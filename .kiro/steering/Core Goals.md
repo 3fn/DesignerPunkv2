@@ -5,3 +5,10 @@
 - Prioritize accessibility (WCAG 2.1 AA) and cross-platform consistency
 - Use the establisheds True Native and Token architecture patterns documented in the project
 - Development with Human-AI collaboration and partnership at a foundational value
+
+## Development Practices
+- Follow systematic task completion workflow with automated git integration
+- Use hook system for consistent commit practices: `./.kiro/hooks/commit-task.sh "Task Name"`
+- Maintain concept-based documentation approach preventing contamination vectors
+- Apply process-first tool development: prove manual processes before automation
+- Repository: https://github.com/3fn/DesignerPunkv2 (single-branch workflow on main)
