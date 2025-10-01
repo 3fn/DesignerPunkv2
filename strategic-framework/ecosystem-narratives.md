@@ -2,7 +2,9 @@
 
 **Date**: September 30, 2025  
 **Purpose**: Complete stories from all participants in the token ecosystem  
-**Cross-Reference**: [Token Journey Narrative](token-journey-narrative.md), [Translation Provider Narrative](translation-provider-narrative.md)
+**Cross-Reference**: [Token Journey Narrative](token-journey-narrative.md), [Translation Provider Narrative](translation-provider-narrative.md)  
+**Organization**: framework-strategic
+**Scope**: cross-spec
 
 ---
 
