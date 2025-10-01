@@ -3,7 +3,9 @@
 **Date**: December 30, 2024  
 **Purpose**: System relationship mapping and integration guidance for fresh repository implementation  
 **Task**: 5.5 Create Coordination Framework  
-**Cross-Reference**: [System Relationships Matrix](system-relationships-matrix.md), [Knowledge Gap Resolution Input](knowledge-gap-resolution-input.md)
+**Cross-Reference**: [System Relationships Matrix](system-relationships-matrix.md), [Knowledge Gap Resolution Input](knowledge-gap-resolution-input.md)  
+**Organization**: framework-strategic  
+**Scope**: cross-spec
 
 ---
 

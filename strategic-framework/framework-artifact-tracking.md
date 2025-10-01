@@ -3,7 +3,9 @@
 **Date**: January 10, 2025  
 **Purpose**: Comprehensive tracking of all strategic framework components  
 **Status**: Complete framework ready for detailed spec creation  
-**Cross-Reference**: [Strategic Framework Package](strategic-framework-package/README.md)
+**Cross-Reference**: [Strategic Framework Package](strategic-framework-package/README.md)  
+**Organization**: framework-strategic  
+**Scope**: cross-spec
 
 ---
 

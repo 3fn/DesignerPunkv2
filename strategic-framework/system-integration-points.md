@@ -3,7 +3,9 @@
 **Date**: September 30, 2025  
 **Purpose**: Key integration areas for future detailed design based on resolved system dependencies  
 **Task**: 5.4 Identify Key Integration Points  
-**Cross-Reference**: [System Integration Inconsistencies Resolution](system-integration-inconsistencies-resolution.md)
+**Cross-Reference**: [System Integration Inconsistencies Resolution](system-integration-inconsistencies-resolution.md)  
+**Organization**: framework-strategic  
+**Scope**: cross-spec
 
 ---
 

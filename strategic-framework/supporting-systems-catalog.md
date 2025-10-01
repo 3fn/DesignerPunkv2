@@ -3,7 +3,9 @@
 **Date**: September 28, 2025  
 **Purpose**: Comprehensive inventory of high-level systems required to achieve the DesignerPunk Design System north star vision  
 **Approach**: Strategic system identification with Foundation/Development/Collaboration/Quality categorization  
-**Cross-Reference**: [North Star Vision](north-star-vision.md)
+**Cross-Reference**: [North Star Vision](north-star-vision.md)  
+**Organization**: framework-strategic  
+**Scope**: cross-spec
 
 ---
 

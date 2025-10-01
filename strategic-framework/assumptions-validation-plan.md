@@ -3,7 +3,9 @@
 **Date**: September 29, 2025  
 **Purpose**: Explicit assumptions with validation approaches for strategic framework development  
 **Framework**: Evidence-based validation immune to AI influence  
-**Cross-Reference**: [Knowledge Gaps Register](knowledge-gaps-register.md)
+**Cross-Reference**: [Knowledge Gaps Register](knowledge-gaps-register.md)  
+**Organization**: framework-strategic  
+**Scope**: cross-spec
 
 ---
 

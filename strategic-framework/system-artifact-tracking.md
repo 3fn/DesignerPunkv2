@@ -3,7 +3,9 @@
 **Date**: September 28, 2025  
 **Purpose**: Comprehensive artifact tracking for each identified supporting system  
 **Approach**: Strategic artifact identification without implementation details  
-**Cross-Reference**: [Supporting Systems Catalog](supporting-systems-catalog.md)
+**Cross-Reference**: [Supporting Systems Catalog](supporting-systems-catalog.md)  
+**Organization**: framework-strategic  
+**Scope**: cross-spec
 
 ---
 

@@ -3,16 +3,18 @@
 **Date**: January 10, 2025  
 **Purpose**: Comprehensive validation of strategic framework against preserved knowledge  
 **Task**: 7. Validate Strategic Framework Against Preserved Knowledge  
-**Status**: Strategic framework validated and ready for detailed spec creation
+**Status**: Strategic framework validated and ready for detailed spec creation  
+**Organization**: spec-validation  
+**Scope**: fresh-repository-roadmap-refinement
 
 ---
 
 ## Cross-Reference Headers
 
 **Related Strategic Framework Documents:**
-- [North Star Vision](north-star-vision.md) - Ultimate success definition with architectural integration
-- [Supporting Systems Catalog](supporting-systems-catalog.md) - System inventory with preserved knowledge alignment
-- [Strategic Prioritization Matrix](strategic-prioritization-matrix.md) - Development sequencing with architectural coherence
+- [North Star Vision](../../strategic-framework/north-star-vision.md) - Ultimate success definition with architectural integration
+- [Supporting Systems Catalog](../../strategic-framework/supporting-systems-catalog.md) - System inventory with preserved knowledge alignment
+- [Strategic Prioritization Matrix](../../strategic-framework/strategic-prioritization-matrix.md) - Development sequencing with architectural coherence
 - [Knowledge Gaps Register](knowledge-gaps-register.md) - Uncertainty management with evidence-based resolution
 - [Strategic Coordination Framework](strategic-coordination-framework.md) - Integration guidance with contamination prevention
 - [Consolidated Strategic Framework](consolidated-strategic-framework.md) - Complete framework integration

@@ -3,7 +3,9 @@
 **Date**: September 9, 2025  
 **Purpose**: Strategic success definition integrating preserved architectural knowledge  
 **Framework**: Customer needs + brand goals decision-making  
-**Philosophy**: Sustainable design system capabilities with contamination prevention
+**Philosophy**: Sustainable design system capabilities with contamination prevention  
+**Organization**: framework-strategic  
+**Scope**: cross-spec
 
 ---
 

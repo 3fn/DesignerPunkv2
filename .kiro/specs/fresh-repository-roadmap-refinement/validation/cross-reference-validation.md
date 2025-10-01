@@ -3,7 +3,9 @@
 **Date**: January 10, 2025  
 **Purpose**: Verification of all links and references across strategic framework  
 **Task**: 7. Validate Strategic Framework Against Preserved Knowledge  
-**Status**: All cross-references validated and bidirectional links established
+**Status**: All cross-references validated and bidirectional links established  
+**Organization**: spec-validation  
+**Scope**: fresh-repository-roadmap-refinement
 
 ---
 
@@ -11,10 +13,10 @@
 
 **Related Strategic Framework Documents:**
 - [Framework Validation Report](framework-validation-report.md) - Comprehensive validation against preserved knowledge
-- [Framework Artifact Tracking](framework-artifact-tracking.md) - Complete component inventory
-- [North Star Vision](north-star-vision.md) - Strategic success definition
-- [Supporting Systems Catalog](supporting-systems-catalog.md) - System inventory
-- [Strategic Coordination Framework](strategic-coordination-framework.md) - Integration guidance
+- [Framework Artifact Tracking](../../strategic-framework/framework-artifact-tracking.md) - Complete component inventory
+- [North Star Vision](../../strategic-framework/north-star-vision.md) - Strategic success definition
+- [Supporting Systems Catalog](../../strategic-framework/supporting-systems-catalog.md) - System inventory
+- [Strategic Coordination Framework](../../strategic-framework/strategic-coordination-framework.md) - Integration guidance
 
 **Related Preserved Knowledge:**
 - [True Native Architecture Concepts](preserved-knowledge/true-native-architecture-concepts.md)

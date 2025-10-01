@@ -3,7 +3,9 @@
 **Date**: December 30, 2024  
 **Purpose**: Comprehensive strategic framework compilation integrating all components with narrative alignment  
 **Task**: 5.5 Create Coordination Framework - Final Integration  
-**Cross-Reference**: [Strategic Coordination Framework](strategic-coordination-framework.md)
+**Cross-Reference**: [Strategic Coordination Framework](strategic-coordination-framework.md)  
+**Organization**: framework-strategic  
+**Scope**: cross-spec
 
 ---
 

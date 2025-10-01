@@ -3,7 +3,9 @@
 **Date**: December 29, 2024  
 **Purpose**: Visual and textual mapping of system relationships for strategic prioritization  
 **Framework**: Customer needs + brand goals dependency analysis  
-**Cross-Reference**: [Supporting Systems Catalog](supporting-systems-catalog.md), [North Star Vision](north-star-vision.md)
+**Cross-Reference**: [Supporting Systems Catalog](supporting-systems-catalog.md), [North Star Vision](north-star-vision.md)  
+**Organization**: framework-strategic  
+**Scope**: cross-spec
 
 ---
 

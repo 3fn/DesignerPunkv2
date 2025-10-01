@@ -3,7 +3,9 @@
 **Date**: September 29, 2025  
 **Purpose**: Comprehensive catalog of questions and uncertainties requiring resolution before detailed planning  
 **Categorization**: Preserved knowledge operationalization, cross-platform implementation, AI collaboration, and sustainable development  
-**Priority Framework**: Impact on foundational systems development
+**Priority Framework**: Impact on foundational systems development  
+**Organization**: framework-strategic  
+**Scope**: cross-spec
 
 ---
 
