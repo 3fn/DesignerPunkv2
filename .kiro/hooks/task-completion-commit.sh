@@ -10,8 +10,30 @@ extract_commit_info() {
     local task_file="$1"
     local task_name="$2"
     
-    # Look for the Post-Complete commit message in the task
-    local commit_msg=$(grep -A 5 -B 5 "Post-Complete.*Commit" "$task_file" | grep -o '"[^"]*"' | head -1 | tr -d '"')
+    # Escape special characters in task name for grep
+    local escaped_task_name=$(echo "$task_name" | sed 's/[[\.*^$()+?{|]/\\&/g')
+    
+    # Look for the specific task and its Post-Complete message
+    local commit_msg=""
+    
+    # Try to find the task section and extract its Post-Complete message
+    if [ -n "$task_name" ]; then
+        # Find the task section and look for Post-Complete within it
+        commit_msg=$(awk -v task="$task_name" '
+            /^- \[.\]/ { 
+                current_task = $0
+                in_target_task = (index(current_task, task) > 0)
+            }
+            in_target_task && /Post-Complete.*Commit.*message/ {
+                match($0, /"[^"]*"/)
+                if (RSTART > 0) {
+                    msg = substr($0, RSTART+1, RLENGTH-2)
+                    print msg
+                    exit
+                }
+            }
+        ' "$task_file")
+    fi
     
     if [ -z "$commit_msg" ]; then
         # Fallback to generic message if no specific message found
