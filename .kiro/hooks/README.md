@@ -164,3 +164,100 @@ During Task 6 completion, we discovered that tasks specify "Post-Complete: Commi
 ---
 
 *This hook system addresses the workflow gap identified during Task 6 completion, providing both immediate manual solutions and a path toward full automation integration with Kiro's task management system.*
+-
+--
+
+## File Organization Hooks
+
+### Metadata-Driven Organization (`organize-by-metadata.sh`)
+**Purpose**: Organize files based on **Organization** metadata in file headers  
+**Usage**: `./.kiro/hooks/organize-by-metadata.sh [OPTIONS]`
+
+**Features**:
+- Scans markdown files for Organization metadata
+- Validates metadata format and values
+- Moves files to appropriate directories based on metadata
+- Updates cross-references automatically
+- Interactive confirmation before moving files
+
+**Options**:
+- `--validate-only`: Check metadata without organizing files
+- `--dry-run`: Preview organization without moving files
+- `--help`: Show detailed usage information
+
+**Organization Values**:
+- `framework-strategic`: Move to `strategic-framework/`
+- `spec-validation`: Move to `.kiro/specs/[scope]/validation/`
+- `spec-completion`: Move to `.kiro/specs/[scope]/completion/`
+- `process-standard`: Keep in `.kiro/steering/`
+- `working-document`: Keep in root directory
+
+**Examples**:
+```bash
+# Interactive organization
+./.kiro/hooks/organize-by-metadata.sh
+
+# Validate metadata only
+./.kiro/hooks/organize-by-metadata.sh --validate-only
+
+# Preview organization
+./.kiro/hooks/organize-by-metadata.sh --dry-run
+```
+
+### Enhanced Task Commit with Organization (`commit-task-organized.sh`)
+**Purpose**: Commit task completion with optional file organization  
+**Usage**: `./.kiro/hooks/commit-task-organized.sh "Task Name" [OPTIONS]`
+
+**Features**:
+- Optional file organization before commit
+- Metadata validation before commit
+- Standard task completion commit workflow
+- Interactive confirmation for organization and commit
+- Automatic cross-reference updates
+
+**Options**:
+- `--organize`: Run file organization before commit
+- `--validate-metadata`: Validate metadata before commit
+- `--help`: Show detailed usage information
+
+**Examples**:
+```bash
+# Standard task completion
+./.kiro/hooks/commit-task-organized.sh "7. Validate Strategic Framework"
+
+# With file organization
+./.kiro/hooks/commit-task-organized.sh "7. Validate Strategic Framework" --organize
+
+# With metadata validation and organization
+./.kiro/hooks/commit-task-organized.sh "7. Validate Strategic Framework" --validate-metadata --organize
+```
+
+---
+
+## Integration with File Organization Standards
+
+The organization hooks integrate with the **File Organization Standards** steering document to provide:
+
+### Process-First Tool Development
+- Manual organization process established first
+- Hooks enhance proven manual processes
+- Human control maintained with hook assistance
+- Fallback to manual organization always available
+
+### Metadata-Driven Safety
+- No keyword detection or automated guessing
+- Explicit human intent through metadata
+- Validation prevents organization errors
+- Interactive confirmation for all moves
+
+### Sustainable Project Structure
+- Framework artifacts separated from spec-specific artifacts
+- Cross-reference integrity maintained automatically
+- Directory structure scales with project growth
+- Organization patterns work across multiple specs
+
+### Quality Assurance
+- Metadata validation ensures correct organization values
+- Cross-reference updates prevent broken links
+- Interactive confirmation prevents accidental moves
+- Dry-run capability for safe preview
