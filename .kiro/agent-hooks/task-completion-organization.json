@@ -1,0 +1,24 @@
+{
+  "name": "Task Completion File Organization",
+  "description": "Automatically organize files based on metadata when tasks are completed",
+  "trigger": {
+    "type": "taskStatus",
+    "condition": "status_changed_to_completed"
+  },
+  "action": {
+    "type": "agent_execution",
+    "prompt": "A task has just been completed. Please run file organization to ensure any new artifacts are properly organized based on their **Organization** metadata. Use the organize-by-metadata.sh hook to check for files that need organization and move them to appropriate directories while maintaining cross-reference integrity.",
+    "context": {
+      "include_files": [
+        ".kiro/hooks/organize-by-metadata.sh",
+        ".kiro/steering/File Organization Standards.md"
+      ],
+      "working_directory": "."
+    }
+  },
+  "settings": {
+    "auto_approve": false,
+    "require_confirmation": true,
+    "timeout_minutes": 10
+  }
+}

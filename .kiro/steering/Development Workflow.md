@@ -9,8 +9,9 @@ inclusion: always
 ### Standard Process
 1. **Complete Task Work**: Implement all requirements and create specified artifacts
 2. **Mark Task Complete**: Use `taskStatus` tool to update task status to "completed"
-3. **Commit Changes**: Run `./.kiro/hooks/commit-task.sh "Task Name"` to automatically commit and push
-4. **Verify on GitHub**: Confirm changes appear in repository with correct commit message
+3. **[AUTOMATED]** **File Organization**: Kiro agent hook automatically checks for files needing organization
+4. **Commit Changes**: Run `./.kiro/hooks/commit-task.sh "Task Name"` to automatically commit and push
+5. **Verify on GitHub**: Confirm changes appear in repository with correct commit message
 
 ### Commit Message Standards
 - All task completions should use the commit message specified in the task's "Post-Complete" instruction
@@ -59,11 +60,17 @@ inclusion: always
 - Hook system provides automation for git operations
 - Commit messages automatically extracted from task specifications
 
+### Current Enhancements
+- ✅ **Automatic File Organization**: Kiro agent hook triggers organization on task completion
+- ✅ **Metadata-Driven Organization**: Safe automation based on explicit **Organization** metadata
+- ✅ **Cross-Reference Integrity**: Automatic link updates after file organization
+- ✅ **Human Control**: Interactive confirmation for all organization actions
+
 ### Future Enhancements
-- Automatic trigger on task status change (Kiro agent hook)
 - Branch management for individual tasks
 - Integration with pull request workflow
 - Notification system for team coordination
+- Smart metadata suggestion for new files
 
 ## Troubleshooting
 
@@ -98,3 +105,69 @@ inclusion: always
 ---
 
 *This workflow ensures consistent task completion practices while maintaining the strategic framework principles of contamination prevention, sustainable development, and effective AI-human collaboration.*
+---
+
+
+## Kiro Agent Hook Integration
+
+### Automatic File Organization
+
+**Trigger**: Task status changes to "completed"  
+**Hook**: `.kiro/agent-hooks/organize-after-task.sh`  
+**Purpose**: Automatically organize files based on **Organization** metadata
+
+#### Workflow
+1. **Detection**: Kiro detects task completion event
+2. **Scanning**: Agent hook scans for files with organization metadata
+3. **Preview**: Shows user what files would be organized
+4. **Confirmation**: Prompts user for approval before organizing
+5. **Organization**: Moves files and updates cross-references
+6. **Commit**: Automatically commits organization changes
+
+#### Safety Features
+- **Human Control**: User confirmation required for all file moves
+- **Metadata Validation**: Validates organization metadata before organizing
+- **Dry-Run Preview**: Shows what will be organized before execution
+- **Cross-Reference Updates**: Automatically maintains link integrity
+- **Fallback Available**: Manual organization always available
+
+#### User Experience
+```
+🤖 [Agent Hook] Task completion detected - checking for file organization needs...
+🤖 [Agent Hook] Found files that need organization:
+  - new-document.md -> strategic-framework/ (framework-strategic, cross-spec)
+
+Would you like to organize these files now? [y/N]: y
+
+📁 Moving: ./new-document.md -> strategic-framework/new-document.md
+✅ Organized: new-document.md -> strategic-framework/
+📁 Updating cross-references...
+✅ Cross-references updated
+✅ Organization complete!
+```
+
+#### Configuration
+- **Auto-Approve**: `false` (requires human confirmation)
+- **Timeout**: 10 minutes (allows time for user interaction)
+- **Integration**: Seamless with existing task completion workflow
+- **Fallback**: Manual hooks available if automation fails
+
+### Benefits of Agent Hook Integration
+
+#### Immediate Benefits
+- **Automatic Organization**: Files organized immediately after task completion
+- **Prevents Clutter**: No accumulation of unorganized files in root directory
+- **Maintains Quality**: Cross-reference integrity preserved automatically
+- **Reduces Manual Work**: Organization happens with minimal user intervention
+
+#### Long-Term Benefits
+- **Scalable Organization**: Pattern works as project grows and more specs are created
+- **Consistent Application**: Organization standards applied automatically across all development
+- **Knowledge Preservation**: Framework artifacts properly separated from spec-specific work
+- **Developer Experience**: Clean, navigable project structure maintained without manual effort
+
+#### Process-First Validation
+- ✅ **Manual Process Proven**: File organization validated manually before automation
+- ✅ **Hook Enhancement**: Automation enhances proven processes rather than replacing them
+- ✅ **Safety Maintained**: All safety features from manual process preserved in automation
+- ✅ **Human Override**: Manual organization always available as fallback option
