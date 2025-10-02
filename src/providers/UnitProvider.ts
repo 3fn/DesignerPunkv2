@@ -76,15 +76,15 @@ export abstract class BaseUnitProvider implements UnitProvider {
     if (typeof originalValue === 'string') {
       return convertedValue.value === originalValue;
     }
-    
+
     // Basic validation - ensure converted numeric value is positive and maintains proportional relationships
     if (typeof convertedValue.value === 'number' && convertedValue.value < 0) return false;
-    
+
     // For unitless values (like lineHeight), the value should remain the same
     if (convertedValue.unit === 'unitless') {
       return Math.abs((convertedValue.value as number) - originalValue) < 0.001;
     }
-    
+
     // For pass-through values (fontFamily, fontWeight, letterSpacing), the value should remain the same
     if (convertedValue.unit === 'fontFamily' || convertedValue.unit === 'fontWeight' || convertedValue.unit === 'em') {
       if (typeof convertedValue.value === 'number' && typeof originalValue === 'number') {
@@ -92,15 +92,15 @@ export abstract class BaseUnitProvider implements UnitProvider {
       }
       return convertedValue.value === originalValue;
     }
-    
+
     // For other units, ensure the conversion factor is applied correctly (originalValue must be numeric here)
     if (typeof originalValue !== 'number') return false;
-    
+
     const conversionFactor = this.getConversionFactor(category);
-    const expectedValue = typeof conversionFactor === 'number' 
-      ? originalValue * conversionFactor 
+    const expectedValue = typeof conversionFactor === 'number'
+      ? originalValue * conversionFactor
       : originalValue * conversionFactor.factor;
-    
+
     return Math.abs((convertedValue.value as number) - expectedValue) < 0.001;
   }
 }
