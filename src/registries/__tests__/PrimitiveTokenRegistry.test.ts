@@ -116,7 +116,7 @@ describe('PrimitiveTokenRegistry', () => {
 
       expect(result.level).toBe('Pass');
       expect(result.message).toBe('Token registered successfully');
-      expect(result.rationale).toContain('Validation skipped');
+      expect(result.rationale).toContain('Pass validation');
     });
 
     test('should reject tokens that fail baseline grid validation', () => {
@@ -277,7 +277,7 @@ describe('PrimitiveTokenRegistry', () => {
       const result = registry.validateToken(fontSizeToken);
 
       expect(result.level).toBe('Pass');
-      expect(result.rationale).toContain('does not require baseline grid validation');
+      expect(result.rationale).toContain('uses its own mathematical foundation');
     });
 
     test('should validate all registered tokens', () => {
