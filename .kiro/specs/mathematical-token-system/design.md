@@ -27,10 +27,10 @@ The system architecture follows the business localization model established in t
 ### Two-Layer Token Architecture
 
 #### Primitive Token Layer
-- **Purpose**: Foundational mathematical values with systematic naming
-- **Scope**: Mathematical foundation tokens (space075, space100, size275, radius100)
-- **Usage**: Primary token type for component development
-- **Validation**: Must align with baseline grid or strategic flexibility tokens
+- **Purpose**: Foundational unitless mathematical values organized by token families
+- **Scope**: Six token families (spacing, fontSize, lineHeight, radius, density, tapArea) with per-family base values
+- **Usage**: Primary token type for component development with family-specific mathematical relationships
+- **Validation**: Must align with per-family mathematical foundation or strategic flexibility exceptions
 
 #### Semantic Token Layer  
 - **Purpose**: Contextual tokens that reference primitives with semantic meaning
@@ -41,11 +41,11 @@ The system architecture follows the business localization model established in t
 ### Translation Provider Architecture
 
 #### Unit Provider Service
-- **Responsibility**: Convert unitless base values to platform-appropriate units
-- **Web Output**: REM values (÷16 conversion from base values)
-- **iOS Output**: Points with display density considerations
-- **Android Output**: Density-independent pixels across density buckets
-- **Validation**: Ensures mathematical equivalence across platforms
+- **Responsibility**: Convert unitless token values to platform-appropriate units using per-family conversion rules
+- **Web Output**: Spacing/radius (×1px), Typography (÷16 = REM), LineHeight (unitless), Density (multiplier), TapArea (×1px)
+- **iOS Output**: Spacing/radius/typography/tapArea (×1pt), LineHeight (unitless), Density (multiplier)
+- **Android Output**: Spacing/radius/tapArea (×1dp), Typography (×1sp), LineHeight (unitless), Density (multiplier)
+- **Validation**: Ensures mathematical equivalence across platforms with per-family unit application
 
 #### Format Provider Service
 - **Responsibility**: Generate platform-appropriate syntax and naming conventions
@@ -67,16 +67,20 @@ The system architecture follows the business localization model established in t
 ```
 TokenEngine
 ├── PrimitiveTokenRegistry
-│   ├── SpacingTokens (space075, space100, space150, etc.)
-│   ├── SizingTokens (size275, size300, size400, etc.)
-│   ├── RadiusTokens (radius100, radius200, etc.)
-│   └── StrategicFlexibilityTokens (6, 10, 20)
+│   ├── SpacingTokens (space050, space075, space100, space150, etc.) - Base: 8
+│   ├── FontSizeTokens (fontSize050, fontSize100, fontSize125, etc.) - Base: 16
+│   ├── LineHeightTokens (lineHeight050, lineHeight100, etc.) - Base: 1.5
+│   ├── RadiusTokens (radius025, radius100, radius200, etc.) - Base: 8
+│   ├── DensityTokens (densityCompact, densityDefault, densityComfortable) - Base: 1.0
+│   └── TapAreaTokens (tapAreaMinimum, tapAreaRecommended, etc.) - Base: 44
 ├── SemanticTokenRegistry
 │   ├── ColorTokens (color.warning, color.primary, etc.)
 │   ├── SpacingTokens (space.tight, space.loose, etc.)
 │   └── StyleTokens (border.stylePrimary, shadow.elevated, etc.)
 └── ValidationEngine
     ├── ThreeTierValidator (Pass/Warning/Error)
+    ├── PerFamilyMathematicalValidator
+    ├── StrategicFlexibilityValidator
     ├── CrossPlatformConsistencyValidator
     └── UsagePatternAnalyzer
 ```
@@ -122,20 +126,22 @@ ValidationSystem
 
 ```typescript
 interface PrimitiveToken {
-  name: string;                    // e.g., "space100"
-  category: TokenCategory;         // spacing | sizing | radius
-  baseValue: number;              // base value (e.g., 8 for space100)
-  description: string;             // mathematical meaning
-  mathematicalRelationship: string; // relationship to baseline grid
-  baselineGridAlignment: boolean;  // true for 8 multiples
-  isStrategicFlexibility: boolean; // true for 6, 10, 20
+  name: string;                    // e.g., "space100", "fontSize125", "lineHeight100"
+  category: TokenCategory;         // spacing | fontSize | lineHeight | radius | density | tapArea
+  baseValue: number;              // unitless base value (varies per family)
+  familyBaseValue: number;        // base value for the token family (e.g., 8 for spacing)
+  description: string;             // mathematical meaning and usage
+  mathematicalRelationship: string; // relationship to family base value
+  baselineGridAlignment: boolean;  // true for 8-unit alignment (spacing/radius families)
+  isStrategicFlexibility: boolean; // true for strategic flexibility exceptions
+  isPrecisionTargeted: boolean;    // true for precision multipliers (lineHeight, tapArea)
   platforms: PlatformValues;       // generated platform-specific values
 }
 
 interface PlatformValues {
-  web: { value: number; unit: 'rem' };
-  ios: { value: number; unit: 'pt' };
-  android: { value: number; unit: 'dp' };
+  web: { value: number; unit: 'px' | 'rem' | 'unitless' };
+  ios: { value: number; unit: 'pt' | 'unitless' };
+  android: { value: number; unit: 'dp' | 'sp' | 'unitless' };
 }
 ```
 

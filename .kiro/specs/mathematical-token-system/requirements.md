@@ -15,30 +15,31 @@ The Mathematical Token System serves as the foundational layer for the DesignerP
 
 ## Requirements
 
-### Requirement 1: Cross-Platform Mathematical Consistency
+### Requirement 1: Cross-Platform Mathematical Consistency with Unitless Values
 
-**User Story:** As a developer using the DesignerPunk Design System, I want mathematical relationships to be consistent across web, iOS, and Android platforms, so that I can confidently build components knowing they will behave predictably regardless of platform.
+**User Story:** As a developer using the DesignerPunk Design System, I want mathematical relationships to be consistent across web, iOS, and Android platforms using unitless token values, so that I can confidently build components knowing they will behave predictably regardless of platform.
 
 #### Acceptance Criteria
 
-1. WHEN a primitive or semantic token is defined THEN the system SHALL generate mathematically equivalent values for web (REM), iOS (points), and Android (dp)
-2. WHEN mathematical relationships are established THEN the system SHALL maintain proportional consistency across all three platforms
+1. WHEN a primitive or semantic token is defined THEN the system SHALL store unitless values and generate platform-specific units during translation (web: px/REM, iOS: points, Android: dp/sp)
+2. WHEN mathematical relationships are established THEN the system SHALL maintain proportional consistency across all three platforms using per-family base values
 3. WHEN baseline grid calculations are performed THEN the system SHALL produce near identical visual results across web, iOS, and Android
 4. IF platform-specific mathematical constraints exist THEN the system SHALL document the constraint and provide the closest mathematically valid alternative
 5. WHEN cross-platform validation is performed THEN the system SHALL verify mathematical consistency within acceptable tolerance levels
 
 ### Requirement 2: Strategic Flexibility Token Implementation
 
-**User Story:** As a design system architect, I want strategic flexibility tokens (6px, 10px, 20px) to be available for exceptional cases, so that the system can handle edge cases without breaking mathematical consistency.
+**User Story:** As a design system architect, I want strategic flexibility tokens to be available for exceptional cases within each token family, so that the system can handle edge cases without breaking mathematical consistency.
 
 #### Acceptance Criteria
 
 1. WHEN strategic flexibility tokens are used THEN the system SHALL treat them as Pass-level validation without warnings
-2. WHEN strategic flexibility usage is analyzed THEN the system SHALL track usage patterns to ensure ≥80% appropriate usage
-3. IF strategic flexibility tokens are overused THEN the system SHALL provide guidance on semantic token alternatives
-4. WHEN strategic flexibility tokens are applied THEN the system SHALL maintain cross-platform mathematical relationships
-5. WHEN validation is performed THEN the system SHALL distinguish between strategic flexibility usage and mathematical errors
-6. WHEN an AI Agent wants to add a new strategic flexibility token THEN the AI Agent must seek approval from a Human to do so
+2. WHEN strategic flexibility tokens are defined THEN they SHALL be mathematically derived but break the systematic progression within their token family (e.g., space075 = space100 × 0.75 = 6)
+3. WHEN strategic flexibility usage is analyzed THEN the system SHALL track usage patterns to ensure ≥80% appropriate usage
+4. IF strategic flexibility tokens are overused THEN the system SHALL provide guidance on semantic token alternatives
+5. WHEN strategic flexibility tokens are applied THEN the system SHALL maintain cross-platform mathematical relationships
+6. WHEN validation is performed THEN the system SHALL distinguish between strategic flexibility usage and mathematical errors
+7. WHEN an AI Agent wants to add a new strategic flexibility token THEN the AI Agent must seek approval from a Human to do so
 
 ### Requirement 3: Three-Tier Validation System
 
@@ -64,30 +65,34 @@ The Mathematical Token System serves as the foundational layer for the DesignerP
 4. WHEN Path Providers process tokens THEN they SHALL organize tokens into platform-appropriate file structures
 5. WHEN token generation is complete THEN the system SHALL validate that all platform files contain mathematically consistent values
 
-### Requirement 5: Primitive and Semantic Token Composition Patterns
+### Requirement 5: Multi-Family Token System Implementation
 
-**User Story:** As a component developer, I want clear primitive and semantic token usage patterns, so that I can compose tokens appropriately without creating mathematical inconsistencies.
+**User Story:** As a component developer, I want access to multiple token families (spacing, typography, line height, radius, density, tap area) with clear usage patterns, so that I can compose tokens appropriately without creating mathematical inconsistencies.
 
 #### Acceptance Criteria
 
 1. WHEN developing tokens THEN prioritize using semantic tokens if available before opting to use primitive tokens as a fallback
-2. WHEN components use spacing tokens THEN they SHALL compose primitive and/or semantic tokens (space075, space100, space150) rather than raw values
-3. WHEN components use sizing tokens THEN they SHALL follow primitive and/or semantic sizing patterns (size275, size300, size400) for consistent proportions
-4. WHEN components use radius tokens THEN they SHALL apply primitive and/or semantic radius values (radius100, radius200) that maintain mathematical relationships
-5. IF components require non-semantic values THEN they SHALL use strategic flexibility tokens with appropriate justification
-6. WHEN token composition is validated THEN the system SHALL verify primitive and/or semantic token usage follows established patterns
+2. WHEN components use spacing tokens THEN they SHALL use tokens from the spacing family (space050, space100, space150) with base value 8
+3. WHEN components use typography tokens THEN they SHALL use tokens from the fontSize family (fontSize100, fontSize125, fontSize150) with base value 16
+4. WHEN components use line height THEN they SHALL multiply fontSize tokens by lineHeight tokens (fontSize100 × lineHeight100 = computed line height)
+5. WHEN components use border radius THEN they SHALL use tokens from the radius family (radius100, radius200) with base value 8
+6. WHEN density scaling is applied THEN it SHALL multiply functional tokens (spacing, typography, tap areas) but NOT aesthetic tokens (radius, line height ratios)
+7. WHEN accessibility requirements apply THEN components SHALL use tapArea tokens (tapAreaMinimum, tapAreaRecommended) with base value 44
+8. WHEN token composition is validated THEN the system SHALL verify primitive and/or semantic token usage follows established per-family patterns
 
-### Requirement 6: Mathematical Foundation Integration
+### Requirement 6: Per-Family Mathematical Foundation Integration
 
-**User Story:** As a design system architect, I want the token system to integrate with the mathematical foundation from Token Architecture 2.0, so that all design decisions follow predictable mathematical relationships.
+**User Story:** As a design system architect, I want the token system to use per-family base values with precision targeting, so that all design decisions follow predictable mathematical relationships while achieving systematic alignment goals.
 
 #### Acceptance Criteria
 
-1. WHEN the modular scale is applied THEN the system SHALL generate token values following the established mathematical progression
-2. WHEN baseline grid calculations are performed THEN the system SHALL ensure all tokens align with the grid system
-3. WHEN mathematical relationships are established THEN the system SHALL maintain consistency with the REM and baseline grid structure
-4. IF mathematical conflicts arise THEN the system SHALL prioritize mathematical consistency over arbitrary design preferences
-5. WHEN mathematical validation is performed THEN the system SHALL verify all tokens follow the established mathematical foundation
+1. WHEN token families are defined THEN each family SHALL have its own base value (spacing: 8, typography: 16, lineHeight: 1.5, radius: 8, density: 1.0, tapArea: 44)
+2. WHEN modular scale is applied to typography THEN the system SHALL use 1.125 ratio (musical fourth) for systematic font size progression
+3. WHEN line height tokens are calculated THEN they SHALL use precision multipliers to align with 8pt vertical rhythm when combined with fontSize tokens
+4. WHEN tap area tokens are calculated THEN they SHALL use precision multipliers to achieve specific accessibility targets at default scale
+5. WHEN baseline grid calculations are performed THEN spacing and radius tokens SHALL align with 8-unit grid system
+6. IF mathematical conflicts arise THEN the system SHALL prioritize mathematical consistency over arbitrary design preferences
+7. WHEN mathematical validation is performed THEN the system SHALL verify all tokens follow their family's mathematical foundation
 
 ### Requirement 7: Contamination Prevention Integration
 

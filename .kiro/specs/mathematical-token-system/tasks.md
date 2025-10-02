@@ -50,7 +50,7 @@ Convert the Mathematical Token System design into a series of prompts for a code
   **Post-Complete:** Commit with message "Task 1 Complete: Project Structure and Core Interfaces"
 
 - [ ] 2. Implement primitive token registry with baseline grid validation
-  - [ ] 2.1 Create PrimitiveTokenRegistry class with baseline grid validation
+  - [x] 2.1 Create PrimitiveTokenRegistry class with baseline grid validation
     - Implement 8-unit baseline grid alignment validation
     - Add strategic flexibility token support (6, 10, 20)
     - Create token registration and retrieval methods
@@ -82,18 +82,25 @@ Convert the Mathematical Token System design into a series of prompts for a code
     
     **Post-Complete:** Commit with message "Task 2.1 Complete: PrimitiveTokenRegistry with Baseline Grid Validation"
     
-  - [ ] 2.2 Implement spacing, sizing, and radius token categories
-    - Create spacing tokens (space075, space100, space150, etc.)
-    - Create sizing tokens (size275, size300, size400, etc.)
-    - Create radius tokens (radius100, radius200, etc.)
-    - _Requirements: 5.2, 5.3, 5.4, 6.1_
+  - [ ] 2.2 Implement all six token family categories
+    - Create spacing tokens (space050, space075, space100, space150, etc.) with base value 8
+    - Create fontSize tokens (fontSize050, fontSize100, fontSize125, etc.) with base value 16
+    - Create lineHeight tokens (lineHeight050, lineHeight100, etc.) with base value 1.5
+    - Create radius tokens (radius025, radius100, radius200, etc.) with base value 8
+    - Create density tokens (densityCompact, densityDefault, densityComfortable) with base value 1.0
+    - Create tapArea tokens (tapAreaMinimum, tapAreaRecommended, etc.) with base value 44
+    - _Requirements: 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 6.1, 6.2, 6.4, 6.5_
     
     **Success Criteria:**
-    - Complete set of spacing tokens following mathematical progression
-    - Complete set of sizing tokens following mathematical progression
-    - Complete set of radius tokens following mathematical progression
-    - All tokens validate correctly against baseline grid
-    - Token naming follows systematic conventions
+    - Complete set of spacing tokens with 8-unit baseline grid alignment and strategic flexibility
+    - Complete set of fontSize tokens with 1.125 modular scale progression
+    - Complete set of lineHeight tokens with precision multipliers for 8pt vertical rhythm alignment
+    - Complete set of radius tokens with 8-unit baseline grid alignment and strategic flexibility
+    - Complete set of density tokens with selective application to functional tokens
+    - Complete set of tapArea tokens with precision multipliers for accessibility targets
+    - All tokens validate correctly against per-family mathematical foundations
+    - Token naming follows systematic per-family conventions
+    - Strategic flexibility tokens properly marked as exceptions within families
     
     **Artifacts Created:**
     - `src/tokens/SpacingTokens.ts` - Spacing token definitions

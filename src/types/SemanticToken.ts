@@ -14,9 +14,11 @@ import type { PrimitiveToken } from './PrimitiveToken.js';
 export enum SemanticCategory {
   COLOR = 'color',
   SPACING = 'spacing',
+  TYPOGRAPHY = 'typography',
   BORDER = 'border',
   SHADOW = 'shadow',
-  TYPOGRAPHY = 'typography'
+  LAYOUT = 'layout',
+  INTERACTION = 'interaction'
 }
 
 /**

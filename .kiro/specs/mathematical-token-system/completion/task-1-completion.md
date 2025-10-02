@@ -22,14 +22,14 @@ Successfully implemented the foundational project structure and core TypeScript 
 ### Core Interface Files
 
 #### `src/types/PrimitiveToken.ts`
-- **PrimitiveToken interface**: Complete implementation matching design specifications
-- **TokenCategory enum**: SPACING, SIZING, RADIUS categories
-- **PlatformValues interface**: Cross-platform value structure (web/iOS/Android)
-- **Key Features**: Baseline grid alignment tracking, strategic flexibility support
+- **PrimitiveToken interface**: Complete implementation with per-family base values and unitless approach
+- **TokenCategory enum**: SPACING, FONT_SIZE, LINE_HEIGHT, RADIUS, DENSITY, TAP_AREA categories
+- **PlatformValues interface**: Cross-platform value structure with per-family unit application
+- **Key Features**: Per-family base values, strategic flexibility exceptions, precision targeting support
 
 #### `src/types/SemanticToken.ts` 
 - **SemanticToken interface**: Contextual abstraction over primitive tokens
-- **SemanticCategory enum**: COLOR, SPACING, BORDER, SHADOW, TYPOGRAPHY categories
+- **SemanticCategory enum**: COLOR, SPACING, TYPOGRAPHY, BORDER, SHADOW, LAYOUT, INTERACTION categories
 - **Key Features**: Primitive token references, contextual meaning, resolved token support
 
 #### `src/types/ValidationResult.ts`
@@ -51,14 +51,15 @@ Successfully implemented the foundational project structure and core TypeScript 
 ## Interface Design Decisions
 
 ### Mathematical Foundation Integration
-- **Baseline Grid Support**: PrimitiveToken interface includes `baselineGridAlignment` boolean
-- **Strategic Flexibility**: Explicit `isStrategicFlexibility` flag for 6, 10, 20 tokens
-- **Mathematical Relationships**: String field for documenting grid relationships
+- **Per-Family Base Values**: PrimitiveToken interface includes both `baseValue` and `familyBaseValue` for per-family mathematical foundations
+- **Strategic Flexibility**: Explicit `isStrategicFlexibility` flag for strategic flexibility exceptions within families
+- **Precision Targeting**: New `isPrecisionTargeted` flag for tokens using precision multipliers (lineHeight, tapArea)
+- **Mathematical Relationships**: String field for documenting relationship to family base value
 
 ### Cross-Platform Consistency
-- **PlatformValues Structure**: Explicit web (REM), iOS (points), Android (dp) support
-- **Unit Conversion Config**: Flexible configuration for platform-specific conversions
-- **Validation Integration**: Cross-platform consistency validation built into type system
+- **PlatformValues Structure**: Per-family unit application (web: px/REM/unitless, iOS: pt/unitless, Android: dp/sp/unitless)
+- **Unit Conversion Config**: Flexible configuration for per-family platform-specific conversions
+- **Validation Integration**: Cross-platform consistency validation built into type system with per-family awareness
 
 ### Three-Tier Validation System
 - **ValidationLevel Type**: Strict 'Pass' | 'Warning' | 'Error' union type
