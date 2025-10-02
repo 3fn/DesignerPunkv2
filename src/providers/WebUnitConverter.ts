@@ -1,5 +1,6 @@
 import { PrimitiveToken, PlatformValues } from '../types';
 import { BaseUnitProvider, UnitConversionConfig } from './UnitProvider';
+import { FONT_SIZE_BASE_VALUE } from '../tokens/SizingTokens';
 
 /**
  * Web-specific unit converter
@@ -10,7 +11,7 @@ export class WebUnitConverter extends BaseUnitProvider {
 
   constructor(config: UnitConversionConfig = {}) {
     super({
-      baseFontSize: 16, // Default browser base font size
+      baseFontSize: FONT_SIZE_BASE_VALUE, // Derived from primitive fontSize tokens
       ...config
     });
   }

@@ -24,10 +24,10 @@ Successfully implemented the base UnitProvider interface and all three platform-
 
 #### WebUnitConverter (`src/providers/WebUnitConverter.ts`)
 - **Spacing/Radius/TapArea**: 1:1 conversion to pixels (px)
-- **FontSize**: Division by base font size (default 16) to REM units
+- **FontSize**: Division by base font size (derived from FONT_SIZE_BASE_VALUE = 16) to REM units
 - **LineHeight/Density**: Remains unitless for proper CSS behavior
 - **Key Features**: 
-  - Configurable base font size for REM calculations
+  - Base font size derived from primitive fontSize tokens (FONT_SIZE_BASE_VALUE)
   - Helper methods for px ↔ REM conversion
   - 3 decimal place precision for REM values
 
@@ -83,7 +83,7 @@ LineHeight/Density: baseValue × 1 = value (unitless)
 
 ### Web Constraints
 - **REM Precision**: Limited to 3 decimal places to prevent sub-pixel rendering issues
-- **Base Font Size**: Configurable but defaults to 16px (browser standard)
+- **Base Font Size**: Derived from primitive fontSize tokens (FONT_SIZE_BASE_VALUE = 16) ensuring consistency with token system
 - **CSS Compatibility**: Unitless values for line-height ensure proper CSS cascade behavior
 
 ### iOS Constraints
@@ -165,6 +165,10 @@ This implementation provides the foundation for:
 2. **Precision Management**: Web REM values need precision limiting for practical use
 3. **Platform Idioms**: Each platform has specific unit preferences that must be respected
 4. **Validation Complexity**: Mathematical relationship validation requires platform-aware logic
+5. **Token Integration**: Unit converters must derive values from primitive tokens rather than hardcoding to maintain mathematical consistency
+
+### Post-Implementation Fix
+- **WebUnitConverter Base Font Size**: Updated to derive baseFontSize from FONT_SIZE_BASE_VALUE (16) from primitive fontSize tokens instead of hardcoding, ensuring consistency with the token system mathematical foundation
 
 ### Design Validation
 1. **Interface Abstraction**: The UnitProvider interface successfully abstracts platform differences
