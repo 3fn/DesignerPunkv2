@@ -31,31 +31,43 @@ export class AndroidUnitConverter extends BaseUnitProvider {
     return this.convertValue(token.baseValue, token.category);
   }
 
-  convertValue(baseValue: number, category: string): PlatformValues['android'] {
+  convertValue(baseValue: number | string, category: string): PlatformValues['android'] {
     switch (category) {
       case 'spacing':
       case 'radius':
       case 'tapArea':
         // Convert to density-independent pixels (dp)
         // dp values remain consistent across different screen densities
-        return { value: baseValue, unit: 'dp' };
+        return { value: baseValue as number, unit: 'dp' };
       
       case 'fontSize':
         // Convert to scale-independent pixels (sp) for text
         // sp respects user's font size preferences
-        return { value: baseValue, unit: 'sp' };
+        return { value: baseValue as number, unit: 'sp' };
+
+      case 'fontFamily':
+        // Font family remains as string for Android
+        return { value: baseValue as string, unit: 'fontFamily' };
+
+      case 'fontWeight':
+        // Font weight remains as numeric for Android
+        return { value: baseValue as number, unit: 'fontWeight' };
+
+      case 'letterSpacing':
+        // Letter spacing converted to em units for Android
+        return { value: baseValue as number, unit: 'em' };
       
       case 'lineHeight':
         // Line height remains unitless for proper Android behavior
-        return { value: baseValue, unit: 'unitless' };
+        return { value: baseValue as number, unit: 'unitless' };
       
       case 'density':
         // Density is a multiplier, remains unitless
-        return { value: baseValue, unit: 'unitless' };
+        return { value: baseValue as number, unit: 'unitless' };
       
       default:
         // Default to dp for unknown categories
-        return { value: baseValue, unit: 'dp' };
+        return { value: baseValue as number, unit: 'dp' };
     }
   }
 
@@ -68,6 +80,15 @@ export class AndroidUnitConverter extends BaseUnitProvider {
       
       case 'fontSize':
         return { factor: 1, unit: 'sp' };
+
+      case 'fontFamily':
+        return { factor: 1, unit: 'fontFamily' }; // Pass-through for strings
+
+      case 'fontWeight':
+        return { factor: 1, unit: 'fontWeight' }; // Pass-through for numeric weights
+
+      case 'letterSpacing':
+        return { factor: 1, unit: 'em' }; // 1:1 conversion to em
       
       case 'lineHeight':
       case 'density':

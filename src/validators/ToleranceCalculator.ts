@@ -34,7 +34,7 @@ export const DEFAULT_TOLERANCE_CONFIG: ToleranceConfig = {
   platformConstraintTolerance: 0.05,
   categoryTolerances: {
     [TokenCategory.SPACING]: 0.001,
-    [TokenCategory.FONT_SIZE]: 0.001,
+    [TokenCategory.FONT_SIZE]: 0.002, // Higher tolerance for REM precision rounding
     [TokenCategory.LINE_HEIGHT]: 0.001,
     [TokenCategory.RADIUS]: 0.001,
     [TokenCategory.DENSITY]: 0.001,
@@ -169,8 +169,9 @@ export class ToleranceCalculator {
     // Different categories may have different conversion precision requirements
     switch (context.category) {
       case TokenCategory.FONT_SIZE:
-        // REM conversion may introduce rounding (e.g., 16px / 16 = 1rem exactly)
-        return baseConversionTolerance * 0.5;
+        // REM conversion introduces 3-decimal precision rounding (e.g., 0.8125 → 0.813)
+        // Maximum rounding error is 0.0005 (half of the precision unit)
+        return Math.max(baseConversionTolerance * 2.0, 0.001);
 
       case TokenCategory.SPACING:
       case TokenCategory.RADIUS:

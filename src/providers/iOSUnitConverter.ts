@@ -19,7 +19,7 @@ export class iOSUnitConverter extends BaseUnitProvider {
     return this.convertValue(token.baseValue, token.category);
   }
 
-  convertValue(baseValue: number, category: string): PlatformValues['ios'] {
+  convertValue(baseValue: number | string, category: string): PlatformValues['ios'] {
     switch (category) {
       case 'spacing':
       case 'radius':
@@ -27,19 +27,31 @@ export class iOSUnitConverter extends BaseUnitProvider {
       case 'tapArea':
         // Convert to points (1:1 ratio for most values)
         // Points are device-independent units in iOS
-        return { value: baseValue, unit: 'pt' };
+        return { value: baseValue as number, unit: 'pt' };
+      
+      case 'fontFamily':
+        // Font family remains as string for iOS
+        return { value: baseValue as string, unit: 'fontFamily' };
+
+      case 'fontWeight':
+        // Font weight remains as numeric for iOS
+        return { value: baseValue as number, unit: 'fontWeight' };
+
+      case 'letterSpacing':
+        // Letter spacing converted to em units for iOS
+        return { value: baseValue as number, unit: 'em' };
       
       case 'lineHeight':
         // Line height remains unitless for proper UIKit behavior
-        return { value: baseValue, unit: 'unitless' };
+        return { value: baseValue as number, unit: 'unitless' };
       
       case 'density':
         // Density is a multiplier, remains unitless
-        return { value: baseValue, unit: 'unitless' };
+        return { value: baseValue as number, unit: 'unitless' };
       
       default:
         // Default to points for unknown categories
-        return { value: baseValue, unit: 'pt' };
+        return { value: baseValue as number, unit: 'pt' };
     }
   }
 
@@ -50,6 +62,15 @@ export class iOSUnitConverter extends BaseUnitProvider {
       case 'fontSize':
       case 'tapArea':
         return { factor: 1, unit: 'pt' };
+
+      case 'fontFamily':
+        return { factor: 1, unit: 'fontFamily' }; // Pass-through for strings
+
+      case 'fontWeight':
+        return { factor: 1, unit: 'fontWeight' }; // Pass-through for numeric weights
+
+      case 'letterSpacing':
+        return { factor: 1, unit: 'em' }; // 1:1 conversion to em
       
       case 'lineHeight':
       case 'density':

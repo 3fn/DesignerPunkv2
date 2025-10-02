@@ -154,7 +154,7 @@ Convert the Mathematical Token System design into a series of prompts for a code
     
     **Post-Complete:** Commit with message "Task 2.3 Complete: Unit Tests for Primitive Token Registry"
 
-  - [ ] 2.4 Implement typography primitive token families
+  - [x] 2.4 Implement typography primitive token families
     - Create FontFamilyTokens.ts with Inter font stacks for display/body, system fonts, monospace
     - Create FontWeightTokens.ts with standard 100-900 weight progression and base 400
     - Create LetterSpacingTokens.ts with em-based spacing adjustments (-0.05 to 0.05)
@@ -298,7 +298,7 @@ Convert the Mathematical Token System design into a series of prompts for a code
     
     **Post-Complete:** Commit with message "Task 3.2 Complete: Cross-Platform Mathematical Consistency Validation"
     
-  - [ ]* 3.3 Write unit tests for Unit Provider services
+  - [x] 3.3 Write unit tests for Unit Provider services
     - Test mathematical accuracy of unit conversions
     - Test cross-platform consistency validation
     - Test platform constraint handling

@@ -163,19 +163,18 @@ export class PlatformConstraintHandler {
     // Cross-platform font weight constraints
     ['web', 'ios', 'android'].forEach(platform => {
       this.addConstraintDefinition(platform, TokenCategory.FONT_WEIGHT, (value) => {
-        if (typeof value === 'number' && (value < 100 || value > 900 || value % 100 !== 0)) {
-          const constrainedValue = Math.round(value / 100) * 100;
-          const clampedValue = Math.max(100, Math.min(900, constrainedValue));
+        if (typeof value === 'number' && (value < 100 || value > 900)) {
+          const clampedValue = Math.max(100, Math.min(900, value));
           
           return {
             type: ConstraintType.FONT_SYSTEM,
             platforms: [platform],
             category: TokenCategory.FONT_WEIGHT,
-            description: `${platform} font systems typically support weights in 100-900 range in 100-unit increments`,
+            description: `${platform} font systems support weights in 100-900 range`,
             originalValue: value,
             constrainedValue: clampedValue,
-            impact: 'Font weight rounded to nearest supported value',
-            recommendation: `Use standard font weights (100, 200, 300, 400, 500, 600, 700, 800, 900)`,
+            impact: 'Font weight clamped to supported range',
+            recommendation: `Use font weights between 100-900 (intermediate values like 450 are supported)`,
             severity: 'low'
           };
         }
@@ -184,26 +183,31 @@ export class PlatformConstraintHandler {
     });
 
     // REM conversion precision constraints for web
+    // Note: This constraint should only apply to pixel values being converted to REM,
+    // not to values that are already in REM units
     this.addConstraintDefinition('web', TokenCategory.FONT_SIZE, (value) => {
       if (typeof value === 'number') {
-        // Check if REM conversion results in excessive decimal places
-        const remValue = value / 16; // Assuming 16px base
-        const decimalPlaces = (remValue.toString().split('.')[1] || '').length;
-        
-        if (decimalPlaces > 3) {
-          const roundedValue = Math.round(remValue * 1000) / 1000;
+        // Only apply precision constraint if the value appears to be in pixels (> 10)
+        // Values already in REM (typically 0.5-5) should not be precision-constrained
+        if (value > 10) {
+          const remValue = value / 16; // Convert pixels to REM
+          const decimalPlaces = (remValue.toString().split('.')[1] || '').length;
           
-          return {
-            type: ConstraintType.CONVERSION_PRECISION,
-            platforms: ['web'],
-            category: TokenCategory.FONT_SIZE,
-            description: 'REM values with excessive decimal places may cause rendering inconsistencies',
-            originalValue: value,
-            constrainedValue: roundedValue * 16, // Convert back to base value
-            impact: 'REM value rounded to 3 decimal places for consistency',
-            recommendation: 'Limit REM precision to 3 decimal places',
-            severity: 'low'
-          };
+          if (decimalPlaces > 3) {
+            const roundedValue = Math.round(remValue * 1000) / 1000;
+            
+            return {
+              type: ConstraintType.CONVERSION_PRECISION,
+              platforms: ['web'],
+              category: TokenCategory.FONT_SIZE,
+              description: 'REM values with excessive decimal places may cause rendering inconsistencies',
+              originalValue: value,
+              constrainedValue: roundedValue * 16, // Convert back to pixels
+              impact: 'REM value rounded to 3 decimal places for consistency',
+              recommendation: 'Limit REM precision to 3 decimal places',
+              severity: 'low'
+            };
+          }
         }
       }
       return null;
@@ -406,16 +410,16 @@ export class PlatformConstraintHandler {
     const documentation: Record<string, any> = {
       web: {
         fontSize: 'Minimum 0.5rem for reliable rendering',
-        fontWeight: 'Standard weights 100-900 in 100-unit increments',
+        fontWeight: 'Font weights 100-900 supported (intermediate values like 450 allowed)',
         remPrecision: 'Limited to 3 decimal places for consistency'
       },
       ios: {
         tapArea: 'Minimum 44pt for accessibility compliance (HIG)',
-        fontWeight: 'Standard weights 100-900 supported'
+        fontWeight: 'Font weights 100-900 supported (intermediate values allowed)'
       },
       android: {
         tapArea: 'Minimum 48dp for accessibility compliance (Material Design)',
-        fontWeight: 'Standard weights 100-900 supported'
+        fontWeight: 'Font weights 100-900 supported (intermediate values allowed)'
       }
     };
 

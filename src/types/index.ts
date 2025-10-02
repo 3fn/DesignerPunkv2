@@ -6,12 +6,12 @@
  */
 
 // Primitive Token Types
-export type { PrimitiveToken, PlatformValues } from './PrimitiveToken.js';
-export { TokenCategory } from './PrimitiveToken.js';
+export type { PrimitiveToken, PlatformValues } from './PrimitiveToken';
+export { TokenCategory } from './PrimitiveToken';
 
 // Semantic Token Types  
-export type { SemanticToken } from './SemanticToken.js';
-export { SemanticCategory } from './SemanticToken.js';
+export type { SemanticToken } from './SemanticToken';
+export { SemanticCategory } from './SemanticToken';
 
 // Validation Result Types
 export type { 
@@ -19,7 +19,7 @@ export type {
   UsagePatternResult, 
   ConsistencyValidationResult,
   ValidationLevel 
-} from './ValidationResult.js';
+} from './ValidationResult';
 
 // Translation Output Types
 export type { 
@@ -29,4 +29,4 @@ export type {
   PathOrganizationConfig,
   TargetPlatform,
   OutputFormat
-} from './TranslationOutput.js';
+} from './TranslationOutput';
