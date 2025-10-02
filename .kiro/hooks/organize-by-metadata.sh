@@ -89,12 +89,27 @@ get_target_directory() {
             echo ".kiro/steering/"
             ;;
         "working-document")
-            echo "." # Stay in root
+            echo "" # Stay in root (empty string to avoid ./ prefix)
             ;;
         *)
-            echo "." # Default to root if unknown
+            echo "" # Default to root if unknown (empty string to avoid ./ prefix)
             ;;
     esac
+}
+
+# Function to get target path for a file
+get_target_path() {
+    local file="$1"
+    local organization="$2"
+    local scope="$3"
+    local target_dir=$(get_target_directory "$organization" "$scope")
+    local filename=$(basename "$file")
+    
+    if [[ -z "$target_dir" ]]; then
+        echo "$filename"
+    else
+        echo "${target_dir}${filename}"
+    fi
 }
 
 # Function to create directory if it doesn't exist
@@ -112,10 +127,12 @@ organize_file() {
     local organization=$(extract_metadata "$file" "Organization")
     local scope=$(extract_metadata "$file" "Scope")
     local target_dir=$(get_target_directory "$organization" "$scope")
-    local target_path="${target_dir}$(basename "$file")"
+    local target_path=$(get_target_path "$file" "$organization" "$scope")
     
     # Skip if already in correct location
-    if [[ "$file" == "$target_path" ]]; then
+    # Normalize paths for comparison (remove ./ prefix)
+    local normalized_file="${file#./}"
+    if [[ "$normalized_file" == "$target_path" ]]; then
         print_success "Already organized: $file"
         return 0
     fi
@@ -188,13 +205,23 @@ organize_files() {
     
     print_status "Scanning for files to organize..."
     
-    # Find all markdown files in root directory
+    # Find all markdown files in root directory that need organization
     while IFS= read -r -d '' file; do
         if [[ -f "$file" && "$file" == *.md ]]; then
             local organization=$(extract_metadata "$file" "Organization")
             if [[ -n "$organization" ]]; then
                 if validate_metadata "$file"; then
-                    files_to_organize+=("$file")
+                    # Check if file is already in correct location
+                    local scope=$(extract_metadata "$file" "Scope")
+                    local target_dir=$(get_target_directory "$organization" "$scope")
+                    local target_path=$(get_target_path "$file" "$organization" "$scope")
+                    
+                    # Only add to organize list if not already in correct location
+                    # Normalize paths for comparison (remove ./ prefix)
+                    local normalized_file="${file#./}"
+                    if [[ "$normalized_file" != "$target_path" ]]; then
+                        files_to_organize+=("$file")
+                    fi
                 else
                     ((validation_errors++))
                 fi
@@ -323,9 +350,11 @@ dry_run() {
                 if validate_metadata "$file"; then
                     local scope=$(extract_metadata "$file" "Scope")
                     local target_dir=$(get_target_directory "$organization" "$scope")
-                    local target_path="${target_dir}$(basename "$file")"
+                    local target_path=$(get_target_path "$file" "$organization" "$scope")
                     
-                    if [[ "$file" != "$target_path" ]]; then
+                    # Normalize paths for comparison (remove ./ prefix)
+                    local normalized_file="${file#./}"
+                    if [[ "$normalized_file" != "$target_path" ]]; then
                         echo "  WOULD MOVE: $file -> $target_path"
                         files_to_organize+=("$file")
                     else
