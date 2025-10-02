@@ -23,7 +23,7 @@ export const MODULAR_SCALE_RATIO = 1.125;
  */
 function generateFontSizePlatformValues(baseValue: number): PlatformValues {
   return {
-    web: { value: baseValue / 16, unit: 'rem' }, // Convert to REM (÷16)
+    web: { value: baseValue / FONT_SIZE_BASE_VALUE, unit: 'rem' }, // Convert to 1 REM
     ios: { value: baseValue, unit: 'pt' },
     android: { value: baseValue, unit: 'sp' }
   };

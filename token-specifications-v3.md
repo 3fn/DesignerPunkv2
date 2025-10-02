@@ -10,7 +10,7 @@
 
 ## Overview
 
-This document defines the current token specifications for the Mathematical Token System, representing the evolution from Token Architecture 2.0 to the current unitless, per-family base value approach.
+This document defines the current token specifications for the Mathematical Token System, representing the evolution from Token Architecture 2.0 to the current unitless, per-family base value approach with primitive and semantic token layers.
 
 ## Key Changes from Previous Iteration
 
@@ -24,10 +24,17 @@ This document defines the current token specifications for the Mathematical Toke
 
 ### **Expanded Token Categories**
 - Added line height, scale density, minimum tap areas, and other accessibility tokens
+- Separated primitive tokens (foundational mathematical values) from semantic tokens (contextual references)
+
+### **Two-Layer Token Architecture**
+- **Primitive Tokens**: Foundational unitless mathematical values organized by token families
+- **Semantic Tokens**: Contextual tokens that reference primitives with semantic meaning (e.g., `color.warning`, `space.tight`, `typography.bodyText`)
 
 ---
 
-## Token Family Specifications
+## Primitive Token Family Specifications
+
+The following specifications define **primitive tokens** - the foundational mathematical values that serve as the building blocks for semantic tokens.
 
 ### **Spacing Token Family**
 **Base Value**: 8  
@@ -47,19 +54,59 @@ space500 = (space100 × 5)
 space600 = (space100 × 6)
 ```
 
-### **Typography Token Family**
+### **Font Size Token Family**
 **Base Value**: 16  
-**Unit Application**: Web (÷(Base Unit) = REM), iOS (×1pt), Android (×1sp)
+**Unit Application**: Web (÷ Base Unit = REM), iOS (×1pt), Android (×1sp)  
+**Mathematical Progression**: 1.125 modular scale (musical fourth)
 
 ```
-fontSize050 = (fontSize100 × 0.75)
-fontSize075 = (fontSize100 × 0.875)
-fontSize100 = baseValue - Base Unit
-fontSize125 = (fontSize100 x 1.125)
-fontSize150 = (fontSize100 × 1.25)
-fontSize200 = (fontSize100 × 1.424) - Rounded from 1.125³
-fontSize250 = (fontSize100 × 1.75)
-fontSize300 = (fontSize100 × 2)
+fontSize050 = 13 - (base ÷ 1.125²) rounded
+fontSize075 = 14 - (base ÷ 1.125) rounded  
+fontSize100 = 16 - Base Unit
+fontSize125 = 18 - (base × 1.125) rounded
+fontSize150 = 20 - (base × 1.125²) rounded
+fontSize200 = 23 - (base × 1.125³) rounded
+fontSize300 = 26 - (base × 1.125⁴) rounded
+fontSize400 = 29 - (base × 1.125⁵) rounded
+```
+
+### **Font Family Token Family**
+**Base Value**: N/A (categorical, not mathematical)  
+**Unit Application**: Font family names/stacks across all platforms
+
+```
+fontFamilySystem     = Platform (Browser, iOS, Android) default font stack 
+fontFamilyMono       = SF Mono, Monaco, Inconsolata, 'Roboto Mono', Consolas, 'Courier New', monospace
+fontFamilyDisplay    = Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif
+fontFamilyBody       = Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif
+```
+
+### **Font Weight Token Family**
+**Base Value**: 400 (normal weight)  
+**Unit Application**: Numeric font weights across all platforms
+
+```
+fontWeight100 = 100 - Thin
+fontWeight200 = 200 - Extra Light
+fontWeight300 = 300 - Light
+fontWeight400 = 400 - Normal (Base Unit)
+fontWeight500 = 500 - Medium
+fontWeight600 = 600 - Semi Bold
+fontWeight700 = 700 - Bold
+fontWeight800 = 800 - Extra Bold
+fontWeight900 = 900 - Black
+```
+
+### **Letter Spacing Token Family**
+**Base Value**: 0 (normal spacing)  
+**Unit Application**: Web (×1em), iOS (×1em equivalent), Android (×1em equivalent)
+
+```
+letterSpacing025 = -0.025 - Tight spacing for large text
+letterSpacing050 = -0.05  - Very tight spacing for display text  
+letterSpacing100 = 0      - Normal spacing (Base Unit)
+letterSpacing125 = 0.025  - Loose spacing for small text
+letterSpacing150 = 0.05   - Very loose spacing for emphasis
 ```
 
 ### **Line Height Token Family**
@@ -124,6 +171,135 @@ tapAreaComfortable = (tapAreaMinimum × 1.273) - Comfortable Touch
 
 ---
 
+## Semantic Token Specifications
+
+Semantic tokens provide contextual meaning by referencing primitive tokens. They enable design intent while maintaining mathematical consistency.
+
+### **Typography Semantic Tokens**
+Semantic typography tokens combine multiple primitive tokens to create complete text styles. Based on the previous DesignerPunk iteration, we use a three-layer approach:
+
+#### **Content Typography (Semantic Layer)**
+```
+// Body Text Variants
+typography.body = {
+  fontSize: fontSize100,     // 16px
+  lineHeight: lineHeight100, // 1.5
+  fontFamily: fontFamilyBody,
+  fontWeight: fontWeight400
+}
+
+typography.bodySmall = {
+  fontSize: fontSize075,     // 14px
+  lineHeight: lineHeight075, // 1.25
+  fontFamily: fontFamilyBody,
+  fontWeight: fontWeight400
+}
+
+typography.bodyLarge = {
+  fontSize: fontSize125,     // 18px
+  lineHeight: lineHeight125, // 1.75
+  fontFamily: fontFamilyBody,
+  fontWeight: fontWeight400
+}
+
+// Heading Hierarchy
+typography.heading1 = {
+  fontSize: fontSize300,     // 26px
+  lineHeight: lineHeight075, // 1.25
+  fontFamily: fontFamilyDisplay,
+  fontWeight: fontWeight700
+}
+
+typography.heading2 = {
+  fontSize: fontSize250,     // ~23px (fontSize200 equivalent)
+  lineHeight: lineHeight075, // 1.25
+  fontFamily: fontFamilyDisplay,
+  fontWeight: fontWeight600
+}
+
+typography.heading3 = {
+  fontSize: fontSize200,     // 23px
+  lineHeight: lineHeight100, // 1.5
+  fontFamily: fontFamilyDisplay,
+  fontWeight: fontWeight600
+}
+
+typography.heading4 = {
+  fontSize: fontSize150,     // 20px
+  lineHeight: lineHeight100, // 1.5
+  fontFamily: fontFamilyBody,
+  fontWeight: fontWeight600
+}
+
+// Specialized Text
+typography.caption = {
+  fontSize: fontSize050,     // 13px
+  lineHeight: lineHeight050, // 1.0
+  fontFamily: fontFamilyBody,
+  fontWeight: fontWeight300
+}
+
+typography.legal = {
+  fontSize: fontSize050,     // 13px
+  lineHeight: lineHeight050, // 1.0
+  fontFamily: fontFamilyBody,
+  fontWeight: fontWeight400
+}
+```
+
+#### **Interface Typography (UI Layer)**
+```
+// UI Component Text Styles
+typography.button = {
+  fontSize: fontSize100,     // 16px
+  fontFamily: fontFamilyBody,
+  fontWeight: fontWeight500
+}
+
+typography.input = {
+  fontSize: fontSize100,     // 16px
+  fontFamily: fontFamilyBody,
+  fontWeight: fontWeight400
+}
+
+typography.label = {
+  fontSize: fontSize075,     // 14px
+  fontFamily: fontFamilyBody,
+  fontWeight: fontWeight500
+}
+```
+
+### **Spacing Semantic Tokens**
+Semantic spacing tokens provide contextual meaning for specific use cases:
+
+```
+space.tight      = space050  - Compact layouts
+space.normal     = space100  - Standard spacing
+space.loose      = space200  - Generous spacing
+space.component  = space125  - Component internal spacing (strategic flexibility)
+space.section    = space400  - Section separation
+```
+
+### **Color Semantic Tokens**
+Color semantic tokens reference primitive color values with contextual meaning:
+
+```
+color.primary    = blue500   - Primary brand color
+color.secondary  = gray600   - Secondary brand color
+color.success    = green500  - Success states
+color.warning    = yellow500 - Warning states
+color.error      = red500    - Error states
+color.text       = gray900   - Primary text color
+color.textMuted  = gray600   - Secondary text color
+```
+
+### **Usage Priority**
+1. **Prefer semantic tokens** when available for the use case
+2. **Fallback to primitive tokens** when no appropriate semantic token exists
+3. **Avoid raw values** - always use token references
+
+---
+
 ## Mathematical Relationships
 
 ### **Strategic Flexibility Tokens**
@@ -182,13 +358,23 @@ Tap Area: unitlessValue × 1dp
 {category}{value}
 ```
 
-### **Category Prefixes**
+### **Primitive Token Category Prefixes**
 - `space` - Spacing tokens
-- `fontSize` - Typography size tokens
+- `fontSize` - Font size tokens
+- `fontFamily` - Font family tokens
+- `fontWeight` - Font weight tokens
 - `lineHeight` - Line height ratio tokens
+- `letterSpacing` - Letter spacing tokens
 - `radius` - Border radius tokens
 - `density` - Scale density tokens
 - `tapArea` - Minimum touch target tokens
+
+### **Semantic Token Category Prefixes**
+- `typography` - Complete text style definitions
+- `color` - Contextual color references
+- `space` - Contextual spacing references
+- `border` - Border style combinations
+- `shadow` - Shadow effect definitions
 
 ### **Value Suffixes**
 - Numbers typically represent relative scale position (050, 075, 100, 125, etc.)
@@ -200,8 +386,11 @@ Tap Area: unitlessValue × 1dp
 
 ### **Per-Family Base Values Rationale**
 - **Spacing (8)**: Maintains 8px baseline grid foundation
-- **Typography (16)**: Aligns with browser default font size
+- **Font Size (16)**: Aligns with browser default font size
+- **Font Family (N/A)**: Categorical values, not mathematical
+- **Font Weight (400)**: Standard normal weight baseline
 - **Line Height (1.5)**: Optimal readability ratio for body text
+- **Letter Spacing (0)**: Normal spacing baseline for optimal readability
 - **Radius (8)**: Consistent with spacing for visual harmony
 - **Density (1.0)**: Neutral multiplier for scaling
 - **Tap Area (44)**: WCAG AA minimum touch target requirement
@@ -228,11 +417,15 @@ Tap Area: unitlessValue × 1dp
 
 ## Questions for Validation
 
-1. **Token Categories**: Are there additional token categories needed beyond these six? Peter: Probably, but we can evaluate those needs as we get more into development. 
-2. **Token Values**: Do the specific token values and progressions look correct?
-3. **Base Values**: Are the per-family base values appropriate? Peter: I believe they are, yes.
-4. **Naming Conventions**: Does the naming structure work for all use cases? Peter: Mostly, but this also doesn't seem to include semantic tokens whose naming conventions will be drastically different as they're defined more conceptually.
-5. **Cross-Platform Units**: Are the platform-specific unit applications correct?
+1. **Primitive Token Categories**: Are there additional primitive token categories needed beyond these nine families?
+2. **Semantic Token Structure**: Does the three-layer approach (primitive → semantic → interface) provide the right abstraction levels?
+3. **Typography Semantic Tokens**: Do the combined typography tokens (fontSize + lineHeight + fontFamily + fontWeight + letterSpacing) provide sufficient flexibility?
+4. **Font Family Categories**: Are the font family categories (system, mono, display, body) comprehensive for cross-platform needs?
+5. **Letter Spacing Integration**: Should letterSpacing be included in all semantic typography tokens or only specific ones?
+6. **Interface Typography**: Does the separate interface layer (button, input, label) provide appropriate UI-specific styling?
+7. **Heading Hierarchy**: Is the heading1-4 structure sufficient, or should we extend to full H1-H6 coverage?
+8. **Usage Priority**: Is the semantic-first, primitive-fallback approach the right guidance across all typography use cases?
+9. **Cross-Platform Units**: Are the platform-specific unit applications correct for all token families including letterSpacing?
 
 ---
 

@@ -24,6 +24,32 @@ export {
   MODULAR_SCALE_RATIO
 } from './FontSizeTokens';
 
+// Font family tokens
+export {
+  fontFamilyTokens,
+  fontFamilyTokenNames,
+  getFontFamilyToken,
+  getAllFontFamilyTokens
+} from './FontFamilyTokens';
+
+// Font weight tokens
+export {
+  fontWeightTokens,
+  fontWeightTokenNames,
+  getFontWeightToken,
+  getAllFontWeightTokens,
+  FONT_WEIGHT_BASE_VALUE
+} from './FontWeightTokens';
+
+// Letter spacing tokens
+export {
+  letterSpacingTokens,
+  letterSpacingTokenNames,
+  getLetterSpacingToken,
+  getAllLetterSpacingTokens,
+  LETTER_SPACING_BASE_VALUE
+} from './LetterSpacingTokens';
+
 // Line height tokens
 export {
   lineHeightTokens,
@@ -68,7 +94,10 @@ export {
 // Combined token utilities
 import { spacingTokens } from './SpacingTokens';
 import { fontSizeTokens } from './FontSizeTokens';
+import { fontFamilyTokens } from './FontFamilyTokens';
+import { fontWeightTokens } from './FontWeightTokens';
 import { lineHeightTokens } from './LineHeightTokens';
+import { letterSpacingTokens } from './LetterSpacingTokens';
 import { densityTokens } from './DensityTokens';
 import { tapAreaTokens } from './TapAreaTokens';
 import { radiusTokens } from './RadiusTokens';
@@ -80,7 +109,10 @@ import { PrimitiveToken, TokenCategory } from '../types/PrimitiveToken';
 export const allTokens = {
   [TokenCategory.SPACING]: spacingTokens,
   [TokenCategory.FONT_SIZE]: fontSizeTokens,
+  [TokenCategory.FONT_FAMILY]: fontFamilyTokens,
+  [TokenCategory.FONT_WEIGHT]: fontWeightTokens,
   [TokenCategory.LINE_HEIGHT]: lineHeightTokens,
+  [TokenCategory.LETTER_SPACING]: letterSpacingTokens,
   [TokenCategory.RADIUS]: radiusTokens,
   [TokenCategory.DENSITY]: densityTokens,
   [TokenCategory.TAP_AREA]: tapAreaTokens
@@ -93,7 +125,10 @@ export function getAllTokens(): PrimitiveToken[] {
   return [
     ...Object.values(spacingTokens),
     ...Object.values(fontSizeTokens),
+    ...Object.values(fontFamilyTokens),
+    ...Object.values(fontWeightTokens),
     ...Object.values(lineHeightTokens),
+    ...Object.values(letterSpacingTokens),
     ...Object.values(radiusTokens),
     ...Object.values(densityTokens),
     ...Object.values(tapAreaTokens)
@@ -143,7 +178,10 @@ export function getAllPrecisionTargetedTokens(): PrimitiveToken[] {
 export const TOKEN_FAMILY_BASE_VALUES = {
   [TokenCategory.SPACING]: 8,
   [TokenCategory.FONT_SIZE]: 16,
+  [TokenCategory.FONT_FAMILY]: 0, // N/A for categorical tokens
+  [TokenCategory.FONT_WEIGHT]: 400,
   [TokenCategory.LINE_HEIGHT]: 1.5,
+  [TokenCategory.LETTER_SPACING]: 0,
   [TokenCategory.RADIUS]: 8,
   [TokenCategory.DENSITY]: 1.0,
   [TokenCategory.TAP_AREA]: 44

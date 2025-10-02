@@ -12,7 +12,10 @@
 export enum TokenCategory {
   SPACING = 'spacing',
   FONT_SIZE = 'fontSize',
+  FONT_FAMILY = 'fontFamily',
+  FONT_WEIGHT = 'fontWeight',
   LINE_HEIGHT = 'lineHeight',
+  LETTER_SPACING = 'letterSpacing',
   RADIUS = 'radius',
   DENSITY = 'density',
   TAP_AREA = 'tapArea'
@@ -22,9 +25,9 @@ export enum TokenCategory {
  * Platform-specific values for cross-platform consistency with per-family unit application
  */
 export interface PlatformValues {
-  web: { value: number; unit: 'px' | 'rem' | 'unitless' };
-  ios: { value: number; unit: 'pt' | 'unitless' };
-  android: { value: number; unit: 'dp' | 'sp' | 'unitless' };
+  web: { value: number | string; unit: 'px' | 'rem' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' };
+  ios: { value: number | string; unit: 'pt' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' };
+  android: { value: number | string; unit: 'dp' | 'sp' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' };
 }
 
 /**

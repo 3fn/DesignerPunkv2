@@ -13,21 +13,26 @@ import {
   SPACING_BASE_VALUE
 } from '../../tokens/SpacingTokens';
 import {
-  fontSizeTokens,
-  lineHeightTokens,
-  densityTokens,
-  tapAreaTokens,
-  getFontSizeTokens,
-  getLineHeightTokens,
-  getDensityTokens,
-  getTapAreaTokens,
-  getSizingToken,
+  getAllFontSizeTokens,
+  getFontSizeToken,
   FONT_SIZE_BASE_VALUE,
-  LINE_HEIGHT_BASE_VALUE,
-  DENSITY_BASE_VALUE,
-  TAP_AREA_BASE_VALUE,
   MODULAR_SCALE_RATIO
-} from '../../tokens/SizingTokens';
+} from '../../tokens/FontSizeTokens';
+import {
+  getAllLineHeightTokens,
+  getLineHeightToken,
+  LINE_HEIGHT_BASE_VALUE
+} from '../../tokens/LineHeightTokens';
+import {
+  getAllDensityTokens,
+  getDensityToken,
+  DENSITY_BASE_VALUE
+} from '../../tokens/DensityTokens';
+import {
+  getAllTapAreaTokens,
+  getTapAreaToken,
+  TAP_AREA_BASE_VALUE
+} from '../../tokens/TapAreaTokens';
 import {
   radiusTokens,
   getAllRadiusTokens,
@@ -102,22 +107,22 @@ describe('Token Categories', () => {
       expect(FONT_SIZE_BASE_VALUE).toBe(16);
       expect(MODULAR_SCALE_RATIO).toBe(1.125);
 
-      const allTokens = getFontSizeTokens();
+      const allTokens = getAllFontSizeTokens();
       expect(allTokens.length).toBeGreaterThan(0);
-      expect(allTokens.every(token => token.category === TokenCategory.FONT_SIZE)).toBe(true);
-      expect(allTokens.every(token => token.familyBaseValue === FONT_SIZE_BASE_VALUE)).toBe(true);
+      expect(allTokens.every((token: any) => token.category === TokenCategory.FONT_SIZE)).toBe(true);
+      expect(allTokens.every((token: any) => token.familyBaseValue === FONT_SIZE_BASE_VALUE)).toBe(true);
     });
 
     test('should follow modular scale mathematical progression', () => {
-      const fontSize100 = getSizingToken('fontSize100', TokenCategory.FONT_SIZE);
-      const fontSize125 = getSizingToken('fontSize125', TokenCategory.FONT_SIZE);
+      const fontSize100 = getFontSizeToken('fontSize100');
+      const fontSize125 = getFontSizeToken('fontSize125');
 
       expect(fontSize100?.baseValue).toBe(16);
       expect(fontSize125?.baseValue).toBe(18); // 16 × 1.125 = 18
     });
 
     test('should have correct platform values with REM conversion', () => {
-      const fontSize100 = getSizingToken('fontSize100', TokenCategory.FONT_SIZE);
+      const fontSize100 = getFontSizeToken('fontSize100');
 
       expect(fontSize100?.platforms.web).toEqual({ value: 1, unit: 'rem' }); // 16 ÷ 16 = 1
       expect(fontSize100?.platforms.ios).toEqual({ value: 16, unit: 'pt' });
@@ -125,10 +130,10 @@ describe('Token Categories', () => {
     });
 
     test('should not require baseline grid alignment', () => {
-      const allTokens = getFontSizeTokens();
+      const allTokens = getAllFontSizeTokens();
 
       // Most fontSize tokens don't align with 8-unit grid due to modular scale
-      const nonAlignedTokens = allTokens.filter(token => !token.baselineGridAlignment);
+      const nonAlignedTokens = allTokens.filter((token: any) => !token.baselineGridAlignment);
       expect(nonAlignedTokens.length).toBeGreaterThan(0);
     });
   });
@@ -137,15 +142,15 @@ describe('Token Categories', () => {
     test('should have correct base value and precision targeting', () => {
       expect(LINE_HEIGHT_BASE_VALUE).toBe(1.5);
 
-      const allTokens = getLineHeightTokens();
+      const allTokens = getAllLineHeightTokens();
       expect(allTokens.length).toBeGreaterThan(0);
-      expect(allTokens.every(token => token.category === TokenCategory.LINE_HEIGHT)).toBe(true);
-      expect(allTokens.every(token => token.familyBaseValue === LINE_HEIGHT_BASE_VALUE)).toBe(true);
-      expect(allTokens.every(token => token.isPrecisionTargeted)).toBe(true);
+      expect(allTokens.every((token: any) => token.category === TokenCategory.LINE_HEIGHT)).toBe(true);
+      expect(allTokens.every((token: any) => token.familyBaseValue === LINE_HEIGHT_BASE_VALUE)).toBe(true);
+      expect(allTokens.every((token: any) => token.isPrecisionTargeted)).toBe(true);
     });
 
     test('should have unitless platform values', () => {
-      const lineHeight100 = getSizingToken('lineHeight100', TokenCategory.LINE_HEIGHT);
+      const lineHeight100 = getLineHeightToken('lineHeight100');
 
       expect(lineHeight100?.platforms.web).toEqual({ value: 1.5, unit: 'unitless' });
       expect(lineHeight100?.platforms.ios).toEqual({ value: 1.5, unit: 'unitless' });
@@ -153,9 +158,9 @@ describe('Token Categories', () => {
     });
 
     test('should provide range of line height multipliers', () => {
-      const lineHeight050 = getSizingToken('lineHeight050', TokenCategory.LINE_HEIGHT);
-      const lineHeight100 = getSizingToken('lineHeight100', TokenCategory.LINE_HEIGHT);
-      const lineHeight150 = getSizingToken('lineHeight150', TokenCategory.LINE_HEIGHT);
+      const lineHeight050 = getLineHeightToken('lineHeight050');
+      const lineHeight100 = getLineHeightToken('lineHeight100');
+      const lineHeight150 = getLineHeightToken('lineHeight150');
 
       expect(lineHeight050?.baseValue).toBe(1.0); // Tight
       expect(lineHeight100?.baseValue).toBe(1.5); // Base
@@ -167,17 +172,17 @@ describe('Token Categories', () => {
     test('should have correct base value and selective application', () => {
       expect(DENSITY_BASE_VALUE).toBe(1.0);
 
-      const allTokens = getDensityTokens();
+      const allTokens = getAllDensityTokens();
       expect(allTokens.length).toBeGreaterThan(0);
-      expect(allTokens.every(token => token.category === TokenCategory.DENSITY)).toBe(true);
-      expect(allTokens.every(token => token.familyBaseValue === DENSITY_BASE_VALUE)).toBe(true);
-      expect(allTokens.every(token => token.isPrecisionTargeted)).toBe(true);
+      expect(allTokens.every((token: any) => token.category === TokenCategory.DENSITY)).toBe(true);
+      expect(allTokens.every((token: any) => token.familyBaseValue === DENSITY_BASE_VALUE)).toBe(true);
+      expect(allTokens.every((token: any) => token.isPrecisionTargeted)).toBe(true);
     });
 
     test('should provide density scaling options', () => {
-      const densityCompact = getSizingToken('densityCompact', TokenCategory.DENSITY);
-      const densityDefault = getSizingToken('densityDefault', TokenCategory.DENSITY);
-      const densityComfortable = getSizingToken('densityComfortable', TokenCategory.DENSITY);
+      const densityCompact = getDensityToken('densityCompact');
+      const densityDefault = getDensityToken('densityDefault');
+      const densityComfortable = getDensityToken('densityComfortable');
 
       expect(densityCompact?.baseValue).toBe(0.75); // 25% reduction
       expect(densityDefault?.baseValue).toBe(1.0); // No scaling
@@ -185,7 +190,7 @@ describe('Token Categories', () => {
     });
 
     test('should have unitless platform values', () => {
-      const densityDefault = getSizingToken('densityDefault', TokenCategory.DENSITY);
+      const densityDefault = getDensityToken('densityDefault');
 
       expect(densityDefault?.platforms.web).toEqual({ value: 1.0, unit: 'unitless' });
       expect(densityDefault?.platforms.ios).toEqual({ value: 1.0, unit: 'unitless' });
@@ -197,23 +202,23 @@ describe('Token Categories', () => {
     test('should have correct base value and accessibility targets', () => {
       expect(TAP_AREA_BASE_VALUE).toBe(44);
 
-      const allTokens = getTapAreaTokens();
+      const allTokens = getAllTapAreaTokens();
       expect(allTokens.length).toBeGreaterThan(0);
-      expect(allTokens.every(token => token.category === TokenCategory.TAP_AREA)).toBe(true);
-      expect(allTokens.every(token => token.familyBaseValue === TAP_AREA_BASE_VALUE)).toBe(true);
-      expect(allTokens.every(token => token.isPrecisionTargeted)).toBe(true);
+      expect(allTokens.every((token: any) => token.category === TokenCategory.TAP_AREA)).toBe(true);
+      expect(allTokens.every((token: any) => token.familyBaseValue === TAP_AREA_BASE_VALUE)).toBe(true);
+      expect(allTokens.every((token: any) => token.isPrecisionTargeted)).toBe(true);
     });
 
     test('should meet accessibility requirements', () => {
-      const tapAreaMinimum = getSizingToken('tapAreaMinimum', TokenCategory.TAP_AREA);
-      const tapAreaRecommended = getSizingToken('tapAreaRecommended', TokenCategory.TAP_AREA);
+      const tapAreaMinimum = getTapAreaToken('tapAreaMinimum');
+      const tapAreaRecommended = getTapAreaToken('tapAreaRecommended');
 
       expect(tapAreaMinimum?.baseValue).toBe(44); // WCAG 2.1 AA minimum
       expect(tapAreaRecommended?.baseValue).toBe(48); // Enhanced usability
     });
 
     test('should have correct platform values', () => {
-      const tapAreaMinimum = getSizingToken('tapAreaMinimum', TokenCategory.TAP_AREA);
+      const tapAreaMinimum = getTapAreaToken('tapAreaMinimum');
 
       expect(tapAreaMinimum?.platforms.web).toEqual({ value: 44, unit: 'px' });
       expect(tapAreaMinimum?.platforms.ios).toEqual({ value: 44, unit: 'pt' });
@@ -221,8 +226,8 @@ describe('Token Categories', () => {
     });
 
     test('should include baseline grid aligned options', () => {
-      const tapAreaRecommended = getSizingToken('tapAreaRecommended', TokenCategory.TAP_AREA);
-      const tapAreaComfortable = getSizingToken('tapAreaComfortable', TokenCategory.TAP_AREA);
+      const tapAreaRecommended = getTapAreaToken('tapAreaRecommended');
+      const tapAreaComfortable = getTapAreaToken('tapAreaComfortable');
 
       expect(tapAreaRecommended?.baseValue).toBe(48); // 8 × 6
       expect(tapAreaRecommended?.baselineGridAlignment).toBe(true);
@@ -326,29 +331,29 @@ describe('Token Categories', () => {
 
     test('should have appropriate precision targeting flags', () => {
       // LineHeight, Density, and TapArea should be precision targeted
-      const lineHeightTokens = getLineHeightTokens();
-      const densityTokens = getDensityTokens();
-      const tapAreaTokens = getTapAreaTokens();
+      const lineHeightTokens = getAllLineHeightTokens();
+      const densityTokens = getAllDensityTokens();
+      const tapAreaTokens = getAllTapAreaTokens();
 
-      expect(lineHeightTokens.every(token => token.isPrecisionTargeted)).toBe(true);
-      expect(densityTokens.every(token => token.isPrecisionTargeted)).toBe(true);
-      expect(tapAreaTokens.every(token => token.isPrecisionTargeted)).toBe(true);
+      expect(lineHeightTokens.every((token: any) => token.isPrecisionTargeted)).toBe(true);
+      expect(densityTokens.every((token: any) => token.isPrecisionTargeted)).toBe(true);
+      expect(tapAreaTokens.every((token: any) => token.isPrecisionTargeted)).toBe(true);
 
       // Spacing and Radius should not be precision targeted
       const spacingTokens = getAllSpacingTokens();
       const radiusTokens = getAllRadiusTokens();
 
-      expect(spacingTokens.every(token => !token.isPrecisionTargeted)).toBe(true);
-      expect(radiusTokens.every(token => !token.isPrecisionTargeted)).toBe(true);
+      expect(spacingTokens.every((token: any) => !token.isPrecisionTargeted)).toBe(true);
+      expect(radiusTokens.every((token: any) => !token.isPrecisionTargeted)).toBe(true);
     });
   });
 
   describe('Token Retrieval Functions', () => {
-    test('should handle getSizingToken for all sizing categories', () => {
-      const fontSize = getSizingToken('fontSize100', TokenCategory.FONT_SIZE);
-      const lineHeight = getSizingToken('lineHeight100', TokenCategory.LINE_HEIGHT);
-      const density = getSizingToken('densityDefault', TokenCategory.DENSITY);
-      const tapArea = getSizingToken('tapAreaMinimum', TokenCategory.TAP_AREA);
+    test('should handle individual token getters for all categories', () => {
+      const fontSize = getFontSizeToken('fontSize100');
+      const lineHeight = getLineHeightToken('lineHeight100');
+      const density = getDensityToken('densityDefault');
+      const tapArea = getTapAreaToken('tapAreaMinimum');
 
       expect(fontSize?.category).toBe(TokenCategory.FONT_SIZE);
       expect(lineHeight?.category).toBe(TokenCategory.LINE_HEIGHT);
@@ -356,19 +361,23 @@ describe('Token Categories', () => {
       expect(tapArea?.category).toBe(TokenCategory.TAP_AREA);
     });
 
-    test('should return undefined for invalid category/name combinations', () => {
-      const invalid1 = getSizingToken('fontSize100', TokenCategory.SPACING);
-      const invalid2 = getSizingToken('non-existent', TokenCategory.FONT_SIZE);
+    test('should return undefined for invalid token names', () => {
+      const invalid1 = getFontSizeToken('non-existent');
+      const invalid2 = getLineHeightToken('invalid-name');
+      const invalid3 = getDensityToken('does-not-exist');
+      const invalid4 = getTapAreaToken('missing-token');
 
       expect(invalid1).toBeUndefined();
       expect(invalid2).toBeUndefined();
+      expect(invalid3).toBeUndefined();
+      expect(invalid4).toBeUndefined();
     });
 
     test('should return all tokens for category getter functions', () => {
-      expect(getFontSizeTokens().length).toBeGreaterThan(0);
-      expect(getLineHeightTokens().length).toBeGreaterThan(0);
-      expect(getDensityTokens().length).toBeGreaterThan(0);
-      expect(getTapAreaTokens().length).toBeGreaterThan(0);
+      expect(getAllFontSizeTokens().length).toBeGreaterThan(0);
+      expect(getAllLineHeightTokens().length).toBeGreaterThan(0);
+      expect(getAllDensityTokens().length).toBeGreaterThan(0);
+      expect(getAllTapAreaTokens().length).toBeGreaterThan(0);
       expect(getAllSpacingTokens().length).toBeGreaterThan(0);
       expect(getAllRadiusTokens().length).toBeGreaterThan(0);
     });
