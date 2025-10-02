@@ -154,19 +154,96 @@ Convert the Mathematical Token System design into a series of prompts for a code
     
     **Post-Complete:** Commit with message "Task 2.3 Complete: Unit Tests for Primitive Token Registry"
 
-- [ ] 3. Implement Unit Provider services for cross-platform conversion
-  - [x] 3.1 Create base UnitProvider interface and platform-specific converters
-    - Implement WebUnitConverter (baseValue → REM with ÷16 conversion)
-    - Implement iOSUnitConverter (baseValue → points)
-    - Implement AndroidUnitConverter (baseValue → dp)
-    - _Requirements: 1.1, 1.2, 4.2_
+  - [ ] 2.4 Implement typography primitive token families
+    - Create FontFamilyTokens.ts with Inter font stacks for display/body, system fonts, monospace
+    - Create FontWeightTokens.ts with standard 100-900 weight progression and base 400
+    - Create LetterSpacingTokens.ts with em-based spacing adjustments (-0.05 to 0.05)
+    - Update PlatformValues interface to support string values and new unit types
+    - Add FONT_FAMILY, FONT_WEIGHT, LETTER_SPACING to TokenCategory enum
+    - Update tokens/index.ts to export all new token families
+    - _Requirements: 5.2, 5.3, 6.1, 6.2_
     
     **Success Criteria:**
-    - UnitProvider interface defines consistent contract for all platforms
-    - WebUnitConverter accurately converts base values to REM by dividing by the configured base font size
+    - FontFamilyTokens.ts provides Inter font stacks with system font fallbacks
+    - FontWeightTokens.ts includes complete 100-900 numeric weight range with 400 as base
+    - LetterSpacingTokens.ts provides precision-targeted em-based spacing adjustments
+    - PlatformValues interface supports both numeric and string values with appropriate units
+    - TokenCategory enum includes all typography token categories
+    - All typography tokens maintain mathematical relationships where applicable
+    - Typography tokens integrate seamlessly with existing token system architecture
+    
+    **Artifacts Created:**
+    - `src/tokens/FontFamilyTokens.ts` - Font family primitive tokens with Inter font stacks
+    - `src/tokens/FontWeightTokens.ts` - Font weight primitive tokens with numeric progression
+    - `src/tokens/LetterSpacingTokens.ts` - Letter spacing primitive tokens with em-based values
+    - Updated `src/types/PrimitiveToken.ts` - Enhanced PlatformValues interface and TokenCategory enum
+    - Updated `src/tokens/index.ts` - Barrel exports for all typography token families
+    
+    **Completion Documentation:**
+    - Store in `.kiro/specs/mathematical-token-system/completion/task-2-4-completion.md`
+    - Document typography token architecture and Inter font selection rationale
+    - Include mathematical relationships for font weight progression
+    - Document letter spacing precision targeting for typography refinement
+    - Include platform-specific considerations for typography tokens
+    
+    **Validation Required:**
+    - TypeScript compilation validation for all typography token files
+    - Validate font family tokens provide appropriate cross-platform font stacks
+    - Validate font weight tokens follow standard numeric progression
+    - Validate letter spacing tokens provide appropriate em-based adjustments
+    - Test typography token integration with existing token system
+    
+    **Post-Complete:** Commit with message "Task 2.4 Complete: Typography Primitive Token Families"
+
+  - [ ]* 2.5 Write unit tests for typography token families
+    - Test font family token categorical values and platform consistency
+    - Test font weight token numeric progression and mathematical relationships
+    - Test letter spacing token precision targeting and em-based values
+    - Test typography token integration with token registry and utilities
+    - _Requirements: 5.2, 5.3, 6.1, 6.2_
+    
+    **Success Criteria:**
+    - Comprehensive test coverage for all typography token families
+    - Test font family tokens provide consistent font stacks across platforms
+    - Test font weight tokens maintain mathematical progression from base 400
+    - Test letter spacing tokens provide appropriate precision-targeted adjustments
+    - Test typography token integration with existing token system utilities
+    - All tests pass and provide clear validation of typography token correctness
+    
+    **Artifacts Created:**
+    - `src/tokens/__tests__/FontFamilyTokens.test.ts` - Font family token tests
+    - `src/tokens/__tests__/FontWeightTokens.test.ts` - Font weight token tests
+    - `src/tokens/__tests__/LetterSpacingTokens.test.ts` - Letter spacing token tests
+    - Updated `src/tokens/__tests__/TokenCategories.test.ts` - Integration tests for typography tokens
+    
+    **Completion Documentation:**
+    - Store in `.kiro/specs/mathematical-token-system/completion/task-2-5-completion.md`
+    - Document typography token testing strategy and coverage approach
+    - Include test case rationale for categorical vs numeric token validation
+    - Document integration testing approach for typography token families
+    
+    **Validation Required:**
+    - All unit tests pass successfully
+    - Typography token validation confirmed through comprehensive testing
+    - Integration with existing token system validated
+    - Test coverage meets established thresholds for typography tokens
+    
+    **Post-Complete:** Commit with message "Task 2.5 Complete: Unit Tests for Typography Token Families"
+
+- [ ] 3. Implement Unit Provider services for cross-platform conversion
+  - [x] 3.1 Create base UnitProvider interface and platform-specific converters
+    - Implement WebUnitConverter (baseValue → REM with ÷16 conversion, typography token support)
+    - Implement iOSUnitConverter (baseValue → points)
+    - Implement AndroidUnitConverter (baseValue → dp)
+    - Update UnitProvider interface to handle string values for categorical tokens
+    - _Requirements: 1.1, 1.2, 4.2, 5.2, 5.3_
+    
+    **Success Criteria:**
+    - UnitProvider interface defines consistent contract for all platforms including typography tokens
+    - WebUnitConverter accurately converts base values to REM and handles typography tokens (fontFamily, fontWeight, letterSpacing)
     - iOSUnitConverter handles points conversion with display density considerations
     - AndroidUnitConverter handles dp conversion across density buckets
-    - All converters maintain mathematical relationships
+    - All converters maintain mathematical relationships and support both numeric and string token values
     
     **Artifacts Created:**
     - `src/providers/UnitProvider.ts` - Base UnitProvider interface
@@ -356,6 +433,7 @@ Convert the Mathematical Token System design into a series of prompts for a code
 - [ ] 5. Implement semantic token registry and composition
   - [ ] 5.1 Create SemanticTokenRegistry with primitive token references
     - Implement semantic token registration with primitive references
+    - Create typography tokens (typography.body, typography.heading1, typography.caption, etc.)
     - Create color tokens (color.warning, color.primary, etc.)
     - Create spacing tokens (space.tight, space.loose, etc.)
     - Create style tokens (border.stylePrimary, shadow.elevated, etc.)
@@ -363,6 +441,7 @@ Convert the Mathematical Token System design into a series of prompts for a code
     
     **Success Criteria:**
     - SemanticTokenRegistry manages semantic tokens with primitive references
+    - Typography semantic tokens combine fontSize, lineHeight, fontFamily, fontWeight, letterSpacing primitives
     - Color semantic tokens properly reference primitive color tokens
     - Spacing semantic tokens properly reference primitive spacing tokens
     - Style semantic tokens properly reference primitive style tokens
@@ -370,6 +449,7 @@ Convert the Mathematical Token System design into a series of prompts for a code
     
     **Artifacts Created:**
     - `src/registries/SemanticTokenRegistry.ts` - Main semantic token registry
+    - `src/tokens/semantic/TypographyTokens.ts` - Semantic typography token definitions (body, heading, caption, etc.)
     - `src/tokens/semantic/ColorTokens.ts` - Semantic color token definitions
     - `src/tokens/semantic/SpacingTokens.ts` - Semantic spacing token definitions
     - `src/tokens/semantic/StyleTokens.ts` - Semantic style token definitions

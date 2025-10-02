@@ -19,11 +19,11 @@ export interface UnitProvider {
 
   /**
    * Convert a raw base value to platform-specific unit for a given token category
-   * @param baseValue - The unitless base value to convert
+   * @param baseValue - The unitless base value to convert (number or string for categorical tokens)
    * @param category - The token category (spacing, fontSize, etc.)
    * @returns Platform-specific value with unit
    */
-  convertValue(baseValue: number, category: string): PlatformValues[keyof PlatformValues];
+  convertValue(baseValue: number | string, category: string): PlatformValues[keyof PlatformValues];
 
   /**
    * Get the conversion factor for a specific token category
@@ -34,12 +34,12 @@ export interface UnitProvider {
 
   /**
    * Validate that the converted value maintains mathematical relationships
-   * @param originalValue - Original unitless value
+   * @param originalValue - Original unitless value (number or string for categorical tokens)
    * @param convertedValue - Converted platform-specific value
    * @param category - Token category
    * @returns True if conversion maintains mathematical relationships
    */
-  validateConversion(originalValue: number, convertedValue: PlatformValues[keyof PlatformValues], category: string): boolean;
+  validateConversion(originalValue: number | string, convertedValue: PlatformValues[keyof PlatformValues], category: string): boolean;
 }
 
 /**
@@ -68,24 +68,39 @@ export abstract class BaseUnitProvider implements UnitProvider {
   }
 
   abstract convertToken(token: PrimitiveToken): PlatformValues[keyof PlatformValues];
-  abstract convertValue(baseValue: number, category: string): PlatformValues[keyof PlatformValues];
+  abstract convertValue(baseValue: number | string, category: string): PlatformValues[keyof PlatformValues];
   abstract getConversionFactor(category: string): number | { factor: number; unit: string };
 
-  validateConversion(originalValue: number, convertedValue: PlatformValues[keyof PlatformValues], category: string): boolean {
-    // Basic validation - ensure converted value is positive and maintains proportional relationships
-    if (convertedValue.value <= 0) return false;
+  validateConversion(originalValue: number | string, convertedValue: PlatformValues[keyof PlatformValues], category: string): boolean {
+    // For string values (like fontFamily), just ensure they match
+    if (typeof originalValue === 'string') {
+      return convertedValue.value === originalValue;
+    }
+    
+    // Basic validation - ensure converted numeric value is positive and maintains proportional relationships
+    if (typeof convertedValue.value === 'number' && convertedValue.value < 0) return false;
     
     // For unitless values (like lineHeight), the value should remain the same
     if (convertedValue.unit === 'unitless') {
-      return Math.abs(convertedValue.value - originalValue) < 0.001;
+      return Math.abs((convertedValue.value as number) - originalValue) < 0.001;
     }
     
-    // For other units, ensure the conversion factor is applied correctly
+    // For pass-through values (fontFamily, fontWeight, letterSpacing), the value should remain the same
+    if (convertedValue.unit === 'fontFamily' || convertedValue.unit === 'fontWeight' || convertedValue.unit === 'em') {
+      if (typeof convertedValue.value === 'number' && typeof originalValue === 'number') {
+        return Math.abs(convertedValue.value - originalValue) < 0.001;
+      }
+      return convertedValue.value === originalValue;
+    }
+    
+    // For other units, ensure the conversion factor is applied correctly (originalValue must be numeric here)
+    if (typeof originalValue !== 'number') return false;
+    
     const conversionFactor = this.getConversionFactor(category);
     const expectedValue = typeof conversionFactor === 'number' 
       ? originalValue * conversionFactor 
       : originalValue * conversionFactor.factor;
     
-    return Math.abs(convertedValue.value - expectedValue) < 0.001;
+    return Math.abs((convertedValue.value as number) - expectedValue) < 0.001;
   }
 }

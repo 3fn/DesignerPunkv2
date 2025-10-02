@@ -17,35 +17,51 @@ export class WebUnitConverter extends BaseUnitProvider {
     }
 
     convertToken(token: PrimitiveToken): PlatformValues['web'] {
+        // For font family tokens, use the actual font stack from platforms
+        if (token.category === 'fontFamily') {
+            return token.platforms.web;
+        }
         return this.convertValue(token.baseValue, token.category);
     }
 
-    convertValue(baseValue: number, category: string): PlatformValues['web'] {
+    convertValue(baseValue: number | string, category: string): PlatformValues['web'] {
         switch (category) {
             case 'spacing':
             case 'radius':
             case 'tapArea':
                 // Convert to pixels (1:1 ratio for spacing, radius, and tap areas)
-                return { value: baseValue, unit: 'px' };
+                return { value: baseValue as number, unit: 'px' };
 
             case 'fontSize':
                 // Convert to REM by dividing by base font size
                 return {
-                    value: Math.round((baseValue / this.config.baseFontSize!) * 1000) / 1000, // Round to 3 decimal places
+                    value: Math.round(((baseValue as number) / this.config.baseFontSize!) * 1000) / 1000, // Round to 3 decimal places
                     unit: 'rem'
                 };
 
+            case 'fontFamily':
+                // Font family remains as string for CSS
+                return { value: baseValue as string, unit: 'fontFamily' };
+
+            case 'fontWeight':
+                // Font weight remains as numeric for CSS
+                return { value: baseValue as number, unit: 'fontWeight' };
+
             case 'lineHeight':
                 // Line height remains unitless for proper CSS behavior
-                return { value: baseValue, unit: 'unitless' };
+                return { value: baseValue as number, unit: 'unitless' };
+
+            case 'letterSpacing':
+                // Letter spacing converted to em units for CSS
+                return { value: baseValue as number, unit: 'em' };
 
             case 'density':
                 // Density is a multiplier, remains unitless
-                return { value: baseValue, unit: 'unitless' };
+                return { value: baseValue as number, unit: 'unitless' };
 
             default:
                 // Default to pixels for unknown categories
-                return { value: baseValue, unit: 'px' };
+                return { value: baseValue as number, unit: 'px' };
         }
     }
 
@@ -59,9 +75,18 @@ export class WebUnitConverter extends BaseUnitProvider {
             case 'fontSize':
                 return { factor: 1 / this.config.baseFontSize!, unit: 'rem' };
 
+            case 'fontFamily':
+                return { factor: 1, unit: 'fontFamily' }; // Pass-through for strings
+
+            case 'fontWeight':
+                return { factor: 1, unit: 'fontWeight' }; // Pass-through for numeric weights
+
             case 'lineHeight':
             case 'density':
                 return { factor: 1, unit: 'unitless' };
+
+            case 'letterSpacing':
+                return { factor: 1, unit: 'em' }; // 1:1 conversion to em
 
             default:
                 return { factor: 1, unit: 'px' };
