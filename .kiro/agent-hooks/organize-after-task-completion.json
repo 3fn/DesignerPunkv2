@@ -1,0 +1,18 @@
+{
+  "name": "Auto-Organize Files After Task Completion",
+  "description": "When a task status changes to 'completed', automatically check for markdown files that have **Organization** metadata and need to be moved to appropriate directories. Shows preview, asks for confirmation, then organizes files based on metadata values and updates cross-references.",
+  "id": "organize-after-task-completion",
+  "trigger": {
+    "type": "taskStatusChange",
+    "status": "completed"
+  },
+  "action": {
+    "type": "runScript",
+    "script": ".kiro/agent-hooks/organize-after-task.sh"
+  },
+  "settings": {
+    "requireConfirmation": true,
+    "timeout": 600,
+    "autoApprove": false
+  }
+}
