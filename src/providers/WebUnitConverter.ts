@@ -1,6 +1,6 @@
 import { PrimitiveToken, PlatformValues } from '../types';
 import { BaseUnitProvider, UnitConversionConfig } from './UnitProvider';
-import { FONT_SIZE_BASE_VALUE } from '../tokens/SizingTokens';
+import { FONT_SIZE_BASE_VALUE } from '../tokens/FontSizeTokens';
 
 /**
  * Web-specific unit converter

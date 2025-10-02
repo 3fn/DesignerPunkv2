@@ -2,7 +2,7 @@
  * Token Definitions - Barrel Export
  * 
  * Exports all token families for the Mathematical Token System.
- * Provides unified access to spacing, sizing, and radius token families.
+ * Provides unified access to all primitive token families.
  */
 
 // Spacing tokens
@@ -14,23 +14,45 @@ export {
   SPACING_BASE_VALUE
 } from './SpacingTokens';
 
-// Sizing tokens (fontSize, lineHeight, density, tapArea)
+// Font size tokens
 export {
   fontSizeTokens,
-  lineHeightTokens,
-  densityTokens,
-  tapAreaTokens,
-  getFontSizeTokens,
-  getLineHeightTokens,
-  getDensityTokens,
-  getTapAreaTokens,
-  getSizingToken,
+  fontSizeTokenNames,
+  getFontSizeToken,
+  getAllFontSizeTokens,
   FONT_SIZE_BASE_VALUE,
-  LINE_HEIGHT_BASE_VALUE,
-  DENSITY_BASE_VALUE,
-  TAP_AREA_BASE_VALUE,
   MODULAR_SCALE_RATIO
-} from './SizingTokens';
+} from './FontSizeTokens';
+
+// Line height tokens
+export {
+  lineHeightTokens,
+  lineHeightTokenNames,
+  getLineHeightToken,
+  getAllLineHeightTokens,
+  calculateComputedLineHeight,
+  LINE_HEIGHT_BASE_VALUE
+} from './LineHeightTokens';
+
+// Density tokens
+export {
+  densityTokens,
+  densityTokenNames,
+  getDensityToken,
+  getAllDensityTokens,
+  applyDensityScaling,
+  DENSITY_BASE_VALUE
+} from './DensityTokens';
+
+// Tap area tokens
+export {
+  tapAreaTokens,
+  tapAreaTokenNames,
+  getTapAreaToken,
+  getAllTapAreaTokens,
+  validateTapAreaAccessibility,
+  TAP_AREA_BASE_VALUE
+} from './TapAreaTokens';
 
 // Radius tokens
 export {
@@ -45,7 +67,10 @@ export {
 
 // Combined token utilities
 import { spacingTokens } from './SpacingTokens';
-import { fontSizeTokens, lineHeightTokens, densityTokens, tapAreaTokens } from './SizingTokens';
+import { fontSizeTokens } from './FontSizeTokens';
+import { lineHeightTokens } from './LineHeightTokens';
+import { densityTokens } from './DensityTokens';
+import { tapAreaTokens } from './TapAreaTokens';
 import { radiusTokens } from './RadiusTokens';
 import { PrimitiveToken, TokenCategory } from '../types/PrimitiveToken';
 
