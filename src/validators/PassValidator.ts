@@ -7,7 +7,8 @@
  * - Strategic flexibility tokens used for exceptional design requirements
  */
 
-import type { PrimitiveToken, SemanticToken, ValidationResult, TokenCategory } from '../types';
+import type { PrimitiveToken, SemanticToken, ValidationResult } from '../types';
+import { TokenCategory } from '../types';
 import { isStrategicFlexibilityValue } from '../constants/StrategicFlexibilityTokens';
 import { ValidationReasoning, type ReasoningContext } from './ValidationReasoning';
 
@@ -17,27 +18,27 @@ import { ValidationReasoning, type ReasoningContext } from './ValidationReasonin
 export interface PassValidationContext {
   /** Token being validated */
   token: PrimitiveToken | SemanticToken;
-  
+
   /** Usage context information */
   usageContext?: {
     /** Component or context where token is used */
     component?: string;
-    
+
     /** Property or attribute where token is applied */
     property?: string;
-    
+
     /** Additional usage metadata */
     metadata?: Record<string, any>;
   };
-  
+
   /** Validation options */
   options?: {
     /** Strict mode - more rigorous validation */
     strictMode?: boolean;
-    
+
     /** Check cross-platform consistency */
     checkCrossPlatform?: boolean;
-    
+
     /** Validate mathematical relationships */
     validateMathematics?: boolean;
   };
@@ -144,7 +145,7 @@ export class PassValidator {
   ): ValidationResult {
     // Strategic flexibility tokens always pass validation by design
     // They are mathematically derived exceptions for exceptional design requirements
-    
+
     return this.generatePassResult(token, 'strategic-flexibility', usageContext);
   }
 
@@ -153,11 +154,11 @@ export class PassValidator {
    */
   private validateMathematicalFoundation(
     token: PrimitiveToken,
-    options: PassValidationContext['options']
+    options: PassValidationContext['options'] = {}
   ): ValidationResult {
     // Check if token follows its family's mathematical foundation
     const hasValidRelationship = this.checkMathematicalRelationship(token);
-    
+
     if (!hasValidRelationship) {
       return {
         level: 'Error',
@@ -195,7 +196,7 @@ export class PassValidator {
    */
   private validateBaselineGridAlignment(
     token: PrimitiveToken,
-    options: PassValidationContext['options']
+    options: PassValidationContext['options'] = {}
   ): ValidationResult {
     // Only spacing and radius tokens require baseline grid alignment
     if (!this.requiresBaselineGridAlignment(token.category)) {
@@ -238,11 +239,11 @@ export class PassValidator {
    */
   private validateCrossPlatformConsistency(
     token: PrimitiveToken,
-    options: PassValidationContext['options']
+    options: PassValidationContext['options'] = {}
   ): ValidationResult {
     // Check if platform values maintain mathematical relationships
     const platforms = Object.keys(token.platforms);
-    
+
     if (platforms.length < 2) {
       return {
         level: 'Pass',
@@ -255,7 +256,7 @@ export class PassValidator {
 
     // Validate mathematical relationships across platforms
     const consistencyCheck = this.checkCrossPlatformMathematicalConsistency(token);
-    
+
     if (!consistencyCheck.isConsistent) {
       return {
         level: 'Error',
@@ -281,7 +282,7 @@ export class PassValidator {
    */
   private validatePrimitiveReference(
     token: SemanticToken,
-    options: PassValidationContext['options']
+    options: PassValidationContext['options'] = {}
   ): ValidationResult {
     // Check if primitive reference is valid (this would typically involve registry lookup)
     if (!token.primitiveReference) {
@@ -367,11 +368,11 @@ export class PassValidator {
    */
   private validateSemanticAbstraction(
     token: SemanticToken,
-    options: PassValidationContext['options']
+    options: PassValidationContext['options'] = {}
   ): ValidationResult {
     // Check if semantic token name provides meaningful abstraction
     const abstractionValue = this.assessAbstractionValue(token);
-    
+
     if (abstractionValue.score < 0.7) {
       return {
         level: 'Warning',
@@ -412,7 +413,7 @@ export class PassValidator {
 
     return {
       level: 'Pass',
-      token: 'name' in token ? token.name : token.name,
+      token: token.name,
       message: this.getPassMessage(scenario),
       rationale: this.getPassRationale(token, scenario),
       mathematicalReasoning: reasoning

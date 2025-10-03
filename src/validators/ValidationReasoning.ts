@@ -5,7 +5,8 @@
  * across the three-tier validation system (Pass/Warning/Error).
  */
 
-import type { PrimitiveToken, SemanticToken, TokenCategory } from '../types';
+import type { PrimitiveToken, SemanticToken } from '../types';
+import { TokenCategory } from '../types';
 import { isStrategicFlexibilityValue, getStrategicFlexibilityToken } from '../constants/StrategicFlexibilityTokens';
 
 /**
@@ -14,25 +15,25 @@ import { isStrategicFlexibilityValue, getStrategicFlexibilityToken } from '../co
 export interface ReasoningContext {
   /** Token being validated */
   token: PrimitiveToken | SemanticToken;
-  
+
   /** Validation scenario */
   scenario: 'primitive-usage' | 'semantic-usage' | 'strategic-flexibility' | 'mathematical-violation' | 'problematic-pattern';
-  
+
   /** Additional context data */
   contextData?: {
     /** Expected vs actual values */
     expectedValue?: number;
     actualValue?: number;
-    
+
     /** Mathematical relationship details */
     relationship?: string;
-    
+
     /** Usage pattern information */
     usagePattern?: string;
-    
+
     /** Platform-specific information */
     platformInfo?: Record<string, any>;
-    
+
     /** Baseline grid information */
     baselineGridInfo?: {
       gridUnit: number;
@@ -55,13 +56,13 @@ export class ValidationReasoning {
     switch (scenario) {
       case 'primitive-usage':
         return this.generatePrimitivePassReasoning(token as PrimitiveToken, contextData);
-      
+
       case 'semantic-usage':
         return this.generateSemanticPassReasoning(token as SemanticToken, contextData);
-      
+
       case 'strategic-flexibility':
         return this.generateStrategicFlexibilityReasoning(token as PrimitiveToken, contextData);
-      
+
       default:
         return 'Token usage follows established mathematical patterns and design system guidelines';
     }
@@ -76,7 +77,7 @@ export class ValidationReasoning {
     switch (scenario) {
       case 'problematic-pattern':
         return this.generateProblematicPatternReasoning(token, contextData);
-      
+
       default:
         return 'Token usage is mathematically valid but may indicate suboptimal design patterns';
     }
@@ -91,7 +92,7 @@ export class ValidationReasoning {
     switch (scenario) {
       case 'mathematical-violation':
         return this.generateMathematicalViolationReasoning(token, contextData);
-      
+
       default:
         return 'Token usage violates mathematical relationships or design system constraints';
     }
@@ -171,7 +172,7 @@ export class ValidationReasoning {
    */
   private generateStrategicFlexibilityReasoning(token: PrimitiveToken, contextData?: ReasoningContext['contextData']): string {
     const flexibilityToken = getStrategicFlexibilityToken(token.baseValue);
-    
+
     if (!flexibilityToken) {
       return 'Strategic flexibility token with mathematically derived exception to systematic progression';
     }
@@ -205,7 +206,7 @@ export class ValidationReasoning {
    * Generate reasoning for problematic pattern warnings
    */
   private generateProblematicPatternReasoning(
-    token: PrimitiveToken | SemanticToken, 
+    token: PrimitiveToken | SemanticToken,
     contextData?: ReasoningContext['contextData']
   ): string {
     const reasoningParts: string[] = [];
@@ -266,7 +267,7 @@ export class ValidationReasoning {
       reasoningParts.push(
         `Baseline grid violation: value does not align with ${gridUnit}-unit grid system`
       );
-      
+
       if (nearestValid) {
         reasoningParts.push(`Nearest valid value: ${nearestValid}`);
       }
@@ -299,11 +300,11 @@ export class ValidationReasoning {
       case 'mathematical-violation':
         suggestions.push(...this.generateViolationSuggestions(token, contextData));
         break;
-      
+
       case 'problematic-pattern':
         suggestions.push(...this.generatePatternSuggestions(token, contextData));
         break;
-      
+
       case 'strategic-flexibility':
         suggestions.push(...this.generateFlexibilitySuggestions(token, contextData));
         break;
@@ -364,7 +365,7 @@ export class ValidationReasoning {
     }
 
     suggestions.push('Validate usage pattern against design system guidelines');
-    
+
     return suggestions;
   }
 
@@ -402,7 +403,7 @@ export class ValidationReasoning {
   } {
     const reasoning = this.generatePassReasoning(context);
     const suggestions = this.generateSuggestions(context);
-    
+
     // Generate detailed mathematical explanation
     const mathematicalDetails = this.generateMathematicalDetails(context);
 
@@ -425,7 +426,7 @@ export class ValidationReasoning {
       details.push(`Base value: ${token.baseValue} (unitless)`);
       details.push(`Family base: ${token.familyBaseValue}`);
       details.push(`Category: ${token.category}`);
-      
+
       if (token.mathematicalRelationship) {
         details.push(`Relationship: ${token.mathematicalRelationship}`);
       }

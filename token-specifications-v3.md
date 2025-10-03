@@ -169,6 +169,74 @@ tapAreaRecommended = (tapAreaMinimum × 1.091) - Enhanced Accessibility
 tapAreaComfortable = (tapAreaMinimum × 1.273) - Comfortable Touch
 ```
 
+### **Color Token Family**
+**Base Value**: N/A (hex values, not mathematical)  
+**Unit Application**: Hex color values across all platforms
+
+**Color Palette Structure**: Systematic color scales with 50-900 progression for each hue, following modern design system conventions.
+
+```
+// Gray Scale (Neutral Colors)
+gray050 = #F9FAFB - Lightest gray
+gray100 = #F3F4F6 - Very light gray
+gray200 = #E5E7EB - Light gray
+gray300 = #D1D5DB - Medium light gray
+gray400 = #9CA3AF - Medium gray
+gray500 = #6B7280 - Base gray
+gray600 = #4B5563 - Medium dark gray
+gray700 = #374151 - Dark gray
+gray800 = #1F2937 - Very dark gray
+gray900 = #111827 - Darkest gray
+
+// Blue Scale (Primary Brand Colors)
+blue050 = #EFF6FF - Lightest blue
+blue100 = #DBEAFE - Very light blue
+blue200 = #BFDBFE - Light blue
+blue300 = #93C5FD - Medium light blue
+blue400 = #60A5FA - Medium blue
+blue500 = #3B82F6 - Base blue
+blue600 = #2563EB - Medium dark blue
+blue700 = #1D4ED8 - Dark blue
+blue800 = #1E40AF - Very dark blue
+blue900 = #1E3A8A - Darkest blue
+
+// Red Scale (Error/Danger Colors)
+red050 = #FEF2F2 - Lightest red
+red100 = #FEE2E2 - Very light red
+red200 = #FECACA - Light red
+red300 = #FCA5A5 - Medium light red
+red400 = #F87171 - Medium red
+red500 = #EF4444 - Base red
+red600 = #DC2626 - Medium dark red
+red700 = #B91C1C - Dark red
+red800 = #991B1B - Very dark red
+red900 = #7F1D1D - Darkest red
+
+// Green Scale (Success Colors)
+green050 = #F0FDF4 - Lightest green
+green100 = #DCFCE7 - Very light green
+green200 = #BBF7D0 - Light green
+green300 = #86EFAC - Medium light green
+green400 = #4ADE80 - Medium green
+green500 = #22C55E - Base green
+green600 = #16A34A - Medium dark green
+green700 = #15803D - Dark green
+green800 = #166534 - Very dark green
+green900 = #14532D - Darkest green
+
+// Yellow Scale (Warning Colors)
+yellow050 = #FEFCE8 - Lightest yellow
+yellow100 = #FEF3C7 - Very light yellow
+yellow200 = #FDE68A - Light yellow
+yellow300 = #FCD34D - Medium light yellow
+yellow400 = #FBBF24 - Medium yellow
+yellow500 = #F59E0B - Base yellow
+yellow600 = #D97706 - Medium dark yellow
+yellow700 = #B45309 - Dark yellow
+yellow800 = #92400E - Very dark yellow
+yellow900 = #78350F - Darkest yellow
+```
+
 ---
 
 ## Semantic Token Specifications
@@ -327,6 +395,7 @@ Line Height: unitlessValue (unitless)
 Radius: unitlessValue × 1px
 Density: unitlessValue (multiplier)
 Tap Area: unitlessValue × 1px
+Color: hexValue (direct hex usage)
 ```
 
 #### **iOS Platform**
@@ -337,6 +406,7 @@ Line Height: unitlessValue (unitless)
 Radius: unitlessValue × 1pt
 Density: unitlessValue (multiplier)
 Tap Area: unitlessValue × 1pt
+Color: hexValue (UIColor from hex)
 ```
 
 #### **Android Platform**
@@ -347,6 +417,7 @@ Line Height: unitlessValue (unitless)
 Radius: unitlessValue × 1dp
 Density: unitlessValue (multiplier)
 Tap Area: unitlessValue × 1dp
+Color: hexValue (Color.parseColor)
 ```
 
 ---
@@ -368,6 +439,7 @@ Tap Area: unitlessValue × 1dp
 - `radius` - Border radius tokens
 - `density` - Scale density tokens
 - `tapArea` - Minimum touch target tokens
+- `gray`, `blue`, `red`, `green`, `yellow` - Color tokens by hue
 
 ### **Semantic Token Category Prefixes**
 - `typography` - Complete text style definitions
@@ -394,6 +466,7 @@ Tap Area: unitlessValue × 1dp
 - **Radius (8)**: Consistent with spacing for visual harmony
 - **Density (1.0)**: Neutral multiplier for scaling
 - **Tap Area (44)**: WCAG AA minimum touch target requirement
+- **Color (N/A)**: Hex color values, not mathematical
 
 ### **Unitless Benefits**
 - **Platform Flexibility**: Each platform applies appropriate units

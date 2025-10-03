@@ -230,6 +230,75 @@ Convert the Mathematical Token System design into a series of prompts for a code
     
     **Post-Complete:** Commit with message "Task 2.5 Complete: Unit Tests for Typography Token Families"
 
+  - [ ] 2.6 Implement color primitive token family
+    - Create ColorTokens.ts with systematic color scales (gray, blue, red, green, yellow)
+    - Implement 50-900 progression for each hue following modern design system conventions
+    - Add COLOR to TokenCategory enum and update PlatformValues to support hex values
+    - Create color token definitions with hex values for cross-platform consistency
+    - Update tokens/index.ts to export color token family
+    - _Requirements: 5.2, 5.3, 6.1, 6.2_
+    
+    **Success Criteria:**
+    - ColorTokens.ts provides systematic color scales with 50-900 progression
+    - Gray scale provides neutral colors from lightest (#F9FAFB) to darkest (#111827)
+    - Blue scale provides primary brand colors with appropriate contrast ratios
+    - Red, green, yellow scales provide semantic colors for error, success, warning states
+    - COLOR category added to TokenCategory enum with proper integration
+    - PlatformValues interface supports hex color values with 'hex' unit type
+    - Color tokens maintain consistent naming conventions and mathematical relationships
+    
+    **Artifacts Created:**
+    - `src/tokens/ColorTokens.ts` - Color primitive tokens with systematic hex color scales
+    - Updated `src/types/PrimitiveToken.ts` - Enhanced TokenCategory enum and PlatformValues interface
+    - Updated `src/tokens/index.ts` - Barrel exports for color token family
+    
+    **Completion Documentation:**
+    - Store in `.kiro/specs/mathematical-token-system/completion/task-2-6-completion.md`
+    - Document color token architecture and systematic color scale rationale
+    - Include hex color selection methodology and accessibility considerations
+    - Document color naming conventions and cross-platform consistency approach
+    
+    **Validation Required:**
+    - TypeScript compilation validation for color token files
+    - Validate color tokens provide appropriate contrast ratios for accessibility
+    - Validate color token naming follows systematic conventions
+    - Test color token integration with existing token system
+    
+    **Post-Complete:** Commit with message "Task 2.6 Complete: Color Primitive Token Family"
+
+  - [ ]* 2.7 Write unit tests for color token family
+    - Test color token hex value accuracy and consistency
+    - Test color scale progression and systematic relationships
+    - Test color token integration with token registry and utilities
+    - Test accessibility compliance for color contrast ratios
+    - _Requirements: 5.2, 5.3, 6.1, 6.2_
+    
+    **Success Criteria:**
+    - Comprehensive test coverage for all color token families
+    - Test color tokens provide valid hex values and proper formatting
+    - Test color scale progression maintains systematic relationships
+    - Test color token integration with existing token system utilities
+    - Test accessibility compliance for color contrast ratios where applicable
+    - All tests pass and provide clear validation of color token correctness
+    
+    **Artifacts Created:**
+    - `src/tokens/__tests__/ColorTokens.test.ts` - Color token tests
+    - Updated `src/tokens/__tests__/TokenCategories.test.ts` - Integration tests for color tokens
+    
+    **Completion Documentation:**
+    - Store in `.kiro/specs/mathematical-token-system/completion/task-2-7-completion.md`
+    - Document color token testing strategy and coverage approach
+    - Include test case rationale for hex value validation and accessibility testing
+    - Document integration testing approach for color token family
+    
+    **Validation Required:**
+    - All unit tests pass successfully
+    - Color token validation confirmed through comprehensive testing
+    - Integration with existing token system validated
+    - Test coverage meets established thresholds for color tokens
+    
+    **Post-Complete:** Commit with message "Task 2.7 Complete: Unit Tests for Color Token Family"
+
 - [ ] 3. Implement Unit Provider services for cross-platform conversion
   - [x] 3.1 Create base UnitProvider interface and platform-specific converters
     - Implement WebUnitConverter (baseValue → REM with ÷16 conversion, typography token support)

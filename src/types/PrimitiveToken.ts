@@ -18,16 +18,17 @@ export enum TokenCategory {
   LETTER_SPACING = 'letterSpacing',
   RADIUS = 'radius',
   DENSITY = 'density',
-  TAP_AREA = 'tapArea'
+  TAP_AREA = 'tapArea',
+  COLOR = 'color'
 }
 
 /**
  * Platform-specific values for cross-platform consistency with per-family unit application
  */
 export interface PlatformValues {
-  web: { value: number | string; unit: 'px' | 'rem' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' };
-  ios: { value: number | string; unit: 'pt' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' };
-  android: { value: number | string; unit: 'dp' | 'sp' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' };
+  web: { value: number | string; unit: 'px' | 'rem' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' | 'hex' };
+  ios: { value: number | string; unit: 'pt' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' | 'hex' };
+  android: { value: number | string; unit: 'dp' | 'sp' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' | 'hex' };
 }
 
 /**
