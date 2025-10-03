@@ -171,73 +171,228 @@ tapAreaComfortable = (tapAreaMinimum × 1.273) - Comfortable Touch
 
 ### **Color Token Family**
 **Base Value**: N/A (hex values, not mathematical)  
-**Unit Application**: Hex color values across all platforms
+**Unit Application**: Hex color values across all platforms  
+**Architecture**: Mode-aware and theme-aware token structure
 
-**Color Palette Structure**: Systematic color scales with 50-900 progression for each hue, following modern design system conventions.
+**Color Palette Structure**: Scales with 100, 200, 300, 400, 500 progression for each hue. Each primitive color token supports:
+- **Light/Dark Modes**: Native platform mode support
+- **Original/WCAG Themes**: Original for aesthetic impact, WCAG for accessibility compliance
 
-```
-// Gray Scale (Neutral Colors)
-gray050 = #F9FAFB - Lightest gray
-gray100 = #F3F4F6 - Very light gray
-gray200 = #E5E7EB - Light gray
-gray300 = #D1D5DB - Medium light gray
-gray400 = #9CA3AF - Medium gray
-gray500 = #6B7280 - Base gray
-gray600 = #4B5563 - Medium dark gray
-gray700 = #374151 - Dark gray
-gray800 = #1F2937 - Very dark gray
-gray900 = #111827 - Darkest gray
-
-// Blue Scale (Primary Brand Colors)
-blue050 = #EFF6FF - Lightest blue
-blue100 = #DBEAFE - Very light blue
-blue200 = #BFDBFE - Light blue
-blue300 = #93C5FD - Medium light blue
-blue400 = #60A5FA - Medium blue
-blue500 = #3B82F6 - Base blue
-blue600 = #2563EB - Medium dark blue
-blue700 = #1D4ED8 - Dark blue
-blue800 = #1E40AF - Very dark blue
-blue900 = #1E3A8A - Darkest blue
-
-// Red Scale (Error/Danger Colors)
-red050 = #FEF2F2 - Lightest red
-red100 = #FEE2E2 - Very light red
-red200 = #FECACA - Light red
-red300 = #FCA5A5 - Medium light red
-red400 = #F87171 - Medium red
-red500 = #EF4444 - Base red
-red600 = #DC2626 - Medium dark red
-red700 = #B91C1C - Dark red
-red800 = #991B1B - Very dark red
-red900 = #7F1D1D - Darkest red
-
-// Green Scale (Success Colors)
-green050 = #F0FDF4 - Lightest green
-green100 = #DCFCE7 - Very light green
-green200 = #BBF7D0 - Light green
-green300 = #86EFAC - Medium light green
-green400 = #4ADE80 - Medium green
-green500 = #22C55E - Base green
-green600 = #16A34A - Medium dark green
-green700 = #15803D - Dark green
-green800 = #166534 - Very dark green
-green900 = #14532D - Darkest green
-
-// Yellow Scale (Warning Colors)
-yellow050 = #FEFCE8 - Lightest yellow
-yellow100 = #FEF3C7 - Very light yellow
-yellow200 = #FDE68A - Light yellow
-yellow300 = #FCD34D - Medium light yellow
-yellow400 = #FBBF24 - Medium yellow
-yellow500 = #F59E0B - Base yellow
-yellow600 = #D97706 - Medium dark yellow
-yellow700 = #B45309 - Dark yellow
-yellow800 = #92400E - Very dark yellow
-yellow900 = #78350F - Darkest yellow
+**Token Architecture**:
+```typescript
+colorToken = {
+  light: {
+    base: "#hex",  // Light mode, base aesthetic
+    wcag: "#hex"   // Light mode, WCAG 2.2 compliant
+  },
+  dark: {
+    base: "#hex",  // Dark mode, base aesthetic  
+    wcag: "#hex"   // Dark mode, WCAG 2.2 compliant
+  }
+}
 ```
 
----
+```typescript
+// Gray Scale
+gray100 = {
+  light: { base: "#B8B6C8", wcag: "#C2C0D4" },
+  dark: { base: "#B8B6C8", wcag: "#C2C0D4" }
+}
+gray200 = {
+  light: { base: "#68658A", wcag: "#8A879E" },
+  dark: { base: "#68658A", wcag: "#8A879E" }
+}
+gray300 = {
+  light: { base: "#2D2B3E", wcag: "#4D4A5C" },
+  dark: { base: "#2D2B3E", wcag: "#4D4A5C" }
+}
+gray400 = {
+  light: { base: "#1F1D2E", wcag: "#2E2C3D" },
+  dark: { base: "#1F1D2E", wcag: "#2E2C3D" }
+}
+gray500 = {
+  light: { base: "#15131F", wcag: "#1A1826" },
+  dark: { base: "#15131F", wcag: "#1A1826" }
+}
+
+// Black Scale
+black100 = {
+  light: { base: "#3A3A45", wcag: "#52525C" },
+  dark: { base: "#3A3A45", wcag: "#52525C" }
+}
+black200 = {
+  light: { base: "#22222A", wcag: "#2E2E38" },
+  dark: { base: "#22222A", wcag: "#2E2E38" }
+}
+black300 = {
+  light: { base: "#0A0A0F", wcag: "#0A0A0F" },
+  dark: { base: "#0A0A0F", wcag: "#0A0A0F" }
+}
+black400 = {
+  light: { base: "#06060A", wcag: "#06060A" },
+  dark: { base: "#06060A", wcag: "#06060A" }
+}
+black500 = {
+  light: { base: "#000000", wcag: "#000000" },
+  dark: { base: "#000000", wcag: "#000000" }
+}
+
+// White Scale
+white100 = {
+  light: { base: "#FFFFFF", wcag: "#FFFFFF" },
+  dark: { base: "#FFFFFF", wcag: "#FFFFFF" }
+}
+white200 = {
+  light: { base: "#F5F5FA", wcag: "#F2F2FA" },
+  dark: { base: "#F5F5FA", wcag: "#F2F2FA" }
+}
+white300 = {
+  light: { base: "#E8E8F0", wcag: "#D9D9E6" },
+  dark: { base: "#E8E8F0", wcag: "#D9D9E6" }
+}
+white400 = {
+  light: { base: "#C5C5D5", wcag: "#A6A6BF" },
+  dark: { base: "#C5C5D5", wcag: "#A6A6BF" }
+}
+white500 = {
+  light: { base: "#9999AB", wcag: "#737388" },
+  dark: { base: "#9999AB", wcag: "#737388" }
+}
+
+// Yellow Scale
+yellow100 = {
+  light: { base: "#FEFBCC", wcag: "#FFF9B3" },
+  dark: { base: "#FEFBCC", wcag: "#FFF9B3" }
+}
+yellow200 = {
+  light: { base: "#FCF680", wcag: "#F5E34A" },
+  dark: { base: "#FCF680", wcag: "#F5E34A" }
+}
+yellow300 = {
+  light: { base: "#F9F002", wcag: "#E6D200" },
+  dark: { base: "#F9F002", wcag: "#E6D200" }
+}
+yellow400 = {
+  light: { base: "#C7C002", wcag: "#9B8E00" },
+  dark: { base: "#C7C002", wcag: "#9B8E00" }
+}
+yellow500 = {
+  light: { base: "#8F8B01", wcag: "#5C5400" },
+  dark: { base: "#8F8B01", wcag: "#5C5400" }
+}
+
+// Orange Scale
+orange100 = {
+  light: { base: "#FFE5DC", wcag: "#FFD4C2" },
+  dark: { base: "#FFE5DC", wcag: "#FFD4C2" }
+}
+orange200 = {
+  light: { base: "#FFB8A0", wcag: "#FFA380" },
+  dark: { base: "#FFB8A0", wcag: "#FFA380" }
+}
+orange300 = {
+  light: { base: "#FF6B35", wcag: "#E65A2A" },
+  dark: { base: "#FF6B35", wcag: "#E65A2A" }
+}
+orange400 = {
+  light: { base: "#CC5529", wcag: "#B34621" },
+  dark: { base: "#CC5529", wcag: "#B34621" }
+}
+orange500 = {
+  light: { base: "#8F3C1D", wcag: "#6B2A14" },
+  dark: { base: "#8F3C1D", wcag: "#6B2A14" }
+}
+
+// Purple Scale - Primary
+purple100 = {
+  light: { base: "#F3E0FF", wcag: "#F5D4FF" },
+  dark: { base: "#F3E0FF", wcag: "#F5D4FF" }
+}
+purple200 = {
+  light: { base: "#D98AFF", wcag: "#D580FF" },
+  dark: { base: "#D98AFF", wcag: "#D580FF" }
+}
+purple300 = {
+  light: { base: "#B026FF", wcag: "#A928E6" },
+  dark: { base: "#B026FF", wcag: "#A928E6" }
+}
+purple400 = {
+  light: { base: "#8D1ECC", wcag: "#7A1DA6" },
+  dark: { base: "#8D1ECC", wcag: "#7A1DA6" }
+}
+purple500 = {
+  light: { base: "#63158F", wcag: "#4A1166" },
+  dark: { base: "#63158F", wcag: "#4A1166" }
+}
+
+// Violet Scale
+violet100 = {
+  light: { base: "#E8DDF3", wcag: "#DCC8F0" },
+  dark: { base: "#E8DDF3", wcag: "#DCC8F0" }
+}
+violet200 = {
+  light: { base: "#9A6BC2", wcag: "#A87DD9" },
+  dark: { base: "#9A6BC2", wcag: "#A87DD9" }
+}
+violet300 = {
+  light: { base: "#5B2C91", wcag: "#7A48B3" },
+  dark: { base: "#5B2C91", wcag: "#7A48B3" }
+}
+violet400 = {
+  light: { base: "#482374", wcag: "#5A3380" },
+  dark: { base: "#482374", wcag: "#5A3380" }
+}
+violet500 = {
+  light: { base: "#331951", wcag: "#3A2159" },
+  dark: { base: "#331951", wcag: "#3A2159" }
+}
+
+// Cyan Scale
+cyan100 = {
+  light: { base: "#CCFBFF", wcag: "#B3F5FF" },
+  dark: { base: "#CCFBFF", wcag: "#B3F5FF" }
+}
+cyan200 = {
+  light: { base: "#80F6FF", wcag: "#66E5F5" },
+  dark: { base: "#80F6FF", wcag: "#66E5F5" }
+}
+cyan300 = {
+  light: { base: "#00F0FF", wcag: "#00C5D9" },
+  dark: { base: "#00F0FF", wcag: "#00C5D9" }
+}
+cyan400 = {
+  light: { base: "#00C0CC", wcag: "#008C99" },
+  dark: { base: "#00C0CC", wcag: "#008C99" }
+}
+cyan500 = {
+  light: { base: "#00888F", wcag: "#005259" },
+  dark: { base: "#00888F", wcag: "#005259" }
+}
+
+// Teal Scale
+teal100 = {
+  light: { base: "#D9E8EA", wcag: "#B3D9E0" },
+  dark: { base: "#D9E8EA", wcag: "#B3D9E0" }
+}
+teal200 = {
+  light: { base: "#4D9BA5", wcag: "#66A6B3" },
+  dark: { base: "#4D9BA5", wcag: "#66A6B3" }
+}
+teal300 = {
+  light: { base: "#1A535C", wcag: "#2D7380" },
+  dark: { base: "#1A535C", wcag: "#2D7380" }
+}
+teal400 = {
+  light: { base: "#15424A", wcag: "#1F5159" },
+  dark: { base: "#15424A", wcag: "#1F5159" }
+}
+teal500 = {
+  light: { base: "#0F2E33", wcag: "#143740" },
+  dark: { base: "#0F2E33", wcag: "#143740" }
+}
+
+```
+
 
 ## Semantic Token Specifications
 
@@ -349,22 +504,55 @@ space.section    = space400  - Section separation
 ```
 
 ### **Color Semantic Tokens**
-Color semantic tokens reference primitive color values with contextual meaning:
+Color semantic tokens reference primitive color values with contextual meaning. These tokens are mode-aware and theme-aware, automatically resolving to appropriate values based on system context.
 
 ```
-color.primary    = blue500   - Primary brand color
-color.secondary  = gray600   - Secondary brand color
-color.success    = green500  - Success states
-color.warning    = yellow500 - Warning states
-color.error      = red500    - Error states
-color.text       = gray900   - Primary text color
-color.textMuted  = gray600   - Secondary text color
+// Brand Identity Tokens
+color.primary    = purple300  - Primary brand color
+color.secondary  = violet300  - Secondary brand color
+
+// Status and Feedback Tokens  
+color.success.strong = cyan300    - Default success states (mode-aware: cyan300 dark, teal300 light)
+color.success.subtle = teal300    - Subtle success states (mode-aware: teal300 dark, cyan300 light)
+color.warning.strong = yellow300  - Default warning states (mode-aware: yellow300 dark, orange400 light)
+color.warning.subtle = orange300  - Subtle warning states (mode-aware: orange300 dark, yellow500 light)
+color.error          = orange300  - Error states (mode-aware: orange400 dark, orange500 light)
+
+// Text Hierarchy Tokens
+color.text       = white300   - Primary text color (mode-aware: white300 dark, black300 light)
+color.textMuted  = gray200    - Secondary text color (mode-aware: gray200 dark, gray300 light)
+color.textSubtle = gray100    - Tertiary text color (mode-aware: gray100 dark, gray500 light)
+
+// Surface and Background Tokens
+color.background = black300   - Primary background (mode-aware: black300 dark, white100 light)
+color.surface    = gray500    - Primary surface/card color (mode-aware: gray500 dark, white200 light)
+color.border     = gray400    - Border and divider color (mode-aware: gray400 dark, gray200 light)
+
+// Info Tokens
+color.info.strong = violet200  - Default informational messaging (mode-aware: violet200 dark, violet400 light)
+color.info.subtle = purple200  - Default informational messaging (mode-aware: purple200 dark, purple400 light)
+```
+
+**Semantic Token Usage Guidelines**:
+
+- **Primary (Purple)**: Brand authority, luxury, electric sophistication. Use for hero CTAs, key UI moments, primary brand color
+- **Secondary (Violet)**: Mysterious depth, sophisticated secondary brand color. Use when purple feels too intense
+- **Success (Cyan)**: Tech/digital success, sharp contrast. Perfect for AI, data, and tech features
+- **Warning (Yellow)**: Aggressive, energetic, urgent attention. Most visible color for immediate attention
+- **Error (Orange)**: Warm, approachable errors. Less aggressive than yellow while maintaining energy
+
+**Mode-Aware Resolution**:
+```typescript
+// Example: color.primary resolves to:
+// Dark mode: purple300.dark[theme] 
+// Light mode: purple300.light[theme]
+// Where theme = 'base' | 'wcag'
 ```
 
 ### **Usage Priority**
 1. **Prefer semantic tokens** when available for the use case
 2. **Fallback to primitive tokens** when no appropriate semantic token exists
-3. **Avoid raw values** - always use token references
+3. **Avoid raw values** - always use token references. Prompt human for permission to use
 
 ---
 
@@ -395,7 +583,11 @@ Line Height: unitlessValue (unitless)
 Radius: unitlessValue × 1px
 Density: unitlessValue (multiplier)
 Tap Area: unitlessValue × 1px
-Color: hexValue (direct hex usage)
+Color: CSS custom properties with automatic mode detection
+  - Mode: Automatic via @media (prefers-color-scheme)
+  - Theme: Manual via CSS class or data attribute (default: base)
+  - Resolution: colorToken[systemMode][userTheme]
+  - Example: var(--color-primary) → purple300.dark.base
 ```
 
 #### **iOS Platform**
@@ -406,7 +598,11 @@ Line Height: unitlessValue (unitless)
 Radius: unitlessValue × 1pt
 Density: unitlessValue (multiplier)
 Tap Area: unitlessValue × 1pt
-Color: hexValue (UIColor from hex)
+Color: UIColor.dynamicColor with native trait collection detection
+  - Mode: Automatic via traitCollection.userInterfaceStyle
+  - Theme: Manual via app-level theme manager (default: base)
+  - Resolution: colorToken[systemMode][userTheme]
+  - Example: UIColor.dynamicColor(light: purple300.light.base, dark: purple300.dark.base)
 ```
 
 #### **Android Platform**
@@ -417,7 +613,11 @@ Line Height: unitlessValue (unitless)
 Radius: unitlessValue × 1dp
 Density: unitlessValue (multiplier)
 Tap Area: unitlessValue × 1dp
-Color: hexValue (Color.parseColor)
+Color: Resource qualifiers with native configuration detection
+  - Mode: Automatic via res/values-night/ configuration qualifiers
+  - Theme: Manual via resource overlay or theme switching (default: base)
+  - Resolution: colorToken[systemMode][userTheme]
+  - Example: @color/color_primary → purple300_dark_base (in values-night/)
 ```
 
 ---
@@ -439,7 +639,7 @@ Color: hexValue (Color.parseColor)
 - `radius` - Border radius tokens
 - `density` - Scale density tokens
 - `tapArea` - Minimum touch target tokens
-- `gray`, `blue`, `red`, `green`, `yellow` - Color tokens by hue
+- `gray`, `black`, `white`, `yellow`, `orange`, `purple`, `violet`, `cyan`, `teal` - Color tokens by hue
 
 ### **Semantic Token Category Prefixes**
 - `typography` - Complete text style definitions

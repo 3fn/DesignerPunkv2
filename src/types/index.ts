@@ -6,7 +6,7 @@
  */
 
 // Primitive Token Types
-export type { PrimitiveToken, PlatformValues } from './PrimitiveToken';
+export type { PrimitiveToken, PlatformValues, ColorTokenValue, ModeThemeValues } from './PrimitiveToken';
 export { TokenCategory } from './PrimitiveToken';
 
 // Semantic Token Types  

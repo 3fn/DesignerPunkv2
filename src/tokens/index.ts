@@ -91,6 +91,30 @@ export {
   RADIUS_BASE_VALUE
 } from './RadiusTokens';
 
+// Color tokens
+export {
+  colorTokens,
+  colorTokenNames,
+  getColorToken,
+  getAllColorTokens,
+  getColorTokensByFamily,
+  resolveColorTokenValue,
+  grayTokens,
+  blackTokens,
+  whiteTokens,
+  yellowTokens,
+  orangeTokens,
+  purpleTokens,
+  violetTokens,
+  cyanTokens,
+  tealTokens,
+  COLOR_BASE_VALUE,
+  COLOR_FAMILIES,
+  COLOR_SCALE,
+  COLOR_MODES,
+  COLOR_THEMES
+} from './ColorTokens';
+
 // Combined token utilities
 import { spacingTokens } from './SpacingTokens';
 import { fontSizeTokens } from './FontSizeTokens';
@@ -101,6 +125,7 @@ import { letterSpacingTokens } from './LetterSpacingTokens';
 import { densityTokens } from './DensityTokens';
 import { tapAreaTokens } from './TapAreaTokens';
 import { radiusTokens } from './RadiusTokens';
+import { colorTokens } from './ColorTokens';
 import { PrimitiveToken, TokenCategory } from '../types/PrimitiveToken';
 
 /**
@@ -115,7 +140,8 @@ export const allTokens = {
   [TokenCategory.LETTER_SPACING]: letterSpacingTokens,
   [TokenCategory.RADIUS]: radiusTokens,
   [TokenCategory.DENSITY]: densityTokens,
-  [TokenCategory.TAP_AREA]: tapAreaTokens
+  [TokenCategory.TAP_AREA]: tapAreaTokens,
+  [TokenCategory.COLOR]: colorTokens
 };
 
 /**
@@ -131,7 +157,8 @@ export function getAllTokens(): PrimitiveToken[] {
     ...Object.values(letterSpacingTokens),
     ...Object.values(radiusTokens),
     ...Object.values(densityTokens),
-    ...Object.values(tapAreaTokens)
+    ...Object.values(tapAreaTokens),
+    ...Object.values(colorTokens)
   ];
 }
 
@@ -184,5 +211,6 @@ export const TOKEN_FAMILY_BASE_VALUES = {
   [TokenCategory.LETTER_SPACING]: 0,
   [TokenCategory.RADIUS]: 8,
   [TokenCategory.DENSITY]: 1.0,
-  [TokenCategory.TAP_AREA]: 44
+  [TokenCategory.TAP_AREA]: 44,
+  [TokenCategory.COLOR]: 0 // N/A for hex color tokens
 } as const;

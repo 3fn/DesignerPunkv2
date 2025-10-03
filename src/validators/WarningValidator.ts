@@ -8,7 +8,8 @@
  * - Usage that works but could be optimized
  */
 
-import type { PrimitiveToken, SemanticToken, ValidationResult, TokenCategory } from '../types';
+import type { PrimitiveToken, SemanticToken, ValidationResult } from '../types';
+import { TokenCategory } from '../types';
 import { isStrategicFlexibilityValue, STRATEGIC_FLEXIBILITY_VALUES } from '../constants/StrategicFlexibilityTokens';
 import { ValidationReasoning, type ReasoningContext } from './ValidationReasoning';
 
@@ -395,6 +396,10 @@ export class WarningValidator {
     token: PrimitiveToken | SemanticToken,
     usagePattern: WarningValidationContext['usagePattern']
   ): ValidationResult | null {
+    if (!usagePattern) {
+      return null;
+    }
+    
     switch (usagePattern.patternType) {
       case 'overuse':
         return this.generateWarningResult(
@@ -478,7 +483,7 @@ export class WarningValidator {
 
     return {
       level: 'Warning',
-      token: 'name' in token ? token.name : token.name,
+      token: token.name,
       message,
       rationale,
       mathematicalReasoning,
@@ -496,7 +501,7 @@ export class WarningValidator {
   ): boolean {
     // Simplified inconsistency detection
     // In real implementation, this would analyze usage patterns across contexts
-    return Boolean(usagePattern.availableAlternatives && usagePattern.availableAlternatives.length > 2);
+    return Boolean(usagePattern?.availableAlternatives && usagePattern.availableAlternatives.length > 2);
   }
 
   private shouldUseIntegerValues(category: TokenCategory): boolean {

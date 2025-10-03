@@ -5,7 +5,7 @@
  * prevent exact mathematical equivalence while maintaining proportional relationships.
  */
 
-import { TokenCategory, PlatformValues } from '../types';
+import { TokenCategory, PlatformValues, ColorTokenValue } from '../types';
 import { UnitProvider } from '../providers/UnitProvider';
 
 /**
@@ -89,7 +89,7 @@ export interface ConstraintHandlingResult {
 interface PlatformConstraintDefinition {
   platform: string;
   category: TokenCategory;
-  constraint: (value: number | string) => PlatformConstraint | null;
+  constraint: (value: number | string | ColorTokenValue) => PlatformConstraint | null;
 }
 
 /**
@@ -220,7 +220,7 @@ export class PlatformConstraintHandler {
   private addConstraintDefinition(
     platform: string,
     category: TokenCategory,
-    constraint: (value: number | string) => PlatformConstraint | null
+    constraint: (value: number | string | ColorTokenValue) => PlatformConstraint | null
   ): void {
     this.constraintDefinitions.push({ platform, category, constraint });
   }

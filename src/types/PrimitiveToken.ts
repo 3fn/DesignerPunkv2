@@ -23,12 +23,28 @@ export enum TokenCategory {
 }
 
 /**
+ * Mode and theme structure for color tokens
+ */
+export interface ModeThemeValues {
+  base: string;  // Base aesthetic theme
+  wcag: string;  // WCAG 2.2 compliant theme
+}
+
+/**
+ * Color token value structure supporting light/dark modes with base/wcag themes
+ */
+export interface ColorTokenValue {
+  light: ModeThemeValues;
+  dark: ModeThemeValues;
+}
+
+/**
  * Platform-specific values for cross-platform consistency with per-family unit application
  */
 export interface PlatformValues {
-  web: { value: number | string; unit: 'px' | 'rem' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' | 'hex' };
-  ios: { value: number | string; unit: 'pt' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' | 'hex' };
-  android: { value: number | string; unit: 'dp' | 'sp' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' | 'hex' };
+  web: { value: number | string | ColorTokenValue; unit: 'px' | 'rem' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' | 'hex' };
+  ios: { value: number | string | ColorTokenValue; unit: 'pt' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' | 'hex' };
+  android: { value: number | string | ColorTokenValue; unit: 'dp' | 'sp' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' | 'hex' };
 }
 
 /**

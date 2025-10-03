@@ -1,11 +1,17 @@
 # Mathematical Token System - Implementation Plan
 
 **Date**: October 1, 2025  
+**Updated**: October 3, 2025 - Mode-aware and theme-aware color architecture  
 **Purpose**: Convert Mathematical Token System design into actionable implementation tasks  
 **Priority**: Critical (Priority 1) - Must be first  
 **Dependencies**: None (foundational)  
 **Organization**: spec-validation  
 **Scope**: mathematical-token-system
+
+**Recent Updates:**
+- Updated color token architecture to support mode-aware (light/dark) and theme-aware (base/wcag) structure
+- Updated semantic color tokens to follow systematic color guidelines (primary=purple, secondary=violet, success=cyan, warning=yellow, error=orange)
+- Updated token specifications to reflect native mode support and accessibility theme requirements
 
 ---
 
@@ -230,74 +236,90 @@ Convert the Mathematical Token System design into a series of prompts for a code
     
     **Post-Complete:** Commit with message "Task 2.5 Complete: Unit Tests for Typography Token Families"
 
-  - [ ] 2.6 Implement color primitive token family
-    - Create ColorTokens.ts with systematic color scales (gray, blue, red, green, yellow)
-    - Implement 50-900 progression for each hue following modern design system conventions
-    - Add COLOR to TokenCategory enum and update PlatformValues to support hex values
-    - Create color token definitions with hex values for cross-platform consistency
+  - [x] 2.6 Implement mode-aware and theme-aware color primitive token family
+    - Create ColorTokens.ts with systematic color families (gray, black, white, yellow, orange, purple, violet, cyan, teal)
+    - Implement 100-500 progression for each hue following systematic aesthetic with mode-aware structure
+    - Add mode-aware architecture: each color contains light/dark modes with base/wcag themes
+    - Add COLOR to TokenCategory enum and update PlatformValues to support mode-aware hex values
+    - Create color token definitions based on updated token-specifications-v3.md color palette
     - Update tokens/index.ts to export color token family
     - _Requirements: 5.2, 5.3, 6.1, 6.2_
     
     **Success Criteria:**
-    - ColorTokens.ts provides systematic color scales with 50-900 progression
-    - Gray scale provides neutral colors from lightest (#F9FAFB) to darkest (#111827)
-    - Blue scale provides primary brand colors with appropriate contrast ratios
-    - Red, green, yellow scales provide semantic colors for error, success, warning states
+    - ColorTokens.ts provides systematic color families with 100-500 progression (gray, black, white, yellow, orange, purple, violet, cyan, teal)
+    - Each color token contains mode-aware structure: { light: { base, wcag }, dark: { base, wcag } }
+    - Gray scale provides neutral surfaces and text colors
+    - Black scale provides deep backgrounds and containers
+    - White scale provides light surfaces and primary text
+    - Yellow scale provides high-energy CTAs and warnings
+    - Orange scale provides secondary CTAs and approachable error states
+    - Purple scale provides primary brand and focus states
+    - Violet scale provides depth, hover states, and secondary elements
+    - Cyan scale provides tech elements, links, and success states
+    - Teal scale provides secondary UI elements and alternative success states
     - COLOR category added to TokenCategory enum with proper integration
-    - PlatformValues interface supports hex color values with 'hex' unit type
-    - Color tokens maintain consistent naming conventions and mathematical relationships
+    - PlatformValues interface supports mode-aware hex color values
+    - Color tokens maintain systematic aesthetic while supporting accessibility themes
     
     **Artifacts Created:**
-    - `src/tokens/ColorTokens.ts` - Color primitive tokens with systematic hex color scales
-    - Updated `src/types/PrimitiveToken.ts` - Enhanced TokenCategory enum and PlatformValues interface
+    - `src/tokens/ColorTokens.ts` - Mode-aware systematic color primitive tokens
+    - Updated `src/types/PrimitiveToken.ts` - Enhanced TokenCategory enum and mode-aware PlatformValues interface
     - Updated `src/tokens/index.ts` - Barrel exports for color token family
     
     **Completion Documentation:**
     - Store in `.kiro/specs/mathematical-token-system/completion/task-2-6-completion.md`
-    - Document color token architecture and systematic color scale rationale
-    - Include hex color selection methodology and accessibility considerations
-    - Document color naming conventions and cross-platform consistency approach
+    - Document mode-aware color token architecture and systematic palette rationale
+    - Include theme switching methodology (base vs WCAG) and accessibility considerations
+    - Document systematic color naming conventions and cross-platform consistency approach
+    - Include mode-aware implementation strategy for native light/dark mode support
     
     **Validation Required:**
-    - TypeScript compilation validation for color token files
-    - Validate color tokens provide appropriate contrast ratios for accessibility
-    - Validate color token naming follows systematic conventions
-    - Test color token integration with existing token system
+    - TypeScript compilation validation for mode-aware color token files
+    - Validate color tokens provide appropriate contrast ratios for both base and WCAG themes
+    - Validate systematic color naming follows consistent conventions (100-500 progression)
+    - Test mode-aware color token integration with existing token system
+    - Validate light/dark mode structure supports native platform implementations
     
-    **Post-Complete:** Commit with message "Task 2.6 Complete: Color Primitive Token Family"
+    **Post-Complete:** Commit with message "Task 2.6 Complete: Mode-Aware Systematic Color Primitive Token Family"
 
-  - [ ]* 2.7 Write unit tests for color token family
-    - Test color token hex value accuracy and consistency
-    - Test color scale progression and systematic relationships
+  - [ ]* 2.7 Write unit tests for mode-aware color token family
+    - Test mode-aware color token structure (light/dark modes with base/wcag themes)
+    - Test systematic color token hex value accuracy and consistency across modes/themes
+    - Test color scale progression (100-500) and systematic relationships within families
     - Test color token integration with token registry and utilities
-    - Test accessibility compliance for color contrast ratios
+    - Test accessibility compliance for WCAG theme color contrast ratios
+    - Test native mode detection and theme switching functionality
     - _Requirements: 5.2, 5.3, 6.1, 6.2_
     
     **Success Criteria:**
-    - Comprehensive test coverage for all color token families
-    - Test color tokens provide valid hex values and proper formatting
-    - Test color scale progression maintains systematic relationships
+    - Comprehensive test coverage for all systematic color token families
+    - Test mode-aware structure validates light/dark modes with base/wcag themes
+    - Test color tokens provide valid hex values and proper formatting across all mode/theme combinations
+    - Test color scale progression (100-500) maintains systematic relationships within families
     - Test color token integration with existing token system utilities
-    - Test accessibility compliance for color contrast ratios where applicable
-    - All tests pass and provide clear validation of color token correctness
+    - Test WCAG theme accessibility compliance for color contrast ratios
+    - Test base theme maintains systematic aesthetic integrity
+    - All tests pass and provide clear validation of mode-aware color token correctness
     
     **Artifacts Created:**
-    - `src/tokens/__tests__/ColorTokens.test.ts` - Color token tests
-    - Updated `src/tokens/__tests__/TokenCategories.test.ts` - Integration tests for color tokens
+    - `src/tokens/__tests__/ColorTokens.test.ts` - Mode-aware color token tests
+    - Updated `src/tokens/__tests__/TokenCategories.test.ts` - Integration tests for mode-aware color tokens
     
     **Completion Documentation:**
     - Store in `.kiro/specs/mathematical-token-system/completion/task-2-7-completion.md`
-    - Document color token testing strategy and coverage approach
-    - Include test case rationale for hex value validation and accessibility testing
-    - Document integration testing approach for color token family
+    - Document mode-aware color token testing strategy and coverage approach
+    - Include test case rationale for mode/theme validation and accessibility testing
+    - Document integration testing approach for mode-aware color token family
+    - Include native mode detection testing strategy
     
     **Validation Required:**
     - All unit tests pass successfully
-    - Color token validation confirmed through comprehensive testing
+    - Mode-aware color token validation confirmed through comprehensive testing
     - Integration with existing token system validated
-    - Test coverage meets established thresholds for color tokens
+    - Test coverage meets established thresholds for mode-aware color tokens
+    - WCAG accessibility compliance validated through automated testing
     
-    **Post-Complete:** Commit with message "Task 2.7 Complete: Unit Tests for Color Token Family"
+    **Post-Complete:** Commit with message "Task 2.7 Complete: Unit Tests for Mode-Aware Color Token Family"
 
 - [ ] 3. Implement Unit Provider services for cross-platform conversion
   - [x] 3.1 Create base UnitProvider interface and platform-specific converters
@@ -398,6 +420,78 @@ Convert the Mathematical Token System design into a series of prompts for a code
     - Platform constraint tests validate graceful handling
     
     **Post-Complete:** Commit with message "Task 3.3 Complete: Unit Tests for Unit Provider Services"
+
+  - [ ] 3.4 Implement cross-platform mode-aware color resolution
+    - Create ModeThemeResolver for handling colorToken[systemMode][userTheme] resolution
+    - Implement WebColorResolver with CSS custom properties and prefers-color-scheme detection
+    - Implement iOSColorResolver with UIColor.dynamicColor and trait collection detection
+    - Implement AndroidColorResolver with resource qualifiers and configuration detection
+    - Add default theme handling (base theme as default)
+    - _Requirements: 1.2, 5.2, 6.1, 6.2_
+    
+    **Success Criteria:**
+    - ModeThemeResolver correctly resolves colorToken[systemMode][userTheme] pattern
+    - WebColorResolver generates CSS custom properties with automatic mode detection via @media queries
+    - iOSColorResolver generates UIColor.dynamicColor implementations with trait collection support
+    - AndroidColorResolver generates resource qualifiers (values/values-night) with configuration detection
+    - All resolvers default to base theme and handle theme switching capability
+    - Resolution system integrates seamlessly with existing unit provider architecture
+    
+    **Artifacts Created:**
+    - `src/resolvers/ModeThemeResolver.ts` - Core mode/theme resolution logic
+    - `src/resolvers/WebColorResolver.ts` - Web CSS custom properties implementation
+    - `src/resolvers/iOSColorResolver.ts` - iOS UIColor.dynamicColor implementation
+    - `src/resolvers/AndroidColorResolver.ts` - Android resource qualifier implementation
+    - `src/resolvers/index.ts` - Barrel export for all color resolvers
+    
+    **Completion Documentation:**
+    - Store in `.kiro/specs/mathematical-token-system/completion/task-3-4-completion.md`
+    - Document mode/theme resolution algorithm and platform-specific implementations
+    - Include native mode detection strategies and theme switching methodology
+    - Document default theme handling (base) and accessibility theme support
+    
+    **Validation Required:**
+    - TypeScript compilation validation for all resolver implementations
+    - Validate mode detection works correctly on each platform (system preference detection)
+    - Validate theme switching functionality and default theme handling
+    - Test integration with existing unit provider and token system architecture
+    
+    **Post-Complete:** Commit with message "Task 3.4 Complete: Cross-Platform Mode-Aware Color Resolution"
+
+  - [ ]* 3.5 Write unit tests for mode-aware color resolution
+    - Test ModeThemeResolver resolution logic for all mode/theme combinations
+    - Test WebColorResolver CSS custom property generation and media query handling
+    - Test iOSColorResolver UIColor.dynamicColor generation and trait collection detection
+    - Test AndroidColorResolver resource qualifier generation and configuration handling
+    - Test default theme handling and theme switching functionality
+    - _Requirements: 1.2, 5.2, 6.1, 6.2_
+    
+    **Success Criteria:**
+    - Comprehensive test coverage for all mode/theme resolution scenarios
+    - Test coverage for platform-specific color resolution implementations
+    - Test coverage for native mode detection and theme switching functionality
+    - All tests validate correct resolution of colorToken[systemMode][userTheme] pattern
+    - Test suite validates integration with existing token system architecture
+    
+    **Artifacts Created:**
+    - `src/resolvers/__tests__/ModeThemeResolver.test.ts` - Core resolution logic tests
+    - `src/resolvers/__tests__/WebColorResolver.test.ts` - Web implementation tests
+    - `src/resolvers/__tests__/iOSColorResolver.test.ts` - iOS implementation tests
+    - `src/resolvers/__tests__/AndroidColorResolver.test.ts` - Android implementation tests
+    
+    **Completion Documentation:**
+    - Store in `.kiro/specs/mathematical-token-system/completion/task-3-5-completion.md`
+    - Document mode-aware color resolution testing strategy and coverage approach
+    - Include platform-specific testing scenarios and native mode detection validation
+    - Document theme switching test cases and default theme handling validation
+    
+    **Validation Required:**
+    - All unit tests pass successfully
+    - Mode/theme resolution accuracy confirmed through comprehensive testing
+    - Platform-specific implementations validated through targeted test scenarios
+    - Integration with existing token system validated through test coverage
+    
+    **Post-Complete:** Commit with message "Task 3.5 Complete: Unit Tests for Mode-Aware Color Resolution"
 
 - [ ] 4. Implement three-tier validation system
   - [x] 4.1 Create ThreeTierValidator with Pass/Warning/Error logic
@@ -500,26 +594,29 @@ Convert the Mathematical Token System design into a series of prompts for a code
     **Post-Complete:** Commit with message "Task 4.3 Complete: Unit Tests for Validation System"
 
 - [ ] 5. Implement semantic token registry and composition
-  - [ ] 5.1 Create SemanticTokenRegistry with primitive token references
-    - Implement semantic token registration with primitive references
+  - [ ] 5.1 Create SemanticTokenRegistry with mode-aware primitive token references
+    - Implement semantic token registration with mode-aware primitive references
     - Create typography tokens (typography.body, typography.heading1, typography.caption, etc.)
-    - Create color tokens (color.warning, color.primary, etc.)
+    - Create mode-aware color tokens (color.primary=purple500, color.secondary=violet500, color.success=cyan500, color.warning=yellow500, color.error=orange500)
     - Create spacing tokens (space.tight, space.loose, etc.)
     - Create style tokens (border.stylePrimary, shadow.elevated, etc.)
+    - Implement mode-aware resolution for semantic color tokens based on system context
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.6_
     
     **Success Criteria:**
-    - SemanticTokenRegistry manages semantic tokens with primitive references
+    - SemanticTokenRegistry manages semantic tokens with mode-aware primitive references
     - Typography semantic tokens combine fontSize, lineHeight, fontFamily, fontWeight, letterSpacing primitives
-    - Color semantic tokens properly reference primitive color tokens
+    - Color semantic tokens properly reference mode-aware primitive color tokens (purple500, violet500, cyan500, yellow500, orange500)
+    - Semantic color tokens follow systematic palette guidelines: primary=purple (brand authority), secondary=violet (sophisticated depth), success=cyan (tech/digital), warning=yellow (urgent attention), error=orange (approachable errors)
+    - Mode-aware resolution automatically selects appropriate light/dark mode and base/wcag theme values
     - Spacing semantic tokens properly reference primitive spacing tokens
     - Style semantic tokens properly reference primitive style tokens
     - Registry enforces primitive token references and prevents raw values
     
     **Artifacts Created:**
-    - `src/registries/SemanticTokenRegistry.ts` - Main semantic token registry
+    - `src/registries/SemanticTokenRegistry.ts` - Main semantic token registry with mode-aware support
     - `src/tokens/semantic/TypographyTokens.ts` - Semantic typography token definitions (body, heading, caption, etc.)
-    - `src/tokens/semantic/ColorTokens.ts` - Semantic color token definitions
+    - `src/tokens/semantic/ColorTokens.ts` - Mode-aware semantic color token definitions following systematic palette guidelines
     - `src/tokens/semantic/SpacingTokens.ts` - Semantic spacing token definitions
     - `src/tokens/semantic/StyleTokens.ts` - Semantic style token definitions
     - `src/tokens/semantic/index.ts` - Barrel export for semantic tokens
