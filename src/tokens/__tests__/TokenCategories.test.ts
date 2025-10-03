@@ -41,6 +41,20 @@ import {
   getStrategicFlexibilityRadiusTokens,
   RADIUS_BASE_VALUE
 } from '../../tokens/RadiusTokens';
+import {
+  getAllFontFamilyTokens,
+  getFontFamilyToken
+} from '../../tokens/FontFamilyTokens';
+import {
+  getAllFontWeightTokens,
+  getFontWeightToken,
+  FONT_WEIGHT_BASE_VALUE
+} from '../../tokens/FontWeightTokens';
+import {
+  getAllLetterSpacingTokens,
+  getLetterSpacingToken,
+  LETTER_SPACING_BASE_VALUE
+} from '../../tokens/LetterSpacingTokens';
 
 describe('Token Categories', () => {
   describe('Spacing Tokens', () => {
@@ -348,17 +362,86 @@ describe('Token Categories', () => {
     });
   });
 
+  describe('Typography Token Integration', () => {
+    test('should have correct token categories for typography tokens', () => {
+      const fontFamilyTokens = getAllFontFamilyTokens();
+      const fontWeightTokens = getAllFontWeightTokens();
+      const letterSpacingTokens = getAllLetterSpacingTokens();
+
+      expect(fontFamilyTokens.every(token => token.category === TokenCategory.FONT_FAMILY)).toBe(true);
+      expect(fontWeightTokens.every(token => token.category === TokenCategory.FONT_WEIGHT)).toBe(true);
+      expect(letterSpacingTokens.every(token => token.category === TokenCategory.LETTER_SPACING)).toBe(true);
+    });
+
+    test('should have appropriate base values for typography token families', () => {
+      expect(FONT_WEIGHT_BASE_VALUE).toBe(400);
+      expect(LETTER_SPACING_BASE_VALUE).toBe(0);
+
+      const fontWeightTokens = getAllFontWeightTokens();
+      const letterSpacingTokens = getAllLetterSpacingTokens();
+
+      expect(fontWeightTokens.every(token => token.familyBaseValue === FONT_WEIGHT_BASE_VALUE)).toBe(true);
+      expect(letterSpacingTokens.every(token => token.familyBaseValue === LETTER_SPACING_BASE_VALUE)).toBe(true);
+    });
+
+    test('should have correct precision targeting for typography tokens', () => {
+      const fontFamilyTokens = getAllFontFamilyTokens();
+      const fontWeightTokens = getAllFontWeightTokens();
+      const letterSpacingTokens = getAllLetterSpacingTokens();
+
+      // Font family and weight are not precision targeted
+      expect(fontFamilyTokens.every(token => !token.isPrecisionTargeted)).toBe(true);
+      expect(fontWeightTokens.every(token => !token.isPrecisionTargeted)).toBe(true);
+
+      // Letter spacing is precision targeted for typography refinement
+      expect(letterSpacingTokens.every(token => token.isPrecisionTargeted)).toBe(true);
+    });
+
+    test('should have appropriate platform units for typography tokens', () => {
+      const fontFamilyToken = getFontFamilyToken('fontFamilySystem');
+      const fontWeightToken = getFontWeightToken('fontWeight400');
+      const letterSpacingToken = getLetterSpacingToken('letterSpacing100');
+
+      expect(fontFamilyToken?.platforms.web.unit).toBe('fontFamily');
+      expect(fontWeightToken?.platforms.web.unit).toBe('fontWeight');
+      expect(letterSpacingToken?.platforms.web.unit).toBe('em');
+    });
+
+    test('should maintain cross-platform consistency for typography tokens', () => {
+      const fontWeightTokens = getAllFontWeightTokens();
+      const letterSpacingTokens = getAllLetterSpacingTokens();
+
+      // Font weight should have identical numeric values across platforms
+      fontWeightTokens.forEach(token => {
+        expect(token.platforms.web.value).toBe(token.platforms.ios.value);
+        expect(token.platforms.ios.value).toBe(token.platforms.android.value);
+      });
+
+      // Letter spacing should have identical em values across platforms
+      letterSpacingTokens.forEach(token => {
+        expect(token.platforms.web.value).toBe(token.platforms.ios.value);
+        expect(token.platforms.ios.value).toBe(token.platforms.android.value);
+      });
+    });
+  });
+
   describe('Token Retrieval Functions', () => {
     test('should handle individual token getters for all categories', () => {
       const fontSize = getFontSizeToken('fontSize100');
       const lineHeight = getLineHeightToken('lineHeight100');
       const density = getDensityToken('densityDefault');
       const tapArea = getTapAreaToken('tapAreaMinimum');
+      const fontFamily = getFontFamilyToken('fontFamilySystem');
+      const fontWeight = getFontWeightToken('fontWeight400');
+      const letterSpacing = getLetterSpacingToken('letterSpacing100');
 
       expect(fontSize?.category).toBe(TokenCategory.FONT_SIZE);
       expect(lineHeight?.category).toBe(TokenCategory.LINE_HEIGHT);
       expect(density?.category).toBe(TokenCategory.DENSITY);
       expect(tapArea?.category).toBe(TokenCategory.TAP_AREA);
+      expect(fontFamily?.category).toBe(TokenCategory.FONT_FAMILY);
+      expect(fontWeight?.category).toBe(TokenCategory.FONT_WEIGHT);
+      expect(letterSpacing?.category).toBe(TokenCategory.LETTER_SPACING);
     });
 
     test('should return undefined for invalid token names', () => {
@@ -366,11 +449,17 @@ describe('Token Categories', () => {
       const invalid2 = getLineHeightToken('invalid-name');
       const invalid3 = getDensityToken('does-not-exist');
       const invalid4 = getTapAreaToken('missing-token');
+      const invalid5 = getFontFamilyToken('fontFamilyInvalid');
+      const invalid6 = getFontWeightToken('fontWeight050');
+      const invalid7 = getLetterSpacingToken('letterSpacing200');
 
       expect(invalid1).toBeUndefined();
       expect(invalid2).toBeUndefined();
       expect(invalid3).toBeUndefined();
       expect(invalid4).toBeUndefined();
+      expect(invalid5).toBeUndefined();
+      expect(invalid6).toBeUndefined();
+      expect(invalid7).toBeUndefined();
     });
 
     test('should return all tokens for category getter functions', () => {
@@ -380,6 +469,9 @@ describe('Token Categories', () => {
       expect(getAllTapAreaTokens().length).toBeGreaterThan(0);
       expect(getAllSpacingTokens().length).toBeGreaterThan(0);
       expect(getAllRadiusTokens().length).toBeGreaterThan(0);
+      expect(getAllFontFamilyTokens().length).toBeGreaterThan(0);
+      expect(getAllFontWeightTokens().length).toBeGreaterThan(0);
+      expect(getAllLetterSpacingTokens().length).toBeGreaterThan(0);
     });
   });
 });
