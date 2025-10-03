@@ -115,7 +115,7 @@ export function validateTapAreaAccessibility(tapAreaValue: number): {
     }
     return { isAccessible: true, level: 'AA' };
   }
-  
+
   return {
     isAccessible: false,
     level: 'Below AA',

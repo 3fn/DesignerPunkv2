@@ -27,19 +27,19 @@ export enum SemanticCategory {
 export interface SemanticToken {
   /** Semantic token name with contextual meaning (e.g., "color.warning", "space.tight") */
   name: string;
-  
+
   /** Reference to the primitive token this semantic token uses */
   primitiveReference: string;
-  
+
   /** Semantic category for organizational purposes */
   category: SemanticCategory;
-  
+
   /** Contextual meaning or usage description */
   context: string;
-  
+
   /** Detailed description of semantic meaning and appropriate usage */
   description: string;
-  
+
   /** Resolved primitive token (populated during token resolution) */
   primitiveToken: PrimitiveToken;
 }

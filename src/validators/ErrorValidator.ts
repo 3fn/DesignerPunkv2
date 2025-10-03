@@ -9,7 +9,8 @@
  * - Critical design system constraint violations
  */
 
-import type { PrimitiveToken, SemanticToken, ValidationResult, TokenCategory } from '../types';
+import type { PrimitiveToken, SemanticToken, ValidationResult } from '../types';
+import { TokenCategory } from '../types';
 import { isStrategicFlexibilityValue } from '../constants/StrategicFlexibilityTokens';
 import { ValidationReasoning, type ReasoningContext } from './ValidationReasoning';
 
@@ -19,15 +20,15 @@ import { ValidationReasoning, type ReasoningContext } from './ValidationReasonin
 export interface ErrorValidationContext {
   /** Token being validated */
   token: PrimitiveToken | SemanticToken;
-  
+
   /** Mathematical validation context */
   mathematicalContext?: {
     /** Expected mathematical relationship */
     expectedRelationship?: string;
-    
+
     /** Actual calculated relationship */
     actualRelationship?: string;
-    
+
     /** Baseline grid requirements */
     baselineGridRequirement?: {
       required: boolean;
@@ -35,7 +36,7 @@ export interface ErrorValidationContext {
       expectedAlignment: boolean;
       actualAlignment: boolean;
     };
-    
+
     /** Cross-platform consistency data */
     crossPlatformData?: {
       platforms: string[];
@@ -44,7 +45,7 @@ export interface ErrorValidationContext {
       maxDeviation: number;
       failedPairs: string[];
     };
-    
+
     /** Family mathematical foundation */
     familyFoundation?: {
       category: TokenCategory;
@@ -53,33 +54,33 @@ export interface ErrorValidationContext {
       actualProgression: string;
     };
   };
-  
+
   /** Token registry context for reference validation */
   registryContext?: {
     /** Available primitive tokens */
     availablePrimitiveTokens?: string[];
-    
+
     /** Available semantic tokens */
     availableSemanticTokens?: string[];
-    
+
     /** Token dependency graph */
     dependencyGraph?: Record<string, string[]>;
-    
+
     /** Circular reference detection */
     circularReferences?: string[];
   };
-  
+
   /** Validation options */
   options?: {
     /** Strict mathematical validation */
     strictMathematics?: boolean;
-    
+
     /** Require cross-platform consistency */
     requireCrossPlatformConsistency?: boolean;
-    
+
     /** Validate all token references */
     validateReferences?: boolean;
-    
+
     /** Check for circular dependencies */
     checkCircularDependencies?: boolean;
   };
@@ -90,7 +91,7 @@ export interface ErrorValidationContext {
  */
 export class ErrorValidator {
   private reasoningGenerator: ValidationReasoning;
-  
+
   // Mathematical constants
   private readonly BASELINE_GRID_UNIT = 8;
   private readonly CROSS_PLATFORM_TOLERANCE = 0.01; // 1% tolerance
@@ -168,8 +169,6 @@ export class ErrorValidator {
         `Primitive token ${primitiveToken.name} lacks required mathematical relationship definition`,
         'mathematical-violation',
         {
-          expectedValue: 'defined mathematical relationship',
-          actualValue: primitiveToken.mathematicalRelationship || 'undefined',
           relationship: 'Mathematical relationship required for all primitive tokens'
         },
         [
@@ -190,8 +189,6 @@ export class ErrorValidator {
           'Calculated mathematical relationship does not match expected relationship',
           'mathematical-violation',
           {
-            expectedValue: mathematicalContext.expectedRelationship,
-            actualValue: mathematicalContext.actualRelationship,
             relationship: `Expected: ${mathematicalContext.expectedRelationship}, Actual: ${mathematicalContext.actualRelationship}`
           },
           [
@@ -212,7 +209,6 @@ export class ErrorValidator {
         `Base value ${primitiveToken.baseValue} must be positive`,
         'mathematical-violation',
         {
-          expectedValue: 'positive number',
           actualValue: primitiveToken.baseValue,
           relationship: 'Base values must be positive for mathematical consistency'
         },
@@ -232,7 +228,6 @@ export class ErrorValidator {
         `Family base value ${primitiveToken.familyBaseValue} must be positive`,
         'mathematical-violation',
         {
-          expectedValue: 'positive number',
           actualValue: primitiveToken.familyBaseValue,
           relationship: 'Family base values must be positive for mathematical consistency'
         },
@@ -287,7 +282,6 @@ export class ErrorValidator {
         `Token value ${primitiveToken.baseValue} does not align with ${gridUnit}-unit baseline grid`,
         'mathematical-violation',
         {
-          expectedValue: `multiple of ${gridUnit}`,
           actualValue: primitiveToken.baseValue,
           relationship: `${primitiveToken.baseValue} ÷ ${gridUnit} = ${primitiveToken.baseValue / gridUnit} (non-integer)`,
           baselineGridInfo: {
@@ -313,8 +307,6 @@ export class ErrorValidator {
         `Token baselineGridAlignment flag (${primitiveToken.baselineGridAlignment}) does not match actual alignment (${isAligned})`,
         'mathematical-violation',
         {
-          expectedValue: isAligned,
-          actualValue: primitiveToken.baselineGridAlignment,
           relationship: 'Baseline grid alignment flag must match actual mathematical alignment'
         },
         [
@@ -427,8 +419,6 @@ export class ErrorValidator {
         `Referenced primitive token '${semanticToken.primitiveReference}' does not exist`,
         'mathematical-violation',
         {
-          expectedValue: 'valid primitive token reference',
-          actualValue: semanticToken.primitiveReference,
           relationship: 'Semantic tokens must reference existing primitive tokens'
         },
         [
@@ -475,7 +465,7 @@ export class ErrorValidator {
 
     // Check for circular references
     const circularReferences = registryContext.circularReferences || [];
-    const tokenName = 'name' in token ? token.name : token.name;
+    const tokenName = token.name;
 
     if (circularReferences.includes(tokenName)) {
       return this.generateErrorResult(
@@ -526,8 +516,7 @@ export class ErrorValidator {
         `Token does not follow ${familyFoundation.category} family mathematical progression`,
         'mathematical-violation',
         {
-          expectedValue: familyFoundation.expectedProgression,
-          actualValue: familyFoundation.actualProgression,
+
           relationship: `Family foundation requires: ${familyFoundation.expectedProgression}`
         },
         [
@@ -584,7 +573,7 @@ export class ErrorValidator {
 
     return {
       level: 'Error',
-      token: 'name' in token ? token.name : token.name,
+      token: token.name,
       message,
       rationale,
       mathematicalReasoning,
