@@ -458,7 +458,7 @@ Convert the Mathematical Token System design into a series of prompts for a code
     
     **Post-Complete:** Commit with message "Task 3.4 Complete: Cross-Platform Mode-Aware Color Resolution"
 
-  - [ ]* 3.5 Write unit tests for mode-aware color resolution
+  - [x] 3.5 Write unit tests for mode-aware color resolution
     - Test ModeThemeResolver resolution logic for all mode/theme combinations
     - Test WebColorResolver CSS custom property generation and media query handling
     - Test iOSColorResolver UIColor.dynamicColor generation and trait collection detection
