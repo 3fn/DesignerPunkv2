@@ -282,7 +282,7 @@ Convert the Mathematical Token System design into a series of prompts for a code
     
     **Post-Complete:** Commit with message "Task 2.6 Complete: Mode-Aware Systematic Color Primitive Token Family"
 
-  - [ ]* 2.7 Write unit tests for mode-aware color token family
+  - [x] 2.7 Write unit tests for mode-aware color token family
     - Test mode-aware color token structure (light/dark modes with base/wcag themes)
     - Test systematic color token hex value accuracy and consistency across modes/themes
     - Test color scale progression (100-500) and systematic relationships within families
@@ -421,7 +421,7 @@ Convert the Mathematical Token System design into a series of prompts for a code
     
     **Post-Complete:** Commit with message "Task 3.3 Complete: Unit Tests for Unit Provider Services"
 
-  - [ ] 3.4 Implement cross-platform mode-aware color resolution
+  - [x] 3.4 Implement cross-platform mode-aware color resolution
     - Create ModeThemeResolver for handling colorToken[systemMode][userTheme] resolution
     - Implement WebColorResolver with CSS custom properties and prefers-color-scheme detection
     - Implement iOSColorResolver with UIColor.dynamicColor and trait collection detection

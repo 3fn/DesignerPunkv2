@@ -55,6 +55,14 @@ import {
   getLetterSpacingToken,
   LETTER_SPACING_BASE_VALUE
 } from '../../tokens/LetterSpacingTokens';
+import {
+  getAllColorTokens,
+  getColorToken,
+  resolveColorTokenValue,
+  COLOR_BASE_VALUE,
+  COLOR_FAMILIES,
+  COLOR_SCALE
+} from '../../tokens/ColorTokens';
 
 describe('Token Categories', () => {
   describe('Spacing Tokens', () => {
@@ -472,6 +480,99 @@ describe('Token Categories', () => {
       expect(getAllFontFamilyTokens().length).toBeGreaterThan(0);
       expect(getAllFontWeightTokens().length).toBeGreaterThan(0);
       expect(getAllLetterSpacingTokens().length).toBeGreaterThan(0);
+      expect(getAllColorTokens().length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('Color Token Integration', () => {
+    test('should have correct base value and family structure for color tokens', () => {
+      expect(COLOR_BASE_VALUE).toBe(0); // N/A for hex color tokens
+
+      const allTokens = getAllColorTokens();
+      expect(allTokens.length).toBe(45); // 9 families × 5 scales = 45 tokens
+      expect(allTokens.every(token => token.category === TokenCategory.COLOR)).toBe(true);
+      expect(allTokens.every(token => token.familyBaseValue === COLOR_BASE_VALUE)).toBe(true);
+    });
+
+    test('should have mode-aware color token structure integrated with token system', () => {
+      const allTokens = getAllColorTokens();
+
+      allTokens.forEach(token => {
+        // Validate mode-aware structure integration
+        expect(token.platforms.web.unit).toBe('hex');
+        expect(token.platforms.ios.unit).toBe('hex');
+        expect(token.platforms.android.unit).toBe('hex');
+
+        // Validate color token flags are appropriate
+        expect(token.baselineGridAlignment).toBe(false);
+        expect(token.isStrategicFlexibility).toBe(false);
+        expect(token.isPrecisionTargeted).toBe(false);
+      });
+    });
+
+    test('should integrate color families with systematic color scale', () => {
+      expect(COLOR_SCALE).toEqual([100, 200, 300, 400, 500]);
+      expect(Object.keys(COLOR_FAMILIES)).toHaveLength(9);
+
+      // Test that all families follow the scale
+      Object.values(COLOR_FAMILIES).forEach(family => {
+        COLOR_SCALE.forEach(scale => {
+          const token = getColorToken(`${family}${scale}` as any);
+          expect(token).toBeDefined();
+          expect(token.name).toBe(`${family}${scale}`);
+        });
+      });
+    });
+
+    test('should support mode-aware color resolution in token system integration', () => {
+      const testToken = getColorToken('purple300');
+
+      // Test integration with resolveColorTokenValue utility
+      const lightBase = resolveColorTokenValue(testToken, 'light', 'base');
+      const lightWcag = resolveColorTokenValue(testToken, 'light', 'wcag');
+      const darkBase = resolveColorTokenValue(testToken, 'dark', 'base');
+      const darkWcag = resolveColorTokenValue(testToken, 'dark', 'wcag');
+
+      expect(lightBase).toMatch(/^#[0-9A-F]{6}$/i);
+      expect(lightWcag).toMatch(/^#[0-9A-F]{6}$/i);
+      expect(darkBase).toMatch(/^#[0-9A-F]{6}$/i);
+      expect(darkWcag).toMatch(/^#[0-9A-F]{6}$/i);
+    });
+
+    test('should maintain cross-platform consistency for mode-aware color tokens', () => {
+      const allTokens = getAllColorTokens();
+
+      allTokens.forEach(token => {
+        const webValue = token.platforms.web.value;
+        const iosValue = token.platforms.ios.value;
+        const androidValue = token.platforms.android.value;
+
+        // Color values should be identical across platforms
+        expect(webValue).toEqual(iosValue);
+        expect(iosValue).toEqual(androidValue);
+      });
+    });
+
+    test('should integrate color tokens with existing token category validation', () => {
+      const allTokens = getAllColorTokens();
+
+      // Color tokens should not be precision targeted (like spacing/radius)
+      expect(allTokens.every(token => !token.isPrecisionTargeted)).toBe(true);
+
+      // Color tokens should not have baseline grid alignment (like typography)
+      expect(allTokens.every(token => !token.baselineGridAlignment)).toBe(true);
+
+      // Color tokens should not be strategic flexibility (different from spacing/radius)
+      expect(allTokens.every(token => !token.isStrategicFlexibility)).toBe(true);
+    });
+
+    test('should have consistent mathematical relationship descriptions across color families', () => {
+      Object.values(COLOR_FAMILIES).forEach(family => {
+        COLOR_SCALE.forEach(scale => {
+          const token = getColorToken(`${family}${scale}` as any);
+          expect(token.mathematicalRelationship).toContain(`Systematic ${family} scale progression`);
+        });
+      });
     });
   });
 });
