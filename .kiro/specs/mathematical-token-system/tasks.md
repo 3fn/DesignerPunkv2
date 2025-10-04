@@ -594,10 +594,146 @@ Convert the Mathematical Token System design into a series of prompts for a code
     **Post-Complete:** Commit with message "Task 4.3 Complete: Unit Tests for Validation System"
 
 - [ ] 5. Implement semantic token registry and composition
-  - [ ] 5.1 Create SemanticTokenRegistry with mode-aware primitive token references
-    - Implement semantic token registration with mode-aware primitive references
-    - Create typography tokens (typography.body, typography.heading1, typography.caption, etc.)
-    - Create mode-aware color tokens (color.primary=purple500, color.secondary=violet500, color.success=cyan500, color.warning=yellow500, color.error=orange500)
+  - [x] 5.1 Create SemanticTokenRegistry with multi-primitive token support
+    - [x] 5.1.1 Update SemanticToken type and registry for multi-primitive support
+      - Modify SemanticToken interface to use `primitiveReferences: Record<string, string>`
+      - Update SemanticTokenRegistry to handle multi-primitive token structure
+      - Update validation logic to validate all primitive references in a token
+      - Update resolution methods for multi-primitive tokens
+      - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.6_
+      
+      **Success Criteria:**
+      - SemanticToken interface uses `primitiveReferences: Record<string, string>` structure
+      - Registry validates all primitive references exist
+      - Registry can resolve multi-primitive tokens correctly
+      - Mode-aware resolution works for color tokens within multi-primitive structure
+      - Type system enforces correct primitive reference structure
+      
+      **Artifacts Created:**
+      - Updated `src/types/SemanticToken.ts` - Modified interface for multi-primitive support
+      - Updated `src/registries/SemanticTokenRegistry.ts` - Enhanced registry for multi-primitive tokens
+      
+      **Validation Required:**
+      - TypeScript compilation validation
+      - Validate registry handles both simple and composite tokens
+      - Test multi-primitive validation logic
+      
+      **Post-Complete:** Commit with message "Task 5.1.1 Complete: Multi-Primitive Semantic Token Support"
+    
+    - [x] 5.1.2 Add fontSize500-700 and lineHeight500-700 primitive tokens
+      - Add fontSize500 (33px), fontSize600 (37px), fontSize700 (42px) to FontSizeTokens.ts
+      - Add lineHeight500 (1.212), lineHeight600 (1.19), lineHeight700 (1.143) to LineHeightTokens.ts
+      - Follow 1.125 modular scale progression for font sizes
+      - Ensure line heights align to 4pt typography subgrid
+      - Update token exports in index.ts
+      - _Requirements: 5.2, 6.1_
+      
+      **Success Criteria:**
+      - fontSize500-700 follow 1.125 modular scale progression
+      - lineHeight500-700 paired with corresponding fontSize tokens
+      - Computed line heights align to 4pt subgrid (40px, 44px, 48px)
+      - Tightening pattern maintained (ratios decrease as size increases)
+      - All tokens properly exported and accessible
+      
+      **Artifacts Created:**
+      - Updated `src/tokens/FontSizeTokens.ts` - Added fontSize500-700
+      - Updated `src/tokens/LineHeightTokens.ts` - Added lineHeight500-700
+      - Updated `src/tokens/index.ts` - Export new tokens
+      
+      **Validation Required:**
+      - TypeScript compilation validation
+      - Validate mathematical progression (1.125 ratio)
+      - Validate line height alignment to 4pt subgrid
+      - Test token pairing (fontSize500 ↔ lineHeight500)
+      
+      **Post-Complete:** Commit with message "Task 5.1.2 Complete: Extended Typography Primitive Tokens"
+    
+    - [ ] 5.1.3 Implement typography semantic tokens with multi-primitive structure
+      - Create typography.body, typography.bodySmall, typography.bodyLarge
+      - Create typography.h1 through typography.h6 following HTML semantics
+      - Create typography.caption, typography.legal, typography.display
+      - Create typography.button, typography.input, typography.label (UI layer)
+      - Each token explicitly defines fontSize, lineHeight, fontFamily, fontWeight, letterSpacing
+      - Use letterSpacing100 as default for all tokens
+      - _Requirements: 5.2, 5.3, 5.4, 6.1, 6.2_
+      
+      **Success Criteria:**
+      - All typography tokens use explicit multi-primitive structure
+      - Typography tokens follow spec-defined compositions
+      - H1-H6 hierarchy properly mapped to fontSize150-600
+      - UI layer tokens (button, input, label) properly defined
+      - All tokens include letterSpacing100 default
+      - Token structure is self-documenting and AI-collaboration friendly
+      
+      **Artifacts Created:**
+      - Updated `src/tokens/semantic/TypographyTokens.ts` - Complete typography semantic tokens
+      
+      **Validation Required:**
+      - TypeScript compilation validation
+      - Validate all primitive references exist
+      - Validate typography hierarchy follows spec
+      - Test token structure matches multi-primitive pattern
+      
+      **Post-Complete:** Commit with message "Task 5.1.3 Complete: Typography Semantic Tokens"
+    
+    - [ ] 5.1.4 Implement color semantic tokens with multi-primitive structure
+      - Create color.primary, color.secondary (brand identity)
+      - Create color.success.strong, color.success.subtle (status feedback)
+      - Create color.warning.strong, color.warning.subtle (status feedback)
+      - Create color.error (status feedback)
+      - Create color.info.strong, color.info.subtle (informational)
+      - Create color.text, color.textMuted, color.textSubtle (text hierarchy)
+      - Create color.background, color.surface, color.border (surfaces)
+      - All tokens use `{ value: 'primitiveTokenName' }` structure
+      - Follow spec exactly - no additional tokens
+      - _Requirements: 5.1, 5.4, 5.6_
+      
+      **Success Criteria:**
+      - Color tokens match spec exactly (15 tokens total)
+      - All tokens use `primitiveReferences: { value: 'tokenName' }` structure
+      - Mode-aware color tokens properly reference primitive color tokens
+      - Systematic palette guidelines followed (purple=primary, violet=secondary, etc.)
+      - No extra tokens beyond spec definition
+      
+      **Artifacts Created:**
+      - Updated `src/tokens/semantic/ColorTokens.ts` - Spec-aligned color semantic tokens
+      
+      **Validation Required:**
+      - TypeScript compilation validation
+      - Validate all primitive color references exist
+      - Validate mode-aware resolution works correctly
+      - Test token count matches spec (15 tokens)
+      
+      **Post-Complete:** Commit with message "Task 5.1.4 Complete: Color Semantic Tokens"
+    
+    - [ ] 5.1.5 Create semantic token barrel export and validation
+      - Create src/tokens/semantic/index.ts barrel export
+      - Export all semantic token families (typography, color)
+      - Create utility functions for semantic token access
+      - Run TypeScript compilation validation
+      - Test semantic token registration and retrieval
+      - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.6_
+      
+      **Success Criteria:**
+      - Barrel export provides clean access to all semantic tokens
+      - Utility functions simplify semantic token usage
+      - All TypeScript compilation passes
+      - Semantic tokens integrate with registry correctly
+      - Documentation is clear and complete
+      
+      **Artifacts Created:**
+      - `src/tokens/semantic/index.ts` - Barrel export for semantic tokens
+      - `.kiro/specs/mathematical-token-system/completion/task-5-1-completion.md` - Completion documentation
+      
+      **Validation Required:**
+      - TypeScript compilation validation
+      - Validate semantic token registration works
+      - Test semantic token retrieval and resolution
+      - Validate mode-aware color resolution
+      
+      **Post-Complete:** Commit with message "Task 5.1.5 Complete: Semantic Token System Integration"
+    
+    **Note:** Spacing semantic tokens (space.tight, space.loose, etc.) and style tokens (border, shadow) will be addressed in separate tasks after spec refinement.
     - Create spacing tokens (space.tight, space.loose, etc.)
     - Create style tokens (border.stylePrimary, shadow.elevated, etc.)
     - Implement mode-aware resolution for semantic color tokens based on system context

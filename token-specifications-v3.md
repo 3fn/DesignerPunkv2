@@ -59,6 +59,19 @@ space600 = (space100 × 6)
 **Unit Application**: Web (÷ Base Unit = REM), iOS (×1pt), Android (×1sp)  
 **Mathematical Progression**: 1.125 modular scale (musical fourth)
 
+**Pairing Principle**: Font size tokens are exactly paired with lineHeight tokens (fontSize050↔lineHeight050, fontSize100↔lineHeight100, etc.)
+
+**Typography Hierarchy**: 
+- Body text: fontSize050-fontSize125 (13-18px) with looser line height ratios
+- Headers: fontSize150-fontSize700 (20-42px) with tighter line height ratios
+  - fontSize150 = H6 (smallest header)
+  - fontSize200 = H5
+  - fontSize300 = H4
+  - fontSize400 = H3
+  - fontSize500 = H2
+  - fontSize600 = H1
+  - fontSize700 = Display text
+
 ```
 fontSize050 = 13 - (base ÷ 1.125²) rounded
 fontSize075 = 14 - (base ÷ 1.125) rounded  
@@ -68,6 +81,9 @@ fontSize150 = 20 - (base × 1.125²) rounded
 fontSize200 = 23 - (base × 1.125³) rounded
 fontSize300 = 26 - (base × 1.125⁴) rounded
 fontSize400 = 29 - (base × 1.125⁵) rounded
+fontSize500 = 33 - (base × 1.125⁶) rounded
+fontSize600 = 37 - (base × 1.125⁷) rounded
+fontSize700 = 42 - (base × 1.125⁸) rounded
 ```
 
 ### **Font Family Token Family**
@@ -116,15 +132,24 @@ letterSpacing150 = 0.05   - Very loose spacing for emphasis
 **Usage Pattern**: `fontSize × lineHeight = computed line height`
 **Example**: `fontSize100 (16) × lineHeight100 (1.5) = 24 units of line height`
 
-**Precision Targeting**: Line height multipliers are calculated to align with 8pt vertical rhythm when combined with their corresponding fontSize tokens, ensuring systematic vertical spacing.
+**Pairing Principle**: Line height tokens are exactly paired with fontSize tokens (fontSize050↔lineHeight050, fontSize100↔lineHeight100, etc.)
+
+**4pt Typography Subgrid**: Line height multipliers are calculated to align with 4pt typography subgrid when combined with their paired fontSize tokens, ensuring systematic vertical rhythm. Valid line heights: 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, etc.
+
+**Tightening Pattern**: Multipliers decrease as font size increases - body text uses looser ratios (1.429-1.556) for readability, while headers use tighter ratios (1.143-1.4) for visual impact.
 
 ```
-lineHeight050 = (lineHeight100 × 0.833)
-lineHeight075 = (lineHeight100 × 0.889)
-lineHeight100 = baseValue - Base Unit
-lineHeight125 = (lineHeight100 × 1.037)
-lineHeight150 = (lineHeight100 × 1.167)
-lineHeight200 = (lineHeight100 × 1.333)
+lineHeight050 = 1.538 - (fontSize050: 13 → 20px line height)
+lineHeight075 = 1.429 - (fontSize075: 14 → 20px line height)
+lineHeight100 = 1.5 - Base Unit (fontSize100: 16 → 24px line height)
+lineHeight125 = 1.556 - (fontSize125: 18 → 28px line height)
+lineHeight150 = 1.4 - (fontSize150: 20 → 28px line height)
+lineHeight200 = 1.391 - (fontSize200: 23 → 32px line height)
+lineHeight300 = 1.231 - (fontSize300: 26 → 32px line height)
+lineHeight400 = 1.241 - (fontSize400: 29 → 36px line height)
+lineHeight500 = 1.212 - (fontSize500: 33 → 40px line height)
+lineHeight600 = 1.19 - (fontSize600: 37 → 44px line height)
+lineHeight700 = 1.143 - (fontSize700: 42 → 48px line height)
 ```
 
 ### **Border Radius Token Family**
@@ -405,92 +430,101 @@ Semantic typography tokens combine multiple primitive tokens to create complete 
 ```
 // Body Text Variants
 typography.body = {
-  fontSize: fontSize100,     // 16px
-  lineHeight: lineHeight100, // 1.5
+  fontSize: fontSize100,
+  lineHeight: lineHeight100,
   fontFamily: fontFamilyBody,
   fontWeight: fontWeight400
 }
 
 typography.bodySmall = {
-  fontSize: fontSize075,     // 14px
-  lineHeight: lineHeight075, // 1.25
+  fontSize: fontSize075,
+  lineHeight: lineHeight075,
   fontFamily: fontFamilyBody,
   fontWeight: fontWeight400
 }
 
 typography.bodyLarge = {
-  fontSize: fontSize125,     // 18px
-  lineHeight: lineHeight125, // 1.75
+  fontSize: fontSize125,
+  lineHeight: lineHeight125,
   fontFamily: fontFamilyBody,
   fontWeight: fontWeight400
 }
 
 // Heading Hierarchy
-typography.heading1 = {
-  fontSize: fontSize300,     // 26px
-  lineHeight: lineHeight075, // 1.25
+typography.h1 = {
+  fontSize: fontSize600, 
+  lineHeight: lineHeight600,
   fontFamily: fontFamilyDisplay,
   fontWeight: fontWeight700
 }
 
-typography.heading2 = {
-  fontSize: fontSize250,     // ~23px (fontSize200 equivalent)
-  lineHeight: lineHeight075, // 1.25
+typography.h2 = {
+  fontSize: fontSize500,
+  lineHeight: lineHeight500,
+  fontFamily: fontFamilyDisplay,
+  fontWeight: fontWeight700
+}
+
+typography.h3 = {
+  fontSize: fontSize400,
+  lineHeight: lineHeight400,
   fontFamily: fontFamilyDisplay,
   fontWeight: fontWeight600
 }
 
-typography.heading3 = {
-  fontSize: fontSize200,     // 23px
-  lineHeight: lineHeight100, // 1.5
-  fontFamily: fontFamilyDisplay,
-  fontWeight: fontWeight600
-}
-
-typography.heading4 = {
-  fontSize: fontSize150,     // 20px
-  lineHeight: lineHeight100, // 1.5
+typography.h4 = {
+  fontSize: fontSize300,
+  lineHeight: lineHeight300,
   fontFamily: fontFamilyBody,
   fontWeight: fontWeight600
 }
 
+typography.h5 = {
+  fontSize: fontSize200,
+  lineHeight: lineHeight200,
+  fontFamily: fontFamilyBody,
+  fontWeight: fontWeight600
+}
+
+typography.h6 = {
+  fontSize: fontSize150,
+  lineHeight: lineHeight150,
+  fontFamily: fontFamilyBody,
+  fontWeight: fontWeight700
+}
+
+
+
 // Specialized Text
 typography.caption = {
-  fontSize: fontSize050,     // 13px
-  lineHeight: lineHeight050, // 1.0
+  fontSize: fontSize050,
+  lineHeight: lineHeight050,
   fontFamily: fontFamilyBody,
   fontWeight: fontWeight300
 }
 
 typography.legal = {
-  fontSize: fontSize050,     // 13px
-  lineHeight: lineHeight050, // 1.0
+  fontSize: fontSize050,
+  lineHeight: lineHeight050,
   fontFamily: fontFamilyBody,
   fontWeight: fontWeight400
+}
+
+typography.display = {
+  fontSize: fontSize700,
+  lineHeight: lineHeight700,
+  fontFamily: fontFamilyDisplay,
+  fontWeight: fontWeight700
 }
 ```
 
 #### **Interface Typography (UI Layer)**
-```
 // UI Component Text Styles
-typography.button = {
-  fontSize: fontSize100,     // 16px
-  fontFamily: fontFamilyBody,
-  fontWeight: fontWeight500
-}
+typography.button = typography.body + fontWeight: fontWeight500
 
-typography.input = {
-  fontSize: fontSize100,     // 16px
-  fontFamily: fontFamilyBody,
-  fontWeight: fontWeight400
-}
+typography.input = typography.body
 
-typography.label = {
-  fontSize: fontSize075,     // 14px
-  fontFamily: fontFamilyBody,
-  fontWeight: fontWeight500
-}
-```
+typography.label = typography.bodySmall + fontWeight: fontWeight500
 
 ### **Spacing Semantic Tokens**
 Semantic spacing tokens provide contextual meaning for specific use cases:
@@ -682,9 +716,17 @@ Color: Resource qualifiers with native configuration detection
 
 ### **Precision Multiplier Philosophy**
 - Line height and tap area multipliers are not arbitrary - they are calculated to achieve specific systematic targets
-- Line height multipliers align with 8pt vertical rhythm when combined with fontSize tokens
+- Line height multipliers align with 4pt typography subgrid when combined with their paired fontSize tokens
+- Typography works on 4pt subgrid (4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, etc.) within the 8pt baseline grid system
 - Tap area multipliers hit specific accessibility targets at default scale
 - This precision targeting maintains mathematical rigor while achieving practical design goals
+
+### **Typography Token Pairing System**
+- fontSize and lineHeight tokens are exactly paired with matching numeric suffixes
+- fontSize050 always pairs with lineHeight050, fontSize100 with lineHeight100, etc.
+- Multipliers are rounded to thousandths for precision (e.g., 1.538, 1.429, 1.391)
+- Tightening pattern: ratios decrease as font size increases (body: 1.429-1.556, headers: 1.143-1.4)
+- All computed line heights align to 4pt subgrid for systematic vertical rhythm
 
 ---
 

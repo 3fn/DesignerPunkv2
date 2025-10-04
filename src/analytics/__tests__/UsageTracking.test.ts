@@ -431,11 +431,11 @@ describe('Usage Tracking System', () => {
 
       const semanticToken: SemanticToken = {
         name: 'space.normal',
-        primitiveReference: 'space100',
+        primitiveReferences: { default: 'space100' },
         category: SemanticCategory.SPACING,
         context: 'Normal spacing',
         description: 'Semantic normal spacing',
-        primitiveToken
+        primitiveTokens: { default: primitiveToken }
       };
 
       // Record some usages
@@ -613,11 +613,11 @@ describe('Usage Tracking System', () => {
 
       const semanticToken: SemanticToken = {
         name: 'space.normal',
-        primitiveReference: 'space100',
+        primitiveReferences: { default: 'space100' },
         category: SemanticCategory.SPACING,
         context: 'Normal spacing',
         description: 'Semantic normal spacing',
-        primitiveToken
+        primitiveTokens: { default: primitiveToken }
       };
 
       // Record 30 semantic and 70 primitive usages

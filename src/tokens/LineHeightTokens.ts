@@ -91,6 +91,45 @@ export const lineHeightTokens: Record<string, PrimitiveToken> = {
     isStrategicFlexibility: false,
     isPrecisionTargeted: true, // Precision multiplier for vertical rhythm
     platforms: generateLineHeightPlatformValues(2.0)
+  },
+
+  lineHeight500: {
+    name: 'lineHeight500',
+    category: TokenCategory.LINE_HEIGHT,
+    baseValue: 1.212,
+    familyBaseValue: LINE_HEIGHT_BASE_VALUE,
+    description: 'Display heading line height - precision multiplier for 40px (4×10) with fontSize500',
+    mathematicalRelationship: '40px ÷ 33px = 1.212 (aligns to 4pt subgrid)',
+    baselineGridAlignment: false,
+    isStrategicFlexibility: false,
+    isPrecisionTargeted: true, // Precision multiplier for vertical rhythm
+    platforms: generateLineHeightPlatformValues(1.212)
+  },
+
+  lineHeight600: {
+    name: 'lineHeight600',
+    category: TokenCategory.LINE_HEIGHT,
+    baseValue: 1.19,
+    familyBaseValue: LINE_HEIGHT_BASE_VALUE,
+    description: 'Large display line height - precision multiplier for 44px (4×11) with fontSize600',
+    mathematicalRelationship: '44px ÷ 37px ≈ 1.19 (aligns to 4pt subgrid)',
+    baselineGridAlignment: false,
+    isStrategicFlexibility: false,
+    isPrecisionTargeted: true, // Precision multiplier for vertical rhythm
+    platforms: generateLineHeightPlatformValues(1.19)
+  },
+
+  lineHeight700: {
+    name: 'lineHeight700',
+    category: TokenCategory.LINE_HEIGHT,
+    baseValue: 1.143,
+    familyBaseValue: LINE_HEIGHT_BASE_VALUE,
+    description: 'Extra large display line height - precision multiplier for 48px (4×12) with fontSize700',
+    mathematicalRelationship: '48px ÷ 42px ≈ 1.143 (aligns to 4pt subgrid)',
+    baselineGridAlignment: false,
+    isStrategicFlexibility: false,
+    isPrecisionTargeted: true, // Precision multiplier for vertical rhythm
+    platforms: generateLineHeightPlatformValues(1.143)
   }
 };
 

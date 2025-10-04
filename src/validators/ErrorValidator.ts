@@ -155,7 +155,7 @@ export class ErrorValidator {
     options: ErrorValidationContext['options'] = {}
   ): ValidationResult | null {
     // Only applies to primitive tokens
-    if ('primitiveReference' in token) {
+    if ('primitiveReferences' in token) {
       return null;
     }
 
@@ -251,7 +251,7 @@ export class ErrorValidator {
     options: ErrorValidationContext['options'] = {}
   ): ValidationResult | null {
     // Only applies to primitive tokens
-    if ('primitiveReference' in token) {
+    if ('primitiveReferences' in token) {
       return null;
     }
 
@@ -338,7 +338,7 @@ export class ErrorValidator {
     }
 
     // Only applies to primitive tokens
-    if ('primitiveReference' in token) {
+    if ('primitiveReferences' in token) {
       return null;
     }
 
@@ -409,34 +409,43 @@ export class ErrorValidator {
     }
 
     // Only applies to semantic tokens
-    if (!('primitiveReference' in token)) {
+    if (!('primitiveReferences' in token)) {
       return null;
     }
 
     const semanticToken = token as SemanticToken;
 
-    // Check if primitive reference exists
+    // Check if primitive references exist
     const availablePrimitives = registryContext.availablePrimitiveTokens || [];
-    if (!availablePrimitives.includes(semanticToken.primitiveReference)) {
+    const invalidReferences: string[] = [];
+    
+    for (const [key, primitiveRef] of Object.entries(semanticToken.primitiveReferences)) {
+      if (!availablePrimitives.includes(primitiveRef)) {
+        invalidReferences.push(`${key}: ${primitiveRef}`);
+      }
+    }
+    
+    if (invalidReferences.length > 0) {
       return this.generateErrorResult(
         token,
-        'Invalid primitive token reference',
-        `Referenced primitive token '${semanticToken.primitiveReference}' does not exist`,
+        'Invalid primitive token reference(s)',
+        `Referenced primitive token(s) do not exist: ${invalidReferences.join(', ')}`,
         'mathematical-violation',
         {
           relationship: 'Semantic tokens must reference existing primitive tokens'
         },
         [
-          'Reference an existing primitive token',
+          'Reference existing primitive token(s)',
           `Available primitive tokens: ${availablePrimitives.slice(0, 5).join(', ')}${availablePrimitives.length > 5 ? '...' : ''}`,
           'Verify primitive token name spelling and availability',
-          'Ensure primitive token is registered before semantic token creation'
+          'Ensure primitive token(s) are registered before semantic token creation'
         ]
       );
     }
 
     // Check for self-reference (semantic token referencing itself)
-    if (semanticToken.primitiveReference === semanticToken.name) {
+    const selfReferences = Object.values(semanticToken.primitiveReferences).filter(ref => ref === semanticToken.name);
+    if (selfReferences.length > 0) {
       return this.generateErrorResult(
         token,
         'Self-reference violation',
@@ -447,7 +456,7 @@ export class ErrorValidator {
         },
         [
           'Reference a different primitive token',
-          'Ensure semantic token name differs from primitive reference',
+          'Ensure semantic token name differs from primitive reference(s)',
           'Review token naming conventions'
         ]
       );
@@ -502,7 +511,7 @@ export class ErrorValidator {
     options: ErrorValidationContext['options'] = {}
   ): ValidationResult | null {
     // Only applies to primitive tokens
-    if ('primitiveReference' in token) {
+    if ('primitiveReferences' in token) {
       return null;
     }
 

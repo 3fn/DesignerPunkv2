@@ -74,7 +74,7 @@ The Mathematical Token System serves as the foundational layer for the DesignerP
 1. WHEN developing tokens THEN prioritize using semantic tokens if available before opting to use primitive tokens as a fallback
 2. WHEN components use spacing tokens THEN they SHALL use tokens from the spacing family (space050, space100, space150) with base value 8
 3. WHEN components use typography tokens THEN they SHALL use tokens from the fontSize family (fontSize100, fontSize125, fontSize150) with base value 16
-4. WHEN components use line height THEN they SHALL multiply fontSize tokens by lineHeight tokens (fontSize100 × lineHeight100 = computed line height)
+4. WHEN components use line height THEN they SHALL use paired lineHeight tokens with corresponding fontSize tokens (fontSize050 with lineHeight050, fontSize100 with lineHeight100, etc.) where lineHeight multipliers are calculated to achieve 4pt subgrid alignment
 5. WHEN components use border radius THEN they SHALL use tokens from the radius family (radius100, radius200) with base value 8
 6. WHEN density scaling is applied THEN it SHALL multiply functional tokens (spacing, typography, tap areas) but NOT aesthetic tokens (radius, line height ratios)
 7. WHEN accessibility requirements apply THEN components SHALL use tapArea tokens (tapAreaMinimum, tapAreaRecommended) with base value 44
@@ -88,11 +88,14 @@ The Mathematical Token System serves as the foundational layer for the DesignerP
 
 1. WHEN token families are defined THEN each family SHALL have its own base value (spacing: 8, typography: 16, lineHeight: 1.5, radius: 8, density: 1.0, tapArea: 44)
 2. WHEN modular scale is applied to typography THEN the system SHALL use 1.125 ratio (musical fourth) for systematic font size progression
-3. WHEN line height tokens are calculated THEN they SHALL use precision multipliers to align with 8pt vertical rhythm when combined with fontSize tokens
-4. WHEN tap area tokens are calculated THEN they SHALL use precision multipliers to achieve specific accessibility targets at default scale
-5. WHEN baseline grid calculations are performed THEN spacing and radius tokens SHALL align with 8-unit grid system
-6. IF mathematical conflicts arise THEN the system SHALL prioritize mathematical consistency over arbitrary design preferences
-7. WHEN mathematical validation is performed THEN the system SHALL verify all tokens follow their family's mathematical foundation
+3. WHEN line height tokens are calculated THEN they SHALL use precision multipliers to align with 4pt typography subgrid when combined with their paired fontSize tokens, achieving systematic vertical rhythm
+4. WHEN fontSize and lineHeight tokens are paired THEN they SHALL follow exact coupling (fontSize050↔lineHeight050, fontSize100↔lineHeight100, etc.) with multipliers rounded to thousandths
+5. WHEN line height multipliers are calculated THEN they SHALL produce tighter ratios as font size increases (body text: 1.5-1.556, headers: 1.143-1.4) to maintain appropriate visual hierarchy
+6. WHEN tap area tokens are calculated THEN they SHALL use precision multipliers to achieve specific accessibility targets at default scale
+7. WHEN baseline grid calculations are performed THEN spacing and radius tokens SHALL align with 8-unit grid system
+8. WHEN typography vertical rhythm is calculated THEN line heights SHALL align to 4pt subgrid (4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, etc.)
+9. IF mathematical conflicts arise THEN the system SHALL prioritize mathematical consistency over arbitrary design preferences
+10. WHEN mathematical validation is performed THEN the system SHALL verify all tokens follow their family's mathematical foundation
 
 ### Requirement 7: Contamination Prevention Integration
 

@@ -60,28 +60,30 @@ describe('ThreeTierValidator', () => {
     });
 
     it('should validate semantic token with valid primitive reference', () => {
+      const primitiveToken: PrimitiveToken = {
+        name: 'space050',
+        category: TokenCategory.SPACING,
+        baseValue: 4,
+        familyBaseValue: 8,
+        description: 'Half base spacing',
+        mathematicalRelationship: 'base × 0.5',
+        baselineGridAlignment: true,
+        isStrategicFlexibility: false,
+        isPrecisionTargeted: false,
+        platforms: {
+          web: { value: 4, unit: 'px' },
+          ios: { value: 4, unit: 'pt' },
+          android: { value: 4, unit: 'dp' }
+        }
+      };
+
       const token: SemanticToken = {
         name: 'space.tight',
-        primitiveReference: 'space050',
+        primitiveReferences: { default: 'space050' },
         category: SemanticCategory.SPACING,
         context: 'Tight spacing for compact layouts',
         description: 'Semantic token for tight spacing',
-        primitiveToken: {
-          name: 'space050',
-          category: TokenCategory.SPACING,
-          baseValue: 4,
-          familyBaseValue: 8,
-          description: 'Half base spacing',
-          mathematicalRelationship: 'base × 0.5',
-          baselineGridAlignment: true,
-          isStrategicFlexibility: false,
-          isPrecisionTargeted: false,
-          platforms: {
-            web: { value: 4, unit: 'px' },
-            ios: { value: 4, unit: 'pt' },
-            android: { value: 4, unit: 'dp' }
-          }
-        }
+        primitiveTokens: { default: primitiveToken }
       };
 
       const context: ThreeTierValidationContext = {
@@ -312,7 +314,7 @@ describe('ThreeTierValidator', () => {
       console.log('Result level:', result.primaryResult.level);
       console.log('Result message:', result.primaryResult.message);
       console.log('Results by level:', Object.keys(result.resultsByLevel));
-      
+
       // The ErrorValidator checks if baseValue % 8 === 0
       // Since 10 % 8 !== 0, it should error
       expect(result.primaryResult.level).toBe('Error');
@@ -322,11 +324,11 @@ describe('ThreeTierValidator', () => {
     it('should error on invalid primitive reference', () => {
       const token: SemanticToken = {
         name: 'space.tight',
-        primitiveReference: 'nonexistent',
+        primitiveReferences: { default: 'nonexistent' },
         category: SemanticCategory.SPACING,
         context: 'Tight spacing',
         description: 'Invalid semantic token',
-        primitiveToken: {} as PrimitiveToken
+        primitiveTokens: { default: {} as PrimitiveToken }
       };
 
       const context: ThreeTierValidationContext = {

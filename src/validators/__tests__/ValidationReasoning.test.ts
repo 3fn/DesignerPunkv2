@@ -100,11 +100,11 @@ describe('ValidationReasoning', () => {
 
             const token: SemanticToken = {
                 name: 'space.normal',
-                primitiveReference: 'space100',
+                primitiveReferences: { default: 'space100' },
                 category: SemanticCategory.SPACING,
                 context: 'Normal spacing for standard layouts',
                 description: 'Semantic token for normal spacing',
-                primitiveToken
+                primitiveTokens: { default: primitiveToken }
             };
 
             const context: ReasoningContext = {
@@ -611,11 +611,11 @@ describe('ValidationReasoning', () => {
 
             const token: SemanticToken = {
                 name: 'space.normal',
-                primitiveReference: 'space100',
+                primitiveReferences: { default: 'space100' },
                 category: SemanticCategory.SPACING,
                 context: 'Normal spacing for standard layouts',
                 description: 'Semantic token for normal spacing',
-                primitiveToken
+                primitiveTokens: { default: primitiveToken }
             };
 
             const context: ReasoningContext = {

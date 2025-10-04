@@ -23,13 +23,18 @@ export enum SemanticCategory {
 
 /**
  * Semantic token interface providing contextual abstraction over primitive tokens
+ * Supports both single primitive references and composite multi-primitive tokens
  */
 export interface SemanticToken {
   /** Semantic token name with contextual meaning (e.g., "color.warning", "space.tight") */
   name: string;
 
-  /** Reference to the primitive token this semantic token uses */
-  primitiveReference: string;
+  /** 
+   * References to primitive tokens this semantic token uses
+   * For simple tokens: { default: 'primitiveTokenName' }
+   * For composite tokens: { fontSize: 'fontSize100', lineHeight: 'lineHeight100', fontFamily: 'fontFamilyBody' }
+   */
+  primitiveReferences: Record<string, string>;
 
   /** Semantic category for organizational purposes */
   category: SemanticCategory;
@@ -40,6 +45,6 @@ export interface SemanticToken {
   /** Detailed description of semantic meaning and appropriate usage */
   description: string;
 
-  /** Resolved primitive token (populated during token resolution) */
-  primitiveToken: PrimitiveToken;
+  /** Resolved primitive tokens (populated during token resolution) */
+  primitiveTokens: Record<string, PrimitiveToken>;
 }

@@ -145,8 +145,12 @@ export class ValidationReasoning {
     const reasoningParts: string[] = [];
 
     // Semantic abstraction explanation
+    const referenceList = Object.entries(token.primitiveReferences)
+      .map(([key, ref]) => `${key}: ${ref}`)
+      .join(', ');
+    
     reasoningParts.push(
-      `Semantic token ${token.name} provides contextual abstraction over primitive token ${token.primitiveReference}`
+      `Semantic token ${token.name} provides contextual abstraction over primitive token(s): ${referenceList}`
     );
 
     // Mathematical inheritance
@@ -432,7 +436,19 @@ export class ValidationReasoning {
       }
     } else {
       // Semantic token details
-      details.push(`Semantic reference: ${token.primitiveReference}`);
+      const references = Object.entries(token.primitiveReferences);
+      
+      // For single 'default' reference, show simplified format
+      if (references.length === 1 && references[0][0] === 'default') {
+        details.push(`Semantic reference: ${references[0][1]}`);
+      } else {
+        // For multi-primitive or non-default keys, show full format
+        const referenceList = references
+          .map(([key, ref]) => `${key}: ${ref}`)
+          .join(', ');
+        details.push(`Semantic references: ${referenceList}`);
+      }
+      
       details.push(`Category: ${token.category}`);
       details.push(`Context: ${token.context}`);
     }

@@ -76,10 +76,13 @@ export class TokenUsageTracker {
         location: string,
         timestamp: Date = new Date()
     ): void {
+        // Get the first primitive token to check strategic flexibility
+        const firstPrimitiveToken = Object.values(token.primitiveTokens)[0];
+        
         this.usages.push({
             tokenName: token.name,
             tokenType: TokenType.SEMANTIC,
-            isStrategicFlexibility: token.primitiveToken.isStrategicFlexibility,
+            isStrategicFlexibility: firstPrimitiveToken?.isStrategicFlexibility || false,
             category: token.category,
             location,
             timestamp

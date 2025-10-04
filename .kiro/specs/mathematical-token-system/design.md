@@ -31,6 +31,7 @@ The system architecture follows the business localization model established in t
 - **Scope**: Six token families (spacing, fontSize, lineHeight, radius, density, tapArea) with per-family base values
 - **Usage**: Primary token type for component development with family-specific mathematical relationships
 - **Validation**: Must align with per-family mathematical foundation or strategic flexibility exceptions
+- **Typography Pairing**: fontSize and lineHeight tokens are exactly paired (050↔050, 100↔100, etc.) with lineHeight multipliers calculated to achieve 4pt subgrid alignment
 
 #### Semantic Token Layer  
 - **Purpose**: Contextual tokens that reference primitives with semantic meaning
@@ -62,14 +63,50 @@ The system architecture follows the business localization model established in t
 
 ## Components and Interfaces
 
+### Typography Token Pairing System
+
+The typography system implements exact pairing between fontSize and lineHeight tokens to achieve systematic vertical rhythm on a 4pt subgrid:
+
+**Pairing Principle:**
+- Each fontSize token has a corresponding lineHeight token with the same numeric suffix
+- fontSize050 pairs with lineHeight050, fontSize100 pairs with lineHeight100, etc.
+- LineHeight multipliers are calculated to produce line heights aligned to 4pt subgrid
+- Multipliers are rounded to thousandths for precision
+
+**4pt Typography Subgrid:**
+- Typography works on a 4pt subgrid within the 8pt baseline grid system
+- Valid line heights: 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, etc.
+- Provides granular control over vertical rhythm while maintaining systematic alignment
+
+**Tightening Pattern:**
+- Body text (050-125): Looser ratios (1.429-1.556) for optimal readability
+- Headers (150-700): Tighter ratios (1.143-1.4) for visual impact and hierarchy
+- Ratios decrease as font size increases to prevent headers from feeling "floaty"
+
+**Complete Token Pairing:**
+
+| Token | fontSize (px) | lineHeight (multiplier) | Computed (px) | 4pt Aligned | Use Case |
+|-------|---------------|-------------------------|---------------|-------------|----------|
+| 050 | 13 | 1.538 | 20 | ✅ (4×5) | Caption/small text |
+| 075 | 14 | 1.429 | 20 | ✅ (4×5) | Small text |
+| 100 | 16 | 1.5 | 24 | ✅ (4×6) | Body text (base) |
+| 125 | 18 | 1.556 | 28 | ✅ (4×7) | Large body text |
+| 150 | 20 | 1.4 | 28 | ✅ (4×7) | H6 (smallest header) |
+| 200 | 23 | 1.391 | 32 | ✅ (4×8) | H5 |
+| 300 | 26 | 1.231 | 32 | ✅ (4×8) | H4 |
+| 400 | 29 | 1.241 | 36 | ✅ (4×9) | H3 |
+| 500 | 33 | 1.212 | 40 | ✅ (4×10) | H2 |
+| 600 | 37 | 1.19 | 44 | ✅ (4×11) | H1 |
+| 700 | 42 | 1.143 | 48 | ✅ (4×12) | Display text |
+
 ### Core Token Engine
 
 ```
 TokenEngine
 ├── PrimitiveTokenRegistry
 │   ├── SpacingTokens (space050, space075, space100, space150, etc.) - Base: 8
-│   ├── FontSizeTokens (fontSize050, fontSize100, fontSize125, etc.) - Base: 16
-│   ├── LineHeightTokens (lineHeight050, lineHeight100, etc.) - Base: 1.5
+│   ├── FontSizeTokens (fontSize050-fontSize700) - Base: 16, 1.125 modular scale
+│   ├── LineHeightTokens (lineHeight050-lineHeight700) - Base: 1.5, paired with fontSize
 │   ├── RadiusTokens (radius025, radius100, radius200, etc.) - Base: 8
 │   ├── DensityTokens (densityCompact, densityDefault, densityComfortable) - Base: 1.0
 │   └── TapAreaTokens (tapAreaMinimum, tapAreaRecommended, etc.) - Base: 44

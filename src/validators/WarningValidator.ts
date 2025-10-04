@@ -135,7 +135,7 @@ export class WarningValidator {
     options: WarningValidationContext['options'] = {}
   ): ValidationResult | null {
     // Only applies to primitive tokens
-    if ('primitiveReference' in token) {
+    if ('primitiveReferences' in token) {
       return null;
     }
 
@@ -188,7 +188,7 @@ export class WarningValidator {
     options: WarningValidationContext['options'] = {}
   ): ValidationResult | null {
     // Only applies to primitive tokens
-    if ('primitiveReference' in token) {
+    if ('primitiveReferences' in token) {
       return null;
     }
 
@@ -326,7 +326,7 @@ export class WarningValidator {
     options: WarningValidationContext['options'] = {}
   ): ValidationResult | null {
     // Only applies to primitive tokens
-    if ('primitiveReference' in token) {
+    if ('primitiveReferences' in token) {
       return null;
     }
 

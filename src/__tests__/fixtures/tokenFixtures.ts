@@ -202,11 +202,11 @@ export class TokenBuilder {
     ): SemanticToken {
         return {
             name: 'space.normal',
-            primitiveReference: primitiveToken.name,
+            primitiveReferences: { default: primitiveToken.name },
             category: SemanticCategory.SPACING,
             context: 'Normal spacing for standard layouts',
             description: 'Semantic token for normal spacing',
-            primitiveToken,
+            primitiveTokens: { default: primitiveToken },
             ...overrides
         };
     }

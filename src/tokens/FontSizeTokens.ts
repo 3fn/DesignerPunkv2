@@ -135,6 +135,45 @@ export const fontSizeTokens: Record<string, PrimitiveToken> = {
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
     platforms: generateFontSizePlatformValues(29)
+  },
+
+  fontSize500: {
+    name: 'fontSize500',
+    category: TokenCategory.FONT_SIZE,
+    baseValue: 33, // Adjusted from Math.round(32.4) for 4pt subgrid alignment
+    familyBaseValue: FONT_SIZE_BASE_VALUE,
+    description: 'Display heading font size - 5x relative scale',
+    mathematicalRelationship: 'base × (1.125⁶) = 16 × 2.027 ≈ 32.4 → 33 (adjusted for 4pt subgrid)',
+    baselineGridAlignment: false,
+    isStrategicFlexibility: false,
+    isPrecisionTargeted: true, // Adjusted for 4pt subgrid alignment
+    platforms: generateFontSizePlatformValues(33)
+  },
+
+  fontSize600: {
+    name: 'fontSize600',
+    category: TokenCategory.FONT_SIZE,
+    baseValue: 37, // Adjusted from Math.round(36.5) for 4pt subgrid alignment
+    familyBaseValue: FONT_SIZE_BASE_VALUE,
+    description: 'Large display font size - 6x relative scale',
+    mathematicalRelationship: 'base × (1.125⁷) = 16 × 2.281 ≈ 36.5 → 37 (adjusted for 4pt subgrid)',
+    baselineGridAlignment: false,
+    isStrategicFlexibility: false,
+    isPrecisionTargeted: true, // Adjusted for 4pt subgrid alignment
+    platforms: generateFontSizePlatformValues(37)
+  },
+
+  fontSize700: {
+    name: 'fontSize700',
+    category: TokenCategory.FONT_SIZE,
+    baseValue: 42, // Adjusted from Math.round(41.1) for 4pt subgrid alignment
+    familyBaseValue: FONT_SIZE_BASE_VALUE,
+    description: 'Extra large display font size - 7x relative scale',
+    mathematicalRelationship: 'base × (1.125⁸) = 16 × 2.566 ≈ 41.1 → 42 (adjusted for 4pt subgrid)',
+    baselineGridAlignment: false,
+    isStrategicFlexibility: false,
+    isPrecisionTargeted: true, // Adjusted for 4pt subgrid alignment
+    platforms: generateFontSizePlatformValues(42)
   }
 };
 

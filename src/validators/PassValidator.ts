@@ -61,7 +61,7 @@ export class PassValidator {
     const { token, usageContext, options = {} } = context;
 
     // Determine if this is a primitive or semantic token
-    if ('primitiveReference' in token) {
+    if ('primitiveReferences' in token) {
       return this.validateSemanticToken(token, usageContext, options);
     } else {
       return this.validatePrimitiveToken(token, usageContext, options);
@@ -284,34 +284,39 @@ export class PassValidator {
     token: SemanticToken,
     options: PassValidationContext['options'] = {}
   ): ValidationResult {
-    // Check if primitive reference is valid (this would typically involve registry lookup)
-    if (!token.primitiveReference) {
+    // Check if primitive references exist (multi-primitive support)
+    if (!token.primitiveReferences || Object.keys(token.primitiveReferences).length === 0) {
       return {
         level: 'Error',
         token: token.name,
-        message: 'Missing primitive reference',
-        rationale: 'Semantic token must reference a valid primitive token',
+        message: 'Missing primitive references',
+        rationale: 'Semantic token must reference at least one valid primitive token',
         mathematicalReasoning: 'Semantic tokens maintain mathematical consistency through primitive token references',
         suggestions: [
-          'Specify valid primitive token reference',
-          'Ensure referenced primitive token exists in registry',
-          'Verify primitive token follows mathematical foundations'
+          'Specify valid primitive token reference(s)',
+          'Ensure referenced primitive token(s) exist in registry',
+          'Verify primitive token(s) follow mathematical foundations'
         ]
       };
     }
 
-    // In strict mode, validate that the primitive token actually exists and is valid
+    // In strict mode, validate that the primitive tokens actually exist and are valid
     if (options.strictMode) {
       // This would typically involve registry lookup - for now we assume it's valid
       // In a real implementation, this would check the primitive token registry
     }
 
+    const referenceCount = Object.keys(token.primitiveReferences).length;
+    const referenceList = Object.entries(token.primitiveReferences)
+      .map(([key, ref]) => `${key}: ${ref}`)
+      .join(', ');
+
     return {
       level: 'Pass',
       token: token.name,
-      message: 'Primitive reference validated',
-      rationale: `References valid primitive token: ${token.primitiveReference}`,
-      mathematicalReasoning: 'Mathematical consistency inherited from referenced primitive token'
+      message: 'Primitive reference(s) validated',
+      rationale: `References ${referenceCount} valid primitive token(s): ${referenceList}`,
+      mathematicalReasoning: 'Mathematical consistency inherited from referenced primitive token(s)'
     };
   }
 
