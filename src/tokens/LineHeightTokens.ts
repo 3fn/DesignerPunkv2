@@ -83,14 +83,53 @@ export const lineHeightTokens: Record<string, PrimitiveToken> = {
   lineHeight150: {
     name: 'lineHeight150',
     category: TokenCategory.LINE_HEIGHT,
-    baseValue: 2.0,
+    baseValue: 1.4,
     familyBaseValue: LINE_HEIGHT_BASE_VALUE,
-    description: 'Extra loose line height - precision multiplier for spacious text',
-    mathematicalRelationship: 'base × 1.333 = 1.5 × 1.333 = 2.0',
+    description: 'H6 line height - precision multiplier for 28px (4×7) with fontSize150',
+    mathematicalRelationship: '28px ÷ 20px = 1.4 (aligns to 4pt subgrid)',
     baselineGridAlignment: false,
     isStrategicFlexibility: false,
     isPrecisionTargeted: true, // Precision multiplier for vertical rhythm
-    platforms: generateLineHeightPlatformValues(2.0)
+    platforms: generateLineHeightPlatformValues(1.4)
+  },
+
+  lineHeight200: {
+    name: 'lineHeight200',
+    category: TokenCategory.LINE_HEIGHT,
+    baseValue: 1.391,
+    familyBaseValue: LINE_HEIGHT_BASE_VALUE,
+    description: 'H5 line height - precision multiplier for 32px (4×8) with fontSize200',
+    mathematicalRelationship: '32px ÷ 23px ≈ 1.391 (aligns to 4pt subgrid)',
+    baselineGridAlignment: false,
+    isStrategicFlexibility: false,
+    isPrecisionTargeted: true, // Precision multiplier for vertical rhythm
+    platforms: generateLineHeightPlatformValues(1.391)
+  },
+
+  lineHeight300: {
+    name: 'lineHeight300',
+    category: TokenCategory.LINE_HEIGHT,
+    baseValue: 1.231,
+    familyBaseValue: LINE_HEIGHT_BASE_VALUE,
+    description: 'H4 line height - precision multiplier for 32px (4×8) with fontSize300',
+    mathematicalRelationship: '32px ÷ 26px ≈ 1.231 (aligns to 4pt subgrid)',
+    baselineGridAlignment: false,
+    isStrategicFlexibility: false,
+    isPrecisionTargeted: true, // Precision multiplier for vertical rhythm
+    platforms: generateLineHeightPlatformValues(1.231)
+  },
+
+  lineHeight400: {
+    name: 'lineHeight400',
+    category: TokenCategory.LINE_HEIGHT,
+    baseValue: 1.241,
+    familyBaseValue: LINE_HEIGHT_BASE_VALUE,
+    description: 'H3 line height - precision multiplier for 36px (4×9) with fontSize400',
+    mathematicalRelationship: '36px ÷ 29px ≈ 1.241 (aligns to 4pt subgrid)',
+    baselineGridAlignment: false,
+    isStrategicFlexibility: false,
+    isPrecisionTargeted: true, // Precision multiplier for vertical rhythm
+    platforms: generateLineHeightPlatformValues(1.241)
   },
 
   lineHeight500: {

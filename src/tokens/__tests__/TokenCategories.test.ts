@@ -186,7 +186,7 @@ describe('Token Categories', () => {
 
       expect(lineHeight050?.baseValue).toBe(1.0); // Tight
       expect(lineHeight100?.baseValue).toBe(1.5); // Base
-      expect(lineHeight150?.baseValue).toBe(2.0); // Loose
+      expect(lineHeight150?.baseValue).toBe(1.4); // H6 line height (4pt subgrid aligned)
     });
   });
 
