@@ -16,15 +16,32 @@ Implemented comprehensive usage pattern analysis and tracking system for monitor
 
 ### Components Implemented
 
-#### 1. StrategicFlexibilityTracker
-**Purpose**: Monitor strategic flexibility token usage to ensure ≥80% appropriate usage threshold
+#### 1. TokenUsageTracker
+**Purpose**: Track all token usages across the system to provide baseline metrics
+
+**Key Features**:
+- Records all primitive and semantic token usages
+- Tracks strategic flexibility usage as part of overall usage
+- Calculates strategic flexibility usage rate (SF usages / total usages)
+- Provides category-level and token-level usage statistics
+- Enables calculation of the ≤20% strategic flexibility threshold
+
+**Statistics Provided**:
+- Total token usages across the system
+- Primitive vs semantic usage breakdown
+- Strategic flexibility usage count and rate
+- Usage by category and by individual token
+- Most used tokens (top 10)
+
+#### 2. StrategicFlexibilityTracker
+**Purpose**: Monitor strategic flexibility token usage to ensure ≤20% usage rate threshold
 
 **Key Features**:
 - Records strategic flexibility token usage with context and appropriateness assessment
-- Tracks usage statistics including total, appropriate, questionable, and inappropriate usages
-- Calculates appropriateness rate and validates against 80% threshold
-- Provides context-specific feedback (component-internal, layout-spacing, typography-adjustment, etc.)
-- Identifies patterns requiring semantic token alternatives
+- Validates that strategic flexibility tokens remain exceptional (≤20% of total usage)
+- Provides PASS/FAIL status based on usage rate threshold
+- Tracks appropriateness as informational insight (appropriate/questionable/inappropriate)
+- Provides context-specific feedback and identifies patterns
 
 **Usage Context Categories**:
 - `COMPONENT_INTERNAL`: Within component boundaries
@@ -34,14 +51,20 @@ Implemented comprehensive usage pattern analysis and tracking system for monitor
 - `VISUAL_BALANCE`: Visual design balance
 - `UNKNOWN`: Context not specified
 
-**Appropriateness Levels**:
+**Appropriateness Levels** (Informational):
 - `APPROPRIATE`: Correct usage of strategic flexibility
 - `QUESTIONABLE`: Potentially inappropriate usage
 - `INAPPROPRIATE`: Clear misuse of strategic flexibility
 
+**Threshold Validation**:
+- **Primary metric**: Strategic flexibility usage rate ≤20% of total token usage
+- **Status**: PASS if ≤20%, FAIL if >20%
+- **Rationale**: Strategic flexibility tokens should be exceptional, not common
+
 **Feedback Examples**:
-- Alerts when usage falls below 80% threshold
-- Identifies inappropriate usages requiring review
+- ✅ PASS: "Strategic flexibility usage is within threshold (15% ≤ 20%)"
+- ❌ FAIL: "Strategic flexibility usage exceeds 20% threshold (25%)"
+- Identifies inappropriate usages as informational insight
 - Detects high layout spacing usage suggesting semantic token opportunities
 - Provides positive reinforcement when usage patterns are healthy
 
@@ -101,29 +124,29 @@ Implemented comprehensive usage pattern analysis and tracking system for monitor
 **Purpose**: Aggregate insights from all trackers for comprehensive analysis
 
 **Key Features**:
-- Combines data from all three trackers
-- Calculates overall health score (0-100)
-- Provides health status (excellent/good/needs-improvement/poor)
-- Generates actionable recommendations
+- Combines data from TokenUsageTracker and all specialized trackers
+- Provides PASS/FAIL validation for strategic flexibility (≤20% threshold)
+- Generates informational insights for semantic adoption and primitive fallbacks
 - Creates comprehensive usage reports
+- Separates validation from insights
 
-**Health Score Calculation**:
-- Strategic flexibility component: 40 points (meets threshold or proportional)
-- Semantic adoption component: 40 points (proportional to adoption rate)
-- Fallback penalty component: 20 points (fewer fallbacks = higher score)
+**Analysis Structure**:
+- **Overall Usage**: Total usages, primitive/semantic breakdown, SF usage count
+- **Strategic Flexibility Validation**: PASS/FAIL status, usage rate, threshold check
+- **Insights**: Semantic adoption rate, fallback patterns, opportunities
 
-**Health Status Thresholds**:
-- Excellent: ≥90 points
-- Good: ≥75 points
-- Needs Improvement: ≥60 points
-- Poor: <60 points
+**No Health Score**:
+- Removed combined health scoring to avoid conflating concerns
+- Strategic flexibility validation is binary: PASS or FAIL
+- Semantic adoption and fallbacks are informational, not pass/fail criteria
+- Focus on clear validation vs informational insights
 
-**Recommendations Generated**:
-- Strategic flexibility threshold violations
-- Low semantic adoption rates
-- Semantic token creation opportunities
-- High fallback counts requiring attention
-- Positive reinforcement for excellent patterns
+**Report Generation**:
+- Overall token usage statistics
+- Strategic flexibility validation (PASS/FAIL)
+- Appropriateness breakdown (informational)
+- Semantic token adoption insights
+- Primitive fallback patterns and opportunities
 
 ## Usage Tracking Methodology
 
@@ -192,17 +215,27 @@ const report = analyzer.generateReport();
 ## Strategic Flexibility Monitoring Algorithm
 
 ### Threshold Validation
-The system maintains a constant 80% appropriateness threshold:
+The system validates that strategic flexibility tokens remain exceptional (≤20% of total usage):
 
 ```typescript
-private readonly APPROPRIATENESS_THRESHOLD = 0.80;  // 80% threshold
+private readonly USAGE_RATE_THRESHOLD = 0.20;  // 20% threshold
 ```
 
-### Appropriateness Rate Calculation
+### Usage Rate Calculation
 ```typescript
-appropriatenessRate = appropriateUsages / totalUsages
-meetsThreshold = appropriatenessRate >= 0.80
+usageRate = strategicFlexibilityUsages / totalTokenUsages
+meetsThreshold = usageRate <= 0.20
+status = meetsThreshold ? 'PASS' : 'FAIL'
 ```
+
+**Rationale**: Strategic flexibility tokens are mathematical exceptions. If they exceed 20% of total usage, they're no longer exceptional - they're becoming the norm, which indicates a system design issue.
+
+### Appropriateness Tracking (Informational)
+```typescript
+appropriatenessRate = appropriateUsages / strategicFlexibilityUsages
+```
+
+This provides insight into whether individual SF usages are appropriate, but doesn't affect the PASS/FAIL status.
 
 ### Context-Specific Monitoring
 The tracker monitors usage patterns by context to identify specific areas requiring attention:
@@ -283,28 +316,30 @@ Trackers provide `clear()` methods for resetting usage data:
 ✅ Import/export structure verified
 
 ### Usage Tracking Accuracy
-✅ Strategic flexibility threshold monitoring (≥80%) implemented correctly
+✅ Strategic flexibility threshold monitoring (≤20% usage rate) implemented correctly
+✅ General token usage tracking provides baseline metrics
 ✅ Semantic adoption rate calculation validated
 ✅ Fallback tracking and opportunity identification working as designed
 
 ### Analytics Integration
 ✅ UsagePatternAnalyzer successfully aggregates data from all trackers
-✅ Health score calculation produces expected results
+✅ PASS/FAIL validation separated from informational insights
 ✅ Feedback generation provides actionable insights
 
 ## Artifacts Created
 
 ### Source Files
-- `src/analytics/StrategicFlexibilityTracker.ts` - Strategic flexibility usage tracking (217 lines)
-- `src/analytics/SemanticTokenUsageTracker.ts` - Semantic token usage analytics (186 lines)
+- `src/analytics/TokenUsageTracker.ts` - General token usage tracking (159 lines)
+- `src/analytics/StrategicFlexibilityTracker.ts` - Strategic flexibility validation (220 lines)
+- `src/analytics/SemanticTokenUsageTracker.ts` - Semantic token usage insights (186 lines)
 - `src/analytics/PrimitiveTokenFallbackTracker.ts` - Primitive fallback tracking (213 lines)
-- `src/analytics/UsagePatternAnalyzer.ts` - Overall usage pattern analysis (267 lines)
-- `src/analytics/index.ts` - Barrel export for analytics module (28 lines)
+- `src/analytics/UsagePatternAnalyzer.ts` - Overall pattern analysis (135 lines)
+- `src/analytics/index.ts` - Barrel export for analytics module (38 lines)
 
 ### Total Implementation
-- **5 files created**
-- **911 lines of code**
-- **Complete usage tracking and analytics system**
+- **6 files created**
+- **951 lines of code**
+- **Complete usage tracking and analytics system with clear validation vs insights separation**
 
 ## Design Decisions
 
@@ -329,17 +364,23 @@ Trackers provide `clear()` methods for resetting usage data:
 
 **Rationale**: This reason indicates genuine gaps in semantic token coverage, while other reasons may reflect valid choices or temporary situations.
 
-### Health Score Weighting
-**Decision**: Weight strategic flexibility and semantic adoption equally (40 points each)
+### Validation vs Insights Separation
+**Decision**: Separate PASS/FAIL validation from informational insights
 
-**Rationale**: Both are critical to token system health:
-- Strategic flexibility ensures mathematical consistency
-- Semantic adoption ensures appropriate abstraction levels
+**Rationale**: 
+- Strategic flexibility threshold (≤20%) is a mathematical requirement - binary PASS/FAIL
+- Semantic adoption and fallback patterns are informational - help identify opportunities
+- Combining them into a single "health score" conflates different concerns
+- Clear separation makes the system's requirements explicit
 
-### Fallback Penalty
-**Decision**: Use graduated penalty for fallback counts (20 points maximum)
+### Usage Rate Threshold
+**Decision**: Strategic flexibility tokens must be ≤20% of total token usage
 
-**Rationale**: Some fallbacks are inevitable during development, but excessive fallbacks indicate system gaps requiring attention.
+**Rationale**:
+- Strategic flexibility tokens are mathematical exceptions
+- If they exceed 20% of usage, they're no longer exceptional
+- High SF usage rate indicates system design issues (wrong tokens marked as SF, or missing regular tokens)
+- This is simpler and more objective than assessing appropriateness of each usage
 
 ## Integration with Validation System
 
@@ -389,19 +430,52 @@ The usage tracking system complements the three-tier validation system:
 - Distinguishing between valid exceptions and misuse patterns
 - Aggregating insights from multiple tracking dimensions
 
+## Implementation Refinement
+
+### Initial Implementation
+The initial implementation included a combined "health score" (0-100) that weighted:
+- Strategic flexibility appropriateness: 40 points
+- Semantic token adoption: 40 points  
+- Fallback penalty: 20 points
+
+### Refinement Discussion
+Through discussion with the project owner, we identified that this approach conflated different concerns:
+
+**Issue 1**: The goal was to track strategic flexibility tokens in contrast to all other tokens, not to weight against semantic tokens specifically.
+
+**Issue 2**: The appropriateness assessment (appropriate/questionable/inappropriate) was being used as the pass/fail criteria, when the actual requirement is simpler: strategic flexibility tokens should be ≤20% of total usage.
+
+**Issue 3**: Semantic vs primitive usage tracking is valuable for insights, but shouldn't impact a "health score" that implies mathematical correctness.
+
+### Refactored Approach
+The refactored implementation:
+
+1. **Added TokenUsageTracker**: Tracks all token usages to provide baseline metrics
+2. **Changed SF threshold**: From "≥80% appropriate" to "≤20% of total usage"
+3. **Separated validation from insights**: 
+   - Strategic flexibility: PASS/FAIL validation
+   - Semantic adoption: Informational insights
+   - Fallback patterns: Informational insights
+4. **Removed health score**: No combined scoring that conflates concerns
+5. **Kept appropriateness tracking**: Still useful as informational feedback
+
+This approach provides clear validation (PASS/FAIL on SF usage rate) while maintaining rich insights for system improvement.
+
 ## Conclusion
 
 The usage pattern analysis and tracking system provides comprehensive monitoring of token usage patterns across the Mathematical Token System. The implementation successfully:
 
-- Monitors strategic flexibility usage against ≥80% threshold
-- Tracks semantic token adoption and identifies opportunities
-- Detects primitive fallback patterns requiring semantic alternatives
-- Provides actionable feedback for continuous system improvement
+- Validates that strategic flexibility usage remains ≤20% of total token usage (PASS/FAIL)
+- Tracks all token usages to provide baseline metrics
+- Provides informational insights on semantic token adoption
+- Detects primitive fallback patterns and identifies semantic token opportunities
+- Separates mathematical validation from architectural insights
 
-The system integrates seamlessly with the validation workflow and provides the analytics foundation for data-driven token system evolution.
+The system integrates seamlessly with the validation workflow and provides the analytics foundation for data-driven token system evolution, with clear distinction between requirements (SF ≤20%) and insights (adoption patterns, opportunities).
 
 ---
 
 **Task Status**: Complete  
 **Validation**: All success criteria met  
+**Refinement**: Implementation refined based on project owner feedback  
 **Next Steps**: Proceed to Task 4.3 (Write unit tests for three-tier validation system)

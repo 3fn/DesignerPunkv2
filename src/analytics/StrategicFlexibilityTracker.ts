@@ -1,12 +1,13 @@
 /**
  * Strategic Flexibility Tracker
  * 
- * Monitors usage patterns of strategic flexibility tokens to ensure ≥80% appropriate usage.
- * Strategic flexibility tokens are mathematically derived exceptions that break systematic
- * progression within their token families (e.g., space075 = 6).
+ * Monitors usage patterns of strategic flexibility tokens to ensure they remain
+ * exceptional (≤20% of total token usage). Strategic flexibility tokens are
+ * mathematically derived exceptions that break systematic progression within
+ * their token families (e.g., space075 = 6).
  * 
- * The tracker maintains usage statistics and provides feedback when usage patterns
- * fall below the 80% appropriate usage threshold.
+ * The tracker validates that strategic flexibility tokens are used sparingly
+ * and provides insights into appropriateness of individual usages.
  */
 
 import type { PrimitiveToken } from '../types/PrimitiveToken.js';
@@ -24,7 +25,7 @@ export enum UsageContext {
 }
 
 /**
- * Appropriateness assessment for strategic flexibility usage
+ * Appropriateness assessment for strategic flexibility usage (informational)
  */
 export enum UsageAppropriateness {
   APPROPRIATE = 'appropriate',      // Correct usage of strategic flexibility
@@ -49,11 +50,13 @@ export interface StrategicFlexibilityUsage {
  */
 export interface StrategicFlexibilityStats {
   totalUsages: number;
-  appropriateUsages: number;
-  questionableUsages: number;
-  inappropriateUsages: number;
-  appropriatenessRate: number;  // Percentage of appropriate usages
-  meetsThreshold: boolean;      // Whether ≥80% threshold is met
+  totalTokenUsages: number;         // Total usages across all tokens
+  usageRate: number;                // SF usages / total usages
+  meetsThreshold: boolean;          // Whether ≤20% threshold is met
+  appropriateUsages: number;        // Informational
+  questionableUsages: number;       // Informational
+  inappropriateUsages: number;      // Informational
+  appropriatenessRate: number;      // Informational
   byContext: Map<UsageContext, number>;
   byToken: Map<string, number>;
 }
@@ -63,7 +66,7 @@ export interface StrategicFlexibilityStats {
  */
 export class StrategicFlexibilityTracker {
   private usages: StrategicFlexibilityUsage[] = [];
-  private readonly APPROPRIATENESS_THRESHOLD = 0.80;  // 80% threshold
+  private readonly USAGE_RATE_THRESHOLD = 0.20;  // 20% threshold (SF should be ≤20% of total)
 
   /**
    * Record a usage of a strategic flexibility token
@@ -77,9 +80,14 @@ export class StrategicFlexibilityTracker {
 
   /**
    * Get usage statistics for strategic flexibility tokens
+   * Requires total token usage count to calculate usage rate
    */
-  getStatistics(): StrategicFlexibilityStats {
+  getStatistics(totalTokenUsages: number): StrategicFlexibilityStats {
     const totalUsages = this.usages.length;
+    const usageRate = totalTokenUsages > 0 ? totalUsages / totalTokenUsages : 0;
+    const meetsThreshold = usageRate <= this.USAGE_RATE_THRESHOLD;
+
+    // Appropriateness tracking (informational)
     const appropriateUsages = this.usages.filter(
       u => u.appropriateness === UsageAppropriateness.APPROPRIATE
     ).length;
@@ -91,7 +99,6 @@ export class StrategicFlexibilityTracker {
     ).length;
 
     const appropriatenessRate = totalUsages > 0 ? appropriateUsages / totalUsages : 1.0;
-    const meetsThreshold = appropriatenessRate >= this.APPROPRIATENESS_THRESHOLD;
 
     // Group by context
     const byContext = new Map<UsageContext, number>();
@@ -107,11 +114,13 @@ export class StrategicFlexibilityTracker {
 
     return {
       totalUsages,
+      totalTokenUsages,
+      usageRate,
+      meetsThreshold,
       appropriateUsages,
       questionableUsages,
       inappropriateUsages,
       appropriatenessRate,
-      meetsThreshold,
       byContext,
       byToken
     };
@@ -119,29 +128,43 @@ export class StrategicFlexibilityTracker {
 
   /**
    * Get feedback on strategic flexibility usage patterns
+   * Requires total token usage count to provide accurate feedback
    */
-  getFeedback(): string[] {
-    const stats = this.getStatistics();
+  getFeedback(totalTokenUsages: number): string[] {
+    const stats = this.getStatistics(totalTokenUsages);
     const feedback: string[] = [];
 
+    if (stats.totalUsages === 0) {
+      feedback.push('No strategic flexibility token usage recorded yet.');
+      return feedback;
+    }
+
+    // Primary threshold check (PASS/FAIL)
     if (!stats.meetsThreshold) {
       feedback.push(
-        `Strategic flexibility usage is below 80% threshold (${(stats.appropriatenessRate * 100).toFixed(1)}%). ` +
-        `Consider using semantic tokens for common use cases.`
+        `⚠️ FAIL: Strategic flexibility usage exceeds 20% threshold (${(stats.usageRate * 100).toFixed(1)}%). ` +
+        `Strategic flexibility tokens should be exceptional, not common. ` +
+        `Review usage patterns and consider using regular tokens or creating semantic alternatives.`
+      );
+    } else {
+      feedback.push(
+        `✅ PASS: Strategic flexibility usage is within threshold (${(stats.usageRate * 100).toFixed(1)}% ≤ 20%). ` +
+        `Strategic flexibility tokens are being used as exceptions.`
       );
     }
 
+    // Informational appropriateness feedback
     if (stats.inappropriateUsages > 0) {
       feedback.push(
         `Found ${stats.inappropriateUsages} inappropriate usage(s) of strategic flexibility tokens. ` +
-        `Review these usages and consider semantic token alternatives.`
+        `Review these usages and consider alternatives.`
       );
     }
 
     if (stats.questionableUsages > stats.appropriateUsages) {
       feedback.push(
         `Questionable usages (${stats.questionableUsages}) exceed appropriate usages (${stats.appropriateUsages}). ` +
-        `Review usage patterns and ensure strategic flexibility is used for exceptional cases only.`
+        `Review usage patterns to ensure strategic flexibility is used correctly.`
       );
     }
 
@@ -154,12 +177,11 @@ export class StrategicFlexibilityTracker {
       );
     }
 
-    if (stats.totalUsages === 0) {
-      feedback.push('No strategic flexibility token usage recorded yet.');
-    } else if (stats.meetsThreshold && stats.inappropriateUsages === 0) {
+    // Positive reinforcement
+    if (stats.meetsThreshold && stats.inappropriateUsages === 0 && stats.appropriatenessRate > 0.8) {
       feedback.push(
-        `Strategic flexibility usage is healthy (${(stats.appropriatenessRate * 100).toFixed(1)}% appropriate). ` +
-        `Continue using strategic flexibility for exceptional cases.`
+        `Strategic flexibility usage is excellent (${(stats.appropriatenessRate * 100).toFixed(1)}% appropriate). ` +
+        `Continue using strategic flexibility for exceptional cases only.`
       );
     }
 
@@ -188,9 +210,17 @@ export class StrategicFlexibilityTracker {
   }
 
   /**
-   * Get the appropriateness threshold (80%)
+   * Get the usage rate threshold (20%)
    */
   getThreshold(): number {
-    return this.APPROPRIATENESS_THRESHOLD;
+    return this.USAGE_RATE_THRESHOLD;
+  }
+
+  /**
+   * Check if usage rate meets threshold (≤20%)
+   */
+  meetsThreshold(totalTokenUsages: number): boolean {
+    const stats = this.getStatistics(totalTokenUsages);
+    return stats.meetsThreshold;
   }
 }
