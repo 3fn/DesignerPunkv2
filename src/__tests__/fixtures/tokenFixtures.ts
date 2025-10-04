@@ -15,230 +15,230 @@ import { getStrategicFlexibilityToken } from '../../constants/StrategicFlexibili
  * Token builder for creating test tokens with system-aligned values
  */
 export class TokenBuilder {
-  /**
-   * Create a base spacing token (space100)
-   */
-  static createBaseSpacingToken(overrides?: Partial<PrimitiveToken>): PrimitiveToken {
-    return {
-      name: 'space100',
-      category: TokenCategory.SPACING,
-      baseValue: SPACING_BASE_VALUE, // References actual system constant
-      familyBaseValue: SPACING_BASE_VALUE,
-      description: 'Base spacing unit',
-      mathematicalRelationship: 'base value',
-      baselineGridAlignment: true,
-      isStrategicFlexibility: false,
-      isPrecisionTargeted: false,
-      platforms: {
-        web: { value: SPACING_BASE_VALUE, unit: 'px' },
-        ios: { value: SPACING_BASE_VALUE, unit: 'pt' },
-        android: { value: SPACING_BASE_VALUE, unit: 'dp' }
-      },
-      ...overrides
-    };
-  }
+    /**
+     * Create a base spacing token (space100)
+     */
+    static createBaseSpacingToken(overrides?: Partial<PrimitiveToken>): PrimitiveToken {
+        return {
+            name: 'space100',
+            category: TokenCategory.SPACING,
+            baseValue: SPACING_BASE_VALUE, // References actual system constant
+            familyBaseValue: SPACING_BASE_VALUE,
+            description: 'Base spacing unit',
+            mathematicalRelationship: 'base value',
+            baselineGridAlignment: true,
+            isStrategicFlexibility: false,
+            isPrecisionTargeted: false,
+            platforms: {
+                web: { value: SPACING_BASE_VALUE, unit: 'px' },
+                ios: { value: SPACING_BASE_VALUE, unit: 'pt' },
+                android: { value: SPACING_BASE_VALUE, unit: 'dp' }
+            },
+            ...overrides
+        };
+    }
 
-  /**
-   * Create a strategic flexibility spacing token (space075)
-   */
-  static createStrategicFlexibilityToken(overrides?: Partial<PrimitiveToken>): PrimitiveToken {
-    const sfToken = getStrategicFlexibilityToken(SPACING_BASE_VALUE * 0.75);
-    const baseValue = sfToken?.value || 6;
-    
-    return {
-      name: 'space075',
-      category: TokenCategory.SPACING,
-      baseValue,
-      familyBaseValue: SPACING_BASE_VALUE,
-      description: 'Strategic flexibility spacing',
-      mathematicalRelationship: 'base × 0.75',
-      baselineGridAlignment: false,
-      isStrategicFlexibility: true,
-      isPrecisionTargeted: false,
-      platforms: {
-        web: { value: baseValue, unit: 'px' },
-        ios: { value: baseValue, unit: 'pt' },
-        android: { value: baseValue, unit: 'dp' }
-      },
-      ...overrides
-    };
-  }
+    /**
+     * Create a strategic flexibility spacing token (space075)
+     */
+    static createStrategicFlexibilityToken(overrides?: Partial<PrimitiveToken>): PrimitiveToken {
+        const sfToken = getStrategicFlexibilityToken(SPACING_BASE_VALUE * 0.75);
+        const baseValue = sfToken?.value || 6;
 
-  /**
-   * Create a double spacing token (space200)
-   */
-  static createDoubleSpacingToken(overrides?: Partial<PrimitiveToken>): PrimitiveToken {
-    const baseValue = SPACING_BASE_VALUE * 2;
-    
-    return {
-      name: 'space200',
-      category: TokenCategory.SPACING,
-      baseValue,
-      familyBaseValue: SPACING_BASE_VALUE,
-      description: 'Double spacing',
-      mathematicalRelationship: 'base × 2',
-      baselineGridAlignment: true,
-      isStrategicFlexibility: false,
-      isPrecisionTargeted: false,
-      platforms: {
-        web: { value: baseValue, unit: 'px' },
-        ios: { value: baseValue, unit: 'pt' },
-        android: { value: baseValue, unit: 'dp' }
-      },
-      ...overrides
-    };
-  }
+        return {
+            name: 'space075',
+            category: TokenCategory.SPACING,
+            baseValue,
+            familyBaseValue: SPACING_BASE_VALUE,
+            description: 'Strategic flexibility spacing',
+            mathematicalRelationship: 'base × 0.75',
+            baselineGridAlignment: false,
+            isStrategicFlexibility: true,
+            isPrecisionTargeted: false,
+            platforms: {
+                web: { value: baseValue, unit: 'px' },
+                ios: { value: baseValue, unit: 'pt' },
+                android: { value: baseValue, unit: 'dp' }
+            },
+            ...overrides
+        };
+    }
 
-  /**
-   * Create a quarter spacing token (space025 = 2)
-   * This is a strategic flexibility token for fine-grain spacing
-   */
-  static createQuarterSpacingToken(overrides?: Partial<PrimitiveToken>): PrimitiveToken {
-    const baseValue = SPACING_BASE_VALUE * 0.25;
-    
-    return {
-      name: 'space025',
-      category: TokenCategory.SPACING,
-      baseValue,
-      familyBaseValue: SPACING_BASE_VALUE,
-      description: 'Fine-grain spacing for exceptional needs',
-      mathematicalRelationship: 'base × 0.25',
-      baselineGridAlignment: false,
-      isStrategicFlexibility: true, // 2 is strategic flexibility
-      isPrecisionTargeted: false,
-      platforms: {
-        web: { value: baseValue, unit: 'px' },
-        ios: { value: baseValue, unit: 'pt' },
-        android: { value: baseValue, unit: 'dp' }
-      },
-      ...overrides
-    };
-  }
+    /**
+     * Create a double spacing token (space200)
+     */
+    static createDoubleSpacingToken(overrides?: Partial<PrimitiveToken>): PrimitiveToken {
+        const baseValue = SPACING_BASE_VALUE * 2;
 
-  /**
-   * Create a half spacing token (space050 = 4)
-   * Strategic flexibility token for sub-grid spacing
-   */
-  static createHalfSpacingToken(overrides?: Partial<PrimitiveToken>): PrimitiveToken {
-    const baseValue = SPACING_BASE_VALUE * 0.5;
-    
-    return {
-      name: 'space050',
-      category: TokenCategory.SPACING,
-      baseValue,
-      familyBaseValue: SPACING_BASE_VALUE,
-      description: 'Sub-grid spacing for medium-scale adjustments',
-      mathematicalRelationship: 'base × 0.5',
-      baselineGridAlignment: false, // 4 is not 8-unit grid aligned
-      isStrategicFlexibility: true, // Strategic flexibility
-      isPrecisionTargeted: false,
-      platforms: {
-        web: { value: baseValue, unit: 'px' },
-        ios: { value: baseValue, unit: 'pt' },
-        android: { value: baseValue, unit: 'dp' }
-      },
-      ...overrides
-    };
-  }
+        return {
+            name: 'space200',
+            category: TokenCategory.SPACING,
+            baseValue,
+            familyBaseValue: SPACING_BASE_VALUE,
+            description: 'Double spacing',
+            mathematicalRelationship: 'base × 2',
+            baselineGridAlignment: true,
+            isStrategicFlexibility: false,
+            isPrecisionTargeted: false,
+            platforms: {
+                web: { value: baseValue, unit: 'px' },
+                ios: { value: baseValue, unit: 'pt' },
+                android: { value: baseValue, unit: 'dp' }
+            },
+            ...overrides
+        };
+    }
 
-  /**
-   * Create a 1.5x spacing token (space150 = 12)
-   * Strategic flexibility token for sub-grid spacing
-   */
-  static createOneAndHalfSpacingToken(overrides?: Partial<PrimitiveToken>): PrimitiveToken {
-    const baseValue = SPACING_BASE_VALUE * 1.5;
-    
-    return {
-      name: 'space150',
-      category: TokenCategory.SPACING,
-      baseValue,
-      familyBaseValue: SPACING_BASE_VALUE,
-      description: 'Sub-grid spacing for larger adjustments',
-      mathematicalRelationship: 'base × 1.5',
-      baselineGridAlignment: false, // 12 is not 8-unit grid aligned
-      isStrategicFlexibility: true, // Strategic flexibility
-      isPrecisionTargeted: false,
-      platforms: {
-        web: { value: baseValue, unit: 'px' },
-        ios: { value: baseValue, unit: 'pt' },
-        android: { value: baseValue, unit: 'dp' }
-      },
-      ...overrides
-    };
-  }
+    /**
+     * Create a quarter spacing token (space025 = 2)
+     * This is a strategic flexibility token for fine-grain spacing
+     */
+    static createQuarterSpacingToken(overrides?: Partial<PrimitiveToken>): PrimitiveToken {
+        const baseValue = SPACING_BASE_VALUE * 0.25;
 
-  /**
-   * Create an invalid spacing token (not aligned to baseline grid)
-   */
-  static createInvalidSpacingToken(overrides?: Partial<PrimitiveToken>): PrimitiveToken {
-    // Use a value that's NOT aligned to baseline grid
-    const baseValue = BASELINE_GRID_UNIT + 2; // e.g., 10 if grid is 8
-    
-    return {
-      name: 'space125',
-      category: TokenCategory.SPACING,
-      baseValue,
-      familyBaseValue: SPACING_BASE_VALUE,
-      description: 'Invalid spacing (not grid-aligned)',
-      mathematicalRelationship: `base × ${baseValue / SPACING_BASE_VALUE}`,
-      baselineGridAlignment: false,
-      isStrategicFlexibility: false,
-      isPrecisionTargeted: false,
-      platforms: {
-        web: { value: baseValue, unit: 'px' },
-        ios: { value: baseValue, unit: 'pt' },
-        android: { value: baseValue, unit: 'dp' }
-      },
-      ...overrides
-    };
-  }
+        return {
+            name: 'space025',
+            category: TokenCategory.SPACING,
+            baseValue,
+            familyBaseValue: SPACING_BASE_VALUE,
+            description: 'Fine-grain spacing for exceptional needs',
+            mathematicalRelationship: 'base × 0.25',
+            baselineGridAlignment: false,
+            isStrategicFlexibility: true, // 2 is strategic flexibility
+            isPrecisionTargeted: false,
+            platforms: {
+                web: { value: baseValue, unit: 'px' },
+                ios: { value: baseValue, unit: 'pt' },
+                android: { value: baseValue, unit: 'dp' }
+            },
+            ...overrides
+        };
+    }
 
-  /**
-   * Create a semantic spacing token
-   */
-  static createSemanticSpacingToken(
-    primitiveToken: PrimitiveToken,
-    overrides?: Partial<SemanticToken>
-  ): SemanticToken {
-    return {
-      name: 'space.normal',
-      primitiveReference: primitiveToken.name,
-      category: SemanticCategory.SPACING,
-      context: 'Normal spacing for standard layouts',
-      description: 'Semantic token for normal spacing',
-      primitiveToken,
-      ...overrides
-    };
-  }
+    /**
+     * Create a half spacing token (space050 = 4)
+     * Strategic flexibility token for sub-grid spacing
+     */
+    static createHalfSpacingToken(overrides?: Partial<PrimitiveToken>): PrimitiveToken {
+        const baseValue = SPACING_BASE_VALUE * 0.5;
+
+        return {
+            name: 'space050',
+            category: TokenCategory.SPACING,
+            baseValue,
+            familyBaseValue: SPACING_BASE_VALUE,
+            description: 'Sub-grid spacing for medium-scale adjustments',
+            mathematicalRelationship: 'base × 0.5',
+            baselineGridAlignment: false, // 4 is not 8-unit grid aligned
+            isStrategicFlexibility: true, // Strategic flexibility
+            isPrecisionTargeted: false,
+            platforms: {
+                web: { value: baseValue, unit: 'px' },
+                ios: { value: baseValue, unit: 'pt' },
+                android: { value: baseValue, unit: 'dp' }
+            },
+            ...overrides
+        };
+    }
+
+    /**
+     * Create a 1.5x spacing token (space150 = 12)
+     * Strategic flexibility token for sub-grid spacing
+     */
+    static createOneAndHalfSpacingToken(overrides?: Partial<PrimitiveToken>): PrimitiveToken {
+        const baseValue = SPACING_BASE_VALUE * 1.5;
+
+        return {
+            name: 'space150',
+            category: TokenCategory.SPACING,
+            baseValue,
+            familyBaseValue: SPACING_BASE_VALUE,
+            description: 'Sub-grid spacing for larger adjustments',
+            mathematicalRelationship: 'base × 1.5',
+            baselineGridAlignment: false, // 12 is not 8-unit grid aligned
+            isStrategicFlexibility: true, // Strategic flexibility
+            isPrecisionTargeted: false,
+            platforms: {
+                web: { value: baseValue, unit: 'px' },
+                ios: { value: baseValue, unit: 'pt' },
+                android: { value: baseValue, unit: 'dp' }
+            },
+            ...overrides
+        };
+    }
+
+    /**
+     * Create an invalid spacing token (not aligned to baseline grid)
+     */
+    static createInvalidSpacingToken(overrides?: Partial<PrimitiveToken>): PrimitiveToken {
+        // Use a value that's NOT aligned to baseline grid
+        const baseValue = BASELINE_GRID_UNIT + 2; // e.g., 10 if grid is 8
+
+        return {
+            name: 'space125',
+            category: TokenCategory.SPACING,
+            baseValue,
+            familyBaseValue: SPACING_BASE_VALUE,
+            description: 'Invalid spacing (not grid-aligned)',
+            mathematicalRelationship: `base × ${baseValue / SPACING_BASE_VALUE}`,
+            baselineGridAlignment: false,
+            isStrategicFlexibility: false,
+            isPrecisionTargeted: false,
+            platforms: {
+                web: { value: baseValue, unit: 'px' },
+                ios: { value: baseValue, unit: 'pt' },
+                android: { value: baseValue, unit: 'dp' }
+            },
+            ...overrides
+        };
+    }
+
+    /**
+     * Create a semantic spacing token
+     */
+    static createSemanticSpacingToken(
+        primitiveToken: PrimitiveToken,
+        overrides?: Partial<SemanticToken>
+    ): SemanticToken {
+        return {
+            name: 'space.normal',
+            primitiveReference: primitiveToken.name,
+            category: SemanticCategory.SPACING,
+            context: 'Normal spacing for standard layouts',
+            description: 'Semantic token for normal spacing',
+            primitiveToken,
+            ...overrides
+        };
+    }
 }
 
 /**
  * Common test constants derived from system values
  */
 export const TEST_CONSTANTS = {
-  BASELINE_GRID: BASELINE_GRID_UNIT,
-  SPACING_BASE: SPACING_BASE_VALUE,
-  SPACING_QUARTER: SPACING_BASE_VALUE * 0.25, // 2 (strategic flexibility)
-  SPACING_HALF: SPACING_BASE_VALUE * 0.5, // 4 (strategic flexibility)
-  SPACING_SF_075: SPACING_BASE_VALUE * 0.75, // 6 (strategic flexibility)
-  SPACING_ONE_HALF: SPACING_BASE_VALUE * 1.5, // 12 (strategic flexibility)
-  SPACING_DOUBLE: SPACING_BASE_VALUE * 2, // 16 (8-unit grid)
-  SPACING_INVALID: 5, // 5 (not grid-aligned, not SF)
+    BASELINE_GRID: BASELINE_GRID_UNIT,
+    SPACING_BASE: SPACING_BASE_VALUE,
+    SPACING_QUARTER: SPACING_BASE_VALUE * 0.25, // 2 (strategic flexibility)
+    SPACING_HALF: SPACING_BASE_VALUE * 0.5, // 4 (strategic flexibility)
+    SPACING_SF_075: SPACING_BASE_VALUE * 0.75, // 6 (strategic flexibility)
+    SPACING_ONE_HALF: SPACING_BASE_VALUE * 1.5, // 12 (strategic flexibility)
+    SPACING_DOUBLE: SPACING_BASE_VALUE * 2, // 16 (8-unit grid)
+    SPACING_INVALID: 5, // 5 (not grid-aligned, not SF)
 };
 
 /**
  * Helper to check if a value aligns with baseline grid
  */
 export function isBaselineGridAligned(value: number): boolean {
-  return value % BASELINE_GRID_UNIT === 0;
+    return value % BASELINE_GRID_UNIT === 0;
 }
 
 /**
  * Helper to get nearest baseline grid values
  */
 export function getNearestGridValues(value: number): { lower: number; upper: number } {
-  return {
-    lower: Math.floor(value / BASELINE_GRID_UNIT) * BASELINE_GRID_UNIT,
-    upper: Math.ceil(value / BASELINE_GRID_UNIT) * BASELINE_GRID_UNIT
-  };
+    return {
+        lower: Math.floor(value / BASELINE_GRID_UNIT) * BASELINE_GRID_UNIT,
+        upper: Math.ceil(value / BASELINE_GRID_UNIT) * BASELINE_GRID_UNIT
+    };
 }
