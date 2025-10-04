@@ -90,8 +90,35 @@ export class TokenBuilder {
   }
 
   /**
-   * Create a half spacing token (space050)
-   * Note: This is NOT baseline grid aligned (4 % 8 !== 0)
+   * Create a quarter spacing token (space025 = 2)
+   * This is a strategic flexibility token for fine-grain spacing
+   */
+  static createQuarterSpacingToken(overrides?: Partial<PrimitiveToken>): PrimitiveToken {
+    const baseValue = SPACING_BASE_VALUE * 0.25;
+    
+    return {
+      name: 'space025',
+      category: TokenCategory.SPACING,
+      baseValue,
+      familyBaseValue: SPACING_BASE_VALUE,
+      description: 'Fine-grain spacing for exceptional needs',
+      mathematicalRelationship: 'base × 0.25',
+      baselineGridAlignment: false,
+      isStrategicFlexibility: true, // 2 is strategic flexibility
+      isPrecisionTargeted: false,
+      platforms: {
+        web: { value: baseValue, unit: 'px' },
+        ios: { value: baseValue, unit: 'pt' },
+        android: { value: baseValue, unit: 'dp' }
+      },
+      ...overrides
+    };
+  }
+
+  /**
+   * Create a half spacing token (space050 = 4)
+   * DEPRECATED: 4-unit sub-grid is reserved for typography only
+   * For spacing, use space100 (8) or space025 (2, strategic flexibility)
    */
   static createHalfSpacingToken(overrides?: Partial<PrimitiveToken>): PrimitiveToken {
     const baseValue = SPACING_BASE_VALUE * 0.5;
@@ -101,9 +128,9 @@ export class TokenBuilder {
       category: TokenCategory.SPACING,
       baseValue,
       familyBaseValue: SPACING_BASE_VALUE,
-      description: 'Half base spacing',
+      description: 'DEPRECATED: Use typography sub-grid only',
       mathematicalRelationship: 'base × 0.5',
-      baselineGridAlignment: false, // 4 is not divisible by 8
+      baselineGridAlignment: false, // 4 is not 8-unit grid aligned
       isStrategicFlexibility: false,
       isPrecisionTargeted: false,
       platforms: {
@@ -166,10 +193,11 @@ export class TokenBuilder {
 export const TEST_CONSTANTS = {
   BASELINE_GRID: BASELINE_GRID_UNIT,
   SPACING_BASE: SPACING_BASE_VALUE,
-  SPACING_HALF: SPACING_BASE_VALUE * 0.5,
-  SPACING_DOUBLE: SPACING_BASE_VALUE * 2,
-  SPACING_SF_075: SPACING_BASE_VALUE * 0.75,
-  SPACING_INVALID: BASELINE_GRID_UNIT + 2, // Not grid-aligned
+  SPACING_QUARTER: SPACING_BASE_VALUE * 0.25, // 2 (strategic flexibility)
+  SPACING_HALF: SPACING_BASE_VALUE * 0.5, // 4 (DEPRECATED: typography only)
+  SPACING_SF_075: SPACING_BASE_VALUE * 0.75, // 6 (strategic flexibility)
+  SPACING_DOUBLE: SPACING_BASE_VALUE * 2, // 16 (8-unit grid)
+  SPACING_INVALID: BASELINE_GRID_UNIT + 2, // 10 (not grid-aligned, not SF)
 };
 
 /**

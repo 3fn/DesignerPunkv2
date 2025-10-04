@@ -79,14 +79,17 @@ describe('ThreeTierValidator (Improved)', () => {
     it('should validate tokens with different multipliers', () => {
       // Easy to create variations
       const doubleToken = TokenBuilder.createDoubleSpacingToken();
-      const halfToken = TokenBuilder.createHalfSpacingToken();
+      const quarterToken = TokenBuilder.createQuarterSpacingToken();
 
       expect(doubleToken.baseValue).toBe(TEST_CONSTANTS.SPACING_DOUBLE);
-      expect(halfToken.baseValue).toBe(TEST_CONSTANTS.SPACING_HALF);
+      expect(quarterToken.baseValue).toBe(TEST_CONSTANTS.SPACING_QUARTER);
       
-      // Double is grid-aligned, half is not
+      // Double is 8-unit grid-aligned
       expect(isBaselineGridAligned(doubleToken.baseValue)).toBe(true);
-      expect(isBaselineGridAligned(halfToken.baseValue)).toBe(false); // 4 % 8 !== 0
+      
+      // Quarter (2) is strategic flexibility, not grid-aligned
+      expect(isBaselineGridAligned(quarterToken.baseValue)).toBe(false);
+      expect(quarterToken.isStrategicFlexibility).toBe(true);
     });
   });
 
