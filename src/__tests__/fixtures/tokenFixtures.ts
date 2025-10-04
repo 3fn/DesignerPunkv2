@@ -91,6 +91,7 @@ export class TokenBuilder {
 
   /**
    * Create a half spacing token (space050)
+   * Note: This is NOT baseline grid aligned (4 % 8 !== 0)
    */
   static createHalfSpacingToken(overrides?: Partial<PrimitiveToken>): PrimitiveToken {
     const baseValue = SPACING_BASE_VALUE * 0.5;
@@ -102,7 +103,7 @@ export class TokenBuilder {
       familyBaseValue: SPACING_BASE_VALUE,
       description: 'Half base spacing',
       mathematicalRelationship: 'base × 0.5',
-      baselineGridAlignment: true,
+      baselineGridAlignment: false, // 4 is not divisible by 8
       isStrategicFlexibility: false,
       isPrecisionTargeted: false,
       platforms: {
