@@ -5,7 +5,7 @@ import type { ValidationResult } from '../types/ValidationResult';
  * Baseline Grid Validator
  * 
  * Validates that primitive tokens align with the 8-unit baseline grid system.
- * Strategic flexibility tokens (6, 10, 20) are treated as Pass-level validation.
+ * Strategic flexibility tokens (2, 4, 6, 10, 12, 20) are treated as Pass-level validation.
  */
 
 export const BASELINE_GRID_UNIT = 8;
@@ -99,7 +99,7 @@ export class BaselineGridValidator {
     return {
       gridUnit: this.gridUnit,
       allowStrategicFlexibility: this.allowStrategicFlexibility,
-      strategicFlexibilityValues: this.allowStrategicFlexibility ? [6, 10, 20] : []
+      strategicFlexibilityValues: this.allowStrategicFlexibility ? [2, 4, 6, 10, 12, 20] : []
     };
   }
 }

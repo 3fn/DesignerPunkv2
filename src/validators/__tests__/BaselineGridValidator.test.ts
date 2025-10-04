@@ -69,7 +69,7 @@ describe('BaselineGridValidator', () => {
 
   describe('Strategic Flexibility Token Handling', () => {
     test('should validate strategic flexibility values as Pass', () => {
-      const strategicValues = [6, 10, 20];
+      const strategicValues = [2, 4, 6, 10, 12, 20];
 
       strategicValues.forEach(value => {
         const result = validator.validate(value, `strategic-${value}`);
@@ -102,7 +102,7 @@ describe('BaselineGridValidator', () => {
       const gridInfo = validator.getGridInfo();
 
       expect(gridInfo.allowStrategicFlexibility).toBe(true);
-      expect(gridInfo.strategicFlexibilityValues).toEqual([6, 10, 20]);
+      expect(gridInfo.strategicFlexibilityValues).toEqual([2, 4, 6, 10, 12, 20]);
     });
   });
 
@@ -111,10 +111,12 @@ describe('BaselineGridValidator', () => {
       const customValidator = new BaselineGridValidator({ customGridUnit: 4 });
       
       // 12 is aligned to 4-unit grid but not 8-unit grid
+      // Note: 12 is also a strategic flexibility token, so it passes for that reason
       const result = customValidator.validate(12, 'test-12');
 
       expect(result.level).toBe('Pass');
-      expect(result.mathematicalReasoning).toContain('12 ÷ 4 = 3');
+      // With strategic flexibility enabled, 12 passes as SF token, not grid alignment
+      expect(result.mathematicalReasoning).toContain('Strategic flexibility');
     });
 
     test('should validate against custom grid unit correctly', () => {
@@ -200,10 +202,12 @@ describe('BaselineGridValidator', () => {
       expect(lowResult.suggestions).toContain('Use 0 (0 × 8)');
       expect(lowResult.suggestions).toContain('Use 8 (1 × 8)');
 
-      // Test exact midpoint between grid values
-      const midResult = validator.validate(12, 'test-12');
-      expect(midResult.suggestions).toContain('Use 8 (1 × 8)');
-      expect(midResult.suggestions).toContain('Use 16 (2 × 8)');
+      // Test a value that's not grid-aligned and not strategic flexibility
+      // 5 is not divisible by 8 and not in SF values (2, 4, 6, 10, 12, 20)
+      const invalidResult = validator.validate(5, 'test-5');
+      expect(invalidResult.level).toBe('Error');
+      expect(invalidResult.suggestions).toContain('Use 0 (0 × 8)');
+      expect(invalidResult.suggestions).toContain('Use 8 (1 × 8)');
     });
   });
 
@@ -235,7 +239,7 @@ describe('BaselineGridValidator', () => {
 
       expect(gridInfo.gridUnit).toBe(8);
       expect(gridInfo.allowStrategicFlexibility).toBe(true);
-      expect(gridInfo.strategicFlexibilityValues).toEqual([6, 10, 20]);
+      expect(gridInfo.strategicFlexibilityValues).toEqual([2, 4, 6, 10, 12, 20]);
     });
 
     test('should reflect configuration changes in grid info', () => {
