@@ -7,12 +7,14 @@
  * 
  * Strategic Flexibility Values:
  * - 2: Fine-grain spacing for exceptional component-internal needs
+ * - 4: Sub-grid spacing for medium-scale adjustments
  * - 6: Component-level spacing that breaks 8-unit grid
  * - 10: Specific design requirements between standard progressions
+ * - 12: Sub-grid spacing for larger adjustments
  * - 20: Larger spacing needs between standard progressions
  */
 
-export const STRATEGIC_FLEXIBILITY_VALUES = [2, 6, 10, 20] as const;
+export const STRATEGIC_FLEXIBILITY_VALUES = [2, 4, 6, 10, 12, 20] as const;
 
 export type StrategicFlexibilityValue = typeof STRATEGIC_FLEXIBILITY_VALUES[number];
 
@@ -28,6 +30,16 @@ export const STRATEGIC_FLEXIBILITY_TOKENS = {
     multiplier: 0.25,
     category: 'spacing',
     usage: 'Component-internal fine-grain spacing for exceptional design requirements'
+  },
+  
+  // space050 = space100 × 0.5 = 4 (sub-grid spacing)
+  space050: {
+    value: 4,
+    derivation: 'space100 × 0.5',
+    baseToken: 'space100',
+    multiplier: 0.5,
+    category: 'spacing',
+    usage: 'Sub-grid spacing for medium-scale adjustments and typography alignment'
   },
   
   // space075 = space100 × 0.75 = 6 (breaks 8-unit baseline grid)
@@ -48,6 +60,16 @@ export const STRATEGIC_FLEXIBILITY_TOKENS = {
     multiplier: 1.25,
     category: 'spacing',
     usage: 'Specific design requirements between standard progressions'
+  },
+  
+  // space150 = space100 × 1.5 = 12 (sub-grid spacing)
+  space150: {
+    value: 12,
+    derivation: 'space100 × 1.5',
+    baseToken: 'space100',
+    multiplier: 1.5,
+    category: 'spacing',
+    usage: 'Sub-grid spacing for larger adjustments and typography alignment'
   },
   
   // space250 = space100 × 2.5 = 20 (larger spacing needs)

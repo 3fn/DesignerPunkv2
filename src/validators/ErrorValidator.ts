@@ -263,15 +263,15 @@ export class ErrorValidator {
     }
 
     // Strategic flexibility tokens are exempt from baseline grid requirements
-    // Strategic flexibility values: 2, 6, 10, 20
+    // Strategic flexibility values: 2, 4, 6, 10, 12, 20
     // - 2: Fine-grain spacing for exceptional component-internal needs
+    // - 4, 12: Sub-grid spacing for medium/large adjustments
     // - 6, 10, 20: Specific design requirements that break 8-unit grid
     if (primitiveToken.isStrategicFlexibility || isStrategicFlexibilityValue(primitiveToken.baseValue)) {
       return null;
     }
 
     // Check baseline grid alignment (8-unit primary grid)
-    // Note: 4-unit sub-grid is reserved exclusively for typography tokens
     // Spacing and radius tokens must align to 8-unit grid or be strategic flexibility
     const gridRequirement = mathematicalContext?.baselineGridRequirement;
     const gridUnit = gridRequirement?.gridUnit || this.BASELINE_GRID_UNIT;

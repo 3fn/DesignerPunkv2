@@ -11,17 +11,18 @@
 ## Decision
 
 **Grid Hierarchy:**
-- **8-unit primary grid**: For spacing and radius tokens
-- **4-unit sub-grid**: Exclusively for typography (line height, font size alignment)
-- **Strategic flexibility**: Exceptional values (2, 6, 10, 20) for specific design needs
+- **8-unit primary grid**: For spacing and radius tokens (preferred)
+- **Strategic flexibility**: Exceptional values for specific design needs
+  - Values: 2, 4, 6, 10, 12, 20
+  - Usage should maintain ≥80% appropriate usage patterns
 
 **Specifically:**
 - `space025` (2) → **Strategic Flexibility** (fine-grain spacing)
-- `space050` (4) → **DEPRECATED** for spacing (typography only)
+- `space050` (4) → **Strategic Flexibility** (sub-grid spacing)
 - `space075` (6) → **Strategic Flexibility** (component-level)
 - `space100` (8) → **Primary Grid** (base)
-- `space150` (12) → **DEPRECATED** for spacing (typography only)
-- `space200+` → **Primary Grid** (8, 16, 24, 32, 48, 64...)
+- `space150` (12) → **Strategic Flexibility** (sub-grid spacing)
+- `space200+` → **Primary Grid** (16, 24, 32, 48, 64...)
 
 ---
 
@@ -34,23 +35,22 @@ With an 8-unit base, mathematical progressions create values that don't align to
 - `base × 0.75 = 6` (not divisible by 8)
 - `base × 1.5 = 12` (not divisible by 8)
 
-### Why Not Allow 4-Unit Sub-Grid for Spacing?
+### Why Make 2, 4, 6, 10, 12, 20 Strategic Flexibility?
 
-**Principle**: **Separation of concerns between layout and typography**
+**Principle**: **8-unit grid is preferred, but flexibility is needed**
 
 1. **Visual Rhythm**: 8-unit grid creates strong visual rhythm for layout
-2. **Typography Needs**: Typography requires finer control (4-unit) for line height alignment
-3. **Clear Boundaries**: Prevents "grid creep" where sub-grid becomes overused
-4. **Strategic Flexibility**: Forces intentional decisions for exceptional spacing needs
+2. **Real-World Needs**: Design sometimes requires values between the 8-unit grid
+3. **Intentional Exceptions**: Strategic flexibility forces deliberate decisions
+4. **Monitoring**: Can track usage to ensure exceptions stay exceptional (≤20% threshold)
 
-### Why Make 2 a Strategic Flexibility Token?
-
-**Rationale**: 2 is genuinely exceptional for spacing
-
-1. **Rare Usage**: Fine-grain 2px spacing is needed infrequently
-2. **Component-Internal**: Typically used within component boundaries, not layout
-3. **Intentional Exception**: Should be used deliberately, not as default
-4. **Monitoring**: Can track usage to ensure it stays exceptional (≤20% threshold)
+**Specific Use Cases:**
+- **2 (space025)**: Fine-grain component-internal spacing
+- **4 (space050)**: Sub-grid spacing for medium adjustments, typography alignment
+- **6 (space075)**: Component-level spacing that breaks grid
+- **10 (space125)**: Specific design requirements between progressions
+- **12 (space150)**: Sub-grid spacing for larger adjustments, typography alignment
+- **20 (space250)**: Larger spacing needs between progressions
 
 ---
 
@@ -135,20 +135,14 @@ space800 = 64
 ### Strategic Flexibility - EXCEPTIONAL
 ```
 space025 = 2   (fine-grain, component-internal)
+space050 = 4   (sub-grid spacing, typography alignment)
 space075 = 6   (component-level, breaks grid)
 space125 = 10  (specific design requirements)
+space150 = 12  (sub-grid spacing, typography alignment)
 space250 = 20  (larger spacing needs)
 ```
 **Usage**: Exceptional design needs, must maintain ≥80% appropriate usage  
 **Validation**: PASS (exempt from grid)
-
-### Typography Sub-Grid (4-unit) - TYPOGRAPHY ONLY
-```
-space050 = 4   (DEPRECATED for spacing)
-space150 = 12  (DEPRECATED for spacing)
-```
-**Usage**: Typography tokens only (line height, font size alignment)  
-**Validation**: ERROR if used for spacing/radius
 
 ---
 

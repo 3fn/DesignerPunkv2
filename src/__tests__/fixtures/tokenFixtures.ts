@@ -117,8 +117,7 @@ export class TokenBuilder {
 
   /**
    * Create a half spacing token (space050 = 4)
-   * DEPRECATED: 4-unit sub-grid is reserved for typography only
-   * For spacing, use space100 (8) or space025 (2, strategic flexibility)
+   * Strategic flexibility token for sub-grid spacing
    */
   static createHalfSpacingToken(overrides?: Partial<PrimitiveToken>): PrimitiveToken {
     const baseValue = SPACING_BASE_VALUE * 0.5;
@@ -128,10 +127,36 @@ export class TokenBuilder {
       category: TokenCategory.SPACING,
       baseValue,
       familyBaseValue: SPACING_BASE_VALUE,
-      description: 'DEPRECATED: Use typography sub-grid only',
+      description: 'Sub-grid spacing for medium-scale adjustments',
       mathematicalRelationship: 'base × 0.5',
       baselineGridAlignment: false, // 4 is not 8-unit grid aligned
-      isStrategicFlexibility: false,
+      isStrategicFlexibility: true, // Strategic flexibility
+      isPrecisionTargeted: false,
+      platforms: {
+        web: { value: baseValue, unit: 'px' },
+        ios: { value: baseValue, unit: 'pt' },
+        android: { value: baseValue, unit: 'dp' }
+      },
+      ...overrides
+    };
+  }
+
+  /**
+   * Create a 1.5x spacing token (space150 = 12)
+   * Strategic flexibility token for sub-grid spacing
+   */
+  static createOneAndHalfSpacingToken(overrides?: Partial<PrimitiveToken>): PrimitiveToken {
+    const baseValue = SPACING_BASE_VALUE * 1.5;
+    
+    return {
+      name: 'space150',
+      category: TokenCategory.SPACING,
+      baseValue,
+      familyBaseValue: SPACING_BASE_VALUE,
+      description: 'Sub-grid spacing for larger adjustments',
+      mathematicalRelationship: 'base × 1.5',
+      baselineGridAlignment: false, // 12 is not 8-unit grid aligned
+      isStrategicFlexibility: true, // Strategic flexibility
       isPrecisionTargeted: false,
       platforms: {
         web: { value: baseValue, unit: 'px' },
@@ -194,10 +219,11 @@ export const TEST_CONSTANTS = {
   BASELINE_GRID: BASELINE_GRID_UNIT,
   SPACING_BASE: SPACING_BASE_VALUE,
   SPACING_QUARTER: SPACING_BASE_VALUE * 0.25, // 2 (strategic flexibility)
-  SPACING_HALF: SPACING_BASE_VALUE * 0.5, // 4 (DEPRECATED: typography only)
+  SPACING_HALF: SPACING_BASE_VALUE * 0.5, // 4 (strategic flexibility)
   SPACING_SF_075: SPACING_BASE_VALUE * 0.75, // 6 (strategic flexibility)
+  SPACING_ONE_HALF: SPACING_BASE_VALUE * 1.5, // 12 (strategic flexibility)
   SPACING_DOUBLE: SPACING_BASE_VALUE * 2, // 16 (8-unit grid)
-  SPACING_INVALID: BASELINE_GRID_UNIT + 2, // 10 (not grid-aligned, not SF)
+  SPACING_INVALID: 5, // 5 (not grid-aligned, not SF)
 };
 
 /**
