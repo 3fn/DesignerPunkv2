@@ -24,3 +24,25 @@ export type {
   FlexibilityTokenGuardConfig, 
   GuardResult 
 } from './FlexibilityTokenGuard';
+
+export { ContaminationPrevention } from './ContaminationPrevention';
+export type {
+  ContaminationVector,
+  ContaminationCheckResult,
+  ContaminationPreventionConfig
+} from './ContaminationPrevention';
+
+export { DocumentationGuard } from './DocumentationGuard';
+export type {
+  DocumentationValidationResult,
+  DocumentationGuardConfig
+} from './DocumentationGuard';
+
+export { ContaminationAuditor } from './ContaminationAuditor';
+export type {
+  AuditTarget,
+  AuditResult,
+  AuditReport,
+  AuditSummary,
+  ContaminationAuditorConfig
+} from './ContaminationAuditor';
