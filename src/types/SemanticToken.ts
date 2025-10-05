@@ -46,5 +46,5 @@ export interface SemanticToken {
   description: string;
 
   /** Resolved primitive tokens (populated during token resolution) */
-  primitiveTokens: Record<string, PrimitiveToken>;
+  primitiveTokens?: Record<string, PrimitiveToken>;
 }
