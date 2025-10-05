@@ -131,7 +131,7 @@ export class TokenEngine {
       this.semanticRegistry,
       {
         strategicFlexibilityThreshold: this.config.strategicFlexibilityThreshold,
-        primitiveUsageThreshold: this.config.validationOptions.primitiveUsageThreshold,
+        primitiveUsageThreshold: this.config.validationOptions.primitiveUsageThreshold!,
         enableUsageTracking: this.config.enableUsageTracking
       }
     );
@@ -140,9 +140,9 @@ export class TokenEngine {
       this.primitiveRegistry,
       this.semanticRegistry,
       {
-        enabledPlatforms: this.config.translationConfig.enabledPlatforms,
-        outputDirectory: this.config.translationConfig.outputDirectory,
-        includeComments: this.config.translationConfig.includeComments
+        enabledPlatforms: this.config.translationConfig.enabledPlatforms!,
+        outputDirectory: this.config.translationConfig.outputDirectory!,
+        includeComments: this.config.translationConfig.includeComments!
       }
     );
   }
@@ -267,8 +267,7 @@ export class TokenEngine {
   generateValidationReport() {
     return this.validationCoordinator.generateValidationReport({
       strictMathematics: this.config.validationOptions.strictMathematics,
-      requireCrossPlatformConsistency: this.config.enableCrossPlatformValidation,
-      strategicFlexibilityThreshold: this.config.strategicFlexibilityThreshold
+      requireCrossPlatformConsistency: this.config.enableCrossPlatformValidation
     });
   }
 
@@ -309,8 +308,7 @@ export class TokenEngine {
     const semanticStats = this.semanticRegistry.getStats();
     const validationReport = this.validationCoordinator.generateValidationReport({
       strictMathematics: this.config.validationOptions.strictMathematics,
-      requireCrossPlatformConsistency: this.config.enableCrossPlatformValidation,
-      strategicFlexibilityThreshold: this.config.strategicFlexibilityThreshold
+      requireCrossPlatformConsistency: this.config.enableCrossPlatformValidation
     });
 
     return {
@@ -332,7 +330,7 @@ export class TokenEngine {
         mathematicalConsistencyScore: validationReport.systemAnalysis.mathematicalConsistencyScore
       },
       translation: {
-        enabledPlatforms: this.config.translationConfig.enabledPlatforms,
+        enabledPlatforms: this.config.translationConfig.enabledPlatforms!,
         lastGenerationTime: this.translationCoordinator.getLastGenerationTime(),
         generatedFileCount: this.translationCoordinator.getGeneratedFileCount()
       }
@@ -409,14 +407,14 @@ export class TokenEngine {
     // Update coordinators with new configuration
     this.validationCoordinator.updateConfig({
       strategicFlexibilityThreshold: this.config.strategicFlexibilityThreshold,
-      primitiveUsageThreshold: this.config.validationOptions.primitiveUsageThreshold,
+      primitiveUsageThreshold: this.config.validationOptions.primitiveUsageThreshold!,
       enableUsageTracking: this.config.enableUsageTracking
     });
 
     this.translationCoordinator.updateConfig({
-      enabledPlatforms: this.config.translationConfig.enabledPlatforms,
-      outputDirectory: this.config.translationConfig.outputDirectory,
-      includeComments: this.config.translationConfig.includeComments
+      enabledPlatforms: this.config.translationConfig.enabledPlatforms!,
+      outputDirectory: this.config.translationConfig.outputDirectory!,
+      includeComments: this.config.translationConfig.includeComments!
     });
   }
 

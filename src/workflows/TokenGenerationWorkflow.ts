@@ -10,12 +10,12 @@ import { TokenEngine } from '../TokenEngine';
 import { ValidationPipeline } from './ValidationPipeline.js';
 import { ConsistencyValidator } from './ConsistencyValidator.js';
 import { WorkflowErrorHandler } from './WorkflowErrorHandler.js';
-import type { 
-  PrimitiveToken, 
-  SemanticToken, 
-  ValidationResult, 
+import type {
+  PrimitiveToken,
+  SemanticToken,
+  ValidationResult,
   TranslationOutput,
-  TargetPlatform 
+  TargetPlatform
 } from '../types';
 
 /**
@@ -37,19 +37,19 @@ export enum WorkflowStage {
 export interface WorkflowExecutionOptions {
   /** Skip validation stages (not recommended) */
   skipValidation?: boolean;
-  
+
   /** Skip consistency checks (not recommended) */
   skipConsistencyCheck?: boolean;
-  
+
   /** Target platforms for generation */
   targetPlatforms?: TargetPlatform[];
-  
+
   /** Continue on validation warnings */
   continueOnWarnings?: boolean;
-  
+
   /** Stop on first error */
   stopOnError?: boolean;
-  
+
   /** Enable detailed logging */
   verbose?: boolean;
 }
@@ -148,8 +148,8 @@ export class TokenGenerationWorkflow {
       result.registrationResults = registrationResult;
 
       // Check for registration errors
-      if (this.hasErrors(registrationResult.primitiveTokens) || 
-          this.hasErrors(registrationResult.semanticTokens)) {
+      if (this.hasErrors(registrationResult.primitiveTokens) ||
+        this.hasErrors(registrationResult.semanticTokens)) {
         if (options.stopOnError) {
           throw new Error('Token registration failed with errors');
         }
