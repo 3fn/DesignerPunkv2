@@ -50,12 +50,14 @@ describe('ThreeTierValidator (Improved)', () => {
   });
 
   describe('Error-level validation', () => {
-    it.skip('should error on baseline grid violation', () => {
+    it('should error on baseline grid violation', () => {
       // Fixture creates invalid token based on current grid unit
+      // Uses a value that is NOT strategic flexibility and NOT grid-aligned
       const token = TokenBuilder.createInvalidSpacingToken();
 
       // Verify our test assumptions
       expect(isBaselineGridAligned(token.baseValue)).toBe(false);
+      expect(token.isStrategicFlexibility).toBe(false);
 
       const context: ThreeTierValidationContext = {
         token,
@@ -72,6 +74,10 @@ describe('ThreeTierValidator (Improved)', () => {
       const result = validator.validate(context);
 
       // Test still works regardless of what the actual grid unit is
+      // The ErrorValidator checks:
+      // 1. Token category requires baseline grid alignment (spacing/radius)
+      // 2. Token is NOT strategic flexibility (flag AND value check)
+      // 3. baseValue % gridUnit !== 0
       expect(result.primaryResult.level).toBe('Error');
       expect(result.primaryResult.message).toContain('Baseline grid');
     });

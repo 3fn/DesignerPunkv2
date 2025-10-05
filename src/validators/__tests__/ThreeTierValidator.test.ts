@@ -278,21 +278,21 @@ describe('ThreeTierValidator', () => {
       expect(result.primaryResult.message).toContain('mathematical relationship');
     });
 
-    it.skip('should error on baseline grid violation', () => {
+    it('should error on baseline grid violation', () => {
       const token: PrimitiveToken = {
-        name: 'space125',
+        name: 'spaceInvalid',
         category: TokenCategory.SPACING,
-        baseValue: 10, // Not aligned to 8-unit grid
+        baseValue: 9, // Not aligned to 8-unit grid (9 % 8 = 1)
         familyBaseValue: 8,
         description: 'Invalid spacing',
-        mathematicalRelationship: 'base × 1.25', // Valid relationship
-        baselineGridAlignment: false, // Incorrectly marked as not aligned
+        mathematicalRelationship: 'base × 1.125', // Valid relationship
+        baselineGridAlignment: false,
         isStrategicFlexibility: false, // Not strategic flexibility
         isPrecisionTargeted: false,
         platforms: {
-          web: { value: 10, unit: 'px' },
-          ios: { value: 10, unit: 'pt' },
-          android: { value: 10, unit: 'dp' }
+          web: { value: 9, unit: 'px' },
+          ios: { value: 9, unit: 'pt' },
+          android: { value: 9, unit: 'dp' }
         }
       };
 
@@ -310,13 +310,11 @@ describe('ThreeTierValidator', () => {
 
       const result = validator.validate(context);
 
-      // Debug: Let's see what we actually got
-      console.log('Result level:', result.primaryResult.level);
-      console.log('Result message:', result.primaryResult.message);
-      console.log('Results by level:', Object.keys(result.resultsByLevel));
-
-      // The ErrorValidator checks if baseValue % 8 === 0
-      // Since 10 % 8 !== 0, it should error
+      // The ErrorValidator checks:
+      // 1. If token category requires baseline grid alignment (spacing/radius)
+      // 2. If token is strategic flexibility (flag OR value check)
+      // 3. If baseValue % 8 === 0
+      // Since 9 is NOT a strategic flexibility value and 9 % 8 !== 0, it should error
       expect(result.primaryResult.level).toBe('Error');
       expect(result.primaryResult.message).toContain('Baseline grid');
     });

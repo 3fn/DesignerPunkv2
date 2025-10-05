@@ -169,18 +169,22 @@ export class TokenBuilder {
 
     /**
      * Create an invalid spacing token (not aligned to baseline grid)
+     * Uses a value that is NOT a strategic flexibility value and NOT grid-aligned
      */
     static createInvalidSpacingToken(overrides?: Partial<PrimitiveToken>): PrimitiveToken {
-        // Use a value that's NOT aligned to baseline grid
-        const baseValue = BASELINE_GRID_UNIT + 2; // e.g., 10 if grid is 8
+        // Use a value that's NOT aligned to baseline grid AND NOT strategic flexibility
+        // Strategic flexibility values: 2, 4, 6, 10, 12, 20
+        // Grid-aligned values: 8, 16, 24, 32, etc.
+        // Valid invalid values: 1, 3, 5, 7, 9, 11, 13, 14, 15, 17, 18, 19, 21, 22, 23, etc.
+        const baseValue = BASELINE_GRID_UNIT + 1; // e.g., 9 if grid is 8
 
         return {
-            name: 'space125',
+            name: 'spaceInvalid',
             category: TokenCategory.SPACING,
             baseValue,
             familyBaseValue: SPACING_BASE_VALUE,
-            description: 'Invalid spacing (not grid-aligned)',
-            mathematicalRelationship: `base × ${baseValue / SPACING_BASE_VALUE}`,
+            description: 'Invalid spacing (not grid-aligned, not strategic flexibility)',
+            mathematicalRelationship: `base × ${(baseValue / SPACING_BASE_VALUE).toFixed(3)}`,
             baselineGridAlignment: false,
             isStrategicFlexibility: false,
             isPrecisionTargeted: false,
@@ -223,7 +227,7 @@ export const TEST_CONSTANTS = {
     SPACING_SF_075: SPACING_BASE_VALUE * 0.75, // 6 (strategic flexibility)
     SPACING_ONE_HALF: SPACING_BASE_VALUE * 1.5, // 12 (strategic flexibility)
     SPACING_DOUBLE: SPACING_BASE_VALUE * 2, // 16 (8-unit grid)
-    SPACING_INVALID: 5, // 5 (not grid-aligned, not SF)
+    SPACING_INVALID: BASELINE_GRID_UNIT + 1, // 9 (not grid-aligned, not SF)
 };
 
 /**
