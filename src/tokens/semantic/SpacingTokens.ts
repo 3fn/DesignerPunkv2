@@ -192,6 +192,8 @@ export const spacingTokens = {
  *    → Use 0 directly (not a token)
  * 
  * 4. Component-specific needs?
- *    → Define in component spec if pattern doesn't fit semantic tokens
- *    → Use primitive tokens directly for component-specific spacing
+ *    → Within the context of the illustrated spec, prioritize using semantic tokens;
+ *      if those tokens fail to achieve the spec requirements, use primitive tokens.
+ *      If primitive tokens fail to achieve the spec requirements, request the
+ *      creation of a component token that lives within the component's directory.
  */
