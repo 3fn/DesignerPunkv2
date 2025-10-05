@@ -35,9 +35,10 @@ The system architecture follows the business localization model established in t
 
 #### Semantic Token Layer  
 - **Purpose**: Contextual tokens that reference primitives with semantic meaning
-- **Scope**: Semantic references (color.warning, space.tight, border.stylePrimary)
+- **Scope**: Semantic references (color.warning, typography.body, space.grouped.normal, space.inset.comfortable)
 - **Usage**: Higher-level abstraction for specific semantic contexts
 - **Validation**: Must reference valid primitive tokens, not raw values
+- **Spacing Architecture**: Two-category system distinguishing layout (external relationships) from inset (internal density)
 
 ### Translation Provider Architecture
 
@@ -62,6 +63,53 @@ The system architecture follows the business localization model established in t
 - **Validation**: Ensures all platforms receive complete token sets
 
 ## Components and Interfaces
+
+### Hierarchical Spacing Semantic Token System
+
+The spacing semantic token system uses a two-category architecture that distinguishes between external spacing (layout) and internal spacing (inset):
+
+**Layout Tokens (External Spacing):**
+Layout tokens describe spacing between elements based on their relationship hierarchy. Used for margins, gaps, and spacing between components.
+
+**Relationship Hierarchy:**
+- **grouped**: Elements within the same logical group (tightest relationships)
+  - minimal (space025): Extremely tight grouping (metadata, labels)
+  - tight (space050): Tight grouping (icon-label pairs)
+  - normal (space100): Standard grouping (form fields in group)
+  - loose (space150): Generous grouping (related cards)
+
+- **related**: Elements that are connected but distinct (moderate relationships)
+  - tight (space100): Minimal related separation
+  - normal (space200): Standard related separation
+  - loose (space300): Generous related separation
+
+- **separated**: Elements that are independent (clear separation)
+  - tight (space200): Minimal separated distinction
+  - normal (space300): Standard separated distinction
+  - loose (space400): Generous separated distinction
+
+- **sectioned**: Major section boundaries (strongest separation)
+  - tight (space400): Minimal section boundary
+  - normal (space500): Standard section boundary
+  - loose (space600): Generous section boundary
+
+**Inset Tokens (Internal Spacing):**
+Inset tokens describe spacing inside containers based on density. Used for padding within components and containers.
+
+**Density Levels:**
+- **tight** (space050): High-density interfaces (compact, efficient)
+- **normal** (space100): Standard-density interfaces (balanced)
+- **comfortable** (space150): Low-density interfaces (generous, content-focused)
+- **spacious** (space200): Very low-density interfaces (emphasis, breathing room)
+- **expansive** (space300): Maximum breathing room (heroes, feature sections)
+
+**Zero Spacing Guidance:**
+For removing spacing (resets, overrides), use `0` directly rather than a token. Zero represents the absence of spacing, not a spacing value.
+
+**AI Agent Guidance:**
+- Between elements (margins, gaps)? → Use layout tokens based on relationship hierarchy
+- Inside containers (padding)? → Use inset tokens based on desired density
+- Removing spacing (resets)? → Use 0 directly (not a token)
 
 ### Typography Token Pairing System
 
@@ -112,7 +160,8 @@ TokenEngine
 │   └── TapAreaTokens (tapAreaMinimum, tapAreaRecommended, etc.) - Base: 44
 ├── SemanticTokenRegistry
 │   ├── ColorTokens (color.warning, color.primary, etc.)
-│   ├── SpacingTokens (space.tight, space.loose, etc.)
+│   ├── TypographyTokens (typography.body, typography.h1, etc.)
+│   ├── SpacingTokens (space.grouped.*, space.related.*, space.separated.*, space.sectioned.*, space.inset.*)
 │   └── StyleTokens (border.stylePrimary, shadow.elevated, etc.)
 └── ValidationEngine
     ├── ThreeTierValidator (Pass/Warning/Error)

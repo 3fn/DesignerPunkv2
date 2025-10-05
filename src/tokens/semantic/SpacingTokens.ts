@@ -1,214 +1,197 @@
 /**
- * Semantic Spacing Token Definitions
+ * Hierarchical Spacing Semantic Token Definitions
  * 
- * Spacing semantic tokens provide contextual meaning for spacing primitives,
- * making it easier to apply consistent spacing patterns across components.
+ * Two-category spacing system distinguishing between external spacing (layout)
+ * and internal spacing (inset):
+ * 
+ * - Layout Tokens: Spacing between elements based on relationship hierarchy
+ *   (grouped, related, separated, sectioned)
+ * - Inset Tokens: Spacing inside containers based on density
+ *   (tight, normal, comfortable, spacious, expansive)
+ * 
+ * Zero Spacing: Use 0 directly rather than a token (zero represents absence of spacing)
  */
-
-import { SemanticToken, SemanticCategory } from '../../types/SemanticToken';
 
 /**
- * Semantic spacing tokens for common spacing contexts
+ * Spacing semantic token structure
+ * Uses { value: 'primitiveTokenName' } format for primitive references
  */
-export const spacingTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>> = {
-  // Component internal spacing
-  'space.tight': {
-    name: 'space.tight',
-    primitiveReferences: { default: 'space050' },
-    category: SemanticCategory.SPACING,
-    context: 'Tight spacing within components for closely related elements',
-    description: 'Tight spacing (4px) for elements that should be visually grouped closely'
+interface SpacingSemanticToken {
+  value: string;
+}
+
+/**
+ * Layout Spacing Tokens (External Spacing)
+ * 
+ * Describe spacing between elements based on their relationship hierarchy.
+ * Use for margins, gaps, and spacing between components.
+ */
+export const layoutSpacing = {
+  /**
+   * Grouped - Elements within the same logical group (tightest relationships)
+   */
+  grouped: {
+    /**
+     * Extremely tight grouping for metadata, labels, and tightly coupled elements
+     * Example: Post metadata, icon-label pairs with minimal separation
+     */
+    minimal: { value: 'space025' } as SpacingSemanticToken,
+
+    /**
+     * Tight grouping for closely related elements within a group
+     * Example: Icon-label pairs, form field labels
+     */
+    tight: { value: 'space050' } as SpacingSemanticToken,
+
+    /**
+     * Standard grouping for form fields and related elements in a group
+     * Example: Form fields in same section, list items in a group
+     */
+    normal: { value: 'space100' } as SpacingSemanticToken,
+
+    /**
+     * Generous grouping for related cards and loosely grouped elements
+     * Example: Related cards in a grid, grouped content blocks
+     */
+    loose: { value: 'space150' } as SpacingSemanticToken
   },
 
-  'space.compact': {
-    name: 'space.compact',
-    primitiveReferences: { default: 'space075' },
-    category: SemanticCategory.SPACING,
-    context: 'Compact spacing for dense layouts',
-    description: 'Compact spacing (6px) for dense UI layouts and compact components'
+  /**
+   * Related - Elements that are connected but distinct (moderate relationships)
+   */
+  related: {
+    /**
+     * Minimal related separation for connected but distinct elements
+     * Example: Different form sections with minimal separation
+     */
+    tight: { value: 'space100' } as SpacingSemanticToken,
+
+    /**
+     * Standard related separation for connected sections
+     * Example: Form sections, related content areas
+     */
+    normal: { value: 'space200' } as SpacingSemanticToken,
+
+    /**
+     * Generous related separation for loosely connected sections
+     * Example: Related content blocks with clear but moderate separation
+     */
+    loose: { value: 'space300' } as SpacingSemanticToken
   },
 
-  'space.default': {
-    name: 'space.default',
-    primitiveReferences: { default: 'space100' },
-    category: SemanticCategory.SPACING,
-    context: 'Default spacing for standard component padding and gaps',
-    description: 'Default spacing (8px) for standard component internal spacing'
+  /**
+   * Separated - Elements that are independent (clear separation)
+   */
+  separated: {
+    /**
+     * Minimal separated distinction for independent elements
+     * Example: Dashboard widgets with minimal separation
+     */
+    tight: { value: 'space200' } as SpacingSemanticToken,
+
+    /**
+     * Standard separated distinction for independent sections
+     * Example: Dashboard widgets, independent content cards
+     */
+    normal: { value: 'space300' } as SpacingSemanticToken,
+
+    /**
+     * Generous separated distinction for clearly independent sections
+     * Example: Major content areas with clear visual separation
+     */
+    loose: { value: 'space400' } as SpacingSemanticToken
   },
 
-  'space.comfortable': {
-    name: 'space.comfortable',
-    primitiveReferences: { default: 'space150' },
-    category: SemanticCategory.SPACING,
-    context: 'Comfortable spacing for relaxed layouts',
-    description: 'Comfortable spacing (12px) for relaxed component layouts'
-  },
+  /**
+   * Sectioned - Major section boundaries (strongest separation)
+   */
+  sectioned: {
+    /**
+     * Minimal section boundary for major page sections
+     * Example: Page sections with minimal boundary
+     */
+    tight: { value: 'space400' } as SpacingSemanticToken,
 
-  'space.loose': {
-    name: 'space.loose',
-    primitiveReferences: { default: 'space200' },
-    category: SemanticCategory.SPACING,
-    context: 'Loose spacing for separated elements',
-    description: 'Loose spacing (16px) for elements that should be visually separated'
-  },
+    /**
+     * Standard section boundary for major page sections
+     * Example: Hero to features section, major page boundaries
+     */
+    normal: { value: 'space500' } as SpacingSemanticToken,
 
-  // Layout spacing
-  'space.layoutTight': {
-    name: 'space.layoutTight',
-    primitiveReferences: { default: 'space200' },
-    category: SemanticCategory.SPACING,
-    context: 'Tight layout spacing between sections',
-    description: 'Tight layout spacing (16px) for closely related sections'
-  },
-
-  'space.layoutDefault': {
-    name: 'space.layoutDefault',
-    primitiveReferences: { default: 'space300' },
-    category: SemanticCategory.SPACING,
-    context: 'Default layout spacing between sections',
-    description: 'Default layout spacing (24px) for standard section separation'
-  },
-
-  'space.layoutLoose': {
-    name: 'space.layoutLoose',
-    primitiveReferences: { default: 'space400' },
-    category: SemanticCategory.SPACING,
-    context: 'Loose layout spacing between major sections',
-    description: 'Loose layout spacing (32px) for major section separation'
-  },
-
-  'space.layoutWide': {
-    name: 'space.layoutWide',
-    primitiveReferences: { default: 'space500' },
-    category: SemanticCategory.SPACING,
-    context: 'Wide layout spacing for distinct content areas',
-    description: 'Wide layout spacing (40px) for distinct content area separation'
-  },
-
-  // Stack spacing (vertical)
-  'space.stackTight': {
-    name: 'space.stackTight',
-    primitiveReferences: { default: 'space050' },
-    category: SemanticCategory.SPACING,
-    context: 'Tight vertical spacing in stacks',
-    description: 'Tight stack spacing (4px) for closely related vertical elements'
-  },
-
-  'space.stackDefault': {
-    name: 'space.stackDefault',
-    primitiveReferences: { default: 'space100' },
-    category: SemanticCategory.SPACING,
-    context: 'Default vertical spacing in stacks',
-    description: 'Default stack spacing (8px) for standard vertical element separation'
-  },
-
-  'space.stackLoose': {
-    name: 'space.stackLoose',
-    primitiveReferences: { default: 'space200' },
-    category: SemanticCategory.SPACING,
-    context: 'Loose vertical spacing in stacks',
-    description: 'Loose stack spacing (16px) for separated vertical elements'
-  },
-
-  // Inline spacing (horizontal)
-  'space.inlineTight': {
-    name: 'space.inlineTight',
-    primitiveReferences: { default: 'space050' },
-    category: SemanticCategory.SPACING,
-    context: 'Tight horizontal spacing between inline elements',
-    description: 'Tight inline spacing (4px) for closely related horizontal elements'
-  },
-
-  'space.inlineDefault': {
-    name: 'space.inlineDefault',
-    primitiveReferences: { default: 'space100' },
-    category: SemanticCategory.SPACING,
-    context: 'Default horizontal spacing between inline elements',
-    description: 'Default inline spacing (8px) for standard horizontal element separation'
-  },
-
-  'space.inlineLoose': {
-    name: 'space.inlineLoose',
-    primitiveReferences: { default: 'space200' },
-    category: SemanticCategory.SPACING,
-    context: 'Loose horizontal spacing between inline elements',
-    description: 'Loose inline spacing (16px) for separated horizontal elements'
-  },
-
-  // Padding
-  'space.paddingTight': {
-    name: 'space.paddingTight',
-    primitiveReferences: { default: 'space050' },
-    category: SemanticCategory.SPACING,
-    context: 'Tight padding for compact components',
-    description: 'Tight padding (4px) for compact component internal spacing'
-  },
-
-  'space.paddingDefault': {
-    name: 'space.paddingDefault',
-    primitiveReferences: { default: 'space100' },
-    category: SemanticCategory.SPACING,
-    context: 'Default padding for standard components',
-    description: 'Default padding (8px) for standard component internal spacing'
-  },
-
-  'space.paddingComfortable': {
-    name: 'space.paddingComfortable',
-    primitiveReferences: { default: 'space150' },
-    category: SemanticCategory.SPACING,
-    context: 'Comfortable padding for relaxed components',
-    description: 'Comfortable padding (12px) for relaxed component internal spacing'
-  },
-
-  'space.paddingLoose': {
-    name: 'space.paddingLoose',
-    primitiveReferences: { default: 'space200' },
-    category: SemanticCategory.SPACING,
-    context: 'Loose padding for spacious components',
-    description: 'Loose padding (16px) for spacious component internal spacing'
-  },
-
-  // Gap (for flexbox/grid)
-  'space.gapTight': {
-    name: 'space.gapTight',
-    primitiveReferences: { default: 'space050' },
-    category: SemanticCategory.SPACING,
-    context: 'Tight gap for dense flex/grid layouts',
-    description: 'Tight gap (4px) for dense flexbox or grid layouts'
-  },
-
-  'space.gapDefault': {
-    name: 'space.gapDefault',
-    primitiveReferences: { default: 'space100' },
-    category: SemanticCategory.SPACING,
-    context: 'Default gap for standard flex/grid layouts',
-    description: 'Default gap (8px) for standard flexbox or grid layouts'
-  },
-
-  'space.gapLoose': {
-    name: 'space.gapLoose',
-    primitiveReferences: { default: 'space200' },
-    category: SemanticCategory.SPACING,
-    context: 'Loose gap for spacious flex/grid layouts',
-    description: 'Loose gap (16px) for spacious flexbox or grid layouts'
+    /**
+     * Generous section boundary for maximum visual separation
+     * Example: Major landing page sections, distinct content areas
+     */
+    loose: { value: 'space600' } as SpacingSemanticToken
   }
 };
 
 /**
- * Array of all spacing semantic token names for iteration
+ * Inset Spacing Tokens (Internal Spacing)
+ * 
+ * Describe spacing inside containers based on density.
+ * Use for padding within components and containers.
  */
-export const spacingTokenNames = Object.keys(spacingTokens);
+export const insetSpacing = {
+  /**
+   * High-density interfaces (compact, efficient)
+   * Example: Data table cells, compact chips, dense toolbars
+   */
+  tight: { value: 'space050' } as SpacingSemanticToken,
+
+  /**
+   * Standard-density interfaces (balanced)
+   * Example: Standard buttons, cards, form inputs
+   */
+  normal: { value: 'space100' } as SpacingSemanticToken,
+
+  /**
+   * Low-density interfaces (generous, content-focused)
+   * Example: Content cards, comfortable forms, readable content areas
+   */
+  comfortable: { value: 'space150' } as SpacingSemanticToken,
+
+  /**
+   * Very low-density interfaces (emphasis, breathing room)
+   * Example: Modal dialogs, emphasized content, feature callouts
+   */
+  spacious: { value: 'space200' } as SpacingSemanticToken,
+
+  /**
+   * Maximum breathing room (heroes, feature sections)
+   * Example: Hero sections, landing page features, maximum emphasis areas
+   */
+  expansive: { value: 'space300' } as SpacingSemanticToken
+};
 
 /**
- * Get spacing semantic token by name
+ * Complete hierarchical spacing semantic token structure
  */
-export function getSpacingToken(name: string): Omit<SemanticToken, 'primitiveTokens'> | undefined {
-  return spacingTokens[name];
-}
+export const spacingTokens = {
+  grouped: layoutSpacing.grouped,
+  related: layoutSpacing.related,
+  separated: layoutSpacing.separated,
+  sectioned: layoutSpacing.sectioned,
+  inset: insetSpacing
+};
 
 /**
- * Get all spacing semantic tokens as array
+ * AI Agent Guidance for Token Selection
+ * 
+ * When adding spacing:
+ * 
+ * 1. Between elements (margins, gaps)?
+ *    → Use layout tokens: grouped / related / separated / sectioned
+ *    → Choose based on relationship hierarchy + desired density
+ * 
+ * 2. Inside containers (padding)?
+ *    → Use inset tokens: tight / normal / comfortable / spacious / expansive
+ *    → Choose based on desired interface density
+ * 
+ * 3. Removing spacing (resets)?
+ *    → Use 0 directly (not a token)
+ * 
+ * 4. Component-specific needs?
+ *    → Define in component spec if pattern doesn't fit semantic tokens
+ *    → Use primitive tokens directly for component-specific spacing
  */
-export function getAllSpacingTokens(): Array<Omit<SemanticToken, 'primitiveTokens'>> {
-  return Object.values(spacingTokens);
-}

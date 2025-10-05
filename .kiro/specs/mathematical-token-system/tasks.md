@@ -676,7 +676,7 @@ Convert the Mathematical Token System design into a series of prompts for a code
       
       **Post-Complete:** Commit with message "Task 5.1.3 Complete: Typography Semantic Tokens"
     
-    - [ ] 5.1.4 Implement color semantic tokens with multi-primitive structure
+    - [x] 5.1.4 Implement color semantic tokens with multi-primitive structure
       - Create color.primary, color.secondary (brand identity)
       - Create color.success.strong, color.success.subtle (status feedback)
       - Create color.warning.strong, color.warning.subtle (status feedback)
@@ -706,9 +706,42 @@ Convert the Mathematical Token System design into a series of prompts for a code
       
       **Post-Complete:** Commit with message "Task 5.1.4 Complete: Color Semantic Tokens"
     
-    - [ ] 5.1.5 Create semantic token barrel export and validation
+    - [x] 5.1.5 Implement hierarchical spacing semantic tokens (layout + inset)
+      - Create layout spacing tokens with relationship hierarchy (grouped, related, separated, sectioned)
+      - Create inset spacing tokens with density levels (tight, normal, comfortable, spacious, expansive)
+      - Implement space.grouped.minimal through space.grouped.loose (4 density levels)
+      - Implement space.related.tight through space.related.loose (3 density levels)
+      - Implement space.separated.tight through space.separated.loose (3 density levels)
+      - Implement space.sectioned.tight through space.sectioned.loose (3 density levels)
+      - Implement space.inset.tight through space.inset.expansive (5 density levels)
+      - All tokens use `{ value: 'primitiveTokenName' }` structure
+      - Follow token-specifications-v3.md spacing semantic token spec exactly
+      - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.6_
+      
+      **Success Criteria:**
+      - Layout tokens provide 4-tier relationship hierarchy (grouped, related, separated, sectioned)
+      - Grouped level includes minimal density (space025) for extremely tight relationships
+      - Inset tokens provide 5-tier density system (tight, normal, comfortable, spacious, expansive)
+      - All tokens properly reference primitive spacing tokens
+      - Token structure supports AI agent guidance for layout vs padding decisions
+      - Hierarchical naming encodes design intent (relationship for layout, density for inset)
+      - Zero spacing guidance documented (use 0 directly, not a token)
+      
+      **Artifacts Created:**
+      - `src/tokens/semantic/SpacingTokens.ts` - Hierarchical spacing semantic tokens
+      
+      **Validation Required:**
+      - TypeScript compilation validation
+      - Validate all primitive spacing references exist
+      - Validate layout token relationship hierarchy is complete
+      - Validate inset token density levels are complete
+      - Test token structure matches spec exactly
+      
+      **Post-Complete:** Commit with message "Task 5.1.5 Complete: Hierarchical Spacing Semantic Tokens"
+    
+    - [ ] 5.1.6 Create semantic token barrel export and validation
       - Create src/tokens/semantic/index.ts barrel export
-      - Export all semantic token families (typography, color)
+      - Export all semantic token families (typography, color, spacing)
       - Create utility functions for semantic token access
       - Run TypeScript compilation validation
       - Test semantic token registration and retrieval
@@ -730,12 +763,11 @@ Convert the Mathematical Token System design into a series of prompts for a code
       - Validate semantic token registration works
       - Test semantic token retrieval and resolution
       - Validate mode-aware color resolution
+      - Validate hierarchical spacing token access
       
-      **Post-Complete:** Commit with message "Task 5.1.5 Complete: Semantic Token System Integration"
+      **Post-Complete:** Commit with message "Task 5.1.6 Complete: Semantic Token System Integration"
     
-    **Note:** Spacing semantic tokens (space.tight, space.loose, etc.) and style tokens (border, shadow) will be addressed in separate tasks after spec refinement.
-    - Create spacing tokens (space.tight, space.loose, etc.)
-    - Create style tokens (border.stylePrimary, shadow.elevated, etc.)
+    **Note:** Spacing semantic tokens now use hierarchical layout/inset structure per updated token-specifications-v3.md. Style tokens (border, shadow) will be addressed in separate tasks after spec refinement.
     - Implement mode-aware resolution for semantic color tokens based on system context
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.6_
     

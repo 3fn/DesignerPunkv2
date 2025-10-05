@@ -527,15 +527,150 @@ typography.input = typography.body
 typography.label = typography.bodySmall + fontWeight: fontWeight500
 
 ### **Spacing Semantic Tokens**
-Semantic spacing tokens provide contextual meaning for specific use cases:
+
+Semantic spacing tokens use a two-category system that distinguishes between external spacing (layout) and internal spacing (inset):
+
+#### **Layout Tokens (External Spacing)**
+Layout tokens describe spacing between elements based on their relationship hierarchy. Use for margins, gaps, and spacing between components.
+
+**Relationship Hierarchy**:
+- **grouped**: Elements within the same logical group (tightest relationships)
+- **related**: Elements that are connected but distinct (moderate relationships)
+- **separated**: Elements that are independent (clear separation)
+- **sectioned**: Major section boundaries (strongest separation)
 
 ```
-space.tight      = space050  - Compact layouts
-space.normal     = space100  - Standard spacing
-space.loose      = space200  - Generous spacing
-space.component  = space125  - Component internal spacing (strategic flexibility)
-space.section    = space400  - Section separation
+// Grouped - Elements in the same logical group
+space.grouped.minimal    = space025  // 2pt - Extremely tight (metadata, labels)
+space.grouped.tight      = space050  // 4pt - Tight grouping (icon-label pairs)
+space.grouped.normal     = space100  // 8pt - Standard grouping (form fields in group)
+space.grouped.loose      = space150  // 12pt - Generous grouping (related cards)
+
+// Related - Elements that are connected but distinct
+space.related.tight      = space100  // 8pt - Minimal related separation
+space.related.normal     = space200  // 16pt - Standard related separation
+space.related.loose      = space300  // 24pt - Generous related separation
+
+// Separated - Elements that are independent
+space.separated.tight    = space200  // 16pt - Minimal separated distinction
+space.separated.normal   = space300  // 24pt - Standard separated distinction
+space.separated.loose    = space400  // 32pt - Generous separated distinction
+
+// Sectioned - Major section boundaries
+space.sectioned.tight    = space400  // 32pt - Minimal section boundary
+space.sectioned.normal   = space500  // 40pt - Standard section boundary
+space.sectioned.loose    = space600  // 48pt - Generous section boundary
 ```
+
+**Usage Examples**:
+```typescript
+// Post metadata (extremely grouped)
+<PostTitle>Check out this design system</PostTitle>
+<PostMeta style={{ marginTop: space.grouped.minimal }}>
+  Posted by u/peter • 2 hours ago
+</PostMeta>
+
+// Form fields in same section (grouped)
+<FormSection gap={space.grouped.normal}>
+  <Input label="First Name" />
+  <Input label="Last Name" />
+</FormSection>
+
+// Different form sections (related)
+<Form>
+  <PersonalInfoSection />
+  <AddressSection style={{ marginTop: space.related.normal }} />
+</Form>
+
+// Dashboard widgets (separated)
+<Dashboard>
+  <MetricsWidget />
+  <ActivityWidget style={{ marginTop: space.separated.normal }} />
+</Dashboard>
+
+// Page sections (sectioned)
+<Page>
+  <HeroSection />
+  <FeaturesSection style={{ marginTop: space.sectioned.normal }} />
+</Page>
+```
+
+#### **Inset Tokens (Internal Spacing)**
+Inset tokens describe spacing inside containers based on density. Use for padding within components and containers.
+
+**Density Levels**:
+- **tight**: High-density interfaces (compact, efficient)
+- **normal**: Standard-density interfaces (balanced)
+- **comfortable**: Low-density interfaces (generous, content-focused)
+- **spacious**: Very low-density interfaces (emphasis, breathing room)
+- **expansive**: Maximum breathing room (heroes, modals)
+
+```
+space.inset.tight        = space050  // 4pt - Compact padding (tables, chips)
+space.inset.normal       = space100  // 8pt - Standard padding (buttons, cards)
+space.inset.comfortable  = space150  // 12pt - Generous padding (forms, content)
+space.inset.spacious     = space200  // 16pt - Very generous padding (modals, emphasis)
+space.inset.expansive    = space300  // 24pt - Maximum padding (heroes, feature sections)
+```
+
+**Usage Examples**:
+```typescript
+// Data table cell (tight density)
+<TableCell padding={space.inset.tight}>
+  {value}
+</TableCell>
+
+// Standard button (normal density)
+<Button padding={space.inset.normal}>
+  Click me
+</Button>
+
+// Content card (comfortable density)
+<Card padding={space.inset.comfortable}>
+  <CardContent />
+</Card>
+
+// Modal dialog (spacious density)
+<Modal padding={space.inset.spacious}>
+  <ModalContent />
+</Modal>
+
+// Hero section (expansive density)
+<Hero padding={space.inset.expansive}>
+  <HeroContent />
+</Hero>
+```
+
+#### **Zero Spacing**
+For removing spacing (resets, overrides), use `0` directly rather than a token. Zero represents the absence of spacing, not a spacing value.
+
+```typescript
+// Correct - use 0 directly
+<List style={{ margin: 0, padding: 0 }}>
+  <ListItem />
+</List>
+
+// Avoid - don't create space000 token
+```
+
+#### **Token Selection Guidance**
+
+**When adding spacing:**
+
+1. **Between elements** (margins, gaps)?
+   - Use layout tokens: `space.grouped.*` / `space.related.*` / `space.separated.*` / `space.sectioned.*`
+   - Choose based on relationship hierarchy + desired density
+
+2. **Inside containers** (padding)?
+   - Use inset tokens: `space.inset.*`
+   - Choose based on desired interface density
+
+3. **Removing spacing** (resets)?
+   - Use `0` directly (not a token)
+
+4. **Component-specific needs**?
+   - Define in component spec if the pattern doesn't fit semantic tokens
+   - Use primitive tokens directly for component-specific spacing
 
 ### **Color Semantic Tokens**
 Color semantic tokens reference primitive color values with contextual meaning. These tokens are mode-aware and theme-aware, automatically resolving to appropriate values based on system context.

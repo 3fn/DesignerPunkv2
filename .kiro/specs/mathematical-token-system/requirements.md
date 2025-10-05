@@ -73,12 +73,15 @@ The Mathematical Token System serves as the foundational layer for the DesignerP
 
 1. WHEN developing tokens THEN prioritize using semantic tokens if available before opting to use primitive tokens as a fallback
 2. WHEN components use spacing tokens THEN they SHALL use tokens from the spacing family (space050, space100, space150) with base value 8
-3. WHEN components use typography tokens THEN they SHALL use tokens from the fontSize family (fontSize100, fontSize125, fontSize150) with base value 16
-4. WHEN components use line height THEN they SHALL use paired lineHeight tokens with corresponding fontSize tokens (fontSize050 with lineHeight050, fontSize100 with lineHeight100, etc.) where lineHeight multipliers are calculated to achieve 4pt subgrid alignment
-5. WHEN components use border radius THEN they SHALL use tokens from the radius family (radius100, radius200) with base value 8
-6. WHEN density scaling is applied THEN it SHALL multiply functional tokens (spacing, typography, tap areas) but NOT aesthetic tokens (radius, line height ratios)
-7. WHEN accessibility requirements apply THEN components SHALL use tapArea tokens (tapAreaMinimum, tapAreaRecommended) with base value 44
-8. WHEN token composition is validated THEN the system SHALL verify primitive and/or semantic token usage follows established per-family patterns
+3. WHEN components use semantic spacing for layout THEN they SHALL use hierarchical layout tokens (space.grouped.*, space.related.*, space.separated.*, space.sectioned.*) based on relationship between elements
+4. WHEN components use semantic spacing for padding THEN they SHALL use inset tokens (space.inset.*) based on desired interface density
+5. WHEN zero spacing is needed THEN developers SHALL use 0 directly rather than a token (zero represents absence of spacing, not a spacing value)
+6. WHEN components use typography tokens THEN they SHALL use tokens from the fontSize family (fontSize100, fontSize125, fontSize150) with base value 16
+7. WHEN components use line height THEN they SHALL use paired lineHeight tokens with corresponding fontSize tokens (fontSize050 with lineHeight050, fontSize100 with lineHeight100, etc.) where lineHeight multipliers are calculated to achieve 4pt subgrid alignment
+8. WHEN components use border radius THEN they SHALL use tokens from the radius family (radius100, radius200) with base value 8
+9. WHEN density scaling is applied THEN it SHALL multiply functional tokens (spacing, typography, tap areas) but NOT aesthetic tokens (radius, line height ratios)
+10. WHEN accessibility requirements apply THEN components SHALL use tapArea tokens (tapAreaMinimum, tapAreaRecommended) with base value 44
+11. WHEN token composition is validated THEN the system SHALL verify primitive and/or semantic token usage follows established per-family patterns
 
 ### Requirement 6: Per-Family Mathematical Foundation Integration
 
