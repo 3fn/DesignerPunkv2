@@ -1,6 +1,7 @@
-import { PrimitiveToken, SemanticToken, TokenCategory } from '../types';
-import { BaseFormatProvider, FileMetadata, FormatOptions } from './FormatProvider';
+import { PrimitiveToken, SemanticToken } from '../types';
+import { BaseFormatProvider, FileMetadata } from './FormatProvider';
 import { TargetPlatform, OutputFormat } from '../types/TranslationOutput';
+import { getPlatformTokenName } from '../naming/PlatformNamingRules';
 
 /**
  * Android-specific format generator
@@ -116,16 +117,8 @@ export class AndroidFormatGenerator extends BaseFormatProvider {
   }
 
   getTokenName(tokenName: string, category: string): string {
-    if (this.outputFormat === 'kotlin') {
-      // Convert to lowerCamelCase for Kotlin
-      return tokenName.charAt(0).toLowerCase() + tokenName.slice(1);
-    } else {
-      // Convert to snake_case for XML resources
-      return tokenName
-        .replace(/([a-z])([A-Z])/g, '$1_$2')
-        .replace(/([A-Z])([A-Z][a-z])/g, '$1_$2')
-        .toLowerCase();
-    }
+    // Use platform naming rules for consistent naming
+    return getPlatformTokenName(tokenName, this.platform, category as any);
   }
 
   private formatKotlinConstant(name: string, value: number | string | object, unit: string, category: string): string {

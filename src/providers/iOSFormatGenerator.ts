@@ -1,6 +1,7 @@
-import { PrimitiveToken, SemanticToken, TokenCategory } from '../types';
-import { BaseFormatProvider, FileMetadata, FormatOptions } from './FormatProvider';
+import { PrimitiveToken, SemanticToken } from '../types';
+import { BaseFormatProvider, FileMetadata } from './FormatProvider';
 import { TargetPlatform, OutputFormat } from '../types/TranslationOutput';
+import { getPlatformTokenName } from '../naming/PlatformNamingRules';
 
 /**
  * iOS-specific format generator
@@ -83,10 +84,8 @@ export class iOSFormatGenerator extends BaseFormatProvider {
   }
 
   getTokenName(tokenName: string, category: string): string {
-    // Convert to lowerCamelCase for Swift
-    // e.g., "space100" -> "space100", "fontSize125" -> "fontSize125"
-    // Ensure first character is lowercase
-    return tokenName.charAt(0).toLowerCase() + tokenName.slice(1);
+    // Use platform naming rules for consistent naming
+    return getPlatformTokenName(tokenName, this.platform, category as any);
   }
 
   private formatSwiftConstant(name: string, value: number | string | object, unit: string, swiftType: string): string {

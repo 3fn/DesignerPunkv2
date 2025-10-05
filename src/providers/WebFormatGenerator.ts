@@ -1,6 +1,7 @@
-import { PrimitiveToken, SemanticToken, TokenCategory } from '../types';
-import { BaseFormatProvider, FileMetadata, FormatOptions } from './FormatProvider';
+import { PrimitiveToken, SemanticToken } from '../types';
+import { BaseFormatProvider, FileMetadata } from './FormatProvider';
 import { TargetPlatform, OutputFormat } from '../types/TranslationOutput';
+import { getPlatformTokenName } from '../naming/PlatformNamingRules';
 
 /**
  * Web-specific format generator
@@ -114,17 +115,16 @@ export class WebFormatGenerator extends BaseFormatProvider {
   }
 
   getTokenName(tokenName: string, category: string): string {
-    // Convert camelCase to kebab-case for CSS
-    // e.g., "space100" -> "space-100", "fontSize125" -> "font-size-125"
-    if (this.outputFormat === 'css') {
-      return tokenName
-        .replace(/([a-z])([A-Z])/g, '$1-$2')
-        .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
-        .toLowerCase();
-    } else {
-      // Keep camelCase for JavaScript
-      return tokenName;
+    // Use platform naming rules for consistent naming
+    const platformName = getPlatformTokenName(tokenName, this.platform, category as any);
+    
+    // For JavaScript output, remove the CSS custom property prefix
+    if (this.outputFormat === 'javascript' && platformName.startsWith('--')) {
+      // Convert back to camelCase for JavaScript
+      return tokenName.charAt(0).toLowerCase() + tokenName.slice(1);
     }
+    
+    return platformName;
   }
 
   private formatCSSCustomProperty(name: string, value: number | string | object, unit: string): string {
