@@ -77,7 +77,7 @@ export class TokenUsageTracker {
         timestamp: Date = new Date()
     ): void {
         // Get the first primitive token to check strategic flexibility
-        const firstPrimitiveToken = Object.values(token.primitiveTokens)[0];
+        const firstPrimitiveToken = token.primitiveTokens ? Object.values(token.primitiveTokens)[0] : undefined;
         
         this.usages.push({
             tokenName: token.name,
