@@ -32,16 +32,31 @@ This implementation plan converts the F2 design into a series of coding tasks th
 ## Task List
 
 - [ ] 1. Set up build system foundation and core interfaces
-  - Create directory structure for build orchestration, platform builders, and validation
-  - Define core TypeScript interfaces for build configuration and orchestration
-  - Set up build system entry points and module exports
-  - _Requirements: 1.1, 6.1, 6.2_
+  
+  **Success Criteria:**
+  - Complete directory structure supports modular build system development
+  - Core TypeScript interfaces defined for build configuration and orchestration
+  - BuildOrchestrator class implements configuration validation and platform selection
+  - Build system entry points and module exports properly configured
+  - Foundation enables incremental development of platform builders
+  
+  **Primary Artifacts:**
+  - `src/build/` directory structure (orchestration, platforms, validation, tokens)
+  - `src/build/types/` - Core interfaces (BuildOrchestrator, BuildConfig, BuildResult, Platform)
+  - `src/build/BuildOrchestrator.ts` - Main orchestrator implementation
+  - `src/build/index.ts` - Module exports
+  
+  **Completion Documentation:**
+  - `.kiro/specs/cross-platform-build-system/completion/task-1-completion.md`
+  - Document directory structure rationale and interface design decisions
+  - Include orchestrator architecture and extensibility approach
 
 - [ ] 1.1 Create build system directory structure
   - Create `src/build/` directory for build orchestration
   - Create `src/build/platforms/` for platform-specific builders
   - Create `src/build/validation/` for interface and token validation
   - Create `src/build/tokens/` for token integration layer
+  - Create `src/build/types/` for TypeScript interfaces
   - _Requirements: 1.1, 6.1_
 
 - [ ] 1.2 Define core build interfaces
@@ -59,11 +74,30 @@ This implementation plan converts the F2 design into a series of coding tasks th
   - _Requirements: 1.1, 6.1, 6.3_
 
 - [ ] 2. Implement token integration layer with F1
-  - Create token integration interfaces
-  - Implement token selection priority logic (semantic → primitive → component)
-  - Implement cross-platform unit conversion
-  - Integrate with F1 token system
-  - _Requirements: 3.1, 3.2, 3.3, 9.1, 9.2_
+  
+  **Success Criteria:**
+  - Token integration interfaces defined and exported
+  - Token selection priority enforced (semantic → primitive → component)
+  - Cross-platform unit conversion working (baseValue → pt/dp/px/rem)
+  - F1 integration validated with mathematical consistency maintained
+  - Component tokens generated only when semantic/primitive insufficient
+  - Token selection reasoning documented for all conversions
+  
+  **Primary Artifacts:**
+  - `src/build/tokens/TokenIntegrator.ts` - Main integration class
+  - `src/build/tokens/TokenSelection.ts` - Selection priority logic
+  - `src/build/tokens/PlatformTokens.ts` - Platform-specific token values
+  - `src/build/tokens/ComponentToken.ts` - Component token generation
+  - `src/build/tokens/UnitConverter.ts` - Cross-platform unit conversion
+  
+  **Completion Documentation:**
+  - `.kiro/specs/cross-platform-build-system/completion/task-2-completion.md`
+  - Document token selection priority algorithm and F1 integration approach
+  - Include unit conversion formulas and mathematical consistency validation
+  
+  **F1 Integration Note:**
+  - F1 provides unitless baseValues; F2 converts to platform-specific units
+  - Uses F1 TokenEngine, PrimitiveTokenRegistry, SemanticTokenRegistry
 
 - [ ] 2.1 Create token integration interfaces
   - Create `TokenIntegrator` interface with platform-specific token methods
@@ -80,31 +114,38 @@ This implementation plan converts the F2 design into a series of coding tasks th
   - _Requirements: 9.1, 9.2, 9.3, 9.4_
 
 - [ ] 2.3 Implement cross-platform unit conversion
-  - **Context**: F1 provides unitless baseValues (8, 12, 16); F2 converts to platform units
   - Implement iOS unit conversion (F1 baseValue → Swift constants in pt)
   - Implement Android unit conversion (F1 baseValue → Kotlin constants in dp/sp)
   - Implement Web unit conversion (F1 baseValue → CSS custom properties in px/rem)
-  - Validate mathematical consistency across platforms (same baseValue = consistent visual result)
-  - **Note**: This builds on F1's token definitions but generates platform-specific constant files
+  - Validate mathematical consistency across platforms
   - _Requirements: 3.4, 3.5, 3.6, 3.7_
-  - _F1 Reference_: F1 Task 10.2 created build integration interfaces; F2 implements actual conversion
 
 - [ ] 2.4 Integrate with F1 token system
-  - **Context**: F2 consumes F1's token definitions and converts them for platform use
   - Import primitive tokens from F1 (space100, color.blue500, etc.)
   - Import semantic tokens from F1 (space.normal, color.primary, etc.)
   - Validate token references are valid (tokens exist in F1)
-  - Test token integration with F1 validation (mathematical consistency maintained)
-  - **F1 Dependency**: Requires F1 TokenEngine, PrimitiveTokenRegistry, SemanticTokenRegistry
+  - Test token integration with F1 validation
   - _Requirements: 3.1, 3.2, 3.8, 3.9_
-  - _F1 Reference_: Uses F1's token data structures and validation system
 
 - [ ] 3. Implement iOS platform builder
-  - Create iOS builder interface and implementation
-  - Implement Swift Package generation
-  - Implement Swift constant generation from tokens
-  - Validate Swift code compilation
-  - _Requirements: 1.3, 2.1, 3.4_
+  
+  **Success Criteria:**
+  - iOS builder generates valid Swift Package with Package.swift manifest
+  - Swift constants generated from F1 tokens with proper pt units
+  - SwiftUI component structure properly configured
+  - Swift Package can be imported and used in Xcode projects
+  - iOS-specific optimizations working (SF Symbols, native animations)
+  
+  **Primary Artifacts:**
+  - `src/build/platforms/iOSBuilder.ts` - iOS platform builder
+  - Generated: `Package.swift` - Swift Package manifest
+  - Generated: Swift token constants files
+  - Generated: SwiftUI component structure
+  
+  **Completion Documentation:**
+  - `.kiro/specs/cross-platform-build-system/completion/task-3-completion.md`
+  - Document Swift Package generation approach and token conversion to pt units
+  - Include SwiftUI structure and iOS-specific optimization strategies
 
 - [ ] 3.1 Create iOS builder foundation
   - Create `iOSBuilder` class implementing platform builder interface
@@ -135,11 +176,24 @@ This implementation plan converts the F2 design into a series of coding tasks th
   - _Requirements: 2.1, 2.7, 5.1_
 
 - [ ] 4. Implement Android platform builder
-  - Create Android builder interface and implementation
-  - Implement Gradle module generation
-  - Implement Kotlin constant generation from tokens
-  - Validate Kotlin code compilation
-  - _Requirements: 1.4, 2.2, 3.5_
+  
+  **Success Criteria:**
+  - Android builder generates valid Gradle module with build.gradle.kts
+  - Kotlin constants generated from F1 tokens with proper dp/sp units
+  - Jetpack Compose component structure properly configured
+  - Gradle module can be imported and used in Android Studio projects
+  - Android-specific optimizations working (Material Design, native animations)
+  
+  **Primary Artifacts:**
+  - `src/build/platforms/AndroidBuilder.ts` - Android platform builder
+  - Generated: `build.gradle.kts` - Gradle build configuration
+  - Generated: Kotlin token constants files
+  - Generated: Jetpack Compose component structure
+  
+  **Completion Documentation:**
+  - `.kiro/specs/cross-platform-build-system/completion/task-4-completion.md`
+  - Document Gradle module generation and token conversion to dp/sp units
+  - Include Jetpack Compose structure and Android-specific optimizations
 
 - [ ] 4.1 Create Android builder foundation
   - Create `AndroidBuilder` class implementing platform builder interface
@@ -170,11 +224,24 @@ This implementation plan converts the F2 design into a series of coding tasks th
   - _Requirements: 2.2, 2.7, 5.2_
 
 - [ ] 5. Implement Web platform builder
-  - Create Web builder interface and implementation
-  - Implement NPM package generation
-  - Implement CSS custom property generation from tokens
-  - Validate TypeScript/Lit compilation
-  - _Requirements: 1.5, 2.3, 3.6_
+  
+  **Success Criteria:**
+  - Web builder generates valid NPM package with package.json
+  - CSS custom properties generated from F1 tokens with proper px/rem units
+  - Web Component (Lit) structure properly configured
+  - NPM package can be installed and used in web projects
+  - Web-specific optimizations working (Shadow DOM, custom elements)
+  
+  **Primary Artifacts:**
+  - `src/build/platforms/WebBuilder.ts` - Web platform builder
+  - Generated: `package.json` - NPM package configuration
+  - Generated: CSS custom properties files
+  - Generated: Web Component (Lit) structure
+  
+  **Completion Documentation:**
+  - `.kiro/specs/cross-platform-build-system/completion/task-5-completion.md`
+  - Document NPM package generation and token conversion to px/rem units
+  - Include Web Component structure and web-specific optimizations
 
 - [ ] 5.1 Create Web builder foundation
   - Create `WebBuilder` class implementing platform builder interface
@@ -205,11 +272,24 @@ This implementation plan converts the F2 design into a series of coding tasks th
   - _Requirements: 2.3, 2.7, 5.3_
 
 - [ ] 6. Implement interface validation layer
-  - Create interface validation interfaces
-  - Implement cross-platform API contract validation
-  - Implement method signature and property type checking
-  - Generate validation reports with actionable errors
-  - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
+  
+  **Success Criteria:**
+  - Interface validation detects API contract mismatches across platforms
+  - Method signatures validated for consistency (names, parameters, return types)
+  - Property types validated for consistency across platforms
+  - Validation reports provide actionable error messages with file paths
+  - Cross-platform consistency enforced automatically during builds
+  
+  **Primary Artifacts:**
+  - `src/build/validation/InterfaceValidator.ts` - Main validation class
+  - `src/build/validation/MethodSignatureValidator.ts` - Method validation
+  - `src/build/validation/PropertyTypeValidator.ts` - Property validation
+  - `src/build/validation/ValidationReport.ts` - Report generation
+  
+  **Completion Documentation:**
+  - `.kiro/specs/cross-platform-build-system/completion/task-6-completion.md`
+  - Document interface validation algorithm and cross-platform consistency approach
+  - Include validation report format and error message guidelines
 
 - [ ] 6.1 Create interface validation foundation
   - Create `InterfaceValidator` class with validation methods
@@ -240,11 +320,24 @@ This implementation plan converts the F2 design into a series of coding tasks th
   - _Requirements: 4.6, 10.2, 10.3, 10.4_
 
 - [ ] 7. Implement build orchestration and execution
-  - Implement parallel build execution
-  - Implement sequential build execution
-  - Implement incremental build support
-  - Add build progress tracking and reporting
-  - _Requirements: 6.2, 6.4, 6.5, 8.1, 8.2_
+  
+  **Success Criteria:**
+  - Parallel build execution works for multiple platforms simultaneously
+  - Sequential build execution provides clear progress feedback
+  - Incremental builds detect changes and rebuild only affected code
+  - Build progress tracking reports duration and status for each platform
+  - Build results aggregated and reported clearly
+  
+  **Primary Artifacts:**
+  - `src/build/orchestration/ParallelExecutor.ts` - Parallel build execution
+  - `src/build/orchestration/SequentialExecutor.ts` - Sequential execution
+  - `src/build/orchestration/IncrementalBuilder.ts` - Incremental build support
+  - `src/build/orchestration/ProgressTracker.ts` - Progress tracking
+  
+  **Completion Documentation:**
+  - `.kiro/specs/cross-platform-build-system/completion/task-7-completion.md`
+  - Document build orchestration strategy and incremental build approach
+  - Include progress tracking implementation and performance considerations
 
 - [ ] 7.1 Implement parallel build execution
   - Execute multiple platform builds simultaneously
@@ -275,11 +368,24 @@ This implementation plan converts the F2 design into a series of coding tasks th
   - _Requirements: 6.4, 6.5_
 
 - [ ] 8. Implement cross-platform validation
-  - Implement mathematical consistency validation
-  - Implement token value comparison across platforms
-  - Implement interface contract validation
-  - Generate cross-platform validation reports
-  - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7_
+  
+  **Success Criteria:**
+  - Mathematical consistency validated across all platforms
+  - Token values compared and verified consistent (same baseValue = same visual result)
+  - Interface contracts validated for API consistency
+  - Validation reports provide comprehensive cross-platform analysis
+  - Strategic flexibility tokens and accessibility requirements validated
+  
+  **Primary Artifacts:**
+  - `src/build/validation/MathematicalValidator.ts` - Mathematical consistency
+  - `src/build/validation/TokenComparator.ts` - Token value comparison
+  - `src/build/validation/CrossPlatformValidator.ts` - Overall validation
+  - `src/build/validation/ValidationReporter.ts` - Report generation
+  
+  **Completion Documentation:**
+  - `.kiro/specs/cross-platform-build-system/completion/task-8-completion.md`
+  - Document cross-platform validation strategy and mathematical consistency checks
+  - Include token comparison methodology and validation report format
 
 - [ ] 8.1 Implement mathematical consistency validation
   - Validate token values are consistent across platforms
@@ -310,11 +416,24 @@ This implementation plan converts the F2 design into a series of coding tasks th
   - _Requirements: 7.4, 7.7_
 
 - [ ] 9. Implement error handling and recovery
-  - Create error handling framework
-  - Implement error categorization and reporting
-  - Implement recovery strategies
-  - Add error documentation and suggestions
-  - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7_
+  
+  **Success Criteria:**
+  - Error handling framework categorizes errors (config, build, token, interface)
+  - Error recovery strategies implemented (retry, skip, fallback, abort)
+  - Error messages provide actionable suggestions and documentation links
+  - Error reports include context, file paths, and recovery recommendations
+  - Build failures handled gracefully with clear error communication
+  
+  **Primary Artifacts:**
+  - `src/build/errors/ErrorHandler.ts` - Main error handling class
+  - `src/build/errors/BuildError.ts` - Error interface and types
+  - `src/build/errors/RecoveryStrategy.ts` - Recovery implementations
+  - `src/build/errors/ErrorReporter.ts` - Error reporting
+  
+  **Completion Documentation:**
+  - `.kiro/specs/cross-platform-build-system/completion/task-9-completion.md`
+  - Document error handling framework and recovery strategy approach
+  - Include error categorization logic and suggestion generation methodology
 
 - [ ] 9.1 Create error handling framework
   - Define `BuildError` interface with error details
@@ -345,11 +464,24 @@ This implementation plan converts the F2 design into a series of coding tasks th
   - _Requirements: 10.1, 10.2, 10.3_
 
 - [ ] 10. Implement development workflow integration
-  - Add source map generation for debugging
-  - Implement development vs production build modes
-  - Add CI/CD integration support
-  - Create build configuration helpers
-  - _Requirements: 8.4, 8.5, 8.6, 8.7_
+  
+  **Success Criteria:**
+  - Source maps generated for all platforms (Swift, Kotlin, TypeScript)
+  - Development mode enables debugging; production mode optimizes builds
+  - CI/CD integration provides automated builds with machine-readable reports
+  - Build configuration helpers validate and assist with configuration
+  - Development workflow supports rapid iteration and debugging
+  
+  **Primary Artifacts:**
+  - `src/build/workflow/SourceMapGenerator.ts` - Source map generation
+  - `src/build/workflow/BuildMode.ts` - Development vs production modes
+  - `src/build/workflow/CICDIntegration.ts` - CI/CD support
+  - `src/build/workflow/ConfigHelpers.ts` - Configuration utilities
+  
+  **Completion Documentation:**
+  - `.kiro/specs/cross-platform-build-system/completion/task-10-completion.md`
+  - Document development workflow integration and build mode differences
+  - Include CI/CD integration approach and configuration helper utilities
 
 - [ ] 10.1 Implement source map generation
   - Generate source maps for iOS builds (Swift)
