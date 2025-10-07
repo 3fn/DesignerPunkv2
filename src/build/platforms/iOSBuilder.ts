@@ -8,6 +8,7 @@
  */
 
 import * as fs from 'fs/promises';
+import * as fsSync from 'fs';
 import * as path from 'path';
 import { PlatformBuilder, ComponentDefinition } from './PlatformBuilder';
 import { BuildConfig, iOSBuildOptions } from '../types/BuildConfig';
@@ -1305,6 +1306,225 @@ ${dependenciesSection}
     lines.push('');
     
     return lines.join('\n');
+  }
+  
+  /**
+   * Validate Package.swift manifest syntax
+   * 
+   * Validates that Package.swift has:
+   * - swift-tools-version declaration
+   * - import PackageDescription
+   * - Package definition with required fields
+   * 
+   * Requirements: 2.1, 2.7, 5.1
+   */
+  validatePackageManifest(manifest: string): {
+    valid: boolean;
+    errors: string[];
+    warnings: string[];
+  } {
+    const errors: string[] = [];
+    const warnings: string[] = [];
+    
+    // Check for swift-tools-version
+    if (!manifest.includes('swift-tools-version')) {
+      errors.push('Missing swift-tools-version declaration');
+    }
+    
+    // Check for import PackageDescription
+    if (!manifest.includes('import PackageDescription')) {
+      errors.push('Missing import PackageDescription');
+    }
+    
+    // Check for Package definition
+    if (!manifest.includes('let package = Package(')) {
+      errors.push('Missing Package definition');
+    }
+    
+    // Check for required Package fields
+    if (!manifest.includes('name:')) {
+      errors.push('Missing package name');
+    }
+    
+    if (!manifest.includes('platforms:')) {
+      warnings.push('Missing platforms specification');
+    }
+    
+    if (!manifest.includes('products:')) {
+      errors.push('Missing products specification');
+    }
+    
+    if (!manifest.includes('targets:')) {
+      errors.push('Missing targets specification');
+    }
+    
+    // Check for balanced parentheses
+    const openParens = (manifest.match(/\(/g) || []).length;
+    const closeParens = (manifest.match(/\)/g) || []).length;
+    if (openParens !== closeParens) {
+      errors.push(`Unbalanced parentheses: ${openParens} open, ${closeParens} close`);
+    }
+    
+    // Check for balanced brackets
+    const openBrackets = (manifest.match(/\[/g) || []).length;
+    const closeBrackets = (manifest.match(/\]/g) || []).length;
+    if (openBrackets !== closeBrackets) {
+      errors.push(`Unbalanced brackets: ${openBrackets} open, ${closeBrackets} close`);
+    }
+    
+    return {
+      valid: errors.length === 0,
+      errors,
+      warnings
+    };
+  }
+  
+  /**
+   * Validate Swift Package structure
+   * 
+   * Validates that the package has:
+   * - Package.swift manifest
+   * - Sources directory
+   * - Tests directory
+   * - Main module file
+   * 
+   * Requirements: 2.1, 2.5, 5.1
+   */
+  validatePackageStructure(packagePath: string): {
+    valid: boolean;
+    errors: string[];
+    warnings: string[];
+    hasPackageManifest: boolean;
+    hasSourcesDirectory: boolean;
+    hasTestsDirectory: boolean;
+    hasMainModule: boolean;
+  } {
+    const errors: string[] = [];
+    const warnings: string[] = [];
+    
+    let hasPackageManifest = false;
+    let hasSourcesDirectory = false;
+    let hasTestsDirectory = false;
+    let hasMainModule = false;
+    
+    try {
+      // Check for Package.swift
+      const manifestPath = path.join(packagePath, 'Package.swift');
+      try {
+        fsSync.accessSync(manifestPath);
+        hasPackageManifest = true;
+      } catch {
+        errors.push('Missing Package.swift manifest');
+      }
+      
+      // Check for Sources directory
+      const sourcesPath = path.join(packagePath, 'Sources');
+      try {
+        fsSync.accessSync(sourcesPath);
+        hasSourcesDirectory = true;
+      } catch {
+        errors.push('Missing Sources directory');
+      }
+      
+      // Check for Tests directory
+      const testsPath = path.join(packagePath, 'Tests');
+      try {
+        fsSync.accessSync(testsPath);
+        hasTestsDirectory = true;
+      } catch {
+        warnings.push('Missing Tests directory');
+      }
+      
+      // Check for main module
+      const modulePath = path.join(packagePath, 'Sources', this.buildConfig.productName);
+      try {
+        fsSync.accessSync(modulePath);
+        hasMainModule = true;
+      } catch {
+        errors.push(`Missing main module at Sources/${this.buildConfig.productName}`);
+      }
+    } catch (error) {
+      errors.push(`Error validating package structure: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+    
+    return {
+      valid: errors.length === 0,
+      errors,
+      warnings,
+      hasPackageManifest,
+      hasSourcesDirectory,
+      hasTestsDirectory,
+      hasMainModule
+    };
+  }
+  
+  /**
+   * Validate iOS-specific optimizations
+   * 
+   * Validates that components use:
+   * - SwiftUI framework
+   * - CGFloat for numeric values
+   * - Color extension for hex colors
+   * - Proper token references
+   * 
+   * Requirements: 2.7, 5.1
+   */
+  validateiOSOptimizations(componentCode: string): {
+    valid: boolean;
+    errors: string[];
+    warnings: string[];
+    usesSwiftUI: boolean;
+    usesCGFloat: boolean;
+    usesColorExtension: boolean;
+  } {
+    const errors: string[] = [];
+    const warnings: string[] = [];
+    
+    // Check for SwiftUI import
+    const usesSwiftUI = componentCode.includes('import SwiftUI');
+    if (!usesSwiftUI) {
+      errors.push('Component does not import SwiftUI');
+    }
+    
+    // Check for View protocol conformance
+    if (!componentCode.includes(': View')) {
+      errors.push('Component does not conform to View protocol');
+    }
+    
+    // Check for body property
+    if (!componentCode.includes('var body: some View')) {
+      errors.push('Component missing body property');
+    }
+    
+    // Check for CGFloat usage
+    const usesCGFloat = componentCode.includes('CGFloat');
+    if (!usesCGFloat) {
+      warnings.push('Component does not use CGFloat for numeric values');
+    }
+    
+    // Check for Color extension usage
+    const usesColorExtension = componentCode.includes('Color(hex:');
+    
+    // Check for token references
+    if (!componentCode.includes('Tokens.')) {
+      warnings.push('Component does not reference design system tokens');
+    }
+    
+    // Check for proper SwiftUI structure
+    if (usesSwiftUI) {
+      if (!componentCode.includes('public struct') && !componentCode.includes('struct')) {
+        errors.push('Component should be defined as a struct');
+      }
+    }
+    
+    return {
+      valid: errors.length === 0,
+      errors,
+      warnings,
+      usesSwiftUI,
+      usesCGFloat,
+      usesColorExtension
+    };
   }
 }
 

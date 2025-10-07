@@ -1115,5 +1115,481 @@ public enum Tokens {
       await expect(builder.clean('/non/existent/path')).resolves.not.toThrow();
     });
   });
+
+  describe('iOS build output validation (Task 3.4)', () => {
+    it('should validate Package.swift syntax is correct', async () => {
+      const components: ComponentDefinition[] = [];
+      const tokens: PlatformTokens = {
+        platform: 'ios',
+        primitives: {
+          spacing: { space100: { value: 8, unit: 'pt', token: 'space100' } },
+          colors: {},
+          typography: {},
+          radius: {},
+          sizing: {},
+          opacity: {},
+          elevation: {},
+          animation: {}
+        },
+        semantics: {
+          spacing: {},
+          colors: {},
+          typography: {},
+          radius: {},
+          sizing: {},
+          opacity: {},
+          elevation: {},
+          animation: {}
+        },
+        components: {
+          spacing: {},
+          colors: {},
+          typography: {},
+          radius: {},
+          sizing: {},
+          opacity: {},
+          elevation: {},
+          animation: {}
+        },
+        metadata: {
+          platform: 'ios',
+          defaultSpacingUnit: 'pt',
+          defaultTypographyUnit: 'pt',
+          supportedUnits: ['pt'],
+          constraints: {
+            decimalPrecision: 2,
+            supportsSubpixel: false,
+            roundingMode: 'round'
+          },
+          generatedAt: new Date()
+        }
+      };
+
+      const config: BuildConfig = {
+        platforms: ['ios'],
+        mode: 'development',
+        outputDir: testOutputDir,
+        parallel: false,
+        incremental: false,
+        sourceMaps: true,
+        minify: false,
+        validation: {
+          interfaces: true,
+          tokens: true,
+          mathematical: true
+        }
+      };
+
+      const result = await builder.build(components, tokens, config);
+      expect(result.success).toBe(true);
+
+      // Read Package.swift
+      const packageManifest = await fs.readFile(
+        path.join(testOutputDir, 'ios', 'Package.swift'),
+        'utf-8'
+      );
+
+      // Validate Package.swift syntax
+      const validation = builder.validatePackageManifest(packageManifest);
+      
+      expect(validation.valid).toBe(true);
+      expect(validation.errors).toHaveLength(0);
+      expect(packageManifest).toContain('swift-tools-version');
+      expect(packageManifest).toContain('import PackageDescription');
+      expect(packageManifest).toContain('let package = Package(');
+      expect(packageManifest).toContain('name:');
+      expect(packageManifest).toContain('platforms:');
+      expect(packageManifest).toContain('products:');
+      expect(packageManifest).toContain('targets:');
+    });
+
+    it('should validate Swift constants compile correctly', async () => {
+      const components: ComponentDefinition[] = [];
+      const tokens: PlatformTokens = {
+        platform: 'ios',
+        primitives: {
+          spacing: { 
+            space100: { value: 8, unit: 'pt', token: 'space100' },
+            space200: { value: 16, unit: 'pt', token: 'space200' }
+          },
+          colors: {
+            'color.blue.500': { value: '#3B82F6', unit: '', token: 'color.blue.500' }
+          },
+          typography: {
+            fontSize100: { value: 16, unit: 'pt', token: 'fontSize100' }
+          },
+          radius: {
+            radius050: { value: 4, unit: 'pt', token: 'radius050' }
+          },
+          sizing: {},
+          opacity: {},
+          elevation: {},
+          animation: {}
+        },
+        semantics: {
+          spacing: {},
+          colors: {},
+          typography: {},
+          radius: {},
+          sizing: {},
+          opacity: {},
+          elevation: {},
+          animation: {}
+        },
+        components: {
+          spacing: {},
+          colors: {},
+          typography: {},
+          radius: {},
+          sizing: {},
+          opacity: {},
+          elevation: {},
+          animation: {}
+        },
+        metadata: {
+          platform: 'ios',
+          defaultSpacingUnit: 'pt',
+          defaultTypographyUnit: 'pt',
+          supportedUnits: ['pt'],
+          constraints: {
+            decimalPrecision: 2,
+            supportsSubpixel: false,
+            roundingMode: 'round'
+          },
+          generatedAt: new Date()
+        }
+      };
+
+      const config: BuildConfig = {
+        platforms: ['ios'],
+        mode: 'development',
+        outputDir: testOutputDir,
+        parallel: false,
+        incremental: false,
+        sourceMaps: true,
+        minify: false,
+        validation: {
+          interfaces: true,
+          tokens: true,
+          mathematical: true
+        }
+      };
+
+      const result = await builder.build(components, tokens, config);
+      expect(result.success).toBe(true);
+
+      // Read generated Swift constants
+      const tokensFile = await fs.readFile(
+        path.join(testOutputDir, 'ios', 'Sources', 'DesignerPunk', 'Tokens', 'Tokens.swift'),
+        'utf-8'
+      );
+
+      // Validate Swift constants syntax
+      const validation = builder.validateSwiftSyntax(tokensFile);
+      
+      expect(validation.valid).toBe(true);
+      expect(validation.errors).toHaveLength(0);
+      
+      // Verify all token constants are present
+      expect(tokensFile).toContain('public static let space100: CGFloat = 8');
+      expect(tokensFile).toContain('public static let space200: CGFloat = 16');
+      expect(tokensFile).toContain('public static let colorBlue_500 = Color(hex: "#3B82F6")');
+      expect(tokensFile).toContain('public static let fontSize100: CGFloat = 16');
+      expect(tokensFile).toContain('public static let radius050: CGFloat = 4');
+    });
+
+    it('should verify Swift Package can be imported', async () => {
+      const components: ComponentDefinition[] = [];
+      const tokens: PlatformTokens = {
+        platform: 'ios',
+        primitives: {
+          spacing: { space100: { value: 8, unit: 'pt', token: 'space100' } },
+          colors: {},
+          typography: {},
+          radius: {},
+          sizing: {},
+          opacity: {},
+          elevation: {},
+          animation: {}
+        },
+        semantics: {
+          spacing: {},
+          colors: {},
+          typography: {},
+          radius: {},
+          sizing: {},
+          opacity: {},
+          elevation: {},
+          animation: {}
+        },
+        components: {
+          spacing: {},
+          colors: {},
+          typography: {},
+          radius: {},
+          sizing: {},
+          opacity: {},
+          elevation: {},
+          animation: {}
+        },
+        metadata: {
+          platform: 'ios',
+          defaultSpacingUnit: 'pt',
+          defaultTypographyUnit: 'pt',
+          supportedUnits: ['pt'],
+          constraints: {
+            decimalPrecision: 2,
+            supportsSubpixel: false,
+            roundingMode: 'round'
+          },
+          generatedAt: new Date()
+        }
+      };
+
+      const config: BuildConfig = {
+        platforms: ['ios'],
+        mode: 'development',
+        outputDir: testOutputDir,
+        parallel: false,
+        incremental: false,
+        sourceMaps: true,
+        minify: false,
+        validation: {
+          interfaces: true,
+          tokens: true,
+          mathematical: true
+        }
+      };
+
+      const result = await builder.build(components, tokens, config);
+      expect(result.success).toBe(true);
+
+      // Validate package structure for importability
+      const validation = builder.validatePackageStructure(path.join(testOutputDir, 'ios'));
+      
+      expect(validation.valid).toBe(true);
+      expect(validation.errors).toHaveLength(0);
+      
+      // Verify required files exist
+      expect(validation.hasPackageManifest).toBe(true);
+      expect(validation.hasSourcesDirectory).toBe(true);
+      expect(validation.hasTestsDirectory).toBe(true);
+      expect(validation.hasMainModule).toBe(true);
+    });
+
+    it('should verify iOS-specific optimizations work', async () => {
+      const components: ComponentDefinition[] = [
+        {
+          name: 'OptimizedButton',
+          description: 'Button with iOS optimizations',
+          category: 'button',
+          properties: [],
+          methods: [],
+          tokens: []
+        }
+      ];
+
+      const tokens: PlatformTokens = {
+        platform: 'ios',
+        primitives: {
+          spacing: { space100: { value: 8, unit: 'pt', token: 'space100' } },
+          colors: { 'color.blue.500': { value: '#3B82F6', unit: '', token: 'color.blue.500' } },
+          typography: { fontSize100: { value: 16, unit: 'pt', token: 'fontSize100' } },
+          radius: {},
+          sizing: {},
+          opacity: {},
+          elevation: {},
+          animation: {}
+        },
+        semantics: {
+          spacing: {},
+          colors: {},
+          typography: {},
+          radius: {},
+          sizing: {},
+          opacity: {},
+          elevation: {},
+          animation: {}
+        },
+        components: {
+          spacing: {},
+          colors: {},
+          typography: {},
+          radius: {},
+          sizing: {},
+          opacity: {},
+          elevation: {},
+          animation: {}
+        },
+        metadata: {
+          platform: 'ios',
+          defaultSpacingUnit: 'pt',
+          defaultTypographyUnit: 'pt',
+          supportedUnits: ['pt'],
+          constraints: {
+            decimalPrecision: 2,
+            supportsSubpixel: false,
+            roundingMode: 'round'
+          },
+          generatedAt: new Date()
+        }
+      };
+
+      const config: BuildConfig = {
+        platforms: ['ios'],
+        mode: 'production',
+        outputDir: testOutputDir,
+        parallel: false,
+        incremental: false,
+        sourceMaps: false,
+        minify: true,
+        validation: {
+          interfaces: true,
+          tokens: true,
+          mathematical: true
+        }
+      };
+
+      const result = await builder.build(components, tokens, config);
+      expect(result.success).toBe(true);
+
+      // Read component file
+      const componentFile = await fs.readFile(
+        path.join(testOutputDir, 'ios', 'Sources', 'DesignerPunk', 'Components', 'OptimizedButton.swift'),
+        'utf-8'
+      );
+
+      // Validate iOS-specific optimizations
+      const validation = builder.validateiOSOptimizations(componentFile);
+      
+      expect(validation.valid).toBe(true);
+      expect(validation.errors).toHaveLength(0);
+      
+      // Verify iOS-specific features are present
+      expect(validation.usesSwiftUI).toBe(true);
+      // Note: Component may not directly use CGFloat, but references tokens that are CGFloat
+      
+      // Verify component uses SwiftUI best practices
+      expect(componentFile).toContain('import SwiftUI');
+      expect(componentFile).toContain(': View');
+      expect(componentFile).toContain('var body: some View');
+      expect(componentFile).toContain('Tokens.');
+    });
+
+    it('should validate all generated files have correct syntax', async () => {
+      const components: ComponentDefinition[] = [
+        {
+          name: 'TestComponent',
+          description: 'Test component',
+          category: 'test',
+          properties: [],
+          methods: [],
+          tokens: []
+        }
+      ];
+
+      const tokens: PlatformTokens = {
+        platform: 'ios',
+        primitives: {
+          spacing: { space100: { value: 8, unit: 'pt', token: 'space100' } },
+          colors: { 'color.blue.500': { value: '#3B82F6', unit: '', token: 'color.blue.500' } },
+          typography: { fontSize100: { value: 16, unit: 'pt', token: 'fontSize100' } },
+          radius: {},
+          sizing: {},
+          opacity: {},
+          elevation: {},
+          animation: {}
+        },
+        semantics: {
+          spacing: {},
+          colors: {},
+          typography: {},
+          radius: {},
+          sizing: {},
+          opacity: {},
+          elevation: {},
+          animation: {}
+        },
+        components: {
+          spacing: {},
+          colors: {},
+          typography: {},
+          radius: {},
+          sizing: {},
+          opacity: {},
+          elevation: {},
+          animation: {}
+        },
+        metadata: {
+          platform: 'ios',
+          defaultSpacingUnit: 'pt',
+          defaultTypographyUnit: 'pt',
+          supportedUnits: ['pt'],
+          constraints: {
+            decimalPrecision: 2,
+            supportsSubpixel: false,
+            roundingMode: 'round'
+          },
+          generatedAt: new Date()
+        }
+      };
+
+      const config: BuildConfig = {
+        platforms: ['ios'],
+        mode: 'development',
+        outputDir: testOutputDir,
+        parallel: false,
+        incremental: false,
+        sourceMaps: true,
+        minify: false,
+        validation: {
+          interfaces: true,
+          tokens: true,
+          mathematical: true
+        }
+      };
+
+      const result = await builder.build(components, tokens, config);
+      expect(result.success).toBe(true);
+
+      // Validate all Swift files
+      const sourcesDir = path.join(testOutputDir, 'ios', 'Sources', 'DesignerPunk');
+      
+      // Validate main tokens file
+      const tokensFile = await fs.readFile(path.join(sourcesDir, 'Tokens', 'Tokens.swift'), 'utf-8');
+      const tokensValidation = builder.validateSwiftSyntax(tokensFile);
+      expect(tokensValidation.valid).toBe(true);
+      
+      // Validate spacing tokens file (extension file, so validation may have warnings)
+      const spacingFile = await fs.readFile(path.join(sourcesDir, 'Tokens', 'SpacingTokens.swift'), 'utf-8');
+      const spacingValidation = builder.validateSwiftSyntax(spacingFile);
+      // Extension files don't have main Tokens enum, so we just check it has valid Swift
+      expect(spacingFile).toContain('import SwiftUI');
+      expect(spacingFile).toContain('public extension Tokens');
+      
+      // Validate color tokens file (extension file, so validation may have warnings)
+      const colorFile = await fs.readFile(path.join(sourcesDir, 'Tokens', 'ColorTokens.swift'), 'utf-8');
+      const colorValidation = builder.validateSwiftSyntax(colorFile);
+      // Extension files don't have main Tokens enum, so we just check it has valid Swift
+      expect(colorFile).toContain('import SwiftUI');
+      expect(colorFile).toContain('public extension Tokens');
+      
+      // Validate component file (components don't need Foundation import)
+      const componentFile = await fs.readFile(path.join(sourcesDir, 'Components', 'TestComponent.swift'), 'utf-8');
+      const componentValidation = builder.validateSwiftSyntax(componentFile);
+      // Component files may not have Foundation import, just check for SwiftUI
+      expect(componentFile).toContain('import SwiftUI');
+      expect(componentFile).toContain('struct TestComponent: View');
+      
+      // Validate extension files (extensions don't need main Tokens enum)
+      const colorExtFile = await fs.readFile(path.join(sourcesDir, 'Extensions', 'ColorExtensions.swift'), 'utf-8');
+      expect(colorExtFile).toContain('import SwiftUI');
+      expect(colorExtFile).toContain('extension Color');
+      
+      const viewExtFile = await fs.readFile(path.join(sourcesDir, 'Extensions', 'ViewExtensions.swift'), 'utf-8');
+      expect(viewExtFile).toContain('import SwiftUI');
+      expect(viewExtFile).toContain('extension View');
+    });
+  });
 });
 

@@ -9,6 +9,25 @@
 // Main orchestrator
 export { BuildOrchestrator } from './BuildOrchestrator';
 
+// Orchestration strategies
+export {
+  ParallelExecutor,
+  SequentialExecutor,
+  IncrementalBuilder,
+} from './orchestration';
+
+export type {
+  ParallelExecutionOptions,
+  ParallelExecutionResult,
+  SequentialExecutionOptions,
+  SequentialExecutionResult,
+  SequentialProgress,
+  IncrementalBuildOptions,
+  IncrementalBuildResult,
+  FileChange,
+  BuildCacheEntry,
+} from './orchestration';
+
 // Type exports
 export type {
   BuildOrchestrator as IBuildOrchestrator,
