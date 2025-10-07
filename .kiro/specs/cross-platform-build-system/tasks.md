@@ -11,6 +11,43 @@
 
 This implementation plan converts the F2 design into a series of coding tasks that build the Cross-Platform Build System incrementally. Each task builds on previous work, with early validation of core concepts before expanding functionality.
 
+### Parent-Level Validation Approach
+
+**When all subtasks for a parent task are complete, validation is triggered automatically:**
+
+1. **Automatic Syntax Validation** (Non-Negotiable)
+   - Runs `getDiagnostics` on all task artifacts
+   - Checks for TypeScript compilation errors
+   - **Blocks completion if syntax errors found**
+   - Must pass before proceeding to success criteria review
+
+2. **Manual Success Criteria Review** (Human Judgment)
+   - Presents the Success Criteria checklist for the parent task
+   - Human (or AI with human approval) verifies each criterion
+   - Allows flexibility for "done enough" decisions
+   - Documents what was validated in completion doc
+
+**Validation Flow:**
+```
+All subtasks complete → Trigger parent task validation
+  ↓
+Automatic: Syntax validation (getDiagnostics)
+  ├─ FAIL → Show errors, block completion, offer to fix
+  └─ PASS → Proceed to manual review
+  ↓
+Manual: Present Success Criteria checklist
+  ↓
+Human reviews and confirms
+  ↓
+Task marked complete, completion doc created with validation results
+```
+
+**Benefits:**
+- Prevents syntax corruption (automatic gate)
+- Ensures functional completeness (manual review)
+- ~60% fewer tokens than subtask-level validation
+- Single validation pass per parent task
+
 ### F1/F2 Relationship
 
 **F1 (Mathematical Token System)** provides:
@@ -31,7 +68,7 @@ This implementation plan converts the F2 design into a series of coding tasks th
 
 ## Task List
 
-- [ ] 1. Set up build system foundation and core interfaces
+- [x] 1. Set up build system foundation and core interfaces
   
   **Success Criteria:**
   - Complete directory structure supports modular build system development
@@ -46,12 +83,18 @@ This implementation plan converts the F2 design into a series of coding tasks th
   - `src/build/BuildOrchestrator.ts` - Main orchestrator implementation
   - `src/build/index.ts` - Module exports
   
+  **Validation:**
+  - **Automatic Syntax Validation**: Run `getDiagnostics` on all task artifacts
+  - **Success Criteria Review**: Verify each criterion above before marking complete
+  - **Validation Scope**: All files in `src/build/` created during this task
+  
   **Completion Documentation:**
   - `.kiro/specs/cross-platform-build-system/completion/task-1-completion.md`
   - Document directory structure rationale and interface design decisions
   - Include orchestrator architecture and extensibility approach
+  - Include validation results (syntax check + success criteria verification)
 
-- [ ] 1.1 Create build system directory structure
+- [x] 1.1 Create build system directory structure
   - Create `src/build/` directory for build orchestration
   - Create `src/build/platforms/` for platform-specific builders
   - Create `src/build/validation/` for interface and token validation
@@ -59,21 +102,21 @@ This implementation plan converts the F2 design into a series of coding tasks th
   - Create `src/build/types/` for TypeScript interfaces
   - _Requirements: 1.1, 6.1_
 
-- [ ] 1.2 Define core build interfaces
+- [x] 1.2 Define core build interfaces
   - Create `BuildOrchestrator` interface with configuration and execution methods
   - Create `BuildConfig` interface with platform selection and build options
   - Create `BuildResult` interface for build output and status
   - Create `Platform` type definition (iOS, Android, Web)
   - _Requirements: 1.1, 6.1, 6.2_
 
-- [ ] 1.3 Implement basic BuildOrchestrator
+- [x] 1.3 Implement basic BuildOrchestrator
   - Implement configuration validation
   - Implement platform selection logic
   - Implement build status tracking
   - Create error handling foundation
   - _Requirements: 1.1, 6.1, 6.3_
 
-- [ ] 2. Implement token integration layer with F1
+- [x] 2. Implement token integration layer with F1
   
   **Success Criteria:**
   - Token integration interfaces defined and exported
@@ -90,37 +133,44 @@ This implementation plan converts the F2 design into a series of coding tasks th
   - `src/build/tokens/ComponentToken.ts` - Component token generation
   - `src/build/tokens/UnitConverter.ts` - Cross-platform unit conversion
   
+  **Validation:**
+  - **Automatic Syntax Validation**: Run `getDiagnostics` on all task artifacts
+  - **Success Criteria Review**: Verify each criterion above before marking complete
+  - **Validation Scope**: All files in `src/build/tokens/` created during this task
+  - **Integration Test**: Verify F1 token imports work and unit conversion produces correct values
+  
   **Completion Documentation:**
   - `.kiro/specs/cross-platform-build-system/completion/task-2-completion.md`
   - Document token selection priority algorithm and F1 integration approach
   - Include unit conversion formulas and mathematical consistency validation
+  - Include validation results (syntax check + success criteria verification)
   
   **F1 Integration Note:**
   - F1 provides unitless baseValues; F2 converts to platform-specific units
   - Uses F1 TokenEngine, PrimitiveTokenRegistry, SemanticTokenRegistry
 
-- [ ] 2.1 Create token integration interfaces
+- [x] 2.1 Create token integration interfaces
   - Create `TokenIntegrator` interface with platform-specific token methods
   - Create `TokenSelection` interface with priority reasoning
   - Create `PlatformTokens` interface for platform-specific values
   - Create `ComponentToken` interface for component-specific tokens
   - _Requirements: 3.1, 3.2, 9.1_
 
-- [ ] 2.2 Implement token selection priority logic
+- [x] 2.2 Implement token selection priority logic
   - Implement semantic token selection (first priority)
   - Implement primitive token selection (second priority)
   - Implement component token generation (fallback)
   - Document token selection reasoning
   - _Requirements: 9.1, 9.2, 9.3, 9.4_
 
-- [ ] 2.3 Implement cross-platform unit conversion
+- [x] 2.3 Implement cross-platform unit conversion
   - Implement iOS unit conversion (F1 baseValue → Swift constants in pt)
   - Implement Android unit conversion (F1 baseValue → Kotlin constants in dp/sp)
   - Implement Web unit conversion (F1 baseValue → CSS custom properties in px/rem)
   - Validate mathematical consistency across platforms
   - _Requirements: 3.4, 3.5, 3.6, 3.7_
 
-- [ ] 2.4 Integrate with F1 token system
+- [x] 2.4 Integrate with F1 token system
   - Import primitive tokens from F1 (space100, color.blue500, etc.)
   - Import semantic tokens from F1 (space.normal, color.primary, etc.)
   - Validate token references are valid (tokens exist in F1)
@@ -142,26 +192,33 @@ This implementation plan converts the F2 design into a series of coding tasks th
   - Generated: Swift token constants files
   - Generated: SwiftUI component structure
   
+  **Validation:**
+  - **Automatic Syntax Validation**: Run `getDiagnostics` on TypeScript builder files
+  - **Success Criteria Review**: Verify each criterion above before marking complete
+  - **Validation Scope**: `src/build/platforms/iOSBuilder.ts` and related files
+  - **Generated Code Check**: Verify Package.swift and Swift constants have valid syntax
+  
   **Completion Documentation:**
   - `.kiro/specs/cross-platform-build-system/completion/task-3-completion.md`
   - Document Swift Package generation approach and token conversion to pt units
   - Include SwiftUI structure and iOS-specific optimization strategies
+  - Include validation results (syntax check + success criteria verification)
 
-- [ ] 3.1 Create iOS builder foundation
+- [x] 3.1 Create iOS builder foundation
   - Create `iOSBuilder` class implementing platform builder interface
   - Implement Swift Package manifest generation (Package.swift)
   - Set up Swift source file structure
   - Create iOS-specific build configuration
   - _Requirements: 1.3, 2.1_
 
-- [ ] 3.2 Implement Swift token generation
+- [x] 3.2 Implement Swift token generation
   - Generate Swift constants from primitive tokens (pt units)
   - Generate Swift constants from semantic tokens
   - Generate Swift constants from component tokens (if needed)
   - Validate Swift constant syntax
   - _Requirements: 3.4, 3.7_
 
-- [ ] 3.3 Implement Swift Package structure
+- [x] 3.3 Implement Swift Package structure
   - Generate Package.swift with proper dependencies
   - Create Swift source file organization
   - Set up SwiftUI component structure
@@ -190,10 +247,17 @@ This implementation plan converts the F2 design into a series of coding tasks th
   - Generated: Kotlin token constants files
   - Generated: Jetpack Compose component structure
   
+  **Validation:**
+  - **Automatic Syntax Validation**: Run `getDiagnostics` on TypeScript builder files
+  - **Success Criteria Review**: Verify each criterion above before marking complete
+  - **Validation Scope**: `src/build/platforms/AndroidBuilder.ts` and related files
+  - **Generated Code Check**: Verify build.gradle.kts and Kotlin constants have valid syntax
+  
   **Completion Documentation:**
   - `.kiro/specs/cross-platform-build-system/completion/task-4-completion.md`
   - Document Gradle module generation and token conversion to dp/sp units
   - Include Jetpack Compose structure and Android-specific optimizations
+  - Include validation results (syntax check + success criteria verification)
 
 - [ ] 4.1 Create Android builder foundation
   - Create `AndroidBuilder` class implementing platform builder interface
@@ -238,10 +302,17 @@ This implementation plan converts the F2 design into a series of coding tasks th
   - Generated: CSS custom properties files
   - Generated: Web Component (Lit) structure
   
+  **Validation:**
+  - **Automatic Syntax Validation**: Run `getDiagnostics` on TypeScript builder files
+  - **Success Criteria Review**: Verify each criterion above before marking complete
+  - **Validation Scope**: `src/build/platforms/WebBuilder.ts` and related files
+  - **Generated Code Check**: Verify package.json and CSS have valid syntax
+  
   **Completion Documentation:**
   - `.kiro/specs/cross-platform-build-system/completion/task-5-completion.md`
   - Document NPM package generation and token conversion to px/rem units
   - Include Web Component structure and web-specific optimizations
+  - Include validation results (syntax check + success criteria verification)
 
 - [ ] 5.1 Create Web builder foundation
   - Create `WebBuilder` class implementing platform builder interface
@@ -286,10 +357,17 @@ This implementation plan converts the F2 design into a series of coding tasks th
   - `src/build/validation/PropertyTypeValidator.ts` - Property validation
   - `src/build/validation/ValidationReport.ts` - Report generation
   
+  **Validation:**
+  - **Automatic Syntax Validation**: Run `getDiagnostics` on all task artifacts
+  - **Success Criteria Review**: Verify each criterion above before marking complete
+  - **Validation Scope**: All files in `src/build/validation/` created during this task
+  - **Functional Test**: Run validation on sample interfaces to verify detection works
+  
   **Completion Documentation:**
   - `.kiro/specs/cross-platform-build-system/completion/task-6-completion.md`
   - Document interface validation algorithm and cross-platform consistency approach
   - Include validation report format and error message guidelines
+  - Include validation results (syntax check + success criteria verification)
 
 - [ ] 6.1 Create interface validation foundation
   - Create `InterfaceValidator` class with validation methods
@@ -334,10 +412,17 @@ This implementation plan converts the F2 design into a series of coding tasks th
   - `src/build/orchestration/IncrementalBuilder.ts` - Incremental build support
   - `src/build/orchestration/ProgressTracker.ts` - Progress tracking
   
+  **Validation:**
+  - **Automatic Syntax Validation**: Run `getDiagnostics` on all task artifacts
+  - **Success Criteria Review**: Verify each criterion above before marking complete
+  - **Validation Scope**: All files in `src/build/orchestration/` created during this task
+  - **Functional Test**: Execute sample builds to verify parallel/sequential execution works
+  
   **Completion Documentation:**
   - `.kiro/specs/cross-platform-build-system/completion/task-7-completion.md`
   - Document build orchestration strategy and incremental build approach
   - Include progress tracking implementation and performance considerations
+  - Include validation results (syntax check + success criteria verification)
 
 - [ ] 7.1 Implement parallel build execution
   - Execute multiple platform builds simultaneously
@@ -382,10 +467,17 @@ This implementation plan converts the F2 design into a series of coding tasks th
   - `src/build/validation/CrossPlatformValidator.ts` - Overall validation
   - `src/build/validation/ValidationReporter.ts` - Report generation
   
+  **Validation:**
+  - **Automatic Syntax Validation**: Run `getDiagnostics` on all task artifacts
+  - **Success Criteria Review**: Verify each criterion above before marking complete
+  - **Validation Scope**: All files in `src/build/validation/` created during this task
+  - **Functional Test**: Run cross-platform validation on sample tokens to verify consistency checks
+  
   **Completion Documentation:**
   - `.kiro/specs/cross-platform-build-system/completion/task-8-completion.md`
   - Document cross-platform validation strategy and mathematical consistency checks
   - Include token comparison methodology and validation report format
+  - Include validation results (syntax check + success criteria verification)
 
 - [ ] 8.1 Implement mathematical consistency validation
   - Validate token values are consistent across platforms
@@ -430,10 +522,17 @@ This implementation plan converts the F2 design into a series of coding tasks th
   - `src/build/errors/RecoveryStrategy.ts` - Recovery implementations
   - `src/build/errors/ErrorReporter.ts` - Error reporting
   
+  **Validation:**
+  - **Automatic Syntax Validation**: Run `getDiagnostics` on all task artifacts
+  - **Success Criteria Review**: Verify each criterion above before marking complete
+  - **Validation Scope**: All files in `src/build/errors/` created during this task
+  - **Functional Test**: Trigger sample errors to verify categorization and recovery strategies work
+  
   **Completion Documentation:**
   - `.kiro/specs/cross-platform-build-system/completion/task-9-completion.md`
   - Document error handling framework and recovery strategy approach
   - Include error categorization logic and suggestion generation methodology
+  - Include validation results (syntax check + success criteria verification)
 
 - [ ] 9.1 Create error handling framework
   - Define `BuildError` interface with error details
@@ -478,10 +577,17 @@ This implementation plan converts the F2 design into a series of coding tasks th
   - `src/build/workflow/CICDIntegration.ts` - CI/CD support
   - `src/build/workflow/ConfigHelpers.ts` - Configuration utilities
   
+  **Validation:**
+  - **Automatic Syntax Validation**: Run `getDiagnostics` on all task artifacts
+  - **Success Criteria Review**: Verify each criterion above before marking complete
+  - **Validation Scope**: All files in `src/build/workflow/` created during this task
+  - **Functional Test**: Test development vs production builds and verify CI/CD integration works
+  
   **Completion Documentation:**
   - `.kiro/specs/cross-platform-build-system/completion/task-10-completion.md`
   - Document development workflow integration and build mode differences
   - Include CI/CD integration approach and configuration helper utilities
+  - Include validation results (syntax check + success criteria verification)
 
 - [ ] 10.1 Implement source map generation
   - Generate source maps for iOS builds (Swift)

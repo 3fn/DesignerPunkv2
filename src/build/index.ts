@@ -1,0 +1,43 @@
+/**
+ * Build System Module Exports
+ * 
+ * Main entry point for the Cross-Platform Build System.
+ * Exports orchestrator, types, and utilities for building
+ * platform-specific packages.
+ */
+
+// Main orchestrator
+export { BuildOrchestrator } from './BuildOrchestrator';
+
+// Type exports
+export type {
+  BuildOrchestrator as IBuildOrchestrator,
+  BuildStatus,
+  ValidationResult,
+} from './types/BuildOrchestrator';
+
+export type {
+  BuildConfig,
+  BuildMode,
+  ValidationOptions,
+  iOSBuildOptions,
+  AndroidBuildOptions,
+  WebBuildOptions,
+} from './types/BuildConfig';
+
+export { DEFAULT_BUILD_CONFIG } from './types/BuildConfig';
+
+export type {
+  BuildResult,
+  BuildResultSummary,
+  BuildError,
+  ErrorCategory,
+  ErrorSeverity,
+} from './types/BuildResult';
+
+export type {
+  Platform,
+  PlatformMetadata,
+} from './types/Platform';
+
+export { PLATFORM_METADATA } from './types/Platform';
