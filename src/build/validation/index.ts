@@ -36,6 +36,24 @@ export type {
   TouchTargetIssue,
 } from './MathematicalConsistencyValidator';
 
+// Token value comparator (Task 8.2)
+export { TokenComparator } from './TokenComparator';
+export type {
+  TokenComparisonResult,
+  TokenValueDifference,
+  TokenComparisonRequest,
+  TokenComparisonOptions,
+  BatchComparisonResult,
+} from './TokenComparator';
+
+// Interface contract validator (Task 8.3)
+export { InterfaceContractValidator } from './InterfaceContractValidator';
+export type {
+  InterfaceContractValidationResult,
+  ApiDifference,
+  AffectedFile,
+} from './InterfaceContractValidator';
+
 export type {
   InterfaceDefinition,
   PropertyDefinition,

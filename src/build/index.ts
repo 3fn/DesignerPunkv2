@@ -60,3 +60,14 @@ export type {
 } from './types/Platform';
 
 export { PLATFORM_METADATA } from './types/Platform';
+
+// Workflow utilities
+export {
+  SourceMapGenerator,
+} from './workflow';
+
+export type {
+  SourceMapOptions,
+  PlatformSourceMapConfig,
+  SourceMapResult,
+} from './workflow';
