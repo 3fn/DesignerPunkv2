@@ -397,7 +397,7 @@ Task marked complete, completion doc created with validation results
   - Generate summary of validation status
   - _Requirements: 4.6, 10.2, 10.3, 10.4_
 
-- [ ] 7. Implement build orchestration and execution
+- [x] 7. Implement build orchestration and execution
   
   **Success Criteria:**
   - Parallel build execution works for multiple platforms simultaneously
@@ -462,10 +462,10 @@ Task marked complete, completion doc created with validation results
   - Strategic flexibility tokens and accessibility requirements validated
   
   **Primary Artifacts:**
-  - `src/build/validation/MathematicalValidator.ts` - Mathematical consistency
+  - `src/build/validation/MathematicalConsistencyValidator.ts` - Mathematical consistency (wraps F1 validators)
   - `src/build/validation/TokenComparator.ts` - Token value comparison
   - `src/build/validation/CrossPlatformValidator.ts` - Overall validation
-  - `src/build/validation/ValidationReporter.ts` - Report generation
+  - `src/build/validation/ValidationReporter.ts` - Report generation (already exists from Task 6)
   
   **Validation:**
   - **Automatic Syntax Validation**: Run `getDiagnostics` on all task artifacts
@@ -479,33 +479,65 @@ Task marked complete, completion doc created with validation results
   - Include token comparison methodology and validation report format
   - Include validation results (syntax check + success criteria verification)
 
-- [ ] 8.1 Implement mathematical consistency validation
-  - Validate token values are consistent across platforms
-  - Check mathematical relationships are preserved
-  - Verify strategic flexibility tokens maintained
-  - Validate accessibility requirements met
-  - _Requirements: 7.2, 7.3_
+- [x] 7.5 Refactor iOS validation for architectural consistency
+  - **Purpose**: Extract iOS validation from builder to match Android/Web pattern
+  - **Context**: Task 3.4 embedded validation in iOSBuilder; Tasks 4.4/5.4 created separate validators
+  - Create `src/build/validation/iOSBuildValidator.ts` matching Android/Web pattern
+  - Extract validation methods from `iOSBuilder.ts`:
+    - `validatePackageManifest()` - Package.swift syntax validation
+    - `validatePackageStructure()` - Swift Package structure validation
+    - `validateiOSOptimizations()` - iOS-specific optimizations validation
+    - `validateSwiftSyntax()` - Swift constants syntax validation
+  - Update `iOSBuilder.ts` to use separate validator
+  - Update tests to reflect new structure
+  - Verify all existing tests still pass
+  - _Rationale: Ensures consistent architecture across all three platforms for Task 8 integration_
+  - _Requirements: 2.1, 2.7, 5.1 (same as original Task 3.4)_
 
-- [ ] 8.2 Implement token value comparison
-  - Compare primitive token values across platforms
-  - Compare semantic token values across platforms
-  - Compare component token values across platforms
-  - Report specific token values that differ
+- [x] 7.6 Align Task 8 file naming with implementation
+  - **Purpose**: Resolve naming inconsistency between tasks.md and actual files
+  - **Context**: Tasks.md specifies `MathematicalValidator.ts`, but file created as `MathematicalConsistencyValidator.ts`
+  - Update Task 8 Primary Artifacts (line 465) to use `MathematicalConsistencyValidator.ts`
+  - Document naming decision: "Consistency" clarifies cross-platform mathematical consistency validation
+  - Aligns with F1's `CrossPlatformConsistencyValidator` that it wraps
+  - _Rationale: Clear communication and alignment between specification and implementation_
+
+- [x] 8.1 Implement mathematical consistency validation
+  - **F1 Integration Note**: Reuse F1 validators by creating F2 wrapper that adapts them to build context
+  - Validate token values are consistent across platforms (reuse F1's `CrossPlatformConsistencyValidator`)
+  - Check mathematical relationships are preserved (reuse F1's `ThreeTierValidator`)
+  - Verify strategic flexibility tokens maintained (reuse F1's `BaselineGridValidator`)
+  - **NEW**: Validate accessibility requirements met (WCAG 2.1 AA contrast ratios, touch target sizes)
+  - _Requirements: 7.2, 7.3_
+  - _F1 Dependencies: `src/validators/CrossPlatformConsistencyValidator.ts`, `BaselineGridValidator.ts`, `ThreeTierValidator.ts`_
+
+- [x] 8.2 Implement token value comparison
+  - **F1 Integration Note**: Leverage F1's token comparison logic from `CrossPlatformConsistencyValidator`
+  - Compare primitive token values across platforms (use F1's platform value conversion)
+  - Compare semantic token values across platforms (use F1's semantic token resolution)
+  - Compare component token values across platforms (new - F2 specific)
+  - Report specific token values that differ (adapt F1's `DetailedConsistencyResult` format)
   - _Requirements: 7.2, 7.5_
+  - _F1 Dependencies: `src/validators/CrossPlatformConsistencyValidator.ts`, `src/providers/UnitProvider.ts`_
 
 - [ ] 8.3 Implement interface contract validation
-  - Validate all platforms implement same API
-  - Check method signatures match across platforms
-  - Verify property types match across platforms
-  - Report specific API differences
+  - **Note**: This is F2-specific validation (not in F1) - validates generated platform code interfaces
+  - Validate all platforms implement same API (parse Swift/Kotlin/TypeScript interfaces)
+  - Check method signatures match across platforms (compare parameter types, return types)
+  - Verify property types match across platforms (ensure type equivalence)
+  - Report specific API differences (provide file paths and line numbers)
   - _Requirements: 7.1, 7.6_
+  - _Related: Task 6 already implemented `InterfaceValidator.ts` - may be able to reuse_
 
 - [ ] 8.4 Generate cross-platform validation reports
-  - Create comprehensive validation reports
-  - Include mathematical consistency results
-  - Include interface validation results
-  - Provide actionable recommendations
+  - **Integration Note**: Aggregate results from F1 validators and F2 interface validation
+  - Create comprehensive validation reports (combine mathematical + interface validation)
+  - Include mathematical consistency results (from F1 validators via Task 8.1)
+  - Include token comparison results (from Task 8.2)
+  - Include interface validation results (from Task 8.3)
+  - Provide actionable recommendations (adapt F1's suggestion format for build context)
   - _Requirements: 7.4, 7.7_
+  - _Dependencies: Results from Tasks 8.1, 8.2, 8.3_
 
 - [ ] 9. Implement error handling and recovery
   
