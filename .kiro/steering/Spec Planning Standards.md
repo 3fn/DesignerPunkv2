@@ -1,8 +1,3 @@
----
-inclusion: conditional
-trigger: spec-creation
----
-
 # Spec Planning Standards
 
 **Date**: January 10, 2025  
@@ -11,6 +6,9 @@ trigger: spec-creation
 **Scope**: cross-project  
 **Trigger**: Conditional - loaded when AI Agent creates or updates specs
 
+---
+inclusion: conditional
+trigger: spec-work
 ---
 
 ## Overview

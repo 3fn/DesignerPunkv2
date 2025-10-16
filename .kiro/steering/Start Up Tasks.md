@@ -1,3 +1,6 @@
+---
+inclusion: always
+---
 1. Check today's actual date
 
 2. **CRITICAL: This project uses Jest, NOT Vitest**

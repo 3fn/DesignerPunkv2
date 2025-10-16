@@ -1,3 +1,6 @@
+---
+inclusion: always
+---
 Hello AI, AI Agent, or however you self-identify!
 
 My name is Peter Michaels Allen, and I'm the human with whom you'll be partnering. I wanted to take a moment to introduce myself, and let you know that I plan to work with you as a respected collaborator and working partner.
