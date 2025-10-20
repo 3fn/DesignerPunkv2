@@ -1,0 +1,214 @@
+[
+  {
+    "id": "analysis-1761000267860",
+    "timestamp": "2025-10-20T22:44:27.860Z",
+    "scope": {
+      "toCommit": "HEAD",
+      "completionDocuments": [],
+      "analysisDate": "2025-10-20T22:44:27.710Z"
+    },
+    "result": {
+      "scope": {
+        "toCommit": "HEAD",
+        "completionDocuments": [],
+        "analysisDate": "2025-10-20T22:44:27.710Z"
+      },
+      "changes": {
+        "breakingChanges": [],
+        "newFeatures": [],
+        "bugFixes": [],
+        "improvements": [],
+        "documentation": [],
+        "metadata": {
+          "documentsAnalyzed": 0,
+          "extractionConfidence": 0.1,
+          "ambiguousItems": [],
+          "filteredItems": [],
+          "deduplication": {
+            "originalCount": 0,
+            "duplicatesRemoved": 0,
+            "uncertainDuplicates": [],
+            "effectiveness": 0
+          }
+        }
+      },
+      "versionRecommendation": {
+        "currentVersion": "1.0.0",
+        "recommendedVersion": "1.0.0",
+        "bumpType": "none",
+        "rationale": "No version bump required - only documentation or non-functional changes detected",
+        "confidence": 0.1,
+        "evidence": []
+      },
+      "releaseNotes": "## 1.0.0\n*Released: 2025-10-20*\n\nNo significant changes in this release.",
+      "confidence": {
+        "overall": 0.05,
+        "extraction": 0.1,
+        "categorization": 0.1,
+        "deduplication": 0.95,
+        "versionCalculation": 0.1
+      }
+    },
+    "options": {},
+    "duration": 240
+  },
+  {
+    "id": "analysis-1761000205512",
+    "timestamp": "2025-10-20T22:43:25.512Z",
+    "scope": {
+      "toCommit": "HEAD",
+      "completionDocuments": [],
+      "analysisDate": "2025-10-20T22:43:25.361Z"
+    },
+    "result": {
+      "scope": {
+        "toCommit": "HEAD",
+        "completionDocuments": [],
+        "analysisDate": "2025-10-20T22:43:25.361Z"
+      },
+      "changes": {
+        "breakingChanges": [],
+        "newFeatures": [],
+        "bugFixes": [],
+        "improvements": [],
+        "documentation": [],
+        "metadata": {
+          "documentsAnalyzed": 0,
+          "extractionConfidence": 0.1,
+          "ambiguousItems": [],
+          "filteredItems": [],
+          "deduplication": {
+            "originalCount": 0,
+            "duplicatesRemoved": 0,
+            "uncertainDuplicates": [],
+            "effectiveness": 0
+          }
+        }
+      },
+      "versionRecommendation": {
+        "currentVersion": "1.0.0",
+        "recommendedVersion": "1.0.0",
+        "bumpType": "none",
+        "rationale": "No version bump required - only documentation or non-functional changes detected",
+        "confidence": 0.1,
+        "evidence": []
+      },
+      "releaseNotes": "## 1.0.0\n*Released: 2025-10-20*\n\nNo significant changes in this release.",
+      "confidence": {
+        "overall": 0.05,
+        "extraction": 0.1,
+        "categorization": 0.1,
+        "deduplication": 0.95,
+        "versionCalculation": 0.1
+      }
+    },
+    "options": {},
+    "duration": 241
+  },
+  {
+    "id": "analysis-1761000194134",
+    "timestamp": "2025-10-20T22:43:14.134Z",
+    "scope": {
+      "toCommit": "HEAD",
+      "completionDocuments": [],
+      "analysisDate": "2025-10-20T22:43:13.985Z"
+    },
+    "result": {
+      "scope": {
+        "toCommit": "HEAD",
+        "completionDocuments": [],
+        "analysisDate": "2025-10-20T22:43:13.985Z"
+      },
+      "changes": {
+        "breakingChanges": [],
+        "newFeatures": [],
+        "bugFixes": [],
+        "improvements": [],
+        "documentation": [],
+        "metadata": {
+          "documentsAnalyzed": 0,
+          "extractionConfidence": 0.1,
+          "ambiguousItems": [],
+          "filteredItems": [],
+          "deduplication": {
+            "originalCount": 0,
+            "duplicatesRemoved": 0,
+            "uncertainDuplicates": [],
+            "effectiveness": 0
+          }
+        }
+      },
+      "versionRecommendation": {
+        "currentVersion": "1.0.0",
+        "recommendedVersion": "1.0.0",
+        "bumpType": "none",
+        "rationale": "No version bump required - only documentation or non-functional changes detected",
+        "confidence": 0.1,
+        "evidence": []
+      },
+      "releaseNotes": "## 1.0.0\n*Released: 2025-10-20*\n\nNo significant changes in this release.",
+      "confidence": {
+        "overall": 0.05,
+        "extraction": 0.1,
+        "categorization": 0.1,
+        "deduplication": 0.95,
+        "versionCalculation": 0.1
+      }
+    },
+    "options": {},
+    "duration": 239
+  },
+  {
+    "id": "analysis-1761000170322",
+    "timestamp": "2025-10-20T22:42:50.322Z",
+    "scope": {
+      "toCommit": "HEAD",
+      "completionDocuments": [],
+      "analysisDate": "2025-10-20T22:42:50.167Z"
+    },
+    "result": {
+      "scope": {
+        "toCommit": "HEAD",
+        "completionDocuments": [],
+        "analysisDate": "2025-10-20T22:42:50.167Z"
+      },
+      "changes": {
+        "breakingChanges": [],
+        "newFeatures": [],
+        "bugFixes": [],
+        "improvements": [],
+        "documentation": [],
+        "metadata": {
+          "documentsAnalyzed": 0,
+          "extractionConfidence": 0.1,
+          "ambiguousItems": [],
+          "filteredItems": [],
+          "deduplication": {
+            "originalCount": 0,
+            "duplicatesRemoved": 0,
+            "uncertainDuplicates": [],
+            "effectiveness": 0
+          }
+        }
+      },
+      "versionRecommendation": {
+        "currentVersion": "1.0.0",
+        "recommendedVersion": "1.0.0",
+        "bumpType": "none",
+        "rationale": "No version bump required - only documentation or non-functional changes detected",
+        "confidence": 0.1,
+        "evidence": []
+      },
+      "releaseNotes": "## 1.0.0\n*Released: 2025-10-20*\n\nNo significant changes in this release.",
+      "confidence": {
+        "overall": 0.05,
+        "extraction": 0.1,
+        "categorization": 0.1,
+        "deduplication": 0.95,
+        "versionCalculation": 0.1
+      }
+    },
+    "options": {},
+    "duration": 252
+  }
+]

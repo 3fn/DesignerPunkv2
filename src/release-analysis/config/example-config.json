@@ -1,0 +1,49 @@
+{
+  "extraction": {
+    "breakingChangeKeywords": [
+      "breaking change",
+      "breaking",
+      "incompatible",
+      "removes",
+      "deprecated",
+      "migration required"
+    ],
+    "featureKeywords": [
+      "new feature",
+      "adds functionality",
+      "enhancement",
+      "implements"
+    ],
+    "confidenceThresholds": {
+      "minimumConfidence": 0.7,
+      "uncertaintyThreshold": 0.8,
+      "reviewThreshold": 0.75
+    }
+  },
+  "versioning": {
+    "semanticVersioning": true,
+    "preReleaseHandling": "increment",
+    "versionBumpRules": {
+      "defaultBumpType": "patch",
+      "requireMajorConfirmation": true
+    }
+  },
+  "reporting": {
+    "defaultFormat": "summary",
+    "includeConfidence": true,
+    "includeMetadata": true,
+    "outputFiles": {
+      "saveResults": true,
+      "outputDirectory": "./.kiro/release-analysis"
+    }
+  },
+  "git": {
+    "defaultBranch": "main",
+    "releaseTagPattern": "^v?\\d+\\.\\d+\\.\\d+",
+    "completionPaths": [
+      ".kiro/specs/*/completion/",
+      ".kiro/specs/*/tasks.md"
+    ],
+    "maxCommits": 1000
+  }
+}

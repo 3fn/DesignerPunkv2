@@ -2,7 +2,7 @@
 
 **Date**: October 4, 2025  
 **Purpose**: Document the typography token pairing refinements for the Mathematical Token System  
-**Organization**: working-document  
+**Organization**: working-document
 **Scope**: temporary
 
 ---
