@@ -68,6 +68,26 @@ All files use explicit metadata to declare organizational intent, enabling safe 
 **Location**: `.kiro/specs/[spec-name]/completion/` directory
 **Examples**: Task completion documentation, lessons learned, implementation notes
 
+**Completion Documentation Standards**:
+- **All Subtasks**: Completion documents are created for all subtasks, regardless of task type (Setup, Implementation, Architecture)
+- **Naming Convention**: 
+  - Parent tasks: `task-[N]-completion.md` (e.g., `task-1-completion.md`, `task-2-completion.md`)
+  - Subtasks: `task-[N.M]-completion.md` (e.g., `task-1-1-completion.md`, `task-2-3-completion.md`)
+- **Organization Metadata**: All completion documents use `**Organization**: spec-completion`
+- **Location**: All completion documents stored in `.kiro/specs/[spec-name]/completion/` directory
+
+**Naming Convention Examples**:
+```
+.kiro/specs/cross-platform-build-system/completion/
+├── task-1-completion.md           # Parent task 1 completion
+├── task-1-1-completion.md         # Subtask 1.1 completion
+├── task-1-2-completion.md         # Subtask 1.2 completion
+├── task-1-3-completion.md         # Subtask 1.3 completion
+├── task-2-completion.md           # Parent task 2 completion
+├── task-2-1-completion.md         # Subtask 2.1 completion
+└── task-2-2-completion.md         # Subtask 2.2 completion
+```
+
 #### Process Standards
 ```markdown
 **Organization**: process-standard
@@ -115,7 +135,11 @@ strategic-framework/
 │   ├── cross-reference-validation.md     # Link integrity verification
 │   └── [other-validation-files].md       # Additional validation artifacts
 └── completion/                           # Spec-specific completion documentation
-    ├── task-[n]-completion.md            # Individual task completion docs
+    ├── task-1-completion.md              # Parent task completion docs
+    ├── task-1-1-completion.md            # Subtask completion docs
+    ├── task-1-2-completion.md            # Subtask completion docs
+    ├── task-2-completion.md              # Parent task completion docs
+    ├── task-2-1-completion.md            # Subtask completion docs
     └── spec-completion-summary.md        # Overall spec completion documentation
 ```
 
