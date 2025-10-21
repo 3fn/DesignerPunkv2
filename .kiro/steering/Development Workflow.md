@@ -188,3 +188,148 @@ Would you like to organize these files now? [y/N]: y
 - ✅ **Hook Enhancement**: Automation enhances proven processes rather than replacing them
 - ✅ **Safety Maintained**: All safety features from manual process preserved in automation
 - ✅ **Human Override**: Manual organization always available as fallback option
+
+---
+
+### Automatic Release Detection
+
+**Trigger**: Task status changes to "completed" (runs after file organization)  
+**Hook**: `.kiro/hooks/release-manager.sh`  
+**Purpose**: Automatically detect release triggers and process them through the release management system
+
+#### Workflow
+1. **Detection**: Kiro detects task completion event
+2. **Organization First**: File organization hook runs first (if needed)
+3. **Release Detection**: Release manager checks for release triggers
+4. **Trigger Processing**: Creates release trigger files with metadata
+5. **Analysis**: Runs release analysis if triggers detected
+6. **Logging**: Records all activity in release manager log
+
+#### How It Works
+
+**Hook Chain**:
+```
+Task Completion Event
+    ↓
+File Organization Hook (if needed)
+    ↓
+Release Detection Hook
+    ↓
+Release Analysis (if triggered)
+```
+
+**Trigger Detection**:
+- **Spec Completion**: Detects completion documents in `.kiro/specs/*/completion/`
+- **Task Completion**: Detects task completion commits with "Task X Complete" messages
+- **Configuration**: Controlled by `.kiro/release-config.json`
+
+**Automatic vs Manual**:
+- **Automatic**: Runs when using `taskStatus` tool to mark tasks complete
+- **Manual**: Can be triggered with `./.kiro/hooks/release-manager.sh auto`
+- **Bypass**: Direct git commits bypass the automation (no task status change event)
+
+#### Configuration
+
+**Release Config** (`.kiro/release-config.json`):
+```json
+{
+  "detection": {
+    "specCompletionTrigger": true,
+    "taskCompletionTrigger": true
+  }
+}
+```
+
+**Agent Hook Config** (`.kiro/agent-hooks/release-detection-on-task-completion.json`):
+```json
+{
+  "name": "Release Detection on Task Completion",
+  "trigger": {
+    "type": "taskStatusChange",
+    "status": "completed"
+  },
+  "settings": {
+    "requireConfirmation": false,
+    "autoApprove": true,
+    "runAfter": ["organize-after-task-completion"]
+  }
+}
+```
+
+#### Why It Didn't Run
+
+**Common Reasons**:
+
+1. **No Task Status Change Event**
+   - Used direct git commands instead of `taskStatus` tool
+   - Manual commits bypass Kiro IDE automation
+   - Hook only triggers on IDE events, not raw git operations
+
+2. **Hook Chain Dependency**
+   - Release detection runs after file organization
+   - If organization hook doesn't run, release detection may not run
+   - Dependency chain: task completion → organization → release detection
+
+3. **Configuration Disabled**
+   - Release detection may be disabled in `.kiro/release-config.json`
+   - Check `specCompletionTrigger` and `taskCompletionTrigger` settings
+
+#### Manual Trigger
+
+**When to use**:
+- After manual git commits that should trigger release analysis
+- When automatic detection didn't run
+- For testing release detection logic
+
+**How to trigger**:
+```bash
+# Automatic mode (detects triggers from recent changes)
+./.kiro/hooks/release-manager.sh auto
+
+# Check release manager log
+cat .kiro/logs/release-manager.log
+
+# Check for trigger files
+ls -la .kiro/release-triggers/
+```
+
+#### Logging and Debugging
+
+**Log Location**: `.kiro/logs/release-manager.log`
+
+**What's Logged**:
+- Task completion events detected
+- Release triggers found
+- Trigger files created
+- Analysis execution
+- Errors and warnings
+
+**Debugging Steps**:
+1. Check if log file exists: `cat .kiro/logs/release-manager.log`
+2. Check for trigger files: `ls .kiro/release-triggers/`
+3. Verify release config: `cat .kiro/release-config.json`
+4. Check agent hook config: `cat .kiro/agent-hooks/release-detection-on-task-completion.json`
+
+#### Best Practices
+
+**For Automatic Triggering**:
+- Use `taskStatus` tool to mark tasks complete (triggers automation)
+- Let the hook chain execute (organization → release detection)
+- Check logs to verify execution
+
+**For Manual Commits**:
+- Understand that direct git commits bypass automation
+- Manually trigger release detection if needed: `./.kiro/hooks/release-manager.sh auto`
+- Consider using `taskStatus` tool even for manual work to maintain automation
+
+**For Development**:
+- Test hooks with `taskStatus` tool to verify automation
+- Check logs after task completion to confirm execution
+- Use manual trigger for testing and debugging
+
+#### Integration Benefits
+
+- **Automatic Release Detection**: No manual release analysis needed
+- **Consistent Process**: Release detection happens automatically for all task completions
+- **Audit Trail**: All release triggers logged with metadata
+- **Flexible Triggering**: Automatic via IDE events or manual via script
