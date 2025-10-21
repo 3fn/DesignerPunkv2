@@ -24,20 +24,17 @@ inclusion: always
 - **Commits**: Atomic commits per task completion with descriptive messages
 - **Push**: Always push immediately after commit to maintain synchronization
 
-## Spec Planning and Implementation
+## Spec Planning
 
-### Spec Creation Standards
+**WHEN creating or updating specification documents (requirements.md, design.md, tasks.md):**
 
-**WHEN creating or updating any specification document (requirements.md, design.md, tasks.md) THEN AI Agent MUST WITHOUT FAIL:**
+See **Spec Planning Standards** (`.kiro/steering/Spec Planning Standards.md`) for complete guidance on:
+- Requirements format (EARS, user stories, acceptance criteria)
+- Design document structure and principles
+- Tasks document format with task type classification
+- Validation and documentation tier requirements
 
-1. **Read Spec Planning Standards**: #[[file:.kiro/steering/Spec Planning Standards.md]]
-2. **Follow three-document structure**: requirements.md → design.md → tasks.md
-3. **Use EARS format**: Event-driven requirements with user stories
-4. **Use hierarchical task format**: Success criteria at primary task level only
-5. **Reference integration points**: Document how spec coordinates with other specs
-6. **Validate format**: Ensure consistency with established standards before finalizing
-
-**This ensures all specs follow consistent format and maintain quality standards across the project.**
+**This document (Development Workflow) focuses on task execution and git workflow, not spec creation.**
 
 ---
 
