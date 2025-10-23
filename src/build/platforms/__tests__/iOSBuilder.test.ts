@@ -139,7 +139,7 @@ describe('iOSBuilder', () => {
             'color.primary': { value: '#3B82F6', unit: '', token: 'color.blue.500' }
           },
           typography: {
-            'typography.body': { value: 16, unit: 'pt', token: 'fontSize100' }
+            'typography.bodyMd': { value: 16, unit: 'pt', token: 'fontSize100' }
           },
           radius: {},
           sizing: {},

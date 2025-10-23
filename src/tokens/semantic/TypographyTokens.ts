@@ -20,8 +20,22 @@ import { SemanticToken, SemanticCategory } from '../../types/SemanticToken';
  */
 export const typographyTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>> = {
   // Body Text Variants
-  'typography.body': {
-    name: 'typography.body',
+  'typography.bodySm': {
+    name: 'typography.bodySm',
+    primitiveReferences: {
+      fontSize: 'fontSize075',
+      lineHeight: 'lineHeight075',
+      fontFamily: 'fontFamilyBody',
+      fontWeight: 'fontWeight400',
+      letterSpacing: 'letterSpacing100'
+    },
+    category: SemanticCategory.TYPOGRAPHY,
+    context: 'Small body text for secondary content and compact layouts',
+    description: 'Small body typography with 14px font size, 1.25 line height, body font family, normal weight'
+  },
+
+  'typography.bodyMd': {
+    name: 'typography.bodyMd',
     primitiveReferences: {
       fontSize: 'fontSize100',
       lineHeight: 'lineHeight100',
@@ -31,25 +45,11 @@ export const typographyTokens: Record<string, Omit<SemanticToken, 'primitiveToke
     },
     category: SemanticCategory.TYPOGRAPHY,
     context: 'Standard body text for paragraphs and general content',
-    description: 'Body typography style with base font size (16), optimal line height (1.5), body font family, normal weight, and default letter spacing'
+    description: 'Medium body typography with 16px font size, 1.5 line height, body font family, normal weight'
   },
 
-  'typography.bodySmall': {
-    name: 'typography.bodySmall',
-    primitiveReferences: {
-      fontSize: 'fontSize075',
-      lineHeight: 'lineHeight075',
-      fontFamily: 'fontFamilyBody',
-      fontWeight: 'fontWeight400',
-      letterSpacing: 'letterSpacing100'
-    },
-    category: SemanticCategory.TYPOGRAPHY,
-    context: 'Smaller body text for secondary content',
-    description: 'Small body typography style with reduced font size (14), paired line height (1.429), body font family, normal weight, and default letter spacing'
-  },
-
-  'typography.bodyLarge': {
-    name: 'typography.bodyLarge',
+  'typography.bodyLg': {
+    name: 'typography.bodyLg',
     primitiveReferences: {
       fontSize: 'fontSize125',
       lineHeight: 'lineHeight125',
@@ -58,8 +58,8 @@ export const typographyTokens: Record<string, Omit<SemanticToken, 'primitiveToke
       letterSpacing: 'letterSpacing100'
     },
     category: SemanticCategory.TYPOGRAPHY,
-    context: 'Larger body text for emphasis or lead paragraphs',
-    description: 'Large body typography style with increased font size (18), paired line height (1.556), body font family, normal weight, and default letter spacing'
+    context: 'Large body text for emphasis, lead paragraphs, and prominent content',
+    description: 'Large body typography with 18px font size, 1.75 line height, body font family, normal weight'
   },
 
   // Heading Hierarchy (H1-H6 following HTML semantics)
@@ -191,8 +191,23 @@ export const typographyTokens: Record<string, Omit<SemanticToken, 'primitiveToke
   },
 
   // UI Layer Typography
-  'typography.button': {
-    name: 'typography.button',
+  // Button Text Size Variants
+  'typography.buttonSm': {
+    name: 'typography.buttonSm',
+    primitiveReferences: {
+      fontSize: 'fontSize075',
+      lineHeight: 'lineHeight075',
+      fontFamily: 'fontFamilyBody',
+      fontWeight: 'fontWeight500',
+      letterSpacing: 'letterSpacing100'
+    },
+    category: SemanticCategory.TYPOGRAPHY,
+    context: 'Small button text for compact buttons and tertiary actions',
+    description: 'Small button typography with 14px font size, 1.25 line height, body font family, medium weight'
+  },
+
+  'typography.buttonMd': {
+    name: 'typography.buttonMd',
     primitiveReferences: {
       fontSize: 'fontSize100',
       lineHeight: 'lineHeight100',
@@ -201,8 +216,22 @@ export const typographyTokens: Record<string, Omit<SemanticToken, 'primitiveToke
       letterSpacing: 'letterSpacing100'
     },
     category: SemanticCategory.TYPOGRAPHY,
-    context: 'Button text with appropriate sizing and weight',
-    description: 'Button typography style with base font size (16), optimal line height (1.5), body font family, medium weight for emphasis, and default letter spacing'
+    context: 'Standard button text for primary and secondary buttons',
+    description: 'Medium button typography with 16px font size, 1.5 line height, body font family, medium weight'
+  },
+
+  'typography.buttonLg': {
+    name: 'typography.buttonLg',
+    primitiveReferences: {
+      fontSize: 'fontSize125',
+      lineHeight: 'lineHeight125',
+      fontFamily: 'fontFamilyBody',
+      fontWeight: 'fontWeight500',
+      letterSpacing: 'letterSpacing100'
+    },
+    category: SemanticCategory.TYPOGRAPHY,
+    context: 'Large button text for prominent CTAs and hero buttons',
+    description: 'Large button typography with 18px font size, 1.75 line height, body font family, medium weight'
   },
 
   'typography.input': {
@@ -219,8 +248,23 @@ export const typographyTokens: Record<string, Omit<SemanticToken, 'primitiveToke
     description: 'Input typography style with base font size (16), optimal line height (1.5), body font family, normal weight, and default letter spacing'
   },
 
-  'typography.label': {
-    name: 'typography.label',
+  // Label Text Size Variants
+  'typography.labelXs': {
+    name: 'typography.labelXs',
+    primitiveReferences: {
+      fontSize: 'fontSize050',
+      lineHeight: 'lineHeight050',
+      fontFamily: 'fontFamilyBody',
+      fontWeight: 'fontWeight500',
+      letterSpacing: 'letterSpacing100'
+    },
+    category: SemanticCategory.TYPOGRAPHY,
+    context: 'Extra small labels for floating label patterns in form inputs',
+    description: 'Extra small label typography with 13px font size, 1.0 line height, body font family, medium weight for floating labels'
+  },
+
+  'typography.labelSm': {
+    name: 'typography.labelSm',
     primitiveReferences: {
       fontSize: 'fontSize075',
       lineHeight: 'lineHeight075',
@@ -229,8 +273,79 @@ export const typographyTokens: Record<string, Omit<SemanticToken, 'primitiveToke
       letterSpacing: 'letterSpacing100'
     },
     category: SemanticCategory.TYPOGRAPHY,
-    context: 'Label text for form fields and UI elements',
-    description: 'Label typography style with small-medium font size (14), paired line height (1.429), body font family, medium weight for emphasis, and default letter spacing'
+    context: 'Small labels for compact form fields and UI elements',
+    description: 'Small label typography with 14px font size, 1.25 line height, body font family, medium weight'
+  },
+
+  'typography.labelMd': {
+    name: 'typography.labelMd',
+    primitiveReferences: {
+      fontSize: 'fontSize100',
+      lineHeight: 'lineHeight100',
+      fontFamily: 'fontFamilyBody',
+      fontWeight: 'fontWeight500',
+      letterSpacing: 'letterSpacing100'
+    },
+    category: SemanticCategory.TYPOGRAPHY,
+    context: 'Standard labels for form fields and UI elements',
+    description: 'Medium label typography with 16px font size, 1.5 line height, body font family, medium weight'
+  },
+
+  'typography.labelLg': {
+    name: 'typography.labelLg',
+    primitiveReferences: {
+      fontSize: 'fontSize125',
+      lineHeight: 'lineHeight125',
+      fontFamily: 'fontFamilyBody',
+      fontWeight: 'fontWeight500',
+      letterSpacing: 'letterSpacing100'
+    },
+    category: SemanticCategory.TYPOGRAPHY,
+    context: 'Large labels for prominent form sections and UI headers',
+    description: 'Large label typography with 18px font size, 1.75 line height, body font family, medium weight'
+  },
+
+  // Code Text Size Variants
+  'typography.codeSm': {
+    name: 'typography.codeSm',
+    primitiveReferences: {
+      fontSize: 'fontSize075',
+      lineHeight: 'lineHeight075',
+      fontFamily: 'fontFamilyMono',
+      fontWeight: 'fontWeight400',
+      letterSpacing: 'letterSpacing100'
+    },
+    category: SemanticCategory.TYPOGRAPHY,
+    context: 'Small code text for inline code in compact layouts',
+    description: 'Small code typography with 14px font size, 1.25 line height, monospace font family, normal weight'
+  },
+
+  'typography.codeMd': {
+    name: 'typography.codeMd',
+    primitiveReferences: {
+      fontSize: 'fontSize100',
+      lineHeight: 'lineHeight100',
+      fontFamily: 'fontFamilyMono',
+      fontWeight: 'fontWeight400',
+      letterSpacing: 'letterSpacing100'
+    },
+    category: SemanticCategory.TYPOGRAPHY,
+    context: 'Standard code text for inline code and code blocks',
+    description: 'Medium code typography with 16px font size, 1.5 line height, monospace font family, normal weight'
+  },
+
+  'typography.codeLg': {
+    name: 'typography.codeLg',
+    primitiveReferences: {
+      fontSize: 'fontSize125',
+      lineHeight: 'lineHeight125',
+      fontFamily: 'fontFamilyMono',
+      fontWeight: 'fontWeight400',
+      letterSpacing: 'letterSpacing100'
+    },
+    category: SemanticCategory.TYPOGRAPHY,
+    context: 'Large code text for prominent code examples and documentation',
+    description: 'Large code typography with 18px font size, 1.75 line height, monospace font family, normal weight'
   }
 };
 
