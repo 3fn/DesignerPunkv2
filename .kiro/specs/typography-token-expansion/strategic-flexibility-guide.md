@@ -8,6 +8,14 @@
 
 ---
 
+## Related Guides
+
+- [Compositional Color Guide](./compositional-color-guide.md) - Explains compositional architecture that informs flexibility decisions
+- [Inline Emphasis Guide](./inline-emphasis-guide.md) - Another example of strategic flexibility in token design
+- [Migration Guide](./migration-guide.md) - Provides migration path for renamed tokens
+
+---
+
 ## Overview
 
 The typography token expansion introduces 13 new tokens across four families (body, label, code, button). While most families follow a three-size scale (Sm, Md, Lg), the label family uniquely includes an extra small (Xs) variant. This document explains the strategic flexibility rationale behind this asymmetric design.

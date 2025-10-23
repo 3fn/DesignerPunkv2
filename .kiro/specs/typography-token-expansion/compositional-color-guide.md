@@ -8,6 +8,14 @@
 
 ---
 
+## Related Guides
+
+- [Strategic Flexibility Guide](./strategic-flexibility-guide.md) - Explains size variant decisions related to compositional architecture
+- [Inline Emphasis Guide](./inline-emphasis-guide.md) - Explains why emphasis isn't in tokens, relates to compositional architecture
+- [Migration Guide](./migration-guide.md) - Provides migration path for renamed tokens
+
+---
+
 ## Overview
 
 The DesignerPunk typography token system follows a **compositional architecture** where typography tokens define text structure (size, weight, line-height, family, letter-spacing) while color is applied separately through color tokens. This document explains the rationale for this approach and provides platform-specific examples for composing typography with color.
