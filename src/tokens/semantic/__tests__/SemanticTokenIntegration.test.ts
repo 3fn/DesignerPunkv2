@@ -48,9 +48,9 @@ describe('getSemanticToken', () => {
   });
 
   it('should retrieve typography tokens by name', () => {
-    const token = getSemanticToken('typography.body');
+    const token = getSemanticToken('typography.bodyMd');
     expect(token).toBeDefined();
-    expect(token?.name).toBe('typography.body');
+    expect(token?.name).toBe('typography.bodyMd');
     expect(token?.category).toBe(SemanticCategory.TYPOGRAPHY);
   });
 
@@ -206,14 +206,14 @@ describe('getTypographyRecommendation', () => {
 
   it('should recommend body tokens', () => {
     const recommendations = getTypographyRecommendation('body');
-    expect(recommendations).toContain('typography.body');
-    expect(recommendations).toContain('typography.bodySmall');
-    expect(recommendations).toContain('typography.bodyLarge');
+    expect(recommendations).toContain('typography.bodyMd');
+    expect(recommendations).toContain('typography.bodySm');
+    expect(recommendations).toContain('typography.bodyLg');
   });
 
   it('should recommend UI tokens', () => {
     const recommendations = getTypographyRecommendation('ui');
-    expect(recommendations).toContain('typography.button');
+    expect(recommendations).toContain('typography.buttonMd');
     expect(recommendations).toContain('typography.input');
     expect(recommendations).toContain('typography.label');
   });
@@ -270,7 +270,7 @@ describe('SemanticTokenRegistry Integration', () => {
   });
 
   it('should register typography semantic tokens', () => {
-    const token = getSemanticToken('typography.body');
+    const token = getSemanticToken('typography.bodyMd');
     expect(token).toBeDefined();
     
     const result = semanticRegistry.validateToken({
@@ -279,7 +279,7 @@ describe('SemanticTokenRegistry Integration', () => {
     });
     
     expect(result).toBeDefined();
-    expect(result.token).toBe('typography.body');
+    expect(result.token).toBe('typography.bodyMd');
   });
 
   it('should handle hierarchical spacing token registration', () => {

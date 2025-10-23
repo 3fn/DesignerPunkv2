@@ -278,12 +278,12 @@ export function getTypographyRecommendation(useCase: 'heading' | 'body' | 'ui' |
       'typography.display'
     ],
     body: [
-      'typography.body',
-      'typography.bodySmall',
-      'typography.bodyLarge'
+      'typography.bodyMd',
+      'typography.bodySm',
+      'typography.bodyLg'
     ],
     ui: [
-      'typography.button',
+      'typography.buttonMd',
       'typography.input',
       'typography.label'
     ],
