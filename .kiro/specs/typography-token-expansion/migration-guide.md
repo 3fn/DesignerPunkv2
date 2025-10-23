@@ -8,6 +8,14 @@
 
 ---
 
+## Related Guides
+
+- [Compositional Color Guide](./compositional-color-guide.md) - Explains compositional architecture behind renamed tokens
+- [Strategic Flexibility Guide](./strategic-flexibility-guide.md) - Explains size variant decisions for renamed tokens
+- [Inline Emphasis Guide](./inline-emphasis-guide.md) - Explains platform-native patterns for emphasis
+
+---
+
 ## Overview
 
 This guide helps you migrate from the old typography token naming convention to the new consistent size-based naming system. The changes improve naming consistency across all typography token families by using a uniform size scale (Xs, Sm, Md, Lg).

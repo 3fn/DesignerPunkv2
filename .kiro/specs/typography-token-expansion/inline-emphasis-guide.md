@@ -8,6 +8,14 @@
 
 ---
 
+## Related Guides
+
+- [Compositional Color Guide](./compositional-color-guide.md) - Explains why emphasis isn't in tokens, relates to compositional architecture
+- [Strategic Flexibility Guide](./strategic-flexibility-guide.md) - Another example of strategic design decisions in token architecture
+- [Migration Guide](./migration-guide.md) - Provides migration path for renamed tokens
+
+---
+
 ## Overview
 
 This guide explains how to apply bold and italic emphasis within text using platform-appropriate semantic markup and modifiers. Typography tokens in DesignerPunk define text **structure** (size, weight, line-height, family), while inline emphasis is applied through **platform-native modifiers** that preserve semantic meaning and accessibility.
