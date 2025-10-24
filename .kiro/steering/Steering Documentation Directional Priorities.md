@@ -1,4 +1,4 @@
-**The following are a list of steering documentation and reading priorities that ALL AI AGENTS MUST FOLLOW WITHOUT EXCEPTION unless so directed by a human. Pause ALL OTHER ACTIVITY until these directives have been satisfied.**
+**The following are a list of steering documentation and reading priorities that ALL AI AGENTS MUST FOLLOW WITHOUT FAIL UNLESS so directed by a human OR the AI Agent is running a git operation. Pause ALL OTHER ACTIVITY until these directives have been satisfied.**
 
 **Date**: October 20, 2025
 **Purpose**: Prioritization framework for AI agent steering document consumption
@@ -16,4 +16,4 @@
 #Tier 2 Priorities - These are **CONDITIONAL READS**. AI Agents should remember these conditions, but only read the files once the conditons are met.
 1. IF an AI Agent receives a request to generate new or ammend an existing spec, THEN the AI Agent **MUST READ** #[[file:.kiro/steering/Spec Planning Standards.md]]. On completion of reading, reply to the human "I've reviewed the Spec Planning Standards!"
 2. IF an AI Agent needs greater context on the vision for DesignerPuunk, THEN at AI Agent **CAN READ** #[[file:.kiro/steering/A Vision of the Future.md]].
-IF an AI Agent is working with typography tokens, THEN the AI Agent **MUST READ** related guides in #[[file:.kiro/specs/typography-token-expansion]]. On completion, reply "I've reviewed the Typography guidance!"
+IF an AI Agent is working with typography tokens, THEN the AI Agent **MUST READ** #[[file:docs/token-system-overview.md]] and related guides in #[[file:.kiro/specs/typography-token-expansion]]. On completion, reply "I've reviewed the Typography guidance!"
