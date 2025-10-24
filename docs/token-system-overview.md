@@ -7,6 +7,37 @@
 
 ---
 
+## Getting Started with the Token System
+
+### New to the System?
+
+If you're new to the DesignerPunk token system, we recommend this learning path:
+
+1. **[Token Ecosystem Narrative](./concepts/token-ecosystem-narrative.md)** - Understand the conceptual foundation through the business localization metaphor. This narrative explains the "why" behind the architecture and helps you build a mental model of how tokens, developers, components, platforms, and the build system work together.
+
+2. **[Token System Overview](#introduction)** (this document) - Navigate to specific token files and documentation guides. Use this as your reference for finding token implementations and related documentation.
+
+3. **[Token Category Pattern Guide](../.kiro/specs/token-system/token-category-pattern-guide.md)** - Learn how to add new token categories following established patterns. Essential reading before creating new token types.
+
+### Already Familiar?
+
+Jump directly to:
+- [Primitive Tokens](#primitive-tokens) - Find specific token implementation files
+- [Semantic Tokens](#semantic-tokens) - Find semantic token compositions
+- [Related Documentation](#related-documentation) - Explore specifications and guides
+
+### For AI Agents
+
+This learning path is designed to help you build the correct mental model of the token system before making implementation decisions. Following this path will help you:
+- Understand the architectural principles that guide token design
+- Make decisions that align with the system's philosophy
+- Apply systematic skepticism effectively by understanding the "why" behind patterns
+- Avoid common mistakes that come from incomplete context
+
+**Recommendation**: Even if you're familiar with design token systems in general, read the Token Ecosystem Narrative to understand DesignerPunk's specific approach.
+
+---
+
 ## Introduction
 
 This document provides an overview of the DesignerPunk token system, mapping each token type to its implementation file and related documentation guides. The token system follows a mathematical foundation with a primitive→semantic hierarchy, enabling cross-platform consistency and AI-human collaboration through precise, unambiguous design language.
@@ -14,6 +45,25 @@ This document provides an overview of the DesignerPunk token system, mapping eac
 The token system is organized into two main categories:
 - **Primitive Tokens**: Base-level tokens with mathematical relationships (fontSize, spacing, colors, etc.)
 - **Semantic Tokens**: Higher-level tokens that compose primitives for specific use cases (typography, semantic colors, etc.)
+
+---
+
+## Adding New Token Categories
+
+> ⚠️ **IMPORTANT**: Before adding a new token category, read the [Token Category Pattern Guide](../.kiro/specs/token-system/token-category-pattern-guide.md)
+
+The Token Category Pattern Guide provides the definitive patterns for adding new token categories to the system. It covers:
+
+- **Primitive Token Structure**: How to export complete PrimitiveToken objects with all required metadata
+- **Semantic Token Structure**: How to reference primitive tokens using `{ value: 'primitiveTokenName' }` format
+- **File Organization**: Where to place token files, tests, and how to integrate with index.ts
+- **What NOT to Do**: Common mistakes to avoid (no registration functions, no simple value exports)
+- **Complete Checklist**: Step-by-step checklist for adding new token categories
+- **Cross-References**: Links to example files (SpacingTokens, FontSizeTokens, semantic tokens)
+
+**Why this matters**: Following the established patterns ensures consistency, maintainability, and proper integration with the existing token infrastructure. The guide prevents common mistakes that were made during early token category implementations.
+
+**When to use**: Whenever you're creating a new token category (e.g., BorderWidthTokens, OpacityTokens, ShadowTokens, etc.)
 
 ---
 
@@ -99,6 +149,14 @@ The token system is organized into two main categories:
 ---
 
 ## Related Documentation
+
+### Conceptual Foundation
+
+- [Token Ecosystem Narrative](./concepts/token-ecosystem-narrative.md) - Understand the token system through the business localization metaphor
+
+### Process Standards
+
+- [Token Category Pattern Guide](../.kiro/specs/token-system/token-category-pattern-guide.md) - Definitive guide for adding new token categories with complete patterns and checklist
 
 ### Specifications
 
