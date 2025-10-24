@@ -1,0 +1,273 @@
+/**
+ * DesignerPunk Design System - Android Tokens
+ * Generated: 2025-10-23T21:35:13.952Z
+ * Version: 1.0.0
+ * Platform: Android (Kotlin Constants)
+ */
+
+package com.designerpunk.tokens
+
+object DesignTokens {
+
+    // BORDERWIDTH TOKENS
+    // base × 1 = 1 × 1 = 1
+    const val border_width_100: Float = 1f
+    // base × 2 = 1 × 2 = 2
+    const val border_width_200: Float = 2f
+    // base × 4 = 1 × 4 = 4
+    const val border_width_400: Float = 4f
+
+    // COLOR TOKENS
+    // Systematic gray scale progression - lightest
+    const val gray_100: Int = 0xFF000000.toInt() // placeholder
+    // Systematic gray scale progression - medium-light
+    const val gray_200: Int = 0xFF000000.toInt() // placeholder
+    // Systematic gray scale progression - medium
+    const val gray_300: Int = 0xFF000000.toInt() // placeholder
+    // Systematic gray scale progression - dark
+    const val gray_400: Int = 0xFF000000.toInt() // placeholder
+    // Systematic gray scale progression - darkest
+    const val gray_500: Int = 0xFF000000.toInt() // placeholder
+    // Systematic black scale progression - lightest
+    const val black_100: Int = 0xFF000000.toInt() // placeholder
+    // Systematic black scale progression - medium
+    const val black_200: Int = 0xFF000000.toInt() // placeholder
+    // Systematic black scale progression - dark
+    const val black_300: Int = 0xFF000000.toInt() // placeholder
+    // Systematic black scale progression - very dark
+    const val black_400: Int = 0xFF000000.toInt() // placeholder
+    // Systematic black scale progression - pure black
+    const val black_500: Int = 0xFF000000.toInt() // placeholder
+    // Systematic white scale progression - pure white
+    const val white_100: Int = 0xFF000000.toInt() // placeholder
+    // Systematic white scale progression - near white
+    const val white_200: Int = 0xFF000000.toInt() // placeholder
+    // Systematic white scale progression - light gray-white
+    const val white_300: Int = 0xFF000000.toInt() // placeholder
+    // Systematic white scale progression - medium gray-white
+    const val white_400: Int = 0xFF000000.toInt() // placeholder
+    // Systematic white scale progression - dark gray-white
+    const val white_500: Int = 0xFF000000.toInt() // placeholder
+    // Systematic yellow scale progression - lightest
+    const val yellow_100: Int = 0xFF000000.toInt() // placeholder
+    // Systematic yellow scale progression - medium-light
+    const val yellow_200: Int = 0xFF000000.toInt() // placeholder
+    // Systematic yellow scale progression - bright
+    const val yellow_300: Int = 0xFF000000.toInt() // placeholder
+    // Systematic yellow scale progression - dark
+    const val yellow_400: Int = 0xFF000000.toInt() // placeholder
+    // Systematic yellow scale progression - darkest
+    const val yellow_500: Int = 0xFF000000.toInt() // placeholder
+    // Systematic orange scale progression - lightest
+    const val orange_100: Int = 0xFF000000.toInt() // placeholder
+    // Systematic orange scale progression - medium-light
+    const val orange_200: Int = 0xFF000000.toInt() // placeholder
+    // Systematic orange scale progression - bright
+    const val orange_300: Int = 0xFF000000.toInt() // placeholder
+    // Systematic orange scale progression - dark
+    const val orange_400: Int = 0xFF000000.toInt() // placeholder
+    // Systematic orange scale progression - darkest
+    const val orange_500: Int = 0xFF000000.toInt() // placeholder
+    // Systematic purple scale progression - lightest
+    const val purple_100: Int = 0xFF000000.toInt() // placeholder
+    // Systematic purple scale progression - medium-light
+    const val purple_200: Int = 0xFF000000.toInt() // placeholder
+    // Systematic purple scale progression - primary brand
+    const val purple_300: Int = 0xFF000000.toInt() // placeholder
+    // Systematic purple scale progression - dark
+    const val purple_400: Int = 0xFF000000.toInt() // placeholder
+    // Systematic purple scale progression - darkest
+    const val purple_500: Int = 0xFF000000.toInt() // placeholder
+    // Systematic violet scale progression - lightest
+    const val violet_100: Int = 0xFF000000.toInt() // placeholder
+    // Systematic violet scale progression - medium-light
+    const val violet_200: Int = 0xFF000000.toInt() // placeholder
+    // Systematic violet scale progression - secondary brand
+    const val violet_300: Int = 0xFF000000.toInt() // placeholder
+    // Systematic violet scale progression - dark
+    const val violet_400: Int = 0xFF000000.toInt() // placeholder
+    // Systematic violet scale progression - darkest
+    const val violet_500: Int = 0xFF000000.toInt() // placeholder
+    // Systematic cyan scale progression - lightest
+    const val cyan_100: Int = 0xFF000000.toInt() // placeholder
+    // Systematic cyan scale progression - medium-light
+    const val cyan_200: Int = 0xFF000000.toInt() // placeholder
+    // Systematic cyan scale progression - tech primary
+    const val cyan_300: Int = 0xFF000000.toInt() // placeholder
+    // Systematic cyan scale progression - dark
+    const val cyan_400: Int = 0xFF000000.toInt() // placeholder
+    // Systematic cyan scale progression - darkest
+    const val cyan_500: Int = 0xFF000000.toInt() // placeholder
+    // Systematic teal scale progression - lightest
+    const val teal_100: Int = 0xFF000000.toInt() // placeholder
+    // Systematic teal scale progression - medium-light
+    const val teal_200: Int = 0xFF000000.toInt() // placeholder
+    // Systematic teal scale progression - secondary UI
+    const val teal_300: Int = 0xFF000000.toInt() // placeholder
+    // Systematic teal scale progression - dark
+    const val teal_400: Int = 0xFF000000.toInt() // placeholder
+    // Systematic teal scale progression - darkest
+    const val teal_500: Int = 0xFF000000.toInt() // placeholder
+
+    // DENSITY TOKENS
+    // base × 0.75 = 1.0 × 0.75 = 0.75
+    const val density_compact: Float = 0.75f
+    // base × 1 = 1.0 × 1 = 1.0
+    const val density_default: Float = 1f
+    // base × 1.25 = 1.0 × 1.25 = 1.25
+    const val density_comfortable: Float = 1.25f
+    // base × 1.5 = 1.0 × 1.5 = 1.5
+    const val density_spacious: Float = 1.5f
+
+    // FONTFAMILY TOKENS
+    // N/A - Categorical value
+    const val font_family_system: String = "-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif"
+    // N/A - Categorical value
+    const val font_family_mono: String = "SF Mono, Monaco, Inconsolata, "Roboto Mono", Consolas, "Courier New", monospace"
+    // N/A - Categorical value
+    const val font_family_display: String = "Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif"
+    // N/A - Categorical value
+    const val font_family_body: String = "Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif"
+
+    // FONTSIZE TOKENS
+    // base ÷ (1.125²) = 16 ÷ 1.266 ≈ 13
+    const val font_size_050: Float = 13f
+    // base ÷ 1.125 = 16 ÷ 1.125 ≈ 14
+    const val font_size_075: Float = 14f
+    // base × 1 = 16 × 1 = 16
+    const val font_size_100: Float = 16f
+    // base × 1.125 = 16 × 1.125 = 18
+    const val font_size_125: Float = 18f
+    // base × (1.125²) = 16 × 1.266 ≈ 20
+    const val font_size_150: Float = 20f
+    // base × (1.125³) = 16 × 1.424 ≈ 23
+    const val font_size_200: Float = 23f
+    // base × (1.125⁴) = 16 × 1.602 ≈ 26
+    const val font_size_300: Float = 26f
+    // base × (1.125⁵) = 16 × 1.802 ≈ 29
+    const val font_size_400: Float = 29f
+    // base × (1.125⁶) = 16 × 2.027 ≈ 32.4 → 33 (adjusted for 4pt subgrid)
+    const val font_size_500: Float = 33f
+    // base × (1.125⁷) = 16 × 2.281 ≈ 36.5 → 37 (adjusted for 4pt subgrid)
+    const val font_size_600: Float = 37f
+    // base × (1.125⁸) = 16 × 2.566 ≈ 41.1 → 42 (adjusted for 4pt subgrid)
+    const val font_size_700: Float = 42f
+
+    // FONTWEIGHT TOKENS
+    // base × 0.25 = 400 × 0.25 = 100
+    const val font_weight_100: Int = 100
+    // base × 0.5 = 400 × 0.5 = 200
+    const val font_weight_200: Int = 200
+    // base × 0.75 = 400 × 0.75 = 300
+    const val font_weight_300: Int = 300
+    // base × 1 = 400 × 1 = 400
+    const val font_weight_400: Int = 400
+    // base × 1.25 = 400 × 1.25 = 500
+    const val font_weight_500: Int = 500
+    // base × 1.5 = 400 × 1.5 = 600
+    const val font_weight_600: Int = 600
+    // base × 1.75 = 400 × 1.75 = 700
+    const val font_weight_700: Int = 700
+    // base × 2 = 400 × 2 = 800
+    const val font_weight_800: Int = 800
+    // base × 2.25 = 400 × 2.25 = 900
+    const val font_weight_900: Int = 900
+
+    // LETTERSPACING TOKENS
+    // base - 0.025 = 0 - 0.025 = -0.025
+    const val letter_spacing_025: Float = -0.025f
+    // base - 0.05 = 0 - 0.05 = -0.05
+    const val letter_spacing_050: Float = -0.05f
+    // base × 1 = 0 × 1 = 0
+    const val letter_spacing_100: Float = 0f
+    // base + 0.025 = 0 + 0.025 = 0.025
+    const val letter_spacing_125: Float = 0.025f
+    // base + 0.05 = 0 + 0.05 = 0.05
+    const val letter_spacing_150: Float = 0.05f
+
+    // LINEHEIGHT TOKENS
+    // base × 0.667 = 1.5 × 0.667 ≈ 1.0
+    const val line_height_050: Float = 1f
+    // base × 0.833 = 1.5 × 0.833 ≈ 1.25
+    const val line_height_075: Float = 1.25f
+    // base × 1 = 1.5 × 1 = 1.5
+    const val line_height_100: Float = 1.5f
+    // base × 1.167 = 1.5 × 1.167 ≈ 1.75
+    const val line_height_125: Float = 1.75f
+    // 28px ÷ 20px = 1.4 (aligns to 4pt subgrid)
+    const val line_height_150: Float = 1.4f
+    // 32px ÷ 23px ≈ 1.391 (aligns to 4pt subgrid)
+    const val line_height_200: Float = 1.391f
+    // 32px ÷ 26px ≈ 1.231 (aligns to 4pt subgrid)
+    const val line_height_300: Float = 1.231f
+    // 36px ÷ 29px ≈ 1.241 (aligns to 4pt subgrid)
+    const val line_height_400: Float = 1.241f
+    // 40px ÷ 33px = 1.212 (aligns to 4pt subgrid)
+    const val line_height_500: Float = 1.212f
+    // 44px ÷ 37px ≈ 1.19 (aligns to 4pt subgrid)
+    const val line_height_600: Float = 1.19f
+    // 48px ÷ 42px ≈ 1.143 (aligns to 4pt subgrid)
+    const val line_height_700: Float = 1.143f
+
+    // RADIUS TOKENS
+    // base × 0 = 8 × 0 = 0
+    const val radius_000: Float = 0f
+    // base × 0.25 = 8 × 0.25 = 2
+    const val radius_025: Float = 2f
+    // base × 0.5 = 8 × 0.5 = 4
+    const val radius_050: Float = 4f
+    // base × 0.75 = 8 × 0.75 = 6
+    const val radius_075: Float = 6f
+    // base × 1 = 8 × 1 = 8
+    const val radius_100: Float = 8f
+    // base × 1.25 = 8 × 1.25 = 10
+    const val radius_125: Float = 10f
+    // base × 1.5 = 8 × 1.5 = 12
+    const val radius_150: Float = 12f
+    // base × 2 = 8 × 2 = 16
+    const val radius_200: Float = 16f
+    // base × 2.5 = 8 × 2.5 = 20
+    const val radius_250: Float = 20f
+    // base × 3 = 8 × 3 = 24
+    const val radius_300: Float = 24f
+    // base × 4 = 8 × 4 = 32
+    const val radius_400: Float = 32f
+    // special case = 9999 (effectively infinite)
+    const val radius_full: Float = 9999f
+
+    // SPACING TOKENS
+    // base × 0.25 = 8 × 0.25 = 2
+    const val space_025: Float = 2f
+    // base × 0.5 = 8 × 0.5 = 4
+    const val space_050: Float = 4f
+    // space100 × 0.75
+    const val space_075: Float = 6f
+    // base × 1 = 8 × 1 = 8
+    const val space_100: Float = 8f
+    // space100 × 1.25
+    const val space_125: Float = 10f
+    // base × 1.5 = 8 × 1.5 = 12
+    const val space_150: Float = 12f
+    // base × 2 = 8 × 2 = 16
+    const val space_200: Float = 16f
+    // space100 × 2.5
+    const val space_250: Float = 20f
+    // base × 3 = 8 × 3 = 24
+    const val space_300: Float = 24f
+    // base × 4 = 8 × 4 = 32
+    const val space_400: Float = 32f
+    // base × 5 = 8 × 5 = 40
+    const val space_500: Float = 40f
+    // base × 6 = 8 × 6 = 48
+    const val space_600: Float = 48f
+
+    // TAPAREA TOKENS
+    // base × 1 = 44 × 1 = 44
+    const val tap_area_minimum: Float = 44f
+    // base × 1.09 = 44 × 1.09 ≈ 48
+    const val tap_area_recommended: Float = 48f
+    // base × 1.27 = 44 × 1.27 ≈ 56
+    const val tap_area_comfortable: Float = 56f
+    // base × 1.45 = 44 × 1.45 ≈ 64
+    const val tap_area_generous: Float = 64f
+}

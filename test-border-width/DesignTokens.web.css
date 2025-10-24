@@ -1,0 +1,17 @@
+/**
+ * DesignerPunk Design System - Web Tokens
+ * Generated: 2025-10-23T21:39:21.947Z
+ * Version: 1.0.0
+ * Platform: Web (CSS Custom Properties)
+ */
+
+:root {
+
+  /* BORDER_WIDTH TOKENS */
+  /* base × 1 = 1 × 1 = 1 */
+  --border-width-100: 1px;
+  /* base × 2 = 1 × 2 = 2 */
+  --border-width-200: 2px;
+  /* base × 4 = 1 × 4 = 4 */
+  --border-width-400: 4px;
+}
