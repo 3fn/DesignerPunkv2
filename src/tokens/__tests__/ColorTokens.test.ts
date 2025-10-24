@@ -23,6 +23,11 @@ import {
   violetTokens,
   cyanTokens,
   tealTokens,
+  shadowColorTokens,
+  shadowColorTokenNames,
+  getShadowColorToken,
+  getAllShadowColorTokens,
+  getShadowColorTokensByFamily,
   COLOR_BASE_VALUE,
   COLOR_FAMILIES,
   COLOR_SCALE,
@@ -163,7 +168,12 @@ describe('Color Tokens', () => {
     test('should follow 100-500 scale progression for all color families', () => {
       expect(COLOR_SCALE).toEqual([100, 200, 300, 400, 500]);
       
-      Object.values(COLOR_FAMILIES).forEach(family => {
+      // Shadow colors don't follow the 100-500 scale, so exclude them
+      const scaledFamilies = Object.values(COLOR_FAMILIES).filter(f => 
+        !f.startsWith('shadow')
+      );
+      
+      scaledFamilies.forEach(family => {
         const familyTokens = getColorTokensByFamily(family as any);
         
         // Each family should have all scale values
@@ -180,7 +190,12 @@ describe('Color Tokens', () => {
     });
 
     test('should maintain systematic naming within color families', () => {
-      Object.values(COLOR_FAMILIES).forEach(family => {
+      // Shadow colors don't follow the 100-500 scale, so exclude them
+      const scaledFamilies = Object.values(COLOR_FAMILIES).filter(f => 
+        !f.startsWith('shadow')
+      );
+      
+      scaledFamilies.forEach(family => {
         const familyTokens = getColorTokensByFamily(family as any);
         
         familyTokens.forEach(token => {
@@ -197,7 +212,12 @@ describe('Color Tokens', () => {
     });
 
     test('should have logical progression descriptions within families', () => {
-      Object.values(COLOR_FAMILIES).forEach(family => {
+      // Shadow colors don't follow the 100-500 scale, so exclude them
+      const scaledFamilies = Object.values(COLOR_FAMILIES).filter(f => 
+        !f.startsWith('shadow')
+      );
+      
+      scaledFamilies.forEach(family => {
         const familyTokens = getColorTokensByFamily(family as any);
         const sortedTokens = familyTokens.sort((a, b) => {
           const aScale = parseInt(a.name.replace(family, ''));
@@ -224,15 +244,16 @@ describe('Color Tokens', () => {
   describe('Color Token Integration with Token Registry', () => {
     test('should integrate with token registry utilities', () => {
       // Test colorTokens object contains all family tokens
-      expect(Object.keys(colorTokens)).toHaveLength(45); // 9 families × 5 scales = 45 tokens
+      // 9 families × 5 scales + 4 shadow colors = 49 tokens
+      expect(Object.keys(colorTokens)).toHaveLength(49);
       
       // Test colorTokenNames array matches colorTokens keys
       expect(colorTokenNames).toEqual(Object.keys(colorTokens));
-      expect(colorTokenNames).toHaveLength(45);
+      expect(colorTokenNames).toHaveLength(49);
       
       // Test getAllColorTokens returns all tokens
       const allTokens = getAllColorTokens();
-      expect(allTokens).toHaveLength(45);
+      expect(allTokens).toHaveLength(49);
       expect(allTokens.every(token => token.category === TokenCategory.COLOR)).toBe(true);
     });
 
@@ -276,10 +297,19 @@ describe('Color Tokens', () => {
       Object.values(COLOR_FAMILIES).forEach(family => {
         const familyTokens = getColorTokensByFamily(family as any);
         
-        expect(familyTokens).toHaveLength(5);
-        familyTokens.forEach(token => {
-          expect(token.name).toMatch(new RegExp(`^${family}\\d{3}$`));
-        });
+        if (family.startsWith('shadow')) {
+          // Shadow color families have 1 token each (shadowBlack100, shadowBlue100, etc.)
+          expect(familyTokens).toHaveLength(1);
+          familyTokens.forEach(token => {
+            expect(token.name).toMatch(/^shadow(Black|Blue|Orange|Gray)100$/);
+          });
+        } else {
+          // Other families have 5 tokens following 100-500 scale
+          expect(familyTokens).toHaveLength(5);
+          familyTokens.forEach(token => {
+            expect(token.name).toMatch(new RegExp(`^${family}\\d{3}$`));
+          });
+        }
       });
     });
   });
@@ -540,6 +570,156 @@ describe('Color Tokens', () => {
         expect(token.name).toMatch(/^teal[1-5]00$/);
         expect(token.description.toLowerCase()).toContain('teal');
         expect(token.mathematicalRelationship).toContain('Systematic teal scale progression');
+      });
+    });
+  });
+
+  describe('Shadow Color Token Family', () => {
+    test('should have all shadow color tokens defined', () => {
+      const shadowFamily = Object.values(shadowColorTokens);
+      expect(shadowFamily).toHaveLength(4);
+      
+      // Verify all shadow color tokens exist with family structure
+      expect(shadowColorTokens.shadowBlack100).toBeDefined();
+      expect(shadowColorTokens.shadowBlue100).toBeDefined();
+      expect(shadowColorTokens.shadowOrange100).toBeDefined();
+      expect(shadowColorTokens.shadowGray100).toBeDefined();
+    });
+
+    test('should have mode-agnostic shadow colors (same in light and dark modes)', () => {
+      const shadowFamily = getAllShadowColorTokens();
+      
+      shadowFamily.forEach(token => {
+        const colorValue = token.platforms.web.value as ColorTokenValue;
+        
+        // Shadow colors should be mode-agnostic (same in light and dark)
+        expect(colorValue.light.base).toBe(colorValue.dark.base);
+        expect(colorValue.light.wcag).toBe(colorValue.dark.wcag);
+        
+        // Shadow colors should be the same for base and wcag themes
+        expect(colorValue.light.base).toBe(colorValue.light.wcag);
+        expect(colorValue.dark.base).toBe(colorValue.dark.wcag);
+      });
+    });
+
+    test('should validate shadowBlack100 token for neutral lighting', () => {
+      const shadowBlack100 = getShadowColorToken('shadowBlack100');
+      
+      expect(shadowBlack100.name).toBe('shadowBlack100');
+      expect(shadowBlack100.description).toContain('pure black');
+      expect(shadowBlack100.description).toContain('neutral lighting');
+      expect(shadowBlack100.mathematicalRelationship).toContain('mode-agnostic');
+      
+      const colorValue = shadowBlack100.platforms.web.value as ColorTokenValue;
+      expect(colorValue.light.base).toBe('#000000');
+      expect(colorValue.dark.base).toBe('#000000');
+    });
+
+    test('should validate shadowBlue100 token for sunrise/sunset lighting', () => {
+      const shadowBlue100 = getShadowColorToken('shadowBlue100');
+      
+      expect(shadowBlue100.name).toBe('shadowBlue100');
+      expect(shadowBlue100.description).toContain('cool blue-gray tint');
+      expect(shadowBlue100.description).toContain('warm light creates cool shadows');
+      expect(shadowBlue100.mathematicalRelationship).toContain('mode-agnostic');
+      
+      const colorValue = shadowBlue100.platforms.web.value as ColorTokenValue;
+      expect(colorValue.light.base).toBe('#141928');
+      expect(colorValue.dark.base).toBe('#141928');
+    });
+
+    test('should validate shadowOrange100 token for cool lighting environments', () => {
+      const shadowOrange100 = getShadowColorToken('shadowOrange100');
+      
+      expect(shadowOrange100.name).toBe('shadowOrange100');
+      expect(shadowOrange100.description).toContain('warm gray tint');
+      expect(shadowOrange100.description).toContain('cool light creates warm shadows');
+      expect(shadowOrange100.mathematicalRelationship).toContain('mode-agnostic');
+      
+      const colorValue = shadowOrange100.platforms.web.value as ColorTokenValue;
+      expect(colorValue.light.base).toBe('#19140F');
+      expect(colorValue.dark.base).toBe('#19140F');
+    });
+
+    test('should validate shadowGray100 token for overcast/ambient lighting', () => {
+      const shadowGray100 = getShadowColorToken('shadowGray100');
+      
+      expect(shadowGray100.name).toBe('shadowGray100');
+      expect(shadowGray100.description).toContain('blue-gray tint');
+      expect(shadowGray100.description).toContain('overcast/ambient lighting');
+      expect(shadowGray100.mathematicalRelationship).toContain('mode-agnostic');
+      
+      const colorValue = shadowGray100.platforms.web.value as ColorTokenValue;
+      expect(colorValue.light.base).toBe('#0F141E');
+      expect(colorValue.dark.base).toBe('#0F141E');
+    });
+
+    test('should integrate shadow colors with token registry utilities', () => {
+      // Test shadowColorTokens object
+      expect(Object.keys(shadowColorTokens)).toHaveLength(4);
+      
+      // Test shadowColorTokenNames array
+      expect(shadowColorTokenNames).toEqual(Object.keys(shadowColorTokens));
+      expect(shadowColorTokenNames).toHaveLength(4);
+      
+      // Test getAllShadowColorTokens
+      const allShadowTokens = getAllShadowColorTokens();
+      expect(allShadowTokens).toHaveLength(4);
+      expect(allShadowTokens.every(token => token.category === TokenCategory.COLOR)).toBe(true);
+    });
+
+    test('should retrieve shadow color tokens by name correctly', () => {
+      // Test valid token retrieval
+      const shadowBlack100 = getShadowColorToken('shadowBlack100');
+      expect(shadowBlack100.name).toBe('shadowBlack100');
+      expect(shadowBlack100.category).toBe(TokenCategory.COLOR);
+      
+      // Test error handling for invalid token names
+      expect(() => getShadowColorToken('invalidShadow' as any)).toThrow('Shadow color token "invalidShadow" not found');
+    });
+
+    test('should have shadow color families in COLOR_FAMILIES constant', () => {
+      expect(COLOR_FAMILIES.SHADOW_BLACK).toBe('shadowBlack');
+      expect(COLOR_FAMILIES.SHADOW_BLUE).toBe('shadowBlue');
+      expect(COLOR_FAMILIES.SHADOW_ORANGE).toBe('shadowOrange');
+      expect(COLOR_FAMILIES.SHADOW_GRAY).toBe('shadowGray');
+    });
+
+    test('should retrieve shadow color tokens by family', () => {
+      // Test shadowBlack family
+      const shadowBlackFamily = getShadowColorTokensByFamily('shadowBlack');
+      expect(shadowBlackFamily).toHaveLength(1);
+      expect(shadowBlackFamily[0].name).toBe('shadowBlack100');
+      
+      // Test shadowBlue family
+      const shadowBlueFamily = getShadowColorTokensByFamily('shadowBlue');
+      expect(shadowBlueFamily).toHaveLength(1);
+      expect(shadowBlueFamily[0].name).toBe('shadowBlue100');
+      
+      // Test shadowOrange family
+      const shadowOrangeFamily = getShadowColorTokensByFamily('shadowOrange');
+      expect(shadowOrangeFamily).toHaveLength(1);
+      expect(shadowOrangeFamily[0].name).toBe('shadowOrange100');
+      
+      // Test shadowGray family
+      const shadowGrayFamily = getShadowColorTokensByFamily('shadowGray');
+      expect(shadowGrayFamily).toHaveLength(1);
+      expect(shadowGrayFamily[0].name).toBe('shadowGray100');
+    });
+
+    test('should have cross-platform consistency for shadow colors', () => {
+      const allShadowTokens = getAllShadowColorTokens();
+      
+      allShadowTokens.forEach(token => {
+        const webValue = token.platforms.web.value as ColorTokenValue;
+        const iosValue = token.platforms.ios.value as ColorTokenValue;
+        const androidValue = token.platforms.android.value as ColorTokenValue;
+        
+        // Values should be identical across platforms
+        expect(webValue.light.base).toBe(iosValue.light.base);
+        expect(webValue.light.base).toBe(androidValue.light.base);
+        expect(webValue.dark.base).toBe(iosValue.dark.base);
+        expect(webValue.dark.base).toBe(androidValue.dark.base);
       });
     });
   });

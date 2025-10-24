@@ -8,18 +8,26 @@
  * - warning = yellow (urgent attention and warnings)
  * - error = orange (approachable error states)
  * - info = teal (informational states)
+ * - shadow colors = mode-agnostic shadow tints based on art theory
+ * - glow colors = vibrant neon colors for emphasis effects
  * 
  * All color tokens reference mode-aware primitive color tokens that support
  * light/dark modes with base/wcag themes.
  * 
- * Spec-aligned: Exactly 15 color semantic tokens as defined in task 5.1.4
+ * Shadow colors are mode-agnostic (always dark) and reference primitive shadow
+ * color tokens based on art theory (warm light creates cool shadows, etc.)
+ * 
+ * Glow colors reference existing vibrant primitive colors (purple500, cyan500, yellow500)
+ * for neon emphasis effects.
+ * 
+ * Spec-aligned: 22 color semantic tokens (15 original + 4 shadow + 3 glow)
  */
 
 import { SemanticToken, SemanticCategory } from '../../types/SemanticToken';
 
 /**
  * Semantic color tokens for systematic color usage
- * Total: 15 tokens as per spec
+ * Total: 22 tokens (15 original + 4 shadow + 3 glow)
  */
 export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>> = {
   // Brand Identity (2 tokens)
@@ -147,12 +155,70 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
     category: SemanticCategory.COLOR,
     context: 'Border color for UI elements and dividers',
     description: 'Border gray for standard UI element borders and dividers'
+  },
+
+  // Shadow Colors (4 tokens) - Mode-agnostic shadow tints
+  'color.shadow.default': {
+    name: 'color.shadow.default',
+    primitiveReferences: { value: 'shadowBlack100' },
+    category: SemanticCategory.COLOR,
+    context: 'Default shadow color for standard UI shadows',
+    description: 'Pure black shadow for neutral lighting (noon)'
+  },
+
+  'color.shadow.warm': {
+    name: 'color.shadow.warm',
+    primitiveReferences: { value: 'shadowBlue100' },
+    category: SemanticCategory.COLOR,
+    context: 'Warm shadow color for sunrise/sunset lighting',
+    description: 'Cool blue-gray tinted shadow (warm light creates cool shadows)'
+  },
+
+  'color.shadow.cool': {
+    name: 'color.shadow.cool',
+    primitiveReferences: { value: 'shadowOrange100' },
+    category: SemanticCategory.COLOR,
+    context: 'Cool shadow color for cool lighting environments',
+    description: 'Warm gray tinted shadow (cool light creates warm shadows)'
+  },
+
+  'color.shadow.ambient': {
+    name: 'color.shadow.ambient',
+    primitiveReferences: { value: 'shadowGray100' },
+    category: SemanticCategory.COLOR,
+    context: 'Ambient shadow color for overcast/ambient lighting',
+    description: 'Blue-gray tinted shadow for ambient conditions'
+  },
+
+  // Glow Colors (3 tokens) - Reference existing vibrant primitive colors
+  'glow.neonPurple': {
+    name: 'glow.neonPurple',
+    primitiveReferences: { value: 'purple500' },
+    category: SemanticCategory.COLOR,
+    context: 'Neon purple glow color for emphasis effects',
+    description: 'Vibrant purple glow referencing purple500'
+  },
+
+  'glow.neonCyan': {
+    name: 'glow.neonCyan',
+    primitiveReferences: { value: 'cyan500' },
+    category: SemanticCategory.COLOR,
+    context: 'Neon cyan glow color for emphasis effects',
+    description: 'Vibrant cyan glow referencing cyan500'
+  },
+
+  'glow.neonYellow': {
+    name: 'glow.neonYellow',
+    primitiveReferences: { value: 'yellow500' },
+    category: SemanticCategory.COLOR,
+    context: 'Neon yellow glow color for emphasis effects',
+    description: 'Vibrant yellow glow referencing yellow500'
   }
 };
 
 /**
  * Array of all color semantic token names for iteration
- * Total: 15 tokens as per spec
+ * Total: 22 tokens (15 original + 4 shadow + 3 glow)
  */
 export const colorTokenNames = Object.keys(colorTokens);
 
@@ -171,10 +237,10 @@ export function getAllColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'
 }
 
 /**
- * Validate token count matches spec (15 tokens)
+ * Validate token count matches spec (22 tokens: 15 original + 4 shadow + 3 glow)
  */
 export function validateColorTokenCount(): boolean {
-  const expectedCount = 15;
+  const expectedCount = 22;
   const actualCount = colorTokenNames.length;
   if (actualCount !== expectedCount) {
     console.warn(`Color token count mismatch: expected ${expectedCount}, got ${actualCount}`);

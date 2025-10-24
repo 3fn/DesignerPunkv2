@@ -15,6 +15,7 @@
 export * from './ColorTokens';
 export * from './SpacingTokens';
 export * from './TypographyTokens';
+export * from './ShadowTokens';
 
 // StyleTokens placeholder - will be implemented in future tasks
 export { styleTokens, getStyleToken } from './StyleTokens';
@@ -41,12 +42,20 @@ export {
   getAllTypographyTokens
 } from './TypographyTokens';
 
+export {
+  shadowTokens,
+  shadowTokenNames,
+  getShadowToken,
+  getAllShadowTokens
+} from './ShadowTokens';
+
 // Import types for utility functions
 import type { SemanticToken } from '../../types/SemanticToken';
 import { SemanticCategory } from '../../types/SemanticToken';
 import { colorTokens } from './ColorTokens';
 import { spacingTokens } from './SpacingTokens';
 import { typographyTokens } from './TypographyTokens';
+import { shadowTokens } from './ShadowTokens';
 
 /**
  * Get any semantic token by name across all categories
@@ -66,6 +75,11 @@ export function getSemanticToken(name: string): Omit<SemanticToken, 'primitiveTo
   // Check spacing tokens (hierarchical structure)
   if (name.startsWith('space.')) {
     return getSpacingTokenByPath(name);
+  }
+  
+  // Check shadow tokens
+  if (name.startsWith('shadow.')) {
+    return shadowTokens[name];
   }
   
   return undefined;
@@ -165,6 +179,9 @@ export function getAllSemanticTokens(): Array<Omit<SemanticToken, 'primitiveToke
   // Add typography tokens
   tokens.push(...Object.values(typographyTokens));
   
+  // Add shadow tokens
+  tokens.push(...Object.values(shadowTokens));
+  
   // Add spacing tokens (flatten hierarchical structure)
   for (const [category, levels] of Object.entries(spacingTokens)) {
     for (const [level, token] of Object.entries(levels)) {
@@ -190,6 +207,8 @@ export function getSemanticTokensByCategory(category: SemanticCategory): Array<O
       return Object.values(typographyTokens);
     case SemanticCategory.SPACING:
       return getAllSemanticTokens().filter(t => t.category === SemanticCategory.SPACING);
+    case SemanticCategory.SHADOW:
+      return Object.values(shadowTokens);
     default:
       return [];
   }
@@ -313,6 +332,7 @@ export function getSemanticTokenStats() {
     byCategory: categoryCount,
     colorTokens: Object.keys(colorTokens).length,
     typographyTokens: Object.keys(typographyTokens).length,
-    spacingTokens: allTokens.filter(t => t.category === SemanticCategory.SPACING).length
+    spacingTokens: allTokens.filter(t => t.category === SemanticCategory.SPACING).length,
+    shadowTokens: Object.keys(shadowTokens).length
   };
 }

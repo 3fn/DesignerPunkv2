@@ -108,6 +108,11 @@ export {
   violetTokens,
   cyanTokens,
   tealTokens,
+  shadowColorTokens,
+  shadowColorTokenNames,
+  getShadowColorToken,
+  getAllShadowColorTokens,
+  getShadowColorTokensByFamily,
   COLOR_BASE_VALUE,
   COLOR_FAMILIES,
   COLOR_SCALE,
@@ -124,6 +129,52 @@ export {
   BORDER_WIDTH_BASE_VALUE
 } from './BorderWidthTokens';
 
+// Shadow tokens
+export {
+  SHADOW_OFFSET_BASE_VALUE,
+  shadowOffsetX,
+  shadowOffsetY,
+  shadowOffsetXNames,
+  shadowOffsetYNames,
+  getShadowOffsetXToken,
+  getShadowOffsetYToken,
+  getAllShadowOffsetXTokens,
+  getAllShadowOffsetYTokens
+} from './ShadowOffsetTokens';
+
+export {
+  SHADOW_BLUR_BASE_VALUE,
+  shadowBlur,
+  shadowBlurNames,
+  getShadowBlurToken,
+  getAllShadowBlurTokens
+} from './ShadowBlurTokens';
+
+export {
+  SHADOW_OPACITY_BASE_VALUE,
+  shadowOpacityTokens,
+  shadowOpacityTokenNames,
+  getShadowOpacityToken,
+  getAllShadowOpacityTokens
+} from './ShadowOpacityTokens';
+
+// Glow tokens
+export {
+  GLOW_BLUR_BASE_VALUE,
+  glowBlur,
+  glowBlurNames,
+  getGlowBlurToken,
+  getAllGlowBlurTokens
+} from './GlowBlurTokens';
+
+export {
+  GLOW_OPACITY_BASE_VALUE,
+  glowOpacity,
+  glowOpacityNames,
+  getGlowOpacityToken,
+  getAllGlowOpacityTokens
+} from './GlowOpacityTokens';
+
 // Combined token utilities
 import { spacingTokens } from './SpacingTokens';
 import { fontSizeTokens } from './FontSizeTokens';
@@ -136,6 +187,11 @@ import { tapAreaTokens } from './TapAreaTokens';
 import { radiusTokens } from './RadiusTokens';
 import { colorTokens } from './ColorTokens';
 import { borderWidthTokens } from './BorderWidthTokens';
+import { shadowOffsetX, shadowOffsetY } from './ShadowOffsetTokens';
+import { shadowBlur } from './ShadowBlurTokens';
+import { shadowOpacityTokens } from './ShadowOpacityTokens';
+import { glowBlur } from './GlowBlurTokens';
+import { glowOpacity } from './GlowOpacityTokens';
 import { PrimitiveToken, TokenCategory } from '../types/PrimitiveToken';
 
 /**
@@ -152,7 +208,9 @@ export const allTokens = {
   [TokenCategory.DENSITY]: densityTokens,
   [TokenCategory.TAP_AREA]: tapAreaTokens,
   [TokenCategory.COLOR]: colorTokens,
-  [TokenCategory.BORDER_WIDTH]: borderWidthTokens
+  [TokenCategory.BORDER_WIDTH]: borderWidthTokens,
+  [TokenCategory.SHADOW]: { ...shadowOffsetX, ...shadowOffsetY, ...shadowBlur, ...shadowOpacityTokens },
+  [TokenCategory.GLOW]: { ...glowBlur, ...glowOpacity }
 };
 
 /**
@@ -170,7 +228,13 @@ export function getAllTokens(): PrimitiveToken[] {
     ...Object.values(densityTokens),
     ...Object.values(tapAreaTokens),
     ...Object.values(colorTokens),
-    ...Object.values(borderWidthTokens)
+    ...Object.values(borderWidthTokens),
+    ...Object.values(shadowOffsetX),
+    ...Object.values(shadowOffsetY),
+    ...Object.values(shadowBlur),
+    ...Object.values(shadowOpacityTokens),
+    ...Object.values(glowBlur),
+    ...Object.values(glowOpacity)
   ];
 }
 
@@ -225,5 +289,7 @@ export const TOKEN_FAMILY_BASE_VALUES = {
   [TokenCategory.DENSITY]: 1.0,
   [TokenCategory.TAP_AREA]: 44,
   [TokenCategory.COLOR]: 0, // N/A for hex color tokens
-  [TokenCategory.BORDER_WIDTH]: 1
+  [TokenCategory.BORDER_WIDTH]: 1,
+  [TokenCategory.SHADOW]: 4,
+  [TokenCategory.GLOW]: 8
 } as const;
