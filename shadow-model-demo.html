@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shadow Model Demo - Full Sun Arc with Depth Levels</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            font-size: 36px;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 32px;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+
+        .description {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 32px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .card-meta {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .card-code {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #764ba2;
+            background: #f5f5f5;
+            padding: 12px;
+            border-radius: 6px;
+            width: 100%;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        /* Shadow Examples - Full Sun Arc */
+        .shadow-sunrise {
+            box-shadow: -12px 16px 12px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .shadow-morning {
+            box-shadow: -6px 12px 12px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .shadow-noon-moderate {
+            box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .shadow-afternoon-moderate {
+            box-shadow: 6px 12px 12px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .shadow-sunset-moderate {
+            box-shadow: 12px 16px 12px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        /* Shadow Examples - Quality Variations */
+        .shadow-noon-hard {
+            box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        .shadow-noon-moderate-2 {
+            box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .shadow-noon-soft {
+            box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        /* Shadow Examples - Depth Variations */
+        .shadow-depth-100 {
+            box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .shadow-depth-200 {
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.35);
+        }
+
+        .shadow-depth-300 {
+            box-shadow: 0 16px 24px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        /* Combined Examples */
+        .shadow-card {
+            box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .shadow-modal {
+            box-shadow: 6px 12px 20px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .shadow-fab {
+            box-shadow: 12px 16px 4px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        .shadow-hover {
+            box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .shadow-sunrise-card {
+            box-shadow: -12px 16px 12px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .shadow-morning-panel {
+            box-shadow: -6px 12px 20px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .primitives-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 24px;
+        }
+
+        .primitives-table th,
+        .primitives-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .primitives-table th {
+            background: #f5f5f5;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .primitives-table code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #764ba2;
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Shadow Model Demo</h1>
+        <p class="subtitle">Full Sun Arc (Sunrise → Sunset) • Depth Levels (100/200/300) • Shadow Quality
+            (Hard/Moderate/Soft)</p>
+
+        <!-- Full Sun Arc -->
+        <div class="section">
+            <h2>Full Sun Arc - Light Angle Variations</h2>
+            <p class="description">How light angle (inspired by sun position throughout the day) affects shadow
+                direction</p>
+            <div class="grid">
+                <div class="card shadow-sunrise">
+                    <div class="card-title">Sunrise</div>
+                    <div class="card-meta">Low angle from left • Moderate quality</div>
+                    <div class="card-code">offsetX: -12px
+                        offsetY: 16px
+                        blur: 12px
+                        opacity: 0.3</div>
+                </div>
+
+                <div class="card shadow-morning">
+                    <div class="card-title">Morning</div>
+                    <div class="card-meta">Medium angle from left • Moderate quality</div>
+                    <div class="card-code">offsetX: -6px
+                        offsetY: 12px
+                        blur: 12px
+                        opacity: 0.3</div>
+                </div>
+
+                <div class="card shadow-noon-moderate">
+                    <div class="card-title">Noon</div>
+                    <div class="card-meta">Overhead light • Moderate quality</div>
+                    <div class="card-code">offsetX: 0
+                        offsetY: 4px
+                        blur: 12px
+                        opacity: 0.3</div>
+                </div>
+
+                <div class="card shadow-afternoon-moderate">
+                    <div class="card-title">Afternoon</div>
+                    <div class="card-meta">Medium angle from right • Moderate quality</div>
+                    <div class="card-code">offsetX: 6px
+                        offsetY: 12px
+                        blur: 12px
+                        opacity: 0.3</div>
+                </div>
+
+                <div class="card shadow-sunset-moderate">
+                    <div class="card-title">Sunset</div>
+                    <div class="card-meta">Low angle from right • Moderate quality</div>
+                    <div class="card-code">offsetX: 12px
+                        offsetY: 16px
+                        blur: 12px
+                        opacity: 0.3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shadow Quality Variations -->
+        <div class="section">
+            <h2>Shadow Quality Variations</h2>
+            <p class="description">How shadow quality (hard/moderate/soft) affects blur and opacity</p>
+            <div class="grid">
+                <div class="card shadow-noon-hard">
+                    <div class="card-title">Hard Shadow</div>
+                    <div class="card-meta">Sharp, defined edges</div>
+                    <div class="card-code">offsetX: 0
+                        offsetY: 4px
+                        blur: 4px
+                        opacity: 0.4</div>
+                </div>
+
+                <div class="card shadow-noon-moderate-2">
+                    <div class="card-title">Moderate Shadow</div>
+                    <div class="card-meta">Balanced definition</div>
+                    <div class="card-code">offsetX: 0
+                        offsetY: 4px
+                        blur: 12px
+                        opacity: 0.3</div>
+                </div>
+
+                <div class="card shadow-noon-soft">
+                    <div class="card-title">Soft Shadow</div>
+                    <div class="card-meta">Diffuse, gentle edges</div>
+                    <div class="card-code">offsetX: 0
+                        offsetY: 4px
+                        blur: 20px
+                        opacity: 0.2</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Depth Variations -->
+        <div class="section">
+            <h2>Depth Variations</h2>
+            <p class="description">How depth (distance from surface) affects shadow offset, blur, and opacity</p>
+            <div class="grid">
+                <div class="card shadow-depth-100">
+                    <div class="card-title">Depth 100</div>
+                    <div class="card-meta">Close to surface • 1× scale</div>
+                    <div class="card-code">offsetX: 0
+                        offsetY: 4px
+                        blur: 12px
+                        opacity: 0.3</div>
+                </div>
+
+                <div class="card shadow-depth-200">
+                    <div class="card-title">Depth 200</div>
+                    <div class="card-meta">Raised • 2× scale</div>
+                    <div class="card-code">offsetX: 0
+                        offsetY: 8px
+                        blur: 16px
+                        opacity: 0.35</div>
+                </div>
+
+                <div class="card shadow-depth-300">
+                    <div class="card-title">Depth 300</div>
+                    <div class="card-meta">Floating • 3× scale</div>
+                    <div class="card-code">offsetX: 0
+                        offsetY: 16px
+                        blur: 24px
+                        opacity: 0.4</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-World Examples -->
+        <div class="section">
+            <h2>Real-World Semantic Shadows</h2>
+            <p class="description">Practical shadow examples for common UI elements</p>
+            <div class="grid">
+                <div class="card shadow-card">
+                    <div class="card-title">Card Shadow</div>
+                    <div class="card-meta">Noon • Moderate • Depth 100</div>
+                    <div class="card-code">shadow.card
+                        offsetX: 0, offsetY: 4px
+                        blur: 12px, opacity: 0.3</div>
+                </div>
+
+                <div class="card shadow-modal">
+                    <div class="card-title">Modal Shadow</div>
+                    <div class="card-meta">Afternoon • Soft • Depth 200</div>
+                    <div class="card-code">shadow.modal
+                        offsetX: 6px, offsetY: 12px
+                        blur: 20px, opacity: 0.2</div>
+                </div>
+
+                <div class="card shadow-fab">
+                    <div class="card-title">Floating Button</div>
+                    <div class="card-meta">Sunset • Hard • Depth 300</div>
+                    <div class="card-code">shadow.fab
+                        offsetX: 12px, offsetY: 16px
+                        blur: 4px, opacity: 0.4</div>
+                </div>
+
+                <div class="card shadow-hover">
+                    <div class="card-title">Hover Effect</div>
+                    <div class="card-meta">Noon • Soft • Depth 100</div>
+                    <div class="card-code">shadow.hover
+                        offsetX: 0, offsetY: 4px
+                        blur: 20px, opacity: 0.2</div>
+                </div>
+
+                <div class="card shadow-sunrise-card">
+                    <div class="card-title">Sunrise Card</div>
+                    <div class="card-meta">Sunrise • Moderate • Depth 200</div>
+                    <div class="card-code">shadow.sunriseCard
+                        offsetX: -12px, offsetY: 16px
+                        blur: 12px, opacity: 0.3</div>
+                </div>
+
+                <div class="card shadow-morning-panel">
+                    <div class="card-title">Morning Panel</div>
+                    <div class="card-meta">Morning • Soft • Depth 100</div>
+                    <div class="card-code">shadow.morningPanel
+                        offsetX: -6px, offsetY: 12px
+                        blur: 20px, opacity: 0.2</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Primitive Tokens -->
+        <div class="section">
+            <h2>Simplified Primitive Token Structure</h2>
+            <p class="description">One value per quality level for clarity</p>
+
+            <table class="primitives-table">
+                <thead>
+                    <tr>
+                        <th>Token Name</th>
+                        <th>Value</th>
+                        <th>Usage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="3" style="background: #f9f9f9; font-weight: 600;">Shadow Offset Primitives</td>
+                    </tr>
+                    <tr>
+                        <td><code>shadowOffsetX100</code></td>
+                        <td>4px</td>
+                        <td>Small horizontal offset</td>
+                    </tr>
+                    <tr>
+                        <td><code>shadowOffsetX150</code></td>
+                        <td>6px</td>
+                        <td>Medium horizontal offset (strategic flexibility)</td>
+                    </tr>
+                    <tr>
+                        <td><code>shadowOffsetX200</code></td>
+                        <td>8px</td>
+                        <td>Standard horizontal offset</td>
+                    </tr>
+                    <tr>
+                        <td><code>shadowOffsetX300</code></td>
+                        <td>12px</td>
+                        <td>Large horizontal offset</td>
+                    </tr>
+                    <tr>
+                        <td><code>shadowOffsetY100</code></td>
+                        <td>4px</td>
+                        <td>Small vertical offset (elevation 1)</td>
+                    </tr>
+                    <tr>
+                        <td><code>shadowOffsetY200</code></td>
+                        <td>8px</td>
+                        <td>Medium vertical offset (elevation 2)</td>
+                    </tr>
+                    <tr>
+                        <td><code>shadowOffsetY300</code></td>
+                        <td>12px</td>
+                        <td>Large vertical offset</td>
+                    </tr>
+                    <tr>
+                        <td><code>shadowOffsetY400</code></td>
+                        <td>16px</td>
+                        <td>Extra large vertical offset (elevation 3)</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="background: #f9f9f9; font-weight: 600;">Shadow Blur Primitives (Quality
+                            Levels)</td>
+                    </tr>
+                    <tr>
+                        <td><code>shadowBlurHard</code></td>
+                        <td>4px</td>
+                        <td>Hard shadow - sharp, defined edges</td>
+                    </tr>
+                    <tr>
+                        <td><code>shadowBlurModerate</code></td>
+                        <td>12px</td>
+                        <td>Moderate shadow - balanced definition</td>
+                    </tr>
+                    <tr>
+                        <td><code>shadowBlurSoft</code></td>
+                        <td>20px</td>
+                        <td>Soft shadow - diffuse, gentle edges</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="background: #f9f9f9; font-weight: 600;">Shadow Opacity Primitives
+                            (Quality Levels)</td>
+                    </tr>
+                    <tr>
+                        <td><code>shadowOpacityHard</code></td>
+                        <td>0.4</td>
+                        <td>Hard shadow - darker, more defined</td>
+                    </tr>
+                    <tr>
+                        <td><code>shadowOpacityModerate</code></td>
+                        <td>0.3</td>
+                        <td>Moderate shadow - balanced visibility</td>
+                    </tr>
+                    <tr>
+                        <td><code>shadowOpacitySoft</code></td>
+                        <td>0.2</td>
+                        <td>Soft shadow - lighter, more subtle</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="background: #f9f9f9; font-weight: 600;">Depth-Based Adjustments</td>
+                    </tr>
+                    <tr>
+                        <td><code>shadowBlurDepth200</code></td>
+                        <td>16px</td>
+                        <td>Moderate blur for depth 200 (2× scale)</td>
+                    </tr>
+                    <tr>
+                        <td><code>shadowBlurDepth300</code></td>
+                        <td>24px</td>
+                        <td>Soft blur for depth 300 (3× scale)</td>
+                    </tr>
+                    <tr>
+                        <td><code>shadowOpacityDepth200</code></td>
+                        <td>0.35</td>
+                        <td>Slightly darker for depth 200</td>
+                    </tr>
+                    <tr>
+                        <td><code>shadowOpacityDepth300</code></td>
+                        <td>0.4</td>
+                        <td>Darker for depth 300</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -117,6 +117,40 @@ The Token Category Pattern Guide provides the definitive patterns for adding new
 - **Description**: Radius tokens following 8-unit baseline grid alignment with strategic flexibility exceptions for border radius values
 - **Base Value**: 8px
 
+### Shadow Tokens
+
+- **File**: `src/tokens/ShadowOffsetTokens.ts`
+- **Description**: Shadow offset tokens determining shadow direction based on light source position (sun arc: sunrise, morning, noon, afternoon, sunset)
+- **Base Value**: 4px (4px baseline grid alignment)
+
+- **File**: `src/tokens/ShadowBlurTokens.ts`
+- **Description**: Shadow blur tokens determining edge definition based on shadow quality (hard, moderate, soft) and depth (depth100, depth200, depth300)
+- **Base Value**: 4px
+
+- **File**: `src/tokens/ShadowOpacityTokens.ts`
+- **Description**: Shadow opacity tokens determining shadow darkness based on quality and depth
+- **Base Value**: 0.3 (unitless)
+
+- **File**: `src/tokens/ColorTokens.ts` (shadow color family)
+- **Description**: Shadow color primitives based on art theory (warm light creates cool shadows, cool light creates warm shadows) - shadowBlack100, shadowBlue100, shadowOrange100, shadowGray100
+- **Related Documentation**:
+  - [Shadow Tokens Guide](./tokens/shadow-tokens.md) - Complete shadow token reference with usage examples and lighting framework concepts
+
+### Glow Tokens
+
+- **File**: `src/tokens/GlowBlurTokens.ts`
+- **Description**: Glow blur tokens with extended blur range for radial emphasis effects
+- **Base Value**: 8px
+
+- **File**: `src/tokens/GlowOpacityTokens.ts`
+- **Description**: Glow opacity tokens with decreasing progression for multi-layer glow effects
+- **Base Value**: 0.8 (unitless)
+
+- **File**: `src/tokens/semantic/ColorTokens.ts` (glow color semantics)
+- **Description**: Glow color semantics referencing vibrant primitive colors (purple500, cyan500, yellow500) for neon emphasis effects
+- **Related Documentation**:
+  - [Glow Tokens Guide](./tokens/glow-tokens.md) - Glow primitive token reference with usage examples
+
 ---
 
 ## Semantic Tokens
@@ -146,6 +180,14 @@ The Token Category Pattern Guide provides the definitive patterns for adding new
 - **File**: `src/tokens/semantic/StyleTokens.ts`
 - **Description**: Semantic style tokens combining multiple primitives for complete component styling patterns (shadows, borders, effects)
 
+### Semantic Shadow Tokens
+
+- **File**: `src/tokens/semantic/ShadowTokens.ts`
+- **Description**: Semantic shadow tokens composing offsetX, offsetY, blur, opacity, and color primitives to create complete shadow styles for specific use cases (container, modal, hover, fab) with lighting framework concepts (sun arc positions and shadow quality)
+- **Related Guides**:
+  - [Shadow Tokens Guide](./tokens/shadow-tokens.md) - Complete shadow token reference with usage examples and lighting framework concepts
+  - [Lighting Framework Guide](../.kiro/specs/shadow-glow-token-system/lighting-framework.md) - Conceptual framework for light source positioning and shadow quality
+
 ---
 
 ## Related Documentation
@@ -163,6 +205,7 @@ The Token Category Pattern Guide provides the definitive patterns for adding new
 - [Typography Token Expansion](../.kiro/specs/typography-token-expansion/design.md) - Comprehensive design and architecture for typography token system
 - [Mathematical Token System](../.kiro/specs/mathematical-token-system/design.md) - Mathematical foundations and validation system for all tokens
 - [Cross-Platform Build System](../.kiro/specs/cross-platform-build-system/design.md) - Token generation and platform-specific conversion system
+- [Shadow and Glow Token System](../.kiro/specs/shadow-glow-token-system/design.md) - Shadow and glow token architecture with lighting framework concepts and cross-platform translation
 
 ### Project Overview
 
