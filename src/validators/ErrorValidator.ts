@@ -112,6 +112,12 @@ export class ErrorValidator {
       return mathematicalError;
     }
 
+    // Check for border width specific mathematical relationships
+    const borderWidthError = this.validateBorderWidthMathematicalRelationships(token, options);
+    if (borderWidthError) {
+      return borderWidthError;
+    }
+
     // Check for baseline grid violations
     const baselineGridError = this.validateBaselineGridCompliance(token, mathematicalContext, options);
     if (baselineGridError) {
@@ -128,6 +134,12 @@ export class ErrorValidator {
     const referenceError = this.validateTokenReferences(token, registryContext, options);
     if (referenceError) {
       return referenceError;
+    }
+
+    // Check for border width semantic token reference violations
+    const borderWidthSemanticError = this.validateBorderWidthSemanticReferences(token, registryContext, options);
+    if (borderWidthSemanticError) {
+      return borderWidthSemanticError;
     }
 
     // Check for circular dependency violations
@@ -237,6 +249,191 @@ export class ErrorValidator {
           'Ensure consistent family base value across all tokens in family'
         ]
       );
+    }
+
+    return null;
+  }
+
+  /**
+   * Validate border width mathematical relationships
+   * 
+   * Border width tokens follow a doubling progression:
+   * - borderWidth100 = 1 (base value)
+   * - borderWidth200 = borderWidth100 × 2 = 2
+   * - borderWidth400 = borderWidth100 × 4 = 4
+   */
+  private validateBorderWidthMathematicalRelationships(
+    token: PrimitiveToken | SemanticToken,
+    options: ErrorValidationContext['options'] = {}
+  ): ValidationResult | null {
+    // Only applies to primitive border width tokens
+    if ('primitiveReferences' in token) {
+      return null;
+    }
+
+    const primitiveToken = token as PrimitiveToken;
+
+    // Only validate border width tokens
+    if (primitiveToken.category !== TokenCategory.BORDER_WIDTH) {
+      return null;
+    }
+
+    const baseValue = 1; // Border width base value
+    const tokenName = primitiveToken.name;
+
+    // Validate borderWidth200 = borderWidth100 × 2
+    if (tokenName === 'borderWidth200') {
+      const expectedValue = baseValue * 2;
+      if (primitiveToken.baseValue !== expectedValue) {
+        return this.generateErrorResult(
+          token,
+          'Border width mathematical relationship violation',
+          `borderWidth200 must equal borderWidth100 × 2 (expected: ${expectedValue}, actual: ${primitiveToken.baseValue})`,
+          'mathematical-violation',
+          {
+            expectedValue,
+            actualValue: primitiveToken.baseValue,
+            relationship: 'borderWidth200 = borderWidth100 × 2'
+          },
+          [
+            `Set borderWidth200 base value to ${expectedValue}`,
+            'Verify mathematical relationship: borderWidth200 = borderWidth100 × 2',
+            'Ensure doubling progression is maintained',
+            'Review border width token mathematical foundation'
+          ]
+        );
+      }
+    }
+
+    // Validate borderWidth400 = borderWidth100 × 4
+    if (tokenName === 'borderWidth400') {
+      const expectedValue = baseValue * 4;
+      if (primitiveToken.baseValue !== expectedValue) {
+        return this.generateErrorResult(
+          token,
+          'Border width mathematical relationship violation',
+          `borderWidth400 must equal borderWidth100 × 4 (expected: ${expectedValue}, actual: ${primitiveToken.baseValue})`,
+          'mathematical-violation',
+          {
+            expectedValue,
+            actualValue: primitiveToken.baseValue,
+            relationship: 'borderWidth400 = borderWidth100 × 4'
+          },
+          [
+            `Set borderWidth400 base value to ${expectedValue}`,
+            'Verify mathematical relationship: borderWidth400 = borderWidth100 × 4',
+            'Ensure doubling progression is maintained',
+            'Review border width token mathematical foundation'
+          ]
+        );
+      }
+    }
+
+    // Validate borderWidth100 base value
+    if (tokenName === 'borderWidth100') {
+      if (primitiveToken.baseValue !== baseValue) {
+        return this.generateErrorResult(
+          token,
+          'Border width base value violation',
+          `borderWidth100 must equal base value (expected: ${baseValue}, actual: ${primitiveToken.baseValue})`,
+          'mathematical-violation',
+          {
+            expectedValue: baseValue,
+            actualValue: primitiveToken.baseValue,
+            relationship: 'borderWidth100 = 1 (base value)'
+          },
+          [
+            `Set borderWidth100 base value to ${baseValue}`,
+            'Verify border width base value is 1',
+            'Ensure all border width tokens derive from this base',
+            'Review border width token mathematical foundation'
+          ]
+        );
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Validate border width semantic token references
+   * 
+   * Semantic border width tokens must reference the correct primitive tokens:
+   * - borderDefault must reference borderWidth100
+   * - borderEmphasis must reference borderWidth200
+   * - borderHeavy must reference borderWidth400
+   */
+  private validateBorderWidthSemanticReferences(
+    token: PrimitiveToken | SemanticToken,
+    registryContext?: ErrorValidationContext['registryContext'],
+    options: ErrorValidationContext['options'] = {}
+  ): ValidationResult | null {
+    // Only applies to semantic tokens
+    if (!('primitiveReferences' in token)) {
+      return null;
+    }
+
+    const semanticToken = token as SemanticToken;
+
+    // Only validate border width semantic tokens
+    // Border width semantic tokens have names: borderDefault, borderEmphasis, borderHeavy
+    const borderWidthSemanticTokens = ['borderDefault', 'borderEmphasis', 'borderHeavy'];
+    if (!borderWidthSemanticTokens.includes(semanticToken.name)) {
+      return null;
+    }
+
+    // Define expected primitive references for each semantic token
+    const expectedReferences: Record<string, string> = {
+      borderDefault: 'borderWidth100',
+      borderEmphasis: 'borderWidth200',
+      borderHeavy: 'borderWidth400'
+    };
+
+    const expectedPrimitive = expectedReferences[semanticToken.name];
+    
+    // Get the actual primitive reference
+    // Semantic border width tokens use { value: 'primitiveTokenName' } pattern
+    const actualPrimitive = semanticToken.primitiveReferences.value;
+
+    // Validate that the semantic token references the correct primitive
+    if (actualPrimitive !== expectedPrimitive) {
+      return this.generateErrorResult(
+        token,
+        'Border width semantic token reference violation',
+        `${semanticToken.name} must reference ${expectedPrimitive} (actual: ${actualPrimitive || 'none'})`,
+        'mathematical-violation',
+        {
+          relationship: `Expected: ${semanticToken.name} → ${expectedPrimitive}, Actual: ${semanticToken.name} → ${actualPrimitive || 'none'}`
+        },
+        [
+          `Update ${semanticToken.name} to reference ${expectedPrimitive}`,
+          'Verify semantic token follows border width reference pattern',
+          'Ensure semantic tokens maintain mathematical consistency with primitives',
+          'Review border width semantic token definitions'
+        ]
+      );
+    }
+
+    // Validate that the referenced primitive token exists (if registry context provided)
+    if (registryContext?.availablePrimitiveTokens) {
+      const availablePrimitives = registryContext.availablePrimitiveTokens;
+      if (!availablePrimitives.includes(expectedPrimitive)) {
+        return this.generateErrorResult(
+          token,
+          'Border width primitive token not found',
+          `${semanticToken.name} references ${expectedPrimitive} which does not exist`,
+          'mathematical-violation',
+          {
+            relationship: `${semanticToken.name} → ${expectedPrimitive} (primitive token not found in registry)`
+          },
+          [
+            `Register primitive token ${expectedPrimitive} before semantic token`,
+            'Verify primitive border width tokens are defined',
+            'Ensure border width token registration order (primitives before semantics)',
+            'Review border width token system setup'
+          ]
+        );
+      }
     }
 
     return null;

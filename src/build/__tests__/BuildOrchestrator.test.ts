@@ -486,4 +486,73 @@ describe('BuildOrchestrator', () => {
       expect(status.failedPlatforms).toHaveLength(0);
     });
   });
+
+  describe('Border Width Token Integration', () => {
+    it('should include border width tokens in build process', async () => {
+      const config: BuildConfig = {
+        ...DEFAULT_BUILD_CONFIG,
+        platforms: ['web'],
+        outputDir: './test-output',
+      };
+
+      orchestrator.configure(config);
+
+      const results = await orchestrator.build(['web']);
+
+      expect(results).toHaveLength(1);
+      expect(results[0].success).toBe(true);
+      expect(results[0].metadata?.tokensGenerated).toBeGreaterThan(0);
+    });
+
+    it('should generate border width tokens for all platforms', async () => {
+      const config: BuildConfig = {
+        ...DEFAULT_BUILD_CONFIG,
+        platforms: ['web', 'ios', 'android'],
+        outputDir: './test-output',
+      };
+
+      orchestrator.configure(config);
+
+      const results = await orchestrator.build(['web', 'ios', 'android']);
+
+      expect(results).toHaveLength(3);
+      results.forEach(result => {
+        expect(result.success).toBe(true);
+        expect(result.metadata?.tokensGenerated).toBeGreaterThan(0);
+      });
+    });
+
+    it('should include token count in build metadata', async () => {
+      const config: BuildConfig = {
+        ...DEFAULT_BUILD_CONFIG,
+        platforms: ['web'],
+        outputDir: './test-output',
+      };
+
+      orchestrator.configure(config);
+
+      const results = await orchestrator.build(['web']);
+
+      expect(results[0].metadata).toBeDefined();
+      expect(results[0].metadata?.tokensGenerated).toBeDefined();
+      expect(typeof results[0].metadata?.tokensGenerated).toBe('number');
+    });
+
+    it('should include package size in build metadata', async () => {
+      const config: BuildConfig = {
+        ...DEFAULT_BUILD_CONFIG,
+        platforms: ['web'],
+        outputDir: './test-output',
+      };
+
+      orchestrator.configure(config);
+
+      const results = await orchestrator.build(['web']);
+
+      expect(results[0].metadata).toBeDefined();
+      expect(results[0].metadata?.packageSize).toBeDefined();
+      expect(typeof results[0].metadata?.packageSize).toBe('number');
+      expect(results[0].metadata?.packageSize).toBeGreaterThan(0);
+    });
+  });
 });

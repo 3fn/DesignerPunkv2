@@ -111,6 +111,8 @@ export class iOSFormatGenerator extends BaseFormatProvider {
         return 'CGFloat';
       case 'color':
         return 'UIColor';
+      case 'borderWidth':
+        return 'CGFloat';
       default:
         return 'CGFloat';
     }

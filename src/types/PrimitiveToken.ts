@@ -19,7 +19,8 @@ export enum TokenCategory {
   RADIUS = 'radius',
   DENSITY = 'density',
   TAP_AREA = 'tapArea',
-  COLOR = 'color'
+  COLOR = 'color',
+  BORDER_WIDTH = 'borderWidth'
 }
 
 /**

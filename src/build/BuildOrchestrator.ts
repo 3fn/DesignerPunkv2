@@ -21,6 +21,9 @@ import {
   BuildError,
 } from './types/BuildResult';
 import { Platform, PLATFORM_METADATA } from './types/Platform';
+import { TokenFileGenerator } from '../generators/TokenFileGenerator';
+import { getAllTokens, getTokensByCategory } from '../tokens';
+import { TokenCategory } from '../types/PrimitiveToken';
 import * as path from 'path';
 import * as fs from 'fs';
 
@@ -35,12 +38,14 @@ export class BuildOrchestrator implements IBuildOrchestrator {
   private status: BuildStatus;
   private results: BuildResult[];
   private cancelled: boolean;
+  private tokenGenerator: TokenFileGenerator;
 
   constructor() {
     this.config = { ...DEFAULT_BUILD_CONFIG };
     this.status = this.createInitialStatus();
     this.results = [];
     this.cancelled = false;
+    this.tokenGenerator = new TokenFileGenerator();
   }
 
   /**
@@ -362,33 +367,135 @@ export class BuildOrchestrator implements IBuildOrchestrator {
   /**
    * Build a single platform
    * 
-   * Note: This is a placeholder implementation. Actual platform builders
-   * will be implemented in subsequent tasks.
+   * Generates platform-specific token files using TokenFileGenerator.
+   * Includes all token categories including border width tokens.
    */
   private async buildPlatform(platform: Platform): Promise<BuildResult> {
     const startTime = Date.now();
+    const warnings: string[] = [];
+    const errors: BuildError[] = [];
 
-    // Placeholder: Actual platform builder integration will be added in later tasks
-    // For now, create a basic success result
-    const packagePath = path.join(
-      this.config.outputDir,
-      platform,
-      `${platform}-package`
-    );
+    try {
+      // Verify border width tokens are available
+      const borderWidthTokens = getTokensByCategory(TokenCategory.BORDER_WIDTH);
+      if (borderWidthTokens.length === 0) {
+        warnings.push('No border width tokens found in token registry');
+      }
 
-    const duration = Date.now() - startTime;
+      // Verify all tokens are available
+      const allTokens = getAllTokens();
+      if (allTokens.length === 0) {
+        throw new Error('No tokens available for generation');
+      }
 
-    return {
-      platform,
-      success: true,
-      packagePath,
-      duration,
-      warnings: [],
-      errors: [],
-      metadata: {
-        timestamp: new Date().toISOString(),
-      },
-    };
+      // Generate platform-specific token file
+      let generationResult;
+      switch (platform) {
+        case 'web':
+          generationResult = this.tokenGenerator.generateWebTokens({
+            outputDir: this.config.outputDir,
+            version: '1.0.0',
+            includeComments: true,
+            groupByCategory: true
+          });
+          break;
+        case 'ios':
+          generationResult = this.tokenGenerator.generateiOSTokens({
+            outputDir: this.config.outputDir,
+            version: '1.0.0',
+            includeComments: true,
+            groupByCategory: true
+          });
+          break;
+        case 'android':
+          generationResult = this.tokenGenerator.generateAndroidTokens({
+            outputDir: this.config.outputDir,
+            version: '1.0.0',
+            includeComments: true,
+            groupByCategory: true
+          });
+          break;
+        default:
+          throw new Error(`Unsupported platform: ${platform}`);
+      }
+
+      // Check generation result
+      if (!generationResult.valid) {
+        const generationErrors = generationResult.errors || [];
+        generationErrors.forEach(errorMsg => {
+          errors.push({
+            code: 'GENERATION_FAILED',
+            message: errorMsg,
+            severity: 'error',
+            category: 'token',
+            platform,
+            context: {},
+            suggestions: [
+              'Check token definitions for syntax errors',
+              'Verify all tokens have required platform values',
+              'Review generator configuration'
+            ],
+            documentation: []
+          });
+        });
+      }
+
+      // Write generated content to file
+      const outputPath = path.join(this.config.outputDir, platform);
+      
+      // Ensure output directory exists
+      if (!fs.existsSync(outputPath)) {
+        fs.mkdirSync(outputPath, { recursive: true });
+      }
+
+      // Write the generated file
+      const fileName = path.basename(generationResult.filePath);
+      const fullPath = path.join(outputPath, fileName);
+      fs.writeFileSync(fullPath, generationResult.content, 'utf-8');
+
+      const duration = Date.now() - startTime;
+
+      return {
+        platform,
+        success: errors.length === 0,
+        packagePath: fullPath,
+        duration,
+        warnings,
+        errors,
+        metadata: {
+          timestamp: new Date().toISOString(),
+          tokensGenerated: generationResult.tokenCount,
+          packageSize: Buffer.byteLength(generationResult.content, 'utf-8')
+        },
+      };
+    } catch (error) {
+      const duration = Date.now() - startTime;
+      
+      const buildError: BuildError = {
+        code: 'BUILD_FAILED',
+        message: error instanceof Error ? error.message : 'Unknown build error',
+        severity: 'error',
+        category: 'build',
+        platform,
+        context: {},
+        suggestions: [
+          'Check build logs for detailed error information',
+          'Verify platform-specific configuration is correct',
+          'Ensure all dependencies are installed',
+          'Verify token definitions are valid'
+        ],
+        documentation: [],
+      };
+
+      return {
+        platform,
+        success: false,
+        packagePath: '',
+        duration,
+        warnings,
+        errors: [buildError],
+      };
+    }
   }
 
   /**
