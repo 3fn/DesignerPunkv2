@@ -2,7 +2,8 @@
 
 **Date**: October 1, 2025  
 **Purpose**: Unified story of the design token ecosystem using business localization metaphor  
-**Context**: Foundation for translating narrative vision into production pipeline
+**Organization**: framework-strategic
+**Scope**: cross-project
 
 ---
 
@@ -281,4 +282,22 @@
 
 ---
 
-*This narrative provides the foundation for translating the business localization vision into concrete production pipeline specifications and technical implementation.*
+## Related Documentation
+
+This narrative provides the conceptual foundation for understanding the token system. For implementation details and practical guidance:
+
+### Getting Started
+- [Token System Overview](../token-system-overview.md) - Navigate to token files and documentation guides
+- [Token Category Pattern Guide](../../.kiro/specs/token-system/token-category-pattern-guide.md) - Learn how to add new token categories
+
+### Technical Implementation
+- [Mathematical Token System](../../.kiro/specs/mathematical-token-system/design.md) - Mathematical foundation and validation system
+- [Cross-Platform Build System](../../.kiro/specs/cross-platform-build-system/design.md) - Build-time translation and platform generation
+
+### Vision and Philosophy
+- [A Vision of the Future](../../.kiro/steering/A Vision of the Future.md) - AI-human collaboration vision for design systems
+- [Core Goals](../../.kiro/steering/Core Goals.md) - Project principles and development approach
+
+---
+
+*This narrative explains the "why" behind the token system architecture. For the "how" and "what," see the related documentation above.*
