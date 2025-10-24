@@ -225,7 +225,8 @@ export class PrimitiveTokenRegistry {
       TokenCategory.LINE_HEIGHT, 
       TokenCategory.RADIUS, 
       TokenCategory.DENSITY, 
-      TokenCategory.TAP_AREA
+      TokenCategory.TAP_AREA,
+      TokenCategory.BORDER_WIDTH
     ];
     categories.forEach(category => {
       this.categoryIndex.set(category, new Set());

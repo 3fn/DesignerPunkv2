@@ -115,6 +115,15 @@ export {
   COLOR_THEMES
 } from './ColorTokens';
 
+// Border width tokens
+export {
+  borderWidthTokens,
+  borderWidthTokenNames,
+  getBorderWidthToken,
+  getAllBorderWidthTokens,
+  BORDER_WIDTH_BASE_VALUE
+} from './BorderWidthTokens';
+
 // Combined token utilities
 import { spacingTokens } from './SpacingTokens';
 import { fontSizeTokens } from './FontSizeTokens';
@@ -126,6 +135,7 @@ import { densityTokens } from './DensityTokens';
 import { tapAreaTokens } from './TapAreaTokens';
 import { radiusTokens } from './RadiusTokens';
 import { colorTokens } from './ColorTokens';
+import { borderWidthTokens } from './BorderWidthTokens';
 import { PrimitiveToken, TokenCategory } from '../types/PrimitiveToken';
 
 /**
@@ -141,7 +151,8 @@ export const allTokens = {
   [TokenCategory.RADIUS]: radiusTokens,
   [TokenCategory.DENSITY]: densityTokens,
   [TokenCategory.TAP_AREA]: tapAreaTokens,
-  [TokenCategory.COLOR]: colorTokens
+  [TokenCategory.COLOR]: colorTokens,
+  [TokenCategory.BORDER_WIDTH]: borderWidthTokens
 };
 
 /**
@@ -158,7 +169,8 @@ export function getAllTokens(): PrimitiveToken[] {
     ...Object.values(radiusTokens),
     ...Object.values(densityTokens),
     ...Object.values(tapAreaTokens),
-    ...Object.values(colorTokens)
+    ...Object.values(colorTokens),
+    ...Object.values(borderWidthTokens)
   ];
 }
 
@@ -212,5 +224,6 @@ export const TOKEN_FAMILY_BASE_VALUES = {
   [TokenCategory.RADIUS]: 8,
   [TokenCategory.DENSITY]: 1.0,
   [TokenCategory.TAP_AREA]: 44,
-  [TokenCategory.COLOR]: 0 // N/A for hex color tokens
+  [TokenCategory.COLOR]: 0, // N/A for hex color tokens
+  [TokenCategory.BORDER_WIDTH]: 1
 } as const;

@@ -139,6 +139,7 @@ export class AndroidFormatGenerator extends BaseFormatProvider {
       case 'radius':
       case 'tapArea':
       case 'fontSize':
+      case 'borderWidth':
         return 'Float';
       case 'lineHeight':
       case 'density':
@@ -161,6 +162,7 @@ export class AndroidFormatGenerator extends BaseFormatProvider {
       case 'radius':
       case 'tapArea':
       case 'fontSize':
+      case 'borderWidth':
         return 'dimen';
       case 'fontFamily':
         return 'string';

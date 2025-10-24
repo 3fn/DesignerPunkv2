@@ -122,6 +122,27 @@ describe('Format Provider Services', () => {
         expect(result).toContain('Inter, sans-serif');
       });
 
+      test('should format borderWidth tokens with px units', () => {
+        const token = createMockPrimitiveToken({
+          name: 'borderWidth100',
+          category: TokenCategory.BORDER_WIDTH,
+          baseValue: 1,
+          platforms: {
+            web: { value: 1, unit: 'px' },
+            ios: { value: 1, unit: 'pt' },
+            android: { value: 1, unit: 'dp' }
+          }
+        });
+
+        const result = generator.formatToken(token);
+
+        expect(result).toContain('--border-width-100');
+        expect(result).toContain('1px');
+        expect(result).toMatch(/--border-width-100:\s*1px;/);
+        // Ensure no double dash prefix
+        expect(result).not.toContain('----');
+      });
+
       test('should generate complete CSS file with header and footer', () => {
         const tokens = [
           createMockPrimitiveToken({ name: 'space100', baseValue: 8 }),
@@ -353,6 +374,26 @@ describe('Format Provider Services', () => {
         expect(result).toContain('"Inter, sans-serif"');
       });
 
+      test('should format borderWidth tokens with CGFloat type and pt units', () => {
+        const token = createMockPrimitiveToken({
+          name: 'borderWidth100',
+          category: TokenCategory.BORDER_WIDTH,
+          baseValue: 1,
+          platforms: {
+            web: { value: 1, unit: 'px' },
+            ios: { value: 1, unit: 'pt' },
+            android: { value: 1, unit: 'dp' }
+          }
+        });
+
+        const result = generator.formatToken(token);
+
+        expect(result).toContain('borderWidth100');
+        expect(result).toContain('CGFloat');
+        expect(result).toContain('= 1');
+        expect(result).toMatch(/public static let borderWidth100: CGFloat = 1/);
+      });
+
       test('should generate complete Swift file with header and footer', () => {
         const tokens = [
           createMockPrimitiveToken({ name: 'space100' }),
@@ -500,6 +541,25 @@ struct DesignTokens {
         expect(result).toContain('font_weight_bold');
         expect(result).toContain('Int');
         expect(result).toContain('= 700');
+      });
+
+      test('should format borderWidth tokens with Float type and dp units', () => {
+        const token = createMockPrimitiveToken({
+          name: 'borderWidth100',
+          category: TokenCategory.BORDER_WIDTH,
+          baseValue: 1,
+          platforms: {
+            web: { value: 1, unit: 'px' },
+            ios: { value: 1, unit: 'pt' },
+            android: { value: 1, unit: 'dp' }
+          }
+        });
+
+        const result = generator.formatToken(token);
+
+        expect(result).toContain('border_width_100');
+        expect(result).toContain('Float');
+        expect(result).toContain('= 1f');
       });
 
       test('should generate complete Kotlin file', () => {

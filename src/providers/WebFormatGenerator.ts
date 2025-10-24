@@ -129,7 +129,9 @@ export class WebFormatGenerator extends BaseFormatProvider {
 
   private formatCSSCustomProperty(name: string, value: number | string | object, unit: string): string {
     const formattedValue = this.formatCSSValue(value, unit);
-    return `  --${name}: ${formattedValue};`;
+    // Check if name already has the -- prefix (from getPlatformTokenName)
+    const prefix = name.startsWith('--') ? '' : '--';
+    return `  ${prefix}${name}: ${formattedValue};`;
   }
 
   private formatJavaScriptConstant(name: string, value: number | string | object, unit: string): string {
