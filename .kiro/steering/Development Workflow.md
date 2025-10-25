@@ -6,12 +6,35 @@ inclusion: always
 
 ## Task Completion Workflow
 
-### Standard Process
+### Recommended Process (IDE-based with Automation)
 1. **Complete Task Work**: Implement all requirements and create specified artifacts
-2. **Mark Task Complete**: Use `taskStatus` tool to update task status to "completed"
-3. **[AUTOMATED]** **File Organization**: Kiro agent hook automatically checks for files needing organization
-4. **Commit Changes**: Run `./.kiro/hooks/commit-task.sh "Task Name"` to automatically commit and push
-5. **Verify on GitHub**: Confirm changes appear in repository with correct commit message
+2. **Mark Task In Progress**: Use `taskStatus` tool to update task status to "in_progress" when starting
+3. **Mark Task Complete**: Use `taskStatus` tool to update task status to "completed" when finished
+4. **[AUTOMATED]** **File Organization**: Kiro agent hook automatically checks for files needing organization
+5. **[AUTOMATED]** **Release Detection**: Kiro agent hook automatically detects release triggers and creates trigger files
+6. **Commit Changes**: Run `./.kiro/hooks/commit-task.sh "Task Name"` to automatically commit and push
+7. **Verify on GitHub**: Confirm changes appear in repository with correct commit message
+
+**Why use `taskStatus` tool?**
+- Triggers agent hooks for automatic file organization
+- Triggers agent hooks for automatic release detection
+- Maintains consistent task tracking in tasks.md
+- Enables automation without manual steps
+
+### Alternative Process (Script-based without Automation)
+1. **Complete Task Work**: Implement all requirements and create specified artifacts
+2. **Manually update tasks.md**: Change task status from `[ ]` to `[x]`
+3. **Commit Changes**: Run `./.kiro/hooks/commit-task.sh "Task Name"` to automatically commit and push
+4. **Verify on GitHub**: Confirm changes appear in repository with correct commit message
+5. **[OPTIONAL]** **Manual Release Detection**: Run `./.kiro/hooks/release-manager.sh auto` if release analysis needed
+
+**When to use this approach:**
+- Quick fixes or minor changes
+- Non-spec work that doesn't need automation
+- When agent hooks aren't available or needed
+- When you prefer direct control over each step
+
+**Trade-off**: No automatic file organization or release detection, but simpler and more direct
 
 ### Commit Message Standards
 - All task completions should use the commit message specified in the task's "Post-Complete" instruction
