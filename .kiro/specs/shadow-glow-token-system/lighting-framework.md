@@ -93,9 +93,9 @@ offsetY: 4 to 8     // Short shadow (high angle)
 - Neutral, non-directional lighting
 - Most common shadow scenario
 
-#### Afternoon (Medium Angle from Right)
+#### Dusk (Medium Angle from Right)
 
-**Time**: Mid-afternoon, sun descending
+**Time**: Mid-afternoon to early evening, sun descending
 **Light Characteristics**:
 - Medium angle (30-45° above horizon)
 - Light comes from the right side
@@ -114,7 +114,7 @@ offsetY: 8 to 12    // Medium shadow
 
 **Use Cases**:
 - Balanced directional lighting
-- Natural afternoon atmosphere
+- Natural dusk atmosphere
 - Right-side accent lighting
 
 #### Sunset (Low Angle from Right)
@@ -454,7 +454,7 @@ let lightPosition;
 if (hour >= 5 && hour < 8) lightPosition = 'sunrise';
 else if (hour >= 8 && hour < 11) lightPosition = 'morning';
 else if (hour >= 11 && hour < 14) lightPosition = 'noon';
-else if (hour >= 14 && hour < 17) lightPosition = 'afternoon';
+else if (hour >= 14 && hour < 17) lightPosition = 'dusk';
 else if (hour >= 17 && hour < 20) lightPosition = 'sunset';
 else lightPosition = 'noon'; // Default for night
 

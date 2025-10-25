@@ -47,4 +47,7 @@ export interface SemanticToken {
 
   /** Resolved primitive tokens (populated during token resolution) */
   primitiveTokens?: Record<string, PrimitiveToken>;
+
+  /** Optional metadata for additional context (e.g., dedications, notes) */
+  _meta?: Record<string, string>;
 }

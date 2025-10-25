@@ -4,10 +4,13 @@
  * Shadow offset tokens determine shadow direction based on light source position (sun arc).
  * Base value: 4 units (4px baseline grid alignment)
  * 
- * X-axis offsets (horizontal direction):
- * - Negative values: Sunrise/morning shadows (shadow falls left)
- * - Zero value: Noon shadows (no horizontal offset)
- * - Positive values: Afternoon/sunset shadows (shadow falls right)
+ * Horizontal shadow offsets following the sun's arc across the sky:
+ * - Sunrise/Morning: Shadows fall left (negative values)
+ * - Noon: Shadows fall straight down (zero)
+ * - Dusk/Sunset: Shadows fall right (positive values)
+ * 
+ * "Dusk" naming inspired by Tracy Weiss—because she lights me up,
+ * and this lighting framework needed her spark to shine its brightest.
  * 
  * Y-axis offsets (vertical direction):
  * - All positive values (shadows fall downward)
@@ -38,7 +41,7 @@ function generateShadowOffsetPlatformValues(baseValue: number): PlatformValues {
  * Naming convention:
  * - n300, n150, n100: Negative values for sunrise/morning (shadow falls left)
  * - 000: Zero value for noon (no horizontal offset)
- * - 100, 150, 300: Positive values for afternoon/sunset (shadow falls right)
+ * - 100, 150, 300: Positive values for dusk/sunset (shadow falls right)
  */
 export const shadowOffsetX: Record<string, PrimitiveToken> = {
   n300: {
@@ -124,7 +127,7 @@ export const shadowOffsetX: Record<string, PrimitiveToken> = {
     category: TokenCategory.SHADOW,
     baseValue: SHADOW_OFFSET_BASE_VALUE * 1.5,
     familyBaseValue: SHADOW_OFFSET_BASE_VALUE,
-    description: 'Afternoon shadow offset - medium right offset',
+    description: 'Dusk shadow offset - medium right offset',
     mathematicalRelationship: 'base × 1.5 = 4 × 1.5 = 6',
     baselineGridAlignment: false, // 6 is not 4px baseline grid aligned (strategic flexibility)
     isStrategicFlexibility: true,
@@ -166,7 +169,7 @@ export const shadowOffsetX: Record<string, PrimitiveToken> = {
  * Values scale with depth:
  * - 100: Depth 100 / Noon - short shadow
  * - 200: Depth 200 - medium shadow
- * - 300: Morning/Afternoon - medium-long shadow
+ * - 300: Morning/Dusk - medium-long shadow
  * - 400: Depth 300 / Sunrise/Sunset - long shadow
  */
 export const shadowOffsetY: Record<string, PrimitiveToken> = {
@@ -201,7 +204,7 @@ export const shadowOffsetY: Record<string, PrimitiveToken> = {
     category: TokenCategory.SHADOW,
     baseValue: SHADOW_OFFSET_BASE_VALUE * 3,
     familyBaseValue: SHADOW_OFFSET_BASE_VALUE,
-    description: 'Morning/Afternoon - medium-long shadow',
+    description: 'Morning/Dusk - medium-long shadow',
     mathematicalRelationship: 'base × 3 = 4 × 3 = 12',
     baselineGridAlignment: true, // 12 is 4px baseline grid aligned
     isStrategicFlexibility: false,

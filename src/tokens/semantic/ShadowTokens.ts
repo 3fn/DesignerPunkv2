@@ -119,8 +119,9 @@ export const shadowTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>
     description: 'Shadow with no horizontal offset, 8px vertical offset, 12px blur, moderate opacity, default color for noon lighting'
   },
   
-  'shadow.afternoon': {
-    name: 'shadow.afternoon',
+  // Easter egg: TW - "she lights me up" - Oct 2025
+  'shadow.dusk': {
+    name: 'shadow.dusk',
     primitiveReferences: {
       offsetX: 'shadowOffsetX.150',
       offsetY: 'shadowOffsetY.200',
@@ -129,8 +130,9 @@ export const shadowTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>
       color: 'color.shadow.default'
     },
     category: SemanticCategory.SHADOW,
-    context: 'Afternoon lighting shadow with medium right offset and default color',
-    description: 'Shadow with 6px right offset, 8px vertical offset, 12px blur, moderate opacity, default color for afternoon lighting'
+    context: 'Dusk lighting shadow with medium right offset and default color',
+    description: 'Shadow with 6px right offset, 8px vertical offset, 12px blur, moderate opacity, default color for dusk lighting',
+    _meta: { dedicatedTo: 'Tracy Weiss', reason: 'illuminating inspiration' }
   },
   
   'shadow.sunset': {

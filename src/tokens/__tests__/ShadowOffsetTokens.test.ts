@@ -306,7 +306,7 @@ describe('Shadow Offset Tokens', () => {
       getAllShadowOffsetYTokens: indexGetAllShadowOffsetYTokens,
       SHADOW_OFFSET_BASE_VALUE: indexSHADOW_OFFSET_BASE_VALUE,
       allTokens,
-      getAllTokens,
+      getAllPrimitiveTokens,
       getTokensByCategory,
       getTokenByName,
       TOKEN_FAMILY_BASE_VALUES
@@ -354,8 +354,8 @@ describe('Shadow Offset Tokens', () => {
       expect(shadowTokenNames).toContain('400');
     });
 
-    test('should include shadow offset tokens in getAllTokens()', () => {
-      const allTokensArray = getAllTokens();
+    test('should include shadow offset tokens in getAllPrimitiveTokens()', () => {
+      const allTokensArray = getAllPrimitiveTokens();
       const shadowTokensInArray = allTokensArray.filter(
         (token: any) => token.category === TokenCategory.SHADOW
       );

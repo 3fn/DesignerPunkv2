@@ -77,7 +77,7 @@ This follows the same pattern as typography tokens, which don't include color pr
 **Options Considered**:
 1. Arbitrary directional names (left, right, diagonal, etc.)
 2. Degree-based naming (shadow.45deg, shadow.90deg, etc.)
-3. Sun arc framework (sunrise, morning, noon, afternoon, sunset)
+3. Sun arc framework (sunrise, morning, noon, dusk, sunset)
 
 **Decision**: Sun arc framework
 
@@ -87,14 +87,14 @@ The sun arc framework provides intuitive, conceptual naming for directional shad
 - **Sunrise**: Large left offset with warm color (sun rising in east)
 - **Morning**: Medium left offset with neutral color (sun moving up)
 - **Noon**: No horizontal offset (sun directly overhead)
-- **Afternoon**: Medium right offset with neutral color (sun moving down)
+- **Dusk**: Medium right offset with neutral color (sun moving down)
 - **Sunset**: Large right offset with warm color (sun setting in west)
 
 This conceptual framework makes shadow selection more intuitive and less arbitrary. Designers don't need to think "I need a shadow with -12px horizontal offset" - they think "I want a sunrise lighting effect."
 
 The framework also demonstrates the relationship between lighting environment and shadow color:
 - Warm light (sunrise/sunset) creates cool shadows (blue-gray tint)
-- Neutral light (morning/afternoon/noon) creates neutral shadows (default color)
+- Neutral light (morning/dusk/noon) creates neutral shadows (default color)
 
 **Trade-offs**:
 - ✅ **Gained**: Intuitive naming, conceptual framework, natural lighting principles
@@ -152,7 +152,7 @@ Implemented the shadow semantic token system in three phases:
 **Phase 3 (Task 3.3)**: Implemented four directional shadow tokens demonstrating the sun arc framework:
 - shadow.sunrise: Large left offset with warm color
 - shadow.morning: Medium left offset with neutral color
-- shadow.afternoon: Medium right offset with neutral color
+- shadow.dusk: Medium right offset with neutral color
 - shadow.sunset: Large right offset with warm color
 
 ### Key Patterns
@@ -173,13 +173,13 @@ Each shadow token explicitly defines all five shadow properties:
 
 **Pattern 2**: Semantic Color References
 Shadow tokens reference semantic shadow colors from `semantic/ColorTokens.ts`:
-- `color.shadow.default`: Pure black for neutral lighting (noon, morning, afternoon)
+- `color.shadow.default`: Pure black for neutral lighting (noon, morning, dusk)
 - `color.shadow.warm`: Blue-gray tint for warm lighting (sunrise, sunset)
 
 **Pattern 3**: Sun Arc Framework
 Directional shadows follow the sun arc progression:
 ```
-Sunrise (-12px) → Morning (-6px) → Noon (0px) → Afternoon (6px) → Sunset (12px)
+Sunrise (-12px) → Morning (-6px) → Noon (0px) → Dusk (6px) → Sunset (12px)
    warm color      default color   default color  default color    warm color
 ```
 
@@ -218,7 +218,7 @@ Sunrise (-12px) → Morning (-6px) → Noon (0px) → Afternoon (6px) → Sunset
 ### Edge Cases
 ✅ Shadow tokens with no horizontal offset (noon lighting) work correctly
 ✅ Shadow tokens with negative horizontal offset (sunrise/morning) work correctly
-✅ Shadow tokens with positive horizontal offset (afternoon/sunset) work correctly
+✅ Shadow tokens with positive horizontal offset (dusk/sunset) work correctly
 ✅ Shadow tokens with different qualities (hard, moderate, soft) work correctly
 ✅ Shadow tokens with different depths (100, 200, 300, 400) work correctly
 ✅ Shadow tokens with different colors (default, warm) work correctly
@@ -279,19 +279,19 @@ Sunrise (-12px) → Morning (-6px) → Noon (0px) → Afternoon (6px) → Sunset
 }
 ```
 
-### Criterion 3: Directional shadows implemented (sunrise, morning, afternoon, sunset variations)
+### Criterion 3: Directional shadows implemented (sunrise, morning, dusk, sunset variations)
 
 **Evidence**: Four directional shadow tokens implemented demonstrating the sun arc framework.
 
 **Verification**:
 - shadow.sunrise: Large left offset (-12px), warm color ✅
 - shadow.morning: Medium left offset (-6px), default color ✅
-- shadow.afternoon: Medium right offset (6px), default color ✅
+- shadow.dusk: Medium right offset (6px), default color ✅
 - shadow.sunset: Large right offset (12px), warm color ✅
 
 **Sun Arc Progression**:
 ```
-Sunrise (-12px)  →  Morning (-6px)  →  Noon (0px)  →  Afternoon (6px)  →  Sunset (12px)
+Sunrise (-12px)  →  Morning (-6px)  →  Noon (0px)  →  Dusk (6px)  →  Sunset (12px)
    warm color         default color     default color    default color       warm color
 ```
 
@@ -376,7 +376,7 @@ This workflow is coordinated by the compositional architecture, which maintains 
 - Demonstrated lighting variations (noon, sunset)
 
 **Task 3.3**: Implement directional shadow tokens
-- Implemented four directional shadows (sunrise, morning, afternoon, sunset)
+- Implemented four directional shadows (sunrise, morning, dusk, sunset)
 - Demonstrated sun arc framework progression
 - Demonstrated relationship between lighting and shadow color
 - Provided intuitive, conceptual shadow selection
@@ -387,7 +387,7 @@ The shadow semantic token system now provides:
 
 **For Designers**:
 - Intuitive shadow selection based on use case (container, modal, hover, fab)
-- Conceptual directional shadows based on lighting environment (sunrise, morning, afternoon, sunset)
+- Conceptual directional shadows based on lighting environment (sunrise, morning, dusk, sunset)
 - Predictable shadow behavior through mathematical consistency
 - Flexible shadow composition through primitive references
 
@@ -456,7 +456,7 @@ Designers can now:
 **Acceptance Criteria**: "WHEN semantic shadows reference colors THEN they SHALL reference semantic shadow color tokens from semantic/ColorTokens.ts"
 
 **Implementation**: All shadow tokens reference semantic shadow colors:
-- color.shadow.default: Used by container, modal, hover, morning, afternoon
+- color.shadow.default: Used by container, modal, hover, morning, dusk
 - color.shadow.warm: Used by fab, sunrise, sunset
 
 ✅ **Verified**: All shadow tokens reference semantic shadow colors, not primitive shadow colors
@@ -467,7 +467,7 @@ Designers can now:
 
 **Requirement 3.3**: Morning shadow variation implemented with negative offsetX and color.shadow.default ✅
 
-**Requirement 3.5**: Afternoon shadow variation implemented with positive offsetX and color.shadow.default ✅
+**Requirement 3.5**: Dusk shadow variation implemented with positive offsetX and color.shadow.default ✅
 
 **Requirement 3.6**: Sunset shadow variation implemented with positive offsetX and color.shadow.warm ✅
 
@@ -479,7 +479,7 @@ Designers can now:
 Following the exact same pattern as typography tokens made implementation straightforward and predictable. The multi-primitive structure provides excellent traceability and mathematical consistency.
 
 **Sun Arc Framework**
-The sun arc framework (sunrise, morning, noon, afternoon, sunset) provides intuitive, conceptual naming that makes shadow selection easier for designers. The framework demonstrates natural lighting principles in a way that's more accessible than technical specifications.
+The sun arc framework (sunrise, morning, noon, dusk, sunset) provides intuitive, conceptual naming that makes shadow selection easier for designers. The framework demonstrates natural lighting principles in a way that's more accessible than technical specifications.
 
 **Semantic Color References**
 Referencing semantic shadow colors (color.shadow.default, color.shadow.warm) rather than primitive colors maintains the semantic layer abstraction and provides better design intent communication.
@@ -500,14 +500,14 @@ Initial uncertainty about whether shadow tokens should reference semantic shadow
 **Resolution**: All shadow tokens reference semantic shadow colors (color.shadow.default, color.shadow.warm) from semantic/ColorTokens.ts.
 
 **Directional Shadow Symmetry**
-Ensuring morning/afternoon shadows are symmetric (±6px) and sunrise/sunset shadows are symmetric (±12px) required careful attention to offset token selection.
+Ensuring morning/dusk shadows are symmetric (±6px) and sunrise/sunset shadows are symmetric (±12px) required careful attention to offset token selection.
 
 **Resolution**: Used shadowOffsetX tokens with symmetric naming (n150/150, n300/300) to ensure mathematical symmetry.
 
 ### Future Considerations
 
 **Additional Lighting Environments**
-The sun arc framework could be extended with additional lighting environments (dawn, dusk, midnight) if needed. The current five positions (sunrise, morning, noon, afternoon, sunset) provide good coverage for most use cases.
+The sun arc framework could be extended with additional lighting environments (dawn, twilight, midnight) if needed. The current five positions (sunrise, morning, noon, dusk, sunset) provide good coverage for most use cases.
 
 **Shadow Quality Variations**
 Could add more shadow quality variations (extra-soft, extra-hard) if needed. The current three qualities (hard, moderate, soft) provide good coverage for most use cases.

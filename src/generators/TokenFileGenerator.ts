@@ -11,7 +11,7 @@ import { WebFormatGenerator } from '../providers/WebFormatGenerator';
 import { iOSFormatGenerator } from '../providers/iOSFormatGenerator';
 import { AndroidFormatGenerator } from '../providers/AndroidFormatGenerator';
 import { FileMetadata } from '../providers/FormatProvider';
-import { getAllTokens, getTokensByCategory } from '../tokens';
+import { getAllPrimitiveTokens, getTokensByCategory } from '../tokens';
 
 export interface GenerationOptions {
   outputDir?: string;
@@ -73,7 +73,7 @@ export class TokenFileGenerator {
       generatedAt: new Date()
     };
 
-    const tokens = getAllTokens();
+    const tokens = getAllPrimitiveTokens();
     const lines: string[] = [];
 
     // Add header
@@ -136,7 +136,7 @@ export class TokenFileGenerator {
       generatedAt: new Date()
     };
 
-    const tokens = getAllTokens();
+    const tokens = getAllPrimitiveTokens();
     const lines: string[] = [];
 
     // Add header
@@ -199,7 +199,7 @@ export class TokenFileGenerator {
       generatedAt: new Date()
     };
 
-    const tokens = getAllTokens();
+    const tokens = getAllPrimitiveTokens();
     const lines: string[] = [];
 
     // Add header

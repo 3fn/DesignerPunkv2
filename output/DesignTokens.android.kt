@@ -1,6 +1,6 @@
 /**
  * DesignerPunk Design System - Android Tokens
- * Generated: 2025-10-05T14:29:50.496Z
+ * Generated: 2025-10-25T05:35:59.630Z
  * Version: 1.0.0
  * Platform: Android (Kotlin Constants)
  */
@@ -8,6 +8,14 @@
 package com.designerpunk.tokens
 
 object DesignTokens {
+
+    // BORDERWIDTH TOKENS
+    // base × 1 = 1 × 1 = 1
+    const val border_width_100: Float = 1f
+    // base × 2 = 1 × 2 = 2
+    const val border_width_200: Float = 2f
+    // base × 4 = 1 × 4 = 4
+    const val border_width_400: Float = 4f
 
     // COLOR TOKENS
     // Systematic gray scale progression - lightest
@@ -100,6 +108,14 @@ object DesignTokens {
     const val teal_400: Int = 0xFF000000.toInt() // placeholder
     // Systematic teal scale progression - darkest
     const val teal_500: Int = 0xFF000000.toInt() // placeholder
+    // Systematic shadow color family - pure black (0, 0, 0) - mode-agnostic
+    const val shadow_black_100: Int = 0xFF000000.toInt() // placeholder
+    // Systematic shadow color family - blue-tinted gray for sunrise/sunset lighting - mode-agnostic
+    const val shadow_blue_100: Int = 0xFF000000.toInt() // placeholder
+    // Systematic shadow color family - warm-tinted gray for cool lighting environments - mode-agnostic
+    const val shadow_orange_100: Int = 0xFF000000.toInt() // placeholder
+    // Systematic shadow color family - blue-gray for ambient/overcast conditions - mode-agnostic
+    const val shadow_gray_100: Int = 0xFF000000.toInt() // placeholder
 
     // DENSITY TOKENS
     // base × 0.75 = 1.0 × 0.75 = 0.75
@@ -165,6 +181,26 @@ object DesignTokens {
     // base × 2.25 = 400 × 2.25 = 900
     const val font_weight_900: Int = 900
 
+    // GLOW TOKENS
+    // base × 1 = 8 × 1 = 8
+    const val glow_blur_100: Float = 8f
+    // base × 2 = 8 × 2 = 16
+    const val glow_blur_200: Float = 16f
+    // base × 3 = 8 × 3 = 24
+    const val glow_blur_300: Float = 24f
+    // base × 4 = 8 × 4 = 32
+    const val glow_blur_400: Float = 32f
+    // base × 5 = 8 × 5 = 40
+    const val glow_blur_500: Float = 40f
+    // base × 1 = 0.8 × 1 = 0.8
+    const val glow_opacity_100: Float = 0.8f
+    // base × 0.75 = 0.8 × 0.75 = 0.6
+    const val glow_opacity_200: Float = 0.6f
+    // base × 0.5 = 0.8 × 0.5 = 0.4
+    const val glow_opacity_300: Float = 0.4f
+    // base × 0.25 = 0.8 × 0.25 = 0.2
+    const val glow_opacity_400: Float = 0.2f
+
     // LETTERSPACING TOKENS
     // base - 0.025 = 0 - 0.025 = -0.025
     const val letter_spacing_025: Float = -0.025f
@@ -226,6 +262,54 @@ object DesignTokens {
     const val radius_400: Float = 32f
     // special case = 9999 (effectively infinite)
     const val radius_full: Float = 9999f
+
+    // SHADOW TOKENS
+    // base × 1 = 4 × 1 = 4
+    const val shadow_offset_x.100: Float = 4f
+    // base × 1.5 = 4 × 1.5 = 6
+    const val shadow_offset_x.150: Float = 6f
+    // base × 2 = 4 × 2 = 8
+    const val shadow_offset_x.200: Float = 8f
+    // base × 3 = 4 × 3 = 12
+    const val shadow_offset_x.300: Float = 12f
+    // base × -3 = 4 × -3 = -12
+    const val shadow_offset_x.n_300: Float = -12f
+    // base × -2 = 4 × -2 = -8
+    const val shadow_offset_x.n_200: Float = -8f
+    // base × -1.5 = 4 × -1.5 = -6
+    const val shadow_offset_x.n_150: Float = -6f
+    // base × -1 = 4 × -1 = -4
+    const val shadow_offset_x.n_100: Float = -4f
+    // base × 0 = 4 × 0 = 0
+    const val shadow_offset_x.000: Float = 0f
+    // base × 1 = 4 × 1 = 4
+    const val shadow_offset_y.100: Float = 4f
+    // base × 2 = 4 × 2 = 8
+    const val shadow_offset_y.200: Float = 8f
+    // base × 3 = 4 × 3 = 12
+    const val shadow_offset_y.300: Float = 12f
+    // base × 4 = 4 × 4 = 16
+    const val shadow_offset_y.400: Float = 16f
+    // base × 1 = 4 × 1 = 4
+    const val shadow_blur_hard: Float = 4f
+    // base × 3 = 4 × 3 = 12
+    const val shadow_blur_moderate: Float = 12f
+    // base × 5 = 4 × 5 = 20
+    const val shadow_blur_soft: Float = 20f
+    // base × 4 = 4 × 4 = 16
+    const val shadow_blur_depth_200: Float = 16f
+    // base × 6 = 4 × 6 = 24
+    const val shadow_blur_depth_300: Float = 24f
+    // base × 1.33 = 0.3 × 1.33 ≈ 0.4
+    const val shadow_opacity_hard: Float = 0.4f
+    // base × 1 = 0.3 × 1 = 0.3
+    const val shadow_opacity_moderate: Float = 0.3f
+    // base × 0.67 = 0.3 × 0.67 ≈ 0.2
+    const val shadow_opacity_soft: Float = 0.2f
+    // base × 1.17 = 0.3 × 1.17 ≈ 0.35
+    const val shadow_opacity_depth_200: Float = 0.35f
+    // base × 1.33 = 0.3 × 1.33 ≈ 0.4
+    const val shadow_opacity_depth_300: Float = 0.4f
 
     // SPACING TOKENS
     // base × 0.25 = 8 × 0.25 = 2

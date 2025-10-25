@@ -103,7 +103,7 @@ describe('IOSShadowGenerator', () => {
       
       expect(swift).toContain('static let sunrise');
       expect(swift).toContain('static let morning');
-      expect(swift).toContain('static let afternoon');
+      expect(swift).toContain('static let dusk');
       expect(swift).toContain('static let sunset');
     });
     

@@ -1,6 +1,6 @@
 /**
  * DesignerPunk Design System - Web Tokens
- * Generated: 2025-10-23T22:01:53.258Z
+ * Generated: 2025-10-25T05:20:06.266Z
  * Version: 1.0.0
  * Platform: Web (JavaScript Constants)
  */
@@ -106,6 +106,14 @@ export const DesignTokens = {
   teal400: {"light":{"base":"#15424A","wcag":"#1F5159"},"dark":{"base":"#15424A","wcag":"#1F5159"}},
   // Systematic teal scale progression - darkest
   teal500: {"light":{"base":"#0F2E33","wcag":"#143740"},"dark":{"base":"#0F2E33","wcag":"#143740"}},
+  // Systematic shadow color family - pure black (0, 0, 0) - mode-agnostic
+  shadowBlack100: {"light":{"base":"#000000","wcag":"#000000"},"dark":{"base":"#000000","wcag":"#000000"}},
+  // Systematic shadow color family - blue-tinted gray for sunrise/sunset lighting - mode-agnostic
+  shadowBlue100: {"light":{"base":"#141928","wcag":"#141928"},"dark":{"base":"#141928","wcag":"#141928"}},
+  // Systematic shadow color family - warm-tinted gray for cool lighting environments - mode-agnostic
+  shadowOrange100: {"light":{"base":"#19140F","wcag":"#19140F"},"dark":{"base":"#19140F","wcag":"#19140F"}},
+  // Systematic shadow color family - blue-gray for ambient/overcast conditions - mode-agnostic
+  shadowGray100: {"light":{"base":"#0F141E","wcag":"#0F141E"},"dark":{"base":"#0F141E","wcag":"#0F141E"}},
 
   // DENSITY TOKENS
   // base × 0.75 = 1.0 × 0.75 = 0.75
@@ -171,6 +179,26 @@ export const DesignTokens = {
   // base × 2.25 = 400 × 2.25 = 900
   fontWeight900: 900,
 
+  // GLOW TOKENS
+  // base × 1 = 8 × 1 = 8
+  glowBlur100: '8px',
+  // base × 2 = 8 × 2 = 16
+  glowBlur200: '16px',
+  // base × 3 = 8 × 3 = 24
+  glowBlur300: '24px',
+  // base × 4 = 8 × 4 = 32
+  glowBlur400: '32px',
+  // base × 5 = 8 × 5 = 40
+  glowBlur500: '40px',
+  // base × 1 = 0.8 × 1 = 0.8
+  glowOpacity100: 0.8,
+  // base × 0.75 = 0.8 × 0.75 = 0.6
+  glowOpacity200: 0.6,
+  // base × 0.5 = 0.8 × 0.5 = 0.4
+  glowOpacity300: 0.4,
+  // base × 0.25 = 0.8 × 0.25 = 0.2
+  glowOpacity400: 0.2,
+
   // LETTERSPACING TOKENS
   // base - 0.025 = 0 - 0.025 = -0.025
   letterSpacing025: '-0.025em',
@@ -232,6 +260,54 @@ export const DesignTokens = {
   radius400: '32px',
   // special case = 9999 (effectively infinite)
   radiusFull: '9999px',
+
+  // SHADOW TOKENS
+  // base × 1 = 4 × 1 = 4
+  shadowOffsetX.100: '4px',
+  // base × 1.5 = 4 × 1.5 = 6
+  shadowOffsetX.150: '6px',
+  // base × 2 = 4 × 2 = 8
+  shadowOffsetX.200: '8px',
+  // base × 3 = 4 × 3 = 12
+  shadowOffsetX.300: '12px',
+  // base × -3 = 4 × -3 = -12
+  shadowOffsetX.n300: '-12px',
+  // base × -2 = 4 × -2 = -8
+  shadowOffsetX.n200: '-8px',
+  // base × -1.5 = 4 × -1.5 = -6
+  shadowOffsetX.n150: '-6px',
+  // base × -1 = 4 × -1 = -4
+  shadowOffsetX.n100: '-4px',
+  // base × 0 = 4 × 0 = 0
+  shadowOffsetX.000: '0px',
+  // base × 1 = 4 × 1 = 4
+  shadowOffsetY.100: '4px',
+  // base × 2 = 4 × 2 = 8
+  shadowOffsetY.200: '8px',
+  // base × 3 = 4 × 3 = 12
+  shadowOffsetY.300: '12px',
+  // base × 4 = 4 × 4 = 16
+  shadowOffsetY.400: '16px',
+  // base × 1 = 4 × 1 = 4
+  shadowBlurHard: '4px',
+  // base × 3 = 4 × 3 = 12
+  shadowBlurModerate: '12px',
+  // base × 5 = 4 × 5 = 20
+  shadowBlurSoft: '20px',
+  // base × 4 = 4 × 4 = 16
+  shadowBlurDepth200: '16px',
+  // base × 6 = 4 × 6 = 24
+  shadowBlurDepth300: '24px',
+  // base × 1.33 = 0.3 × 1.33 ≈ 0.4
+  shadowOpacityHard: 0.4,
+  // base × 1 = 0.3 × 1 = 0.3
+  shadowOpacityModerate: 0.3,
+  // base × 0.67 = 0.3 × 0.67 ≈ 0.2
+  shadowOpacitySoft: 0.2,
+  // base × 1.17 = 0.3 × 1.17 ≈ 0.35
+  shadowOpacityDepth200: 0.35,
+  // base × 1.33 = 0.3 × 1.33 ≈ 0.4
+  shadowOpacityDepth300: 0.4,
 
   // SPACING TOKENS
   // base × 0.25 = 8 × 0.25 = 2

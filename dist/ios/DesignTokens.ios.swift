@@ -1,6 +1,6 @@
 ///
 /// DesignerPunk Design System - iOS Tokens
-/// Generated: 2025-10-23T22:01:53.257Z
+/// Generated: 2025-10-25T05:20:06.265Z
 /// Version: 1.0.0
 /// Platform: iOS (Swift Constants)
 ///
@@ -108,6 +108,14 @@ public struct DesignTokens {
     public static let teal400: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
     /// Systematic teal scale progression - darkest
     public static let teal500: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    /// Systematic shadow color family - pure black (0, 0, 0) - mode-agnostic
+    public static let shadowBlack100: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    /// Systematic shadow color family - blue-tinted gray for sunrise/sunset lighting - mode-agnostic
+    public static let shadowBlue100: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    /// Systematic shadow color family - warm-tinted gray for cool lighting environments - mode-agnostic
+    public static let shadowOrange100: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    /// Systematic shadow color family - blue-gray for ambient/overcast conditions - mode-agnostic
+    public static let shadowGray100: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
 
     // MARK: - DENSITY TOKENS
     /// base × 0.75 = 1.0 × 0.75 = 0.75
@@ -173,6 +181,26 @@ public struct DesignTokens {
     /// base × 2.25 = 400 × 2.25 = 900
     public static let fontWeight900: UIFont.Weight = 900
 
+    // MARK: - GLOW TOKENS
+    /// base × 1 = 8 × 1 = 8
+    public static let glowBlur100: CGFloat = 8
+    /// base × 2 = 8 × 2 = 16
+    public static let glowBlur200: CGFloat = 16
+    /// base × 3 = 8 × 3 = 24
+    public static let glowBlur300: CGFloat = 24
+    /// base × 4 = 8 × 4 = 32
+    public static let glowBlur400: CGFloat = 32
+    /// base × 5 = 8 × 5 = 40
+    public static let glowBlur500: CGFloat = 40
+    /// base × 1 = 0.8 × 1 = 0.8
+    public static let glowOpacity100: CGFloat = 0.8
+    /// base × 0.75 = 0.8 × 0.75 = 0.6
+    public static let glowOpacity200: CGFloat = 0.6
+    /// base × 0.5 = 0.8 × 0.5 = 0.4
+    public static let glowOpacity300: CGFloat = 0.4
+    /// base × 0.25 = 0.8 × 0.25 = 0.2
+    public static let glowOpacity400: CGFloat = 0.2
+
     // MARK: - LETTERSPACING TOKENS
     /// base - 0.025 = 0 - 0.025 = -0.025
     public static let letterSpacing025: CGFloat = -0.025
@@ -234,6 +262,54 @@ public struct DesignTokens {
     public static let radius400: CGFloat = 32
     /// special case = 9999 (effectively infinite)
     public static let radiusFull: CGFloat = 9999
+
+    // MARK: - SHADOW TOKENS
+    /// base × 1 = 4 × 1 = 4
+    public static let shadowOffsetX.100: CGFloat = 4
+    /// base × 1.5 = 4 × 1.5 = 6
+    public static let shadowOffsetX.150: CGFloat = 6
+    /// base × 2 = 4 × 2 = 8
+    public static let shadowOffsetX.200: CGFloat = 8
+    /// base × 3 = 4 × 3 = 12
+    public static let shadowOffsetX.300: CGFloat = 12
+    /// base × -3 = 4 × -3 = -12
+    public static let shadowOffsetX.n300: CGFloat = -12
+    /// base × -2 = 4 × -2 = -8
+    public static let shadowOffsetX.n200: CGFloat = -8
+    /// base × -1.5 = 4 × -1.5 = -6
+    public static let shadowOffsetX.n150: CGFloat = -6
+    /// base × -1 = 4 × -1 = -4
+    public static let shadowOffsetX.n100: CGFloat = -4
+    /// base × 0 = 4 × 0 = 0
+    public static let shadowOffsetX.000: CGFloat = 0
+    /// base × 1 = 4 × 1 = 4
+    public static let shadowOffsetY.100: CGFloat = 4
+    /// base × 2 = 4 × 2 = 8
+    public static let shadowOffsetY.200: CGFloat = 8
+    /// base × 3 = 4 × 3 = 12
+    public static let shadowOffsetY.300: CGFloat = 12
+    /// base × 4 = 4 × 4 = 16
+    public static let shadowOffsetY.400: CGFloat = 16
+    /// base × 1 = 4 × 1 = 4
+    public static let shadowBlurHard: CGFloat = 4
+    /// base × 3 = 4 × 3 = 12
+    public static let shadowBlurModerate: CGFloat = 12
+    /// base × 5 = 4 × 5 = 20
+    public static let shadowBlurSoft: CGFloat = 20
+    /// base × 4 = 4 × 4 = 16
+    public static let shadowBlurDepth200: CGFloat = 16
+    /// base × 6 = 4 × 6 = 24
+    public static let shadowBlurDepth300: CGFloat = 24
+    /// base × 1.33 = 0.3 × 1.33 ≈ 0.4
+    public static let shadowOpacityHard: CGFloat = 0.4
+    /// base × 1 = 0.3 × 1 = 0.3
+    public static let shadowOpacityModerate: CGFloat = 0.3
+    /// base × 0.67 = 0.3 × 0.67 ≈ 0.2
+    public static let shadowOpacitySoft: CGFloat = 0.2
+    /// base × 1.17 = 0.3 × 1.17 ≈ 0.35
+    public static let shadowOpacityDepth200: CGFloat = 0.35
+    /// base × 1.33 = 0.3 × 1.33 ≈ 0.4
+    public static let shadowOpacityDepth300: CGFloat = 0.4
 
     // MARK: - SPACING TOKENS
     /// base × 0.25 = 8 × 0.25 = 2

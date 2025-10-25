@@ -15,6 +15,7 @@
 export * from './ColorTokens';
 export * from './SpacingTokens';
 export * from './TypographyTokens';
+export * from './BorderWidthTokens';
 export * from './ShadowTokens';
 
 // StyleTokens placeholder - will be implemented in future tasks
@@ -49,39 +50,62 @@ export {
   getAllShadowTokens
 } from './ShadowTokens';
 
+export {
+  SemanticBorderWidthTokens,
+  borderDefault,
+  borderEmphasis,
+  borderHeavy
+} from './BorderWidthTokens';
+
 // Import types for utility functions
 import type { SemanticToken } from '../../types/SemanticToken';
 import { SemanticCategory } from '../../types/SemanticToken';
 import { colorTokens } from './ColorTokens';
 import { spacingTokens } from './SpacingTokens';
 import { typographyTokens } from './TypographyTokens';
+import { SemanticBorderWidthTokens } from './BorderWidthTokens';
 import { shadowTokens } from './ShadowTokens';
 
 /**
  * Get any semantic token by name across all categories
- * Searches color, spacing, and typography tokens
+ * Searches color, spacing, typography, border, and shadow tokens
  */
 export function getSemanticToken(name: string): Omit<SemanticToken, 'primitiveTokens'> | undefined {
   // Check color tokens
   if (name.startsWith('color.')) {
     return colorTokens[name];
   }
-  
+
   // Check typography tokens
   if (name.startsWith('typography.')) {
     return typographyTokens[name];
   }
-  
+
   // Check spacing tokens (hierarchical structure)
   if (name.startsWith('space.')) {
     return getSpacingTokenByPath(name);
   }
-  
+
+  // Check border tokens
+  if (name.startsWith('border.')) {
+    const borderName = name.replace('border.', '');
+    const token = SemanticBorderWidthTokens[borderName as keyof typeof SemanticBorderWidthTokens];
+    if (token) {
+      return {
+        name,
+        primitiveReferences: { value: token.value },
+        category: SemanticCategory.BORDER,
+        context: `Border width for ${borderName.replace(/([A-Z])/g, ' $1').toLowerCase().trim()}`,
+        description: `Semantic border width token: ${borderName}`
+      };
+    }
+  }
+
   // Check shadow tokens
   if (name.startsWith('shadow.')) {
     return shadowTokens[name];
   }
-  
+
   return undefined;
 }
 
@@ -91,24 +115,24 @@ export function getSemanticToken(name: string): Omit<SemanticToken, 'primitiveTo
  */
 function getSpacingTokenByPath(path: string): Omit<SemanticToken, 'primitiveTokens'> | undefined {
   const parts = path.split('.');
-  
+
   if (parts.length !== 3 || parts[0] !== 'space') {
     return undefined;
   }
-  
+
   const [, category, level] = parts;
-  
+
   // Navigate the hierarchical spacing structure
   const categoryTokens = (spacingTokens as any)[category];
   if (!categoryTokens) {
     return undefined;
   }
-  
+
   const token = categoryTokens[level];
   if (!token || !token.value) {
     return undefined;
   }
-  
+
   // Convert spacing token structure to SemanticToken format
   return {
     name: path,
@@ -153,7 +177,7 @@ function getSpacingContext(category: string, level: string): string {
       expansive: 'Maximum breathing room (heroes, feature sections)'
     }
   };
-  
+
   return contexts[category]?.[level] || 'Spacing token';
 }
 
@@ -172,16 +196,27 @@ function getSpacingDescription(category: string, level: string): string {
  */
 export function getAllSemanticTokens(): Array<Omit<SemanticToken, 'primitiveTokens'>> {
   const tokens: Array<Omit<SemanticToken, 'primitiveTokens'>> = [];
-  
+
   // Add color tokens
   tokens.push(...Object.values(colorTokens));
-  
+
   // Add typography tokens
   tokens.push(...Object.values(typographyTokens));
-  
+
   // Add shadow tokens
   tokens.push(...Object.values(shadowTokens));
-  
+
+  // Add border width tokens
+  for (const [name, token] of Object.entries(SemanticBorderWidthTokens)) {
+    tokens.push({
+      name: `border.${name}`,
+      primitiveReferences: { value: token.value },
+      category: SemanticCategory.BORDER,
+      context: `Border width for ${name.replace(/([A-Z])/g, ' $1').toLowerCase().trim()}`,
+      description: `Semantic border width token: ${name}`
+    });
+  }
+
   // Add spacing tokens (flatten hierarchical structure)
   for (const [category, levels] of Object.entries(spacingTokens)) {
     for (const [level, token] of Object.entries(levels)) {
@@ -192,7 +227,7 @@ export function getAllSemanticTokens(): Array<Omit<SemanticToken, 'primitiveToke
       }
     }
   }
-  
+
   return tokens;
 }
 
@@ -207,6 +242,8 @@ export function getSemanticTokensByCategory(category: SemanticCategory): Array<O
       return Object.values(typographyTokens);
     case SemanticCategory.SPACING:
       return getAllSemanticTokens().filter(t => t.category === SemanticCategory.SPACING);
+    case SemanticCategory.BORDER:
+      return getAllSemanticTokens().filter(t => t.category === SemanticCategory.BORDER);
     case SemanticCategory.SHADOW:
       return Object.values(shadowTokens);
     default:
@@ -223,29 +260,29 @@ export function validateSemanticTokenStructure(token: Omit<SemanticToken, 'primi
   errors: string[];
 } {
   const errors: string[] = [];
-  
+
   if (!token.name || typeof token.name !== 'string') {
     errors.push('Token must have a valid name');
   }
-  
+
   if (!token.primitiveReferences || typeof token.primitiveReferences !== 'object') {
     errors.push('Token must have primitiveReferences object');
   } else if (Object.keys(token.primitiveReferences).length === 0) {
     errors.push('Token must reference at least one primitive token');
   }
-  
+
   if (!token.category || !Object.values(SemanticCategory).includes(token.category)) {
     errors.push('Token must have a valid category');
   }
-  
+
   if (!token.context || typeof token.context !== 'string') {
     errors.push('Token must have a context description');
   }
-  
+
   if (!token.description || typeof token.description !== 'string') {
     errors.push('Token must have a description');
   }
-  
+
   return {
     valid: errors.length === 0,
     errors
@@ -265,11 +302,11 @@ export function getSpacingRecommendation(useCase: 'layout' | 'inset', density?: 
       'space.inset.expansive'
     ];
   }
-  
+
   // Layout recommendations
   const recommendations: string[] = [];
   const levels = density ? [density] : ['tight', 'normal', 'loose'];
-  
+
   for (const category of ['grouped', 'related', 'separated', 'sectioned']) {
     for (const level of levels) {
       const path = `space.${category}.${level}`;
@@ -278,7 +315,7 @@ export function getSpacingRecommendation(useCase: 'layout' | 'inset', density?: 
       }
     }
   }
-  
+
   return recommendations;
 }
 
@@ -312,7 +349,7 @@ export function getTypographyRecommendation(useCase: 'heading' | 'body' | 'ui' |
       'typography.display'
     ]
   };
-  
+
   return recommendations[useCase] || [];
 }
 
@@ -321,18 +358,19 @@ export function getTypographyRecommendation(useCase: 'heading' | 'body' | 'ui' |
  */
 export function getSemanticTokenStats() {
   const allTokens = getAllSemanticTokens();
-  
+
   const categoryCount: Record<string, number> = {};
   for (const token of allTokens) {
     categoryCount[token.category] = (categoryCount[token.category] || 0) + 1;
   }
-  
+
   return {
     total: allTokens.length,
     byCategory: categoryCount,
     colorTokens: Object.keys(colorTokens).length,
     typographyTokens: Object.keys(typographyTokens).length,
     spacingTokens: allTokens.filter(t => t.category === SemanticCategory.SPACING).length,
+    borderTokens: Object.keys(SemanticBorderWidthTokens).length,
     shadowTokens: Object.keys(shadowTokens).length
   };
 }

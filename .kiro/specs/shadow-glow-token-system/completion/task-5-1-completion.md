@@ -140,7 +140,7 @@ This ensures the shadow darkness matches the opacity primitive token value.
 Web fully supports directional shadows through offsetX:
 - **Negative offsetX**: Shadow falls left (sunrise, morning)
 - **Zero offsetX**: Shadow falls straight down (noon)
-- **Positive offsetX**: Shadow falls right (afternoon, sunset)
+- **Positive offsetX**: Shadow falls right (dusk, sunset)
 
 **Example**:
 ```css

@@ -106,7 +106,7 @@ Shadow tokens reference semantic color tokens (color.shadow.default, color.shado
 
 ## Next Steps
 
-Task 3.2 will implement standard UI shadow tokens (already complete in this task - the design document's task breakdown had these combined). Task 3.3 will implement directional shadow tokens (sunrise, morning, afternoon, sunset variations).
+Task 3.2 will implement standard UI shadow tokens (already complete in this task - the design document's task breakdown had these combined). Task 3.3 will implement directional shadow tokens (sunrise, morning, dusk, sunset variations).
 
 ---
 
