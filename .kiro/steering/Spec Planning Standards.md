@@ -2309,7 +2309,12 @@ Developers can now:
 
 1. **Before starting task**: Review task type and validation tier requirements
 2. Execute tasks incrementally (one at a time)
-3. Mark tasks in progress, then complete
+3. **Mark tasks using `taskStatus` tool**:
+   - Mark task "in_progress" when starting
+   - Mark task "completed" when finished
+   - **Important**: Using `taskStatus` tool (not direct git commits) triggers agent hooks for:
+     - Automatic file organization (based on Organization metadata)
+     - Automatic release detection (creates release triggers for analysis)
 4. **Validate by tier** before marking complete:
    - **Tier 1 (Setup)**: Syntax validation + artifact verification + basic structure
    - **Tier 2 (Implementation)**: Syntax + functional + integration + requirements compliance
@@ -2319,8 +2324,21 @@ Developers can now:
    - **Tier 1 (Setup)**: Minimal format - artifacts, notes, validation
    - **Tier 2 (Implementation)**: Standard format - artifacts, details, validation, requirements
    - **Tier 3 (Architecture/Parent)**: Comprehensive format - artifacts, decisions, algorithm, validation, lessons, integration
-6. Commit using task completion hook (automatic)
+6. **Commit changes**: Run `./.kiro/hooks/commit-task.sh "Task Name"` to commit and push
 7. Verify all validation checks passed before moving to next task
+
+**Two Workflow Paths:**
+
+**Path A (Recommended - IDE-based with automation)**:
+- Use `taskStatus` tool → Triggers agent hooks → Auto organization → Auto release detection → Manual commit
+- **Benefit**: Automated file organization and release detection
+- **Use when**: Working within Kiro IDE on spec tasks
+
+**Path B (Manual - Script-based)**:
+- Manual task status updates → Manual commit via script → No agent hooks triggered
+- **Benefit**: Simpler, direct control
+- **Use when**: Quick fixes, non-spec work, or when agent hooks aren't needed
+- **Note**: Can manually trigger release detection with `./.kiro/hooks/release-manager.sh auto`
 
 ---
 
