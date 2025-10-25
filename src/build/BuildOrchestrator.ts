@@ -22,7 +22,7 @@ import {
 } from './types/BuildResult';
 import { Platform, PLATFORM_METADATA } from './types/Platform';
 import { TokenFileGenerator } from '../generators/TokenFileGenerator';
-import { getAllTokens, getTokensByCategory } from '../tokens';
+import { getAllPrimitiveTokens, getTokensByCategory } from '../tokens';
 import { TokenCategory } from '../types/PrimitiveToken';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -383,7 +383,7 @@ export class BuildOrchestrator implements IBuildOrchestrator {
       }
 
       // Verify all tokens are available
-      const allTokens = getAllTokens();
+      const allTokens = getAllPrimitiveTokens();
       if (allTokens.length === 0) {
         throw new Error('No tokens available for generation');
       }

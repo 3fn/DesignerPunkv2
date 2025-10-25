@@ -111,7 +111,7 @@ describe('WebShadowGenerator', () => {
       
       expect(css).toContain('--shadow-sunrise');
       expect(css).toContain('--shadow-morning');
-      expect(css).toContain('--shadow-afternoon');
+      expect(css).toContain('--shadow-dusk');
       expect(css).toContain('--shadow-sunset');
     });
   });

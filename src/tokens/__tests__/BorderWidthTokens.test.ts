@@ -291,7 +291,7 @@ describe('Border Width Tokens', () => {
       getAllBorderWidthTokens: indexGetAllBorderWidthTokens,
       BORDER_WIDTH_BASE_VALUE: indexBORDER_WIDTH_BASE_VALUE,
       allTokens,
-      getAllTokens,
+      getAllPrimitiveTokens,
       getTokensByCategory,
       getTokenByName,
       TOKEN_FAMILY_BASE_VALUES
@@ -330,8 +330,8 @@ describe('Border Width Tokens', () => {
       expect(allTokens[TokenCategory.BORDER_WIDTH]).toEqual(borderWidthTokens);
     });
 
-    test('should include border width tokens in getAllTokens()', () => {
-      const allTokensArray = getAllTokens();
+    test('should include border width tokens in getAllPrimitiveTokens()', () => {
+      const allTokensArray = getAllPrimitiveTokens();
       const borderWidthTokensInArray = allTokensArray.filter(
         (token: any) => token.category === TokenCategory.BORDER_WIDTH
       );

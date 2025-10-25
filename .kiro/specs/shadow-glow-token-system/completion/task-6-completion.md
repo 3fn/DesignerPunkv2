@@ -32,7 +32,7 @@
 **Evidence**: Lighting framework concepts integrated throughout shadow token documentation
 
 **Verification**:
-- Sun arc concept explained (sunrise, morning, noon, afternoon, sunset)
+- Sun arc concept explained (sunrise, morning, noon, dusk, sunset)
 - Shadow quality framework explained (hard, moderate, soft)
 - Depth concept explained (depth100, depth200, depth300)
 - Art theory rationale documented (warm light creates cool shadows)

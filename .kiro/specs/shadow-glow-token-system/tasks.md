@@ -173,7 +173,7 @@ This implementation plan addresses the incorrect file structure from Task 1.1, t
   **Success Criteria:**
   - Shadow semantic tokens created using string reference pattern
   - Standard UI shadows implemented (card, modal, hover, fab)
-  - Directional shadows implemented (sunrise, morning, afternoon, sunset variations)
+  - Directional shadows implemented (sunrise, morning, dusk, sunset variations)
   - All semantic tokens follow semantic/TypographyTokens.ts pattern
 
   **Primary Artifacts:**
@@ -205,7 +205,7 @@ This implementation plan addresses the incorrect file structure from Task 1.1, t
     **Validation**: Tier 2 - Standard
     - Implement sunrise shadow variation (negative offsetX, color.shadow.warm)
     - Implement morning shadow variation (negative offsetX, color.shadow.default)
-    - Implement afternoon shadow variation (positive offsetX, color.shadow.default)
+    - Implement dusk shadow variation (positive offsetX, color.shadow.default)
     - Implement sunset shadow variation (positive offsetX, color.shadow.warm)
     - Reference appropriate shadow colors based on lighting environment
     - _Requirements: 3.2, 3.3, 3.5, 3.6, 5.1, 5.5_

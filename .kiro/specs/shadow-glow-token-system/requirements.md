@@ -9,7 +9,7 @@
 
 ## Draft Status Note
 
-This requirements document has been updated from DRAFT to complete status. Requirements 3 and 4 have been refined based on exploration exercises that defined the sun arc conceptual model (sunrise/morning/noon/afternoon/sunset) and shadow quality framework (hard/moderate/soft). All requirements are now complete and ready for design phase.
+This requirements document has been updated from DRAFT to complete status. Requirements 3 and 4 have been refined based on exploration exercises that defined the sun arc conceptual model (sunrise/morning/noon/dusk/sunset) and shadow quality framework (hard/moderate/soft). All requirements are now complete and ready for design phase.
 
 ---
 
@@ -25,7 +25,7 @@ Shadows convey elevation and spatial relationships using directional lighting pr
 
 - **Shadow Token System**: Token system for directional shadows that convey depth and spatial relationships
 - **Glow Token System**: Token system for radial glow effects that convey emphasis and energy
-- **Light Source Position**: Conceptual position of light relative to an element that determines shadow offset direction (inspired by sun arc: sunrise, morning, noon, afternoon, sunset)
+- **Light Source Position**: Conceptual position of light relative to an element that determines shadow offset direction (inspired by sun arc: sunrise, morning, noon, dusk, sunset)
 - **Shadow Quality**: Characteristic of shadow edge definition and opacity (hard, moderate, soft)
 - **Depth**: Distance of an element from the surface behind it, conveyed through shadow size and softness (depth100, depth200, depth300)
 - **Sun Arc**: Conceptual model of light source positions based on sun position throughout the day
@@ -86,11 +86,11 @@ Semantic shadow color tokens (color.shadow.default, color.shadow.warm, color.sha
 
 #### Acceptance Criteria
 
-1. WHEN documenting light source concepts THEN the Shadow Token System SHALL provide guidance based on sun position throughout the day (sunrise, morning, noon, afternoon, sunset)
+1. WHEN documenting light source concepts THEN the Shadow Token System SHALL provide guidance based on sun position throughout the day (sunrise, morning, noon, dusk, sunset)
 2. WHEN light source is at sunrise position THEN shadows SHALL offset left and down (negative offsetX, positive offsetY)
 3. WHEN light source is at morning position THEN shadows SHALL offset left and down with medium angle (negative offsetX, positive offsetY)
 4. WHEN light source is at noon position THEN shadows SHALL offset straight down (offsetX = 0, positive offsetY)
-5. WHEN light source is at afternoon position THEN shadows SHALL offset right and down with medium angle (positive offsetX, positive offsetY)
+5. WHEN light source is at dusk position THEN shadows SHALL offset right and down with medium angle (positive offsetX, positive offsetY)
 6. WHEN light source is at sunset position THEN shadows SHALL offset right and down (positive offsetX, positive offsetY)
 7. WHEN applying light source concepts THEN semantic shadow tokens SHALL demonstrate the sun arc framework in practice
 

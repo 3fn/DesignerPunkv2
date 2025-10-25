@@ -214,9 +214,12 @@ export const allTokens = {
 };
 
 /**
- * Get all tokens as a flat array
+ * Get all primitive tokens as a flat array
+ * 
+ * Renamed from getAllTokens() for clarity and symmetry with getAllSemanticTokens().
+ * This function returns only primitive tokens (mathematical foundation tokens).
  */
-export function getAllTokens(): PrimitiveToken[] {
+export function getAllPrimitiveTokens(): PrimitiveToken[] {
   return [
     ...Object.values(spacingTokens),
     ...Object.values(fontSizeTokens),
@@ -239,6 +242,11 @@ export function getAllTokens(): PrimitiveToken[] {
 }
 
 /**
+ * @deprecated Use getAllPrimitiveTokens() instead. This alias will be removed in v2.0.
+ */
+export const getAllTokens = getAllPrimitiveTokens;
+
+/**
  * Get tokens by category
  */
 export function getTokensByCategory(category: TokenCategory): PrimitiveToken[] {
@@ -250,7 +258,7 @@ export function getTokensByCategory(category: TokenCategory): PrimitiveToken[] {
  * Get token by name across all categories
  */
 export function getTokenByName(name: string): PrimitiveToken | undefined {
-  const allTokensFlat = getAllTokens();
+  const allTokensFlat = getAllPrimitiveTokens();
   return allTokensFlat.find(token => token.name === name);
 }
 
@@ -258,21 +266,21 @@ export function getTokenByName(name: string): PrimitiveToken | undefined {
  * Get all strategic flexibility tokens
  */
 export function getAllStrategicFlexibilityTokens(): PrimitiveToken[] {
-  return getAllTokens().filter(token => token.isStrategicFlexibility);
+  return getAllPrimitiveTokens().filter(token => token.isStrategicFlexibility);
 }
 
 /**
  * Get all baseline grid aligned tokens
  */
 export function getAllBaselineAlignedTokens(): PrimitiveToken[] {
-  return getAllTokens().filter(token => token.baselineGridAlignment);
+  return getAllPrimitiveTokens().filter(token => token.baselineGridAlignment);
 }
 
 /**
  * Get all precision targeted tokens
  */
 export function getAllPrecisionTargetedTokens(): PrimitiveToken[] {
-  return getAllTokens().filter(token => token.isPrecisionTargeted);
+  return getAllPrimitiveTokens().filter(token => token.isPrecisionTargeted);
 }
 
 /**
