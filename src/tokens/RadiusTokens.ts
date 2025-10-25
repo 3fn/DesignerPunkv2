@@ -31,40 +31,40 @@ export const radiusTokens: Record<string, PrimitiveToken> = {
   radius000: {
     name: 'radius000',
     category: TokenCategory.RADIUS,
-    baseValue: 0,
+    baseValue: RADIUS_BASE_VALUE * 0,
     familyBaseValue: RADIUS_BASE_VALUE,
     description: 'No radius - sharp corners',
     mathematicalRelationship: 'base × 0 = 8 × 0 = 0',
     baselineGridAlignment: true, // 0 is baseline grid aligned
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
-    platforms: generateRadiusPlatformValues(0)
+    platforms: generateRadiusPlatformValues(RADIUS_BASE_VALUE * 0)
   },
 
   radius025: {
     name: 'radius025',
     category: TokenCategory.RADIUS,
-    baseValue: 2,
+    baseValue: RADIUS_BASE_VALUE * 0.25,
     familyBaseValue: RADIUS_BASE_VALUE,
     description: 'Subtle radius - 0.25x base value',
     mathematicalRelationship: 'base × 0.25 = 8 × 0.25 = 2',
     baselineGridAlignment: false, // 2 is not 8-unit aligned
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
-    platforms: generateRadiusPlatformValues(2)
+    platforms: generateRadiusPlatformValues(RADIUS_BASE_VALUE * 0.25)
   },
 
   radius050: {
     name: 'radius050',
     category: TokenCategory.RADIUS,
-    baseValue: 4,
+    baseValue: RADIUS_BASE_VALUE * 0.5,
     familyBaseValue: RADIUS_BASE_VALUE,
     description: 'Small radius - 0.5x base value',
     mathematicalRelationship: 'base × 0.5 = 8 × 0.5 = 4',
     baselineGridAlignment: false, // 4 is not 8-unit aligned
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
-    platforms: generateRadiusPlatformValues(4)
+    platforms: generateRadiusPlatformValues(RADIUS_BASE_VALUE * 0.5)
   },
 
   radius075: {
@@ -109,27 +109,27 @@ export const radiusTokens: Record<string, PrimitiveToken> = {
   radius150: {
     name: 'radius150',
     category: TokenCategory.RADIUS,
-    baseValue: 12,
+    baseValue: RADIUS_BASE_VALUE * 1.5,
     familyBaseValue: RADIUS_BASE_VALUE,
     description: 'Medium-large radius - 1.5x base value',
     mathematicalRelationship: 'base × 1.5 = 8 × 1.5 = 12',
     baselineGridAlignment: false, // 12 is not 8-unit aligned
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
-    platforms: generateRadiusPlatformValues(12)
+    platforms: generateRadiusPlatformValues(RADIUS_BASE_VALUE * 1.5)
   },
 
   radius200: {
     name: 'radius200',
     category: TokenCategory.RADIUS,
-    baseValue: 16,
+    baseValue: RADIUS_BASE_VALUE * 2,
     familyBaseValue: RADIUS_BASE_VALUE,
     description: 'Large radius - 2x base value',
     mathematicalRelationship: 'base × 2 = 8 × 2 = 16',
     baselineGridAlignment: true, // 16 is baseline grid aligned (8 × 2)
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
-    platforms: generateRadiusPlatformValues(16)
+    platforms: generateRadiusPlatformValues(RADIUS_BASE_VALUE * 2)
   },
 
   radius250: {
@@ -148,27 +148,27 @@ export const radiusTokens: Record<string, PrimitiveToken> = {
   radius300: {
     name: 'radius300',
     category: TokenCategory.RADIUS,
-    baseValue: 24,
+    baseValue: RADIUS_BASE_VALUE * 3,
     familyBaseValue: RADIUS_BASE_VALUE,
     description: 'Huge radius - 3x base value',
     mathematicalRelationship: 'base × 3 = 8 × 3 = 24',
     baselineGridAlignment: true, // 24 is baseline grid aligned (8 × 3)
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
-    platforms: generateRadiusPlatformValues(24)
+    platforms: generateRadiusPlatformValues(RADIUS_BASE_VALUE * 3)
   },
 
   radius400: {
     name: 'radius400',
     category: TokenCategory.RADIUS,
-    baseValue: 32,
+    baseValue: RADIUS_BASE_VALUE * 4,
     familyBaseValue: RADIUS_BASE_VALUE,
     description: 'Maximum radius - 4x base value',
     mathematicalRelationship: 'base × 4 = 8 × 4 = 32',
     baselineGridAlignment: true, // 32 is baseline grid aligned (8 × 4)
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
-    platforms: generateRadiusPlatformValues(32)
+    platforms: generateRadiusPlatformValues(RADIUS_BASE_VALUE * 4)
   },
 
   radiusFull: {

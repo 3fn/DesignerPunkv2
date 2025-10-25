@@ -32,27 +32,27 @@ export const spacingTokens: Record<string, PrimitiveToken> = {
   space025: {
     name: 'space025',
     category: TokenCategory.SPACING,
-    baseValue: 2,
+    baseValue: SPACING_BASE_VALUE * 0.25,
     familyBaseValue: SPACING_BASE_VALUE,
     description: 'Extra tight spacing - 0.25x base value',
     mathematicalRelationship: 'base × 0.25 = 8 × 0.25 = 2',
     baselineGridAlignment: false, // 2 is not 8-unit aligned
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
-    platforms: generateSpacingPlatformValues(2)
+    platforms: generateSpacingPlatformValues(SPACING_BASE_VALUE * 0.25)
   },
 
   space050: {
     name: 'space050',
     category: TokenCategory.SPACING,
-    baseValue: 4,
+    baseValue: SPACING_BASE_VALUE * 0.5,
     familyBaseValue: SPACING_BASE_VALUE,
     description: 'Tight spacing - 0.5x base value',
     mathematicalRelationship: 'base × 0.5 = 8 × 0.5 = 4',
     baselineGridAlignment: false, // 4 is not 8-unit aligned
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
-    platforms: generateSpacingPlatformValues(4)
+    platforms: generateSpacingPlatformValues(SPACING_BASE_VALUE * 0.5)
   },
 
   space075: {
@@ -97,27 +97,27 @@ export const spacingTokens: Record<string, PrimitiveToken> = {
   space150: {
     name: 'space150',
     category: TokenCategory.SPACING,
-    baseValue: 12,
+    baseValue: SPACING_BASE_VALUE * 1.5,
     familyBaseValue: SPACING_BASE_VALUE,
     description: 'Loose spacing - 1.5x base value',
     mathematicalRelationship: 'base × 1.5 = 8 × 1.5 = 12',
     baselineGridAlignment: false, // 12 is not 8-unit aligned
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
-    platforms: generateSpacingPlatformValues(12)
+    platforms: generateSpacingPlatformValues(SPACING_BASE_VALUE * 1.5)
   },
 
   space200: {
     name: 'space200',
     category: TokenCategory.SPACING,
-    baseValue: 16,
+    baseValue: SPACING_BASE_VALUE * 2,
     familyBaseValue: SPACING_BASE_VALUE,
     description: 'Wide spacing - 2x base value',
     mathematicalRelationship: 'base × 2 = 8 × 2 = 16',
     baselineGridAlignment: true, // 16 is baseline grid aligned (8 × 2)
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
-    platforms: generateSpacingPlatformValues(16)
+    platforms: generateSpacingPlatformValues(SPACING_BASE_VALUE * 2)
   },
 
   space250: {
@@ -136,53 +136,53 @@ export const spacingTokens: Record<string, PrimitiveToken> = {
   space300: {
     name: 'space300',
     category: TokenCategory.SPACING,
-    baseValue: 24,
+    baseValue: SPACING_BASE_VALUE * 3,
     familyBaseValue: SPACING_BASE_VALUE,
     description: 'Extra wide spacing - 3x base value',
     mathematicalRelationship: 'base × 3 = 8 × 3 = 24',
     baselineGridAlignment: true, // 24 is baseline grid aligned (8 × 3)
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
-    platforms: generateSpacingPlatformValues(24)
+    platforms: generateSpacingPlatformValues(SPACING_BASE_VALUE * 3)
   },
 
   space400: {
     name: 'space400',
     category: TokenCategory.SPACING,
-    baseValue: 32,
+    baseValue: SPACING_BASE_VALUE * 4,
     familyBaseValue: SPACING_BASE_VALUE,
     description: 'Large spacing - 4x base value',
     mathematicalRelationship: 'base × 4 = 8 × 4 = 32',
     baselineGridAlignment: true, // 32 is baseline grid aligned (8 × 4)
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
-    platforms: generateSpacingPlatformValues(32)
+    platforms: generateSpacingPlatformValues(SPACING_BASE_VALUE * 4)
   },
 
   space500: {
     name: 'space500',
     category: TokenCategory.SPACING,
-    baseValue: 40,
+    baseValue: SPACING_BASE_VALUE * 5,
     familyBaseValue: SPACING_BASE_VALUE,
     description: 'Extra large spacing - 5x base value',
     mathematicalRelationship: 'base × 5 = 8 × 5 = 40',
     baselineGridAlignment: true, // 40 is baseline grid aligned (8 × 5)
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
-    platforms: generateSpacingPlatformValues(40)
+    platforms: generateSpacingPlatformValues(SPACING_BASE_VALUE * 5)
   },
 
   space600: {
     name: 'space600',
     category: TokenCategory.SPACING,
-    baseValue: 48,
+    baseValue: SPACING_BASE_VALUE * 6,
     familyBaseValue: SPACING_BASE_VALUE,
     description: 'Huge spacing - 6x base value',
     mathematicalRelationship: 'base × 6 = 8 × 6 = 48',
     baselineGridAlignment: true, // 48 is baseline grid aligned (8 × 6)
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
-    platforms: generateSpacingPlatformValues(48)
+    platforms: generateSpacingPlatformValues(SPACING_BASE_VALUE * 6)
   }
 };
 

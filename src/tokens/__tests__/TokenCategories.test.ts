@@ -489,7 +489,7 @@ describe('Token Categories', () => {
       expect(COLOR_BASE_VALUE).toBe(0); // N/A for hex color tokens
 
       const allTokens = getAllColorTokens();
-      expect(allTokens.length).toBe(45); // 9 families × 5 scales = 45 tokens
+      expect(allTokens.length).toBe(49); // 9 families × 5 scales + 4 shadow families × 1 scale = 49 tokens
       expect(allTokens.every(token => token.category === TokenCategory.COLOR)).toBe(true);
       expect(allTokens.every(token => token.familyBaseValue === COLOR_BASE_VALUE)).toBe(true);
     });
@@ -512,15 +512,24 @@ describe('Token Categories', () => {
 
     test('should integrate color families with systematic color scale', () => {
       expect(COLOR_SCALE).toEqual([100, 200, 300, 400, 500]);
-      expect(Object.keys(COLOR_FAMILIES)).toHaveLength(9);
+      expect(Object.keys(COLOR_FAMILIES)).toHaveLength(13); // 9 original + 4 shadow families
 
-      // Test that all families follow the scale
-      Object.values(COLOR_FAMILIES).forEach(family => {
+      // Test that main families follow the full scale
+      const mainFamilies = ['gray', 'black', 'white', 'yellow', 'orange', 'purple', 'violet', 'cyan', 'teal'];
+      mainFamilies.forEach(family => {
         COLOR_SCALE.forEach(scale => {
           const token = getColorToken(`${family}${scale}` as any);
           expect(token).toBeDefined();
           expect(token.name).toBe(`${family}${scale}`);
         });
+      });
+
+      // Shadow families only have 100 scale
+      const shadowFamilies = ['shadowBlack', 'shadowBlue', 'shadowOrange', 'shadowGray'];
+      shadowFamilies.forEach(family => {
+        const token = getColorToken(`${family}100` as any);
+        expect(token).toBeDefined();
+        expect(token.name).toBe(`${family}100`);
       });
     });
 
@@ -567,11 +576,20 @@ describe('Token Categories', () => {
     });
 
     test('should have consistent mathematical relationship descriptions across color families', () => {
-      Object.values(COLOR_FAMILIES).forEach(family => {
+      // Test main families with full scale
+      const mainFamilies = ['gray', 'black', 'white', 'yellow', 'orange', 'purple', 'violet', 'cyan', 'teal'];
+      mainFamilies.forEach(family => {
         COLOR_SCALE.forEach(scale => {
           const token = getColorToken(`${family}${scale}` as any);
           expect(token.mathematicalRelationship).toContain(`Systematic ${family} scale progression`);
         });
+      });
+
+      // Test shadow families (only 100 scale, different description pattern)
+      const shadowFamilies = ['shadowBlack', 'shadowBlue', 'shadowOrange', 'shadowGray'];
+      shadowFamilies.forEach(family => {
+        const token = getColorToken(`${family}100` as any);
+        expect(token.mathematicalRelationship).toContain(`Systematic shadow color family`);
       });
     });
   });
