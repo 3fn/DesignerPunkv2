@@ -231,6 +231,7 @@ describe('TokenFileGenerator', () => {
           filePath: 'test.js',
           content: 'test',
           tokenCount: 10,
+          semanticTokenCount: 5,
           valid: true
         },
         {
@@ -238,6 +239,7 @@ describe('TokenFileGenerator', () => {
           filePath: 'test.swift',
           content: 'test',
           tokenCount: 15,
+          semanticTokenCount: 5,
           valid: true
         },
         {
@@ -245,6 +247,7 @@ describe('TokenFileGenerator', () => {
           filePath: 'test.kt',
           content: 'test',
           tokenCount: 10,
+          semanticTokenCount: 5,
           valid: true
         }
       ];
@@ -253,7 +256,7 @@ describe('TokenFileGenerator', () => {
 
       expect(validation.consistent).toBe(false);
       expect(validation.issues.length).toBeGreaterThan(0);
-      expect(validation.issues[0]).toContain('Token count mismatch');
+      expect(validation.issues[0]).toContain('Primitive token count mismatch');
     });
 
     it('should detect generation failures', () => {
@@ -263,6 +266,7 @@ describe('TokenFileGenerator', () => {
           filePath: 'test.js',
           content: 'test',
           tokenCount: 10,
+          semanticTokenCount: 5,
           valid: true
         },
         {
@@ -270,6 +274,7 @@ describe('TokenFileGenerator', () => {
           filePath: 'test.swift',
           content: 'test',
           tokenCount: 10,
+          semanticTokenCount: 5,
           valid: false,
           errors: ['Syntax error']
         },
@@ -278,6 +283,7 @@ describe('TokenFileGenerator', () => {
           filePath: 'test.kt',
           content: 'test',
           tokenCount: 10,
+          semanticTokenCount: 5,
           valid: true
         }
       ];
@@ -296,6 +302,7 @@ describe('TokenFileGenerator', () => {
           filePath: 'test.js',
           content: 'test',
           tokenCount: 10,
+          semanticTokenCount: 5,
           valid: true
         },
         {
@@ -303,6 +310,7 @@ describe('TokenFileGenerator', () => {
           filePath: 'test.swift',
           content: 'test',
           tokenCount: 10,
+          semanticTokenCount: 5,
           valid: true
         },
         {
@@ -310,6 +318,7 @@ describe('TokenFileGenerator', () => {
           filePath: 'test.kt',
           content: 'test',
           tokenCount: 10,
+          semanticTokenCount: 5,
           valid: true
         }
       ];
@@ -434,6 +443,174 @@ describe('TokenFileGenerator', () => {
         expect(result.tokenCount).toBeGreaterThan(0);
         expect(result.content.length).toBeGreaterThan(100); // Reasonable minimum
       });
+    });
+  });
+
+  describe('Semantic Token Reference Validation', () => {
+    it('should validate semantic tokens with valid single references', () => {
+      const semantics = [
+        {
+          name: 'colorPrimary',
+          primitiveReferences: { value: 'purple300' },
+          category: 'color' as any,
+          context: 'Primary brand color',
+          description: 'Primary brand color for main actions'
+        }
+      ];
+
+      const primitives = [
+        {
+          name: 'purple300',
+          category: 'color' as any,
+          baseValue: 0,
+          familyBaseValue: 0,
+          description: 'Purple 300',
+          mathematicalRelationship: 'base',
+          baselineGridAlignment: false,
+          isStrategicFlexibility: false,
+          isPrecisionTargeted: false,
+          platforms: {} as any
+        }
+      ];
+
+      const validation = generator.validateSemanticReferences(semantics, primitives);
+
+      expect(validation.valid).toBe(true);
+      expect(validation.invalidReferences).toHaveLength(0);
+    });
+
+    it('should detect invalid single reference', () => {
+      const semantics = [
+        {
+          name: 'colorPrimary',
+          primitiveReferences: { value: 'nonExistentToken' },
+          category: 'color' as any,
+          context: 'Primary brand color',
+          description: 'Primary brand color for main actions'
+        }
+      ];
+
+      const primitives = [
+        {
+          name: 'purple300',
+          category: 'color' as any,
+          baseValue: 0,
+          familyBaseValue: 0,
+          description: 'Purple 300',
+          mathematicalRelationship: 'base',
+          baselineGridAlignment: false,
+          isStrategicFlexibility: false,
+          isPrecisionTargeted: false,
+          platforms: {} as any
+        }
+      ];
+
+      const validation = generator.validateSemanticReferences(semantics, primitives);
+
+      expect(validation.valid).toBe(false);
+      expect(validation.invalidReferences).toHaveLength(1);
+      expect(validation.invalidReferences[0].semanticToken).toBe('colorPrimary');
+      expect(validation.invalidReferences[0].reference).toBe('nonExistentToken');
+      expect(validation.invalidReferences[0].reason).toContain('non-existent primitive');
+    });
+
+    it('should validate typography tokens with all required references', () => {
+      const semantics = [
+        {
+          name: 'typographyBodyMd',
+          primitiveReferences: {
+            fontSize: 'fontSize100',
+            lineHeight: 'lineHeight100',
+            fontFamily: 'fontFamilyBody',
+            fontWeight: 'fontWeight400',
+            letterSpacing: 'letterSpacing100'
+          },
+          category: 'typography' as any,
+          context: 'Body medium typography',
+          description: 'Medium body text style'
+        }
+      ];
+
+      const primitives = [
+        { name: 'fontSize100', category: 'fontSize' as any, baseValue: 16, familyBaseValue: 16, description: '', mathematicalRelationship: '', baselineGridAlignment: false, isStrategicFlexibility: false, isPrecisionTargeted: false, platforms: {} as any },
+        { name: 'lineHeight100', category: 'lineHeight' as any, baseValue: 24, familyBaseValue: 24, description: '', mathematicalRelationship: '', baselineGridAlignment: false, isStrategicFlexibility: false, isPrecisionTargeted: false, platforms: {} as any },
+        { name: 'fontFamilyBody', category: 'fontFamily' as any, baseValue: 0, familyBaseValue: 0, description: '', mathematicalRelationship: '', baselineGridAlignment: false, isStrategicFlexibility: false, isPrecisionTargeted: false, platforms: {} as any },
+        { name: 'fontWeight400', category: 'fontWeight' as any, baseValue: 400, familyBaseValue: 400, description: '', mathematicalRelationship: '', baselineGridAlignment: false, isStrategicFlexibility: false, isPrecisionTargeted: false, platforms: {} as any },
+        { name: 'letterSpacing100', category: 'letterSpacing' as any, baseValue: 0, familyBaseValue: 0, description: '', mathematicalRelationship: '', baselineGridAlignment: false, isStrategicFlexibility: false, isPrecisionTargeted: false, platforms: {} as any }
+      ];
+
+      const validation = generator.validateSemanticReferences(semantics, primitives);
+
+      expect(validation.valid).toBe(true);
+      expect(validation.invalidReferences).toHaveLength(0);
+    });
+
+    it('should detect missing required typography property', () => {
+      const semantics = [
+        {
+          name: 'typographyBodyMd',
+          primitiveReferences: {
+            fontSize: 'fontSize100',
+            lineHeight: 'lineHeight100',
+            fontFamily: 'fontFamilyBody',
+            fontWeight: 'fontWeight400'
+            // Missing letterSpacing
+          },
+          category: 'typography' as any,
+          context: 'Body medium typography',
+          description: 'Medium body text style'
+        }
+      ];
+
+      const primitives = [
+        { name: 'fontSize100', category: 'fontSize' as any, baseValue: 16, familyBaseValue: 16, description: '', mathematicalRelationship: '', baselineGridAlignment: false, isStrategicFlexibility: false, isPrecisionTargeted: false, platforms: {} as any },
+        { name: 'lineHeight100', category: 'lineHeight' as any, baseValue: 24, familyBaseValue: 24, description: '', mathematicalRelationship: '', baselineGridAlignment: false, isStrategicFlexibility: false, isPrecisionTargeted: false, platforms: {} as any },
+        { name: 'fontFamilyBody', category: 'fontFamily' as any, baseValue: 0, familyBaseValue: 0, description: '', mathematicalRelationship: '', baselineGridAlignment: false, isStrategicFlexibility: false, isPrecisionTargeted: false, platforms: {} as any },
+        { name: 'fontWeight400', category: 'fontWeight' as any, baseValue: 400, familyBaseValue: 400, description: '', mathematicalRelationship: '', baselineGridAlignment: false, isStrategicFlexibility: false, isPrecisionTargeted: false, platforms: {} as any }
+      ];
+
+      const validation = generator.validateSemanticReferences(semantics, primitives);
+
+      expect(validation.valid).toBe(false);
+      expect(validation.invalidReferences).toHaveLength(1);
+      expect(validation.invalidReferences[0].semanticToken).toBe('typographyBodyMd');
+      expect(validation.invalidReferences[0].property).toBe('letterSpacing');
+      expect(validation.invalidReferences[0].reason).toContain('missing required reference');
+    });
+
+    it('should detect invalid typography property reference', () => {
+      const semantics = [
+        {
+          name: 'typographyBodyMd',
+          primitiveReferences: {
+            fontSize: 'invalidFontSize',
+            lineHeight: 'lineHeight100',
+            fontFamily: 'fontFamilyBody',
+            fontWeight: 'fontWeight400',
+            letterSpacing: 'letterSpacing100'
+          },
+          category: 'typography' as any,
+          context: 'Body medium typography',
+          description: 'Medium body text style'
+        }
+      ];
+
+      const primitives = [
+        { name: 'fontSize100', category: 'fontSize' as any, baseValue: 16, familyBaseValue: 16, description: '', mathematicalRelationship: '', baselineGridAlignment: false, isStrategicFlexibility: false, isPrecisionTargeted: false, platforms: {} as any },
+        { name: 'lineHeight100', category: 'lineHeight' as any, baseValue: 24, familyBaseValue: 24, description: '', mathematicalRelationship: '', baselineGridAlignment: false, isStrategicFlexibility: false, isPrecisionTargeted: false, platforms: {} as any },
+        { name: 'fontFamilyBody', category: 'fontFamily' as any, baseValue: 0, familyBaseValue: 0, description: '', mathematicalRelationship: '', baselineGridAlignment: false, isStrategicFlexibility: false, isPrecisionTargeted: false, platforms: {} as any },
+        { name: 'fontWeight400', category: 'fontWeight' as any, baseValue: 400, familyBaseValue: 400, description: '', mathematicalRelationship: '', baselineGridAlignment: false, isStrategicFlexibility: false, isPrecisionTargeted: false, platforms: {} as any },
+        { name: 'letterSpacing100', category: 'letterSpacing' as any, baseValue: 0, familyBaseValue: 0, description: '', mathematicalRelationship: '', baselineGridAlignment: false, isStrategicFlexibility: false, isPrecisionTargeted: false, platforms: {} as any }
+      ];
+
+      const validation = generator.validateSemanticReferences(semantics, primitives);
+
+      expect(validation.valid).toBe(false);
+      expect(validation.invalidReferences).toHaveLength(1);
+      expect(validation.invalidReferences[0].semanticToken).toBe('typographyBodyMd');
+      expect(validation.invalidReferences[0].property).toBe('fontSize');
+      expect(validation.invalidReferences[0].reference).toBe('invalidFontSize');
+      expect(validation.invalidReferences[0].reason).toContain('invalid fontSize reference');
     });
   });
 });

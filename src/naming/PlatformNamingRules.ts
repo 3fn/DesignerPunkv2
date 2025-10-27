@@ -162,7 +162,7 @@ function splitIntoWords(name: string): string[] {
     .replace(/([A-Z])([A-Z][a-z])/g, '$1 $2')  // PascalCase boundaries
     .replace(/([a-zA-Z])(\d)/g, '$1 $2')  // Letter to number boundary
     .replace(/(\d)([a-zA-Z])/g, '$1 $2')  // Number to letter boundary
-    .replace(/[-_]/g, ' ')  // kebab-case and snake_case
+    .replace(/[-_.]/g, ' ')  // kebab-case, snake_case, and dot notation
     .split(/\s+/)
     .filter(word => word.length > 0);
 }

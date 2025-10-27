@@ -1,6 +1,6 @@
 ///
 /// DesignerPunk Design System - iOS Tokens
-/// Generated: 2025-10-25T05:35:59.629Z
+/// Generated: 2025-10-27T18:03:08.392Z
 /// Version: 1.0.0
 /// Platform: iOS (Swift Constants)
 ///
@@ -8,6 +8,12 @@
 import UIKit
 
 public struct DesignTokens {
+
+    // ============================================
+    // PRIMITIVE TOKENS
+    /// Mathematical foundation
+    // ============================================
+
 
     // MARK: - BORDERWIDTH TOKENS
     /// base × 1 = 1 × 1 = 1
@@ -265,31 +271,31 @@ public struct DesignTokens {
 
     // MARK: - SHADOW TOKENS
     /// base × 1 = 4 × 1 = 4
-    public static let shadowOffsetX.100: CGFloat = 4
+    public static let shadowOffsetX100: CGFloat = 4
     /// base × 1.5 = 4 × 1.5 = 6
-    public static let shadowOffsetX.150: CGFloat = 6
+    public static let shadowOffsetX150: CGFloat = 6
     /// base × 2 = 4 × 2 = 8
-    public static let shadowOffsetX.200: CGFloat = 8
+    public static let shadowOffsetX200: CGFloat = 8
     /// base × 3 = 4 × 3 = 12
-    public static let shadowOffsetX.300: CGFloat = 12
+    public static let shadowOffsetX300: CGFloat = 12
     /// base × -3 = 4 × -3 = -12
-    public static let shadowOffsetX.n300: CGFloat = -12
+    public static let shadowOffsetXN300: CGFloat = -12
     /// base × -2 = 4 × -2 = -8
-    public static let shadowOffsetX.n200: CGFloat = -8
+    public static let shadowOffsetXN200: CGFloat = -8
     /// base × -1.5 = 4 × -1.5 = -6
-    public static let shadowOffsetX.n150: CGFloat = -6
+    public static let shadowOffsetXN150: CGFloat = -6
     /// base × -1 = 4 × -1 = -4
-    public static let shadowOffsetX.n100: CGFloat = -4
+    public static let shadowOffsetXN100: CGFloat = -4
     /// base × 0 = 4 × 0 = 0
-    public static let shadowOffsetX.000: CGFloat = 0
+    public static let shadowOffsetX000: CGFloat = 0
     /// base × 1 = 4 × 1 = 4
-    public static let shadowOffsetY.100: CGFloat = 4
+    public static let shadowOffsetY100: CGFloat = 4
     /// base × 2 = 4 × 2 = 8
-    public static let shadowOffsetY.200: CGFloat = 8
+    public static let shadowOffsetY200: CGFloat = 8
     /// base × 3 = 4 × 3 = 12
-    public static let shadowOffsetY.300: CGFloat = 12
+    public static let shadowOffsetY300: CGFloat = 12
     /// base × 4 = 4 × 4 = 16
-    public static let shadowOffsetY.400: CGFloat = 16
+    public static let shadowOffsetY400: CGFloat = 16
     /// base × 1 = 4 × 1 = 4
     public static let shadowBlurHard: CGFloat = 4
     /// base × 3 = 4 × 3 = 12
@@ -346,4 +352,73 @@ public struct DesignTokens {
     public static let tapAreaComfortable: CGFloat = 56
     /// base × 1.45 = 44 × 1.45 ≈ 64
     public static let tapAreaGenerous: CGFloat = 64
+
+    // ============================================
+    // SEMANTIC TOKENS
+    /// Use these for UI development
+    // ============================================
+
+    public static let colorPrimary = purple300
+    public static let colorSecondary = violet300
+    public static let colorSuccessStrong = cyan400
+    public static let colorSuccessSubtle = cyan100
+    public static let colorWarningStrong = yellow400
+    public static let colorWarningSubtle = yellow100
+    public static let colorError = orange300
+    public static let colorInfoStrong = teal400
+    public static let colorInfoSubtle = teal100
+    public static let colorTextDefault = gray300
+    public static let colorTextMuted = gray200
+    public static let colorTextSubtle = gray100
+    public static let colorBackground = white100
+    public static let colorSurface = white200
+    public static let colorBorder = gray100
+    public static let colorShadowDefault = shadowBlack100
+    public static let colorShadowWarm = shadowBlue100
+    public static let colorShadowCool = shadowOrange100
+    public static let colorShadowAmbient = shadowGray100
+    public static let typographyBodySm = Typography(fontSize: fontSize075, lineHeight: lineHeight075, fontFamily: fontFamilyBody, fontWeight: fontWeight400, letterSpacing: letterSpacing100)
+    public static let typographyBodyMd = Typography(fontSize: fontSize100, lineHeight: lineHeight100, fontFamily: fontFamilyBody, fontWeight: fontWeight400, letterSpacing: letterSpacing100)
+    public static let typographyBodyLg = Typography(fontSize: fontSize125, lineHeight: lineHeight125, fontFamily: fontFamilyBody, fontWeight: fontWeight400, letterSpacing: letterSpacing100)
+    public static let typographyH1 = Typography(fontSize: fontSize600, lineHeight: lineHeight600, fontFamily: fontFamilyDisplay, fontWeight: fontWeight700, letterSpacing: letterSpacing100)
+    public static let typographyH2 = Typography(fontSize: fontSize500, lineHeight: lineHeight500, fontFamily: fontFamilyDisplay, fontWeight: fontWeight700, letterSpacing: letterSpacing100)
+    public static let typographyH3 = Typography(fontSize: fontSize400, lineHeight: lineHeight400, fontFamily: fontFamilyDisplay, fontWeight: fontWeight600, letterSpacing: letterSpacing100)
+    public static let typographyH4 = Typography(fontSize: fontSize300, lineHeight: lineHeight300, fontFamily: fontFamilyBody, fontWeight: fontWeight600, letterSpacing: letterSpacing100)
+    public static let typographyH5 = Typography(fontSize: fontSize200, lineHeight: lineHeight200, fontFamily: fontFamilyBody, fontWeight: fontWeight600, letterSpacing: letterSpacing100)
+    public static let typographyH6 = Typography(fontSize: fontSize150, lineHeight: lineHeight150, fontFamily: fontFamilyBody, fontWeight: fontWeight700, letterSpacing: letterSpacing100)
+    public static let typographyCaption = Typography(fontSize: fontSize050, lineHeight: lineHeight050, fontFamily: fontFamilyBody, fontWeight: fontWeight300, letterSpacing: letterSpacing100)
+    public static let typographyLegal = Typography(fontSize: fontSize050, lineHeight: lineHeight050, fontFamily: fontFamilyBody, fontWeight: fontWeight400, letterSpacing: letterSpacing100)
+    public static let typographyDisplay = Typography(fontSize: fontSize700, lineHeight: lineHeight700, fontFamily: fontFamilyDisplay, fontWeight: fontWeight700, letterSpacing: letterSpacing100)
+    public static let typographyButtonSm = Typography(fontSize: fontSize075, lineHeight: lineHeight075, fontFamily: fontFamilyBody, fontWeight: fontWeight500, letterSpacing: letterSpacing100)
+    public static let typographyButtonMd = Typography(fontSize: fontSize100, lineHeight: lineHeight100, fontFamily: fontFamilyBody, fontWeight: fontWeight500, letterSpacing: letterSpacing100)
+    public static let typographyButtonLg = Typography(fontSize: fontSize125, lineHeight: lineHeight125, fontFamily: fontFamilyBody, fontWeight: fontWeight500, letterSpacing: letterSpacing100)
+    public static let typographyInput = Typography(fontSize: fontSize100, lineHeight: lineHeight100, fontFamily: fontFamilyBody, fontWeight: fontWeight400, letterSpacing: letterSpacing100)
+    public static let typographyLabelXs = Typography(fontSize: fontSize050, lineHeight: lineHeight050, fontFamily: fontFamilyBody, fontWeight: fontWeight500, letterSpacing: letterSpacing100)
+    public static let typographyLabelSm = Typography(fontSize: fontSize075, lineHeight: lineHeight075, fontFamily: fontFamilyBody, fontWeight: fontWeight500, letterSpacing: letterSpacing100)
+    public static let typographyLabelMd = Typography(fontSize: fontSize100, lineHeight: lineHeight100, fontFamily: fontFamilyBody, fontWeight: fontWeight500, letterSpacing: letterSpacing100)
+    public static let typographyLabelLg = Typography(fontSize: fontSize125, lineHeight: lineHeight125, fontFamily: fontFamilyBody, fontWeight: fontWeight500, letterSpacing: letterSpacing100)
+    public static let typographyCodeSm = Typography(fontSize: fontSize075, lineHeight: lineHeight075, fontFamily: fontFamilyMono, fontWeight: fontWeight400, letterSpacing: letterSpacing100)
+    public static let typographyCodeMd = Typography(fontSize: fontSize100, lineHeight: lineHeight100, fontFamily: fontFamilyMono, fontWeight: fontWeight400, letterSpacing: letterSpacing100)
+    public static let typographyCodeLg = Typography(fontSize: fontSize125, lineHeight: lineHeight125, fontFamily: fontFamilyMono, fontWeight: fontWeight400, letterSpacing: letterSpacing100)
+    public static let borderBorderDefault = borderWidth100
+    public static let borderBorderEmphasis = borderWidth200
+    public static let borderBorderHeavy = borderWidth400
+    public static let spaceGroupedMinimal = space025
+    public static let spaceGroupedTight = space050
+    public static let spaceGroupedNormal = space100
+    public static let spaceGroupedLoose = space150
+    public static let spaceRelatedTight = space100
+    public static let spaceRelatedNormal = space200
+    public static let spaceRelatedLoose = space300
+    public static let spaceSeparatedTight = space200
+    public static let spaceSeparatedNormal = space300
+    public static let spaceSeparatedLoose = space400
+    public static let spaceSectionedTight = space400
+    public static let spaceSectionedNormal = space500
+    public static let spaceSectionedLoose = space600
+    public static let spaceInsetTight = space050
+    public static let spaceInsetNormal = space100
+    public static let spaceInsetComfortable = space150
+    public static let spaceInsetSpacious = space200
+    public static let spaceInsetExpansive = space300
 }

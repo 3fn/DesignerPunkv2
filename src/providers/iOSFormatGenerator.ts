@@ -175,4 +175,72 @@ export class iOSFormatGenerator extends BaseFormatProvider {
   protected generateMathematicalComment(token: PrimitiveToken): string {
     return `    /// ${token.mathematicalRelationship}`;
   }
+
+  /**
+   * Format a single-reference semantic token
+   * Generates: static let colorPrimary = purple300
+   */
+  formatSingleReferenceToken(semantic: SemanticToken): string {
+    // Get the primitive reference name (e.g., 'purple300' from primitiveReferences)
+    const primitiveRef = semantic.primitiveReferences.value || 
+                         semantic.primitiveReferences.default ||
+                         Object.values(semantic.primitiveReferences)[0];
+    
+    if (!primitiveRef) {
+      throw new Error(`Semantic token ${semantic.name} has no primitive reference`);
+    }
+
+    // Convert semantic token name to appropriate format using platform naming rules
+    // getPlatformTokenName will handle dot notation conversion (e.g., 'color.primary' -> 'colorPrimary')
+    const semanticName = this.getTokenName(semantic.name, semantic.category);
+    
+    // Convert primitive reference to appropriate format
+    const primitiveRefName = this.getTokenName(primitiveRef, semantic.category);
+    
+    return `    public static let ${semanticName} = ${primitiveRefName}`;
+  }
+
+  /**
+   * Format a multi-reference semantic token (typography)
+   * Generates: static let typographyBodyMd = Typography(fontSize: fontSize100, ...)
+   */
+  formatMultiReferenceToken(semantic: SemanticToken): string {
+    // Get all primitive references except 'value' and 'default' which are for single-reference tokens
+    const refs = Object.entries(semantic.primitiveReferences)
+      .filter(([key]) => key !== 'value' && key !== 'default');
+    
+    if (refs.length === 0) {
+      throw new Error(`Multi-reference semantic token ${semantic.name} has no primitive references`);
+    }
+
+    // Convert semantic token name to appropriate format using platform naming rules
+    // getPlatformTokenName will handle dot notation conversion (e.g., 'typography.bodyMd' -> 'typographyBodyMd')
+    const semanticName = this.getTokenName(semantic.name, semantic.category);
+    
+    // Generate Typography struct initialization format
+    const parameters = refs.map(([key, primitiveRef]) => {
+      const primitiveRefName = this.getTokenName(primitiveRef, semantic.category);
+      return `${key}: ${primitiveRefName}`;
+    }).join(', ');
+    
+    return `    public static let ${semanticName} = Typography(${parameters})`;
+  }
+
+  /**
+   * Generate section header comment
+   * Marks primitive vs semantic sections
+   */
+  generateSectionComment(section: 'primitive' | 'semantic'): string {
+    const sectionTitle = section === 'primitive' 
+      ? 'PRIMITIVE TOKENS\n    /// Mathematical foundation'
+      : 'SEMANTIC TOKENS\n    /// Use these for UI development';
+    
+    return [
+      '',
+      '    // ============================================',
+      `    // ${sectionTitle}`,
+      '    // ============================================',
+      ''
+    ].join('\n');
+  }
 }

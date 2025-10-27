@@ -58,7 +58,7 @@ This implementation extends the existing TokenFileGenerator to include semantic 
     - Return filtered array of semantic tokens
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5_
 
-- [ ] 2. Web Platform Semantic Generation
+- [x] 2. Web Platform Semantic Generation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -77,7 +77,7 @@ This implementation extends the existing TokenFileGenerator to include semantic 
   **Completion Documentation:**
   - `.kiro/specs/semantic-token-generation/completion/task-2-completion.md`
 
-  - [ ] 2.1 Extend WebFormatGenerator for semantic tokens
+  - [x] 2.1 Extend WebFormatGenerator for semantic tokens
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add `formatSingleReferenceToken(semantic: SemanticToken): string` method
@@ -87,7 +87,7 @@ This implementation extends the existing TokenFileGenerator to include semantic 
     - Add `generateSectionComment(section: 'primitive' | 'semantic'): string` method
     - _Requirements: 2.1, 4.2, 4.3, 4.4_
 
-  - [ ] 2.2 Extend TokenFileGenerator.generateWebTokens
+  - [x] 2.2 Extend TokenFileGenerator.generateWebTokens
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Import `getAllSemanticTokens` from semantic token index
@@ -96,7 +96,7 @@ This implementation extends the existing TokenFileGenerator to include semantic 
     - Maintain existing primitive generation unchanged
     - _Requirements: 2.1, 2.4, 4.1, 4.2, 4.3, 6.1, 6.2, 6.4_
 
-  - [ ] 2.3 Implement generateSemanticSection method
+  - [x] 2.3 Implement generateSemanticSection method
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `generateSemanticSection(semantics: SemanticToken[], platform: string)` method
@@ -106,7 +106,7 @@ This implementation extends the existing TokenFileGenerator to include semantic 
     - Return array of formatted token strings
     - _Requirements: 2.1, 3.1, 3.4_
 
-  - [ ] 2.4 Add header comment with usage guidance
+  - [x] 2.4 Add header comment with usage guidance
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Extend header comment generation to include usage guidance
@@ -115,7 +115,7 @@ This implementation extends the existing TokenFileGenerator to include semantic 
     - Add guidance: "Comments show semantic → primitive relationships"
     - _Requirements: 4.1, 4.5_
 
-- [ ] 3. iOS Platform Semantic Generation
+- [x] 3. iOS Platform Semantic Generation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -133,7 +133,7 @@ This implementation extends the existing TokenFileGenerator to include semantic 
   **Completion Documentation:**
   - `.kiro/specs/semantic-token-generation/completion/task-3-completion.md`
 
-  - [ ] 3.1 Extend iOSFormatGenerator for semantic tokens
+  - [x] 3.1 Extend iOSFormatGenerator for semantic tokens
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add `formatSingleReferenceToken(semantic: SemanticToken): string` method
@@ -143,7 +143,7 @@ This implementation extends the existing TokenFileGenerator to include semantic 
     - Add `generateSectionComment(section: 'primitive' | 'semantic'): string` method
     - _Requirements: 2.2, 3.2, 4.2, 4.3, 4.4_
 
-  - [ ] 3.2 Extend TokenFileGenerator.generateiOSTokens
+  - [x] 3.2 Extend TokenFileGenerator.generateiOSTokens
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add `generateSemanticSection(semantics, 'ios')` call after primitive generation
@@ -152,7 +152,7 @@ This implementation extends the existing TokenFileGenerator to include semantic 
     - Ensure primitives defined before semantics in struct
     - _Requirements: 2.2, 2.4, 4.1, 4.2, 4.3, 6.1, 6.2, 6.4_
 
-- [ ] 4. Android Platform Semantic Generation
+- [x] 4. Android Platform Semantic Generation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -170,7 +170,7 @@ This implementation extends the existing TokenFileGenerator to include semantic 
   **Completion Documentation:**
   - `.kiro/specs/semantic-token-generation/completion/task-4-completion.md`
 
-  - [ ] 4.1 Extend AndroidFormatGenerator for semantic tokens
+  - [x] 4.1 Extend AndroidFormatGenerator for semantic tokens
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add `formatSingleReferenceToken(semantic: SemanticToken): string` method
@@ -180,7 +180,7 @@ This implementation extends the existing TokenFileGenerator to include semantic 
     - Add `generateSectionComment(section: 'primitive' | 'semantic'): string` method
     - _Requirements: 2.3, 3.3, 4.2, 4.3, 4.4_
 
-  - [ ] 4.2 Extend TokenFileGenerator.generateAndroidTokens
+  - [x] 4.2 Extend TokenFileGenerator.generateAndroidTokens
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add `generateSemanticSection(semantics, 'android')` call after primitive generation
@@ -189,7 +189,7 @@ This implementation extends the existing TokenFileGenerator to include semantic 
     - Ensure primitives defined before semantics in object
     - _Requirements: 2.3, 2.4, 4.1, 4.2, 4.3, 6.1, 6.2, 6.4_
 
-- [ ] 5. Reference Validation and Error Handling
+- [x] 5. Reference Validation and Error Handling
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -206,7 +206,7 @@ This implementation extends the existing TokenFileGenerator to include semantic 
   **Completion Documentation:**
   - `.kiro/specs/semantic-token-generation/completion/task-5-completion.md`
 
-  - [ ] 5.1 Implement semantic token reference validation
+  - [x] 5.1 Implement semantic token reference validation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `validateSemanticReferences(semantics: SemanticToken[], primitives: PrimitiveToken[])` method
@@ -215,7 +215,7 @@ This implementation extends the existing TokenFileGenerator to include semantic 
     - Return validation result with list of invalid references
     - _Requirements: 2.5, 3.5_
 
-  - [ ] 5.2 Add error handling to generation methods
+  - [x] 5.2 Add error handling to generation methods
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Call validation before generating semantic section
@@ -225,7 +225,7 @@ This implementation extends the existing TokenFileGenerator to include semantic 
     - Update GenerationResult interface to include `semanticTokenCount` and `warnings`
     - _Requirements: 2.5, 3.5, 6.5_
 
-  - [ ] 5.3 Implement clear error messages
+  - [x] 5.3 Implement clear error messages
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Format error: `Semantic token '${name}' references non-existent primitive '${ref}'`
@@ -234,7 +234,7 @@ This implementation extends the existing TokenFileGenerator to include semantic 
     - Include semantic token name and specific invalid reference in all errors
     - _Requirements: 2.5, 3.5, 6.5_
 
-- [ ] 6. Cross-Platform Validation and Testing
+- [x] 6. Cross-Platform Validation and Testing
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -252,7 +252,7 @@ This implementation extends the existing TokenFileGenerator to include semantic 
   **Completion Documentation:**
   - `.kiro/specs/semantic-token-generation/completion/task-6-completion.md`
 
-  - [ ] 6.1 Implement cross-platform consistency validation
+  - [x] 6.1 Implement cross-platform consistency validation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Extend `validateCrossPlatformConsistency` method to check semantic tokens
@@ -262,7 +262,7 @@ This implementation extends the existing TokenFileGenerator to include semantic 
     - Add validation results to consistency check
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
 
-  - [ ] 6.2 Write unit tests for semantic token export
+  - [x] 6.2 Write unit tests for semantic token export
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test `getAllSemanticTokens()` returns all semantic tokens
@@ -271,7 +271,7 @@ This implementation extends the existing TokenFileGenerator to include semantic 
     - Test each token has valid structure (name, primitiveReferences, category)
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5_
 
-  - [ ] 6.3 Write unit tests for single-reference generation
+  - [x] 6.3 Write unit tests for single-reference generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test web formatter generates correct JavaScript syntax with references
@@ -280,7 +280,7 @@ This implementation extends the existing TokenFileGenerator to include semantic 
     - Test references use primitive token names (not values)
     - _Requirements: 2.1, 2.2, 2.3_
 
-  - [ ] 6.4 Write unit tests for multi-reference generation
+  - [x] 6.4 Write unit tests for multi-reference generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test web formatter generates object literal with all properties
@@ -289,7 +289,7 @@ This implementation extends the existing TokenFileGenerator to include semantic 
     - Test all primitive references included (fontSize, lineHeight, fontFamily, fontWeight, letterSpacing)
     - _Requirements: 3.1, 3.2, 3.3, 3.4_
 
-  - [ ] 6.5 Write integration tests for end-to-end generation
+  - [x] 6.5 Write integration tests for end-to-end generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test generate web tokens with primitives + semantics
@@ -300,7 +300,25 @@ This implementation extends the existing TokenFileGenerator to include semantic 
     - Test backward compatibility (primitive tokens unchanged)
     - _Requirements: 2.4, 4.1, 4.2, 4.3, 5.1, 5.2, 5.3, 5.4, 5.5, 6.1, 6.2, 6.3, 6.4_
 
-- [ ] 7. Documentation Update
+  - [x] 6.6 Rewrite integration tests based on corrected design and format
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Delete existing `src/__tests__/integration/SemanticTokenGeneration.test.ts`
+    - Create new integration test file from scratch
+    - Reference corrected design document "Platform Naming Conventions" section
+    - Reference web-format-mismatch-issue.md for CSS format requirements
+    - Write web platform tests expecting CSS format with `:root { }` wrapper
+    - Write web platform tests expecting kebab-case with `--` prefix (e.g., `--color-primary`)
+    - Write web platform tests expecting `var(--token-name)` references for semantic tokens
+    - Write iOS platform tests expecting camelCase with proper casing (e.g., `colorPrimary`)
+    - Write Android platform tests expecting snake_case (e.g., `color_primary`)
+    - Use `getPlatformTokenName()` for cross-platform consistency assertions
+    - Verify all test scenarios from original task 6.5 are covered (file structure, consistency, backward compatibility)
+    - Verify generated file is `DesignTokens.web.css` (not `.js`)
+    - Run tests and verify all pass
+    - _Requirements: 4.1, 4.2, 4.3, 5.1, 5.2, 5.3_
+
+- [x] 7. Documentation Update
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -317,7 +335,7 @@ This implementation extends the existing TokenFileGenerator to include semantic 
   **Completion Documentation:**
   - `.kiro/specs/semantic-token-generation/completion/task-7-completion.md`
 
-  - [ ] 7.1 Update Token System Overview with semantic generation
+  - [x] 7.1 Update Token System Overview with semantic generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add section documenting semantic token generation capability

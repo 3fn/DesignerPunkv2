@@ -1,6 +1,6 @@
 /**
  * DesignerPunk Design System - Android Tokens
- * Generated: 2025-10-25T05:35:59.630Z
+ * Generated: 2025-10-27T18:03:08.393Z
  * Version: 1.0.0
  * Platform: Android (Kotlin Constants)
  */
@@ -8,6 +8,12 @@
 package com.designerpunk.tokens
 
 object DesignTokens {
+
+    // ============================================
+    // PRIMITIVE TOKENS
+    Mathematical foundation
+    // ============================================
+
 
     // BORDERWIDTH TOKENS
     // base × 1 = 1 × 1 = 1
@@ -265,31 +271,31 @@ object DesignTokens {
 
     // SHADOW TOKENS
     // base × 1 = 4 × 1 = 4
-    const val shadow_offset_x.100: Float = 4f
+    const val shadow_offset_x_100: Float = 4f
     // base × 1.5 = 4 × 1.5 = 6
-    const val shadow_offset_x.150: Float = 6f
+    const val shadow_offset_x_150: Float = 6f
     // base × 2 = 4 × 2 = 8
-    const val shadow_offset_x.200: Float = 8f
+    const val shadow_offset_x_200: Float = 8f
     // base × 3 = 4 × 3 = 12
-    const val shadow_offset_x.300: Float = 12f
+    const val shadow_offset_x_300: Float = 12f
     // base × -3 = 4 × -3 = -12
-    const val shadow_offset_x.n_300: Float = -12f
+    const val shadow_offset_x_n_300: Float = -12f
     // base × -2 = 4 × -2 = -8
-    const val shadow_offset_x.n_200: Float = -8f
+    const val shadow_offset_x_n_200: Float = -8f
     // base × -1.5 = 4 × -1.5 = -6
-    const val shadow_offset_x.n_150: Float = -6f
+    const val shadow_offset_x_n_150: Float = -6f
     // base × -1 = 4 × -1 = -4
-    const val shadow_offset_x.n_100: Float = -4f
+    const val shadow_offset_x_n_100: Float = -4f
     // base × 0 = 4 × 0 = 0
-    const val shadow_offset_x.000: Float = 0f
+    const val shadow_offset_x_000: Float = 0f
     // base × 1 = 4 × 1 = 4
-    const val shadow_offset_y.100: Float = 4f
+    const val shadow_offset_y_100: Float = 4f
     // base × 2 = 4 × 2 = 8
-    const val shadow_offset_y.200: Float = 8f
+    const val shadow_offset_y_200: Float = 8f
     // base × 3 = 4 × 3 = 12
-    const val shadow_offset_y.300: Float = 12f
+    const val shadow_offset_y_300: Float = 12f
     // base × 4 = 4 × 4 = 16
-    const val shadow_offset_y.400: Float = 16f
+    const val shadow_offset_y_400: Float = 16f
     // base × 1 = 4 × 1 = 4
     const val shadow_blur_hard: Float = 4f
     // base × 3 = 4 × 3 = 12
@@ -346,4 +352,73 @@ object DesignTokens {
     const val tap_area_comfortable: Float = 56f
     // base × 1.45 = 44 × 1.45 ≈ 64
     const val tap_area_generous: Float = 64f
+
+    // ============================================
+    // SEMANTIC TOKENS
+    Use these for UI development
+    // ============================================
+
+    val color_primary = purple_300
+    val color_secondary = violet_300
+    val color_success_strong = cyan_400
+    val color_success_subtle = cyan_100
+    val color_warning_strong = yellow_400
+    val color_warning_subtle = yellow_100
+    val color_error = orange_300
+    val color_info_strong = teal_400
+    val color_info_subtle = teal_100
+    val color_text_default = gray_300
+    val color_text_muted = gray_200
+    val color_text_subtle = gray_100
+    val color_background = white_100
+    val color_surface = white_200
+    val color_border = gray_100
+    val color_shadow_default = shadow_black_100
+    val color_shadow_warm = shadow_blue_100
+    val color_shadow_cool = shadow_orange_100
+    val color_shadow_ambient = shadow_gray_100
+    val typography_body_sm = Typography(fontSize = font_size_075, lineHeight = line_height_075, fontFamily = font_family_body, fontWeight = font_weight_400, letterSpacing = letter_spacing_100)
+    val typography_body_md = Typography(fontSize = font_size_100, lineHeight = line_height_100, fontFamily = font_family_body, fontWeight = font_weight_400, letterSpacing = letter_spacing_100)
+    val typography_body_lg = Typography(fontSize = font_size_125, lineHeight = line_height_125, fontFamily = font_family_body, fontWeight = font_weight_400, letterSpacing = letter_spacing_100)
+    val typography_h_1 = Typography(fontSize = font_size_600, lineHeight = line_height_600, fontFamily = font_family_display, fontWeight = font_weight_700, letterSpacing = letter_spacing_100)
+    val typography_h_2 = Typography(fontSize = font_size_500, lineHeight = line_height_500, fontFamily = font_family_display, fontWeight = font_weight_700, letterSpacing = letter_spacing_100)
+    val typography_h_3 = Typography(fontSize = font_size_400, lineHeight = line_height_400, fontFamily = font_family_display, fontWeight = font_weight_600, letterSpacing = letter_spacing_100)
+    val typography_h_4 = Typography(fontSize = font_size_300, lineHeight = line_height_300, fontFamily = font_family_body, fontWeight = font_weight_600, letterSpacing = letter_spacing_100)
+    val typography_h_5 = Typography(fontSize = font_size_200, lineHeight = line_height_200, fontFamily = font_family_body, fontWeight = font_weight_600, letterSpacing = letter_spacing_100)
+    val typography_h_6 = Typography(fontSize = font_size_150, lineHeight = line_height_150, fontFamily = font_family_body, fontWeight = font_weight_700, letterSpacing = letter_spacing_100)
+    val typography_caption = Typography(fontSize = font_size_050, lineHeight = line_height_050, fontFamily = font_family_body, fontWeight = font_weight_300, letterSpacing = letter_spacing_100)
+    val typography_legal = Typography(fontSize = font_size_050, lineHeight = line_height_050, fontFamily = font_family_body, fontWeight = font_weight_400, letterSpacing = letter_spacing_100)
+    val typography_display = Typography(fontSize = font_size_700, lineHeight = line_height_700, fontFamily = font_family_display, fontWeight = font_weight_700, letterSpacing = letter_spacing_100)
+    val typography_button_sm = Typography(fontSize = font_size_075, lineHeight = line_height_075, fontFamily = font_family_body, fontWeight = font_weight_500, letterSpacing = letter_spacing_100)
+    val typography_button_md = Typography(fontSize = font_size_100, lineHeight = line_height_100, fontFamily = font_family_body, fontWeight = font_weight_500, letterSpacing = letter_spacing_100)
+    val typography_button_lg = Typography(fontSize = font_size_125, lineHeight = line_height_125, fontFamily = font_family_body, fontWeight = font_weight_500, letterSpacing = letter_spacing_100)
+    val typography_input = Typography(fontSize = font_size_100, lineHeight = line_height_100, fontFamily = font_family_body, fontWeight = font_weight_400, letterSpacing = letter_spacing_100)
+    val typography_label_xs = Typography(fontSize = font_size_050, lineHeight = line_height_050, fontFamily = font_family_body, fontWeight = font_weight_500, letterSpacing = letter_spacing_100)
+    val typography_label_sm = Typography(fontSize = font_size_075, lineHeight = line_height_075, fontFamily = font_family_body, fontWeight = font_weight_500, letterSpacing = letter_spacing_100)
+    val typography_label_md = Typography(fontSize = font_size_100, lineHeight = line_height_100, fontFamily = font_family_body, fontWeight = font_weight_500, letterSpacing = letter_spacing_100)
+    val typography_label_lg = Typography(fontSize = font_size_125, lineHeight = line_height_125, fontFamily = font_family_body, fontWeight = font_weight_500, letterSpacing = letter_spacing_100)
+    val typography_code_sm = Typography(fontSize = font_size_075, lineHeight = line_height_075, fontFamily = font_family_mono, fontWeight = font_weight_400, letterSpacing = letter_spacing_100)
+    val typography_code_md = Typography(fontSize = font_size_100, lineHeight = line_height_100, fontFamily = font_family_mono, fontWeight = font_weight_400, letterSpacing = letter_spacing_100)
+    val typography_code_lg = Typography(fontSize = font_size_125, lineHeight = line_height_125, fontFamily = font_family_mono, fontWeight = font_weight_400, letterSpacing = letter_spacing_100)
+    val border_border_default = border_width_100
+    val border_border_emphasis = border_width_200
+    val border_border_heavy = border_width_400
+    val space_grouped_minimal = space_025
+    val space_grouped_tight = space_050
+    val space_grouped_normal = space_100
+    val space_grouped_loose = space_150
+    val space_related_tight = space_100
+    val space_related_normal = space_200
+    val space_related_loose = space_300
+    val space_separated_tight = space_200
+    val space_separated_normal = space_300
+    val space_separated_loose = space_400
+    val space_sectioned_tight = space_400
+    val space_sectioned_normal = space_500
+    val space_sectioned_loose = space_600
+    val space_inset_tight = space_050
+    val space_inset_normal = space_100
+    val space_inset_comfortable = space_150
+    val space_inset_spacious = space_200
+    val space_inset_expansive = space_300
 }

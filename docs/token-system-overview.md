@@ -48,6 +48,247 @@ The token system is organized into two main categories:
 
 ---
 
+## Semantic Token Generation
+
+### Overview
+
+The DesignerPunk token system generates platform-specific files that include both primitive and semantic tokens. Semantic tokens reference primitive tokens by name (not resolved values), preserving the architectural relationships between tokens across all platforms.
+
+**Key Benefits**:
+- **Visible Relationships**: Developers can see that `colorPrimary` references `purple300`, not just that both are `#9333EA`
+- **Cross-Platform Consistency**: Same semantic token names work across web, iOS, and Android
+- **Reference Maintenance**: Changing a primitive token automatically updates all semantic tokens that reference it
+- **AI-Friendly**: Unambiguous token relationships enable reliable AI-human collaboration
+
+### Generated File Structure
+
+All generated platform files follow this structure:
+
+```
+// Header Comment (usage guidance)
+
+// ============================================
+// PRIMITIVE TOKENS
+// Mathematical foundation
+// ============================================
+
+[All primitive tokens - fontSize100, space100, purple300, etc.]
+
+// ============================================
+// SEMANTIC TOKENS  
+// Use these for UI development
+// ============================================
+
+[All semantic tokens - colorPrimary, typographyBodyMd, etc.]
+```
+
+**Usage Guidance**: The generated files include header comments directing developers to:
+1. Use semantic tokens (colorPrimary, spacingGroupedNormal) for all UI development
+2. Use primitive tokens (purple300, space100) only when no semantic token exists
+3. Refer to comments showing semantic → primitive relationships
+
+### Platform-Specific Output Examples
+
+#### Web (CSS Custom Properties)
+
+**Single-Reference Token** (color, spacing, border):
+```css
+/* Primitive */
+:root {
+  --purple-300: #9333EA;
+  --space-100: 8px;
+}
+
+/* Semantic (references primitive) */
+:root {
+  --color-primary: var(--purple-300);
+  --spacing-grouped-normal: var(--space-100);
+}
+```
+
+**Multi-Reference Token** (typography):
+```css
+/* Primitives */
+:root {
+  --font-size-100: 16px;
+  --line-height-100: 24px;
+  --font-family-body: system-ui;
+  --font-weight-400: 400;
+  --letter-spacing-100: 0;
+}
+
+/* Semantic (references multiple primitives) */
+:root {
+  --typography-body-md-font-size: var(--font-size-100);
+  --typography-body-md-line-height: var(--line-height-100);
+  --typography-body-md-font-family: var(--font-family-body);
+  --typography-body-md-font-weight: var(--font-weight-400);
+  --typography-body-md-letter-spacing: var(--letter-spacing-100);
+}
+```
+
+#### iOS (Swift)
+
+**Single-Reference Token**:
+```swift
+struct DesignTokens {
+    // Primitive
+    static let purple300 = UIColor(hex: "#9333EA")
+    static let space100: CGFloat = 8
+    
+    // Semantic (references primitive)
+    static let colorPrimary = purple300
+    static let spacingGroupedNormal = space100
+}
+```
+
+**Multi-Reference Token**:
+```swift
+struct Typography {
+    let fontSize: CGFloat
+    let lineHeight: CGFloat
+    let fontFamily: String
+    let fontWeight: UIFont.Weight
+    let letterSpacing: CGFloat
+}
+
+struct DesignTokens {
+    // Primitives
+    static let fontSize100: CGFloat = 16
+    static let lineHeight100: CGFloat = 24
+    static let fontFamilyBody = "system-ui"
+    static let fontWeight400 = UIFont.Weight.regular
+    static let letterSpacing100: CGFloat = 0
+    
+    // Semantic (references multiple primitives)
+    static let typographyBodyMd = Typography(
+        fontSize: fontSize100,
+        lineHeight: lineHeight100,
+        fontFamily: fontFamilyBody,
+        fontWeight: fontWeight400,
+        letterSpacing: letterSpacing100
+    )
+}
+```
+
+#### Android (Kotlin)
+
+**Single-Reference Token**:
+```kotlin
+object DesignTokens {
+    // Primitive
+    val purple_300 = Color(0xFF9333EA)
+    val space_100 = 8.dp
+    
+    // Semantic (references primitive)
+    val color_primary = purple_300
+    val spacing_grouped_normal = space_100
+}
+```
+
+**Multi-Reference Token**:
+```kotlin
+data class Typography(
+    val fontSize: TextUnit,
+    val lineHeight: TextUnit,
+    val fontFamily: String,
+    val fontWeight: FontWeight,
+    val letterSpacing: TextUnit
+)
+
+object DesignTokens {
+    // Primitives
+    val font_size_100 = 16.sp
+    val line_height_100 = 24.sp
+    val font_family_body = "system-ui"
+    val font_weight_400 = FontWeight.Normal
+    val letter_spacing_100 = 0.sp
+    
+    // Semantic (references multiple primitives)
+    val typography_body_md = Typography(
+        fontSize = font_size_100,
+        lineHeight = line_height_100,
+        fontFamily = font_family_body,
+        fontWeight = font_weight_400,
+        letterSpacing = letter_spacing_100
+    )
+}
+```
+
+### Platform Naming Conventions
+
+The token generation system automatically converts token names to platform-appropriate conventions:
+
+| Platform | Convention | Prefix | Example Primitive | Example Semantic |
+|----------|-----------|--------|-------------------|------------------|
+| **Web** | `kebab-case` | `--` | `--font-size-100` | `--color-primary` |
+| **iOS** | `camelCase` | none | `fontSize100` | `colorPrimary` |
+| **Android** | `snake_case` | none | `font_size_100` | `color_primary` |
+
+**Dot Notation Handling**: Semantic tokens use dot notation in source definitions (e.g., `color.primary`, `typography.bodyMd`). The platform formatters automatically convert these:
+- **Web**: `color.primary` → `--color-primary`
+- **iOS**: `color.primary` → `colorPrimary`
+- **Android**: `color.primary` → `color_primary`
+
+### Primitive→Semantic Reference Maintenance
+
+The generation system maintains references rather than resolving to values:
+
+**Why References Matter**:
+- **Architectural Clarity**: Developers see that `colorPrimary` comes from `purple300`
+- **Automatic Updates**: Changing `purple300` automatically updates `colorPrimary`
+- **AI Reasoning**: AI agents can understand token relationships for better collaboration
+- **Debugging**: Clear token chains make debugging easier
+
+**How It Works**:
+1. Semantic tokens define primitive references in source: `{ value: 'purple300' }`
+2. Generator validates that referenced primitives exist
+3. Platform formatters output references using platform syntax:
+   - Web: `var(--purple-300)`
+   - iOS: `purple300` (constant reference)
+   - Android: `purple_300` (property reference)
+
+### Semantic Token Source Files
+
+All semantic tokens are defined in TypeScript source files that the generation system reads:
+
+- **Color Tokens**: `src/tokens/semantic/ColorTokens.ts` - Semantic color assignments (primary, error, success, etc.)
+- **Spacing Tokens**: `src/tokens/semantic/SpacingTokens.ts` - Layout pattern spacing (grouped, related, separated, sectioned, inset)
+- **Typography Tokens**: `src/tokens/semantic/TypographyTokens.ts` - Complete typography styles (body, label, heading, display)
+- **Border Tokens**: `src/tokens/semantic/BorderWidthTokens.ts` - Semantic border widths (default, emphasis, heavy)
+- **Shadow Tokens**: `src/tokens/semantic/ShadowTokens.ts` - Complete shadow compositions (container, modal, hover, fab)
+- **Style Tokens**: `src/tokens/semantic/StyleTokens.ts` - Component styling patterns
+
+**Semantic Token Index**: `src/tokens/semantic/index.ts` provides utility functions:
+- `getAllSemanticTokens()` - Returns all semantic tokens as flat array
+- `getSemanticTokensByCategory()` - Filters tokens by category
+- `getSemanticToken()` - Retrieves specific token by name
+- `validateSemanticTokenStructure()` - Validates token structure
+
+### Cross-Platform Consistency
+
+The generation system ensures semantic tokens work identically across all platforms:
+
+**Consistent Token Names**: All platforms use the same semantic token names (converted to platform conventions)
+
+**Identical Relationships**: All platforms maintain the same primitive→semantic relationships
+
+**Platform-Appropriate Syntax**: Each platform uses its native syntax while preserving semantic meaning
+
+**Validation**: Cross-platform consistency is validated during generation to ensure no platform diverges
+
+### Related Documentation
+
+- **Semantic Token Generation Spec**: [`.kiro/specs/semantic-token-generation/design.md`](../.kiro/specs/semantic-token-generation/design.md) - Complete design and architecture for semantic token generation system
+- **Platform Naming Rules**: `src/naming/PlatformNamingRules.ts` - Source of truth for platform-specific naming conventions
+- **Token File Generator**: `src/generators/TokenFileGenerator.ts` - Main generator orchestrating platform-specific file generation
+- **Platform Formatters**: 
+  - `src/providers/WebFormatGenerator.ts` - Web/CSS formatting
+  - `src/providers/iOSFormatGenerator.ts` - iOS/Swift formatting
+  - `src/providers/AndroidFormatGenerator.ts` - Android/Kotlin formatting
+
+---
+
 ## Adding New Token Categories
 
 > ⚠️ **IMPORTANT**: Before adding a new token category, read the [Token Category Pattern Guide](../.kiro/specs/token-system/token-category-pattern-guide.md)
