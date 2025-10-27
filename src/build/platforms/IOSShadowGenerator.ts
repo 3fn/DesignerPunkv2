@@ -215,25 +215,16 @@ export class IOSShadowGenerator {
   
   /**
    * Resolve color token from color token registry
+   * 
+   * Shadow tokens now reference primitive colors directly (e.g., 'shadowBlack100')
+   * rather than semantic colors (e.g., 'color.shadow.default').
    */
   private resolveColorToken(tokenName: string): PrimitiveToken | null {
-    // Handle semantic color references (e.g., 'color.shadow.default')
-    // Map semantic shadow colors to primitive shadow colors
-    const semanticToPrimitive: Record<string, string> = {
-      'color.shadow.default': 'shadowBlack100',
-      'color.shadow.warm': 'shadowBlue100',
-      'color.shadow.cool': 'shadowOrange100',
-      'color.shadow.ambient': 'shadowGray100'
-    };
+    // Direct primitive color lookup
+    const token = (colorTokens as Record<string, PrimitiveToken>)[tokenName];
     
-    const primitiveColorName = semanticToPrimitive[tokenName];
-    
-    if (primitiveColorName) {
-      // Use type assertion to access dynamic property
-      const token = (colorTokens as Record<string, PrimitiveToken>)[primitiveColorName];
-      if (token) {
-        return token;
-      }
+    if (token) {
+      return token;
     }
     
     return null;

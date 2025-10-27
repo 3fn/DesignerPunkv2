@@ -174,11 +174,11 @@ This implementation plan outlines the tasks for renaming "Afternoon" to "Dusk" i
     - Document test results
     - _Requirements: 4.5_
 
-- [ ] 5. Regenerate Platform Code **[BLOCKED - Semantic Token Generation Not Implemented]**
+- [ ] 5. Regenerate Platform Code
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
-  **Status**: BLOCKED - Semantic tokens not integrated into platform generation system
+  **Status**: READY - Unblocked by removal of semantic shadow color layer
   
   **Success Criteria:**
   - Platform-specific code generated with "dusk" naming
@@ -188,47 +188,87 @@ This implementation plan outlines the tasks for renaming "Afternoon" to "Dusk" i
   **Primary Artifacts:**
   - Generated platform files with updated naming
   
-  **Blocking Documentation:**
-  - `.kiro/specs/afternoon-to-dusk-rename/completion/task-5-blocking.md`
+  **Unblocking Tasks:**
+  - Tasks 5.Unblocker.1-5.Unblocker.3 must complete before 5.1-5.4 can begin
   
-  **Note:** Semantic token rename is complete at source level. Platform generation blocked by architectural gap - semantic tokens not integrated into generation system. Requires new spec: "Semantic Token Platform Generation"
+  **Completion Documentation:**
+  - `.kiro/specs/afternoon-to-dusk-rename/completion/task-5-completion.md`
 
-  - [x] 5.1 Regenerate web CSS **[BLOCKED]**
+  - [x] 5.Unblocker.1 Remove semantic shadow color tokens from ColorTokens.ts
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    **Status**: BLOCKED - Semantic tokens not in generation system
+    - Remove `color.shadow.default`, `color.shadow.warm`, `color.shadow.cool`, `color.shadow.ambient` from semantic ColorTokens
+    - Document architectural decision in code comments (matches industry patterns, aligns with typography architecture)
+    - Verify no other code references these semantic shadow color tokens
+    - _Requirements: 1.1, 1.3_
+
+  - [x] 5.Unblocker.2 Update shadow tokens to reference primitive colors directly
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Update `shadow.dusk` to reference `shadowBlack100` instead of `color.shadow.default`
+    - Update `shadow.sunrise` to reference primitive color instead of semantic
+    - Update `shadow.morning` to reference primitive color instead of semantic
+    - Update `shadow.noon` to reference primitive color instead of semantic
+    - Update `shadow.sunset` to reference primitive color instead of semantic
+    - Verify all shadow tokens now reference primitives directly (no semantic→semantic references)
+    - _Requirements: 1.1, 1.3, 4.1_
+
+  - [x] 5.Unblocker.3 Update tests and remove shadow color semantic filter
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Remove shadow/glow color filter from semantic token generation (if present)
+    - Update any tests referencing semantic shadow colors to expect primitive references
+    - Run getDiagnostics to verify no type errors
+    - Verify shadow tokens now generate successfully without hierarchical reference errors
+    - _Requirements: 4.5_
+
+  - [x] 5.1 Regenerate web CSS
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
     - Run platform generation for web
     - Verify generated CSS contains `--shadow-dusk` instead of `--shadow-afternoon`
     - Verify shadow values unchanged (6px 8px 12px rgba(0, 0, 0, 0.15))
+    - Verify shadow color references primitive color correctly
     - _Requirements: 5.1, 5.4_
-    - _Blocking Doc: `.kiro/specs/afternoon-to-dusk-rename/completion/task-5-1-blocking.md`_
 
-  - [ ] 5.2 Regenerate iOS Swift **[BLOCKED]**
+  - [x] 5.2 Regenerate iOS Swift
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    **Status**: BLOCKED - Same root cause as 5.1
     - Run platform generation for iOS
     - Verify generated Swift contains `static let dusk` instead of `static let afternoon`
     - Verify shadow values unchanged (offsetX: 6, offsetY: 8, blur: 12, opacity: 0.15)
+    - Verify shadow color references primitive color correctly
     - _Requirements: 5.2, 5.4_
 
-  - [ ] 5.3 Regenerate Android Kotlin **[BLOCKED]**
+  - [x] 5.3 Regenerate Android Kotlin
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    **Status**: BLOCKED - Same root cause as 5.1
     - Run platform generation for Android
     - Verify generated Kotlin contains appropriate "dusk" naming instead of "afternoon"
     - Verify shadow values unchanged
+    - Verify shadow color references primitive color correctly
     - _Requirements: 5.3, 5.4_
 
-  - [ ] 5.4 Validate platform output **[BLOCKED]**
+  - [x] 5.4 Validate platform output
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    **Status**: BLOCKED - Cannot validate output that cannot be generated
     - Verify no references to "afternoon" remain in generated platform files
-    - Confirm all generated values match pre-rename output
+    - Confirm all generated values match pre-rename output (except naming)
+    - Verify shadow colors reference primitives correctly in all platforms
     - Run getDiagnostics on generated files
     - _Requirements: 5.5_
+
+  - [x] 5.5 Clean up dead semantic shadow color mapping code (Optional)
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Remove `semanticToPrimitive` mapping logic from `AndroidShadowGenerator.ts`
+    - Remove `semanticToPrimitive` mapping logic from `IOSShadowGenerator.ts`
+    - Remove `semanticToPrimitive` mapping logic from `WebShadowGenerator.ts`
+    - Update comments to reflect that shadow tokens now reference primitives directly
+    - Run getDiagnostics to verify no type errors
+    - Verify platform generation still works correctly
+    - _Requirements: 4.1_
+    - _Note: This is optional cleanup - the code will work fine with the dead mapping code, but removing it improves maintainability_
 
 - [x] 6. Create Tracy Weiss Dedication Completion Note
 

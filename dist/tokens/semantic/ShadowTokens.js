@@ -29,7 +29,7 @@ exports.shadowTokens = {
             offsetY: 'shadowOffsetY.100',
             blur: 'shadowBlurModerate',
             opacity: 'shadowOpacityModerate',
-            color: 'color.shadow.default'
+            color: 'shadowBlack100'
         },
         category: SemanticToken_1.SemanticCategory.SHADOW,
         context: 'Standard container shadow with noon lighting and moderate quality',
@@ -42,7 +42,7 @@ exports.shadowTokens = {
             offsetY: 'shadowOffsetY.200',
             blur: 'shadowBlurDepth200',
             opacity: 'shadowOpacityDepth200',
-            color: 'color.shadow.default'
+            color: 'shadowBlack100'
         },
         category: SemanticToken_1.SemanticCategory.SHADOW,
         context: 'Modal shadow with noon lighting and depth 200',
@@ -55,7 +55,7 @@ exports.shadowTokens = {
             offsetY: 'shadowOffsetY.400',
             blur: 'shadowBlurHard',
             opacity: 'shadowOpacityHard',
-            color: 'color.shadow.warm'
+            color: 'shadowBlue100'
         },
         category: SemanticToken_1.SemanticCategory.SHADOW,
         context: 'Floating action button shadow with sunset lighting and hard quality',
@@ -68,7 +68,7 @@ exports.shadowTokens = {
             offsetY: 'shadowOffsetY.100',
             blur: 'shadowBlurSoft',
             opacity: 'shadowOpacitySoft',
-            color: 'color.shadow.default'
+            color: 'shadowBlack100'
         },
         category: SemanticToken_1.SemanticCategory.SHADOW,
         context: 'Hover state shadow with noon lighting and soft quality',
@@ -82,7 +82,7 @@ exports.shadowTokens = {
             offsetY: 'shadowOffsetY.200',
             blur: 'shadowBlurModerate',
             opacity: 'shadowOpacityModerate',
-            color: 'color.shadow.warm'
+            color: 'shadowBlue100'
         },
         category: SemanticToken_1.SemanticCategory.SHADOW,
         context: 'Sunrise lighting shadow with left offset and warm color',
@@ -95,7 +95,7 @@ exports.shadowTokens = {
             offsetY: 'shadowOffsetY.200',
             blur: 'shadowBlurModerate',
             opacity: 'shadowOpacityModerate',
-            color: 'color.shadow.default'
+            color: 'shadowBlack100'
         },
         category: SemanticToken_1.SemanticCategory.SHADOW,
         context: 'Morning lighting shadow with medium left offset and default color',
@@ -108,7 +108,7 @@ exports.shadowTokens = {
             offsetY: 'shadowOffsetY.200',
             blur: 'shadowBlurModerate',
             opacity: 'shadowOpacityModerate',
-            color: 'color.shadow.default'
+            color: 'shadowBlack100'
         },
         category: SemanticToken_1.SemanticCategory.SHADOW,
         context: 'Noon lighting shadow with no horizontal offset and default color',
@@ -122,7 +122,7 @@ exports.shadowTokens = {
             offsetY: 'shadowOffsetY.200',
             blur: 'shadowBlurModerate',
             opacity: 'shadowOpacityModerate',
-            color: 'color.shadow.default'
+            color: 'shadowBlack100'
         },
         category: SemanticToken_1.SemanticCategory.SHADOW,
         context: 'Dusk lighting shadow with medium right offset and default color',
@@ -136,7 +136,7 @@ exports.shadowTokens = {
             offsetY: 'shadowOffsetY.200',
             blur: 'shadowBlurModerate',
             opacity: 'shadowOpacityModerate',
-            color: 'color.shadow.warm'
+            color: 'shadowBlue100'
         },
         category: SemanticToken_1.SemanticCategory.SHADOW,
         context: 'Sunset lighting shadow with right offset and warm color',

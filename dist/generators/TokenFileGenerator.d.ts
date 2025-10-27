@@ -2,7 +2,7 @@
  * Token File Generator
  *
  * Orchestrates the generation of platform-specific token constant files.
- * Generates DesignTokens.web.js, DesignTokens.ios.swift, and DesignTokens.android.kt
+ * Generates DesignTokens.web.css, DesignTokens.ios.swift, and DesignTokens.android.kt
  * with mathematical consistency across all platforms.
  */
 import { PrimitiveToken } from '../types/PrimitiveToken';

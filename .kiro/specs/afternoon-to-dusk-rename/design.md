@@ -442,6 +442,72 @@ Platform generation automatically picks up the rename:
 3. **Android Generator**: Outputs appropriate Kotlin naming
 4. **Build Validation**: Confirms generated code uses new naming
 
+### Decision 4: Remove Semantic Shadow Color Layer
+
+**Options Considered**:
+1. Keep semantic shadow color tokens (`color.shadow.default`, etc.) and implement hierarchical semantic→semantic references
+2. Remove semantic shadow color layer and have shadows reference primitive colors directly
+3. Create new architectural capability for semantic→semantic references
+
+**Decision**: Remove semantic shadow color layer
+
+**Rationale**:
+The semantic shadow color layer (`color.shadow.default`, `color.shadow.warm`, etc.) creates an unnecessary abstraction that doesn't match industry patterns or our own typography architecture:
+
+**Industry Pattern Analysis**:
+- **Material Design**: Shadow tokens include color directly (e.g., `--md-sys-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.3)`)
+- **Carbon**: Shadow tokens include color in definition (e.g., `$shadow-01: 0 1px 2px rgba(0, 0, 0, 0.1)`)
+- **Polaris**: Shadow tokens include color as part of shadow definition
+- **Pattern**: No major design system creates semantic color tokens specifically for shadows
+
+**Typography Architecture Parallel**:
+Typography tokens demonstrate the correct pattern:
+- **Primitives**: `fontSize100`, `lineHeight100`, `fontWeight400`
+- **Semantic**: `typography.bodyMd` (composes primitives directly)
+- **No middle layer**: No "semantic font size" tokens
+
+Shadows should follow the same pattern:
+- **Primitives**: `shadowBlack100`, `shadowOffsetX.150`, `shadowBlurModerate`
+- **Semantic**: `shadow.dusk` (composes primitives directly)
+- **No middle layer**: No semantic shadow color tokens
+
+**Architectural Consistency**:
+- Shadow colors aren't reusable outside shadows (e.g., `shadowBlack100` won't be used for text or backgrounds)
+- The "shadow" prefix in primitives already communicates intent
+- The semantic layer for shadow colors creates hierarchical reference problems (semantic→semantic)
+- Semantic meaning belongs in the shadow token itself (`shadow.dusk`), not in a separate color token
+
+**Developer Experience**:
+Removing the semantic shadow color layer:
+- Eliminates hierarchical reference complexity
+- Matches developer expectations from other design systems
+- Simplifies the token architecture
+- Makes shadow token composition clearer
+
+**Trade-offs**:
+- ✅ **Gained**: Architectural consistency, matches industry patterns, eliminates hierarchical references, simpler token structure
+- ❌ **Lost**: Ability to swap shadow colors via semantic tokens (but this wasn't a real use case)
+- ⚠️ **Risk**: None - this simplification removes complexity without losing functionality
+
+**Counter-Arguments**:
+- **Argument**: "What if we want warm shadows in some contexts and cool shadows in others?"
+- **Response**: Create multiple semantic shadow tokens (e.g., `shadow.dusk.warm`, `shadow.dusk.cool`). The semantic meaning is in the shadow token name, not in a separate color semantic layer.
+
+**Implementation Impact**:
+This decision unblocks Task 5 (platform generation) by removing the semantic→semantic reference problem. Shadow tokens will now reference primitive colors directly:
+
+```typescript
+// Before (blocked by hierarchical reference):
+'shadow.dusk': {
+  color: 'color.shadow.default'  // semantic→semantic reference
+}
+
+// After (unblocked):
+'shadow.dusk': {
+  color: 'shadowBlack100'  // semantic→primitive reference
+}
+```
+
 ---
 
 *This design document provides the technical approach for renaming "Afternoon" to "Dusk" in the Shadow Tokens and Lighting Framework, including a three-part dedication to Tracy Weiss that honors her contribution while maintaining professional code quality and mathematical integrity.*
