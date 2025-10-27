@@ -162,7 +162,7 @@ generateAndroidTokens(options: GenerationOptions): GenerationResult;
  * Format a single-reference semantic token
  * Web: export const colorPrimary = purple300;
  * iOS: static let colorPrimary = purple300
- * Android: val colorPrimary = purple300
+ * Android: val color_primary = purple_300
  */
 formatSingleReferenceToken(semantic: SemanticToken): string;
 
@@ -170,7 +170,7 @@ formatSingleReferenceToken(semantic: SemanticToken): string;
  * Format a multi-reference semantic token (typography)
  * Web: export const typographyBodyMd = { fontSize: fontSize100, ... };
  * iOS: static let typographyBodyMd = Typography(fontSize: fontSize100, ...)
- * Android: val typographyBodyMd = Typography(fontSize = fontSize100, ...)
+ * Android: val typography_body_md = Typography(fontSize = font_size_100, ...)
  */
 formatMultiReferenceToken(semantic: SemanticToken): string;
 
@@ -228,6 +228,52 @@ interface SemanticToken {
 
 [All semantic tokens - NEW generation]
 ```
+
+---
+
+## Platform Naming Conventions
+
+**Source of Truth**: `src/naming/PlatformNamingRules.ts`
+
+All platform-specific token naming follows the conventions defined in `PlatformNamingRules.ts`. This ensures consistency between primitive and semantic token generation and provides a single, authoritative source for naming rules.
+
+### Naming Convention Summary
+
+| Platform | Convention | Prefix | Example Primitive | Example Semantic |
+|----------|-----------|--------|-------------------|------------------|
+| **Web** | `kebab-case` | `--` | `--font-size-100` | `--color-primary` |
+| **iOS** | `camelCase` | none | `fontSize100` | `colorPrimary` |
+| **Android** | `snake_case` | none | `font_size_100` | `color_primary` |
+
+### Platform-Specific Rules
+
+**Web (CSS Custom Properties)**:
+- Convention: `kebab-case`
+- Prefix: `--` (CSS custom property prefix)
+- Example: `--purple-300`, `--color-primary`, `--typography-body-md`
+- Rationale: CSS custom properties require `--` prefix and use kebab-case by convention
+
+**iOS (Swift)**:
+- Convention: `camelCase`
+- Prefix: none
+- Example: `purple300`, `colorPrimary`, `typographyBodyMd`
+- Rationale: Swift naming conventions use camelCase for properties and constants
+
+**Android (Kotlin)**:
+- Convention: `snake_case`
+- Prefix: none
+- Example: `purple_300`, `color_primary`, `typography_body_md`
+- Rationale: Android XML resources and Kotlin constants traditionally use snake_case
+
+### Dot Notation Handling
+
+Semantic tokens may use dot notation in their source definitions (e.g., `color.primary`, `typography.bodySm`). The platform formatters convert these to platform-appropriate naming:
+
+- **Web**: Converts to kebab-case with prefix: `color.primary` → `--color-primary`
+- **iOS**: Removes dots and converts to camelCase: `color.primary` → `colorPrimary`
+- **Android**: Removes dots and converts to snake_case: `color.primary` → `color_primary`
+
+This conversion is handled automatically by the `getPlatformTokenName()` function in `PlatformNamingRules.ts`, ensuring consistency across all token types.
 
 ---
 
@@ -311,10 +357,10 @@ struct DesignTokens {
 ```kotlin
 object DesignTokens {
     // Primitive
-    val purple300 = Color(0xFF9333EA)
+    val purple_300 = Color(0xFF9333EA)
     
     // Semantic (references primitive)
-    val colorPrimary = purple300
+    val color_primary = purple_300
 }
 ```
 
@@ -330,19 +376,19 @@ data class Typography(
 
 object DesignTokens {
     // Primitives
-    val fontSize100 = 16f
-    val lineHeight100 = 24f
-    val fontFamilyBody = "system-ui"
-    val fontWeight400 = 400
-    val letterSpacing100 = 0f
+    val font_size_100 = 16f
+    val line_height_100 = 24f
+    val font_family_body = "system-ui"
+    val font_weight_400 = 400
+    val letter_spacing_100 = 0f
     
     // Semantic (references multiple primitives)
-    val typographyBodyMd = Typography(
-        fontSize = fontSize100,
-        lineHeight = lineHeight100,
-        fontFamily = fontFamilyBody,
-        fontWeight = fontWeight400,
-        letterSpacing = letterSpacing100
+    val typography_body_md = Typography(
+        fontSize = font_size_100,
+        lineHeight = line_height_100,
+        fontFamily = font_family_body,
+        fontWeight = font_weight_400,
+        letterSpacing = letter_spacing_100
     )
 }
 ```

@@ -240,4 +240,100 @@ export class AndroidFormatGenerator extends BaseFormatProvider {
       return `    <!-- ${token.mathematicalRelationship} -->`;
     }
   }
+
+  /**
+   * Format a single-reference semantic token
+   * Generates: val colorPrimary = purple300
+   */
+  formatSingleReferenceToken(semantic: SemanticToken): string {
+    // Get the primitive reference name (e.g., 'purple300' from primitiveReferences)
+    const primitiveRef = semantic.primitiveReferences.value || 
+                         semantic.primitiveReferences.default ||
+                         Object.values(semantic.primitiveReferences)[0];
+    
+    if (!primitiveRef) {
+      throw new Error(`Semantic token ${semantic.name} has no primitive reference`);
+    }
+
+    // Convert semantic token name to appropriate format using platform naming rules
+    // getPlatformTokenName will handle dot notation conversion (e.g., 'color.primary' -> 'color_primary')
+    const semanticName = this.getTokenName(semantic.name, semantic.category);
+    
+    // Convert primitive reference to appropriate format
+    const primitiveRefName = this.getTokenName(primitiveRef, semantic.category);
+    
+    if (this.outputFormat === 'kotlin') {
+      return `    val ${semanticName} = ${primitiveRefName}`;
+    } else {
+      // XML format - reference another resource
+      const resourceType = this.getXMLResourceType(semantic.category);
+      return `    <${resourceType} name="${semanticName}">@${resourceType}/${primitiveRefName}</${resourceType}>`;
+    }
+  }
+
+  /**
+   * Format a multi-reference semantic token (typography)
+   * Generates: val typographyBodyMd = Typography(fontSize = fontSize100, ...)
+   */
+  formatMultiReferenceToken(semantic: SemanticToken): string {
+    // Get all primitive references except 'value' and 'default' which are for single-reference tokens
+    const refs = Object.entries(semantic.primitiveReferences)
+      .filter(([key]) => key !== 'value' && key !== 'default');
+    
+    if (refs.length === 0) {
+      throw new Error(`Multi-reference semantic token ${semantic.name} has no primitive references`);
+    }
+
+    // Convert semantic token name to appropriate format using platform naming rules
+    // getPlatformTokenName will handle dot notation conversion (e.g., 'typography.bodyMd' -> 'typography_body_md')
+    const semanticName = this.getTokenName(semantic.name, semantic.category);
+    
+    if (this.outputFormat === 'kotlin') {
+      // Generate Typography data class initialization format
+      const parameters = refs.map(([key, primitiveRef]) => {
+        const primitiveRefName = this.getTokenName(primitiveRef, semantic.category);
+        return `${key} = ${primitiveRefName}`;
+      }).join(', ');
+      
+      return `    val ${semanticName} = Typography(${parameters})`;
+    } else {
+      // XML doesn't support object literals, so we'll generate individual properties
+      // This is a limitation of XML resources
+      const properties = refs.map(([key, primitiveRef]) => {
+        const primitiveRefName = this.getTokenName(primitiveRef, semantic.category);
+        const resourceType = this.getXMLResourceType(semantic.category);
+        return `    <${resourceType} name="${semanticName}_${key}">@${resourceType}/${primitiveRefName}</${resourceType}>`;
+      }).join('\n');
+      
+      return properties;
+    }
+  }
+
+  /**
+   * Generate section header comment
+   * Marks primitive vs semantic sections
+   */
+  generateSectionComment(section: 'primitive' | 'semantic'): string {
+    const sectionTitle = section === 'primitive' 
+      ? 'PRIMITIVE TOKENS\n    Mathematical foundation'
+      : 'SEMANTIC TOKENS\n    Use these for UI development';
+    
+    if (this.outputFormat === 'kotlin') {
+      return [
+        '',
+        '    // ============================================',
+        `    // ${sectionTitle}`,
+        '    // ============================================',
+        ''
+      ].join('\n');
+    } else {
+      return [
+        '',
+        '    <!-- ============================================',
+        `         ${sectionTitle}`,
+        '         ============================================ -->',
+        ''
+      ].join('\n');
+    }
+  }
 }

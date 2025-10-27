@@ -97,6 +97,81 @@ describe('getAllSemanticTokens', () => {
     const spacingCount = tokens.filter(t => t.category === SemanticCategory.SPACING).length;
     expect(spacingCount).toBeGreaterThan(0);
   });
+
+  it('should include color, spacing, typography, and border tokens', () => {
+    const tokens = getAllSemanticTokens();
+    
+    // Verify color tokens are included
+    const colorTokens = tokens.filter(t => t.category === SemanticCategory.COLOR);
+    expect(colorTokens.length).toBeGreaterThan(0);
+    expect(colorTokens.some(t => t.name === 'color.primary')).toBe(true);
+    
+    // Verify spacing tokens are included
+    const spacingTokens = tokens.filter(t => t.category === SemanticCategory.SPACING);
+    expect(spacingTokens.length).toBeGreaterThan(0);
+    expect(spacingTokens.some(t => t.name === 'space.grouped.normal')).toBe(true);
+    expect(spacingTokens.some(t => t.name === 'space.inset.comfortable')).toBe(true);
+    
+    // Verify typography tokens are included
+    const typographyTokens = tokens.filter(t => t.category === SemanticCategory.TYPOGRAPHY);
+    expect(typographyTokens.length).toBeGreaterThan(0);
+    expect(typographyTokens.some(t => t.name === 'typography.bodyMd')).toBe(true);
+    
+    // Verify border tokens are included
+    const borderTokens = tokens.filter(t => t.category === SemanticCategory.BORDER);
+    expect(borderTokens.length).toBeGreaterThan(0);
+    expect(borderTokens.some(t => t.name === 'border.borderDefault')).toBe(true);
+  });
+
+  it('should return correct count of semantic tokens', () => {
+    const tokens = getAllSemanticTokens();
+    const stats = getSemanticTokenStats();
+    
+    // Total count should match stats
+    expect(tokens.length).toBe(stats.total);
+    
+    // Category counts should match
+    const colorCount = tokens.filter(t => t.category === SemanticCategory.COLOR).length;
+    expect(colorCount).toBe(stats.colorTokens);
+    
+    const typographyCount = tokens.filter(t => t.category === SemanticCategory.TYPOGRAPHY).length;
+    expect(typographyCount).toBe(stats.typographyTokens);
+    
+    const spacingCount = tokens.filter(t => t.category === SemanticCategory.SPACING).length;
+    expect(spacingCount).toBe(stats.spacingTokens);
+    
+    const borderCount = tokens.filter(t => t.category === SemanticCategory.BORDER).length;
+    expect(borderCount).toBe(stats.borderTokens);
+  });
+
+  it('should ensure each token has valid structure', () => {
+    const tokens = getAllSemanticTokens();
+    
+    // Verify every token has required fields
+    tokens.forEach(token => {
+      expect(token.name).toBeDefined();
+      expect(typeof token.name).toBe('string');
+      expect(token.name.length).toBeGreaterThan(0);
+      
+      expect(token.primitiveReferences).toBeDefined();
+      expect(typeof token.primitiveReferences).toBe('object');
+      expect(Object.keys(token.primitiveReferences).length).toBeGreaterThan(0);
+      
+      expect(token.category).toBeDefined();
+      expect(Object.values(SemanticCategory)).toContain(token.category);
+      
+      expect(token.context).toBeDefined();
+      expect(typeof token.context).toBe('string');
+      
+      expect(token.description).toBeDefined();
+      expect(typeof token.description).toBe('string');
+      
+      // Validate structure using utility function
+      const validation = validateSemanticTokenStructure(token);
+      expect(validation.valid).toBe(true);
+      expect(validation.errors).toHaveLength(0);
+    });
+  });
 });
 
 describe('getSemanticTokensByCategory', () => {

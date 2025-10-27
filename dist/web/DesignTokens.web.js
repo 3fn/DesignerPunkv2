@@ -1,11 +1,22 @@
 /**
  * DesignerPunk Design System - Web Tokens
- * Generated: 2025-10-25T05:20:06.266Z
+ * Generated: 2025-10-26T00:36:39.592Z
  * Version: 1.0.0
  * Platform: Web (JavaScript Constants)
+ *
+ * USAGE GUIDANCE:
+ * - Use semantic tokens (colorPrimary, borderDefault) for all UI development
+ * - Use primitive tokens (purple300, space100) only when no semantic exists
+ * - Comments show semantic → primitive relationships
  */
 
 export const DesignTokens = {
+
+  // ============================================
+  // PRIMITIVE TOKENS
+  Mathematical foundation
+  // ============================================
+
 
   // BORDERWIDTH TOKENS
   // base × 1 = 1 × 1 = 1
@@ -344,4 +355,211 @@ export const DesignTokens = {
   tapAreaComfortable: '56px',
   // base × 1.45 = 44 × 1.45 ≈ 64
   tapAreaGenerous: '64px',
+
+  // ============================================
+  // SEMANTIC TOKENS
+  Use these for UI development
+  // ============================================
+
+  color.primary: purple300,
+  color.secondary: violet300,
+  color.success.strong: cyan400,
+  color.success.subtle: cyan100,
+  color.warning.strong: yellow400,
+  color.warning.subtle: yellow100,
+  color.error: orange300,
+  color.info.strong: teal400,
+  color.info.subtle: teal100,
+  color.text.default: gray300,
+  color.text.muted: gray200,
+  color.text.subtle: gray100,
+  color.background: white100,
+  color.surface: white200,
+  color.border: gray100,
+  color.shadow.default: shadowBlack100,
+  color.shadow.warm: shadowBlue100,
+  color.shadow.cool: shadowOrange100,
+  color.shadow.ambient: shadowGray100,
+  typography.bodySm: {
+    fontSize: fontSize075,
+    lineHeight: lineHeight075,
+    fontFamily: fontFamilyBody,
+    fontWeight: fontWeight400,
+    letterSpacing: letterSpacing100
+  },
+  typography.bodyMd: {
+    fontSize: fontSize100,
+    lineHeight: lineHeight100,
+    fontFamily: fontFamilyBody,
+    fontWeight: fontWeight400,
+    letterSpacing: letterSpacing100
+  },
+  typography.bodyLg: {
+    fontSize: fontSize125,
+    lineHeight: lineHeight125,
+    fontFamily: fontFamilyBody,
+    fontWeight: fontWeight400,
+    letterSpacing: letterSpacing100
+  },
+  typography.h1: {
+    fontSize: fontSize600,
+    lineHeight: lineHeight600,
+    fontFamily: fontFamilyDisplay,
+    fontWeight: fontWeight700,
+    letterSpacing: letterSpacing100
+  },
+  typography.h2: {
+    fontSize: fontSize500,
+    lineHeight: lineHeight500,
+    fontFamily: fontFamilyDisplay,
+    fontWeight: fontWeight700,
+    letterSpacing: letterSpacing100
+  },
+  typography.h3: {
+    fontSize: fontSize400,
+    lineHeight: lineHeight400,
+    fontFamily: fontFamilyDisplay,
+    fontWeight: fontWeight600,
+    letterSpacing: letterSpacing100
+  },
+  typography.h4: {
+    fontSize: fontSize300,
+    lineHeight: lineHeight300,
+    fontFamily: fontFamilyBody,
+    fontWeight: fontWeight600,
+    letterSpacing: letterSpacing100
+  },
+  typography.h5: {
+    fontSize: fontSize200,
+    lineHeight: lineHeight200,
+    fontFamily: fontFamilyBody,
+    fontWeight: fontWeight600,
+    letterSpacing: letterSpacing100
+  },
+  typography.h6: {
+    fontSize: fontSize150,
+    lineHeight: lineHeight150,
+    fontFamily: fontFamilyBody,
+    fontWeight: fontWeight700,
+    letterSpacing: letterSpacing100
+  },
+  typography.caption: {
+    fontSize: fontSize050,
+    lineHeight: lineHeight050,
+    fontFamily: fontFamilyBody,
+    fontWeight: fontWeight300,
+    letterSpacing: letterSpacing100
+  },
+  typography.legal: {
+    fontSize: fontSize050,
+    lineHeight: lineHeight050,
+    fontFamily: fontFamilyBody,
+    fontWeight: fontWeight400,
+    letterSpacing: letterSpacing100
+  },
+  typography.display: {
+    fontSize: fontSize700,
+    lineHeight: lineHeight700,
+    fontFamily: fontFamilyDisplay,
+    fontWeight: fontWeight700,
+    letterSpacing: letterSpacing100
+  },
+  typography.buttonSm: {
+    fontSize: fontSize075,
+    lineHeight: lineHeight075,
+    fontFamily: fontFamilyBody,
+    fontWeight: fontWeight500,
+    letterSpacing: letterSpacing100
+  },
+  typography.buttonMd: {
+    fontSize: fontSize100,
+    lineHeight: lineHeight100,
+    fontFamily: fontFamilyBody,
+    fontWeight: fontWeight500,
+    letterSpacing: letterSpacing100
+  },
+  typography.buttonLg: {
+    fontSize: fontSize125,
+    lineHeight: lineHeight125,
+    fontFamily: fontFamilyBody,
+    fontWeight: fontWeight500,
+    letterSpacing: letterSpacing100
+  },
+  typography.input: {
+    fontSize: fontSize100,
+    lineHeight: lineHeight100,
+    fontFamily: fontFamilyBody,
+    fontWeight: fontWeight400,
+    letterSpacing: letterSpacing100
+  },
+  typography.labelXs: {
+    fontSize: fontSize050,
+    lineHeight: lineHeight050,
+    fontFamily: fontFamilyBody,
+    fontWeight: fontWeight500,
+    letterSpacing: letterSpacing100
+  },
+  typography.labelSm: {
+    fontSize: fontSize075,
+    lineHeight: lineHeight075,
+    fontFamily: fontFamilyBody,
+    fontWeight: fontWeight500,
+    letterSpacing: letterSpacing100
+  },
+  typography.labelMd: {
+    fontSize: fontSize100,
+    lineHeight: lineHeight100,
+    fontFamily: fontFamilyBody,
+    fontWeight: fontWeight500,
+    letterSpacing: letterSpacing100
+  },
+  typography.labelLg: {
+    fontSize: fontSize125,
+    lineHeight: lineHeight125,
+    fontFamily: fontFamilyBody,
+    fontWeight: fontWeight500,
+    letterSpacing: letterSpacing100
+  },
+  typography.codeSm: {
+    fontSize: fontSize075,
+    lineHeight: lineHeight075,
+    fontFamily: fontFamilyMono,
+    fontWeight: fontWeight400,
+    letterSpacing: letterSpacing100
+  },
+  typography.codeMd: {
+    fontSize: fontSize100,
+    lineHeight: lineHeight100,
+    fontFamily: fontFamilyMono,
+    fontWeight: fontWeight400,
+    letterSpacing: letterSpacing100
+  },
+  typography.codeLg: {
+    fontSize: fontSize125,
+    lineHeight: lineHeight125,
+    fontFamily: fontFamilyMono,
+    fontWeight: fontWeight400,
+    letterSpacing: letterSpacing100
+  },
+  border.borderDefault: borderWidth100,
+  border.borderEmphasis: borderWidth200,
+  border.borderHeavy: borderWidth400,
+  space.grouped.minimal: space025,
+  space.grouped.tight: space050,
+  space.grouped.normal: space100,
+  space.grouped.loose: space150,
+  space.related.tight: space100,
+  space.related.normal: space200,
+  space.related.loose: space300,
+  space.separated.tight: space200,
+  space.separated.normal: space300,
+  space.separated.loose: space400,
+  space.sectioned.tight: space400,
+  space.sectioned.normal: space500,
+  space.sectioned.loose: space600,
+  space.inset.tight: space050,
+  space.inset.normal: space100,
+  space.inset.comfortable: space150,
+  space.inset.spacious: space200,
+  space.inset.expansive: space300,
 };

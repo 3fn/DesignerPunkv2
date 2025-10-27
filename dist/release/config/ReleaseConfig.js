@@ -1,0 +1,184 @@
+"use strict";
+/**
+ * Release Management Configuration System
+ *
+ * Provides comprehensive configuration for all release management behaviors
+ * including detection, versioning, publishing, and validation settings.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DEFAULT_RELEASE_CONFIG = void 0;
+/**
+ * Default configuration values
+ */
+exports.DEFAULT_RELEASE_CONFIG = {
+    detection: {
+        specCompletionTrigger: true,
+        taskCompletionTrigger: true,
+        breakingChangeKeywords: [
+            'breaking change',
+            'breaking',
+            'incompatible',
+            'removes',
+            'deprecated',
+            'migration required'
+        ],
+        confidenceThreshold: 0.8,
+        monitorPaths: [
+            '.kiro/specs/*/completion/',
+            '.kiro/specs/*/tasks.md'
+        ],
+        completionPatterns: [
+            '*-completion.md',
+            'spec-completion-summary.md'
+        ]
+    },
+    versioning: {
+        preReleaseStrategy: 'beta',
+        packageCoordination: {
+            corePackageSync: true,
+            componentIndependence: true,
+            dependencyUpdates: 'automatic',
+            corePackages: [
+                '@designerpunk/tokens',
+                '@designerpunk/build-system'
+            ],
+            independentPackages: [
+                '@designerpunk/components'
+            ]
+        },
+        semanticVersioning: {
+            strictCompliance: true,
+            allowPreRelease: true,
+            preReleaseFormat: '{version}-{type}.{number}',
+            validationRules: [
+                {
+                    id: 'semver-format',
+                    description: 'Version must follow semantic versioning format',
+                    pattern: '^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9.-]+)?$',
+                    errorMessage: 'Version must follow semantic versioning format (x.y.z or x.y.z-prerelease)'
+                }
+            ]
+        },
+        versionBumpRules: {
+            majorBumpTriggers: [
+                'breaking change',
+                'incompatible change',
+                'removes feature',
+                'API change'
+            ],
+            minorBumpTriggers: [
+                'new feature',
+                'adds functionality',
+                'spec completion',
+                'enhancement'
+            ],
+            patchBumpTriggers: [
+                'bug fix',
+                'patch',
+                'task completion',
+                'improvement'
+            ],
+            defaultBumpType: 'patch'
+        }
+    },
+    publishing: {
+        github: {
+            owner: '3fn',
+            repository: 'DesignerPunkv2',
+            tokenEnvVar: 'GITHUB_TOKEN',
+            createReleases: true,
+            createTags: true,
+            tagFormat: 'v{version}',
+            releaseNameFormat: 'Release {version}',
+            includePreReleases: true
+        },
+        npm: {
+            registry: 'https://registry.npmjs.org/',
+            tokenEnvVar: 'NPM_TOKEN',
+            access: 'public',
+            packages: [
+                {
+                    name: '@designerpunk/tokens',
+                    path: './packages/tokens'
+                },
+                {
+                    name: '@designerpunk/build-system',
+                    path: './packages/build-system'
+                },
+                {
+                    name: '@designerpunk/components',
+                    path: './packages/components'
+                }
+            ],
+            publishTimeout: 300000 // 5 minutes
+        },
+        artifacts: {
+            enabled: true,
+            buildCommand: 'npm run build',
+            outputDirectory: './dist',
+            includePatterns: [
+                '**/*.js',
+                '**/*.d.ts',
+                '**/*.json',
+                '**/README.md'
+            ],
+            excludePatterns: [
+                '**/*.test.*',
+                '**/*.spec.*',
+                '**/node_modules/**'
+            ]
+        },
+        publishingOrder: {
+            dependencyAware: true,
+            parallelGroups: [
+                ['@designerpunk/tokens'],
+                ['@designerpunk/build-system'],
+                ['@designerpunk/components']
+            ],
+            retryConfig: {
+                maxAttempts: 3,
+                retryDelay: 5000,
+                backoffMultiplier: 2,
+                maxRetryDelay: 30000
+            }
+        }
+    },
+    validation: {
+        releaseReadiness: true,
+        versionBumpValidation: true,
+        packageCompatibility: true,
+        completionDocumentValidation: true,
+        validationRules: {
+            requireCompletionDocs: true,
+            validateDocFormat: true,
+            requiredSections: [
+                'Summary',
+                'Implementation Approach',
+                'Key Decisions',
+                'Artifacts Created'
+            ],
+            breakingChangeRules: [
+                {
+                    id: 'api-removal',
+                    description: 'API or interface removal',
+                    pattern: '(remove|delete|drop).*\\b(api|interface|method|function)\\b',
+                    requireMigrationGuidance: true
+                },
+                {
+                    id: 'signature-change',
+                    description: 'Function or method signature change',
+                    pattern: '(change|modify|update).*\\b(signature|parameter|argument)\\b',
+                    requireMigrationGuidance: true
+                }
+            ]
+        },
+        safetyChecks: {
+            rollbackValidation: true,
+            dependencyConflictDetection: true,
+            publishingSafetyChecks: true,
+            requireMajorReleaseConfirmation: true,
+            requireBreakingChangeConfirmation: true
+        }
+    }
+};
+//# sourceMappingURL=ReleaseConfig.js.map
