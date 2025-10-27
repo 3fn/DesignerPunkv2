@@ -133,14 +133,7 @@ export class TokenFileGenerator {
     };
 
     const tokens = getAllPrimitiveTokens();
-    const allSemantics = getAllSemanticTokens();
-
-    // Temporary filter: Exclude shadow/glow tokens that require semantic→semantic references
-    // See: .kiro/specs/semantic-token-generation/completion/shadow-glow-semantic-reference-issue.md
-    const semantics = allSemantics.filter(s =>
-      !s.name.startsWith('shadow.') &&
-      !s.name.startsWith('glow.')
-    );
+    const semantics = getAllSemanticTokens();
 
     const lines: string[] = [];
     const errors: string[] = [];
@@ -241,14 +234,7 @@ export class TokenFileGenerator {
     };
 
     const tokens = getAllPrimitiveTokens();
-    const allSemantics = getAllSemanticTokens();
-
-    // Temporary filter: Exclude shadow/glow tokens that require semantic→semantic references
-    // See: .kiro/specs/semantic-token-generation/completion/shadow-glow-semantic-reference-issue.md
-    const semantics = allSemantics.filter(s =>
-      !s.name.startsWith('shadow.') &&
-      !s.name.startsWith('glow.')
-    );
+    const semantics = getAllSemanticTokens();
 
     const lines: string[] = [];
     const errors: string[] = [];
@@ -349,14 +335,7 @@ export class TokenFileGenerator {
     };
 
     const tokens = getAllPrimitiveTokens();
-    const allSemantics = getAllSemanticTokens();
-
-    // Temporary filter: Exclude shadow/glow tokens that require semantic→semantic references
-    // See: .kiro/specs/semantic-token-generation/completion/shadow-glow-semantic-reference-issue.md
-    const semantics = allSemantics.filter(s =>
-      !s.name.startsWith('shadow.') &&
-      !s.name.startsWith('glow.')
-    );
+    const semantics = getAllSemanticTokens();
 
     const lines: string[] = [];
     const errors: string[] = [];

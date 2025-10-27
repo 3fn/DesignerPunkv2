@@ -1,6 +1,6 @@
 ///
 /// DesignerPunk Design System - iOS Tokens
-/// Generated: 2025-10-27T18:03:08.392Z
+/// Generated: 2025-10-27T23:17:34.594Z
 /// Version: 1.0.0
 /// Platform: iOS (Swift Constants)
 ///
@@ -373,10 +373,9 @@ public struct DesignTokens {
     public static let colorBackground = white100
     public static let colorSurface = white200
     public static let colorBorder = gray100
-    public static let colorShadowDefault = shadowBlack100
-    public static let colorShadowWarm = shadowBlue100
-    public static let colorShadowCool = shadowOrange100
-    public static let colorShadowAmbient = shadowGray100
+    public static let glowNeonPurple = purple500
+    public static let glowNeonCyan = cyan500
+    public static let glowNeonYellow = yellow500
     public static let typographyBodySm = Typography(fontSize: fontSize075, lineHeight: lineHeight075, fontFamily: fontFamilyBody, fontWeight: fontWeight400, letterSpacing: letterSpacing100)
     public static let typographyBodyMd = Typography(fontSize: fontSize100, lineHeight: lineHeight100, fontFamily: fontFamilyBody, fontWeight: fontWeight400, letterSpacing: letterSpacing100)
     public static let typographyBodyLg = Typography(fontSize: fontSize125, lineHeight: lineHeight125, fontFamily: fontFamilyBody, fontWeight: fontWeight400, letterSpacing: letterSpacing100)
@@ -400,6 +399,15 @@ public struct DesignTokens {
     public static let typographyCodeSm = Typography(fontSize: fontSize075, lineHeight: lineHeight075, fontFamily: fontFamilyMono, fontWeight: fontWeight400, letterSpacing: letterSpacing100)
     public static let typographyCodeMd = Typography(fontSize: fontSize100, lineHeight: lineHeight100, fontFamily: fontFamilyMono, fontWeight: fontWeight400, letterSpacing: letterSpacing100)
     public static let typographyCodeLg = Typography(fontSize: fontSize125, lineHeight: lineHeight125, fontFamily: fontFamilyMono, fontWeight: fontWeight400, letterSpacing: letterSpacing100)
+    public static let shadowContainer = Typography(offsetX: shadowOffsetX000, offsetY: shadowOffsetY100, blur: shadowBlurModerate, opacity: shadowOpacityModerate, color: shadowBlack100)
+    public static let shadowModal = Typography(offsetX: shadowOffsetX000, offsetY: shadowOffsetY200, blur: shadowBlurDepth200, opacity: shadowOpacityDepth200, color: shadowBlack100)
+    public static let shadowFab = Typography(offsetX: shadowOffsetX300, offsetY: shadowOffsetY400, blur: shadowBlurHard, opacity: shadowOpacityHard, color: shadowBlue100)
+    public static let shadowHover = Typography(offsetX: shadowOffsetX000, offsetY: shadowOffsetY100, blur: shadowBlurSoft, opacity: shadowOpacitySoft, color: shadowBlack100)
+    public static let shadowSunrise = Typography(offsetX: shadowOffsetXN300, offsetY: shadowOffsetY200, blur: shadowBlurModerate, opacity: shadowOpacityModerate, color: shadowBlue100)
+    public static let shadowMorning = Typography(offsetX: shadowOffsetXN150, offsetY: shadowOffsetY200, blur: shadowBlurModerate, opacity: shadowOpacityModerate, color: shadowBlack100)
+    public static let shadowNoon = Typography(offsetX: shadowOffsetX000, offsetY: shadowOffsetY200, blur: shadowBlurModerate, opacity: shadowOpacityModerate, color: shadowBlack100)
+    public static let shadowDusk = Typography(offsetX: shadowOffsetX150, offsetY: shadowOffsetY200, blur: shadowBlurModerate, opacity: shadowOpacityModerate, color: shadowBlack100)
+    public static let shadowSunset = Typography(offsetX: shadowOffsetX300, offsetY: shadowOffsetY200, blur: shadowBlurModerate, opacity: shadowOpacityModerate, color: shadowBlue100)
     public static let borderBorderDefault = borderWidth100
     public static let borderBorderEmphasis = borderWidth200
     public static let borderBorderHeavy = borderWidth400

@@ -3,7 +3,7 @@
  * Token File Generator
  *
  * Orchestrates the generation of platform-specific token constant files.
- * Generates DesignTokens.web.js, DesignTokens.ios.swift, and DesignTokens.android.kt
+ * Generates DesignTokens.web.css, DesignTokens.ios.swift, and DesignTokens.android.kt
  * with mathematical consistency across all platforms.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -19,7 +19,7 @@ const semantic_1 = require("../tokens/semantic");
  */
 class TokenFileGenerator {
     constructor() {
-        this.webGenerator = new WebFormatGenerator_1.WebFormatGenerator('javascript');
+        this.webGenerator = new WebFormatGenerator_1.WebFormatGenerator('css');
         this.iosGenerator = new iOSFormatGenerator_1.iOSFormatGenerator();
         this.androidGenerator = new AndroidFormatGenerator_1.AndroidFormatGenerator('kotlin');
     }
@@ -90,11 +90,7 @@ class TokenFileGenerator {
             generatedAt: new Date()
         };
         const tokens = (0, tokens_1.getAllPrimitiveTokens)();
-        const allSemantics = (0, semantic_1.getAllSemanticTokens)();
-        // Temporary filter: Exclude shadow/glow tokens that require semantic→semantic references
-        // See: .kiro/specs/semantic-token-generation/completion/shadow-glow-semantic-reference-issue.md
-        const semantics = allSemantics.filter(s => !s.name.startsWith('shadow.') &&
-            !s.name.startsWith('glow.'));
+        const semantics = (0, semantic_1.getAllSemanticTokens)();
         const lines = [];
         const errors = [];
         const warnings = [];
@@ -155,7 +151,7 @@ class TokenFileGenerator {
         const allErrors = [...errors, ...(validation.errors || [])];
         return {
             platform: 'web',
-            filePath: `${outputDir}/DesignTokens.web.js`,
+            filePath: `${outputDir}/DesignTokens.web.css`,
             content,
             tokenCount: tokens.length,
             semanticTokenCount,
@@ -174,11 +170,7 @@ class TokenFileGenerator {
             generatedAt: new Date()
         };
         const tokens = (0, tokens_1.getAllPrimitiveTokens)();
-        const allSemantics = (0, semantic_1.getAllSemanticTokens)();
-        // Temporary filter: Exclude shadow/glow tokens that require semantic→semantic references
-        // See: .kiro/specs/semantic-token-generation/completion/shadow-glow-semantic-reference-issue.md
-        const semantics = allSemantics.filter(s => !s.name.startsWith('shadow.') &&
-            !s.name.startsWith('glow.'));
+        const semantics = (0, semantic_1.getAllSemanticTokens)();
         const lines = [];
         const errors = [];
         const warnings = [];
@@ -258,11 +250,7 @@ class TokenFileGenerator {
             generatedAt: new Date()
         };
         const tokens = (0, tokens_1.getAllPrimitiveTokens)();
-        const allSemantics = (0, semantic_1.getAllSemanticTokens)();
-        // Temporary filter: Exclude shadow/glow tokens that require semantic→semantic references
-        // See: .kiro/specs/semantic-token-generation/completion/shadow-glow-semantic-reference-issue.md
-        const semantics = allSemantics.filter(s => !s.name.startsWith('shadow.') &&
-            !s.name.startsWith('glow.'));
+        const semantics = (0, semantic_1.getAllSemanticTokens)();
         const lines = [];
         const errors = [];
         const warnings = [];

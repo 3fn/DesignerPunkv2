@@ -1,6 +1,6 @@
 /**
  * DesignerPunk Design System - Web Tokens
- * Generated: 2025-10-27T18:03:08.389Z
+ * Generated: 2025-10-27T23:17:34.591Z
  * Version: 1.0.0
  * Platform: Web (CSS Custom Properties)
  *
@@ -376,10 +376,9 @@
   --color-background: var(--white-100);
   --color-surface: var(--white-200);
   --color-border: var(--gray-100);
-  --color-shadow-default: var(--shadow-black-100);
-  --color-shadow-warm: var(--shadow-blue-100);
-  --color-shadow-cool: var(--shadow-orange-100);
-  --color-shadow-ambient: var(--shadow-gray-100);
+  --glow-neon-purple: var(--purple-500);
+  --glow-neon-cyan: var(--cyan-500);
+  --glow-neon-yellow: var(--yellow-500);
   --typography-body-sm-font-size: var(--font-size-075);
   --typography-body-sm-line-height: var(--line-height-075);
   --typography-body-sm-font-family: var(--font-family-body);
@@ -495,6 +494,51 @@
   --typography-code-lg-font-family: var(--font-family-mono);
   --typography-code-lg-font-weight: var(--font-weight-400);
   --typography-code-lg-letter-spacing: var(--letter-spacing-100);
+  --shadow-container-offset-x: var(--shadow-offset-x-000);
+  --shadow-container-offset-y: var(--shadow-offset-y-100);
+  --shadow-container-blur: var(--shadow-blur-moderate);
+  --shadow-container-opacity: var(--shadow-opacity-moderate);
+  --shadow-container-color: var(--shadow-black-100);
+  --shadow-modal-offset-x: var(--shadow-offset-x-000);
+  --shadow-modal-offset-y: var(--shadow-offset-y-200);
+  --shadow-modal-blur: var(--shadow-blur-depth-200);
+  --shadow-modal-opacity: var(--shadow-opacity-depth-200);
+  --shadow-modal-color: var(--shadow-black-100);
+  --shadow-fab-offset-x: var(--shadow-offset-x-300);
+  --shadow-fab-offset-y: var(--shadow-offset-y-400);
+  --shadow-fab-blur: var(--shadow-blur-hard);
+  --shadow-fab-opacity: var(--shadow-opacity-hard);
+  --shadow-fab-color: var(--shadow-blue-100);
+  --shadow-hover-offset-x: var(--shadow-offset-x-000);
+  --shadow-hover-offset-y: var(--shadow-offset-y-100);
+  --shadow-hover-blur: var(--shadow-blur-soft);
+  --shadow-hover-opacity: var(--shadow-opacity-soft);
+  --shadow-hover-color: var(--shadow-black-100);
+  --shadow-sunrise-offset-x: var(--shadow-offset-x-n-300);
+  --shadow-sunrise-offset-y: var(--shadow-offset-y-200);
+  --shadow-sunrise-blur: var(--shadow-blur-moderate);
+  --shadow-sunrise-opacity: var(--shadow-opacity-moderate);
+  --shadow-sunrise-color: var(--shadow-blue-100);
+  --shadow-morning-offset-x: var(--shadow-offset-x-n-150);
+  --shadow-morning-offset-y: var(--shadow-offset-y-200);
+  --shadow-morning-blur: var(--shadow-blur-moderate);
+  --shadow-morning-opacity: var(--shadow-opacity-moderate);
+  --shadow-morning-color: var(--shadow-black-100);
+  --shadow-noon-offset-x: var(--shadow-offset-x-000);
+  --shadow-noon-offset-y: var(--shadow-offset-y-200);
+  --shadow-noon-blur: var(--shadow-blur-moderate);
+  --shadow-noon-opacity: var(--shadow-opacity-moderate);
+  --shadow-noon-color: var(--shadow-black-100);
+  --shadow-dusk-offset-x: var(--shadow-offset-x-150);
+  --shadow-dusk-offset-y: var(--shadow-offset-y-200);
+  --shadow-dusk-blur: var(--shadow-blur-moderate);
+  --shadow-dusk-opacity: var(--shadow-opacity-moderate);
+  --shadow-dusk-color: var(--shadow-black-100);
+  --shadow-sunset-offset-x: var(--shadow-offset-x-300);
+  --shadow-sunset-offset-y: var(--shadow-offset-y-200);
+  --shadow-sunset-blur: var(--shadow-blur-moderate);
+  --shadow-sunset-opacity: var(--shadow-opacity-moderate);
+  --shadow-sunset-color: var(--shadow-blue-100);
   --border-border-default: var(--border-width-100);
   --border-border-emphasis: var(--border-width-200);
   --border-border-heavy: var(--border-width-400);

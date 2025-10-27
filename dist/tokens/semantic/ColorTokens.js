@@ -9,19 +9,39 @@
  * - warning = yellow (urgent attention and warnings)
  * - error = orange (approachable error states)
  * - info = teal (informational states)
- * - shadow colors = mode-agnostic shadow tints based on art theory
  * - glow colors = vibrant neon colors for emphasis effects
  *
  * All color tokens reference mode-aware primitive color tokens that support
  * light/dark modes with base/wcag themes.
  *
- * Shadow colors are mode-agnostic (always dark) and reference primitive shadow
- * color tokens based on art theory (warm light creates cool shadows, etc.)
- *
  * Glow colors reference existing vibrant primitive colors (purple500, cyan500, yellow500)
  * for neon emphasis effects.
  *
- * Spec-aligned: 22 color semantic tokens (15 original + 4 shadow + 3 glow)
+ * ARCHITECTURAL DECISION: Shadow Color Semantic Layer Removed
+ *
+ * Shadow tokens now reference primitive shadow colors directly (e.g., shadowBlack100)
+ * instead of going through a semantic color layer (e.g., color.shadow.default).
+ *
+ * Rationale:
+ * 1. Matches Industry Patterns: Major design systems (Material Design, Carbon, Polaris)
+ *    include shadow color directly in shadow token definitions rather than creating
+ *    separate semantic color tokens for shadows.
+ *
+ * 2. Aligns with Typography Architecture: Typography tokens compose primitives directly
+ *    (fontSize, lineHeight, fontWeight) without intermediate semantic layers. Shadow
+ *    tokens should follow the same pattern.
+ *
+ * 3. Eliminates Hierarchical References: Semantic→semantic references (shadow.dusk →
+ *    color.shadow.default → shadowBlack100) create unnecessary complexity. Direct
+ *    primitive references (shadow.dusk → shadowBlack100) are clearer.
+ *
+ * 4. Shadow Colors Aren't Reusable: Shadow-specific colors like shadowBlack100 won't
+ *    be used outside shadow contexts, so a semantic abstraction layer provides no value.
+ *
+ * 5. Semantic Meaning in Shadow Token: The semantic meaning belongs in the shadow token
+ *    name itself (shadow.dusk, shadow.sunrise) rather than in a separate color token.
+ *
+ * Spec-aligned: 18 color semantic tokens (15 original + 3 glow, shadow colors removed)
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.colorTokenNames = exports.colorTokens = void 0;
@@ -31,7 +51,7 @@ exports.validateColorTokenCount = validateColorTokenCount;
 const SemanticToken_1 = require("../../types/SemanticToken");
 /**
  * Semantic color tokens for systematic color usage
- * Total: 22 tokens (15 original + 4 shadow + 3 glow)
+ * Total: 18 tokens (15 original + 3 glow, shadow colors removed)
  */
 exports.colorTokens = {
     // Brand Identity (2 tokens)
@@ -146,35 +166,6 @@ exports.colorTokens = {
         context: 'Border color for UI elements and dividers',
         description: 'Border gray for standard UI element borders and dividers'
     },
-    // Shadow Colors (4 tokens) - Mode-agnostic shadow tints
-    'color.shadow.default': {
-        name: 'color.shadow.default',
-        primitiveReferences: { value: 'shadowBlack100' },
-        category: SemanticToken_1.SemanticCategory.COLOR,
-        context: 'Default shadow color for standard UI shadows',
-        description: 'Pure black shadow for neutral lighting (noon)'
-    },
-    'color.shadow.warm': {
-        name: 'color.shadow.warm',
-        primitiveReferences: { value: 'shadowBlue100' },
-        category: SemanticToken_1.SemanticCategory.COLOR,
-        context: 'Warm shadow color for sunrise/sunset lighting',
-        description: 'Cool blue-gray tinted shadow (warm light creates cool shadows)'
-    },
-    'color.shadow.cool': {
-        name: 'color.shadow.cool',
-        primitiveReferences: { value: 'shadowOrange100' },
-        category: SemanticToken_1.SemanticCategory.COLOR,
-        context: 'Cool shadow color for cool lighting environments',
-        description: 'Warm gray tinted shadow (cool light creates warm shadows)'
-    },
-    'color.shadow.ambient': {
-        name: 'color.shadow.ambient',
-        primitiveReferences: { value: 'shadowGray100' },
-        category: SemanticToken_1.SemanticCategory.COLOR,
-        context: 'Ambient shadow color for overcast/ambient lighting',
-        description: 'Blue-gray tinted shadow for ambient conditions'
-    },
     // Glow Colors (3 tokens) - Reference existing vibrant primitive colors
     'glow.neonPurple': {
         name: 'glow.neonPurple',
@@ -200,7 +191,7 @@ exports.colorTokens = {
 };
 /**
  * Array of all color semantic token names for iteration
- * Total: 22 tokens (15 original + 4 shadow + 3 glow)
+ * Total: 18 tokens (15 original + 3 glow, shadow colors removed)
  */
 exports.colorTokenNames = Object.keys(exports.colorTokens);
 /**
@@ -216,10 +207,10 @@ function getAllColorTokens() {
     return Object.values(exports.colorTokens);
 }
 /**
- * Validate token count matches spec (22 tokens: 15 original + 4 shadow + 3 glow)
+ * Validate token count matches spec (18 tokens: 15 original + 3 glow, shadow colors removed)
  */
 function validateColorTokenCount() {
-    const expectedCount = 22;
+    const expectedCount = 18;
     const actualCount = exports.colorTokenNames.length;
     if (actualCount !== expectedCount) {
         console.warn(`Color token count mismatch: expected ${expectedCount}, got ${actualCount}`);

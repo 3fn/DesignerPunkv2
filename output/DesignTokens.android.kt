@@ -1,6 +1,6 @@
 /**
  * DesignerPunk Design System - Android Tokens
- * Generated: 2025-10-27T18:03:08.393Z
+ * Generated: 2025-10-27T23:17:34.595Z
  * Version: 1.0.0
  * Platform: Android (Kotlin Constants)
  */
@@ -373,10 +373,9 @@ object DesignTokens {
     val color_background = white_100
     val color_surface = white_200
     val color_border = gray_100
-    val color_shadow_default = shadow_black_100
-    val color_shadow_warm = shadow_blue_100
-    val color_shadow_cool = shadow_orange_100
-    val color_shadow_ambient = shadow_gray_100
+    val glow_neon_purple = purple_500
+    val glow_neon_cyan = cyan_500
+    val glow_neon_yellow = yellow_500
     val typography_body_sm = Typography(fontSize = font_size_075, lineHeight = line_height_075, fontFamily = font_family_body, fontWeight = font_weight_400, letterSpacing = letter_spacing_100)
     val typography_body_md = Typography(fontSize = font_size_100, lineHeight = line_height_100, fontFamily = font_family_body, fontWeight = font_weight_400, letterSpacing = letter_spacing_100)
     val typography_body_lg = Typography(fontSize = font_size_125, lineHeight = line_height_125, fontFamily = font_family_body, fontWeight = font_weight_400, letterSpacing = letter_spacing_100)
@@ -400,6 +399,15 @@ object DesignTokens {
     val typography_code_sm = Typography(fontSize = font_size_075, lineHeight = line_height_075, fontFamily = font_family_mono, fontWeight = font_weight_400, letterSpacing = letter_spacing_100)
     val typography_code_md = Typography(fontSize = font_size_100, lineHeight = line_height_100, fontFamily = font_family_mono, fontWeight = font_weight_400, letterSpacing = letter_spacing_100)
     val typography_code_lg = Typography(fontSize = font_size_125, lineHeight = line_height_125, fontFamily = font_family_mono, fontWeight = font_weight_400, letterSpacing = letter_spacing_100)
+    val shadow_container = Typography(offsetX = shadow_offset_x_000, offsetY = shadow_offset_y_100, blur = shadow_blur_moderate, opacity = shadow_opacity_moderate, color = shadow_black_100)
+    val shadow_modal = Typography(offsetX = shadow_offset_x_000, offsetY = shadow_offset_y_200, blur = shadow_blur_depth_200, opacity = shadow_opacity_depth_200, color = shadow_black_100)
+    val shadow_fab = Typography(offsetX = shadow_offset_x_300, offsetY = shadow_offset_y_400, blur = shadow_blur_hard, opacity = shadow_opacity_hard, color = shadow_blue_100)
+    val shadow_hover = Typography(offsetX = shadow_offset_x_000, offsetY = shadow_offset_y_100, blur = shadow_blur_soft, opacity = shadow_opacity_soft, color = shadow_black_100)
+    val shadow_sunrise = Typography(offsetX = shadow_offset_x_n_300, offsetY = shadow_offset_y_200, blur = shadow_blur_moderate, opacity = shadow_opacity_moderate, color = shadow_blue_100)
+    val shadow_morning = Typography(offsetX = shadow_offset_x_n_150, offsetY = shadow_offset_y_200, blur = shadow_blur_moderate, opacity = shadow_opacity_moderate, color = shadow_black_100)
+    val shadow_noon = Typography(offsetX = shadow_offset_x_000, offsetY = shadow_offset_y_200, blur = shadow_blur_moderate, opacity = shadow_opacity_moderate, color = shadow_black_100)
+    val shadow_dusk = Typography(offsetX = shadow_offset_x_150, offsetY = shadow_offset_y_200, blur = shadow_blur_moderate, opacity = shadow_opacity_moderate, color = shadow_black_100)
+    val shadow_sunset = Typography(offsetX = shadow_offset_x_300, offsetY = shadow_offset_y_200, blur = shadow_blur_moderate, opacity = shadow_opacity_moderate, color = shadow_blue_100)
     val border_border_default = border_width_100
     val border_border_emphasis = border_width_200
     val border_border_heavy = border_width_400
