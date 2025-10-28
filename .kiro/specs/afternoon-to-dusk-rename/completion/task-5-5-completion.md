@@ -136,6 +136,49 @@ Verified the cleanup by:
 3. Comparing generated output (identical to pre-cleanup)
 4. Reviewing code for clarity and maintainability improvements
 
+## Future Considerations: Shadow Generator Unification
+
+### Current Architecture Decision
+
+This spec maintains the **dual generation architecture** where shadows use specialized generators (`WebShadowGenerator`, `IOSShadowGenerator`, `AndroidShadowGenerator`) while other semantic tokens use the unified generator (`TokenFileGenerator` with platform-specific formatters).
+
+**Rationale for keeping specialized shadow generators:**
+
+1. **Complex Composition**: Shadows compose 5 properties (offsetX, offsetY, blur, opacity, color) into platform-specific formats
+2. **Platform-Specific Formatting**: Each platform has unique shadow syntax (CSS `box-shadow`, Swift `Shadow` struct, Kotlin format)
+3. **Working System**: Specialized generators work well and are thoroughly tested
+4. **Focused Scope**: This spec focuses on rename and architectural simplification, not generator consolidation
+
+### Potential Future Unification
+
+**Shadow generator unification could be valuable in the future**, but should wait for:
+
+**Trigger Conditions** (when to create unification spec):
+- Maintaining two generation systems becomes genuinely painful
+- A new feature requires unified generation to work
+- Multiple developers struggle with the dual system
+- Shadows diverge from other tokens in problematic ways
+
+**Requirements to Gather First** (from real usage):
+- How are shadow tokens actually being used in development?
+- What specific problems does the dual system cause?
+- What platform-specific shadow needs must be preserved?
+- What composition patterns emerge from usage?
+
+**Technical Challenges to Solve**:
+1. **Multi-Property Composition**: Extend `TokenFileGenerator` to handle tokens that compose multiple primitives into single values
+2. **Platform-Specific Formatting**: Implement shadow-specific formatting in `WebFormatGenerator`, `iOSFormatGenerator`, `AndroidFormatGenerator`
+3. **Reference Resolution**: Handle resolving 5 different primitive references per shadow token
+4. **Output Validation**: Ensure generated shadow output matches existing specialized generators exactly
+
+**Recommended Timeline**: Use the current dual system for 1-2 weeks or through 1-2 more specs to validate the architecture and gather real usage requirements before attempting unification.
+
+### Related Documentation
+
+- **Semantic Token Generation Issue**: `.kiro/specs/semantic-token-generation/completion/shadow-glow-semantic-reference-issue.md` - Documents why shadows were excluded from unified generation
+- **Task 5 Completion**: `.kiro/specs/afternoon-to-dusk-rename/completion/task-5-completion.md` - Documents platform generation with specialized generators
+- **Design Decision 4**: `.kiro/specs/afternoon-to-dusk-rename/design.md` - Explains removal of semantic shadow color layer
+
 ---
 
 **Organization**: spec-completion

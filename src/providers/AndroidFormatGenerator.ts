@@ -336,4 +336,69 @@ export class AndroidFormatGenerator extends BaseFormatProvider {
       ].join('\n');
     }
   }
+
+  /**
+   * Generate Jetpack Compose alpha modifier
+   * Outputs: Modifier.alpha(0.48f)
+   * 
+   * @param opacityValue - Unitless opacity value (0.0 - 1.0)
+   * @returns Jetpack Compose alpha modifier string
+   */
+  generateAlphaModifier(opacityValue: number): string {
+    // Format number to preserve decimal places (1.0 instead of 1)
+    const formattedValue = this.formatFloatValue(opacityValue);
+    return `Modifier.alpha(${formattedValue}f)`;
+  }
+
+  /**
+   * Generate Jetpack Compose Color.copy with alpha
+   * Outputs: Color(0xFF6B50A4).copy(alpha = 0.48f)
+   * 
+   * @param colorHex - Hex color value (e.g., 0xFF6B50A4)
+   * @param alpha - Unitless alpha value (0.0 - 1.0)
+   * @returns Jetpack Compose Color with alpha string
+   */
+  generateColorWithAlpha(colorHex: string, alpha: number): string {
+    // Format number to preserve decimal places (1.0 instead of 1)
+    const formattedAlpha = this.formatFloatValue(alpha);
+    return `Color(${colorHex}).copy(alpha = ${formattedAlpha}f)`;
+  }
+
+  /**
+   * Generate Kotlin constant for opacity token
+   * Outputs: const val OPACITY_600 = 0.48f
+   * 
+   * @param tokenName - Token name (e.g., 'opacity600')
+   * @param opacityValue - Unitless opacity value (0.0 - 1.0)
+   * @returns Kotlin constant declaration string
+   */
+  generateConstant(tokenName: string, opacityValue: number): string {
+    // Convert camelCase or kebab-case to UPPER_SNAKE_CASE for Kotlin constants
+    // Also add underscores between letters and numbers (opacity600 → OPACITY_600)
+    const constantName = tokenName
+      .replace(/([a-z])([A-Z])/g, '$1_$2') // camelCase to snake_case
+      .replace(/([a-zA-Z])(\d)/g, '$1_$2') // Add underscore between letter and number
+      .replace(/-/g, '_') // kebab-case to snake_case
+      .toUpperCase();
+    
+    // Format number to preserve decimal places (1.0 instead of 1)
+    const formattedValue = this.formatFloatValue(opacityValue);
+    return `const val ${constantName} = ${formattedValue}f`;
+  }
+
+  /**
+   * Format float value to preserve decimal places
+   * Ensures 1.0 stays as "1.0" instead of "1"
+   * 
+   * @param value - Numeric value to format
+   * @returns Formatted string with decimal places preserved
+   */
+  private formatFloatValue(value: number): string {
+    // If the value is a whole number (0 or 1), ensure it has .0
+    if (value === 0 || value === 1) {
+      return value.toFixed(1);
+    }
+    // Otherwise, return the value as-is (JavaScript will handle decimal places)
+    return String(value);
+  }
 }
