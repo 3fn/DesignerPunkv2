@@ -22,7 +22,9 @@ export enum TokenCategory {
   COLOR = 'color',
   BORDER_WIDTH = 'borderWidth',
   SHADOW = 'shadow',
-  GLOW = 'glow'
+  GLOW = 'glow',
+  OPACITY = 'opacity',
+  BLEND = 'blend'
 }
 
 /**

@@ -175,6 +175,25 @@ export {
   getAllGlowOpacityTokens
 } from './GlowOpacityTokens';
 
+// Opacity tokens
+export {
+  opacityTokens,
+  opacityTokenNames,
+  getOpacityToken,
+  getAllOpacityTokens,
+  OPACITY_BASE_VALUE
+} from './OpacityTokens';
+
+// Blend tokens
+export {
+  blendTokens,
+  blendTokenNames,
+  getBlendToken,
+  getAllBlendTokens,
+  BLEND_BASE_VALUE,
+  BlendDirection
+} from './BlendTokens';
+
 // Combined token utilities
 import { spacingTokens } from './SpacingTokens';
 import { fontSizeTokens } from './FontSizeTokens';
@@ -192,6 +211,8 @@ import { shadowBlur } from './ShadowBlurTokens';
 import { shadowOpacityTokens } from './ShadowOpacityTokens';
 import { glowBlur } from './GlowBlurTokens';
 import { glowOpacity } from './GlowOpacityTokens';
+import { opacityTokens } from './OpacityTokens';
+import { blendTokens } from './BlendTokens';
 import { PrimitiveToken, TokenCategory } from '../types/PrimitiveToken';
 
 /**
@@ -210,7 +231,9 @@ export const allTokens = {
   [TokenCategory.COLOR]: colorTokens,
   [TokenCategory.BORDER_WIDTH]: borderWidthTokens,
   [TokenCategory.SHADOW]: { ...shadowOffsetX, ...shadowOffsetY, ...shadowBlur, ...shadowOpacityTokens },
-  [TokenCategory.GLOW]: { ...glowBlur, ...glowOpacity }
+  [TokenCategory.GLOW]: { ...glowBlur, ...glowOpacity },
+  [TokenCategory.OPACITY]: opacityTokens,
+  [TokenCategory.BLEND]: blendTokens
 };
 
 /**
@@ -237,7 +260,9 @@ export function getAllPrimitiveTokens(): PrimitiveToken[] {
     ...Object.values(shadowBlur),
     ...Object.values(shadowOpacityTokens),
     ...Object.values(glowBlur),
-    ...Object.values(glowOpacity)
+    ...Object.values(glowOpacity),
+    ...Object.values(opacityTokens),
+    ...Object.values(blendTokens)
   ];
 }
 
@@ -299,5 +324,7 @@ export const TOKEN_FAMILY_BASE_VALUES = {
   [TokenCategory.COLOR]: 0, // N/A for hex color tokens
   [TokenCategory.BORDER_WIDTH]: 1,
   [TokenCategory.SHADOW]: 4,
-  [TokenCategory.GLOW]: 8
+  [TokenCategory.GLOW]: 8,
+  [TokenCategory.OPACITY]: 0.08,
+  [TokenCategory.BLEND]: 0.04
 } as const;

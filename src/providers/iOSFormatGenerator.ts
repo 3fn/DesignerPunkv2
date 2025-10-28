@@ -243,4 +243,41 @@ export class iOSFormatGenerator extends BaseFormatProvider {
       ''
     ].join('\n');
   }
+
+  /**
+   * Generate SwiftUI opacity modifier
+   * Outputs: .opacity(0.48)
+   * 
+   * @param opacityValue - Opacity value (0.0 - 1.0)
+   * @returns SwiftUI opacity modifier string
+   */
+  generateOpacityModifier(opacityValue: number): string {
+    return `.opacity(${opacityValue})`;
+  }
+
+  /**
+   * Generate SwiftUI Color with opacity parameter
+   * Outputs: Color(red: r, green: g, blue: b, opacity: 0.48)
+   * 
+   * @param r - Red channel (0.0 - 1.0)
+   * @param g - Green channel (0.0 - 1.0)
+   * @param b - Blue channel (0.0 - 1.0)
+   * @param opacity - Opacity value (0.0 - 1.0)
+   * @returns SwiftUI Color with opacity string
+   */
+  generateColorWithOpacity(r: number, g: number, b: number, opacity: number): string {
+    return `Color(red: ${r}, green: ${g}, blue: ${b}, opacity: ${opacity})`;
+  }
+
+  /**
+   * Generate Swift constant for opacity token
+   * Outputs: static let opacity600 = 0.48
+   * 
+   * @param tokenName - Opacity token name (e.g., 'opacity600')
+   * @param opacityValue - Opacity value (0.0 - 1.0)
+   * @returns Swift constant declaration string
+   */
+  generateConstant(tokenName: string, opacityValue: number): string {
+    return `static let ${tokenName} = ${opacityValue}`;
+  }
 }

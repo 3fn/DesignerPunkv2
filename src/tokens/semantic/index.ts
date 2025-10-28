@@ -17,6 +17,8 @@ export * from './SpacingTokens';
 export * from './TypographyTokens';
 export * from './BorderWidthTokens';
 export * from './ShadowTokens';
+export * from './OpacityTokens';
+export * from './BlendTokens';
 
 // StyleTokens placeholder - will be implemented in future tasks
 export { styleTokens, getStyleToken } from './StyleTokens';
@@ -57,6 +59,22 @@ export {
   borderHeavy
 } from './BorderWidthTokens';
 
+export {
+  opacityTokens,
+  opacityTokenNames,
+  getOpacityToken,
+  getAllOpacityTokens,
+  validateOpacityTokenCount
+} from './OpacityTokens';
+
+export {
+  blendTokens,
+  blendTokenNames,
+  getBlendToken,
+  getAllBlendTokens,
+  validateBlendTokenCount
+} from './BlendTokens';
+
 // Import types for utility functions
 import type { SemanticToken } from '../../types/SemanticToken';
 import { SemanticCategory } from '../../types/SemanticToken';
@@ -65,10 +83,12 @@ import { spacingTokens } from './SpacingTokens';
 import { typographyTokens } from './TypographyTokens';
 import { SemanticBorderWidthTokens } from './BorderWidthTokens';
 import { shadowTokens } from './ShadowTokens';
+import { opacityTokens } from './OpacityTokens';
+import { blendTokens } from './BlendTokens';
 
 /**
  * Get any semantic token by name across all categories
- * Searches color, spacing, typography, border, and shadow tokens
+ * Searches color, spacing, typography, border, shadow, and opacity tokens
  */
 export function getSemanticToken(name: string): Omit<SemanticToken, 'primitiveTokens'> | undefined {
   // Check color tokens
@@ -104,6 +124,16 @@ export function getSemanticToken(name: string): Omit<SemanticToken, 'primitiveTo
   // Check shadow tokens
   if (name.startsWith('shadow.')) {
     return shadowTokens[name];
+  }
+
+  // Check opacity tokens
+  if (name.startsWith('opacity.')) {
+    return opacityTokens[name];
+  }
+
+  // Check blend tokens
+  if (name.startsWith('blend.')) {
+    return blendTokens[name] as any;
   }
 
   return undefined;
@@ -206,6 +236,12 @@ export function getAllSemanticTokens(): Array<Omit<SemanticToken, 'primitiveToke
   // Add shadow tokens
   tokens.push(...Object.values(shadowTokens));
 
+  // Add opacity tokens
+  tokens.push(...Object.values(opacityTokens));
+
+  // Add blend tokens
+  tokens.push(...(Object.values(blendTokens) as any));
+
   // Add border width tokens
   for (const [name, token] of Object.entries(SemanticBorderWidthTokens)) {
     tokens.push({
@@ -246,6 +282,8 @@ export function getSemanticTokensByCategory(category: SemanticCategory): Array<O
       return getAllSemanticTokens().filter(t => t.category === SemanticCategory.BORDER);
     case SemanticCategory.SHADOW:
       return Object.values(shadowTokens);
+    case SemanticCategory.INTERACTION:
+      return [...Object.values(opacityTokens), ...(Object.values(blendTokens) as any)];
     default:
       return [];
   }
@@ -371,6 +409,8 @@ export function getSemanticTokenStats() {
     typographyTokens: Object.keys(typographyTokens).length,
     spacingTokens: allTokens.filter(t => t.category === SemanticCategory.SPACING).length,
     borderTokens: Object.keys(SemanticBorderWidthTokens).length,
-    shadowTokens: Object.keys(shadowTokens).length
+    shadowTokens: Object.keys(shadowTokens).length,
+    opacityTokens: Object.keys(opacityTokens).length,
+    blendTokens: Object.keys(blendTokens).length
   };
 }
