@@ -39,5 +39,33 @@ export declare class WebFormatGenerator extends BaseFormatProvider {
      * Marks primitive vs semantic sections
      */
     generateSectionComment(section: 'primitive' | 'semantic'): string;
+    /**
+     * Generate CSS opacity property
+     * Outputs: opacity: 0.48;
+     *
+     * @param opacityValue - Opacity value (0.0 - 1.0)
+     * @returns CSS opacity property string
+     */
+    generateOpacityProperty(opacityValue: number): string;
+    /**
+     * Generate RGBA alpha channel with color
+     * Outputs: rgba(r, g, b, 0.48)
+     *
+     * @param r - Red channel (0-255)
+     * @param g - Green channel (0-255)
+     * @param b - Blue channel (0-255)
+     * @param alpha - Alpha channel (0.0 - 1.0)
+     * @returns RGBA color string
+     */
+    generateRgbaAlpha(r: number, g: number, b: number, alpha: number): string;
+    /**
+     * Generate CSS custom property for opacity token
+     * Outputs: --opacity600: 0.48;
+     *
+     * @param tokenName - Opacity token name (e.g., 'opacity600')
+     * @param opacityValue - Opacity value (0.0 - 1.0)
+     * @returns CSS custom property string
+     */
+    generateCustomProperty(tokenName: string, opacityValue: number): string;
 }
 //# sourceMappingURL=WebFormatGenerator.d.ts.map

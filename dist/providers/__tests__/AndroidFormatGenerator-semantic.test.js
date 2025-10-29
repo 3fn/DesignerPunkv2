@@ -3,10 +3,87 @@
  * AndroidFormatGenerator Semantic Token Tests
  *
  * Tests for semantic token formatting methods added in task 4.1
+ * Tests for opacity generation methods added in task 3.3
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 const AndroidFormatGenerator_1 = require("../AndroidFormatGenerator");
 const SemanticToken_1 = require("../../types/SemanticToken");
+describe('AndroidFormatGenerator - Opacity Generation', () => {
+    let generator;
+    beforeEach(() => {
+        generator = new AndroidFormatGenerator_1.AndroidFormatGenerator('kotlin');
+    });
+    describe('generateAlphaModifier', () => {
+        test('should generate correct Jetpack Compose alpha modifier syntax', () => {
+            const result = generator.generateAlphaModifier(0.48);
+            expect(result).toBe('Modifier.alpha(0.48f)');
+        });
+        test('should handle full opacity (1.0)', () => {
+            const result = generator.generateAlphaModifier(1.0);
+            expect(result).toBe('Modifier.alpha(1.0f)');
+        });
+        test('should handle full transparency (0.0)', () => {
+            const result = generator.generateAlphaModifier(0.0);
+            expect(result).toBe('Modifier.alpha(0.0f)');
+        });
+        test('should handle various opacity values', () => {
+            expect(generator.generateAlphaModifier(0.08)).toBe('Modifier.alpha(0.08f)');
+            expect(generator.generateAlphaModifier(0.16)).toBe('Modifier.alpha(0.16f)');
+            expect(generator.generateAlphaModifier(0.32)).toBe('Modifier.alpha(0.32f)');
+            expect(generator.generateAlphaModifier(0.64)).toBe('Modifier.alpha(0.64f)');
+            expect(generator.generateAlphaModifier(0.88)).toBe('Modifier.alpha(0.88f)');
+        });
+    });
+    describe('generateColorWithAlpha', () => {
+        test('should generate correct Jetpack Compose Color.copy syntax', () => {
+            const result = generator.generateColorWithAlpha('0xFF6B50A4', 0.48);
+            expect(result).toBe('Color(0xFF6B50A4).copy(alpha = 0.48f)');
+        });
+        test('should handle full opacity color', () => {
+            const result = generator.generateColorWithAlpha('0xFF3B82F6', 1.0);
+            expect(result).toBe('Color(0xFF3B82F6).copy(alpha = 1.0f)');
+        });
+        test('should handle fully transparent color', () => {
+            const result = generator.generateColorWithAlpha('0xFFEF4444', 0.0);
+            expect(result).toBe('Color(0xFFEF4444).copy(alpha = 0.0f)');
+        });
+        test('should handle various color and alpha combinations', () => {
+            expect(generator.generateColorWithAlpha('0xFF6B50A4', 0.8)).toBe('Color(0xFF6B50A4).copy(alpha = 0.8f)');
+            expect(generator.generateColorWithAlpha('0xFF3B82F6', 0.72)).toBe('Color(0xFF3B82F6).copy(alpha = 0.72f)');
+            expect(generator.generateColorWithAlpha('0xFFEF4444', 0.48)).toBe('Color(0xFFEF4444).copy(alpha = 0.48f)');
+        });
+    });
+    describe('generateConstant', () => {
+        test('should generate correct Kotlin constant syntax', () => {
+            const result = generator.generateConstant('opacity600', 0.48);
+            expect(result).toBe('const val OPACITY_600 = 0.48f');
+        });
+        test('should handle full opacity constant', () => {
+            const result = generator.generateConstant('opacity1300', 1.0);
+            expect(result).toBe('const val OPACITY_1300 = 1.0f');
+        });
+        test('should handle full transparency constant', () => {
+            const result = generator.generateConstant('opacity000', 0.0);
+            expect(result).toBe('const val OPACITY_000 = 0.0f');
+        });
+        test('should convert camelCase to UPPER_SNAKE_CASE', () => {
+            expect(generator.generateConstant('opacityDisabled', 0.48)).toBe('const val OPACITY_DISABLED = 0.48f');
+            expect(generator.generateConstant('opacityOverlay', 0.32)).toBe('const val OPACITY_OVERLAY = 0.32f');
+            expect(generator.generateConstant('opacityHover', 0.08)).toBe('const val OPACITY_HOVER = 0.08f');
+        });
+        test('should handle various primitive opacity token constants', () => {
+            expect(generator.generateConstant('opacity100', 0.08)).toBe('const val OPACITY_100 = 0.08f');
+            expect(generator.generateConstant('opacity200', 0.16)).toBe('const val OPACITY_200 = 0.16f');
+            expect(generator.generateConstant('opacity400', 0.32)).toBe('const val OPACITY_400 = 0.32f');
+            expect(generator.generateConstant('opacity800', 0.64)).toBe('const val OPACITY_800 = 0.64f');
+        });
+        test('should handle semantic opacity token constants', () => {
+            expect(generator.generateConstant('opacityDisabled', 0.48)).toBe('const val OPACITY_DISABLED = 0.48f');
+            expect(generator.generateConstant('opacityPressed', 0.16)).toBe('const val OPACITY_PRESSED = 0.16f');
+            expect(generator.generateConstant('opacityLoading', 0.16)).toBe('const val OPACITY_LOADING = 0.16f');
+        });
+    });
+});
 describe('AndroidFormatGenerator - Single-Reference Token Generation', () => {
     describe('Kotlin Format', () => {
         let generator;

@@ -21,17 +21,44 @@ export class WebFormatGenerator extends BaseFormatProvider {
   formatToken(token: PrimitiveToken | SemanticToken): string {
     const tokenName = this.getTokenName(token.name, token.category);
     
-    // For semantic tokens, use the resolved primitive token's platform value
-    let platformValue;
-    if ('platforms' in token) {
-      platformValue = token.platforms.web;
-    } else {
-      // For semantic tokens, get the first resolved primitive token
-      const primitiveToken = token.primitiveTokens ? Object.values(token.primitiveTokens)[0] : null;
-      if (!primitiveToken) {
-        throw new Error(`Semantic token ${token.name} has no resolved primitive tokens`);
+    // Handle semantic-only tokens (like z-index tokens) that have direct values
+    // These tokens have a 'value' property and 'platforms' array but no 'primitiveReferences'
+    if ('value' in token && typeof token.value === 'number' && 
+        'platforms' in token && Array.isArray(token.platforms)) {
+      // This is a semantic-only token with a direct value (e.g., z-index tokens)
+      if (this.outputFormat === 'css') {
+        return this.formatCSSCustomProperty(tokenName, token.value, 'unitless');
+      } else {
+        return this.formatJavaScriptConstant(tokenName, token.value, 'unitless');
       }
+    }
+    
+    // Check if this is a primitive token (has 'baseValue' property)
+    const isPrimitiveToken = 'baseValue' in token;
+    
+    // For primitive tokens or semantic tokens with platform-specific values
+    let platformValue;
+    if (isPrimitiveToken) {
+      // This is a primitive token
+      const primitiveToken = token as PrimitiveToken;
       platformValue = primitiveToken.platforms.web;
+    } else {
+      // This is a semantic token - check for platforms property first
+      const semanticToken = token as SemanticToken;
+      if (semanticToken.platforms?.web) {
+        platformValue = semanticToken.platforms.web;
+      } else {
+        // Get the first resolved primitive token
+        const primitiveToken = semanticToken.primitiveTokens ? Object.values(semanticToken.primitiveTokens)[0] : null;
+        if (!primitiveToken) {
+          throw new Error(`Semantic token ${token.name} has no resolved primitive tokens`);
+        }
+        platformValue = primitiveToken.platforms.web;
+      }
+    }
+    
+    if (!platformValue) {
+      throw new Error(`Token ${token.name} has no web platform value`);
     }
 
     if (this.outputFormat === 'css') {
@@ -125,16 +152,15 @@ export class WebFormatGenerator extends BaseFormatProvider {
   }
 
   getTokenName(tokenName: string, category: string): string {
-    // Use platform naming rules for consistent naming
-    const platformName = getPlatformTokenName(tokenName, this.platform, category as any);
-    
-    // For JavaScript output, remove the CSS custom property prefix
-    if (this.outputFormat === 'javascript' && platformName.startsWith('--')) {
-      // Convert back to camelCase for JavaScript
-      return tokenName.charAt(0).toLowerCase() + tokenName.slice(1);
+    // For JavaScript output, we need camelCase without prefix
+    if (this.outputFormat === 'javascript') {
+      // Use iOS naming rules (camelCase) for JavaScript
+      const camelCaseName = getPlatformTokenName(tokenName, 'ios', category as any);
+      return camelCaseName;
     }
     
-    return platformName;
+    // For CSS output, use web platform naming rules (kebab-case with -- prefix)
+    return getPlatformTokenName(tokenName, this.platform, category as any);
   }
 
   private formatCSSCustomProperty(name: string, value: number | string | object, unit: string): string {

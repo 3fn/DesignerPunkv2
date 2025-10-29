@@ -26,7 +26,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.borderHeavy = exports.borderEmphasis = exports.borderDefault = exports.SemanticBorderWidthTokens = exports.getAllShadowTokens = exports.getShadowToken = exports.shadowTokenNames = exports.shadowTokens = exports.getAllTypographyTokens = exports.getTypographyToken = exports.typographyTokenNames = exports.typographyTokens = exports.insetSpacing = exports.layoutSpacing = exports.spacingTokens = exports.validateColorTokenCount = exports.getAllColorTokens = exports.getColorToken = exports.colorTokenNames = exports.colorTokens = exports.getStyleToken = exports.styleTokens = void 0;
+exports.getLayeringTokensByPlatform = exports.getAllLayeringTokens = exports.getAllElevationTokens = exports.getElevationToken = exports.elevationTokenNames = exports.elevationTokens = exports.getAllZIndexTokens = exports.getZIndexToken = exports.zIndexTokenNames = exports.zIndexTokens = exports.validateBlendTokenCount = exports.getAllBlendTokens = exports.getBlendToken = exports.blendTokenNames = exports.blendTokens = exports.validateOpacityTokenCount = exports.getAllOpacityTokens = exports.getOpacityToken = exports.opacityTokenNames = exports.opacityTokens = exports.borderHeavy = exports.borderEmphasis = exports.borderDefault = exports.SemanticBorderWidthTokens = exports.getAllShadowTokens = exports.getShadowToken = exports.shadowTokenNames = exports.shadowTokens = exports.getAllTypographyTokens = exports.getTypographyToken = exports.typographyTokenNames = exports.typographyTokens = exports.insetSpacing = exports.layoutSpacing = exports.spacingTokens = exports.validateColorTokenCount = exports.getAllColorTokens = exports.getColorToken = exports.colorTokenNames = exports.colorTokens = exports.getStyleToken = exports.styleTokens = void 0;
 exports.getSemanticToken = getSemanticToken;
 exports.getAllSemanticTokens = getAllSemanticTokens;
 exports.getSemanticTokensByCategory = getSemanticTokensByCategory;
@@ -40,6 +40,9 @@ __exportStar(require("./SpacingTokens"), exports);
 __exportStar(require("./TypographyTokens"), exports);
 __exportStar(require("./BorderWidthTokens"), exports);
 __exportStar(require("./ShadowTokens"), exports);
+__exportStar(require("./OpacityTokens"), exports);
+__exportStar(require("./BlendTokens"), exports);
+__exportStar(require("./LayeringTokens"), exports);
 // StyleTokens placeholder - will be implemented in future tasks
 var StyleTokens_1 = require("./StyleTokens");
 Object.defineProperty(exports, "styleTokens", { enumerable: true, get: function () { return StyleTokens_1.styleTokens; } });
@@ -70,15 +73,41 @@ Object.defineProperty(exports, "SemanticBorderWidthTokens", { enumerable: true, 
 Object.defineProperty(exports, "borderDefault", { enumerable: true, get: function () { return BorderWidthTokens_1.borderDefault; } });
 Object.defineProperty(exports, "borderEmphasis", { enumerable: true, get: function () { return BorderWidthTokens_1.borderEmphasis; } });
 Object.defineProperty(exports, "borderHeavy", { enumerable: true, get: function () { return BorderWidthTokens_1.borderHeavy; } });
+var OpacityTokens_1 = require("./OpacityTokens");
+Object.defineProperty(exports, "opacityTokens", { enumerable: true, get: function () { return OpacityTokens_1.opacityTokens; } });
+Object.defineProperty(exports, "opacityTokenNames", { enumerable: true, get: function () { return OpacityTokens_1.opacityTokenNames; } });
+Object.defineProperty(exports, "getOpacityToken", { enumerable: true, get: function () { return OpacityTokens_1.getOpacityToken; } });
+Object.defineProperty(exports, "getAllOpacityTokens", { enumerable: true, get: function () { return OpacityTokens_1.getAllOpacityTokens; } });
+Object.defineProperty(exports, "validateOpacityTokenCount", { enumerable: true, get: function () { return OpacityTokens_1.validateOpacityTokenCount; } });
+var BlendTokens_1 = require("./BlendTokens");
+Object.defineProperty(exports, "blendTokens", { enumerable: true, get: function () { return BlendTokens_1.blendTokens; } });
+Object.defineProperty(exports, "blendTokenNames", { enumerable: true, get: function () { return BlendTokens_1.blendTokenNames; } });
+Object.defineProperty(exports, "getBlendToken", { enumerable: true, get: function () { return BlendTokens_1.getBlendToken; } });
+Object.defineProperty(exports, "getAllBlendTokens", { enumerable: true, get: function () { return BlendTokens_1.getAllBlendTokens; } });
+Object.defineProperty(exports, "validateBlendTokenCount", { enumerable: true, get: function () { return BlendTokens_1.validateBlendTokenCount; } });
+var LayeringTokens_1 = require("./LayeringTokens");
+Object.defineProperty(exports, "zIndexTokens", { enumerable: true, get: function () { return LayeringTokens_1.zIndexTokens; } });
+Object.defineProperty(exports, "zIndexTokenNames", { enumerable: true, get: function () { return LayeringTokens_1.zIndexTokenNames; } });
+Object.defineProperty(exports, "getZIndexToken", { enumerable: true, get: function () { return LayeringTokens_1.getZIndexToken; } });
+Object.defineProperty(exports, "getAllZIndexTokens", { enumerable: true, get: function () { return LayeringTokens_1.getAllZIndexTokens; } });
+Object.defineProperty(exports, "elevationTokens", { enumerable: true, get: function () { return LayeringTokens_1.elevationTokens; } });
+Object.defineProperty(exports, "elevationTokenNames", { enumerable: true, get: function () { return LayeringTokens_1.elevationTokenNames; } });
+Object.defineProperty(exports, "getElevationToken", { enumerable: true, get: function () { return LayeringTokens_1.getElevationToken; } });
+Object.defineProperty(exports, "getAllElevationTokens", { enumerable: true, get: function () { return LayeringTokens_1.getAllElevationTokens; } });
+Object.defineProperty(exports, "getAllLayeringTokens", { enumerable: true, get: function () { return LayeringTokens_1.getAllLayeringTokens; } });
+Object.defineProperty(exports, "getLayeringTokensByPlatform", { enumerable: true, get: function () { return LayeringTokens_1.getLayeringTokensByPlatform; } });
 const SemanticToken_1 = require("../../types/SemanticToken");
 const ColorTokens_2 = require("./ColorTokens");
 const SpacingTokens_2 = require("./SpacingTokens");
 const TypographyTokens_2 = require("./TypographyTokens");
 const BorderWidthTokens_2 = require("./BorderWidthTokens");
 const ShadowTokens_2 = require("./ShadowTokens");
+const OpacityTokens_2 = require("./OpacityTokens");
+const BlendTokens_2 = require("./BlendTokens");
+const LayeringTokens_2 = require("./LayeringTokens");
 /**
  * Get any semantic token by name across all categories
- * Searches color, spacing, typography, border, and shadow tokens
+ * Searches color, spacing, typography, border, shadow, and opacity tokens
  */
 function getSemanticToken(name) {
     // Check color tokens
@@ -110,6 +139,22 @@ function getSemanticToken(name) {
     // Check shadow tokens
     if (name.startsWith('shadow.')) {
         return ShadowTokens_2.shadowTokens[name];
+    }
+    // Check opacity tokens
+    if (name.startsWith('opacity.')) {
+        return OpacityTokens_2.opacityTokens[name];
+    }
+    // Check blend tokens
+    if (name.startsWith('blend.')) {
+        return BlendTokens_2.blendTokens[name];
+    }
+    // Check z-index tokens
+    if (name.startsWith('zIndex.')) {
+        return LayeringTokens_2.zIndexTokens[name];
+    }
+    // Check elevation tokens
+    if (name.startsWith('elevation.')) {
+        return LayeringTokens_2.elevationTokens[name];
     }
     return undefined;
 }
@@ -197,6 +242,14 @@ function getAllSemanticTokens() {
     tokens.push(...Object.values(TypographyTokens_2.typographyTokens));
     // Add shadow tokens
     tokens.push(...Object.values(ShadowTokens_2.shadowTokens));
+    // Add opacity tokens
+    tokens.push(...Object.values(OpacityTokens_2.opacityTokens));
+    // Add blend tokens
+    tokens.push(...Object.values(BlendTokens_2.blendTokens));
+    // Add z-index tokens
+    tokens.push(...Object.values(LayeringTokens_2.zIndexTokens));
+    // Add elevation tokens
+    tokens.push(...Object.values(LayeringTokens_2.elevationTokens));
     // Add border width tokens
     for (const [name, token] of Object.entries(BorderWidthTokens_2.SemanticBorderWidthTokens)) {
         tokens.push({
@@ -234,6 +287,10 @@ function getSemanticTokensByCategory(category) {
             return getAllSemanticTokens().filter(t => t.category === SemanticToken_1.SemanticCategory.BORDER);
         case SemanticToken_1.SemanticCategory.SHADOW:
             return Object.values(ShadowTokens_2.shadowTokens);
+        case SemanticToken_1.SemanticCategory.INTERACTION:
+            return [...Object.values(OpacityTokens_2.opacityTokens), ...Object.values(BlendTokens_2.blendTokens)];
+        case SemanticToken_1.SemanticCategory.LAYERING:
+            return [...Object.values(LayeringTokens_2.zIndexTokens), ...Object.values(LayeringTokens_2.elevationTokens)];
         default:
             return [];
     }
@@ -341,7 +398,11 @@ function getSemanticTokenStats() {
         typographyTokens: Object.keys(TypographyTokens_2.typographyTokens).length,
         spacingTokens: allTokens.filter(t => t.category === SemanticToken_1.SemanticCategory.SPACING).length,
         borderTokens: Object.keys(BorderWidthTokens_2.SemanticBorderWidthTokens).length,
-        shadowTokens: Object.keys(ShadowTokens_2.shadowTokens).length
+        shadowTokens: Object.keys(ShadowTokens_2.shadowTokens).length,
+        opacityTokens: Object.keys(OpacityTokens_2.opacityTokens).length,
+        blendTokens: Object.keys(BlendTokens_2.blendTokens).length,
+        zIndexTokens: Object.keys(LayeringTokens_2.zIndexTokens).length,
+        elevationTokens: Object.keys(LayeringTokens_2.elevationTokens).length
     };
 }
 //# sourceMappingURL=index.js.map

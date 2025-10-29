@@ -14,17 +14,44 @@ export class iOSFormatGenerator extends BaseFormatProvider {
   formatToken(token: PrimitiveToken | SemanticToken): string {
     const tokenName = this.getTokenName(token.name, token.category);
     
+    // Handle semantic-only tokens (like z-index tokens) that have direct values
+    // These tokens have a 'value' property and 'platforms' array but no 'primitiveReferences'
+    if ('value' in token && typeof token.value === 'number' && 
+        'platforms' in token && Array.isArray(token.platforms)) {
+      // This is a semantic-only token with a direct value (e.g., z-index tokens)
+      let value = token.value;
+      
+      // For z-index tokens, scale down values (divide by 100) for SwiftUI conventions
+      // Web uses 100, 200, 300... but iOS uses 1, 2, 3...
+      if (token.category === 'layering') {
+        value = token.value / 100;
+      }
+      
+      const swiftType = this.getSwiftType(token.category, 'unitless');
+      return this.formatSwiftConstant(tokenName, value, 'unitless', swiftType);
+    }
+    
+    // Check if this is a primitive token (has 'baseValue' property)
+    const isPrimitiveToken = 'baseValue' in token;
+    
     // For semantic tokens, use the resolved primitive token's platform value
     let platformValue;
-    if ('platforms' in token) {
-      platformValue = token.platforms.ios;
+    if (isPrimitiveToken) {
+      // This is a primitive token
+      const primitiveToken = token as PrimitiveToken;
+      platformValue = primitiveToken.platforms.ios;
     } else {
-      // For semantic tokens, get the first resolved primitive token
-      const primitiveToken = token.primitiveTokens ? Object.values(token.primitiveTokens)[0] : null;
+      // This is a semantic token - get the first resolved primitive token
+      const semanticToken = token as SemanticToken;
+      const primitiveToken = semanticToken.primitiveTokens ? Object.values(semanticToken.primitiveTokens)[0] : null;
       if (!primitiveToken) {
         throw new Error(`Semantic token ${token.name} has no resolved primitive tokens`);
       }
       platformValue = primitiveToken.platforms.ios;
+    }
+    
+    if (!platformValue) {
+      throw new Error(`Token ${token.name} has no iOS platform value`);
     }
     
     const swiftType = this.getSwiftType(token.category, platformValue.unit);
@@ -112,6 +139,8 @@ export class iOSFormatGenerator extends BaseFormatProvider {
       case 'color':
         return 'UIColor';
       case 'borderWidth':
+        return 'CGFloat';
+      case 'layering':
         return 'CGFloat';
       default:
         return 'CGFloat';

@@ -1,6 +1,9 @@
 /**
  * Z-Index Tokens (Web + iOS)
  * 
+ * Part of the Layering Token System.
+ * For Android layering, see ElevationTokens.ts
+ * 
  * Semantic tokens for stacking order on web and iOS platforms.
  * Use independently with shadow tokens for visual depth.
  * 
@@ -23,7 +26,7 @@
  *    (modal above dropdown), not mathematical progressions.
  */
 
-import { SemanticCategory } from '../../types/SemanticToken.js';
+import { SemanticCategory } from '../../types/SemanticToken';
 
 /**
  * Z-Index token interface for semantic-only layering tokens

@@ -16,18 +16,21 @@ class AndroidFormatGenerator extends FormatProvider_1.BaseFormatProvider {
     }
     formatToken(token) {
         const tokenName = this.getTokenName(token.name, token.category);
-        // For semantic tokens, use the resolved primitive token's platform value
+        // For primitive tokens, use the platform value directly
         let platformValue;
-        if ('platforms' in token) {
+        if ('platforms' in token && token.platforms) {
             platformValue = token.platforms.android;
         }
-        else {
+        else if ('primitiveTokens' in token && token.primitiveTokens) {
             // For semantic tokens, get the first resolved primitive token
-            const primitiveToken = token.primitiveTokens ? Object.values(token.primitiveTokens)[0] : null;
+            const primitiveToken = Object.values(token.primitiveTokens)[0];
             if (!primitiveToken) {
                 throw new Error(`Semantic token ${token.name} has no resolved primitive tokens`);
             }
-            platformValue = primitiveToken.platforms.android;
+            platformValue = primitiveToken.platforms?.android;
+        }
+        if (!platformValue) {
+            throw new Error(`Token ${token.name} has no Android platform value`);
         }
         if (this.outputFormat === 'kotlin') {
             return this.formatKotlinConstant(tokenName, platformValue.value, platformValue.unit, token.category);
@@ -140,6 +143,8 @@ class AndroidFormatGenerator extends FormatProvider_1.BaseFormatProvider {
                 return 'Int';
             case 'color':
                 return 'Int'; // Color as ARGB integer
+            case 'layering':
+                return 'Dp'; // Elevation tokens use Dp type
             default:
                 return 'Float';
         }
@@ -305,6 +310,93 @@ class AndroidFormatGenerator extends FormatProvider_1.BaseFormatProvider {
                 '         ============================================ -->',
                 ''
             ].join('\n');
+        }
+    }
+    /**
+     * Generate Jetpack Compose alpha modifier
+     * Outputs: Modifier.alpha(0.48f)
+     *
+     * @param opacityValue - Unitless opacity value (0.0 - 1.0)
+     * @returns Jetpack Compose alpha modifier string
+     */
+    generateAlphaModifier(opacityValue) {
+        // Format number to preserve decimal places (1.0 instead of 1)
+        const formattedValue = this.formatFloatValue(opacityValue);
+        return `Modifier.alpha(${formattedValue}f)`;
+    }
+    /**
+     * Generate Jetpack Compose Color.copy with alpha
+     * Outputs: Color(0xFF6B50A4).copy(alpha = 0.48f)
+     *
+     * @param colorHex - Hex color value (e.g., 0xFF6B50A4)
+     * @param alpha - Unitless alpha value (0.0 - 1.0)
+     * @returns Jetpack Compose Color with alpha string
+     */
+    generateColorWithAlpha(colorHex, alpha) {
+        // Format number to preserve decimal places (1.0 instead of 1)
+        const formattedAlpha = this.formatFloatValue(alpha);
+        return `Color(${colorHex}).copy(alpha = ${formattedAlpha}f)`;
+    }
+    /**
+     * Generate Kotlin constant for opacity token
+     * Outputs: const val OPACITY_600 = 0.48f
+     *
+     * @param tokenName - Token name (e.g., 'opacity600')
+     * @param opacityValue - Unitless opacity value (0.0 - 1.0)
+     * @returns Kotlin constant declaration string
+     */
+    generateConstant(tokenName, opacityValue) {
+        // Convert camelCase or kebab-case to UPPER_SNAKE_CASE for Kotlin constants
+        // Also add underscores between letters and numbers (opacity600 → OPACITY_600)
+        const constantName = tokenName
+            .replace(/([a-z])([A-Z])/g, '$1_$2') // camelCase to snake_case
+            .replace(/([a-zA-Z])(\d)/g, '$1_$2') // Add underscore between letter and number
+            .replace(/-/g, '_') // kebab-case to snake_case
+            .toUpperCase();
+        // Format number to preserve decimal places (1.0 instead of 1)
+        const formattedValue = this.formatFloatValue(opacityValue);
+        return `const val ${constantName} = ${formattedValue}f`;
+    }
+    /**
+     * Format float value to preserve decimal places
+     * Ensures 1.0 stays as "1.0" instead of "1"
+     *
+     * @param value - Numeric value to format
+     * @returns Formatted string with decimal places preserved
+     */
+    formatFloatValue(value) {
+        // If the value is a whole number (0 or 1), ensure it has .0
+        if (value === 0 || value === 1) {
+            return value.toFixed(1);
+        }
+        // Otherwise, return the value as-is (JavaScript will handle decimal places)
+        return String(value);
+    }
+    /**
+     * Format elevation token for Android
+     * Generates Kotlin constant with .dp suffix
+     *
+     * @param tokenName - Token name (e.g., 'elevation.modal')
+     * @param elevationValue - Elevation value in dp (e.g., 16)
+     * @returns Kotlin constant declaration string
+     *
+     * @example
+     * ```typescript
+     * formatElevationToken('elevation.modal', 16)
+     * // Returns: "val elevation_modal = 16.dp"
+     * ```
+     */
+    formatElevationToken(tokenName, elevationValue) {
+        // Convert dot notation to snake_case for Kotlin naming convention
+        // elevation.modal → elevation_modal
+        const snakeCaseName = tokenName.replace(/\./g, '_');
+        if (this.outputFormat === 'kotlin') {
+            // Kotlin format: val elevation_modal = 16.dp
+            return `    val ${snakeCaseName} = ${elevationValue}.dp`;
+        }
+        else {
+            // XML format: <dimen name="elevation_modal">16dp</dimen>
+            return `    <dimen name="${snakeCaseName}">${elevationValue}dp</dimen>`;
         }
     }
 }

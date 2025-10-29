@@ -429,6 +429,50 @@ The Token Category Pattern Guide provides the definitive patterns for adding new
   - [Shadow Tokens Guide](./tokens/shadow-tokens.md) - Complete shadow token reference with usage examples and lighting framework concepts
   - [Lighting Framework Guide](../.kiro/specs/shadow-glow-token-system/lighting-framework.md) - Conceptual framework for light source positioning and shadow quality
 
+### Layering Tokens
+
+The Layering Token System provides platform-specific semantic tokens for controlling element stacking order across web, iOS, and Android platforms. Unlike other token categories that follow a primitive→semantic hierarchy, layering tokens are **semantic-only** with no primitive token layer.
+
+**Why Semantic-Only?**
+
+Layering tokens are an architectural exception to the typical primitive→semantic pattern because:
+- **Ordinal Values**: Z-index and elevation values establish ordering, not mathematical relationships
+- **Platform-Specific Scales**: Web uses arbitrary z-index values (100, 200, 300), Android uses Material Design elevation scale (4dp, 8dp, 16dp), iOS uses small integers (1, 2, 3)
+- **Component-Driven**: Layering is about component stacking order (modal above dropdown), not mathematical progressions
+
+**Two Token Sets**:
+
+1. **Z-Index Tokens** (Web + iOS)
+   - **File**: `src/tokens/semantic/ZIndexTokens.ts`
+   - **Description**: Stacking order tokens for web and iOS platforms that control z-axis positioning independently from visual depth (shadows)
+   - **Platform**: Web, iOS
+   - **Values**: 100-based increments (100, 200, 300, 400, 500, 600)
+   - **Usage**: Use independently with shadow tokens for visual depth
+
+2. **Elevation Tokens** (Android)
+   - **File**: `src/tokens/semantic/ElevationTokens.ts`
+   - **Description**: Material Design elevation tokens for Android that handle both stacking order and shadow rendering
+   - **Platform**: Android
+   - **Values**: Material Design scale (4dp, 8dp, 16dp, 24dp)
+   - **Usage**: Elevation handles both z-order and shadow (Material Design convention)
+
+**Unified Entry Point**:
+- **File**: `src/tokens/semantic/LayeringTokens.ts`
+- **Description**: Unified API that re-exports all layering tokens and provides platform-agnostic helper functions
+- **Helpers**: `getAllLayeringTokens()`, `getLayeringTokensByPlatform(platform)`
+
+**Semantic Levels** (consistent across platforms):
+- `container` - Base z-index for container components (cards, panels, surfaces)
+- `navigation` - Persistent navigation (headers, sidebars, sticky elements)
+- `dropdown` - Temporary overlay content (dropdowns, popovers, menus)
+- `modal` - Modal overlay content (dialogs, sheets, overlays)
+- `toast` - Notification elements (toasts, snackbars, alerts)
+- `tooltip` - Always-visible elements (tooltips, critical overlays)
+
+**Related Documentation**:
+- [Layering Tokens Guide](./tokens/layering-tokens.md) - Complete layering token reference with platform-specific usage examples and AI agent generation rules
+- [Layering Token System Design](../.kiro/specs/layering-token-system/design.md) - Architecture and design decisions for platform-specific layering tokens
+
 ---
 
 ## Related Documentation

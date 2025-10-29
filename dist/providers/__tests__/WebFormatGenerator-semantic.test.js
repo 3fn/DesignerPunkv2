@@ -3,6 +3,7 @@
  * WebFormatGenerator Semantic Token Tests
  *
  * Tests for semantic token formatting methods added in task 2.1
+ * Tests for opacity generation methods added in task 3.1
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 const WebFormatGenerator_1 = require("../WebFormatGenerator");
@@ -161,6 +162,148 @@ describe('WebFormatGenerator - Semantic Token Methods', () => {
             expect(result).toContain('/*');
             expect(result).toContain('*/');
             expect(result).toContain('============================================');
+        });
+    });
+    describe('Opacity Generation Methods', () => {
+        let generator;
+        beforeEach(() => {
+            generator = new WebFormatGenerator_1.WebFormatGenerator('css');
+        });
+        describe('generateOpacityProperty', () => {
+            test('should generate CSS opacity property with correct format', () => {
+                const result = generator.generateOpacityProperty(0.48);
+                expect(result).toBe('opacity: 0.48;');
+            });
+            test('should handle opacity value of 0', () => {
+                const result = generator.generateOpacityProperty(0);
+                expect(result).toBe('opacity: 0;');
+            });
+            test('should handle opacity value of 1', () => {
+                const result = generator.generateOpacityProperty(1);
+                expect(result).toBe('opacity: 1;');
+            });
+            test('should handle decimal opacity values', () => {
+                const result = generator.generateOpacityProperty(0.08);
+                expect(result).toBe('opacity: 0.08;');
+            });
+        });
+        describe('generateRgbaAlpha', () => {
+            test('should generate RGBA with alpha channel', () => {
+                const result = generator.generateRgbaAlpha(107, 80, 164, 0.48);
+                expect(result).toBe('rgba(107, 80, 164, 0.48)');
+            });
+            test('should handle alpha value of 0', () => {
+                const result = generator.generateRgbaAlpha(255, 0, 0, 0);
+                expect(result).toBe('rgba(255, 0, 0, 0)');
+            });
+            test('should handle alpha value of 1', () => {
+                const result = generator.generateRgbaAlpha(0, 255, 0, 1);
+                expect(result).toBe('rgba(0, 255, 0, 1)');
+            });
+            test('should handle various RGB and alpha combinations', () => {
+                const result = generator.generateRgbaAlpha(0, 0, 0, 0.32);
+                expect(result).toBe('rgba(0, 0, 0, 0.32)');
+            });
+        });
+        describe('generateCustomProperty', () => {
+            test('should generate CSS custom property with -- prefix', () => {
+                const result = generator.generateCustomProperty('opacity600', 0.48);
+                expect(result).toBe('--opacity600: 0.48;');
+            });
+            test('should not duplicate -- prefix if already present', () => {
+                const result = generator.generateCustomProperty('--opacity600', 0.48);
+                expect(result).toBe('--opacity600: 0.48;');
+            });
+            test('should handle opacity value of 0', () => {
+                const result = generator.generateCustomProperty('opacity000', 0);
+                expect(result).toBe('--opacity000: 0;');
+            });
+            test('should handle opacity value of 1', () => {
+                const result = generator.generateCustomProperty('opacity1300', 1);
+                expect(result).toBe('--opacity1300: 1;');
+            });
+            test('should handle decimal opacity values', () => {
+                const result = generator.generateCustomProperty('opacity100', 0.08);
+                expect(result).toBe('--opacity100: 0.08;');
+            });
+        });
+    });
+    describe('Z-Index Token Formatting', () => {
+        describe('formatToken with semantic-only z-index tokens', () => {
+            let cssGenerator;
+            let jsGenerator;
+            beforeEach(() => {
+                cssGenerator = new WebFormatGenerator_1.WebFormatGenerator('css');
+                jsGenerator = new WebFormatGenerator_1.WebFormatGenerator('javascript');
+            });
+            test('should format z-index token for CSS with correct prefix and kebab-case', () => {
+                // Mock z-index token structure (semantic-only with direct value)
+                const zIndexToken = {
+                    name: 'zIndex.modal',
+                    value: 400,
+                    platforms: ['web', 'ios'],
+                    category: SemanticToken_1.SemanticCategory.LAYERING,
+                    context: 'Modal dialogs',
+                    description: 'Z-index for modal overlay content'
+                };
+                const result = cssGenerator.formatToken(zIndexToken);
+                expect(result).toContain('--z-index-modal');
+                expect(result).toContain('400');
+                expect(result).toMatch(/--z-index-modal:\s*400;/);
+            });
+            test('should format z-index token for JavaScript', () => {
+                const zIndexToken = {
+                    name: 'zIndex.modal',
+                    value: 400,
+                    platforms: ['web', 'ios'],
+                    category: SemanticToken_1.SemanticCategory.LAYERING,
+                    context: 'Modal dialogs',
+                    description: 'Z-index for modal overlay content'
+                };
+                const result = jsGenerator.formatToken(zIndexToken);
+                expect(result).toContain('zIndexModal');
+                expect(result).toContain('400');
+                expect(result).toMatch(/zIndexModal:\s*400,/);
+            });
+            test('should format all z-index semantic levels correctly', () => {
+                const zIndexTokens = [
+                    { name: 'zIndex.container', value: 100 },
+                    { name: 'zIndex.navigation', value: 200 },
+                    { name: 'zIndex.dropdown', value: 300 },
+                    { name: 'zIndex.modal', value: 400 },
+                    { name: 'zIndex.toast', value: 500 },
+                    { name: 'zIndex.tooltip', value: 600 }
+                ];
+                zIndexTokens.forEach(token => {
+                    const fullToken = {
+                        ...token,
+                        platforms: ['web', 'ios'],
+                        category: SemanticToken_1.SemanticCategory.LAYERING,
+                        context: 'Test context',
+                        description: 'Test description'
+                    };
+                    const result = cssGenerator.formatToken(fullToken);
+                    // Extract expected name from token name (e.g., 'zIndex.container' -> 'container')
+                    const semanticName = token.name.split('.')[1];
+                    expect(result).toContain(`--z-index-${semanticName}`);
+                    expect(result).toContain(`${token.value}`);
+                });
+            });
+            test('should handle z-index tokens with unitless values', () => {
+                const zIndexToken = {
+                    name: 'zIndex.navigation',
+                    value: 200,
+                    platforms: ['web', 'ios'],
+                    category: SemanticToken_1.SemanticCategory.LAYERING,
+                    context: 'Navigation',
+                    description: 'Navigation z-index'
+                };
+                const result = cssGenerator.formatToken(zIndexToken);
+                // Should not add any unit suffix (px, rem, etc.)
+                expect(result).toMatch(/--z-index-navigation:\s*200;/);
+                expect(result).not.toContain('px');
+                expect(result).not.toContain('rem');
+            });
         });
     });
 });

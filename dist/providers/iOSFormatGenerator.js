@@ -15,18 +15,40 @@ class iOSFormatGenerator extends FormatProvider_1.BaseFormatProvider {
     }
     formatToken(token) {
         const tokenName = this.getTokenName(token.name, token.category);
+        // Handle semantic-only tokens (like z-index tokens) that have direct values
+        // These tokens have a 'value' property and 'platforms' array but no 'primitiveReferences'
+        if ('value' in token && typeof token.value === 'number' &&
+            'platforms' in token && Array.isArray(token.platforms)) {
+            // This is a semantic-only token with a direct value (e.g., z-index tokens)
+            let value = token.value;
+            // For z-index tokens, scale down values (divide by 100) for SwiftUI conventions
+            // Web uses 100, 200, 300... but iOS uses 1, 2, 3...
+            if (token.category === 'layering') {
+                value = token.value / 100;
+            }
+            const swiftType = this.getSwiftType(token.category, 'unitless');
+            return this.formatSwiftConstant(tokenName, value, 'unitless', swiftType);
+        }
+        // Check if this is a primitive token (has 'baseValue' property)
+        const isPrimitiveToken = 'baseValue' in token;
         // For semantic tokens, use the resolved primitive token's platform value
         let platformValue;
-        if ('platforms' in token) {
-            platformValue = token.platforms.ios;
+        if (isPrimitiveToken) {
+            // This is a primitive token
+            const primitiveToken = token;
+            platformValue = primitiveToken.platforms.ios;
         }
         else {
-            // For semantic tokens, get the first resolved primitive token
-            const primitiveToken = token.primitiveTokens ? Object.values(token.primitiveTokens)[0] : null;
+            // This is a semantic token - get the first resolved primitive token
+            const semanticToken = token;
+            const primitiveToken = semanticToken.primitiveTokens ? Object.values(semanticToken.primitiveTokens)[0] : null;
             if (!primitiveToken) {
                 throw new Error(`Semantic token ${token.name} has no resolved primitive tokens`);
             }
             platformValue = primitiveToken.platforms.ios;
+        }
+        if (!platformValue) {
+            throw new Error(`Token ${token.name} has no iOS platform value`);
         }
         const swiftType = this.getSwiftType(token.category, platformValue.unit);
         return this.formatSwiftConstant(tokenName, platformValue.value, platformValue.unit, swiftType);
@@ -101,6 +123,8 @@ class iOSFormatGenerator extends FormatProvider_1.BaseFormatProvider {
             case 'color':
                 return 'UIColor';
             case 'borderWidth':
+                return 'CGFloat';
+            case 'layering':
                 return 'CGFloat';
             default:
                 return 'CGFloat';
@@ -211,6 +235,40 @@ class iOSFormatGenerator extends FormatProvider_1.BaseFormatProvider {
             '    // ============================================',
             ''
         ].join('\n');
+    }
+    /**
+     * Generate SwiftUI opacity modifier
+     * Outputs: .opacity(0.48)
+     *
+     * @param opacityValue - Opacity value (0.0 - 1.0)
+     * @returns SwiftUI opacity modifier string
+     */
+    generateOpacityModifier(opacityValue) {
+        return `.opacity(${opacityValue})`;
+    }
+    /**
+     * Generate SwiftUI Color with opacity parameter
+     * Outputs: Color(red: r, green: g, blue: b, opacity: 0.48)
+     *
+     * @param r - Red channel (0.0 - 1.0)
+     * @param g - Green channel (0.0 - 1.0)
+     * @param b - Blue channel (0.0 - 1.0)
+     * @param opacity - Opacity value (0.0 - 1.0)
+     * @returns SwiftUI Color with opacity string
+     */
+    generateColorWithOpacity(r, g, b, opacity) {
+        return `Color(red: ${r}, green: ${g}, blue: ${b}, opacity: ${opacity})`;
+    }
+    /**
+     * Generate Swift constant for opacity token
+     * Outputs: static let opacity600 = 0.48
+     *
+     * @param tokenName - Opacity token name (e.g., 'opacity600')
+     * @param opacityValue - Opacity value (0.0 - 1.0)
+     * @returns Swift constant declaration string
+     */
+    generateConstant(tokenName, opacityValue) {
+        return `static let ${tokenName} = ${opacityValue}`;
     }
 }
 exports.iOSFormatGenerator = iOSFormatGenerator;

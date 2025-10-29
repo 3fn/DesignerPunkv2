@@ -26,5 +26,7 @@ var TokenCategory;
     TokenCategory["BORDER_WIDTH"] = "borderWidth";
     TokenCategory["SHADOW"] = "shadow";
     TokenCategory["GLOW"] = "glow";
+    TokenCategory["OPACITY"] = "opacity";
+    TokenCategory["BLEND"] = "blend";
 })(TokenCategory || (exports.TokenCategory = TokenCategory = {}));
 //# sourceMappingURL=PrimitiveToken.js.map

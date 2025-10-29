@@ -149,26 +149,15 @@ class WebShadowGenerator {
     }
     /**
      * Resolve color token from color token registry
+     *
+     * Shadow tokens now reference primitive colors directly (e.g., 'shadowBlack100')
+     * rather than semantic colors (e.g., 'color.shadow.default').
      */
     resolveColorToken(tokenName) {
-        // Handle semantic color references (e.g., 'color.shadow.default')
-        // For now, we need to resolve through the semantic layer
-        // This is a simplified implementation - in production, you'd want to
-        // resolve through the semantic token registry
-        // Map semantic shadow colors to primitive shadow colors
-        const semanticToPrimitive = {
-            'color.shadow.default': 'shadowBlack100',
-            'color.shadow.warm': 'shadowBlue100',
-            'color.shadow.cool': 'shadowOrange100',
-            'color.shadow.ambient': 'shadowGray100'
-        };
-        const primitiveColorName = semanticToPrimitive[tokenName];
-        if (primitiveColorName) {
-            // Use type assertion to access dynamic property
-            const token = ColorTokens_1.colorTokens[primitiveColorName];
-            if (token) {
-                return token;
-            }
+        // Direct primitive color lookup
+        const token = ColorTokens_1.colorTokens[tokenName];
+        if (token) {
+            return token;
         }
         return null;
     }

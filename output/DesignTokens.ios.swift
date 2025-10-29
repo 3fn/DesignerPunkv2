@@ -1,6 +1,6 @@
 ///
 /// DesignerPunk Design System - iOS Tokens
-/// Generated: 2025-10-27T23:17:34.594Z
+/// Generated: 2025-10-29T00:46:17.925Z
 /// Version: 1.0.0
 /// Platform: iOS (Swift Constants)
 ///
@@ -14,6 +14,18 @@ public struct DesignTokens {
     /// Mathematical foundation
     // ============================================
 
+
+    // MARK: - BLEND TOKENS
+    /// base × 1 = 0.04 × 1 = 0.04
+    public static let blend100: CGFloat = 0.04
+    /// base × 2 = 0.04 × 2 = 0.08
+    public static let blend200: CGFloat = 0.08
+    /// base × 3 = 0.04 × 3 = 0.12
+    public static let blend300: CGFloat = 0.12
+    /// base × 4 = 0.04 × 4 = 0.16
+    public static let blend400: CGFloat = 0.16
+    /// base × 5 = 0.04 × 5 = 0.20
+    public static let blend500: CGFloat = 0.2
 
     // MARK: - BORDERWIDTH TOKENS
     /// base × 1 = 1 × 1 = 1
@@ -243,6 +255,36 @@ public struct DesignTokens {
     /// 48px ÷ 42px ≈ 1.143 (aligns to 4pt subgrid)
     public static let lineHeight700: CGFloat = 1.143
 
+    // MARK: - OPACITY TOKENS
+    /// base × 0 = 0.08 × 0 = 0.0
+    public static let opacity000: CGFloat = 0
+    /// base × 1 = 0.08 × 1 = 0.08
+    public static let opacity100: CGFloat = 0.08
+    /// base × 2 = 0.08 × 2 = 0.16
+    public static let opacity200: CGFloat = 0.16
+    /// base × 3 = 0.08 × 3 = 0.24
+    public static let opacity300: CGFloat = 0.24
+    /// base × 4 = 0.08 × 4 = 0.32
+    public static let opacity400: CGFloat = 0.32
+    /// base × 5 = 0.08 × 5 = 0.40
+    public static let opacity500: CGFloat = 0.4
+    /// base × 6 = 0.08 × 6 = 0.48
+    public static let opacity600: CGFloat = 0.48
+    /// base × 7 = 0.08 × 7 = 0.56
+    public static let opacity700: CGFloat = 0.56
+    /// base × 8 = 0.08 × 8 = 0.64
+    public static let opacity800: CGFloat = 0.64
+    /// base × 9 = 0.08 × 9 = 0.72
+    public static let opacity900: CGFloat = 0.72
+    /// base × 10 = 0.08 × 10 = 0.80
+    public static let opacity1000: CGFloat = 0.8
+    /// base × 11 = 0.08 × 11 = 0.88
+    public static let opacity1100: CGFloat = 0.88
+    /// base × 12 = 0.08 × 12 = 0.96
+    public static let opacity1200: CGFloat = 0.96
+    /// Special case: full opacity = 1.0
+    public static let opacity1300: CGFloat = 1
+
     // MARK: - RADIUS TOKENS
     /// base × 0 = 8 × 0 = 0
     public static let radius000: CGFloat = 0
@@ -400,7 +442,11 @@ public struct DesignTokens {
     public static let typographyCodeMd = Typography(fontSize: fontSize100, lineHeight: lineHeight100, fontFamily: fontFamilyMono, fontWeight: fontWeight400, letterSpacing: letterSpacing100)
     public static let typographyCodeLg = Typography(fontSize: fontSize125, lineHeight: lineHeight125, fontFamily: fontFamilyMono, fontWeight: fontWeight400, letterSpacing: letterSpacing100)
     public static let shadowContainer = Typography(offsetX: shadowOffsetX000, offsetY: shadowOffsetY100, blur: shadowBlurModerate, opacity: shadowOpacityModerate, color: shadowBlack100)
+    public static let shadowNavigation = Typography(offsetX: shadowOffsetX000, offsetY: shadowOffsetY100, blur: shadowBlurSoft, opacity: shadowOpacitySoft, color: shadowBlack100)
+    public static let shadowDropdown = Typography(offsetX: shadowOffsetX000, offsetY: shadowOffsetY100, blur: shadowBlurModerate, opacity: shadowOpacityModerate, color: shadowBlack100)
     public static let shadowModal = Typography(offsetX: shadowOffsetX000, offsetY: shadowOffsetY200, blur: shadowBlurDepth200, opacity: shadowOpacityDepth200, color: shadowBlack100)
+    public static let shadowToast = Typography(offsetX: shadowOffsetX000, offsetY: shadowOffsetY300, blur: shadowBlurDepth300, opacity: shadowOpacityDepth300, color: shadowBlack100)
+    public static let shadowTooltip = Typography(offsetX: shadowOffsetX000, offsetY: shadowOffsetY300, blur: shadowBlurDepth300, opacity: shadowOpacityDepth300, color: shadowBlack100)
     public static let shadowFab = Typography(offsetX: shadowOffsetX300, offsetY: shadowOffsetY400, blur: shadowBlurHard, opacity: shadowOpacityHard, color: shadowBlue100)
     public static let shadowHover = Typography(offsetX: shadowOffsetX000, offsetY: shadowOffsetY100, blur: shadowBlurSoft, opacity: shadowOpacitySoft, color: shadowBlack100)
     public static let shadowSunrise = Typography(offsetX: shadowOffsetXN300, offsetY: shadowOffsetY200, blur: shadowBlurModerate, opacity: shadowOpacityModerate, color: shadowBlue100)
@@ -408,6 +454,11 @@ public struct DesignTokens {
     public static let shadowNoon = Typography(offsetX: shadowOffsetX000, offsetY: shadowOffsetY200, blur: shadowBlurModerate, opacity: shadowOpacityModerate, color: shadowBlack100)
     public static let shadowDusk = Typography(offsetX: shadowOffsetX150, offsetY: shadowOffsetY200, blur: shadowBlurModerate, opacity: shadowOpacityModerate, color: shadowBlack100)
     public static let shadowSunset = Typography(offsetX: shadowOffsetX300, offsetY: shadowOffsetY200, blur: shadowBlurModerate, opacity: shadowOpacityModerate, color: shadowBlue100)
+    public static let opacityDisabled = opacity600
+    public static let opacityOverlay = opacity400
+    public static let opacityHover = opacity100
+    public static let opacityPressed = opacity200
+    public static let opacityLoading = opacity200
     public static let borderBorderDefault = borderWidth100
     public static let borderBorderEmphasis = borderWidth200
     public static let borderBorderHeavy = borderWidth400
@@ -429,4 +480,12 @@ public struct DesignTokens {
     public static let spaceInsetComfortable = space150
     public static let spaceInsetSpacious = space200
     public static let spaceInsetExpansive = space300
+
+    // MARK: - Layering Tokens (Z-Index)
+    static let zIndexContainer: CGFloat = 1
+    static let zIndexNavigation: CGFloat = 2
+    static let zIndexDropdown: CGFloat = 3
+    static let zIndexModal: CGFloat = 4
+    static let zIndexToast: CGFloat = 5
+    static let zIndexTooltip: CGFloat = 6
 }

@@ -21,17 +21,21 @@ export class AndroidFormatGenerator extends BaseFormatProvider {
   formatToken(token: PrimitiveToken | SemanticToken): string {
     const tokenName = this.getTokenName(token.name, token.category);
     
-    // For semantic tokens, use the resolved primitive token's platform value
+    // For primitive tokens, use the platform value directly
     let platformValue;
-    if ('platforms' in token) {
+    if ('platforms' in token && token.platforms) {
       platformValue = token.platforms.android;
-    } else {
+    } else if ('primitiveTokens' in token && token.primitiveTokens) {
       // For semantic tokens, get the first resolved primitive token
-      const primitiveToken = token.primitiveTokens ? Object.values(token.primitiveTokens)[0] : null;
+      const primitiveToken = Object.values(token.primitiveTokens)[0];
       if (!primitiveToken) {
         throw new Error(`Semantic token ${token.name} has no resolved primitive tokens`);
       }
-      platformValue = primitiveToken.platforms.android;
+      platformValue = primitiveToken.platforms?.android;
+    }
+
+    if (!platformValue) {
+      throw new Error(`Token ${token.name} has no Android platform value`);
     }
 
     if (this.outputFormat === 'kotlin') {
@@ -151,6 +155,8 @@ export class AndroidFormatGenerator extends BaseFormatProvider {
         return 'Int';
       case 'color':
         return 'Int'; // Color as ARGB integer
+      case 'layering':
+        return 'Dp'; // Elevation tokens use Dp type
       default:
         return 'Float';
     }
@@ -400,5 +406,33 @@ export class AndroidFormatGenerator extends BaseFormatProvider {
     }
     // Otherwise, return the value as-is (JavaScript will handle decimal places)
     return String(value);
+  }
+
+  /**
+   * Format elevation token for Android
+   * Generates Kotlin constant with .dp suffix
+   * 
+   * @param tokenName - Token name (e.g., 'elevation.modal')
+   * @param elevationValue - Elevation value in dp (e.g., 16)
+   * @returns Kotlin constant declaration string
+   * 
+   * @example
+   * ```typescript
+   * formatElevationToken('elevation.modal', 16)
+   * // Returns: "val elevation_modal = 16.dp"
+   * ```
+   */
+  formatElevationToken(tokenName: string, elevationValue: number): string {
+    // Convert dot notation to snake_case for Kotlin naming convention
+    // elevation.modal → elevation_modal
+    const snakeCaseName = tokenName.replace(/\./g, '_');
+    
+    if (this.outputFormat === 'kotlin') {
+      // Kotlin format: val elevation_modal = 16.dp
+      return `    val ${snakeCaseName} = ${elevationValue}.dp`;
+    } else {
+      // XML format: <dimen name="elevation_modal">16dp</dimen>
+      return `    <dimen name="${snakeCaseName}">${elevationValue}dp</dimen>`;
+    }
   }
 }

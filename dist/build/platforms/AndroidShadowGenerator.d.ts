@@ -83,6 +83,9 @@ export declare class AndroidShadowGenerator {
     private resolvePrimitiveToken;
     /**
      * Resolve color token from color token registry
+     *
+     * Shadow tokens now reference primitive colors directly (e.g., 'shadowBlack100')
+     * rather than semantic colors (e.g., 'color.shadow.default').
      */
     private resolveColorToken;
     /**

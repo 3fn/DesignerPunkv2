@@ -46,6 +46,14 @@ export declare class TokenFileGenerator {
      */
     private generateSemanticSection;
     /**
+     * Generate layering token section for specified platform
+     * Handles semantic-only layering tokens (z-index and elevation)
+     *
+     * @param platform - Target platform ('web', 'ios', or 'android')
+     * @returns Array of formatted token strings
+     */
+    private generateLayeringSection;
+    /**
      * Generate web token file (JavaScript)
      */
     generateWebTokens(options?: GenerationOptions): GenerationResult;
