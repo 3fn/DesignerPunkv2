@@ -60,7 +60,7 @@ DesignerPunk addresses the fundamental challenge of AI collaboration: **fuzzy te
 - Three-tier validation and documentation system (Setup/Implementation/Architecture)
 
 **Token System Status** - Comprehensive primitive and semantic token implementation
-- **~220+ tokens implemented**: Spacing (12), Typography (40), Color (45+), Radius (12), Accessibility (8), Shadow (15), Glow (6), Layering (6), Border Width (5), Opacity (8), Blend (12)
+- **~230+ tokens implemented**: Spacing (12), Typography (40), Color (45+), Radius (12), Accessibility (8), Shadow (23), Glow (9), Layering (12), Border Width (3), Opacity (14), Blend (5)
 - **Semantic layer**: Color, spacing, typography, shadow, layering, border, opacity, and blend compositions with hierarchical structure
 - **Cross-platform generation**: Web CSS, iOS Swift, and Android Kotlin with platform-native conventions and semantic token references
 - **Lighting framework**: Shadow tokens follow art theory principles (warm light creates cool shadows, cool light creates warm shadows)
@@ -109,11 +109,11 @@ DesignerPunk addresses the fundamental challenge of AI collaboration: **fuzzy te
 - **Radius** (12 tokens): Base 8 (radius050=4, radius100=8, radius200=16, radiusFull=9999)
 - **Tap Area** (4 tokens): WCAG 2.1 AA/AAA compliance (44pt-64pt)
 - **Density** (4 tokens): Selective scaling (0.75x-1.5x for functional tokens)
-- **Shadow** (15 tokens): Offset, blur, opacity, and color primitives with lighting framework
-- **Glow** (6 tokens): Blur and opacity primitives for radial emphasis effects
-- **Border Width** (5 tokens): Hairline to heavy progression (1px-6px)
-- **Opacity** (8 tokens): Systematic opacity progression (0.1-1.0)
-- **Blend** (12 tokens): Cross-platform blend modes with color space support
+- **Shadow** (23 tokens): Offset (13), blur (5), opacity (5) primitives with lighting framework
+- **Glow** (9 tokens): Blur (5) and opacity (4) primitives for radial emphasis effects
+- **Border Width** (3 tokens): Doubling progression (1px, 2px, 4px)
+- **Opacity** (14 tokens): Comprehensive opacity progression (0.05-1.0)
+- **Blend** (5 tokens): Blend amount scale (4%-20% in 4% increments)
 
 **Semantic Token Architecture** (~70+ tokens implemented):
 - **Layout Spacing**: Hierarchical relationships (grouped, related, separated, sectioned)
@@ -126,39 +126,39 @@ DesignerPunk addresses the fundamental challenge of AI collaboration: **fuzzy te
 - **Opacity**: Purpose-driven opacity values (disabled, overlay, hover, pressed, ghost)
 - **Blends**: Semantic blend compositions (shadow, highlight, tint, shade)
 
-**Shadow Tokens** (15 tokens implemented):
-- **Shadow Offset**: Light source positioning based on sun arc (sunrise, morning, noon, afternoon, sunset)
-- **Shadow Blur**: Edge definition based on quality (hard, moderate, soft) and depth (depth100, depth200, depth300)
-- **Shadow Opacity**: Darkness based on quality and depth (0.1-0.5 range)
+**Shadow Tokens** (23 primitive tokens implemented):
+- **Shadow Offset** (13 tokens): Light source positioning based on sun arc (sunrise, morning, noon, afternoon, sunset) with quality variants
+- **Shadow Blur** (5 tokens): Edge definition based on quality (hard, moderate, soft) and depth (depth100, depth200, depth300)
+- **Shadow Opacity** (5 tokens): Darkness based on quality and depth (0.1-0.5 range)
 - **Shadow Colors**: Art theory-based colors (warm light creates cool shadows: shadowBlue; cool light creates warm shadows: shadowOrange)
 - **Semantic Shadows**: Complete shadow compositions (container, modal, hover, fab) combining offset, blur, opacity, and color
 - **Lighting Framework**: Systematic approach to shadow direction and quality based on light source position
 
-**Glow Tokens** (6 tokens implemented):
-- **Glow Blur**: Extended blur range for radial emphasis effects (8-64px)
-- **Glow Opacity**: Decreasing progression for multi-layer glow effects (0.8-0.2)
+**Glow Tokens** (9 primitive tokens implemented):
+- **Glow Blur** (5 tokens): Extended blur range for radial emphasis effects (glowBlur100=8px through glowBlur500=64px)
+- **Glow Opacity** (4 tokens): Decreasing progression for multi-layer glow effects (glowOpacity100=0.8 through glowOpacity400=0.2)
 - **Semantic Glows**: Vibrant color references (purple500, cyan500, yellow500) for neon emphasis
 
-**Layering Tokens** (6 tokens implemented):
-- **Z-Index** (Web/iOS): Systematic stacking order (container=100, navigation=200, dropdown=300, modal=400, toast=500, tooltip=600)
-- **Elevation** (Android): Material Design elevation scale (container=8dp, navigation=4dp, dropdown=8dp, modal=16dp, toast=24dp, tooltip=24dp)
+**Layering Tokens** (12 semantic tokens implemented):
+- **Z-Index** (6 tokens, Web/iOS): Systematic stacking order (container=100, navigation=200, dropdown=300, modal=400, toast=500, tooltip=600)
+- **Elevation** (6 tokens, Android): Material Design elevation scale (container=8dp, navigation=4dp, dropdown=8dp, modal=16dp, toast=24dp, tooltip=24dp)
 - **Platform-Specific Generation**: Web CSS custom properties, iOS Swift CGFloat (scaled 1-6), Android Kotlin .dp suffix
 - **Semantic Consistency**: Same semantic names across platforms with platform-appropriate values
 
-**Border Width Tokens** (5 tokens implemented):
-- **Primitive Widths**: Systematic border width progression (hairline=1px, thin=2px, default=3px, thick=4px, heavy=6px)
+**Border Width Tokens** (3 tokens implemented):
+- **Primitive Widths**: Doubling progression (borderWidth100=1px, borderWidth200=2px, borderWidth400=4px)
 - **Semantic Borders**: Component-specific border widths (input, divider, focus ring, card, emphasis)
 - **Cross-Platform**: Platform-appropriate units (px for web, pt for iOS, dp for Android)
 - **Component Structure**: Essential for inputs, dividers, focus states, and card boundaries
 
-**Opacity Tokens** (8 tokens implemented):
-- **Primitive Opacities**: Systematic opacity progression (opacity010=0.1 to opacity100=1.0)
+**Opacity Tokens** (14 tokens implemented):
+- **Primitive Opacities**: Comprehensive opacity progression (opacity005=0.05 to opacity100=1.0)
 - **Semantic Opacities**: Purpose-driven opacity values (disabled, overlay, hover, pressed, ghost)
 - **Unitless Values**: Cross-platform opacity values (0.0-1.0 range)
 - **State Management**: Essential for disabled states, overlays, and interaction feedback
 
-**Blend Tokens** (12 tokens implemented):
-- **Blend Modes**: Cross-platform color blending modes (normal, multiply, screen, overlay, etc.)
+**Blend Tokens** (5 tokens implemented):
+- **Blend Amounts**: 5-token scale from 4% to 20% in 4% increments (blend100=0.04 to blend500=0.20)
 - **Color Space Support**: sRGB and Display P3 color space handling
 - **Platform Translation**: Web CSS blend modes, iOS CIBlendMode, Android PorterDuff/BlendMode
 - **Semantic Blends**: Purpose-driven blend compositions (shadow, highlight, tint, shade)
