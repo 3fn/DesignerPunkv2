@@ -19,6 +19,7 @@ var SemanticCategory;
     SemanticCategory["BORDER"] = "border";
     SemanticCategory["SHADOW"] = "shadow";
     SemanticCategory["LAYOUT"] = "layout";
+    SemanticCategory["LAYERING"] = "layering";
     SemanticCategory["INTERACTION"] = "interaction";
 })(SemanticCategory || (exports.SemanticCategory = SemanticCategory = {}));
 //# sourceMappingURL=SemanticToken.js.map

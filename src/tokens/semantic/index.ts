@@ -19,6 +19,7 @@ export * from './BorderWidthTokens';
 export * from './ShadowTokens';
 export * from './OpacityTokens';
 export * from './BlendTokens';
+export * from './LayeringTokens';
 
 // StyleTokens placeholder - will be implemented in future tasks
 export { styleTokens, getStyleToken } from './StyleTokens';
@@ -75,6 +76,19 @@ export {
   validateBlendTokenCount
 } from './BlendTokens';
 
+export {
+  zIndexTokens,
+  zIndexTokenNames,
+  getZIndexToken,
+  getAllZIndexTokens,
+  elevationTokens,
+  elevationTokenNames,
+  getElevationToken,
+  getAllElevationTokens,
+  getAllLayeringTokens,
+  getLayeringTokensByPlatform
+} from './LayeringTokens';
+
 // Import types for utility functions
 import type { SemanticToken } from '../../types/SemanticToken';
 import { SemanticCategory } from '../../types/SemanticToken';
@@ -85,6 +99,7 @@ import { SemanticBorderWidthTokens } from './BorderWidthTokens';
 import { shadowTokens } from './ShadowTokens';
 import { opacityTokens } from './OpacityTokens';
 import { blendTokens } from './BlendTokens';
+import { zIndexTokens, elevationTokens } from './LayeringTokens';
 
 /**
  * Get any semantic token by name across all categories
@@ -134,6 +149,16 @@ export function getSemanticToken(name: string): Omit<SemanticToken, 'primitiveTo
   // Check blend tokens
   if (name.startsWith('blend.')) {
     return blendTokens[name] as any;
+  }
+
+  // Check z-index tokens
+  if (name.startsWith('zIndex.')) {
+    return zIndexTokens[name] as any;
+  }
+
+  // Check elevation tokens
+  if (name.startsWith('elevation.')) {
+    return elevationTokens[name] as any;
   }
 
   return undefined;
@@ -242,6 +267,12 @@ export function getAllSemanticTokens(): Array<Omit<SemanticToken, 'primitiveToke
   // Add blend tokens
   tokens.push(...(Object.values(blendTokens) as any));
 
+  // Add z-index tokens
+  tokens.push(...(Object.values(zIndexTokens) as any));
+
+  // Add elevation tokens
+  tokens.push(...(Object.values(elevationTokens) as any));
+
   // Add border width tokens
   for (const [name, token] of Object.entries(SemanticBorderWidthTokens)) {
     tokens.push({
@@ -284,6 +315,8 @@ export function getSemanticTokensByCategory(category: SemanticCategory): Array<O
       return Object.values(shadowTokens);
     case SemanticCategory.INTERACTION:
       return [...Object.values(opacityTokens), ...(Object.values(blendTokens) as any)];
+    case SemanticCategory.LAYERING:
+      return [...(Object.values(zIndexTokens) as any), ...(Object.values(elevationTokens) as any)];
     default:
       return [];
   }
@@ -411,6 +444,8 @@ export function getSemanticTokenStats() {
     borderTokens: Object.keys(SemanticBorderWidthTokens).length,
     shadowTokens: Object.keys(shadowTokens).length,
     opacityTokens: Object.keys(opacityTokens).length,
-    blendTokens: Object.keys(blendTokens).length
+    blendTokens: Object.keys(blendTokens).length,
+    zIndexTokens: Object.keys(zIndexTokens).length,
+    elevationTokens: Object.keys(elevationTokens).length
   };
 }

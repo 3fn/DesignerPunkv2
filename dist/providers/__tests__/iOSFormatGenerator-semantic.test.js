@@ -240,4 +240,90 @@ describe('iOSFormatGenerator - Single-Reference Token Generation', () => {
         });
     });
 });
+describe('iOSFormatGenerator - Opacity Generation', () => {
+    let generator;
+    beforeEach(() => {
+        generator = new iOSFormatGenerator_1.iOSFormatGenerator();
+    });
+    describe('generateOpacityModifier', () => {
+        test('should generate SwiftUI opacity modifier with correct syntax', () => {
+            const result = generator.generateOpacityModifier(0.48);
+            expect(result).toBe('.opacity(0.48)');
+        });
+        test('should handle full opacity (1.0)', () => {
+            const result = generator.generateOpacityModifier(1.0);
+            expect(result).toBe('.opacity(1)');
+        });
+        test('should handle full transparency (0.0)', () => {
+            const result = generator.generateOpacityModifier(0.0);
+            expect(result).toBe('.opacity(0)');
+        });
+        test('should handle various opacity values', () => {
+            expect(generator.generateOpacityModifier(0.08)).toBe('.opacity(0.08)');
+            expect(generator.generateOpacityModifier(0.16)).toBe('.opacity(0.16)');
+            expect(generator.generateOpacityModifier(0.32)).toBe('.opacity(0.32)');
+            expect(generator.generateOpacityModifier(0.64)).toBe('.opacity(0.64)');
+            expect(generator.generateOpacityModifier(0.88)).toBe('.opacity(0.88)');
+        });
+    });
+    describe('generateColorWithOpacity', () => {
+        test('should generate SwiftUI Color with opacity parameter', () => {
+            const result = generator.generateColorWithOpacity(0.42, 0.31, 0.64, 0.48);
+            expect(result).toBe('Color(red: 0.42, green: 0.31, blue: 0.64, opacity: 0.48)');
+        });
+        test('should handle full opacity color', () => {
+            const result = generator.generateColorWithOpacity(1.0, 0.0, 0.0, 1.0);
+            expect(result).toBe('Color(red: 1, green: 0, blue: 0, opacity: 1)');
+        });
+        test('should handle fully transparent color', () => {
+            const result = generator.generateColorWithOpacity(0.5, 0.5, 0.5, 0.0);
+            expect(result).toBe('Color(red: 0.5, green: 0.5, blue: 0.5, opacity: 0)');
+        });
+        test('should handle various RGB and opacity combinations', () => {
+            // Purple with 48% opacity
+            expect(generator.generateColorWithOpacity(0.42, 0.31, 0.64, 0.48))
+                .toBe('Color(red: 0.42, green: 0.31, blue: 0.64, opacity: 0.48)');
+            // Blue with 80% opacity
+            expect(generator.generateColorWithOpacity(0.0, 0.5, 1.0, 0.8))
+                .toBe('Color(red: 0, green: 0.5, blue: 1, opacity: 0.8)');
+            // Black with 32% opacity
+            expect(generator.generateColorWithOpacity(0.0, 0.0, 0.0, 0.32))
+                .toBe('Color(red: 0, green: 0, blue: 0, opacity: 0.32)');
+        });
+    });
+    describe('generateConstant', () => {
+        test('should generate Swift constant with correct syntax', () => {
+            const result = generator.generateConstant('opacity600', 0.48);
+            expect(result).toBe('static let opacity600 = 0.48');
+        });
+        test('should handle full opacity constant', () => {
+            const result = generator.generateConstant('opacity1300', 1.0);
+            expect(result).toBe('static let opacity1300 = 1');
+        });
+        test('should handle full transparency constant', () => {
+            const result = generator.generateConstant('opacity000', 0.0);
+            expect(result).toBe('static let opacity000 = 0');
+        });
+        test('should handle various opacity token constants', () => {
+            expect(generator.generateConstant('opacity100', 0.08))
+                .toBe('static let opacity100 = 0.08');
+            expect(generator.generateConstant('opacity200', 0.16))
+                .toBe('static let opacity200 = 0.16');
+            expect(generator.generateConstant('opacity400', 0.32))
+                .toBe('static let opacity400 = 0.32');
+            expect(generator.generateConstant('opacity800', 0.64))
+                .toBe('static let opacity800 = 0.64');
+            expect(generator.generateConstant('opacity1100', 0.88))
+                .toBe('static let opacity1100 = 0.88');
+        });
+        test('should handle semantic opacity token constants', () => {
+            expect(generator.generateConstant('opacityDisabled', 0.48))
+                .toBe('static let opacityDisabled = 0.48');
+            expect(generator.generateConstant('opacityOverlay', 0.32))
+                .toBe('static let opacityOverlay = 0.32');
+            expect(generator.generateConstant('opacityHover', 0.08))
+                .toBe('static let opacityHover = 0.08');
+        });
+    });
+});
 //# sourceMappingURL=iOSFormatGenerator-semantic.test.js.map

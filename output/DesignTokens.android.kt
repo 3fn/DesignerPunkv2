@@ -1,6 +1,6 @@
 /**
  * DesignerPunk Design System - Android Tokens
- * Generated: 2025-10-27T23:17:34.595Z
+ * Generated: 2025-10-29T00:46:17.926Z
  * Version: 1.0.0
  * Platform: Android (Kotlin Constants)
  */
@@ -14,6 +14,18 @@ object DesignTokens {
     Mathematical foundation
     // ============================================
 
+
+    // BLEND TOKENS
+    // base × 1 = 0.04 × 1 = 0.04
+    const val blend_100: Float = 0.04f
+    // base × 2 = 0.04 × 2 = 0.08
+    const val blend_200: Float = 0.08f
+    // base × 3 = 0.04 × 3 = 0.12
+    const val blend_300: Float = 0.12f
+    // base × 4 = 0.04 × 4 = 0.16
+    const val blend_400: Float = 0.16f
+    // base × 5 = 0.04 × 5 = 0.20
+    const val blend_500: Float = 0.2f
 
     // BORDERWIDTH TOKENS
     // base × 1 = 1 × 1 = 1
@@ -243,6 +255,36 @@ object DesignTokens {
     // 48px ÷ 42px ≈ 1.143 (aligns to 4pt subgrid)
     const val line_height_700: Float = 1.143f
 
+    // OPACITY TOKENS
+    // base × 0 = 0.08 × 0 = 0.0
+    const val opacity_000: Float = 0f
+    // base × 1 = 0.08 × 1 = 0.08
+    const val opacity_100: Float = 0.08f
+    // base × 2 = 0.08 × 2 = 0.16
+    const val opacity_200: Float = 0.16f
+    // base × 3 = 0.08 × 3 = 0.24
+    const val opacity_300: Float = 0.24f
+    // base × 4 = 0.08 × 4 = 0.32
+    const val opacity_400: Float = 0.32f
+    // base × 5 = 0.08 × 5 = 0.40
+    const val opacity_500: Float = 0.4f
+    // base × 6 = 0.08 × 6 = 0.48
+    const val opacity_600: Float = 0.48f
+    // base × 7 = 0.08 × 7 = 0.56
+    const val opacity_700: Float = 0.56f
+    // base × 8 = 0.08 × 8 = 0.64
+    const val opacity_800: Float = 0.64f
+    // base × 9 = 0.08 × 9 = 0.72
+    const val opacity_900: Float = 0.72f
+    // base × 10 = 0.08 × 10 = 0.80
+    const val opacity_1000: Float = 0.8f
+    // base × 11 = 0.08 × 11 = 0.88
+    const val opacity_1100: Float = 0.88f
+    // base × 12 = 0.08 × 12 = 0.96
+    const val opacity_1200: Float = 0.96f
+    // Special case: full opacity = 1.0
+    const val opacity_1300: Float = 1f
+
     // RADIUS TOKENS
     // base × 0 = 8 × 0 = 0
     const val radius_000: Float = 0f
@@ -400,7 +442,11 @@ object DesignTokens {
     val typography_code_md = Typography(fontSize = font_size_100, lineHeight = line_height_100, fontFamily = font_family_mono, fontWeight = font_weight_400, letterSpacing = letter_spacing_100)
     val typography_code_lg = Typography(fontSize = font_size_125, lineHeight = line_height_125, fontFamily = font_family_mono, fontWeight = font_weight_400, letterSpacing = letter_spacing_100)
     val shadow_container = Typography(offsetX = shadow_offset_x_000, offsetY = shadow_offset_y_100, blur = shadow_blur_moderate, opacity = shadow_opacity_moderate, color = shadow_black_100)
+    val shadow_navigation = Typography(offsetX = shadow_offset_x_000, offsetY = shadow_offset_y_100, blur = shadow_blur_soft, opacity = shadow_opacity_soft, color = shadow_black_100)
+    val shadow_dropdown = Typography(offsetX = shadow_offset_x_000, offsetY = shadow_offset_y_100, blur = shadow_blur_moderate, opacity = shadow_opacity_moderate, color = shadow_black_100)
     val shadow_modal = Typography(offsetX = shadow_offset_x_000, offsetY = shadow_offset_y_200, blur = shadow_blur_depth_200, opacity = shadow_opacity_depth_200, color = shadow_black_100)
+    val shadow_toast = Typography(offsetX = shadow_offset_x_000, offsetY = shadow_offset_y_300, blur = shadow_blur_depth_300, opacity = shadow_opacity_depth_300, color = shadow_black_100)
+    val shadow_tooltip = Typography(offsetX = shadow_offset_x_000, offsetY = shadow_offset_y_300, blur = shadow_blur_depth_300, opacity = shadow_opacity_depth_300, color = shadow_black_100)
     val shadow_fab = Typography(offsetX = shadow_offset_x_300, offsetY = shadow_offset_y_400, blur = shadow_blur_hard, opacity = shadow_opacity_hard, color = shadow_blue_100)
     val shadow_hover = Typography(offsetX = shadow_offset_x_000, offsetY = shadow_offset_y_100, blur = shadow_blur_soft, opacity = shadow_opacity_soft, color = shadow_black_100)
     val shadow_sunrise = Typography(offsetX = shadow_offset_x_n_300, offsetY = shadow_offset_y_200, blur = shadow_blur_moderate, opacity = shadow_opacity_moderate, color = shadow_blue_100)
@@ -408,6 +454,11 @@ object DesignTokens {
     val shadow_noon = Typography(offsetX = shadow_offset_x_000, offsetY = shadow_offset_y_200, blur = shadow_blur_moderate, opacity = shadow_opacity_moderate, color = shadow_black_100)
     val shadow_dusk = Typography(offsetX = shadow_offset_x_150, offsetY = shadow_offset_y_200, blur = shadow_blur_moderate, opacity = shadow_opacity_moderate, color = shadow_black_100)
     val shadow_sunset = Typography(offsetX = shadow_offset_x_300, offsetY = shadow_offset_y_200, blur = shadow_blur_moderate, opacity = shadow_opacity_moderate, color = shadow_blue_100)
+    val opacity_disabled = opacity_600
+    val opacity_overlay = opacity_400
+    val opacity_hover = opacity_100
+    val opacity_pressed = opacity_200
+    val opacity_loading = opacity_200
     val border_border_default = border_width_100
     val border_border_emphasis = border_width_200
     val border_border_heavy = border_width_400
@@ -429,4 +480,12 @@ object DesignTokens {
     val space_inset_comfortable = space_150
     val space_inset_spacious = space_200
     val space_inset_expansive = space_300
+
+    // Layering Tokens (Elevation)
+    val elevation_container = 8.dp
+    val elevation_navigation = 4.dp
+    val elevation_dropdown = 8.dp
+    val elevation_modal = 16.dp
+    val elevation_toast = 24.dp
+    val elevation_tooltip = 24.dp
 }

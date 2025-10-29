@@ -8,7 +8,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RADIUS_BASE_VALUE = exports.getStrategicFlexibilityRadiusTokens = exports.getBaselineAlignedRadiusTokens = exports.getAllRadiusTokens = exports.getRadiusToken = exports.radiusTokenNames = exports.radiusTokens = exports.TAP_AREA_BASE_VALUE = exports.validateTapAreaAccessibility = exports.getAllTapAreaTokens = exports.getTapAreaToken = exports.tapAreaTokenNames = exports.tapAreaTokens = exports.DENSITY_BASE_VALUE = exports.applyDensityScaling = exports.getAllDensityTokens = exports.getDensityToken = exports.densityTokenNames = exports.densityTokens = exports.LINE_HEIGHT_BASE_VALUE = exports.calculateComputedLineHeight = exports.getAllLineHeightTokens = exports.getLineHeightToken = exports.lineHeightTokenNames = exports.lineHeightTokens = exports.LETTER_SPACING_BASE_VALUE = exports.getAllLetterSpacingTokens = exports.getLetterSpacingToken = exports.letterSpacingTokenNames = exports.letterSpacingTokens = exports.FONT_WEIGHT_BASE_VALUE = exports.getAllFontWeightTokens = exports.getFontWeightToken = exports.fontWeightTokenNames = exports.fontWeightTokens = exports.getAllFontFamilyTokens = exports.getFontFamilyToken = exports.fontFamilyTokenNames = exports.fontFamilyTokens = exports.MODULAR_SCALE_RATIO = exports.FONT_SIZE_BASE_VALUE = exports.getAllFontSizeTokens = exports.getFontSizeToken = exports.fontSizeTokenNames = exports.fontSizeTokens = exports.SPACING_BASE_VALUE = exports.getAllSpacingTokens = exports.getSpacingToken = exports.spacingTokenNames = exports.spacingTokens = void 0;
 exports.GLOW_BLUR_BASE_VALUE = exports.getAllShadowOpacityTokens = exports.getShadowOpacityToken = exports.shadowOpacityTokenNames = exports.shadowOpacityTokens = exports.SHADOW_OPACITY_BASE_VALUE = exports.getAllShadowBlurTokens = exports.getShadowBlurToken = exports.shadowBlurNames = exports.shadowBlur = exports.SHADOW_BLUR_BASE_VALUE = exports.getAllShadowOffsetYTokens = exports.getAllShadowOffsetXTokens = exports.getShadowOffsetYToken = exports.getShadowOffsetXToken = exports.shadowOffsetYNames = exports.shadowOffsetXNames = exports.shadowOffsetY = exports.shadowOffsetX = exports.SHADOW_OFFSET_BASE_VALUE = exports.BORDER_WIDTH_BASE_VALUE = exports.getAllBorderWidthTokens = exports.getBorderWidthToken = exports.borderWidthTokenNames = exports.borderWidthTokens = exports.COLOR_THEMES = exports.COLOR_MODES = exports.COLOR_SCALE = exports.COLOR_FAMILIES = exports.COLOR_BASE_VALUE = exports.getShadowColorTokensByFamily = exports.getAllShadowColorTokens = exports.getShadowColorToken = exports.shadowColorTokenNames = exports.shadowColorTokens = exports.tealTokens = exports.cyanTokens = exports.violetTokens = exports.purpleTokens = exports.orangeTokens = exports.yellowTokens = exports.whiteTokens = exports.blackTokens = exports.grayTokens = exports.resolveColorTokenValue = exports.getColorTokensByFamily = exports.getAllColorTokens = exports.getColorToken = exports.colorTokenNames = exports.colorTokens = void 0;
-exports.TOKEN_FAMILY_BASE_VALUES = exports.getAllTokens = exports.allTokens = exports.getAllGlowOpacityTokens = exports.getGlowOpacityToken = exports.glowOpacityNames = exports.glowOpacity = exports.GLOW_OPACITY_BASE_VALUE = exports.getAllGlowBlurTokens = exports.getGlowBlurToken = exports.glowBlurNames = exports.glowBlur = void 0;
+exports.TOKEN_FAMILY_BASE_VALUES = exports.getAllTokens = exports.allTokens = exports.BlendDirection = exports.BLEND_BASE_VALUE = exports.getAllBlendTokens = exports.getBlendToken = exports.blendTokenNames = exports.blendTokens = exports.OPACITY_BASE_VALUE = exports.getAllOpacityTokens = exports.getOpacityToken = exports.opacityTokenNames = exports.opacityTokens = exports.getAllGlowOpacityTokens = exports.getGlowOpacityToken = exports.glowOpacityNames = exports.glowOpacity = exports.GLOW_OPACITY_BASE_VALUE = exports.getAllGlowBlurTokens = exports.getGlowBlurToken = exports.glowBlurNames = exports.glowBlur = void 0;
 exports.getAllPrimitiveTokens = getAllPrimitiveTokens;
 exports.getTokensByCategory = getTokensByCategory;
 exports.getTokenByName = getTokenByName;
@@ -153,6 +153,21 @@ Object.defineProperty(exports, "glowOpacity", { enumerable: true, get: function 
 Object.defineProperty(exports, "glowOpacityNames", { enumerable: true, get: function () { return GlowOpacityTokens_1.glowOpacityNames; } });
 Object.defineProperty(exports, "getGlowOpacityToken", { enumerable: true, get: function () { return GlowOpacityTokens_1.getGlowOpacityToken; } });
 Object.defineProperty(exports, "getAllGlowOpacityTokens", { enumerable: true, get: function () { return GlowOpacityTokens_1.getAllGlowOpacityTokens; } });
+// Opacity tokens
+var OpacityTokens_1 = require("./OpacityTokens");
+Object.defineProperty(exports, "opacityTokens", { enumerable: true, get: function () { return OpacityTokens_1.opacityTokens; } });
+Object.defineProperty(exports, "opacityTokenNames", { enumerable: true, get: function () { return OpacityTokens_1.opacityTokenNames; } });
+Object.defineProperty(exports, "getOpacityToken", { enumerable: true, get: function () { return OpacityTokens_1.getOpacityToken; } });
+Object.defineProperty(exports, "getAllOpacityTokens", { enumerable: true, get: function () { return OpacityTokens_1.getAllOpacityTokens; } });
+Object.defineProperty(exports, "OPACITY_BASE_VALUE", { enumerable: true, get: function () { return OpacityTokens_1.OPACITY_BASE_VALUE; } });
+// Blend tokens
+var BlendTokens_1 = require("./BlendTokens");
+Object.defineProperty(exports, "blendTokens", { enumerable: true, get: function () { return BlendTokens_1.blendTokens; } });
+Object.defineProperty(exports, "blendTokenNames", { enumerable: true, get: function () { return BlendTokens_1.blendTokenNames; } });
+Object.defineProperty(exports, "getBlendToken", { enumerable: true, get: function () { return BlendTokens_1.getBlendToken; } });
+Object.defineProperty(exports, "getAllBlendTokens", { enumerable: true, get: function () { return BlendTokens_1.getAllBlendTokens; } });
+Object.defineProperty(exports, "BLEND_BASE_VALUE", { enumerable: true, get: function () { return BlendTokens_1.BLEND_BASE_VALUE; } });
+Object.defineProperty(exports, "BlendDirection", { enumerable: true, get: function () { return BlendTokens_1.BlendDirection; } });
 // Combined token utilities
 const SpacingTokens_2 = require("./SpacingTokens");
 const FontSizeTokens_2 = require("./FontSizeTokens");
@@ -170,6 +185,8 @@ const ShadowBlurTokens_2 = require("./ShadowBlurTokens");
 const ShadowOpacityTokens_2 = require("./ShadowOpacityTokens");
 const GlowBlurTokens_2 = require("./GlowBlurTokens");
 const GlowOpacityTokens_2 = require("./GlowOpacityTokens");
+const OpacityTokens_2 = require("./OpacityTokens");
+const BlendTokens_2 = require("./BlendTokens");
 const PrimitiveToken_1 = require("../types/PrimitiveToken");
 /**
  * All primitive tokens combined by category
@@ -187,7 +204,9 @@ exports.allTokens = {
     [PrimitiveToken_1.TokenCategory.COLOR]: ColorTokens_2.colorTokens,
     [PrimitiveToken_1.TokenCategory.BORDER_WIDTH]: BorderWidthTokens_2.borderWidthTokens,
     [PrimitiveToken_1.TokenCategory.SHADOW]: { ...ShadowOffsetTokens_2.shadowOffsetX, ...ShadowOffsetTokens_2.shadowOffsetY, ...ShadowBlurTokens_2.shadowBlur, ...ShadowOpacityTokens_2.shadowOpacityTokens },
-    [PrimitiveToken_1.TokenCategory.GLOW]: { ...GlowBlurTokens_2.glowBlur, ...GlowOpacityTokens_2.glowOpacity }
+    [PrimitiveToken_1.TokenCategory.GLOW]: { ...GlowBlurTokens_2.glowBlur, ...GlowOpacityTokens_2.glowOpacity },
+    [PrimitiveToken_1.TokenCategory.OPACITY]: OpacityTokens_2.opacityTokens,
+    [PrimitiveToken_1.TokenCategory.BLEND]: BlendTokens_2.blendTokens
 };
 /**
  * Get all primitive tokens as a flat array
@@ -213,7 +232,9 @@ function getAllPrimitiveTokens() {
         ...Object.values(ShadowBlurTokens_2.shadowBlur),
         ...Object.values(ShadowOpacityTokens_2.shadowOpacityTokens),
         ...Object.values(GlowBlurTokens_2.glowBlur),
-        ...Object.values(GlowOpacityTokens_2.glowOpacity)
+        ...Object.values(GlowOpacityTokens_2.glowOpacity),
+        ...Object.values(OpacityTokens_2.opacityTokens),
+        ...Object.values(BlendTokens_2.blendTokens)
     ];
 }
 /**
@@ -268,6 +289,8 @@ exports.TOKEN_FAMILY_BASE_VALUES = {
     [PrimitiveToken_1.TokenCategory.COLOR]: 0, // N/A for hex color tokens
     [PrimitiveToken_1.TokenCategory.BORDER_WIDTH]: 1,
     [PrimitiveToken_1.TokenCategory.SHADOW]: 4,
-    [PrimitiveToken_1.TokenCategory.GLOW]: 8
+    [PrimitiveToken_1.TokenCategory.GLOW]: 8,
+    [PrimitiveToken_1.TokenCategory.OPACITY]: 0.08,
+    [PrimitiveToken_1.TokenCategory.BLEND]: 0.04
 };
 //# sourceMappingURL=index.js.map

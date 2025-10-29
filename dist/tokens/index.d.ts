@@ -20,6 +20,8 @@ export { SHADOW_BLUR_BASE_VALUE, shadowBlur, shadowBlurNames, getShadowBlurToken
 export { SHADOW_OPACITY_BASE_VALUE, shadowOpacityTokens, shadowOpacityTokenNames, getShadowOpacityToken, getAllShadowOpacityTokens } from './ShadowOpacityTokens';
 export { GLOW_BLUR_BASE_VALUE, glowBlur, glowBlurNames, getGlowBlurToken, getAllGlowBlurTokens } from './GlowBlurTokens';
 export { GLOW_OPACITY_BASE_VALUE, glowOpacity, glowOpacityNames, getGlowOpacityToken, getAllGlowOpacityTokens } from './GlowOpacityTokens';
+export { opacityTokens, opacityTokenNames, getOpacityToken, getAllOpacityTokens, OPACITY_BASE_VALUE } from './OpacityTokens';
+export { blendTokens, blendTokenNames, getBlendToken, getAllBlendTokens, BLEND_BASE_VALUE, BlendDirection } from './BlendTokens';
 import { PrimitiveToken, TokenCategory } from '../types/PrimitiveToken';
 /**
  * All primitive tokens combined by category
@@ -92,6 +94,8 @@ export declare const allTokens: {
     glow: {
         [x: string]: PrimitiveToken;
     };
+    opacity: Record<string, PrimitiveToken>;
+    blend: Record<string, PrimitiveToken>;
 };
 /**
  * Get all primitive tokens as a flat array
@@ -141,5 +145,7 @@ export declare const TOKEN_FAMILY_BASE_VALUES: {
     readonly borderWidth: 1;
     readonly shadow: 4;
     readonly glow: 8;
+    readonly opacity: 0.08;
+    readonly blend: 0.04;
 };
 //# sourceMappingURL=index.d.ts.map

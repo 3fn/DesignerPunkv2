@@ -1,6 +1,6 @@
 /**
  * DesignerPunk Design System - Web Tokens
- * Generated: 2025-10-27T23:17:34.591Z
+ * Generated: 2025-10-29T00:46:17.922Z
  * Version: 1.0.0
  * Platform: Web (CSS Custom Properties)
  *
@@ -17,6 +17,18 @@
   Mathematical foundation
    * ============================================ */
 
+
+  /* BLEND TOKENS */
+  /* base × 1 = 0.04 × 1 = 0.04 */
+  --blend-100: 0.04;
+  /* base × 2 = 0.04 × 2 = 0.08 */
+  --blend-200: 0.08;
+  /* base × 3 = 0.04 × 3 = 0.12 */
+  --blend-300: 0.12;
+  /* base × 4 = 0.04 × 4 = 0.16 */
+  --blend-400: 0.16;
+  /* base × 5 = 0.04 × 5 = 0.20 */
+  --blend-500: 0.2;
 
   /* BORDERWIDTH TOKENS */
   /* base × 1 = 1 × 1 = 1 */
@@ -245,6 +257,36 @@
   --line-height-600: 1.19;
   /* 48px ÷ 42px ≈ 1.143 (aligns to 4pt subgrid) */
   --line-height-700: 1.143;
+
+  /* OPACITY TOKENS */
+  /* base × 0 = 0.08 × 0 = 0.0 */
+  --opacity-000: 0;
+  /* base × 1 = 0.08 × 1 = 0.08 */
+  --opacity-100: 0.08;
+  /* base × 2 = 0.08 × 2 = 0.16 */
+  --opacity-200: 0.16;
+  /* base × 3 = 0.08 × 3 = 0.24 */
+  --opacity-300: 0.24;
+  /* base × 4 = 0.08 × 4 = 0.32 */
+  --opacity-400: 0.32;
+  /* base × 5 = 0.08 × 5 = 0.40 */
+  --opacity-500: 0.4;
+  /* base × 6 = 0.08 × 6 = 0.48 */
+  --opacity-600: 0.48;
+  /* base × 7 = 0.08 × 7 = 0.56 */
+  --opacity-700: 0.56;
+  /* base × 8 = 0.08 × 8 = 0.64 */
+  --opacity-800: 0.64;
+  /* base × 9 = 0.08 × 9 = 0.72 */
+  --opacity-900: 0.72;
+  /* base × 10 = 0.08 × 10 = 0.80 */
+  --opacity-1000: 0.8;
+  /* base × 11 = 0.08 × 11 = 0.88 */
+  --opacity-1100: 0.88;
+  /* base × 12 = 0.08 × 12 = 0.96 */
+  --opacity-1200: 0.96;
+  /* Special case: full opacity = 1.0 */
+  --opacity-1300: 1;
 
   /* RADIUS TOKENS */
   /* base × 0 = 8 × 0 = 0 */
@@ -499,11 +541,31 @@
   --shadow-container-blur: var(--shadow-blur-moderate);
   --shadow-container-opacity: var(--shadow-opacity-moderate);
   --shadow-container-color: var(--shadow-black-100);
+  --shadow-navigation-offset-x: var(--shadow-offset-x-000);
+  --shadow-navigation-offset-y: var(--shadow-offset-y-100);
+  --shadow-navigation-blur: var(--shadow-blur-soft);
+  --shadow-navigation-opacity: var(--shadow-opacity-soft);
+  --shadow-navigation-color: var(--shadow-black-100);
+  --shadow-dropdown-offset-x: var(--shadow-offset-x-000);
+  --shadow-dropdown-offset-y: var(--shadow-offset-y-100);
+  --shadow-dropdown-blur: var(--shadow-blur-moderate);
+  --shadow-dropdown-opacity: var(--shadow-opacity-moderate);
+  --shadow-dropdown-color: var(--shadow-black-100);
   --shadow-modal-offset-x: var(--shadow-offset-x-000);
   --shadow-modal-offset-y: var(--shadow-offset-y-200);
   --shadow-modal-blur: var(--shadow-blur-depth-200);
   --shadow-modal-opacity: var(--shadow-opacity-depth-200);
   --shadow-modal-color: var(--shadow-black-100);
+  --shadow-toast-offset-x: var(--shadow-offset-x-000);
+  --shadow-toast-offset-y: var(--shadow-offset-y-300);
+  --shadow-toast-blur: var(--shadow-blur-depth-300);
+  --shadow-toast-opacity: var(--shadow-opacity-depth-300);
+  --shadow-toast-color: var(--shadow-black-100);
+  --shadow-tooltip-offset-x: var(--shadow-offset-x-000);
+  --shadow-tooltip-offset-y: var(--shadow-offset-y-300);
+  --shadow-tooltip-blur: var(--shadow-blur-depth-300);
+  --shadow-tooltip-opacity: var(--shadow-opacity-depth-300);
+  --shadow-tooltip-color: var(--shadow-black-100);
   --shadow-fab-offset-x: var(--shadow-offset-x-300);
   --shadow-fab-offset-y: var(--shadow-offset-y-400);
   --shadow-fab-blur: var(--shadow-blur-hard);
@@ -539,6 +601,11 @@
   --shadow-sunset-blur: var(--shadow-blur-moderate);
   --shadow-sunset-opacity: var(--shadow-opacity-moderate);
   --shadow-sunset-color: var(--shadow-blue-100);
+  --opacity-disabled: var(--opacity-600);
+  --opacity-overlay: var(--opacity-400);
+  --opacity-hover: var(--opacity-100);
+  --opacity-pressed: var(--opacity-200);
+  --opacity-loading: var(--opacity-200);
   --border-border-default: var(--border-width-100);
   --border-border-emphasis: var(--border-width-200);
   --border-border-heavy: var(--border-width-400);
@@ -560,4 +627,12 @@
   --space-inset-comfortable: var(--space-150);
   --space-inset-spacious: var(--space-200);
   --space-inset-expansive: var(--space-300);
+
+  /* Layering Tokens (Z-Index) */
+  --z-index-container: 100;
+  --z-index-navigation: 200;
+  --z-index-dropdown: 300;
+  --z-index-modal: 400;
+  --z-index-toast: 500;
+  --z-index-tooltip: 600;
 }

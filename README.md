@@ -60,22 +60,27 @@ DesignerPunk addresses the fundamental challenge of AI collaboration: **fuzzy te
 - Three-tier validation and documentation system (Setup/Implementation/Architecture)
 
 **Token System Status** - Comprehensive primitive and semantic token implementation
-- **~170 tokens implemented**: Spacing (12), Typography (40), Color (45+), Radius (12), Accessibility (8)
-- **Semantic layer**: Color, spacing, and typography compositions with hierarchical structure
+- **~200+ tokens implemented**: Spacing (12), Typography (40), Color (45+), Radius (12), Accessibility (8), Shadow (15), Glow (6), Layering (6)
+- **Semantic layer**: Color, spacing, typography, shadow, and layering compositions with hierarchical structure
+- **Cross-platform generation**: Web CSS, iOS Swift, and Android Kotlin with platform-native conventions and semantic token references
+- **Lighting framework**: Shadow tokens follow art theory principles (warm light creates cool shadows, cool light creates warm shadows)
 - **Detailed analysis**: See [Design Token Coverage Analysis](design-token-coverage-analysis.md) for complete breakdown
-- **Identified gaps**: 4 critical categories needed before components (shadow, border width, opacity, z-index)
+- **Remaining gaps**: 2 critical categories needed before components (border width, opacity)
 
 **Completed Specifications**
 - [Typography Token Expansion](/.kiro/specs/typography-token-expansion/) - Enhanced typography compositions with inline emphasis
 - [Spec Standards Refinement](/.kiro/specs/spec-standards-refinement/) - Three-tier validation and documentation system
+- [Shadow and Glow Token System](/.kiro/specs/shadow-glow-token-system/) - Complete shadow and glow primitives with lighting framework and semantic compositions
+- [Semantic Token Generation](/.kiro/specs/semantic-token-generation/) - Cross-platform semantic token generation with primitive reference preservation
+- [Layering Token System](/.kiro/specs/layering-token-system/) - Platform-specific z-index and elevation tokens with cross-platform generation
 - Requirements, design, and implementation planning following EARS format with hierarchical task structure
 
 ### 🚧 In Development
 
 **Component Development Preparation**
-- Planning Phase 1 primitive tokens (shadow, border width, opacity, z-index)
+- Planning final Phase 1 primitive tokens (border width, opacity)
 - Component architecture framework design
-- Cross-platform build system specification
+- Component template development with captured architectural learnings
 
 ---
 
@@ -106,11 +111,34 @@ DesignerPunk addresses the fundamental challenge of AI collaboration: **fuzzy te
 - **Typography**: Complete text styles (typography.body, typography.h1-h6, typography.display, typography.button)
 - **Colors**: Contextual references (color.primary, color.success, color.text, color.background)
 
-**Identified Gaps** (Phase 1 priorities before component development):
-- **Shadow/Elevation** (7 tokens needed): Visual hierarchy for cards, modals, dropdowns
+**Shadow Tokens** (15 tokens implemented):
+- **Shadow Offset**: Light source positioning based on sun arc (sunrise, morning, noon, afternoon, sunset)
+- **Shadow Blur**: Edge definition based on quality (hard, moderate, soft) and depth (depth100, depth200, depth300)
+- **Shadow Opacity**: Darkness based on quality and depth (0.1-0.5 range)
+- **Shadow Colors**: Art theory-based colors (warm light creates cool shadows: shadowBlue; cool light creates warm shadows: shadowOrange)
+- **Semantic Shadows**: Complete shadow compositions (container, modal, hover, fab) combining offset, blur, opacity, and color
+- **Lighting Framework**: Systematic approach to shadow direction and quality based on light source position
+
+**Glow Tokens** (6 tokens implemented):
+- **Glow Blur**: Extended blur range for radial emphasis effects (8-64px)
+- **Glow Opacity**: Decreasing progression for multi-layer glow effects (0.8-0.2)
+- **Semantic Glows**: Vibrant color references (purple500, cyan500, yellow500) for neon emphasis
+
+**Layering Tokens** (6 tokens implemented):
+- **Z-Index** (Web/iOS): Systematic stacking order (container=100, navigation=200, dropdown=300, modal=400, toast=500, tooltip=600)
+- **Elevation** (Android): Material Design elevation scale (container=8dp, navigation=4dp, dropdown=8dp, modal=16dp, toast=24dp, tooltip=24dp)
+- **Platform-Specific Generation**: Web CSS custom properties, iOS Swift CGFloat (scaled 1-6), Android Kotlin .dp suffix
+- **Semantic Consistency**: Same semantic names across platforms with platform-appropriate values
+
+**Semantic Token Generation** (Complete):
+- **Reference Preservation**: Semantic tokens reference primitives by name (colorPrimary → purple300), not resolved values
+- **Cross-Platform Consistency**: Same semantic token names across all platforms with platform-appropriate syntax
+- **Architectural Clarity**: Developers see token relationships (colorPrimary comes from purple300)
+- **Automatic Updates**: Changing primitive tokens automatically updates all semantic references
+
+**Remaining Gaps** (Phase 1 priorities before component development):
 - **Border Width** (5 tokens needed): Component structure for inputs, dividers, focus rings
 - **Opacity** (8 tokens needed): Overlays, disabled states, hover effects
-- **Z-Index** (8 tokens needed): Systematic layering for modals, dropdowns, tooltips
 
 See [Design Token Coverage Analysis](design-token-coverage-analysis.md) for complete details.
 

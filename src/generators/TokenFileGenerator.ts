@@ -13,7 +13,7 @@ import { iOSFormatGenerator } from '../providers/iOSFormatGenerator';
 import { AndroidFormatGenerator } from '../providers/AndroidFormatGenerator';
 import { FileMetadata } from '../providers/FormatProvider';
 import { getAllPrimitiveTokens, getTokensByCategory } from '../tokens';
-import { getAllSemanticTokens } from '../tokens/semantic';
+import { getAllSemanticTokens, getAllZIndexTokens, getAllElevationTokens } from '../tokens/semantic';
 
 export interface GenerationOptions {
   outputDir?: string;
@@ -94,6 +94,11 @@ export class TokenFileGenerator {
 
     // Iterate over semantic tokens
     for (const semantic of semantics) {
+      // Skip tokens without primitiveReferences (e.g., semantic-only layering tokens)
+      if (!semantic.primitiveReferences) {
+        continue;
+      }
+      
       // Detect single-reference vs multi-reference tokens
       // Single-reference tokens have:
       // - Only one key in primitiveReferences, OR
@@ -117,6 +122,51 @@ export class TokenFileGenerator {
   }
 
   /**
+   * Generate layering token section for specified platform
+   * Handles semantic-only layering tokens (z-index and elevation)
+   * 
+   * @param platform - Target platform ('web', 'ios', or 'android')
+   * @returns Array of formatted token strings
+   */
+  private generateLayeringSection(platform: 'web' | 'ios' | 'android'): string[] {
+    const lines: string[] = [];
+
+    // Route z-index tokens to web/iOS, elevation tokens to Android
+    if (platform === 'web' || platform === 'ios') {
+      // Get z-index tokens for web and iOS
+      const zIndexTokens = getAllZIndexTokens();
+      
+      for (const token of zIndexTokens) {
+        // Format z-index token based on platform
+        if (platform === 'web') {
+          // Web: CSS custom property format
+          // --z-index-modal: 400;
+          const kebabName = token.name.replace('zIndex.', 'z-index-');
+          lines.push(`  --${kebabName}: ${token.value};`);
+        } else {
+          // iOS: Swift constant format with scaled value
+          // static let zIndexModal: CGFloat = 4
+          const suffix = token.name.replace('zIndex.', '');
+          const camelSuffix = suffix.charAt(0).toUpperCase() + suffix.slice(1);
+          const camelName = 'zIndex' + camelSuffix;
+          const scaledValue = token.value / 100; // Scale down from 100-600 to 1-6
+          lines.push(`    static let ${camelName}: CGFloat = ${scaledValue}`);
+        }
+      }
+    } else if (platform === 'android') {
+      // Get elevation tokens for Android
+      const elevationTokens = getAllElevationTokens();
+      
+      for (const token of elevationTokens) {
+        // Use AndroidFormatGenerator to format elevation tokens
+        lines.push(this.androidGenerator.formatElevationToken(token.name, token.value));
+      }
+    }
+
+    return lines;
+  }
+
+  /**
    * Generate web token file (JavaScript)
    */
   generateWebTokens(options: GenerationOptions = {}): GenerationResult {
@@ -133,7 +183,12 @@ export class TokenFileGenerator {
     };
 
     const tokens = getAllPrimitiveTokens();
-    const semantics = getAllSemanticTokens();
+    const allSemantics = getAllSemanticTokens();
+    
+    // Filter out layering tokens (they don't have primitiveReferences)
+    const semantics = allSemantics.filter(s => 
+      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.')
+    );
 
     const lines: string[] = [];
     const errors: string[] = [];
@@ -196,6 +251,15 @@ export class TokenFileGenerator {
       semanticTokenCount = semantics.length;
     }
 
+    // Add layering tokens section (z-index for web)
+    if (includeComments) {
+      lines.push('');
+      lines.push('  /* Layering Tokens (Z-Index) */');
+    }
+    const layeringLines = this.generateLayeringSection('web');
+    lines.push(...layeringLines);
+    semanticTokenCount += layeringLines.length;
+
     // Add footer
     lines.push(this.webGenerator.generateFooter());
 
@@ -234,7 +298,12 @@ export class TokenFileGenerator {
     };
 
     const tokens = getAllPrimitiveTokens();
-    const semantics = getAllSemanticTokens();
+    const allSemantics = getAllSemanticTokens();
+    
+    // Filter out layering tokens (they don't have primitiveReferences)
+    const semantics = allSemantics.filter(s => 
+      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.')
+    );
 
     const lines: string[] = [];
     const errors: string[] = [];
@@ -297,6 +366,15 @@ export class TokenFileGenerator {
       semanticTokenCount = semantics.length;
     }
 
+    // Add layering tokens section (z-index for iOS)
+    if (includeComments) {
+      lines.push('');
+      lines.push('    // MARK: - Layering Tokens (Z-Index)');
+    }
+    const layeringLines = this.generateLayeringSection('ios');
+    lines.push(...layeringLines);
+    semanticTokenCount += layeringLines.length;
+
     // Add footer
     lines.push(this.iosGenerator.generateFooter());
 
@@ -335,7 +413,12 @@ export class TokenFileGenerator {
     };
 
     const tokens = getAllPrimitiveTokens();
-    const semantics = getAllSemanticTokens();
+    const allSemantics = getAllSemanticTokens();
+    
+    // Filter out layering tokens (they don't have primitiveReferences)
+    const semantics = allSemantics.filter(s => 
+      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.')
+    );
 
     const lines: string[] = [];
     const errors: string[] = [];
@@ -397,6 +480,15 @@ export class TokenFileGenerator {
       lines.push(...semanticLines);
       semanticTokenCount = semantics.length;
     }
+
+    // Add layering tokens section (elevation for Android)
+    if (includeComments) {
+      lines.push('');
+      lines.push('    // Layering Tokens (Elevation)');
+    }
+    const layeringLines = this.generateLayeringSection('android');
+    lines.push(...layeringLines);
+    semanticTokenCount += layeringLines.length;
 
     // Add footer
     lines.push(this.androidGenerator.generateFooter());
@@ -460,6 +552,11 @@ export class TokenFileGenerator {
 
     // Validate each semantic token
     for (const semantic of semantics) {
+      // Skip tokens without primitiveReferences (e.g., layering tokens)
+      if (!semantic.primitiveReferences) {
+        continue;
+      }
+      
       const refs = semantic.primitiveReferences;
 
       // Check single-reference tokens (have 'value' or 'default' property)

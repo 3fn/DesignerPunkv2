@@ -277,4 +277,97 @@ describe('WebFormatGenerator - Semantic Token Methods', () => {
       });
     });
   });
+
+  describe('Z-Index Token Formatting', () => {
+    describe('formatToken with semantic-only z-index tokens', () => {
+      let cssGenerator: WebFormatGenerator;
+      let jsGenerator: WebFormatGenerator;
+
+      beforeEach(() => {
+        cssGenerator = new WebFormatGenerator('css');
+        jsGenerator = new WebFormatGenerator('javascript');
+      });
+
+      test('should format z-index token for CSS with correct prefix and kebab-case', () => {
+        // Mock z-index token structure (semantic-only with direct value)
+        const zIndexToken = {
+          name: 'zIndex.modal',
+          value: 400,
+          platforms: ['web', 'ios'],
+          category: SemanticCategory.LAYERING,
+          context: 'Modal dialogs',
+          description: 'Z-index for modal overlay content'
+        };
+
+        const result = cssGenerator.formatToken(zIndexToken as any);
+
+        expect(result).toContain('--z-index-modal');
+        expect(result).toContain('400');
+        expect(result).toMatch(/--z-index-modal:\s*400;/);
+      });
+
+      test('should format z-index token for JavaScript', () => {
+        const zIndexToken = {
+          name: 'zIndex.modal',
+          value: 400,
+          platforms: ['web', 'ios'],
+          category: SemanticCategory.LAYERING,
+          context: 'Modal dialogs',
+          description: 'Z-index for modal overlay content'
+        };
+
+        const result = jsGenerator.formatToken(zIndexToken as any);
+
+        expect(result).toContain('zIndexModal');
+        expect(result).toContain('400');
+        expect(result).toMatch(/zIndexModal:\s*400,/);
+      });
+
+      test('should format all z-index semantic levels correctly', () => {
+        const zIndexTokens = [
+          { name: 'zIndex.container', value: 100 },
+          { name: 'zIndex.navigation', value: 200 },
+          { name: 'zIndex.dropdown', value: 300 },
+          { name: 'zIndex.modal', value: 400 },
+          { name: 'zIndex.toast', value: 500 },
+          { name: 'zIndex.tooltip', value: 600 }
+        ];
+
+        zIndexTokens.forEach(token => {
+          const fullToken = {
+            ...token,
+            platforms: ['web', 'ios'],
+            category: SemanticCategory.LAYERING,
+            context: 'Test context',
+            description: 'Test description'
+          };
+
+          const result = cssGenerator.formatToken(fullToken as any);
+          
+          // Extract expected name from token name (e.g., 'zIndex.container' -> 'container')
+          const semanticName = token.name.split('.')[1];
+          expect(result).toContain(`--z-index-${semanticName}`);
+          expect(result).toContain(`${token.value}`);
+        });
+      });
+
+      test('should handle z-index tokens with unitless values', () => {
+        const zIndexToken = {
+          name: 'zIndex.navigation',
+          value: 200,
+          platforms: ['web', 'ios'],
+          category: SemanticCategory.LAYERING,
+          context: 'Navigation',
+          description: 'Navigation z-index'
+        };
+
+        const result = cssGenerator.formatToken(zIndexToken as any);
+
+        // Should not add any unit suffix (px, rem, etc.)
+        expect(result).toMatch(/--z-index-navigation:\s*200;/);
+        expect(result).not.toContain('px');
+        expect(result).not.toContain('rem');
+      });
+    });
+  });
 });

@@ -16,6 +16,7 @@ export declare enum SemanticCategory {
     BORDER = "border",
     SHADOW = "shadow",
     LAYOUT = "layout",
+    LAYERING = "layering",
     INTERACTION = "interaction"
 }
 /**
@@ -39,6 +40,18 @@ export interface SemanticToken {
     description: string;
     /** Resolved primitive tokens (populated during token resolution) */
     primitiveTokens?: Record<string, PrimitiveToken>;
+    /**
+     * Platform-specific properties for tokens that need different values per platform
+     * Used by shadow tokens to specify Android elevation values alongside web/iOS primitive references
+     */
+    platforms?: {
+        web?: Record<string, any>;
+        ios?: Record<string, any>;
+        android?: {
+            elevation?: number;
+            [key: string]: any;
+        };
+    };
     /** Optional metadata for additional context (e.g., dedications, notes) */
     _meta?: Record<string, string>;
 }

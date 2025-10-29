@@ -15,17 +15,23 @@ export * from './SpacingTokens';
 export * from './TypographyTokens';
 export * from './BorderWidthTokens';
 export * from './ShadowTokens';
+export * from './OpacityTokens';
+export * from './BlendTokens';
+export * from './LayeringTokens';
 export { styleTokens, getStyleToken } from './StyleTokens';
 export { colorTokens, colorTokenNames, getColorToken, getAllColorTokens, validateColorTokenCount } from './ColorTokens';
 export { spacingTokens, layoutSpacing, insetSpacing } from './SpacingTokens';
 export { typographyTokens, typographyTokenNames, getTypographyToken, getAllTypographyTokens } from './TypographyTokens';
 export { shadowTokens, shadowTokenNames, getShadowToken, getAllShadowTokens } from './ShadowTokens';
 export { SemanticBorderWidthTokens, borderDefault, borderEmphasis, borderHeavy } from './BorderWidthTokens';
+export { opacityTokens, opacityTokenNames, getOpacityToken, getAllOpacityTokens, validateOpacityTokenCount } from './OpacityTokens';
+export { blendTokens, blendTokenNames, getBlendToken, getAllBlendTokens, validateBlendTokenCount } from './BlendTokens';
+export { zIndexTokens, zIndexTokenNames, getZIndexToken, getAllZIndexTokens, elevationTokens, elevationTokenNames, getElevationToken, getAllElevationTokens, getAllLayeringTokens, getLayeringTokensByPlatform } from './LayeringTokens';
 import type { SemanticToken } from '../../types/SemanticToken';
 import { SemanticCategory } from '../../types/SemanticToken';
 /**
  * Get any semantic token by name across all categories
- * Searches color, spacing, typography, border, and shadow tokens
+ * Searches color, spacing, typography, border, shadow, and opacity tokens
  */
 export declare function getSemanticToken(name: string): Omit<SemanticToken, 'primitiveTokens'> | undefined;
 /**
@@ -63,5 +69,9 @@ export declare function getSemanticTokenStats(): {
     spacingTokens: number;
     borderTokens: number;
     shadowTokens: number;
+    opacityTokens: number;
+    blendTokens: number;
+    zIndexTokens: number;
+    elevationTokens: number;
 };
 //# sourceMappingURL=index.d.ts.map

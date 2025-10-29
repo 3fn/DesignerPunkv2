@@ -20,6 +20,10 @@ const SemanticToken_1 = require("../../types/SemanticToken");
 /**
  * Shadow semantic tokens for common UI shadow styles
  * Following compositional architecture with explicit multi-primitive composition
+ *
+ * Platform-specific properties:
+ * - web/ios: Use primitive references for shadow composition
+ * - android: Use elevation values (Material Design)
  */
 exports.shadowTokens = {
     'shadow.container': {
@@ -31,9 +35,68 @@ exports.shadowTokens = {
             opacity: 'shadowOpacityModerate',
             color: 'shadowBlack100'
         },
+        platforms: {
+            web: {
+            // CSS box-shadow uses primitive references
+            },
+            ios: {
+            // SwiftUI shadow uses primitive references
+            },
+            android: {
+                elevation: 8 // Material Design elevation (dp)
+            }
+        },
         category: SemanticToken_1.SemanticCategory.SHADOW,
         context: 'Standard container shadow with noon lighting and moderate quality',
         description: 'Container shadow with no horizontal offset, 4px vertical offset, 12px blur, moderate opacity'
+    },
+    'shadow.navigation': {
+        name: 'shadow.navigation',
+        primitiveReferences: {
+            offsetX: 'shadowOffsetX.000',
+            offsetY: 'shadowOffsetY.100',
+            blur: 'shadowBlurSoft',
+            opacity: 'shadowOpacitySoft',
+            color: 'shadowBlack100'
+        },
+        platforms: {
+            web: {
+            // CSS box-shadow uses primitive references
+            },
+            ios: {
+            // SwiftUI shadow uses primitive references
+            },
+            android: {
+                elevation: 4 // Material Design elevation (dp)
+            }
+        },
+        category: SemanticToken_1.SemanticCategory.SHADOW,
+        context: 'Navigation shadow with noon lighting and soft quality',
+        description: 'Navigation shadow with no horizontal offset, 2px vertical offset, 20px blur, lighter opacity'
+    },
+    'shadow.dropdown': {
+        name: 'shadow.dropdown',
+        primitiveReferences: {
+            offsetX: 'shadowOffsetX.000',
+            offsetY: 'shadowOffsetY.100',
+            blur: 'shadowBlurModerate',
+            opacity: 'shadowOpacityModerate',
+            color: 'shadowBlack100'
+        },
+        platforms: {
+            web: {
+            // CSS box-shadow uses primitive references
+            },
+            ios: {
+            // SwiftUI shadow uses primitive references
+            },
+            android: {
+                elevation: 8 // Material Design elevation (dp)
+            }
+        },
+        category: SemanticToken_1.SemanticCategory.SHADOW,
+        context: 'Dropdown shadow with noon lighting and moderate quality',
+        description: 'Dropdown shadow with no horizontal offset, 4px vertical offset, 12px blur, moderate opacity'
     },
     'shadow.modal': {
         name: 'shadow.modal',
@@ -44,9 +107,68 @@ exports.shadowTokens = {
             opacity: 'shadowOpacityDepth200',
             color: 'shadowBlack100'
         },
+        platforms: {
+            web: {
+            // CSS box-shadow uses primitive references
+            },
+            ios: {
+            // SwiftUI shadow uses primitive references
+            },
+            android: {
+                elevation: 16 // Material Design elevation (dp)
+            }
+        },
         category: SemanticToken_1.SemanticCategory.SHADOW,
         context: 'Modal shadow with noon lighting and depth 200',
         description: 'Modal shadow with no horizontal offset, 8px vertical offset, 16px blur, slightly darker opacity'
+    },
+    'shadow.toast': {
+        name: 'shadow.toast',
+        primitiveReferences: {
+            offsetX: 'shadowOffsetX.000',
+            offsetY: 'shadowOffsetY.300',
+            blur: 'shadowBlurDepth300',
+            opacity: 'shadowOpacityDepth300',
+            color: 'shadowBlack100'
+        },
+        platforms: {
+            web: {
+            // CSS box-shadow uses primitive references
+            },
+            ios: {
+            // SwiftUI shadow uses primitive references
+            },
+            android: {
+                elevation: 24 // Material Design elevation (dp)
+            }
+        },
+        category: SemanticToken_1.SemanticCategory.SHADOW,
+        context: 'Toast shadow with noon lighting and depth 300',
+        description: 'Toast shadow with no horizontal offset, 12px vertical offset, 24px blur, darker opacity'
+    },
+    'shadow.tooltip': {
+        name: 'shadow.tooltip',
+        primitiveReferences: {
+            offsetX: 'shadowOffsetX.000',
+            offsetY: 'shadowOffsetY.300',
+            blur: 'shadowBlurDepth300',
+            opacity: 'shadowOpacityDepth300',
+            color: 'shadowBlack100'
+        },
+        platforms: {
+            web: {
+            // CSS box-shadow uses primitive references
+            },
+            ios: {
+            // SwiftUI shadow uses primitive references
+            },
+            android: {
+                elevation: 24 // Material Design elevation (dp)
+            }
+        },
+        category: SemanticToken_1.SemanticCategory.SHADOW,
+        context: 'Tooltip shadow with noon lighting and depth 300',
+        description: 'Tooltip shadow with no horizontal offset, 12px vertical offset, 24px blur, darker opacity'
     },
     'shadow.fab': {
         name: 'shadow.fab',
@@ -56,6 +178,17 @@ exports.shadowTokens = {
             blur: 'shadowBlurHard',
             opacity: 'shadowOpacityHard',
             color: 'shadowBlue100'
+        },
+        platforms: {
+            web: {
+            // CSS box-shadow uses primitive references
+            },
+            ios: {
+            // SwiftUI shadow uses primitive references
+            },
+            android: {
+                elevation: 6 // Material Design FAB elevation (dp)
+            }
         },
         category: SemanticToken_1.SemanticCategory.SHADOW,
         context: 'Floating action button shadow with sunset lighting and hard quality',
@@ -69,6 +202,17 @@ exports.shadowTokens = {
             blur: 'shadowBlurSoft',
             opacity: 'shadowOpacitySoft',
             color: 'shadowBlack100'
+        },
+        platforms: {
+            web: {
+            // CSS box-shadow uses primitive references
+            },
+            ios: {
+            // SwiftUI shadow uses primitive references
+            },
+            android: {
+                elevation: 4 // Material Design hover elevation (dp)
+            }
         },
         category: SemanticToken_1.SemanticCategory.SHADOW,
         context: 'Hover state shadow with noon lighting and soft quality',
@@ -84,6 +228,17 @@ exports.shadowTokens = {
             opacity: 'shadowOpacityModerate',
             color: 'shadowBlue100'
         },
+        platforms: {
+            web: {
+            // CSS box-shadow uses primitive references
+            },
+            ios: {
+            // SwiftUI shadow uses primitive references
+            },
+            android: {
+                elevation: 8 // Material Design elevation (dp)
+            }
+        },
         category: SemanticToken_1.SemanticCategory.SHADOW,
         context: 'Sunrise lighting shadow with left offset and warm color',
         description: 'Shadow with -12px left offset, 8px vertical offset, 12px blur, moderate opacity, warm (blue-gray) tint for sunrise lighting'
@@ -97,6 +252,17 @@ exports.shadowTokens = {
             opacity: 'shadowOpacityModerate',
             color: 'shadowBlack100'
         },
+        platforms: {
+            web: {
+            // CSS box-shadow uses primitive references
+            },
+            ios: {
+            // SwiftUI shadow uses primitive references
+            },
+            android: {
+                elevation: 8 // Material Design elevation (dp)
+            }
+        },
         category: SemanticToken_1.SemanticCategory.SHADOW,
         context: 'Morning lighting shadow with medium left offset and default color',
         description: 'Shadow with -6px left offset, 8px vertical offset, 12px blur, moderate opacity, default color for morning lighting'
@@ -109,6 +275,17 @@ exports.shadowTokens = {
             blur: 'shadowBlurModerate',
             opacity: 'shadowOpacityModerate',
             color: 'shadowBlack100'
+        },
+        platforms: {
+            web: {
+            // CSS box-shadow uses primitive references
+            },
+            ios: {
+            // SwiftUI shadow uses primitive references
+            },
+            android: {
+                elevation: 8 // Material Design elevation (dp)
+            }
         },
         category: SemanticToken_1.SemanticCategory.SHADOW,
         context: 'Noon lighting shadow with no horizontal offset and default color',
@@ -124,6 +301,17 @@ exports.shadowTokens = {
             opacity: 'shadowOpacityModerate',
             color: 'shadowBlack100'
         },
+        platforms: {
+            web: {
+            // CSS box-shadow uses primitive references
+            },
+            ios: {
+            // SwiftUI shadow uses primitive references
+            },
+            android: {
+                elevation: 8 // Material Design elevation (dp)
+            }
+        },
         category: SemanticToken_1.SemanticCategory.SHADOW,
         context: 'Dusk lighting shadow with medium right offset and default color',
         description: 'Shadow with 6px right offset, 8px vertical offset, 12px blur, moderate opacity, default color for dusk lighting',
@@ -137,6 +325,17 @@ exports.shadowTokens = {
             blur: 'shadowBlurModerate',
             opacity: 'shadowOpacityModerate',
             color: 'shadowBlue100'
+        },
+        platforms: {
+            web: {
+            // CSS box-shadow uses primitive references
+            },
+            ios: {
+            // SwiftUI shadow uses primitive references
+            },
+            android: {
+                elevation: 8 // Material Design elevation (dp)
+            }
         },
         category: SemanticToken_1.SemanticCategory.SHADOW,
         context: 'Sunset lighting shadow with right offset and warm color',
