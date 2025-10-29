@@ -1,6 +1,6 @@
 ///
 /// DesignerPunk Design System - iOS Tokens
-/// Generated: 2025-10-29T00:46:17.925Z
+/// Generated: 2025-10-29T15:24:43.479Z
 /// Version: 1.0.0
 /// Platform: iOS (Swift Constants)
 ///
