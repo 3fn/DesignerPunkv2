@@ -60,8 +60,7 @@ export class WorkflowMonitor extends EventEmitter {
       processingDelay: 1000 // 1 second delay between processing events
     };
 
-    // Set up event queue processing
-    this.setupEventQueueProcessing();
+    // Note: Event queue processing timer is started in startMonitoring(), not here
   }
 
   /**
@@ -76,6 +75,9 @@ export class WorkflowMonitor extends EventEmitter {
 
     // Initialize file tracking
     await this.initializeFileTracking();
+
+    // Start event queue processing timer
+    this.setupEventQueueProcessing();
 
     // Start polling for changes
     if (this.options.enableFileWatching) {

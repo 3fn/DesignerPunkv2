@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Manual Release Detection",
+  "description": "Manually trigger release detection to scan for completion documents and create release trigger files. Use this as a fallback when automatic detection doesn't run, for on-demand analysis, or when testing release detection behavior. This hook provides explicit control over when release detection executes.",
+  "version": "1",
+  "when": {
+    "type": "manual"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A manual release detection has been triggered. Please run the release detection script to scan for completion documents and create release trigger files. Execute: ./.kiro/hooks/release-manager.sh auto"
+  }
+}

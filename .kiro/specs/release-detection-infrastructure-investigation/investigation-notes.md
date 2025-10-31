@@ -667,7 +667,336 @@ npm run release:detect -- process-triggers
 
 **Execution Model**:
 1. **Event-Driven**: Hooks respond to IDE events, not manual triggers
-2. **Automatic**: Hooks execute automatically when events match
+2. **Automatic**: Hooks execute automatically w
+
+---
+
+## Investigation Area 5: Related Infrastructure Issues
+
+### Issue #004: Release Manager Hook Dependency Chain Unclear
+
+**Investigation Date**: October 29, 2025, 12:00 PM PDT
+
+**Issue Reference**: `.kiro/audits/phase-1-issues-registry.md` - Issue #004
+
+**Severity**: Minor
+
+**Category**: Build Automation - Release Management
+
+**Issue Description**:
+
+The release detection agent hook is configured to run after the file organization hook using the "runAfter" setting, but the documentation doesn't clearly explain what happens if the organization hook fails or is skipped. This creates ambiguity about the dependency chain behavior.
+
+The configuration specifies `"runAfter": ["organize-after-task-completion"]`, which suggests a dependency relationship, but it's unclear whether:
+- Release detection waits for organization to complete successfully
+- Release detection runs even if organization fails
+- Release detection is skipped if organization is skipped by user
+- Release detection has a timeout if organization takes too long
+
+#### Investigation Findings
+
+**Hook Configuration Analysis**:
+
+**File Organization Hook** (`.kiro/agent-hooks/organize-after-task-completion.json`):
+```json
+{
+  "name": "Auto-Organize Files After Task Completion",
+  "id": "organize-after-task-completion",
+  "trigger": {
+    "type": "taskStatusChange",
+    "status": "completed"
+  },
+  "action": {
+    "type": "runScript",
+    "script": ".kiro/agent-hooks/organize-after-task.sh"
+  },
+  "settings": {
+    "requireConfirmation": true,
+    "timeout": 600,
+    "autoApprove": false
+  }
+}
+```
+
+**Release Detection Hook** (`.kiro/agent-hooks/release-detection-on-task-completion.json`):
+```json
+{
+  "name": "Release Detection on Task Completion",
+  "id": "release-detection-on-task-completion",
+  "trigger": {
+    "type": "taskStatusChange",
+    "status": "completed"
+  },
+  "action": {
+    "type": "runScript",
+    "script": ".kiro/hooks/release-manager.sh",
+    "args": ["auto"]
+  },
+  "settings": {
+    "requireConfirmation": false,
+    "timeout": 300,
+    "autoApprove": true,
+    "runAfter": ["organize-after-task-completion"]
+  },
+  "integration": {
+    "dependsOn": ["organize-after-task-completion"],
+    "description": "Runs after file organization to detect release triggers from organized completion documents"
+  }
+}
+```
+
+**Key Configuration Elements**:
+
+1. **runAfter Setting**: `"runAfter": ["organize-after-task-completion"]`
+   - References the `id` field of the file organization hook
+   - Indicates release detection should execute after file organization
+   - Syntax suggests sequential execution order
+
+2. **Integration Metadata**: 
+   - `"dependsOn": ["organize-after-task-completion"]`
+   - Provides human-readable description of dependency
+   - Explains rationale: "detect release triggers from organized completion documents"
+
+3. **Timeout Differences**:
+   - File organization: 600 seconds (10 minutes)
+   - Release detection: 300 seconds (5 minutes)
+   - Total potential execution time: 15 minutes if both run sequentially
+
+4. **Confirmation Differences**:
+   - File organization: `requireConfirmation: true` (user must approve)
+   - Release detection: `autoApprove: true` (no user interaction)
+
+#### How runAfter is Supposed to Work
+
+**Based on Configuration Analysis**:
+
+The `runAfter` setting appears to implement a **sequential execution dependency** where:
+
+1. **Trigger Event**: Both hooks listen for the same event (`taskStatusChange` with `status="completed"`)
+
+2. **Execution Order**: 
+   - File organization hook executes first (no `runAfter` dependency)
+   - Release detection hook waits for file organization to complete
+   - Release detection executes after file organization finishes
+
+3. **User Interaction**:
+   - File organization prompts user for confirmation
+   - User can approve, skip, or cancel file organization
+   - Release detection waits for user's decision
+
+4. **Dependency Behavior** (Inferred):
+   - If file organization **completes successfully**: Release detection runs
+   - If file organization **is skipped by user**: Release detection likely still runs (not blocked)
+   - If file organization **fails**: Release detection behavior is unclear
+   - If file organization **times out**: Release detection behavior is unclear
+
+**Rationale for Dependency**:
+
+The integration description explains why this dependency exists:
+> "Runs after file organization to detect release triggers from organized completion documents"
+
+This suggests:
+- File organization may move completion documents to proper locations
+- Release detection scans for completion documents in organized locations
+- Running release detection before organization could miss newly organized files
+
+**Potential Scenarios**:
+
+| Scenario | File Organization Result | Release Detection Behavior | Evidence |
+|----------|-------------------------|---------------------------|----------|
+| User approves organization | Completes successfully | Should run after completion | Intended behavior |
+| User skips organization | Skipped (no files moved) | Unclear - may run or skip | Not documented |
+| Organization fails | Script error or timeout | Unclear - may run or skip | Not documented |
+| Organization times out | Exceeds 10-minute timeout | Unclear - may run or skip | Not documented |
+| User cancels organization | Cancelled by user | Unclear - may run or skip | Not documented |
+
+#### Documentation Gaps Identified
+
+**Missing Documentation**:
+
+1. **runAfter Semantics**: No documentation explaining what `runAfter` means in Kiro IDE agent hooks
+   - Is it a hard dependency (must complete successfully)?
+   - Is it a soft dependency (just execution order)?
+   - What happens if dependent hook fails?
+
+2. **Failure Handling**: No documentation explaining behavior when dependent hook fails
+   - Does release detection run if organization fails?
+   - Does release detection skip if organization is skipped?
+   - Are there error logs or notifications?
+
+3. **Timeout Behavior**: No documentation explaining timeout interactions
+   - What happens if organization times out (10 minutes)?
+   - Does release detection still run after timeout?
+   - Is there a total timeout for the dependency chain?
+
+4. **User Cancellation**: No documentation explaining user interaction effects
+   - If user cancels organization, does release detection run?
+   - If user skips organization, does release detection run?
+   - Can user cancel the entire dependency chain?
+
+5. **Logging and Debugging**: No documentation explaining how to debug dependency chains
+   - Where are hook execution logs?
+   - How to verify dependency chain executed?
+   - How to troubleshoot dependency issues?
+
+**Documentation Locations Checked**:
+- ✅ `.kiro/agent-hooks/README.md` - No explanation of `runAfter`
+- ✅ `.kiro/steering/Development Workflow.md` - Mentions hooks but no `runAfter` details
+- ✅ Hook configuration files - Have `runAfter` but no explanation
+- ❌ Kiro IDE documentation - Not accessible for review
+
+#### Relationship to Release Detection Failure
+
+**Does Dependency Chain Contribute to Issue #001?**
+
+**Analysis**: The dependency chain **may contribute** to release detection failure in the following ways:
+
+1. **Cascading Failure**: If file organization hook doesn't trigger, release detection won't trigger either
+   - Both hooks listen for same event (`taskStatusChange`)
+   - If event isn't emitted, neither hook runs
+   - Dependency chain amplifies the impact of event emission failure
+
+2. **Timeout Accumulation**: If file organization takes too long, release detection may not run
+   - File organization has 10-minute timeout
+   - Release detection has 5-minute timeout
+   - If organization takes 9 minutes, release detection has limited time
+   - If organization times out, release detection behavior is unclear
+
+3. **User Interaction Blocking**: File organization requires user confirmation
+   - User must approve organization for it to complete
+   - If user doesn't respond, organization may timeout
+   - Release detection waits for organization, so user inaction blocks both
+
+4. **Silent Failure Propagation**: If organization fails silently, release detection may not run
+   - No logging mechanism to verify hook execution
+   - Can't determine if organization failed or was skipped
+   - Release detection may be waiting for organization that never completes
+
+**Evidence from Investigation**:
+
+From Investigation Area 1, we know:
+- ✅ Task status updates successfully (taskStatus tool works)
+- ❌ No evidence of file organization hook executing
+- ❌ No evidence of release detection hook executing
+- ❌ No log entries in release-manager.log
+- ❌ No trigger files created
+
+This suggests:
+- **Primary Issue**: Neither hook is executing at all (event emission or hook registration issue)
+- **Secondary Issue**: Even if hooks were executing, dependency chain behavior is unclear
+
+**Conclusion**: The dependency chain **does not appear to be the root cause** of Issue #001, but it **amplifies the impact** of the root cause. If the primary issue (event emission or hook registration) is fixed, the dependency chain could still cause issues due to unclear failure handling and timeout behavior.
+
+#### Assessment: Related to Release Detection Failure?
+
+**Answer**: **Indirectly Related**
+
+**Relationship Type**: **Amplifying Factor**, not Root Cause
+
+**Explanation**:
+
+1. **Not the Root Cause**: The dependency chain itself is not causing release detection to fail. The root cause is that hooks aren't executing at all (likely event emission or hook registration issue).
+
+2. **Amplifies Impact**: The dependency chain makes the problem worse by:
+   - Creating two failure points instead of one
+   - Adding user interaction that can block execution
+   - Accumulating timeouts that reduce available execution time
+   - Making debugging harder due to unclear dependency behavior
+
+3. **Could Cause Future Issues**: Even if the primary issue is fixed, the dependency chain could cause problems:
+   - If organization fails, release detection behavior is unclear
+   - If user skips organization, release detection may not run
+   - Timeout accumulation could cause intermittent failures
+   - Lack of logging makes debugging dependency issues difficult
+
+**Priority for Fixing**:
+
+1. **First**: Fix primary issue (event emission or hook registration) - Issue #001
+2. **Second**: Document dependency chain behavior clearly - Issue #004
+3. **Third**: Add logging for dependency chain execution
+4. **Fourth**: Consider making dependency optional or configurable
+
+#### Recommendations
+
+**Documentation Improvements**:
+
+1. **Add runAfter Documentation**: Create clear documentation explaining:
+   - What `runAfter` means (execution order vs hard dependency)
+   - Behavior when dependent hook fails
+   - Behavior when dependent hook is skipped
+   - Timeout interactions
+   - User cancellation effects
+
+2. **Add Troubleshooting Guide**: Document how to:
+   - Verify dependency chain executed
+   - Debug dependency chain issues
+   - Check hook execution logs
+   - Identify which hook in chain failed
+
+3. **Add Examples**: Provide examples of:
+   - Simple dependency chain (A runs after B)
+   - Multiple dependencies (C runs after A and B)
+   - Handling failures in dependency chains
+   - Testing dependency chains
+
+**Configuration Improvements**:
+
+1. **Add Logging**: Implement logging for dependency chain execution:
+   - Log when dependent hook starts waiting
+   - Log when dependent hook completes
+   - Log when dependent hook fails
+   - Log when dependent hook is skipped
+
+2. **Add Failure Handling**: Make failure behavior explicit:
+   - `continueOnFailure: true/false` - Run even if dependent fails
+   - `continueOnSkip: true/false` - Run even if dependent is skipped
+   - `continueOnTimeout: true/false` - Run even if dependent times out
+
+3. **Add Timeout Management**: Improve timeout handling:
+   - `totalTimeout: 900` - Maximum time for entire chain
+   - `dependentTimeout: 600` - Maximum time to wait for dependent
+   - Better timeout error messages
+
+**Testing Improvements**:
+
+1. **Test Dependency Scenarios**: Create tests for:
+   - Dependent hook completes successfully
+   - Dependent hook fails
+   - Dependent hook is skipped
+   - Dependent hook times out
+   - User cancels dependent hook
+
+2. **Add Integration Tests**: Test complete dependency chains:
+   - File organization → Release detection
+   - Multiple hooks in sequence
+   - Parallel hooks with dependencies
+
+#### Investigation Conclusion
+
+**Issue #004 Assessment**:
+
+- **Severity**: Minor (documentation gap, not functional issue)
+- **Impact**: Makes debugging difficult, could cause future issues
+- **Relationship to Issue #001**: Indirectly related (amplifies impact, not root cause)
+- **Fix Priority**: Medium (document after fixing primary issue)
+
+**Key Findings**:
+
+1. ✅ **runAfter Configuration**: Properly configured with correct hook ID reference
+2. ✅ **Integration Metadata**: Provides clear rationale for dependency
+3. ❌ **Documentation**: No explanation of `runAfter` behavior
+4. ❌ **Failure Handling**: Unclear what happens when dependent hook fails
+5. ❌ **Logging**: No way to verify dependency chain execution
+
+**Next Steps**:
+
+1. Fix primary issue (Issue #001) - event emission or hook registration
+2. Document `runAfter` behavior clearly
+3. Add logging for dependency chain execution
+4. Test dependency chain scenarios
+5. Consider making dependency optional or configurable
+
+---hen events match
 3. **Configurable**: Hooks can require user confirmation or auto-approve
 4. **Timeout-Protected**: Hooks have configurable timeouts to prevent hanging
 5. **Dependency-Aware**: Hooks can specify execution order via `runAfter`
@@ -5874,3 +6203,1081 @@ Developer: Commit Changes
 ---
 
 *This root cause analysis synthesizes findings from all workflow investigation tasks, identifying multiple systemic issues that prevent infrastructure automation from working. The analysis provides clear fix recommendations prioritized by impact and complexity, with comprehensive testing and validation approaches.*
+
+
+---
+
+## Investigation Area 5: Related Infrastructure Issues
+
+### Issue #002: commit-task.sh --help Handling
+
+**Investigation Date**: October 29, 2025
+
+**Issue Description**: The `.kiro/hooks/commit-task.sh` script treats `--help` as a task name instead of displaying help information, resulting in an unintended commit with message "Task Complete: --help".
+
+#### Root Cause Analysis
+
+**Test Performed**: Executed `./.kiro/hooks/commit-task.sh --help`
+
+**Actual Behavior**:
+```bash
+🚀 Committing completion of: --help
+🔍 Checking for changes to commit...
+📝 Changes detected, preparing commit...
+💾 Committing with message: Task Complete: --help
+[main ec2dd84] Task Complete: --help
+```
+
+**Expected Behavior**: Display help/usage information without creating a commit.
+
+**Root Cause**: Argument parsing logic in commit-task.sh does not recognize `--help` as a special flag.
+
+**Code Analysis** (`.kiro/hooks/commit-task.sh` lines 8-26):
+
+```bash
+TASK_NAME="$1"
+TASKS_FILE=".kiro/specs/fresh-repository-roadmap-refinement/tasks.md"
+NO_ANALYZE=false
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --no-analyze)
+            NO_ANALYZE=true
+            shift
+            ;;
+        *)
+            if [ -z "$TASK_NAME" ]; then
+                TASK_NAME="$1"
+            fi
+            shift
+            ;;
+    esac
+done
+```
+
+**Problem Identified**:
+
+1. **No --help Case**: The `case` statement only handles `--no-analyze`, not `--help`
+2. **Default Behavior**: Any unrecognized argument (including `--help`) falls through to the `*)` case
+3. **Assignment Logic**: The `*)` case assigns the first unrecognized argument to `TASK_NAME`
+4. **No Validation**: No check to prevent special flags from being treated as task names
+
+**Why This Happens**:
+
+1. User runs: `./.kiro/hooks/commit-task.sh --help`
+2. Script sets `TASK_NAME="$1"` which is `--help`
+3. Argument parsing loop processes `--help`:
+   - Doesn't match `--no-analyze` case
+   - Falls through to `*)` case
+   - `TASK_NAME` is already set to `--help`, so `if [ -z "$TASK_NAME" ]` is false
+   - Shifts to next argument (none exist)
+4. Script continues with `TASK_NAME="--help"`
+5. Creates commit with message "Task Complete: --help"
+
+**Design Flaw**: The script initializes `TASK_NAME="$1"` before parsing arguments, which means the first argument is always treated as the task name, even if it's a flag.
+
+#### Relationship to Hook System Issues
+
+**Assessment**: This issue is **NOT related** to the agent hook system failures.
+
+**Rationale**:
+- This is a standalone script issue in argument parsing logic
+- Affects manual script invocation, not hook triggering
+- Hook system issues are about hooks not executing at all
+- This issue is about incorrect behavior when script DOES execute
+- Different failure modes: hook system = no execution, this = wrong execution
+
+**Independence**: This issue exists independently of whether hooks trigger or not. It's a script design flaw that would need fixing regardless of hook system status.
+
+#### Fix Approach
+
+**Recommended Fix**: Add `--help` and `-h` cases to argument parsing with usage display.
+
+**Implementation**:
+
+```bash
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --help|-h)
+            echo "Usage: $0 \"Task Name\" [--no-analyze]"
+            echo ""
+            echo "Arguments:"
+            echo "  Task Name       Name of the task to commit (required)"
+            echo "  --no-analyze    Skip release analysis after commit (optional)"
+            echo "  --help, -h      Display this help message"
+            echo ""
+            echo "Examples:"
+            echo "  $0 \"1. Create North Star Vision Document\""
+            echo "  $0 \"2.3 Implement token validation\" --no-analyze"
+            exit 0
+            ;;
+        --no-analyze)
+            NO_ANALYZE=true
+            shift
+            ;;
+        *)
+            if [ -z "$TASK_NAME" ]; then
+                TASK_NAME="$1"
+            fi
+            shift
+            ;;
+    esac
+done
+```
+
+**Alternative Fix**: Move `TASK_NAME` initialization inside the loop to prevent pre-assignment:
+
+```bash
+TASK_NAME=""
+TASKS_FILE=".kiro/specs/fresh-repository-roadmap-refinement/tasks.md"
+NO_ANALYZE=false
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --help|-h)
+            # Display help and exit
+            ;;
+        --no-analyze)
+            NO_ANALYZE=true
+            shift
+            ;;
+        *)
+            if [ -z "$TASK_NAME" ]; then
+                TASK_NAME="$1"
+            fi
+            shift
+            ;;
+    esac
+done
+```
+
+**Complexity Assessment**: **Simple**
+
+- Single file change (`.kiro/hooks/commit-task.sh`)
+- Add one case statement for `--help|-h`
+- Add usage display function or inline echo statements
+- No dependencies on other systems
+- No breaking changes to existing functionality
+
+**Risks**: **Low**
+
+- Isolated change to argument parsing
+- No impact on commit functionality
+- No impact on release analysis integration
+- Backward compatible (existing usage patterns unchanged)
+
+**Testing Approach**:
+
+1. Test `--help` displays usage and exits without commit
+2. Test `-h` displays usage and exits without commit
+3. Test normal usage still works: `./commit-task.sh "Task Name"`
+4. Test `--no-analyze` flag still works
+5. Test combination: `./commit-task.sh "Task Name" --no-analyze`
+6. Test invalid usage displays error and usage
+
+#### Related Issues
+
+**Similar Pattern in Other Scripts**: Should check if other hook scripts have the same argument parsing flaw:
+- `.kiro/hooks/task-completion-commit.sh`
+- `.kiro/hooks/release-manager.sh`
+- `.kiro/agent-hooks/organize-after-task.sh`
+
+**Recommendation**: Apply consistent argument parsing pattern across all hook scripts with proper `--help` support.
+
+---
+
+
+### Issue #005, #006, #007: File Organization Issues
+
+**Investigation Date**: October 29, 2025
+
+**Issues Investigated**:
+- Issue #005: File Organization Metadata Validation Inconsistent
+- Issue #006: Cross-Reference Update Logic Has Path Calculation Issues
+- Issue #007: File Organization Hook Only Scans Root Directory
+
+**Test Script**: `.kiro/specs/release-detection-infrastructure-investigation/tests/test-file-organization.sh`
+
+#### Issue #005: Metadata Validation Inconsistency
+
+**Issue Description**: The file organization system validates **Organization** metadata against a list of approved values, but some files use values not in the validation list (e.g., "process-documentation").
+
+**Test Results**:
+
+**Validation List Check**:
+```bash
+# Valid values in organize-by-metadata.sh:
+"framework-strategic"|"spec-validation"|"spec-completion"|"process-standard"|"working-document"
+```
+
+**Files Using Invalid Values**:
+```bash
+# Search for 'process-documentation' metadata
+$ grep -r "**Organization**: process-documentation" . --include="*.md"
+# Result: No files found with 'process-documentation' metadata
+```
+
+**Current Status**: ✅ **RESOLVED** - No files currently use invalid metadata values
+
+**Historical Context**: The issue was documented in the Phase 1 audit when BUILD-SYSTEM-SETUP.md used "process-documentation", but this has since been corrected.
+
+**Root Cause**: Implementation gap where validation list didn't include all intended values. This has been resolved through file updates.
+
+**Impact on Release Detection**: **NONE**
+
+**Rationale**:
+- Release detection scans `.kiro/specs/*/completion/` directly
+- Does not depend on file organization metadata
+- Does not use metadata validation
+- Completion documents are already in correct locations
+- File organization operates independently of release detection
+
+---
+
+#### Issue #006: Cross-Reference Update Logic Issues
+
+**Issue Description**: The file organization hook includes logic to update cross-references after moving files, but has several potential reliability issues:
+1. Python dependency for path calculation
+2. Fallback path may be incorrect if Python fails
+3. Simple pattern matching could match unintended links
+4. No validation of updated links
+5. Backup file cleanup without verification
+
+**Test Results**:
+
+**Python Availability Check**:
+```bash
+$ python3 --version
+Python 3.9.6
+✅ Python3 is available
+```
+
+**Script Analysis**:
+```bash
+# Cross-reference update function exists at line 160
+$ grep -n "update_cross_references" .kiro/hooks/organize-by-metadata.sh
+160:update_cross_references() {
+
+# Python dependency confirmed
+$ grep "python3 -c" .kiro/hooks/organize-by-metadata.sh
+✅ Script uses Python for path calculation
+
+# Fallback logic confirmed
+$ grep "|| echo" .kiro/hooks/organize-by-metadata.sh
+✅ Script has fallback for Python failure
+```
+
+**Current Status**: ⚠️ **CONFIRMED** - Potential reliability issues exist
+
+**Root Cause**: Implementation reliability concerns:
+- Python dependency not checked before use
+- Fallback path calculation may be incorrect
+- No validation that updated links resolve correctly
+- Backup files deleted without verification
+
+**Impact on Release Detection**: **NONE**
+
+**Rationale**:
+- Release detection reads completion documents directly
+- Does not follow cross-references in documents
+- Does not depend on cross-reference integrity
+- Cross-reference issues affect documentation navigation, not release detection
+- File organization and release detection operate independently
+
+---
+
+#### Issue #007: Scope Limitation (Root Directory Only)
+
+**Issue Description**: The file organization hook only scans the root directory for markdown files using `find . -maxdepth 1`, meaning files in subdirectories with organization metadata will not be discovered or organized.
+
+**Test Results**:
+
+**Scope Check**:
+```bash
+$ grep "find.*maxdepth" .kiro/hooks/organize-by-metadata.sh
+    done < <(find . -maxdepth 1 -name "*.md" -print0)
+    done < <(find . -maxdepth 1 -name "*.md" -print0)
+    done < <(find . -maxdepth 1 -name "*.md" -print0)
+
+✅ Script only scans root directory (maxdepth 1)
+```
+
+**Current Status**: ✅ **CONFIRMED** - Intentional design decision
+
+**Root Cause**: Intentional design decision (not documented):
+- Prevents accidentally moving files already in correct locations
+- Most files needing organization are created in root directory
+- Files in subdirectories are likely already organized
+- Reduces risk of incorrect organization
+
+**Impact on Release Detection**: **NONE**
+
+**Rationale**:
+- Completion documents are in `.kiro/specs/*/completion/` (subdirectories)
+- File organization scans root directory only
+- Completion documents are already in correct locations
+- Release detection scans completion directories directly
+- File organization scope does not affect release detection
+
+---
+
+#### Shared Root Cause Analysis
+
+**Question**: Do file organization issues share root causes with release detection issues?
+
+**Answer**: **NO** - File organization issues are independent implementation issues
+
+**Analysis**:
+
+**Issue Categories**:
+
+1. **Agent Hook Event System Issues** (Systemic):
+   - Issue #001: Release detection hook not triggering
+   - Issue #003: Agent hook triggering cannot be verified
+   - **Root Cause**: Kiro IDE event system or agent hook integration
+   - **Failure Mode**: Hooks don't execute at all
+
+2. **File Organization Implementation Issues** (Independent):
+   - Issue #005: Metadata validation inconsistency
+   - Issue #006: Cross-reference update logic issues
+   - Issue #007: Scope limitation (root directory only)
+   - **Root Cause**: Individual implementation gaps and design decisions
+   - **Failure Mode**: Specific functionality issues when scripts execute
+
+**Comparison**:
+
+| Aspect | Agent Hook Issues (#001, #003) | File Organization Issues (#005, #006, #007) |
+|--------|-------------------------------|---------------------------------------------|
+| **System** | Kiro IDE event system | File organization scripts |
+| **Failure Mode** | Hooks don't execute | Scripts execute but have specific issues |
+| **Scope** | Systemic (affects all hooks) | Isolated (affects specific functionality) |
+| **Root Cause** | Event handling or hook registration | Implementation gaps and design decisions |
+| **Impact** | Blocks automation entirely | Reduces reliability of specific features |
+| **Relationship** | Related (same system) | Independent (different concerns) |
+
+**Evidence for Independence**:
+
+1. **Different Systems**: Agent hooks vs file organization scripts
+2. **Different Failure Modes**: No execution vs incorrect execution
+3. **Different Impacts**: Systemic vs isolated
+4. **Different Root Causes**: Event system vs implementation details
+5. **No Dependency**: Release detection doesn't depend on file organization
+6. **Historical Evidence**: File organization issues existed before agent hook issues
+
+**Conclusion**: File organization issues (#005, #006, #007) are **independent implementation issues** that do NOT share root causes with agent hook system issues (#001, #003).
+
+---
+
+#### Impact on Release Detection
+
+**Question**: Do file organization issues affect release detection?
+
+**Answer**: **NO** - File organization issues do NOT affect release detection
+
+**Detailed Analysis**:
+
+**1. Completion Document Organization**:
+- **Completion Documents Location**: `.kiro/specs/*/completion/`
+- **File Organization Scope**: Root directory only (`maxdepth 1`)
+- **Impact**: NONE - Completion documents are already in correct subdirectories
+- **Conclusion**: File organization doesn't touch completion documents
+
+**2. Metadata Validation**:
+- **Release Detection Method**: Scans `.kiro/specs/*/completion/` directly
+- **Metadata Dependency**: Release detection doesn't use **Organization** metadata
+- **Impact**: NONE - Release detection doesn't validate metadata
+- **Conclusion**: Metadata validation issues don't affect release detection
+
+**3. Cross-Reference Updates**:
+- **Release Detection Method**: Reads completion document content
+- **Cross-Reference Dependency**: Release detection doesn't follow links
+- **Impact**: NONE - Release detection doesn't use cross-references
+- **Conclusion**: Cross-reference issues don't affect release detection
+
+**4. System Independence**:
+- **File Organization**: Moves files based on metadata, updates links
+- **Release Detection**: Scans completion directories, analyzes content
+- **Overlap**: NONE - Systems operate independently
+- **Conclusion**: File organization and release detection are decoupled
+
+**Evidence**:
+
+```bash
+# Release detection scans completion directories directly
+$ grep -r "completion" .kiro/hooks/release-manager.sh
+# Scans: .kiro/specs/*/completion/*.md
+
+# File organization scans root directory only
+$ grep "maxdepth" .kiro/hooks/organize-by-metadata.sh
+# Scans: . -maxdepth 1 -name "*.md"
+
+# No overlap in scanned locations
+```
+
+**Conclusion**: File organization issues (#005, #006, #007) have **ZERO impact** on release detection functionality.
+
+---
+
+#### Fix Grouping Recommendations
+
+**Question**: Should file organization issues be fixed together or separately?
+
+**Answer**: Fix **independently** from release detection issues, but **together** as a group
+
+**Rationale**:
+
+**Fix Grouping Strategy**:
+
+1. **Priority 1: Agent Hook System Issues** (Critical)
+   - Issue #001: Release detection hook not triggering
+   - Issue #003: Agent hook triggering cannot be verified
+   - **Fix Together**: Same root cause (agent hook event system)
+   - **Priority**: Critical - Blocks all automation
+   - **Complexity**: Moderate to High (may require Kiro IDE investigation)
+
+2. **Priority 2: File Organization Issues** (Important)
+   - Issue #005: Metadata validation inconsistency (RESOLVED)
+   - Issue #006: Cross-reference update logic issues
+   - Issue #007: Scope limitation documentation
+   - **Fix Together**: Same system (file organization)
+   - **Priority**: Important - Reduces reliability
+   - **Complexity**: Low to Moderate (script improvements)
+
+3. **Priority 3: Other Infrastructure Issues** (Minor)
+   - Issue #002: commit-task.sh --help handling
+   - Issue #004: Hook dependency chain unclear
+   - **Fix Separately**: Independent issues
+   - **Priority**: Minor - Usability improvements
+   - **Complexity**: Low (documentation and script fixes)
+
+**Fix Approach for File Organization Issues**:
+
+**Issue #005 (Metadata Validation)**:
+- Status: Already resolved (no files use invalid values)
+- Action: Document resolution in fix spec
+- Complexity: None (already fixed)
+
+**Issue #006 (Cross-Reference Logic)**:
+- Fix: Add Python availability check
+- Fix: Improve fallback path calculation
+- Fix: Add link validation after updates
+- Fix: Verify backup files before deletion
+- Complexity: Moderate (script improvements)
+- File: `.kiro/hooks/organize-by-metadata.sh`
+
+**Issue #007 (Scope Limitation)**:
+- Fix: Document intentional design decision
+- Fix: Add option for recursive scanning if needed
+- Fix: Explain why root-only scanning is appropriate
+- Complexity: Low (documentation + optional feature)
+- File: `.kiro/hooks/organize-by-metadata.sh` + README
+
+**Benefits of Grouping**:
+- All changes in same file (`.kiro/hooks/organize-by-metadata.sh`)
+- Can test all fixes together
+- Single PR/commit for file organization improvements
+- Doesn't block release detection fixes
+
+**Benefits of Independence from Release Detection**:
+- Can fix file organization without solving agent hook issues
+- Doesn't block release detection investigation
+- Different complexity levels (file org = moderate, agent hooks = high)
+- Different testing requirements
+
+---
+
+#### Investigation Summary
+
+**Issues Investigated**: #005, #006, #007 (File Organization)
+
+**Test Script Created**: `tests/test-file-organization.sh`
+
+**Key Findings**:
+
+1. **Issue #005 (Metadata Validation)**:
+   - Status: RESOLVED - No files currently use invalid values
+   - Impact on Release Detection: NONE
+   - Root Cause: Historical implementation gap (now fixed)
+
+2. **Issue #006 (Cross-Reference Logic)**:
+   - Status: CONFIRMED - Potential reliability issues exist
+   - Impact on Release Detection: NONE
+   - Root Cause: Implementation reliability concerns
+
+3. **Issue #007 (Scope Limitation)**:
+   - Status: CONFIRMED - Intentional design decision
+   - Impact on Release Detection: NONE
+   - Root Cause: Intentional design (not documented)
+
+4. **Shared Root Causes**:
+   - File organization issues: Independent implementation issues
+   - Release detection issues: Systemic agent hook event handling
+   - Conclusion: NO SHARED ROOT CAUSES
+
+5. **Impact on Release Detection**:
+   - Metadata validation: NONE
+   - Cross-reference logic: NONE
+   - Scope limitation: NONE
+   - Conclusion: File organization issues do NOT affect release detection
+
+6. **Fix Grouping**:
+   - Fix file organization issues together (same system)
+   - Fix independently from release detection (different systems)
+   - Priority: Important (but not critical like agent hooks)
+
+**Recommendations**:
+
+1. **Focus on Agent Hook System**: Priority 1 for release detection fixes
+2. **Fix File Organization Independently**: Can be addressed separately
+3. **Group File Organization Fixes**: All in same file, fix together
+4. **Document Design Decisions**: Explain scope limitation rationale
+5. **No Blocking Issues**: File organization doesn't block release detection
+
+**Test Files to Keep**:
+- `tests/test-file-organization.sh` - Validates file organization issues and impact analysis
+  - Purpose: Tests metadata validation, cross-reference logic, and scope limitation
+  - Usage: Run to verify file organization issues and their independence from release detection
+  - Value: Provides evidence for fix spec that issues are independent
+
+**Test Files to Delete**:
+- None - Only one test file created for this investigation
+
+---
+
+
+---
+
+## Related Issues Root Cause Analysis
+
+**Analysis Date**: October 29, 2025
+
+**Issues Analyzed**: #002, #004, #005, #006, #007
+
+### Root Cause Classification
+
+#### Category 1: Agent Hook Event System Issues (Systemic)
+
+**Issues with Shared Root Cause**:
+- Issue #001: Release detection hook not triggering
+- Issue #003: Agent hook triggering cannot be verified
+
+**Shared Root Cause**: Kiro IDE agent hook event system failure
+
+**Evidence for Shared Root Cause**:
+- Both issues involve hooks not executing at all
+- Same failure mode: no evidence of hook execution
+- Same system: Kiro IDE agent hook event handling
+- Historical evidence shows hooks worked previously (October 22-28)
+- Both issues discovered simultaneously
+- No log entries, no trigger files, no execution evidence
+
+**Relationship**: **DIRECTLY RELATED** - Must be fixed together
+
+---
+
+#### Category 2: Script Implementation Issues (Independent)
+
+**Issue #002: commit-task.sh --help handling**
+- **Root Cause**: Argument parsing logic doesn't recognize `--help` flag
+- **Failure Mode**: Script executes but treats `--help` as task name
+- **System**: commit-task.sh script
+- **Independence**: Affects manual script invocation, not hook triggering
+- **Relationship**: **INDEPENDENT** - Different script, different bug
+
+**Issue #006: Cross-reference update logic issues**
+- **Root Cause**: Cross-reference update logic has reliability concerns
+- **Failure Mode**: Script executes but may have edge case failures
+- **System**: organize-by-metadata.sh script
+- **Independence**: Affects file organization, not release detection
+- **Relationship**: **INDEPENDENT** - Different script, different bug
+
+**Conclusion**: Issues #002 and #006 are independent script bugs with no shared root cause
+
+---
+
+#### Category 3: Documentation Gaps (Independent)
+
+**Issue #004: Hook dependency chain unclear**
+- **Root Cause**: No documentation explaining `runAfter` behavior
+- **Failure Mode**: Unclear what happens when dependent hook fails
+- **System**: Agent hook dependency chain
+- **Independence**: Documentation gap, not functional issue
+- **Relationship**: **INDEPENDENT** - Documentation only
+
+**Issue #007: File organization scope limitation**
+- **Root Cause**: Intentional design decision not documented
+- **Failure Mode**: Unclear why only root directory is scanned
+- **System**: File organization scope
+- **Independence**: Design decision, not implementation bug
+- **Relationship**: **INDEPENDENT** - Documentation only
+
+**Conclusion**: Issues #004 and #007 are independent documentation gaps
+
+---
+
+#### Category 4: Resolved Issues (No Action Needed)
+
+**Issue #005: File organization metadata validation inconsistency**
+- **Status**: RESOLVED - No files currently use invalid metadata values
+- **Historical Context**: BUILD-SYSTEM-SETUP.md previously used "process-documentation"
+- **Current State**: File has been corrected, no current issues
+- **Action Required**: Document resolution in fix spec, no code changes needed
+
+---
+
+### Shared Root Cause Matrix
+
+| Issue | System | Root Cause | Failure Mode | Shared With |
+|-------|--------|------------|--------------|-------------|
+| #001 | Agent hooks | Event system | No execution | #003 |
+| #003 | Agent hooks | Event system | No verification | #001 |
+| #002 | commit-task.sh | Argument parsing | Wrong execution | None |
+| #004 | Documentation | Missing docs | Unclear behavior | None |
+| #005 | File org | Historical gap | RESOLVED | None |
+| #006 | organize script | Implementation | Reliability issues | None |
+| #007 | Documentation | Design not documented | Unclear rationale | None |
+
+**Key Finding**: Only 2 of 7 issues share a root cause (Issues #001 and #003)
+
+---
+
+### Independence Analysis
+
+**Independent Issues**: #002, #004, #005, #006, #007 (5 of 7 issues)
+
+**Evidence for Independence**:
+
+**Cross-System Analysis**:
+```
+Agent Hook System (Systemic)
+├── Issue #001: Release detection not triggering
+└── Issue #003: Hook triggering cannot be verified
+    └── Shared Root Cause: Event system failure
+
+Script Implementation (Independent)
+├── Issue #002: commit-task.sh argument parsing
+└── Issue #006: organize-by-metadata.sh reliability
+    └── No Shared Root Cause: Different scripts, different bugs
+
+Documentation (Independent)
+├── Issue #004: runAfter behavior unclear
+└── Issue #007: Scope limitation not documented
+    └── No Shared Root Cause: Different systems, different docs
+
+Resolved (No Action)
+└── Issue #005: Metadata validation
+    └── Already fixed
+```
+
+**Conclusion**: 5 of 7 issues are independent and can be fixed separately
+
+---
+
+### Fix Grouping Recommendations
+
+**Three-Tier Priority System**:
+
+#### Priority 1: Agent Hook System Issues (CRITICAL)
+
+**Issues**: #001, #003
+
+**Fix Together**: YES - Same root cause
+
+**Rationale**:
+- Same root cause (agent hook event system)
+- Same failure mode (no hook execution)
+- Must be diagnosed together
+- Fix will address both simultaneously
+
+**Fix Approach**:
+1. Investigate Kiro IDE event emission
+2. Verify hook registration with Kiro IDE
+3. Test event flow from taskStatus to hook execution
+4. Fix npm script syntax in release-manager.sh (line 117)
+5. Add logging for hook execution verification
+
+**Complexity**: Moderate to High
+**Priority**: CRITICAL - Blocks all automation
+**Estimated Effort**: 2-3 days
+
+---
+
+#### Priority 2: File Organization Issues (IMPORTANT)
+
+**Issues**: #006, #007
+
+**Fix Together**: YES - Same file
+
+**Rationale**:
+- Same file (`.kiro/hooks/organize-by-metadata.sh`)
+- Same system (file organization)
+- Can test together
+- Single PR/commit
+
+**Fix Approach**:
+- Issue #006: Add Python check, improve fallback, add validation
+- Issue #007: Document design decision, add optional recursive scanning
+
+**Complexity**: Low to Moderate
+**Priority**: IMPORTANT - Reduces reliability
+**Estimated Effort**: 1-2 days
+
+---
+
+#### Priority 3: Other Infrastructure Issues (MINOR)
+
+**Issues**: #002, #004, #005
+
+**Fix Separately**: YES - Different systems
+
+**Rationale**:
+- Different files and systems
+- Different complexity levels
+- No dependencies between them
+- Can be prioritized independently
+
+**Fix Approach**:
+- Issue #002: Add `--help` case to argument parsing
+- Issue #004: Document `runAfter` behavior
+- Issue #005: Document resolution (no code changes)
+
+**Complexity**: Low
+**Priority**: MINOR - Usability improvements
+**Estimated Effort**: 0.5-1 day per issue
+
+---
+
+### Test File Cleanup Decisions
+
+**Test Files Created**:
+1. `tests/test-hook-configuration.sh` (Task 5.1)
+2. `tests/test-manual-release-detection.sh` (Task 5.1)
+3. `tests/test-file-organization.sh` (Task 5.3)
+
+**Decision**: KEEP ALL 3 TEST FILES
+
+**Rationale**:
+
+| Test File | Purpose | Value for Fix Spec |
+|-----------|---------|-------------------|
+| test-hook-configuration.sh | Validates hook config | Regression testing after fixes |
+| test-manual-release-detection.sh | Validates script execution | Verify script fixes work |
+| test-file-organization.sh | Validates file org issues | Verify file org fixes work |
+
+**Usage in Fix Spec**:
+- Run after implementing fixes
+- Verify issues are resolved
+- Regression testing
+- Document evidence of fixes
+
+---
+
+### Summary
+
+**Key Findings**:
+1. Only 2 of 7 issues share a root cause (#001 and #003)
+2. 5 of 7 issues are independent
+3. Most issues can be fixed separately
+4. Agent hook issues must be fixed together
+5. File organization issues should be fixed together
+6. All test files provide value for fix spec
+
+**Fix Strategy**:
+- Priority 1: Fix agent hook issues together (CRITICAL)
+- Priority 2: Fix file organization issues together (IMPORTANT)
+- Priority 3: Fix other issues separately (MINOR)
+
+**Test Files**: Keep all 3 for fix spec validation and regression testing
+
+---
+
+*This analysis provides a comprehensive understanding of issue relationships and a practical fix grouping strategy for subsequent fix specifications.*
+
+
+---
+
+## Official Kiro Hook Documentation Review
+
+**Review Date**: October 29, 2025
+
+**Source**: `hooksDocumentation.rtf` (root directory)
+
+**Purpose**: Review official Kiro IDE Agent Hooks documentation to validate investigation findings and identify additional troubleshooting approaches.
+
+### Key Documentation Findings
+
+#### 1. Event-Driven Hook System Confirmation
+
+**Documentation States**:
+> "Agent Hooks are event-driven automations inside Kiro IDE: when a certain event happens (like saving a file, creating a file, deleting a file, or manually triggering) your agent takes a predefined action."
+
+**Validation**: ✅ Confirms our investigation's understanding that hooks should trigger automatically on events
+
+**Implication**: The release detection hook **should** trigger automatically when `taskStatusChange` events occur. If it's not triggering, there's a system-level issue.
+
+---
+
+#### 2. Hook Management Features
+
+**Documentation Confirms**:
+- **Enable/Disable**: "You can toggle hooks on/off without deleting them"
+- **Edit**: "Change triggers, file patterns, instructions, descriptions at any time. Updates apply immediately"
+- **Delete**: "You can remove unused hooks (though this action is irreversible)"
+- **Manual Run**: "For hooks with manual trigger, you can click '▶' or 'Start Hook' to execute on demand"
+
+**Validation**: ✅ Confirms hooks can be managed through Kiro IDE UI
+
+**Implication**: We should verify hook status in Kiro IDE UI, not just configuration files.
+
+---
+
+#### 3. Official Troubleshooting Guide
+
+**Documentation Provides Troubleshooting Matrix**:
+
+| Issue | What to Check |
+|-------|---------------|
+| **Hook not triggering** | - Confirm file pattern matches actual files<br>- Check if hook is enabled<br>- Ensure correct trigger type selected |
+| **Unexpected behavior / too many triggers** | - Are patterns too broad?<br>- Do instructions match expectations?<br>- Are there conflicting hooks? |
+| **Performance is slow** | - Simplify instructions<br>- Narrow down file patterns<br>- Reduce trigger frequency or batch operations |
+
+**Validation**: ✅ Our hypothesis testing approach aligns with official troubleshooting steps
+
+**Comparison with Our Investigation**:
+
+| Official Troubleshooting Step | Our Investigation Status |
+|-------------------------------|-------------------------|
+| Confirm file pattern matches | ✅ Verified - Pattern is correct |
+| Check if hook is enabled | ✅ Tested - No `enabled: false` field found |
+| Ensure correct trigger type | ✅ Verified - `taskStatusChange` is correct |
+| Check for conflicting hooks | ✅ Tested - No conflicting hooks found |
+
+**Conclusion**: We've followed official troubleshooting steps and ruled out configuration issues.
+
+---
+
+#### 4. Debug Tips from Documentation
+
+**Documentation Recommends**:
+1. "Look at hook execution logs in the Agent Hooks panel"
+2. "Start with a simple hook implementation → test → expand"
+3. "Validate that the files you expect are actually in the watched workspace (not outside)"
+
+**Critical Finding**: Documentation mentions **"Agent Hooks panel"** with **execution logs**
+
+**Implication**: There should be a UI panel in Kiro IDE that shows:
+- Hook execution history
+- Execution logs
+- Hook status
+- Error messages
+
+**Gap in Our Investigation**: We have not checked the Agent Hooks panel in Kiro IDE UI for execution logs.
+
+---
+
+#### 5. Hook Execution Flow
+
+**Documentation Describes**:
+1. An **event** is detected (file saved, file created, etc.)
+2. A **prompt** (or instructions) is sent to the agent
+3. The agent **executes** the action (e.g., generate code, run tests, update docs)
+
+**Validation**: ✅ Confirms our understanding of the intended flow
+
+**Current Investigation Status**:
+- Step 1 (Event Detection): ❓ Unknown - Cannot verify if events are emitted
+- Step 2 (Prompt Sent): ❓ Unknown - No evidence of prompt being sent
+- Step 3 (Agent Execution): ❌ Not happening - No evidence of execution
+
+**Conclusion**: Failure occurs at Step 1 or Step 2, before agent execution.
+
+---
+
+### New Investigation Opportunities
+
+#### Agent Hooks Panel Investigation
+
+**What to Check**:
+1. **Panel Location**: Find "Agent Hooks" section in Kiro IDE sidebar (Explorer view)
+2. **Hook Visibility**: Verify if release detection hook appears in the panel
+3. **Hook Status**: Check if hook shows as "enabled" or "disabled"
+4. **Execution Logs**: Look for execution history or log entries
+5. **Error Messages**: Check for any error indicators or status messages
+
+**Expected Findings**:
+
+**If Hook is Visible and Enabled**:
+- Hook is properly registered with Kiro IDE
+- Should see execution logs (or lack thereof)
+- May see error messages explaining why hook isn't triggering
+
+**If Hook is Not Visible**:
+- Hook configuration file may not be properly registered
+- May need to reload Kiro IDE or refresh hook list
+- Configuration file may have syntax errors preventing registration
+
+**If Hook Shows Errors**:
+- Error messages may explain root cause
+- May indicate event system issues
+- May indicate script execution failures
+
+---
+
+#### Command Palette Investigation
+
+**Documentation Mentions**: "Via Command Palette: `Ctrl/Cmd + Shift + P` → 'Kiro: Open Kiro Hook UI'"
+
+**What to Check**:
+1. Open Command Palette
+2. Search for "Kiro: Open Kiro Hook UI"
+3. Check if command exists and opens hook management UI
+4. Verify if release detection hook appears in UI
+5. Check for any UI-level error messages or warnings
+
+**Expected Findings**:
+- Hook UI should show all registered hooks
+- Should provide hook management interface
+- May show hook execution status or history
+- May provide debugging information
+
+---
+
+### Validation of Investigation Findings
+
+#### Configuration Analysis ✅
+
+**Documentation Confirms**: Our configuration analysis was correct
+- Hook configuration format matches documentation
+- Trigger types are valid
+- Settings are appropriate
+
+**Conclusion**: Configuration is not the issue.
+
+---
+
+#### Hypothesis Testing ✅
+
+**Documentation Confirms**: Our hypothesis testing approach was correct
+- Testing for disabled hooks (Hypothesis 1) ✅
+- Testing for script issues (Hypothesis 5) ✅
+- Testing for conflicting hooks (Hypothesis 6) ✅
+
+**Conclusion**: Our systematic approach aligns with official troubleshooting.
+
+---
+
+#### Missing Investigation Area ❌
+
+**Documentation Reveals**: We missed checking the Agent Hooks panel UI
+- Should have checked for execution logs in UI
+- Should have verified hook visibility in UI
+- Should have checked for UI-level error messages
+
+**Conclusion**: Need to investigate Kiro IDE UI for additional debugging information.
+
+---
+
+### Updated Root Cause Hypothesis
+
+**Based on Documentation Review**:
+
+**Primary Hypothesis**: Agent Hooks panel should show execution logs, but we haven't checked it yet.
+
+**Possible Scenarios**:
+
+**Scenario 1: Hook Not Registered**
+- Hook configuration file exists but isn't registered with Kiro IDE
+- Hook doesn't appear in Agent Hooks panel
+- No execution logs because hook never registered
+
+**Scenario 2: Hook Registered But Not Triggering**
+- Hook appears in Agent Hooks panel
+- Hook shows as "enabled"
+- No execution logs because events aren't being emitted
+- May see error messages in panel
+
+**Scenario 3: Hook Triggering But Failing Silently**
+- Hook appears in Agent Hooks panel
+- Execution logs show hook triggered
+- Logs show script execution failures
+- npm command stall causes timeout
+
+**Scenario 4: UI Issue**
+- Hook is registered and triggering
+- Execution logs exist but aren't visible in UI
+- UI bug prevents log visibility
+
+---
+
+### Recommended Next Steps
+
+**Priority 1: Check Agent Hooks Panel** (CRITICAL)
+1. Open Kiro IDE
+2. Navigate to Explorer view → Agent Hooks section
+3. Verify if release detection hook appears
+4. Check hook status (enabled/disabled)
+5. Look for execution logs or history
+6. Check for error messages or warnings
+7. Document findings
+
+**Priority 2: Check Command Palette Hook UI** (HIGH)
+1. Open Command Palette (`Ctrl/Cmd + Shift + P`)
+2. Search for "Kiro: Open Kiro Hook UI"
+3. Open hook management UI
+4. Verify hook visibility and status
+5. Check for debugging information
+6. Document findings
+
+**Priority 3: Test Manual Hook Execution** (MEDIUM)
+1. If hook appears in UI, try manual execution
+2. Click "▶" or "Start Hook" button
+3. Observe if hook executes
+4. Check for execution logs
+5. Document results
+
+**Priority 4: Verify Event Emission** (MEDIUM)
+1. Use `taskStatus` tool to mark a task complete
+2. Immediately check Agent Hooks panel for activity
+3. Look for execution logs or status changes
+4. Document whether event triggered hook
+
+---
+
+### Documentation Gaps Identified
+
+**What Documentation Doesn't Cover**:
+
+1. **Event Types**: Documentation mentions file events (save, create, delete) but doesn't explicitly document `taskStatusChange` event type
+2. **runAfter Behavior**: No documentation on `runAfter` dependency chain behavior (confirms Issue #004)
+3. **Logging Location**: Mentions "execution logs" but doesn't specify where logs are stored or how to access them
+4. **Troubleshooting Event Emission**: No guidance on how to verify if events are being emitted
+5. **Hook Registration Process**: Doesn't explain how hooks are discovered and registered
+
+**Implication**: Some aspects of our investigation (like `taskStatusChange` events and `runAfter` dependencies) are not covered by official documentation, suggesting these may be advanced features or undocumented behavior.
+
+---
+
+### Summary
+
+**Key Takeaways from Documentation Review**:
+
+1. ✅ **Configuration Validated**: Our hook configuration aligns with official documentation
+2. ✅ **Troubleshooting Validated**: Our hypothesis testing approach matches official troubleshooting steps
+3. ❌ **Missing Investigation**: We haven't checked the Agent Hooks panel UI for execution logs
+4. 🎯 **New Lead**: Agent Hooks panel should provide execution logs and debugging information
+5. 📋 **Action Required**: Check Kiro IDE UI for hook status, execution logs, and error messages
+
+**Updated Investigation Priority**:
+1. Check Agent Hooks panel in Kiro IDE UI (NEW - CRITICAL)
+2. Fix npm command syntax in release-manager.sh (KNOWN ISSUE)
+3. Verify event emission from taskStatus tool (EXISTING)
+4. Test hook registration and visibility (NEW)
+
+**Confidence Level**: Documentation review increases confidence that our investigation approach is correct, but reveals we've been missing UI-level debugging information that could provide critical insights.
+
+---
+
+*This documentation review validates our investigation methodology while identifying a critical gap: we haven't checked the Kiro IDE UI for hook execution logs and status information that the official documentation says should be available.*

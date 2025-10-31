@@ -5,6 +5,50 @@
 
 set -e
 
+# Show help function
+show_help() {
+    cat << EOF
+Usage: commit-task.sh [OPTIONS] "Task Name"
+
+Commit completed task with standardized message format and optional release analysis.
+
+OPTIONS:
+    -h, --help      Display this help message
+    --no-analyze    Skip automatic release analysis after commit
+    
+ARGUMENTS:
+    Task Name       The name of the completed task (required)
+                    Example: "1. Create North Star Vision Document"
+
+EXAMPLES:
+    # Display help
+    commit-task.sh --help
+    
+    # Commit a completed task with release analysis
+    commit-task.sh "1. Create North Star Vision Document"
+    
+    # Commit without release analysis
+    commit-task.sh "Task 2.3 Complete: Create Typography Guides" --no-analyze
+    
+    # Commit with task number
+    commit-task.sh "2.1 Implement TokenSelector class"
+
+NOTES:
+    - Task name should match the task in tasks.md
+    - Commit message format: "Task [Number] Complete: [Description]"
+    - Changes are automatically committed and pushed to origin main
+    - Release analysis runs by default unless --no-analyze is specified
+    - Release analysis can be disabled in .kiro/release-config.json
+
+EOF
+    exit 0
+}
+
+# Check for help flags before processing arguments
+if [ "$1" = "--help" ] || [ "$1" = "-h" ] || [ -z "$1" ]; then
+    show_help
+fi
+
 TASK_NAME="$1"
 TASKS_FILE=".kiro/specs/fresh-repository-roadmap-refinement/tasks.md"
 NO_ANALYZE=false
