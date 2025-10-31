@@ -240,7 +240,7 @@ This is an investigation spec - the goal is understanding, not fixing. All findi
     - Create root cause analysis section in investigation notes
     - _Requirements: 3.7_
 
-- [ ] 5. Investigate Related Infrastructure Issues
+- [x] 5. Investigate Related Infrastructure Issues
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -259,7 +259,7 @@ This is an investigation spec - the goal is understanding, not fixing. All findi
   **Completion Documentation:**
   - `.kiro/specs/release-detection-infrastructure-investigation/completion/task-5-completion.md`
 
-  - [-] 5.1 Investigate commit-task.sh --help issue
+  - [x] 5.1 Investigate commit-task.sh --help issue
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test `.kiro/hooks/commit-task.sh --help` behavior
@@ -270,7 +270,7 @@ This is an investigation spec - the goal is understanding, not fixing. All findi
     - Record findings in investigation notes
     - _Requirements: 4.1_
 
-  - [ ] 5.2 Investigate hook dependency chain clarity
+  - [x] 5.2 Investigate hook dependency chain clarity
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Review Issue #004 (hook dependency chain unclear)
@@ -281,7 +281,7 @@ This is an investigation spec - the goal is understanding, not fixing. All findi
     - Record findings in investigation notes
     - _Requirements: 4.2_
 
-  - [ ] 5.3 Investigate file organization issues
+  - [x] 5.3 Investigate file organization issues
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test file organization metadata validation (Issue #005)
@@ -293,7 +293,7 @@ This is an investigation spec - the goal is understanding, not fixing. All findi
     - Record findings in investigation notes
     - _Requirements: 4.3, 4.4, 4.5_
 
-  - [ ] 5.4 Document related issues analysis
+  - [x] 5.4 Document related issues analysis
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Synthesize findings from all related issues
@@ -305,7 +305,7 @@ This is an investigation spec - the goal is understanding, not fixing. All findi
     - Create root cause analysis section in investigation notes
     - _Requirements: 4.6, 4.7_
 
-- [ ] 6. Compile Root Cause Analysis Document
+- [x] 6. Compile Root Cause Analysis Document
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -323,7 +323,7 @@ This is an investigation spec - the goal is understanding, not fixing. All findi
   **Completion Documentation:**
   - `.kiro/specs/release-detection-infrastructure-investigation/completion/task-6-completion.md`
 
-  - [ ] 6.1 Compile root cause analysis document
+  - [x] 6.1 Compile root cause analysis document
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `root-cause-analysis.md` using template from design document
@@ -335,7 +335,7 @@ This is an investigation spec - the goal is understanding, not fixing. All findi
     - Document test file cleanup decisions (keep vs delete)
     - _Requirements: All requirements (final deliverable)_
 
-  - [ ] 6.2 Review and validate findings
+  - [x] 6.2 Review and validate findings
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Review root cause analysis for completeness

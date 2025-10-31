@@ -7,6 +7,22 @@
 
 set -e
 
+# Log file for file organization
+LOG_FILE=".kiro/logs/file-organization.log"
+
+# Entry logging function
+log_entry() {
+    # Ensure log directory exists
+    mkdir -p "$(dirname "$LOG_FILE")"
+    
+    # Log entry message with timestamp
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] Hook triggered by Kiro IDE agent hook system" >> "$LOG_FILE"
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] Event: taskStatusChange, Status: completed" >> "$LOG_FILE"
+}
+
+# Call entry logging at script start
+log_entry
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'

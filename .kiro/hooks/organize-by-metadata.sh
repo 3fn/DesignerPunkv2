@@ -156,6 +156,14 @@ organize_file() {
     echo "$file|$target_path" >> /tmp/organized_files.txt
 }
 
+# Function to check Python availability
+check_python() {
+    if ! command -v python3 &> /dev/null; then
+        return 1
+    fi
+    return 0
+}
+
 # Function to update cross-references after file moves
 update_cross_references() {
     if [[ ! -f /tmp/organized_files.txt ]]; then
@@ -164,38 +172,79 @@ update_cross_references() {
     
     print_status "Updating cross-references..."
     
+    # Check Python availability
+    if ! check_python; then
+        print_warning "Python 3 is required for cross-reference updates but not found"
+        print_warning "Please install Python 3 or update cross-references manually"
+        print_warning "Skipping cross-reference updates"
+        rm -f /tmp/organized_files.txt
+        return 0
+    fi
+    
+    local update_count=0
+    local error_count=0
+    
     while IFS='|' read -r old_path new_path; do
         local old_name=$(basename "$old_path")
-        local new_relative_path
         
-        # Calculate relative path from root to new location
-        if [[ "$new_path" == "./"* ]]; then
-            new_relative_path="$old_name"
-        else
-            new_relative_path="$new_path"
-        fi
+        print_status "Processing cross-references for: $old_name"
+        print_status "  Old path: $old_path"
+        print_status "  New path: $new_path"
         
         # Update references in all markdown files
-        find . -name "*.md" -type f -exec grep -l "\[$old_name\]" {} \; | while read -r ref_file; do
+        find . -name "*.md" -type f -exec grep -l "\[$old_name\]" {} \; 2>/dev/null | while read -r ref_file; do
             # Skip if it's the moved file itself
             if [[ "$ref_file" != "./$new_path" ]]; then
                 # Calculate relative path from ref_file to new location
                 local ref_dir=$(dirname "$ref_file")
-                local relative_path=$(python3 -c "
+                
+                # Use Python to calculate relative path with error handling
+                local relative_path
+                relative_path=$(python3 -c "
 import os
-print(os.path.relpath('$new_path', '$ref_dir'))
-" 2>/dev/null || echo "$new_relative_path")
+import sys
+try:
+    result = os.path.relpath('$new_path', '$ref_dir')
+    print(result)
+    sys.exit(0)
+except Exception as e:
+    print(f'ERROR: {e}', file=sys.stderr)
+    sys.exit(1)
+" 2>&1)
+                
+                local python_exit_code=$?
+                
+                if [[ $python_exit_code -ne 0 ]]; then
+                    print_error "Failed to calculate relative path for cross-reference update"
+                    print_error "  Reference file: $ref_file"
+                    print_error "  Old path: $old_path"
+                    print_error "  New path: $new_path"
+                    print_error "  Python error: $relative_path"
+                    ((error_count++))
+                    continue
+                fi
                 
                 # Update the reference
-                sed -i.bak "s|\[$old_name\](\([^)]*\)$old_name)|\[$old_name\]($relative_path)|g" "$ref_file"
-                rm -f "${ref_file}.bak"
-                print_status "Updated reference in: $ref_file"
+                if sed -i.bak "s|\[$old_name\](\([^)]*\)$old_name)|\[$old_name\]($relative_path)|g" "$ref_file" 2>/dev/null; then
+                    rm -f "${ref_file}.bak"
+                    print_status "  Updated reference in: $ref_file -> $relative_path"
+                    ((update_count++))
+                else
+                    print_error "Failed to update reference in: $ref_file"
+                    ((error_count++))
+                fi
             fi
         done
     done < /tmp/organized_files.txt
     
     rm -f /tmp/organized_files.txt
-    print_success "Cross-references updated"
+    
+    if [[ $error_count -gt 0 ]]; then
+        print_warning "Cross-reference updates completed with $error_count errors"
+        print_warning "Updated $update_count references successfully"
+    else
+        print_success "Cross-references updated successfully ($update_count references)"
+    fi
 }
 
 # Main organization function

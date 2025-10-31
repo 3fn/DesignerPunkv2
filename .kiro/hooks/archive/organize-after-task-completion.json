@@ -2,6 +2,8 @@
   "name": "Auto-Organize Files After Task Completion",
   "description": "When a task status changes to 'completed', automatically check for markdown files that have **Organization** metadata and need to be moved to appropriate directories. Shows preview, asks for confirmation, then organizes files based on metadata values and updates cross-references.",
   "id": "organize-after-task-completion",
+  "enabled": false,
+  "_comment": "DISABLED: taskStatusChange trigger type is not supported by Kiro IDE. Only fileCreated, fileEdited, fileDeleted, and manual trigger types are supported. This hook has been replaced by release-detection-auto.kiro.hook which uses fileCreated trigger on summary documents in docs/specs/ directory. Preserved for reference.",
   "trigger": {
     "type": "taskStatusChange",
     "status": "completed"

@@ -31,7 +31,10 @@ async function main() {
   
   try {
     const config = await loadConfig();
-    const detector = new WorkflowEventDetector(config);
+    
+    // Disable auto-processing for one-off CLI commands (except 'monitor')
+    const enableAutoProcessing = command === 'monitor';
+    const detector = new WorkflowEventDetector(config, { enableAutoProcessing });
     
     switch (command) {
       case 'help':

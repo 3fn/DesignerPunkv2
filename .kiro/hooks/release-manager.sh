@@ -17,6 +17,15 @@ TRIGGER_DIR="$PROJECT_ROOT/.kiro/release-triggers"
 mkdir -p "$(dirname "$LOG_FILE")"
 mkdir -p "$TRIGGER_DIR"
 
+# Entry logging function
+log_entry() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] Hook triggered by Kiro IDE agent hook system" >> "$LOG_FILE"
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] Event: taskStatusChange, Status: completed" >> "$LOG_FILE"
+}
+
+# Call entry logging at script start
+log_entry
+
 # Logging function
 log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"
@@ -117,19 +126,9 @@ EOF
     
     success "Release trigger created: $trigger_file"
     
-    # Attempt to process trigger immediately if TypeScript system is available
-    if command -v npm >/dev/null 2>&1 && [ -f "$PROJECT_ROOT/package.json" ]; then
-        log "Attempting to process trigger with TypeScript release system..."
-        
-        # Try to run the release detection system
-        if cd "$PROJECT_ROOT" && npm run release:detect process-triggers >/dev/null 2>&1; then
-            success "Release trigger processed by TypeScript system"
-        else
-            log "TypeScript release system not available, trigger queued for manual processing"
-        fi
-    else
-        log "Node.js/npm not available, trigger queued for manual processing"
-    fi
+    # NOTE: TypeScript release system integration disabled due to architectural issues
+    # The WorkflowMonitor creates multiple unclearable setInterval timers causing hangs
+    log "Trigger queued for manual processing (TypeScript integration disabled)"
 }
 
 # Main hook execution
@@ -147,19 +146,27 @@ main() {
     
     # Auto-detect triggers if no specific type provided
     if [[ "$hook_type" == "auto" ]]; then
-        # Check for spec completion documents
-        for completion_doc in "$PROJECT_ROOT"/.kiro/specs/*/completion/*-completion.md; do
-            if [[ -f "$completion_doc" ]] && detect_release_triggers "spec-completion" "$completion_doc"; then
-                process_release_trigger "spec-completion" "$completion_doc"
-            fi
-        done
+        # Only check files modified in the last commit (not all historical files)
+        local recent_files=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || echo "")
         
-        # Check for task completion in tasks.md files
-        for tasks_file in "$PROJECT_ROOT"/.kiro/specs/*/tasks.md; do
-            if [[ -f "$tasks_file" ]] && detect_release_triggers "task-completion" "$tasks_file"; then
-                process_release_trigger "task-completion" "$tasks_file"
-            fi
-        done
+        if [ -n "$recent_files" ]; then
+            # Check for spec completion documents in recent changes
+            # Use process substitution to avoid subshell issues
+            while IFS= read -r completion_doc; do
+                if [[ -n "$completion_doc" && -f "$completion_doc" ]] && detect_release_triggers "spec-completion" "$completion_doc"; then
+                    process_release_trigger "spec-completion" "$completion_doc"
+                fi
+            done < <(echo "$recent_files" | grep "completion.*-completion\.md$")
+            
+            # Check for task completion in tasks.md files in recent changes
+            while IFS= read -r tasks_file; do
+                if [[ -n "$tasks_file" && -f "$tasks_file" ]] && detect_release_triggers "task-completion" "$tasks_file"; then
+                    process_release_trigger "task-completion" "$tasks_file"
+                fi
+            done < <(echo "$recent_files" | grep "tasks\.md$")
+        else
+            log "No recent git changes detected, skipping auto-detection"
+        fi
     else
         # Process specific trigger type
         if [[ -n "$source_path" ]]; then

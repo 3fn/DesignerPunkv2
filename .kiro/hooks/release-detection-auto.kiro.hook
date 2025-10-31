@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Auto Release Detection",
+  "description": "When a parent task summary document is saved through the IDE (task-N-summary.md format in docs/specs/), automatically trigger release detection to scan for completion documents and create release trigger files. Note: Only triggers for manual file saves through IDE UI, not for programmatically created files. Use manual trigger (./.kiro/hooks/release-manager.sh auto) for AI-assisted workflows.",
+  "version": "1",
+  "when": {
+    "type": "fileCreated",
+    "patterns": [
+      "**/task-*-summary.md"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A parent task summary document has been created. Please run the release detection script to scan for completion documents and create release trigger files. Execute: ./.kiro/hooks/release-manager.sh auto"
+  }
+}

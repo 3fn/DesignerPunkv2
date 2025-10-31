@@ -88,6 +88,138 @@ All files use explicit metadata to declare organizational intent, enabling safe 
 └── task-2-2-completion.md         # Subtask 2.2 completion
 ```
 
+#### Summary Documents
+```markdown
+**Organization**: spec-summary
+**Scope**: [spec-name]
+```
+**Purpose**: Concise, commit-style summaries of parent task completion that trigger release detection hooks and serve as release note content
+**Location**: `docs/specs/[spec-name]/` directory
+**Examples**: Parent task summaries that trigger automatic release detection
+
+**Summary Document Standards**:
+- **Naming Convention**: `task-N-summary.md` (e.g., `task-1-summary.md`, `task-2-summary.md`, `task-10-summary.md`)
+- **Organization Metadata**: All summary documents use `**Organization**: spec-summary`
+- **Location**: All summary documents stored in `docs/specs/[spec-name]/` directory
+- **Purpose**: Dual purpose as hook trigger and release note content
+- **Relationship to Detailed Docs**: Summary docs complement detailed completion docs in `.kiro/specs/[spec-name]/completion/`
+
+**Hook Limitation**: Kiro IDE's `fileCreated` and `fileSaved` hooks only trigger for **manual file operations through the IDE UI**, not for programmatically created files by AI agents. This requires a hybrid approach:
+- **Automatic hooks**: Work for manually created/edited files through IDE UI
+- **Manual trigger**: Required for AI-assisted workflows after summary document creation
+
+**Rationale**:
+- **Hook Triggering**: The `.kiro/` directory is filtered from Kiro IDE's file watching system. Summary documents in `docs/specs/` enable automatic release detection for manual file operations.
+- **Dual Purpose**: Summary documents serve both as hook triggers and as concise, public-facing release note content.
+- **Clear Separation**: Detailed completion docs (internal knowledge preservation) remain in `.kiro/`, while summaries (public-facing) live in `docs/`.
+- **Hybrid Approach**: Automatic hooks for manual edits, manual trigger for AI workflows ensures release detection works in all scenarios.
+
+**Example Metadata Header**:
+```markdown
+# Task 1 Summary: Fix Release Detection Triggers
+
+**Date**: October 30, 2025
+**Purpose**: Concise summary of parent task completion
+**Organization**: spec-summary
+**Scope**: release-detection-trigger-fix
+
+## What Was Done
+
+[Concise description of what was implemented]
+
+## Why It Matters
+
+[Business value, user impact, or technical benefit]
+
+## Key Changes
+
+- [Change 1]
+- [Change 2]
+- [Change 3]
+
+## Impact
+
+- ✅ [Positive impact 1]
+- ✅ [Positive impact 2]
+```
+
+**Cross-References Between Summary and Detailed Docs**:
+
+Summary documents and detailed completion documents should cross-reference each other to enable easy navigation between public-facing summaries and comprehensive internal documentation.
+
+**From Summary to Detailed Docs**:
+
+Summary documents should include a link to the detailed completion document at the end, providing readers a path to comprehensive implementation notes.
+
+Format:
+```markdown
+---
+
+*For detailed implementation notes, see [task-N-parent-completion.md](../../.kiro/specs/[spec-name]/completion/task-N-parent-completion.md)*
+```
+
+Example from `docs/specs/release-detection-trigger-fix/task-1-summary.md`:
+```markdown
+---
+
+*For detailed implementation notes, see [task-1-parent-completion.md](../../.kiro/specs/release-detection-trigger-fix/completion/task-1-parent-completion.md)*
+```
+
+**From Detailed Docs to Summary (Optional)**:
+
+Detailed completion documents can optionally link to the summary document, though this is less critical since detailed docs are the primary reference.
+
+Format:
+```markdown
+## Related Documentation
+
+- [Task N Summary](../../../../docs/specs/[spec-name]/task-N-summary.md) - Public-facing summary that triggered release detection
+```
+
+Example from `.kiro/specs/release-detection-trigger-fix/completion/task-1-parent-completion.md`:
+```markdown
+## Related Documentation
+
+- [Task 1 Summary](../../../../docs/specs/release-detection-trigger-fix/task-1-summary.md) - Public-facing summary that triggered release detection
+```
+
+**In Tasks.md**:
+
+Parent tasks should reference both documentation types in the "Completion Documentation" section to make it clear that two documents will be created.
+
+Format:
+```markdown
+**Completion Documentation:**
+- Detailed: `.kiro/specs/[spec-name]/completion/task-[N]-parent-completion.md`
+- Summary: `docs/specs/[spec-name]/task-[N]-summary.md` (triggers release detection)
+```
+
+Example:
+```markdown
+**Completion Documentation:**
+- Detailed: `.kiro/specs/release-detection-trigger-fix/completion/task-1-parent-completion.md`
+- Summary: `docs/specs/release-detection-trigger-fix/task-1-summary.md` (triggers release detection)
+```
+
+**Relative Path Calculation**:
+
+When creating cross-references, calculate relative paths based on the source document location:
+
+- **From summary to detailed**: Summary docs are in `docs/specs/[spec-name]/`, detailed docs are in `.kiro/specs/[spec-name]/completion/`
+  - Path: `../../.kiro/specs/[spec-name]/completion/task-N-parent-completion.md`
+  - Breakdown: `../..` (up to root) → `.kiro/specs/[spec-name]/completion/` (down to target)
+
+- **From detailed to summary**: Detailed docs are in `.kiro/specs/[spec-name]/completion/`, summary docs are in `docs/specs/[spec-name]/`
+  - Path: `../../../../docs/specs/[spec-name]/task-N-summary.md`
+  - Breakdown: `../../../..` (up to root) → `docs/specs/[spec-name]/` (down to target)
+
+**Best Practices**:
+
+- Always use relative paths (not absolute paths) for cross-references
+- Include descriptive link text that explains what the linked document contains
+- Test links by clicking them in rendered markdown to verify they work
+- Update cross-references if files are moved during organization
+
 #### Process Standards
 ```markdown
 **Organization**: process-standard
@@ -125,23 +257,53 @@ strategic-framework/
 ```
 
 ### Spec-Specific Organization
+
+**Two-Directory Structure**: Spec documentation is organized across two directories to enable automatic release detection while maintaining comprehensive internal documentation.
+
 ```
-.kiro/specs/[spec-name]/
-├── requirements.md                        # Spec requirements
-├── design.md                             # Spec design
-├── tasks.md                              # Implementation tasks
-├── validation/                           # Spec-specific validation artifacts
+docs/specs/[spec-name]/                   # Public-facing documentation (TRIGGERS HOOKS)
+├── task-1-summary.md                     # ✅ Parent task summary (triggers release detection)
+├── task-2-summary.md                     # ✅ Parent task summary (triggers release detection)
+└── task-N-summary.md                     # ✅ Parent task summary (triggers release detection)
+                                          # Format: task-N-summary.md (N = parent task number)
+                                          # Purpose: Concise, commit-style summaries
+                                          # Hook Pattern: **/task-*-summary.md
+                                          # Kiro IDE watches this directory for file creation
+
+.kiro/specs/[spec-name]/                  # Internal documentation (NO HOOK TRIGGERS)
+├── requirements.md                        # ❌ Spec requirements (no hook trigger)
+├── design.md                             # ❌ Spec design (no hook trigger)
+├── tasks.md                              # ❌ Implementation tasks (no hook trigger)
+├── validation/                           # ❌ Spec-specific validation artifacts (no hook trigger)
 │   ├── framework-validation-report.md    # Validation against preserved knowledge
 │   ├── cross-reference-validation.md     # Link integrity verification
 │   └── [other-validation-files].md       # Additional validation artifacts
-└── completion/                           # Spec-specific completion documentation
-    ├── task-1-completion.md              # Parent task completion docs
+└── completion/                           # ❌ Spec-specific completion documentation (no hook trigger)
+    ├── task-1-parent-completion.md       # Parent task detailed docs (Tier 3 comprehensive)
     ├── task-1-1-completion.md            # Subtask completion docs
     ├── task-1-2-completion.md            # Subtask completion docs
-    ├── task-2-completion.md              # Parent task completion docs
+    ├── task-2-parent-completion.md       # Parent task detailed docs (Tier 3 comprehensive)
     ├── task-2-1-completion.md            # Subtask completion docs
     └── spec-completion-summary.md        # Overall spec completion documentation
+                                          # .kiro/ directory is filtered from Kiro IDE file watching
 ```
+
+**Key Distinctions**:
+
+| Location | Purpose | Hook Trigger | Audience |
+|----------|---------|--------------|----------|
+| `docs/specs/[spec-name]/` | Concise summaries | ✅ Yes | Public-facing, release notes |
+| `.kiro/specs/[spec-name]/` | Comprehensive docs | ❌ No | Internal, knowledge preservation |
+
+**Why Two Directories?**:
+- **Hook Triggering**: The `.kiro/` directory is filtered from Kiro IDE's file watching system. Summary documents in `docs/specs/` enable automatic release detection when created.
+- **Dual Purpose**: Summary documents serve both as hook triggers and as concise, public-facing release note content.
+- **Clear Separation**: Detailed completion docs (internal knowledge preservation) remain in `.kiro/`, while summaries (public-facing) live in `docs/`.
+
+**File Naming Patterns**:
+- **Summary docs**: `task-N-summary.md` (e.g., `task-1-summary.md`, `task-2-summary.md`, `task-10-summary.md`)
+- **Detailed parent docs**: `task-N-parent-completion.md` (e.g., `task-1-parent-completion.md`)
+- **Subtask docs**: `task-N.M-completion.md` (e.g., `task-1-1-completion.md`, `task-2-3-completion.md`)
 
 ### Process Documentation
 ```
@@ -174,6 +336,7 @@ When creating any new file, include organization metadata in the header:
 - **framework-strategic**: Move to `strategic-framework/` directory
 - **spec-validation**: Move to `.kiro/specs/[spec-name]/validation/` directory
 - **spec-completion**: Move to `.kiro/specs/[spec-name]/completion/` directory
+- **spec-summary**: Move to `docs/specs/[spec-name]/` directory
 - **process-standard**: Keep in `.kiro/steering/` or move to `docs/processes/`
 - **working-document**: Keep in root or appropriate working directory
 
@@ -1067,6 +1230,12 @@ Cross-references should be navigation aids, not content dependencies:
 - **Lessons learned**: Does this capture insights from specific implementation?
 - **Completion artifacts**: Is this required for task or spec completion?
 - **Implementation notes**: Does this document specific implementation decisions?
+
+### Spec-Summary Criteria
+- **Parent task summary**: Is this a concise summary of parent task completion?
+- **Hook trigger**: Does this need to trigger automatic release detection?
+- **Public-facing**: Is this intended as release note content?
+- **Commit-style format**: Does this follow concise, what/why/impact format?
 
 ---
 

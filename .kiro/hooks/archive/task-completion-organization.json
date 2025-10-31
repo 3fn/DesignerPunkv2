@@ -1,6 +1,8 @@
 {
   "name": "Task Completion File Organization",
   "description": "Automatically organize files based on metadata when tasks are completed",
+  "enabled": false,
+  "_comment": "DISABLED: taskStatus trigger type is not supported by Kiro IDE. Only fileCreated, fileEdited, fileDeleted, and manual trigger types are supported. This hook attempted to use taskStatus with condition status_changed_to_completed, which is also unsupported. File organization is now manual or can be triggered via organize-by-metadata.sh script. Preserved for reference.",
   "trigger": {
     "type": "taskStatus",
     "condition": "status_changed_to_completed"
