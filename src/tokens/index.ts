@@ -194,6 +194,15 @@ export {
   BlendDirection
 } from './BlendTokens';
 
+// Breakpoint tokens
+export {
+  breakpointTokens,
+  breakpointTokenNames,
+  getBreakpointToken,
+  getAllBreakpointTokens,
+  BREAKPOINT_BASE_VALUE
+} from './BreakpointTokens';
+
 // Combined token utilities
 import { spacingTokens } from './SpacingTokens';
 import { fontSizeTokens } from './FontSizeTokens';
@@ -213,6 +222,7 @@ import { glowBlur } from './GlowBlurTokens';
 import { glowOpacity } from './GlowOpacityTokens';
 import { opacityTokens } from './OpacityTokens';
 import { blendTokens } from './BlendTokens';
+import { breakpointTokens } from './BreakpointTokens';
 import { PrimitiveToken, TokenCategory } from '../types/PrimitiveToken';
 
 /**
@@ -233,7 +243,8 @@ export const allTokens = {
   [TokenCategory.SHADOW]: { ...shadowOffsetX, ...shadowOffsetY, ...shadowBlur, ...shadowOpacityTokens },
   [TokenCategory.GLOW]: { ...glowBlur, ...glowOpacity },
   [TokenCategory.OPACITY]: opacityTokens,
-  [TokenCategory.BLEND]: blendTokens
+  [TokenCategory.BLEND]: blendTokens,
+  [TokenCategory.BREAKPOINT]: breakpointTokens
 };
 
 /**
@@ -262,7 +273,8 @@ export function getAllPrimitiveTokens(): PrimitiveToken[] {
     ...Object.values(glowBlur),
     ...Object.values(glowOpacity),
     ...Object.values(opacityTokens),
-    ...Object.values(blendTokens)
+    ...Object.values(blendTokens),
+    ...Object.values(breakpointTokens)
   ];
 }
 
@@ -326,5 +338,6 @@ export const TOKEN_FAMILY_BASE_VALUES = {
   [TokenCategory.SHADOW]: 4,
   [TokenCategory.GLOW]: 8,
   [TokenCategory.OPACITY]: 0.08,
-  [TokenCategory.BLEND]: 0.04
+  [TokenCategory.BLEND]: 0.04,
+  [TokenCategory.BREAKPOINT]: 320
 } as const;
