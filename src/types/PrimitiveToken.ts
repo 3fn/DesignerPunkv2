@@ -24,7 +24,8 @@ export enum TokenCategory {
   SHADOW = 'shadow',
   GLOW = 'glow',
   OPACITY = 'opacity',
-  BLEND = 'blend'
+  BLEND = 'blend',
+  BREAKPOINT = 'breakpoint'
 }
 
 /**
