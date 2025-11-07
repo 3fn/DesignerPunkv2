@@ -20,6 +20,7 @@ export * from './ShadowTokens';
 export * from './OpacityTokens';
 export * from './BlendTokens';
 export * from './LayeringTokens';
+export * from './GridSpacingTokens';
 
 // StyleTokens placeholder - will be implemented in future tasks
 export { styleTokens, getStyleToken } from './StyleTokens';
@@ -89,6 +90,13 @@ export {
   getLayeringTokensByPlatform
 } from './LayeringTokens';
 
+export {
+  gridSpacingTokens,
+  gridSpacingTokenNames,
+  getGridSpacingToken,
+  getAllGridSpacingTokens
+} from './GridSpacingTokens';
+
 // Import types for utility functions
 import type { SemanticToken } from '../../types/SemanticToken';
 import { SemanticCategory } from '../../types/SemanticToken';
@@ -100,6 +108,7 @@ import { shadowTokens } from './ShadowTokens';
 import { opacityTokens } from './OpacityTokens';
 import { blendTokens } from './BlendTokens';
 import { zIndexTokens, elevationTokens } from './LayeringTokens';
+import { gridSpacingTokens } from './GridSpacingTokens';
 
 /**
  * Get any semantic token by name across all categories
@@ -159,6 +168,11 @@ export function getSemanticToken(name: string): Omit<SemanticToken, 'primitiveTo
   // Check elevation tokens
   if (name.startsWith('elevation.')) {
     return elevationTokens[name] as any;
+  }
+
+  // Check grid spacing tokens
+  if (name.startsWith('grid')) {
+    return gridSpacingTokens[name];
   }
 
   return undefined;
@@ -272,6 +286,9 @@ export function getAllSemanticTokens(): Array<Omit<SemanticToken, 'primitiveToke
 
   // Add elevation tokens
   tokens.push(...(Object.values(elevationTokens) as any));
+
+  // Add grid spacing tokens
+  tokens.push(...Object.values(gridSpacingTokens));
 
   // Add border width tokens
   for (const [name, token] of Object.entries(SemanticBorderWidthTokens)) {
@@ -446,6 +463,7 @@ export function getSemanticTokenStats() {
     opacityTokens: Object.keys(opacityTokens).length,
     blendTokens: Object.keys(blendTokens).length,
     zIndexTokens: Object.keys(zIndexTokens).length,
-    elevationTokens: Object.keys(elevationTokens).length
+    elevationTokens: Object.keys(elevationTokens).length,
+    gridSpacingTokens: Object.keys(gridSpacingTokens).length
   };
 }
