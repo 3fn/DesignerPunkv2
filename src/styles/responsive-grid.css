@@ -1,0 +1,200 @@
+/**
+ * DesignerPunk Responsive Grid System
+ * 
+ * Progressive column counts:
+ * - xs (320px): 4 columns
+ * - sm (375px): 8 columns
+ * - md (1024px): 12 columns
+ * - lg (1440px): 16 columns
+ * 
+ * Grid spacing scales with layout complexity
+ * Uses CSS custom properties from design tokens
+ */
+
+/**
+ * Responsive Grid System
+ * Progressive column counts: 4→8→12→16
+ * Grid spacing scales with layout complexity
+ */
+
+/* Base Grid Container (xs: 4 columns) */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--grid-gutter-xs);
+  margin-inline: var(--grid-margin-xs);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* SM Breakpoint: 8 columns */
+@media (min-width: 375px) {
+  .grid-container {
+    grid-template-columns: repeat(8, 1fr);
+    gap: var(--grid-gutter-sm);
+    margin-inline: var(--grid-margin-sm);
+  }
+}
+
+/* MD Breakpoint: 12 columns */
+@media (min-width: 1024px) {
+  .grid-container {
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--grid-gutter-md);
+    margin-inline: var(--grid-margin-md);
+  }
+}
+
+/* LG Breakpoint: 16 columns */
+@media (min-width: 1440px) {
+  .grid-container {
+    grid-template-columns: repeat(16, 1fr);
+    gap: var(--grid-gutter-lg);
+    margin-inline: var(--grid-margin-lg);
+  }
+}
+
+/**
+ * Grid Item Styles
+ * Column span utilities for responsive layouts
+ */
+
+/* Base Grid Item */
+.grid-item {
+  min-width: 0; /* Prevent overflow */
+  box-sizing: border-box;
+}
+
+/* XS Column Span Utilities (4 columns) */
+.col-xs-1 {
+  grid-column: span 1;
+}
+.col-xs-2 {
+  grid-column: span 2;
+}
+.col-xs-3 {
+  grid-column: span 3;
+}
+.col-xs-4 {
+  grid-column: span 4;
+}
+
+/* SM Column Span Utilities (8 columns) */
+@media (min-width: 375px) {
+  .col-sm-1 {
+    grid-column: span 1;
+  }
+  .col-sm-2 {
+    grid-column: span 2;
+  }
+  .col-sm-3 {
+    grid-column: span 3;
+  }
+  .col-sm-4 {
+    grid-column: span 4;
+  }
+  .col-sm-5 {
+    grid-column: span 5;
+  }
+  .col-sm-6 {
+    grid-column: span 6;
+  }
+  .col-sm-7 {
+    grid-column: span 7;
+  }
+  .col-sm-8 {
+    grid-column: span 8;
+  }
+}
+
+/* MD Column Span Utilities (12 columns) */
+@media (min-width: 1024px) {
+  .col-md-1 {
+    grid-column: span 1;
+  }
+  .col-md-2 {
+    grid-column: span 2;
+  }
+  .col-md-3 {
+    grid-column: span 3;
+  }
+  .col-md-4 {
+    grid-column: span 4;
+  }
+  .col-md-5 {
+    grid-column: span 5;
+  }
+  .col-md-6 {
+    grid-column: span 6;
+  }
+  .col-md-7 {
+    grid-column: span 7;
+  }
+  .col-md-8 {
+    grid-column: span 8;
+  }
+  .col-md-9 {
+    grid-column: span 9;
+  }
+  .col-md-10 {
+    grid-column: span 10;
+  }
+  .col-md-11 {
+    grid-column: span 11;
+  }
+  .col-md-12 {
+    grid-column: span 12;
+  }
+}
+
+/* LG Column Span Utilities (16 columns) */
+@media (min-width: 1440px) {
+  .col-lg-1 {
+    grid-column: span 1;
+  }
+  .col-lg-2 {
+    grid-column: span 2;
+  }
+  .col-lg-3 {
+    grid-column: span 3;
+  }
+  .col-lg-4 {
+    grid-column: span 4;
+  }
+  .col-lg-5 {
+    grid-column: span 5;
+  }
+  .col-lg-6 {
+    grid-column: span 6;
+  }
+  .col-lg-7 {
+    grid-column: span 7;
+  }
+  .col-lg-8 {
+    grid-column: span 8;
+  }
+  .col-lg-9 {
+    grid-column: span 9;
+  }
+  .col-lg-10 {
+    grid-column: span 10;
+  }
+  .col-lg-11 {
+    grid-column: span 11;
+  }
+  .col-lg-12 {
+    grid-column: span 12;
+  }
+  .col-lg-13 {
+    grid-column: span 13;
+  }
+  .col-lg-14 {
+    grid-column: span 14;
+  }
+  .col-lg-15 {
+    grid-column: span 15;
+  }
+  .col-lg-16 {
+    grid-column: span 16;
+  }
+}
