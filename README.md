@@ -77,6 +77,7 @@ DesignerPunk addresses the fundamental challenge of AI collaboration: **fuzzy te
 - [Border Width Tokens](/.kiro/specs/border-width-tokens/) - Semantic border width tokens for component structure and focus states
 - [Opacity Tokens](/.kiro/specs/opacity-tokens/) - Opacity primitives and semantic tokens for overlays and disabled states
 - [Blend Tokens](/.kiro/specs/blend-tokens/) - Cross-platform color blending with sRGB/Display P3 support and platform-specific blend mode translation
+- [Responsive Layout System](/.kiro/specs/responsive-layout-system/) - Web-specific responsive grid enhancement with breakpoint tokens, grid spacing tokens, and comprehensive documentation for universal content-driven component behavior
 - Requirements, design, and implementation planning following EARS format with hierarchical task structure
 
 ### 🚧 In Development
@@ -86,6 +87,15 @@ DesignerPunk addresses the fundamental challenge of AI collaboration: **fuzzy te
 - Component template development with captured architectural learnings
 - True Native component patterns (web, iOS, Android)
 - Mathematical token integration in component APIs
+
+### ✅ Recently Completed
+
+**Responsive Layout System** (January 2025)
+- Breakpoint and grid spacing token implementation
+- Web-specific responsive grid CSS generation
+- Universal content-driven component sizing guidance
+- Comprehensive documentation with platform-specific examples
+- Decision frameworks for token selection and component sizing
 
 ---
 
@@ -163,6 +173,16 @@ DesignerPunk addresses the fundamental challenge of AI collaboration: **fuzzy te
 - **Platform Translation**: Web CSS blend modes, iOS CIBlendMode, Android PorterDuff/BlendMode
 - **Semantic Blends**: Purpose-driven blend compositions (shadow, highlight, tint, shade)
 - **Blend Calculator**: Mathematical color blending with cross-platform consistency
+
+**Responsive Layout System** (Complete):
+- **Breakpoint Tokens** (4 tokens): Viewport width definitions (breakpointXs=320, breakpointSm=375, breakpointMd=1024, breakpointLg=1440)
+- **Grid Spacing Tokens** (8 semantic tokens): Gutter and margin tokens for each breakpoint referencing existing spacing tokens
+- **Progressive Column Counts**: 4→8→12→16 columns aligned with breakpoints for systematic layout complexity scaling
+- **Grid Spacing Scaling**: Spacing increases proportionally with layout complexity (16px→20px→24px→32px gutters)
+- **Web-Specific Grid Enhancement**: CSS Grid with custom properties for optimal performance, works with content-driven components
+- **Universal Content-Driven Behavior**: All platforms use content-driven component sizing with mathematical min/max constraints
+- **Cross-Platform Documentation**: Platform-specific examples for web (Lit + CSS), iOS (SwiftUI), Android (Compose)
+- **Comprehensive Usage Guides**: Decision frameworks, complete layout examples, media query patterns, and component sizing guidance
 
 **Semantic Token Generation** (Complete):
 - **Reference Preservation**: Semantic tokens reference primitives by name (colorPrimary → purple300), not resolved values
@@ -413,6 +433,41 @@ HOWEVER, here's why this might be wrong:
 <Modal padding={space.inset.spacious}>
   <ModalContent />
 </Modal>
+```
+
+### Responsive Layout System
+```html
+<!-- Web: Responsive grid with progressive column counts -->
+<div class="grid-container">
+  <!-- Sidebar: 4 cols on xs (stacked), 3 cols on sm, 4 cols on md/lg -->
+  <aside class="grid-item col-xs-4 col-sm-3 col-md-4 col-lg-4">
+    <h2>Filters</h2>
+  </aside>
+  
+  <!-- Main: 4 cols on xs, 5 cols on sm, 8 cols on md, 12 cols on lg -->
+  <main class="grid-item col-xs-4 col-sm-5 col-md-8 col-lg-12">
+    <!-- Content-driven components use their own sizing tokens -->
+    <button style="min-width: var(--space-800); max-width: var(--space-1200)">
+      Click Me
+    </button>
+  </main>
+</div>
+```
+
+```swift
+// iOS: Same mathematical constraints, platform-native syntax
+Button("Click Me")
+  .frame(minWidth: space800, maxWidth: space1200)
+```
+
+```kotlin
+// Android: Same mathematical constraints, platform-native syntax
+Button(
+  onClick = { },
+  modifier = Modifier.widthIn(min = space800.dp, max = space1200.dp)
+) {
+  Text("Click Me")
+}
 ```
 
 ---
