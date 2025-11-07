@@ -1,6 +1,6 @@
 /**
  * DesignerPunk Design System - Android Tokens
- * Generated: 2025-10-29T15:24:43.481Z
+ * Generated: 2025-11-07T00:27:08.304Z
  * Version: 1.0.0
  * Platform: Android (Kotlin Constants)
  */
@@ -34,6 +34,16 @@ object DesignTokens {
     const val border_width_200: Float = 2f
     // base × 4 = 1 × 4 = 4
     const val border_width_400: Float = 4f
+
+    // BREAKPOINT TOKENS
+    // Practical device-based value
+    const val breakpoint_xs: Float = 320f
+    // Practical device-based value
+    const val breakpoint_sm: Float = 375f
+    // Practical device-based value
+    const val breakpoint_md: Float = 1024f
+    // Practical device-based value
+    const val breakpoint_lg: Float = 1440f
 
     // COLOR TOKENS
     // Systematic gray scale progression - lightest
@@ -459,6 +469,16 @@ object DesignTokens {
     val opacity_hover = opacity_100
     val opacity_pressed = opacity_200
     val opacity_loading = opacity_200
+    val grid_gutter_xs = space_200
+    val grid_gutter_sm = space_250
+    val grid_gutter_md = space_300
+    val grid_gutter_lg = space_400
+    val grid_margin_xs = space_300
+    val grid_margin_sm = space_300
+    val grid_margin_md = space_400
+    val grid_margin_lg = space_500
+    val grid_gutter_native = space_250
+    val grid_margin_native = space_300
     val border_border_default = border_width_100
     val border_border_emphasis = border_width_200
     val border_border_heavy = border_width_400

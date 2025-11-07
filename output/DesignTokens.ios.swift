@@ -1,6 +1,6 @@
 ///
 /// DesignerPunk Design System - iOS Tokens
-/// Generated: 2025-10-29T15:24:43.479Z
+/// Generated: 2025-11-07T00:27:08.303Z
 /// Version: 1.0.0
 /// Platform: iOS (Swift Constants)
 ///
@@ -34,6 +34,16 @@ public struct DesignTokens {
     public static let borderWidth200: CGFloat = 2
     /// base × 4 = 1 × 4 = 4
     public static let borderWidth400: CGFloat = 4
+
+    // MARK: - BREAKPOINT TOKENS
+    /// Practical device-based value
+    public static let breakpointXs: CGFloat = 320
+    /// Practical device-based value
+    public static let breakpointSm: CGFloat = 375
+    /// Practical device-based value
+    public static let breakpointMd: CGFloat = 1024
+    /// Practical device-based value
+    public static let breakpointLg: CGFloat = 1440
 
     // MARK: - COLOR TOKENS
     /// Systematic gray scale progression - lightest
@@ -459,6 +469,16 @@ public struct DesignTokens {
     public static let opacityHover = opacity100
     public static let opacityPressed = opacity200
     public static let opacityLoading = opacity200
+    public static let gridGutterXs = space200
+    public static let gridGutterSm = space250
+    public static let gridGutterMd = space300
+    public static let gridGutterLg = space400
+    public static let gridMarginXs = space300
+    public static let gridMarginSm = space300
+    public static let gridMarginMd = space400
+    public static let gridMarginLg = space500
+    public static let gridGutterNative = space250
+    public static let gridMarginNative = space300
     public static let borderBorderDefault = borderWidth100
     public static let borderBorderEmphasis = borderWidth200
     public static let borderBorderHeavy = borderWidth400

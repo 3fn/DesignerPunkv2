@@ -1,6 +1,6 @@
 /**
  * DesignerPunk Design System - Web Tokens
- * Generated: 2025-10-29T15:24:43.476Z
+ * Generated: 2025-11-07T00:27:08.300Z
  * Version: 1.0.0
  * Platform: Web (CSS Custom Properties)
  *
@@ -37,6 +37,16 @@
   --border-width-200: 2px;
   /* base × 4 = 1 × 4 = 4 */
   --border-width-400: 4px;
+
+  /* BREAKPOINT TOKENS */
+  /* Practical device-based value */
+  --breakpoint-xs: 320px;
+  /* Practical device-based value */
+  --breakpoint-sm: 375px;
+  /* Practical device-based value */
+  --breakpoint-md: 1024px;
+  /* Practical device-based value */
+  --breakpoint-lg: 1440px;
 
   /* COLOR TOKENS */
   /* Systematic gray scale progression - lightest */
@@ -606,6 +616,16 @@
   --opacity-hover: var(--opacity-100);
   --opacity-pressed: var(--opacity-200);
   --opacity-loading: var(--opacity-200);
+  --grid-gutter-xs: var(--space-200);
+  --grid-gutter-sm: var(--space-250);
+  --grid-gutter-md: var(--space-300);
+  --grid-gutter-lg: var(--space-400);
+  --grid-margin-xs: var(--space-300);
+  --grid-margin-sm: var(--space-300);
+  --grid-margin-md: var(--space-400);
+  --grid-margin-lg: var(--space-500);
+  --grid-gutter-native: var(--space-250);
+  --grid-margin-native: var(--space-300);
   --border-border-default: var(--border-width-100);
   --border-border-emphasis: var(--border-width-200);
   --border-border-heavy: var(--border-width-400);
