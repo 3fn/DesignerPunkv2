@@ -11,12 +11,13 @@
 
 ## Executive Summary
 
-**Issues Discovered**: 13 new issues added to registry (#008-#020)
-**Issues Affecting This Area**: 13 total
-- Critical: 1
-- Important: 8
+**Issues Discovered**: 13 items initially identified (#008-#020)
+**Issues Affecting This Area**: 9 actual issues (4 reclassified as intentional design)
+- Critical: 0 (Issue #010 reclassified as intentional design)
+- Important: 5 (Issues #008, #009, #011 reclassified as intentional design)
 - Minor: 3
 - Not Issues: 1 (documented for clarity)
+- Reclassified: 4 (platform-appropriate design decisions)
 
 The architecture audit revealed significant inconsistencies across platform implementations and violations of separation of concerns principles. While the system demonstrates strong use of the generator pattern and consistent base class inheritance, there are critical gaps in interface definitions and systematic mixing of validation logic into non-validation components.
 
@@ -266,6 +267,76 @@ Issues discovered during this audit (see Issues Registry for full details):
   - Correct orchestration pattern
   - Demonstrates proper separation of concerns
   - Documented to clarify orchestration vs mixed responsibilities
+
+---
+
+## Reclassified Items (Investigation Results)
+
+**Investigation Date**: November 8, 2025
+**Investigator**: Kiro AI Agent + Peter Michaels Allen
+**Methodology**: Reviewed original design specs, implementation code, and design rationale
+
+The following items were initially flagged as inconsistencies during the architecture audit. Subsequent investigation revealed they are **intentional platform-appropriate design decisions**, not issues requiring fixes. These items have been reclassified and are documented here to prevent future misidentification.
+
+### Platform-Appropriate Design Decisions
+
+**Issue #008 - Constructor Inconsistency**:
+- **Initial Classification**: Important - Constructor patterns differ across platforms
+- **Reclassified As**: Not an issue - Intentional design
+- **Rationale**: iOS has no constructor because it only supports one output format (Swift). Android and Web have constructors because they support multiple output formats (Kotlin/XML for Android, CSS/JavaScript for Web). Constructors are only needed when format selection is required.
+- **Investigation**: Reviewed `.kiro/specs/cross-platform-build-system/design.md` and `.kiro/specs/semantic-token-generation/design.md`
+- **Evidence**: 
+  - iOS: `readonly formats: OutputFormat[] = ['swift']` - Single format, no constructor needed
+  - Android: `readonly formats: OutputFormat[] = ['kotlin', 'xml']` - Multiple formats, constructor for selection
+  - Web: `readonly formats: OutputFormat[] = ['css', 'javascript']` - Multiple formats, constructor for selection
+- **Resolution**: Documented in Platform Conventions Guide
+- **True Native Architecture**: Respects platform-specific needs rather than forcing artificial uniformity
+
+**Issue #009 - Method Naming Inconsistency**:
+- **Initial Classification**: Important - Platform-specific method names for equivalent functionality
+- **Reclassified As**: Not an issue - Intentional design
+- **Rationale**: Method names are platform-specific (`getSwiftType()`, `getKotlinType()`) because they return platform-specific types. iOS returns Swift types (`CGFloat`, `UIColor`, `UIFont.Weight`), Android returns Kotlin types (`Float`, `Color`, `Int`). Web doesn't need this method because it has a simpler type system (numbers/strings). The method names communicate WHAT they return.
+- **Investigation**: Reviewed platform generator implementations in `src/providers/`
+- **Evidence**:
+  - iOS `getSwiftType()`: Returns `'CGFloat' | 'UIColor' | 'UIFont.Weight' | 'String'`
+  - Android `getKotlinType()`: Returns `'Float' | 'Color' | 'Int' | 'String'`
+  - Web: No type method needed - inline handling for simple type system
+- **Resolution**: Documented in Platform Conventions Guide
+- **True Native Architecture**: Method names reflect platform-specific type systems
+
+**Issue #010 - Z-Index Handling Inconsistency**:
+- **Initial Classification**: Critical - Z-index scaling differs across platforms
+- **Reclassified As**: Not an issue - Intentional design
+- **Rationale**: Z-index scaling is intentional to match platform conventions. Web uses values like 100/200/300 (standard CSS z-index convention), iOS scales down by 100 to get 1/2/3 (SwiftUI layering convention). This respects platform-native layering patterns rather than forcing artificial consistency.
+- **Investigation**: Reviewed `.kiro/specs/layering-token-system/design.md`
+- **Evidence**: Design document explicitly states: "For z-index tokens, scale down values (divide by 100) for SwiftUI conventions. Web uses 100, 200, 300... but iOS uses 1, 2, 3..."
+- **Code Comment**: `src/providers/iOSFormatGenerator.ts` lines 24-27 document this intentional scaling
+- **Resolution**: Documented in Platform Conventions Guide
+- **True Native Architecture**: Respects platform-native layering conventions
+
+**Issue #011 - Opacity/Alpha Terminology**:
+- **Initial Classification**: Minor - Terminology inconsistency for same concept
+- **Reclassified As**: Not an issue - Intentional design
+- **Rationale**: Terminology matches platform API conventions. iOS and Web use "opacity" because that's what their APIs use (CSS `opacity` property, SwiftUI `.opacity()` modifier). Android uses "alpha" because that's what Compose uses (`Modifier.alpha()`, `Color.copy(alpha = ...)`). This ensures generated code matches platform documentation and developer expectations.
+- **Investigation**: Reviewed `.kiro/specs/opacity-tokens/design.md`
+- **Evidence**:
+  - Web: `opacity: 0.48;` (CSS property name)
+  - iOS: `.opacity(0.48)` (SwiftUI modifier name)
+  - Android: `Modifier.alpha(0.48f)` (Compose modifier name)
+- **Resolution**: Documented in Platform Conventions Guide
+- **True Native Architecture**: Matches platform API terminology
+
+### Lessons Learned from Investigation
+
+**Pattern Recognition**: Platform differences that appear as "inconsistencies" may actually be intentional platform-appropriate design. True Native Architecture respects platform conventions rather than forcing artificial uniformity.
+
+**Investigation Value**: Investigating before "fixing" prevented introducing actual problems by undoing intentional design decisions. All four items would have broken the system if "fixed" to be uniform.
+
+**Documentation Need**: Implicit design decisions should be made explicit through documentation to prevent future misidentification as issues. The Platform Conventions Guide now documents these design decisions with rationale.
+
+**Audit Process Success**: The audit successfully identified items that appeared inconsistent. The investigation process successfully determined which were real issues vs intentional design. Both processes worked as intended.
+
+**True Native Architecture Principle**: The system correctly prioritizes platform-appropriate design over artificial consistency. This is a feature, not a bug. Cross-platform consistency is achieved through mathematical foundations and token values, not through forcing identical implementation patterns.
 
 ---
 
