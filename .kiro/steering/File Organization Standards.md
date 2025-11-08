@@ -419,6 +419,143 @@ After moving files, update any cross-reference links to reflect new locations.
 
 ---
 
+## File Organization Scope
+
+### Overview
+
+The file organization system is intentionally designed to scan **only the root directory**, not subdirectories. This design decision is based on typical workflow patterns and ensures the automation remains predictable and safe.
+
+### Root Directory Only
+
+**Intentional Design**: File organization scans the root directory for files with organization metadata and moves them to appropriate locations based on their metadata values.
+
+**Why Root Directory Only?**
+
+1. **Completion Documents Already Organized**: Task completion documents are created directly in `.kiro/specs/[spec-name]/completion/` subdirectories and are already in their correct location
+2. **New Files in Root**: New documentation, analysis, and framework files are typically created in the root directory during development and need organization
+3. **Subdirectory Stability**: Files in subdirectories are usually already organized and shouldn't be moved automatically
+4. **Clear Scope Boundary**: Limiting scope to root directory makes the automation predictable and safe
+5. **Avoid Moving Organized Files**: Prevents accidentally reorganizing files that are already in their intended locations
+
+### Rationale
+
+**Root Directory Clutter Prevention**: The primary purpose of file organization is to prevent accumulation of unorganized files in the root directory. New files created during development typically appear in root and need to be moved to appropriate directories.
+
+**Completion Docs Already Organized**: Files created in `.kiro/specs/*/completion/` are already in their correct location and don't need organization.
+
+**Subdirectory Stability**: Files in subdirectories are usually already organized. Scanning subdirectories would risk moving files that are intentionally placed in specific locations.
+
+**Predictable Automation**: Limiting scope to root directory makes the system behavior clear and predictable. Developers know that only root-level files will be automatically organized.
+
+### Special Case: Spec-Guide Files
+
+**Note**: As decided in Task 1.2, spec-guide files will move from `.kiro/specs/[spec-name]/` to `docs/specs/[spec-name]/guides/` directory. This is an intentional migration to improve documentation organization and enable better cross-referencing between guides.
+
+**Migration Path**:
+- Old location: `.kiro/specs/[spec-name]/[guide-name].md`
+- New location: `docs/specs/[spec-name]/guides/[guide-name].md`
+- Organization metadata: `**Organization**: spec-guide`
+
+This migration will be handled through the file organization system when spec-guide files are moved to the root directory temporarily and then organized to their new location.
+
+### Organizing Files in Subdirectories
+
+If you need to organize files that are already in subdirectories, you have three options:
+
+#### Option 1: Move to Root Temporarily
+
+1. Move the file from subdirectory to root directory
+2. Add appropriate **Organization** metadata to the file header (if not already present)
+3. Run file organization: `./.kiro/hooks/organize-by-metadata.sh` or mark a task complete to trigger automatic organization
+4. The file will be organized to its correct location based on metadata
+
+**Example**:
+```bash
+# Move file to root
+mv .kiro/specs/my-spec/old-guide.md ./old-guide.md
+
+# Add organization metadata to file header
+# **Organization**: spec-guide
+# **Scope**: my-spec
+
+# Run organization (or mark task complete to trigger automatic organization)
+./.kiro/hooks/organize-by-metadata.sh
+
+# File moves to: docs/specs/my-spec/guides/old-guide.md
+```
+
+#### Option 2: Manual Organization
+
+1. Add **Organization** metadata to the file header (if not already present)
+2. Manually move the file to the appropriate directory based on metadata value:
+   - `framework-strategic` → `strategic-framework/`
+   - `spec-validation` → `.kiro/specs/[spec-name]/validation/`
+   - `spec-completion` → `.kiro/specs/[spec-name]/completion/`
+   - `spec-summary` → `docs/specs/[spec-name]/`
+   - `spec-guide` → `docs/specs/[spec-name]/guides/`
+   - `audit-findings` → `.kiro/audits/`
+   - `token-documentation` → `docs/tokens/`
+   - `process-standard` → `.kiro/steering/` or `docs/processes/`
+3. Update any cross-references in other files to reflect the new location
+4. Commit the changes manually
+
+**Example**:
+```bash
+# Add organization metadata to file header
+# **Organization**: spec-guide
+# **Scope**: my-spec
+
+# Manually move file
+mkdir -p docs/specs/my-spec/guides
+mv .kiro/specs/my-spec/old-guide.md docs/specs/my-spec/guides/old-guide.md
+
+# Update cross-references in other files
+# (Search for references to old-guide.md and update paths)
+
+# Commit changes
+git add .
+git commit -m "Organize: Move old-guide.md to spec-guide location"
+git push
+```
+
+#### Option 3: Use organize-by-metadata.sh Directly
+
+Run the organization script directly (scans root only by default):
+
+```bash
+# Run organization script
+./.kiro/hooks/organize-by-metadata.sh
+
+# For subdirectory files, move to root first, then run script
+mv subdirectory/file.md ./file.md
+./.kiro/hooks/organize-by-metadata.sh
+```
+
+### Scope Behavior Summary
+
+| Location | Automatic Organization | Manual Organization |
+|----------|----------------------|---------------------|
+| Root directory | ✅ Yes (on task completion) | ✅ Yes (anytime) |
+| Subdirectories | ❌ No (intentionally excluded) | ✅ Yes (manual process) |
+| Completion docs | ❌ No (already organized) | ✅ Yes (if needed) |
+| Spec-guide files | ⚠️ Migration in progress | ✅ Yes (manual or via root) |
+
+**Note**: This scope limitation is an intentional design decision that keeps the automation focused and predictable. Files in subdirectories are assumed to be already organized or require manual review before moving.
+
+### Logging Scanning Scope
+
+When the organization script runs, it logs the scanning scope to provide transparency about which directory is being scanned:
+
+```
+📁 Scanning directory: /path/to/project
+   Scope: Root directory only (subdirectories excluded by design)
+   Rationale: Avoid moving already-organized files
+```
+
+This logging helps developers understand the system behavior and confirms that only the root directory is being scanned.
+
+---
+
 ## Cross-Reference Standards
 
 ### Overview
