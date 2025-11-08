@@ -3,8 +3,8 @@
 **Date**: October 28, 2025
 **Last Updated**: November 7, 2025
 **Total Issues**: 7 (from Phase 1 Infrastructure Audit)
-**Resolved Issues**: 2 (Issues #001, #003)
-**Active Issues**: 5 (Issues #002, #004, #005, #006, #007)
+**Resolved Issues**: 4 (Issues #001, #002, #003, #004)
+**Active Issues**: 3 (Issues #005, #006, #007)
 **Status**: Partial Resolution Phase
 **Organization**: audit-findings
 **Scope**: phase-1-discovery-audit
@@ -532,8 +532,8 @@ None - Isolated documentation issue
 ## Issue Counter
 
 **Next Issue ID**: #008
-**Resolved Issues**: 2 (Issues #001, #003)
-**Active Issues**: 5 (Issues #002, #004, #005, #006, #007)
+**Resolved Issues**: 4 (Issues #001, #002, #003, #004)
+**Active Issues**: 3 (Issues #005, #006, #007)
 
 ---
 
@@ -829,10 +829,14 @@ Test hooks manually by running scripts directly, but this doesn't verify event-b
 ### Important Issues
 _Issues that reduce efficiency, create technical debt, or violate established patterns_
 
-**Active Important Issues**: 4 (Issues #002, #005, #006, #007)
-**Resolved Important Issues**: 1 (Issue #003)
+**Active Important Issues**: 2 (Issues #005, #006)
+**Resolved Important Issues**: 2 (Issues #002, #003)
 
-## Issue #002: commit-task.sh Treats --help as Task Name [ACTIVE]
+## Issue #002: commit-task.sh Treats --help as Task Name [RESOLVED]
+
+**Resolution Date**: November 7, 2025
+**Resolved By**: issue-fix-infrastructure-usability spec
+**Resolution Summary**: Added --help and -h flag support to commit-task.sh script. Script now displays comprehensive usage information when either flag is provided, and shows usage information when task name is missing. Improved error messages to guide developers on correct usage.
 
 **Discovered By**: Infrastructure Discovery Audit
 **Date Discovered**: 2025-10-28
@@ -878,7 +882,53 @@ Read script comments or documentation for usage information.
 
 ---
 
-## Issue #004: Release Manager Hook Dependency Chain Unclear [ACTIVE]
+### Resolution Details
+
+**Solution Implemented**:
+1. **Help Flag Support**: Added detection for --help and -h flags at the beginning of script
+2. **Usage Function**: Created show_usage() function with comprehensive usage information
+3. **Improved Error Messages**: When task name is missing, script now shows error message followed by usage information
+4. **Exit Codes**: Proper exit codes (0 for help, 1 for errors)
+
+**Changes Made**:
+- Updated `.kiro/hooks/commit-task.sh` with help flag handling
+- Added usage information display function
+- Improved error messages to include usage guidance
+
+**Validation**:
+- ✅ --help flag displays usage and exits with code 0
+- ✅ -h flag displays usage and exits with code 0
+- ✅ Missing task name shows error + usage and exits with code 1
+- ✅ Normal task processing still works correctly
+
+**Current State**:
+- ✅ Developers can run `./commit-task.sh --help` to see usage
+- ✅ Error messages guide developers on correct usage
+- ✅ Script is more discoverable and user-friendly
+
+**Verification**:
+To verify the fix is working:
+```bash
+# Display help
+./.kiro/hooks/commit-task.sh --help
+./.kiro/hooks/commit-task.sh -h
+
+# Test error message with usage
+./.kiro/hooks/commit-task.sh
+
+# Test normal operation
+./.kiro/hooks/commit-task.sh "Task Name"
+```
+
+---
+
+---
+
+## Issue #004: Release Manager Hook Dependency Chain Unclear [RESOLVED]
+
+**Resolution Date**: November 7, 2025
+**Resolved By**: issue-fix-infrastructure-usability spec
+**Resolution Summary**: Added comprehensive "Agent Hook Dependency Chains" section to Development Workflow document. Documented all dependency chain scenarios (success, failure, timeout, cancellation) with concrete troubleshooting commands and best practices. Developers can now understand and debug hook dependency chains effectively.
 
 **Discovered By**: Infrastructure Discovery Audit
 **Date Discovered**: 2025-10-28
@@ -924,6 +974,57 @@ Test dependency chain behavior manually.
 - Documentation: Minor - Documentation gap
 
 **Related Issues**: None
+
+---
+
+### Resolution Details
+
+**Solution Implemented**:
+1. **Agent Hook Dependency Chains Section**: Added comprehensive section to Development Workflow document
+2. **Dependency Chain Scenarios**: Documented four complete scenarios:
+   - When Prerequisite Hook Succeeds (execution flow, timing, logs, verification)
+   - When Prerequisite Hook Fails (causes, troubleshooting, workarounds, prevention)
+   - When Prerequisite Hook Times Out (timeout values: 10 min file org, 5 min release detection)
+   - When User Cancels Prerequisite Hook (cancellation scenarios, best practices)
+3. **Troubleshooting Guidance**: Provided concrete bash commands for:
+   - Verifying hook execution order
+   - Checking for prerequisite failures
+   - Verifying hook configuration
+   - Manual trigger commands as fallback
+4. **Best Practices**: Documented six comprehensive best practices:
+   - Monitor Logs Regularly
+   - Understand Dependencies
+   - Have Fallbacks Ready
+   - Test Independently
+   - Plan for Common Failure Scenarios
+   - Maintain Configuration Validity
+
+**Changes Made**:
+- Updated `.kiro/steering/Development Workflow.md` with "Agent Hook Dependency Chains" section
+- Used conditional loading pattern to prevent information overload
+- Included dependency chain diagram showing current hook chain
+- Provided copy-paste ready diagnostic commands
+
+**Validation**:
+- ✅ All dependency scenarios documented with complete information
+- ✅ Troubleshooting steps include concrete bash commands
+- ✅ Best practices cover all aspects of reliable hook automation
+- ✅ Documentation is clear, actionable, and comprehensive
+
+**Current State**:
+- ✅ Developers can understand how hook dependencies work
+- ✅ All failure scenarios documented with workarounds
+- ✅ Troubleshooting is faster with concrete diagnostic commands
+- ✅ Best practices guide reliable hook automation
+
+**Verification**:
+To verify the fix is working:
+1. Open `.kiro/steering/Development Workflow.md`
+2. Navigate to "Agent Hook Dependency Chains" section
+3. Review dependency chain scenarios and troubleshooting guidance
+4. Use diagnostic commands to verify hook execution
+
+---
 
 ---
 
@@ -1066,10 +1167,8 @@ Move files to root directory before running organization.
 ### Minor Issues
 _Cosmetic issues, documentation inconsistencies, or isolated improvements_
 
-**Active Minor Issues**: 0
-**Resolved Minor Issues**: 0
-
-(No minor issues discovered yet)
+**Active Minor Issues**: 1 (Issue #007)
+**Resolved Minor Issues**: 1 (Issue #004)
 
 ---
 
@@ -1078,13 +1177,13 @@ _Cosmetic issues, documentation inconsistencies, or isolated improvements_
 ### Infrastructure Discovery
 _Issues discovered during infrastructure audit_
 
-**Active Issues**: 5 (Issues #002, #004, #005, #006, #007)
-**Resolved Issues**: 2 (Issues #001, #003)
+**Active Issues**: 3 (Issues #005, #006, #007)
+**Resolved Issues**: 4 (Issues #001, #002, #003, #004)
 
 - **Issue #001**: Release Detection Hook Not Triggering on taskStatus Events (Critical) - **RESOLVED** by release-detection-trigger-fix spec
-- **Issue #002**: commit-task.sh Treats --help as Task Name (Important) - **ACTIVE**
+- **Issue #002**: commit-task.sh Treats --help as Task Name (Important) - **RESOLVED** by issue-fix-infrastructure-usability spec
 - **Issue #003**: Agent Hook Triggering Cannot Be Verified (Important) - **RESOLVED** by release-detection-trigger-fix spec
-- **Issue #004**: Release Manager Hook Dependency Chain Unclear (Minor) - **ACTIVE**
+- **Issue #004**: Release Manager Hook Dependency Chain Unclear (Minor) - **RESOLVED** by issue-fix-infrastructure-usability spec
 - **Issue #005**: File Organization Metadata Validation Inconsistent (Important) - **ACTIVE**
 - **Issue #006**: Cross-Reference Update Logic Has Path Calculation Issues (Important) - **ACTIVE**
 - **Issue #007**: File Organization Hook Only Scans Root Directory (Minor) - **ACTIVE**
@@ -1138,23 +1237,23 @@ _Issues that affect multiple discovery areas_
 
 - **Total Issues Discovered**: 7 (from Phase 1 Infrastructure Audit)
 - **Critical Issues**: 1 (resolved)
-- **Important Issues**: 5 (1 resolved, 4 active)
-- **Minor Issues**: 2 (both active)
-- **Resolution Rate**: 29% (2/7 resolved)
+- **Important Issues**: 4 (2 resolved, 2 active)
+- **Minor Issues**: 2 (1 resolved, 1 active)
+- **Resolution Rate**: 57% (4/7 resolved)
 
 ### Resolution Timeline
 
 | Issue ID | Severity | Discovered | Resolved | Days to Resolution | Resolved By |
 |----------|----------|------------|----------|-------------------|-------------|
 | #001 | Critical | 2025-10-28 | 2025-11-07 | 10 days | release-detection-trigger-fix |
+| #002 | Important | 2025-10-28 | 2025-11-07 | 10 days | issue-fix-infrastructure-usability |
 | #003 | Important | 2025-10-28 | 2025-11-07 | 10 days | release-detection-trigger-fix |
+| #004 | Minor | 2025-10-28 | 2025-11-07 | 10 days | issue-fix-infrastructure-usability |
 
 ### Active Issues
 
 | Issue ID | Severity | Discovered | Status | Priority |
 |----------|----------|------------|--------|----------|
-| #002 | Important | 2025-10-28 | Active | Medium |
-| #004 | Minor | 2025-10-28 | Active | Low |
 | #005 | Important | 2025-10-28 | Active | High |
 | #006 | Important | 2025-10-28 | Active | High |
 | #007 | Minor | 2025-10-28 | Active | Low |
@@ -1172,10 +1271,23 @@ _Issues that affect multiple discovery areas_
 - **Documentation**: Updated three standards documents (Spec Planning, Development Workflow, File Organization)
 - **Validation**: Confirmed hooks work correctly with new workflow, documented hybrid approach for AI vs manual workflows
 
+**Issues #002 and #004 Resolution** (issue-fix-infrastructure-usability spec):
+- **Root Cause**: 
+  - Issue #002: Missing help flag support in commit-task.sh script
+  - Issue #004: Undocumented hook dependency chain behavior
+- **Solution**: 
+  - Added --help and -h flag support to commit-task.sh with comprehensive usage information
+  - Added "Agent Hook Dependency Chains" section to Development Workflow with all scenarios documented
+- **Impact**:
+  - Improved developer experience with discoverable tool usage (Issue #002)
+  - Enabled effective troubleshooting of hook dependency chains (Issue #004)
+  - Both issues resolved with minimal implementation effort (quick wins)
+- **Documentation**: Updated commit-task.sh script and Development Workflow document
+- **Validation**: Confirmed help flags work correctly and dependency chain documentation is comprehensive
+
 **Remaining Issues Prioritization**:
 - **High Priority** (Issues #005, #006): File organization reliability concerns that could affect documentation quality
-- **Medium Priority** (Issue #002): Usability issue affecting developer experience
-- **Low Priority** (Issues #004, #007): Documentation gaps and intentional limitations
+- **Low Priority** (Issue #007): Intentional limitation that needs documentation
 
 ### Next Steps
 
@@ -1193,4 +1305,4 @@ _Issues that affect multiple discovery areas_
 
 ---
 
-*This registry tracks all issues discovered during the Phase 1 Discovery Audit. Issues #001 and #003 have been successfully resolved through the release-detection-trigger-fix spec (29% resolution rate). Five active issues remain, with Issues #005 and #006 prioritized as high priority for resolution. The registry will continue to be updated as additional issues are discovered in remaining discovery areas.*
+*This registry tracks all issues discovered during the Phase 1 Discovery Audit. Four issues (#001, #002, #003, #004) have been successfully resolved through two specs: release-detection-trigger-fix and issue-fix-infrastructure-usability (57% resolution rate). Three active issues remain (#005, #006, #007), with Issues #005 and #006 prioritized as high priority for resolution. The registry will continue to be updated as additional issues are discovered in remaining discovery areas.*
