@@ -1,11 +1,12 @@
 # Phase 1 Issues Registry
 
 **Date**: October 28, 2025
-**Last Updated**: November 7, 2025
+**Last Updated**: November 8, 2025
 **Total Issues**: 7 (from Phase 1 Infrastructure Audit)
 **Resolved Issues**: 7 (All issues resolved)
 **Active Issues**: 0
-**Status**: All Issues Resolved
+**Reclassified Items**: 4 (Issues #008-#011 - Platform-appropriate design decisions)
+**Status**: All Issues Resolved, 4 Items Reclassified
 **Organization**: audit-findings
 **Scope**: phase-1-discovery-audit
 
@@ -16,6 +17,8 @@
 This registry serves as the centralized record of all issues discovered during the Phase 1 Discovery Audit. Each issue is assigned a unique ID and documented with complete details including severity, evidence, reproduction steps, and cross-area impact.
 
 All discovery reports reference issues in this registry rather than duplicating information, ensuring consistency and enabling cross-area awareness.
+
+**Reclassification Note**: Issues #008-#011 were initially flagged by the Architecture Audit as inconsistencies. Investigation on November 8, 2025 revealed these are intentional platform-appropriate design decisions, not issues. They are documented in the "Reclassified Items" section to prevent future misidentification.
 
 ---
 
@@ -531,9 +534,128 @@ None - Isolated documentation issue
 
 ## Issue Counter
 
-**Next Issue ID**: #008
+**Next Issue ID**: #012 (Issues #008-#011 reclassified as intentional design)
 **Resolved Issues**: 7 (All issues from Phase 1 Infrastructure Audit)
 **Active Issues**: 0
+**Reclassified Issues**: 4 (Issues #008-#011 - Platform-appropriate design decisions)
+
+---
+
+## Reclassified Items (Not Issues)
+
+**Investigation Date**: November 8, 2025
+**Investigator**: Kiro AI Agent + Peter Michaels Allen
+**Methodology**: Reviewed original design specs, implementation code, and design rationale
+
+The following items were initially flagged as inconsistencies during the Phase 1 Architecture Audit. Subsequent investigation revealed they are **intentional platform-appropriate design decisions**, not issues requiring fixes. These items are documented here to prevent future misidentification.
+
+### Issue #008: Format Generator Constructor Inconsistency [NOT AN ISSUE]
+
+**Initial Classification**: Important - Constructor patterns differ across platforms
+**Reclassified As**: Platform-appropriate design decision
+**Investigation Date**: November 8, 2025
+
+**Rationale**: iOS has no constructor because it only supports one output format (Swift). Android and Web have constructors because they support multiple output formats (Kotlin/XML for Android, CSS/JavaScript for Web). Constructors are only needed when format selection is required.
+
+**Evidence**:
+- iOS: `readonly formats: OutputFormat[] = ['swift']` - Single format, no constructor needed
+- Android: `readonly formats: OutputFormat[] = ['kotlin', 'xml']` - Multiple formats, constructor for selection
+- Web: `readonly formats: OutputFormat[] = ['css', 'javascript']` - Multiple formats, constructor for selection
+
+**Investigation Sources**:
+- `.kiro/specs/cross-platform-build-system/design.md`
+- `.kiro/specs/semantic-token-generation/design.md`
+- `src/providers/iOSFormatGenerator.ts`
+- `src/providers/AndroidFormatGenerator.ts`
+- `src/providers/WebFormatGenerator.ts`
+
+**Resolution**: Documented in Platform Conventions Guide
+
+**True Native Architecture**: Respects platform-specific needs rather than forcing artificial uniformity.
+
+---
+
+### Issue #009: Platform-Specific Method Naming [NOT AN ISSUE]
+
+**Initial Classification**: Important - Platform-specific method names for equivalent functionality
+**Reclassified As**: Platform-appropriate design decision
+**Investigation Date**: November 8, 2025
+
+**Rationale**: Method names are platform-specific (`getSwiftType()`, `getKotlinType()`) because they return platform-specific types. iOS returns Swift types (`CGFloat`, `UIColor`, `UIFont.Weight`), Android returns Kotlin types (`Float`, `Color`, `Int`). Web doesn't need this method because it has a simpler type system (numbers/strings). The method names communicate WHAT they return.
+
+**Evidence**:
+- iOS `getSwiftType()`: Returns `'CGFloat' | 'UIColor' | 'UIFont.Weight' | 'String'`
+- Android `getKotlinType()`: Returns `'Float' | 'Color' | 'Int' | 'String'`
+- Web: No type method needed - inline handling for simple type system
+
+**Investigation Sources**:
+- `src/providers/iOSFormatGenerator.ts` (lines 120-145)
+- `src/providers/AndroidFormatGenerator.ts`
+- `src/providers/WebFormatGenerator.ts`
+
+**Resolution**: Documented in Platform Conventions Guide
+
+**True Native Architecture**: Method names reflect platform-specific type systems.
+
+---
+
+### Issue #010: Z-Index Handling Inconsistency [NOT AN ISSUE]
+
+**Initial Classification**: Critical - Z-index scaling differs across platforms
+**Reclassified As**: Platform-appropriate design decision
+**Investigation Date**: November 8, 2025
+
+**Rationale**: Z-index scaling is intentional to match platform conventions. Web uses values like 100/200/300 (standard CSS z-index convention), iOS scales down by 100 to get 1/2/3 (SwiftUI layering convention). This respects platform-native layering patterns rather than forcing artificial consistency.
+
+**Evidence**:
+- Design document explicitly states: "For z-index tokens, scale down values (divide by 100) for SwiftUI conventions. Web uses 100, 200, 300... but iOS uses 1, 2, 3..."
+- Code comment in `src/providers/iOSFormatGenerator.ts` (lines 24-27) documents this intentional scaling
+
+**Investigation Sources**:
+- `.kiro/specs/layering-token-system/design.md`
+- `src/providers/iOSFormatGenerator.ts` (lines 24-27)
+
+**Resolution**: Documented in Platform Conventions Guide
+
+**True Native Architecture**: Respects platform-native layering conventions.
+
+---
+
+### Issue #011: Opacity/Alpha Terminology [NOT AN ISSUE]
+
+**Initial Classification**: Minor - Terminology inconsistency for same concept
+**Reclassified As**: Platform-appropriate design decision
+**Investigation Date**: November 8, 2025
+
+**Rationale**: Terminology matches platform API conventions. iOS and Web use "opacity" because that's what their APIs use (CSS `opacity` property, SwiftUI `.opacity()` modifier). Android uses "alpha" because that's what Compose uses (`Modifier.alpha()`, `Color.copy(alpha = ...)`). This ensures generated code matches platform documentation and developer expectations.
+
+**Evidence**:
+- Web: `opacity: 0.48;` (CSS property name)
+- iOS: `.opacity(0.48)` (SwiftUI modifier name)
+- Android: `Modifier.alpha(0.48f)` (Compose modifier name)
+
+**Investigation Sources**:
+- `.kiro/specs/opacity-tokens/design.md` (Platform Translation section)
+- `src/providers/iOSFormatGenerator.ts` (generateOpacityModifier method)
+- `src/providers/AndroidFormatGenerator.ts` (generateAlphaModifier method)
+
+**Resolution**: Documented in Platform Conventions Guide
+
+**True Native Architecture**: Matches platform API terminology.
+
+---
+
+### Lessons Learned from Reclassification
+
+**Pattern Recognition**: Platform differences that appear as "inconsistencies" may actually be intentional platform-appropriate design. True Native Architecture respects platform conventions rather than forcing artificial uniformity.
+
+**Investigation Value**: Investigating before "fixing" prevented introducing actual problems by undoing intentional design decisions. All four items would have broken the system if "fixed" to be uniform.
+
+**Documentation Need**: Implicit design decisions should be made explicit through documentation to prevent future misidentification as issues. The Platform Conventions Guide now documents these design decisions with rationale.
+
+**Audit Process Success**: The audit successfully identified items that appeared inconsistent. The investigation process successfully determined which were real issues vs intentional design. Both processes worked as intended.
+
+**True Native Architecture Principle**: The system correctly prioritizes platform-appropriate design over artificial consistency. This is a feature, not a bug. Cross-platform consistency is achieved through mathematical foundations and token values, not through forcing identical implementation patterns.
 
 ---
 
