@@ -2,8 +2,8 @@
 
 **Date**: October 30, 2025  
 **Purpose**: Archive of deprecated hook configurations that used unsupported trigger types  
-**Organization**: process-documentation  
-**Scope**: release-detection-trigger-fix
+**Organization**: process-standard  
+**Scope**: cross-project
 
 ---
 

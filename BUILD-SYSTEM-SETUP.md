@@ -160,5 +160,5 @@ Remove `dist/` entirely and use ts-node everywhere (simpler but slower)
 
 ---
 
-**Organization**: process-documentation  
+**Organization**: process-standard
 **Scope**: cross-project

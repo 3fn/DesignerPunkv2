@@ -2,8 +2,8 @@
 
 **Date**: October 28, 2025
 **Purpose**: Documentation guide for the Layering Token System
-**Organization**: framework-documentation
-**Scope**: cross-platform
+**Organization**: token-documentation
+**Scope**: cross-project
 
 ---
 

@@ -4682,3 +4682,7 @@ Error processing trigger file .kiro/release-triggers/1761868170-spec-completion.
 [2025-11-06 17:59:54] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1762480794-task-completion.json
 [2025-11-06 17:59:54] Trigger queued for manual processing (TypeScript integration disabled)
 [2025-11-06 17:59:54] Release manager hook completed
+[2025-11-07 19:47:51] Hook triggered by Kiro IDE agent hook system
+[2025-11-07 19:47:51] Event: taskStatusChange, Status: completed
+[2025-11-07 19:47:51] Release manager hook started: hook_type=auto, source_path=
+[2025-11-07 19:47:51] Release manager hook completed
