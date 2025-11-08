@@ -164,6 +164,26 @@ This specification addresses five critical architectural issues discovered durin
 
 ---
 
+### Requirement 7: Document Current Dependencies and Migration Strategy
+
+**User Story**: As a developer implementing this refactoring, I want a clear understanding of current dependencies and a migration strategy, so that I can safely extract validation logic without breaking existing functionality.
+
+#### Acceptance Criteria
+
+1. WHEN the design phase begins THEN all current usages of validation methods SHALL be identified and documented
+2. WHEN validation method usage is documented THEN it SHALL include:
+   - All calls to TokenFileGenerator.validateSemanticReferences()
+   - All calls to PrimitiveTokenRegistry.validateToken() and validateAll()
+   - All calls to SemanticTokenRegistry.validateToken() and validateAll()
+   - Any other components that depend on these validation methods
+3. WHEN dependencies are identified THEN a dependency diagram SHALL be created showing component relationships
+4. WHEN the refactoring strategy is designed THEN it SHALL include a migration path for all dependent components
+5. WHEN the migration path is defined THEN it SHALL specify the order of changes to avoid breaking functionality
+6. WHEN the design is complete THEN it SHALL include both current state analysis and desired state design
+7. WHEN the design documents dependencies THEN it SHALL identify any potential breaking changes and mitigation strategies
+
+---
+
 ## Success Criteria
 
 This specification will be considered successful when:
@@ -178,6 +198,8 @@ This specification will be considered successful when:
 8. ✅ All existing functionality preserved (no breaking changes)
 9. ✅ Validation logic centralized in validator components only
 10. ✅ Clear separation of concerns: generators generate, registries store, validators validate
+11. ✅ Current dependencies documented with migration strategy
+12. ✅ Design includes dependency analysis, refactoring order, and mitigation for breaking changes
 
 ---
 
