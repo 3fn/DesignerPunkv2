@@ -3,9 +3,9 @@
 **Date**: October 28, 2025
 **Last Updated**: November 7, 2025
 **Total Issues**: 7 (from Phase 1 Infrastructure Audit)
-**Resolved Issues**: 4 (Issues #001, #002, #003, #004)
-**Active Issues**: 3 (Issues #005, #006, #007)
-**Status**: Partial Resolution Phase
+**Resolved Issues**: 7 (All issues resolved)
+**Active Issues**: 0
+**Status**: All Issues Resolved
 **Organization**: audit-findings
 **Scope**: phase-1-discovery-audit
 
@@ -532,8 +532,8 @@ None - Isolated documentation issue
 ## Issue Counter
 
 **Next Issue ID**: #008
-**Resolved Issues**: 4 (Issues #001, #002, #003, #004)
-**Active Issues**: 3 (Issues #005, #006, #007)
+**Resolved Issues**: 7 (All issues from Phase 1 Infrastructure Audit)
+**Active Issues**: 0
 
 ---
 
@@ -829,8 +829,8 @@ Test hooks manually by running scripts directly, but this doesn't verify event-b
 ### Important Issues
 _Issues that reduce efficiency, create technical debt, or violate established patterns_
 
-**Active Important Issues**: 2 (Issues #005, #006)
-**Resolved Important Issues**: 2 (Issues #002, #003)
+**Active Important Issues**: 0
+**Resolved Important Issues**: 4 (Issues #002, #003, #005, #006)
 
 ## Issue #002: commit-task.sh Treats --help as Task Name [RESOLVED]
 
@@ -1028,7 +1028,11 @@ To verify the fix is working:
 
 ---
 
-## Issue #005: File Organization Metadata Validation Inconsistent [ACTIVE]
+## Issue #005: File Organization Metadata Validation Inconsistent [RESOLVED]
+
+**Resolution Date**: November 7, 2025
+**Resolved By**: issue-fix-file-organization-reliability spec
+**Resolution Summary**: Audited all 289 files with organization metadata. Added three new valid values (spec-guide, audit-findings, token-documentation) to File Organization Standards with comprehensive documentation. Consolidated three duplicate values (process-documentation → process-standard). All files now use validated metadata values and are eligible for automatic organization.
 
 **Discovered By**: Infrastructure Discovery Audit
 **Date Discovered**: 2025-10-28
@@ -1072,7 +1076,60 @@ Manually organize files or update metadata to use valid values.
 
 ---
 
-## Issue #006: Cross-Reference Update Logic Has Path Calculation Issues [ACTIVE]
+### Resolution Details
+
+**Solution Implemented**:
+1. **Comprehensive Audit**: Scanned all markdown files in repository, found 289 files with organization metadata
+2. **Added Three New Values**: 
+   - `spec-guide` (19 files): Implementation guides explaining architectural decisions
+   - `audit-findings` (7 files): Cross-project audit reports and issue registries
+   - `token-documentation` (2 files): Foundational token system documentation
+3. **Consolidated Duplicate Values**:
+   - `process-documentation` → `process-standard` (3 files updated)
+   - Documented rationale for consolidation
+4. **Updated Standards**: File Organization Standards now documents all valid values with clear definitions and rationale
+5. **Enhanced Error Messages**: Organization script provides clear error messages indicating which values are valid
+
+**Changes Made**:
+- Updated `.kiro/steering/File Organization Standards.md` with new organization values
+- Updated 3 files to use consolidated metadata values
+- Created comprehensive audit report documenting all 289 files
+- Enhanced validation logic in organize-by-metadata.sh
+
+**Validation**:
+- ✅ All 289 files with organization metadata audited
+- ✅ All metadata values validated and documented
+- ✅ All files eligible for automatic organization
+- ✅ Clear rationale documented for all metadata values
+
+**Current State**:
+- ✅ 100% of files with organization metadata use validated values
+- ✅ File Organization Standards documents all valid values
+- ✅ Automatic organization works for all files with metadata
+- ✅ Clear error messages guide developers on valid values
+
+**Verification**:
+To verify the fix is working:
+```bash
+# Check File Organization Standards for all valid values
+grep "**Organization**:" .kiro/steering/File\ Organization\ Standards.md
+
+# Run organization script to verify no validation errors
+./.kiro/agent-hooks/organize-by-metadata.sh
+
+# Review audit report
+cat .kiro/specs/issue-fix-file-organization-reliability/validation/metadata-audit-report.md
+```
+
+---
+
+---
+
+## Issue #006: Cross-Reference Update Logic Has Path Calculation Issues [RESOLVED]
+
+**Resolution Date**: November 7, 2025
+**Resolved By**: issue-fix-file-organization-reliability spec
+**Resolution Summary**: Added Python availability check with clear error messages and installation instructions. Implemented link validation to verify updated links resolve to existing files. Added exclusion rules for preserved-knowledge directory to preserve historical integrity. Enhanced logging to track which files had links updated and how many changes were made.
 
 **Discovered By**: Infrastructure Discovery Audit
 **Date Discovered**: 2025-10-28
@@ -1119,7 +1176,77 @@ Manually update cross-references after file moves.
 
 ---
 
-## Issue #007: File Organization Hook Only Scans Root Directory [ACTIVE]
+### Resolution Details
+
+**Solution Implemented**:
+1. **Python Availability Check**: Added check for Python before executing Python-dependent logic
+   - If Python not available: Clear error message with installation instructions
+   - Script skips cross-reference updates with warning
+   - Prevents cryptic errors from missing dependency
+   
+2. **Link Validation**: Implemented validation that updated links resolve to existing files
+   - Checks that target files exist after path calculation
+   - Reports broken links with specific file paths
+   - Provides guidance for manual correction
+   
+3. **Exclusion Rules**: Added configuration to exclude specific directories from cross-reference updates
+   - `preserved-knowledge/` directory excluded to preserve historical integrity
+   - Logs which files were skipped due to exclusion rules
+   - Prevents unintended modifications to historical documents
+   
+4. **Enhanced Logging**: Improved logging to track cross-reference updates
+   - Logs which files had links updated
+   - Logs how many links were changed per file
+   - Provides visibility into update operations
+
+**Changes Made**:
+- Updated `.kiro/hooks/organize-by-metadata.sh` with Python check, link validation, and exclusion rules
+- Updated `.kiro/agent-hooks/organize-after-task.sh` to use enhanced logic
+- Added configuration for excluded directories
+- Enhanced error messages and logging
+
+**Validation**:
+- ✅ Python availability checked before cross-reference updates
+- ✅ Clear error messages when Python not available
+- ✅ Link validation verifies updated links resolve correctly
+- ✅ Broken links reported with specific guidance
+- ✅ preserved-knowledge directory excluded from updates
+- ✅ Enhanced logging tracks all update operations
+
+**Current State**:
+- ✅ Cross-reference updates are reliable with Python check
+- ✅ Link validation prevents broken documentation links
+- ✅ Historical documents preserved through exclusion rules
+- ✅ Clear logging provides visibility into operations
+
+**Verification**:
+To verify the fix is working:
+```bash
+# Test Python availability check
+# (Temporarily rename python3 to test error handling)
+# mv /usr/bin/python3 /usr/bin/python3.bak
+# ./.kiro/agent-hooks/organize-by-metadata.sh
+# Should see: "Python 3 is required for cross-reference updates..."
+
+# Test link validation
+# Move a file and run organization
+./.kiro/agent-hooks/organize-by-metadata.sh
+# Check logs for link validation results
+
+# Verify exclusion rules
+# Check that preserved-knowledge files are not modified
+ls -la preserved-knowledge/
+```
+
+---
+
+---
+
+## Issue #007: File Organization Hook Only Scans Root Directory [RESOLVED]
+
+**Resolution Date**: November 7, 2025
+**Resolved By**: issue-fix-file-organization-reliability spec
+**Resolution Summary**: Documented that root-only scanning is an intentional design decision in File Organization Standards. Added comprehensive explanation of rationale (avoid moving already-organized files), provided guidance for organizing files in subdirectories, and enhanced logging to show which directory is being scanned.
 
 **Discovered By**: Infrastructure Discovery Audit
 **Date Discovered**: 2025-10-28
@@ -1162,13 +1289,68 @@ Move files to root directory before running organization.
 
 ---
 
+### Resolution Details
+
+**Solution Implemented**:
+1. **Documented Intentional Design**: Added "File Organization Scope" section to File Organization Standards
+   - Explicitly documents that only root directory is scanned
+   - Explains rationale: Avoid moving already-organized files in subdirectories
+   - Clarifies that completion docs are created directly in correct subdirectories
+   
+2. **Provided Guidance**: Documented three options for organizing files in subdirectories
+   - Option 1: Move to root temporarily, then run organization
+   - Option 2: Manual organization with metadata update
+   - Option 3: Use organize-by-metadata.sh directly
+   
+3. **Enhanced Logging**: Added logging to show scanning scope
+   - Logs which directory is being scanned
+   - Logs rationale for root-only scanning
+   - Provides transparency about system behavior
+   
+4. **Documented Scope Behavior**: Created summary table showing automatic vs manual organization for different locations
+
+**Changes Made**:
+- Updated `.kiro/steering/File Organization Standards.md` with "File Organization Scope" section
+- Added comprehensive rationale and guidance
+- Enhanced logging in organize-by-metadata.sh
+- Created scope behavior summary table
+
+**Validation**:
+- ✅ Root-only scanning documented as intentional design
+- ✅ Rationale clearly explained
+- ✅ Guidance provided for organizing subdirectory files
+- ✅ Logging shows scanning scope
+- ✅ Scope behavior table clarifies automatic vs manual organization
+
+**Current State**:
+- ✅ Developers understand root-only scanning is intentional
+- ✅ Clear guidance available for organizing subdirectory files
+- ✅ Logging provides transparency about scanning scope
+- ✅ Documentation prevents confusion about system behavior
+
+**Verification**:
+To verify the fix is working:
+```bash
+# Check File Organization Standards for scope documentation
+grep -A 20 "File Organization Scope" .kiro/steering/File\ Organization\ Standards.md
+
+# Run organization script and check logging
+./.kiro/agent-hooks/organize-by-metadata.sh
+# Should see: "📁 Scanning directory: /path/to/project"
+# Should see: "   Scope: Root directory only (subdirectories excluded by design)"
+```
+
+---
+
+---
+
 ---
 
 ### Minor Issues
 _Cosmetic issues, documentation inconsistencies, or isolated improvements_
 
-**Active Minor Issues**: 1 (Issue #007)
-**Resolved Minor Issues**: 1 (Issue #004)
+**Active Minor Issues**: 0
+**Resolved Minor Issues**: 2 (Issues #004, #007)
 
 ---
 
@@ -1177,16 +1359,16 @@ _Cosmetic issues, documentation inconsistencies, or isolated improvements_
 ### Infrastructure Discovery
 _Issues discovered during infrastructure audit_
 
-**Active Issues**: 3 (Issues #005, #006, #007)
-**Resolved Issues**: 4 (Issues #001, #002, #003, #004)
+**Active Issues**: 0
+**Resolved Issues**: 7 (All issues resolved)
 
 - **Issue #001**: Release Detection Hook Not Triggering on taskStatus Events (Critical) - **RESOLVED** by release-detection-trigger-fix spec
 - **Issue #002**: commit-task.sh Treats --help as Task Name (Important) - **RESOLVED** by issue-fix-infrastructure-usability spec
 - **Issue #003**: Agent Hook Triggering Cannot Be Verified (Important) - **RESOLVED** by release-detection-trigger-fix spec
 - **Issue #004**: Release Manager Hook Dependency Chain Unclear (Minor) - **RESOLVED** by issue-fix-infrastructure-usability spec
-- **Issue #005**: File Organization Metadata Validation Inconsistent (Important) - **ACTIVE**
-- **Issue #006**: Cross-Reference Update Logic Has Path Calculation Issues (Important) - **ACTIVE**
-- **Issue #007**: File Organization Hook Only Scans Root Directory (Minor) - **ACTIVE**
+- **Issue #005**: File Organization Metadata Validation Inconsistent (Important) - **RESOLVED** by issue-fix-file-organization-reliability spec
+- **Issue #006**: Cross-Reference Update Logic Has Path Calculation Issues (Important) - **RESOLVED** by issue-fix-file-organization-reliability spec
+- **Issue #007**: File Organization Hook Only Scans Root Directory (Minor) - **RESOLVED** by issue-fix-file-organization-reliability spec
 
 ---
 
@@ -1237,9 +1419,9 @@ _Issues that affect multiple discovery areas_
 
 - **Total Issues Discovered**: 7 (from Phase 1 Infrastructure Audit)
 - **Critical Issues**: 1 (resolved)
-- **Important Issues**: 4 (2 resolved, 2 active)
-- **Minor Issues**: 2 (1 resolved, 1 active)
-- **Resolution Rate**: 57% (4/7 resolved)
+- **Important Issues**: 4 (all resolved)
+- **Minor Issues**: 2 (all resolved)
+- **Resolution Rate**: 100% (7/7 resolved) ✅
 
 ### Resolution Timeline
 
@@ -1249,14 +1431,13 @@ _Issues that affect multiple discovery areas_
 | #002 | Important | 2025-10-28 | 2025-11-07 | 10 days | issue-fix-infrastructure-usability |
 | #003 | Important | 2025-10-28 | 2025-11-07 | 10 days | release-detection-trigger-fix |
 | #004 | Minor | 2025-10-28 | 2025-11-07 | 10 days | issue-fix-infrastructure-usability |
+| #005 | Important | 2025-10-28 | 2025-11-07 | 10 days | issue-fix-file-organization-reliability |
+| #006 | Important | 2025-10-28 | 2025-11-07 | 10 days | issue-fix-file-organization-reliability |
+| #007 | Minor | 2025-10-28 | 2025-11-07 | 10 days | issue-fix-file-organization-reliability |
 
 ### Active Issues
 
-| Issue ID | Severity | Discovered | Status | Priority |
-|----------|----------|------------|--------|----------|
-| #005 | Important | 2025-10-28 | Active | High |
-| #006 | Important | 2025-10-28 | Active | High |
-| #007 | Minor | 2025-10-28 | Active | Low |
+**No active issues remaining** - All Phase 1 Infrastructure Audit issues have been resolved! 🎉
 
 ### Key Learnings
 
@@ -1285,9 +1466,28 @@ _Issues that affect multiple discovery areas_
 - **Documentation**: Updated commit-task.sh script and Development Workflow document
 - **Validation**: Confirmed help flags work correctly and dependency chain documentation is comprehensive
 
-**Remaining Issues Prioritization**:
-- **High Priority** (Issues #005, #006): File organization reliability concerns that could affect documentation quality
-- **Low Priority** (Issue #007): Intentional limitation that needs documentation
+**Issues #005, #006, and #007 Resolution** (issue-fix-file-organization-reliability spec):
+- **Root Causes**:
+  - Issue #005: Files using undocumented organization metadata values
+  - Issue #006: Cross-reference update logic lacked Python check and link validation
+  - Issue #007: Root-only scanning limitation was undocumented
+- **Solution**:
+  - Audited all 289 files with organization metadata
+  - Added three new valid values (spec-guide, audit-findings, token-documentation)
+  - Consolidated duplicate values (process-documentation → process-standard)
+  - Added Python availability check with clear error messages
+  - Implemented link validation to prevent broken documentation links
+  - Added exclusion rules for preserved-knowledge directory
+  - Documented root-only scanning as intentional design decision
+- **Impact**:
+  - 100% of files with organization metadata now use validated values (Issue #005)
+  - Cross-reference updates are reliable with Python check and link validation (Issue #006)
+  - Developers understand root-only scanning is intentional (Issue #007)
+  - All three issues resolved in single comprehensive spec
+- **Documentation**: Updated File Organization Standards with new values, scope documentation, and rationale
+- **Validation**: All 289 files eligible for automatic organization, cross-reference updates validated, scanning scope documented
+
+**Phase 1 Infrastructure Audit Complete**: All 7 issues discovered during Phase 1 Infrastructure Audit have been successfully resolved across three specs (100% resolution rate)
 
 ### Next Steps
 
@@ -1305,4 +1505,4 @@ _Issues that affect multiple discovery areas_
 
 ---
 
-*This registry tracks all issues discovered during the Phase 1 Discovery Audit. Four issues (#001, #002, #003, #004) have been successfully resolved through two specs: release-detection-trigger-fix and issue-fix-infrastructure-usability (57% resolution rate). Three active issues remain (#005, #006, #007), with Issues #005 and #006 prioritized as high priority for resolution. The registry will continue to be updated as additional issues are discovered in remaining discovery areas.*
+*This registry tracks all issues discovered during the Phase 1 Discovery Audit. **All 7 issues from Phase 1 Infrastructure Audit have been successfully resolved** (100% resolution rate) through three comprehensive specs: release-detection-trigger-fix (Issues #001, #003), issue-fix-infrastructure-usability (Issues #002, #004), and issue-fix-file-organization-reliability (Issues #005, #006, #007). All issues were discovered on October 28, 2025 and resolved on November 7, 2025 (10 days to resolution). The registry will continue to be updated as additional issues are discovered in remaining discovery areas (Architecture, Token System, Documentation).*
