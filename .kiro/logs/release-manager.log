@@ -4764,3 +4764,62 @@ Error processing trigger file .kiro/release-triggers/1761868170-spec-completion.
 [2025-11-07 20:50:19] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1762577419-task-completion.json
 [2025-11-07 20:50:19] Trigger queued for manual processing (TypeScript integration disabled)
 [2025-11-07 20:50:19] Release manager hook completed
+[2025-11-07 21:25:59] Hook triggered by Kiro IDE agent hook system
+[2025-11-07 21:25:59] Event: taskStatusChange, Status: completed
+[2025-11-07 21:25:59] Release manager hook started: hook_type=auto, source_path=
+[2025-11-07 21:25:59] Detecting release triggers: type=spec-completion, source=.kiro/specs/issue-fix-file-organization-reliability/completion/task-2-1-completion.md
+[2025-11-07 21:25:59] Spec completion detected: .kiro/specs/issue-fix-file-organization-reliability/completion/task-2-1-completion.md
+[2025-11-07 21:25:59] Processing release trigger: spec-completion from .kiro/specs/issue-fix-file-organization-reliability/completion/task-2-1-completion.md
+[2025-11-07 21:25:59] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1762579559-spec-completion.json
+[2025-11-07 21:25:59] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-07 21:25:59] Detecting release triggers: type=spec-completion, source=.kiro/specs/issue-fix-file-organization-reliability/completion/task-2-2-completion.md
+[2025-11-07 21:25:59] Spec completion detected: .kiro/specs/issue-fix-file-organization-reliability/completion/task-2-2-completion.md
+[2025-11-07 21:25:59] Processing release trigger: spec-completion from .kiro/specs/issue-fix-file-organization-reliability/completion/task-2-2-completion.md
+[2025-11-07 21:25:59] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1762579559-spec-completion.json
+[2025-11-07 21:25:59] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-07 21:25:59] Detecting release triggers: type=spec-completion, source=.kiro/specs/issue-fix-file-organization-reliability/completion/task-2-3-completion.md
+[2025-11-07 21:25:59] Spec completion detected: .kiro/specs/issue-fix-file-organization-reliability/completion/task-2-3-completion.md
+[2025-11-07 21:25:59] Processing release trigger: spec-completion from .kiro/specs/issue-fix-file-organization-reliability/completion/task-2-3-completion.md
+[2025-11-07 21:25:59] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1762579559-spec-completion.json
+[2025-11-07 21:25:59] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-07 21:25:59] Detecting release triggers: type=spec-completion, source=.kiro/specs/issue-fix-file-organization-reliability/completion/task-2-4-completion.md
+[2025-11-07 21:25:59] Spec completion detected: .kiro/specs/issue-fix-file-organization-reliability/completion/task-2-4-completion.md
+[2025-11-07 21:25:59] Processing release trigger: spec-completion from .kiro/specs/issue-fix-file-organization-reliability/completion/task-2-4-completion.md
+[2025-11-07 21:25:59] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1762579559-spec-completion.json
+[2025-11-07 21:25:59] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-07 21:25:59] Detecting release triggers: type=spec-completion, source=.kiro/specs/issue-fix-file-organization-reliability/completion/task-2-5-completion.md
+[2025-11-07 21:25:59] Spec completion detected: .kiro/specs/issue-fix-file-organization-reliability/completion/task-2-5-completion.md
+[2025-11-07 21:25:59] Processing release trigger: spec-completion from .kiro/specs/issue-fix-file-organization-reliability/completion/task-2-5-completion.md
+[2025-11-07 21:25:59] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1762579559-spec-completion.json
+[2025-11-07 21:25:59] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-07 21:25:59] Detecting release triggers: type=spec-completion, source=.kiro/specs/issue-fix-file-organization-reliability/completion/task-2-parent-completion.md
+[2025-11-07 21:25:59] Spec completion detected: .kiro/specs/issue-fix-file-organization-reliability/completion/task-2-parent-completion.md
+[2025-11-07 21:25:59] Processing release trigger: spec-completion from .kiro/specs/issue-fix-file-organization-reliability/completion/task-2-parent-completion.md
+[2025-11-07 21:25:59] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1762579559-spec-completion.json
+[2025-11-07 21:25:59] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-07 21:25:59] Detecting release triggers: type=spec-completion, source=.kiro/specs/issue-fix-file-organization-reliability/completion/task-3-1-completion.md
+[2025-11-07 21:25:59] Spec completion detected: .kiro/specs/issue-fix-file-organization-reliability/completion/task-3-1-completion.md
+[2025-11-07 21:25:59] Processing release trigger: spec-completion from .kiro/specs/issue-fix-file-organization-reliability/completion/task-3-1-completion.md
+[2025-11-07 21:25:59] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1762579559-spec-completion.json
+[2025-11-07 21:25:59] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-07 21:25:59] Detecting release triggers: type=spec-completion, source=.kiro/specs/issue-fix-file-organization-reliability/completion/task-3-2-completion.md
+[2025-11-07 21:25:59] Spec completion detected: .kiro/specs/issue-fix-file-organization-reliability/completion/task-3-2-completion.md
+[2025-11-07 21:25:59] Processing release trigger: spec-completion from .kiro/specs/issue-fix-file-organization-reliability/completion/task-3-2-completion.md
+[2025-11-07 21:25:59] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1762579559-spec-completion.json
+[2025-11-07 21:25:59] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-07 21:25:59] Detecting release triggers: type=spec-completion, source=.kiro/specs/issue-fix-file-organization-reliability/completion/task-3-3-completion.md
+[2025-11-07 21:25:59] Spec completion detected: .kiro/specs/issue-fix-file-organization-reliability/completion/task-3-3-completion.md
+[2025-11-07 21:25:59] Processing release trigger: spec-completion from .kiro/specs/issue-fix-file-organization-reliability/completion/task-3-3-completion.md
+[2025-11-07 21:25:59] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1762579559-spec-completion.json
+[2025-11-07 21:25:59] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-07 21:25:59] Detecting release triggers: type=spec-completion, source=.kiro/specs/issue-fix-file-organization-reliability/completion/task-3-parent-completion.md
+[2025-11-07 21:25:59] Spec completion detected: .kiro/specs/issue-fix-file-organization-reliability/completion/task-3-parent-completion.md
+[2025-11-07 21:25:59] Processing release trigger: spec-completion from .kiro/specs/issue-fix-file-organization-reliability/completion/task-3-parent-completion.md
+[2025-11-07 21:25:59] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1762579559-spec-completion.json
+[2025-11-07 21:25:59] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-07 21:25:59] Detecting release triggers: type=task-completion, source=.kiro/specs/issue-fix-file-organization-reliability/tasks.md
+[2025-11-07 21:25:59] Task completion detected: .kiro/specs/issue-fix-file-organization-reliability/tasks.md
+[2025-11-07 21:25:59] Processing release trigger: task-completion from .kiro/specs/issue-fix-file-organization-reliability/tasks.md
+[2025-11-07 21:25:59] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1762579559-task-completion.json
+[2025-11-07 21:25:59] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-07 21:25:59] Release manager hook completed
