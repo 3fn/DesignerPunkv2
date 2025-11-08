@@ -220,6 +220,36 @@ When creating cross-references, calculate relative paths based on the source doc
 - Test links by clicking them in rendered markdown to verify they work
 - Update cross-references if files are moved during organization
 
+#### Spec-Specific Guides
+```markdown
+**Organization**: spec-guide
+**Scope**: [spec-name]
+```
+**Purpose**: Implementation guides and architectural documentation for specific specs
+**Location**: `docs/specs/[spec-name]/guides/` directory
+**Examples**: Compositional architecture guides, strategic flexibility explanations, migration guides
+**Rationale**: Added based on Phase 1 audit findings (19 files). Spec guides are distinct from completion docs (which document what was done) and validation artifacts (which verify correctness). Guides explain architectural decisions, design patterns, and implementation approaches for spec outputs.
+
+#### Audit Findings
+```markdown
+**Organization**: audit-findings
+**Scope**: cross-project
+```
+**Purpose**: Cross-project audit reports and issue registries
+**Location**: `.kiro/audits/` directory
+**Examples**: Phase 1 infrastructure audit, issues registry, discovery reports
+**Rationale**: Added based on Phase 1 audit findings (7 files). Audit findings are distinct from spec-validation (which validates specific spec implementation) because audits are cross-spec, document discovered issues rather than validate implementation, and have different lifecycle than spec validation artifacts.
+
+#### Token Documentation
+```markdown
+**Organization**: token-documentation
+**Scope**: cross-project
+```
+**Purpose**: Foundational token system documentation and guides
+**Location**: `docs/tokens/` directory
+**Examples**: Shadow tokens guide, glow tokens guide, layering tokens guide
+**Rationale**: Added based on Phase 1 audit findings (2 files). Token documentation is distinct from spec-guide (which is spec-specific) because token docs are foundational, cross-project references that explain token system concepts used across multiple specs.
+
 #### Process Standards
 ```markdown
 **Organization**: process-standard
@@ -228,6 +258,7 @@ When creating cross-references, calculate relative paths based on the source doc
 **Purpose**: Reusable process documentation and standards
 **Location**: `.kiro/steering/` or `docs/processes/` directory
 **Examples**: Development workflows, quality standards, methodology documentation
+**Consolidation Note**: The value `process-documentation` has been consolidated into `process-standard`. Files previously using `process-documentation` should be updated to use `process-standard` as they serve the same purpose (reusable process documentation).
 
 #### Working Documents
 ```markdown
@@ -264,11 +295,15 @@ strategic-framework/
 docs/specs/[spec-name]/                   # Public-facing documentation (TRIGGERS HOOKS)
 ├── task-1-summary.md                     # ✅ Parent task summary (triggers release detection)
 ├── task-2-summary.md                     # ✅ Parent task summary (triggers release detection)
-└── task-N-summary.md                     # ✅ Parent task summary (triggers release detection)
-                                          # Format: task-N-summary.md (N = parent task number)
-                                          # Purpose: Concise, commit-style summaries
-                                          # Hook Pattern: **/task-*-summary.md
-                                          # Kiro IDE watches this directory for file creation
+├── task-N-summary.md                     # ✅ Parent task summary (triggers release detection)
+│                                         # Format: task-N-summary.md (N = parent task number)
+│                                         # Purpose: Concise, commit-style summaries
+│                                         # Hook Pattern: **/task-*-summary.md
+│                                         # Kiro IDE watches this directory for file creation
+└── guides/                               # Spec-specific implementation guides
+    ├── compositional-architecture-guide.md  # Architectural pattern explanations
+    ├── strategic-flexibility-guide.md       # Design decision rationale
+    └── migration-guide.md                   # Migration paths and upgrade guides
 
 .kiro/specs/[spec-name]/                  # Internal documentation (NO HOOK TRIGGERS)
 ├── requirements.md                        # ❌ Spec requirements (no hook trigger)
@@ -305,6 +340,23 @@ docs/specs/[spec-name]/                   # Public-facing documentation (TRIGGER
 - **Detailed parent docs**: `task-N-parent-completion.md` (e.g., `task-1-parent-completion.md`)
 - **Subtask docs**: `task-N.M-completion.md` (e.g., `task-1-1-completion.md`, `task-2-3-completion.md`)
 
+### Audit Findings
+```
+.kiro/audits/                             # Cross-project audit reports
+├── phase-1-infrastructure-report.md      # Infrastructure discovery audit
+├── phase-1-issues-registry.md            # Discovered issues and priorities
+└── [other-audit-reports].md              # Additional audit findings
+```
+
+### Token Documentation
+```
+docs/tokens/                              # Foundational token system documentation
+├── shadow-tokens.md                      # Shadow token system guide
+├── glow-tokens.md                        # Glow token system guide
+├── layering-tokens.md                    # Layering token system guide
+└── [other-token-guides].md               # Additional token documentation
+```
+
 ### Process Documentation
 ```
 .kiro/steering/                           # Always-active process guidance
@@ -337,6 +389,9 @@ When creating any new file, include organization metadata in the header:
 - **spec-validation**: Move to `.kiro/specs/[spec-name]/validation/` directory
 - **spec-completion**: Move to `.kiro/specs/[spec-name]/completion/` directory
 - **spec-summary**: Move to `docs/specs/[spec-name]/` directory
+- **spec-guide**: Move to `docs/specs/[spec-name]/guides/` directory
+- **audit-findings**: Move to `.kiro/audits/` directory
+- **token-documentation**: Move to `docs/tokens/` directory
 - **process-standard**: Keep in `.kiro/steering/` or move to `docs/processes/`
 - **working-document**: Keep in root or appropriate working directory
 

@@ -41,6 +41,19 @@ extract_metadata() {
     fi
 }
 
+# Valid organization metadata values
+VALID_ORG_VALUES=(
+    "framework-strategic"
+    "spec-validation"
+    "spec-completion"
+    "spec-summary"
+    "spec-guide"
+    "audit-findings"
+    "token-documentation"
+    "process-standard"
+    "working-document"
+)
+
 # Function to validate organization metadata
 validate_metadata() {
     local file="$1"
@@ -49,25 +62,46 @@ validate_metadata() {
     
     if [[ -z "$organization" ]]; then
         print_error "Missing **Organization** metadata in $file"
+        echo ""
+        echo "  Please add organization metadata to the file header:"
+        echo "  **Organization**: [value]"
+        echo "  **Scope**: [scope]"
+        echo ""
         return 1
     fi
     
     if [[ -z "$scope" ]]; then
         print_error "Missing **Scope** metadata in $file"
+        echo ""
+        echo "  Please add scope metadata to the file header:"
+        echo "  **Scope**: [scope]"
+        echo ""
         return 1
     fi
     
     # Validate organization values
-    case "$organization" in
-        "framework-strategic"|"spec-validation"|"spec-completion"|"process-standard"|"working-document")
-            return 0
-            ;;
-        *)
-            print_error "Invalid organization value '$organization' in $file"
-            print_error "Valid values: framework-strategic, spec-validation, spec-completion, process-standard, working-document"
-            return 1
-            ;;
-    esac
+    local valid=false
+    for valid_value in "${VALID_ORG_VALUES[@]}"; do
+        if [[ "$organization" == "$valid_value" ]]; then
+            valid=true
+            break
+        fi
+    done
+    
+    if [[ "$valid" == false ]]; then
+        print_error "Invalid organization value in $file: '$organization'"
+        echo ""
+        echo "  Valid organization values are:"
+        for valid_value in "${VALID_ORG_VALUES[@]}"; do
+            echo "    - $valid_value"
+        done
+        echo ""
+        echo "  Please update the **Organization** metadata in $file to use one of these values."
+        echo ""
+        return 1
+    fi
+    
+    return 0
 }
 
 # Function to determine target directory based on metadata
@@ -84,6 +118,18 @@ get_target_directory() {
             ;;
         "spec-completion")
             echo ".kiro/specs/${scope}/completion/"
+            ;;
+        "spec-summary")
+            echo "docs/specs/${scope}/"
+            ;;
+        "spec-guide")
+            echo "docs/specs/${scope}/guides/"
+            ;;
+        "audit-findings")
+            echo ".kiro/audits/"
+            ;;
+        "token-documentation")
+            echo "docs/tokens/"
             ;;
         "process-standard")
             echo ".kiro/steering/"
@@ -340,6 +386,10 @@ DESCRIPTION:
     - framework-strategic: Move to strategic-framework/
     - spec-validation: Move to .kiro/specs/[scope]/validation/
     - spec-completion: Move to .kiro/specs/[scope]/completion/
+    - spec-summary: Move to docs/specs/[scope]/
+    - spec-guide: Move to docs/specs/[scope]/guides/
+    - audit-findings: Move to .kiro/audits/
+    - token-documentation: Move to docs/tokens/
     - process-standard: Keep in .kiro/steering/
     - working-document: Keep in root directory
     

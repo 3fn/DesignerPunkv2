@@ -1,9 +1,11 @@
 # Phase 1 Issues Registry
 
 **Date**: October 28, 2025
-**Last Updated**: October 28, 2025
-**Total Issues**: 1
-**Status**: Discovery Phase
+**Last Updated**: November 7, 2025
+**Total Issues**: 7 (from Phase 1 Infrastructure Audit)
+**Resolved Issues**: 2 (Issues #001, #003)
+**Active Issues**: 5 (Issues #002, #004, #005, #006, #007)
+**Status**: Partial Resolution Phase
 **Organization**: audit-findings
 **Scope**: phase-1-discovery-audit
 
@@ -529,7 +531,9 @@ None - Isolated documentation issue
 
 ## Issue Counter
 
-**Next Issue ID**: #002
+**Next Issue ID**: #008
+**Resolved Issues**: 2 (Issues #001, #003)
+**Active Issues**: 5 (Issues #002, #004, #005, #006, #007)
 
 ---
 
@@ -538,7 +542,16 @@ None - Isolated documentation issue
 ### Critical Issues
 _Issues that block development, cause system failures, or violate core architectural principles_
 
-## Issue #001: Release Detection Hook Not Triggering on taskStatus Events
+**Active Critical Issues**: 0
+**Resolved Critical Issues**: 1 (Issue #001)
+
+---
+
+## Issue #001: Release Detection Hook Not Triggering on taskStatus Events [RESOLVED]
+
+**Resolution Date**: November 7, 2025
+**Resolved By**: release-detection-trigger-fix spec
+**Resolution Summary**: Replaced unsupported `taskStatusChange` trigger with `fileCreated` trigger on parent task summary documents in `docs/specs/[spec-name]/`. Implemented two-document workflow: detailed completion docs in `.kiro/` (internal) and summary docs in `docs/` (triggers hooks). Created both automatic and manual fallback hooks.
 
 **Discovered By**: Infrastructure Discovery Audit
 **Date Discovered**: 2025-10-28
@@ -677,21 +690,384 @@ This workaround defeats the purpose of automation and requires developers to rem
 - Documentation: Important - Release analysis documentation may be incomplete without automated detection
 
 **Related Issues**:
-- `.kiro/issues/release-manager-taskstatus-trigger-issue.md` - Known issue documenting this problem in detail with additional context and investigation notes
+- `.kiro/issues/release-manager-taskstatus-trigger-issue.md` - Known issue documenting this problem in detail with additional context and investigation notes (also resolved by this spec)
 
 ---
+
+### Resolution Details
+
+**Root Cause Identified**:
+- The `taskStatusChange` trigger type is **not supported** by Kiro IDE agent hooks
+- Only four trigger types are supported: `fileCreated`, `fileEdited`, `fileDeleted`, and `manual`
+- The `.kiro/` directory is filtered from Kiro IDE's file watching system, preventing hooks from triggering on files created there
+
+**Solution Implemented**:
+1. **Two-Document Workflow**: 
+   - Detailed completion docs remain in `.kiro/specs/[spec-name]/completion/` (internal, comprehensive)
+   - Summary docs created in `docs/specs/[spec-name]/` (public-facing, triggers hooks)
+   
+2. **New Hook Configurations**:
+   - Automatic hook: Uses `fileCreated` trigger with pattern `**/task-*-summary.md`
+   - Manual hook: Provides fallback for edge cases or when automatic detection doesn't run
+   
+3. **Documentation Updates**:
+   - Spec Planning Standards updated with summary document workflow
+   - Development Workflow updated with two-document process and troubleshooting
+   - File Organization Standards updated with summary document metadata
+   
+4. **Validation Completed**:
+   - Hooks tested and confirmed working with manual file creation through IDE UI
+   - Hook limitation documented: automatic hooks only work for manual file operations, not AI-created files
+   - Hybrid approach documented: automatic for manual edits, manual trigger for AI workflows
+
+**Spec Artifacts**:
+- Requirements: `.kiro/specs/release-detection-trigger-fix/requirements.md`
+- Design: `.kiro/specs/release-detection-trigger-fix/design.md`
+- Tasks: `.kiro/specs/release-detection-trigger-fix/tasks.md`
+- Completion Docs: `.kiro/specs/release-detection-trigger-fix/completion/` (25 documents)
+- Summary Docs: `docs/specs/release-detection-trigger-fix/` (6 parent task summaries)
+
+**Current State**:
+- ✅ Release detection now triggers on parent task summary document creation
+- ✅ Both automatic (fileCreated) and manual fallback hooks available
+- ✅ Documentation updated across all three standards documents
+- ✅ Validation confirms hooks work correctly with new workflow
+- ✅ Hybrid approach documented for AI-assisted vs manual workflows
+
+**Verification**:
+To verify the fix is working:
+1. Complete a parent task and create summary document in `docs/specs/[spec-name]/task-N-summary.md`
+2. For AI-created files: Run `./.kiro/hooks/release-manager.sh auto` manually
+3. For manually created files through IDE UI: Hook triggers automatically
+4. Check `.kiro/logs/release-manager.log` for execution entry
+5. Check `.kiro/release-triggers/` for new trigger files
+6. Run `npm run release:analyze` to verify completion documents are found
+
+---
+
+---
+
+## Issue #003: Agent Hook Triggering Cannot Be Verified [RESOLVED]
+
+**Discovered By**: Infrastructure Discovery Audit
+**Date Discovered**: 2025-10-28
+**Severity**: Important
+**Category**: Agent Hook System
+**Affects**: All agent hooks, testing infrastructure, automation verification
+
+**Resolution Date**: November 7, 2025
+**Resolved By**: release-detection-trigger-fix spec
+**Resolution Summary**: Replaced unsupported `taskStatusChange` trigger with `fileCreated` trigger. This resolved the verification issue by using a supported trigger type that can be tested and validated. The new hook configuration uses `fileCreated` on summary documents, which can be verified through manual file creation testing.
+
+**Location**:
+- **File(s)**: `.kiro/agent-hooks/*.json` (all agent hook configurations)
+- **System**: Agent Hook System
+- **Context**: Hook execution verification and testing
+
+**Description**:
+Agent hooks configured with `taskStatusChange` trigger type cannot be verified because this trigger type is not supported by Kiro IDE. There is no way to test if hooks are triggered by Kiro IDE events, creating a testing gap for critical automation functionality. This issue is related to Issue #001 (same root cause).
+
+**Steps to Reproduce**:
+1. Configure agent hook with `taskStatusChange` trigger
+2. Use taskStatus tool to mark task complete
+3. Check `.kiro/logs/` for hook execution logs
+4. Observe: No log entries, no way to verify if hook executed
+
+**Expected Behavior**:
+Agent hooks should be verifiable through testing, with clear execution logs and observable outcomes.
+
+**Actual Behavior**:
+Cannot verify if agent hooks execute when triggered by Kiro IDE events. No logging mechanism exists to confirm hook execution.
+
+**Evidence**:
+```json
+// .kiro/agent-hooks/release-detection-on-task-completion.json
+{
+  "trigger": {
+    "type": "taskStatusChange",  // Unsupported trigger type
+    "status": "completed"
+  }
+}
+```
+
+**Workaround**:
+Test hooks manually by running scripts directly, but this doesn't verify event-based triggering.
+
+**Cross-Area Impact**:
+- Infrastructure: Important - Cannot verify automation works correctly
+- Architecture: Minor - Testing architecture has gaps
+- Token System: None
+- Documentation: Minor - Cannot document verified behavior
+
+**Related Issues**:
+- Issue #001: Release Detection Hook Not Triggering (same root cause)
+
+### Resolution Details
+
+**Root Cause**: Same as Issue #001 - `taskStatusChange` trigger type not supported by Kiro IDE
+
+**Solution**: Replaced with `fileCreated` trigger on summary documents in `docs/specs/[spec-name]/`, which:
+- Uses supported trigger type that can be tested
+- Provides verifiable hook execution through file creation
+- Enables validation through manual testing
+- Creates observable outcomes (log entries, trigger files)
+
+**Verification**: 
+- Hooks tested with manual file creation through IDE UI
+- Execution confirmed through log entries
+- Trigger files created as expected
+- Hook behavior now verifiable and documented
+
+**Current State**:
+- ✅ Hooks use supported trigger types
+- ✅ Hook execution can be verified through testing
+- ✅ Logging confirms hook execution
+- ✅ Observable outcomes enable validation
 
 ---
 
 ### Important Issues
 _Issues that reduce efficiency, create technical debt, or violate established patterns_
 
-(No important issues discovered yet)
+**Active Important Issues**: 4 (Issues #002, #005, #006, #007)
+**Resolved Important Issues**: 1 (Issue #003)
+
+## Issue #002: commit-task.sh Treats --help as Task Name [ACTIVE]
+
+**Discovered By**: Infrastructure Discovery Audit
+**Date Discovered**: 2025-10-28
+**Severity**: Important
+**Category**: Build Automation
+**Affects**: Task completion workflow, developer experience
+
+**Location**:
+- **File(s)**: `.kiro/hooks/commit-task.sh`
+- **System**: Build Automation System
+- **Context**: Command-line argument parsing
+
+**Description**:
+The commit-task.sh script treats --help flag as a task name instead of displaying usage information. This creates confusion for developers learning the tool and can result in accidental commits with meaningless messages.
+
+**Steps to Reproduce**:
+1. Run `./.kiro/hooks/commit-task.sh --help`
+2. Observe: Script attempts to find task named "--help" in tasks.md
+3. Expected: Display usage information
+
+**Expected Behavior**:
+Script should recognize --help flag and display usage information.
+
+**Actual Behavior**:
+Script treats --help as a task name and attempts to process it.
+
+**Evidence**:
+```bash
+$ ./.kiro/hooks/commit-task.sh --help
+Error: Task '--help' not found in tasks.md
+```
+
+**Workaround**:
+Read script comments or documentation for usage information.
+
+**Cross-Area Impact**:
+- Infrastructure: Important - Affects developer experience
+- Architecture: None
+- Token System: None
+- Documentation: Minor - Help text not accessible
+
+**Related Issues**: None
+
+---
+
+## Issue #004: Release Manager Hook Dependency Chain Unclear [ACTIVE]
+
+**Discovered By**: Infrastructure Discovery Audit
+**Date Discovered**: 2025-10-28
+**Severity**: Minor
+**Category**: Release Management
+**Affects**: Hook dependency chains, troubleshooting
+
+**Location**:
+- **File(s)**: `.kiro/agent-hooks/release-detection-on-task-completion.json`
+- **System**: Release Management System
+- **Context**: Hook dependency chain behavior
+
+**Description**:
+Documentation doesn't explain what happens when hooks in a dependency chain fail. The `runAfter` configuration specifies dependencies but behavior on failure is unclear.
+
+**Steps to Reproduce**:
+1. Review agent hook configuration with `runAfter` dependency
+2. Check documentation for dependency chain behavior
+3. Observe: No explanation of failure handling
+
+**Expected Behavior**:
+Documentation should explain what happens when dependent hooks fail.
+
+**Actual Behavior**:
+Dependency chain behavior is undocumented.
+
+**Evidence**:
+```json
+{
+  "settings": {
+    "runAfter": ["organize-after-task-completion"]
+  }
+}
+```
+
+**Workaround**:
+Test dependency chain behavior manually.
+
+**Cross-Area Impact**:
+- Infrastructure: Minor - Affects troubleshooting
+- Architecture: None
+- Token System: None
+- Documentation: Minor - Documentation gap
+
+**Related Issues**: None
+
+---
+
+## Issue #005: File Organization Metadata Validation Inconsistent [ACTIVE]
+
+**Discovered By**: Infrastructure Discovery Audit
+**Date Discovered**: 2025-10-28
+**Severity**: Important
+**Category**: File Organization
+**Affects**: File organization automation, metadata validation
+
+**Location**:
+- **File(s)**: Various files with organization metadata
+- **System**: File Organization System
+- **Context**: Metadata validation
+
+**Description**:
+Some files use organization metadata values that are not in the validation list, preventing automatic organization of affected files and creating inconsistency between documentation and implementation.
+
+**Steps to Reproduce**:
+1. Run file organization script
+2. Observe: Some files rejected due to invalid organization values
+3. Check File Organization Standards for valid values
+4. Observe: Files use values not in the list
+
+**Expected Behavior**:
+All organization metadata values should be validated and documented.
+
+**Actual Behavior**:
+Files use undocumented organization values.
+
+**Evidence**:
+Files using "process-documentation" value not in validation list.
+
+**Workaround**:
+Manually organize files or update metadata to use valid values.
+
+**Cross-Area Impact**:
+- Infrastructure: Important - Affects automation reliability
+- Architecture: None
+- Token System: None
+- Documentation: Important - Documentation inconsistency
+
+**Related Issues**: None
+
+---
+
+## Issue #006: Cross-Reference Update Logic Has Path Calculation Issues [ACTIVE]
+
+**Discovered By**: Infrastructure Discovery Audit
+**Date Discovered**: 2025-10-28
+**Severity**: Important
+**Category**: File Organization
+**Affects**: Cross-reference integrity, documentation quality
+
+**Location**:
+- **File(s)**: `.kiro/hooks/organize-by-metadata.sh` (cross-reference update logic)
+- **System**: File Organization System
+- **Context**: Cross-reference path calculation
+
+**Description**:
+The cross-reference update logic has several reliability concerns:
+- Python dependency without availability check
+- Fallback path calculation may be incorrect
+- No validation of updated links
+- Could result in broken documentation links
+
+**Steps to Reproduce**:
+1. Move file with cross-references
+2. Run organization script
+3. Observe: Cross-reference updates may fail or produce incorrect paths
+
+**Expected Behavior**:
+Cross-references should be updated correctly with validation.
+
+**Actual Behavior**:
+Updates may fail or produce incorrect paths.
+
+**Evidence**:
+Script uses Python for path calculation without checking if Python is available.
+
+**Workaround**:
+Manually update cross-references after file moves.
+
+**Cross-Area Impact**:
+- Infrastructure: Important - Affects automation reliability
+- Architecture: None
+- Token System: None
+- Documentation: Important - Could break documentation links
+
+**Related Issues**: None
+
+---
+
+## Issue #007: File Organization Hook Only Scans Root Directory [ACTIVE]
+
+**Discovered By**: Infrastructure Discovery Audit
+**Date Discovered**: 2025-10-28
+**Severity**: Minor
+**Category**: File Organization
+**Affects**: File organization scope
+
+**Location**:
+- **File(s)**: `.kiro/hooks/organize-by-metadata.sh`
+- **System**: File Organization System
+- **Context**: Scanning scope
+
+**Description**:
+The file organization hook only scans the root directory, not subdirectories. This may be intentional to avoid moving already-organized files, but it's not documented as a limitation.
+
+**Steps to Reproduce**:
+1. Create file with organization metadata in subdirectory
+2. Run organization script
+3. Observe: File not detected or organized
+
+**Expected Behavior**:
+Either scan subdirectories or document root-only scanning as intentional.
+
+**Actual Behavior**:
+Only root directory scanned, limitation not documented.
+
+**Evidence**:
+Script scans only root directory by default.
+
+**Workaround**:
+Move files to root directory before running organization.
+
+**Cross-Area Impact**:
+- Infrastructure: Minor - Limited scope
+- Architecture: None
+- Token System: None
+- Documentation: Minor - Undocumented limitation
+
+**Related Issues**: None
+
+---
 
 ---
 
 ### Minor Issues
 _Cosmetic issues, documentation inconsistencies, or isolated improvements_
+
+**Active Minor Issues**: 0
+**Resolved Minor Issues**: 0
 
 (No minor issues discovered yet)
 
@@ -702,12 +1078,24 @@ _Cosmetic issues, documentation inconsistencies, or isolated improvements_
 ### Infrastructure Discovery
 _Issues discovered during infrastructure audit_
 
-- **Issue #001**: Release Detection Hook Not Triggering on taskStatus Events (Critical)
+**Active Issues**: 5 (Issues #002, #004, #005, #006, #007)
+**Resolved Issues**: 2 (Issues #001, #003)
+
+- **Issue #001**: Release Detection Hook Not Triggering on taskStatus Events (Critical) - **RESOLVED** by release-detection-trigger-fix spec
+- **Issue #002**: commit-task.sh Treats --help as Task Name (Important) - **ACTIVE**
+- **Issue #003**: Agent Hook Triggering Cannot Be Verified (Important) - **RESOLVED** by release-detection-trigger-fix spec
+- **Issue #004**: Release Manager Hook Dependency Chain Unclear (Minor) - **ACTIVE**
+- **Issue #005**: File Organization Metadata Validation Inconsistent (Important) - **ACTIVE**
+- **Issue #006**: Cross-Reference Update Logic Has Path Calculation Issues (Important) - **ACTIVE**
+- **Issue #007**: File Organization Hook Only Scans Root Directory (Minor) - **ACTIVE**
 
 ---
 
 ### Architecture Discovery
 _Issues discovered during architecture audit_
+
+**Active Issues**: 0
+**Resolved Issues**: 0
 
 (No architecture issues discovered yet)
 
@@ -716,12 +1104,18 @@ _Issues discovered during architecture audit_
 ### Token System Discovery
 _Issues discovered during token system audit_
 
+**Active Issues**: 0
+**Resolved Issues**: 0
+
 (No token system issues discovered yet)
 
 ---
 
 ### Documentation Discovery
 _Issues discovered during documentation audit_
+
+**Active Issues**: 0
+**Resolved Issues**: 0
 
 (No documentation issues discovered yet)
 
@@ -731,8 +1125,72 @@ _Issues discovered during documentation audit_
 
 _Issues that affect multiple discovery areas_
 
+**Active Issues**: 0
+**Resolved Issues**: 0
+
 (No cross-area issues discovered yet)
 
 ---
 
-*This registry will be updated as issues are discovered during the Phase 1 Discovery Audit. Each discovery report will reference issues by ID rather than duplicating information.*
+## Registry Summary
+
+### Overall Status
+
+- **Total Issues Discovered**: 7 (from Phase 1 Infrastructure Audit)
+- **Critical Issues**: 1 (resolved)
+- **Important Issues**: 5 (1 resolved, 4 active)
+- **Minor Issues**: 2 (both active)
+- **Resolution Rate**: 29% (2/7 resolved)
+
+### Resolution Timeline
+
+| Issue ID | Severity | Discovered | Resolved | Days to Resolution | Resolved By |
+|----------|----------|------------|----------|-------------------|-------------|
+| #001 | Critical | 2025-10-28 | 2025-11-07 | 10 days | release-detection-trigger-fix |
+| #003 | Important | 2025-10-28 | 2025-11-07 | 10 days | release-detection-trigger-fix |
+
+### Active Issues
+
+| Issue ID | Severity | Discovered | Status | Priority |
+|----------|----------|------------|--------|----------|
+| #002 | Important | 2025-10-28 | Active | Medium |
+| #004 | Minor | 2025-10-28 | Active | Low |
+| #005 | Important | 2025-10-28 | Active | High |
+| #006 | Important | 2025-10-28 | Active | High |
+| #007 | Minor | 2025-10-28 | Active | Low |
+
+### Key Learnings
+
+**Issues #001 and #003 Resolution** (release-detection-trigger-fix spec):
+- **Root Cause**: Using unsupported `taskStatusChange` trigger type in Kiro IDE agent hooks
+- **Investigation**: Discovered Kiro IDE only supports `fileCreated`, `fileEdited`, `fileDeleted`, and `manual` triggers
+- **Solution**: Two-document workflow with summary docs in `docs/` (triggers hooks) and detailed docs in `.kiro/` (internal)
+- **Impact**: 
+  - Restored automatic release detection functionality (Issue #001)
+  - Enabled hook verification through testable trigger types (Issue #003)
+  - Both automatic and manual fallback options available
+- **Documentation**: Updated three standards documents (Spec Planning, Development Workflow, File Organization)
+- **Validation**: Confirmed hooks work correctly with new workflow, documented hybrid approach for AI vs manual workflows
+
+**Remaining Issues Prioritization**:
+- **High Priority** (Issues #005, #006): File organization reliability concerns that could affect documentation quality
+- **Medium Priority** (Issue #002): Usability issue affecting developer experience
+- **Low Priority** (Issues #004, #007): Documentation gaps and intentional limitations
+
+### Next Steps
+
+1. **Continue Phase 1 Discovery Audit**: Complete remaining discovery areas (Architecture, Token System, Documentation)
+2. **Monitor Resolved Issues**: Verify Issues #001 and #003 fixes continue working in production use
+3. **Address High Priority Active Issues**:
+   - Issue #005: File Organization Metadata Validation Inconsistent
+   - Issue #006: Cross-Reference Update Logic Has Path Calculation Issues
+4. **Address Medium Priority Active Issues**:
+   - Issue #002: commit-task.sh Treats --help as Task Name
+5. **Document Low Priority Active Issues**:
+   - Issue #004: Release Manager Hook Dependency Chain Unclear
+   - Issue #007: File Organization Hook Only Scans Root Directory
+6. **Document New Issues**: Add any newly discovered issues from remaining discovery areas
+
+---
+
+*This registry tracks all issues discovered during the Phase 1 Discovery Audit. Issues #001 and #003 have been successfully resolved through the release-detection-trigger-fix spec (29% resolution rate). Five active issues remain, with Issues #005 and #006 prioritized as high priority for resolution. The registry will continue to be updated as additional issues are discovered in remaining discovery areas.*
