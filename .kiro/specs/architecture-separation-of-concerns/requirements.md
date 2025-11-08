@@ -184,6 +184,48 @@ This specification addresses five critical architectural issues discovered durin
 
 ---
 
+### Requirement 8: Define Registry-Validator Interaction Pattern
+
+**User Story**: As a developer using registries, I want a clear pattern for how validation and registration work together, so that I can correctly validate tokens before registration and AI agents can consistently follow the architectural pattern.
+
+#### Acceptance Criteria
+
+1. WHEN the refactoring strategy is designed THEN it SHALL define how registries and validators interact
+2. WHEN the interaction pattern is defined THEN it SHALL specify who is responsible for calling validators (caller, registry, or orchestrator)
+3. WHEN the IRegistry interface is designed THEN it SHALL reflect the chosen interaction pattern
+4. WHEN tokens are registered THEN the pattern SHALL ensure validation occurs before registration
+5. WHEN the pattern is documented THEN it SHALL include code examples showing correct usage
+6. WHEN the pattern is chosen THEN it SHALL consider:
+   - Separation of concerns (registries don't validate)
+   - Ease of use (clear API for developers and AI agents)
+   - Type safety (TypeScript enforces correct usage)
+   - Testability (easy to test validation and registration separately)
+   - Consistency (pattern is unambiguous and always applied the same way)
+
+---
+
+### Requirement 9: Update Documentation to Reflect Architectural Changes
+
+**User Story**: As a developer and AI agent reading documentation, I want accurate information about how validation and registration work, so that I can correctly use the refactored system and build consistently within the architecture.
+
+#### Acceptance Criteria
+
+1. WHEN the refactoring is complete THEN all documentation referencing validation SHALL be reviewed and updated
+2. WHEN documentation is updated THEN it SHALL include:
+   - Architecture overview documents showing new separation of concerns
+   - Developer guides explaining how to validate and register tokens
+   - API documentation for IValidator and IRegistry interfaces
+   - Code examples demonstrating correct usage patterns
+   - Migration guide for code using old validation methods
+   - Preserved knowledge documents reflecting new architecture
+3. WHEN architecture diagrams exist THEN they SHALL be updated to show validator-registry separation
+4. WHEN tutorials or examples exist THEN they SHALL be updated to use new validation pattern
+5. WHEN the design phase identifies documentation THEN it SHALL create a list of documents requiring updates
+6. WHEN implementation is complete THEN all identified documentation SHALL be updated before marking spec complete
+7. WHEN documentation is updated THEN it SHALL be accurate enough for AI agents to build consistently within the architecture without human clarification
+
+---
+
 ## Success Criteria
 
 This specification will be considered successful when:
@@ -200,6 +242,9 @@ This specification will be considered successful when:
 10. ✅ Clear separation of concerns: generators generate, registries store, validators validate
 11. ✅ Current dependencies documented with migration strategy
 12. ✅ Design includes dependency analysis, refactoring order, and mitigation for breaking changes
+13. ✅ Registry-validator interaction pattern defined and documented with code examples
+14. ✅ All architecture documentation updated to reflect new separation of concerns
+15. ✅ Documentation accurate enough for AI agents to build consistently within architecture
 
 ---
 
