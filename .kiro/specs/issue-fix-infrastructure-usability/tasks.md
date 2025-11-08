@@ -21,7 +21,7 @@ This implementation plan addresses two usability improvements discovered during 
 
 ## Task List
 
-- [ ] 1. Add Help Flag Support to commit-task.sh (Issue #002)
+- [x] 1. Add Help Flag Support to commit-task.sh (Issue #002)
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -39,7 +39,7 @@ This implementation plan addresses two usability improvements discovered during 
   - Detailed: `.kiro/specs/issue-fix-infrastructure-usability/completion/task-1-parent-completion.md`
   - Summary: `docs/specs/issue-fix-infrastructure-usability/task-1-summary.md` (triggers release detection)
 
-  - [ ] 1.1 Create show_usage() function
+  - [x] 1.1 Create show_usage() function
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create function that displays comprehensive help text
@@ -48,16 +48,17 @@ This implementation plan addresses two usability improvements discovered during 
     - Format help text for readability
     - _Requirements: 1.3_
 
-  - [ ] 1.2 Add argument parsing for help flags
+  - [x] 1.2 Add argument parsing for help flags
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    - Check for --help flag before task name processing
-    - Check for -h flag before task name processing
-    - Call show_usage() and exit 0 if help flag detected
-    - Ensure help check happens before any other logic
+    **Note**: Completed as part of task 1.1 - argument parsing was already implemented in the existing script and verified during 1.1 implementation
+    - Check for --help flag before task name processing ✅
+    - Check for -h flag before task name processing ✅
+    - Call show_usage() and exit 0 if help flag detected ✅
+    - Ensure help check happens before any other logic ✅
     - _Requirements: 1.1, 1.2, 1.4, 1.5, 1.6_
 
-  - [ ] 1.3 Enhance error message for missing task name
+  - [x] 1.3 Enhance error message for missing task name
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update error message when task name not provided
@@ -65,7 +66,7 @@ This implementation plan addresses two usability improvements discovered during 
     - Maintain exit code 1 for error case
     - _Requirements: 1.3_
 
-  - [ ] 1.4 Test help flag functionality
+  - [x] 1.4 Test help flag functionality
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test --help flag displays usage and exits
@@ -77,7 +78,7 @@ This implementation plan addresses two usability improvements discovered during 
 
 ---
 
-- [ ] 2. Document Hook Dependency Chain Behavior (Issue #004)
+- [x] 2. Document Hook Dependency Chain Behavior (Issue #004)
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -95,7 +96,7 @@ This implementation plan addresses two usability improvements discovered during 
   - Detailed: `.kiro/specs/issue-fix-infrastructure-usability/completion/task-2-parent-completion.md`
   - Summary: `docs/specs/issue-fix-infrastructure-usability/task-2-summary.md` (triggers release detection)
 
-  - [ ] 2.1 Add "Agent Hook Dependency Chains" section
+  - [x] 2.1 Add "Agent Hook Dependency Chains" section
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add new section to Development Workflow after hook system usage
@@ -103,7 +104,7 @@ This implementation plan addresses two usability improvements discovered during 
     - Provide configuration example showing dependency
     - _Requirements: 2.1_
 
-  - [ ] 2.2 Document dependency chain scenarios
+  - [x] 2.2 Document dependency chain scenarios
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Document behavior when prerequisite hook succeeds
@@ -113,7 +114,7 @@ This implementation plan addresses two usability improvements discovered during 
     - Include timeout values for each hook type
     - _Requirements: 2.2, 2.3, 2.4, 2.5_
 
-  - [ ] 2.3 Add troubleshooting guidance
+  - [x] 2.3 Add troubleshooting guidance
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Provide steps to verify hook execution order
@@ -123,7 +124,7 @@ This implementation plan addresses two usability improvements discovered during 
     - Include concrete bash commands for each step
     - _Requirements: 2.6, 2.7_
 
-  - [ ] 2.4 Add best practices section
+  - [x] 2.4 Add best practices section
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Document best practices for monitoring logs

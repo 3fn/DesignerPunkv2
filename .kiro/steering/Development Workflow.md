@@ -4,6 +4,33 @@ inclusion: always
 
 # Development Workflow and Task Completion Practices
 
+## AI Agent Reading Priorities
+
+**This document contains both essential workflow guidance and detailed troubleshooting reference material. Read strategically based on what you're doing RIGHT NOW.**
+
+### WHEN Executing Normal Tasks THEN Read:
+1. ✅ **Task Completion Workflow** (MUST READ)
+2. ✅ **Spec Planning** (brief reference)
+3. ✅ **Hook System Usage** (basic commands)
+4. ✅ **Quality Standards** (MUST READ)
+5. ✅ **Workflow Improvements** (context)
+6. ❌ **SKIP**: Agent Hook Dependency Chains, Troubleshooting sections, Hook Integration details
+
+### WHEN Debugging Hook Issues THEN Read:
+1. ✅ **Task Completion Workflow** (context)
+2. ✅ **Agent Hook Dependency Chains** (understand dependencies)
+3. ✅ **Troubleshooting** (diagnose and resolve issues)
+4. ✅ **Hook Integration** (understand automation details)
+5. ❌ **SKIP**: Spec Planning, Workflow Improvements
+
+### WHEN Setting Up or Modifying Hooks THEN Read:
+1. ✅ **Agent Hook Dependency Chains** (understand configuration)
+2. ✅ **Kiro Agent Hook Integration** (setup details)
+3. ✅ **Troubleshooting** (reference for testing)
+4. ❌ **SKIP**: Task Completion Workflow, Quality Standards
+
+---
+
 ## Task Completion Workflow
 
 ### Recommended Process (IDE-based with Automation)
@@ -78,6 +105,672 @@ See **Spec Planning Standards** (`.kiro/steering/Spec Planning Standards.md`) fo
 ./.kiro/hooks/task-completion-commit.sh path/to/tasks.md "Task Name"
 ```
 
+---
+
+## Agent Hook Dependency Chains (Conditional Loading)
+
+**📖 CONDITIONAL SECTION - Read only when needed**
+
+**Load when**: 
+- Debugging hook issues or automation failures
+- Understanding hook dependencies and execution order
+- Setting up new hooks or modifying existing ones
+- Investigating why dependent hooks didn't execute
+
+**Skip when**: 
+- Normal task execution
+- Spec creation or documentation work
+- Hooks are working correctly
+- General development without hook issues
+
+---
+
+### Overview
+
+Agent hooks can specify dependencies using the `runAfter` configuration field. This creates a dependency chain where hooks wait for prerequisite hooks to complete before executing.
+
+### Configuration Example
+
+```json
+{
+  "name": "Release Detection on Task Completion",
+  "trigger": {
+    "type": "fileCreated",
+    "patterns": ["**/task-*-summary.md"]
+  },
+  "settings": {
+    "runAfter": ["organize-after-task-completion"]
+  }
+}
+```
+
+In this example, the release detection hook waits for the file organization hook (`organize-after-task-completion`) to complete before executing.
+
+### Dependency Chain Behavior
+
+Agent hooks with `runAfter` dependencies create execution chains where dependent hooks wait for prerequisite hooks to complete. Understanding how these chains behave in different scenarios is critical for troubleshooting and ensuring reliable automation.
+
+#### When Prerequisite Hook Succeeds
+
+**Behavior**: The dependent hook executes normally after the prerequisite hook completes successfully.
+
+**Execution Flow**:
+1. Prerequisite hook (e.g., file organization) starts execution
+2. Prerequisite hook completes all operations successfully
+3. Prerequisite hook logs completion message
+4. Dependent hook (e.g., release detection) starts immediately
+5. Dependent hook executes its operations
+6. Both hooks log their execution in respective log files
+
+**Timing**: The dependent hook starts immediately after the prerequisite finishes. There is no artificial delay between hooks - the transition happens as soon as the prerequisite hook's process exits with a success code.
+
+**Logs**: Both hooks log execution in their respective log files with timestamps that show the execution order:
+- Prerequisite hook log: `.kiro/logs/file-organization.log`
+- Dependent hook log: `.kiro/logs/release-manager.log`
+
+**Example Workflow**:
+```
+[2025-11-07 10:30:00] File organization hook triggered
+[2025-11-07 10:30:15] File organization complete
+[2025-11-07 10:30:16] Release detection hook triggered
+[2025-11-07 10:30:25] Release detection complete
+```
+
+**Verification**:
+```bash
+# Check both logs to verify successful execution chain
+tail -20 .kiro/logs/file-organization.log
+tail -20 .kiro/logs/release-manager.log
+
+# Compare timestamps to confirm execution order
+grep "Hook triggered" .kiro/logs/file-organization.log
+grep "Hook triggered" .kiro/logs/release-manager.log
+```
+
+**Expected Outcome**: When everything works correctly, you should see:
+- File organization completes successfully
+- Release detection starts immediately after
+- Both hooks complete their operations
+- All expected artifacts are created (organized files, release triggers)
+
+---
+
+#### When Prerequisite Hook Fails
+
+**Behavior**: The dependent hook behavior depends on Kiro IDE implementation when the prerequisite hook fails. Based on current observations, the dependent hook typically does not execute if the prerequisite fails.
+
+**What Constitutes a Failure**:
+- Script exits with non-zero exit code
+- Unhandled exception or error in hook script
+- Missing dependencies (npm, Python, etc.)
+- File permission errors
+- Invalid configuration or syntax errors
+
+**Expected Behavior**: The dependent hook will likely not execute if the prerequisite fails. The Kiro IDE agent hook system appears to check the exit status of prerequisite hooks before triggering dependent hooks.
+
+**Logs**: The prerequisite hook log will contain error messages indicating the failure:
+```
+[2025-11-07 10:30:00] File organization hook triggered
+[2025-11-07 10:30:05] ERROR: Failed to move file - permission denied
+[2025-11-07 10:30:05] Hook execution failed with exit code 1
+```
+
+The dependent hook log will show no entry, indicating it was never triggered:
+```
+# No entries after the prerequisite failure time
+```
+
+**Troubleshooting Steps**:
+
+1. **Check prerequisite hook logs first**:
+   ```bash
+   # Look for errors in prerequisite hook log
+   grep "ERROR\|Failed" .kiro/logs/file-organization.log
+   
+   # View full log for context
+   cat .kiro/logs/file-organization.log
+   ```
+
+2. **Identify the root cause**:
+   - Missing dependencies: Check if npm, Python, or other tools are installed
+   - Permission errors: Verify file and directory permissions
+   - Configuration errors: Validate hook configuration JSON syntax
+   - Script bugs: Review error messages for specific issues
+
+3. **Fix the underlying issue**:
+   - Install missing dependencies
+   - Fix file permissions with `chmod` or `chown`
+   - Correct configuration syntax errors
+   - Debug and fix script logic issues
+
+4. **Re-trigger the workflow**:
+   - Mark the task complete again to re-trigger hooks
+   - Or use manual triggers to test the fix
+
+**Workaround**: If the prerequisite hook failed but you need the dependent hook to run:
+
+```bash
+# Run the dependent hook manually
+./.kiro/hooks/release-manager.sh auto
+
+# Verify it executed
+cat .kiro/logs/release-manager.log
+ls -la .kiro/release-triggers/
+```
+
+**Recommendation**: Always check prerequisite hook logs first when troubleshooting dependency chain issues. The root cause is usually in the prerequisite hook, not the dependent hook.
+
+**Prevention**:
+- Test hooks independently before relying on dependency chains
+- Ensure all dependencies (npm, Python, etc.) are installed
+- Validate hook configurations regularly
+- Monitor logs after task completion to catch failures early
+
+---
+
+#### When Prerequisite Hook Times Out
+
+**Behavior**: The prerequisite hook stops execution after exceeding its timeout limit. The dependent hook behavior depends on whether the timeout is treated as a failure by Kiro IDE.
+
+**Timeout Values**:
+- **File organization hook**: 10 minutes
+- **Release detection hook**: 5 minutes
+
+These timeout values are configured in the hook configuration files and represent the maximum time a hook can run before being forcibly terminated.
+
+**What Causes Timeouts**:
+- npm command stalls (incorrect syntax or network issues)
+- Script infinite loops or blocking operations
+- Large file operations taking too long
+- User confirmation not provided for interactive hooks
+- Network latency for remote operations
+
+**Timeout Behavior**:
+
+When a hook times out:
+1. The hook process is forcibly terminated by Kiro IDE
+2. A timeout message is logged to the hook's log file
+3. The hook is considered to have failed (non-zero exit)
+4. The dependent hook likely does not execute (treated as failure)
+
+**Logs**: The prerequisite hook log will show a timeout message:
+```
+[2025-11-07 10:30:00] File organization hook triggered
+[2025-11-07 10:30:05] Scanning for files to organize...
+[2025-11-07 10:40:00] ERROR: Hook execution timed out after 10 minutes
+[2025-11-07 10:40:00] Hook terminated
+```
+
+The dependent hook log will show no entry:
+```
+# No entries - dependent hook was not triggered due to timeout
+```
+
+**Troubleshooting Steps**:
+
+1. **Check for timeout messages**:
+   ```bash
+   # Look for timeout errors
+   grep "timeout\|timed out\|terminated" .kiro/logs/file-organization.log
+   
+   # Check execution duration
+   head -1 .kiro/logs/file-organization.log  # Start time
+   tail -1 .kiro/logs/file-organization.log  # End time
+   ```
+
+2. **Identify the bottleneck**:
+   - **npm command stalls**: Check for incorrect npm command syntax
+     ```bash
+     # Correct syntax (with -- separator)
+     npm run release:detect -- process-triggers
+     
+     # Wrong syntax (causes stall)
+     npm run release:detect process-triggers
+     ```
+   - **Infinite loops**: Review script logic for blocking operations
+   - **User confirmation**: Check if hook is waiting for user input
+   - **Large operations**: Verify file operations aren't processing too much data
+
+3. **Fix the underlying issue**:
+   - Correct npm command syntax in hook scripts
+   - Fix infinite loops or blocking operations
+   - Provide user confirmation promptly for interactive hooks
+   - Optimize file operations or increase timeout if justified
+
+4. **Test with manual trigger**:
+   ```bash
+   # Test hook execution manually to identify bottleneck
+   ./.kiro/agent-hooks/organize-by-metadata.sh
+   
+   # Time the execution to see if it's close to timeout
+   time ./.kiro/agent-hooks/organize-by-metadata.sh
+   ```
+
+**Workaround**: If the prerequisite hook timed out but you need the dependent hook to run:
+
+```bash
+# Run the dependent hook manually
+./.kiro/hooks/release-manager.sh auto
+
+# Verify it executed
+cat .kiro/logs/release-manager.log
+```
+
+**Prevention**:
+- Review hook scripts for potential blocking operations
+- Test hooks with realistic data volumes before relying on automation
+- Ensure npm commands use correct syntax with `--` separator
+- Respond promptly to user confirmation prompts
+- Monitor execution times to identify hooks approaching timeout limits
+
+**When to Increase Timeout**:
+
+Consider increasing timeout values if:
+- Hook legitimately needs more time for large operations
+- Network latency is consistently high
+- User confirmation requires more time for review
+
+Update timeout in hook configuration file:
+```json
+{
+  "settings": {
+    "timeout": 900  // 15 minutes (in seconds)
+  }
+}
+```
+
+---
+
+#### When User Cancels Prerequisite Hook
+
+**Behavior**: Users can decline confirmation prompts for hooks that require user approval. When a user cancels a prerequisite hook, the dependent hook behavior depends on Kiro IDE implementation.
+
+**Hooks Requiring Confirmation**:
+- **File organization hook**: Requires user confirmation before moving files
+- **Release detection hook**: Auto-approved, no confirmation required
+
+**Cancellation Scenarios**:
+
+1. **User declines confirmation prompt**:
+   - Hook shows preview of actions (e.g., files to organize)
+   - User is prompted: "Would you like to organize these files now? [y/N]"
+   - User responds with "N" or "n" or simply presses Enter (default is No)
+   - Hook exits without performing operations
+
+2. **User closes confirmation dialog**:
+   - Hook displays confirmation dialog in IDE
+   - User closes dialog without responding
+   - Hook treats this as cancellation
+
+**Expected Behavior**: When a user cancels a prerequisite hook:
+- The prerequisite hook exits without performing its operations
+- The hook may log a cancellation message
+- The dependent hook behavior depends on how Kiro IDE treats cancellation:
+  - If treated as failure: Dependent hook does not execute
+  - If treated as success: Dependent hook may execute (unlikely)
+  - Current behavior: Requires testing to confirm
+
+**Logs**: The prerequisite hook log will show a cancellation message:
+```
+[2025-11-07 10:30:00] File organization hook triggered
+[2025-11-07 10:30:05] Found files that need organization
+[2025-11-07 10:30:10] User declined confirmation
+[2025-11-07 10:30:10] Hook cancelled by user
+```
+
+The dependent hook log may or may not show an entry depending on Kiro IDE behavior:
+```
+# Likely no entry if cancellation is treated as failure
+```
+
+**Troubleshooting Steps**:
+
+1. **Verify cancellation occurred**:
+   ```bash
+   # Check for cancellation messages
+   grep "cancelled\|declined\|user" .kiro/logs/file-organization.log
+   ```
+
+2. **Check if dependent hook ran**:
+   ```bash
+   # Check if release detection was triggered despite cancellation
+   grep "Hook triggered" .kiro/logs/release-manager.log
+   ```
+
+3. **Understand why cancellation occurred**:
+   - User intentionally declined (no issue)
+   - User didn't see confirmation prompt (UI issue)
+   - User unsure about proposed actions (needs better preview)
+
+**Workaround**: If you cancelled the prerequisite hook but need the dependent hook to run:
+
+```bash
+# Option 1: Re-trigger the entire workflow
+# Mark task complete again to re-trigger hooks
+# This time, approve the prerequisite hook confirmation
+
+# Option 2: Run dependent hook manually
+./.kiro/hooks/release-manager.sh auto
+
+# Verify it executed
+cat .kiro/logs/release-manager.log
+```
+
+**Recommendation**: If you cancel a prerequisite hook:
+- Understand that dependent hooks may not execute
+- Manually run dependent hooks if their operations are still needed
+- Consider why you cancelled and whether the hook needs adjustment
+
+**Best Practices**:
+- Review hook preview carefully before confirming or cancelling
+- If unsure, cancel and investigate what the hook will do
+- Use manual triggers to test hooks independently
+- Document reasons for cancellation to improve hook design
+
+**When Cancellation is Appropriate**:
+- Hook preview shows unexpected file moves
+- You want to review changes before organizing
+- Testing hook behavior without committing changes
+- Troubleshooting hook issues
+
+**When to Approve Instead**:
+- Hook preview shows expected operations
+- You trust the hook's logic and metadata
+- You want the full automation workflow to complete
+- Dependent hooks need to run as part of the workflow
+
+### Troubleshooting Hook Dependencies
+
+1. **Verify Hook Execution Order**:
+   ```bash
+   # Check file organization log
+   tail -20 .kiro/logs/file-organization.log
+   
+   # Check release detection log
+   tail -20 .kiro/logs/release-manager.log
+   
+   # Compare timestamps to verify order
+   ```
+
+2. **Check for Prerequisite Failures**:
+   ```bash
+   # Look for errors in prerequisite hook log
+   grep "ERROR\|Failed" .kiro/logs/file-organization.log
+   ```
+
+3. **Verify Hook Configuration**:
+   ```bash
+   # Check runAfter configuration
+   cat .kiro/hooks/release-detection-auto.kiro.hook | grep -A 3 "runAfter"
+   ```
+
+4. **Manual Trigger as Fallback**:
+   ```bash
+   # If automatic hook didn't run, trigger manually
+   ./.kiro/hooks/release-manager.sh auto
+   ```
+
+### Best Practices
+
+Working effectively with agent hook dependency chains requires understanding how to monitor execution, manage dependencies, handle failures, and test independently. These best practices help ensure reliable automation while maintaining fallback options when issues arise.
+
+#### 1. Monitor Logs Regularly
+
+**Why This Matters**: Logs are your primary visibility into hook execution. Regular monitoring helps catch issues early before they compound.
+
+**What to Monitor**:
+
+```bash
+# Check if hooks triggered after task completion
+grep "Hook triggered" .kiro/logs/file-organization.log
+grep "Hook triggered" .kiro/logs/release-manager.log
+
+# View recent activity
+tail -n 20 .kiro/logs/file-organization.log
+tail -n 20 .kiro/logs/release-manager.log
+
+# Look for errors or warnings
+grep "ERROR\|WARN\|Failed" .kiro/logs/file-organization.log
+grep "ERROR\|WARN\|Failed" .kiro/logs/release-manager.log
+```
+
+**When to Check Logs**:
+- Immediately after marking a task complete
+- When expected automation doesn't occur
+- Before starting a new task (verify previous task's hooks completed)
+- During troubleshooting sessions
+
+**What to Look For**:
+- **Entry messages**: Confirm hooks were triggered by IDE
+- **Completion messages**: Verify hooks finished successfully
+- **Timestamps**: Check execution order matches dependencies
+- **Error messages**: Identify specific failures requiring attention
+
+**Best Practice**: Make log checking part of your task completion routine. A quick `tail -n 20` on both log files takes seconds and prevents issues from going unnoticed.
+
+#### 2. Understand Dependencies
+
+**Why This Matters**: Knowing which hooks depend on others helps you predict behavior and troubleshoot issues when automation doesn't work as expected.
+
+**Current Dependency Chain**:
+
+```
+Task Completion (taskStatusChange: completed)
+    ↓
+File Organization Hook
+    - Requires user confirmation
+    - 10-minute timeout
+    - Scans root directory for organization metadata
+    ↓
+Release Detection Hook
+    - Auto-approved (no confirmation needed)
+    - 5-minute timeout
+    - Depends on file organization completing first
+    - Creates release trigger files
+```
+
+**Key Dependency Concepts**:
+
+**runAfter Configuration**: The `runAfter` field in hook configuration specifies prerequisite hooks:
+```json
+{
+  "settings": {
+    "runAfter": ["organize-after-task-completion"]
+  }
+}
+```
+
+**Execution Order**: Dependent hooks wait for prerequisite hooks to complete before starting. There's no artificial delay - the transition happens immediately when the prerequisite exits successfully.
+
+**Failure Propagation**: If a prerequisite hook fails, the dependent hook typically does not execute. This prevents cascading issues but means you need to fix the prerequisite before the dependent hook will run.
+
+**Timeout Independence**: Each hook has its own timeout. A prerequisite timing out is treated as a failure, preventing the dependent hook from executing.
+
+**Best Practice**: Document your project's hook dependencies in a simple diagram or list. When troubleshooting, always start with the first hook in the chain and work forward.
+
+#### 3. Have Fallbacks Ready
+
+**Why This Matters**: Automation fails sometimes. Having manual fallback procedures ensures you can complete critical operations even when hooks don't work.
+
+**Fallback Procedures**:
+
+**File Organization Fallback**:
+```bash
+# Option 1: Run organization script directly
+./.kiro/agent-hooks/organize-by-metadata.sh
+
+# Option 2: Manual organization
+# 1. Add Organization metadata to file header
+# 2. Move file to appropriate directory
+# 3. Update cross-references manually
+# 4. Commit changes
+```
+
+**Release Detection Fallback**:
+```bash
+# Option 1: Run release manager script
+./.kiro/hooks/release-manager.sh auto
+
+# Option 2: Use manual release detection hook in IDE
+# 1. Open Agent Hooks panel
+# 2. Find "Manual Release Detection"
+# 3. Click "Run" button
+# 4. Confirm execution
+```
+
+**When to Use Fallbacks**:
+- Automatic hooks didn't trigger (no entry logs)
+- Hooks failed during execution (error in logs)
+- Timeout occurred before completion
+- User cancelled prerequisite hook but needs dependent hook
+- Testing or debugging hook behavior
+
+**Best Practice**: Keep a cheat sheet of fallback commands near your workspace. When automation fails, you want to quickly execute the fallback without searching for the right command.
+
+#### 4. Test Independently
+
+**Why This Matters**: Testing hooks independently helps isolate issues and verify that each hook works correctly before relying on the full automation chain.
+
+**Independent Testing Strategies**:
+
+**Test File Organization Independently**:
+```bash
+# Create a test file with organization metadata
+echo '**Organization**: framework-strategic' > test-doc.md
+echo '**Scope**: cross-spec' >> test-doc.md
+
+# Run organization script directly
+./.kiro/agent-hooks/organize-by-metadata.sh
+
+# Verify file moved correctly
+ls -la strategic-framework/test-doc.md
+
+# Clean up test file
+rm strategic-framework/test-doc.md
+```
+
+**Test Release Detection Independently**:
+```bash
+# Create a test summary document
+mkdir -p docs/specs/test-spec
+echo '# Test Summary' > docs/specs/test-spec/task-1-summary.md
+
+# Run release detection manually
+./.kiro/hooks/release-manager.sh auto
+
+# Check if trigger files created
+ls -la .kiro/release-triggers/
+
+# Clean up test files
+rm -rf docs/specs/test-spec
+```
+
+**Test Hook Configurations**:
+```bash
+# Validate JSON syntax
+python3 -m json.tool .kiro/agent-hooks/organize-after-task-completion.json
+python3 -m json.tool .kiro/agent-hooks/release-detection-on-task-completion.json
+
+# Check hook script permissions
+ls -la .kiro/hooks/release-manager.sh
+ls -la .kiro/agent-hooks/organize-after-task.sh
+
+# Verify dependencies are available
+which npm && npm --version
+which python3 && python3 --version
+```
+
+**When to Test Independently**:
+- After modifying hook scripts or configurations
+- Before relying on automation for important work
+- When troubleshooting dependency chain issues
+- To verify fixes after resolving hook failures
+- During onboarding to understand how hooks work
+
+**Best Practice**: Test hooks independently in a safe environment (test files, test specs) before relying on them for production work. This builds confidence in the automation and helps you understand failure modes.
+
+#### 5. Plan for Common Failure Scenarios
+
+**Why This Matters**: Understanding common failure scenarios helps you respond quickly when issues occur rather than spending time diagnosing from scratch.
+
+**Common Scenarios and Responses**:
+
+**Scenario 1: No Entry Logs (Hooks Not Triggering)**
+- **Cause**: Using direct git commands instead of `taskStatus` tool
+- **Response**: Verify you're using `taskStatus` tool to mark tasks complete
+- **Fallback**: Run hooks manually with fallback commands
+
+**Scenario 2: Prerequisite Hook Fails**
+- **Cause**: Missing dependencies, permission errors, script bugs
+- **Response**: Check prerequisite hook logs for specific error messages
+- **Fallback**: Fix the issue, then re-trigger the workflow or run dependent hook manually
+
+**Scenario 3: Hook Timeout**
+- **Cause**: npm command stalls, infinite loops, large operations
+- **Response**: Review script for blocking operations, check npm command syntax
+- **Fallback**: Fix the bottleneck, increase timeout if justified, or run manually
+
+**Scenario 4: User Cancels Prerequisite**
+- **Cause**: User declines confirmation prompt
+- **Response**: Understand why cancellation occurred, review hook preview
+- **Fallback**: Re-trigger workflow and approve, or run dependent hook manually
+
+**Scenario 5: Dependency Chain Broken**
+- **Cause**: Prerequisite failed silently, configuration mismatch
+- **Response**: Verify prerequisite completed, check `runAfter` configuration
+- **Fallback**: Test hooks independently to isolate the issue
+
+**Best Practice**: Keep a troubleshooting decision tree handy. When a hook fails, follow the tree to quickly identify the issue and apply the appropriate response.
+
+#### 6. Maintain Configuration Validity
+
+**Why This Matters**: Invalid configurations prevent hooks from working correctly. Regular validation catches issues before they cause failures.
+
+**Configuration Validation Checklist**:
+
+```bash
+# Validate JSON syntax (should return nothing if valid)
+python3 -m json.tool .kiro/agent-hooks/organize-after-task-completion.json > /dev/null
+python3 -m json.tool .kiro/agent-hooks/release-detection-on-task-completion.json > /dev/null
+
+# Check for common configuration issues
+grep '"enabled": true' .kiro/agent-hooks/*.json  # Verify hooks are enabled
+grep '"runAfter"' .kiro/agent-hooks/*.json       # Check dependency configuration
+grep '"timeout"' .kiro/agent-hooks/*.json        # Verify timeout values
+```
+
+**What to Validate**:
+- **JSON Syntax**: No trailing commas, proper quotes, valid structure
+- **Hook Names**: `runAfter` references match actual hook names exactly
+- **Trigger Configuration**: Event types and patterns are correct
+- **Timeout Values**: Appropriate for hook complexity and operations
+- **Auto-Approve Settings**: Match intended user interaction model
+
+**When to Validate**:
+- After modifying hook configurations
+- When adding new hooks to the system
+- During troubleshooting sessions
+- As part of regular maintenance (monthly or quarterly)
+
+**Best Practice**: Add configuration validation to your pre-commit checks or run it periodically as part of project maintenance. Catching configuration errors early prevents runtime failures.
+
+#### Summary: Best Practices Checklist
+
+Use this checklist to ensure reliable hook automation:
+
+- ✅ **Monitor logs** after every task completion
+- ✅ **Understand dependencies** in your hook chain
+- ✅ **Have fallback commands** ready for manual execution
+- ✅ **Test hooks independently** before relying on automation
+- ✅ **Plan for common failures** with documented responses
+- ✅ **Validate configurations** regularly to catch issues early
+- ✅ **Use `taskStatus` tool** to ensure hooks trigger correctly
+- ✅ **Document your workflow** so others can follow the same practices
+
+**Remember**: Automation is a tool to enhance your workflow, not replace your understanding. The best automation users know how to work both with and without the automation.
+
+---
+
 ## Quality Standards
 
 ### Before Task Completion
@@ -110,7 +803,25 @@ See **Spec Planning Standards** (`.kiro/steering/Spec Planning Standards.md`) fo
 - Notification system for team coordination
 - Smart metadata suggestion for new files
 
-## Troubleshooting
+---
+
+## Troubleshooting (Conditional Loading)
+
+**📖 CONDITIONAL SECTION - Read only when needed**
+
+**Load when**: 
+- Experiencing errors or failures during task completion
+- Hooks not triggering or executing correctly
+- Debugging automation issues
+- Need diagnostic commands or troubleshooting procedures
+
+**Skip when**: 
+- Normal task execution without issues
+- Hooks working correctly
+- General development work
+- Creating or updating specs
+
+---
 
 ### Common Issues
 - **No changes to commit**: Ensure all work is saved and files are created
@@ -612,10 +1323,27 @@ which python3 && python3 --version
 ---
 
 *This workflow ensures consistent task completion practices while maintaining the strategic framework principles of contamination prevention, sustainable development, and effective AI-human collaboration.*
+
 ---
 
+## Kiro Agent Hook Integration (Conditional Loading)
 
-## Kiro Agent Hook Integration
+**📖 CONDITIONAL SECTION - Read only when needed**
+
+**Load when**: 
+- Setting up or modifying agent hooks
+- Understanding automatic file organization
+- Understanding automatic release detection
+- Need details on hook execution order and dependencies
+- Working with file organization scope or Kiro IDE file watching
+
+**Skip when**: 
+- Normal task execution
+- Hooks already set up and working
+- General development work
+- Not working with automation setup
+
+---
 
 ### Agent Hook Execution Order
 

@@ -5,48 +5,55 @@
 
 set -e
 
-# Show help function
-show_help() {
-    cat << EOF
-Usage: commit-task.sh [OPTIONS] "Task Name"
+# Display usage information
+show_usage() {
+  cat << EOF
+Usage: commit-task.sh [OPTIONS] "TASK_NAME"
 
-Commit completed task with standardized message format and optional release analysis.
+Commit task completion with automatically extracted commit message.
+
+ARGUMENTS:
+  TASK_NAME    Name of the completed task (must match task in tasks.md)
 
 OPTIONS:
-    -h, --help      Display this help message
-    --no-analyze    Skip automatic release analysis after commit
-    
-ARGUMENTS:
-    Task Name       The name of the completed task (required)
-                    Example: "1. Create North Star Vision Document"
+  -h, --help   Display this help message and exit
 
 EXAMPLES:
-    # Display help
-    commit-task.sh --help
-    
-    # Commit a completed task with release analysis
-    commit-task.sh "1. Create North Star Vision Document"
-    
-    # Commit without release analysis
-    commit-task.sh "Task 2.3 Complete: Create Typography Guides" --no-analyze
-    
-    # Commit with task number
-    commit-task.sh "2.1 Implement TokenSelector class"
+  # Commit task completion
+  ./commit-task.sh "1. Create North Star Vision Document"
+  
+  # Display help
+  ./commit-task.sh --help
+  ./commit-task.sh -h
 
-NOTES:
-    - Task name should match the task in tasks.md
-    - Commit message format: "Task [Number] Complete: [Description]"
-    - Changes are automatically committed and pushed to origin main
-    - Release analysis runs by default unless --no-analyze is specified
-    - Release analysis can be disabled in .kiro/release-config.json
+DESCRIPTION:
+  This script automates the commit process for task completions by:
+  1. Extracting the commit message from the task name
+  2. Adding all changes to git
+  3. Committing with the extracted message
+  4. Pushing to the remote repository
+
+  The task name must match a task in tasks.md exactly.
+
+SEE ALSO:
+  - Development Workflow: .kiro/steering/Development Workflow.md
+  - Task completion process documentation
 
 EOF
-    exit 0
 }
 
 # Check for help flags before processing arguments
-if [ "$1" = "--help" ] || [ "$1" = "-h" ] || [ -z "$1" ]; then
-    show_help
+if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+    show_usage
+    exit 0
+fi
+
+# Check if task name provided
+if [ -z "$1" ]; then
+    echo "❌ Error: Task name required"
+    echo ""
+    show_usage
+    exit 1
 fi
 
 TASK_NAME="$1"
@@ -68,12 +75,6 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
-
-if [ -z "$TASK_NAME" ]; then
-    echo "❌ Error: Please provide a task name"
-    echo "Usage: $0 \"Task Name\" [--no-analyze]"
-    exit 1
-fi
 
 echo "🚀 Committing completion of: $TASK_NAME"
 ./.kiro/hooks/task-completion-commit.sh "$TASKS_FILE" "$TASK_NAME"
