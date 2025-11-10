@@ -279,7 +279,7 @@ The plan prioritizes safety through incremental changes, comprehensive testing a
   - Detailed: `.kiro/specs/architecture-separation-of-concerns/completion/task-4-parent-completion.md`
   - Summary: `docs/specs/architecture-separation-of-concerns/task-4-summary.md` (triggers release detection)
 
-  - [ ] 4.1 Document registry-validator interaction pattern
+  - [x] 4.1 Document registry-validator interaction pattern
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `docs/architecture/registry-validator-pattern.md`
@@ -295,15 +295,17 @@ The plan prioritizes safety through incremental changes, comprehensive testing a
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update `.kiro/audits/phase-1-architecture-report.md`:
-      - Mark Issues #012, #013, #014, #016, #017 as resolved
-      - Add "Resolution" section for each issue documenting the refactoring approach
+      - Mark Issues #012, #013 as resolved (validation extraction)
+      - Mark Issue #014 as resolved if Task 3.7 fixed it (async validator investigation)
+      - Add "Resolution" section for each resolved issue documenting the refactoring approach
       - Update architecture diagrams to show new separation of concerns
       - Add cross-references to this spec's completion documentation
     - Update `.kiro/audits/phase-1-issues-registry.md`:
-      - Mark Issues #012-#017 as ✅ Resolved
-      - Add resolution date, resolved by spec, resolution summary
-      - Add verification notes confirming successful validation
+      - ✅ ALREADY DONE: Issues #012 and #013 restored and marked RESOLVED
+      - Verify Issue #014 resolution status (may already be resolved by Task 3.7)
+      - Add resolution details for Issue #014 if resolved
       - Add cross-references to completion documentation
+      - NOTE: Issues #015, #016, #017, #018, #019, #020 remain ACTIVE (not resolved by this spec)
     - _Requirements: 9.1, 9.2, 9.3_
 
   - [ ] 4.3 Update Token System Overview
