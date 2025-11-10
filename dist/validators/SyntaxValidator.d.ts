@@ -1,4 +1,14 @@
 import { TargetPlatform, OutputFormat } from '../types/TranslationOutput';
+import type { ValidationResult } from '../types/ValidationResult';
+import type { IValidator } from './IValidator';
+/**
+ * Syntax validation input
+ */
+export interface SyntaxValidationInput {
+    content: string;
+    platform: TargetPlatform;
+    format: OutputFormat;
+}
 /**
  * Syntax validation result
  */
@@ -45,17 +55,22 @@ export interface SyntaxWarning {
 /**
  * Validates platform-specific syntax for generated token files
  */
-export declare class SyntaxValidator {
+export declare class SyntaxValidator implements IValidator<SyntaxValidationInput> {
+    readonly name = "SyntaxValidator";
     private rules;
     constructor();
+    /**
+     * Validate input using IValidator interface
+     */
+    validate(input: SyntaxValidationInput): ValidationResult;
     /**
      * Initialize platform-specific syntax rules
      */
     private initializeRules;
     /**
-     * Validate syntax for a specific platform and format
+     * Validate syntax for a specific platform and format (legacy method)
      */
-    validate(content: string, platform: TargetPlatform, format: OutputFormat): SyntaxValidationResult;
+    validateSyntax(content: string, platform: TargetPlatform, format: OutputFormat): SyntaxValidationResult;
     /**
      * Check if delimiters are balanced
      */

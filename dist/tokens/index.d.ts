@@ -22,6 +22,7 @@ export { GLOW_BLUR_BASE_VALUE, glowBlur, glowBlurNames, getGlowBlurToken, getAll
 export { GLOW_OPACITY_BASE_VALUE, glowOpacity, glowOpacityNames, getGlowOpacityToken, getAllGlowOpacityTokens } from './GlowOpacityTokens';
 export { opacityTokens, opacityTokenNames, getOpacityToken, getAllOpacityTokens, OPACITY_BASE_VALUE } from './OpacityTokens';
 export { blendTokens, blendTokenNames, getBlendToken, getAllBlendTokens, BLEND_BASE_VALUE, BlendDirection } from './BlendTokens';
+export { breakpointTokens, breakpointTokenNames, getBreakpointToken, getAllBreakpointTokens, BREAKPOINT_BASE_VALUE } from './BreakpointTokens';
 import { PrimitiveToken, TokenCategory } from '../types/PrimitiveToken';
 /**
  * All primitive tokens combined by category
@@ -96,6 +97,7 @@ export declare const allTokens: {
     };
     opacity: Record<string, PrimitiveToken>;
     blend: Record<string, PrimitiveToken>;
+    breakpoint: Record<string, PrimitiveToken>;
 };
 /**
  * Get all primitive tokens as a flat array
@@ -147,5 +149,6 @@ export declare const TOKEN_FAMILY_BASE_VALUES: {
     readonly glow: 8;
     readonly opacity: 0.08;
     readonly blend: 0.04;
+    readonly breakpoint: 320;
 };
 //# sourceMappingURL=index.d.ts.map

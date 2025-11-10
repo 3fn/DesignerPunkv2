@@ -5,12 +5,18 @@
  * Manages semantic tokens with mode-aware primitive token references.
  * Enforces primitive token references and prevents raw values in semantic tokens.
  * Provides registration, retrieval, and resolution methods for all semantic categories.
+ *
+ * Implements IRegistry<SemanticToken> for consistent registry interface.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SemanticTokenRegistry = void 0;
 const SemanticToken_1 = require("../types/SemanticToken");
 class SemanticTokenRegistry {
     constructor(primitiveRegistry) {
+        /**
+         * Registry name for identification
+         */
+        this.name = 'SemanticTokenRegistry';
         this.tokens = new Map();
         this.categoryIndex = new Map();
         this.primitiveRegistry = primitiveRegistry;
@@ -18,46 +24,27 @@ class SemanticTokenRegistry {
     }
     /**
      * Register a semantic token with primitive reference validation
+     *
+     * Implements IRegistry.register() interface.
+     * Note: Validation methods (validateToken, validateAll) will be removed in Phase 3.
+     * Callers should validate tokens before registration using appropriate validators.
      */
     register(token, options = {}) {
         const { skipValidation = false, allowOverwrite = false } = options;
         // Check for existing token
         if (this.tokens.has(token.name) && !allowOverwrite) {
-            return {
-                level: 'Error',
-                token: token.name,
-                message: 'Semantic token already exists',
-                rationale: `Semantic token ${token.name} is already registered. Use allowOverwrite option to replace.`,
-                mathematicalReasoning: 'Token uniqueness prevents semantic inconsistencies in the system'
-            };
+            throw new Error(`Semantic token ${token.name} is already registered. Use allowOverwrite option to replace.`);
         }
         // Validate token if not skipped
-        let validationResult;
         if (!skipValidation) {
-            validationResult = this.validateToken(token);
+            const validationResult = this.validateToken(token);
             if (validationResult.level === 'Error') {
-                return validationResult;
+                throw new Error(`Validation failed for semantic token ${token.name}: ${validationResult.message}`);
             }
-        }
-        else {
-            validationResult = {
-                level: 'Pass',
-                token: token.name,
-                message: 'Validation skipped',
-                rationale: 'Semantic token registered without validation',
-                mathematicalReasoning: 'Validation bypassed by registration options'
-            };
         }
         // Register the token
         this.tokens.set(token.name, token);
         this.addToCategory(token.category, token.name);
-        return {
-            level: 'Pass',
-            token: token.name,
-            message: 'Semantic token registered successfully',
-            rationale: `Semantic token ${token.name} registered with ${validationResult.level} validation`,
-            mathematicalReasoning: validationResult.mathematicalReasoning
-        };
     }
     /**
      * Retrieve a semantic token by name

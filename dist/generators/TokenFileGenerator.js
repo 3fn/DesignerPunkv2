@@ -140,8 +140,6 @@ class TokenFileGenerator {
         // Filter out layering tokens (they don't have primitiveReferences)
         const semantics = allSemantics.filter(s => !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.'));
         const lines = [];
-        const errors = [];
-        const warnings = [];
         let semanticTokenCount = 0;
         // Add header
         lines.push(this.webGenerator.generateHeader(metadata));
@@ -171,26 +169,14 @@ class TokenFileGenerator {
                 lines.push(this.webGenerator.formatToken(token));
             }
         }
-        // Validate semantic token references before generating semantic section
-        const validationResult = this.validateSemanticReferences(semantics, tokens);
-        if (!validationResult.valid) {
-            // Log errors for invalid references
-            validationResult.invalidReferences.forEach(ref => {
-                errors.push(ref.reason);
-            });
-            // Skip semantic generation if validation fails (graceful degradation)
-            warnings.push('Semantic token generation skipped due to validation errors');
+        // Add semantic tokens section comment
+        if (includeComments) {
+            lines.push(this.webGenerator.generateSectionComment('semantic'));
         }
-        else {
-            // Add semantic tokens section comment
-            if (includeComments) {
-                lines.push(this.webGenerator.generateSectionComment('semantic'));
-            }
-            // Add semantic tokens section
-            const semanticLines = this.generateSemanticSection(semantics, 'web');
-            lines.push(...semanticLines);
-            semanticTokenCount = semantics.length;
-        }
+        // Add semantic tokens section
+        const semanticLines = this.generateSemanticSection(semantics, 'web');
+        lines.push(...semanticLines);
+        semanticTokenCount = semantics.length;
         // Add layering tokens section (z-index for web)
         if (includeComments) {
             lines.push('');
@@ -203,17 +189,14 @@ class TokenFileGenerator {
         lines.push(this.webGenerator.generateFooter());
         const content = lines.join('\n');
         const validation = this.webGenerator.validateSyntax(content);
-        // Combine validation errors with semantic validation errors
-        const allErrors = [...errors, ...(validation.errors || [])];
         return {
             platform: 'web',
             filePath: `${outputDir}/DesignTokens.web.css`,
             content,
             tokenCount: tokens.length,
             semanticTokenCount,
-            valid: validation.valid && errors.length === 0,
-            errors: allErrors.length > 0 ? allErrors : undefined,
-            warnings: warnings.length > 0 ? warnings : undefined
+            valid: validation.valid,
+            errors: validation.errors
         };
     }
     /**
@@ -230,8 +213,6 @@ class TokenFileGenerator {
         // Filter out layering tokens (they don't have primitiveReferences)
         const semantics = allSemantics.filter(s => !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.'));
         const lines = [];
-        const errors = [];
-        const warnings = [];
         let semanticTokenCount = 0;
         // Add header
         lines.push(this.iosGenerator.generateHeader(metadata));
@@ -261,26 +242,14 @@ class TokenFileGenerator {
                 lines.push(this.iosGenerator.formatToken(token));
             }
         }
-        // Validate semantic token references before generating semantic section
-        const validationResult = this.validateSemanticReferences(semantics, tokens);
-        if (!validationResult.valid) {
-            // Log errors for invalid references
-            validationResult.invalidReferences.forEach(ref => {
-                errors.push(ref.reason);
-            });
-            // Skip semantic generation if validation fails (graceful degradation)
-            warnings.push('Semantic token generation skipped due to validation errors');
+        // Add semantic tokens section comment
+        if (includeComments) {
+            lines.push(this.iosGenerator.generateSectionComment('semantic'));
         }
-        else {
-            // Add semantic tokens section comment
-            if (includeComments) {
-                lines.push(this.iosGenerator.generateSectionComment('semantic'));
-            }
-            // Add semantic tokens section
-            const semanticLines = this.generateSemanticSection(semantics, 'ios');
-            lines.push(...semanticLines);
-            semanticTokenCount = semantics.length;
-        }
+        // Add semantic tokens section
+        const semanticLines = this.generateSemanticSection(semantics, 'ios');
+        lines.push(...semanticLines);
+        semanticTokenCount = semantics.length;
         // Add layering tokens section (z-index for iOS)
         if (includeComments) {
             lines.push('');
@@ -293,17 +262,14 @@ class TokenFileGenerator {
         lines.push(this.iosGenerator.generateFooter());
         const content = lines.join('\n');
         const validation = this.iosGenerator.validateSyntax(content);
-        // Combine validation errors with semantic validation errors
-        const allErrors = [...errors, ...(validation.errors || [])];
         return {
             platform: 'ios',
             filePath: `${outputDir}/DesignTokens.ios.swift`,
             content,
             tokenCount: tokens.length,
             semanticTokenCount,
-            valid: validation.valid && errors.length === 0,
-            errors: allErrors.length > 0 ? allErrors : undefined,
-            warnings: warnings.length > 0 ? warnings : undefined
+            valid: validation.valid,
+            errors: validation.errors
         };
     }
     /**
@@ -320,8 +286,6 @@ class TokenFileGenerator {
         // Filter out layering tokens (they don't have primitiveReferences)
         const semantics = allSemantics.filter(s => !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.'));
         const lines = [];
-        const errors = [];
-        const warnings = [];
         let semanticTokenCount = 0;
         // Add header
         lines.push(this.androidGenerator.generateHeader(metadata));
@@ -351,26 +315,14 @@ class TokenFileGenerator {
                 lines.push(this.androidGenerator.formatToken(token));
             }
         }
-        // Validate semantic token references before generating semantic section
-        const validationResult = this.validateSemanticReferences(semantics, tokens);
-        if (!validationResult.valid) {
-            // Log errors for invalid references
-            validationResult.invalidReferences.forEach(ref => {
-                errors.push(ref.reason);
-            });
-            // Skip semantic generation if validation fails (graceful degradation)
-            warnings.push('Semantic token generation skipped due to validation errors');
+        // Add semantic tokens section comment
+        if (includeComments) {
+            lines.push(this.androidGenerator.generateSectionComment('semantic'));
         }
-        else {
-            // Add semantic tokens section comment
-            if (includeComments) {
-                lines.push(this.androidGenerator.generateSectionComment('semantic'));
-            }
-            // Add semantic tokens section
-            const semanticLines = this.generateSemanticSection(semantics, 'android');
-            lines.push(...semanticLines);
-            semanticTokenCount = semantics.length;
-        }
+        // Add semantic tokens section
+        const semanticLines = this.generateSemanticSection(semantics, 'android');
+        lines.push(...semanticLines);
+        semanticTokenCount = semantics.length;
         // Add layering tokens section (elevation for Android)
         if (includeComments) {
             lines.push('');
@@ -383,17 +335,14 @@ class TokenFileGenerator {
         lines.push(this.androidGenerator.generateFooter());
         const content = lines.join('\n');
         const validation = this.androidGenerator.validateSyntax(content);
-        // Combine validation errors with semantic validation errors
-        const allErrors = [...errors, ...(validation.errors || [])];
         return {
             platform: 'android',
             filePath: `${outputDir}/DesignTokens.android.kt`,
             content,
             tokenCount: tokens.length,
             semanticTokenCount,
-            valid: validation.valid && errors.length === 0,
-            errors: allErrors.length > 0 ? allErrors : undefined,
-            warnings: warnings.length > 0 ? warnings : undefined
+            valid: validation.valid,
+            errors: validation.errors
         };
     }
     /**
@@ -403,93 +352,6 @@ class TokenFileGenerator {
         const categories = new Set();
         tokens.forEach(token => categories.add(token.category));
         return Array.from(categories).sort();
-    }
-    /**
-     * Validate semantic token references against primitive tokens
-     * Checks that all primitive references in semantic tokens exist in the primitive token list
-     *
-     * @param semantics - Array of semantic tokens to validate
-     * @param primitives - Array of primitive tokens to validate against
-     * @returns Validation result with list of invalid references
-     */
-    validateSemanticReferences(semantics, primitives) {
-        const invalidReferences = [];
-        // Create a set of primitive token names for fast lookup
-        const primitiveNames = new Set(primitives.map(p => p.name));
-        // Validate each semantic token
-        for (const semantic of semantics) {
-            // Skip tokens without primitiveReferences (e.g., layering tokens)
-            if (!semantic.primitiveReferences) {
-                continue;
-            }
-            const refs = semantic.primitiveReferences;
-            // Check single-reference tokens (have 'value' or 'default' property)
-            if (refs.value !== undefined) {
-                if (!primitiveNames.has(refs.value)) {
-                    invalidReferences.push({
-                        semanticToken: semantic.name,
-                        property: 'value',
-                        reference: refs.value,
-                        reason: `Semantic token '${semantic.name}' references non-existent primitive '${refs.value}'`
-                    });
-                }
-            }
-            else if (refs.default !== undefined) {
-                if (!primitiveNames.has(refs.default)) {
-                    invalidReferences.push({
-                        semanticToken: semantic.name,
-                        property: 'default',
-                        reference: refs.default,
-                        reason: `Semantic token '${semantic.name}' references non-existent primitive '${refs.default}'`
-                    });
-                }
-            }
-            else {
-                // Check multi-reference tokens (typography tokens with multiple properties)
-                // Required properties for typography tokens
-                const requiredTypographyProps = ['fontSize', 'lineHeight', 'fontFamily', 'fontWeight', 'letterSpacing'];
-                // Check if this looks like a typography token (has fontSize or lineHeight)
-                const isTypographyToken = refs.fontSize !== undefined || refs.lineHeight !== undefined;
-                if (isTypographyToken) {
-                    // Validate all required typography properties exist
-                    for (const prop of requiredTypographyProps) {
-                        if (refs[prop] === undefined) {
-                            invalidReferences.push({
-                                semanticToken: semantic.name,
-                                property: prop,
-                                reference: '',
-                                reason: `Typography token '${semantic.name}' missing required reference: ${prop}`
-                            });
-                        }
-                        else if (!primitiveNames.has(refs[prop])) {
-                            invalidReferences.push({
-                                semanticToken: semantic.name,
-                                property: prop,
-                                reference: refs[prop],
-                                reason: `Semantic token '${semantic.name}' has invalid ${prop} reference '${refs[prop]}'`
-                            });
-                        }
-                    }
-                }
-                else {
-                    // For other multi-reference tokens, validate all references exist
-                    for (const [prop, ref] of Object.entries(refs)) {
-                        if (typeof ref === 'string' && !primitiveNames.has(ref)) {
-                            invalidReferences.push({
-                                semanticToken: semantic.name,
-                                property: prop,
-                                reference: ref,
-                                reason: `Semantic token '${semantic.name}' has invalid ${prop} reference '${ref}'`
-                            });
-                        }
-                    }
-                }
-            }
-        }
-        return {
-            valid: invalidReferences.length === 0,
-            invalidReferences
-        };
     }
     /**
      * Validate mathematical consistency across platforms

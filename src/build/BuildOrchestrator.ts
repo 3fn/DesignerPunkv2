@@ -23,7 +23,11 @@ import {
 import { Platform, PLATFORM_METADATA } from './types/Platform';
 import { TokenFileGenerator } from '../generators/TokenFileGenerator';
 import { getAllPrimitiveTokens, getTokensByCategory } from '../tokens';
+import { getAllSemanticTokens } from '../tokens/semantic';
 import { TokenCategory } from '../types/PrimitiveToken';
+import { SemanticTokenValidator } from '../validators/SemanticTokenValidator';
+import { PrimitiveTokenRegistry } from '../registries/PrimitiveTokenRegistry';
+import { SemanticTokenRegistry } from '../registries/SemanticTokenRegistry';
 import * as path from 'path';
 import * as fs from 'fs';
 
@@ -386,6 +390,49 @@ export class BuildOrchestrator implements IBuildOrchestrator {
       const allTokens = getAllPrimitiveTokens();
       if (allTokens.length === 0) {
         throw new Error('No tokens available for generation');
+      }
+
+      // Validate semantic token references before generation
+      const primitiveRegistry = new PrimitiveTokenRegistry();
+      const semanticRegistry = new SemanticTokenRegistry(primitiveRegistry);
+      const validator = new SemanticTokenValidator(primitiveRegistry, semanticRegistry);
+      
+      const semanticTokens = getAllSemanticTokens();
+      const validationResult = validator.validateSemanticReferences(semanticTokens, allTokens);
+      
+      if (validationResult.level === 'Error') {
+        // Validation failed - add error and return early
+        errors.push({
+          code: 'VALIDATION_FAILED',
+          message: validationResult.message,
+          severity: 'error',
+          category: 'token',
+          platform,
+          context: {
+            rationale: validationResult.rationale,
+            suggestions: validationResult.suggestions
+          },
+          suggestions: validationResult.suggestions || [
+            'Verify that all referenced primitive tokens exist',
+            'Check for typos in primitive token names',
+            'Ensure typography tokens include all required properties'
+          ],
+          documentation: []
+        });
+        
+        const duration = Date.now() - startTime;
+        return {
+          platform,
+          success: false,
+          packagePath: '',
+          duration,
+          warnings,
+          errors
+        };
+      }
+      
+      if (validationResult.level === 'Warning') {
+        warnings.push(validationResult.message);
       }
 
       // Generate platform-specific token file

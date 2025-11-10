@@ -10,6 +10,7 @@
 import type { PrimitiveToken, SemanticToken, ValidationResult } from '../types';
 import { TokenCategory } from '../types';
 import { ValidationReasoning } from './ValidationReasoning';
+import type { IValidator } from './IValidator';
 /**
  * Warning validation context with usage pattern analysis
  */
@@ -60,7 +61,8 @@ export interface WarningValidationContext {
 /**
  * Warning-level validator for potentially problematic patterns
  */
-export declare class WarningValidator {
+export declare class WarningValidator implements IValidator<WarningValidationContext> {
+    readonly name = "WarningValidator";
     private reasoningGenerator;
     private readonly DEFAULT_STRATEGIC_FLEXIBILITY_THRESHOLD;
     private readonly DEFAULT_PRIMITIVE_USAGE_THRESHOLD;

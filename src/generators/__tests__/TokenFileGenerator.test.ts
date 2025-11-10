@@ -6,6 +6,9 @@
  */
 
 import { TokenFileGenerator, GenerationOptions } from '../TokenFileGenerator';
+import { SemanticTokenValidator } from '../../validators/SemanticTokenValidator';
+import { PrimitiveTokenRegistry } from '../../registries/PrimitiveTokenRegistry';
+import { SemanticTokenRegistry } from '../../registries/SemanticTokenRegistry';
 
 describe('TokenFileGenerator', () => {
   let generator: TokenFileGenerator;
@@ -26,7 +29,7 @@ describe('TokenFileGenerator', () => {
       const result = generator.generateWebTokens();
 
       expect(result.platform).toBe('web');
-      expect(result.filePath).toBe('output/DesignTokens.web.js');
+      expect(result.filePath).toBe('output/DesignTokens.web.css');
       expect(result.content).toBeDefined();
       expect(result.tokenCount).toBeGreaterThan(0);
       expect(result.valid).toBe(true);
@@ -37,7 +40,7 @@ describe('TokenFileGenerator', () => {
         outputDir: 'custom/output'
       });
 
-      expect(result.filePath).toBe('custom/output/DesignTokens.web.js');
+      expect(result.filePath).toBe('custom/output/DesignTokens.web.css');
     });
 
     it('should include version in generated content', () => {
@@ -334,7 +337,7 @@ describe('TokenFileGenerator', () => {
     it('should generate consistent file names across platforms', () => {
       const results = generator.generateAll();
 
-      expect(results[0].filePath).toContain('DesignTokens.web.js');
+      expect(results[0].filePath).toContain('DesignTokens.web.css');
       expect(results[1].filePath).toContain('DesignTokens.ios.swift');
       expect(results[2].filePath).toContain('DesignTokens.android.kt');
     });
@@ -425,8 +428,8 @@ describe('TokenFileGenerator', () => {
       const iosResult = generator.generateiOSTokens();
       const androidResult = generator.generateAndroidTokens();
 
-      // Web should have export statements
-      expect(webResult.content).toContain('export');
+      // Web should have CSS custom properties
+      expect(webResult.content).toContain(':root');
 
       // iOS should have struct definition
       expect(iosResult.content).toContain('struct');
@@ -446,8 +449,9 @@ describe('TokenFileGenerator', () => {
     });
   });
 
-  describe('Semantic Token Reference Validation', () => {
-    it('should validate semantic tokens with valid single references', () => {
+  describe('Integration: Validation + Generation', () => {
+    it('should validate semantic references before generating web tokens', () => {
+      // Create test data
       const semantics = [
         {
           name: 'colorPrimary',
@@ -473,13 +477,23 @@ describe('TokenFileGenerator', () => {
         }
       ];
 
-      const validation = generator.validateSemanticReferences(semantics, primitives);
+      // Step 1: Validate semantic references
+      const primitiveRegistry = new PrimitiveTokenRegistry();
+      const semanticRegistry = new SemanticTokenRegistry(primitiveRegistry);
+      const validator = new SemanticTokenValidator(primitiveRegistry, semanticRegistry);
+      const validation = validator.validateSemanticReferences(semantics, primitives);
 
-      expect(validation.valid).toBe(true);
-      expect(validation.invalidReferences).toHaveLength(0);
+      expect(validation.level).toBe('Pass');
+
+      // Step 2: Generate tokens (assuming valid input)
+      const result = generator.generateWebTokens();
+
+      expect(result.valid).toBe(true);
+      expect(result.tokenCount).toBeGreaterThan(0);
     });
 
-    it('should detect invalid single reference', () => {
+    it('should detect invalid references before generation', () => {
+      // Create test data with invalid reference
       const semantics = [
         {
           name: 'colorPrimary',
@@ -505,16 +519,22 @@ describe('TokenFileGenerator', () => {
         }
       ];
 
-      const validation = generator.validateSemanticReferences(semantics, primitives);
+      // Step 1: Validate semantic references
+      const primitiveRegistry = new PrimitiveTokenRegistry();
+      const semanticRegistry = new SemanticTokenRegistry(primitiveRegistry);
+      const validator = new SemanticTokenValidator(primitiveRegistry, semanticRegistry);
+      const validation = validator.validateSemanticReferences(semantics, primitives);
 
-      expect(validation.valid).toBe(false);
-      expect(validation.invalidReferences).toHaveLength(1);
-      expect(validation.invalidReferences[0].semanticToken).toBe('colorPrimary');
-      expect(validation.invalidReferences[0].reference).toBe('nonExistentToken');
-      expect(validation.invalidReferences[0].reason).toContain('non-existent primitive');
+      // Validation should fail
+      expect(validation.level).toBe('Error');
+      expect(validation.rationale).toContain('nonExistentToken');
+
+      // Step 2: Should not proceed to generation if validation fails
+      // (In real usage, caller would check validation.level before generating)
     });
 
-    it('should validate typography tokens with all required references', () => {
+    it('should validate typography tokens before generation', () => {
+      // Create test data with valid typography token
       const semantics = [
         {
           name: 'typographyBodyMd',
@@ -539,13 +559,23 @@ describe('TokenFileGenerator', () => {
         { name: 'letterSpacing100', category: 'letterSpacing' as any, baseValue: 0, familyBaseValue: 0, description: '', mathematicalRelationship: '', baselineGridAlignment: false, isStrategicFlexibility: false, isPrecisionTargeted: false, platforms: {} as any }
       ];
 
-      const validation = generator.validateSemanticReferences(semantics, primitives);
+      // Step 1: Validate semantic references
+      const primitiveRegistry = new PrimitiveTokenRegistry();
+      const semanticRegistry = new SemanticTokenRegistry(primitiveRegistry);
+      const validator = new SemanticTokenValidator(primitiveRegistry, semanticRegistry);
+      const validation = validator.validateSemanticReferences(semantics, primitives);
 
-      expect(validation.valid).toBe(true);
-      expect(validation.invalidReferences).toHaveLength(0);
+      expect(validation.level).toBe('Pass');
+
+      // Step 2: Generate tokens (assuming valid input)
+      const result = generator.generateWebTokens();
+
+      expect(result.valid).toBe(true);
+      expect(result.tokenCount).toBeGreaterThan(0);
     });
 
-    it('should detect missing required typography property', () => {
+    it('should detect missing typography properties before generation', () => {
+      // Create test data with missing typography property
       const semantics = [
         {
           name: 'typographyBodyMd',
@@ -569,48 +599,63 @@ describe('TokenFileGenerator', () => {
         { name: 'fontWeight400', category: 'fontWeight' as any, baseValue: 400, familyBaseValue: 400, description: '', mathematicalRelationship: '', baselineGridAlignment: false, isStrategicFlexibility: false, isPrecisionTargeted: false, platforms: {} as any }
       ];
 
-      const validation = generator.validateSemanticReferences(semantics, primitives);
+      // Step 1: Validate semantic references
+      const primitiveRegistry = new PrimitiveTokenRegistry();
+      const semanticRegistry = new SemanticTokenRegistry(primitiveRegistry);
+      const validator = new SemanticTokenValidator(primitiveRegistry, semanticRegistry);
+      const validation = validator.validateSemanticReferences(semantics, primitives);
 
-      expect(validation.valid).toBe(false);
-      expect(validation.invalidReferences).toHaveLength(1);
-      expect(validation.invalidReferences[0].semanticToken).toBe('typographyBodyMd');
-      expect(validation.invalidReferences[0].property).toBe('letterSpacing');
-      expect(validation.invalidReferences[0].reason).toContain('missing required reference');
+      // Validation should fail
+      expect(validation.level).toBe('Error');
+      expect(validation.rationale).toContain('letterSpacing');
+      expect(validation.rationale).toContain('missing required reference');
+
+      // Step 2: Should not proceed to generation if validation fails
     });
 
-    it('should detect invalid typography property reference', () => {
+    it('should validate all platforms consistently', () => {
+      // Create test data
       const semantics = [
         {
-          name: 'typographyBodyMd',
-          primitiveReferences: {
-            fontSize: 'invalidFontSize',
-            lineHeight: 'lineHeight100',
-            fontFamily: 'fontFamilyBody',
-            fontWeight: 'fontWeight400',
-            letterSpacing: 'letterSpacing100'
-          },
-          category: 'typography' as any,
-          context: 'Body medium typography',
-          description: 'Medium body text style'
+          name: 'colorPrimary',
+          primitiveReferences: { value: 'purple300' },
+          category: 'color' as any,
+          context: 'Primary brand color',
+          description: 'Primary brand color for main actions'
         }
       ];
 
       const primitives = [
-        { name: 'fontSize100', category: 'fontSize' as any, baseValue: 16, familyBaseValue: 16, description: '', mathematicalRelationship: '', baselineGridAlignment: false, isStrategicFlexibility: false, isPrecisionTargeted: false, platforms: {} as any },
-        { name: 'lineHeight100', category: 'lineHeight' as any, baseValue: 24, familyBaseValue: 24, description: '', mathematicalRelationship: '', baselineGridAlignment: false, isStrategicFlexibility: false, isPrecisionTargeted: false, platforms: {} as any },
-        { name: 'fontFamilyBody', category: 'fontFamily' as any, baseValue: 0, familyBaseValue: 0, description: '', mathematicalRelationship: '', baselineGridAlignment: false, isStrategicFlexibility: false, isPrecisionTargeted: false, platforms: {} as any },
-        { name: 'fontWeight400', category: 'fontWeight' as any, baseValue: 400, familyBaseValue: 400, description: '', mathematicalRelationship: '', baselineGridAlignment: false, isStrategicFlexibility: false, isPrecisionTargeted: false, platforms: {} as any },
-        { name: 'letterSpacing100', category: 'letterSpacing' as any, baseValue: 0, familyBaseValue: 0, description: '', mathematicalRelationship: '', baselineGridAlignment: false, isStrategicFlexibility: false, isPrecisionTargeted: false, platforms: {} as any }
+        {
+          name: 'purple300',
+          category: 'color' as any,
+          baseValue: 0,
+          familyBaseValue: 0,
+          description: 'Purple 300',
+          mathematicalRelationship: 'base',
+          baselineGridAlignment: false,
+          isStrategicFlexibility: false,
+          isPrecisionTargeted: false,
+          platforms: {} as any
+        }
       ];
 
-      const validation = generator.validateSemanticReferences(semantics, primitives);
+      // Step 1: Validate semantic references
+      const primitiveRegistry = new PrimitiveTokenRegistry();
+      const semanticRegistry = new SemanticTokenRegistry(primitiveRegistry);
+      const validator = new SemanticTokenValidator(primitiveRegistry, semanticRegistry);
+      const validation = validator.validateSemanticReferences(semantics, primitives);
 
-      expect(validation.valid).toBe(false);
-      expect(validation.invalidReferences).toHaveLength(1);
-      expect(validation.invalidReferences[0].semanticToken).toBe('typographyBodyMd');
-      expect(validation.invalidReferences[0].property).toBe('fontSize');
-      expect(validation.invalidReferences[0].reference).toBe('invalidFontSize');
-      expect(validation.invalidReferences[0].reason).toContain('invalid fontSize reference');
+      expect(validation.level).toBe('Pass');
+
+      // Step 2: Generate tokens for all platforms (assuming valid input)
+      const results = generator.generateAll();
+
+      expect(results).toHaveLength(3);
+      results.forEach(result => {
+        expect(result.valid).toBe(true);
+        expect(result.tokenCount).toBeGreaterThan(0);
+      });
     });
   });
 });

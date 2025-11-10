@@ -5,6 +5,10 @@ const PrimitiveToken_1 = require("../types/PrimitiveToken");
 const BaselineGridValidator_1 = require("../validators/BaselineGridValidator");
 class PrimitiveTokenRegistry {
     constructor() {
+        /**
+         * Registry name for identification
+         */
+        this.name = 'PrimitiveTokenRegistry';
         this.tokens = new Map();
         this.categoryIndex = new Map();
         this.validator = new BaselineGridValidator_1.BaselineGridValidator({
@@ -15,46 +19,27 @@ class PrimitiveTokenRegistry {
     }
     /**
      * Register a primitive token with validation
+     *
+     * Implements IRegistry.register() interface.
+     * Note: Validation methods (validateToken, validateAll) will be removed in Phase 3.
+     * Callers should validate tokens before registration using appropriate validators.
      */
     register(token, options = {}) {
         const { skipValidation = false, allowOverwrite = false } = options;
         // Check for existing token
         if (this.tokens.has(token.name) && !allowOverwrite) {
-            return {
-                level: 'Error',
-                token: token.name,
-                message: 'Token already exists',
-                rationale: `Token ${token.name} is already registered. Use allowOverwrite option to replace.`,
-                mathematicalReasoning: 'Token uniqueness prevents mathematical inconsistencies in the system'
-            };
+            throw new Error(`Token ${token.name} is already registered. Use allowOverwrite option to replace.`);
         }
         // Validate token if not skipped
-        let validationResult;
         if (!skipValidation) {
-            validationResult = this.validateToken(token);
+            const validationResult = this.validateToken(token);
             if (validationResult.level === 'Error') {
-                return validationResult;
+                throw new Error(`Validation failed for token ${token.name}: ${validationResult.message}`);
             }
-        }
-        else {
-            validationResult = {
-                level: 'Pass',
-                token: token.name,
-                message: 'Validation skipped',
-                rationale: 'Token registered without validation',
-                mathematicalReasoning: 'Validation bypassed by registration options'
-            };
         }
         // Register the token
         this.tokens.set(token.name, token);
         this.addToCategory(token.category, token.name);
-        return {
-            level: 'Pass',
-            token: token.name,
-            message: 'Token registered successfully',
-            rationale: `Token ${token.name} registered with ${validationResult.level} validation`,
-            mathematicalReasoning: validationResult.mathematicalReasoning
-        };
     }
     /**
      * Retrieve a token by name
@@ -114,7 +99,7 @@ class PrimitiveTokenRegistry {
         // Categories that require baseline grid alignment
         const baselineGridCategories = [PrimitiveToken_1.TokenCategory.SPACING, PrimitiveToken_1.TokenCategory.RADIUS];
         if (baselineGridCategories.includes(token.category)) {
-            return this.validator.validate(token.baseValue, token.name);
+            return this.validator.validate({ value: token.baseValue, tokenName: token.name });
         }
         // Other categories pass validation (they have their own mathematical foundations)
         return {

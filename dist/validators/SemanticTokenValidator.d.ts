@@ -11,6 +11,7 @@ import type { PrimitiveTokenRegistry } from '../registries/PrimitiveTokenRegistr
 import type { SemanticTokenRegistry } from '../registries/SemanticTokenRegistry';
 import { PrimitiveReferenceValidator } from './PrimitiveReferenceValidator';
 import { CompositionPatternValidator } from './CompositionPatternValidator';
+import type { IValidator } from './IValidator';
 export interface SemanticValidationOptions {
     /** Whether to validate primitive references (default: true) */
     validatePrimitiveReferences?: boolean;
@@ -20,6 +21,10 @@ export interface SemanticValidationOptions {
     allowEmptyReferences?: boolean;
     /** Whether to enforce strict validation (default: true) */
     strictValidation?: boolean;
+}
+export interface SemanticValidationInput {
+    semanticToken: SemanticToken;
+    options?: SemanticValidationOptions;
 }
 export interface ComprehensiveValidationResult {
     /** Overall validation result */
@@ -36,14 +41,20 @@ export interface ComprehensiveValidationResult {
         validationTimestamp: Date;
     };
 }
-export declare class SemanticTokenValidator {
+export declare class SemanticTokenValidator implements IValidator<SemanticValidationInput> {
+    readonly name = "SemanticTokenValidator";
     private primitiveReferenceValidator;
     private compositionPatternValidator;
     constructor(primitiveRegistry: PrimitiveTokenRegistry, semanticRegistry: SemanticTokenRegistry);
     /**
-     * Perform comprehensive validation on a semantic token
+     * Validate input using IValidator interface
      */
+    validate(input: SemanticValidationInput): ValidationResult;
     validate(semanticToken: SemanticToken, options?: SemanticValidationOptions): ComprehensiveValidationResult;
+    /**
+     * Perform comprehensive validation on a semantic token (legacy method)
+     */
+    validateToken(semanticToken: SemanticToken, options?: SemanticValidationOptions): ComprehensiveValidationResult;
     /**
      * Validate semantic token structure and hierarchy
      */
@@ -76,5 +87,22 @@ export declare class SemanticTokenValidator {
      * Get composition pattern validator for direct access
      */
     getCompositionPatternValidator(): CompositionPatternValidator;
+    /**
+     * Validate semantic token references against primitive tokens
+     * Checks that all primitive references in semantic tokens exist in the primitive token list
+     *
+     * This method validates that:
+     * - All primitive token references exist in the provided primitive token list
+     * - Single-reference tokens (with 'value' or 'default' property) reference valid primitives
+     * - Multi-reference tokens (typography) have all required properties
+     * - Multi-reference tokens reference valid primitives for each property
+     *
+     * @param semantics - Array of semantic tokens to validate
+     * @param primitives - Array of primitive tokens to validate against
+     * @returns ValidationResult with comprehensive error messages for invalid references
+     */
+    validateSemanticReferences(semantics: SemanticToken[], primitives: Array<{
+        name: string;
+    }>): ValidationResult;
 }
 //# sourceMappingURL=SemanticTokenValidator.d.ts.map

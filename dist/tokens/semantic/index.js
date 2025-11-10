@@ -26,7 +26,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLayeringTokensByPlatform = exports.getAllLayeringTokens = exports.getAllElevationTokens = exports.getElevationToken = exports.elevationTokenNames = exports.elevationTokens = exports.getAllZIndexTokens = exports.getZIndexToken = exports.zIndexTokenNames = exports.zIndexTokens = exports.validateBlendTokenCount = exports.getAllBlendTokens = exports.getBlendToken = exports.blendTokenNames = exports.blendTokens = exports.validateOpacityTokenCount = exports.getAllOpacityTokens = exports.getOpacityToken = exports.opacityTokenNames = exports.opacityTokens = exports.borderHeavy = exports.borderEmphasis = exports.borderDefault = exports.SemanticBorderWidthTokens = exports.getAllShadowTokens = exports.getShadowToken = exports.shadowTokenNames = exports.shadowTokens = exports.getAllTypographyTokens = exports.getTypographyToken = exports.typographyTokenNames = exports.typographyTokens = exports.insetSpacing = exports.layoutSpacing = exports.spacingTokens = exports.validateColorTokenCount = exports.getAllColorTokens = exports.getColorToken = exports.colorTokenNames = exports.colorTokens = exports.getStyleToken = exports.styleTokens = void 0;
+exports.getAllGridSpacingTokens = exports.getGridSpacingToken = exports.gridSpacingTokenNames = exports.gridSpacingTokens = exports.getLayeringTokensByPlatform = exports.getAllLayeringTokens = exports.getAllElevationTokens = exports.getElevationToken = exports.elevationTokenNames = exports.elevationTokens = exports.getAllZIndexTokens = exports.getZIndexToken = exports.zIndexTokenNames = exports.zIndexTokens = exports.validateBlendTokenCount = exports.getAllBlendTokens = exports.getBlendToken = exports.blendTokenNames = exports.blendTokens = exports.validateOpacityTokenCount = exports.getAllOpacityTokens = exports.getOpacityToken = exports.opacityTokenNames = exports.opacityTokens = exports.borderHeavy = exports.borderEmphasis = exports.borderDefault = exports.SemanticBorderWidthTokens = exports.getAllShadowTokens = exports.getShadowToken = exports.shadowTokenNames = exports.shadowTokens = exports.getAllTypographyTokens = exports.getTypographyToken = exports.typographyTokenNames = exports.typographyTokens = exports.insetSpacing = exports.layoutSpacing = exports.spacingTokens = exports.validateColorTokenCount = exports.getAllColorTokens = exports.getColorToken = exports.colorTokenNames = exports.colorTokens = exports.getStyleToken = exports.styleTokens = void 0;
 exports.getSemanticToken = getSemanticToken;
 exports.getAllSemanticTokens = getAllSemanticTokens;
 exports.getSemanticTokensByCategory = getSemanticTokensByCategory;
@@ -43,6 +43,7 @@ __exportStar(require("./ShadowTokens"), exports);
 __exportStar(require("./OpacityTokens"), exports);
 __exportStar(require("./BlendTokens"), exports);
 __exportStar(require("./LayeringTokens"), exports);
+__exportStar(require("./GridSpacingTokens"), exports);
 // StyleTokens placeholder - will be implemented in future tasks
 var StyleTokens_1 = require("./StyleTokens");
 Object.defineProperty(exports, "styleTokens", { enumerable: true, get: function () { return StyleTokens_1.styleTokens; } });
@@ -96,6 +97,11 @@ Object.defineProperty(exports, "getElevationToken", { enumerable: true, get: fun
 Object.defineProperty(exports, "getAllElevationTokens", { enumerable: true, get: function () { return LayeringTokens_1.getAllElevationTokens; } });
 Object.defineProperty(exports, "getAllLayeringTokens", { enumerable: true, get: function () { return LayeringTokens_1.getAllLayeringTokens; } });
 Object.defineProperty(exports, "getLayeringTokensByPlatform", { enumerable: true, get: function () { return LayeringTokens_1.getLayeringTokensByPlatform; } });
+var GridSpacingTokens_1 = require("./GridSpacingTokens");
+Object.defineProperty(exports, "gridSpacingTokens", { enumerable: true, get: function () { return GridSpacingTokens_1.gridSpacingTokens; } });
+Object.defineProperty(exports, "gridSpacingTokenNames", { enumerable: true, get: function () { return GridSpacingTokens_1.gridSpacingTokenNames; } });
+Object.defineProperty(exports, "getGridSpacingToken", { enumerable: true, get: function () { return GridSpacingTokens_1.getGridSpacingToken; } });
+Object.defineProperty(exports, "getAllGridSpacingTokens", { enumerable: true, get: function () { return GridSpacingTokens_1.getAllGridSpacingTokens; } });
 const SemanticToken_1 = require("../../types/SemanticToken");
 const ColorTokens_2 = require("./ColorTokens");
 const SpacingTokens_2 = require("./SpacingTokens");
@@ -105,6 +111,7 @@ const ShadowTokens_2 = require("./ShadowTokens");
 const OpacityTokens_2 = require("./OpacityTokens");
 const BlendTokens_2 = require("./BlendTokens");
 const LayeringTokens_2 = require("./LayeringTokens");
+const GridSpacingTokens_2 = require("./GridSpacingTokens");
 /**
  * Get any semantic token by name across all categories
  * Searches color, spacing, typography, border, shadow, and opacity tokens
@@ -155,6 +162,10 @@ function getSemanticToken(name) {
     // Check elevation tokens
     if (name.startsWith('elevation.')) {
         return LayeringTokens_2.elevationTokens[name];
+    }
+    // Check grid spacing tokens
+    if (name.startsWith('grid')) {
+        return GridSpacingTokens_2.gridSpacingTokens[name];
     }
     return undefined;
 }
@@ -250,6 +261,8 @@ function getAllSemanticTokens() {
     tokens.push(...Object.values(LayeringTokens_2.zIndexTokens));
     // Add elevation tokens
     tokens.push(...Object.values(LayeringTokens_2.elevationTokens));
+    // Add grid spacing tokens
+    tokens.push(...Object.values(GridSpacingTokens_2.gridSpacingTokens));
     // Add border width tokens
     for (const [name, token] of Object.entries(BorderWidthTokens_2.SemanticBorderWidthTokens)) {
         tokens.push({
@@ -402,7 +415,8 @@ function getSemanticTokenStats() {
         opacityTokens: Object.keys(OpacityTokens_2.opacityTokens).length,
         blendTokens: Object.keys(BlendTokens_2.blendTokens).length,
         zIndexTokens: Object.keys(LayeringTokens_2.zIndexTokens).length,
-        elevationTokens: Object.keys(LayeringTokens_2.elevationTokens).length
+        elevationTokens: Object.keys(LayeringTokens_2.elevationTokens).length,
+        gridSpacingTokens: Object.keys(GridSpacingTokens_2.gridSpacingTokens).length
     };
 }
 //# sourceMappingURL=index.js.map

@@ -416,4 +416,304 @@ describe('SemanticTokenValidator', () => {
       expect(result.details.hasValidReferences).toBe(true);
     });
   });
+
+  describe('validateSemanticReferences', () => {
+    it('should validate all semantic tokens with valid references', () => {
+      const semantics: SemanticToken[] = [
+        {
+          name: 'space.grouped.normal',
+          category: SemanticCategory.SPACING,
+          primitiveReferences: { value: 'space100' },
+          description: 'Normal grouped spacing',
+          context: 'Test'
+        },
+        {
+          name: 'space.grouped.large',
+          category: SemanticCategory.SPACING,
+          primitiveReferences: { default: 'space200' },
+          description: 'Large grouped spacing',
+          context: 'Test'
+        }
+      ];
+
+      const primitives = [
+        { name: 'space100' },
+        { name: 'space200' }
+      ];
+
+      const result = validator.validateSemanticReferences(semantics, primitives);
+
+      expect(result.level).toBe('Pass');
+      expect(result.message).toContain('All semantic token references are valid');
+      expect(result.message).toContain('2 tokens validated');
+    });
+
+    it('should detect invalid single-reference token with value property', () => {
+      const semantics: SemanticToken[] = [
+        {
+          name: 'space.invalid',
+          category: SemanticCategory.SPACING,
+          primitiveReferences: { value: 'nonexistent' },
+          description: 'Invalid reference',
+          context: 'Test'
+        }
+      ];
+
+      const primitives = [
+        { name: 'space100' }
+      ];
+
+      const result = validator.validateSemanticReferences(semantics, primitives);
+
+      expect(result.level).toBe('Error');
+      expect(result.message).toContain('1 invalid semantic token reference');
+      expect(result.rationale).toContain("references non-existent primitive 'nonexistent'");
+    });
+
+    it('should detect invalid single-reference token with default property', () => {
+      const semantics: SemanticToken[] = [
+        {
+          name: 'space.invalid',
+          category: SemanticCategory.SPACING,
+          primitiveReferences: { default: 'missing' },
+          description: 'Invalid reference',
+          context: 'Test'
+        }
+      ];
+
+      const primitives = [
+        { name: 'space100' }
+      ];
+
+      const result = validator.validateSemanticReferences(semantics, primitives);
+
+      expect(result.level).toBe('Error');
+      expect(result.rationale).toContain("references non-existent primitive 'missing'");
+    });
+
+    it('should validate typography tokens with all required properties', () => {
+      const semantics: SemanticToken[] = [
+        {
+          name: 'typography.body',
+          category: SemanticCategory.TYPOGRAPHY,
+          primitiveReferences: {
+            fontSize: 'fontSize100',
+            lineHeight: 'lineHeight100',
+            fontFamily: 'fontFamily.system',
+            fontWeight: 'fontWeight400',
+            letterSpacing: 'letterSpacing000'
+          },
+          description: 'Body typography',
+          context: 'Test'
+        }
+      ];
+
+      const primitives = [
+        { name: 'fontSize100' },
+        { name: 'lineHeight100' },
+        { name: 'fontFamily.system' },
+        { name: 'fontWeight400' },
+        { name: 'letterSpacing000' }
+      ];
+
+      const result = validator.validateSemanticReferences(semantics, primitives);
+
+      expect(result.level).toBe('Pass');
+    });
+
+    it('should detect missing required typography properties', () => {
+      const semantics: SemanticToken[] = [
+        {
+          name: 'typography.incomplete',
+          category: SemanticCategory.TYPOGRAPHY,
+          primitiveReferences: {
+            fontSize: 'fontSize100',
+            lineHeight: 'lineHeight100'
+            // Missing fontFamily, fontWeight, letterSpacing
+          },
+          description: 'Incomplete typography',
+          context: 'Test'
+        }
+      ];
+
+      const primitives = [
+        { name: 'fontSize100' },
+        { name: 'lineHeight100' }
+      ];
+
+      const result = validator.validateSemanticReferences(semantics, primitives);
+
+      expect(result.level).toBe('Error');
+      expect(result.rationale).toContain('missing required reference: fontFamily');
+      expect(result.rationale).toContain('missing required reference: fontWeight');
+      expect(result.rationale).toContain('missing required reference: letterSpacing');
+    });
+
+    it('should detect invalid typography property references', () => {
+      const semantics: SemanticToken[] = [
+        {
+          name: 'typography.invalid',
+          category: SemanticCategory.TYPOGRAPHY,
+          primitiveReferences: {
+            fontSize: 'invalidFontSize',
+            lineHeight: 'lineHeight100',
+            fontFamily: 'fontFamily.system',
+            fontWeight: 'fontWeight400',
+            letterSpacing: 'letterSpacing000'
+          },
+          description: 'Invalid typography',
+          context: 'Test'
+        }
+      ];
+
+      const primitives = [
+        { name: 'fontSize100' },
+        { name: 'lineHeight100' },
+        { name: 'fontFamily.system' },
+        { name: 'fontWeight400' },
+        { name: 'letterSpacing000' }
+      ];
+
+      const result = validator.validateSemanticReferences(semantics, primitives);
+
+      expect(result.level).toBe('Error');
+      expect(result.rationale).toContain("has invalid fontSize reference 'invalidFontSize'");
+    });
+
+    it('should validate multi-reference tokens (non-typography)', () => {
+      const semantics: SemanticToken[] = [
+        {
+          name: 'custom.multi',
+          category: SemanticCategory.SPACING,
+          primitiveReferences: {
+            horizontal: 'space100',
+            vertical: 'space200'
+          },
+          description: 'Multi-reference',
+          context: 'Test'
+        }
+      ];
+
+      const primitives = [
+        { name: 'space100' },
+        { name: 'space200' }
+      ];
+
+      const result = validator.validateSemanticReferences(semantics, primitives);
+
+      expect(result.level).toBe('Pass');
+    });
+
+    it('should detect invalid multi-reference token properties', () => {
+      const semantics: SemanticToken[] = [
+        {
+          name: 'custom.invalid',
+          category: SemanticCategory.SPACING,
+          primitiveReferences: {
+            horizontal: 'space100',
+            vertical: 'invalidSpace'
+          },
+          description: 'Invalid multi-reference',
+          context: 'Test'
+        }
+      ];
+
+      const primitives = [
+        { name: 'space100' }
+      ];
+
+      const result = validator.validateSemanticReferences(semantics, primitives);
+
+      expect(result.level).toBe('Error');
+      expect(result.rationale).toContain("has invalid vertical reference 'invalidSpace'");
+    });
+
+    it('should skip tokens without primitiveReferences', () => {
+      const semantics: SemanticToken[] = [
+        {
+          name: 'zIndex.modal',
+          category: SemanticCategory.LAYERING,
+          primitiveReferences: undefined as any,
+          description: 'Modal z-index',
+          context: 'Test'
+        },
+        {
+          name: 'space.valid',
+          category: SemanticCategory.SPACING,
+          primitiveReferences: { value: 'space100' },
+          description: 'Valid spacing',
+          context: 'Test'
+        }
+      ];
+
+      const primitives = [
+        { name: 'space100' }
+      ];
+
+      const result = validator.validateSemanticReferences(semantics, primitives);
+
+      expect(result.level).toBe('Pass');
+      expect(result.message).toContain('2 tokens validated');
+    });
+
+    it('should provide helpful suggestions for invalid references', () => {
+      const semantics: SemanticToken[] = [
+        {
+          name: 'space.invalid',
+          category: SemanticCategory.SPACING,
+          primitiveReferences: { value: 'nonexistent' },
+          description: 'Invalid',
+          context: 'Test'
+        }
+      ];
+
+      const primitives = [
+        { name: 'space100' }
+      ];
+
+      const result = validator.validateSemanticReferences(semantics, primitives);
+
+      expect(result.suggestions).toBeDefined();
+      expect(result.suggestions).toContain('Verify that all referenced primitive tokens exist in the primitive token registry');
+      expect(result.suggestions).toContain('Check for typos in primitive token names');
+    });
+
+    it('should handle empty semantic token array', () => {
+      const result = validator.validateSemanticReferences([], [{ name: 'space100' }]);
+
+      expect(result.level).toBe('Pass');
+      expect(result.message).toContain('0 tokens validated');
+    });
+
+    it('should handle multiple invalid references in single token', () => {
+      const semantics: SemanticToken[] = [
+        {
+          name: 'typography.multipleErrors',
+          category: SemanticCategory.TYPOGRAPHY,
+          primitiveReferences: {
+            fontSize: 'invalidFontSize',
+            lineHeight: 'invalidLineHeight',
+            fontFamily: 'fontFamily.system',
+            fontWeight: 'fontWeight400',
+            letterSpacing: 'letterSpacing000'
+          },
+          description: 'Multiple errors',
+          context: 'Test'
+        }
+      ];
+
+      const primitives = [
+        { name: 'fontFamily.system' },
+        { name: 'fontWeight400' },
+        { name: 'letterSpacing000' }
+      ];
+
+      const result = validator.validateSemanticReferences(semantics, primitives);
+
+      expect(result.level).toBe('Error');
+      expect(result.message).toContain('2 invalid semantic token reference');
+      expect(result.rationale).toContain('invalidFontSize');
+      expect(result.rationale).toContain('invalidLineHeight');
+    });
+  });
 });

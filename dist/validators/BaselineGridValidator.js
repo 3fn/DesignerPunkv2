@@ -11,13 +11,20 @@ const StrategicFlexibilityTokens_1 = require("../constants/StrategicFlexibilityT
 exports.BASELINE_GRID_UNIT = 8;
 class BaselineGridValidator {
     constructor(options = {}) {
+        this.name = 'BaselineGridValidator';
         this.gridUnit = options.customGridUnit ?? exports.BASELINE_GRID_UNIT;
         this.allowStrategicFlexibility = options.allowStrategicFlexibility ?? true;
     }
     /**
-     * Validate if a value aligns with the baseline grid
+     * Validate input using IValidator interface
      */
-    validate(value, tokenName) {
+    validate(input) {
+        return this.validateValue(input.value, input.tokenName);
+    }
+    /**
+     * Validate if a value aligns with the baseline grid (legacy method)
+     */
+    validateValue(value, tokenName) {
         // Strategic flexibility tokens always pass validation
         if (this.allowStrategicFlexibility && (0, StrategicFlexibilityTokens_1.isStrategicFlexibilityValue)(value)) {
             return {
@@ -72,7 +79,7 @@ class BaselineGridValidator {
      * Validate multiple values at once
      */
     validateBatch(values) {
-        return values.map(({ value, tokenName }) => this.validate(value, tokenName));
+        return values.map(({ value, tokenName }) => this.validateValue(value, tokenName));
     }
     /**
      * Get baseline grid information

@@ -1,4 +1,5 @@
 import type { ValidationResult } from '../types/ValidationResult';
+import type { IValidator } from './IValidator';
 /**
  * Baseline Grid Validator
  *
@@ -10,14 +11,23 @@ export interface BaselineGridValidationOptions {
     allowStrategicFlexibility?: boolean;
     customGridUnit?: number;
 }
-export declare class BaselineGridValidator {
+export interface BaselineGridValidationInput {
+    value: number;
+    tokenName?: string;
+}
+export declare class BaselineGridValidator implements IValidator<BaselineGridValidationInput> {
+    readonly name = "BaselineGridValidator";
     private readonly gridUnit;
     private readonly allowStrategicFlexibility;
     constructor(options?: BaselineGridValidationOptions);
     /**
-     * Validate if a value aligns with the baseline grid
+     * Validate input using IValidator interface
      */
-    validate(value: number, tokenName?: string): ValidationResult;
+    validate(input: BaselineGridValidationInput): ValidationResult;
+    /**
+     * Validate if a value aligns with the baseline grid (legacy method)
+     */
+    validateValue(value: number, tokenName?: string): ValidationResult;
     /**
      * Check if a value is aligned to the baseline grid
      */

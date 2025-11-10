@@ -23,7 +23,8 @@ export declare enum TokenCategory {
     SHADOW = "shadow",
     GLOW = "glow",
     OPACITY = "opacity",
-    BLEND = "blend"
+    BLEND = "blend",
+    BREAKPOINT = "breakpoint"
 }
 /**
  * Mode and theme structure for color tokens

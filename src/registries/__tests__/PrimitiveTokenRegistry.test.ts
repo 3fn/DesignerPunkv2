@@ -66,20 +66,15 @@ describe('PrimitiveTokenRegistry', () => {
   describe('Token Registration', () => {
     test('should register a valid token successfully', () => {
       const token = createSpacingToken('space100', 8);
-      const result = registry.register(token);
-
-      expect(result.level).toBe('Pass');
-      expect(result.token).toBe('space100');
-      expect(result.message).toBe('Token registered successfully');
+      
+      expect(() => registry.register(token)).not.toThrow();
       expect(registry.has('space100')).toBe(true);
     });
 
     test('should register strategic flexibility tokens without warnings', () => {
       const strategicToken = createSpacingToken('space075', 6, true);
-      const result = registry.register(strategicToken);
-
-      expect(result.level).toBe('Pass');
-      expect(result.token).toBe('space075');
+      
+      expect(() => registry.register(strategicToken)).not.toThrow();
       expect(registry.has('space075')).toBe(true);
     });
 
@@ -88,11 +83,8 @@ describe('PrimitiveTokenRegistry', () => {
       const token2 = createSpacingToken('space100', 16);
 
       registry.register(token1);
-      const result = registry.register(token2);
-
-      expect(result.level).toBe('Error');
-      expect(result.message).toBe('Token already exists');
-      expect(result.rationale).toContain('already registered');
+      
+      expect(() => registry.register(token2)).toThrow('already registered');
       expect(registry.get('space100')?.baseValue).toBe(8); // Original token preserved
     });
 
@@ -102,31 +94,16 @@ describe('PrimitiveTokenRegistry', () => {
       const options: TokenRegistrationOptions = { allowOverwrite: true };
 
       registry.register(token1);
-      const result = registry.register(token2, options);
-
-      expect(result.level).toBe('Pass');
+      
+      expect(() => registry.register(token2, options)).not.toThrow();
       expect(registry.get('space100')?.baseValue).toBe(16); // Token was overwritten
     });
 
-    test('should skip validation when requested', () => {
-      const invalidToken = createSpacingToken('invalid-token', 7); // Not baseline grid aligned
-      const options: TokenRegistrationOptions = { skipValidation: true };
-
-      const result = registry.register(invalidToken, options);
-
-      expect(result.level).toBe('Pass');
-      expect(result.message).toBe('Token registered successfully');
-      expect(result.rationale).toContain('Pass validation');
-    });
-
-    test('should reject tokens that fail baseline grid validation', () => {
-      const invalidToken = createSpacingToken('space-invalid', 7); // Not baseline grid aligned
-      const result = registry.register(invalidToken);
-
-      expect(result.level).toBe('Error');
-      expect(result.message).toBe('Baseline grid alignment violation');
-      expect(result.suggestions).toBeDefined();
-      expect(registry.has('space-invalid')).toBe(false);
+    test('should register tokens without validation (validation removed from registry)', () => {
+      const token = createSpacingToken('space-any', 7); // Any value allowed now
+      
+      expect(() => registry.register(token)).not.toThrow();
+      expect(registry.has('space-any')).toBe(true);
     });
   });
 
@@ -246,49 +223,23 @@ describe('PrimitiveTokenRegistry', () => {
     });
   });
 
-  describe('Token Validation', () => {
-    test('should validate spacing tokens against baseline grid', () => {
-      const validToken = createSpacingToken('space200', 16);
-      const invalidToken = createSpacingToken('space-invalid', 7);
+  describe('Storage-Only Behavior', () => {
+    test('should store tokens without validation (validation moved to validators)', () => {
+      const token1 = createSpacingToken('space200', 16);
+      const token2 = createSpacingToken('space-any', 7); // Any value allowed
 
-      const validResult = registry.validateToken(validToken);
-      const invalidResult = registry.validateToken(invalidToken);
-
-      expect(validResult.level).toBe('Pass');
-      expect(invalidResult.level).toBe('Error');
-      expect(invalidResult.suggestions).toBeDefined();
+      expect(() => registry.register(token1)).not.toThrow();
+      expect(() => registry.register(token2)).not.toThrow();
+      expect(registry.has('space200')).toBe(true);
+      expect(registry.has('space-any')).toBe(true);
     });
 
-    test('should validate radius tokens against baseline grid', () => {
-      const validRadiusToken = createMockToken({
-        name: 'radius200',
-        category: TokenCategory.RADIUS,
-        baseValue: 16,
-        baselineGridAlignment: true
-      });
-
-      const result = registry.validateToken(validRadiusToken);
-
-      expect(result.level).toBe('Pass');
-    });
-
-    test('should pass validation for non-baseline-grid categories', () => {
-      const fontSizeToken = createFontSizeToken('fontSize125', 18);
-      const result = registry.validateToken(fontSizeToken);
-
-      expect(result.level).toBe('Pass');
-      expect(result.rationale).toContain('uses its own mathematical foundation');
-    });
-
-    test('should validate all registered tokens', () => {
+    test('should register all tokens regardless of baseline grid alignment', () => {
       registry.register(createSpacingToken('space100', 8));
       registry.register(createSpacingToken('space075', 6, true)); // Strategic flexibility
       registry.register(createFontSizeToken('fontSize100', 16));
 
-      const results = registry.validateAll();
-
-      expect(results).toHaveLength(3);
-      expect(results.every(result => result.level === 'Pass')).toBe(true);
+      expect(registry.query()).toHaveLength(3);
     });
   });
 
@@ -315,12 +266,10 @@ describe('PrimitiveTokenRegistry', () => {
       expect(stats.categoryStats[TokenCategory.RADIUS]).toBe(0);
     });
 
-    test('should include validation information', () => {
+    test('should not include validation information (validation removed from registry)', () => {
       const stats = registry.getStats();
 
-      expect(stats.validationInfo).toBeDefined();
-      expect(stats.validationInfo.gridUnit).toBe(8);
-      expect(stats.validationInfo.allowStrategicFlexibility).toBe(true);
+      expect((stats as any).validationInfo).toBeUndefined();
     });
   });
 
@@ -366,27 +315,24 @@ describe('PrimitiveTokenRegistry', () => {
   describe('Error Handling and Edge Cases', () => {
     test('should handle empty registry operations gracefully', () => {
       expect(registry.query()).toHaveLength(0);
-      expect(registry.validateAll()).toHaveLength(0);
       expect(registry.getStats().totalTokens).toBe(0);
     });
 
-    test('should provide clear error messages for validation failures', () => {
-      const invalidToken = createSpacingToken('space-invalid', 7);
-      const result = registry.register(invalidToken);
-
-      expect(result.level).toBe('Error');
-      expect(result.message).toBe('Baseline grid alignment violation');
-      expect(result.mathematicalReasoning).toContain('non-whole number');
-      expect(result.suggestions).toContain('Use 8 (1 × 8)');
+    test('should register any token value (validation moved to validators)', () => {
+      const token1 = createSpacingToken('space-any-1', 7);
+      const token2 = createSpacingToken('space-any-2', 13);
+      
+      expect(() => registry.register(token1)).not.toThrow();
+      expect(() => registry.register(token2)).not.toThrow();
+      expect(registry.has('space-any-1')).toBe(true);
+      expect(registry.has('space-any-2')).toBe(true);
     });
 
-    test('should handle strategic flexibility tokens correctly in validation', () => {
+    test('should handle strategic flexibility tokens as regular tokens', () => {
       const strategicToken = createSpacingToken('space075', 6, true);
-      const result = registry.validateToken(strategicToken);
-
-      expect(result.level).toBe('Pass');
-      expect(result.message).toBe('Strategic flexibility token - mathematically derived exception');
-      expect(result.mathematicalReasoning).toContain('mathematically derived');
+      
+      expect(() => registry.register(strategicToken)).not.toThrow();
+      expect(registry.has('space075')).toBe(true);
     });
   });
 });

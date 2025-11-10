@@ -17,6 +17,7 @@ const ValidationReasoning_1 = require("./ValidationReasoning");
  */
 class PassValidator {
     constructor(reasoningGenerator) {
+        this.name = 'PassValidator';
         this.reasoningGenerator = reasoningGenerator || new ValidationReasoning_1.ValidationReasoning();
     }
     /**

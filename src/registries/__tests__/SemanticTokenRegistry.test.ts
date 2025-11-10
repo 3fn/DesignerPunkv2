@@ -106,14 +106,11 @@ describe('SemanticTokenRegistry', () => {
         context: 'Spacing between elements in the same logical group'
       };
 
-      const result = semanticRegistry.register(semanticToken);
-
-      expect(result.level).toBe('Pass');
-      expect(result.message).toContain('registered successfully');
+      expect(() => semanticRegistry.register(semanticToken)).not.toThrow();
       expect(semanticRegistry.has('space.grouped.normal')).toBe(true);
     });
 
-    it('should reject semantic token with invalid primitive reference', () => {
+    it('should register semantic token even with invalid primitive reference (validation moved to validators)', () => {
       const semanticToken: SemanticToken = {
         name: 'space.invalid',
         category: SemanticCategory.SPACING,
@@ -122,10 +119,8 @@ describe('SemanticTokenRegistry', () => {
         context: 'Test invalid reference'
       };
 
-      const result = semanticRegistry.register(semanticToken);
-
-      expect(result.level).toBe('Error');
-      expect(result.message).toContain('Invalid primitive token reference');
+      expect(() => semanticRegistry.register(semanticToken)).not.toThrow();
+      expect(semanticRegistry.has('space.invalid')).toBe(true);
     });
 
     it('should reject duplicate semantic token registration', () => {
@@ -138,10 +133,8 @@ describe('SemanticTokenRegistry', () => {
       };
 
       semanticRegistry.register(semanticToken);
-      const result = semanticRegistry.register(semanticToken);
-
-      expect(result.level).toBe('Error');
-      expect(result.message).toContain('already exists');
+      
+      expect(() => semanticRegistry.register(semanticToken)).toThrow('already registered');
     });
 
     it('should allow overwrite with allowOverwrite option', () => {
@@ -161,9 +154,7 @@ describe('SemanticTokenRegistry', () => {
         primitiveReferences: { default: 'space200' }
       };
 
-      const result = semanticRegistry.register(updatedToken, { allowOverwrite: true });
-
-      expect(result.level).toBe('Pass');
+      expect(() => semanticRegistry.register(updatedToken, { allowOverwrite: true })).not.toThrow();
       expect(semanticRegistry.get('space.overwrite')?.description).toBe('Updated');
     });
 
@@ -176,10 +167,8 @@ describe('SemanticTokenRegistry', () => {
         context: 'Test skip'
       };
 
-      const result = semanticRegistry.register(semanticToken, { skipValidation: true });
-
-      expect(result.level).toBe('Pass');
-      expect(result.message).toContain('registered successfully');
+      expect(() => semanticRegistry.register(semanticToken, { skipValidation: true })).not.toThrow();
+      expect(semanticRegistry.has('space.skip')).toBe(true);
     });
   });
 
@@ -254,8 +243,8 @@ describe('SemanticTokenRegistry', () => {
     });
   });
 
-  describe('Token Validation', () => {
-    it('should validate semantic token with valid primitive reference', () => {
+  describe('Storage-Only Behavior', () => {
+    it('should store semantic tokens without validation (validation moved to validators)', () => {
       const semanticToken: SemanticToken = {
         name: 'space.test',
         category: SemanticCategory.SPACING,
@@ -264,13 +253,11 @@ describe('SemanticTokenRegistry', () => {
         context: 'Test'
       };
 
-      const result = semanticRegistry.validateToken(semanticToken);
-
-      expect(result.level).toBe('Pass');
-      expect(result.message).toContain('valid primitive token');
+      expect(() => semanticRegistry.register(semanticToken)).not.toThrow();
+      expect(semanticRegistry.has('space.test')).toBe(true);
     });
 
-    it('should validate semantic token with multiple primitive references', () => {
+    it('should store semantic tokens with multiple primitive references', () => {
       const semanticToken: SemanticToken = {
         name: 'space.multi',
         category: SemanticCategory.SPACING,
@@ -282,29 +269,24 @@ describe('SemanticTokenRegistry', () => {
         context: 'Test multiple references'
       };
 
-      const result = semanticRegistry.validateToken(semanticToken);
-
-      expect(result.level).toBe('Pass');
-      expect(result.message).toContain('2 valid primitive token');
+      expect(() => semanticRegistry.register(semanticToken)).not.toThrow();
+      expect(semanticRegistry.has('space.multi')).toBe(true);
     });
 
-    it('should attach resolved primitive tokens after validation', () => {
+    it('should store tokens even with invalid primitive references (validation moved to validators)', () => {
       const semanticToken: SemanticToken = {
-        name: 'space.resolved',
+        name: 'space.invalid',
         category: SemanticCategory.SPACING,
-        primitiveReferences: { default: 'space100' },
-        description: 'Resolved test',
-        context: 'Test resolution'
+        primitiveReferences: { default: 'non-existent' },
+        description: 'Invalid reference',
+        context: 'Test invalid'
       };
 
-      semanticRegistry.validateToken(semanticToken);
-
-      expect(semanticToken.primitiveTokens).toBeDefined();
-      expect(semanticToken.primitiveTokens?.default).toBeDefined();
-      expect(semanticToken.primitiveTokens?.default.name).toBe('space100');
+      expect(() => semanticRegistry.register(semanticToken)).not.toThrow();
+      expect(semanticRegistry.has('space.invalid')).toBe(true);
     });
 
-    it('should validate all registered tokens', () => {
+    it('should register all tokens without validation', () => {
       semanticRegistry.register({
         name: 'space.valid',
         category: SemanticCategory.SPACING,
@@ -313,10 +295,7 @@ describe('SemanticTokenRegistry', () => {
         context: 'Valid'
       });
 
-      const results = semanticRegistry.validateAll();
-
-      expect(results).toHaveLength(1);
-      expect(results[0].level).toBe('Pass');
+      expect(semanticRegistry.query()).toHaveLength(1);
     });
   });
 

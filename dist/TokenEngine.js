@@ -65,39 +65,85 @@ class TokenEngine {
     // ============================================================================
     /**
      * Register a primitive token with automatic validation
+     *
+     * Validates the token before registration. If validation fails with an error,
+     * registration is prevented. Warnings allow registration to proceed.
      */
     registerPrimitiveToken(token) {
+        // Validate before registration if autoValidate is enabled
+        if (this.config.autoValidate) {
+            const validationResult = this.validateToken(token);
+            // Prevent registration if validation fails with error
+            if (validationResult.level === 'Error') {
+                return validationResult;
+            }
+            // Proceed with registration (validation passed or warning)
+            // Skip validation in registry since we already validated
+            return this.registryCoordinator.registerPrimitive(token, {
+                skipValidation: true,
+                allowOverwrite: false
+            });
+        }
+        // If autoValidate is disabled, register without validation
         return this.registryCoordinator.registerPrimitive(token, {
-            skipValidation: !this.config.autoValidate,
+            skipValidation: true,
             allowOverwrite: false
         });
     }
     /**
      * Register multiple primitive tokens in batch
+     *
+     * Validates each token before registration. If validation fails with an error,
+     * that token's registration is prevented. Warnings allow registration to proceed.
      */
     registerPrimitiveTokens(tokens) {
-        return this.registryCoordinator.registerPrimitiveBatch(tokens, {
-            skipValidation: !this.config.autoValidate,
-            allowOverwrite: false
-        });
+        const results = [];
+        for (const token of tokens) {
+            const result = this.registerPrimitiveToken(token);
+            results.push(result);
+        }
+        return results;
     }
     /**
      * Register a semantic token with automatic validation
+     *
+     * Validates the token before registration. If validation fails with an error,
+     * registration is prevented. Warnings allow registration to proceed.
      */
     registerSemanticToken(token) {
+        // Validate before registration if autoValidate is enabled
+        if (this.config.autoValidate) {
+            const validationResult = this.validateToken(token);
+            // Prevent registration if validation fails with error
+            if (validationResult.level === 'Error') {
+                return validationResult;
+            }
+            // Proceed with registration (validation passed or warning)
+            // Skip validation in registry since we already validated
+            return this.registryCoordinator.registerSemantic(token, {
+                skipValidation: true,
+                allowOverwrite: false
+            });
+        }
+        // If autoValidate is disabled, register without validation
         return this.registryCoordinator.registerSemantic(token, {
-            skipValidation: !this.config.autoValidate,
+            skipValidation: true,
             allowOverwrite: false
         });
     }
     /**
      * Register multiple semantic tokens in batch
+     *
+     * Validates each token before registration. If validation fails with an error,
+     * that token's registration is prevented. Warnings allow registration to proceed.
      */
     registerSemanticTokens(tokens) {
-        return this.registryCoordinator.registerSemanticBatch(tokens, {
-            skipValidation: !this.config.autoValidate,
-            allowOverwrite: false
-        });
+        const results = [];
+        for (const token of tokens) {
+            const result = this.registerSemanticToken(token);
+            results.push(result);
+        }
+        return results;
     }
     // ============================================================================
     // Token Retrieval Methods

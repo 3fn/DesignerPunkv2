@@ -19,6 +19,7 @@ const ValidationReasoning_1 = require("./ValidationReasoning");
  */
 class ErrorValidator {
     constructor(reasoningGenerator) {
+        this.name = 'ErrorValidator';
         // Mathematical constants
         this.BASELINE_GRID_UNIT = 8;
         this.CROSS_PLATFORM_TOLERANCE = 0.01; // 1% tolerance

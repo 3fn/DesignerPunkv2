@@ -78,18 +78,30 @@ export declare class TokenEngine {
     constructor(config?: TokenEngineConfig);
     /**
      * Register a primitive token with automatic validation
+     *
+     * Validates the token before registration. If validation fails with an error,
+     * registration is prevented. Warnings allow registration to proceed.
      */
     registerPrimitiveToken(token: PrimitiveToken): ValidationResult;
     /**
      * Register multiple primitive tokens in batch
+     *
+     * Validates each token before registration. If validation fails with an error,
+     * that token's registration is prevented. Warnings allow registration to proceed.
      */
     registerPrimitiveTokens(tokens: PrimitiveToken[]): ValidationResult[];
     /**
      * Register a semantic token with automatic validation
+     *
+     * Validates the token before registration. If validation fails with an error,
+     * registration is prevented. Warnings allow registration to proceed.
      */
     registerSemanticToken(token: SemanticToken): ValidationResult;
     /**
      * Register multiple semantic tokens in batch
+     *
+     * Validates each token before registration. If validation fails with an error,
+     * that token's registration is prevented. Warnings allow registration to proceed.
      */
     registerSemanticTokens(tokens: SemanticToken[]): ValidationResult[];
     /**

@@ -8,6 +8,7 @@
  */
 import type { PrimitiveToken, SemanticToken, ValidationResult } from '../types';
 import { ValidationReasoning } from './ValidationReasoning';
+import type { IValidator } from './IValidator';
 /**
  * Pass validation context
  */
@@ -36,7 +37,8 @@ export interface PassValidationContext {
 /**
  * Pass-level validator for tokens following best practices
  */
-export declare class PassValidator {
+export declare class PassValidator implements IValidator<PassValidationContext> {
+    readonly name = "PassValidator";
     private reasoningGenerator;
     constructor(reasoningGenerator?: ValidationReasoning);
     /**

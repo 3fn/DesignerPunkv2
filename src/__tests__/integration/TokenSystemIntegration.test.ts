@@ -603,4 +603,256 @@ describe('Token System Integration', () => {
       expect(result.errors.length).toBeGreaterThan(0);
     });
   });
+
+  describe('Validation Before Registration', () => {
+    it('should validate primitive token before registration and prevent registration on error', () => {
+      // Create an invalid token (not baseline grid aligned, not strategic flexibility)
+      const invalidToken: PrimitiveToken = {
+        name: 'space999',
+        category: TokenCategory.SPACING,
+        baseValue: 9, // Invalid: not baseline grid aligned
+        familyBaseValue: 8,
+        description: 'Invalid spacing',
+        mathematicalRelationship: 'invalid',
+        baselineGridAlignment: false, // Claims not aligned
+        isStrategicFlexibility: false, // Not strategic flexibility
+        isPrecisionTargeted: false,
+        platforms: {
+          web: { value: 9, unit: 'px' },
+          ios: { value: 9, unit: 'pt' },
+          android: { value: 9, unit: 'dp' }
+        }
+      };
+
+      const result = engine.registerPrimitiveToken(invalidToken);
+
+      // Validation should fail with error
+      expect(result.level).toBe('Error');
+      
+      // Token should NOT be registered
+      expect(engine.getPrimitiveToken('space999')).toBeUndefined();
+    });
+
+    it('should validate primitive token and allow registration on pass', () => {
+      const validToken: PrimitiveToken = {
+        name: 'space100',
+        category: TokenCategory.SPACING,
+        baseValue: 8,
+        familyBaseValue: 8,
+        description: 'Base spacing',
+        mathematicalRelationship: 'base',
+        baselineGridAlignment: true,
+        isStrategicFlexibility: false,
+        isPrecisionTargeted: false,
+        platforms: {
+          web: { value: 8, unit: 'px' },
+          ios: { value: 8, unit: 'pt' },
+          android: { value: 8, unit: 'dp' }
+        }
+      };
+
+      const result = engine.registerPrimitiveToken(validToken);
+
+      // Validation should pass
+      expect(result.level).toBe('Pass');
+      
+      // Token should be registered
+      expect(engine.getPrimitiveToken('space100')).toEqual(validToken);
+    });
+
+    it('should validate primitive token and allow registration on warning', () => {
+      // Strategic flexibility token (may generate warning but should register)
+      const warningToken: PrimitiveToken = {
+        name: 'space075',
+        category: TokenCategory.SPACING,
+        baseValue: 6,
+        familyBaseValue: 8,
+        description: 'Strategic flexibility spacing',
+        mathematicalRelationship: 'base × 0.75',
+        baselineGridAlignment: false,
+        isStrategicFlexibility: true,
+        isPrecisionTargeted: false,
+        platforms: {
+          web: { value: 6, unit: 'px' },
+          ios: { value: 6, unit: 'pt' },
+          android: { value: 6, unit: 'dp' }
+        }
+      };
+
+      const result = engine.registerPrimitiveToken(warningToken);
+
+      // Should pass or warn (not error)
+      expect(result.level).not.toBe('Error');
+      
+      // Token should be registered even with warning
+      expect(engine.getPrimitiveToken('space075')).toEqual(warningToken);
+    });
+
+    it('should validate semantic token before registration and prevent registration on error', () => {
+      // First register a valid primitive token
+      const primitiveToken: PrimitiveToken = {
+        name: 'space100',
+        category: TokenCategory.SPACING,
+        baseValue: 8,
+        familyBaseValue: 8,
+        description: 'Base spacing',
+        mathematicalRelationship: 'base',
+        baselineGridAlignment: true,
+        isStrategicFlexibility: false,
+        isPrecisionTargeted: false,
+        platforms: {
+          web: { value: 8, unit: 'px' },
+          ios: { value: 8, unit: 'pt' },
+          android: { value: 8, unit: 'dp' }
+        }
+      };
+      engine.registerPrimitiveToken(primitiveToken);
+
+      // Create semantic token with invalid reference
+      const invalidSemanticToken: SemanticToken = {
+        name: 'spacing.invalid',
+        category: SemanticCategory.SPACING,
+        context: 'layout',
+        description: 'Invalid semantic spacing',
+        primitiveReferences: {
+          value: 'nonexistent-token' // Invalid reference
+        },
+        platforms: {
+          web: { value: 'var(--nonexistent-token)', unit: 'px' },
+          ios: { value: 0, unit: 'pt' },
+          android: { value: 0, unit: 'dp' }
+        }
+      };
+
+      const result = engine.registerSemanticToken(invalidSemanticToken);
+
+      // Validation should fail with error
+      expect(result.level).toBe('Error');
+      
+      // Token should NOT be registered
+      expect(engine.getSemanticToken('spacing.invalid')).toBeUndefined();
+    });
+
+    it('should validate semantic token and allow registration on pass', () => {
+      // First register a valid primitive token
+      const primitiveToken: PrimitiveToken = {
+        name: 'space100',
+        category: TokenCategory.SPACING,
+        baseValue: 8,
+        familyBaseValue: 8,
+        description: 'Base spacing',
+        mathematicalRelationship: 'base',
+        baselineGridAlignment: true,
+        isStrategicFlexibility: false,
+        isPrecisionTargeted: false,
+        platforms: {
+          web: { value: 8, unit: 'px' },
+          ios: { value: 8, unit: 'pt' },
+          android: { value: 8, unit: 'dp' }
+        }
+      };
+      engine.registerPrimitiveToken(primitiveToken);
+
+      // Create valid semantic token
+      const validSemanticToken: SemanticToken = {
+        name: 'spacing.base',
+        category: SemanticCategory.SPACING,
+        context: 'layout',
+        description: 'Base semantic spacing',
+        primitiveReferences: {
+          value: 'space100'
+        },
+        platforms: {
+          web: { value: 'var(--space100)', unit: 'px' },
+          ios: { value: 8, unit: 'pt' },
+          android: { value: 8, unit: 'dp' }
+        }
+      };
+
+      const result = engine.registerSemanticToken(validSemanticToken);
+
+      // Validation should pass
+      expect(result.level).not.toBe('Error');
+      
+      // Token should be registered
+      expect(engine.getSemanticToken('spacing.base')).toEqual(validSemanticToken);
+    });
+
+    it('should skip validation when autoValidate is disabled', () => {
+      const engineNoValidation = new TokenEngine({
+        autoValidate: false
+      });
+
+      // Create an invalid token
+      const invalidToken: PrimitiveToken = {
+        name: 'space999',
+        category: TokenCategory.SPACING,
+        baseValue: 9, // Invalid: not baseline grid aligned
+        familyBaseValue: 8,
+        description: 'Invalid spacing',
+        mathematicalRelationship: 'invalid',
+        baselineGridAlignment: false,
+        isStrategicFlexibility: false,
+        isPrecisionTargeted: false,
+        platforms: {
+          web: { value: 9, unit: 'px' },
+          ios: { value: 9, unit: 'pt' },
+          android: { value: 9, unit: 'dp' }
+        }
+      };
+
+      const result = engineNoValidation.registerPrimitiveToken(invalidToken);
+
+      // Should register without validation (result from registry, not validator)
+      // Token should be registered even though it's invalid
+      expect(engineNoValidation.getPrimitiveToken('space999')).toEqual(invalidToken);
+    });
+
+    it('should validate batch registration and prevent registration of invalid tokens', () => {
+      const tokens: PrimitiveToken[] = [
+        {
+          name: 'space100',
+          category: TokenCategory.SPACING,
+          baseValue: 8,
+          familyBaseValue: 8,
+          description: 'Valid spacing',
+          mathematicalRelationship: 'base',
+          baselineGridAlignment: true,
+          isStrategicFlexibility: false,
+          isPrecisionTargeted: false,
+          platforms: {
+            web: { value: 8, unit: 'px' },
+            ios: { value: 8, unit: 'pt' },
+            android: { value: 8, unit: 'dp' }
+          }
+        },
+        {
+          name: 'space999',
+          category: TokenCategory.SPACING,
+          baseValue: 9, // Invalid
+          familyBaseValue: 8,
+          description: 'Invalid spacing',
+          mathematicalRelationship: 'invalid',
+          baselineGridAlignment: false,
+          isStrategicFlexibility: false,
+          isPrecisionTargeted: false,
+          platforms: {
+            web: { value: 9, unit: 'px' },
+            ios: { value: 9, unit: 'pt' },
+            android: { value: 9, unit: 'dp' }
+          }
+        }
+      ];
+
+      const results = engine.registerPrimitiveTokens(tokens);
+
+      // First token should pass
+      expect(results[0].level).toBe('Pass');
+      expect(engine.getPrimitiveToken('space100')).toBeDefined();
+
+      // Second token should fail
+      expect(results[1].level).toBe('Error');
+      expect(engine.getPrimitiveToken('space999')).toBeUndefined();
+    });
+  });
 });

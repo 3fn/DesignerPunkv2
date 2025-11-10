@@ -333,40 +333,32 @@ describe('SemanticTokenRegistry Integration', () => {
     const token = getSemanticToken('color.primary');
     expect(token).toBeDefined();
     
-    // Note: This will fail validation because primitive tokens aren't registered
-    // This is expected - just testing the structure
-    const result = semanticRegistry.validateToken({
-      ...token!,
-      primitiveTokens: {}
-    });
+    // Registry just stores tokens (validation moved to validators)
+    semanticRegistry.register(token!);
     
-    expect(result).toBeDefined();
-    expect(result.token).toBe('color.primary');
+    expect(semanticRegistry.has('color.primary')).toBe(true);
+    expect(semanticRegistry.get('color.primary')).toEqual(token);
   });
 
   it('should register typography semantic tokens', () => {
     const token = getSemanticToken('typography.bodyMd');
     expect(token).toBeDefined();
     
-    const result = semanticRegistry.validateToken({
-      ...token!,
-      primitiveTokens: {}
-    });
+    // Registry just stores tokens (validation moved to validators)
+    semanticRegistry.register(token!);
     
-    expect(result).toBeDefined();
-    expect(result.token).toBe('typography.bodyMd');
+    expect(semanticRegistry.has('typography.bodyMd')).toBe(true);
+    expect(semanticRegistry.get('typography.bodyMd')).toEqual(token);
   });
 
   it('should handle hierarchical spacing token registration', () => {
     const token = getSemanticToken('space.grouped.normal');
     expect(token).toBeDefined();
     
-    const result = semanticRegistry.validateToken({
-      ...token!,
-      primitiveTokens: {}
-    });
+    // Registry just stores tokens (validation moved to validators)
+    semanticRegistry.register(token!);
     
-    expect(result).toBeDefined();
-    expect(result.token).toBe('space.grouped.normal');
+    expect(semanticRegistry.has('space.grouped.normal')).toBe(true);
+    expect(semanticRegistry.get('space.grouped.normal')).toEqual(token);
   });
 });

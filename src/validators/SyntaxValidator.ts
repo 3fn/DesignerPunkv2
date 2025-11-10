@@ -1,4 +1,15 @@
 import { TargetPlatform, OutputFormat } from '../types/TranslationOutput';
+import type { ValidationResult } from '../types/ValidationResult';
+import type { IValidator } from './IValidator';
+
+/**
+ * Syntax validation input
+ */
+export interface SyntaxValidationInput {
+  content: string;
+  platform: TargetPlatform;
+  format: OutputFormat;
+}
 
 /**
  * Syntax validation result
@@ -89,12 +100,32 @@ interface PlatformSyntaxRules {
 /**
  * Validates platform-specific syntax for generated token files
  */
-export class SyntaxValidator {
+export class SyntaxValidator implements IValidator<SyntaxValidationInput> {
+  readonly name = 'SyntaxValidator';
   private rules: Map<string, PlatformSyntaxRules>;
   
   constructor() {
     this.rules = new Map();
     this.initializeRules();
+  }
+
+  /**
+   * Validate input using IValidator interface
+   */
+  validate(input: SyntaxValidationInput): ValidationResult {
+    const result = this.validateSyntax(input.content, input.platform, input.format);
+    
+    // Convert SyntaxValidationResult to ValidationResult
+    return {
+      level: result.valid ? 'Pass' : 'Error',
+      token: `${input.platform}-${input.format}`,
+      message: result.valid ? 'Syntax validation passed' : 'Syntax validation failed',
+      rationale: result.details || '',
+      suggestions: result.errors?.map(e => e.suggestion || e.message).filter(Boolean) as string[] | undefined,
+      mathematicalReasoning: result.valid 
+        ? 'Platform-specific syntax follows required patterns'
+        : 'Platform-specific syntax violations detected'
+    };
   }
   
   /**
@@ -254,9 +285,9 @@ export class SyntaxValidator {
   }
   
   /**
-   * Validate syntax for a specific platform and format
+   * Validate syntax for a specific platform and format (legacy method)
    */
-  validate(
+  validateSyntax(
     content: string,
     platform: TargetPlatform,
     format: OutputFormat
@@ -458,7 +489,7 @@ export class SyntaxValidator {
     
     for (const file of files) {
       const key = `${file.platform}-${file.format}`;
-      results.set(key, this.validate(file.content, file.platform, file.format));
+      results.set(key, this.validateSyntax(file.content, file.platform, file.format));
     }
     
     return results;

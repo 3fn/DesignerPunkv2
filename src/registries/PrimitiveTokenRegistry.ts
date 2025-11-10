@@ -1,18 +1,18 @@
 import type { PrimitiveToken } from '../types/PrimitiveToken';
 import { TokenCategory } from '../types/PrimitiveToken';
-import type { ValidationResult } from '../types/ValidationResult';
-import { BaselineGridValidator } from '../validators/BaselineGridValidator';
 import { isStrategicFlexibilityValue, getStrategicFlexibilityToken } from '../constants/StrategicFlexibilityTokens';
+import type { IRegistry, RegistrationOptions } from './IRegistry';
 
 /**
  * Primitive Token Registry
  * 
  * Manages primitive tokens with baseline grid validation and strategic flexibility support.
  * Provides registration, retrieval, and validation methods for all token categories.
+ * 
+ * Implements IRegistry<PrimitiveToken> for consistent registry interface.
  */
 
-export interface TokenRegistrationOptions {
-  skipValidation?: boolean;
+export interface TokenRegistrationOptions extends RegistrationOptions {
   allowOverwrite?: boolean;
 }
 
@@ -22,65 +22,39 @@ export interface TokenQueryOptions {
   sortBy?: 'name' | 'value' | 'category';
 }
 
-export class PrimitiveTokenRegistry {
+export class PrimitiveTokenRegistry implements IRegistry<PrimitiveToken> {
+  /**
+   * Registry name for identification
+   */
+  readonly name = 'PrimitiveTokenRegistry';
+
   private tokens: Map<string, PrimitiveToken> = new Map();
-  private validator: BaselineGridValidator;
   private categoryIndex: Map<TokenCategory, Set<string>> = new Map();
 
   constructor() {
-    this.validator = new BaselineGridValidator({
-      allowStrategicFlexibility: true
-    });
-    
     // Initialize category index
     this.initializeCategoryIndex();
   }
 
   /**
-   * Register a primitive token with validation
+   * Register a primitive token
+   * 
+   * Implements IRegistry.register() interface.
+   * Callers should validate tokens before registration using appropriate validators.
    */
-  register(token: PrimitiveToken, options: TokenRegistrationOptions = {}): ValidationResult {
-    const { skipValidation = false, allowOverwrite = false } = options;
+  register(token: PrimitiveToken, options: TokenRegistrationOptions = {}): void {
+    const { allowOverwrite = false } = options;
 
     // Check for existing token
     if (this.tokens.has(token.name) && !allowOverwrite) {
-      return {
-        level: 'Error',
-        token: token.name,
-        message: 'Token already exists',
-        rationale: `Token ${token.name} is already registered. Use allowOverwrite option to replace.`,
-        mathematicalReasoning: 'Token uniqueness prevents mathematical inconsistencies in the system'
-      };
-    }
-
-    // Validate token if not skipped
-    let validationResult: ValidationResult;
-    if (!skipValidation) {
-      validationResult = this.validateToken(token);
-      if (validationResult.level === 'Error') {
-        return validationResult;
-      }
-    } else {
-      validationResult = {
-        level: 'Pass',
-        token: token.name,
-        message: 'Validation skipped',
-        rationale: 'Token registered without validation',
-        mathematicalReasoning: 'Validation bypassed by registration options'
-      };
+      throw new Error(
+        `Token ${token.name} is already registered. Use allowOverwrite option to replace.`
+      );
     }
 
     // Register the token
     this.tokens.set(token.name, token);
     this.addToCategory(token.category, token.name);
-
-    return {
-      level: 'Pass',
-      token: token.name,
-      message: 'Token registered successfully',
-      rationale: `Token ${token.name} registered with ${validationResult.level} validation`,
-      mathematicalReasoning: validationResult.mathematicalReasoning
-    };
   }
 
   /**
@@ -143,34 +117,6 @@ export class PrimitiveTokenRegistry {
   }
 
   /**
-   * Validate a token against baseline grid requirements
-   */
-  validateToken(token: PrimitiveToken): ValidationResult {
-    // Categories that require baseline grid alignment
-    const baselineGridCategories: TokenCategory[] = [TokenCategory.SPACING, TokenCategory.RADIUS];
-    
-    if (baselineGridCategories.includes(token.category)) {
-      return this.validator.validate(token.baseValue, token.name);
-    }
-
-    // Other categories pass validation (they have their own mathematical foundations)
-    return {
-      level: 'Pass',
-      token: token.name,
-      message: 'Token category does not require baseline grid validation',
-      rationale: `Category ${token.category} uses its own mathematical foundation (base: ${token.familyBaseValue})`,
-      mathematicalReasoning: `Token follows ${token.category} family mathematical progression with base value ${token.familyBaseValue}`
-    };
-  }
-
-  /**
-   * Validate all registered tokens
-   */
-  validateAll(): ValidationResult[] {
-    return Array.from(this.tokens.values()).map(token => this.validateToken(token));
-  }
-
-  /**
    * Get registry statistics
    */
   getStats() {
@@ -187,8 +133,7 @@ export class PrimitiveTokenRegistry {
       totalTokens,
       strategicFlexibilityCount,
       strategicFlexibilityPercentage: totalTokens > 0 ? (strategicFlexibilityCount / totalTokens) * 100 : 0,
-      categoryStats: Object.fromEntries(categoryStats),
-      validationInfo: this.validator.getGridInfo()
+      categoryStats: Object.fromEntries(categoryStats)
     };
   }
 
