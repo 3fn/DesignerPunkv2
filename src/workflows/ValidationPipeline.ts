@@ -109,6 +109,11 @@ export class ValidationPipeline {
 
   /**
    * Validate primitive tokens
+   * 
+   * Validates all registered primitive tokens. This method validates tokens
+   * that are already in the registry. For validation before registration,
+   * use the engine's registerPrimitiveToken() method which validates before
+   * allowing registration.
    */
   private async validatePrimitiveTokens(
     config: ValidationStageConfig
@@ -116,6 +121,9 @@ export class ValidationPipeline {
     const primitiveTokens = this.engine.getAllPrimitiveTokens();
     const results: ValidationResult[] = [];
 
+    // Validate each primitive token
+    // Note: These tokens are already registered. The engine's registration
+    // methods (registerPrimitiveToken) validate before registration.
     for (const token of primitiveTokens) {
       const result = this.engine.validateToken(token);
       results.push(result);
@@ -126,6 +134,11 @@ export class ValidationPipeline {
 
   /**
    * Validate semantic tokens
+   * 
+   * Validates all registered semantic tokens. This method validates tokens
+   * that are already in the registry. For validation before registration,
+   * use the engine's registerSemanticToken() method which validates before
+   * allowing registration.
    */
   private async validateSemanticTokens(
     config: ValidationStageConfig
@@ -133,6 +146,9 @@ export class ValidationPipeline {
     const semanticTokens = this.engine.getAllSemanticTokens();
     const results: ValidationResult[] = [];
 
+    // Validate each semantic token
+    // Note: These tokens are already registered. The engine's registration
+    // methods (registerSemanticToken) validate before registration.
     for (const token of semanticTokens) {
       const result = this.engine.validateToken(token);
       results.push(result);

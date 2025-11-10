@@ -4,13 +4,15 @@
  * Manages semantic tokens with mode-aware primitive token references.
  * Enforces primitive token references and prevents raw values in semantic tokens.
  * Provides registration, retrieval, and resolution methods for all semantic categories.
+ *
+ * Implements IRegistry<SemanticToken> for consistent registry interface.
  */
 import type { SemanticToken } from '../types/SemanticToken';
 import { SemanticCategory } from '../types/SemanticToken';
 import type { ValidationResult } from '../types/ValidationResult';
 import { PrimitiveTokenRegistry } from './PrimitiveTokenRegistry';
-export interface SemanticTokenRegistrationOptions {
-    skipValidation?: boolean;
+import type { IRegistry, RegistrationOptions } from './IRegistry';
+export interface SemanticTokenRegistrationOptions extends RegistrationOptions {
     allowOverwrite?: boolean;
 }
 export interface SemanticTokenQueryOptions {
@@ -21,15 +23,23 @@ export interface ModeThemeContext {
     mode: 'light' | 'dark';
     theme: 'base' | 'wcag';
 }
-export declare class SemanticTokenRegistry {
+export declare class SemanticTokenRegistry implements IRegistry<SemanticToken> {
+    /**
+     * Registry name for identification
+     */
+    readonly name = "SemanticTokenRegistry";
     private tokens;
     private primitiveRegistry;
     private categoryIndex;
     constructor(primitiveRegistry: PrimitiveTokenRegistry);
     /**
      * Register a semantic token with primitive reference validation
+     *
+     * Implements IRegistry.register() interface.
+     * Note: Validation methods (validateToken, validateAll) will be removed in Phase 3.
+     * Callers should validate tokens before registration using appropriate validators.
      */
-    register(token: SemanticToken, options?: SemanticTokenRegistrationOptions): ValidationResult;
+    register(token: SemanticToken, options?: SemanticTokenRegistrationOptions): void;
     /**
      * Retrieve a semantic token by name
      */

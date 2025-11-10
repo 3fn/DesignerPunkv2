@@ -1,14 +1,16 @@
 import type { PrimitiveToken } from '../types/PrimitiveToken';
 import { TokenCategory } from '../types/PrimitiveToken';
 import type { ValidationResult } from '../types/ValidationResult';
+import type { IRegistry, RegistrationOptions } from './IRegistry';
 /**
  * Primitive Token Registry
  *
  * Manages primitive tokens with baseline grid validation and strategic flexibility support.
  * Provides registration, retrieval, and validation methods for all token categories.
+ *
+ * Implements IRegistry<PrimitiveToken> for consistent registry interface.
  */
-export interface TokenRegistrationOptions {
-    skipValidation?: boolean;
+export interface TokenRegistrationOptions extends RegistrationOptions {
     allowOverwrite?: boolean;
 }
 export interface TokenQueryOptions {
@@ -16,15 +18,23 @@ export interface TokenQueryOptions {
     includeStrategicFlexibility?: boolean;
     sortBy?: 'name' | 'value' | 'category';
 }
-export declare class PrimitiveTokenRegistry {
+export declare class PrimitiveTokenRegistry implements IRegistry<PrimitiveToken> {
+    /**
+     * Registry name for identification
+     */
+    readonly name = "PrimitiveTokenRegistry";
     private tokens;
     private validator;
     private categoryIndex;
     constructor();
     /**
      * Register a primitive token with validation
+     *
+     * Implements IRegistry.register() interface.
+     * Note: Validation methods (validateToken, validateAll) will be removed in Phase 3.
+     * Callers should validate tokens before registration using appropriate validators.
      */
-    register(token: PrimitiveToken, options?: TokenRegistrationOptions): ValidationResult;
+    register(token: PrimitiveToken, options?: TokenRegistrationOptions): void;
     /**
      * Retrieve a token by name
      */

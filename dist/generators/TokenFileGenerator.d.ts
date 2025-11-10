@@ -5,8 +5,6 @@
  * Generates DesignTokens.web.css, DesignTokens.ios.swift, and DesignTokens.android.kt
  * with mathematical consistency across all platforms.
  */
-import { PrimitiveToken } from '../types/PrimitiveToken';
-import { SemanticToken } from '../types/SemanticToken';
 export interface GenerationOptions {
     outputDir?: string;
     version?: string;
@@ -69,23 +67,6 @@ export declare class TokenFileGenerator {
      * Get unique categories from token list
      */
     private getUniqueCategories;
-    /**
-     * Validate semantic token references against primitive tokens
-     * Checks that all primitive references in semantic tokens exist in the primitive token list
-     *
-     * @param semantics - Array of semantic tokens to validate
-     * @param primitives - Array of primitive tokens to validate against
-     * @returns Validation result with list of invalid references
-     */
-    validateSemanticReferences(semantics: SemanticToken[], primitives: PrimitiveToken[]): {
-        valid: boolean;
-        invalidReferences: Array<{
-            semanticToken: string;
-            property: string;
-            reference: string;
-            reason: string;
-        }>;
-    };
     /**
      * Validate mathematical consistency across platforms
      * Extended to include semantic token validation

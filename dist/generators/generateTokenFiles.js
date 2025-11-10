@@ -43,6 +43,11 @@ exports.generateTokenFiles = generateTokenFiles;
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
 const TokenFileGenerator_1 = require("./TokenFileGenerator");
+const SemanticTokenValidator_1 = require("../validators/SemanticTokenValidator");
+const PrimitiveTokenRegistry_1 = require("../registries/PrimitiveTokenRegistry");
+const SemanticTokenRegistry_1 = require("../registries/SemanticTokenRegistry");
+const tokens_1 = require("../tokens");
+const semantic_1 = require("../tokens/semantic");
 /**
  * Main generation function
  */
@@ -52,6 +57,36 @@ function generateTokenFiles(outputDir = 'output') {
     if (!fs.existsSync(outputDir)) {
         fs.mkdirSync(outputDir, { recursive: true });
         console.log(`📁 Created output directory: ${outputDir}\n`);
+    }
+    // Validate semantic token references before generation
+    console.log('🔍 Validating semantic token references...\n');
+    const primitiveRegistry = new PrimitiveTokenRegistry_1.PrimitiveTokenRegistry();
+    const semanticRegistry = new SemanticTokenRegistry_1.SemanticTokenRegistry(primitiveRegistry);
+    const validator = new SemanticTokenValidator_1.SemanticTokenValidator(primitiveRegistry, semanticRegistry);
+    const primitiveTokens = (0, tokens_1.getAllPrimitiveTokens)();
+    const semanticTokens = (0, semantic_1.getAllSemanticTokens)();
+    const validationResult = validator.validateSemanticReferences(semanticTokens, primitiveTokens);
+    if (validationResult.level === 'Error') {
+        console.error('❌ Semantic token validation failed:\n');
+        console.error(`   ${validationResult.message}`);
+        console.error(`   ${validationResult.rationale}\n`);
+        if (validationResult.suggestions) {
+            console.error('💡 Suggestions:');
+            validationResult.suggestions.forEach(suggestion => {
+                console.error(`   - ${suggestion}`);
+            });
+            console.error('');
+        }
+        console.error('⚠️  Token generation aborted due to validation errors.\n');
+        return;
+    }
+    if (validationResult.level === 'Warning') {
+        console.warn('⚠️  Semantic token validation passed with warnings:\n');
+        console.warn(`   ${validationResult.message}`);
+        console.warn(`   ${validationResult.rationale}\n`);
+    }
+    else {
+        console.log('✅ Semantic token validation passed\n');
     }
     // Initialize generator
     const generator = new TokenFileGenerator_1.TokenFileGenerator();

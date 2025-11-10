@@ -6,8 +6,26 @@ exports.SyntaxValidator = void 0;
  */
 class SyntaxValidator {
     constructor() {
+        this.name = 'SyntaxValidator';
         this.rules = new Map();
         this.initializeRules();
+    }
+    /**
+     * Validate input using IValidator interface
+     */
+    validate(input) {
+        const result = this.validateSyntax(input.content, input.platform, input.format);
+        // Convert SyntaxValidationResult to ValidationResult
+        return {
+            level: result.valid ? 'Pass' : 'Error',
+            token: `${input.platform}-${input.format}`,
+            message: result.valid ? 'Syntax validation passed' : 'Syntax validation failed',
+            rationale: result.details || '',
+            suggestions: result.errors?.map(e => e.suggestion || e.message).filter(Boolean),
+            mathematicalReasoning: result.valid
+                ? 'Platform-specific syntax follows required patterns'
+                : 'Platform-specific syntax violations detected'
+        };
     }
     /**
      * Initialize platform-specific syntax rules
@@ -161,9 +179,9 @@ class SyntaxValidator {
         });
     }
     /**
-     * Validate syntax for a specific platform and format
+     * Validate syntax for a specific platform and format (legacy method)
      */
-    validate(content, platform, format) {
+    validateSyntax(content, platform, format) {
         const ruleKey = `${platform}-${format}`;
         const rules = this.rules.get(ruleKey);
         if (!rules) {
@@ -312,7 +330,7 @@ class SyntaxValidator {
         const results = new Map();
         for (const file of files) {
             const key = `${file.platform}-${file.format}`;
-            results.set(key, this.validate(file.content, file.platform, file.format));
+            results.set(key, this.validateSyntax(file.content, file.platform, file.format));
         }
         return results;
     }

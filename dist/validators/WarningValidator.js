@@ -18,6 +18,7 @@ const ValidationReasoning_1 = require("./ValidationReasoning");
  */
 class WarningValidator {
     constructor(reasoningGenerator) {
+        this.name = 'WarningValidator';
         // Default thresholds
         this.DEFAULT_STRATEGIC_FLEXIBILITY_THRESHOLD = 0.8; // 80%
         this.DEFAULT_PRIMITIVE_USAGE_THRESHOLD = 0.3; // 30%

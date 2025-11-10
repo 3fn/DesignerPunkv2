@@ -5,7 +5,10 @@
  * Exports all validation components for the Mathematical Token System
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PrimitiveReferenceValidator = exports.CompositionPatternValidator = exports.SemanticTokenValidator = exports.WarningValidator = exports.ValidationReasoning = exports.ToleranceCalculator = exports.ThreeTierValidator = exports.PlatformConstraintHandler = exports.PassValidator = exports.ErrorValidator = exports.CrossPlatformConsistencyValidator = exports.BaselineGridValidator = void 0;
+exports.PrimitiveReferenceValidator = exports.CompositionPatternValidator = exports.SemanticTokenValidator = exports.WarningValidator = exports.ValidationReasoning = exports.ToleranceCalculator = exports.ThreeTierValidator = exports.PlatformConstraintHandler = exports.PassValidator = exports.ErrorValidator = exports.CrossPlatformConsistencyValidator = exports.BaselineGridValidator = exports.awaitValidationResult = exports.isPromiseValidationResult = void 0;
+var IValidator_1 = require("./IValidator");
+Object.defineProperty(exports, "isPromiseValidationResult", { enumerable: true, get: function () { return IValidator_1.isPromiseValidationResult; } });
+Object.defineProperty(exports, "awaitValidationResult", { enumerable: true, get: function () { return IValidator_1.awaitValidationResult; } });
 var BaselineGridValidator_1 = require("./BaselineGridValidator");
 Object.defineProperty(exports, "BaselineGridValidator", { enumerable: true, get: function () { return BaselineGridValidator_1.BaselineGridValidator; } });
 var CrossPlatformConsistencyValidator_1 = require("./CrossPlatformConsistencyValidator");

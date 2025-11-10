@@ -11,6 +11,7 @@ import type { PrimitiveToken, SemanticToken, ValidationResult } from '../types';
 import { TokenCategory } from '../types';
 import { isStrategicFlexibilityValue } from '../constants/StrategicFlexibilityTokens';
 import { ValidationReasoning, type ReasoningContext } from './ValidationReasoning';
+import type { IValidator } from './IValidator';
 
 /**
  * Pass validation context
@@ -47,7 +48,8 @@ export interface PassValidationContext {
 /**
  * Pass-level validator for tokens following best practices
  */
-export class PassValidator {
+export class PassValidator implements IValidator<PassValidationContext> {
+  readonly name = 'PassValidator';
   private reasoningGenerator: ValidationReasoning;
 
   constructor(reasoningGenerator?: ValidationReasoning) {

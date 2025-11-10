@@ -10,9 +10,9 @@
  * - Error: Mathematical relationship violations or critical design system errors
  */
 import type { PrimitiveToken, SemanticToken, ValidationResult, TokenCategory } from '../types';
-import { PassValidator } from './PassValidator';
-import { WarningValidator } from './WarningValidator';
-import { ErrorValidator } from './ErrorValidator';
+import { type PassValidationContext } from './PassValidator';
+import { type WarningValidationContext } from './WarningValidator';
+import { type ErrorValidationContext } from './ErrorValidator';
 import { ValidationReasoning } from './ValidationReasoning';
 /**
  * Comprehensive validation context combining all validation levels
@@ -150,6 +150,7 @@ export interface ThreeTierValidationResult {
         };
     };
 }
+import type { IValidator } from './IValidator';
 /**
  * Three-tier validation system orchestrator
  */
@@ -158,7 +159,7 @@ export declare class ThreeTierValidator {
     private warningValidator;
     private errorValidator;
     private reasoningGenerator;
-    constructor(passValidator?: PassValidator, warningValidator?: WarningValidator, errorValidator?: ErrorValidator, reasoningGenerator?: ValidationReasoning);
+    constructor(passValidator?: IValidator<PassValidationContext>, warningValidator?: IValidator<WarningValidationContext>, errorValidator?: IValidator<ErrorValidationContext>, reasoningGenerator?: ValidationReasoning);
     /**
      * Perform comprehensive three-tier validation
      */

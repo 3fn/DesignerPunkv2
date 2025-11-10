@@ -28,5 +28,6 @@ var TokenCategory;
     TokenCategory["GLOW"] = "glow";
     TokenCategory["OPACITY"] = "opacity";
     TokenCategory["BLEND"] = "blend";
+    TokenCategory["BREAKPOINT"] = "breakpoint";
 })(TokenCategory || (exports.TokenCategory = TokenCategory = {}));
 //# sourceMappingURL=PrimitiveToken.js.map

@@ -45,7 +45,11 @@ const BuildConfig_1 = require("./types/BuildConfig");
 const Platform_1 = require("./types/Platform");
 const TokenFileGenerator_1 = require("../generators/TokenFileGenerator");
 const tokens_1 = require("../tokens");
+const semantic_1 = require("../tokens/semantic");
 const PrimitiveToken_1 = require("../types/PrimitiveToken");
+const SemanticTokenValidator_1 = require("../validators/SemanticTokenValidator");
+const PrimitiveTokenRegistry_1 = require("../registries/PrimitiveTokenRegistry");
+const SemanticTokenRegistry_1 = require("../registries/SemanticTokenRegistry");
 const path = __importStar(require("path"));
 const fs = __importStar(require("fs"));
 /**
@@ -338,6 +342,44 @@ class BuildOrchestrator {
             const allTokens = (0, tokens_1.getAllPrimitiveTokens)();
             if (allTokens.length === 0) {
                 throw new Error('No tokens available for generation');
+            }
+            // Validate semantic token references before generation
+            const primitiveRegistry = new PrimitiveTokenRegistry_1.PrimitiveTokenRegistry();
+            const semanticRegistry = new SemanticTokenRegistry_1.SemanticTokenRegistry(primitiveRegistry);
+            const validator = new SemanticTokenValidator_1.SemanticTokenValidator(primitiveRegistry, semanticRegistry);
+            const semanticTokens = (0, semantic_1.getAllSemanticTokens)();
+            const validationResult = validator.validateSemanticReferences(semanticTokens, allTokens);
+            if (validationResult.level === 'Error') {
+                // Validation failed - add error and return early
+                errors.push({
+                    code: 'VALIDATION_FAILED',
+                    message: validationResult.message,
+                    severity: 'error',
+                    category: 'token',
+                    platform,
+                    context: {
+                        rationale: validationResult.rationale,
+                        suggestions: validationResult.suggestions
+                    },
+                    suggestions: validationResult.suggestions || [
+                        'Verify that all referenced primitive tokens exist',
+                        'Check for typos in primitive token names',
+                        'Ensure typography tokens include all required properties'
+                    ],
+                    documentation: []
+                });
+                const duration = Date.now() - startTime;
+                return {
+                    platform,
+                    success: false,
+                    packagePath: '',
+                    duration,
+                    warnings,
+                    errors
+                };
+            }
+            if (validationResult.level === 'Warning') {
+                warnings.push(validationResult.message);
             }
             // Generate platform-specific token file
             let generationResult;

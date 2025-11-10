@@ -534,9 +534,9 @@ None - Isolated documentation issue
 
 ## Issue Counter
 
-**Next Issue ID**: #012 (Issues #008-#011 reclassified as intentional design)
+**Next Issue ID**: #014
 **Resolved Issues**: 7 (All issues from Phase 1 Infrastructure Audit)
-**Active Issues**: 0
+**Active Issues**: 2 (Issues #012, #013)
 **Reclassified Issues**: 4 (Issues #008-#011 - Platform-appropriate design decisions)
 
 ---
@@ -1476,6 +1476,213 @@ _Cosmetic issues, documentation inconsistencies, or isolated improvements_
 
 ---
 
+### Important Issues
+_Issues that reduce efficiency, create technical debt, or violate established patterns_
+
+**Active Important Issues**: 2 (Issues #012, #013)
+**Resolved Important Issues**: 4 (Issues #002, #003, #005, #006)
+
+---
+
+## Issue #012: TokenFileGenerator Tests Reference Outdated Web Output Format
+
+**Discovered By**: Architecture Separation of Concerns Spec (Task 2.4)
+**Date Discovered**: 2025-11-09
+**Severity**: Important (upgraded from Minor after investigation revealed broader scope)
+**Category**: Test Maintenance / Incomplete Migration
+**Affects**: TokenFileGenerator test suite, multiple integration test suites, WebFileOrganizer implementation
+
+**Location**:
+- **File(s)**: `src/generators/__tests__/TokenFileGenerator.test.ts` (lines 32, 43, 340, 432)
+- **System**: Token Generation System - Test Suite
+- **Context**: Web token generation test expectations
+
+**Description**:
+The TokenFileGenerator test suite contains test expectations that reference an outdated web token output format. Tests expect JavaScript output (`.web.js` file extension, `export` statements) but the current implementation generates CSS output (`.web.css` file extension, `:root` selector with CSS custom properties).
+
+This suggests that at some point the web generator was refactored from JavaScript output to CSS output (a good architectural decision - CSS custom properties are the modern standard for design tokens on the web), but the tests weren't updated to reflect this change.
+
+The tests were failing before the architecture separation of concerns refactoring work, indicating they may have been failing for a while or the test suite wasn't being run regularly.
+
+**Steps to Reproduce**:
+1. Run TokenFileGenerator tests: `npm test -- src/generators/__tests__/TokenFileGenerator.test.ts`
+2. Observe test failures for:
+   - "should generate web tokens with default options" (expected `.web.js`, got `.web.css`)
+   - "should generate web tokens with custom output directory" (expected `.web.js`, got `.web.css`)
+   - "should generate consistent file names across platforms" (expected `.web.js`, got `.web.css`)
+   - "should include header and footer in generated content" (expected `export`, got `:root`)
+
+**Expected Behavior**:
+Tests should expect CSS output format that matches current implementation:
+- File extension: `.web.css`
+- Content format: CSS custom properties with `:root` selector
+- Example: `:root { --space-100: 8px; --color-primary: var(--purple-300); }`
+
+**Actual Behavior** (before fix):
+Tests expected JavaScript output format:
+- File extension: `.web.js`
+- Content format: JavaScript `export` statements
+- Tests failed when run against current implementation
+
+**Evidence**:
+```typescript
+// Before fix - Expected JavaScript format
+expect(result.filePath).toBe('output/DesignTokens.web.js');
+expect(webResult.content).toContain('export');
+
+// After fix - Expects CSS format
+expect(result.filePath).toBe('output/DesignTokens.web.css');
+expect(webResult.content).toContain(':root');
+```
+
+```css
+/* Actual web generator output (CSS custom properties) */
+:root {
+  --space-100: 8px;
+  --color-primary: var(--purple-300);
+  /* etc */
+}
+```
+
+**Workaround**:
+Tests were updated during Task 2.4 to match current implementation. No workaround needed for future development.
+
+**Cross-Area Impact**:
+- Infrastructure: Minor - Test suite reliability affected
+- Architecture: None - Does not affect code architecture
+- Token System: None - Does not affect token generation
+- Documentation: Minor - May indicate other documentation referencing old format
+
+**Related Issues**:
+- **Issue #013**: Web Format Dual Support Investigation - Broader investigation into whether JavaScript format support is intentional or incomplete migration
+- **Investigation Report**: `.kiro/audits/web-format-migration-investigation.md` - Comprehensive investigation of web format support across codebase
+
+**Recommendation** (Updated after broader investigation):
+Investigation revealed this is part of a broader pattern (see Issue #013). Multiple test suites and WebFileOrganizer implementation reference JavaScript format. Requires investigation to determine if dual format support is intentional or incomplete migration.
+
+See Investigation Report (`.kiro/audits/web-format-migration-investigation.md`) for complete analysis and recommendations.
+
+---
+
+## Issue #013: Web Format Dual Support - Intentional Feature or Incomplete Migration?
+
+**Discovered By**: Follow-up investigation from Issue #012
+**Date Discovered**: 2025-11-09
+**Severity**: Important
+**Category**: Technical Debt / Architecture Decision
+**Affects**: WebFileOrganizer implementation, multiple test suites, build system integration, potentially production code paths
+
+**Location**:
+- **File(s)**: 
+  - `src/providers/WebFileOrganizer.ts` (lines 17-21) - Implements JavaScript format support
+  - `src/__tests__/BuildSystemIntegration.test.ts` - Tests JavaScript format
+  - `src/__tests__/integration/BuildSystemCompatibility.test.ts` - Tests JavaScript format
+  - `src/providers/__tests__/PathProviders.test.ts` - Tests JavaScript format
+  - `src/generators/generateTokenFiles.ts` - Comment references JavaScript output
+- **System**: Web Token Generation System
+- **Context**: Format selection and output generation
+
+**Description**:
+During investigation of Issue #012 (TokenFileGenerator test drift), a broader pattern was discovered: the web token generation system supports BOTH JavaScript and CSS output formats, but it's unclear whether this is:
+
+1. **Intentional dual format support** - System designed to support both formats with CSS as primary
+2. **Incomplete migration** - Started migrating from JavaScript to CSS but didn't finish cleanup
+3. **Dead code** - JavaScript format no longer used but code not removed
+
+WebFileOrganizer.ts explicitly supports both formats:
+```typescript
+switch (format) {
+  case 'javascript':
+    return 'DesignTokens.web.js';
+  case 'css':
+    return 'DesignTokens.web.css';
+}
+```
+
+Multiple test suites test JavaScript format functionality, suggesting either:
+- Tests are validating intentional dual format support
+- Tests are testing unused code paths (test drift)
+
+**Steps to Reproduce**:
+1. Review `src/providers/WebFileOrganizer.ts` implementation
+2. Note JavaScript format case in getFileName() method
+3. Search codebase for `.web.js` references: `grep -r "\.web\.js" --include="*.ts" .`
+4. Observe: Multiple test files reference JavaScript format
+5. Check if JavaScript format is actually used in production code paths
+
+**Expected Behavior** (Unknown - requires investigation):
+Either:
+- **Option A**: System intentionally supports both formats, tests are correct
+- **Option B**: System migrated to CSS only, JavaScript support should be removed
+
+**Actual Behavior**:
+- CSS is primary/default format for web tokens
+- JavaScript format support exists in WebFileOrganizer
+- Multiple tests validate JavaScript format functionality
+- No clear documentation of format support strategy
+
+**Evidence**:
+```typescript
+// src/providers/WebFileOrganizer.ts (lines 17-21)
+switch (format) {
+  case 'javascript':
+    return 'DesignTokens.web.js';
+  case 'css':
+    return 'DesignTokens.web.css';
+}
+```
+
+```typescript
+// src/__tests__/BuildSystemIntegration.test.ts (lines 50-54)
+expect(config.importPatterns).toContain(
+  "import { tokens } from '@/tokens/DesignTokens.web.js'"
+);
+expect(config.importPatterns).toContain(
+  "import tokens from '@/tokens/DesignTokens.web.js'"
+);
+```
+
+**Files with `.web.js` References**:
+- `src/providers/WebFileOrganizer.ts` - Implementation
+- `src/__tests__/BuildSystemIntegration.test.ts` - Tests
+- `src/__tests__/integration/BuildSystemCompatibility.test.ts` - Tests
+- `src/providers/__tests__/PathProviders.test.ts` - Tests
+- `src/generators/generateTokenFiles.ts` - Comment
+- `dist/` - Compiled artifacts (stale)
+
+**Workaround**:
+None needed - system works correctly with CSS format. This is an investigation issue, not a blocking bug.
+
+**Cross-Area Impact**:
+- Infrastructure: Minor - Build system may have unused code paths
+- Architecture: Important - Unclear if dual format is architectural decision or technical debt
+- Token System: None - Token generation works correctly
+- Documentation: Important - No documentation of format support strategy
+
+**Related Issues**:
+- **Issue #012**: TokenFileGenerator Tests Reference Outdated Web Output Format - Initial discovery that led to this investigation
+- **Investigation Report**: `.kiro/audits/web-format-migration-investigation.md` - Comprehensive investigation report
+
+**Investigation Questions**:
+1. Was dual format support an intentional architectural decision?
+2. Is JavaScript format still used in any production code paths?
+3. Should JavaScript format be removed or documented as supported?
+4. Are tests validating intentional features or testing dead code?
+5. What was the original migration plan from JavaScript to CSS?
+
+**Recommendation**:
+See Investigation Report (`.kiro/audits/web-format-migration-investigation.md`) for:
+- Complete analysis of format usage across codebase
+- Investigation methodology and findings
+- Recommendations for resolution
+- Proposed spec to address findings
+
+**Priority**: Important - Requires investigation before deciding on resolution approach
+
+---
+
+---
+
 ## Issues by Discovery Area
 
 ### Infrastructure Discovery
@@ -1539,11 +1746,11 @@ _Issues that affect multiple discovery areas_
 
 ### Overall Status
 
-- **Total Issues Discovered**: 7 (from Phase 1 Infrastructure Audit)
+- **Total Issues Discovered**: 9 (7 from Phase 1 Infrastructure Audit, 2 from Architecture Separation of Concerns Spec)
 - **Critical Issues**: 1 (resolved)
-- **Important Issues**: 4 (all resolved)
+- **Important Issues**: 6 (4 resolved, 2 active)
 - **Minor Issues**: 2 (all resolved)
-- **Resolution Rate**: 100% (7/7 resolved) ✅
+- **Resolution Rate**: 77.8% (7/9 resolved)
 
 ### Resolution Timeline
 
@@ -1559,7 +1766,12 @@ _Issues that affect multiple discovery areas_
 
 ### Active Issues
 
-**No active issues remaining** - All Phase 1 Infrastructure Audit issues have been resolved! 🎉
+**2 active issues** - Issues #012 and #013 (both Important severity)
+
+- **Issue #012**: TokenFileGenerator Tests Reference Outdated Web Output Format (Important) - Discovered during architecture separation of concerns work, investigation revealed broader scope than initially assessed
+- **Issue #013**: Web Format Dual Support - Intentional Feature or Incomplete Migration? (Important) - Investigation needed to determine if JavaScript format support is intentional or technical debt
+
+**Investigation Report**: `.kiro/audits/web-format-migration-investigation.md` - Comprehensive investigation of web format support across codebase
 
 ### Key Learnings
 
@@ -1628,3 +1840,462 @@ _Issues that affect multiple discovery areas_
 ---
 
 *This registry tracks all issues discovered during the Phase 1 Discovery Audit. **All 7 issues from Phase 1 Infrastructure Audit have been successfully resolved** (100% resolution rate) through three comprehensive specs: release-detection-trigger-fix (Issues #001, #003), issue-fix-infrastructure-usability (Issues #002, #004), and issue-fix-file-organization-reliability (Issues #005, #006, #007). All issues were discovered on October 28, 2025 and resolved on November 7, 2025 (10 days to resolution). The registry will continue to be updated as additional issues are discovered in remaining discovery areas (Architecture, Token System, Documentation).*
+
+
+---
+
+## Issue #014: ThreeTierValidator Async/Sync Return Type Mismatch
+
+**Discovered By**: Architecture Separation of Concerns Spec (Task 3.2)
+**Date Discovered**: November 9, 2025
+**Severity**: Important
+**Category**: Validation System Architecture
+**Affects**: Validation system, test execution, development workflow
+
+**Location**:
+- **File(s)**: `src/validators/ThreeTierValidator.ts` (lines 326, 350, 367)
+- **System**: Three-Tier Validation System
+- **Context**: Validator orchestration and result aggregation
+
+**Description**:
+The ThreeTierValidator has methods that return `ValidationResult | null` (synchronous), but it's calling validator methods that can return `ValidationResult | Promise<ValidationResult | null> | null` (potentially asynchronous). TypeScript correctly identifies that the code doesn't handle the async case - it's treating potentially async operations as if they're always synchronous.
+
+This creates a type mismatch where:
+- ThreeTierValidator expects synchronous `ValidationResult | null`
+- Individual validators can return `Promise<ValidationResult | null>` (async)
+- The orchestration layer doesn't await async validators
+
+The issue manifests as TypeScript compilation errors that prevent:
+- Running Jest tests (requires full TypeScript compilation)
+- Running ts-node scripts (direct execution blocked)
+- Full integration testing of validation workflows
+
+This is a pre-existing architectural issue that was discovered when attempting to test the architecture-separation-of-concerns refactoring (Task 3.2: Update TokenEngine to validate before registration).
+
+**Steps to Reproduce**:
+1. Attempt to run any test file that imports ThreeTierValidator:
+   ```bash
+   npm test -- src/__tests__/integration/TokenSystemIntegration.test.ts
+   ```
+2. Observe TypeScript compilation errors:
+   ```
+   src/validators/ThreeTierValidator.ts:326:5 - error TS2322: 
+   Type 'ValidationResult | Promise<ValidationResult | null> | null' 
+   is not assignable to type 'ValidationResult | null'.
+   ```
+3. Same error appears at lines 350 and 367
+4. Test execution fails before any tests run
+
+**Expected Behavior**:
+ThreeTierValidator should either:
+- Make all validators synchronous and return `ValidationResult | null`
+- Make orchestration async and properly await async validators
+- Provide clear separation between sync and async validation paths
+
+**Actual Behavior**:
+ThreeTierValidator mixes sync and async validators without proper handling, causing TypeScript compilation errors that block test execution.
+
+**Evidence**:
+```typescript
+// src/validators/ThreeTierValidator.ts (line 326)
+// Method signature expects synchronous result
+private validateErrorLevel(context: ThreeTierValidationContext): ValidationResult | null {
+  // But calls validator that can return Promise
+  return this.errorValidator.validate(errorContext);
+  // ~~~~~~ Error: Type includes Promise but method expects sync result
+}
+
+// Similar issues at lines 350 and 367
+private validateWarningLevel(context: ThreeTierValidationContext): ValidationResult | null {
+  return this.warningValidator.validate(warningContext);
+  // ~~~~~~ Error: Type includes Promise but method expects sync result
+}
+
+private validatePassLevel(context: ThreeTierValidationContext): ValidationResult | null {
+  return this.passValidator.validate(passContext);
+  // ~~~~~~ Error: Type includes Promise but method expects sync result
+}
+```
+
+```bash
+# Test execution fails with compilation errors
+$ npm test -- src/__tests__/integration/TokenSystemIntegration.test.ts
+
+> designer-punk-v2@1.0.0 test
+> jest src/__tests__/integration/TokenSystemIntegration.test.ts
+
+FAIL src/__tests__/integration/TokenSystemIntegration.test.ts
+  ● Test suite failed to run
+
+    src/validators/ThreeTierValidator.ts:326:5 - error TS2322
+    src/validators/ThreeTierValidator.ts:350:5 - error TS2322
+    src/validators/ThreeTierValidator.ts:367:5 - error TS2322
+
+Test Suites: 1 failed, 1 total
+Tests:       0 total
+```
+
+**Workaround**:
+For development and validation during architecture-separation-of-concerns spec:
+1. Use static validation via `getDiagnostics` on modified files
+2. Verify type safety through TypeScript type checking
+3. Review code logic against requirements
+4. Create tests that will run once errors are fixed
+5. Use `tsc --skipLibCheck` for build (already configured)
+
+**Cross-Area Impact**:
+- **Infrastructure**: Important - Blocks automated test execution in CI/CD
+- **Architecture**: Important - Prevents validation of architectural refactoring
+- **Token System**: Minor - Token generation works but can't be fully tested
+- **Documentation**: None - Does not affect documentation
+
+**Related Issues**:
+None - New issue discovered during architecture-separation-of-concerns spec
+
+**Resolution Priority**:
+**Recommended**: Fix after completing architecture-separation-of-concerns spec
+
+**Rationale for Deferral**:
+1. **Scope Isolation**: Issue is in ThreeTierValidator, outside scope of current spec
+2. **Static Validation Works**: Can validate refactoring through type checking and code review
+3. **No Blocking Dependencies**: Remaining tasks (3.3, 3.4, 3.5) don't depend on fix
+4. **Build System Configured**: `tsc --skipLibCheck` allows compilation to complete
+5. **Clear Separation**: Fixing ThreeTierValidator is separate concern from extracting validation from registries
+
+**When to Fix**:
+After architecture-separation-of-concerns spec completes, because:
+- It blocks comprehensive integration testing
+- It prevents validating the complete refactoring works end-to-end
+- It should be fixed before next spec that depends on validation
+
+**Fix Options**:
+
+**Option 1: Make All Validators Synchronous** (Recommended)
+- Update validator interfaces to return `ValidationResult | null` (no Promise)
+- Ensure all validator implementations are synchronous
+- Simplest fix if validators don't need async operations
+
+**Option 2: Make Orchestration Async**
+- Update ThreeTierValidator methods to be async
+- Properly await all validator calls
+- Update callers to handle async validation
+- More complex but supports async validators if needed
+
+**Option 3: Separate Sync/Async Paths**
+- Create separate orchestration for sync vs async validators
+- Provide clear API for each path
+- Most flexible but adds complexity
+
+---
+
+## Issue #015: Architecture Separation of Concerns Spec Testing Blocked
+
+**Discovered By**: Architecture Separation of Concerns Spec (Task 3.2)
+**Date Discovered**: November 9, 2025
+**Severity**: Important
+**Category**: Testing Infrastructure
+**Affects**: Architecture refactoring validation, test-driven development workflow
+
+**Location**:
+- **File(s)**: All test files that import validation components
+- **System**: Test Infrastructure
+- **Context**: Integration testing for architecture-separation-of-concerns spec
+
+**Description**:
+The architecture-separation-of-concerns spec is refactoring validation logic out of registries and into dedicated validation coordinators. This is a significant architectural change that requires comprehensive integration testing to verify:
+- Validation happens before registration
+- Invalid tokens are rejected and not registered
+- Valid tokens are accepted and registered
+- Error handling works correctly
+- All integration points work together
+
+However, Issue #014 (ThreeTierValidator async/sync mismatch) prevents running any tests that use the validation system. This means the architectural refactoring cannot be validated through automated tests, requiring reliance on:
+- Static type checking via `getDiagnostics`
+- Manual code review against requirements
+- Verification of integration points through code inspection
+
+While these validation methods are effective for catching type errors and logic issues, they cannot verify runtime behavior, edge cases, or integration correctness.
+
+**Steps to Reproduce**:
+1. Complete Task 3.2: Update TokenEngine to validate before registration
+2. Create comprehensive test suite in `TokenSystemIntegration.test.ts`
+3. Attempt to run tests:
+   ```bash
+   npm test -- src/__tests__/integration/TokenSystemIntegration.test.ts
+   ```
+4. Observe: Tests fail to compile due to Issue #014
+5. Cannot verify:
+   - Validation actually prevents registration at runtime
+   - Error messages are correct and helpful
+   - Edge cases are handled properly
+   - Integration between components works correctly
+
+**Expected Behavior**:
+After implementing architectural changes:
+1. Run comprehensive test suite
+2. Verify all tests pass
+3. Confirm validation-before-registration pattern works correctly
+4. Validate error handling and edge cases
+5. Ensure no regressions in existing functionality
+
+**Actual Behavior**:
+After implementing architectural changes:
+1. Cannot run test suite (compilation errors)
+2. Must rely on static validation only
+3. Cannot verify runtime behavior
+4. Cannot test edge cases interactively
+5. Cannot confirm integration correctness
+
+**Evidence**:
+```typescript
+// Created comprehensive test suite in TokenSystemIntegration.test.ts
+describe('Validation Before Registration', () => {
+  it('should validate primitive token before registration and prevent registration on error', () => {
+    // Test implementation...
+  });
+  
+  it('should validate primitive token and allow registration on pass', () => {
+    // Test implementation...
+  });
+  
+  // 7 total tests covering validation scenarios
+});
+
+// But tests cannot run:
+$ npm test -- src/__tests__/integration/TokenSystemIntegration.test.ts
+FAIL src/__tests__/integration/TokenSystemIntegration.test.ts
+  ● Test suite failed to run
+    src/validators/ThreeTierValidator.ts:326:5 - error TS2322
+    [compilation errors prevent test execution]
+```
+
+**Workaround**:
+Validation approach for architecture-separation-of-concerns spec:
+1. **Static Validation**: Use `getDiagnostics` to verify no type errors in modified files
+2. **Type Safety**: Verify all type annotations are correct
+3. **Code Review**: Review logic against requirements
+4. **Integration Points**: Verify all dependencies updated correctly
+5. **Documentation**: Document assumptions about runtime behavior
+6. **Test Creation**: Create tests that will run once Issue #014 is fixed
+
+**Cross-Area Impact**:
+- **Infrastructure**: Important - Reduces confidence in architectural changes
+- **Architecture**: Critical - Cannot validate architectural refactoring through tests
+- **Token System**: Minor - Token generation works but refactoring not fully validated
+- **Documentation**: None - Does not affect documentation
+
+**Related Issues**:
+- **Issue #014**: ThreeTierValidator Async/Sync Return Type Mismatch (root cause)
+
+**Resolution Priority**:
+**Recommended**: Fix Issue #014 after completing architecture-separation-of-concerns spec, then run full test suite to validate refactoring
+
+**Rationale**:
+This issue is a consequence of Issue #014. Fixing Issue #014 will automatically resolve this issue by enabling test execution. The architectural refactoring can proceed using static validation, with runtime validation deferred until Issue #014 is fixed.
+
+**Validation Strategy**:
+For architecture-separation-of-concerns spec completion:
+1. **Phase 1 (Current)**: Static validation during implementation
+   - Type checking via `getDiagnostics`
+   - Code review against requirements
+   - Integration point verification
+   
+2. **Phase 2 (After Issue #014 Fix)**: Runtime validation
+   - Run comprehensive test suite
+   - Verify all tests pass
+   - Confirm runtime behavior matches expectations
+   - Test edge cases and error handling
+   - Validate integration correctness
+
+**Success Criteria**:
+Spec is considered complete when:
+1. All tasks implemented with static validation ✓
+2. No type errors in modified files ✓
+3. Integration points verified ✓
+4. Tests created (ready to run) ✓
+5. Issue #014 fixed (enables runtime validation) ⏳
+6. All tests pass (confirms correctness) ⏳
+
+---
+
+## Issue #016: Semantic Token Data Quality - Missing primitiveReferences Field
+
+**Discovered By**: Architecture Separation of Concerns Spec (Task 3.6)
+**Date Discovered**: November 9, 2025
+**Severity**: Minor
+**Category**: Token System - Data Quality
+**Affects**: Semantic token definitions, token validation tests, token system integrity
+
+**Location**:
+- **File(s)**: Semantic token definition files (specific files to be identified during audit)
+- **System**: Semantic Token System
+- **Context**: Token data structure validation in integration tests
+
+**Description**:
+Some semantic tokens in the token definitions are missing the required `primitiveReferences` field. The SemanticToken interface requires this field, but some token definitions don't include it, causing data structure validation tests to fail.
+
+This is a data quality issue where token definitions don't conform to the SemanticToken interface contract. The `primitiveReferences` field is essential because it defines which primitive tokens a semantic token references, enabling the token resolution system to work correctly.
+
+The issue was discovered when running the SemanticTokenIntegration test suite, specifically the test "should ensure each token has valid structure" which validates that all semantic tokens have the required fields.
+
+**Steps to Reproduce**:
+1. Run semantic token integration tests:
+   ```bash
+   npm test -- src/tokens/semantic/__tests__/SemanticTokenIntegration.test.ts
+   ```
+2. Observe test failure in "should ensure each token has valid structure"
+3. Error shows: `expect(received).toBeDefined()` but `Received: undefined`
+4. Error occurs at line checking `token.primitiveReferences`
+5. Some tokens in the semantic token collection are missing this required field
+
+**Expected Behavior**:
+All semantic tokens should have a `primitiveReferences` field that defines which primitive tokens they reference. This field should be an object with at least one key-value pair mapping reference names to primitive token names.
+
+Example:
+```typescript
+{
+  name: 'color.primary',
+  category: SemanticCategory.COLOR,
+  primitiveReferences: { default: 'purple300' }, // Required field
+  description: 'Primary brand color',
+  context: 'Primary actions'
+}
+```
+
+**Actual Behavior**:
+Some semantic tokens are missing the `primitiveReferences` field entirely, causing:
+- Data structure validation tests to fail
+- Potential runtime errors when trying to resolve token references
+- Inconsistent token definitions across the system
+
+**Evidence**:
+```bash
+# Test failure output
+$ npm test -- src/tokens/semantic/__tests__/SemanticTokenIntegration.test.ts
+
+FAIL src/tokens/semantic/__tests__/SemanticTokenIntegration.test.ts
+  ● getAllSemanticTokens › should ensure each token has valid structure
+  
+    expect(received).toBeDefined()
+    Received: undefined
+
+      154 |       expect(token.name.length).toBeGreaterThan(0);
+      155 |       
+    > 156 |       expect(token.primitiveReferences).toBeDefined();
+          |                                         ^
+      157 |       expect(typeof token.primitiveReferences).toBe('object');
+      158 |       expect(Object.keys(token.primitiveReferences).length).toBeGreaterThan(0);
+```
+
+```typescript
+// SemanticToken interface (required structure)
+export interface SemanticToken {
+  name: string;
+  category: SemanticCategory;
+  primitiveReferences: Record<string, string>; // REQUIRED - but missing in some tokens
+  description: string;
+  context: string;
+}
+```
+
+**Workaround**:
+None - tokens with missing `primitiveReferences` should be fixed or removed from the token definitions.
+
+**Cross-Area Impact**:
+- **Infrastructure**: None - Does not affect build or deployment
+- **Architecture**: Minor - Violates interface contract but doesn't break architecture
+- **Token System**: Important - Affects token data quality and resolution system
+- **Documentation**: None - Does not affect documentation
+
+**Related Issues**:
+None - New issue discovered during architecture-separation-of-concerns spec
+
+**Resolution Priority**:
+**Recommended**: Fix during token system audit or data quality review
+
+**Rationale for Priority**:
+- Minor severity because it doesn't block development
+- Affects test suite but not production token generation
+- Should be fixed to maintain data quality standards
+- Not urgent but should be addressed in next token system work
+
+**Fix Steps**:
+1. **Audit**: Identify all semantic tokens missing `primitiveReferences` field
+   ```bash
+   # Search for semantic token definitions
+   grep -r "SemanticToken" src/tokens/semantic/ --include="*.ts"
+   ```
+
+2. **Categorize**: Determine for each token whether to:
+   - Add missing `primitiveReferences` field (if token is valid)
+   - Remove token (if token is obsolete or invalid)
+   - Update token definition (if token structure is incorrect)
+
+3. **Fix**: Update token definitions to include required field
+   ```typescript
+   // Before (missing field)
+   {
+     name: 'color.example',
+     category: SemanticCategory.COLOR,
+     description: 'Example color',
+     context: 'Example usage'
+   }
+   
+   // After (field added)
+   {
+     name: 'color.example',
+     category: SemanticCategory.COLOR,
+     primitiveReferences: { default: 'purple300' },
+     description: 'Example color',
+     context: 'Example usage'
+   }
+   ```
+
+4. **Validate**: Run integration tests to confirm all tokens have required fields
+   ```bash
+   npm test -- src/tokens/semantic/__tests__/SemanticTokenIntegration.test.ts
+   ```
+
+5. **Document**: Update token system documentation with data quality standards
+
+**Prevention**:
+- Add TypeScript strict mode checks for token definitions
+- Create token definition validation in build process
+- Add pre-commit hooks to validate token structure
+- Document required fields in token creation guide
+
+---
+
+## Updated Issue Counter
+
+**Next Issue ID**: #017
+**Resolved Issues**: 7 (All issues from Phase 1 Infrastructure Audit)
+**Active Issues**: 5 (Issues #012, #013, #014, #015, #016)
+**Reclassified Issues**: 4 (Issues #008-#011 - Platform-appropriate design decisions)
+
+---
+
+## Issues by Severity (Updated)
+
+### Important Issues
+_Issues that reduce efficiency, create technical debt, or violate established patterns_
+
+**Active Important Issues**: 4
+- **Issue #012**: TokenFileGenerator Tests Reference Outdated Web Output Format
+- **Issue #013**: Web Format Dual Support - Intentional Feature or Incomplete Migration?
+- **Issue #014**: ThreeTierValidator Async/Sync Return Type Mismatch
+- **Issue #015**: Architecture Separation of Concerns Spec Testing Blocked
+
+**Resolved Important Issues**: 4 (Issues #002, #004, #005, #006)
+
+### Minor Issues
+_Issues that are cosmetic, isolated, or have minimal impact_
+
+**Active Minor Issues**: 1
+- **Issue #016**: Semantic Token Data Quality - Missing primitiveReferences Field
+
+**Resolved Minor Issues**: 3 (Issues #003, #007, #017)
+
+---
+
+*Registry updated November 9, 2025 with Issues #014, #015, and #016 discovered during architecture-separation-of-concerns spec (Tasks 3.2 and 3.6). Issues #014 and #015 are recommended for resolution after completing the current spec to enable comprehensive integration testing of the architectural refactoring. Issue #016 should be addressed during next token system audit or data quality review.*

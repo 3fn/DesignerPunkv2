@@ -13,6 +13,7 @@ import type { PrimitiveToken, SemanticToken, ValidationResult } from '../types';
 import { TokenCategory } from '../types';
 import { isStrategicFlexibilityValue } from '../constants/StrategicFlexibilityTokens';
 import { ValidationReasoning, type ReasoningContext } from './ValidationReasoning';
+import type { IValidator } from './IValidator';
 
 /**
  * Error validation context with detailed mathematical analysis
@@ -89,7 +90,8 @@ export interface ErrorValidationContext {
 /**
  * Error-level validator for critical design system violations
  */
-export class ErrorValidator {
+export class ErrorValidator implements IValidator<ErrorValidationContext> {
+  readonly name = 'ErrorValidator';
   private reasoningGenerator: ValidationReasoning;
 
   // Mathematical constants

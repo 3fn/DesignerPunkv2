@@ -11,6 +11,7 @@
 import type { PrimitiveToken, SemanticToken, ValidationResult } from '../types';
 import { TokenCategory } from '../types';
 import { ValidationReasoning } from './ValidationReasoning';
+import type { IValidator } from './IValidator';
 /**
  * Error validation context with detailed mathematical analysis
  */
@@ -72,7 +73,8 @@ export interface ErrorValidationContext {
 /**
  * Error-level validator for critical design system violations
  */
-export declare class ErrorValidator {
+export declare class ErrorValidator implements IValidator<ErrorValidationContext> {
+    readonly name = "ErrorValidator";
     private reasoningGenerator;
     private readonly BASELINE_GRID_UNIT;
     private readonly CROSS_PLATFORM_TOLERANCE;

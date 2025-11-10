@@ -12,6 +12,7 @@ import type { PrimitiveToken, SemanticToken, ValidationResult } from '../types';
 import { TokenCategory } from '../types';
 import { isStrategicFlexibilityValue, STRATEGIC_FLEXIBILITY_VALUES } from '../constants/StrategicFlexibilityTokens';
 import { ValidationReasoning, type ReasoningContext } from './ValidationReasoning';
+import type { IValidator } from './IValidator';
 
 /**
  * Warning validation context with usage pattern analysis
@@ -75,7 +76,8 @@ export interface WarningValidationContext {
 /**
  * Warning-level validator for potentially problematic patterns
  */
-export class WarningValidator {
+export class WarningValidator implements IValidator<WarningValidationContext> {
+  readonly name = 'WarningValidator';
   private reasoningGenerator: ValidationReasoning;
   
   // Default thresholds

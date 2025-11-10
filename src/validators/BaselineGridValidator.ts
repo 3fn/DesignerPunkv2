@@ -1,5 +1,6 @@
 import { isStrategicFlexibilityValue } from '../constants/StrategicFlexibilityTokens';
 import type { ValidationResult } from '../types/ValidationResult';
+import type { IValidator } from './IValidator';
 
 /**
  * Baseline Grid Validator
@@ -15,7 +16,13 @@ export interface BaselineGridValidationOptions {
   customGridUnit?: number;
 }
 
-export class BaselineGridValidator {
+export interface BaselineGridValidationInput {
+  value: number;
+  tokenName?: string;
+}
+
+export class BaselineGridValidator implements IValidator<BaselineGridValidationInput> {
+  readonly name = 'BaselineGridValidator';
   private readonly gridUnit: number;
   private readonly allowStrategicFlexibility: boolean;
 
@@ -25,9 +32,16 @@ export class BaselineGridValidator {
   }
 
   /**
-   * Validate if a value aligns with the baseline grid
+   * Validate input using IValidator interface
    */
-  validate(value: number, tokenName?: string): ValidationResult {
+  validate(input: BaselineGridValidationInput): ValidationResult {
+    return this.validateValue(input.value, input.tokenName);
+  }
+
+  /**
+   * Validate if a value aligns with the baseline grid (legacy method)
+   */
+  validateValue(value: number, tokenName?: string): ValidationResult {
     // Strategic flexibility tokens always pass validation
     if (this.allowStrategicFlexibility && isStrategicFlexibilityValue(value)) {
       return {
@@ -89,7 +103,7 @@ export class BaselineGridValidator {
    * Validate multiple values at once
    */
   validateBatch(values: Array<{ value: number; tokenName?: string }>): ValidationResult[] {
-    return values.map(({ value, tokenName }) => this.validate(value, tokenName));
+    return values.map(({ value, tokenName }) => this.validateValue(value, tokenName));
   }
 
   /**

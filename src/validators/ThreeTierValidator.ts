@@ -190,19 +190,21 @@ export interface ThreeTierValidationResult {
   };
 }
 
+import type { IValidator } from './IValidator';
+
 /**
  * Three-tier validation system orchestrator
  */
 export class ThreeTierValidator {
-  private passValidator: PassValidator;
-  private warningValidator: WarningValidator;
-  private errorValidator: ErrorValidator;
+  private passValidator: IValidator<PassValidationContext>;
+  private warningValidator: IValidator<WarningValidationContext>;
+  private errorValidator: IValidator<ErrorValidationContext>;
   private reasoningGenerator: ValidationReasoning;
 
   constructor(
-    passValidator?: PassValidator,
-    warningValidator?: WarningValidator,
-    errorValidator?: ErrorValidator,
+    passValidator?: IValidator<PassValidationContext>,
+    warningValidator?: IValidator<WarningValidationContext>,
+    errorValidator?: IValidator<ErrorValidationContext>,
     reasoningGenerator?: ValidationReasoning
   ) {
     this.reasoningGenerator = reasoningGenerator || new ValidationReasoning();

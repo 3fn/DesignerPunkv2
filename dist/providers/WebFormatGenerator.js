@@ -150,6 +150,18 @@ class WebFormatGenerator extends FormatProvider_1.BaseFormatProvider {
             return camelCaseName;
         }
         // For CSS output, use web platform naming rules (kebab-case with -- prefix)
+        // Special handling for breakpoint and grid spacing tokens to ensure proper naming
+        if (category === 'breakpoint') {
+            // Convert breakpointXs -> --breakpoint-xs
+            const kebabName = tokenName.replace(/([A-Z])/g, '-$1').toLowerCase();
+            return `--${kebabName}`;
+        }
+        if (tokenName.startsWith('grid')) {
+            // Convert gridGutterXs -> --grid-gutter-xs
+            // Convert gridMarginNative -> --grid-margin-native
+            const kebabName = tokenName.replace(/([A-Z])/g, '-$1').toLowerCase();
+            return `--${kebabName}`;
+        }
         return (0, PlatformNamingRules_1.getPlatformTokenName)(tokenName, this.platform, category);
     }
     formatCSSCustomProperty(name, value, unit) {

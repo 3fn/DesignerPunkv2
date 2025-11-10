@@ -97,9 +97,7 @@ const PrimitiveToken_1 = require("../../types/PrimitiveToken");
                 description: 'Normal grouped spacing',
                 context: 'Spacing between elements in the same logical group'
             };
-            const result = semanticRegistry.register(semanticToken);
-            (0, globals_1.expect)(result.level).toBe('Pass');
-            (0, globals_1.expect)(result.message).toContain('registered successfully');
+            (0, globals_1.expect)(() => semanticRegistry.register(semanticToken)).not.toThrow();
             (0, globals_1.expect)(semanticRegistry.has('space.grouped.normal')).toBe(true);
         });
         (0, globals_1.it)('should reject semantic token with invalid primitive reference', () => {
@@ -110,9 +108,7 @@ const PrimitiveToken_1 = require("../../types/PrimitiveToken");
                 description: 'Invalid spacing',
                 context: 'Test invalid reference'
             };
-            const result = semanticRegistry.register(semanticToken);
-            (0, globals_1.expect)(result.level).toBe('Error');
-            (0, globals_1.expect)(result.message).toContain('Invalid primitive token reference');
+            (0, globals_1.expect)(() => semanticRegistry.register(semanticToken)).toThrow('Validation failed');
         });
         (0, globals_1.it)('should reject duplicate semantic token registration', () => {
             const semanticToken = {
@@ -123,9 +119,7 @@ const PrimitiveToken_1 = require("../../types/PrimitiveToken");
                 context: 'Test duplicate'
             };
             semanticRegistry.register(semanticToken);
-            const result = semanticRegistry.register(semanticToken);
-            (0, globals_1.expect)(result.level).toBe('Error');
-            (0, globals_1.expect)(result.message).toContain('already exists');
+            (0, globals_1.expect)(() => semanticRegistry.register(semanticToken)).toThrow('already registered');
         });
         (0, globals_1.it)('should allow overwrite with allowOverwrite option', () => {
             const semanticToken = {
@@ -141,8 +135,7 @@ const PrimitiveToken_1 = require("../../types/PrimitiveToken");
                 description: 'Updated',
                 primitiveReferences: { default: 'space200' }
             };
-            const result = semanticRegistry.register(updatedToken, { allowOverwrite: true });
-            (0, globals_1.expect)(result.level).toBe('Pass');
+            (0, globals_1.expect)(() => semanticRegistry.register(updatedToken, { allowOverwrite: true })).not.toThrow();
             (0, globals_1.expect)(semanticRegistry.get('space.overwrite')?.description).toBe('Updated');
         });
         (0, globals_1.it)('should skip validation when skipValidation is true', () => {
@@ -153,9 +146,8 @@ const PrimitiveToken_1 = require("../../types/PrimitiveToken");
                 description: 'Skip validation test',
                 context: 'Test skip'
             };
-            const result = semanticRegistry.register(semanticToken, { skipValidation: true });
-            (0, globals_1.expect)(result.level).toBe('Pass');
-            (0, globals_1.expect)(result.message).toContain('registered successfully');
+            (0, globals_1.expect)(() => semanticRegistry.register(semanticToken, { skipValidation: true })).not.toThrow();
+            (0, globals_1.expect)(semanticRegistry.has('space.skip')).toBe(true);
         });
     });
     (0, globals_1.describe)('Token Retrieval', () => {

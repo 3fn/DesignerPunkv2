@@ -3,6 +3,8 @@
  *
  * Exports all validation components for the Mathematical Token System
  */
+export type { IValidator, ValidationResult, ValidationLevel } from './IValidator';
+export { isPromiseValidationResult, awaitValidationResult } from './IValidator';
 export { BaselineGridValidator } from './BaselineGridValidator';
 export { CrossPlatformConsistencyValidator } from './CrossPlatformConsistencyValidator';
 export { ErrorValidator } from './ErrorValidator';

@@ -8,7 +8,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RADIUS_BASE_VALUE = exports.getStrategicFlexibilityRadiusTokens = exports.getBaselineAlignedRadiusTokens = exports.getAllRadiusTokens = exports.getRadiusToken = exports.radiusTokenNames = exports.radiusTokens = exports.TAP_AREA_BASE_VALUE = exports.validateTapAreaAccessibility = exports.getAllTapAreaTokens = exports.getTapAreaToken = exports.tapAreaTokenNames = exports.tapAreaTokens = exports.DENSITY_BASE_VALUE = exports.applyDensityScaling = exports.getAllDensityTokens = exports.getDensityToken = exports.densityTokenNames = exports.densityTokens = exports.LINE_HEIGHT_BASE_VALUE = exports.calculateComputedLineHeight = exports.getAllLineHeightTokens = exports.getLineHeightToken = exports.lineHeightTokenNames = exports.lineHeightTokens = exports.LETTER_SPACING_BASE_VALUE = exports.getAllLetterSpacingTokens = exports.getLetterSpacingToken = exports.letterSpacingTokenNames = exports.letterSpacingTokens = exports.FONT_WEIGHT_BASE_VALUE = exports.getAllFontWeightTokens = exports.getFontWeightToken = exports.fontWeightTokenNames = exports.fontWeightTokens = exports.getAllFontFamilyTokens = exports.getFontFamilyToken = exports.fontFamilyTokenNames = exports.fontFamilyTokens = exports.MODULAR_SCALE_RATIO = exports.FONT_SIZE_BASE_VALUE = exports.getAllFontSizeTokens = exports.getFontSizeToken = exports.fontSizeTokenNames = exports.fontSizeTokens = exports.SPACING_BASE_VALUE = exports.getAllSpacingTokens = exports.getSpacingToken = exports.spacingTokenNames = exports.spacingTokens = void 0;
 exports.GLOW_BLUR_BASE_VALUE = exports.getAllShadowOpacityTokens = exports.getShadowOpacityToken = exports.shadowOpacityTokenNames = exports.shadowOpacityTokens = exports.SHADOW_OPACITY_BASE_VALUE = exports.getAllShadowBlurTokens = exports.getShadowBlurToken = exports.shadowBlurNames = exports.shadowBlur = exports.SHADOW_BLUR_BASE_VALUE = exports.getAllShadowOffsetYTokens = exports.getAllShadowOffsetXTokens = exports.getShadowOffsetYToken = exports.getShadowOffsetXToken = exports.shadowOffsetYNames = exports.shadowOffsetXNames = exports.shadowOffsetY = exports.shadowOffsetX = exports.SHADOW_OFFSET_BASE_VALUE = exports.BORDER_WIDTH_BASE_VALUE = exports.getAllBorderWidthTokens = exports.getBorderWidthToken = exports.borderWidthTokenNames = exports.borderWidthTokens = exports.COLOR_THEMES = exports.COLOR_MODES = exports.COLOR_SCALE = exports.COLOR_FAMILIES = exports.COLOR_BASE_VALUE = exports.getShadowColorTokensByFamily = exports.getAllShadowColorTokens = exports.getShadowColorToken = exports.shadowColorTokenNames = exports.shadowColorTokens = exports.tealTokens = exports.cyanTokens = exports.violetTokens = exports.purpleTokens = exports.orangeTokens = exports.yellowTokens = exports.whiteTokens = exports.blackTokens = exports.grayTokens = exports.resolveColorTokenValue = exports.getColorTokensByFamily = exports.getAllColorTokens = exports.getColorToken = exports.colorTokenNames = exports.colorTokens = void 0;
-exports.TOKEN_FAMILY_BASE_VALUES = exports.getAllTokens = exports.allTokens = exports.BlendDirection = exports.BLEND_BASE_VALUE = exports.getAllBlendTokens = exports.getBlendToken = exports.blendTokenNames = exports.blendTokens = exports.OPACITY_BASE_VALUE = exports.getAllOpacityTokens = exports.getOpacityToken = exports.opacityTokenNames = exports.opacityTokens = exports.getAllGlowOpacityTokens = exports.getGlowOpacityToken = exports.glowOpacityNames = exports.glowOpacity = exports.GLOW_OPACITY_BASE_VALUE = exports.getAllGlowBlurTokens = exports.getGlowBlurToken = exports.glowBlurNames = exports.glowBlur = void 0;
+exports.TOKEN_FAMILY_BASE_VALUES = exports.getAllTokens = exports.allTokens = exports.BREAKPOINT_BASE_VALUE = exports.getAllBreakpointTokens = exports.getBreakpointToken = exports.breakpointTokenNames = exports.breakpointTokens = exports.BlendDirection = exports.BLEND_BASE_VALUE = exports.getAllBlendTokens = exports.getBlendToken = exports.blendTokenNames = exports.blendTokens = exports.OPACITY_BASE_VALUE = exports.getAllOpacityTokens = exports.getOpacityToken = exports.opacityTokenNames = exports.opacityTokens = exports.getAllGlowOpacityTokens = exports.getGlowOpacityToken = exports.glowOpacityNames = exports.glowOpacity = exports.GLOW_OPACITY_BASE_VALUE = exports.getAllGlowBlurTokens = exports.getGlowBlurToken = exports.glowBlurNames = exports.glowBlur = void 0;
 exports.getAllPrimitiveTokens = getAllPrimitiveTokens;
 exports.getTokensByCategory = getTokensByCategory;
 exports.getTokenByName = getTokenByName;
@@ -168,6 +168,13 @@ Object.defineProperty(exports, "getBlendToken", { enumerable: true, get: functio
 Object.defineProperty(exports, "getAllBlendTokens", { enumerable: true, get: function () { return BlendTokens_1.getAllBlendTokens; } });
 Object.defineProperty(exports, "BLEND_BASE_VALUE", { enumerable: true, get: function () { return BlendTokens_1.BLEND_BASE_VALUE; } });
 Object.defineProperty(exports, "BlendDirection", { enumerable: true, get: function () { return BlendTokens_1.BlendDirection; } });
+// Breakpoint tokens
+var BreakpointTokens_1 = require("./BreakpointTokens");
+Object.defineProperty(exports, "breakpointTokens", { enumerable: true, get: function () { return BreakpointTokens_1.breakpointTokens; } });
+Object.defineProperty(exports, "breakpointTokenNames", { enumerable: true, get: function () { return BreakpointTokens_1.breakpointTokenNames; } });
+Object.defineProperty(exports, "getBreakpointToken", { enumerable: true, get: function () { return BreakpointTokens_1.getBreakpointToken; } });
+Object.defineProperty(exports, "getAllBreakpointTokens", { enumerable: true, get: function () { return BreakpointTokens_1.getAllBreakpointTokens; } });
+Object.defineProperty(exports, "BREAKPOINT_BASE_VALUE", { enumerable: true, get: function () { return BreakpointTokens_1.BREAKPOINT_BASE_VALUE; } });
 // Combined token utilities
 const SpacingTokens_2 = require("./SpacingTokens");
 const FontSizeTokens_2 = require("./FontSizeTokens");
@@ -187,6 +194,7 @@ const GlowBlurTokens_2 = require("./GlowBlurTokens");
 const GlowOpacityTokens_2 = require("./GlowOpacityTokens");
 const OpacityTokens_2 = require("./OpacityTokens");
 const BlendTokens_2 = require("./BlendTokens");
+const BreakpointTokens_2 = require("./BreakpointTokens");
 const PrimitiveToken_1 = require("../types/PrimitiveToken");
 /**
  * All primitive tokens combined by category
@@ -206,7 +214,8 @@ exports.allTokens = {
     [PrimitiveToken_1.TokenCategory.SHADOW]: { ...ShadowOffsetTokens_2.shadowOffsetX, ...ShadowOffsetTokens_2.shadowOffsetY, ...ShadowBlurTokens_2.shadowBlur, ...ShadowOpacityTokens_2.shadowOpacityTokens },
     [PrimitiveToken_1.TokenCategory.GLOW]: { ...GlowBlurTokens_2.glowBlur, ...GlowOpacityTokens_2.glowOpacity },
     [PrimitiveToken_1.TokenCategory.OPACITY]: OpacityTokens_2.opacityTokens,
-    [PrimitiveToken_1.TokenCategory.BLEND]: BlendTokens_2.blendTokens
+    [PrimitiveToken_1.TokenCategory.BLEND]: BlendTokens_2.blendTokens,
+    [PrimitiveToken_1.TokenCategory.BREAKPOINT]: BreakpointTokens_2.breakpointTokens
 };
 /**
  * Get all primitive tokens as a flat array
@@ -234,7 +243,8 @@ function getAllPrimitiveTokens() {
         ...Object.values(GlowBlurTokens_2.glowBlur),
         ...Object.values(GlowOpacityTokens_2.glowOpacity),
         ...Object.values(OpacityTokens_2.opacityTokens),
-        ...Object.values(BlendTokens_2.blendTokens)
+        ...Object.values(BlendTokens_2.blendTokens),
+        ...Object.values(BreakpointTokens_2.breakpointTokens)
     ];
 }
 /**
@@ -291,6 +301,7 @@ exports.TOKEN_FAMILY_BASE_VALUES = {
     [PrimitiveToken_1.TokenCategory.SHADOW]: 4,
     [PrimitiveToken_1.TokenCategory.GLOW]: 8,
     [PrimitiveToken_1.TokenCategory.OPACITY]: 0.08,
-    [PrimitiveToken_1.TokenCategory.BLEND]: 0.04
+    [PrimitiveToken_1.TokenCategory.BLEND]: 0.04,
+    [PrimitiveToken_1.TokenCategory.BREAKPOINT]: 320
 };
 //# sourceMappingURL=index.js.map

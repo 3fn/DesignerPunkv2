@@ -101,6 +101,13 @@ export class ValidationCoordinator {
 
   /**
    * Validate a single token with comprehensive three-tier validation
+   * 
+   * This method performs validation only and does not register the token.
+   * The caller is responsible for registering the token after successful validation.
+   * 
+   * @param token - Token to validate
+   * @param options - Validation options
+   * @returns Validation result indicating whether the token is valid
    */
   validateToken(
     token: PrimitiveToken | SemanticToken,
@@ -117,6 +124,12 @@ export class ValidationCoordinator {
 
   /**
    * Validate all registered tokens
+   * 
+   * This method validates all tokens currently in the registries.
+   * It does not perform registration - tokens are already registered.
+   * 
+   * @param options - Validation options
+   * @returns Array of validation results for all tokens
    */
   validateAllTokens(options: ValidationOptions = {}): ValidationResult[] {
     const allTokens: (PrimitiveToken | SemanticToken)[] = [
@@ -129,6 +142,12 @@ export class ValidationCoordinator {
 
   /**
    * Validate primitive tokens only
+   * 
+   * This method validates all primitive tokens currently in the registry.
+   * It does not perform registration - tokens are already registered.
+   * 
+   * @param options - Validation options
+   * @returns Array of validation results for primitive tokens
    */
   validatePrimitiveTokens(options: ValidationOptions = {}): ValidationResult[] {
     const primitiveTokens = this.primitiveRegistry.query();
@@ -137,6 +156,12 @@ export class ValidationCoordinator {
 
   /**
    * Validate semantic tokens only
+   * 
+   * This method validates all semantic tokens currently in the registry.
+   * It does not perform registration - tokens are already registered.
+   * 
+   * @param options - Validation options
+   * @returns Array of validation results for semantic tokens
    */
   validateSemanticTokens(options: ValidationOptions = {}): ValidationResult[] {
     const semanticTokens = this.semanticRegistry.query();
