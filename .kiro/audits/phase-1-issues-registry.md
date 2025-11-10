@@ -1934,7 +1934,11 @@ _Issues that affect multiple discovery areas_
 
 ---
 
-## Issue #014: ThreeTierValidator Async/Sync Return Type Mismatch
+## Issue #014: ThreeTierValidator Async/Sync Return Type Mismatch [RESOLVED]
+
+**Resolution Date**: November 9, 2025
+**Resolved By**: architecture-separation-of-concerns spec (Task 3.7)
+**Resolution Summary**: IValidator interface updated to sync-only (no Promise support). ThreeTierValidator updated to sync-only orchestration. TypeScript compilation errors resolved, tests can now run.
 
 **Discovered By**: Architecture Separation of Concerns Spec (Task 3.2)
 **Date Discovered**: November 9, 2025
@@ -2039,11 +2043,26 @@ For development and validation during architecture-separation-of-concerns spec:
 - **Token System**: Minor - Token generation works but can't be fully tested
 - **Documentation**: None - Does not affect documentation
 
-**Related Issues**:
-None - New issue discovered during architecture-separation-of-concerns spec
+**Resolution**:
+Task 3.7 investigated async validator requirements and determined:
+- No current validators require async operations
+- All validation is computational (no I/O)
+- Async support adds complexity without benefit
+- Updated IValidator interface to sync-only: `validate(input: TInput): ValidationResult | null`
+- Updated ThreeTierValidator to sync-only orchestration
+- TypeScript compilation errors resolved
 
-**Resolution Priority**:
-**Recommended**: Fix after completing architecture-separation-of-concerns spec
+**Verification**:
+- ✅ IValidator interface is sync-only (no Promise return type)
+- ✅ ThreeTierValidator compiles without errors (getDiagnostics clean)
+- ✅ Tests can run (no compilation blocking)
+- ✅ ValidationPipeline integration tests execute
+
+**Related Issues**:
+- **Issue #015**: Architecture Separation of Concerns Spec Testing Blocked - Also resolved by fixing this issue
+
+**Completion Documentation**:
+- `.kiro/specs/architecture-separation-of-concerns/completion/task-3-7-completion.md`
 
 **Rationale for Deferral**:
 1. **Scope Isolation**: Issue is in ThreeTierValidator, outside scope of current spec
@@ -2078,7 +2097,11 @@ After architecture-separation-of-concerns spec completes, because:
 
 ---
 
-## Issue #015: Architecture Separation of Concerns Spec Testing Blocked
+## Issue #015: Architecture Separation of Concerns Spec Testing Blocked [RESOLVED]
+
+**Resolution Date**: November 9, 2025
+**Resolved By**: architecture-separation-of-concerns spec (Task 3.7)
+**Resolution Summary**: Testing unblocked by resolving Issue #014. Tests can now run, enabling validation of architectural refactoring through automated testing.
 
 **Discovered By**: Architecture Separation of Concerns Spec (Task 3.2)
 **Date Discovered**: November 9, 2025
@@ -2174,37 +2197,25 @@ Validation approach for architecture-separation-of-concerns spec:
 - **Token System**: Minor - Token generation works but refactoring not fully validated
 - **Documentation**: None - Does not affect documentation
 
+**Resolution**:
+Issue #014 was resolved by Task 3.7, which unblocked testing:
+- IValidator interface updated to sync-only
+- TypeScript compilation errors resolved
+- Tests can now execute without compilation blocking
+- Architectural refactoring can be validated through automated testing
+
+**Verification**:
+- ✅ Tests compile successfully
+- ✅ ValidationPipeline integration tests execute
+- ✅ Can validate architectural refactoring through automated tests
+- ⚠️ Some tests have logic failures (separate from compilation blocking) - see Issue #023
+
 **Related Issues**:
-- **Issue #014**: ThreeTierValidator Async/Sync Return Type Mismatch (root cause)
+- **Issue #014**: ThreeTierValidator Async/Sync Return Type Mismatch - RESOLVED (root cause fix)
+- **Issue #023**: ValidationPipeline Integration Tests Return Empty Results - NEW (logic bug discovered after unblocking)
 
-**Resolution Priority**:
-**Recommended**: Fix Issue #014 after completing architecture-separation-of-concerns spec, then run full test suite to validate refactoring
-
-**Rationale**:
-This issue is a consequence of Issue #014. Fixing Issue #014 will automatically resolve this issue by enabling test execution. The architectural refactoring can proceed using static validation, with runtime validation deferred until Issue #014 is fixed.
-
-**Validation Strategy**:
-For architecture-separation-of-concerns spec completion:
-1. **Phase 1 (Current)**: Static validation during implementation
-   - Type checking via `getDiagnostics`
-   - Code review against requirements
-   - Integration point verification
-   
-2. **Phase 2 (After Issue #014 Fix)**: Runtime validation
-   - Run comprehensive test suite
-   - Verify all tests pass
-   - Confirm runtime behavior matches expectations
-   - Test edge cases and error handling
-   - Validate integration correctness
-
-**Success Criteria**:
-Spec is considered complete when:
-1. All tasks implemented with static validation ✓
-2. No type errors in modified files ✓
-3. Integration points verified ✓
-4. Tests created (ready to run) ✓
-5. Issue #014 fixed (enables runtime validation) ⏳
-6. All tests pass (confirms correctness) ⏳
+**Completion Documentation**:
+- `.kiro/specs/architecture-separation-of-concerns/completion/task-3-7-completion.md`
 
 ---
 
@@ -2356,11 +2367,145 @@ None - New issue discovered during architecture-separation-of-concerns spec
 
 ---
 
+## Issue #023: ValidationPipeline Integration Tests Return Empty Results [ACTIVE]
+
+**Discovered By**: Post-Task 3 completion testing (after resolving Issue #014)
+**Date Discovered**: November 9, 2025
+**Severity**: Important
+**Category**: Test Logic / Integration Bug
+**Affects**: ValidationPipeline integration tests, validation workflow verification
+
+**Location**:
+- **File(s)**: `src/__tests__/integration/ValidationPipeline.test.ts`, `src/workflows/ValidationPipeline.ts`
+- **System**: Validation Pipeline - Integration Testing
+- **Context**: Tests execute but return empty results when validating registered tokens
+
+**Description**:
+After resolving Issue #014 (TypeScript compilation errors), ValidationPipeline integration tests can now run. However, tests are failing with logic errors - specifically, `pipeline.validate()` returns empty results (0 validation results) when it should return validation results for registered tokens.
+
+The test workflow is:
+1. Register a token with `engine.registerPrimitiveToken(token)`
+2. Call `pipeline.validate()` to validate all registered tokens
+3. Expect validation results for the registered token
+4. **Actual**: Get 0 results back
+
+The issue appears to be in how tokens flow through the system:
+- `pipeline.validate()` calls `engine.getAllPrimitiveTokens()` to get tokens
+- This returns an empty array (no tokens)
+- Loop doesn't execute, results array stays empty
+- Tests fail with `expect(results.length).toBeGreaterThan(0)` receiving 0
+
+**Steps to Reproduce**:
+1. Run ValidationPipeline integration tests:
+   ```bash
+   npm test -- src/__tests__/integration/ValidationPipeline.test.ts
+   ```
+2. Observe test failures:
+   ```
+   ● ValidationPipeline Integration › Primitive Token Validation › should validate registered primitive tokens
+   
+   expect(received).toBeGreaterThan(expected)
+   Expected: > 0
+   Received:   0
+   ```
+3. Tests compile and execute (Issue #014 resolved)
+4. But logic fails - no tokens returned from engine
+
+**Expected Behavior**:
+1. Register token with `engine.registerPrimitiveToken(token)`
+2. Token is stored in engine's internal registry
+3. `engine.getAllPrimitiveTokens()` returns the registered token
+4. `pipeline.validate()` validates the token and returns results
+5. Test receives validation results and passes
+
+**Actual Behavior**:
+1. Register token with `engine.registerPrimitiveToken(token)`
+2. Token may or may not be stored (unclear)
+3. `engine.getAllPrimitiveTokens()` returns empty array
+4. `pipeline.validate()` has no tokens to validate
+5. Test receives 0 results and fails
+
+**Evidence**:
+```typescript
+// Test code (src/__tests__/integration/ValidationPipeline.test.ts)
+it('should validate registered primitive tokens', async () => {
+  const token: PrimitiveToken = {
+    name: 'space100',
+    category: TokenCategory.SPACING,
+    baseValue: 8,
+    // ... other properties
+  };
+
+  // Token is validated before registration by engine
+  engine.registerPrimitiveToken(token);
+
+  // Pipeline validates already-registered tokens
+  const results = await pipeline.validate();
+
+  expect(results.length).toBeGreaterThan(0); // FAILS: receives 0
+  expect(results.some(r => r.token === 'space100')).toBe(true);
+});
+```
+
+```typescript
+// ValidationPipeline code (src/workflows/ValidationPipeline.ts)
+private async validatePrimitiveTokens(
+  config: ValidationStageConfig
+): Promise<ValidationPipelineResult> {
+  const primitiveTokens = this.engine.getAllPrimitiveTokens(); // Returns []
+  const results: ValidationResult[] = [];
+
+  for (const token of primitiveTokens) { // Loop doesn't execute
+    const result = this.engine.validateToken(token);
+    results.push(result);
+  }
+
+  return this.createStageResult('Primitive Token Validation', results); // Empty results
+}
+```
+
+**Possible Root Causes**:
+1. **Engine not storing tokens**: `registerPrimitiveToken()` validates but doesn't actually store
+2. **Registry isolation**: Engine has separate registry instance from what tests expect
+3. **Validation failure preventing storage**: Token validation fails, preventing registration
+4. **Test setup issue**: Engine/pipeline not properly connected or initialized
+
+**Workaround**:
+None currently - tests fail. Manual verification of token registration logic needed.
+
+**Cross-Area Impact**:
+- **Infrastructure**: Minor - Tests fail but don't block development
+- **Architecture**: Important - Cannot validate architectural refactoring through automated tests
+- **Token System**: Minor - Token generation works, but validation workflow unverified
+- **Documentation**: None - Does not affect documentation
+
+**Related Issues**:
+- **Issue #014**: ThreeTierValidator Async/Sync Return Type Mismatch - RESOLVED (unblocked testing, revealing this issue)
+- **Issue #015**: Architecture Separation of Concerns Spec Testing Blocked - RESOLVED (testing unblocked, but logic bugs remain)
+
+**Resolution Priority**:
+**Recommended**: Investigate and fix to enable validation of architectural refactoring
+
+**Rationale**:
+- Tests can now run (Issue #014 resolved)
+- But logic bugs prevent validation of refactoring work
+- Need working tests to confirm validation-before-registration pattern works correctly
+- Should be fixed before considering architecture-separation-of-concerns spec complete
+
+**Investigation Steps**:
+1. Verify `engine.registerPrimitiveToken()` actually stores tokens
+2. Check if validation failures prevent storage
+3. Verify `engine.getAllPrimitiveTokens()` returns stored tokens
+4. Check registry instance isolation issues
+5. Review test setup and initialization
+
+---
+
 ## Updated Issue Counter
 
-**Next Issue ID**: #021
-**Resolved Issues**: 9 (Issues #001-#007 from Phase 1 Infrastructure Audit, Issues #012-#013 from Architecture Audit)
-**Active Issues**: 7 (Issues #014, #015, #016, #017, #018, #019, #020)
+**Next Issue ID**: #024
+**Resolved Issues**: 11 (Issues #001-#007 from Phase 1 Infrastructure Audit, Issues #012-#015 from Architecture Audit)
+**Active Issues**: 6 (Issues #016, #017, #018, #019, #020, #023)
 **Reclassified Issues**: 4 (Issues #008-#011 - Platform-appropriate design decisions)
 
 ---
@@ -2370,13 +2515,12 @@ None - New issue discovered during architecture-separation-of-concerns spec
 ### Important Issues
 _Issues that reduce efficiency, create technical debt, or violate established patterns_
 
-**Active Important Issues**: 4
-- **Issue #014**: ThreeTierValidator Async/Sync Return Type Mismatch
-- **Issue #015**: Architecture Separation of Concerns Spec Testing Blocked
+**Active Important Issues**: 3
 - **Issue #019**: TokenFileGenerator Tests Reference Outdated Web Output Format
 - **Issue #020**: Web Format Dual Support - Intentional Feature or Incomplete Migration?
+- **Issue #023**: ValidationPipeline Integration Tests Return Empty Results
 
-**Resolved Important Issues**: 6 (Issues #002, #003, #004, #005, #006, #012, #013)
+**Resolved Important Issues**: 8 (Issues #002, #003, #004, #005, #006, #012, #013, #014, #015)
 
 ### Minor Issues
 _Issues that are cosmetic, isolated, or have minimal impact_
