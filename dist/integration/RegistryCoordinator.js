@@ -22,38 +22,57 @@ class RegistryCoordinator {
     // ============================================================================
     /**
      * Register a primitive token with coordination
+     *
+     * Note: This method no longer returns ValidationResult. Validation should be
+     * performed by the caller before registration. Registration either succeeds
+     * (returns void) or throws an error.
      */
     registerPrimitive(token, options = {}) {
-        const result = this.primitiveRegistry.register(token, options);
-        this.recordRegistration(token.name, 'primitive', result);
-        return result;
+        this.primitiveRegistry.register(token, options);
+        // Record successful registration
+        const successResult = {
+            level: 'Pass',
+            token: token.name,
+            message: 'Token registered successfully',
+            rationale: 'Registration completed',
+            mathematicalReasoning: 'N/A',
+            suggestions: []
+        };
+        this.recordRegistration(token.name, 'primitive', successResult);
     }
     /**
      * Register multiple primitive tokens in batch
+     *
+     * Note: This method no longer returns ValidationResult[]. Validation should be
+     * performed by the caller before registration. Registration either succeeds
+     * (returns void) or throws an error for each token.
      */
     registerPrimitiveBatch(tokens, options = {}) {
-        const results = [];
         for (const token of tokens) {
-            const result = this.registerPrimitive(token, options);
-            results.push(result);
+            this.registerPrimitive(token, options);
         }
-        return results;
     }
     // ============================================================================
     // Semantic Token Registration
     // ============================================================================
     /**
      * Register a semantic token with coordination and dependency validation
+     *
+     * Note: This method no longer returns ValidationResult. Validation should be
+     * performed by the caller before registration. This method only checks for
+     * unresolved primitive references and either succeeds (returns void) or throws an error.
      */
     registerSemantic(token, options = {}) {
         // Validate all primitive references exist before registration
         const unresolvedRefs = this.validatePrimitiveReferences(token);
         if (unresolvedRefs.length > 0 && !options.skipValidation) {
-            const result = {
+            const errorMessage = `Unresolved primitive token references: ${unresolvedRefs.join(', ')}`;
+            // Record failed registration
+            const errorResult = {
                 level: 'Error',
                 token: token.name,
-                message: 'Unresolved primitive token references',
-                rationale: `Semantic token ${token.name} references non-existent primitive tokens: ${unresolvedRefs.join(', ')}`,
+                message: errorMessage,
+                rationale: `Semantic token ${token.name} references non-existent primitive tokens`,
                 mathematicalReasoning: 'Semantic tokens must reference valid primitive tokens to maintain mathematical consistency',
                 suggestions: [
                     'Register the referenced primitive tokens first',
@@ -61,23 +80,32 @@ class RegistryCoordinator {
                     'Use skipValidation option if primitive tokens will be registered later'
                 ]
             };
-            this.recordRegistration(token.name, 'semantic', result);
-            return result;
+            this.recordRegistration(token.name, 'semantic', errorResult);
+            throw new Error(errorMessage);
         }
-        const result = this.semanticRegistry.register(token, options);
-        this.recordRegistration(token.name, 'semantic', result);
-        return result;
+        this.semanticRegistry.register(token, options);
+        // Record successful registration
+        const successResult = {
+            level: 'Pass',
+            token: token.name,
+            message: 'Token registered successfully',
+            rationale: 'Registration completed',
+            mathematicalReasoning: 'N/A',
+            suggestions: []
+        };
+        this.recordRegistration(token.name, 'semantic', successResult);
     }
     /**
      * Register multiple semantic tokens in batch
+     *
+     * Note: This method no longer returns ValidationResult[]. Validation should be
+     * performed by the caller before registration. Registration either succeeds
+     * (returns void) or throws an error for each token.
      */
     registerSemanticBatch(tokens, options = {}) {
-        const results = [];
         for (const token of tokens) {
-            const result = this.registerSemantic(token, options);
-            results.push(result);
+            this.registerSemantic(token, options);
         }
-        return results;
     }
     // ============================================================================
     // Dependency Management

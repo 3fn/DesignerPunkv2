@@ -14,10 +14,12 @@
 **Issues Discovered**: 13 items initially identified (#008-#020)
 **Issues Affecting This Area**: 9 actual issues (4 reclassified as intentional design)
 - Critical: 0 (Issue #010 reclassified as intentional design)
-- Important: 5 (Issues #008, #009, #011 reclassified as intentional design)
+- Important: 5 (Issues #008, #009, #011 reclassified as intentional design) - **3 RESOLVED** (#012, #013, #014)
 - Minor: 3
 - Not Issues: 1 (documented for clarity)
 - Reclassified: 4 (platform-appropriate design decisions)
+- **Resolved**: 3 issues (#012, #013, #014) via architecture-separation-of-concerns spec
+- **Partial Progress**: Issues #016, #017 (interfaces created but full integration pending)
 
 The architecture audit revealed significant inconsistencies across platform implementations and violations of separation of concerns principles. While the system demonstrates strong use of the generator pattern and consistent base class inheritance, there are critical gaps in interface definitions and systematic mixing of validation logic into non-validation components.
 
@@ -89,27 +91,30 @@ The architecture audit revealed significant inconsistencies across platform impl
 
 ### Separation of Concerns
 
-**Critical Violations**:
+**Status**: ✅ **RESOLVED** (November 9, 2025)
+**Resolved By**: architecture-separation-of-concerns spec
+
+**Critical Violations** (All Resolved):
 
 Three components were found performing validation logic that should be delegated to validators:
 
-1. **TokenFileGenerator** (Issue #012):
-   - Contains `validateSemanticReferences()` method checking primitive token references
-   - Duplicates validation logic from SemanticTokenValidator
-   - Uses validation results to control generation (skip semantic generation if validation fails)
+1. **TokenFileGenerator** (Issue #012) - ✅ **RESOLVED**:
+   - **Original Issue**: Contains `validateSemanticReferences()` method checking primitive token references
    - **Impact**: Duplicate validation logic, potential for inconsistency, mixed responsibilities
+   - **Resolution**: Validation logic removed from TokenFileGenerator. Callers now validate before generation using SemanticTokenValidator and PrimitiveReferenceValidator. Generator focuses solely on platform-specific file generation.
+   - **Resolution Details**: See `.kiro/specs/architecture-separation-of-concerns/completion/task-2-parent-completion.md`
 
-2. **PrimitiveTokenRegistry** (Issue #013):
-   - Instantiates BaselineGridValidator in constructor
-   - Performs validation during token registration
-   - Has `validateToken()` and `validateAll()` methods
+2. **PrimitiveTokenRegistry** (Issue #013) - ✅ **RESOLVED**:
+   - **Original Issue**: Instantiates BaselineGridValidator in constructor, performs validation during token registration, has `validateToken()` and `validateAll()` methods
    - **Impact**: Registry couples storage with validation, tight coupling to validator implementation
+   - **Resolution**: Validation logic removed from PrimitiveTokenRegistry. Registry now focuses solely on storage operations (register, query, get, has). Callers validate tokens before registration using appropriate validators.
+   - **Resolution Details**: See `.kiro/specs/architecture-separation-of-concerns/completion/task-3-parent-completion.md`
 
-3. **SemanticTokenRegistry** (Issue #014):
-   - Performs primitive reference validation during registration
-   - Checks if primitive tokens exist using primitive registry
-   - Has `validateToken()` and `validateAll()` methods
+3. **SemanticTokenRegistry** (Issue #014) - ✅ **RESOLVED**:
+   - **Original Issue**: Performs primitive reference validation during registration, checks if primitive tokens exist using primitive registry, has `validateToken()` and `validateAll()` methods
    - **Impact**: Registry couples storage with validation, duplicate validation logic
+   - **Resolution**: Validation logic removed from SemanticTokenRegistry. Registry now focuses solely on storage operations (register, query, get, has). Callers validate tokens before registration using appropriate validators.
+   - **Resolution Details**: See `.kiro/specs/architecture-separation-of-concerns/completion/task-3-parent-completion.md`
 
 **Correct Pattern Documented**:
 
@@ -118,6 +123,15 @@ Three components were found performing validation logic that should be delegated
 - Delegates validation to specialized validators
 - Composes results without duplicating validation logic
 - **Example**: Demonstrates proper separation - orchestrator coordinates, validators validate
+
+**Resolution Cross-References**:
+- **Spec**: `.kiro/specs/architecture-separation-of-concerns/`
+- **Requirements**: `.kiro/specs/architecture-separation-of-concerns/requirements.md`
+- **Design**: `.kiro/specs/architecture-separation-of-concerns/design.md`
+- **Tasks**: `.kiro/specs/architecture-separation-of-concerns/tasks.md`
+- **Task 2 Completion** (TokenFileGenerator): `.kiro/specs/architecture-separation-of-concerns/completion/task-2-parent-completion.md`
+- **Task 3 Completion** (Registries): `.kiro/specs/architecture-separation-of-concerns/completion/task-3-parent-completion.md`
+- **Task 3.7 Completion** (Async Validator Investigation): `.kiro/specs/architecture-separation-of-concerns/completion/task-3-7-completion.md`
 
 **Pattern Analysis**:
 
@@ -155,12 +169,14 @@ This creates:
    - PassValidator, WarningValidator, ErrorValidator are independent classes
    - ThreeTierValidator orchestrates validators without common interface
    - **Impact**: Cannot add new validators without modifying ThreeTierValidator, no contract enforcement
+   - **Note**: IValidator interface created by architecture-separation-of-concerns spec (Task 1), but issue remains ACTIVE pending full integration
 
 2. **Registry System Lacks Common Interface** (Issue #017):
    - No IRegistry or ITokenRegistry interface
    - PrimitiveTokenRegistry and SemanticTokenRegistry have different method signatures
    - Cannot work with registries polymorphically
    - **Impact**: Cannot abstract over registry type, difficult to add new registry types
+   - **Note**: IRegistry interface created by architecture-separation-of-concerns spec (Task 1), but issue remains ACTIVE pending full integration
 
 **Enforcement Analysis**:
 
@@ -223,25 +239,30 @@ Issues discovered during this audit (see Issues Registry for full details):
   - Different prefixes (Swift/Kotlin/CSS) for equivalent methods
   - Makes cross-platform understanding difficult
 
-- **Issue #012**: TokenFileGenerator Performs Validation Logic
+- **Issue #012**: TokenFileGenerator Performs Validation Logic - ✅ **RESOLVED**
   - Generator validates during generation
   - Duplicates validation logic from validators
+  - **Resolution**: Validation logic removed, callers validate before generation
 
-- **Issue #013**: PrimitiveTokenRegistry Performs Validation
+- **Issue #013**: PrimitiveTokenRegistry Performs Validation - ✅ **RESOLVED**
   - Registry validates during registration
   - Couples storage with validation
+  - **Resolution**: Validation logic removed, callers validate before registration
 
-- **Issue #014**: SemanticTokenRegistry Performs Validation
+- **Issue #014**: SemanticTokenRegistry Performs Validation - ✅ **RESOLVED**
   - Registry validates during registration
   - Duplicates validation logic
+  - **Resolution**: Validation logic removed, callers validate before registration
 
 - **Issue #016**: Validator System Lacks Common Interface
   - No IValidator interface for validation system
   - Prevents polymorphic validator usage
+  - **Note**: IValidator interface created by architecture-separation-of-concerns spec (Task 1)
 
 - **Issue #017**: Registry System Lacks Common Interface
   - No IRegistry interface for registry system
   - Prevents polymorphic registry usage
+  - **Note**: IRegistry interface created by architecture-separation-of-concerns spec (Task 1)
 
 ### Minor Issues
 

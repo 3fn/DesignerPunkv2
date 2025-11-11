@@ -48,10 +48,20 @@ export declare class ValidationPipeline {
     validate(config?: ValidationStageConfig): Promise<ValidationResult[]>;
     /**
      * Validate primitive tokens
+     *
+     * Validates all registered primitive tokens. This method validates tokens
+     * that are already in the registry. For validation before registration,
+     * use the engine's registerPrimitiveToken() method which validates before
+     * allowing registration.
      */
     private validatePrimitiveTokens;
     /**
      * Validate semantic tokens
+     *
+     * Validates all registered semantic tokens. This method validates tokens
+     * that are already in the registry. For validation before registration,
+     * use the engine's registerSemanticToken() method which validates before
+     * allowing registration.
      */
     private validateSemanticTokens;
     /**

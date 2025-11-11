@@ -4835,3 +4835,11 @@ Error processing trigger file .kiro/release-triggers/1761868170-spec-completion.
 [2025-11-09 16:09:40] Event: taskStatusChange, Status: completed
 [2025-11-09 16:09:40] Release manager hook started: hook_type=auto, source_path=
 [2025-11-09 16:09:40] Release manager hook completed
+[2025-11-09 17:24:57] Hook triggered by Kiro IDE agent hook system
+[2025-11-09 17:24:57] Event: taskStatusChange, Status: completed
+[2025-11-09 17:24:57] Release manager hook started: hook_type=auto, source_path=
+[2025-11-09 17:24:57] Release manager hook completed
+[2025-11-10 23:51:49] Hook triggered by Kiro IDE agent hook system
+[2025-11-10 23:51:49] Event: taskStatusChange, Status: completed
+[2025-11-10 23:51:49] Release manager hook started: hook_type=auto, source_path=
+[2025-11-10 23:51:49] Release manager hook completed

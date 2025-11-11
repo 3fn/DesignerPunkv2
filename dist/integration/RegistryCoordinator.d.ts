@@ -7,7 +7,7 @@
  */
 import { PrimitiveTokenRegistry, TokenRegistrationOptions } from '../registries/PrimitiveTokenRegistry';
 import { SemanticTokenRegistry, SemanticTokenRegistrationOptions } from '../registries/SemanticTokenRegistry';
-import type { PrimitiveToken, SemanticToken, ValidationResult } from '../types';
+import type { PrimitiveToken, SemanticToken } from '../types';
 /**
  * Registry coordination statistics
  */
@@ -28,20 +28,36 @@ export declare class RegistryCoordinator {
     constructor(primitiveRegistry: PrimitiveTokenRegistry, semanticRegistry: SemanticTokenRegistry);
     /**
      * Register a primitive token with coordination
+     *
+     * Note: This method no longer returns ValidationResult. Validation should be
+     * performed by the caller before registration. Registration either succeeds
+     * (returns void) or throws an error.
      */
-    registerPrimitive(token: PrimitiveToken, options?: TokenRegistrationOptions): ValidationResult;
+    registerPrimitive(token: PrimitiveToken, options?: TokenRegistrationOptions): void;
     /**
      * Register multiple primitive tokens in batch
+     *
+     * Note: This method no longer returns ValidationResult[]. Validation should be
+     * performed by the caller before registration. Registration either succeeds
+     * (returns void) or throws an error for each token.
      */
-    registerPrimitiveBatch(tokens: PrimitiveToken[], options?: TokenRegistrationOptions): ValidationResult[];
+    registerPrimitiveBatch(tokens: PrimitiveToken[], options?: TokenRegistrationOptions): void;
     /**
      * Register a semantic token with coordination and dependency validation
+     *
+     * Note: This method no longer returns ValidationResult. Validation should be
+     * performed by the caller before registration. This method only checks for
+     * unresolved primitive references and either succeeds (returns void) or throws an error.
      */
-    registerSemantic(token: SemanticToken, options?: SemanticTokenRegistrationOptions): ValidationResult;
+    registerSemantic(token: SemanticToken, options?: SemanticTokenRegistrationOptions): void;
     /**
      * Register multiple semantic tokens in batch
+     *
+     * Note: This method no longer returns ValidationResult[]. Validation should be
+     * performed by the caller before registration. Registration either succeeds
+     * (returns void) or throws an error for each token.
      */
-    registerSemanticBatch(tokens: SemanticToken[], options?: SemanticTokenRegistrationOptions): ValidationResult[];
+    registerSemanticBatch(tokens: SemanticToken[], options?: SemanticTokenRegistrationOptions): void;
     /**
      * Validate that all primitive references in a semantic token exist
      */

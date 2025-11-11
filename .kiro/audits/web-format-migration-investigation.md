@@ -306,26 +306,45 @@ importPatterns: [
    - Was dual format support intentional?
    - Should JavaScript format be maintained or removed?
 
-### Post-Investigation Actions
+### Resolution Actions (Based on Investigation Findings)
 
-**If Dual Format is Intentional**:
-- Create spec to document format strategy
-- Update tests to reflect both formats as valid
-- Add documentation explaining format selection
-- Consider making format selection explicit in configuration
+**Confirmed Scenario**: Incomplete Migration / Misunderstood Requirements
 
-**If Migration is Incomplete**:
-- Create spec to complete migration
-- Remove JavaScript format support from WebFileOrganizer
-- Update all tests to CSS format only
-- Update documentation to reflect CSS-only approach
-- Clean up build system configuration
+**Root Cause**: WebFormatGenerator was implemented with dual format support based on a misunderstanding. The requirement was always CSS-only, but the implementation included JavaScript format support unnecessarily.
 
-**If Dead Code**:
-- Create spec to remove dead code
-- Remove JavaScript format case from WebFileOrganizer
-- Remove or update tests for JavaScript format
-- Update documentation and comments
+**Resolution Approach**: Remove JavaScript format support and update all related code
+
+**Spec to Create**: `web-format-cleanup`
+
+**Scope**:
+1. **Remove JavaScript Format Support**:
+   - Remove `'javascript'` from `WebFormatGenerator.formats` array
+   - Remove constructor parameter (always CSS)
+   - Remove all JavaScript format conditional logic
+   - Remove `formatJavaScriptConstant()` method
+   - Remove JavaScript-specific helper methods
+
+2. **Update WebFileOrganizer**:
+   - Remove `'javascript'` case from `getFileName()`
+   - Update `getBuildSystemIntegration()` to remove JavaScript import patterns
+   - Keep only CSS-related configuration
+
+3. **Update Tests**:
+   - Update TokenFileGenerator tests to expect CSS format (Issue #019)
+   - Update BuildSystemIntegration tests to remove JavaScript expectations
+   - Update BuildSystemCompatibility tests to remove JavaScript expectations
+   - Update PathProviders tests to remove JavaScript expectations
+   - Keep tests that validate CSS format functionality
+
+4. **Update Documentation**:
+   - Update comments in `generateTokenFiles.ts`
+   - Update any documentation referencing JavaScript format
+   - Ensure all docs consistently reference CSS custom properties
+
+5. **Validate**:
+   - Run all tests to ensure CSS format works correctly
+   - Verify no production code paths broken
+   - Confirm build system integration still works
 
 ### Phase 1 Audit Gap
 
@@ -384,15 +403,20 @@ importPatterns: [
 
 ## Investigation Status
 
-**Current Status**: Evidence Gathered, Root Cause Analysis Pending
+**Current Status**: Investigation Complete - Root Cause Identified
+
+**Resolution**: Scenario B Confirmed - Incomplete Migration / Misunderstood Requirements
 
 **Blocking Questions**:
-1. Was dual format support intentional? (Unknown)
-2. Is JavaScript format used in production? (Unknown)
+1. Was dual format support intentional? **ANSWERED: No** - Misunderstanding in requirements
+2. Is JavaScript format used in production? **ANSWERED: No** - Production hardcoded to CSS
 
-**Next Action**: Complete git history review and design document review
+**Stakeholder Consultation** (November 9, 2025):
+- **Question**: Was dual format support intentional or incomplete migration?
+- **Answer** (Peter Michaels Allen): "If I had to guess... There was perhaps a misunderstanding in the requirements of creating WebFormatGenerator that it needed support both JavaScript and CSS. I've always given the direction that we were delivering CSS."
+- **Conclusion**: JavaScript format support was implemented based on misunderstood requirements. CSS was always the intended format.
 
-**Timeline**: Investigation should be completed before creating resolution spec
+**Next Action**: Create resolution spec to remove JavaScript format support and update tests
 
 ---
 
@@ -421,6 +445,59 @@ importPatterns: [
 
 ---
 
+## Investigation Summary
+
+**Date Completed**: November 9, 2025
+**Investigation Duration**: ~2 hours
+**Outcome**: Root cause identified, resolution path clear
+
+### Key Findings
+
+1. **Production Code**: Hardcoded to CSS format only (`new WebFormatGenerator('css')`)
+2. **Implementation**: Full dual format support exists but JavaScript format never used
+3. **Design Specs**: Only mention CSS format, no JavaScript format documented
+4. **Root Cause**: Misunderstood requirements during implementation
+5. **Stakeholder Intent**: Always intended CSS-only, JavaScript support unnecessary
+
+### Impact Assessment
+
+**Code Impact**:
+- ~200 lines of unnecessary JavaScript format code in WebFormatGenerator
+- ~50 lines of unnecessary format switching in WebFileOrganizer
+- ~100+ lines of test code validating unused JavaScript format
+
+**Risk Assessment**:
+- **Low Risk**: JavaScript format never used in production
+- **No Breaking Changes**: Removing unused code won't affect production
+- **Test Updates Required**: Multiple test suites need updates
+
+**Maintenance Burden**:
+- Maintaining dual format support adds complexity
+- Tests validate functionality that's never used
+- Documentation inconsistency creates confusion
+
+### Recommendation
+
+**Priority**: Important (not critical - no production impact, but technical debt)
+
+**Action**: Create `web-format-cleanup` spec to remove JavaScript format support
+
+**Benefits**:
+- Reduces code complexity
+- Eliminates technical debt
+- Aligns implementation with design intent
+- Improves test accuracy
+- Reduces maintenance burden
+
+**Estimated Effort**: Low-Medium
+- Code removal is straightforward
+- Test updates are mechanical
+- No architectural changes required
+- Clear success criteria (all tests pass with CSS only)
+
+---
+
 **Organization**: audit-findings
 **Scope**: cross-project
 **Type**: investigation-report
+**Status**: Complete

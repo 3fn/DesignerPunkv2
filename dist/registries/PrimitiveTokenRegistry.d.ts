@@ -1,6 +1,5 @@
 import type { PrimitiveToken } from '../types/PrimitiveToken';
 import { TokenCategory } from '../types/PrimitiveToken';
-import type { ValidationResult } from '../types/ValidationResult';
 import type { IRegistry, RegistrationOptions } from './IRegistry';
 /**
  * Primitive Token Registry
@@ -24,14 +23,12 @@ export declare class PrimitiveTokenRegistry implements IRegistry<PrimitiveToken>
      */
     readonly name = "PrimitiveTokenRegistry";
     private tokens;
-    private validator;
     private categoryIndex;
     constructor();
     /**
-     * Register a primitive token with validation
+     * Register a primitive token
      *
      * Implements IRegistry.register() interface.
-     * Note: Validation methods (validateToken, validateAll) will be removed in Phase 3.
      * Callers should validate tokens before registration using appropriate validators.
      */
     register(token: PrimitiveToken, options?: TokenRegistrationOptions): void;
@@ -52,14 +49,6 @@ export declare class PrimitiveTokenRegistry implements IRegistry<PrimitiveToken>
      */
     getByCategory(category: TokenCategory): PrimitiveToken[];
     /**
-     * Validate a token against baseline grid requirements
-     */
-    validateToken(token: PrimitiveToken): ValidationResult;
-    /**
-     * Validate all registered tokens
-     */
-    validateAll(): ValidationResult[];
-    /**
      * Get registry statistics
      */
     getStats(): {
@@ -68,11 +57,6 @@ export declare class PrimitiveTokenRegistry implements IRegistry<PrimitiveToken>
         strategicFlexibilityPercentage: number;
         categoryStats: {
             [k: string]: number;
-        };
-        validationInfo: {
-            gridUnit: number;
-            allowStrategicFlexibility: boolean;
-            strategicFlexibilityValues: number[];
         };
     };
     /**

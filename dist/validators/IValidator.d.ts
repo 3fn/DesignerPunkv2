@@ -152,21 +152,24 @@ export interface ValidationResult {
  *   }
  * }
  *
- * // Async validator example
- * class AsyncValidator implements IValidator<TokenReference> {
- *   readonly name = 'AsyncValidator';
+ * // Validator that returns null when no issues found
+ * class WarningValidator implements IValidator<WarningContext> {
+ *   readonly name = 'WarningValidator';
  *
- *   async validate(input: TokenReference): Promise<ValidationResult> {
- *     // Async validation logic (e.g., registry lookup)
- *     const exists = await this.checkTokenExists(input.name);
+ *   validate(input: WarningContext): ValidationResult | null {
+ *     // Check for warnings
+ *     if (this.hasWarning(input)) {
+ *       return {
+ *         level: 'Warning',
+ *         token: input.token.name,
+ *         message: 'Usage could be improved',
+ *         rationale: 'Consider semantic alternatives',
+ *         mathematicalReasoning: 'Primitive token usage detected'
+ *       };
+ *     }
  *
- *     return {
- *       level: exists ? 'Pass' : 'Error',
- *       token: input.name,
- *       message: exists ? 'Token reference valid' : 'Token not found',
- *       rationale: exists ? 'Referenced token exists in registry' : 'Token reference is invalid',
- *       mathematicalReasoning: 'Token reference validation'
- *     };
+ *     // No warnings found
+ *     return null;
  *   }
  * }
  * ```
@@ -193,9 +196,9 @@ export interface IValidator<TInput = any> {
      * validation result indicating the outcome, rationale, and any suggestions
      * for improvement.
      *
-     * This method supports both synchronous and asynchronous validation through
-     * the return type union, allowing validators to perform complex operations
-     * like registry lookups or cross-platform consistency checks.
+     * All validators in the design system are synchronous, performing computational
+     * validation (mathematical checks, pattern matching, reference validation) without
+     * I/O operations. This ensures fast, predictable validation performance.
      *
      * Some validators (like WarningValidator and ErrorValidator) may return null
      * when no issues are found, indicating that validation passed without warnings
@@ -205,11 +208,10 @@ export interface IValidator<TInput = any> {
      * @returns Validation result with status, messages, and mathematical reasoning, or null if no issues found
      *
      * @remarks
-     * - Synchronous validators return ValidationResult directly or null
-     * - Asynchronous validators return Promise<ValidationResult | null>
-     * - Both patterns are supported through the union return type
-     * - Validators should provide clear, actionable feedback in all cases
+     * - All validators return ValidationResult synchronously or null
+     * - Validators perform computational validation only (no I/O)
      * - Null return indicates no validation issues (equivalent to Pass)
+     * - Validators should provide clear, actionable feedback in all cases
      *
      * @example
      * ```typescript
@@ -251,68 +253,8 @@ export interface IValidator<TInput = any> {
      *   // No warnings found
      *   return null;
      * }
-     *
-     * // Asynchronous validation
-     * async validate(reference: TokenReference): Promise<ValidationResult> {
-     *   const token = await this.registry.get(reference.name);
-     *
-     *   if (token) {
-     *     return {
-     *       level: 'Pass',
-     *       token: reference.name,
-     *       message: 'Token reference validated',
-     *       rationale: 'Referenced token exists and is valid',
-     *       mathematicalReasoning: 'Token reference integrity confirmed'
-     *     };
-     *   }
-     *
-     *   return {
-     *     level: 'Error',
-     *     token: reference.name,
-     *     message: 'Invalid token reference',
-     *     rationale: 'Referenced token does not exist',
-     *     mathematicalReasoning: 'Token reference validation failed',
-     *     suggestions: ['Check token name spelling', 'Verify token is registered']
-     *   };
-     * }
      * ```
      */
-    validate(input: TInput): ValidationResult | null | Promise<ValidationResult | null>;
+    validate(input: TInput): ValidationResult | null;
 }
-/**
- * Type guard to check if a validation result is a Promise
- *
- * Utility function for handling both synchronous and asynchronous validation results.
- *
- * @param result - Validation result or promise
- * @returns True if result is a Promise, false otherwise
- *
- * @example
- * ```typescript
- * const result = validator.validate(input);
- *
- * if (isPromiseValidationResult(result)) {
- *   result.then(r => console.log(r.level));
- * } else {
- *   console.log(result.level);
- * }
- * ```
- */
-export declare function isPromiseValidationResult(result: ValidationResult | Promise<ValidationResult>): result is Promise<ValidationResult>;
-/**
- * Helper function to await validation result regardless of sync/async
- *
- * Normalizes synchronous and asynchronous validation results into a Promise,
- * simplifying handling of mixed validator types.
- *
- * @param result - Validation result or promise
- * @returns Promise resolving to validation result
- *
- * @example
- * ```typescript
- * const result = await awaitValidationResult(validator.validate(input));
- * console.log(result.level);
- * ```
- */
-export declare function awaitValidationResult(result: ValidationResult | Promise<ValidationResult>): Promise<ValidationResult>;
 //# sourceMappingURL=IValidator.d.ts.map

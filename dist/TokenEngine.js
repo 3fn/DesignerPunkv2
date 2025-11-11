@@ -79,16 +79,50 @@ class TokenEngine {
             }
             // Proceed with registration (validation passed or warning)
             // Skip validation in registry since we already validated
-            return this.registryCoordinator.registerPrimitive(token, {
+            try {
+                this.registryCoordinator.registerPrimitive(token, {
+                    skipValidation: true,
+                    allowOverwrite: false
+                });
+                return validationResult;
+            }
+            catch (error) {
+                // Handle registration errors (e.g., duplicate token)
+                return {
+                    level: 'Error',
+                    token: token.name,
+                    message: error instanceof Error ? error.message : 'Registration failed',
+                    rationale: 'Token registration failed after successful validation',
+                    mathematicalReasoning: 'N/A',
+                    suggestions: ['Check for duplicate token names', 'Use allowOverwrite option if intentional']
+                };
+            }
+        }
+        // If autoValidate is disabled, register without validation
+        try {
+            this.registryCoordinator.registerPrimitive(token, {
                 skipValidation: true,
                 allowOverwrite: false
             });
+            return {
+                level: 'Pass',
+                token: token.name,
+                message: 'Token registered successfully without validation',
+                rationale: 'Auto-validation is disabled',
+                mathematicalReasoning: 'N/A',
+                suggestions: []
+            };
         }
-        // If autoValidate is disabled, register without validation
-        return this.registryCoordinator.registerPrimitive(token, {
-            skipValidation: true,
-            allowOverwrite: false
-        });
+        catch (error) {
+            return {
+                level: 'Error',
+                token: token.name,
+                message: error instanceof Error ? error.message : 'Registration failed',
+                rationale: 'Token registration failed',
+                mathematicalReasoning: 'N/A',
+                suggestions: ['Check for duplicate token names', 'Use allowOverwrite option if intentional']
+            };
+        }
     }
     /**
      * Register multiple primitive tokens in batch
@@ -120,16 +154,50 @@ class TokenEngine {
             }
             // Proceed with registration (validation passed or warning)
             // Skip validation in registry since we already validated
-            return this.registryCoordinator.registerSemantic(token, {
+            try {
+                this.registryCoordinator.registerSemantic(token, {
+                    skipValidation: true,
+                    allowOverwrite: false
+                });
+                return validationResult;
+            }
+            catch (error) {
+                // Handle registration errors (e.g., duplicate token, unresolved references)
+                return {
+                    level: 'Error',
+                    token: token.name,
+                    message: error instanceof Error ? error.message : 'Registration failed',
+                    rationale: 'Token registration failed after successful validation',
+                    mathematicalReasoning: 'N/A',
+                    suggestions: ['Check for duplicate token names', 'Ensure all primitive references exist', 'Use allowOverwrite option if intentional']
+                };
+            }
+        }
+        // If autoValidate is disabled, register without validation
+        try {
+            this.registryCoordinator.registerSemantic(token, {
                 skipValidation: true,
                 allowOverwrite: false
             });
+            return {
+                level: 'Pass',
+                token: token.name,
+                message: 'Token registered successfully without validation',
+                rationale: 'Auto-validation is disabled',
+                mathematicalReasoning: 'N/A',
+                suggestions: []
+            };
         }
-        // If autoValidate is disabled, register without validation
-        return this.registryCoordinator.registerSemantic(token, {
-            skipValidation: true,
-            allowOverwrite: false
-        });
+        catch (error) {
+            return {
+                level: 'Error',
+                token: token.name,
+                message: error instanceof Error ? error.message : 'Registration failed',
+                rationale: 'Token registration failed',
+                mathematicalReasoning: 'N/A',
+                suggestions: ['Check for duplicate token names', 'Ensure all primitive references exist', 'Use allowOverwrite option if intentional']
+            };
+        }
     }
     /**
      * Register multiple semantic tokens in batch

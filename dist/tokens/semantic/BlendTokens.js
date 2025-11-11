@@ -35,7 +35,9 @@ const BlendTokens_1 = require("../BlendTokens");
 exports.blendTokens = {
     'blend.hoverDarker': {
         name: 'blend.hoverDarker',
-        primitiveReference: 'blend200',
+        primitiveReferences: {
+            value: 'blend200'
+        },
         direction: BlendTokens_1.BlendDirection.DARKER,
         category: 'interaction',
         context: 'Standard hover feedback - darker color for light backgrounds',
@@ -43,7 +45,9 @@ exports.blendTokens = {
     },
     'blend.hoverLighter': {
         name: 'blend.hoverLighter',
-        primitiveReference: 'blend200',
+        primitiveReferences: {
+            value: 'blend200'
+        },
         direction: BlendTokens_1.BlendDirection.LIGHTER,
         category: 'interaction',
         context: 'Hover feedback on dark backgrounds - lighter color for dark surfaces',
@@ -51,7 +55,9 @@ exports.blendTokens = {
     },
     'blend.pressedDarker': {
         name: 'blend.pressedDarker',
-        primitiveReference: 'blend300',
+        primitiveReferences: {
+            value: 'blend300'
+        },
         direction: BlendTokens_1.BlendDirection.DARKER,
         category: 'interaction',
         context: 'Pressed state feedback - clear darkening for active press',
@@ -59,7 +65,9 @@ exports.blendTokens = {
     },
     'blend.focusSaturate': {
         name: 'blend.focusSaturate',
-        primitiveReference: 'blend200',
+        primitiveReferences: {
+            value: 'blend200'
+        },
         direction: BlendTokens_1.BlendDirection.SATURATE,
         category: 'interaction',
         context: 'Focus state feedback - more vibrant, attention-drawing color',
@@ -67,7 +75,9 @@ exports.blendTokens = {
     },
     'blend.disabledDesaturate': {
         name: 'blend.disabledDesaturate',
-        primitiveReference: 'blend300',
+        primitiveReferences: {
+            value: 'blend300'
+        },
         direction: BlendTokens_1.BlendDirection.DESATURATE,
         category: 'interaction',
         context: 'Disabled state appearance - muted, inactive color',
@@ -75,7 +85,9 @@ exports.blendTokens = {
     },
     'blend.containerHoverDarker': {
         name: 'blend.containerHoverDarker',
-        primitiveReference: 'blend100',
+        primitiveReferences: {
+            value: 'blend100'
+        },
         direction: BlendTokens_1.BlendDirection.DARKER,
         category: 'interaction',
         context: 'Subtle container hover - gentle surface feedback for large areas',

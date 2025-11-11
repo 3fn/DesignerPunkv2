@@ -30,7 +30,9 @@ export interface SemanticBlendToken {
     /** Semantic token name with contextual meaning */
     name: string;
     /** Reference to primitive blend token (e.g., 'blend200') */
-    primitiveReference: string;
+    primitiveReferences: {
+        value: string;
+    };
     /** Blend direction for color modification */
     direction: BlendDirection;
     /** Semantic category (always 'interaction' for blend tokens) */

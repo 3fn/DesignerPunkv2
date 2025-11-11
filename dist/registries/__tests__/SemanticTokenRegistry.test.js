@@ -100,7 +100,7 @@ const PrimitiveToken_1 = require("../../types/PrimitiveToken");
             (0, globals_1.expect)(() => semanticRegistry.register(semanticToken)).not.toThrow();
             (0, globals_1.expect)(semanticRegistry.has('space.grouped.normal')).toBe(true);
         });
-        (0, globals_1.it)('should reject semantic token with invalid primitive reference', () => {
+        (0, globals_1.it)('should register semantic token even with invalid primitive reference (validation moved to validators)', () => {
             const semanticToken = {
                 name: 'space.invalid',
                 category: SemanticToken_1.SemanticCategory.SPACING,
@@ -108,7 +108,8 @@ const PrimitiveToken_1 = require("../../types/PrimitiveToken");
                 description: 'Invalid spacing',
                 context: 'Test invalid reference'
             };
-            (0, globals_1.expect)(() => semanticRegistry.register(semanticToken)).toThrow('Validation failed');
+            (0, globals_1.expect)(() => semanticRegistry.register(semanticToken)).not.toThrow();
+            (0, globals_1.expect)(semanticRegistry.has('space.invalid')).toBe(true);
         });
         (0, globals_1.it)('should reject duplicate semantic token registration', () => {
             const semanticToken = {
@@ -208,8 +209,8 @@ const PrimitiveToken_1 = require("../../types/PrimitiveToken");
             (0, globals_1.expect)(colorTokens[0].name).toBe('color.primary');
         });
     });
-    (0, globals_1.describe)('Token Validation', () => {
-        (0, globals_1.it)('should validate semantic token with valid primitive reference', () => {
+    (0, globals_1.describe)('Storage-Only Behavior', () => {
+        (0, globals_1.it)('should store semantic tokens without validation (validation moved to validators)', () => {
             const semanticToken = {
                 name: 'space.test',
                 category: SemanticToken_1.SemanticCategory.SPACING,
@@ -217,11 +218,10 @@ const PrimitiveToken_1 = require("../../types/PrimitiveToken");
                 description: 'Test spacing',
                 context: 'Test'
             };
-            const result = semanticRegistry.validateToken(semanticToken);
-            (0, globals_1.expect)(result.level).toBe('Pass');
-            (0, globals_1.expect)(result.message).toContain('valid primitive token');
+            (0, globals_1.expect)(() => semanticRegistry.register(semanticToken)).not.toThrow();
+            (0, globals_1.expect)(semanticRegistry.has('space.test')).toBe(true);
         });
-        (0, globals_1.it)('should validate semantic token with multiple primitive references', () => {
+        (0, globals_1.it)('should store semantic tokens with multiple primitive references', () => {
             const semanticToken = {
                 name: 'space.multi',
                 category: SemanticToken_1.SemanticCategory.SPACING,
@@ -232,24 +232,21 @@ const PrimitiveToken_1 = require("../../types/PrimitiveToken");
                 description: 'Multi-reference spacing',
                 context: 'Test multiple references'
             };
-            const result = semanticRegistry.validateToken(semanticToken);
-            (0, globals_1.expect)(result.level).toBe('Pass');
-            (0, globals_1.expect)(result.message).toContain('2 valid primitive token');
+            (0, globals_1.expect)(() => semanticRegistry.register(semanticToken)).not.toThrow();
+            (0, globals_1.expect)(semanticRegistry.has('space.multi')).toBe(true);
         });
-        (0, globals_1.it)('should attach resolved primitive tokens after validation', () => {
+        (0, globals_1.it)('should store tokens even with invalid primitive references (validation moved to validators)', () => {
             const semanticToken = {
-                name: 'space.resolved',
+                name: 'space.invalid',
                 category: SemanticToken_1.SemanticCategory.SPACING,
-                primitiveReferences: { default: 'space100' },
-                description: 'Resolved test',
-                context: 'Test resolution'
+                primitiveReferences: { default: 'non-existent' },
+                description: 'Invalid reference',
+                context: 'Test invalid'
             };
-            semanticRegistry.validateToken(semanticToken);
-            (0, globals_1.expect)(semanticToken.primitiveTokens).toBeDefined();
-            (0, globals_1.expect)(semanticToken.primitiveTokens?.default).toBeDefined();
-            (0, globals_1.expect)(semanticToken.primitiveTokens?.default.name).toBe('space100');
+            (0, globals_1.expect)(() => semanticRegistry.register(semanticToken)).not.toThrow();
+            (0, globals_1.expect)(semanticRegistry.has('space.invalid')).toBe(true);
         });
-        (0, globals_1.it)('should validate all registered tokens', () => {
+        (0, globals_1.it)('should register all tokens without validation', () => {
             semanticRegistry.register({
                 name: 'space.valid',
                 category: SemanticToken_1.SemanticCategory.SPACING,
@@ -257,9 +254,7 @@ const PrimitiveToken_1 = require("../../types/PrimitiveToken");
                 description: 'Valid',
                 context: 'Valid'
             });
-            const results = semanticRegistry.validateAll();
-            (0, globals_1.expect)(results).toHaveLength(1);
-            (0, globals_1.expect)(results[0].level).toBe('Pass');
+            (0, globals_1.expect)(semanticRegistry.query()).toHaveLength(1);
         });
     });
     (0, globals_1.describe)('Mode-Aware Color Resolution', () => {

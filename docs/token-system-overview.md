@@ -46,6 +46,104 @@ The token system is organized into two main categories:
 - **Primitive Tokens**: Base-level tokens with mathematical relationships (fontSize, spacing, colors, etc.)
 - **Semantic Tokens**: Higher-level tokens that compose primitives for specific use cases (typography, semantic colors, etc.)
 
+### System Architecture
+
+The token system follows a clear separation of concerns with three main components:
+
+**Validators** (IValidator implementations):
+- Validate tokens against specific criteria (baseline grid, mathematical relationships, etc.)
+- Return structured validation results (Pass/Warning/Error)
+- Focus solely on validation logic
+
+**Registries** (IRegistry implementations):
+- Store and retrieve tokens (primitive and semantic)
+- Provide query operations (get, has, query)
+- Focus solely on storage operations
+
+**Coordinators** (ValidationCoordinator, TokenEngine):
+- Coordinate validation and registration
+- Call validators before registration
+- Handle validation failures appropriately
+
+For detailed information on how these components interact, see the [Registry-Validator Interaction Pattern](../architecture/registry-validator-pattern.md).
+
+---
+
+## Validation Flow
+
+The token system uses a **caller-validates-then-registers** pattern where validation happens before registration:
+
+```typescript
+// 1. Caller validates the token
+const validationResult = validator.validate(token);
+
+// 2. Caller checks validation result
+if (validationResult.valid) {
+  // 3. Caller registers the token
+  registry.register(token);
+} else {
+  // 4. Caller handles validation failure
+  throw new Error(`Validation failed: ${validationResult.errors.join(', ')}`);
+}
+```
+
+### Validation Workflow
+
+**Step 1: Token Creation**
+- Tokens are created with mathematical relationships and metadata
+- Primitive tokens define base values (fontSize100 = 16, space100 = 8)
+- Semantic tokens reference primitive tokens (colorPrimary references purple300)
+
+**Step 2: Validation**
+- Validators check tokens against specific criteria:
+  - **BaselineGridValidator**: Ensures spacing aligns to 4px/8px grid
+  - **SemanticTokenValidator**: Verifies primitive references exist
+  - **SyntaxValidator**: Checks token structure and naming
+  - **ThreeTierValidator**: Orchestrates multiple validators with Pass/Warning/Error levels
+
+**Step 3: Registration**
+- If validation passes, tokens are registered in appropriate registry
+- **PrimitiveTokenRegistry**: Stores primitive tokens (fontSize, spacing, colors)
+- **SemanticTokenRegistry**: Stores semantic tokens (typography, semantic colors)
+
+**Step 4: Generation**
+- Registered tokens are used to generate platform-specific files
+- Cross-platform consistency maintained through unitless base values
+- Platform formatters convert to native syntax (CSS, Swift, Kotlin)
+
+### Validation Interfaces
+
+The token system uses common interfaces to ensure consistent validation and storage contracts:
+
+**IValidator Interface**:
+```typescript
+interface IValidator<TInput = any> {
+  validate(input: TInput): ValidationResult | Promise<ValidationResult>;
+  readonly name: string;
+}
+```
+
+**IRegistry Interface**:
+```typescript
+interface IRegistry<TToken> {
+  register(token: TToken, options?: RegistrationOptions): void;
+  query(): TToken[];
+  get(name: string): TToken | undefined;
+  has(name: string): boolean;
+  readonly name: string;
+}
+```
+
+These interfaces enable:
+- **Polymorphic usage**: Work with any validator or registry through common interface
+- **Type safety**: TypeScript enforces correct usage patterns
+- **Testability**: Easy to test validation and registration independently
+- **Consistency**: Unambiguous pattern applied uniformly across system
+
+For complete details on validation patterns, usage examples, and guidelines for AI agents, see the [Registry-Validator Interaction Pattern](../architecture/registry-validator-pattern.md).
+
+**Migrating from Old Pattern**: If you're updating code that used the old validation pattern (where registries and generators performed validation), see the [Validation Refactoring Migration Guide](./migration/validation-refactoring-guide.md) for step-by-step migration instructions and troubleshooting.
+
 ---
 
 ## Semantic Token Generation
@@ -480,6 +578,10 @@ Layering tokens are an architectural exception to the typical primitive→semant
 ### Conceptual Foundation
 
 - [Token Ecosystem Narrative](./concepts/token-ecosystem-narrative.md) - Understand the token system through the business localization metaphor
+
+### Architecture
+
+- [Registry-Validator Interaction Pattern](../architecture/registry-validator-pattern.md) - Definitive guide for validation and registration patterns with usage examples and guidelines for AI agents
 
 ### Process Standards
 

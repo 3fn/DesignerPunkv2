@@ -9,7 +9,6 @@
  */
 import type { SemanticToken } from '../types/SemanticToken';
 import { SemanticCategory } from '../types/SemanticToken';
-import type { ValidationResult } from '../types/ValidationResult';
 import { PrimitiveTokenRegistry } from './PrimitiveTokenRegistry';
 import type { IRegistry, RegistrationOptions } from './IRegistry';
 export interface SemanticTokenRegistrationOptions extends RegistrationOptions {
@@ -33,10 +32,9 @@ export declare class SemanticTokenRegistry implements IRegistry<SemanticToken> {
     private categoryIndex;
     constructor(primitiveRegistry: PrimitiveTokenRegistry);
     /**
-     * Register a semantic token with primitive reference validation
+     * Register a semantic token
      *
      * Implements IRegistry.register() interface.
-     * Note: Validation methods (validateToken, validateAll) will be removed in Phase 3.
      * Callers should validate tokens before registration using appropriate validators.
      */
     register(token: SemanticToken, options?: SemanticTokenRegistrationOptions): void;
@@ -57,19 +55,10 @@ export declare class SemanticTokenRegistry implements IRegistry<SemanticToken> {
      */
     getByCategory(category: SemanticCategory): SemanticToken[];
     /**
-     * Validate a semantic token against primitive reference requirements
-     * Supports both single and multi-primitive token validation
-     */
-    validateToken(token: SemanticToken): ValidationResult;
-    /**
      * Resolve mode-aware color token value based on system context
      * Works with both single-reference and multi-primitive color tokens
      */
     resolveColorValue(semanticToken: SemanticToken, context: ModeThemeContext): string | null;
-    /**
-     * Validate all registered semantic tokens
-     */
-    validateAll(): ValidationResult[];
     /**
      * Get registry statistics
      */
