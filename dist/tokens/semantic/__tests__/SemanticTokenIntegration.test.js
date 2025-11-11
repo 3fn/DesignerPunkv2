@@ -266,34 +266,26 @@ describe('SemanticTokenRegistry Integration', () => {
     it('should register color semantic tokens', () => {
         const token = (0, index_1.getSemanticToken)('color.primary');
         expect(token).toBeDefined();
-        // Note: This will fail validation because primitive tokens aren't registered
-        // This is expected - just testing the structure
-        const result = semanticRegistry.validateToken({
-            ...token,
-            primitiveTokens: {}
-        });
-        expect(result).toBeDefined();
-        expect(result.token).toBe('color.primary');
+        // Registry just stores tokens (validation moved to validators)
+        semanticRegistry.register(token);
+        expect(semanticRegistry.has('color.primary')).toBe(true);
+        expect(semanticRegistry.get('color.primary')).toEqual(token);
     });
     it('should register typography semantic tokens', () => {
         const token = (0, index_1.getSemanticToken)('typography.bodyMd');
         expect(token).toBeDefined();
-        const result = semanticRegistry.validateToken({
-            ...token,
-            primitiveTokens: {}
-        });
-        expect(result).toBeDefined();
-        expect(result.token).toBe('typography.bodyMd');
+        // Registry just stores tokens (validation moved to validators)
+        semanticRegistry.register(token);
+        expect(semanticRegistry.has('typography.bodyMd')).toBe(true);
+        expect(semanticRegistry.get('typography.bodyMd')).toEqual(token);
     });
     it('should handle hierarchical spacing token registration', () => {
         const token = (0, index_1.getSemanticToken)('space.grouped.normal');
         expect(token).toBeDefined();
-        const result = semanticRegistry.validateToken({
-            ...token,
-            primitiveTokens: {}
-        });
-        expect(result).toBeDefined();
-        expect(result.token).toBe('space.grouped.normal');
+        // Registry just stores tokens (validation moved to validators)
+        semanticRegistry.register(token);
+        expect(semanticRegistry.has('space.grouped.normal')).toBe(true);
+        expect(semanticRegistry.get('space.grouped.normal')).toEqual(token);
     });
 });
 //# sourceMappingURL=SemanticTokenIntegration.test.js.map

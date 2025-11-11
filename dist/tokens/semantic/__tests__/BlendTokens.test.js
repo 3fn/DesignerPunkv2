@@ -13,17 +13,18 @@ describe('Semantic Blend Tokens', () => {
         test('should have all required properties', () => {
             Object.values(BlendTokens_1.blendTokens).forEach(token => {
                 expect(token).toHaveProperty('name');
-                expect(token).toHaveProperty('primitiveReference');
+                expect(token).toHaveProperty('primitiveReferences');
                 expect(token).toHaveProperty('direction');
                 expect(token).toHaveProperty('category');
                 expect(token).toHaveProperty('context');
                 expect(token).toHaveProperty('description');
             });
         });
-        test('should have primitiveReference as string', () => {
+        test('should have primitiveReferences with value property', () => {
             Object.values(BlendTokens_1.blendTokens).forEach(token => {
-                expect(typeof token.primitiveReference).toBe('string');
-                expect(token.primitiveReference.length).toBeGreaterThan(0);
+                expect(token.primitiveReferences).toHaveProperty('value');
+                expect(typeof token.primitiveReferences.value).toBe('string');
+                expect(token.primitiveReferences.value.length).toBeGreaterThan(0);
             });
         });
         test('should have direction as valid BlendDirection enum value', () => {
@@ -40,32 +41,32 @@ describe('Semantic Blend Tokens', () => {
     describe('Primitive References', () => {
         test('blend.hoverDarker should reference blend200', () => {
             const token = BlendTokens_1.blendTokens['blend.hoverDarker'];
-            expect(token.primitiveReference).toBe('blend200');
+            expect(token.primitiveReferences.value).toBe('blend200');
         });
         test('blend.hoverLighter should reference blend200', () => {
             const token = BlendTokens_1.blendTokens['blend.hoverLighter'];
-            expect(token.primitiveReference).toBe('blend200');
+            expect(token.primitiveReferences.value).toBe('blend200');
         });
         test('blend.pressedDarker should reference blend300', () => {
             const token = BlendTokens_1.blendTokens['blend.pressedDarker'];
-            expect(token.primitiveReference).toBe('blend300');
+            expect(token.primitiveReferences.value).toBe('blend300');
         });
         test('blend.focusSaturate should reference blend200', () => {
             const token = BlendTokens_1.blendTokens['blend.focusSaturate'];
-            expect(token.primitiveReference).toBe('blend200');
+            expect(token.primitiveReferences.value).toBe('blend200');
         });
         test('blend.disabledDesaturate should reference blend300', () => {
             const token = BlendTokens_1.blendTokens['blend.disabledDesaturate'];
-            expect(token.primitiveReference).toBe('blend300');
+            expect(token.primitiveReferences.value).toBe('blend300');
         });
         test('blend.containerHoverDarker should reference blend100', () => {
             const token = BlendTokens_1.blendTokens['blend.containerHoverDarker'];
-            expect(token.primitiveReference).toBe('blend100');
+            expect(token.primitiveReferences.value).toBe('blend100');
         });
         test('all semantic tokens should reference valid primitive token names', () => {
             const validPrimitiveNames = Object.keys(BlendTokens_2.blendTokens);
             Object.values(BlendTokens_1.blendTokens).forEach(token => {
-                expect(validPrimitiveNames).toContain(token.primitiveReference);
+                expect(validPrimitiveNames).toContain(token.primitiveReferences.value);
             });
         });
     });
@@ -109,19 +110,19 @@ describe('Semantic Blend Tokens', () => {
     describe('Token Resolution', () => {
         test('blend.hoverDarker should resolve to blend200 (0.08)', () => {
             const semanticToken = BlendTokens_1.blendTokens['blend.hoverDarker'];
-            const primitiveTokenName = semanticToken.primitiveReference;
+            const primitiveTokenName = semanticToken.primitiveReferences.value;
             const primitiveToken = BlendTokens_2.blendTokens[primitiveTokenName];
             expect(primitiveToken.baseValue).toBe(0.08);
         });
         test('blend.containerHoverDarker should resolve to blend100 (0.04)', () => {
             const semanticToken = BlendTokens_1.blendTokens['blend.containerHoverDarker'];
-            const primitiveTokenName = semanticToken.primitiveReference;
+            const primitiveTokenName = semanticToken.primitiveReferences.value;
             const primitiveToken = BlendTokens_2.blendTokens[primitiveTokenName];
             expect(primitiveToken.baseValue).toBe(0.04);
         });
         test('all semantic tokens should resolve to valid primitive values', () => {
             Object.values(BlendTokens_1.blendTokens).forEach(semanticToken => {
-                const primitiveTokenName = semanticToken.primitiveReference;
+                const primitiveTokenName = semanticToken.primitiveReferences.value;
                 const primitiveToken = BlendTokens_2.blendTokens[primitiveTokenName];
                 expect(primitiveToken).toBeDefined();
                 expect(primitiveToken.baseValue).toBeGreaterThanOrEqual(0.04);
@@ -139,7 +140,7 @@ describe('Semantic Blend Tokens', () => {
             };
             Object.entries(expectedReferences).forEach(([semanticName, primitiveName]) => {
                 const semanticToken = BlendTokens_1.blendTokens[semanticName];
-                expect(semanticToken.primitiveReference).toBe(primitiveName);
+                expect(semanticToken.primitiveReferences.value).toBe(primitiveName);
                 // Verify the primitive token exists
                 const primitiveToken = BlendTokens_2.blendTokens[primitiveName];
                 expect(primitiveToken).toBeDefined();
@@ -181,7 +182,7 @@ describe('Semantic Blend Tokens', () => {
             const token = (0, BlendTokens_1.getBlendToken)('blend.hoverDarker');
             expect(token).toBeDefined();
             expect(token?.name).toBe('blend.hoverDarker');
-            expect(token?.primitiveReference).toBe('blend200');
+            expect(token?.primitiveReferences.value).toBe('blend200');
             expect(token?.direction).toBe(BlendTokens_2.BlendDirection.DARKER);
         });
         test('getBlendToken should return undefined for invalid name', () => {

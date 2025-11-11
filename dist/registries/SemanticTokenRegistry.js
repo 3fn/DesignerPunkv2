@@ -23,24 +23,16 @@ class SemanticTokenRegistry {
         this.initializeCategoryIndex();
     }
     /**
-     * Register a semantic token with primitive reference validation
+     * Register a semantic token
      *
      * Implements IRegistry.register() interface.
-     * Note: Validation methods (validateToken, validateAll) will be removed in Phase 3.
      * Callers should validate tokens before registration using appropriate validators.
      */
     register(token, options = {}) {
-        const { skipValidation = false, allowOverwrite = false } = options;
+        const { allowOverwrite = false } = options;
         // Check for existing token
         if (this.tokens.has(token.name) && !allowOverwrite) {
             throw new Error(`Semantic token ${token.name} is already registered. Use allowOverwrite option to replace.`);
-        }
-        // Validate token if not skipped
-        if (!skipValidation) {
-            const validationResult = this.validateToken(token);
-            if (validationResult.level === 'Error') {
-                throw new Error(`Validation failed for semantic token ${token.name}: ${validationResult.message}`);
-            }
         }
         // Register the token
         this.tokens.set(token.name, token);
@@ -92,47 +84,6 @@ class SemanticTokenRegistry {
             .filter((token) => token !== undefined);
     }
     /**
-     * Validate a semantic token against primitive reference requirements
-     * Supports both single and multi-primitive token validation
-     */
-    validateToken(token) {
-        const invalidReferences = [];
-        const resolvedTokens = {};
-        // Validate all primitive references
-        for (const [key, primitiveRef] of Object.entries(token.primitiveReferences)) {
-            const primitiveToken = this.primitiveRegistry.get(primitiveRef);
-            if (!primitiveToken) {
-                invalidReferences.push(`${key}: ${primitiveRef}`);
-            }
-            else {
-                resolvedTokens[key] = primitiveToken;
-            }
-        }
-        // Check if any references were invalid
-        if (invalidReferences.length > 0) {
-            return {
-                level: 'Error',
-                token: token.name,
-                message: 'Invalid primitive token reference(s)',
-                rationale: `Semantic token ${token.name} references non-existent primitive token(s): ${invalidReferences.join(', ')}`,
-                mathematicalReasoning: 'Semantic tokens must reference valid primitive tokens to maintain mathematical consistency'
-            };
-        }
-        // Attach resolved primitive tokens
-        token.primitiveTokens = resolvedTokens;
-        const referenceCount = Object.keys(token.primitiveReferences).length;
-        const referenceList = Object.entries(token.primitiveReferences)
-            .map(([key, ref]) => `${key}: ${ref}`)
-            .join(', ');
-        return {
-            level: 'Pass',
-            token: token.name,
-            message: `Semantic token references ${referenceCount} valid primitive token(s)`,
-            rationale: `Semantic token ${token.name} correctly references primitive token(s): ${referenceList}`,
-            mathematicalReasoning: `Semantic token inherits mathematical properties from ${referenceCount} primitive token(s)`
-        };
-    }
-    /**
      * Resolve mode-aware color token value based on system context
      * Works with both single-reference and multi-primitive color tokens
      */
@@ -140,10 +91,14 @@ class SemanticTokenRegistry {
         if (semanticToken.category !== SemanticToken_1.SemanticCategory.COLOR) {
             return null;
         }
-        // For color tokens, look for 'default' or 'color' key in primitiveTokens
-        const primitiveToken = semanticToken.primitiveTokens?.default ||
-            semanticToken.primitiveTokens?.color ||
-            Object.values(semanticToken.primitiveTokens || {})[0];
+        // Resolve primitive token reference on-the-fly
+        const primitiveRef = semanticToken.primitiveReferences.default ||
+            semanticToken.primitiveReferences.color ||
+            Object.values(semanticToken.primitiveReferences)[0];
+        if (!primitiveRef) {
+            return null;
+        }
+        const primitiveToken = this.primitiveRegistry.get(primitiveRef);
         if (!primitiveToken) {
             return null;
         }
@@ -156,12 +111,6 @@ class SemanticTokenRegistry {
         }
         // Fallback for non-mode-aware tokens (shouldn't happen with proper color tokens)
         return typeof colorValue === 'string' ? colorValue : null;
-    }
-    /**
-     * Validate all registered semantic tokens
-     */
-    validateAll() {
-        return Array.from(this.tokens.values()).map(token => this.validateToken(token));
     }
     /**
      * Get registry statistics

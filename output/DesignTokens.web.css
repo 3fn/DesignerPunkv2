@@ -1,6 +1,6 @@
 /**
  * DesignerPunk Design System - Web Tokens
- * Generated: 2025-11-07T00:27:08.300Z
+ * Generated: 2025-11-11T07:45:47.096Z
  * Version: 1.0.0
  * Platform: Web (CSS Custom Properties)
  *
@@ -616,6 +616,12 @@
   --opacity-hover: var(--opacity-100);
   --opacity-pressed: var(--opacity-200);
   --opacity-loading: var(--opacity-200);
+  --blend-hover-darker: var(--blend-200);
+  --blend-hover-lighter: var(--blend-200);
+  --blend-pressed-darker: var(--blend-300);
+  --blend-focus-saturate: var(--blend-200);
+  --blend-disabled-desaturate: var(--blend-300);
+  --blend-container-hover-darker: var(--blend-100);
   --grid-gutter-xs: var(--space-200);
   --grid-gutter-sm: var(--space-250);
   --grid-gutter-md: var(--space-300);

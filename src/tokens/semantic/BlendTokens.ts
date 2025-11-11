@@ -33,7 +33,9 @@ export interface SemanticBlendToken {
   name: string;
 
   /** Reference to primitive blend token (e.g., 'blend200') */
-  primitiveReference: string;
+  primitiveReferences: {
+    value: string;
+  };
 
   /** Blend direction for color modification */
   direction: BlendDirection;
@@ -55,7 +57,9 @@ export interface SemanticBlendToken {
 export const blendTokens: Record<string, SemanticBlendToken> = {
   'blend.hoverDarker': {
     name: 'blend.hoverDarker',
-    primitiveReference: 'blend200',
+    primitiveReferences: {
+      value: 'blend200'
+    },
     direction: BlendDirection.DARKER,
     category: 'interaction',
     context: 'Standard hover feedback - darker color for light backgrounds',
@@ -64,7 +68,9 @@ export const blendTokens: Record<string, SemanticBlendToken> = {
 
   'blend.hoverLighter': {
     name: 'blend.hoverLighter',
-    primitiveReference: 'blend200',
+    primitiveReferences: {
+      value: 'blend200'
+    },
     direction: BlendDirection.LIGHTER,
     category: 'interaction',
     context: 'Hover feedback on dark backgrounds - lighter color for dark surfaces',
@@ -73,7 +79,9 @@ export const blendTokens: Record<string, SemanticBlendToken> = {
 
   'blend.pressedDarker': {
     name: 'blend.pressedDarker',
-    primitiveReference: 'blend300',
+    primitiveReferences: {
+      value: 'blend300'
+    },
     direction: BlendDirection.DARKER,
     category: 'interaction',
     context: 'Pressed state feedback - clear darkening for active press',
@@ -82,7 +90,9 @@ export const blendTokens: Record<string, SemanticBlendToken> = {
 
   'blend.focusSaturate': {
     name: 'blend.focusSaturate',
-    primitiveReference: 'blend200',
+    primitiveReferences: {
+      value: 'blend200'
+    },
     direction: BlendDirection.SATURATE,
     category: 'interaction',
     context: 'Focus state feedback - more vibrant, attention-drawing color',
@@ -91,7 +101,9 @@ export const blendTokens: Record<string, SemanticBlendToken> = {
 
   'blend.disabledDesaturate': {
     name: 'blend.disabledDesaturate',
-    primitiveReference: 'blend300',
+    primitiveReferences: {
+      value: 'blend300'
+    },
     direction: BlendDirection.DESATURATE,
     category: 'interaction',
     context: 'Disabled state appearance - muted, inactive color',
@@ -100,7 +112,9 @@ export const blendTokens: Record<string, SemanticBlendToken> = {
 
   'blend.containerHoverDarker': {
     name: 'blend.containerHoverDarker',
-    primitiveReference: 'blend100',
+    primitiveReferences: {
+      value: 'blend100'
+    },
     direction: BlendDirection.DARKER,
     category: 'interaction',
     context: 'Subtle container hover - gentle surface feedback for large areas',

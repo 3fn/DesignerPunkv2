@@ -2,10 +2,9 @@
 /**
  * IValidator Interface Tests
  *
- * Tests to verify the IValidator interface contract and helper functions
+ * Tests to verify the IValidator interface contract (sync-only)
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-const IValidator_1 = require("../IValidator");
 describe('IValidator Interface', () => {
     describe('Interface Contract', () => {
         it('should allow synchronous validator implementation', () => {
@@ -33,33 +32,37 @@ describe('IValidator Interface', () => {
             expect(result.token).toBe('value-8');
             expect(result.message).toBe('Validation passed');
         });
-        it('should allow asynchronous validator implementation', async () => {
+        it('should allow validator that returns null', () => {
             // Arrange
-            class AsyncValidator {
+            class NullValidator {
                 constructor() {
-                    this.name = 'AsyncValidator';
+                    this.name = 'NullValidator';
                 }
-                async validate(input) {
-                    // Simulate async operation
-                    await new Promise(resolve => setTimeout(resolve, 10));
+                validate(input) {
+                    // Return null when no issues found
+                    if (input === 'valid') {
+                        return null;
+                    }
                     return {
-                        level: 'Pass',
+                        level: 'Error',
                         token: input,
-                        message: 'Async validation passed',
-                        rationale: 'Input is valid after async check',
-                        mathematicalReasoning: 'Async validation confirmed'
+                        message: 'Validation failed',
+                        rationale: 'Input is invalid',
+                        mathematicalReasoning: 'Validation check failed'
                     };
                 }
             }
-            const validator = new AsyncValidator();
+            const validator = new NullValidator();
             // Act
-            const result = await validator.validate('test-token');
+            const validResult = validator.validate('valid');
+            const invalidResult = validator.validate('invalid');
             // Assert
-            expect(validator.name).toBe('AsyncValidator');
-            expect(result.level).toBe('Pass');
-            expect(result.token).toBe('test-token');
+            expect(validator.name).toBe('NullValidator');
+            expect(validResult).toBeNull();
+            expect(invalidResult).not.toBeNull();
+            expect(invalidResult?.level).toBe('Error');
         });
-        it('should support polymorphic validator usage', async () => {
+        it('should support polymorphic validator usage', () => {
             // Arrange
             class ValidatorA {
                 constructor() {
@@ -94,7 +97,7 @@ describe('IValidator Interface', () => {
                 new ValidatorB()
             ];
             // Act
-            const results = await Promise.all(validators.map(async (v) => {
+            const results = validators.map(v => {
                 const result = v.validate(8);
                 if (result === null) {
                     return {
@@ -105,21 +108,8 @@ describe('IValidator Interface', () => {
                         mathematicalReasoning: 'No issues detected'
                     };
                 }
-                if (result instanceof Promise) {
-                    const resolved = await result;
-                    if (resolved === null) {
-                        return {
-                            level: 'Pass',
-                            token: 'test',
-                            message: 'No issues found',
-                            rationale: 'Validation passed',
-                            mathematicalReasoning: 'No issues detected'
-                        };
-                    }
-                    return resolved;
-                }
                 return result;
-            }));
+            });
             // Assert
             expect(results).toHaveLength(2);
             expect(results[0].level).toBe('Pass');
@@ -175,65 +165,6 @@ describe('IValidator Interface', () => {
                     mathematicalReasoning: 'Test'
                 };
                 expect(result.level).toBe(level);
-            });
-        });
-    });
-    describe('Helper Functions', () => {
-        describe('isPromiseValidationResult', () => {
-            it('should return true for Promise<ValidationResult>', () => {
-                // Arrange
-                const promiseResult = Promise.resolve({
-                    level: 'Pass',
-                    token: 'test',
-                    message: 'Test',
-                    rationale: 'Test',
-                    mathematicalReasoning: 'Test'
-                });
-                // Act & Assert
-                expect((0, IValidator_1.isPromiseValidationResult)(promiseResult)).toBe(true);
-            });
-            it('should return false for ValidationResult', () => {
-                // Arrange
-                const result = {
-                    level: 'Pass',
-                    token: 'test',
-                    message: 'Test',
-                    rationale: 'Test',
-                    mathematicalReasoning: 'Test'
-                };
-                // Act & Assert
-                expect((0, IValidator_1.isPromiseValidationResult)(result)).toBe(false);
-            });
-        });
-        describe('awaitValidationResult', () => {
-            it('should handle synchronous ValidationResult', async () => {
-                // Arrange
-                const result = {
-                    level: 'Pass',
-                    token: 'test',
-                    message: 'Test',
-                    rationale: 'Test',
-                    mathematicalReasoning: 'Test'
-                };
-                // Act
-                const awaited = await (0, IValidator_1.awaitValidationResult)(result);
-                // Assert
-                expect(awaited).toEqual(result);
-            });
-            it('should handle Promise<ValidationResult>', async () => {
-                // Arrange
-                const result = {
-                    level: 'Pass',
-                    token: 'test',
-                    message: 'Test',
-                    rationale: 'Test',
-                    mathematicalReasoning: 'Test'
-                };
-                const promiseResult = Promise.resolve(result);
-                // Act
-                const awaited = await (0, IValidator_1.awaitValidationResult)(promiseResult);
-                // Assert
-                expect(awaited).toEqual(result);
             });
         });
     });

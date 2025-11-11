@@ -1,6 +1,6 @@
 /**
  * DesignerPunk Design System - Android Tokens
- * Generated: 2025-11-07T00:27:08.304Z
+ * Generated: 2025-11-11T07:45:47.100Z
  * Version: 1.0.0
  * Platform: Android (Kotlin Constants)
  */
@@ -469,6 +469,12 @@ object DesignTokens {
     val opacity_hover = opacity_100
     val opacity_pressed = opacity_200
     val opacity_loading = opacity_200
+    val blend_hover_darker = blend_200
+    val blend_hover_lighter = blend_200
+    val blend_pressed_darker = blend_300
+    val blend_focus_saturate = blend_200
+    val blend_disabled_desaturate = blend_300
+    val blend_container_hover_darker = blend_100
     val grid_gutter_xs = space_200
     val grid_gutter_sm = space_250
     val grid_gutter_md = space_300

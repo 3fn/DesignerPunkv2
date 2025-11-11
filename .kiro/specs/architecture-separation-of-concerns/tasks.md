@@ -253,7 +253,7 @@ The plan prioritizes safety through incremental changes, comprehensive testing a
     - _Requirements: 6.3, 6.4, 8.1, 8.4_
     - **Completion Documentation**: `.kiro/specs/architecture-separation-of-concerns/completion/task-3-7-completion.md`
 
-- [ ] 4. Document Registry-Validator Interaction Pattern and Update Documentation
+- [x] 4. Document Registry-Validator Interaction Pattern and Update Documentation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -291,7 +291,7 @@ The plan prioritizes safety through incremental changes, comprehensive testing a
     - Make pattern unambiguous for AI agents to follow
     - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 9.7_
 
-  - [ ] 4.2 Update Phase 1 audit documents
+  - [x] 4.2 Update Phase 1 audit documents
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update `.kiro/audits/phase-1-architecture-report.md`:
@@ -308,7 +308,7 @@ The plan prioritizes safety through incremental changes, comprehensive testing a
       - NOTE: Issues #015, #016, #017, #018, #019, #020 remain ACTIVE (not resolved by this spec)
     - _Requirements: 9.1, 9.2, 9.3_
 
-  - [ ] 4.3 Update Token System Overview
+  - [x] 4.3 Update Token System Overview
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update validation flow description to reflect new pattern
@@ -318,7 +318,7 @@ The plan prioritizes safety through incremental changes, comprehensive testing a
     - Reference registry-validator-pattern.md for detailed pattern explanation
     - _Requirements: 9.1, 9.2, 9.3, 9.4_
 
-  - [ ] 4.4 Create migration guide and update API documentation
+  - [x] 4.4 Create migration guide and update API documentation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `docs/migration/validation-refactoring-guide.md`:
