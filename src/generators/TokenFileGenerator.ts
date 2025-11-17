@@ -43,7 +43,7 @@ export class TokenFileGenerator {
   private androidGenerator: AndroidFormatGenerator;
 
   constructor() {
-    this.webGenerator = new WebFormatGenerator('css');
+    this.webGenerator = new WebFormatGenerator();
     this.iosGenerator = new iOSFormatGenerator();
     this.androidGenerator = new AndroidFormatGenerator('kotlin');
   }

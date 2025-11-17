@@ -1,6 +1,6 @@
 ///
 /// DesignerPunk Design System - iOS Tokens
-/// Generated: 2025-11-11T07:03:20.442Z
+/// Generated: 2025-11-17T05:16:56.889Z
 /// Version: 1.0.0
 /// Platform: iOS (Swift Constants)
 ///
@@ -469,6 +469,12 @@ public struct DesignTokens {
     public static let opacityHover = opacity100
     public static let opacityPressed = opacity200
     public static let opacityLoading = opacity200
+    public static let blendHoverDarker = blend200
+    public static let blendHoverLighter = blend200
+    public static let blendPressedDarker = blend300
+    public static let blendFocusSaturate = blend200
+    public static let blendDisabledDesaturate = blend300
+    public static let blendContainerHoverDarker = blend100
     public static let gridGutterXs = space200
     public static let gridGutterSm = space250
     public static let gridGutterMd = space300

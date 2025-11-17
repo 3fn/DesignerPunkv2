@@ -1,8 +1,0 @@
-{
-  "timestamp": "2025-11-11T07:56:03.248Z",
-  "lastRelease": null,
-  "documentCount": 0,
-  "documents": [],
-  "quickAnalysisMode": true,
-  "note": "Full analysis can be run with: npm run release:analyze"
-}

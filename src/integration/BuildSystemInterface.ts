@@ -211,13 +211,13 @@ export class BuildSystemIntegration implements IBuildSystemIntegration {
     // This would integrate with TranslationCoordinator in real implementation
     // For now, return a mock structure
     const fileExtensions: Record<TargetPlatform, string> = {
-      web: 'js',
+      web: 'css',
       ios: 'swift',
       android: 'kt'
     };
 
     const formats: Record<TargetPlatform, TranslationOutput['format']> = {
-      web: 'javascript',
+      web: 'css',
       ios: 'swift',
       android: 'kotlin'
     };
