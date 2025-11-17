@@ -63,7 +63,7 @@ This implementation plan removes JavaScript format support from the web token ge
 
 ---
 
-- [ ] 2. Remove JavaScript Format Support from WebFormatGenerator
+- [x] 2. Remove JavaScript Format Support from WebFormatGenerator
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -82,7 +82,7 @@ This implementation plan removes JavaScript format support from the web token ge
   - Detailed: `.kiro/specs/web-format-cleanup/completion/task-2-parent-completion.md`
   - Summary: `docs/specs/web-format-cleanup/task-2-summary.md` (triggers release detection)
 
-  - [ ] 2.1 Remove format parameter and outputFormat property
+  - [x] 2.1 Remove format parameter and outputFormat property
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Remove `outputFormat: OutputFormat` property
@@ -92,7 +92,7 @@ This implementation plan removes JavaScript format support from the web token ge
     - Run `getDiagnostics` to check for type errors
     - _Requirements: 1.1, 1.2, 1.3_
 
-  - [ ] 2.2 Remove formatJavaScriptConstant method and helpers
+  - [x] 2.2 Remove formatJavaScriptConstant method and helpers
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Remove `formatJavaScriptConstant()` method
@@ -101,7 +101,7 @@ This implementation plan removes JavaScript format support from the web token ge
     - Run `getDiagnostics` to verify no broken references
     - _Requirements: 1.5_
 
-  - [ ] 2.3 Remove format conditionals from token formatting methods
+  - [x] 2.3 Remove format conditionals from token formatting methods
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Find all `if (this.outputFormat === 'css')` conditionals
@@ -112,7 +112,7 @@ This implementation plan removes JavaScript format support from the web token ge
     - Run `getDiagnostics` to verify no errors
     - _Requirements: 1.4_
 
-  - [ ] 2.4 Remove format conditionals from semantic token methods
+  - [x] 2.4 Remove format conditionals from semantic token methods
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update `formatSingleReferenceToken()` to remove format conditionals
@@ -122,7 +122,7 @@ This implementation plan removes JavaScript format support from the web token ge
     - Run `getDiagnostics` to verify no errors
     - _Requirements: 1.4_
 
-  - [ ] 2.5 Update getTokenName to remove JavaScript-specific logic
+  - [x] 2.5 Update getTokenName to remove JavaScript-specific logic
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Remove `if (this.outputFormat === 'javascript')` conditional
@@ -131,7 +131,7 @@ This implementation plan removes JavaScript format support from the web token ge
     - Run `getDiagnostics` to verify no errors
     - _Requirements: 1.4_
 
-  - [ ] 2.6 Update WebFormatGenerator tests
+  - [x] 2.6 Update WebFormatGenerator tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Remove JavaScript format test cases
@@ -142,7 +142,7 @@ This implementation plan removes JavaScript format support from the web token ge
 
 ---
 
-- [ ] 3. Simplify WebFileOrganizer to CSS-Only
+- [x] 3. Simplify WebFileOrganizer to CSS-Only
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -161,7 +161,7 @@ This implementation plan removes JavaScript format support from the web token ge
   - Detailed: `.kiro/specs/web-format-cleanup/completion/task-3-parent-completion.md`
   - Summary: `docs/specs/web-format-cleanup/task-3-summary.md` (triggers release detection)
 
-  - [ ] 3.1 Remove format parameter from getFileName
+  - [x] 3.1 Remove format parameter from getFileName
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Change signature from `getFileName(format: OutputFormat)` to `getFileName()`
@@ -170,7 +170,7 @@ This implementation plan removes JavaScript format support from the web token ge
     - Run `getDiagnostics` to check for type errors
     - _Requirements: 2.1, 2.2_
 
-  - [ ] 3.2 Remove JavaScript import patterns from getBuildSystemIntegration
+  - [x] 3.2 Remove JavaScript import patterns from getBuildSystemIntegration
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Remove JavaScript import patterns from `importPatterns` array
@@ -179,7 +179,7 @@ This implementation plan removes JavaScript format support from the web token ge
     - Run `getDiagnostics` to verify no errors
     - _Requirements: 2.3_
 
-  - [ ] 3.3 Update validatePath to CSS-only
+  - [x] 3.3 Update validatePath to CSS-only
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update validation to only check for `.css` extension
@@ -188,7 +188,7 @@ This implementation plan removes JavaScript format support from the web token ge
     - Run `getDiagnostics` to verify no errors
     - _Requirements: 2.4_
 
-  - [ ] 3.4 Update PathProviders tests
+  - [x] 3.4 Update PathProviders tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update file path expectations from `.web.js` to `.web.css`
