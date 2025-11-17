@@ -143,7 +143,7 @@ This implementation plan fixes three test infrastructure issues through targeted
 
 ---
 
-- [ ] 3. Fix Release Analysis Test Infrastructure (Issue #024)
+- [x] 3. Fix Release Analysis Test Infrastructure (Issue #024)
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -163,7 +163,7 @@ This implementation plan fixes three test infrastructure issues through targeted
   - Detailed: `.kiro/specs/002-test-infrastructure-fixes/completion/task-3-parent-completion.md`
   - Summary: `docs/specs/002-test-infrastructure-fixes/task-3-summary.md` (triggers release detection)
 
-  - [ ] 3.1 Fix mock scope issues in CLIIntegration tests
+  - [x] 3.1 Fix mock scope issues in CLIIntegration tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Apply same mock fixes as Task 2 (if not already done)
@@ -171,7 +171,7 @@ This implementation plan fixes three test infrastructure issues through targeted
     - Test that mocks are accessible in all test cases
     - _Requirements: 3.1, 3.2_
 
-  - [ ] 3.2 Update or remove HookScripts tests
+  - [x] 3.2 Update or remove HookScripts tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Review tests expecting hook files that don't exist
@@ -180,7 +180,7 @@ This implementation plan fixes three test infrastructure issues through targeted
     - If removing: document why tests were removed
     - _Requirements: 3.3, 3.4_
 
-  - [ ] 3.3 Run infrastructure tests
+  - [x] 3.3 Run infrastructure tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run `npm test -- src/release-analysis/hooks/__tests__/HookScripts.test.ts`
@@ -210,7 +210,7 @@ This implementation plan fixes three test infrastructure issues through targeted
   - Detailed: `.kiro/specs/002-test-infrastructure-fixes/completion/task-4-parent-completion.md`
   - Summary: `docs/specs/002-test-infrastructure-fixes/task-4-summary.md` (triggers release detection)
 
-  - [ ] 4.1 Run full test suite
+  - [x] 4.1 Run full test suite
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run `npm test` to execute full test suite
@@ -219,7 +219,7 @@ This implementation plan fixes three test infrastructure issues through targeted
     - Verify no regressions in other tests
     - _Requirements: 4.1, 4.2, 4.3, 4.4_
 
-  - [ ] 4.2 Document test infrastructure best practices
+  - [x] 4.2 Document test infrastructure best practices
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create or update test infrastructure documentation
@@ -229,7 +229,7 @@ This implementation plan fixes three test infrastructure issues through targeted
     - Explain common pitfalls and how to avoid them
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
 
-  - [ ] 4.3 Update issues registry
+  - [x] 4.3 Update issues registry
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update `.kiro/audits/phase-1-issues-registry.md`

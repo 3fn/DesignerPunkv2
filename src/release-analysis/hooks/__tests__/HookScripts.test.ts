@@ -1,269 +1,187 @@
 /**
- * Tests for hook scripts
+ * Tests for release detection workflow
  * 
- * Validates that hook scripts are properly created, executable, and handle
- * concurrent requests and failures gracefully.
+ * Validates that the manual release detection workflow is properly documented
+ * and that the release-manager.sh script exists and is executable.
+ * 
+ * Note: The automatic hook files (analyze-after-commit.sh) were never implemented.
+ * The current workflow uses manual release detection via release-manager.sh.
  */
 
 import { promises as fs } from 'fs';
 import { join } from 'path';
-import { execSync } from 'child_process';
 
-describe('Hook Scripts', () => {
+describe('Release Detection Workflow', () => {
   const projectRoot = process.cwd();
-  const gitHookPath = join(projectRoot, '.kiro/hooks/analyze-after-commit.sh');
-  const agentHookPath = join(projectRoot, '.kiro/agent-hooks/analyze-after-commit.sh');
-  const agentConfigPath = join(projectRoot, '.kiro/agent-hooks/release-analysis-on-task-completion.json');
+  const releaseManagerPath = join(projectRoot, '.kiro/hooks/release-manager.sh');
+  const workflowDocPath = join(projectRoot, '.kiro/steering/Development Workflow.md');
 
-  describe('Git Hook Script', () => {
+  describe('Release Manager Script', () => {
     it('should exist and be executable', async () => {
-      const stats = await fs.stat(gitHookPath);
+      const stats = await fs.stat(releaseManagerPath);
       expect(stats.isFile()).toBe(true);
       expect(stats.mode & 0o111).toBeTruthy(); // Check executable bit
     });
 
-    it('should contain required configuration', async () => {
-      const content = await fs.readFile(gitHookPath, 'utf-8');
+    it('should support auto mode for automatic detection', async () => {
+      const content = await fs.readFile(releaseManagerPath, 'utf-8');
       
-      expect(content).toContain('QUICK_MODE');
-      expect(content).toContain('TIMEOUT');
-      expect(content).toContain('FAIL_SILENTLY');
-      expect(content).toContain('CACHE_RESULTS');
+      // Should support 'auto' argument for automatic detection
+      expect(content).toContain('auto');
     });
 
-    it('should implement concurrent request handling', async () => {
-      const content = await fs.readFile(gitHookPath, 'utf-8');
+    it('should be documented in workflow', async () => {
+      const workflowContent = await fs.readFile(workflowDocPath, 'utf-8');
       
-      expect(content).toContain('check_concurrent_analysis');
-      expect(content).toContain('LOCK_FILE');
-      expect(content).toContain('MAX_LOCK_AGE');
-    });
-
-    it('should implement graceful failure handling', async () => {
-      const content = await fs.readFile(gitHookPath, 'utf-8');
-      
-      expect(content).toContain('FAIL_SILENTLY');
-      expect(content).toContain('trap remove_lock');
-      expect(content).toContain('Non-blocking');
-    });
-
-    it('should support cross-platform timeout', async () => {
-      const content = await fs.readFile(gitHookPath, 'utf-8');
-      
-      // Should check for timeout command availability
-      expect(content).toContain('command -v timeout');
-      // Should have macOS fallback using perl
-      expect(content).toContain('perl -e "alarm');
-    });
-
-    it('should call release:analyze npm script', async () => {
-      const content = await fs.readFile(gitHookPath, 'utf-8');
-      
-      expect(content).toContain('npm run release:analyze');
+      // Manual workflow should be documented
+      expect(workflowContent).toContain('release-manager.sh auto');
+      expect(workflowContent).toContain('Manual Release Detection');
     });
   });
 
-  describe('Agent Hook Script', () => {
-    it('should exist and be executable', async () => {
-      const stats = await fs.stat(agentHookPath);
-      expect(stats.isFile()).toBe(true);
-      expect(stats.mode & 0o111).toBeTruthy(); // Check executable bit
-    });
+  describe('Automatic Hook Configuration', () => {
+    const autoHookPath = join(projectRoot, '.kiro/hooks/release-detection-auto.kiro.hook');
 
-    it('should contain required configuration', async () => {
-      const content = await fs.readFile(agentHookPath, 'utf-8');
-      
-      expect(content).toContain('QUICK_MODE');
-      expect(content).toContain('TIMEOUT');
-      expect(content).toContain('FAIL_SILENTLY');
-    });
-
-    it('should implement concurrent request handling', async () => {
-      const content = await fs.readFile(agentHookPath, 'utf-8');
-      
-      expect(content).toContain('check_concurrent_analysis');
-      expect(content).toContain('LOCK_FILE');
-      expect(content).toContain('MAX_LOCK_AGE');
-    });
-
-    it('should implement graceful failure handling', async () => {
-      const content = await fs.readFile(agentHookPath, 'utf-8');
-      
-      expect(content).toContain('FAIL_SILENTLY');
-      expect(content).toContain('trap remove_lock');
-    });
-
-    it('should support cross-platform timeout', async () => {
-      const content = await fs.readFile(agentHookPath, 'utf-8');
-      
-      // Should check for timeout command availability
-      expect(content).toContain('command -v timeout');
-      // Should have macOS fallback using perl
-      expect(content).toContain('perl -e "alarm');
-    });
-
-    it('should suppress output in silent mode', async () => {
-      const content = await fs.readFile(agentHookPath, 'utf-8');
-      
-      // Should redirect output to /dev/null in silent mode
-      expect(content).toContain('>/dev/null 2>&1');
-    });
-  });
-
-  describe('Agent Hook Configuration', () => {
     it('should exist', async () => {
-      const stats = await fs.stat(agentConfigPath);
+      const stats = await fs.stat(autoHookPath);
       expect(stats.isFile()).toBe(true);
     });
 
     it('should be valid JSON', async () => {
-      const content = await fs.readFile(agentConfigPath, 'utf-8');
+      const content = await fs.readFile(autoHookPath, 'utf-8');
       const config = JSON.parse(content);
       
       expect(config).toBeDefined();
     });
 
-    it('should contain required fields', async () => {
-      const content = await fs.readFile(agentConfigPath, 'utf-8');
+    it('should trigger on summary document creation', async () => {
+      const content = await fs.readFile(autoHookPath, 'utf-8');
       const config = JSON.parse(content);
       
-      expect(config.name).toBe('release-analysis-on-task-completion');
-      expect(config.description).toBeDefined();
-      expect(config.version).toBeDefined();
-      expect(config.events).toContain('task.completed');
-      expect(config.command).toBe('./.kiro/agent-hooks/analyze-after-commit.sh');
-      expect(config.timeout).toBe(10000);
-      expect(config.failSilently).toBe(true);
+      expect(config.when).toBeDefined();
+      expect(config.when.type).toBe('fileCreated');
+      expect(config.when.patterns).toContain('**/task-*-summary.md');
     });
 
-    it('should be disabled by default', async () => {
-      const content = await fs.readFile(agentConfigPath, 'utf-8');
+    it('should execute release-manager.sh', async () => {
+      const content = await fs.readFile(autoHookPath, 'utf-8');
       const config = JSON.parse(content);
       
-      expect(config.enabled).toBe(false);
+      expect(config.then).toBeDefined();
+      expect(config.then.prompt).toContain('release-manager.sh auto');
     });
   });
 
-  describe('Concurrent Request Handling', () => {
-    const lockFile = join(projectRoot, '.kiro/release-analysis/.analysis-lock');
+  describe('Manual Hook Configuration', () => {
+    const manualHookPath = join(projectRoot, '.kiro/hooks/release-detection-manual.kiro.hook');
 
-    afterEach(async () => {
-      // Clean up lock file after each test
-      try {
-        await fs.unlink(lockFile);
-      } catch {
-        // Ignore if doesn't exist
-      }
+    it('should exist', async () => {
+      const stats = await fs.stat(manualHookPath);
+      expect(stats.isFile()).toBe(true);
     });
 
-    it('should create lock file during execution', async () => {
-      // Create a mock lock file
-      await fs.mkdir(join(projectRoot, '.kiro/release-analysis'), { recursive: true });
-      await fs.writeFile(lockFile, '12345');
-
-      const exists = await fs.access(lockFile).then(() => true).catch(() => false);
-      expect(exists).toBe(true);
+    it('should be valid JSON', async () => {
+      const content = await fs.readFile(manualHookPath, 'utf-8');
+      const config = JSON.parse(content);
+      
+      expect(config).toBeDefined();
     });
 
-    it('should detect concurrent analysis', async () => {
-      // Create a fresh lock file
-      await fs.mkdir(join(projectRoot, '.kiro/release-analysis'), { recursive: true });
-      await fs.writeFile(lockFile, '12345');
-
-      // Run hook and check for concurrent detection message
-      try {
-        const output = execSync('./.kiro/hooks/analyze-after-commit.sh', {
-          encoding: 'utf-8',
-          cwd: projectRoot
-        });
-        
-        expect(output).toContain('Another analysis is already running');
-      } catch (error) {
-        // Hook should exit successfully even when skipping
-        expect((error as any).status).toBe(0);
-      }
+    it('should have manual trigger', async () => {
+      const content = await fs.readFile(manualHookPath, 'utf-8');
+      const config = JSON.parse(content);
+      
+      expect(config.when).toBeDefined();
+      expect(config.when.type).toBe('manual');
     });
 
-    it('should remove stale lock files', async () => {
-      // Create a stale lock file (older than MAX_LOCK_AGE)
-      await fs.mkdir(join(projectRoot, '.kiro/release-analysis'), { recursive: true });
-      await fs.writeFile(lockFile, '12345');
-
-      // Set file modification time to 60 seconds ago
-      const sixtySecondsAgo = new Date(Date.now() - 60000);
-      await fs.utimes(lockFile, sixtySecondsAgo, sixtySecondsAgo);
-
-      // Run hook - should detect and remove stale lock
-      try {
-        execSync('./.kiro/hooks/analyze-after-commit.sh', {
-          encoding: 'utf-8',
-          cwd: projectRoot,
-          timeout: 15000
-        });
-      } catch {
-        // Ignore execution errors
-      }
-
-      // Lock file should be removed or replaced
-      // (Can't guarantee it's removed since analysis might create a new one)
+    it('should execute release-manager.sh', async () => {
+      const content = await fs.readFile(manualHookPath, 'utf-8');
+      const config = JSON.parse(content);
+      
+      expect(config.then).toBeDefined();
+      expect(config.then.prompt).toContain('release-manager.sh auto');
     });
   });
 
-  describe('Graceful Failure Handling', () => {
-    it('should not block on analysis failure', async () => {
-      // The hook should always exit with code 0 in FAIL_SILENTLY mode
-      const content = await fs.readFile(gitHookPath, 'utf-8');
+  describe('Workflow Documentation', () => {
+    it('should document manual trigger workflow', async () => {
+      const workflowContent = await fs.readFile(workflowDocPath, 'utf-8');
       
-      // Verify FAIL_SILENTLY is set to true
-      expect(content).toContain('FAIL_SILENTLY=true');
-      
-      // Verify non-blocking exit
-      expect(content).toContain('exit_code=0  # Non-blocking');
+      // Should document when to use manual trigger
+      expect(workflowContent).toContain('Manual Release Detection');
+      expect(workflowContent).toContain('release-manager.sh auto');
     });
 
-    it('should clean up lock file on failure', async () => {
-      const content = await fs.readFile(gitHookPath, 'utf-8');
+    it('should document automatic hook behavior', async () => {
+      const workflowContent = await fs.readFile(workflowDocPath, 'utf-8');
       
-      // Should use trap to ensure cleanup
-      expect(content).toContain('trap remove_lock EXIT INT TERM');
+      // Should document automatic hook triggering on summary document creation
+      expect(workflowContent).toContain('summary document');
+      expect(workflowContent).toContain('task-*-summary.md');
     });
 
-    it('should handle timeout gracefully', async () => {
-      const content = await fs.readFile(gitHookPath, 'utf-8');
+    it('should document hybrid approach', async () => {
+      const workflowContent = await fs.readFile(workflowDocPath, 'utf-8');
       
-      // Should detect timeout exit codes
-      expect(content).toContain('timed out');
+      // Should document that AI-created files require manual trigger
+      expect(workflowContent).toContain('AI-created files');
+      expect(workflowContent).toContain('manual trigger');
     });
   });
 
-  describe('Requirements Validation', () => {
-    it('should address requirement 9.1: Automatic analysis triggered', async () => {
-      const gitContent = await fs.readFile(gitHookPath, 'utf-8');
-      const agentContent = await fs.readFile(agentHookPath, 'utf-8');
+  describe('Release Manager Features', () => {
+    it('should support automatic mode', async () => {
+      const content = await fs.readFile(releaseManagerPath, 'utf-8');
       
-      // Both hooks should call release:analyze
-      expect(gitContent).toContain('npm run release:analyze');
-      expect(agentContent).toContain('npm run release:analyze');
+      // Should support 'auto' mode for automatic detection
+      expect(content).toContain('auto');
     });
 
-    it('should address requirement 9.4: Graceful failure handling', async () => {
-      const gitContent = await fs.readFile(gitHookPath, 'utf-8');
-      const agentContent = await fs.readFile(agentHookPath, 'utf-8');
+    it('should create trigger files', async () => {
+      const content = await fs.readFile(releaseManagerPath, 'utf-8');
       
-      // Both hooks should have FAIL_SILENTLY=true
-      expect(gitContent).toContain('FAIL_SILENTLY=true');
-      expect(agentContent).toContain('FAIL_SILENTLY=true');
+      // Should create trigger files in .kiro/release-triggers/
+      expect(content).toContain('release-triggers');
     });
 
-    it('should address requirement 9.6: Concurrent request handling', async () => {
-      const gitContent = await fs.readFile(gitHookPath, 'utf-8');
-      const agentContent = await fs.readFile(agentHookPath, 'utf-8');
+    it('should scan for completion documents', async () => {
+      const content = await fs.readFile(releaseManagerPath, 'utf-8');
       
-      // Both hooks should implement concurrent handling
-      expect(gitContent).toContain('check_concurrent_analysis');
-      expect(agentContent).toContain('check_concurrent_analysis');
-      expect(gitContent).toContain('LOCK_FILE');
-      expect(agentContent).toContain('LOCK_FILE');
+      // Should scan for completion documents
+      expect(content).toContain('completion');
+    });
+  });
+
+  describe('Current Implementation', () => {
+    it('should use manual workflow instead of automatic hooks', async () => {
+      const workflowContent = await fs.readFile(workflowDocPath, 'utf-8');
+      
+      // Manual workflow should be documented as the current approach
+      expect(workflowContent).toContain('release-manager.sh auto');
+      expect(workflowContent).toContain('Manual');
+    });
+
+    it('should have hook configurations for both automatic and manual triggers', async () => {
+      const autoHookPath = join(projectRoot, '.kiro/hooks/release-detection-auto.kiro.hook');
+      const manualHookPath = join(projectRoot, '.kiro/hooks/release-detection-manual.kiro.hook');
+      
+      // Both hook configurations should exist
+      const autoExists = await fs.access(autoHookPath).then(() => true).catch(() => false);
+      const manualExists = await fs.access(manualHookPath).then(() => true).catch(() => false);
+      
+      expect(autoExists).toBe(true);
+      expect(manualExists).toBe(true);
+    });
+
+    it('should document why automatic hook files were not implemented', async () => {
+      // The analyze-after-commit.sh files were never implemented
+      // because the manual workflow with release-manager.sh was sufficient
+      const analyzeHookPath = join(projectRoot, '.kiro/hooks/analyze-after-commit.sh');
+      const exists = await fs.access(analyzeHookPath).then(() => true).catch(() => false);
+      
+      // These files should NOT exist - manual workflow is the current implementation
+      expect(exists).toBe(false);
     });
   });
 });

@@ -50,7 +50,7 @@ describe('Format Provider Services', () => {
         describe('CSS Format Generation', () => {
             let generator;
             beforeEach(() => {
-                generator = new WebFormatGenerator_1.WebFormatGenerator('css');
+                generator = new WebFormatGenerator_1.WebFormatGenerator();
             });
             test('should format primitive token as CSS custom property', () => {
                 const token = createMockPrimitiveToken();
@@ -190,58 +190,16 @@ describe('Format Provider Services', () => {
                 expect(result.errors).toContain('Unbalanced braces in CSS');
             });
         });
-        describe('JavaScript Format Generation', () => {
-            let generator;
-            beforeEach(() => {
-                generator = new WebFormatGenerator_1.WebFormatGenerator('javascript');
-            });
-            test('should format primitive token as JavaScript constant', () => {
-                const token = createMockPrimitiveToken();
-                const result = generator.formatToken(token);
-                expect(result).toContain('space100');
-                expect(result).toContain("'8px'");
-                expect(result).toMatch(/space100:\s*'8px'/);
-            });
-            test('should generate complete JavaScript file', () => {
-                const tokens = [
-                    createMockPrimitiveToken({ name: 'space100' }),
-                    createMockPrimitiveToken({ name: 'space150' })
-                ];
-                const result = generator.generateFile(tokens);
-                expect(result).toContain('export const DesignTokens = {');
-                expect(result).toContain('space100');
-                expect(result).toContain('space150');
-                expect(result).toMatch(/};\s*$/);
-            });
-            test('should validate JavaScript syntax correctly', () => {
-                const validContent = "export const DesignTokens = { space100: '8px' };";
-                const result = generator.validateSyntax(validContent);
-                expect(result.valid).toBe(true);
-                expect(result.errors).toBeUndefined();
-            });
-            test('should detect missing export statement', () => {
-                const invalidContent = "const DesignTokens = { space100: '8px' };";
-                const result = generator.validateSyntax(invalidContent);
-                expect(result.valid).toBe(false);
-                expect(result.errors).toContain('Missing export statement');
-            });
-        });
         describe('Naming Convention Consistency', () => {
             test('should convert token names to kebab-case with prefix', () => {
-                const generator = new WebFormatGenerator_1.WebFormatGenerator('css');
+                const generator = new WebFormatGenerator_1.WebFormatGenerator();
                 const name = generator.getTokenName('fontSize125', 'fontSize');
                 expect(name).toBe('--font-size-125');
             });
             test('should handle complex token names', () => {
-                const generator = new WebFormatGenerator_1.WebFormatGenerator('css');
+                const generator = new WebFormatGenerator_1.WebFormatGenerator();
                 expect(generator.getTokenName('lineHeight100', 'lineHeight')).toBe('--line-height-100');
                 expect(generator.getTokenName('fontWeightBold', 'fontWeight')).toBe('--font-weight-bold');
-            });
-            test('should remove prefix for JavaScript output', () => {
-                const generator = new WebFormatGenerator_1.WebFormatGenerator('javascript');
-                const name = generator.getTokenName('space100', 'spacing');
-                expect(name).toBe('space100');
-                expect(name).not.toContain('--');
             });
         });
     });
@@ -583,7 +541,7 @@ object DesignTokens {
         let iosGenerator;
         let androidGenerator;
         beforeEach(() => {
-            webGenerator = new WebFormatGenerator_1.WebFormatGenerator('css');
+            webGenerator = new WebFormatGenerator_1.WebFormatGenerator();
             iosGenerator = new iOSFormatGenerator_1.iOSFormatGenerator();
             androidGenerator = new AndroidFormatGenerator_1.AndroidFormatGenerator('kotlin');
         });
@@ -629,7 +587,7 @@ object DesignTokens {
     });
     describe('Format Options', () => {
         test('should respect includeComments option', () => {
-            const generator = new WebFormatGenerator_1.WebFormatGenerator('css');
+            const generator = new WebFormatGenerator_1.WebFormatGenerator();
             const tokens = [createMockPrimitiveToken()];
             const withComments = generator.generateFile(tokens, { includeComments: true });
             const withoutComments = generator.generateFile(tokens, { includeComments: false });
@@ -639,7 +597,7 @@ object DesignTokens {
             expect(withoutComments).toContain(':root');
         });
         test('should respect groupByCategory option', () => {
-            const generator = new WebFormatGenerator_1.WebFormatGenerator('css');
+            const generator = new WebFormatGenerator_1.WebFormatGenerator();
             const tokens = [
                 createMockPrimitiveToken({ category: PrimitiveToken_1.TokenCategory.SPACING }),
                 createMockPrimitiveToken({ category: PrimitiveToken_1.TokenCategory.FONT_SIZE })
@@ -650,7 +608,7 @@ object DesignTokens {
             expect(ungrouped).not.toContain('SPACING TOKENS');
         });
         test('should respect sortAlphabetically option', () => {
-            const generator = new WebFormatGenerator_1.WebFormatGenerator('css');
+            const generator = new WebFormatGenerator_1.WebFormatGenerator();
             const tokens = [
                 createMockPrimitiveToken({ name: 'space150' }),
                 createMockPrimitiveToken({ name: 'space050' }),
@@ -669,7 +627,7 @@ object DesignTokens {
             expect(unsortedSpace150).toBeLessThan(unsortedSpace050);
         });
         test('should respect includeMathematicalContext option', () => {
-            const generator = new WebFormatGenerator_1.WebFormatGenerator('css');
+            const generator = new WebFormatGenerator_1.WebFormatGenerator();
             const tokens = [createMockPrimitiveToken()];
             const withMath = generator.generateFile(tokens, {
                 includeComments: true,
@@ -685,20 +643,20 @@ object DesignTokens {
     });
     describe('Error Handling', () => {
         test('should handle tokens with missing platform values', () => {
-            const webGenerator = new WebFormatGenerator_1.WebFormatGenerator('css');
+            const webGenerator = new WebFormatGenerator_1.WebFormatGenerator();
             const semanticToken = createMockSemanticToken({
                 primitiveTokens: {}
             });
             expect(() => webGenerator.formatToken(semanticToken)).toThrow();
         });
         test('should handle empty token arrays', () => {
-            const generator = new WebFormatGenerator_1.WebFormatGenerator('css');
+            const generator = new WebFormatGenerator_1.WebFormatGenerator();
             const result = generator.generateFile([]);
             expect(result).toContain(':root {');
             expect(result).toContain('}');
         });
         test('should validate syntax for malformed content', () => {
-            const generator = new WebFormatGenerator_1.WebFormatGenerator('css');
+            const generator = new WebFormatGenerator_1.WebFormatGenerator();
             const malformed = 'this is not valid CSS';
             const result = generator.validateSyntax(malformed);
             expect(result.valid).toBe(false);

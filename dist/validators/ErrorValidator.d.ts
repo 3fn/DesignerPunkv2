@@ -45,6 +45,7 @@ export interface ErrorValidationContext {
             baseValue: number;
             expectedProgression: string;
             actualProgression: string;
+            validationResult?: any;
         };
     };
     /** Token registry context for reference validation */

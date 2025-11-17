@@ -8,6 +8,7 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ValidationCoordinator = void 0;
+const MathematicalRelationshipParser_1 = require("../validators/MathematicalRelationshipParser");
 const types_1 = require("../types");
 /**
  * Validation Coordinator class managing validation services
@@ -19,6 +20,7 @@ class ValidationCoordinator {
         this.primitiveRegistry = primitiveRegistry;
         this.semanticRegistry = semanticRegistry;
         this.config = config;
+        this.parser = new MathematicalRelationshipParser_1.MathematicalRelationshipParser();
     }
     // ============================================================================
     // Token Validation
@@ -126,6 +128,9 @@ class ValidationCoordinator {
      * Build mathematical context for primitive tokens
      */
     buildMathematicalContext(token) {
+        // Validate the mathematical relationship using the parser
+        // Parser will return validation result even if it can't parse the format
+        const validationResult = this.parser.validate(token.mathematicalRelationship, token.baseValue, token.familyBaseValue);
         return {
             expectedRelationship: token.mathematicalRelationship,
             actualRelationship: token.mathematicalRelationship,
@@ -138,8 +143,9 @@ class ValidationCoordinator {
             familyFoundation: {
                 category: token.category,
                 baseValue: token.familyBaseValue,
-                expectedProgression: `Based on ${token.familyBaseValue}`,
-                actualProgression: token.mathematicalRelationship
+                expectedProgression: token.mathematicalRelationship,
+                actualProgression: token.mathematicalRelationship,
+                validationResult // Include parser validation result for ErrorValidator
             }
         };
     }

@@ -2,7 +2,7 @@ import { TargetPlatform, OutputFormat } from '../types/TranslationOutput';
 import { BasePathProvider, BuildSystemConfig, OptimizedFileStructure } from './PathProvider';
 /**
  * Web file organization implementation
- * Organizes tokens for JavaScript/CSS structure with webpack/vite optimization
+ * Organizes tokens for CSS structure with webpack/vite optimization
  */
 export declare class WebFileOrganizer extends BasePathProvider {
     readonly platform: TargetPlatform;
@@ -21,6 +21,7 @@ export declare class WebFileOrganizer extends BasePathProvider {
      * Get JavaScript export naming convention
      * @param tokenName - Original token name
      * @returns JavaScript export name
+     * @deprecated JavaScript format no longer supported - method maintained for interface compatibility
      */
     getJavaScriptExportName(tokenName: string): string;
     /**

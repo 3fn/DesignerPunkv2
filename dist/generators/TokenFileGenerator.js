@@ -19,7 +19,7 @@ const semantic_1 = require("../tokens/semantic");
  */
 class TokenFileGenerator {
     constructor() {
-        this.webGenerator = new WebFormatGenerator_1.WebFormatGenerator('css');
+        this.webGenerator = new WebFormatGenerator_1.WebFormatGenerator();
         this.iosGenerator = new iOSFormatGenerator_1.iOSFormatGenerator();
         this.androidGenerator = new AndroidFormatGenerator_1.AndroidFormatGenerator('kotlin');
     }
