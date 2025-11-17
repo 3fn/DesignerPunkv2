@@ -1,6 +1,6 @@
 /**
  * DesignerPunk Design System - Android Tokens
- * Generated: 2025-11-17T05:52:36.775Z
+ * Generated: 2025-11-17T05:16:56.899Z
  * Version: 1.0.0
  * Platform: Android (Kotlin Constants)
  */

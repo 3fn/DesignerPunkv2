@@ -4931,3 +4931,61 @@ Error processing trigger file .kiro/release-triggers/1761868170-spec-completion.
 [2025-11-16 20:59:44] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763355584-task-completion.json
 [2025-11-16 20:59:44] Trigger queued for manual processing (TypeScript integration disabled)
 [2025-11-16 20:59:44] Release manager hook completed
+[2025-11-16 21:12:52] Hook triggered by Kiro IDE agent hook system
+[2025-11-16 21:12:52] Event: taskStatusChange, Status: completed
+[2025-11-16 21:12:52] Release manager hook started: hook_type=auto, source_path=
+[2025-11-16 21:12:52] Detecting release triggers: type=spec-completion, source=.kiro/specs/web-format-cleanup/completion/task-2-5-completion.md
+[2025-11-16 21:12:52] Spec completion detected: .kiro/specs/web-format-cleanup/completion/task-2-5-completion.md
+[2025-11-16 21:12:52] Processing release trigger: spec-completion from .kiro/specs/web-format-cleanup/completion/task-2-5-completion.md
+[2025-11-16 21:12:52] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763356372-spec-completion.json
+[2025-11-16 21:12:52] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-16 21:12:52] Detecting release triggers: type=spec-completion, source=.kiro/specs/web-format-cleanup/completion/task-2-parent-completion.md
+[2025-11-16 21:12:52] Spec completion detected: .kiro/specs/web-format-cleanup/completion/task-2-parent-completion.md
+[2025-11-16 21:12:52] Processing release trigger: spec-completion from .kiro/specs/web-format-cleanup/completion/task-2-parent-completion.md
+[2025-11-16 21:12:52] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763356372-spec-completion.json
+[2025-11-16 21:12:52] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-16 21:12:52] Detecting release triggers: type=spec-completion, source=.kiro/specs/web-format-cleanup/completion/task-3-4-completion.md
+[2025-11-16 21:12:52] Spec completion detected: .kiro/specs/web-format-cleanup/completion/task-3-4-completion.md
+[2025-11-16 21:12:52] Processing release trigger: spec-completion from .kiro/specs/web-format-cleanup/completion/task-3-4-completion.md
+[2025-11-16 21:12:52] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763356372-spec-completion.json
+[2025-11-16 21:12:52] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-16 21:12:52] Detecting release triggers: type=spec-completion, source=.kiro/specs/web-format-cleanup/completion/task-3-parent-completion.md
+[2025-11-16 21:12:52] Spec completion detected: .kiro/specs/web-format-cleanup/completion/task-3-parent-completion.md
+[2025-11-16 21:12:52] Processing release trigger: spec-completion from .kiro/specs/web-format-cleanup/completion/task-3-parent-completion.md
+[2025-11-16 21:12:52] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763356372-spec-completion.json
+[2025-11-16 21:12:52] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-16 21:12:52] Detecting release triggers: type=task-completion, source=.kiro/specs/web-format-cleanup/tasks.md
+[2025-11-16 21:12:52] Task completion detected: .kiro/specs/web-format-cleanup/tasks.md
+[2025-11-16 21:12:52] Processing release trigger: task-completion from .kiro/specs/web-format-cleanup/tasks.md
+[2025-11-16 21:12:52] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763356372-task-completion.json
+[2025-11-16 21:12:52] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-16 21:12:52] Release manager hook completed
+[2025-11-16 22:02:51] Hook triggered by Kiro IDE agent hook system
+[2025-11-16 22:02:51] Event: taskStatusChange, Status: completed
+[2025-11-16 22:02:51] Release manager hook started: hook_type=auto, source_path=
+[2025-11-16 22:02:51] Detecting release triggers: type=spec-completion, source=.kiro/specs/web-format-cleanup/completion/task-2-5-completion.md
+[2025-11-16 22:02:51] Spec completion detected: .kiro/specs/web-format-cleanup/completion/task-2-5-completion.md
+[2025-11-16 22:02:51] Processing release trigger: spec-completion from .kiro/specs/web-format-cleanup/completion/task-2-5-completion.md
+[2025-11-16 22:02:51] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763359371-spec-completion.json
+[2025-11-16 22:02:51] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-16 22:02:51] Detecting release triggers: type=spec-completion, source=.kiro/specs/web-format-cleanup/completion/task-2-parent-completion.md
+[2025-11-16 22:02:51] Spec completion detected: .kiro/specs/web-format-cleanup/completion/task-2-parent-completion.md
+[2025-11-16 22:02:51] Processing release trigger: spec-completion from .kiro/specs/web-format-cleanup/completion/task-2-parent-completion.md
+[2025-11-16 22:02:52] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763359371-spec-completion.json
+[2025-11-16 22:02:52] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-16 22:02:52] Detecting release triggers: type=spec-completion, source=.kiro/specs/web-format-cleanup/completion/task-3-4-completion.md
+[2025-11-16 22:02:52] Spec completion detected: .kiro/specs/web-format-cleanup/completion/task-3-4-completion.md
+[2025-11-16 22:02:52] Processing release trigger: spec-completion from .kiro/specs/web-format-cleanup/completion/task-3-4-completion.md
+[2025-11-16 22:02:52] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763359372-spec-completion.json
+[2025-11-16 22:02:52] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-16 22:02:52] Detecting release triggers: type=spec-completion, source=.kiro/specs/web-format-cleanup/completion/task-3-parent-completion.md
+[2025-11-16 22:02:52] Spec completion detected: .kiro/specs/web-format-cleanup/completion/task-3-parent-completion.md
+[2025-11-16 22:02:52] Processing release trigger: spec-completion from .kiro/specs/web-format-cleanup/completion/task-3-parent-completion.md
+[2025-11-16 22:02:52] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763359372-spec-completion.json
+[2025-11-16 22:02:52] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-16 22:02:52] Detecting release triggers: type=task-completion, source=.kiro/specs/web-format-cleanup/tasks.md
+[2025-11-16 22:02:52] Task completion detected: .kiro/specs/web-format-cleanup/tasks.md
+[2025-11-16 22:02:52] Processing release trigger: task-completion from .kiro/specs/web-format-cleanup/tasks.md
+[2025-11-16 22:02:52] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763359372-task-completion.json
+[2025-11-16 22:02:52] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-16 22:02:52] Release manager hook completed

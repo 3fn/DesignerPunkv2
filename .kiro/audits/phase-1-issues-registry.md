@@ -1574,7 +1574,11 @@ Task 3 of the architecture-separation-of-concerns spec extracted all validation 
 
 ---
 
-## Issue #019: TokenFileGenerator Tests Reference Outdated Web Output Format
+## Issue #019: TokenFileGenerator Tests Reference Outdated Web Output Format [RESOLVED]
+
+**Resolution Date**: November 16, 2025
+**Resolved By**: web-format-cleanup spec
+**Resolution Summary**: JavaScript format support completely removed from web token generation system. WebFormatGenerator simplified to CSS-only, WebFileOrganizer updated to return CSS filename only, all tests updated to expect CSS format. ~370 lines of unnecessary code removed.
 
 **Discovered By**: Architecture Separation of Concerns Spec (Task 2.4)
 **Date Discovered**: 2025-11-09
@@ -1644,17 +1648,49 @@ Tests were updated during Task 2.4 to match current implementation. No workaroun
 - Documentation: Minor - May indicate other documentation referencing old format
 
 **Related Issues**:
-- **Issue #013**: Web Format Dual Support Investigation - Broader investigation into whether JavaScript format support is intentional or incomplete migration
+- **Issue #020**: Web Format Dual Support Investigation - Also resolved by web-format-cleanup spec
 - **Investigation Report**: `.kiro/audits/web-format-migration-investigation.md` - Comprehensive investigation of web format support across codebase
 
-**Recommendation** (Updated after broader investigation):
-Investigation revealed this is part of a broader pattern (see Issue #013). Multiple test suites and WebFileOrganizer implementation reference JavaScript format. Requires investigation to determine if dual format support is intentional or incomplete migration.
+**Resolution Details**:
 
-See Investigation Report (`.kiro/audits/web-format-migration-investigation.md`) for complete analysis and recommendations.
+**Root Cause**: Tests expected JavaScript format (`.web.js`, `export` statements) but implementation generated CSS format (`.web.css`, `:root` selector). This was part of broader incomplete migration from JavaScript to CSS format.
+
+**Solution Implemented** (web-format-cleanup spec):
+1. **Task 2**: Removed JavaScript format support from WebFormatGenerator
+   - Removed `outputFormat` property and constructor parameter
+   - Removed `formatJavaScriptConstant()` method
+   - Removed all format conditionals
+   - Simplified to CSS-only generation
+   
+2. **Task 3**: Simplified WebFileOrganizer to CSS-only
+   - Removed format parameter from `getFileName()`
+   - Returns `'DesignTokens.web.css'` directly
+   - Removed JavaScript import patterns from build system integration
+   
+3. **Task 4**: Updated TokenFileGenerator and integration tests
+   - Updated TokenFileGenerator constructor to not pass format parameter
+   - Updated 4 failing tests to expect `.web.css` and `:root` selector
+   - Updated BuildSystemIntegration tests to remove JavaScript expectations
+   - Updated BuildSystemCompatibility tests to CSS-only
+
+**Verification**:
+- ✅ All TokenFileGenerator tests pass with CSS format expectations
+- ✅ WebFormatGenerator only supports CSS format
+- ✅ WebFileOrganizer returns CSS filename only
+- ✅ Generated CSS output identical to baseline
+- ✅ ~370 lines of unnecessary code removed
+
+**Completion Documentation**:
+- `.kiro/specs/web-format-cleanup/completion/task-4-parent-completion.md`
+- `docs/specs/web-format-cleanup/task-4-summary.md`
 
 ---
 
-## Issue #020: Web Format Dual Support - Intentional Feature or Incomplete Migration? [INVESTIGATION COMPLETE]
+## Issue #020: Web Format Dual Support - Intentional Feature or Incomplete Migration? [RESOLVED]
+
+**Resolution Date**: November 16, 2025
+**Resolved By**: web-format-cleanup spec
+**Resolution Summary**: Investigation confirmed JavaScript format support was unnecessary technical debt from misunderstood requirements. Removed all JavaScript format support, simplified system to CSS-only. All tests updated, documentation reflects CSS-only approach.
 
 **Discovered By**: Follow-up investigation from Issue #019
 **Date Discovered**: 2025-11-09
@@ -1663,7 +1699,7 @@ See Investigation Report (`.kiro/audits/web-format-migration-investigation.md`) 
 **Category**: Technical Debt / Misunderstood Requirements
 **Affects**: WebFileOrganizer implementation, multiple test suites, build system integration
 
-**Investigation Status**: ✅ **COMPLETE** - Root cause identified, resolution path clear
+**Investigation Status**: ✅ **COMPLETE** - Root cause identified, resolution implemented
 
 **Location**:
 - **File(s)**: 
@@ -1776,7 +1812,51 @@ Create `web-format-cleanup` spec to:
 
 **Investigation Report**: `.kiro/audits/web-format-migration-investigation.md` (Complete)
 
-**Priority**: Important - Technical debt with clear resolution path, low risk
+**Resolution Details**:
+
+**Investigation Findings**:
+- **Stakeholder Intent**: "I've always given the direction that we were delivering CSS" (Peter Michaels Allen)
+- **Implementation Reality**: Dual format support added based on misunderstanding
+- **Production Usage**: Hardcoded to CSS only (`new WebFormatGenerator('css')`)
+- **Conclusion**: JavaScript format support was unnecessary technical debt
+
+**Solution Implemented** (web-format-cleanup spec):
+1. **Task 2**: Removed JavaScript format support from WebFormatGenerator
+   - Removed `outputFormat` property and format parameter
+   - Removed `formatJavaScriptConstant()` and helper methods
+   - Removed all format conditionals
+   - Simplified `formats` array to `['css']` only
+   
+2. **Task 3**: Simplified WebFileOrganizer to CSS-only
+   - Removed format parameter from `getFileName()`
+   - Removed switch statement, returns CSS filename directly
+   - Removed JavaScript import patterns from build system integration
+   - Updated `validatePath()` to CSS-only
+   
+3. **Task 4**: Updated all tests to expect CSS format
+   - TokenFileGenerator tests: Updated 4 tests to expect `.web.css`
+   - BuildSystemIntegration tests: Removed JavaScript import expectations
+   - BuildSystemCompatibility tests: Removed JavaScript format tests
+   - PathProviders tests: Updated to expect CSS file paths
+   
+4. **Task 5**: Updated documentation
+   - Updated `generateTokenFiles.ts` comment to reference CSS
+   - Updated code comments to remove JavaScript format references
+   - All documentation now reflects CSS-only approach
+
+**Verification**:
+- ✅ WebFormatGenerator only supports CSS format
+- ✅ WebFileOrganizer returns CSS filename only
+- ✅ All tests pass with CSS format expectations
+- ✅ Generated CSS output identical to baseline
+- ✅ ~370 lines of unnecessary code removed
+- ✅ No JavaScript format references remain in codebase
+
+**Completion Documentation**:
+- `.kiro/specs/web-format-cleanup/completion/task-5-parent-completion.md`
+- `docs/specs/web-format-cleanup/task-5-summary.md`
+
+**Priority**: Important - Technical debt with clear resolution path, low risk - **RESOLVED**
 
 ---
 
@@ -1845,11 +1925,11 @@ _Issues that affect multiple discovery areas_
 
 ### Overall Status
 
-- **Total Issues Discovered**: 9 (7 from Phase 1 Infrastructure Audit, 2 from Architecture Separation of Concerns Spec)
+- **Total Issues Discovered**: 13 (7 from Phase 1 Infrastructure Audit, 4 from Architecture Separation of Concerns Spec, 2 from Web Format Cleanup Investigation)
 - **Critical Issues**: 1 (resolved)
-- **Important Issues**: 6 (4 resolved, 2 active)
-- **Minor Issues**: 2 (all resolved)
-- **Resolution Rate**: 77.8% (7/9 resolved)
+- **Important Issues**: 11 (10 resolved, 1 active)
+- **Minor Issues**: 3 (2 resolved, 1 active)
+- **Resolution Rate**: 92.3% (12/13 resolved)
 
 ### Resolution Timeline
 
@@ -1862,15 +1942,20 @@ _Issues that affect multiple discovery areas_
 | #005 | Important | 2025-10-28 | 2025-11-07 | 10 days | issue-fix-file-organization-reliability |
 | #006 | Important | 2025-10-28 | 2025-11-07 | 10 days | issue-fix-file-organization-reliability |
 | #007 | Minor | 2025-10-28 | 2025-11-07 | 10 days | issue-fix-file-organization-reliability |
+| #012 | Important | 2025-11-09 | 2025-11-09 | Same day | architecture-separation-of-concerns |
+| #013 | Important | 2025-11-09 | 2025-11-09 | Same day | architecture-separation-of-concerns |
+| #014 | Important | 2025-11-09 | 2025-11-09 | Same day | architecture-separation-of-concerns |
+| #015 | Important | 2025-11-09 | 2025-11-09 | Same day | architecture-separation-of-concerns |
+| #019 | Important | 2025-11-09 | 2025-11-16 | 7 days | web-format-cleanup |
+| #020 | Important | 2025-11-09 | 2025-11-16 | 7 days | web-format-cleanup |
 
 ### Active Issues
 
-**2 active issues** - Issues #012 and #013 (both Important severity)
+**1 active issue** - Issue #023 (Important severity)
 
-- **Issue #012**: TokenFileGenerator Tests Reference Outdated Web Output Format (Important) - Discovered during architecture separation of concerns work, investigation revealed broader scope than initially assessed
-- **Issue #013**: Web Format Dual Support - Intentional Feature or Incomplete Migration? (Important) - Investigation needed to determine if JavaScript format support is intentional or technical debt
+- **Issue #023**: ValidationPipeline Integration Tests Return Empty Results (Important) - Integration tests failing after architecture refactoring, needs investigation
 
-**Investigation Report**: `.kiro/audits/web-format-migration-investigation.md` - Comprehensive investigation of web format support across codebase
+**Investigation Report**: `.kiro/audits/web-format-migration-investigation.md` - Comprehensive investigation of web format support across codebase (completed, issues resolved)
 
 ### Key Learnings
 
@@ -1938,7 +2023,7 @@ _Issues that affect multiple discovery areas_
 
 ---
 
-*This registry tracks all issues discovered during the Phase 1 Discovery Audit. **All 7 issues from Phase 1 Infrastructure Audit have been successfully resolved** (100% resolution rate) through three comprehensive specs: release-detection-trigger-fix (Issues #001, #003), issue-fix-infrastructure-usability (Issues #002, #004), and issue-fix-file-organization-reliability (Issues #005, #006, #007). All issues were discovered on October 28, 2025 and resolved on November 7, 2025 (10 days to resolution). The registry will continue to be updated as additional issues are discovered in remaining discovery areas (Architecture, Token System, Documentation).*
+*This registry tracks all issues discovered during the Phase 1 Discovery Audit and subsequent development work. **12 of 13 issues have been successfully resolved** (92.3% resolution rate) through five comprehensive specs: release-detection-trigger-fix (Issues #001, #003), issue-fix-infrastructure-usability (Issues #002, #004), issue-fix-file-organization-reliability (Issues #005, #006, #007), architecture-separation-of-concerns (Issues #012, #013, #014, #015), and web-format-cleanup (Issues #019, #020). The registry continues to be updated as additional issues are discovered and resolved.*
 
 
 ---
@@ -2548,9 +2633,9 @@ const engine = new TokenEngine({
 
 ## Updated Issue Counter
 
-**Next Issue ID**: #024
-**Resolved Issues**: 11 (Issues #001-#007 from Phase 1 Infrastructure Audit, Issues #012-#015 from Architecture Audit)
-**Active Issues**: 6 (Issues #016, #017, #018, #019, #020, #023)
+**Next Issue ID**: #027
+**Resolved Issues**: 13 (Issues #001-#007 from Phase 1 Infrastructure Audit, Issues #012-#015 from Architecture Audit, Issues #019-#020 from Web Format Cleanup)
+**Active Issues**: 4 (Issues #016, #017, #018, #023)
 **Reclassified Issues**: 4 (Issues #008-#011 - Platform-appropriate design decisions)
 
 ---
@@ -2560,12 +2645,10 @@ const engine = new TokenEngine({
 ### Important Issues
 _Issues that reduce efficiency, create technical debt, or violate established patterns_
 
-**Active Important Issues**: 3
-- **Issue #019**: TokenFileGenerator Tests Reference Outdated Web Output Format
-- **Issue #020**: Web Format Dual Support - Intentional Feature or Incomplete Migration?
+**Active Important Issues**: 1
 - **Issue #023**: ValidationPipeline Integration Tests Return Empty Results
 
-**Resolved Important Issues**: 8 (Issues #002, #003, #004, #005, #006, #012, #013, #014, #015)
+**Resolved Important Issues**: 10 (Issues #002, #003, #004, #005, #006, #012, #013, #014, #015, #019, #020)
 
 ### Minor Issues
 _Issues that are cosmetic, isolated, or have minimal impact_

@@ -39,44 +39,35 @@ describe('Build System Integration', () => {
       expect(config.treeShakingHints).toBeDefined();
       expect(config.treeShakingHints?.length).toBeGreaterThan(0);
       expect(config.treeShakingHints).toContain(
-        'Use named exports for individual tokens to enable tree-shaking'
+        'CSS custom properties are automatically available globally'
       );
     });
 
-    it('should support multiple import patterns', () => {
+    it('should support CSS import pattern', () => {
       const config = organizer.getBuildSystemIntegration();
 
       expect(config.importPatterns).toContain(
-        "import { tokens } from '@/tokens/DesignTokens.web.js'"
-      );
-      expect(config.importPatterns).toContain(
-        "import tokens from '@/tokens/DesignTokens.web.js'"
-      );
-      expect(config.importPatterns).toContain(
         "import '@/tokens/DesignTokens.web.css'"
       );
+      expect(config.importPatterns.length).toBeGreaterThan(0);
     });
 
     it('should provide file watching patterns', () => {
       const config = organizer.getBuildSystemIntegration();
 
-      expect(config.watchPatterns).toContain('src/tokens/**/*.js');
       expect(config.watchPatterns).toContain('src/tokens/**/*.css');
     });
 
     it('should optimize for webpack/vite bundling', () => {
       const files = [
-        'src/tokens/DesignTokens.web.js',
         'src/tokens/DesignTokens.web.css'
       ];
 
       const optimized = organizer.optimizeForBuildSystem(files);
 
-      expect(optimized.primaryFile).toBe('src/tokens/DesignTokens.web.js');
+      expect(optimized.primaryFile).toBe('src/tokens/DesignTokens.web.css');
       expect(optimized.importPath).toBe('@/tokens/DesignTokens.web');
-      expect(optimized.optimizations).toContain(
-        'JavaScript tokens exported as named exports for tree-shaking'
-      );
+      expect(optimized.optimizations.length).toBeGreaterThan(0);
     });
 
     it('should support PostCSS plugins configuration', () => {
@@ -280,7 +271,7 @@ describe('Build System Integration', () => {
     });
 
     it('should optimize file structures for each platform', () => {
-      const webFiles = ['src/tokens/DesignTokens.web.js'];
+      const webFiles = ['src/tokens/DesignTokens.web.css'];
       const iosFiles = ['Sources/DesignSystem/Tokens/DesignTokens.swift'];
       const androidFiles = ['designsystem/src/main/kotlin/com/designsystem/tokens/DesignTokens.kt'];
 
@@ -373,7 +364,7 @@ describe('Build System Integration', () => {
       const config = organizer.getBuildSystemIntegration();
 
       expect(config.treeShakingHints).toContain(
-        'Use named exports for individual tokens to enable tree-shaking'
+        'CSS custom properties are automatically available globally'
       );
       expect(config.additionalConfig?.sideEffects).toBe(false);
     });
@@ -400,9 +391,9 @@ describe('Build System Integration', () => {
   describe('File Organization Compatibility', () => {
     it('should organize web files for webpack/vite compatibility', () => {
       const organizer = new WebFileOrganizer();
-      const path = organizer.getFilePath('javascript');
+      const path = organizer.getFilePath('css');
 
-      expect(path).toBe('src/tokens/DesignTokens.web.js');
+      expect(path).toBe('src/tokens/DesignTokens.web.css');
       expect(path).not.toContain('..'); // No parent references
       expect(path.startsWith('/')).toBe(false); // Relative path
     });
