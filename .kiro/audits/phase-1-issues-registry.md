@@ -1,24 +1,92 @@
 # Phase 1 Issues Registry
 
 **Date**: October 28, 2025
-**Last Updated**: November 9, 2025
-**Total Issues**: 10 (7 from Infrastructure Audit, 3 from Architecture Audit)
-**Resolved Issues**: 10 (All infrastructure issues + 3 architecture issues resolved)
-**Active Issues**: 0
-**Reclassified Items**: 4 (Issues #008-#011 - Platform-appropriate design decisions)
-**Status**: All Issues Resolved, 4 Items Reclassified
+**Last Updated**: November 16, 2025 (Registry Audit Completed)
 **Organization**: audit-findings
 **Scope**: phase-1-discovery-audit
 
 ---
 
+## Current Status (Authoritative Summary)
+
+**Last Audited**: November 17, 2025 (Issue #016 resolved)
+
+### Issue Counts
+
+- **Total Issues**: 22 (excluding 4 reclassified items)
+- **Resolved**: 16 issues
+- **Active**: 3 issues
+- **Duplicate**: 1 issue (marked as duplicate of another)
+- **Reclassified**: 4 items (not issues - platform-appropriate design decisions)
+- **Resolution Rate**: 84.2% (16/19 actual issues)
+
+### Resolved Issues (16)
+
+**Infrastructure Issues** (7): #001, #002, #003, #004, #005, #006, #007
+**Architecture Issues** (4): #012, #013, #014, #015
+**Token System Issues** (1): #016
+**Web Format Issues** (2): #019, #020
+**Test Issues** (2): #017, #026
+
+### Active Issues (3)
+
+**Important Severity** (1):
+- **#023**: ValidationPipeline Integration Tests Return Empty Results
+
+**Minor Severity** (2):
+- **#018**: Release Analysis CLI Integration Test Mock Setup Issues
+- **#024**: Release Analysis Test Infrastructure - Mock Setup Broken
+
+### Duplicate Issues (1)
+
+- **#025**: Duplicate of #023 (ValidationPipeline integration tests)
+
+### Reclassified Items (4)
+
+- **#008-#011**: Platform-appropriate design decisions (not issues)
+
+### Next Issue ID
+
+**#027** (next available issue number)
+
+---
+
+## Registry Maintenance Rules
+
+**⚠️ IMPORTANT**: These rules must be followed to maintain registry accuracy:
+
+1. **Issue Title Marker is Source of Truth**
+   - Every issue MUST have [ACTIVE], [RESOLVED], [DUPLICATE], or [RECLASSIFIED] in title
+   - No exceptions
+
+2. **Single Summary Section Only**
+   - The "Current Status" section above is the ONLY authoritative summary
+   - All other sections reference this summary
+   - Update this summary when issue status changes
+
+3. **Resolution Documentation Required**
+   - Every [RESOLVED] issue must have:
+     - Resolution Date
+     - Resolved By (spec name)
+     - Resolution Summary
+     - Verification evidence
+
+4. **Regular Audits**
+   - Audit registry after major spec completions
+   - Validate that claimed resolutions are accurate
+   - Check for undocumented fixes
+
+---
+
 ## Overview
 
-This registry serves as the centralized record of all issues discovered during the Phase 1 Discovery Audit. Each issue is assigned a unique ID and documented with complete details including severity, evidence, reproduction steps, and cross-area impact.
+This registry serves as the centralized record of all issues discovered during the Phase 1 Discovery Audit and subsequent development work. Each issue is assigned a unique ID and documented with complete details including severity, evidence, reproduction steps, and cross-area impact.
 
 All discovery reports reference issues in this registry rather than duplicating information, ensuring consistency and enabling cross-area awareness.
 
 **Reclassification Note**: Issues #008-#011 were initially flagged by the Architecture Audit as inconsistencies. Investigation on November 8, 2025 revealed these are intentional platform-appropriate design decisions, not issues. They are documented in the "Reclassified Items" section to prevent future misidentification.
+
+**Audit Note**: A comprehensive registry audit was completed on November 16, 2025, validating all issue statuses through reproduction step testing. See `.kiro/audits/issues-registry-audit-2025-11-16.md` for complete audit findings.
 
 ---
 
@@ -532,12 +600,7 @@ None - Isolated documentation issue
 
 ---
 
-## Issue Counter
 
-**Next Issue ID**: #014
-**Resolved Issues**: 7 (All issues from Phase 1 Infrastructure Audit)
-**Active Issues**: 2 (Issues #012, #013)
-**Reclassified Issues**: 4 (Issues #008-#011 - Platform-appropriate design decisions)
 
 ---
 
@@ -948,11 +1011,7 @@ Test hooks manually by running scripts directly, but this doesn't verify event-b
 
 ---
 
-### Important Issues
-_Issues that reduce efficiency, create technical debt, or violate established patterns_
 
-**Active Important Issues**: 0
-**Resolved Important Issues**: 4 (Issues #002, #003, #005, #006)
 
 ## Issue #002: commit-task.sh Treats --help as Task Name [RESOLVED]
 
@@ -1476,11 +1535,7 @@ _Cosmetic issues, documentation inconsistencies, or isolated improvements_
 
 ---
 
-### Important Issues
-_Issues that reduce efficiency, create technical debt, or violate established patterns_
 
-**Active Important Issues**: 2 (Issues #019, #020)
-**Resolved Important Issues**: 6 (Issues #002, #003, #005, #006, #012, #013)
 
 ---
 
@@ -1925,11 +1980,15 @@ _Issues that affect multiple discovery areas_
 
 ### Overall Status
 
-- **Total Issues Discovered**: 13 (7 from Phase 1 Infrastructure Audit, 4 from Architecture Separation of Concerns Spec, 2 from Web Format Cleanup Investigation)
+**Last Audited**: November 16, 2025 (see `.kiro/audits/issues-registry-audit-2025-11-16.md`)
+
+- **Total Issues Discovered**: 22 (excluding 4 reclassified items)
+- **Actual Issues**: 19 (excluding 1 duplicate, 2 undocumented fixes discovered during audit)
 - **Critical Issues**: 1 (resolved)
 - **Important Issues**: 11 (10 resolved, 1 active)
-- **Minor Issues**: 3 (2 resolved, 1 active)
-- **Resolution Rate**: 92.3% (12/13 resolved)
+- **Minor Issues**: 8 (5 resolved, 3 active)
+- **Duplicate Issues**: 1 (#025 duplicate of #023)
+- **Resolution Rate**: 78.9% (15/19 actual issues resolved)
 
 ### Resolution Timeline
 
@@ -1946,16 +2005,31 @@ _Issues that affect multiple discovery areas_
 | #013 | Important | 2025-11-09 | 2025-11-09 | Same day | architecture-separation-of-concerns |
 | #014 | Important | 2025-11-09 | 2025-11-09 | Same day | architecture-separation-of-concerns |
 | #015 | Important | 2025-11-09 | 2025-11-09 | Same day | architecture-separation-of-concerns |
+| #017 | Minor | 2025-11-09 | 2025-11-16 | 7 days | Fixed during earlier work, discovered in audit |
 | #019 | Important | 2025-11-09 | 2025-11-16 | 7 days | web-format-cleanup |
 | #020 | Important | 2025-11-09 | 2025-11-16 | 7 days | web-format-cleanup |
+| #026 | Important | 2025-11-11 | 2025-11-16 | 5 days | Fixed during earlier work, discovered in audit |
 
-### Active Issues
+### Active Issues (4)
 
-**1 active issue** - Issue #023 (Important severity)
+**Important Severity** (1):
+- **#023**: ValidationPipeline Integration Tests Return Empty Results
 
-- **Issue #023**: ValidationPipeline Integration Tests Return Empty Results (Important) - Integration tests failing after architecture refactoring, needs investigation
+**Minor Severity** (3):
+- **#016**: Semantic Token Data Quality - Missing primitiveReferences Field
+- **#018**: Release Analysis CLI Integration Test Mock Setup Issues
+- **#024**: Release Analysis Test Infrastructure - Mock Setup Broken
 
-**Investigation Report**: `.kiro/audits/web-format-migration-investigation.md` - Comprehensive investigation of web format support across codebase (completed, issues resolved)
+### Duplicate Issues (1)
+
+- **#025**: Duplicate of #023 (identified during registry audit)
+
+- **Issue #016**: Semantic Token Data Quality - Missing primitiveReferences Field (Minor)
+- **Issue #018**: Release Analysis CLI Integration Test Mock Setup Issues (Minor)
+- **Issue #023**: ValidationPipeline Integration Tests Return Empty Results (Important)
+- **Issue #024**: Release Analysis Test Infrastructure - Mock Setup Broken (Important)
+
+**Audit Report**: `.kiro/audits/issues-registry-audit-2025-11-16.md` - Comprehensive registry audit validating all issue statuses (completed November 16, 2025)
 
 ### Key Learnings
 
@@ -2023,7 +2097,7 @@ _Issues that affect multiple discovery areas_
 
 ---
 
-*This registry tracks all issues discovered during the Phase 1 Discovery Audit and subsequent development work. **12 of 13 issues have been successfully resolved** (92.3% resolution rate) through five comprehensive specs: release-detection-trigger-fix (Issues #001, #003), issue-fix-infrastructure-usability (Issues #002, #004), issue-fix-file-organization-reliability (Issues #005, #006, #007), architecture-separation-of-concerns (Issues #012, #013, #014, #015), and web-format-cleanup (Issues #019, #020). The registry continues to be updated as additional issues are discovered and resolved.*
+*This registry tracks all issues discovered during the Phase 1 Discovery Audit and subsequent development work. **15 of 19 actual issues have been successfully resolved** (78.9% resolution rate). A comprehensive registry audit was completed on November 16, 2025, validating all issue statuses through reproduction step testing. The audit discovered 2 issues that were fixed but not documented (#017, #026) and identified 1 duplicate issue (#025). See `.kiro/audits/issues-registry-audit-2025-11-16.md` for complete audit findings. The registry continues to be updated as additional issues are discovered and resolved.*
 
 
 ---
@@ -2313,7 +2387,11 @@ Issue #014 was resolved by Task 3.7, which unblocked testing:
 
 ---
 
-## Issue #016: Semantic Token Data Quality - Missing primitiveReferences Field
+## Issue #016: Semantic Token Data Quality - Missing primitiveReferences Field [RESOLVED]
+
+**Resolution Date**: November 17, 2025
+**Resolved By**: 001-token-data-quality-fix spec
+**Resolution Summary**: Comprehensive audit revealed all semantic tokens already have proper `primitiveReferences` fields. No tokens were missing this required field. Updated SemanticTokenIntegration test to handle architectural exceptions (LAYERING category tokens like ZIndexTokens and ElevationTokens intentionally use direct values). Validated token structure through automated tests and documented requirements for future token development.
 
 **Discovered By**: Architecture Separation of Concerns Spec (Task 3.6)
 **Date Discovered**: November 9, 2025
@@ -2631,24 +2709,11 @@ const engine = new TokenEngine({
 
 ---
 
-## Updated Issue Counter
 
-**Next Issue ID**: #027
-**Resolved Issues**: 13 (Issues #001-#007 from Phase 1 Infrastructure Audit, Issues #012-#015 from Architecture Audit, Issues #019-#020 from Web Format Cleanup)
-**Active Issues**: 4 (Issues #016, #017, #018, #023)
-**Reclassified Issues**: 4 (Issues #008-#011 - Platform-appropriate design decisions)
 
 ---
 
-## Issues by Severity (Updated)
 
-### Important Issues
-_Issues that reduce efficiency, create technical debt, or violate established patterns_
-
-**Active Important Issues**: 1
-- **Issue #023**: ValidationPipeline Integration Tests Return Empty Results
-
-**Resolved Important Issues**: 10 (Issues #002, #003, #004, #005, #006, #012, #013, #014, #015, #019, #020)
 
 ### Minor Issues
 _Issues that are cosmetic, isolated, or have minimal impact_
@@ -2662,7 +2727,11 @@ _Issues that are cosmetic, isolated, or have minimal impact_
 
 ---
 
-## Issue #017: iOSFormatGenerator Test Regex Pattern Mismatch [ACTIVE]
+## Issue #017: iOSFormatGenerator Test Regex Pattern Mismatch [RESOLVED]
+
+**Resolution Date**: November 16, 2025 (discovered during registry audit)
+**Resolved By**: Fixed during web-format-cleanup or earlier work
+**Resolution Summary**: Test regex pattern was corrected to match camelCase output format. Test now passes consistently. Issue was resolved but not documented until registry audit on November 16, 2025.
 
 **Discovered By**: Task 3 Completion Testing (architecture-separation-of-concerns spec)
 **Date Discovered**: 2025-11-09
@@ -3008,7 +3077,11 @@ Skip these tests or run release analysis functionality manually (which works cor
 
 ---
 
-## Issue #025: ValidationPipeline Integration Tests Return Empty Results After Architecture Refactoring [ACTIVE]
+## Issue #025: ValidationPipeline Integration Tests Return Empty Results After Architecture Refactoring [DUPLICATE OF #023]
+
+**Duplicate Status**: This issue is a duplicate of Issue #023
+**Identified As Duplicate**: November 16, 2025 (during registry audit)
+**Reason**: Same problem (ValidationPipeline returning empty results), same file, same reproduction steps. Re-discovered during different testing phase but describes identical issue.
 
 **Discovered By**: Task 1.1 Baseline Testing (web-format-cleanup spec)
 **Date Discovered**: 2025-11-11
@@ -3146,7 +3219,11 @@ Validation functionality works correctly in production code. Only integration te
 
 ---
 
-## Issue #026: Semantic Blend Tokens Not Generated Due to Property Name Mismatch [ACTIVE]
+## Issue #026: Semantic Blend Tokens Not Generated Due to Property Name Mismatch [RESOLVED]
+
+**Resolution Date**: November 16, 2025 (discovered during registry audit)
+**Resolved By**: Fixed during architecture-separation-of-concerns or earlier work
+**Resolution Summary**: Semantic blend tokens are now being generated correctly across all platforms (web, iOS, Android). Property name mismatch was resolved. Issue was fixed but not documented until registry audit on November 16, 2025.
 
 **Discovered By**: Task 1.1 Baseline Testing (web-format-cleanup spec)
 **Date Discovered**: 2025-11-11
@@ -3382,37 +3459,13 @@ Complete investigation with detailed analysis available at:
 
 ## Updated Issue Counter (November 11, 2025)
 
-**Next Issue ID**: #027
-**Resolved Issues**: 11 (Issues #001-#007 from Phase 1 Infrastructure Audit, Issues #012-#015 from Architecture Audit)
-**Active Issues**: 10 (Issues #016, #017, #018, #019, #020, #023, #024, #025, #026)
-**Reclassified Issues**: 4 (Issues #008-#011 - Platform-appropriate design decisions)
+
 
 ---
 
 ## Issues by Severity (Updated November 11, 2025)
 
-### Important Issues
-_Issues that reduce efficiency, create technical debt, or violate established patterns_
 
-**Active Important Issues**: 6
-- **Issue #019**: TokenFileGenerator Tests Reference Outdated Web Output Format
-- **Issue #020**: Web Format Dual Support - Intentional Feature or Incomplete Migration?
-- **Issue #023**: ValidationPipeline Integration Tests Return Empty Results
-- **Issue #024**: Release Analysis Test Infrastructure - Mock Setup Broken
-- **Issue #025**: ValidationPipeline Integration Tests Return Empty Results After Architecture Refactoring
-- **Issue #026**: Semantic Blend Tokens Not Generated Due to Property Name Mismatch
-
-**Resolved Important Issues**: 8 (Issues #002, #003, #004, #005, #006, #012, #013, #014, #015)
-
-### Minor Issues
-_Issues that are cosmetic, isolated, or have minimal impact_
-
-**Active Minor Issues**: 3
-- **Issue #016**: Semantic Token Data Quality - Missing primitiveReferences Field
-- **Issue #017**: iOSFormatGenerator Test Regex Pattern Mismatch
-- **Issue #018**: Release Analysis CLI Integration Test Mock Setup Issues
-
-**Resolved Minor Issues**: 2 (Issues #003, #007)
 
 ---
 
