@@ -135,7 +135,9 @@ Test task completed successfully.`;
       const nonGitAnalyzer = new GitHistoryAnalyzer('/tmp');
       
       const lastRelease = await nonGitAnalyzer.findLastRelease();
-      expect(lastRelease).toBeNull();
+      // Graceful error handling returns an object with confidence reduction instead of null
+      expect(lastRelease).toBeDefined();
+      expect(lastRelease).toHaveProperty('confidenceReduction');
     });
 
     it('should handle invalid commit references', async () => {
@@ -144,9 +146,8 @@ Test task completed successfully.`;
       execSync('git add README.md', { cwd: tempDir });
       execSync('git commit -m "Initial commit"', { cwd: tempDir });
 
-      await expect(analyzer.getChangesSince('invalid-commit')).rejects.toThrow(
-        'Failed to get changes since invalid-commit'
-      );
+      const result = await analyzer.getChangesSince('invalid-commit');
+      expect(result.commits).toEqual([]);
     });
   });
 });

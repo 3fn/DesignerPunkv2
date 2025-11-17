@@ -8,8 +8,7 @@ import { TargetPlatform, OutputFormat } from '../types/TranslationOutput';
 export declare class WebFormatGenerator extends BaseFormatProvider {
     readonly platform: TargetPlatform;
     readonly formats: OutputFormat[];
-    private outputFormat;
-    constructor(outputFormat?: OutputFormat);
+    constructor();
     formatToken(token: PrimitiveToken | SemanticToken): string;
     generateHeader(metadata?: FileMetadata): string;
     generateFooter(): string;
@@ -19,19 +18,17 @@ export declare class WebFormatGenerator extends BaseFormatProvider {
     };
     getTokenName(tokenName: string, category: string): string;
     private formatCSSCustomProperty;
-    private formatJavaScriptConstant;
     private formatCSSValue;
-    private formatJSValue;
     protected generateCategoryComment(category: string): string;
     protected generateMathematicalComment(token: PrimitiveToken): string;
     /**
      * Format a single-reference semantic token
-     * Generates: export const colorPrimary = purple300;
+     * Generates CSS custom property format: --color-primary: var(--purple-300);
      */
     formatSingleReferenceToken(semantic: SemanticToken): string;
     /**
      * Format a multi-reference semantic token (typography)
-     * Generates: export const typographyBodyMd = { fontSize: fontSize100, ... };
+     * Generates individual CSS custom properties for each property
      */
     formatMultiReferenceToken(semantic: SemanticToken): string;
     /**

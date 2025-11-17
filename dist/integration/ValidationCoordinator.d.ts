@@ -72,6 +72,7 @@ export declare class ValidationCoordinator {
     private primitiveRegistry;
     private semanticRegistry;
     private config;
+    private parser;
     private validationCache;
     constructor(validator: ThreeTierValidator, primitiveRegistry: PrimitiveTokenRegistry, semanticRegistry: SemanticTokenRegistry, config: ValidationCoordinatorConfig);
     /**

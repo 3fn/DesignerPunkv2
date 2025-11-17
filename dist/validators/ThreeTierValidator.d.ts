@@ -62,6 +62,7 @@ export interface ThreeTierValidationContext {
             baseValue: number;
             expectedProgression: string;
             actualProgression: string;
+            validationResult?: any;
         };
     };
     /** Design system context */

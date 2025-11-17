@@ -4,7 +4,7 @@ exports.WebFileOrganizer = void 0;
 const PathProvider_1 = require("./PathProvider");
 /**
  * Web file organization implementation
- * Organizes tokens for JavaScript/CSS structure with webpack/vite optimization
+ * Organizes tokens for CSS structure with webpack/vite optimization
  */
 class WebFileOrganizer extends PathProvider_1.BasePathProvider {
     constructor() {
@@ -15,14 +15,9 @@ class WebFileOrganizer extends PathProvider_1.BasePathProvider {
         return 'src/tokens';
     }
     getFileName(format) {
-        switch (format) {
-            case 'javascript':
-                return 'DesignTokens.web.js';
-            case 'css':
-                return 'DesignTokens.web.css';
-            default:
-                throw new Error(`Unsupported format for web platform: ${format}`);
-        }
+        // Web platform only supports CSS format
+        // Format parameter maintained for interface compatibility
+        return 'DesignTokens.web.css';
     }
     getDirectoryStructure() {
         // Flat structure for web - all tokens in base directory
@@ -33,17 +28,12 @@ class WebFileOrganizer extends PathProvider_1.BasePathProvider {
         return {
             buildSystemType: 'webpack/vite',
             importPatterns: [
-                "import { tokens } from '@/tokens/DesignTokens.web.js'",
-                "import tokens from '@/tokens/DesignTokens.web.js'",
                 "import '@/tokens/DesignTokens.web.css'"
             ],
             watchPatterns: [
-                'src/tokens/**/*.js',
                 'src/tokens/**/*.css'
             ],
             treeShakingHints: [
-                'Use named exports for individual tokens to enable tree-shaking',
-                'Import only needed tokens: import { space100, fontSize100 } from "@/tokens"',
                 'CSS custom properties are automatically available globally'
             ],
             additionalConfig: {
@@ -85,9 +75,10 @@ class WebFileOrganizer extends PathProvider_1.BasePathProvider {
      * Get JavaScript export naming convention
      * @param tokenName - Original token name
      * @returns JavaScript export name
+     * @deprecated JavaScript format no longer supported - method maintained for interface compatibility
      */
     getJavaScriptExportName(tokenName) {
-        // Keep camelCase for JavaScript exports
+        // Keep camelCase for naming convention
         return tokenName;
     }
     /**
@@ -103,14 +94,14 @@ class WebFileOrganizer extends PathProvider_1.BasePathProvider {
         if (!filePath.includes('src/tokens')) {
             errors.push('Web token files should be in src/tokens directory');
         }
-        if (!filePath.endsWith('.js') && !filePath.endsWith('.css')) {
-            errors.push('Web token files should have .js or .css extension');
+        if (!filePath.endsWith('.css')) {
+            errors.push('Web token files should have .css extension');
         }
         if (filePath.includes('DesignTokens.web')) {
             // Valid web token file
         }
         else {
-            errors.push('Web token files should follow DesignTokens.web.[js|css] naming pattern');
+            errors.push('Web token files should follow DesignTokens.web.css naming pattern');
         }
         return {
             valid: errors.length === 0,

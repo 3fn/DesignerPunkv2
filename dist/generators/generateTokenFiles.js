@@ -3,7 +3,7 @@
  * Generate Token Files Script
  *
  * Generates platform-specific token constant files and writes them to the output directory.
- * Run this script to create DesignTokens.web.js, DesignTokens.ios.swift, and DesignTokens.android.kt
+ * Run this script to create DesignTokens.web.css, DesignTokens.ios.swift, and DesignTokens.android.kt
  */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;

@@ -107,12 +107,12 @@ class BuildSystemIntegration {
         // This would integrate with TranslationCoordinator in real implementation
         // For now, return a mock structure
         const fileExtensions = {
-            web: 'js',
+            web: 'css',
             ios: 'swift',
             android: 'kt'
         };
         const formats = {
-            web: 'javascript',
+            web: 'css',
             ios: 'swift',
             android: 'kotlin'
         };

@@ -436,16 +436,44 @@ class ErrorValidator {
         if (!familyFoundation) {
             return null; // Cannot validate without family foundation data
         }
-        // Check if token follows family mathematical progression
-        if (familyFoundation.expectedProgression !== familyFoundation.actualProgression) {
-            return this.generateErrorResult(token, 'Family foundation violation', `Token does not follow ${familyFoundation.category} family mathematical progression`, 'mathematical-violation', {
-                relationship: `Family foundation requires: ${familyFoundation.expectedProgression}`
-            }, [
-                `Follow ${familyFoundation.category} family mathematical progression: ${familyFoundation.expectedProgression}`,
-                `Verify relationship to family base value: ${familyFoundation.baseValue}`,
-                'Review family mathematical foundation documentation',
-                'Ensure token fits within established family patterns'
-            ]);
+        // Use parser validation result if available
+        if (familyFoundation.validationResult) {
+            const validationResult = familyFoundation.validationResult;
+            // Check if the mathematical relationship is valid and mathematically correct
+            if (!validationResult.isValid || !validationResult.mathematicallyCorrect) {
+                const errors = validationResult.errors || [];
+                const errorMessage = errors.length > 0
+                    ? errors.join('; ')
+                    : 'Mathematical relationship does not match actual token values';
+                // Build detailed relationship string with calculated vs actual values
+                const relationshipDetails = validationResult.calculatedResult !== undefined
+                    ? `Expected: ${familyFoundation.expectedProgression}. Calculated: ${familyFoundation.baseValue} → ${validationResult.calculatedResult}, Actual: ${primitiveToken.baseValue}`
+                    : `Expected: ${familyFoundation.expectedProgression}`;
+                return this.generateErrorResult(token, 'Family foundation violation', `Token does not follow ${familyFoundation.category} family mathematical progression: ${errorMessage}`, 'mathematical-violation', {
+                    relationship: relationshipDetails,
+                    expectedValue: validationResult.calculatedResult,
+                    actualValue: primitiveToken.baseValue
+                }, [
+                    `Correct mathematical relationship to match: ${familyFoundation.baseValue} (family base) → ${primitiveToken.baseValue} (token base)`,
+                    `Verify relationship to family base value: ${familyFoundation.baseValue}`,
+                    'Review family mathematical foundation documentation',
+                    'Ensure token fits within established family patterns'
+                ]);
+            }
+        }
+        else {
+            // Fallback to simple string comparison for backward compatibility
+            // This handles cases where parser validation result is not available
+            if (familyFoundation.expectedProgression !== familyFoundation.actualProgression) {
+                return this.generateErrorResult(token, 'Family foundation violation', `Token does not follow ${familyFoundation.category} family mathematical progression`, 'mathematical-violation', {
+                    relationship: `Family foundation requires: ${familyFoundation.expectedProgression}`
+                }, [
+                    `Follow ${familyFoundation.category} family mathematical progression: ${familyFoundation.expectedProgression}`,
+                    `Verify relationship to family base value: ${familyFoundation.baseValue}`,
+                    'Review family mathematical foundation documentation',
+                    'Ensure token fits within established family patterns'
+                ]);
+            }
         }
         // Check family base value consistency
         if (primitiveToken.familyBaseValue !== familyFoundation.baseValue) {

@@ -23,30 +23,20 @@ describe('WebFileOrganizer', () => {
         });
     });
     describe('File Naming', () => {
-        it('should generate correct JavaScript file name', () => {
-            expect(organizer.getFileName('javascript')).toBe('DesignTokens.web.js');
-        });
         it('should generate correct CSS file name', () => {
             expect(organizer.getFileName('css')).toBe('DesignTokens.web.css');
         });
-        it('should throw error for unsupported format', () => {
-            expect(() => organizer.getFileName('swift')).toThrow('Unsupported format for web platform: swift');
-        });
     });
     describe('File Path Generation', () => {
-        it('should generate correct JavaScript file path', () => {
-            const path = organizer.getFilePath('javascript');
-            expect(path).toBe('src/tokens/DesignTokens.web.js');
-        });
         it('should generate correct CSS file path', () => {
             const path = organizer.getFilePath('css');
             expect(path).toBe('src/tokens/DesignTokens.web.css');
         });
         it('should support custom base directory', () => {
-            const path = organizer.getFilePath('javascript', {
+            const path = organizer.getFilePath('css', {
                 customBaseDirectory: 'custom/path'
             });
-            expect(path).toBe('custom/path/DesignTokens.web.js');
+            expect(path).toBe('custom/path/DesignTokens.web.css');
         });
         it('should use flat directory structure', () => {
             const structure = organizer.getDirectoryStructure();
@@ -57,33 +47,17 @@ describe('WebFileOrganizer', () => {
         it('should provide webpack/vite build configuration', () => {
             const config = organizer.getBuildSystemIntegration();
             expect(config.buildSystemType).toBe('webpack/vite');
-            expect(config.importPatterns).toContain("import { tokens } from '@/tokens/DesignTokens.web.js'");
-            expect(config.watchPatterns).toContain('src/tokens/**/*.js');
-            expect(config.treeShakingHints).toContain('Use named exports for individual tokens to enable tree-shaking');
-        });
-        it('should include ESM module configuration', () => {
-            const config = organizer.getBuildSystemIntegration();
-            expect(config.additionalConfig?.moduleType).toBe('esm');
-            expect(config.additionalConfig?.sideEffects).toBe(false);
+            expect(config.importPatterns).toContain("import '@/tokens/DesignTokens.web.css'");
+            expect(config.watchPatterns).toContain('src/tokens/**/*.css');
         });
     });
     describe('Build System Optimization', () => {
-        it('should optimize file structure for tree-shaking', () => {
-            const files = [
-                'src/tokens/DesignTokens.web.js',
-                'src/tokens/DesignTokens.web.css'
-            ];
+        it('should optimize file structure for CSS', () => {
+            const files = ['src/tokens/DesignTokens.web.css'];
             const optimized = organizer.optimizeForBuildSystem(files);
-            expect(optimized.primaryFile).toBe('src/tokens/DesignTokens.web.js');
-            expect(optimized.supportingFiles).toContain('src/tokens/DesignTokens.web.css');
+            expect(optimized.primaryFile).toBe('src/tokens/DesignTokens.web.css');
+            expect(optimized.supportingFiles).toEqual(['src/tokens/DesignTokens.web.css']);
             expect(optimized.importPath).toBe('@/tokens/DesignTokens.web');
-            expect(optimized.optimizations).toContain('JavaScript tokens exported as named exports for tree-shaking');
-        });
-        it('should handle single file optimization', () => {
-            const files = ['src/tokens/DesignTokens.web.js'];
-            const optimized = organizer.optimizeForBuildSystem(files);
-            expect(optimized.primaryFile).toBe('src/tokens/DesignTokens.web.js');
-            expect(optimized.supportingFiles).toEqual([]);
         });
     });
     describe('Naming Conventions', () => {
@@ -92,29 +66,25 @@ describe('WebFileOrganizer', () => {
             expect(organizer.getCSSCustomPropertyName('fontSize125')).toBe('--font-size125');
             expect(organizer.getCSSCustomPropertyName('colorPrimary')).toBe('--color-primary');
         });
-        it('should keep JavaScript export names in camelCase', () => {
-            expect(organizer.getJavaScriptExportName('space100')).toBe('space100');
-            expect(organizer.getJavaScriptExportName('fontSize125')).toBe('fontSize125');
-        });
     });
     describe('Path Validation', () => {
         it('should validate correct web token file paths', () => {
-            const result = organizer.validatePath('src/tokens/DesignTokens.web.js');
+            const result = organizer.validatePath('src/tokens/DesignTokens.web.css');
             expect(result.valid).toBe(true);
             expect(result.errors).toBeUndefined();
         });
         it('should reject paths without src/tokens directory', () => {
-            const result = organizer.validatePath('other/path/DesignTokens.web.js');
+            const result = organizer.validatePath('other/path/DesignTokens.web.css');
             expect(result.valid).toBe(false);
             expect(result.errors).toContain('Web token files should be in src/tokens directory');
         });
         it('should reject paths with wrong file extension', () => {
             const result = organizer.validatePath('src/tokens/DesignTokens.web.txt');
             expect(result.valid).toBe(false);
-            expect(result.errors).toContain('Web token files should have .js or .css extension');
+            expect(result.errors).toContain('Web token files should have .css extension');
         });
         it('should reject paths with parent directory references', () => {
-            const result = organizer.validatePath('../src/tokens/DesignTokens.web.js');
+            const result = organizer.validatePath('../src/tokens/DesignTokens.web.css');
             expect(result.valid).toBe(false);
             expect(result.errors).toContain('File path cannot contain parent directory references (..)');
         });

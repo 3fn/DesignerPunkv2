@@ -180,9 +180,9 @@ describe('Build System Compatibility Integration', () => {
             selector.registerFiles([
                 {
                     platform: 'web',
-                    filePath: 'dist/tokens/DesignTokens.web.js',
-                    content: '// Web tokens',
-                    format: 'javascript',
+                    filePath: 'dist/tokens/DesignTokens.web.css',
+                    content: '/* Web tokens */',
+                    format: 'css',
                     tokenCount: 10,
                     validationStatus: 'valid'
                 },
@@ -233,9 +233,9 @@ describe('Build System Compatibility Integration', () => {
             testSelector.registerFiles([
                 {
                     platform: 'web',
-                    filePath: 'dist/tokens/DesignTokens.web.js',
-                    content: '// Web tokens',
-                    format: 'javascript',
+                    filePath: 'dist/tokens/DesignTokens.web.css',
+                    content: '/* Web tokens */',
+                    format: 'css',
                     tokenCount: 10,
                     validationStatus: 'valid'
                 }
@@ -434,7 +434,7 @@ describe('Build System Compatibility Integration', () => {
             const webFile = result.files.find(f => f.platform === 'web');
             const iosFile = result.files.find(f => f.platform === 'ios');
             const androidFile = result.files.find(f => f.platform === 'android');
-            expect(webFile?.filePath).toContain('.js');
+            expect(webFile?.filePath).toContain('.css');
             expect(iosFile?.filePath).toContain('.swift');
             expect(androidFile?.filePath).toContain('.kt');
         });
