@@ -419,5 +419,152 @@ Creating placeholder files just to make tests pass would be misleading - it woul
 
 ---
 
+### Decision 4: Mathematical Relationship Parser (Added During Implementation)
+
+**Date Added**: November 17, 2025  
+**Context**: Discovered during Task 1.2 implementation  
+**Status**: Late addition - not part of original design
+
+**Discovery**:
+
+During Task 1.2 implementation, we successfully fixed the ValidationPipeline tests by updating test tokens to use `mathematicalRelationship: 'Based on 8'`. However, this revealed a fundamental issue with the validation logic that was not apparent during initial design.
+
+**Investigation revealed**:
+
+The ValidationCoordinator builds a `familyFoundation` context that performs rigid string equality:
+
+```typescript
+// In ValidationCoordinator.buildMathematicalContext():
+familyFoundation: {
+  category: token.category,
+  baseValue: token.familyBaseValue,
+  expectedProgression: `Based on ${token.familyBaseValue}`,  // "Based on 8"
+  actualProgression: token.mathematicalRelationship           // Must match exactly
+}
+
+// In ErrorValidator.validateFamilyFoundation():
+if (familyFoundation.expectedProgression !== familyFoundation.actualProgression) {
+  return error; // "Family foundation violation"
+}
+```
+
+This means `mathematicalRelationship` MUST be exactly `"Based on 8"` - nothing else works.
+
+**The Problem**:
+
+1. **Production Token Incompatibility**: Production tokens in `src/tokens/SpacingTokens.ts` use descriptive format:
+   ```typescript
+   mathematicalRelationship: 'base × 1 = 8 × 1 = 8'  // Would fail validation
+   ```
+
+2. **Loss of Mathematical Meaning**: `"Based on 8"` is vague and uninformative compared to `"base × 2 = 8 × 2 = 16"`
+
+3. **Fragile Validation**: Any variation breaks (extra space, lowercase, decimal format)
+
+4. **Contradicts System Goals**: Mathematical Token System should support mathematical descriptions, not force abandonment of them
+
+**Options Considered**:
+
+1. **Accept workaround**: Keep test tokens using `"Based on 8"` format, ignore production token issue
+2. **Remove validation**: Remove family foundation validation entirely
+3. **Implement parser**: Create mathematical relationship parser that validates correctness, not string equality
+
+**Decision**: Implement mathematical relationship parser (Option 3)
+
+**Rationale**:
+
+Option 1 (workaround) is not sustainable:
+- Production tokens would fail the same validation
+- Tests would pass but production behavior would be broken
+- Contradicts system architecture goals
+- Creates technical debt
+
+Option 2 (remove validation) loses valuable validation:
+- Family foundation validation catches real mathematical errors
+- Removing it weakens the validation system
+- Doesn't align with Mathematical Token System goals
+
+Option 3 (parser) provides sustainable solution:
+- Validates mathematical correctness, not string format
+- Supports descriptive mathematical relationships
+- Works with production token formats
+- Aligns with Mathematical Token System vision
+- Extensible for future validation needs
+
+**Implementation Approach**:
+
+Added Tasks 1.3-1.5 to implement parser solution:
+
+**Task 1.3: Implement Mathematical Relationship Parser** (Architecture - Tier 3)
+- Design parser for mathematical expressions
+- Support multiple formats: `'base × 2'`, `'8 × 2 = 16'`, `'base × 2 = 8 × 2 = 16'`
+- Validate mathematical correctness (verify math is accurate)
+- Handle operators: `×`, `*`, `x`, `÷`, `/`, `+`, `-`
+- Create comprehensive unit tests with edge cases
+
+**Task 1.4: Update ValidationCoordinator** (Implementation - Tier 2)
+- Replace string equality check with parser validation
+- Update `buildMathematicalContext` to use parser
+- Update ErrorValidator's `validateFamilyFoundation` method
+- Ensure backward compatibility with simple formats
+
+**Task 1.5: Update Test Tokens** (Implementation - Tier 2)
+- Change test tokens from `'Based on 8'` back to descriptive format
+- Use `'base × 1 = 8 × 1 = 8'` for space100
+- Use `'base × 2 = 8 × 2 = 16'` for space200
+- Verify production tokens would pass validation
+
+**Trade-offs**:
+
+- ✅ **Gained**: Sustainable solution that works with production tokens
+- ✅ **Gained**: Supports meaningful mathematical descriptions
+- ✅ **Gained**: Aligns with Mathematical Token System architecture goals
+- ✅ **Gained**: Extensible parser for future validation needs
+- ✅ **Gained**: Validates mathematical correctness, not just format
+- ❌ **Lost**: Simplicity of quick test data fix
+- ❌ **Lost**: Additional implementation time (2 hours vs 30 minutes)
+- ⚠️ **Risk**: Parser complexity, but well-scoped and testable
+
+**Impact on Scope**:
+
+- **Original estimate**: 30 minutes for ValidationPipeline fix (simple test data update)
+- **Updated estimate**: 2 hours for ValidationPipeline fix (includes parser implementation)
+- **Total spec estimate**: 4-5 hours (up from 2-3 hours)
+- **Complexity**: Increased from Low-Medium to Medium
+- **Task count**: Added 3 subtasks (1.3, 1.4, 1.5)
+
+**Justification**:
+
+The additional time investment is justified because:
+- Fixes root cause, not just symptom
+- Provides sustainable solution for production use
+- Aligns with system architecture goals (Mathematical Token System)
+- Prevents future issues with validation logic
+- Creates reusable component for other validators
+
+**Counter-Arguments**:
+
+- **Argument**: "Just use the workaround - tests pass, ship it"
+- **Response**: Tests passing with invalid production token format creates technical debt. The validation bug would remain, affecting production tokens. Fixing the root cause now prevents future issues and aligns with system goals.
+
+- **Argument**: "Parser adds unnecessary complexity"
+- **Response**: The complexity is justified by the value. Mathematical Token System should support mathematical descriptions. String equality is the wrong validation approach for mathematical relationships. Parser provides proper validation.
+
+- **Argument**: "This is scope creep"
+- **Response**: This is scope clarification. The original design assumed test data was simply invalid. Investigation revealed a validation logic bug that requires architectural fix. Discovering root causes during implementation is normal and valuable.
+
+**Documentation**:
+
+See `.kiro/specs/002-test-infrastructure-fixes/task-1-3-rationale.md` for complete analysis of the parser solution, including:
+- Detailed problem description
+- Parser design approach
+- Integration strategy
+- Success criteria
+- Impact assessment
+
+**Status**: Tasks 1.3-1.5 added to implementation plan, ready for execution after Task 1.2 completion.
+
+---
+
 **Organization**: spec-design
 **Scope**: 002-test-infrastructure-fixes
