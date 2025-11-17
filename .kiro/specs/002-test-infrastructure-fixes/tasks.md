@@ -16,7 +16,7 @@ This implementation plan fixes three test infrastructure issues through targeted
 
 ## Task List
 
-- [ ] 1. Fix ValidationPipeline Integration Tests (Issue #023)
+- [x] 1. Fix ValidationPipeline Integration Tests (Issue #023)
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -35,7 +35,7 @@ This implementation plan fixes three test infrastructure issues through targeted
   - Detailed: `.kiro/specs/002-test-infrastructure-fixes/completion/task-1-parent-completion.md`
   - Summary: `docs/specs/002-test-infrastructure-fixes/task-1-summary.md` (triggers release detection)
 
-  - [ ] 1.1 Identify invalid test token data
+  - [x] 1.1 Identify invalid test token data
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Review test tokens in ValidationPipeline.test.ts
@@ -44,27 +44,59 @@ This implementation plan fixes three test infrastructure issues through targeted
     - Review PrimitiveToken interface for required fields
     - _Requirements: 1.5_
 
-  - [ ] 1.2 Update test tokens to use valid data
+  - [x] 1.2 Update test tokens to use valid data
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    - Update `mathematicalRelationship` to valid format ('1.0x base')
+    - Update `mathematicalRelationship` to valid format ('Based on 8')
     - Add `familyBaseValue` field for spacing tokens
     - Add all required fields per PrimitiveToken interface
     - Verify tokens match validation rules
     - _Requirements: 1.1, 1.2, 1.3_
 
-  - [ ] 1.3 Run ValidationPipeline tests
+  - [x] 1.3 Implement mathematical relationship parser
+    **Type**: Architecture
+    **Validation**: Tier 3 - Comprehensive
+    - Design parser for mathematical relationship expressions
+    - Support multiple formats: 'base × 2', '8 × 2 = 16', 'base × 2 = 8 × 2 = 16'
+    - Implement validation logic that verifies mathematical correctness
+    - Handle operators: ×, *, x, ÷, /, +, -
+    - Validate relationship matches actual baseValue and familyBaseValue
+    - Create unit tests for parser with edge cases
+    - _Requirements: 1.1, 1.2, 1.3_
+
+  - [x] 1.4 Update ValidationCoordinator to use parser
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Replace string equality check with parser validation
+    - Update `buildMathematicalContext` to use parser
+    - Update `familyFoundation` validation in ErrorValidator
+    - Ensure backward compatibility with simple formats
+    - Test with both simple and complex relationship formats
+    - _Requirements: 1.1, 1.2, 1.3_
+
+  - [x] 1.5 Update test tokens to use descriptive format
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Change test tokens from 'Based on 8' to descriptive format
+    - Use format: 'base × 1 = 8 × 1 = 8' for space100
+    - Use format: 'base × 2 = 8 × 2 = 16' for space200
+    - Verify tests still pass with new parser
+    - Verify production tokens would pass validation
+    - _Requirements: 1.1, 1.2, 1.3_
+
+  - [x] 1.6 Run ValidationPipeline tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run `npm test -- src/__tests__/integration/ValidationPipeline.test.ts`
-    - Verify all tests pass
+    - Verify all tests pass with new parser
     - Verify validation results are returned (not empty)
+    - Test with various mathematical relationship formats
     - Document test results
     - _Requirements: 1.4, 4.1_
 
 ---
 
-- [ ] 2. Fix Release Analysis CLI Test Mocks (Issue #018)
+- [x] 2. Fix Release Analysis CLI Test Mocks (Issue #018)
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -83,7 +115,7 @@ This implementation plan fixes three test infrastructure issues through targeted
   - Detailed: `.kiro/specs/002-test-infrastructure-fixes/completion/task-2-parent-completion.md`
   - Summary: `docs/specs/002-test-infrastructure-fixes/task-2-summary.md` (triggers release detection)
 
-  - [ ] 2.1 Declare mocks at module level
+  - [x] 2.1 Declare mocks at module level
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add module-level declarations for all mock variables
@@ -91,7 +123,7 @@ This implementation plan fixes three test infrastructure issues through targeted
     - Ensure mocks are accessible throughout test file
     - _Requirements: 2.1, 2.2_
 
-  - [ ] 2.2 Fix mock initialization in beforeEach
+  - [x] 2.2 Fix mock initialization in beforeEach
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create mocks using `jest.fn()` directly
@@ -100,7 +132,7 @@ This implementation plan fixes three test infrastructure issues through targeted
     - Verify mocks are properly initialized
     - _Requirements: 2.3, 2.4_
 
-  - [ ] 2.3 Run CLI integration tests
+  - [x] 2.3 Run CLI integration tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run `npm test -- src/release-analysis/__tests__/CLIIntegration.test.ts`
@@ -212,30 +244,35 @@ This implementation plan fixes three test infrastructure issues through targeted
 
 ## Task Summary
 
-**Total Tasks**: 4 parent tasks, 11 subtasks
+**Total Tasks**: 4 parent tasks, 15 subtasks
 
 **By Issue**:
-- Issue #023 (ValidationPipeline): 1 parent task, 3 subtasks
+- Issue #023 (ValidationPipeline): 1 parent task, 6 subtasks
 - Issue #018 (CLI Mocks): 1 parent task, 3 subtasks
 - Issue #024 (Infrastructure): 1 parent task, 3 subtasks
-- Validation & Documentation: 1 parent task, 2 subtasks
+- Validation & Documentation: 1 parent task, 3 subtasks
 
 **By Type**:
 - Setup: 0 tasks
-- Implementation: 11 tasks (all fixes are implementation work)
+- Implementation: 13 tasks
+- Architecture: 1 task (mathematical relationship parser)
 - Parent: 4 tasks (overall coordination)
 
-**Estimated Complexity**: Low-Medium
-- ValidationPipeline fix is straightforward (update test data)
+**Estimated Complexity**: Medium
+- ValidationPipeline fix requires architectural work (parser design)
+- Mathematical relationship parser is complex but well-scoped
 - Mock fixes are standard Jest patterns
 - Infrastructure fixes require decisions about test expectations
 - Clear validation criteria for each fix
 
-**Estimated Time**: 2-3 hours
-- ValidationPipeline fix: 30 minutes
+**Estimated Time**: 4-5 hours
+- ValidationPipeline fix: 2 hours (includes parser implementation)
+  - Parser design and implementation: 1 hour
+  - ValidationCoordinator updates: 30 minutes
+  - Test updates and validation: 30 minutes
 - CLI mock fix: 45 minutes
 - Infrastructure fix: 45 minutes
-- Validation & documentation: 45 minutes
+- Validation & documentation: 1 hour
 
 ---
 

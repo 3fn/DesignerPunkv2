@@ -9,6 +9,7 @@
 import { ThreeTierValidator, ThreeTierValidationContext, ThreeTierValidationResult } from '../validators/ThreeTierValidator';
 import { PrimitiveTokenRegistry } from '../registries/PrimitiveTokenRegistry';
 import { SemanticTokenRegistry } from '../registries/SemanticTokenRegistry';
+import { MathematicalRelationshipParser } from '../validators/MathematicalRelationshipParser';
 import type { PrimitiveToken, SemanticToken, ValidationResult } from '../types';
 import { TokenCategory, SemanticCategory } from '../types';
 
@@ -78,6 +79,7 @@ export class ValidationCoordinator {
   private primitiveRegistry: PrimitiveTokenRegistry;
   private semanticRegistry: SemanticTokenRegistry;
   private config: ValidationCoordinatorConfig;
+  private parser: MathematicalRelationshipParser;
   private validationCache: Map<string, {
     result: ThreeTierValidationResult;
     timestamp: Date;
@@ -93,6 +95,7 @@ export class ValidationCoordinator {
     this.primitiveRegistry = primitiveRegistry;
     this.semanticRegistry = semanticRegistry;
     this.config = config;
+    this.parser = new MathematicalRelationshipParser();
   }
 
   // ============================================================================
@@ -220,6 +223,14 @@ export class ValidationCoordinator {
    * Build mathematical context for primitive tokens
    */
   private buildMathematicalContext(token: PrimitiveToken): ThreeTierValidationContext['mathematicalContext'] {
+    // Validate the mathematical relationship using the parser
+    // Parser will return validation result even if it can't parse the format
+    const validationResult = this.parser.validate(
+      token.mathematicalRelationship,
+      token.baseValue,
+      token.familyBaseValue
+    );
+
     return {
       expectedRelationship: token.mathematicalRelationship,
       actualRelationship: token.mathematicalRelationship,
@@ -232,8 +243,9 @@ export class ValidationCoordinator {
       familyFoundation: {
         category: token.category as TokenCategory,
         baseValue: token.familyBaseValue,
-        expectedProgression: `Based on ${token.familyBaseValue}`,
-        actualProgression: token.mathematicalRelationship
+        expectedProgression: token.mathematicalRelationship,
+        actualProgression: token.mathematicalRelationship,
+        validationResult // Include parser validation result for ErrorValidator
       }
     };
   }
