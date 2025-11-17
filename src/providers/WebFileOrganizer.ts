@@ -13,14 +13,9 @@ export class WebFileOrganizer extends BasePathProvider {
   }
 
   getFileName(format: OutputFormat): string {
-    switch (format) {
-      case 'javascript':
-        return 'DesignTokens.web.js';
-      case 'css':
-        return 'DesignTokens.web.css';
-      default:
-        throw new Error(`Unsupported format for web platform: ${format}`);
-    }
+    // Web platform only supports CSS format
+    // Format parameter maintained for interface compatibility but ignored
+    return 'DesignTokens.web.css';
   }
 
   getDirectoryStructure(): string[] {
@@ -33,17 +28,12 @@ export class WebFileOrganizer extends BasePathProvider {
     return {
       buildSystemType: 'webpack/vite',
       importPatterns: [
-        "import { tokens } from '@/tokens/DesignTokens.web.js'",
-        "import tokens from '@/tokens/DesignTokens.web.js'",
         "import '@/tokens/DesignTokens.web.css'"
       ],
       watchPatterns: [
-        'src/tokens/**/*.js',
         'src/tokens/**/*.css'
       ],
       treeShakingHints: [
-        'Use named exports for individual tokens to enable tree-shaking',
-        'Import only needed tokens: import { space100, fontSize100 } from "@/tokens"',
         'CSS custom properties are automatically available globally'
       ],
       additionalConfig: {
@@ -112,14 +102,14 @@ export class WebFileOrganizer extends BasePathProvider {
       errors.push('Web token files should be in src/tokens directory');
     }
 
-    if (!filePath.endsWith('.js') && !filePath.endsWith('.css')) {
-      errors.push('Web token files should have .js or .css extension');
+    if (!filePath.endsWith('.css')) {
+      errors.push('Web token files should have .css extension');
     }
 
     if (filePath.includes('DesignTokens.web')) {
       // Valid web token file
     } else {
-      errors.push('Web token files should follow DesignTokens.web.[js|css] naming pattern');
+      errors.push('Web token files should follow DesignTokens.web.css naming pattern');
     }
 
     return {

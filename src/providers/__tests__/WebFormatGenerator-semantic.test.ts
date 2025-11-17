@@ -13,10 +13,10 @@ describe('WebFormatGenerator - Semantic Token Methods', () => {
     let generator: WebFormatGenerator;
 
     beforeEach(() => {
-      generator = new WebFormatGenerator('javascript');
+      generator = new WebFormatGenerator();
     });
 
-    test('should format single-reference semantic token for JavaScript', () => {
+    test('should format single-reference semantic token for CSS', () => {
       const semanticToken: SemanticToken = {
         name: 'colorPrimary',
         primitiveReferences: {
@@ -28,25 +28,6 @@ describe('WebFormatGenerator - Semantic Token Methods', () => {
       };
 
       const result = generator.formatSingleReferenceToken(semanticToken);
-
-      expect(result).toContain('colorPrimary');
-      expect(result).toContain('purple300');
-      expect(result).toMatch(/colorPrimary:\s*purple300/);
-    });
-
-    test('should format single-reference semantic token for CSS', () => {
-      const cssGenerator = new WebFormatGenerator('css');
-      const semanticToken: SemanticToken = {
-        name: 'colorPrimary',
-        primitiveReferences: {
-          value: 'purple300'
-        },
-        category: SemanticCategory.COLOR,
-        context: 'Primary brand color',
-        description: 'Main brand color for primary actions'
-      };
-
-      const result = cssGenerator.formatSingleReferenceToken(semanticToken);
 
       expect(result).toContain('--color-primary');
       expect(result).toContain('var(--purple-300)');
@@ -65,8 +46,8 @@ describe('WebFormatGenerator - Semantic Token Methods', () => {
 
       const result = generator.formatSingleReferenceToken(semanticToken);
 
-      expect(result).toContain('spacingGroupedNormal');
-      expect(result).toContain('space100');
+      expect(result).toContain('--spacing-grouped-normal');
+      expect(result).toContain('var(--space-100)');
     });
 
     test('should throw error when no primitive reference exists', () => {
@@ -88,36 +69,10 @@ describe('WebFormatGenerator - Semantic Token Methods', () => {
     let generator: WebFormatGenerator;
 
     beforeEach(() => {
-      generator = new WebFormatGenerator('javascript');
-    });
-
-    test('should format multi-reference semantic token for JavaScript', () => {
-      const semanticToken: SemanticToken = {
-        name: 'typographyBodyMd',
-        primitiveReferences: {
-          fontSize: 'fontSize100',
-          lineHeight: 'lineHeight100',
-          fontFamily: 'fontFamilyBody',
-          fontWeight: 'fontWeight400',
-          letterSpacing: 'letterSpacing100'
-        },
-        category: SemanticCategory.TYPOGRAPHY,
-        context: 'Medium body text',
-        description: 'Standard body text for content'
-      };
-
-      const result = generator.formatMultiReferenceToken(semanticToken);
-
-      expect(result).toContain('typographyBodyMd');
-      expect(result).toContain('fontSize: fontSize100');
-      expect(result).toContain('lineHeight: lineHeight100');
-      expect(result).toContain('fontFamily: fontFamilyBody');
-      expect(result).toContain('fontWeight: fontWeight400');
-      expect(result).toContain('letterSpacing: letterSpacing100');
+      generator = new WebFormatGenerator();
     });
 
     test('should format multi-reference semantic token for CSS', () => {
-      const cssGenerator = new WebFormatGenerator('css');
       const semanticToken: SemanticToken = {
         name: 'typographyBodyMd',
         primitiveReferences: {
@@ -130,7 +85,7 @@ describe('WebFormatGenerator - Semantic Token Methods', () => {
         description: 'Standard body text for content'
       };
 
-      const result = cssGenerator.formatMultiReferenceToken(semanticToken);
+      const result = generator.formatMultiReferenceToken(semanticToken);
 
       expect(result).toContain('--typography-body-md-font-size');
       expect(result).toContain('var(--font-size-100)');
@@ -156,28 +111,8 @@ describe('WebFormatGenerator - Semantic Token Methods', () => {
   });
 
   describe('generateSectionComment', () => {
-    test('should generate primitive section comment for JavaScript', () => {
-      const generator = new WebFormatGenerator('javascript');
-      const result = generator.generateSectionComment('primitive');
-
-      expect(result).toContain('PRIMITIVE TOKENS');
-      expect(result).toContain('Mathematical foundation');
-      expect(result).toContain('//');
-      expect(result).toContain('============================================');
-    });
-
-    test('should generate semantic section comment for JavaScript', () => {
-      const generator = new WebFormatGenerator('javascript');
-      const result = generator.generateSectionComment('semantic');
-
-      expect(result).toContain('SEMANTIC TOKENS');
-      expect(result).toContain('Use these for UI development');
-      expect(result).toContain('//');
-      expect(result).toContain('============================================');
-    });
-
     test('should generate primitive section comment for CSS', () => {
-      const generator = new WebFormatGenerator('css');
+      const generator = new WebFormatGenerator();
       const result = generator.generateSectionComment('primitive');
 
       expect(result).toContain('PRIMITIVE TOKENS');
@@ -188,7 +123,7 @@ describe('WebFormatGenerator - Semantic Token Methods', () => {
     });
 
     test('should generate semantic section comment for CSS', () => {
-      const generator = new WebFormatGenerator('css');
+      const generator = new WebFormatGenerator();
       const result = generator.generateSectionComment('semantic');
 
       expect(result).toContain('SEMANTIC TOKENS');
@@ -203,7 +138,7 @@ describe('WebFormatGenerator - Semantic Token Methods', () => {
     let generator: WebFormatGenerator;
 
     beforeEach(() => {
-      generator = new WebFormatGenerator('css');
+      generator = new WebFormatGenerator();
     });
 
     describe('generateOpacityProperty', () => {
@@ -281,11 +216,9 @@ describe('WebFormatGenerator - Semantic Token Methods', () => {
   describe('Z-Index Token Formatting', () => {
     describe('formatToken with semantic-only z-index tokens', () => {
       let cssGenerator: WebFormatGenerator;
-      let jsGenerator: WebFormatGenerator;
 
       beforeEach(() => {
-        cssGenerator = new WebFormatGenerator('css');
-        jsGenerator = new WebFormatGenerator('javascript');
+        cssGenerator = new WebFormatGenerator();
       });
 
       test('should format z-index token for CSS with correct prefix and kebab-case', () => {
@@ -304,23 +237,6 @@ describe('WebFormatGenerator - Semantic Token Methods', () => {
         expect(result).toContain('--z-index-modal');
         expect(result).toContain('400');
         expect(result).toMatch(/--z-index-modal:\s*400;/);
-      });
-
-      test('should format z-index token for JavaScript', () => {
-        const zIndexToken = {
-          name: 'zIndex.modal',
-          value: 400,
-          platforms: ['web', 'ios'],
-          category: SemanticCategory.LAYERING,
-          context: 'Modal dialogs',
-          description: 'Z-index for modal overlay content'
-        };
-
-        const result = jsGenerator.formatToken(zIndexToken as any);
-
-        expect(result).toContain('zIndexModal');
-        expect(result).toContain('400');
-        expect(result).toMatch(/zIndexModal:\s*400,/);
       });
 
       test('should format all z-index semantic levels correctly', () => {
