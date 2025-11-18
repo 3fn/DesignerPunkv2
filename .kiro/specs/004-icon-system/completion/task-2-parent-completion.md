@@ -193,7 +193,7 @@ Created comprehensive conversion log (`.kiro/specs/004-icon-system/icon-conversi
 ✅ Icon proportions and alignment consistent
 
 ### System Integration
-✅ Web SVG files ready for Icon.web.tsx component integration
+✅ Web SVG files ready for Icon.web.ts component integration
 ✅ Android VectorDrawable files ready for Icon.android.kt component integration
 ✅ iOS setup documentation ready for manual Asset Catalog import
 ✅ All files follow platform-specific naming conventions (kebab-case for web, snake_case for Android)

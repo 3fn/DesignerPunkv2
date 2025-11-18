@@ -138,7 +138,7 @@ This implementation plan converts the Icon System design into actionable coding 
     - Provide conversion date and version information
     - _Requirements: 5.4, 5.5, 5.6, 8.5, 9.2_
 
-- [ ] 3. Web Icon Component Implementation
+- [x] 3. Web Icon Component Implementation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -151,17 +151,17 @@ This implementation plan converts the Icon System design into actionable coding 
   - TypeScript types enforced correctly
   
   **Primary Artifacts:**
-  - `src/components/core/Icon/platforms/web/Icon.web.tsx`
-  - `src/components/core/Icon/platforms/web/__tests__/Icon.web.test.tsx`
+  - `src/components/core/Icon/platforms/web/Icon.web.ts`
+  - `src/components/core/Icon/platforms/web/__tests__/Icon.web.test.ts`
   
   **Completion Documentation:**
   - Detailed: `.kiro/specs/004-icon-system/completion/task-3-parent-completion.md`
   - Summary: `docs/specs/004-icon-system/task-3-summary.md` (triggers release detection)
 
-  - [ ] 3.1 Implement web Icon component
+  - [x] 3.1 Implement web Icon component
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    - Create `src/components/core/Icon/platforms/web/Icon.web.tsx`
+    - Create `src/components/core/Icon/platforms/web/Icon.web.ts`
     - Implement Icon component with IconProps interface
     - Load SVG content based on icon name
     - Render inline SVG with size, viewBox, stroke attributes
@@ -170,7 +170,7 @@ This implementation plan converts the Icon System design into actionable coding 
     - Handle invalid icon names with fallback to circle
     - _Requirements: 1.1, 1.2, 1.3, 2.1, 2.2, 2.3, 3.1, 7.1, 10.1_
 
-  - [ ] 3.2 Write web Icon component tests
+  - [x] 3.2 Write web Icon component tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/components/core/Icon/platforms/web/__tests__/Icon.web.test.tsx`

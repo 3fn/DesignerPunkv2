@@ -27,7 +27,7 @@ The Icon System provides cross-platform infrastructure for displaying vector ico
 ```
 Icon System
 ├── Icon Component (Platform-Specific)
-│   ├── Icon.web.tsx (React/TypeScript)
+│   ├── Icon.web.ts (TypeScript)
 │   ├── Icon.ios.swift (SwiftUI)
 │   └── Icon.android.kt (Jetpack Compose)
 │
@@ -128,9 +128,9 @@ export interface IconProps {
 ### Web Implementation (React/TypeScript)
 
 ```typescript
-// src/components/core/Icon/platforms/web/Icon.web.tsx
+// src/components/core/Icon/platforms/web/Icon.web.ts
 
-import React from 'react';
+import { IconProps, IconName } from '../../types';
 import { IconProps } from '../../types';
 
 /**
@@ -275,7 +275,7 @@ src/components/core/Icon/
 ├── types.ts                    # TypeScript type definitions
 ├── platforms/
 │   ├── web/
-│   │   ├── Icon.web.tsx       # Web component
+│   │   ├── Icon.web.ts        # Web component
 │   │   └── assets/
 │   │       ├── arrow-right.svg
 │   │       ├── check.svg

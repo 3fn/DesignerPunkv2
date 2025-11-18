@@ -119,10 +119,11 @@ interface IconProps {
 
 ### Platform-Specific Implementations
 
-**Web (React/TypeScript):**
+**Web (TypeScript):**
 ```typescript
-// Icon.web.tsx
-export const Icon: React.FC<IconProps> = ({ name, size, className }) => {
+// Icon.web.ts
+export function createIcon(props: IconProps): string {
+  const { name, size, className } = props;
   return (
     <svg 
       width={size} 

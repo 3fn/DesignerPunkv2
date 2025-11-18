@@ -145,7 +145,7 @@ This bottom-up approach ensured each layer was solid before building the next. T
 ### Key Patterns
 
 **Pattern 1: True Native Architecture**
-- Separate implementation files per platform (Icon.web.tsx, Icon.ios.swift, Icon.android.kt)
+- Separate implementation files per platform (Icon.web.ts, Icon.ios.swift, Icon.android.kt)
 - Shared type definitions in platform-agnostic types.ts
 - Platform-specific asset directories for icon storage
 
@@ -277,7 +277,7 @@ Icon(name = "arrow_right", size = 24.dp)
 - Documentation includes platform-specific examples
 
 **Example**: Platform implementations can now be added to:
-- `platforms/web/Icon.web.tsx` (React/TypeScript)
+- `platforms/web/Icon.web.ts` (TypeScript)
 - `platforms/ios/Icon.ios.swift` (SwiftUI)
 - `platforms/android/Icon.android.kt` (Jetpack Compose)
 
@@ -386,7 +386,7 @@ Developers can now:
 ### Dependents
 
 - **Icon Asset Conversion (Task 2)**: Will convert 15 Feather Icons to platform-specific formats
-- **Web Icon Component (Task 3)**: Will implement Icon.web.tsx using these type definitions
+- **Web Icon Component (Task 3)**: Will implement Icon.web.ts using these type definitions
 - **iOS Icon Component (Task 4)**: Will implement Icon.ios.swift using these type definitions
 - **Android Icon Component (Task 5)**: Will implement Icon.android.kt using these type definitions
 - **Button Component**: Will use Icon component for button icons
