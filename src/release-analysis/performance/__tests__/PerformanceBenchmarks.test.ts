@@ -564,6 +564,9 @@ describe('Performance Benchmarks', () => {
         averageTime: number;
         throughput: number;
     }> {
+        // Create files on disk before parsing
+        setupMockGitRepository(documents);
+
         if (!useCache) {
             documentCache.clear();
         }
@@ -586,6 +589,9 @@ describe('Performance Benchmarks', () => {
         totalTime: number;
         throughput: number;
     }> {
+        // Create files on disk before parsing
+        setupMockGitRepository(documents);
+
         const startTime = Date.now();
 
         for (const doc of documents) {
@@ -604,6 +610,9 @@ describe('Performance Benchmarks', () => {
         throughput: number;
         parallelEfficiency: number;
     }> {
+        // Create files on disk before parsing
+        setupMockGitRepository(documents);
+
         const processor = new ParallelProcessor({
             maxConcurrency: concurrency,
             batchSize: Math.ceil(documents.length / concurrency),
@@ -637,6 +646,9 @@ describe('Performance Benchmarks', () => {
         peak: number;
         average: number;
     }> {
+        // Create files on disk before parsing
+        setupMockGitRepository(documents);
+
         const memoryMeasurements: number[] = [];
         let peakMemory = 0;
 
@@ -804,6 +816,9 @@ All acceptance criteria have been met:
     }
 
     async function simulateRepositoryAnalysis(documents: CompletionDocument[]): Promise<void> {
+        // Create files on disk before parsing
+        setupMockGitRepository(documents);
+
         // Simulate the work done during repository analysis
         for (const doc of documents) {
             await documentCache.parseDocumentIncremental(doc.path);

@@ -5,7 +5,7 @@
  * Uses { value: 'primitiveTokenName' } pattern following semantic/SpacingTokens.ts pattern.
  * 
  * Token Selection Guidance:
- * - borderDefault: Standard borders for cards, inputs at rest, buttons at rest, dividers
+ * - borderDefault: Standard borders for containers, inputs at rest, buttons at rest, dividers
  * - borderEmphasis: Emphasized borders for inputs on focus, selected cards, active buttons
  * - borderHeavy: Strong visual weight borders (rare, use sparingly)
  */
