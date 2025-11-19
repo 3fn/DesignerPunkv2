@@ -285,7 +285,10 @@ export class MathematicalConsistencyValidator {
     // Validate baseline grid alignment for spacing and radius tokens
     for (const token of primitiveTokens) {
       if (token.category === TokenCategory.SPACING || token.category === TokenCategory.RADIUS) {
-        const result = this.baselineGridValidator.validate(token.baseValue, token.name);
+        const result = this.baselineGridValidator.validate({
+          value: token.baseValue,
+          tokenName: token.name
+        });
         results.push(result);
       }
     }
