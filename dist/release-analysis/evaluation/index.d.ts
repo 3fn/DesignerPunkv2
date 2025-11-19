@@ -6,5 +6,5 @@
  */
 export { ArtifactEvaluator } from './ArtifactEvaluator';
 export { EvaluationCLI, runArtifactEvaluation, runQuickComparison } from './EvaluationCLI';
-export type { EvaluationMetrics, AccuracyMetrics, PerformanceMetrics, ComplexityMetrics, ValueMetrics, ComparisonResult, IntegrationRecommendation, TradeoffAnalysis, TestCase, EvaluationOptions } from './ArtifactEvaluator';
+export type { EvaluationMetrics, AccuracyMetrics, PerformanceMetrics, ComplexityMetrics, ValueMetrics, ComparisonResult, IntegrationRecommendation, TradeoffAnalysis, TestCase } from './ArtifactEvaluator';
 //# sourceMappingURL=index.d.ts.map

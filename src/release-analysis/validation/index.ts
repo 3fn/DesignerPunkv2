@@ -18,9 +18,7 @@ export type {
   CategorizationAccuracyMetrics,
   VersionBumpAccuracyMetrics,
   ConfidenceValidationMetrics,
-  RegressionTestResult,
-  AccuracyTestReport,
-  AccuracyTestSummary
+  RegressionTestResult
 } from './AccuracyValidationFramework';
 
 export type {

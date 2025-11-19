@@ -17,6 +17,5 @@ export type {
   ComparisonResult,
   IntegrationRecommendation,
   TradeoffAnalysis,
-  TestCase,
-  EvaluationOptions
+  TestCase
 } from './ArtifactEvaluator';
