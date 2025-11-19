@@ -6,6 +6,7 @@
  */
 
 import { ErrorContext, ErrorDetails } from '../types';
+import { withErrorHandling } from './ErrorHandler';
 
 export {
   ReleaseAnalysisErrorHandler,

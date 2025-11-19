@@ -7,10 +7,11 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleMultipleErrors = exports.formatErrorForCLI = exports.createErrorContext = exports.createRecoveryUtilities = exports.ConfigurationErrorRecovery = exports.DocumentErrorRecovery = exports.GitErrorRecovery = exports.withErrorHandling = exports.releaseAnalysisErrorHandler = exports.ReleaseAnalysisErrorHandler = void 0;
-var ErrorHandler_1 = require("./ErrorHandler");
-Object.defineProperty(exports, "ReleaseAnalysisErrorHandler", { enumerable: true, get: function () { return ErrorHandler_1.ReleaseAnalysisErrorHandler; } });
-Object.defineProperty(exports, "releaseAnalysisErrorHandler", { enumerable: true, get: function () { return ErrorHandler_1.releaseAnalysisErrorHandler; } });
-Object.defineProperty(exports, "withErrorHandling", { enumerable: true, get: function () { return ErrorHandler_1.withErrorHandling; } });
+const ErrorHandler_1 = require("./ErrorHandler");
+var ErrorHandler_2 = require("./ErrorHandler");
+Object.defineProperty(exports, "ReleaseAnalysisErrorHandler", { enumerable: true, get: function () { return ErrorHandler_2.ReleaseAnalysisErrorHandler; } });
+Object.defineProperty(exports, "releaseAnalysisErrorHandler", { enumerable: true, get: function () { return ErrorHandler_2.releaseAnalysisErrorHandler; } });
+Object.defineProperty(exports, "withErrorHandling", { enumerable: true, get: function () { return ErrorHandler_2.withErrorHandling; } });
 var ErrorRecovery_1 = require("./ErrorRecovery");
 Object.defineProperty(exports, "GitErrorRecovery", { enumerable: true, get: function () { return ErrorRecovery_1.GitErrorRecovery; } });
 Object.defineProperty(exports, "DocumentErrorRecovery", { enumerable: true, get: function () { return ErrorRecovery_1.DocumentErrorRecovery; } });
@@ -52,7 +53,7 @@ const handleMultipleErrors = async (operations, context, continueOnError = true)
             operation: `batch-operation-${i}`,
             timestamp: new Date()
         };
-        const result = await withErrorHandling(operations[i], operationContext);
+        const result = await (0, ErrorHandler_1.withErrorHandling)(operations[i], operationContext);
         if (result.success && result.data !== undefined) {
             results.push(result.data);
         }
