@@ -3,6 +3,7 @@ import { existsSync, statSync } from 'fs';
 import { join } from 'path';
 import { releaseAnalysisErrorHandler, withErrorHandling, ErrorContext } from '../errors/ErrorHandler';
 import { GitErrorRecovery } from '../errors/ErrorRecovery';
+import { CompletionDocument, DocumentMetadata } from '../types/AnalysisTypes';
 
 /**
  * Git tag information
@@ -46,29 +47,6 @@ export interface AnalysisScope {
   toCommit: string;
   completionDocuments: CompletionDocument[];
   analysisDate: Date;
-}
-
-/**
- * Completion document metadata
- */
-export interface CompletionDocument {
-  path: string;
-  content: string;
-  lastModified: Date;
-  gitCommit: string;
-  metadata: DocumentMetadata;
-}
-
-/**
- * Document metadata extracted from completion documents
- */
-export interface DocumentMetadata {
-  title: string;
-  date?: string;
-  task?: string;
-  spec?: string;
-  status?: string;
-  type: 'task-completion' | 'spec-completion' | 'other';
 }
 
 /**

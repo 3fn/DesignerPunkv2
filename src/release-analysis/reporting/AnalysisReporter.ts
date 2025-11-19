@@ -13,7 +13,9 @@ import {
   Feature, 
   BugFix, 
   Improvement,
-  DocumentationChange 
+  DocumentationChange,
+  CompletionDocument,
+  DocumentMetadata
 } from '../types/AnalysisTypes';
 import { VersionRecommendation } from '../versioning/VersionCalculator';
 
@@ -32,23 +34,6 @@ export interface AnalysisScope {
   toCommit: string;
   completionDocuments: CompletionDocument[];
   analysisDate: Date;
-}
-
-export interface CompletionDocument {
-  path: string;
-  content: string;
-  lastModified: Date;
-  gitCommit: string;
-  metadata: DocumentMetadata;
-}
-
-export interface DocumentMetadata {
-  title: string;
-  date?: string;
-  task?: string;
-  spec?: string;
-  status?: string;
-  type: 'task-completion' | 'spec-completion' | 'other';
 }
 
 export interface ConfidenceMetrics {

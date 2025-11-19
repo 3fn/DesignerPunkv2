@@ -1,4 +1,4 @@
-import { CompletionDocument } from '../git/GitHistoryAnalyzer';
+import { CompletionDocument } from '../types/AnalysisTypes';
 /**
  * Document parsing cache entry
  */

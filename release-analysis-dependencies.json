@@ -1,0 +1,482 @@
+{
+  "../performance/CachingStrategy.ts": [
+    "../types/PrimitiveToken.ts",
+    "../types/SemanticToken.ts"
+  ],
+  "../performance/PerformanceMonitor.ts": [],
+  "../release/config/ReleaseConfig.ts": [],
+  "../release/detection/CompletionAnalyzer.ts": [
+    "../release/config/ReleaseConfig.ts",
+    "../release/types/ReleaseTypes.ts"
+  ],
+  "../release/types/ReleaseTypes.ts": [],
+  "../types/PrimitiveToken.ts": [],
+  "../types/SemanticToken.ts": [
+    "../types/PrimitiveToken.ts"
+  ],
+  "__tests__/CLIIntegration.test.ts": [
+    "cli/ReleaseCLI.ts",
+    "config/AnalysisConfig.ts",
+    "extraction/SimpleChangeExtractor.ts",
+    "git/GitHistoryAnalyzer.ts",
+    "notes/ReleaseNoteGenerator.ts",
+    "versioning/VersionCalculator.ts"
+  ],
+  "__tests__/ConfigurationIntegration.test.ts": [
+    "cli/ReleaseCLI.ts",
+    "config/AnalysisConfig.ts",
+    "config/AnalysisConfigManager.ts"
+  ],
+  "__tests__/EdgeCases.test.ts": [
+    "config/AnalysisConfig.ts",
+    "extraction/SimpleChangeExtractor.ts",
+    "notes/ReleaseNoteGenerator.ts",
+    "types/AnalysisTypes.ts",
+    "versioning/VersionCalculator.ts"
+  ],
+  "__tests__/ErrorHandlingIntegration.test.ts": [
+    "cli/ReleaseCLI.ts",
+    "errors/ErrorHandler.ts",
+    "git/GitHistoryAnalyzer.ts"
+  ],
+  "__tests__/SystemIntegration.test.ts": [
+    "cli/ReleaseCLI.ts",
+    "config/AnalysisConfig.ts",
+    "extraction/SimpleChangeExtractor.ts",
+    "git/GitHistoryAnalyzer.ts",
+    "notes/ReleaseNoteGenerator.ts",
+    "types/AnalysisTypes.ts",
+    "versioning/VersionCalculator.ts"
+  ],
+  "__tests__/WorkflowIntegration.test.ts": [
+    "config/AnalysisConfig.ts",
+    "config/AnalysisConfigManager.ts",
+    "extraction/SimpleChangeExtractor.ts",
+    "git/GitHistoryAnalyzer.ts",
+    "notes/ReleaseNoteGenerator.ts",
+    "types/AnalysisTypes.ts",
+    "versioning/VersionCalculator.ts"
+  ],
+  "cli/AdvancedReleaseCLI.ts": [
+    "collection/CompletionDocumentCollector.ts",
+    "config/AnalysisConfig.ts",
+    "errors/ErrorHandler.ts",
+    "errors/ErrorRecovery.ts",
+    "extraction/SimpleChangeExtractor.ts",
+    "git/GitHistoryAnalyzer.ts",
+    "notes/ReleaseNoteGenerator.ts",
+    "types/AnalysisTypes.ts",
+    "versioning/VersionCalculator.ts"
+  ],
+  "cli/ReleaseCLI.ts": [
+    "collection/CompletionDocumentCollector.ts",
+    "config/AnalysisConfig.ts",
+    "config/AnalysisConfigManager.ts",
+    "errors/ErrorHandler.ts",
+    "errors/ErrorRecovery.ts",
+    "extraction/SimpleChangeExtractor.ts",
+    "git/GitHistoryAnalyzer.ts",
+    "notes/ReleaseNoteGenerator.ts",
+    "types/AnalysisTypes.ts",
+    "versioning/VersionCalculator.ts"
+  ],
+  "cli/__tests__/AdvancedReleaseCLI.test.ts": [
+    "cli/AdvancedReleaseCLI.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "cli/__tests__/ReleaseCLI.test.ts": [
+    "cli/ReleaseCLI.ts"
+  ],
+  "cli/__tests__/quick-analyze.test.ts": [
+    "cli/quick-analyze.ts"
+  ],
+  "cli/accuracy-validate.ts": [
+    "config/AnalysisConfig.ts",
+    "validation/AccuracyTestRunner.ts"
+  ],
+  "cli/evaluate-artifacts.ts": [
+    "evaluation/EvaluationCLI.ts"
+  ],
+  "cli/evaluate-methods.ts": [
+    "evaluation/EvaluationCLI.ts"
+  ],
+  "cli/example-usage.ts": [
+    "cli/AdvancedReleaseCLI.ts"
+  ],
+  "cli/index.ts": [
+    "cli/AdvancedReleaseCLI.ts",
+    "cli/ReleaseCLI.ts",
+    "cli/quick-analyze.ts"
+  ],
+  "cli/manage-hooks.ts": [
+    "config/AnalysisConfigManager.ts",
+    "hooks/HookIntegrationManager.ts"
+  ],
+  "cli/performance-benchmark.ts": [
+    "config/AnalysisConfigManager.ts",
+    "performance/PerformanceBenchmarkRunner.ts"
+  ],
+  "cli/quick-analyze.ts": [
+    "git/GitHistoryAnalyzer.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "cli/release-analyze.ts": [
+    "cli/AdvancedReleaseCLI.ts"
+  ],
+  "collection/CompletionDocumentCollector.ts": [
+    "config/AnalysisConfig.ts",
+    "errors/ErrorHandler.ts",
+    "errors/ErrorRecovery.ts",
+    "git/GitHistoryAnalyzer.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "collection/OptimizedCompletionDocumentCollector.ts": [
+    "collection/CompletionDocumentCollector.ts",
+    "config/AnalysisConfig.ts",
+    "errors/ErrorHandler.ts",
+    "git/GitHistoryAnalyzer.ts",
+    "performance/DocumentParsingCache.ts",
+    "performance/ParallelProcessor.ts",
+    "performance/ProgressReporter.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "collection/__tests__/CompletionDocumentCollector.test.ts": [
+    "collection/CompletionDocumentCollector.ts",
+    "config/AnalysisConfig.ts",
+    "git/GitHistoryAnalyzer.ts"
+  ],
+  "collection/index.ts": [
+    "collection/CompletionDocumentCollector.ts"
+  ],
+  "config/AnalysisConfig.ts": [],
+  "config/AnalysisConfigManager.ts": [
+    "config/AnalysisConfig.ts",
+    "config/AnalysisConfigSchema.ts"
+  ],
+  "config/AnalysisConfigSchema.ts": [],
+  "config/__tests__/AnalysisConfigManager.test.ts": [
+    "config/AnalysisConfig.ts",
+    "config/AnalysisConfigManager.ts"
+  ],
+  "config/index.ts": [
+    "config/AnalysisConfig.ts",
+    "config/AnalysisConfigManager.ts",
+    "config/AnalysisConfigSchema.ts"
+  ],
+  "errors/ErrorHandler.ts": [
+    "types.ts"
+  ],
+  "errors/ErrorRecovery.ts": [
+    "errors/ErrorHandler.ts"
+  ],
+  "errors/__tests__/ErrorHandler.test.ts": [
+    "errors/ErrorHandler.ts",
+    "errors/ErrorRecovery.ts"
+  ],
+  "errors/example-usage.ts": [
+    "errors/ErrorRecovery.ts",
+    "errors/index.ts"
+  ],
+  "errors/index.ts": [
+    "errors/ErrorHandler.ts",
+    "errors/ErrorRecovery.ts",
+    "types.ts"
+  ],
+  "evaluation/ArtifactEvaluator.ts": [
+    "../release/config/ReleaseConfig.ts",
+    "../release/detection/CompletionAnalyzer.ts",
+    "config/AnalysisConfig.ts",
+    "extraction/SimpleChangeExtractor.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "evaluation/EvaluationCLI.ts": [
+    "../release/config/ReleaseConfig.ts",
+    "config/AnalysisConfig.ts",
+    "evaluation/ArtifactEvaluator.ts"
+  ],
+  "evaluation/__tests__/ArtifactEvaluator.test.ts": [
+    "../release/config/ReleaseConfig.ts",
+    "config/AnalysisConfig.ts",
+    "evaluation/ArtifactEvaluator.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "evaluation/index.ts": [
+    "evaluation/ArtifactEvaluator.ts",
+    "evaluation/EvaluationCLI.ts"
+  ],
+  "extraction/ChangeCategorizationSystem.ts": [
+    "config/AnalysisConfig.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "extraction/ChangeExtractor.ts": [
+    "config/AnalysisConfig.ts",
+    "extraction/SimpleChangeExtractor.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "extraction/ConfidenceMetrics.ts": [
+    "config/AnalysisConfig.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "extraction/DeduplicationEngine.ts": [
+    "config/AnalysisConfig.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "extraction/PatternMatcher.ts": [
+    "config/AnalysisConfig.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "extraction/SimpleChangeExtractor.ts": [
+    "config/AnalysisConfig.ts",
+    "extraction/ChangeCategorizationSystem.ts",
+    "extraction/ConfidenceMetrics.ts",
+    "extraction/DeduplicationEngine.ts",
+    "extraction/PatternMatcher.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "extraction/__tests__/ChangeCategorizationSystem.test.ts": [
+    "config/AnalysisConfig.ts",
+    "extraction/ChangeCategorizationSystem.ts"
+  ],
+  "extraction/__tests__/ConfidenceMetrics.test.ts": [
+    "config/AnalysisConfig.ts",
+    "extraction/ConfidenceMetrics.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "extraction/__tests__/DeduplicationEngine.test.ts": [
+    "config/AnalysisConfig.ts",
+    "extraction/DeduplicationEngine.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "extraction/__tests__/SimpleChangeExtractor-confidence.test.ts": [
+    "config/AnalysisConfig.ts",
+    "extraction/SimpleChangeExtractor.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "extraction/__tests__/SimpleChangeExtractor.test.ts": [
+    "config/AnalysisConfig.ts",
+    "extraction/SimpleChangeExtractor.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "extraction/__tests__/deduplication-integration.test.ts": [
+    "config/AnalysisConfig.ts",
+    "extraction/SimpleChangeExtractor.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "extraction/__tests__/integration.test.ts": [
+    "config/AnalysisConfig.ts",
+    "extraction/ChangeExtractor.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "extraction/example-confidence-usage.ts": [
+    "config/AnalysisConfig.ts",
+    "extraction/ConfidenceMetrics.ts",
+    "extraction/SimpleChangeExtractor.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "extraction/index.ts": [
+    "extraction/ChangeCategorizationSystem.ts",
+    "extraction/ChangeExtractor.ts",
+    "extraction/PatternMatcher.ts",
+    "extraction/SimpleChangeExtractor.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "git/GitHistoryAnalyzer.ts": [
+    "errors/ErrorHandler.ts",
+    "errors/ErrorRecovery.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "git/__tests__/GitHistoryAnalyzer.integration.test.ts": [
+    "git/GitHistoryAnalyzer.ts"
+  ],
+  "git/__tests__/GitHistoryAnalyzer.test.ts": [
+    "git/GitHistoryAnalyzer.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "git/example-usage.ts": [
+    "git/GitHistoryAnalyzer.ts"
+  ],
+  "git/index.ts": [
+    "git/GitHistoryAnalyzer.ts",
+    "git/example-usage.ts"
+  ],
+  "hooks/HookIntegrationManager.ts": [
+    "cli/quick-analyze.ts",
+    "config/AnalysisConfig.ts"
+  ],
+  "hooks/__tests__/HookIntegration.test.ts": [
+    "cli/quick-analyze.ts",
+    "config/AnalysisConfig.ts",
+    "hooks/HookIntegrationManager.ts"
+  ],
+  "hooks/__tests__/HookIntegrationManager.test.ts": [
+    "config/AnalysisConfig.ts",
+    "hooks/HookIntegrationManager.ts"
+  ],
+  "hooks/__tests__/HookScripts.test.ts": [],
+  "hooks/index.ts": [
+    "hooks/HookIntegrationManager.ts"
+  ],
+  "index.ts": [
+    "cli/ReleaseCLI.ts",
+    "collection/index.ts",
+    "config/index.ts",
+    "errors/index.ts",
+    "extraction/index.ts",
+    "git/index.ts",
+    "notes/index.ts",
+    "performance/index.ts",
+    "reporting/index.ts",
+    "types.ts",
+    "types/AnalysisTypes.ts",
+    "validation/index.ts",
+    "versioning/index.ts"
+  ],
+  "notes/ReleaseNoteGenerator.ts": [
+    "types/AnalysisTypes.ts"
+  ],
+  "notes/__tests__/ReleaseNoteGenerator.test.ts": [
+    "notes/ReleaseNoteGenerator.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "notes/example-usage.ts": [
+    "notes/ReleaseNoteGenerator.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "notes/index.ts": [
+    "notes/ReleaseNoteGenerator.ts"
+  ],
+  "performance/DocumentParsingCache.ts": [
+    "../performance/CachingStrategy.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "performance/GitPerformanceOptimizer.ts": [
+    "../performance/CachingStrategy.ts",
+    "../performance/PerformanceMonitor.ts",
+    "git/GitHistoryAnalyzer.ts"
+  ],
+  "performance/ParallelProcessor.ts": [
+    "../performance/PerformanceMonitor.ts"
+  ],
+  "performance/PerformanceBenchmarkRunner.ts": [
+    "config/AnalysisConfig.ts",
+    "performance/DocumentParsingCache.ts",
+    "performance/GitPerformanceOptimizer.ts",
+    "performance/ParallelProcessor.ts",
+    "performance/PerformanceOptimizedAnalyzer.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "performance/PerformanceOptimizedAnalyzer.ts": [
+    "collection/OptimizedCompletionDocumentCollector.ts",
+    "config/AnalysisConfig.ts",
+    "errors/ErrorHandler.ts",
+    "git/GitHistoryAnalyzer.ts",
+    "performance/GitPerformanceOptimizer.ts",
+    "performance/ProgressReporter.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "performance/ProgressReporter.ts": [],
+  "performance/__tests__/DocumentParsingCache.test.ts": [
+    "performance/DocumentParsingCache.ts"
+  ],
+  "performance/__tests__/GitPerformanceOptimizer.test.ts": [
+    "performance/GitPerformanceOptimizer.ts"
+  ],
+  "performance/__tests__/PerformanceBenchmarks.test.ts": [
+    "config/AnalysisConfig.ts",
+    "config/AnalysisConfigManager.ts",
+    "performance/DocumentParsingCache.ts",
+    "performance/GitPerformanceOptimizer.ts",
+    "performance/ParallelProcessor.ts",
+    "performance/PerformanceOptimizedAnalyzer.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "performance/__tests__/PerformanceRegression.test.ts": [
+    "config/AnalysisConfigManager.ts",
+    "performance/PerformanceBenchmarkRunner.ts"
+  ],
+  "performance/example-usage.ts": [
+    "config/AnalysisConfigManager.ts",
+    "performance/PerformanceBenchmarkRunner.ts"
+  ],
+  "performance/index.ts": [
+    "performance/DocumentParsingCache.ts",
+    "performance/GitPerformanceOptimizer.ts",
+    "performance/ParallelProcessor.ts",
+    "performance/ProgressReporter.ts"
+  ],
+  "reporting/AnalysisReporter.ts": [
+    "types/AnalysisTypes.ts",
+    "versioning/VersionCalculator.ts"
+  ],
+  "reporting/__tests__/AnalysisReporter.test.ts": [
+    "reporting/AnalysisReporter.ts",
+    "types/AnalysisTypes.ts"
+  ],
+  "reporting/example-usage.ts": [
+    "reporting/AnalysisReporter.ts"
+  ],
+  "reporting/index.ts": [
+    "reporting/AnalysisReporter.ts"
+  ],
+  "types.ts": [],
+  "types/AnalysisTypes.ts": [],
+  "validation/AccuracyTestCases.ts": [
+    "types/AnalysisTypes.ts",
+    "validation/AccuracyValidationFramework.ts"
+  ],
+  "validation/AccuracyTestRunner.ts": [
+    "config/AnalysisConfig.ts",
+    "validation/AccuracyTestCases.ts",
+    "validation/AccuracyValidationFramework.ts"
+  ],
+  "validation/AccuracyValidationFramework.ts": [
+    "config/AnalysisConfig.ts",
+    "extraction/SimpleChangeExtractor.ts",
+    "types/AnalysisTypes.ts",
+    "versioning/VersionCalculator.ts"
+  ],
+  "validation/AnalysisValidator.ts": [
+    "types/AnalysisTypes.ts",
+    "versioning/VersionCalculator.ts"
+  ],
+  "validation/__tests__/AccuracyRegressionTests.test.ts": [
+    "config/AnalysisConfig.ts",
+    "validation/AccuracyTestCases.ts",
+    "validation/AccuracyValidationFramework.ts"
+  ],
+  "validation/__tests__/AccuracyValidationFramework.test.ts": [
+    "config/AnalysisConfig.ts",
+    "validation/AccuracyTestCases.ts",
+    "validation/AccuracyValidationFramework.ts"
+  ],
+  "validation/__tests__/AnalysisValidator.test.ts": [
+    "types/AnalysisTypes.ts",
+    "validation/AnalysisValidator.ts",
+    "versioning/VersionCalculator.ts"
+  ],
+  "validation/example-usage.ts": [
+    "types/AnalysisTypes.ts",
+    "validation/AnalysisValidator.ts",
+    "versioning/VersionCalculator.ts"
+  ],
+  "validation/index.ts": [
+    "validation/AccuracyTestCases.ts",
+    "validation/AccuracyTestRunner.ts",
+    "validation/AccuracyValidationFramework.ts",
+    "validation/AnalysisValidator.ts"
+  ],
+  "versioning/VersionCalculator.ts": [
+    "types/AnalysisTypes.ts"
+  ],
+  "versioning/__tests__/VersionCalculator.test.ts": [
+    "types/AnalysisTypes.ts",
+    "versioning/VersionCalculator.ts"
+  ],
+  "versioning/example-usage.ts": [
+    "types/AnalysisTypes.ts",
+    "versioning/VersionCalculator.ts"
+  ],
+  "versioning/index.ts": [
+    "versioning/VersionCalculator.ts"
+  ]
+}

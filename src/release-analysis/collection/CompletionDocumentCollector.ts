@@ -2,7 +2,8 @@ import { existsSync, statSync } from 'fs';
 import { join, relative } from 'path';
 import { execSync } from 'child_process';
 import { AnalysisConfig } from '../config/AnalysisConfig';
-import { GitChanges, CompletionDocument, DocumentMetadata } from '../git/GitHistoryAnalyzer';
+import { GitChanges } from '../git/GitHistoryAnalyzer';
+import { CompletionDocument, DocumentMetadata } from '../types/AnalysisTypes';
 import { withErrorHandling, ErrorContext } from '../errors/ErrorHandler';
 import { DocumentErrorRecovery } from '../errors/ErrorRecovery';
 

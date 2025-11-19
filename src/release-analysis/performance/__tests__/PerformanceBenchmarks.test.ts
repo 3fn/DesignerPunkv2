@@ -4,7 +4,7 @@ import { DocumentParsingCache } from '../DocumentParsingCache';
 import { ParallelProcessor } from '../ParallelProcessor';
 import { AnalysisConfig } from '../../config/AnalysisConfig';
 import { AnalysisConfigManager } from '../../config/AnalysisConfigManager';
-import { CompletionDocument } from '../../git/GitHistoryAnalyzer';
+import { CompletionDocument } from '../../types/AnalysisTypes';
 import { execSync } from 'child_process';
 import { writeFileSync, mkdirSync, rmSync } from 'fs';
 import { join } from 'path';
