@@ -134,4 +134,44 @@ export interface IconProps {
    * - Android: testTag
    */
   testID?: string;
+  
+  /**
+   * Optional color override for optical weight compensation.
+   * 
+   * By default, icons inherit color from their parent component (recommended).
+   * Use this property to specify a lighter color when icons appear heavier than
+   * adjacent text due to stroke density (optical illusion).
+   * 
+   * Values:
+   * - `'inherit'` (default): Use color inheritance (currentColor on web, template mode on iOS, LocalContentColor on Android)
+   * - Token reference: Design system token name (e.g., 'color-text-secondary')
+   * 
+   * Platform-specific behavior:
+   * - Web: 'inherit' uses currentColor, token reference becomes CSS custom property (var(--token))
+   * - iOS: 'inherit' uses .primary, token reference uses Color parameter
+   * - Android: 'inherit' uses LocalContentColor.current, token reference uses Color parameter
+   * 
+   * @example
+   * ```typescript
+   * // Default - inherit color from parent
+   * <Icon name="arrow-right" size={24} />
+   * 
+   * // Explicit inheritance
+   * <Icon name="arrow-right" size={24} color="inherit" />
+   * 
+   * // Optical weight compensation - lighter color for icon
+   * <Icon name="arrow-right" size={24} color="color-text-secondary" />
+   * ```
+   * 
+   * **When to use color override:**
+   * - Icon paired with text label (use lighter color for icon to balance optical weight)
+   * - Icon needs specific semantic color (error, success, warning)
+   * - Complex layouts where inheritance doesn't provide correct color
+   * 
+   * **When to use inheritance (default):**
+   * - Icon is the only element (no text to balance)
+   * - Icon and text should have identical color
+   * - Simple button/link contexts where parent color is correct
+   */
+  color?: 'inherit' | string;
 }

@@ -107,7 +107,20 @@ The Icon System provides foundational infrastructure for displaying icons across
 5. WHEN a developer types icon name THEN the Icon System SHALL provide TypeScript autocomplete with valid icon names
 6. WHEN a developer uses invalid icon name THEN the Icon System SHALL produce compile-time error before code runs
 
-### Requirement 7: Accessibility
+### Requirement 7: Color Override for Optical Weight Compensation
+
+**User Story**: As a designer, I want to specify a lighter color for icons paired with text labels, so that I can compensate for the optical illusion where icons appear heavier than text at the same color.
+
+#### Acceptance Criteria
+
+1. WHEN an icon is rendered THEN the Icon System SHALL support optional color parameter for explicit color control
+2. WHEN color parameter is not provided THEN the Icon System SHALL default to color inheritance (currentColor on web, template mode on iOS, LocalContentColor on Android)
+3. WHEN color parameter is 'inherit' THEN the Icon System SHALL use color inheritance mechanism
+4. WHEN color parameter is a token reference THEN the Icon System SHALL apply the specified token color
+5. WHEN an icon is paired with text label THEN the Icon System SHALL enable designer to use lighter icon color for optical balance
+6. WHEN color override is used THEN the Icon System SHALL maintain cross-platform consistency (web uses CSS custom properties, iOS uses Color parameter, Android uses Color parameter)
+
+### Requirement 8: Accessibility
 
 **User Story**: As a user with screen reader, I want icons in buttons to not interfere with button labels, so that I hear clear button descriptions without redundant icon announcements.
 
@@ -119,7 +132,7 @@ The Icon System provides foundational infrastructure for displaying icons across
 4. WHEN an icon is used in a button THEN the Icon System SHALL allow button text to serve as accessible label
 5. WHEN an icon is decorative THEN the Icon System SHALL not announce icon to screen readers
 
-### Requirement 8: Cross-Platform Consistency
+### Requirement 9: Cross-Platform Consistency
 
 **User Story**: As a product designer, I want icons to look visually consistent across web, iOS, and Android, so that users have a unified experience regardless of platform.
 
@@ -131,7 +144,7 @@ The Icon System provides foundational infrastructure for displaying icons across
 4. WHEN an icon is converted THEN the Icon System SHALL validate that conversion maintains visual fidelity to source SVG
 5. WHEN platform-specific adjustments are needed THEN the Icon System SHALL document the adjustment and rationale
 
-### Requirement 9: Feather Icons Integration
+### Requirement 10: Feather Icons Integration
 
 **User Story**: As a developer, I want to use Feather Icons from local assets, so that I have reliable, version-controlled access to icons without external dependencies.
 

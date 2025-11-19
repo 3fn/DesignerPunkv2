@@ -282,7 +282,7 @@ This implementation plan converts the Icon System design into actionable coding 
     - Verify preview renders correctly in Android Studio
     - _Requirements: 1.1, 2.1, 2.2, 2.3_
 
-- [ ] 6. Cross-Platform Integration Testing
+- [x] 6. Cross-Platform Integration Testing
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -290,6 +290,7 @@ This implementation plan converts the Icon System design into actionable coding 
   **Success Criteria:**
   - Icons render consistently across all platforms
   - Color inheritance works on all platforms
+  - Color override enables optical weight compensation
   - Size variants render correctly on all platforms
   - Accessibility features work on all platforms
   - Visual regression tests pass
@@ -298,12 +299,13 @@ This implementation plan converts the Icon System design into actionable coding 
   - Integration test files for each platform
   - Visual regression test screenshots
   - Cross-platform consistency validation report
+  - Color override implementation across all platforms
   
   **Completion Documentation:**
   - Detailed: `.kiro/specs/004-icon-system/completion/task-6-parent-completion.md`
   - Summary: `docs/specs/004-icon-system/task-6-summary.md` (triggers release detection)
 
-  - [ ] 6.1 Create cross-platform visual regression tests
+  - [x] 6.1 Create cross-platform visual regression tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Render same icon at same size on all platforms
@@ -313,7 +315,7 @@ This implementation plan converts the Icon System design into actionable coding 
     - Document any platform-specific differences
     - _Requirements: 8.1, 8.2, 8.3, 8.4_
 
-  - [ ] 6.2 Test color inheritance across platforms
+  - [x] 6.2 Test color inheritance across platforms
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Web: Verify currentColor inheritance from parent
@@ -323,7 +325,19 @@ This implementation plan converts the Icon System design into actionable coding 
     - Verify icons match parent text color automatically
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5_
 
-  - [ ] 6.3 Test accessibility across platforms
+  - [x] 6.3 Implement optional color override
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Add `color?: 'inherit' | string` to IconProps interface
+    - Web: Support 'inherit' (currentColor) or token reference (var(--token))
+    - iOS: Support Color? parameter with nil default
+    - Android: Support Color? parameter with null default
+    - Update tests to verify color override with tokens
+    - Update README with optical weight compensation guidance
+    - Document when to use override vs inheritance
+    - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5, 7.6_
+
+  - [x] 6.4 Test accessibility across platforms
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Web: Verify aria-hidden="true" with screen reader
@@ -331,9 +345,9 @@ This implementation plan converts the Icon System design into actionable coding 
     - Android: Verify contentDescription=null with TalkBack
     - Test that button text is announced, not icon
     - Verify icons don't interfere with navigation
-    - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5_
+    - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5_
 
-  - [ ] 6.4 Validate size variants across platforms
+  - [x] 6.5 Validate size variants across platforms
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test 16px/pt/dp size on all platforms
@@ -342,9 +356,9 @@ This implementation plan converts the Icon System design into actionable coding 
     - Test 40px/pt/dp size on all platforms
     - Verify sizes render consistently across platforms
     - Verify 8px baseline grid alignment
-    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 8.2_
+    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 9.2_
 
-- [ ] 7. Documentation and Examples
+- [x] 7. Documentation and Examples
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -364,7 +378,7 @@ This implementation plan converts the Icon System design into actionable coding 
   - Detailed: `.kiro/specs/004-icon-system/completion/task-7-parent-completion.md`
   - Summary: `docs/specs/004-icon-system/task-7-summary.md` (triggers release detection)
 
-  - [ ] 7.1 Create icon conversion guide
+  - [x] 7.1 Create icon conversion guide
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `.kiro/specs/004-icon-system/icon-conversion-guide.md`
@@ -374,7 +388,7 @@ This implementation plan converts the Icon System design into actionable coding 
     - Provide checklist for adding new icons
     - _Requirements: 5.1, 5.2, 5.3, 5.6_
 
-  - [ ] 7.2 Create usage examples
+  - [x] 7.2 Create usage examples
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add usage examples to Icon README
@@ -385,7 +399,7 @@ This implementation plan converts the Icon System design into actionable coding 
     - Provide examples for all three platforms
     - _Requirements: 1.1, 4.1_
 
-  - [ ] 7.3 Document icon naming conventions
+  - [x] 7.3 Document icon naming conventions
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Document icon naming rules (kebab-case for web/iOS, snake_case for Android)

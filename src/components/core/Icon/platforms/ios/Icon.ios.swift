@@ -52,12 +52,17 @@ struct Icon: View {
     /// Icon size in points
     let size: CGFloat
     
+    /// Optional color override for optical weight compensation
+    /// - nil (default): Uses .primary color (inherits from environment)
+    /// - Color value: Uses specified color for optical balance
+    let color: Color?
+    
     var body: some View {
         Image(name)
             .resizable()
             .renderingMode(.template)
             .frame(width: size, height: size)
-            .foregroundColor(.primary)
+            .foregroundColor(color ?? .primary) // Use override or default to .primary
             .accessibilityHidden(true)
     }
 }
@@ -103,8 +108,8 @@ struct Icon_Previews: PreviewProvider {
             
             Divider()
             
-            // Color inheritance
-            Text("Color Inheritance")
+            // Color inheritance (default)
+            Text("Color Inheritance (Default)")
                 .font(.headline)
             
             HStack(spacing: 16) {
@@ -119,6 +124,19 @@ struct Icon_Previews: PreviewProvider {
                 
                 Icon(name: "settings", size: 24)
                     .foregroundColor(.blue)
+            }
+            
+            Divider()
+            
+            // Color override (explicit)
+            Text("Color Override (Explicit)")
+                .font(.headline)
+            
+            HStack(spacing: 16) {
+                Icon(name: "check", size: 24, color: .green)
+                Icon(name: "x", size: 24, color: .red)
+                Icon(name: "heart", size: 24, color: .pink)
+                Icon(name: "settings", size: 24, color: .blue)
             }
             
             Divider()

@@ -264,6 +264,150 @@ private fun getIconResource(name: String): Int {
 Icon(name = "arrow-right", size = 24.dp)
 ```
 
+### Color Override for Optical Weight Compensation
+
+**Design Decision**: Add optional color parameter for explicit color control
+
+**Problem**: Icons have more visual weight than text at the same color due to stroke density. When an icon is paired with a text label at the same color, the icon appears heavier/darker than the text due to an optical illusion. This creates visual imbalance.
+
+**Solution**: Provide optional `color` parameter that allows explicit color specification while maintaining inheritance as the default behavior.
+
+**API Design**:
+- Parameter: `color?: 'inherit' | string`
+- Default: `'inherit'` (uses platform-native color inheritance)
+- Override: Token reference (e.g., `'color-text-secondary'`)
+
+**Rationale**:
+- **Optical balance**: Enables designers to use lighter colors for icons paired with text
+- **Backward compatible**: Optional parameter doesn't break existing code
+- **Token integration**: Explicit color uses design system tokens
+- **Cross-platform**: Same API pattern across all platforms
+
+**Trade-offs**:
+- ✅ **Gained**: Explicit control for optical weight compensation
+- ✅ **Gained**: Token system integration for color overrides
+- ✅ **Gained**: Flexibility for complex layouts where inheritance doesn't work
+- ❌ **Lost**: Slightly more complex API (additional optional parameter)
+- ⚠️ **Risk**: Developers might overuse explicit colors instead of inheritance
+
+**Implementation**:
+
+#### Web Implementation
+
+```typescript
+// types.ts - Add color to IconProps
+export interface IconProps {
+  name: IconName;
+  size: IconSize;
+  color?: 'inherit' | string; // Optional color override
+  className?: string;
+  style?: Record<string, any>;
+  testID?: string;
+}
+
+// Icon.web.ts - Support color override
+export function createIcon(props: IconProps): string {
+  const { name, size, color = 'inherit', className = '', style = {}, testID } = props;
+  
+  // Determine stroke color
+  const strokeColor = color === 'inherit' 
+    ? 'currentColor' 
+    : `var(--${color})`; // Token reference becomes CSS custom property
+  
+  const svgContent = loadIconSVG(name);
+  const classAttr = `icon icon-${name} ${className}`.trim();
+  
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${strokeColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${classAttr}" aria-hidden="true">${svgContent}</svg>`;
+}
+
+// Usage examples
+createIcon({ name: 'arrow-right', size: 24 }); 
+// Uses currentColor (inherits from parent)
+
+createIcon({ name: 'arrow-right', size: 24, color: 'color-text-secondary' }); 
+// Uses var(--color-text-secondary) for optical balance
+```
+
+#### iOS Implementation
+
+```swift
+// Icon.ios.swift - Add optional color parameter
+struct Icon: View {
+    let name: String
+    let size: CGFloat
+    let color: Color? // Optional color override
+    
+    var body: some View {
+        Image(name)
+            .resizable()
+            .renderingMode(.template)
+            .frame(width: size, height: size)
+            .foregroundColor(color ?? .primary) // Use override or default to .primary
+            .accessibilityHidden(true)
+    }
+}
+
+// Usage examples
+Icon(name: "arrow-right", size: 24)
+// Uses .primary (inherits from environment)
+
+Icon(name: "arrow-right", size: 24, color: .secondary)
+// Uses .secondary for optical balance
+```
+
+#### Android Implementation
+
+```kotlin
+// Icon.android.kt - Add optional color parameter
+@Composable
+fun Icon(
+    name: String,
+    size: Dp,
+    color: Color? = null, // Optional color override
+    modifier: Modifier = Modifier
+) {
+    Icon(
+        painter = painterResource(id = getIconResource(name)),
+        contentDescription = null,
+        modifier = modifier.size(size),
+        tint = color ?: LocalContentColor.current // Use override or default
+    )
+}
+
+// Usage examples
+Icon(name = "arrow-right", size = 24.dp)
+// Uses LocalContentColor.current (inherits from composition local)
+
+Icon(name = "arrow-right", size = 24.dp, color = MaterialTheme.colorScheme.secondary)
+// Uses secondary color for optical balance
+```
+
+**Usage Guidance**:
+
+When to use color override:
+- Icon paired with text label (use lighter color for icon)
+- Icon needs specific semantic color (error, success, warning)
+- Complex layouts where inheritance doesn't provide correct color
+
+When to use inheritance (default):
+- Icon is the only element (no text to balance)
+- Icon and text should have identical color
+- Simple button/link contexts where parent color is correct
+
+**Example - Optical Weight Compensation**:
+
+```typescript
+// Web example - Button with icon and text
+<button style={{ color: 'var(--color-text-default)' }}>
+  <Icon 
+    name="arrow-right" 
+    size={24} 
+    color="color-text-secondary" // Lighter color for optical balance
+  />
+  <span>Continue</span> // Uses parent color (darker)
+</button>
+```
+
 ---
 
 ## Data Models
