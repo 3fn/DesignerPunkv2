@@ -4,7 +4,7 @@
   "description": "True Native cross-platform design system with mathematical foundations",
   "main": "index.js",
   "scripts": {
-    "build": "tsc --skipLibCheck || echo 'Build completed with errors (non-blocking)'",
+    "build": "tsc --skipLibCheck",
     "build:watch": "tsc --watch --skipLibCheck",
     "build:verify": "node verify-build.js",
     "test": "jest --testPathIgnorePatterns='performance/__tests__|__tests__/performance'",
