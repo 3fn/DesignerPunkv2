@@ -2,7 +2,6 @@
 > designer-punk-v2@1.0.0 build
 > tsc --skipLibCheck || echo 'Build completed with errors (non-blocking)'
 
-src/build/validation/MathematicalConsistencyValidator.ts(288,77): error TS2554: Expected 1 arguments, but got 2.
 src/release-analysis/cli/AdvancedReleaseCLI.ts(13,58): error TS2459: Module '"../errors/ErrorHandler"' declares 'ErrorContext' locally, but it is not exported.
 src/release-analysis/cli/ReleaseCLI.ts(12,58): error TS2459: Module '"../errors/ErrorHandler"' declares 'ErrorContext' locally, but it is not exported.
 src/release-analysis/collection/CompletionDocumentCollector.ts(7,29): error TS2459: Module '"../errors/ErrorHandler"' declares 'ErrorContext' locally, but it is not exported.
@@ -34,5 +33,4 @@ src/release-analysis/index.ts(38,1): error TS2308: Module './versioning' has alr
 src/release-analysis/performance/PerformanceOptimizedAnalyzer.ts(7,29): error TS2459: Module '"../errors/ErrorHandler"' declares 'ErrorContext' locally, but it is not exported.
 src/release-analysis/validation/index.ts(22,3): error TS2305: Module '"./AccuracyValidationFramework"' has no exported member 'AccuracyTestReport'.
 src/release-analysis/validation/index.ts(23,3): error TS2305: Module '"./AccuracyValidationFramework"' has no exported member 'AccuracyTestSummary'.
-src/validators/__tests__/ThreeTierValidator.test.ts(191,11): error TS2739: Type '{ spacing: { primitiveUsage: number; semanticUsage: number; totalUsage: number; }; fontSize: { primitiveUsage: number; semanticUsage: number; totalUsage: number; }; fontFamily: { primitiveUsage: number; semanticUsage: number; totalUsage: number; }; ... 9 more ...; glow: { ...; }; }' is missing the following properties from type 'Record<TokenCategory, { primitiveUsage: number; semanticUsage: number; totalUsage: number; }>': opacity, blend, breakpoint
 Build completed with errors (non-blocking)
