@@ -5,7 +5,8 @@
  * and user guidance functionality.
  */
 
-import { ReleaseAnalysisErrorHandler, withErrorHandling, ErrorContext } from '../ErrorHandler';
+import { ReleaseAnalysisErrorHandler, withErrorHandling } from '../ErrorHandler';
+import { ErrorContext } from '../../types';
 import { GitErrorRecovery, DocumentErrorRecovery, ConfigurationErrorRecovery } from '../ErrorRecovery';
 
 describe('ReleaseAnalysisErrorHandler', () => {

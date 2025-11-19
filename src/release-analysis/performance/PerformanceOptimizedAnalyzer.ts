@@ -4,7 +4,8 @@ import { AnalysisConfig } from '../config/AnalysisConfig';
 import { OptimizedCompletionDocumentCollector, OptimizedCollectionResult } from '../collection/OptimizedCompletionDocumentCollector';
 import { GitPerformanceOptimizer, GitOptimizationConfig } from './GitPerformanceOptimizer';
 import { ProgressReporter, AnalysisPhase } from './ProgressReporter';
-import { withErrorHandling, ErrorContext } from '../errors/ErrorHandler';
+import { withErrorHandling } from '../errors/ErrorHandler';
+import { ErrorContext } from '../types';
 
 /**
  * Performance optimization configuration for the entire analysis pipeline

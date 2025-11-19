@@ -10,7 +10,8 @@
 import { promises as fs } from 'fs';
 import * as path from 'path';
 import * as readline from 'readline';
-import { releaseAnalysisErrorHandler, withErrorHandling, ErrorContext } from '../errors/ErrorHandler';
+import { releaseAnalysisErrorHandler, withErrorHandling } from '../errors/ErrorHandler';
+import { ErrorContext } from '../types';
 import { createRecoveryUtilities } from '../errors/ErrorRecovery';
 import { AnalysisConfig, DEFAULT_ANALYSIS_CONFIG } from '../config/AnalysisConfig';
 import { 

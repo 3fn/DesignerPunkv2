@@ -1,7 +1,8 @@
 import { execSync } from 'child_process';
 import { existsSync, statSync } from 'fs';
 import { join } from 'path';
-import { releaseAnalysisErrorHandler, withErrorHandling, ErrorContext } from '../errors/ErrorHandler';
+import { releaseAnalysisErrorHandler, withErrorHandling } from '../errors/ErrorHandler';
+import { ErrorContext } from '../types';
 import { GitErrorRecovery } from '../errors/ErrorRecovery';
 import { CompletionDocument, DocumentMetadata } from '../types/AnalysisTypes';
 

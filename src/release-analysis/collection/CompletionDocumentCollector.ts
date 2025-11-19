@@ -4,7 +4,8 @@ import { execSync } from 'child_process';
 import { AnalysisConfig } from '../config/AnalysisConfig';
 import { GitChanges } from '../git/GitHistoryAnalyzer';
 import { CompletionDocument, DocumentMetadata } from '../types/AnalysisTypes';
-import { withErrorHandling, ErrorContext } from '../errors/ErrorHandler';
+import { withErrorHandling } from '../errors/ErrorHandler';
+import { ErrorContext } from '../types';
 import { DocumentErrorRecovery } from '../errors/ErrorRecovery';
 
 /**
