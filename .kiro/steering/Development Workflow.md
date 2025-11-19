@@ -35,13 +35,17 @@ inclusion: always
 
 ### Recommended Process (IDE-based with Automation)
 1. **[MANUAL]** **Complete Task Work**: Implement all requirements and create specified artifacts
-2. **[MANUAL]** **Create Detailed Completion Document**: For parent tasks, create comprehensive completion doc at `.kiro/specs/[spec-name]/completion/task-N-parent-completion.md` (Tier 3)
-3. **[MANUAL]** **Create Summary Document**: For parent tasks, create concise summary doc at `docs/specs/[spec-name]/task-N-summary.md` (triggers release detection for manual files only)
-4. **[MANUAL - AI Workflows]** **Trigger Release Detection**: Run `./.kiro/hooks/release-manager.sh auto` (required for AI-created files; automatic hooks only work for manual IDE file operations)
-5. **[AUTOMATED - Manual Files]** **Release Detection**: Kiro IDE detects summary document creation and triggers release detection hook automatically (only for manually created files through IDE UI)
-6. **[MANUAL]** **Mark Task Complete**: Use `taskStatus` tool to update task status to "completed" when finished
-7. **[MANUAL]** **Commit Changes**: Run `./.kiro/hooks/commit-task.sh "Task Name"` to automatically commit and push
-8. **[MANUAL]** **Verify on GitHub**: Confirm changes appear in repository with correct commit message
+2. **[MANUAL]** **Validate Implementation**: 
+   - For regular tasks: Run `npm test` (fast validation, ~10 min)
+   - For parent tasks: Run `npm run test:all` (comprehensive, ~28 min)
+   - For performance tasks: Run `npm run test:performance` (~20 min)
+3. **[MANUAL]** **Create Detailed Completion Document**: For parent tasks, create comprehensive completion doc at `.kiro/specs/[spec-name]/completion/task-N-parent-completion.md` (Tier 3)
+4. **[MANUAL]** **Create Summary Document**: For parent tasks, create concise summary doc at `docs/specs/[spec-name]/task-N-summary.md` (triggers release detection for manual files only)
+5. **[MANUAL - AI Workflows]** **Trigger Release Detection**: Run `./.kiro/hooks/release-manager.sh auto` (required for AI-created files; automatic hooks only work for manual IDE file operations)
+6. **[AUTOMATED - Manual Files]** **Release Detection**: Kiro IDE detects summary document creation and triggers release detection hook automatically (only for manually created files through IDE UI)
+7. **[MANUAL]** **Mark Task Complete**: Use `taskStatus` tool to update task status to "completed" when finished
+8. **[MANUAL]** **Commit Changes**: Run `./.kiro/hooks/commit-task.sh "Task Name"` to automatically commit and push
+9. **[MANUAL]** **Verify on GitHub**: Confirm changes appear in repository with correct commit message
 
 **Why use `taskStatus` tool?**
 - Triggers agent hooks for automatic file organization

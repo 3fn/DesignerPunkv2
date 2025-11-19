@@ -1044,6 +1044,11 @@ This validation system ensures:
    - Confirm acceptance criteria are met
    - Check that specified functionality is implemented
 
+5. **Test Execution**
+   - Run `npm test` for standard validation (unit/integration tests)
+   - Excludes performance tests for fast feedback (~10 minutes)
+   - Sufficient for most implementation task validation
+
 **Validation Example**:
 
 ```markdown
@@ -1125,6 +1130,11 @@ This validation system ensures:
    - Verify all requirements for this task are addressed
    - Confirm acceptance criteria are met
    - Check that design decisions align with requirements
+
+7. **Test Execution**
+   - Run `npm run test:all` for comprehensive validation (includes performance tests)
+   - Required for parent task completion (~28 minutes)
+   - Ensures no performance regressions introduced
 
 **Validation Example (Architecture Task)**:
 
