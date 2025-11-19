@@ -29,9 +29,9 @@ inclusion: always
    - Sufficient for most development validation
    
    **WHEN validating parent task completion THEN:**
-   - Use `npm run test:all` (comprehensive validation)
-   - Includes performance tests (~28 minutes)
-   - Required for Tier 3 comprehensive validation
+   - **Default**: Use `npm test` (comprehensive functional validation, ~10 min)
+   - **If task modifies release-analysis or release-detection systems**: Use `npm run test:all` (~28 min)
+   - **If task is performance-critical**: Use `npm run test:all` (~28 min)
    
    **WHEN task involves performance changes THEN:**
    - Use `npm run test:performance` (performance validation only)
@@ -41,10 +41,17 @@ inclusion: always
    **Decision tree:**
    ```
    Is this a parent task completion?
-   ├─ YES → npm run test:all (comprehensive)
+   ├─ YES → Does task modify release-analysis or release-detection systems?
+   │   ├─ YES → npm run test:all (includes performance regression tests)
+   │   └─ NO → npm test (comprehensive functional validation)
    └─ NO → Does task involve performance changes?
        ├─ YES → npm run test:performance
        └─ NO → npm test (default)
    ```
    
-   **Default assumption**: Use `npm test` unless task explicitly requires comprehensive or performance validation.
+   **Key distinction:**
+   - `npm test` validates all functionality including release analysis (functional tests only)
+   - `npm run test:all` adds 20 minutes of performance regression tests for release analysis
+   - Most parent tasks only need functional validation
+   
+   **Default assumption**: Use `npm test` for parent tasks unless working on release-analysis/release-detection systems.

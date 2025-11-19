@@ -1132,9 +1132,10 @@ This validation system ensures:
    - Check that design decisions align with requirements
 
 7. **Test Execution**
-   - Run `npm run test:all` for comprehensive validation (includes performance tests)
-   - Required for parent task completion (~28 minutes)
-   - Ensures no performance regressions introduced
+   - **Default for parent tasks**: Run `npm test` (comprehensive functional validation, ~10 min)
+   - **If task modifies release-analysis/release-detection**: Run `npm run test:all` (~28 min)
+   - **If task is performance-critical**: Run `npm run test:all` (~28 min)
+   - Most parent tasks only need functional validation
 
 **Validation Example (Architecture Task)**:
 
