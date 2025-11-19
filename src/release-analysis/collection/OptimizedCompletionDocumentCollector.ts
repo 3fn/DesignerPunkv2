@@ -17,7 +17,8 @@ import {
   AnalysisPhase,
   ProgressReportingConfig
 } from '../performance/ProgressReporter';
-import { withErrorHandling, ErrorContext } from '../errors/ErrorHandler';
+import { withErrorHandling } from '../errors/ErrorHandler';
+import { ErrorContext } from '../types';
 
 /**
  * Optimized collection configuration

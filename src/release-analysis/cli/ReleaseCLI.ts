@@ -9,7 +9,8 @@
 
 import { promises as fs } from 'fs';
 import * as path from 'path';
-import { releaseAnalysisErrorHandler, withErrorHandling, ErrorContext } from '../errors/ErrorHandler';
+import { releaseAnalysisErrorHandler, withErrorHandling } from '../errors/ErrorHandler';
+import { ErrorContext } from '../types';
 import { createRecoveryUtilities } from '../errors/ErrorRecovery';
 import { 
   AnalysisResult as SharedAnalysisResult,
