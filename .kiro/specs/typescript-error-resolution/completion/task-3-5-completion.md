@@ -99,10 +99,13 @@ The remaining errors are primarily:
 2. Update MathematicalConsistencyValidator call (Task 4.2)
 3. Validate Phase 4 completion (Task 4.3)
 
-**Release-analysis Follow-up** (Optional):
-- Resolve duplicate export warnings in `index.ts`
-- Update ErrorContext import paths in remaining files
-- Export missing types from validation and evaluation modules
+**Release-analysis Follow-up** (Deferred):
+- **Issue Documented**: `.kiro/issues/release-analysis-typescript-errors.md`
+- **Status**: Deferred to post-Phase 4 (architectural refactoring)
+- **Priority**: Low (module is functionally working)
+- **Quick Wins Available**: 11 errors can be resolved in ~45 minutes (ErrorContext imports + missing exports)
+- **Architectural Work**: 20 duplicate export errors require refactoring decisions
+- **Recommendation**: Complete Phase 4 first, then evaluate if refactoring is needed
 
 ## Requirements Compliance
 
@@ -111,6 +114,22 @@ The remaining errors are primarily:
 - Module functionality tested
 - Core functionality confirmed working
 - Git commit and tag created
+
+## Issue Documentation
+
+**Remaining Release-analysis Errors**: Documented in `.kiro/issues/release-analysis-typescript-errors.md`
+
+**Summary**:
+- **31 TypeScript errors** remain in release-analysis module
+- **Status**: Deferred to post-Phase 4
+- **Priority**: Low (module is functionally working)
+- **Impact**: Type system warnings, not runtime failures
+- **Module Health**: 97% test pass rate, core functionality intact
+
+**Decision**: Focus on Phase 4 completion (2 remaining errors in other modules) rather than architectural refactoring of release-analysis module. The module works, and refactoring is better done with full context of usage patterns.
+
+**Related Issues**:
+- `.kiro/issues/release-analysis-change-extraction.md` - Separate logic bug issue (no overlap)
 
 ---
 
