@@ -221,6 +221,95 @@ describe('Icon Component', () => {
   });
 
   // ============================================================================
+  // Size Variants (Spec 006: Icon Size Tokens)
+  // ============================================================================
+  
+  describe('Size Variants', () => {
+    it('accepts all IconSize values from icon size tokens', () => {
+      const allSizes: IconSize[] = [13, 18, 24, 28, 32, 36, 40, 44, 48];
+      
+      allSizes.forEach(size => {
+        const result = createIcon({ name: 'check', size });
+        
+        expect(result).toContain(`width="${size}"`);
+        expect(result).toContain(`height="${size}"`);
+        expect(result).toContain(`viewBox="0 0 24 24"`);
+      });
+    });
+
+    it('renders core sizes correctly (90% use cases)', () => {
+      const coreSizes: IconSize[] = [18, 24, 32, 36, 40];
+      
+      coreSizes.forEach(size => {
+        const result = createIcon({ name: 'arrow-right', size });
+        
+        expect(result).toContain(`width="${size}"`);
+        expect(result).toContain(`height="${size}"`);
+        expect(result).toContain('icon-arrow-right');
+      });
+    });
+
+    it('renders available sizes correctly (10% use cases)', () => {
+      const availableSizes: IconSize[] = [13, 28, 44, 48];
+      
+      availableSizes.forEach(size => {
+        const result = createIcon({ name: 'heart', size });
+        
+        expect(result).toContain(`width="${size}"`);
+        expect(result).toContain(`height="${size}"`);
+        expect(result).toContain('icon-heart');
+      });
+    });
+
+    it('maintains type safety with IconSize type', () => {
+      // TypeScript compile-time validation
+      const validSize: IconSize = 24;
+      const result = createIcon({ name: 'check', size: validSize });
+      
+      expect(result).toContain('width="24"');
+      
+      // These would cause TypeScript errors (compile-time validation):
+      // const invalidSize: IconSize = 25; // Error: Type '25' is not assignable to type 'IconSize'
+      // const invalidSize: IconSize = 16; // Error: Type '16' is not assignable to type 'IconSize'
+    });
+
+    it('works with iconSizes constant for type-safe token references', () => {
+      const { iconSizes } = require('../types');
+      
+      // Test a few key sizes from iconSizes constant
+      const testCases = [
+        { token: 'size050', value: 13 },
+        { token: 'size075', value: 18 },
+        { token: 'size100', value: 24 },
+        { token: 'size400', value: 36 },
+        { token: 'size700', value: 48 }
+      ];
+      
+      testCases.forEach(({ token, value }) => {
+        const size = iconSizes[token];
+        expect(size).toBe(value);
+        
+        const result = createIcon({ name: 'check', size });
+        expect(result).toContain(`width="${value}"`);
+        expect(result).toContain(`height="${value}"`);
+      });
+    });
+
+    it('maintains backward compatibility with existing size usage', () => {
+      // Existing tests use size 24 and 32 - verify these still work
+      const existingSizes: IconSize[] = [24, 32];
+      
+      existingSizes.forEach(size => {
+        const result = createIcon({ name: 'check', size });
+        
+        expect(result).toContain(`width="${size}"`);
+        expect(result).toContain(`height="${size}"`);
+        expect(result).toContain('<svg');
+      });
+    });
+  });
+
+  // ============================================================================
   // SVG Attributes
   // ============================================================================
   

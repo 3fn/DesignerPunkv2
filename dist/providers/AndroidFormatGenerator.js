@@ -399,6 +399,41 @@ class AndroidFormatGenerator extends FormatProvider_1.BaseFormatProvider {
             return `    <dimen name="${snakeCaseName}">${elevationValue}dp</dimen>`;
         }
     }
+    /**
+     * Format icon size token with calculated value
+     * Generates: val iconSize100 = 24.dp with formula and typography pairing comments
+     *
+     * @param tokenName - Icon token name (e.g., 'icon.size100')
+     * @param calculatedSize - Calculated icon size in dp
+     * @param category - Token category
+     * @param description - Token description with formula (optional)
+     * @param context - Token context with typography pairing (optional)
+     * @returns Kotlin constant declaration string with comments
+     */
+    formatIconSizeToken(tokenName, calculatedSize, category, description, context) {
+        const kotlinName = this.getTokenName(tokenName, category);
+        // Build comment with formula and typography pairing
+        const comments = [];
+        if (description) {
+            comments.push(description);
+        }
+        if (context) {
+            comments.push(`Pairs with: ${context}`);
+        }
+        if (this.outputFormat === 'kotlin') {
+            if (comments.length > 0) {
+                return `    val ${kotlinName} = ${calculatedSize}.dp // ${comments.join(' | ')}`;
+            }
+            return `    val ${kotlinName} = ${calculatedSize}.dp`;
+        }
+        else {
+            // XML format with comment
+            if (comments.length > 0) {
+                return `    <!-- ${comments.join(' | ')} -->\n    <dimen name="${kotlinName}">${calculatedSize}dp</dimen>`;
+            }
+            return `    <dimen name="${kotlinName}">${calculatedSize}dp</dimen>`;
+        }
+    }
 }
 exports.AndroidFormatGenerator = AndroidFormatGenerator;
 //# sourceMappingURL=AndroidFormatGenerator.js.map

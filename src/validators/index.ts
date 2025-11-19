@@ -6,7 +6,6 @@
 
 // Core validator interface
 export type { IValidator, ValidationResult, ValidationLevel } from './IValidator';
-export { isPromiseValidationResult, awaitValidationResult } from './IValidator';
 
 export { BaselineGridValidator } from './BaselineGridValidator';
 export { CrossPlatformConsistencyValidator } from './CrossPlatformConsistencyValidator';

@@ -91,5 +91,17 @@ export declare class AndroidFormatGenerator extends BaseFormatProvider {
      * ```
      */
     formatElevationToken(tokenName: string, elevationValue: number): string;
+    /**
+     * Format icon size token with calculated value
+     * Generates: val iconSize100 = 24.dp with formula and typography pairing comments
+     *
+     * @param tokenName - Icon token name (e.g., 'icon.size100')
+     * @param calculatedSize - Calculated icon size in dp
+     * @param category - Token category
+     * @param description - Token description with formula (optional)
+     * @param context - Token context with typography pairing (optional)
+     * @returns Kotlin constant declaration string with comments
+     */
+    formatIconSizeToken(tokenName: string, calculatedSize: number, category: string, description?: string, context?: string): string;
 }
 //# sourceMappingURL=AndroidFormatGenerator.d.ts.map

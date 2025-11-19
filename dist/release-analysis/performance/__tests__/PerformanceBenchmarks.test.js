@@ -424,6 +424,8 @@ describe('Performance Benchmarks', () => {
         };
     }
     async function benchmarkExtraction(documents, useCache) {
+        // Create files on disk before parsing
+        setupMockGitRepository(documents);
         if (!useCache) {
             documentCache.clear();
         }
@@ -438,6 +440,8 @@ describe('Performance Benchmarks', () => {
         return { averageTime, throughput };
     }
     async function benchmarkSequentialExtraction(documents) {
+        // Create files on disk before parsing
+        setupMockGitRepository(documents);
         const startTime = Date.now();
         for (const doc of documents) {
             await documentCache.parseDocumentIncremental(doc.path);
@@ -448,6 +452,8 @@ describe('Performance Benchmarks', () => {
         return { totalTime, throughput };
     }
     async function benchmarkParallelExtraction(documents, concurrency) {
+        // Create files on disk before parsing
+        setupMockGitRepository(documents);
         const processor = new ParallelProcessor_1.ParallelProcessor({
             maxConcurrency: concurrency,
             batchSize: Math.ceil(documents.length / concurrency),
@@ -472,6 +478,8 @@ describe('Performance Benchmarks', () => {
         return { totalTime, throughput, parallelEfficiency };
     }
     async function benchmarkMemoryUsage(documents) {
+        // Create files on disk before parsing
+        setupMockGitRepository(documents);
         const memoryMeasurements = [];
         let peakMemory = 0;
         // Monitor memory during processing
@@ -615,6 +623,8 @@ All acceptance criteria have been met:
         }
     }
     async function simulateRepositoryAnalysis(documents) {
+        // Create files on disk before parsing
+        setupMockGitRepository(documents);
         // Simulate the work done during repository analysis
         for (const doc of documents) {
             await documentCache.parseDocumentIncremental(doc.path);

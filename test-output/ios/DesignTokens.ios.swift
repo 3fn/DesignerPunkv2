@@ -1,6 +1,6 @@
 ///
 /// DesignerPunk Design System - iOS Tokens
-/// Generated: 2025-11-17T23:12:19.413Z
+/// Generated: 2025-11-19T05:10:30.306Z
 /// Version: 1.0.0
 /// Platform: iOS (Swift Constants)
 ///
@@ -485,6 +485,17 @@ public struct DesignTokens {
     public static let gridMarginLg = space500
     public static let gridGutterNative = space250
     public static let gridMarginNative = space300
+    public static let iconSize050: CGFloat = 13 // Icon size calculated from fontSize050 × lineHeight050 = 13 × 1.0 = 13px | Pairs with: Icon size for caption, legal, labelXs typography (smallest text)
+    public static let iconSize075: CGFloat = 18 // Icon size calculated from fontSize075 × lineHeight075 = 14 × 1.25 = 18px (rounded from 17.5) | Pairs with: Icon size for bodySm, buttonSm, labelSm typography
+    public static let iconSize100: CGFloat = 24 // Icon size calculated from fontSize100 × lineHeight100 = 16 × 1.5 = 24px | Pairs with: Icon size for bodyMd, buttonMd, labelMd, input typography (standard)
+    public static let iconSize125: CGFloat = 32 // Icon size calculated from fontSize125 × lineHeight125 = 18 × 1.75 = 32px (rounded from 31.5) | Pairs with: Icon size for bodyLg, buttonLg, labelLg typography
+    public static let iconSize150: CGFloat = 28 // Icon size calculated from fontSize150 × lineHeight150 = 20 × 1.4 = 28px | Pairs with: Icon size for h6 typography (smallest heading)
+    public static let iconSize200: CGFloat = 32 // Icon size calculated from fontSize200 × lineHeight200 = 23 × 1.391 = 32px (rounded from 31.993) | Pairs with: Icon size for h5 typography
+    public static let iconSize300: CGFloat = 32 // Icon size calculated from fontSize300 × lineHeight300 = 26 × 1.231 = 32px (rounded from 32.006) | Pairs with: Icon size for h4 typography
+    public static let iconSize400: CGFloat = 36 // Icon size calculated from fontSize400 × lineHeight400 = 29 × 1.241 = 36px (rounded from 35.989) | Pairs with: Icon size for h3 typography
+    public static let iconSize500: CGFloat = 40 // Icon size calculated from fontSize500 × lineHeight500 = 33 × 1.212 = 40px (rounded from 39.996) | Pairs with: Icon size for h2 typography
+    public static let iconSize600: CGFloat = 44 // Icon size calculated from fontSize600 × lineHeight600 = 37 × 1.19 = 44px (rounded from 44.03) | Pairs with: Icon size for h1 typography
+    public static let iconSize700: CGFloat = 48 // Icon size calculated from fontSize700 × lineHeight700 = 42 × 1.143 = 48px (rounded from 48.006) | Pairs with: Icon size for display typography (hero text)
     public static let borderBorderDefault = borderWidth100
     public static let borderBorderEmphasis = borderWidth200
     public static let borderBorderHeavy = borderWidth400

@@ -64,5 +64,17 @@ export declare class WebFormatGenerator extends BaseFormatProvider {
      * @returns CSS custom property string
      */
     generateCustomProperty(tokenName: string, opacityValue: number): string;
+    /**
+     * Format icon size token with calculated value
+     * Generates: --icon-size-100: 24px; with formula and typography pairing comments
+     *
+     * @param tokenName - Icon token name (e.g., 'icon.size100')
+     * @param calculatedSize - Calculated icon size in pixels
+     * @param category - Token category
+     * @param description - Token description with formula (optional)
+     * @param context - Token context with typography pairing (optional)
+     * @returns CSS custom property string with comments
+     */
+    formatIconSizeToken(tokenName: string, calculatedSize: number, category: string, description?: string, context?: string): string;
 }
 //# sourceMappingURL=WebFormatGenerator.d.ts.map

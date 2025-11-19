@@ -337,8 +337,9 @@ export class SemanticTokenValidator implements IValidator<SemanticValidationInpu
         // Required properties for typography tokens
         const requiredTypographyProps = ['fontSize', 'lineHeight', 'fontFamily', 'fontWeight', 'letterSpacing'];
 
-        // Check if this looks like a typography token (has fontSize or lineHeight)
-        const isTypographyToken = refs.fontSize !== undefined || refs.lineHeight !== undefined;
+        // Check if this is a typography token by category (not just by having fontSize/lineHeight)
+        // Icon tokens also have fontSize and lineHeight but are not typography tokens
+        const isTypographyToken = semantic.category === 'typography';
 
         if (isTypographyToken) {
           // Validate all required typography properties exist
@@ -360,7 +361,7 @@ export class SemanticTokenValidator implements IValidator<SemanticValidationInpu
             }
           }
         } else {
-          // For other multi-reference tokens, validate all references exist
+          // For other multi-reference tokens (including icon tokens), validate all references exist
           for (const [prop, ref] of Object.entries(refs)) {
             if (typeof ref === 'string' && !primitiveNames.has(ref)) {
               invalidReferences.push({

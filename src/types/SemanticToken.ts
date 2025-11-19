@@ -19,7 +19,8 @@ export enum SemanticCategory {
   SHADOW = 'shadow',
   LAYOUT = 'layout',
   LAYERING = 'layering',
-  INTERACTION = 'interaction'
+  INTERACTION = 'interaction',
+  ICON = 'icon'
 }
 
 /**

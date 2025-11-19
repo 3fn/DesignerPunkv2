@@ -30,7 +30,7 @@ describe('Icon Component (Web)', () => {
     });
 
     it('should render icon with different sizes', () => {
-      const sizes: IconSize[] = [16, 24, 32, 40];
+      const sizes: IconSize[] = [18, 24, 32, 40];
       
       sizes.forEach(size => {
         const props: IconProps = {
@@ -345,8 +345,8 @@ describe('Icon Component (Web)', () => {
     });
 
     it('should meet Requirement 2.1-2.6: Icon size variants', () => {
-      // Test all specified size variants (16, 24, 32, 40)
-      const sizes: IconSize[] = [16, 24, 32, 40];
+      // Test all specified size variants from icon size tokens (Spec 006)
+      const sizes: IconSize[] = [13, 18, 24, 28, 32, 36, 40, 44, 48];
       
       sizes.forEach(size => {
         const result = createIcon({ name: 'check', size });

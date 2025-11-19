@@ -64,6 +64,14 @@ class TokenFileGenerator {
             if (!semantic.primitiveReferences) {
                 continue;
             }
+            // Special handling for ICON category tokens
+            if (semantic.category === 'icon') {
+                const iconLine = this.generateIconSizeToken(semantic, platform, generator);
+                if (iconLine) {
+                    lines.push(iconLine);
+                }
+                continue;
+            }
             // Detect single-reference vs multi-reference tokens
             // Single-reference tokens have:
             // - Only one key in primitiveReferences, OR
@@ -83,6 +91,38 @@ class TokenFileGenerator {
             }
         }
         return lines;
+    }
+    /**
+     * Generate icon size token with calculated value
+     * Resolves fontSize and lineHeight primitives and applies formula: fontSize × lineHeight
+     *
+     * @param semantic - Icon size semantic token
+     * @param platform - Target platform
+     * @param generator - Platform-specific generator
+     * @returns Formatted token string with calculated value
+     */
+    generateIconSizeToken(semantic, platform, generator) {
+        // Get fontSize and lineHeight primitive references
+        const fontSizeRef = semantic.primitiveReferences.fontSize;
+        const lineHeightRef = semantic.primitiveReferences.lineHeight;
+        if (!fontSizeRef || !lineHeightRef) {
+            console.warn(`Icon token ${semantic.name} missing fontSize or lineHeight reference`);
+            return null;
+        }
+        // Import primitive tokens to resolve references
+        const { fontSizeTokens } = require('../tokens/FontSizeTokens');
+        const { lineHeightTokens } = require('../tokens/LineHeightTokens');
+        // Resolve primitive tokens
+        const fontSizeToken = fontSizeTokens[fontSizeRef];
+        const lineHeightToken = lineHeightTokens[lineHeightRef];
+        if (!fontSizeToken || !lineHeightToken) {
+            console.warn(`Icon token ${semantic.name} references invalid primitives: ${fontSizeRef}, ${lineHeightRef}`);
+            return null;
+        }
+        // Calculate icon size: fontSize × lineHeight (rounded)
+        const calculatedSize = Math.round(fontSizeToken.baseValue * lineHeightToken.baseValue);
+        // Generate platform-specific token with calculated value, description, and context
+        return generator.formatIconSizeToken(semantic.name, calculatedSize, semantic.category, semantic.description, semantic.context);
     }
     /**
      * Generate layering token section for specified platform

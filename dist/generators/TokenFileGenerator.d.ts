@@ -44,6 +44,16 @@ export declare class TokenFileGenerator {
      */
     private generateSemanticSection;
     /**
+     * Generate icon size token with calculated value
+     * Resolves fontSize and lineHeight primitives and applies formula: fontSize × lineHeight
+     *
+     * @param semantic - Icon size semantic token
+     * @param platform - Target platform
+     * @param generator - Platform-specific generator
+     * @returns Formatted token string with calculated value
+     */
+    private generateIconSizeToken;
+    /**
      * Generate layering token section for specified platform
      * Handles semantic-only layering tokens (z-index and elevation)
      *

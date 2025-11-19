@@ -17,7 +17,6 @@ export { WorkflowMonitor } from '../detection/WorkflowMonitor';
 
 // Re-export commonly used types
 export type {
-  WorkflowEventDetector,
   HookSystemIntegration,
   FileOrganizationIntegration,
   AICollaborationIntegration,
