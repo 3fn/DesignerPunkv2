@@ -1,0 +1,17 @@
+{
+  "id": "1763531433-spec-completion",
+  "type": "spec-completion",
+  "source": ".kiro/specs/006-icon-size-tokens/completion/task-5-parent-completion.md",
+  "triggeredAt": "2025-11-19T05:50:33.3NZ",
+  "triggeredBy": "hook-system",
+  "git": {
+    "commit": "adc44547156aa3cdc91352b296fcd9f9d3d1a154",
+    "branch": "main",
+    "message": "Phase 1: Quick win fixes - 12 errors resolved"
+  },
+  "workflow": {
+    "hookType": "auto",
+    "projectRoot": "/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2"
+  },
+  "status": "pending"
+}

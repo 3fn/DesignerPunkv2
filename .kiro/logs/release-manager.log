@@ -5984,3 +5984,64 @@ Error processing trigger file .kiro/release-triggers/1761868170-spec-completion.
 [2025-11-18 20:52:39] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763527959-task-completion.json
 [2025-11-18 20:52:39] Trigger queued for manual processing (TypeScript integration disabled)
 [2025-11-18 20:52:39] Release manager hook completed
+[2025-11-18 21:50:33] Hook triggered by Kiro IDE agent hook system
+[2025-11-18 21:50:33] Event: taskStatusChange, Status: completed
+[2025-11-18 21:50:33] Release manager hook started: hook_type=auto, source_path=
+[2025-11-18 21:50:33] Detecting release triggers: type=spec-completion, source=.kiro/specs/006-icon-size-tokens/completion/task-1-parent-completion.md
+[2025-11-18 21:50:33] Spec completion detected: .kiro/specs/006-icon-size-tokens/completion/task-1-parent-completion.md
+[2025-11-18 21:50:33] Processing release trigger: spec-completion from .kiro/specs/006-icon-size-tokens/completion/task-1-parent-completion.md
+[2025-11-18 21:50:33] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763531433-spec-completion.json
+[2025-11-18 21:50:33] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-18 21:50:33] Detecting release triggers: type=spec-completion, source=.kiro/specs/006-icon-size-tokens/completion/task-2-1-completion.md
+[2025-11-18 21:50:33] Spec completion detected: .kiro/specs/006-icon-size-tokens/completion/task-2-1-completion.md
+[2025-11-18 21:50:33] Processing release trigger: spec-completion from .kiro/specs/006-icon-size-tokens/completion/task-2-1-completion.md
+[2025-11-18 21:50:33] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763531433-spec-completion.json
+[2025-11-18 21:50:33] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-18 21:50:33] Detecting release triggers: type=spec-completion, source=.kiro/specs/006-icon-size-tokens/completion/task-2-2-completion.md
+[2025-11-18 21:50:33] Spec completion detected: .kiro/specs/006-icon-size-tokens/completion/task-2-2-completion.md
+[2025-11-18 21:50:33] Processing release trigger: spec-completion from .kiro/specs/006-icon-size-tokens/completion/task-2-2-completion.md
+[2025-11-18 21:50:33] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763531433-spec-completion.json
+[2025-11-18 21:50:33] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-18 21:50:33] Detecting release triggers: type=spec-completion, source=.kiro/specs/006-icon-size-tokens/completion/task-2-parent-completion.md
+[2025-11-18 21:50:33] Spec completion detected: .kiro/specs/006-icon-size-tokens/completion/task-2-parent-completion.md
+[2025-11-18 21:50:33] Processing release trigger: spec-completion from .kiro/specs/006-icon-size-tokens/completion/task-2-parent-completion.md
+[2025-11-18 21:50:33] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763531433-spec-completion.json
+[2025-11-18 21:50:33] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-18 21:50:33] Detecting release triggers: type=spec-completion, source=.kiro/specs/006-icon-size-tokens/completion/task-3-3-completion.md
+[2025-11-18 21:50:33] Spec completion detected: .kiro/specs/006-icon-size-tokens/completion/task-3-3-completion.md
+[2025-11-18 21:50:33] Processing release trigger: spec-completion from .kiro/specs/006-icon-size-tokens/completion/task-3-3-completion.md
+[2025-11-18 21:50:33] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763531433-spec-completion.json
+[2025-11-18 21:50:33] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-18 21:50:33] Detecting release triggers: type=spec-completion, source=.kiro/specs/006-icon-size-tokens/completion/task-3-4-completion.md
+[2025-11-18 21:50:33] Spec completion detected: .kiro/specs/006-icon-size-tokens/completion/task-3-4-completion.md
+[2025-11-18 21:50:33] Processing release trigger: spec-completion from .kiro/specs/006-icon-size-tokens/completion/task-3-4-completion.md
+[2025-11-18 21:50:33] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763531433-spec-completion.json
+[2025-11-18 21:50:33] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-18 21:50:33] Detecting release triggers: type=spec-completion, source=.kiro/specs/006-icon-size-tokens/completion/task-3-parent-completion.md
+[2025-11-18 21:50:33] Spec completion detected: .kiro/specs/006-icon-size-tokens/completion/task-3-parent-completion.md
+[2025-11-18 21:50:33] Processing release trigger: spec-completion from .kiro/specs/006-icon-size-tokens/completion/task-3-parent-completion.md
+[2025-11-18 21:50:33] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763531433-spec-completion.json
+[2025-11-18 21:50:33] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-18 21:50:33] Detecting release triggers: type=spec-completion, source=.kiro/specs/006-icon-size-tokens/completion/task-4-2-completion.md
+[2025-11-18 21:50:33] Spec completion detected: .kiro/specs/006-icon-size-tokens/completion/task-4-2-completion.md
+[2025-11-18 21:50:33] Processing release trigger: spec-completion from .kiro/specs/006-icon-size-tokens/completion/task-4-2-completion.md
+[2025-11-18 21:50:33] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763531433-spec-completion.json
+[2025-11-18 21:50:33] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-18 21:50:33] Detecting release triggers: type=spec-completion, source=.kiro/specs/006-icon-size-tokens/completion/task-4-3-completion.md
+[2025-11-18 21:50:33] Spec completion detected: .kiro/specs/006-icon-size-tokens/completion/task-4-3-completion.md
+[2025-11-18 21:50:33] Processing release trigger: spec-completion from .kiro/specs/006-icon-size-tokens/completion/task-4-3-completion.md
+[2025-11-18 21:50:33] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763531433-spec-completion.json
+[2025-11-18 21:50:33] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-18 21:50:33] Detecting release triggers: type=spec-completion, source=.kiro/specs/006-icon-size-tokens/completion/task-4-parent-completion.md
+[2025-11-18 21:50:33] Spec completion detected: .kiro/specs/006-icon-size-tokens/completion/task-4-parent-completion.md
+[2025-11-18 21:50:33] Processing release trigger: spec-completion from .kiro/specs/006-icon-size-tokens/completion/task-4-parent-completion.md
+[2025-11-18 21:50:33] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763531433-spec-completion.json
+[2025-11-18 21:50:33] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-18 21:50:33] Detecting release triggers: type=spec-completion, source=.kiro/specs/006-icon-size-tokens/completion/task-5-parent-completion.md
+[2025-11-18 21:50:33] Spec completion detected: .kiro/specs/006-icon-size-tokens/completion/task-5-parent-completion.md
+[2025-11-18 21:50:33] Processing release trigger: spec-completion from .kiro/specs/006-icon-size-tokens/completion/task-5-parent-completion.md
+[2025-11-18 21:50:33] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763531433-spec-completion.json
+[2025-11-18 21:50:33] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-18 21:50:33] Detecting release triggers: type=task-completion, source=.kiro/specs/006-icon-size-tokens/tasks.md
+[2025-11-18 21:50:33] Detecting release triggers: type=task-completion, source=.kiro/specs/typescript-error-resolution/tasks.md
+[2025-11-18 21:50:33] Release manager hook completed
