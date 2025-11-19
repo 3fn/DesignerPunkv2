@@ -77,13 +77,18 @@ function loadIconSVG(name: IconName): string {
  * ```
  */
 export function createIcon(props: IconProps): string {
-  const { name, size, className = '', style = {}, testID } = props;
+  const { name, size, className = '', style = {}, testID, color = 'inherit' } = props;
   
   // Load SVG content based on icon name
   const svgContent = loadIconSVG(name);
   
   // Build class attribute
   const classAttr = `icon icon-${name} ${className}`.trim();
+  
+  // Determine stroke color based on color prop
+  const strokeColor = color === 'inherit' 
+    ? 'currentColor' 
+    : `var(--${color})`; // Token reference becomes CSS custom property
   
   // Build style attribute
   const styleStr = Object.entries(style)
@@ -100,7 +105,7 @@ export function createIcon(props: IconProps): string {
   // Build style attribute
   const styleAttr = styleStr ? ` style="${styleStr}"` : '';
   
-  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${classAttr}" aria-hidden="true"${testIDAttr}${styleAttr}>${svgContent}</svg>`;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${strokeColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${classAttr}" aria-hidden="true"${testIDAttr}${styleAttr}>${svgContent}</svg>`;
 }
 
 /**

@@ -20,19 +20,21 @@ import androidx.compose.ui.graphics.Color
  * 
  * @param name Icon name (e.g., "arrow-right", "check", "settings")
  * @param size Icon size in Dp (16.dp, 24.dp, 32.dp, 40.dp)
+ * @param color Optional color override for optical weight compensation (null = inherit)
  * @param modifier Optional modifier for additional styling
  */
 @Composable
 fun Icon(
     name: String,
     size: Dp,
+    color: Color? = null,
     modifier: Modifier = Modifier
 ) {
     Icon(
         painter = painterResource(id = getIconResource(name)),
         contentDescription = null, // Decorative icon - hidden from TalkBack
         modifier = modifier.size(size),
-        tint = LocalContentColor.current // Inherits color from composition local
+        tint = color ?: LocalContentColor.current // Use override or default to LocalContentColor
     )
 }
 
@@ -123,9 +125,9 @@ fun IconPreview() {
             Icon(name = "settings", size = 24.dp)
         }
         
-        // Different tint colors - Blue
+        // Color inheritance (default) - Blue
         androidx.compose.material3.Text(
-            text = "Blue Tint",
+            text = "Color Inheritance - Blue",
             style = androidx.compose.material3.MaterialTheme.typography.labelMedium
         )
         androidx.compose.material3.CompositionLocalProvider(
@@ -140,38 +142,30 @@ fun IconPreview() {
             }
         }
         
-        // Different tint colors - Red
+        // Color override (explicit) - Red
         androidx.compose.material3.Text(
-            text = "Red Tint",
+            text = "Color Override - Red",
             style = androidx.compose.material3.MaterialTheme.typography.labelMedium
         )
-        androidx.compose.material3.CompositionLocalProvider(
-            LocalContentColor provides Color.Red
+        androidx.compose.foundation.layout.Row(
+            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(16.dp)
         ) {
-            androidx.compose.foundation.layout.Row(
-                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(16.dp)
-            ) {
-                Icon(name = "x", size = 24.dp)
-                Icon(name = "minus", size = 24.dp)
-                Icon(name = "circle", size = 24.dp)
-            }
+            Icon(name = "x", size = 24.dp, color = Color.Red)
+            Icon(name = "minus", size = 24.dp, color = Color.Red)
+            Icon(name = "circle", size = 24.dp, color = Color.Red)
         }
         
-        // Different tint colors - Green
+        // Color override (explicit) - Green
         androidx.compose.material3.Text(
-            text = "Green Tint",
+            text = "Color Override - Green",
             style = androidx.compose.material3.MaterialTheme.typography.labelMedium
         )
-        androidx.compose.material3.CompositionLocalProvider(
-            LocalContentColor provides Color.Green
+        androidx.compose.foundation.layout.Row(
+            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(16.dp)
         ) {
-            androidx.compose.foundation.layout.Row(
-                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(16.dp)
-            ) {
-                Icon(name = "check", size = 24.dp)
-                Icon(name = "plus", size = 24.dp)
-                Icon(name = "arrow-up", size = 24.dp)
-            }
+            Icon(name = "check", size = 24.dp, color = Color.Green)
+            Icon(name = "plus", size = 24.dp, color = Color.Green)
+            Icon(name = "arrow-up", size = 24.dp, color = Color.Green)
         }
     }
 }

@@ -241,6 +241,95 @@ describe('Icon Component (Web)', () => {
     });
   });
 
+  describe('Color Override', () => {
+    it('should use currentColor by default (inherit)', () => {
+      const props: IconProps = {
+        name: 'arrow-right',
+        size: 24
+      };
+      
+      const result = createIcon(props);
+      
+      expect(result).toContain('stroke="currentColor"');
+    });
+
+    it('should use currentColor when color is explicitly "inherit"', () => {
+      const props: IconProps = {
+        name: 'arrow-right',
+        size: 24,
+        color: 'inherit'
+      };
+      
+      const result = createIcon(props);
+      
+      expect(result).toContain('stroke="currentColor"');
+    });
+
+    it('should use CSS custom property for token reference', () => {
+      const props: IconProps = {
+        name: 'arrow-right',
+        size: 24,
+        color: 'color-text-secondary'
+      };
+      
+      const result = createIcon(props);
+      
+      expect(result).toContain('stroke="var(--color-text-secondary)"');
+    });
+
+    it('should support different token references', () => {
+      const tokens = [
+        'color-text-primary',
+        'color-text-secondary',
+        'color-primary',
+        'color-error'
+      ];
+      
+      tokens.forEach(token => {
+        const result = createIcon({
+          name: 'check',
+          size: 24,
+          color: token
+        });
+        
+        expect(result).toContain(`stroke="var(--${token})"`);
+      });
+    });
+
+    it('should work with Icon class and color override', () => {
+      const icon = new Icon({
+        name: 'arrow-right',
+        size: 24,
+        color: 'color-text-secondary'
+      });
+      
+      const result = icon.render();
+      
+      expect(result).toContain('stroke="var(--color-text-secondary)"');
+    });
+
+    it('should update color via Icon class update method', () => {
+      const icon = new Icon({
+        name: 'arrow-right',
+        size: 24
+      });
+      
+      // Initially uses currentColor
+      let result = icon.render();
+      expect(result).toContain('stroke="currentColor"');
+      
+      // Update to use token
+      icon.update({ color: 'color-primary' });
+      result = icon.render();
+      expect(result).toContain('stroke="var(--color-primary)"');
+      
+      // Update back to inherit
+      icon.update({ color: 'inherit' });
+      result = icon.render();
+      expect(result).toContain('stroke="currentColor"');
+    });
+  });
+
   describe('Requirements Compliance', () => {
     it('should meet Requirement 1.1: Unified icon component API', () => {
       // Icon component provides consistent API with name and size props
@@ -271,6 +360,23 @@ describe('Icon Component (Web)', () => {
       const result = createIcon({ name: 'arrow-right', size: 24 });
       
       expect(result).toContain('stroke="currentColor"');
+    });
+
+    it('should meet Requirement 7.1: Color override support on web', () => {
+      // Icon supports optional color parameter for explicit color control
+      const inheritResult = createIcon({ 
+        name: 'arrow-right', 
+        size: 24, 
+        color: 'inherit' 
+      });
+      expect(inheritResult).toContain('stroke="currentColor"');
+      
+      const tokenResult = createIcon({ 
+        name: 'arrow-right', 
+        size: 24, 
+        color: 'color-text-secondary' 
+      });
+      expect(tokenResult).toContain('stroke="var(--color-text-secondary)"');
     });
 
     it('should meet Requirement 7.1: Accessibility on web', () => {
