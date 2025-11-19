@@ -1,6 +1,6 @@
 /**
  * DesignerPunk Design System - Web Tokens
- * Generated: 2025-11-17T07:49:17.580Z
+ * Generated: 2025-11-19T03:51:05.277Z
  * Version: 1.0.0
  * Platform: Web (CSS Custom Properties)
  *
@@ -632,6 +632,17 @@
   --grid-margin-lg: var(--space-500);
   --grid-gutter-native: var(--space-250);
   --grid-margin-native: var(--space-300);
+  --icon-size-050: 13px; /* Icon size calculated from fontSize050 × lineHeight050 = 13 × 1.0 = 13px | Pairs with: Icon size for caption, legal, labelXs typography (smallest text) */
+  --icon-size-075: 18px; /* Icon size calculated from fontSize075 × lineHeight075 = 14 × 1.25 = 18px (rounded from 17.5) | Pairs with: Icon size for bodySm, buttonSm, labelSm typography */
+  --icon-size-100: 24px; /* Icon size calculated from fontSize100 × lineHeight100 = 16 × 1.5 = 24px | Pairs with: Icon size for bodyMd, buttonMd, labelMd, input typography (standard) */
+  --icon-size-125: 32px; /* Icon size calculated from fontSize125 × lineHeight125 = 18 × 1.75 = 32px (rounded from 31.5) | Pairs with: Icon size for bodyLg, buttonLg, labelLg typography */
+  --icon-size-150: 28px; /* Icon size calculated from fontSize150 × lineHeight150 = 20 × 1.4 = 28px | Pairs with: Icon size for h6 typography (smallest heading) */
+  --icon-size-200: 32px; /* Icon size calculated from fontSize200 × lineHeight200 = 23 × 1.391 = 32px (rounded from 31.993) | Pairs with: Icon size for h5 typography */
+  --icon-size-300: 32px; /* Icon size calculated from fontSize300 × lineHeight300 = 26 × 1.231 = 32px (rounded from 32.006) | Pairs with: Icon size for h4 typography */
+  --icon-size-400: 36px; /* Icon size calculated from fontSize400 × lineHeight400 = 29 × 1.241 = 36px (rounded from 35.989) | Pairs with: Icon size for h3 typography */
+  --icon-size-500: 40px; /* Icon size calculated from fontSize500 × lineHeight500 = 33 × 1.212 = 40px (rounded from 39.996) | Pairs with: Icon size for h2 typography */
+  --icon-size-600: 44px; /* Icon size calculated from fontSize600 × lineHeight600 = 37 × 1.19 = 44px (rounded from 44.03) | Pairs with: Icon size for h1 typography */
+  --icon-size-700: 48px; /* Icon size calculated from fontSize700 × lineHeight700 = 42 × 1.143 = 48px (rounded from 48.006) | Pairs with: Icon size for display typography (hero text) */
   --border-border-default: var(--border-width-100);
   --border-border-emphasis: var(--border-width-200);
   --border-border-heavy: var(--border-width-400);

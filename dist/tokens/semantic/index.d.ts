@@ -19,6 +19,7 @@ export * from './OpacityTokens';
 export * from './BlendTokens';
 export * from './LayeringTokens';
 export * from './GridSpacingTokens';
+export * from './IconTokens';
 export { styleTokens, getStyleToken } from './StyleTokens';
 export { colorTokens, colorTokenNames, getColorToken, getAllColorTokens, validateColorTokenCount } from './ColorTokens';
 export { spacingTokens, layoutSpacing, insetSpacing } from './SpacingTokens';
@@ -29,6 +30,7 @@ export { opacityTokens, opacityTokenNames, getOpacityToken, getAllOpacityTokens,
 export { blendTokens, blendTokenNames, getBlendToken, getAllBlendTokens, validateBlendTokenCount } from './BlendTokens';
 export { zIndexTokens, zIndexTokenNames, getZIndexToken, getAllZIndexTokens, elevationTokens, elevationTokenNames, getElevationToken, getAllElevationTokens, getAllLayeringTokens, getLayeringTokensByPlatform } from './LayeringTokens';
 export { gridSpacingTokens, gridSpacingTokenNames, getGridSpacingToken, getAllGridSpacingTokens } from './GridSpacingTokens';
+export { iconTokens, iconTokenNames, getIconToken, getAllIconTokens, calculateIconSize, generateIconSizeTokens } from './IconTokens';
 import type { SemanticToken } from '../../types/SemanticToken';
 import { SemanticCategory } from '../../types/SemanticToken';
 /**
@@ -76,5 +78,6 @@ export declare function getSemanticTokenStats(): {
     zIndexTokens: number;
     elevationTokens: number;
     gridSpacingTokens: number;
+    iconTokens: number;
 };
 //# sourceMappingURL=index.d.ts.map

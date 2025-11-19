@@ -309,4 +309,40 @@ export class iOSFormatGenerator extends BaseFormatProvider {
   generateConstant(tokenName: string, opacityValue: number): string {
     return `static let ${tokenName} = ${opacityValue}`;
   }
+
+  /**
+   * Format icon size token with calculated value
+   * Generates: public static let iconSize100: CGFloat = 24 with formula and typography pairing comments
+   * 
+   * @param tokenName - Icon token name (e.g., 'icon.size100')
+   * @param calculatedSize - Calculated icon size in points
+   * @param category - Token category
+   * @param description - Token description with formula (optional)
+   * @param context - Token context with typography pairing (optional)
+   * @returns Swift constant declaration string with comments
+   */
+  formatIconSizeToken(
+    tokenName: string,
+    calculatedSize: number,
+    category: string,
+    description?: string,
+    context?: string
+  ): string {
+    const swiftName = this.getTokenName(tokenName, category);
+    
+    // Build comment with formula and typography pairing
+    const comments: string[] = [];
+    if (description) {
+      comments.push(description);
+    }
+    if (context) {
+      comments.push(`Pairs with: ${context}`);
+    }
+    
+    if (comments.length > 0) {
+      return `    public static let ${swiftName}: CGFloat = ${calculatedSize} // ${comments.join(' | ')}`;
+    }
+    
+    return `    public static let ${swiftName}: CGFloat = ${calculatedSize}`;
+  }
 }

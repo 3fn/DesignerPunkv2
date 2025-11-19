@@ -252,6 +252,33 @@ class WebFormatGenerator extends FormatProvider_1.BaseFormatProvider {
         const prefix = tokenName.startsWith('--') ? '' : '--';
         return `${prefix}${tokenName}: ${opacityValue};`;
     }
+    /**
+     * Format icon size token with calculated value
+     * Generates: --icon-size-100: 24px; with formula and typography pairing comments
+     *
+     * @param tokenName - Icon token name (e.g., 'icon.size100')
+     * @param calculatedSize - Calculated icon size in pixels
+     * @param category - Token category
+     * @param description - Token description with formula (optional)
+     * @param context - Token context with typography pairing (optional)
+     * @returns CSS custom property string with comments
+     */
+    formatIconSizeToken(tokenName, calculatedSize, category, description, context) {
+        const cssName = this.getTokenName(tokenName, category);
+        const prefix = cssName.startsWith('--') ? '' : '--';
+        // Build comment with formula and typography pairing
+        const comments = [];
+        if (description) {
+            comments.push(description);
+        }
+        if (context) {
+            comments.push(`Pairs with: ${context}`);
+        }
+        if (comments.length > 0) {
+            return `  ${prefix}${cssName}: ${calculatedSize}px; /* ${comments.join(' | ')} */`;
+        }
+        return `  ${prefix}${cssName}: ${calculatedSize}px;`;
+    }
 }
 exports.WebFormatGenerator = WebFormatGenerator;
 //# sourceMappingURL=WebFormatGenerator.js.map

@@ -32,7 +32,7 @@ describe('Opacity Platform Translation Integration', () => {
             });
         });
         test('opacity values should be consistent across all test cases', () => {
-            const webGenerator = new WebFormatGenerator_1.WebFormatGenerator('css');
+            const webGenerator = new WebFormatGenerator_1.WebFormatGenerator();
             const iosGenerator = new iOSFormatGenerator_1.iOSFormatGenerator();
             const androidGenerator = new AndroidFormatGenerator_1.AndroidFormatGenerator('kotlin');
             testOpacityValues.forEach(({ name, value }) => {
@@ -54,7 +54,7 @@ describe('Opacity Platform Translation Integration', () => {
     describe('Web Platform CSS Generation', () => {
         let generator;
         beforeEach(() => {
-            generator = new WebFormatGenerator_1.WebFormatGenerator('css');
+            generator = new WebFormatGenerator_1.WebFormatGenerator();
         });
         test('should generate valid CSS opacity property', () => {
             const result = generator.generateOpacityProperty(0.48);
@@ -138,7 +138,7 @@ describe('Opacity Platform Translation Integration', () => {
             { name: 'opacityLoading', primitiveValue: 0.16, primitiveRef: 'opacity200' }
         ];
         test('semantic tokens should resolve to same primitive values across platforms', () => {
-            const webGenerator = new WebFormatGenerator_1.WebFormatGenerator('css');
+            const webGenerator = new WebFormatGenerator_1.WebFormatGenerator();
             const iosGenerator = new iOSFormatGenerator_1.iOSFormatGenerator();
             const androidGenerator = new AndroidFormatGenerator_1.AndroidFormatGenerator('kotlin');
             semanticOpacityTokens.forEach(({ name, primitiveValue }) => {
@@ -157,7 +157,7 @@ describe('Opacity Platform Translation Integration', () => {
             });
         });
         test('semantic tokens should generate valid platform-specific code', () => {
-            const webGenerator = new WebFormatGenerator_1.WebFormatGenerator('css');
+            const webGenerator = new WebFormatGenerator_1.WebFormatGenerator();
             const iosGenerator = new iOSFormatGenerator_1.iOSFormatGenerator();
             const androidGenerator = new AndroidFormatGenerator_1.AndroidFormatGenerator('kotlin');
             semanticOpacityTokens.forEach(({ name, primitiveValue }) => {
@@ -175,7 +175,7 @@ describe('Opacity Platform Translation Integration', () => {
     });
     describe('Opacity with Color Composition', () => {
         test('web should generate valid RGBA with opacity', () => {
-            const generator = new WebFormatGenerator_1.WebFormatGenerator('css');
+            const generator = new WebFormatGenerator_1.WebFormatGenerator();
             // Purple with 48% opacity
             const purple = generator.generateRgbaAlpha(107, 80, 164, 0.48);
             expect(purple).toBe('rgba(107, 80, 164, 0.48)');
@@ -213,7 +213,7 @@ describe('Opacity Platform Translation Integration', () => {
     });
     describe('Platform-Specific Syntax Validation', () => {
         test('web CSS should use correct syntax patterns', () => {
-            const generator = new WebFormatGenerator_1.WebFormatGenerator('css');
+            const generator = new WebFormatGenerator_1.WebFormatGenerator();
             // Opacity property uses colon and semicolon
             expect(generator.generateOpacityProperty(0.48)).toMatch(/^opacity: [\d.]+;$/);
             // RGBA uses parentheses and commas
@@ -244,7 +244,7 @@ describe('Opacity Platform Translation Integration', () => {
     });
     describe('Opacity Value Range Validation', () => {
         test('all platforms should handle full opacity range (0.0 to 1.0)', () => {
-            const webGenerator = new WebFormatGenerator_1.WebFormatGenerator('css');
+            const webGenerator = new WebFormatGenerator_1.WebFormatGenerator();
             const iosGenerator = new iOSFormatGenerator_1.iOSFormatGenerator();
             const androidGenerator = new AndroidFormatGenerator_1.AndroidFormatGenerator('kotlin');
             const testValues = [0.0, 0.08, 0.16, 0.32, 0.48, 0.64, 0.80, 0.88, 0.96, 1.0];
@@ -263,7 +263,7 @@ describe('Opacity Platform Translation Integration', () => {
             });
         });
         test('all platforms should maintain precision for decimal values', () => {
-            const webGenerator = new WebFormatGenerator_1.WebFormatGenerator('css');
+            const webGenerator = new WebFormatGenerator_1.WebFormatGenerator();
             const iosGenerator = new iOSFormatGenerator_1.iOSFormatGenerator();
             const androidGenerator = new AndroidFormatGenerator_1.AndroidFormatGenerator('kotlin');
             // Test precise decimal values

@@ -66,5 +66,17 @@ export declare class iOSFormatGenerator extends BaseFormatProvider {
      * @returns Swift constant declaration string
      */
     generateConstant(tokenName: string, opacityValue: number): string;
+    /**
+     * Format icon size token with calculated value
+     * Generates: public static let iconSize100: CGFloat = 24 with formula and typography pairing comments
+     *
+     * @param tokenName - Icon token name (e.g., 'icon.size100')
+     * @param calculatedSize - Calculated icon size in points
+     * @param category - Token category
+     * @param description - Token description with formula (optional)
+     * @param context - Token context with typography pairing (optional)
+     * @returns Swift constant declaration string with comments
+     */
+    formatIconSizeToken(tokenName: string, calculatedSize: number, category: string, description?: string, context?: string): string;
 }
 //# sourceMappingURL=iOSFormatGenerator.d.ts.map

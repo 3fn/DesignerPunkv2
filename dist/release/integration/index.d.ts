@@ -10,5 +10,5 @@ export { AICollaborationManager } from './AICollaborationIntegration';
 export { FileOrganizationManager } from './FileOrganizationIntegration';
 export { WorkflowEventDetector } from './WorkflowEventDetector';
 export { WorkflowMonitor } from '../detection/WorkflowMonitor';
-export type { WorkflowEventDetector, HookSystemIntegration, FileOrganizationIntegration, AICollaborationIntegration, TaskCompletionEvent, SpecCompletionEvent, FileOrganizationEvent, CommitHookEvent, OrganizationHookEvent, ReleaseSystemStatus, ReleaseProgress, AIErrorGuidance, DecisionContext } from './WorkflowIntegration';
+export type { HookSystemIntegration, FileOrganizationIntegration, AICollaborationIntegration, TaskCompletionEvent, SpecCompletionEvent, FileOrganizationEvent, CommitHookEvent, OrganizationHookEvent, ReleaseSystemStatus, ReleaseProgress, AIErrorGuidance, DecisionContext } from './WorkflowIntegration';
 //# sourceMappingURL=index.d.ts.map

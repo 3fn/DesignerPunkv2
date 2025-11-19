@@ -21,6 +21,7 @@ export * from './OpacityTokens';
 export * from './BlendTokens';
 export * from './LayeringTokens';
 export * from './GridSpacingTokens';
+export * from './IconTokens';
 
 // StyleTokens placeholder - will be implemented in future tasks
 export { styleTokens, getStyleToken } from './StyleTokens';
@@ -97,6 +98,15 @@ export {
   getAllGridSpacingTokens
 } from './GridSpacingTokens';
 
+export {
+  iconTokens,
+  iconTokenNames,
+  getIconToken,
+  getAllIconTokens,
+  calculateIconSize,
+  generateIconSizeTokens
+} from './IconTokens';
+
 // Import types for utility functions
 import type { SemanticToken } from '../../types/SemanticToken';
 import { SemanticCategory } from '../../types/SemanticToken';
@@ -109,6 +119,7 @@ import { opacityTokens } from './OpacityTokens';
 import { blendTokens } from './BlendTokens';
 import { zIndexTokens, elevationTokens } from './LayeringTokens';
 import { gridSpacingTokens } from './GridSpacingTokens';
+import { iconTokens } from './IconTokens';
 
 /**
  * Get any semantic token by name across all categories
@@ -173,6 +184,11 @@ export function getSemanticToken(name: string): Omit<SemanticToken, 'primitiveTo
   // Check grid spacing tokens
   if (name.startsWith('grid')) {
     return gridSpacingTokens[name];
+  }
+
+  // Check icon tokens
+  if (name.startsWith('icon.')) {
+    return iconTokens[name];
   }
 
   return undefined;
@@ -290,6 +306,9 @@ export function getAllSemanticTokens(): Array<Omit<SemanticToken, 'primitiveToke
   // Add grid spacing tokens
   tokens.push(...Object.values(gridSpacingTokens));
 
+  // Add icon tokens
+  tokens.push(...Object.values(iconTokens));
+
   // Add border width tokens
   for (const [name, token] of Object.entries(SemanticBorderWidthTokens)) {
     tokens.push({
@@ -334,6 +353,8 @@ export function getSemanticTokensByCategory(category: SemanticCategory): Array<O
       return [...Object.values(opacityTokens), ...(Object.values(blendTokens) as any)];
     case SemanticCategory.LAYERING:
       return [...(Object.values(zIndexTokens) as any), ...(Object.values(elevationTokens) as any)];
+    case SemanticCategory.ICON:
+      return Object.values(iconTokens);
     default:
       return [];
   }
@@ -464,6 +485,7 @@ export function getSemanticTokenStats() {
     blendTokens: Object.keys(blendTokens).length,
     zIndexTokens: Object.keys(zIndexTokens).length,
     elevationTokens: Object.keys(elevationTokens).length,
-    gridSpacingTokens: Object.keys(gridSpacingTokens).length
+    gridSpacingTokens: Object.keys(gridSpacingTokens).length,
+    iconTokens: Object.keys(iconTokens).length
   };
 }

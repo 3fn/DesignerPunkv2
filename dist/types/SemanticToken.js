@@ -21,5 +21,6 @@ var SemanticCategory;
     SemanticCategory["LAYOUT"] = "layout";
     SemanticCategory["LAYERING"] = "layering";
     SemanticCategory["INTERACTION"] = "interaction";
+    SemanticCategory["ICON"] = "icon";
 })(SemanticCategory || (exports.SemanticCategory = SemanticCategory = {}));
 //# sourceMappingURL=SemanticToken.js.map
