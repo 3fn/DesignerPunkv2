@@ -37,7 +37,8 @@ inclusion: always
 1. **[MANUAL]** **Complete Task Work**: Implement all requirements and create specified artifacts
 2. **[MANUAL]** **Validate Implementation**: 
    - For regular tasks: Run `npm test` (fast validation, ~10 min)
-   - For parent tasks: Run `npm run test:all` (comprehensive, ~28 min)
+   - For parent tasks (default): Run `npm test` (comprehensive functional validation, ~10 min)
+   - For parent tasks modifying release-analysis/release-detection: Run `npm run test:all` (~28 min)
    - For performance tasks: Run `npm run test:performance` (~20 min)
 3. **[MANUAL]** **Create Detailed Completion Document**: For parent tasks, create comprehensive completion doc at `.kiro/specs/[spec-name]/completion/task-N-parent-completion.md` (Tier 3)
 4. **[MANUAL]** **Create Summary Document**: For parent tasks, create concise summary doc at `docs/specs/[spec-name]/task-N-summary.md` (triggers release detection for manual files only)
