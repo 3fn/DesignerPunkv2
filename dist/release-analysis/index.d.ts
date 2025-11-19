@@ -22,4 +22,5 @@ export * from './performance';
 export * from './config';
 export * from './errors';
 export * from './types/AnalysisTypes';
+export type { EvaluationOptions, AccuracyTestReport, AccuracyTestSummary } from './types';
 //# sourceMappingURL=index.d.ts.map

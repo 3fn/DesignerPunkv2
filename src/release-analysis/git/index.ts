@@ -4,8 +4,6 @@ export {
   type GitCommit,
   type GitChanges,
   type AnalysisScope,
-  type CompletionDocument,
-  type DocumentMetadata,
   type ValidationResult
 } from './GitHistoryAnalyzer';
 

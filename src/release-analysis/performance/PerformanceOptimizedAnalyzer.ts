@@ -1,4 +1,5 @@
-import { GitHistoryAnalyzer, GitChanges, AnalysisScope, CompletionDocument } from '../git/GitHistoryAnalyzer';
+import { GitHistoryAnalyzer, GitChanges, AnalysisScope } from '../git/GitHistoryAnalyzer';
+import { CompletionDocument } from '../types/AnalysisTypes';
 import { AnalysisConfig } from '../config/AnalysisConfig';
 import { OptimizedCompletionDocumentCollector, OptimizedCollectionResult } from '../collection/OptimizedCompletionDocumentCollector';
 import { GitPerformanceOptimizer, GitOptimizationConfig } from './GitPerformanceOptimizer';

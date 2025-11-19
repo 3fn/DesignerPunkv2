@@ -11,6 +11,8 @@
  * - Comprehensive progress reporting for long-running operations
  */
 
+import { EvaluationOptions, AccuracyTestReport, AccuracyTestSummary } from './types';
+
 // CLI Interface
 export { ReleaseCLI, runAnalysisCli } from './cli/ReleaseCLI';
 
@@ -34,3 +36,4 @@ export * from './errors';
 
 // Types
 export * from './types/AnalysisTypes';
+export type { EvaluationOptions, AccuracyTestReport, AccuracyTestSummary } from './types';

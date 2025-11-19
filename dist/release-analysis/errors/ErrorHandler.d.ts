@@ -11,30 +11,7 @@
  * - 8.4: Highlight areas requiring human review
  * - 8.5: Provide clear, actionable error messages with resolution guidance
  */
-export interface ErrorContext {
-    operation: string;
-    component: string;
-    filePath?: string;
-    gitCommand?: string;
-    userAction?: string;
-    timestamp: Date;
-}
-export interface RecoveryStrategy {
-    type: 'fallback' | 'retry' | 'skip' | 'manual' | 'abort';
-    description: string;
-    action?: () => Promise<any>;
-    guidance: string;
-}
-export interface ErrorDetails {
-    code: string;
-    message: string;
-    severity: 'low' | 'medium' | 'high' | 'critical';
-    category: 'git' | 'parsing' | 'validation' | 'configuration' | 'filesystem' | 'network';
-    context: ErrorContext;
-    recoveryStrategies: RecoveryStrategy[];
-    userGuidance: string;
-    technicalDetails?: string;
-}
+import { ErrorContext, ErrorDetails, RecoveryStrategy } from '../types';
 export interface ErrorHandlingResult<T = any> {
     success: boolean;
     data?: T;

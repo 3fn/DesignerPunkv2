@@ -3,7 +3,7 @@ import { GitPerformanceOptimizer } from './GitPerformanceOptimizer';
 import { DocumentParsingCache } from './DocumentParsingCache';
 import { ParallelProcessor } from './ParallelProcessor';
 import { AnalysisConfig } from '../config/AnalysisConfig';
-import { CompletionDocument } from '../git/GitHistoryAnalyzer';
+import { CompletionDocument } from '../types/AnalysisTypes';
 import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import { join } from 'path';
 

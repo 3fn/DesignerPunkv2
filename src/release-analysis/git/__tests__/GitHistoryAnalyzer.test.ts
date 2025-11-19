@@ -1,4 +1,5 @@
-import { GitHistoryAnalyzer, GitTag, GitChanges, AnalysisScope, CompletionDocument } from '../GitHistoryAnalyzer';
+import { GitHistoryAnalyzer, GitTag, GitChanges, AnalysisScope } from '../GitHistoryAnalyzer';
+import { CompletionDocument } from '../../types/AnalysisTypes';
 import { execSync } from 'child_process';
 import { existsSync, statSync } from 'fs';
 import { join } from 'path';

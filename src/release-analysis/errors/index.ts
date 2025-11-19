@@ -5,15 +5,17 @@
  * Provides centralized error management, recovery strategies, and user guidance.
  */
 
+import { ErrorContext, ErrorDetails } from '../types';
+
 export {
   ReleaseAnalysisErrorHandler,
   releaseAnalysisErrorHandler,
   withErrorHandling,
-  type ErrorContext,
-  type ErrorDetails,
   type ErrorHandlingResult,
-  type RecoveryStrategy
 } from './ErrorHandler';
+
+// Re-export types from central types file
+export type { ErrorContext, ErrorDetails, RecoveryStrategy } from '../types';
 
 export {
   GitErrorRecovery,

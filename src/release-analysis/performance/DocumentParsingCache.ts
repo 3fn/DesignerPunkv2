@@ -2,7 +2,7 @@ import { createHash } from 'crypto';
 import { statSync } from 'fs';
 import { join } from 'path';
 import { CachingStrategy } from '../../performance/CachingStrategy';
-import { CompletionDocument, DocumentMetadata } from '../git/GitHistoryAnalyzer';
+import { CompletionDocument, DocumentMetadata } from '../types/AnalysisTypes';
 
 /**
  * Document parsing cache entry

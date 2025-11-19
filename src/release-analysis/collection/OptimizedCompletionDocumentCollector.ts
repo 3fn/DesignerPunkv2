@@ -1,4 +1,5 @@
-import { GitChanges, CompletionDocument } from '../git/GitHistoryAnalyzer';
+import { GitChanges } from '../git/GitHistoryAnalyzer';
+import { CompletionDocument } from '../types/AnalysisTypes';
 import { AnalysisConfig } from '../config/AnalysisConfig';
 import { DocumentCollectionResult, DocumentFilter, CompletionDocumentCollector } from './CompletionDocumentCollector';
 import {

@@ -1,5 +1,6 @@
 import { AnalysisConfig } from '../config/AnalysisConfig';
-import { GitChanges, CompletionDocument, DocumentMetadata } from '../git/GitHistoryAnalyzer';
+import { GitChanges } from '../git/GitHistoryAnalyzer';
+import { CompletionDocument, DocumentMetadata } from '../types/AnalysisTypes';
 /**
  * Document collection result with metadata
  */

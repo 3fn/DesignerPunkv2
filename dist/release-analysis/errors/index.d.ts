@@ -4,7 +4,9 @@
  * Exports comprehensive error handling utilities for the release analysis system.
  * Provides centralized error management, recovery strategies, and user guidance.
  */
-export { ReleaseAnalysisErrorHandler, releaseAnalysisErrorHandler, withErrorHandling, type ErrorContext, type ErrorDetails, type ErrorHandlingResult, type RecoveryStrategy } from './ErrorHandler';
+import { ErrorContext, ErrorDetails } from '../types';
+export { ReleaseAnalysisErrorHandler, releaseAnalysisErrorHandler, withErrorHandling, type ErrorHandlingResult, } from './ErrorHandler';
+export type { ErrorContext, ErrorDetails, RecoveryStrategy } from '../types';
 export { GitErrorRecovery, DocumentErrorRecovery, ConfigurationErrorRecovery, createRecoveryUtilities, type GitRecoveryOptions, type DocumentRecoveryOptions, type ConfigRecoveryOptions } from './ErrorRecovery';
 export declare const createErrorContext: (operation: string, component: string, additionalContext?: Partial<ErrorContext>) => ErrorContext;
 export declare const formatErrorForCLI: (error: ErrorDetails) => string;

@@ -1,3 +1,4 @@
+import { CompletionDocument } from '../types/AnalysisTypes';
 /**
  * Git tag information
  */
@@ -40,27 +41,6 @@ export interface AnalysisScope {
     toCommit: string;
     completionDocuments: CompletionDocument[];
     analysisDate: Date;
-}
-/**
- * Completion document metadata
- */
-export interface CompletionDocument {
-    path: string;
-    content: string;
-    lastModified: Date;
-    gitCommit: string;
-    metadata: DocumentMetadata;
-}
-/**
- * Document metadata extracted from completion documents
- */
-export interface DocumentMetadata {
-    title: string;
-    date?: string;
-    task?: string;
-    spec?: string;
-    status?: string;
-    type: 'task-completion' | 'spec-completion' | 'other';
 }
 /**
  * Validation result for analysis scope
