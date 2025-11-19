@@ -96,7 +96,7 @@ This plan systematically resolves 145 TypeScript compilation errors across 12 fi
   - Detailed: `.kiro/specs/typescript-error-resolution/completion/task-2-parent-completion.md`
   - Summary: `docs/specs/typescript-error-resolution/task-2-summary.md` (triggers release detection)
 
-  - [ ] 2.1 Analyze current validator API signatures
+  - [x] 2.1 Analyze current validator API signatures
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Read `src/validators/BaselineGridValidator.ts` to understand current API
@@ -107,7 +107,7 @@ This plan systematically resolves 145 TypeScript compilation errors across 12 fi
     - Create reference document for test updates
     - _Requirements: 2.1_
 
-  - [ ] 2.2 Update BaselineGridValidator tests
+  - [x] 2.2 Update BaselineGridValidator tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Open `src/validators/__tests__/BaselineGridValidator.test.ts`
@@ -118,7 +118,7 @@ This plan systematically resolves 145 TypeScript compilation errors across 12 fi
     - Verify all tests pass
     - _Requirements: 2.2_
 
-  - [ ] 2.3 Update SyntaxValidator tests
+  - [x] 2.3 Update SyntaxValidator tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Open `src/validators/__tests__/SyntaxValidator.test.ts`
@@ -129,7 +129,7 @@ This plan systematically resolves 145 TypeScript compilation errors across 12 fi
     - Verify all tests pass
     - _Requirements: 2.3_
 
-  - [ ] 2.4 Update TokenIntegrator tests
+  - [x] 2.4 Update TokenIntegrator tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Open `src/build/tokens/__tests__/TokenIntegrator.test.ts`
@@ -140,7 +140,7 @@ This plan systematically resolves 145 TypeScript compilation errors across 12 fi
     - Verify all tests pass
     - _Requirements: 2.4_
 
-  - [ ] 2.5 Validate Phase 2 completion
+  - [-] 2.5 Validate Phase 2 completion
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run `npm run build` and count remaining errors

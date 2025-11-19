@@ -2,9 +2,6 @@
 > designer-punk-v2@1.0.0 build
 > tsc --skipLibCheck || echo 'Build completed with errors (non-blocking)'
 
-src/build/tokens/__tests__/TokenIntegrator.test.ts(148,26): error TS2339: Property 'level' does not exist on type 'void'.
-src/build/tokens/__tests__/TokenIntegrator.test.ts(159,28): error TS2339: Property 'level' does not exist on type 'void'.
-src/build/tokens/__tests__/TokenIntegrator.test.ts(160,28): error TS2339: Property 'message' does not exist on type 'void'.
 src/build/validation/MathematicalConsistencyValidator.ts(288,77): error TS2554: Expected 1 arguments, but got 2.
 src/release-analysis/errors/index.ts(32,31): error TS2304: Cannot find name 'ErrorContext'.
 src/release-analysis/errors/index.ts(33,4): error TS2304: Cannot find name 'ErrorContext'.
@@ -40,99 +37,5 @@ src/release-analysis/index.ts(36,1): error TS2308: Module './versioning' has alr
 src/release-analysis/index.ts(36,1): error TS2308: Module './versioning' has already exported a member named 'VersionRecommendation'. Consider explicitly re-exporting to resolve the ambiguity.
 src/release-analysis/validation/index.ts(22,3): error TS2305: Module '"./AccuracyValidationFramework"' has no exported member 'AccuracyTestReport'.
 src/release-analysis/validation/index.ts(23,3): error TS2305: Module '"./AccuracyValidationFramework"' has no exported member 'AccuracyTestSummary'.
-src/validators/__tests__/BaselineGridValidator.test.ts(23,50): error TS2554: Expected 1 arguments, but got 2.
-src/validators/__tests__/BaselineGridValidator.test.ts(36,50): error TS2554: Expected 1 arguments, but got 2.
-src/validators/__tests__/BaselineGridValidator.test.ts(46,44): error TS2554: Expected 1 arguments, but got 2.
-src/validators/__tests__/BaselineGridValidator.test.ts(57,45): error TS2345: Argument of type 'number' is not assignable to parameter of type 'BaselineGridValidationInput'.
-src/validators/__tests__/BaselineGridValidator.test.ts(61,49): error TS2345: Argument of type 'number' is not assignable to parameter of type 'BaselineGridValidationInput'.
-src/validators/__tests__/BaselineGridValidator.test.ts(65,46): error TS2345: Argument of type 'number' is not assignable to parameter of type 'BaselineGridValidationInput'.
-src/validators/__tests__/BaselineGridValidator.test.ts(75,50): error TS2554: Expected 1 arguments, but got 2.
-src/validators/__tests__/BaselineGridValidator.test.ts(86,44): error TS2554: Expected 1 arguments, but got 2.
-src/validators/__tests__/BaselineGridValidator.test.ts(95,50): error TS2554: Expected 1 arguments, but got 2.
-src/validators/__tests__/BaselineGridValidator.test.ts(115,51): error TS2554: Expected 1 arguments, but got 2.
-src/validators/__tests__/BaselineGridValidator.test.ts(125,56): error TS2554: Expected 1 arguments, but got 2.
-src/validators/__tests__/BaselineGridValidator.test.ts(126,58): error TS2554: Expected 1 arguments, but got 2.
-src/validators/__tests__/BaselineGridValidator.test.ts(181,45): error TS2554: Expected 1 arguments, but got 2.
-src/validators/__tests__/BaselineGridValidator.test.ts(187,45): error TS2554: Expected 1 arguments, but got 2.
-src/validators/__tests__/BaselineGridValidator.test.ts(193,45): error TS2554: Expected 1 arguments, but got 2.
-src/validators/__tests__/BaselineGridValidator.test.ts(201,47): error TS2554: Expected 1 arguments, but got 2.
-src/validators/__tests__/BaselineGridValidator.test.ts(207,51): error TS2554: Expected 1 arguments, but got 2.
-src/validators/__tests__/BaselineGridValidator.test.ts(216,44): error TS2554: Expected 1 arguments, but got 2.
-src/validators/__tests__/BaselineGridValidator.test.ts(222,41): error TS2345: Argument of type 'number' is not assignable to parameter of type 'BaselineGridValidationInput'.
-src/validators/__tests__/BaselineGridValidator.test.ts(228,45): error TS2554: Expected 1 arguments, but got 2.
-src/validators/__tests__/BaselineGridValidator.test.ts(229,45): error TS2554: Expected 1 arguments, but got 2.
-src/validators/__tests__/BaselineGridValidator.test.ts(260,46): error TS2554: Expected 1 arguments, but got 2.
-src/validators/__tests__/BaselineGridValidator.test.ts(267,47): error TS2554: Expected 1 arguments, but got 2.
-src/validators/__tests__/BaselineGridValidator.test.ts(274,53): error TS2554: Expected 1 arguments, but got 2.
-src/validators/__tests__/BaselineGridValidator.test.ts(275,55): error TS2554: Expected 1 arguments, but got 2.
-src/validators/__tests__/BaselineGridValidator.test.ts(282,44): error TS2554: Expected 1 arguments, but got 2.
-src/validators/__tests__/SyntaxValidator.test.ts(21,50): error TS2554: Expected 1 arguments, but got 3.
-src/validators/__tests__/SyntaxValidator.test.ts(23,21): error TS2339: Property 'valid' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(24,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(34,50): error TS2554: Expected 1 arguments, but got 3.
-src/validators/__tests__/SyntaxValidator.test.ts(36,21): error TS2339: Property 'valid' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(37,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(38,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(47,50): error TS2554: Expected 1 arguments, but got 3.
-src/validators/__tests__/SyntaxValidator.test.ts(49,21): error TS2339: Property 'valid' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(50,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(51,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(51,34): error TS7006: Parameter 'e' implicitly has an 'any' type.
-src/validators/__tests__/SyntaxValidator.test.ts(62,50): error TS2554: Expected 1 arguments, but got 3.
-src/validators/__tests__/SyntaxValidator.test.ts(64,21): error TS2339: Property 'valid' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(65,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(66,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(66,34): error TS7006: Parameter 'e' implicitly has an 'any' type.
-src/validators/__tests__/SyntaxValidator.test.ts(84,50): error TS2554: Expected 1 arguments, but got 3.
-src/validators/__tests__/SyntaxValidator.test.ts(86,21): error TS2339: Property 'valid' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(87,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(97,50): error TS2554: Expected 1 arguments, but got 3.
-src/validators/__tests__/SyntaxValidator.test.ts(99,21): error TS2339: Property 'valid' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(100,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(101,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(121,50): error TS2554: Expected 1 arguments, but got 3.
-src/validators/__tests__/SyntaxValidator.test.ts(123,21): error TS2339: Property 'valid' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(124,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(134,50): error TS2554: Expected 1 arguments, but got 3.
-src/validators/__tests__/SyntaxValidator.test.ts(136,21): error TS2339: Property 'valid' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(137,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(138,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(150,50): error TS2554: Expected 1 arguments, but got 3.
-src/validators/__tests__/SyntaxValidator.test.ts(152,21): error TS2339: Property 'valid' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(153,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(154,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(169,50): error TS2554: Expected 1 arguments, but got 3.
-src/validators/__tests__/SyntaxValidator.test.ts(172,21): error TS2339: Property 'valid' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(192,50): error TS2554: Expected 1 arguments, but got 3.
-src/validators/__tests__/SyntaxValidator.test.ts(194,21): error TS2339: Property 'valid' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(195,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(205,50): error TS2554: Expected 1 arguments, but got 3.
-src/validators/__tests__/SyntaxValidator.test.ts(207,21): error TS2339: Property 'valid' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(208,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(209,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(221,50): error TS2554: Expected 1 arguments, but got 3.
-src/validators/__tests__/SyntaxValidator.test.ts(223,21): error TS2339: Property 'valid' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(224,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(225,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(243,50): error TS2554: Expected 1 arguments, but got 3.
-src/validators/__tests__/SyntaxValidator.test.ts(245,21): error TS2339: Property 'valid' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(246,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(256,50): error TS2554: Expected 1 arguments, but got 3.
-src/validators/__tests__/SyntaxValidator.test.ts(258,21): error TS2339: Property 'valid' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(259,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(260,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(271,50): error TS2554: Expected 1 arguments, but got 3.
-src/validators/__tests__/SyntaxValidator.test.ts(273,21): error TS2339: Property 'valid' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(274,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(275,21): error TS2339: Property 'errors' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(275,34): error TS7006: Parameter 'e' implicitly has an 'any' type.
-src/validators/__tests__/SyntaxValidator.test.ts(346,50): error TS2554: Expected 1 arguments, but got 3.
-src/validators/__tests__/SyntaxValidator.test.ts(348,21): error TS2339: Property 'warnings' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(349,21): error TS2339: Property 'warnings' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(349,36): error TS7006: Parameter 'w' implicitly has an 'any' type.
-src/validators/__tests__/SyntaxValidator.test.ts(355,50): error TS2554: Expected 1 arguments, but got 3.
-src/validators/__tests__/SyntaxValidator.test.ts(357,21): error TS2339: Property 'warnings' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(358,21): error TS2339: Property 'warnings' does not exist on type 'ValidationResult'.
-src/validators/__tests__/SyntaxValidator.test.ts(358,36): error TS7006: Parameter 'w' implicitly has an 'any' type.
 src/validators/__tests__/ThreeTierValidator.test.ts(191,11): error TS2739: Type '{ spacing: { primitiveUsage: number; semanticUsage: number; totalUsage: number; }; fontSize: { primitiveUsage: number; semanticUsage: number; totalUsage: number; }; fontFamily: { primitiveUsage: number; semanticUsage: number; totalUsage: number; }; ... 9 more ...; glow: { ...; }; }' is missing the following properties from type 'Record<TokenCategory, { primitiveUsage: number; semanticUsage: number; totalUsage: number; }>': opacity, blend, breakpoint
 Build completed with errors (non-blocking)
