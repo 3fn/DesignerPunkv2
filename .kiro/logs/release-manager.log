@@ -6087,3 +6087,17 @@ Error processing trigger file .kiro/release-triggers/1761868170-spec-completion.
 [2025-11-19 09:29:01] Event: taskStatusChange, Status: completed
 [2025-11-19 09:29:01] Release manager hook started: hook_type=auto, source_path=
 [2025-11-19 09:29:01] Release manager hook completed
+[2025-11-19 10:20:36] Hook triggered by Kiro IDE agent hook system
+[2025-11-19 10:20:36] Event: taskStatusChange, Status: completed
+[2025-11-19 10:20:36] Release manager hook started: hook_type=auto, source_path=
+[2025-11-19 10:20:36] Detecting release triggers: type=spec-completion, source=.kiro/specs/typescript-error-resolution/completion/task-5-parent-completion.md
+[2025-11-19 10:20:36] Spec completion detected: .kiro/specs/typescript-error-resolution/completion/task-5-parent-completion.md
+[2025-11-19 10:20:36] Processing release trigger: spec-completion from .kiro/specs/typescript-error-resolution/completion/task-5-parent-completion.md
+[2025-11-19 10:20:36] SUCCESS: Release trigger created: /Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/.kiro/release-triggers/1763576436-spec-completion.json
+[2025-11-19 10:20:36] Trigger queued for manual processing (TypeScript integration disabled)
+[2025-11-19 10:20:36] Detecting release triggers: type=task-completion, source=.kiro/specs/typescript-error-resolution/tasks.md
+[2025-11-19 10:20:36] Release manager hook completed
+[2025-11-19 17:31:27] Hook triggered by Kiro IDE agent hook system
+[2025-11-19 17:31:27] Event: taskStatusChange, Status: completed
+[2025-11-19 17:31:27] Release manager hook started: hook_type=auto, source_path=
+[2025-11-19 17:31:27] Release manager hook completed
