@@ -166,8 +166,8 @@ The button integrates with the mathematical token system for sizing, spacing, ty
 
 #### Acceptance Criteria
 
-1. WHEN the Button Component receives keyboard focus THEN the Button Component SHALL render outline with border.emphasis (2px) width and color.primary color
-2. WHEN the Button Component renders focus outline THEN the Button Component SHALL position outline accessibility.focus.offset outside button bounds (Note: Token defined in Spec 007 - Accessibility Token Family)
+1. WHEN the Button Component receives keyboard focus THEN the Button Component SHALL render outline with accessibility.focus.width and accessibility.focus.color
+2. WHEN the Button Component renders focus outline THEN the Button Component SHALL position outline accessibility.focus.offset outside button bounds
 3. WHEN the Button Component renders focus outline THEN the Button Component SHALL apply shadow.hover for additional depth
 4. WHEN the Button Component renders focus outline THEN the Button Component SHALL calculate outline radius as button radius + accessibility.focus.offset
 5. WHEN the Button Component receives focus via mouse click THEN the Button Component SHALL NOT render focus outline (focus-visible only)
@@ -259,7 +259,8 @@ src/components/core/ButtonCTA/
 ├── examples/                    # Usage examples
 └── platforms/                   # Platform-specific implementations
     ├── web/
-    │   └── ButtonCTA.web.tsx   # Web implementation (React/TypeScript)
+    │   ├── ButtonCTA.web.ts    # Web implementation (Vanilla Web Component)
+    │   └── ButtonCTA.web.css   # Web component styles
     ├── ios/
     │   └── ButtonCTA.ios.swift # iOS implementation (SwiftUI)
     └── android/
@@ -300,12 +301,13 @@ export interface ButtonProps {
 
 #### Platform Implementations
 
-**Web (React/TypeScript)**:
-- Uses semantic `<button>` element
+**Web (Vanilla Web Components)**:
+- Uses semantic `<button>` element within Shadow DOM
 - CSS custom properties for token consumption
 - Flexbox for icon-text layout
 - `:focus-visible` for keyboard focus
 - `cursor: pointer` for hover affordance
+- Custom element registration (`<button-cta>`)
 
 **iOS (SwiftUI)**:
 - Native `Button` component
@@ -348,7 +350,7 @@ The Button Component integrates with the Icon System (Spec 004) for optional lea
 
 All platforms expose identical component APIs with platform-specific prop types:
 
-**Web**: `ButtonProps` interface with React event handlers
+**Web**: `ButtonProps` interface with custom element attributes and events
 **iOS**: `ButtonProps` struct with Swift closures
 **Android**: `ButtonProps` data class with Kotlin lambdas
 
@@ -360,15 +362,21 @@ Platform-specific behaviors (hover, press feedback, focus indicators) are handle
 
 ### Spec 007: Accessibility Token Family
 
-**Status**: To be created  
-**Blocking**: ButtonCTA implementation requires accessibility tokens for focus indicators
+**Status**: ✅ Complete (Implemented November 19, 2025)  
+**Blocking**: None - accessibility tokens are now available
 
-**Required Tokens**:
-- `accessibility.focus.offset` - Focus indicator outline offset (WCAG 2.4.7 Focus Visible)
-- `accessibility.focus.width` - Focus indicator outline width (may reference `border.emphasis`)
-- `accessibility.focus.color` - Focus indicator color (may reference `color.primary`)
+**Available Tokens**:
+- `accessibility.focus.offset` - Focus indicator outline offset (2px via space025) - WCAG 2.4.7 Focus Visible
+- `accessibility.focus.width` - Focus indicator outline width (2px via borderWidth200) - WCAG 2.4.7 Focus Visible
+- `accessibility.focus.color` - Focus indicator color (purple300 via color.primary) - WCAG 2.4.7 Focus Visible + 1.4.11 Non-text Contrast
 
-**Note**: Spec 007 will establish the accessibility token family pattern for focus indicators and other accessibility-specific tokens. Touch target sizing uses existing tokens (not accessibility-specific) as it serves general usability for all users, not specific accessibility needs.
+**Implementation Details**:
+- All tokens follow compositional architecture (reference primitive tokens)
+- Tokens registered with SemanticTokenRegistry
+- Cross-platform generation working (web CSS, iOS Swift, Android Kotlin)
+- WCAG compliance validated
+
+**Note**: Touch target sizing uses existing tokens (not accessibility-specific) as it serves general usability for all users, not specific accessibility needs.
 
 ---
 
@@ -397,13 +405,18 @@ The following semantic tokens must be created before implementing the Button Com
 **Usage**: Large button horizontal padding, spacious card padding, hero section insets  
 **Rationale**: Fills gap in inset token progression (tight→normal→comfortable→spacious→expansive→generous)
 
-### 4. accessibility.focus.offset (Spec 007 Dependency)
+### 4. accessibility.focus.* (Spec 007 - Complete)
 
-**Value**: `space050` (2px primitive)  
-**Purpose**: Focus indicator outline offset from component bounds  
+**Status**: ✅ Available from Spec 007 (Accessibility Token Family)
+
+**Tokens**:
+- `accessibility.focus.offset` - 2px outline offset (via space025)
+- `accessibility.focus.width` - 2px outline width (via borderWidth200)
+- `accessibility.focus.color` - Primary color (via purple300)
+
+**Purpose**: Focus indicator styling for keyboard navigation  
 **Usage**: Focus rings on buttons, inputs, links, any focusable element  
-**Rationale**: WCAG 2.4.7 Focus Visible - ensures focus indicators are clearly visible and separated from component  
-**Note**: Defined in Spec 007 (Accessibility Token Family)
+**Rationale**: WCAG 2.4.7 Focus Visible + 1.4.11 Non-text Contrast compliance
 
 ---
 
