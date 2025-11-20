@@ -8,6 +8,8 @@
  * - Invalid name handling (fallback to circle)
  * - Custom className application
  * 
+ * @jest-environment jsdom
+ * 
  * @module Icon/platforms/web/__tests__
  */
 

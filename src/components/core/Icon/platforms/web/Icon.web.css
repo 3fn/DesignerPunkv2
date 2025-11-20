@@ -1,0 +1,200 @@
+/**
+ * Icon Component Styles for Web Platform
+ * 
+ * Token-based styling using CSS custom properties.
+ * Minimal styling - icons inherit color from parent by default.
+ * 
+ * @module Icon/platforms/web/styles
+ */
+
+/* ==========================================================================
+   Base Icon Styles
+   ========================================================================== */
+
+/**
+ * Base SVG element styling.
+ * 
+ * - Display: inline-block for proper alignment
+ * - Vertical alignment: middle for text alignment
+ * - Color inheritance: currentColor by default
+ * - Flex-shrink: 0 to prevent shrinking in flex containers
+ */
+.icon {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+/* ==========================================================================
+   Size Variant Classes
+   ========================================================================== */
+
+/**
+ * Icon size variants using icon size tokens (spec 006).
+ * 
+ * Icon sizes are calculated from fontSize × lineHeight to maintain perfect
+ * optical balance with paired typography. Each size variant corresponds to
+ * a typography scale level (icon.size100 pairs with typography using
+ * fontSize100 and lineHeight100).
+ * 
+ * These classes can be applied for explicit sizing, but size is typically
+ * controlled via the size attribute which sets inline width/height on the
+ * SVG element.
+ * 
+ * Complete token mapping (11 scale levels):
+ * - icon.size050 = fontSize050 × lineHeight050 = 13 × 1.0 = 13px (caption, legal, labelXs)
+ * - icon.size075 = fontSize075 × lineHeight075 = 14 × 1.25 = 18px (bodySm, buttonSm, labelSm)
+ * - icon.size100 = fontSize100 × lineHeight100 = 16 × 1.5 = 24px (bodyMd, buttonMd, labelMd, input)
+ * - icon.size125 = fontSize125 × lineHeight125 = 18 × 1.75 = 32px (bodyLg, buttonLg, labelLg)
+ * - icon.size150 = fontSize150 × lineHeight150 = 20 × 1.4 = 28px (h6)
+ * - icon.size200 = fontSize200 × lineHeight200 = 23 × 1.391 = 32px (h5)
+ * - icon.size300 = fontSize300 × lineHeight300 = 26 × 1.231 = 32px (h4)
+ * - icon.size400 = fontSize400 × lineHeight400 = 29 × 1.241 = 36px (h3)
+ * - icon.size500 = fontSize500 × lineHeight500 = 33 × 1.212 = 40px (h2)
+ * - icon.size600 = fontSize600 × lineHeight600 = 37 × 1.19 = 44px (h1)
+ * - icon.size700 = fontSize700 × lineHeight700 = 42 × 1.143 = 48px (display)
+ * 
+ * Note: Some tokens have the same pixel values (size125, size200, size300 all = 32px)
+ * but maintain separate classes to preserve semantic meaning and typography pairing.
+ */
+
+/**
+ * Icon size 050 (13px) - Pairs with caption, legal, labelXs typography
+ */
+.icon--size-050 {
+  width: var(--icon-size-050);
+  height: var(--icon-size-050);
+}
+
+/**
+ * Icon size 075 (18px) - Pairs with bodySm, buttonSm, labelSm typography
+ */
+.icon--size-075 {
+  width: var(--icon-size-075);
+  height: var(--icon-size-075);
+}
+
+/**
+ * Icon size 100 (24px) - Pairs with bodyMd, buttonMd, labelMd, input typography (standard)
+ */
+.icon--size-100 {
+  width: var(--icon-size-100);
+  height: var(--icon-size-100);
+}
+
+/**
+ * Icon size 125 (32px) - Pairs with bodyLg, buttonLg, labelLg typography
+ */
+.icon--size-125 {
+  width: var(--icon-size-125);
+  height: var(--icon-size-125);
+}
+
+/**
+ * Icon size 150 (28px) - Pairs with h6 typography
+ */
+.icon--size-150 {
+  width: var(--icon-size-150);
+  height: var(--icon-size-150);
+}
+
+/**
+ * Icon size 200 (32px) - Pairs with h5 typography
+ */
+.icon--size-200 {
+  width: var(--icon-size-200);
+  height: var(--icon-size-200);
+}
+
+/**
+ * Icon size 300 (32px) - Pairs with h4 typography
+ */
+.icon--size-300 {
+  width: var(--icon-size-300);
+  height: var(--icon-size-300);
+}
+
+/**
+ * Icon size 400 (36px) - Pairs with h3 typography
+ */
+.icon--size-400 {
+  width: var(--icon-size-400);
+  height: var(--icon-size-400);
+}
+
+/**
+ * Icon size 500 (40px) - Pairs with h2 typography
+ */
+.icon--size-500 {
+  width: var(--icon-size-500);
+  height: var(--icon-size-500);
+}
+
+/**
+ * Icon size 600 (44px) - Pairs with h1 typography
+ */
+.icon--size-600 {
+  width: var(--icon-size-600);
+  height: var(--icon-size-600);
+}
+
+/**
+ * Icon size 700 (48px) - Pairs with display typography
+ */
+.icon--size-700 {
+  width: var(--icon-size-700);
+  height: var(--icon-size-700);
+}
+
+/* ==========================================================================
+   Accessibility
+   ========================================================================== */
+
+/**
+ * Ensure icons are hidden from screen readers.
+ * 
+ * Icons in this system are decorative and should not be announced by
+ * assistive technologies. Parent elements (buttons, links) provide
+ * accessible labels through their text content or aria-label attributes.
+ * 
+ * The aria-hidden="true" attribute is set directly on the SVG element
+ * in the component's render method. No additional CSS styling is needed
+ * for this accessibility feature - it's handled entirely through the
+ * HTML attribute.
+ */
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+/**
+ * Optimize icon appearance for print media.
+ * 
+ * When printing, ensure icons are visible and legible by forcing
+ * a solid black color. This ensures icons print clearly regardless
+ * of the original color scheme or theme.
+ */
+@media print {
+  .icon {
+    color: #000 !important;
+  }
+}
+
+/* ==========================================================================
+   High Contrast Mode Support
+   ========================================================================== */
+
+/**
+ * Ensure icons remain visible in Windows High Contrast Mode.
+ * 
+ * In high contrast mode, force the stroke color to currentColor to
+ * ensure icons inherit the system's high contrast color scheme.
+ * This maintains visibility and readability for users who need
+ * enhanced contrast.
+ */
+@media (prefers-contrast: high) {
+  .icon {
+    stroke: currentColor !important;
+  }
+}

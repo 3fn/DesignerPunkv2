@@ -9,6 +9,8 @@
  * - Platform-specific details documented in README, not tested here
  * - Focus on what the component does, not implementation details
  * 
+ * @jest-environment jsdom
+ * 
  * @module Icon/__tests__
  */
 
