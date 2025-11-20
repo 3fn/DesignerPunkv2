@@ -4,13 +4,13 @@
  * Renders inline SVG icons with currentColor inheritance for automatic color matching.
  * Part of the DesignerPunk Icon System infrastructure.
  * 
- * Note: This is a TypeScript implementation that provides the foundation for React integration.
- * When React is added to the project, this can be converted to a React component.
+ * This module provides both a web component (<dp-icon>) and backward-compatible
+ * functional API (createIcon, Icon class) for maximum flexibility.
  * 
  * @module Icon/platforms/web
  */
 
-import { IconProps, IconName } from '../../types';
+import { IconProps, IconName, IconSize } from '../../types';
 
 /**
  * Load SVG content for a given icon name.
@@ -163,6 +163,157 @@ export class Icon {
 }
 
 /**
+ * Icon Web Component
+ * 
+ * A native web component that renders inline SVG icons with currentColor inheritance.
+ * Follows True Native Architecture with Shadow DOM encapsulation.
+ * 
+ * @example
+ * ```html
+ * <!-- Basic usage -->
+ * <dp-icon name="arrow-right" size="24"></dp-icon>
+ * 
+ * <!-- With color override -->
+ * <dp-icon name="check" size="32" color="color-success"></dp-icon>
+ * 
+ * <!-- With test ID -->
+ * <dp-icon name="settings" size="24" test-id="settings-icon"></dp-icon>
+ * ```
+ * 
+ * @example
+ * ```typescript
+ * // Programmatic usage
+ * const icon = document.createElement('dp-icon') as DPIcon;
+ * icon.name = 'arrow-right';
+ * icon.size = 24;
+ * document.body.appendChild(icon);
+ * ```
+ */
+export class DPIcon extends HTMLElement {
+  private _shadowRoot: ShadowRoot;
+  
+  /**
+   * Observed attributes for automatic re-rendering on change.
+   */
+  static get observedAttributes(): string[] {
+    return ['name', 'size', 'color', 'test-id'];
+  }
+  
+  constructor() {
+    super();
+    
+    // Attach shadow DOM for style encapsulation
+    this._shadowRoot = this.attachShadow({ mode: 'open' });
+  }
+  
+  /**
+   * Called when the element is added to the DOM.
+   */
+  connectedCallback(): void {
+    this.render();
+  }
+  
+  /**
+   * Called when an observed attribute changes.
+   */
+  attributeChangedCallback(_name: string, oldValue: string | null, newValue: string | null): void {
+    if (oldValue !== newValue) {
+      this.render();
+    }
+  }
+  
+  // Property getters/setters
+  get name(): IconName {
+    return (this.getAttribute('name') || 'circle') as IconName;
+  }
+  
+  set name(value: IconName) {
+    this.setAttribute('name', value);
+  }
+  
+  get size(): IconSize {
+    const size = parseInt(this.getAttribute('size') || '24', 10);
+    // Validate size is one of the allowed IconSize values
+    const validSizes: IconSize[] = [13, 18, 24, 28, 32, 36, 40, 44, 48];
+    return validSizes.includes(size as IconSize) ? (size as IconSize) : 24;
+  }
+  
+  set size(value: IconSize) {
+    this.setAttribute('size', value.toString());
+  }
+  
+  get color(): string {
+    return this.getAttribute('color') || 'inherit';
+  }
+  
+  set color(value: string) {
+    this.setAttribute('color', value);
+  }
+  
+  get testID(): string | null {
+    return this.getAttribute('test-id');
+  }
+  
+  set testID(value: string | null) {
+    if (value) {
+      this.setAttribute('test-id', value);
+    } else {
+      this.removeAttribute('test-id');
+    }
+  }
+  
+  /**
+   * Render the component.
+   */
+  private render(): void {
+    const name = this.name;
+    const size = this.size;
+    const color = this.color;
+    const testID = this.testID;
+    
+    // Load SVG content
+    const svgContent = loadIconSVG(name);
+    
+    // Determine stroke color
+    const strokeColor = color === 'inherit' 
+      ? 'currentColor' 
+      : `var(--${color})`;
+    
+    // Generate test ID attribute
+    const testIDAttr = testID ? ` data-testid="${testID}"` : '';
+    
+    // Load CSS from external file
+    const styleLink = `<link rel="stylesheet" href="./Icon.web.css">`;
+    
+    // Render shadow DOM content
+    this._shadowRoot.innerHTML = `
+      ${styleLink}
+      <svg
+        width="${size}"
+        height="${size}"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="${strokeColor}"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="icon icon-${name}"
+        aria-hidden="true"${testIDAttr}
+      >
+        ${svgContent}
+      </svg>
+    `;
+  }
+}
+
+/**
+ * Register the custom element.
+ */
+if (!customElements.get('dp-icon')) {
+  customElements.define('dp-icon', DPIcon);
+}
+
+/**
  * Default export for convenience.
  */
-export default Icon;
+export default DPIcon;
