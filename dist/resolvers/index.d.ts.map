@@ -1,1 +1,0 @@
-{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../src/resolvers/index.ts"],"names":[],"mappings":"AAAA;;;;;GAKG;AAEH,OAAO,EAAE,iBAAiB,EAAE,UAAU,EAAE,SAAS,EAAE,qBAAqB,EAAE,MAAM,qBAAqB,CAAC;AACtG,OAAO,EAAE,gBAAgB,EAAE,gBAAgB,EAAE,MAAM,oBAAoB,CAAC;AACxE,OAAO,EAAE,gBAAgB,EAAE,kBAAkB,EAAE,MAAM,oBAAoB,CAAC;AAC1E,OAAO,EAAE,oBAAoB,EAAE,oBAAoB,EAAE,MAAM,wBAAwB,CAAC"}
