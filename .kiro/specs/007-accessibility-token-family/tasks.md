@@ -80,7 +80,7 @@ This implementation plan creates the accessibility token family with focus indic
     - Verify token resolution works (`accessibility.focus.offset` → 2)
     - _Requirements: 11.1, 11.4_
 
-- [ ] 2. Integrate with Cross-Platform Generation
+- [x] 2. Integrate with Cross-Platform Generation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -104,7 +104,7 @@ This implementation plan creates the accessibility token family with focus indic
   **Post-Completion:**
   - Run `./.kiro/hooks/release-manager.sh auto` to trigger release detection
 
-  - [ ] 2.1 Add web CSS generation
+  - [x] 2.1 Add web CSS generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update `WebCSSGenerator` with `generateAccessibilityTokens()` method
@@ -114,7 +114,7 @@ This implementation plan creates the accessibility token family with focus indic
     - Add WCAG comments to generated CSS
     - _Requirements: 8.2, 8.3, 11.2, 11.5_
 
-  - [ ] 2.2 Add iOS Swift generation
+  - [x] 2.2 Add iOS Swift generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update `iOSSwiftGenerator` with `generateAccessibilityTokens()` method
@@ -124,7 +124,7 @@ This implementation plan creates the accessibility token family with focus indic
     - Add WCAG comments to generated Swift
     - _Requirements: 8.2, 8.3, 11.2, 11.5_
 
-  - [ ] 2.3 Add Android Kotlin generation
+  - [x] 2.3 Add Android Kotlin generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update `AndroidKotlinGenerator` with `generateAccessibilityTokens()` method
@@ -134,7 +134,7 @@ This implementation plan creates the accessibility token family with focus indic
     - Add WCAG comments to generated Kotlin
     - _Requirements: 8.2, 8.3, 11.2, 11.5_
 
-  - [ ] 2.4 Verify cross-platform consistency
+  - [x] 2.4 Verify cross-platform consistency
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run build system (`npm run build`)
@@ -143,7 +143,7 @@ This implementation plan creates the accessibility token family with focus indic
     - Verify platform-specific naming conventions followed
     - _Requirements: 8.1, 8.3, 11.2_
 
-- [ ] 3. Add Validation Support
+- [x] 3. Add Validation Support
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -166,7 +166,7 @@ This implementation plan creates the accessibility token family with focus indic
   **Post-Completion:**
   - Run `./.kiro/hooks/release-manager.sh auto` to trigger release detection
 
-  - [ ] 3.1 Create WCAGValidator
+  - [x] 3.1 Create WCAGValidator
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/validation/WCAGValidator.ts` file
@@ -175,7 +175,7 @@ This implementation plan creates the accessibility token family with focus indic
     - Implement `calculateContrastRatio()` helper method
     - _Requirements: 3.2, 3.3, 5.2, 5.3, 11.6_
 
-  - [ ] 3.2 Integrate with ThreeTierValidator
+  - [x] 3.2 Integrate with ThreeTierValidator
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update `ThreeTierValidator` with `validateAccessibilityTokens()` method
@@ -184,7 +184,7 @@ This implementation plan creates the accessibility token family with focus indic
     - Return Pass/Warning/Error results
     - _Requirements: 11.3, 11.6_
 
-  - [ ] 3.3 Add validation to build pipeline
+  - [x] 3.3 Add validation to build pipeline
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Integrate accessibility token validation into build system
@@ -192,7 +192,7 @@ This implementation plan creates the accessibility token family with focus indic
     - Report validation results (Pass/Warning/Error)
     - _Requirements: 11.3, 11.6_
 
-- [ ] 4. Create Tests
+- [x] 4. Create Tests
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -215,7 +215,7 @@ This implementation plan creates the accessibility token family with focus indic
   **Post-Completion:**
   - Run `./.kiro/hooks/release-manager.sh auto` to trigger release detection
 
-  - [ ] 4.1 Create unit tests for token values
+  - [x] 4.1 Create unit tests for token values
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/tokens/semantic/__tests__/AccessibilityTokens.test.ts`
@@ -225,7 +225,7 @@ This implementation plan creates the accessibility token family with focus indic
     - Test that resolved values are correct (2, 2, string)
     - _Requirements: 4.1, 4.2, 4.3, 4.4_
 
-  - [ ] 4.2 Create WCAG compliance tests
+  - [x] 4.2 Create WCAG compliance tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/validation/__tests__/WCAGValidator.test.ts`
@@ -234,7 +234,7 @@ This implementation plan creates the accessibility token family with focus indic
     - Test WCAG criterion references in error messages
     - _Requirements: 5.1, 5.2, 5.3, 5.4_
 
-  - [ ] 4.3 Create cross-platform generation tests
+  - [x] 4.3 Create cross-platform generation tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/generators/__tests__/AccessibilityTokenGeneration.test.ts`
@@ -244,7 +244,16 @@ This implementation plan creates the accessibility token family with focus indic
     - Verify platform naming conventions
     - _Requirements: 8.1, 8.2, 8.3, 11.2, 11.5_
 
-  - [ ] 4.4 Run all tests
+    - [x] 4.3.1 Add WCAG comment generation for accessibility tokens
+      **Type**: Implementation
+      **Validation**: Tier 2 - Standard
+      - Modify WebFormatGenerator to include WCAG comments for accessibility tokens
+      - Modify iOSFormatGenerator to include WCAG comments for accessibility tokens
+      - Modify AndroidFormatGenerator to include WCAG comments for accessibility tokens
+      - Verify tests pass with WCAG comments in generated output
+      - _Requirements: 5.1, 5.2, 5.3, 5.4, 10.3_
+
+  - [x] 4.4 Run all tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run `npm test` to execute all tests
@@ -252,7 +261,7 @@ This implementation plan creates the accessibility token family with focus indic
     - Verify no regressions in existing tests
     - _Requirements: 11.4_
 
-- [ ] 5. Create Documentation
+- [x] 5. Create Documentation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -274,7 +283,7 @@ This implementation plan creates the accessibility token family with focus indic
   **Post-Completion:**
   - Run `./.kiro/hooks/release-manager.sh auto` to trigger release detection
 
-  - [ ] 5.1 Create AccessibilityTokens README
+  - [x] 5.1 Create AccessibilityTokens README
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/tokens/semantic/AccessibilityTokens.README.md`
@@ -284,7 +293,7 @@ This implementation plan creates the accessibility token family with focus indic
     - Add web, iOS, Android usage examples
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 10.3_
 
-  - [ ] 5.2 Document usability vs accessibility distinction
+  - [x] 5.2 Document usability vs accessibility distinction
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add section explaining decision framework
@@ -293,7 +302,7 @@ This implementation plan creates the accessibility token family with focus indic
     - Document when to use accessibility token family
     - _Requirements: 6.1, 6.2, 6.3, 6.4_
 
-  - [ ] 5.3 Document future extensibility
+  - [x] 5.3 Document future extensibility
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Document pattern for future token categories

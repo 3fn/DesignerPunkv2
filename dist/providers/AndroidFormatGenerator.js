@@ -243,14 +243,42 @@ class AndroidFormatGenerator extends FormatProvider_1.BaseFormatProvider {
         const semanticName = this.getTokenName(semantic.name, semantic.category);
         // Convert primitive reference to appropriate format
         const primitiveRefName = this.getTokenName(primitiveRef, semantic.category);
+        // Add WCAG comment for accessibility tokens
+        const wcagComment = this.getWCAGComment(semantic);
         if (this.outputFormat === 'kotlin') {
-            return `    val ${semanticName} = ${primitiveRefName}`;
+            const tokenLine = `    val ${semanticName} = ${primitiveRefName}`;
+            return wcagComment ? `    ${wcagComment}\n${tokenLine}` : tokenLine;
         }
         else {
             // XML format - reference another resource
             const resourceType = this.getXMLResourceType(semantic.category);
-            return `    <${resourceType} name="${semanticName}">@${resourceType}/${primitiveRefName}</${resourceType}>`;
+            const tokenLine = `    <${resourceType} name="${semanticName}">@${resourceType}/${primitiveRefName}</${resourceType}>`;
+            return wcagComment ? `    ${wcagComment}\n${tokenLine}` : tokenLine;
         }
+    }
+    /**
+     * Get WCAG comment for accessibility tokens
+     * Extracts WCAG information from token description
+     */
+    getWCAGComment(semantic) {
+        // Only add WCAG comments for accessibility tokens
+        if (!semantic.name.startsWith('accessibility.')) {
+            return null;
+        }
+        // Extract WCAG information from description
+        // Format: "Accessibility token for focus offset (WCAG 2.4.7)"
+        const wcagMatch = semantic.description?.match(/WCAG\s+([\d.]+)/);
+        if (!wcagMatch) {
+            return null;
+        }
+        const wcagCriterion = wcagMatch[1];
+        // Map WCAG criteria to names
+        const wcagNames = {
+            '2.4.7': 'Focus Visible',
+            '1.4.11': 'Non-text Contrast'
+        };
+        const criterionName = wcagNames[wcagCriterion] || '';
+        return `// WCAG ${wcagCriterion}${criterionName ? ` ${criterionName}` : ''}`;
     }
     /**
      * Format a multi-reference semantic token (typography)
@@ -433,6 +461,46 @@ class AndroidFormatGenerator extends FormatProvider_1.BaseFormatProvider {
             }
             return `    <dimen name="${kotlinName}">${calculatedSize}dp</dimen>`;
         }
+    }
+    /**
+     * Generate accessibility tokens section for Android platform
+     * Generates Kotlin constants for focus indicator tokens with WCAG comments
+     *
+     * WCAG References:
+     * - 2.4.7 Focus Visible (Level AA)
+     * - 1.4.11 Non-text Contrast (Level AA) - 3:1 minimum for focus indicators
+     *
+     * @returns Array of Kotlin constant declaration strings with WCAG comments
+     */
+    generateAccessibilityTokens() {
+        const lines = [];
+        // Add section header with WCAG guidance
+        lines.push('');
+        lines.push('    // ============================================');
+        lines.push('    // ACCESSIBILITY TOKENS');
+        lines.push('    // Focus Indicators for Keyboard Navigation');
+        lines.push('    // WCAG 2.4.7 Focus Visible (Level AA)');
+        lines.push('    // WCAG 1.4.11 Non-text Contrast (Level AA)');
+        lines.push('    // ============================================');
+        lines.push('');
+        // Focus indicator tokens with WCAG comments
+        lines.push('    // Focus Indicator Offset - WCAG 2.4.7 Focus Visible');
+        lines.push('    val accessibilityFocusOffset = 2.dp');
+        lines.push('');
+        lines.push('    // Focus Indicator Width - WCAG 2.4.7 Focus Visible');
+        lines.push('    val accessibilityFocusWidth = 2.dp');
+        lines.push('');
+        lines.push('    // Focus Indicator Color - WCAG 2.4.7 Focus Visible, 1.4.11 Non-text Contrast (3:1 minimum)');
+        lines.push('    val accessibilityFocusColor = colorPrimary');
+        lines.push('');
+        // Add usage example comment
+        lines.push('    // Usage Example:');
+        lines.push('    // .border(');
+        lines.push('    //     width = accessibilityFocusWidth,');
+        lines.push('    //     color = accessibilityFocusColor,');
+        lines.push('    //     shape = RoundedCornerShape(cornerRadius + accessibilityFocusOffset)');
+        lines.push('    // )');
+        return lines;
     }
 }
 exports.AndroidFormatGenerator = AndroidFormatGenerator;

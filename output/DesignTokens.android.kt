@@ -1,6 +1,6 @@
 /**
  * DesignerPunk Design System - Android Tokens
- * Generated: 2025-11-19T03:51:05.283Z
+ * Generated: 2025-11-20T02:33:02.877Z
  * Version: 1.0.0
  * Platform: Android (Kotlin Constants)
  */
@@ -496,6 +496,9 @@ object DesignTokens {
     val icon_size_500 = 40.dp // Icon size calculated from fontSize500 × lineHeight500 = 33 × 1.212 = 40px (rounded from 39.996) | Pairs with: Icon size for h2 typography
     val icon_size_600 = 44.dp // Icon size calculated from fontSize600 × lineHeight600 = 37 × 1.19 = 44px (rounded from 44.03) | Pairs with: Icon size for h1 typography
     val icon_size_700 = 48.dp // Icon size calculated from fontSize700 × lineHeight700 = 42 × 1.143 = 48px (rounded from 48.006) | Pairs with: Icon size for display typography (hero text)
+    val accessibility_focus_offset = space_025
+    val accessibility_focus_width = border_width_200
+    val accessibility_focus_color = purple_300
     val border_border_default = border_width_100
     val border_border_emphasis = border_width_200
     val border_border_heavy = border_width_400

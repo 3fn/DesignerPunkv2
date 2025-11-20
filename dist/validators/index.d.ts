@@ -16,6 +16,8 @@ export { WarningValidator } from './WarningValidator';
 export { SemanticTokenValidator } from './SemanticTokenValidator';
 export { CompositionPatternValidator } from './CompositionPatternValidator';
 export { PrimitiveReferenceValidator } from './PrimitiveReferenceValidator';
+export { WCAGValidator } from './WCAGValidator';
+export type { WCAGValidationResult } from './WCAGValidator';
 export type { SemanticValidationOptions, ComprehensiveValidationResult } from './SemanticTokenValidator';
 export type { CompositionContext, CompositionValidationOptions } from './CompositionPatternValidator';
 export type { PrimitiveReferenceValidationOptions } from './PrimitiveReferenceValidator';

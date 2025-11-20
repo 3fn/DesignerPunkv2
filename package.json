@@ -4,9 +4,10 @@
   "description": "True Native cross-platform design system with mathematical foundations",
   "main": "index.js",
   "scripts": {
-    "build": "tsc --skipLibCheck",
+    "build": "tsc --skipLibCheck && npm run build:validate",
     "build:watch": "tsc --watch --skipLibCheck",
     "build:verify": "node verify-build.js",
+    "build:validate": "npx ts-node src/validators/buildValidation.ts",
     "test": "jest --testPathIgnorePatterns='performance/__tests__|__tests__/performance'",
     "test:all": "jest",
     "test:performance": "jest --testPathPattern='performance/__tests__|__tests__/performance'",

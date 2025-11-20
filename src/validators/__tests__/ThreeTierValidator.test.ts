@@ -768,4 +768,130 @@ describe('ThreeTierValidator', () => {
       expect(result.metadata.performanceMetrics).toBeDefined();
     });
   });
+
+  describe('Accessibility token validation', () => {
+    describe('focus.offset validation', () => {
+      it('should error when offset is negative', () => {
+        const tokens = {
+          focus: { offset: -1, width: 2, color: '#3B82F6' }
+        };
+
+        const results = validator.validateAccessibilityTokens(tokens);
+        const offsetResult = results.find(r => r.token === 'accessibility.focus.offset');
+
+        expect(offsetResult).toBeDefined();
+        expect(offsetResult?.level).toBe('Error');
+        expect(offsetResult?.message).toContain('non-negative');
+        expect(offsetResult?.mathematicalReasoning).toContain('WCAG 2.4.7');
+      });
+
+      it('should warn when offset is 0', () => {
+        const tokens = {
+          focus: { offset: 0, width: 2, color: '#3B82F6' }
+        };
+
+        const results = validator.validateAccessibilityTokens(tokens);
+        const offsetResult = results.find(r => r.token === 'accessibility.focus.offset');
+
+        expect(offsetResult).toBeDefined();
+        expect(offsetResult?.level).toBe('Warning');
+        expect(offsetResult?.message).toContain('may reduce visibility');
+        expect(offsetResult?.suggestions).toBeDefined();
+        expect(offsetResult?.suggestions?.length).toBeGreaterThan(0);
+      });
+
+      it('should pass when offset is positive', () => {
+        const tokens = {
+          focus: { offset: 2, width: 2, color: '#3B82F6' }
+        };
+
+        const results = validator.validateAccessibilityTokens(tokens);
+        const offsetResult = results.find(r => r.token === 'accessibility.focus.offset');
+
+        expect(offsetResult).toBeDefined();
+        expect(offsetResult?.level).toBe('Pass');
+        expect(offsetResult?.message).toContain('clear separation');
+      });
+    });
+
+    describe('focus.width validation', () => {
+      it('should error when width is less than 1px', () => {
+        const tokens = {
+          focus: { offset: 2, width: 0.5, color: '#3B82F6' }
+        };
+
+        const results = validator.validateAccessibilityTokens(tokens);
+        const widthResult = results.find(r => r.token === 'accessibility.focus.width');
+
+        expect(widthResult).toBeDefined();
+        expect(widthResult?.level).toBe('Error');
+        expect(widthResult?.message).toContain('at least 1px');
+        expect(widthResult?.mathematicalReasoning).toContain('WCAG 2.4.7');
+      });
+
+      it('should warn when width is less than 2px', () => {
+        const tokens = {
+          focus: { offset: 2, width: 1, color: '#3B82F6' }
+        };
+
+        const results = validator.validateAccessibilityTokens(tokens);
+        const widthResult = results.find(r => r.token === 'accessibility.focus.width');
+
+        expect(widthResult).toBeDefined();
+        expect(widthResult?.level).toBe('Warning');
+        expect(widthResult?.message).toContain('may reduce visibility');
+        expect(widthResult?.suggestions).toBeDefined();
+        expect(widthResult?.suggestions?.length).toBeGreaterThan(0);
+      });
+
+      it('should pass when width is 2px or greater', () => {
+        const tokens = {
+          focus: { offset: 2, width: 2, color: '#3B82F6' }
+        };
+
+        const results = validator.validateAccessibilityTokens(tokens);
+        const widthResult = results.find(r => r.token === 'accessibility.focus.width');
+
+        expect(widthResult).toBeDefined();
+        expect(widthResult?.level).toBe('Pass');
+        expect(widthResult?.message).toContain('clear visibility');
+      });
+    });
+
+    describe('combined validation', () => {
+      it('should return results for both offset and width', () => {
+        const tokens = {
+          focus: { offset: 2, width: 2, color: '#3B82F6' }
+        };
+
+        const results = validator.validateAccessibilityTokens(tokens);
+
+        expect(results).toHaveLength(2);
+        expect(results.some(r => r.token === 'accessibility.focus.offset')).toBe(true);
+        expect(results.some(r => r.token === 'accessibility.focus.width')).toBe(true);
+      });
+
+      it('should handle multiple validation issues', () => {
+        const tokens = {
+          focus: { offset: -1, width: 0.5, color: '#3B82F6' }
+        };
+
+        const results = validator.validateAccessibilityTokens(tokens);
+
+        expect(results).toHaveLength(2);
+        expect(results.every(r => r.level === 'Error')).toBe(true);
+      });
+
+      it('should handle mixed validation levels', () => {
+        const tokens = {
+          focus: { offset: 0, width: 1, color: '#3B82F6' }
+        };
+
+        const results = validator.validateAccessibilityTokens(tokens);
+
+        expect(results).toHaveLength(2);
+        expect(results.every(r => r.level === 'Warning')).toBe(true);
+      });
+    });
+  });
 });

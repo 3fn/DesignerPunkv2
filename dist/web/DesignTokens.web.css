@@ -1,6 +1,6 @@
 /**
  * DesignerPunk Design System - Web Tokens
- * Generated: 2025-11-20T01:29:11.419Z
+ * Generated: 2025-11-20T04:00:41.324Z
  * Version: 1.0.0
  * Platform: Web (CSS Custom Properties)
  *
@@ -643,8 +643,11 @@
   --icon-size-500: 40px; /* Icon size calculated from fontSize500 × lineHeight500 = 33 × 1.212 = 40px (rounded from 39.996) | Pairs with: Icon size for h2 typography */
   --icon-size-600: 44px; /* Icon size calculated from fontSize600 × lineHeight600 = 37 × 1.19 = 44px (rounded from 44.03) | Pairs with: Icon size for h1 typography */
   --icon-size-700: 48px; /* Icon size calculated from fontSize700 × lineHeight700 = 42 × 1.143 = 48px (rounded from 48.006) | Pairs with: Icon size for display typography (hero text) */
-  --accessibility-focus-offset: var(--space-050);
+  /* WCAG 2.4.7 Focus Visible */
+  --accessibility-focus-offset: var(--space-025);
+  /* WCAG 2.4.7 Focus Visible */
   --accessibility-focus-width: var(--border-width-200);
+  /* WCAG 2.4.7 Focus Visible */
   --accessibility-focus-color: var(--purple-300);
   --border-border-default: var(--border-width-100);
   --border-border-emphasis: var(--border-width-200);

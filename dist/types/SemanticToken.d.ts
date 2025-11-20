@@ -18,7 +18,8 @@ export declare enum SemanticCategory {
     LAYOUT = "layout",
     LAYERING = "layering",
     INTERACTION = "interaction",
-    ICON = "icon"
+    ICON = "icon",
+    ACCESSIBILITY = "accessibility"
 }
 /**
  * Semantic token interface providing contextual abstraction over primitive tokens

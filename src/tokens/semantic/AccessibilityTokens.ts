@@ -24,7 +24,7 @@ import { borderEmphasis } from './BorderWidthTokens';
 import { colorTokens } from './ColorTokens';
 
 // Reference primitive token names (not resolved values)
-const space050Ref = 'space050';  // Primitive token name
+const space025Ref = 'space025';  // Primitive token name
 const borderEmphasisRef = borderEmphasis.value;  // Already a primitive token name: 'borderWidth200'
 const colorPrimaryRef = colorTokens['color.primary'].primitiveReferences.value;  // Already a primitive token name: 'purple300'
 
@@ -41,7 +41,7 @@ const colorPrimaryRef = colorTokens['color.primary'].primitiveReferences.value; 
  * - color: 'purple300' (primitive token name)
  */
 export interface FocusTokens {
-  /** Focus indicator outline offset - references primitive token 'space050' (2px) */
+  /** Focus indicator outline offset - references primitive token 'space025' (2px) */
   offset: string;
   
   /** Focus indicator outline width - references primitive token 'borderWidth200' (2px) */
@@ -85,12 +85,12 @@ export const accessibility: AccessibilityTokens = {
     /**
      * Focus indicator outline offset from component bounds
      * 
-     * @value 'space050' → 2px (primitive token reference)
+     * @value 'space025' → 2px (primitive token reference)
      * @wcag 2.4.7 Focus Visible (Level AA)
      * @usage Position focus outline outside element bounds
      * @example outlineOffset: accessibility.focus.offset
      */
-    offset: space050Ref,
+    offset: space025Ref,
     
     /**
      * Focus indicator outline width
@@ -112,6 +112,38 @@ export const accessibility: AccessibilityTokens = {
      * @example outlineColor: accessibility.focus.color
      */
     color: colorPrimaryRef,
+  },
+};
+
+/**
+ * Accessibility tokens as semantic token objects
+ * Following the same pattern as ColorTokens for proper integration with the generation system
+ */
+import { SemanticToken, SemanticCategory } from '../../types/SemanticToken';
+
+export const accessibilityTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>> = {
+  'accessibility.focus.offset': {
+    name: 'accessibility.focus.offset',
+    primitiveReferences: { value: space025Ref },
+    category: SemanticCategory.ACCESSIBILITY,
+    context: 'Focus indicator outline offset for keyboard navigation',
+    description: 'WCAG 2.4.7 Focus Visible - positions outline outside element bounds (2px)'
+  },
+  
+  'accessibility.focus.width': {
+    name: 'accessibility.focus.width',
+    primitiveReferences: { value: borderEmphasisRef },
+    category: SemanticCategory.ACCESSIBILITY,
+    context: 'Focus indicator outline width for keyboard navigation',
+    description: 'WCAG 2.4.7 Focus Visible - visible indicator thickness (2px)'
+  },
+  
+  'accessibility.focus.color': {
+    name: 'accessibility.focus.color',
+    primitiveReferences: { value: colorPrimaryRef },
+    category: SemanticCategory.ACCESSIBILITY,
+    context: 'Focus indicator outline color for keyboard navigation',
+    description: 'WCAG 2.4.7 Focus Visible + 1.4.11 Non-text Contrast - 3:1 contrast minimum'
   },
 };
 

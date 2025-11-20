@@ -110,6 +110,7 @@ export {
 
 export {
   accessibility,
+  accessibilityTokens,
   accessibilityTokenNames,
   getAccessibilityToken,
   getAllAccessibilityTokens
@@ -128,7 +129,7 @@ import { blendTokens } from './BlendTokens';
 import { zIndexTokens, elevationTokens } from './LayeringTokens';
 import { gridSpacingTokens } from './GridSpacingTokens';
 import { iconTokens } from './IconTokens';
-import { accessibility } from './AccessibilityTokens';
+import { accessibility, accessibilityTokens } from './AccessibilityTokens';
 
 /**
  * Get any semantic token by name across all categories
@@ -335,15 +336,7 @@ export function getAllSemanticTokens(): Array<Omit<SemanticToken, 'primitiveToke
   tokens.push(...Object.values(iconTokens));
 
   // Add accessibility tokens
-  for (const [property, value] of Object.entries(accessibility.focus)) {
-    tokens.push({
-      name: `accessibility.focus.${property}`,
-      primitiveReferences: { value: String(value) },
-      category: SemanticCategory.ACCESSIBILITY,
-      context: `Focus indicator ${property} for keyboard navigation`,
-      description: `Accessibility token for focus ${property} (WCAG 2.4.7)`
-    });
-  }
+  tokens.push(...Object.values(accessibilityTokens));
 
   // Add border width tokens
   for (const [name, token] of Object.entries(SemanticBorderWidthTokens)) {
@@ -392,7 +385,7 @@ export function getSemanticTokensByCategory(category: SemanticCategory): Array<O
     case SemanticCategory.ICON:
       return Object.values(iconTokens);
     case SemanticCategory.ACCESSIBILITY:
-      return getAllSemanticTokens().filter(t => t.category === SemanticCategory.ACCESSIBILITY);
+      return Object.values(accessibilityTokens);
     default:
       return [];
   }

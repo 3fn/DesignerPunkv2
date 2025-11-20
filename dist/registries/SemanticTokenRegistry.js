@@ -157,7 +157,8 @@ class SemanticTokenRegistry {
             SemanticToken_1.SemanticCategory.BORDER,
             SemanticToken_1.SemanticCategory.SHADOW,
             SemanticToken_1.SemanticCategory.LAYOUT,
-            SemanticToken_1.SemanticCategory.INTERACTION
+            SemanticToken_1.SemanticCategory.INTERACTION,
+            SemanticToken_1.SemanticCategory.ACCESSIBILITY
         ];
         categories.forEach(category => {
             this.categoryIndex.set(category, new Set());
