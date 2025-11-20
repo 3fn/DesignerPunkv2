@@ -18,8 +18,9 @@
  * - blendFocusSaturate: Focus state with increased saturation (8% more saturated)
  * - blendDisabledDesaturate: Disabled state with decreased saturation (12% less saturated)
  * - blendContainerHoverDarker: Subtle container hover feedback (4% darker)
+ * - color.icon.opticalBalance: Icon optical weight compensation (8% lighter)
  * 
- * Total: 6 semantic blend tokens
+ * Total: 7 semantic blend tokens
  */
 
 import { BlendDirection } from '../BlendTokens';
@@ -52,7 +53,7 @@ export interface SemanticBlendToken {
 
 /**
  * Semantic blend tokens for common interaction states
- * Total: 6 tokens
+ * Total: 7 tokens
  */
 export const blendTokens: Record<string, SemanticBlendToken> = {
   'blend.hoverDarker': {
@@ -119,12 +120,23 @@ export const blendTokens: Record<string, SemanticBlendToken> = {
     category: 'interaction',
     context: 'Subtle container hover - gentle surface feedback for large areas',
     description: 'Blend for container/surface hover with subtle darkening (4% darker) - provides gentle feedback for large interactive surfaces like cards, tiles, and list items'
+  },
+
+  'color.icon.opticalBalance': {
+    name: 'color.icon.opticalBalance',
+    primitiveReferences: {
+      value: 'blend200'
+    },
+    direction: BlendDirection.LIGHTER,
+    category: 'interaction',
+    context: 'Icon optical weight compensation when paired with text',
+    description: 'Blend for icon-text pairing with lightening (8% lighter) - compensates for icons appearing heavier than text at same color due to stroke density and fill area'
   }
 };
 
 /**
  * Array of all blend semantic token names for iteration
- * Total: 6 tokens
+ * Total: 7 tokens
  */
 export const blendTokenNames = Object.keys(blendTokens);
 
@@ -143,10 +155,10 @@ export function getAllBlendTokens(): SemanticBlendToken[] {
 }
 
 /**
- * Validate token count matches spec (6 tokens)
+ * Validate token count matches spec (7 tokens)
  */
 export function validateBlendTokenCount(): boolean {
-  const expectedCount = 6;
+  const expectedCount = 7;
   const actualCount = blendTokenNames.length;
   if (actualCount !== expectedCount) {
     console.warn(`Blend token count mismatch: expected ${expectedCount}, got ${actualCount}`);

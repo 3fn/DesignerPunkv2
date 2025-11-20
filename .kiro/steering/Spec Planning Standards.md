@@ -55,6 +55,29 @@ trigger: spec-work
 2. ✅ **Anti-Patterns to Avoid** (MUST READ)
 3. ✅ **Your specific validation tier requirements**
 
+### WHEN Working with Cross-Spec Dependencies THEN Read:
+
+**📖 CONDITIONAL SECTION - Read only when needed**
+
+**Load when**:
+- Your spec lists dependencies in the header
+- A task references another spec (e.g., "Test ButtonCTA integration")
+- Writing integration tests between components
+- A task is blocked waiting for another spec
+- Creating or updating integration contracts
+
+**Skip when**:
+- Spec is fully independent
+- All dependencies are already complete
+- No integration work in current task
+
+**What to read**:
+1. ✅ **Cross-Spec Dependencies** (MUST READ - dependency declaration format)
+2. ✅ **Blocked Tasks** (MUST READ - how to mark and document blockers)
+3. ✅ **Integration Testing Workflow** (MUST READ - when and how to write integration tests)
+4. ✅ **Integration Contracts** (OPTIONAL - if creating formal integration contract)
+5. ❌ **SKIP**: Other sections unless also relevant to your current task
+
 ---
 
 ## Overview
@@ -2623,6 +2646,390 @@ When creating cross-references, calculate relative paths based on the source doc
 ❌ **Vague implementation steps** - Be specific about what to build  
 ❌ **Missing artifacts** - Hard to know what files should exist  
 ❌ **No completion documentation** - Learnings get lost
+
+---
+
+## Cross-Spec Coordination (Conditional Loading)
+
+**📖 CONDITIONAL SECTION - Read only when needed**
+
+**Load when**: 
+- Working with dependencies between specs
+- Writing integration tests
+- Task blocked by external dependency
+- Creating integration contracts
+- Spec header lists dependencies
+
+**Skip when**: 
+- Spec is independent
+- Dependencies already complete
+- No integration work needed
+
+---
+
+### Cross-Spec Dependencies
+
+When your spec depends on another spec, declare dependencies explicitly in the header and document integration requirements.
+
+#### Dependency Declaration Format
+
+**In spec header (requirements.md, design.md, tasks.md)**:
+
+```markdown
+**Dependencies**: 
+- Spec XXX ([Spec Name]) - [What you need from it]
+  - Status: [Complete | In Progress | Not Started]
+  - Required for: [Which tasks depend on this]
+  - Integration point: [Specific API/component needed]
+```
+
+**Example - Simple Dependency**:
+
+```markdown
+**Dependencies**: 
+- Spec 004 (Icon System) - createIcon() function
+  - Status: Complete
+  - Required for: Task 3.3 (icon integration)
+  - Integration point: createIcon({ name, size, color }) API
+```
+
+**Example - Blocking Dependency**:
+
+```markdown
+**Dependencies**: 
+- Spec 005 (ButtonCTA Component) - Working web component
+  - Status: In Progress (Task 3.3 not complete)
+  - Required for: Task 3.7 (integration tests)
+  - Integration point: ButtonCTA web component with shadow DOM
+  - **BLOCKER**: Cannot write integration tests until ButtonCTA works in test environment
+```
+
+#### When to Check Dependencies
+
+**During Requirements Phase**:
+- Identify which specs you depend on
+- Document what you need from each dependency
+- Verify dependencies exist or plan to create them
+
+**During Design Phase**:
+- Review dependency status
+- Design integration points and contracts
+- Plan for dependency delays or changes
+
+**During Tasks Phase**:
+- Mark tasks that depend on external specs
+- Add blocker documentation if dependencies not ready
+- Sequence tasks to minimize blocking
+
+**During Implementation**:
+- Verify dependency is ready before starting dependent task
+- Check integration contract if one exists
+- Coordinate with dependency spec if issues arise
+
+---
+
+### Blocked Tasks
+
+When a task cannot proceed due to external dependencies, mark it as blocked with clear documentation.
+
+#### Blocked Task Format
+
+```markdown
+- [ ] X.Y Task Name
+  **Type**: [Setup | Implementation | Architecture]
+  **Validation**: [Tier 1 | Tier 2 | Tier 3]
+  **Status**: BLOCKED
+  **Blocker**: [Spec XXX Task Y.Z] - [Specific reason]
+  **Unblock Criteria**: [What needs to happen to unblock]
+  **Partial Progress**: [What's been done despite block]
+  
+  - [Implementation steps]
+  - _Requirements: X.X_
+```
+
+#### Blocked Task Example
+
+```markdown
+- [ ] 3.7 Create ButtonCTA integration tests
+  **Type**: Implementation
+  **Validation**: Tier 2 - Standard
+  **Status**: BLOCKED
+  **Blocker**: Spec 005 Task 3.3 - ButtonCTA icon integration not implemented
+  **Unblock Criteria**: 
+    - ButtonCTA web component functional in test environment
+    - ButtonCTA shadow DOM initializes correctly
+    - ButtonCTA can render icons using createIcon()
+  **Partial Progress**:
+    - ✅ Integration test file created with 37 comprehensive tests
+    - ✅ 3/37 tests passing (createIcon import verification)
+    - ❌ 34/37 tests failing (ButtonCTA shadow DOM null)
+  
+  - Test ButtonCTA imports createIcon successfully
+  - Test ButtonCTA renders icons using createIcon
+  - Test ButtonCTA icon rendering unchanged
+  - Test ButtonCTA with all icon names
+  - Test ButtonCTA with different icon sizes
+  - Verify ButtonCTA requires no code changes
+  - _Requirements: 6.1, 6.2_
+```
+
+#### Unblocking Process
+
+**When dependency becomes ready**:
+1. Verify unblock criteria are met
+2. Update task status from BLOCKED to in progress
+3. Remove blocker documentation
+4. Proceed with task implementation
+5. Document any integration issues discovered
+
+**If blocker persists**:
+1. Coordinate with blocking spec
+2. Update unblock criteria if they change
+3. Consider workarounds or alternative approaches
+4. Document coordination in completion notes
+
+---
+
+### Integration Testing Workflow
+
+Integration tests verify that components from different specs work together correctly. Follow this workflow to avoid premature integration testing.
+
+#### The Integration Testing Rule
+
+**RULE**: Integration tests should only be written **after** both components have working unit tests.
+
+**Why**: Integration tests require both components to be functional. Writing integration tests before components work leads to:
+- False failures (component not ready, not integration broken)
+- Wasted effort (tests fail for wrong reasons)
+- Unclear ownership (who fixes the test?)
+- Blocked tasks (can't complete until dependency ready)
+
+#### Integration Testing Phases
+
+**Phase 1: Independent Development**
+- Each spec completes its component with unit tests
+- Components proven to work independently
+- APIs are stable and tested
+
+**Phase 2: Integration Readiness Checkpoint**
+- Verify both components work independently
+- Review integration contract (if one exists)
+- Confirm APIs are stable and won't change
+- Agree on integration test ownership
+
+**Phase 3: Write Integration Tests**
+- One spec owns the integration tests (usually the consumer)
+- Tests verify the integration works as expected
+- Tests focus on integration points, not component internals
+
+**Phase 4: Fix Integration Issues**
+- Both specs coordinate on fixes
+- Provider spec fixes API issues
+- Consumer spec fixes usage issues
+- Integration tests pass
+
+#### Integration Test Ownership
+
+**Consumer spec writes integration tests** when:
+- Testing that provider's API works for consumer's use case
+- Verifying backward compatibility (e.g., Icon testing ButtonCTA still works)
+- Consumer needs to prove integration works
+
+**Provider spec writes integration tests** when:
+- Testing that provider works with multiple consumers
+- Verifying provider's contract is met
+- Provider needs to prove API stability
+
+**Example - Consumer Owns Tests**:
+```markdown
+# Icon Spec (008) - Task 3.7
+- [ ] 3.7 Create ButtonCTA integration tests
+  **Type**: Implementation
+  **Validation**: Tier 2 - Standard
+  
+  - Test ButtonCTA imports createIcon successfully
+  - Test ButtonCTA renders icons using createIcon
+  - Verify ButtonCTA requires no code changes
+  - _Requirements: 6.1, 6.2_
+```
+
+**Rationale**: Icon spec needs to prove backward compatibility - that ButtonCTA continues working after Icon's web component conversion.
+
+#### Blocked Integration Tests
+
+If integration tests are written before dependencies are ready:
+
+1. **Mark task as BLOCKED** with clear blocker documentation
+2. **Document partial progress** (test file created, some tests passing)
+3. **Wait for dependency** to be ready
+4. **Unblock and complete** when dependency is available
+
+**Example**:
+```markdown
+- [ ] 3.7 Create ButtonCTA integration tests
+  **Status**: BLOCKED
+  **Blocker**: Spec 005 Task 3.3 - ButtonCTA not functional in test environment
+  **Partial Progress**:
+    - ✅ Test file created with 37 tests
+    - ✅ 3/37 tests passing (import tests)
+    - ❌ 34/37 tests failing (ButtonCTA shadow DOM null)
+```
+
+---
+
+### Integration Contracts
+
+Integration contracts are optional documents that formalize the agreement between specs about what one provides and what the other needs.
+
+#### When to Create Integration Contracts
+
+**Create a contract when**:
+- Integration is complex with multiple touch points
+- Multiple specs depend on the same provider
+- Integration requirements are unclear
+- Coordination between teams is needed
+- You want to prevent integration issues
+
+**Skip the contract when**:
+- Integration is simple (single API call)
+- Both specs are developed by same person
+- Integration is obvious and well-understood
+- Overhead isn't justified
+
+#### Integration Contract Template
+
+Create contracts in `.kiro/specs/integration-contracts/[provider]-[consumer].md`:
+
+```markdown
+# Integration Contract: [Provider] + [Consumer]
+
+**Provider**: Spec XXX ([Provider Name])
+**Consumer**: Spec YYY ([Consumer Name])
+**Status**: [Pending | Active | Complete]
+**Date**: [Creation Date]
+
+---
+
+## What Provider Offers
+
+### [API/Component Name]
+- **API**: [Function signature or component interface]
+- **Returns**: [What it returns]
+- **Status**: [Available | In Progress | Not Started]
+
+### [Additional APIs/Components]
+- **API**: [Function signature or component interface]
+- **Status**: [Available | In Progress | Not Started]
+
+---
+
+## What Consumer Needs
+
+### [Consumer Requirement]
+- **Need**: [What consumer needs from provider]
+- **Usage**: [How consumer will use it]
+- **Status**: [Implemented | In Progress | Not Started]
+
+### [Additional Requirements]
+- **Need**: [What consumer needs]
+- **Status**: [Implemented | In Progress | Not Started]
+
+---
+
+## Integration Tests
+
+### Location
+- [Which spec owns the integration tests]
+- [Where tests are located]
+
+### Status
+- [Test status and results]
+
+---
+
+## Unblock Criteria
+
+1. [Criterion 1 for integration to proceed]
+2. [Criterion 2 for integration to proceed]
+3. [Criterion 3 for integration to proceed]
+
+---
+
+## Coordination Notes
+
+- [Notes about coordination between specs]
+- [Issues discovered during integration]
+- [Decisions made about integration approach]
+```
+
+#### Integration Contract Example
+
+```markdown
+# Integration Contract: Icon + ButtonCTA
+
+**Provider**: Spec 008 (Icon Web Component Conversion)
+**Consumer**: Spec 005 (ButtonCTA Component)
+**Status**: Pending ButtonCTA completion
+**Date**: November 20, 2025
+
+---
+
+## What Provider Offers
+
+### createIcon() Function
+- **API**: `createIcon({ name: IconName, size: number, color: string }): string`
+- **Returns**: SVG string with icon markup
+- **Status**: ✅ Available and tested
+
+### Icon Web Component
+- **API**: `<dp-icon name="..." size="..." color="..."></dp-icon>`
+- **Status**: ✅ Available and tested
+
+---
+
+## What Consumer Needs
+
+### ButtonCTA Requirements
+- **Need**: createIcon() function to render icons
+- **Usage**: Called when icon prop provided to ButtonCTA
+- **Status**: ❌ Not implemented (Task 3.3 pending)
+
+### ButtonCTA Test Environment
+- **Need**: Working web component in test environment
+- **Requirement**: Shadow DOM must initialize correctly
+- **Status**: ❌ Not working (shadow DOM returns null)
+
+---
+
+## Integration Tests
+
+### Location
+- Icon spec (008) - Task 3.7
+- Tests Icon's backward compatibility with ButtonCTA
+
+### Status
+- ❌ BLOCKED - ButtonCTA not ready
+- Partial: 3/37 tests passing (import tests only)
+- Remaining: 34/37 tests failing (ButtonCTA shadow DOM issues)
+
+---
+
+## Unblock Criteria
+
+1. ButtonCTA Task 3.3 complete (icon integration implemented)
+2. ButtonCTA has working unit tests
+3. ButtonCTA shadow DOM initializes in test environment
+4. ButtonCTA can render icons using createIcon()
+
+---
+
+## Coordination Notes
+
+- Icon spec should wait for ButtonCTA completion before unblocking Task 3.7
+- ButtonCTA spec should notify when Task 3.3 is complete
+- Integration tests can then be run and debugged
+- Both specs coordinate on any integration issues discovered
+```
 
 ---
 

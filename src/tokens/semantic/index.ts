@@ -285,7 +285,8 @@ function getSpacingContext(category: string, level: string): string {
       normal: 'Standard-density interfaces (balanced)',
       comfortable: 'Low-density interfaces (generous, content-focused)',
       spacious: 'Very low-density interfaces (emphasis, breathing room)',
-      expansive: 'Maximum breathing room (heroes, feature sections)'
+      expansive: 'Maximum breathing room (heroes, feature sections)',
+      generous: 'Generous internal spacing for large components'
     }
   };
 
@@ -432,14 +433,15 @@ export function validateSemanticTokenStructure(token: Omit<SemanticToken, 'primi
 /**
  * Get spacing token recommendations based on use case
  */
-export function getSpacingRecommendation(useCase: 'layout' | 'inset', density?: 'tight' | 'normal' | 'loose' | 'comfortable' | 'spacious' | 'expansive'): string[] {
+export function getSpacingRecommendation(useCase: 'layout' | 'inset', density?: 'tight' | 'normal' | 'loose' | 'comfortable' | 'spacious' | 'expansive' | 'generous'): string[] {
   if (useCase === 'inset') {
     return [
       'space.inset.tight',
       'space.inset.normal',
       'space.inset.comfortable',
       'space.inset.spacious',
-      'space.inset.expansive'
+      'space.inset.expansive',
+      'space.inset.generous'
     ];
   }
 
