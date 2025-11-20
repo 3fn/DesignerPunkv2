@@ -215,6 +215,10 @@ export class DPIcon extends HTMLElement {
   
   /**
    * Called when an observed attribute changes.
+   * 
+   * @param _name - Attribute name (unused, prefixed with underscore)
+   * @param oldValue - Previous attribute value
+   * @param newValue - New attribute value
    */
   attributeChangedCallback(_name: string, oldValue: string | null, newValue: string | null): void {
     if (oldValue !== newValue) {
@@ -263,7 +267,11 @@ export class DPIcon extends HTMLElement {
   }
   
   /**
-   * Render the component.
+   * Render the component into shadow DOM.
+   * 
+   * Generates SVG markup with currentColor inheritance and injects it into
+   * the shadow DOM. The SVG uses inline width/height attributes for sizing
+   * and CSS custom properties for token-based color overrides.
    */
   private render(): void {
     const name = this.name;

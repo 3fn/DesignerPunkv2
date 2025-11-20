@@ -542,6 +542,1039 @@ Icon(
 
 ---
 
+## Web Component Usage
+
+The Icon component is available as a native web component (`<dp-icon>`) for modern web applications. This provides a declarative HTML interface with Shadow DOM encapsulation while maintaining backward compatibility with the functional API.
+
+### Basic Usage
+
+```html
+<!-- Basic icon -->
+<dp-icon name="arrow-right" size="24"></dp-icon>
+
+<!-- Icon with color override -->
+<dp-icon name="check" size="24" color="color-success"></dp-icon>
+
+<!-- Icon with test ID -->
+<dp-icon name="settings" size="32" test-id="settings-icon"></dp-icon>
+```
+
+### Custom Element API
+
+The `<dp-icon>` custom element provides both HTML attributes and JavaScript properties for configuration.
+
+#### Attributes
+
+All attributes are optional and have sensible defaults:
+
+| Attribute | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `name` | string | `'circle'` | Icon name (see Available Icons section) |
+| `size` | number | `24` | Icon size in pixels (13, 18, 24, 28, 32, 36, 40, 44, 48) |
+| `color` | string | `'inherit'` | Color token reference or 'inherit' for currentColor |
+| `test-id` | string | - | Test ID for automated testing (adds data-testid attribute) |
+
+**Example with all attributes**:
+```html
+<dp-icon 
+  name="heart" 
+  size="32" 
+  color="color-error" 
+  test-id="favorite-icon">
+</dp-icon>
+```
+
+#### Properties
+
+JavaScript properties provide programmatic access to the same configuration:
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `name` | IconName | `'circle'` | Icon name (type-safe) |
+| `size` | IconSize | `24` | Icon size in pixels |
+| `color` | string | `'inherit'` | Color token reference or 'inherit' |
+| `testID` | string \| null | `null` | Test ID for automated testing |
+
+**Example with properties**:
+```javascript
+const icon = document.createElement('dp-icon');
+icon.name = 'arrow-right';
+icon.size = 24;
+icon.color = 'color-primary';
+icon.testID = 'nav-icon';
+document.body.appendChild(icon);
+```
+
+### Programmatic Usage
+
+#### Creating Icons Dynamically
+
+```javascript
+// Create icon element
+const icon = document.createElement('dp-icon');
+
+// Configure via properties
+icon.name = 'check';
+icon.size = 24;
+icon.color = 'color-success';
+
+// Add to DOM
+document.body.appendChild(icon);
+```
+
+#### Updating Icon Properties
+
+```javascript
+// Get existing icon
+const icon = document.querySelector('dp-icon');
+
+// Update properties
+icon.name = 'x';
+icon.size = 32;
+icon.color = 'color-error';
+
+// Properties automatically update attributes and re-render
+```
+
+#### Reading Icon Properties
+
+```javascript
+const icon = document.querySelector('dp-icon');
+
+console.log(icon.name);    // 'arrow-right'
+console.log(icon.size);    // 24
+console.log(icon.color);   // 'inherit'
+console.log(icon.testID);  // null or test ID string
+```
+
+### Shadow DOM Encapsulation
+
+The web component uses Shadow DOM for style encapsulation, ensuring icon styles don't conflict with page styles.
+
+#### Shadow DOM Structure
+
+```html
+<dp-icon name="arrow-right" size="24">
+  #shadow-root (open)
+    <link rel="stylesheet" href="./Icon.web.css">
+    <svg width="24" height="24" viewBox="0 0 24 24" ...>
+      <!-- SVG content -->
+    </svg>
+</dp-icon>
+```
+
+#### Benefits of Shadow DOM
+
+- **Style Isolation**: Icon styles don't affect page styles and vice versa
+- **Encapsulation**: Internal SVG structure is hidden from external CSS
+- **Token Integration**: CSS custom properties pierce Shadow DOM boundary for theming
+- **Predictable Rendering**: Icons render consistently regardless of page styles
+
+#### Accessing Shadow DOM
+
+```javascript
+const icon = document.querySelector('dp-icon');
+const shadowRoot = icon.shadowRoot;
+const svg = shadowRoot.querySelector('svg');
+
+console.log(svg.getAttribute('width'));  // '24'
+```
+
+### Integration Examples
+
+#### In Buttons
+
+```html
+<button class="primary-button">
+  <dp-icon name="check" size="24"></dp-icon>
+  <span>Confirm</span>
+</button>
+```
+
+#### In Navigation
+
+```html
+<nav>
+  <a href="/home">
+    <dp-icon name="home" size="24"></dp-icon>
+    <span>Home</span>
+  </a>
+  <a href="/settings">
+    <dp-icon name="settings" size="24"></dp-icon>
+    <span>Settings</span>
+  </a>
+</nav>
+```
+
+#### In Forms
+
+```html
+<label>
+  <dp-icon name="mail" size="18"></dp-icon>
+  <span>Email Address</span>
+</label>
+<input type="email" placeholder="you@example.com">
+```
+
+#### With Color Inheritance
+
+```html
+<!-- Icon inherits color from parent -->
+<div style="color: var(--color-primary);">
+  <dp-icon name="arrow-right" size="24"></dp-icon>
+  <span>Continue</span>
+</div>
+```
+
+#### With Color Override
+
+```html
+<!-- Icon uses explicit color token -->
+<div style="color: var(--color-text-default);">
+  <dp-icon name="check" size="24" color="color-success"></dp-icon>
+  <span>Success</span>
+</div>
+```
+
+### Framework Integration
+
+#### React
+
+```tsx
+// React automatically handles custom elements
+function ConfirmButton() {
+  return (
+    <button>
+      <dp-icon name="check" size={24}></dp-icon>
+      <span>Confirm</span>
+    </button>
+  );
+}
+```
+
+#### Vue
+
+```vue
+<template>
+  <button>
+    <dp-icon name="check" :size="24"></dp-icon>
+    <span>Confirm</span>
+  </button>
+</template>
+```
+
+#### Angular
+
+```typescript
+// Add CUSTOM_ELEMENTS_SCHEMA to module
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+
+@NgModule({
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+})
+export class AppModule { }
+```
+
+```html
+<!-- Use in template -->
+<button>
+  <dp-icon name="check" [attr.size]="24"></dp-icon>
+  <span>Confirm</span>
+</button>
+```
+
+### Lifecycle Hooks
+
+The web component follows standard Custom Element lifecycle:
+
+#### connectedCallback
+
+Called when the element is added to the DOM:
+```javascript
+// Icon renders automatically when added to DOM
+document.body.appendChild(icon);  // Triggers connectedCallback
+```
+
+#### attributeChangedCallback
+
+Called when observed attributes change:
+```javascript
+icon.setAttribute('name', 'x');  // Triggers re-render
+icon.setAttribute('size', '32'); // Triggers re-render
+```
+
+#### disconnectedCallback
+
+Called when the element is removed from the DOM:
+```javascript
+icon.remove();  // Triggers disconnectedCallback
+```
+
+### Browser Support
+
+The web component requires browsers with Custom Elements v1 support:
+
+- ✅ Chrome 54+
+- ✅ Firefox 63+
+- ✅ Safari 10.1+
+- ✅ Edge 79+
+
+For older browsers, use the functional API (`createIcon()`) instead.
+
+### Backward Compatibility
+
+The web component is fully backward compatible with the existing functional API:
+
+```typescript
+// Old functional API (still works)
+import { createIcon } from '@/components/core/Icon/platforms/web/Icon.web';
+const iconHTML = createIcon({ name: 'arrow-right', size: 24 });
+
+// New web component API (recommended)
+<dp-icon name="arrow-right" size="24"></dp-icon>
+```
+
+Both APIs generate the same SVG output and maintain the same accessibility and styling behavior.
+
+---
+
+## Migration Guide
+
+The Icon component now supports two APIs: the original functional API (`createIcon()`) and the new web component API (`<dp-icon>`). Both APIs work simultaneously, allowing gradual migration at your own pace.
+
+### Old Usage (Functional API)
+
+The functional API uses the `createIcon()` function to generate SVG strings:
+
+```typescript
+import { createIcon } from '@/components/core/Icon/platforms/web/Icon.web';
+
+// Generate SVG string
+const iconHTML = createIcon({ 
+  name: 'arrow-right', 
+  size: 24,
+  color: 'inherit',
+  className: 'custom-icon',
+  style: { marginRight: '8px' },
+  testID: 'nav-icon'
+});
+
+// Insert into DOM
+element.innerHTML = iconHTML;
+```
+
+**Characteristics**:
+- Returns HTML string
+- Requires manual DOM insertion
+- No automatic updates when properties change
+- Works in all browsers (no Custom Elements requirement)
+
+### New Usage (Web Component API)
+
+The web component API uses the `<dp-icon>` custom element:
+
+```html
+<!-- Declarative HTML -->
+<dp-icon 
+  name="arrow-right" 
+  size="24"
+  color="inherit"
+  test-id="nav-icon">
+</dp-icon>
+```
+
+```javascript
+// Programmatic JavaScript
+const icon = document.createElement('dp-icon');
+icon.name = 'arrow-right';
+icon.size = 24;
+icon.color = 'inherit';
+icon.testID = 'nav-icon';
+document.body.appendChild(icon);
+```
+
+**Characteristics**:
+- Native HTML element
+- Automatic DOM management
+- Reactive updates when properties change
+- Shadow DOM encapsulation
+- Requires Custom Elements v1 support (Chrome 54+, Firefox 63+, Safari 10.1+, Edge 79+)
+
+### Backward Compatibility
+
+**Both APIs work simultaneously** - you don't need to migrate all code at once:
+
+```typescript
+// Old code continues working
+const oldIcon = createIcon({ name: 'check', size: 24 });
+element.innerHTML = oldIcon;
+
+// New code uses web component
+<dp-icon name="check" size="24"></dp-icon>
+
+// Both generate identical SVG output
+```
+
+**No breaking changes**:
+- `createIcon()` function still exported
+- `Icon` class still exported
+- Same SVG output and styling
+- Same accessibility behavior
+- Same color inheritance
+
+### Side-by-Side Comparison
+
+#### Basic Icon
+
+**Old (Functional API)**:
+```typescript
+import { createIcon } from '@/components/core/Icon/platforms/web/Icon.web';
+
+const iconHTML = createIcon({ name: 'arrow-right', size: 24 });
+element.innerHTML = iconHTML;
+```
+
+**New (Web Component API)**:
+```html
+<dp-icon name="arrow-right" size="24"></dp-icon>
+```
+
+#### Icon in Button
+
+**Old (Functional API)**:
+```typescript
+import { createIcon } from '@/components/core/Icon/platforms/web/Icon.web';
+
+const button = document.createElement('button');
+button.innerHTML = `
+  ${createIcon({ name: 'check', size: 24 })}
+  <span>Confirm</span>
+`;
+```
+
+**New (Web Component API)**:
+```html
+<button>
+  <dp-icon name="check" size="24"></dp-icon>
+  <span>Confirm</span>
+</button>
+```
+
+#### Icon with Color Override
+
+**Old (Functional API)**:
+```typescript
+import { createIcon } from '@/components/core/Icon/platforms/web/Icon.web';
+
+const iconHTML = createIcon({ 
+  name: 'heart', 
+  size: 24,
+  color: 'color-error'
+});
+element.innerHTML = iconHTML;
+```
+
+**New (Web Component API)**:
+```html
+<dp-icon name="heart" size="24" color="color-error"></dp-icon>
+```
+
+#### Icon with Custom Styling
+
+**Old (Functional API)**:
+```typescript
+import { createIcon } from '@/components/core/Icon/platforms/web/Icon.web';
+
+const iconHTML = createIcon({ 
+  name: 'settings', 
+  size: 32,
+  className: 'custom-icon',
+  style: { marginRight: '8px' }
+});
+element.innerHTML = iconHTML;
+```
+
+**New (Web Component API)**:
+```html
+<dp-icon 
+  name="settings" 
+  size="32" 
+  class="custom-icon"
+  style="margin-right: 8px;">
+</dp-icon>
+```
+
+#### Dynamic Icon Updates
+
+**Old (Functional API)**:
+```typescript
+import { createIcon } from '@/components/core/Icon/platforms/web/Icon.web';
+
+// Initial render
+element.innerHTML = createIcon({ name: 'arrow-right', size: 24 });
+
+// Update requires re-rendering
+element.innerHTML = createIcon({ name: 'arrow-left', size: 24 });
+```
+
+**New (Web Component API)**:
+```javascript
+// Initial render
+const icon = document.createElement('dp-icon');
+icon.name = 'arrow-right';
+icon.size = 24;
+element.appendChild(icon);
+
+// Update via property (automatic re-render)
+icon.name = 'arrow-left';
+```
+
+### ButtonCTA Continues Working Unchanged
+
+The ButtonCTA component uses the `createIcon()` function internally and **requires no code changes**:
+
+```typescript
+// ButtonCTA implementation (unchanged)
+import { createIcon } from '@/components/core/Icon/platforms/web/Icon.web';
+
+class ButtonCTA extends HTMLElement {
+  render() {
+    const iconHTML = this.icon 
+      ? createIcon({ name: this.icon, size: this.iconSize })
+      : '';
+    
+    this.shadowRoot.innerHTML = `
+      <button>
+        ${iconHTML}
+        <span>${this.label}</span>
+      </button>
+    `;
+  }
+}
+```
+
+**Why this works**:
+- `createIcon()` function remains unchanged
+- Same function signature and return value
+- Same SVG output and styling
+- ButtonCTA continues using functional API internally
+- No migration needed for ButtonCTA
+
+### When to Migrate
+
+**Migrate to web component API when**:
+- Building new components or features
+- Working with modern frameworks (React, Vue, Angular)
+- Need reactive property updates
+- Want Shadow DOM encapsulation
+- Prefer declarative HTML syntax
+
+**Keep using functional API when**:
+- Working with legacy code that's stable
+- Need maximum browser compatibility
+- Building server-side rendered content
+- Generating static HTML strings
+- Working in environments without Custom Elements support
+
+**No pressure to migrate**:
+- Both APIs are fully supported
+- No deprecation planned for functional API
+- Migrate at your own pace
+- Choose the API that fits your use case
+
+### Migration Strategy
+
+**Recommended approach**:
+
+1. **Start with new code**: Use web component API for new features
+2. **Leave existing code**: Keep functional API in stable code
+3. **Migrate opportunistically**: Update to web component API when touching old code
+4. **Test thoroughly**: Verify behavior matches before and after migration
+5. **No rush**: Both APIs are first-class citizens
+
+**Example migration timeline**:
+
+```
+Week 1: Use <dp-icon> for new feature development
+Week 2-4: Continue using createIcon() in existing code
+Month 2: Migrate high-traffic pages opportunistically
+Month 3+: Gradual migration as code is touched
+```
+
+### Framework-Specific Migration
+
+#### React
+
+**Old (Functional API)**:
+```tsx
+import { createIcon } from '@/components/core/Icon/platforms/web/Icon.web';
+
+function Button() {
+  return (
+    <button dangerouslySetInnerHTML={{ 
+      __html: createIcon({ name: 'check', size: 24 })
+    }}>
+      <span>Confirm</span>
+    </button>
+  );
+}
+```
+
+**New (Web Component API)**:
+```tsx
+function Button() {
+  return (
+    <button>
+      <dp-icon name="check" size={24}></dp-icon>
+      <span>Confirm</span>
+    </button>
+  );
+}
+```
+
+#### Vue
+
+**Old (Functional API)**:
+```vue
+<template>
+  <button v-html="iconHTML">
+    <span>Confirm</span>
+  </button>
+</template>
+
+<script>
+import { createIcon } from '@/components/core/Icon/platforms/web/Icon.web';
+
+export default {
+  computed: {
+    iconHTML() {
+      return createIcon({ name: 'check', size: 24 });
+    }
+  }
+}
+</script>
+```
+
+**New (Web Component API)**:
+```vue
+<template>
+  <button>
+    <dp-icon name="check" :size="24"></dp-icon>
+    <span>Confirm</span>
+  </button>
+</template>
+```
+
+#### Angular
+
+**Old (Functional API)**:
+```typescript
+import { Component } from '@angular/core';
+import { createIcon } from '@/components/core/Icon/platforms/web/Icon.web';
+
+@Component({
+  selector: 'app-button',
+  template: `
+    <button [innerHTML]="iconHTML">
+      <span>Confirm</span>
+    </button>
+  `
+})
+export class ButtonComponent {
+  iconHTML = createIcon({ name: 'check', size: 24 });
+}
+```
+
+**New (Web Component API)**:
+```typescript
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+
+@Component({
+  selector: 'app-button',
+  template: `
+    <button>
+      <dp-icon name="check" [attr.size]="24"></dp-icon>
+      <span>Confirm</span>
+    </button>
+  `,
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+})
+export class ButtonComponent {}
+```
+
+### Migration Checklist
+
+When migrating from functional API to web component API:
+
+- [ ] Verify browser support (Custom Elements v1)
+- [ ] Replace `createIcon()` calls with `<dp-icon>` elements
+- [ ] Update property names (camelCase → kebab-case for attributes)
+- [ ] Remove manual DOM insertion code
+- [ ] Test color inheritance behavior
+- [ ] Verify accessibility (aria-hidden still works)
+- [ ] Check styling and layout
+- [ ] Test dynamic property updates
+- [ ] Validate test IDs (test-id attribute)
+- [ ] Confirm framework integration (React, Vue, Angular)
+
+### Common Migration Questions
+
+**Q: Do I need to migrate all code at once?**  
+A: No. Both APIs work simultaneously. Migrate at your own pace.
+
+**Q: Will the functional API be deprecated?**  
+A: No deprecation is planned. Both APIs are fully supported.
+
+**Q: What if I need to support older browsers?**  
+A: Use the functional API for maximum compatibility. Custom Elements v1 requires Chrome 54+, Firefox 63+, Safari 10.1+, Edge 79+.
+
+**Q: Does ButtonCTA need to be updated?**  
+A: No. ButtonCTA uses `createIcon()` internally and requires no changes.
+
+**Q: Can I mix both APIs in the same project?**  
+A: Yes. Use the API that fits each use case. No conflicts between APIs.
+
+**Q: How do I know which API to use?**  
+A: Use web component API for new code. Keep functional API in stable legacy code. Migrate opportunistically.
+
+**Q: Are there performance differences?**  
+A: Both APIs generate identical SVG output. Web components have slightly more overhead for Custom Element registration, but the difference is negligible in practice.
+
+**Q: What about TypeScript support?**  
+A: Both APIs have full TypeScript support. Web components use standard DOM types. Functional API uses `IconProps` interface.
+
+---
+
+## Platform Implementations
+
+The Icon component follows True Native Architecture, with platform-specific implementations that use each platform's native patterns and technologies while maintaining a unified API across all platforms.
+
+### True Native Architecture
+
+**True Native Architecture** is a build-time platform separation approach where each platform has its own native implementation rather than using runtime platform detection or cross-platform abstraction layers.
+
+**Key Principles**:
+- **Build-Time Separation**: Platform-specific code is separated at build time, not runtime
+- **Native Patterns**: Each platform uses its native UI framework and patterns
+- **Unified API**: Same component interface across all platforms
+- **No Runtime Detection**: No `if (platform === 'ios')` checks in code
+- **Platform Optimization**: Each implementation is optimized for its platform
+
+**Benefits**:
+- **Performance**: No runtime overhead from platform detection or abstraction layers
+- **Native Feel**: Each platform uses its native UI patterns and behaviors
+- **Maintainability**: Platform-specific code is isolated and easy to update
+- **Type Safety**: Platform-specific types and APIs are fully supported
+- **Bundle Size**: Only the target platform's code is included in builds
+
+### Web Implementation
+
+**Technology**: Vanilla Web Components (Custom Elements)  
+**File**: `src/components/core/Icon/platforms/web/Icon.web.ts`  
+**Format**: Inline SVG with Shadow DOM encapsulation
+
+#### Web-Specific Features
+
+**Custom Element**: `<dp-icon>`
+- Native HTML element registered with `customElements.define()`
+- Shadow DOM for style encapsulation
+- Reactive attributes and properties
+- Automatic re-rendering on property changes
+
+**SVG Rendering**:
+- Inline SVG elements with optimized paths
+- `stroke="currentColor"` for automatic color inheritance
+- `aria-hidden="true"` for accessibility
+- Feather Icons source with 2px stroke width
+
+**Styling**:
+- External stylesheet (`Icon.web.css`) loaded in Shadow DOM
+- CSS custom properties for token integration
+- Token-based sizing and colors
+- Print and high-contrast mode support
+
+**Browser Support**:
+- Chrome 54+ (Custom Elements v1)
+- Firefox 63+
+- Safari 10.1+
+- Edge 79+
+
+**Example**:
+```html
+<!-- Web Component API -->
+<dp-icon name="arrow-right" size="24"></dp-icon>
+
+<!-- Functional API (backward compatibility) -->
+<script>
+  import { createIcon } from './Icon.web';
+  const iconHTML = createIcon({ name: 'arrow-right', size: 24 });
+</script>
+```
+
+### iOS Implementation
+
+**Technology**: SwiftUI  
+**File**: `src/components/core/Icon/platforms/ios/Icon.ios.swift`  
+**Format**: Vector images from Asset Catalog
+
+#### iOS-Specific Features
+
+**Asset Catalog Integration**:
+- Icons stored as vector PDFs in `Icons.xcassets`
+- Template rendering mode for color tinting
+- Automatic @1x/@2x/@3x scaling
+- Xcode preview support
+
+**SwiftUI View**:
+- Native SwiftUI `View` protocol conformance
+- `.foregroundColor()` for color inheritance
+- `.frame()` for sizing
+- `.accessibilityHidden(true)` for accessibility
+
+**Platform-Specific Enhancements**:
+- Minimum 44pt touch target for accessibility (WCAG)
+- SF Symbols integration (future enhancement)
+- Dynamic Type support (future enhancement)
+- Dark Mode automatic adaptation
+
+**Example**:
+```swift
+// SwiftUI usage
+Icon(name: "arrow-right", size: 24)
+    .foregroundColor(.primary)
+
+// In Button
+Button(action: action) {
+    HStack {
+        Icon(name: "check", size: 24)
+        Text("Confirm")
+    }
+}
+```
+
+### Android Implementation
+
+**Technology**: Jetpack Compose  
+**File**: `src/components/core/Icon/platforms/android/Icon.android.kt`  
+**Format**: VectorDrawable XML resources
+
+#### Android-Specific Features
+
+**VectorDrawable Resources**:
+- Icons stored as XML in `res/drawable/`
+- Vector graphics with path data
+- Automatic density scaling (mdpi, hdpi, xhdpi, etc.)
+- Android Studio preview support
+
+**Jetpack Compose Component**:
+- Native `@Composable` function
+- `tint = LocalContentColor.current` for color inheritance
+- `.size()` modifier for sizing
+- `contentDescription = null` for accessibility
+
+**Platform-Specific Enhancements**:
+- Material Design ripple effects
+- Minimum 48dp touch target for accessibility
+- Material Theme integration
+- Dynamic color support (Material You)
+
+**Example**:
+```kotlin
+// Jetpack Compose usage
+Icon(name = "arrow_right", size = 24.dp)
+
+// In Button
+Button(onClick = onClick) {
+    Row {
+        Icon(name = "check", size = 24.dp)
+        Text("Confirm")
+    }
+}
+```
+
+### Cross-Platform API Consistency
+
+Despite platform-specific implementations, the Icon component maintains a consistent API across all platforms:
+
+#### Unified Properties
+
+| Property | Web | iOS | Android | Description |
+|----------|-----|-----|---------|-------------|
+| `name` | ✅ | ✅ | ✅ | Icon name (kebab-case for web/iOS, snake_case for Android) |
+| `size` | ✅ | ✅ | ✅ | Icon size in pixels/points/dp |
+| `color` | ✅ | ✅ | ✅ | Color override (optional, defaults to inherit) |
+| `testID` | ✅ | ✅ | ✅ | Test identifier for automated testing |
+
+#### Consistent Behavior
+
+**Color Inheritance**:
+- **Web**: `stroke="currentColor"` inherits from parent CSS color
+- **iOS**: `.foregroundColor(.primary)` inherits from environment
+- **Android**: `tint = LocalContentColor.current` inherits from composition local
+
+**Accessibility**:
+- **Web**: `aria-hidden="true"` hides from screen readers
+- **iOS**: `.accessibilityHidden(true)` hides from VoiceOver
+- **Android**: `contentDescription = null` hides from TalkBack
+
+**Size Variants**:
+- All platforms support the same 8 icon sizes (13, 18, 24, 28, 32, 36, 40, 44, 48)
+- Sizes calculated from `fontSize × lineHeight` formula
+- Typography pairing consistent across platforms
+
+### Platform-Specific Naming Conventions
+
+Icon names follow platform-specific conventions to align with resource management requirements:
+
+**Web & iOS**: `kebab-case`
+- Format: `arrow-right`, `chevron-down`, `alert-circle`
+- Rationale: Web uses kebab-case for CSS classes; iOS Asset Catalogs support kebab-case
+
+**Android**: `snake_case`
+- Format: `arrow_right`, `chevron_down`, `alert_circle`
+- Rationale: Android resource naming requires lowercase letters, numbers, and underscores only
+
+**Automatic Conversion**: Component implementations handle naming convention conversion automatically. Developers use the platform's native convention.
+
+### Platform-Specific File Structure
+
+```
+src/components/core/Icon/
+├── types.ts                    # Shared TypeScript types
+├── README.md                   # This documentation
+├── platforms/
+│   ├── web/
+│   │   ├── Icon.web.ts        # Web Component implementation
+│   │   ├── Icon.web.css       # Web Component styles
+│   │   └── __tests__/         # Web-specific tests
+│   ├── ios/
+│   │   ├── Icon.ios.swift     # SwiftUI implementation
+│   │   └── Icons.xcassets/    # Asset Catalog with vector PDFs
+│   └── android/
+│       ├── Icon.android.kt    # Jetpack Compose implementation
+│       └── res/drawable/      # VectorDrawable XML resources
+```
+
+### Build-Time Platform Selection
+
+The build system selects the appropriate platform implementation at build time:
+
+**Web Build**:
+```typescript
+// Webpack/Vite resolves to web implementation
+import { Icon } from '@/components/core/Icon';
+// → Resolves to Icon.web.ts
+```
+
+**iOS Build**:
+```swift
+// Xcode includes iOS implementation
+import Icon
+// → Compiles Icon.ios.swift
+```
+
+**Android Build**:
+```kotlin
+// Gradle includes Android implementation
+import com.designerpunk.components.Icon
+// → Compiles Icon.android.kt
+```
+
+### Platform-Specific Optimizations
+
+Each platform implementation includes optimizations specific to that platform:
+
+**Web**:
+- Shadow DOM prevents style conflicts
+- CSS custom properties for theming
+- Lazy loading for large icon sets (future)
+- Service Worker caching (future)
+
+**iOS**:
+- Vector PDFs scale without quality loss
+- Asset Catalog compilation optimizations
+- SF Symbols integration (future)
+- Dynamic Type support (future)
+
+**Android**:
+- VectorDrawable hardware acceleration
+- Automatic density scaling
+- Material Theme integration
+- Compose performance optimizations
+
+### Testing Across Platforms
+
+Each platform has its own test suite using platform-native testing tools:
+
+**Web**: Jest + Testing Library
+```bash
+npm test -- src/components/core/Icon/platforms/web
+```
+
+**iOS**: XCTest + SwiftUI Previews
+```bash
+xcodebuild test -scheme Icon
+```
+
+**Android**: JUnit + Compose Testing
+```bash
+./gradlew testDebugUnitTest
+```
+
+### Migration Between Platforms
+
+The unified API makes it easy to migrate components between platforms:
+
+**Web to iOS**:
+```typescript
+// Web
+<Icon name="arrow-right" size={24} />
+
+// iOS (same API, different syntax)
+Icon(name: "arrow-right", size: 24)
+```
+
+**iOS to Android**:
+```swift
+// iOS
+Icon(name: "arrow-right", size: 24)
+
+// Android (same API, different syntax)
+Icon(name = "arrow_right", size = 24.dp)
+```
+
+**Key Differences**:
+- Naming convention (kebab-case vs snake_case)
+- Unit suffix (px vs pt vs dp)
+- Syntax (JSX vs SwiftUI vs Compose)
+
+**Similarities**:
+- Same property names
+- Same size values
+- Same color inheritance behavior
+- Same accessibility approach
+
+### Future Platform Support
+
+The True Native Architecture approach makes it easy to add new platforms:
+
+**Potential Future Platforms**:
+- Flutter (Dart)
+- React Native (JavaScript/TypeScript)
+- Windows (WinUI 3)
+- Linux (GTK)
+
+**Adding a New Platform**:
+1. Create `platforms/[platform]/Icon.[platform].[ext]`
+2. Implement the unified Icon API
+3. Use platform-native UI framework
+4. Add platform-specific tests
+5. Update build configuration
+
+The unified API and True Native Architecture ensure new platforms integrate seamlessly with existing code.
+
+---
+
 ## Color Inheritance and Override
 
 Icons automatically inherit text color from their parent component by default, eliminating the need to manually specify icon colors in most cases. However, an optional color override is available for optical weight compensation when icons appear heavier than adjacent text.
