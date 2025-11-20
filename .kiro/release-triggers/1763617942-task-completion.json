@@ -1,0 +1,17 @@
+{
+  "id": "1763617942-task-completion",
+  "type": "task-completion",
+  "source": ".kiro/specs/007-accessibility-token-family/tasks.md",
+  "triggeredAt": "2025-11-20T05:52:22.3NZ",
+  "triggeredBy": "hook-system",
+  "git": {
+    "commit": "81a05e8cab8550947f4111420886dc754e22f470",
+    "branch": "main",
+    "message": "Task Complete: 5. Create Documentation"
+  },
+  "workflow": {
+    "hookType": "auto",
+    "projectRoot": "/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2"
+  },
+  "status": "pending"
+}
