@@ -161,7 +161,13 @@ export const insetSpacing = {
    * Maximum breathing room (heroes, feature sections)
    * Example: Hero sections, landing page features, maximum emphasis areas
    */
-  expansive: { value: 'space300' } as SpacingSemanticToken
+  expansive: { value: 'space300' } as SpacingSemanticToken,
+
+  /**
+   * Generous internal spacing for large components
+   * Example: Large button horizontal padding, spacious card padding, hero section insets
+   */
+  generous: { value: 'space400' } as SpacingSemanticToken
 };
 
 /**

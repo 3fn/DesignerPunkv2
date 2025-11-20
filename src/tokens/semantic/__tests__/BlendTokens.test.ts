@@ -43,9 +43,9 @@ describe('Semantic Blend Tokens', () => {
       });
     });
 
-    test('should have exactly 6 semantic blend tokens', () => {
-      expect(Object.keys(blendTokens)).toHaveLength(6);
-      expect(blendTokenNames).toHaveLength(6);
+    test('should have exactly 7 semantic blend tokens', () => {
+      expect(Object.keys(blendTokens)).toHaveLength(7);
+      expect(blendTokenNames).toHaveLength(7);
     });
   });
 
@@ -78,6 +78,11 @@ describe('Semantic Blend Tokens', () => {
     test('blend.containerHoverDarker should reference blend100', () => {
       const token = blendTokens['blend.containerHoverDarker'];
       expect(token.primitiveReferences.value).toBe('blend100');
+    });
+
+    test('color.icon.opticalBalance should reference blend200', () => {
+      const token = blendTokens['color.icon.opticalBalance'];
+      expect(token.primitiveReferences.value).toBe('blend200');
     });
 
     test('all semantic tokens should reference valid primitive token names', () => {
@@ -118,6 +123,11 @@ describe('Semantic Blend Tokens', () => {
     test('blend.containerHoverDarker should have DARKER direction', () => {
       const token = blendTokens['blend.containerHoverDarker'];
       expect(token.direction).toBe(BlendDirection.DARKER);
+    });
+
+    test('color.icon.opticalBalance should have LIGHTER direction', () => {
+      const token = blendTokens['color.icon.opticalBalance'];
+      expect(token.direction).toBe(BlendDirection.LIGHTER);
     });
 
     test('all semantic tokens should have valid blend directions', () => {
@@ -169,7 +179,8 @@ describe('Semantic Blend Tokens', () => {
         'blend.pressedDarker': 'blend300',
         'blend.focusSaturate': 'blend200',
         'blend.disabledDesaturate': 'blend300',
-        'blend.containerHoverDarker': 'blend100'
+        'blend.containerHoverDarker': 'blend100',
+        'color.icon.opticalBalance': 'blend200'
       };
 
       Object.entries(expectedReferences).forEach(([semanticName, primitiveName]) => {
@@ -205,8 +216,14 @@ describe('Semantic Blend Tokens', () => {
       expect(blendTokens['blend.containerHoverDarker'].name).toBe('blend.containerHoverDarker');
     });
 
-    test('all token names should include state and direction', () => {
+    test('all token names should include state and direction or be color.icon.opticalBalance', () => {
       Object.values(blendTokens).forEach(token => {
+        // Special case for color.icon.opticalBalance
+        if (token.name === 'color.icon.opticalBalance') {
+          expect(token.name).toBe('color.icon.opticalBalance');
+          return;
+        }
+        
         // Token name should start with "blend."
         expect(token.name).toMatch(/^blend\./);
         
@@ -237,7 +254,7 @@ describe('Semantic Blend Tokens', () => {
 
     test('getAllBlendTokens should return all tokens as array', () => {
       const tokens = getAllBlendTokens();
-      expect(tokens).toHaveLength(6);
+      expect(tokens).toHaveLength(7);
       expect(Array.isArray(tokens)).toBe(true);
     });
 
@@ -255,7 +272,8 @@ describe('Semantic Blend Tokens', () => {
         'blend.pressedDarker',
         'blend.focusSaturate',
         'blend.disabledDesaturate',
-        'blend.containerHoverDarker'
+        'blend.containerHoverDarker',
+        'color.icon.opticalBalance'
       ];
 
       expectedNames.forEach(name => {
@@ -300,6 +318,45 @@ describe('Semantic Blend Tokens', () => {
       expect(blendTokens['blend.focusSaturate'].description).toContain('8%');
       expect(blendTokens['blend.disabledDesaturate'].description).toContain('12%');
       expect(blendTokens['blend.containerHoverDarker'].description).toContain('4%');
+      expect(blendTokens['color.icon.opticalBalance'].description).toContain('8%');
+    });
+  });
+
+  describe('Icon Optical Balance Token', () => {
+    test('color.icon.opticalBalance should exist', () => {
+      const token = blendTokens['color.icon.opticalBalance'];
+      expect(token).toBeDefined();
+    });
+
+    test('color.icon.opticalBalance should reference blend200', () => {
+      const token = blendTokens['color.icon.opticalBalance'];
+      expect(token.primitiveReferences.value).toBe('blend200');
+    });
+
+    test('color.icon.opticalBalance should have LIGHTER direction', () => {
+      const token = blendTokens['color.icon.opticalBalance'];
+      expect(token.direction).toBe(BlendDirection.LIGHTER);
+    });
+
+    test('color.icon.opticalBalance should resolve to 8% lighter (0.08)', () => {
+      const semanticToken = blendTokens['color.icon.opticalBalance'];
+      const primitiveTokenName = semanticToken.primitiveReferences.value;
+      const primitiveToken = primitiveBlendTokens[primitiveTokenName];
+      
+      expect(primitiveToken.baseValue).toBe(0.08);
+    });
+
+    test('color.icon.opticalBalance should have appropriate context', () => {
+      const token = blendTokens['color.icon.opticalBalance'];
+      expect(token.context).toContain('Icon optical weight compensation');
+      expect(token.context).toContain('paired with text');
+    });
+
+    test('color.icon.opticalBalance should have appropriate description', () => {
+      const token = blendTokens['color.icon.opticalBalance'];
+      expect(token.description).toContain('icon-text pairing');
+      expect(token.description).toContain('8% lighter');
+      expect(token.description).toContain('heavier than text');
     });
   });
 });

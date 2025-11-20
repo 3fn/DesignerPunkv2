@@ -40,14 +40,14 @@
  * 5. Semantic Meaning in Shadow Token: The semantic meaning belongs in the shadow token
  *    name itself (shadow.dusk, shadow.sunrise) rather than in a separate color token.
  * 
- * Spec-aligned: 18 color semantic tokens (15 original + 3 glow, shadow colors removed)
+ * Spec-aligned: 19 color semantic tokens (16 original + 3 glow, shadow colors removed)
  */
 
 import { SemanticToken, SemanticCategory } from '../../types/SemanticToken';
 
 /**
  * Semantic color tokens for systematic color usage
- * Total: 18 tokens (15 original + 3 glow, shadow colors removed)
+ * Total: 19 tokens (16 original + 3 glow, shadow colors removed)
  */
 export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>> = {
   // Brand Identity (2 tokens)
@@ -127,7 +127,7 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
     description: 'Subtle teal for informational backgrounds and light info indicators'
   },
 
-  // Text Hierarchy (3 tokens)
+  // Text Hierarchy (4 tokens)
   'color.text.default': {
     name: 'color.text.default',
     primitiveReferences: { value: 'gray300' },
@@ -150,6 +150,14 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
     category: SemanticCategory.COLOR,
     context: 'Subtle text color for tertiary content',
     description: 'Subtle gray for tertiary and very subtle text elements'
+  },
+
+  'color.text.onPrimary': {
+    name: 'color.text.onPrimary',
+    primitiveReferences: { value: 'white100' },
+    category: SemanticCategory.COLOR,
+    context: 'Text color for content on primary-colored backgrounds',
+    description: 'White text for use on primary color backgrounds (buttons, badges, chips)'
   },
 
   // Surfaces (3 tokens)
@@ -205,7 +213,7 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
 
 /**
  * Array of all color semantic token names for iteration
- * Total: 18 tokens (15 original + 3 glow, shadow colors removed)
+ * Total: 19 tokens (16 original + 3 glow, shadow colors removed)
  */
 export const colorTokenNames = Object.keys(colorTokens);
 
@@ -224,10 +232,10 @@ export function getAllColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'
 }
 
 /**
- * Validate token count matches spec (18 tokens: 15 original + 3 glow, shadow colors removed)
+ * Validate token count matches spec (19 tokens: 16 original + 3 glow, shadow colors removed)
  */
 export function validateColorTokenCount(): boolean {
-  const expectedCount = 18;
+  const expectedCount = 19;
   const actualCount = colorTokenNames.length;
   if (actualCount !== expectedCount) {
     console.warn(`Color token count mismatch: expected ${expectedCount}, got ${actualCount}`);
