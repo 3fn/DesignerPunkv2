@@ -27,7 +27,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllIconTokens = exports.getIconToken = exports.iconTokenNames = exports.iconTokens = exports.getAllGridSpacingTokens = exports.getGridSpacingToken = exports.gridSpacingTokenNames = exports.gridSpacingTokens = exports.getLayeringTokensByPlatform = exports.getAllLayeringTokens = exports.getAllElevationTokens = exports.getElevationToken = exports.elevationTokenNames = exports.elevationTokens = exports.getAllZIndexTokens = exports.getZIndexToken = exports.zIndexTokenNames = exports.zIndexTokens = exports.validateBlendTokenCount = exports.getAllBlendTokens = exports.getBlendToken = exports.blendTokenNames = exports.blendTokens = exports.validateOpacityTokenCount = exports.getAllOpacityTokens = exports.getOpacityToken = exports.opacityTokenNames = exports.opacityTokens = exports.borderHeavy = exports.borderEmphasis = exports.borderDefault = exports.SemanticBorderWidthTokens = exports.getAllShadowTokens = exports.getShadowToken = exports.shadowTokenNames = exports.shadowTokens = exports.getAllTypographyTokens = exports.getTypographyToken = exports.typographyTokenNames = exports.typographyTokens = exports.insetSpacing = exports.layoutSpacing = exports.spacingTokens = exports.validateColorTokenCount = exports.getAllColorTokens = exports.getColorToken = exports.colorTokenNames = exports.colorTokens = exports.getStyleToken = exports.styleTokens = void 0;
-exports.generateIconSizeTokens = exports.calculateIconSize = void 0;
+exports.getAllAccessibilityTokens = exports.getAccessibilityToken = exports.accessibilityTokenNames = exports.accessibility = exports.generateIconSizeTokens = exports.calculateIconSize = void 0;
 exports.getSemanticToken = getSemanticToken;
 exports.getAllSemanticTokens = getAllSemanticTokens;
 exports.getSemanticTokensByCategory = getSemanticTokensByCategory;
@@ -46,6 +46,7 @@ __exportStar(require("./BlendTokens"), exports);
 __exportStar(require("./LayeringTokens"), exports);
 __exportStar(require("./GridSpacingTokens"), exports);
 __exportStar(require("./IconTokens"), exports);
+__exportStar(require("./AccessibilityTokens"), exports);
 // StyleTokens placeholder - will be implemented in future tasks
 var StyleTokens_1 = require("./StyleTokens");
 Object.defineProperty(exports, "styleTokens", { enumerable: true, get: function () { return StyleTokens_1.styleTokens; } });
@@ -111,6 +112,11 @@ Object.defineProperty(exports, "getIconToken", { enumerable: true, get: function
 Object.defineProperty(exports, "getAllIconTokens", { enumerable: true, get: function () { return IconTokens_1.getAllIconTokens; } });
 Object.defineProperty(exports, "calculateIconSize", { enumerable: true, get: function () { return IconTokens_1.calculateIconSize; } });
 Object.defineProperty(exports, "generateIconSizeTokens", { enumerable: true, get: function () { return IconTokens_1.generateIconSizeTokens; } });
+var AccessibilityTokens_1 = require("./AccessibilityTokens");
+Object.defineProperty(exports, "accessibility", { enumerable: true, get: function () { return AccessibilityTokens_1.accessibility; } });
+Object.defineProperty(exports, "accessibilityTokenNames", { enumerable: true, get: function () { return AccessibilityTokens_1.accessibilityTokenNames; } });
+Object.defineProperty(exports, "getAccessibilityToken", { enumerable: true, get: function () { return AccessibilityTokens_1.getAccessibilityToken; } });
+Object.defineProperty(exports, "getAllAccessibilityTokens", { enumerable: true, get: function () { return AccessibilityTokens_1.getAllAccessibilityTokens; } });
 const SemanticToken_1 = require("../../types/SemanticToken");
 const ColorTokens_2 = require("./ColorTokens");
 const SpacingTokens_2 = require("./SpacingTokens");
@@ -122,6 +128,7 @@ const BlendTokens_2 = require("./BlendTokens");
 const LayeringTokens_2 = require("./LayeringTokens");
 const GridSpacingTokens_2 = require("./GridSpacingTokens");
 const IconTokens_2 = require("./IconTokens");
+const AccessibilityTokens_2 = require("./AccessibilityTokens");
 /**
  * Get any semantic token by name across all categories
  * Searches color, spacing, typography, border, shadow, and opacity tokens
@@ -180,6 +187,21 @@ function getSemanticToken(name) {
     // Check icon tokens
     if (name.startsWith('icon.')) {
         return IconTokens_2.iconTokens[name];
+    }
+    // Check accessibility tokens
+    if (name.startsWith('accessibility.')) {
+        const parts = name.split('.');
+        if (parts[1] === 'focus' && parts[2]) {
+            const focusProperty = parts[2];
+            const value = AccessibilityTokens_2.accessibility.focus[focusProperty];
+            return {
+                name,
+                primitiveReferences: { value: String(value) },
+                category: SemanticToken_1.SemanticCategory.INTERACTION,
+                context: `Focus indicator ${focusProperty} for keyboard navigation`,
+                description: `Accessibility token for focus ${focusProperty} (WCAG 2.4.7)`
+            };
+        }
     }
     return undefined;
 }
@@ -279,6 +301,16 @@ function getAllSemanticTokens() {
     tokens.push(...Object.values(GridSpacingTokens_2.gridSpacingTokens));
     // Add icon tokens
     tokens.push(...Object.values(IconTokens_2.iconTokens));
+    // Add accessibility tokens
+    for (const [property, value] of Object.entries(AccessibilityTokens_2.accessibility.focus)) {
+        tokens.push({
+            name: `accessibility.focus.${property}`,
+            primitiveReferences: { value: String(value) },
+            category: SemanticToken_1.SemanticCategory.INTERACTION,
+            context: `Focus indicator ${property} for keyboard navigation`,
+            description: `Accessibility token for focus ${property} (WCAG 2.4.7)`
+        });
+    }
     // Add border width tokens
     for (const [name, token] of Object.entries(BorderWidthTokens_2.SemanticBorderWidthTokens)) {
         tokens.push({
@@ -435,7 +467,8 @@ function getSemanticTokenStats() {
         zIndexTokens: Object.keys(LayeringTokens_2.zIndexTokens).length,
         elevationTokens: Object.keys(LayeringTokens_2.elevationTokens).length,
         gridSpacingTokens: Object.keys(GridSpacingTokens_2.gridSpacingTokens).length,
-        iconTokens: Object.keys(IconTokens_2.iconTokens).length
+        iconTokens: Object.keys(IconTokens_2.iconTokens).length,
+        accessibilityTokens: Object.keys(AccessibilityTokens_2.accessibility.focus).length
     };
 }
 //# sourceMappingURL=index.js.map

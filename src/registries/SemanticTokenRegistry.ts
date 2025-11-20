@@ -206,7 +206,8 @@ export class SemanticTokenRegistry implements IRegistry<SemanticToken> {
       SemanticCategory.BORDER,
       SemanticCategory.SHADOW,
       SemanticCategory.LAYOUT,
-      SemanticCategory.INTERACTION
+      SemanticCategory.INTERACTION,
+      SemanticCategory.ACCESSIBILITY
     ];
     categories.forEach(category => {
       this.categoryIndex.set(category, new Set());

@@ -25,6 +25,14 @@
 
 **Resolution Spec**: `.kiro/specs/typescript-error-resolution/`
 
+**Completion Documentation**:
+- Phase 1: `.kiro/specs/typescript-error-resolution/completion/task-1-parent-completion.md`
+- Phase 2: `.kiro/specs/typescript-error-resolution/completion/task-2-parent-completion.md`
+- Phase 3: `.kiro/specs/typescript-error-resolution/completion/task-3-parent-completion.md`
+- Phase 4: `.kiro/specs/typescript-error-resolution/completion/task-4-parent-completion.md`
+- Phase 5: `.kiro/specs/typescript-error-resolution/completion/task-5-parent-completion.md`
+- IDE Validation: `.kiro/specs/typescript-error-resolution/completion/task-6-1-completion.md`
+
 ---
 
 ## Error Categories

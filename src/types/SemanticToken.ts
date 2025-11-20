@@ -20,7 +20,8 @@ export enum SemanticCategory {
   LAYOUT = 'layout',
   LAYERING = 'layering',
   INTERACTION = 'interaction',
-  ICON = 'icon'
+  ICON = 'icon',
+  ACCESSIBILITY = 'accessibility'
 }
 
 /**

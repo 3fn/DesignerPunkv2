@@ -22,6 +22,7 @@ export * from './BlendTokens';
 export * from './LayeringTokens';
 export * from './GridSpacingTokens';
 export * from './IconTokens';
+export * from './AccessibilityTokens';
 
 // StyleTokens placeholder - will be implemented in future tasks
 export { styleTokens, getStyleToken } from './StyleTokens';
@@ -107,6 +108,13 @@ export {
   generateIconSizeTokens
 } from './IconTokens';
 
+export {
+  accessibility,
+  accessibilityTokenNames,
+  getAccessibilityToken,
+  getAllAccessibilityTokens
+} from './AccessibilityTokens';
+
 // Import types for utility functions
 import type { SemanticToken } from '../../types/SemanticToken';
 import { SemanticCategory } from '../../types/SemanticToken';
@@ -120,6 +128,7 @@ import { blendTokens } from './BlendTokens';
 import { zIndexTokens, elevationTokens } from './LayeringTokens';
 import { gridSpacingTokens } from './GridSpacingTokens';
 import { iconTokens } from './IconTokens';
+import { accessibility } from './AccessibilityTokens';
 
 /**
  * Get any semantic token by name across all categories
@@ -189,6 +198,22 @@ export function getSemanticToken(name: string): Omit<SemanticToken, 'primitiveTo
   // Check icon tokens
   if (name.startsWith('icon.')) {
     return iconTokens[name];
+  }
+
+  // Check accessibility tokens
+  if (name.startsWith('accessibility.')) {
+    const parts = name.split('.');
+    if (parts[1] === 'focus' && parts[2]) {
+      const focusProperty = parts[2] as keyof typeof accessibility.focus;
+      const value = accessibility.focus[focusProperty];
+      return {
+        name,
+        primitiveReferences: { value: String(value) },
+        category: SemanticCategory.ACCESSIBILITY,
+        context: `Focus indicator ${focusProperty} for keyboard navigation`,
+        description: `Accessibility token for focus ${focusProperty} (WCAG 2.4.7)`
+      };
+    }
   }
 
   return undefined;
@@ -309,6 +334,17 @@ export function getAllSemanticTokens(): Array<Omit<SemanticToken, 'primitiveToke
   // Add icon tokens
   tokens.push(...Object.values(iconTokens));
 
+  // Add accessibility tokens
+  for (const [property, value] of Object.entries(accessibility.focus)) {
+    tokens.push({
+      name: `accessibility.focus.${property}`,
+      primitiveReferences: { value: String(value) },
+      category: SemanticCategory.ACCESSIBILITY,
+      context: `Focus indicator ${property} for keyboard navigation`,
+      description: `Accessibility token for focus ${property} (WCAG 2.4.7)`
+    });
+  }
+
   // Add border width tokens
   for (const [name, token] of Object.entries(SemanticBorderWidthTokens)) {
     tokens.push({
@@ -355,6 +391,8 @@ export function getSemanticTokensByCategory(category: SemanticCategory): Array<O
       return [...(Object.values(zIndexTokens) as any), ...(Object.values(elevationTokens) as any)];
     case SemanticCategory.ICON:
       return Object.values(iconTokens);
+    case SemanticCategory.ACCESSIBILITY:
+      return getAllSemanticTokens().filter(t => t.category === SemanticCategory.ACCESSIBILITY);
     default:
       return [];
   }
@@ -486,6 +524,7 @@ export function getSemanticTokenStats() {
     zIndexTokens: Object.keys(zIndexTokens).length,
     elevationTokens: Object.keys(elevationTokens).length,
     gridSpacingTokens: Object.keys(gridSpacingTokens).length,
-    iconTokens: Object.keys(iconTokens).length
+    iconTokens: Object.keys(iconTokens).length,
+    accessibilityTokens: Object.keys(accessibility.focus).length
   };
 }

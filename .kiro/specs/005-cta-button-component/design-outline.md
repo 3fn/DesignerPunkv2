@@ -86,10 +86,15 @@ Vertical Padding = (Target Height - Line Height rendered) / 2
 
 ### Icon Support (Optional)
 
-**Icon Sizing**: Icons match the rendered line height of the button's typography
-- Small: 24px (matches bodyMd line height)
-- Medium: 24px (matches bodyMd line height)
-- Large: 32px (matches bodyLg line height)
+**Icon Sizing**: Icons use semantic icon size tokens that match button typography line heights
+- Small: `icon.size100` (24px) - matches bodyMd line height (fontSize100 × lineHeight100 = 16 × 1.5 = 24)
+- Medium: `icon.size100` (24px) - matches bodyMd line height (fontSize100 × lineHeight100 = 16 × 1.5 = 24)
+- Large: `icon.size125` (32px) - matches bodyLg line height (fontSize125 × lineHeight125 = 18 × 1.75 ≈ 32)
+
+**Icon Size Token Benefits**:
+- **Automatic adaptation**: Icon sizes adapt when typography tokens change
+- **Mathematical foundation**: Formula-based sizing (fontSize × lineHeight) ensures optical balance
+- **AI-friendly reasoning**: Clear relationship between typography and icon sizing
 
 **Icon Placement**: Leading icon (left of text) only
 - Icon-only buttons are a separate button type (not included in this spec)
@@ -99,10 +104,24 @@ Vertical Padding = (Target Height - Line Height rendered) / 2
 - Medium: 8px (space.grouped.normal) - standard spacing
 - Large: 8px (space.grouped.normal) - standard spacing
 
-**Icon Color**: Inherits text color from button style
-- Primary: color.text.onPrimary
-- Secondary: color.primary
-- Tertiary: color.primary
+**Icon Color**: Uses blend tokens for optical weight compensation
+
+**Primary Style** (dark background):
+- Icon inherits `color.text.onPrimary` (white100)
+- No optical compensation needed (sufficient contrast on dark background)
+
+**Secondary & Tertiary Styles** (light background):
+- Text: `color.primary` (purple300)
+- Icon: `color.primary` + `color.icon.opticalBalance` (purple300 + 8% lighter via blend200)
+- **Rationale**: Icons appear heavier than text at same color due to stroke density
+- **Blend token approach**: Color-agnostic solution works with any color family (purple, cyan, black, etc.)
+
+**Optical Weight Compensation Details**:
+- **Semantic token**: `color.icon.opticalBalance` (references `blend200` with `LIGHTER` direction)
+- **Blend value**: 8% lighter (blend200 = 0.08) - adjustable based on visual testing
+- **Alternative blend values**: blend100 (4%), blend300 (12%) if 8% needs adjustment
+- **Platform support**: Verified on web (lighterBlend), iOS (Color.lighterBlend), Android (Color.lighterBlend)
+- **Documentation**: See `src/tokens/BlendTokens.ts` and `src/tokens/semantic/BlendTokens.ts` for blend token system details
 
 **Icon Alignment**: 
 - **Vertical**: Centered to button height (not text baseline)
@@ -117,34 +136,49 @@ Vertical Padding = (Target Height - Line Height rendered) / 2
 
 ### Icon Format & Source
 
-**Status:** ⚠️ **BLOCKED** - Awaiting Icon System spec (#004) completion
-
-**Dependency:** This button spec requires Icon System spec (#004) to be completed first.
+**Status:** ✅ **READY** - Icon System (Spec 004) and Icon Size Tokens (Spec 006) completed
 
 **Icon Source:** Feather Icons (280+ icons in `icons-feather/` directory)
 - Consistent 24x24 grid, stroke-based design
 - `stroke="currentColor"` enables automatic color inheritance
 - Proven cross-platform compatibility
+- Initial implementation: 15 icons (~5% sample)
 
-**Icon Component API (Expected):**
+**Icon Component API** (from Spec 004):
 ```typescript
+// Basic usage (color inheritance)
 <Icon name="arrow-right" size={24} />
 <Icon name="check" size={32} />
+
+// With semantic token reference
+import { iconSizes } from '@/tokens/semantic/IconTokens';
+<Icon name="arrow-right" size={iconSizes.size100} />
+
+// With optional color override (optical weight compensation)
+<Icon name="arrow-right" size={iconSizes.size100} color="color-text-secondary" />
 ```
 
-**Checkpoint:** Before proceeding to requirements.md for this spec:
-1. Complete Icon System spec (#004) requirements, design, and implementation
-2. Verify Icon component API supports sizes: 16px, 24px, 32px, 40px
-3. Confirm icon sizes align with button line heights (24px for small/medium, 32px for large)
-4. Verify color inheritance (currentColor) works across all platforms
-5. Confirm type safety (IconName type) is implemented
-6. Update this design outline with final icon integration details
+**Type Safety**:
+- `IconName` type: Union type of available icon names (compile-time validation)
+- `IconSize` type: `13 | 18 | 24 | 28 | 32 | 36 | 40 | 44 | 48` (from icon size tokens)
+
+**Available Icon Sizes** (from Spec 006):
+- ✅ 24px (`icon.size100`) - Small/Medium buttons
+- ✅ 32px (`icon.size125`) - Large buttons
+- All sizes: 13, 18, 24, 28, 32, 36, 40, 44, 48px
 
 **Icons Needed for CTA Button:**
 - `arrow-right` - Forward actions
 - `check` - Confirmation actions
 - `plus` - Add/create actions
 - `chevron-right` - Navigation actions
+
+**Integration Verified:**
+- ✅ Icon component API supports required sizes (24px, 32px)
+- ✅ Icon sizes align with button line heights via semantic tokens
+- ✅ Color inheritance (currentColor) works across all platforms
+- ✅ Type safety (IconName type) implemented
+- ✅ Optional color parameter available for optical weight compensation
 
 ---
 
@@ -223,14 +257,52 @@ Base styles as defined above
 ### Disabled
 **NOT IMPLEMENTED** - Disabled states are bad for accessibility and usability. Instead, show why action can't be taken.
 
-### Loading (Future Consideration)
-**NOT INCLUDED IN INITIAL SPEC** - Loading states can be added later without significant rework.
+### Loading (Future Enhancement)
+**NOT INCLUDED IN INITIAL IMPLEMENTATION** - API designed now, visual state deferred pending animation token system.
 
-**Future considerations**:
-- Loading spinner (size matches icon size: 24px or 32px)
-- Loading text behavior (optional: "Submit" → "Submitting...")
-- Interaction disabled during loading
-- Screen reader announcement ("Loading" or "Busy")
+**Status**: Deferred pending animation token system (separate spec needed)
+
+**Dependencies**:
+- Animation tokens (duration, easing, spinner-specific)
+- Loading spinner component
+- Cross-platform animation patterns
+
+**API Design** (implemented now, visual state deferred):
+```typescript
+interface ButtonProps {
+  loading?: boolean; // Designed now, implemented later
+  // ... other props
+}
+```
+
+**Ideal Loading Behavior**:
+
+**Visual Behavior**:
+- Spinner replaces icon (if present) or appears in leading position
+- Spinner size matches icon size (24px for small/medium, 32px for large)
+- Spinner color inherits button text color
+- Smooth fade transition (animation.duration.fast)
+
+**Interaction Behavior**:
+- Button becomes non-interactive (pointer-events: none)
+- Visual state remains (no hover/press effects)
+- Focus remains on button (for keyboard users)
+- Screen reader announces "Loading" or "Busy"
+
+**Text Behavior** (decision deferred):
+- Option A: Keep original text ("Submit")
+- Option B: Change text ("Submit" → "Submitting...")
+- Option C: Hide text, show spinner only
+
+**Animation Requirements**:
+- Spinner rotation: 1000ms linear infinite (animation.duration.spinner + animation.easing.linear)
+- Fade in/out: 150ms ease-in-out (animation.duration.fast + animation.easing.standard)
+- Platform-specific: iOS scale animation, Android ripple disable
+
+**Implementation Path**:
+1. Create animation token system spec
+2. Create loading spinner component spec
+3. Enhance button with loading state (API already exists, add visual implementation)
 
 ---
 
@@ -244,7 +316,15 @@ Base styles as defined above
 - **Usage**: Primary buttons, badges, chips with primary background
 - **Rationale**: Follows compositional architecture and industry patterns (Material "on-primary", Carbon "text-on-color")
 
-**2. space.inset.generous**
+**2. color.icon.opticalBalance**
+- **Value**: `blend200` (primitive) with `BlendDirection.LIGHTER`
+- **Purpose**: Icon optical weight compensation when paired with text
+- **Usage**: Secondary/tertiary buttons, any component with icon-text pairing on light backgrounds
+- **Rationale**: Icons appear heavier than text at same color due to stroke density. Blend token approach is color-agnostic (works with purple, cyan, black, etc.) and avoids explosion of color-specific tokens
+- **Adjustable**: Can use blend100 (4%), blend200 (8%), or blend300 (12%) based on visual testing
+- **Platform support**: Verified on web, iOS, Android via blend utility functions
+
+**3. space.inset.generous**
 - **Value**: `space400` (32px primitive)
 - **Purpose**: Generous internal spacing for large components
 - **Usage**: Large button horizontal padding, spacious card padding, hero section insets
@@ -469,11 +549,13 @@ Base styles as defined above
 
 ## Open Questions & Checkpoints
 
-### Checkpoint 1: Token Strategy
+### Checkpoint 1: Token Strategy ✅ RESOLVED
 
-**Question**: Should we create `color.text.onPrimary` as semantic token, or start with component token and elevate later?
+**Decision**: Create both `color.text.onPrimary` and `color.icon.opticalBalance` as semantic tokens
 
-**Recommendation**: Create as semantic token immediately (follows industry patterns, likely to be reused)
+**Rationale**:
+- `color.text.onPrimary`: Follows industry patterns (Material, Carbon), reusable across components
+- `color.icon.opticalBalance`: Blend token approach is color-agnostic, works across all button types and color families
 
 ### Checkpoint 2: Large Button V-Padding ✅ RESOLVED
 
@@ -521,15 +603,72 @@ Base styles as defined above
 
 **Rationale**: Combining outline and shadow provides better visibility across different backgrounds and ensures WCAG compliance for keyboard navigation indicators
 
+### Checkpoint 6: Loading State & Animation Tokens ✅ RESOLVED
+
+**Decision**: Design API now, defer visual implementation pending animation token system
+
+**Implementation**:
+- Add `loading?: boolean` prop to button API (designed now, visual state deferred)
+- Document ideal loading behavior in design outline
+- Create animation token requirements as task in this spec
+- Defer visual implementation to separate loading state enhancement spec
+
+**Rationale**: Loading state requires animation tokens (duration, easing, spinner-specific) that don't exist yet. Designing API now prevents breaking changes later. Animation token system is foundational for multiple components (buttons, spinners, transitions).
+
+---
+
+## Dependency Resolution
+
+### Spec 004: Icon System (Completed November 18, 2025)
+
+**Impact**: Unblocked icon integration for CTA button component
+
+**Key Deliverables**:
+- Icon component with cross-platform implementations (web, iOS, Android)
+- Type-safe icon names via `IconName` union type
+- Color inheritance via `currentColor` (web), template rendering (iOS), tint (Android)
+- Optional `color` parameter for optical weight compensation
+- Initial icon set: 15 icons including arrow-right, check, plus, chevron-right
+
+**Integration Points**:
+- Button can use `<Icon name="arrow-right" size={24} />` for leading icons
+- Icon automatically inherits button text color
+- Optional color override available for optical balance adjustments
+
+### Spec 006: Icon Size Tokens (Completed November 18, 2025)
+
+**Impact**: Provided semantic token-based icon sizing with automatic adaptation
+
+**Key Deliverables**:
+- Icon size tokens calculated via formula: `iconSize = fontSize × lineHeight`
+- Semantic tokens: `icon.size050` through `icon.size700`
+- Available sizes: 13, 18, 24, 28, 32, 36, 40, 44, 48px
+- Integration with Icon component type system
+
+**Integration Points**:
+- Button uses `icon.size100` (24px) for small/medium sizes
+- Button uses `icon.size125` (32px) for large size
+- Icon sizes automatically adapt if typography tokens change
+- Clear mathematical relationship enables AI-friendly reasoning
+
+**Benefits for CTA Button**:
+- ✅ No hard-coded icon sizes - uses semantic tokens
+- ✅ Automatic adaptation when typography scales change
+- ✅ Mathematical foundation ensures optical balance
+- ✅ AI agents can reason about icon size selection
+
 ---
 
 ## Next Steps
 
-1. **Review this design outline** - confirm decisions and answer open questions
-2. **Create requirements.md** - EARS format with user stories and acceptance criteria
-3. **Create design.md** - Detailed component architecture and token integration
-4. **Create tasks.md** - Implementation plan with task type classification
-5. **Build the component** - Implement across all three platforms
+1. ✅ **Icon System Integration** - Specs 004 and 006 completed, icon support ready
+2. ✅ **Optical Weight Solution** - Blend token approach verified and documented
+3. ✅ **Loading State Strategy** - API designed, implementation deferred with clear path forward
+4. **Review this design outline** - confirm all decisions finalized
+5. **Create requirements.md** - EARS format with user stories and acceptance criteria
+6. **Create design.md** - Detailed component architecture and token integration
+7. **Create tasks.md** - Implementation plan with task type classification (includes animation token documentation task)
+8. **Build the component** - Implement across all three platforms
 
 ---
 
@@ -583,6 +722,41 @@ Base styles as defined above
 - More intuitive for AI-human collaboration
 
 **Current Approach**: Use "generous" temporarily to unblock button component development, plan separate refactoring spec for all inset tokens.
+
+### Learning 6: Icon Size Token Integration
+
+**Key insight**: Icon size tokens (Spec 006) provide mathematical foundation for icon sizing that automatically adapts to typography changes.
+
+**Formula**: `iconSize = fontSize × lineHeight`
+- Small/Medium buttons: `icon.size100` = fontSize100 (16) × lineHeight100 (1.5) = 24px
+- Large buttons: `icon.size125` = fontSize125 (18) × lineHeight125 (1.75) ≈ 32px
+
+**Benefits**:
+- **Automatic adaptation**: If typography tokens change, icon sizes adapt automatically
+- **Mathematical consistency**: Icons maintain optical balance with paired typography
+- **AI-friendly reasoning**: Clear formula enables AI agents to select correct icon size
+- **No hard-coded values**: All icon sizing uses semantic tokens
+
+**Impact on button design**: Eliminates need for hard-coded icon sizes, provides clear token references for all button size variants.
+
+### Learning 7: Blend Tokens for Optical Weight Compensation
+
+**Key insight**: Blend tokens provide color-agnostic solution for optical weight compensation, avoiding explosion of color-specific tokens.
+
+**Problem**: Icons appear heavier than text at same color due to stroke density, creating visual imbalance when paired with text.
+
+**Solution**: Use blend tokens to lighten icon color by 8% (blend200 with LIGHTER direction)
+- Text: `color.primary` (purple300)
+- Icon: `color.primary` + `color.icon.opticalBalance` (purple300 + 8% lighter)
+
+**Benefits**:
+- **Color-agnostic**: Works with purple, cyan, black, any color family
+- **Single semantic token**: Avoids explosion of color-specific tokens (purple.icon.muted, cyan.icon.muted, etc.)
+- **Adjustable**: Can use blend100 (4%), blend200 (8%), or blend300 (12%) based on visual testing
+- **Platform support verified**: Works on web (lighterBlend), iOS (Color.lighterBlend), Android (Color.lighterBlend)
+- **Mathematically consistent**: 8% lighter is the optical compensation formula
+
+**Impact on button design**: Provides elegant, maintainable solution for icon-text optical balance across all button types and color families. Pattern is reusable for other components with icon-text pairing (chips, badges, cards).
 
 ---
 
