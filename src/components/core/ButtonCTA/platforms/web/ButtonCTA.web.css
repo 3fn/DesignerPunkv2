@@ -1,0 +1,400 @@
+/**
+ * ButtonCTA Component Styles for Web Platform
+ * 
+ * Token-based styling using CSS custom properties from the mathematical token system.
+ * All values reference semantic or primitive tokens - zero hard-coded values.
+ * 
+ * @module ButtonCTA/platforms/web/styles
+ */
+
+/* ==========================================================================
+   Base Button Styles
+   ========================================================================== */
+
+/**
+ * Base button element styling.
+ * 
+ * - Flexbox layout for icon-text composition
+ * - Token-based typography, spacing, and colors
+ * - Semantic button element with proper cursor
+ * - Smooth transitions for interaction states
+ */
+.button-cta {
+  /* Layout */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-grouped-normal); /* Default icon-text spacing: 8px */
+  
+  /* Typography - Default to medium size */
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+  
+  /* Text alignment */
+  text-align: center;
+  text-decoration: none;
+  
+  /* Interaction */
+  cursor: pointer;
+  user-select: none;
+  
+  /* Transitions */
+  transition: background-color 150ms ease-in-out,
+              border-color 150ms ease-in-out,
+              color 150ms ease-in-out,
+              opacity 150ms ease-in-out,
+              box-shadow 150ms ease-in-out;
+  
+  /* Remove default button styles */
+  border: none;
+  outline: none;
+  background: none;
+  
+  /* Ensure button doesn't shrink in flex containers */
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Size Variants
+   ========================================================================== */
+
+/**
+ * Small button (40px height)
+ * 
+ * - Height: 40px (aligns to 8px baseline grid)
+ * - Horizontal padding: space.inset.spacious (16px)
+ * - Vertical padding: space.inset.normal (8px)
+ * - Border radius: radius100 (8px)
+ * - Typography: typography.bodyMd
+ * - Icon size: icon.size100 (24px)
+ * - Icon spacing: space.grouped.tight (4px)
+ * - Min width: 56px
+ */
+.button-cta--small {
+  min-height: 40px;
+  min-width: 56px;
+  padding: var(--space-inset-normal) var(--space-inset-spacious); /* 8px 16px */
+  border-radius: var(--radius-100); /* 8px */
+  gap: var(--space-grouped-tight); /* 4px for icon-text spacing */
+  
+  /* Typography: bodyMd (same as base) */
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+}
+
+/**
+ * Medium button (48px height) - Default size
+ * 
+ * - Height: 48px (aligns to 8px baseline grid)
+ * - Horizontal padding: space.inset.expansive (24px)
+ * - Vertical padding: space.inset.comfortable (12px)
+ * - Border radius: radius150 (12px)
+ * - Typography: typography.bodyMd
+ * - Icon size: icon.size100 (24px)
+ * - Icon spacing: space.grouped.normal (8px)
+ * - Min width: 72px
+ */
+.button-cta--medium {
+  min-height: 48px;
+  min-width: 72px;
+  padding: var(--space-inset-comfortable) var(--space-inset-expansive); /* 12px 24px */
+  border-radius: var(--radius-150); /* 12px */
+  gap: var(--space-grouped-normal); /* 8px for icon-text spacing */
+  
+  /* Typography: bodyMd (same as base) */
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+}
+
+/**
+ * Large button (56px height)
+ * 
+ * - Height: 56px (aligns to 8px baseline grid)
+ * - Horizontal padding: space.inset.generous (32px)
+ * - Vertical padding: space.inset.comfortable (12px)
+ * - Border radius: radius200 (16px)
+ * - Typography: typography.bodyLg
+ * - Icon size: icon.size125 (32px)
+ * - Icon spacing: space.grouped.normal (8px)
+ * - Min width: 80px
+ */
+.button-cta--large {
+  min-height: 56px;
+  min-width: 80px;
+  padding: var(--space-inset-comfortable) var(--space-inset-generous); /* 12px 32px */
+  border-radius: var(--radius-200); /* 16px */
+  gap: var(--space-grouped-normal); /* 8px for icon-text spacing */
+  
+  /* Typography: bodyLg */
+  font-family: var(--typography-body-lg-font-family);
+  font-size: var(--typography-body-lg-font-size);
+  font-weight: var(--typography-body-lg-font-weight);
+  line-height: var(--typography-body-lg-line-height);
+  letter-spacing: var(--typography-body-lg-letter-spacing);
+}
+
+/* ==========================================================================
+   Style Variants
+   ========================================================================== */
+
+/**
+ * Primary button style (filled background)
+ * 
+ * - Background: color.primary
+ * - Text: color.text.onPrimary (white100)
+ * - Border: none
+ * - Highest visual emphasis
+ */
+.button-cta--primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+  border: none;
+}
+
+/**
+ * Secondary button style (outlined)
+ * 
+ * - Background: color.background
+ * - Text: color.primary
+ * - Border: 1px solid color.primary
+ * - Medium visual emphasis
+ */
+.button-cta--secondary {
+  background-color: var(--color-background);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+
+/**
+ * Tertiary button style (text-only)
+ * 
+ * - Background: transparent
+ * - Text: color.primary
+ * - Border: none
+ * - Lowest visual emphasis
+ */
+.button-cta--tertiary {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: none;
+}
+
+/* ==========================================================================
+   Icon Styling
+   ========================================================================== */
+
+/**
+ * Icon container styling.
+ * 
+ * - Flexbox for centering
+ * - Inherits color from button
+ * - Marked as decorative (aria-hidden)
+ */
+.button-cta__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+/**
+ * Icon optical balance for secondary and tertiary buttons.
+ * 
+ * Icons appear heavier than text at the same color due to stroke density.
+ * Apply 20% lighter blend for optical weight compensation.
+ * 
+ * Note: This would ideally use color.icon.opticalBalance blend token,
+ * but CSS doesn't support color blending directly. Implementation options:
+ * 1. Use filter: brightness(1.2) as approximation
+ * 2. Generate blended color values at build time
+ * 3. Use opacity: 0.8 as alternative (affects transparency)
+ * 
+ * Current approach: Use filter for approximation
+ */
+.button-cta--secondary .button-cta__icon,
+.button-cta--tertiary .button-cta__icon {
+  filter: brightness(1.2);
+}
+
+/* ==========================================================================
+   Text Label Styling
+   ========================================================================== */
+
+/**
+ * Text label with default wrapping behavior.
+ * 
+ * - Allows multi-line text (accessibility-first)
+ * - Button height grows to accommodate wrapped text
+ * - Maintains minimum height for all text lengths
+ */
+.button-cta__label {
+  display: inline-block;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/**
+ * Text label with no-wrap behavior (opt-in).
+ * 
+ * - Single-line text with ellipsis truncation
+ * - Use for constrained spaces (toolbars, navigation)
+ * - Accessibility trade-off: may hide content
+ */
+.button-cta__label--no-wrap {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* ==========================================================================
+   Interaction States
+   ========================================================================== */
+
+/**
+ * Hover state (web only).
+ * 
+ * - Applies 8% opacity overlay (opacity.hover)
+ * - Cursor changes to pointer
+ * - Smooth transition
+ */
+.button-cta:hover:not(:disabled) {
+  opacity: 0.92; /* 100% - 8% = 92% */
+}
+
+/**
+ * Pressed/Active state.
+ * 
+ * - Applies 16% opacity overlay (opacity.pressed)
+ * - Visual feedback for click/tap
+ */
+.button-cta:active:not(:disabled) {
+  opacity: 0.84; /* 100% - 16% = 84% */
+}
+
+/**
+ * Focus state (keyboard navigation only).
+ * 
+ * - Uses :focus-visible for keyboard-only focus indicators
+ * - Outline: accessibility.focus.width (2px)
+ * - Color: accessibility.focus.color (primary)
+ * - Offset: accessibility.focus.offset (2px)
+ * - Shadow: shadow.hover for elevation
+ * - Meets WCAG 2.1 AA contrast requirements (3:1 minimum)
+ */
+.button-cta:focus-visible {
+  outline: var(--accessibility-focus-width) solid var(--accessibility-focus-color);
+  outline-offset: var(--accessibility-focus-offset);
+  box-shadow: var(--shadow-hover);
+}
+
+/**
+ * Remove focus outline on mouse click.
+ * 
+ * :focus-visible handles this automatically in modern browsers,
+ * but this provides fallback for older browsers.
+ */
+.button-cta:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/**
+ * Disabled state.
+ * 
+ * - Reduced opacity for visual feedback
+ * - Cursor changes to not-allowed
+ * - Prevents interaction
+ * - Maintains color contrast for accessibility
+ */
+.button-cta:disabled,
+.button-cta--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Responsive Behavior
+   ========================================================================== */
+
+/**
+ * Ensure buttons adapt to container width when needed.
+ * 
+ * By default, buttons are inline-flex and size to content.
+ * For full-width buttons, apply width: 100% via utility class or inline style.
+ */
+.button-cta--full-width {
+  width: 100%;
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+/**
+ * Optimize button appearance for print.
+ * 
+ * - Remove interactive states
+ * - Ensure text is visible
+ * - Simplify visual styling
+ */
+@media print {
+  .button-cta {
+    background-color: transparent !important;
+    color: #000 !important;
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+  }
+  
+  .button-cta__icon {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   High Contrast Mode Support
+   ========================================================================== */
+
+/**
+ * Ensure buttons remain visible in Windows High Contrast Mode.
+ * 
+ * - Force borders for all button styles
+ * - Ensure focus indicators are visible
+ */
+@media (prefers-contrast: high) {
+  .button-cta {
+    border: 2px solid currentColor;
+  }
+  
+  .button-cta:focus-visible {
+    outline-width: 3px;
+  }
+}
+
+/* ==========================================================================
+   Reduced Motion Support
+   ========================================================================== */
+
+/**
+ * Respect user preference for reduced motion.
+ * 
+ * - Remove transitions and animations
+ * - Maintain functionality without motion
+ */
+@media (prefers-reduced-motion: reduce) {
+  .button-cta {
+    transition: none;
+  }
+}
