@@ -33,6 +33,11 @@ export declare class AndroidFormatGenerator extends BaseFormatProvider {
      */
     formatSingleReferenceToken(semantic: SemanticToken): string;
     /**
+     * Get WCAG comment for accessibility tokens
+     * Extracts WCAG information from token description
+     */
+    private getWCAGComment;
+    /**
      * Format a multi-reference semantic token (typography)
      * Generates: val typographyBodyMd = Typography(fontSize = fontSize100, ...)
      */
@@ -103,5 +108,16 @@ export declare class AndroidFormatGenerator extends BaseFormatProvider {
      * @returns Kotlin constant declaration string with comments
      */
     formatIconSizeToken(tokenName: string, calculatedSize: number, category: string, description?: string, context?: string): string;
+    /**
+     * Generate accessibility tokens section for Android platform
+     * Generates Kotlin constants for focus indicator tokens with WCAG comments
+     *
+     * WCAG References:
+     * - 2.4.7 Focus Visible (Level AA)
+     * - 1.4.11 Non-text Contrast (Level AA) - 3:1 minimum for focus indicators
+     *
+     * @returns Array of Kotlin constant declaration strings with WCAG comments
+     */
+    generateAccessibilityTokens(): string[];
 }
 //# sourceMappingURL=AndroidFormatGenerator.d.ts.map

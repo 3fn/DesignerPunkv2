@@ -27,6 +27,11 @@ export declare class WebFormatGenerator extends BaseFormatProvider {
      */
     formatSingleReferenceToken(semantic: SemanticToken): string;
     /**
+     * Get WCAG comment for accessibility tokens
+     * Extracts WCAG information from token description
+     */
+    private getWCAGComment;
+    /**
      * Format a multi-reference semantic token (typography)
      * Generates individual CSS custom properties for each property
      */
@@ -76,5 +81,16 @@ export declare class WebFormatGenerator extends BaseFormatProvider {
      * @returns CSS custom property string with comments
      */
     formatIconSizeToken(tokenName: string, calculatedSize: number, category: string, description?: string, context?: string): string;
+    /**
+     * Generate accessibility tokens section for web platform
+     * Generates CSS custom properties for focus indicator tokens with WCAG comments
+     *
+     * WCAG References:
+     * - 2.4.7 Focus Visible (Level AA)
+     * - 1.4.11 Non-text Contrast (Level AA) - 3:1 minimum for focus indicators
+     *
+     * @returns Array of CSS custom property strings with WCAG comments
+     */
+    generateAccessibilityTokens(): string[];
 }
 //# sourceMappingURL=WebFormatGenerator.d.ts.map

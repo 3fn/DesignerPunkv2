@@ -373,6 +373,90 @@ class ThreeTierValidator {
         });
         return aggregated;
     }
+    /**
+     * Validate accessibility tokens
+     *
+     * Validates accessibility token values against WCAG requirements:
+     * - focus.offset: error if negative, warning if 0, pass if positive
+     * - focus.width: error if < 1px, warning if < 2px, pass if >= 2px
+     *
+     * @param tokens - Accessibility tokens object with focus properties
+     * @returns Array of validation results for each token property
+     *
+     * Requirements: 11.3, 11.6
+     *
+     * @example
+     * ```typescript
+     * const results = validator.validateAccessibilityTokens({
+     *   focus: { offset: 2, width: 2, color: '#3B82F6' }
+     * });
+     * // Returns array of ValidationResult objects
+     * ```
+     */
+    validateAccessibilityTokens(tokens) {
+        const results = [];
+        // Validate focus.offset
+        const offset = tokens.focus.offset;
+        if (offset < 0) {
+            results.push({
+                level: 'Error',
+                token: 'accessibility.focus.offset',
+                message: `Focus offset must be non-negative (current: ${offset}px)`,
+                rationale: 'Negative offset values are invalid and will cause rendering issues',
+                mathematicalReasoning: `Focus offset ${offset}px violates non-negative constraint (WCAG 2.4.7 Focus Visible)`
+            });
+        }
+        else if (offset === 0) {
+            results.push({
+                level: 'Warning',
+                token: 'accessibility.focus.offset',
+                message: 'Focus offset of 0px may reduce visibility - consider 2px for better separation',
+                rationale: 'Zero offset places focus indicator directly on element border, reducing visibility',
+                mathematicalReasoning: `Focus offset 0px is valid but suboptimal - 2px offset provides clearer visual separation (WCAG 2.4.7 Focus Visible)`,
+                suggestions: ['Use 2px offset for better focus indicator visibility']
+            });
+        }
+        else {
+            results.push({
+                level: 'Pass',
+                token: 'accessibility.focus.offset',
+                message: `Focus offset ${offset}px provides clear separation`,
+                rationale: 'Positive offset value ensures focus indicator is visually separated from element',
+                mathematicalReasoning: `Focus offset ${offset}px meets WCAG 2.4.7 Focus Visible requirements with clear visual separation`
+            });
+        }
+        // Validate focus.width
+        const width = tokens.focus.width;
+        if (width < 1) {
+            results.push({
+                level: 'Error',
+                token: 'accessibility.focus.width',
+                message: `Focus width must be at least 1px for visibility (current: ${width}px)`,
+                rationale: 'Width below 1px is not visible to users and fails WCAG requirements',
+                mathematicalReasoning: `Focus width ${width}px violates minimum 1px visibility requirement (WCAG 2.4.7 Focus Visible)`
+            });
+        }
+        else if (width < 2) {
+            results.push({
+                level: 'Warning',
+                token: 'accessibility.focus.width',
+                message: `Focus width below 2px may reduce visibility (current: ${width}px) - consider 2px for better clarity`,
+                rationale: 'Width below 2px is technically valid but may be difficult to see for some users',
+                mathematicalReasoning: `Focus width ${width}px meets minimum requirement but 2px provides better visibility (WCAG 2.4.7 Focus Visible)`,
+                suggestions: ['Use 2px width for better focus indicator visibility']
+            });
+        }
+        else {
+            results.push({
+                level: 'Pass',
+                token: 'accessibility.focus.width',
+                message: `Focus width ${width}px provides clear visibility`,
+                rationale: 'Width of 2px or greater ensures focus indicator is clearly visible',
+                mathematicalReasoning: `Focus width ${width}px meets WCAG 2.4.7 Focus Visible requirements with clear visibility`
+            });
+        }
+        return results;
+    }
 }
 exports.ThreeTierValidator = ThreeTierValidator;
 //# sourceMappingURL=ThreeTierValidator.js.map

@@ -5,7 +5,7 @@
  * Exports all validation components for the Mathematical Token System
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PrimitiveReferenceValidator = exports.CompositionPatternValidator = exports.SemanticTokenValidator = exports.WarningValidator = exports.ValidationReasoning = exports.ToleranceCalculator = exports.ThreeTierValidator = exports.PlatformConstraintHandler = exports.PassValidator = exports.ErrorValidator = exports.CrossPlatformConsistencyValidator = exports.BaselineGridValidator = void 0;
+exports.WCAGValidator = exports.PrimitiveReferenceValidator = exports.CompositionPatternValidator = exports.SemanticTokenValidator = exports.WarningValidator = exports.ValidationReasoning = exports.ToleranceCalculator = exports.ThreeTierValidator = exports.PlatformConstraintHandler = exports.PassValidator = exports.ErrorValidator = exports.CrossPlatformConsistencyValidator = exports.BaselineGridValidator = void 0;
 var BaselineGridValidator_1 = require("./BaselineGridValidator");
 Object.defineProperty(exports, "BaselineGridValidator", { enumerable: true, get: function () { return BaselineGridValidator_1.BaselineGridValidator; } });
 var CrossPlatformConsistencyValidator_1 = require("./CrossPlatformConsistencyValidator");
@@ -31,4 +31,7 @@ var CompositionPatternValidator_1 = require("./CompositionPatternValidator");
 Object.defineProperty(exports, "CompositionPatternValidator", { enumerable: true, get: function () { return CompositionPatternValidator_1.CompositionPatternValidator; } });
 var PrimitiveReferenceValidator_1 = require("./PrimitiveReferenceValidator");
 Object.defineProperty(exports, "PrimitiveReferenceValidator", { enumerable: true, get: function () { return PrimitiveReferenceValidator_1.PrimitiveReferenceValidator; } });
+// WCAG accessibility validation exports
+var WCAGValidator_1 = require("./WCAGValidator");
+Object.defineProperty(exports, "WCAGValidator", { enumerable: true, get: function () { return WCAGValidator_1.WCAGValidator; } });
 //# sourceMappingURL=index.js.map

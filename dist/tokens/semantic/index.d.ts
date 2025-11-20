@@ -32,7 +32,7 @@ export { blendTokens, blendTokenNames, getBlendToken, getAllBlendTokens, validat
 export { zIndexTokens, zIndexTokenNames, getZIndexToken, getAllZIndexTokens, elevationTokens, elevationTokenNames, getElevationToken, getAllElevationTokens, getAllLayeringTokens, getLayeringTokensByPlatform } from './LayeringTokens';
 export { gridSpacingTokens, gridSpacingTokenNames, getGridSpacingToken, getAllGridSpacingTokens } from './GridSpacingTokens';
 export { iconTokens, iconTokenNames, getIconToken, getAllIconTokens, calculateIconSize, generateIconSizeTokens } from './IconTokens';
-export { accessibility, accessibilityTokenNames, getAccessibilityToken, getAllAccessibilityTokens } from './AccessibilityTokens';
+export { accessibility, accessibilityTokens, accessibilityTokenNames, getAccessibilityToken, getAllAccessibilityTokens } from './AccessibilityTokens';
 import type { SemanticToken } from '../../types/SemanticToken';
 import { SemanticCategory } from '../../types/SemanticToken';
 /**

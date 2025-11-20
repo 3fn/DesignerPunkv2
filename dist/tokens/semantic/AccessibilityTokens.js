@@ -20,16 +20,15 @@
  * @see https://www.w3.org/WAI/WCAG21/quickref/
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.accessibilityTokenNames = exports.accessibility = void 0;
+exports.accessibilityTokenNames = exports.accessibilityTokens = exports.accessibility = void 0;
 exports.getAccessibilityToken = getAccessibilityToken;
 exports.getAllAccessibilityTokens = getAllAccessibilityTokens;
-const SpacingTokens_1 = require("../SpacingTokens");
 const BorderWidthTokens_1 = require("./BorderWidthTokens");
 const ColorTokens_1 = require("./ColorTokens");
-// Extract space050 from spacing tokens
-const space050 = SpacingTokens_1.spacingTokens.space050.baseValue;
-// Extract color.primary value reference
-const colorPrimary = ColorTokens_1.colorTokens['color.primary'].primitiveReferences.value;
+// Reference primitive token names (not resolved values)
+const space025Ref = 'space025'; // Primitive token name
+const borderEmphasisRef = BorderWidthTokens_1.borderEmphasis.value; // Already a primitive token name: 'borderWidth200'
+const colorPrimaryRef = ColorTokens_1.colorTokens['color.primary'].primitiveReferences.value; // Already a primitive token name: 'purple300'
 /**
  * Accessibility token family
  *
@@ -51,31 +50,59 @@ exports.accessibility = {
         /**
          * Focus indicator outline offset from component bounds
          *
-         * @value space050 (2px)
+         * @value 'space025' → 2px (primitive token reference)
          * @wcag 2.4.7 Focus Visible (Level AA)
          * @usage Position focus outline outside element bounds
          * @example outlineOffset: accessibility.focus.offset
          */
-        offset: space050,
+        offset: space025Ref,
         /**
          * Focus indicator outline width
          *
-         * @value border.emphasis (2px)
+         * @value 'borderWidth200' → 2px (primitive token reference via border.emphasis)
          * @wcag 2.4.7 Focus Visible (Level AA)
          * @usage Render focus outline with specified width
          * @example outlineWidth: accessibility.focus.width
          */
-        width: BorderWidthTokens_1.borderEmphasis.value,
+        width: borderEmphasisRef,
         /**
          * Focus indicator outline color
          *
-         * @value color.primary
+         * @value 'purple300' (primitive token reference via color.primary)
          * @wcag 2.4.7 Focus Visible (Level AA)
          * @wcag 1.4.11 Non-text Contrast (Level AA) - 3:1 minimum
          * @usage Apply color to focus outline
          * @example outlineColor: accessibility.focus.color
          */
-        color: colorPrimary,
+        color: colorPrimaryRef,
+    },
+};
+/**
+ * Accessibility tokens as semantic token objects
+ * Following the same pattern as ColorTokens for proper integration with the generation system
+ */
+const SemanticToken_1 = require("../../types/SemanticToken");
+exports.accessibilityTokens = {
+    'accessibility.focus.offset': {
+        name: 'accessibility.focus.offset',
+        primitiveReferences: { value: space025Ref },
+        category: SemanticToken_1.SemanticCategory.ACCESSIBILITY,
+        context: 'Focus indicator outline offset for keyboard navigation',
+        description: 'WCAG 2.4.7 Focus Visible - positions outline outside element bounds (2px)'
+    },
+    'accessibility.focus.width': {
+        name: 'accessibility.focus.width',
+        primitiveReferences: { value: borderEmphasisRef },
+        category: SemanticToken_1.SemanticCategory.ACCESSIBILITY,
+        context: 'Focus indicator outline width for keyboard navigation',
+        description: 'WCAG 2.4.7 Focus Visible - visible indicator thickness (2px)'
+    },
+    'accessibility.focus.color': {
+        name: 'accessibility.focus.color',
+        primitiveReferences: { value: colorPrimaryRef },
+        category: SemanticToken_1.SemanticCategory.ACCESSIBILITY,
+        context: 'Focus indicator outline color for keyboard navigation',
+        description: 'WCAG 2.4.7 Focus Visible + 1.4.11 Non-text Contrast - 3:1 contrast minimum'
     },
 };
 /**
@@ -84,7 +111,7 @@ exports.accessibility = {
 exports.accessibilityTokenNames = ['accessibility.focus.offset', 'accessibility.focus.width', 'accessibility.focus.color'];
 /**
  * Get accessibility token by path
- * @example getAccessibilityToken('accessibility.focus.offset') => 2
+ * @example getAccessibilityToken('accessibility.focus.offset') => 'space050'
  */
 function getAccessibilityToken(path) {
     const parts = path.split('.');

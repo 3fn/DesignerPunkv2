@@ -1,6 +1,6 @@
 ///
 /// DesignerPunk Design System - iOS Tokens
-/// Generated: 2025-11-20T01:29:11.417Z
+/// Generated: 2025-11-20T04:00:41.322Z
 /// Version: 1.0.0
 /// Platform: iOS (Swift Constants)
 ///
@@ -496,8 +496,11 @@ public struct DesignTokens {
     public static let iconSize500: CGFloat = 40 // Icon size calculated from fontSize500 × lineHeight500 = 33 × 1.212 = 40px (rounded from 39.996) | Pairs with: Icon size for h2 typography
     public static let iconSize600: CGFloat = 44 // Icon size calculated from fontSize600 × lineHeight600 = 37 × 1.19 = 44px (rounded from 44.03) | Pairs with: Icon size for h1 typography
     public static let iconSize700: CGFloat = 48 // Icon size calculated from fontSize700 × lineHeight700 = 42 × 1.143 = 48px (rounded from 48.006) | Pairs with: Icon size for display typography (hero text)
-    public static let accessibilityFocusOffset = space050
+    // WCAG 2.4.7 Focus Visible
+    public static let accessibilityFocusOffset = space025
+    // WCAG 2.4.7 Focus Visible
     public static let accessibilityFocusWidth = borderWidth200
+    // WCAG 2.4.7 Focus Visible
     public static let accessibilityFocusColor = purple300
     public static let borderBorderDefault = borderWidth100
     public static let borderBorderEmphasis = borderWidth200

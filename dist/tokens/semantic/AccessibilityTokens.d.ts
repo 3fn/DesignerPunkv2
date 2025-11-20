@@ -21,21 +21,21 @@
 /**
  * Focus indicator token structure
  *
- * Note: These types describe the resolved values, not the token references.
- * The implementation uses compositional architecture (references existing tokens),
- * but TypeScript sees the resolved primitive values.
+ * All properties reference primitive token names (not resolved values).
+ * This follows the compositional architecture pattern used throughout
+ * the semantic token system.
  *
  * Example:
- * - offset: number (resolves from space050 → 2)
- * - width: string (resolves from border.emphasis → 'borderWidth200')
- * - color: string (resolves from color.primary → 'purple300')
+ * - offset: 'space050' (primitive token name)
+ * - width: 'borderWidth200' (primitive token name)
+ * - color: 'purple300' (primitive token name)
  */
 export interface FocusTokens {
-    /** Focus indicator outline offset - resolves to number (2px from space050) */
-    offset: number;
-    /** Focus indicator outline width - resolves to string reference (borderWidth200 from border.emphasis) */
+    /** Focus indicator outline offset - references primitive token 'space025' (2px) */
+    offset: string;
+    /** Focus indicator outline width - references primitive token 'borderWidth200' (2px) */
     width: string;
-    /** Focus indicator outline color - resolves to string reference (purple300 from color.primary) */
+    /** Focus indicator outline color - references primitive token 'purple300' */
     color: string;
 }
 /**
@@ -54,20 +54,26 @@ export interface AccessibilityTokens {
  */
 export declare const accessibility: AccessibilityTokens;
 /**
+ * Accessibility tokens as semantic token objects
+ * Following the same pattern as ColorTokens for proper integration with the generation system
+ */
+import { SemanticToken } from '../../types/SemanticToken';
+export declare const accessibilityTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>;
+/**
  * Array of all accessibility token names for iteration
  */
 export declare const accessibilityTokenNames: string[];
 /**
  * Get accessibility token by path
- * @example getAccessibilityToken('accessibility.focus.offset') => 2
+ * @example getAccessibilityToken('accessibility.focus.offset') => 'space050'
  */
-export declare function getAccessibilityToken(path: string): number | string | undefined;
+export declare function getAccessibilityToken(path: string): string | undefined;
 /**
  * Get all accessibility tokens as array
  */
 export declare function getAllAccessibilityTokens(): Array<{
     name: string;
-    value: number | string;
+    value: string;
 }>;
 /**
  * AI Agent Guidance for Accessibility Token Usage

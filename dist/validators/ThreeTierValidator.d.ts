@@ -229,5 +229,32 @@ export declare class ThreeTierValidator {
      * Aggregate validation times by level across all results
      */
     private aggregateValidationTimesByLevel;
+    /**
+     * Validate accessibility tokens
+     *
+     * Validates accessibility token values against WCAG requirements:
+     * - focus.offset: error if negative, warning if 0, pass if positive
+     * - focus.width: error if < 1px, warning if < 2px, pass if >= 2px
+     *
+     * @param tokens - Accessibility tokens object with focus properties
+     * @returns Array of validation results for each token property
+     *
+     * Requirements: 11.3, 11.6
+     *
+     * @example
+     * ```typescript
+     * const results = validator.validateAccessibilityTokens({
+     *   focus: { offset: 2, width: 2, color: '#3B82F6' }
+     * });
+     * // Returns array of ValidationResult objects
+     * ```
+     */
+    validateAccessibilityTokens(tokens: {
+        focus: {
+            offset: number;
+            width: number;
+            color: string;
+        };
+    }): ValidationResult[];
 }
 //# sourceMappingURL=ThreeTierValidator.d.ts.map

@@ -22,6 +22,10 @@ export { SemanticTokenValidator } from './SemanticTokenValidator';
 export { CompositionPatternValidator } from './CompositionPatternValidator';
 export { PrimitiveReferenceValidator } from './PrimitiveReferenceValidator';
 
+// WCAG accessibility validation exports
+export { WCAGValidator } from './WCAGValidator';
+export type { WCAGValidationResult } from './WCAGValidator';
+
 // Type exports
 export type { SemanticValidationOptions, ComprehensiveValidationResult } from './SemanticTokenValidator';
 export type { CompositionContext, CompositionValidationOptions } from './CompositionPatternValidator';

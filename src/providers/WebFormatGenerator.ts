@@ -196,7 +196,40 @@ export class WebFormatGenerator extends BaseFormatProvider {
     const cssSemanticName = semanticName.startsWith('--') ? semanticName : `--${semanticName}`;
     const cssPrimitiveRef = cssPrimitiveRefName.startsWith('--') ? cssPrimitiveRefName : `--${cssPrimitiveRefName}`;
     
-    return `  ${cssSemanticName}: var(${cssPrimitiveRef});`;
+    // Add WCAG comment for accessibility tokens
+    const wcagComment = this.getWCAGComment(semantic);
+    const tokenLine = `  ${cssSemanticName}: var(${cssPrimitiveRef});`;
+    
+    return wcagComment ? `  ${wcagComment}\n${tokenLine}` : tokenLine;
+  }
+
+  /**
+   * Get WCAG comment for accessibility tokens
+   * Extracts WCAG information from token description
+   */
+  private getWCAGComment(semantic: SemanticToken): string | null {
+    // Only add WCAG comments for accessibility tokens
+    if (!semantic.name.startsWith('accessibility.')) {
+      return null;
+    }
+
+    // Extract WCAG information from description
+    // Format: "Accessibility token for focus offset (WCAG 2.4.7)"
+    const wcagMatch = semantic.description?.match(/WCAG\s+([\d.]+)/);
+    if (!wcagMatch) {
+      return null;
+    }
+
+    const wcagCriterion = wcagMatch[1];
+    
+    // Map WCAG criteria to names
+    const wcagNames: Record<string, string> = {
+      '2.4.7': 'Focus Visible',
+      '1.4.11': 'Non-text Contrast'
+    };
+
+    const criterionName = wcagNames[wcagCriterion] || '';
+    return `/* WCAG ${wcagCriterion}${criterionName ? ` ${criterionName}` : ''} */`;
   }
 
   /**
@@ -324,5 +357,52 @@ export class WebFormatGenerator extends BaseFormatProvider {
     }
     
     return `  ${prefix}${cssName}: ${calculatedSize}px;`;
+  }
+
+  /**
+   * Generate accessibility tokens section for web platform
+   * Generates CSS custom properties for focus indicator tokens with WCAG comments
+   * 
+   * WCAG References:
+   * - 2.4.7 Focus Visible (Level AA)
+   * - 1.4.11 Non-text Contrast (Level AA) - 3:1 minimum for focus indicators
+   * 
+   * @returns Array of CSS custom property strings with WCAG comments
+   */
+  generateAccessibilityTokens(): string[] {
+    const lines: string[] = [];
+    
+    // Add section header with WCAG guidance
+    lines.push('');
+    lines.push('  /* ============================================');
+    lines.push('   * ACCESSIBILITY TOKENS');
+    lines.push('   * Focus Indicators for Keyboard Navigation');
+    lines.push('   * WCAG 2.4.7 Focus Visible (Level AA)');
+    lines.push('   * WCAG 1.4.11 Non-text Contrast (Level AA)');
+    lines.push('   * ============================================ */');
+    lines.push('');
+    
+    // Focus indicator tokens with WCAG comments
+    lines.push('  /* Focus Indicator Offset - WCAG 2.4.7 Focus Visible */');
+    lines.push('  --accessibility-focus-offset: 2px;');
+    lines.push('');
+    
+    lines.push('  /* Focus Indicator Width - WCAG 2.4.7 Focus Visible */');
+    lines.push('  --accessibility-focus-width: 2px;');
+    lines.push('');
+    
+    lines.push('  /* Focus Indicator Color - WCAG 2.4.7 Focus Visible, 1.4.11 Non-text Contrast (3:1 minimum) */');
+    lines.push('  --accessibility-focus-color: var(--color-primary);');
+    lines.push('');
+    
+    // Add usage example comment
+    lines.push('  /* Usage Example:');
+    lines.push('   * button:focus-visible {');
+    lines.push('   *   outline: var(--accessibility-focus-width) solid var(--accessibility-focus-color);');
+    lines.push('   *   outline-offset: var(--accessibility-focus-offset);');
+    lines.push('   * }');
+    lines.push('   */');
+    
+    return lines;
   }
 }

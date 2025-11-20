@@ -197,7 +197,34 @@ class iOSFormatGenerator extends FormatProvider_1.BaseFormatProvider {
         const semanticName = this.getTokenName(semantic.name, semantic.category);
         // Convert primitive reference to appropriate format
         const primitiveRefName = this.getTokenName(primitiveRef, semantic.category);
-        return `    public static let ${semanticName} = ${primitiveRefName}`;
+        // Add WCAG comment for accessibility tokens
+        const wcagComment = this.getWCAGComment(semantic);
+        const tokenLine = `    public static let ${semanticName} = ${primitiveRefName}`;
+        return wcagComment ? `    ${wcagComment}\n${tokenLine}` : tokenLine;
+    }
+    /**
+     * Get WCAG comment for accessibility tokens
+     * Extracts WCAG information from token description
+     */
+    getWCAGComment(semantic) {
+        // Only add WCAG comments for accessibility tokens
+        if (!semantic.name.startsWith('accessibility.')) {
+            return null;
+        }
+        // Extract WCAG information from description
+        // Format: "Accessibility token for focus offset (WCAG 2.4.7)"
+        const wcagMatch = semantic.description?.match(/WCAG\s+([\d.]+)/);
+        if (!wcagMatch) {
+            return null;
+        }
+        const wcagCriterion = wcagMatch[1];
+        // Map WCAG criteria to names
+        const wcagNames = {
+            '2.4.7': 'Focus Visible',
+            '1.4.11': 'Non-text Contrast'
+        };
+        const criterionName = wcagNames[wcagCriterion] || '';
+        return `// WCAG ${wcagCriterion}${criterionName ? ` ${criterionName}` : ''}`;
     }
     /**
      * Format a multi-reference semantic token (typography)
@@ -295,6 +322,46 @@ class iOSFormatGenerator extends FormatProvider_1.BaseFormatProvider {
             return `    public static let ${swiftName}: CGFloat = ${calculatedSize} // ${comments.join(' | ')}`;
         }
         return `    public static let ${swiftName}: CGFloat = ${calculatedSize}`;
+    }
+    /**
+     * Generate accessibility tokens section for iOS platform
+     * Generates Swift constants for focus indicator tokens with WCAG comments
+     *
+     * WCAG References:
+     * - 2.4.7 Focus Visible (Level AA)
+     * - 1.4.11 Non-text Contrast (Level AA) - 3:1 minimum for focus indicators
+     *
+     * @returns Array of Swift constant declaration strings with WCAG comments
+     */
+    generateAccessibilityTokens() {
+        const lines = [];
+        // Add section header with WCAG guidance
+        lines.push('');
+        lines.push('    // ============================================');
+        lines.push('    // ACCESSIBILITY TOKENS');
+        lines.push('    // Focus Indicators for Keyboard Navigation');
+        lines.push('    // WCAG 2.4.7 Focus Visible (Level AA)');
+        lines.push('    // WCAG 1.4.11 Non-text Contrast (Level AA)');
+        lines.push('    // ============================================');
+        lines.push('');
+        // Focus indicator tokens with WCAG comments
+        lines.push('    /// Focus Indicator Offset - WCAG 2.4.7 Focus Visible');
+        lines.push('    public static let accessibilityFocusOffset: CGFloat = 2');
+        lines.push('');
+        lines.push('    /// Focus Indicator Width - WCAG 2.4.7 Focus Visible');
+        lines.push('    public static let accessibilityFocusWidth: CGFloat = 2');
+        lines.push('');
+        lines.push('    /// Focus Indicator Color - WCAG 2.4.7 Focus Visible, 1.4.11 Non-text Contrast (3:1 minimum)');
+        lines.push('    public static let accessibilityFocusColor: Color = .primary');
+        lines.push('');
+        // Add usage example comment
+        lines.push('    /// Usage Example:');
+        lines.push('    /// .overlay(');
+        lines.push('    ///     RoundedRectangle(cornerRadius: cornerRadius + accessibilityFocusOffset)');
+        lines.push('    ///         .stroke(accessibilityFocusColor, lineWidth: accessibilityFocusWidth)');
+        lines.push('    ///         .padding(-accessibilityFocusOffset)');
+        lines.push('    /// )');
+        return lines;
     }
 }
 exports.iOSFormatGenerator = iOSFormatGenerator;

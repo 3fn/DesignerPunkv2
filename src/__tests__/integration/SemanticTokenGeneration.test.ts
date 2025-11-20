@@ -316,6 +316,20 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
           
           expect(androidResult.content).toContain(androidSemanticName);
           expect(androidResult.content).toContain(androidPrimitiveName);
+        } else {
+          // Multi-primitive token (e.g., typography with fontSize, lineHeight, etc.)
+          // Just verify the semantic token name exists in each platform's output
+          const webSemanticName = getPlatformTokenName(semantic.name, 'web', semantic.category as any);
+          const iosSemanticName = getPlatformTokenName(semantic.name, 'ios', semantic.category as any);
+          const androidSemanticName = getPlatformTokenName(semantic.name, 'android', semantic.category as any);
+          
+          expect(webResult.content).toContain(webSemanticName);
+          expect(iosResult.content).toContain(iosSemanticName);
+          expect(androidResult.content).toContain(androidSemanticName);
+          
+          // Verify at least one primitive reference exists for multi-primitive tokens
+          const primitiveRefs = Object.values(semantic.primitiveReferences);
+          expect(primitiveRefs.length).toBeGreaterThan(0);
         }
       });
     });
