@@ -1,14 +1,32 @@
 /**
  * Tests for Release Analysis CLI
+ * 
+ * Optimization Strategy:
+ * - Mock external npm commands (slow, external)
+ * - Use minimal test fixtures (reduce processing time)
+ * - Keep file system operations real (validate actual behavior)
+ * - Keep ReleaseAnalyzer real (test our code)
+ * - Increase timeout as safety net (45s)
  */
 
 import { ReleaseCLI, AnalysisOptions } from '../ReleaseCLI';
+import { execSync } from 'child_process';
+
+// Mock external npm commands only (these are slow and external)
+jest.mock('child_process', () => ({
+  execSync: jest.fn().mockReturnValue('mock npm output')
+}));
+
+// Increase timeout for integration tests (safety net)
+jest.setTimeout(45000); // 45 seconds
 
 describe('ReleaseCLI', () => {
   let cli: ReleaseCLI;
 
   beforeEach(() => {
     cli = new ReleaseCLI();
+    // Clear any previous mock calls
+    jest.clearAllMocks();
   });
 
   describe('analyzeChanges', () => {
@@ -88,6 +106,7 @@ describe('ReleaseCLI', () => {
     let mockResult: any;
 
     beforeEach(() => {
+      // Minimal but valid test fixture (optimized for speed)
       mockResult = {
         scope: {
           fromTag: 'v1.0.0',
@@ -97,7 +116,16 @@ describe('ReleaseCLI', () => {
         },
         changes: {
           breakingChanges: [],
-          newFeatures: [{ id: '1', title: 'Test Feature', description: 'Test', benefits: [], requirements: [], artifacts: [], source: 'test', category: 'test' }],
+          newFeatures: [{ 
+            id: '1', 
+            title: 'Test Feature', 
+            description: 'Test', 
+            benefits: [], 
+            requirements: [], 
+            artifacts: [], 
+            source: 'test', 
+            category: 'test' 
+          }],
           bugFixes: [],
           improvements: [],
           documentation: [],
@@ -120,8 +148,9 @@ describe('ReleaseCLI', () => {
         confidence: {
           overall: 0.9,
           extraction: 0.9,
-          versioning: 0.9,
-          completeness: 0.9
+          categorization: 0.9,
+          deduplication: 0.9,
+          versionCalculation: 0.9
         }
       };
     });

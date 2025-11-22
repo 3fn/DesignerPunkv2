@@ -33,7 +33,10 @@ describe('WorkflowMonitor', () => {
   let monitor: WorkflowMonitor;
   let config: DetectionConfig;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    // Set up fake timers before initialization
+    jest.useFakeTimers();
+    
     config = {
       ...DEFAULT_RELEASE_CONFIG.detection,
       monitorPaths: [
@@ -47,12 +50,18 @@ describe('WorkflowMonitor', () => {
       enableHookIntegration: true
     });
     jest.clearAllMocks();
-    jest.useFakeTimers();
+    
+    // Initialize monitoring
+    await monitor.startMonitoring();
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    // Stop monitoring and cleanup
+    await monitor.stopMonitoring();
+    
+    // Clear all timers and restore real timers
+    jest.clearAllTimers();
     jest.useRealTimers();
-    monitor.stopMonitoring();
   });
 
   describe('Event Detection', () => {
@@ -126,9 +135,21 @@ describe('WorkflowMonitor', () => {
       await monitor.triggerEvent('spec-completion', 'test-source-2');
       await monitor.triggerEvent('file-change', 'test-source-3');
 
-      // Process the queue
-      jest.advanceTimersByTime(1500);
-      await new Promise(resolve => setTimeout(resolve, 0));
+      // Advance timer to trigger processing interval
+      jest.advanceTimersByTime(1000);
+      
+      // Allow async processing to start
+      await Promise.resolve();
+      
+      // Advance timers for each event processing delay (100ms between events)
+      jest.advanceTimersByTime(100);
+      await Promise.resolve();
+      
+      jest.advanceTimersByTime(100);
+      await Promise.resolve();
+      
+      jest.advanceTimersByTime(100);
+      await Promise.resolve();
 
       expect(processedEvents).toHaveLength(3);
       expect(processedEvents[0].source).toBe('test-source-1');
@@ -143,6 +164,9 @@ describe('WorkflowMonitor', () => {
         enableHookIntegration: false
       });
 
+      // Initialize monitoring
+      await smallQueueMonitor.startMonitoring();
+
       // Set small queue size for testing
       (smallQueueMonitor as any).eventQueue.maxSize = 2;
 
@@ -154,7 +178,7 @@ describe('WorkflowMonitor', () => {
       const queueStatus = smallQueueMonitor.getQueueStatus();
       expect(queueStatus.queueLength).toBe(2); // Should not exceed maxSize
 
-      smallQueueMonitor.stopMonitoring();
+      await smallQueueMonitor.stopMonitoring();
     });
 
     it('should clear queue when requested', async () => {
@@ -190,7 +214,9 @@ describe('WorkflowMonitor', () => {
 
       // Advance timers to trigger git check
       jest.advanceTimersByTime(10000);
-      await new Promise(resolve => setTimeout(resolve, 0));
+      
+      // Allow async operations to complete
+      await Promise.resolve();
 
       expect(detectedEvents.some(e => 
         e.type === 'task-completion' && 
@@ -222,7 +248,9 @@ describe('WorkflowMonitor', () => {
 
       // Advance timers to trigger check
       jest.advanceTimersByTime(2000);
-      await new Promise(resolve => setTimeout(resolve, 0));
+      
+      // Allow async operations to complete
+      await Promise.resolve();
 
       expect(detectedEvents.some(e => 
         e.type === 'task-completion' && 
@@ -251,7 +279,9 @@ describe('WorkflowMonitor', () => {
 
       // Advance timers to trigger check
       jest.advanceTimersByTime(5000);
-      await new Promise(resolve => setTimeout(resolve, 0));
+      
+      // Allow async operations to complete
+      await Promise.resolve();
 
       expect(detectedEvents.some(e => 
         e.type === 'file-change' && 
@@ -369,17 +399,19 @@ describe('WorkflowMonitor', () => {
 
   describe('Monitoring Lifecycle', () => {
     it('should start and stop monitoring correctly', async () => {
-      expect((monitor as any).isMonitoring).toBe(false);
-
-      await monitor.startMonitoring();
+      // Monitor is already started in beforeEach
       expect((monitor as any).isMonitoring).toBe(true);
 
       await monitor.stopMonitoring();
       expect((monitor as any).isMonitoring).toBe(false);
+
+      // Start again
+      await monitor.startMonitoring();
+      expect((monitor as any).isMonitoring).toBe(true);
     });
 
     it('should not start monitoring if already monitoring', async () => {
-      await monitor.startMonitoring();
+      // Monitor is already started in beforeEach
       const firstState = (monitor as any).isMonitoring;
 
       await monitor.startMonitoring(); // Should not change state
@@ -392,9 +424,14 @@ describe('WorkflowMonitor', () => {
     it('should emit monitoring events', async () => {
       const events: string[] = [];
 
+      // Stop the monitor that was started in beforeEach
+      await monitor.stopMonitoring();
+
+      // Set up event listeners
       monitor.on('monitoring-started', () => events.push('started'));
       monitor.on('monitoring-stopped', () => events.push('stopped'));
 
+      // Start and stop to capture events
       await monitor.startMonitoring();
       await monitor.stopMonitoring();
 
@@ -468,7 +505,9 @@ describe('WorkflowMonitor', () => {
 
       // Advance timers to trigger git check
       jest.advanceTimersByTime(10000);
-      await new Promise(resolve => setTimeout(resolve, 0));
+      
+      // Allow async operations to complete
+      await Promise.resolve();
 
       // Should continue working despite git errors
       expect(true).toBe(true);
@@ -482,7 +521,9 @@ describe('WorkflowMonitor', () => {
       await (monitor as any).setupHookIntegration();
 
       jest.advanceTimersByTime(2000);
-      await new Promise(resolve => setTimeout(resolve, 0));
+      
+      // Allow async operations to complete
+      await Promise.resolve();
 
       expect(true).toBe(true);
     });
@@ -498,8 +539,15 @@ describe('WorkflowMonitor', () => {
 
       await monitor.triggerEvent('task-completion', '.kiro/specs/test/completion/task-1-completion.md');
 
-      jest.advanceTimersByTime(1500);
-      await new Promise(resolve => setTimeout(resolve, 0));
+      // Advance timer to trigger processing
+      jest.advanceTimersByTime(1000);
+      
+      // Allow async processing to start
+      await Promise.resolve();
+      
+      // Advance timers for event processing delay
+      jest.advanceTimersByTime(100);
+      await Promise.resolve();
 
       expect(errors.length).toBeGreaterThan(0);
     });
