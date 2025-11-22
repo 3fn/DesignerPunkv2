@@ -158,6 +158,11 @@ export class CompletionAnalyzer {
         patchReleaseReason
       };
     } catch (error) {
+      // Log the error with stack trace for debugging
+      console.error('[CompletionAnalyzer] Error parsing task completion document:', error);
+      if (error instanceof Error) {
+        console.error('[CompletionAnalyzer] Stack trace:', error.stack);
+      }
       throw new Error(`Failed to parse task completion document: ${error}`);
     }
   }
@@ -194,6 +199,11 @@ export class CompletionAnalyzer {
   async extractBreakingChanges(document: CompletionDocument): Promise<BreakingChange[]> {
     const breakingChanges: BreakingChange[] = [];
     const content = document.content;
+    
+    // Add null check for content
+    if (!content || typeof content !== 'string') {
+      return breakingChanges;
+    }
 
     // Prioritized extraction strategy: structured sections first
     const breakingChangeSections = this.findSections(content, [
@@ -244,6 +254,11 @@ export class CompletionAnalyzer {
   async extractFeatures(document: CompletionDocument): Promise<Feature[]> {
     const features: Feature[] = [];
     const content = document.content;
+    
+    // Add null check for content
+    if (!content || typeof content !== 'string') {
+      return features;
+    }
 
     // Prioritized extraction strategy: structured sections first
     const featureSections = this.findSections(content, [
@@ -292,6 +307,11 @@ export class CompletionAnalyzer {
   async extractBugFixes(document: CompletionDocument): Promise<BugFix[]> {
     const bugFixes: BugFix[] = [];
     const content = document.content;
+    
+    // Add null check for content
+    if (!content || typeof content !== 'string') {
+      return bugFixes;
+    }
 
     // Check for documentation sections to avoid extracting documentation fixes as bug fixes
     const documentationSections = this.findSections(content, [
@@ -346,6 +366,11 @@ export class CompletionAnalyzer {
   async extractImprovements(document: CompletionDocument): Promise<Improvement[]> {
     const improvements: Improvement[] = [];
     const content = document.content;
+    
+    // Add null check for content
+    if (!content || typeof content !== 'string') {
+      return improvements;
+    }
 
     // Prioritized extraction strategy: structured sections first
     const improvementSections = this.findSections(content, [
@@ -445,10 +470,16 @@ export class CompletionAnalyzer {
   }
 
   private extractDocumentMetadata(content: string): DocumentMetadata {
-    const lines = content.split('\n');
     const metadata: DocumentMetadata = {
       title: 'Untitled'
     };
+    
+    // Add null check for content
+    if (!content || typeof content !== 'string') {
+      return metadata;
+    }
+    
+    const lines = content.split('\n');
 
     // Extract title from first heading
     const titleMatch = content.match(/^#\s+(.+)$/m);
@@ -484,6 +515,12 @@ export class CompletionAnalyzer {
 
   private findSections(content: string, sectionNames: string[]): string[] {
     const sections: string[] = [];
+    
+    // Add null check for content
+    if (!content || typeof content !== 'string') {
+      return sections;
+    }
+    
     const lines = content.split('\n');
 
     for (let i = 0; i < lines.length; i++) {
@@ -525,6 +562,12 @@ export class CompletionAnalyzer {
 
   private async parseBreakingChangeSection(section: string, source: string): Promise<BreakingChange[]> {
     const changes: BreakingChange[] = [];
+    
+    // Add null check for section
+    if (!section || typeof section !== 'string') {
+      return changes;
+    }
+    
     const lines = section.split('\n');
 
     for (const line of lines) {
@@ -590,6 +633,12 @@ export class CompletionAnalyzer {
 
   private async parseFeaturesSection(section: string, source: string): Promise<Feature[]> {
     const features: Feature[] = [];
+    
+    // Add null check for section
+    if (!section || typeof section !== 'string') {
+      return features;
+    }
+    
     const lines = section.split('\n');
 
     for (const line of lines) {
@@ -662,6 +711,12 @@ export class CompletionAnalyzer {
 
   private async parseBugFixSection(section: string, source: string): Promise<BugFix[]> {
     const bugFixes: BugFix[] = [];
+    
+    // Add null check for section
+    if (!section || typeof section !== 'string') {
+      return bugFixes;
+    }
+    
     const lines = section.split('\n');
 
     for (const line of lines) {
@@ -750,6 +805,12 @@ export class CompletionAnalyzer {
 
   private async parseImprovementSection(section: string, source: string): Promise<Improvement[]> {
     const improvements: Improvement[] = [];
+    
+    // Add null check for section
+    if (!section || typeof section !== 'string') {
+      return improvements;
+    }
+    
     const lines = section.split('\n');
 
     for (const line of lines) {
@@ -884,15 +945,21 @@ export class CompletionAnalyzer {
   }
 
   private determineSuggestedVersionBump(analysis: ReleaseAnalysis): 'major' | 'minor' | 'patch' {
-    if (analysis.breakingChanges.length > 0) {
+    // Add safety checks for undefined arrays
+    const breakingChanges = analysis.breakingChanges || [];
+    const newFeatures = analysis.newFeatures || [];
+    const bugFixes = analysis.bugFixes || [];
+    const improvements = analysis.improvements || [];
+    
+    if (breakingChanges.length > 0) {
       return 'major';
     }
 
-    if (analysis.newFeatures.length > 0) {
+    if (newFeatures.length > 0) {
       return 'minor';
     }
 
-    if (analysis.bugFixes.length > 0 || analysis.improvements.length > 0) {
+    if (bugFixes.length > 0 || improvements.length > 0) {
       return 'patch';
     }
 
@@ -916,7 +983,9 @@ export class CompletionAnalyzer {
     }
 
     // Increase confidence based on content quality
-    const contentLength = document.content.length;
+    // Add null check for content
+    const content = document.content || '';
+    const contentLength = content.length;
     if (contentLength > 500) {
       confidence += 0.1;
     }
@@ -928,17 +997,23 @@ export class CompletionAnalyzer {
     // Increase confidence based on structured sections
     const structuredSections = ['summary', 'implementation', 'approach', 'decisions', 'artifacts'];
     const foundSections = structuredSections.filter(section =>
-      document.content.toLowerCase().includes(`## ${section}`) ||
-      document.content.toLowerCase().includes(`# ${section}`)
+      content.toLowerCase().includes(`## ${section}`) ||
+      content.toLowerCase().includes(`# ${section}`)
     );
 
     confidence += foundSections.length * 0.05;
 
     // Increase confidence based on analysis results
-    const totalChanges = analysis.breakingChanges.length +
-      analysis.newFeatures.length +
-      analysis.bugFixes.length +
-      analysis.improvements.length;
+    // Add safety checks for undefined arrays
+    const breakingChanges = analysis.breakingChanges || [];
+    const newFeatures = analysis.newFeatures || [];
+    const bugFixes = analysis.bugFixes || [];
+    const improvements = analysis.improvements || [];
+    
+    const totalChanges = breakingChanges.length +
+      newFeatures.length +
+      bugFixes.length +
+      improvements.length;
 
     if (totalChanges > 0) {
       confidence += 0.2;
@@ -961,10 +1036,16 @@ export class CompletionAnalyzer {
     const averageConfidence = totalConfidence / documents.length;
 
     // Adjust based on analysis completeness
-    const totalChanges = analysis.breakingChanges.length +
-      analysis.newFeatures.length +
-      analysis.bugFixes.length +
-      analysis.improvements.length;
+    // Add safety checks for undefined arrays
+    const breakingChanges = analysis.breakingChanges || [];
+    const newFeatures = analysis.newFeatures || [];
+    const bugFixes = analysis.bugFixes || [];
+    const improvements = analysis.improvements || [];
+    
+    const totalChanges = breakingChanges.length +
+      newFeatures.length +
+      bugFixes.length +
+      improvements.length;
 
     let completenessBonus = 0;
     if (totalChanges > 0) {
@@ -1100,15 +1181,24 @@ export class CompletionAnalyzer {
 
   private determineTaskPatchReleaseNecessity(analysis: ReleaseAnalysis, document: CompletionDocument): boolean {
     // Task completion warrants patch release if:
-    // 1. Bug fixes are present
-    // 2. Improvements that affect functionality
-    // 3. Implementation changes that could affect behavior
-    // 4. Configuration or validation changes
+    // 1. New features are present (minor release)
+    // 2. Bug fixes are present (patch release)
+    // 3. Improvements that affect functionality (patch release)
+    // 4. Implementation changes that could affect behavior (patch release)
+    // 5. Configuration or validation changes (patch release)
 
+    // Add safety checks for undefined arrays
+    const newFeatures = analysis.newFeatures || [];
+    const bugFixes = analysis.bugFixes || [];
+    const improvements = analysis.improvements || [];
 
+    // New features always warrant a release (minor)
+    if (newFeatures.length > 0) {
+      return true;
+    }
 
     // Filter out documentation-related bug fixes
-    const functionalBugFixes = analysis.bugFixes.filter(bugFix => {
+    const functionalBugFixes = bugFixes.filter(bugFix => {
       const description = bugFix.description.toLowerCase();
       const isDocumentationFix = description.includes('typos') ||
         description.includes('formatting') ||
@@ -1125,7 +1215,7 @@ export class CompletionAnalyzer {
     }
 
     // Check if improvements suggest functional changes (not documentation improvements)
-    const functionalImprovements = analysis.improvements.filter(imp =>
+    const functionalImprovements = improvements.filter(imp =>
       imp.type === 'performance' ||
       imp.type === 'usability' ||
       imp.description.toLowerCase().includes('behavior') ||
@@ -1138,10 +1228,12 @@ export class CompletionAnalyzer {
     }
 
     // Check for implementation artifacts that suggest functional changes
-    const content = document.content.toLowerCase();
+    // Add null check for content
+    const documentContent = document.content || '';
+    const content = documentContent.toLowerCase();
 
     // Check if this is primarily documentation work
-    const documentationSections = this.findSections(document.content, [
+    const documentationSections = this.findSections(documentContent, [
       'documentation updates',
       'documentation changes',
       'readme updates'
@@ -1194,7 +1286,8 @@ export class CompletionAnalyzer {
       taskTitle.includes('doc ');
 
     // Check summary for documentation indicators
-    const summaryMatch = document.content.match(/## Summary\s*\n([^#]*)/i);
+    // documentContent already declared above
+    const summaryMatch = documentContent.match(/## Summary\s*\n([^#]*)/i);
     const summary = summaryMatch ? summaryMatch[1].toLowerCase() : '';
     const summaryIsDocumentation = summary.includes('documentation') ||
       summary.includes('examples') ||
@@ -1226,13 +1319,17 @@ export class CompletionAnalyzer {
 
   private generatePatchReleaseReason(analysis: ReleaseAnalysis, document: CompletionDocument): string {
     const reasons: string[] = [];
+    
+    // Add safety checks for undefined arrays
+    const bugFixes = analysis.bugFixes || [];
+    const improvements = analysis.improvements || [];
 
-    if (analysis.bugFixes.length > 0) {
-      reasons.push(`${analysis.bugFixes.length} bug fix(es)`);
+    if (bugFixes.length > 0) {
+      reasons.push(`${bugFixes.length} bug fix(es)`);
     }
 
-    if (analysis.improvements.length > 0) {
-      const functionalImprovements = analysis.improvements.filter(imp =>
+    if (improvements.length > 0) {
+      const functionalImprovements = improvements.filter(imp =>
         imp.type === 'performance' || imp.type === 'usability'
       );
       if (functionalImprovements.length > 0) {
@@ -1241,7 +1338,8 @@ export class CompletionAnalyzer {
     }
 
     // Check for specific improvement types in the content
-    const content = document.content.toLowerCase();
+    // Add null check for content
+    const content = (document.content || '').toLowerCase();
     if (content.includes('performance') && content.includes('optimization')) {
       reasons.push('performance optimization');
     }
@@ -1256,6 +1354,12 @@ export class CompletionAnalyzer {
   private async detectBreakingChangesByKeywords(document: CompletionDocument): Promise<BreakingChange[]> {
     const breakingChanges: BreakingChange[] = [];
     const content = document.content;
+    
+    // Add null check for content
+    if (!content || typeof content !== 'string') {
+      return breakingChanges;
+    }
+    
     const lines = content.split('\n');
 
     for (let i = 0; i < lines.length; i++) {
@@ -1381,6 +1485,12 @@ export class CompletionAnalyzer {
 
   private async detectRemovalPatterns(section: string, source: string): Promise<BreakingChange[]> {
     const breakingChanges: BreakingChange[] = [];
+    
+    // Add null check for section
+    if (!section || typeof section !== 'string') {
+      return breakingChanges;
+    }
+    
     const lines = section.split('\n');
 
     const removalPatterns = [

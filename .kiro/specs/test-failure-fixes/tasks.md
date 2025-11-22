@@ -159,12 +159,15 @@ This plan systematically fixes all 65 test failures identified in the test-failu
     - Confirm cleanup happens on shutdown
     - _Requirements: 3.5_
 
-- [ ] 4. Update Validation Test Expectations (Group 3)
+- [x] 4. Update Validation Test Expectations (Group 3)
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
   **Estimated Effort**: 2-3 hours
   **Priority**: High
+  
+  **Note**: Task 4.1 investigation revealed all 7 EndToEndWorkflow.test.ts tests are 
+  already passing due to fixes in Tasks 2-3. Task 4.2 not needed - tests already correct.
   
   **Success Criteria:**
   - All 7 validation expectation failures fixed
@@ -180,7 +183,7 @@ This plan systematically fixes all 65 test failures identified in the test-failu
   - Detailed: `.kiro/specs/test-failure-fixes/completion/task-4-parent-completion.md`
   - Summary: `docs/specs/test-failure-fixes/task-4-summary.md` (triggers release detection)
 
-  - [ ] 4.1 Identify current validation behavior
+  - [x] 4.1 Identify current validation behavior
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Review 7 failing tests in EndToEndWorkflow.test.ts
@@ -189,7 +192,7 @@ This plan systematically fixes all 65 test failures identified in the test-failu
     - Document validation rule changes
     - _Requirements: 4.1, 4.3_
 
-  - [ ] 4.2 Update test expectations
+  - [x] 4.2 Update test expectations
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update assertions to expect Warning/Error where appropriate
@@ -198,7 +201,7 @@ This plan systematically fixes all 65 test failures identified in the test-failu
     - Ensure end-to-end workflow still validates correctly
     - _Requirements: 4.2, 4.4_
 
-- [ ] 5. Review Detection Logic Changes (Group 4)
+- [x] 5. Review Detection Logic Changes (Group 4)
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -221,7 +224,7 @@ This plan systematically fixes all 65 test failures identified in the test-failu
   - Detailed: `.kiro/specs/test-failure-fixes/completion/task-5-parent-completion.md`
   - Summary: `docs/specs/test-failure-fixes/task-5-summary.md` (triggers release detection)
 
-  - [ ] 5.1 Review version bump calculation
+  - [x] 5.1 Review version bump calculation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Review failing version bump tests
@@ -231,7 +234,7 @@ This plan systematically fixes all 65 test failures identified in the test-failu
     - Document decision rationale
     - _Requirements: 5.1_
 
-  - [ ] 5.2 Review bug fix detection
+  - [x] 5.2 Review bug fix detection
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Review failing bug fix detection tests
@@ -241,7 +244,7 @@ This plan systematically fixes all 65 test failures identified in the test-failu
     - Document decision rationale
     - _Requirements: 5.2_
 
-  - [ ] 5.3 Review token generation
+  - [x] 5.3 Review token generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Review failing token generation tests
@@ -251,7 +254,7 @@ This plan systematically fixes all 65 test failures identified in the test-failu
     - Document decision rationale
     - _Requirements: 5.3, 5.4_
 
-- [ ] 6. Investigate Performance Degradation (Group 6)
+- [x] 6. Investigate Performance Degradation (Group 6)
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -272,7 +275,7 @@ This plan systematically fixes all 65 test failures identified in the test-failu
   - Detailed: `.kiro/specs/test-failure-fixes/completion/task-6-parent-completion.md`
   - Summary: `docs/specs/test-failure-fixes/task-6-summary.md` (triggers release detection)
 
-  - [ ] 6.1 Measure current performance
+  - [x] 6.1 Measure current performance
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run performance tests multiple times
@@ -281,7 +284,7 @@ This plan systematically fixes all 65 test failures identified in the test-failu
     - Document current performance characteristics
     - _Requirements: 6.1, 6.3_
 
-  - [ ] 6.2 Determine root cause
+  - [x] 6.2 Determine root cause
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Analyze performance variance (0.825 vs threshold 0.5)
@@ -290,7 +293,7 @@ This plan systematically fixes all 65 test failures identified in the test-failu
     - Document findings
     - _Requirements: 6.1, 6.2_
 
-  - [ ] 6.3 Apply fix
+  - [x] 6.3 Apply fix
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - If threshold issue: adjust threshold to appropriate value

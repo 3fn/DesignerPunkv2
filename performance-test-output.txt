@@ -1,0 +1,49 @@
+
+> designer-punk-v2@1.0.0 test
+> jest --testPathIgnorePatterns='performance/__tests__|__tests__/performance' --testNamePattern=should maintain consistent performance
+
+PASS src/__tests__/integration/PerformanceValidation.test.ts
+FAIL src/release-analysis/validation/__tests__/AccuracyRegressionTests.test.ts
+  ● Accuracy Regression Tests › Performance Regression Standards › should maintain consistent performance across test runs
+
+    expect(received).toBeLessThan(expected)
+
+    Expected: < 0.5
+    Received:   3.1121112563653774
+
+      290 |       const variance = (maxTime - minTime) / avgTime;
+      291 |
+    > 292 |       expect(variance).toBeLessThan(0.5);
+          |                        ^
+      293 |
+      294 |       // Accuracy should be consistent (within 5% variance)
+      295 |       const avgAccuracy = accuracies.reduce((sum, acc) => sum + acc, 0) / accuracies.length;
+
+      at Object.<anonymous> (src/release-analysis/validation/__tests__/AccuracyRegressionTests.test.ts:292:24)
+
+
+Summary of all failing tests
+FAIL src/release-analysis/validation/__tests__/AccuracyRegressionTests.test.ts
+  ● Accuracy Regression Tests › Performance Regression Standards › should maintain consistent performance across test runs
+
+    expect(received).toBeLessThan(expected)
+
+    Expected: < 0.5
+    Received:   3.1121112563653774
+
+      290 |       const variance = (maxTime - minTime) / avgTime;
+      291 |
+    > 292 |       expect(variance).toBeLessThan(0.5);
+          |                        ^
+      293 |
+      294 |       // Accuracy should be consistent (within 5% variance)
+      295 |       const avgAccuracy = accuracies.reduce((sum, acc) => sum + acc, 0) / accuracies.length;
+
+      at Object.<anonymous> (src/release-analysis/validation/__tests__/AccuracyRegressionTests.test.ts:292:24)
+
+
+Test Suites: 1 failed, 167 skipped, 1 passed, 2 of 169 total
+Tests:       1 failed, 3895 skipped, 1 passed, 3897 total
+Snapshots:   0 total
+Time:        3.861 s, estimated 16 s
+Ran all test suites with tests matching "should maintain consistent performance".
