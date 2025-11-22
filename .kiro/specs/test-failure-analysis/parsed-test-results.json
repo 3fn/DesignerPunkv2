@@ -1,0 +1,1277 @@
+{
+  "timestamp": "2025-11-21T23:22:08.413Z",
+  "summary": {
+    "testSuites": {
+      "failed": 10,
+      "passed": 159,
+      "total": 169
+    },
+    "tests": {
+      "failed": 89,
+      "skipped": 13,
+      "passed": 3789,
+      "total": 3891
+    },
+    "passRate": "97.38%"
+  },
+  "failedSuites": [
+    "src/__tests__/integration/CrossPlatformConsistency.test.ts",
+    "src/__tests__/integration/EndToEndWorkflow.test.ts",
+    "src/__tests__/integration/PerformanceValidation.test.ts",
+    "src/__tests__/integration/SemanticTokenGeneration.test.ts",
+    "src/__tests__/integration/TokenSystemIntegration.test.ts",
+    "src/components/core/ButtonCTA/__tests__/ButtonCTA.test.ts",
+    "src/release-analysis/cli/__tests__/ReleaseCLI.test.ts",
+    "src/release-analysis/validation/__tests__/AccuracyRegressionTests.test.ts",
+    "src/release/detection/__tests__/DetectionSystemIntegration.test.ts",
+    "src/release/detection/__tests__/WorkflowMonitor.test.ts"
+  ],
+  "failedTests": [
+    {
+      "suite": "Semantic Token Generation - End-to-End Integration",
+      "describe": "Cross-Platform Consistency",
+      "testName": "should generate same semantic token names across all platforms (with platform-specific formatting)",
+      "fullName": "Semantic Token Generation - End-to-End Integration › Cross-Platform Consistency › should generate same semantic token names across all platforms (with platform-specific formatting)",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Expected substring: \"z_index_container\"\n    Received string:    \"/**\n     * DesignerPunk Design System - Android Tokens\n     * Generated: 2025-11-21T23:15:01.202Z\n     * Version: 1.0.0\n     * Platform: Android (Kotlin Constants)\n     */·\n    package com.designerpunk.tokens·\n    object DesignTokens {·"
+    },
+    {
+      "suite": "Semantic Token Generation - End-to-End Integration",
+      "describe": "Cross-Platform Consistency",
+      "testName": "should maintain identical primitive→semantic relationships across platforms",
+      "fullName": "Semantic Token Generation - End-to-End Integration › Cross-Platform Consistency › should maintain identical primitive→semantic relationships across platforms",
+      "errorPreview": "TypeError: Cannot read properties of undefined (reading 'value')\n      294 |       // Verify each platform maintains the same relationships\n      295 |       semanticTokens.forEach(semantic => {\n    > 296 |         if (semantic.primitiveReferences.value) {\n          |                                          ^\n      297 |           // Single-reference token - all platforms should reference the same primitive\n      298 |           const primitiveRef = semantic.primitiveReferences.value;\n      299..."
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Required Props",
+      "testName": "should render with required props (label, onPress)",
+      "fullName": "ButtonCTA Component Rendering › Required Props › should render with required props (label, onPress)",
+      "errorPreview": "expect(received).toBeTruthy()\n    Received: undefined\n      35 |       // Wait for component to render\n      36 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 37 |       expect(shadowButton).toBeTruthy();\n         |                            ^\n      38 |       expect(shadowButton?.textContent).toContain('Click me');\n      39 |     });\n      40 |"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Required Props",
+      "testName": "should have default size of medium when not specified",
+      "fullName": "ButtonCTA Component Rendering › Required Props › should have default size of medium when not specified",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"medium\"\n    Received: undefined\n      45 |       container.appendChild(button);\n      46 |       \n    > 47 |       expect(button.size).toBe('medium');\n         |                           ^\n      48 |       const shadowButton = button.shadowRoot?.querySelector('button');\n      49 |       expect(shadowButton?.className).toContain('button-cta--medium');\n      50 |     });"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Required Props",
+      "testName": "should have default style of primary when not specified",
+      "fullName": "ButtonCTA Component Rendering › Required Props › should have default style of primary when not specified",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"primary\"\n    Received: undefined\n      56 |       container.appendChild(button);\n      57 |       \n    > 58 |       expect(button.buttonStyle).toBe('primary');\n         |                                  ^\n      59 |       const shadowButton = button.shadowRoot?.querySelector('button');\n      60 |       expect(shadowButton?.className).toContain('button-cta--primary');\n      61 |     });"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Size Variants",
+      "testName": "should render small size with correct class",
+      "fullName": "ButtonCTA Component Rendering › Size Variants › should render small size with correct class",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Matcher error: received value must not be null nor undefined\n    Received has value: undefined\n      71 |       \n      72 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 73 |       expect(shadowButton?.className).toContain('button-cta--small');\n         |                                       ^\n      74 |     });\n      75 |     \n      76 |     it('should render medium size with correct class', () => {"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Size Variants",
+      "testName": "should render medium size with correct class",
+      "fullName": "ButtonCTA Component Rendering › Size Variants › should render medium size with correct class",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Matcher error: received value must not be null nor undefined\n    Received has value: undefined\n      82 |       \n      83 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 84 |       expect(shadowButton?.className).toContain('button-cta--medium');\n         |                                       ^\n      85 |     });\n      86 |     \n      87 |     it('should render large size with correct class', () => {"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Size Variants",
+      "testName": "should render large size with correct class",
+      "fullName": "ButtonCTA Component Rendering › Size Variants › should render large size with correct class",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Matcher error: received value must not be null nor undefined\n    Received has value: undefined\n      93 |       \n      94 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 95 |       expect(shadowButton?.className).toContain('button-cta--large');\n         |                                       ^\n      96 |     });\n      97 |     \n      98 |     it('should apply all size classes correctly', () => {"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Size Variants",
+      "testName": "should apply all size classes correctly",
+      "fullName": "ButtonCTA Component Rendering › Size Variants › should apply all size classes correctly",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Matcher error: received value must not be null nor undefined\n    Received has value: undefined\n      107 |         \n      108 |         const shadowButton = button.shadowRoot?.querySelector('button');\n    > 109 |         expect(shadowButton?.className).toContain(`button-cta--${size}`);\n          |                                         ^\n      110 |         \n      111 |         container.removeChild(button);\n      112 |       });"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Style Variants",
+      "testName": "should render primary style with correct class",
+      "fullName": "ButtonCTA Component Rendering › Style Variants › should render primary style with correct class",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Matcher error: received value must not be null nor undefined\n    Received has value: undefined\n      123 |       \n      124 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 125 |       expect(shadowButton?.className).toContain('button-cta--primary');\n          |                                       ^\n      126 |     });\n      127 |     \n      128 |     it('should render secondary style with correct class', () => {"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Style Variants",
+      "testName": "should render secondary style with correct class",
+      "fullName": "ButtonCTA Component Rendering › Style Variants › should render secondary style with correct class",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Matcher error: received value must not be null nor undefined\n    Received has value: undefined\n      134 |       \n      135 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 136 |       expect(shadowButton?.className).toContain('button-cta--secondary');\n          |                                       ^\n      137 |     });\n      138 |     \n      139 |     it('should render tertiary style with correct class', () => ..."
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Style Variants",
+      "testName": "should render tertiary style with correct class",
+      "fullName": "ButtonCTA Component Rendering › Style Variants › should render tertiary style with correct class",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Matcher error: received value must not be null nor undefined\n    Received has value: undefined\n      145 |       \n      146 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 147 |       expect(shadowButton?.className).toContain('button-cta--tertiary');\n          |                                       ^\n      148 |     });\n      149 |     \n      150 |     it('should apply all style classes correctly', () => {"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Style Variants",
+      "testName": "should apply all style classes correctly",
+      "fullName": "ButtonCTA Component Rendering › Style Variants › should apply all style classes correctly",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Matcher error: received value must not be null nor undefined\n    Received has value: undefined\n      159 |         \n      160 |         const shadowButton = button.shadowRoot?.querySelector('button');\n    > 161 |         expect(shadowButton?.className).toContain(`button-cta--${style}`);\n          |                                         ^\n      162 |         \n      163 |         container.removeChild(button);\n      164 |       });"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Icon Integration",
+      "testName": "should render icon when icon prop provided",
+      "fullName": "ButtonCTA Component Rendering › Icon Integration › should render icon when icon prop provided",
+      "errorPreview": "expect(received).toBeTruthy()\n    Received: undefined\n      175 |       \n      176 |       const iconElement = button.shadowRoot?.querySelector('.button-cta__icon');\n    > 177 |       expect(iconElement).toBeTruthy();\n          |                           ^\n      178 |       expect(iconElement?.getAttribute('aria-hidden')).toBe('true');\n      179 |     });\n      180 |"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Icon Integration",
+      "testName": "should render icon with correct size for small/medium buttons",
+      "fullName": "ButtonCTA Component Rendering › Icon Integration › should render icon with correct size for small/medium buttons",
+      "errorPreview": "expect(received).toBeTruthy()\n    Received: undefined\n      198 |       \n      199 |       const iconElement = button.shadowRoot?.querySelector('.button-cta__icon');\n    > 200 |       expect(iconElement).toBeTruthy();\n          |                           ^\n      201 |       // Icon size is handled by createIcon function, we just verify it exists\n      202 |     });\n      203 |"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Icon Integration",
+      "testName": "should render icon with correct size for large buttons",
+      "fullName": "ButtonCTA Component Rendering › Icon Integration › should render icon with correct size for large buttons",
+      "errorPreview": "expect(received).toBeTruthy()\n    Received: undefined\n      211 |       \n      212 |       const iconElement = button.shadowRoot?.querySelector('.button-cta__icon');\n    > 213 |       expect(iconElement).toBeTruthy();\n          |                           ^\n      214 |       // Icon size is handled by createIcon function, we just verify it exists\n      215 |     });\n      216 |"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Icon Integration",
+      "testName": "should mark icon as decorative with aria-hidden",
+      "fullName": "ButtonCTA Component Rendering › Icon Integration › should mark icon as decorative with aria-hidden",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"true\"\n    Received: undefined\n      223 |       \n      224 |       const iconElement = button.shadowRoot?.querySelector('.button-cta__icon');\n    > 225 |       expect(iconElement?.getAttribute('aria-hidden')).toBe('true');\n          |                                                        ^\n      226 |     });\n      227 |   });\n      228 |"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Text Wrapping",
+      "testName": "should allow text wrapping by default",
+      "fullName": "ButtonCTA Component Rendering › Text Wrapping › should allow text wrapping by default",
+      "errorPreview": "expect(received).toBeTruthy()\n    Received: undefined\n      235 |       \n      236 |       const labelElement = button.shadowRoot?.querySelector('.button-cta__label');\n    > 237 |       expect(labelElement).toBeTruthy();\n          |                            ^\n      238 |       expect(labelElement?.className).toBe('button-cta__label');\n      239 |     });\n      240 |"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Text Wrapping",
+      "testName": "should truncate text with ellipsis when noWrap is true",
+      "fullName": "ButtonCTA Component Rendering › Text Wrapping › should truncate text with ellipsis when noWrap is true",
+      "errorPreview": "expect(received).toBeTruthy()\n    Received: undefined\n      247 |       \n      248 |       const labelElement = button.shadowRoot?.querySelector('.button-cta__label--no-wrap');\n    > 249 |       expect(labelElement).toBeTruthy();\n          |                            ^\n      250 |       expect(labelElement?.className).toBe('button-cta__label--no-wrap');\n      251 |     });\n      252 |"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Text Wrapping",
+      "testName": "should center-align text horizontally",
+      "fullName": "ButtonCTA Component Rendering › Text Wrapping › should center-align text horizontally",
+      "errorPreview": "expect(received).toBeTruthy()\n    Received: undefined\n      258 |       \n      259 |       const labelElement = button.shadowRoot?.querySelector('.button-cta__label');\n    > 260 |       expect(labelElement).toBeTruthy();\n          |                            ^\n      261 |       // CSS handles centering, we just verify the element exists\n      262 |     });\n      263 |   });"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Disabled State",
+      "testName": "should render disabled button with correct attributes",
+      "fullName": "ButtonCTA Component Rendering › Disabled State › should render disabled button with correct attributes",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: true\n    Received: undefined\n      272 |       \n      273 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 274 |       expect(shadowButton?.hasAttribute('disabled')).toBe(true);\n          |                                                      ^\n      275 |       expect(shadowButton?.getAttribute('aria-disabled')).toBe('true');\n      276 |       expect(shadowButton?.className).toContain('button-cta--..."
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Disabled State",
+      "testName": "should not have disabled attributes when disabled is false",
+      "fullName": "ButtonCTA Component Rendering › Disabled State › should not have disabled attributes when disabled is false",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: false\n    Received: undefined\n      285 |       \n      286 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 287 |       expect(shadowButton?.hasAttribute('disabled')).toBe(false);\n          |                                                      ^\n      288 |       expect(shadowButton?.getAttribute('aria-disabled')).toBe('false');\n      289 |       expect(shadowButton?.className).not.toContain('butto..."
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Accessibility Attributes",
+      "testName": "should have correct ARIA role",
+      "fullName": "ButtonCTA Component Rendering › Accessibility Attributes › should have correct ARIA role",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"button\"\n    Received: undefined\n      317 |       \n      318 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 319 |       expect(shadowButton?.getAttribute('role')).toBe('button');\n          |                                                  ^\n      320 |     });\n      321 |     \n      322 |     it('should have aria-label matching button text', () => {"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Accessibility Attributes",
+      "testName": "should have aria-label matching button text",
+      "fullName": "ButtonCTA Component Rendering › Accessibility Attributes › should have aria-label matching button text",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Submit Form\"\n    Received: undefined\n      327 |       \n      328 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 329 |       expect(shadowButton?.getAttribute('aria-label')).toBe('Submit Form');\n          |                                                        ^\n      330 |     });\n      331 |     \n      332 |     it('should have correct type attribute', () => {"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Accessibility Attributes",
+      "testName": "should have correct type attribute",
+      "fullName": "ButtonCTA Component Rendering › Accessibility Attributes › should have correct type attribute",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"button\"\n    Received: undefined\n      337 |       \n      338 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 339 |       expect(shadowButton?.getAttribute('type')).toBe('button');\n          |                                                  ^\n      340 |     });\n      341 |   });\n      342 |"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Test ID Support",
+      "testName": "should apply test ID when provided",
+      "fullName": "ButtonCTA Component Rendering › Test ID Support › should apply test ID when provided",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"submit-button\"\n    Received: undefined\n      350 |       \n      351 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 352 |       expect(shadowButton?.getAttribute('data-testid')).toBe('submit-button');\n          |                                                         ^\n      353 |     });\n      354 |     \n      355 |     it('should not have test ID attribute when not provided', () => {"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Test ID Support",
+      "testName": "should not have test ID attribute when not provided",
+      "fullName": "ButtonCTA Component Rendering › Test ID Support › should not have test ID attribute when not provided",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: false\n    Received: undefined\n      360 |       \n      361 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 362 |       expect(shadowButton?.hasAttribute('data-testid')).toBe(false);\n          |                                                         ^\n      363 |     });\n      364 |   });\n      365 |"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Combined Props",
+      "testName": "should render with all props combined correctly",
+      "fullName": "ButtonCTA Component Rendering › Combined Props › should render with all props combined correctly",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Matcher error: received value must not be null nor undefined\n    Received has value: undefined\n      377 |       \n      378 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 379 |       expect(shadowButton?.className).toContain('button-cta--large');\n          |                                       ^\n      380 |       expect(shadowButton?.className).toContain('button-cta--secondary');\n      381 |       expect(shadow..."
+    },
+    {
+      "suite": "Detection System Integration",
+      "describe": "End-to-End Release Detection Scenarios",
+      "testName": "should detect and validate minor release from task completion with new features",
+      "fullName": "Detection System Integration › End-to-End Release Detection Scenarios › should detect and validate minor release from task completion with new features",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"minor\"\n    Received: \"major\"\n      205 |       expect(taskAnalysis.analysis.newFeatures).toHaveLength(3);\n      206 |       // With improved extraction, this should be minor (not major due to better accuracy)\n    > 207 |       expect(taskAnalysis.analysis.suggestedVersionBump).toBe('minor');\n          |                                                          ^\n      208 |\n      209 |       // Step 3: Validate release readiness..."
+    },
+    {
+      "suite": "Detection System Integration",
+      "describe": "End-to-End Release Detection Scenarios",
+      "testName": "should detect patch release from bug fix task completion",
+      "fullName": "Detection System Integration › End-to-End Release Detection Scenarios › should detect patch release from bug fix task completion",
+      "errorPreview": "expect(received).toHaveLength(expected)\n    Expected length: 3\n    Received length: 0\n    Received array:  []\n      281 |       expect(taskAnalysis.needsPatchRelease).toBe(true);\n      282 |       // With improved extraction, bug fixes are properly detected from structured sections\n    > 283 |       expect(taskAnalysis.analysis.bugFixes).toHaveLength(3);\n          |                                              ^\n      284 |       expect(taskAnalysis.analysis.newFeatures).toHaveLength(0);\n      2..."
+    },
+    {
+      "suite": "Detection System Integration",
+      "describe": "End-to-End Release Detection Scenarios",
+      "testName": "should not trigger release for documentation-only changes",
+      "fullName": "Detection System Integration › End-to-End Release Detection Scenarios › should not trigger release for documentation-only changes",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: false\n    Received: true\n      353 |\n      354 |       // With improved filtering, documentation-only changes should not need patch release\n    > 355 |       expect(taskAnalysis.needsPatchRelease).toBe(false);\n          |                                              ^\n      356 |       expect(taskAnalysis.analysis.newFeatures).toHaveLength(0);\n      357 |       expect(taskAnalysis.analysis.bugFixes).toHaveLength(0);\n      358 | ..."
+    },
+    {
+      "suite": "End-to-End Workflow Integration",
+      "describe": "Complete Token Definition Workflow",
+      "testName": "should complete full workflow: define → validate → query",
+      "fullName": "End-to-End Workflow Integration › Complete Token Definition Workflow › should complete full workflow: define → validate → query",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: true\n    Received: false\n      62 |       // Step 2: Register and validate\n      63 |       const primitiveResults = engine.registerPrimitiveTokens(primitiveTokens);\n    > 64 |       expect(primitiveResults.every(r => r.level === 'Pass')).toBe(true);\n         |                                                               ^\n      65 |\n      66 |       // Step 3: Define semantic tokens\n      67 |       const semanticTokens: Seman..."
+    },
+    {
+      "suite": "End-to-End Workflow Integration",
+      "describe": "Complete Token Definition Workflow",
+      "testName": "should handle workflow with strategic flexibility tokens",
+      "fullName": "End-to-End Workflow Integration › Complete Token Definition Workflow › should handle workflow with strategic flexibility tokens",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: true\n    Received: false\n      154 |\n      155 |       const results = engine.registerPrimitiveTokens(tokens);\n    > 156 |       expect(results.every(r => r.level === 'Pass')).toBe(true);\n          |                                                      ^\n      157 |\n      158 |       // Verify strategic flexibility tracking\n      159 |       const stats = engine.getStats();"
+    },
+    {
+      "suite": "End-to-End Workflow Integration",
+      "describe": "Multi-Category Token System Workflow",
+      "testName": "should handle tokens across multiple categories",
+      "fullName": "End-to-End Workflow Integration › Multi-Category Token System Workflow › should handle tokens across multiple categories",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: true\n    Received: false\n      221 |\n      222 |       const results = engine.registerPrimitiveTokens(tokens);\n    > 223 |       expect(results.every(r => r.level === 'Pass')).toBe(true);\n          |                                                      ^\n      224 |\n      225 |       // Query by category\n      226 |       const spacingTokens = engine.queryPrimitiveTokens({ category: TokenCategory.SPACING });"
+    },
+    {
+      "suite": "End-to-End Workflow Integration",
+      "describe": "Validation and Error Recovery Workflow",
+      "testName": "should detect and report validation errors",
+      "fullName": "End-to-End Workflow Integration › Validation and Error Recovery Workflow › should detect and report validation errors",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Pass\"\n    Received: \"Error\"\n      255 |\n      256 |       const validResult = engine.registerPrimitiveToken(validToken);\n    > 257 |       expect(validResult.level).toBe('Pass');\n          |                                 ^\n      258 |\n      259 |       // Attempt to register invalid token\n      260 |       const invalidToken: PrimitiveToken = {"
+    },
+    {
+      "suite": "End-to-End Workflow Integration",
+      "describe": "Semantic Token Composition Workflow",
+      "testName": "should compose hierarchical semantic token system",
+      "fullName": "End-to-End Workflow Integration › Semantic Token Composition Workflow › should compose hierarchical semantic token system",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: true\n    Received: false\n      410 |\n      411 |       const results = engine.registerSemanticTokens(semanticTokens);\n    > 412 |       expect(results.every(r => r.level === 'Pass')).toBe(true);\n          |                                                      ^\n      413 |\n      414 |       // Verify hierarchical structure\n      415 |       const allSemantics = engine.getAllSemanticTokens();"
+    },
+    {
+      "suite": "End-to-End Workflow Integration",
+      "describe": "Semantic Token Composition Workflow",
+      "testName": "should validate semantic token references",
+      "fullName": "End-to-End Workflow Integration › Semantic Token Composition Workflow › should validate semantic token references",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Pass\"\n    Received: \"Error\"\n      437 |\n      438 |       const validResult = engine.registerSemanticToken(validSemantic);\n    > 439 |       expect(validResult.level).toBe('Pass');\n          |                                 ^\n      440 |\n      441 |       // Invalid semantic token (non-existent primitive)\n      442 |       const invalidSemantic: SemanticToken = {"
+    },
+    {
+      "suite": "End-to-End Workflow Integration",
+      "describe": "State Persistence Workflow",
+      "testName": "should export and import complete system state",
+      "fullName": "End-to-End Workflow Integration › State Persistence Workflow › should export and import complete system state",
+      "errorPreview": "expect(received).toHaveLength(expected)\n    Expected length: 1\n    Received length: 0\n    Received array:  []\n      592 |       // Export state\n      593 |       const state = engine.exportState();\n    > 594 |       expect(state.primitiveTokens).toHaveLength(1);\n          |                                     ^\n      595 |       expect(state.semanticTokens).toHaveLength(1);\n      596 |"
+    },
+    {
+      "suite": "Performance Validation Integration",
+      "describe": "Validation Performance",
+      "testName": "should validate single token in <5ms",
+      "fullName": "Performance Validation Integration › Validation Performance › should validate single token in <5ms",
+      "errorPreview": "TypeError: Cannot use 'in' operator to search for 'baseValue' in undefined\n      183 |     options: ValidationOptions\n      184 |   ): ThreeTierValidationContext {\n    > 185 |     const isPrimitive = 'baseValue' in token;\n          |                                    ^\n      186 |     \n      187 |     const context: ThreeTierValidationContext = {\n      188 |       token,"
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Platform Unit Conversion Consistency",
+      "testName": "should maintain proportional relationships across platforms",
+      "fullName": "Cross-Platform Consistency Integration › Platform Unit Conversion Consistency › should maintain proportional relationships across platforms",
+      "errorPreview": "TypeError: Cannot read properties of undefined (reading 'platforms')\n      64 |\n      65 |       // Verify proportional relationships maintained across platforms\n    > 66 |       expect((space200.platforms.web.value as number) / (space100.platforms.web.value as number)).toBe(2);\n         |                                                                   ^\n      67 |       expect((space200.platforms.ios.value as number) / (space100.platforms.ios.value as number)).toBe(2);\n      68 |       expect..."
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Platform Unit Conversion Consistency",
+      "testName": "should handle typography tokens with REM conversion on web",
+      "fullName": "Cross-Platform Consistency Integration › Platform Unit Conversion Consistency › should handle typography tokens with REM conversion on web",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Pass\"\n    Received: \"Error\"\n      133 |\n      134 |       const result = engine.registerPrimitiveToken(token);\n    > 135 |       expect(result.level).toBe('Pass');\n          |                            ^\n      136 |\n      137 |       // Verify mathematical equivalence\n      138 |       const registered = engine.getPrimitiveToken('fontSize100')!;"
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Mathematical Relationship Consistency",
+      "testName": "should maintain modular scale relationships across platforms",
+      "fullName": "Cross-Platform Consistency Integration › Mathematical Relationship Consistency › should maintain modular scale relationships across platforms",
+      "errorPreview": "TypeError: Cannot read properties of undefined (reading 'platforms')\n      186 |\n      187 |       // Verify modular scale maintained across platforms\n    > 188 |       const webRatio = (fontSize125.platforms.web.value as number) / (fontSize100.platforms.web.value as number);\n          |                                                                                   ^\n      189 |       const iosRatio = (fontSize125.platforms.ios.value as number) / (fontSize100.platforms.ios.value as number);\n ..."
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Mathematical Relationship Consistency",
+      "testName": "should maintain baseline grid alignment across platforms",
+      "fullName": "Cross-Platform Consistency Integration › Mathematical Relationship Consistency › should maintain baseline grid alignment across platforms",
+      "errorPreview": "TypeError: Cannot read properties of undefined (reading 'platforms')\n      237 |       const space400 = engine.getPrimitiveToken('space400')!;\n      238 |\n    > 239 |       expect((space100.platforms.web.value as number) % 8).toBe(0);\n          |                        ^\n      240 |       expect((space100.platforms.ios.value as number) % 8).toBe(0);\n      241 |       expect((space100.platforms.android.value as number) % 8).toBe(0);\n      242 |"
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Strategic Flexibility Cross-Platform Consistency",
+      "testName": "should maintain strategic flexibility values across platforms",
+      "fullName": "Cross-Platform Consistency Integration › Strategic Flexibility Cross-Platform Consistency › should maintain strategic flexibility values across platforms",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Pass\"\n    Received: \"Warning\"\n      267 |\n      268 |       const result = engine.registerPrimitiveToken(token);\n    > 269 |       expect(result.level).toBe('Pass');\n          |                            ^\n      270 |\n      271 |       // Verify strategic flexibility value consistent across platforms\n      272 |       const registered = engine.getPrimitiveToken('space075')!;"
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Strategic Flexibility Cross-Platform Consistency",
+      "testName": "should validate strategic flexibility proportions across platforms",
+      "fullName": "Cross-Platform Consistency Integration › Strategic Flexibility Cross-Platform Consistency › should validate strategic flexibility proportions across platforms",
+      "errorPreview": "TypeError: Cannot read properties of undefined (reading 'platforms')\n      318 |\n      319 |       // Verify 0.75 ratio maintained across platforms\n    > 320 |       expect((space075.platforms.web.value as number) / (space100.platforms.web.value as number)).toBe(0.75);\n          |                                                                   ^\n      321 |       expect((space075.platforms.ios.value as number) / (space100.platforms.ios.value as number)).toBe(0.75);\n      322 |       expect((sp..."
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Platform-Specific Unit Handling",
+      "testName": "should use correct units for each platform",
+      "fullName": "Cross-Platform Consistency Integration › Platform-Specific Unit Handling › should use correct units for each platform",
+      "errorPreview": "TypeError: Cannot read properties of undefined (reading 'platforms')\n      346 |       const registered = engine.getPrimitiveToken('space100')!;\n      347 |\n    > 348 |       expect(registered.platforms.web.unit).toBe('px');\n          |                         ^\n      349 |       expect(registered.platforms.ios.unit).toBe('pt');\n      350 |       expect(registered.platforms.android.unit).toBe('dp');\n      351 |     });"
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Platform-Specific Unit Handling",
+      "testName": "should use correct units for typography tokens",
+      "fullName": "Cross-Platform Consistency Integration › Platform-Specific Unit Handling › should use correct units for typography tokens",
+      "errorPreview": "TypeError: Cannot read properties of undefined (reading 'platforms')\n      372 |       const registered = engine.getPrimitiveToken('fontSize100')!;\n      373 |\n    > 374 |       expect(registered.platforms.web.unit).toBe('rem');\n          |                         ^\n      375 |       expect(registered.platforms.ios.unit).toBe('pt');\n      376 |       expect(registered.platforms.android.unit).toBe('sp');\n      377 |     });"
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Platform-Specific Unit Handling",
+      "testName": "should use unitless values for line height",
+      "fullName": "Cross-Platform Consistency Integration › Platform-Specific Unit Handling › should use unitless values for line height",
+      "errorPreview": "TypeError: Cannot read properties of undefined (reading 'platforms')\n      398 |       const registered = engine.getPrimitiveToken('lineHeight100')!;\n      399 |\n    > 400 |       expect(registered.platforms.web.unit).toBe('unitless');\n          |                         ^\n      401 |       expect(registered.platforms.ios.unit).toBe('unitless');\n      402 |       expect(registered.platforms.android.unit).toBe('unitless');\n      403 |     });"
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Precision Targeting Consistency",
+      "testName": "should maintain precision multipliers across platforms",
+      "fullName": "Cross-Platform Consistency Integration › Precision Targeting Consistency › should maintain precision multipliers across platforms",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Pass\"\n    Received: \"Error\"\n      424 |\n      425 |       const result = engine.registerPrimitiveToken(lineHeightToken);\n    > 426 |       expect(result.level).toBe('Pass');\n          |                            ^\n      427 |\n      428 |       const registered = engine.getPrimitiveToken('lineHeight100')!;\n      429 |       expect(registered.isPrecisionTargeted).toBe(true);"
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Precision Targeting Consistency",
+      "testName": "should validate tap area precision targeting",
+      "fullName": "Cross-Platform Consistency Integration › Precision Targeting Consistency › should validate tap area precision targeting",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Pass\"\n    Received: \"Error\"\n      452 |\n      453 |       const result = engine.registerPrimitiveToken(tapAreaToken);\n    > 454 |       expect(result.level).toBe('Pass');\n          |                            ^\n      455 |\n      456 |       const registered = engine.getPrimitiveToken('tapAreaMinimum')!;\n      457 |       expect(registered.isPrecisionTargeted).toBe(true);"
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Multi-Token Cross-Platform Validation",
+      "testName": "should detect cross-platform inconsistencies",
+      "fullName": "Cross-Platform Consistency Integration › Multi-Token Cross-Platform Validation › should detect cross-platform inconsistencies",
+      "errorPreview": "expect(received).toBeGreaterThan(expected)\n    Expected: > 0\n    Received:   0\n      567 |       );\n      568 |\n    > 569 |       expect(warnings.length).toBeGreaterThan(0);\n          |                               ^\n      570 |     });\n      571 |   });\n      572 |"
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Platform Translation Validation",
+      "testName": "should generate consistent platform outputs",
+      "fullName": "Cross-Platform Consistency Integration › Platform Translation Validation › should generate consistent platform outputs",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: true\n    Received: false\n      597 |\n      598 |       expect(outputs).toHaveLength(3);\n    > 599 |       expect(outputs.every(o => o.validationStatus === 'valid')).toBe(true);\n          |                                                                  ^\n      600 |       expect(outputs.map(o => o.platform)).toContain('web');\n      601 |       expect(outputs.map(o => o.platform)).toContain('ios');\n      602 |       expect(outpu..."
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Primitive Token Registration and Validation",
+      "testName": "should register and validate baseline grid-aligned token",
+      "fullName": "Token System Integration › Primitive Token Registration and Validation › should register and validate baseline grid-aligned token",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Pass\"\n    Received: \"Error\"\n      82 |       const result = engine.registerPrimitiveToken(token);\n      83 |\n    > 84 |       expect(result.level).toBe('Pass');\n         |                            ^\n      85 |       expect(result.token).toBe('space100');\n      86 |       expect(engine.getPrimitiveToken('space100')).toEqual(token);\n      87 |     });"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Primitive Token Registration and Validation",
+      "testName": "should register and validate strategic flexibility token",
+      "fullName": "Token System Integration › Primitive Token Registration and Validation › should register and validate strategic flexibility token",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Pass\"\n    Received: \"Warning\"\n      107 |       const result = engine.registerPrimitiveToken(token);\n      108 |\n    > 109 |       expect(result.level).toBe('Pass');\n          |                            ^\n      110 |       expect(result.token).toBe('space075');\n      111 |     });\n      112 |"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Primitive Token Registration and Validation",
+      "testName": "should register multiple tokens in batch",
+      "fullName": "Token System Integration › Primitive Token Registration and Validation › should register multiple tokens in batch",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: true\n    Received: false\n      174 |\n      175 |       expect(results).toHaveLength(2);\n    > 176 |       expect(results.every(r => r.level === 'Pass')).toBe(true);\n          |                                                      ^\n      177 |       expect(engine.getAllPrimitiveTokens()).toHaveLength(2);\n      178 |     });\n      179 |   });"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Semantic Token Registration and Validation",
+      "testName": "should register semantic token with valid primitive reference",
+      "fullName": "Token System Integration › Semantic Token Registration and Validation › should register semantic token with valid primitive reference",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Pass\"\n    Received: \"Error\"\n      214 |       const result = engine.registerSemanticToken(semanticToken);\n      215 |\n    > 216 |       expect(result.level).toBe('Pass');\n          |                            ^\n      217 |       expect(result.token).toBe('space.normal');\n      218 |       expect(engine.getSemanticToken('space.normal')).toBeDefined();\n      219 |     });"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Semantic Token Registration and Validation",
+      "testName": "should register multiple semantic tokens in batch",
+      "fullName": "Token System Integration › Semantic Token Registration and Validation › should register multiple semantic tokens in batch",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: true\n    Received: false\n      258 |\n      259 |       expect(results).toHaveLength(2);\n    > 260 |       expect(results.every(r => r.level === 'Pass')).toBe(true);\n          |                                                      ^\n      261 |       expect(engine.getAllSemanticTokens()).toHaveLength(2);\n      262 |     });\n      263 |   });"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Token Query and Retrieval",
+      "testName": "should retrieve primitive token by name",
+      "fullName": "Token System Integration › Token Query and Retrieval › should retrieve primitive token by name",
+      "errorPreview": "expect(received).toBeDefined()\n    Received: undefined\n      307 |       const token = engine.getPrimitiveToken('space100');\n      308 |\n    > 309 |       expect(token).toBeDefined();\n          |                     ^\n      310 |       expect(token?.name).toBe('space100');\n      311 |       expect(token?.baseValue).toBe(8);\n      312 |     });"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Token Query and Retrieval",
+      "testName": "should query primitive tokens by category",
+      "fullName": "Token System Integration › Token Query and Retrieval › should query primitive tokens by category",
+      "errorPreview": "expect(received).toHaveLength(expected)\n    Expected length: 1\n    Received length: 0\n    Received array:  []\n      317 |       });\n      318 |\n    > 319 |       expect(spacingTokens).toHaveLength(1);\n          |                             ^\n      320 |       expect(spacingTokens[0].name).toBe('space100');\n      321 |     });"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Token Query and Retrieval",
+      "testName": "should get all primitive tokens",
+      "fullName": "Token System Integration › Token Query and Retrieval › should get all primitive tokens",
+      "errorPreview": "expect(received).toHaveLength(expected)\n    Expected length: 2\n    Received length: 0\n    Received array:  []\n      324 |       const allTokens = engine.getAllPrimitiveTokens();\n      325 |\n    > 326 |       expect(allTokens).toHaveLength(2);\n          |                         ^\n      327 |       expect(allTokens.map(t => t.name)).toContain('space100');\n      328 |       expect(allTokens.map(t => t.name)).toContain('fontSize100');"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "System Statistics",
+      "testName": "should provide accurate primitive token statistics",
+      "fullName": "Token System Integration › System Statistics › should provide accurate primitive token statistics",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: 2\n    Received: 1\n      453 |       const stats = engine.getStats();\n      454 |\n    > 455 |       expect(stats.primitiveTokens.total).toBe(2);\n          |                                           ^\n      456 |       expect(stats.primitiveTokens.strategicFlexibility).toBe(1);\n      457 |       expect(stats.primitiveTokens.strategicFlexibilityPercentage).toBe(50);\n      458 |     });"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "System Statistics",
+      "testName": "should provide accurate semantic token statistics",
+      "fullName": "Token System Integration › System Statistics › should provide accurate semantic token statistics",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: 1\n    Received: 0\n      461 |       const stats = engine.getStats();\n      462 |\n    > 463 |       expect(stats.semanticTokens.total).toBe(1);\n          |                                          ^\n      464 |     });\n      465 |\n      466 |     it('should track validation statistics', () => {"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "State Management",
+      "testName": "should export system state",
+      "fullName": "Token System Integration › State Management › should export system state",
+      "errorPreview": "expect(received).toHaveLength(expected)\n    Expected length: 1\n    Received length: 0\n    Received array:  []\n      524 |       const state = engine.exportState();\n      525 |\n    > 526 |       expect(state.primitiveTokens).toHaveLength(1);\n          |                                     ^\n      527 |       expect(state.semanticTokens).toHaveLength(0);\n      528 |       expect(state.config).toBeDefined();"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "State Management",
+      "testName": "should import system state",
+      "fullName": "Token System Integration › State Management › should import system state",
+      "errorPreview": "expect(received).toHaveLength(expected)\n    Expected length: 1\n    Received length: 0\n    Received array:  []\n      538 |       expect(result.success).toBe(true);\n      539 |       expect(result.errors).toHaveLength(0);\n    > 540 |       expect(newEngine.getAllPrimitiveTokens()).toHaveLength(1);\n          |                                                 ^\n      541 |     });\n      542 |"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Error Handling",
+      "testName": "should handle duplicate token registration",
+      "fullName": "Token System Integration › Error Handling › should handle duplicate token registration",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Expected substring: \"already exists\"\n    Received string:    \"Family foundation violation\"\n      572 |\n      573 |       expect(result.level).toBe('Error');\n    > 574 |       expect(result.message).toContain('already exists');\n          |                              ^\n      575 |     });\n      576 |\n      577 |     it('should handle invalid state import', () => {"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Validation Before Registration",
+      "testName": "should validate primitive token and allow registration on pass",
+      "fullName": "Token System Integration › Validation Before Registration › should validate primitive token and allow registration on pass",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Pass\"\n    Received: \"Error\"\n      655 |\n      656 |       // Validation should pass\n    > 657 |       expect(result.level).toBe('Pass');\n          |                            ^\n      658 |       \n      659 |       // Token should be registered\n      660 |       expect(engine.getPrimitiveToken('space100')).toEqual(validToken);"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Validation Before Registration",
+      "testName": "should validate semantic token and allow registration on pass",
+      "fullName": "Token System Integration › Validation Before Registration › should validate semantic token and allow registration on pass",
+      "errorPreview": "expect(received).not.toBe(expected) // Object.is equality\n    Expected: not \"Error\"\n      773 |\n      774 |       // Validation should pass\n    > 775 |       expect(result.level).not.toBe('Error');\n          |                                ^\n      776 |       \n      777 |       // Token should be registered\n      778 |       expect(engine.getSemanticToken('spacing.base')).toEqual(validSemanticToken);"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Validation Before Registration",
+      "testName": "should validate batch registration and prevent registration of invalid tokens",
+      "fullName": "Token System Integration › Validation Before Registration › should validate batch registration and prevent registration of invalid tokens",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Pass\"\n    Received: \"Error\"\n      848 |\n      849 |       // First token should pass\n    > 850 |       expect(results[0].level).toBe('Pass');\n          |                                ^\n      851 |       expect(engine.getPrimitiveToken('space100')).toBeDefined();\n      852 |\n      853 |       // Second token should fail"
+    },
+    {
+      "suite": "Accuracy Regression Tests",
+      "describe": "Performance Regression Standards",
+      "testName": "should maintain consistent performance across test runs",
+      "fullName": "Accuracy Regression Tests › Performance Regression Standards › should maintain consistent performance across test runs",
+      "errorPreview": "expect(received).toBeLessThan(expected)\n    Expected: < 0.5\n    Received:   0.8250904575184232\n      290 |       const variance = (maxTime - minTime) / avgTime;\n      291 |\n    > 292 |       expect(variance).toBeLessThan(0.5);\n          |                        ^\n      293 |\n      294 |       // Accuracy should be consistent (within 5% variance)\n      295 |       const avgAccuracy = accuracies.reduce((sum, acc) => sum + acc, 0) / accuracies.length;"
+    },
+    {
+      "suite": "ReleaseCLI",
+      "describe": "analyzeChanges",
+      "testName": "should return analysis result with default options",
+      "fullName": "ReleaseCLI › analyzeChanges › should return analysis result with default options",
+      "errorPreview": "thrown: \"Exceeded timeout of 5000 ms for a test.\n    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.\"\n      13 |\n      14 |   describe('analyzeChanges', () => {\n    > 15 |     it('should return analysis result with default options', async () => {\n         |     ^\n      16 |       const result = await cli.analyzeChanges();\n      17 |\n      18 |       // The method might return an error recovery object or..."
+    },
+    {
+      "suite": "ReleaseCLI",
+      "describe": "analyzeChanges",
+      "testName": "should handle custom options",
+      "fullName": "ReleaseCLI › analyzeChanges › should handle custom options",
+      "errorPreview": "thrown: \"Exceeded timeout of 5000 ms for a test.\n    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.\"\n      31 |     });\n      32 |\n    > 33 |     it('should handle custom options', async () => {\n         |     ^\n      34 |       const options: AnalysisOptions = {\n      35 |         since: 'v1.0.0',\n      36 |         outputFormat: 'detailed',"
+    },
+    {
+      "suite": "ReleaseCLI",
+      "describe": "argument parsing",
+      "testName": "should handle format options",
+      "fullName": "ReleaseCLI › argument parsing › should handle format options",
+      "errorPreview": "thrown: \"Exceeded timeout of 5000 ms for a test.\n    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.\"\n      73 |     });\n      74 |\n    > 75 |     it('should handle format options', async () => {\n         |     ^\n      76 |       const consoleSpy = jest.spyOn(console, 'log').mockImplementation();\n      77 |\n      78 |       await cli.run(['--format', 'json']);"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Event Detection",
+      "testName": "should detect task completion events",
+      "fullName": "WorkflowMonitor › Event Detection › should detect task completion events",
+      "errorPreview": "expect(received).toHaveLength(expected)\n    Expected length: 1\n    Received length: 0\n    Received array:  []\n      69 |       const events = await monitor.checkForCompletionEvents();\n      70 |\n    > 71 |       expect(events).toHaveLength(1);\n         |                      ^\n      72 |       expect(events[0].type).toBe('task-completion');\n      73 |       expect(events[0].source).toContain('task-1-completion.md');"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Event Detection",
+      "testName": "should detect spec completion events",
+      "fullName": "WorkflowMonitor › Event Detection › should detect spec completion events",
+      "errorPreview": "expect(received).toHaveLength(expected)\n    Expected length: 1\n    Received length: 0\n    Received array:  []\n      86 |       const events = await monitor.checkForCompletionEvents();\n      87 |\n    > 88 |       expect(events).toHaveLength(1);\n         |                      ^\n      89 |       expect(events[0].type).toBe('spec-completion');\n      90 |       expect(events[0].source).toContain('spec-completion-summary.md');"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Event Detection",
+      "testName": "should detect file changes in tasks.md",
+      "fullName": "WorkflowMonitor › Event Detection › should detect file changes in tasks.md",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: true\n    Received: false\n      110 |       const events = await monitor.checkForCompletionEvents();\n      111 |\n    > 112 |       expect(events.some(e => e.type === 'file-change' && e.source.includes('tasks.md'))).toBe(true);\n          |                                                                                           ^\n      113 |     });\n      114 |   });\n      115 |"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Event Queue Management",
+      "testName": "should queue events and process them in order",
+      "fullName": "WorkflowMonitor › Event Queue Management › should queue events and process them in order",
+      "errorPreview": "thrown: \"Exceeded timeout of 5000 ms for a test.\n    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.\"\n      115 |\n      116 |   describe('Event Queue Management', () => {\n    > 117 |     it('should queue events and process them in order', async () => {\n          |     ^\n      118 |       const processedEvents: WorkflowEvent[] = [];\n      119 |\n      120 |       monitor.on('event-processed', (event: Work..."
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Event Queue Management",
+      "testName": "should clear queue when requested",
+      "fullName": "WorkflowMonitor › Event Queue Management › should clear queue when requested",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: 1\n    Received: 0\n      162 |       \n      163 |       let queueStatus = monitor.getQueueStatus();\n    > 164 |       expect(queueStatus.queueLength).toBe(1);\n          |                                       ^\n      165 |\n      166 |       monitor.clearQueue();\n      167 |"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Hook Integration",
+      "testName": "should detect git commit events for task completion",
+      "fullName": "WorkflowMonitor › Hook Integration › should detect git commit events for task completion",
+      "errorPreview": "thrown: \"Exceeded timeout of 5000 ms for a test.\n    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.\"\n      173 |\n      174 |   describe('Hook Integration', () => {\n    > 175 |     it('should detect git commit events for task completion', async () => {\n          |     ^\n      176 |       const commitHash = 'abc123def456';\n      177 |       const commitMessage = 'Task 1.1 Complete: Implement validation s..."
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Hook Integration",
+      "testName": "should process trigger files from hook system",
+      "fullName": "WorkflowMonitor › Hook Integration › should process trigger files from hook system",
+      "errorPreview": "thrown: \"Exceeded timeout of 5000 ms for a test.\n    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.\"\n      200 |     });\n      201 |\n    > 202 |     it('should process trigger files from hook system', async () => {\n          |     ^\n      203 |       const triggerData = {\n      204 |         type: 'task-completion',\n      205 |         source: '.kiro/specs/test-spec/tasks.md',"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Hook Integration",
+      "testName": "should monitor file organization events",
+      "fullName": "WorkflowMonitor › Hook Integration › should monitor file organization events",
+      "errorPreview": "thrown: \"Exceeded timeout of 5000 ms for a test.\n    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.\"\n      231 |     });\n      232 |\n    > 233 |     it('should monitor file organization events', async () => {\n          |     ^\n      234 |       const organizationLogContent = `\n      235 | [2025-01-10 10:00:00] Organized: task-1-completion.md -> .kiro/specs/test-spec/completion/\n      236 | [2025-01-10 ..."
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Event Processing",
+      "testName": "should process task completion events",
+      "fullName": "WorkflowMonitor › Event Processing › should process task completion events",
+      "errorPreview": "expect(received).toHaveLength(expected)\n    Expected length: 1\n    Received length: 0\n    Received array:  []\n      288 |       await monitor.processWorkflowEvent(event);\n      289 |\n    > 290 |       expect(emittedEvents).toHaveLength(1);\n          |                             ^\n      291 |       expect(emittedEvents[0].taskName).toBe('Implement validation system');\n      292 |       expect(emittedEvents[0].taskNumber).toBe('1');"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Event Processing",
+      "testName": "should process file change events for tasks.md",
+      "fullName": "WorkflowMonitor › Event Processing › should process file change events for tasks.md",
+      "errorPreview": "expect(received).toHaveLength(expected)\n    Expected length: 2\n    Received length: 0\n    Received array:  []\n      338 |       await monitor.processWorkflowEvent(event);\n      339 |\n    > 340 |       expect(emittedEvents).toHaveLength(2);\n          |                             ^\n      341 |       expect(emittedEvents[0].taskName).toBe('Completed Task');\n      342 |       expect(emittedEvents[0].status).toBe('completed');"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Monitoring Lifecycle",
+      "testName": "should emit monitoring events",
+      "fullName": "WorkflowMonitor › Monitoring Lifecycle › should emit monitoring events",
+      "errorPreview": "expect(received).toEqual(expected) // deep equality\n    - Expected  - 1\n    + Received  + 0\n      Array [\n        \"started\",\n    -   \"stopped\",\n      ]\n      399 |       await monitor.stopMonitoring();\n      400 |\n    > 401 |       expect(events).toEqual(['started', 'stopped']);"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Path Expansion and Matching",
+      "testName": "should expand glob paths correctly",
+      "fullName": "WorkflowMonitor › Path Expansion and Matching › should expand glob paths correctly",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Expected value: \".kiro/specs/test-spec/completion/task-1-completion.md\"\n    Received array: [\".kiro/specs/another-spec/completion/task-1-completion.md\"]\n      427 |       const expandedPaths = await (monitor as any).expandGlobPath(globPath);\n      428 |\n    > 429 |       expect(expandedPaths).toContain('.kiro/specs/test-spec/completion/task-1-completion.md');\n          |                             ^\n      430 |       expect(expandedPaths).toCo..."
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Path Expansion and Matching",
+      "testName": "should match glob patterns correctly",
+      "fullName": "WorkflowMonitor › Path Expansion and Matching › should match glob patterns correctly",
+      "errorPreview": "TypeError: Cannot read properties of undefined (reading 'bind')\n      432 |\n      433 |     it('should match glob patterns correctly', async () => {\n    > 434 |       const matchesPattern = (monitor as any).matchesPattern.bind(monitor);\n          |                                                              ^\n      435 |\n      436 |       expect(matchesPattern('task-1-completion.md', '*-completion.md')).toBe(true);\n      437 |       expect(matchesPattern('spec-completion-summary.md', '*-complet..."
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Error Handling",
+      "testName": "should handle git command errors",
+      "fullName": "WorkflowMonitor › Error Handling › should handle git command errors",
+      "errorPreview": "thrown: \"Exceeded timeout of 5000 ms for a test.\n    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.\"\n      459 |     });\n      460 |\n    > 461 |     it('should handle git command errors', async () => {\n          |     ^\n      462 |       mockExecSync.mockImplementation(() => {\n      463 |         throw new Error('Git not available');\n      464 |       });"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Error Handling",
+      "testName": "should handle malformed trigger files",
+      "fullName": "WorkflowMonitor › Error Handling › should handle malformed trigger files",
+      "errorPreview": "thrown: \"Exceeded timeout of 5000 ms for a test.\n    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.\"\n      475 |     });\n      476 |\n    > 477 |     it('should handle malformed trigger files', async () => {\n          |     ^\n      478 |       mockFs.readdir.mockResolvedValue(['invalid-trigger.json'] as any);\n      479 |       mockFs.readFile.mockResolvedValue('invalid json content');\n      480 |"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Error Handling",
+      "testName": "should emit error events for processing failures",
+      "fullName": "WorkflowMonitor › Error Handling › should emit error events for processing failures",
+      "errorPreview": "thrown: \"Exceeded timeout of 5000 ms for a test.\n    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.\"\n      488 |     });\n      489 |\n    > 490 |     it('should emit error events for processing failures', async () => {\n          |     ^\n      491 |       const errors: Error[] = [];\n      492 |       monitor.on('error', (error: Error) => {\n      493 |         errors.push(error);"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Task Name Extraction",
+      "testName": "should extract task names from tasks.md content",
+      "fullName": "WorkflowMonitor › Task Name Extraction › should extract task names from tasks.md content",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Main Task One\"\n    Received: \"Sub Task One\"\n      520 |       const extractTaskName = (monitor as any).extractTaskName.bind(monitor);\n      521 |\n    > 522 |       expect(extractTaskName(tasksContent, '1')).toBe('Main Task One');\n          |                                                  ^\n      523 |       expect(extractTaskName(tasksContent, '1.1')).toBe('Sub Task One');\n      524 |       expect(extractTaskName(tasksContent..."
+    },
+    {
+      "suite": "Semantic Token Generation - End-to-End Integration",
+      "describe": "Cross-Platform Consistency",
+      "testName": "should generate same semantic token names across all platforms (with platform-specific formatting)",
+      "fullName": "Semantic Token Generation - End-to-End Integration › Cross-Platform Consistency › should generate same semantic token names across all platforms (with platform-specific formatting)",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Expected substring: \"z_index_container\"\n    Received string:    \"/**\n     * DesignerPunk Design System - Android Tokens\n     * Generated: 2025-11-21T23:15:01.202Z\n     * Version: 1.0.0\n     * Platform: Android (Kotlin Constants)\n     */·\n    package com.designerpunk.tokens·\n    object DesignTokens {·"
+    },
+    {
+      "suite": "Semantic Token Generation - End-to-End Integration",
+      "describe": "Cross-Platform Consistency",
+      "testName": "should maintain identical primitive→semantic relationships across platforms",
+      "fullName": "Semantic Token Generation - End-to-End Integration › Cross-Platform Consistency › should maintain identical primitive→semantic relationships across platforms",
+      "errorPreview": "TypeError: Cannot read properties of undefined (reading 'value')\n      294 |       // Verify each platform maintains the same relationships\n      295 |       semanticTokens.forEach(semantic => {\n    > 296 |         if (semantic.primitiveReferences.value) {\n          |                                          ^\n      297 |           // Single-reference token - all platforms should reference the same primitive\n      298 |           const primitiveRef = semantic.primitiveReferences.value;\n      299..."
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Required Props",
+      "testName": "should render with required props (label, onPress)",
+      "fullName": "ButtonCTA Component Rendering › Required Props › should render with required props (label, onPress)",
+      "errorPreview": "expect(received).toBeTruthy()\n    Received: undefined\n      35 |       // Wait for component to render\n      36 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 37 |       expect(shadowButton).toBeTruthy();\n         |                            ^\n      38 |       expect(shadowButton?.textContent).toContain('Click me');\n      39 |     });\n      40 |"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Required Props",
+      "testName": "should have default size of medium when not specified",
+      "fullName": "ButtonCTA Component Rendering › Required Props › should have default size of medium when not specified",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"medium\"\n    Received: undefined\n      45 |       container.appendChild(button);\n      46 |       \n    > 47 |       expect(button.size).toBe('medium');\n         |                           ^\n      48 |       const shadowButton = button.shadowRoot?.querySelector('button');\n      49 |       expect(shadowButton?.className).toContain('button-cta--medium');\n      50 |     });"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Required Props",
+      "testName": "should have default style of primary when not specified",
+      "fullName": "ButtonCTA Component Rendering › Required Props › should have default style of primary when not specified",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"primary\"\n    Received: undefined\n      56 |       container.appendChild(button);\n      57 |       \n    > 58 |       expect(button.buttonStyle).toBe('primary');\n         |                                  ^\n      59 |       const shadowButton = button.shadowRoot?.querySelector('button');\n      60 |       expect(shadowButton?.className).toContain('button-cta--primary');\n      61 |     });"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Size Variants",
+      "testName": "should render small size with correct class",
+      "fullName": "ButtonCTA Component Rendering › Size Variants › should render small size with correct class",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Matcher error: received value must not be null nor undefined\n    Received has value: undefined\n      71 |       \n      72 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 73 |       expect(shadowButton?.className).toContain('button-cta--small');\n         |                                       ^\n      74 |     });\n      75 |     \n      76 |     it('should render medium size with correct class', () => {"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Size Variants",
+      "testName": "should render medium size with correct class",
+      "fullName": "ButtonCTA Component Rendering › Size Variants › should render medium size with correct class",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Matcher error: received value must not be null nor undefined\n    Received has value: undefined\n      82 |       \n      83 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 84 |       expect(shadowButton?.className).toContain('button-cta--medium');\n         |                                       ^\n      85 |     });\n      86 |     \n      87 |     it('should render large size with correct class', () => {"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Size Variants",
+      "testName": "should render large size with correct class",
+      "fullName": "ButtonCTA Component Rendering › Size Variants › should render large size with correct class",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Matcher error: received value must not be null nor undefined\n    Received has value: undefined\n      93 |       \n      94 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 95 |       expect(shadowButton?.className).toContain('button-cta--large');\n         |                                       ^\n      96 |     });\n      97 |     \n      98 |     it('should apply all size classes correctly', () => {"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Size Variants",
+      "testName": "should apply all size classes correctly",
+      "fullName": "ButtonCTA Component Rendering › Size Variants › should apply all size classes correctly",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Matcher error: received value must not be null nor undefined\n    Received has value: undefined\n      107 |         \n      108 |         const shadowButton = button.shadowRoot?.querySelector('button');\n    > 109 |         expect(shadowButton?.className).toContain(`button-cta--${size}`);\n          |                                         ^\n      110 |         \n      111 |         container.removeChild(button);\n      112 |       });"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Style Variants",
+      "testName": "should render primary style with correct class",
+      "fullName": "ButtonCTA Component Rendering › Style Variants › should render primary style with correct class",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Matcher error: received value must not be null nor undefined\n    Received has value: undefined\n      123 |       \n      124 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 125 |       expect(shadowButton?.className).toContain('button-cta--primary');\n          |                                       ^\n      126 |     });\n      127 |     \n      128 |     it('should render secondary style with correct class', () => {"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Style Variants",
+      "testName": "should render secondary style with correct class",
+      "fullName": "ButtonCTA Component Rendering › Style Variants › should render secondary style with correct class",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Matcher error: received value must not be null nor undefined\n    Received has value: undefined\n      134 |       \n      135 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 136 |       expect(shadowButton?.className).toContain('button-cta--secondary');\n          |                                       ^\n      137 |     });\n      138 |     \n      139 |     it('should render tertiary style with correct class', () => ..."
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Style Variants",
+      "testName": "should render tertiary style with correct class",
+      "fullName": "ButtonCTA Component Rendering › Style Variants › should render tertiary style with correct class",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Matcher error: received value must not be null nor undefined\n    Received has value: undefined\n      145 |       \n      146 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 147 |       expect(shadowButton?.className).toContain('button-cta--tertiary');\n          |                                       ^\n      148 |     });\n      149 |     \n      150 |     it('should apply all style classes correctly', () => {"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Style Variants",
+      "testName": "should apply all style classes correctly",
+      "fullName": "ButtonCTA Component Rendering › Style Variants › should apply all style classes correctly",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Matcher error: received value must not be null nor undefined\n    Received has value: undefined\n      159 |         \n      160 |         const shadowButton = button.shadowRoot?.querySelector('button');\n    > 161 |         expect(shadowButton?.className).toContain(`button-cta--${style}`);\n          |                                         ^\n      162 |         \n      163 |         container.removeChild(button);\n      164 |       });"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Icon Integration",
+      "testName": "should render icon when icon prop provided",
+      "fullName": "ButtonCTA Component Rendering › Icon Integration › should render icon when icon prop provided",
+      "errorPreview": "expect(received).toBeTruthy()\n    Received: undefined\n      175 |       \n      176 |       const iconElement = button.shadowRoot?.querySelector('.button-cta__icon');\n    > 177 |       expect(iconElement).toBeTruthy();\n          |                           ^\n      178 |       expect(iconElement?.getAttribute('aria-hidden')).toBe('true');\n      179 |     });\n      180 |"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Icon Integration",
+      "testName": "should render icon with correct size for small/medium buttons",
+      "fullName": "ButtonCTA Component Rendering › Icon Integration › should render icon with correct size for small/medium buttons",
+      "errorPreview": "expect(received).toBeTruthy()\n    Received: undefined\n      198 |       \n      199 |       const iconElement = button.shadowRoot?.querySelector('.button-cta__icon');\n    > 200 |       expect(iconElement).toBeTruthy();\n          |                           ^\n      201 |       // Icon size is handled by createIcon function, we just verify it exists\n      202 |     });\n      203 |"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Icon Integration",
+      "testName": "should render icon with correct size for large buttons",
+      "fullName": "ButtonCTA Component Rendering › Icon Integration › should render icon with correct size for large buttons",
+      "errorPreview": "expect(received).toBeTruthy()\n    Received: undefined\n      211 |       \n      212 |       const iconElement = button.shadowRoot?.querySelector('.button-cta__icon');\n    > 213 |       expect(iconElement).toBeTruthy();\n          |                           ^\n      214 |       // Icon size is handled by createIcon function, we just verify it exists\n      215 |     });\n      216 |"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Icon Integration",
+      "testName": "should mark icon as decorative with aria-hidden",
+      "fullName": "ButtonCTA Component Rendering › Icon Integration › should mark icon as decorative with aria-hidden",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"true\"\n    Received: undefined\n      223 |       \n      224 |       const iconElement = button.shadowRoot?.querySelector('.button-cta__icon');\n    > 225 |       expect(iconElement?.getAttribute('aria-hidden')).toBe('true');\n          |                                                        ^\n      226 |     });\n      227 |   });\n      228 |"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Text Wrapping",
+      "testName": "should allow text wrapping by default",
+      "fullName": "ButtonCTA Component Rendering › Text Wrapping › should allow text wrapping by default",
+      "errorPreview": "expect(received).toBeTruthy()\n    Received: undefined\n      235 |       \n      236 |       const labelElement = button.shadowRoot?.querySelector('.button-cta__label');\n    > 237 |       expect(labelElement).toBeTruthy();\n          |                            ^\n      238 |       expect(labelElement?.className).toBe('button-cta__label');\n      239 |     });\n      240 |"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Text Wrapping",
+      "testName": "should truncate text with ellipsis when noWrap is true",
+      "fullName": "ButtonCTA Component Rendering › Text Wrapping › should truncate text with ellipsis when noWrap is true",
+      "errorPreview": "expect(received).toBeTruthy()\n    Received: undefined\n      247 |       \n      248 |       const labelElement = button.shadowRoot?.querySelector('.button-cta__label--no-wrap');\n    > 249 |       expect(labelElement).toBeTruthy();\n          |                            ^\n      250 |       expect(labelElement?.className).toBe('button-cta__label--no-wrap');\n      251 |     });\n      252 |"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Text Wrapping",
+      "testName": "should center-align text horizontally",
+      "fullName": "ButtonCTA Component Rendering › Text Wrapping › should center-align text horizontally",
+      "errorPreview": "expect(received).toBeTruthy()\n    Received: undefined\n      258 |       \n      259 |       const labelElement = button.shadowRoot?.querySelector('.button-cta__label');\n    > 260 |       expect(labelElement).toBeTruthy();\n          |                            ^\n      261 |       // CSS handles centering, we just verify the element exists\n      262 |     });\n      263 |   });"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Disabled State",
+      "testName": "should render disabled button with correct attributes",
+      "fullName": "ButtonCTA Component Rendering › Disabled State › should render disabled button with correct attributes",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: true\n    Received: undefined\n      272 |       \n      273 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 274 |       expect(shadowButton?.hasAttribute('disabled')).toBe(true);\n          |                                                      ^\n      275 |       expect(shadowButton?.getAttribute('aria-disabled')).toBe('true');\n      276 |       expect(shadowButton?.className).toContain('button-cta--..."
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Disabled State",
+      "testName": "should not have disabled attributes when disabled is false",
+      "fullName": "ButtonCTA Component Rendering › Disabled State › should not have disabled attributes when disabled is false",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: false\n    Received: undefined\n      285 |       \n      286 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 287 |       expect(shadowButton?.hasAttribute('disabled')).toBe(false);\n          |                                                      ^\n      288 |       expect(shadowButton?.getAttribute('aria-disabled')).toBe('false');\n      289 |       expect(shadowButton?.className).not.toContain('butto..."
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Accessibility Attributes",
+      "testName": "should have correct ARIA role",
+      "fullName": "ButtonCTA Component Rendering › Accessibility Attributes › should have correct ARIA role",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"button\"\n    Received: undefined\n      317 |       \n      318 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 319 |       expect(shadowButton?.getAttribute('role')).toBe('button');\n          |                                                  ^\n      320 |     });\n      321 |     \n      322 |     it('should have aria-label matching button text', () => {"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Accessibility Attributes",
+      "testName": "should have aria-label matching button text",
+      "fullName": "ButtonCTA Component Rendering › Accessibility Attributes › should have aria-label matching button text",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Submit Form\"\n    Received: undefined\n      327 |       \n      328 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 329 |       expect(shadowButton?.getAttribute('aria-label')).toBe('Submit Form');\n          |                                                        ^\n      330 |     });\n      331 |     \n      332 |     it('should have correct type attribute', () => {"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Accessibility Attributes",
+      "testName": "should have correct type attribute",
+      "fullName": "ButtonCTA Component Rendering › Accessibility Attributes › should have correct type attribute",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"button\"\n    Received: undefined\n      337 |       \n      338 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 339 |       expect(shadowButton?.getAttribute('type')).toBe('button');\n          |                                                  ^\n      340 |     });\n      341 |   });\n      342 |"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Test ID Support",
+      "testName": "should apply test ID when provided",
+      "fullName": "ButtonCTA Component Rendering › Test ID Support › should apply test ID when provided",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"submit-button\"\n    Received: undefined\n      350 |       \n      351 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 352 |       expect(shadowButton?.getAttribute('data-testid')).toBe('submit-button');\n          |                                                         ^\n      353 |     });\n      354 |     \n      355 |     it('should not have test ID attribute when not provided', () => {"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Test ID Support",
+      "testName": "should not have test ID attribute when not provided",
+      "fullName": "ButtonCTA Component Rendering › Test ID Support › should not have test ID attribute when not provided",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: false\n    Received: undefined\n      360 |       \n      361 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 362 |       expect(shadowButton?.hasAttribute('data-testid')).toBe(false);\n          |                                                         ^\n      363 |     });\n      364 |   });\n      365 |"
+    },
+    {
+      "suite": "ButtonCTA Component Rendering",
+      "describe": "Combined Props",
+      "testName": "should render with all props combined correctly",
+      "fullName": "ButtonCTA Component Rendering › Combined Props › should render with all props combined correctly",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Matcher error: received value must not be null nor undefined\n    Received has value: undefined\n      377 |       \n      378 |       const shadowButton = button.shadowRoot?.querySelector('button');\n    > 379 |       expect(shadowButton?.className).toContain('button-cta--large');\n          |                                       ^\n      380 |       expect(shadowButton?.className).toContain('button-cta--secondary');\n      381 |       expect(shadow..."
+    },
+    {
+      "suite": "Detection System Integration",
+      "describe": "End-to-End Release Detection Scenarios",
+      "testName": "should detect and validate minor release from task completion with new features",
+      "fullName": "Detection System Integration › End-to-End Release Detection Scenarios › should detect and validate minor release from task completion with new features",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"minor\"\n    Received: \"major\"\n      205 |       expect(taskAnalysis.analysis.newFeatures).toHaveLength(3);\n      206 |       // With improved extraction, this should be minor (not major due to better accuracy)\n    > 207 |       expect(taskAnalysis.analysis.suggestedVersionBump).toBe('minor');\n          |                                                          ^\n      208 |\n      209 |       // Step 3: Validate release readiness..."
+    },
+    {
+      "suite": "Detection System Integration",
+      "describe": "End-to-End Release Detection Scenarios",
+      "testName": "should detect patch release from bug fix task completion",
+      "fullName": "Detection System Integration › End-to-End Release Detection Scenarios › should detect patch release from bug fix task completion",
+      "errorPreview": "expect(received).toHaveLength(expected)\n    Expected length: 3\n    Received length: 0\n    Received array:  []\n      281 |       expect(taskAnalysis.needsPatchRelease).toBe(true);\n      282 |       // With improved extraction, bug fixes are properly detected from structured sections\n    > 283 |       expect(taskAnalysis.analysis.bugFixes).toHaveLength(3);\n          |                                              ^\n      284 |       expect(taskAnalysis.analysis.newFeatures).toHaveLength(0);\n      2..."
+    },
+    {
+      "suite": "Detection System Integration",
+      "describe": "End-to-End Release Detection Scenarios",
+      "testName": "should not trigger release for documentation-only changes",
+      "fullName": "Detection System Integration › End-to-End Release Detection Scenarios › should not trigger release for documentation-only changes",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: false\n    Received: true\n      353 |\n      354 |       // With improved filtering, documentation-only changes should not need patch release\n    > 355 |       expect(taskAnalysis.needsPatchRelease).toBe(false);\n          |                                              ^\n      356 |       expect(taskAnalysis.analysis.newFeatures).toHaveLength(0);\n      357 |       expect(taskAnalysis.analysis.bugFixes).toHaveLength(0);\n      358 | ..."
+    },
+    {
+      "suite": "End-to-End Workflow Integration",
+      "describe": "Complete Token Definition Workflow",
+      "testName": "should complete full workflow: define → validate → query",
+      "fullName": "End-to-End Workflow Integration › Complete Token Definition Workflow › should complete full workflow: define → validate → query",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: true\n    Received: false\n      62 |       // Step 2: Register and validate\n      63 |       const primitiveResults = engine.registerPrimitiveTokens(primitiveTokens);\n    > 64 |       expect(primitiveResults.every(r => r.level === 'Pass')).toBe(true);\n         |                                                               ^\n      65 |\n      66 |       // Step 3: Define semantic tokens\n      67 |       const semanticTokens: Seman..."
+    },
+    {
+      "suite": "End-to-End Workflow Integration",
+      "describe": "Complete Token Definition Workflow",
+      "testName": "should handle workflow with strategic flexibility tokens",
+      "fullName": "End-to-End Workflow Integration › Complete Token Definition Workflow › should handle workflow with strategic flexibility tokens",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: true\n    Received: false\n      154 |\n      155 |       const results = engine.registerPrimitiveTokens(tokens);\n    > 156 |       expect(results.every(r => r.level === 'Pass')).toBe(true);\n          |                                                      ^\n      157 |\n      158 |       // Verify strategic flexibility tracking\n      159 |       const stats = engine.getStats();"
+    },
+    {
+      "suite": "End-to-End Workflow Integration",
+      "describe": "Multi-Category Token System Workflow",
+      "testName": "should handle tokens across multiple categories",
+      "fullName": "End-to-End Workflow Integration › Multi-Category Token System Workflow › should handle tokens across multiple categories",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: true\n    Received: false\n      221 |\n      222 |       const results = engine.registerPrimitiveTokens(tokens);\n    > 223 |       expect(results.every(r => r.level === 'Pass')).toBe(true);\n          |                                                      ^\n      224 |\n      225 |       // Query by category\n      226 |       const spacingTokens = engine.queryPrimitiveTokens({ category: TokenCategory.SPACING });"
+    },
+    {
+      "suite": "End-to-End Workflow Integration",
+      "describe": "Validation and Error Recovery Workflow",
+      "testName": "should detect and report validation errors",
+      "fullName": "End-to-End Workflow Integration › Validation and Error Recovery Workflow › should detect and report validation errors",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Pass\"\n    Received: \"Error\"\n      255 |\n      256 |       const validResult = engine.registerPrimitiveToken(validToken);\n    > 257 |       expect(validResult.level).toBe('Pass');\n          |                                 ^\n      258 |\n      259 |       // Attempt to register invalid token\n      260 |       const invalidToken: PrimitiveToken = {"
+    },
+    {
+      "suite": "End-to-End Workflow Integration",
+      "describe": "Semantic Token Composition Workflow",
+      "testName": "should compose hierarchical semantic token system",
+      "fullName": "End-to-End Workflow Integration › Semantic Token Composition Workflow › should compose hierarchical semantic token system",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: true\n    Received: false\n      410 |\n      411 |       const results = engine.registerSemanticTokens(semanticTokens);\n    > 412 |       expect(results.every(r => r.level === 'Pass')).toBe(true);\n          |                                                      ^\n      413 |\n      414 |       // Verify hierarchical structure\n      415 |       const allSemantics = engine.getAllSemanticTokens();"
+    },
+    {
+      "suite": "End-to-End Workflow Integration",
+      "describe": "Semantic Token Composition Workflow",
+      "testName": "should validate semantic token references",
+      "fullName": "End-to-End Workflow Integration › Semantic Token Composition Workflow › should validate semantic token references",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Pass\"\n    Received: \"Error\"\n      437 |\n      438 |       const validResult = engine.registerSemanticToken(validSemantic);\n    > 439 |       expect(validResult.level).toBe('Pass');\n          |                                 ^\n      440 |\n      441 |       // Invalid semantic token (non-existent primitive)\n      442 |       const invalidSemantic: SemanticToken = {"
+    },
+    {
+      "suite": "End-to-End Workflow Integration",
+      "describe": "State Persistence Workflow",
+      "testName": "should export and import complete system state",
+      "fullName": "End-to-End Workflow Integration › State Persistence Workflow › should export and import complete system state",
+      "errorPreview": "expect(received).toHaveLength(expected)\n    Expected length: 1\n    Received length: 0\n    Received array:  []\n      592 |       // Export state\n      593 |       const state = engine.exportState();\n    > 594 |       expect(state.primitiveTokens).toHaveLength(1);\n          |                                     ^\n      595 |       expect(state.semanticTokens).toHaveLength(1);\n      596 |"
+    },
+    {
+      "suite": "Performance Validation Integration",
+      "describe": "Validation Performance",
+      "testName": "should validate single token in <5ms",
+      "fullName": "Performance Validation Integration › Validation Performance › should validate single token in <5ms",
+      "errorPreview": "TypeError: Cannot use 'in' operator to search for 'baseValue' in undefined\n      183 |     options: ValidationOptions\n      184 |   ): ThreeTierValidationContext {\n    > 185 |     const isPrimitive = 'baseValue' in token;\n          |                                    ^\n      186 |     \n      187 |     const context: ThreeTierValidationContext = {\n      188 |       token,"
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Platform Unit Conversion Consistency",
+      "testName": "should maintain proportional relationships across platforms",
+      "fullName": "Cross-Platform Consistency Integration › Platform Unit Conversion Consistency › should maintain proportional relationships across platforms",
+      "errorPreview": "TypeError: Cannot read properties of undefined (reading 'platforms')\n      64 |\n      65 |       // Verify proportional relationships maintained across platforms\n    > 66 |       expect((space200.platforms.web.value as number) / (space100.platforms.web.value as number)).toBe(2);\n         |                                                                   ^\n      67 |       expect((space200.platforms.ios.value as number) / (space100.platforms.ios.value as number)).toBe(2);\n      68 |       expect..."
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Platform Unit Conversion Consistency",
+      "testName": "should handle typography tokens with REM conversion on web",
+      "fullName": "Cross-Platform Consistency Integration › Platform Unit Conversion Consistency › should handle typography tokens with REM conversion on web",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Pass\"\n    Received: \"Error\"\n      133 |\n      134 |       const result = engine.registerPrimitiveToken(token);\n    > 135 |       expect(result.level).toBe('Pass');\n          |                            ^\n      136 |\n      137 |       // Verify mathematical equivalence\n      138 |       const registered = engine.getPrimitiveToken('fontSize100')!;"
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Mathematical Relationship Consistency",
+      "testName": "should maintain modular scale relationships across platforms",
+      "fullName": "Cross-Platform Consistency Integration › Mathematical Relationship Consistency › should maintain modular scale relationships across platforms",
+      "errorPreview": "TypeError: Cannot read properties of undefined (reading 'platforms')\n      186 |\n      187 |       // Verify modular scale maintained across platforms\n    > 188 |       const webRatio = (fontSize125.platforms.web.value as number) / (fontSize100.platforms.web.value as number);\n          |                                                                                   ^\n      189 |       const iosRatio = (fontSize125.platforms.ios.value as number) / (fontSize100.platforms.ios.value as number);\n ..."
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Mathematical Relationship Consistency",
+      "testName": "should maintain baseline grid alignment across platforms",
+      "fullName": "Cross-Platform Consistency Integration › Mathematical Relationship Consistency › should maintain baseline grid alignment across platforms",
+      "errorPreview": "TypeError: Cannot read properties of undefined (reading 'platforms')\n      237 |       const space400 = engine.getPrimitiveToken('space400')!;\n      238 |\n    > 239 |       expect((space100.platforms.web.value as number) % 8).toBe(0);\n          |                        ^\n      240 |       expect((space100.platforms.ios.value as number) % 8).toBe(0);\n      241 |       expect((space100.platforms.android.value as number) % 8).toBe(0);\n      242 |"
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Strategic Flexibility Cross-Platform Consistency",
+      "testName": "should maintain strategic flexibility values across platforms",
+      "fullName": "Cross-Platform Consistency Integration › Strategic Flexibility Cross-Platform Consistency › should maintain strategic flexibility values across platforms",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Pass\"\n    Received: \"Warning\"\n      267 |\n      268 |       const result = engine.registerPrimitiveToken(token);\n    > 269 |       expect(result.level).toBe('Pass');\n          |                            ^\n      270 |\n      271 |       // Verify strategic flexibility value consistent across platforms\n      272 |       const registered = engine.getPrimitiveToken('space075')!;"
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Strategic Flexibility Cross-Platform Consistency",
+      "testName": "should validate strategic flexibility proportions across platforms",
+      "fullName": "Cross-Platform Consistency Integration › Strategic Flexibility Cross-Platform Consistency › should validate strategic flexibility proportions across platforms",
+      "errorPreview": "TypeError: Cannot read properties of undefined (reading 'platforms')\n      318 |\n      319 |       // Verify 0.75 ratio maintained across platforms\n    > 320 |       expect((space075.platforms.web.value as number) / (space100.platforms.web.value as number)).toBe(0.75);\n          |                                                                   ^\n      321 |       expect((space075.platforms.ios.value as number) / (space100.platforms.ios.value as number)).toBe(0.75);\n      322 |       expect((sp..."
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Platform-Specific Unit Handling",
+      "testName": "should use correct units for each platform",
+      "fullName": "Cross-Platform Consistency Integration › Platform-Specific Unit Handling › should use correct units for each platform",
+      "errorPreview": "TypeError: Cannot read properties of undefined (reading 'platforms')\n      346 |       const registered = engine.getPrimitiveToken('space100')!;\n      347 |\n    > 348 |       expect(registered.platforms.web.unit).toBe('px');\n          |                         ^\n      349 |       expect(registered.platforms.ios.unit).toBe('pt');\n      350 |       expect(registered.platforms.android.unit).toBe('dp');\n      351 |     });"
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Platform-Specific Unit Handling",
+      "testName": "should use correct units for typography tokens",
+      "fullName": "Cross-Platform Consistency Integration › Platform-Specific Unit Handling › should use correct units for typography tokens",
+      "errorPreview": "TypeError: Cannot read properties of undefined (reading 'platforms')\n      372 |       const registered = engine.getPrimitiveToken('fontSize100')!;\n      373 |\n    > 374 |       expect(registered.platforms.web.unit).toBe('rem');\n          |                         ^\n      375 |       expect(registered.platforms.ios.unit).toBe('pt');\n      376 |       expect(registered.platforms.android.unit).toBe('sp');\n      377 |     });"
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Platform-Specific Unit Handling",
+      "testName": "should use unitless values for line height",
+      "fullName": "Cross-Platform Consistency Integration › Platform-Specific Unit Handling › should use unitless values for line height",
+      "errorPreview": "TypeError: Cannot read properties of undefined (reading 'platforms')\n      398 |       const registered = engine.getPrimitiveToken('lineHeight100')!;\n      399 |\n    > 400 |       expect(registered.platforms.web.unit).toBe('unitless');\n          |                         ^\n      401 |       expect(registered.platforms.ios.unit).toBe('unitless');\n      402 |       expect(registered.platforms.android.unit).toBe('unitless');\n      403 |     });"
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Precision Targeting Consistency",
+      "testName": "should maintain precision multipliers across platforms",
+      "fullName": "Cross-Platform Consistency Integration › Precision Targeting Consistency › should maintain precision multipliers across platforms",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Pass\"\n    Received: \"Error\"\n      424 |\n      425 |       const result = engine.registerPrimitiveToken(lineHeightToken);\n    > 426 |       expect(result.level).toBe('Pass');\n          |                            ^\n      427 |\n      428 |       const registered = engine.getPrimitiveToken('lineHeight100')!;\n      429 |       expect(registered.isPrecisionTargeted).toBe(true);"
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Precision Targeting Consistency",
+      "testName": "should validate tap area precision targeting",
+      "fullName": "Cross-Platform Consistency Integration › Precision Targeting Consistency › should validate tap area precision targeting",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Pass\"\n    Received: \"Error\"\n      452 |\n      453 |       const result = engine.registerPrimitiveToken(tapAreaToken);\n    > 454 |       expect(result.level).toBe('Pass');\n          |                            ^\n      455 |\n      456 |       const registered = engine.getPrimitiveToken('tapAreaMinimum')!;\n      457 |       expect(registered.isPrecisionTargeted).toBe(true);"
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Multi-Token Cross-Platform Validation",
+      "testName": "should detect cross-platform inconsistencies",
+      "fullName": "Cross-Platform Consistency Integration › Multi-Token Cross-Platform Validation › should detect cross-platform inconsistencies",
+      "errorPreview": "expect(received).toBeGreaterThan(expected)\n    Expected: > 0\n    Received:   0\n      567 |       );\n      568 |\n    > 569 |       expect(warnings.length).toBeGreaterThan(0);\n          |                               ^\n      570 |     });\n      571 |   });\n      572 |"
+    },
+    {
+      "suite": "Cross-Platform Consistency Integration",
+      "describe": "Platform Translation Validation",
+      "testName": "should generate consistent platform outputs",
+      "fullName": "Cross-Platform Consistency Integration › Platform Translation Validation › should generate consistent platform outputs",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: true\n    Received: false\n      597 |\n      598 |       expect(outputs).toHaveLength(3);\n    > 599 |       expect(outputs.every(o => o.validationStatus === 'valid')).toBe(true);\n          |                                                                  ^\n      600 |       expect(outputs.map(o => o.platform)).toContain('web');\n      601 |       expect(outputs.map(o => o.platform)).toContain('ios');\n      602 |       expect(outpu..."
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Primitive Token Registration and Validation",
+      "testName": "should register and validate baseline grid-aligned token",
+      "fullName": "Token System Integration › Primitive Token Registration and Validation › should register and validate baseline grid-aligned token",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Pass\"\n    Received: \"Error\"\n      82 |       const result = engine.registerPrimitiveToken(token);\n      83 |\n    > 84 |       expect(result.level).toBe('Pass');\n         |                            ^\n      85 |       expect(result.token).toBe('space100');\n      86 |       expect(engine.getPrimitiveToken('space100')).toEqual(token);\n      87 |     });"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Primitive Token Registration and Validation",
+      "testName": "should register and validate strategic flexibility token",
+      "fullName": "Token System Integration › Primitive Token Registration and Validation › should register and validate strategic flexibility token",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Pass\"\n    Received: \"Warning\"\n      107 |       const result = engine.registerPrimitiveToken(token);\n      108 |\n    > 109 |       expect(result.level).toBe('Pass');\n          |                            ^\n      110 |       expect(result.token).toBe('space075');\n      111 |     });\n      112 |"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Primitive Token Registration and Validation",
+      "testName": "should register multiple tokens in batch",
+      "fullName": "Token System Integration › Primitive Token Registration and Validation › should register multiple tokens in batch",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: true\n    Received: false\n      174 |\n      175 |       expect(results).toHaveLength(2);\n    > 176 |       expect(results.every(r => r.level === 'Pass')).toBe(true);\n          |                                                      ^\n      177 |       expect(engine.getAllPrimitiveTokens()).toHaveLength(2);\n      178 |     });\n      179 |   });"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Semantic Token Registration and Validation",
+      "testName": "should register semantic token with valid primitive reference",
+      "fullName": "Token System Integration › Semantic Token Registration and Validation › should register semantic token with valid primitive reference",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Pass\"\n    Received: \"Error\"\n      214 |       const result = engine.registerSemanticToken(semanticToken);\n      215 |\n    > 216 |       expect(result.level).toBe('Pass');\n          |                            ^\n      217 |       expect(result.token).toBe('space.normal');\n      218 |       expect(engine.getSemanticToken('space.normal')).toBeDefined();\n      219 |     });"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Semantic Token Registration and Validation",
+      "testName": "should register multiple semantic tokens in batch",
+      "fullName": "Token System Integration › Semantic Token Registration and Validation › should register multiple semantic tokens in batch",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: true\n    Received: false\n      258 |\n      259 |       expect(results).toHaveLength(2);\n    > 260 |       expect(results.every(r => r.level === 'Pass')).toBe(true);\n          |                                                      ^\n      261 |       expect(engine.getAllSemanticTokens()).toHaveLength(2);\n      262 |     });\n      263 |   });"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Token Query and Retrieval",
+      "testName": "should retrieve primitive token by name",
+      "fullName": "Token System Integration › Token Query and Retrieval › should retrieve primitive token by name",
+      "errorPreview": "expect(received).toBeDefined()\n    Received: undefined\n      307 |       const token = engine.getPrimitiveToken('space100');\n      308 |\n    > 309 |       expect(token).toBeDefined();\n          |                     ^\n      310 |       expect(token?.name).toBe('space100');\n      311 |       expect(token?.baseValue).toBe(8);\n      312 |     });"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Token Query and Retrieval",
+      "testName": "should query primitive tokens by category",
+      "fullName": "Token System Integration › Token Query and Retrieval › should query primitive tokens by category",
+      "errorPreview": "expect(received).toHaveLength(expected)\n    Expected length: 1\n    Received length: 0\n    Received array:  []\n      317 |       });\n      318 |\n    > 319 |       expect(spacingTokens).toHaveLength(1);\n          |                             ^\n      320 |       expect(spacingTokens[0].name).toBe('space100');\n      321 |     });"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Token Query and Retrieval",
+      "testName": "should get all primitive tokens",
+      "fullName": "Token System Integration › Token Query and Retrieval › should get all primitive tokens",
+      "errorPreview": "expect(received).toHaveLength(expected)\n    Expected length: 2\n    Received length: 0\n    Received array:  []\n      324 |       const allTokens = engine.getAllPrimitiveTokens();\n      325 |\n    > 326 |       expect(allTokens).toHaveLength(2);\n          |                         ^\n      327 |       expect(allTokens.map(t => t.name)).toContain('space100');\n      328 |       expect(allTokens.map(t => t.name)).toContain('fontSize100');"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "System Statistics",
+      "testName": "should provide accurate primitive token statistics",
+      "fullName": "Token System Integration › System Statistics › should provide accurate primitive token statistics",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: 2\n    Received: 1\n      453 |       const stats = engine.getStats();\n      454 |\n    > 455 |       expect(stats.primitiveTokens.total).toBe(2);\n          |                                           ^\n      456 |       expect(stats.primitiveTokens.strategicFlexibility).toBe(1);\n      457 |       expect(stats.primitiveTokens.strategicFlexibilityPercentage).toBe(50);\n      458 |     });"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "System Statistics",
+      "testName": "should provide accurate semantic token statistics",
+      "fullName": "Token System Integration › System Statistics › should provide accurate semantic token statistics",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: 1\n    Received: 0\n      461 |       const stats = engine.getStats();\n      462 |\n    > 463 |       expect(stats.semanticTokens.total).toBe(1);\n          |                                          ^\n      464 |     });\n      465 |\n      466 |     it('should track validation statistics', () => {"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "State Management",
+      "testName": "should export system state",
+      "fullName": "Token System Integration › State Management › should export system state",
+      "errorPreview": "expect(received).toHaveLength(expected)\n    Expected length: 1\n    Received length: 0\n    Received array:  []\n      524 |       const state = engine.exportState();\n      525 |\n    > 526 |       expect(state.primitiveTokens).toHaveLength(1);\n          |                                     ^\n      527 |       expect(state.semanticTokens).toHaveLength(0);\n      528 |       expect(state.config).toBeDefined();"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "State Management",
+      "testName": "should import system state",
+      "fullName": "Token System Integration › State Management › should import system state",
+      "errorPreview": "expect(received).toHaveLength(expected)\n    Expected length: 1\n    Received length: 0\n    Received array:  []\n      538 |       expect(result.success).toBe(true);\n      539 |       expect(result.errors).toHaveLength(0);\n    > 540 |       expect(newEngine.getAllPrimitiveTokens()).toHaveLength(1);\n          |                                                 ^\n      541 |     });\n      542 |"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Error Handling",
+      "testName": "should handle duplicate token registration",
+      "fullName": "Token System Integration › Error Handling › should handle duplicate token registration",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Expected substring: \"already exists\"\n    Received string:    \"Family foundation violation\"\n      572 |\n      573 |       expect(result.level).toBe('Error');\n    > 574 |       expect(result.message).toContain('already exists');\n          |                              ^\n      575 |     });\n      576 |\n      577 |     it('should handle invalid state import', () => {"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Validation Before Registration",
+      "testName": "should validate primitive token and allow registration on pass",
+      "fullName": "Token System Integration › Validation Before Registration › should validate primitive token and allow registration on pass",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Pass\"\n    Received: \"Error\"\n      655 |\n      656 |       // Validation should pass\n    > 657 |       expect(result.level).toBe('Pass');\n          |                            ^\n      658 |       \n      659 |       // Token should be registered\n      660 |       expect(engine.getPrimitiveToken('space100')).toEqual(validToken);"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Validation Before Registration",
+      "testName": "should validate semantic token and allow registration on pass",
+      "fullName": "Token System Integration › Validation Before Registration › should validate semantic token and allow registration on pass",
+      "errorPreview": "expect(received).not.toBe(expected) // Object.is equality\n    Expected: not \"Error\"\n      773 |\n      774 |       // Validation should pass\n    > 775 |       expect(result.level).not.toBe('Error');\n          |                                ^\n      776 |       \n      777 |       // Token should be registered\n      778 |       expect(engine.getSemanticToken('spacing.base')).toEqual(validSemanticToken);"
+    },
+    {
+      "suite": "Token System Integration",
+      "describe": "Validation Before Registration",
+      "testName": "should validate batch registration and prevent registration of invalid tokens",
+      "fullName": "Token System Integration › Validation Before Registration › should validate batch registration and prevent registration of invalid tokens",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Pass\"\n    Received: \"Error\"\n      848 |\n      849 |       // First token should pass\n    > 850 |       expect(results[0].level).toBe('Pass');\n          |                                ^\n      851 |       expect(engine.getPrimitiveToken('space100')).toBeDefined();\n      852 |\n      853 |       // Second token should fail"
+    },
+    {
+      "suite": "Accuracy Regression Tests",
+      "describe": "Performance Regression Standards",
+      "testName": "should maintain consistent performance across test runs",
+      "fullName": "Accuracy Regression Tests › Performance Regression Standards › should maintain consistent performance across test runs",
+      "errorPreview": "expect(received).toBeLessThan(expected)\n    Expected: < 0.5\n    Received:   0.8250904575184232\n      290 |       const variance = (maxTime - minTime) / avgTime;\n      291 |\n    > 292 |       expect(variance).toBeLessThan(0.5);\n          |                        ^\n      293 |\n      294 |       // Accuracy should be consistent (within 5% variance)\n      295 |       const avgAccuracy = accuracies.reduce((sum, acc) => sum + acc, 0) / accuracies.length;"
+    },
+    {
+      "suite": "ReleaseCLI",
+      "describe": "analyzeChanges",
+      "testName": "should return analysis result with default options",
+      "fullName": "ReleaseCLI › analyzeChanges › should return analysis result with default options",
+      "errorPreview": "thrown: \"Exceeded timeout of 5000 ms for a test.\n    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.\"\n      13 |\n      14 |   describe('analyzeChanges', () => {\n    > 15 |     it('should return analysis result with default options', async () => {\n         |     ^\n      16 |       const result = await cli.analyzeChanges();\n      17 |\n      18 |       // The method might return an error recovery object or..."
+    },
+    {
+      "suite": "ReleaseCLI",
+      "describe": "analyzeChanges",
+      "testName": "should handle custom options",
+      "fullName": "ReleaseCLI › analyzeChanges › should handle custom options",
+      "errorPreview": "thrown: \"Exceeded timeout of 5000 ms for a test.\n    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.\"\n      31 |     });\n      32 |\n    > 33 |     it('should handle custom options', async () => {\n         |     ^\n      34 |       const options: AnalysisOptions = {\n      35 |         since: 'v1.0.0',\n      36 |         outputFormat: 'detailed',"
+    },
+    {
+      "suite": "ReleaseCLI",
+      "describe": "argument parsing",
+      "testName": "should handle format options",
+      "fullName": "ReleaseCLI › argument parsing › should handle format options",
+      "errorPreview": "thrown: \"Exceeded timeout of 5000 ms for a test.\n    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.\"\n      73 |     });\n      74 |\n    > 75 |     it('should handle format options', async () => {\n         |     ^\n      76 |       const consoleSpy = jest.spyOn(console, 'log').mockImplementation();\n      77 |\n      78 |       await cli.run(['--format', 'json']);"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Event Detection",
+      "testName": "should detect task completion events",
+      "fullName": "WorkflowMonitor › Event Detection › should detect task completion events",
+      "errorPreview": "expect(received).toHaveLength(expected)\n    Expected length: 1\n    Received length: 0\n    Received array:  []\n      69 |       const events = await monitor.checkForCompletionEvents();\n      70 |\n    > 71 |       expect(events).toHaveLength(1);\n         |                      ^\n      72 |       expect(events[0].type).toBe('task-completion');\n      73 |       expect(events[0].source).toContain('task-1-completion.md');"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Event Detection",
+      "testName": "should detect spec completion events",
+      "fullName": "WorkflowMonitor › Event Detection › should detect spec completion events",
+      "errorPreview": "expect(received).toHaveLength(expected)\n    Expected length: 1\n    Received length: 0\n    Received array:  []\n      86 |       const events = await monitor.checkForCompletionEvents();\n      87 |\n    > 88 |       expect(events).toHaveLength(1);\n         |                      ^\n      89 |       expect(events[0].type).toBe('spec-completion');\n      90 |       expect(events[0].source).toContain('spec-completion-summary.md');"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Event Detection",
+      "testName": "should detect file changes in tasks.md",
+      "fullName": "WorkflowMonitor › Event Detection › should detect file changes in tasks.md",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: true\n    Received: false\n      110 |       const events = await monitor.checkForCompletionEvents();\n      111 |\n    > 112 |       expect(events.some(e => e.type === 'file-change' && e.source.includes('tasks.md'))).toBe(true);\n          |                                                                                           ^\n      113 |     });\n      114 |   });\n      115 |"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Event Queue Management",
+      "testName": "should queue events and process them in order",
+      "fullName": "WorkflowMonitor › Event Queue Management › should queue events and process them in order",
+      "errorPreview": "thrown: \"Exceeded timeout of 5000 ms for a test.\n    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.\"\n      115 |\n      116 |   describe('Event Queue Management', () => {\n    > 117 |     it('should queue events and process them in order', async () => {\n          |     ^\n      118 |       const processedEvents: WorkflowEvent[] = [];\n      119 |\n      120 |       monitor.on('event-processed', (event: Work..."
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Event Queue Management",
+      "testName": "should clear queue when requested",
+      "fullName": "WorkflowMonitor › Event Queue Management › should clear queue when requested",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: 1\n    Received: 0\n      162 |       \n      163 |       let queueStatus = monitor.getQueueStatus();\n    > 164 |       expect(queueStatus.queueLength).toBe(1);\n          |                                       ^\n      165 |\n      166 |       monitor.clearQueue();\n      167 |"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Hook Integration",
+      "testName": "should detect git commit events for task completion",
+      "fullName": "WorkflowMonitor › Hook Integration › should detect git commit events for task completion",
+      "errorPreview": "thrown: \"Exceeded timeout of 5000 ms for a test.\n    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.\"\n      173 |\n      174 |   describe('Hook Integration', () => {\n    > 175 |     it('should detect git commit events for task completion', async () => {\n          |     ^\n      176 |       const commitHash = 'abc123def456';\n      177 |       const commitMessage = 'Task 1.1 Complete: Implement validation s..."
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Hook Integration",
+      "testName": "should process trigger files from hook system",
+      "fullName": "WorkflowMonitor › Hook Integration › should process trigger files from hook system",
+      "errorPreview": "thrown: \"Exceeded timeout of 5000 ms for a test.\n    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.\"\n      200 |     });\n      201 |\n    > 202 |     it('should process trigger files from hook system', async () => {\n          |     ^\n      203 |       const triggerData = {\n      204 |         type: 'task-completion',\n      205 |         source: '.kiro/specs/test-spec/tasks.md',"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Hook Integration",
+      "testName": "should monitor file organization events",
+      "fullName": "WorkflowMonitor › Hook Integration › should monitor file organization events",
+      "errorPreview": "thrown: \"Exceeded timeout of 5000 ms for a test.\n    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.\"\n      231 |     });\n      232 |\n    > 233 |     it('should monitor file organization events', async () => {\n          |     ^\n      234 |       const organizationLogContent = `\n      235 | [2025-01-10 10:00:00] Organized: task-1-completion.md -> .kiro/specs/test-spec/completion/\n      236 | [2025-01-10 ..."
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Event Processing",
+      "testName": "should process task completion events",
+      "fullName": "WorkflowMonitor › Event Processing › should process task completion events",
+      "errorPreview": "expect(received).toHaveLength(expected)\n    Expected length: 1\n    Received length: 0\n    Received array:  []\n      288 |       await monitor.processWorkflowEvent(event);\n      289 |\n    > 290 |       expect(emittedEvents).toHaveLength(1);\n          |                             ^\n      291 |       expect(emittedEvents[0].taskName).toBe('Implement validation system');\n      292 |       expect(emittedEvents[0].taskNumber).toBe('1');"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Event Processing",
+      "testName": "should process file change events for tasks.md",
+      "fullName": "WorkflowMonitor › Event Processing › should process file change events for tasks.md",
+      "errorPreview": "expect(received).toHaveLength(expected)\n    Expected length: 2\n    Received length: 0\n    Received array:  []\n      338 |       await monitor.processWorkflowEvent(event);\n      339 |\n    > 340 |       expect(emittedEvents).toHaveLength(2);\n          |                             ^\n      341 |       expect(emittedEvents[0].taskName).toBe('Completed Task');\n      342 |       expect(emittedEvents[0].status).toBe('completed');"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Monitoring Lifecycle",
+      "testName": "should emit monitoring events",
+      "fullName": "WorkflowMonitor › Monitoring Lifecycle › should emit monitoring events",
+      "errorPreview": "expect(received).toEqual(expected) // deep equality\n    - Expected  - 1\n    + Received  + 0\n      Array [\n        \"started\",\n    -   \"stopped\",\n      ]\n      399 |       await monitor.stopMonitoring();\n      400 |\n    > 401 |       expect(events).toEqual(['started', 'stopped']);"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Path Expansion and Matching",
+      "testName": "should expand glob paths correctly",
+      "fullName": "WorkflowMonitor › Path Expansion and Matching › should expand glob paths correctly",
+      "errorPreview": "expect(received).toContain(expected) // indexOf\n    Expected value: \".kiro/specs/test-spec/completion/task-1-completion.md\"\n    Received array: [\".kiro/specs/another-spec/completion/task-1-completion.md\"]\n      427 |       const expandedPaths = await (monitor as any).expandGlobPath(globPath);\n      428 |\n    > 429 |       expect(expandedPaths).toContain('.kiro/specs/test-spec/completion/task-1-completion.md');\n          |                             ^\n      430 |       expect(expandedPaths).toCo..."
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Path Expansion and Matching",
+      "testName": "should match glob patterns correctly",
+      "fullName": "WorkflowMonitor › Path Expansion and Matching › should match glob patterns correctly",
+      "errorPreview": "TypeError: Cannot read properties of undefined (reading 'bind')\n      432 |\n      433 |     it('should match glob patterns correctly', async () => {\n    > 434 |       const matchesPattern = (monitor as any).matchesPattern.bind(monitor);\n          |                                                              ^\n      435 |\n      436 |       expect(matchesPattern('task-1-completion.md', '*-completion.md')).toBe(true);\n      437 |       expect(matchesPattern('spec-completion-summary.md', '*-complet..."
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Error Handling",
+      "testName": "should handle git command errors",
+      "fullName": "WorkflowMonitor › Error Handling › should handle git command errors",
+      "errorPreview": "thrown: \"Exceeded timeout of 5000 ms for a test.\n    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.\"\n      459 |     });\n      460 |\n    > 461 |     it('should handle git command errors', async () => {\n          |     ^\n      462 |       mockExecSync.mockImplementation(() => {\n      463 |         throw new Error('Git not available');\n      464 |       });"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Error Handling",
+      "testName": "should handle malformed trigger files",
+      "fullName": "WorkflowMonitor › Error Handling › should handle malformed trigger files",
+      "errorPreview": "thrown: \"Exceeded timeout of 5000 ms for a test.\n    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.\"\n      475 |     });\n      476 |\n    > 477 |     it('should handle malformed trigger files', async () => {\n          |     ^\n      478 |       mockFs.readdir.mockResolvedValue(['invalid-trigger.json'] as any);\n      479 |       mockFs.readFile.mockResolvedValue('invalid json content');\n      480 |"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Error Handling",
+      "testName": "should emit error events for processing failures",
+      "fullName": "WorkflowMonitor › Error Handling › should emit error events for processing failures",
+      "errorPreview": "thrown: \"Exceeded timeout of 5000 ms for a test.\n    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout.\"\n      488 |     });\n      489 |\n    > 490 |     it('should emit error events for processing failures', async () => {\n          |     ^\n      491 |       const errors: Error[] = [];\n      492 |       monitor.on('error', (error: Error) => {\n      493 |         errors.push(error);"
+    },
+    {
+      "suite": "WorkflowMonitor",
+      "describe": "Task Name Extraction",
+      "testName": "should extract task names from tasks.md content",
+      "fullName": "WorkflowMonitor › Task Name Extraction › should extract task names from tasks.md content",
+      "errorPreview": "expect(received).toBe(expected) // Object.is equality\n    Expected: \"Main Task One\"\n    Received: \"Sub Task One\"\n      520 |       const extractTaskName = (monitor as any).extractTaskName.bind(monitor);\n      521 |\n    > 522 |       expect(extractTaskName(tasksContent, '1')).toBe('Main Task One');\n          |                                                  ^\n      523 |       expect(extractTaskName(tasksContent, '1.1')).toBe('Sub Task One');\n      524 |       expect(extractTaskName(tasksContent..."
+    }
+  ]
+}
