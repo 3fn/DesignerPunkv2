@@ -14,8 +14,11 @@
 
 package com.designerpunk.components.core
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -29,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.designerpunk.tokens.DesignTokens
 
 /**
  * Button size variants
@@ -132,8 +136,16 @@ fun ButtonCTA(
     // Get style-based configuration
     val styleConfig = getStyleConfig(style)
     
-    Button(
-        onClick = onPress,
+    // Requirement 17.3: Configure Material ripple effect
+    // Ripple color is color.primary at 16% opacity, emanates from touch point
+    val colorPrimary = Color(DesignTokens.color_primary)
+    val rippleIndication = rememberRipple(
+        color = colorPrimary.copy(alpha = 0.16f)
+    )
+    
+    // Use Surface with clickable modifier to apply custom ripple
+    // This provides more control over ripple appearance than Material3 Button
+    Surface(
         modifier = Modifier
             // Requirement 13.1-13.4: Touch target accessibility (44dp minimum)
             // Small buttons extend from 40dp visual to 44dp touch target
@@ -141,67 +153,77 @@ fun ButtonCTA(
             // Requirement 6.1-6.3: Minimum width
             .widthIn(min = sizeConfig.minWidth.dp)
             // Requirement 16.5: Test tag for automated testing
-            .testTag(testID ?: ""),
-        enabled = !disabled,
-        // Requirement 2.1-2.3: Button colors based on style
-        colors = ButtonDefaults.buttonColors(
-            containerColor = styleConfig.backgroundColor,
-            contentColor = styleConfig.textColor,
-            disabledContainerColor = styleConfig.backgroundColor.copy(alpha = 0.38f),
-            disabledContentColor = styleConfig.textColor.copy(alpha = 0.38f)
-        ),
+            .testTag(testID ?: "")
+            // Requirement 17.3: Apply clickable with custom ripple indication
+            .clickable(
+                onClick = onPress,
+                enabled = !disabled,
+                interactionSource = interactionSource,
+                indication = rippleIndication
+            ),
+        // Requirement 2.1-2.3: Background color based on style
+        color = if (disabled) {
+            styleConfig.backgroundColor.copy(alpha = 0.38f)
+        } else {
+            styleConfig.backgroundColor
+        },
         // Requirement 5.1-5.3: Border radius based on size
-        shape = MaterialTheme.shapes.small.copy(
-            topStart = androidx.compose.foundation.shape.CornerSize(sizeConfig.borderRadius.dp),
-            topEnd = androidx.compose.foundation.shape.CornerSize(sizeConfig.borderRadius.dp),
-            bottomStart = androidx.compose.foundation.shape.CornerSize(sizeConfig.borderRadius.dp),
-            bottomEnd = androidx.compose.foundation.shape.CornerSize(sizeConfig.borderRadius.dp)
-        ),
-        // Requirement 3.1-3.3, 4.1-4.3: Padding based on size
-        contentPadding = PaddingValues(
-            horizontal = sizeConfig.horizontalPadding.dp,
-            vertical = sizeConfig.verticalPadding.dp
-        ),
+        shape = RoundedCornerShape(sizeConfig.borderRadius.dp),
         // Requirement 2.2: Border for secondary style
         border = if (style == ButtonStyle.SECONDARY) {
-            androidx.compose.foundation.BorderStroke(
+            BorderStroke(
                 width = styleConfig.borderWidth.dp,
                 color = styleConfig.borderColor
             )
-        } else null,
-        interactionSource = interactionSource
+        } else null
     ) {
-        // Requirement 8.1-8.6: Icon-text layout with Row
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(sizeConfig.iconTextSpacing.dp),
-            verticalAlignment = Alignment.CenterVertically
+        // Requirement 3.1-3.3, 4.1-4.3: Padding based on size
+        Box(
+            modifier = Modifier.padding(
+                horizontal = sizeConfig.horizontalPadding.dp,
+                vertical = sizeConfig.verticalPadding.dp
+            ),
+            contentAlignment = Alignment.Center
         ) {
-            // Optional leading icon
-            // Requirements: 8.1-8.6, 9.1-9.3
-            icon?.let { iconName ->
-                // TODO: Integrate with Icon component from Icon System (Spec 004)
-                // Icon(
-                //     name = iconName,
-                //     size = sizeConfig.iconSize,
-                //     color = styleConfig.iconColor,
-                //     contentDescription = null // Requirement 16.3: Mark icon as decorative
-                // )
+            // Requirement 8.1-8.6: Icon-text layout with Row
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(sizeConfig.iconTextSpacing.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Optional leading icon
+                // Requirements: 8.1-8.6, 9.1-9.3
+                icon?.let { iconName ->
+                    // Requirement 8.1: Render icon in leading position (left of text)
+                    // Requirement 8.2-8.3: Use correct icon size based on button size
+                    // Requirement 9.1-9.2: Apply icon color with optical balance
+                    // Requirement 16.3: Mark icon as decorative (contentDescription = null)
+                    Icon(
+                        name = iconName,
+                        size = sizeConfig.iconSize.dp,
+                        color = if (disabled) {
+                            styleConfig.iconColor.copy(alpha = 0.38f)
+                        } else {
+                            styleConfig.iconColor
+                        }
+                    )
+                }
                 
-                // Placeholder for icon integration
-                // This will be implemented when Icon component is available for Android
+                // Button label text
+                // Requirement 16.5: Support TalkBack screen reader
+                Text(
+                    text = label,
+                    style = sizeConfig.typography,
+                    color = if (disabled) {
+                        styleConfig.textColor.copy(alpha = 0.38f)
+                    } else {
+                        styleConfig.textColor
+                    },
+                    // Requirement 7.1-7.4: Text wrapping behavior
+                    maxLines = if (noWrap) 1 else Int.MAX_VALUE,
+                    overflow = if (noWrap) TextOverflow.Ellipsis else TextOverflow.Visible,
+                    textAlign = TextAlign.Center
+                )
             }
-            
-            // Button label text
-            // Requirement 16.5: Support TalkBack screen reader
-            Text(
-                text = label,
-                style = sizeConfig.typography,
-                color = styleConfig.textColor,
-                // Requirement 7.1-7.4: Text wrapping behavior
-                maxLines = if (noWrap) 1 else Int.MAX_VALUE,
-                overflow = if (noWrap) TextOverflow.Ellipsis else TextOverflow.Visible,
-                textAlign = TextAlign.Center
-            )
         }
     }
 }
@@ -257,46 +279,46 @@ private fun getSizeConfig(size: ButtonSize): SizeConfig {
             height = 40,
             touchTargetHeight = 44, // Requirement 13.1: Extends to 44dp for accessibility
             typography = TextStyle(
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Normal,
-                lineHeight = 24.sp
+                fontSize = DesignTokens.font_size_100.sp,
+                fontWeight = FontWeight(DesignTokens.font_weight_400.toInt()),
+                lineHeight = DesignTokens.line_height_100.sp
             ), // typography.bodyMd
-            horizontalPadding = 16, // space.inset.spacious
-            verticalPadding = 8,    // space.inset.normal
-            borderRadius = 8,       // radius100
+            horizontalPadding = DesignTokens.space_inset_spacious.toInt(), // space.inset.spacious (16dp)
+            verticalPadding = DesignTokens.space_inset_normal.toInt(),     // space.inset.normal (8dp)
+            borderRadius = DesignTokens.radius_100.toInt(),                // radius100 (8dp)
             minWidth = 56,          // Requirement 6.1
-            iconSize = 24,          // icon.size100
-            iconTextSpacing = 4     // space.grouped.tight
+            iconSize = DesignTokens.icon_size_100.value.toInt(),          // icon.size100 (24dp)
+            iconTextSpacing = DesignTokens.space_grouped_tight.toInt()    // space.grouped.tight (4dp)
         )
         ButtonSize.MEDIUM -> SizeConfig(
             height = 48,
             touchTargetHeight = 48, // Requirement 13.2: Meets 44dp minimum
             typography = TextStyle(
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Normal,
-                lineHeight = 24.sp
+                fontSize = DesignTokens.font_size_100.sp,
+                fontWeight = FontWeight(DesignTokens.font_weight_400.toInt()),
+                lineHeight = DesignTokens.line_height_100.sp
             ), // typography.bodyMd
-            horizontalPadding = 24, // space.inset.expansive
-            verticalPadding = 12,   // space.inset.comfortable
-            borderRadius = 12,      // radius150
+            horizontalPadding = DesignTokens.space_inset_expansive.toInt(), // space.inset.expansive (24dp)
+            verticalPadding = DesignTokens.space_inset_comfortable.toInt(), // space.inset.comfortable (12dp)
+            borderRadius = DesignTokens.radius_150.toInt(),                 // radius150 (12dp)
             minWidth = 72,          // Requirement 6.2
-            iconSize = 24,          // icon.size100
-            iconTextSpacing = 8     // space.grouped.normal
+            iconSize = DesignTokens.icon_size_100.value.toInt(),           // icon.size100 (24dp)
+            iconTextSpacing = DesignTokens.space_grouped_normal.toInt()    // space.grouped.normal (8dp)
         )
         ButtonSize.LARGE -> SizeConfig(
             height = 56,
             touchTargetHeight = 56, // Requirement 13.2: Exceeds 44dp minimum
             typography = TextStyle(
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Normal,
-                lineHeight = 28.sp
+                fontSize = DesignTokens.font_size_125.sp,
+                fontWeight = FontWeight(DesignTokens.font_weight_400.toInt()),
+                lineHeight = DesignTokens.line_height_125.sp
             ), // typography.bodyLg
-            horizontalPadding = 32, // space.inset.generous
-            verticalPadding = 12,   // space.inset.comfortable
-            borderRadius = 16,      // radius200
+            horizontalPadding = DesignTokens.space_inset_generous.toInt(), // space.inset.generous (32dp)
+            verticalPadding = DesignTokens.space_inset_comfortable.toInt(), // space.inset.comfortable (12dp)
+            borderRadius = DesignTokens.radius_200.toInt(),                 // radius200 (16dp)
             minWidth = 80,          // Requirement 6.3
-            iconSize = 32,          // icon.size125
-            iconTextSpacing = 8     // space.grouped.normal
+            iconSize = DesignTokens.icon_size_125.value.toInt(),           // icon.size125 (32dp)
+            iconTextSpacing = DesignTokens.space_grouped_normal.toInt()    // space.grouped.normal (8dp)
         )
     }
 }
@@ -334,36 +356,57 @@ private data class StyleConfig(
  * @return Style configuration object
  */
 private fun getStyleConfig(style: ButtonStyle): StyleConfig {
-    // color.primary = #6750A4 (purple)
-    val colorPrimary = Color(0xFF6750A4)
-    // color.background = #FFFFFF (white)
-    val colorBackground = Color(0xFFFFFFFF)
-    // color.text.onPrimary = #FFFFFF (white)
-    val colorTextOnPrimary = Color(0xFFFFFFFF)
-    // color.icon.opticalBalance = 20% lighter primary for visual weight compensation
-    val colorIconOpticalBalance = Color(0xFF8170B8)
+    // Import semantic color tokens from generated constants
+    val colorPrimary = Color(DesignTokens.color_primary)           // color.primary (purple)
+    val colorBackground = Color(DesignTokens.color_background)     // color.background (white)
+    val colorTextOnPrimary = Color(DesignTokens.color_text_on_primary) // color.text.onPrimary (white)
+    
+    // Calculate optical balance color: primary + 20% lighter (blend200)
+    // color.icon.opticalBalance applies blend200 (20% lighter) to primary for visual weight compensation
+    val blendAmount = DesignTokens.color_icon_optical_balance
+    val colorIconOpticalBalance = lightenColor(colorPrimary, blendAmount)
     
     return when (style) {
         ButtonStyle.PRIMARY -> StyleConfig(
-            backgroundColor = colorPrimary,      // Requirement 2.1
-            textColor = colorTextOnPrimary,      // Requirement 2.1
-            iconColor = colorTextOnPrimary,      // Requirement 9.1
+            backgroundColor = colorPrimary,      // Requirement 2.1: color.primary
+            textColor = colorTextOnPrimary,      // Requirement 2.1: color.text.onPrimary
+            iconColor = colorTextOnPrimary,      // Requirement 9.1: color.text.onPrimary
             borderWidth = 0,
             borderColor = Color.Transparent
         )
         ButtonStyle.SECONDARY -> StyleConfig(
-            backgroundColor = colorBackground,   // Requirement 2.2
-            textColor = colorPrimary,            // Requirement 2.2
-            iconColor = colorIconOpticalBalance, // Requirement 9.2: With optical balance
-            borderWidth = 1,                     // border.default
-            borderColor = colorPrimary           // Requirement 2.2
+            backgroundColor = colorBackground,   // Requirement 2.2: color.background
+            textColor = colorPrimary,            // Requirement 2.2: color.primary
+            iconColor = colorIconOpticalBalance, // Requirement 9.2: color.primary with optical balance
+            borderWidth = DesignTokens.border_border_default.toInt(), // border.default (1dp)
+            borderColor = colorPrimary           // Requirement 2.2: color.primary
         )
         ButtonStyle.TERTIARY -> StyleConfig(
-            backgroundColor = Color.Transparent, // Requirement 2.3
-            textColor = colorPrimary,            // Requirement 2.3
-            iconColor = colorIconOpticalBalance, // Requirement 9.2: With optical balance
+            backgroundColor = Color.Transparent, // Requirement 2.3: transparent
+            textColor = colorPrimary,            // Requirement 2.3: color.primary
+            iconColor = colorIconOpticalBalance, // Requirement 9.2: color.primary with optical balance
             borderWidth = 0,
             borderColor = Color.Transparent
         )
     }
+}
+
+/**
+ * Lighten a color by a specified blend amount.
+ * 
+ * Applies the blend token (20% lighter) to achieve optical weight compensation
+ * for icons paired with text.
+ * 
+ * @param color Base color to lighten
+ * @param blendAmount Blend amount (0.0 to 1.0, where 0.2 = 20% lighter)
+ * @return Lightened color
+ */
+private fun lightenColor(color: Color, blendAmount: Float): Color {
+    val factor = 1.0f + blendAmount
+    return Color(
+        red = (color.red * factor).coerceAtMost(1.0f),
+        green = (color.green * factor).coerceAtMost(1.0f),
+        blue = (color.blue * factor).coerceAtMost(1.0f),
+        alpha = color.alpha
+    )
 }

@@ -340,7 +340,7 @@ This implementation plan converts the CTA Button Component design into actionabl
     - _Requirements: 13.1-13.4, 16.4_
 
 
-- [ ] 5. Implement Android Platform (Jetpack Compose)
+- [x] 5. Implement Android Platform (Jetpack Compose)
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -372,7 +372,7 @@ This implementation plan converts the CTA Button Component design into actionabl
     - Add remember state for interaction tracking
     - _Requirements: 1.1-1.7, 2.1-2.4_
 
-  - [ ] 5.2 Implement styling with Kotlin token constants
+  - [x] 5.2 Implement styling with Kotlin token constants
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Import generated Kotlin token constants
@@ -385,7 +385,7 @@ This implementation plan converts the CTA Button Component design into actionabl
     - Implement minimum width constraints via Modifier.widthIn()
     - _Requirements: 1.1-1.7, 3.1-3.4, 4.1-4.4, 5.1-5.3, 6.1-6.4_
 
-  - [ ] 5.3 Implement icon integration
+  - [x] 5.3 Implement icon integration
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Import Icon component from Icon System
@@ -397,7 +397,7 @@ This implementation plan converts the CTA Button Component design into actionabl
     - Mark icon as decorative (contentDescription = null)
     - _Requirements: 8.1-8.6, 9.1-9.3_
 
-  - [ ] 5.4 Implement Android-specific interaction patterns
+  - [x] 5.4 Implement Android-specific interaction patterns
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement Material ripple effect with rememberRipple()
@@ -407,7 +407,7 @@ This implementation plan converts the CTA Button Component design into actionabl
     - Ensure ripple emanates from touch point
     - _Requirements: 17.3_
 
-  - [ ] 5.5 Implement touch target accessibility
+  - [x] 5.5 Implement touch target accessibility
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Extend small button (40dp) touch target to 44dp using Modifier.heightIn(min = 44.dp)
@@ -441,19 +441,55 @@ This implementation plan converts the CTA Button Component design into actionabl
   - Detailed: `.kiro/specs/005-cta-button-component/completion/task-6-parent-completion.md`
   - Summary: `docs/specs/005-cta-button-component/task-6-summary.md` (triggers release detection)
 
-  - [ ] 6.1 Create unit tests for component rendering
+  - [x] 6.1 Set up test infrastructure
+    **Type**: Setup
+    **Validation**: Tier 1 - Minimal
+    - Configure Jest for web components
+    - Create test utilities for custom element registration
+    - Create helper for shadow DOM rendering waits
+    - Write one smoke test to verify setup works
+    - _Requirements: Testing infrastructure_
+
+  - [x] 6.2 Test basic rendering
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    - Test button renders with required props (label, onPress)
-    - Test all size variants render with correct classes/styles
-    - Test all style variants render with correct colors/borders
+    - Test button renders with required props (label)
+    - Test default values (size: medium, style: primary)
+    - Test component mounts and renders in DOM
+    - _Requirements: 1.1, 1.2, 2.1_
+
+  - [x] 6.3 Test size variants
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Test all three size variants (small, medium, large)
+    - Verify correct CSS classes applied for each size
+    - _Requirements: 1.1-1.3_
+
+  - [x] 6.4 Test style variants
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Test all three style variants (primary, secondary, tertiary)
+    - Verify correct CSS classes applied for each style
+    - _Requirements: 2.1-2.3_
+
+  - [ ] 6.5 Test icon integration
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
     - Test icon renders when icon prop provided
     - Test icon doesn't render when icon prop omitted
+    - Test icon sizing for different button sizes
+    - Test icon marked as decorative (aria-hidden="true")
+    - _Requirements: 8.1-8.6_
+
+  - [ ] 6.6 Test text and disabled state
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Test text wrapping behavior (default multi-line)
     - Test noWrap prop truncates text with ellipsis
     - Test disabled prop prevents interaction
-    - _Requirements: 1.1-1.7, 2.1-2.4, 7.1-7.4, 8.1-8.6_
+    - _Requirements: 7.1-7.4_
 
-  - [ ] 6.2 Create interaction tests
+  - [ ] 6.7 Create interaction tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test onPress called when button clicked
@@ -465,37 +501,52 @@ This implementation plan converts the CTA Button Component design into actionabl
     - Test rapid clicks don't cause issues
     - _Requirements: 15.1-15.4_
 
-  - [ ] 6.3 Create accessibility tests
+  - [ ] 6.8 Test ARIA and keyboard navigation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test button has correct ARIA role (role="button")
     - Test button is keyboard focusable
     - Test icon is marked decorative (aria-hidden="true")
+    - Test focus indicator visible on keyboard navigation
+    - _Requirements: 12.1-12.6, 15.1-15.4_
+
+  - [ ] 6.9 Test touch targets and contrast
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
     - Test small button meets 44px minimum touch target
     - Test medium and large buttons meet 44px minimum
     - Test primary button text has ≥4.5:1 contrast ratio
     - Test secondary button text has ≥4.5:1 contrast ratio
     - Test tertiary button text has ≥4.5:1 contrast ratio
     - Test focus outline has ≥3:1 contrast ratio
-    - Test focus indicator visible on keyboard navigation
-    - _Requirements: 12.1-12.6, 13.1-13.4, 14.1-14.4, 15.1-15.4, 16.1-16.5_
+    - _Requirements: 13.1-13.4, 14.1-14.4, 16.1-16.5_
 
-  - [ ] 6.4 Create visual regression tests
+  - [ ] 6.10 Test size and style variant snapshots
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    - Create snapshot tests for all size variants
-    - Create snapshot tests for all style variants
+    - Create snapshot tests for all size variants (small, medium, large)
+    - Create snapshot tests for all style variants (primary, secondary, tertiary)
+    - _Requirements: 1.1-1.7, 2.1-2.4_
+
+  - [ ] 6.11 Test icon and text variant snapshots
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
     - Create snapshot tests for buttons with icons
     - Create snapshot tests for buttons without icons
+    - Create snapshot tests for multi-line text
+    - Create snapshot tests for truncated text (noWrap)
+    - _Requirements: 7.1-7.4, 8.1-8.6_
+
+  - [ ] 6.12 Test interaction state snapshots
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
     - Create snapshot tests for hover state
     - Create snapshot tests for pressed state
     - Create snapshot tests for focus state
     - Create snapshot tests for disabled state
-    - Create snapshot tests for multi-line text
-    - Create snapshot tests for truncated text (noWrap)
-    - _Requirements: 1.1-1.7, 2.1-2.4, 7.1-7.4, 8.1-8.6, 10.1-10.3, 11.1-11.3, 12.1-12.6_
+    - _Requirements: 10.1-10.3, 11.1-11.3, 12.1-12.6_
 
-  - [ ] 6.5 Create token integration tests
+  - [ ] 6.13 Test typography and spacing tokens
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test small button uses typography.bodyMd
@@ -504,16 +555,26 @@ This implementation plan converts the CTA Button Component design into actionabl
     - Test small button uses space.inset.spacious (16px) horizontal padding
     - Test medium button uses space.inset.expansive (24px) horizontal padding
     - Test large button uses space.inset.generous (32px) horizontal padding
+    - _Requirements: 1.5-1.7, 3.1-3.3_
+
+  - [ ] 6.14 Test color and radius tokens
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
     - Test primary button uses color.primary background
     - Test primary button uses color.text.onPrimary text
     - Test secondary button uses color.primary text and border
     - Test small button uses radius100 (8px)
     - Test medium button uses radius150 (12px)
     - Test large button uses radius200 (16px)
+    - _Requirements: 2.4, 4.1-4.3, 5.1-5.3_
+
+  - [ ] 6.15 Test icon and accessibility tokens
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
     - Test small/medium button uses icon.size100 (24px)
     - Test large button uses icon.size125 (32px)
     - Test focus outline uses accessibility.focus tokens
-    - _Requirements: 1.5-1.7, 2.4, 3.1-3.3, 4.1-4.3, 5.1-5.3, 8.2-8.3, 12.1-12.4, 18.1-18.2_
+    - _Requirements: 8.2-8.3, 12.1-12.4, 18.1-18.2_
 
 
 - [ ] 7. Create Usage Examples and Documentation

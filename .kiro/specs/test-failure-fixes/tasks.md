@@ -15,7 +15,7 @@ This plan systematically fixes all 65 test failures identified in the test-failu
 
 ## Task List
 
-- [ ] 1. Fix Task Name Extraction Regex Bug (Group 5)
+- [x] 1. Fix Task Name Extraction Regex Bug (Group 5)
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -36,7 +36,7 @@ This plan systematically fixes all 65 test failures identified in the test-failu
   - Detailed: `.kiro/specs/test-failure-fixes/completion/task-1-parent-completion.md`
   - Summary: `docs/specs/test-failure-fixes/task-1-summary.md` (triggers release detection)
 
-  - [ ] 1.1 Update regex pattern to use negative lookahead
+  - [x] 1.1 Update regex pattern to use negative lookahead
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Locate task name extraction code
@@ -45,7 +45,7 @@ This plan systematically fixes all 65 test failures identified in the test-failu
     - Verify parent tasks match correctly
     - _Requirements: 1.1, 1.2, 1.3_
 
-  - [ ] 1.2 Verify commit message generation
+  - [x] 1.2 Verify commit message generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test commit message generation with updated regex
@@ -53,7 +53,7 @@ This plan systematically fixes all 65 test failures identified in the test-failu
     - Check edge cases (task 10, task 100, etc.)
     - _Requirements: 1.4_
 
-- [ ] 2. Fix Validation Preventing Registration (Group 1)
+- [x] 2. Fix Validation Preventing Registration (Group 1)
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -74,7 +74,7 @@ This plan systematically fixes all 65 test failures identified in the test-failu
   - Detailed: `.kiro/specs/test-failure-fixes/completion/task-2-parent-completion.md`
   - Summary: `docs/specs/test-failure-fixes/task-2-summary.md` (triggers release detection)
 
-  - [ ] 2.1 Update CrossPlatformConsistency tests
+  - [x] 2.1 Update CrossPlatformConsistency tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Review 19 failing tests in CrossPlatformConsistency.test.ts
@@ -83,7 +83,7 @@ This plan systematically fixes all 65 test failures identified in the test-failu
     - Verify tokens are defined before accessing properties
     - _Requirements: 2.1, 2.2_
 
-  - [ ] 2.2 Update TokenSystemIntegration tests
+  - [x] 2.2 Update TokenSystemIntegration tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Review 18 failing tests in TokenSystemIntegration.test.ts
@@ -92,7 +92,7 @@ This plan systematically fixes all 65 test failures identified in the test-failu
     - Verify tokens are defined before accessing properties
     - _Requirements: 2.1, 2.2_
 
-  - [ ] 2.3 Review validation rules
+  - [x] 2.3 Review validation rules
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Identify validation rules causing Error level

@@ -269,6 +269,44 @@ export class MathematicalRelationshipParser {
     baseValue: number,
     familyBaseValue: number
   ): RelationshipValidationResult {
+    // Special case: For base tokens where baseValue === familyBaseValue,
+    // allow descriptive relationships like "base value", "family base", etc.
+    // These tokens don't need mathematical operators since they ARE the base
+    // 
+    // For non-numeric tokens (colors, strings), we can't do mathematical comparison,
+    // so we accept descriptive relationships if they don't contain operators
+    const isDescriptiveRelationship = !expression.match(/[×*x÷\/+\-]/);
+    
+    // Check if this is a base token (numeric comparison)
+    const isNumericBaseToken = typeof baseValue === 'number' && 
+                                typeof familyBaseValue === 'number' && 
+                                Math.abs(baseValue - familyBaseValue) < 0.001;
+    
+    // Check if this is a non-numeric token (color, string, etc.)
+    const isNonNumericToken = typeof baseValue !== 'number' || typeof familyBaseValue !== 'number';
+    
+    if ((isNumericBaseToken || isNonNumericToken) && isDescriptiveRelationship) {
+      // This is either:
+      // 1. A base token with a descriptive relationship - accept it
+      // 2. A non-numeric token (color, string) - accept descriptive relationship
+      return {
+        isValid: true,
+        errors: [],
+        parsed: {
+          original: expression,
+          normalized: expression.trim(),
+          leftSide: expression.trim(),
+          operator: '×',
+          operand: 1,
+          isValid: true,
+          errors: []
+        },
+        mathematicallyCorrect: true,
+        calculatedResult: baseValue,
+        expectedResult: baseValue
+      };
+    }
+    
     const parsed = this.parse(expression);
     
     if (!parsed.isValid) {
