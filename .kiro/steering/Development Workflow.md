@@ -42,7 +42,7 @@ inclusion: always
    - For performance tasks: Run `npm run test:performance` (~20 min)
 3. **[MANUAL]** **Create Detailed Completion Document**: For parent tasks, create comprehensive completion doc at `.kiro/specs/[spec-name]/completion/task-N-parent-completion.md` (Tier 3)
 4. **[MANUAL]** **Create Summary Document**: For parent tasks, create concise summary doc at `docs/specs/[spec-name]/task-N-summary.md` (triggers release detection for manual files only)
-5. **[MANUAL - AI Workflows]** **Trigger Release Detection**: Run `./.kiro/hooks/release-manager.sh auto` (required for AI-created files; automatic hooks only work for manual IDE file operations)
+5. **[MANUAL - CRITICAL AI Workflows]** **Trigger Release Detection**: Run `./.kiro/hooks/release-manager.sh auto` (required for AI-created files; automatic hooks only work for manual IDE file operations)
 6. **[AUTOMATED - Manual Files]** **Release Detection**: Kiro IDE detects summary document creation and triggers release detection hook automatically (only for manually created files through IDE UI)
 7. **[MANUAL]** **Mark Task Complete**: Use `taskStatus` tool to update task status to "completed" when finished
 8. **[MANUAL]** **Commit Changes**: Run `./.kiro/hooks/commit-task.sh "Task Name"` to automatically commit and push
@@ -1580,7 +1580,7 @@ If you need to organize files that are already in subdirectories:
 2. Create detailed completion document: `.kiro/specs/[spec-name]/completion/task-N-parent-completion.md` (Tier 3 comprehensive)
 3. Create summary document: `docs/specs/[spec-name]/task-N-summary.md` (concise, commit-style)
 4. **[AUTOMATIC - Manual Files Only]** Kiro IDE detects summary file creation and triggers release detection hook (only for manually created files)
-5. **[MANUAL - AI Workflows]** Run `./.kiro/hooks/release-manager.sh auto` to trigger release detection (standard practice for AI-assisted workflows)
+5. **[MANUAL - CRITICAL AI Workflows]** Run `./.kiro/hooks/release-manager.sh auto` to trigger release detection (standard practice for AI-assisted workflows)
 6. Release manager scans for completion documents and creates trigger files
 7. Release analysis can be run to calculate version bump and generate notes
 

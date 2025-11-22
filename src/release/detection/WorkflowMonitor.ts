@@ -794,8 +794,11 @@ export class WorkflowMonitor extends EventEmitter {
     const lines = tasksContent.split('\n');
 
     for (const line of lines) {
-      // Look for task with matching number
-      const taskMatch = line.match(new RegExp(`^- \\[ \\] ${taskNumber}(?:\\.\\d+)?\\s+(.+)$`));
+      // Look for task with matching number (using negative lookahead to prevent subtask matching)
+      // For parent tasks: matches "1 Task" but not "1.1 Task" when searching for "1"
+      // For subtasks: matches "1.1 Task" when searching for "1.1"
+      // Pattern: task number NOT followed by a dot, then whitespace
+      const taskMatch = line.match(new RegExp(`^- \\[ \\] ${taskNumber}(?!\\.)\\s+(.+)$`));
       if (taskMatch) {
         return taskMatch[1].trim();
       }

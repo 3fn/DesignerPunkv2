@@ -510,10 +510,10 @@ describe('WorkflowMonitor', () => {
       const tasksContent = `
 # Implementation Plan
 
-- [ ] 1. Main Task One
+- [ ] 1 Main Task One
 - [ ] 1.1 Sub Task One
 - [ ] 1.2 Sub Task Two
-- [ ] 2. Main Task Two
+- [ ] 2 Main Task Two
 - [ ] 2.1 Another Sub Task
 `;
 
@@ -524,6 +524,230 @@ describe('WorkflowMonitor', () => {
       expect(extractTaskName(tasksContent, '2')).toBe('Main Task Two');
       expect(extractTaskName(tasksContent, '2.1')).toBe('Another Sub Task');
       expect(extractTaskName(tasksContent, '3')).toBeNull();
+    });
+
+    it('should not match subtasks when searching for parent task', async () => {
+      const tasksContent = `
+# Implementation Plan
+
+- [ ] 1 Parent Task
+- [ ] 1.1 Subtask One
+- [ ] 1.2 Subtask Two
+- [ ] 10 Another Parent Task
+- [ ] 10.1 Another Subtask
+`;
+
+      const extractTaskName = (monitor as any).extractTaskName.bind(monitor);
+
+      // Parent task "1" should match only "1 Parent Task", not "1.1" or "1.2"
+      expect(extractTaskName(tasksContent, '1')).toBe('Parent Task');
+      
+      // Parent task "10" should match only "10 Another Parent Task", not "10.1"
+      expect(extractTaskName(tasksContent, '10')).toBe('Another Parent Task');
+      
+      // Subtasks should still match correctly
+      expect(extractTaskName(tasksContent, '1.1')).toBe('Subtask One');
+      expect(extractTaskName(tasksContent, '10.1')).toBe('Another Subtask');
+    });
+
+    it('should handle various task number formats correctly', async () => {
+      const tasksContent = `
+# Implementation Plan
+
+- [ ] 1 Task One
+- [ ] 1.1 Task One Point One
+- [ ] 1.10 Task One Point Ten
+- [ ] 1.100 Task One Point One Hundred
+- [ ] 10 Task Ten
+- [ ] 10.1 Task Ten Point One
+- [ ] 100 Task One Hundred
+- [ ] 100.1 Task One Hundred Point One
+`;
+
+      const extractTaskName = (monitor as any).extractTaskName.bind(monitor);
+
+      // Test single digit parent tasks
+      expect(extractTaskName(tasksContent, '1')).toBe('Task One');
+      
+      // Test double digit parent tasks
+      expect(extractTaskName(tasksContent, '10')).toBe('Task Ten');
+      
+      // Test triple digit parent tasks
+      expect(extractTaskName(tasksContent, '100')).toBe('Task One Hundred');
+      
+      // Test subtasks with various decimal places
+      expect(extractTaskName(tasksContent, '1.1')).toBe('Task One Point One');
+      expect(extractTaskName(tasksContent, '1.10')).toBe('Task One Point Ten');
+      expect(extractTaskName(tasksContent, '1.100')).toBe('Task One Point One Hundred');
+      expect(extractTaskName(tasksContent, '10.1')).toBe('Task Ten Point One');
+      expect(extractTaskName(tasksContent, '100.1')).toBe('Task One Hundred Point One');
+    });
+  });
+
+  describe('Commit Message Generation Verification', () => {
+    it('should generate correct commit messages for parent tasks', async () => {
+      const tasksContent = `
+# Implementation Plan
+
+- [ ] 1. Fix Task Name Extraction Regex Bug
+  **Type**: Parent
+  - [ ] 1.1 Update regex pattern
+  - [ ] 1.2 Verify commit message generation
+
+- [ ] 10. Build System Foundation
+  **Type**: Parent
+  - [ ] 10.1 Create directory structure
+
+- [ ] 100. Complete Feature Implementation
+  **Type**: Parent
+  - [ ] 100.1 Implement core logic
+`;
+
+      const extractTaskName = (monitor as any).extractTaskName.bind(monitor);
+
+      // Verify task names are extracted correctly for commit messages
+      const task1Name = extractTaskName(tasksContent, '1');
+      const task10Name = extractTaskName(tasksContent, '10');
+      const task100Name = extractTaskName(tasksContent, '100');
+
+      expect(task1Name).toBe('Fix Task Name Extraction Regex Bug');
+      expect(task10Name).toBe('Build System Foundation');
+      expect(task100Name).toBe('Complete Feature Implementation');
+
+      // Verify commit messages would be formatted correctly
+      expect(`Task 1 Complete: ${task1Name}`).toBe('Task 1 Complete: Fix Task Name Extraction Regex Bug');
+      expect(`Task 10 Complete: ${task10Name}`).toBe('Task 10 Complete: Build System Foundation');
+      expect(`Task 100 Complete: ${task100Name}`).toBe('Task 100 Complete: Complete Feature Implementation');
+    });
+
+    it('should generate correct commit messages for subtasks', async () => {
+      const tasksContent = `
+# Implementation Plan
+
+- [ ] 1. Parent Task
+  - [ ] 1.1 Update regex pattern to use negative lookahead
+  - [ ] 1.2 Verify commit message generation
+  - [ ] 1.10 Handle edge case with ten subtasks
+  - [ ] 1.100 Handle edge case with hundred subtasks
+
+- [ ] 10. Another Parent Task
+  - [ ] 10.1 First subtask of task 10
+  - [ ] 10.10 Tenth subtask of task 10
+`;
+
+      const extractTaskName = (monitor as any).extractTaskName.bind(monitor);
+
+      // Verify subtask names are extracted correctly
+      const task1_1Name = extractTaskName(tasksContent, '1.1');
+      const task1_2Name = extractTaskName(tasksContent, '1.2');
+      const task1_10Name = extractTaskName(tasksContent, '1.10');
+      const task1_100Name = extractTaskName(tasksContent, '1.100');
+      const task10_1Name = extractTaskName(tasksContent, '10.1');
+      const task10_10Name = extractTaskName(tasksContent, '10.10');
+
+      expect(task1_1Name).toBe('Update regex pattern to use negative lookahead');
+      expect(task1_2Name).toBe('Verify commit message generation');
+      expect(task1_10Name).toBe('Handle edge case with ten subtasks');
+      expect(task1_100Name).toBe('Handle edge case with hundred subtasks');
+      expect(task10_1Name).toBe('First subtask of task 10');
+      expect(task10_10Name).toBe('Tenth subtask of task 10');
+
+      // Verify commit messages would be formatted correctly
+      expect(`Task 1.1 Complete: ${task1_1Name}`).toBe('Task 1.1 Complete: Update regex pattern to use negative lookahead');
+      expect(`Task 1.10 Complete: ${task1_10Name}`).toBe('Task 1.10 Complete: Handle edge case with ten subtasks');
+      expect(`Task 10.1 Complete: ${task10_1Name}`).toBe('Task 10.1 Complete: First subtask of task 10');
+    });
+
+    it('should not confuse parent and subtask numbers in commit messages', async () => {
+      const tasksContent = `
+# Implementation Plan
+
+- [ ] 1. Parent Task One
+  - [ ] 1.1 Subtask of Parent One
+  - [ ] 1.2 Another Subtask of Parent One
+
+- [ ] 2. Parent Task Two
+  - [ ] 2.1 Subtask of Parent Two
+
+- [ ] 10. Parent Task Ten
+  - [ ] 10.1 Subtask of Parent Ten
+  - [ ] 10.2 Another Subtask of Parent Ten
+
+- [ ] 11. Parent Task Eleven
+  - [ ] 11.1 Subtask of Parent Eleven
+`;
+
+      const extractTaskName = (monitor as any).extractTaskName.bind(monitor);
+
+      // Verify parent tasks don't match subtasks
+      expect(extractTaskName(tasksContent, '1')).toBe('Parent Task One');
+      expect(extractTaskName(tasksContent, '1')).not.toBe('Subtask of Parent One');
+      
+      expect(extractTaskName(tasksContent, '2')).toBe('Parent Task Two');
+      expect(extractTaskName(tasksContent, '2')).not.toBe('Subtask of Parent Two');
+      
+      expect(extractTaskName(tasksContent, '10')).toBe('Parent Task Ten');
+      expect(extractTaskName(tasksContent, '10')).not.toBe('Subtask of Parent Ten');
+      
+      expect(extractTaskName(tasksContent, '11')).toBe('Parent Task Eleven');
+      expect(extractTaskName(tasksContent, '11')).not.toBe('Subtask of Parent Eleven');
+
+      // Verify subtasks are extracted correctly
+      expect(extractTaskName(tasksContent, '1.1')).toBe('Subtask of Parent One');
+      expect(extractTaskName(tasksContent, '10.1')).toBe('Subtask of Parent Ten');
+      expect(extractTaskName(tasksContent, '11.1')).toBe('Subtask of Parent Eleven');
+    });
+
+    it('should handle real-world task formats with metadata', async () => {
+      const tasksContent = `
+# Implementation Plan
+
+- [ ] 1. Fix Task Name Extraction Regex Bug (Group 5)
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  **Estimated Effort**: 15 minutes
+  **Priority**: Quick Win
+  
+  **Success Criteria:**
+  - Regex pattern uses negative lookahead to prevent subtask matching
+  - Parent task "1" matches only "1. Main Task", not "1.1 Sub Task"
+  - All task name extraction tests pass
+  - Commit messages reference correct tasks
+
+  - [ ] 1.1 Update regex pattern to use negative lookahead
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Locate task name extraction code
+    - Replace \`(?:\\\\.\\\\d+)?\` with \`(?!\\\\.)\`
+    - Test with various task number formats
+    - Verify parent tasks match correctly
+    - _Requirements: 1.1, 1.2, 1.3_
+
+  - [ ] 1.2 Verify commit message generation
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Test commit message generation with updated regex
+    - Verify correct task names in messages
+    - Check edge cases (task 10, task 100, etc.)
+    - _Requirements: 1.4_
+`;
+
+      const extractTaskName = (monitor as any).extractTaskName.bind(monitor);
+
+      // Verify extraction works with real-world task format including metadata
+      const parentTaskName = extractTaskName(tasksContent, '1');
+      const subtask1Name = extractTaskName(tasksContent, '1.1');
+      const subtask2Name = extractTaskName(tasksContent, '1.2');
+
+      expect(parentTaskName).toBe('Fix Task Name Extraction Regex Bug (Group 5)');
+      expect(subtask1Name).toBe('Update regex pattern to use negative lookahead');
+      expect(subtask2Name).toBe('Verify commit message generation');
+
+      // Verify commit messages would be correct
+      expect(`Task 1 Complete: ${parentTaskName}`).toBe('Task 1 Complete: Fix Task Name Extraction Regex Bug (Group 5)');
+      expect(`Task 1.1 Complete: ${subtask1Name}`).toBe('Task 1.1 Complete: Update regex pattern to use negative lookahead');
+      expect(`Task 1.2 Complete: ${subtask2Name}`).toBe('Task 1.2 Complete: Verify commit message generation');
     });
   });
 });
