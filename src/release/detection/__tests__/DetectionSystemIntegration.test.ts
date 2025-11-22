@@ -185,9 +185,13 @@ Successfully implemented a new validation engine with rule-based validation and 
 - Performance tests showing 60% improvement in validation speed
 `;
 
+      // detectReleaseFromTaskCompletion calls readFile twice (tasks + completion)
+      // parseTaskCompletionDocument calls readFile once more (completion again)
+      // So we need 3 mock values total
       mockFs.readFile
-        .mockResolvedValueOnce(tasksContent)
-        .mockResolvedValueOnce(completionContent);
+        .mockResolvedValueOnce(tasksContent)        // For detectReleaseFromTaskCompletion (tasks)
+        .mockResolvedValueOnce(completionContent)   // For detectReleaseFromTaskCompletion (completion)
+        .mockResolvedValueOnce(completionContent);  // For parseTaskCompletionDocument (completion)
       mockFs.access.mockResolvedValue(undefined);
 
       // Step 1: Detect release signal from task completion
@@ -213,7 +217,8 @@ Successfully implemented a new validation engine with rule-based validation and 
 
       // Verify new features are properly extracted with improved logic
       expect(taskAnalysis.analysis.newFeatures.some(f => 
-        f.title.includes('rule-based validation engine') || f.description.includes('rule-based validation engine')
+        f.title.toLowerCase().includes('rule-based validation engine') || 
+        f.description.toLowerCase().includes('rule-based validation engine')
       )).toBe(true);
 
       // Note: Artifacts are not automatically linked to features in the improved extraction
@@ -264,8 +269,9 @@ Fixed several critical bugs in the validation system.
 `;
 
       mockFs.readFile
-        .mockResolvedValueOnce(tasksContent)
-        .mockResolvedValueOnce(completionContent);
+        .mockResolvedValueOnce(tasksContent)      // For detectReleaseFromTaskCompletion (tasks.md)
+        .mockResolvedValueOnce(completionContent) // For detectReleaseFromTaskCompletion (completion doc)
+        .mockResolvedValueOnce(completionContent); // For parseTaskCompletionDocument (completion doc)
       mockFs.access.mockResolvedValue(undefined);
 
       // Step 1: Detect release signal from task completion

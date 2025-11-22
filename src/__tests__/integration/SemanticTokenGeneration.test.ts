@@ -257,10 +257,13 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
 
       // Extract semantic token names from each platform
       const allSemantics = getAllSemanticTokens();
-      // Filter out shadow/glow tokens (same filter as generator)
+      // Filter out shadow/glow/layering tokens (same filter as generator)
+      // Note: zIndex tokens are web/iOS only, elevation tokens are Android only
       const semanticTokens = allSemantics.filter(s => 
         !s.name.startsWith('shadow.') && 
-        !s.name.startsWith('glow.')
+        !s.name.startsWith('glow.') &&
+        !s.name.startsWith('zIndex.') &&
+        !s.name.startsWith('elevation.')
       );
       const semanticTokenNames = semanticTokens.map(t => t.name);
 
@@ -285,10 +288,12 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
       const iosResult = generator.generateiOSTokens();
       const androidResult = generator.generateAndroidTokens();
 
-      // Get semantic tokens
+      // Get semantic tokens (filter out platform-specific layering tokens)
       const semanticTokens = getAllSemanticTokens().filter(s => 
         !s.name.startsWith('shadow.') && 
-        !s.name.startsWith('glow.')
+        !s.name.startsWith('glow.') &&
+        !s.name.startsWith('zIndex.') &&
+        !s.name.startsWith('elevation.')
       );
 
       // Verify each platform maintains the same relationships
