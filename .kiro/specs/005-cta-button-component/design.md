@@ -709,6 +709,159 @@ describe('ButtonCTA token integration', () => {
 
 ---
 
+## Component Examples Pattern
+
+### Pattern Overview
+
+The ButtonCTA component uses a "canary pattern" for component examples where:
+- **README serves as source of truth** for component usage and API documentation
+- **HTML validation files** provide automated validation that examples remain functional
+- **Examples are embedded in README** using standard markdown code blocks
+
+This pattern emerged from Task 7 prototype work evaluating separate example files vs README-embedded examples.
+
+### Pattern Decision
+
+**Decision**: Use README as single source of truth with HTML validation files as canaries.
+
+**Rationale**:
+- README is the natural first stop for developers learning a component
+- Embedding examples in README keeps documentation and examples synchronized
+- HTML validation files catch breaking changes without duplicating documentation
+- Simpler mental model: one place for docs, validation files for CI/CD
+
+### README Structure
+
+The component README follows this structure:
+
+```markdown
+# ButtonCTA Component
+
+## Overview
+[Component description and key features]
+
+## Usage
+
+### Basic Usage
+[Code example with explanation]
+
+### Size Variants
+[Code examples for small, medium, large]
+
+### Visual Styles
+[Code examples for primary, secondary, tertiary]
+
+### With Icons
+[Code example with leading icon]
+
+### States
+[Code examples for hover, pressed, focus, disabled]
+
+## API Reference
+[Props table with types and descriptions]
+
+## Accessibility
+[WCAG compliance notes and keyboard navigation]
+
+## Platform-Specific Notes
+[Web, iOS, Android implementation differences]
+```
+
+### HTML Validation Files
+
+HTML validation files serve as automated tests that examples remain functional:
+
+**Location**: `src/components/core/ButtonCTA/examples/*.html`
+
+**Purpose**:
+- Validate that component examples work in actual browser environment
+- Catch breaking changes in component API or token generation
+- Provide runnable examples for manual testing during development
+
+**Important**: These files are validation mechanisms, not documentation. They include a warning comment to prevent misuse:
+
+```html
+<head>
+  <!--
+    VALIDATION FILE - NOT DOCUMENTATION
+    
+    This HTML file validates that ButtonCTA examples work correctly.
+    It is NOT the source of truth for component documentation.
+    
+    For component usage and examples, see: ../README.md
+    
+    Purpose: Automated validation that examples remain functional
+    Usage: Run validation script or open in browser for manual testing
+  -->
+  <title>ButtonCTA Validation - [Example Name]</title>
+  ...
+</head>
+```
+
+### Validation Files Structure
+
+**BasicUsage.html**:
+- Single button with minimal props
+- Validates core functionality works
+
+**WithIcon.html**:
+- Button with leading icon
+- Validates Icon System integration
+
+**Variants.html**:
+- All size and style combinations
+- Validates token generation for all variants
+- Validates interaction states (hover, pressed, focus)
+
+### Pattern Benefits
+
+**For Developers**:
+- Single source of truth (README) for learning component usage
+- Copy-paste examples directly from documentation
+- No confusion about which file contains "the real examples"
+
+**For AI Agents**:
+- Clear documentation structure in README
+- Validation files provide functional verification
+- No ambiguity about documentation vs validation
+
+**For Maintenance**:
+- Update examples in one place (README)
+- Validation files catch breaking changes automatically
+- Simpler to keep documentation synchronized with implementation
+
+### Pattern Trade-offs
+
+**Advantages**:
+- ✅ Single source of truth reduces documentation drift
+- ✅ README is natural first stop for developers
+- ✅ Validation files provide automated testing without documentation duplication
+- ✅ Simpler mental model (docs in README, validation in HTML)
+
+**Disadvantages**:
+- ❌ HTML validation files require maintenance when component API changes
+- ❌ Cannot run examples directly from README (must copy-paste or use validation files)
+- ❌ Validation files may become stale if not run regularly
+
+**Mitigation**:
+- Include validation script in CI/CD pipeline to catch stale validation files
+- Document validation file purpose clearly to prevent misuse as documentation
+- Keep validation files minimal (only essential examples)
+
+### Future Considerations
+
+**If Pattern Proves Insufficient**:
+- Consider interactive documentation tools (Storybook, Docusaurus)
+- Evaluate separate example files if README becomes too long
+- Assess whether validation files provide sufficient value vs maintenance cost
+
+**Success Metrics**:
+- Developers find examples easily in README
+- Validation files catch breaking changes before production
+- Documentation remains synchronized with implementation
+
+---
+
 ## Design Decisions
 
 
@@ -1278,6 +1431,53 @@ After tokens are created, implement the Button Component in this order:
 5. **Create tests** (__tests__/)
 6. **Create examples** (examples/)
 7. **Write documentation** (README.md)
+
+---
+
+## Documentation Strategy
+
+### Examples Directory (Experimental - Task 7.1)
+
+**Status**: Prototype phase - evaluating pattern viability
+
+**Context**: During Task 7.1 execution, work began prematurely before the task was properly defined or the design was planned. This section establishes the experimental framework for evaluating whether separate example files provide value over README-only documentation.
+
+**Hypothesis**: Separate example files in an `examples/` directory will improve:
+- **AI Agent Comprehension**: AI agents can more easily discover and understand component usage patterns
+- **Developer Usability**: Developers can find copy-paste examples more efficiently
+- **Documentation Maintainability**: Examples remain synchronized with component implementation
+
+**Prototype Scope**:
+- `examples/basic-usage.md` - Simple button instantiation with minimal props
+- `examples/variant-showcase.md` - All size/variant combinations and state demonstrations
+
+**Evaluation Criteria**:
+
+After Task 7.1 completion, evaluate against these specific questions:
+
+1. **AI Agent Comprehension**: Can AI agents locate and use examples effectively?
+2. **Developer Usability**: Are examples easier to find than README documentation?
+3. **Maintenance Burden**: Do examples stay synchronized with component changes?
+
+**Decision Framework**:
+
+The completion document for Task 7.1 MUST include one of these recommendations:
+
+**If Adopting Pattern**:
+- What worked well (specific benefits observed)
+- Recommended adjustments (improvements to pattern)
+- How to apply to remaining tasks (implementation guidance)
+
+**If Rejecting Pattern**:
+- What didn't work (specific problems encountered)
+- Why README-only is better (comparative analysis)
+- Alternative approach recommended (if any)
+
+**Success Criteria**: The prototype is successful if it provides clear, evidence-based reasoning for adopting or rejecting the pattern. Success is NOT measured by whether we adopt the pattern, but by whether we have sufficient evidence to make an informed decision.
+
+**Alternative**: If prototype shows limited value, consolidate examples into README and remove `examples/` directory.
+
+**Reference**: See `.kiro/specs/005-cta-button-component/task-7-1-prototype-plan.md` for complete prototype plan.
 
 ---
 

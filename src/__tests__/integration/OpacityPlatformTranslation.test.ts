@@ -25,7 +25,7 @@ describe('Opacity Platform Translation Integration', () => {
     ];
 
     test('all platforms should use same unitless opacity values', () => {
-      testOpacityValues.forEach(({ name, value, description }) => {
+      testOpacityValues.forEach(({ value }) => {
         // All platforms should use the exact same opacity value
         // Web uses 0.48, iOS uses 0.48, Android uses 0.48f
         expect(value).toBeGreaterThanOrEqual(0.0);
@@ -38,7 +38,7 @@ describe('Opacity Platform Translation Integration', () => {
       const iosGenerator = new iOSFormatGenerator();
       const androidGenerator = new AndroidFormatGenerator('kotlin');
 
-      testOpacityValues.forEach(({ name, value }) => {
+      testOpacityValues.forEach(({ value }) => {
         // Generate platform-specific output
         const webOutput = webGenerator.generateOpacityProperty(value);
         const iosOutput = iosGenerator.generateOpacityModifier(value);

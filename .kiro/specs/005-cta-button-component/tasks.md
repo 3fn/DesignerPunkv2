@@ -430,7 +430,7 @@ This implementation plan converts the CTA Button Component design into actionabl
     - _Requirements: 13.1-13.4, 16.5_
 
 
-- [ ] 6. Create Component Tests
+- [x] 6. Create Component Tests
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -522,7 +522,7 @@ This implementation plan converts the CTA Button Component design into actionabl
     - Test focus indicator visible on keyboard navigation
     - _Requirements: 12.1-12.6, 15.1-15.4_
 
-  - [ ] 6.9 Test touch targets and contrast
+  - [x] 6.9 Test touch targets and contrast
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test small button meets 44px minimum touch target
@@ -533,14 +533,14 @@ This implementation plan converts the CTA Button Component design into actionabl
     - Test focus outline has ≥3:1 contrast ratio
     - _Requirements: 13.1-13.4, 14.1-14.4, 16.1-16.5_
 
-  - [ ] 6.10 Test size and style variant snapshots
+  - [x] 6.10 Test size and style variant snapshots
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create snapshot tests for all size variants (small, medium, large)
     - Create snapshot tests for all style variants (primary, secondary, tertiary)
     - _Requirements: 1.1-1.7, 2.1-2.4_
 
-  - [ ] 6.11 Test icon and text variant snapshots
+  - [x] 6.11 Test icon and text variant snapshots
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create snapshot tests for buttons with icons
@@ -549,7 +549,7 @@ This implementation plan converts the CTA Button Component design into actionabl
     - Create snapshot tests for truncated text (noWrap)
     - _Requirements: 7.1-7.4, 8.1-8.6_
 
-  - [ ] 6.12 Test interaction state snapshots
+  - [x] 6.12 Test interaction state snapshots
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create snapshot tests for hover state
@@ -558,7 +558,7 @@ This implementation plan converts the CTA Button Component design into actionabl
     - Create snapshot tests for disabled state
     - _Requirements: 10.1-10.3, 11.1-11.3, 12.1-12.6_
 
-  - [ ] 6.13 Test typography and spacing tokens
+  - [x] 6.13 Test typography and spacing tokens
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test small button uses typography.bodyMd
@@ -569,7 +569,7 @@ This implementation plan converts the CTA Button Component design into actionabl
     - Test large button uses space.inset.generous (32px) horizontal padding
     - _Requirements: 1.5-1.7, 3.1-3.3_
 
-  - [ ] 6.14 Test color and radius tokens
+  - [x] 6.14 Test color and radius tokens
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test primary button uses color.primary background
@@ -580,7 +580,7 @@ This implementation plan converts the CTA Button Component design into actionabl
     - Test large button uses radius200 (16px)
     - _Requirements: 2.4, 4.1-4.3, 5.1-5.3_
 
-  - [ ] 6.15 Test icon and accessibility tokens
+  - [x] 6.15 Test icon and accessibility tokens
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test small/medium button uses icon.size100 (24px)
@@ -589,31 +589,31 @@ This implementation plan converts the CTA Button Component design into actionabl
     - _Requirements: 8.2-8.3, 12.1-12.4, 18.1-18.2_
 
 
-- [ ] 7. Create Usage Examples and Documentation
+- [x] 7. Create Component Documentation with Canary Pattern
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
   
   **Success Criteria:**
-  - Usage examples demonstrate all component variants and features
-  - Examples are runnable and visually demonstrate component behavior
+  - README serves as single source of truth for component usage
+  - HTML validation files provide automated validation of examples
+  - Examples demonstrate all component variants and features
   - Documentation explains token consumption and customization
   - Accessibility guidance provided for proper usage
   - Cross-platform considerations documented
   
   **Primary Artifacts:**
-  - `src/components/core/ButtonCTA/examples/BasicUsage.tsx`
-  - `src/components/core/ButtonCTA/examples/SizeVariants.tsx`
-  - `src/components/core/ButtonCTA/examples/StyleVariants.tsx`
-  - `src/components/core/ButtonCTA/examples/WithIcons.tsx`
-  - `src/components/core/ButtonCTA/examples/AccessibilityExamples.tsx`
-  - Updated README.md with comprehensive documentation
+  - `src/components/core/ButtonCTA/README.md` (comprehensive documentation with embedded examples)
+  - `src/components/core/ButtonCTA/examples/BasicUsage.html` (validation canary)
+  - `src/components/core/ButtonCTA/examples/WithIcon.html` (validation canary)
+  - `src/components/core/ButtonCTA/examples/Variants.html` (validation canary)
+  - `scripts/validate-examples.js` (validation script)
   
   **Completion Documentation:**
   - Detailed: `.kiro/specs/005-cta-button-component/completion/task-7-parent-completion.md`
   - Summary: `docs/specs/005-cta-button-component/task-7-summary.md` (triggers release detection)
 
-  - [ ] 7.1 Create basic usage examples
+  - [x] 7.1 Create basic usage examples
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create BasicUsage.tsx with simple button examples
@@ -624,63 +624,93 @@ This implementation plan converts the CTA Button Component design into actionabl
     - Add code comments explaining each example
     - _Requirements: 1.1-1.7, 2.1-2.4_
 
-  - [ ] 7.2 Create size variant examples
+  - [x] 7.1-Prototype PROTOTYPE: Executable Examples Pattern
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    - Create SizeVariants.tsx demonstrating all three sizes
-    - Show small button (40px height) with use case
-    - Show medium button (48px height) with use case
-    - Show large button (56px height) with use case
-    - Demonstrate size selection guidance
-    - Add visual comparison of all sizes
-    - _Requirements: 1.1-1.4_
+    
+    **Purpose**: Validate executable examples approach before committing to pattern
+    
+    **Scope**:
+    - Create `src/components/core/ButtonCTA/examples/` directory
+    - Create 3 minimal HTML examples (BasicUsage.html, WithIcon.html, Variants.html)
+    - Create simple validation script (`scripts/validate-examples.js`)
+    - Manually test examples in browser
+    - Document findings and recommendation in completion notes
+    
+    **Decision Point**: 
+    - If successful → Adopt pattern for Tasks 7.2-7.5
+    - If unsuccessful → Revert to minimal static examples with staleness warnings
+    
+    **Success Criteria**:
+    - Examples are clearer than static comments would be
+    - Examples break when component API changes (self-correcting)
+    - Validation script is maintainable (~50 lines or less)
+    - Manual testing feels reasonable (< 5 minutes)
+    
+    _Requirements: 7.1_
 
-  - [ ] 7.3 Create style variant examples
+  - [x] 7.1-Resolution ASSESSMENT: Evaluate Example Documentation Approach
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    - Create StyleVariants.tsx demonstrating all three styles
-    - Show primary button (filled) with use case
-    - Show secondary button (outlined) with use case
-    - Show tertiary button (text-only) with use case
-    - Demonstrate visual hierarchy guidance
-    - Add visual comparison of all styles
-    - _Requirements: 2.1-2.3_
+    
+    **Purpose**: Assess prototype results and decide on documentation pattern
+    
+    **Scope**:
+    - Review Task 7.1 and Task 7.1-Prototype completion documentation
+    - Compare original approach (7.1) vs executable examples (7.1-Prototype)
+    - Evaluate against success criteria (clarity, self-correction, maintainability, testing burden)
+    - Consider test suite volume concerns (FUTURE-test-suite-volume-analysis.md)
+    - Compare executable examples vs tests-as-documentation vs static examples
+    - Document decision with evidence-based reasoning
+    - Update design.md Documentation Strategy section with decision
+    - Update remaining Task 7 subtasks based on decision
+    
+    **Decision Options**:
+    1. **Adopt executable examples**: Update Tasks 7.2-7.5 to use examples/ pattern
+    2. **Use tests as documentation**: Reference __tests__/ files, no separate examples
+    3. **Use minimal static examples**: README-only with "may be stale" warnings
+    
+    **Deliverables**:
+    - Decision document at `.kiro/specs/005-cta-button-component/task-7-1-resolution.md`
+    - Updated design.md Documentation Strategy section
+    - Updated Task 7.2-7.5 subtasks (if pattern changes)
+    
+    _Requirements: 7.1_
 
-  - [ ] 7.4 Create icon integration examples
+  - [x] 7.2 Write comprehensive README documentation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    - Create WithIcons.tsx demonstrating icon usage
-    - Show buttons with leading icons
-    - Demonstrate icon size selection (size100 vs size125)
-    - Show optical balance effect on secondary/tertiary buttons
-    - Demonstrate icon-text spacing
-    - Show buttons without icons for comparison
-    - _Requirements: 8.1-8.6, 9.1-9.3_
-
-  - [ ] 7.5 Create accessibility examples
-    **Type**: Implementation
-    **Validation**: Tier 2 - Standard
-    - Create AccessibilityExamples.tsx demonstrating accessibility features
-    - Show keyboard navigation examples
-    - Demonstrate focus indicators
-    - Show touch target extension for small buttons
-    - Demonstrate screen reader announcements
-    - Show color contrast examples
-    - Add accessibility best practices guidance
-    - _Requirements: 12.1-12.6, 13.1-13.4, 14.1-14.4, 15.1-15.4, 16.1-16.5_
-
-  - [ ] 7.6 Update component documentation
-    **Type**: Implementation
-    **Validation**: Tier 2 - Standard
-    - Update README.md with comprehensive component documentation
-    - Document all props with types and descriptions
-    - Document token consumption (which tokens are used)
-    - Document platform-specific behaviors
-    - Add troubleshooting section for common issues
-    - Add migration guide if replacing existing button component
+    - Create README.md with component overview and key features
+    - Document basic usage with code examples
+    - Document all size variants (small, medium, large) with examples
+    - Document all visual styles (primary, secondary, tertiary) with examples
+    - Document icon integration with examples
+    - Document interaction states (hover, pressed, focus, disabled)
+    - Include API reference table with props, types, and descriptions
     - Document accessibility features and WCAG compliance
-    - Add links to related components (Icon System)
-    - _Requirements: All requirements (comprehensive documentation)_
+    - Document platform-specific implementation notes
+    - _Requirements: 1.1-1.7, 2.1-2.4, 9.1-9.3_
+
+  - [x] 7.3 Create HTML validation files
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Create BasicUsage.html with minimal button example
+    - Create WithIcon.html with icon integration example
+    - Create Variants.html with all size/style combinations
+    - Add warning comment in <head> explaining validation purpose
+    - Ensure validation files reference README as source of truth
+    - Test validation files manually in browser
+    - _Requirements: 1.1-1.7, 2.1-2.4, 9.1-9.3_
+
+  - [x] 7.4 Update validation script
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Update scripts/validate-examples.js to validate all HTML files
+    - Ensure script checks that validation files load without errors
+    - Add check that validation files include warning comment
+    - Document validation script usage in README
+    - Test validation script with all HTML validation files
+    - _Requirements: 1.1-1.7, 2.1-2.4_
 
 ---
 
