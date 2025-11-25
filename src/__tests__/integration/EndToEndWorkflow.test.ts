@@ -70,16 +70,14 @@ describe('End-to-End Workflow Integration', () => {
           primitiveReferences: { default: 'space100' },
           category: SemanticCategory.SPACING,
           context: 'Grouped elements with normal spacing',
-          description: 'Standard spacing for grouped elements',
-          primitiveTokens: {}
+          description: 'Standard spacing for grouped elements'
         },
         {
           name: 'space.separated.normal',
           primitiveReferences: { default: 'space200' },
           category: SemanticCategory.SPACING,
           context: 'Separated elements with normal spacing',
-          description: 'Standard spacing for separated elements',
-          primitiveTokens: {}
+          description: 'Standard spacing for separated elements'
         }
       ];
 
@@ -377,16 +375,14 @@ describe('End-to-End Workflow Integration', () => {
           primitiveReferences: { default: 'space100' },
           category: SemanticCategory.SPACING,
           context: 'Tight grouping',
-          description: 'Minimal spacing for tightly grouped elements',
-          primitiveTokens: {}
+          description: 'Minimal spacing for tightly grouped elements'
         },
         {
           name: 'space.grouped.normal',
           primitiveReferences: { default: 'space100' },
           category: SemanticCategory.SPACING,
           context: 'Normal grouping',
-          description: 'Standard spacing for grouped elements',
-          primitiveTokens: {}
+          description: 'Standard spacing for grouped elements'
         },
         // Related spacing
         {
@@ -394,8 +390,7 @@ describe('End-to-End Workflow Integration', () => {
           primitiveReferences: { default: 'space200' },
           category: SemanticCategory.SPACING,
           context: 'Related elements',
-          description: 'Spacing for related but distinct elements',
-          primitiveTokens: {}
+          description: 'Spacing for related but distinct elements'
         },
         // Separated spacing
         {
@@ -403,8 +398,7 @@ describe('End-to-End Workflow Integration', () => {
           primitiveReferences: { default: 'space300' },
           category: SemanticCategory.SPACING,
           context: 'Separated elements',
-          description: 'Clear separation between independent elements',
-          primitiveTokens: {}
+          description: 'Clear separation between independent elements'
         }
       ];
 
@@ -431,8 +425,7 @@ describe('End-to-End Workflow Integration', () => {
         primitiveReferences: { default: 'space100' },
         category: SemanticCategory.SPACING,
         context: 'Valid reference',
-        description: 'References existing primitive',
-        primitiveTokens: {}
+        description: 'References existing primitive'
       };
 
       const validResult = engine.registerSemanticToken(validSemantic);
@@ -444,8 +437,7 @@ describe('End-to-End Workflow Integration', () => {
         primitiveReferences: { default: 'nonexistent' },
         category: SemanticCategory.SPACING,
         context: 'Invalid reference',
-        description: 'References non-existent primitive',
-        primitiveTokens: {}
+        description: 'References non-existent primitive'
       };
 
       const invalidResult = engine.registerSemanticToken(invalidSemantic);
@@ -583,8 +575,7 @@ describe('End-to-End Workflow Integration', () => {
         primitiveReferences: { default: 'space100' },
         category: SemanticCategory.SPACING,
         context: 'Normal spacing',
-        description: 'Standard spacing',
-        primitiveTokens: {}
+        description: 'Standard spacing'
       };
 
       engine.registerSemanticToken(semanticToken);

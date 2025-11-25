@@ -1,0 +1,17 @@
+{
+  "id": "1764030982-spec-completion",
+  "type": "spec-completion",
+  "source": ".kiro/specs/test-failure-fixes/completion/task-6-parent-completion.md",
+  "triggeredAt": "2025-11-25T00:36:22.3NZ",
+  "triggeredBy": "hook-system",
+  "git": {
+    "commit": "cad4f7c0d64d8a4bda956ca551ca2c64817625a1",
+    "branch": "main",
+    "message": "Fix: Detection integration test failures - correct mock setup and feature detection"
+  },
+  "workflow": {
+    "hookType": "auto",
+    "projectRoot": "/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2"
+  },
+  "status": "pending"
+}

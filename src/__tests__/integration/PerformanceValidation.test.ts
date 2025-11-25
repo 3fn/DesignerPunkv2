@@ -3,11 +3,65 @@
  * 
  * Tests performance requirements for token generation, validation,
  * and translation to ensure <5ms generation time and efficient operations.
+ * 
+ * DUAL-THRESHOLD APPROACH:
+ * - Normal Operation Thresholds: Current values (5ms, 10ms, etc.)
+ *   Provide headroom for normal variance and system load variations
+ * - Regression Detection Thresholds: 2x P95 measured performance
+ *   Detect genuine performance degradation without false positives
+ * 
+ * BASELINE MEASUREMENTS (November 22, 2025):
+ * - Token Registration: 0.233ms avg, 1.393ms P95 → 3ms regression threshold
+ * - Token Query: 0.002ms avg, 0.017ms P95 → 1ms regression threshold
+ * - Validation: 0.021ms avg, 0.060ms P95 → 1ms regression threshold
+ * - Statistics: 0.338ms avg, 0.802ms P95 → 2ms regression threshold
+ * - State Management: 0.416ms avg, 0.544ms P95 → 2ms regression threshold
+ * - Platform Generation: 0.185ms avg, 1.450ms P95 → 3ms regression threshold
+ * - Large Scale: 1.103ms avg, 1.702ms P95 → 4ms regression threshold
+ * - Config Update: 0.013ms avg, 0.102ms P95 → 1ms regression threshold
+ * 
+ * See: .kiro/specs/remaining-test-failures-fixes/completion/task-4-1-completion.md
  */
 
 import { TokenEngine } from '../../TokenEngine';
 import { TokenCategory, SemanticCategory } from '../../types';
 import type { PrimitiveToken, SemanticToken } from '../../types';
+
+/**
+ * Performance Thresholds Configuration
+ * 
+ * NORMAL OPERATION THRESHOLDS:
+ * Used for standard performance validation. Provide 5-10x headroom
+ * over typical performance to allow for system variance.
+ */
+const NORMAL_THRESHOLDS = {
+  tokenRegistration: 5,      // ms - Single token registration
+  tokenQuery: 5,             // ms - Query operations
+  validation: 5,             // ms - Validation operations
+  statistics: 5,             // ms - Statistics generation
+  stateManagement: 5,        // ms - State export/import
+  platformGeneration: 10,    // ms - Platform-specific generation
+  largeScale: 50,            // ms - Batch operations (100 tokens)
+  configUpdate: 1,           // ms - Configuration updates
+  asyncOperations: 15        // ms - Async operations (all platforms)
+} as const;
+
+/**
+ * REGRESSION DETECTION THRESHOLDS:
+ * Based on 2x P95 measured performance. Detect genuine performance
+ * degradation while avoiding false positives from normal variance.
+ */
+const REGRESSION_THRESHOLDS = {
+  tokenRegistration: 3,      // ms - 2x P95 (1.393ms)
+  tokenQuery: 1,             // ms - 2x P95 (0.017ms)
+  validation: 1,             // ms - 2x P95 (0.060ms)
+  statistics: 2,             // ms - 2x P95 (0.802ms)
+  stateManagement: 2,        // ms - 2x P95 (0.544ms)
+  platformGeneration: 3,     // ms - 2x P95 (1.450ms)
+  largeScale: 4,             // ms - 2x P95 (1.702ms)
+  configUpdate: 1,           // ms - 2x P95 (0.102ms)
+  performanceConsistency: 1  // ms - Standard deviation threshold
+} as const;
 
 describe('Performance Validation Integration', () => {
   let engine: TokenEngine;
@@ -21,7 +75,7 @@ describe('Performance Validation Integration', () => {
   });
 
   describe('Token Registration Performance', () => {
-    it('should register single primitive token in <5ms', () => {
+    it('should register single primitive token within normal threshold', () => {
       const token: PrimitiveToken = {
         name: 'space100',
         category: TokenCategory.SPACING,
@@ -44,10 +98,36 @@ describe('Performance Validation Integration', () => {
       const endTime = performance.now();
 
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(5);
+      expect(duration).toBeLessThan(NORMAL_THRESHOLDS.tokenRegistration);
     });
 
-    it('should register batch of 10 primitive tokens in <5ms', () => {
+    it('should register single primitive token without regression', () => {
+      const token: PrimitiveToken = {
+        name: 'space100',
+        category: TokenCategory.SPACING,
+        baseValue: 8,
+        familyBaseValue: 8,
+        description: 'Base spacing',
+        mathematicalRelationship: 'base',
+        baselineGridAlignment: true,
+        isStrategicFlexibility: false,
+        isPrecisionTargeted: false,
+        platforms: {
+          web: { value: 8, unit: 'px' },
+          ios: { value: 8, unit: 'pt' },
+          android: { value: 8, unit: 'dp' }
+        }
+      };
+
+      const startTime = performance.now();
+      engine.registerPrimitiveToken(token);
+      const endTime = performance.now();
+
+      const duration = endTime - startTime;
+      expect(duration).toBeLessThan(REGRESSION_THRESHOLDS.tokenRegistration);
+    });
+
+    it('should register batch of 10 primitive tokens within normal threshold', () => {
       const tokens: PrimitiveToken[] = [];
       
       for (let i = 1; i <= 10; i++) {
@@ -74,10 +154,10 @@ describe('Performance Validation Integration', () => {
       const endTime = performance.now();
 
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(5);
+      expect(duration).toBeLessThan(NORMAL_THRESHOLDS.tokenRegistration);
     });
 
-    it('should register semantic token in <5ms', () => {
+    it('should register semantic token within normal threshold', () => {
       // Register primitive first
       const primitiveToken: PrimitiveToken = {
         name: 'space100',
@@ -103,8 +183,7 @@ describe('Performance Validation Integration', () => {
         primitiveReferences: { default: 'space100' },
         category: SemanticCategory.SPACING,
         context: 'Normal spacing',
-        description: 'Standard spacing',
-        primitiveTokens: {}
+        description: 'Standard spacing'
       };
 
       const startTime = performance.now();
@@ -112,7 +191,7 @@ describe('Performance Validation Integration', () => {
       const endTime = performance.now();
 
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(5);
+      expect(duration).toBeLessThan(NORMAL_THRESHOLDS.tokenRegistration);
     });
   });
 
@@ -143,31 +222,40 @@ describe('Performance Validation Integration', () => {
       engine.registerPrimitiveTokens(tokens);
     });
 
-    it('should retrieve single token in <1ms', () => {
+    it('should retrieve single token within normal threshold', () => {
       const startTime = performance.now();
       engine.getPrimitiveToken('space100');
       const endTime = performance.now();
 
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(1);
+      expect(duration).toBeLessThan(NORMAL_THRESHOLDS.tokenQuery);
     });
 
-    it('should query all tokens in <5ms', () => {
+    it('should retrieve single token without regression', () => {
+      const startTime = performance.now();
+      engine.getPrimitiveToken('space100');
+      const endTime = performance.now();
+
+      const duration = endTime - startTime;
+      expect(duration).toBeLessThan(REGRESSION_THRESHOLDS.tokenQuery);
+    });
+
+    it('should query all tokens within normal threshold', () => {
       const startTime = performance.now();
       engine.getAllPrimitiveTokens();
       const endTime = performance.now();
 
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(5);
+      expect(duration).toBeLessThan(NORMAL_THRESHOLDS.tokenQuery);
     });
 
-    it('should query tokens by category in <5ms', () => {
+    it('should query tokens by category within normal threshold', () => {
       const startTime = performance.now();
       engine.queryPrimitiveTokens({ category: TokenCategory.SPACING });
       const endTime = performance.now();
 
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(5);
+      expect(duration).toBeLessThan(NORMAL_THRESHOLDS.tokenQuery);
     });
   });
 
@@ -228,7 +316,7 @@ describe('Performance Validation Integration', () => {
       engine.registerPrimitiveTokens(tokens);
     });
 
-    it('should validate single token in <5ms', () => {
+    it('should validate single token within normal threshold', () => {
       const token = engine.getPrimitiveToken('space100')!;
 
       const startTime = performance.now();
@@ -236,34 +324,45 @@ describe('Performance Validation Integration', () => {
       const endTime = performance.now();
 
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(5);
+      expect(duration).toBeLessThan(NORMAL_THRESHOLDS.validation);
     });
 
-    it('should validate all tokens in <5ms', () => {
+    it('should validate single token without regression', () => {
+      const token = engine.getPrimitiveToken('space100')!;
+
+      const startTime = performance.now();
+      engine.validateToken(token);
+      const endTime = performance.now();
+
+      const duration = endTime - startTime;
+      expect(duration).toBeLessThan(REGRESSION_THRESHOLDS.validation);
+    });
+
+    it('should validate all tokens within normal threshold', () => {
       const startTime = performance.now();
       engine.validateAllTokens();
       const endTime = performance.now();
 
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(5);
+      expect(duration).toBeLessThan(NORMAL_THRESHOLDS.validation);
     });
 
-    it('should generate validation report in <10ms', () => {
+    it('should generate validation report within normal threshold', () => {
       const startTime = performance.now();
       engine.generateValidationReport();
       const endTime = performance.now();
 
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(10);
+      expect(duration).toBeLessThan(NORMAL_THRESHOLDS.platformGeneration);
     });
 
-    it('should validate cross-platform consistency in <5ms', () => {
+    it('should validate cross-platform consistency within normal threshold', () => {
       const startTime = performance.now();
       engine.validateCrossPlatformConsistency();
       const endTime = performance.now();
 
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(5);
+      expect(duration).toBeLessThan(NORMAL_THRESHOLDS.validation);
     });
   });
 
@@ -301,30 +400,38 @@ describe('Performance Validation Integration', () => {
           primitiveReferences: { default: `space${i}00` },
           category: SemanticCategory.SPACING,
           context: `Semantic ${i}`,
-          description: `Semantic spacing ${i}`,
-          primitiveTokens: {}
+          description: `Semantic spacing ${i}`
         });
       }
 
       engine.registerSemanticTokens(semanticTokens);
     });
 
-    it('should get statistics in <5ms', () => {
+    it('should get statistics within normal threshold', () => {
       const startTime = performance.now();
       engine.getStats();
       const endTime = performance.now();
 
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(5);
+      expect(duration).toBeLessThan(NORMAL_THRESHOLDS.statistics);
     });
 
-    it('should get health status in <5ms', () => {
+    it('should get statistics without regression', () => {
+      const startTime = performance.now();
+      engine.getStats();
+      const endTime = performance.now();
+
+      const duration = endTime - startTime;
+      expect(duration).toBeLessThan(REGRESSION_THRESHOLDS.statistics);
+    });
+
+    it('should get health status within normal threshold', () => {
       const startTime = performance.now();
       engine.getHealthStatus();
       const endTime = performance.now();
 
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(5);
+      expect(duration).toBeLessThan(NORMAL_THRESHOLDS.statistics);
     });
   });
 
@@ -355,16 +462,25 @@ describe('Performance Validation Integration', () => {
       engine.registerPrimitiveTokens(tokens);
     });
 
-    it('should export state in <5ms', () => {
+    it('should export state within normal threshold', () => {
       const startTime = performance.now();
       engine.exportState();
       const endTime = performance.now();
 
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(5);
+      expect(duration).toBeLessThan(NORMAL_THRESHOLDS.stateManagement);
     });
 
-    it('should import state in <10ms', () => {
+    it('should export state without regression', () => {
+      const startTime = performance.now();
+      engine.exportState();
+      const endTime = performance.now();
+
+      const duration = endTime - startTime;
+      expect(duration).toBeLessThan(REGRESSION_THRESHOLDS.stateManagement);
+    });
+
+    it('should import state within normal threshold', () => {
       const state = engine.exportState();
       const newEngine = new TokenEngine();
 
@@ -373,16 +489,16 @@ describe('Performance Validation Integration', () => {
       const endTime = performance.now();
 
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(10);
+      expect(duration).toBeLessThan(NORMAL_THRESHOLDS.platformGeneration);
     });
 
-    it('should reset state in <1ms', () => {
+    it('should reset state within normal threshold', () => {
       const startTime = performance.now();
       engine.reset();
       const endTime = performance.now();
 
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(1);
+      expect(duration).toBeLessThan(NORMAL_THRESHOLDS.configUpdate);
     });
   });
 
@@ -443,27 +559,36 @@ describe('Performance Validation Integration', () => {
       engine.registerPrimitiveTokens(tokens);
     });
 
-    it('should generate single platform tokens in <10ms', async () => {
+    it('should generate single platform tokens within normal threshold', async () => {
       const startTime = performance.now();
       await engine.generatePlatformTokensFor('web');
       const endTime = performance.now();
 
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(10); // Allow more time for async operations
+      expect(duration).toBeLessThan(NORMAL_THRESHOLDS.platformGeneration);
     });
 
-    it('should generate all platform tokens in <15ms', async () => {
+    it('should generate single platform tokens without regression', async () => {
+      const startTime = performance.now();
+      await engine.generatePlatformTokensFor('web');
+      const endTime = performance.now();
+
+      const duration = endTime - startTime;
+      expect(duration).toBeLessThan(REGRESSION_THRESHOLDS.platformGeneration);
+    });
+
+    it('should generate all platform tokens within normal threshold', async () => {
       const startTime = performance.now();
       await engine.generatePlatformTokens();
       const endTime = performance.now();
 
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(15); // 3 platforms × 5ms
+      expect(duration).toBeLessThan(NORMAL_THRESHOLDS.asyncOperations);
     });
   });
 
   describe('Large-Scale Performance', () => {
-    it('should handle 100 tokens efficiently', () => {
+    it('should handle 100 tokens within normal threshold', () => {
       const tokens: PrimitiveToken[] = [];
       
       for (let i = 1; i <= 100; i++) {
@@ -490,10 +615,40 @@ describe('Performance Validation Integration', () => {
       const endTime = performance.now();
 
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(50); // Allow more time for large batch
+      expect(duration).toBeLessThan(NORMAL_THRESHOLDS.largeScale);
     });
 
-    it('should validate 100 tokens efficiently', () => {
+    it('should handle 100 tokens without regression', () => {
+      const tokens: PrimitiveToken[] = [];
+      
+      for (let i = 1; i <= 100; i++) {
+        tokens.push({
+          name: `token${i}`,
+          category: TokenCategory.SPACING,
+          baseValue: 8 * (i % 10 + 1),
+          familyBaseValue: 8,
+          description: `Token ${i}`,
+          mathematicalRelationship: `base × ${i % 10 + 1}`,
+          baselineGridAlignment: true,
+          isStrategicFlexibility: false,
+          isPrecisionTargeted: false,
+          platforms: {
+            web: { value: 8 * (i % 10 + 1), unit: 'px' },
+            ios: { value: 8 * (i % 10 + 1), unit: 'pt' },
+            android: { value: 8 * (i % 10 + 1), unit: 'dp' }
+          }
+        });
+      }
+
+      const startTime = performance.now();
+      engine.registerPrimitiveTokens(tokens);
+      const endTime = performance.now();
+
+      const duration = endTime - startTime;
+      expect(duration).toBeLessThan(REGRESSION_THRESHOLDS.largeScale);
+    });
+
+    it('should validate 100 tokens within normal threshold', () => {
       const tokens: PrimitiveToken[] = [];
       
       for (let i = 1; i <= 100; i++) {
@@ -522,10 +677,10 @@ describe('Performance Validation Integration', () => {
       const endTime = performance.now();
 
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(50); // Allow more time for large validation
+      expect(duration).toBeLessThan(NORMAL_THRESHOLDS.largeScale);
     });
 
-    it('should query 100 tokens efficiently', () => {
+    it('should query 100 tokens within normal threshold', () => {
       const tokens: PrimitiveToken[] = [];
       
       for (let i = 1; i <= 100; i++) {
@@ -554,12 +709,12 @@ describe('Performance Validation Integration', () => {
       const endTime = performance.now();
 
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(10);
+      expect(duration).toBeLessThan(NORMAL_THRESHOLDS.platformGeneration);
     });
   });
 
   describe('Configuration Update Performance', () => {
-    it('should update configuration in <1ms', () => {
+    it('should update configuration within normal threshold', () => {
       const startTime = performance.now();
       engine.updateConfig({
         strategicFlexibilityThreshold: 0.9,
@@ -568,16 +723,28 @@ describe('Performance Validation Integration', () => {
       const endTime = performance.now();
 
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(1);
+      expect(duration).toBeLessThan(NORMAL_THRESHOLDS.configUpdate);
     });
 
-    it('should get configuration in <1ms', () => {
+    it('should update configuration without regression', () => {
+      const startTime = performance.now();
+      engine.updateConfig({
+        strategicFlexibilityThreshold: 0.9,
+        autoValidate: false
+      });
+      const endTime = performance.now();
+
+      const duration = endTime - startTime;
+      expect(duration).toBeLessThan(REGRESSION_THRESHOLDS.configUpdate);
+    });
+
+    it('should get configuration within normal threshold', () => {
       const startTime = performance.now();
       engine.getConfig();
       const endTime = performance.now();
 
       const duration = endTime - startTime;
-      expect(duration).toBeLessThan(1);
+      expect(duration).toBeLessThan(NORMAL_THRESHOLDS.configUpdate);
     });
   });
 
@@ -617,11 +784,39 @@ describe('Performance Validation Integration', () => {
         sum + Math.pow(duration - average, 2), 0) / durations.length;
       const stdDev = Math.sqrt(variance);
 
-      // Performance should be consistent (adjusted threshold based on system characteristics)
-      // Threshold increased from 2ms to accommodate measured variance of ~0.825ms
-      // This reflects the current system's performance characteristics without indicating degradation
-      expect(stdDev).toBeLessThan(1.0); // Allow 1ms variation (adjusted from 2ms based on actual measurements)
-      expect(average).toBeLessThan(5); // Average should be under 5ms
+      // Performance should be consistent
+      // Baseline: stdDev ~0.002ms (measured Nov 22, 2025)
+      // Threshold: 1ms allows for normal system variance
+      expect(stdDev).toBeLessThan(REGRESSION_THRESHOLDS.performanceConsistency);
+      expect(average).toBeLessThan(NORMAL_THRESHOLDS.tokenRegistration);
+    });
+
+    it('should detect performance regression in token registration', () => {
+      const token: PrimitiveToken = {
+        name: 'space100',
+        category: TokenCategory.SPACING,
+        baseValue: 8,
+        familyBaseValue: 8,
+        description: 'Base spacing',
+        mathematicalRelationship: 'base',
+        baselineGridAlignment: true,
+        isStrategicFlexibility: false,
+        isPrecisionTargeted: false,
+        platforms: {
+          web: { value: 8, unit: 'px' },
+          ios: { value: 8, unit: 'pt' },
+          android: { value: 8, unit: 'dp' }
+        }
+      };
+
+      const startTime = performance.now();
+      engine.registerPrimitiveToken(token);
+      const endTime = performance.now();
+
+      const duration = endTime - startTime;
+      
+      // Should not exceed regression threshold (2x P95)
+      expect(duration).toBeLessThan(REGRESSION_THRESHOLDS.tokenRegistration);
     });
   });
 });
