@@ -5,7 +5,7 @@
  * ensuring graceful degradation and clear error messages.
  */
 
-import { BuildErrorHandler, type BuildError, type FallbackStrategy } from '../../integration/BuildErrorHandler';
+import { BuildErrorHandler, type BuildError } from '../../integration/BuildErrorHandler';
 import { BuildSystemIntegration, type BuildSystemConfig } from '../../integration/BuildSystemInterface';
 
 describe('Error Handling Integration', () => {
@@ -168,12 +168,10 @@ describe('Error Handling Integration', () => {
     });
 
     it('should use custom error handler', async () => {
-      let customHandlerCalled = false;
-      
       const customHandler = new BuildErrorHandler({
         strategy: 'use-default',
-        customHandler: async (error: BuildError) => {
-          customHandlerCalled = true;
+        customHandler: async (_error: BuildError) => {
+          // Custom handler implementation
         }
       });
 

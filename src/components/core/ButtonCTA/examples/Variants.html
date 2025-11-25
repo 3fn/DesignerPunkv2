@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--
+    VALIDATION FILE - NOT DOCUMENTATION
+    
+    This HTML file validates that ButtonCTA examples work correctly.
+    It is NOT the source of truth for component documentation.
+    
+    For component usage and examples, see: ../README.md
+    
+    Purpose: Automated validation that examples remain functional
+    Usage: Run validation script or open in browser for manual testing
+  -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ButtonCTA Validation - Variants</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      padding: 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    .example-section {
+      margin-bottom: 32px;
+      padding: 16px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+    }
+    
+    .example-section h2 {
+      margin-top: 0;
+      font-size: 18px;
+      color: #333;
+    }
+    
+    .example-section p {
+      color: #666;
+      margin-bottom: 16px;
+    }
+    
+    .variant-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    
+    .variant-item {
+      padding: 16px;
+      background: #f9f9f9;
+      border-radius: 4px;
+      text-align: center;
+    }
+    
+    .variant-item h3 {
+      margin: 0 0 12px 0;
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .variant-item .specs {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #999;
+    }
+    
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+    
+    .comparison-table th,
+    .comparison-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .comparison-table th {
+      background: #f5f5f5;
+      font-weight: 600;
+    }
+    
+    .comparison-table td:first-child {
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <h1>ButtonCTA - Size and Style Variants</h1>
+  
+  <div class="example-section">
+    <h2>Size Variants</h2>
+    <p>Three size variants provide flexibility for different UI contexts and hierarchies.</p>
+    <div class="variant-grid">
+      <div class="variant-item">
+        <h3>Small (40px)</h3>
+        <button-cta label="Small Button" size="small"></button-cta>
+        <div class="specs">
+          Height: 40px<br>
+          Typography: bodyMd<br>
+          Padding: 16px horizontal
+        </div>
+      </div>
+      <div class="variant-item">
+        <h3>Medium (48px)</h3>
+        <button-cta label="Medium Button" size="medium"></button-cta>
+        <div class="specs">
+          Height: 48px<br>
+          Typography: bodyMd<br>
+          Padding: 24px horizontal
+        </div>
+      </div>
+      <div class="variant-item">
+        <h3>Large (56px)</h3>
+        <button-cta label="Large Button" size="large"></button-cta>
+        <div class="specs">
+          Height: 56px<br>
+          Typography: bodyLg<br>
+          Padding: 32px horizontal
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="example-section">
+    <h2>Style Variants</h2>
+    <p>Three visual styles establish clear hierarchy and distinguish between primary and secondary actions.</p>
+    <div class="variant-grid">
+      <div class="variant-item">
+        <h3>Primary</h3>
+        <button-cta label="Primary Action" style="primary"></button-cta>
+        <div class="specs">
+          Filled background<br>
+          Primary color<br>
+          High emphasis
+        </div>
+      </div>
+      <div class="variant-item">
+        <h3>Secondary</h3>
+        <button-cta label="Secondary Action" style="secondary"></button-cta>
+        <div class="specs">
+          Outlined border<br>
+          Primary color text<br>
+          Medium emphasis
+        </div>
+      </div>
+      <div class="variant-item">
+        <h3>Tertiary</h3>
+        <button-cta label="Tertiary Action" style="tertiary"></button-cta>
+        <div class="specs">
+          Text only<br>
+          Primary color text<br>
+          Low emphasis
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="example-section">
+    <h2>Size × Style Matrix</h2>
+    <p>All combinations of size and style variants work together seamlessly.</p>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Size</th>
+          <th>Primary</th>
+          <th>Secondary</th>
+          <th>Tertiary</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Small</td>
+          <td><button-cta label="Small Primary" size="small" style="primary"></button-cta></td>
+          <td><button-cta label="Small Secondary" size="small" style="secondary"></button-cta></td>
+          <td><button-cta label="Small Tertiary" size="small" style="tertiary"></button-cta></td>
+        </tr>
+        <tr>
+          <td>Medium</td>
+          <td><button-cta label="Medium Primary" size="medium" style="primary"></button-cta></td>
+          <td><button-cta label="Medium Secondary" size="medium" style="secondary"></button-cta></td>
+          <td><button-cta label="Medium Tertiary" size="medium" style="tertiary"></button-cta></td>
+        </tr>
+        <tr>
+          <td>Large</td>
+          <td><button-cta label="Large Primary" size="large" style="primary"></button-cta></td>
+          <td><button-cta label="Large Secondary" size="large" style="secondary"></button-cta></td>
+          <td><button-cta label="Large Tertiary" size="large" style="tertiary"></button-cta></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="example-section">
+    <h2>Usage Guidance</h2>
+    <p>When to use each variant:</p>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Variant</th>
+          <th>Use Case</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Small Primary</td>
+          <td>Compact spaces, inline actions</td>
+          <td>Table row actions, card buttons</td>
+        </tr>
+        <tr>
+          <td>Medium Primary</td>
+          <td>Standard forms, dialogs</td>
+          <td>Form submit, modal confirm</td>
+        </tr>
+        <tr>
+          <td>Large Primary</td>
+          <td>Hero sections, prominent CTAs</td>
+          <td>Landing page signup, checkout</td>
+        </tr>
+        <tr>
+          <td>Secondary</td>
+          <td>Alternative actions</td>
+          <td>Cancel, back, secondary options</td>
+        </tr>
+        <tr>
+          <td>Tertiary</td>
+          <td>Low-priority actions</td>
+          <td>Learn more, skip, dismiss</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <script type="module">
+    // Import the ButtonCTA web component
+    import { ButtonCTA } from '../platforms/web/ButtonCTA.web.js';
+    
+    // All variants follow the same token-based styling system:
+    // - Size variants control height, padding, and typography
+    // - Style variants control background, border, and text color
+    // - All values derived from design system tokens
+    // - Mathematical relationships maintained across all variants
+  </script>
+</body>
+</html>
