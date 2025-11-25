@@ -794,11 +794,13 @@ export class WorkflowMonitor extends EventEmitter {
     const lines = tasksContent.split('\n');
 
     for (const line of lines) {
-      // Look for task with matching number (using negative lookahead to prevent subtask matching)
-      // For parent tasks: matches "1 Task" but not "1.1 Task" when searching for "1"
-      // For subtasks: matches "1.1 Task" when searching for "1.1"
-      // Pattern: task number NOT followed by a dot, then whitespace
-      const taskMatch = line.match(new RegExp(`^- \\[ \\] ${taskNumber}(?!\\.)\\s+(.+)$`));
+      // Look for task with matching number (accounting for optional period after task number)
+      // For parent tasks: matches "1. Task" or "1 Task" when searching for "1"
+      // For subtasks: matches "1.1 Task" or "1.1. Task" when searching for "1.1"
+      // Pattern: optional leading whitespace, task number followed by optional period, then whitespace
+      // The task number parameter already contains the full number (including decimal for subtasks)
+      // so there's no risk of parent task "1" matching subtask "1.1"
+      const taskMatch = line.match(new RegExp(`^\\s*- \\[ \\] ${taskNumber}\\.?\\s+(.+)$`));
       if (taskMatch) {
         return taskMatch[1].trim();
       }
@@ -829,5 +831,106 @@ export class WorkflowMonitor extends EventEmitter {
     }
 
     return completedTasks;
+  }
+
+  /**
+   * Check if a workflow (spec) is complete
+   * 
+   * A workflow is considered complete when either:
+   * 1. All non-optional tasks in tasks.md are marked as complete [x], OR
+   * 2. An explicit completion marker file (spec-completion-summary.md) exists
+   * 
+   * Optional tasks are identified by:
+   * - A * marker before the task number: - [ ]* 1. Task
+   * - A * suffix after the task name: - [ ] 1. Task*
+   * 
+   * Edge case handling:
+   * - Empty workflow (no tasks): Returns false
+   * - Missing tasks.md: Returns false
+   * - Malformed task entries: Skipped, doesn't affect completion
+   * - Partial completion: Returns false
+   * 
+   * Supported task formats:
+   * - Current: - [ ] 1. Task name
+   * - Legacy: - [ ] 1 Task name (no period)
+   * - Optional: - [ ]* 1. Task name
+   * - Optional suffix: - [ ] 1. Task name*
+   * 
+   * @param tasksPath Path to tasks.md file (absolute or relative)
+   * @returns Promise<boolean> true if workflow is complete, false otherwise
+   * 
+   * @example
+   * // Check if a spec is complete
+   * const isComplete = await monitor.isWorkflowComplete('.kiro/specs/my-spec/tasks.md');
+   * if (isComplete) {
+   *   console.log('Workflow is complete!');
+   * }
+   * 
+   * @example
+   * // Check completion after task completion event
+   * monitor.on('task-completion-detected', async (event) => {
+   *   const tasksPath = event.taskPath;
+   *   const isComplete = await monitor.isWorkflowComplete(tasksPath);
+   *   if (isComplete) {
+   *     monitor.emit('workflow-completed', { tasksPath });
+   *   }
+   * });
+   */
+  async isWorkflowComplete(tasksPath: string): Promise<boolean> {
+    try {
+      // Check for explicit completion marker first
+      const specPath = path.dirname(tasksPath);
+      const completionMarkerPath = path.join(specPath, 'completion', 'spec-completion-summary.md');
+      
+      try {
+        await fs.access(completionMarkerPath);
+        // Explicit marker exists - workflow is complete
+        return true;
+      } catch {
+        // No explicit marker - check task completion
+      }
+      
+      // Read tasks.md content
+      const content = await fs.readFile(tasksPath, 'utf-8');
+      const lines = content.split('\n');
+      
+      let totalRequiredTasks = 0;
+      let completedRequiredTasks = 0;
+      
+      for (const line of lines) {
+        // Match task lines: - [ ] or - [x] followed by task number
+        // Supports formats:
+        // - [ ] 1. Task name
+        // - [ ] 1 Task name
+        // - [ ]* 1. Task name
+        // - [ ] 1. Task name*
+        const taskMatch = line.match(/^-\s*\[(.)\]\s*(\*?)\s*(\d+(?:\.\d+)?)\s+(.+)$/);
+        
+        if (taskMatch) {
+          const status = taskMatch[1];
+          const optionalMarker = taskMatch[2];
+          const taskName = taskMatch[4];
+          
+          // Skip optional tasks (marked with * before task number or * suffix in name)
+          if (optionalMarker === '*' || taskName.trim().endsWith('*')) {
+            continue;
+          }
+          
+          totalRequiredTasks++;
+          
+          if (status.toLowerCase() === 'x') {
+            completedRequiredTasks++;
+          }
+        }
+      }
+      
+      // Workflow is complete if there are tasks and all required tasks are complete
+      return totalRequiredTasks > 0 && totalRequiredTasks === completedRequiredTasks;
+      
+    } catch (error) {
+      // File doesn't exist or can't be read
+      console.error(`Error checking workflow completion for ${tasksPath}:`, error);
+      return false;
+    }
   }
 }

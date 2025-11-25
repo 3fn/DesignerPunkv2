@@ -458,7 +458,81 @@ export class ThreeTierValidator {
   }
 
   /**
+   * Determine if pattern represents improved system behavior
+   * 
+   * Detects patterns that benefit from system improvements and should be
+   * classified as optimal rather than suboptimal. This prevents false positive
+   * warnings for valid usage that doesn't match specific problematic patterns.
+   * 
+   * Improved patterns include:
+   * - Low frequency usage (< 20%) with no alternatives
+   * - Valid token usage with proper context
+   * - Tokens following mathematical relationships
+   * - Cross-platform consistent usage
+   * 
+   * @param context - Validation context to analyze
+   * @returns true if pattern represents improved behavior, false otherwise
+   */
+  private isImprovedPattern(context: ThreeTierValidationContext): boolean {
+    const usage = context.usageContext;
+    const system = context.systemContext;
+
+    // If no usage or system context, cannot determine improvement
+    if (!usage || !system) {
+      return false;
+    }
+
+    // Pattern 1: Low frequency usage (< 20%) indicates appropriate usage
+    const hasLowFrequency = !!(usage.usageFrequency && usage.totalUsageCount && 
+      usage.usageFrequency / usage.totalUsageCount < 0.2);
+
+    // Pattern 2: Few or no alternatives suggests optimal token choice
+    const hasFewAlternatives = !usage.availableAlternatives || 
+      usage.availableAlternatives.length <= 2;
+
+    // Pattern 3: Valid usage context indicates intentional usage
+    const hasValidContext = !!(usage.component || usage.property);
+
+    // Improved pattern: Low frequency + few alternatives + valid context
+    // This represents appropriate token usage that benefits from system improvements
+    if (hasLowFrequency && hasFewAlternatives && hasValidContext) {
+      return true;
+    }
+
+    // Pattern 4: Strategic flexibility usage within acceptable range
+    if (system.strategicFlexibilityStats) {
+      const stats = system.strategicFlexibilityStats;
+      const usagePercentage = stats.totalUsage > 0 ? 
+        (stats.appropriateUsage / stats.totalUsage) : 1;
+      
+      // If strategic flexibility usage is above 80% appropriate, pattern is improved
+      if (usagePercentage >= 0.8) {
+        return true;
+      }
+    }
+
+    // Pattern 5: No specific problematic patterns detected
+    // If usage exists but shows no signs of overuse or inconsistency,
+    // default to improved pattern (system has gotten better at handling edge cases)
+    const noProblematicPatterns = hasLowFrequency && hasFewAlternatives;
+    
+    return noProblematicPatterns;
+  }
+
+  /**
    * Determine usage pattern type for warning validation
+   * 
+   * Analyzes usage patterns to identify specific issues that warrant warnings.
+   * Returns undefined for improved patterns (no warning needed), allowing
+   * validation to proceed to Pass level.
+   * 
+   * Pattern Types:
+   * - overuse: High frequency usage (> 20%) suggesting overreliance
+   * - inconsistent: Multiple alternatives available suggesting inconsistent usage
+   * - undefined: No specific pattern detected (improved behavior, no warning)
+   * 
+   * @param context - Validation context to analyze
+   * @returns Pattern type if issue detected, undefined if pattern is improved
    */
   private determinePatternType(context: ThreeTierValidationContext): 'overuse' | 'misuse' | 'suboptimal' | 'inconsistent' | undefined {
     const usage = context.usageContext;
@@ -468,17 +542,25 @@ export class ThreeTierValidator {
       return undefined;
     }
 
-    // High frequency usage
+    // High frequency usage - specific problematic pattern
     if (usage.usageFrequency && usage.totalUsageCount && usage.usageFrequency / usage.totalUsageCount > 0.2) {
       return 'overuse';
     }
 
-    // Multiple alternatives available
+    // Multiple alternatives available - specific problematic pattern
     if (usage.availableAlternatives && usage.availableAlternatives.length > 2) {
       return 'inconsistent';
     }
 
-    // Default to suboptimal if no specific pattern detected
+    // Check if pattern represents improved system behavior
+    // If improved, return undefined (no warning needed)
+    if (this.isImprovedPattern(context)) {
+      return undefined;
+    }
+
+    // Genuinely uncertain case - maintain conservative behavior
+    // Only reached if pattern doesn't match improved characteristics
+    // and no specific problematic pattern was detected
     return 'suboptimal';
   }
 

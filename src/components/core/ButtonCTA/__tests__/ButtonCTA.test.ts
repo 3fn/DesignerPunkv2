@@ -25,14 +25,63 @@ describe('ButtonCTA Component Rendering', () => {
     document.body.removeChild(container);
   });
   
+  /**
+   * Helper function to create and initialize a ButtonCTA component.
+   * 
+   * In jsdom test environment, connectedCallback is not automatically called
+   * when custom elements are appended to the DOM. This helper ensures proper
+   * initialization by:
+   * 1. Creating the element (constructor runs, shadow DOM attached)
+   * 2. Setting initial properties
+   * 3. Appending to DOM
+   * 4. Manually calling connectedCallback to trigger render
+   * 
+   * @param props - Component properties to set
+   * @returns Initialized ButtonCTA component
+   */
+  function createButton(props: {
+    label: string;
+    size?: 'small' | 'medium' | 'large';
+    buttonStyle?: 'primary' | 'secondary' | 'tertiary';
+    icon?: string;
+    noWrap?: boolean;
+    disabled?: boolean;
+    testID?: string;
+  }): ButtonCTA {
+    // Create element - constructor runs and attaches shadow DOM
+    const button = new ButtonCTA();
+    
+    // Set properties before appending to DOM
+    button.label = props.label;
+    if (props.size) button.size = props.size;
+    if (props.buttonStyle) button.buttonStyle = props.buttonStyle;
+    if (props.icon) button.icon = props.icon;
+    if (props.noWrap !== undefined) button.noWrap = props.noWrap;
+    if (props.disabled !== undefined) button.disabled = props.disabled;
+    if (props.testID) button.testID = props.testID;
+    
+    // Append to container
+    container.appendChild(button);
+    
+    // Manually trigger connectedCallback for jsdom environment
+    // jsdom doesn't automatically call lifecycle methods for custom elements
+    if (typeof (button as any).connectedCallback === 'function') {
+      (button as any).connectedCallback();
+    }
+    
+    // Verify shadow DOM was created
+    if (!button.shadowRoot) {
+      throw new Error('Shadow DOM was not initialized. Check that ButtonCTA constructor calls attachShadow().');
+    }
+    
+    return button;
+  }
+  
   describe('Required Props', () => {
     it('should render with required props (label, onPress)', () => {
       // Requirement 1.1: Button renders with label
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Click me';
-      container.appendChild(button);
+      const button = createButton({ label: 'Click me' });
       
-      // Wait for component to render
       const shadowButton = button.shadowRoot?.querySelector('button');
       expect(shadowButton).toBeTruthy();
       expect(shadowButton?.textContent).toContain('Click me');
@@ -40,9 +89,7 @@ describe('ButtonCTA Component Rendering', () => {
     
     it('should have default size of medium when not specified', () => {
       // Requirement 1.2: Default size is medium
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Test';
-      container.appendChild(button);
+      const button = createButton({ label: 'Test' });
       
       expect(button.size).toBe('medium');
       const shadowButton = button.shadowRoot?.querySelector('button');
@@ -51,9 +98,7 @@ describe('ButtonCTA Component Rendering', () => {
     
     it('should have default style of primary when not specified', () => {
       // Requirement 2.1: Default style is primary
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Test';
-      container.appendChild(button);
+      const button = createButton({ label: 'Test' });
       
       expect(button.buttonStyle).toBe('primary');
       const shadowButton = button.shadowRoot?.querySelector('button');
@@ -64,10 +109,7 @@ describe('ButtonCTA Component Rendering', () => {
   describe('Size Variants', () => {
     it('should render small size with correct class', () => {
       // Requirement 1.1: Small button renders with 40px height
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Small Button';
-      button.size = 'small';
-      container.appendChild(button);
+      const button = createButton({ label: 'Small Button', size: 'small' });
       
       const shadowButton = button.shadowRoot?.querySelector('button');
       expect(shadowButton?.className).toContain('button-cta--small');
@@ -75,10 +117,7 @@ describe('ButtonCTA Component Rendering', () => {
     
     it('should render medium size with correct class', () => {
       // Requirement 1.2: Medium button renders with 48px height
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Medium Button';
-      button.size = 'medium';
-      container.appendChild(button);
+      const button = createButton({ label: 'Medium Button', size: 'medium' });
       
       const shadowButton = button.shadowRoot?.querySelector('button');
       expect(shadowButton?.className).toContain('button-cta--medium');
@@ -86,10 +125,7 @@ describe('ButtonCTA Component Rendering', () => {
     
     it('should render large size with correct class', () => {
       // Requirement 1.3: Large button renders with 56px height
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Large Button';
-      button.size = 'large';
-      container.appendChild(button);
+      const button = createButton({ label: 'Large Button', size: 'large' });
       
       const shadowButton = button.shadowRoot?.querySelector('button');
       expect(shadowButton?.className).toContain('button-cta--large');
@@ -100,10 +136,7 @@ describe('ButtonCTA Component Rendering', () => {
       const sizes: Array<'small' | 'medium' | 'large'> = ['small', 'medium', 'large'];
       
       sizes.forEach(size => {
-        const button = document.createElement('button-cta') as ButtonCTA;
-        button.label = `${size} button`;
-        button.size = size;
-        container.appendChild(button);
+        const button = createButton({ label: `${size} button`, size });
         
         const shadowButton = button.shadowRoot?.querySelector('button');
         expect(shadowButton?.className).toContain(`button-cta--${size}`);
@@ -116,10 +149,7 @@ describe('ButtonCTA Component Rendering', () => {
   describe('Style Variants', () => {
     it('should render primary style with correct class', () => {
       // Requirement 2.1: Primary button with filled background
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Primary Button';
-      button.buttonStyle = 'primary';
-      container.appendChild(button);
+      const button = createButton({ label: 'Primary Button', buttonStyle: 'primary' });
       
       const shadowButton = button.shadowRoot?.querySelector('button');
       expect(shadowButton?.className).toContain('button-cta--primary');
@@ -127,10 +157,7 @@ describe('ButtonCTA Component Rendering', () => {
     
     it('should render secondary style with correct class', () => {
       // Requirement 2.2: Secondary button with outline
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Secondary Button';
-      button.buttonStyle = 'secondary';
-      container.appendChild(button);
+      const button = createButton({ label: 'Secondary Button', buttonStyle: 'secondary' });
       
       const shadowButton = button.shadowRoot?.querySelector('button');
       expect(shadowButton?.className).toContain('button-cta--secondary');
@@ -138,10 +165,7 @@ describe('ButtonCTA Component Rendering', () => {
     
     it('should render tertiary style with correct class', () => {
       // Requirement 2.3: Tertiary button with text-only
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Tertiary Button';
-      button.buttonStyle = 'tertiary';
-      container.appendChild(button);
+      const button = createButton({ label: 'Tertiary Button', buttonStyle: 'tertiary' });
       
       const shadowButton = button.shadowRoot?.querySelector('button');
       expect(shadowButton?.className).toContain('button-cta--tertiary');
@@ -152,10 +176,7 @@ describe('ButtonCTA Component Rendering', () => {
       const styles: Array<'primary' | 'secondary' | 'tertiary'> = ['primary', 'secondary', 'tertiary'];
       
       styles.forEach(style => {
-        const button = document.createElement('button-cta') as ButtonCTA;
-        button.label = `${style} button`;
-        button.buttonStyle = style;
-        container.appendChild(button);
+        const button = createButton({ label: `${style} button`, buttonStyle: style });
         
         const shadowButton = button.shadowRoot?.querySelector('button');
         expect(shadowButton?.className).toContain(`button-cta--${style}`);
@@ -168,10 +189,7 @@ describe('ButtonCTA Component Rendering', () => {
   describe('Icon Integration', () => {
     it('should render icon when icon prop provided', () => {
       // Requirement 8.1: Icon renders in leading position
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Button with Icon';
-      button.icon = 'arrow-right';
-      container.appendChild(button);
+      const button = createButton({ label: 'Button with Icon', icon: 'arrow-right' });
       
       const iconElement = button.shadowRoot?.querySelector('.button-cta__icon');
       expect(iconElement).toBeTruthy();
@@ -180,9 +198,7 @@ describe('ButtonCTA Component Rendering', () => {
     
     it('should not render icon when icon prop omitted', () => {
       // Requirement 8.1: Icon doesn't render when not provided
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Button without Icon';
-      container.appendChild(button);
+      const button = createButton({ label: 'Button without Icon' });
       
       const iconElement = button.shadowRoot?.querySelector('.button-cta__icon');
       expect(iconElement).toBeFalsy();
@@ -190,11 +206,7 @@ describe('ButtonCTA Component Rendering', () => {
     
     it('should render icon with correct size for small/medium buttons', () => {
       // Requirement 8.2: Small/medium buttons use icon.size100 (24px)
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Medium Button';
-      button.size = 'medium';
-      button.icon = 'check';
-      container.appendChild(button);
+      const button = createButton({ label: 'Medium Button', size: 'medium', icon: 'check' });
       
       const iconElement = button.shadowRoot?.querySelector('.button-cta__icon');
       expect(iconElement).toBeTruthy();
@@ -203,11 +215,7 @@ describe('ButtonCTA Component Rendering', () => {
     
     it('should render icon with correct size for large buttons', () => {
       // Requirement 8.3: Large buttons use icon.size125 (32px)
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Large Button';
-      button.size = 'large';
-      button.icon = 'plus';
-      container.appendChild(button);
+      const button = createButton({ label: 'Large Button', size: 'large', icon: 'plus' });
       
       const iconElement = button.shadowRoot?.querySelector('.button-cta__icon');
       expect(iconElement).toBeTruthy();
@@ -216,10 +224,7 @@ describe('ButtonCTA Component Rendering', () => {
     
     it('should mark icon as decorative with aria-hidden', () => {
       // Requirement 8.6: Icon marked as decorative for accessibility
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Accessible Button';
-      button.icon = 'info';
-      container.appendChild(button);
+      const button = createButton({ label: 'Accessible Button', icon: 'info' });
       
       const iconElement = button.shadowRoot?.querySelector('.button-cta__icon');
       expect(iconElement?.getAttribute('aria-hidden')).toBe('true');
@@ -229,9 +234,7 @@ describe('ButtonCTA Component Rendering', () => {
   describe('Text Wrapping', () => {
     it('should allow text wrapping by default', () => {
       // Requirement 7.1: Text wraps by default
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'This is a very long button label that should wrap';
-      container.appendChild(button);
+      const button = createButton({ label: 'This is a very long button label that should wrap' });
       
       const labelElement = button.shadowRoot?.querySelector('.button-cta__label');
       expect(labelElement).toBeTruthy();
@@ -240,10 +243,10 @@ describe('ButtonCTA Component Rendering', () => {
     
     it('should truncate text with ellipsis when noWrap is true', () => {
       // Requirement 7.3: noWrap prop truncates text with ellipsis
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'This is a very long button label that should truncate';
-      button.noWrap = true;
-      container.appendChild(button);
+      const button = createButton({ 
+        label: 'This is a very long button label that should truncate',
+        noWrap: true
+      });
       
       const labelElement = button.shadowRoot?.querySelector('.button-cta__label--no-wrap');
       expect(labelElement).toBeTruthy();
@@ -252,9 +255,7 @@ describe('ButtonCTA Component Rendering', () => {
     
     it('should center-align text horizontally', () => {
       // Requirement 7.4: Text is center-aligned
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Centered Text';
-      container.appendChild(button);
+      const button = createButton({ label: 'Centered Text' });
       
       const labelElement = button.shadowRoot?.querySelector('.button-cta__label');
       expect(labelElement).toBeTruthy();
@@ -265,10 +266,7 @@ describe('ButtonCTA Component Rendering', () => {
   describe('Disabled State', () => {
     it('should render disabled button with correct attributes', () => {
       // Requirement: Disabled prop prevents interaction
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Disabled Button';
-      button.disabled = true;
-      container.appendChild(button);
+      const button = createButton({ label: 'Disabled Button', disabled: true });
       
       const shadowButton = button.shadowRoot?.querySelector('button');
       expect(shadowButton?.hasAttribute('disabled')).toBe(true);
@@ -278,10 +276,7 @@ describe('ButtonCTA Component Rendering', () => {
     
     it('should not have disabled attributes when disabled is false', () => {
       // Requirement: Enabled button is interactive
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Enabled Button';
-      button.disabled = false;
-      container.appendChild(button);
+      const button = createButton({ label: 'Enabled Button', disabled: false });
       
       const shadowButton = button.shadowRoot?.querySelector('button');
       expect(shadowButton?.hasAttribute('disabled')).toBe(false);
@@ -291,10 +286,7 @@ describe('ButtonCTA Component Rendering', () => {
     
     it('should prevent press event when disabled', () => {
       // Requirement: Disabled button doesn't trigger onPress
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Disabled Button';
-      button.disabled = true;
-      container.appendChild(button);
+      const button = createButton({ label: 'Disabled Button', disabled: true });
       
       let pressCount = 0;
       button.addEventListener('press', () => {
@@ -311,9 +303,7 @@ describe('ButtonCTA Component Rendering', () => {
   describe('Accessibility Attributes', () => {
     it('should have correct ARIA role', () => {
       // Requirement: Button has role="button"
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Accessible Button';
-      container.appendChild(button);
+      const button = createButton({ label: 'Accessible Button' });
       
       const shadowButton = button.shadowRoot?.querySelector('button');
       expect(shadowButton?.getAttribute('role')).toBe('button');
@@ -321,9 +311,7 @@ describe('ButtonCTA Component Rendering', () => {
     
     it('should have aria-label matching button text', () => {
       // Requirement: Button has accessible label
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Submit Form';
-      container.appendChild(button);
+      const button = createButton({ label: 'Submit Form' });
       
       const shadowButton = button.shadowRoot?.querySelector('button');
       expect(shadowButton?.getAttribute('aria-label')).toBe('Submit Form');
@@ -331,9 +319,7 @@ describe('ButtonCTA Component Rendering', () => {
     
     it('should have correct type attribute', () => {
       // Requirement: Button has type="button"
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Button';
-      container.appendChild(button);
+      const button = createButton({ label: 'Button' });
       
       const shadowButton = button.shadowRoot?.querySelector('button');
       expect(shadowButton?.getAttribute('type')).toBe('button');
@@ -343,10 +329,7 @@ describe('ButtonCTA Component Rendering', () => {
   describe('Test ID Support', () => {
     it('should apply test ID when provided', () => {
       // Requirement: testID prop for automated testing
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Test Button';
-      button.testID = 'submit-button';
-      container.appendChild(button);
+      const button = createButton({ label: 'Test Button', testID: 'submit-button' });
       
       const shadowButton = button.shadowRoot?.querySelector('button');
       expect(shadowButton?.getAttribute('data-testid')).toBe('submit-button');
@@ -354,9 +337,7 @@ describe('ButtonCTA Component Rendering', () => {
     
     it('should not have test ID attribute when not provided', () => {
       // Requirement: testID is optional
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Button';
-      container.appendChild(button);
+      const button = createButton({ label: 'Button' });
       
       const shadowButton = button.shadowRoot?.querySelector('button');
       expect(shadowButton?.hasAttribute('data-testid')).toBe(false);
@@ -366,14 +347,14 @@ describe('ButtonCTA Component Rendering', () => {
   describe('Combined Props', () => {
     it('should render with all props combined correctly', () => {
       // Requirement: All props work together
-      const button = document.createElement('button-cta') as ButtonCTA;
-      button.label = 'Complete Button';
-      button.size = 'large';
-      button.buttonStyle = 'secondary';
-      button.icon = 'arrow-right';
-      button.noWrap = true;
-      button.testID = 'complete-button';
-      container.appendChild(button);
+      const button = createButton({
+        label: 'Complete Button',
+        size: 'large',
+        buttonStyle: 'secondary',
+        icon: 'arrow-right',
+        noWrap: true,
+        testID: 'complete-button'
+      });
       
       const shadowButton = button.shadowRoot?.querySelector('button');
       expect(shadowButton?.className).toContain('button-cta--large');
@@ -385,6 +366,360 @@ describe('ButtonCTA Component Rendering', () => {
       
       const labelElement = button.shadowRoot?.querySelector('.button-cta__label--no-wrap');
       expect(labelElement).toBeTruthy();
+    });
+  });
+  
+  describe('Interaction Tests', () => {
+    it('should call onPress when button clicked', () => {
+      // Requirement 15.1: Button activates on click
+      const button = createButton({ label: 'Click Me' });
+      
+      let pressCount = 0;
+      button.addEventListener('press', () => {
+        pressCount++;
+      });
+      
+      const shadowButton = button.shadowRoot?.querySelector('button');
+      shadowButton?.click();
+      
+      expect(pressCount).toBe(1);
+    });
+    
+    it('should NOT call onPress when button disabled', () => {
+      // Requirement 15.1: Disabled button doesn't trigger onPress
+      const button = createButton({ label: 'Disabled Button', disabled: true });
+      
+      let pressCount = 0;
+      button.addEventListener('press', () => {
+        pressCount++;
+      });
+      
+      const shadowButton = button.shadowRoot?.querySelector('button');
+      shadowButton?.click();
+      
+      expect(pressCount).toBe(0);
+    });
+    
+    it('should receive focus via Tab key', () => {
+      // Requirement 15.2: Button is keyboard focusable
+      const button = createButton({ label: 'Focusable Button' });
+      
+      const shadowButton = button.shadowRoot?.querySelector('button');
+      expect(shadowButton).toBeTruthy();
+      
+      // Verify button is focusable (tabindex not -1)
+      const tabIndex = shadowButton?.getAttribute('tabindex');
+      expect(tabIndex).not.toBe('-1');
+      
+      // Simulate focus
+      shadowButton?.focus();
+      expect(document.activeElement).toBe(button);
+    });
+    
+    it('should call onPress when Enter key pressed while focused', () => {
+      // Requirement 15.2: Button activates on Enter key
+      const button = createButton({ label: 'Enter Button' });
+      
+      let pressCount = 0;
+      button.addEventListener('press', () => {
+        pressCount++;
+      });
+      
+      const shadowButton = button.shadowRoot?.querySelector('button');
+      shadowButton?.focus();
+      
+      // Simulate Enter key press
+      const enterEvent = new KeyboardEvent('keydown', {
+        key: 'Enter',
+        code: 'Enter',
+        bubbles: true,
+        cancelable: true
+      });
+      shadowButton?.dispatchEvent(enterEvent);
+      
+      expect(pressCount).toBe(1);
+    });
+    
+    it('should call onPress when Space key pressed while focused', () => {
+      // Requirement 15.3: Button activates on Space key
+      const button = createButton({ label: 'Space Button' });
+      
+      let pressCount = 0;
+      button.addEventListener('press', () => {
+        pressCount++;
+      });
+      
+      const shadowButton = button.shadowRoot?.querySelector('button');
+      shadowButton?.focus();
+      
+      // Simulate Space key press
+      const spaceEvent = new KeyboardEvent('keydown', {
+        key: ' ',
+        code: 'Space',
+        bubbles: true,
+        cancelable: true
+      });
+      shadowButton?.dispatchEvent(spaceEvent);
+      
+      expect(pressCount).toBe(1);
+    });
+    
+    it('should call onPress multiple times for multiple clicks', () => {
+      // Requirement 15.4: Multiple clicks work correctly
+      const button = createButton({ label: 'Multi Click' });
+      
+      let pressCount = 0;
+      button.addEventListener('press', () => {
+        pressCount++;
+      });
+      
+      const shadowButton = button.shadowRoot?.querySelector('button');
+      
+      // Click multiple times
+      shadowButton?.click();
+      shadowButton?.click();
+      shadowButton?.click();
+      
+      expect(pressCount).toBe(3);
+    });
+    
+    it('should handle rapid clicks without issues', () => {
+      // Requirement 15.4: Rapid clicks don't cause issues
+      const button = createButton({ label: 'Rapid Click' });
+      
+      let pressCount = 0;
+      button.addEventListener('press', () => {
+        pressCount++;
+      });
+      
+      const shadowButton = button.shadowRoot?.querySelector('button');
+      
+      // Simulate rapid clicks
+      for (let i = 0; i < 10; i++) {
+        shadowButton?.click();
+      }
+      
+      expect(pressCount).toBe(10);
+    });
+  });
+  
+  describe('ARIA and Keyboard Navigation', () => {
+    it('should have correct ARIA role (role="button")', () => {
+      // Requirement 12.1: Button has correct ARIA role
+      const button = createButton({ label: 'ARIA Button' });
+      
+      const shadowButton = button.shadowRoot?.querySelector('button');
+      expect(shadowButton?.getAttribute('role')).toBe('button');
+    });
+    
+    it('should be keyboard focusable', () => {
+      // Requirement 12.1, 15.1: Button is keyboard focusable
+      const button = createButton({ label: 'Keyboard Focusable' });
+      
+      const shadowButton = button.shadowRoot?.querySelector('button');
+      expect(shadowButton).toBeTruthy();
+      
+      // Verify button is focusable (not disabled and tabindex not -1)
+      expect(shadowButton?.hasAttribute('disabled')).toBe(false);
+      const tabIndex = shadowButton?.getAttribute('tabindex');
+      expect(tabIndex).not.toBe('-1');
+      
+      // Verify button can receive focus
+      shadowButton?.focus();
+      expect(document.activeElement).toBe(button);
+    });
+    
+    it('should mark icon as decorative (aria-hidden="true")', () => {
+      // Requirement 12.3, 8.6: Icon is marked decorative for screen readers
+      const button = createButton({ label: 'Button with Icon', icon: 'check' });
+      
+      const iconElement = button.shadowRoot?.querySelector('.button-cta__icon');
+      expect(iconElement).toBeTruthy();
+      expect(iconElement?.getAttribute('aria-hidden')).toBe('true');
+    });
+    
+    it('should not have aria-hidden on icon when no icon provided', () => {
+      // Requirement 12.3: No icon means no aria-hidden attribute
+      const button = createButton({ label: 'Button without Icon' });
+      
+      const iconElement = button.shadowRoot?.querySelector('.button-cta__icon');
+      expect(iconElement).toBeFalsy();
+    });
+    
+    it('should show focus indicator on keyboard navigation', () => {
+      // Requirement 12.4: Focus indicator visible on keyboard navigation
+      const button = createButton({ label: 'Focus Indicator' });
+      
+      const shadowButton = button.shadowRoot?.querySelector('button');
+      expect(shadowButton).toBeTruthy();
+      
+      // Simulate keyboard focus (Tab key)
+      shadowButton?.focus();
+      
+      // Verify button is focused
+      expect(document.activeElement).toBe(button);
+      
+      // In a real browser, :focus-visible would apply CSS styles
+      // In jsdom, we verify the button can receive focus and has proper attributes
+      expect(shadowButton?.hasAttribute('disabled')).toBe(false);
+      
+      // Verify button has proper ARIA attributes for focus
+      expect(shadowButton?.getAttribute('role')).toBe('button');
+      expect(shadowButton?.getAttribute('aria-label')).toBeTruthy();
+    });
+    
+    it('should maintain focus indicator visibility across all button styles', () => {
+      // Requirement 12.4: Focus indicator works for all style variants
+      const styles: Array<'primary' | 'secondary' | 'tertiary'> = ['primary', 'secondary', 'tertiary'];
+      
+      styles.forEach(style => {
+        const button = createButton({ 
+          label: `${style} button`, 
+          buttonStyle: style 
+        });
+        
+        const shadowButton = button.shadowRoot?.querySelector('button');
+        shadowButton?.focus();
+        
+        // Verify focus works for all styles
+        expect(document.activeElement).toBe(button);
+        expect(shadowButton?.getAttribute('role')).toBe('button');
+        
+        container.removeChild(button);
+      });
+    });
+    
+    it('should maintain focus indicator visibility across all button sizes', () => {
+      // Requirement 12.4: Focus indicator works for all size variants
+      const sizes: Array<'small' | 'medium' | 'large'> = ['small', 'medium', 'large'];
+      
+      sizes.forEach(size => {
+        const button = createButton({ 
+          label: `${size} button`, 
+          size 
+        });
+        
+        const shadowButton = button.shadowRoot?.querySelector('button');
+        shadowButton?.focus();
+        
+        // Verify focus works for all sizes
+        expect(document.activeElement).toBe(button);
+        expect(shadowButton?.getAttribute('role')).toBe('button');
+        
+        container.removeChild(button);
+      });
+    });
+    
+    it('should have proper ARIA attributes for accessibility', () => {
+      // Requirement 12.1-12.6: Complete ARIA attribute verification
+      const button = createButton({ label: 'Accessible Button' });
+      
+      const shadowButton = button.shadowRoot?.querySelector('button');
+      
+      // Verify all required ARIA attributes
+      expect(shadowButton?.getAttribute('role')).toBe('button');
+      expect(shadowButton?.getAttribute('aria-label')).toBe('Accessible Button');
+      expect(shadowButton?.getAttribute('type')).toBe('button');
+      expect(shadowButton?.getAttribute('aria-disabled')).toBe('false');
+    });
+    
+    it('should have proper ARIA attributes when disabled', () => {
+      // Requirement 12.6: Disabled button has correct ARIA attributes
+      const button = createButton({ label: 'Disabled Button', disabled: true });
+      
+      const shadowButton = button.shadowRoot?.querySelector('button');
+      
+      // Verify disabled ARIA attributes
+      expect(shadowButton?.getAttribute('role')).toBe('button');
+      expect(shadowButton?.getAttribute('aria-disabled')).toBe('true');
+      expect(shadowButton?.hasAttribute('disabled')).toBe(true);
+    });
+    
+    it('should support keyboard navigation with Enter key', () => {
+      // Requirement 15.2: Enter key activates button
+      const button = createButton({ label: 'Enter Key Button' });
+      
+      let pressCount = 0;
+      button.addEventListener('press', () => {
+        pressCount++;
+      });
+      
+      const shadowButton = button.shadowRoot?.querySelector('button');
+      shadowButton?.focus();
+      
+      // Verify button is focused
+      expect(document.activeElement).toBe(button);
+      
+      // Simulate Enter key press
+      const enterEvent = new KeyboardEvent('keydown', {
+        key: 'Enter',
+        code: 'Enter',
+        bubbles: true,
+        cancelable: true
+      });
+      shadowButton?.dispatchEvent(enterEvent);
+      
+      expect(pressCount).toBe(1);
+    });
+    
+    it('should support keyboard navigation with Space key', () => {
+      // Requirement 15.3: Space key activates button
+      const button = createButton({ label: 'Space Key Button' });
+      
+      let pressCount = 0;
+      button.addEventListener('press', () => {
+        pressCount++;
+      });
+      
+      const shadowButton = button.shadowRoot?.querySelector('button');
+      shadowButton?.focus();
+      
+      // Verify button is focused
+      expect(document.activeElement).toBe(button);
+      
+      // Simulate Space key press
+      const spaceEvent = new KeyboardEvent('keydown', {
+        key: ' ',
+        code: 'Space',
+        bubbles: true,
+        cancelable: true
+      });
+      shadowButton?.dispatchEvent(spaceEvent);
+      
+      expect(pressCount).toBe(1);
+    });
+    
+    it('should not activate on keyboard when disabled', () => {
+      // Requirement 15.4: Disabled button doesn't respond to keyboard
+      const button = createButton({ label: 'Disabled Keyboard', disabled: true });
+      
+      let pressCount = 0;
+      button.addEventListener('press', () => {
+        pressCount++;
+      });
+      
+      const shadowButton = button.shadowRoot?.querySelector('button');
+      shadowButton?.focus();
+      
+      // Try Enter key
+      const enterEvent = new KeyboardEvent('keydown', {
+        key: 'Enter',
+        code: 'Enter',
+        bubbles: true,
+        cancelable: true
+      });
+      shadowButton?.dispatchEvent(enterEvent);
+      
+      // Try Space key
+      const spaceEvent = new KeyboardEvent('keydown', {
+        key: ' ',
+        code: 'Space',
+        bubbles: true,
+        cancelable: true
+      });
+      shadowButton?.dispatchEvent(spaceEvent);
+      
+      expect(pressCount).toBe(0);
     });
   });
 });

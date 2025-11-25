@@ -151,8 +151,7 @@ describe('ValidationPipeline Integration', () => {
         primitiveReferences: { default: 'space100' },
         category: SemanticCategory.SPACING,
         context: 'Normal spacing',
-        description: 'Standard spacing for layouts',
-        primitiveTokens: {}
+        description: 'Standard spacing for layouts'
       };
 
       // Token is validated before registration by engine
@@ -172,16 +171,14 @@ describe('ValidationPipeline Integration', () => {
           primitiveReferences: { default: 'space100' },
           category: SemanticCategory.SPACING,
           context: 'Tight spacing',
-          description: 'Compact layouts',
-          primitiveTokens: {}
+          description: 'Compact layouts'
         },
         {
           name: 'space.normal',
           primitiveReferences: { default: 'space100' },
           category: SemanticCategory.SPACING,
           context: 'Normal spacing',
-          description: 'Standard layouts',
-          primitiveTokens: {}
+          description: 'Standard layouts'
         }
       ];
 
@@ -226,8 +223,7 @@ describe('ValidationPipeline Integration', () => {
         primitiveReferences: { default: 'space100' },
         category: SemanticCategory.SPACING,
         context: 'Normal spacing',
-        description: 'Standard spacing',
-        primitiveTokens: {}
+        description: 'Standard spacing'
       };
 
       engine.registerSemanticToken(semanticToken);
