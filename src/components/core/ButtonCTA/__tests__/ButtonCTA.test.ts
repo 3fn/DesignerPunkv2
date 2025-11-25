@@ -42,7 +42,7 @@ describe('ButtonCTA Component Rendering', () => {
   function createButton(props: {
     label: string;
     size?: 'small' | 'medium' | 'large';
-    buttonStyle?: 'primary' | 'secondary' | 'tertiary';
+    buttonVariant?: 'primary' | 'secondary' | 'tertiary';
     icon?: string;
     noWrap?: boolean;
     disabled?: boolean;
@@ -54,7 +54,7 @@ describe('ButtonCTA Component Rendering', () => {
     // Set properties before appending to DOM
     button.label = props.label;
     if (props.size) button.size = props.size;
-    if (props.buttonStyle) button.buttonStyle = props.buttonStyle;
+    if (props.buttonVariant) button.buttonVariant = props.buttonVariant;
     if (props.icon) button.icon = props.icon;
     if (props.noWrap !== undefined) button.noWrap = props.noWrap;
     if (props.disabled !== undefined) button.disabled = props.disabled;
@@ -100,7 +100,7 @@ describe('ButtonCTA Component Rendering', () => {
       // Requirement 2.1: Default style is primary
       const button = createButton({ label: 'Test' });
       
-      expect(button.buttonStyle).toBe('primary');
+      expect(button.buttonVariant).toBe('primary');
       const shadowButton = button.shadowRoot?.querySelector('button');
       expect(shadowButton?.className).toContain('button-cta--primary');
     });
@@ -149,7 +149,7 @@ describe('ButtonCTA Component Rendering', () => {
   describe('Style Variants', () => {
     it('should render primary style with correct class', () => {
       // Requirement 2.1: Primary button with filled background
-      const button = createButton({ label: 'Primary Button', buttonStyle: 'primary' });
+      const button = createButton({ label: 'Primary Button', buttonVariant: 'primary' });
       
       const shadowButton = button.shadowRoot?.querySelector('button');
       expect(shadowButton?.className).toContain('button-cta--primary');
@@ -157,7 +157,7 @@ describe('ButtonCTA Component Rendering', () => {
     
     it('should render secondary style with correct class', () => {
       // Requirement 2.2: Secondary button with outline
-      const button = createButton({ label: 'Secondary Button', buttonStyle: 'secondary' });
+      const button = createButton({ label: 'Secondary Button', buttonVariant: 'secondary' });
       
       const shadowButton = button.shadowRoot?.querySelector('button');
       expect(shadowButton?.className).toContain('button-cta--secondary');
@@ -165,7 +165,7 @@ describe('ButtonCTA Component Rendering', () => {
     
     it('should render tertiary style with correct class', () => {
       // Requirement 2.3: Tertiary button with text-only
-      const button = createButton({ label: 'Tertiary Button', buttonStyle: 'tertiary' });
+      const button = createButton({ label: 'Tertiary Button', buttonVariant: 'tertiary' });
       
       const shadowButton = button.shadowRoot?.querySelector('button');
       expect(shadowButton?.className).toContain('button-cta--tertiary');
@@ -176,7 +176,7 @@ describe('ButtonCTA Component Rendering', () => {
       const styles: Array<'primary' | 'secondary' | 'tertiary'> = ['primary', 'secondary', 'tertiary'];
       
       styles.forEach(style => {
-        const button = createButton({ label: `${style} button`, buttonStyle: style });
+        const button = createButton({ label: `${style} button`, buttonVariant: style });
         
         const shadowButton = button.shadowRoot?.querySelector('button');
         expect(shadowButton?.className).toContain(`button-cta--${style}`);
@@ -350,7 +350,7 @@ describe('ButtonCTA Component Rendering', () => {
       const button = createButton({
         label: 'Complete Button',
         size: 'large',
-        buttonStyle: 'secondary',
+        buttonVariant: 'secondary',
         icon: 'arrow-right',
         noWrap: true,
         testID: 'complete-button'
@@ -575,7 +575,7 @@ describe('ButtonCTA Component Rendering', () => {
       styles.forEach(style => {
         const button = createButton({ 
           label: `${style} button`, 
-          buttonStyle: style 
+          buttonVariant: style 
         });
         
         const shadowButton = button.shadowRoot?.querySelector('button');

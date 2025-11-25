@@ -125,7 +125,7 @@ describe('ButtonCTA Icon Integration', () => {
     it('should use inherit color for primary button', () => {
       const button = document.createElement('button-cta') as ButtonCTA;
       button.label = 'Click me';
-      button.buttonStyle = 'primary';
+      button.buttonVariant = 'primary';
       button.icon = 'arrow-right';
       document.body.appendChild(button);
 
@@ -139,7 +139,7 @@ describe('ButtonCTA Icon Integration', () => {
     it('should use inherit color for secondary button', () => {
       const button = document.createElement('button-cta') as ButtonCTA;
       button.label = 'Click me';
-      button.buttonStyle = 'secondary';
+      button.buttonVariant = 'secondary';
       button.icon = 'arrow-right';
       document.body.appendChild(button);
 
@@ -153,7 +153,7 @@ describe('ButtonCTA Icon Integration', () => {
     it('should use inherit color for tertiary button', () => {
       const button = document.createElement('button-cta') as ButtonCTA;
       button.label = 'Click me';
-      button.buttonStyle = 'tertiary';
+      button.buttonVariant = 'tertiary';
       button.icon = 'arrow-right';
       document.body.appendChild(button);
 
@@ -303,7 +303,7 @@ describe('ButtonCTA Icon Integration', () => {
       const button = document.createElement('button-cta') as ButtonCTA;
       button.label = 'Save';
       button.size = 'small';
-      button.buttonStyle = 'primary';
+      button.buttonVariant = 'primary';
       button.icon = 'check';
       document.body.appendChild(button);
 
@@ -318,7 +318,7 @@ describe('ButtonCTA Icon Integration', () => {
       const button = document.createElement('button-cta') as ButtonCTA;
       button.label = 'Continue';
       button.size = 'large';
-      button.buttonStyle = 'secondary';
+      button.buttonVariant = 'secondary';
       button.icon = 'arrow-right';
       document.body.appendChild(button);
 
@@ -333,7 +333,7 @@ describe('ButtonCTA Icon Integration', () => {
       const button = document.createElement('button-cta') as ButtonCTA;
       button.label = 'Learn More';
       button.size = 'medium';
-      button.buttonStyle = 'tertiary';
+      button.buttonVariant = 'tertiary';
       button.icon = 'arrow-right';
       document.body.appendChild(button);
 

@@ -116,7 +116,7 @@ describe('Test Infrastructure Setup', () => {
       button = await createButtonCTA({
         label: 'Complete Button',
         size: 'large',
-        buttonStyle: 'secondary',
+        buttonVariant: 'secondary',
         icon: 'arrow-right',
         noWrap: true,
         disabled: false,
@@ -125,7 +125,7 @@ describe('Test Infrastructure Setup', () => {
       
       expect(button.label).toBe('Complete Button');
       expect(button.size).toBe('large');
-      expect(button.buttonStyle).toBe('secondary');
+      expect(button.buttonVariant).toBe('secondary');
       expect(button.icon).toBe('arrow-right');
       expect(button.noWrap).toBe(true);
       expect(button.disabled).toBe(false);

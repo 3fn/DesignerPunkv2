@@ -271,7 +271,7 @@ describe('Icon + ButtonCTA Integration', () => {
       const button = document.createElement('button-cta') as ButtonCTA;
       button.label = 'Primary';
       button.icon = 'check';
-      button.buttonStyle = 'primary';
+      button.buttonVariant = 'primary';
       document.body.appendChild(button);
 
       await waitForRender();
@@ -288,7 +288,7 @@ describe('Icon + ButtonCTA Integration', () => {
       const button = document.createElement('button-cta') as ButtonCTA;
       button.label = 'Secondary';
       button.icon = 'arrow-right';
-      button.buttonStyle = 'secondary';
+      button.buttonVariant = 'secondary';
       document.body.appendChild(button);
 
       await waitForRender();
@@ -305,7 +305,7 @@ describe('Icon + ButtonCTA Integration', () => {
       const button = document.createElement('button-cta') as ButtonCTA;
       button.label = 'Tertiary';
       button.icon = 'x';
-      button.buttonStyle = 'tertiary';
+      button.buttonVariant = 'tertiary';
       document.body.appendChild(button);
 
       await waitForRender();
@@ -326,7 +326,7 @@ describe('Icon + ButtonCTA Integration', () => {
       button.label = 'Test Button';
       button.icon = 'arrow-right';
       button.size = 'medium';
-      button.buttonStyle = 'primary';
+      button.buttonVariant = 'primary';
       document.body.appendChild(button);
 
       await waitForRender();
@@ -429,7 +429,7 @@ describe('Icon + ButtonCTA Integration', () => {
       button.label = 'Full Featured Button';
       button.icon = 'check';
       button.size = 'large';
-      button.buttonStyle = 'primary';
+      button.buttonVariant = 'primary';
       button.testID = 'test-button';
       document.body.appendChild(button);
 

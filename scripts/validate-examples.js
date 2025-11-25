@@ -10,9 +10,9 @@
  * Validation Checks:
  * - Presence of button-cta elements
  * - Required label attribute on all buttons
- * - Valid attribute names (label, size, style, icon, no-wrap, disabled, test-id, id)
+ * - Valid attribute names (label, size, variant, icon, no-wrap, disabled, test-id, id)
  * - Valid size values (small, medium, large)
- * - Valid style values (primary, secondary, tertiary)
+ * - Valid variant values (primary, secondary, tertiary)
  * - Component import (ButtonCTA.web.js)
  * - Proper HTML structure (DOCTYPE, html, head, body tags)
  * - Warning comment present (VALIDATION FILE - NOT DOCUMENTATION)
@@ -49,7 +49,7 @@ const exampleFiles = [
 const validAttributes = [
   'label',      // Required: button text
   'size',       // Optional: 'small' | 'medium' | 'large'
-  'style',      // Optional: 'primary' | 'secondary' | 'tertiary'
+  'variant',    // Optional: 'primary' | 'secondary' | 'tertiary'
   'icon',       // Optional: icon name from Icon System
   'no-wrap',    // Optional: prevent text wrapping
   'disabled',   // Optional: disable button
@@ -60,8 +60,8 @@ const validAttributes = [
 // Valid size values
 const validSizes = ['small', 'medium', 'large'];
 
-// Valid style values
-const validStyles = ['primary', 'secondary', 'tertiary'];
+// Valid variant values
+const validVariants = ['primary', 'secondary', 'tertiary'];
 
 let totalErrors = 0;
 let totalWarnings = 0;
@@ -123,10 +123,10 @@ function validateExample(filePath) {
         fileErrors++;
       }
       
-      // Check for valid style values
-      const styleMatch = button.match(/style="([^"]*)"/);
-      if (styleMatch && !validStyles.includes(styleMatch[1])) {
-        console.log(`  ${colors.red}✗ Button ${buttonNum}: Invalid style '${styleMatch[1]}' (must be: ${validStyles.join(', ')})${colors.reset}`);
+      // Check for valid variant values
+      const variantMatch = button.match(/variant="([^"]*)"/);
+      if (variantMatch && !validVariants.includes(variantMatch[1])) {
+        console.log(`  ${colors.red}✗ Button ${buttonNum}: Invalid variant '${variantMatch[1]}' (must be: ${validVariants.join(', ')})${colors.reset}`);
         fileErrors++;
       }
     });

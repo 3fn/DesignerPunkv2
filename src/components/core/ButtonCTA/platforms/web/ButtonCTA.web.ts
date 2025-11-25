@@ -40,7 +40,7 @@ import { createIcon } from '../../../Icon/platforms/web/Icon.web';
  * <button-cta
  *   label="Submit Form"
  *   size="large"
- *   style="primary"
+ *   variant="primary"
  *   icon="arrow-right"
  *   no-wrap="false"
  *   disabled="false"
@@ -68,7 +68,7 @@ export class ButtonCTA extends HTMLElement {
    * When these attributes change, attributeChangedCallback is invoked.
    */
   static get observedAttributes(): string[] {
-    return ['label', 'size', 'style', 'icon', 'no-wrap', 'disabled', 'test-id'];
+    return ['label', 'size', 'variant', 'icon', 'no-wrap', 'disabled', 'test-id'];
   }
   
   constructor() {
@@ -140,18 +140,18 @@ export class ButtonCTA extends HTMLElement {
   }
   
   /**
-   * Get the button visual style.
+   * Get the button visual variant.
    */
-  get buttonStyle(): ButtonStyle {
-    const style = this.getAttribute('style');
-    return (style === 'primary' || style === 'secondary' || style === 'tertiary') ? style : 'primary';
+  get buttonVariant(): ButtonStyle {
+    const variant = this.getAttribute('variant');
+    return (variant === 'primary' || variant === 'secondary' || variant === 'tertiary') ? variant : 'primary';
   }
   
   /**
-   * Set the button visual style.
+   * Set the button visual variant.
    */
-  set buttonStyle(value: ButtonStyle) {
-    this.setAttribute('style', value);
+  set buttonVariant(value: ButtonStyle) {
+    this.setAttribute('variant', value);
   }
   
   /**
@@ -231,7 +231,7 @@ export class ButtonCTA extends HTMLElement {
   private render(): void {
     const label = this.label;
     const size = this.size;
-    const style = this.buttonStyle;
+    const variant = this.buttonVariant;
     const icon = this.icon;
     const noWrap = this.noWrap;
     const disabled = this.disabled;
@@ -241,7 +241,7 @@ export class ButtonCTA extends HTMLElement {
     const buttonClasses = [
       'button-cta',
       `button-cta--${size}`,
-      `button-cta--${style}`,
+      `button-cta--${variant}`,
       disabled ? 'button-cta--disabled' : ''
     ].filter(Boolean).join(' ');
     

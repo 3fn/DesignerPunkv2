@@ -2,12 +2,12 @@
 
 ## Overview
 
-The ButtonCTA (Call-to-Action Button) component is a cross-platform button following True Native Architecture with build-time platform separation. It provides three size variants, three visual styles, and comprehensive interaction states while maintaining WCAG 2.1 AA accessibility compliance.
+The ButtonCTA (Call-to-Action Button) component is a cross-platform button following True Native Architecture with build-time platform separation. It provides three size variants, three visual variants, and comprehensive interaction states while maintaining WCAG 2.1 AA accessibility compliance.
 
 **Key Features**:
 - Token-based styling (zero hard-coded values)
 - Three size variants (small, medium, large)
-- Three visual styles (primary, secondary, tertiary)
+- Three visual variants (primary, secondary, tertiary)
 - Optional leading icons with optical weight compensation
 - Platform-specific interaction patterns (ripple on Android, scale on iOS, hover on web)
 - WCAG 2.1 AA accessibility compliance
@@ -29,7 +29,7 @@ The ButtonCTA (Call-to-Action Button) component is a cross-platform button follo
 ### Validation Files
 - [BasicUsage.html](./examples/BasicUsage.html) - Validates basic button functionality
 - [WithIcon.html](./examples/WithIcon.html) - Validates icon integration
-- [Variants.html](./examples/Variants.html) - Validates all size and style combinations
+- [Variants.html](./examples/Variants.html) - Validates all size and variant combinations
 
 **Note**: Validation files are automated tests, not documentation. See usage examples in this README for component documentation.
 
@@ -82,34 +82,34 @@ Three size variants provide visual hierarchy:
 - **Medium**: Default size for most buttons, balances visibility and space efficiency
 - **Large**: Prominent buttons for primary CTAs, hero sections, high-emphasis actions
 
-### Visual Styles
+### Visual Variants
 
-Three visual styles establish emphasis hierarchy:
+Three visual variants establish emphasis hierarchy:
 
 ```tsx
-// Primary style (filled background, highest emphasis)
+// Primary variant (filled background, highest emphasis)
 <ButtonCTA 
   label="Primary Action" 
-  style="primary"
+  variant="primary"
   onPress={handlePress} 
 />
 
-// Secondary style (outlined, medium emphasis)
+// Secondary variant (outlined, medium emphasis)
 <ButtonCTA 
   label="Secondary Action" 
-  style="secondary"
+  variant="secondary"
   onPress={handlePress} 
 />
 
-// Tertiary style (text-only, lowest emphasis)
+// Tertiary variant (text-only, lowest emphasis)
 <ButtonCTA 
   label="Tertiary Action" 
-  style="tertiary"
+  variant="tertiary"
   onPress={handlePress} 
 />
 ```
 
-**When to use each style**:
+**When to use each variant**:
 - **Primary**: Main action on a page (e.g., "Save", "Submit", "Continue")
 - **Secondary**: Alternative actions (e.g., "Cancel", "Go Back", "Learn More")
 - **Tertiary**: Low-emphasis actions (e.g., "Skip", "Not Now", "View Details")
@@ -183,7 +183,7 @@ Buttons support multiple interaction states:
 | `label` | `string` | *required* | Button text label |
 | `onPress` | `() => void` | *required* | Click/tap handler function |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Button size variant |
-| `style` | `'primary' \| 'secondary' \| 'tertiary'` | `'primary'` | Button visual style |
+| `variant` | `'primary' \| 'secondary' \| 'tertiary'` | `'primary'` | Button visual variant |
 | `icon` | `IconName` | `undefined` | Optional leading icon from Icon System |
 | `noWrap` | `boolean` | `false` | Prevent text wrapping (single line) |
 | `disabled` | `boolean` | `false` | Disable button interaction |
@@ -193,13 +193,13 @@ Buttons support multiple interaction states:
 
 ```typescript
 type ButtonSize = 'small' | 'medium' | 'large';
-type ButtonStyle = 'primary' | 'secondary' | 'tertiary';
+type ButtonVariant = 'primary' | 'secondary' | 'tertiary';
 
 interface ButtonProps {
   label: string;
   onPress: () => void;
   size?: ButtonSize;
-  style?: ButtonStyle;
+  variant?: ButtonVariant;
   icon?: IconName;
   noWrap?: boolean;
   disabled?: boolean;
@@ -361,7 +361,7 @@ This component includes HTML validation files in the `examples/` directory that 
 **Validation files**:
 - `examples/BasicUsage.html` - Validates basic button functionality
 - `examples/WithIcon.html` - Validates icon integration
-- `examples/Variants.html` - Validates all size and style combinations
+- `examples/Variants.html` - Validates all size and variant combinations
 
 **To run validation**:
 ```bash
