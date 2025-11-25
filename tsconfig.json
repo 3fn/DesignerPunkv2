@@ -14,6 +14,11 @@
         "declaration": true,
         "declarationMap": true,
         "sourceMap": true,
+        // Enable safe iterator handling for for...of loops and spread operators
+        // Required for strict mode compilation with iterator features
+        // Affects: PrimitiveTokenRegistry.ts (line 128), SemanticTokenRegistry.ts (line 165), 
+        //          ThreeTierValidator.ts (line 282)
+        "downlevelIteration": true,
         "types": [
             "jest",
             "node"
