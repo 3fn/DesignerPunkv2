@@ -1,7 +1,7 @@
 /**
  * Unit tests for ButtonCTA component rendering
  * 
- * Tests component rendering with various props, size variants, style variants,
+ * Tests component rendering with various props, size variants, variant styles,
  * icon integration, text wrapping, and disabled state.
  * 
  * Requirements: 1.1-1.7, 2.1-2.4, 7.1-7.4, 8.1-8.6
@@ -96,8 +96,8 @@ describe('ButtonCTA Component Rendering', () => {
       expect(shadowButton?.className).toContain('button-cta--medium');
     });
     
-    it('should have default style of primary when not specified', () => {
-      // Requirement 2.1: Default style is primary
+    it('should have default variant of primary when not specified', () => {
+      // Requirement 2.1: Default variant is primary
       const button = createButton({ label: 'Test' });
       
       expect(button.buttonVariant).toBe('primary');
@@ -146,8 +146,8 @@ describe('ButtonCTA Component Rendering', () => {
     });
   });
   
-  describe('Style Variants', () => {
-    it('should render primary style with correct class', () => {
+  describe('Variant Styles', () => {
+    it('should render primary variant with correct class', () => {
       // Requirement 2.1: Primary button with filled background
       const button = createButton({ label: 'Primary Button', buttonVariant: 'primary' });
       
@@ -155,7 +155,7 @@ describe('ButtonCTA Component Rendering', () => {
       expect(shadowButton?.className).toContain('button-cta--primary');
     });
     
-    it('should render secondary style with correct class', () => {
+    it('should render secondary variant with correct class', () => {
       // Requirement 2.2: Secondary button with outline
       const button = createButton({ label: 'Secondary Button', buttonVariant: 'secondary' });
       
@@ -163,7 +163,7 @@ describe('ButtonCTA Component Rendering', () => {
       expect(shadowButton?.className).toContain('button-cta--secondary');
     });
     
-    it('should render tertiary style with correct class', () => {
+    it('should render tertiary variant with correct class', () => {
       // Requirement 2.3: Tertiary button with text-only
       const button = createButton({ label: 'Tertiary Button', buttonVariant: 'tertiary' });
       
@@ -171,15 +171,15 @@ describe('ButtonCTA Component Rendering', () => {
       expect(shadowButton?.className).toContain('button-cta--tertiary');
     });
     
-    it('should apply all style classes correctly', () => {
-      // Requirement 2.1-2.3: All style variants render correctly
-      const styles: Array<'primary' | 'secondary' | 'tertiary'> = ['primary', 'secondary', 'tertiary'];
+    it('should apply all variant classes correctly', () => {
+      // Requirement 2.1-2.3: All variant styles render correctly
+      const variants: Array<'primary' | 'secondary' | 'tertiary'> = ['primary', 'secondary', 'tertiary'];
       
-      styles.forEach(style => {
-        const button = createButton({ label: `${style} button`, buttonVariant: style });
+      variants.forEach(variant => {
+        const button = createButton({ label: `${variant} button`, buttonVariant: variant });
         
         const shadowButton = button.shadowRoot?.querySelector('button');
-        expect(shadowButton?.className).toContain(`button-cta--${style}`);
+        expect(shadowButton?.className).toContain(`button-cta--${variant}`);
         
         container.removeChild(button);
       });
@@ -568,20 +568,20 @@ describe('ButtonCTA Component Rendering', () => {
       expect(shadowButton?.getAttribute('aria-label')).toBeTruthy();
     });
     
-    it('should maintain focus indicator visibility across all button styles', () => {
-      // Requirement 12.4: Focus indicator works for all style variants
-      const styles: Array<'primary' | 'secondary' | 'tertiary'> = ['primary', 'secondary', 'tertiary'];
+    it('should maintain focus indicator visibility across all button variants', () => {
+      // Requirement 12.4: Focus indicator works for all variant styles
+      const variants: Array<'primary' | 'secondary' | 'tertiary'> = ['primary', 'secondary', 'tertiary'];
       
-      styles.forEach(style => {
+      variants.forEach(variant => {
         const button = createButton({ 
-          label: `${style} button`, 
-          buttonVariant: style 
+          label: `${variant} button`, 
+          buttonVariant: variant 
         });
         
         const shadowButton = button.shadowRoot?.querySelector('button');
         shadowButton?.focus();
         
-        // Verify focus works for all styles
+        // Verify focus works for all variants
         expect(document.activeElement).toBe(button);
         expect(shadowButton?.getAttribute('role')).toBe('button');
         

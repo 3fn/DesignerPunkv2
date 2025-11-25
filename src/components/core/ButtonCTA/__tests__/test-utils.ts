@@ -54,7 +54,7 @@ export async function waitForShadowDOM(
 export async function createButtonCTA(props: {
   label: string;
   size?: 'small' | 'medium' | 'large';
-  buttonStyle?: 'primary' | 'secondary' | 'tertiary';
+  buttonVariant?: 'primary' | 'secondary' | 'tertiary';
   icon?: string;
   noWrap?: boolean;
   disabled?: boolean;
@@ -67,7 +67,7 @@ export async function createButtonCTA(props: {
   // Set properties
   button.label = props.label;
   if (props.size) button.size = props.size;
-  if (props.buttonStyle) button.buttonStyle = props.buttonStyle;
+  if (props.buttonVariant) button.buttonVariant = props.buttonVariant;
   if (props.icon) button.icon = props.icon;
   if (props.noWrap !== undefined) button.noWrap = props.noWrap;
   if (props.disabled !== undefined) button.disabled = props.disabled;
