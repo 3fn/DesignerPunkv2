@@ -2506,6 +2506,8 @@ When creating cross-references, calculate relative paths based on the source doc
 
 ### Phase 1: Requirements
 
+**For component development**: Consider creating a design outline before requirements to explore variants, token usage, and platform considerations. See Component Development Guide for component-specific spec methodology.
+
 1. Generate initial requirements based on feature idea
 2. Use EARS format for acceptance criteria
 3. Include user stories for context

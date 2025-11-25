@@ -138,6 +138,66 @@ export const buttonCTATokens = {
 
 ---
 
+## Component Attribute Standards
+
+### Variant Attribute Naming
+
+**Standard**: Use `variant` attribute for component variations, not `style`
+
+**Rationale**:
+- **IDE Warnings**: The `style` attribute conflicts with the standard HTML `style` attribute, causing IDE warnings and potential confusion
+- **Industry Standards**: Leading design systems use `variant` for component variations:
+  - Material Design: `<Button variant="contained">`
+  - Shoelace: `<sl-button variant="primary">`
+  - Adobe Spectrum: `<sp-button variant="accent">`
+- **Web Component Best Practices**: Custom elements should avoid attribute names that conflict with standard HTML attributes
+- **Developer Experience**: Clear, unambiguous attribute names improve code readability and reduce errors
+
+**Correct Usage**:
+```html
+<!-- ✅ CORRECT: Use variant attribute -->
+<button-cta variant="primary" label="Submit"></button-cta>
+<button-cta variant="secondary" label="Cancel"></button-cta>
+<button-cta variant="danger" label="Delete"></button-cta>
+```
+
+**Anti-Pattern**:
+```html
+<!-- ❌ WRONG: Don't use style attribute for variants -->
+<button-cta style="primary" label="Submit"></button-cta>
+```
+
+**Why This Matters**:
+- IDEs will show warnings when `style` is used for non-CSS purposes
+- Developers familiar with web standards expect `style` to contain CSS
+- Using `variant` aligns with industry conventions and improves code clarity
+- Future-proofs components against potential conflicts with HTML standards
+
+**TypeScript Interface Pattern**:
+```typescript
+// Component props interface
+export interface ButtonCTAProps {
+  label: string;
+  variant?: 'primary' | 'secondary' | 'danger';  // ✅ Use variant
+  size?: 'small' | 'medium' | 'large';
+  icon?: string;
+  disabled?: boolean;
+}
+```
+
+**Web Component Implementation Pattern**:
+```typescript
+// Web component attribute reading
+class ButtonCTA extends HTMLElement {
+  connectedCallback() {
+    const variant = this.getAttribute('variant') || 'primary';  // ✅ Read variant
+    // Apply styling based on variant
+  }
+}
+```
+
+---
+
 ## Component Structure Pattern
 
 ### File Organization
@@ -406,6 +466,27 @@ export const buttonTokens = {
 };
 ```
 
+### ❌ Using `style` Attribute for Variants
+```html
+<!-- DON'T: Use style attribute for component variants -->
+<button-cta style="primary" label="Submit"></button-cta>
+
+<!-- DO: Use variant attribute -->
+<button-cta variant="primary" label="Submit"></button-cta>
+```
+
+```typescript
+// DON'T: Use style property in TypeScript interfaces
+export interface ButtonProps {
+  style?: 'primary' | 'secondary';  // Conflicts with HTML style attribute
+}
+
+// DO: Use variant property
+export interface ButtonProps {
+  variant?: 'primary' | 'secondary';  // Clear, unambiguous
+}
+```
+
 ---
 
 ## Validation Checklist
@@ -421,7 +502,97 @@ Before implementing a component, verify:
 - [ ] Platform implementations handle platform-specific nuances
 - [ ] Followed True Native Architecture (separate files per platform)
 - [ ] Used system-specific terminology (Container not Card)
+- [ ] Used `variant` attribute for component variations (not `style`)
 - [ ] Documented any primitive token usage with rationale
+
+---
+
+## Component Spec Development Workflow
+
+Components come with their own unique properties that might include, but are not limited to, multiple variants, states, or platform considerations. Use this workflow to create clearer, more precise specifications to fully understand their complexity.
+
+### Design Outline Before Requirements
+
+**When to use**: All components benefit from upfront exploration to understand their extensibility to support planned use cases. Identifying aspects such as sizing variants, interaction states, token dependencies, platform-specific considerations, and more are critical to creating sustainable, appropiately scaled components.
+
+**Purpose**: Explore component design space before committing to formal requirements. Captures decision-making process, token needs, and open questions in an informal document.
+
+**What to include**:
+- Component overview and variant specifications (tables work well)
+- Token requirements (existing tokens used + new tokens needed)
+- Design decisions with rationale and alternatives considered
+- Open questions and checkpoints for resolution
+- Observations and learnings for future reference
+
+**What NOT to include**:
+- Full EARS requirements (save for requirements.md)
+- Implementation details (save for design.md)
+- Task breakdowns (save for tasks.md)
+
+**Key principle**: This is a thinking document, not a template to copy-paste. Use it to explore and document your design reasoning.
+
+**Reference example**: `.kiro/specs/005-cta-button-component/design-outline.md` - Shows informal exploration of button sizing, token usage, and design decisions before creating formal spec.
+
+### README-First Documentation
+
+**Purpose**: Create living documentation that serves as both component guide and validation target. Documentation that can't drift from implementation.
+
+**Required sections**:
+- Overview (what it is, key features)
+- Related Documentation (cross-links to spec docs, related components)
+- Usage (code examples showing variants and states)
+- API Reference (props table with types)
+- Token Consumption (which tokens the component uses)
+- Accessibility (WCAG compliance notes)
+- Platform-Specific Notes (if applicable)
+- Validation (link to validation files with disclaimer)
+
+**Cross-reference pattern**:
+- Link to spec documents (requirements.md, design.md)
+- Link to related components (dependencies)
+- Link to validation files with clear disclaimer
+
+**Validation file disclaimer**: Always note that validation files are automated tests, not documentation source of truth.
+
+**Reference example**: `src/components/core/ButtonCTA/README.md` - Shows comprehensive component documentation with cross-links and validation disclaimer.
+
+### HTML Canary Validation
+
+**Purpose**: Create living examples that validate component behavior and accuracy of the README documentation. Examples that must stay functional as component evolves.
+
+**Required elements**:
+- Warning comment at top: `<!-- VALIDATION FILE - NOT DOCUMENTATION -->`
+- Purpose comment explaining what's being validated
+- Actual component usage (not mock HTML)
+- Can be run as automated tests via validation script
+- Must remain functional (breaking changes break validation)
+
+**Key principle**: These are executable tests that validate the component's implementation and documentation are actually working and in alignemnt.
+
+**Validation script pattern**: Create `scripts/validate-examples.js` to check:
+- Presence of component elements
+- Required attributes
+- Valid attribute values
+- Proper HTML structure
+- Warning comments present
+
+**Reference examples**:
+- `src/components/core/ButtonCTA/examples/BasicUsage.html` - Validates basic button functionality
+- `src/components/core/ButtonCTA/examples/WithIcon.html` - Validates icon integration
+- `src/components/core/ButtonCTA/examples/Variants.html` - Validates all size/style combinations
+- `scripts/validate-examples.js` - Validation script that checks HTML examples
+
+### Workflow Summary
+
+1. **Design Outline** (required) - Explore design space informally
+2. **Requirements** (required) - Formalize requirements using EARS format
+3. **Design** (required) - Document architecture and token integration
+4. **Tasks** (required) - Break down implementation steps
+5. **README** (required) - Create comprehensive component documentation
+6. **HTML Canaries** (required) - Create validation examples
+7. **Implementation** (required) - Build component across platforms
+
+This workflow produces clearer requirements, better documentation, and validation that ensures documentation stays accurate.
 
 ---
 
