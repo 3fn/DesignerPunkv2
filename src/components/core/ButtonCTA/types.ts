@@ -46,9 +46,9 @@ export type ButtonSize = 'small' | 'medium' | 'large';
  * 
  * @example
  * ```typescript
- * <ButtonCTA style="primary" label="Save" onPress={handleSave} />
- * <ButtonCTA style="secondary" label="Cancel" onPress={handleCancel} />
- * <ButtonCTA style="tertiary" label="Learn More" onPress={handleLearnMore} />
+ * <ButtonCTA variant="primary" label="Save" onPress={handleSave} />
+ * <ButtonCTA variant="secondary" label="Cancel" onPress={handleCancel} />
+ * <ButtonCTA variant="tertiary" label="Learn More" onPress={handleLearnMore} />
  * ```
  */
 export type ButtonStyle = 'primary' | 'secondary' | 'tertiary';
@@ -76,7 +76,7 @@ export type ButtonStyle = 'primary' | 'secondary' | 'tertiary';
  * <ButtonCTA
  *   label="Submit Form"
  *   size="large"
- *   style="primary"
+ *   variant="primary"
  *   icon="arrow-right"
  *   noWrap={false}
  *   disabled={false}
@@ -127,10 +127,10 @@ export interface ButtonProps {
   size?: ButtonSize;
   
   /**
-   * Button visual style (optional, default: 'primary')
+   * Button visual variant (optional, default: 'primary')
    * 
    * Controls the button's visual treatment and emphasis level.
-   * Choose style based on action importance:
+   * Choose variant based on action importance:
    * - primary: Main action (highest emphasis)
    * - secondary: Alternative action (medium emphasis)
    * - tertiary: Subtle action (lowest emphasis)
@@ -139,12 +139,12 @@ export interface ButtonProps {
    * 
    * @example
    * ```typescript
-   * style="primary"    // Filled background, highest emphasis
-   * style="secondary"  // Outlined, medium emphasis
-   * style="tertiary"   // Text-only, lowest emphasis
+   * variant="primary"    // Filled background, highest emphasis
+   * variant="secondary"  // Outlined, medium emphasis
+   * variant="tertiary"   // Text-only, lowest emphasis
    * ```
    */
-  style?: ButtonStyle;
+  variant?: ButtonStyle;
   
   /**
    * Optional leading icon from Icon System

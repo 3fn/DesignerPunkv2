@@ -17,7 +17,7 @@ import { ButtonCTA } from '../platforms/web/ButtonCTA.web';
  * 
  * Default values:
  * - size: 'medium' (48px height)
- * - style: 'primary' (filled background with primary color)
+ * - variant: 'primary' (filled background with primary color)
  * - noWrap: false (text wraps if needed)
  * - disabled: false (interactive)
  * 
