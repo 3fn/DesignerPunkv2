@@ -232,11 +232,11 @@ struct ButtonCTA: View {
     private var horizontalPadding: CGFloat {
         switch size {
         case .small:
-            return 16 // space.inset.spacious
+            return 16 // space.inset.200
         case .medium:
-            return 24 // space.inset.expansive
+            return 24 // space.inset.300
         case .large:
-            return 32 // space.inset.generous
+            return 32 // space.inset.400
         }
     }
     
@@ -245,9 +245,9 @@ struct ButtonCTA: View {
     private var verticalPadding: CGFloat {
         switch size {
         case .small:
-            return 8 // space.inset.normal
+            return 8 // space.inset.100
         case .medium, .large:
-            return 12 // space.inset.comfortable
+            return 12 // space.inset.150
         }
     }
     

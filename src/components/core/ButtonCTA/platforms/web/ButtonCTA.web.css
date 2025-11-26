@@ -65,8 +65,8 @@
  * Small button (40px height)
  * 
  * - Height: 40px (aligns to 8px baseline grid)
- * - Horizontal padding: space.inset.spacious (16px)
- * - Vertical padding: space.inset.normal (8px)
+ * - Horizontal padding: space.inset.200 (16px)
+ * - Vertical padding: space.inset.100 (8px)
  * - Border radius: radius100 (8px)
  * - Typography: typography.bodyMd
  * - Icon size: icon.size100 (24px)
@@ -76,7 +76,7 @@
 .button-cta--small {
   min-height: 40px;
   min-width: 56px;
-  padding: var(--space-inset-normal) var(--space-inset-spacious); /* 8px 16px */
+  padding: var(--space-inset-100) var(--space-inset-200); /* 8px 16px */
   border-radius: var(--radius-100); /* 8px */
   gap: var(--space-grouped-tight); /* 4px for icon-text spacing */
   
@@ -92,8 +92,8 @@
  * Medium button (48px height) - Default size
  * 
  * - Height: 48px (aligns to 8px baseline grid)
- * - Horizontal padding: space.inset.expansive (24px)
- * - Vertical padding: space.inset.comfortable (12px)
+ * - Horizontal padding: space.inset.300 (24px)
+ * - Vertical padding: space.inset.150 (12px)
  * - Border radius: radius150 (12px)
  * - Typography: typography.bodyMd
  * - Icon size: icon.size100 (24px)
@@ -103,7 +103,7 @@
 .button-cta--medium {
   min-height: 48px;
   min-width: 72px;
-  padding: var(--space-inset-comfortable) var(--space-inset-expansive); /* 12px 24px */
+  padding: var(--space-inset-150) var(--space-inset-300); /* 12px 24px */
   border-radius: var(--radius-150); /* 12px */
   gap: var(--space-grouped-normal); /* 8px for icon-text spacing */
   
@@ -119,8 +119,8 @@
  * Large button (56px height)
  * 
  * - Height: 56px (aligns to 8px baseline grid)
- * - Horizontal padding: space.inset.generous (32px)
- * - Vertical padding: space.inset.comfortable (12px)
+ * - Horizontal padding: space.inset.400 (32px)
+ * - Vertical padding: space.inset.150 (12px)
  * - Border radius: radius200 (16px)
  * - Typography: typography.bodyLg
  * - Icon size: icon.size125 (32px)
@@ -130,7 +130,7 @@
 .button-cta--large {
   min-height: 56px;
   min-width: 80px;
-  padding: var(--space-inset-comfortable) var(--space-inset-generous); /* 12px 32px */
+  padding: var(--space-inset-150) var(--space-inset-400); /* 12px 32px */
   border-radius: var(--radius-200); /* 16px */
   gap: var(--space-grouped-normal); /* 8px for icon-text spacing */
   

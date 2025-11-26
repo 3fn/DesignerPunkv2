@@ -1,0 +1,17 @@
+{
+  "id": "1764191540-task-completion",
+  "type": "task-completion",
+  "source": ".kiro/specs/011-inset-token-renaming/tasks.md",
+  "triggeredAt": "2025-11-26T21:12:20.3NZ",
+  "triggeredBy": "hook-system",
+  "git": {
+    "commit": "4cd4d5eb631892898d673363bcb7043753ff0dc9",
+    "branch": "main",
+    "message": "Task Complete: 2. Update TypeScript Types"
+  },
+  "workflow": {
+    "hookType": "auto",
+    "projectRoot": "/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2"
+  },
+  "status": "pending"
+}

@@ -111,6 +111,13 @@ export class iOSFormatGenerator extends BaseFormatProvider {
   }
 
   getTokenName(tokenName: string, category: string): string {
+    // Special handling for inset spacing tokens with numeric names
+    // Convert "inset.050" -> "spaceInset050"
+    if (category === 'spacing' && tokenName.startsWith('inset.')) {
+      const numericPart = tokenName.replace('inset.', '');
+      return `spaceInset${numericPart}`;
+    }
+    
     // Use platform naming rules for consistent naming
     return getPlatformTokenName(tokenName, this.platform, category as any);
   }

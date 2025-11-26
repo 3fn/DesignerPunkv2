@@ -121,6 +121,13 @@ export class WebFormatGenerator extends BaseFormatProvider {
       return `--${kebabName}`;
     }
     
+    // Special handling for inset spacing tokens with numeric names
+    // Convert "inset.050" -> "--space-inset-050"
+    if (category === 'spacing' && tokenName.startsWith('inset.')) {
+      const numericPart = tokenName.replace('inset.', '');
+      return `--space-inset-${numericPart}`;
+    }
+    
     return getPlatformTokenName(tokenName, this.platform, category as any);
   }
 
