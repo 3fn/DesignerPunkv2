@@ -62,11 +62,51 @@ describe('getSemanticToken', () => {
     expect(token?.primitiveReferences.value).toBe('space100');
   });
 
-  it('should retrieve inset spacing tokens', () => {
+  it('should retrieve inset spacing tokens with numeric names', () => {
     const token = getSemanticToken('space.inset.150');
     expect(token).toBeDefined();
     expect(token?.name).toBe('space.inset.150');
     expect(token?.primitiveReferences.value).toBe('space150');
+  });
+
+  it('should verify all numeric inset token names exist', () => {
+    // Test all numeric inset token names (050, 100, 150, 200, 300, 400)
+    const numericTokens = ['050', '100', '150', '200', '300', '400'];
+    
+    numericTokens.forEach(tokenName => {
+      const token = getSemanticToken(`space.inset.${tokenName}`);
+      expect(token).toBeDefined();
+      expect(token?.name).toBe(`space.inset.${tokenName}`);
+      expect(token?.category).toBe(SemanticCategory.SPACING);
+    });
+  });
+
+  it('should verify old synonym names do not exist', () => {
+    // Test that old names (tight, normal, comfortable, spacious, expansive, generous) don't exist
+    const oldNames = ['tight', 'normal', 'comfortable', 'spacious', 'expansive', 'generous'];
+    
+    oldNames.forEach(oldName => {
+      const token = getSemanticToken(`space.inset.${oldName}`);
+      expect(token).toBeUndefined();
+    });
+  });
+
+  it('should verify inset tokens reference correct primitives', () => {
+    // Verify primitive references are unchanged (space050, space100, etc.)
+    const tokenMappings = [
+      { name: '050', primitive: 'space050' },
+      { name: '100', primitive: 'space100' },
+      { name: '150', primitive: 'space150' },
+      { name: '200', primitive: 'space200' },
+      { name: '300', primitive: 'space300' },
+      { name: '400', primitive: 'space400' }
+    ];
+    
+    tokenMappings.forEach(({ name, primitive }) => {
+      const token = getSemanticToken(`space.inset.${name}`);
+      expect(token).toBeDefined();
+      expect(token?.primitiveReferences.value).toBe(primitive);
+    });
   });
 
   it('should return undefined for non-existent tokens', () => {
@@ -253,7 +293,7 @@ describe('validateSemanticTokenStructure', () => {
 });
 
 describe('getSpacingRecommendation', () => {
-  it('should recommend inset spacing tokens', () => {
+  it('should recommend inset spacing tokens with numeric names', () => {
     const recommendations = getSpacingRecommendation('inset');
     expect(recommendations).toContain('space.inset.050');
     expect(recommendations).toContain('space.inset.100');
@@ -261,6 +301,15 @@ describe('getSpacingRecommendation', () => {
     expect(recommendations).toContain('space.inset.200');
     expect(recommendations).toContain('space.inset.300');
     expect(recommendations).toContain('space.inset.400');
+  });
+
+  it('should not recommend old synonym names', () => {
+    const recommendations = getSpacingRecommendation('inset');
+    const oldNames = ['tight', 'normal', 'comfortable', 'spacious', 'expansive', 'generous'];
+    
+    oldNames.forEach(oldName => {
+      expect(recommendations).not.toContain(`space.inset.${oldName}`);
+    });
   });
 
   it('should recommend layout spacing tokens', () => {

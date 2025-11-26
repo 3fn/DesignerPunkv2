@@ -418,9 +418,11 @@ The Token Category Pattern Guide provides the definitive patterns for adding new
 ### Spacing Tokens
 
 - **File**: `src/tokens/SpacingTokens.ts`
-- **Description**: Spacing tokens following 8-unit baseline grid alignment with strategic flexibility exceptions
+- **Description**: Spacing tokens following 8-unit baseline grid alignment with strategic flexibility exceptions using numeric naming that exposes mathematical relationships
 - **Base Value**: 8px
 - **Grid**: 8-unit baseline grid with 4px subgrid alignment
+- **Related Guides**:
+  - [Spacing Tokens Guide](./tokens/spacing-tokens.md) - Complete spacing token reference with numeric naming convention, mathematical relationships, and cross-platform usage examples
 
 ### Line Height Tokens
 
@@ -512,7 +514,9 @@ The Token Category Pattern Guide provides the definitive patterns for adding new
 ### Semantic Spacing Tokens
 
 - **File**: `src/tokens/semantic/SpacingTokens.ts`
-- **Description**: Semantic spacing tokens providing layout pattern-specific spacing values (stack, inline, inset) that reference primitive spacing tokens
+- **Description**: Semantic spacing tokens providing layout pattern-specific spacing values (grouped, related, separated, sectioned, inset) that reference primitive spacing tokens
+- **Related Guides**:
+  - [Spacing Tokens Guide](./tokens/spacing-tokens.md) - Complete spacing token reference with numeric naming convention, mathematical relationships, and usage examples
 
 ### Style Tokens
 

@@ -219,7 +219,7 @@ This plan implements the renaming of inset spacing semantic tokens from subjecti
   - Detailed: `.kiro/specs/011-inset-token-renaming/completion/task-5-parent-completion.md`
   - Summary: `docs/specs/011-inset-token-renaming/task-5-summary.md` (triggers release detection)
 
-  - [ ] 5.1 Update semantic token tests
+  - [x] 5.1 Update semantic token tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update tests to verify numeric token names (050, 100, 150, etc.)
@@ -228,7 +228,7 @@ This plan implements the renaming of inset spacing semantic tokens from subjecti
     - Verify primitive references unchanged (space050, space100, etc.)
     - _Requirements: 8.1, 8.4_
 
-  - [ ] 5.2 Update component tests
+  - [x] 5.2 Update component tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update ButtonCTA tests to use new prop values (inset050, etc.)
@@ -237,7 +237,7 @@ This plan implements the renaming of inset spacing semantic tokens from subjecti
     - Verify visual appearance unchanged (snapshot tests)
     - _Requirements: 8.2, 8.4_
 
-  - [ ] 5.3 Update platform generator tests
+  - [x] 5.3 Update platform generator tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update tests to verify new token names in generated output
@@ -247,7 +247,7 @@ This plan implements the renaming of inset spacing semantic tokens from subjecti
     - Verify old names not in generated output
     - _Requirements: 8.3, 8.4_
 
-  - [ ] 5.4 Run full test suite
+  - [x] 5.4 Run full test suite
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run `npm test` to execute all tests
@@ -256,7 +256,7 @@ This plan implements the renaming of inset spacing semantic tokens from subjecti
     - Verify no references to old token names in test output
     - _Requirements: 8.4_
 
-- [ ] 6. Update Documentation and Migration Guide
+- [x] 6. Update Documentation and Migration Guide
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -276,7 +276,7 @@ This plan implements the renaming of inset spacing semantic tokens from subjecti
   - Detailed: `.kiro/specs/011-inset-token-renaming/completion/task-6-parent-completion.md`
   - Summary: `docs/specs/011-inset-token-renaming/task-6-summary.md` (triggers release detection)
 
-  - [ ] 6.1 Create migration guide
+  - [x] 6.1 Create migration guide
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create migration guide document
@@ -286,7 +286,7 @@ This plan implements the renaming of inset spacing semantic tokens from subjecti
     - Document breaking change clearly
     - _Requirements: 7.4, 9.1, 9.2, 9.3, 9.4_
 
-  - [ ] 6.2 Update token system documentation
+  - [x] 6.2 Update token system documentation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update spacing token documentation
@@ -295,7 +295,7 @@ This plan implements the renaming of inset spacing semantic tokens from subjecti
     - Provide usage examples with new names
     - _Requirements: 7.1, 7.2_
 
-  - [ ] 6.3 Update component usage documentation
+  - [x] 6.3 Update component usage documentation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update component README files
@@ -304,7 +304,7 @@ This plan implements the renaming of inset spacing semantic tokens from subjecti
     - Document TypeScript types
     - _Requirements: 7.3_
 
-- [ ] 7. Final Verification
+- [x] 7. Final Verification
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -325,7 +325,7 @@ This plan implements the renaming of inset spacing semantic tokens from subjecti
   - Detailed: `.kiro/specs/011-inset-token-renaming/completion/task-7-parent-completion.md`
   - Summary: `docs/specs/011-inset-token-renaming/task-7-summary.md` (triggers release detection)
 
-  - [ ] 7.1 Run full build and test suite
+  - [x] 7.1 Run full build and test suite
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run `npm run build` to compile TypeScript
@@ -334,7 +334,7 @@ This plan implements the renaming of inset spacing semantic tokens from subjecti
     - Verify all tests pass
     - _Requirements: All_
 
-  - [ ] 7.2 Search for old token name references
+  - [x] 7.2 Search for old token name references
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Search codebase for "tight" in spacing context
@@ -345,7 +345,7 @@ This plan implements the renaming of inset spacing semantic tokens from subjecti
     - Verify no references found (except in migration docs)
     - _Requirements: 4.4, 8.4_
 
-  - [ ] 7.3 Visual regression verification
+  - [x] 7.3 Visual regression verification
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Compare ButtonCTA visual appearance before/after
@@ -354,7 +354,7 @@ This plan implements the renaming of inset spacing semantic tokens from subjecti
     - Run visual regression tests if available
     - _Requirements: 3.3, 4.3, 5.4_
 
-  - [ ] 7.4 Documentation completeness check
+  - [x] 7.4 Documentation completeness check
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Verify migration guide is complete

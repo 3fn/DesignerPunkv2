@@ -1,0 +1,17 @@
+{
+  "id": "1764193673-task-completion",
+  "type": "task-completion",
+  "source": ".kiro/specs/011-inset-token-renaming/tasks.md",
+  "triggeredAt": "2025-11-26T21:47:53.3NZ",
+  "triggeredBy": "hook-system",
+  "git": {
+    "commit": "464f820e1536ef7e0fc8e95d86551b105cbe9724",
+    "branch": "main",
+    "message": "Task Complete: 4. Update Platform Generators"
+  },
+  "workflow": {
+    "hookType": "auto",
+    "projectRoot": "/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2"
+  },
+  "status": "pending"
+}
