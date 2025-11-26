@@ -129,45 +129,58 @@ export const layoutSpacing = {
 /**
  * Inset Spacing Tokens (Internal Spacing)
  * 
- * Describe spacing inside containers based on density.
+ * Numeric naming exposes mathematical relationships:
+ * - 050: 4px (0.5 × base)
+ * - 100: 8px (1 × base)  
+ * - 150: 12px (1.5 × base)
+ * - 200: 16px (2 × base)
+ * - 300: 24px (3 × base)
+ * - 400: 32px (4 × base)
+ * 
  * Use for padding within components and containers.
  */
 export const insetSpacing = {
   /**
-   * High-density interfaces (compact, efficient)
-   * Example: Data table cells, compact chips, dense toolbars
+   * 050 - Minimal internal spacing (4px)
+   * Mathematical relationship: 0.5 × base (space100)
+   * Example: Compact chips, dense toolbars, tight buttons
    */
-  tight: { value: 'space050' } as SpacingSemanticToken,
+  '050': { value: 'space050' } as SpacingSemanticToken,
 
   /**
-   * Standard-density interfaces (balanced)
+   * 100 - Compact internal spacing (8px)
+   * Mathematical relationship: 1 × base (space100)
+   * Example: Small buttons, compact cards, dense forms
+   */
+  '100': { value: 'space100' } as SpacingSemanticToken,
+
+  /**
+   * 150 - Standard internal spacing (12px)
+   * Mathematical relationship: 1.5 × base (space100)
    * Example: Standard buttons, cards, form inputs
    */
-  normal: { value: 'space100' } as SpacingSemanticToken,
+  '150': { value: 'space150' } as SpacingSemanticToken,
 
   /**
-   * Low-density interfaces (generous, content-focused)
-   * Example: Content cards, comfortable forms, readable content areas
+   * 200 - Comfortable internal spacing (16px)
+   * Mathematical relationship: 2 × base (space100)
+   * Example: Large buttons, comfortable cards, readable content
    */
-  comfortable: { value: 'space150' } as SpacingSemanticToken,
+  '200': { value: 'space200' } as SpacingSemanticToken,
 
   /**
-   * Very low-density interfaces (emphasis, breathing room)
-   * Example: Modal dialogs, emphasized content, feature callouts
+   * 300 - Spacious internal spacing (24px)
+   * Mathematical relationship: 3 × base (space100)
+   * Example: Hero sections, emphasized content, feature callouts
    */
-  spacious: { value: 'space200' } as SpacingSemanticToken,
+  '300': { value: 'space300' } as SpacingSemanticToken,
 
   /**
-   * Maximum breathing room (heroes, feature sections)
-   * Example: Hero sections, landing page features, maximum emphasis areas
+   * 400 - Maximum internal spacing (32px)
+   * Mathematical relationship: 4 × base (space100)
+   * Example: Landing page heroes, maximum emphasis areas
    */
-  expansive: { value: 'space300' } as SpacingSemanticToken,
-
-  /**
-   * Generous internal spacing for large components
-   * Example: Large button horizontal padding, spacious card padding, hero section insets
-   */
-  generous: { value: 'space400' } as SpacingSemanticToken
+  '400': { value: 'space400' } as SpacingSemanticToken
 };
 
 /**
@@ -191,8 +204,9 @@ export const spacingTokens = {
  *    → Choose based on relationship hierarchy + desired density
  * 
  * 2. Inside containers (padding)?
- *    → Use inset tokens: tight / normal / comfortable / spacious / expansive
+ *    → Use inset tokens: 050 / 100 / 150 / 200 / 300 / 400
  *    → Choose based on desired interface density
+ *    → Numeric names expose mathematical relationships (150 = 1.5 × base)
  * 
  * 3. Removing spacing (resets)?
  *    → Use 0 directly (not a token)

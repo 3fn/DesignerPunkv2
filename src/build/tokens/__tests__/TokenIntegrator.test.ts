@@ -75,7 +75,7 @@ describe('TokenIntegrator - F1 Integration', () => {
 
       // Register semantic spacing tokens
       const spacingSemantics = [
-        { name: 'space.inset.normal', ...semanticSpacingTokens.inset.normal, category: SemanticCategory.SPACING, context: 'Standard inset spacing', description: 'Normal inset' },
+        { name: 'space.inset.100', ...semanticSpacingTokens.inset['100'], category: SemanticCategory.SPACING, context: 'Standard inset spacing', description: 'Compact inset' },
         { name: 'space.grouped.normal', ...semanticSpacingTokens.grouped.normal, category: SemanticCategory.SPACING, context: 'Grouped spacing', description: 'Normal grouped' }
       ];
 
@@ -90,13 +90,13 @@ describe('TokenIntegrator - F1 Integration', () => {
       });
 
       // Verify tokens are registered
-      expect(semanticRegistry.has('space.inset.normal')).toBe(true);
+      expect(semanticRegistry.has('space.inset.100')).toBe(true);
       expect(semanticRegistry.has('space.grouped.normal')).toBe(true);
 
       // Verify token references
-      const insetNormal = semanticRegistry.get('space.inset.normal');
-      expect(insetNormal).toBeDefined();
-      expect(insetNormal?.primitiveReferences.value).toBe('space100');
+      const inset100 = semanticRegistry.get('space.inset.100');
+      expect(inset100).toBeDefined();
+      expect(inset100?.primitiveReferences.value).toBe('space100');
     });
 
     it('should import color semantic tokens from F1', () => {
