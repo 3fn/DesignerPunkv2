@@ -121,6 +121,13 @@ export class AndroidFormatGenerator extends BaseFormatProvider {
   }
 
   getTokenName(tokenName: string, category: string): string {
+    // Special handling for inset spacing tokens with numeric names
+    // Convert "inset.050" -> "space_inset_050" (snake_case for Android)
+    if (category === 'spacing' && tokenName.startsWith('inset.')) {
+      const numericPart = tokenName.replace('inset.', '');
+      return `space_inset_${numericPart}`;
+    }
+    
     // Use platform naming rules for consistent naming
     return getPlatformTokenName(tokenName, this.platform, category as any);
   }

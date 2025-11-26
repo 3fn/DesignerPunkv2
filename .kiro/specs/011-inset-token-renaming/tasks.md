@@ -96,7 +96,7 @@ This plan implements the renaming of inset spacing semantic tokens from subjecti
     - Verify TypeScript compilation succeeds
     - _Requirements: 6.1, 6.2_
 
-- [ ] 3. Update Component Implementations
+- [x] 3. Update Component Implementations
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -115,7 +115,7 @@ This plan implements the renaming of inset spacing semantic tokens from subjecti
   - Detailed: `.kiro/specs/011-inset-token-renaming/completion/task-3-parent-completion.md`
   - Summary: `docs/specs/011-inset-token-renaming/task-3-summary.md` (triggers release detection)
 
-  - [ ] 3.1 Update ButtonCTA component
+  - [x] 3.1 Update ButtonCTA component
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update padding prop values to use "inset" prefix
@@ -124,7 +124,7 @@ This plan implements the renaming of inset spacing semantic tokens from subjecti
     - Verify visual appearance unchanged
     - _Requirements: 4.1, 4.3_
 
-  - [ ] 3.2 Update Icon component
+  - [x] 3.2 Update Icon component
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Check if Icon uses inset padding
@@ -133,7 +133,7 @@ This plan implements the renaming of inset spacing semantic tokens from subjecti
     - Verify visual appearance unchanged
     - _Requirements: 4.2, 4.3_
 
-  - [ ] 3.3 Update component documentation
+  - [x] 3.3 Update component documentation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update ButtonCTA README with new prop values
@@ -142,7 +142,7 @@ This plan implements the renaming of inset spacing semantic tokens from subjecti
     - Document migration from old to new values
     - _Requirements: 7.1, 7.2, 7.3, 7.4_
 
-- [ ] 4. Update Platform Generators
+- [x] 4. Update Platform Generators
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -163,7 +163,7 @@ This plan implements the renaming of inset spacing semantic tokens from subjecti
   - Detailed: `.kiro/specs/011-inset-token-renaming/completion/task-4-parent-completion.md`
   - Summary: `docs/specs/011-inset-token-renaming/task-4-summary.md` (triggers release detection)
 
-  - [ ] 4.1 Update Web CSS Generator
+  - [x] 4.1 Update Web CSS Generator
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update token name formatting for inset tokens
@@ -172,7 +172,7 @@ This plan implements the renaming of inset spacing semantic tokens from subjecti
     - Test that generated values are correct (4px, 8px, 12px, etc.)
     - _Requirements: 5.1, 5.4_
 
-  - [ ] 4.2 Update iOS Swift Generator
+  - [x] 4.2 Update iOS Swift Generator
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update token name formatting for inset tokens
@@ -181,7 +181,7 @@ This plan implements the renaming of inset spacing semantic tokens from subjecti
     - Test that generated values are correct (4, 8, 12, etc.)
     - _Requirements: 5.2, 5.4_
 
-  - [ ] 4.3 Update Android Kotlin Generator
+  - [x] 4.3 Update Android Kotlin Generator
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update token name formatting for inset tokens
@@ -190,7 +190,7 @@ This plan implements the renaming of inset spacing semantic tokens from subjecti
     - Test that generated values are correct (4.dp, 8.dp, 12.dp, etc.)
     - _Requirements: 5.3, 5.4_
 
-  - [ ] 4.4 Rebuild platform outputs
+  - [x] 4.4 Rebuild platform outputs
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run build system to regenerate all platform files

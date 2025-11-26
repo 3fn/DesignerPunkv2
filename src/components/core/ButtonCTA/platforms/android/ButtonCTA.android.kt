@@ -283,12 +283,12 @@ private fun getSizeConfig(size: ButtonSize): SizeConfig {
                 fontWeight = FontWeight(DesignTokens.font_weight_400.toInt()),
                 lineHeight = DesignTokens.line_height_100.sp
             ), // typography.bodyMd
-            horizontalPadding = DesignTokens.space_inset_spacious.toInt(), // space.inset.spacious (16dp)
-            verticalPadding = DesignTokens.space_inset_normal.toInt(),     // space.inset.normal (8dp)
-            borderRadius = DesignTokens.radius_100.toInt(),                // radius100 (8dp)
+            horizontalPadding = DesignTokens.space_inset_200.toInt(), // space.inset.200 (16dp)
+            verticalPadding = DesignTokens.space_inset_100.toInt(),   // space.inset.100 (8dp)
+            borderRadius = DesignTokens.radius_100.toInt(),            // radius100 (8dp)
             minWidth = 56,          // Requirement 6.1
-            iconSize = DesignTokens.icon_size_100.value.toInt(),          // icon.size100 (24dp)
-            iconTextSpacing = DesignTokens.space_grouped_tight.toInt()    // space.grouped.tight (4dp)
+            iconSize = DesignTokens.icon_size_100.value.toInt(),      // icon.size100 (24dp)
+            iconTextSpacing = DesignTokens.space_grouped_tight.toInt() // space.grouped.tight (4dp)
         )
         ButtonSize.MEDIUM -> SizeConfig(
             height = 48,
@@ -298,12 +298,12 @@ private fun getSizeConfig(size: ButtonSize): SizeConfig {
                 fontWeight = FontWeight(DesignTokens.font_weight_400.toInt()),
                 lineHeight = DesignTokens.line_height_100.sp
             ), // typography.bodyMd
-            horizontalPadding = DesignTokens.space_inset_expansive.toInt(), // space.inset.expansive (24dp)
-            verticalPadding = DesignTokens.space_inset_comfortable.toInt(), // space.inset.comfortable (12dp)
-            borderRadius = DesignTokens.radius_150.toInt(),                 // radius150 (12dp)
+            horizontalPadding = DesignTokens.space_inset_300.toInt(), // space.inset.300 (24dp)
+            verticalPadding = DesignTokens.space_inset_150.toInt(),   // space.inset.150 (12dp)
+            borderRadius = DesignTokens.radius_150.toInt(),            // radius150 (12dp)
             minWidth = 72,          // Requirement 6.2
-            iconSize = DesignTokens.icon_size_100.value.toInt(),           // icon.size100 (24dp)
-            iconTextSpacing = DesignTokens.space_grouped_normal.toInt()    // space.grouped.normal (8dp)
+            iconSize = DesignTokens.icon_size_100.value.toInt(),      // icon.size100 (24dp)
+            iconTextSpacing = DesignTokens.space_grouped_normal.toInt() // space.grouped.normal (8dp)
         )
         ButtonSize.LARGE -> SizeConfig(
             height = 56,
@@ -313,12 +313,12 @@ private fun getSizeConfig(size: ButtonSize): SizeConfig {
                 fontWeight = FontWeight(DesignTokens.font_weight_400.toInt()),
                 lineHeight = DesignTokens.line_height_125.sp
             ), // typography.bodyLg
-            horizontalPadding = DesignTokens.space_inset_generous.toInt(), // space.inset.generous (32dp)
-            verticalPadding = DesignTokens.space_inset_comfortable.toInt(), // space.inset.comfortable (12dp)
-            borderRadius = DesignTokens.radius_200.toInt(),                 // radius200 (16dp)
+            horizontalPadding = DesignTokens.space_inset_400.toInt(), // space.inset.400 (32dp)
+            verticalPadding = DesignTokens.space_inset_150.toInt(),   // space.inset.150 (12dp)
+            borderRadius = DesignTokens.radius_200.toInt(),            // radius200 (16dp)
             minWidth = 80,          // Requirement 6.3
-            iconSize = DesignTokens.icon_size_125.value.toInt(),           // icon.size125 (32dp)
-            iconTextSpacing = DesignTokens.space_grouped_normal.toInt()    // space.grouped.normal (8dp)
+            iconSize = DesignTokens.icon_size_125.value.toInt(),      // icon.size125 (32dp)
+            iconTextSpacing = DesignTokens.space_grouped_normal.toInt() // space.grouped.normal (8dp)
         )
     }
 }

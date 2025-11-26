@@ -218,13 +218,26 @@ The ButtonCTA component uses the following design tokens:
 - `typography.bodyLg` - Large button text
 
 ### Spacing Tokens
-- `space.inset.spacious` (16px) - Small button horizontal padding
-- `space.inset.expansive` (24px) - Medium button horizontal padding
-- `space.inset.generous` (32px) - Large button horizontal padding
-- `space.inset.normal` (8px) - Small button vertical padding
-- `space.inset.comfortable` (12px) - Medium and large button vertical padding
+
+**Inset Spacing** (internal padding):
+- `space.inset.050` (4px) - Minimal internal spacing
+- `space.inset.100` (8px) - Small button vertical padding
+- `space.inset.150` (12px) - Medium and large button vertical padding
+- `space.inset.200` (16px) - Small button horizontal padding
+- `space.inset.300` (24px) - Medium button horizontal padding
+- `space.inset.400` (32px) - Large button horizontal padding
+
+**Layout Spacing** (element relationships):
 - `space.grouped.tight` (4px) - Small button icon-text spacing
 - `space.grouped.normal` (8px) - Medium and large button icon-text spacing
+
+**Token Naming**: Inset tokens use numeric names (050, 100, 150, 200, 300, 400) that expose mathematical relationships. Each number represents a multiplier of the base spacing value (space100 = 8px):
+- 050 = 0.5× base (4px)
+- 100 = 1× base (8px)
+- 150 = 1.5× base (12px)
+- 200 = 2× base (16px)
+- 300 = 3× base (24px)
+- 400 = 4× base (32px)
 
 ### Color Tokens
 - `color.primary` - Primary button background, secondary/tertiary text and border
@@ -249,6 +262,66 @@ The ButtonCTA component uses the following design tokens:
 ### Icon Tokens
 - `icon.size100` (24px) - Small and medium button icon size
 - `icon.size125` (32px) - Large button icon size
+
+---
+
+## Migration Guide: Inset Token Renaming
+
+**Breaking Change**: Inset spacing tokens have been renamed from subjective synonyms to numeric names that expose mathematical relationships.
+
+### What Changed
+
+Inset spacing tokens (used for internal padding) now use numeric names instead of subjective synonyms:
+
+| Old Name | New Name | Pixel Value | Mathematical Relationship |
+|----------|----------|-------------|---------------------------|
+| `tight` | `050` | 4px | 0.5 × base (space100) |
+| `normal` | `100` | 8px | 1 × base (space100) |
+| `comfortable` | `150` | 12px | 1.5 × base (space100) |
+| `spacious` | `200` | 16px | 2 × base (space100) |
+| `expansive` | `300` | 24px | 3 × base (space100) |
+| `generous` | `400` | 32px | 4 × base (space100) |
+
+### Why This Change
+
+**Mathematical Transparency**: Numeric names expose the mathematical relationships between token values, making it easier to reason about proportions without memorization.
+
+**AI-Friendly**: Numeric names provide unambiguous references that AI agents can understand and work with consistently.
+
+**Proportion Reasoning**: Developers can calculate relationships (e.g., 300 is 2× 150, 3× 100) without looking up documentation.
+
+### Impact on ButtonCTA
+
+**No Code Changes Required**: ButtonCTA uses tokens internally, so no changes are needed to your component usage:
+
+```tsx
+// Your code remains unchanged
+<ButtonCTA label="Submit" size="medium" onPress={handleSubmit} />
+```
+
+**Token System Changes**: If you're working with the token system directly or creating custom components, update token references:
+
+```typescript
+// Before (old token names)
+padding: 'space.inset.normal'
+
+// After (new token names)
+padding: 'space.inset.100'
+```
+
+### Layout Tokens Unchanged
+
+**Important**: Layout spacing tokens (grouped, related, separated, sectioned) remain unchanged. They continue using density modifiers (tight, normal, loose) which work well with their two-level semantic structure.
+
+```typescript
+// Layout tokens still use density modifiers
+spacing: 'space.grouped.normal'  // ✅ Unchanged
+spacing: 'space.related.tight'   // ✅ Unchanged
+```
+
+### Visual Consistency
+
+All pixel values remain unchanged. This is purely a naming change with no visual impact. ButtonCTA continues to render identically before and after the token renaming.
 
 ---
 

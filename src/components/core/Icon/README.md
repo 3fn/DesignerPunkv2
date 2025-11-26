@@ -2601,4 +2601,18 @@ npm test -- src/components/core/Icon
 
 ---
 
+## Design System Updates
+
+### Inset Token Renaming (November 2025)
+
+The design system has renamed inset spacing tokens from subjective synonyms to numeric names that expose mathematical relationships. This change does not affect the Icon component directly, as Icon does not use inset spacing tokens.
+
+**What Changed**: Inset tokens now use numeric names (050, 100, 150, 200, 300, 400) instead of subjective names (tight, normal, comfortable, spacious, expansive, generous).
+
+**Impact on Icon**: None. Icon component does not use inset spacing tokens.
+
+**For More Information**: See the [ButtonCTA Migration Guide](../ButtonCTA/README.md#migration-guide-inset-token-renaming) for complete details on the token renaming.
+
+---
+
 *This Icon component provides foundational infrastructure for displaying icons across web, iOS, and Android platforms with a unified, type-safe API.*
