@@ -30,3 +30,6 @@ export type {
   TargetPlatform,
   OutputFormat
 } from './TranslationOutput';
+
+// Component Types
+export type { InsetPadding } from './ComponentTypes';

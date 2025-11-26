@@ -222,7 +222,7 @@ export function getSemanticToken(name: string): Omit<SemanticToken, 'primitiveTo
 
 /**
  * Get spacing token by hierarchical path
- * Examples: 'space.grouped.normal', 'space.inset.comfortable'
+ * Examples: 'space.grouped.normal', 'space.inset.150'
  */
 function getSpacingTokenByPath(path: string): Omit<SemanticToken, 'primitiveTokens'> | undefined {
   const parts = path.split('.');
@@ -281,12 +281,12 @@ function getSpacingContext(category: string, level: string): string {
       loose: 'Generous section boundary'
     },
     inset: {
-      tight: 'High-density interfaces (compact, efficient)',
-      normal: 'Standard-density interfaces (balanced)',
-      comfortable: 'Low-density interfaces (generous, content-focused)',
-      spacious: 'Very low-density interfaces (emphasis, breathing room)',
-      expansive: 'Maximum breathing room (heroes, feature sections)',
-      generous: 'Generous internal spacing for large components'
+      '050': 'Minimal internal spacing (4px) - 0.5 × base',
+      '100': 'Compact internal spacing (8px) - 1 × base',
+      '150': 'Standard internal spacing (12px) - 1.5 × base',
+      '200': 'Comfortable internal spacing (16px) - 2 × base',
+      '300': 'Spacious internal spacing (24px) - 3 × base',
+      '400': 'Maximum internal spacing (32px) - 4 × base'
     }
   };
 
@@ -298,7 +298,17 @@ function getSpacingContext(category: string, level: string): string {
  */
 function getSpacingDescription(category: string, level: string): string {
   if (category === 'inset') {
-    return `Inset spacing for ${level} density interfaces`;
+    // Map numeric levels to descriptive text
+    const densityMap: Record<string, string> = {
+      '050': 'minimal (4px)',
+      '100': 'compact (8px)',
+      '150': 'standard (12px)',
+      '200': 'comfortable (16px)',
+      '300': 'spacious (24px)',
+      '400': 'maximum (32px)'
+    };
+    const density = densityMap[level] || level;
+    return `Inset spacing for ${density} density interfaces`;
   }
   return `Layout spacing for ${category} elements with ${level} separation`;
 }
@@ -436,12 +446,12 @@ export function validateSemanticTokenStructure(token: Omit<SemanticToken, 'primi
 export function getSpacingRecommendation(useCase: 'layout' | 'inset', density?: 'tight' | 'normal' | 'loose' | 'comfortable' | 'spacious' | 'expansive' | 'generous'): string[] {
   if (useCase === 'inset') {
     return [
-      'space.inset.tight',
-      'space.inset.normal',
-      'space.inset.comfortable',
-      'space.inset.spacious',
-      'space.inset.expansive',
-      'space.inset.generous'
+      'space.inset.050',
+      'space.inset.100',
+      'space.inset.150',
+      'space.inset.200',
+      'space.inset.300',
+      'space.inset.400'
     ];
   }
 

@@ -63,9 +63,9 @@ describe('getSemanticToken', () => {
   });
 
   it('should retrieve inset spacing tokens', () => {
-    const token = getSemanticToken('space.inset.comfortable');
+    const token = getSemanticToken('space.inset.150');
     expect(token).toBeDefined();
-    expect(token?.name).toBe('space.inset.comfortable');
+    expect(token?.name).toBe('space.inset.150');
     expect(token?.primitiveReferences.value).toBe('space150');
   });
 
@@ -110,7 +110,7 @@ describe('getAllSemanticTokens', () => {
     const spacingTokens = tokens.filter(t => t.category === SemanticCategory.SPACING);
     expect(spacingTokens.length).toBeGreaterThan(0);
     expect(spacingTokens.some(t => t.name === 'space.grouped.normal')).toBe(true);
-    expect(spacingTokens.some(t => t.name === 'space.inset.comfortable')).toBe(true);
+    expect(spacingTokens.some(t => t.name === 'space.inset.150')).toBe(true);
     
     // Verify typography tokens are included
     const typographyTokens = tokens.filter(t => t.category === SemanticCategory.TYPOGRAPHY);
@@ -255,11 +255,12 @@ describe('validateSemanticTokenStructure', () => {
 describe('getSpacingRecommendation', () => {
   it('should recommend inset spacing tokens', () => {
     const recommendations = getSpacingRecommendation('inset');
-    expect(recommendations).toContain('space.inset.tight');
-    expect(recommendations).toContain('space.inset.normal');
-    expect(recommendations).toContain('space.inset.comfortable');
-    expect(recommendations).toContain('space.inset.spacious');
-    expect(recommendations).toContain('space.inset.expansive');
+    expect(recommendations).toContain('space.inset.050');
+    expect(recommendations).toContain('space.inset.100');
+    expect(recommendations).toContain('space.inset.150');
+    expect(recommendations).toContain('space.inset.200');
+    expect(recommendations).toContain('space.inset.300');
+    expect(recommendations).toContain('space.inset.400');
   });
 
   it('should recommend layout spacing tokens', () => {
