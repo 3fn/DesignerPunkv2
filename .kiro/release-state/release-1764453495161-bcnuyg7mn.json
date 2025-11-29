@@ -1,0 +1,21 @@
+{
+  "id": "release-1764453495161-bcnuyg7mn",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-29T21:58:15.161Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T21:58:15.164Z",
+  "completedAt": "2025-11-29T21:58:15.164Z"
+}

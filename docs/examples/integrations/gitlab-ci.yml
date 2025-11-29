@@ -1,0 +1,145 @@
+# GitLab CI/CD Configuration for Release Management System
+# 
+# This configuration automates releases using GitLab CI/CD pipelines.
+# Triggers on completion document creation and executes automated releases.
+
+stages:
+  - test
+  - analyze
+  - release
+
+variables:
+  NODE_VERSION: "18"
+  NPM_CONFIG_CACHE: "$CI_PROJECT_DIR/.npm"
+
+# Cache node_modules for faster builds
+cache:
+  key:
+    files:
+      - package-lock.json
+  paths:
+    - .npm
+    - node_modules
+
+# Install dependencies
+.install_deps: &install_deps
+  before_script:
+    - node --version
+    - npm --version
+    - npm ci --cache .npm --prefer-offline
+
+# Run tests
+test:
+  stage: test
+  image: node:${NODE_VERSION}
+  <<: *install_deps
+  script:
+    - npm test
+  only:
+    - branches
+    - merge_requests
+
+# Analyze changes and determine release type
+analyze:
+  stage: analyze
+  image: node:${NODE_VERSION}
+  <<: *install_deps
+  script:
+    - npm run release:analyze --format json > release-analysis.json
+    - cat release-analysis.json
+  artifacts:
+    paths:
+      - release-analysis.json
+    expire_in: 1 hour
+  only:
+    - main
+    - master
+  when: manual
+
+# Execute automated release
+release:
+  stage: release
+  image: node:${NODE_VERSION}
+  <<: *install_deps
+  script:
+    # Validate configuration
+    - npm run release:cli config validate
+    
+    # Preview release plan
+    - npm run release:cli plan
+    
+    # Execute release (auto-approve in CI)
+    - npm run release:cli release auto --ci
+  only:
+    - main
+    - master
+  when: manual
+  environment:
+    name: production
+    action: prepare
+
+# Scheduled release check (runs daily)
+scheduled_release_check:
+  stage: analyze
+  image: node:${NODE_VERSION}
+  <<: *install_deps
+  script:
+    - npm run release:analyze
+    - |
+      if [ -f ".kiro/release-triggers/pending-release.json" ]; then
+        echo "Pending release detected"
+        exit 0
+      else
+        echo "No pending releases"
+        exit 0
+      fi
+  only:
+    - schedules
+
+# Release with approval (for major versions)
+release_with_approval:
+  stage: release
+  image: node:${NODE_VERSION}
+  <<: *install_deps
+  script:
+    - npm run release:cli release auto --ci
+  only:
+    - main
+    - master
+  when: manual
+  environment:
+    name: production
+    action: prepare
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /BREAKING CHANGE/'
+      when: manual
+    - when: never
+
+# Dry run release (for testing)
+release_dry_run:
+  stage: release
+  image: node:${NODE_VERSION}
+  <<: *install_deps
+  script:
+    - npm run release:cli release auto --dry-run
+  only:
+    - branches
+  except:
+    - main
+    - master
+
+# Rollback release (manual trigger)
+rollback:
+  stage: release
+  image: node:${NODE_VERSION}
+  <<: *install_deps
+  script:
+    - npm run release:cli rollback
+  only:
+    - main
+    - master
+  when: manual
+  environment:
+    name: production
+    action: rollback
+

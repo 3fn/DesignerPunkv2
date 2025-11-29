@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "description": "Single package project configuration - Minimal setup for projects with one package.json",
+  
+  "workingDirectory": ".",
+  "dryRun": false,
+  "skipConfirmation": false,
+  "verbose": false,
+  
+  "github": {
+    "owner": "your-username",
+    "repo": "your-repo",
+    "token": "${GITHUB_TOKEN}",
+    "createRelease": true,
+    "uploadArtifacts": true,
+    "draft": false,
+    "prerelease": false
+  },
+  
+  "npm": {
+    "registry": "https://registry.npmjs.org",
+    "token": "${NPM_TOKEN}",
+    "publish": true,
+    "access": "public",
+    "tag": "latest"
+  },
+  
+  "validation": {
+    "requireCompletionDocs": true,
+    "requireBreakingChangeDoc": true,
+    "validateSemanticVersioning": true,
+    "allowManualOverride": true
+  }
+}

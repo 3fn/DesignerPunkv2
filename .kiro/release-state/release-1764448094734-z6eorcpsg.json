@@ -1,0 +1,21 @@
+{
+  "id": "release-1764448094734-z6eorcpsg",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-29T20:28:14.734Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T20:28:14.735Z",
+  "completedAt": "2025-11-29T20:28:14.735Z"
+}

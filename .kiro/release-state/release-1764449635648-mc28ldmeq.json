@@ -1,0 +1,21 @@
+{
+  "id": "release-1764449635648-mc28ldmeq",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-29T20:53:55.648Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T20:53:56.992Z",
+  "completedAt": "2025-11-29T20:53:56.992Z"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "release-1764453343891-gmv6dhr11",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-11-29T21:55:43.891Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T21:55:43.891Z"
+}

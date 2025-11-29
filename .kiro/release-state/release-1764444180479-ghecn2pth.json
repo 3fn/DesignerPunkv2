@@ -1,0 +1,21 @@
+{
+  "id": "release-1764444180479-ghecn2pth",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-29T19:23:00.479Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T19:23:00.479Z",
+  "completedAt": "2025-11-29T19:23:00.479Z"
+}

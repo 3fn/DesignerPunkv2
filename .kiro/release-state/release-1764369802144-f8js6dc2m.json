@@ -1,0 +1,16 @@
+{
+  "id": "release-1764369802144-f8js6dc2m",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-28T22:43:22.144Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-28T22:43:22.145Z",
+  "completedAt": "2025-11-28T22:43:22.145Z"
+}

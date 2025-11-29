@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "description": "Monorepo with synchronized versions - All packages share the same version number",
+  
+  "workingDirectory": ".",
+  "dryRun": false,
+  "skipConfirmation": false,
+  "verbose": false,
+  
+  "github": {
+    "owner": "your-org",
+    "repo": "your-monorepo",
+    "token": "${GITHUB_TOKEN}",
+    "createRelease": true,
+    "uploadArtifacts": true,
+    "draft": false,
+    "prerelease": false
+  },
+  
+  "npm": {
+    "registry": "https://registry.npmjs.org",
+    "token": "${NPM_TOKEN}",
+    "publish": true,
+    "access": "public",
+    "tag": "latest"
+  },
+  
+  "coordination": {
+    "strategy": "synchronized",
+    "corePackageSync": true,
+    "componentIndependence": false,
+    "corePackages": ["@your-org/core", "@your-org/utils", "@your-org/components"],
+    "independentPackages": []
+  },
+  
+  "packages": {
+    "coordination": "synchronized",
+    "updateDependencies": true,
+    "packages": [
+      {
+        "name": "@your-org/core",
+        "path": "./packages/core"
+      },
+      {
+        "name": "@your-org/utils",
+        "path": "./packages/utils"
+      },
+      {
+        "name": "@your-org/components",
+        "path": "./packages/components"
+      }
+    ]
+  },
+  
+  "validation": {
+    "requireCompletionDocs": true,
+    "requireBreakingChangeDoc": true,
+    "validateSemanticVersioning": true,
+    "allowManualOverride": true
+  }
+}

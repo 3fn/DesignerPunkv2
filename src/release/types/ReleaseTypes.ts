@@ -498,6 +498,15 @@ export interface ReleaseOverrides {
   
   /** Dry run mode */
   dryRun?: boolean;
+  
+  /** Resume from specific stage (for crash recovery) */
+  resumeFromStage?: string;
+  
+  /** Workflow ID to resume (for crash recovery) */
+  workflowId?: string;
+  
+  /** Analyze changes since specific commit/tag */
+  since?: string;
 }
 
 export interface CoordinationPlan {

@@ -16,6 +16,15 @@ export interface ExtractionConfig {
   /** File patterns to identify completion documents */
   completionPatterns: string[];
 
+  /** File patterns to identify summary documents (prioritized over completion docs) */
+  summaryPatterns: string[];
+
+  /** Whether to prefer summary documents over full completion documents */
+  preferSummaries: boolean;
+
+  /** Whether to use ONLY summary documents (ignore completion docs entirely) */
+  summariesOnly: boolean;
+
   /** Keywords that indicate breaking changes in completion documents */
   breakingChangeKeywords: string[];
 
@@ -242,6 +251,12 @@ export const DEFAULT_ANALYSIS_CONFIG: AnalysisConfig = {
       'spec-completion-summary.md',
       'task-*-completion.md'
     ],
+    summaryPatterns: [
+      'task-*-summary.md',
+      '*-summary.md'
+    ],
+    preferSummaries: true,
+    summariesOnly: true,  // For inaugural release: only analyze summary documents
     breakingChangeKeywords: [
       'breaking change',
       'breaking',
@@ -328,7 +343,10 @@ export const DEFAULT_ANALYSIS_CONFIG: AnalysisConfig = {
         'Overview',
         'Description',
         'What Changed',
-        'Changes'
+        'Changes',
+        'What Was Done',
+        'Key Changes',
+        'Impact'
       ]
     },
     excludePatterns: [
@@ -481,6 +499,8 @@ export const DEFAULT_ANALYSIS_CONFIG: AnalysisConfig = {
       '.kiro/specs/*/tasks.md'
     ],
     includePatterns: [
+      '**/task-*-summary.md',
+      '**/*-summary.md',
       '**/*-completion.md',
       '**/spec-completion-summary.md',
       '**/task-*-completion.md'

@@ -1,0 +1,21 @@
+{
+  "id": "release-1764373695550-jl8crrdct",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-28T23:48:15.550Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-28T23:48:15.551Z",
+  "completedAt": "2025-11-28T23:48:15.551Z"
+}

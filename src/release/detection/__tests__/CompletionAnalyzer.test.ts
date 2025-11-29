@@ -3,6 +3,11 @@
  * 
  * Tests completion document parsing accuracy, content extraction,
  * and analysis confidence calculations.
+ * 
+ * Mock Strategy:
+ * - jest.mock('fs'): Mock file system operations for completion document reading
+ * - No shared mocks: Each test creates fresh mocks with specific test data
+ * - Focus on analysis logic: Tests validate content extraction and confidence scoring
  */
 
 import { promises as fs } from 'fs';

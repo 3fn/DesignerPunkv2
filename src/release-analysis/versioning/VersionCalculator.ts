@@ -186,6 +186,171 @@ export class VersionCalculator {
   }
 
   /**
+   * Generate pre-release version (alpha, beta, rc)
+   * 
+   * @param baseVersion - Base version to create pre-release from (e.g., "1.2.3")
+   * @param preReleaseType - Type of pre-release (alpha, beta, rc)
+   * @param preReleaseNumber - Pre-release number (defaults to 1)
+   * @returns Pre-release version string (e.g., "1.2.3-alpha.1")
+   */
+  generatePreReleaseVersion(
+    baseVersion: string,
+    preReleaseType: 'alpha' | 'beta' | 'rc',
+    preReleaseNumber: number = 1
+  ): string {
+    const parsed = this.parseVersion(baseVersion);
+    
+    // Remove any existing pre-release identifier
+    const cleanVersion = `${parsed.major}.${parsed.minor}.${parsed.patch}`;
+    
+    return `${cleanVersion}-${preReleaseType}.${preReleaseNumber}`;
+  }
+
+  /**
+   * Progress pre-release version to next stage
+   * 
+   * Progression order: alpha → beta → rc → stable
+   * 
+   * @param currentVersion - Current pre-release version
+   * @returns Next stage pre-release version or stable version
+   */
+  progressPreReleaseStage(currentVersion: string): string {
+    const parsed = this.parseVersion(currentVersion);
+    
+    if (!parsed.preRelease) {
+      throw new Error(`Version ${currentVersion} is not a pre-release version`);
+    }
+
+    const preReleaseMatch = parsed.preRelease.match(/^(alpha|beta|rc)\.?(\d+)?$/);
+    if (!preReleaseMatch) {
+      throw new Error(`Invalid pre-release format: ${parsed.preRelease}`);
+    }
+
+    const [, type] = preReleaseMatch;
+    const baseVersion = `${parsed.major}.${parsed.minor}.${parsed.patch}`;
+
+    // Progress to next stage
+    switch (type) {
+      case 'alpha':
+        return `${baseVersion}-beta.1`;
+      case 'beta':
+        return `${baseVersion}-rc.1`;
+      case 'rc':
+        // Promote to stable
+        return baseVersion;
+      default:
+        throw new Error(`Unknown pre-release type: ${type}`);
+    }
+  }
+
+  /**
+   * Increment pre-release version number
+   * 
+   * @param currentVersion - Current pre-release version (e.g., "1.2.3-alpha.1")
+   * @returns Incremented pre-release version (e.g., "1.2.3-alpha.2")
+   */
+  incrementPreReleaseNumber(currentVersion: string): string {
+    const parsed = this.parseVersion(currentVersion);
+    
+    if (!parsed.preRelease) {
+      throw new Error(`Version ${currentVersion} is not a pre-release version`);
+    }
+
+    const preReleaseMatch = parsed.preRelease.match(/^(alpha|beta|rc)\.?(\d+)?$/);
+    if (!preReleaseMatch) {
+      throw new Error(`Invalid pre-release format: ${parsed.preRelease}`);
+    }
+
+    const [, type, num] = preReleaseMatch;
+    const nextNum = num ? parseInt(num) + 1 : 1;
+    const baseVersion = `${parsed.major}.${parsed.minor}.${parsed.patch}`;
+
+    return `${baseVersion}-${type}.${nextNum}`;
+  }
+
+  /**
+   * Promote pre-release version to stable
+   * 
+   * @param currentVersion - Current pre-release version
+   * @returns Stable version without pre-release identifier
+   */
+  promoteToStable(currentVersion: string): string {
+    const parsed = this.parseVersion(currentVersion);
+    
+    if (!parsed.preRelease) {
+      throw new Error(`Version ${currentVersion} is already a stable version`);
+    }
+
+    return `${parsed.major}.${parsed.minor}.${parsed.patch}`;
+  }
+
+  /**
+   * Check if version is a pre-release
+   * 
+   * @param version - Version string to check
+   * @returns True if version is a pre-release
+   */
+  isPreRelease(version: string): boolean {
+    try {
+      const parsed = this.parseVersion(version);
+      return parsed.preRelease !== null;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Get pre-release type from version
+   * 
+   * @param version - Version string
+   * @returns Pre-release type or null if not a pre-release
+   */
+  getPreReleaseType(version: string): 'alpha' | 'beta' | 'rc' | null {
+    try {
+      const parsed = this.parseVersion(version);
+      
+      if (!parsed.preRelease) {
+        return null;
+      }
+
+      const preReleaseMatch = parsed.preRelease.match(/^(alpha|beta|rc)\.?(\d+)?$/);
+      if (!preReleaseMatch) {
+        return null;
+      }
+
+      return preReleaseMatch[1] as 'alpha' | 'beta' | 'rc';
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Get pre-release number from version
+   * 
+   * @param version - Version string
+   * @returns Pre-release number or null if not a pre-release
+   */
+  getPreReleaseNumber(version: string): number | null {
+    try {
+      const parsed = this.parseVersion(version);
+      
+      if (!parsed.preRelease) {
+        return null;
+      }
+
+      const preReleaseMatch = parsed.preRelease.match(/^(alpha|beta|rc)\.?(\d+)?$/);
+      if (!preReleaseMatch) {
+        return null;
+      }
+
+      const num = preReleaseMatch[2];
+      return num ? parseInt(num) : 0;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
    * Parse semantic version string into components
    */
   private parseVersion(version: string): ParsedVersion {

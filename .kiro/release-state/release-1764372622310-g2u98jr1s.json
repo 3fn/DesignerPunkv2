@@ -1,0 +1,21 @@
+{
+  "id": "release-1764372622310-g2u98jr1s",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-28T23:30:22.310Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-28T23:30:22.313Z",
+  "completedAt": "2025-11-28T23:30:22.313Z"
+}

@@ -1,0 +1,21 @@
+{
+  "id": "release-1764374040598-mos7d9spb",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-28T23:54:00.598Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-28T23:54:00.599Z",
+  "completedAt": "2025-11-28T23:54:00.599Z"
+}

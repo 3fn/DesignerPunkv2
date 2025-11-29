@@ -324,20 +324,11 @@ The dependent hook log will show no entry:
    ```
 
 2. **Identify the bottleneck**:
-   - **npm command stalls**: Check for incorrect npm command syntax
-     ```bash
-     # Correct syntax (with -- separator)
-     npm run release:detect -- process-triggers
-     
-     # Wrong syntax (causes stall)
-     npm run release:detect process-triggers
-     ```
    - **Infinite loops**: Review script logic for blocking operations
    - **User confirmation**: Check if hook is waiting for user input
    - **Large operations**: Verify file operations aren't processing too much data
 
 3. **Fix the underlying issue**:
-   - Correct npm command syntax in hook scripts
    - Fix infinite loops or blocking operations
    - Provide user confirmation promptly for interactive hooks
    - Optimize file operations or increase timeout if justified
@@ -1026,11 +1017,6 @@ ls -la .kiro/release-triggers/
 **Solutions**:
 1. **Check for npm stalls**: Review npm command syntax in scripts
    ```bash
-   # Correct syntax (with -- separator)
-   npm run release:detect -- process-triggers
-   
-   # Wrong syntax (causes stall)
-   npm run release:detect process-triggers
    ```
 
 2. **Review script logic**: Check for infinite loops or blocking operations

@@ -1,0 +1,21 @@
+{
+  "id": "release-1764456005595-vvrx7frsl",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-29T22:40:05.596Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T22:40:06.631Z",
+  "completedAt": "2025-11-29T22:40:06.631Z"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "release-1764374040805-c35zsifmm",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-11-28T23:54:00.805Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-28T23:54:00.805Z"
+}

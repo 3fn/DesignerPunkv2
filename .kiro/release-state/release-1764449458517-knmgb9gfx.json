@@ -1,0 +1,15 @@
+{
+  "id": "release-1764449458517-knmgb9gfx",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-11-29T20:50:58.517Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T20:50:58.517Z"
+}

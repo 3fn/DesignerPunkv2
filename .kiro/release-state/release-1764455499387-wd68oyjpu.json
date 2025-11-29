@@ -1,0 +1,15 @@
+{
+  "id": "release-1764455499387-wd68oyjpu",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-11-29T22:31:39.387Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T22:31:39.387Z"
+}

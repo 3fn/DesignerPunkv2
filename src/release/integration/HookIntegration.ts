@@ -1,442 +1,445 @@
 /**
- * Hook System Integration Implementation
+ * Hook System Integration
  * 
- * Integrates release management with existing commit and organization hooks
+ * Integrates release management with existing commit and organization hooks.
+ * Provides coordination to prevent conflicts and ensure proper sequencing.
+ * 
+ * Requirements: 6.1, 6.2, 6.3, 6.4, 6.5
  */
 
-import { promises as fs } from 'fs';
-import { join, dirname } from 'path';
-import {
-  HookSystemIntegration,
-  CommitHookEvent,
-  OrganizationHookEvent,
-  MonitoringStatus
-} from './WorkflowIntegration';
-import { ReleaseSignal, ValidationResult } from '../types/ReleaseTypes';
-import { ReleaseConfig } from '../config/ReleaseConfig';
+import * as fs from 'fs';
+import * as path from 'path';
+import { execSync } from 'child_process';
 
-export class HookIntegrationManager implements HookSystemIntegration {
-  private config: ReleaseConfig;
+export interface HookConfig {
+  enabled: boolean;
+  name: string;
+  description: string;
+  version: string;
+  when: {
+    type: string;
+    patterns?: string[];
+  };
+  then: {
+    type: string;
+    prompt?: string;
+    command?: string;
+  };
+  settings?: {
+    runAfter?: string[];
+    autoApprove?: boolean;
+    timeout?: number;
+  };
+}
+
+export interface HookExecutionContext {
+  hookName: string;
+  triggerType: string;
+  sourcePath?: string;
+  timestamp: Date;
+  metadata?: Record<string, any>;
+}
+
+export interface HookExecutionResult {
+  success: boolean;
+  hookName: string;
+  executionTime: number;
+  output?: string;
+  error?: string;
+}
+
+/**
+ * Hook Integration Manager
+ * 
+ * Manages integration between release management and existing hook system.
+ * Ensures proper coordination and prevents conflicts.
+ */
+export class HookIntegration {
   private projectRoot: string;
-  private monitoringActive: boolean = false;
-  private registeredHooks: Set<string> = new Set();
+  private hooksDir: string;
+  private logFile: string;
+  private releaseManagerScript: string;
 
-  constructor(config: ReleaseConfig, projectRoot: string = process.cwd()) {
-    this.config = config;
+  constructor(projectRoot: string = process.cwd()) {
     this.projectRoot = projectRoot;
-  }
+    this.hooksDir = path.join(projectRoot, '.kiro', 'hooks');
+    this.logFile = path.join(projectRoot, '.kiro', 'logs', 'hook-integration.log');
+    this.releaseManagerScript = path.join(this.hooksDir, 'release-manager.sh');
 
-  /**
-   * Register release detection with commit hooks
-   */
-  async registerWithCommitHooks(): Promise<boolean> {
-    try {
-      const commitHookPath = join(this.projectRoot, '.kiro/hooks/commit-task.sh');
-      const releaseHookPath = join(this.projectRoot, '.kiro/hooks/release-manager.sh');
-      
-      // Check if hooks exist
-      const commitHookExists = await this.fileExists(commitHookPath);
-      const releaseHookExists = await this.fileExists(releaseHookPath);
-      
-      if (!commitHookExists) {
-        throw new Error(`Commit hook not found at ${commitHookPath}`);
-      }
-      
-      if (!releaseHookExists) {
-        throw new Error(`Release manager hook not found at ${releaseHookPath}`);
-      }
-      
-      // Update commit hook to call release manager
-      await this.updateCommitHookIntegration(commitHookPath, releaseHookPath);
-      
-      this.registeredHooks.add('commit');
-      return true;
-    } catch (error) {
-      console.error('Failed to register with commit hooks:', error);
-      return false;
+    // Ensure log directory exists
+    const logDir = path.dirname(this.logFile);
+    if (!fs.existsSync(logDir)) {
+      fs.mkdirSync(logDir, { recursive: true });
     }
   }
 
   /**
-   * Register release detection with organization hooks
+   * Integrate with commit hook
+   * 
+   * Triggers release detection when task completion commits occur.
+   * Requirement 6.1: Integrate with commit-task hook without disrupting workflow
    */
-  async registerWithOrganizationHooks(): Promise<boolean> {
-    try {
-      const orgHookPath = join(this.projectRoot, '.kiro/hooks/organize-by-metadata.sh');
-      const releaseHookPath = join(this.projectRoot, '.kiro/hooks/release-manager.sh');
-      
-      // Check if hooks exist
-      const orgHookExists = await this.fileExists(orgHookPath);
-      const releaseHookExists = await this.fileExists(releaseHookPath);
-      
-      if (!orgHookExists) {
-        throw new Error(`Organization hook not found at ${orgHookPath}`);
-      }
-      
-      if (!releaseHookExists) {
-        throw new Error(`Release manager hook not found at ${releaseHookPath}`);
-      }
-      
-      // Update organization hook to call release manager
-      await this.updateOrganizationHookIntegration(orgHookPath, releaseHookPath);
-      
-      this.registeredHooks.add('organization');
-      return true;
-    } catch (error) {
-      console.error('Failed to register with organization hooks:', error);
-      return false;
-    }
-  }
+  async integrateWithCommitHook(commitMessage: string): Promise<HookExecutionResult> {
+    const startTime = Date.now();
+    const context: HookExecutionContext = {
+      hookName: 'commit-hook',
+      triggerType: 'commit',
+      timestamp: new Date(),
+      metadata: { commitMessage }
+    };
 
-  /**
-   * Process commit hook event for release detection
-   */
-  async processCommitHookEvent(event: CommitHookEvent): Promise<ReleaseSignal | null> {
-    if (!this.config.detection.taskCompletionTrigger && !this.config.detection.specCompletionTrigger) {
-      return null;
-    }
+    this.log(`Integrating with commit hook: ${commitMessage}`);
 
     try {
       // Check if this is a task completion commit
-      if (this.isTaskCompletionCommit(event.message)) {
-        return await this.createTaskCompletionSignal(event);
+      if (this.isTaskCompletionCommit(commitMessage)) {
+        this.log('Task completion commit detected');
+        
+        // Execute release manager with commit integration
+        const result = await this.executeReleaseManager('commit', commitMessage);
+        
+        return {
+          success: result.success,
+          hookName: context.hookName,
+          executionTime: Date.now() - startTime,
+          output: result.output,
+          error: result.error
+        };
       }
-      
-      // Check if this commit includes completion documents
-      if (await this.hasCompletionDocuments(event.changedFiles)) {
-        return await this.createSpecCompletionSignal(event);
-      }
-      
-      return null;
-    } catch (error) {
-      console.error('Error processing commit hook event:', error);
-      return null;
-    }
-  }
 
-  /**
-   * Process organization hook event for release detection
-   */
-  async processOrganizationHookEvent(event: OrganizationHookEvent): Promise<ReleaseSignal | null> {
-    if (!this.config.detection.specCompletionTrigger) {
-      return null;
-    }
-
-    try {
-      // Check if organized files include completion documents
-      const completionDocs = event.organizedFiles.filter(file => 
-        file.metadata.organization === 'spec-completion'
-      );
-      
+      // Check if commit includes completion documents
+      const completionDocs = this.getCompletionDocsFromCommit();
       if (completionDocs.length > 0) {
-        return await this.createOrganizationCompletionSignal(event, completionDocs);
+        this.log(`Completion documents detected: ${completionDocs.join(', ')}`);
+        
+        // Process each completion document
+        for (const doc of completionDocs) {
+          await this.executeReleaseManager('manual', 'spec-completion', doc);
+        }
+        
+        return {
+          success: true,
+          hookName: context.hookName,
+          executionTime: Date.now() - startTime,
+          output: `Processed ${completionDocs.length} completion documents`
+        };
       }
-      
-      return null;
+
+      this.log('No release triggers detected in commit');
+      return {
+        success: true,
+        hookName: context.hookName,
+        executionTime: Date.now() - startTime,
+        output: 'No release triggers detected'
+      };
+
     } catch (error) {
-      console.error('Error processing organization hook event:', error);
-      return null;
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      this.log(`ERROR: Commit hook integration failed: ${errorMessage}`);
+      
+      return {
+        success: false,
+        hookName: context.hookName,
+        executionTime: Date.now() - startTime,
+        error: errorMessage
+      };
     }
   }
 
   /**
-   * Validate hook integration status
+   * Integrate with file organization hook
+   * 
+   * Triggers release detection when completion documents are organized.
+   * Requirement 6.2: Coordinate with organization system for release artifacts
    */
-  async validateHookIntegration(): Promise<ValidationResult> {
-    const errors: Array<{ code: string; message: string; severity: 'error' | 'warning' | 'info' }> = [];
-    const warnings: Array<{ code: string; message: string }> = [];
+  async integrateWithOrganizationHook(): Promise<HookExecutionResult> {
+    const startTime = Date.now();
+    const context: HookExecutionContext = {
+      hookName: 'organization-hook',
+      triggerType: 'organization',
+      timestamp: new Date()
+    };
+
+    this.log('Integrating with file organization hook');
 
     try {
-      // Check if required hooks exist
-      const requiredHooks = [
-        '.kiro/hooks/commit-task.sh',
-        '.kiro/hooks/release-manager.sh',
-        '.kiro/hooks/organize-by-metadata.sh'
-      ];
-
-      for (const hookPath of requiredHooks) {
-        const fullPath = join(this.projectRoot, hookPath);
-        if (!(await this.fileExists(fullPath))) {
-          errors.push({
-            code: 'HOOK_MISSING',
-            message: `Required hook not found: ${hookPath}`,
-            severity: 'error'
-          });
-        }
-      }
-
-      // Check hook registration status
-      if (!this.registeredHooks.has('commit')) {
-        warnings.push({
-          code: 'COMMIT_HOOK_NOT_REGISTERED',
-          message: 'Commit hook integration not registered'
-        });
-      }
-
-      if (!this.registeredHooks.has('organization')) {
-        warnings.push({
-          code: 'ORG_HOOK_NOT_REGISTERED',
-          message: 'Organization hook integration not registered'
-        });
-      }
-
-      // Check configuration
-      if (!this.config.detection.taskCompletionTrigger && !this.config.detection.specCompletionTrigger) {
-        warnings.push({
-          code: 'NO_TRIGGERS_ENABLED',
-          message: 'No release triggers are enabled in configuration'
-        });
-      }
-
+      // Execute release manager with organization integration
+      const result = await this.executeReleaseManager('organize');
+      
       return {
-        valid: errors.length === 0,
-        errors,
-        warnings,
-        validatedAt: new Date(),
-        context: 'hook-integration'
+        success: result.success,
+        hookName: context.hookName,
+        executionTime: Date.now() - startTime,
+        output: result.output,
+        error: result.error
       };
-    } catch (error) {
-      errors.push({
-        code: 'VALIDATION_ERROR',
-        message: `Hook integration validation failed: ${error instanceof Error ? error.message : String(error)}`,
-        severity: 'error'
-      });
 
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      this.log(`ERROR: Organization hook integration failed: ${errorMessage}`);
+      
       return {
-        valid: false,
-        errors,
-        warnings,
-        validatedAt: new Date(),
-        context: 'hook-integration'
+        success: false,
+        hookName: context.hookName,
+        executionTime: Date.now() - startTime,
+        error: errorMessage
       };
     }
   }
 
   /**
-   * Get monitoring status
+   * Trigger release detection manually
+   * 
+   * Allows manual triggering of release detection for specific events.
+   * Requirement 6.3: Trigger appropriate release processes automatically
    */
-  getMonitoringStatus(): MonitoringStatus {
-    return {
-      active: this.monitoringActive,
-      monitoredEvents: Array.from(this.registeredHooks),
-      errors: []
+  async triggerReleaseDetection(
+    triggerType: 'spec-completion' | 'task-completion' | 'auto',
+    sourcePath?: string
+  ): Promise<HookExecutionResult> {
+    const startTime = Date.now();
+    const context: HookExecutionContext = {
+      hookName: 'manual-trigger',
+      triggerType,
+      sourcePath,
+      timestamp: new Date()
     };
+
+    this.log(`Manual release detection trigger: type=${triggerType}, source=${sourcePath || 'auto'}`);
+
+    try {
+      const result = await this.executeReleaseManager('manual', triggerType, sourcePath);
+      
+      return {
+        success: result.success,
+        hookName: context.hookName,
+        executionTime: Date.now() - startTime,
+        output: result.output,
+        error: result.error
+      };
+
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      this.log(`ERROR: Manual trigger failed: ${errorMessage}`);
+      
+      return {
+        success: false,
+        hookName: context.hookName,
+        executionTime: Date.now() - startTime,
+        error: errorMessage
+      };
+    }
+  }
+
+  /**
+   * Check hook system status
+   * 
+   * Verifies that hook system is properly configured and operational.
+   * Requirement 6.5: Provide clear interfaces for AI-driven release management
+   */
+  async checkHookStatus(): Promise<{
+    configured: boolean;
+    releaseManagerExists: boolean;
+    configExists: boolean;
+    issues: string[];
+  }> {
+    const issues: string[] = [];
+
+    // Check if release manager script exists
+    const releaseManagerExists = fs.existsSync(this.releaseManagerScript);
+    if (!releaseManagerExists) {
+      issues.push('Release manager script not found');
+    }
+
+    // Check if script is executable
+    if (releaseManagerExists) {
+      try {
+        fs.accessSync(this.releaseManagerScript, fs.constants.X_OK);
+      } catch {
+        issues.push('Release manager script is not executable');
+      }
+    }
+
+    // Check if release config exists
+    const configPath = path.join(this.projectRoot, '.kiro', 'release-config.json');
+    const configExists = fs.existsSync(configPath);
+    if (!configExists) {
+      issues.push('Release configuration file not found');
+    }
+
+    // Check if hooks directory exists
+    if (!fs.existsSync(this.hooksDir)) {
+      issues.push('Hooks directory not found');
+    }
+
+    const configured = issues.length === 0;
+
+    return {
+      configured,
+      releaseManagerExists,
+      configExists,
+      issues
+    };
+  }
+
+  /**
+   * Coordinate hook execution
+   * 
+   * Ensures proper sequencing and prevents conflicts between hooks.
+   * Requirement 6.1, 6.2: Coordinate hooks without disrupting workflow
+   */
+  async coordinateHookExecution(
+    hooks: Array<{ name: string; execute: () => Promise<HookExecutionResult> }>
+  ): Promise<HookExecutionResult[]> {
+    const results: HookExecutionResult[] = [];
+
+    this.log(`Coordinating execution of ${hooks.length} hooks`);
+
+    for (const hook of hooks) {
+      this.log(`Executing hook: ${hook.name}`);
+      
+      try {
+        const result = await hook.execute();
+        results.push(result);
+        
+        if (!result.success) {
+          this.log(`Hook ${hook.name} failed, stopping coordination`);
+          break;
+        }
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        this.log(`ERROR: Hook ${hook.name} threw exception: ${errorMessage}`);
+        
+        results.push({
+          success: false,
+          hookName: hook.name,
+          executionTime: 0,
+          error: errorMessage
+        });
+        break;
+      }
+    }
+
+    this.log(`Hook coordination complete: ${results.filter(r => r.success).length}/${results.length} succeeded`);
+
+    return results;
+  }
+
+  /**
+   * Read hook configuration
+   * 
+   * Loads hook configuration from .kiro.hook files.
+   */
+  readHookConfig(hookName: string): HookConfig | null {
+    const hookPath = path.join(this.hooksDir, `${hookName}.kiro.hook`);
+    
+    if (!fs.existsSync(hookPath)) {
+      return null;
+    }
+
+    try {
+      const content = fs.readFileSync(hookPath, 'utf-8');
+      return JSON.parse(content) as HookConfig;
+    } catch (error) {
+      this.log(`ERROR: Failed to read hook config ${hookName}: ${error}`);
+      return null;
+    }
+  }
+
+  /**
+   * Update hook configuration
+   * 
+   * Updates hook configuration file with new settings.
+   */
+  updateHookConfig(hookName: string, config: HookConfig): boolean {
+    const hookPath = path.join(this.hooksDir, `${hookName}.kiro.hook`);
+    
+    try {
+      const content = JSON.stringify(config, null, 2);
+      fs.writeFileSync(hookPath, content, 'utf-8');
+      this.log(`Updated hook configuration: ${hookName}`);
+      return true;
+    } catch (error) {
+      this.log(`ERROR: Failed to update hook config ${hookName}: ${error}`);
+      return false;
+    }
   }
 
   // Private helper methods
 
-  private async fileExists(path: string): Promise<boolean> {
+  private async executeReleaseManager(
+    command: string,
+    ...args: Array<string | undefined>
+  ): Promise<{ success: boolean; output?: string; error?: string }> {
     try {
-      await fs.access(path);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  private async updateCommitHookIntegration(commitHookPath: string, releaseHookPath: string): Promise<void> {
-    try {
-      const commitHookContent = await fs.readFile(commitHookPath, 'utf-8');
-      
-      // Check if release manager integration already exists
-      if (commitHookContent.includes('release-manager.sh')) {
-        return; // Already integrated
+      // Check if release manager script exists
+      if (!fs.existsSync(this.releaseManagerScript)) {
+        throw new Error('Release manager script not found');
       }
-      
-      // Add release manager call to commit hook
-      const integrationCode = `
-# Release Management Integration
-if [ -f "${releaseHookPath}" ]; then
-    echo "🔍 Checking for release triggers..."
-    "${releaseHookPath}" commit "$commit_msg" || echo "⚠️  Release detection failed (non-blocking)"
-fi
-`;
-      
-      // Insert before the final success message
-      const updatedContent = commitHookContent.replace(
-        /echo "✅ Task completion committed and pushed successfully!"/,
-        `${integrationCode.trim()}
 
-echo "✅ Task completion committed and pushed successfully!"`
-      );
+      // Filter out undefined args and build command
+      const validArgs = args.filter((arg): arg is string => arg !== undefined);
+      const fullCommand = `"${this.releaseManagerScript}" ${command} ${validArgs.map(a => `"${a}"`).join(' ')}`;
       
-      await fs.writeFile(commitHookPath, updatedContent);
+      this.log(`Executing: ${fullCommand}`);
+
+      // Execute with timeout
+      const output = execSync(fullCommand, {
+        cwd: this.projectRoot,
+        encoding: 'utf-8',
+        timeout: 30000, // 30 second timeout
+        stdio: 'pipe'
+      });
+
+      return {
+        success: true,
+        output: output.trim()
+      };
+
     } catch (error) {
-      throw new Error(`Failed to update commit hook integration: ${error instanceof Error ? error.message : String(error)}`);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      return {
+        success: false,
+        error: errorMessage
+      };
     }
   }
 
-  private async updateOrganizationHookIntegration(orgHookPath: string, releaseHookPath: string): Promise<void> {
+  private isTaskCompletionCommit(commitMessage: string): boolean {
+    // Check for "Task X Complete:" pattern
+    return /Task\s+[\d.]+\s+Complete:/i.test(commitMessage);
+  }
+
+  private getCompletionDocsFromCommit(): string[] {
     try {
-      const orgHookContent = await fs.readFile(orgHookPath, 'utf-8');
-      
-      // Check if release manager integration already exists
-      if (orgHookContent.includes('release-manager.sh')) {
-        return; // Already integrated
-      }
-      
-      // Add release manager call to organization hook
-      const integrationCode = `
-# Release Management Integration
-if [ -f "${releaseHookPath}" ]; then
-    echo "🔍 Checking for release triggers after organization..."
-    "${releaseHookPath}" organize || echo "⚠️  Release detection failed (non-blocking)"
-fi
-`;
-      
-      // Insert at the end of the main function
-      const updatedContent = orgHookContent.replace(
-        /echo "✅ Organization complete!"/,
-        `echo "✅ Organization complete!"
-${integrationCode.trim()}`
-      );
-      
-      await fs.writeFile(orgHookPath, updatedContent);
+      // Get files changed in last commit
+      const output = execSync('git diff --name-only HEAD~1 HEAD', {
+        cwd: this.projectRoot,
+        encoding: 'utf-8',
+        stdio: 'pipe'
+      });
+
+      // Filter for completion documents
+      return output
+        .split('\n')
+        .filter(file => file.includes('completion') && file.endsWith('.md'))
+        .filter(file => fs.existsSync(path.join(this.projectRoot, file)));
+
     } catch (error) {
-      throw new Error(`Failed to update organization hook integration: ${error instanceof Error ? error.message : String(error)}`);
+      this.log(`ERROR: Failed to get completion docs from commit: ${error}`);
+      return [];
     }
   }
 
-  private isTaskCompletionCommit(message: string): boolean {
-    const taskCompletionPatterns = [
-      /Task \d+(\.\d+)? Complete:/i,
-      /Task Complete:/i,
-      /Completed Task:/i
-    ];
+  private log(message: string): void {
+    const timestamp = new Date().toISOString();
+    const logMessage = `[${timestamp}] ${message}\n`;
     
-    return taskCompletionPatterns.some(pattern => pattern.test(message));
-  }
-
-  private async hasCompletionDocuments(changedFiles: string[]): Promise<boolean> {
-    const completionPatterns = [
-      /completion\/.*\.md$/,
-      /.*-completion\.md$/,
-      /spec-completion-summary\.md$/
-    ];
-    
-    return changedFiles.some(file => 
-      completionPatterns.some(pattern => pattern.test(file))
-    );
-  }
-
-  private async createTaskCompletionSignal(event: CommitHookEvent): Promise<ReleaseSignal> {
-    // Extract task information from commit message
-    const taskMatch = event.message.match(/Task (\d+(?:\.\d+)?)\s+Complete:\s*(.+)/i);
-    const taskNumber = taskMatch ? taskMatch[1] : 'unknown';
-    const taskDescription = taskMatch ? taskMatch[2] : event.message;
-    
-    return {
-      type: 'patch', // Task completion typically results in patch release
-      trigger: 'task-completion',
-      confidence: 0.8, // High confidence for explicit task completion
-      evidence: [
-        `Commit message indicates task completion: ${event.message}`,
-        `Task number: ${taskNumber}`,
-        `Changed files: ${event.changedFiles.join(', ')}`
-      ],
-      affectedPackages: await this.determineAffectedPackages(event.changedFiles),
-      timestamp: event.timestamp,
-      source: `commit:${event.hash}`
-    };
-  }
-
-  private async createSpecCompletionSignal(event: CommitHookEvent): Promise<ReleaseSignal> {
-    const completionDocs = event.changedFiles.filter(file => 
-      file.includes('completion') && file.endsWith('.md')
-    );
-    
-    return {
-      type: 'minor', // Spec completion typically results in minor release
-      trigger: 'spec-completion',
-      confidence: 0.9, // Very high confidence for completion documents
-      evidence: [
-        `Completion documents modified: ${completionDocs.join(', ')}`,
-        `Commit message: ${event.message}`,
-        `Total changed files: ${event.changedFiles.length}`
-      ],
-      affectedPackages: await this.determineAffectedPackages(event.changedFiles),
-      timestamp: event.timestamp,
-      source: `commit:${event.hash}`
-    };
-  }
-
-  private async createOrganizationCompletionSignal(
-    event: OrganizationHookEvent, 
-    completionDocs: Array<{ originalPath: string; newPath: string }>
-  ): Promise<ReleaseSignal> {
-    return {
-      type: 'minor', // Organization of completion docs suggests spec completion
-      trigger: 'spec-completion',
-      confidence: 0.85, // High confidence for organized completion documents
-      evidence: [
-        `Completion documents organized: ${completionDocs.map(doc => doc.newPath).join(', ')}`,
-        `Organization trigger: ${event.trigger}`,
-        `Total organized files: ${event.organizedFiles.length}`
-      ],
-      affectedPackages: await this.determineAffectedPackagesFromPaths(
-        completionDocs.map(doc => doc.newPath)
-      ),
-      timestamp: event.timestamp,
-      source: `organization:${event.trigger}`
-    };
-  }
-
-  private async determineAffectedPackages(changedFiles: string[]): Promise<string[]> {
-    const packages = new Set<string>();
-    
-    for (const file of changedFiles) {
-      // Check if file is in a package directory
-      if (file.startsWith('src/')) {
-        packages.add('@designerpunk/tokens'); // Core token system
-      }
-      
-      // Check for build system changes
-      if (file.includes('build') || file.includes('generator')) {
-        packages.add('@designerpunk/build-system');
-      }
-      
-      // Check for component changes
-      if (file.includes('component') || file.includes('ui')) {
-        packages.add('@designerpunk/components');
-      }
-      
-      // Default to core package if uncertain
-      if (packages.size === 0) {
-        packages.add('@designerpunk/tokens');
-      }
+    try {
+      fs.appendFileSync(this.logFile, logMessage, 'utf-8');
+    } catch (error) {
+      // Silently fail if logging fails
+      console.error(`Failed to write to log: ${error}`);
     }
-    
-    return Array.from(packages);
-  }
-
-  private async determineAffectedPackagesFromPaths(paths: string[]): Promise<string[]> {
-    const packages = new Set<string>();
-    
-    for (const path of paths) {
-      // Extract spec name from completion document path
-      const specMatch = path.match(/specs\/([^\/]+)\//);
-      if (specMatch) {
-        const specName = specMatch[1];
-        
-        // Map spec names to packages
-        switch (specName) {
-          case 'mathematical-token-system':
-          case 'release-management-system':
-            packages.add('@designerpunk/tokens');
-            break;
-          case 'cross-platform-build-system':
-            packages.add('@designerpunk/build-system');
-            break;
-          default:
-            packages.add('@designerpunk/tokens'); // Default to core package
-        }
-      }
-    }
-    
-    if (packages.size === 0) {
-      packages.add('@designerpunk/tokens'); // Default fallback
-    }
-    
-    return Array.from(packages);
   }
 }

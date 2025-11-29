@@ -6,6 +6,11 @@
  * - Semantic deduplication reduces false positives
  * - Documentation filtering prevents doc fixes from triggering releases
  * - Improved section parsing prevents header contamination and content bleeding
+ * 
+ * Mock Strategy:
+ * - jest.mock('fs'): Mock file system operations for completion document reading
+ * - No shared mocks: Each test creates fresh mocks with specific test data
+ * - Regression focus: Tests validate specific extraction improvements
  */
 
 import { promises as fs } from 'fs';

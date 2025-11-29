@@ -859,27 +859,111 @@ export class AdvancedReleaseCLI {
       this.config
     );
 
+    const { glob } = await import('glob');
     const completionPaths: string[] = [];
     
-    // Use glob to find completion documents
-    const { glob } = await import('glob');
-    
-    for (const pattern of this.config.extraction.completionPatterns) {
-      try {
-        const matches = await new Promise<string[]>((resolve, reject) => {
-          glob(pattern, { cwd: this.workingDirectory }, (err, files) => {
+    // If preferSummaries is enabled, prioritize summary documents from docs/specs/
+    if (this.config.extraction.preferSummaries) {
+      console.log('📝 Prioritizing summary documents from docs/specs/...');
+      
+      // Find all summary documents in docs/specs/
+      const summaryPattern = 'docs/specs/**/task-*-summary.md';
+      const summaryPaths = await new Promise<string[]>((resolve, reject) => {
+        glob(summaryPattern, { 
+          cwd: this.workingDirectory,
+          ignore: this.config.git.excludePatterns
+        }, (err, files) => {
+          if (err) reject(err);
+          else resolve(files);
+        });
+      });
+      
+      console.log(`📄 Found ${summaryPaths.length} summary documents`);
+      completionPaths.push(...summaryPaths);
+      
+      // If summariesOnly is true, skip completion documents entirely
+      if (this.config.extraction.summariesOnly) {
+        console.log(`📊 Summaries-only mode: analyzing ${summaryPaths.length} summary documents (ignoring completion docs)`);
+      } else {
+        // Find completion documents that don't have corresponding summaries
+        const completionPattern = '.kiro/specs/**/completion/task-*-completion.md';
+        const allCompletionPaths = await new Promise<string[]>((resolve, reject) => {
+          glob(completionPattern, { 
+            cwd: this.workingDirectory,
+            ignore: this.config.git.excludePatterns,
+            dot: true
+          }, (err, files) => {
             if (err) reject(err);
             else resolve(files);
           });
         });
-        completionPaths.push(...matches);
-      } catch (error) {
-        // Continue with other patterns if one fails
+        
+        // Extract identifiers from summaries to skip corresponding completion docs
+        const summaryIdentifiers = new Set(
+          summaryPaths.map(path => this.extractDocumentIdentifier(path))
+        );
+        
+        // Only add completion docs that don't have summaries
+        let skippedCount = 0;
+        for (const completionPath of allCompletionPaths) {
+          const identifier = this.extractDocumentIdentifier(completionPath);
+          if (!summaryIdentifiers.has(identifier)) {
+            completionPaths.push(completionPath);
+          } else {
+            skippedCount++;
+          }
+        }
+        
+        console.log(`📄 Found ${allCompletionPaths.length} completion documents (${skippedCount} skipped - summaries exist)`);
+        console.log(`📊 Total documents to analyze: ${completionPaths.length}`);
       }
+      
+    } else {
+      // Original behavior: use all patterns
+      const patterns = this.config.git.includePatterns;
+      const pathsSet = new Set<string>();
+      
+      for (const pattern of patterns) {
+        try {
+          const matches = await new Promise<string[]>((resolve, reject) => {
+            glob(pattern, { 
+              cwd: this.workingDirectory,
+              ignore: this.config.git.excludePatterns,
+              dot: true
+            }, (err, files) => {
+              if (err) reject(err);
+              else resolve(files);
+            });
+          });
+          matches.forEach(match => pathsSet.add(match));
+        } catch (error) {
+          console.warn(`⚠️  Failed to glob pattern ${pattern}:`, error);
+        }
+      }
+      
+      completionPaths.push(...Array.from(pathsSet));
+      console.log(`📄 Found ${completionPaths.length} completion documents`);
     }
 
     const collectionResult = await collector.collectFromPaths(completionPaths);
     return collectionResult.documents;
+  }
+
+  /**
+   * Extract document identifier for deduplication
+   * Examples:
+   *   docs/specs/008-icon-web-component-conversion/task-1-summary.md -> 008-icon-web-component-conversion/task-1
+   *   .kiro/specs/008-icon-web-component-conversion/completion/task-1-parent-completion.md -> 008-icon-web-component-conversion/task-1
+   */
+  private extractDocumentIdentifier(filePath: string): string {
+    const specMatch = filePath.match(/specs\/([^\/]+)\//);
+    const taskMatch = filePath.match(/task-(\d+)/);
+    
+    if (specMatch && taskMatch) {
+      return `${specMatch[1]}/task-${taskMatch[1]}`;
+    }
+    
+    return filePath;
   }
 
   private async getCurrentVersion(): Promise<string> {

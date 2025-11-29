@@ -2,6 +2,11 @@
  * Validation Framework Tests
  * 
  * Tests for the comprehensive release validation system
+ * 
+ * Mock Strategy:
+ * - No external mocks: Tests use real validation logic
+ * - Focus on validation rules: Tests validate semantic versioning, readiness checks, and safety rules
+ * - Pure logic testing: No file system or external dependencies
  */
 
 import { ReleaseValidator, SemanticVersionValidator, ReleaseReadinessValidator, SafetyValidator } from '../index';

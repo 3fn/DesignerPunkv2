@@ -1,0 +1,15 @@
+{
+  "id": "release-1764374444784-xvical6af",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-11-29T00:00:44.784Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T00:00:44.784Z"
+}

@@ -3,13 +3,17 @@
  * 
  * Tests completion document parsing accuracy, confidence scoring algorithm,
  * and workflow event detection and processing.
+ * 
+ * Mock Strategy:
+ * - jest.mock('fs'): Mock file system operations for completion document reading
+ * - No shared mocks: Each test creates fresh mocks with specific test data
+ * - Focus on detection logic: Tests validate signal generation and confidence scoring
  */
 
 import { promises as fs } from 'fs';
 import * as path from 'path';
 import { ReleaseDetector } from '../ReleaseDetector';
 import { CompletionAnalyzer } from '../CompletionAnalyzer';
-import { WorkflowMonitor } from '../WorkflowMonitor';
 import { DetectionConfig, DEFAULT_RELEASE_CONFIG } from '../../config/ReleaseConfig';
 import {
   ReleaseSignal,
@@ -33,7 +37,7 @@ jest.mock('fs', () => ({
   }
 }));
 
-// Mock child_process for WorkflowMonitor
+// Mock child_process
 jest.mock('child_process', () => ({
   execSync: jest.fn()
 }));

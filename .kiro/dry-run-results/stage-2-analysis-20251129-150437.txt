@@ -1,0 +1,43 @@
+
+> designer-punk-v2@1.0.0 release:analyze
+> npx ts-node src/release-analysis/cli/release-analyze.ts
+
+🔍 Starting enhanced release analysis...
+
+🎯 Determining analysis scope...
+📄 Found 1391 completion documents
+🔍 Extracting changes...
+🏷️  Calculating version recommendation...
+
+⚠️  Major version bump detected!
+   1.0.0 → 2.0.0
+   Rationale: Major version bump required due to 133 breaking change(s):
+  • **Resolution**: Parser integrates through ValidationCoordinator without breaking existing code (high severity)
+  • changes: { newFeatures: [], bugFixes: [], improvements: [], breakingChanges: [] }, (high severity)
+  • **Response**: Correct, but for the initial 15-icon implementation, manual maintenance is acceptable. The design allows for future migration to build-time generation without API changes. (medium severity)
+  • ... and 130 more breaking changes
+Confirm major version bump? (y/n): 📝 Generating release notes...
+✅ Enhanced analysis complete!
+
+📊 Release Analysis Summary
+==============================
+
+🏷️  Version: 1.0.0 → 2.0.0
+📈 Bump type: major
+🎯 Confidence: 71.2%
+
+📝 Changes: 2312 total
+  ⚠️  133 breaking changes
+  ✨ 79 new features
+  🐛 481 bug fixes
+  🔧 1619 improvements
+
+💭 Major version bump required due to 133 breaking change(s):
+  • **Resolution**: Parser integrates through ValidationCoordinator without breaking existing code (high severity)
+  • changes: { newFeatures: [], bugFixes: [], improvements: [], breakingChanges: [] }, (high severity)
+  • **Response**: Correct, but for the initial 15-icon implementation, manual maintenance is acceptable. The design allows for future migration to build-time generation without API changes. (medium severity)
+  • ... and 130 more breaking changes
+
+⚠️  2460 items need review
+
+==============================

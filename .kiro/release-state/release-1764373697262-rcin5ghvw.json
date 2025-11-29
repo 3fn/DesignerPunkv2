@@ -1,0 +1,21 @@
+{
+  "id": "release-1764373697262-rcin5ghvw",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-28T23:48:17.262Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-11-28T23:48:20.395Z",
+  "completedAt": "2025-11-28T23:48:20.395Z"
+}

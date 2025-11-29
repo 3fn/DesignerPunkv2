@@ -1,0 +1,21 @@
+{
+  "id": "release-1764456249755-9keywsvhl",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-29T22:44:09.755Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T22:44:09.756Z",
+  "completedAt": "2025-11-29T22:44:09.756Z"
+}

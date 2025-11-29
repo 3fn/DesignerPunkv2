@@ -1,0 +1,15 @@
+{
+  "id": "release-1764374333215-x7i3azmap",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-11-28T23:58:53.215Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-28T23:58:53.215Z"
+}

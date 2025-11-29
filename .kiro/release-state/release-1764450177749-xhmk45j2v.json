@@ -1,0 +1,15 @@
+{
+  "id": "release-1764450177749-xhmk45j2v",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-11-29T21:02:57.749Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T21:02:57.749Z"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "release-1764444980880-ehge7plcs",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-11-29T19:36:20.880Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T19:36:20.880Z"
+}

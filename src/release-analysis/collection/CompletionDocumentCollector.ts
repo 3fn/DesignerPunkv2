@@ -300,6 +300,8 @@ export class CompletionDocumentCollector {
     result: DocumentCollectionResult
   ): Promise<string[]> {
     const discoveredPaths: string[] = [];
+    const summaryPaths = new Set<string>();
+    const completionPaths = new Map<string, string>(); // Maps spec/task to completion path
 
     for (const filePath of filePaths) {
       try {
@@ -307,7 +309,19 @@ export class CompletionDocumentCollector {
           // Check if file exists and is accessible
           const fullPath = join(this.workingDirectory, filePath);
           if (existsSync(fullPath)) {
-            discoveredPaths.push(filePath);
+            // Check if this is a summary document
+            const isSummary = this.config.extraction.summaryPatterns?.some(pattern =>
+              this.matchesPattern(filePath, pattern)
+            );
+
+            if (isSummary) {
+              summaryPaths.add(filePath);
+              discoveredPaths.push(filePath);
+            } else {
+              // Extract spec/task identifier from completion document path
+              const identifier = this.extractDocumentIdentifier(filePath);
+              completionPaths.set(identifier, filePath);
+            }
           } else {
             result.errors.push({
               filePath,
@@ -327,7 +341,49 @@ export class CompletionDocumentCollector {
       }
     }
 
+    // Add completion documents only if no summary exists for that spec/task
+    if (this.config.extraction.preferSummaries) {
+      for (const [identifier, completionPath] of completionPaths.entries()) {
+        // Check if a summary exists for this identifier
+        const hasSummary = Array.from(summaryPaths).some(summaryPath =>
+          this.extractDocumentIdentifier(summaryPath) === identifier
+        );
+
+        if (!hasSummary) {
+          discoveredPaths.push(completionPath);
+        } else {
+          result.warnings.push(
+            `Skipping completion document ${completionPath} - summary document exists`
+          );
+        }
+      }
+    } else {
+      // If not preferring summaries, add all completion documents
+      for (const completionPath of completionPaths.values()) {
+        discoveredPaths.push(completionPath);
+      }
+    }
+
     return discoveredPaths;
+  }
+
+  /**
+   * Extract a document identifier from file path for deduplication
+   * Examples:
+   *   docs/specs/008-icon-web-component-conversion/task-1-summary.md -> 008-icon-web-component-conversion/task-1
+   *   .kiro/specs/008-icon-web-component-conversion/completion/task-1-parent-completion.md -> 008-icon-web-component-conversion/task-1
+   */
+  private extractDocumentIdentifier(filePath: string): string {
+    // Extract spec name and task number
+    const specMatch = filePath.match(/specs\/([^\/]+)\//);
+    const taskMatch = filePath.match(/task-(\d+)/);
+
+    if (specMatch && taskMatch) {
+      return `${specMatch[1]}/task-${taskMatch[1]}`;
+    }
+
+    // Fallback to full path if pattern doesn't match
+    return filePath;
   }
 
   /**
@@ -451,7 +507,17 @@ export class CompletionDocumentCollector {
    * Check if a file path represents a completion document
    */
   protected isCompletionDocument(filePath: string): boolean {
-    // Use configuration patterns
+    // Check summary patterns first if preferSummaries is enabled
+    if (this.config.extraction.preferSummaries && this.config.extraction.summaryPatterns) {
+      const isSummary = this.config.extraction.summaryPatterns.some(pattern =>
+        this.matchesPattern(filePath, pattern)
+      );
+      if (isSummary) {
+        return true;
+      }
+    }
+
+    // Use configuration patterns for completion documents
     const patterns = this.config.extraction.completionPatterns;
 
     return patterns.some(pattern => this.matchesPattern(filePath, pattern)) ||

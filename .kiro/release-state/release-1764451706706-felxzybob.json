@@ -1,0 +1,21 @@
+{
+  "id": "release-1764451706706-felxzybob",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-29T21:28:26.706Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T21:28:26.707Z",
+  "completedAt": "2025-11-29T21:28:26.707Z"
+}

@@ -1,0 +1,21 @@
+{
+  "id": "release-1764450853546-wcvqm2x12",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-29T21:14:13.546Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T21:14:13.546Z",
+  "completedAt": "2025-11-29T21:14:13.546Z"
+}

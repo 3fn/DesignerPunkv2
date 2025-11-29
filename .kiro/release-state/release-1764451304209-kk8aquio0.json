@@ -1,0 +1,21 @@
+{
+  "id": "release-1764451304209-kk8aquio0",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-29T21:21:44.209Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T21:21:44.210Z",
+  "completedAt": "2025-11-29T21:21:44.210Z"
+}

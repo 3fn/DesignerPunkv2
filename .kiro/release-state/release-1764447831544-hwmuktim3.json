@@ -1,0 +1,15 @@
+{
+  "id": "release-1764447831544-hwmuktim3",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-11-29T20:23:51.544Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T20:23:51.544Z"
+}

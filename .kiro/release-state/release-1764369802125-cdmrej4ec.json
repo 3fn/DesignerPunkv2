@@ -1,0 +1,21 @@
+{
+  "id": "release-1764369802125-cdmrej4ec",
+  "state": "completed",
+  "type": "release",
+  "startedAt": "2025-11-28T22:43:22.125Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {
+    "version": "1.1.0",
+    "packages": [
+      "designerpunk"
+    ]
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-28T22:43:22.143Z",
+  "completedAt": "2025-11-28T22:43:22.143Z"
+}

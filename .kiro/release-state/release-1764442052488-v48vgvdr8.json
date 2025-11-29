@@ -1,0 +1,15 @@
+{
+  "id": "release-1764442052488-v48vgvdr8",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-11-29T18:47:32.488Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T18:47:32.488Z"
+}

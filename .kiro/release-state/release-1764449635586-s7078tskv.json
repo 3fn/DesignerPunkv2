@@ -1,0 +1,21 @@
+{
+  "id": "release-1764449635586-s7078tskv",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-29T20:53:55.586Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T20:53:55.587Z",
+  "completedAt": "2025-11-29T20:53:55.587Z"
+}

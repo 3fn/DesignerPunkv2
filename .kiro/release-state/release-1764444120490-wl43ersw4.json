@@ -1,0 +1,21 @@
+{
+  "id": "release-1764444120490-wl43ersw4",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-29T19:22:00.490Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T19:22:01.736Z",
+  "completedAt": "2025-11-29T19:22:01.736Z"
+}

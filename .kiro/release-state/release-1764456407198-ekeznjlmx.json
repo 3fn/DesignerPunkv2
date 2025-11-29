@@ -1,0 +1,21 @@
+{
+  "id": "release-1764456407198-ekeznjlmx",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-29T22:46:47.198Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T22:46:47.199Z",
+  "completedAt": "2025-11-29T22:46:47.199Z"
+}

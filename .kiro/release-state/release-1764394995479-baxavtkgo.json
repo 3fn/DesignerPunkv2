@@ -1,0 +1,21 @@
+{
+  "id": "release-1764394995479-baxavtkgo",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-29T05:43:15.479Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T05:43:16.651Z",
+  "completedAt": "2025-11-29T05:43:16.651Z"
+}

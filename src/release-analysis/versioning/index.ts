@@ -12,3 +12,11 @@ export type {
   PreReleaseInfo,
   ValidationResult
 } from './VersionCalculator';
+
+export { VersionHistory } from './VersionHistory';
+export type {
+  VersionHistoryEntry,
+  VersionHistoryAnalysis,
+  VersionProgressionAnalysis,
+  VersionComparisonResult
+} from './VersionHistory';

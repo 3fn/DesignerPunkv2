@@ -81,6 +81,21 @@ None.
     });
 
     it('should handle missing files gracefully', async () => {
+      // Mock fs/promises to handle file reads
+      const mockReadFile = jest.fn()
+        .mockResolvedValueOnce(`# Task 1 Completion
+**Date**: 2025-01-01
+## Summary
+Test content.`)
+        .mockRejectedValueOnce(new Error('ENOENT: no such file or directory'));
+
+      const mockFsPromises = { readFile: mockReadFile };
+      jest.doMock('fs/promises', () => mockFsPromises, { virtual: true });
+
+      // Create new collector to pick up mocked fs/promises
+      const testCollector = new CompletionDocumentCollector('/test/workspace', mockConfig);
+
+      // Mock existsSync to return false only for missing-file
       mockExistsSync.mockImplementation((path) => {
         return !path.toString().includes('missing-file');
       });
@@ -96,7 +111,7 @@ None.
         timeRange: { from: new Date(), to: new Date() }
       };
 
-      const result = await collector.collectFromGitChanges(gitChanges);
+      const result = await testCollector.collectFromGitChanges(gitChanges);
 
       expect(result.errors).toHaveLength(1);
       expect(result.errors[0].type).toBe('access');

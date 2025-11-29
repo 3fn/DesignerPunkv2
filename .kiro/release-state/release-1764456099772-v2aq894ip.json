@@ -1,0 +1,21 @@
+{
+  "id": "release-1764456099772-v2aq894ip",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-29T22:41:39.772Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T22:41:39.772Z",
+  "completedAt": "2025-11-29T22:41:39.772Z"
+}

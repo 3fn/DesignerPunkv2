@@ -1,0 +1,15 @@
+{
+  "id": "release-1764443880301-kby04j7vn",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-11-29T19:18:00.301Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T19:18:00.301Z"
+}

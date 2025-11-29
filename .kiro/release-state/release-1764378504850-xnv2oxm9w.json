@@ -1,0 +1,21 @@
+{
+  "id": "release-1764378504850-xnv2oxm9w",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-29T01:08:24.850Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T01:08:24.851Z",
+  "completedAt": "2025-11-29T01:08:24.851Z"
+}

@@ -1,0 +1,21 @@
+{
+  "id": "release-1764374446039-0rn38nf3n",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-29T00:00:46.039Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-11-29T00:00:47.765Z",
+  "completedAt": "2025-11-29T00:00:47.765Z"
+}

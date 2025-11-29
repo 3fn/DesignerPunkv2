@@ -1,0 +1,21 @@
+{
+  "id": "release-1764372190225-uxm3l6pkc",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-28T23:23:10.225Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-28T23:23:10.226Z",
+  "completedAt": "2025-11-28T23:23:10.226Z"
+}
