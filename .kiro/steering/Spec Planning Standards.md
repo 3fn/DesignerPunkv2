@@ -311,10 +311,11 @@ This document defines the format and structure for creating feature specificatio
 - Keep concise and actionable
 - No success criteria (covered by primary)
 
-**Post-Complete Commits**:
-- **NOT included in tasks** - handled automatically by task completion hook
-- Hook extracts commit message from task name
-- Follows Development Workflow automation
+**Post-Completion Workflow**:
+- Parent tasks include a **Post-Completion** section with the complete workflow checklist
+- Format provides clear steps for task completion without requiring reference to other docs
+- Follows the sequence defined in Development Workflow document
+- Each step is actionable and includes the specific command to run
 
 **Task Type Metadata**:
 - All subtasks must include **Type** metadata field
@@ -348,7 +349,10 @@ This document defines the format and structure for creating feature specificatio
   - Summary: `docs/specs/cross-platform-build-system/task-1-summary.md` (triggers release detection)
   
   **Post-Completion:**
-  - Run `./.kiro/hooks/release-manager.sh auto` to trigger release detection
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 1 Complete: Build System Foundation"`
+  - Verify: Check GitHub for committed changes
 
   - [ ] 1.1 Create directory structure
     **Type**: Setup
@@ -446,7 +450,10 @@ This document defines the format and structure for creating feature specificatio
   - Summary: `docs/specs/token-generation/task-5-summary.md` (triggers release detection)
   
   **Post-Completion:**
-  - Run `./.kiro/hooks/release-manager.sh auto` to trigger release detection
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 5 Complete: Token Generation System"`
+  - Verify: Check GitHub for committed changes
 
   - [ ] 5.1 Set up generator directory structure
     **Type**: Setup

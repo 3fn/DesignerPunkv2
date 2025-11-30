@@ -8,9 +8,10 @@ dist/
 build/
 *.tsbuildinfo
 
-# Generated token files
+# Generated files
 output/
 test-output/
+src/types/generated/
 
 # Test coverage
 coverage/

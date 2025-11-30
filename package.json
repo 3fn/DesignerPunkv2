@@ -4,6 +4,8 @@
   "description": "True Native cross-platform design system with mathematical foundations",
   "main": "index.js",
   "scripts": {
+    "generate:types": "ts-node scripts/generate-token-types.ts",
+    "prebuild": "npm run generate:types",
     "build": "tsc --skipLibCheck && npm run build:validate",
     "build:watch": "tsc --watch --skipLibCheck",
     "build:verify": "node verify-build.js",
