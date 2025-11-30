@@ -32,6 +32,19 @@ export { PublishingPlanner } from './coordination/PublishingPlanner';
 // AI Collaboration
 export * from './ai';
 
-// Types
+// Types - Export from ReleaseTypes (main type definitions)
 export * from './types/ReleaseTypes';
-export * from './coordination/types';
+
+// Coordination types - These are coordination-specific and don't conflict
+export type {
+  PackageVersion as CoordPackageVersion,
+  PackageUpdate as CoordPackageUpdate,
+  DependencyUpdate as CoordDependencyUpdate,
+  VersionConflict,
+  CoordinationStrategy,
+  CoordinationPlan,
+  CompatibilityReport,
+  CompatibilityIssue,
+  CompatibilityWarning,
+  PublishingPlan as CoordPublishingPlan
+} from './coordination/types';

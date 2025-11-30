@@ -1,11 +1,14 @@
 /**
  * Package Coordination Types
  * 
- * Type definitions for multi-package version coordination and dependency management.
+ * Extended type definitions for multi-package version coordination.
+ * These types extend the base types from ReleaseTypes with coordination-specific properties.
  */
 
+import type { PackageUpdate as BasePackageUpdate, DependencyUpdate as BaseDependencyUpdate } from '../types/ReleaseTypes';
+
 /**
- * Package version information
+ * Package version information (coordination-specific)
  */
 export interface PackageVersion {
   name: string;
@@ -17,7 +20,8 @@ export interface PackageVersion {
 }
 
 /**
- * Package update information
+ * Package update information (coordination-specific)
+ * Extends base PackageUpdate with coordination-specific fields
  */
 export interface PackageUpdate {
   name: string;
@@ -29,7 +33,7 @@ export interface PackageUpdate {
 }
 
 /**
- * Dependency update information
+ * Dependency update information (coordination-specific)
  */
 export interface DependencyUpdate {
   package: string;
@@ -112,7 +116,7 @@ export interface CompatibilityWarning {
 }
 
 /**
- * Publishing plan
+ * Publishing plan (coordination-specific)
  */
 export interface PublishingPlan {
   /** Publishing order (packages grouped by dependency level) */

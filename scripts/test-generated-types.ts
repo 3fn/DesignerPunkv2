@@ -126,11 +126,10 @@ function testOpacityTokenTypes(): boolean {
   
   // Test valid opacity tokens
   const validOpacityTokens: OpacityTokenName[] = [
-    'opacity.disabled',
-    'opacity.hover',
-    'opacity.overlay',
-    'opacity.pressed',
-    'opacity.loading'
+    'opacity.subtle',
+    'opacity.medium',
+    'opacity.heavy',
+    'opacity.ghost'
   ];
   
   validOpacityTokens.forEach(token => {
@@ -151,7 +150,7 @@ function testOpacityTokenTypes(): boolean {
   console.log(`✅ All ${opacityTokenNames.length} opacity tokens are in OpacityTokenName type`);
   
   // Test type guard
-  if (!isOpacityTokenName('opacity.hover')) {
+  if (!isOpacityTokenName('opacity.subtle')) {
     console.error('❌ isOpacityTokenName type guard failed');
     return false;
   }
@@ -169,7 +168,7 @@ function testSemanticTokenNameUnion(): boolean {
   // Test that all token types are assignable to SemanticTokenName
   const colorToken: SemanticTokenName = 'color.primary';
   const shadowToken: SemanticTokenName = 'shadow.modal';
-  const opacityToken: SemanticTokenName = 'opacity.hover';
+  const opacityToken: SemanticTokenName = 'opacity.subtle';
   
   console.log('✅ SemanticTokenName union type works');
   return true;

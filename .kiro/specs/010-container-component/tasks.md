@@ -70,7 +70,7 @@ The plan follows a bottom-up approach: infrastructure → core component → pla
     - _Requirements: 15.9, 15.10_
 
 
-- [ ] 2. Create Opacity Tokens
+- [x] 2. Create Opacity Tokens
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -95,7 +95,7 @@ The plan follows a bottom-up approach: infrastructure → core component → pla
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Create Opacity Tokens"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 2.1 Create OpacityTokens.ts file
+  - [x] 2.1 Create OpacityTokens.ts file
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/tokens/semantic/OpacityTokens.ts`
@@ -104,20 +104,30 @@ The plan follows a bottom-up approach: infrastructure → core component → pla
     - Add token getter functions
     - _Requirements: 8.2, 8.3_
 
-  - [ ] 2.2 Update semantic token exports
+  - [x] 2.2 Update semantic token exports
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Add OpacityTokens export to `src/tokens/semantic/index.ts`
     - Verify opacity tokens are accessible from semantic token module
     - _Requirements: 8.2, 8.3_
 
-  - [ ] 2.3 Regenerate types to include opacity tokens
+  - [x] 2.3 Regenerate types to include opacity tokens
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run type generation script
     - Verify OpacityTokenName type includes all opacity tokens
     - Test TypeScript compilation with opacity types
     - _Requirements: 8.4, 15.7, 15.10_
+
+  - [x] 2.4 Fix TypeScript compilation errors in release system
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Consolidate duplicate type exports in release management system
+    - Update coordination/types.ts to re-export from ReleaseTypes.ts
+    - Fix ReleaseManager.ts import path for CoordinationStrategy
+    - Delete broken example-usage.ts file
+    - Verify TypeScript compilation passes
+    - _Requirements: 15.11 (TypeScript compilation must succeed)_
 
 
 - [ ] 3. Create Container Component Structure

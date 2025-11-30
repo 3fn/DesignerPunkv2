@@ -33,36 +33,31 @@ describe('Semantic Opacity Tokens', () => {
       });
     });
 
-    test('should have exactly 5 semantic opacity tokens', () => {
-      expect(Object.keys(opacityTokens)).toHaveLength(5);
-      expect(opacityTokenNames).toHaveLength(5);
+    test('should have exactly 4 semantic opacity tokens', () => {
+      expect(Object.keys(opacityTokens)).toHaveLength(4);
+      expect(opacityTokenNames).toHaveLength(4);
     });
   });
 
   describe('Primitive References', () => {
-    test('opacity.disabled should reference opacity600', () => {
-      const token = opacityTokens['opacity.disabled'];
+    test('opacity.subtle should reference opacity1100', () => {
+      const token = opacityTokens['opacity.subtle'];
+      expect(token.primitiveReferences.value).toBe('opacity1100');
+    });
+
+    test('opacity.medium should reference opacity900', () => {
+      const token = opacityTokens['opacity.medium'];
+      expect(token.primitiveReferences.value).toBe('opacity900');
+    });
+
+    test('opacity.heavy should reference opacity600', () => {
+      const token = opacityTokens['opacity.heavy'];
       expect(token.primitiveReferences.value).toBe('opacity600');
     });
 
-    test('opacity.overlay should reference opacity400', () => {
-      const token = opacityTokens['opacity.overlay'];
+    test('opacity.ghost should reference opacity400', () => {
+      const token = opacityTokens['opacity.ghost'];
       expect(token.primitiveReferences.value).toBe('opacity400');
-    });
-
-    test('opacity.hover should reference opacity100', () => {
-      const token = opacityTokens['opacity.hover'];
-      expect(token.primitiveReferences.value).toBe('opacity100');
-    });
-
-    test('opacity.pressed should reference opacity200', () => {
-      const token = opacityTokens['opacity.pressed'];
-      expect(token.primitiveReferences.value).toBe('opacity200');
-    });
-
-    test('opacity.loading should reference opacity200', () => {
-      const token = opacityTokens['opacity.loading'];
-      expect(token.primitiveReferences.value).toBe('opacity200');
     });
 
     test('all semantic tokens should reference valid primitive token names', () => {
@@ -75,12 +70,12 @@ describe('Semantic Opacity Tokens', () => {
   });
 
   describe('Token Resolution', () => {
-    test('opacityDisabled should resolve to opacity600 (0.48)', () => {
-      const semanticToken = opacityTokens['opacity.disabled'];
+    test('opacity.subtle should resolve to opacity1100 (0.88)', () => {
+      const semanticToken = opacityTokens['opacity.subtle'];
       const primitiveTokenName = semanticToken.primitiveReferences.value;
       const primitiveToken = primitiveOpacityTokens[primitiveTokenName];
       
-      expect(primitiveToken.baseValue).toBe(0.48);
+      expect(primitiveToken.baseValue).toBe(0.88);
     });
 
     test('all semantic tokens should resolve to valid primitive values', () => {
@@ -96,11 +91,10 @@ describe('Semantic Opacity Tokens', () => {
 
     test('semantic token references should be valid', () => {
       const expectedReferences = {
-        'opacity.disabled': 'opacity600',
-        'opacity.overlay': 'opacity400',
-        'opacity.hover': 'opacity100',
-        'opacity.pressed': 'opacity200',
-        'opacity.loading': 'opacity200'
+        'opacity.subtle': 'opacity1100',
+        'opacity.medium': 'opacity900',
+        'opacity.heavy': 'opacity600',
+        'opacity.ghost': 'opacity400'
       };
 
       Object.entries(expectedReferences).forEach(([semanticName, primitiveName]) => {
@@ -116,10 +110,10 @@ describe('Semantic Opacity Tokens', () => {
 
   describe('Helper Functions', () => {
     test('getOpacityToken should return token by name', () => {
-      const token = getOpacityToken('opacity.disabled');
+      const token = getOpacityToken('opacity.subtle');
       expect(token).toBeDefined();
-      expect(token?.name).toBe('opacity.disabled');
-      expect(token?.primitiveReferences.value).toBe('opacity600');
+      expect(token?.name).toBe('opacity.subtle');
+      expect(token?.primitiveReferences.value).toBe('opacity1100');
     });
 
     test('getOpacityToken should return undefined for invalid name', () => {
@@ -129,7 +123,7 @@ describe('Semantic Opacity Tokens', () => {
 
     test('getAllOpacityTokens should return all tokens as array', () => {
       const tokens = getAllOpacityTokens();
-      expect(tokens).toHaveLength(5);
+      expect(tokens).toHaveLength(4);
       expect(Array.isArray(tokens)).toBe(true);
     });
 
@@ -142,11 +136,10 @@ describe('Semantic Opacity Tokens', () => {
   describe('Token Names', () => {
     test('should have expected token names', () => {
       const expectedNames = [
-        'opacity.disabled',
-        'opacity.overlay',
-        'opacity.hover',
-        'opacity.pressed',
-        'opacity.loading'
+        'opacity.subtle',
+        'opacity.medium',
+        'opacity.heavy',
+        'opacity.ghost'
       ];
 
       expectedNames.forEach(name => {

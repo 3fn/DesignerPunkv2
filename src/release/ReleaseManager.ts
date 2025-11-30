@@ -31,9 +31,9 @@ import {
   ReleaseResult,
   ValidationResult,
   RollbackResult,
-  ReleaseError
+  ReleaseError,
+  CoordinationStrategy
 } from './types/ReleaseTypes';
-import { CoordinationStrategy } from './coordination/types';
 
 export interface ReleaseManagerConfig {
   /** Working directory for release operations */
