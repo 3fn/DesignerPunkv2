@@ -470,7 +470,7 @@ The plan follows a bottom-up approach: infrastructure → core component → pla
     - _Requirements: 1.1, 15.9, 15.10_
 
 
-- [ ] 8. Create Documentation and Examples
+- [x] 8. Create Documentation and Examples
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -500,7 +500,7 @@ The plan follows a bottom-up approach: infrastructure → core component → pla
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 8 Complete: Create Documentation and Examples"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 8.1 Create Container README
+  - [x] 8.1 Create Container README
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `README.md` with overview section
@@ -512,7 +512,7 @@ The plan follows a bottom-up approach: infrastructure → core component → pla
     - Document token consumption
     - _Requirements: All requirements_
 
-  - [ ] 8.2 Create basic usage examples
+  - [x] 8.2 Create basic usage examples
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `examples/BasicUsage.html`
@@ -521,20 +521,20 @@ The plan follows a bottom-up approach: infrastructure → core component → pla
     - Show Container with common prop combinations
     - _Requirements: 1.1, 1.2_
 
-  - [ ] 8.3 Create comprehensive props example
+  - [x] 8.3 Create props reference example
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    - Create `examples/AllProps.html`
-    - Demonstrate all padding values
-    - Demonstrate all border values
-    - Demonstrate all borderRadius values
-    - Demonstrate all layering values
-    - Demonstrate color, shadow, opacity props
-    - Demonstrate semantic HTML elements
-    - Demonstrate accessibility labels
-    - _Requirements: 2.1-2.5, 3.1-3.3, 4.1-4.3, 5.1-5.3, 6.1-6.3, 7.1-7.3, 8.1-8.4, 9.1-9.6, 11.3-11.4, 14.1-14.2_
+    - Create `examples/PropsReference.html`
+    - Visual comparison of all padding values (grid layout showing 7 values side-by-side)
+    - Visual comparison of all border values (4 values in a row)
+    - Visual comparison of all borderRadius values (4 values in a row)
+    - Layering demonstration (stacked containers showing z-index behavior)
+    - Reference note directing to README for complete token lists
+    - Include AI Agent warning against copy-pasting code
+    - _Requirements: 2.1-2.5, 3.1-3.3, 4.1-4.3, 6.1-6.3, 7.1-7.3, 9.1-9.6_
+    - _Note: Focused on visual comparison rather than exhaustive coverage. README documents all props comprehensively._
 
-  - [ ] 8.4 Create semantic component examples
+  - [x] 8.4 Create semantic component examples
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `examples/semantic-components/Card.tsx`
@@ -542,9 +542,10 @@ The plan follows a bottom-up approach: infrastructure → core component → pla
     - Show how semantic components use Container
     - Demonstrate prop combination patterns
     - Show design decision encoding
+    - Include AI Agent warning against copy-pasting code (in file comments and visible documentation)
     - _Requirements: 1.3, 1.4_
 
-  - [ ] 8.5 Update Component Development Guide
+  - [x] 8.5 Update Component Development Guide
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add nested Container anti-patterns section

@@ -487,6 +487,30 @@ export interface ButtonProps {
 }
 ```
 
+### ❌ Nested Containers with Same Border Radius
+
+```html
+<!-- DON'T: Same radius creates awkward visual overlap -->
+<dp-container borderRadius="normal" padding="200">
+  <dp-container borderRadius="normal">
+    Awkward corner overlap
+  </dp-container>
+</dp-container>
+
+<!-- DO: Reduce inner radius by padding amount -->
+<dp-container borderRadius="normal" padding="200">
+  <dp-container borderRadius="none">
+    Harmonious corner alignment
+  </dp-container>
+</dp-container>
+```
+
+**Mathematical relationship**: `inner borderRadius = outer borderRadius - padding`
+
+**Why this matters**: Padding creates visual space between containers. Reducing the inner radius maintains consistent visual curvature and prevents awkward overlapping corners.
+
+**For detailed guidance**: See Container component README "Nested Containers" section for visual examples, token value reference table, platform-specific considerations, and common use cases.
+
 ---
 
 ## Validation Checklist
