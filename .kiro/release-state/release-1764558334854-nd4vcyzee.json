@@ -1,0 +1,21 @@
+{
+  "id": "release-1764558334854-nd4vcyzee",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-01T03:05:34.854Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T03:05:34.855Z",
+  "completedAt": "2025-12-01T03:05:34.855Z"
+}

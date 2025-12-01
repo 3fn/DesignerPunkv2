@@ -1,0 +1,21 @@
+{
+  "id": "release-1764558723631-uhduiseji",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-01T03:12:03.631Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T03:12:03.631Z",
+  "completedAt": "2025-12-01T03:12:03.631Z"
+}
