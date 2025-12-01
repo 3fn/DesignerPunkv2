@@ -63,3 +63,6 @@ Thumbs.db
 
 # Optional stylelint cache
 .stylelintcache
+
+# Release analysis cache (grows too large for GitHub)
+.kiro/release-analysis/history.json
