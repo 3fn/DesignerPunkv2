@@ -1,0 +1,16 @@
+{
+  "id": "release-1764566502769-lpjaezzpa",
+  "state": "in-progress",
+  "type": "release",
+  "startedAt": "2025-12-01T05:21:42.769Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T05:21:42.769Z",
+  "currentStage": "analysis"
+}

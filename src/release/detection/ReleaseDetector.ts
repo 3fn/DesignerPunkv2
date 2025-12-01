@@ -480,7 +480,7 @@ export class ReleaseDetector implements IReleaseDetector {
 
   private async extractBreakingChanges(content: string, source: string): Promise<BreakingChange[]> {
     const breakingChanges: BreakingChange[] = [];
-    const lines = content.split('\n');
+    const lines = (content || '').split('\n');
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i].toLowerCase();
@@ -516,7 +516,7 @@ export class ReleaseDetector implements IReleaseDetector {
 
   private async extractFeatures(content: string, source: string): Promise<Feature[]> {
     const features: Feature[] = [];
-    const lines = content.split('\n');
+    const lines = (content || '').split('\n');
 
     const featureKeywords = ['implement', 'create', 'add', 'build', 'new feature', 'introduces'];
 
@@ -554,7 +554,7 @@ export class ReleaseDetector implements IReleaseDetector {
 
   private async extractBugFixes(content: string, source: string): Promise<BugFix[]> {
     const bugFixes: BugFix[] = [];
-    const lines = content.split('\n');
+    const lines = (content || '').split('\n');
 
     const bugFixKeywords = ['fix', 'bug', 'issue', 'problem', 'error', 'resolve'];
 
@@ -589,7 +589,7 @@ export class ReleaseDetector implements IReleaseDetector {
 
   private async extractImprovements(content: string, source: string): Promise<Improvement[]> {
     const improvements: Improvement[] = [];
-    const lines = content.split('\n');
+    const lines = (content || '').split('\n');
 
     const improvementKeywords = ['improve', 'enhance', 'optimize', 'refactor', 'update'];
 

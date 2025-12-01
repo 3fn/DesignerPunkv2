@@ -1,0 +1,15 @@
+{
+  "id": "release-1764566498668-ct3a7dxtv",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-12-01T05:21:38.668Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T05:21:38.668Z"
+}

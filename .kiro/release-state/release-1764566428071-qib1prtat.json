@@ -1,0 +1,21 @@
+{
+  "id": "release-1764566428071-qib1prtat",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-01T05:20:28.071Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T05:20:28.072Z",
+  "completedAt": "2025-12-01T05:20:28.072Z"
+}

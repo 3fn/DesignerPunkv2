@@ -1,0 +1,21 @@
+{
+  "id": "release-1764567800246-eluvhzqsb",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-01T05:43:20.246Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T05:43:20.247Z",
+  "completedAt": "2025-12-01T05:43:20.247Z"
+}
