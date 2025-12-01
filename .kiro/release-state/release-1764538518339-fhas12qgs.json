@@ -1,0 +1,21 @@
+{
+  "id": "release-1764538518339-fhas12qgs",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-30T21:35:18.339Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-11-30T21:35:21.083Z",
+  "completedAt": "2025-11-30T21:35:21.083Z"
+}

@@ -1,0 +1,21 @@
+{
+  "id": "release-1764548056249-v81s1whax",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-01T00:14:16.249Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T00:14:16.250Z",
+  "completedAt": "2025-12-01T00:14:16.250Z"
+}

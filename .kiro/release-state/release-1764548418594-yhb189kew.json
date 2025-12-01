@@ -1,0 +1,15 @@
+{
+  "id": "release-1764548418594-yhb189kew",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-12-01T00:20:18.594Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T00:20:18.594Z"
+}

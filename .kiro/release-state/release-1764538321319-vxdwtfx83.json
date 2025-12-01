@@ -1,0 +1,15 @@
+{
+  "id": "release-1764538321319-vxdwtfx83",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-11-30T21:32:01.319Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-30T21:32:01.319Z"
+}

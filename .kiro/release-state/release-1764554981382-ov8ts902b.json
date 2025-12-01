@@ -1,0 +1,15 @@
+{
+  "id": "release-1764554981382-ov8ts902b",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-12-01T02:09:41.382Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T02:09:41.382Z"
+}

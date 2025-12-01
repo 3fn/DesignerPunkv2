@@ -1,0 +1,21 @@
+{
+  "id": "release-1764549251698-t6aumj2v2",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-01T00:34:11.698Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T00:34:11.698Z",
+  "completedAt": "2025-12-01T00:34:11.698Z"
+}

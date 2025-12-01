@@ -1,0 +1,21 @@
+{
+  "id": "release-1764548225525-5h5leormu",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-01T00:17:05.525Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T00:17:05.526Z",
+  "completedAt": "2025-12-01T00:17:05.526Z"
+}

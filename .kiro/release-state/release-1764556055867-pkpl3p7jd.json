@@ -1,0 +1,21 @@
+{
+  "id": "release-1764556055867-pkpl3p7jd",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-01T02:27:35.867Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T02:27:35.867Z",
+  "completedAt": "2025-12-01T02:27:35.867Z"
+}

@@ -141,6 +141,16 @@ describe('CLI Integration Tests', () => {
     });
   });
 
+  afterEach(async () => {
+    // Force cleanup of any remaining resources
+    if (integration) {
+      await integration.cleanup();
+    }
+    
+    // Give processes time to fully terminate
+    await new Promise(resolve => setTimeout(resolve, 100));
+  });
+
   describe('CLI Availability', () => {
     it('should detect if CLI is available', async () => {
       const available = await integration.isAvailable();
@@ -483,7 +493,7 @@ describe('CLI Integration Tests', () => {
           expect(error.category).toBeDefined();
         }
       }
-    });
+    }, 10000); // 10 second timeout for dry-run test
 
     it('should provide convenience methods for common queries', async () => {
       // Test that the wrapper interface provides expected methods

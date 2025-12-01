@@ -1,0 +1,21 @@
+{
+  "id": "release-1764554785770-mbtgtuxot",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-01T02:06:25.770Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T02:06:29.470Z",
+  "completedAt": "2025-12-01T02:06:29.470Z"
+}

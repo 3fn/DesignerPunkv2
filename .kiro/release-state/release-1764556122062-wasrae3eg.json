@@ -1,0 +1,21 @@
+{
+  "id": "release-1764556122062-wasrae3eg",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-01T02:28:42.062Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T02:28:49.247Z",
+  "completedAt": "2025-12-01T02:28:49.247Z"
+}

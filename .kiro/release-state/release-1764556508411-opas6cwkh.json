@@ -1,0 +1,15 @@
+{
+  "id": "release-1764556508411-opas6cwkh",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-12-01T02:35:08.411Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T02:35:08.411Z"
+}

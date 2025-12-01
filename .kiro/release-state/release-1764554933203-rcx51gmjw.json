@@ -1,0 +1,21 @@
+{
+  "id": "release-1764554933203-rcx51gmjw",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-01T02:08:53.203Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T02:08:53.204Z",
+  "completedAt": "2025-12-01T02:08:53.204Z"
+}

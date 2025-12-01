@@ -1,0 +1,15 @@
+{
+  "id": "release-1764556127497-gdjmciyhc",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-12-01T02:28:47.497Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T02:28:47.497Z"
+}

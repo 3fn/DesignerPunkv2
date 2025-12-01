@@ -647,4 +647,16 @@ export class ReleaseAnalysisIntegration {
   async handleError(error: CLIError): Promise<void> {
     return this.errorHandler.handleError(error, this.options.fallbackOptions);
   }
+
+  /**
+   * Force cleanup of any remaining resources
+   * 
+   * This method should be called in test teardown to ensure
+   * all child processes are terminated and resources are released.
+   * 
+   * @returns Promise that resolves when cleanup is complete
+   */
+  async cleanup(): Promise<void> {
+    await this.cliBridge.forceCleanup();
+  }
 }

@@ -1,0 +1,126 @@
+{
+  "id": "release-1764556127448-b02qsz7d4",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-01T02:28:47.448Z",
+  "completedStages": [
+    "analysis",
+    "planning",
+    "validation"
+  ],
+  "failedStages": [],
+  "context": {
+    "analysisResult": {
+      "scope": {
+        "toCommit": "abc123",
+        "completionDocuments": [],
+        "analysisDate": "2025-12-01T02:28:47.447Z"
+      },
+      "changes": {
+        "breakingChanges": [],
+        "newFeatures": [],
+        "bugFixes": [],
+        "improvements": [],
+        "documentation": [],
+        "metadata": {
+          "documentsAnalyzed": 1,
+          "extractionConfidence": 0.9,
+          "ambiguousItems": [],
+          "filteredItems": []
+        }
+      },
+      "versionRecommendation": {
+        "currentVersion": "1.0.0",
+        "recommendedVersion": "invalid-version",
+        "bumpType": "minor",
+        "rationale": "New features added",
+        "confidence": 0.9,
+        "evidence": []
+      },
+      "releaseNotes": "## Features\n- New feature",
+      "confidence": {
+        "overall": 0.9,
+        "extraction": 0.9,
+        "categorization": 0.9,
+        "deduplication": 0.9,
+        "versionCalculation": 0.9
+      }
+    },
+    "lastSuccessfulStage": "validation",
+    "planningResult": {
+      "version": {
+        "from": "1.0.0",
+        "to": "invalid-version",
+        "type": "minor",
+        "rationale": "New features added",
+        "calculatedAt": "2025-12-01T02:28:47.448Z"
+      },
+      "packages": [
+        {
+          "name": "designerpunk",
+          "versionBump": {
+            "from": "1.0.0",
+            "to": "invalid-version",
+            "type": "minor",
+            "rationale": "New features added",
+            "calculatedAt": "2025-12-01T02:28:47.448Z"
+          },
+          "dependencyUpdates": [],
+          "needsPublishing": true,
+          "publishingPriority": 1
+        }
+      ],
+      "releaseNotes": {
+        "version": "invalid-version",
+        "date": "2025-12-01",
+        "summary": "New features added",
+        "breakingChanges": [],
+        "newFeatures": [],
+        "improvements": [],
+        "bugFixes": [],
+        "format": "markdown",
+        "content": "## Features\n- New feature"
+      },
+      "publishingPlan": {
+        "order": [
+          "designerpunk"
+        ],
+        "parallelGroups": [
+          [
+            "designerpunk"
+          ]
+        ],
+        "estimatedDuration": 60000,
+        "steps": []
+      },
+      "validationResults": [],
+      "createdAt": "2025-12-01T02:28:47.448Z",
+      "id": "release-1764556127448"
+    },
+    "version": "invalid-version",
+    "packages": [
+      "designerpunk"
+    ],
+    "validationResult": {
+      "valid": false,
+      "errors": [
+        {
+          "code": "VALIDATION_VERSION_FORMAT",
+          "message": "Invalid semantic version format: invalid-version",
+          "severity": "error",
+          "source": "validation"
+        }
+      ],
+      "warnings": [],
+      "validatedAt": "2025-12-01T02:28:47.447Z",
+      "context": "release-plan-validation"
+    }
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T02:28:47.449Z",
+  "completedAt": "2025-12-01T02:28:47.449Z"
+}

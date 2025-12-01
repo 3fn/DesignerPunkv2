@@ -685,6 +685,22 @@ export class AdvancedReleaseCLI {
     while (i < args.length) {
       const arg = args[i];
       
+      // Check if this is an unknown flag
+      if (arg.startsWith('--')) {
+        const knownFlags = [
+          '--since', '--format', '--dry-run', '--include', '--exclude',
+          '--interactive', '-i', '--auto-approve', '--skip-confirmation', '--review-threshold',
+          '--config-show', '--config-set', '--config-reset', '--config-validate', '--config-path',
+          '--history-list', '--history-compare', '--history-show', '--history-clear'
+        ];
+        
+        if (!knownFlags.includes(arg)) {
+          // Unknown flag detected - show help instead of failing
+          console.warn(`Warning: Unknown flag '${arg}' - showing help`);
+          return { command: 'help', options, configOptions, historyOptions };
+        }
+      }
+      
       switch (arg) {
         // Basic analysis options
         case '--since':
@@ -773,6 +789,7 @@ export class AdvancedReleaseCLI {
       switch (command) {
         case 'help':
           this.showAdvancedHelp();
+          // Don't exit - let the process complete normally with exit code 0
           break;
 
         case 'analyze':

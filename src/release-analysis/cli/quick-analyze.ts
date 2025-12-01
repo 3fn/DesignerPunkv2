@@ -100,15 +100,23 @@ export class QuickAnalyzer {
     const startTime = Date.now();
     const startMemory = process.memoryUsage().heapUsed;
 
+    let timeoutId: NodeJS.Timeout | null = null;
+    
     try {
-      // Set up timeout
+      // Set up timeout with cleanup
       const timeoutPromise = new Promise<never>((_, reject) => {
-        setTimeout(() => reject(new Error('Analysis timeout')), this.options.timeoutMs);
+        timeoutId = setTimeout(() => reject(new Error('Analysis timeout')), this.options.timeoutMs);
       });
 
       // Run analysis with timeout
       const analysisPromise = this.performQuickAnalysis();
       const result = await Promise.race([analysisPromise, timeoutPromise]);
+      
+      // Clear timeout if analysis completed first
+      if (timeoutId !== null) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+      }
 
       // Calculate final metrics
       const totalTime = Date.now() - startTime;
@@ -123,6 +131,12 @@ export class QuickAnalyzer {
         performanceMetrics: this.options.monitorPerformance ? this.performanceMetrics : undefined
       };
     } catch (error) {
+      // Clear timeout on error
+      if (timeoutId !== null) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+      }
+      
       // Return fallback result on timeout or error
       const totalTime = Date.now() - startTime;
       this.performanceMetrics.totalTimeMs = totalTime;
@@ -141,6 +155,12 @@ export class QuickAnalyzer {
         fullResultCached: false,
         performanceMetrics: this.options.monitorPerformance ? this.performanceMetrics : undefined
       };
+    } finally {
+      // Ensure timeout is always cleared
+      if (timeoutId !== null) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+      }
     }
   }
 

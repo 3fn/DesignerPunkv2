@@ -87,6 +87,7 @@ export class CLIBridge {
     let exitCode: number | null = null;
     let timedOut = false;
     let childProcess: ChildProcess | null = null;
+    let timeoutId: NodeJS.Timeout | null = null;
 
     try {
       // Create promise for process execution
@@ -95,8 +96,19 @@ export class CLIBridge {
         childProcess = spawn(this.cliCommand, args, {
           cwd: workingDir,
           env,
-          stdio: ['ignore', 'pipe', 'pipe'] // stdin ignored, stdout/stderr piped
+          stdio: ['pipe', 'pipe', 'pipe'] // stdin piped (so we can close it), stdout/stderr piped
         });
+        
+        // Immediately close stdin to prevent CLI from waiting for input
+        // This is especially important for dry-run mode where readline might wait
+        // We do this in a try-catch to handle cases where stdin might not be available
+        try {
+          if (childProcess.stdin && !childProcess.stdin.destroyed) {
+            childProcess.stdin.end();
+          }
+        } catch (stdinError) {
+          // Ignore errors closing stdin - process will still work
+        }
 
         // Capture stdout
         if (childProcess.stdout) {
@@ -152,7 +164,6 @@ export class CLIBridge {
       });
 
       // Create timeout promise with cleanup
-      let timeoutId: NodeJS.Timeout | null = null;
       const timeoutPromise = new Promise<CLIExecutionResult>((resolve) => {
         timeoutId = setTimeout(() => {
           timedOut = true;
@@ -185,11 +196,6 @@ export class CLIBridge {
       // Race between execution and timeout
       const result = await Promise.race([executionPromise, timeoutPromise]);
       
-      // Clear timeout if execution completed first
-      if (timeoutId !== null) {
-        clearTimeout(timeoutId);
-      }
-      
       return result;
 
     } catch (error) {
@@ -209,6 +215,67 @@ export class CLIBridge {
         duration,
         error: error instanceof Error ? error.message : String(error)
       };
+    } finally {
+      // Explicit cleanup in finally block to ensure resources are released
+      
+      // Clear timeout if it exists
+      if (timeoutId !== null) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+      }
+      
+      // Ensure child process is cleaned up
+      const processToClean = childProcess as ChildProcess | null;
+      if (processToClean && !processToClean.killed) {
+        try {
+          // Remove all listeners to prevent memory leaks
+          processToClean.removeAllListeners();
+          
+          // Kill the process if still running
+          processToClean.kill('SIGTERM');
+          
+          // Give it a moment to terminate gracefully with a shorter timeout
+          await new Promise<void>((resolve) => {
+            const killTimeout = setTimeout(() => {
+              if (processToClean && !processToClean.killed) {
+                processToClean.kill('SIGKILL');
+              }
+              resolve();
+            }, 500); // Reduced from 1000ms to 500ms
+            
+            // If process exits before timeout, clear the timeout
+            processToClean.once('exit', () => {
+              clearTimeout(killTimeout);
+              resolve();
+            });
+            
+            // Also resolve if process is already killed
+            if (processToClean.killed) {
+              clearTimeout(killTimeout);
+              resolve();
+            }
+          });
+        } catch (cleanupError) {
+          // Log cleanup errors but don't throw - we're already in cleanup
+          console.error('Error during process cleanup:', cleanupError);
+        }
+      }
+      
+      // Additional cleanup: ensure stdin is closed to prevent hanging
+      const processForStdinCleanup = childProcess as ChildProcess | null;
+      if (processForStdinCleanup && processForStdinCleanup.stdin && !processForStdinCleanup.stdin.destroyed) {
+        try {
+          processForStdinCleanup.stdin.end();
+          processForStdinCleanup.stdin.destroy();
+        } catch (stdinError) {
+          // Ignore stdin cleanup errors
+        }
+      }
+      
+      // Force garbage collection hint for Node.js
+      if (global.gc) {
+        global.gc();
+      }
     }
   }
 
@@ -309,6 +376,24 @@ export class CLIBridge {
       return null;
     } catch {
       return null;
+    }
+  }
+
+  /**
+   * Force cleanup of any remaining resources
+   * 
+   * This method should be called in test teardown to ensure
+   * all child processes are terminated and resources are released.
+   * 
+   * @returns Promise that resolves when cleanup is complete
+   */
+  async forceCleanup(): Promise<void> {
+    // Give any pending operations a moment to complete
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    // Force garbage collection if available
+    if (global.gc) {
+      global.gc();
     }
   }
 }

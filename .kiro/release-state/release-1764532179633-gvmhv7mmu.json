@@ -1,0 +1,15 @@
+{
+  "id": "release-1764532179633-gvmhv7mmu",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-11-30T19:49:39.633Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-30T19:49:39.633Z"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "release-1764550968848-ymhpy2ecq",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-12-01T01:02:48.848Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T01:02:48.848Z"
+}

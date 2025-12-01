@@ -1,0 +1,15 @@
+{
+  "id": "release-1764549358439-lxjengk7x",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-12-01T00:35:58.439Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T00:35:58.439Z"
+}

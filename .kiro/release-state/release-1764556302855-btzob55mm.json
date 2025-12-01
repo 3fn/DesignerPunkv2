@@ -1,0 +1,21 @@
+{
+  "id": "release-1764556302855-btzob55mm",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-01T02:31:42.855Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T02:31:46.631Z",
+  "completedAt": "2025-12-01T02:31:46.631Z"
+}

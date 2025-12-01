@@ -1,0 +1,21 @@
+{
+  "id": "release-1764555866080-lio0n15ai",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-01T02:24:26.080Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T02:24:26.080Z",
+  "completedAt": "2025-12-01T02:24:26.080Z"
+}

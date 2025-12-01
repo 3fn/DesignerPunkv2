@@ -1,0 +1,21 @@
+{
+  "id": "release-1764552194759-nidyof18r",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-01T01:23:14.759Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T01:23:14.760Z",
+  "completedAt": "2025-12-01T01:23:14.760Z"
+}

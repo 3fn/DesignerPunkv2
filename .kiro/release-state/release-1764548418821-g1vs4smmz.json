@@ -1,0 +1,21 @@
+{
+  "id": "release-1764548418821-g1vs4smmz",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-01T00:20:18.821Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T00:20:18.823Z",
+  "completedAt": "2025-12-01T00:20:18.823Z"
+}

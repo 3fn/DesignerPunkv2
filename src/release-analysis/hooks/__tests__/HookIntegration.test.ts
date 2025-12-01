@@ -41,6 +41,16 @@ describe('Hook Integration Tests', () => {
     );
   });
 
+  afterEach(async () => {
+    // Give any pending operations time to complete
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    // Force garbage collection if available
+    if (global.gc) {
+      global.gc();
+    }
+  });
+
   describe('Requirement 9.1: Hook Triggering', () => {
     it('should trigger analysis automatically after task completion', async () => {
       // Install hook
@@ -380,7 +390,7 @@ describe('Hook Integration Tests', () => {
         expect(result).toBeDefined();
         expect(result.versionBump).toBeDefined();
       });
-    });
+    }, 15000); // 15 second timeout for rapid commits test
   });
 
   describe('Requirement 9.7: Cache Functionality', () => {

@@ -34,6 +34,18 @@ export interface CLIOptions {
 }
 
 /**
+ * CLI execution result
+ */
+export interface CLIResult {
+  /** Whether the command was successful */
+  success: boolean;
+  /** Error message if failed */
+  error?: string;
+  /** Exit code */
+  exitCode: number;
+}
+
+/**
  * Release override options for manual releases
  */
 export interface ReleaseOverrides {
@@ -65,32 +77,29 @@ export class ReleaseCLI {
   /**
    * Execute CLI command
    */
-  async execute(command: string, args: string[]): Promise<void> {
+  async execute(command: string, args: string[]): Promise<CLIResult> {
     try {
       switch (command) {
         case 'release':
-          await this.executeRelease(args);
-          break;
+          return await this.executeRelease(args);
         case 'status':
-          await this.showStatus(args);
-          break;
+          return await this.showStatus(args);
         case 'plan':
-          await this.showReleasePlan(args);
-          break;
+          return await this.showReleasePlan(args);
         case 'config':
-          await this.manageConfig(args);
-          break;
+          return await this.manageConfig(args);
         case 'help':
           this.showHelp(args);
-          break;
+          return { success: true, exitCode: 0 };
         default:
           console.error(`Unknown command: ${command}`);
           this.showHelp([]);
-          process.exit(1);
+          return { success: false, error: `Unknown command: ${command}`, exitCode: 1 };
       }
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       console.error('Error executing command:', error);
-      process.exit(1);
+      return { success: false, error: errorMessage, exitCode: 1 };
     } finally {
       this.rl.close();
     }
@@ -99,7 +108,7 @@ export class ReleaseCLI {
   /**
    * Execute a release
    */
-  private async executeRelease(args: string[]): Promise<void> {
+  private async executeRelease(args: string[]): Promise<CLIResult> {
     console.log('🚀 Starting release process...\n');
 
     // Parse release type from args
@@ -141,6 +150,7 @@ export class ReleaseCLI {
       if (result.npmPackageUrls && result.npmPackageUrls.length > 0) {
         console.log(`   npm: ${result.npmPackageUrls.join(', ')}`);
       }
+      return { success: true, exitCode: 0 };
     } else {
       console.error('\n❌ Release failed!');
       if (result.errors && result.errors.length > 0) {
@@ -149,14 +159,14 @@ export class ReleaseCLI {
           console.error(`   - ${error.message} (${error.code})`);
         });
       }
-      process.exit(1);
+      return { success: false, error: 'Release failed', exitCode: 1 };
     }
   }
 
   /**
    * Show release status
    */
-  private async showStatus(args: string[]): Promise<void> {
+  private async showStatus(args: string[]): Promise<CLIResult> {
     console.log('📊 Release Status\n');
 
     const config = await this.loadConfiguration();
@@ -167,7 +177,7 @@ export class ReleaseCLI {
 
     if (!state) {
       console.log('No active release pipeline.');
-      return;
+      return { success: true, exitCode: 0 };
     }
 
     console.log(`Active: ${state.active}`);
@@ -179,12 +189,14 @@ export class ReleaseCLI {
     if (state.summary) {
       console.log(`Summary: ${JSON.stringify(state.summary, null, 2)}`);
     }
+
+    return { success: true, exitCode: 0 };
   }
 
   /**
    * Show release plan
    */
-  private async showReleasePlan(args: string[]): Promise<void> {
+  private async showReleasePlan(args: string[]): Promise<CLIResult> {
     console.log('📋 Release Plan\n');
 
     const config = await this.loadConfiguration();
@@ -213,39 +225,39 @@ export class ReleaseCLI {
         console.log(`\nRelease Notes Preview:`);
         console.log(plan.releaseNotes.summary);
       }
+
+      return { success: true, exitCode: 0 };
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       console.error('Failed to generate release plan:', error);
-      process.exit(1);
+      return { success: false, error: errorMessage, exitCode: 1 };
     }
   }
 
   /**
    * Manage configuration
    */
-  private async manageConfig(args: string[]): Promise<void> {
+  private async manageConfig(args: string[]): Promise<CLIResult> {
     const subcommand = args[0];
 
     switch (subcommand) {
       case 'show':
-        await this.showConfig();
-        break;
+        return await this.showConfig();
       case 'set':
-        await this.setConfig(args.slice(1));
-        break;
+        return await this.setConfig(args.slice(1));
       case 'validate':
-        await this.validateConfig();
-        break;
+        return await this.validateConfig();
       default:
         console.error(`Unknown config subcommand: ${subcommand}`);
         console.log('Available subcommands: show, set, validate');
-        process.exit(1);
+        return { success: false, error: `Unknown config subcommand: ${subcommand}`, exitCode: 1 };
     }
   }
 
   /**
    * Show current configuration
    */
-  private async showConfig(): Promise<void> {
+  private async showConfig(): Promise<CLIResult> {
     console.log('⚙️  Current Configuration\n');
 
     const config = await this.loadConfiguration();
@@ -266,15 +278,17 @@ export class ReleaseCLI {
       console.log('  Registry:', config.npm.registry || 'https://registry.npmjs.org');
       console.log('  Token:', config.npm.token ? '***' : 'Not set');
     }
+
+    return { success: true, exitCode: 0 };
   }
 
   /**
    * Set configuration value
    */
-  private async setConfig(args: string[]): Promise<void> {
+  private async setConfig(args: string[]): Promise<CLIResult> {
     if (args.length < 2) {
       console.error('Usage: release config set <key> <value>');
-      process.exit(1);
+      return { success: false, error: 'Missing required arguments', exitCode: 1 };
     }
 
     const [key, value] = args;
@@ -282,12 +296,13 @@ export class ReleaseCLI {
     
     // TODO: Implement configuration persistence
     console.log('Configuration updated successfully.');
+    return { success: true, exitCode: 0 };
   }
 
   /**
    * Validate configuration
    */
-  private async validateConfig(): Promise<void> {
+  private async validateConfig(): Promise<CLIResult> {
     console.log('✅ Validating configuration...\n');
 
     const config = await this.loadConfiguration();
@@ -315,10 +330,11 @@ export class ReleaseCLI {
     if (errors.length > 0) {
       console.error('❌ Configuration validation failed:');
       errors.forEach(error => console.error(`  - ${error}`));
-      process.exit(1);
+      return { success: false, error: 'Configuration validation failed', exitCode: 1 };
     }
 
     console.log('✅ Configuration is valid.');
+    return { success: true, exitCode: 0 };
   }
 
   /**
@@ -526,68 +542,91 @@ Examples:
 /**
  * Parse command-line arguments
  */
-export function parseArgs(argv: string[]): { command: string; args: string[]; options: CLIOptions } {
+export function parseArgs(argv: string[]): { command: string; args: string[]; options: CLIOptions; showHelp?: boolean } {
   const args = argv.slice(2); // Remove node and script path
   
   const options: CLIOptions = {};
   const commandArgs: string[] = [];
   let command = 'help';
+  let showHelp = false;
 
-  for (let i = 0; i < args.length; i++) {
-    const arg = args[i];
+  try {
+    for (let i = 0; i < args.length; i++) {
+      const arg = args[i];
 
-    if (arg.startsWith('--')) {
-      // Parse option
-      const optionName = arg.slice(2);
-      
-      switch (optionName) {
-        case 'dry-run':
-          options.dryRun = true;
-          break;
-        case 'skip-confirmation':
-          options.skipConfirmation = true;
-          break;
-        case 'verbose':
-          options.verbose = true;
-          break;
-        case 'config':
-          options.config = args[++i];
-          break;
-        case 'github-token':
-          options.githubToken = args[++i];
-          break;
-        case 'npm-token':
-          options.npmToken = args[++i];
-          break;
-        case 'working-dir':
-          options.workingDirectory = args[++i];
-          break;
+      if (arg.startsWith('--')) {
+        // Parse option
+        const optionName = arg.slice(2);
+        
+        switch (optionName) {
+          case 'dry-run':
+            options.dryRun = true;
+            break;
+          case 'skip-confirmation':
+            options.skipConfirmation = true;
+            break;
+          case 'verbose':
+            options.verbose = true;
+            break;
+          case 'config':
+            options.config = args[++i];
+            break;
+          case 'github-token':
+            options.githubToken = args[++i];
+            break;
+          case 'npm-token':
+            options.npmToken = args[++i];
+            break;
+          case 'working-dir':
+            options.workingDirectory = args[++i];
+            break;
+          default:
+            // Unknown flag - show help instead of failing
+            console.warn(`Warning: Unknown flag '${arg}' - showing help`);
+            showHelp = true;
+            command = 'help';
+            break;
+        }
+      } else if (i === 0) {
+        // First non-option argument is the command
+        command = arg;
+      } else {
+        // Subsequent arguments are command arguments
+        commandArgs.push(arg);
       }
-    } else if (i === 0) {
-      // First non-option argument is the command
-      command = arg;
-    } else {
-      // Subsequent arguments are command arguments
-      commandArgs.push(arg);
     }
+  } catch (error) {
+    // If parsing fails, show help
+    console.error('Error parsing arguments:', error instanceof Error ? error.message : String(error));
+    showHelp = true;
+    command = 'help';
   }
 
-  return { command, args: commandArgs, options };
+  return { command, args: commandArgs, options, showHelp };
 }
 
 /**
  * Main CLI entry point
  */
-export async function main(argv: string[] = process.argv): Promise<void> {
-  const { command, args, options } = parseArgs(argv);
+export async function main(argv: string[] = process.argv): Promise<CLIResult> {
+  const { command, args, options, showHelp } = parseArgs(argv);
   
   const cli = new ReleaseCLI(options);
-  await cli.execute(command, args);
+  const result = await cli.execute(command, args);
+  
+  // If we're showing help due to unknown flags, ensure exit code is 0
+  if (showHelp && command === 'help') {
+    return { success: true, exitCode: 0 };
+  }
+  
+  return result;
 }
 
 // Run CLI if executed directly
 if (require.main === module) {
-  main().catch((error) => {
+  main().then((result) => {
+    process.exit(result.exitCode);
+  }).catch((error) => {
     console.error('Fatal error:', error);
     process.exit(1);
   });

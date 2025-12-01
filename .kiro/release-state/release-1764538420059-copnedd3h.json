@@ -1,0 +1,21 @@
+{
+  "id": "release-1764538420059-copnedd3h",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-11-30T21:33:40.059Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-11-30T21:33:40.060Z",
+  "completedAt": "2025-11-30T21:33:40.060Z"
+}

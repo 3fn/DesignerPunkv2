@@ -1,0 +1,15 @@
+{
+  "id": "release-1764548056263-lirlto238",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-12-01T00:14:16.263Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T00:14:16.263Z"
+}
