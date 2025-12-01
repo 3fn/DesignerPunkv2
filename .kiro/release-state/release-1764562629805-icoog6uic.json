@@ -1,0 +1,21 @@
+{
+  "id": "release-1764562629805-icoog6uic",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-01T04:17:09.805Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T04:17:09.806Z",
+  "completedAt": "2025-12-01T04:17:09.806Z"
+}

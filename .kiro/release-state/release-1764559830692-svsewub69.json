@@ -1,0 +1,21 @@
+{
+  "id": "release-1764559830692-svsewub69",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-01T03:30:30.692Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T03:30:30.693Z",
+  "completedAt": "2025-12-01T03:30:30.693Z"
+}

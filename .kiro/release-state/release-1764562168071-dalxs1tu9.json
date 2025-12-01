@@ -1,0 +1,21 @@
+{
+  "id": "release-1764562168071-dalxs1tu9",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-01T04:09:28.071Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-01T04:09:28.071Z",
+  "completedAt": "2025-12-01T04:09:28.071Z"
+}
