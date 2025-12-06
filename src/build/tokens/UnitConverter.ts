@@ -264,6 +264,35 @@ export class UnitConverter {
   }
 
   /**
+   * Apply scale factor with rounding to whole pixel values
+   * 
+   * This method is used for scale tokens (e.g., scale088 = 0.88) to ensure
+   * that scaled values produce whole pixel values for consistent rendering.
+   * 
+   * Example: 16px × 0.88 = 14.08px → rounds to 14px
+   * 
+   * @param baseValue - The base value to scale (e.g., 16)
+   * @param scaleFactor - The scale factor to apply (e.g., 0.88)
+   * @returns Rounded whole pixel value
+   * 
+   * Logs warning if precision loss exceeds 0.5px threshold
+   */
+  applyScaleWithRounding(baseValue: number, scaleFactor: number): number {
+    const scaledValue = baseValue * scaleFactor;
+    const roundedValue = Math.round(scaledValue);
+    const precisionLoss = Math.abs(scaledValue - roundedValue);
+
+    // Warn if precision loss is significant (>0.5px)
+    if (precisionLoss > 0.5) {
+      console.warn(
+        `Rounding precision loss: ${baseValue}px × ${scaleFactor} = ${scaledValue}px → ${roundedValue}px (loss: ${precisionLoss.toFixed(2)}px)`
+      );
+    }
+
+    return roundedValue;
+  }
+
+  /**
    * Convert single platform value
    */
   convertToPlatform(

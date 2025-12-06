@@ -1,0 +1,21 @@
+{
+  "id": "release-1764992389092-uxsepbspa",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-06T03:39:49.092Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-06T03:39:49.092Z",
+  "completedAt": "2025-12-06T03:39:49.092Z"
+}

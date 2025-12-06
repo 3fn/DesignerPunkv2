@@ -14,6 +14,7 @@ import { BuildConfig, AndroidBuildOptions } from '../types/BuildConfig';
 import { BuildResult, BuildError } from '../types/BuildResult';
 import { Platform } from '../types/Platform';
 import { PlatformTokens } from '../tokens/PlatformTokens';
+import { unitConverter } from '../tokens/UnitConverter';
 
 /**
  * Android Library structure
@@ -1118,7 +1119,19 @@ dependencies {${composeDependencies}${dependenciesStr ? '\n' + dependenciesStr :
    * Generates Kotlin constants for transform scale tokens.
    * Format: val Scale088 = 0.88f
    * 
-   * Requirements: 3.1, 6.3
+   * Scale tokens are unitless factors that should be applied to base values.
+   * When applying scale tokens to base values during token generation,
+   * use unitConverter.applyScaleWithRounding() to ensure whole pixel values.
+   * 
+   * Example:
+   *   const baseSize = 16;
+   *   const scaledSize = unitConverter.applyScaleWithRounding(baseSize, 0.88);
+   *   // Result: 14 (16 × 0.88 = 14.08 → rounds to 14)
+   * 
+   * In Kotlin, components should apply rounding when using scale tokens:
+   *   val scaledSize = round(baseSize * Tokens.Scale.Scale088).toInt()
+   * 
+   * Requirements: 3.1, 4.2, 4.3, 6.3
    * 
    * @param scaleTokens - Scale primitive tokens from token system
    * @returns Kotlin constant declarations
@@ -1129,6 +1142,7 @@ dependencies {${composeDependencies}${dependenciesStr ? '\n' + dependenciesStr :
     lines.push('    // MARK: Scale Tokens');
     lines.push('    ');
     lines.push('    /** Transform scale factors (unitless) */');
+    lines.push('    /** When applying to base values, use round() for whole pixels */');
     lines.push('    object Scale {');
     
     for (const [name, token] of Object.entries(scaleTokens)) {

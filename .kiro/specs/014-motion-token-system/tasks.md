@@ -199,7 +199,7 @@ The implementation follows a bottom-up approach: primitive tokens → semantic t
     - Test that existing build workflow remains unchanged
     - _Requirements: 8.1_
 
-- [ ] 4. Implement Scale Token Rounding in Generation System
+- [x] 4. Implement Scale Token Rounding in Generation System
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -224,7 +224,7 @@ The implementation follows a bottom-up approach: primitive tokens → semantic t
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 Complete: Implement Scale Token Rounding"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 4.1 Add rounding utility to UnitConverter
+  - [x] 4.1 Add rounding utility to UnitConverter
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add applyScaleWithRounding(baseValue: number, scaleFactor: number) method
@@ -233,7 +233,7 @@ The implementation follows a bottom-up approach: primitive tokens → semantic t
     - Export utility for use in platform builders
     - _Requirements: 4.1, 4.2_
 
-  - [ ] 4.2 Apply rounding in platform-specific generation
+  - [x] 4.2 Apply rounding in platform-specific generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update platform builders to use applyScaleWithRounding utility

@@ -15,6 +15,7 @@ import { BuildConfig, iOSBuildOptions } from '../types/BuildConfig';
 import { BuildResult, BuildError } from '../types/BuildResult';
 import { Platform } from '../types/Platform';
 import { PlatformTokens } from '../tokens/PlatformTokens';
+import { unitConverter } from '../tokens/UnitConverter';
 
 /**
  * Swift Package structure
@@ -1355,7 +1356,19 @@ ${dependenciesSection}
    * Generates Swift constants for transform scale tokens.
    * Format: let scale088: CGFloat = 0.88
    * 
-   * Requirements: 3.1, 6.2
+   * Scale tokens are unitless factors that should be applied to base values.
+   * When applying scale tokens to base values during token generation,
+   * use unitConverter.applyScaleWithRounding() to ensure whole pixel values.
+   * 
+   * Example:
+   *   const baseSize = 16;
+   *   const scaledSize = unitConverter.applyScaleWithRounding(baseSize, 0.88);
+   *   // Result: 14 (16 × 0.88 = 14.08 → rounds to 14)
+   * 
+   * In Swift, components should apply rounding when using scale tokens:
+   *   let scaledSize = round(baseSize * Tokens.Scale.scale088)
+   * 
+   * Requirements: 3.1, 4.2, 4.3, 6.2
    * 
    * @param scaleTokens - Scale primitive tokens from token system
    * @returns Swift constant declarations
@@ -1366,6 +1379,7 @@ ${dependenciesSection}
     lines.push('    // MARK: - Scale Tokens');
     lines.push('    ');
     lines.push('    /// Transform scale factors (unitless)');
+    lines.push('    /// When applying to base values, use round() for whole pixels');
     lines.push('    public enum Scale {');
     
     for (const [name, token] of Object.entries(scaleTokens)) {
