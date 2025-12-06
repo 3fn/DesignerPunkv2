@@ -22,17 +22,18 @@ This design outline explores the Text Input Field component architecture for Des
 
 ## Related Spec: Motion Token System
 
-**Dependency**: This component drives the Motion Token System specification (Spec 014).
+**Dependency**: ✅ **COMPLETED** - Motion Token System (Spec 014) is now complete and ready for use.
 
-**Relationship**: The float label animation pattern defines the motion token requirements:
-- Duration primitives (duration250 for label transition)
-- Easing primitives (easingStandard for balanced animation)
-- Scale primitives (scale088 for transform-based animation if needed)
-- Semantic motion token (motion.floatLabel composing duration + easing)
+**Available Motion Tokens**:
+- ✅ Duration primitives: `duration150`, `duration250`, `duration350`
+- ✅ Easing primitives: `easingStandard`, `easingDecelerate`, `easingAccelerate`
+- ✅ Scale primitives: `scale088`, `scale092`, `scale096`, `scale100`, `scale104`, `scale108`
+- ✅ Semantic motion token: `motion.floatLabel` (composes `duration250` + `easingStandard`)
+- ✅ Scale rounding utility: `applyScaleWithRounding()` in `UnitConverter` for typography scaling
 
-**Workflow**: Complete this design outline → Defines motion token needs → Motion Token System can proceed to Requirements phase
+**Documentation**: See `docs/tokens/motion-tokens.md` for complete usage guide
 
-**Related Spec**: `.kiro/specs/014-motion-token-system/design-outline.md`
+**Related Spec**: `.kiro/specs/014-motion-token-system/` (completed December 6, 2025)
 
 ---
 
@@ -120,7 +121,7 @@ The rounding infrastructure exists and is ready for Option B if that approach is
 - Maintains fontWeight and other properties
 - Clear semantic meaning: "labelMd in floated state"
 
-**Animation**:
+**Animation** (using motion tokens from Spec 014):
 ```css
 /* Option 1: Font-size transition (simpler) */
 label {
@@ -142,7 +143,18 @@ label {
 label.floated {
   transform: scale(var(--scale-088));  /* 0.88, rounds to 14px effective size */
 }
+
+/* Option 3: Using semantic motion token (recommended) */
+label {
+  font-size: var(--typography-label-md-font-size);
+  transition: 
+    font-size var(--motion-float-label-duration) var(--motion-float-label-easing),
+    color var(--motion-float-label-duration) var(--motion-float-label-easing),
+    transform var(--motion-float-label-duration) var(--motion-float-label-easing);
+}
 ```
+
+**Note**: See `docs/tokens/motion-tokens.md` for complete motion token usage guide and platform-specific examples.
 
 ---
 
@@ -283,10 +295,10 @@ label.floated {
 - `space.grouped.minimal` - Space between input and helper text
 
 ### Motion Tokens
-- `duration250` - Label transition duration (250ms) **[NEW PRIMITIVE TOKEN]**
-- `easingStandard` - Label transition easing (cubic-bezier) **[NEW PRIMITIVE TOKEN]**
-- `scale088` - Typography scale for transform-based animation (0.88) **[NEW PRIMITIVE TOKEN]**
-- `motion.floatLabel` - Semantic motion token composing duration + easing **[NEW SEMANTIC TOKEN]**
+- `duration250` - Label transition duration (250ms) ✅ **AVAILABLE** (from Spec 014)
+- `easingStandard` - Label transition easing (cubic-bezier(0.4, 0.0, 0.2, 1)) ✅ **AVAILABLE** (from Spec 014)
+- `scale088` - Typography scale for transform-based animation (0.88) ✅ **AVAILABLE** (from Spec 014)
+- `motion.floatLabel` - Semantic motion token composing duration + easing ✅ **AVAILABLE** (from Spec 014)
 
 ### Border Tokens
 - `borderDefault` - Input border width (semantic token, references `border.width.default` = 1px)
@@ -671,7 +683,7 @@ val animationSpec = if (reduceMotion) snap() else tween(...)
 
 1. **Create formal requirements** - Convert this outline into EARS-formatted requirements
 2. **Create labelMdFloat typography token** - Add to semantic typography tokens
-3. **Implement motion tokens** - Create duration250, easingStandard, scale088 primitives and motion.floatLabel semantic token
+3. ~~**Implement motion tokens**~~ - ✅ **COMPLETED** (Spec 014, December 6, 2025)
 4. **Design component architecture** - Detailed component structure and state management
 5. **Create HTML canary examples** - Validation examples for README documentation
 
