@@ -58,3 +58,33 @@ export {
   ErrorReportOptions,
   BuildResultSummary,
 } from './ErrorReporter';
+
+// Token generation errors
+export {
+  TokenGenerationErrorCodes,
+  createInvalidPrimitiveReferenceError,
+  createMissingPrimitiveTokenError,
+  createInvalidTokenStructureError,
+  createCircularReferenceError,
+  createTypeMismatchError,
+} from './TokenGenerationError';
+
+// Platform generation errors
+export {
+  PlatformGenerationErrorCodes,
+  createPlatformConversionError,
+  createInvalidPlatformSyntaxError,
+  createPlatformSpecificError,
+  createUnitConversionError,
+  createFormatGenerationError,
+} from './PlatformGenerationError';
+
+// Token reference errors
+export {
+  TokenReferenceErrorCodes,
+  createTokenNotFoundError,
+  createInvalidReferencePathError,
+  createAmbiguousReferenceError,
+  createReferenceTypeMismatchError,
+  createUnresolvedReferenceError,
+} from './TokenReferenceError';

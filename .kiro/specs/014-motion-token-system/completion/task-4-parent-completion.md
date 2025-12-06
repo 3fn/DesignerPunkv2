@@ -31,7 +31,7 @@ unitConverter.applyScaleWithRounding(16, 0.88) // Returns 14 (16 × 0.88 = 14.08
 - Documentation added explaining rounding behavior
 - Utility ready to use when semantic/component tokens apply scale factors
 
-**Note**: Currently, scale tokens are output as raw factors (0.88, 0.92, etc.). When future semantic or component tokens apply these factors to base values, the `applyScaleWithRounding` utility will ensure components receive pre-rounded values.
+**Note on Preparatory Infrastructure**: This task creates infrastructure for future use in spec 013 (Text Input Field). Currently, scale tokens are output as raw factors (0.88, 0.92, etc.) because no typography tokens use scale factors yet. When spec 013 creates `labelMdFloat` (which may use `scale088` to scale from 16px to ~14px), the `applyScaleWithRounding` utility will be available and ready to ensure components receive pre-rounded values. This is intentional preparatory work, not incomplete implementation.
 
 ### Criterion 3: Rounding produces whole pixel values consistently
 ✅ **Evidence**: Math.round() produces consistent whole pixel values across all test cases
@@ -61,7 +61,9 @@ The scale token rounding system provides infrastructure for consistent pixel-per
 
 1. **Utility Creation** (Task 4.1): Created `applyScaleWithRounding` method in UnitConverter
 2. **Platform Integration** (Task 4.2): Imported utility in all platform builders and added documentation
-3. **Future Usage**: When semantic/component tokens apply scale factors to base values, rounding will happen automatically
+3. **Future Usage (Spec 013)**: When spec 013 creates typography tokens that use scale factors (e.g., `labelMdFloat` using `scale088`), the rounding utility will be called during token generation to ensure components receive pre-rounded values
+
+**Preparatory Infrastructure Context**: This task intentionally creates infrastructure before its first consumer exists. Spec 013 (Text Input Field) will be the first to use scale token rounding when creating `labelMdFloat`, which scales from 16px to ~14px using `scale088`. The infrastructure is complete and ready for that integration.
 
 ### Subtask Contributions
 
@@ -201,9 +203,29 @@ Tests:       5127 passed, 5142 total
 - **Future-proofing**: Prepared infrastructure for when scale tokens are applied in semantic/component tokens
 
 ### Future Considerations
-- **Semantic token expansion**: When adding semantic tokens that apply scale factors, use `applyScaleWithRounding`
+- **Spec 013 Integration**: When spec 013 creates `labelMdFloat` typography token, it should use `applyScaleWithRounding` if applying `scale088` to scale from 16px to ~14px
+- **Semantic token expansion**: When adding other semantic tokens that apply scale factors, use `applyScaleWithRounding`
 - **Component tokens**: Component-level tokens that apply scale factors should use the utility
 - **Performance**: Current implementation is simple; could optimize if performance becomes an issue
+
+### Integration Example for Spec 013
+
+When spec 013 creates `labelMdFloat`, the typography token generation should use the rounding utility:
+
+```typescript
+// Example: Typography token generation using scale factor
+import { UnitConverter } from '../build/tokens/UnitConverter';
+
+const unitConverter = new UnitConverter();
+const baseSize = 16; // fontSize100
+const scaleFactor = 0.88; // scale088
+
+// Apply scale with rounding
+const scaledSize = unitConverter.applyScaleWithRounding(baseSize, scaleFactor);
+// Result: 14px (16 × 0.88 = 14.08 → rounds to 14)
+```
+
+This infrastructure is ready and waiting for spec 013 to use it.
 
 ---
 

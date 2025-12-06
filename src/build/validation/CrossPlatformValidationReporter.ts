@@ -478,6 +478,121 @@ export class CrossPlatformValidationReporter {
     };
   }
 
+  /**
+   * Validate motion token cross-platform equivalence
+   * 
+   * Verifies:
+   * - Duration tokens: web ms = iOS seconds × 1000 = Android ms
+   * - Easing tokens: cubic-bezier curves are mathematically equivalent
+   * - Scale tokens: unitless values are identical across platforms
+   * 
+   * Requirements: 6.8
+   */
+  validateMotionTokenEquivalence(
+    durationTokens: Record<string, any>,
+    easingTokens: Record<string, any>,
+    scaleTokens: Record<string, any>
+  ): {
+    valid: boolean;
+    durationResults: Array<{ token: string; valid: boolean; message: string }>;
+    easingResults: Array<{ token: string; valid: boolean; message: string }>;
+    scaleResults: Array<{ token: string; valid: boolean; message: string }>;
+  } {
+    const durationResults: Array<{ token: string; valid: boolean; message: string }> = [];
+    const easingResults: Array<{ token: string; valid: boolean; message: string }> = [];
+    const scaleResults: Array<{ token: string; valid: boolean; message: string }> = [];
+
+    // Validate duration tokens: web ms = iOS seconds × 1000 = Android ms
+    Object.entries(durationTokens).forEach(([name, token]: [string, any]) => {
+      const webValue = token.platforms.web.value;
+      const iosValue = token.platforms.ios.value;
+      const androidValue = token.platforms.android.value;
+
+      // iOS should be in seconds (web value / 1000)
+      const expectedIosValue = webValue / 1000;
+      const iosMatches = Math.abs(iosValue - expectedIosValue) < 0.001; // Tolerance for floating point
+
+      // Android should match web (both in milliseconds)
+      const androidMatches = webValue === androidValue;
+
+      const valid = iosMatches && androidMatches;
+
+      if (!valid) {
+        durationResults.push({
+          token: name,
+          valid: false,
+          message: `Duration mismatch: web=${webValue}ms, iOS=${iosValue}s (expected ${expectedIosValue}s), Android=${androidValue}ms`
+        });
+      } else {
+        durationResults.push({
+          token: name,
+          valid: true,
+          message: `Duration equivalence verified: ${webValue}ms = ${iosValue}s × 1000 = ${androidValue}ms`
+        });
+      }
+    });
+
+    // Validate easing tokens: cubic-bezier curves should be mathematically equivalent
+    Object.entries(easingTokens).forEach(([name, token]: [string, any]) => {
+      const webValue = token.platforms.web.value;
+      const iosValue = token.platforms.ios.value;
+      const androidValue = token.platforms.android.value;
+
+      // All platforms should have the same cubic-bezier string
+      const allMatch = webValue === iosValue && iosValue === androidValue;
+
+      if (!allMatch) {
+        easingResults.push({
+          token: name,
+          valid: false,
+          message: `Easing curve mismatch: web="${webValue}", iOS="${iosValue}", Android="${androidValue}"`
+        });
+      } else {
+        easingResults.push({
+          token: name,
+          valid: true,
+          message: `Easing curve equivalence verified: ${webValue}`
+        });
+      }
+    });
+
+    // Validate scale tokens: unitless values should be identical
+    Object.entries(scaleTokens).forEach(([name, token]: [string, any]) => {
+      const webValue = token.platforms.web.value;
+      const iosValue = token.platforms.ios.value;
+      const androidValue = token.platforms.android.value;
+
+      // All platforms should have identical scale factors
+      const allMatch = webValue === iosValue && iosValue === androidValue;
+
+      if (!allMatch) {
+        scaleResults.push({
+          token: name,
+          valid: false,
+          message: `Scale factor mismatch: web=${webValue}, iOS=${iosValue}, Android=${androidValue}`
+        });
+      } else {
+        scaleResults.push({
+          token: name,
+          valid: true,
+          message: `Scale factor equivalence verified: ${webValue}`
+        });
+      }
+    });
+
+    const allValid = 
+      durationResults.every(r => r.valid) &&
+      easingResults.every(r => r.valid) &&
+      scaleResults.every(r => r.valid);
+
+    return {
+      valid: allValid,
+      durationResults,
+      easingResults,
+      scaleResults
+    };
+  }
+
 
   /**
    * Summarize interface validation results from Task 8.3

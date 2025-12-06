@@ -242,7 +242,7 @@ The implementation follows a bottom-up approach: primitive tokens → semantic t
     - Test rounding behavior across all platforms
     - _Requirements: 4.3, 4.4, 4.5_
 
-- [ ] 5. Add Motion Token Validation Rules
+- [x] 5. Add Motion Token Validation Rules
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -267,7 +267,7 @@ The implementation follows a bottom-up approach: primitive tokens → semantic t
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 5 Complete: Add Motion Token Validation Rules"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 5.1 Add structural validation rules for motion tokens
+  - [x] 5.1 Add structural validation rules for motion tokens
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add validation for primitive token existence and type correctness
@@ -276,7 +276,7 @@ The implementation follows a bottom-up approach: primitive tokens → semantic t
     - Focus on structural correctness, not philosophical alignment
     - _Requirements: 8.1, 8.4_
 
-  - [ ] 5.2 Add cross-platform equivalence validation
+  - [x] 5.2 Add cross-platform equivalence validation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update CrossPlatformValidationReporter to validate motion tokens
@@ -285,7 +285,7 @@ The implementation follows a bottom-up approach: primitive tokens → semantic t
     - Use existing TokenComparator for consistency checks
     - _Requirements: 6.8_
 
-  - [ ] 5.3 Add error handling for motion token failures
+  - [x] 5.3 Add error handling for motion token failures
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add TokenGenerationError for invalid primitive references

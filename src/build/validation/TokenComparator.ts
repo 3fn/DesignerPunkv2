@@ -628,4 +628,169 @@ export class TokenComparator {
     }
     return 'primitive';
   }
+
+  /**
+   * Validate motion token cross-platform equivalence
+   * 
+   * Specialized validation for motion tokens:
+   * - Duration: web ms = iOS seconds × 1000 = Android ms
+   * - Easing: cubic-bezier curves mathematically equivalent
+   * - Scale: unitless values identical across platforms
+   * 
+   * Requirements: 6.8
+   */
+  validateMotionTokenEquivalence(
+    token: PrimitiveToken,
+    platforms: Platform[]
+  ): {
+    valid: boolean;
+    message: string;
+    details: Record<Platform, any>;
+  } {
+    const tokenName = token.name;
+    const details: Record<Platform, any> = {} as Record<Platform, any>;
+
+    // Extract platform values
+    platforms.forEach(platform => {
+      details[platform] = token.platforms[platform];
+    });
+
+    // Determine motion token type based on name
+    if (tokenName.startsWith('duration')) {
+      return this.validateDurationEquivalence(token, platforms, details);
+    } else if (tokenName.startsWith('easing')) {
+      return this.validateEasingEquivalence(token, platforms, details);
+    } else if (tokenName.startsWith('scale')) {
+      return this.validateScaleEquivalence(token, platforms, details);
+    }
+
+    return {
+      valid: false,
+      message: `Unknown motion token type: ${tokenName}`,
+      details
+    };
+  }
+
+  /**
+   * Validate duration token equivalence
+   * web ms = iOS seconds × 1000 = Android ms
+   */
+  private validateDurationEquivalence(
+    token: PrimitiveToken,
+    platforms: Platform[],
+    details: Record<Platform, any>
+  ): { valid: boolean; message: string; details: Record<Platform, any> } {
+    const webValue = details.web?.value;
+    const iosValue = details.ios?.value;
+    const androidValue = details.android?.value;
+
+    if (webValue === undefined || iosValue === undefined || androidValue === undefined) {
+      return {
+        valid: false,
+        message: `Missing platform values for duration token ${token.name}`,
+        details
+      };
+    }
+
+    // iOS should be in seconds (web value / 1000)
+    const expectedIosValue = webValue / 1000;
+    const iosMatches = Math.abs(iosValue - expectedIosValue) < 0.001; // Tolerance for floating point
+
+    // Android should match web (both in milliseconds)
+    const androidMatches = webValue === androidValue;
+
+    const valid = iosMatches && androidMatches;
+
+    if (!valid) {
+      return {
+        valid: false,
+        message: `Duration mismatch: web=${webValue}ms, iOS=${iosValue}s (expected ${expectedIosValue}s), Android=${androidValue}ms`,
+        details
+      };
+    }
+
+    return {
+      valid: true,
+      message: `Duration equivalence verified: ${webValue}ms = ${iosValue}s × 1000 = ${androidValue}ms`,
+      details
+    };
+  }
+
+  /**
+   * Validate easing token equivalence
+   * Cubic-bezier curves should be mathematically equivalent
+   */
+  private validateEasingEquivalence(
+    token: PrimitiveToken,
+    platforms: Platform[],
+    details: Record<Platform, any>
+  ): { valid: boolean; message: string; details: Record<Platform, any> } {
+    const webValue = details.web?.value;
+    const iosValue = details.ios?.value;
+    const androidValue = details.android?.value;
+
+    if (webValue === undefined || iosValue === undefined || androidValue === undefined) {
+      return {
+        valid: false,
+        message: `Missing platform values for easing token ${token.name}`,
+        details
+      };
+    }
+
+    // All platforms should have the same cubic-bezier string
+    const allMatch = webValue === iosValue && iosValue === androidValue;
+
+    if (!allMatch) {
+      return {
+        valid: false,
+        message: `Easing curve mismatch: web="${webValue}", iOS="${iosValue}", Android="${androidValue}"`,
+        details
+      };
+    }
+
+    return {
+      valid: true,
+      message: `Easing curve equivalence verified: ${webValue}`,
+      details
+    };
+  }
+
+  /**
+   * Validate scale token equivalence
+   * Unitless values should be identical across platforms
+   */
+  private validateScaleEquivalence(
+    token: PrimitiveToken,
+    platforms: Platform[],
+    details: Record<Platform, any>
+  ): { valid: boolean; message: string; details: Record<Platform, any> } {
+    const webValue = details.web?.value;
+    const iosValue = details.ios?.value;
+    const androidValue = details.android?.value;
+
+    if (webValue === undefined || iosValue === undefined || androidValue === undefined) {
+      return {
+        valid: false,
+        message: `Missing platform values for scale token ${token.name}`,
+        details
+      };
+    }
+
+    // All platforms should have identical scale factors
+    const allMatch = webValue === iosValue && iosValue === androidValue;
+
+    if (!allMatch) {
+      return {
+        valid: false,
+        message: `Scale factor mismatch: web=${webValue}, iOS=${iosValue}, Android=${androidValue}`,
+        details
+      };
+    }
+
+    return {
+      valid: true,
+      message: `Scale factor equivalence verified: ${webValue}`,
+      details
+    };
+  }
 }

@@ -97,6 +97,23 @@ This design outline explores the Text Input Field component architecture for Des
 }
 ```
 
+**⚠️ IMPORTANT NOTE FOR SPEC 013 IMPLEMENTATION**:
+
+**Scale Token Rounding Infrastructure Available**: Spec 014 (Motion Token System) has created `applyScaleWithRounding` utility in `UnitConverter` specifically for this use case. If `labelMdFloat` is implemented using `scale088` to scale from 16px to ~14px (instead of directly using `fontSize050`), the typography token generation MUST use this utility:
+
+```typescript
+// If using scale approach:
+import { UnitConverter } from '../build/tokens/UnitConverter';
+const unitConverter = new UnitConverter();
+const scaledSize = unitConverter.applyScaleWithRounding(16, 0.88); // Returns 14px
+```
+
+**Decision Point**: When creating Requirements/Design/Tasks for spec 013, decide whether:
+- **Option A**: Use `fontSize050` (13px) directly - simpler, no scale token needed
+- **Option B**: Use `scale088` applied to `fontSize100` (16px) - validates scale token system, produces 14px instead of 13px
+
+The rounding infrastructure exists and is ready for Option B if that approach is chosen. See `.kiro/specs/014-motion-token-system/completion/task-4-parent-completion.md` for integration details.
+
 **Rationale**:
 - Keeps lineHeight constant during animation (prevents layout shift)
 - Only fontSize animates (16px → 13px)
