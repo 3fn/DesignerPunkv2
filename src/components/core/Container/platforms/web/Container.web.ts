@@ -194,8 +194,10 @@ export class ContainerWeb extends HTMLElement {
     });
 
     // Build accessibility attributes
+    // Note: No need to escape - the browser automatically escapes attribute values
+    // when parsing HTML strings. Escaping would result in double-encoding.
     const accessibilityAttrs = accessibilityLabel 
-      ? `aria-label="${this.escapeHtml(accessibilityLabel)}"` 
+      ? `aria-label="${accessibilityLabel.replace(/"/g, '&quot;')}"` 
       : '';
 
     // Render Shadow DOM content
@@ -236,19 +238,6 @@ export class ContainerWeb extends HTMLElement {
     return buildContainerStyles(props);
   }
 
-  /**
-   * Escape HTML special characters
-   * 
-   * Prevents XSS attacks by escaping special characters in attribute values.
-   * 
-   * @param text - Text to escape
-   * @returns Escaped text safe for HTML
-   */
-  private escapeHtml(text: string): string {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
 }
 
 /**

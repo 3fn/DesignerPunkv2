@@ -17,12 +17,14 @@
  * - How to avoid duplicating Container's styling logic
  */
 
-import React from 'react';
-import { Container } from '../../Container';
+// NOTE: This is a conceptual example file showing how semantic components
+// could be built using Container. Container is actually a Web Component.
+// See BasicUsage.html for actual usage examples.
+
 import type { PaddingValue, BorderValue, BorderRadiusValue } from '../../types';
 
 /**
- * Card semantic component
+ * Card semantic component (CONCEPTUAL EXAMPLE)
  * 
  * Card is a semantic component that uses Container to encode specific design decisions.
  * Instead of exposing all Container props, Card provides a simplified API with variants
@@ -50,7 +52,7 @@ export interface CardProps {
   /**
    * Content to render inside the card
    */
-  children: React.ReactNode;
+  children: any; // Content nodes in actual implementation
   
   /**
    * Optional accessibility label for screen readers
@@ -59,29 +61,33 @@ export interface CardProps {
 }
 
 /**
- * Card Component
+ * Card Component (CONCEPTUAL EXAMPLE - NOT EXECUTABLE)
  * 
- * Example Usage:
+ * This demonstrates the pattern for building semantic components.
+ * Container is actually a Web Component, so actual implementation would use:
+ * <dp-container padding="200" shadow="shadow.container" ...>
  * 
- * ```tsx
- * // Elevated card (default)
- * <Card>
- *   <h2>Product Title</h2>
- *   <p>Product description</p>
- * </Card>
+ * Example Usage Pattern:
  * 
- * // Outlined card
- * <Card variant="outlined">
- *   <h2>Settings Panel</h2>
- *   <p>Configuration options</p>
- * </Card>
+ * Elevated card (default):
+ *   <dp-container padding="200" background="color.surface" 
+ *                 shadow="shadow.container" borderRadius="normal">
+ *     <h2>Product Title</h2>
+ *     <p>Product description</p>
+ *   </dp-container>
  * 
- * // Filled card
- * <Card variant="filled">
- *   <h2>Information Box</h2>
- *   <p>Important details</p>
- * </Card>
- * ```
+ * Outlined card:
+ *   <dp-container padding="200" background="color.surface" 
+ *                 border="default" borderRadius="normal">
+ *     <h2>Settings Panel</h2>
+ *     <p>Configuration options</p>
+ *   </dp-container>
+ * 
+ * Filled card:
+ *   <dp-container padding="200" background="color.surface" borderRadius="normal">
+ *     <h2>Information Box</h2>
+ *     <p>Important details</p>
+ *   </dp-container>
  * 
  * Key Architectural Points:
  * 1. Card doesn't duplicate Container's styling logic
@@ -89,42 +95,27 @@ export interface CardProps {
  * 3. Redesigning Card only requires changing Container prop combinations
  * 4. Container remains unchanged when Card design evolves
  */
-export function Card({ 
-  variant = 'elevated', 
-  children,
-  accessibilityLabel 
-}: CardProps) {
+export const CardVariants = {
   // Card encodes design decisions as Container prop combinations
   // Each variant maps to a specific set of Container props
-  const containerProps = {
-    elevated: {
-      padding: '200' as PaddingValue,
-      background: 'color.surface',
-      shadow: 'shadow.container',
-      borderRadius: 'normal' as BorderRadiusValue
-    },
-    outlined: {
-      padding: '200' as PaddingValue,
-      background: 'color.surface',
-      border: 'default' as BorderValue,
-      borderRadius: 'normal' as BorderRadiusValue
-    },
-    filled: {
-      padding: '200' as PaddingValue,
-      background: 'color.surface',
-      borderRadius: 'normal' as BorderRadiusValue
-    }
-  };
-  
-  return (
-    <Container 
-      {...containerProps[variant]}
-      accessibilityLabel={accessibilityLabel}
-    >
-      {children}
-    </Container>
-  );
-}
+  elevated: {
+    padding: '200' as PaddingValue,
+    background: 'color.surface',
+    shadow: 'shadow.container',
+    borderRadius: 'normal' as BorderRadiusValue
+  },
+  outlined: {
+    padding: '200' as PaddingValue,
+    background: 'color.surface',
+    border: 'default' as BorderValue,
+    borderRadius: 'normal' as BorderRadiusValue
+  },
+  filled: {
+    padding: '200' as PaddingValue,
+    background: 'color.surface',
+    borderRadius: 'normal' as BorderRadiusValue
+  }
+};
 
 /**
  * Design Pattern Demonstration
@@ -167,18 +158,19 @@ export function Card({
  * When nesting Containers inside Card, follow the mathematical relationship:
  * inner borderRadius = outer borderRadius - padding
  * 
- * Example:
+ * Example (using actual Web Component syntax):
  * 
- * ```tsx
- * <Card variant="elevated">
- *   {/* Outer: borderRadius="normal" (8px), padding="200" (16px) */}
+ * <dp-container padding="200" shadow="shadow.container" borderRadius="normal">
+ *   <!-- Outer: borderRadius="normal" (8px), padding="200" (16px) -->
  *   
- *   <Container borderRadius="none">
- *     {/* Inner: borderRadius="none" (0px) because 8px - 16px < 0 */}
+ *   <dp-container borderRadius="none">
+ *     <!-- Inner: borderRadius="none" (0px) because 8px - 16px < 0 -->
  *     Content
- *   </Container>
- * </Card>
- * ```
+ *   </dp-container>
+ * </dp-container>
  * 
  * See Container README "Nested Containers" section for detailed guidance.
  */
+
+// Export to satisfy TypeScript module requirements
+export default CardVariants;

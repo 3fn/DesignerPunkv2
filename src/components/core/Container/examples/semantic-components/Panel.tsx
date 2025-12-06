@@ -17,8 +17,10 @@
  * - How different semantic components can use Container differently
  */
 
-import React from 'react';
-import { Container } from '../../Container';
+// NOTE: This is a conceptual example file showing how semantic components
+// could be built using Container. Container is actually a Web Component.
+// See BasicUsage.html for actual usage examples.
+
 import type { PaddingValue, BorderValue, BorderRadiusValue } from '../../types';
 
 /**
@@ -42,7 +44,7 @@ export interface PanelProps {
   /**
    * Content to render inside the panel
    */
-  children: React.ReactNode;
+  children: any; // Content nodes in actual implementation
   
   /**
    * Optional accessibility label for screen readers
@@ -51,23 +53,28 @@ export interface PanelProps {
 }
 
 /**
- * Panel Component
+ * Panel Component (CONCEPTUAL EXAMPLE - NOT EXECUTABLE)
  * 
- * Example Usage:
+ * This demonstrates the pattern for building semantic components.
+ * Container is actually a Web Component, so actual implementation would use:
+ * <dp-container padding="300" border="emphasis" ...>
  * 
- * ```tsx
- * // Basic panel
- * <Panel>
- *   <h2>Settings Section</h2>
- *   <p>Configuration options and preferences</p>
- * </Panel>
+ * Example Usage Pattern:
  * 
- * // Panel with accessibility label
- * <Panel accessibilityLabel="User preferences section">
- *   <h2>Preferences</h2>
- *   <p>Customize your experience</p>
- * </Panel>
- * ```
+ * Basic panel:
+ *   <dp-container padding="300" background="color.background" 
+ *                 border="emphasis" borderRadius="tight">
+ *     <h2>Settings Section</h2>
+ *     <p>Configuration options and preferences</p>
+ *   </dp-container>
+ * 
+ * Panel with accessibility label:
+ *   <dp-container padding="300" background="color.background" 
+ *                 border="emphasis" borderRadius="tight"
+ *                 accessibilityLabel="User preferences section">
+ *     <h2>Preferences</h2>
+ *     <p>Customize your experience</p>
+ *   </dp-container>
  * 
  * Key Architectural Points:
  * 1. Panel uses Container with different prop combinations than Card
@@ -75,24 +82,14 @@ export interface PanelProps {
  * 3. Panel demonstrates how semantic components can have different APIs
  * 4. Panel shows Container's flexibility for different design needs
  */
-export function Panel({ 
-  children,
-  accessibilityLabel 
-}: PanelProps) {
+export const PanelConfig = {
   // Panel encodes a single set of design decisions
   // No variants - Panel has one consistent appearance
-  return (
-    <Container
-      padding="300"
-      background="color.background"
-      border="emphasis"
-      borderRadius="tight"
-      accessibilityLabel={accessibilityLabel}
-    >
-      {children}
-    </Container>
-  );
-}
+  padding: '300' as PaddingValue,
+  background: 'color.background',
+  border: 'emphasis' as BorderValue,
+  borderRadius: 'tight' as BorderRadiusValue
+};
 
 /**
  * Design Pattern Demonstration
@@ -137,41 +134,32 @@ export function Panel({
  */
 
 /**
- * Extending Panel
+ * Extending Panel with Variants
  * 
- * If Panel needs variants in the future, follow the Card pattern:
+ * If Panel needs variants in the future, extend the PanelConfig pattern:
  * 
- * ```tsx
- * export interface PanelProps {
- *   variant?: 'default' | 'highlighted' | 'muted';
- *   children: React.ReactNode;
- * }
- * 
- * export function Panel({ variant = 'default', children }: PanelProps) {
- *   const containerProps = {
- *     default: {
- *       padding: '300',
- *       background: 'color.background',
- *       border: 'emphasis',
- *       borderRadius: 'tight'
- *     },
- *     highlighted: {
- *       padding: '300',
- *       background: 'color.primary',
- *       border: 'emphasis',
- *       borderRadius: 'tight'
- *     },
- *     muted: {
- *       padding: '300',
- *       background: 'color.background',
- *       border: 'default',
- *       borderRadius: 'tight',
- *       opacity: 'opacity.subtle'
- *     }
- *   };
- *   
- *   return <Container {...containerProps[variant]}>{children}</Container>;
- * }
+ * ```typescript
+ * export const PanelVariants = {
+ *   default: {
+ *     padding: '300' as PaddingValue,
+ *     background: 'color.background',
+ *     border: 'emphasis' as BorderValue,
+ *     borderRadius: 'tight' as BorderRadiusValue
+ *   },
+ *   highlighted: {
+ *     padding: '300' as PaddingValue,
+ *     background: 'color.primary',
+ *     border: 'emphasis' as BorderValue,
+ *     borderRadius: 'tight' as BorderRadiusValue
+ *   },
+ *   muted: {
+ *     padding: '300' as PaddingValue,
+ *     background: 'color.background',
+ *     border: 'default' as BorderValue,
+ *     borderRadius: 'tight' as BorderRadiusValue,
+ *     opacity: 'opacity.subtle'
+ *   }
+ * };
  * ```
  * 
  * This demonstrates how semantic components can evolve without changing Container.
@@ -183,21 +171,22 @@ export function Panel({
  * When nesting Containers inside Panel, follow the mathematical relationship:
  * inner borderRadius = outer borderRadius - padding
  * 
- * Example:
+ * Example (using actual Web Component syntax):
  * 
- * ```tsx
- * <Panel>
- *   {/* Outer: borderRadius="tight" (4px), padding="300" (24px) */}
+ * <dp-container padding="300" border="emphasis" borderRadius="tight">
+ *   <!-- Outer: borderRadius="tight" (4px), padding="300" (24px) -->
  *   
- *   <Container borderRadius="none">
- *     {/* Inner: borderRadius="none" (0px) because 4px - 24px < 0 */}
+ *   <dp-container borderRadius="none">
+ *     <!-- Inner: borderRadius="none" (0px) because 4px - 24px < 0 -->
  *     Content
- *   </Container>
- * </Panel>
- * ```
+ *   </dp-container>
+ * </dp-container>
  * 
  * Panel's tighter borderRadius and larger padding means nested Containers
  * should typically use borderRadius="none" for visual harmony.
  * 
  * See Container README "Nested Containers" section for detailed guidance.
  */
+
+// Export to satisfy TypeScript module requirements
+export default PanelConfig;

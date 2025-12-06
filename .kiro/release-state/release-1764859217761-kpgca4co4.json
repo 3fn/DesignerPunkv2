@@ -1,0 +1,15 @@
+{
+  "id": "release-1764859217761-kpgca4co4",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-12-04T14:40:17.761Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-04T14:40:17.761Z"
+}

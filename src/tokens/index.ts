@@ -203,6 +203,32 @@ export {
   BREAKPOINT_BASE_VALUE
 } from './BreakpointTokens';
 
+// Duration tokens
+export {
+  durationTokens,
+  durationTokenNames,
+  getDurationToken,
+  getAllDurationTokens,
+  DURATION_BASE_VALUE
+} from './DurationTokens';
+
+// Easing tokens
+export {
+  easingTokens,
+  easingTokenNames,
+  getEasingToken,
+  getAllEasingTokens
+} from './EasingTokens';
+
+// Scale tokens
+export {
+  scaleTokens,
+  scaleTokenNames,
+  getScaleToken,
+  getAllScaleTokens,
+  SCALE_BASE_VALUE
+} from './ScaleTokens';
+
 // Combined token utilities
 import { spacingTokens } from './SpacingTokens';
 import { fontSizeTokens } from './FontSizeTokens';
@@ -223,6 +249,9 @@ import { glowOpacity } from './GlowOpacityTokens';
 import { opacityTokens } from './OpacityTokens';
 import { blendTokens } from './BlendTokens';
 import { breakpointTokens } from './BreakpointTokens';
+import { durationTokens } from './DurationTokens';
+import { easingTokens } from './EasingTokens';
+import { scaleTokens } from './ScaleTokens';
 import { PrimitiveToken, TokenCategory } from '../types/PrimitiveToken';
 
 /**
@@ -274,7 +303,10 @@ export function getAllPrimitiveTokens(): PrimitiveToken[] {
     ...Object.values(glowOpacity),
     ...Object.values(opacityTokens),
     ...Object.values(blendTokens),
-    ...Object.values(breakpointTokens)
+    ...Object.values(breakpointTokens),
+    ...Object.values(durationTokens),
+    ...Object.values(easingTokens),
+    ...Object.values(scaleTokens)
   ];
 }
 

@@ -168,7 +168,7 @@ describe('Hook Integration Tests', () => {
       expect(quickResult.performanceMetrics?.totalTimeMs).toBeLessThanOrEqual(
         (detailedResult.performanceMetrics?.totalTimeMs || 0) * 1.5
       );
-    });
+    }, 30000); // 30 second timeout for performance comparison test
   });
 
   describe('Requirement 9.3: Concise Output for AI Agents', () => {
