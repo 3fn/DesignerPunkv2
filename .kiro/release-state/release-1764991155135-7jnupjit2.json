@@ -1,0 +1,15 @@
+{
+  "id": "release-1764991155135-7jnupjit2",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-12-06T03:19:15.135Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-06T03:19:15.135Z"
+}

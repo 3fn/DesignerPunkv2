@@ -1,0 +1,21 @@
+{
+  "id": "release-1764988426540-ftle7491x",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-06T02:33:46.540Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-06T02:33:46.542Z",
+  "completedAt": "2025-12-06T02:33:46.542Z"
+}

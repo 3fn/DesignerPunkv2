@@ -1,0 +1,21 @@
+{
+  "id": "release-1764991400739-vda5enara",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-06T03:23:20.739Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-06T03:23:20.740Z",
+  "completedAt": "2025-12-06T03:23:20.740Z"
+}

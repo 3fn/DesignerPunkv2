@@ -1,0 +1,15 @@
+{
+  "id": "release-1764990753253-crjktee2i",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-12-06T03:12:33.253Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-06T03:12:33.253Z"
+}

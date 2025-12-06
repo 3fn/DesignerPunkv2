@@ -1,0 +1,21 @@
+{
+  "id": "release-1764987995417-rc64kss26",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-06T02:26:35.417Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-12-06T02:26:41.843Z",
+  "completedAt": "2025-12-06T02:26:41.843Z"
+}

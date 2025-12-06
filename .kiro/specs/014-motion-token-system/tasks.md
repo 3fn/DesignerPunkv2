@@ -130,7 +130,7 @@ The implementation follows a bottom-up approach: primitive tokens → semantic t
     - Verify motion tokens accessible from semantic index
     - _Requirements: 8.4_
 
-- [ ] 3. Extend Platform Builders for Motion Token Generation
+- [x] 3. Extend Platform Builders for Motion Token Generation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -156,7 +156,7 @@ The implementation follows a bottom-up approach: primitive tokens → semantic t
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Extend Platform Builders for Motion Token Generation"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 3.1 Extend WebBuilder with motion token generation
+  - [x] 3.1 Extend WebBuilder with motion token generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add generateDurationTokens() method to WebBuilder
@@ -167,7 +167,7 @@ The implementation follows a bottom-up approach: primitive tokens → semantic t
     - Use existing toKebabCase utility for naming
     - _Requirements: 1.5, 2.5, 6.1, 6.4_
 
-  - [ ] 3.2 Extend iOSBuilder with motion token generation
+  - [x] 3.2 Extend iOSBuilder with motion token generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add generateDurationTokens() method to iOSBuilder
@@ -179,7 +179,7 @@ The implementation follows a bottom-up approach: primitive tokens → semantic t
     - Use Animation.timingCurve() for easing curves
     - _Requirements: 1.6, 2.6, 6.2, 6.5, 6.6_
 
-  - [ ] 3.3 Extend AndroidBuilder with motion token generation
+  - [x] 3.3 Extend AndroidBuilder with motion token generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add generateDurationTokens() method to AndroidBuilder
@@ -190,7 +190,7 @@ The implementation follows a bottom-up approach: primitive tokens → semantic t
     - Use CubicBezierEasing() for easing curves
     - _Requirements: 1.7, 2.7, 6.3, 6.7_
 
-  - [ ] 3.4 Integrate motion token generation with BuildOrchestrator
+  - [x] 3.4 Integrate motion token generation with BuildOrchestrator
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update BuildOrchestrator to call motion token generation methods

@@ -1,0 +1,21 @@
+{
+  "id": "release-1764988067809-sfelsgyfo",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-06T02:27:47.809Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-12-06T02:27:52.934Z",
+  "completedAt": "2025-12-06T02:27:52.934Z"
+}

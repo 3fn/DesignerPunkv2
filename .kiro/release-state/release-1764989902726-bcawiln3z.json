@@ -1,0 +1,21 @@
+{
+  "id": "release-1764989902726-bcawiln3z",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-06T02:58:22.726Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-12-06T02:58:29.647Z",
+  "completedAt": "2025-12-06T02:58:29.647Z"
+}

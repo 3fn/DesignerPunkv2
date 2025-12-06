@@ -1,0 +1,21 @@
+{
+  "id": "release-1764990317783-hcdz2a8xi",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-06T03:05:17.783Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-06T03:05:17.784Z",
+  "completedAt": "2025-12-06T03:05:17.784Z"
+}

@@ -12,8 +12,8 @@ import { WebFormatGenerator } from '../providers/WebFormatGenerator';
 import { iOSFormatGenerator } from '../providers/iOSFormatGenerator';
 import { AndroidFormatGenerator } from '../providers/AndroidFormatGenerator';
 import { FileMetadata } from '../providers/FormatProvider';
-import { getAllPrimitiveTokens, getTokensByCategory } from '../tokens';
-import { getAllSemanticTokens, getAllZIndexTokens, getAllElevationTokens } from '../tokens/semantic';
+import { getAllPrimitiveTokens, getTokensByCategory, durationTokens, easingTokens, scaleTokens } from '../tokens';
+import { getAllSemanticTokens, getAllZIndexTokens, getAllElevationTokens, motionTokens } from '../tokens/semantic';
 
 export interface GenerationOptions {
   outputDir?: string;
@@ -180,6 +180,54 @@ export class TokenFileGenerator {
   }
 
   /**
+   * Generate motion token section for specified platform
+   * Handles primitive motion tokens (duration, easing, scale) and semantic motion tokens
+   * 
+   * @param platform - Target platform ('web', 'ios', or 'android')
+   * @returns Array of formatted token strings
+   */
+  private generateMotionSection(platform: 'web' | 'ios' | 'android'): string[] {
+    const lines: string[] = [];
+
+    // Import platform builders for motion token generation
+    const { WebBuilder } = require('../build/platforms/WebBuilder');
+    const { iOSBuilder } = require('../build/platforms/iOSBuilder');
+    const { AndroidBuilder } = require('../build/platforms/AndroidBuilder');
+
+    // Select appropriate builder based on platform
+    let builder: any;
+
+    switch (platform) {
+      case 'web':
+        builder = new WebBuilder();
+        break;
+      case 'ios':
+        builder = new iOSBuilder();
+        break;
+      case 'android':
+        builder = new AndroidBuilder();
+        break;
+      default:
+        return lines;
+    }
+
+    // Generate primitive motion tokens
+    const durationLines = builder.generateDurationTokens(durationTokens);
+    const easingLines = builder.generateEasingTokens(easingTokens);
+    const scaleLines = builder.generateScaleTokens(scaleTokens);
+
+    lines.push(durationLines);
+    lines.push(easingLines);
+    lines.push(scaleLines);
+
+    // Generate semantic motion tokens
+    const semanticMotionLines = builder.generateSemanticMotionTokens(motionTokens);
+    lines.push(semanticMotionLines);
+
+    return lines;
+  }
+
+  /**
    * Generate layering token section for specified platform
    * Handles semantic-only layering tokens (z-index and elevation)
    * 
@@ -294,6 +342,15 @@ export class TokenFileGenerator {
     lines.push(...semanticLines);
     semanticTokenCount = semantics.length;
 
+    // Add motion tokens section
+    if (includeComments) {
+      lines.push('');
+      lines.push('  /* Motion Tokens */');
+    }
+    const motionLines = this.generateMotionSection('web');
+    lines.push(...motionLines);
+    semanticTokenCount += motionLines.length;
+
     // Add layering tokens section (z-index for web)
     if (includeComments) {
       lines.push('');
@@ -390,6 +447,15 @@ export class TokenFileGenerator {
     lines.push(...semanticLines);
     semanticTokenCount = semantics.length;
 
+    // Add motion tokens section
+    if (includeComments) {
+      lines.push('');
+      lines.push('    // MARK: - Motion Tokens');
+    }
+    const motionLines = this.generateMotionSection('ios');
+    lines.push(...motionLines);
+    semanticTokenCount += motionLines.length;
+
     // Add layering tokens section (z-index for iOS)
     if (includeComments) {
       lines.push('');
@@ -485,6 +551,15 @@ export class TokenFileGenerator {
     const semanticLines = this.generateSemanticSection(semantics, 'android');
     lines.push(...semanticLines);
     semanticTokenCount = semantics.length;
+
+    // Add motion tokens section
+    if (includeComments) {
+      lines.push('');
+      lines.push('    // Motion Tokens');
+    }
+    const motionLines = this.generateMotionSection('android');
+    lines.push(...motionLines);
+    semanticTokenCount += motionLines.length;
 
     // Add layering tokens section (elevation for Android)
     if (includeComments) {

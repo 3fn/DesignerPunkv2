@@ -1,0 +1,21 @@
+{
+  "id": "release-1764989977617-m9scbrfb2",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-06T02:59:37.617Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-06T02:59:37.618Z",
+  "completedAt": "2025-12-06T02:59:37.618Z"
+}

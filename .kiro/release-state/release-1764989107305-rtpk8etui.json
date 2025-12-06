@@ -1,0 +1,21 @@
+{
+  "id": "release-1764989107305-rtpk8etui",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-06T02:45:07.305Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-12-06T02:45:12.725Z",
+  "completedAt": "2025-12-06T02:45:12.725Z"
+}

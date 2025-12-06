@@ -651,6 +651,139 @@ export class WebBuilder implements PlatformBuilder {
   }
 
   /**
+   * Generate duration token CSS custom properties
+   * 
+   * Generates CSS custom properties for animation duration tokens.
+   * Format: --duration-150: 150ms;
+   * 
+   * Requirements: 1.5, 6.1
+   * 
+   * @param durationTokens - Duration primitive tokens from token system
+   * @returns CSS custom property declarations
+   */
+  generateDurationTokens(durationTokens: Record<string, any>): string {
+    const lines: string[] = [];
+    
+    lines.push('  /* Duration Tokens */');
+    lines.push('  /* Animation timing values in milliseconds */');
+    lines.push('  ');
+    
+    for (const [name, token] of Object.entries(durationTokens)) {
+      const cssName = this.toCSSVariableName(name);
+      const value = token.platforms.web.value;
+      lines.push(`  --${cssName}: ${value}ms;`);
+    }
+    
+    lines.push('  ');
+    
+    return lines.join('\n');
+  }
+
+  /**
+   * Generate easing token CSS custom properties
+   * 
+   * Generates CSS custom properties for animation easing tokens.
+   * Format: --easing-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
+   * 
+   * Requirements: 2.5, 6.1
+   * 
+   * @param easingTokens - Easing primitive tokens from token system
+   * @returns CSS custom property declarations
+   */
+  generateEasingTokens(easingTokens: Record<string, any>): string {
+    const lines: string[] = [];
+    
+    lines.push('  /* Easing Tokens */');
+    lines.push('  /* Animation curve definitions (cubic-bezier) */');
+    lines.push('  ');
+    
+    for (const [name, token] of Object.entries(easingTokens)) {
+      const cssName = this.toCSSVariableName(name);
+      const value = token.platforms.web.value;
+      lines.push(`  --${cssName}: ${value};`);
+    }
+    
+    lines.push('  ');
+    
+    return lines.join('\n');
+  }
+
+  /**
+   * Generate scale token CSS custom properties
+   * 
+   * Generates CSS custom properties for transform scale tokens.
+   * Format: --scale-088: 0.88;
+   * 
+   * Requirements: 3.1, 6.1
+   * 
+   * @param scaleTokens - Scale primitive tokens from token system
+   * @returns CSS custom property declarations
+   */
+  generateScaleTokens(scaleTokens: Record<string, any>): string {
+    const lines: string[] = [];
+    
+    lines.push('  /* Scale Tokens */');
+    lines.push('  /* Transform scale factors (unitless) */');
+    lines.push('  ');
+    
+    for (const [name, token] of Object.entries(scaleTokens)) {
+      const cssName = this.toCSSVariableName(name);
+      const value = token.platforms.web.value;
+      lines.push(`  --${cssName}: ${value};`);
+    }
+    
+    lines.push('  ');
+    
+    return lines.join('\n');
+  }
+
+  /**
+   * Generate semantic motion token CSS custom properties
+   * 
+   * Generates CSS custom properties for semantic motion tokens that compose
+   * primitive duration, easing, and scale tokens.
+   * 
+   * Format: 
+   *   --motion-float-label-duration: var(--duration-250);
+   *   --motion-float-label-easing: var(--easing-standard);
+   * 
+   * Requirements: 5.1, 5.2, 6.4
+   * 
+   * @param motionTokens - Semantic motion tokens from token system
+   * @returns CSS custom property declarations
+   */
+  generateSemanticMotionTokens(motionTokens: Record<string, any>): string {
+    const lines: string[] = [];
+    
+    lines.push('  /* Semantic Motion Tokens */');
+    lines.push('  /* Composed motion styles for specific animation contexts */');
+    lines.push('  ');
+    
+    for (const [name, token] of Object.entries(motionTokens)) {
+      const cssName = this.toCSSVariableName(name);
+      const { duration, easing, scale } = token.primitiveReferences;
+      
+      // Generate duration reference
+      const durationCssName = this.toCSSVariableName(duration);
+      lines.push(`  --${cssName}-duration: var(--${durationCssName});`);
+      
+      // Generate easing reference
+      const easingCssName = this.toCSSVariableName(easing);
+      lines.push(`  --${cssName}-easing: var(--${easingCssName});`);
+      
+      // Generate scale reference if present
+      if (scale) {
+        const scaleCssName = this.toCSSVariableName(scale);
+        lines.push(`  --${cssName}-scale: var(--${scaleCssName});`);
+      }
+      
+      lines.push('  ');
+    }
+    
+    return lines.join('\n');
+  }
+
+  /**
    * Generate TypeScript token constants from platform tokens
    * 
    * Generates TypeScript constants from:

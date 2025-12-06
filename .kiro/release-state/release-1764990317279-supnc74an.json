@@ -1,0 +1,15 @@
+{
+  "id": "release-1764990317279-supnc74an",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-12-06T03:05:17.279Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-06T03:05:17.279Z"
+}

@@ -1,0 +1,21 @@
+{
+  "id": "release-1764991156911-hrgs39efr",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-06T03:19:16.911Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-12-06T03:19:22.873Z",
+  "completedAt": "2025-12-06T03:19:22.873Z"
+}

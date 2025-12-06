@@ -1,0 +1,21 @@
+{
+  "id": "release-1764990246470-qoparckkm",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-06T03:04:06.470Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-06T03:04:06.471Z",
+  "completedAt": "2025-12-06T03:04:06.471Z"
+}

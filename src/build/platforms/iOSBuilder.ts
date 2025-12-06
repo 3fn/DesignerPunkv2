@@ -1273,6 +1273,183 @@ ${dependenciesSection}
   }
   
   /**
+   * Generate duration token Swift constants
+   * 
+   * Generates Swift constants for animation duration tokens.
+   * Format: let duration150: TimeInterval = 0.15
+   * 
+   * Converts milliseconds to seconds for iOS TimeInterval.
+   * 
+   * Requirements: 1.6, 6.2, 6.5
+   * 
+   * @param durationTokens - Duration primitive tokens from token system
+   * @returns Swift constant declarations
+   */
+  generateDurationTokens(durationTokens: Record<string, any>): string {
+    const lines: string[] = [];
+    
+    lines.push('    // MARK: - Duration Tokens');
+    lines.push('    ');
+    lines.push('    /// Animation duration values in seconds (TimeInterval)');
+    lines.push('    public enum Duration {');
+    
+    for (const [name, token] of Object.entries(durationTokens)) {
+      const swiftName = this.toSwiftConstantName(name);
+      const valueInSeconds = token.platforms.ios.value; // Already converted to seconds in token definition
+      const comment = `        /// ${name}: ${valueInSeconds}s (${token.baseValue}ms)`;
+      lines.push(comment);
+      lines.push(`        public static let ${swiftName}: TimeInterval = ${valueInSeconds}`);
+    }
+    
+    lines.push('    }');
+    lines.push('    ');
+    
+    return lines.join('\n');
+  }
+
+  /**
+   * Generate easing token Swift constants
+   * 
+   * Generates Swift constants for animation easing tokens using Animation.timingCurve().
+   * Format: let easingStandard = Animation.timingCurve(0.4, 0.0, 0.2, 1.0)
+   * 
+   * Converts cubic-bezier CSS format to Swift Animation.timingCurve format.
+   * 
+   * Requirements: 2.6, 6.2, 6.6
+   * 
+   * @param easingTokens - Easing primitive tokens from token system
+   * @returns Swift constant declarations
+   */
+  generateEasingTokens(easingTokens: Record<string, any>): string {
+    const lines: string[] = [];
+    
+    lines.push('    // MARK: - Easing Tokens');
+    lines.push('    ');
+    lines.push('    /// Animation easing curves using Animation.timingCurve');
+    lines.push('    public enum Easing {');
+    
+    for (const [name, token] of Object.entries(easingTokens)) {
+      const swiftName = this.toSwiftConstantName(name);
+      const cubicBezier = token.platforms.ios.value;
+      
+      // Extract cubic-bezier parameters from string like "cubic-bezier(0.4, 0.0, 0.2, 1)"
+      const match = cubicBezier.match(/cubic-bezier\(([\d.]+),\s*([\d.]+),\s*([\d.]+),\s*([\d.]+)\)/);
+      if (match) {
+        const [, p1, p2, p3, p4] = match;
+        // Use Animation.timingCurve format in comment (iOS-specific, no cubic-bezier)
+        const comment = `        /// ${name}: Animation.timingCurve(${p1}, ${p2}, ${p3}, ${p4})`;
+        lines.push(comment);
+        lines.push(`        public static let ${swiftName} = Animation.timingCurve(${p1}, ${p2}, ${p3}, ${p4})`);
+      }
+    }
+    
+    lines.push('    }');
+    lines.push('    ');
+    
+    return lines.join('\n');
+  }
+
+  /**
+   * Generate scale token Swift constants
+   * 
+   * Generates Swift constants for transform scale tokens.
+   * Format: let scale088: CGFloat = 0.88
+   * 
+   * Requirements: 3.1, 6.2
+   * 
+   * @param scaleTokens - Scale primitive tokens from token system
+   * @returns Swift constant declarations
+   */
+  generateScaleTokens(scaleTokens: Record<string, any>): string {
+    const lines: string[] = [];
+    
+    lines.push('    // MARK: - Scale Tokens');
+    lines.push('    ');
+    lines.push('    /// Transform scale factors (unitless)');
+    lines.push('    public enum Scale {');
+    
+    for (const [name, token] of Object.entries(scaleTokens)) {
+      const swiftName = this.toSwiftConstantName(name);
+      const value = token.platforms.ios.value;
+      const comment = `        /// ${name}: ${value}`;
+      lines.push(comment);
+      lines.push(`        public static let ${swiftName}: CGFloat = ${value}`);
+    }
+    
+    lines.push('    }');
+    lines.push('    ');
+    
+    return lines.join('\n');
+  }
+
+  /**
+   * Generate semantic motion token Swift constants
+   * 
+   * Generates Swift structs for semantic motion tokens that compose
+   * primitive duration, easing, and scale tokens.
+   * 
+   * Format:
+   *   struct MotionFloatLabel {
+   *     let duration = Duration.duration250
+   *     let easing = Easing.easingStandard
+   *   }
+   * 
+   * Requirements: 5.1, 5.2, 6.5
+   * 
+   * @param motionTokens - Semantic motion tokens from token system
+   * @returns Swift struct declarations
+   */
+  generateSemanticMotionTokens(motionTokens: Record<string, any>): string {
+    const lines: string[] = [];
+    
+    lines.push('    // MARK: - Semantic Motion Tokens');
+    lines.push('    ');
+    lines.push('    /// Composed motion styles for specific animation contexts');
+    
+    for (const [name, token] of Object.entries(motionTokens)) {
+      const structName = this.toSwiftTypeName(name);
+      const { duration, easing, scale } = token.primitiveReferences;
+      
+      lines.push('    ');
+      lines.push(`    /// ${token.description}`);
+      lines.push(`    public struct ${structName} {`);
+      
+      // Generate duration reference
+      const durationSwiftName = this.toSwiftConstantName(duration);
+      lines.push(`        public static let duration = Duration.${durationSwiftName}`);
+      
+      // Generate easing reference
+      const easingSwiftName = this.toSwiftConstantName(easing);
+      lines.push(`        public static let easing = Easing.${easingSwiftName}`);
+      
+      // Generate scale reference if present
+      if (scale) {
+        const scaleSwiftName = this.toSwiftConstantName(scale);
+        lines.push(`        public static let scale = Scale.${scaleSwiftName}`);
+      }
+      
+      lines.push('    }');
+    }
+    
+    lines.push('    ');
+    
+    return lines.join('\n');
+  }
+
+  /**
+   * Convert token name to Swift type name (PascalCase)
+   * 
+   * Converts names like "motion.floatLabel" to "MotionFloatLabel"
+   * Used for struct and enum names.
+   */
+  private toSwiftTypeName(name: string): string {
+    return name
+      .split('.')
+      .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+      .join('');
+  }
+
+  /**
    * Generate basic test file for Swift Package
    */
   private generateTestFile(): string {
