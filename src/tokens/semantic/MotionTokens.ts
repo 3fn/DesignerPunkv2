@@ -1,0 +1,92 @@
+/**
+ * Semantic Motion Token Definitions
+ * 
+ * Motion semantic tokens compose primitive duration, easing, and scale tokens
+ * to create complete motion styles for specific animation contexts.
+ * 
+ * Each motion token explicitly defines animation properties using multi-primitive structure:
+ * - duration: Animation timing in milliseconds
+ * - easing: Animation curve for acceleration/deceleration
+ * - scale (optional): Transform scale factor for size-based animations
+ * 
+ * Compositional Architecture:
+ * Motion tokens follow the same compositional pattern as Shadow and Typography tokens.
+ * They reference primitive tokens rather than containing hard-coded values, enabling
+ * mathematical consistency and cross-platform generation.
+ * 
+ * Usage Context:
+ * - motion.floatLabel: Text input label floating animation (duration + easing)
+ * 
+ * Future Expansion:
+ * The structure supports incremental expansion as new animation patterns emerge:
+ * - Additional semantic motion tokens can be added
+ * - New primitive tokens can be referenced
+ * - Scale properties can be included for transform-based animations
+ */
+
+import { SemanticToken, SemanticCategory } from '../../types/SemanticToken';
+
+/**
+ * Motion token interface with primitiveReferences property
+ * Follows the same pattern as ShadowTokens and TypographyTokens
+ */
+interface SemanticMotionToken extends Omit<SemanticToken, 'primitiveTokens'> {
+  /** References to primitive motion tokens (duration, easing, scale) */
+  primitiveReferences: {
+    duration: string;
+    easing: string;
+    scale?: string;
+  };
+}
+
+/**
+ * Motion semantic tokens for common animation patterns
+ * Following compositional architecture with explicit multi-primitive composition
+ * 
+ * Initial implementation focuses on float label animation for Text Input Field component.
+ * Structure supports incremental expansion as new animation patterns emerge.
+ */
+export const motionTokens: Record<string, SemanticMotionToken> = {
+  'motion.floatLabel': {
+    name: 'motion.floatLabel',
+    primitiveReferences: {
+      duration: 'duration250',
+      easing: 'easingStandard'
+    },
+    category: SemanticCategory.INTERACTION,
+    context: 'Float label animation for text input fields',
+    description: 'Standard motion for label floating up with balanced easing (250ms, standard curve). Used when text input receives focus and label transitions from placeholder to floating position.'
+  }
+};
+
+/**
+ * Array of all motion semantic token names for iteration
+ */
+export const motionTokenNames = Object.keys(motionTokens);
+
+/**
+ * Get motion semantic token by name
+ * 
+ * @param name - Token name (e.g., 'motion.floatLabel')
+ * @returns Motion token or undefined if not found
+ * 
+ * @example
+ * const floatLabelMotion = getMotionToken('motion.floatLabel');
+ * // Returns: { name: 'motion.floatLabel', primitiveReferences: { duration: 'duration250', easing: 'easingStandard' }, ... }
+ */
+export function getMotionToken(name: string): SemanticMotionToken | undefined {
+  return motionTokens[name];
+}
+
+/**
+ * Get all motion semantic tokens as array
+ * 
+ * @returns Array of all motion tokens
+ * 
+ * @example
+ * const allMotions = getAllMotionTokens();
+ * // Returns: [motion.floatLabel, ...]
+ */
+export function getAllMotionTokens(): Array<SemanticMotionToken> {
+  return Object.values(motionTokens);
+}

@@ -104,7 +104,7 @@ The implementation follows a bottom-up approach: primitive tokens → semantic t
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Create Semantic Motion Tokens"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 2.1 Create MotionTokens.ts semantic file
+  - [x] 2.1 Create MotionTokens.ts semantic file
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/tokens/semantic/MotionTokens.ts` following ShadowTokens.ts pattern
@@ -113,7 +113,7 @@ The implementation follows a bottom-up approach: primitive tokens → semantic t
     - Include JSDoc comments explaining compositional pattern
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 8.3_
 
-  - [ ] 2.2 Add utility functions to MotionTokens.ts
+  - [x] 2.2 Add utility functions to MotionTokens.ts
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement getMotionToken(name: string) function
@@ -122,7 +122,7 @@ The implementation follows a bottom-up approach: primitive tokens → semantic t
     - Export utility functions for external use
     - _Requirements: 8.5_
 
-  - [ ] 2.3 Update src/tokens/semantic/index.ts with motion exports
+  - [x] 2.3 Update src/tokens/semantic/index.ts with motion exports
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add exports for motionTokens and utility functions

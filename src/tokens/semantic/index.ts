@@ -23,6 +23,7 @@ export * from './LayeringTokens';
 export * from './GridSpacingTokens';
 export * from './IconTokens';
 export * from './AccessibilityTokens';
+export * from './MotionTokens';
 
 // StyleTokens placeholder - will be implemented in future tasks
 export { styleTokens, getStyleToken } from './StyleTokens';
@@ -116,6 +117,13 @@ export {
   getAllAccessibilityTokens
 } from './AccessibilityTokens';
 
+export {
+  motionTokens,
+  motionTokenNames,
+  getMotionToken,
+  getAllMotionTokens
+} from './MotionTokens';
+
 // Import types for utility functions
 import type { SemanticToken } from '../../types/SemanticToken';
 import { SemanticCategory } from '../../types/SemanticToken';
@@ -130,6 +138,7 @@ import { zIndexTokens, elevationTokens } from './LayeringTokens';
 import { gridSpacingTokens } from './GridSpacingTokens';
 import { iconTokens } from './IconTokens';
 import { accessibility, accessibilityTokens } from './AccessibilityTokens';
+import { motionTokens } from './MotionTokens';
 
 /**
  * Get any semantic token by name across all categories
@@ -215,6 +224,11 @@ export function getSemanticToken(name: string): Omit<SemanticToken, 'primitiveTo
         description: `Accessibility token for focus ${focusProperty} (WCAG 2.4.7)`
       };
     }
+  }
+
+  // Check motion tokens
+  if (name.startsWith('motion.')) {
+    return motionTokens[name];
   }
 
   return undefined;
@@ -349,6 +363,9 @@ export function getAllSemanticTokens(): Array<Omit<SemanticToken, 'primitiveToke
   // Add accessibility tokens
   tokens.push(...Object.values(accessibilityTokens));
 
+  // Add motion tokens
+  tokens.push(...Object.values(motionTokens));
+
   // Add border width tokens
   for (const [name, token] of Object.entries(SemanticBorderWidthTokens)) {
     tokens.push({
@@ -390,7 +407,7 @@ export function getSemanticTokensByCategory(category: SemanticCategory): Array<O
     case SemanticCategory.SHADOW:
       return Object.values(shadowTokens);
     case SemanticCategory.INTERACTION:
-      return [...Object.values(opacityTokens), ...(Object.values(blendTokens) as any)];
+      return [...Object.values(opacityTokens), ...(Object.values(blendTokens) as any), ...Object.values(motionTokens)];
     case SemanticCategory.LAYERING:
       return [...(Object.values(zIndexTokens) as any), ...(Object.values(elevationTokens) as any)];
     case SemanticCategory.ICON:
@@ -530,6 +547,7 @@ export function getSemanticTokenStats() {
     elevationTokens: Object.keys(elevationTokens).length,
     gridSpacingTokens: Object.keys(gridSpacingTokens).length,
     iconTokens: Object.keys(iconTokens).length,
-    accessibilityTokens: Object.keys(accessibility.focus).length
+    accessibilityTokens: Object.keys(accessibility.focus).length,
+    motionTokens: Object.keys(motionTokens).length
   };
 }
