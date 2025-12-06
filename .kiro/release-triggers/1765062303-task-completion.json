@@ -1,0 +1,17 @@
+{
+  "id": "1765062303-task-completion",
+  "type": "task-completion",
+  "source": ".kiro/specs/014-motion-token-system/tasks.md",
+  "triggeredAt": "2025-12-06T23:05:03.3NZ",
+  "triggeredBy": "hook-system",
+  "git": {
+    "commit": "72ab1f596d51aedf73040770fdfacd92fcd55e7e",
+    "branch": "main",
+    "message": "Task Complete: Task 5 Complete: Add Motion Token Validation Rules"
+  },
+  "workflow": {
+    "hookType": "auto",
+    "projectRoot": "/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2"
+  },
+  "status": "pending"
+}

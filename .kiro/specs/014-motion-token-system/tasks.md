@@ -295,7 +295,7 @@ The implementation follows a bottom-up approach: primitive tokens → semantic t
     - Provide actionable error messages with context
     - _Requirements: 8.1_
 
-- [ ] 6. Create Motion Token Tests
+- [x] 6. Create Motion Token Tests
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -323,7 +323,7 @@ The implementation follows a bottom-up approach: primitive tokens → semantic t
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 6 Complete: Create Motion Token Tests"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 6.1 Create unit tests for primitive motion tokens
+  - [x] 6.1 Create unit tests for primitive motion tokens
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test that duration tokens exist and have valid numeric values
@@ -333,7 +333,7 @@ The implementation follows a bottom-up approach: primitive tokens → semantic t
     - Focus on existence and type correctness, not specific values
     - _Requirements: 1.1, 2.1, 3.1_
 
-  - [ ] 6.2 Create unit tests for semantic motion tokens
+  - [x] 6.2 Create unit tests for semantic motion tokens
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test that motion.floatLabel exists and has required properties
@@ -342,7 +342,7 @@ The implementation follows a bottom-up approach: primitive tokens → semantic t
     - Test that semantic tokens follow compositional pattern
     - _Requirements: 5.1, 5.2, 8.4_
 
-  - [ ]* 6.3 Create property-based tests for motion tokens
+  - [x] 6.3 Create property-based tests for motion tokens
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - **Property 1**: Token existence and type correctness
@@ -353,7 +353,7 @@ The implementation follows a bottom-up approach: primitive tokens → semantic t
     - Use fast-check for property-based testing
     - _Requirements: 1.1, 2.1, 3.1, 4.1, 5.1, 6.8, 8.4, 9.5_
 
-  - [ ] 6.4 Create integration tests for cross-platform generation
+  - [x] 6.4 Create integration tests for cross-platform generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test that motion tokens generate for all platforms (web, iOS, Android)
@@ -363,7 +363,7 @@ The implementation follows a bottom-up approach: primitive tokens → semantic t
     - Use existing build integration test patterns
     - _Requirements: 6.1, 6.2, 6.3, 6.8_
 
-  - [ ] 6.5 Run full test suite and verify all tests pass
+  - [x] 6.5 Run full test suite and verify all tests pass
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run npm test to execute all motion token tests

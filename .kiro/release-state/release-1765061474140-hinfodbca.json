@@ -1,0 +1,21 @@
+{
+  "id": "release-1765061474140-hinfodbca",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-06T22:51:14.140Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-12-06T22:51:19.628Z",
+  "completedAt": "2025-12-06T22:51:19.628Z"
+}

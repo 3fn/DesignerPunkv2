@@ -1,0 +1,21 @@
+{
+  "id": "release-1765060384462-5kx4crvey",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-06T22:33:04.462Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-06T22:33:04.465Z",
+  "completedAt": "2025-12-06T22:33:04.465Z"
+}

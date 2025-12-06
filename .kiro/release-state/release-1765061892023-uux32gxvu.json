@@ -1,0 +1,21 @@
+{
+  "id": "release-1765061892023-uux32gxvu",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-06T22:58:12.023Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-06T22:58:12.023Z",
+  "completedAt": "2025-12-06T22:58:12.023Z"
+}
