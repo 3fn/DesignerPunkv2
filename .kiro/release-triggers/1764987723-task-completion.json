@@ -1,0 +1,17 @@
+{
+  "id": "1764987723-task-completion",
+  "type": "task-completion",
+  "source": ".kiro/specs/014-motion-token-system/tasks.md",
+  "triggeredAt": "2025-12-06T02:22:03.3NZ",
+  "triggeredBy": "hook-system",
+  "git": {
+    "commit": "560d81af5faa9626d6483f7efac62ddfb1d5b323",
+    "branch": "main",
+    "message": "Task Complete: Task 2.3 Complete: Update Semantic Index with Motion Exports"
+  },
+  "workflow": {
+    "hookType": "auto",
+    "projectRoot": "/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2"
+  },
+  "status": "pending"
+}

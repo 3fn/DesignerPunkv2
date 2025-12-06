@@ -1,0 +1,21 @@
+{
+  "id": "release-1764987508950-oswrli8qh",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-06T02:18:28.950Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-06T02:18:28.951Z",
+  "completedAt": "2025-12-06T02:18:28.951Z"
+}
