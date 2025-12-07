@@ -1,0 +1,284 @@
+<!-- VALIDATION FILE - NOT DOCUMENTATION -->
+<!-- 
+  Purpose: Validate TextInputField component behavior across all states
+  This file demonstrates all component states and serves as a living validation example.
+  For documentation, see: src/components/core/TextInputField/README.md
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TextInputField State Examples - Validation</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+      background: #f5f5f5;
+    }
+    
+    .warning {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      border-radius: 4px;
+      padding: 16px;
+      margin-bottom: 32px;
+    }
+    
+    .warning h2 {
+      margin: 0 0 8px 0;
+      color: #856404;
+      font-size: 18px;
+    }
+    
+    .warning p {
+      margin: 0;
+      color: #856404;
+      font-size: 14px;
+    }
+    
+    .example-section {
+      background: white;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .example-section h2 {
+      margin: 0 0 8px 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .example-section p {
+      margin: 0 0 16px 0;
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .example-container {
+      margin-bottom: 16px;
+    }
+    
+    .example-container:last-child {
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="warning">
+    <h2>⚠️ Validation File</h2>
+    <p>This is an automated validation file, not documentation. These examples validate component behavior and must remain functional. For usage documentation, see the component README.</p>
+  </div>
+
+  <h1>TextInputField State Examples</h1>
+  <p style="color: #666; margin-bottom: 32px;">
+    This file demonstrates all TextInputField component states for validation purposes.
+  </p>
+
+  <!-- Default State (Empty, Not Focused) -->
+  <div class="example-section">
+    <h2>Default State</h2>
+    <p>Empty input, not focused. Label appears inside the input field.</p>
+    <div class="example-container">
+      <text-input-field
+        id="default-example"
+        label="Email address"
+      ></text-input-field>
+    </div>
+  </div>
+
+  <!-- Focused State (Empty, Focused) -->
+  <div class="example-section">
+    <h2>Focused State</h2>
+    <p>Empty input with focus. Label animates to floated position above input.</p>
+    <div class="example-container">
+      <text-input-field
+        id="focused-example"
+        label="Username"
+      ></text-input-field>
+    </div>
+    <script>
+      // Auto-focus this example to demonstrate focused state
+      setTimeout(() => {
+        const input = document.querySelector('#focused-example');
+        if (input && input.shadowRoot) {
+          const inputElement = input.shadowRoot.querySelector('input');
+          if (inputElement) {
+            inputElement.focus();
+          }
+        }
+      }, 100);
+    </script>
+  </div>
+
+  <!-- Filled State (Filled, Not Focused) -->
+  <div class="example-section">
+    <h2>Filled State</h2>
+    <p>Input with content, not focused. Label remains in floated position.</p>
+    <div class="example-container">
+      <text-input-field
+        id="filled-example"
+        label="Full name"
+        value="Jane Smith"
+      ></text-input-field>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div class="example-section">
+    <h2>Error State</h2>
+    <p>Input with validation error. Shows error icon and error message below input.</p>
+    <div class="example-container">
+      <text-input-field
+        id="error-example"
+        label="Email address"
+        value="invalid-email"
+        error-message="Please enter a valid email address"
+      ></text-input-field>
+    </div>
+  </div>
+
+  <!-- Success State -->
+  <div class="example-section">
+    <h2>Success State</h2>
+    <p>Input with successful validation. Shows success icon (checkmark).</p>
+    <div class="example-container">
+      <text-input-field
+        id="success-example"
+        label="Email address"
+        value="jane@example.com"
+        is-success="true"
+      ></text-input-field>
+    </div>
+  </div>
+
+  <!-- Helper Text Examples -->
+  <div class="example-section">
+    <h2>Helper Text</h2>
+    <p>Input with persistent helper text below the field.</p>
+    <div class="example-container">
+      <text-input-field
+        id="helper-text-example"
+        label="Password"
+        type="password"
+        helper-text="Must be at least 8 characters with one number and one special character"
+      ></text-input-field>
+    </div>
+  </div>
+
+  <!-- Helper Text + Error State -->
+  <div class="example-section">
+    <h2>Helper Text + Error State</h2>
+    <p>Both helper text and error message visible simultaneously.</p>
+    <div class="example-container">
+      <text-input-field
+        id="helper-error-example"
+        label="Password"
+        type="password"
+        value="weak"
+        helper-text="Must be at least 8 characters with one number and one special character"
+        error-message="Password is too short"
+      ></text-input-field>
+    </div>
+  </div>
+
+  <!-- Required Field -->
+  <div class="example-section">
+    <h2>Required Field</h2>
+    <p>Input marked as required.</p>
+    <div class="example-container">
+      <text-input-field
+        id="required-example"
+        label="Email address"
+        required="true"
+      ></text-input-field>
+    </div>
+  </div>
+
+  <!-- Read-Only State -->
+  <div class="example-section">
+    <h2>Read-Only State</h2>
+    <p>Input in read-only mode (alternative to disabled).</p>
+    <div class="example-container">
+      <text-input-field
+        id="readonly-example"
+        label="Account ID"
+        value="ACC-12345"
+        read-only="true"
+      ></text-input-field>
+    </div>
+  </div>
+
+  <!-- Different Input Types -->
+  <div class="example-section">
+    <h2>Input Type Variations</h2>
+    <p>Different input types (email, tel, url).</p>
+    
+    <div class="example-container">
+      <text-input-field
+        id="email-type-example"
+        label="Email"
+        type="email"
+        value="user@example.com"
+      ></text-input-field>
+    </div>
+    
+    <div class="example-container">
+      <text-input-field
+        id="tel-type-example"
+        label="Phone number"
+        type="tel"
+        value="+1 (555) 123-4567"
+      ></text-input-field>
+    </div>
+    
+    <div class="example-container">
+      <text-input-field
+        id="url-type-example"
+        label="Website"
+        type="url"
+        value="https://example.com"
+      ></text-input-field>
+    </div>
+  </div>
+
+  <!-- Max Length -->
+  <div class="example-section">
+    <h2>Max Length</h2>
+    <p>Input with maximum character limit.</p>
+    <div class="example-container">
+      <text-input-field
+        id="maxlength-example"
+        label="Username"
+        value="johndoe"
+        max-length="20"
+        helper-text="Maximum 20 characters"
+      ></text-input-field>
+    </div>
+  </div>
+
+  <!-- Autocomplete -->
+  <div class="example-section">
+    <h2>Autocomplete</h2>
+    <p>Input with autocomplete attribute for browser autofill.</p>
+    <div class="example-container">
+      <text-input-field
+        id="autocomplete-example"
+        label="Email address"
+        type="email"
+        autocomplete="email"
+      ></text-input-field>
+    </div>
+  </div>
+
+  <!-- Load the web component -->
+  <script type="module">
+    import '../platforms/web/TextInputField.web.js';
+  </script>
+</body>
+</html>

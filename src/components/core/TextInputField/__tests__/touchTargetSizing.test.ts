@@ -1,4 +1,8 @@
 /**
+ * @jest-environment jsdom
+ */
+
+/**
  * Touch Target Sizing Tests
  * 
  * Tests that verify the TextInputField component meets WCAG 2.1 AA

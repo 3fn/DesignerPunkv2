@@ -1,0 +1,21 @@
+{
+  "id": "release-1765135332453-1efachcrv",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-07T19:22:12.453Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-12-07T19:22:17.617Z",
+  "completedAt": "2025-12-07T19:22:17.617Z"
+}

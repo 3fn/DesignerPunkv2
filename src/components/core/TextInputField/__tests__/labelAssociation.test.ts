@@ -11,6 +11,9 @@
 
 import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 
+// Import web component to register it
+import '../platforms/web/TextInputField.web';
+
 describe('TextInputField Label Association', () => {
   let container: HTMLElement;
   
@@ -26,9 +29,8 @@ describe('TextInputField Label Association', () => {
   });
   
   describe('Web Platform', () => {
-    it.skip('should have label with for attribute matching input id', () => {
-      // Note: This test requires the web component to be registered
-      // Skipping until web component registration is added to test setup
+    it('should have label with for attribute matching input id', () => {
+      // Web component is now registered via test setup file
       
       // Create component
       container.innerHTML = `
@@ -61,9 +63,8 @@ describe('TextInputField Label Association', () => {
       expect(input?.getAttribute('id')).toBe('test-input');
     });
     
-    it.skip('should focus input when label is clicked', () => {
-      // Note: This test requires the web component to be registered
-      // Skipping until web component registration is added to test setup
+    it('should focus input when label is clicked', () => {
+      // Web component is now registered via test setup file
       
       // Create component
       container.innerHTML = `
@@ -92,9 +93,8 @@ describe('TextInputField Label Association', () => {
       expect(label.getAttribute('for')).toBe(input.getAttribute('id'));
     });
     
-    it.skip('should have programmatic association for screen readers', () => {
-      // Note: This test requires the web component to be registered
-      // Skipping until web component registration is added to test setup
+    it('should have programmatic association for screen readers', () => {
+      // Web component is now registered via test setup file
       
       // Create component with helper text
       container.innerHTML = `
@@ -121,9 +121,8 @@ describe('TextInputField Label Association', () => {
       expect(helperText.getAttribute('id')).toBe('helper-test-input');
     });
     
-    it.skip('should associate error message with input for screen readers', () => {
-      // Note: This test requires the web component to be registered
-      // Skipping until web component registration is added to test setup
+    it('should associate error message with input for screen readers', () => {
+      // Web component is now registered via test setup file
       
       // Create component with error
       container.innerHTML = `
@@ -156,9 +155,8 @@ describe('TextInputField Label Association', () => {
       expect(input.getAttribute('aria-invalid')).toBe('true');
     });
     
-    it.skip('should associate both helper text and error message with input', () => {
-      // Note: This test requires the web component to be registered
-      // Skipping until web component registration is added to test setup
+    it('should associate both helper text and error message with input', () => {
+      // Web component is now registered via test setup file
       
       // Create component with both helper text and error
       container.innerHTML = `
@@ -183,9 +181,8 @@ describe('TextInputField Label Association', () => {
       expect(describedBy).toContain('error-test-input');
     });
     
-    it.skip('should maintain label association when label floats', () => {
-      // Note: This test requires the web component to be registered
-      // Skipping until web component registration is added to test setup
+    it('should maintain label association when label floats', () => {
+      // Web component is now registered via test setup file
       
       // Create component
       container.innerHTML = `
@@ -219,9 +216,8 @@ describe('TextInputField Label Association', () => {
   });
   
   describe('Cross-Platform Accessibility', () => {
-    it.skip('should have consistent label text across platforms', () => {
-      // Note: This test requires the web component to be registered
-      // Skipping until web component registration is added to test setup
+    it('should have consistent label text across platforms', () => {
+      // Web component is now registered via test setup file
       
       const labelText = 'Email Address';
       
@@ -247,9 +243,8 @@ describe('TextInputField Label Association', () => {
       // - Android: semantics { contentDescription = label }
     });
     
-    it.skip('should indicate required fields consistently', () => {
-      // Note: This test requires the web component to be registered
-      // Skipping until web component registration is added to test setup
+    it('should indicate required fields consistently', () => {
+      // Web component is now registered via test setup file
       
       // Web
       container.innerHTML = `

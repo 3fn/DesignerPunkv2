@@ -1,0 +1,21 @@
+{
+  "id": "release-1765134112141-cvkycadb4",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-07T19:01:52.141Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-07T19:01:52.142Z",
+  "completedAt": "2025-12-07T19:01:52.142Z"
+}

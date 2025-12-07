@@ -1,0 +1,15 @@
+{
+  "id": "release-1765134022450-emu1pfy7v",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-12-07T19:00:22.450Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-07T19:00:22.450Z"
+}

@@ -1,0 +1,21 @@
+{
+  "id": "release-1765135029929-tmmvc20ec",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-07T19:17:09.929Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-12-07T19:17:15.095Z",
+  "completedAt": "2025-12-07T19:17:15.095Z"
+}

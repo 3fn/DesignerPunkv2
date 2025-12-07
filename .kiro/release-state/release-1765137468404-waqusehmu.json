@@ -1,0 +1,21 @@
+{
+  "id": "release-1765137468404-waqusehmu",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-07T19:57:48.404Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-07T19:57:48.405Z",
+  "completedAt": "2025-12-07T19:57:48.405Z"
+}
