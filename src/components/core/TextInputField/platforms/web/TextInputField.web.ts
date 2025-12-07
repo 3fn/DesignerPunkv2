@@ -27,9 +27,11 @@ import {
   handleValueChange,
   handleValidationChange,
   calculateLabelPosition,
+  calculateIconVisibility,
   startLabelAnimation,
   completeLabelAnimation
 } from '../../stateManagement';
+import { createIcon } from '../../../Icon/platforms/web/Icon.web';
 
 /**
  * TextInputField Web Component
@@ -158,11 +160,37 @@ export class TextInputField extends HTMLElement {
   private render(): void {
     const props = this.getPropsFromAttributes();
     const labelPosition = calculateLabelPosition(this.state);
+    const iconVisibility = calculateIconVisibility(this.state, this.animationState);
     
     // Create container
     if (!this.container) {
       this.container = document.createElement('div');
       this.container.className = 'text-input-field';
+    }
+    
+    // Generate trailing icon HTML
+    let trailingIconHTML = '';
+    if (iconVisibility.showErrorIcon) {
+      trailingIconHTML = createIcon({
+        name: 'x',
+        size: 24,
+        color: 'color-error',
+        className: 'trailing-icon error-icon'
+      });
+    } else if (iconVisibility.showSuccessIcon) {
+      trailingIconHTML = createIcon({
+        name: 'check',
+        size: 24,
+        color: 'color-success-strong',
+        className: 'trailing-icon success-icon'
+      });
+    } else if (iconVisibility.showInfoIcon) {
+      trailingIconHTML = createIcon({
+        name: 'info',
+        size: 24,
+        color: 'color-text-subtle',
+        className: 'trailing-icon info-icon'
+      });
     }
     
     // Build HTML structure
@@ -187,6 +215,7 @@ export class TextInputField extends HTMLElement {
           aria-describedby="${props.helperText ? `helper-${props.id}` : ''} ${props.errorMessage ? `error-${props.id}` : ''}"
           ${props.errorMessage ? 'aria-invalid="true"' : ''}
         />
+        ${trailingIconHTML ? `<div class="trailing-icon-container">${trailingIconHTML}</div>` : ''}
       </div>
       ${props.helperText ? `
         <p id="helper-${props.id}" class="helper-text">
@@ -240,6 +269,7 @@ export class TextInputField extends HTMLElement {
         width: 100%;
         min-height: var(--tap-area-recommended, 48px);
         padding: var(--space-inset-100, 8px);
+        padding-right: calc(var(--space-inset-100, 8px) + 24px + var(--space-inset-100, 8px));
         font-family: var(--typography-input-font-family, system-ui);
         font-size: var(--typography-input-font-size, 16px);
         line-height: var(--typography-input-line-height, 24px);
@@ -329,10 +359,28 @@ export class TextInputField extends HTMLElement {
         color: var(--color-error, #EF4444);
       }
       
+      .trailing-icon-container {
+        position: absolute;
+        right: var(--space-inset-100, 8px);
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        opacity: 1;
+        transition: opacity var(--motion-float-label-duration, 250ms) var(--motion-float-label-easing, cubic-bezier(0.4, 0.0, 0.2, 1.0));
+      }
+      
+      .trailing-icon {
+        display: block;
+      }
+      
       /* Respect prefers-reduced-motion */
       @media (prefers-reduced-motion: reduce) {
         .input-element,
-        .input-label {
+        .input-label,
+        .trailing-icon-container {
           transition: none;
         }
       }
@@ -442,7 +490,32 @@ export class TextInputField extends HTMLElement {
     if (this.animationState.isAnimating) {
       setTimeout(() => {
         this.animationState = completeLabelAnimation(this.animationState);
+        // Re-render to update icon visibility after animation completes
+        this.updateIconVisibility();
       }, 250); // Match motion.floatLabel duration
+    }
+  }
+  
+  /**
+   * Update icon visibility with animation coordination
+   */
+  private updateIconVisibility(): void {
+    if (!this.container) return;
+    
+    const iconVisibility = calculateIconVisibility(this.state, this.animationState);
+    const iconContainer = this.container.querySelector('.trailing-icon-container') as HTMLElement;
+    
+    if (!iconContainer) return;
+    
+    // Show/hide icon based on visibility state and animation completion
+    const shouldShow = iconVisibility.showErrorIcon || 
+                      iconVisibility.showSuccessIcon || 
+                      iconVisibility.showInfoIcon;
+    
+    if (shouldShow) {
+      iconContainer.style.opacity = '1';
+    } else {
+      iconContainer.style.opacity = '0';
     }
   }
 }

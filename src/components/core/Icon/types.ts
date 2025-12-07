@@ -32,6 +32,8 @@ export type IconName =
   // Action icons
   | 'check'
   | 'x'
+  | 'x-circle'
+  | 'info'
   | 'plus'
   | 'minus'
   

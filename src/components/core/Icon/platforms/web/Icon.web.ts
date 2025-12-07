@@ -31,6 +31,8 @@ function loadIconSVG(name: IconName): string {
     'chevron-right': '<polyline points="9 18 15 12 9 6"></polyline>',
     'check': '<polyline points="20 6 9 17 4 12"></polyline>',
     'x': '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>',
+    'x-circle': '<circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line>',
+    'info': '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line>',
     'plus': '<line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line>',
     'minus': '<line x1="5" y1="12" x2="19" y2="12"></line>',
     'circle': '<circle cx="12" cy="12" r="10"></circle>',

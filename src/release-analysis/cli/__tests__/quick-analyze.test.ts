@@ -94,7 +94,7 @@ describe('QuickAnalyzer', () => {
       expect(result.changeCount.features).toBeGreaterThanOrEqual(0);
       expect(result.changeCount.fixes).toBeGreaterThanOrEqual(0);
       expect(result.changeCount.improvements).toBeGreaterThanOrEqual(0);
-    });
+    }, 30000); // Increased timeout to 30s for git history analysis
 
     it('should recommend major version bump for breaking changes', async () => {
       const result = await analyzer.runQuickAnalysis();

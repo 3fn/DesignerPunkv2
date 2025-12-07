@@ -8,10 +8,11 @@
  * - Float label animation (labelMd → labelMdFloat)
  * - Color animation (text.subtle → primary)
  * - Offset animation (translateY)
+ * - Trailing icon support (error, success, info)
  * - Respects reduce motion settings
  * - WCAG 2.1 AA compliant
  * 
- * Requirements: 1.1, 1.2, 1.3, 1.5, 8.5
+ * Requirements: 1.1, 1.2, 1.3, 1.5, 4.1, 4.2, 4.3, 8.5
  */
 
 package com.designerpunk.components.core
@@ -34,6 +35,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.contentDescription
@@ -110,11 +112,17 @@ fun TextInputField(
     // State
     var isFocused by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
+    var labelAnimationComplete by remember { mutableStateOf(true) }
     
     // Computed properties
     val isFilled = value.isNotEmpty()
     val hasError = errorMessage != null
     val isLabelFloated = isFocused || isFilled
+    
+    // Icon visibility (after label animation completes)
+    val showErrorIcon = hasError && isLabelFloated && labelAnimationComplete
+    val showSuccessIcon = isSuccess && isLabelFloated && labelAnimationComplete
+    val showInfoIconVisible = showInfoIcon && (isFocused || isFilled) && labelAnimationComplete
     
     // Check if reduce motion is enabled
     val context = LocalContext.current
@@ -134,6 +142,16 @@ fun TextInputField(
             durationMillis = motionFloatLabelDuration,
             easing = CubicBezierEasing(0.4f, 0.0f, 0.2f, 1.0f) // easingStandard
         )
+    }
+    
+    // Track label animation state changes
+    LaunchedEffect(isLabelFloated) {
+        // Mark animation as incomplete when label starts animating
+        labelAnimationComplete = false
+        
+        // Mark animation as complete after motion.floatLabel duration
+        kotlinx.coroutines.delay(motionFloatLabelDuration.toLong())
+        labelAnimationComplete = true
     }
     
     // Animated values
@@ -177,6 +195,13 @@ fun TextInputField(
         label = "borderColor"
     )
     
+    // Icon opacity animation
+    val iconOpacity by animateFloatAsState(
+        targetValue = if (showErrorIcon || showSuccessIcon || showInfoIconVisible) 1f else 0f,
+        animationSpec = animationSpec,
+        label = "iconOpacity"
+    )
+    
     // Main layout
     Column(
         modifier = modifier
@@ -190,14 +215,20 @@ fun TextInputField(
                 }
             }
     ) {
-        // Input wrapper with label
-        Box(
+        // Input wrapper with label and trailing icon
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = tapAreaRecommended.dp) // WCAG minimum touch target
+                .heightIn(min = tapAreaRecommended.dp), // WCAG minimum touch target
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            // Input field
-            BasicTextField(
+            // Input field with label
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+            ) {
+                // Input field
+                BasicTextField(
                 value = value,
                 onValueChange = { newValue ->
                     // Enforce max length
@@ -271,24 +302,50 @@ fun TextInputField(
                 }
             )
             
-            // Floating label
-            Text(
-                text = label + if (required) " *" else "",
-                style = TextStyle(
-                    fontSize = labelFontSize.sp,
-                    lineHeight = if (isLabelFloated) typographyLabelMdFloatLineHeight.sp else typographyLabelMdLineHeight.sp,
-                    fontWeight = FontWeight(typographyLabelMdFontWeight),
-                    letterSpacing = typographyLabelMdLetterSpacing.sp,
-                    color = labelColor
-                ),
+                // Floating label
+                Text(
+                    text = label + if (required) " *" else "",
+                    style = TextStyle(
+                        fontSize = labelFontSize.sp,
+                        lineHeight = if (isLabelFloated) typographyLabelMdFloatLineHeight.sp else typographyLabelMdLineHeight.sp,
+                        fontWeight = FontWeight(typographyLabelMdFontWeight),
+                        letterSpacing = typographyLabelMdLetterSpacing.sp,
+                        color = labelColor
+                    ),
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .offset(
+                            x = spaceInset100.dp,
+                            y = labelOffsetY
+                        )
+                        .padding(horizontal = 4.dp) // Small padding for better readability
+                )
+            }
+            
+            // Trailing icon (error, success, or info) with fade animation
+            Box(
                 modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .offset(
-                        x = spaceInset100.dp,
-                        y = labelOffsetY
+                    .padding(end = spaceInset100.dp)
+                    .graphicsLayer(alpha = iconOpacity)
+            ) {
+                when {
+                    showErrorIcon -> Icon(
+                        name = "x",
+                        size = 24.dp,
+                        color = colorError
                     )
-                    .padding(horizontal = 4.dp) // Small padding for better readability
-            )
+                    showSuccessIcon -> Icon(
+                        name = "check",
+                        size = 24.dp,
+                        color = colorSuccessStrong
+                    )
+                    showInfoIconVisible -> Icon(
+                        name = "info",
+                        size = 24.dp,
+                        color = colorTextSubtle
+                    )
+                }
+            }
         }
         
         // Helper text (persistent)

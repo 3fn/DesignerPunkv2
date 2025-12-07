@@ -65,6 +65,7 @@ private fun getIconResource(name: String): Int {
         // UI element icons
         "circle" -> R.drawable.circle
         "heart" -> R.drawable.heart
+        "info" -> R.drawable.info
         
         // Complex icons
         "settings" -> R.drawable.settings

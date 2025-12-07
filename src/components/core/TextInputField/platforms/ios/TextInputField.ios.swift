@@ -8,10 +8,11 @@
  * - Float label animation (labelMd → labelMdFloat)
  * - Color animation (text.subtle → primary)
  * - Offset animation (translateY)
+ * - Trailing icon support (error, success, info)
  * - Respects accessibilityReduceMotion
  * - WCAG 2.1 AA compliant
  * 
- * Requirements: 1.1, 1.2, 1.3, 1.5, 8.4
+ * Requirements: 1.1, 1.2, 1.3, 1.5, 4.1, 4.2, 4.3, 8.4
  */
 
 import SwiftUI
@@ -81,6 +82,9 @@ struct TextInputField: View {
     /// Whether reduce motion is enabled
     @Environment(\.accessibilityReduceMotion) var reduceMotion
     
+    /// Whether label animation has completed (for icon timing coordination)
+    @State private var labelAnimationComplete: Bool = true
+    
     // MARK: - Computed Properties
     
     /// Whether input has content
@@ -148,75 +152,130 @@ struct TextInputField: View {
         }
     }
     
+    /// Whether to show error icon (after label animation completes)
+    private var showErrorIcon: Bool {
+        hasError && isLabelFloated && labelAnimationComplete
+    }
+    
+    /// Whether to show success icon (after label animation completes)
+    private var showSuccessIcon: Bool {
+        isSuccess && isLabelFloated && labelAnimationComplete
+    }
+    
+    /// Whether to show info icon (after label animation completes)
+    private var showInfoIconVisible: Bool {
+        showInfoIcon && (isFocused || isFilled) && labelAnimationComplete
+    }
+    
     // MARK: - Body
     
     var body: some View {
         VStack(alignment: .leading, spacing: spaceGroupedMinimal) {
-            // Input wrapper with label
-            ZStack(alignment: .leading) {
-                // Label
-                Text(label + (required ? " *" : ""))
-                    .font(labelFont)
-                    .foregroundColor(labelColor)
-                    .offset(y: labelOffset)
-                    .animation(
-                        reduceMotion ? .none : .timingCurve(0.4, 0.0, 0.2, 1.0, duration: motionFloatLabelDuration),
-                        value: isLabelFloated
-                    )
-                    .allowsHitTesting(false) // Label doesn't intercept touches
+            // Input wrapper with label and trailing icon
+            HStack(alignment: .center, spacing: 0) {
+                ZStack(alignment: .leading) {
+                    // Label
+                    Text(label + (required ? " *" : ""))
+                        .font(labelFont)
+                        .foregroundColor(labelColor)
+                        .offset(y: labelOffset)
+                        .animation(
+                            reduceMotion ? .none : .timingCurve(0.4, 0.0, 0.2, 1.0, duration: motionFloatLabelDuration),
+                            value: isLabelFloated
+                        )
+                        .allowsHitTesting(false) // Label doesn't intercept touches
+                        .onChange(of: isLabelFloated) { _ in
+                            // Mark animation as incomplete when label starts animating
+                            labelAnimationComplete = false
+                            
+                            // Mark animation as complete after motion.floatLabel duration
+                            DispatchQueue.main.asyncAfter(deadline: .now() + motionFloatLabelDuration) {
+                                labelAnimationComplete = true
+                            }
+                        }
+                    
+                    // Input field
+                    if type == .password {
+                        SecureField(isLabelFloated && placeholder != nil ? placeholder! : "", text: $value)
+                            .textFieldStyle(CustomTextFieldStyle(
+                                borderColor: borderColor,
+                                isFocused: isFocused,
+                                hasError: hasError,
+                                isSuccess: isSuccess,
+                                hasTrailingIcon: showErrorIcon || showSuccessIcon || showInfoIconVisible
+                            ))
+                            .focused($isFocused)
+                            .disabled(readOnly)
+                            .textContentType(autocomplete)
+                            .onChange(of: value) { newValue in
+                                // Enforce max length
+                                if let maxLength = maxLength, newValue.count > maxLength {
+                                    value = String(newValue.prefix(maxLength))
+                                }
+                                onChange?(value)
+                            }
+                            .onChange(of: isFocused) { focused in
+                                if focused {
+                                    onFocus?()
+                                } else {
+                                    onBlur?()
+                                }
+                            }
+                    } else {
+                        TextField(isLabelFloated && placeholder != nil ? placeholder! : "", text: $value)
+                            .textFieldStyle(CustomTextFieldStyle(
+                                borderColor: borderColor,
+                                isFocused: isFocused,
+                                hasError: hasError,
+                                isSuccess: isSuccess,
+                                hasTrailingIcon: showErrorIcon || showSuccessIcon || showInfoIconVisible
+                            ))
+                            .focused($isFocused)
+                            .disabled(readOnly)
+                            .textContentType(autocomplete)
+                            .keyboardType(keyboardTypeForInputType(type))
+                            .onChange(of: value) { newValue in
+                                // Enforce max length
+                                if let maxLength = maxLength, newValue.count > maxLength {
+                                    value = String(newValue.prefix(maxLength))
+                                }
+                                onChange?(value)
+                            }
+                            .onChange(of: isFocused) { focused in
+                                if focused {
+                                    onFocus?()
+                                } else {
+                                    onBlur?()
+                                }
+                            }
+                    }
+                }
                 
-                // Input field
-                if type == .password {
-                    SecureField(isLabelFloated && placeholder != nil ? placeholder! : "", text: $value)
-                        .textFieldStyle(CustomTextFieldStyle(
-                            borderColor: borderColor,
-                            isFocused: isFocused,
-                            hasError: hasError,
-                            isSuccess: isSuccess
-                        ))
-                        .focused($isFocused)
-                        .disabled(readOnly)
-                        .textContentType(autocomplete)
-                        .onChange(of: value) { newValue in
-                            // Enforce max length
-                            if let maxLength = maxLength, newValue.count > maxLength {
-                                value = String(newValue.prefix(maxLength))
-                            }
-                            onChange?(value)
-                        }
-                        .onChange(of: isFocused) { focused in
-                            if focused {
-                                onFocus?()
-                            } else {
-                                onBlur?()
-                            }
-                        }
-                } else {
-                    TextField(isLabelFloated && placeholder != nil ? placeholder! : "", text: $value)
-                        .textFieldStyle(CustomTextFieldStyle(
-                            borderColor: borderColor,
-                            isFocused: isFocused,
-                            hasError: hasError,
-                            isSuccess: isSuccess
-                        ))
-                        .focused($isFocused)
-                        .disabled(readOnly)
-                        .textContentType(autocomplete)
-                        .keyboardType(keyboardTypeForInputType(type))
-                        .onChange(of: value) { newValue in
-                            // Enforce max length
-                            if let maxLength = maxLength, newValue.count > maxLength {
-                                value = String(newValue.prefix(maxLength))
-                            }
-                            onChange?(value)
-                        }
-                        .onChange(of: isFocused) { focused in
-                            if focused {
-                                onFocus?()
-                            } else {
-                                onBlur?()
-                            }
-                        }
+                // Trailing icon (error, success, or info)
+                if showErrorIcon {
+                    Icon(name: "x", size: 24, color: colorError)
+                        .padding(.trailing, spaceInset100)
+                        .transition(.opacity)
+                        .animation(
+                            reduceMotion ? .none : .timingCurve(0.4, 0.0, 0.2, 1.0, duration: motionFloatLabelDuration),
+                            value: showErrorIcon
+                        )
+                } else if showSuccessIcon {
+                    Icon(name: "check", size: 24, color: colorSuccessStrong)
+                        .padding(.trailing, spaceInset100)
+                        .transition(.opacity)
+                        .animation(
+                            reduceMotion ? .none : .timingCurve(0.4, 0.0, 0.2, 1.0, duration: motionFloatLabelDuration),
+                            value: showSuccessIcon
+                        )
+                } else if showInfoIconVisible {
+                    Icon(name: "info", size: 24, color: colorTextSubtle)
+                        .padding(.trailing, spaceInset100)
+                        .transition(.opacity)
+                        .animation(
+                            reduceMotion ? .none : .timingCurve(0.4, 0.0, 0.2, 1.0, duration: motionFloatLabelDuration),
+                            value: showInfoIconVisible
+                        )
                 }
             }
             .frame(minHeight: tapAreaRecommended) // WCAG minimum touch target
@@ -287,13 +346,16 @@ struct CustomTextFieldStyle: TextFieldStyle {
     let isFocused: Bool
     let hasError: Bool
     let isSuccess: Bool
+    let hasTrailingIcon: Bool
     
     func _body(configuration: TextField<Self._Label>) -> some View {
         configuration
             .font(Font.system(size: typographyInputFontSize)
                 .weight(typographyInputFontWeight))
             .foregroundColor(colorTextDefault)
-            .padding(spaceInset100)
+            .padding(.leading, spaceInset100)
+            .padding(.vertical, spaceInset100)
+            .padding(.trailing, hasTrailingIcon ? 0 : spaceInset100) // No trailing padding if icon present
             .background(colorBackground)
             .overlay(
                 RoundedRectangle(cornerRadius: radius150)
