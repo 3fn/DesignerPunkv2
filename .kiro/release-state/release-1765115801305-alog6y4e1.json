@@ -1,0 +1,21 @@
+{
+  "id": "release-1765115801305-alog6y4e1",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-07T13:56:41.305Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-07T13:56:41.306Z",
+  "completedAt": "2025-12-07T13:56:41.306Z"
+}

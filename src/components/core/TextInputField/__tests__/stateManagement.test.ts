@@ -625,6 +625,48 @@ describe('State Management', () => {
       expect(state.isLabelFloated).toBe(true);
     });
 
+    it('should maintain error state across focus transitions', () => {
+      // Start with error state, not focused
+      let state: TextInputFieldState = {
+        isFocused: false,
+        isFilled: true,
+        hasError: true,
+        isSuccess: false,
+        isLabelFloated: true
+      };
+
+      // Focus the input - error state should persist
+      state = handleFocus(state);
+      expect(state.hasError).toBe(true);
+      expect(state.isFocused).toBe(true);
+
+      // Blur the input - error state should still persist
+      state = handleBlur(state);
+      expect(state.hasError).toBe(true);
+      expect(state.isFocused).toBe(false);
+    });
+
+    it('should maintain error state across value changes', () => {
+      // Start with error state
+      let state: TextInputFieldState = {
+        isFocused: true,
+        isFilled: false,
+        hasError: true,
+        isSuccess: false,
+        isLabelFloated: true
+      };
+
+      // Change value - error state should persist
+      state = handleValueChange(state, 'new value');
+      expect(state.hasError).toBe(true);
+      expect(state.isFilled).toBe(true);
+
+      // Clear value - error state should still persist
+      state = handleValueChange(state, '');
+      expect(state.hasError).toBe(true);
+      expect(state.isFilled).toBe(false);
+    });
+
     it('should transition from Empty, Focused to Empty, Not Focused', () => {
       let state: TextInputFieldState = {
         isFocused: true,
