@@ -1,0 +1,21 @@
+{
+  "id": "release-1765110026020-b0vlclcfh",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-07T12:20:26.020Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-07T12:20:26.021Z",
+  "completedAt": "2025-12-07T12:20:26.021Z"
+}

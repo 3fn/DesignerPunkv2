@@ -1,0 +1,21 @@
+{
+  "id": "release-1765110564637-eoch5bgvz",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-07T12:29:24.637Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-07T12:29:24.638Z",
+  "completedAt": "2025-12-07T12:29:24.638Z"
+}

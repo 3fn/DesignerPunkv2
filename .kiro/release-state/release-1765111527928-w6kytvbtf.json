@@ -1,0 +1,21 @@
+{
+  "id": "release-1765111527928-w6kytvbtf",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-07T12:45:27.928Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-07T12:45:27.929Z",
+  "completedAt": "2025-12-07T12:45:27.929Z"
+}

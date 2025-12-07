@@ -1,0 +1,21 @@
+{
+  "id": "release-1765111827010-jlc3139rm",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-07T12:50:27.010Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-12-07T12:50:31.593Z",
+  "completedAt": "2025-12-07T12:50:31.593Z"
+}

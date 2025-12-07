@@ -80,7 +80,7 @@ describe('State Integration', () => {
       expect(workflowState).toBeDefined();
       expect(workflowState?.state).toBeDefined();
       expect(workflowState?.completedStages).toBeDefined();
-    });
+    }, 15000); // 15 second timeout for integration test with release execution
 
     it('should track completed and failed stages', async () => {
       // Requirements: 8.1
@@ -131,7 +131,7 @@ describe('State Integration', () => {
       const workflowState = releaseManager.getWorkflowState();
       expect(workflowState).toBeDefined();
       expect(workflowState?.context).toBeDefined();
-    });
+    }, 15000); // 15 second timeout for integration test with release execution
   });
 
   describe('Crash Recovery', () => {

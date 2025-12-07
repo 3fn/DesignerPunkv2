@@ -1,0 +1,21 @@
+{
+  "id": "release-1765110315219-vkledkqun",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-07T12:25:15.219Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-07T12:25:15.221Z",
+  "completedAt": "2025-12-07T12:25:15.221Z"
+}

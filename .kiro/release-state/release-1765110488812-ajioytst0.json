@@ -1,0 +1,21 @@
+{
+  "id": "release-1765110488812-ajioytst0",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-07T12:28:08.812Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-07T12:28:08.813Z",
+  "completedAt": "2025-12-07T12:28:08.813Z"
+}

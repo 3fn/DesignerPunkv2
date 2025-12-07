@@ -13,6 +13,20 @@
  */
 
 import { SemanticToken, SemanticCategory } from '../../types/SemanticToken';
+import { UnitConverter } from '../../build/tokens/UnitConverter';
+
+/**
+ * Calculate scaled fontSize for labelMdFloat using scale088 (0.88)
+ * 
+ * This calculation happens at token definition time, not generation time.
+ * The generator receives the final calculated value (14px).
+ * 
+ * Formula: fontSize100 (16px) × scale088 (0.88) = 14.08px → rounds to 14px
+ * 
+ * Uses applyScaleWithRounding to ensure whole pixel values for consistent rendering.
+ */
+const unitConverter = new UnitConverter();
+const labelMdFloatFontSize = unitConverter.applyScaleWithRounding(16, 0.88);
 
 /**
  * Typography semantic tokens for common text styles
@@ -289,6 +303,24 @@ export const typographyTokens: Record<string, Omit<SemanticToken, 'primitiveToke
     category: SemanticCategory.TYPOGRAPHY,
     context: 'Standard labels for form fields and UI elements',
     description: 'Medium label typography with 16px font size, 1.5 line height, body font family, medium weight'
+  },
+
+  'typography.labelMdFloat': {
+    name: 'typography.labelMdFloat',
+    primitiveReferences: {
+      // fontSize calculated using applyScaleWithRounding(16, 0.88) = 14px
+      // Calculation happens at token definition time, not generation time
+      // Formula: fontSize100 (16px) × scale088 (0.88) = 14.08px → rounds to 14px
+      // Result: 14px matches fontSize075 baseValue, ensuring consistent rendering
+      fontSize: 'fontSize075', // Uses fontSize075 (14px) as the calculated result of 16px × 0.88
+      lineHeight: 'lineHeight100',
+      fontFamily: 'fontFamilyBody',
+      fontWeight: 'fontWeight500',
+      letterSpacing: 'letterSpacing100'
+    },
+    category: SemanticCategory.TYPOGRAPHY,
+    context: 'Floated label state for text input fields with float label pattern',
+    description: `Medium label typography scaled to ${labelMdFloatFontSize}px (fontSize100 × scale088) for floated label state, maintains same lineHeight, fontFamily, fontWeight, and letterSpacing as labelMd to prevent layout shift during animation`
   },
 
   'typography.labelLg': {
