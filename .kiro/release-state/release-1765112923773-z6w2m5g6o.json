@@ -1,0 +1,15 @@
+{
+  "id": "release-1765112923773-z6w2m5g6o",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-12-07T13:08:43.773Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-07T13:08:43.773Z"
+}
