@@ -1,0 +1,21 @@
+{
+  "id": "release-1765120401336-6qnuxgcli",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-07T15:13:21.336Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-12-07T15:13:26.320Z",
+  "completedAt": "2025-12-07T15:13:26.320Z"
+}

@@ -35,7 +35,7 @@ describe('State Management', () => {
 
       expect(result.isFloated).toBe(false);
       expect(result.fontSize).toBe('typography.labelMd');
-      expect(result.color).toBe('color.text.subtle');
+      expect(result.color).toBe('color.text.muted');
       expect(result.position).toBe('inside');
     });
 
@@ -69,7 +69,7 @@ describe('State Management', () => {
 
       expect(result.isFloated).toBe(true);
       expect(result.fontSize).toBe('typography.labelMdFloat');
-      expect(result.color).toBe('color.text.subtle');
+      expect(result.color).toBe('color.text.muted');
       expect(result.position).toBe('above');
     });
 

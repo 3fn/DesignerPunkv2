@@ -65,7 +65,7 @@ export interface IconVisibility {
  * - Error state: color.error
  * - Success state: color.success
  * - Focused state: color.primary
- * - Default/floated: color.text.subtle
+ * - Default/floated: color.text.muted
  * 
  * @param state - Current component state
  * @returns Label position configuration
@@ -89,7 +89,7 @@ export function calculateLabelPosition(state: TextInputFieldState): LabelPositio
   } else if (state.isFocused) {
     color = 'color.primary';
   } else {
-    color = 'color.text.subtle';
+    color = 'color.text.muted';
   }
   
   return {

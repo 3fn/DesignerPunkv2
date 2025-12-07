@@ -48,7 +48,7 @@ export const typographyTokens = {
  */
 export const colorTokens = {
   /** Label color when not focused */
-  labelDefault: 'color.text.subtle',
+  labelDefault: 'color.text.muted',
   
   /** Label color when focused (enhanced with blend.focusSaturate) */
   labelFocused: 'color.primary',
@@ -63,7 +63,7 @@ export const colorTokens = {
   inputText: 'color.text.default',
   
   /** Helper text color */
-  helperText: 'color.text.subtle',
+  helperText: 'color.text.muted',
   
   /** Error message color */
   errorText: 'color.error',

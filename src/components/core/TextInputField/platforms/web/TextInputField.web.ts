@@ -50,18 +50,25 @@ export class TextInputField extends HTMLElement {
   private helperTextElement: HTMLParagraphElement | null = null;
   private errorMessageElement: HTMLParagraphElement | null = null;
   
-  // Shadow DOM (declare as public to match HTMLElement interface)
-  declare shadowRoot: ShadowRoot;
+  // Shadow DOM
+  private _shadowRoot: ShadowRoot;
   
   constructor() {
     super();
     
     // Initialize shadow DOM
-    this.shadowRoot = this.attachShadow({ mode: 'open' });
+    this._shadowRoot = this.attachShadow({ mode: 'open' });
     
     // Initialize state
     this.state = createInitialState(this.getPropsFromAttributes());
     this.animationState = createInitialAnimationState();
+  }
+  
+  /**
+   * Get shadow root (for testing and external access)
+   */
+  get shadowRoot(): ShadowRoot {
+    return this._shadowRoot;
   }
   
   /**
@@ -234,15 +241,15 @@ export class TextInputField extends HTMLElement {
     style.textContent = this.getStyles();
     
     // Clear shadow root and append new content
-    this.shadowRoot.innerHTML = '';
-    this.shadowRoot.appendChild(style);
-    this.shadowRoot.appendChild(this.container);
+    this._shadowRoot.innerHTML = '';
+    this._shadowRoot.appendChild(style);
+    this._shadowRoot.appendChild(this.container);
     
     // Store DOM references
-    this.inputElement = this.shadowRoot.querySelector('.input-element');
-    this.labelElement = this.shadowRoot.querySelector('.input-label');
-    this.helperTextElement = this.shadowRoot.querySelector('.helper-text');
-    this.errorMessageElement = this.shadowRoot.querySelector('.error-message');
+    this.inputElement = this._shadowRoot.querySelector('.input-element');
+    this.labelElement = this._shadowRoot.querySelector('.input-label');
+    this.helperTextElement = this._shadowRoot.querySelector('.helper-text');
+    this.errorMessageElement = this._shadowRoot.querySelector('.error-message');
   }
   
   /**
@@ -288,9 +295,19 @@ export class TextInputField extends HTMLElement {
         border-color: var(--color-primary, #3B82F6);
       }
       
+      /* Focus ring for keyboard navigation (WCAG 2.4.7 Focus Visible) */
       .input-element:focus-visible {
         outline: var(--accessibility-focus-width, 2px) solid var(--accessibility-focus-color, #3B82F6);
         outline-offset: var(--accessibility-focus-offset, 2px);
+      }
+      
+      /* Ensure focus ring is visible in all states */
+      .input-wrapper.error .input-element:focus-visible {
+        outline-color: var(--accessibility-focus-color, #3B82F6);
+      }
+      
+      .input-wrapper.success .input-element:focus-visible {
+        outline-color: var(--accessibility-focus-color, #3B82F6);
       }
       
       .input-wrapper.error .input-element {
@@ -311,7 +328,7 @@ export class TextInputField extends HTMLElement {
         line-height: var(--typography-label-md-line-height, 24px);
         font-weight: var(--typography-label-md-font-weight, 500);
         letter-spacing: var(--typography-label-md-letter-spacing, 0);
-        color: var(--color-text-subtle, #6B7280);
+        color: var(--color-text-muted, #6B7280);
         pointer-events: none;
         transition: 
           transform var(--motion-float-label-duration, 250ms) var(--motion-float-label-easing, cubic-bezier(0.4, 0.0, 0.2, 1.0)),
@@ -345,7 +362,7 @@ export class TextInputField extends HTMLElement {
         line-height: var(--typography-caption-line-height, 18px);
         font-weight: var(--typography-caption-font-weight, 400);
         letter-spacing: var(--typography-caption-letter-spacing, 0);
-        color: var(--color-text-subtle, #6B7280);
+        color: var(--color-text-muted, #6B7280);
       }
       
       .error-message {

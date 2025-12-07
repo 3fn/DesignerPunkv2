@@ -1,0 +1,21 @@
+{
+  "id": "release-1765119870424-rf1kgeojt",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-07T15:04:30.424Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-07T15:04:30.425Z",
+  "completedAt": "2025-12-07T15:04:30.425Z"
+}

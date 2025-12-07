@@ -178,7 +178,7 @@ fun TextInputField(
             hasError -> colorError
             isSuccess -> colorSuccessStrong
             isFocused -> colorPrimary
-            else -> colorTextSubtle
+            else -> colorTextMuted
         },
         animationSpec = animationSpec,
         label = "labelColor"
@@ -261,6 +261,20 @@ fun TextInputField(
                         color = borderColor,
                         shape = RoundedCornerShape(radius150.dp)
                     )
+                    // Focus ring for keyboard navigation (WCAG 2.4.7 Focus Visible)
+                    // Visible in all states when focused
+                    .then(
+                        if (isFocused) {
+                            Modifier.border(
+                                width = accessibilityFocusWidth.dp,
+                                color = accessibilityFocusColor,
+                                shape = RoundedCornerShape(radius150.dp)
+                            )
+                            .padding(accessibilityFocusOffset.dp)
+                        } else {
+                            Modifier
+                        }
+                    )
                     .padding(spaceInset100.dp),
                 textStyle = LocalTextStyle.current.copy(
                     fontSize = typographyInputFontSize.sp,
@@ -293,7 +307,7 @@ fun TextInputField(
                                 text = placeholder,
                                 style = TextStyle(
                                     fontSize = typographyInputFontSize.sp,
-                                    color = colorTextSubtle.copy(alpha = 0.5f)
+                                    color = colorTextMuted.copy(alpha = 0.5f)
                                 )
                             )
                         }
@@ -342,7 +356,7 @@ fun TextInputField(
                     showInfoIconVisible -> Icon(
                         name = "info",
                         size = 24.dp,
-                        color = colorTextSubtle
+                        color = colorTextMuted
                     )
                 }
             }
@@ -358,7 +372,7 @@ fun TextInputField(
                     lineHeight = typographyCaptionLineHeight.sp,
                     fontWeight = FontWeight(typographyCaptionFontWeight),
                     letterSpacing = typographyCaptionLetterSpacing.sp,
-                    color = colorTextSubtle
+                    color = colorTextMuted
                 ),
                 modifier = Modifier.padding(start = spaceInset100.dp)
             )
@@ -422,7 +436,7 @@ private const val typographyCaptionFontWeight = 400
 private const val typographyCaptionLetterSpacing = 0f
 
 // Color tokens
-private val colorTextSubtle = Color(0xFF6B7280) // #6B7280
+private val colorTextMuted = Color(0xFF6B7280) // #6B7280
 private val colorTextDefault = Color(0xFF000000) // #000000
 private val colorPrimary = Color(0xFF3B82F6) // #3B82F6
 private val colorError = Color(0xFFEF4444) // #EF4444

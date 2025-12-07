@@ -1,0 +1,15 @@
+{
+  "id": "release-1765119957325-ohhfn5vwm",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-12-07T15:05:57.325Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-07T15:05:57.325Z"
+}

@@ -1,0 +1,21 @@
+{
+  "id": "release-1765121812789-lv79m3alb",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-07T15:36:52.789Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-12-07T15:36:57.443Z",
+  "completedAt": "2025-12-07T15:36:57.443Z"
+}

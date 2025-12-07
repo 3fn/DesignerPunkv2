@@ -1,0 +1,21 @@
+{
+  "id": "release-1765133173329-cyijk8upn",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-07T18:46:13.329Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-12-07T18:46:18.317Z",
+  "completedAt": "2025-12-07T18:46:18.317Z"
+}

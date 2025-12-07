@@ -124,7 +124,7 @@ struct TextInputField: View {
         } else if isFocused {
             return colorPrimary
         } else {
-            return colorTextSubtle
+            return colorTextMuted
         }
     }
     
@@ -269,7 +269,7 @@ struct TextInputField: View {
                             value: showSuccessIcon
                         )
                 } else if showInfoIconVisible {
-                    Icon(name: "info", size: 24, color: colorTextSubtle)
+                    Icon(name: "info", size: 24, color: colorTextMuted)
                         .padding(.trailing, spaceInset100)
                         .transition(.opacity)
                         .animation(
@@ -285,7 +285,7 @@ struct TextInputField: View {
                 Text(helperText)
                     .font(Font.system(size: typographyCaptionFontSize)
                         .weight(typographyCaptionFontWeight))
-                    .foregroundColor(colorTextSubtle)
+                    .foregroundColor(colorTextMuted)
                     .accessibilityIdentifier("\(id)-helper")
             }
             
@@ -362,11 +362,16 @@ struct CustomTextFieldStyle: TextFieldStyle {
                     .stroke(borderColor, lineWidth: borderDefault)
             )
             .overlay(
-                // Focus ring
+                // Focus ring for keyboard navigation (WCAG 2.4.7 Focus Visible)
+                // Visible in all states when focused
                 RoundedRectangle(cornerRadius: radius150)
                     .stroke(accessibilityFocusColor, lineWidth: accessibilityFocusWidth)
                     .padding(-accessibilityFocusOffset)
                     .opacity(isFocused ? 1 : 0)
+                    .animation(
+                        reduceMotion ? .none : .easeInOut(duration: 0.15),
+                        value: isFocused
+                    )
             )
     }
 }
@@ -398,7 +403,7 @@ private let typographyCaptionFontWeight: Font.Weight = .regular
 private let typographyCaptionLetterSpacing: CGFloat = 0
 
 // Color tokens
-private let colorTextSubtle = Color(red: 107/255, green: 114/255, blue: 128/255) // #6B7280
+private let colorTextMuted = Color(red: 107/255, green: 114/255, blue: 128/255) // #6B7280
 private let colorTextDefault = Color(red: 0/255, green: 0/255, blue: 0/255) // #000000
 private let colorPrimary = Color(red: 59/255, green: 130/255, blue: 246/255) // #3B82F6
 private let colorError = Color(red: 239/255, green: 68/255, blue: 68/255) // #EF4444
