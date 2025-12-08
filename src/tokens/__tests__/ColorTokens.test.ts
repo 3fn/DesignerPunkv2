@@ -20,7 +20,8 @@ import {
   yellowTokens,
   orangeTokens,
   purpleTokens,
-  violetTokens,
+  greenTokens,
+  pinkTokens,
   cyanTokens,
   tealTokens,
   shadowColorTokens,
@@ -244,16 +245,16 @@ describe('Color Tokens', () => {
   describe('Color Token Integration with Token Registry', () => {
     test('should integrate with token registry utilities', () => {
       // Test colorTokens object contains all family tokens
-      // 9 families × 5 scales + 4 shadow colors = 49 tokens
-      expect(Object.keys(colorTokens)).toHaveLength(49);
+      // 10 families × 5 scales + 4 shadow colors = 54 tokens
+      expect(Object.keys(colorTokens)).toHaveLength(54);
       
       // Test colorTokenNames array matches colorTokens keys
       expect(colorTokenNames).toEqual(Object.keys(colorTokens));
-      expect(colorTokenNames).toHaveLength(49);
+      expect(colorTokenNames).toHaveLength(54);
       
       // Test getAllColorTokens returns all tokens
       const allTokens = getAllColorTokens();
-      expect(allTokens).toHaveLength(49);
+      expect(allTokens).toHaveLength(54);
       expect(allTokens.every(token => token.category === TokenCategory.COLOR)).toBe(true);
     });
 
@@ -439,7 +440,7 @@ describe('Color Tokens', () => {
     });
 
     test('should support theme switching capability through structure', () => {
-      const testToken = getColorToken('violet200');
+      const testToken = getColorToken('green200');
       
       // Test that resolveColorTokenValue can switch between themes
       const baseTheme = resolveColorTokenValue(testToken, 'light', 'base');
@@ -540,14 +541,25 @@ describe('Color Tokens', () => {
       });
     });
 
-    test('should validate violet token family for depth, hover states, and secondary elements', () => {
-      const violetFamily = Object.values(violetTokens);
-      expect(violetFamily).toHaveLength(5);
+    test('should validate green token family for success states and positive feedback', () => {
+      const greenFamily = Object.values(greenTokens);
+      expect(greenFamily).toHaveLength(5);
       
-      violetFamily.forEach(token => {
-        expect(token.name).toMatch(/^violet[1-5]00$/);
-        expect(token.description.toLowerCase()).toContain('violet');
-        expect(token.mathematicalRelationship).toContain('Systematic violet scale progression');
+      greenFamily.forEach(token => {
+        expect(token.name).toMatch(/^green[1-5]00$/);
+        expect(token.description.toLowerCase()).toContain('green');
+        expect(token.mathematicalRelationship).toContain('Systematic green scale progression');
+      });
+    });
+
+    test('should validate pink token family for error states and urgent feedback', () => {
+      const pinkFamily = Object.values(pinkTokens);
+      expect(pinkFamily).toHaveLength(5);
+      
+      pinkFamily.forEach(token => {
+        expect(token.name).toMatch(/^pink[1-5]00$/);
+        expect(token.description.toLowerCase()).toContain('pink');
+        expect(token.mathematicalRelationship).toContain('Systematic pink scale progression');
       });
     });
 
@@ -570,6 +582,113 @@ describe('Color Tokens', () => {
         expect(token.name).toMatch(/^teal[1-5]00$/);
         expect(token.description.toLowerCase()).toContain('teal');
         expect(token.mathematicalRelationship).toContain('Systematic teal scale progression');
+      });
+    });
+
+    test('should validate green token family for success states and positive feedback', () => {
+      const greenFamily = Object.values(greenTokens);
+      expect(greenFamily).toHaveLength(5);
+      
+      greenFamily.forEach(token => {
+        expect(token.name).toMatch(/^green[1-5]00$/);
+        expect(token.description.toLowerCase()).toContain('green');
+        expect(token.mathematicalRelationship).toContain('Systematic green scale progression');
+      });
+    });
+
+    test('should validate pink token family for error states and urgent feedback', () => {
+      const pinkFamily = Object.values(pinkTokens);
+      expect(pinkFamily).toHaveLength(5);
+      
+      pinkFamily.forEach(token => {
+        expect(token.name).toMatch(/^pink[1-5]00$/);
+        expect(token.description.toLowerCase()).toContain('pink');
+        expect(token.mathematicalRelationship).toContain('Systematic pink scale progression');
+      });
+    });
+
+    test('should verify violet token family has been removed', () => {
+      // Verify violetTokens export no longer exists
+      const allTokens = getAllColorTokens();
+      const violetTokenNames = allTokens.filter(token => token.name.startsWith('violet'));
+      
+      expect(violetTokenNames).toHaveLength(0);
+      
+      // Verify COLOR_FAMILIES does not include VIOLET
+      expect(COLOR_FAMILIES).not.toHaveProperty('VIOLET');
+      
+      // Verify violet is not in the color families list
+      const familyValues = Object.values(COLOR_FAMILIES);
+      expect(familyValues).not.toContain('violet');
+    });
+
+    test('should have correct hex values for green color family', () => {
+      // Test green400 base color (#00FF88 - electric green)
+      const green400 = getColorToken('green400');
+      const colorValue = green400.platforms.web.value as ColorTokenValue;
+      
+      // Verify green400 has the electric green base color
+      expect(colorValue.light.base).toMatch(/^#[0-9A-F]{6}$/i);
+      expect(colorValue.dark.base).toMatch(/^#[0-9A-F]{6}$/i);
+      
+      // All green tokens should have valid hex values
+      const greenFamily = Object.values(greenTokens);
+      greenFamily.forEach(token => {
+        const value = token.platforms.web.value as ColorTokenValue;
+        expect(value.light.base).toMatch(/^#[0-9A-F]{6}$/i);
+        expect(value.light.wcag).toMatch(/^#[0-9A-F]{6}$/i);
+        expect(value.dark.base).toMatch(/^#[0-9A-F]{6}$/i);
+        expect(value.dark.wcag).toMatch(/^#[0-9A-F]{6}$/i);
+      });
+    });
+
+    test('should have correct hex values for pink color family', () => {
+      // Test pink400 base color (#FF1493 - hot pink)
+      const pink400 = getColorToken('pink400');
+      const colorValue = pink400.platforms.web.value as ColorTokenValue;
+      
+      // Verify pink400 has the hot pink base color
+      expect(colorValue.light.base).toMatch(/^#[0-9A-F]{6}$/i);
+      expect(colorValue.dark.base).toMatch(/^#[0-9A-F]{6}$/i);
+      
+      // All pink tokens should have valid hex values
+      const pinkFamily = Object.values(pinkTokens);
+      pinkFamily.forEach(token => {
+        const value = token.platforms.web.value as ColorTokenValue;
+        expect(value.light.base).toMatch(/^#[0-9A-F]{6}$/i);
+        expect(value.light.wcag).toMatch(/^#[0-9A-F]{6}$/i);
+        expect(value.dark.base).toMatch(/^#[0-9A-F]{6}$/i);
+        expect(value.dark.wcag).toMatch(/^#[0-9A-F]{6}$/i);
+      });
+    });
+
+    test('should have mode-aware values for green and pink families', () => {
+      // Test green family has mode-aware structure
+      const greenFamily = Object.values(greenTokens);
+      greenFamily.forEach(token => {
+        const colorValue = token.platforms.web.value as ColorTokenValue;
+        
+        // Verify mode-aware structure
+        expect(colorValue).toHaveProperty('light');
+        expect(colorValue).toHaveProperty('dark');
+        expect(colorValue.light).toHaveProperty('base');
+        expect(colorValue.light).toHaveProperty('wcag');
+        expect(colorValue.dark).toHaveProperty('base');
+        expect(colorValue.dark).toHaveProperty('wcag');
+      });
+      
+      // Test pink family has mode-aware structure
+      const pinkFamily = Object.values(pinkTokens);
+      pinkFamily.forEach(token => {
+        const colorValue = token.platforms.web.value as ColorTokenValue;
+        
+        // Verify mode-aware structure
+        expect(colorValue).toHaveProperty('light');
+        expect(colorValue).toHaveProperty('dark');
+        expect(colorValue.light).toHaveProperty('base');
+        expect(colorValue.light).toHaveProperty('wcag');
+        expect(colorValue.dark).toHaveProperty('base');
+        expect(colorValue.dark).toHaveProperty('wcag');
       });
     });
   });

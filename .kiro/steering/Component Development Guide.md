@@ -395,7 +395,7 @@ Each platform uses its native syntax to consume the generated token values. The 
 
 ### Button Components
 - **Text**: `typography.buttonSm/Md/Lg`
-- **Background**: `color.primary` (primary), `color.secondary` (secondary)
+- **Background**: `color.primary` (primary), or use primitive colors directly for variants
 - **Padding**: `space.inset.normal` or `space.inset.comfortable`
 - **Border radius**: `radius100` or `radius150`
 - **Min width**: `space400` (128px minimum for accessibility)

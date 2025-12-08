@@ -1,0 +1,15 @@
+{
+  "id": "release-1765228201860-azlydjyt1",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-12-08T21:10:01.860Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-08T21:10:01.860Z"
+}

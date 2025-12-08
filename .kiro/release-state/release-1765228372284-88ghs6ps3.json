@@ -1,0 +1,21 @@
+{
+  "id": "release-1765228372284-88ghs6ps3",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-08T21:12:52.284Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-08T21:12:52.285Z",
+  "completedAt": "2025-12-08T21:12:52.285Z"
+}

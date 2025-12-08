@@ -1,0 +1,21 @@
+{
+  "id": "release-1765228371666-zrfrhizik",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-08T21:12:51.666Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-08T21:12:51.667Z",
+  "completedAt": "2025-12-08T21:12:51.667Z"
+}

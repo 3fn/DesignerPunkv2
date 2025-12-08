@@ -5,7 +5,7 @@
  * Each color token supports light/dark modes with base/wcag themes for comprehensive
  * accessibility and aesthetic flexibility.
  * 
- * Color families: gray, black, white, yellow, orange, purple, violet, cyan, teal
+ * Color families: gray, black, white, yellow, orange, purple, green, pink, cyan, teal
  * Progression: 100-500 scale for systematic color relationships
  * Architecture: colorToken[systemMode][userTheme] resolution pattern
  */
@@ -1097,178 +1097,358 @@ export const purpleTokens = {
 };
 
 /**
- * Violet scale color tokens - Depth, hover states, and secondary elements
+ * Pink scale color tokens - Error states and urgent feedback
  */
-export const violetTokens = {
-  violet100: {
-    name: 'violet100',
+export const pinkTokens = {
+  pink100: {
+    name: 'pink100',
     category: TokenCategory.COLOR,
     baseValue: 0,
     familyBaseValue: COLOR_BASE_VALUE,
-    description: 'Light violet for subtle secondary backgrounds and highlights',
-    mathematicalRelationship: 'Systematic violet scale progression - lightest',
+    description: 'Lightest hot pink - subtle error backgrounds',
+    mathematicalRelationship: 'Systematic pink scale progression - lightest',
     baselineGridAlignment: false,
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
     platforms: {
       web: {
         value: {
-          light: { base: '#E8DDF3', wcag: '#DCC8F0' },
-          dark: { base: '#E8DDF3', wcag: '#DCC8F0' }
+          light: { base: '#FFDAE8', wcag: '#FFDAE8' },
+          dark: { base: '#FFDAE8', wcag: '#FFDAE8' }
         } as ColorTokenValue,
         unit: 'hex' as const
       },
       ios: {
         value: {
-          light: { base: '#E8DDF3', wcag: '#DCC8F0' },
-          dark: { base: '#E8DDF3', wcag: '#DCC8F0' }
+          light: { base: '#FFDAE8', wcag: '#FFDAE8' },
+          dark: { base: '#FFDAE8', wcag: '#FFDAE8' }
         } as ColorTokenValue,
         unit: 'hex' as const
       },
       android: {
         value: {
-          light: { base: '#E8DDF3', wcag: '#DCC8F0' },
-          dark: { base: '#E8DDF3', wcag: '#DCC8F0' }
+          light: { base: '#FFDAE8', wcag: '#FFDAE8' },
+          dark: { base: '#FFDAE8', wcag: '#FFDAE8' }
         } as ColorTokenValue,
         unit: 'hex' as const
       }
     }
   } as PrimitiveToken,
 
-  violet200: {
-    name: 'violet200',
+  pink200: {
+    name: 'pink200',
     category: TokenCategory.COLOR,
     baseValue: 0,
     familyBaseValue: COLOR_BASE_VALUE,
-    description: 'Medium-light violet for secondary brand elements and depth',
-    mathematicalRelationship: 'Systematic violet scale progression - medium-light',
+    description: 'Medium-light hot pink - error highlights',
+    mathematicalRelationship: 'Systematic pink scale progression - medium-light',
     baselineGridAlignment: false,
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
     platforms: {
       web: {
         value: {
-          light: { base: '#9A6BC2', wcag: '#A87DD9' },
-          dark: { base: '#9A6BC2', wcag: '#A87DD9' }
+          light: { base: '#FF82B4', wcag: '#FF82B4' },
+          dark: { base: '#FF82B4', wcag: '#FF82B4' }
         } as ColorTokenValue,
         unit: 'hex' as const
       },
       ios: {
         value: {
-          light: { base: '#9A6BC2', wcag: '#A87DD9' },
-          dark: { base: '#9A6BC2', wcag: '#A87DD9' }
+          light: { base: '#FF82B4', wcag: '#FF82B4' },
+          dark: { base: '#FF82B4', wcag: '#FF82B4' }
         } as ColorTokenValue,
         unit: 'hex' as const
       },
       android: {
         value: {
-          light: { base: '#9A6BC2', wcag: '#A87DD9' },
-          dark: { base: '#9A6BC2', wcag: '#A87DD9' }
+          light: { base: '#FF82B4', wcag: '#FF82B4' },
+          dark: { base: '#FF82B4', wcag: '#FF82B4' }
         } as ColorTokenValue,
         unit: 'hex' as const
       }
     }
   } as PrimitiveToken,
 
-  violet300: {
-    name: 'violet300',
+  pink300: {
+    name: 'pink300',
     category: TokenCategory.COLOR,
     baseValue: 0,
     familyBaseValue: COLOR_BASE_VALUE,
-    description: 'Medium violet for secondary brand color and hover states',
-    mathematicalRelationship: 'Systematic violet scale progression - secondary brand',
+    description: 'Bright hot pink - base pink color',
+    mathematicalRelationship: 'Systematic pink scale progression - base',
     baselineGridAlignment: false,
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
     platforms: {
       web: {
         value: {
-          light: { base: '#5B2C91', wcag: '#7A48B3' },
-          dark: { base: '#5B2C91', wcag: '#7A48B3' }
+          light: { base: '#FF2A6D', wcag: '#FF2A6D' },
+          dark: { base: '#FF2A6D', wcag: '#FF2A6D' }
         } as ColorTokenValue,
         unit: 'hex' as const
       },
       ios: {
         value: {
-          light: { base: '#5B2C91', wcag: '#7A48B3' },
-          dark: { base: '#5B2C91', wcag: '#7A48B3' }
+          light: { base: '#FF2A6D', wcag: '#FF2A6D' },
+          dark: { base: '#FF2A6D', wcag: '#FF2A6D' }
         } as ColorTokenValue,
         unit: 'hex' as const
       },
       android: {
         value: {
-          light: { base: '#5B2C91', wcag: '#7A48B3' },
-          dark: { base: '#5B2C91', wcag: '#7A48B3' }
+          light: { base: '#FF2A6D', wcag: '#FF2A6D' },
+          dark: { base: '#FF2A6D', wcag: '#FF2A6D' }
         } as ColorTokenValue,
         unit: 'hex' as const
       }
     }
   } as PrimitiveToken,
 
-  violet400: {
-    name: 'violet400',
+  pink400: {
+    name: 'pink400',
     category: TokenCategory.COLOR,
     baseValue: 0,
     familyBaseValue: COLOR_BASE_VALUE,
-    description: 'Dark violet for secondary text and depth elements',
-    mathematicalRelationship: 'Systematic violet scale progression - dark',
+    description: 'Dark hot pink - primary error color',
+    mathematicalRelationship: 'Systematic pink scale progression - dark',
     baselineGridAlignment: false,
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
     platforms: {
       web: {
         value: {
-          light: { base: '#482374', wcag: '#5A3380' },
-          dark: { base: '#482374', wcag: '#5A3380' }
+          light: { base: '#CC2257', wcag: '#CC2257' },
+          dark: { base: '#CC2257', wcag: '#CC2257' }
         } as ColorTokenValue,
         unit: 'hex' as const
       },
       ios: {
         value: {
-          light: { base: '#482374', wcag: '#5A3380' },
-          dark: { base: '#482374', wcag: '#5A3380' }
+          light: { base: '#CC2257', wcag: '#CC2257' },
+          dark: { base: '#CC2257', wcag: '#CC2257' }
         } as ColorTokenValue,
         unit: 'hex' as const
       },
       android: {
         value: {
-          light: { base: '#482374', wcag: '#5A3380' },
-          dark: { base: '#482374', wcag: '#5A3380' }
+          light: { base: '#CC2257', wcag: '#CC2257' },
+          dark: { base: '#CC2257', wcag: '#CC2257' }
         } as ColorTokenValue,
         unit: 'hex' as const
       }
     }
   } as PrimitiveToken,
 
-  violet500: {
-    name: 'violet500',
+  pink500: {
+    name: 'pink500',
     category: TokenCategory.COLOR,
     baseValue: 0,
     familyBaseValue: COLOR_BASE_VALUE,
-    description: 'Darkest violet for secondary text on light backgrounds',
-    mathematicalRelationship: 'Systematic violet scale progression - darkest',
+    description: 'Darkest hot pink - strong error color',
+    mathematicalRelationship: 'Systematic pink scale progression - darkest',
     baselineGridAlignment: false,
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
     platforms: {
       web: {
         value: {
-          light: { base: '#331951', wcag: '#3A2159' },
-          dark: { base: '#331951', wcag: '#3A2159' }
+          light: { base: '#801537', wcag: '#801537' },
+          dark: { base: '#801537', wcag: '#801537' }
         } as ColorTokenValue,
         unit: 'hex' as const
       },
       ios: {
         value: {
-          light: { base: '#331951', wcag: '#3A2159' },
-          dark: { base: '#331951', wcag: '#3A2159' }
+          light: { base: '#801537', wcag: '#801537' },
+          dark: { base: '#801537', wcag: '#801537' }
         } as ColorTokenValue,
         unit: 'hex' as const
       },
       android: {
         value: {
-          light: { base: '#331951', wcag: '#3A2159' },
-          dark: { base: '#331951', wcag: '#3A2159' }
+          light: { base: '#801537', wcag: '#801537' },
+          dark: { base: '#801537', wcag: '#801537' }
+        } as ColorTokenValue,
+        unit: 'hex' as const
+      }
+    }
+  } as PrimitiveToken
+};
+
+/**
+ * Green scale color tokens - Success states and positive feedback
+ */
+export const greenTokens = {
+  green100: {
+    name: 'green100',
+    category: TokenCategory.COLOR,
+    baseValue: 0,
+    familyBaseValue: COLOR_BASE_VALUE,
+    description: 'Lightest electric green - subtle success backgrounds',
+    mathematicalRelationship: 'Systematic green scale progression - lightest',
+    baselineGridAlignment: false,
+    isStrategicFlexibility: false,
+    isPrecisionTargeted: false,
+    platforms: {
+      web: {
+        value: {
+          light: { base: '#E6FFF5', wcag: '#D4FFE8' },
+          dark: { base: '#E6FFF5', wcag: '#D4FFE8' }
+        } as ColorTokenValue,
+        unit: 'hex' as const
+      },
+      ios: {
+        value: {
+          light: { base: '#E6FFF5', wcag: '#D4FFE8' },
+          dark: { base: '#E6FFF5', wcag: '#D4FFE8' }
+        } as ColorTokenValue,
+        unit: 'hex' as const
+      },
+      android: {
+        value: {
+          light: { base: '#E6FFF5', wcag: '#D4FFE8' },
+          dark: { base: '#E6FFF5', wcag: '#D4FFE8' }
+        } as ColorTokenValue,
+        unit: 'hex' as const
+      }
+    }
+  } as PrimitiveToken,
+
+  green200: {
+    name: 'green200',
+    category: TokenCategory.COLOR,
+    baseValue: 0,
+    familyBaseValue: COLOR_BASE_VALUE,
+    description: 'Medium-light electric green - success highlights',
+    mathematicalRelationship: 'Systematic green scale progression - medium-light',
+    baselineGridAlignment: false,
+    isStrategicFlexibility: false,
+    isPrecisionTargeted: false,
+    platforms: {
+      web: {
+        value: {
+          light: { base: '#80FFBB', wcag: '#66FFA8' },
+          dark: { base: '#80FFBB', wcag: '#66FFA8' }
+        } as ColorTokenValue,
+        unit: 'hex' as const
+      },
+      ios: {
+        value: {
+          light: { base: '#80FFBB', wcag: '#66FFA8' },
+          dark: { base: '#80FFBB', wcag: '#66FFA8' }
+        } as ColorTokenValue,
+        unit: 'hex' as const
+      },
+      android: {
+        value: {
+          light: { base: '#80FFBB', wcag: '#66FFA8' },
+          dark: { base: '#80FFBB', wcag: '#66FFA8' }
+        } as ColorTokenValue,
+        unit: 'hex' as const
+      }
+    }
+  } as PrimitiveToken,
+
+  green300: {
+    name: 'green300',
+    category: TokenCategory.COLOR,
+    baseValue: 0,
+    familyBaseValue: COLOR_BASE_VALUE,
+    description: 'Bright electric green - success accents',
+    mathematicalRelationship: 'Systematic green scale progression - bright',
+    baselineGridAlignment: false,
+    isStrategicFlexibility: false,
+    isPrecisionTargeted: false,
+    platforms: {
+      web: {
+        value: {
+          light: { base: '#33FF99', wcag: '#1AE680' },
+          dark: { base: '#33FF99', wcag: '#1AE680' }
+        } as ColorTokenValue,
+        unit: 'hex' as const
+      },
+      ios: {
+        value: {
+          light: { base: '#33FF99', wcag: '#1AE680' },
+          dark: { base: '#33FF99', wcag: '#1AE680' }
+        } as ColorTokenValue,
+        unit: 'hex' as const
+      },
+      android: {
+        value: {
+          light: { base: '#33FF99', wcag: '#1AE680' },
+          dark: { base: '#33FF99', wcag: '#1AE680' }
+        } as ColorTokenValue,
+        unit: 'hex' as const
+      }
+    }
+  } as PrimitiveToken,
+
+  green400: {
+    name: 'green400',
+    category: TokenCategory.COLOR,
+    baseValue: 0,
+    familyBaseValue: COLOR_BASE_VALUE,
+    description: 'Strong electric green - primary success color',
+    mathematicalRelationship: 'Systematic green scale progression - strong',
+    baselineGridAlignment: false,
+    isStrategicFlexibility: false,
+    isPrecisionTargeted: false,
+    platforms: {
+      web: {
+        value: {
+          light: { base: '#00FF88', wcag: '#00CC6E' },
+          dark: { base: '#00FF88', wcag: '#00CC6E' }
+        } as ColorTokenValue,
+        unit: 'hex' as const
+      },
+      ios: {
+        value: {
+          light: { base: '#00FF88', wcag: '#00CC6E' },
+          dark: { base: '#00FF88', wcag: '#00CC6E' }
+        } as ColorTokenValue,
+        unit: 'hex' as const
+      },
+      android: {
+        value: {
+          light: { base: '#00FF88', wcag: '#00CC6E' },
+          dark: { base: '#00FF88', wcag: '#00CC6E' }
+        } as ColorTokenValue,
+        unit: 'hex' as const
+      }
+    }
+  } as PrimitiveToken,
+
+  green500: {
+    name: 'green500',
+    category: TokenCategory.COLOR,
+    baseValue: 0,
+    familyBaseValue: COLOR_BASE_VALUE,
+    description: 'Darkest electric green - neon glow effect',
+    mathematicalRelationship: 'Systematic green scale progression - darkest/glow',
+    baselineGridAlignment: false,
+    isStrategicFlexibility: false,
+    isPrecisionTargeted: false,
+    platforms: {
+      web: {
+        value: {
+          light: { base: '#00CC6E', wcag: '#009954' },
+          dark: { base: '#00CC6E', wcag: '#009954' }
+        } as ColorTokenValue,
+        unit: 'hex' as const
+      },
+      ios: {
+        value: {
+          light: { base: '#00CC6E', wcag: '#009954' },
+          dark: { base: '#00CC6E', wcag: '#009954' }
+        } as ColorTokenValue,
+        unit: 'hex' as const
+      },
+      android: {
+        value: {
+          light: { base: '#00CC6E', wcag: '#009954' },
+          dark: { base: '#00CC6E', wcag: '#009954' }
         } as ColorTokenValue,
         unit: 'hex' as const
       }
@@ -1798,7 +1978,8 @@ export const colorTokens = {
   ...yellowTokens,
   ...orangeTokens,
   ...purpleTokens,
-  ...violetTokens,
+  ...pinkTokens,
+  ...greenTokens,
   ...cyanTokens,
   ...tealTokens,
   ...shadowColorTokens
@@ -1830,7 +2011,7 @@ export function getAllColorTokens(): PrimitiveToken[] {
 /**
  * Get color tokens by family (gray, black, white, etc.)
  */
-export function getColorTokensByFamily(family: 'gray' | 'black' | 'white' | 'yellow' | 'orange' | 'purple' | 'violet' | 'cyan' | 'teal'): PrimitiveToken[] {
+export function getColorTokensByFamily(family: 'gray' | 'black' | 'white' | 'yellow' | 'orange' | 'purple' | 'green' | 'pink' | 'cyan' | 'teal'): PrimitiveToken[] {
   return Object.values(colorTokens).filter(token => token.name.startsWith(family));
 }
 
@@ -1874,7 +2055,8 @@ export const COLOR_FAMILIES = {
   YELLOW: 'yellow',
   ORANGE: 'orange',
   PURPLE: 'purple',
-  VIOLET: 'violet',
+  GREEN: 'green',
+  PINK: 'pink',
   CYAN: 'cyan',
   TEAL: 'teal',
   SHADOW_BLACK: 'shadowBlack',

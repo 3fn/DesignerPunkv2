@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TextInputField - Actual Component Preview</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+      background: #f5f5f5;
+      line-height: 1.6;
+    }
+    
+    h1 {
+      color: #333;
+      margin-bottom: 32px;
+      font-size: 28px;
+    }
+    
+    .example-section {
+      background: white;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .example-section h2 {
+      margin: 0 0 8px 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .example-section p {
+      margin: 0 0 16px 0;
+      font-size: 14px;
+      color: #666;
+    }
+
+    /* Design token CSS variables (fallback values) */
+    :root {
+      --tap-area-recommended: 48px;
+      --space-inset-100: 8px;
+      --space-grouped-tight: 4px;
+      --space-grouped-minimal: 2px;
+      
+      --typography-input-font-family: system-ui;
+      --typography-input-font-size: 16px;
+      --typography-input-line-height: 24px;
+      --typography-input-font-weight: 400;
+      --typography-input-letter-spacing: 0;
+      
+      --typography-label-md-font-family: system-ui;
+      --typography-label-md-font-size: 16px;
+      --typography-label-md-line-height: 24px;
+      --typography-label-md-font-weight: 500;
+      --typography-label-md-letter-spacing: 0;
+      
+      --typography-label-md-float-font-size: 14px;
+      --typography-label-md-float-line-height: 20px;
+      
+      --typography-caption-font-family: system-ui;
+      --typography-caption-font-size: 13px;
+      --typography-caption-line-height: 18px;
+      --typography-caption-font-weight: 400;
+      --typography-caption-letter-spacing: 0;
+      
+      --color-text-default: #000000;
+      --color-text-muted: #6B7280;
+      --color-background: #FFFFFF;
+      --color-border: #D1D5DB;
+      --color-primary: #3B82F6;
+      --color-error: #EF4444;
+      --color-success-strong: #10B981;
+      
+      --border-default: 1px;
+      --radius-150: 12px;
+      
+      --motion-float-label-duration: 250ms;
+      --motion-float-label-easing: cubic-bezier(0.4, 0.0, 0.2, 1.0);
+      
+      --accessibility-focus-width: 2px;
+      --accessibility-focus-color: #3B82F6;
+      --accessibility-focus-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+  <h1>TextInputField - Actual Component Preview</h1>
+  <p style="color: #666; margin-bottom: 24px;">
+    This preview uses the actual <code>&lt;text-input-field&gt;</code> web component implementation.
+  </p>
+
+  <!-- Default State -->
+  <div class="example-section">
+    <h2>Default State</h2>
+    <p>Empty input, not focused. Label appears inside the input field.</p>
+    <text-input-field 
+      id="input-1" 
+      label="Email address">
+    </text-input-field>
+  </div>
+
+  <!-- Focused State -->
+  <div class="example-section">
+    <h2>Focused State</h2>
+    <p>Click the input to see the label animate to floated position.</p>
+    <text-input-field 
+      id="input-2" 
+      label="Username">
+    </text-input-field>
+  </div>
+
+  <!-- Filled State -->
+  <div class="example-section">
+    <h2>Filled State</h2>
+    <p>Input with content. Label remains in floated position.</p>
+    <text-input-field 
+      id="input-3" 
+      label="Full name"
+      value="Jane Smith">
+    </text-input-field>
+  </div>
+
+  <!-- Error State -->
+  <div class="example-section">
+    <h2>Error State</h2>
+    <p>Input with validation error. Shows error icon and error message.</p>
+    <text-input-field 
+      id="input-4" 
+      label="Email address"
+      value="invalid-email"
+      error-message="Please enter a valid email address">
+    </text-input-field>
+  </div>
+
+  <!-- Success State -->
+  <div class="example-section">
+    <h2>Success State</h2>
+    <p>Input with successful validation. Shows success icon (checkmark).</p>
+    <text-input-field 
+      id="input-5" 
+      label="Email address"
+      value="jane@example.com"
+      is-success="true">
+    </text-input-field>
+  </div>
+
+  <!-- Helper Text -->
+  <div class="example-section">
+    <h2>Helper Text</h2>
+    <p>Input with persistent helper text below the field.</p>
+    <text-input-field 
+      id="input-6" 
+      label="Password"
+      type="password"
+      helper-text="Must be at least 8 characters with one number and one special character">
+    </text-input-field>
+  </div>
+
+  <!-- Helper Text + Error -->
+  <div class="example-section">
+    <h2>Helper Text + Error State</h2>
+    <p>Both helper text and error message visible simultaneously.</p>
+    <text-input-field 
+      id="input-7" 
+      label="Password"
+      type="password"
+      value="weak"
+      helper-text="Must be at least 8 characters with one number and one special character"
+      error-message="Password is too short">
+    </text-input-field>
+  </div>
+
+  <!-- Required Field -->
+  <div class="example-section">
+    <h2>Required Field</h2>
+    <p>Input marked as required.</p>
+    <text-input-field 
+      id="input-8" 
+      label="Email address"
+      required>
+    </text-input-field>
+  </div>
+
+  <!-- Read-Only State -->
+  <div class="example-section">
+    <h2>Read-Only State</h2>
+    <p>Input in read-only mode (alternative to disabled).</p>
+    <text-input-field 
+      id="input-9" 
+      label="Account ID"
+      value="ACC-12345"
+      read-only>
+    </text-input-field>
+  </div>
+
+  <!-- Info Icon -->
+  <div class="example-section">
+    <h2>Info Icon</h2>
+    <p>Input with informational icon.</p>
+    <text-input-field 
+      id="input-10" 
+      label="API Key"
+      show-info-icon="true">
+    </text-input-field>
+  </div>
+
+  <!-- Load the actual web component -->
+  <script type="module">
+    // Import the browser-compatible web component
+    // Path is relative to server root (http://127.0.0.1:8001/)
+    import { TextInputField } from '/dist/components/core/TextInputField/platforms/web/TextInputField.browser.js';
+    
+    // Component is automatically registered when imported
+    console.log('TextInputField component loaded');
+  </script>
+</body>
+</html>

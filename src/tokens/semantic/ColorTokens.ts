@@ -3,18 +3,21 @@
  * 
  * Mode-aware semantic color tokens following systematic palette guidelines:
  * - primary = purple (brand authority and focus states)
- * - secondary = violet (sophisticated depth and secondary elements)
- * - success = cyan (tech/digital and success states)
- * - warning = yellow (urgent attention and warnings)
- * - error = orange (approachable error states)
+ * - success = green (success states and positive feedback)
+ * - warning = amber (urgent attention and warnings)
+ * - error = pink (error states and destructive actions)
  * - info = teal (informational states)
+ * - attention = yellow (attention-grabbing elements)
+ * - highlight = yellow (emphasized content)
+ * - tech = cyan (technical elements)
+ * - data = cyan (data visualization)
  * - glow colors = vibrant neon colors for emphasis effects
  * 
  * All color tokens reference mode-aware primitive color tokens that support
  * light/dark modes with base/wcag themes.
  * 
- * Glow colors reference existing vibrant primitive colors (purple500, cyan500, yellow500)
- * for neon emphasis effects.
+ * Glow colors reference existing vibrant primitive colors (purple500, cyan500, yellow500,
+ * green500, pink500) for neon emphasis effects.
  * 
  * ARCHITECTURAL DECISION: Shadow Color Semantic Layer Removed
  * 
@@ -40,17 +43,19 @@
  * 5. Semantic Meaning in Shadow Token: The semantic meaning belongs in the shadow token
  *    name itself (shadow.dusk, shadow.sunrise) rather than in a separate color token.
  * 
- * Spec-aligned: 19 color semantic tokens (16 original + 3 glow, shadow colors removed)
+ * Spec-aligned: 25 color semantic tokens (16 original + 4 new color tokens + 5 glow tokens)
+ * Note: color.secondary removed as part of color palette update (Spec 015)
  */
 
 import { SemanticToken, SemanticCategory } from '../../types/SemanticToken';
 
 /**
  * Semantic color tokens for systematic color usage
- * Total: 19 tokens (16 original + 3 glow, shadow colors removed)
+ * Total: 25 tokens (16 original + 4 new color tokens + 5 glow tokens)
+ * Note: color.secondary removed as part of color palette update (Spec 015)
  */
 export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>> = {
-  // Brand Identity (2 tokens)
+  // Brand Identity (1 token)
   'color.primary': {
     name: 'color.primary',
     primitiveReferences: { value: 'purple300' },
@@ -59,55 +64,55 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
     description: 'Primary purple color representing brand authority and focus states'
   },
 
-  'color.secondary': {
-    name: 'color.secondary',
-    primitiveReferences: { value: 'violet300' },
-    category: SemanticCategory.COLOR,
-    context: 'Secondary brand color for secondary CTAs and elements',
-    description: 'Secondary violet color providing sophisticated depth and secondary UI elements'
-  },
-
   // Status Feedback - Success (2 tokens)
   'color.success.strong': {
     name: 'color.success.strong',
-    primitiveReferences: { value: 'cyan400' },
+    primitiveReferences: { value: 'green400' },
     category: SemanticCategory.COLOR,
     context: 'Strong success color for prominent success states and text',
-    description: 'Strong cyan for prominent success indicators, text, and icons'
+    description: 'Strong green for prominent success indicators, text, and icons'
   },
 
   'color.success.subtle': {
     name: 'color.success.subtle',
-    primitiveReferences: { value: 'cyan100' },
+    primitiveReferences: { value: 'green100' },
     category: SemanticCategory.COLOR,
     context: 'Subtle success color for backgrounds and light indicators',
-    description: 'Subtle cyan for success backgrounds and light success indicators'
+    description: 'Subtle green for success backgrounds and light success indicators'
   },
 
   // Status Feedback - Warning (2 tokens)
   'color.warning.strong': {
     name: 'color.warning.strong',
-    primitiveReferences: { value: 'yellow400' },
+    primitiveReferences: { value: 'orange400' },
     category: SemanticCategory.COLOR,
     context: 'Strong warning color for prominent warning states and text',
-    description: 'Strong yellow for prominent warning indicators, text, and icons'
+    description: 'Strong amber (orange) for prominent warning indicators, text, and icons'
   },
 
   'color.warning.subtle': {
     name: 'color.warning.subtle',
-    primitiveReferences: { value: 'yellow100' },
+    primitiveReferences: { value: 'orange100' },
     category: SemanticCategory.COLOR,
     context: 'Subtle warning color for backgrounds and light indicators',
-    description: 'Subtle yellow for warning backgrounds and light warning indicators'
+    description: 'Subtle amber (orange) for warning backgrounds and light warning indicators'
   },
 
-  // Status Feedback - Error (1 token)
-  'color.error': {
-    name: 'color.error',
-    primitiveReferences: { value: 'orange300' },
+  // Status Feedback - Error (2 tokens)
+  'color.error.strong': {
+    name: 'color.error.strong',
+    primitiveReferences: { value: 'pink400' },
     category: SemanticCategory.COLOR,
-    context: 'Error state color for errors and destructive actions',
-    description: 'Error orange color for approachable error states and destructive actions'
+    context: 'Strong error color for prominent error states and text',
+    description: 'Strong pink for prominent error indicators, text, and icons'
+  },
+
+  'color.error.subtle': {
+    name: 'color.error.subtle',
+    primitiveReferences: { value: 'pink100' },
+    category: SemanticCategory.COLOR,
+    context: 'Subtle error color for backgrounds and light indicators',
+    description: 'Subtle pink for error backgrounds and light error indicators'
   },
 
   // Informational (2 tokens)
@@ -125,6 +130,40 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
     category: SemanticCategory.COLOR,
     context: 'Subtle informational color for backgrounds and light indicators',
     description: 'Subtle teal for informational backgrounds and light info indicators'
+  },
+
+  // Attention & Highlight (2 tokens)
+  'color.attention': {
+    name: 'color.attention',
+    primitiveReferences: { value: 'yellow400' },
+    category: SemanticCategory.COLOR,
+    context: 'Attention color for elements requiring user focus',
+    description: 'Yellow for attention-grabbing elements and notifications'
+  },
+
+  'color.highlight': {
+    name: 'color.highlight',
+    primitiveReferences: { value: 'yellow300' },
+    category: SemanticCategory.COLOR,
+    context: 'Highlight color for emphasized content',
+    description: 'Yellow for highlighted text and emphasized content'
+  },
+
+  // Tech & Data (2 tokens)
+  'color.tech': {
+    name: 'color.tech',
+    primitiveReferences: { value: 'cyan400' },
+    category: SemanticCategory.COLOR,
+    context: 'Tech color for technical elements and code',
+    description: 'Cyan for technical elements, code snippets, and tech-related UI'
+  },
+
+  'color.data': {
+    name: 'color.data',
+    primitiveReferences: { value: 'cyan300' },
+    category: SemanticCategory.COLOR,
+    context: 'Data color for data visualization and metrics',
+    description: 'Cyan for data visualization, metrics, and data-related elements'
   },
 
   // Text Hierarchy (4 tokens)
@@ -185,7 +224,7 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
     description: 'Border gray for standard UI element borders and dividers'
   },
 
-  // Glow Colors (3 tokens) - Reference existing vibrant primitive colors
+  // Glow Colors (5 tokens) - Reference existing vibrant primitive colors
   'glow.neonPurple': {
     name: 'glow.neonPurple',
     primitiveReferences: { value: 'purple500' },
@@ -208,12 +247,29 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
     category: SemanticCategory.COLOR,
     context: 'Neon yellow glow color for emphasis effects',
     description: 'Vibrant yellow glow referencing yellow500'
+  },
+
+  'glow.neonGreen': {
+    name: 'glow.neonGreen',
+    primitiveReferences: { value: 'green500' },
+    category: SemanticCategory.COLOR,
+    context: 'Neon green glow color for emphasis effects',
+    description: 'Vibrant green glow referencing green500'
+  },
+
+  'glow.neonPink': {
+    name: 'glow.neonPink',
+    primitiveReferences: { value: 'pink500' },
+    category: SemanticCategory.COLOR,
+    context: 'Neon pink glow color for emphasis effects',
+    description: 'Vibrant pink glow referencing pink500'
   }
 };
 
 /**
  * Array of all color semantic token names for iteration
- * Total: 19 tokens (16 original + 3 glow, shadow colors removed)
+ * Total: 25 tokens (16 original + 4 new color tokens + 5 glow tokens)
+ * Note: color.secondary removed as part of color palette update (Spec 015)
  */
 export const colorTokenNames = Object.keys(colorTokens);
 
@@ -232,10 +288,11 @@ export function getAllColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'
 }
 
 /**
- * Validate token count matches spec (19 tokens: 16 original + 3 glow, shadow colors removed)
+ * Validate token count matches spec (25 tokens: 16 original + 4 new color tokens + 5 glow tokens)
+ * Note: color.secondary removed as part of color palette update (Spec 015)
  */
 export function validateColorTokenCount(): boolean {
-  const expectedCount = 19;
+  const expectedCount = 25;
   const actualCount = colorTokenNames.length;
   if (actualCount !== expectedCount) {
     console.warn(`Color token count mismatch: expected ${expectedCount}, got ${actualCount}`);

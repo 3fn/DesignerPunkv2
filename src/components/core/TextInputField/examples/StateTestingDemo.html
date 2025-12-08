@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TextInputField - State Testing</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      color: white;
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 2rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .demo-card {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1a202c;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .state-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    .state-example {
+      padding: 20px;
+      background: #f7fafc;
+      border-radius: 8px;
+      border: 2px solid #e2e8f0;
+    }
+
+    .state-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #4a5568;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .controls {
+      background: #f7fafc;
+      border-left: 4px solid #667eea;
+      padding: 20px;
+      border-radius: 4px;
+      margin-bottom: 30px;
+    }
+
+    .controls h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 16px;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    button.primary {
+      background: #667eea;
+      color: white;
+    }
+
+    button.primary:hover {
+      background: #5568d3;
+      transform: translateY(-1px);
+    }
+
+    button.secondary {
+      background: #e2e8f0;
+      color: #2d3748;
+    }
+
+    button.secondary:hover {
+      background: #cbd5e0;
+    }
+
+    button.danger {
+      background: #ef4444;
+      color: white;
+    }
+
+    button.danger:hover {
+      background: #dc2626;
+    }
+
+    button.success {
+      background: #10b981;
+      color: white;
+    }
+
+    button.success:hover {
+      background: #059669;
+    }
+
+    /* Inline component styles */
+    .text-input-wrapper {
+      margin-bottom: 16px;
+    }
+
+    .text-input-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: #ffffff;
+      border: 1px solid #cbd5e0;
+      border-radius: 8px;
+      padding: 12px 16px;
+      transition: all 0.2s ease;
+      min-height: 48px;
+    }
+
+    .text-input-container:focus-within {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .text-input-container.has-error {
+      border-color: #ef4444;
+      background: rgba(239, 68, 68, 0.05);
+    }
+
+    .text-input-container.has-success {
+      border-color: #10b981;
+    }
+
+    .text-input-container.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background: #f7fafc;
+    }
+
+    .text-input-container.readonly {
+      background: #f7fafc;
+    }
+
+    .text-input-label {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #718096;
+      font-size: 16px;
+      pointer-events: none;
+      transition: all 0.2s ease;
+      background: white;
+      padding: 0 4px;
+    }
+
+    .text-input-container:focus-within .text-input-label,
+    .text-input-container.has-value .text-input-label {
+      top: 0;
+      font-size: 12px;
+      color: #667eea;
+    }
+
+    .text-input-container.has-error .text-input-label {
+      color: #ef4444;
+    }
+
+    .text-input-container.has-success .text-input-label {
+      color: #10b981;
+    }
+
+    .text-input-field {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      color: #1a202c;
+      background: transparent;
+      padding: 4px 0;
+    }
+
+    .text-input-field:disabled {
+      cursor: not-allowed;
+    }
+
+    .text-input-icon {
+      margin-left: 8px;
+      font-size: 18px;
+    }
+
+    .text-input-helper {
+      font-size: 14px;
+      color: #718096;
+      margin-top: 8px;
+    }
+
+    .text-input-helper.error {
+      color: #ef4444;
+    }
+
+    .text-input-helper.success {
+      color: #10b981;
+    }
+
+    .checklist {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .checklist h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 12px;
+    }
+
+    .checklist ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .checklist li {
+      padding: 8px 0;
+      color: #4a5568;
+      display: flex;
+      align-items: center;
+    }
+
+    .checklist li:before {
+      content: "☐";
+      margin-right: 8px;
+      font-size: 18px;
+      color: #cbd5e0;
+    }
+
+    .checklist li.checked:before {
+      content: "☑";
+      color: #10b981;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧪 TextInputField State Testing</h1>
+
+    <!-- Interactive Controls -->
+    <div class="demo-card">
+      <div class="section-title">Interactive Test Field</div>
+      
+      <div class="text-input-wrapper">
+        <div class="text-input-container" id="test-container">
+          <label class="text-input-label" for="test-input">Test Input Field</label>
+          <input 
+            type="text" 
+            id="test-input" 
+            class="text-input-field"
+            aria-label="Test Input Field"
+          />
+          <span class="text-input-icon" id="test-icon"></span>
+        </div>
+        <div class="text-input-helper" id="test-helper">Use the buttons below to test different states</div>
+      </div>
+
+      <div class="controls">
+        <h3>Test Controls</h3>
+        <div class="button-group">
+          <button class="secondary" onclick="resetState()">Reset</button>
+          <button class="primary" onclick="fillValue()">Fill Value</button>
+          <button class="secondary" onclick="clearValue()">Clear Value</button>
+          <button class="danger" onclick="showError()">Show Error</button>
+          <button class="success" onclick="showSuccess()">Show Success</button>
+          <button class="secondary" onclick="toggleDisabled()">Toggle Disabled</button>
+          <button class="secondary" onclick="toggleReadonly()">Toggle Readonly</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- All States Display -->
+    <div class="demo-card">
+      <div class="section-title">All States Reference</div>
+      
+      <div class="state-grid">
+        <!-- Default State -->
+        <div class="state-example">
+          <div class="state-label">Default (Empty)</div>
+          <div class="text-input-wrapper">
+            <div class="text-input-container">
+              <label class="text-input-label">Label Text</label>
+              <input type="text" class="text-input-field" aria-label="Default state" />
+            </div>
+            <div class="text-input-helper">Helper text</div>
+          </div>
+        </div>
+
+        <!-- Focused State -->
+        <div class="state-example">
+          <div class="state-label">Focused</div>
+          <div class="text-input-wrapper">
+            <div class="text-input-container" style="border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);">
+              <label class="text-input-label" style="top: 0; font-size: 12px; color: #667eea;">Label Text</label>
+              <input type="text" class="text-input-field" aria-label="Focused state" />
+            </div>
+            <div class="text-input-helper">Helper text</div>
+          </div>
+        </div>
+
+        <!-- Filled State -->
+        <div class="state-example">
+          <div class="state-label">Filled</div>
+          <div class="text-input-wrapper">
+            <div class="text-input-container has-value">
+              <label class="text-input-label">Label Text</label>
+              <input type="text" class="text-input-field" value="Some text" aria-label="Filled state" />
+            </div>
+            <div class="text-input-helper">Helper text</div>
+          </div>
+        </div>
+
+        <!-- Error State -->
+        <div class="state-example">
+          <div class="state-label">Error</div>
+          <div class="text-input-wrapper">
+            <div class="text-input-container has-error has-value">
+              <label class="text-input-label">Label Text</label>
+              <input type="text" class="text-input-field" value="Invalid" aria-label="Error state" />
+              <span class="text-input-icon">⚠️</span>
+            </div>
+            <div class="text-input-helper error">This field has an error</div>
+          </div>
+        </div>
+
+        <!-- Success State -->
+        <div class="state-example">
+          <div class="state-label">Success</div>
+          <div class="text-input-wrapper">
+            <div class="text-input-container has-success has-value">
+              <label class="text-input-label">Label Text</label>
+              <input type="text" class="text-input-field" value="Valid input" aria-label="Success state" />
+              <span class="text-input-icon">✓</span>
+            </div>
+            <div class="text-input-helper success">Looks good!</div>
+          </div>
+        </div>
+
+        <!-- Disabled State -->
+        <div class="state-example">
+          <div class="state-label">Disabled</div>
+          <div class="text-input-wrapper">
+            <div class="text-input-container disabled has-value">
+              <label class="text-input-label">Label Text</label>
+              <input type="text" class="text-input-field" value="Disabled" disabled aria-label="Disabled state" />
+            </div>
+            <div class="text-input-helper">This field is disabled</div>
+          </div>
+        </div>
+
+        <!-- Readonly State -->
+        <div class="state-example">
+          <div class="state-label">Readonly</div>
+          <div class="text-input-wrapper">
+            <div class="text-input-container readonly has-value">
+              <label class="text-input-label">Label Text</label>
+              <input type="text" class="text-input-field" value="Read only" readonly aria-label="Readonly state" />
+            </div>
+            <div class="text-input-helper">This field is read-only</div>
+          </div>
+        </div>
+
+        <!-- Required Field -->
+        <div class="state-example">
+          <div class="state-label">Required</div>
+          <div class="text-input-wrapper">
+            <div class="text-input-container">
+              <label class="text-input-label">Label Text *</label>
+              <input type="text" class="text-input-field" required aria-label="Required state" />
+            </div>
+            <div class="text-input-helper">Required field</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Testing Checklist -->
+    <div class="demo-card">
+      <div class="checklist">
+        <h3>Testing Checklist</h3>
+        <ul>
+          <li id="check-1">Label floats up when focused</li>
+          <li id="check-2">Label stays up when field has value</li>
+          <li id="check-3">Label returns down when field is empty and blurred</li>
+          <li id="check-4">Error state shows red border and icon</li>
+          <li id="check-5">Success state shows green border and checkmark</li>
+          <li id="check-6">Disabled state prevents interaction</li>
+          <li id="check-7">Readonly state allows focus but not editing</li>
+          <li id="check-8">Focus ring visible on keyboard navigation</li>
+          <li id="check-9">Helper text updates with state changes</li>
+          <li id="check-10">Animations are smooth (250ms)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize state tracking
+    let currentState = {
+      disabled: false,
+      readonly: false,
+      hasError: false,
+      hasSuccess: false
+    };
+
+    // Get elements
+    const testContainer = document.getElementById('test-container');
+    const testInput = document.getElementById('test-input');
+    const testHelper = document.getElementById('test-helper');
+    const testIcon = document.getElementById('test-icon');
+
+    // Update input state
+    function updateInputState(input, container) {
+      if (input.value.length > 0) {
+        container.classList.add('has-value');
+      } else {
+        container.classList.remove('has-value');
+      }
+    }
+
+    // Add event listeners to test input
+    testInput.addEventListener('input', () => updateInputState(testInput, testContainer));
+    testInput.addEventListener('blur', () => updateInputState(testInput, testContainer));
+
+    // Control functions
+    function resetState() {
+      currentState = { disabled: false, readonly: false, hasError: false, hasSuccess: false };
+      testContainer.classList.remove('has-error', 'has-success', 'disabled', 'readonly', 'has-value');
+      testInput.disabled = false;
+      testInput.readOnly = false;
+      testInput.value = '';
+      testHelper.className = 'text-input-helper';
+      testHelper.textContent = 'Use the buttons below to test different states';
+      testIcon.textContent = '';
+    }
+
+    function fillValue() {
+      testInput.value = 'Sample text content';
+      updateInputState(testInput, testContainer);
+    }
+
+    function clearValue() {
+      testInput.value = '';
+      updateInputState(testInput, testContainer);
+    }
+
+    function showError() {
+      currentState.hasError = true;
+      currentState.hasSuccess = false;
+      testContainer.classList.add('has-error');
+      testContainer.classList.remove('has-success');
+      testHelper.className = 'text-input-helper error';
+      testHelper.textContent = 'This field has an error';
+      testIcon.textContent = '⚠️';
+    }
+
+    function showSuccess() {
+      currentState.hasSuccess = true;
+      currentState.hasError = false;
+      testContainer.classList.add('has-success');
+      testContainer.classList.remove('has-error');
+      testHelper.className = 'text-input-helper success';
+      testHelper.textContent = 'Looks good!';
+      testIcon.textContent = '✓';
+    }
+
+    function toggleDisabled() {
+      currentState.disabled = !currentState.disabled;
+      testInput.disabled = currentState.disabled;
+      if (currentState.disabled) {
+        testContainer.classList.add('disabled');
+        testHelper.textContent = 'This field is disabled';
+      } else {
+        testContainer.classList.remove('disabled');
+        testHelper.textContent = 'Use the buttons below to test different states';
+      }
+    }
+
+    function toggleReadonly() {
+      currentState.readonly = !currentState.readonly;
+      testInput.readOnly = currentState.readonly;
+      if (currentState.readonly) {
+        testContainer.classList.add('readonly');
+        testHelper.textContent = 'This field is read-only';
+      } else {
+        testContainer.classList.remove('readonly');
+        testHelper.textContent = 'Use the buttons below to test different states';
+      }
+    }
+
+    // Initialize all static examples
+    document.querySelectorAll('.state-example .text-input-field').forEach(input => {
+      const container = input.closest('.text-input-container');
+      updateInputState(input, container);
+      
+      input.addEventListener('input', () => updateInputState(input, container));
+      input.addEventListener('blur', () => updateInputState(input, container));
+    });
+
+    // Checklist interaction
+    document.querySelectorAll('.checklist li').forEach(item => {
+      item.addEventListener('click', function() {
+        this.classList.toggle('checked');
+      });
+    });
+  </script>
+</body>
+</html>

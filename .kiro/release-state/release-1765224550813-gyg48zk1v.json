@@ -1,0 +1,15 @@
+{
+  "id": "release-1765224550813-gyg48zk1v",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-12-08T20:09:10.813Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-08T20:09:10.813Z"
+}

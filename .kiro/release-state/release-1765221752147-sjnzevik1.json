@@ -1,0 +1,21 @@
+{
+  "id": "release-1765221752147-sjnzevik1",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-08T19:22:32.147Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-08T19:22:32.148Z",
+  "completedAt": "2025-12-08T19:22:32.148Z"
+}

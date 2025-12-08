@@ -1,0 +1,21 @@
+{
+  "id": "release-1765224117481-sbtriqhlo",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-08T20:01:57.481Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-08T20:01:57.481Z",
+  "completedAt": "2025-12-08T20:01:57.481Z"
+}

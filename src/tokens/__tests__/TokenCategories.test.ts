@@ -489,7 +489,7 @@ describe('Token Categories', () => {
       expect(COLOR_BASE_VALUE).toBe(0); // N/A for hex color tokens
 
       const allTokens = getAllColorTokens();
-      expect(allTokens.length).toBe(49); // 9 families × 5 scales + 4 shadow families × 1 scale = 49 tokens
+      expect(allTokens.length).toBe(54); // 10 families × 5 scales + 4 shadow families × 1 scale = 54 tokens
       expect(allTokens.every(token => token.category === TokenCategory.COLOR)).toBe(true);
       expect(allTokens.every(token => token.familyBaseValue === COLOR_BASE_VALUE)).toBe(true);
     });
@@ -512,10 +512,10 @@ describe('Token Categories', () => {
 
     test('should integrate color families with systematic color scale', () => {
       expect(COLOR_SCALE).toEqual([100, 200, 300, 400, 500]);
-      expect(Object.keys(COLOR_FAMILIES)).toHaveLength(13); // 9 original + 4 shadow families
+      expect(Object.keys(COLOR_FAMILIES)).toHaveLength(14); // 10 original + 4 shadow families
 
       // Test that main families follow the full scale
-      const mainFamilies = ['gray', 'black', 'white', 'yellow', 'orange', 'purple', 'violet', 'cyan', 'teal'];
+      const mainFamilies = ['gray', 'black', 'white', 'yellow', 'orange', 'purple', 'green', 'pink', 'cyan', 'teal'];
       mainFamilies.forEach(family => {
         COLOR_SCALE.forEach(scale => {
           const token = getColorToken(`${family}${scale}` as any);
@@ -577,7 +577,7 @@ describe('Token Categories', () => {
 
     test('should have consistent mathematical relationship descriptions across color families', () => {
       // Test main families with full scale
-      const mainFamilies = ['gray', 'black', 'white', 'yellow', 'orange', 'purple', 'violet', 'cyan', 'teal'];
+      const mainFamilies = ['gray', 'black', 'white', 'yellow', 'orange', 'purple', 'green', 'pink', 'cyan', 'teal'];
       mainFamilies.forEach(family => {
         COLOR_SCALE.forEach(scale => {
           const token = getColorToken(`${family}${scale}` as any);
