@@ -516,6 +516,48 @@ This implementation plan breaks down the Text Input Field component development 
     - Verify visual appearance consistent across platforms
     - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5_
 
+- [ ] 8. Fix WCAG Accessibility Test Failures
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  
+  **Success Criteria:**
+  - All color contrast tests pass WCAG 2.1 AA requirements (4.5:1 for text, 3:1 for non-text)
+  - Touch target sizing tests pass in JSDOM test environment
+  - No accessibility-related test failures
+  - Component maintains visual design while meeting accessibility standards
+  
+  **Primary Artifacts:**
+  - Updated semantic color tokens with WCAG-compliant values
+  - Updated test expectations or test setup for JSDOM compatibility
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/013-text-input-field/completion/task-8-parent-completion.md`
+  - Summary: `docs/specs/013-text-input-field/task-8-summary.md` (triggers release detection)
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 8 Complete: Fix WCAG Accessibility Test Failures"`
+  - Verify: Check GitHub for committed changes
+
+  - [ ] 8.1 Fix color contrast test failures
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Update test expectations to match actual token values OR
+    - Update semantic color tokens to meet WCAG requirements
+    - Document decision and rationale
+    - Verify all color contrast tests pass
+    - _Requirements: 7.4_
+
+  - [ ] 8.2 Fix touch target sizing test failures
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Update tests to work with JSDOM CSS custom property limitations OR
+    - Add CSS custom property polyfill for test environment
+    - Verify all touch target sizing tests pass
+    - _Requirements: 5.2, 5.3_
+
 ---
 
 **Organization**: spec-tasks  

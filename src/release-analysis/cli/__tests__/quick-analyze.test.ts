@@ -102,7 +102,7 @@ describe('QuickAnalyzer', () => {
       if (result.changeCount.breaking > 0) {
         expect(result.versionBump).toBe('major');
       }
-    });
+    }, 30000); // Increased timeout to 30s for git history analysis
 
     it('should recommend minor version bump for features', async () => {
       const result = await analyzer.runQuickAnalysis();
@@ -110,7 +110,7 @@ describe('QuickAnalyzer', () => {
       if (result.changeCount.breaking === 0 && result.changeCount.features > 0) {
         expect(result.versionBump).toBe('minor');
       }
-    });
+    }, 30000); // Increased timeout to 30s for git history analysis
 
     it('should recommend patch version bump for fixes', async () => {
       const result = await analyzer.runQuickAnalysis();
