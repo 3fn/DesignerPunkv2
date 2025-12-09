@@ -41,7 +41,6 @@ function testColorTokenTypes(): boolean {
   // Test valid color tokens
   const validColorTokens: ColorTokenName[] = [
     'color.primary',
-    'color.secondary',
     'color.error',
     'color.success.strong',
     'color.text.default',

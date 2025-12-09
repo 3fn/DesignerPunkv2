@@ -1,0 +1,21 @@
+{
+  "id": "release-1765254567780-durfrot7o",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-09T04:29:27.780Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-09T04:29:27.780Z",
+  "completedAt": "2025-12-09T04:29:27.780Z"
+}

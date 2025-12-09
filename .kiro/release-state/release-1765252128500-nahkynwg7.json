@@ -1,0 +1,15 @@
+{
+  "id": "release-1765252128500-nahkynwg7",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-12-09T03:48:48.500Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-09T03:48:48.500Z"
+}

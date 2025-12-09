@@ -395,7 +395,7 @@ This implementation plan converts the color palette and display font design into
     - Test fallback to Roboto when custom fonts unavailable
     - _Requirements: 8.1, 8.2, 8.4, 8.5_
 
-- [ ] 8. Checkpoint - Verify Token System Integration
+- [x] 8. Checkpoint - Verify Token System Integration
 
   **Type**: Implementation
   **Validation**: Tier 2 - Standard
@@ -406,7 +406,7 @@ This implementation plan converts the color palette and display font design into
   - Ensure all tests pass before proceeding to component validation
   - _Requirements: All previous requirements_
 
-- [ ] 9. Component Migration and Validation
+- [x] 9. Component Migration and Validation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -426,7 +426,7 @@ This implementation plan converts the color palette and display font design into
   - Detailed: `.kiro/specs/015-color-palette-update/completion/task-9-parent-completion.md`
   - Summary: `docs/specs/015-color-palette-update/task-9-summary.md` (triggers release detection)
 
-  - [ ] 9.1 Audit components for color.secondary usage
+  - [x] 9.1 Audit components for color.secondary usage
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Search all component files for `color.secondary` references
@@ -435,7 +435,7 @@ This implementation plan converts the color palette and display font design into
     - Verify no remaining color.secondary references
     - _Requirements: 12.2_
 
-  - [ ] 9.2 Validate component color inheritance
+  - [x] 9.2 Validate component color inheritance
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test ButtonCTA success variant shows green (not cyan)
@@ -444,7 +444,7 @@ This implementation plan converts the color palette and display font design into
     - Verify components automatically inherited new colors
     - _Requirements: 2.7, 10.1, 10.2, 10.3_
 
-  - [ ] 9.3 Validate component typography inheritance
+  - [x] 9.3 Validate component typography inheritance
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test headings render in Rajdhani font
@@ -454,7 +454,7 @@ This implementation plan converts the color palette and display font design into
     - Verify components automatically inherited new fonts
     - _Requirements: 4.5, 10.4, 10.5_
 
-  - [ ]* 9.4 Update visual regression baselines
+  - [x] 9.4 Update visual regression baselines
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Capture new baseline screenshots for all affected components
@@ -463,7 +463,7 @@ This implementation plan converts the color palette and display font design into
     - Remove old baseline images
     - _Requirements: 10.6, 10.7_
 
-  - [ ]* 9.5 Remove migration-specific test files
+  - [x] 9.5 Remove migration-specific test files
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Identify migration-specific test files
@@ -492,16 +492,29 @@ This implementation plan converts the color palette and display font design into
   - Detailed: `.kiro/specs/015-color-palette-update/completion/task-10-parent-completion.md`
   - Summary: `docs/specs/015-color-palette-update/task-10-summary.md` (triggers release detection)
 
-  - [ ] 10.1 Update color token documentation
+  - [x] 10.1 Update color token documentation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Document semantic meaning of each color family
-    - Explain green=success, pink=error, amber=warning, yellow=attention, cyan=tech/data, teal=info, purple=brand
+    - Explain green=success, pink=error, orange=warning, yellow=attention, cyan=tech/data, teal=info, purple=brand | Note from Peter: there seems to be some confusion between using 'amber' and 'orange'. We want to continue using 'orange'; I believe 'amber' is an misunderstanding within this spec.
     - Include guidance on accessible usage contexts
     - Document WCAG contrast considerations
     - _Requirements: 11.1, 11.4_
 
-  - [ ] 10.2 Update typography token documentation
+  - [x] 10.1-FIX Correct amber/orange terminology in documentation
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Replace all instances of "amber" with "orange" in docs/tokens/color-tokens.md ONLY
+    - Update color family heading from "Amber" to "Orange"
+    - Update semantic token descriptions to use "orange" terminology
+    - Update usage guidelines to reference "orange" instead of "amber"
+    - Verify consistency across all documentation sections
+    - DO NOT update completion documents or previously completed task documentation
+    - DO NOT update requirements.md, design.md, or other spec documents
+    - Note: Token names in code (amber100-500) remain unchanged - this is documentation-only fix
+    - _Requirements: 11.1_
+
+  - [x] 10.2 Update typography token documentation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Document that display typography uses Rajdhani
@@ -510,7 +523,7 @@ This implementation plan converts the color palette and display font design into
     - Include font weight mapping guidance
     - _Requirements: 11.2_
 
-  - [ ] 10.3 Update component examples
+  - [x] 10.3 Update component examples
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update component examples to demonstrate new color palette

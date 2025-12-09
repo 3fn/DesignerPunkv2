@@ -6,7 +6,7 @@
     <title>Icon Web Component Usage Examples</title>
     <style>
         body {
-            font-family: system-ui, -apple-system, sans-serif;
+            font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
@@ -14,12 +14,16 @@
         }
         
         h1 {
+            font-family: Rajdhani, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-weight: 600;
             color: #1a1a1a;
             border-bottom: 2px solid #e0e0e0;
             padding-bottom: 0.5rem;
         }
         
         h2 {
+            font-family: Rajdhani, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-weight: 600;
             color: #333;
             margin-top: 2rem;
             margin-bottom: 1rem;
@@ -34,6 +38,7 @@
         }
         
         .example-title {
+            font-family: Rajdhani, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             font-weight: 600;
             color: #555;
             margin-bottom: 0.5rem;
@@ -67,8 +72,8 @@
         }
         
         .blue-text { color: #3b82f6; }
-        .green-text { color: #10b981; }
-        .red-text { color: #ef4444; }
+        .green-text { color: #00FF88; } /* Updated to new success green */
+        .red-text { color: #FF1493; } /* Updated to new error pink */
         .purple-text { color: #8b5cf6; }
         
         button {
@@ -112,6 +117,10 @@
 </head>
 <body>
     <h1>Icon Web Component Usage Examples</h1>
+    
+    <div style="background: #e6fff5; padding: 1rem; border-radius: 8px; border-left: 4px solid #00FF88; margin-bottom: 1.5rem;">
+        <strong style="font-family: Rajdhani, sans-serif;">✨ Updated Design System:</strong> This page demonstrates the new color palette and Rajdhani typography for headings. Icons inherit colors from the updated palette.
+    </div>
     
     <p>
         This page demonstrates various ways to use the <code>&lt;dp-icon&gt;</code> web component.
@@ -214,7 +223,7 @@ check, x, plus, minus, circle, heart, settings, user, mail, calendar
         
         <div class="color-demo red-text">
             <dp-icon name="x"></dp-icon>
-            <span>Red text with red icon (color inherited from parent)</span>
+            <span>Pink text with pink icon (color inherited from parent - new error color)</span>
         </div>
         
         <div class="color-demo purple-text">

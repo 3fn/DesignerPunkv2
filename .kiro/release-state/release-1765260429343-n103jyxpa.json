@@ -1,0 +1,21 @@
+{
+  "id": "release-1765260429343-n103jyxpa",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-09T06:07:09.343Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-09T06:07:09.344Z",
+  "completedAt": "2025-12-09T06:07:09.344Z"
+}

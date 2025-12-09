@@ -1,0 +1,21 @@
+{
+  "id": "release-1765253646997-amtu0c3ig",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-09T04:14:06.997Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-12-09T04:14:14.972Z",
+  "completedAt": "2025-12-09T04:14:14.972Z"
+}
