@@ -1,0 +1,17 @@
+{
+  "id": "1765250721-spec-completion",
+  "type": "spec-completion",
+  "source": ".kiro/specs/015-color-palette-update/completion/task-6-parent-completion.md",
+  "triggeredAt": "2025-12-09T03:25:21.3NZ",
+  "triggeredBy": "hook-system",
+  "git": {
+    "commit": "70307b4d0c9b71f5a57d80bd5c8735903e0a0bc4",
+    "branch": "main",
+    "message": "Task Complete: Task 6 Complete: Configure iOS Font Integration"
+  },
+  "workflow": {
+    "hookType": "auto",
+    "projectRoot": "/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2"
+  },
+  "status": "pending"
+}
