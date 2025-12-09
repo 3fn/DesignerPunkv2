@@ -66,3 +66,7 @@ Thumbs.db
 
 # Release analysis cache (grows too large for GitHub)
 .kiro/release-analysis/history.json
+
+# Release working files (temporary files that accumulate quickly)
+.kiro/release-triggers/
+.kiro/release-state/

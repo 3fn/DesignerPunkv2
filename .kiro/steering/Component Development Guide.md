@@ -136,6 +136,59 @@ export const buttonCTATokens = {
 - **Examples**: Button sizing variants, state-specific colors
 - **Usage**: When component needs variants not covered by semantic tokens
 
+### WCAG Theme Architecture
+
+**Dual-Theme Support**
+
+The DesignerPunk token system includes built-in dual-theme support for color tokens:
+- **Base theme**: Prioritizes aesthetic design and brand expression
+- **WCAG theme**: Ensures WCAG 2.1 AA accessibility compliance
+
+**How It Works**
+
+Each primitive color token has both `base` and `wcag` theme values:
+
+```typescript
+// Example from ColorTokens.ts
+gray200: {
+  platforms: {
+    web: {
+      value: {
+        light: { base: '#68658A', wcag: '#8A879E' },
+        dark: { base: '#68658A', wcag: '#8A879E' }
+      }
+    }
+  }
+}
+```
+
+**Theme Selection**
+
+- **Base theme** (default): Used for aesthetic design where brand expression is prioritized
+- **WCAG theme**: Used when accessibility compliance is required or when base theme fails contrast requirements
+
+**Important Notes**
+
+1. **Not Automatic**: The WCAG theme doesn't automatically solve accessibility issues - it's a tool that requires Human-AI collaboration to use effectively
+2. **Component-Specific**: Accessibility testing must consider the specific context of each component and how elements pair together
+3. **Contrast Testing**: Proper accessibility testing checks element pairings in context (e.g., text on background, border on background) with appropriate WCAG standards based on element criticality
+4. **Design Feedback**: Accessibility decisions often require design feedback to balance aesthetic goals with accessibility requirements
+
+**When to Consider WCAG Theme**
+
+- When base theme colors fail WCAG contrast requirements
+- When component needs to meet specific accessibility standards
+- When design feedback indicates accessibility improvements are needed
+- When building components for accessibility-critical contexts
+
+**Accessibility Testing Philosophy**
+
+Accessibility testing requires understanding:
+- **Element Pairings**: Contrast happens between elements (text on background, border on surface)
+- **Criticality Standards**: Different elements have different contrast requirements (4.5:1 for text, 3:1 for non-text)
+- **Context Matters**: The same color may be accessible in one context but not another
+- **Human-AI Collaboration**: Accessibility decisions require design judgment, not just automated testing
+
 ---
 
 ## Component Attribute Standards
