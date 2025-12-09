@@ -553,7 +553,8 @@ describe('Android Font Configuration Completeness', () => {
   test('all requirements referenced in documentation', () => {
     const content = fs.readFileSync(docsPath, 'utf-8');
     
-    expect(content).toContain('Requirements: 8.1, 8.2, 8.3, 8.4, 8.5');
+    // Check for requirements list (with or without markdown formatting)
+    expect(content).toMatch(/\*\*Requirements\*\*: 8\.1, 8\.2, 8\.3, 8\.4, 8\.5|Requirements: 8\.1, 8\.2, 8\.3, 8\.4, 8\.5/);
   });
 
   test('requirements addressed section exists', () => {

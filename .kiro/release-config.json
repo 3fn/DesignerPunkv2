@@ -24,7 +24,7 @@
     "taskCompletionAnalysis": {
       "enabled": true,
       "quickMode": true,
-      "timeoutSeconds": 10,
+      "timeoutSeconds": 60,
       "failSilently": true,
       "cacheResults": true,
       "provideFeedback": true
