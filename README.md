@@ -61,7 +61,7 @@ DesignerPunk addresses the fundamental challenge of AI collaboration: **fuzzy te
 - Three-tier validation and documentation system (Setup/Implementation/Architecture)
 
 **Token System Status** - Comprehensive primitive and semantic token implementation
-- **~230+ tokens implemented**: Spacing (12), Typography (40+), Color (45+), Radius (12), Accessibility (8), Shadow (23), Glow (9), Layering (12), Border Width (3), Opacity (14), Blend (5)
+- **~245+ tokens implemented**: Spacing (12), Typography (40+), Color (45+), Radius (12), Accessibility (8), Shadow (23), Glow (9), Layering (12), Border Width (3), Opacity (14), Blend (5), Motion (12)
 - **Semantic layer**: Color, spacing, typography, shadow, layering, border, opacity, and blend compositions with hierarchical structure
 - **Typography system**: Complete size variant coverage (Xs/Sm/Md/Lg) for labels, code, and buttons with consistent naming conventions and display font family for all headings (h1-h6)
 - **Cross-platform generation**: Web CSS, iOS Swift, and Android Kotlin with platform-native conventions and semantic token references
@@ -156,7 +156,7 @@ DesignerPunk addresses the fundamental challenge of AI collaboration: **fuzzy te
 **Status**: Phase 1 Complete (~220+ tokens) - Ready for Component Development  
 **Purpose**: Mathematical foundation for consistent design relationships
 
-**Primitive Token Families** (13 categories, ~150+ tokens implemented):
+**Primitive Token Families** (16 categories, ~170+ tokens implemented):
 - **Spacing** (12 tokens): Base 8 (space050=4, space100=8, space200=16, space075=6 strategic flexibility)
 - **Typography** (40+ tokens): 
   - Font Size: Base 16 with 1.125 modular scale (fontSize050=13, fontSize100=16, fontSize200=23)
@@ -174,8 +174,12 @@ DesignerPunk addresses the fundamental challenge of AI collaboration: **fuzzy te
 - **Border Width** (3 tokens): Doubling progression (1px, 2px, 4px)
 - **Opacity** (14 tokens): Comprehensive opacity progression (0.05-1.0)
 - **Blend** (5 tokens): Blend amount scale (4%-20% in 4% increments)
+- **Motion** (12 tokens): Animation timing and curves for consistent motion
+  - Duration (3 tokens): Linear progression (150ms, 250ms, 350ms) for fast, standard, and deliberate animations
+  - Easing (3 tokens): Material Design curves (standard, decelerate, accelerate) for natural motion feel
+  - Scale (6 tokens): Transform scale factors (0.88-1.08) for size-based animations with 8-interval progression
 
-**Semantic Token Architecture** (~70+ tokens implemented):
+**Semantic Token Architecture** (~75+ tokens implemented):
 - **Layout Spacing**: Hierarchical relationships (grouped, related, separated, sectioned)
 - **Inset Spacing**: Density-based (tight, normal, comfortable, spacious, expansive)
 - **Typography**: Complete text styles with size variants
@@ -191,6 +195,8 @@ DesignerPunk addresses the fundamental challenge of AI collaboration: **fuzzy te
 - **Borders**: Component-specific border widths (input, divider, focus, card, emphasis)
 - **Opacity**: Purpose-driven opacity values (disabled, overlay, hover, pressed, ghost)
 - **Blends**: Semantic blend compositions (shadow, highlight, tint, shade)
+- **Motion**: Compositional animation tokens combining duration, easing, and scale primitives
+  - motion.floatLabel: Float label animation for text inputs (250ms, standard easing)
 
 **Shadow Tokens** (23 primitive tokens implemented):
 - **Shadow Offset** (13 tokens): Light source positioning based on sun arc (sunrise, morning, noon, afternoon, sunset) with quality variants
@@ -204,6 +210,14 @@ DesignerPunk addresses the fundamental challenge of AI collaboration: **fuzzy te
 - **Glow Blur** (5 tokens): Extended blur range for radial emphasis effects (glowBlur100=8px through glowBlur500=64px)
 - **Glow Opacity** (4 tokens): Decreasing progression for multi-layer glow effects (glowOpacity100=0.8 through glowOpacity400=0.2)
 - **Semantic Glows**: Vibrant color references (purple500, cyan500, yellow500) for neon emphasis
+
+**Motion Tokens** (12 primitive tokens + 1 semantic token implemented):
+- **Duration** (3 tokens): Linear progression for animation timing (duration150=150ms fast, duration250=250ms standard, duration350=350ms deliberate)
+- **Easing** (3 tokens): Material Design cubic-bezier curves (easingStandard, easingDecelerate, easingAccelerate) for natural motion feel
+- **Scale** (6 tokens): Transform scale factors with 8-interval progression (scale088=0.88 through scale108=1.08) for size-based animations
+- **Compositional Architecture**: Motion tokens combine primitives (duration + easing + optional scale) for complete animation definitions
+- **Semantic Motion**: motion.floatLabel combines duration250 + easingStandard for text input label animations
+- **Cross-Platform Consistency**: Same timing and curves across web (CSS), iOS (SwiftUI), and Android (Compose)
 
 **Layering Tokens** (12 semantic tokens implemented):
 - **Z-Index** (6 tokens, Web/iOS): Systematic stacking order (container=100, navigation=200, dropdown=300, modal=400, toast=500, tooltip=600)
