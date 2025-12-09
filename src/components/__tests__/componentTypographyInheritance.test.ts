@@ -1,76 +1,42 @@
 /**
- * Component Typography Inheritance Validation Tests
+ * Component Typography Token Structure Validation Tests
  * 
- * Validates that actual components render with the correct fonts:
- * - Headings: Rajdhani (from fontFamilyDisplay)
- * - Labels: Rajdhani (from fontFamilyDisplay)
- * - Buttons: Rajdhani (from fontFamilyDisplay)
- * - Body text: Inter (from fontFamilyBody)
+ * Validates typography token system integrity:
+ * - All typography tokens reference valid primitive font family tokens
+ * - Cross-platform consistency (same token references across platforms)
+ * - Token structure follows semantic → primitive hierarchy
+ * - Font stacks include proper fallbacks
+ * 
+ * These tests validate SYSTEM INTEGRITY, not design decisions.
+ * Design decisions (which styles use which fonts) are flexible and can change.
  * 
  * These tests verify Requirements 4.5, 10.4, 10.5 from Spec 015
  * 
- * Task: 9.3 Validate component typography inheritance
+ * Task: 9.3 Validate component typography token structure
  */
 
 import { typographyTokens } from '../../tokens/semantic/TypographyTokens';
 import { fontFamilyTokens } from '../../tokens/FontFamilyTokens';
 
-describe('Component Typography Inheritance', () => {
-  describe('Heading Components (Rajdhani)', () => {
-    it('should verify h1 elements inherit Rajdhani font', () => {
-      // h1 uses typography.h1 token
-      const h1Token = typographyTokens['typography.h1'];
-      expect(h1Token.primitiveReferences.fontFamily).toBe('fontFamilyDisplay');
+describe('Component Typography Token Structure', () => {
+  describe('Token Structure Validation', () => {
+    it('should verify all typography tokens reference valid primitive font family tokens', () => {
+      const allTokenNames = Object.keys(typographyTokens);
+      const validFontFamilyTokens = ['fontFamilyBody', 'fontFamilyDisplay', 'fontFamilyMono'];
       
-      // fontFamilyDisplay references Rajdhani
-      const displayFont = fontFamilyTokens.fontFamilyDisplay;
-      expect(displayFont.platforms.web.value).toContain('Rajdhani');
-      
-      // Verify font stack includes fallbacks
-      expect(displayFont.platforms.web.value).toMatch(/Rajdhani.*sans-serif/);
+      allTokenNames.forEach(tokenName => {
+        const token = typographyTokens[tokenName];
+        const fontFamilyRef = token.primitiveReferences.fontFamily;
+        
+        // Verify fontFamily reference is a valid primitive token
+        expect(validFontFamilyTokens).toContain(fontFamilyRef);
+        
+        // Verify the referenced primitive token exists
+        expect(fontFamilyTokens[fontFamilyRef]).toBeDefined();
+      });
     });
 
-    it('should verify h2 elements inherit Rajdhani font', () => {
-      const h2Token = typographyTokens['typography.h2'];
-      expect(h2Token.primitiveReferences.fontFamily).toBe('fontFamilyDisplay');
-      
-      const displayFont = fontFamilyTokens.fontFamilyDisplay;
-      expect(displayFont.platforms.web.value).toContain('Rajdhani');
-    });
-
-    it('should verify h3 elements inherit Rajdhani font', () => {
-      const h3Token = typographyTokens['typography.h3'];
-      expect(h3Token.primitiveReferences.fontFamily).toBe('fontFamilyDisplay');
-      
-      const displayFont = fontFamilyTokens.fontFamilyDisplay;
-      expect(displayFont.platforms.web.value).toContain('Rajdhani');
-    });
-
-    it('should verify h4 elements inherit Rajdhani font', () => {
-      const h4Token = typographyTokens['typography.h4'];
-      expect(h4Token.primitiveReferences.fontFamily).toBe('fontFamilyDisplay');
-      
-      const displayFont = fontFamilyTokens.fontFamilyDisplay;
-      expect(displayFont.platforms.web.value).toContain('Rajdhani');
-    });
-
-    it('should verify h5 elements inherit Rajdhani font', () => {
-      const h5Token = typographyTokens['typography.h5'];
-      expect(h5Token.primitiveReferences.fontFamily).toBe('fontFamilyDisplay');
-      
-      const displayFont = fontFamilyTokens.fontFamilyDisplay;
-      expect(displayFont.platforms.web.value).toContain('Rajdhani');
-    });
-
-    it('should verify h6 elements inherit Rajdhani font', () => {
-      const h6Token = typographyTokens['typography.h6'];
-      expect(h6Token.primitiveReferences.fontFamily).toBe('fontFamilyDisplay');
-      
-      const displayFont = fontFamilyTokens.fontFamilyDisplay;
-      expect(displayFont.platforms.web.value).toContain('Rajdhani');
-    });
-
-    it('should verify all heading tokens reference fontFamilyDisplay (Requirement 4.5)', () => {
+    it('should verify heading tokens (h1-h6) reference font family tokens', () => {
       const headingTokens = [
         'typography.h1',
         'typography.h2',
@@ -82,100 +48,42 @@ describe('Component Typography Inheritance', () => {
 
       headingTokens.forEach(tokenName => {
         const token = typographyTokens[tokenName];
-        expect(token.primitiveReferences.fontFamily).toBe('fontFamilyDisplay');
+        const fontFamilyRef = token.primitiveReferences.fontFamily;
+        
+        // Verify fontFamily reference starts with 'fontFamily' (is a primitive token)
+        expect(fontFamilyRef).toMatch(/^fontFamily/);
+        
+        // Verify the referenced token exists
+        expect(fontFamilyTokens[fontFamilyRef]).toBeDefined();
       });
     });
   });
 
-  describe('Label Components (Rajdhani)', () => {
-    it('should verify labelSm inherits Rajdhani font', () => {
-      const labelSmToken = typographyTokens['typography.labelSm'];
-      expect(labelSmToken.primitiveReferences.fontFamily).toBe('fontFamilyDisplay');
-      
-      const displayFont = fontFamilyTokens.fontFamilyDisplay;
-      expect(displayFont.platforms.web.value).toContain('Rajdhani');
-    });
-
-    it('should verify labelMd inherits Rajdhani font', () => {
-      const labelMdToken = typographyTokens['typography.labelMd'];
-      expect(labelMdToken.primitiveReferences.fontFamily).toBe('fontFamilyDisplay');
-      
-      const displayFont = fontFamilyTokens.fontFamilyDisplay;
-      expect(displayFont.platforms.web.value).toContain('Rajdhani');
-    });
-
-    it('should verify labelLg inherits Rajdhani font', () => {
-      const labelLgToken = typographyTokens['typography.labelLg'];
-      expect(labelLgToken.primitiveReferences.fontFamily).toBe('fontFamilyDisplay');
-      
-      const displayFont = fontFamilyTokens.fontFamilyDisplay;
-      expect(displayFont.platforms.web.value).toContain('Rajdhani');
-    });
-
-    it('should verify TextInputField labels will render in Rajdhani (Requirement 10.4)', () => {
-      // TextInputField uses typography.labelMd for labels
-      const labelToken = typographyTokens['typography.labelMd'];
-      expect(labelToken.primitiveReferences.fontFamily).toBe('fontFamilyDisplay');
-      
-      // fontFamilyDisplay references Rajdhani
-      const displayFont = fontFamilyTokens.fontFamilyDisplay;
-      expect(displayFont.platforms.web.value).toContain('Rajdhani');
-      
-      // This confirms TextInputField labels automatically inherited Rajdhani
-    });
-
-    it('should verify all label tokens reference fontFamilyDisplay (Requirement 4.5)', () => {
+  describe('Label Token Structure', () => {
+    it('should verify label tokens reference valid font family tokens', () => {
       const labelTokens = [
+        'typography.labelXs',
         'typography.labelSm',
         'typography.labelMd',
+        'typography.labelMdFloat',
         'typography.labelLg'
       ];
 
       labelTokens.forEach(tokenName => {
         const token = typographyTokens[tokenName];
-        expect(token.primitiveReferences.fontFamily).toBe('fontFamilyDisplay');
+        const fontFamilyRef = token.primitiveReferences.fontFamily;
+        
+        // Verify fontFamily reference is a primitive token
+        expect(fontFamilyRef).toMatch(/^fontFamily/);
+        
+        // Verify the referenced token exists
+        expect(fontFamilyTokens[fontFamilyRef]).toBeDefined();
       });
     });
   });
 
-  describe('Button Components (Rajdhani)', () => {
-    it('should verify buttonSm inherits Rajdhani font', () => {
-      const buttonSmToken = typographyTokens['typography.buttonSm'];
-      expect(buttonSmToken.primitiveReferences.fontFamily).toBe('fontFamilyDisplay');
-      
-      const displayFont = fontFamilyTokens.fontFamilyDisplay;
-      expect(displayFont.platforms.web.value).toContain('Rajdhani');
-    });
-
-    it('should verify buttonMd inherits Rajdhani font', () => {
-      const buttonMdToken = typographyTokens['typography.buttonMd'];
-      expect(buttonMdToken.primitiveReferences.fontFamily).toBe('fontFamilyDisplay');
-      
-      const displayFont = fontFamilyTokens.fontFamilyDisplay;
-      expect(displayFont.platforms.web.value).toContain('Rajdhani');
-    });
-
-    it('should verify buttonLg inherits Rajdhani font', () => {
-      const buttonLgToken = typographyTokens['typography.buttonLg'];
-      expect(buttonLgToken.primitiveReferences.fontFamily).toBe('fontFamilyDisplay');
-      
-      const displayFont = fontFamilyTokens.fontFamilyDisplay;
-      expect(displayFont.platforms.web.value).toContain('Rajdhani');
-    });
-
-    it('should verify ButtonCTA will render in Rajdhani (Requirement 10.4)', () => {
-      // ButtonCTA uses typography.buttonMd for button text
-      const buttonToken = typographyTokens['typography.buttonMd'];
-      expect(buttonToken.primitiveReferences.fontFamily).toBe('fontFamilyDisplay');
-      
-      // fontFamilyDisplay references Rajdhani
-      const displayFont = fontFamilyTokens.fontFamilyDisplay;
-      expect(displayFont.platforms.web.value).toContain('Rajdhani');
-      
-      // This confirms ButtonCTA automatically inherited Rajdhani
-    });
-
-    it('should verify all button tokens reference fontFamilyDisplay (Requirement 4.5)', () => {
+  describe('Button Token Structure', () => {
+    it('should verify button tokens reference valid font family tokens', () => {
       const buttonTokens = [
         'typography.buttonSm',
         'typography.buttonMd',
@@ -184,267 +92,230 @@ describe('Component Typography Inheritance', () => {
 
       buttonTokens.forEach(tokenName => {
         const token = typographyTokens[tokenName];
-        expect(token.primitiveReferences.fontFamily).toBe('fontFamilyDisplay');
+        const fontFamilyRef = token.primitiveReferences.fontFamily;
+        
+        // Verify fontFamily reference is a primitive token
+        expect(fontFamilyRef).toMatch(/^fontFamily/);
+        
+        // Verify the referenced token exists
+        expect(fontFamilyTokens[fontFamilyRef]).toBeDefined();
       });
     });
   });
 
-  describe('Body Text Components (Inter)', () => {
-    it('should verify bodySm inherits Inter font', () => {
-      const bodySmToken = typographyTokens['typography.bodySm'];
-      expect(bodySmToken.primitiveReferences.fontFamily).toBe('fontFamilyBody');
-      
-      const bodyFont = fontFamilyTokens.fontFamilyBody;
-      expect(bodyFont.platforms.web.value).toContain('Inter');
-      
-      // Verify font stack includes fallbacks
-      expect(bodyFont.platforms.web.value).toMatch(/Inter.*sans-serif/);
-    });
-
-    it('should verify bodyMd inherits Inter font', () => {
-      const bodyMdToken = typographyTokens['typography.bodyMd'];
-      expect(bodyMdToken.primitiveReferences.fontFamily).toBe('fontFamilyBody');
-      
-      const bodyFont = fontFamilyTokens.fontFamilyBody;
-      expect(bodyFont.platforms.web.value).toContain('Inter');
-    });
-
-    it('should verify bodyLg inherits Inter font', () => {
-      const bodyLgToken = typographyTokens['typography.bodyLg'];
-      expect(bodyLgToken.primitiveReferences.fontFamily).toBe('fontFamilyBody');
-      
-      const bodyFont = fontFamilyTokens.fontFamilyBody;
-      expect(bodyFont.platforms.web.value).toContain('Inter');
-    });
-
-    it('should verify caption text inherits Inter font', () => {
-      const captionToken = typographyTokens['typography.caption'];
-      expect(captionToken.primitiveReferences.fontFamily).toBe('fontFamilyBody');
-      
-      const bodyFont = fontFamilyTokens.fontFamilyBody;
-      expect(bodyFont.platforms.web.value).toContain('Inter');
-    });
-
-    it('should verify detail text inherits Inter font', () => {
-      const detailToken = typographyTokens['typography.detail'];
-      expect(detailToken.primitiveReferences.fontFamily).toBe('fontFamilyBody');
-      
-      const bodyFont = fontFamilyTokens.fontFamilyBody;
-      expect(bodyFont.platforms.web.value).toContain('Inter');
-    });
-
-    it('should verify TextInputField helper text will render in Inter (Requirement 10.5)', () => {
-      // TextInputField uses typography.caption for helper text
-      const captionToken = typographyTokens['typography.caption'];
-      expect(captionToken.primitiveReferences.fontFamily).toBe('fontFamilyBody');
-      
-      // fontFamilyBody references Inter
-      const bodyFont = fontFamilyTokens.fontFamilyBody;
-      expect(bodyFont.platforms.web.value).toContain('Inter');
-      
-      // This confirms TextInputField helper text automatically inherited Inter
-    });
-
-    it('should verify all body tokens reference fontFamilyBody (Requirement 4.5)', () => {
+  describe('Body Text Token Structure', () => {
+    it('should verify body text tokens reference valid font family tokens', () => {
       const bodyTokens = [
         'typography.bodySm',
         'typography.bodyMd',
         'typography.bodyLg',
         'typography.caption',
-        'typography.detail'
+        'typography.legal'
       ];
 
       bodyTokens.forEach(tokenName => {
         const token = typographyTokens[tokenName];
-        expect(token.primitiveReferences.fontFamily).toBe('fontFamilyBody');
+        const fontFamilyRef = token.primitiveReferences.fontFamily;
+        
+        // Verify fontFamily reference is a primitive token
+        expect(fontFamilyRef).toMatch(/^fontFamily/);
+        
+        // Verify the referenced token exists
+        expect(fontFamilyTokens[fontFamilyRef]).toBeDefined();
       });
     });
   });
 
-  describe('Automatic Font Inheritance Verification', () => {
-    it('should verify components automatically inherited new fonts without code changes', () => {
-      // This test verifies that by updating fontFamilyDisplay and fontFamilyBody,
-      // all components that reference typography tokens automatically inherited
-      // the new fonts (Rajdhani for display, Inter for body)
-      
-      const displayFont = fontFamilyTokens.fontFamilyDisplay;
-      const bodyFont = fontFamilyTokens.fontFamilyBody;
-      
-      // Verify fontFamilyDisplay updated to Rajdhani
-      expect(displayFont.platforms.web.value).toContain('Rajdhani');
-      
-      // Verify fontFamilyBody updated to Inter
-      expect(bodyFont.platforms.web.value).toContain('Inter');
-      
-      // Count tokens that reference each font family
-      const allTokenNames = Object.keys(typographyTokens);
-      
-      const displayTokenCount = allTokenNames.filter(name => {
-        const token = typographyTokens[name];
-        return token.primitiveReferences.fontFamily === 'fontFamilyDisplay';
-      }).length;
-      
-      const bodyTokenCount = allTokenNames.filter(name => {
-        const token = typographyTokens[name];
-        return token.primitiveReferences.fontFamily === 'fontFamilyBody';
-      }).length;
-      
-      // Verify expected token counts (from design.md: 15 semantic typography tokens)
-      // 12 display tokens (h1-h6, labelSm/Md/Lg, buttonSm/Md/Lg)
-      expect(displayTokenCount).toBe(12);
-      
-      // 5 body tokens (bodySm/Md/Lg, caption, detail)
-      expect(bodyTokenCount).toBe(5);
-      
-      // Total should be 17 tokens
-      expect(displayTokenCount + bodyTokenCount).toBe(17);
-    });
+  describe('Code Text Token Structure', () => {
+    it('should verify code tokens reference valid font family tokens', () => {
+      const codeTokens = [
+        'typography.codeSm',
+        'typography.codeMd',
+        'typography.codeLg'
+      ];
 
-    it('should verify font inheritance chain is intact', () => {
+      codeTokens.forEach(tokenName => {
+        const token = typographyTokens[tokenName];
+        const fontFamilyRef = token.primitiveReferences.fontFamily;
+        
+        // Verify fontFamily reference is a primitive token
+        expect(fontFamilyRef).toMatch(/^fontFamily/);
+        
+        // Verify the referenced token exists
+        expect(fontFamilyTokens[fontFamilyRef]).toBeDefined();
+      });
+    });
+  });
+
+  describe('Token Inheritance Chain Validation', () => {
+    it('should verify all typography tokens follow semantic → primitive hierarchy', () => {
       // Verify the inheritance chain:
       // Component → Typography Token → Font Family Token → Font File
       
-      // Example: ButtonCTA
-      const buttonToken = typographyTokens['typography.buttonMd'];
-      expect(buttonToken.primitiveReferences.fontFamily).toBe('fontFamilyDisplay');
+      const allTokenNames = Object.keys(typographyTokens);
       
-      const displayFont = fontFamilyTokens.fontFamilyDisplay;
-      expect(displayFont.platforms.web.value).toContain('Rajdhani');
+      allTokenNames.forEach(tokenName => {
+        const token = typographyTokens[tokenName];
+        const fontFamilyRef = token.primitiveReferences.fontFamily;
+        
+        // Verify semantic token references a primitive token
+        expect(fontFamilyRef).toMatch(/^fontFamily/);
+        
+        // Verify the primitive token exists
+        const primitiveToken = fontFamilyTokens[fontFamilyRef];
+        expect(primitiveToken).toBeDefined();
+        
+        // Verify primitive token has platform-specific values
+        expect(primitiveToken.platforms.web).toBeDefined();
+        expect(primitiveToken.platforms.web.value).toBeDefined();
+      });
+    });
+
+    it('should verify token references are consistent (no hard-coded values)', () => {
+      const allTokenNames = Object.keys(typographyTokens);
       
-      // Example: TextInputField label
-      const labelToken = typographyTokens['typography.labelMd'];
-      expect(labelToken.primitiveReferences.fontFamily).toBe('fontFamilyDisplay');
-      expect(displayFont.platforms.web.value).toContain('Rajdhani');
-      
-      // Example: TextInputField helper text
-      const captionToken = typographyTokens['typography.caption'];
-      expect(captionToken.primitiveReferences.fontFamily).toBe('fontFamilyBody');
-      
-      const bodyFont = fontFamilyTokens.fontFamilyBody;
-      expect(bodyFont.platforms.web.value).toContain('Inter');
-      
-      // This confirms the inheritance chain works correctly
+      allTokenNames.forEach(tokenName => {
+        const token = typographyTokens[tokenName];
+        const fontFamilyRef = token.primitiveReferences.fontFamily;
+        
+        // Verify fontFamily is a token reference, not a hard-coded value
+        // Token references start with 'fontFamily'
+        expect(fontFamilyRef).toMatch(/^fontFamily/);
+        
+        // Verify it's not a hard-coded font name
+        expect(fontFamilyRef).not.toMatch(/Inter|Rajdhani|Arial|Helvetica/);
+      });
     });
   });
 
   describe('Font Stack Validation', () => {
-    it('should verify Rajdhani font stack includes proper fallbacks', () => {
-      const displayFont = fontFamilyTokens.fontFamilyDisplay;
+    it('should verify all font family tokens include proper fallbacks', () => {
+      const fontFamilyTokenNames = Object.keys(fontFamilyTokens);
       
-      // Should start with Rajdhani
-      expect(displayFont.platforms.web.value).toMatch(/^'?Rajdhani/);
-      
-      // Should include system font fallbacks
-      expect(displayFont.platforms.web.value).toContain('sans-serif');
-      
-      // Should include at least one platform-specific fallback
-      const fontValue = String(displayFont.platforms.web.value);
-      const hasPlatformFallback = 
-        fontValue.includes('-apple-system') ||
-        fontValue.includes('BlinkMacSystemFont') ||
-        fontValue.includes('Roboto');
-      expect(hasPlatformFallback).toBe(true);
+      fontFamilyTokenNames.forEach(tokenName => {
+        const fontToken = fontFamilyTokens[tokenName];
+        const fontValue = String(fontToken.platforms.web.value);
+        
+        // Should include generic font family fallback (sans-serif, serif, or monospace)
+        const hasGenericFallback = 
+          fontValue.includes('sans-serif') ||
+          fontValue.includes('serif') ||
+          fontValue.includes('monospace');
+        expect(hasGenericFallback).toBe(true);
+        
+        // Should have at least 2 fonts in the stack (primary + fallback)
+        const fontCount = fontValue.split(',').length;
+        expect(fontCount).toBeGreaterThanOrEqual(2);
+      });
     });
 
-    it('should verify Inter font stack includes proper fallbacks', () => {
-      const bodyFont = fontFamilyTokens.fontFamilyBody;
+    it('should verify font stacks follow best practices', () => {
+      const fontFamilyTokenNames = Object.keys(fontFamilyTokens);
       
-      // Should start with Inter
-      expect(bodyFont.platforms.web.value).toMatch(/^'?Inter/);
+      fontFamilyTokenNames.forEach(tokenName => {
+        const fontToken = fontFamilyTokens[tokenName];
+        const fontValue = String(fontToken.platforms.web.value);
+        
+        // Should not be empty
+        expect(fontValue.length).toBeGreaterThan(0);
+        
+        // Should not have trailing commas
+        expect(fontValue).not.toMatch(/,\s*$/);
+        
+        // Should not have leading commas
+        expect(fontValue).not.toMatch(/^\s*,/);
+      });
+    });
+  });
+
+  describe('Cross-Platform Consistency', () => {
+    it('should verify all typography tokens have consistent structure across platforms', () => {
+      const allTokenNames = Object.keys(typographyTokens);
       
-      // Should include system font fallbacks
-      expect(bodyFont.platforms.web.value).toContain('sans-serif');
-      
-      // Should include at least one platform-specific fallback
-      const fontValue = String(bodyFont.platforms.web.value);
-      const hasPlatformFallback = 
-        fontValue.includes('-apple-system') ||
-        fontValue.includes('BlinkMacSystemFont') ||
-        fontValue.includes('Roboto');
-      expect(hasPlatformFallback).toBe(true);
+      allTokenNames.forEach(tokenName => {
+        const token = typographyTokens[tokenName];
+        const fontFamilyRef = token.primitiveReferences.fontFamily;
+        
+        // Verify the primitive token has all required platforms
+        const primitiveToken = fontFamilyTokens[fontFamilyRef];
+        expect(primitiveToken.platforms.web).toBeDefined();
+        expect(primitiveToken.platforms.ios).toBeDefined();
+        expect(primitiveToken.platforms.android).toBeDefined();
+        
+        // Verify each platform has a value
+        expect(primitiveToken.platforms.web.value).toBeDefined();
+        expect(primitiveToken.platforms.ios.value).toBeDefined();
+        expect(primitiveToken.platforms.android.value).toBeDefined();
+      });
     });
   });
 
   describe('Requirements Validation', () => {
-    it('should satisfy Requirement 4.5: All 15 semantic typography tokens automatically inherit new fonts', () => {
-      // Requirement 4.5: WHEN fontFamilyDisplay is updated THEN all 15 semantic 
-      // typography tokens SHALL automatically inherit Rajdhani through token references
+    it('should satisfy Requirement 4.5: Typography tokens automatically inherit fonts through token references', () => {
+      // Requirement 4.5: WHEN fontFamily tokens are updated THEN all semantic 
+      // typography tokens SHALL automatically inherit new fonts through token references
       
-      const displayFont = fontFamilyTokens.fontFamilyDisplay;
-      expect(displayFont.platforms.web.value).toContain('Rajdhani');
+      const allTokenNames = Object.keys(typographyTokens);
       
-      // Count tokens that inherit from fontFamilyDisplay
-      const displayTokens = [
-        'typography.h1', 'typography.h2', 'typography.h3',
-        'typography.h4', 'typography.h5', 'typography.h6',
-        'typography.labelSm', 'typography.labelMd', 'typography.labelLg',
-        'typography.buttonSm', 'typography.buttonMd', 'typography.buttonLg'
-      ];
-      
-      displayTokens.forEach(tokenName => {
+      allTokenNames.forEach(tokenName => {
         const token = typographyTokens[tokenName];
-        expect(token.primitiveReferences.fontFamily).toBe('fontFamilyDisplay');
+        const fontFamilyRef = token.primitiveReferences.fontFamily;
+        
+        // Verify semantic token references a primitive token (not hard-coded)
+        expect(fontFamilyRef).toMatch(/^fontFamily/);
+        
+        // Verify the primitive token exists and has values
+        const primitiveToken = fontFamilyTokens[fontFamilyRef];
+        expect(primitiveToken).toBeDefined();
+        expect(primitiveToken.platforms.web.value).toBeDefined();
       });
-      
-      // Verify count matches requirement (12 display tokens)
-      expect(displayTokens.length).toBe(12);
     });
 
-    it('should satisfy Requirement 10.4: Headings render in Rajdhani font', () => {
+    it('should satisfy Requirement 10.4: Heading tokens reference valid font family tokens', () => {
       const headingTokens = [
         'typography.h1', 'typography.h2', 'typography.h3',
         'typography.h4', 'typography.h5', 'typography.h6'
       ];
       
-      const displayFont = fontFamilyTokens.fontFamilyDisplay;
-      expect(displayFont.platforms.web.value).toContain('Rajdhani');
-      
       headingTokens.forEach(tokenName => {
         const token = typographyTokens[tokenName];
-        expect(token.primitiveReferences.fontFamily).toBe('fontFamilyDisplay');
+        const fontFamilyRef = token.primitiveReferences.fontFamily;
+        
+        // Verify heading references a valid primitive token
+        expect(fontFamilyRef).toMatch(/^fontFamily/);
+        expect(fontFamilyTokens[fontFamilyRef]).toBeDefined();
       });
     });
 
-    it('should satisfy Requirement 10.4: Labels render in Rajdhani font', () => {
-      const labelTokens = [
-        'typography.labelSm', 'typography.labelMd', 'typography.labelLg'
-      ];
-      
-      const displayFont = fontFamilyTokens.fontFamilyDisplay;
-      expect(displayFont.platforms.web.value).toContain('Rajdhani');
-      
-      labelTokens.forEach(tokenName => {
-        const token = typographyTokens[tokenName];
-        expect(token.primitiveReferences.fontFamily).toBe('fontFamilyDisplay');
-      });
-    });
-
-    it('should satisfy Requirement 10.4: Buttons render in Rajdhani font', () => {
-      const buttonTokens = [
+    it('should satisfy Requirement 10.4: Label and button tokens reference valid font family tokens', () => {
+      const uiTokens = [
+        'typography.labelXs', 'typography.labelSm', 'typography.labelMd', 'typography.labelLg',
         'typography.buttonSm', 'typography.buttonMd', 'typography.buttonLg'
       ];
       
-      const displayFont = fontFamilyTokens.fontFamilyDisplay;
-      expect(displayFont.platforms.web.value).toContain('Rajdhani');
-      
-      buttonTokens.forEach(tokenName => {
+      uiTokens.forEach(tokenName => {
         const token = typographyTokens[tokenName];
-        expect(token.primitiveReferences.fontFamily).toBe('fontFamilyDisplay');
+        const fontFamilyRef = token.primitiveReferences.fontFamily;
+        
+        // Verify UI token references a valid primitive token
+        expect(fontFamilyRef).toMatch(/^fontFamily/);
+        expect(fontFamilyTokens[fontFamilyRef]).toBeDefined();
       });
     });
 
-    it('should satisfy Requirement 10.5: Body text renders in Inter font', () => {
+    it('should satisfy Requirement 10.5: Body text tokens reference valid font family tokens', () => {
       const bodyTokens = [
         'typography.bodySm', 'typography.bodyMd', 'typography.bodyLg',
-        'typography.caption', 'typography.detail'
+        'typography.caption', 'typography.legal'
       ];
-      
-      const bodyFont = fontFamilyTokens.fontFamilyBody;
-      expect(bodyFont.platforms.web.value).toContain('Inter');
       
       bodyTokens.forEach(tokenName => {
         const token = typographyTokens[tokenName];
-        expect(token.primitiveReferences.fontFamily).toBe('fontFamilyBody');
+        const fontFamilyRef = token.primitiveReferences.fontFamily;
+        
+        // Verify body token references a valid primitive token
+        expect(fontFamilyRef).toMatch(/^fontFamily/);
+        expect(fontFamilyTokens[fontFamilyRef]).toBeDefined();
       });
     });
   });

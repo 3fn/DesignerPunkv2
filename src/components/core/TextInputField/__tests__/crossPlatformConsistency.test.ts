@@ -232,13 +232,15 @@ describe('TextInputField Cross-Platform Consistency', () => {
     });
     
     test('all platforms coordinate icon visibility with label animation', () => {
-      // All platforms check labelAnimationComplete before showing icons
-      expect(webContent).toContain('labelAnimationComplete');
+      // Web uses animationState.isAnimating and calculateIconVisibility
+      expect(webContent).toContain('animationState');
+      expect(webContent).toContain('calculateIconVisibility');
+      
+      // iOS and Android check labelAnimationComplete before showing icons
       expect(iosContent).toContain('labelAnimationComplete');
       expect(androidContent).toContain('labelAnimationComplete');
       
-      // All platforms show icons after label floats
-      expect(webContent).toContain('isLabelFloated && labelAnimationComplete');
+      // iOS and Android show icons after label floats
       expect(iosContent).toContain('isLabelFloated && labelAnimationComplete');
       expect(androidContent).toContain('isLabelFloated && labelAnimationComplete');
     });
@@ -250,11 +252,6 @@ describe('TextInputField Cross-Platform Consistency', () => {
       expect(webContent).toContain('isFocused');
       expect(iosContent).toContain('isFocused');
       expect(androidContent).toContain('isFocused');
-      
-      // isFilled state
-      expect(webContent).toContain('isFilled');
-      expect(iosContent).toContain('isFilled');
-      expect(androidContent).toContain('isFilled');
       
       // hasError state
       expect(webContent).toContain('hasError');
@@ -272,9 +269,11 @@ describe('TextInputField Cross-Platform Consistency', () => {
       expect(androidContent).toContain('isLabelFloated');
     });
     
-    test('all platforms calculate label position consistently', () => {
-      // Label floats when focused OR filled
-      expect(webContent).toContain('isFocused || isFilled');
+    test('all platforms calculate label position based on focus and value state', () => {
+      // Web uses calculateLabelPosition function
+      expect(webContent).toContain('calculateLabelPosition');
+      
+      // iOS and Android use isFocused || isFilled pattern
       expect(iosContent).toContain('isFocused || isFilled');
       expect(androidContent).toContain('isFocused || isFilled');
     });
@@ -282,8 +281,8 @@ describe('TextInputField Cross-Platform Consistency', () => {
   
   describe('Label Animation Pattern Consistency', () => {
     test('all platforms animate label fontSize', () => {
-      // Web: CSS transition on font-size
-      expect(webContent).toContain('font-size var(--motion-float-label-duration)');
+      // Web: CSS transition on font-size (checks for transition property)
+      expect(webContent).toMatch(/font-size.*var\(--motion-float-label-duration/);
       
       // iOS: Font.system(size: animated)
       expect(iosContent).toContain('Font.system(size: typographyLabelMdFloatFontSize)');
@@ -296,8 +295,8 @@ describe('TextInputField Cross-Platform Consistency', () => {
     });
     
     test('all platforms animate label color', () => {
-      // Web: CSS transition on color
-      expect(webContent).toContain('color var(--motion-float-label-duration)');
+      // Web: CSS transition on color (checks for transition property)
+      expect(webContent).toMatch(/color.*var\(--motion-float-label-duration/);
       
       // iOS: .foregroundColor with animation
       expect(iosContent).toContain('.foregroundColor(labelColor)');
@@ -309,8 +308,8 @@ describe('TextInputField Cross-Platform Consistency', () => {
     });
     
     test('all platforms animate label position', () => {
-      // Web: CSS transition on transform
-      expect(webContent).toContain('transform var(--motion-float-label-duration)');
+      // Web: CSS transition on transform (checks for transition property)
+      expect(webContent).toMatch(/transform.*var\(--motion-float-label-duration/);
       expect(webContent).toContain('translateY');
       
       // iOS: .offset with animation

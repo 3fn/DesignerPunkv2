@@ -124,13 +124,13 @@ export const typographyTokens: Record<string, Omit<SemanticToken, 'primitiveToke
     primitiveReferences: {
       fontSize: 'fontSize300',
       lineHeight: 'lineHeight300',
-      fontFamily: 'fontFamilyBody',
+      fontFamily: 'fontFamilyDisplay',
       fontWeight: 'fontWeight600',
       letterSpacing: 'letterSpacing100'
     },
     category: SemanticCategory.TYPOGRAPHY,
     context: 'Quaternary heading level for smaller sections',
-    description: 'H4 typography style with small-medium font size (26), moderate line height (1.231), body font family, semi-bold weight, and default letter spacing'
+    description: 'H4 typography style with small-medium font size (26), moderate line height (1.231), display font family, semi-bold weight, and default letter spacing'
   },
 
   'typography.h5': {
@@ -138,13 +138,13 @@ export const typographyTokens: Record<string, Omit<SemanticToken, 'primitiveToke
     primitiveReferences: {
       fontSize: 'fontSize200',
       lineHeight: 'lineHeight200',
-      fontFamily: 'fontFamilyBody',
+      fontFamily: 'fontFamilyDisplay',
       fontWeight: 'fontWeight600',
       letterSpacing: 'letterSpacing100'
     },
     category: SemanticCategory.TYPOGRAPHY,
     context: 'Quinary heading level for minor sections',
-    description: 'H5 typography style with small font size (23), moderate line height (1.391), body font family, semi-bold weight, and default letter spacing'
+    description: 'H5 typography style with small font size (23), moderate line height (1.391), display font family, semi-bold weight, and default letter spacing'
   },
 
   'typography.h6': {
@@ -152,13 +152,13 @@ export const typographyTokens: Record<string, Omit<SemanticToken, 'primitiveToke
     primitiveReferences: {
       fontSize: 'fontSize150',
       lineHeight: 'lineHeight150',
-      fontFamily: 'fontFamilyBody',
+      fontFamily: 'fontFamilyDisplay',
       fontWeight: 'fontWeight700',
       letterSpacing: 'letterSpacing100'
     },
     category: SemanticCategory.TYPOGRAPHY,
     context: 'Senary heading level for smallest sections',
-    description: 'H6 typography style with smallest heading font size (20), moderate line height (1.4), body font family, bold weight, and default letter spacing'
+    description: 'H6 typography style with smallest heading font size (20), moderate line height (1.4), display font family, bold weight, and default letter spacing'
   },
 
   // Specialized Text
