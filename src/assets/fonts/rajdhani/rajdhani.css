@@ -1,0 +1,53 @@
+/**
+ * Rajdhani Font Family - @font-face Declarations
+ * 
+ * Purpose: Web font loading configuration for Rajdhani font family
+ * Weights: Regular (400), Medium (500), SemiBold (600), Bold (700)
+ * Formats: WOFF2 (prioritized), WOFF (fallback), TTF (final fallback)
+ * 
+ * Requirements: 6.1, 6.2, 6.3, 6.4
+ */
+
+/* Rajdhani Regular (400) */
+@font-face {
+  font-family: 'Rajdhani';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./Rajdhani-Regular.woff2') format('woff2'),
+       url('./Rajdhani-Regular.woff') format('woff'),
+       url('./Rajdhani-Regular.ttf') format('truetype');
+}
+
+/* Rajdhani Medium (500) */
+@font-face {
+  font-family: 'Rajdhani';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('./Rajdhani-Medium.woff2') format('woff2'),
+       url('./Rajdhani-Medium.woff') format('woff'),
+       url('./Rajdhani-Medium.ttf') format('truetype');
+}
+
+/* Rajdhani SemiBold (600) */
+@font-face {
+  font-family: 'Rajdhani';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./Rajdhani-SemiBold.woff2') format('woff2'),
+       url('./Rajdhani-SemiBold.woff') format('woff'),
+       url('./Rajdhani-SemiBold.ttf') format('truetype');
+}
+
+/* Rajdhani Bold (700) */
+@font-face {
+  font-family: 'Rajdhani';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./Rajdhani-Bold.woff2') format('woff2'),
+       url('./Rajdhani-Bold.woff') format('woff'),
+       url('./Rajdhani-Bold.ttf') format('truetype');
+}

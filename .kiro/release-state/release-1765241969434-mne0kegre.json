@@ -1,0 +1,21 @@
+{
+  "id": "release-1765241969434-mne0kegre",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-09T00:59:29.434Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-12-09T00:59:35.023Z",
+  "completedAt": "2025-12-09T00:59:35.023Z"
+}

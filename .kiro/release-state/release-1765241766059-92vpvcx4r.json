@@ -1,0 +1,21 @@
+{
+  "id": "release-1765241766059-92vpvcx4r",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-09T00:56:06.059Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "CLI analysis failed",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-09T00:56:06.060Z",
+  "completedAt": "2025-12-09T00:56:06.060Z"
+}

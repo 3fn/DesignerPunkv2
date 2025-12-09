@@ -87,14 +87,14 @@ describe('Font Family Tokens', () => {
       expect(fontStack).toContain('monospace');
     });
 
-    test('should provide Inter-based display font stack', () => {
+    test('should provide Rajdhani-based display font stack', () => {
       const displayToken = getFontFamilyToken('fontFamilyDisplay');
       
       expect(displayToken).toBeDefined();
       expect(displayToken?.description).toContain('Display font stack');
       
       const fontStack = displayToken?.platforms.web.value as string;
-      expect(fontStack).toContain('Inter');
+      expect(fontStack).toContain('Rajdhani');
       expect(fontStack).toContain('-apple-system');
       expect(fontStack).toContain('BlinkMacSystemFont');
       expect(fontStack).toContain('Segoe UI');
@@ -147,14 +147,14 @@ describe('Font Family Tokens', () => {
       const displayToken = getFontFamilyToken('fontFamilyDisplay');
       const bodyToken = getFontFamilyToken('fontFamilyBody');
       
-      // Both display and body should start with Inter
+      // Display should start with Rajdhani, body should start with Inter
       const displayStack = displayToken?.platforms.web.value as string;
       const bodyStack = bodyToken?.platforms.web.value as string;
       
-      expect(displayStack.startsWith('Inter')).toBe(true);
+      expect(displayStack.startsWith('Rajdhani')).toBe(true);
       expect(bodyStack.startsWith('Inter')).toBe(true);
       
-      // Both should have same fallback chain after Inter
+      // Both should have same fallback chain after their primary font
       const displayFallbacks = displayStack.split(',').slice(1).map(s => s.trim());
       const bodyFallbacks = bodyStack.split(',').slice(1).map(s => s.trim());
       
@@ -242,8 +242,8 @@ describe('Font Family Tokens', () => {
       const displayStack = displayToken?.platforms.web.value as string;
       const bodyStack = bodyToken?.platforms.web.value as string;
       
-      // Inter should be first choice for both display and body
-      expect(displayStack.startsWith('Inter')).toBe(true);
+      // Rajdhani should be first choice for display, Inter for body
+      expect(displayStack.startsWith('Rajdhani')).toBe(true);
       expect(bodyStack.startsWith('Inter')).toBe(true);
     });
 

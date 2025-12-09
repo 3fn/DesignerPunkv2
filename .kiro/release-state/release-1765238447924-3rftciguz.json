@@ -1,0 +1,21 @@
+{
+  "id": "release-1765238447924-3rftciguz",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-09T00:00:47.924Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-12-09T00:00:53.412Z",
+  "completedAt": "2025-12-09T00:00:53.412Z"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "release-1765241965352-axj04m570",
+  "state": "pending",
+  "type": "release",
+  "startedAt": "2025-12-09T00:59:25.352Z",
+  "completedStages": [],
+  "failedStages": [],
+  "context": {},
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-09T00:59:25.352Z"
+}

@@ -1,0 +1,21 @@
+{
+  "id": "release-1765239444415-tlf68vdgo",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-09T00:17:24.415Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Unexpected token '>', \"\n> designer\"... is not valid JSON",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "manual",
+    "packages": []
+  },
+  "updatedAt": "2025-12-09T00:17:29.831Z",
+  "completedAt": "2025-12-09T00:17:29.831Z"
+}

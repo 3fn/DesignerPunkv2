@@ -58,7 +58,7 @@ export const fontFamilyTokens: Record<string, PrimitiveToken> = {
         baselineGridAlignment: false,
         isStrategicFlexibility: false,
         isPrecisionTargeted: false,
-        platforms: generateFontFamilyPlatformValues('Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif')
+        platforms: generateFontFamilyPlatformValues('Rajdhani, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif')
     },
 
     fontFamilyBody: {

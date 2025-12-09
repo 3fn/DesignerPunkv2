@@ -1,0 +1,49 @@
+/**
+ * Inter Font Family - @font-face Declarations
+ * 
+ * Purpose: Web font loading configuration for Inter font family
+ * Weights: Regular (400), Medium (500), SemiBold (600), Bold (700)
+ * Formats: WOFF2 (prioritized), TTF (fallback)
+ * 
+ * Requirements: 6.1, 6.2, 6.3, 6.4
+ */
+
+/* Inter Regular (400) */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./Inter-Regular.woff2') format('woff2'),
+       url('./Inter-Regular.ttf') format('truetype');
+}
+
+/* Inter Medium (500) */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('./Inter-Medium.woff2') format('woff2'),
+       url('./Inter-Medium.ttf') format('truetype');
+}
+
+/* Inter SemiBold (600) */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./Inter-SemiBold.woff2') format('woff2'),
+       url('./Inter-SemiBold.ttf') format('truetype');
+}
+
+/* Inter Bold (700) */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./Inter-Bold.woff2') format('woff2'),
+       url('./Inter-Bold.ttf') format('truetype');
+}

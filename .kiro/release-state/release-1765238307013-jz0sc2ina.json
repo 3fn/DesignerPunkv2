@@ -1,0 +1,21 @@
+{
+  "id": "release-1765238307013-jz0sc2ina",
+  "state": "failed",
+  "type": "release",
+  "startedAt": "2025-12-08T23:58:27.013Z",
+  "completedStages": [],
+  "failedStages": [
+    "analysis"
+  ],
+  "context": {
+    "analysisError": "Network timeout",
+    "lastFailedStage": "analysis"
+  },
+  "metadata": {
+    "version": "pending",
+    "trigger": "automatic",
+    "packages": []
+  },
+  "updatedAt": "2025-12-08T23:58:27.014Z",
+  "completedAt": "2025-12-08T23:58:27.014Z"
+}

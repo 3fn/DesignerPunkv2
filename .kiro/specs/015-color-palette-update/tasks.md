@@ -203,7 +203,7 @@ This implementation plan converts the color palette and display font design into
     - Verify all 12 files present (4 weights × 3 formats)
     - _Requirements: 5.3, 5.4, 5.5_
 
-- [ ] 4. Update Font Family Primitive Tokens
+- [x] 4. Update Font Family Primitive Tokens
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -223,7 +223,7 @@ This implementation plan converts the color palette and display font design into
   - Detailed: `.kiro/specs/015-color-palette-update/completion/task-4-parent-completion.md`
   - Summary: `docs/specs/015-color-palette-update/task-4-summary.md` (triggers release detection)
 
-  - [ ] 4.1 Update fontFamilyDisplay to Rajdhani
+  - [x] 4.1 Update fontFamilyDisplay to Rajdhani
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update `fontFamilyDisplay` in `FontFamilyTokens.ts`
@@ -231,7 +231,7 @@ This implementation plan converts the color palette and display font design into
     - Verify all 15 semantic typography tokens automatically inherit Rajdhani
     - _Requirements: 4.1, 4.2, 4.5_
 
-  - [ ] 4.2 Update fontFamilyBody to Inter
+  - [x] 4.2 Update fontFamilyBody to Inter
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update `fontFamilyBody` in `FontFamilyTokens.ts`
@@ -239,7 +239,7 @@ This implementation plan converts the color palette and display font design into
     - Verify body typography tokens reference Inter correctly
     - _Requirements: 4.3, 4.4_
 
-  - [ ]* 4.3 Write unit tests for font family tokens
+  - [x] 4.3 Write unit tests for font family tokens
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test fontFamilyDisplay references Rajdhani
@@ -248,7 +248,7 @@ This implementation plan converts the color palette and display font design into
     - Test platform-specific generation includes both fonts
     - _Requirements: 4.1, 4.2, 4.3, 4.4_
 
-  - [ ] 4.4 Verify cross-platform font token generation
+  - [x] 4.4 Verify cross-platform font token generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run build system to generate platform-specific tokens
@@ -257,7 +257,7 @@ This implementation plan converts the color palette and display font design into
     - Verify Android Kotlin includes Rajdhani and Inter references
     - _Requirements: 4.4, 9.1, 9.2, 9.3, 9.5_
 
-- [ ] 5. Configure Web Font Loading
+- [x] 5. Configure Web Font Loading
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -277,7 +277,7 @@ This implementation plan converts the color palette and display font design into
   - Detailed: `.kiro/specs/015-color-palette-update/completion/task-5-parent-completion.md`
   - Summary: `docs/specs/015-color-palette-update/task-5-summary.md` (triggers release detection)
 
-  - [ ] 5.1 Create @font-face declarations for Inter
+  - [x] 5.1 Create @font-face declarations for Inter
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create @font-face declarations for Inter Regular, Medium, SemiBold, Bold
@@ -286,7 +286,7 @@ This implementation plan converts the color palette and display font design into
     - Reference correct font file paths in src/assets/fonts/inter/
     - _Requirements: 6.1, 6.2, 6.3, 6.4_
 
-  - [ ] 5.2 Create @font-face declarations for Rajdhani
+  - [x] 5.2 Create @font-face declarations for Rajdhani
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create @font-face declarations for Rajdhani Regular, Medium, SemiBold, Bold
@@ -295,7 +295,7 @@ This implementation plan converts the color palette and display font design into
     - Reference correct font file paths in src/assets/fonts/rajdhani/
     - _Requirements: 6.1, 6.2, 6.3, 6.4_
 
-  - [ ]* 5.3 Write font loading tests for web
+  - [x] 5.3 Write font loading tests for web
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test Rajdhani fonts load successfully
