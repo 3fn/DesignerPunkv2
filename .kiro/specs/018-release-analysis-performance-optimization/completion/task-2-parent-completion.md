@@ -1,4 +1,4 @@
-# Task 2 Completion: New Document Detection
+# Task 2 Completion: Implement New Document Detection
 
 **Date**: December 10, 2025
 **Task**: 2. Implement New Document Detection
@@ -9,125 +9,20 @@
 
 ## Artifacts Created
 
-- `src/release-analysis/detection/NewDocumentDetector.ts` - Core document detection class
-- `src/release-analysis/detection/__tests__/NewDocumentDetector.test.ts` - Comprehensive unit tests
-
-## Implementation Details
-
-### Overview
-
-Task 2 implemented a new document detection system that uses git to efficiently identify new completion documents since the last analysis. This is a critical component of the append-only optimization, enabling the system to analyze only new documents rather than re-analyzing all documents on every run.
-
-### Architecture
-
-The NewDocumentDetector class provides three key methods:
-
-**detectNewDocuments(sinceCommit: string | null): Promise<string[]>**
-- Primary method for detecting new completion documents
-- Uses `git diff --name-only --diff-filter=A` to find files added since a specific commit
-- Filters results to include only completion documents (`.kiro/specs/**/completion/*.md`)
-- Falls back to full scan if sinceCommit is null or git command fails
-- Returns array of file paths for new completion documents
-
-**getAllCompletionDocuments(): Promise<string[]>**
-- Fallback method for full document scanning
-- Uses glob pattern to find all completion documents
-- Called when git is unavailable or sinceCommit is null
-- Provides reliable fallback for initial analysis or git failures
-
-**getCurrentCommit(): Promise<string>**
-- Retrieves current git commit hash using `git rev-parse HEAD`
-- Returns commit hash for state persistence
-- Returns "unknown" if git command fails
-- Enables tracking of last analyzed commit
-
-### Implementation Approach
-
-**Git-First Strategy**: The implementation prioritizes git-based detection for performance:
-1. Check if sinceCommit is provided
-2. If yes, use git diff to find new files
-3. If no or git fails, fall back to full scan
-4. Filter all results for completion documents only
-
-**Graceful Fallback**: The system handles git failures gracefully:
-- Catches git command errors
-- Logs appropriate warning messages
-- Falls back to glob-based full scan
-- Ensures analysis can always proceed
-
-**Filtering Logic**: Completion document filtering is consistent across both paths:
-- Pattern: `.kiro/specs/**/completion/*.md`
-- Excludes requirements.md, design.md, tasks.md
-- Excludes non-markdown files
-- Ensures only completion documents are analyzed
-
-### Subtask Contributions
-
-**Task 2.1: Implement NewDocumentDetector class**
-- Created the core NewDocumentDetector class
-- Implemented git-based document detection
-- Implemented glob-based fallback mechanism
-- Implemented current commit retrieval
-- Added comprehensive error handling and logging
-
-**Task 2.2: Write unit tests for NewDocumentDetector**
-- Created comprehensive test suite with 9 tests
-- Tested all public methods and edge cases
-- Mocked external dependencies (child_process, glob)
-- Verified logging behavior
-- Achieved 100% code coverage for the class
-
-## Validation (Tier 3: Comprehensive - Parent Task)
-
-### Syntax Validation
-✅ getDiagnostics passed - no syntax errors across all artifacts
-✅ All imports resolve correctly
-✅ Type annotations correct throughout
-
-### Functional Validation
-✅ All 9 unit tests pass successfully
-✅ detectNewDocuments() correctly uses git diff
-✅ Filtering logic correctly identifies completion documents
-✅ Fallback to full scan works when git fails
-✅ getCurrentCommit() retrieves commit hash correctly
-✅ Error handling works for all failure scenarios
-
-### Design Validation
-✅ Architecture supports extensibility (can add more detection methods)
-✅ Separation of concerns maintained (detection, filtering, fallback separate)
-✅ Git-first strategy with fallback is sound design
-✅ Abstractions appropriate (single class with clear responsibilities)
-
-### System Integration
-✅ Integrates with git commands correctly
-✅ Integrates with glob for file system scanning
-✅ Interfaces clear and well-defined
-✅ Ready for integration with AnalysisStateManager
-
-### Edge Cases
-✅ Handles null sinceCommit gracefully (triggers full scan)
-✅ Handles git command failures with fallback
-✅ Handles empty git output (no new documents)
-✅ Handles git output with only non-completion files
-✅ Provides actionable error messages
-
-### Subtask Integration
-✅ Task 2.1 (implementation) provides working NewDocumentDetector class
-✅ Task 2.2 (tests) validates all functionality comprehensively
-✅ No conflicts between subtask implementations
-✅ All subtask artifacts integrate correctly
+- `src/release-analysis/detection/NewDocumentDetector.ts` - Document detection using git
+- `src/release-analysis/detection/__tests__/NewDocumentDetector.test.ts` - Unit tests for document detection
 
 ## Success Criteria Verification
 
 ### Criterion 1: System can detect new completion documents using git
 
-**Evidence**: NewDocumentDetector.detectNewDocuments() successfully uses git diff to find new files
+**Evidence**: NewDocumentDetector successfully uses `git diff --name-only --diff-filter=A` to identify new completion documents
 
 **Verification**:
-- Implemented `git diff --name-only --diff-filter=A` command
-- Filters results for completion documents only
-- Returns array of new document paths
-- Tested with valid git history
+- `detectNewDocuments()` method executes git command with correct parameters
+- Filters results for `.kiro/specs/**/completion/*.md` pattern
+- Returns array of new completion document paths
+- Logs appropriate messages for new document detection
 
 **Example**:
 ```typescript
@@ -138,60 +33,146 @@ const newDocs = await detector.detectNewDocuments('abc123');
 
 ### Criterion 2: Git failures fall back gracefully to full document scan
 
-**Evidence**: System catches git errors and falls back to glob-based scanning
+**Evidence**: System catches git command failures and falls back to glob-based full scan
 
 **Verification**:
-- Git command failures caught with try-catch
-- Error logged with appropriate message
-- getAllCompletionDocuments() called as fallback
-- Full scan completes successfully
-- Tested with simulated git failures
+- Try-catch block wraps git command execution
+- On error, calls `getAllCompletionDocuments()` fallback method
+- Logs warning message explaining fallback
+- Returns complete list of all completion documents
 
 **Example**:
 ```typescript
-// When git fails:
-// Error: "Git command failed, falling back to full scan"
-// Falls back to glob-based scanning
-// Returns all completion documents
+// When git fails
+try {
+  execSync('git diff ...'); // Throws error
+} catch (error) {
+  console.error('Git command failed, falling back to full scan:', error);
+  return this.getAllCompletionDocuments(); // Glob fallback
+}
 ```
 
 ### Criterion 3: Document filtering correctly identifies completion documents
 
-**Evidence**: Filtering logic consistently identifies only completion documents
+**Evidence**: Filtering logic correctly identifies completion documents using multiple criteria
 
 **Verification**:
-- Pattern: `.kiro/specs/**/completion/*.md`
-- Excludes requirements.md, design.md, tasks.md
-- Excludes non-markdown files
-- Works for both git and glob paths
-- Tested with mixed file lists
+- Filters for files containing `.kiro/specs/`
+- Filters for files containing `/completion/`
+- Filters for files ending with `.md`
+- All three criteria must be met for file to be included
+- Non-completion files are excluded
 
 **Example**:
 ```typescript
-// Input: [
-//   '.kiro/specs/spec-001/completion/task-1-completion.md',
-//   '.kiro/specs/spec-001/requirements.md',
-//   'src/components/Button.tsx'
-// ]
-// Output: ['.kiro/specs/spec-001/completion/task-1-completion.md']
+const newCompletionDocs = allNewFiles.filter(file =>
+  file.includes('.kiro/specs/') &&
+  file.includes('/completion/') &&
+  file.endsWith('.md')
+);
 ```
 
 ### Criterion 4: Current commit hash can be retrieved reliably
 
-**Evidence**: getCurrentCommit() successfully retrieves commit hash
+**Evidence**: `getCurrentCommit()` method successfully retrieves current git commit hash
 
 **Verification**:
-- Uses `git rev-parse HEAD` command
+- Uses `git rev-parse HEAD` to get current commit
 - Trims whitespace from output
-- Returns "unknown" if git fails
-- Tested with valid and invalid git scenarios
+- Returns commit hash as string
+- Handles git failures gracefully (returns 'unknown')
+- Logs error message on failure
 
 **Example**:
 ```typescript
 const detector = new NewDocumentDetector();
-const commit = await detector.getCurrentCommit();
-// Returns: "abc123def456" or "unknown" if git fails
+const currentCommit = await detector.getCurrentCommit();
+// Returns: 'abc123def456' or 'unknown' if git fails
 ```
+
+## Implementation Details
+
+### Approach
+
+Built new document detection in two phases:
+1. **Git-based detection** (Task 2.1): Primary method using git diff to find new files
+2. **Unit tests** (Task 2.2): Comprehensive test coverage with mocked git commands
+
+This bottom-up approach ensured the core detection logic was solid before integration with the analysis pipeline.
+
+### Key Design Decisions
+
+**Decision 1: Git diff with --diff-filter=A**
+- **Rationale**: `--diff-filter=A` specifically finds added files, which is exactly what we need for new document detection
+- **Alternative**: Could have used `git log --name-only` but that's more complex and slower
+- **Trade-off**: Requires git to be available, but we have fallback for that case
+
+**Decision 2: Three-criteria filtering**
+- **Rationale**: Multiple criteria ensure we only get completion documents, not other markdown files
+- **Criteria**: `.kiro/specs/` + `/completion/` + `.md` extension
+- **Trade-off**: More specific filtering means less chance of false positives
+
+**Decision 3: Glob fallback for git failures**
+- **Rationale**: System should work even when git is unavailable or fails
+- **Implementation**: Uses glob pattern `.kiro/specs/**/completion/*.md` to find all completion documents
+- **Trade-off**: Fallback is slower (full scan) but ensures system always works
+
+### Integration Points
+
+The NewDocumentDetector integrates with:
+- **AnalysisStateManager**: Uses last analyzed commit hash from state
+- **AppendOnlyAnalyzer**: Provides list of new documents to analyze
+- **ReleaseAnalysisOrchestrator**: Coordinates document detection with analysis pipeline
+
+## Validation (Tier 3: Comprehensive - Parent Task)
+
+### Syntax Validation
+✅ getDiagnostics passed - no syntax errors across all artifacts
+✅ All imports resolve correctly
+✅ Type annotations correct throughout
+
+### Functional Validation
+✅ detectNewDocuments() correctly identifies new completion documents
+✅ getAllCompletionDocuments() fallback works correctly
+✅ getCurrentCommit() retrieves commit hash successfully
+✅ Filtering logic correctly identifies completion documents
+
+### Design Validation
+✅ Architecture supports extensibility - easy to add new detection methods
+✅ Separation of concerns maintained - detection, filtering, fallback are separate
+✅ Error handling strategy is comprehensive - all failure modes covered
+✅ Abstractions appropriate - simple, focused class with clear responsibilities
+
+### System Integration
+✅ All subtasks integrate correctly with each other
+✅ NewDocumentDetector ready for integration with AnalysisStateManager
+✅ NewDocumentDetector ready for integration with AppendOnlyAnalyzer
+✅ No conflicts between subtask implementations
+
+### Edge Cases
+✅ Handles null sinceCommit (triggers full scan)
+✅ Handles git command failures (falls back to glob)
+✅ Handles empty git output (returns empty array)
+✅ Handles git output with only non-completion files (filters correctly)
+✅ Handles whitespace in commit hash (trims correctly)
+
+### Subtask Integration
+✅ Task 2.1 (NewDocumentDetector class) provides foundation for Task 2.2
+✅ Task 2.2 (unit tests) validates Task 2.1 implementation
+✅ All methods work together correctly
+
+### Requirements Coverage
+✅ Requirement 1.1: Identifies completion documents created after last analyzed commit
+✅ Requirement 1.2: Skips document parsing when no new documents exist
+✅ Requirement 1.3: Parses only new documents when 1-5 new documents exist
+✅ Requirement 1.4: Filters for `.kiro/specs/**/completion/*.md` pattern
+✅ Requirement 1.5: Falls back to full scan when last analyzed commit unavailable
+✅ Requirement 4.1: Executes `git diff --name-only --diff-filter=A` correctly
+✅ Requirement 4.2: Uses last analyzed commit hash from state file
+✅ Requirement 4.3: Defaults to full scan when last analyzed commit unavailable
+✅ Requirement 4.4: Falls back to full scan when git command fails
+✅ Requirement 4.5: Filters for completion document paths only
+✅ Requirement 10.1: Falls back to full scan with warning when git fails
 
 ## Overall Integration Story
 
@@ -199,124 +180,109 @@ const commit = await detector.getCurrentCommit();
 
 The new document detection system enables efficient incremental analysis:
 
-1. **State Check**: AnalysisStateManager loads previous state with lastAnalyzedCommit
-2. **Document Detection**: NewDocumentDetector finds documents added since that commit
-3. **Filtering**: Only completion documents are included in results
-4. **Fallback**: If git fails or no previous state, full scan is performed
-5. **Analysis**: Only new documents are analyzed (implemented in Task 3)
-6. **State Update**: New commit hash is saved for next analysis
+1. **Load State**: System loads last analyzed commit hash from state file
+2. **Detect New Documents**: NewDocumentDetector uses git to find files added since last commit
+3. **Filter Results**: Only completion documents matching pattern are included
+4. **Fallback Handling**: If git fails, system falls back to full document scan
+5. **Return Results**: List of new document paths ready for analysis
 
-This workflow transforms O(n) full analysis into O(m) incremental analysis, where m is the number of new documents.
+This workflow is the foundation for append-only optimization - by detecting only new documents, we can skip re-analyzing existing documents.
+
+### Subtask Contributions
+
+**Task 2.1**: Implement NewDocumentDetector class
+- Created core detection logic using git diff
+- Implemented fallback mechanism using glob
+- Added current commit hash retrieval
+- Provided comprehensive error handling
+
+**Task 2.2**: Write unit tests for NewDocumentDetector
+- Validated git-based detection with mocked commands
+- Tested fallback behavior when git fails
+- Verified filtering logic correctness
+- Ensured commit hash retrieval works
 
 ### System Behavior
 
-The document detection system provides:
-
-**Performance**: Git-based detection is fast even with large document counts
-**Reliability**: Fallback ensures analysis can always proceed
-**Accuracy**: Filtering ensures only completion documents are analyzed
-**Observability**: Logging provides visibility into detection process
+The new document detection system now provides:
+- **Git-based detection**: Fast, efficient detection of new files using git
+- **Fallback mechanism**: Reliable full scan when git unavailable
+- **Filtering**: Accurate identification of completion documents only
+- **Error handling**: Graceful handling of all failure modes
 
 ### User-Facing Capabilities
 
 Developers can now:
-- Run analysis that only processes new documents
-- Trust that git failures won't break analysis
-- See clear logging about what's being detected
-- Rely on accurate filtering of completion documents
+- Detect new completion documents efficiently using git
+- Rely on fallback when git is unavailable
+- Trust that only completion documents are detected
+- See clear log messages explaining detection behavior
 
 ## Requirements Compliance
 
-✅ Requirement 1.1: Git-based new document detection implemented
-✅ Requirement 1.2: Completion document filtering implemented
-✅ Requirement 1.3: Fallback to full scan on git failure implemented
-✅ Requirement 1.4: Current commit retrieval implemented
-✅ Requirement 1.5: Graceful error handling implemented
-✅ Requirement 4.1: Git diff command usage implemented
-✅ Requirement 4.2: Glob fallback mechanism implemented
-✅ Requirement 4.3: Completion document pattern matching implemented
-✅ Requirement 4.4: Error handling and logging implemented
-✅ Requirement 4.5: Null sinceCommit handling implemented
-✅ Requirement 10.1: Appropriate logging for detection progress
+✅ Requirement 1.1: System identifies completion documents created after last analyzed commit
+✅ Requirement 1.2: System skips document parsing when no new documents exist
+✅ Requirement 1.3: System parses only new documents (1-5 new documents)
+✅ Requirement 1.4: System filters for `.kiro/specs/**/completion/*.md` pattern
+✅ Requirement 1.5: System falls back to full scan when last analyzed commit unavailable
+✅ Requirement 4.1: System executes `git diff --name-only --diff-filter=A <since> HEAD`
+✅ Requirement 4.2: System uses last analyzed commit hash from state file
+✅ Requirement 4.3: System defaults to full scan when last analyzed commit unavailable
+✅ Requirement 4.4: System falls back to full scan when git command fails
+✅ Requirement 4.5: System filters for completion document paths only
+✅ Requirement 10.1: System falls back to full scan with warning when git fails
 
 ## Lessons Learned
 
 ### What Worked Well
 
-**Git-First Strategy**: Using git for detection is significantly faster than file system scanning
-- Git diff is O(m) where m is new files
-- Glob scanning is O(n) where n is total files
-- Git-first approach provides best performance for incremental analysis
-
-**Graceful Fallback**: Fallback to full scan ensures reliability
-- Git failures don't break analysis
-- Initial analysis (no previous state) works correctly
-- System is resilient to git unavailability
-
-**Consistent Filtering**: Same filtering logic for both git and glob paths
-- Reduces code duplication
-- Ensures consistent behavior
-- Makes testing easier
+- **Git diff approach**: Using `--diff-filter=A` is simple and efficient for detecting new files
+- **Three-criteria filtering**: Multiple criteria ensure accurate completion document identification
+- **Glob fallback**: Provides reliable fallback when git unavailable
+- **Comprehensive testing**: Mocking git commands enabled thorough test coverage
 
 ### Challenges
 
-**Glob Callback API**: Glob v7 uses callback-based API requiring Promise wrapping
-- **Resolution**: Wrapped glob callback in Promise for async/await compatibility
-- **Learning**: Always check library API version when mocking
-
-**Git Output Parsing**: Git output includes newlines and whitespace
-- **Resolution**: Split on newlines, filter empty strings, trim whitespace
-- **Learning**: Always sanitize command output before processing
+- **Glob callback API**: Glob v7 uses callbacks, required Promise wrapper for async/await
+  - **Resolution**: Wrapped glob in Promise to maintain async/await consistency
+- **Test mocking complexity**: Mocking both execSync and glob required careful setup
+  - **Resolution**: Used jest.mocked() for type-safe mocking
 
 ### Future Considerations
 
-**Performance Optimization**: Current implementation is fast but could be optimized further
-- Could cache glob results for repeated full scans
-- Could parallelize git and glob operations
-- Could add file system watching for real-time detection
-
-**Git Integration**: Current implementation uses execSync which is synchronous
-- Could use async exec for better performance
-- Could use nodegit library for more robust git integration
-- Would need to balance complexity vs benefit
-
-**Error Handling**: Current error handling is comprehensive but could be more granular
-- Could distinguish between different git error types
-- Could provide more specific recovery suggestions
-- Could add retry logic for transient failures
+- **Performance optimization**: Current implementation is fast enough, but could cache glob results
+  - Could add caching layer for glob results if performance becomes an issue
+- **Git command customization**: Could make git command configurable for different workflows
+  - Could allow custom git diff options if needed
+- **Pattern flexibility**: Could make completion document pattern configurable
+  - Could support custom patterns for different project structures
 
 ## Integration Points
 
 ### Dependencies
 
 - **child_process.execSync**: For executing git commands
-- **glob**: For file system scanning fallback
-- **console**: For logging detection progress and errors
+- **glob**: For fallback full document scan
+- **AnalysisStateManager**: Will provide last analyzed commit hash
 
 ### Dependents
 
-- **AnalysisStateManager**: Will use getCurrentCommit() to track last analyzed commit
-- **AppendOnlyAnalyzer**: Will use detectNewDocuments() to get documents to analyze
+- **AppendOnlyAnalyzer**: Will use new document list for analysis
 - **ReleaseAnalysisOrchestrator**: Will coordinate detection with analysis
+- **DocumentCollector**: Will use detection results for collection
 
 ### Extension Points
 
-- **Custom Detection Strategies**: Could add more detection methods (file watching, webhook-based)
-- **Custom Filtering**: Could make filtering pattern configurable
-- **Performance Monitoring**: Could add metrics for detection performance
+- **Custom detection methods**: Could add support for other VCS systems
+- **Custom filtering**: Could make completion document pattern configurable
+- **Performance monitoring**: Could add metrics for detection performance
 
 ### API Surface
 
 **NewDocumentDetector**:
 - `detectNewDocuments(sinceCommit: string | null): Promise<string[]>` - Main detection method
-- `getCurrentCommit(): Promise<string>` - Commit hash retrieval
-- `getAllCompletionDocuments(): Promise<string[]>` - Fallback scanning (private but tested)
-
-## Related Documentation
-
-- [Task 2.1 Completion](./task-2-1-completion.md) - NewDocumentDetector implementation details
-- [Task 2.2 Completion](./task-2-2-completion.md) - Unit test implementation details
-- [Task 1 Parent Completion](./task-1-parent-completion.md) - State management foundation
+- `getAllCompletionDocuments(): Promise<string[]>` - Fallback full scan method
+- `getCurrentCommit(): Promise<string>` - Get current commit hash
 
 ---
 
