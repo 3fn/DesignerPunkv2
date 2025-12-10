@@ -142,7 +142,7 @@ This implementation plan systematically replaces hard-coded values with design t
     - Scan all component files
     - _Requirements: 1.2, 1.3, 1.4, 8.1_
 
-- [ ] 3. Clean Up ButtonCTA Component
+- [x] 3. Clean Up ButtonCTA Component
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -213,7 +213,7 @@ This implementation plan systematically replaces hard-coded values with design t
     - Run existing ButtonCTA tests
     - _Requirements: 1.1, 1.2, 1.3, 3.3, 7.5, 7.6_
 
-  - [ ] 3.5 Update ButtonCTA README with token consumption
+  - [x] 3.5 Update ButtonCTA README with token consumption
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add "Token Consumption" section to README
