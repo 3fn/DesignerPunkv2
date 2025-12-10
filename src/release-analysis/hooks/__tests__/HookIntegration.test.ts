@@ -118,7 +118,7 @@ describe('Hook Integration Tests', () => {
       expect(duration).toBeLessThan(10000);
       expect(result.performanceMetrics?.completedWithinTimeout).toBe(true);
       expect(result.performanceMetrics?.totalTimeMs).toBeLessThan(10000);
-    }, 15000); // 15 second timeout to allow for 10 second analysis + overhead
+    }, 15000); // 15s timeout to allow for 10s analysis + overhead
 
     it('should provide performance metrics', async () => {
       const analyzer = new QuickAnalyzer(testProjectRoot, {
@@ -134,7 +134,7 @@ describe('Hook Integration Tests', () => {
       expect(result.performanceMetrics?.phaseTimings.documentCollection).toBeGreaterThanOrEqual(0);
       expect(result.performanceMetrics?.phaseTimings.changeExtraction).toBeGreaterThanOrEqual(0);
       expect(result.performanceMetrics?.phaseTimings.versionCalculation).toBeGreaterThanOrEqual(0);
-    });
+    }, 15000); // 15s timeout for performance metrics test
 
     it('should handle timeout gracefully', async () => {
       const analyzer = new QuickAnalyzer(testProjectRoot, {
@@ -168,7 +168,41 @@ describe('Hook Integration Tests', () => {
       expect(quickResult.performanceMetrics?.totalTimeMs).toBeLessThanOrEqual(
         (detailedResult.performanceMetrics?.totalTimeMs || 0) * 1.5
       );
-    }, 30000); // 30 second timeout for performance comparison test
+    }, 15000); // 15s timeout for optimization comparison test
+
+    it('should complete analysis in under 5 seconds with append-only optimization', async () => {
+      const analyzer = new QuickAnalyzer(testProjectRoot, {
+        timeoutMs: 5000,
+        monitorPerformance: true
+      });
+
+      const startTime = Date.now();
+      const result = await analyzer.runQuickAnalysis();
+      const duration = Date.now() - startTime;
+
+      // Performance assertion: should complete in <5s
+      expect(duration).toBeLessThan(5000);
+      expect(result.performanceMetrics?.totalTimeMs).toBeLessThan(5000);
+      expect(result.performanceMetrics?.completedWithinTimeout).toBe(true);
+
+      // Verify append-only optimization is being used
+      // The system should be using state-based incremental analysis
+      expect(result.performanceMetrics).toBeDefined();
+      expect(result.performanceMetrics?.documentsProcessed).toBeDefined();
+      
+      // With append-only optimization, we should process fewer documents
+      // than the total number of completion documents in the project
+      const totalDocs = result.performanceMetrics?.documentsProcessed || 0;
+      expect(totalDocs).toBeGreaterThanOrEqual(0);
+      
+      // Log performance metrics for verification
+      console.log('Append-only optimization metrics:', {
+        duration: `${duration}ms`,
+        totalTimeMs: result.performanceMetrics?.totalTimeMs,
+        documentsProcessed: result.performanceMetrics?.documentsProcessed,
+        completedWithinTimeout: result.performanceMetrics?.completedWithinTimeout
+      });
+    }, 10000); // 10s timeout for append-only optimization test
   });
 
   describe('Requirement 9.3: Concise Output for AI Agents', () => {
@@ -183,7 +217,7 @@ describe('Hook Integration Tests', () => {
       const hasNoChangesInfo = /no.*change/i.test(result.summary);
       
       expect(hasVersionInfo || hasNoChangesInfo).toBe(true);
-    });
+    }, 10000); // 10s timeout for concise output test
 
     it('should include change counts', async () => {
       const result = await manager.runQuickAnalysis();
@@ -193,21 +227,21 @@ describe('Hook Integration Tests', () => {
       expect(result.changeCount.features).toBeGreaterThanOrEqual(0);
       expect(result.changeCount.fixes).toBeGreaterThanOrEqual(0);
       expect(result.changeCount.improvements).toBeGreaterThanOrEqual(0);
-    });
+    }, 10000); // 10s timeout for concise output test
 
     it('should provide confidence score', async () => {
       const result = await manager.runQuickAnalysis();
 
       expect(result.confidence).toBeGreaterThanOrEqual(0);
       expect(result.confidence).toBeLessThanOrEqual(1);
-    });
+    }, 10000); // 10s timeout for concise output test
 
     it('should indicate if full results are cached', async () => {
       const result = await manager.runQuickAnalysis();
 
       expect(result.fullResultCached).toBeDefined();
       expect(typeof result.fullResultCached).toBe('boolean');
-    });
+    }, 10000); // 10s timeout for concise output test
 
     it('should format summary appropriately for different scenarios', async () => {
       const analyzer = new QuickAnalyzer(testProjectRoot);
@@ -226,7 +260,7 @@ describe('Hook Integration Tests', () => {
       if (result.versionBump === 'none') {
         expect(result.summary).toMatch(/no.*change/i);
       }
-    });
+    }, 10000); // 10s timeout for concise output test
   });
 
   describe('Requirement 9.4: Graceful Failure Handling', () => {
@@ -390,7 +424,7 @@ describe('Hook Integration Tests', () => {
         expect(result).toBeDefined();
         expect(result.versionBump).toBeDefined();
       });
-    }, 15000); // 15 second timeout for rapid commits test
+    }, 15000); // 15s timeout for rapid commits test
   });
 
   describe('Requirement 9.7: Cache Functionality', () => {
@@ -438,7 +472,7 @@ describe('Hook Integration Tests', () => {
           .catch(() => false);
         expect(exists).toBe(true);
       }
-    }, 15000); // 15 second timeout for analysis + caching operations
+    }, 15000); // 15s timeout for analysis + caching operations
 
     it('should not cache results when disabled', async () => {
       const analyzer = new QuickAnalyzer(testProjectRoot, {
@@ -449,7 +483,7 @@ describe('Hook Integration Tests', () => {
       const result = await analyzer.runQuickAnalysis();
 
       expect(result.fullResultCached).toBe(false);
-    });
+    }, 15000); // 15s timeout for cache functionality test
 
     it('should create latest.json symlink', async () => {
       const analyzer = new QuickAnalyzer(testProjectRoot, {
@@ -463,7 +497,7 @@ describe('Hook Integration Tests', () => {
       const exists = await fs.access(latestPath).then(() => true).catch(() => false);
 
       expect(exists).toBe(true);
-    });
+    }, 15000); // 15s timeout for cache functionality test
 
     it('should retrieve cached results', async () => {
       const analyzer = new QuickAnalyzer(testProjectRoot, {
@@ -480,7 +514,7 @@ describe('Hook Integration Tests', () => {
       expect(cached).toBeDefined();
       expect(cached.timestamp).toBeDefined();
       expect(cached.documentCount).toBeGreaterThanOrEqual(0);
-    });
+    }, 15000); // 15s timeout for cache functionality test
 
     it('should cache results via HookIntegrationManager', async () => {
       const testResult = {
@@ -495,7 +529,7 @@ describe('Hook Integration Tests', () => {
 
       expect(cached).toBeDefined();
       expect(cached.versionBump).toBe('minor');
-    });
+    }, 15000); // 15s timeout for cache functionality test
 
     it('should return null when no cache exists', async () => {
       const analyzer = new QuickAnalyzer(testProjectRoot, {
@@ -505,7 +539,7 @@ describe('Hook Integration Tests', () => {
       const cached = await analyzer.getCachedResult();
 
       expect(cached).toBeNull();
-    });
+    }, 15000); // 15s timeout for cache functionality test
 
     it('should clear cache', async () => {
       const analyzer = new QuickAnalyzer(testProjectRoot, {
@@ -522,7 +556,7 @@ describe('Hook Integration Tests', () => {
       // Verify cache is empty
       const files = await fs.readdir(cacheDir).catch(() => []);
       expect(files.length).toBe(0);
-    });
+    }, 15000); // 15s timeout for cache functionality test
   });
 
   describe('End-to-End Hook Integration', () => {

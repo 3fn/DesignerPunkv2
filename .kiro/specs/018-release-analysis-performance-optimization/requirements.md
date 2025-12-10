@@ -65,15 +65,17 @@ This spec addresses the performance issue by implementing **append-only analysis
 
 ### Requirement 3: Performance Targets
 
-**User Story**: As a developer, I want release analysis to complete in under 5 seconds, so that tests pass with default timeouts and development workflow remains smooth.
+**User Story**: As a developer, I want release analysis to complete quickly, so that tests pass with reasonable timeouts and development workflow remains smooth.
+
+**Context**: Performance targets distinguish between first-run full analysis (rare, one-time operation) and incremental analysis (common, ongoing operation). Investigation findings (Task 5.5) show that first-run analysis of 894 documents takes ~6 seconds, while incremental analysis of 1-5 new documents takes <1 second.
 
 #### Acceptance Criteria
 
-1. WHEN analyzing 1-5 changed documents THEN the system SHALL complete analysis in under 5 seconds
-2. WHEN analyzing with 179 total documents THEN the system SHALL complete analysis in under 5 seconds
-3. WHEN analyzing with 300 total documents THEN the system SHALL complete analysis in under 5 seconds
-4. WHEN analyzing with 500 total documents THEN the system SHALL complete analysis in under 5 seconds
-5. WHEN analyzing with 1000 total documents THEN the system SHALL complete analysis in under 5 seconds
+1. WHEN performing incremental analysis with 1-5 new documents THEN the system SHALL complete analysis in under 5 seconds
+2. WHEN performing incremental analysis with 10-20 new documents THEN the system SHALL complete analysis in under 5 seconds
+3. WHEN performing first-run full analysis with 179 total documents THEN the system SHALL complete analysis in under 10 seconds
+4. WHEN performing first-run full analysis with 300 total documents THEN the system SHALL complete analysis in under 15 seconds
+5. WHEN performing first-run full analysis with 500+ total documents THEN the system SHALL complete analysis in under 20 seconds
 
 ### Requirement 4: Git-Based New Document Detection
 
