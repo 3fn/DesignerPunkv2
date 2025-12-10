@@ -32,6 +32,7 @@ import {
   completeLabelAnimation
 } from '../../stateManagement';
 import { createIcon } from '../../../Icon/platforms/web/Icon.web';
+import { iconSizes } from '../../../Icon/types';
 
 /**
  * TextInputField Web Component
@@ -176,25 +177,27 @@ export class TextInputField extends HTMLElement {
     }
     
     // Generate trailing icon HTML
+    // Icon size uses icon.size100 (24px) - standard size for bodyMd/labelMd/input typography
+    const iconSize = iconSizes.size100;
     let trailingIconHTML = '';
     if (iconVisibility.showErrorIcon) {
       trailingIconHTML = createIcon({
         name: 'x',
-        size: 24,
+        size: iconSize,
         color: 'color-error',
         className: 'trailing-icon error-icon'
       });
     } else if (iconVisibility.showSuccessIcon) {
       trailingIconHTML = createIcon({
         name: 'check',
-        size: 24,
+        size: iconSize,
         color: 'color-success-strong',
         className: 'trailing-icon success-icon'
       });
     } else if (iconVisibility.showInfoIcon) {
       trailingIconHTML = createIcon({
         name: 'info',
-        size: 24,
+        size: iconSize,
         color: 'color-text-subtle',
         className: 'trailing-icon info-icon'
       });
@@ -269,116 +272,116 @@ export class TextInputField extends HTMLElement {
       .input-wrapper {
         position: relative;
         width: 100%;
-        min-height: var(--tap-area-recommended, 48px);
+        min-height: var(--tap-area-recommended);
       }
       
       .input-element {
         width: 100%;
-        min-height: var(--tap-area-recommended, 48px);
-        padding: var(--space-inset-100, 8px);
-        padding-right: calc(var(--space-inset-100, 8px) + 24px + var(--space-inset-100, 8px));
-        font-family: var(--typography-input-font-family, system-ui);
-        font-size: var(--typography-input-font-size, 16px);
-        line-height: var(--typography-input-line-height, 24px);
-        font-weight: var(--typography-input-font-weight, 400);
-        letter-spacing: var(--typography-input-letter-spacing, 0);
-        color: var(--color-text-default, #000000);
-        background: var(--color-background, #FFFFFF);
-        border: var(--border-default, 1px) solid var(--color-border, #D1D5DB);
-        border-radius: var(--radius-150, 12px);
+        min-height: var(--tap-area-recommended);
+        padding: var(--space-inset-100);
+        padding-right: calc(var(--space-inset-100) + var(--icon-size-100) + var(--space-inset-100));
+        font-family: var(--typography-input-font-family);
+        font-size: var(--typography-input-font-size);
+        line-height: var(--typography-input-line-height);
+        font-weight: var(--typography-input-font-weight);
+        letter-spacing: var(--typography-input-letter-spacing);
+        color: var(--color-text-default);
+        background: var(--color-background);
+        border: var(--border-default) solid var(--color-border);
+        border-radius: var(--radius-150);
         outline: none;
         box-sizing: border-box;
-        transition: border-color var(--motion-float-label-duration, 250ms) var(--motion-float-label-easing, cubic-bezier(0.4, 0.0, 0.2, 1.0));
+        transition: border-color var(--motion-float-label-duration) var(--motion-float-label-easing);
       }
       
       .input-element:focus {
-        border-color: var(--color-primary, #3B82F6);
+        border-color: var(--color-primary);
       }
       
       /* Focus ring for keyboard navigation (WCAG 2.4.7 Focus Visible) */
       .input-element:focus-visible {
-        outline: var(--accessibility-focus-width, 2px) solid var(--accessibility-focus-color, #3B82F6);
-        outline-offset: var(--accessibility-focus-offset, 2px);
+        outline: var(--accessibility-focus-width) solid var(--accessibility-focus-color);
+        outline-offset: var(--accessibility-focus-offset);
       }
       
       /* Ensure focus ring is visible in all states */
       .input-wrapper.error .input-element:focus-visible {
-        outline-color: var(--accessibility-focus-color, #3B82F6);
+        outline-color: var(--accessibility-focus-color);
       }
       
       .input-wrapper.success .input-element:focus-visible {
-        outline-color: var(--accessibility-focus-color, #3B82F6);
+        outline-color: var(--accessibility-focus-color);
       }
       
       .input-wrapper.error .input-element {
-        border-color: var(--color-error, #EF4444);
+        border-color: var(--color-error);
       }
       
       .input-wrapper.success .input-element {
-        border-color: var(--color-success-strong, #10B981);
+        border-color: var(--color-success-strong);
       }
       
       .input-label {
         position: absolute;
-        left: var(--space-inset-100, 8px);
+        left: var(--space-inset-100);
         top: 50%;
         transform: translateY(-50%);
-        font-family: var(--typography-label-md-font-family, system-ui);
-        font-size: var(--typography-label-md-font-size, 16px);
-        line-height: var(--typography-label-md-line-height, 24px);
-        font-weight: var(--typography-label-md-font-weight, 500);
-        letter-spacing: var(--typography-label-md-letter-spacing, 0);
-        color: var(--color-text-muted, #6B7280);
+        font-family: var(--typography-label-md-font-family);
+        font-size: var(--typography-label-md-font-size);
+        line-height: var(--typography-label-md-line-height);
+        font-weight: var(--typography-label-md-font-weight);
+        letter-spacing: var(--typography-label-md-letter-spacing);
+        color: var(--color-text-muted);
         pointer-events: none;
         transition: 
-          transform var(--motion-float-label-duration, 250ms) var(--motion-float-label-easing, cubic-bezier(0.4, 0.0, 0.2, 1.0)),
-          font-size var(--motion-float-label-duration, 250ms) var(--motion-float-label-easing, cubic-bezier(0.4, 0.0, 0.2, 1.0)),
-          color var(--motion-float-label-duration, 250ms) var(--motion-float-label-easing, cubic-bezier(0.4, 0.0, 0.2, 1.0));
+          transform var(--motion-float-label-duration) var(--motion-float-label-easing),
+          font-size var(--motion-float-label-duration) var(--motion-float-label-easing),
+          color var(--motion-float-label-duration) var(--motion-float-label-easing);
       }
       
       .input-label.floated {
-        transform: translateY(calc(-100% - var(--space-grouped-tight, 4px)));
-        font-size: var(--typography-label-md-float-font-size, 14px);
-        line-height: var(--typography-label-md-float-line-height, 20px);
+        transform: translateY(calc(-100% - var(--space-grouped-tight)));
+        font-size: var(--typography-label-md-float-font-size);
+        line-height: var(--typography-label-md-float-line-height);
       }
       
       .input-wrapper.focused .input-label.floated {
-        color: var(--color-primary, #3B82F6);
+        color: var(--color-primary);
       }
       
       .input-wrapper.error .input-label {
-        color: var(--color-error, #EF4444);
+        color: var(--color-error);
       }
       
       .input-wrapper.success .input-label {
-        color: var(--color-success-strong, #10B981);
+        color: var(--color-success-strong);
       }
       
       .helper-text {
-        margin: var(--space-grouped-minimal, 2px) 0 0 0;
+        margin: var(--space-grouped-minimal) 0 0 0;
         padding: 0;
-        font-family: var(--typography-caption-font-family, system-ui);
-        font-size: var(--typography-caption-font-size, 13px);
-        line-height: var(--typography-caption-line-height, 18px);
-        font-weight: var(--typography-caption-font-weight, 400);
-        letter-spacing: var(--typography-caption-letter-spacing, 0);
-        color: var(--color-text-muted, #6B7280);
+        font-family: var(--typography-caption-font-family);
+        font-size: var(--typography-caption-font-size);
+        line-height: var(--typography-caption-line-height);
+        font-weight: var(--typography-caption-font-weight);
+        letter-spacing: var(--typography-caption-letter-spacing);
+        color: var(--color-text-muted);
       }
       
       .error-message {
-        margin: var(--space-grouped-minimal, 2px) 0 0 0;
+        margin: var(--space-grouped-minimal) 0 0 0;
         padding: 0;
-        font-family: var(--typography-caption-font-family, system-ui);
-        font-size: var(--typography-caption-font-size, 13px);
-        line-height: var(--typography-caption-line-height, 18px);
-        font-weight: var(--typography-caption-font-weight, 400);
-        letter-spacing: var(--typography-caption-letter-spacing, 0);
-        color: var(--color-error, #EF4444);
+        font-family: var(--typography-caption-font-family);
+        font-size: var(--typography-caption-font-size);
+        line-height: var(--typography-caption-line-height);
+        font-weight: var(--typography-caption-font-weight);
+        letter-spacing: var(--typography-caption-letter-spacing);
+        color: var(--color-error);
       }
       
       .trailing-icon-container {
         position: absolute;
-        right: var(--space-inset-100, 8px);
+        right: var(--space-inset-100);
         top: 50%;
         transform: translateY(-50%);
         display: flex;
@@ -386,7 +389,7 @@ export class TextInputField extends HTMLElement {
         justify-content: center;
         pointer-events: none;
         opacity: 1;
-        transition: opacity var(--motion-float-label-duration, 250ms) var(--motion-float-label-easing, cubic-bezier(0.4, 0.0, 0.2, 1.0));
+        transition: opacity var(--motion-float-label-duration) var(--motion-float-label-easing);
       }
       
       .trailing-icon {
@@ -505,11 +508,14 @@ export class TextInputField extends HTMLElement {
     
     // Complete animation after transition
     if (this.animationState.isAnimating) {
+      // Read animation duration from CSS custom property (motion.floatLabel token)
+      // Falls back to 250ms if token not available
+      const duration = this.getAnimationDuration();
       setTimeout(() => {
         this.animationState = completeLabelAnimation(this.animationState);
         // Re-render to update icon visibility after animation completes
         this.updateIconVisibility();
-      }, 250); // Match motion.floatLabel duration
+      }, duration);
     }
   }
   
@@ -534,6 +540,33 @@ export class TextInputField extends HTMLElement {
     } else {
       iconContainer.style.opacity = '0';
     }
+  }
+  
+  /**
+   * Get animation duration from CSS custom property (motion.floatLabel token)
+   * Falls back to 250ms if token not available
+   */
+  private getAnimationDuration(): number {
+    if (!this.labelElement) return 250;
+    
+    try {
+      const computedStyle = getComputedStyle(this.labelElement);
+      const durationStr = computedStyle.getPropertyValue('--motion-float-label-duration').trim();
+      
+      if (durationStr) {
+        // Parse duration (could be "250ms" or "0.25s")
+        const duration = parseFloat(durationStr);
+        if (durationStr.endsWith('s') && !durationStr.endsWith('ms')) {
+          return duration * 1000; // Convert seconds to milliseconds
+        }
+        return duration; // Already in milliseconds
+      }
+    } catch (error) {
+      // Fallback if getComputedStyle fails
+      console.warn('Failed to read animation duration from CSS custom property, using fallback', error);
+    }
+    
+    return 250; // Fallback to motion.floatLabel default duration
   }
 }
 

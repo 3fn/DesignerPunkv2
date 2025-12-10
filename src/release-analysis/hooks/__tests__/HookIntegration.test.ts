@@ -118,7 +118,7 @@ describe('Hook Integration Tests', () => {
       expect(duration).toBeLessThan(10000);
       expect(result.performanceMetrics?.completedWithinTimeout).toBe(true);
       expect(result.performanceMetrics?.totalTimeMs).toBeLessThan(10000);
-    });
+    }, 15000); // 15 second timeout to allow for 10 second analysis + overhead
 
     it('should provide performance metrics', async () => {
       const analyzer = new QuickAnalyzer(testProjectRoot, {
@@ -438,7 +438,7 @@ describe('Hook Integration Tests', () => {
           .catch(() => false);
         expect(exists).toBe(true);
       }
-    });
+    }, 15000); // 15 second timeout for analysis + caching operations
 
     it('should not cache results when disabled', async () => {
       const analyzer = new QuickAnalyzer(testProjectRoot, {

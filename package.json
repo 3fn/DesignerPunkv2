@@ -29,7 +29,9 @@
     "hooks:validate": "npx ts-node src/release-analysis/cli/manage-hooks.ts validate",
     "hooks:status": "npx ts-node src/release-analysis/cli/manage-hooks.ts status",
     "validate:release-setup": "node scripts/validate-release-setup.js",
-    "diagnose:release-issues": "node scripts/diagnose-release-issues.js"
+    "diagnose:release-issues": "node scripts/diagnose-release-issues.js",
+    "audit:tokens": "node scripts/audit-component-tokens.js",
+    "audit:tokens:detailed": "node scripts/audit-component-tokens.js -- --detailed"
   },
   "devDependencies": {
     "@types/glob": "^8.1.0",
