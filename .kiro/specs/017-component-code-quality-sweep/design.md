@@ -471,18 +471,25 @@ if (helperText !== undefined) {
 
 ### Existing Test Suite Validation
 
-**Approach**: Rely on existing component tests to validate refactoring doesn't break behavior
+**Approach**: Rely on existing component tests to validate refactoring doesn't break behavior, updating tests when they check for old patterns
 
 **Process**:
 1. Run existing test suite before token replacement
 2. Replace hard-coded values with tokens
-3. Run existing test suite after token replacement
-4. Compare results - all tests should still pass
-5. If tests fail, investigate and fix (either token replacement or test update needed)
+3. Update component tests that check for old patterns (fallbacks, hard-coded values)
+4. Run existing test suite after token replacement
+5. Compare results - all tests should still pass
+6. If tests fail, investigate and fix (either token replacement or test update needed)
 
 **Rationale**: Existing tests already validate component behavior. If token replacement breaks tests, either:
 - Token replacement was incorrect (fix the replacement)
 - Test was testing implementation details (update test to test behavior)
+- Test was checking for old pattern (update test to check for new pattern)
+
+**Common Test Updates Needed**:
+- Tests checking for fallback patterns (`|| '250ms'`) should check for no-fallback pattern instead
+- Tests checking for hard-coded values should check for token references instead
+- Tests checking for specific CSS values should check for CSS custom properties instead
 
 ### Visual Review Process
 

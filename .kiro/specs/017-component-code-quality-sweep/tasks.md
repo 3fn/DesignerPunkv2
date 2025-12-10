@@ -186,9 +186,10 @@ This implementation plan systematically replaces hard-coded values with design t
     - Replace `Color(red:green:blue:)` with semantic tokens
     - Prefer semantic tokens (colorPrimary, colorTextDefault)
     - Document any primitive token usage
+    - Update component tests to check for token references instead of hard-coded values
     - Run cleanup-specific tests
     - Run existing ButtonCTA tests
-    - _Requirements: 1.1, 1.6, 3.1_
+    - _Requirements: 1.1, 1.6, 3.1, 7.5, 7.6_
 
   - [ ] 3.3 Replace ButtonCTA web hard-coded values
     **Type**: Implementation
@@ -196,9 +197,10 @@ This implementation plan systematically replaces hard-coded values with design t
     - Replace hard-coded colors with CSS custom properties
     - Replace hard-coded spacing with spacing tokens
     - Replace hard-coded motion with motion tokens
+    - Update component tests to check for token references instead of hard-coded values
     - Run cleanup-specific tests
     - Run existing ButtonCTA tests
-    - _Requirements: 1.1, 1.2, 1.3, 3.2_
+    - _Requirements: 1.1, 1.2, 1.3, 3.2, 7.5, 7.6_
 
   - [ ] 3.4 Replace ButtonCTA Android hard-coded values
     **Type**: Implementation
@@ -206,9 +208,10 @@ This implementation plan systematically replaces hard-coded values with design t
     - Replace `Color(0xRRGGBB)` with semantic tokens
     - Replace hard-coded spacing with spacing tokens
     - Replace hard-coded motion with motion tokens
+    - Update component tests to check for token references instead of hard-coded values
     - Run cleanup-specific tests
     - Run existing ButtonCTA tests
-    - _Requirements: 1.1, 1.2, 1.3, 3.3_
+    - _Requirements: 1.1, 1.2, 1.3, 3.3, 7.5, 7.6_
 
   - [ ] 3.5 Update ButtonCTA README with token consumption
     **Type**: Implementation
@@ -264,9 +267,10 @@ This implementation plan systematically replaces hard-coded values with design t
     - Replace `|| '250ms'` with explicit error handling
     - Replace `|| 8` with explicit error handling
     - Fail loudly when tokens missing
+    - Update component tests to check for no-fallback pattern
     - Run cleanup-specific tests
     - Run existing TextInputField tests
-    - _Requirements: 1.5, 7.1_
+    - _Requirements: 1.5, 7.1, 7.5, 7.6_
 
   - [ ] 4.3 Replace TextInputField iOS hard-coded values
     **Type**: Implementation
@@ -274,9 +278,10 @@ This implementation plan systematically replaces hard-coded values with design t
     - Replace hard-coded RGB colors with semantic tokens
     - Replace hard-coded spacing with spacing tokens
     - Replace hard-coded motion with motion tokens
+    - Update component tests to check for token references instead of hard-coded values
     - Run cleanup-specific tests
     - Run existing TextInputField tests
-    - _Requirements: 1.1, 1.2, 1.3, 3.1_
+    - _Requirements: 1.1, 1.2, 1.3, 3.1, 7.5, 7.6_
 
   - [ ] 4.4 Replace TextInputField Android hard-coded values
     **Type**: Implementation
@@ -284,9 +289,10 @@ This implementation plan systematically replaces hard-coded values with design t
     - Replace hard-coded colors with semantic tokens
     - Replace hard-coded spacing with spacing tokens
     - Replace hard-coded motion with motion tokens
+    - Update component tests to check for token references instead of hard-coded values
     - Run cleanup-specific tests
     - Run existing TextInputField tests
-    - _Requirements: 1.1, 1.2, 1.3, 3.3_
+    - _Requirements: 1.1, 1.2, 1.3, 3.3, 7.5, 7.6_
 
   - [ ] 4.5 Update TextInputField README with token consumption
     **Type**: Implementation
@@ -337,9 +343,10 @@ This implementation plan systematically replaces hard-coded values with design t
     - Create cleanup-specific tests
     - Replace hard-coded values with tokens
     - Remove fallback patterns
+    - Update component tests to check for new patterns
     - Run tests
     - Update README
-    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 9.1_
+    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 7.5, 7.6, 9.1_
 
   - [ ] 5.3 Clean up Container component
     **Type**: Implementation
@@ -347,9 +354,10 @@ This implementation plan systematically replaces hard-coded values with design t
     - Create cleanup-specific tests
     - Replace hard-coded values with tokens
     - Remove fallback patterns
+    - Update component tests to check for new patterns
     - Run tests
     - Update README
-    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 9.1_
+    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 7.5, 7.6, 9.1_
 
   - [ ] 5.4 Clean up additional components as needed
     **Type**: Implementation
@@ -358,9 +366,10 @@ This implementation plan systematically replaces hard-coded values with design t
     - Create cleanup-specific tests
     - Replace hard-coded values
     - Remove fallback patterns
+    - Update component tests to check for new patterns
     - Run tests
     - Update READMEs
-    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 9.1_
+    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 7.5, 7.6, 9.1_
 
 - [ ] 6. Delete Cleanup-Specific Tests
 

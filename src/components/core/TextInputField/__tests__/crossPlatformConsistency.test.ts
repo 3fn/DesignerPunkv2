@@ -29,8 +29,8 @@ describe('TextInputField Cross-Platform Consistency', () => {
   
   describe('Animation Timing Consistency', () => {
     test('all platforms use 250ms animation duration', () => {
-      // Web: motion.floatLabel duration (250ms)
-      expect(webContent).toContain('--motion-float-label-duration, 250ms');
+      // Web: motion.floatLabel duration (250ms) - no fallback pattern
+      expect(webContent).toContain('var(--motion-float-label-duration)');
       
       // iOS: motionFloatLabelDuration = 0.25 (250ms in seconds)
       expect(iosContent).toContain('motionFloatLabelDuration: TimeInterval = 0.25');
@@ -67,10 +67,10 @@ describe('TextInputField Cross-Platform Consistency', () => {
   
   describe('Typography Token Consistency', () => {
     test('all platforms use labelMd typography (16px/pt/sp)', () => {
-      // Web: typography.labelMd
-      expect(webContent).toContain('--typography-label-md-font-size, 16px');
-      expect(webContent).toContain('--typography-label-md-line-height, 24px');
-      expect(webContent).toContain('--typography-label-md-font-weight, 500');
+      // Web: typography.labelMd - no fallback pattern
+      expect(webContent).toContain('var(--typography-label-md-font-size)');
+      expect(webContent).toContain('var(--typography-label-md-line-height)');
+      expect(webContent).toContain('var(--typography-label-md-font-weight)');
       
       // iOS: typographyLabelMdFontSize = 16
       expect(iosContent).toContain('typographyLabelMdFontSize: CGFloat = 16');
@@ -84,9 +84,9 @@ describe('TextInputField Cross-Platform Consistency', () => {
     });
     
     test('all platforms use labelMdFloat typography (14px/pt/sp)', () => {
-      // Web: typography.labelMdFloat (via scale088)
-      expect(webContent).toContain('--typography-label-md-float-font-size, 14px');
-      expect(webContent).toContain('--typography-label-md-float-line-height, 20px');
+      // Web: typography.labelMdFloat (via scale088) - no fallback pattern
+      expect(webContent).toContain('var(--typography-label-md-float-font-size)');
+      expect(webContent).toContain('var(--typography-label-md-float-line-height)');
       
       // iOS: typographyLabelMdFloatFontSize = 14
       expect(iosContent).toContain('typographyLabelMdFloatFontSize: CGFloat = 14');
@@ -98,9 +98,9 @@ describe('TextInputField Cross-Platform Consistency', () => {
     });
     
     test('all platforms use input typography (16px/pt/sp)', () => {
-      // Web: typography.input
-      expect(webContent).toContain('--typography-input-font-size, 16px');
-      expect(webContent).toContain('--typography-input-line-height, 24px');
+      // Web: typography.input - no fallback pattern
+      expect(webContent).toContain('var(--typography-input-font-size)');
+      expect(webContent).toContain('var(--typography-input-line-height)');
       
       // iOS: typographyInputFontSize = 16
       expect(iosContent).toContain('typographyInputFontSize: CGFloat = 16');
@@ -112,9 +112,9 @@ describe('TextInputField Cross-Platform Consistency', () => {
     });
     
     test('all platforms use caption typography (13px/pt/sp)', () => {
-      // Web: typography.caption
-      expect(webContent).toContain('--typography-caption-font-size, 13px');
-      expect(webContent).toContain('--typography-caption-line-height, 18px');
+      // Web: typography.caption - no fallback pattern
+      expect(webContent).toContain('var(--typography-caption-font-size)');
+      expect(webContent).toContain('var(--typography-caption-line-height)');
       
       // iOS: typographyCaptionFontSize = 13
       expect(iosContent).toContain('typographyCaptionFontSize: CGFloat = 13');
