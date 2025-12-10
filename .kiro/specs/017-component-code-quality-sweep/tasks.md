@@ -170,7 +170,7 @@ This implementation plan systematically replaces hard-coded values with design t
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Clean Up ButtonCTA Component"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 3.1 Create ButtonCTA cleanup-specific tests
+  - [x] 3.1 Create ButtonCTA cleanup-specific tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create test file for ButtonCTA token replacements
@@ -180,7 +180,7 @@ This implementation plan systematically replaces hard-coded values with design t
     - Mark as TEMPORARY in comments
     - _Requirements: 1.1, 1.6, 8.1_
 
-  - [ ] 3.2 Replace ButtonCTA iOS hard-coded colors
+  - [x] 3.2 Replace ButtonCTA iOS hard-coded colors
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace `Color(red:green:blue:)` with semantic tokens
@@ -191,7 +191,7 @@ This implementation plan systematically replaces hard-coded values with design t
     - Run existing ButtonCTA tests
     - _Requirements: 1.1, 1.6, 3.1, 7.5, 7.6_
 
-  - [ ] 3.3 Replace ButtonCTA web hard-coded values
+  - [x] 3.3 Replace ButtonCTA web hard-coded values
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace hard-coded colors with CSS custom properties

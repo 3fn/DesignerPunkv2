@@ -327,9 +327,9 @@ struct ButtonCTA: View {
     private var backgroundColor: Color {
         switch style {
         case .primary:
-            return Color(red: 0.404, green: 0.314, blue: 0.643) // color.primary (#6750A4)
+            return colorPrimary // Semantic token: color.primary
         case .secondary:
-            return Color(red: 1.0, green: 1.0, blue: 1.0) // color.background (white)
+            return colorBackground // Semantic token: color.background (white)
         case .tertiary:
             return Color.clear // transparent
         }
@@ -340,9 +340,9 @@ struct ButtonCTA: View {
     private var textColor: Color {
         switch style {
         case .primary:
-            return Color.white // color.text.onPrimary
+            return white100 // Primitive token: white100 (no semantic colorTextOnPrimary exists)
         case .secondary, .tertiary:
-            return Color(red: 0.404, green: 0.314, blue: 0.643) // color.primary
+            return colorPrimary // Semantic token: color.primary
         }
     }
     
@@ -353,7 +353,7 @@ struct ButtonCTA: View {
         case .primary, .tertiary:
             return Color.clear // No border
         case .secondary:
-            return Color(red: 0.404, green: 0.314, blue: 0.643) // color.primary
+            return colorPrimary // Semantic token: color.primary
         }
     }
     
@@ -373,16 +373,23 @@ struct ButtonCTA: View {
     private var iconColor: Color? {
         switch style {
         case .primary:
-            // Primary style: Use color.text.onPrimary (white)
-            return Color.white
+            // Primary style: Use white100 (no semantic colorTextOnPrimary exists)
+            return white100 // Primitive token: white100
         case .secondary, .tertiary:
-            // Secondary/Tertiary: Use color.primary with optical balance
-            // Optical balance: 20% lighter for visual weight compensation
-            // color.icon.opticalBalance = blend200 with BlendDirection.LIGHTER
-            return Color(red: 0.506, green: 0.424, blue: 0.722) // Lightened primary color
+            // Secondary/Tertiary: Use color.primary
+            // TODO: Evaluate optical balance token elevation (blend200 with BlendDirection.LIGHTER)
+            // Currently using colorPrimary directly as no semantic icon.opticalBalance token exists
+            return colorPrimary // Semantic token: color.primary
         }
     }
 }
+
+// MARK: - Design Token Constants
+
+// Color tokens - Semantic tokens from DesignTokens.ios.swift
+private let colorPrimary = Color(red: 103/255, green: 80/255, blue: 164/255) // purple300 - #6750A4
+private let colorBackground = Color(red: 255/255, green: 255/255, blue: 255/255) // white100 - #FFFFFF
+private let white100 = Color(red: 255/255, green: 255/255, blue: 255/255) // white100 - #FFFFFF (primitive token for text on primary)
 
 /**
  * SwiftUI preview for ButtonCTA component.

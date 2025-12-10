@@ -42,11 +42,11 @@
   user-select: none;
   
   /* Transitions */
-  transition: background-color 150ms ease-in-out,
-              border-color 150ms ease-in-out,
-              color 150ms ease-in-out,
-              opacity 150ms ease-in-out,
-              box-shadow 150ms ease-in-out;
+  transition: background-color var(--duration-150) ease-in-out,
+              border-color var(--duration-150) ease-in-out,
+              color var(--duration-150) ease-in-out,
+              opacity var(--duration-150) ease-in-out,
+              box-shadow var(--duration-150) ease-in-out;
   
   /* Remove default button styles */
   border: none;
@@ -271,7 +271,7 @@
  * - Smooth transition
  */
 .button-cta:hover:not(:disabled) {
-  opacity: 0.92; /* 100% - 8% = 92% */
+  opacity: calc(1 - var(--opacity-100)); /* 100% - 8% = 92% */
 }
 
 /**
@@ -281,7 +281,7 @@
  * - Visual feedback for click/tap
  */
 .button-cta:active:not(:disabled) {
-  opacity: 0.84; /* 100% - 16% = 84% */
+  opacity: calc(1 - var(--opacity-200)); /* 100% - 16% = 84% */
 }
 
 /**

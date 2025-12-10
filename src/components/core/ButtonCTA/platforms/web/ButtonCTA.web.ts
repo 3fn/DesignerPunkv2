@@ -246,6 +246,9 @@ export class ButtonCTA extends HTMLElement {
     ].filter(Boolean).join(' ');
     
     // Generate icon HTML if icon prop provided
+    // Icon sizes correspond to icon size tokens:
+    // - Small/Medium: 24px (icon.size100)
+    // - Large: 32px (icon.size125)
     const iconSize = size === 'large' ? 32 : 24;
     const iconHTML = icon ? createIcon({ 
       name: icon as any, // Type assertion since IconName is from Icon types
