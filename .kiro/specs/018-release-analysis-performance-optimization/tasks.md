@@ -80,7 +80,7 @@ This implementation plan follows a bottom-up approach: build foundational compon
     - Test state validation logic
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5_
 
-- [ ] 2. Implement New Document Detection
+- [x] 2. Implement New Document Detection
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -105,7 +105,7 @@ This implementation plan follows a bottom-up approach: build foundational compon
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: New Document Detection"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 2.1 Implement NewDocumentDetector class
+  - [x] 2.1 Implement NewDocumentDetector class
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/release-analysis/detection/NewDocumentDetector.ts`
@@ -117,7 +117,7 @@ This implementation plan follows a bottom-up approach: build foundational compon
     - Log appropriate messages for new document detection and fallbacks
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 4.1, 4.2, 4.3, 4.4, 4.5, 10.1_
 
-  - [ ] 2.2 Write unit tests for NewDocumentDetector
+  - [x] 2.2 Write unit tests for NewDocumentDetector
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/release-analysis/detection/__tests__/NewDocumentDetector.test.ts`

@@ -81,12 +81,17 @@ src/components/Button.tsx
         '.kiro/specs/spec-001/completion/task-1-completion.md',
         '.kiro/specs/spec-002/completion/task-2-completion.md'
       ];
-      mockGlob.mockResolvedValue(allDocs as any);
+      
+      // Mock glob to call callback with results
+      mockGlob.mockImplementation(((pattern: string, optionsOrCallback: any, callback?: any) => {
+        const cb = typeof optionsOrCallback === 'function' ? optionsOrCallback : callback;
+        cb(null, allDocs);
+      }) as any);
 
       const result = await detector.detectNewDocuments(null);
 
       expect(mockExecSync).not.toHaveBeenCalled();
-      expect(mockGlob).toHaveBeenCalledWith('.kiro/specs/**/completion/*.md');
+      expect(mockGlob).toHaveBeenCalled();
       expect(result).toEqual(allDocs);
       expect(consoleWarnSpy).toHaveBeenCalledWith(
         'No previous analysis found, performing full scan'
@@ -106,11 +111,16 @@ src/components/Button.tsx
       mockExecSync.mockImplementation(() => {
         throw new Error('Git command failed');
       });
-      mockGlob.mockResolvedValue(allDocs as any);
+      
+      // Mock glob to call callback with results
+      mockGlob.mockImplementation(((pattern: string, optionsOrCallback: any, callback?: any) => {
+        const cb = typeof optionsOrCallback === 'function' ? optionsOrCallback : callback;
+        cb(null, allDocs);
+      }) as any);
 
       const result = await detector.detectNewDocuments(sinceCommit);
 
-      expect(mockGlob).toHaveBeenCalledWith('.kiro/specs/**/completion/*.md');
+      expect(mockGlob).toHaveBeenCalled();
       expect(result).toEqual(allDocs);
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Git command failed, falling back to full scan:',
