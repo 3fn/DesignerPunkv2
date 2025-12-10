@@ -3,10 +3,14 @@ import { DEFAULT_ANALYSIS_CONFIG } from '../../config/AnalysisConfig';
 import { GitChanges } from '../../git/GitHistoryAnalyzer';
 import { existsSync, statSync } from 'fs';
 import { execSync } from 'child_process';
+import { NewDocumentDetector } from '../../detection/NewDocumentDetector';
+import { AnalysisStateManager } from '../../state/AnalysisStateManager';
 
 // Mock file system operations
 jest.mock('fs');
 jest.mock('child_process');
+jest.mock('../../detection/NewDocumentDetector');
+jest.mock('../../state/AnalysisStateManager');
 
 const mockExistsSync = existsSync as jest.MockedFunction<typeof existsSync>;
 const mockStatSync = statSync as jest.MockedFunction<typeof statSync>;
@@ -499,6 +503,235 @@ Implementation complete.
       // At least the task completion document should be classified correctly
       expect(taskDoc).toBeDefined();
       expect(taskDoc?.metadata.type).toBe('task-completion');
+    });
+  });
+
+  describe('collectDocuments (append-only)', () => {
+    let mockNewDocumentDetector: jest.Mocked<NewDocumentDetector>;
+    let mockStateManager: jest.Mocked<AnalysisStateManager>;
+
+    beforeEach(() => {
+      mockNewDocumentDetector = {
+        detectNewDocuments: jest.fn(),
+        getAllCompletionDocuments: jest.fn(),
+        getCurrentCommit: jest.fn()
+      } as any;
+
+      mockStateManager = {
+        loadState: jest.fn(),
+        saveState: jest.fn(),
+        resetState: jest.fn()
+      } as any;
+    });
+
+    it('should use NewDocumentDetector to find new documents', async () => {
+      const mockReadFile = jest.fn().mockResolvedValue(`# Task 1 Completion
+**Date**: 2025-01-01
+## Summary
+Test content.`);
+
+      const mockFsPromises = { readFile: mockReadFile };
+      jest.doMock('fs/promises', () => mockFsPromises, { virtual: true });
+
+      // Mock state manager to return previous state
+      mockStateManager.loadState.mockResolvedValue({
+        lastAnalyzedCommit: 'abc123',
+        accumulatedResults: [],
+        lastAnalyzedAt: '2025-01-01T00:00:00Z',
+        version: '1.0'
+      });
+
+      // Mock detector to return new documents
+      mockNewDocumentDetector.detectNewDocuments.mockResolvedValue([
+        '.kiro/specs/test/completion/task-1-completion.md'
+      ]);
+
+      const testCollector = new CompletionDocumentCollector(
+        '/test/workspace',
+        mockConfig,
+        mockNewDocumentDetector,
+        mockStateManager
+      );
+
+      const result = await testCollector.collectDocuments();
+
+      expect(mockStateManager.loadState).toHaveBeenCalled();
+      expect(mockNewDocumentDetector.detectNewDocuments).toHaveBeenCalledWith('abc123');
+      expect(result.documents).toHaveLength(1);
+      expect(result.metadata.totalFilesScanned).toBe(1);
+    });
+
+    it('should return early when no new documents exist', async () => {
+      mockStateManager.loadState.mockResolvedValue({
+        lastAnalyzedCommit: 'abc123',
+        accumulatedResults: [],
+        lastAnalyzedAt: '2025-01-01T00:00:00Z',
+        version: '1.0'
+      });
+
+      mockNewDocumentDetector.detectNewDocuments.mockResolvedValue([]);
+
+      const testCollector = new CompletionDocumentCollector(
+        '/test/workspace',
+        mockConfig,
+        mockNewDocumentDetector,
+        mockStateManager
+      );
+
+      const result = await testCollector.collectDocuments();
+
+      expect(result.documents).toHaveLength(0);
+      expect(result.metadata.totalFilesScanned).toBe(0);
+      expect(result.metadata.documentsLoaded).toBe(0);
+    });
+
+    it('should fall back to full scan when no previous state exists', async () => {
+      const mockReadFile = jest.fn().mockResolvedValue(`# Task 1 Completion
+**Date**: 2025-01-01
+## Summary
+Test content.`);
+
+      const mockFsPromises = { readFile: mockReadFile };
+      jest.doMock('fs/promises', () => mockFsPromises, { virtual: true });
+
+      mockStateManager.loadState.mockResolvedValue(null);
+      mockNewDocumentDetector.detectNewDocuments.mockResolvedValue([
+        '.kiro/specs/test/completion/task-1-completion.md',
+        '.kiro/specs/test/completion/task-2-completion.md'
+      ]);
+
+      const testCollector = new CompletionDocumentCollector(
+        '/test/workspace',
+        mockConfig,
+        mockNewDocumentDetector,
+        mockStateManager
+      );
+
+      const result = await testCollector.collectDocuments();
+
+      expect(mockNewDocumentDetector.detectNewDocuments).toHaveBeenCalledWith(null);
+      expect(result.documents).toHaveLength(2);
+    });
+
+    it('should apply filters to new documents', async () => {
+      const mockReadFile = jest.fn()
+        .mockResolvedValueOnce(`# Task Completion
+**Date**: 2025-01-01
+## Summary
+Feature implementation.`)
+        .mockResolvedValueOnce(`# Documentation Update
+**Date**: 2025-01-01
+## Summary
+Documentation documentation documentation updates.`);
+
+      const mockFsPromises = { readFile: mockReadFile };
+      jest.doMock('fs/promises', () => mockFsPromises, { virtual: true });
+
+      mockStateManager.loadState.mockResolvedValue(null);
+      mockNewDocumentDetector.detectNewDocuments.mockResolvedValue([
+        '.kiro/specs/test/completion/task-1-completion.md',
+        '.kiro/specs/test/completion/doc-update.md'
+      ]);
+
+      const testCollector = new CompletionDocumentCollector(
+        '/test/workspace',
+        mockConfig,
+        mockNewDocumentDetector,
+        mockStateManager
+      );
+
+      const filter: DocumentFilter = {
+        documentTypes: ['task-completion']
+      };
+
+      const result = await testCollector.collectDocuments(filter);
+
+      expect(result.documents).toHaveLength(1);
+      expect(result.documents[0].metadata.type).toBe('task-completion');
+    });
+  });
+
+  describe('collectAllDocuments (full analysis fallback)', () => {
+    let mockNewDocumentDetector: jest.Mocked<NewDocumentDetector>;
+    let mockStateManager: jest.Mocked<AnalysisStateManager>;
+
+    beforeEach(() => {
+      mockNewDocumentDetector = {
+        detectNewDocuments: jest.fn(),
+        getAllCompletionDocuments: jest.fn(),
+        getCurrentCommit: jest.fn()
+      } as any;
+
+      mockStateManager = {
+        loadState: jest.fn(),
+        saveState: jest.fn(),
+        resetState: jest.fn()
+      } as any;
+    });
+
+    it('should use getAllCompletionDocuments for full scan', async () => {
+      const mockReadFile = jest.fn().mockResolvedValue(`# Task 1 Completion
+**Date**: 2025-01-01
+## Summary
+Test content.`);
+
+      const mockFsPromises = { readFile: mockReadFile };
+      jest.doMock('fs/promises', () => mockFsPromises, { virtual: true });
+
+      mockNewDocumentDetector.getAllCompletionDocuments.mockResolvedValue([
+        '.kiro/specs/test/completion/task-1-completion.md',
+        '.kiro/specs/test/completion/task-2-completion.md',
+        '.kiro/specs/test/completion/task-3-completion.md'
+      ]);
+
+      const testCollector = new CompletionDocumentCollector(
+        '/test/workspace',
+        mockConfig,
+        mockNewDocumentDetector,
+        mockStateManager
+      );
+
+      const result = await testCollector.collectAllDocuments();
+
+      expect(mockNewDocumentDetector.getAllCompletionDocuments).toHaveBeenCalled();
+      expect(result.documents).toHaveLength(3);
+      expect(result.metadata.totalFilesScanned).toBe(3);
+    });
+
+    it('should apply filters to all documents', async () => {
+      const mockReadFile = jest.fn()
+        .mockResolvedValueOnce(`# Task Completion
+**Date**: 2025-01-01
+## Summary
+Feature implementation.`)
+        .mockResolvedValueOnce(`# Documentation Update
+**Date**: 2025-01-01
+## Summary
+Documentation documentation documentation updates.`);
+
+      const mockFsPromises = { readFile: mockReadFile };
+      jest.doMock('fs/promises', () => mockFsPromises, { virtual: true });
+
+      mockNewDocumentDetector.getAllCompletionDocuments.mockResolvedValue([
+        '.kiro/specs/test/completion/task-1-completion.md',
+        '.kiro/specs/test/completion/doc-update.md'
+      ]);
+
+      const testCollector = new CompletionDocumentCollector(
+        '/test/workspace',
+        mockConfig,
+        mockNewDocumentDetector,
+        mockStateManager
+      );
+
+      const filter: DocumentFilter = {
+        documentTypes: ['task-completion']
+      };
+
+      const result = await testCollector.collectAllDocuments(filter);
+
+      expect(result.documents).toHaveLength(1);
+      expect(result.documents[0].metadata.type).toBe('task-completion');
     });
   });
 });

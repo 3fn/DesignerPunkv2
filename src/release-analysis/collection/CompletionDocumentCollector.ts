@@ -7,6 +7,8 @@ import { CompletionDocument, DocumentMetadata } from '../types/AnalysisTypes';
 import { withErrorHandling } from '../errors/ErrorHandler';
 import { ErrorContext } from '../types';
 import { DocumentErrorRecovery } from '../errors/ErrorRecovery';
+import { NewDocumentDetector } from '../detection/NewDocumentDetector';
+import { AnalysisStateManager } from '../state/AnalysisStateManager';
 
 /**
  * Document collection result with metadata
@@ -91,10 +93,196 @@ export interface ValidationIssue {
 export class CompletionDocumentCollector {
   private workingDirectory: string;
   private config: AnalysisConfig;
+  private newDocumentDetector: NewDocumentDetector;
+  private stateManager: AnalysisStateManager;
 
-  constructor(workingDirectory: string = process.cwd(), config: AnalysisConfig) {
+  constructor(
+    workingDirectory: string = process.cwd(), 
+    config: AnalysisConfig,
+    newDocumentDetector?: NewDocumentDetector,
+    stateManager?: AnalysisStateManager
+  ) {
     this.workingDirectory = workingDirectory;
     this.config = config;
+    this.newDocumentDetector = newDocumentDetector || new NewDocumentDetector();
+    this.stateManager = stateManager || new AnalysisStateManager();
+  }
+
+  /**
+   * Collect completion documents using append-only optimization
+   * 
+   * Uses NewDocumentDetector to identify documents added since last analysis.
+   * Integrates with AnalysisStateManager to get last analyzed commit.
+   * Falls back to full document scan if no previous state exists.
+   * 
+   * Requirements:
+   * - 1.1: Identify completion documents created after last analyzed commit
+   * - 1.2: Skip document parsing when no new documents exist
+   * - 1.3: Parse only new documents (1-5 new documents)
+   * - 1.4: Filter for files matching pattern .kiro/specs/star-star/completion/star.md
+   * - 1.5: Fall back to full document scan when last analyzed commit unavailable
+   * 
+   * @param filter - Optional document filter criteria
+   * @returns DocumentCollectionResult with new documents and metadata
+   */
+  async collectDocuments(filter?: DocumentFilter): Promise<DocumentCollectionResult> {
+    const startTime = Date.now();
+    const result: DocumentCollectionResult = {
+      documents: [],
+      metadata: {
+        totalFilesScanned: 0,
+        documentsFound: 0,
+        documentsLoaded: 0,
+        documentsFiltered: 0,
+        collectionDate: new Date(),
+        processingTimeMs: 0
+      },
+      errors: [],
+      warnings: []
+    };
+
+    const context: ErrorContext = {
+      operation: 'collectDocuments',
+      component: 'CompletionDocumentCollector',
+      timestamp: new Date()
+    };
+
+    const collectionResult = await withErrorHandling(async () => {
+      // Load previous state to get last analyzed commit
+      const state = await this.stateManager.loadState();
+      const lastAnalyzedCommit = state?.lastAnalyzedCommit || null;
+
+      if (lastAnalyzedCommit) {
+        console.log(`Last analyzed commit: ${lastAnalyzedCommit}`);
+      } else {
+        console.log('No previous state found, will perform full scan');
+      }
+
+      // Detect new documents using NewDocumentDetector
+      const newDocumentPaths = await this.newDocumentDetector.detectNewDocuments(lastAnalyzedCommit);
+      result.metadata.totalFilesScanned = newDocumentPaths.length;
+
+      // If no new documents, return early (Requirement 1.2)
+      if (newDocumentPaths.length === 0) {
+        console.log('No new documents to analyze');
+        result.metadata.processingTimeMs = Date.now() - startTime;
+        return result;
+      }
+
+      // Discover completion documents with error handling
+      const discoveredDocuments = await this.discoverCompletionDocuments(newDocumentPaths, result);
+      result.metadata.documentsFound = discoveredDocuments.length;
+
+      // Load and validate documents with error recovery
+      const loadedDocuments = await this.loadDocuments(discoveredDocuments, result);
+      result.metadata.documentsLoaded = loadedDocuments.length;
+
+      // Apply filters
+      const filteredDocuments = this.filterDocuments(loadedDocuments, filter, result);
+      result.metadata.documentsFiltered = filteredDocuments.length;
+
+      result.documents = filteredDocuments;
+      result.metadata.processingTimeMs = Date.now() - startTime;
+
+      return result;
+    }, context);
+
+    if (collectionResult.success && collectionResult.data) {
+      return collectionResult.data;
+    } else {
+      // Add collection error to result
+      result.errors.push({
+        filePath: 'collection-process',
+        error: `Collection failed: ${collectionResult.error?.message || 'Unknown error'}`,
+        type: 'validation',
+        recoverable: false
+      });
+      result.metadata.processingTimeMs = Date.now() - startTime;
+
+      // Log error details but return partial results
+      console.warn(`⚠️  Document collection encountered errors: ${collectionResult.error?.message}`);
+      if (collectionResult.warnings) {
+        collectionResult.warnings.forEach(warning => result.warnings.push(warning));
+      }
+
+      return result;
+    }
+  }
+
+  /**
+   * Collect all completion documents (fallback for full analysis)
+   * 
+   * Uses glob to find all completion documents in the project.
+   * This method is kept for full analysis fallback when state reset is needed.
+   * 
+   * @param filter - Optional document filter criteria
+   * @returns DocumentCollectionResult with all documents and metadata
+   */
+  async collectAllDocuments(filter?: DocumentFilter): Promise<DocumentCollectionResult> {
+    const startTime = Date.now();
+    const result: DocumentCollectionResult = {
+      documents: [],
+      metadata: {
+        totalFilesScanned: 0,
+        documentsFound: 0,
+        documentsLoaded: 0,
+        documentsFiltered: 0,
+        collectionDate: new Date(),
+        processingTimeMs: 0
+      },
+      errors: [],
+      warnings: []
+    };
+
+    const context: ErrorContext = {
+      operation: 'collectAllDocuments',
+      component: 'CompletionDocumentCollector',
+      timestamp: new Date()
+    };
+
+    const collectionResult = await withErrorHandling(async () => {
+      // Get all completion documents using NewDocumentDetector
+      const allDocumentPaths = await this.newDocumentDetector.getAllCompletionDocuments();
+      result.metadata.totalFilesScanned = allDocumentPaths.length;
+
+      // Discover completion documents with error handling
+      const discoveredDocuments = await this.discoverCompletionDocuments(allDocumentPaths, result);
+      result.metadata.documentsFound = discoveredDocuments.length;
+
+      // Load and validate documents with error recovery
+      const loadedDocuments = await this.loadDocuments(discoveredDocuments, result);
+      result.metadata.documentsLoaded = loadedDocuments.length;
+
+      // Apply filters
+      const filteredDocuments = this.filterDocuments(loadedDocuments, filter, result);
+      result.metadata.documentsFiltered = filteredDocuments.length;
+
+      result.documents = filteredDocuments;
+      result.metadata.processingTimeMs = Date.now() - startTime;
+
+      return result;
+    }, context);
+
+    if (collectionResult.success && collectionResult.data) {
+      return collectionResult.data;
+    } else {
+      // Add collection error to result
+      result.errors.push({
+        filePath: 'collection-process',
+        error: `Collection failed: ${collectionResult.error?.message || 'Unknown error'}`,
+        type: 'validation',
+        recoverable: false
+      });
+      result.metadata.processingTimeMs = Date.now() - startTime;
+
+      // Log error details but return partial results
+      console.warn(`⚠️  Document collection encountered errors: ${collectionResult.error?.message}`);
+      if (collectionResult.warnings) {
+        collectionResult.warnings.forEach(warning => result.warnings.push(warning));
+      }
+
+      return result;
+    }
   }
 
   /**

@@ -125,7 +125,7 @@ export class AdvancedReleaseCLI {
   /**
    * Enhanced analyze command with interactive features
    */
-  async analyzeChanges(options: AnalysisOptions & InteractiveOptions = {}): Promise<AnalysisResult> {
+  async analyzeChanges(options: AnalysisOptions & InteractiveOptions & { reset?: boolean } = {}): Promise<AnalysisResult> {
     console.log('🔍 Starting enhanced release analysis...\n');
     
     const startTime = Date.now();
@@ -144,6 +144,11 @@ export class AdvancedReleaseCLI {
     };
 
     const result = await withErrorHandling(async () => {
+      // Handle reset flag - force full analysis by resetting state
+      if (options.reset) {
+        console.log('🔄 Reset flag detected - forcing full analysis...\n');
+        return await this.performFullResetAnalysis(options);
+      }
       // Perform dry-run preview if requested
       if (options.dryRun) {
         console.log('🔍 Dry-run mode: Previewing analysis scope...\n');
@@ -237,6 +242,39 @@ export class AdvancedReleaseCLI {
       // Return a minimal result to allow CLI to continue
       return this.createFallbackResult(result.error?.message || 'Analysis failed');
     }
+  }
+
+  /**
+   * Perform full reset analysis using ReleaseAnalysisOrchestrator
+   * Requirement 6.3: Manual state reset forces full analysis
+   */
+  private async performFullResetAnalysis(options: AnalysisOptions & InteractiveOptions): Promise<AnalysisResult> {
+    // Import required classes
+    const { ReleaseAnalysisOrchestrator } = await import('../ReleaseAnalysisOrchestrator');
+    const { AnalysisStateManager } = await import('../state/AnalysisStateManager');
+    const { NewDocumentDetector } = await import('../detection/NewDocumentDetector');
+    const { AppendOnlyAnalyzer } = await import('../analyzer/AppendOnlyAnalyzer');
+    
+    // Create orchestrator with required dependencies
+    const stateManager = new AnalysisStateManager();
+    const documentDetector = new NewDocumentDetector();
+    const analyzer = new AppendOnlyAnalyzer(this.config, this.workingDirectory);
+    const orchestrator = new ReleaseAnalysisOrchestrator(stateManager, documentDetector, analyzer);
+    
+    // Call analyzeFullReset() which resets state and performs full analysis
+    const orchestratorResult = await orchestrator.analyzeFullReset();
+    
+    // Convert orchestrator result to CLI AnalysisResult format
+    return this.convertOrchestratorResult(orchestratorResult);
+  }
+
+  /**
+   * Convert ReleaseAnalysisOrchestrator result to CLI AnalysisResult format
+   */
+  private convertOrchestratorResult(orchestratorResult: any): AnalysisResult {
+    // The orchestrator returns a result that should be compatible with AnalysisResult
+    // This method ensures proper type conversion if needed
+    return orchestratorResult as AnalysisResult;
   }
 
   /**
@@ -688,7 +726,7 @@ export class AdvancedReleaseCLI {
       // Check if this is an unknown flag
       if (arg.startsWith('--')) {
         const knownFlags = [
-          '--since', '--format', '--dry-run', '--include', '--exclude',
+          '--since', '--format', '--dry-run', '--include', '--exclude', '--reset',
           '--interactive', '-i', '--auto-approve', '--skip-confirmation', '--review-threshold',
           '--config-show', '--config-set', '--config-reset', '--config-validate', '--config-path',
           '--history-list', '--history-compare', '--history-show', '--history-clear'
@@ -716,6 +754,9 @@ export class AdvancedReleaseCLI {
           break;
         case '--dry-run':
           options.dryRun = true;
+          break;
+        case '--reset':
+          (options as any).reset = true;
           break;
         case '--include':
           if (i + 1 < args.length) options.includePatterns = args[++i].split(',');
@@ -1362,6 +1403,7 @@ Analysis Options:
   --since <tag|commit>    - Analyze changes since specific tag or commit
   --format <type>         - Output format: summary, detailed, json (default: summary)
   --dry-run              - Preview analysis scope without full extraction
+  --reset                - Force full analysis by resetting state (ignores cached results)
   --include <patterns>    - Comma-separated file patterns to include
   --exclude <patterns>    - Comma-separated file patterns to exclude
 
@@ -1387,6 +1429,9 @@ Analysis History:
 Examples:
   # Basic analysis
   npm run release:analyze
+
+  # Force full analysis (reset state)
+  npm run release:analyze --reset
 
   # Interactive analysis with detailed output
   npm run release:analyze --interactive --format detailed
