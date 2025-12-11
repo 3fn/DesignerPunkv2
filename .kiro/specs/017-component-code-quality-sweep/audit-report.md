@@ -2,19 +2,19 @@
 
 **Date**: 2025-12-11
 **Total Components Audited**: 28
-**Total Violations Found**: 50
+**Total Violations Found**: 39
 
 ## Violations by Type
 
 - **Color**: 3
-- **Spacing**: 45
-- **Motion**: 2
+- **Spacing**: 33
+- **Motion**: 3
 - **Typography**: 0
 
 ## Violations by Priority
 
-- **High** (Colors, Spacing): 48
-- **Medium** (Motion): 2
+- **High** (Colors, Spacing): 36
+- **Medium** (Motion): 3
 - **Low** (Edge Cases): 0
 
 ## Component Details
@@ -32,9 +32,9 @@
 ### ButtonCTA (ios)
 
 **File**: `/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/src/components/core/ButtonCTA/platforms/ios/ButtonCTA.ios.swift`
-**Violations**: 6
+**Violations**: 5
 
-#### Line 194: spacing (high priority)
+#### Line 199: spacing (high priority)
 
 **Current Value**: `? 0.97 : 1.0`
 **Suggested Token**: `Remove fallback - fail loudly when token missing`
@@ -42,42 +42,28 @@
 
 **Context**:
 ```
-        .buttonStyle(PlainButtonStyle())
-        // Requirement 17.2: Scale transform to 0.97 (97%) on press with 100ms ease-out animation
+        // Easing: easeOut (snappy deceleration)
+        // Not tokenized: Platform-specific interaction pattern used only by ButtonCTA
         .scaleEffect(isPressed ? 0.97 : 1.0)
         .animation(.easeOut(duration: 0.1), value: isPressed)
         // Track pressed state for scale transform
 ```
 
-#### Line 195: motion (medium priority)
+#### Line 200: motion (medium priority)
 
 **Current Value**: `0.1`
 **Suggested Token**: `motion100 (primitive - consider semantic alternative)`
 
 **Context**:
 ```
-        // Requirement 17.2: Scale transform to 0.97 (97%) on press with 100ms ease-out animation
+        // Not tokenized: Platform-specific interaction pattern used only by ButtonCTA
         .scaleEffect(isPressed ? 0.97 : 1.0)
         .animation(.easeOut(duration: 0.1), value: isPressed)
         // Track pressed state for scale transform
         .simultaneousGesture(
 ```
 
-#### Line 284: spacing (high priority)
-
-**Current Value**: `44`
-**Suggested Token**: `spaceSectionedNormal (No exact match for 44. Closest: space.sectioned.normal (40))`
-
-**Context**:
-```
-    /// 
-    /// Implements WCAG 2.1 AA touch target requirements:
-    /// - Small (40px visual): Extended to 44px touch target via .frame(minHeight: 44)
-    /// - Medium (48px): Meets 44px minimum naturally
-    /// - Large (56px): Exceeds 44px minimum
-```
-
-#### Line 390: color (high priority)
+#### Line 395: color (high priority)
 
 **Current Value**: `Color(red: 103/255, green: 80/255, blue: 164/255)`
 **Suggested Token**: `colorPrimary or appropriate semantic color token`
@@ -91,7 +77,7 @@ private let colorBackground = Color(red: 255/255, green: 255/255, blue: 255/255)
 private let white100 = Color(red: 255/255, green: 255/255, blue: 255/255) // white100 - #FFFFFF (primitive token for text on primary)
 ```
 
-#### Line 391: color (high priority)
+#### Line 396: color (high priority)
 
 **Current Value**: `Color(red: 255/255, green: 255/255, blue: 255/255)`
 **Suggested Token**: `colorPrimary or appropriate semantic color token`
@@ -105,7 +91,7 @@ private let white100 = Color(red: 255/255, green: 255/255, blue: 255/255) // whi
 
 ```
 
-#### Line 392: color (high priority)
+#### Line 397: color (high priority)
 
 **Current Value**: `Color(red: 255/255, green: 255/255, blue: 255/255)`
 **Suggested Token**: `colorPrimary or appropriate semantic color token`
@@ -116,7 +102,7 @@ private let colorPrimary = Color(red: 103/255, green: 80/255, blue: 164/255) // 
 private let colorBackground = Color(red: 255/255, green: 255/255, blue: 255/255) // white100 - #FFFFFF
 private let white100 = Color(red: 255/255, green: 255/255, blue: 255/255) // white100 - #FFFFFF (primitive token for text on primary)
 
-/**
+// Accessibility tokens - Tap area tokens from TapAreaTokens.ts
 ```
 
 ### ButtonCTA (android)
@@ -167,7 +153,7 @@ private let white100 = Color(red: 255/255, green: 255/255, blue: 255/255) // whi
 ### Container (android)
 
 **File**: `/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/src/components/core/Container/platforms/android/TokenMapping.kt`
-**Violations**: 34
+**Violations**: 27
 
 #### Line 33: spacing (high priority)
 
@@ -183,20 +169,6 @@ private let white100 = Color(red: 255/255, green: 255/255, blue: 255/255) // whi
  * @param padding Padding prop value
 ```
 
-#### Line 40: spacing (high priority)
-
-**Current Value**: `16.dp`
-**Suggested Token**: `DesignTokens.space_related_normal.dp`
-
-**Context**:
-```
- * @example
- * ```kotlin
- * mapPaddingToDp(PaddingValue.P200) // Returns 16.dp
- * mapPaddingToDp(PaddingValue.None) // Returns 0.dp
- * ```
-```
-
 #### Line 41: spacing (high priority)
 
 **Current Value**: `0.dp`
@@ -205,7 +177,7 @@ private let white100 = Color(red: 255/255, green: 255/255, blue: 255/255) // whi
 **Context**:
 ```
  * ```kotlin
- * mapPaddingToDp(PaddingValue.P200) // Returns 16.dp
+ * mapPaddingToDp(PaddingValue.P200) // Returns spaceInset200
  * mapPaddingToDp(PaddingValue.None) // Returns 0.dp
  * ```
  * 
@@ -239,20 +211,6 @@ fun mapPaddingToDp(padding: PaddingValue): Dp {
  * @param border Border prop value
 ```
 
-#### Line 71: spacing (high priority)
-
-**Current Value**: `1.dp`
-**Suggested Token**: `DesignTokens.space_grouped_minimal.dp (No exact match for 1. Closest: space.grouped.minimal (2))`
-
-**Context**:
-```
- * @example
- * ```kotlin
- * mapBorderToWidth(BorderValue.Default) // Returns 1.dp
- * mapBorderToWidth(BorderValue.None) // Returns 0.dp
- * ```
-```
-
 #### Line 72: spacing (high priority)
 
 **Current Value**: `0.dp`
@@ -261,7 +219,7 @@ fun mapPaddingToDp(padding: PaddingValue): Dp {
 **Context**:
 ```
  * ```kotlin
- * mapBorderToWidth(BorderValue.Default) // Returns 1.dp
+ * mapBorderToWidth(BorderValue.Default) // Returns borderDefault
  * mapBorderToWidth(BorderValue.None) // Returns 0.dp
  * ```
  * 
@@ -295,20 +253,6 @@ fun mapBorderToWidth(border: BorderValue): Dp {
  * @param borderRadius Border radius prop value
 ```
 
-#### Line 118: spacing (high priority)
-
-**Current Value**: `8.dp`
-**Suggested Token**: `DesignTokens.space_grouped_normal.dp`
-
-**Context**:
-```
- * @example
- * ```kotlin
- * getRoundedCornerShape(BorderRadiusValue.Normal) // Returns RoundedCornerShape(8.dp)
- * getRoundedCornerShape(BorderRadiusValue.None) // Returns RoundedCornerShape(0.dp)
- * ```
-```
-
 #### Line 119: spacing (high priority)
 
 **Current Value**: `0.dp`
@@ -317,7 +261,7 @@ fun mapBorderToWidth(border: BorderValue): Dp {
 **Context**:
 ```
  * ```kotlin
- * getRoundedCornerShape(BorderRadiusValue.Normal) // Returns RoundedCornerShape(8.dp)
+ * getRoundedCornerShape(BorderRadiusValue.Normal) // Returns RoundedCornerShape(radius100)
  * getRoundedCornerShape(BorderRadiusValue.None) // Returns RoundedCornerShape(0.dp)
  * ```
  * 
@@ -351,34 +295,6 @@ fun getRoundedCornerShape(borderRadius: BorderRadiusValue): RoundedCornerShape {
  * On Android, elevation handles both stacking order and shadow rendering.
 ```
 
-#### Line 196: spacing (high priority)
-
-**Current Value**: `8.dp`
-**Suggested Token**: `DesignTokens.space_grouped_normal.dp`
-
-**Context**:
-```
- * @example
- * ```kotlin
- * mapShadowToElevation("shadow.container") // Returns 8.dp
- * mapShadowToElevation("shadow.modal") // Returns 16.dp
- * mapShadowToElevation(null) // Returns 0.dp
-```
-
-#### Line 197: spacing (high priority)
-
-**Current Value**: `16.dp`
-**Suggested Token**: `DesignTokens.space_related_normal.dp`
-
-**Context**:
-```
- * ```kotlin
- * mapShadowToElevation("shadow.container") // Returns 8.dp
- * mapShadowToElevation("shadow.modal") // Returns 16.dp
- * mapShadowToElevation(null) // Returns 0.dp
- * ```
-```
-
 #### Line 198: spacing (high priority)
 
 **Current Value**: `0.dp`
@@ -386,8 +302,8 @@ fun getRoundedCornerShape(borderRadius: BorderRadiusValue): RoundedCornerShape {
 
 **Context**:
 ```
- * mapShadowToElevation("shadow.container") // Returns 8.dp
- * mapShadowToElevation("shadow.modal") // Returns 16.dp
+ * mapShadowToElevation("shadow.container") // Returns shadowContainerElevation
+ * mapShadowToElevation("shadow.modal") // Returns shadowModalElevation
  * mapShadowToElevation(null) // Returns 0.dp
  * ```
  * 
@@ -547,34 +463,6 @@ fun mapShadowToElevation(tokenName: String?): Dp {
  * On Android, elevation tokens handle both stacking order and shadow rendering,
 ```
 
-#### Line 295: spacing (high priority)
-
-**Current Value**: `16.dp`
-**Suggested Token**: `DesignTokens.space_related_normal.dp`
-
-**Context**:
-```
- * @example
- * ```kotlin
- * mapLayeringToElevation(LayeringValue.Modal) // Returns 16.dp
- * mapLayeringToElevation(LayeringValue.Navigation) // Returns 4.dp
- * mapLayeringToElevation(null) // Returns 0.dp
-```
-
-#### Line 296: spacing (high priority)
-
-**Current Value**: `4.dp`
-**Suggested Token**: `DesignTokens.space_grouped_tight.dp`
-
-**Context**:
-```
- * ```kotlin
- * mapLayeringToElevation(LayeringValue.Modal) // Returns 16.dp
- * mapLayeringToElevation(LayeringValue.Navigation) // Returns 4.dp
- * mapLayeringToElevation(null) // Returns 0.dp
- * ```
-```
-
 #### Line 297: spacing (high priority)
 
 **Current Value**: `0.dp`
@@ -582,8 +470,8 @@ fun mapShadowToElevation(tokenName: String?): Dp {
 
 **Context**:
 ```
- * mapLayeringToElevation(LayeringValue.Modal) // Returns 16.dp
- * mapLayeringToElevation(LayeringValue.Navigation) // Returns 4.dp
+ * mapLayeringToElevation(LayeringValue.Modal) // Returns elevationModal
+ * mapLayeringToElevation(LayeringValue.Navigation) // Returns elevationNavigation
  * mapLayeringToElevation(null) // Returns 0.dp
  * ```
  * 
@@ -663,22 +551,7 @@ private val radius200: Dp = DesignTokens.radius_200.dp
 ### Icon (web)
 
 **File**: `/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/src/components/core/Icon/platforms/web/__tests__/Icon.backward-compatibility.test.ts`
-**Violations**: 1
-
-#### Line 223: spacing (high priority)
-
-**Current Value**: `? 32 : 24`
-**Suggested Token**: `Remove fallback - fail loudly when token missing`
-**⚠️ Fallback Pattern**: This uses a hard-coded fallback value
-
-**Context**:
-```
-      // Use explicit icon size tokens instead of fallback pattern
-      // ButtonCTA should use iconSize100 (24) for small/medium, iconSize125 (32) for large
-      const iconSize: IconSize = buttonSize === 'large' ? 32 : 24;
-      
-      const iconHTML = createIcon({ 
-```
+**Violations**: 0
 
 ### Icon (web)
 
@@ -728,7 +601,7 @@ private val radius200: Dp = DesignTokens.radius_200.dp
 ### TextInputField (ios)
 
 **File**: `/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/src/components/core/TextInputField/platforms/ios/TextInputField.ios.swift`
-**Violations**: 2
+**Violations**: 3
 
 #### Line 370: spacing (high priority)
 
@@ -742,27 +615,41 @@ private val radius200: Dp = DesignTokens.radius_200.dp
                     .padding(-accessibilityFocusOffset)
                     .opacity(isFocused ? 1 : 0)
                     .animation(
-                        reduceMotion ? .none : .easeInOut(duration: 0.15),
+                        reduceMotion ? .none : .easeInOut(duration: duration150),
 ```
 
 #### Line 372: motion (medium priority)
 
-**Current Value**: `0.15`
+**Current Value**: `150`
 **Suggested Token**: `motionFocus`
 
 **Context**:
 ```
                     .opacity(isFocused ? 1 : 0)
                     .animation(
-                        reduceMotion ? .none : .easeInOut(duration: 0.15),
+                        reduceMotion ? .none : .easeInOut(duration: duration150),
                         value: isFocused
                     )
+```
+
+#### Line 430: motion (medium priority)
+
+**Current Value**: `150`
+**Suggested Token**: `motionFocus`
+
+**Context**:
+```
+
+// Duration tokens - primitive tokens (generated by build system)
+private let duration150: TimeInterval // duration150 (150ms) - Fast interactions (focus states)
+
+// Border tokens - primitive tokens (generated by build system)
 ```
 
 ### TextInputField (android)
 
 **File**: `/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/src/components/core/TextInputField/platforms/android/TextInputField.android.kt`
-**Violations**: 7
+**Violations**: 4
 
 #### Line 170: spacing (high priority)
 
@@ -818,47 +705,5 @@ private val radius200: Dp = DesignTokens.radius_200.dp
                                 shape = RoundedCornerShape(radius150.dp)
                             )
                             .padding(accessibilityFocusOffset.dp)
-```
-
-#### Line 348: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-                    showErrorIcon -> Icon(
-                        name = "x",
-                        size = 24.dp,
-                        color = colorError
-                    )
-```
-
-#### Line 353: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-                    showSuccessIcon -> Icon(
-                        name = "check",
-                        size = 24.dp,
-                        color = colorSuccessStrong
-                    )
-```
-
-#### Line 358: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-                    showInfoIconVisible -> Icon(
-                        name = "info",
-                        size = 24.dp,
-                        color = colorTextMuted
-                    )
 ```
 

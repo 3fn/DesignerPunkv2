@@ -12,28 +12,43 @@
 
 import { ButtonSize, ButtonStyle } from '../../types';
 import { createIcon } from '../../../Icon/platforms/web/Icon.web';
-import { IconSize } from '../../../Icon/types';
+import { IconSize, iconSizes } from '../../../Icon/types';
 
 /**
- * Map ButtonCTA size to appropriate IconSize.
+ * Map ButtonCTA size to appropriate IconSize using explicit token references.
  * 
  * Provides type-safe mapping from button size variants to icon sizes:
- * - small/medium: 24px (iconSize100)
- * - large: 32px (iconSize125)
+ * - small/medium: iconSizes.size100 (24px)
+ * - large: iconSizes.size125 (32px)
+ * 
+ * Fails loudly if icon size token is missing to prevent silent fallback issues.
  * 
  * @param buttonSize - Button size variant
- * @returns Type-safe IconSize value
+ * @returns Type-safe IconSize value from token reference
+ * @throws Error if icon size token is missing
  */
 function getIconSizeForButton(buttonSize: ButtonSize): IconSize {
+  let iconSize: IconSize;
+  
   switch (buttonSize) {
     case 'small':
     case 'medium':
-      return 24; // iconSize100
+      iconSize = iconSizes.size100;
+      if (!iconSize) {
+        throw new Error('ButtonCTA: iconSizes.size100 token is missing');
+      }
+      break;
     case 'large':
-      return 32; // iconSize125
+      iconSize = iconSizes.size125;
+      if (!iconSize) {
+        throw new Error('ButtonCTA: iconSizes.size125 token is missing');
+      }
+      break;
     default:
-      return 24; // Default to iconSize100
+      throw new Error(`ButtonCTA: Invalid button size "${buttonSize}"`);
   }
+  
+  return iconSize;
 }
 
 /**

@@ -72,10 +72,10 @@ describe('Icon Component', () => {
       const result = createIcon({ 
         name: 'check', 
         size: 24,
-        style: { marginRight: '8px', color: 'blue' }
+        style: { marginRight: 'var(--space-100)', color: 'blue' }
       });
       
-      expect(result).toContain('margin-right: 8px');
+      expect(result).toContain('margin-right: var(--space-100)');
       expect(result).toContain('color: blue');
     });
 

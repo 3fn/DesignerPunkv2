@@ -50,7 +50,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - Run quick smoke tests on generated tokens
     - _Requirements: 1.1, 2.2_
 
-- [ ] 2. Phase 2A: Quick Wins (Build Momentum)
+- [x] 2. Phase 2A: Quick Wins (Build Momentum)
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive
@@ -70,7 +70,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
   - Detailed: `.kiro/specs/019-test-failures-and-cleanup/completion/task-2-parent-completion.md`
   - Summary: `docs/specs/019-test-failures-and-cleanup/task-2-summary.md`
 
-  - [ ] 2.1 Fix ButtonCTA web fallback pattern
+  - [x] 2.1 Fix ButtonCTA web fallback pattern
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Remove fallback pattern `? 32 : 24` for icon size
@@ -78,7 +78,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - Fail loudly when icon size token missing
     - _Requirements: 3.1, 5.1_
 
-  - [ ] 2.2 Fix Icon web test violations
+  - [x] 2.2 Fix Icon web test violations
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update backward-compatibility test to remove fallback pattern
@@ -86,7 +86,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - Verify tests pass
     - _Requirements: 3.2, 3.3, 3.4_
 
-  - [ ] 2.3 Evaluate TextInputField.browser.ts status
+  - [x] 2.3 Evaluate TextInputField.browser.ts status
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Check import statements and usage across codebase
