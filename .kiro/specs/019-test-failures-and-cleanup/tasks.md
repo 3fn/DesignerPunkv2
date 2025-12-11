@@ -16,7 +16,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
 
 ## Task List
 
-- [ ] 1. Phase 1: Critical Fixes (Unblock Build)
+- [x] 1. Phase 1: Critical Fixes (Unblock Build)
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive
@@ -42,7 +42,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - Verify getDiagnostics shows no TypeScript errors
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
-  - [ ] 1.2 Verify build succeeds
+  - [x] 1.2 Verify build succeeds
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run `npm run build` and verify success
