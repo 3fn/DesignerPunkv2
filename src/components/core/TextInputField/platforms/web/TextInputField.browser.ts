@@ -103,25 +103,25 @@ class TextInputField extends HTMLElement {
           position: relative;
           display: flex;
           align-items: center;
-          min-height: var(--tap-area-recommended, 48px);
-          background: var(--color-background, #FFFFFF);
-          border: var(--border-default, 1px) solid var(--color-border, #D1D5DB);
-          border-radius: var(--radius-150, 12px);
-          padding: var(--space-inset-100, 8px);
-          transition: border-color var(--motion-float-label-duration, 250ms) var(--motion-float-label-easing, cubic-bezier(0.4, 0.0, 0.2, 1.0));
+          min-height: var(--tap-area-recommended);
+          background: var(--color-background);
+          border: var(--border-default) solid var(--color-border);
+          border-radius: var(--radius-150);
+          padding: var(--space-inset-100);
+          transition: border-color var(--motion-float-label-duration) var(--motion-float-label-easing);
         }
 
         .input-container.focused {
-          border-color: var(--color-primary, #3B82F6);
+          border-color: var(--color-primary);
         }
 
         .input-container.error {
-          border-color: var(--color-error, #EF4444);
-          background: rgba(239, 68, 68, 0.05);
+          border-color: var(--color-error);
+          background: var(--color-error-background);
         }
 
         .input-container.success {
-          border-color: var(--color-success-strong, #10B981);
+          border-color: var(--color-success-strong);
         }
 
         .input-container.disabled {
@@ -134,12 +134,12 @@ class TextInputField extends HTMLElement {
           border: none;
           outline: none;
           background: transparent;
-          font-family: var(--typography-input-font-family, system-ui);
-          font-size: var(--typography-input-font-size, 16px);
-          line-height: var(--typography-input-line-height, 24px);
-          font-weight: var(--typography-input-font-weight, 400);
-          color: var(--color-text-default, #000000);
-          padding: var(--space-grouped-tight, 4px) 0;
+          font-family: var(--typography-input-font-family);
+          font-size: var(--typography-input-font-size);
+          line-height: var(--typography-input-line-height);
+          font-weight: var(--typography-input-font-weight);
+          color: var(--color-text-default);
+          padding: var(--space-grouped-tight) 0;
         }
 
         input::placeholder {
@@ -148,33 +148,33 @@ class TextInputField extends HTMLElement {
 
         label {
           position: absolute;
-          left: var(--space-inset-100, 8px);
+          left: var(--space-inset-100);
           top: 50%;
           transform: translateY(-50%);
-          font-family: var(--typography-label-md-font-family, system-ui);
-          font-size: var(--typography-label-md-font-size, 16px);
-          line-height: var(--typography-label-md-line-height, 24px);
-          font-weight: var(--typography-label-md-font-weight, 500);
-          color: var(--color-text-muted, #6B7280);
+          font-family: var(--typography-label-md-font-family);
+          font-size: var(--typography-label-md-font-size);
+          line-height: var(--typography-label-md-line-height);
+          font-weight: var(--typography-label-md-font-weight);
+          color: var(--color-text-muted);
           pointer-events: none;
-          transition: all var(--motion-float-label-duration, 250ms) var(--motion-float-label-easing, cubic-bezier(0.4, 0.0, 0.2, 1.0));
+          transition: all var(--motion-float-label-duration) var(--motion-float-label-easing);
         }
 
         .input-container.focused label,
         .input-container.filled label {
-          top: var(--space-grouped-minimal, 2px);
+          top: var(--space-grouped-minimal);
           transform: translateY(0);
-          font-size: var(--typography-label-md-float-font-size, 14px);
-          line-height: var(--typography-label-md-float-line-height, 20px);
-          color: var(--color-primary, #3B82F6);
+          font-size: var(--typography-label-md-float-font-size);
+          line-height: var(--typography-label-md-float-line-height);
+          color: var(--color-primary);
         }
 
         .input-container.error label {
-          color: var(--color-error, #EF4444);
+          color: var(--color-error);
         }
 
         .icon {
-          margin-left: var(--space-grouped-tight, 4px);
+          margin-left: var(--space-grouped-tight);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -182,20 +182,20 @@ class TextInputField extends HTMLElement {
 
         .helper-text,
         .error-message {
-          margin-top: var(--space-grouped-tight, 4px);
-          font-family: var(--typography-caption-font-family, system-ui);
-          font-size: var(--typography-caption-font-size, 13px);
-          line-height: var(--typography-caption-line-height, 18px);
-          color: var(--color-text-muted, #6B7280);
+          margin-top: var(--space-grouped-tight);
+          font-family: var(--typography-caption-font-family);
+          font-size: var(--typography-caption-font-size);
+          line-height: var(--typography-caption-line-height);
+          color: var(--color-text-muted);
         }
 
         .error-message {
-          color: var(--color-error, #EF4444);
+          color: var(--color-error);
         }
 
         :host(:focus-within) .input-container {
-          outline: var(--accessibility-focus-width, 2px) solid var(--accessibility-focus-color, #3B82F6);
-          outline-offset: var(--accessibility-focus-offset, 2px);
+          outline: var(--accessibility-focus-width) solid var(--accessibility-focus-color);
+          outline-offset: var(--accessibility-focus-offset);
         }
       </style>
 

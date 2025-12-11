@@ -332,7 +332,7 @@ fun TextInputField(
                             x = spaceInset100.dp,
                             y = labelOffsetY
                         )
-                        .padding(horizontal = 4.dp) // Small padding for better readability
+                        .padding(horizontal = spaceGroupedTight.dp) // Small padding for better readability
                 )
             }
             

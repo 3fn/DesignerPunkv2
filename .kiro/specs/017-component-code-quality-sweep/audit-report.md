@@ -2,18 +2,18 @@
 
 **Date**: 2025-12-11
 **Total Components Audited**: 28
-**Total Violations Found**: 111
+**Total Violations Found**: 50
 
 ## Violations by Type
 
-- **Color**: 17
-- **Spacing**: 92
+- **Color**: 3
+- **Spacing**: 45
 - **Motion**: 2
 - **Typography**: 0
 
 ## Violations by Priority
 
-- **High** (Colors, Spacing): 109
+- **High** (Colors, Spacing): 48
 - **Medium** (Motion): 2
 - **Low** (Edge Cases): 0
 
@@ -22,22 +22,7 @@
 ### ButtonCTA (web)
 
 **File**: `/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/src/components/core/ButtonCTA/platforms/web/ButtonCTA.web.ts`
-**Violations**: 1
-
-#### Line 252: spacing (high priority)
-
-**Current Value**: `? 32 : 24`
-**Suggested Token**: `Remove fallback - fail loudly when token missing`
-**⚠️ Fallback Pattern**: This uses a hard-coded fallback value
-
-**Context**:
-```
-    // - Small/Medium: 24px (icon.size100)
-    // - Large: 32px (icon.size125)
-    const iconSize = size === 'large' ? 32 : 24;
-    const iconHTML = icon ? createIcon({ 
-      name: icon as any, // Type assertion since IconName is from Icon types
-```
+**Violations**: 0
 
 ### ButtonCTA (web)
 
@@ -142,49 +127,7 @@ private let white100 = Color(red: 255/255, green: 255/255, blue: 255/255) // whi
 ### Container (web)
 
 **File**: `/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/src/components/core/Container/platforms/web/Container.web.ts`
-**Violations**: 3
-
-#### Line 47: spacing (high priority)
-
-**Current Value**: `2px`
-**Suggested Token**: `var(--space-grouped-minimal)`
-
-**Context**:
-```
-  .container:focus {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
-  }
-  
-```
-
-#### Line 56: spacing (high priority)
-
-**Current Value**: `2px`
-**Suggested Token**: `var(--space-grouped-minimal)`
-
-**Context**:
-```
-  .container:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
-  }
-  
-```
-
-#### Line 68: spacing (high priority)
-
-**Current Value**: `2px`
-**Suggested Token**: `var(--space-grouped-minimal)`
-
-**Context**:
-```
-  @media (prefers-contrast: high) {
-    .container {
-      border-width: 2px;
-    }
-  }
-```
+**Violations**: 0
 
 ### Container (web)
 
@@ -224,7 +167,7 @@ private let white100 = Color(red: 255/255, green: 255/255, blue: 255/255) // whi
 ### Container (android)
 
 **File**: `/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/src/components/core/Container/platforms/android/TokenMapping.kt`
-**Violations**: 44
+**Violations**: 34
 
 #### Line 33: spacing (high priority)
 
@@ -660,185 +603,46 @@ fun mapLayeringToElevation(layering: LayeringValue?): Dp {
         LayeringValue.Navigation -> elevationNavigation
 ```
 
-#### Line 339: spacing (high priority)
+#### Line 347: spacing (high priority)
 
-**Current Value**: `1.dp`
-**Suggested Token**: `DesignTokens.space_grouped_minimal.dp (No exact match for 1. Closest: space.grouped.minimal (2))`
-
-**Context**:
-```
-
-// Border tokens
-private val borderDefault: Dp = 1.dp   // 1dp
-private val borderEmphasis: Dp = 2.dp  // 2dp
-private val borderHeavy: Dp = 4.dp     // 4dp
-```
-
-#### Line 340: spacing (high priority)
-
-**Current Value**: `2.dp`
-**Suggested Token**: `DesignTokens.space_grouped_minimal.dp`
-
-**Context**:
-```
-// Border tokens
-private val borderDefault: Dp = 1.dp   // 1dp
-private val borderEmphasis: Dp = 2.dp  // 2dp
-private val borderHeavy: Dp = 4.dp     // 4dp
-
-```
-
-#### Line 341: spacing (high priority)
-
-**Current Value**: `4.dp`
-**Suggested Token**: `DesignTokens.space_grouped_tight.dp`
-
-**Context**:
-```
-private val borderDefault: Dp = 1.dp   // 1dp
-private val borderEmphasis: Dp = 2.dp  // 2dp
-private val borderHeavy: Dp = 4.dp     // 4dp
-
-// Radius tokens
-```
-
-#### Line 344: spacing (high priority)
-
-**Current Value**: `4.dp`
-**Suggested Token**: `DesignTokens.space_grouped_tight.dp`
+**Current Value**: `050.dp`
+**Suggested Token**: `DesignTokens.space_sectioned_loose.dp (No exact match for 50. Closest: space.sectioned.loose (48))`
 
 **Context**:
 ```
 
 // Radius tokens
-private val radius050: Dp = 4.dp   // 4dp
-private val radius100: Dp = 8.dp   // 8dp
-private val radius200: Dp = 16.dp  // 16dp
+private val radius050: Dp = DesignTokens.radius_050.dp
+private val radius100: Dp = DesignTokens.radius_100.dp
+private val radius200: Dp = DesignTokens.radius_200.dp
 ```
 
-#### Line 345: spacing (high priority)
+#### Line 348: spacing (high priority)
 
-**Current Value**: `8.dp`
-**Suggested Token**: `DesignTokens.space_grouped_normal.dp`
+**Current Value**: `100.dp`
+**Suggested Token**: `DesignTokens.space_sectioned_loose.dp (No exact match for 100. Closest: space.sectioned.loose (48))`
 
 **Context**:
 ```
 // Radius tokens
-private val radius050: Dp = 4.dp   // 4dp
-private val radius100: Dp = 8.dp   // 8dp
-private val radius200: Dp = 16.dp  // 16dp
+private val radius050: Dp = DesignTokens.radius_050.dp
+private val radius100: Dp = DesignTokens.radius_100.dp
+private val radius200: Dp = DesignTokens.radius_200.dp
 
 ```
 
-#### Line 346: spacing (high priority)
+#### Line 349: spacing (high priority)
 
-**Current Value**: `16.dp`
-**Suggested Token**: `DesignTokens.space_related_normal.dp`
+**Current Value**: `200.dp`
+**Suggested Token**: `DesignTokens.space_sectioned_loose.dp (No exact match for 200. Closest: space.sectioned.loose (48))`
 
 **Context**:
 ```
-private val radius050: Dp = 4.dp   // 4dp
-private val radius100: Dp = 8.dp   // 8dp
-private val radius200: Dp = 16.dp  // 16dp
+private val radius050: Dp = DesignTokens.radius_050.dp
+private val radius100: Dp = DesignTokens.radius_100.dp
+private val radius200: Dp = DesignTokens.radius_200.dp
 
 // Elevation tokens (layering - Android-specific)
-```
-
-#### Line 350: spacing (high priority)
-
-**Current Value**: `8.dp`
-**Suggested Token**: `DesignTokens.space_grouped_normal.dp`
-
-**Context**:
-```
-// Elevation tokens (layering - Android-specific)
-// On Android, elevation handles both stacking order and shadow rendering
-private val elevationContainer: Dp = 8.dp    // elevation.container
-private val elevationNavigation: Dp = 4.dp   // elevation.navigation
-private val elevationDropdown: Dp = 8.dp     // elevation.dropdown
-```
-
-#### Line 351: spacing (high priority)
-
-**Current Value**: `4.dp`
-**Suggested Token**: `DesignTokens.space_grouped_tight.dp`
-
-**Context**:
-```
-// On Android, elevation handles both stacking order and shadow rendering
-private val elevationContainer: Dp = 8.dp    // elevation.container
-private val elevationNavigation: Dp = 4.dp   // elevation.navigation
-private val elevationDropdown: Dp = 8.dp     // elevation.dropdown
-private val elevationModal: Dp = 16.dp       // elevation.modal
-```
-
-#### Line 352: spacing (high priority)
-
-**Current Value**: `8.dp`
-**Suggested Token**: `DesignTokens.space_grouped_normal.dp`
-
-**Context**:
-```
-private val elevationContainer: Dp = 8.dp    // elevation.container
-private val elevationNavigation: Dp = 4.dp   // elevation.navigation
-private val elevationDropdown: Dp = 8.dp     // elevation.dropdown
-private val elevationModal: Dp = 16.dp       // elevation.modal
-private val elevationToast: Dp = 24.dp       // elevation.toast
-```
-
-#### Line 353: spacing (high priority)
-
-**Current Value**: `16.dp`
-**Suggested Token**: `DesignTokens.space_related_normal.dp`
-
-**Context**:
-```
-private val elevationNavigation: Dp = 4.dp   // elevation.navigation
-private val elevationDropdown: Dp = 8.dp     // elevation.dropdown
-private val elevationModal: Dp = 16.dp       // elevation.modal
-private val elevationToast: Dp = 24.dp       // elevation.toast
-private val elevationTooltip: Dp = 24.dp     // elevation.tooltip
-```
-
-#### Line 354: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-private val elevationDropdown: Dp = 8.dp     // elevation.dropdown
-private val elevationModal: Dp = 16.dp       // elevation.modal
-private val elevationToast: Dp = 24.dp       // elevation.toast
-private val elevationTooltip: Dp = 24.dp     // elevation.tooltip
-
-```
-
-#### Line 355: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-private val elevationModal: Dp = 16.dp       // elevation.modal
-private val elevationToast: Dp = 24.dp       // elevation.toast
-private val elevationTooltip: Dp = 24.dp     // elevation.tooltip
-
-// Color tokens
-```
-
-#### Line 358: color (high priority)
-
-**Current Value**: `Color(0xFFE5E7EB)`
-**Suggested Token**: `DesignTokens.color_primary or appropriate semantic color token`
-
-**Context**:
-```
-
-// Color tokens
-private val colorBorder: Color = Color(0xFFE5E7EB)
-
 ```
 
 ### Container (android)
@@ -861,7 +665,7 @@ private val colorBorder: Color = Color(0xFFE5E7EB)
 **File**: `/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/src/components/core/Icon/platforms/web/__tests__/Icon.backward-compatibility.test.ts`
 **Violations**: 1
 
-#### Line 220: spacing (high priority)
+#### Line 223: spacing (high priority)
 
 **Current Value**: `? 32 : 24`
 **Suggested Token**: `Remove fallback - fail loudly when token missing`
@@ -869,8 +673,8 @@ private val colorBorder: Color = Color(0xFFE5E7EB)
 
 **Context**:
 ```
-      const buttonIcon = 'arrow-right';
-      const buttonSize = 'medium' as 'small' | 'medium' | 'large';
+      // Use explicit icon size tokens instead of fallback pattern
+      // ButtonCTA should use iconSize100 (24) for small/medium, iconSize125 (32) for large
       const iconSize: IconSize = buttonSize === 'large' ? 32 : 24;
       
       const iconHTML = createIcon({ 
@@ -899,21 +703,7 @@ private val colorBorder: Color = Color(0xFFE5E7EB)
 ### Icon (web)
 
 **File**: `/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/src/components/core/Icon/platforms/web/__tests__/Icon.web.test.ts`
-**Violations**: 1
-
-#### Line 165: spacing (high priority)
-
-**Current Value**: `8px`
-**Suggested Token**: `var(--space-grouped-normal)`
-
-**Context**:
-```
-      // Check that style attribute is present with converted kebab-case properties
-      expect(result).toContain('style="');
-      expect(result).toContain('margin-right: 8px');
-      expect(result).toContain('color: blue');
-    });
-```
+**Violations**: 0
 
 ### Icon (ios)
 
@@ -923,642 +713,12 @@ private val colorBorder: Color = Color(0xFFE5E7EB)
 ### Icon (android)
 
 **File**: `/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/src/components/core/Icon/platforms/android/Icon.android.kt`
-**Violations**: 32
-
-#### Line 22: spacing (high priority)
-
-**Current Value**: `16.dp`
-**Suggested Token**: `DesignTokens.space_related_normal.dp`
-
-**Context**:
-```
- * 
- * @param name Icon name (e.g., "arrow-right", "check", "settings")
- * @param size Icon size in Dp (16.dp, 24.dp, 32.dp, 40.dp)
- * @param color Optional color override for optical weight compensation (null = inherit)
- * @param modifier Optional modifier for additional styling
-```
-
-#### Line 22: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
- * 
- * @param name Icon name (e.g., "arrow-right", "check", "settings")
- * @param size Icon size in Dp (16.dp, 24.dp, 32.dp, 40.dp)
- * @param color Optional color override for optical weight compensation (null = inherit)
- * @param modifier Optional modifier for additional styling
-```
-
-#### Line 22: spacing (high priority)
-
-**Current Value**: `32.dp`
-**Suggested Token**: `DesignTokens.space_separated_loose.dp`
-
-**Context**:
-```
- * 
- * @param name Icon name (e.g., "arrow-right", "check", "settings")
- * @param size Icon size in Dp (16.dp, 24.dp, 32.dp, 40.dp)
- * @param color Optional color override for optical weight compensation (null = inherit)
- * @param modifier Optional modifier for additional styling
-```
-
-#### Line 22: spacing (high priority)
-
-**Current Value**: `40.dp`
-**Suggested Token**: `DesignTokens.space_sectioned_normal.dp`
-
-**Context**:
-```
- * 
- * @param name Icon name (e.g., "arrow-right", "check", "settings")
- * @param size Icon size in Dp (16.dp, 24.dp, 32.dp, 40.dp)
- * @param color Optional color override for optical weight compensation (null = inherit)
- * @param modifier Optional modifier for additional styling
-```
-
-#### Line 88: spacing (high priority)
-
-**Current Value**: `16.dp`
-**Suggested Token**: `DesignTokens.space_related_normal.dp`
-
-**Context**:
-```
- * 
- * Demonstrates:
- * - All four size variants (16.dp, 24.dp, 32.dp, 40.dp)
- * - Multiple icon types at standard size
- * - Color inheritance with different tint colors
-```
-
-#### Line 88: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
- * 
- * Demonstrates:
- * - All four size variants (16.dp, 24.dp, 32.dp, 40.dp)
- * - Multiple icon types at standard size
- * - Color inheritance with different tint colors
-```
-
-#### Line 88: spacing (high priority)
-
-**Current Value**: `32.dp`
-**Suggested Token**: `DesignTokens.space_separated_loose.dp`
-
-**Context**:
-```
- * 
- * Demonstrates:
- * - All four size variants (16.dp, 24.dp, 32.dp, 40.dp)
- * - Multiple icon types at standard size
- * - Color inheritance with different tint colors
-```
-
-#### Line 88: spacing (high priority)
-
-**Current Value**: `40.dp`
-**Suggested Token**: `DesignTokens.space_sectioned_normal.dp`
-
-**Context**:
-```
- * 
- * Demonstrates:
- * - All four size variants (16.dp, 24.dp, 32.dp, 40.dp)
- * - Multiple icon types at standard size
- * - Color inheritance with different tint colors
-```
-
-#### Line 96: spacing (high priority)
-
-**Current Value**: `16.dp`
-**Suggested Token**: `DesignTokens.space_related_normal.dp`
-
-**Context**:
-```
-fun IconPreview() {
-    androidx.compose.foundation.layout.Column(
-        modifier = Modifier.padding(16.dp),
-        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(16.dp)
-    ) {
-```
-
-#### Line 99: spacing (high priority)
-
-**Current Value**: `16.dp`
-**Suggested Token**: `DesignTokens.space_related_normal.dp`
-
-**Context**:
-```
-        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(16.dp)
-    ) {
-        // Different sizes (16.dp, 24.dp, 32.dp, 40.dp)
-        androidx.compose.material3.Text(
-            text = "Size Variants",
-```
-
-#### Line 99: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(16.dp)
-    ) {
-        // Different sizes (16.dp, 24.dp, 32.dp, 40.dp)
-        androidx.compose.material3.Text(
-            text = "Size Variants",
-```
-
-#### Line 99: spacing (high priority)
-
-**Current Value**: `32.dp`
-**Suggested Token**: `DesignTokens.space_separated_loose.dp`
-
-**Context**:
-```
-        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(16.dp)
-    ) {
-        // Different sizes (16.dp, 24.dp, 32.dp, 40.dp)
-        androidx.compose.material3.Text(
-            text = "Size Variants",
-```
-
-#### Line 99: spacing (high priority)
-
-**Current Value**: `40.dp`
-**Suggested Token**: `DesignTokens.space_sectioned_normal.dp`
-
-**Context**:
-```
-        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(16.dp)
-    ) {
-        // Different sizes (16.dp, 24.dp, 32.dp, 40.dp)
-        androidx.compose.material3.Text(
-            text = "Size Variants",
-```
-
-#### Line 108: spacing (high priority)
-
-**Current Value**: `16.dp`
-**Suggested Token**: `DesignTokens.space_related_normal.dp`
-
-**Context**:
-```
-            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
-        ) {
-            Icon(name = "arrow-right", size = 16.dp)
-            Icon(name = "arrow-right", size = 24.dp)
-            Icon(name = "arrow-right", size = 32.dp)
-```
-
-#### Line 109: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-        ) {
-            Icon(name = "arrow-right", size = 16.dp)
-            Icon(name = "arrow-right", size = 24.dp)
-            Icon(name = "arrow-right", size = 32.dp)
-            Icon(name = "arrow-right", size = 40.dp)
-```
-
-#### Line 110: spacing (high priority)
-
-**Current Value**: `32.dp`
-**Suggested Token**: `DesignTokens.space_separated_loose.dp`
-
-**Context**:
-```
-            Icon(name = "arrow-right", size = 16.dp)
-            Icon(name = "arrow-right", size = 24.dp)
-            Icon(name = "arrow-right", size = 32.dp)
-            Icon(name = "arrow-right", size = 40.dp)
-        }
-```
-
-#### Line 111: spacing (high priority)
-
-**Current Value**: `40.dp`
-**Suggested Token**: `DesignTokens.space_sectioned_normal.dp`
-
-**Context**:
-```
-            Icon(name = "arrow-right", size = 24.dp)
-            Icon(name = "arrow-right", size = 32.dp)
-            Icon(name = "arrow-right", size = 40.dp)
-        }
-        
-```
-
-#### Line 114: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-        }
-        
-        // Different icons at standard size (24.dp)
-        androidx.compose.material3.Text(
-            text = "Icon Variety",
-```
-
-#### Line 122: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(16.dp)
-        ) {
-            Icon(name = "check", size = 24.dp)
-            Icon(name = "x", size = 24.dp)
-            Icon(name = "plus", size = 24.dp)
-```
-
-#### Line 123: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-        ) {
-            Icon(name = "check", size = 24.dp)
-            Icon(name = "x", size = 24.dp)
-            Icon(name = "plus", size = 24.dp)
-            Icon(name = "heart", size = 24.dp)
-```
-
-#### Line 124: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-            Icon(name = "check", size = 24.dp)
-            Icon(name = "x", size = 24.dp)
-            Icon(name = "plus", size = 24.dp)
-            Icon(name = "heart", size = 24.dp)
-            Icon(name = "settings", size = 24.dp)
-```
-
-#### Line 125: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-            Icon(name = "x", size = 24.dp)
-            Icon(name = "plus", size = 24.dp)
-            Icon(name = "heart", size = 24.dp)
-            Icon(name = "settings", size = 24.dp)
-        }
-```
-
-#### Line 126: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-            Icon(name = "plus", size = 24.dp)
-            Icon(name = "heart", size = 24.dp)
-            Icon(name = "settings", size = 24.dp)
-        }
-        
-```
-
-#### Line 140: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(16.dp)
-            ) {
-                Icon(name = "arrow-right", size = 24.dp)
-                Icon(name = "check", size = 24.dp)
-                Icon(name = "heart", size = 24.dp)
-```
-
-#### Line 141: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-            ) {
-                Icon(name = "arrow-right", size = 24.dp)
-                Icon(name = "check", size = 24.dp)
-                Icon(name = "heart", size = 24.dp)
-            }
-```
-
-#### Line 142: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-                Icon(name = "arrow-right", size = 24.dp)
-                Icon(name = "check", size = 24.dp)
-                Icon(name = "heart", size = 24.dp)
-            }
-        }
-```
-
-#### Line 154: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(16.dp)
-        ) {
-            Icon(name = "x", size = 24.dp, color = Color.Red)
-            Icon(name = "minus", size = 24.dp, color = Color.Red)
-            Icon(name = "circle", size = 24.dp, color = Color.Red)
-```
-
-#### Line 155: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-        ) {
-            Icon(name = "x", size = 24.dp, color = Color.Red)
-            Icon(name = "minus", size = 24.dp, color = Color.Red)
-            Icon(name = "circle", size = 24.dp, color = Color.Red)
-        }
-```
-
-#### Line 156: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-            Icon(name = "x", size = 24.dp, color = Color.Red)
-            Icon(name = "minus", size = 24.dp, color = Color.Red)
-            Icon(name = "circle", size = 24.dp, color = Color.Red)
-        }
-        
-```
-
-#### Line 167: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(16.dp)
-        ) {
-            Icon(name = "check", size = 24.dp, color = Color.Green)
-            Icon(name = "plus", size = 24.dp, color = Color.Green)
-            Icon(name = "arrow-up", size = 24.dp, color = Color.Green)
-```
-
-#### Line 168: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-        ) {
-            Icon(name = "check", size = 24.dp, color = Color.Green)
-            Icon(name = "plus", size = 24.dp, color = Color.Green)
-            Icon(name = "arrow-up", size = 24.dp, color = Color.Green)
-        }
-```
-
-#### Line 169: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-            Icon(name = "check", size = 24.dp, color = Color.Green)
-            Icon(name = "plus", size = 24.dp, color = Color.Green)
-            Icon(name = "arrow-up", size = 24.dp, color = Color.Green)
-        }
-    }
-```
+**Violations**: 0
 
 ### TextInputField (web)
 
 **File**: `/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/src/components/core/TextInputField/platforms/web/TextInputField.browser.ts`
-**Violations**: 13
-
-#### Line 107: color (high priority)
-
-**Current Value**: `#FFFFFF`
-**Suggested Token**: `var(--color-primary) or appropriate semantic color token`
-
-**Context**:
-```
-          align-items: center;
-          min-height: var(--tap-area-recommended, 48px);
-          background: var(--color-background, #FFFFFF);
-          border: var(--border-default, 1px) solid var(--color-border, #D1D5DB);
-          border-radius: var(--radius-150, 12px);
-```
-
-#### Line 108: color (high priority)
-
-**Current Value**: `#D1D5DB`
-**Suggested Token**: `var(--color-primary) or appropriate semantic color token`
-
-**Context**:
-```
-          min-height: var(--tap-area-recommended, 48px);
-          background: var(--color-background, #FFFFFF);
-          border: var(--border-default, 1px) solid var(--color-border, #D1D5DB);
-          border-radius: var(--radius-150, 12px);
-          padding: var(--space-inset-100, 8px);
-```
-
-#### Line 115: color (high priority)
-
-**Current Value**: `#3B82F6`
-**Suggested Token**: `var(--color-primary) or appropriate semantic color token`
-
-**Context**:
-```
-
-        .input-container.focused {
-          border-color: var(--color-primary, #3B82F6);
-        }
-
-```
-
-#### Line 119: color (high priority)
-
-**Current Value**: `#EF4444`
-**Suggested Token**: `var(--color-primary) or appropriate semantic color token`
-
-**Context**:
-```
-
-        .input-container.error {
-          border-color: var(--color-error, #EF4444);
-          background: rgba(239, 68, 68, 0.05);
-        }
-```
-
-#### Line 120: color (high priority)
-
-**Current Value**: `rgba(239, 68, 68, 0.05)`
-**Suggested Token**: `var(--color-primary) or appropriate semantic color token`
-
-**Context**:
-```
-        .input-container.error {
-          border-color: var(--color-error, #EF4444);
-          background: rgba(239, 68, 68, 0.05);
-        }
-
-```
-
-#### Line 124: color (high priority)
-
-**Current Value**: `#10B981`
-**Suggested Token**: `var(--color-primary) or appropriate semantic color token`
-
-**Context**:
-```
-
-        .input-container.success {
-          border-color: var(--color-success-strong, #10B981);
-        }
-
-```
-
-#### Line 141: color (high priority)
-
-**Current Value**: `#000000`
-**Suggested Token**: `var(--color-primary) or appropriate semantic color token`
-
-**Context**:
-```
-          line-height: var(--typography-input-line-height, 24px);
-          font-weight: var(--typography-input-font-weight, 400);
-          color: var(--color-text-default, #000000);
-          padding: var(--space-grouped-tight, 4px) 0;
-        }
-```
-
-#### Line 158: color (high priority)
-
-**Current Value**: `#6B7280`
-**Suggested Token**: `var(--color-primary) or appropriate semantic color token`
-
-**Context**:
-```
-          line-height: var(--typography-label-md-line-height, 24px);
-          font-weight: var(--typography-label-md-font-weight, 500);
-          color: var(--color-text-muted, #6B7280);
-          pointer-events: none;
-          transition: all var(--motion-float-label-duration, 250ms) var(--motion-float-label-easing, cubic-bezier(0.4, 0.0, 0.2, 1.0));
-```
-
-#### Line 169: color (high priority)
-
-**Current Value**: `#3B82F6`
-**Suggested Token**: `var(--color-primary) or appropriate semantic color token`
-
-**Context**:
-```
-          font-size: var(--typography-label-md-float-font-size, 14px);
-          line-height: var(--typography-label-md-float-line-height, 20px);
-          color: var(--color-primary, #3B82F6);
-        }
-
-```
-
-#### Line 173: color (high priority)
-
-**Current Value**: `#EF4444`
-**Suggested Token**: `var(--color-primary) or appropriate semantic color token`
-
-**Context**:
-```
-
-        .input-container.error label {
-          color: var(--color-error, #EF4444);
-        }
-
-```
-
-#### Line 189: color (high priority)
-
-**Current Value**: `#6B7280`
-**Suggested Token**: `var(--color-primary) or appropriate semantic color token`
-
-**Context**:
-```
-          font-size: var(--typography-caption-font-size, 13px);
-          line-height: var(--typography-caption-line-height, 18px);
-          color: var(--color-text-muted, #6B7280);
-        }
-
-```
-
-#### Line 193: color (high priority)
-
-**Current Value**: `#EF4444`
-**Suggested Token**: `var(--color-primary) or appropriate semantic color token`
-
-**Context**:
-```
-
-        .error-message {
-          color: var(--color-error, #EF4444);
-        }
-
-```
-
-#### Line 197: color (high priority)
-
-**Current Value**: `#3B82F6`
-**Suggested Token**: `var(--color-primary) or appropriate semantic color token`
-
-**Context**:
-```
-
-        :host(:focus-within) .input-container {
-          outline: var(--accessibility-focus-width, 2px) solid var(--accessibility-focus-color, #3B82F6);
-          outline-offset: var(--accessibility-focus-offset, 2px);
-        }
-```
+**Violations**: 0
 
 ### TextInputField (web)
 
@@ -1602,7 +762,7 @@ fun IconPreview() {
 ### TextInputField (android)
 
 **File**: `/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/src/components/core/TextInputField/platforms/android/TextInputField.android.kt`
-**Violations**: 8
+**Violations**: 7
 
 #### Line 170: spacing (high priority)
 
@@ -1658,20 +818,6 @@ fun IconPreview() {
                                 shape = RoundedCornerShape(radius150.dp)
                             )
                             .padding(accessibilityFocusOffset.dp)
-```
-
-#### Line 335: spacing (high priority)
-
-**Current Value**: `4.dp`
-**Suggested Token**: `DesignTokens.space_grouped_tight.dp`
-
-**Context**:
-```
-                            y = labelOffsetY
-                        )
-                        .padding(horizontal = 4.dp) // Small padding for better readability
-                )
-            }
 ```
 
 #### Line 348: spacing (high priority)
