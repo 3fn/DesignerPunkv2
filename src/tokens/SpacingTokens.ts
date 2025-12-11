@@ -29,6 +29,19 @@ function generateSpacingPlatformValues(baseValue: number): PlatformValues {
  * Spacing tokens with 8-unit baseline grid alignment and strategic flexibility
  */
 export const spacingTokens: Record<string, PrimitiveToken> = {
+  space000: {
+    name: 'space000',
+    category: TokenCategory.SPACING,
+    baseValue: 0,
+    familyBaseValue: SPACING_BASE_VALUE,
+    description: 'Zero spacing - explicit no spacing value',
+    mathematicalRelationship: 'base × 0 = 8 × 0 = 0',
+    baselineGridAlignment: true, // 0 is baseline grid aligned
+    isStrategicFlexibility: false,
+    isPrecisionTargeted: false,
+    platforms: generateSpacingPlatformValues(0)
+  },
+
   space025: {
     name: 'space025',
     category: TokenCategory.SPACING,

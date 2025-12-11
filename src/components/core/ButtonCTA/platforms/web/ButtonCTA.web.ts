@@ -12,6 +12,29 @@
 
 import { ButtonSize, ButtonStyle } from '../../types';
 import { createIcon } from '../../../Icon/platforms/web/Icon.web';
+import { IconSize } from '../../../Icon/types';
+
+/**
+ * Map ButtonCTA size to appropriate IconSize.
+ * 
+ * Provides type-safe mapping from button size variants to icon sizes:
+ * - small/medium: 24px (iconSize100)
+ * - large: 32px (iconSize125)
+ * 
+ * @param buttonSize - Button size variant
+ * @returns Type-safe IconSize value
+ */
+function getIconSizeForButton(buttonSize: ButtonSize): IconSize {
+  switch (buttonSize) {
+    case 'small':
+    case 'medium':
+      return 24; // iconSize100
+    case 'large':
+      return 32; // iconSize125
+    default:
+      return 24; // Default to iconSize100
+  }
+}
 
 /**
  * ButtonCTA Web Component
@@ -246,17 +269,10 @@ export class ButtonCTA extends HTMLElement {
     ].filter(Boolean).join(' ');
     
     // Generate icon HTML if icon prop provided
-    // Icon sizes use icon size tokens from CSS custom properties:
-    // - Small/Medium: --icon-size-100 (24px)
-    // - Large: --icon-size-125 (32px)
-    const iconSizeToken = size === 'large' ? '--icon-size-125' : '--icon-size-100';
-    const iconSizeValue = getComputedStyle(this).getPropertyValue(iconSizeToken).trim();
-    
-    if (!iconSizeValue) {
-      throw new Error(`ButtonCTA: Icon size token ${iconSizeToken} is required but not found`);
-    }
-    
-    const iconSize = parseInt(iconSizeValue, 10);
+    // Icon sizes are type-safe mapped from button size:
+    // - Small/Medium: 24px (iconSize100)
+    // - Large: 32px (iconSize125)
+    const iconSize: IconSize = getIconSizeForButton(size);
     const iconHTML = icon ? createIcon({ 
       name: icon as any, // Type assertion since IconName is from Icon types
       size: iconSize,
