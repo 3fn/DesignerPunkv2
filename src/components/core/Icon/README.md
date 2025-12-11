@@ -2563,6 +2563,83 @@ The formula enables automatic adaptation:
 
 ---
 
+## Token Consumption
+
+The Icon component uses spacing tokens for icon sizing. While dedicated icon size tokens are planned for future implementation (Spec 006), the current implementation uses spacing tokens that align with the `fontSize × lineHeight` formula.
+
+### Spacing Tokens Used for Icon Sizes
+
+The Icon component uses the following spacing tokens for icon sizing:
+
+| Icon Size | Spacing Token | Token Value | Typography Pairing |
+|-----------|--------------|-------------|-------------------|
+| 13px | *(not tokenized)* | 13 | caption, legal, labelXs |
+| 18px | *(not tokenized)* | 18 | bodySm, buttonSm, labelSm |
+| 24px | `space_300` | 24 | bodyMd, buttonMd, labelMd, input |
+| 28px | *(not tokenized)* | 28 | h6 |
+| 32px | `space_400` | 32 | bodyLg, buttonLg, labelLg, h5, h4 |
+| 36px | *(not tokenized)* | 36 | h3 |
+| 40px | `space_500` | 40 | h2 |
+| 44px | *(not tokenized)* | 44 | h1 |
+| 48px | *(not tokenized)* | 48 | display |
+
+### Token Usage Notes
+
+**Current Implementation**: Icon sizes are implemented as numeric literals in component code. Some sizes (24px, 32px, 40px) align with existing spacing tokens (`space_300`, `space_400`, `space_500`), but the component does not currently reference these tokens directly.
+
+**Future Implementation (Spec 006)**: Dedicated icon size tokens will be created following the pattern `icon.size050`, `icon.size100`, etc., calculated using the `fontSize × lineHeight` formula. These tokens will replace numeric literals in component implementations.
+
+**Why Spacing Tokens?**: The spacing tokens that align with icon sizes (24, 32, 40) are part of the 8px baseline grid system. Icon sizes that align with this grid benefit from consistent spacing relationships across the design system.
+
+**Non-Tokenized Sizes**: Icon sizes that don't align with existing spacing tokens (13, 18, 28, 36, 44, 48) are currently implemented as numeric literals. These sizes are mathematically derived from the `fontSize × lineHeight` formula and will be tokenized in Spec 006.
+
+### Platform-Specific Token Usage
+
+**Web**: Uses numeric literals in TypeScript
+```typescript
+// Current implementation
+<Icon name="check" size={24} />
+
+// Future with icon size tokens (Spec 006)
+<Icon name="check" size={iconSize100} />
+```
+
+**iOS**: Uses numeric literals in Swift
+```swift
+// Current implementation
+Icon(name: "check", size: 24)
+
+// Future with icon size tokens (Spec 006)
+Icon(name: "check", size: iconSize100)
+```
+
+**Android**: Uses numeric literals with dp suffix
+```kotlin
+// Current implementation
+Icon(name = "check", size = 24.dp)
+
+// Future with icon size tokens (Spec 006)
+Icon(name = "check", size = DesignTokens.iconSize100)
+```
+
+### Token Migration Path
+
+When icon size tokens are implemented (Spec 006):
+
+1. **Token Creation**: Create semantic icon size tokens (`icon.size050` through `icon.size700`)
+2. **Token Generation**: Generate platform-specific token values (CSS custom properties, Swift constants, Kotlin constants)
+3. **Component Update**: Replace numeric literals with token references in all platform implementations
+4. **Backward Compatibility**: Maintain numeric literal API for gradual migration
+5. **Documentation Update**: Update this section to reference icon size tokens instead of spacing tokens
+
+### Related Token Documentation
+
+- **Spacing Tokens**: `src/tokens/SpacingTokens.ts` - Primitive spacing tokens including space_300, space_400, space_500
+- **Semantic Tokens**: `src/tokens/semantic/` - Semantic token layer (icon size tokens will be added here)
+- **Token Architecture**: `preserved-knowledge/token-architecture-2-0-mathematics.md` - Mathematical token system foundations
+
+---
+
 ## Related Documentation
 
 ### Icon System (Spec 004)

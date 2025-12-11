@@ -1,19 +1,19 @@
 # Component Token Audit Report
 
-**Date**: 2025-12-10
+**Date**: 2025-12-11
 **Total Components Audited**: 28
-**Total Violations Found**: 129
+**Total Violations Found**: 111
 
 ## Violations by Type
 
-- **Color**: 35
+- **Color**: 17
 - **Spacing**: 92
 - **Motion**: 2
 - **Typography**: 0
 
 ## Violations by Priority
 
-- **High** (Colors, Spacing): 127
+- **High** (Colors, Spacing): 109
 - **Medium** (Motion): 2
 - **Low** (Edge Cases): 0
 
@@ -24,7 +24,7 @@
 **File**: `/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/src/components/core/ButtonCTA/platforms/web/ButtonCTA.web.ts`
 **Violations**: 1
 
-#### Line 249: spacing (high priority)
+#### Line 252: spacing (high priority)
 
 **Current Value**: `? 32 : 24`
 **Suggested Token**: `Remove fallback - fail loudly when token missing`
@@ -32,8 +32,8 @@
 
 **Context**:
 ```
-    
-    // Generate icon HTML if icon prop provided
+    // - Small/Medium: 24px (icon.size100)
+    // - Large: 32px (icon.size125)
     const iconSize = size === 'large' ? 32 : 24;
     const iconHTML = icon ? createIcon({ 
       name: icon as any, // Type assertion since IconName is from Icon types
@@ -47,7 +47,7 @@
 ### ButtonCTA (ios)
 
 **File**: `/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/src/components/core/ButtonCTA/platforms/ios/ButtonCTA.ios.swift`
-**Violations**: 8
+**Violations**: 6
 
 #### Line 194: spacing (high priority)
 
@@ -92,74 +92,46 @@
     /// - Large (56px): Exceeds 44px minimum
 ```
 
-#### Line 330: color (high priority)
+#### Line 390: color (high priority)
 
-**Current Value**: `Color(red: 0.404, green: 0.314, blue: 0.643)`
+**Current Value**: `Color(red: 103/255, green: 80/255, blue: 164/255)`
 **Suggested Token**: `colorPrimary or appropriate semantic color token`
 
 **Context**:
 ```
-        switch style {
-        case .primary:
-            return Color(red: 0.404, green: 0.314, blue: 0.643) // color.primary (#6750A4)
-        case .secondary:
-            return Color(red: 1.0, green: 1.0, blue: 1.0) // color.background (white)
+
+// Color tokens - Semantic tokens from DesignTokens.ios.swift
+private let colorPrimary = Color(red: 103/255, green: 80/255, blue: 164/255) // purple300 - #6750A4
+private let colorBackground = Color(red: 255/255, green: 255/255, blue: 255/255) // white100 - #FFFFFF
+private let white100 = Color(red: 255/255, green: 255/255, blue: 255/255) // white100 - #FFFFFF (primitive token for text on primary)
 ```
 
-#### Line 332: color (high priority)
+#### Line 391: color (high priority)
 
-**Current Value**: `Color(red: 1.0, green: 1.0, blue: 1.0)`
+**Current Value**: `Color(red: 255/255, green: 255/255, blue: 255/255)`
 **Suggested Token**: `colorPrimary or appropriate semantic color token`
 
 **Context**:
 ```
-            return Color(red: 0.404, green: 0.314, blue: 0.643) // color.primary (#6750A4)
-        case .secondary:
-            return Color(red: 1.0, green: 1.0, blue: 1.0) // color.background (white)
-        case .tertiary:
-            return Color.clear // transparent
+// Color tokens - Semantic tokens from DesignTokens.ios.swift
+private let colorPrimary = Color(red: 103/255, green: 80/255, blue: 164/255) // purple300 - #6750A4
+private let colorBackground = Color(red: 255/255, green: 255/255, blue: 255/255) // white100 - #FFFFFF
+private let white100 = Color(red: 255/255, green: 255/255, blue: 255/255) // white100 - #FFFFFF (primitive token for text on primary)
+
 ```
 
-#### Line 345: color (high priority)
+#### Line 392: color (high priority)
 
-**Current Value**: `Color(red: 0.404, green: 0.314, blue: 0.643)`
+**Current Value**: `Color(red: 255/255, green: 255/255, blue: 255/255)`
 **Suggested Token**: `colorPrimary or appropriate semantic color token`
 
 **Context**:
 ```
-            return Color.white // color.text.onPrimary
-        case .secondary, .tertiary:
-            return Color(red: 0.404, green: 0.314, blue: 0.643) // color.primary
-        }
-    }
-```
+private let colorPrimary = Color(red: 103/255, green: 80/255, blue: 164/255) // purple300 - #6750A4
+private let colorBackground = Color(red: 255/255, green: 255/255, blue: 255/255) // white100 - #FFFFFF
+private let white100 = Color(red: 255/255, green: 255/255, blue: 255/255) // white100 - #FFFFFF (primitive token for text on primary)
 
-#### Line 356: color (high priority)
-
-**Current Value**: `Color(red: 0.404, green: 0.314, blue: 0.643)`
-**Suggested Token**: `colorPrimary or appropriate semantic color token`
-
-**Context**:
-```
-            return Color.clear // No border
-        case .secondary:
-            return Color(red: 0.404, green: 0.314, blue: 0.643) // color.primary
-        }
-    }
-```
-
-#### Line 382: color (high priority)
-
-**Current Value**: `Color(red: 0.506, green: 0.424, blue: 0.722)`
-**Suggested Token**: `colorPrimary or appropriate semantic color token`
-
-**Context**:
-```
-            // Optical balance: 20% lighter for visual weight compensation
-            // color.icon.opticalBalance = blend200 with BlendDirection.LIGHTER
-            return Color(red: 0.506, green: 0.424, blue: 0.722) // Lightened primary color
-        }
-    }
+/**
 ```
 
 ### ButtonCTA (android)
@@ -1596,7 +1568,7 @@ fun IconPreview() {
 ### TextInputField (ios)
 
 **File**: `/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/src/components/core/TextInputField/platforms/ios/TextInputField.ios.swift`
-**Violations**: 10
+**Violations**: 2
 
 #### Line 370: spacing (high priority)
 
@@ -1627,122 +1599,10 @@ fun IconPreview() {
                     )
 ```
 
-#### Line 406: color (high priority)
-
-**Current Value**: `Color(red: 107/255, green: 114/255, blue: 128/255)`
-**Suggested Token**: `colorPrimary or appropriate semantic color token`
-
-**Context**:
-```
-
-// Color tokens
-private let colorTextMuted = Color(red: 107/255, green: 114/255, blue: 128/255) // #6B7280
-private let colorTextDefault = Color(red: 0/255, green: 0/255, blue: 0/255) // #000000
-private let colorPrimary = Color(red: 59/255, green: 130/255, blue: 246/255) // #3B82F6
-```
-
-#### Line 407: color (high priority)
-
-**Current Value**: `Color(red: 0/255, green: 0/255, blue: 0/255)`
-**Suggested Token**: `colorPrimary or appropriate semantic color token`
-
-**Context**:
-```
-// Color tokens
-private let colorTextMuted = Color(red: 107/255, green: 114/255, blue: 128/255) // #6B7280
-private let colorTextDefault = Color(red: 0/255, green: 0/255, blue: 0/255) // #000000
-private let colorPrimary = Color(red: 59/255, green: 130/255, blue: 246/255) // #3B82F6
-private let colorError = Color(red: 239/255, green: 68/255, blue: 68/255) // #EF4444
-```
-
-#### Line 408: color (high priority)
-
-**Current Value**: `Color(red: 59/255, green: 130/255, blue: 246/255)`
-**Suggested Token**: `colorPrimary or appropriate semantic color token`
-
-**Context**:
-```
-private let colorTextMuted = Color(red: 107/255, green: 114/255, blue: 128/255) // #6B7280
-private let colorTextDefault = Color(red: 0/255, green: 0/255, blue: 0/255) // #000000
-private let colorPrimary = Color(red: 59/255, green: 130/255, blue: 246/255) // #3B82F6
-private let colorError = Color(red: 239/255, green: 68/255, blue: 68/255) // #EF4444
-private let colorSuccessStrong = Color(red: 16/255, green: 185/255, blue: 129/255) // #10B981
-```
-
-#### Line 409: color (high priority)
-
-**Current Value**: `Color(red: 239/255, green: 68/255, blue: 68/255)`
-**Suggested Token**: `colorPrimary or appropriate semantic color token`
-
-**Context**:
-```
-private let colorTextDefault = Color(red: 0/255, green: 0/255, blue: 0/255) // #000000
-private let colorPrimary = Color(red: 59/255, green: 130/255, blue: 246/255) // #3B82F6
-private let colorError = Color(red: 239/255, green: 68/255, blue: 68/255) // #EF4444
-private let colorSuccessStrong = Color(red: 16/255, green: 185/255, blue: 129/255) // #10B981
-private let colorBorder = Color(red: 209/255, green: 213/255, blue: 219/255) // #D1D5DB
-```
-
-#### Line 410: color (high priority)
-
-**Current Value**: `Color(red: 16/255, green: 185/255, blue: 129/255)`
-**Suggested Token**: `colorPrimary or appropriate semantic color token`
-
-**Context**:
-```
-private let colorPrimary = Color(red: 59/255, green: 130/255, blue: 246/255) // #3B82F6
-private let colorError = Color(red: 239/255, green: 68/255, blue: 68/255) // #EF4444
-private let colorSuccessStrong = Color(red: 16/255, green: 185/255, blue: 129/255) // #10B981
-private let colorBorder = Color(red: 209/255, green: 213/255, blue: 219/255) // #D1D5DB
-private let colorBackground = Color(red: 255/255, green: 255/255, blue: 255/255) // #FFFFFF
-```
-
-#### Line 411: color (high priority)
-
-**Current Value**: `Color(red: 209/255, green: 213/255, blue: 219/255)`
-**Suggested Token**: `colorPrimary or appropriate semantic color token`
-
-**Context**:
-```
-private let colorError = Color(red: 239/255, green: 68/255, blue: 68/255) // #EF4444
-private let colorSuccessStrong = Color(red: 16/255, green: 185/255, blue: 129/255) // #10B981
-private let colorBorder = Color(red: 209/255, green: 213/255, blue: 219/255) // #D1D5DB
-private let colorBackground = Color(red: 255/255, green: 255/255, blue: 255/255) // #FFFFFF
-
-```
-
-#### Line 412: color (high priority)
-
-**Current Value**: `Color(red: 255/255, green: 255/255, blue: 255/255)`
-**Suggested Token**: `colorPrimary or appropriate semantic color token`
-
-**Context**:
-```
-private let colorSuccessStrong = Color(red: 16/255, green: 185/255, blue: 129/255) // #10B981
-private let colorBorder = Color(red: 209/255, green: 213/255, blue: 219/255) // #D1D5DB
-private let colorBackground = Color(red: 255/255, green: 255/255, blue: 255/255) // #FFFFFF
-
-// Spacing tokens
-```
-
-#### Line 431: color (high priority)
-
-**Current Value**: `Color(red: 59/255, green: 130/255, blue: 246/255)`
-**Suggested Token**: `colorPrimary or appropriate semantic color token`
-
-**Context**:
-```
-private let accessibilityFocusWidth: CGFloat = 2 // Focus ring width
-private let accessibilityFocusOffset: CGFloat = 2 // Focus ring offset
-private let accessibilityFocusColor = Color(red: 59/255, green: 130/255, blue: 246/255) // #3B82F6
-
-// MARK: - Preview
-```
-
 ### TextInputField (android)
 
 **File**: `/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/src/components/core/TextInputField/platforms/android/TextInputField.android.kt`
-**Violations**: 16
+**Violations**: 8
 
 #### Line 170: spacing (high priority)
 
@@ -1854,116 +1714,5 @@ private let accessibilityFocusColor = Color(red: 59/255, green: 130/255, blue: 2
                         size = 24.dp,
                         color = colorTextMuted
                     )
-```
-
-#### Line 439: color (high priority)
-
-**Current Value**: `Color(0xFF6B7280)`
-**Suggested Token**: `DesignTokens.color_primary or appropriate semantic color token`
-
-**Context**:
-```
-
-// Color tokens
-private val colorTextMuted = Color(0xFF6B7280) // #6B7280
-private val colorTextDefault = Color(0xFF000000) // #000000
-private val colorPrimary = Color(0xFF3B82F6) // #3B82F6
-```
-
-#### Line 440: color (high priority)
-
-**Current Value**: `Color(0xFF000000)`
-**Suggested Token**: `DesignTokens.color_primary or appropriate semantic color token`
-
-**Context**:
-```
-// Color tokens
-private val colorTextMuted = Color(0xFF6B7280) // #6B7280
-private val colorTextDefault = Color(0xFF000000) // #000000
-private val colorPrimary = Color(0xFF3B82F6) // #3B82F6
-private val colorError = Color(0xFFEF4444) // #EF4444
-```
-
-#### Line 441: color (high priority)
-
-**Current Value**: `Color(0xFF3B82F6)`
-**Suggested Token**: `DesignTokens.color_primary or appropriate semantic color token`
-
-**Context**:
-```
-private val colorTextMuted = Color(0xFF6B7280) // #6B7280
-private val colorTextDefault = Color(0xFF000000) // #000000
-private val colorPrimary = Color(0xFF3B82F6) // #3B82F6
-private val colorError = Color(0xFFEF4444) // #EF4444
-private val colorSuccessStrong = Color(0xFF10B981) // #10B981
-```
-
-#### Line 442: color (high priority)
-
-**Current Value**: `Color(0xFFEF4444)`
-**Suggested Token**: `DesignTokens.color_primary or appropriate semantic color token`
-
-**Context**:
-```
-private val colorTextDefault = Color(0xFF000000) // #000000
-private val colorPrimary = Color(0xFF3B82F6) // #3B82F6
-private val colorError = Color(0xFFEF4444) // #EF4444
-private val colorSuccessStrong = Color(0xFF10B981) // #10B981
-private val colorBorder = Color(0xFFD1D5DB) // #D1D5DB
-```
-
-#### Line 443: color (high priority)
-
-**Current Value**: `Color(0xFF10B981)`
-**Suggested Token**: `DesignTokens.color_primary or appropriate semantic color token`
-
-**Context**:
-```
-private val colorPrimary = Color(0xFF3B82F6) // #3B82F6
-private val colorError = Color(0xFFEF4444) // #EF4444
-private val colorSuccessStrong = Color(0xFF10B981) // #10B981
-private val colorBorder = Color(0xFFD1D5DB) // #D1D5DB
-private val colorBackground = Color(0xFFFFFFFF) // #FFFFFF
-```
-
-#### Line 444: color (high priority)
-
-**Current Value**: `Color(0xFFD1D5DB)`
-**Suggested Token**: `DesignTokens.color_primary or appropriate semantic color token`
-
-**Context**:
-```
-private val colorError = Color(0xFFEF4444) // #EF4444
-private val colorSuccessStrong = Color(0xFF10B981) // #10B981
-private val colorBorder = Color(0xFFD1D5DB) // #D1D5DB
-private val colorBackground = Color(0xFFFFFFFF) // #FFFFFF
-
-```
-
-#### Line 445: color (high priority)
-
-**Current Value**: `Color(0xFFFFFFFF)`
-**Suggested Token**: `DesignTokens.color_primary or appropriate semantic color token`
-
-**Context**:
-```
-private val colorSuccessStrong = Color(0xFF10B981) // #10B981
-private val colorBorder = Color(0xFFD1D5DB) // #D1D5DB
-private val colorBackground = Color(0xFFFFFFFF) // #FFFFFF
-
-// Spacing tokens
-```
-
-#### Line 464: color (high priority)
-
-**Current Value**: `Color(0xFF3B82F6)`
-**Suggested Token**: `DesignTokens.color_primary or appropriate semantic color token`
-
-**Context**:
-```
-private const val accessibilityFocusWidth = 2f // Focus ring width
-private const val accessibilityFocusOffset = 2f // Focus ring offset
-private val accessibilityFocusColor = Color(0xFF3B82F6) // #3B82F6
-
 ```
 

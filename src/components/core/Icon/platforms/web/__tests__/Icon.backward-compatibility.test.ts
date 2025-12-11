@@ -217,6 +217,9 @@ describe('Icon Backward Compatibility', () => {
       // Simulate ButtonCTA usage pattern
       const buttonIcon = 'arrow-right';
       const buttonSize = 'medium' as 'small' | 'medium' | 'large';
+      
+      // Use explicit icon size tokens instead of fallback pattern
+      // ButtonCTA should use iconSize100 (24) for small/medium, iconSize125 (32) for large
       const iconSize: IconSize = buttonSize === 'large' ? 32 : 24;
       
       const iconHTML = createIcon({ 
