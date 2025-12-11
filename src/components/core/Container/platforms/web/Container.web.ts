@@ -43,8 +43,8 @@ const BASE_STYLES = `
   }
   
   .container:focus {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
+    outline: var(--border-emphasis) solid var(--color-primary);
+    outline-offset: var(--space-grouped-minimal);
   }
   
   .container:focus:not(:focus-visible) {
@@ -52,8 +52,8 @@ const BASE_STYLES = `
   }
   
   .container:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
+    outline: var(--border-emphasis) solid var(--color-primary);
+    outline-offset: var(--space-grouped-minimal);
   }
   
   @media (prefers-reduced-motion: reduce) {
@@ -65,7 +65,7 @@ const BASE_STYLES = `
   
   @media (prefers-contrast: high) {
     .container {
-      border-width: 2px;
+      border-width: var(--border-emphasis);
     }
   }
   

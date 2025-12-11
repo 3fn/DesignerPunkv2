@@ -273,10 +273,12 @@ Container references the following design system tokens:
 - `space.inset.200` (16px) - padding="200"
 - `space.inset.300` (24px) - padding="300"
 - `space.inset.400` (32px) - padding="400"
+- `space.grouped.minimal` (2px) - Used for focus outline offset (web)
 
 ### Color Tokens
 - All semantic color tokens (via generated `ColorTokenName` type)
 - Examples: `color.surface`, `color.background`, `color.primary`
+- `color.border` - Border color (applied automatically)
 
 ### Shadow Tokens
 - All semantic shadow tokens (via generated `ShadowTokenName` type)
@@ -284,9 +286,8 @@ Container references the following design system tokens:
 
 ### Border Tokens
 - `border.default` (1px) - border="default"
-- `border.emphasis` (2px) - border="emphasis"
+- `border.emphasis` (2px) - border="emphasis", focus outline width (web), high contrast border (web)
 - `border.heavy` (4px) - border="heavy"
-- `color.border` - Border color (applied automatically)
 
 ### Radius Tokens
 - `radius050` (4px) - borderRadius="tight"
@@ -316,6 +317,30 @@ Container references the following design system tokens:
 - `elevation.tooltip` (24dp)
 
 **Note**: Android elevation tokens couple stacking order with shadow rendering, following Material Design guidelines.
+
+### Platform-Specific Token Usage
+
+**Web Platform**:
+- Uses CSS custom properties: `var(--border-emphasis)`, `var(--space-grouped-minimal)`
+- Focus outline: `var(--border-emphasis)` for width, `var(--space-grouped-minimal)` for offset
+- High contrast mode: `var(--border-emphasis)` for border width
+
+**iOS Platform**:
+- Uses Swift constants from generated token files
+- Token values are compile-time constants
+
+**Android Platform**:
+- Uses DesignTokens references: `DesignTokens.space_inset_050.dp`, `DesignTokens.border_default.dp`
+- All token values converted to Dp units
+- Color tokens: `Color(DesignTokens.color_border)`
+
+### Token Cleanup Notes
+
+**Task 5.3 Cleanup (December 10, 2025)**:
+- Replaced 44 hard-coded dp values in Android TokenMapping.kt with DesignTokens references
+- Replaced 3 hard-coded px values in web Container.web.ts with CSS custom properties
+- All spacing, border, radius, elevation, and color values now reference design system tokens
+- No fallback patterns remain - component fails loudly when tokens are missing
 
 ---
 
