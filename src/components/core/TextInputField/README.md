@@ -237,6 +237,12 @@ The TextInputField component uses the following design tokens:
 
 - `blend.focusSaturate` - Focus state emphasis (8% more saturated)
 
+### Token Usage Philosophy
+
+**No Fallback Values**: This component intentionally does not use fallback values for missing tokens. If a required token is missing, the component will fail loudly with a clear error message indicating which token is missing and where it's needed. This ensures token system issues are caught immediately during development rather than masked by fallbacks.
+
+**Explicit Error Handling**: When tokens cannot be resolved, the component throws descriptive errors (e.g., "Required motion token missing: --motion-float-label-duration"). This approach maintains token system integrity and prevents silent failures in production.
+
 ---
 
 ## Accessibility Features

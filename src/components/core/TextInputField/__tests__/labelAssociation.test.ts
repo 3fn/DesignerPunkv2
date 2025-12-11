@@ -16,8 +16,19 @@ import '../platforms/web/TextInputField.web';
 
 describe('TextInputField Label Association', () => {
   let container: HTMLElement;
+  let styleElement: HTMLStyleElement;
   
   beforeEach(() => {
+    // Add CSS custom properties for motion tokens
+    styleElement = document.createElement('style');
+    styleElement.textContent = `
+      :root {
+        --motion-float-label-duration: 250ms;
+        --motion-float-label-easing: ease-out;
+      }
+    `;
+    document.head.appendChild(styleElement);
+    
     // Create container for tests
     container = document.createElement('div');
     document.body.appendChild(container);
@@ -26,6 +37,7 @@ describe('TextInputField Label Association', () => {
   afterEach(() => {
     // Clean up
     document.body.removeChild(container);
+    document.head.removeChild(styleElement);
   });
   
   describe('Web Platform', () => {

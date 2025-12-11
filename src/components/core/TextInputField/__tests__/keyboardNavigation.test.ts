@@ -17,14 +17,26 @@ import '../platforms/web/TextInputField.web';
 
 describe('TextInputField - Keyboard Navigation', () => {
   let container: HTMLDivElement;
+  let styleElement: HTMLStyleElement;
 
   beforeEach(() => {
+    // Add CSS custom properties for motion tokens
+    styleElement = document.createElement('style');
+    styleElement.textContent = `
+      :root {
+        --motion-float-label-duration: 250ms;
+        --motion-float-label-easing: ease-out;
+      }
+    `;
+    document.head.appendChild(styleElement);
+    
     container = document.createElement('div');
     document.body.appendChild(container);
   });
 
   afterEach(() => {
     document.body.removeChild(container);
+    document.head.removeChild(styleElement);
   });
 
   describe('Tab Key Focus (Requirement 6.1)', () => {

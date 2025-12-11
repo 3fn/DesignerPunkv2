@@ -544,29 +544,32 @@ export class TextInputField extends HTMLElement {
   
   /**
    * Get animation duration from CSS custom property (motion.floatLabel token)
-   * Falls back to 250ms if token not available
+   * Throws error if token not available (fail loudly)
    */
   private getAnimationDuration(): number {
-    if (!this.labelElement) return 250;
-    
-    try {
-      const computedStyle = getComputedStyle(this.labelElement);
-      const durationStr = computedStyle.getPropertyValue('--motion-float-label-duration').trim();
-      
-      if (durationStr) {
-        // Parse duration (could be "250ms" or "0.25s")
-        const duration = parseFloat(durationStr);
-        if (durationStr.endsWith('s') && !durationStr.endsWith('ms')) {
-          return duration * 1000; // Convert seconds to milliseconds
-        }
-        return duration; // Already in milliseconds
-      }
-    } catch (error) {
-      // Fallback if getComputedStyle fails
-      console.warn('Failed to read animation duration from CSS custom property, using fallback', error);
+    if (!this.labelElement) {
+      throw new Error('TextInputField: labelElement is required to read animation duration');
     }
     
-    return 250; // Fallback to motion.floatLabel default duration
+    const computedStyle = getComputedStyle(this.labelElement);
+    const durationStr = computedStyle.getPropertyValue('--motion-float-label-duration').trim();
+    
+    if (!durationStr) {
+      console.error('TextInputField: --motion-float-label-duration token not found');
+      throw new Error('Required motion token missing: --motion-float-label-duration');
+    }
+    
+    // Parse duration (could be "250ms" or "0.25s")
+    const duration = parseFloat(durationStr);
+    if (isNaN(duration)) {
+      console.error(`TextInputField: Invalid duration value: ${durationStr}`);
+      throw new Error(`Invalid motion token value: --motion-float-label-duration = ${durationStr}`);
+    }
+    
+    if (durationStr.endsWith('s') && !durationStr.endsWith('ms')) {
+      return duration * 1000; // Convert seconds to milliseconds
+    }
+    return duration; // Already in milliseconds
   }
 }
 

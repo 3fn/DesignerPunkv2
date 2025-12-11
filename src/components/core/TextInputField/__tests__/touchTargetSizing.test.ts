@@ -24,6 +24,16 @@ describe('TextInputField - Touch Target Sizing', () => {
   beforeEach(() => {
     // Clear any existing elements
     document.body.innerHTML = '';
+    
+    // Add CSS custom properties for motion tokens
+    const styleElement = document.createElement('style');
+    styleElement.textContent = `
+      :root {
+        --motion-float-label-duration: 250ms;
+        --motion-float-label-easing: ease-out;
+      }
+    `;
+    document.head.appendChild(styleElement);
   });
 
   describe('Minimum Touch Target Height', () => {
