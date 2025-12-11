@@ -95,7 +95,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - If active: remove all 13 color fallback patterns, update to token-first
     - _Requirements: 5.6, 5.7_
 
-- [ ] 3. Phase 2B: Icon Component Cleanup
+- [x] 3. Phase 2B: Icon Component Cleanup
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive
@@ -113,7 +113,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
   - Detailed: `.kiro/specs/019-test-failures-and-cleanup/completion/task-3-parent-completion.md`
   - Summary: `docs/specs/019-test-failures-and-cleanup/task-3-summary.md`
 
-  - [ ] 3.1 Update Icon Android documentation
+  - [x] 3.1 Update Icon Android documentation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace hard-coded dp values in comments with token references
@@ -121,14 +121,94 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - Update all 32 documentation violations
     - _Requirements: 3.1, 3.2_
 
-  - [ ] 3.2 Update Icon Android preview examples
+  - [x] 3.2 Update Icon Android preview examples
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace hard-coded dp values in preview code with token references
     - Verify previews still render correctly
     - _Requirements: 3.2, 3.4_
 
-- [ ] 4. Phase 2C: TextInputField Remaining Cleanup
+- [ ] 4. Investigate Token Unit Consistency
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive
+  
+  **Success Criteria:**
+  - Token generation patterns documented across all token types and platforms
+  - Root cause of inconsistency identified and explained
+  - Impact assessment completed for existing component code
+  - Standardization recommendation provided with rationale and trade-offs
+  - Implementation plan created (if standardization needed)
+  
+  **Primary Artifacts:**
+  - Investigation report documenting findings
+  - Token generation pattern audit across all platforms
+  - Impact assessment for existing code
+  - Standardization recommendation with implementation plan
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/019-test-failures-and-cleanup/completion/task-4-parent-completion.md`
+  - Summary: `docs/specs/019-test-failures-and-cleanup/task-4-summary.md`
+  
+  **Context:**
+  During Task 3.2, discovered critical inconsistency: icon size tokens generated WITH units (`val icon_size_100 = 24.dp`) while spacing tokens generated WITHOUT units (`const val space_200: Float = 16f`). This creates inconsistent usage patterns (`DesignTokens.icon_size_100` vs `DesignTokens.space_200.dp`) that risk spreading through remaining cleanup work.
+
+  - [ ] 4.1 Audit token generation patterns by type
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Check icon size tokens (confirmed: WITH units)
+    - Check spacing tokens (confirmed: WITHOUT units)
+    - Check border width tokens (unknown)
+    - Check radius tokens (unknown)
+    - Check elevation tokens (unknown)
+    - Check typography tokens (unknown)
+    - Document which token types include units in generated code
+    - Identify the pattern: why do some include units and others don't?
+    - _Requirements: 3.1, 3.2_
+
+  - [ ] 4.2 Assess cross-platform consistency
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Check Android generated tokens (confirmed inconsistent)
+    - Check iOS generated tokens (unknown)
+    - Check Web generated tokens (unknown)
+    - Document whether issue is Android-specific or system-wide
+    - Compare generation patterns across platforms
+    - _Requirements: 3.1, 3.2_
+
+  - [ ] 4.3 Review token generation source code
+    **Type**: Architecture
+    **Validation**: Tier 3 - Comprehensive
+    - Locate token generation code for each platform
+    - Understand why different token types are generated differently
+    - Document the generation logic and decision points
+    - Identify if inconsistency is intentional or accidental
+    - Document any rationale found in code comments or commit history
+    - _Requirements: 3.1, 3.2_
+
+  - [ ] 4.4 Assess existing usage impact
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Audit component code for token usage patterns
+    - Audit preview code for token usage patterns
+    - Audit test code for token usage patterns
+    - Document scope of changes needed for standardization
+    - Estimate refactoring effort (hours, files affected)
+    - _Requirements: 3.1, 3.2_
+
+  - [ ] 4.5 Provide standardization recommendation
+    **Type**: Architecture
+    **Validation**: Tier 3 - Comprehensive
+    - Evaluate Option A: All tokens WITH units (consistent with icon sizes)
+    - Evaluate Option B: All tokens WITHOUT units (consistent with spacing)
+    - Document rationale with trade-offs for each option
+    - Recommend standardization approach with clear justification
+    - Estimate refactoring effort for recommended approach
+    - Propose implementation plan (if standardization needed)
+    - Document decision for future reference
+    - _Requirements: 3.1, 3.2_
+
+- [ ] 5. Phase 2C: TextInputField Remaining Cleanup
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive
@@ -144,10 +224,10 @@ This spec addresses 80 test failures and 111 remaining component violations thro
   - `src/components/core/TextInputField/platforms/android/TextInputField.android.kt`
   
   **Completion Documentation:**
-  - Detailed: `.kiro/specs/019-test-failures-and-cleanup/completion/task-4-parent-completion.md`
-  - Summary: `docs/specs/019-test-failures-and-cleanup/task-4-summary.md`
+  - Detailed: `.kiro/specs/019-test-failures-and-cleanup/completion/task-5-parent-completion.md`
+  - Summary: `docs/specs/019-test-failures-and-cleanup/task-5-summary.md`
 
-  - [ ] 4.1 Fix TextInputField iOS violations
+  - [ ] 5.1 Fix TextInputField iOS violations
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Remove opacity fallback pattern `? 1 : 0`
@@ -155,7 +235,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - Fail loudly when tokens missing
     - _Requirements: 5.1, 5.2_
 
-  - [ ] 4.2 Fix TextInputField Android violations
+  - [ ] 5.2 Fix TextInputField Android violations
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace hard-coded `0.dp` label offset with appropriate spacing token
@@ -164,7 +244,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - Replace hard-coded `24.dp` icon sizes with `iconSize100` token (3 occurrences)
     - _Requirements: 5.3, 5.4, 5.5_
 
-- [ ] 5. Phase 2D: Container Component Cleanup
+- [ ] 6. Phase 2D: Container Component Cleanup
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive
@@ -180,10 +260,10 @@ This spec addresses 80 test failures and 111 remaining component violations thro
   - `src/components/core/Container/platforms/android/TokenMapping.kt`
   
   **Completion Documentation:**
-  - Detailed: `.kiro/specs/019-test-failures-and-cleanup/completion/task-5-parent-completion.md`
-  - Summary: `docs/specs/019-test-failures-and-cleanup/task-5-summary.md`
+  - Detailed: `.kiro/specs/019-test-failures-and-cleanup/completion/task-6-parent-completion.md`
+  - Summary: `docs/specs/019-test-failures-and-cleanup/task-6-summary.md`
 
-  - [ ] 5.1 Fix Container web violations
+  - [ ] 6.1 Fix Container web violations
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace hard-coded `2px` focus outline width with accessibility token
@@ -191,7 +271,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - Verify focus styles work correctly
     - _Requirements: 4.6_
 
-  - [ ] 5.2 Fix Container Android border widths
+  - [ ] 6.2 Fix Container Android border widths
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace `1.dp` with `borderDefault` token
@@ -200,7 +280,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - Verify token mapping works correctly
     - _Requirements: 4.2, 4.7_
 
-  - [ ] 5.3 Fix Container Android radius values
+  - [ ] 6.3 Fix Container Android radius values
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace `4.dp` with `radius050` token
@@ -209,7 +289,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - Verify radius mapping works correctly
     - _Requirements: 4.3, 4.7_
 
-  - [ ] 5.4 Fix Container Android elevation values
+  - [ ] 6.4 Fix Container Android elevation values
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace hard-coded elevation values with elevation tokens
@@ -217,14 +297,14 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - Verify elevation mapping works correctly
     - _Requirements: 4.4, 4.7_
 
-  - [ ] 5.5 Fix Container Android colors
+  - [ ] 6.5 Fix Container Android colors
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace `Color(0xFFE5E7EB)` with `colorBorder` semantic token
     - Verify color mapping works correctly
     - _Requirements: 4.5, 4.7_
 
-  - [ ] 5.6 Handle Container Android zero values
+  - [ ] 6.6 Handle Container Android zero values
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Review 15 occurrences of `0.dp` in TokenMapping.kt
@@ -233,7 +313,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - Document rationale for each decision
     - _Requirements: 4.1, 4.7_
 
-- [ ] 6. Phase 3: Test Updates
+- [ ] 7. Phase 3: Test Updates
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive
@@ -252,10 +332,10 @@ This spec addresses 80 test failures and 111 remaining component violations thro
   - Performance test documentation
   
   **Completion Documentation:**
-  - Detailed: `.kiro/specs/019-test-failures-and-cleanup/completion/task-6-parent-completion.md`
-  - Summary: `docs/specs/019-test-failures-and-cleanup/task-6-summary.md`
+  - Detailed: `.kiro/specs/019-test-failures-and-cleanup/completion/task-7-parent-completion.md`
+  - Summary: `docs/specs/019-test-failures-and-cleanup/task-7-summary.md`
 
-  - [ ] 6.1 Update token count expectation tests
+  - [ ] 7.1 Update token count expectation tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update BorderWidthTokens tests for new token counts
@@ -266,7 +346,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - Update AccessibilityTokenGeneration tests for new accessibility tokens
     - _Requirements: 2.1, 2.2, 2.3, 2.4_
 
-  - [ ] 6.2 Fix integration test compilation
+  - [ ] 7.2 Fix integration test compilation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Fix ButtonCTA icon integration test TypeScript errors
@@ -276,7 +356,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - Verify all integration tests compile and pass
     - _Requirements: 6.1, 6.2_
 
-  - [ ] 6.3 Update cross-platform consistency tests
+  - [ ] 7.3 Update cross-platform consistency tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update TextInputField crossPlatformConsistency tests
@@ -284,7 +364,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - Verify tests pass across all platforms
     - _Requirements: 6.3_
 
-  - [ ] 6.4 Update touch target sizing tests
+  - [ ] 7.4 Update touch target sizing tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update TextInputField touchTargetSizing tests
@@ -292,7 +372,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - Verify tests pass
     - _Requirements: 6.4_
 
-  - [ ] 6.5 Update token compliance tests
+  - [ ] 7.5 Update token compliance tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Verify iOS Color() pattern detection regex
@@ -300,7 +380,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - Verify tests accurately detect violations
     - _Requirements: 8.1, 8.2, 8.3, 8.4_
 
-  - [ ] 6.6 Verify build system integration tests
+  - [ ] 7.6 Verify build system integration tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run BuildSystemIntegration tests
@@ -308,7 +388,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - Verify tests pass with space000 token added
     - _Requirements: 2.1, 2.2_
 
-  - [ ] 6.7 Update component integration tests
+  - [ ] 7.7 Update component integration tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update TextInputField labelAssociation tests
@@ -317,7 +397,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - Verify tests pass
     - _Requirements: 6.1, 6.2, 6.3_
 
-  - [ ] 6.8 Document performance test issues
+  - [ ] 7.8 Document performance test issues
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Document PerformanceRegression test timeout issues
@@ -326,7 +406,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - Create recommendations for future performance optimization spec
     - _Requirements: 7.1, 7.2, 7.3, 7.4_
 
-- [ ] 7. Phase 4: Final Verification
+- [ ] 8. Phase 4: Final Verification
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive
@@ -343,10 +423,10 @@ This spec addresses 80 test failures and 111 remaining component violations thro
   - Updated component READMEs (if needed)
   
   **Completion Documentation:**
-  - Detailed: `.kiro/specs/019-test-failures-and-cleanup/completion/task-7-parent-completion.md`
-  - Summary: `docs/specs/019-test-failures-and-cleanup/task-7-summary.md`
+  - Detailed: `.kiro/specs/019-test-failures-and-cleanup/completion/task-8-parent-completion.md`
+  - Summary: `docs/specs/019-test-failures-and-cleanup/task-8-summary.md`
 
-  - [ ] 7.1 Run full test suite
+  - [ ] 8.1 Run full test suite
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run `npm test` and verify all tests pass (excluding documented performance issues)
@@ -354,7 +434,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - Verify test count matches expectations
     - _Requirements: 9.5_
 
-  - [ ] 7.2 Run audit script
+  - [ ] 8.2 Run audit script
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run audit script on all components
@@ -364,7 +444,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - Verify zero fallback pattern violations
     - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5_
 
-  - [ ] 7.3 Update component READMEs if needed
+  - [ ] 8.3 Update component READMEs if needed
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Review component READMEs for accuracy
@@ -372,7 +452,7 @@ This spec addresses 80 test failures and 111 remaining component violations thro
     - Verify all token references are current
     - _Requirements: 9.5_
 
-  - [ ] 7.4 Create completion summary
+  - [ ] 8.4 Create completion summary
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Document all violations fixed (111 total)

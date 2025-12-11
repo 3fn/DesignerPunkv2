@@ -20,7 +20,7 @@ import com.designerpunk.tokens.DesignTokens
  * Icons are decorative (contentDescription = null) and inherit tint from LocalContentColor.
  * 
  * @param name Icon name (e.g., "arrow-right", "check", "settings")
- * @param size Icon size in Dp (use DesignTokens.icon_size_xxx tokens: icon_size_075, icon_size_100, icon_size_125, icon_size_150)
+ * @param size Icon size in Dp (use DesignTokens.icon_size_xxx tokens: iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
  * @param color Optional color override for optical weight compensation (null = inherit)
  * @param modifier Optional modifier for additional styling
  */
@@ -86,7 +86,7 @@ private fun getIconResource(name: String): Int {
  * Preview for Icon component showing different sizes and colors
  * 
  * Demonstrates:
- * - All four size variants (icon_size_075, icon_size_100, icon_size_125, icon_size_150)
+ * - All five size variants (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
  * - Multiple icon types at standard size
  * - Color inheritance with different tint colors
  */
@@ -97,7 +97,7 @@ fun IconPreview() {
         modifier = Modifier.padding(DesignTokens.space_200.dp),
         verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp)
     ) {
-        // Different sizes (space_200=16, space_300=24, space_400=32, space_500=40)
+        // Different sizes (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
         androidx.compose.material3.Text(
             text = "Size Variants",
             style = androidx.compose.material3.MaterialTheme.typography.labelMedium
@@ -106,13 +106,14 @@ fun IconPreview() {
             horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp),
             verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
         ) {
-            Icon(name = "arrow-right", size = DesignTokens.space_200.dp)
-            Icon(name = "arrow-right", size = DesignTokens.space_300.dp)
-            Icon(name = "arrow-right", size = DesignTokens.space_400.dp)
-            Icon(name = "arrow-right", size = DesignTokens.space_500.dp)
+            Icon(name = "arrow-right", size = DesignTokens.icon_size_050)
+            Icon(name = "arrow-right", size = DesignTokens.icon_size_075)
+            Icon(name = "arrow-right", size = DesignTokens.icon_size_100)
+            Icon(name = "arrow-right", size = DesignTokens.icon_size_125)
+            Icon(name = "arrow-right", size = DesignTokens.icon_size_150)
         }
         
-        // Different icons at standard size (space_300=24)
+        // Different icons at standard size (iconSize100 (24.dp))
         androidx.compose.material3.Text(
             text = "Icon Variety",
             style = androidx.compose.material3.MaterialTheme.typography.labelMedium
@@ -120,11 +121,11 @@ fun IconPreview() {
         androidx.compose.foundation.layout.Row(
             horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp)
         ) {
-            Icon(name = "check", size = DesignTokens.space_300.dp)
-            Icon(name = "x", size = DesignTokens.space_300.dp)
-            Icon(name = "plus", size = DesignTokens.space_300.dp)
-            Icon(name = "heart", size = DesignTokens.space_300.dp)
-            Icon(name = "settings", size = DesignTokens.space_300.dp)
+            Icon(name = "check", size = DesignTokens.icon_size_100)
+            Icon(name = "x", size = DesignTokens.icon_size_100)
+            Icon(name = "plus", size = DesignTokens.icon_size_100)
+            Icon(name = "heart", size = DesignTokens.icon_size_100)
+            Icon(name = "settings", size = DesignTokens.icon_size_100)
         }
         
         // Color inheritance (default) - Blue
@@ -138,9 +139,9 @@ fun IconPreview() {
             androidx.compose.foundation.layout.Row(
                 horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp)
             ) {
-                Icon(name = "arrow-right", size = DesignTokens.space_300.dp)
-                Icon(name = "check", size = DesignTokens.space_300.dp)
-                Icon(name = "heart", size = DesignTokens.space_300.dp)
+                Icon(name = "arrow-right", size = DesignTokens.icon_size_100)
+                Icon(name = "check", size = DesignTokens.icon_size_100)
+                Icon(name = "heart", size = DesignTokens.icon_size_100)
             }
         }
         
@@ -152,9 +153,9 @@ fun IconPreview() {
         androidx.compose.foundation.layout.Row(
             horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp)
         ) {
-            Icon(name = "x", size = DesignTokens.space_300.dp, color = Color.Red)
-            Icon(name = "minus", size = DesignTokens.space_300.dp, color = Color.Red)
-            Icon(name = "circle", size = DesignTokens.space_300.dp, color = Color.Red)
+            Icon(name = "x", size = DesignTokens.icon_size_100, color = Color.Red)
+            Icon(name = "minus", size = DesignTokens.icon_size_100, color = Color.Red)
+            Icon(name = "circle", size = DesignTokens.icon_size_100, color = Color.Red)
         }
         
         // Color override (explicit) - Green
@@ -165,9 +166,9 @@ fun IconPreview() {
         androidx.compose.foundation.layout.Row(
             horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp)
         ) {
-            Icon(name = "check", size = DesignTokens.space_300.dp, color = Color.Green)
-            Icon(name = "plus", size = DesignTokens.space_300.dp, color = Color.Green)
-            Icon(name = "arrow-up", size = DesignTokens.space_300.dp, color = Color.Green)
+            Icon(name = "check", size = DesignTokens.icon_size_100, color = Color.Green)
+            Icon(name = "plus", size = DesignTokens.icon_size_100, color = Color.Green)
+            Icon(name = "arrow-up", size = DesignTokens.icon_size_100, color = Color.Green)
         }
     }
 }

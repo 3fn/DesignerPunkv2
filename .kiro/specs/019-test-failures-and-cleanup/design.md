@@ -214,6 +214,103 @@ interface TestFailure {
 
 ---
 
+## Token Unit Consistency Investigation
+
+### Issue Discovery
+
+During Task 3.2 (Icon Android preview cleanup), a critical architectural inconsistency was discovered in token generation patterns:
+
+**Icon Size Tokens** (generated WITH units):
+```kotlin
+// dist/android/DesignTokens.android.kt
+val icon_size_050 = 16.dp
+val icon_size_075 = 20.dp
+val icon_size_100 = 24.dp
+val icon_size_125 = 28.dp
+val icon_size_150 = 32.dp
+```
+
+**Spacing Tokens** (generated WITHOUT units):
+```kotlin
+// dist/android/DesignTokens.android.kt
+const val space_000: Float = 0f
+const val space_050: Float = 4f
+const val space_075: Float = 6f
+const val space_100: Float = 8f
+const val space_200: Float = 16f
+```
+
+### Usage Pattern Inconsistency
+
+This creates two different usage patterns in component code:
+
+```kotlin
+// Icon size tokens - unit included in token
+Icon(
+    size = DesignTokens.icon_size_100  // No .dp needed
+)
+
+// Spacing tokens - unit added at usage
+Box(
+    modifier = Modifier.padding(DesignTokens.space_200.dp)  // .dp required
+)
+```
+
+### Investigation Scope
+
+The investigation will determine:
+
+1. **Token Type Coverage**: Which token types include units and which don't?
+   - Icon sizes (confirmed: WITH units)
+   - Spacing (confirmed: WITHOUT units)
+   - Border widths (unknown)
+   - Radius (unknown)
+   - Elevation (unknown)
+   - Typography (unknown)
+
+2. **Cross-Platform Consistency**: Is this issue Android-specific or system-wide?
+   - Android (confirmed inconsistent)
+   - iOS (unknown)
+   - Web (unknown)
+
+3. **Generation Logic**: Why are different token types generated differently?
+   - Locate token generation source code
+   - Understand decision points in generation logic
+   - Document rationale (if any) for different approaches
+
+4. **Impact Assessment**: How widespread is the inconsistency?
+   - Audit component code for usage patterns
+   - Audit preview code for usage patterns
+   - Audit test code for usage patterns
+   - Estimate refactoring effort for standardization
+
+5. **Standardization Recommendation**: What's the best path forward?
+   - Option A: All tokens WITH units (consistent with icon sizes)
+   - Option B: All tokens WITHOUT units (consistent with spacing)
+   - Document rationale and trade-offs
+   - Provide implementation plan
+
+### Investigation Priority
+
+This investigation takes priority over remaining cleanup tasks (Phase 2C, 2D, and Phase 3) because:
+
+- **Prevents Compounding Debt**: Continuing cleanup with inconsistent patterns makes future standardization exponentially more expensive
+- **Informs Cleanup Approach**: Understanding the correct pattern ensures remaining cleanup work follows standardized approach
+- **Relatively Quick**: Investigation estimated at 2-4 hours, small delay compared to risk of spreading inconsistency
+- **High Impact**: Affects all Android components, potentially iOS and Web as well
+
+### Expected Outcomes
+
+The investigation will produce:
+
+1. **Comprehensive Audit**: Documentation of which token types include units across all platforms
+2. **Root Cause Analysis**: Understanding of why generation patterns differ
+3. **Impact Assessment**: Scope of changes needed for standardization
+4. **Standardization Recommendation**: Clear path forward with rationale and trade-offs
+5. **Implementation Plan**: Detailed steps for standardization (if needed)
+
+---
+
 ## Test Failure Analysis
 
 ### Current Test Failures by Category
@@ -464,7 +561,36 @@ Performance test timeouts (release analysis tests taking >5 seconds) are a separ
 - **Argument**: "We should fix all test failures in this spec"
 - **Response**: Performance optimization is a distinct problem requiring different approach. Documenting issues enables focused optimization work without derailing token compliance cleanup.
 
-### Decision 4: Container Android TokenMapping Complexity
+### Decision 4: Token Unit Consistency Investigation Priority
+
+**Options Considered**:
+1. Continue with remaining cleanup tasks and investigate later
+2. Pause cleanup work and investigate token unit consistency now
+3. Create separate spec for token generation investigation
+
+**Decision**: Pause cleanup work and investigate token unit consistency now
+
+**Rationale**:
+During Task 3.2 (Icon Android preview cleanup), a critical architectural inconsistency was discovered: icon size tokens are generated WITH units (`val icon_size_100 = 24.dp`) while spacing tokens are generated WITHOUT units (`const val space_200: Float = 16f`). This creates inconsistent usage patterns across the codebase (`DesignTokens.icon_size_100` vs `DesignTokens.space_200.dp`).
+
+Continuing cleanup work without understanding this inconsistency risks:
+- **Compounding Technical Debt**: Every component updated with inconsistent patterns makes future standardization harder
+- **Developer Confusion**: Inconsistent patterns create cognitive load and increase error rates
+- **Maintenance Burden**: Having to remember "icon tokens include units, spacing tokens don't" is unsustainable
+- **Cross-Platform Implications**: If Android has this issue, iOS and Web may have similar inconsistencies
+
+The investigation should complete before continuing with Phase 2C (TextInputField), 2D (Container), and Phase 3 (Test Updates) to ensure cleanup work follows a consistent, standardized approach.
+
+**Trade-offs**:
+- ✅ **Gained**: Prevent building on inconsistent foundation, inform all remaining cleanup work, reduce future refactoring cost
+- ❌ **Lost**: Slight delay in completing remaining cleanup tasks
+- ⚠️ **Risk**: Investigation might reveal larger architectural issues requiring separate spec
+
+**Counter-Arguments**:
+- **Argument**: "We should finish cleanup first, then investigate"
+- **Response**: The risk of spreading inconsistent patterns through remaining cleanup work (TextInputField, Container, tests) outweighs the delay. Investigation is relatively quick (2-4 hours) and prevents compounding technical debt.
+
+### Decision 5: Container Android TokenMapping Complexity
 
 **Options Considered**:
 1. Replace all 44 violations in one task

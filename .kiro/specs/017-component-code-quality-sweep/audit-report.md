@@ -2,18 +2,18 @@
 
 **Date**: 2025-12-11
 **Total Components Audited**: 28
-**Total Violations Found**: 39
+**Total Violations Found**: 55
 
 ## Violations by Type
 
 - **Color**: 3
-- **Spacing**: 33
+- **Spacing**: 49
 - **Motion**: 3
 - **Typography**: 0
 
 ## Violations by Priority
 
-- **High** (Colors, Spacing): 36
+- **High** (Colors, Spacing): 52
 - **Medium** (Motion): 3
 - **Low** (Edge Cases): 0
 
@@ -586,7 +586,231 @@ private val radius200: Dp = DesignTokens.radius_200.dp
 ### Icon (android)
 
 **File**: `/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/src/components/core/Icon/platforms/android/Icon.android.kt`
-**Violations**: 0
+**Violations**: 16
+
+#### Line 23: spacing (high priority)
+
+**Current Value**: `13.dp`
+**Suggested Token**: `DesignTokens.space_grouped_loose.dp (No exact match for 13. Closest: space.grouped.loose (12))`
+
+**Context**:
+```
+ * 
+ * @param name Icon name (e.g., "arrow-right", "check", "settings")
+ * @param size Icon size in Dp (use DesignTokens.icon_size_xxx tokens: iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
+ * @param color Optional color override for optical weight compensation (null = inherit)
+ * @param modifier Optional modifier for additional styling
+```
+
+#### Line 23: spacing (high priority)
+
+**Current Value**: `18.dp`
+**Suggested Token**: `DesignTokens.space_related_normal.dp (No exact match for 18. Closest: space.related.normal (16))`
+
+**Context**:
+```
+ * 
+ * @param name Icon name (e.g., "arrow-right", "check", "settings")
+ * @param size Icon size in Dp (use DesignTokens.icon_size_xxx tokens: iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
+ * @param color Optional color override for optical weight compensation (null = inherit)
+ * @param modifier Optional modifier for additional styling
+```
+
+#### Line 23: spacing (high priority)
+
+**Current Value**: `24.dp`
+**Suggested Token**: `DesignTokens.space_related_loose.dp`
+
+**Context**:
+```
+ * 
+ * @param name Icon name (e.g., "arrow-right", "check", "settings")
+ * @param size Icon size in Dp (use DesignTokens.icon_size_xxx tokens: iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
+ * @param color Optional color override for optical weight compensation (null = inherit)
+ * @param modifier Optional modifier for additional styling
+```
+
+#### Line 23: spacing (high priority)
+
+**Current Value**: `32.dp`
+**Suggested Token**: `DesignTokens.space_separated_loose.dp`
+
+**Context**:
+```
+ * 
+ * @param name Icon name (e.g., "arrow-right", "check", "settings")
+ * @param size Icon size in Dp (use DesignTokens.icon_size_xxx tokens: iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
+ * @param color Optional color override for optical weight compensation (null = inherit)
+ * @param modifier Optional modifier for additional styling
+```
+
+#### Line 23: spacing (high priority)
+
+**Current Value**: `40.dp`
+**Suggested Token**: `DesignTokens.space_sectioned_normal.dp`
+
+**Context**:
+```
+ * 
+ * @param name Icon name (e.g., "arrow-right", "check", "settings")
+ * @param size Icon size in Dp (use DesignTokens.icon_size_xxx tokens: iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
+ * @param color Optional color override for optical weight compensation (null = inherit)
+ * @param modifier Optional modifier for additional styling
+```
+
+#### Line 89: spacing (high priority)
+
+**Current Value**: `13.dp`
+**Suggested Token**: `DesignTokens.space_grouped_loose.dp (No exact match for 13. Closest: space.grouped.loose (12))`
+
+**Context**:
+```
+ * 
+ * Demonstrates:
+ * - All five size variants (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
+ * - Multiple icon types at standard size
+ * - Color inheritance with different tint colors
+```
+
+#### Line 89: spacing (high priority)
+
+**Current Value**: `18.dp`
+**Suggested Token**: `DesignTokens.space_related_normal.dp (No exact match for 18. Closest: space.related.normal (16))`
+
+**Context**:
+```
+ * 
+ * Demonstrates:
+ * - All five size variants (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
+ * - Multiple icon types at standard size
+ * - Color inheritance with different tint colors
+```
+
+#### Line 89: spacing (high priority)
+
+**Current Value**: `24.dp`
+**Suggested Token**: `DesignTokens.space_related_loose.dp`
+
+**Context**:
+```
+ * 
+ * Demonstrates:
+ * - All five size variants (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
+ * - Multiple icon types at standard size
+ * - Color inheritance with different tint colors
+```
+
+#### Line 89: spacing (high priority)
+
+**Current Value**: `32.dp`
+**Suggested Token**: `DesignTokens.space_separated_loose.dp`
+
+**Context**:
+```
+ * 
+ * Demonstrates:
+ * - All five size variants (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
+ * - Multiple icon types at standard size
+ * - Color inheritance with different tint colors
+```
+
+#### Line 89: spacing (high priority)
+
+**Current Value**: `40.dp`
+**Suggested Token**: `DesignTokens.space_sectioned_normal.dp`
+
+**Context**:
+```
+ * 
+ * Demonstrates:
+ * - All five size variants (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
+ * - Multiple icon types at standard size
+ * - Color inheritance with different tint colors
+```
+
+#### Line 100: spacing (high priority)
+
+**Current Value**: `13.dp`
+**Suggested Token**: `DesignTokens.space_grouped_loose.dp (No exact match for 13. Closest: space.grouped.loose (12))`
+
+**Context**:
+```
+        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp)
+    ) {
+        // Different sizes (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
+        androidx.compose.material3.Text(
+            text = "Size Variants",
+```
+
+#### Line 100: spacing (high priority)
+
+**Current Value**: `18.dp`
+**Suggested Token**: `DesignTokens.space_related_normal.dp (No exact match for 18. Closest: space.related.normal (16))`
+
+**Context**:
+```
+        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp)
+    ) {
+        // Different sizes (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
+        androidx.compose.material3.Text(
+            text = "Size Variants",
+```
+
+#### Line 100: spacing (high priority)
+
+**Current Value**: `24.dp`
+**Suggested Token**: `DesignTokens.space_related_loose.dp`
+
+**Context**:
+```
+        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp)
+    ) {
+        // Different sizes (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
+        androidx.compose.material3.Text(
+            text = "Size Variants",
+```
+
+#### Line 100: spacing (high priority)
+
+**Current Value**: `32.dp`
+**Suggested Token**: `DesignTokens.space_separated_loose.dp`
+
+**Context**:
+```
+        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp)
+    ) {
+        // Different sizes (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
+        androidx.compose.material3.Text(
+            text = "Size Variants",
+```
+
+#### Line 100: spacing (high priority)
+
+**Current Value**: `40.dp`
+**Suggested Token**: `DesignTokens.space_sectioned_normal.dp`
+
+**Context**:
+```
+        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp)
+    ) {
+        // Different sizes (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
+        androidx.compose.material3.Text(
+            text = "Size Variants",
+```
+
+#### Line 116: spacing (high priority)
+
+**Current Value**: `24.dp`
+**Suggested Token**: `DesignTokens.space_related_loose.dp`
+
+**Context**:
+```
+        }
+        
+        // Different icons at standard size (iconSize100 (24.dp))
+        androidx.compose.material3.Text(
+            text = "Icon Variety",
+```
 
 ### TextInputField (web)
 
