@@ -564,6 +564,61 @@ export interface ButtonProps {
 
 **For detailed guidance**: See Container component README "Nested Containers" section for visual examples, token value reference table, platform-specific considerations, and common use cases.
 
+### ❌ Hard-Coded Fallback Values
+
+**Problem**: Using fallback values masks token system issues and prevents early detection of problems.
+
+**Anti-Pattern Examples**:
+
+```typescript
+// DON'T: Silent fallback to hard-coded value
+const duration = this.getAttribute('duration') || '250ms';
+const spacing = tokenValue || 8;
+const color = getToken('color.primary') ?? '#3B82F6';
+```
+
+**Why This is Wrong**:
+- Masks missing tokens - component appears to work but token system is broken
+- Prevents early detection - issues discovered in production instead of development
+- Inconsistent behavior - some components use tokens, others use fallbacks
+- Maintenance burden - fallback values can drift from token values
+
+**Correct Approach**:
+
+```typescript
+// DO: Fail loudly when token is missing
+const duration = this.getAttribute('duration');
+if (!duration) {
+  throw new Error('Component: duration attribute is required');
+}
+
+// Or for non-critical values
+const spacing = tokenValue;
+if (!spacing) {
+  console.error('Component: spacing token missing, layout may be incorrect');
+}
+```
+
+**When Fallback is Genuinely Optional**:
+
+```typescript
+// DO: Explicit optional handling with documentation
+/**
+ * Helper text (optional)
+ * Provides additional context below the input
+ */
+const helperText = this.getAttribute('helper-text') || undefined;
+if (helperText !== undefined) {
+  // Render helper text
+}
+```
+
+**Benefits of Failing Loudly**:
+- ✅ Immediate detection of token system issues
+- ✅ Clear error messages guide developers to fix
+- ✅ Prevents silent failures in production
+- ✅ Maintains token system integrity
+
 ---
 
 ## Validation Checklist
