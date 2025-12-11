@@ -20,7 +20,7 @@ import com.designerpunk.tokens.DesignTokens
  * Icons are decorative (contentDescription = null) and inherit tint from LocalContentColor.
  * 
  * @param name Icon name (e.g., "arrow-right", "check", "settings")
- * @param size Icon size in Dp (use DesignTokens.icon_size_xxx tokens: iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
+ * @param size Icon size in Dp (use DesignTokens.icon_size_050 through icon_size_150 tokens)
  * @param color Optional color override for optical weight compensation (null = inherit)
  * @param modifier Optional modifier for additional styling
  */
@@ -86,7 +86,7 @@ private fun getIconResource(name: String): Int {
  * Preview for Icon component showing different sizes and colors
  * 
  * Demonstrates:
- * - All five size variants (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
+ * - All five size variants (icon_size_050 through icon_size_150)
  * - Multiple icon types at standard size
  * - Color inheritance with different tint colors
  */
@@ -97,7 +97,7 @@ fun IconPreview() {
         modifier = Modifier.padding(DesignTokens.space_200.dp),
         verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp)
     ) {
-        // Different sizes (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
+        // Different sizes (icon_size_050 through icon_size_150)
         androidx.compose.material3.Text(
             text = "Size Variants",
             style = androidx.compose.material3.MaterialTheme.typography.labelMedium
@@ -113,7 +113,7 @@ fun IconPreview() {
             Icon(name = "arrow-right", size = DesignTokens.icon_size_150)
         }
         
-        // Different icons at standard size (iconSize100 (24.dp))
+        // Different icons at standard size (icon_size_100)
         androidx.compose.material3.Text(
             text = "Icon Variety",
             style = androidx.compose.material3.MaterialTheme.typography.labelMedium
