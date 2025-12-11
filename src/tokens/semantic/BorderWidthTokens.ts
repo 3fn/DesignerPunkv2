@@ -19,6 +19,29 @@ interface BorderWidthSemanticToken {
 }
 
 /**
+ * No border width - removes borders entirely.
+ * 
+ * References: borderWidth000 (0) - Note: This primitive token needs to be added
+ * 
+ * Use cases:
+ * - Borderless cards: Cards without visible borders
+ * - Borderless inputs: Input fields without borders (e.g., underline-only inputs)
+ * - Removing borders: Explicitly removing borders from elements
+ * - Reset states: Resetting border widths to none
+ * 
+ * Visual weight: None (no border)
+ * 
+ * Rationale: Explicit "none" token improves search/discoverability, communicates intent
+ * (removing border vs. forgetting to add one), and provides consistent maintenance pattern
+ * 
+ * Platform output:
+ * - Web: 0px
+ * - iOS: 0pt
+ * - Android: 0dp
+ */
+export const borderNone = { value: 'borderWidth000' } as BorderWidthSemanticToken;
+
+/**
  * Default border width for standard elements.
  * 
  * References: borderWidth100 (1)
@@ -87,6 +110,7 @@ export const borderHeavy = { value: 'borderWidth400' } as BorderWidthSemanticTok
  * Semantic border width tokens object for registry integration.
  */
 export const SemanticBorderWidthTokens = {
+  borderNone,
   borderDefault,
   borderEmphasis,
   borderHeavy,
@@ -102,27 +126,32 @@ export type SemanticBorderWidthTokenKey = keyof typeof SemanticBorderWidthTokens
  * 
  * When applying border widths:
  * 
- * 1. Standard borders (cards, inputs at rest, buttons at rest, dividers)?
+ * 1. No border (borderless elements, removing borders)?
+ *    → Use borderNone
+ *    → Explicitly communicates intent to remove border
+ *    → Better than 0 for search/discoverability and maintenance
+ * 
+ * 2. Standard borders (cards, inputs at rest, buttons at rest, dividers)?
  *    → Use borderDefault
  *    → Provides neutral, standard visual weight
  * 
- * 2. Emphasized states (focus, selection, active)?
+ * 3. Emphasized states (focus, selection, active)?
  *    → Use borderEmphasis
  *    → Draws attention without overwhelming
  *    → For web focus: Use with outline property, not border
  * 
- * 3. Strong visual weight (rare, special cases)?
+ * 4. Strong visual weight (rare, special cases)?
  *    → Use borderHeavy
  *    → Consider if borderEmphasis would be sufficient first
  *    → Use sparingly to avoid overwhelming interface
  * 
- * 4. Platform-specific focus indicators?
+ * 5. Platform-specific focus indicators?
  *    → Web: Use borderEmphasis with outline property
  *    → iOS: Use system-provided focus indicators
  *    → Android: Use ripple effects and elevation changes
  * 
- * 5. Component-specific needs?
- *    → Prioritize semantic tokens (borderDefault, borderEmphasis, borderHeavy)
+ * 6. Component-specific needs?
+ *    → Prioritize semantic tokens (borderNone, borderDefault, borderEmphasis, borderHeavy)
  *    → If semantic tokens don't meet requirements, use primitive tokens
  *    → If primitive tokens don't meet requirements, request component-specific token
  */

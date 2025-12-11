@@ -191,6 +191,11 @@ struct ButtonCTA: View {
         }
         .buttonStyle(PlainButtonStyle())
         // Requirement 17.2: Scale transform to 0.97 (97%) on press with 100ms ease-out animation
+        // Component-specific press animation values (iOS platform pattern)
+        // Scale: 0.97 (3% reduction for tactile feedback)
+        // Duration: 0.1s (100ms for immediate response)
+        // Easing: easeOut (snappy deceleration)
+        // Not tokenized: Platform-specific interaction pattern used only by ButtonCTA
         .scaleEffect(isPressed ? 0.97 : 1.0)
         .animation(.easeOut(duration: 0.1), value: isPressed)
         // Track pressed state for scale transform
@@ -281,20 +286,20 @@ struct ButtonCTA: View {
     /// Requirements: 13.1-13.4
     /// 
     /// Implements WCAG 2.1 AA touch target requirements:
-    /// - Small (40px visual): Extended to 44px touch target via .frame(minHeight: 44)
-    /// - Medium (48px): Meets 44px minimum naturally
-    /// - Large (56px): Exceeds 44px minimum
+    /// - Small (40px visual): Extended to 44px touch target via .frame(minHeight: tapAreaMinimum)
+    /// - Medium (48px): Meets 44px minimum naturally via tapAreaRecommended
+    /// - Large (56px): Exceeds 44px minimum via tapAreaComfortable
     /// 
     /// The .frame(minHeight:) modifier maintains visual height while providing
     /// the required 44px interactive area for small buttons.
     private var touchTargetHeight: CGFloat {
         switch size {
         case .small:
-            return 44 // Extends from 40px visual to 44px touch target (Requirement 13.1, 13.3, 13.4)
+            return tapAreaMinimum // Extends from 40px visual to 44px touch target (Requirement 13.1, 13.3, 13.4)
         case .medium:
-            return 48 // Meets 44px minimum (Requirement 13.2)
+            return tapAreaRecommended // Meets 44px minimum (Requirement 13.2)
         case .large:
-            return 56 // Exceeds 44px minimum (Requirement 13.2)
+            return tapAreaComfortable // Exceeds 44px minimum (Requirement 13.2)
         }
     }
     
@@ -390,6 +395,11 @@ struct ButtonCTA: View {
 private let colorPrimary = Color(red: 103/255, green: 80/255, blue: 164/255) // purple300 - #6750A4
 private let colorBackground = Color(red: 255/255, green: 255/255, blue: 255/255) // white100 - #FFFFFF
 private let white100 = Color(red: 255/255, green: 255/255, blue: 255/255) // white100 - #FFFFFF (primitive token for text on primary)
+
+// Accessibility tokens - Tap area tokens from TapAreaTokens.ts
+private let tapAreaMinimum: CGFloat = 44 // tapAreaMinimum - WCAG 2.1 AA minimum (44pt)
+private let tapAreaRecommended: CGFloat = 48 // tapAreaRecommended - Enhanced usability (48pt)
+private let tapAreaComfortable: CGFloat = 56 // tapAreaComfortable - Comfortable interaction (56pt)
 
 /**
  * SwiftUI preview for ButtonCTA component.

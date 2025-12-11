@@ -165,14 +165,28 @@ export const shadowOffsetX: Record<string, PrimitiveToken> = {
 /**
  * Shadow offset Y tokens (vertical direction)
  * 
- * All Y offsets are positive (shadows fall downward).
+ * All Y offsets are positive (shadows fall downward), except 000 which is zero.
  * Values scale with depth:
+ * - 000: No vertical offset (flat surface, no shadow)
  * - 100: Depth 100 / Noon - short shadow
  * - 200: Depth 200 - medium shadow
  * - 300: Morning/Dusk - medium-long shadow
  * - 400: Depth 300 / Sunrise/Sunset - long shadow
  */
 export const shadowOffsetY: Record<string, PrimitiveToken> = {
+  '000': {
+    name: 'shadowOffsetY.000',
+    category: TokenCategory.SHADOW,
+    baseValue: 0,
+    familyBaseValue: SHADOW_OFFSET_BASE_VALUE,
+    description: 'No vertical offset - flat surface with no shadow',
+    mathematicalRelationship: 'base × 0 = 4 × 0 = 0',
+    baselineGridAlignment: true, // 0 is baseline grid aligned
+    isStrategicFlexibility: false,
+    isPrecisionTargeted: false,
+    platforms: generateShadowOffsetPlatformValues(0)
+  },
+
   '100': {
     name: 'shadowOffsetY.100',
     category: TokenCategory.SHADOW,

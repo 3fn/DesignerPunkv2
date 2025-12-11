@@ -42,6 +42,31 @@ interface ShadowToken {
  * - android: Use elevation values (Material Design)
  */
 export const shadowTokens: Record<string, ShadowToken> = {
+  'shadow.none': {
+    name: 'shadow.none',
+    primitiveReferences: {
+      offsetX: 'shadowOffsetX.000',
+      offsetY: 'shadowOffsetY.000',
+      blur: 'shadowBlurNone',
+      opacity: 'shadowOpacityNone',
+      color: 'shadowBlack100'
+    },
+    platforms: {
+      web: {
+        // CSS box-shadow: none
+      },
+      ios: {
+        // SwiftUI shadow: none
+      },
+      android: {
+        elevation: 0  // Material Design elevation (dp)
+      }
+    },
+    category: SemanticCategory.SHADOW,
+    context: 'No shadow - flat surface',
+    description: 'No shadow - flat surface with no depth. Rationale: Explicit "none" token improves search/discoverability, communicates intent (flat surface vs. forgetting shadow), and provides consistent maintenance pattern'
+  },
+
   'shadow.container': {
     name: 'shadow.container',
     primitiveReferences: {

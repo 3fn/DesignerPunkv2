@@ -48,7 +48,8 @@ export interface ElevationToken {
 /**
  * Elevation tokens for Android Material Design
  * 
- * Six semantic levels following Material Design elevation scale:
+ * Seven semantic levels following Material Design elevation scale:
+ * - none: 0dp (no elevation, flat surface)
  * - container: 8dp (base container elevation)
  * - navigation: 4dp (persistent navigation elements)
  * - dropdown: 8dp (temporary overlay content)
@@ -59,6 +60,16 @@ export interface ElevationToken {
  * Each token includes shadowReference to align with cross-platform shadow tokens.
  */
 export const elevationTokens: Record<string, ElevationToken> = {
+  'elevation.none': {
+    name: 'elevation.none',
+    value: 0,  // dp
+    platforms: ['android'],
+    category: SemanticCategory.LAYERING,
+    shadowReference: 'shadow.none',
+    context: 'No elevation',
+    description: 'No elevation - flat surface with no shadow (handles z-order and shadow removal). Rationale: Explicit "none" token improves search/discoverability, communicates intent (flat surface vs. forgetting elevation), and provides consistent maintenance pattern'
+  },
+
   'elevation.container': {
     name: 'elevation.container',
     value: 8,  // dp

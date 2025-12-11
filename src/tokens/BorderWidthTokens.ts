@@ -28,6 +28,19 @@ function generateBorderWidthPlatformValues(baseValue: number): PlatformValues {
  * Border width tokens with doubling progression
  */
 export const borderWidthTokens: Record<string, PrimitiveToken> = {
+  borderWidth000: {
+    name: 'borderWidth000',
+    category: TokenCategory.BORDER_WIDTH,
+    baseValue: 0,
+    familyBaseValue: BORDER_WIDTH_BASE_VALUE,
+    description: 'No border width - 0x base value. Used for borderless elements, removing borders.',
+    mathematicalRelationship: 'base × 0 = 1 × 0 = 0',
+    baselineGridAlignment: false, // Border widths don't require baseline grid alignment
+    isStrategicFlexibility: false,
+    isPrecisionTargeted: false,
+    platforms: generateBorderWidthPlatformValues(0)
+  },
+
   borderWidth100: {
     name: 'borderWidth100',
     category: TokenCategory.BORDER_WIDTH,

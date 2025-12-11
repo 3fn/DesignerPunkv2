@@ -16,6 +16,7 @@ export * from './ColorTokens';
 export * from './SpacingTokens';
 export * from './TypographyTokens';
 export * from './BorderWidthTokens';
+export * from './RadiusTokens';
 export * from './ShadowTokens';
 export * from './OpacityTokens';
 export * from './BlendTokens';
@@ -59,10 +60,21 @@ export {
 
 export {
   SemanticBorderWidthTokens,
+  borderNone,
   borderDefault,
   borderEmphasis,
   borderHeavy
 } from './BorderWidthTokens';
+
+export {
+  SemanticRadiusTokens,
+  radiusNone,
+  radiusSubtle,
+  radiusSmall,
+  radiusNormal,
+  radiusLarge,
+  radiusFull
+} from './RadiusTokens';
 
 export {
   opacityTokens,

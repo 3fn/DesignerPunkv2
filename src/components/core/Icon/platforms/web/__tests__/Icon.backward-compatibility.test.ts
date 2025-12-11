@@ -220,7 +220,9 @@ describe('Icon Backward Compatibility', () => {
       
       // Use explicit icon size tokens instead of fallback pattern
       // ButtonCTA should use iconSize100 (24) for small/medium, iconSize125 (32) for large
-      const iconSize: IconSize = buttonSize === 'large' ? 32 : 24;
+      const iconSize100 = 24; // icon.size100 token value
+      const iconSize125 = 32; // icon.size125 token value
+      const iconSize: IconSize = buttonSize === 'large' ? iconSize125 : iconSize100;
       
       const iconHTML = createIcon({ 
         name: buttonIcon as any,

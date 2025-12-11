@@ -27,6 +27,19 @@ function generateShadowOpacityPlatformValues(baseValue: number): PlatformValues 
 }
 
 export const shadowOpacityTokens: Record<string, PrimitiveToken> = {
+  shadowOpacityNone: {
+    name: 'shadowOpacityNone',
+    category: TokenCategory.SHADOW,
+    baseValue: 0,
+    familyBaseValue: SHADOW_OPACITY_BASE_VALUE,
+    description: 'No shadow opacity - flat surface with no shadow',
+    mathematicalRelationship: 'base × 0 = 0.3 × 0 = 0',
+    baselineGridAlignment: false, // Opacity is unitless
+    isStrategicFlexibility: false,
+    isPrecisionTargeted: false,
+    platforms: generateShadowOpacityPlatformValues(0)
+  },
+
   shadowOpacityHard: {
     name: 'shadowOpacityHard',
     category: TokenCategory.SHADOW,

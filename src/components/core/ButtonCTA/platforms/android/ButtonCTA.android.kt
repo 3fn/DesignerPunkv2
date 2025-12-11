@@ -277,7 +277,7 @@ private fun getSizeConfig(size: ButtonSize): SizeConfig {
     return when (size) {
         ButtonSize.SMALL -> SizeConfig(
             height = 40,
-            touchTargetHeight = 44, // Requirement 13.1: Extends to 44dp for accessibility
+            touchTargetHeight = DesignTokens.tap_area_minimum.toInt(), // Requirement 13.1: Extends to 44dp for accessibility (tapAreaMinimum)
             typography = TextStyle(
                 fontSize = DesignTokens.font_size_100.sp,
                 fontWeight = FontWeight(DesignTokens.font_weight_400.toInt()),

@@ -32,6 +32,14 @@ export const layoutSpacing = {
    */
   grouped: {
     /**
+     * No spacing - elements directly adjacent with no gap
+     * Example: Removing spacing between tightly coupled elements, resetting margins
+     * Rationale: Explicit "none" token improves search/discoverability, communicates intent,
+     * and provides consistent maintenance pattern across spacing contexts
+     */
+    none: { value: 'space000' } as SpacingSemanticToken,
+
+    /**
      * Extremely tight grouping for metadata, labels, and tightly coupled elements
      * Example: Post metadata, icon-label pairs with minimal separation
      */
@@ -61,6 +69,14 @@ export const layoutSpacing = {
    */
   related: {
     /**
+     * No spacing - elements directly adjacent with no gap
+     * Example: Removing spacing between related sections, resetting margins
+     * Rationale: Explicit "none" token improves search/discoverability, communicates intent,
+     * and provides consistent maintenance pattern across spacing contexts
+     */
+    none: { value: 'space000' } as SpacingSemanticToken,
+
+    /**
      * Minimal related separation for connected but distinct elements
      * Example: Different form sections with minimal separation
      */
@@ -83,6 +99,14 @@ export const layoutSpacing = {
    * Separated - Elements that are independent (clear separation)
    */
   separated: {
+    /**
+     * No spacing - elements directly adjacent with no gap
+     * Example: Removing spacing between independent sections, resetting margins
+     * Rationale: Explicit "none" token improves search/discoverability, communicates intent,
+     * and provides consistent maintenance pattern across spacing contexts
+     */
+    none: { value: 'space000' } as SpacingSemanticToken,
+
     /**
      * Minimal separated distinction for independent elements
      * Example: Dashboard widgets with minimal separation
@@ -107,6 +131,14 @@ export const layoutSpacing = {
    */
   sectioned: {
     /**
+     * No spacing - sections directly adjacent with no gap
+     * Example: Removing spacing between major sections, resetting margins
+     * Rationale: Explicit "none" token improves search/discoverability, communicates intent,
+     * and provides consistent maintenance pattern across spacing contexts
+     */
+    none: { value: 'space000' } as SpacingSemanticToken,
+
+    /**
      * Minimal section boundary for major page sections
      * Example: Page sections with minimal boundary
      */
@@ -130,6 +162,7 @@ export const layoutSpacing = {
  * Inset Spacing Tokens (Internal Spacing)
  * 
  * Numeric naming exposes mathematical relationships:
+ * - none: 0px (no spacing)
  * - 050: 4px (0.5 × base)
  * - 100: 8px (1 × base)  
  * - 150: 12px (1.5 × base)
@@ -140,6 +173,15 @@ export const layoutSpacing = {
  * Use for padding within components and containers.
  */
 export const insetSpacing = {
+  /**
+   * none - No internal spacing (0px)
+   * Mathematical relationship: 0 × base (space000)
+   * Example: Removing padding from containers, resetting insets
+   * Rationale: Explicit "none" token improves search/discoverability, communicates intent,
+   * and provides consistent maintenance pattern across spacing contexts
+   */
+  none: { value: 'space000' } as SpacingSemanticToken,
+
   /**
    * 050 - Minimal internal spacing (4px)
    * Mathematical relationship: 0.5 × base (space100)
@@ -202,14 +244,18 @@ export const spacingTokens = {
  * 1. Between elements (margins, gaps)?
  *    → Use layout tokens: grouped / related / separated / sectioned
  *    → Choose based on relationship hierarchy + desired density
+ *    → Use .none variant to explicitly remove spacing (better than 0 for search/intent)
  * 
  * 2. Inside containers (padding)?
- *    → Use inset tokens: 050 / 100 / 150 / 200 / 300 / 400
+ *    → Use inset tokens: none / 050 / 100 / 150 / 200 / 300 / 400
  *    → Choose based on desired interface density
  *    → Numeric names expose mathematical relationships (150 = 1.5 × base)
+ *    → Use .none to explicitly remove padding (better than 0 for search/intent)
  * 
  * 3. Removing spacing (resets)?
- *    → Use 0 directly (not a token)
+ *    → Use .none tokens (grouped.none, separated.none, inset.none)
+ *    → Rationale: Explicit "none" tokens improve search/discoverability, communicate intent,
+ *      and provide consistent maintenance pattern
  * 
  * 4. Component-specific needs?
  *    → Within the context of the illustrated spec, prioritize using semantic tokens;

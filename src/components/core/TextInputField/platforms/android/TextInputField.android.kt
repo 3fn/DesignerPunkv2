@@ -345,17 +345,17 @@ fun TextInputField(
                 when {
                     showErrorIcon -> Icon(
                         name = "x",
-                        size = 24.dp,
+                        size = DesignTokens.icon_size_100.value.dp, // icon.size100 (24dp) - standard size for bodyMd/labelMd/input typography
                         color = colorError
                     )
                     showSuccessIcon -> Icon(
                         name = "check",
-                        size = 24.dp,
+                        size = DesignTokens.icon_size_100.value.dp, // icon.size100 (24dp) - standard size for bodyMd/labelMd/input typography
                         color = colorSuccessStrong
                     )
                     showInfoIconVisible -> Icon(
                         name = "info",
-                        size = 24.dp,
+                        size = DesignTokens.icon_size_100.value.dp, // icon.size100 (24dp) - standard size for bodyMd/labelMd/input typography
                         color = colorTextMuted
                     )
                 }

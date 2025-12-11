@@ -36,6 +36,7 @@ function generateShadowBlurPlatformValues(baseValue: number): PlatformValues {
  * Shadow blur tokens
  * 
  * Quality-based tokens define edge characteristics:
+ * - None: No blur (flat surface, no shadow)
  * - Hard: Sharp, defined edges for strong shadows
  * - Moderate: Balanced definition for standard shadows
  * - Soft: Diffuse, gentle edges for subtle shadows
@@ -45,6 +46,19 @@ function generateShadowBlurPlatformValues(baseValue: number): PlatformValues {
  * - Depth300: Maximum blur for floating elements
  */
 export const shadowBlur: Record<string, PrimitiveToken> = {
+  shadowBlurNone: {
+    name: 'shadowBlurNone',
+    category: TokenCategory.SHADOW,
+    baseValue: 0,
+    familyBaseValue: SHADOW_BLUR_BASE_VALUE,
+    description: 'No shadow blur - flat surface with no shadow',
+    mathematicalRelationship: 'base × 0 = 4 × 0 = 0',
+    baselineGridAlignment: true, // 0 is baseline grid aligned
+    isStrategicFlexibility: false,
+    isPrecisionTargeted: false,
+    platforms: generateShadowBlurPlatformValues(0)
+  },
+
   shadowBlurHard: {
     name: 'shadowBlurHard',
     category: TokenCategory.SHADOW,

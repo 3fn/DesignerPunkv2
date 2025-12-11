@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
  * 
  * @example
  * ```kotlin
- * mapPaddingToDp(PaddingValue.P200) // Returns 16.dp
+ * mapPaddingToDp(PaddingValue.P200) // Returns spaceInset200
  * mapPaddingToDp(PaddingValue.None) // Returns 0.dp
  * ```
  * 
@@ -68,7 +68,7 @@ fun mapPaddingToDp(padding: PaddingValue): Dp {
  * 
  * @example
  * ```kotlin
- * mapBorderToWidth(BorderValue.Default) // Returns 1.dp
+ * mapBorderToWidth(BorderValue.Default) // Returns borderDefault
  * mapBorderToWidth(BorderValue.None) // Returns 0.dp
  * ```
  * 
@@ -115,7 +115,7 @@ fun getBorderColor(): Color {
  * 
  * @example
  * ```kotlin
- * getRoundedCornerShape(BorderRadiusValue.Normal) // Returns RoundedCornerShape(8.dp)
+ * getRoundedCornerShape(BorderRadiusValue.Normal) // Returns RoundedCornerShape(radius100)
  * getRoundedCornerShape(BorderRadiusValue.None) // Returns RoundedCornerShape(0.dp)
  * ```
  * 
@@ -193,8 +193,8 @@ fun resolveColorToken(tokenName: String?): Color {
  * 
  * @example
  * ```kotlin
- * mapShadowToElevation("shadow.container") // Returns 8.dp
- * mapShadowToElevation("shadow.modal") // Returns 16.dp
+ * mapShadowToElevation("shadow.container") // Returns shadowContainerElevation
+ * mapShadowToElevation("shadow.modal") // Returns shadowModalElevation
  * mapShadowToElevation(null) // Returns 0.dp
  * ```
  * 
@@ -248,8 +248,8 @@ fun mapShadowToElevation(tokenName: String?): Dp {
  * 
  * @example
  * ```kotlin
- * resolveOpacityToken("opacity.subtle") // Returns 0.9f
- * resolveOpacityToken("opacity.ghost") // Returns 0.3f
+ * resolveOpacityToken("opacity.subtle") // Returns opacitySubtle
+ * resolveOpacityToken("opacity.ghost") // Returns opacityGhost
  * resolveOpacityToken(null) // Returns 1.0f
  * ```
  * 
@@ -292,8 +292,8 @@ fun resolveOpacityToken(tokenName: String?): Float {
  * 
  * @example
  * ```kotlin
- * mapLayeringToElevation(LayeringValue.Modal) // Returns 16.dp
- * mapLayeringToElevation(LayeringValue.Navigation) // Returns 4.dp
+ * mapLayeringToElevation(LayeringValue.Modal) // Returns elevationModal
+ * mapLayeringToElevation(LayeringValue.Navigation) // Returns elevationNavigation
  * mapLayeringToElevation(null) // Returns 0.dp
  * ```
  * 

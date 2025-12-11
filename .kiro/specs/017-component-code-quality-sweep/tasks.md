@@ -446,7 +446,7 @@ This implementation plan systematically replaces hard-coded values with design t
     - Include benefits of failing loudly
     - _Requirements: 9.2_
 
-- [ ] 8. Final Validation and Documentation
+- [x] 8. Final Validation and Documentation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -471,7 +471,7 @@ This implementation plan systematically replaces hard-coded values with design t
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 8 Complete: Final Validation and Documentation"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 8.1 Run final audit
+  - [x] 8.1 Run final audit
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run audit script on all components
@@ -479,7 +479,65 @@ This implementation plan systematically replaces hard-coded values with design t
     - Document any legitimate exceptions with rationale
     - _Requirements: 2.1, 8.2_
 
-  - [ ] 8.2 Verify all component READMEs updated
+  - [x] 8.2 Add semantic "none" tokens
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Add `space.inset.none`, `space.separated.none`, `space.grouped.none` tokens
+    - Add `border.none`, `radius.none`, `elevation.none` tokens
+    - Update token generation to include none tokens
+    - Document rationale: search/discoverability/maintenance/intent
+    - _Requirements: 1.2, 1.6_
+
+  - [x] 8.3 Clean up documentation examples
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Update Container Android TokenMapping.kt documentation examples
+    - Replace hard-coded values in comments with token references
+    - Format: `mapPaddingToDp(PaddingValue.P200) // Returns spaceInset200 (16.dp)`
+    - Critical: Prevents contamination vector from documentation
+    - _Requirements: 9.2_
+
+  - [x] 8.4 Review animation interaction values
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Review ButtonCTA iOS: scale transform (0.97), duration (0.1)
+    - Review TextInputField iOS: opacity toggle (0/1), duration (0.15)
+    - Determine if these should be motion tokens or component-specific
+    - Document findings and recommendations
+    - _Requirements: 1.3_
+
+  - [x] 8.5 Audit accessibility token usage
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Review ButtonCTA iOS touch target height (44px)
+    - Verify accessibility tokens exist for WCAG constants
+    - Update components to use accessibility tokens consistently
+    - Document: `accessibility.touchTarget.minimum` or `tapAreaRecommended`
+    - _Requirements: 1.2_
+
+  - [x] 8.6 Update test verification code
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Update Icon web test (line 223) to use token references
+    - Replace: `buttonSize === 'large' ? 32 : 24`
+    - With: `buttonSize === 'large' ? iconSize125 : iconSize100`
+    - Prevents contamination vector from test code
+    - _Requirements: 7.5, 9.2_
+
+  - [x] 8.7 Fix genuine violations
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Fix ButtonCTA iOS touch target heights (lines 298, 301, 303)
+    - Replace hard-coded `44`, `48`, `56` with `tapAreaMinimum`, `tapAreaRecommended`, `tapAreaComfortable` tokens
+    - Fix ButtonCTA Android touch target height (line 280)
+    - Replace hard-coded `44` with `tapAreaMinimum` token
+    - Fix TextInputField Android icon sizes (lines 348, 353, 358)
+    - Replace hard-coded `24.dp` with `iconSize100` token
+    - Run tests to verify changes
+    - Context: Task 8.5 audit identified ButtonCTA components using hard-coded accessibility values
+    - _Requirements: 1.1, 1.2, 1.6_
+
+  - [x] 8.8 Verify all component READMEs updated
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Check each component README has Token Consumption section
@@ -487,11 +545,12 @@ This implementation plan systematically replaces hard-coded values with design t
     - Ensure consistent format across all READMEs
     - _Requirements: 9.1_
 
-  - [ ] 8.3 Create completion summary
+  - [x] 8.9 Create completion summary
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Document common violation patterns discovered
-    - Document token gaps identified
+    - Document token gaps identified (semantic none tokens, animation tokens, accessibility tokens)
+    - Document contamination vectors found (documentation examples, test code)
     - Document platform differences observed
     - Document fallback pattern prevalence
     - Document test coverage gaps
