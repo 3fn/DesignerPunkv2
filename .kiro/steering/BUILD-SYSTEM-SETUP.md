@@ -6,6 +6,39 @@
 **Context**: Added during Task 3.2 completion to prevent stale JavaScript issues. Updated during TypeScript error resolution to reflect restored type safety enforcement.
 
 ---
+inclusion: conditional
+trigger: build-issues, typescript-errors, testing-output
+---
+
+## AI Agent Reading Priorities
+
+**WHEN experiencing build errors THEN Read:**
+- Troubleshooting section for specific error patterns
+- "When to Build" section to understand build requirements
+- Type Safety Enforcement section for TypeScript error context
+
+**WHEN testing generated output files THEN Read:**
+- "When to Build" section (MUST build before testing output)
+- Build Verification section to understand what's checked
+- Development Workflow section for proper testing sequence
+
+**WHEN encountering TypeScript compilation errors THEN Read:**
+- Type Safety Enforcement section (errors must be fixed, not bypassed)
+- Troubleshooting: "Build fails with TypeScript errors"
+- Best Practices for type safety
+
+**WHEN seeing "method not found" or stale JavaScript errors THEN Read:**
+- Troubleshooting: "Method not found errors"
+- How It Works: TypeScript Compilation vs Test Execution
+- Solution: Run `npm run build` to recompile
+
+**SKIP when:**
+- Normal development without build issues
+- Running tests (ts-jest handles compilation automatically)
+- Component development following established patterns
+- No TypeScript errors or build failures
+
+---
 
 ## Overview
 

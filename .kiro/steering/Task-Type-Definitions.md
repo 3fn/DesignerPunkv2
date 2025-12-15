@@ -6,6 +6,9 @@
 **Scope**: cross-project
 
 ---
+inclusion: conditional
+trigger: spec-work
+---
 
 ## Overview
 

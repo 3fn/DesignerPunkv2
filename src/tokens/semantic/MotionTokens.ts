@@ -43,8 +43,9 @@ interface SemanticMotionToken extends Omit<SemanticToken, 'primitiveTokens'> {
  * Motion semantic tokens for common animation patterns
  * Following compositional architecture with explicit multi-primitive composition
  * 
- * Initial implementation focuses on float label animation for Text Input Field component.
- * Structure supports incremental expansion as new animation patterns emerge.
+ * Semantic motion tokens compose primitive duration and easing tokens to create
+ * complete animation definitions for specific interaction contexts. Each token
+ * represents a common animation pattern used across components.
  */
 export const motionTokens: Record<string, SemanticMotionToken> = {
   'motion.floatLabel': {
@@ -56,6 +57,36 @@ export const motionTokens: Record<string, SemanticMotionToken> = {
     category: SemanticCategory.INTERACTION,
     context: 'Float label animation for text input fields',
     description: 'Standard motion for label floating up with balanced easing (250ms, standard curve). Used when text input receives focus and label transitions from placeholder to floating position.'
+  },
+  'motion.focusTransition': {
+    name: 'motion.focusTransition',
+    primitiveReferences: {
+      duration: 'duration150',
+      easing: 'easingStandard'
+    },
+    category: SemanticCategory.INTERACTION,
+    context: 'Focus state transitions for interactive elements',
+    description: 'Fast motion for focus state changes with balanced easing (150ms, standard curve). Used when elements receive or lose focus, providing quick visual feedback for user interactions.'
+  },
+  'motion.buttonPress': {
+    name: 'motion.buttonPress',
+    primitiveReferences: {
+      duration: 'duration150',
+      easing: 'easingAccelerate'
+    },
+    category: SemanticCategory.INTERACTION,
+    context: 'Button press and release animations',
+    description: 'Fast motion for button press feedback with accelerate easing (150ms, accelerate curve). Used for scale transforms during button press, providing immediate tactile response to user input.'
+  },
+  'motion.modalSlide': {
+    name: 'motion.modalSlide',
+    primitiveReferences: {
+      duration: 'duration350',
+      easing: 'easingDecelerate'
+    },
+    category: SemanticCategory.INTERACTION,
+    context: 'Modal and overlay slide animations',
+    description: 'Deliberate motion for modal entry with decelerate easing (350ms, decelerate curve). Used when modals, drawers, or overlays slide into view, creating a natural entrance effect that settles into place.'
   }
 };
 

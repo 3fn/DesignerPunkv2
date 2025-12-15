@@ -12,6 +12,49 @@ inclusion: always
 
 ---
 
+## AI Agent Reading Priorities
+
+**This document is always loaded. Focus on sections relevant to your current task type.**
+
+### WHEN Completing Parent Tasks
+**Focus on:**
+- **Summary Documents** - Two-document workflow (detailed + summary)
+- **Spec-Specific Organization** - Two-directory structure for completion docs
+- **Cross-Reference Standards** - Linking between summary and detailed docs
+- **Required Metadata Fields** - Add organization metadata to both documents
+
+### WHEN Creating Spec Documents (Requirements, Design, Tasks)
+**Focus on:**
+- **Required Metadata Fields** - Standard metadata header format
+- **Organization Field Values** - Use `spec-validation`, `spec-completion`, or `spec-guide`
+- **Directory Structure** - Understand `.kiro/specs/[spec-name]/` organization
+
+### WHEN Creating Framework Documentation
+**Focus on:**
+- **Organization Field Values** - Use `framework-strategic` for reusable guidance
+- **Directory Structure** - Place in `strategic-framework/` directory
+- **Required Metadata Fields** - Ensure cross-project scope
+
+### WHEN Creating Completion Documents
+**Focus on:**
+- **Spec-Specific Completion** - Naming conventions and metadata format
+- **Organization Implementation** - Steps 1-2 (add metadata, place file)
+- **Directory Structure** - `.kiro/specs/[spec-name]/completion/` location
+
+### WHEN Adding Cross-References
+**Focus on:**
+- **Cross-Reference Standards** - Relative path format and link text
+- **Organization Implementation - Step 3** - Update links after moving files
+- **Summary Documents** - Cross-reference patterns for completion docs
+
+### WHEN Organizing Existing Files AND Creating New Implementation Files
+**Focus on:**
+- **Organization Implementation** - Complete 3-step process
+- **File Organization Scope** - Root directory scanning behavior
+- **Organizing Files in Subdirectories** - Manual organization options
+
+---
+
 ## File Organization Philosophy
 
 ### Metadata-Driven Organization

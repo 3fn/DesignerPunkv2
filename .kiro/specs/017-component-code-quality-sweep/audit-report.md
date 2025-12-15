@@ -2,18 +2,18 @@
 
 **Date**: 2025-12-11
 **Total Components Audited**: 28
-**Total Violations Found**: 55
+**Total Violations Found**: 39
 
 ## Violations by Type
 
 - **Color**: 3
-- **Spacing**: 49
+- **Spacing**: 33
 - **Motion**: 3
 - **Typography**: 0
 
 ## Violations by Priority
 
-- **High** (Colors, Spacing): 52
+- **High** (Colors, Spacing): 36
 - **Medium** (Motion): 3
 - **Low** (Edge Cases): 0
 
@@ -586,231 +586,7 @@ private val radius200: Dp = DesignTokens.radius_200.dp
 ### Icon (android)
 
 **File**: `/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/src/components/core/Icon/platforms/android/Icon.android.kt`
-**Violations**: 16
-
-#### Line 23: spacing (high priority)
-
-**Current Value**: `13.dp`
-**Suggested Token**: `DesignTokens.space_grouped_loose.dp (No exact match for 13. Closest: space.grouped.loose (12))`
-
-**Context**:
-```
- * 
- * @param name Icon name (e.g., "arrow-right", "check", "settings")
- * @param size Icon size in Dp (use DesignTokens.icon_size_xxx tokens: iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
- * @param color Optional color override for optical weight compensation (null = inherit)
- * @param modifier Optional modifier for additional styling
-```
-
-#### Line 23: spacing (high priority)
-
-**Current Value**: `18.dp`
-**Suggested Token**: `DesignTokens.space_related_normal.dp (No exact match for 18. Closest: space.related.normal (16))`
-
-**Context**:
-```
- * 
- * @param name Icon name (e.g., "arrow-right", "check", "settings")
- * @param size Icon size in Dp (use DesignTokens.icon_size_xxx tokens: iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
- * @param color Optional color override for optical weight compensation (null = inherit)
- * @param modifier Optional modifier for additional styling
-```
-
-#### Line 23: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
- * 
- * @param name Icon name (e.g., "arrow-right", "check", "settings")
- * @param size Icon size in Dp (use DesignTokens.icon_size_xxx tokens: iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
- * @param color Optional color override for optical weight compensation (null = inherit)
- * @param modifier Optional modifier for additional styling
-```
-
-#### Line 23: spacing (high priority)
-
-**Current Value**: `32.dp`
-**Suggested Token**: `DesignTokens.space_separated_loose.dp`
-
-**Context**:
-```
- * 
- * @param name Icon name (e.g., "arrow-right", "check", "settings")
- * @param size Icon size in Dp (use DesignTokens.icon_size_xxx tokens: iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
- * @param color Optional color override for optical weight compensation (null = inherit)
- * @param modifier Optional modifier for additional styling
-```
-
-#### Line 23: spacing (high priority)
-
-**Current Value**: `40.dp`
-**Suggested Token**: `DesignTokens.space_sectioned_normal.dp`
-
-**Context**:
-```
- * 
- * @param name Icon name (e.g., "arrow-right", "check", "settings")
- * @param size Icon size in Dp (use DesignTokens.icon_size_xxx tokens: iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
- * @param color Optional color override for optical weight compensation (null = inherit)
- * @param modifier Optional modifier for additional styling
-```
-
-#### Line 89: spacing (high priority)
-
-**Current Value**: `13.dp`
-**Suggested Token**: `DesignTokens.space_grouped_loose.dp (No exact match for 13. Closest: space.grouped.loose (12))`
-
-**Context**:
-```
- * 
- * Demonstrates:
- * - All five size variants (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
- * - Multiple icon types at standard size
- * - Color inheritance with different tint colors
-```
-
-#### Line 89: spacing (high priority)
-
-**Current Value**: `18.dp`
-**Suggested Token**: `DesignTokens.space_related_normal.dp (No exact match for 18. Closest: space.related.normal (16))`
-
-**Context**:
-```
- * 
- * Demonstrates:
- * - All five size variants (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
- * - Multiple icon types at standard size
- * - Color inheritance with different tint colors
-```
-
-#### Line 89: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
- * 
- * Demonstrates:
- * - All five size variants (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
- * - Multiple icon types at standard size
- * - Color inheritance with different tint colors
-```
-
-#### Line 89: spacing (high priority)
-
-**Current Value**: `32.dp`
-**Suggested Token**: `DesignTokens.space_separated_loose.dp`
-
-**Context**:
-```
- * 
- * Demonstrates:
- * - All five size variants (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
- * - Multiple icon types at standard size
- * - Color inheritance with different tint colors
-```
-
-#### Line 89: spacing (high priority)
-
-**Current Value**: `40.dp`
-**Suggested Token**: `DesignTokens.space_sectioned_normal.dp`
-
-**Context**:
-```
- * 
- * Demonstrates:
- * - All five size variants (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
- * - Multiple icon types at standard size
- * - Color inheritance with different tint colors
-```
-
-#### Line 100: spacing (high priority)
-
-**Current Value**: `13.dp`
-**Suggested Token**: `DesignTokens.space_grouped_loose.dp (No exact match for 13. Closest: space.grouped.loose (12))`
-
-**Context**:
-```
-        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp)
-    ) {
-        // Different sizes (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
-        androidx.compose.material3.Text(
-            text = "Size Variants",
-```
-
-#### Line 100: spacing (high priority)
-
-**Current Value**: `18.dp`
-**Suggested Token**: `DesignTokens.space_related_normal.dp (No exact match for 18. Closest: space.related.normal (16))`
-
-**Context**:
-```
-        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp)
-    ) {
-        // Different sizes (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
-        androidx.compose.material3.Text(
-            text = "Size Variants",
-```
-
-#### Line 100: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp)
-    ) {
-        // Different sizes (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
-        androidx.compose.material3.Text(
-            text = "Size Variants",
-```
-
-#### Line 100: spacing (high priority)
-
-**Current Value**: `32.dp`
-**Suggested Token**: `DesignTokens.space_separated_loose.dp`
-
-**Context**:
-```
-        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp)
-    ) {
-        // Different sizes (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
-        androidx.compose.material3.Text(
-            text = "Size Variants",
-```
-
-#### Line 100: spacing (high priority)
-
-**Current Value**: `40.dp`
-**Suggested Token**: `DesignTokens.space_sectioned_normal.dp`
-
-**Context**:
-```
-        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp)
-    ) {
-        // Different sizes (iconSize050 (13.dp), iconSize075 (18.dp), iconSize100 (24.dp), iconSize125 (32.dp), iconSize150 (40.dp))
-        androidx.compose.material3.Text(
-            text = "Size Variants",
-```
-
-#### Line 116: spacing (high priority)
-
-**Current Value**: `24.dp`
-**Suggested Token**: `DesignTokens.space_related_loose.dp`
-
-**Context**:
-```
-        }
-        
-        // Different icons at standard size (iconSize100 (24.dp))
-        androidx.compose.material3.Text(
-            text = "Icon Variety",
-```
+**Violations**: 0
 
 ### TextInputField (web)
 
@@ -931,3 +707,168 @@ private let duration150: TimeInterval // duration150 (150ms) - Fast interactions
                             .padding(accessibilityFocusOffset.dp)
 ```
 
+
+
+---
+
+## Additional Findings from Manual Review
+
+### Icon System Integration Issues
+
+**Finding**: Components inconsistently use the Icon component system vs. direct platform-specific asset references.
+
+**Example - TextInputField iOS** (lines 298-303):
+```swift
+// Direct SF Symbol references (bypasses Icon system)
+Image(systemName: "exclamationmark.circle.fill")
+    .font(.system(size: 16))  // Hard-coded size
+
+Image(systemName: "checkmark.circle.fill")
+    .font(.system(size: 16))  // Hard-coded size
+```
+
+**Issues**:
+1. **Inconsistency**: Some components use Icon system, others bypass it
+2. **Hard-coded icon sizes**: Should use `iconSize075` (16px) token
+3. **Maintenance burden**: Changes to icon strategy require updating multiple patterns
+
+**Recommendation**:
+- **Evaluate Icon component integration**: Determine if status icons should use Icon component
+- **Replace hard-coded sizes**: Use `iconSize075` token for 16px icons
+- **Document decision**: If bypassing Icon system is intentional, document rationale
+- **Standardize pattern**: Ensure consistent approach across all components
+
+**Priority**: Medium (affects maintainability and consistency)
+
+---
+
+### Motion Token Cross-Platform Gaps
+
+**Finding**: Motion tokens exist but are web-focused (CSS cubic-bezier). iOS and Android lack platform-specific equivalents.
+
+**Current Motion Tokens** (`MotionTokens.ts`):
+```typescript
+duration: {
+  instant: 100,
+  fast: 200,
+  normal: 300,
+  slow: 500
+},
+easing: {
+  standard: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
+  decelerate: 'cubic-bezier(0.0, 0.0, 0.2, 1)',
+  accelerate: 'cubic-bezier(0.4, 0.0, 1, 1)',
+  sharp: 'cubic-bezier(0.4, 0.0, 0.6, 1)'
+}
+```
+
+**Example - TextInputField iOS** (lines 289-290):
+```swift
+// Hard-coded animation curves
+.animation(.easeInOut(duration: 0.2), value: isFocused)
+.animation(.easeInOut(duration: 0.2), value: hasError)
+```
+
+**Issues**:
+1. **Web-only easing**: Cubic-bezier curves don't translate to iOS `Animation` or Android `AnimationSpec`
+2. **Hard-coded animations**: Components use `.easeInOut(duration: 0.2)` instead of motion tokens
+3. **Platform gaps**: No generated iOS/Android motion token equivalents
+
+**Recommendation**:
+- **Create iOS equivalents**: Generate Swift `Animation` objects from motion tokens
+  ```swift
+  let motionEasingStandard = Animation.timingCurve(0.4, 0.0, 0.2, 1.0)
+  let motionDurationFast: TimeInterval = 0.2
+  ```
+- **Create Android equivalents**: Generate Kotlin `Easing` objects from motion tokens
+  ```kotlin
+  val motionEasingStandard = CubicBezierEasing(0.4f, 0.0f, 0.2f, 1.0f)
+  val motionDurationFast = 200
+  ```
+- **Update build system**: Generate platform-specific motion tokens
+- **Replace hard-coded animations**: Use motion tokens in all components
+
+**Priority**: High (affects cross-platform consistency and token system completeness)
+
+---
+
+### Accessibility Pattern Standardization
+
+**Finding**: TextInputField iOS implements reduced motion accessibility, but pattern is not standardized across components.
+
+**Good Pattern - TextInputField iOS** (line 283):
+```swift
+@Environment(\.accessibilityReduceMotion) var reduceMotion
+
+// Animation respects user preference
+.animation(reduceMotion ? .none : .easeInOut(duration: 0.2), value: isFocused)
+```
+
+**Issues**:
+1. **Inconsistent implementation**: Not all components respect reduced motion
+2. **Platform differences**: Each platform has different accessibility APIs
+3. **No semantic tokens**: Reduced motion behavior is component-specific, not token-based
+4. **Hard-coded accessibility values**: Touch target heights use hard-coded values instead of tokens
+
+**Example - ButtonCTA iOS** (lines 298, 301, 303):
+```swift
+// Hard-coded touch target heights (WCAG 2.5.5)
+.frame(minHeight: 44)  // Should use accessibilityTouchTargetMinimum
+.frame(minHeight: 48)  // Should use accessibilityTouchTargetRecommended
+.frame(minHeight: 56)  // Should use accessibilityTouchTargetComfortable
+```
+
+**Recommendation**:
+- **Standardize reduced motion pattern**: Document platform-specific patterns
+  - iOS: `@Environment(\.accessibilityReduceMotion)`
+  - Android: `LocalAccessibilityManager.current?.isEnabled`
+  - Web: `@media (prefers-reduced-motion: reduce)`
+- **Create accessibility tokens**: Add tokens for WCAG constants
+  ```typescript
+  accessibility: {
+    touchTarget: {
+      minimum: 44,      // WCAG Level AAA
+      recommended: 48,  // WCAG Level AA
+      comfortable: 56   // Enhanced UX
+    }
+  }
+  ```
+- **Consider semantic motion tokens**: Motion tokens that automatically handle reduced motion
+  ```typescript
+  motion: {
+    floatLabel: {
+      duration: 'motion.duration.fast',
+      easing: 'motion.easing.standard',
+      respectsReducedMotion: true
+    }
+  }
+  ```
+- **Replace hard-coded accessibility values**: Use accessibility tokens for touch targets
+
+**Priority**: High (affects accessibility compliance and user experience)
+
+---
+
+## Next Steps
+
+1. **Review audit findings** with team
+2. **Prioritize violations** by impact:
+   - **High**: Colors, spacing, motion token gaps, accessibility patterns
+   - **Medium**: Icon system integration, motion token usage
+   - **Low**: Edge cases
+3. **Create cleanup tasks** for each component
+4. **Address cross-platform gaps**:
+   - Implement iOS/Android motion token equivalents
+   - Create accessibility tokens for WCAG constants
+   - Standardize reduced motion patterns
+5. **Begin systematic replacement** starting with high-priority violations
+6. **Update Component Development Guide** with:
+   - Icon system integration guidelines
+   - Motion token usage patterns
+   - Accessibility pattern standards
+   - Anti-patterns discovered
+7. **Create evergreen prevention tests** to catch future violations
+
+---
+
+*This audit report provides the foundation for systematic token compliance cleanup across all components, including cross-platform motion token implementation and accessibility pattern standardization.*

@@ -190,14 +190,12 @@ struct ButtonCTA: View {
             )
         }
         .buttonStyle(PlainButtonStyle())
-        // Requirement 17.2: Scale transform to 0.97 (97%) on press with 100ms ease-out animation
+        // Requirement 17.2: Scale transform to 0.97 (97%) on press with motion token animation
         // Component-specific press animation values (iOS platform pattern)
         // Scale: 0.97 (3% reduction for tactile feedback)
-        // Duration: 0.1s (100ms for immediate response)
-        // Easing: easeOut (snappy deceleration)
-        // Not tokenized: Platform-specific interaction pattern used only by ButtonCTA
+        // Motion: motionButtonPress (150ms with accelerate easing for immediate response)
         .scaleEffect(isPressed ? 0.97 : 1.0)
-        .animation(.easeOut(duration: 0.1), value: isPressed)
+        .animation(motionButtonPress, value: isPressed)
         // Track pressed state for scale transform
         .simultaneousGesture(
             DragGesture(minimumDistance: 0)

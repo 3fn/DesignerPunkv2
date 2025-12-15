@@ -31,7 +31,9 @@
     "validate:release-setup": "node scripts/validate-release-setup.js",
     "diagnose:release-issues": "node scripts/diagnose-release-issues.js",
     "audit:tokens": "node scripts/audit-component-tokens.js",
-    "audit:tokens:detailed": "node scripts/audit-component-tokens.js -- --detailed"
+    "audit:tokens:detailed": "node scripts/audit-component-tokens.js -- --detailed",
+    "serve": "python3 -m http.server 8001",
+    "server": "python3 -m http.server 8001"
   },
   "devDependencies": {
     "@types/glob": "^8.1.0",

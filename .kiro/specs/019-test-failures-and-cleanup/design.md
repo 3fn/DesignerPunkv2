@@ -90,6 +90,34 @@ function getIconSizeForButton(buttonSize: ButtonSize): IconSize {
 
 ### Component Cleanup Patterns
 
+#### Pattern 0: Rosetta Unit Handling (CRITICAL)
+
+**Issue**: Components manually adding units when build system already includes them
+
+```kotlin
+// BEFORE (Incorrect - Manual Unit Addition)
+private val spaceInset100: Dp = DesignTokens.space_inset_100.dp
+
+// AFTER (Correct - Trust Build System)
+private val spaceInset100: Dp = DesignTokens.space_inset_100
+```
+
+**Strategy**: Reference generated constants directly - build system includes units
+
+**Rationale**: The Rosetta unitless vision means the build system handles unit conversion. Generated constants already include appropriate platform-specific units (`8.dp` for Android, `8` for iOS CGFloat, `8px` for Web CSS). Components should trust the build system and reference constants directly.
+
+**Cross-Platform Pattern**:
+```kotlin
+// Android - unit included in generated constant
+private val spacing: Dp = DesignTokens.space_inset_100
+
+// iOS - unitless as Swift expects
+let spacing = DesignTokens.spaceInset100
+
+// Web - unit included in CSS custom property
+padding: var(--space-inset-100);
+```
+
 #### Pattern 1: Documentation Contamination
 
 **Issue**: Hard-coded values in code comments
@@ -240,74 +268,117 @@ const val space_100: Float = 8f
 const val space_200: Float = 16f
 ```
 
-### Usage Pattern Inconsistency
+### Investigation Results (Task 4 Complete)
 
-This creates two different usage patterns in component code:
+**Key Finding**: The Rosetta vision is 100% correct - the build system already includes units in generated constants.
 
-```kotlin
-// Icon size tokens - unit included in token
-Icon(
-    size = DesignTokens.icon_size_100  // No .dp needed
-)
+#### Build System Validation
 
-// Spacing tokens - unit added at usage
-Box(
-    modifier = Modifier.padding(DesignTokens.space_200.dp)  // .dp required
-)
+The investigation confirmed that `UnitConverter.ts` correctly returns `PlatformValue` objects with both `value` and `unit`:
+
+```typescript
+// UnitConverter.ts
+export function convertToAndroid(value: number): PlatformValue {
+  return {
+    value: value,
+    unit: 'dp'
+  };
+}
 ```
 
-### Investigation Scope
+Platform builders (Android, iOS, Web) correctly include units in generated constants:
 
-The investigation will determine:
+**Android** (units included):
+```kotlin
+val spaceInset100: Dp = 8.dp
+```
 
-1. **Token Type Coverage**: Which token types include units and which don't?
-   - Icon sizes (confirmed: WITH units)
-   - Spacing (confirmed: WITHOUT units)
-   - Border widths (unknown)
-   - Radius (unknown)
-   - Elevation (unknown)
-   - Typography (unknown)
+**iOS** (units included as Swift expects):
+```swift
+public static let spaceInset100: CGFloat = 8
+```
 
-2. **Cross-Platform Consistency**: Is this issue Android-specific or system-wide?
-   - Android (confirmed inconsistent)
-   - iOS (unknown)
-   - Web (unknown)
+**Web** (units included in CSS):
+```css
+--space-inset-100: 8px;
+```
 
-3. **Generation Logic**: Why are different token types generated differently?
-   - Locate token generation source code
-   - Understand decision points in generation logic
-   - Document rationale (if any) for different approaches
+#### Root Cause: Component Development Pattern Deviation
 
-4. **Impact Assessment**: How widespread is the inconsistency?
-   - Audit component code for usage patterns
-   - Audit preview code for usage patterns
-   - Audit test code for usage patterns
-   - Estimate refactoring effort for standardization
+The perceived inconsistency was caused by **component development deviating from the Rosetta pattern**, not by the build system:
 
-5. **Standardization Recommendation**: What's the best path forward?
-   - Option A: All tokens WITH units (consistent with icon sizes)
-   - Option B: All tokens WITHOUT units (consistent with spacing)
-   - Document rationale and trade-offs
-   - Provide implementation plan
+**❌ Incorrect Pattern** (what early components did):
+```kotlin
+// Android components manually adding .dp
+private val spaceInset100: Dp = DesignTokens.space_inset_100.dp
+```
+
+**✅ Correct Pattern** (what build system generates):
+```kotlin
+// Build system already includes units
+private val spaceInset100: Dp = DesignTokens.space_inset_100
+```
+
+#### Why This Happened
+
+1. **Lack of Awareness**: Developers weren't aware the build system includes units
+2. **Documentation Gap**: Component Development Guide didn't clearly document the pattern
+3. **Pattern Propagation**: Early components set wrong pattern, which was then copied
+
+#### Cross-Platform Consistency
+
+All platforms correctly implement the Rosetta unitless vision:
+
+- **Android**: `val spaceInset100: Dp = 8.dp` (unit included)
+- **iOS**: `public static let spaceInset100: CGFloat = 8` (unitless, as Swift expects)
+- **Web**: `--space-inset-100: 8px` (unit included)
+
+The build system handles platform-specific unit requirements correctly.
+
+### Correct Component Development Pattern
+
+Components should reference generated constants directly without adding units:
+
+**✅ Correct Pattern:**
+```kotlin
+// Android
+private val spaceInset100: Dp = DesignTokens.space_inset_100
+
+// iOS
+let spacing = DesignTokens.spaceInset100
+
+// Web
+padding: var(--space-inset-100);
+```
+
+**❌ Incorrect Pattern:**
+```kotlin
+// DON'T add .dp - build system already includes it
+private val spaceInset100: Dp = DesignTokens.space_inset_100.dp
+```
+
+### Impact on Remaining Cleanup
+
+This finding validates the cleanup approach:
+
+1. **Remove Manual Unit Additions**: Android components should not add `.dp` to token references
+2. **Trust Build System**: Generated constants already include appropriate units
+3. **Update Documentation**: Component Development Guide updated to document correct pattern
+4. **Verify iOS/Web**: Confirm iOS and Web components follow correct pattern (unitless references)
 
 ### Investigation Priority
 
-This investigation takes priority over remaining cleanup tasks (Phase 2C, 2D, and Phase 3) because:
+This investigation took priority over remaining cleanup tasks (Phase 2C, 2D, and Phase 3) because:
 
-- **Prevents Compounding Debt**: Continuing cleanup with inconsistent patterns makes future standardization exponentially more expensive
-- **Informs Cleanup Approach**: Understanding the correct pattern ensures remaining cleanup work follows standardized approach
-- **Relatively Quick**: Investigation estimated at 2-4 hours, small delay compared to risk of spreading inconsistency
-- **High Impact**: Affects all Android components, potentially iOS and Web as well
+- **Prevents Compounding Debt**: Continuing cleanup with incorrect patterns would spread the issue
+- **Validates Architecture**: Confirms Rosetta unitless vision is correctly implemented
+- **Informs Cleanup Approach**: Ensures remaining cleanup work follows correct pattern
+- **Relatively Quick**: Investigation completed in ~2 hours as estimated
 
-### Expected Outcomes
+### Reference Documentation
 
-The investigation will produce:
-
-1. **Comprehensive Audit**: Documentation of which token types include units across all platforms
-2. **Root Cause Analysis**: Understanding of why generation patterns differ
-3. **Impact Assessment**: Scope of changes needed for standardization
-4. **Standardization Recommendation**: Clear path forward with rationale and trade-offs
-5. **Implementation Plan**: Detailed steps for standardization (if needed)
+Complete investigation findings documented in:
+- `.kiro/specs/019-test-failures-and-cleanup/rosetta-unit-handling-investigation.md`
 
 ---
 
@@ -561,7 +632,7 @@ Performance test timeouts (release analysis tests taking >5 seconds) are a separ
 - **Argument**: "We should fix all test failures in this spec"
 - **Response**: Performance optimization is a distinct problem requiring different approach. Documenting issues enables focused optimization work without derailing token compliance cleanup.
 
-### Decision 4: Token Unit Consistency Investigation Priority
+### Decision 4: Token Unit Consistency Investigation Priority (COMPLETE)
 
 **Options Considered**:
 1. Continue with remaining cleanup tasks and investigate later
@@ -589,6 +660,17 @@ The investigation should complete before continuing with Phase 2C (TextInputFiel
 **Counter-Arguments**:
 - **Argument**: "We should finish cleanup first, then investigate"
 - **Response**: The risk of spreading inconsistent patterns through remaining cleanup work (TextInputField, Container, tests) outweighs the delay. Investigation is relatively quick (2-4 hours) and prevents compounding technical debt.
+
+**Investigation Results**:
+
+The investigation validated the Rosetta vision is 100% correct:
+
+- **Build System**: Correctly includes units in generated constants (`val spaceInset100: Dp = 8.dp`)
+- **Root Cause**: Component development deviated from pattern by manually adding `.dp`
+- **Solution**: Components should reference generated constants directly without adding units
+- **Impact**: Remaining cleanup work will remove manual unit additions and trust build system
+
+This decision prevented spreading incorrect patterns through remaining cleanup work and validated the architectural foundation is sound.
 
 ### Decision 5: Container Android TokenMapping Complexity
 

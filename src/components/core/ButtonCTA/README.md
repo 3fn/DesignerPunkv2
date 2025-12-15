@@ -268,7 +268,8 @@ The ButtonCTA component uses the following design tokens:
 - `opacity.pressed` (16%) - Pressed state overlay
 
 **iOS Platform**:
-- Scale transform to 0.97 (97%) on press with 100ms ease-out animation
+- Scale transform to 0.97 (97%) on press
+- `motion.buttonPress` - Press animation timing (duration150 + easingAccelerate)
 
 **Android Platform**:
 - Material ripple effect with `color.primary` at 16% opacity

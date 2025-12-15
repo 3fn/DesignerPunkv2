@@ -180,7 +180,7 @@ struct TextInputField: View {
                         .foregroundColor(labelColor)
                         .offset(y: labelOffset)
                         .animation(
-                            reduceMotion ? .none : .timingCurve(0.4, 0.0, 0.2, 1.0, duration: motionFloatLabelDuration),
+                            reduceMotion ? .none : motionFloatLabel,
                             value: isLabelFloated
                         )
                         .allowsHitTesting(false) // Label doesn't intercept touches
@@ -257,7 +257,7 @@ struct TextInputField: View {
                         .padding(.trailing, spaceInset100)
                         .transition(.opacity)
                         .animation(
-                            reduceMotion ? .none : .timingCurve(0.4, 0.0, 0.2, 1.0, duration: motionFloatLabelDuration),
+                            reduceMotion ? .none : motionFloatLabel,
                             value: showErrorIcon
                         )
                 } else if showSuccessIcon {
@@ -265,7 +265,7 @@ struct TextInputField: View {
                         .padding(.trailing, spaceInset100)
                         .transition(.opacity)
                         .animation(
-                            reduceMotion ? .none : .timingCurve(0.4, 0.0, 0.2, 1.0, duration: motionFloatLabelDuration),
+                            reduceMotion ? .none : motionFloatLabel,
                             value: showSuccessIcon
                         )
                 } else if showInfoIconVisible {
@@ -273,7 +273,7 @@ struct TextInputField: View {
                         .padding(.trailing, spaceInset100)
                         .transition(.opacity)
                         .animation(
-                            reduceMotion ? .none : .timingCurve(0.4, 0.0, 0.2, 1.0, duration: motionFloatLabelDuration),
+                            reduceMotion ? .none : motionFloatLabel,
                             value: showInfoIconVisible
                         )
                 }
@@ -369,7 +369,7 @@ struct CustomTextFieldStyle: TextFieldStyle {
                     .padding(-accessibilityFocusOffset)
                     .opacity(isFocused ? 1 : 0)
                     .animation(
-                        reduceMotion ? .none : .easeInOut(duration: duration150),
+                        reduceMotion ? .none : motionFocusTransition,
                         value: isFocused
                     )
             )

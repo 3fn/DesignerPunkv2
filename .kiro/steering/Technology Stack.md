@@ -1,3 +1,6 @@
+---
+inclusion: always
+---
 # Technology Stack
 
 **Date**: November 26, 2025  

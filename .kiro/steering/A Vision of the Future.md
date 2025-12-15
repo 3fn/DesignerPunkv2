@@ -1,3 +1,30 @@
+---
+inclusion: conditional
+trigger: vision-context, architectural-decisions
+---
+
+## AI Agent Reading Priorities
+
+**WHEN questioning system approach or complexity THEN Read:**
+- Understand the "Rosetta Stone" concept for AI-human collaboration
+- See why mathematical foundation enables cross-platform precision
+- Learn the product architect vision (designer + developer unified)
+
+**WHEN making architectural decisions THEN Read:**
+- Understand adaptability through mathematical foundation
+- See how system survives leadership/vision changes
+- Learn why complexity is precision engineering, not over-engineering
+
+**WHEN comparing with other design systems THEN Read:**
+- See DesignerPunk's unique innovations vs Material/Tailwind/etc.
+- Understand trade-offs and positioning
+
+**SKIP when:**
+- Executing routine component development
+- Following clear task specifications
+- Running tests or builds
+- Working within established patterns
+
 <!------------------------------------------------------------------------------------
 Peter:
 How does this system so far compare with other noted design systems?

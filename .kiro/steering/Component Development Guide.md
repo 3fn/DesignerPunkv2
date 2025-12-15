@@ -7,22 +7,50 @@
 
 ---
 inclusion: conditional
-trigger: component-development
+trigger: component-development, token-selection, cross-platform-components
 ---
 
 ## AI Agent Reading Priorities
 
-**WHEN building components THEN read:**
-1. ✅ **This guide** (decision framework and glossary)
+**WHEN building new components THEN read:**
+1. ✅ **Token Selection Decision Framework** (Step 1-4)
 2. ✅ **Semantic tokens**: Read `src/tokens/semantic/index.ts` for available tokens
-3. ✅ **Component sizing guide**: `.kiro/specs/responsive-layout-system/component-sizing-token-guide.md`
+3. ✅ **Component Structure Pattern** (file organization)
 4. ✅ **True Native Architecture**: `preserved-knowledge/true-native-architecture-concepts.md`
+5. ✅ **Validation Checklist** (before implementation)
 
-**WHEN creating semantic tokens THEN also read:**
-5. ✅ **Primitive tokens**: Read `src/tokens/*.ts` for primitive token foundation
-6. ✅ **Token architecture**: `preserved-knowledge/token-architecture-2-0-mathematics.md`
+**WHEN selecting tokens for components THEN read:**
+1. ✅ **Token Selection Decision Framework** (all steps)
+2. ✅ **System-Specific Terminology Glossary** (understand naming conventions)
+3. ✅ **Common Component Patterns** (button, input, container patterns)
+4. ✅ **Anti-Patterns to Avoid** (what NOT to do)
 
-**SKIP primitive tokens when building components** - semantic tokens should cover your needs
+**WHEN creating component-level tokens THEN read:**
+1. ✅ **Step 3: Create Component-Level Tokens for Variants**
+2. ✅ **Component Token Files** section
+3. ✅ **Component sizing guide**: `.kiro/specs/responsive-layout-system/component-sizing-token-guide.md`
+
+**WHEN creating semantic tokens THEN read:**
+1. ✅ **Step 4: Propose Semantic Token Elevation**
+2. ✅ **Primitive tokens**: Read `src/tokens/*.ts` for primitive token foundation
+3. ✅ **Token architecture**: `preserved-knowledge/token-architecture-2-0-mathematics.md`
+
+**WHEN implementing cross-platform components THEN read:**
+1. ✅ **Component Structure Pattern** (True Native Architecture)
+2. ✅ **Component Token Files** (platform-agnostic token references)
+3. ✅ **Cross-Platform Token Consumption** (how tokens work per platform)
+4. ✅ **Platform-Specific Nuances** (iOS/Android/Web differences)
+
+**WHEN troubleshooting component issues THEN read:**
+1. ✅ **Anti-Patterns to Avoid** (common mistakes)
+2. ✅ **Validation Checklist** (what to verify)
+3. ✅ **WCAG Theme Architecture** (if accessibility issues)
+
+**SKIP when:**
+- Updating component documentation only
+- Fixing typos or formatting
+- Running tests without implementation changes
+- Working on non-component code (tokens, build system, etc.)
 
 ---
 

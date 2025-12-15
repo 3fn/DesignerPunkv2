@@ -219,6 +219,10 @@ The TextInputField component uses the following design tokens:
 ### Motion Tokens
 
 - `motion.floatLabel` - Label float animation timing (duration250 + easingStandard)
+  - Used for label floating animation
+  - Used for icon fade in/out animations (error, success, info icons)
+- `motion.focusTransition` - Focus state transition timing (duration150 + easingStandard)
+  - Used for focus ring opacity animation
 - `scale088` - Typography scale for label animation (0.88 × fontSize100 = 14px)
 
 ### Border Tokens
