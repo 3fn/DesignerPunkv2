@@ -1,20 +1,24 @@
+# File Organization Standards
+
+**Date**: 2025-01-10
+**Last Reviewed**: 2025-12-15
+**Purpose**: Metadata-driven file organization system for sustainable project structure
+**Organization**: process-standard
+**Scope**: cross-project
+**Layer**: 2
+**Relevant Tasks**: all-tasks
+
 ---
 inclusion: always
 ---
 
-# File Organization Standards
-
-**Date**: January 10, 2025  
-**Purpose**: Metadata-driven file organization system for sustainable project structure  
-**Organization**: process-standard  
-**Scope**: cross-project  
-**Approach**: Process-first tool development with human-controlled organization
-
----
-
 ## AI Agent Reading Priorities
 
+**Note**: This section intentionally uses the same heading as other steering documents because each document provides reading priorities specific to its content. This structural pattern enables progressive disclosure and helps AI agents navigate to relevant sections efficiently.
+
 **This document is always loaded. Focus on sections relevant to your current task type.**
+
+**Layer Context**: This is a Layer 2 (Frameworks and Patterns) document that provides metadata-driven file organization framework. It's always loaded and contains conditional sections for specific organization scenarios.
 
 ### WHEN Completing Parent Tasks
 **Focus on:**
@@ -161,7 +165,7 @@ All files use explicit metadata to declare organizational intent, enabling safe 
 ```markdown
 # Task 1 Summary: Fix Release Detection Triggers
 
-**Date**: October 30, 2025
+**Date**: 2025-10-30
 **Purpose**: Concise summary of parent task completion
 **Organization**: spec-summary
 **Scope**: release-detection-trigger-fix
@@ -416,7 +420,22 @@ docs/processes/                           # Detailed process documentation
 
 ---
 
-## Organization Implementation
+## Organization Implementation (Conditional Loading)
+
+**📖 CONDITIONAL SECTION - Read only when needed**
+
+**Load when**: 
+- Organizing existing files or creating new implementation files
+- Need to understand the 3-step organization process
+- Adding organization metadata to files
+- Moving files to appropriate directories
+
+**Skip when**: 
+- Just completing normal tasks without file organization
+- Reading for general context
+- Files are already organized correctly
+
+---
 
 ### Manual Organization Process
 
@@ -462,7 +481,22 @@ After moving files, update any cross-reference links to reflect new locations.
 
 ---
 
-## File Organization Scope
+## File Organization Scope (Conditional Loading)
+
+**📖 CONDITIONAL SECTION - Read only when needed**
+
+**Load when**: 
+- Organizing files in subdirectories
+- Understanding why automation only scans root directory
+- Need to organize spec-guide files or other subdirectory content
+- Troubleshooting file organization behavior
+
+**Skip when**: 
+- Normal task completion without file organization
+- Files are in root directory and will be organized automatically
+- Just need to understand metadata fields
+
+---
 
 ### Overview
 
@@ -599,7 +633,22 @@ This logging helps developers understand the system behavior and confirms that o
 
 ---
 
-## Cross-Reference Standards
+## Cross-Reference Standards (Conditional Loading)
+
+**📖 CONDITIONAL SECTION - Read only when needed**
+
+**Load when**: 
+- Adding cross-references to documentation
+- Creating documentation guides or completion documents
+- Need to understand cross-reference formatting patterns
+- Updating links after file moves
+
+**Skip when**: 
+- Not working with documentation
+- Just completing implementation tasks
+- Files don't contain cross-references
+
+---
 
 ### Overview
 
@@ -767,7 +816,7 @@ Group multiple cross-references in a dedicated section at the beginning or end o
 ```markdown
 # Typography Token Architecture Guide
 
-**Date**: October 22, 2025
+**Date**: 2025-10-22
 **Purpose**: Explain typography token composition and design decisions
 **Organization**: spec-guide
 **Scope**: typography-token-expansion
@@ -818,7 +867,7 @@ This section documents the three most common cross-reference patterns used in De
 ```markdown
 # Compositional Color Guide
 
-**Date**: October 22, 2025
+**Date**: 2025-10-22
 **Purpose**: Explain compositional color architecture in typography tokens
 **Organization**: spec-guide
 **Scope**: typography-token-expansion
@@ -854,7 +903,7 @@ in different contexts.
 ```markdown
 # Build System Architecture Guide
 
-**Date**: October 22, 2025
+**Date**: 2025-10-22
 **Purpose**: Explain build system orchestration patterns
 **Organization**: spec-guide
 **Scope**: cross-platform-build-system
@@ -888,7 +937,7 @@ in different contexts.
 ```markdown
 # Task 2.3 Completion: Create Typography Guides
 
-**Date**: October 22, 2025
+**Date**: 2025-10-22
 **Task**: 2.3 Create typography documentation guides
 **Type**: Implementation
 **Status**: Complete
@@ -933,7 +982,7 @@ connecting related concepts.
 ```markdown
 # Task 3.2 Completion: Update Build System Documentation
 
-**Date**: October 22, 2025
+**Date**: 2025-10-22
 **Task**: 3.2 Update build system guides with new orchestration patterns
 **Type**: Implementation
 **Status**: Complete
@@ -968,7 +1017,7 @@ connecting related concepts.
 ```markdown
 # Token System Overview
 
-**Date**: October 22, 2025
+**Date**: 2025-10-22
 **Purpose**: Master document mapping token files to their documentation
 **Organization**: framework-strategic
 **Scope**: cross-project
@@ -1044,7 +1093,7 @@ to its implementation file and related documentation guides.
 ```markdown
 # DesignerPunk Design System
 
-**Date**: October 22, 2025
+**Date**: 2025-10-22
 **Purpose**: Cross-platform design system with mathematical foundations
 **Organization**: project-documentation
 **Scope**: cross-project
@@ -1085,6 +1134,8 @@ to its implementation file and related documentation guides.
 - **Brief descriptions**: Help readers understand what each link provides
 
 ### Anti-Patterns to Avoid
+
+**Note**: This section intentionally uses the same heading as other steering documents because each document addresses anti-patterns specific to its domain. File Organization Standards focuses on organization metadata and cross-reference anti-patterns, while other documents cover their respective domains.
 
 This section documents common anti-patterns in cross-reference usage and provides clear examples of what NOT to do, along with explanations of why these patterns are problematic.
 
@@ -1168,7 +1219,7 @@ Instead of cross-references in code, create documentation guides that explain th
 ```markdown
 # Typography Token Architecture Guide
 
-**Date**: October 22, 2025
+**Date**: 2025-10-22
 **Purpose**: Explain typography token composition and design decisions
 **Organization**: spec-guide
 **Scope**: typography-token-expansion
@@ -1226,7 +1277,7 @@ This compositional approach provides flexibility because...
 ```markdown
 # Strategic Flexibility Guide
 
-**Date**: October 22, 2025
+**Date**: 2025-10-22
 **Purpose**: Explain size variant decisions in typography tokens
 **Organization**: spec-guide
 **Scope**: typography-token-expansion
@@ -1352,7 +1403,7 @@ For information about platform-native patterns, see the Inline Emphasis Guide.
 ```markdown
 # Typography Token Guide
 
-**Date**: October 22, 2025
+**Date**: 2025-10-22
 **Purpose**: Explain typography token composition and design decisions
 **Organization**: spec-guide
 **Scope**: typography-token-expansion
@@ -1426,6 +1477,8 @@ Cross-references should be navigation aids, not content dependencies:
 
 ## Quality Standards
 
+**Note**: This section intentionally uses the same heading as other steering documents because each document defines quality standards specific to its domain. File Organization Standards focuses on metadata and cross-reference quality, while other documents define standards for their respective processes.
+
 ### Metadata Validation
 - All new files must include organization metadata
 - Organization values must match approved list
@@ -1446,7 +1499,22 @@ Cross-references should be navigation aids, not content dependencies:
 
 ---
 
-## Organization Decision Guidelines
+## Organization Decision Guidelines (Conditional Loading)
+
+**📖 CONDITIONAL SECTION - Read only when needed**
+
+**Load when**: 
+- Making organization decisions for new files
+- Unclear which organization value to use
+- Need to understand criteria for each organization type
+- Evaluating whether content is framework-strategic vs spec-specific
+
+**Skip when**: 
+- Organization metadata is already clear
+- Following established patterns
+- Just implementing tasks without creating new documentation
+
+---
 
 ### Framework-Strategic Criteria
 - **Reusable across specs**: Will this be referenced by multiple future specs?

@@ -1,12 +1,24 @@
+# Development Workflow and Task Completion Practices
+
+**Date**: 2025-10-20
+**Last Reviewed**: 2025-12-15
+**Purpose**: Task completion workflow and git practices for all development work
+**Organization**: process-standard
+**Scope**: cross-project
+**Layer**: 2
+**Relevant Tasks**: all-tasks
+
 ---
 inclusion: always
 ---
 
-# Development Workflow and Task Completion Practices
-
 ## AI Agent Reading Priorities
 
+**Note**: This section intentionally uses the same heading as other steering documents because each document provides reading priorities specific to its content. This structural pattern enables progressive disclosure and helps AI agents navigate to relevant sections efficiently.
+
 **This document contains both essential workflow guidance and detailed troubleshooting reference material. Read strategically based on what you're doing RIGHT NOW.**
+
+**Layer Context**: This is a Layer 2 (Frameworks and Patterns) document that provides reusable task completion workflows. It's always loaded but contains extensive conditional sections for specialized scenarios like hook debugging and setup.
 
 ### WHEN Executing Normal Tasks THEN Read:
 1. ✅ **Task Completion Workflow** (MUST READ)
@@ -80,7 +92,21 @@ inclusion: always
 - **Commits**: Atomic commits per task completion with descriptive messages
 - **Push**: Always push immediately after commit to maintain synchronization
 
-## Spec Planning
+## Spec Planning (Conditional Loading)
+
+**📖 CONDITIONAL SECTION - Read only when needed**
+
+**Load when**: 
+- Creating or updating specification documents (requirements.md, design.md, tasks.md)
+- Need reference to spec planning standards location
+- Working on spec-related tasks
+
+**Skip when**: 
+- Executing implementation tasks
+- Normal development work without spec creation
+- Following established task specifications
+
+---
 
 **WHEN creating or updating specification documents (requirements.md, design.md, tasks.md):**
 
@@ -768,6 +794,8 @@ Use this checklist to ensure reliable hook automation:
 ---
 
 ## Quality Standards
+
+**Note**: This section intentionally uses the same heading as other steering documents because each document defines quality standards specific to its domain. Development Workflow focuses on task completion quality, while other documents define standards for their respective processes.
 
 ### Before Task Completion
 - Verify all success criteria are met

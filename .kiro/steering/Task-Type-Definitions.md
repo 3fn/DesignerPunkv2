@@ -1,18 +1,63 @@
 # Task Type Definitions
 
-**Date**: October 20, 2025  
-**Purpose**: Define task types for three-tier validation and documentation system  
-**Organization**: process-standard  
+**Date**: 2025-10-20
+**Last Reviewed**: 2025-12-15
+**Purpose**: Define task types for three-tier validation and documentation system
+**Organization**: process-standard
 **Scope**: cross-project
+**Layer**: 2
+**Relevant Tasks**: spec-creation
 
 ---
 inclusion: conditional
-trigger: spec-work
+trigger: spec-creation
+---
+
+## AI Agent Reading Priorities
+
+**Note**: This section intentionally uses the same heading as other steering documents because each document provides reading priorities specific to its content. This structural pattern enables progressive disclosure and helps AI agents navigate to relevant sections efficiently.
+
+**This document is loaded conditionally when creating or updating specs. Read strategically based on your current phase.**
+
+### WHEN Creating Tasks Document (Planning Phase) THEN Read:
+1. ✅ **Overview** (MUST READ - understand task type purpose)
+2. ✅ **All Task Type Definitions** (Setup, Implementation, Architecture)
+3. ✅ **Characteristics and Examples** for each type
+4. ✅ **Validation and Documentation Tiers** for each type
+5. ❌ **SKIP**: Update History (unless encountering new patterns)
+
+### WHEN Classifying Ambiguous Tasks THEN Read:
+1. ✅ **Task Type Definitions** (review characteristics)
+2. ✅ **Examples** for similar tasks
+3. ✅ **Update History** (check for similar patterns previously classified)
+4. ✅ **Guidance for AI Agents** section
+
+### WHEN Executing Tasks (Implementation Phase) THEN Read:
+1. ✅ **Your Task's Type Definition** (understand what's expected)
+2. ✅ **Validation Tier** for your task type
+3. ✅ **Documentation Tier** for your task type
+4. ❌ **SKIP**: Other task type definitions, Update History
+
+### WHEN Encountering New Task Patterns THEN Read:
+1. ✅ **All Task Type Definitions** (find closest match)
+2. ✅ **Update History** (check for similar patterns)
+3. ✅ **Guidelines for Updates** section
+4. ✅ Prompt human for classification decision
+
+**SKIP when:**
+- Executing tasks with clear type classification
+- Working on non-spec tasks
+- Task type is obvious from characteristics
+
 ---
 
 ## Overview
 
+**Note**: This section intentionally uses the same heading as other steering documents because each document provides an overview of its specific system or process. This structural pattern enables consistent navigation across documentation.
+
 This document defines the three task types used in the Spec Planning Standards to determine appropriate validation depth and completion documentation detail. Task types are determined during the planning phase and guide execution practices.
+
+**Layer Context**: This is a Layer 2 (Frameworks and Patterns) document that provides reusable classification framework for spec planning. It works with Spec Planning Standards to enable consistent task type assignment across all specs.
 
 ---
 

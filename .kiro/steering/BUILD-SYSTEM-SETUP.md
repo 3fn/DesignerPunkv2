@@ -1,8 +1,13 @@
 # Build System Setup
 
-**Date**: October 25, 2025  
+**Date**: 2025-10-25
 **Updated**: November 19, 2025  
+**Last Reviewed**: 2025-12-15
 **Purpose**: Document the build system configuration for DesignerPunk v2  
+**Organization**: process-standard
+**Scope**: cross-project
+**Layer**: 3
+**Relevant Tasks**: debugging, validation
 **Context**: Added during Task 3.2 completion to prevent stale JavaScript issues. Updated during TypeScript error resolution to reflect restored type safety enforcement.
 
 ---
@@ -11,6 +16,10 @@ trigger: build-issues, typescript-errors, testing-output
 ---
 
 ## AI Agent Reading Priorities
+
+**Note**: This section intentionally uses the same heading as other steering documents because each document provides reading priorities specific to its content. This structural pattern enables progressive disclosure and helps AI agents navigate to relevant sections efficiently.
+
+**Layer Context**: This is a Layer 3 (Specific Implementations) document that provides specialized troubleshooting and build system guidance. It's conditionally loaded when experiencing build issues, TypeScript errors, or testing generated output files.
 
 **WHEN experiencing build errors THEN Read:**
 - Troubleshooting section for specific error patterns
@@ -41,6 +50,8 @@ trigger: build-issues, typescript-errors, testing-output
 ---
 
 ## Overview
+
+**Note**: This section intentionally uses the same heading as other steering documents because each document provides an overview of its specific system or process. This structural pattern enables consistent navigation across documentation.
 
 This project uses a hybrid TypeScript compilation approach:
 - **Development**: Uses `ts-node` and `ts-jest` for direct TypeScript execution

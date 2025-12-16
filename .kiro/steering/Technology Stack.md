@@ -1,12 +1,39 @@
----
-inclusion: always
----
 # Technology Stack
 
-**Date**: November 26, 2025  
+**Date**: 2025-11-26
+**Last Reviewed**: 2025-12-15
 **Purpose**: Define technology choices for DesignerPunk cross-platform implementation  
 **Organization**: process-standard  
 **Scope**: cross-project
+**Layer**: 3
+**Relevant Tasks**: architecture, coding
+
+---
+inclusion: conditional
+trigger: architecture, coding
+---
+
+## AI Agent Reading Priorities
+
+**Note**: This section intentionally uses the same heading as other steering documents because each document provides reading priorities specific to its content. This structural pattern enables progressive disclosure and helps AI agents navigate to relevant sections efficiently.
+
+**Layer Context**: This is a Layer 3 (Specific Implementations) document that defines technology choices for cross-platform implementation. It's conditionally loaded when working on architecture or coding tasks that require platform-specific technology knowledge.
+
+**WHEN implementing cross-platform components THEN Read:**
+- Platform Technologies section (iOS, Android, Web)
+- True Native Architecture section (file organization)
+
+**WHEN working with web components THEN Read:**
+- Web CSS Standards section (logical properties)
+- Platform Technologies: Web section
+
+**WHEN making architectural decisions THEN Read:**
+- All sections to understand technology constraints and choices
+
+**SKIP when:**
+- Working on non-platform-specific code
+- Following established component patterns
+- Not making technology stack decisions
 
 ---
 

@@ -1,9 +1,23 @@
+# A Vision of the Future
+
+**Date**: 2025-10-20
+**Last Reviewed**: 2025-12-15
+**Purpose**: Philosophical foundation and vision for DesignerPunk as AI-human collaborative design system
+**Organization**: process-standard
+**Scope**: cross-project
+**Layer**: 3
+**Relevant Tasks**: architecture
+
 ---
 inclusion: conditional
-trigger: vision-context, architectural-decisions
+trigger: architecture
 ---
 
 ## AI Agent Reading Priorities
+
+**Note**: This section intentionally uses the same heading as other steering documents because each document provides reading priorities specific to its content. This structural pattern enables progressive disclosure and helps AI agents navigate to relevant sections efficiently.
+
+**Layer Context**: This is a Layer 3 (Specific Implementations) document that provides philosophical foundation and vision for DesignerPunk as an AI-human collaborative design system. It's conditionally loaded when making architectural decisions or questioning system approach.
 
 **WHEN questioning system approach or complexity THEN Read:**
 - Understand the "Rosetta Stone" concept for AI-human collaboration

@@ -1,9 +1,12 @@
 # Component Development Guide
 
-**Date**: November 17, 2025
+**Date**: 2025-11-17
+**Last Reviewed**: 2025-12-15
 **Purpose**: Guide AI agents in building components with appropriate token usage and True Native Architecture
 **Organization**: process-standard
 **Scope**: cross-project
+**Layer**: 3
+**Relevant Tasks**: coding, accessibility-development
 
 ---
 inclusion: conditional
@@ -11,6 +14,10 @@ trigger: component-development, token-selection, cross-platform-components
 ---
 
 ## AI Agent Reading Priorities
+
+**Note**: This section intentionally uses the same heading as other steering documents because each document provides reading priorities specific to its content. This structural pattern enables progressive disclosure and helps AI agents navigate to relevant sections efficiently.
+
+**Layer Context**: This is a Layer 3 (Specific Implementations) document that provides domain-specific guidance for component development. It's conditionally loaded when building or modifying components and contains detailed technical implementation patterns.
 
 **WHEN building new components THEN read:**
 1. ✅ **Token Selection Decision Framework** (Step 1-4)
@@ -498,6 +505,8 @@ Each platform uses its native syntax to consume the generated token values. The 
 ---
 
 ## Anti-Patterns to Avoid
+
+**Note**: This section intentionally uses the same heading as other steering documents because each document addresses anti-patterns specific to its domain. Component Development Guide focuses on token usage anti-patterns, while other documents cover their respective domains.
 
 ### ❌ Using Primitives When Semantics Exist
 ```typescript

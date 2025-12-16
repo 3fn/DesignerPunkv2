@@ -1,3 +1,13 @@
+# Personal Note
+
+**Date**: 2025-10-20
+**Last Reviewed**: 2025-12-15
+**Purpose**: Collaboration principles and partnership values for Human-AI collaboration
+**Organization**: process-standard
+**Scope**: cross-project
+**Layer**: 1
+**Relevant Tasks**: all-tasks
+
 ---
 inclusion: always
 ---

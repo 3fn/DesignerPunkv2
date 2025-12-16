@@ -1,22 +1,38 @@
+# Steering Documentation Directional Priorities
 
-
-**Date**: October 20, 2025
+**Date**: 2025-10-20
 **Updated**: December 14, 2025
 **Purpose**: Meta-guide teaching AI agents how to use the conditional loading steering system
 **Organization**: process-standard
 **Scope**: cross-project
+**Layer**: 0
+**Relevant Tasks**: all-tasks
+**Last Reviewed**: 2025-12-15
 
+---
+inclusion: always
 ---
 
 ## How This Steering System Works
 
-The steering documentation uses **conditional loading** to save tokens while ensuring you have the guidance you need:
+The steering documentation uses **progressive disclosure** through a four-layer architecture to save tokens while ensuring you have the guidance you need:
 
-- **Always-loaded docs**: Loaded for every task, but read strategically based on your work
-- **Conditional docs**: Only loaded when specific triggers match your task type
+### Four-Layer Structure
+
+The documentation is organized like a meal experience:
+
+- **Layer 0 (Reading the Menu)**: Meta-guide - How to use the steering system itself
+- **Layer 1 (Appetizer)**: Foundational concepts - Essential context for all work
+- **Layer 2 (Main Course)**: Frameworks and patterns - Core workflows and methodologies
+- **Layer 3 (Dessert)**: Specific implementations - Domain-specific technical guidance
+
+### Loading Strategy
+
+- **Always-loaded docs**: Layers 0-2 are loaded for every task, but read strategically based on your work
+- **Conditional docs**: Layer 3 documents only load when specific triggers match your task type
 - **"AI Agent Reading Priorities" sections**: Guide you to relevant parts within documents
 
-**Key principle**: Steering docs contain mission critical context for successful execution, but not ALL documents need to be read completely. Many contain conditional sections that only apply to specific task types. Learn to read strategically. If you later receive a request pertaining to topics you skipped, read the previously skipped, relevent section(s).
+**Key principle**: Steering docs contain mission critical context for successful execution, but not ALL documents need to be read completely. Many contain conditional sections that only apply to specific task types. Learn to read strategically. If you later receive a request pertaining to topics you skipped, read the previously skipped, relevant section(s).
 
 ---
 

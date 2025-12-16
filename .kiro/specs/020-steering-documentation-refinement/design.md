@@ -357,6 +357,124 @@ node scripts/validate-steering-metadata.js
 
 ---
 
+## Reference Artifacts Strategy
+
+### Problem: Token Load from Reading Multiple Documents
+
+Many tasks in this spec require analyzing or modifying multiple steering documents. With 12 documents totaling 8,524 lines, AI agents hit token limits when trying to read all documents for analysis tasks.
+
+**Example**: Task 0.2 "Map document structure" originally required reading all 12 documents to extract headings, but this exceeded token budgets.
+
+### Solution: Generate Machine-Readable Artifacts Once, Reference Many Times
+
+**Phase 0 (Baseline Discovery)** generates three machine-readable artifacts that subsequent tasks can reference instead of reading full documents:
+
+1. **`steering-structure-map.md`** - Complete document structure
+   - H1 and H2 headings for all documents
+   - Section counts per document
+   - "AI Agent Reading Priorities" presence
+   - Conditional loading marker locations
+
+2. **`metadata-analysis.md`** - Metadata status for all documents
+   - Which documents have metadata headers
+   - Metadata fields present in each document
+   - Documents missing metadata
+   - Metadata inconsistencies
+
+3. **`baseline-metrics.md`** - Size and complexity metrics
+   - Line counts per document
+   - Section counts per document
+   - Size distribution (small/medium/large)
+   - Conditional loading coverage statistics
+
+### Implementation Approach
+
+**For tasks that analyze all documents:**
+- Use **bash scripts** to extract specific information mechanically
+- Generate machine-readable output files
+- AI agents read output files instead of source documents
+- Examples: Tasks 0.2 (structure), 0.3 (metadata), 0.4 (metrics)
+
+**For tasks that modify documents:**
+- Work on **one document at a time**
+- Use reference artifacts to understand context
+- No need to read other documents
+- Examples: Tasks 1.2-1.5 (metadata audit), 2.2-2.5 (progressive disclosure updates)
+
+**For tasks that scan for patterns:**
+- Create **targeted scripts** that extract just what's needed
+- Use `grep`, `awk`, `sed` for pattern matching
+- Generate summary reports
+- Examples: Task 2.6 (cross-references), Task 3.5 (redundancy audit)
+
+### Script-Based Extraction Benefits
+
+**Token Efficiency**:
+- Scripts extract only needed information (headings, metadata, metrics)
+- AI agents read concise output instead of full documents
+- Reduces token usage by 80-90% for analysis tasks
+
+**Deterministic Results**:
+- Bash scripts produce consistent, repeatable output
+- No risk of AI agent interpretation variance
+- Machine-readable format enables automation
+
+**Avoids Instruction Following**:
+- Scripts don't read document content that might contain instructions
+- Mechanical extraction prevents AI agents from being influenced by document directives
+- Safer for documents with strong AI agent instructions (like meta-guide)
+
+### Reference Artifact Usage by Task
+
+**Task 1 (Metadata Audit)**:
+- Uses `metadata-analysis.md` to identify which documents need metadata
+- Modifies one document at a time
+- No need to read other documents
+
+**Task 2 (Progressive Disclosure)**:
+- Uses `steering-structure-map.md` to understand document organization
+- Uses `baseline-metrics.md` for size information
+- Modifies one document at a time
+
+**Task 3 (Section-Level Markers)**:
+- Task 3.1 uses `baseline-metrics.md` to identify large documents (> 200 lines)
+- Task 3.5 uses new `scripts/find-duplicate-content.sh` for redundancy audit
+- Tasks 3.2-3.4 modify one document at a time
+
+**Task 4 (Metadata Maintenance)**:
+- Task 4.4 uses `metadata-analysis.md` for initial review
+- New `scripts/detect-stale-metadata.js` for staleness detection
+
+**Task 5 (MCP Validation)**:
+- Uses all existing artifacts (structure map, metadata analysis, baseline metrics)
+- Creates validation scripts that parse artifacts, not source documents
+- Generates MCP-readiness report from artifact analysis
+
+### Design Decision: Script-First Approach
+
+**Decision**: Use bash scripts for mechanical extraction tasks instead of AI agent reading.
+
+**Rationale**:
+- **Token efficiency**: Scripts extract only needed data, reducing token usage dramatically
+- **Safety**: Scripts don't interpret document content or follow embedded instructions
+- **Repeatability**: Deterministic output enables consistent results across executions
+- **Speed**: Scripts execute faster than AI agent reading and analysis
+- **Maintainability**: Scripts can be version-controlled and tested independently
+
+**Trade-offs**:
+- ✅ **Gained**: Massive token savings, deterministic results, safer execution
+- ❌ **Lost**: Some flexibility in interpretation (but this is actually a benefit for mechanical tasks)
+- ⚠️ **Risk**: Scripts require bash/Unix tools (acceptable for macOS/Linux development)
+
+**Alternatives Considered**:
+1. **Break tasks into subtasks per document**: Still requires reading each document, just separately
+2. **Use AI agent reading with strategic sections**: Still hits token limits for large documents
+3. **Manual extraction**: Not repeatable, error-prone, time-consuming
+
+**Why script-first won**: Combines token efficiency, safety, and repeatability in a way that other approaches cannot match.
+
+---
+
 ## Testing Strategy
 
 ### Metadata Validation Tests

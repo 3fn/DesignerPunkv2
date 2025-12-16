@@ -1,20 +1,26 @@
 # Spec Planning Standards
 
-**Date**: January 10, 2025  
-**Updated**: October 20, 2025  
-**Purpose**: Standards for creating requirements, design, and task documents for feature specifications  
-**Organization**: process-standard  
-**Scope**: cross-project  
-**Trigger**: Conditional - loaded when AI Agent creates or updates specs
+**Date**: 2025-01-10
+**Updated**: October 20, 2025
+**Last Reviewed**: 2025-12-15
+**Purpose**: Standards for creating requirements, design, and task documents for feature specifications
+**Organization**: process-standard
+**Scope**: cross-project
+**Layer**: 2
+**Relevant Tasks**: spec-creation
 
 ---
 inclusion: conditional
-trigger: spec-work
+trigger: spec-creation
 ---
 
 ## AI Agent Reading Priorities
 
+**Note**: This section intentionally uses the same heading as other steering documents because each document provides reading priorities specific to its content. This structural pattern enables progressive disclosure and helps AI agents navigate to relevant sections efficiently.
+
 **This document is comprehensive but NOT all sections are needed for every task. Read strategically based on what you're doing RIGHT NOW.**
+
+**Layer Context**: This is a Layer 2 (Frameworks and Patterns) document that provides systematic spec creation methodology. It's conditionally loaded when creating or updating specs, and contains extensive sections for different spec phases (requirements, design, tasks, execution).
 
 ### WHEN Creating Requirements Document THEN Read:
 1. ✅ **Requirements Document Format** (MUST READ)
@@ -82,6 +88,8 @@ trigger: spec-work
 
 ## Overview
 
+**Note**: This section intentionally uses the same heading as other steering documents because each document provides an overview of its specific system or process. This structural pattern enables consistent navigation across documentation.
+
 This document defines the format and structure for creating feature specifications in the DesignerPunk project. Specs follow a three-phase workflow: Requirements → Design → Tasks, with each phase building on the previous to create comprehensive, actionable implementation plans.
 
 **When to use this document**: When creating new specs or updating existing spec documents (requirements.md, design.md, tasks.md).
@@ -90,7 +98,23 @@ This document defines the format and structure for creating feature specificatio
 
 ---
 
-## Requirements Document Format
+## Requirements Document Format (Conditional Loading)
+
+**📖 CONDITIONAL SECTION - Read only when needed**
+
+**Load when**: 
+- Creating requirements.md for a new spec
+- Updating requirements.md for an existing spec
+- Need reference for EARS format or user story structure
+- Reviewing requirements quality standards
+
+**Skip when**: 
+- Creating design.md or tasks.md (different formats)
+- Executing implementation tasks
+- Documenting task completion
+- Working on non-spec tasks
+
+---
 
 ### Structure
 
@@ -990,6 +1014,21 @@ This validation system ensures:
 
 ### Tier 1: Minimal Validation (Setup Tasks)
 
+**📖 CONDITIONAL SECTION - Read only when needed**
+
+**Load when**:
+- Executing Setup tasks (Tier 1)
+- Need to understand minimal validation requirements
+- Validating structural work completion
+- Creating completion documentation for Setup tasks
+
+**Skip when**:
+- Executing Implementation or Architecture tasks (use Tier 2 or 3)
+- Not currently validating a task
+- Just planning or designing
+
+---
+
 **Purpose**: Verify structural work is complete and syntactically correct
 
 **When to Apply**: 
@@ -1042,6 +1081,21 @@ This validation system ensures:
 ---
 
 ### Tier 2: Standard Validation (Implementation Tasks)
+
+**📖 CONDITIONAL SECTION - Read only when needed**
+
+**Load when**:
+- Executing Implementation tasks (Tier 2)
+- Need to understand standard validation requirements
+- Validating functional correctness and integration
+- Creating completion documentation for Implementation tasks
+
+**Skip when**:
+- Executing Setup or Architecture tasks (use Tier 1 or 3)
+- Not currently validating a task
+- Just planning or designing
+
+---
 
 **Purpose**: Verify functional correctness and integration with existing code
 
@@ -1116,6 +1170,21 @@ This validation system ensures:
 ---
 
 ### Tier 3: Comprehensive Validation (Architecture & Parent Tasks)
+
+**📖 CONDITIONAL SECTION - Read only when needed**
+
+**Load when**:
+- Executing Architecture or Parent tasks (Tier 3)
+- Need to understand comprehensive validation requirements
+- Validating design soundness and system integration
+- Creating completion documentation for Architecture/Parent tasks
+
+**Skip when**:
+- Executing Setup or Implementation tasks (use Tier 1 or 2)
+- Not currently validating a task
+- Just planning or designing
+
+---
 
 **Purpose**: Verify design soundness, system integration, and end-to-end functionality
 
@@ -1412,6 +1481,21 @@ This documentation system ensures:
 
 ### Tier 1: Minimal Documentation (Setup Tasks)
 
+**📖 CONDITIONAL SECTION - Read only when needed**
+
+**Load when**:
+- Documenting Setup task completion (Tier 1)
+- Need to understand minimal documentation requirements
+- Creating completion docs for structural work
+- Need template for Setup task documentation
+
+**Skip when**:
+- Documenting Implementation or Architecture tasks (use Tier 2 or 3)
+- Not currently creating completion documentation
+- Just planning or executing tasks
+
+---
+
 **Purpose**: Document structural work completion with basic verification
 
 **When to Apply**:
@@ -1488,7 +1572,7 @@ This documentation system ensures:
 ```markdown
 # Task 1.1 Completion: Create Directory Structure
 
-**Date**: October 20, 2025
+**Date**: 2025-10-20
 **Task**: 1.1 Create directory structure
 **Type**: Setup
 **Status**: Complete
@@ -1527,6 +1611,21 @@ Created the foundational directory structure for the build system. All directori
 ---
 
 ### Tier 2: Standard Documentation (Implementation Tasks)
+
+**📖 CONDITIONAL SECTION - Read only when needed**
+
+**Load when**:
+- Documenting Implementation task completion (Tier 2)
+- Need to understand standard documentation requirements
+- Creating completion docs for functional code
+- Need template for Implementation task documentation
+
+**Skip when**:
+- Documenting Setup or Architecture tasks (use Tier 1 or 3)
+- Not currently creating completion documentation
+- Just planning or executing tasks
+
+---
 
 **Purpose**: Document implementation approach, decisions, and validation results
 
@@ -1630,7 +1729,7 @@ Created the foundational directory structure for the build system. All directori
 ```markdown
 # Task 1.2 Completion: Implement Token Selector
 
-**Date**: October 20, 2025
+**Date**: 2025-10-20
 **Task**: 1.2 Implement TokenSelector class with priority logic
 **Type**: Implementation
 **Status**: Complete
@@ -1695,6 +1794,21 @@ The TokenSelector integrates with:
 ---
 
 ### Tier 3: Comprehensive Documentation (Architecture & Parent Tasks)
+
+**📖 CONDITIONAL SECTION - Read only when needed**
+
+**Load when**:
+- Documenting Architecture or Parent task completion (Tier 3)
+- Need to understand comprehensive documentation requirements
+- Creating completion docs for design decisions
+- Need template for Architecture/Parent task documentation
+
+**Skip when**:
+- Documenting Setup or Implementation tasks (use Tier 1 or 2)
+- Not currently creating completion documentation
+- Just planning or executing tasks
+
+---
 
 **Purpose**: Document design decisions, architectural rationale, and system integration
 
@@ -1986,7 +2100,7 @@ The TokenSelector integrates with:
 ```markdown
 # Task 1 Completion: Build System Foundation
 
-**Date**: October 20, 2025
+**Date**: 2025-10-20
 **Task**: 1. Build System Foundation
 **Type**: Parent
 **Status**: Complete
@@ -2391,7 +2505,7 @@ Developers can now:
 ```markdown
 # Task 1 Summary: Update Spec Planning Standards with Summary Document Workflow
 
-**Date**: October 30, 2025
+**Date**: 2025-10-30
 **Spec**: release-detection-trigger-fix
 **Type**: Implementation
 
@@ -2606,6 +2720,8 @@ When creating cross-references, calculate relative paths based on the source doc
 
 ## Quality Standards
 
+**Note**: This section intentionally uses the same heading as other steering documents because each document defines quality standards specific to its domain. Spec Planning Standards focuses on requirements, design, and task quality, while other documents define standards for their respective processes.
+
 ### Requirements Quality
 
 - All requirements testable and verifiable
@@ -2633,6 +2749,8 @@ When creating cross-references, calculate relative paths based on the source doc
 ---
 
 ## Anti-Patterns to Avoid
+
+**Note**: This section intentionally uses the same heading as other steering documents because each document addresses anti-patterns specific to its domain. Spec Planning Standards focuses on spec creation anti-patterns (requirements, design, tasks), while other documents cover their respective domains.
 
 ### Requirements Anti-Patterns
 
@@ -2979,7 +3097,7 @@ Create contracts in `.kiro/specs/integration-contracts/[provider]-[consumer].md`
 **Provider**: Spec 008 (Icon Web Component Conversion)
 **Consumer**: Spec 005 (ButtonCTA Component)
 **Status**: Pending ButtonCTA completion
-**Date**: November 20, 2025
+**Date**: 2025-11-20
 
 ---
 
