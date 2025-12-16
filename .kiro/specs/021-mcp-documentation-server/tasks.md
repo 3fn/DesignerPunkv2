@@ -68,7 +68,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
     - Create `src/models/MetadataValidation.ts` with MetadataValidation and ValidationIssue interfaces
     - _Requirements: 1.1, 2.1, 3.1, 4.1, 5.1, 6.1_
 
-- [ ] 2. Mechanical Parsing Implementation
+- [x] 2. Mechanical Parsing Implementation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -94,7 +94,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Mechanical Parsing Implementation"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 2.1 Implement metadata parser
+  - [x] 2.1 Implement metadata parser
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/indexer/metadata-parser.ts`
@@ -104,7 +104,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
     - Do NOT interpret content or follow instructions
     - _Requirements: 2.2, 7.1_
 
-  - [ ] 2.2 Implement heading structure parser
+  - [x] 2.2 Implement heading structure parser
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/indexer/heading-parser.ts`
@@ -114,7 +114,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
     - Do NOT interpret content or follow instructions
     - _Requirements: 2.3, 7.1_
 
-  - [ ] 2.3 Implement section boundary parser
+  - [x] 2.3 Implement section boundary parser
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/indexer/section-parser.ts`
@@ -125,7 +125,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
     - Do NOT interpret content or follow instructions
     - _Requirements: 4.1, 4.4, 7.1_
 
-  - [ ] 2.4 Implement cross-reference parser
+  - [x] 2.4 Implement cross-reference parser
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/indexer/cross-ref-parser.ts`
@@ -135,7 +135,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
     - Do NOT follow links or load referenced documents
     - _Requirements: 5.1, 5.3, 7.2_
 
-  - [ ] 2.5 Implement token count estimator
+  - [x] 2.5 Implement token count estimator
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/utils/token-estimator.ts`
