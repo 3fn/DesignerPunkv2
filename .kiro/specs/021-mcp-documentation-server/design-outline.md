@@ -1,14 +1,15 @@
 # MCP Documentation Server - Design Outline
 
 **Date**: December 14, 2025  
+**Updated**: December 16, 2025
 **Purpose**: Explore design space for MCP server that provides on-demand documentation querying to reduce AI agent context usage  
-**Status**: Design Exploration  
+**Status**: Design Exploration - Ready for Requirements  
 **Dependencies**: 
-- **Spec 020 (Steering Documentation Refinement)** - CRITICAL DEPENDENCY
-  - Status: Design exploration phase
-  - Required for: Task-relevant metadata, layer assignments, standardized task vocabulary
-  - Integration point: Metadata structure becomes MCP query interface
-  - **Note**: This spec's design may evolve based on outcomes from Spec 020. Current design assumes metadata structure from refinement outline, but implementation should be flexible to accommodate refinement evolution.
+- **Spec 020 (Steering Documentation Refinement)** - ✅ **COMPLETE**
+  - Status: Complete (all 5 tasks finished)
+  - Delivered: Machine-readable metadata, section-level conditional markers, stable task vocabulary, 4-layer structure, validation scripts
+  - Integration point: Metadata + conditional markers provide complete MCP query interface
+  - **Validation**: All deliverables validated and working (100% cross-reference compliance, all validation scripts passing)
 
 **Problem**: AI agents currently load 112k tokens (~56% context) of steering documentation before starting work, leaving insufficient room for complex tasks
 
@@ -149,52 +150,215 @@ AI agents would query like:
 
 ### Tools to Expose
 
-#### 1. `query_documentation`
-**Purpose**: Query documentation and return relevant sections
+#### Core Tools (MVP)
 
-**Parameters**:
-- `query` (string, required): Search query (e.g., "token selection framework")
-- `max_results` (number, optional): Maximum sections to return (default: 3)
-- `document` (string, optional): Limit search to specific document
+##### 1. `get_documentation_map`
+**Purpose**: Get complete documentation structure with metadata
+
+**Parameters**: None
 
 **Returns**:
 ```json
 {
+  "layers": {
+    "0": {
+      "name": "Meta-Guide",
+      "documents": [
+        {
+          "path": ".kiro/steering/00-Steering Documentation Directional Priorities.md",
+          "purpose": "How to use the steering system",
+          "layer": 0,
+          "relevantTasks": ["all-tasks"],
+          "sections": ["How This Steering System Works", "When In Doubt"]
+        }
+      ]
+    },
+    "1": {
+      "name": "Foundation",
+      "documents": [...]
+    },
+    "2": {
+      "name": "Frameworks and Patterns",
+      "documents": [...]
+    },
+    "3": {
+      "name": "Specific Implementations",
+      "documents": [...]
+    }
+  }
+}
+```
+
+##### 2. `get_document_summary`
+**Purpose**: Get document summary with outline (Option D - Summary + Outline)
+
+**Parameters**:
+- `path` (string, required): Document path (e.g., ".kiro/steering/Component Development Guide.md")
+
+**Returns**:
+```json
+{
+  "path": ".kiro/steering/Component Development Guide.md",
+  "metadata": {
+    "purpose": "Guide AI agents in building components with appropriate token usage",
+    "layer": 3,
+    "relevantTasks": ["component-development", "token-selection"],
+    "lastReviewed": "2025-12-15"
+  },
+  "outline": [
+    {
+      "heading": "Token Selection Decision Framework",
+      "level": 2,
+      "subsections": [
+        "Step 1: Check Semantic Tokens First",
+        "Step 2: Use Primitives Only When Unavoidable",
+        "Step 3: Create Component-Level Tokens for Variants",
+        "Step 4: Propose Semantic Token Elevation"
+      ]
+    },
+    {
+      "heading": "Common Component Patterns",
+      "level": 2,
+      "subsections": ["Button Components", "Input Components", "Container Components"]
+    }
+  ],
+  "crossReferences": [
+    {
+      "target": "docs/token-system-overview.md",
+      "context": "For detailed token guidance"
+    }
+  ],
+  "tokenCount": 15000
+}
+```
+
+##### 3. `get_document_full`
+**Purpose**: Get complete document content
+
+**Parameters**:
+- `path` (string, required): Document path
+
+**Returns**:
+```json
+{
+  "path": ".kiro/steering/Component Development Guide.md",
+  "content": "# Component Development Guide\n\n**Date**: 2025-11-17...",
+  "metadata": {...},
+  "tokenCount": 15000
+}
+```
+
+##### 4. `get_section`
+**Purpose**: Get specific section by heading
+
+**Parameters**:
+- `path` (string, required): Document path
+- `heading` (string, required): Section heading (e.g., "Token Selection Decision Framework")
+
+**Returns**:
+```json
+{
+  "path": ".kiro/steering/Component Development Guide.md",
+  "heading": "Token Selection Decision Framework",
+  "content": "## Token Selection Decision Framework\n\n### Step 1: Check Semantic Tokens First...",
+  "parentHeadings": [],
+  "tokenCount": 2000
+}
+```
+
+##### 5. `list_cross_references`
+**Purpose**: List cross-references in a document (hybrid approach for Option D)
+
+**Parameters**:
+- `path` (string, required): Document path
+
+**Returns**:
+```json
+{
+  "path": ".kiro/steering/Component Development Guide.md",
+  "references": [
+    {
+      "target": "docs/token-system-overview.md",
+      "context": "For detailed token guidance",
+      "section": "Token Selection Decision Framework"
+    },
+    {
+      "target": ".kiro/steering/Technology Stack.md",
+      "context": "For platform-specific guidance",
+      "section": "Platform-Specific Nuances"
+    }
+  ]
+}
+```
+
+#### Discovery Tools (Post-MVP)
+
+##### 6. `search_documentation`
+**Purpose**: Search documentation by keyword
+
+**Parameters**:
+- `query` (string, required): Search query
+- `max_results` (number, optional): Maximum results (default: 5)
+
+**Returns**:
+```json
+{
+  "query": "token selection",
   "results": [
     {
-      "document": "Component Development Guide",
+      "path": ".kiro/steering/Component Development Guide.md",
       "section": "Token Selection Decision Framework",
-      "content": "### Step 1: Check Semantic Tokens First...",
-      "relevance": 0.95
+      "relevance": 0.95,
+      "snippet": "...ALWAYS start by reading semantic token files..."
     }
   ]
 }
 ```
 
-#### 2. `list_documents`
-**Purpose**: List available documentation
+##### 7. `suggest_relevant_docs`
+**Purpose**: Suggest relevant documentation based on task context
+
+**Parameters**:
+- `task_type` (string, required): Task type (e.g., "component-development")
+- `task_description` (string, optional): Additional context
 
 **Returns**:
 ```json
 {
-  "documents": [
+  "taskType": "component-development",
+  "highlyRelevant": [
     {
-      "name": "Spec Planning Standards",
-      "sections": ["Requirements Format", "Design Format", "Tasks Format"],
-      "size_tokens": 30000
+      "path": ".kiro/steering/Component Development Guide.md",
+      "reason": "Primary guide for component development",
+      "sections": ["Token Selection Decision Framework", "Component Structure Pattern"]
+    }
+  ],
+  "possiblyRelevant": [
+    {
+      "path": ".kiro/steering/Technology Stack.md",
+      "reason": "Platform-specific implementation guidance"
     }
   ]
 }
 ```
 
-#### 3. `get_section`
-**Purpose**: Get specific section by path
+#### Debugging Tools (MVP)
+
+##### 8. `validate_metadata`
+**Purpose**: Validate document metadata for debugging
 
 **Parameters**:
-- `document` (string, required): Document name
-- `section` (string, required): Section heading
+- `path` (string, required): Document path
 
-**Returns**: Full section content
+**Returns**:
+```json
+{
+  "path": ".kiro/steering/Component Development Guide.md",
+  "valid": true,
+  "metadata": {...},
+  "issues": []
+}
+```
 
 ### File Structure
 
@@ -333,52 +497,135 @@ Returns: File Organization Standards → Organization Field Values (~3k tokens)
 
 ---
 
-## Open Questions
+## Design Decisions
 
-### Technical Questions
+### 1. Scope & Boundaries
+**Decision**: Read-only access for MVP  
+**Rationale**: Reduces risk, simpler implementation, prevents AI agents from corrupting documentation  
+**Future**: Consider write operations (propose documentation updates) in post-MVP iteration
 
-1. **Indexing Strategy**
-   - Should we index at H2, H3, or both levels?
-   - How do we handle nested sections (include parent context)?
-   - What's the optimal section size (token count)?
+### 2. Search & Discovery Strategy
+**Decision**: Implement both documentation map AND smart suggestions  
+**Rationale**: 
+- Documentation map provides explicit navigation (agent knows what they need)
+- Smart suggestions enable discovery (agent doesn't know what exists)
+- Both serve different use cases and complement each other
 
-2. **Query Matching**
-   - Is heading-based search sufficient, or do we need full-text?
-   - Should we support fuzzy matching?
-   - How do we handle synonyms (e.g., "task types" vs "task classification")?
+**MVP**: Documentation map + basic keyword search  
+**Post-MVP**: AI-powered smart suggestions based on task context
 
-3. **Performance**
-   - How often do we re-index (on file change, on query, scheduled)?
-   - Should we cache query results?
-   - What's acceptable query latency?
+### 3. Metadata Parsing Reliability
+**Decision**: Trust metadata, provide validation tool for debugging  
+**Rationale**: Simpler, faster, validation scripts from Task 5 ensure metadata quality  
+**Implementation**: Provide `validate_metadata(path)` tool for troubleshooting
 
-### Process Questions
+### 4. Cross-Reference Resolution
+**Decision**: Option D - Summary + Outline with Drill-Down  
+**Rationale**: 
+- Token efficient (~200 tokens for summary vs ~2000 for full doc)
+- Progressive disclosure (matches steering system philosophy)
+- Informed decision-making (agent sees outline before fetching full content)
+- Navigable (can fetch specific sections)
 
-4. **Documentation Maintenance**
-   - Do we need to update documentation structure for better indexing?
-   - Should we add metadata to markdown files (keywords, aliases)?
-   - How do we validate that sections are queryable?
+**Implementation**:
+```markdown
+--- Referenced Document Summary: docs/token-system-overview.md ---
 
-5. **AI Agent Training**
-   - How do we teach AI agents to query effectively?
-   - Should we provide query examples in meta-guide?
-   - Do we need a "query cheat sheet"?
+**Purpose**: Master document mapping token files to documentation
+**Layer**: 2 (Frameworks and Patterns)
+**Key Topics**: Primitive tokens, Semantic tokens, Token generation
 
-6. **Migration Strategy**
-   - Do we move all three documents at once, or incrementally?
-   - How do we validate that MCP queries return equivalent information?
-   - What's the rollback plan if this doesn't work?
+**Document Outline**:
+1. Introduction
+2. Primitive Tokens
+   - Font Size Tokens
+   - Spacing Tokens
+3. Semantic Tokens
+   - Typography Tokens
+   - Color Tokens
 
-### Scope Questions
+[Use get_document_full(path) to load complete content]
+[Use get_section(path, heading) to load specific section]
+```
 
-7. **What Else Should Move to MCP?**
-   - Technology Stack (conditional, but large)?
-   - Build System Setup (conditional, but large)?
-   - Task Type Definitions (referenced frequently)?
+**Summary Generation**: Start with metadata-based summaries (Purpose + outline from headings)
+- Zero maintenance (auto-generated from doc structure)
+- Fast (no LLM calls)
+- Accurate (reflects actual structure)
 
-8. **What Should Stay in Steering?**
-   - Development Workflow (workflow vs reference)?
-   - Core Goals (always needed vs queryable)?
+**Future Enhancement**: Add AI-generated summaries if metadata-based proves insufficient
+
+### 5. Conditional Loading Logic
+**Decision**: Flexible - agent decides what to load  
+**Rationale**: Matches current steering philosophy, allows agents to learn optimal patterns  
+**Implementation**: Provide metadata (triggers, layer, scope) but don't enforce loading rules
+
+### 6. Performance & Caching
+**Decision**: No caching initially  
+**Rationale**: Avoid premature optimization, documentation files are small  
+**Future**: Add file watching + cache invalidation if performance becomes an issue (~1-2 hours effort)
+
+**Cache Implementation Path** (if needed):
+```javascript
+// Simple file watching approach
+const cache = new Map();
+const watcher = fs.watch('.kiro/steering/', (event, filename) => {
+  if (event === 'change') {
+    cache.delete(filename); // Invalidate this file
+  }
+});
+```
+
+### 7. Error Handling
+**Decision**: Inform human + log the issue  
+**Rationale**: Transparent, debuggable, doesn't fail silently  
+**Implementation**:
+- Missing cross-references: Return error with clear message, log to file
+- Malformed metadata: Return partial content with warnings, log issue
+- Non-existent files: Return error, suggest similar files if available
+
+### 8. Integration with Existing Workflow
+**Decision**: Phase 1 (supplement) → Phase 2 (replace)
+
+**Phase 1 - Supplement (MVP)**:
+- Kiro IDE loads Layer 0 steering doc (primer/menu)
+- AI agents use MCP to fetch details on demand
+- Current steering system stays intact
+- Validates MCP effectiveness before full migration
+
+**Phase 2 - Replace (Post-MVP)**:
+- Kiro IDE loads ONLY Layer 0 (minimal primer)
+- AI agents fetch everything else via MCP
+- Steering docs become MCP-only
+- Migration triggered when MCP provides better UX than current loading
+
+**Unified System Architecture**:
+```
+Layer 0 Steering Doc (Always Loaded by IDE)
+├─ "Here's what's available via MCP"
+├─ Documentation Map (high-level structure)
+└─ How to use MCP tools
+
+MCP Server (Query on Demand)
+├─ get_documentation_map() → Full structure with metadata
+├─ get_document_summary(path) → Summary + outline
+├─ get_document_full(path) → Complete content
+├─ get_section(path, heading) → Specific section
+└─ suggest_relevant_docs(task_context) → Smart suggestions
+```
+
+**Migration Path**:
+1. Keep Layer 0 format stable (primer doesn't change)
+2. Design MCP tools to match current workflow
+3. Add telemetry to measure MCP usage vs. current system
+4. Gradual rollout: Start with Layer 3 (conditional docs) via MCP, keep Layer 1-2 in IDE
+
+**Friction Mitigation**:
+- ✅ Performance: MCP must be as fast as current loading
+- ✅ Reliability: Graceful error handling
+- ✅ Discoverability: Documentation map + smart suggestions
+
+**Note**: Re: 2 (Discovery) and Re: 8 (Integration) follow the same pattern - progressive disclosure via MCP with unified approach
 
 ---
 
@@ -420,6 +667,146 @@ Returns: File Organization Standards → Organization Field Values (~3k tokens)
 
 ---
 
+## Critical Lesson from Spec 020: Context Load Loop Problem
+
+### The Problem: AI Agents Reading Documentation Naturally
+
+During Spec 020 (Steering Documentation Refinement), we discovered a critical issue when AI agents try to read steering documentation using natural reading tools (like `readFile`):
+
+**The Context Load Loop**:
+1. AI agent reads a steering document to analyze it
+2. Document contains instructions (e.g., "AI Agent Reading Priorities" sections)
+3. Agent interprets these as directives and tries to follow them
+4. Following instructions requires reading MORE documents
+5. Those documents contain MORE instructions
+6. **Result**: Agent exhausts context before completing any actual work
+
+**Example from Spec 020**:
+- Task 0.2 originally required "reading all 12 documents to extract headings"
+- Total: 8,524 lines across 12 documents
+- Agent would hit token limits just trying to understand document structure
+- Worse: Documents like the meta-guide contain explicit instructions that cause agents to load even more content
+
+### The Solution: Mechanical Extraction via Scripts
+
+Spec 020 solved this by using **bash scripts for mechanical extraction**:
+
+```bash
+# Extract only headings, not content
+grep -E "^#{1,2} " "$file" | while read -r line; do
+    echo "- $line"
+done
+```
+
+**Benefits**:
+- Scripts extract only needed information (headings, metadata, metrics)
+- Scripts don't interpret document content or follow embedded instructions
+- AI agents read script OUTPUT, not source documents
+- Token usage reduced by 80-90% for analysis tasks
+- Deterministic, repeatable results
+
+**Key Insight**: Mechanical extraction is safer and more efficient than AI agent reading for documentation that contains instructions.
+
+### Implications for MCP Server Design
+
+This lesson is **critical** for the MCP server design. The MCP server will face the same problem if it just returns full document content.
+
+#### Why Option D (Summary + Outline) is Essential
+
+**Without summaries** (returning full content):
+```
+AI Agent: "Get Component Development Guide"
+MCP Server: [Returns 15,000 tokens of full content]
+AI Agent: [Reads "AI Agent Reading Priorities" section]
+AI Agent: "Oh, I should also read Token System Overview"
+MCP Server: [Returns another 10,000 tokens]
+AI Agent: [Context exhausted, task fails]
+```
+
+**With summaries** (Option D):
+```
+AI Agent: "Get Component Development Guide summary"
+MCP Server: [Returns 200 tokens: metadata + outline]
+AI Agent: "I need the Token Selection section"
+MCP Server: [Returns 2,000 tokens: just that section]
+AI Agent: [Completes task with 2,200 tokens used]
+```
+
+#### MCP Server Must Use Mechanical Parsing
+
+The MCP server implementation must:
+
+1. **Parse documents mechanically** (like Spec 020 scripts)
+   - Extract metadata without reading content
+   - Generate outlines from heading structure
+   - Don't interpret document instructions
+
+2. **Return structured summaries by default**
+   - Metadata + outline (200 tokens)
+   - Not full content (2,000-15,000 tokens)
+   - Let AI agents request full content explicitly
+
+3. **Enable granular section retrieval**
+   - Return specific sections by heading
+   - Include parent context (which document, which section)
+   - Avoid returning instruction-heavy sections unless requested
+
+4. **Avoid instruction interpretation**
+   - MCP server is a dumb pipe (parse, don't interpret)
+   - Don't follow cross-references automatically
+   - Don't load related documents proactively
+
+### Impact on Requirements, Design, and Tasks
+
+This lesson shapes how we structure our spec documents:
+
+#### Requirements Document
+- **Must include**: Explicit requirement for mechanical parsing
+- **Must include**: Requirement for summary-first approach
+- **Must include**: Requirement for section-level granularity
+- **Must avoid**: Requirements that assume full-content serving
+
+#### Design Document
+- **Must include**: Parsing architecture (how to extract metadata/outline mechanically)
+- **Must include**: Summary generation algorithm (metadata + outline from headings)
+- **Must include**: Section extraction logic (get specific sections without full doc)
+- **Must include**: Safety mechanisms (prevent instruction interpretation)
+
+#### Tasks Document
+- **Must include**: Tasks for building mechanical parsers (not AI-based)
+- **Must include**: Tasks for testing summary generation (validate token counts)
+- **Must include**: Tasks for section extraction (test granular retrieval)
+- **Must avoid**: Tasks that require AI agents to read full steering docs
+
+### Validation Criteria
+
+The MCP server implementation must be validated against these criteria:
+
+**Token Efficiency**:
+- ✅ Summary requests use < 500 tokens
+- ✅ Section requests use < 3,000 tokens
+- ✅ Full document requests are explicit (not default)
+
+**Safety**:
+- ✅ Server doesn't interpret document instructions
+- ✅ Server doesn't follow cross-references automatically
+- ✅ Server doesn't load related documents proactively
+
+**Mechanical Parsing**:
+- ✅ Metadata extraction uses regex/parsing (not AI reading)
+- ✅ Outline generation uses heading structure (not content analysis)
+- ✅ Section extraction uses heading boundaries (not semantic understanding)
+
+### Why This Matters
+
+**Without this lesson**: We might build an MCP server that just returns full document content, recreating the exact problem Spec 020 solved.
+
+**With this lesson**: We build an MCP server that uses mechanical parsing and summary-first approach, enabling AI agents to work efficiently without context exhaustion.
+
+**This is the core innovation**: The MCP server isn't just a file server - it's a **context-efficient documentation interface** that prevents the context load loop problem.
+
+---
+
 ## Notes and Observations
 
 ### Why This Will Work
@@ -427,131 +814,190 @@ Returns: File Organization Standards → Organization Field Values (~3k tokens)
 - **Incremental value**: Even basic implementation provides immediate benefit
 - **Low risk**: Documentation stays in markdown, easy to rollback
 - **Scales naturally**: Adding more documents is straightforward
+- **Validated approach**: Spec 020 proved mechanical extraction works
 
 ### Potential Challenges
 - **Query formulation**: AI agents need to learn effective query patterns
 - **Section boundaries**: Some concepts span multiple sections
 - **Context continuity**: Queried sections lack surrounding context
 - **Maintenance overhead**: Need to ensure documentation remains queryable
+- **Parsing complexity**: Mechanical parsing must handle edge cases (nested headings, code blocks, etc.)
 
 ### Design Decisions to Make
-1. **Architecture**: Simple file-based (A) vs Semantic (B) vs Hybrid (C)?
-2. **Scope**: Three documents or more?
-3. **Granularity**: H2 only or H2+H3?
-4. **Migration**: All at once or incremental?
-5. **Query interface**: Single tool or multiple tools?
+1. **Architecture**: Simple file-based (A) vs Semantic (B) vs Hybrid (C)? → **Hybrid (C) recommended**
+2. **Scope**: Three documents or more? → **Start with 3, expand to all Layer 2-3 docs**
+3. **Granularity**: H2 only or H2+H3? → **H2+H3 for better precision**
+4. **Migration**: All at once or incremental? → **Phase 1 (supplement) → Phase 2 (replace)**
+5. **Query interface**: Single tool or multiple tools? → **8 tools (5 core, 2 discovery, 1 debug)**
 
 ---
 
-## Dependency on Spec 020: Steering Documentation Refinement
+## Spec 020 Deliverables: Foundation Complete
 
-### Critical Integration Points
+### What Spec 020 Delivered (Validated and Working)
 
-This spec has a **critical dependency** on Spec 020 (Steering Documentation Refinement). The refinement work establishes the foundation that makes this MCP server effective:
+Spec 020 (Steering Documentation Refinement) is **complete** and delivered everything needed for MCP server implementation:
 
-#### 1. Task-Relevant Metadata (Spec 020 - Solution 1)
+#### 1. Document-Level Metadata (Task 1 - Complete)
 
-**What it provides**:
+**What was delivered**:
 ```markdown
-**Conditional Section Metadata**:
-- **Relevant Tasks**: component-development, token-work
-- **Skip For**: spec-creation, debugging
-- **Layer**: 2 (Framework)
+**Date**: 2025-10-20
+**Last Reviewed**: 2025-12-15
+**Purpose**: Clear description of document purpose
+**Organization**: process-standard
+**Scope**: cross-project
+**Layer**: 2
+**Relevant Tasks**: component-development, coding
 ```
 
 **How MCP uses it**:
 ```typescript
-// MCP query filters by task-relevant metadata
-query({ 
-  taskType: 'component-development',
-  layer: 2 
-})
-// Returns only sections marked relevant for component-development at Layer 2
+// Filter documents by task type and layer
+getSteeringDocumentation(taskType: 'component-development', layer: 2)
+// Returns only Layer 2 documents relevant for component-development
 ```
 
-**Impact**: Transforms MCP from basic search to intelligent, context-aware retrieval
+**Validation**: ✅ All 12 steering documents have complete, parseable metadata
 
-#### 2. Progressive Disclosure Layers (Spec 020 - Solution 2)
+#### 2. Section-Level Conditional Markers (Task 3 - Complete)
 
-**What it provides**:
-- Layer 0: Entry point (navigation)
-- Layer 1: Principles (quick, actionable)
-- Layer 2: Frameworks (detailed how-to)
-- Layer 3: Reference (edge cases, troubleshooting)
+**What was delivered**:
+```markdown
+**📖 CONDITIONAL SECTION - Read only when needed**
+
+**Load when**: 
+- Organizing existing files or creating new implementation files
+- Need to understand the 3-step organization process
+
+**Skip when**: 
+- Just completing normal tasks without file organization
+- Files are already organized correctly
+```
 
 **How MCP uses it**:
 ```typescript
-// MCP tools mirror layer structure
-mcp.tools = {
-  'get-principles': 'Layer 1 - Quick guidance',
-  'get-framework': 'Layer 2 - Detailed how-to',
-  'get-reference': 'Layer 3 - Deep dives'
+// Filter sections by task type within documents
+getSections(document, taskType: 'file-organization')
+// Returns only sections with matching "Load when" criteria
+```
+
+**Validation**: ✅ All large documents (>200 lines) have section-level markers with clear load/skip criteria
+
+**Impact**: Enables intelligent section-level filtering - the "context-aware retrieval" vision
+
+#### 3. Four-Layer Progressive Disclosure (Task 2 - Complete)
+
+**What was delivered**:
+- **Layer 0**: Meta-guide (how to use the system)
+- **Layer 1**: Foundational concepts (Core Goals, Personal Note, Start Up Tasks)
+- **Layer 2**: Frameworks and patterns (Development Workflow, File Organization, Spec Planning)
+- **Layer 3**: Specific implementations (Component Development, Build System, Technology Stack)
+
+**How MCP uses it**:
+```typescript
+// Serve documents based on layer strategy
+function getDocumentsForTask(taskType: TaskType) {
+  return [
+    ...getLayer0Docs(),           // Always serve (meta-guide)
+    ...getLayer1Docs(),           // Always serve (foundational)
+    ...getLayer2Docs(taskType),   // Task-specific (frameworks)
+    // Layer 3 served on-demand
+  ];
 }
 ```
 
-**Impact**: Enables progressive retrieval - AI requests depth as needed
+**Validation**: ✅ All 12 documents assigned to appropriate layers with clear purposes
 
-#### 3. Standardized Task Vocabulary (Spec 020 - Solution 5)
+**Impact**: Enables progressive retrieval - AI agents request depth as needed
 
-**What it provides**:
-- `spec-creation`, `component-development`, `token-work`
-- `normal-task-execution`, `debugging`, `hook-setup`
-- `testing`, `documentation`, `file-organization`
+#### 4. Standardized Task Vocabulary (Task 1 - Complete)
 
-**How MCP uses it**:
+**What was delivered**:
+- 15 standardized task types with stable names
+- Kebab-case naming convention (e.g., `spec-creation`, `component-development`)
+- Validation script ensures consistency
+
+**Task Types**:
 ```typescript
-// Task vocabulary becomes query language
-enum TaskType {
-  SpecCreation = 'spec-creation',
-  ComponentDevelopment = 'component-development',
-  // ... matches Spec 020 vocabulary exactly
-}
+type TaskType = 
+  | 'spec-creation'
+  | 'general-task-execution'
+  | 'architecture'
+  | 'coding'
+  | 'accessibility-development'
+  | 'validation'
+  | 'debugging'
+  | 'documentation'
+  | 'maintenance'
+  | 'performance-optimization'
+  | 'file-organization'
+  | 'refactoring'
+  | 'migration'
+  | 'hook-setup'
+  | 'all-tasks';
 ```
 
-**Impact**: Consistent vocabulary across documentation, queries, and routing
+**Validation**: ✅ All task types validated against standardized vocabulary (100% compliance)
 
-### Evolution Flexibility
+**Impact**: Stable API for MCP server - task vocabulary becomes query language
 
-**Current Design Assumptions**:
-- Metadata structure from Spec 020 refinement outline
-- Task vocabulary as defined in refinement outline
-- Layer assignments as proposed in refinement outline
+#### 5. Validation Scripts and Maintenance (Tasks 4-5 - Complete)
 
-**Flexibility Built In**:
-- MCP query interface can adapt to metadata changes
-- Tool definitions can evolve with vocabulary changes
-- Layer routing can adjust to layer assignment changes
+**What was delivered**:
+- `scripts/validate-metadata-parsing.js` - Validates metadata schema
+- `scripts/validate-task-vocabulary.sh` - Validates task type consistency
+- `scripts/validate-structure-parsing.js` - Validates content structure
+- `scripts/validate-cross-reference-format.sh` - Validates link format
+- `scripts/detect-stale-metadata.js` - Detects stale documentation
+- Quarterly review process documentation
+- Metadata maintenance guidelines
 
-**If Spec 020 Evolves**:
-- **Metadata format changes**: Update query parser, maintain backward compatibility
-- **Task vocabulary changes**: Update TaskType enum, add aliases for old terms
-- **Layer structure changes**: Adjust tool definitions, update routing logic
-- **New metadata fields**: Extend query interface to support new filters
+**Validation**: ✅ All validation scripts working, 100% compliance achieved
 
-### Implementation Sequencing
+**Impact**: Ensures ongoing MCP-readiness through automated quality assurance
 
-**Recommended Approach**:
-1. **Wait for Spec 020 Phase 1 completion** (task-relevant metadata, task vocabulary)
-2. **Build MCP server using established metadata structure**
-3. **Iterate as Spec 020 evolves** (Phase 2, Phase 3 refinements)
+### MCP Implementation Strategy
 
-**Alternative Approach** (if parallel development needed):
-1. **Build MCP with current metadata assumptions**
-2. **Design for flexibility** (pluggable metadata parser, configurable vocabulary)
-3. **Refactor as Spec 020 stabilizes**
+**Foundation is Complete - Ready to Build**:
 
-**Risk**: Building MCP before Spec 020 stabilizes may require rework. Benefit: Parallel development accelerates overall timeline.
+With Spec 020 complete, the MCP server can be implemented with confidence:
 
-### Success Dependency
+1. **Document-Level Filtering**: Use metadata (layer, relevantTasks) to filter documents
+2. **Section-Level Filtering**: Use conditional markers (load/skip criteria) to filter sections
+3. **Task-Type-Based Serving**: Use task vocabulary as stable API parameters
+4. **Progressive Disclosure**: Use 4-layer structure for serving strategies
+5. **Quality Assurance**: Use validation scripts to ensure ongoing correctness
 
-**MCP effectiveness depends on Spec 020 delivering**:
-- ✅ Task-relevant metadata on all conditional sections
-- ✅ Standardized task vocabulary consistently applied
-- ✅ Layer assignments for progressive disclosure
-- ✅ Metadata maintenance strategy (keeps metadata accurate)
+**No Unknowns or Blockers**:
+- ✅ Metadata structure is stable and validated
+- ✅ Task vocabulary is stable (15 types, kebab-case)
+- ✅ Layer assignments are clear (4 layers, distinct purposes)
+- ✅ Section markers provide intelligent filtering capability
+- ✅ Cross-references are 100% compliant
+- ✅ Maintenance process ensures ongoing accuracy
 
-**Without Spec 020**: MCP becomes basic search tool (Option A only)
-**With Spec 020**: MCP becomes intelligent documentation assistant (Options A → B → C)
+**Implementation Confidence**: High - all assumptions validated, all deliverables working
+
+### Maintenance and Evolution
+
+**Ongoing Quality Assurance**:
+- Quarterly review process ensures metadata stays current
+- Validation scripts catch compliance issues early
+- Staleness detection identifies documents needing review
+- Metadata maintenance guidelines enable informed updates
+
+**Evolution Path**:
+- Task vocabulary can be extended (documented process)
+- Layer structure can accommodate new documents
+- Metadata schema can be extended with new fields
+- Validation scripts can be enhanced with new checks
+
+**Stability Guarantees**:
+- No breaking changes to existing task type names
+- Metadata format changes maintain backward compatibility
+- Layer structure changes preserve existing assignments
+- New features extend rather than replace existing capabilities
 
 ---
 

@@ -1,3 +1,5 @@
+**ALL AI AGENTS MUST read this doc COMPLETELY WITHOUT EXCEPTION regardless of current task priority.**
+
 # Steering Documentation Directional Priorities
 
 **Date**: 2025-10-20

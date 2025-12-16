@@ -788,6 +788,7 @@ Use descriptive link text that clearly identifies the target document, followed 
 [Compositional Color Guide](./compositional-color-guide.md) - Explains why typography tokens don't include color
 
 # ❌ BAD - No context for relevance
+<!-- INTENTIONAL VIOLATION - Teaching example of non-descriptive link text -->
 [Strategic Flexibility Guide](./strategic-flexibility-guide.md)
 [Click here](./migration-guide.md)
 [See this document](./compositional-color-guide.md)
@@ -1317,6 +1318,7 @@ where properties are separated by concern.
 
 ## Related Guides
 
+<!-- INTENTIONAL VIOLATION - Teaching example of absolute paths -->
 - [Compositional Color Guide](https://github.com/3fn/DesignerPunkv2/blob/main/.kiro/specs/typography-token-expansion/compositional-color-guide.md)
 - [Strategic Flexibility Guide](/Users/peter/.kiro/specs/typography-token-expansion/strategic-flexibility-guide.md)
 - [Inline Emphasis Guide](/.kiro/specs/typography-token-expansion/inline-emphasis-guide.md)
@@ -1351,6 +1353,7 @@ where properties are separated by concern.
 
 ## Related Guides
 
+<!-- INTENTIONAL VIOLATION - Teaching example of non-descriptive link text -->
 - [Click here](./compositional-color-guide.md)
 - [See this document](./strategic-flexibility-guide.md)
 - [More information](./inline-emphasis-guide.md)

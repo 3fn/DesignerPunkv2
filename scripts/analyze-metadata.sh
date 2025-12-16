@@ -31,6 +31,13 @@ extract_metadata() {
         # Extract metadata fields
         echo "**Metadata fields found:**" >> "$OUTPUT_FILE"
         grep "^\*\*.*\*\*:" /tmp/metadata_check.txt | sed 's/^\*\*/- /' >> "$OUTPUT_FILE"
+        
+        # Also extract YAML frontmatter fields (between --- markers)
+        if grep -q "^---$" /tmp/metadata_check.txt; then
+            # Extract lines between --- markers
+            sed -n '/^---$/,/^---$/p' /tmp/metadata_check.txt | grep -v "^---$" | grep ":" | sed 's/^/- /' >> "$OUTPUT_FILE"
+        fi
+        
         echo "" >> "$OUTPUT_FILE"
     else
         echo "**Has metadata header**: No" >> "$OUTPUT_FILE"
