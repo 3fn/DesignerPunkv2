@@ -32,9 +32,9 @@ import {
   isValidateMetadataError,
 } from '../../src/tools';
 
-// Test fixtures directory
-const TEST_FIXTURES_DIR = path.join(__dirname, '../../test-fixtures/steering');
-const TEST_LOGS_DIR = path.join(__dirname, '../../test-fixtures/logs');
+// Test fixtures directory - unique to this test file to avoid conflicts
+const TEST_FIXTURES_DIR = path.join(__dirname, '../../test-fixtures-mcp-tools/steering');
+const TEST_LOGS_DIR = path.join(__dirname, '../../test-fixtures-mcp-tools/logs');
 
 // Sample test document content
 const SAMPLE_DOC_CONTENT = `# Test Document
@@ -123,9 +123,9 @@ describe('MCP Server Integration Tests', () => {
     // Stop file watcher if running
     fileWatcher.stop();
 
-    // Clean up test fixtures
-    if (fs.existsSync(path.join(__dirname, '../../test-fixtures'))) {
-      fs.rmSync(path.join(__dirname, '../../test-fixtures'), { recursive: true, force: true });
+    // Clean up test fixtures - only clean up this test's fixtures
+    if (fs.existsSync(path.join(__dirname, '../../test-fixtures-mcp-tools'))) {
+      fs.rmSync(path.join(__dirname, '../../test-fixtures-mcp-tools'), { recursive: true, force: true });
     }
   });
 

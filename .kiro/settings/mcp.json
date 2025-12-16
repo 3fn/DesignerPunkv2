@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "designerpunk-docs": {
+      "command": "node",
+      "args": ["/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/mcp-server/dist/index.js"],
+      "env": {
+        "WORKSPACE_ROOT": "/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "get_documentation_map",
+        "get_document_summary",
+        "get_document_full",
+        "get_section",
+        "list_cross_references",
+        "validate_metadata",
+        "get_index_health",
+        "rebuild_index"
+      ]
+    }
+  }
+}

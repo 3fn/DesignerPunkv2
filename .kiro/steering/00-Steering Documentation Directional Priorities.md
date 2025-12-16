@@ -90,14 +90,31 @@ Core project context and development practices. Read completely.
 
 ---
 
-## Tier 2: Conditional Documents
+## Tier 2: MCP-Only Documents
 
-These documents are **only loaded when specific conditions are met**. When loaded, they include "AI Agent Reading Priorities" sections to help you read strategically.
+These documents are **NOT auto-loaded**. Query them via MCP when needed.
 
 ### 1. Spec Planning Standards
-**Trigger**: When creating or updating specification documents (requirements.md, design.md, tasks.md)
+**Access**: MCP query required (not auto-loaded)
+**When needed**: Creating or updating specification documents
 
-**File**: #[[file:.kiro/steering/Spec Planning Standards.md]]
+**How to access**:
+```
+get_section({ path: ".kiro/steering/Spec Planning Standards.md", heading: "Tasks Document Format" })
+```
+
+**Confirmation**: Reply "I've queried Spec Planning Standards via MCP!" after accessing
+
+### 2. Component Development Guide
+**Access**: MCP query required (not auto-loaded)
+**When needed**: Building or modifying components
+
+**How to access**:
+```
+get_section({ path: ".kiro/steering/Component Development Guide.md", heading: "Token Selection Decision Framework" })
+```
+
+**Confirmation**: Reply "I've queried Component Development Guide via MCP!" after accessing
 
 **How to use**: 
 - Read the "AI Agent Reading Priorities" section at the top
@@ -128,6 +145,97 @@ These documents are **only loaded when specific conditions are met**. When loade
 - Related guides in #[[file:.kiro/specs/typography-token-expansion]]
 
 **Confirmation**: Reply "I've reviewed the Token guidance!" after reading
+
+---
+
+## MCP Documentation Server (Primary for Large Docs)
+
+The MCP Documentation Server is the **primary source** for large steering documents. AI agents MUST query MCP for these documents rather than expecting them to be auto-loaded.
+
+### MCP-Only Documents (Not Auto-Loaded)
+
+These documents are available ONLY via MCP queries:
+
+| Document | Path | Tokens |
+|----------|------|--------|
+| Spec Planning Standards | `.kiro/steering/Spec Planning Standards.md` | ~27,000 |
+| Component Development Guide | `.kiro/steering/Component Development Guide.md` | ~7,000 |
+
+### How to Access MCP-Only Documents
+
+**Step 1**: Query the documentation map to confirm document exists
+```
+get_documentation_map()
+```
+
+**Step 2**: Get document summary to understand structure
+```
+get_document_summary({ path: ".kiro/steering/Spec Planning Standards.md" })
+```
+
+**Step 3**: Get specific section you need
+```
+get_section({ path: ".kiro/steering/Spec Planning Standards.md", heading: "Tasks Document Format" })
+```
+
+### When to Use MCP
+
+- **ALWAYS** for Spec Planning Standards and Component Development Guide
+- When you need specific sections from large documents
+- When context is constrained
+
+### Still Auto-Loaded (Small, Essential)
+
+These documents remain auto-loaded:
+- Personal Note (~600 tokens)
+- Core Goals (~550 tokens)
+- Start Up Tasks (~700 tokens)
+- This Meta-Guide (~2,000 tokens)
+- Development Workflow (~16,000 tokens) - strategic reading applies
+- File Organization Standards (~16,000 tokens) - strategic reading applies
+
+### Progressive Disclosure Workflow
+
+1. **Query documentation map** (~500 tokens)
+   ```
+   get_documentation_map()
+   ```
+
+2. **Request document summary** (~200 tokens)
+   ```
+   get_document_summary({ path: ".kiro/steering/Component Development Guide.md" })
+   ```
+
+3. **Request specific section** (~2,000 tokens)
+   ```
+   get_section({ path: ".kiro/steering/Component Development Guide.md", heading: "Token Selection Decision Framework" })
+   ```
+
+4. **Request full document** (only if needed)
+   ```
+   get_document_full({ path: ".kiro/steering/Component Development Guide.md" })
+   ```
+
+### Available Tools
+
+| Tool | Purpose | Typical Tokens |
+|------|---------|----------------|
+| `get_documentation_map` | List all documents with metadata | ~500 |
+| `get_document_summary` | Get metadata + outline | ~200 |
+| `get_document_full` | Get complete content | 2,000-15,000 |
+| `get_section` | Get specific section by heading | ~2,000 |
+| `list_cross_references` | List document links | ~100 |
+| `validate_metadata` | Debug metadata issues | ~50 |
+| `get_index_health` | Check server status | ~50 |
+| `rebuild_index` | Force re-indexing | ~50 |
+
+### Token Efficiency
+
+- **Old approach**: Load all docs upfront (~112k tokens)
+- **MCP approach**: Map + summary + section (~2,700 tokens)
+- **Typical savings**: 97% token reduction
+
+For detailed documentation, see `mcp-server/README.md`.
 
 ---
 

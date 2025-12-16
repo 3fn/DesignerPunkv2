@@ -33,9 +33,9 @@ import {
   isValidateMetadataError,
 } from '../../src/tools';
 
-// Test fixtures directory
-const TEST_FIXTURES_DIR = path.join(__dirname, '../../test-fixtures/ai-workflow');
-const TEST_LOGS_DIR = path.join(__dirname, '../../test-fixtures/logs');
+// Test fixtures directory - unique to this test file to avoid conflicts
+const TEST_FIXTURES_DIR = path.join(__dirname, '../../test-fixtures-ai-workflow/steering');
+const TEST_LOGS_DIR = path.join(__dirname, '../../test-fixtures-ai-workflow/logs');
 
 // Context budget simulation (typical AI agent context window)
 const CONTEXT_BUDGET_TOKENS = 8000; // Simulated context budget for testing
@@ -250,8 +250,8 @@ describe('End-to-End AI Agent Workflow Tests', () => {
   });
 
   afterAll(() => {
-    // Clean up test fixtures
-    const fixturesRoot = path.join(__dirname, '../../test-fixtures');
+    // Clean up test fixtures - only clean up this test's fixtures
+    const fixturesRoot = path.join(__dirname, '../../test-fixtures-ai-workflow');
     if (fs.existsSync(fixturesRoot)) {
       fs.rmSync(fixturesRoot, { recursive: true, force: true });
     }

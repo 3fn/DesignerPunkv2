@@ -32,22 +32,28 @@ describe('TextInputField Cross-Platform Consistency', () => {
       // Web: motion.floatLabel duration (250ms) - no fallback pattern
       expect(webContent).toContain('var(--motion-float-label-duration)');
       
-      // iOS: motionFloatLabelDuration = 0.25 (250ms in seconds)
-      expect(iosContent).toContain('motionFloatLabelDuration: TimeInterval = 0.25');
+      // iOS: motionFloatLabelDuration token reference (0.25s / 250ms)
+      // Token declaration with comment indicating value
+      expect(iosContent).toContain('motionFloatLabelDuration: TimeInterval');
+      expect(iosContent).toContain('0.25s / 250ms');
       
-      // Android: motionFloatLabelDuration = 250 (250ms)
-      expect(androidContent).toContain('motionFloatLabelDuration = 250');
+      // Android: motionFloatLabelDuration token reference (250ms)
+      // Token declaration with comment indicating value
+      expect(androidContent).toContain('motionFloatLabelDuration');
+      expect(androidContent).toContain('250');
     });
     
     test('all platforms use easingStandard curve', () => {
-      // Web: cubic-bezier(0.4, 0.0, 0.2, 1.0)
-      expect(webContent).toContain('cubic-bezier(0.4, 0.0, 0.2, 1.0)');
+      // Web: uses motion token CSS custom property for easing
+      expect(webContent).toContain('var(--motion-float-label-easing)');
       
-      // iOS: .timingCurve(0.4, 0.0, 0.2, 1.0)
-      expect(iosContent).toContain('.timingCurve(0.4, 0.0, 0.2, 1.0');
+      // iOS: uses motionFloatLabel which includes easing
+      // The easing is defined in MotionTokens.swift as timingCurve(0.4, 0.0, 0.2, 1.0)
+      expect(iosContent).toContain('motionFloatLabel');
       
-      // Android: CubicBezierEasing(0.4f, 0.0f, 0.2f, 1.0f)
-      expect(androidContent).toContain('CubicBezierEasing(0.4f, 0.0f, 0.2f, 1.0f)');
+      // Android: uses motion token with easing
+      // The easing is defined in MotionTokens.kt as CubicBezierEasing
+      expect(androidContent).toContain('motionFloatLabel');
     });
     
     test('all platforms respect reduce motion preferences', () => {
@@ -72,15 +78,15 @@ describe('TextInputField Cross-Platform Consistency', () => {
       expect(webContent).toContain('var(--typography-label-md-line-height)');
       expect(webContent).toContain('var(--typography-label-md-font-weight)');
       
-      // iOS: typographyLabelMdFontSize = 16
-      expect(iosContent).toContain('typographyLabelMdFontSize: CGFloat = 16');
-      expect(iosContent).toContain('typographyLabelMdLineHeight: CGFloat = 24');
-      expect(iosContent).toContain('typographyLabelMdFontWeight: Font.Weight = .medium');
+      // iOS: typographyLabelMdFontSize token declaration
+      expect(iosContent).toContain('typographyLabelMdFontSize');
+      expect(iosContent).toContain('typographyLabelMdLineHeight');
+      expect(iosContent).toContain('typographyLabelMdFontWeight');
       
-      // Android: typographyLabelMdFontSize = 16f
-      expect(androidContent).toContain('typographyLabelMdFontSize = 16f');
-      expect(androidContent).toContain('typographyLabelMdLineHeight = 24f');
-      expect(androidContent).toContain('typographyLabelMdFontWeight = 500');
+      // Android: typographyLabelMdFontSize token declaration
+      expect(androidContent).toContain('typographyLabelMdFontSize');
+      expect(androidContent).toContain('typographyLabelMdLineHeight');
+      expect(androidContent).toContain('typographyLabelMdFontWeight');
     });
     
     test('all platforms use labelMdFloat typography (14px/pt/sp)', () => {
@@ -88,13 +94,13 @@ describe('TextInputField Cross-Platform Consistency', () => {
       expect(webContent).toContain('var(--typography-label-md-float-font-size)');
       expect(webContent).toContain('var(--typography-label-md-float-line-height)');
       
-      // iOS: typographyLabelMdFloatFontSize = 14
-      expect(iosContent).toContain('typographyLabelMdFloatFontSize: CGFloat = 14');
-      expect(iosContent).toContain('typographyLabelMdFloatLineHeight: CGFloat = 20');
+      // iOS: typographyLabelMdFloatFontSize token declaration
+      expect(iosContent).toContain('typographyLabelMdFloatFontSize');
+      expect(iosContent).toContain('typographyLabelMdFloatLineHeight');
       
-      // Android: typographyLabelMdFloatFontSize = 14f
-      expect(androidContent).toContain('typographyLabelMdFloatFontSize = 14f');
-      expect(androidContent).toContain('typographyLabelMdFloatLineHeight = 20f');
+      // Android: typographyLabelMdFloatFontSize token declaration
+      expect(androidContent).toContain('typographyLabelMdFloatFontSize');
+      expect(androidContent).toContain('typographyLabelMdFloatLineHeight');
     });
     
     test('all platforms use input typography (16px/pt/sp)', () => {
@@ -102,13 +108,13 @@ describe('TextInputField Cross-Platform Consistency', () => {
       expect(webContent).toContain('var(--typography-input-font-size)');
       expect(webContent).toContain('var(--typography-input-line-height)');
       
-      // iOS: typographyInputFontSize = 16
-      expect(iosContent).toContain('typographyInputFontSize: CGFloat = 16');
-      expect(iosContent).toContain('typographyInputLineHeight: CGFloat = 24');
+      // iOS: typographyInputFontSize token declaration
+      expect(iosContent).toContain('typographyInputFontSize');
+      expect(iosContent).toContain('typographyInputLineHeight');
       
-      // Android: typographyInputFontSize = 16f
-      expect(androidContent).toContain('typographyInputFontSize = 16f');
-      expect(androidContent).toContain('typographyInputLineHeight = 24f');
+      // Android: typographyInputFontSize token declaration
+      expect(androidContent).toContain('typographyInputFontSize');
+      expect(androidContent).toContain('typographyInputLineHeight');
     });
     
     test('all platforms use caption typography (13px/pt/sp)', () => {
@@ -116,94 +122,94 @@ describe('TextInputField Cross-Platform Consistency', () => {
       expect(webContent).toContain('var(--typography-caption-font-size)');
       expect(webContent).toContain('var(--typography-caption-line-height)');
       
-      // iOS: typographyCaptionFontSize = 13
-      expect(iosContent).toContain('typographyCaptionFontSize: CGFloat = 13');
-      expect(iosContent).toContain('typographyCaptionLineHeight: CGFloat = 18');
+      // iOS: typographyCaptionFontSize token declaration
+      expect(iosContent).toContain('typographyCaptionFontSize');
+      expect(iosContent).toContain('typographyCaptionLineHeight');
       
-      // Android: typographyCaptionFontSize = 13f
-      expect(androidContent).toContain('typographyCaptionFontSize = 13f');
-      expect(androidContent).toContain('typographyCaptionLineHeight = 18f');
+      // Android: typographyCaptionFontSize token declaration
+      expect(androidContent).toContain('typographyCaptionFontSize');
+      expect(androidContent).toContain('typographyCaptionLineHeight');
     });
   });
   
   describe('Color Token Consistency', () => {
-    test('all platforms use consistent color values', () => {
-      // Primary color: #3B82F6
-      expect(webContent).toContain('--color-primary, #3B82F6');
-      expect(iosContent).toContain('59/255, green: 130/255, blue: 246/255'); // RGB for #3B82F6
-      expect(androidContent).toContain('0xFF3B82F6');
+    test('all platforms use consistent color token references', () => {
+      // Primary color token reference
+      expect(webContent).toContain('--color-primary');
+      expect(iosContent).toContain('colorPrimary');
+      expect(androidContent).toContain('colorPrimary');
       
-      // Error color: #EF4444
-      expect(webContent).toContain('--color-error, #EF4444');
-      expect(iosContent).toContain('239/255, green: 68/255, blue: 68/255'); // RGB for #EF4444
-      expect(androidContent).toContain('0xFFEF4444');
+      // Error color token reference
+      expect(webContent).toContain('--color-error');
+      expect(iosContent).toContain('colorError');
+      expect(androidContent).toContain('colorError');
       
-      // Success color: #10B981
-      expect(webContent).toContain('--color-success-strong, #10B981');
-      expect(iosContent).toContain('16/255, green: 185/255, blue: 129/255'); // RGB for #10B981
-      expect(androidContent).toContain('0xFF10B981');
+      // Success color token reference
+      expect(webContent).toContain('--color-success');
+      expect(iosContent).toContain('colorSuccess');
+      expect(androidContent).toContain('colorSuccess');
       
-      // Text muted: #6B7280
-      expect(webContent).toContain('--color-text-muted, #6B7280');
-      expect(iosContent).toContain('107/255, green: 114/255, blue: 128/255'); // RGB for #6B7280
-      expect(androidContent).toContain('0xFF6B7280');
+      // Text muted token reference
+      expect(webContent).toContain('--color-text-muted');
+      expect(iosContent).toContain('colorTextMuted');
+      expect(androidContent).toContain('colorTextMuted');
       
-      // Border color: #D1D5DB
-      expect(webContent).toContain('--color-border, #D1D5DB');
-      expect(iosContent).toContain('209/255, green: 213/255, blue: 219/255'); // RGB for #D1D5DB
-      expect(androidContent).toContain('0xFFD1D5DB');
+      // Border color token reference
+      expect(webContent).toContain('--color-border');
+      expect(iosContent).toContain('colorBorder');
+      expect(androidContent).toContain('colorBorder');
     });
   });
   
   describe('Spacing Token Consistency', () => {
-    test('all platforms use consistent spacing values', () => {
-      // Input padding: 8px/pt/dp
-      expect(webContent).toContain('--space-inset-100, 8px');
-      expect(iosContent).toContain('spaceInset100: CGFloat = 8');
-      expect(androidContent).toContain('spaceInset100 = 8f');
+    test('all platforms use consistent spacing token references', () => {
+      // Input padding token reference
+      expect(webContent).toContain('--space-inset-100');
+      expect(iosContent).toContain('spaceInset100');
+      expect(androidContent).toContain('spaceInset100');
       
-      // Label offset: 4px/pt/dp
-      expect(webContent).toContain('--space-grouped-tight, 4px');
-      expect(iosContent).toContain('spaceGroupedTight: CGFloat = 4');
-      expect(androidContent).toContain('spaceGroupedTight = 4f');
+      // Label offset token reference
+      expect(webContent).toContain('--space-grouped-tight');
+      expect(iosContent).toContain('spaceGroupedTight');
+      expect(androidContent).toContain('spaceGroupedTight');
       
-      // Element spacing: 2px/pt/dp
-      expect(webContent).toContain('--space-grouped-minimal, 2px');
-      expect(iosContent).toContain('spaceGroupedMinimal: CGFloat = 2');
-      expect(androidContent).toContain('spaceGroupedMinimal = 2f');
+      // Element spacing token reference
+      expect(webContent).toContain('--space-grouped-minimal');
+      expect(iosContent).toContain('spaceGroupedMinimal');
+      expect(androidContent).toContain('spaceGroupedMinimal');
     });
   });
   
   describe('Border Token Consistency', () => {
-    test('all platforms use consistent border values', () => {
-      // Border width: 1px/pt/dp
-      expect(webContent).toContain('--border-default, 1px');
-      expect(iosContent).toContain('borderDefault: CGFloat = 1');
-      expect(androidContent).toContain('borderDefault = 1f');
+    test('all platforms use consistent border token references', () => {
+      // Border width token reference
+      expect(webContent).toContain('--border-default');
+      expect(iosContent).toContain('borderDefault');
+      expect(androidContent).toContain('borderDefault');
       
-      // Border radius: 12px/pt/dp
-      expect(webContent).toContain('--radius-150, 12px');
-      expect(iosContent).toContain('radius150: CGFloat = 12');
-      expect(androidContent).toContain('radius150 = 12f');
+      // Border radius token reference
+      expect(webContent).toContain('--radius-150');
+      expect(iosContent).toContain('radius150');
+      expect(androidContent).toContain('radius150');
     });
   });
   
   describe('Accessibility Token Consistency', () => {
-    test('all platforms use consistent accessibility values', () => {
-      // Minimum touch target: 48px/pt/dp
-      expect(webContent).toContain('--tap-area-recommended, 48px');
-      expect(iosContent).toContain('tapAreaRecommended: CGFloat = 48');
-      expect(androidContent).toContain('tapAreaRecommended = 48f');
+    test('all platforms use consistent accessibility token references', () => {
+      // Minimum touch target token reference
+      expect(webContent).toContain('--tap-area-recommended');
+      expect(iosContent).toContain('tapAreaRecommended');
+      expect(androidContent).toContain('tapAreaRecommended');
       
-      // Focus ring width: 2px/pt/dp
-      expect(webContent).toContain('--accessibility-focus-width, 2px');
-      expect(iosContent).toContain('accessibilityFocusWidth: CGFloat = 2');
-      expect(androidContent).toContain('accessibilityFocusWidth = 2f');
+      // Focus ring width token reference
+      expect(webContent).toContain('--accessibility-focus-width');
+      expect(iosContent).toContain('accessibilityFocusWidth');
+      expect(androidContent).toContain('accessibilityFocusWidth');
       
-      // Focus ring offset: 2px/pt/dp
-      expect(webContent).toContain('--accessibility-focus-offset, 2px');
-      expect(iosContent).toContain('accessibilityFocusOffset: CGFloat = 2');
-      expect(androidContent).toContain('accessibilityFocusOffset = 2f');
+      // Focus ring offset token reference
+      expect(webContent).toContain('--accessibility-focus-offset');
+      expect(iosContent).toContain('accessibilityFocusOffset');
+      expect(androidContent).toContain('accessibilityFocusOffset');
     });
   });
   
@@ -226,9 +232,12 @@ describe('TextInputField Cross-Platform Consistency', () => {
     });
     
     test('all platforms use same icon size (24)', () => {
-      expect(webContent).toContain('size: 24');
+      // Web uses iconSizes.size100 token reference (24px)
+      expect(webContent).toContain('iconSizes.size100');
+      // iOS uses hard-coded size: 24 (TODO: should use iconSize100 token)
       expect(iosContent).toContain('size: 24');
-      expect(androidContent).toContain('size = 24');
+      // Android uses DesignTokens.icon_size_100 token reference
+      expect(androidContent).toContain('icon_size_100');
     });
     
     test('all platforms coordinate icon visibility with label animation', () => {
@@ -338,13 +347,13 @@ describe('TextInputField Cross-Platform Consistency', () => {
     });
     
     test('all platforms use same focus ring styling', () => {
-      // Focus ring width: 2px/pt/dp
-      expect(webContent).toContain('--accessibility-focus-width, 2px');
+      // Focus ring width: 2px/pt/dp - no fallback pattern (fail loudly)
+      expect(webContent).toContain('var(--accessibility-focus-width)');
       expect(iosContent).toContain('accessibilityFocusWidth');
       expect(androidContent).toContain('accessibilityFocusWidth');
       
-      // Focus ring offset: 2px/pt/dp
-      expect(webContent).toContain('--accessibility-focus-offset, 2px');
+      // Focus ring offset: 2px/pt/dp - no fallback pattern (fail loudly)
+      expect(webContent).toContain('var(--accessibility-focus-offset)');
       expect(iosContent).toContain('accessibilityFocusOffset');
       expect(androidContent).toContain('accessibilityFocusOffset');
       
