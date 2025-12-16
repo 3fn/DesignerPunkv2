@@ -237,7 +237,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
     - Write state changes to `logs/index-state.log`
     - _Requirements: 9.1, 9.2, 9.5_
 
-- [ ] 4. Query Engine and MCP Tools
+- [x] 4. Query Engine and MCP Tools
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -263,7 +263,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 Complete: Query Engine and MCP Tools"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 4.1 Implement QueryEngine class
+  - [x] 4.1 Implement QueryEngine class
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/query/QueryEngine.ts`
@@ -273,7 +273,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
     - Integrate with DocumentIndexer
     - _Requirements: 1.1, 11.1, 11.2, 11.3, 11.4_
 
-  - [ ] 4.2 Implement error handling utilities
+  - [x] 4.2 Implement error handling utilities
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/utils/error-handler.ts`
@@ -282,7 +282,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
     - Write logs to `logs/errors.log`
     - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5_
 
-  - [ ] 4.3 Implement get_documentation_map tool
+  - [x] 4.3 Implement get_documentation_map tool
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/tools/get-documentation-map.ts`
@@ -291,7 +291,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
     - Return DocumentationMap structure
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
-  - [ ] 4.4 Implement get_document_summary tool
+  - [x] 4.4 Implement get_document_summary tool
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/tools/get-document-summary.ts`
@@ -302,7 +302,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
     - Handle FileNotFound errors
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7_
 
-  - [ ] 4.5 Implement get_document_full tool
+  - [x] 4.5 Implement get_document_full tool
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/tools/get-document-full.ts`
@@ -313,7 +313,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
     - Handle FileNotFound errors
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5_
 
-  - [ ] 4.6 Implement get_section tool
+  - [x] 4.6 Implement get_section tool
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/tools/get-section.ts`
@@ -324,7 +324,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
     - Handle SectionNotFound errors with suggestions
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
 
-  - [ ] 4.7 Implement list_cross_references tool
+  - [x] 4.7 Implement list_cross_references tool
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/tools/list-cross-references.ts`
@@ -335,7 +335,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
     - Handle FileNotFound errors
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
 
-  - [ ] 4.8 Implement validate_metadata tool
+  - [x] 4.8 Implement validate_metadata tool
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/tools/validate-metadata.ts`
@@ -346,7 +346,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
     - Return MetadataValidation structure with issues
     - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5_
 
-  - [ ] 4.9 Implement get_index_health tool
+  - [x] 4.9 Implement get_index_health tool
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/tools/get-index-health.ts`
@@ -355,7 +355,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
     - Return IndexHealth structure with status, errors, warnings, metrics
     - _Requirements: 9.1, 9.2, 9.5_
 
-  - [ ] 4.10 Implement rebuild_index tool
+  - [x] 4.10 Implement rebuild_index tool
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/tools/rebuild-index.ts`
@@ -370,7 +370,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
     - Implement automatic re-indexing on corruption detection
     - _Requirements: 16.1, 16.2, 16.3, 16.4_
 
-  - [ ] 4.11 Implement health status tool
+  - [x] 4.11 Implement health status tool
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/tools/get-health-status.ts`

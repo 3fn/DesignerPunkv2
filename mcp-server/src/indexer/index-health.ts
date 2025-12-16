@@ -126,12 +126,19 @@ function getExpectedDocuments(directoryPath: string): string[] {
 /**
  * Get files that have been modified after the last index time
  * 
+ * Uses a 1-second tolerance to account for filesystem timestamp granularity.
+ * Files modified within 1 second of the last index time are not considered stale,
+ * as they may have been written and indexed in the same operation.
+ * 
  * @param filePaths - Array of file paths to check
  * @param lastIndexTime - Last index time
  * @returns Array of stale file paths
  */
 function getStaleFiles(filePaths: string[], lastIndexTime: Date): string[] {
   const staleFiles: string[] = [];
+  // Add 1 second tolerance to account for filesystem timestamp granularity
+  const toleranceMs = 1000;
+  const thresholdTime = new Date(lastIndexTime.getTime() + toleranceMs);
   
   for (const filePath of filePaths) {
     if (!fs.existsSync(filePath)) {
@@ -139,7 +146,7 @@ function getStaleFiles(filePaths: string[], lastIndexTime: Date): string[] {
     }
     
     const stats = fs.statSync(filePath);
-    if (stats.mtime > lastIndexTime) {
+    if (stats.mtime > thresholdTime) {
       staleFiles.push(filePath);
     }
   }
