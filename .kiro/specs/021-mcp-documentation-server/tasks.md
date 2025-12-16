@@ -143,7 +143,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
     - Return estimated token count
     - _Requirements: 2.4, 8.1, 8.2_
 
-- [ ] 3. Document Indexer Implementation
+- [x] 3. Document Indexer Implementation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -169,7 +169,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Document Indexer Implementation"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 3.1 Implement DocumentIndexer class
+  - [x] 3.1 Implement DocumentIndexer class
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/indexer/DocumentIndexer.ts`
@@ -179,7 +179,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
     - Use mechanical parsers from Task 2
     - _Requirements: 1.1, 1.3, 2.1, 10.1_
 
-  - [ ] 3.2 Implement documentation map generation
+  - [x] 3.2 Implement documentation map generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `getDocumentationMap()` in DocumentIndexer
@@ -188,7 +188,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
     - Return DocumentationMap structure
     - _Requirements: 1.1, 1.2, 12.1, 12.2, 12.3_
 
-  - [ ] 3.3 Implement document summary generation
+  - [x] 3.3 Implement document summary generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `getDocumentSummary(path: string)` in DocumentIndexer
@@ -200,7 +200,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
     - Verify summary uses < 500 tokens
     - _Requirements: 2.1, 2.2, 2.3, 2.6, 8.1_
 
-  - [ ] 3.4 Implement file watcher
+  - [x] 3.4 Implement file watcher
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/watcher/FileWatcher.ts`
@@ -209,7 +209,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
     - Trigger `reindexFile()` on changes
     - _Requirements: 10.1, 10.2, 10.3, 10.4_
 
-  - [ ] 3.5 Implement conditional section filtering
+  - [x] 3.5 Implement conditional section filtering
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/indexer/conditional-filter.ts`
@@ -219,7 +219,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
     - Store conditional markers in section index
     - _Requirements: 14.1, 14.2, 14.3, 14.4, 14.5_
 
-  - [ ] 3.6 Implement index health check
+  - [x] 3.6 Implement index health check
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/indexer/index-health.ts`
@@ -228,7 +228,7 @@ This implementation plan follows a bottom-up approach: build parsing foundation 
     - Return IndexHealth structure with errors, warnings, metrics
     - _Requirements: 9.1, 9.2, 9.5_
 
-  - [ ] 3.7 Implement index validation and recovery
+  - [x] 3.7 Implement index validation and recovery
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `validateIndexOnStartup()` in DocumentIndexer
