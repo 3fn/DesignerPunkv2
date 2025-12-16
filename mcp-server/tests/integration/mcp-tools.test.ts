@@ -13,9 +13,9 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { DocumentIndexer } from '../indexer/DocumentIndexer';
-import { QueryEngine } from '../query/QueryEngine';
-import { FileWatcher } from '../watcher/FileWatcher';
+import { DocumentIndexer } from '../../src/indexer/DocumentIndexer';
+import { QueryEngine } from '../../src/query/QueryEngine';
+import { FileWatcher } from '../../src/watcher/FileWatcher';
 import {
   handleGetDocumentationMap,
   handleGetDocumentSummary,
@@ -30,7 +30,7 @@ import {
   isGetSectionError,
   isListCrossReferencesError,
   isValidateMetadataError,
-} from '../tools';
+} from '../../src/tools';
 
 // Test fixtures directory
 const TEST_FIXTURES_DIR = path.join(__dirname, '../../test-fixtures/steering');
