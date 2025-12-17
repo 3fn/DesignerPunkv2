@@ -1,3 +1,7 @@
+---
+inclusion: manual
+---
+
 # Build System Setup
 
 **Date**: 2025-10-25
@@ -9,11 +13,6 @@
 **Layer**: 3
 **Relevant Tasks**: debugging, validation
 **Context**: Added during Task 3.2 completion to prevent stale JavaScript issues. Updated during TypeScript error resolution to reflect restored type safety enforcement.
-
----
-inclusion: conditional
-trigger: build-issues, typescript-errors, testing-output
----
 
 ## AI Agent Reading Priorities
 

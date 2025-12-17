@@ -1,3 +1,8 @@
+---
+inclusion: conditional
+trigger: architecture, coding
+---
+
 # Technology Stack
 
 **Date**: 2025-11-26
@@ -7,11 +12,6 @@
 **Scope**: cross-project
 **Layer**: 3
 **Relevant Tasks**: architecture, coding
-
----
-inclusion: conditional
-trigger: architecture, coding
----
 
 ## AI Agent Reading Priorities
 

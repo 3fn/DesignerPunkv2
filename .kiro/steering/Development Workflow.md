@@ -1,3 +1,7 @@
+---
+inclusion: always
+---
+
 # Development Workflow and Task Completion Practices
 
 **Date**: 2025-10-20
@@ -7,10 +11,6 @@
 **Scope**: cross-project
 **Layer**: 2
 **Relevant Tasks**: all-tasks
-
----
-inclusion: always
----
 
 ## AI Agent Reading Priorities
 

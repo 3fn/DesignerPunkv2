@@ -1,3 +1,7 @@
+---
+inclusion: always
+---
+
 # File Organization Standards
 
 **Date**: 2025-01-10
@@ -7,10 +11,6 @@
 **Scope**: cross-project
 **Layer**: 2
 **Relevant Tasks**: all-tasks
-
----
-inclusion: always
----
 
 ## AI Agent Reading Priorities
 

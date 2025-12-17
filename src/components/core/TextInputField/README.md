@@ -400,6 +400,67 @@ The component includes comprehensive test coverage:
 
 ---
 
+## Icon Usage
+
+The TextInputField component uses the Icon component system for status indicators (error, success, info icons). This section documents the icon integration approach and rationale.
+
+### Icon Integration Pattern
+
+TextInputField uses the Icon component (not direct platform icons like SF Symbols) for all status indicators:
+
+```swift
+// iOS - Using Icon component (CORRECT)
+Icon(name: "x", size: iconSize100, color: colorError)
+Icon(name: "check", size: iconSize100, color: colorSuccessStrong)
+Icon(name: "info", size: iconSize100, color: colorTextMuted)
+```
+
+```kotlin
+// Android - Using Icon component (CORRECT)
+Icon(name = "x", size = iconSize100, tint = colorError)
+Icon(name = "check", size = iconSize100, tint = colorSuccessStrong)
+Icon(name = "info", size = iconSize100, tint = colorTextMuted)
+```
+
+```html
+<!-- Web - Using Icon component (CORRECT) -->
+<dp-icon name="x" size="24" color="color-error"></dp-icon>
+<dp-icon name="check" size="24" color="color-success"></dp-icon>
+<dp-icon name="info" size="24" color="color-text-muted"></dp-icon>
+```
+
+### Rationale for Using Icon Component
+
+The TextInputField uses the Icon component system (rather than direct platform icons like SF Symbols) for the following reasons:
+
+1. **Cross-Platform Consistency**: The Icon component provides unified icon rendering across web, iOS, and Android, ensuring status indicators look consistent across all platforms.
+
+2. **Token-Based Sizing**: Icon sizes use icon size tokens (`iconSize100` = 24px) that align with the typography system, ensuring proper optical balance with input text.
+
+3. **Color Token Integration**: Icon colors use semantic color tokens (`colorError`, `colorSuccessStrong`, `colorTextMuted`) that automatically adapt to theme changes.
+
+4. **Unified Icon Library**: Using the Icon component ensures all icons come from the same Feather Icons source, maintaining visual consistency.
+
+5. **Accessibility**: The Icon component includes built-in accessibility features (hidden from screen readers as decorative icons).
+
+### Icon Size Selection
+
+Status icons use `iconSize100` (24px) because:
+- They pair with `typography.input` (16px font size, 24px line height)
+- The icon fills the vertical space of the input line for optical balance
+- 24px is the standard icon size for bodyMd/labelMd typography contexts
+
+### When Direct Platform Icons Would Be Acceptable
+
+While TextInputField uses the Icon component, direct platform icons (like SF Symbols on iOS) would be acceptable when:
+- Icons are internal implementation details not exposed to the component API
+- Icons follow platform-specific UI conventions (e.g., iOS system UI patterns)
+- Icons are tightly coupled to platform behavior
+
+TextInputField's status icons are exposed through the component's visual design (users see them), so using the unified Icon component ensures cross-platform consistency.
+
+---
+
 ## Related Components
 
 - [Icon](../Icon/README.md) - Icon component used for error, success, and info icons

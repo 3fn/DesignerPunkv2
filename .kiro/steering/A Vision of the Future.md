@@ -1,3 +1,7 @@
+---
+inclusion: manual
+---
+
 # A Vision of the Future
 
 **Date**: 2025-10-20
@@ -7,11 +11,6 @@
 **Scope**: cross-project
 **Layer**: 3
 **Relevant Tasks**: architecture
-
----
-inclusion: conditional
-trigger: architecture
----
 
 ## AI Agent Reading Priorities
 

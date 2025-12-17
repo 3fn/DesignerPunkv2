@@ -1,3 +1,7 @@
+---
+inclusion: manual
+---
+
 # Component Development Guide
 
 **Date**: 2025-11-17
@@ -6,12 +10,7 @@
 **Organization**: process-standard
 **Scope**: cross-project
 **Layer**: 3
-**Relevant Tasks**: coding, accessibility-development
-
----
-inclusion: conditional
-trigger: component-development, token-selection, cross-platform-components
----
+**Relevant Tasks**: coding, accessibility-development, icon-integration
 
 ## AI Agent Reading Priorities
 
@@ -24,7 +23,8 @@ trigger: component-development, token-selection, cross-platform-components
 2. ✅ **Semantic tokens**: Read `src/tokens/semantic/index.ts` for available tokens
 3. ✅ **Component Structure Pattern** (file organization)
 4. ✅ **True Native Architecture**: `preserved-knowledge/true-native-architecture-concepts.md`
-5. ✅ **Validation Checklist** (before implementation)
+5. ✅ **Icon System Integration** (if component uses icons)
+6. ✅ **Validation Checklist** (before implementation)
 
 **WHEN selecting tokens for components THEN read:**
 1. ✅ **Token Selection Decision Framework** (all steps)
@@ -46,7 +46,15 @@ trigger: component-development, token-selection, cross-platform-components
 1. ✅ **Component Structure Pattern** (True Native Architecture)
 2. ✅ **Component Token Files** (platform-agnostic token references)
 3. ✅ **Cross-Platform Token Consumption** (how tokens work per platform)
-4. ✅ **Platform-Specific Nuances** (iOS/Android/Web differences)
+4. ✅ **Icon System Integration** (if component uses icons)
+5. ✅ **Platform-Specific Nuances** (iOS/Android/Web differences)
+
+**WHEN adding icons to components THEN read:**
+1. ✅ **Icon System Integration** (when to use Icon component vs. direct platform icons)
+2. ✅ **Icon Size Tokens** (token-to-pixel mapping and typography pairing)
+3. ✅ **Platform-Specific Icon Usage** (Web, iOS, Android patterns)
+4. ✅ **Icon Integration Anti-Patterns** (what NOT to do)
+5. ✅ **Icon Integration Checklist** (verification steps)
 
 **WHEN troubleshooting component issues THEN read:**
 1. ✅ **Anti-Patterns to Avoid** (common mistakes)
@@ -425,6 +433,259 @@ Platform implementations handle platform-specific requirements that are **not** 
 ```
 
 **These nuances are handled by platform implementations**, not defined in the component tokens file. The component tokens file only defines which design system tokens the component uses.
+
+---
+
+## Icon System Integration
+
+### Overview
+
+The Icon component provides a unified API for displaying vector icons across web, iOS, and Android platforms. This section documents when to use the Icon component system versus direct platform icons, and how to properly use icon size tokens.
+
+### When to Use Icon Component
+
+**Use the Icon component when**:
+- Icon is part of component's public API (user can specify icon name)
+- Icon needs to be swappable or configurable
+- Icon should follow consistent sizing and coloring patterns
+- Component is cross-platform and needs unified icon handling
+
+**Example - ButtonCTA with Icon**:
+```typescript
+// Web component using Icon system
+<button-cta icon="arrow-right" label="Next"></button-cta>
+
+// Component internally uses Icon component
+const iconElement = createIcon({ 
+  name: this.getAttribute('icon'),
+  size: iconSize100,  // Token-based sizing
+  color: 'currentColor'
+});
+```
+
+### When Direct Platform Icons Are Acceptable
+
+**Direct platform icons are acceptable when**:
+- Icon is internal implementation detail (not exposed to component API)
+- Icon is platform-specific UI convention (iOS SF Symbols for system UI)
+- Icon is tightly coupled to platform behavior
+
+**However**: Even internal icons MUST use icon size tokens for sizing.
+
+**Example - TextInputField Status Icons**:
+```swift
+// iOS: SF Symbols for status indicators (internal implementation)
+// ✅ CORRECT: Use icon size token
+Image(systemName: "exclamationmark.circle.fill")
+    .font(.system(size: iconSize075))
+
+// ❌ WRONG: Hard-coded size
+Image(systemName: "exclamationmark.circle.fill")
+    .font(.system(size: 16))
+```
+
+**When bypassing the Icon system**, document the rationale in the component README:
+```markdown
+## Icon Usage
+
+This component uses direct SF Symbols for status indicators because:
+- Icons are internal implementation details (not exposed to API)
+- SF Symbols provide platform-native visual consistency
+- Status icons follow iOS Human Interface Guidelines
+```
+
+### Icon Size Tokens
+
+**All icon sizing MUST use icon size tokens**:
+
+| Token | Pixels | Typography Pairing | Use Cases |
+|-------|--------|-------------------|-----------|
+| `iconSize050` | 12px | caption, legal, labelXs | Smallest text, fine print |
+| `iconSize075` | 16px | bodySm, buttonSm, labelSm | Compact layouts, small UI |
+| `iconSize100` | 24px | bodyMd, buttonMd, labelMd | Standard UI (default) |
+| `iconSize125` | 32px | bodyLg, buttonLg, labelLg | Large UI elements |
+| `iconSize150` | 40px | h2 | Large headings |
+
+**Size Selection Guidelines**:
+- **Default to `iconSize100` (24px)**: Use when in doubt
+- **Match typography context**: Use icon size that pairs with the text typography
+- **Consider visual hierarchy**: Larger icons create stronger visual presence
+
+### Platform-Specific Icon Usage
+
+#### Web Platform
+
+**Using Icon Component**:
+```html
+<!-- Web component API (recommended) -->
+<dp-icon name="arrow-right" size="24"></dp-icon>
+
+<!-- With color override -->
+<dp-icon name="check" size="24" color="color-success"></dp-icon>
+```
+
+**Using Icon Size Tokens in CSS**:
+```css
+.icon-container {
+  width: var(--icon-size-100);   /* 24px */
+  height: var(--icon-size-100);  /* 24px */
+}
+
+.small-icon {
+  width: var(--icon-size-075);   /* 16px */
+  height: var(--icon-size-075);  /* 16px */
+}
+```
+
+**Using Icon Size Tokens in JavaScript**:
+```typescript
+import { createIcon } from '@/components/core/Icon/platforms/web/Icon.web';
+
+// ✅ CORRECT: Use token reference
+const icon = createIcon({ 
+  name: 'check', 
+  size: iconSize100  // Token-based sizing
+});
+
+// ❌ WRONG: Hard-coded size
+const icon = createIcon({ 
+  name: 'check', 
+  size: 24  // Hard-coded value
+});
+```
+
+#### iOS Platform (SwiftUI)
+
+**Using Icon Component**:
+```swift
+// Icon component with token-based sizing
+Icon(name: "arrow-right", size: iconSize100)
+
+// With custom color
+Icon(name: "check", size: iconSize100)
+    .foregroundColor(colorSuccess)
+```
+
+**Using Direct SF Symbols with Tokens**:
+```swift
+// ✅ CORRECT: SF Symbol with icon size token
+Image(systemName: "exclamationmark.circle.fill")
+    .font(.system(size: iconSize075))
+
+// ✅ CORRECT: SF Symbol with frame using token
+Image(systemName: "checkmark.circle.fill")
+    .frame(width: iconSize100, height: iconSize100)
+
+// ❌ WRONG: Hard-coded size
+Image(systemName: "exclamationmark.circle.fill")
+    .font(.system(size: 16))
+```
+
+**When to Use SF Symbols Directly**:
+- Status indicators (error, success, warning icons)
+- System UI elements following iOS conventions
+- Platform-specific accessibility features
+
+#### Android Platform (Jetpack Compose)
+
+**Using Icon Component**:
+```kotlin
+// Icon component with token-based sizing
+Icon(name = "arrow_right", size = iconSize100)
+
+// With custom color
+Icon(
+    name = "check",
+    size = iconSize100,
+    tint = colorSuccess
+)
+```
+
+**Using Direct Material Icons with Tokens**:
+```kotlin
+// ✅ CORRECT: Material Icon with size token
+Icon(
+    imageVector = Icons.Default.CheckCircle,
+    contentDescription = "Success",
+    modifier = Modifier.size(iconSize100)
+)
+
+// ✅ CORRECT: Custom drawable with size token
+Icon(
+    painter = painterResource(id = R.drawable.ic_status),
+    contentDescription = "Status",
+    modifier = Modifier.size(iconSize075)
+)
+
+// ❌ WRONG: Hard-coded size
+Icon(
+    imageVector = Icons.Default.CheckCircle,
+    contentDescription = "Success",
+    modifier = Modifier.size(24.dp)
+)
+```
+
+**When to Use Material Icons Directly**:
+- Status indicators following Material Design guidelines
+- System UI elements following Android conventions
+- Platform-specific interaction patterns
+
+### Icon Integration Anti-Patterns
+
+#### ❌ Hard-Coded Icon Sizes
+```swift
+// DON'T: Hard-coded pixel values
+Image(systemName: "icon-name")
+    .font(.system(size: 16))
+
+// DO: Use icon size tokens
+Image(systemName: "icon-name")
+    .font(.system(size: iconSize075))
+```
+
+#### ❌ Inconsistent Icon Usage Within Component
+```typescript
+// DON'T: Mix Icon component and direct assets inconsistently
+class MyComponent {
+  render() {
+    // Some icons use Icon component
+    const navIcon = createIcon({ name: 'arrow-right', size: iconSize100 });
+    
+    // Other icons use direct SVG (inconsistent)
+    const statusIcon = '<svg width="16" height="16">...</svg>';
+  }
+}
+
+// DO: Use consistent approach throughout component
+class MyComponent {
+  render() {
+    // All icons use Icon component
+    const navIcon = createIcon({ name: 'arrow-right', size: iconSize100 });
+    const statusIcon = createIcon({ name: 'check', size: iconSize075 });
+  }
+}
+```
+
+#### ❌ Missing Documentation for Direct Platform Icons
+```swift
+// DON'T: Use direct platform icons without documentation
+Image(systemName: "exclamationmark.circle.fill")
+    .font(.system(size: iconSize075))
+
+// DO: Document rationale in component README
+// See "When Direct Platform Icons Are Acceptable" section above
+```
+
+### Icon Integration Checklist
+
+Before implementing icons in a component, verify:
+
+- [ ] Decided whether to use Icon component or direct platform icons
+- [ ] Documented rationale if bypassing Icon component system
+- [ ] All icon sizes use icon size tokens (no hard-coded values)
+- [ ] Icon sizing matches typography context (see token pairing table)
+- [ ] Consistent icon approach throughout the component
+- [ ] Component README documents icon usage patterns
 
 ---
 

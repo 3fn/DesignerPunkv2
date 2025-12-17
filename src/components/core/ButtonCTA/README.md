@@ -456,6 +456,75 @@ Buttons are announced correctly by screen readers:
 
 ---
 
+## Icon Usage
+
+The ButtonCTA component uses the Icon component system for optional leading icons. This section documents the icon integration approach and rationale.
+
+### Icon Integration Pattern
+
+ButtonCTA uses the Icon component for all leading icons:
+
+```swift
+// iOS - Using Icon component
+Icon(
+    name: iconName,
+    size: iconSize,      // iconSize100 (24px) or iconSize125 (32px)
+    color: iconColor     // Matches button text color
+)
+```
+
+```kotlin
+// Android - Using Icon component
+Icon(
+    name = iconName,
+    size = iconSize,     // iconSize100 (24px) or iconSize125 (32px)
+    tint = iconColor     // Matches button text color with optical balance
+)
+```
+
+```typescript
+// Web - Using createIcon function
+createIcon({
+    name: this.icon,
+    size: iconSize,      // iconSize100 (24px) or iconSize125 (32px)
+    color: iconColor     // Matches button text color
+})
+```
+
+### Rationale for Using Icon Component
+
+ButtonCTA uses the Icon component system for the following reasons:
+
+1. **Public API**: The `icon` prop is part of the component's public API, allowing users to specify any icon from the Icon System.
+
+2. **Cross-Platform Consistency**: The Icon component provides unified icon rendering across web, iOS, and Android.
+
+3. **Token-Based Sizing**: Icon sizes use icon size tokens that scale with button size:
+   - Small/Medium buttons: `iconSize100` (24px)
+   - Large buttons: `iconSize125` (32px)
+
+4. **Optical Weight Compensation**: Secondary and tertiary buttons apply optical balance adjustments to icons for visual harmony with text.
+
+5. **Color Inheritance**: Icons automatically inherit the appropriate color based on button variant (white on primary, primary color on secondary/tertiary).
+
+### Icon Size by Button Size
+
+| Button Size | Icon Size Token | Pixel Value |
+|-------------|-----------------|-------------|
+| Small | `iconSize100` | 24px |
+| Medium | `iconSize100` | 24px |
+| Large | `iconSize125` | 32px |
+
+### Icon-Text Spacing
+
+| Button Size | Spacing Token | Pixel Value |
+|-------------|---------------|-------------|
+| Small | `space.grouped.tight` | 4px |
+| Medium | `space.grouped.normal` | 8px |
+| Large | `space.grouped.normal` | 8px |
+
+---
+
 ## Related Components
 
 - **Icon System** (Spec 004): Provides icons for optional leading icon prop

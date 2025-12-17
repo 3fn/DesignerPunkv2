@@ -1,3 +1,7 @@
+---
+inclusion: always
+---
+
 **ALL AI AGENTS MUST read this doc COMPLETELY WITHOUT EXCEPTION regardless of current task priority.**
 
 # Steering Documentation Directional Priorities
@@ -10,10 +14,6 @@
 **Layer**: 0
 **Relevant Tasks**: all-tasks
 **Last Reviewed**: 2025-12-15
-
----
-inclusion: always
----
 
 ## How This Steering System Works
 

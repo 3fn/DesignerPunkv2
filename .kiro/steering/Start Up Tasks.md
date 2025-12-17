@@ -1,3 +1,7 @@
+---
+inclusion: always
+---
+
 # Start Up Tasks
 
 **Date**: 2025-10-20
@@ -7,10 +11,6 @@
 **Scope**: cross-project
 **Layer**: 1
 **Relevant Tasks**: all-tasks
-
----
-inclusion: always
----
 
 1. Check today's actual date
 

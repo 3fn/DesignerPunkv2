@@ -36,6 +36,7 @@ export interface SemanticToken {
    * References to primitive tokens this semantic token uses
    * For simple tokens: { default: 'primitiveTokenName' }
    * For composite tokens: { fontSize: 'fontSize100', lineHeight: 'lineHeight100', fontFamily: 'fontFamilyBody' }
+   * For icon tokens: multiplier can be a lineHeight token reference or 'custom:X.XXX' for optical correction
    */
   primitiveReferences: Record<string, string>;
 

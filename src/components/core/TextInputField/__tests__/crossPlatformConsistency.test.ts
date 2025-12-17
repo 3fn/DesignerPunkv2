@@ -231,11 +231,11 @@ describe('TextInputField Cross-Platform Consistency', () => {
       expect(androidContent).toContain('name = "info"');
     });
     
-    test('all platforms use same icon size (24)', () => {
+    test('all platforms use same icon size token (iconSize100 = 24)', () => {
       // Web uses iconSizes.size100 token reference (24px)
       expect(webContent).toContain('iconSizes.size100');
-      // iOS uses hard-coded size: 24 (TODO: should use iconSize100 token)
-      expect(iosContent).toContain('size: 24');
+      // iOS uses iconSize100 token reference (24pt)
+      expect(iosContent).toContain('iconSize100');
       // Android uses DesignTokens.icon_size_100 token reference
       expect(androidContent).toContain('icon_size_100');
     });

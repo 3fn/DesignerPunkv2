@@ -31,27 +31,27 @@ export const lineHeightTokens: Record<string, PrimitiveToken> = {
   lineHeight050: {
     name: 'lineHeight050',
     category: TokenCategory.LINE_HEIGHT,
-    baseValue: 1.0,
+    baseValue: 1.538,
     familyBaseValue: LINE_HEIGHT_BASE_VALUE,
-    description: 'Tight line height - precision multiplier for dense text',
-    mathematicalRelationship: 'base × 0.667 = 1.5 × 0.667 ≈ 1.0',
+    description: 'Line height paired with fontSize050',
+    mathematicalRelationship: 'fontSize050 × baseValue ≈ 20',
     baselineGridAlignment: false,
     isStrategicFlexibility: false,
     isPrecisionTargeted: true, // Precision multiplier for vertical rhythm
-    platforms: generateLineHeightPlatformValues(1.0)
+    platforms: generateLineHeightPlatformValues(1.538)
   },
 
   lineHeight075: {
     name: 'lineHeight075',
     category: TokenCategory.LINE_HEIGHT,
-    baseValue: 1.25,
+    baseValue: 1.429,
     familyBaseValue: LINE_HEIGHT_BASE_VALUE,
-    description: 'Compact line height - precision multiplier for readable text',
-    mathematicalRelationship: 'base × 0.833 = 1.5 × 0.833 ≈ 1.25',
+    description: 'Line height paired with fontSize075',
+    mathematicalRelationship: 'fontSize075 × baseValue ≈ 20',
     baselineGridAlignment: false,
     isStrategicFlexibility: false,
     isPrecisionTargeted: true, // Precision multiplier for vertical rhythm
-    platforms: generateLineHeightPlatformValues(1.25)
+    platforms: generateLineHeightPlatformValues(1.429)
   },
 
   lineHeight100: {
@@ -59,8 +59,8 @@ export const lineHeightTokens: Record<string, PrimitiveToken> = {
     category: TokenCategory.LINE_HEIGHT,
     baseValue: LINE_HEIGHT_BASE_VALUE,
     familyBaseValue: LINE_HEIGHT_BASE_VALUE,
-    description: 'Base line height - optimal for body text',
-    mathematicalRelationship: 'base × 1 = 1.5 × 1 = 1.5',
+    description: 'Line height paired with fontSize100',
+    mathematicalRelationship: 'fontSize100 × baseValue = 24',
     baselineGridAlignment: false,
     isStrategicFlexibility: false,
     isPrecisionTargeted: true, // Precision multiplier for vertical rhythm
@@ -70,14 +70,14 @@ export const lineHeightTokens: Record<string, PrimitiveToken> = {
   lineHeight125: {
     name: 'lineHeight125',
     category: TokenCategory.LINE_HEIGHT,
-    baseValue: 1.75,
+    baseValue: 1.556,
     familyBaseValue: LINE_HEIGHT_BASE_VALUE,
-    description: 'Loose line height - precision multiplier for comfortable reading',
-    mathematicalRelationship: 'base × 1.167 = 1.5 × 1.167 ≈ 1.75',
+    description: 'Line height paired with fontSize125',
+    mathematicalRelationship: 'fontSize125 × baseValue ≈ 28',
     baselineGridAlignment: false,
     isStrategicFlexibility: false,
     isPrecisionTargeted: true, // Precision multiplier for vertical rhythm
-    platforms: generateLineHeightPlatformValues(1.75)
+    platforms: generateLineHeightPlatformValues(1.556)
   },
 
   lineHeight150: {
@@ -85,8 +85,8 @@ export const lineHeightTokens: Record<string, PrimitiveToken> = {
     category: TokenCategory.LINE_HEIGHT,
     baseValue: 1.4,
     familyBaseValue: LINE_HEIGHT_BASE_VALUE,
-    description: 'H6 line height - precision multiplier for 28px (4×7) with fontSize150',
-    mathematicalRelationship: '28px ÷ 20px = 1.4 (aligns to 4pt subgrid)',
+    description: 'Line height paired with fontSize150',
+    mathematicalRelationship: 'fontSize150 × baseValue = 28',
     baselineGridAlignment: false,
     isStrategicFlexibility: false,
     isPrecisionTargeted: true, // Precision multiplier for vertical rhythm
@@ -98,8 +98,8 @@ export const lineHeightTokens: Record<string, PrimitiveToken> = {
     category: TokenCategory.LINE_HEIGHT,
     baseValue: 1.391,
     familyBaseValue: LINE_HEIGHT_BASE_VALUE,
-    description: 'H5 line height - precision multiplier for 32px (4×8) with fontSize200',
-    mathematicalRelationship: '32px ÷ 23px ≈ 1.391 (aligns to 4pt subgrid)',
+    description: 'Line height paired with fontSize200',
+    mathematicalRelationship: 'fontSize200 × baseValue ≈ 32',
     baselineGridAlignment: false,
     isStrategicFlexibility: false,
     isPrecisionTargeted: true, // Precision multiplier for vertical rhythm
@@ -111,8 +111,8 @@ export const lineHeightTokens: Record<string, PrimitiveToken> = {
     category: TokenCategory.LINE_HEIGHT,
     baseValue: 1.231,
     familyBaseValue: LINE_HEIGHT_BASE_VALUE,
-    description: 'H4 line height - precision multiplier for 32px (4×8) with fontSize300',
-    mathematicalRelationship: '32px ÷ 26px ≈ 1.231 (aligns to 4pt subgrid)',
+    description: 'Line height paired with fontSize300',
+    mathematicalRelationship: 'fontSize300 × baseValue ≈ 32',
     baselineGridAlignment: false,
     isStrategicFlexibility: false,
     isPrecisionTargeted: true, // Precision multiplier for vertical rhythm
@@ -124,8 +124,8 @@ export const lineHeightTokens: Record<string, PrimitiveToken> = {
     category: TokenCategory.LINE_HEIGHT,
     baseValue: 1.241,
     familyBaseValue: LINE_HEIGHT_BASE_VALUE,
-    description: 'H3 line height - precision multiplier for 36px (4×9) with fontSize400',
-    mathematicalRelationship: '36px ÷ 29px ≈ 1.241 (aligns to 4pt subgrid)',
+    description: 'Line height paired with fontSize400',
+    mathematicalRelationship: 'fontSize400 × baseValue ≈ 36',
     baselineGridAlignment: false,
     isStrategicFlexibility: false,
     isPrecisionTargeted: true, // Precision multiplier for vertical rhythm
@@ -137,8 +137,8 @@ export const lineHeightTokens: Record<string, PrimitiveToken> = {
     category: TokenCategory.LINE_HEIGHT,
     baseValue: 1.212,
     familyBaseValue: LINE_HEIGHT_BASE_VALUE,
-    description: 'Display heading line height - precision multiplier for 40px (4×10) with fontSize500',
-    mathematicalRelationship: '40px ÷ 33px = 1.212 (aligns to 4pt subgrid)',
+    description: 'Line height paired with fontSize500',
+    mathematicalRelationship: 'fontSize500 × baseValue ≈ 40',
     baselineGridAlignment: false,
     isStrategicFlexibility: false,
     isPrecisionTargeted: true, // Precision multiplier for vertical rhythm
@@ -150,8 +150,8 @@ export const lineHeightTokens: Record<string, PrimitiveToken> = {
     category: TokenCategory.LINE_HEIGHT,
     baseValue: 1.19,
     familyBaseValue: LINE_HEIGHT_BASE_VALUE,
-    description: 'Large display line height - precision multiplier for 44px (4×11) with fontSize600',
-    mathematicalRelationship: '44px ÷ 37px ≈ 1.19 (aligns to 4pt subgrid)',
+    description: 'Line height paired with fontSize600',
+    mathematicalRelationship: 'fontSize600 × baseValue ≈ 44',
     baselineGridAlignment: false,
     isStrategicFlexibility: false,
     isPrecisionTargeted: true, // Precision multiplier for vertical rhythm
@@ -163,8 +163,8 @@ export const lineHeightTokens: Record<string, PrimitiveToken> = {
     category: TokenCategory.LINE_HEIGHT,
     baseValue: 1.143,
     familyBaseValue: LINE_HEIGHT_BASE_VALUE,
-    description: 'Extra large display line height - precision multiplier for 48px (4×12) with fontSize700',
-    mathematicalRelationship: '48px ÷ 42px ≈ 1.143 (aligns to 4pt subgrid)',
+    description: 'Line height paired with fontSize700',
+    mathematicalRelationship: 'fontSize700 × baseValue ≈ 48',
     baselineGridAlignment: false,
     isStrategicFlexibility: false,
     isPrecisionTargeted: true, // Precision multiplier for vertical rhythm

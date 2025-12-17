@@ -1,3 +1,7 @@
+---
+inclusion: manual
+---
+
 # Task Type Definitions
 
 **Date**: 2025-10-20
@@ -7,11 +11,6 @@
 **Scope**: cross-project
 **Layer**: 2
 **Relevant Tasks**: spec-creation
-
----
-inclusion: conditional
-trigger: spec-creation
----
 
 ## AI Agent Reading Priorities
 

@@ -144,30 +144,39 @@ export class TokenFileGenerator {
     platform: 'web' | 'ios' | 'android',
     generator: WebFormatGenerator | iOSFormatGenerator | AndroidFormatGenerator
   ): string | null {
-    // Get fontSize and lineHeight primitive references
+    // Get fontSize and multiplier primitive references
     const fontSizeRef = semantic.primitiveReferences.fontSize;
-    const lineHeightRef = semantic.primitiveReferences.lineHeight;
+    const multiplierRef = semantic.primitiveReferences.multiplier;
     
-    if (!fontSizeRef || !lineHeightRef) {
-      console.warn(`Icon token ${semantic.name} missing fontSize or lineHeight reference`);
+    if (!fontSizeRef || !multiplierRef) {
+      console.warn(`Icon token ${semantic.name} missing fontSize or multiplier reference`);
       return null;
     }
     
-    // Import primitive tokens to resolve references
+    // Import primitive tokens and parsing utilities
     const { fontSizeTokens } = require('../tokens/FontSizeTokens');
     const { lineHeightTokens } = require('../tokens/LineHeightTokens');
+    const { parseMultiplier, CUSTOM_MULTIPLIER_PREFIX } = require('../tokens/semantic/IconTokens');
     
-    // Resolve primitive tokens
+    // Resolve fontSize primitive token
     const fontSizeToken = fontSizeTokens[fontSizeRef];
-    const lineHeightToken = lineHeightTokens[lineHeightRef];
     
-    if (!fontSizeToken || !lineHeightToken) {
-      console.warn(`Icon token ${semantic.name} references invalid primitives: ${fontSizeRef}, ${lineHeightRef}`);
+    if (!fontSizeToken) {
+      console.warn(`Icon token ${semantic.name} references invalid fontSize: ${fontSizeRef}`);
       return null;
     }
     
-    // Calculate icon size: fontSize × lineHeight (rounded)
-    const calculatedSize = Math.round(fontSizeToken.baseValue * lineHeightToken.baseValue);
+    // Resolve multiplier - can be a lineHeight token reference or 'custom:X.XXX'
+    let multiplierValue: number;
+    try {
+      multiplierValue = parseMultiplier(multiplierRef);
+    } catch (error) {
+      console.warn(`Icon token ${semantic.name} has invalid multiplier: ${multiplierRef}`);
+      return null;
+    }
+    
+    // Calculate icon size: fontSize × multiplier (rounded)
+    const calculatedSize = Math.round(fontSizeToken.baseValue * multiplierValue);
     
     // Generate platform-specific token with calculated value, description, and context
     return generator.formatIconSizeToken(

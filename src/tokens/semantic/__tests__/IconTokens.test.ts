@@ -2,7 +2,8 @@
  * Icon Size Token Calculation Tests
  * 
  * Tests for icon size token calculation functions and token structure.
- * Validates that icon sizes are calculated correctly using fontSize × lineHeight formula.
+ * Validates that icon sizes are calculated correctly using fontSize × multiplier formula.
+ * The multiplier can be a lineHeight token reference or 'custom:X.XXX' for optical correction.
  * 
  * Task: 1.3 Implement icon size calculation function
  * Spec: 006-icon-size-tokens
@@ -12,35 +13,71 @@ import {
   calculateIconSize,
   generateIconSizeTokens,
   iconTokens,
-  getAllIconTokens
+  getAllIconTokens,
+  parseMultiplier,
+  isCustomMultiplier,
+  CUSTOM_MULTIPLIER_PREFIX
 } from '../IconTokens';
 import { fontSizeTokens } from '../../FontSizeTokens';
 import { lineHeightTokens } from '../../LineHeightTokens';
 import { SemanticCategory } from '../../../types/SemanticToken';
 
 describe('Icon Size Token Calculation', () => {
+  describe('parseMultiplier()', () => {
+    it('should parse lineHeight token references', () => {
+      const multiplier = parseMultiplier('lineHeight100');
+      expect(multiplier).toBe(1.5);
+    });
+
+    it('should parse custom multiplier strings', () => {
+      const multiplier = parseMultiplier('custom:1.231');
+      expect(multiplier).toBe(1.231);
+    });
+
+    it('should throw for invalid lineHeight references', () => {
+      expect(() => parseMultiplier('lineHeightInvalid')).toThrow();
+    });
+  });
+
+  describe('isCustomMultiplier()', () => {
+    it('should return true for custom multipliers', () => {
+      expect(isCustomMultiplier('custom:1.231')).toBe(true);
+    });
+
+    it('should return false for lineHeight references', () => {
+      expect(isCustomMultiplier('lineHeight100')).toBe(false);
+    });
+  });
+
   describe('calculateIconSize()', () => {
-    it('should calculate icon size from fontSize × lineHeight', () => {
+    it('should calculate icon size from fontSize × lineHeight token', () => {
       const fontSize = fontSizeTokens.fontSize100; // 16
       const lineHeight = lineHeightTokens.lineHeight100; // 1.5
       const iconSize = calculateIconSize(fontSize, lineHeight);
       expect(iconSize).toBe(24); // 16 × 1.5 = 24
     });
 
-    it('should round non-integer results', () => {
-      const fontSize = fontSizeTokens.fontSize075; // 14
-      const lineHeight = lineHeightTokens.lineHeight075; // 1.25
-      const iconSize = calculateIconSize(fontSize, lineHeight);
-      expect(iconSize).toBe(18); // 14 × 1.25 = 17.5 → 18
+    it('should calculate icon size from fontSize × raw number multiplier', () => {
+      const fontSize = fontSizeTokens.fontSize050; // 13
+      const customMultiplier = 1.231; // Custom optical correction multiplier
+      const iconSize = calculateIconSize(fontSize, customMultiplier);
+      expect(iconSize).toBe(16); // 13 × 1.231 = 16.003 → 16
     });
 
-    it('should calculate all expected icon sizes correctly', () => {
-      // Expected values from design document
+    it('should round non-integer results', () => {
+      const fontSize = fontSizeTokens.fontSize075; // 14
+      const lineHeight = lineHeightTokens.lineHeight075; // 1.429
+      const iconSize = calculateIconSize(fontSize, lineHeight);
+      expect(iconSize).toBe(20); // 14 × 1.429 = 20.006 → 20
+    });
+
+    it('should calculate all expected icon sizes correctly using lineHeight tokens', () => {
+      // Expected values with precision-targeted lineHeight multipliers for 8pt vertical rhythm
+      // Note: icon.size050 uses custom multiplier (1.231) not lineHeight050, tested separately
       const expectedSizes = {
-        '050': 13,  // 13 × 1.0 = 13
-        '075': 18,  // 14 × 1.25 = 17.5 → 18
+        '075': 20,  // 14 × 1.429 = 20.006 → 20
         '100': 24,  // 16 × 1.5 = 24
-        '125': 32,  // 18 × 1.75 = 31.5 → 32
+        '125': 28,  // 18 × 1.556 = 28.008 → 28
         '150': 28,  // 20 × 1.4 = 28
         '200': 32,  // 23 × 1.391 = 31.993 → 32
         '300': 32,  // 26 × 1.231 = 32.006 → 32
@@ -56,6 +93,20 @@ describe('Icon Size Token Calculation', () => {
         const calculatedSize = calculateIconSize(fontSize, lineHeight);
         expect(calculatedSize).toBe(expectedSize);
       });
+    });
+
+    it('should calculate icon.size050 with custom multiplier for optical balance', () => {
+      // icon.size050 uses custom multiplier (1.231) instead of lineHeight050 (1.538)
+      // This provides better optical balance: 16px icon with 13px text vs 20px
+      const fontSize = fontSizeTokens.fontSize050; // 13
+      const customMultiplier = parseMultiplier('custom:1.231');
+      const iconSize = calculateIconSize(fontSize, customMultiplier);
+      expect(iconSize).toBe(16); // 13 × 1.231 = 16.003 → 16
+      
+      // Verify this differs from using lineHeight050
+      const lineHeight050Size = calculateIconSize(fontSize, lineHeightTokens.lineHeight050);
+      expect(lineHeight050Size).toBe(20); // 13 × 1.538 = 19.994 → 20
+      expect(iconSize).not.toBe(lineHeight050Size);
     });
   });
 
@@ -98,9 +149,9 @@ describe('Icon Size Token Calculation', () => {
       const token = tokens['icon.size100'];
       
       expect(token.primitiveReferences).toHaveProperty('fontSize');
-      expect(token.primitiveReferences).toHaveProperty('lineHeight');
+      expect(token.primitiveReferences).toHaveProperty('multiplier');
       expect(token.primitiveReferences.fontSize).toBe('fontSize100');
-      expect(token.primitiveReferences.lineHeight).toBe('lineHeight100');
+      expect(token.primitiveReferences.multiplier).toBe('lineHeight100');
     });
 
     it('should include context for each token', () => {
@@ -117,7 +168,7 @@ describe('Icon Size Token Calculation', () => {
       const token = tokens['icon.size100'];
       
       expect(token.description).toContain('fontSize100');
-      expect(token.description).toContain('lineHeight100');
+      expect(token.description).toContain('lineHeight100'); // multiplier source
       expect(token.description).toContain('16');
       expect(token.description).toContain('1.5');
       expect(token.description).toContain('24');
@@ -140,13 +191,21 @@ describe('Icon Size Token Calculation', () => {
       });
     });
 
-    it('should reference valid primitive tokens', () => {
+    it('should reference valid primitive tokens or custom multipliers', () => {
       Object.values(iconTokens).forEach(token => {
         const fontSizeName = token.primitiveReferences.fontSize;
-        const lineHeightName = token.primitiveReferences.lineHeight;
+        const multiplierRef = token.primitiveReferences.multiplier;
         
+        // fontSize should always be a valid primitive token
         expect(fontSizeTokens).toHaveProperty(fontSizeName);
-        expect(lineHeightTokens).toHaveProperty(lineHeightName);
+        
+        // multiplier can be a lineHeight token reference or 'custom:X.XXX'
+        if (isCustomMultiplier(multiplierRef)) {
+          const value = parseMultiplier(multiplierRef);
+          expect(value).toBeGreaterThan(0);
+        } else {
+          expect(lineHeightTokens).toHaveProperty(multiplierRef);
+        }
       });
     });
   });
@@ -176,66 +235,86 @@ describe('Icon Size Token Calculation', () => {
       Object.entries(iconTokens).forEach(([name, token]) => {
         const scale = name.replace('icon.size', '');
         const fontSize = fontSizeTokens[`fontSize${scale}`];
-        const lineHeight = lineHeightTokens[`lineHeight${scale}`];
-        const size = calculateIconSize(fontSize, lineHeight);
+        const multiplierRef = token.primitiveReferences.multiplier;
+        
+        // Parse multiplier (handles both lineHeight references and custom values)
+        const multiplierValue = parseMultiplier(multiplierRef);
+        
+        const size = calculateIconSize(fontSize, multiplierValue);
         uniqueSizes.add(size);
       });
       
       // Log actual unique sizes for debugging
       const sortedSizes = Array.from(uniqueSizes).sort((a, b) => a - b);
       
-      // Verify we have the expected unique sizes (may be 8 or 9 depending on rounding)
-      expect(sortedSizes).toContain(13);
-      expect(sortedSizes).toContain(18);
+      // Verify we have the expected unique sizes
+      // With custom multiplier for size050: 16px (unique), 20px (075 only)
+      // Convergence: 28 (125, 150), 32 (200, 300)
+      expect(sortedSizes).toContain(16);  // size050 with custom multiplier
+      expect(sortedSizes).toContain(20);  // size075
       expect(sortedSizes).toContain(24);
-      expect(sortedSizes).toContain(28);
-      expect(sortedSizes).toContain(32);
+      expect(sortedSizes).toContain(28);  // size125, size150 converge
+      expect(sortedSizes).toContain(32);  // size200, size300 converge
       expect(sortedSizes).toContain(36);
       expect(sortedSizes).toContain(40);
       expect(sortedSizes).toContain(44);
       expect(sortedSizes).toContain(48);
     });
 
-    it('should have natural convergence at 32px', () => {
-      // size125, size200, and size300 all converge to 32px
+    it('should have natural convergence at multiple sizes', () => {
+      // size050 now uses custom multiplier (1.231) for 16px - no longer converges with size075
+      const size050 = calculateIconSize(fontSizeTokens.fontSize050, parseMultiplier('custom:1.231'));
+      const size075 = calculateIconSize(fontSizeTokens.fontSize075, lineHeightTokens.lineHeight075);
+      expect(size050).toBe(16);  // Custom multiplier for optical balance
+      expect(size075).toBe(20);  // Standard lineHeight calculation
+      
+      // size125 and size150 converge to 28px
       const size125 = calculateIconSize(fontSizeTokens.fontSize125, lineHeightTokens.lineHeight125);
+      const size150 = calculateIconSize(fontSizeTokens.fontSize150, lineHeightTokens.lineHeight150);
+      expect(size125).toBe(28);
+      expect(size150).toBe(28);
+      
+      // size200 and size300 converge to 32px
       const size200 = calculateIconSize(fontSizeTokens.fontSize200, lineHeightTokens.lineHeight200);
       const size300 = calculateIconSize(fontSizeTokens.fontSize300, lineHeightTokens.lineHeight300);
-      
-      expect(size125).toBe(32);
       expect(size200).toBe(32);
       expect(size300).toBe(32);
     });
   });
 
   describe('4pt Subgrid Alignment', () => {
-    it('should align most icon sizes to 4pt subgrid', () => {
-      // Sizes that should align to 4pt subgrid (divisible by 4)
-      const alignedSizes = [24, 28, 32, 36, 40, 44, 48];
+    it('should align all icon sizes to 4pt subgrid', () => {
+      // With precision-targeted multipliers, all sizes now align to 4pt subgrid
+      const alignedSizes = [16, 20, 24, 28, 32, 36, 40, 44, 48];
       
       alignedSizes.forEach(size => {
         expect(size % 4).toBe(0);
       });
     });
 
-    it('should verify 4pt alignment for applicable icon sizes', () => {
+    it('should verify 4pt alignment for all icon sizes', () => {
       // Calculate all icon sizes and check 4pt alignment
       const sizeAlignmentMap: Record<string, { size: number; aligned: boolean }> = {};
       
       Object.entries(iconTokens).forEach(([name, token]) => {
         const scale = name.replace('icon.size', '');
         const fontSize = fontSizeTokens[`fontSize${scale}`];
-        const lineHeight = lineHeightTokens[`lineHeight${scale}`];
-        const size = calculateIconSize(fontSize, lineHeight);
+        const multiplierRef = token.primitiveReferences.multiplier;
+        
+        // Parse multiplier (handles both lineHeight references and custom values)
+        const multiplierValue = parseMultiplier(multiplierRef);
+        
+        const size = calculateIconSize(fontSize, multiplierValue);
         const aligned = size % 4 === 0;
         
         sizeAlignmentMap[scale] = { size, aligned };
       });
       
-      // Verify expected alignment status
-      // Sizes 100 and above should be 4pt aligned (except 050 and 075 which are smallest)
+      // ALL sizes should be 4pt aligned
+      expect(sizeAlignmentMap['050'].aligned).toBe(true);  // 16px (custom multiplier)
+      expect(sizeAlignmentMap['075'].aligned).toBe(true);  // 20px
       expect(sizeAlignmentMap['100'].aligned).toBe(true);  // 24px
-      expect(sizeAlignmentMap['125'].aligned).toBe(true);  // 32px
+      expect(sizeAlignmentMap['125'].aligned).toBe(true);  // 28px
       expect(sizeAlignmentMap['150'].aligned).toBe(true);  // 28px
       expect(sizeAlignmentMap['200'].aligned).toBe(true);  // 32px
       expect(sizeAlignmentMap['300'].aligned).toBe(true);  // 32px
@@ -244,32 +323,30 @@ describe('Icon Size Token Calculation', () => {
       expect(sizeAlignmentMap['600'].aligned).toBe(true);  // 44px
       expect(sizeAlignmentMap['700'].aligned).toBe(true);  // 48px
       
-      // Smallest sizes (050, 075) are not 4pt aligned - this is acceptable
-      expect(sizeAlignmentMap['050'].size).toBe(13);  // Not aligned (13 % 4 = 1)
-      expect(sizeAlignmentMap['075'].size).toBe(18);  // Not aligned (18 % 4 = 2)
+      // Verify specific sizes
+      expect(sizeAlignmentMap['050'].size).toBe(16);  // Custom multiplier for optical balance
+      expect(sizeAlignmentMap['075'].size).toBe(20);  // Standard lineHeight calculation
     });
 
-    it('should document non-aligned sizes as acceptable trade-offs', () => {
-      // Non-aligned sizes are smallest sizes where alignment trade-off is acceptable
-      const nonAlignedSizes = [13, 18];
-      
-      nonAlignedSizes.forEach(size => {
-        expect(size % 4).not.toBe(0);
-      });
-      
-      // Verify these are the only non-aligned sizes
+    it('should have no non-aligned sizes with precision-targeted multipliers', () => {
+      // All sizes should be 4pt aligned
       const allSizes = Object.entries(iconTokens).map(([name, token]) => {
         const scale = name.replace('icon.size', '');
         const fontSize = fontSizeTokens[`fontSize${scale}`];
-        const lineHeight = lineHeightTokens[`lineHeight${scale}`];
-        return calculateIconSize(fontSize, lineHeight);
+        const multiplierRef = token.primitiveReferences.multiplier;
+        
+        // Parse multiplier (handles both lineHeight references and custom values)
+        const multiplierValue = parseMultiplier(multiplierRef);
+        
+        return calculateIconSize(fontSize, multiplierValue);
       });
       
       const uniqueSizes = Array.from(new Set(allSizes)).sort((a, b) => a - b);
       const actualNonAligned = uniqueSizes.filter(size => size % 4 !== 0);
       
-      expect(actualNonAligned).toEqual(nonAlignedSizes);
-      expect(actualNonAligned.length).toBeLessThan(3); // Should be minimal exceptions
+      // No non-aligned sizes
+      expect(actualNonAligned).toEqual([]);
+      expect(actualNonAligned.length).toBe(0);
     });
   });
 });
@@ -331,43 +408,55 @@ describe('Icon Size Token Structure Validation', () => {
   });
 
   describe('Primitive References Validation', () => {
-    it('should have fontSize and lineHeight references', () => {
+    it('should have fontSize and multiplier references', () => {
       Object.values(iconTokens).forEach(token => {
         expect(token.primitiveReferences).toHaveProperty('fontSize');
-        expect(token.primitiveReferences).toHaveProperty('lineHeight');
+        expect(token.primitiveReferences).toHaveProperty('multiplier');
         
         expect(typeof token.primitiveReferences.fontSize).toBe('string');
-        expect(typeof token.primitiveReferences.lineHeight).toBe('string');
+        expect(typeof token.primitiveReferences.multiplier).toBe('string');
       });
     });
 
-    it('should reference valid primitive tokens', () => {
+    it('should reference valid primitive tokens or custom multipliers', () => {
       Object.values(iconTokens).forEach(token => {
         const fontSizeName = token.primitiveReferences.fontSize;
-        const lineHeightName = token.primitiveReferences.lineHeight;
+        const multiplierRef = token.primitiveReferences.multiplier;
         
-        // Verify primitive tokens exist
+        // Verify fontSize primitive token exists
         expect(fontSizeTokens).toHaveProperty(fontSizeName);
-        expect(lineHeightTokens).toHaveProperty(lineHeightName);
         
-        // Verify primitive tokens are valid PrimitiveToken objects
+        // Verify fontSize is a valid PrimitiveToken object
         const fontSize = fontSizeTokens[fontSizeName];
-        const lineHeight = lineHeightTokens[lineHeightName];
-        
         expect(fontSize).toHaveProperty('name');
         expect(fontSize).toHaveProperty('baseValue');
-        expect(lineHeight).toHaveProperty('name');
-        expect(lineHeight).toHaveProperty('baseValue');
+        
+        // Verify multiplier is either a valid lineHeight reference or a custom multiplier string
+        if (isCustomMultiplier(multiplierRef)) {
+          const value = parseMultiplier(multiplierRef);
+          expect(value).toBeGreaterThan(0);
+        } else {
+          expect(lineHeightTokens).toHaveProperty(multiplierRef);
+          const lineHeight = lineHeightTokens[multiplierRef];
+          expect(lineHeight).toHaveProperty('name');
+          expect(lineHeight).toHaveProperty('baseValue');
+        }
       });
     });
 
-    it('should reference matching scale levels', () => {
+    it('should reference matching scale levels for lineHeight multipliers', () => {
       Object.entries(iconTokens).forEach(([name, token]) => {
         const scale = name.replace('icon.size', '');
+        const multiplierRef = token.primitiveReferences.multiplier;
         
-        // fontSize and lineHeight should reference the same scale
+        // fontSize should always reference the same scale
         expect(token.primitiveReferences.fontSize).toBe(`fontSize${scale}`);
-        expect(token.primitiveReferences.lineHeight).toBe(`lineHeight${scale}`);
+        
+        // multiplier should reference matching scale if it's a lineHeight reference
+        if (!isCustomMultiplier(multiplierRef)) {
+          expect(multiplierRef).toBe(`lineHeight${scale}`);
+        }
+        // Custom multipliers don't need to match scale
       });
     });
 
@@ -376,7 +465,21 @@ describe('Icon Size Token Structure Validation', () => {
         const refKeys = Object.keys(token.primitiveReferences);
         expect(refKeys).toHaveLength(2);
         expect(refKeys).toContain('fontSize');
-        expect(refKeys).toContain('lineHeight');
+        expect(refKeys).toContain('multiplier');
+      });
+    });
+
+    it('should use custom multiplier only for icon.size050', () => {
+      // Only icon.size050 should have a custom multiplier
+      Object.entries(iconTokens).forEach(([name, token]) => {
+        const multiplierRef = token.primitiveReferences.multiplier;
+        
+        if (name === 'icon.size050') {
+          expect(isCustomMultiplier(multiplierRef)).toBe(true);
+          expect(multiplierRef).toBe('custom:1.231'); // Custom optical correction multiplier
+        } else {
+          expect(isCustomMultiplier(multiplierRef)).toBe(false);
+        }
       });
     });
   });
@@ -472,13 +575,20 @@ describe('Icon Size Token Structure Validation', () => {
       });
     });
 
-    it('should reference primitive token names in description', () => {
+    it('should reference primitive token names or custom multiplier in description', () => {
       Object.entries(iconTokens).forEach(([name, token]) => {
         const scale = name.replace('icon.size', '');
+        const multiplierRef = token.primitiveReferences.multiplier;
         
-        // Description should mention the primitive tokens used
+        // Description should mention the fontSize primitive
         expect(token.description).toContain(`fontSize${scale}`);
-        expect(token.description).toContain(`lineHeight${scale}`);
+        
+        // Description should mention the multiplier source
+        if (isCustomMultiplier(multiplierRef)) {
+          expect(token.description).toContain('custom'); // custom multiplier indicator
+        } else {
+          expect(token.description).toContain(multiplierRef); // lineHeight token name
+        }
       });
     });
 
@@ -486,8 +596,12 @@ describe('Icon Size Token Structure Validation', () => {
       Object.entries(iconTokens).forEach(([name, token]) => {
         const scale = name.replace('icon.size', '');
         const fontSize = fontSizeTokens[`fontSize${scale}`];
-        const lineHeight = lineHeightTokens[`lineHeight${scale}`];
-        const calculatedSize = calculateIconSize(fontSize, lineHeight);
+        const multiplierRef = token.primitiveReferences.multiplier;
+        
+        // Parse multiplier (handles both lineHeight references and custom values)
+        const multiplierValue = parseMultiplier(multiplierRef);
+        
+        const calculatedSize = calculateIconSize(fontSize, multiplierValue);
         
         // Description should include the calculated size
         expect(token.description).toContain(`${calculatedSize}px`);
@@ -496,7 +610,7 @@ describe('Icon Size Token Structure Validation', () => {
 
     it('should indicate rounding when applicable', () => {
       // Tokens that require rounding should mention it
-      const tokensWithRounding = ['icon.size075', 'icon.size125', 'icon.size200', 'icon.size300', 'icon.size400', 'icon.size500', 'icon.size600', 'icon.size700'];
+      const tokensWithRounding = ['icon.size050', 'icon.size075', 'icon.size125', 'icon.size200', 'icon.size300', 'icon.size400', 'icon.size500', 'icon.size600', 'icon.size700'];
       
       tokensWithRounding.forEach(tokenName => {
         const token = iconTokens[tokenName];
@@ -506,7 +620,8 @@ describe('Icon Size Token Structure Validation', () => {
 
     it('should not indicate rounding for exact calculations', () => {
       // Tokens with exact calculations should not mention rounding
-      const tokensWithoutRounding = ['icon.size050', 'icon.size100', 'icon.size150'];
+      // Only size100 and size150 are exact
+      const tokensWithoutRounding = ['icon.size100', 'icon.size150'];
       
       tokensWithoutRounding.forEach(tokenName => {
         const token = iconTokens[tokenName];
@@ -529,7 +644,7 @@ describe('Icon Size Token Structure Validation', () => {
     it('should have consistent primitive reference structure', () => {
       Object.values(iconTokens).forEach(token => {
         const refKeys = Object.keys(token.primitiveReferences).sort();
-        expect(refKeys).toEqual(['fontSize', 'lineHeight']);
+        expect(refKeys).toEqual(['fontSize', 'multiplier']);
       });
     });
 

@@ -1,3 +1,7 @@
+---
+inclusion: manual
+---
+
 # Spec Planning Standards
 
 **Date**: 2025-01-10
@@ -8,11 +12,6 @@
 **Scope**: cross-project
 **Layer**: 2
 **Relevant Tasks**: spec-creation
-
----
-inclusion: conditional
-trigger: spec-creation
----
 
 ## AI Agent Reading Priorities
 
