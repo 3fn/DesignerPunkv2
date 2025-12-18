@@ -19,8 +19,10 @@ import com.designerpunk.tokens.DesignTokens
  * Renders Icon from VectorDrawable resources with automatic color inheritance.
  * Icons are decorative (contentDescription = null) and inherit tint from LocalContentColor.
  * 
+ * This component serves as the reference implementation for Rosetta pattern token usage.
+ * 
  * @param name Icon name (e.g., "arrow-right", "check", "settings")
- * @param size Icon size in Dp (use DesignTokens.icon_size_050 through icon_size_150 tokens)
+ * @param size Icon size in Dp (use DesignTokens.icon_size_050 through icon_size_700 tokens)
  * @param color Optional color override for optical weight compensation (null = inherit)
  * @param modifier Optional modifier for additional styling
  */
@@ -86,7 +88,8 @@ private fun getIconResource(name: String): Int {
  * Preview for Icon component showing different sizes and colors
  * 
  * Demonstrates:
- * - All five size variants (icon_size_050 through icon_size_150)
+ * - Five common size variants (icon_size_050 through icon_size_150)
+ * - Note: Additional sizes available (icon_size_200 through icon_size_700)
  * - Multiple icon types at standard size
  * - Color inheritance with different tint colors
  */
@@ -98,8 +101,9 @@ fun IconPreview() {
         verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp)
     ) {
         // Different sizes (icon_size_050 through icon_size_150)
+        // Note: Additional sizes available (icon_size_200 through icon_size_700)
         androidx.compose.material3.Text(
-            text = "Size Variants",
+            text = "Size Variants (5 of 11 available)",
             style = androidx.compose.material3.MaterialTheme.typography.labelMedium
         )
         androidx.compose.foundation.layout.Row(

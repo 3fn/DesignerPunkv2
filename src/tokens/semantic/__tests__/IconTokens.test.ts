@@ -176,8 +176,17 @@ describe('Icon Size Token Calculation', () => {
   });
 
   describe('iconTokens', () => {
-    it('should have all 11 icon size tokens', () => {
-      expect(Object.keys(iconTokens)).toHaveLength(11);
+    it('should have all 12 icon tokens (11 size + 1 property)', () => {
+      expect(Object.keys(iconTokens)).toHaveLength(12);
+      
+      // Verify we have 11 size tokens
+      const sizeTokens = Object.keys(iconTokens).filter(name => name.startsWith('icon.size'));
+      expect(sizeTokens).toHaveLength(11);
+      
+      // Verify we have 1 property token
+      const propertyTokens = Object.keys(iconTokens).filter(name => !name.startsWith('icon.size'));
+      expect(propertyTokens).toHaveLength(1);
+      expect(propertyTokens).toContain('icon.strokeWidth');
     });
 
     it('should have correct token structure', () => {
@@ -193,6 +202,13 @@ describe('Icon Size Token Calculation', () => {
 
     it('should reference valid primitive tokens or custom multipliers', () => {
       Object.values(iconTokens).forEach(token => {
+        // Icon property tokens (like strokeWidth) have different structure
+        if (token.name === 'icon.strokeWidth') {
+          expect(token.primitiveReferences).toHaveProperty('value');
+          return;
+        }
+        
+        // Icon size tokens have fontSize and multiplier
         const fontSizeName = token.primitiveReferences.fontSize;
         const multiplierRef = token.primitiveReferences.multiplier;
         
@@ -214,7 +230,7 @@ describe('Icon Size Token Calculation', () => {
     it('should return all icon tokens as array', () => {
       const tokens = getAllIconTokens();
       expect(Array.isArray(tokens)).toBe(true);
-      expect(tokens).toHaveLength(11);
+      expect(tokens).toHaveLength(12); // 11 size + 1 property
     });
 
     it('should return tokens with correct structure', () => {
@@ -233,6 +249,9 @@ describe('Icon Size Token Calculation', () => {
       const uniqueSizes = new Set<number>();
       
       Object.entries(iconTokens).forEach(([name, token]) => {
+        // Skip property tokens (like strokeWidth)
+        if (!name.startsWith('icon.size')) return;
+        
         const scale = name.replace('icon.size', '');
         const fontSize = fontSizeTokens[`fontSize${scale}`];
         const multiplierRef = token.primitiveReferences.multiplier;
@@ -297,6 +316,9 @@ describe('Icon Size Token Calculation', () => {
       const sizeAlignmentMap: Record<string, { size: number; aligned: boolean }> = {};
       
       Object.entries(iconTokens).forEach(([name, token]) => {
+        // Skip property tokens (like strokeWidth)
+        if (!name.startsWith('icon.size')) return;
+        
         const scale = name.replace('icon.size', '');
         const fontSize = fontSizeTokens[`fontSize${scale}`];
         const multiplierRef = token.primitiveReferences.multiplier;
@@ -330,16 +352,18 @@ describe('Icon Size Token Calculation', () => {
 
     it('should have no non-aligned sizes with precision-targeted multipliers', () => {
       // All sizes should be 4pt aligned
-      const allSizes = Object.entries(iconTokens).map(([name, token]) => {
-        const scale = name.replace('icon.size', '');
-        const fontSize = fontSizeTokens[`fontSize${scale}`];
-        const multiplierRef = token.primitiveReferences.multiplier;
-        
-        // Parse multiplier (handles both lineHeight references and custom values)
-        const multiplierValue = parseMultiplier(multiplierRef);
-        
-        return calculateIconSize(fontSize, multiplierValue);
-      });
+      const allSizes = Object.entries(iconTokens)
+        .filter(([name]) => name.startsWith('icon.size')) // Skip property tokens
+        .map(([name, token]) => {
+          const scale = name.replace('icon.size', '');
+          const fontSize = fontSizeTokens[`fontSize${scale}`];
+          const multiplierRef = token.primitiveReferences.multiplier;
+          
+          // Parse multiplier (handles both lineHeight references and custom values)
+          const multiplierValue = parseMultiplier(multiplierRef);
+          
+          return calculateIconSize(fontSize, multiplierValue);
+        });
       
       const uniqueSizes = Array.from(new Set(allSizes)).sort((a, b) => a - b);
       const actualNonAligned = uniqueSizes.filter(size => size % 4 !== 0);
@@ -401,15 +425,24 @@ describe('Icon Size Token Structure Validation', () => {
 
     it('should follow icon token naming convention', () => {
       Object.values(iconTokens).forEach(token => {
-        // Icon tokens should follow pattern: icon.sizeXXX
-        expect(token.name).toMatch(/^icon\.size\d{3}$/);
+        // Icon tokens should follow pattern: icon.sizeXXX or icon.propertyName
+        const isSizeToken = /^icon\.size\d{3}$/.test(token.name);
+        const isPropertyToken = token.name === 'icon.strokeWidth';
+        expect(isSizeToken || isPropertyToken).toBe(true);
       });
     });
   });
 
   describe('Primitive References Validation', () => {
-    it('should have fontSize and multiplier references', () => {
+    it('should have fontSize and multiplier references for size tokens', () => {
       Object.values(iconTokens).forEach(token => {
+        // Property tokens have different structure
+        if (token.name === 'icon.strokeWidth') {
+          expect(token.primitiveReferences).toHaveProperty('value');
+          return;
+        }
+        
+        // Size tokens have fontSize and multiplier
         expect(token.primitiveReferences).toHaveProperty('fontSize');
         expect(token.primitiveReferences).toHaveProperty('multiplier');
         
@@ -420,6 +453,12 @@ describe('Icon Size Token Structure Validation', () => {
 
     it('should reference valid primitive tokens or custom multipliers', () => {
       Object.values(iconTokens).forEach(token => {
+        // Property tokens have different structure
+        if (token.name === 'icon.strokeWidth') {
+          expect(token.primitiveReferences).toHaveProperty('value');
+          return;
+        }
+        
         const fontSizeName = token.primitiveReferences.fontSize;
         const multiplierRef = token.primitiveReferences.multiplier;
         
@@ -446,6 +485,9 @@ describe('Icon Size Token Structure Validation', () => {
 
     it('should reference matching scale levels for lineHeight multipliers', () => {
       Object.entries(iconTokens).forEach(([name, token]) => {
+        // Property tokens have different structure
+        if (token.name === 'icon.strokeWidth') return;
+        
         const scale = name.replace('icon.size', '');
         const multiplierRef = token.primitiveReferences.multiplier;
         
@@ -460,18 +502,29 @@ describe('Icon Size Token Structure Validation', () => {
       });
     });
 
-    it('should have exactly two primitive references', () => {
+    it('should have correct primitive references structure', () => {
       Object.values(iconTokens).forEach(token => {
         const refKeys = Object.keys(token.primitiveReferences);
-        expect(refKeys).toHaveLength(2);
-        expect(refKeys).toContain('fontSize');
-        expect(refKeys).toContain('multiplier');
+        
+        // Property tokens have single 'value' reference
+        if (token.name === 'icon.strokeWidth') {
+          expect(refKeys).toHaveLength(1);
+          expect(refKeys).toContain('value');
+        } else {
+          // Size tokens have fontSize and multiplier
+          expect(refKeys).toHaveLength(2);
+          expect(refKeys).toContain('fontSize');
+          expect(refKeys).toContain('multiplier');
+        }
       });
     });
 
     it('should use custom multiplier only for icon.size050', () => {
       // Only icon.size050 should have a custom multiplier
       Object.entries(iconTokens).forEach(([name, token]) => {
+        // Property tokens don't have multipliers
+        if (token.name === 'icon.strokeWidth') return;
+        
         const multiplierRef = token.primitiveReferences.multiplier;
         
         if (name === 'icon.size050') {
@@ -520,9 +573,13 @@ describe('Icon Size Token Structure Validation', () => {
   describe('Context Field Validation', () => {
     it('should have meaningful context descriptions', () => {
       Object.values(iconTokens).forEach(token => {
-        // Context should describe typography pairing
+        // Context should describe usage
         expect(token.context.length).toBeGreaterThan(20);
-        expect(token.context).toContain('Icon size for');
+        
+        // Size tokens describe typography pairing, property tokens describe their purpose
+        if (token.name.startsWith('icon.size')) {
+          expect(token.context).toContain('Icon size for');
+        }
       });
     });
 
@@ -543,7 +600,13 @@ describe('Icon Size Token Structure Validation', () => {
 
     it('should provide usage guidance in context', () => {
       Object.values(iconTokens).forEach(token => {
-        // Context should help developers understand when to use this size
+        // Property tokens have different context
+        if (token.name === 'icon.strokeWidth') {
+          expect(token.context).toContain('stroke width');
+          return;
+        }
+        
+        // Size tokens should help developers understand when to use this size
         const hasTypographyReference = 
           token.context.includes('body') ||
           token.context.includes('button') ||
@@ -566,9 +629,15 @@ describe('Icon Size Token Structure Validation', () => {
   });
 
   describe('Description Field Validation', () => {
-    it('should include calculation formula in description', () => {
+    it('should include calculation formula in description for size tokens', () => {
       Object.values(iconTokens).forEach(token => {
-        // Description should explain the calculation
+        // Property tokens have different descriptions
+        if (token.name === 'icon.strokeWidth') {
+          expect(token.description).toContain('stroke width');
+          return;
+        }
+        
+        // Size tokens should explain the calculation
         expect(token.description).toContain('calculated from');
         expect(token.description).toContain('×');
         expect(token.description).toContain('=');
@@ -577,6 +646,9 @@ describe('Icon Size Token Structure Validation', () => {
 
     it('should reference primitive token names or custom multiplier in description', () => {
       Object.entries(iconTokens).forEach(([name, token]) => {
+        // Property tokens have different descriptions
+        if (token.name === 'icon.strokeWidth') return;
+        
         const scale = name.replace('icon.size', '');
         const multiplierRef = token.primitiveReferences.multiplier;
         
@@ -592,8 +664,11 @@ describe('Icon Size Token Structure Validation', () => {
       });
     });
 
-    it('should include calculated values in description', () => {
+    it('should include calculated values in description for size tokens', () => {
       Object.entries(iconTokens).forEach(([name, token]) => {
+        // Property tokens have different descriptions
+        if (token.name === 'icon.strokeWidth') return;
+        
         const scale = name.replace('icon.size', '');
         const fontSize = fontSizeTokens[`fontSize${scale}`];
         const multiplierRef = token.primitiveReferences.multiplier;
@@ -641,10 +716,17 @@ describe('Icon Size Token Structure Validation', () => {
       });
     });
 
-    it('should have consistent primitive reference structure', () => {
+    it('should have consistent primitive reference structure by token type', () => {
       Object.values(iconTokens).forEach(token => {
         const refKeys = Object.keys(token.primitiveReferences).sort();
-        expect(refKeys).toEqual(['fontSize', 'multiplier']);
+        
+        // Property tokens have 'value' reference
+        if (token.name === 'icon.strokeWidth') {
+          expect(refKeys).toEqual(['value']);
+        } else {
+          // Size tokens have fontSize and multiplier
+          expect(refKeys).toEqual(['fontSize', 'multiplier']);
+        }
       });
     });
 
@@ -656,11 +738,12 @@ describe('Icon Size Token Structure Validation', () => {
   });
 
   describe('Generated Tokens Validation', () => {
-    it('should match manually defined tokens', () => {
+    it('should match manually defined size tokens', () => {
       const generatedTokens = generateIconSizeTokens();
       
-      // Verify same number of tokens
-      expect(Object.keys(generatedTokens)).toHaveLength(Object.keys(iconTokens).length);
+      // Generated tokens only include size tokens (11), not property tokens (1)
+      const sizeTokenCount = Object.keys(iconTokens).filter(name => name.startsWith('icon.size')).length;
+      expect(Object.keys(generatedTokens)).toHaveLength(sizeTokenCount);
       
       // Verify each generated token matches manual definition
       Object.entries(iconTokens).forEach(([name, manualToken]) => {

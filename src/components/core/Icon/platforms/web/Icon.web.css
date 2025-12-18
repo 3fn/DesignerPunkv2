@@ -171,13 +171,13 @@
 /**
  * Optimize icon appearance for print media.
  * 
- * When printing, ensure icons are visible and legible by forcing
- * a solid black color. This ensures icons print clearly regardless
- * of the original color scheme or theme.
+ * When printing, ensure icons are visible and legible by using
+ * the print color token (pure black). This ensures icons print
+ * clearly regardless of the original color scheme or theme.
  */
 @media print {
   .icon {
-    color: #000 !important;
+    color: var(--color-print-default) !important;
   }
 }
 

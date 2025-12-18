@@ -328,8 +328,8 @@ describe('Semantic Color Tokens - Palette Update', () => {
   });
 
   describe('Token Count Validation', () => {
-    it('should have exactly 25 color tokens', () => {
-      expect(colorTokenNames.length).toBe(25);
+    it('should have exactly 27 color tokens', () => {
+      expect(colorTokenNames.length).toBe(27);
     });
 
     it('should pass validateColorTokenCount()', () => {
@@ -337,7 +337,7 @@ describe('Semantic Color Tokens - Palette Update', () => {
     });
 
     it('should have correct token count breakdown', () => {
-      // 1 brand + 2 success + 2 warning + 2 error + 2 info + 2 attention/highlight + 2 tech/data + 4 text + 3 surfaces + 5 glow = 25
+      // 1 brand + 2 success + 2 warning + 2 error + 2 info + 2 attention/highlight + 2 tech/data + 4 text + 3 surfaces + 1 icon + 1 print + 5 glow = 27
       const brandTokens = colorTokenNames.filter(n => n === 'color.primary');
       const successTokens = colorTokenNames.filter(n => n.startsWith('color.success'));
       const warningTokens = colorTokenNames.filter(n => n.startsWith('color.warning'));
@@ -412,9 +412,9 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(Array.isArray(tokens)).toBe(true);
       });
 
-      it('should return exactly 25 tokens', () => {
+      it('should return exactly 27 tokens', () => {
         const tokens = getAllColorTokens();
-        expect(tokens.length).toBe(25);
+        expect(tokens.length).toBe(27);
       });
 
       it('should include all new tokens', () => {

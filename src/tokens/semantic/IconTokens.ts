@@ -171,15 +171,29 @@ export function isCustomMultiplier(multiplierRef: string): boolean {
 }
 
 /**
- * Icon size semantic tokens for typography pairing
- * Following fontSize × multiplier formula for optical balance
+ * Icon semantic tokens for typography pairing and icon properties
  * 
+ * Icon size tokens follow fontSize × multiplier formula for optical balance.
  * Most tokens use lineHeight references as multipliers for standard typography pairing.
  * icon.size050 uses a custom multiplier (custom:1.231) for better optical balance with 13px text.
+ * 
+ * Icon property tokens define standard icon characteristics like stroke width.
  * 
  * Updated to reflect precision-targeted lineHeight multipliers for 8pt vertical rhythm
  */
 export const iconTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>> = {
+  // Icon Properties (1 token)
+  'icon.strokeWidth': {
+    name: 'icon.strokeWidth',
+    primitiveReferences: {
+      value: 'borderWidth200'
+    },
+    category: SemanticCategory.ICON,
+    context: 'Standard stroke width for icon outlines',
+    description: 'Standard stroke width for icon outlines, references borderWidth200 (2px) for consistency with Feather Icons design'
+  },
+
+  // Icon Sizes (11 tokens)
   'icon.size050': {
     name: 'icon.size050',
     primitiveReferences: {

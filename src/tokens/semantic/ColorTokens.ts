@@ -43,16 +43,18 @@
  * 5. Semantic Meaning in Shadow Token: The semantic meaning belongs in the shadow token
  *    name itself (shadow.dusk, shadow.sunrise) rather than in a separate color token.
  * 
- * Spec-aligned: 25 color semantic tokens (16 original + 4 new color tokens + 5 glow tokens)
+ * Spec-aligned: 27 color semantic tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens)
  * Note: color.secondary removed as part of color palette update (Spec 015)
+ * Added: color.icon.default and color.print.default (Spec 023)
  */
 
 import { SemanticToken, SemanticCategory } from '../../types/SemanticToken';
 
 /**
  * Semantic color tokens for systematic color usage
- * Total: 25 tokens (16 original + 4 new color tokens + 5 glow tokens)
+ * Total: 27 tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens)
  * Note: color.secondary removed as part of color palette update (Spec 015)
+ * Added: color.icon.default and color.print.default (Spec 023)
  */
 export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>> = {
   // Brand Identity (1 token)
@@ -224,6 +226,24 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
     description: 'Border gray for standard UI element borders and dividers'
   },
 
+  // Icon Colors (1 token)
+  'color.icon.default': {
+    name: 'color.icon.default',
+    primitiveReferences: { value: 'gray200' },
+    category: SemanticCategory.COLOR,
+    context: 'Default icon color with optical balance (slightly lighter than text)',
+    description: 'Default icon color using gray200 for optical balance - slightly lighter than text (gray300) for proper visual weight'
+  },
+
+  // Print Media Colors (1 token)
+  'color.print.default': {
+    name: 'color.print.default',
+    primitiveReferences: { value: 'black100' },
+    category: SemanticCategory.COLOR,
+    context: 'Pure black color for print media',
+    description: 'Pure black (#000000) for optimal printing quality in print media queries'
+  },
+
   // Glow Colors (5 tokens) - Reference existing vibrant primitive colors
   'glow.neonPurple': {
     name: 'glow.neonPurple',
@@ -268,8 +288,9 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
 
 /**
  * Array of all color semantic token names for iteration
- * Total: 25 tokens (16 original + 4 new color tokens + 5 glow tokens)
+ * Total: 27 tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens)
  * Note: color.secondary removed as part of color palette update (Spec 015)
+ * Added: color.icon.default and color.print.default (Spec 023)
  */
 export const colorTokenNames = Object.keys(colorTokens);
 
@@ -288,11 +309,12 @@ export function getAllColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'
 }
 
 /**
- * Validate token count matches spec (25 tokens: 16 original + 4 new color tokens + 5 glow tokens)
+ * Validate token count matches spec (27 tokens: 16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens)
  * Note: color.secondary removed as part of color palette update (Spec 015)
+ * Added: color.icon.default and color.print.default (Spec 023)
  */
 export function validateColorTokenCount(): boolean {
-  const expectedCount = 25;
+  const expectedCount = 27;
   const actualCount = colorTokenNames.length;
   if (actualCount !== expectedCount) {
     console.warn(`Color token count mismatch: expected ${expectedCount}, got ${actualCount}`);

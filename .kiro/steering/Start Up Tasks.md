@@ -12,9 +12,39 @@ inclusion: always
 **Layer**: 1
 **Relevant Tasks**: all-tasks
 
-1. Check today's actual date
+1. Check the **CURRENT** date
 
-2. **CRITICAL: This project uses Jest, NOT Vitest**
+2. **CRITICAL: Wait for User Authorization Before Starting New Tasks**
+   
+   **WHEN reporting the completion of a task THEN you MUST:**
+   - **STOP and WAIT for user authorization before starting the next task**
+   - Do NOT automatically proceed to the next task in the task list
+   - Do NOT assume the user wants you to continue
+   
+   **User Authorization Required:**
+   - User must explicitly request the next task
+   - User may want to review your work first
+   - User may want to provide additional context
+   - User may want to change direction
+   
+   **Example Completion Pattern:**
+   ```
+   ✅ Task 2.2 Complete: Implemented Icon iOS confirmed actions
+   
+   Summary:
+   - Added token-only sizing approach
+   - Added testID support via accessibilityIdentifier
+   - Updated preview to use token references
+   
+   [STOP HERE - WAIT FOR USER TO REQUEST NEXT TASK]
+   ```
+   
+   **NEVER do this:**
+   - ❌ "Task 2.2 complete. Now starting Task 2.3..."
+   - ❌ Automatically reading files for the next task
+   - ❌ Beginning implementation without explicit user request
+
+3. **CRITICAL: This project uses Jest, NOT Vitest**
    
    **WHEN running tests THEN you MUST use Jest commands (NOT Vitest commands)**
    
@@ -32,7 +62,7 @@ inclusion: always
    
    **Key difference:** Jest runs tests once by default. Vitest uses `--run` for single execution, but Jest doesn't need or support this flag.
 
-3. **Test Command Selection Guidelines**
+4. **Test Command Selection Guidelines**
    
    **WHEN validating regular task completion THEN:**
    - Use `npm test` (default - excludes performance tests)

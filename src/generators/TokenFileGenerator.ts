@@ -99,8 +99,9 @@ export class TokenFileGenerator {
         continue;
       }
       
-      // Special handling for ICON category tokens
-      if (semantic.category === 'icon') {
+      // Special handling for ICON category tokens with fontSize/multiplier (icon sizes)
+      // Icon property tokens (like strokeWidth) are handled as single-reference tokens below
+      if (semantic.category === 'icon' && semantic.primitiveReferences.fontSize && semantic.primitiveReferences.multiplier) {
         const iconLine = this.generateIconSizeToken(semantic, platform, generator);
         if (iconLine) {
           lines.push(iconLine);

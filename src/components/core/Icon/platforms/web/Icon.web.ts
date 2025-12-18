@@ -84,13 +84,31 @@ export function createIcon(props: IconProps): string {
   // Load SVG content based on icon name
   const svgContent = loadIconSVG(name);
   
-  // Build class attribute
-  const classAttr = `icon icon-${name} ${className}`.trim();
+  // Map size to CSS class (using icon size token scale)
+  const sizeClassMap: Record<IconSize, string> = {
+    13: 'icon--size-050',
+    18: 'icon--size-075',
+    24: 'icon--size-100',
+    28: 'icon--size-125',  // Note: size125 and size150 both = 28px
+    32: 'icon--size-200',  // Note: size125, size200, size300 all = 32px
+    36: 'icon--size-400',
+    40: 'icon--size-500',
+    44: 'icon--size-600',
+    48: 'icon--size-700'
+  };
+  
+  const sizeClass = sizeClassMap[size] || 'icon--size-100';
+  
+  // Build class attribute with size class
+  const classAttr = `icon ${sizeClass} icon-${name} ${className}`.trim();
   
   // Determine stroke color based on color prop
   const strokeColor = color === 'inherit' 
     ? 'currentColor' 
     : `var(--${color})`; // Token reference becomes CSS custom property
+  
+  // Determine stroke width using token
+  const strokeWidth = 'var(--icon-stroke-width)';
   
   // Build style attribute
   const styleStr = Object.entries(style)
@@ -107,7 +125,7 @@ export function createIcon(props: IconProps): string {
   // Build style attribute
   const styleAttr = styleStr ? ` style="${styleStr}"` : '';
   
-  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${strokeColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${classAttr}" aria-hidden="true"${testIDAttr}${styleAttr}>${svgContent}</svg>`;
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="${strokeColor}" stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round" class="${classAttr}" aria-hidden="true"${testIDAttr}${styleAttr}>${svgContent}</svg>`;
 }
 
 /**
@@ -272,8 +290,8 @@ export class DPIcon extends HTMLElement {
    * Render the component into shadow DOM.
    * 
    * Generates SVG markup with currentColor inheritance and injects it into
-   * the shadow DOM. The SVG uses inline width/height attributes for sizing
-   * and CSS custom properties for token-based color overrides.
+   * the shadow DOM. The SVG uses CSS classes for token-based sizing
+   * and CSS custom properties for token-based color and stroke width.
    */
   private render(): void {
     const name = this.name;
@@ -284,30 +302,76 @@ export class DPIcon extends HTMLElement {
     // Load SVG content
     const svgContent = loadIconSVG(name);
     
+    // Map size to CSS class (using icon size token scale)
+    const sizeClassMap: Record<IconSize, string> = {
+      13: 'icon--size-050',
+      18: 'icon--size-075',
+      24: 'icon--size-100',
+      28: 'icon--size-125',  // Note: size125 and size150 both = 28px
+      32: 'icon--size-200',  // Note: size125, size200, size300 all = 32px
+      36: 'icon--size-400',
+      40: 'icon--size-500',
+      44: 'icon--size-600',
+      48: 'icon--size-700'
+    };
+    
+    const sizeClass = sizeClassMap[size] || 'icon--size-100';
+    
     // Determine stroke color
     const strokeColor = color === 'inherit' 
       ? 'currentColor' 
       : `var(--${color})`;
     
+    // Use stroke width token
+    const strokeWidth = 'var(--icon-stroke-width)';
+    
     // Generate test ID attribute
     const testIDAttr = testID ? ` data-testid="${testID}"` : '';
     
-    // Load CSS from external file
-    const styleLink = `<link rel="stylesheet" href="./Icon.web.css">`;
+    // Inline CSS for reliable Shadow DOM styling
+    // Inlining avoids relative path issues in different deployment scenarios
+    const styles = `
+      <style>
+        .icon {
+          display: inline-block;
+          vertical-align: middle;
+          flex-shrink: 0;
+          color: inherit;
+        }
+        
+        .icon--size-050 { width: var(--icon-size-050); height: var(--icon-size-050); }
+        .icon--size-075 { width: var(--icon-size-075); height: var(--icon-size-075); }
+        .icon--size-100 { width: var(--icon-size-100); height: var(--icon-size-100); }
+        .icon--size-125 { width: var(--icon-size-125); height: var(--icon-size-125); }
+        .icon--size-150 { width: var(--icon-size-150); height: var(--icon-size-150); }
+        .icon--size-200 { width: var(--icon-size-200); height: var(--icon-size-200); }
+        .icon--size-300 { width: var(--icon-size-300); height: var(--icon-size-300); }
+        .icon--size-400 { width: var(--icon-size-400); height: var(--icon-size-400); }
+        .icon--size-500 { width: var(--icon-size-500); height: var(--icon-size-500); }
+        .icon--size-600 { width: var(--icon-size-600); height: var(--icon-size-600); }
+        .icon--size-700 { width: var(--icon-size-700); height: var(--icon-size-700); }
+        
+        @media print {
+          .icon { color: var(--color-print-default) !important; }
+        }
+        
+        @media (prefers-contrast: high) {
+          .icon { stroke: currentColor !important; }
+        }
+      </style>
+    `;
     
     // Render shadow DOM content
     this._shadowRoot.innerHTML = `
-      ${styleLink}
+      ${styles}
       <svg
-        width="${size}"
-        height="${size}"
         viewBox="0 0 24 24"
         fill="none"
         stroke="${strokeColor}"
-        stroke-width="2"
+        stroke-width="${strokeWidth}"
         stroke-linecap="round"
         stroke-linejoin="round"
-        class="icon icon-${name}"
+        class="icon ${sizeClass} icon-${name}"
         aria-hidden="true"${testIDAttr}
       >
         ${svgContent}
