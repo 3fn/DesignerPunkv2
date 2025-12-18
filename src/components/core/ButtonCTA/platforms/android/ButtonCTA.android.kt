@@ -197,9 +197,10 @@ fun ButtonCTA(
                     // Requirement 8.2-8.3: Use correct icon size based on button size
                     // Requirement 9.1-9.2: Apply icon color with optical balance
                     // Requirement 16.3: Mark icon as decorative (contentDescription = null)
+                    // A3: Use Dp directly without conversion
                     Icon(
                         name = iconName,
-                        size = sizeConfig.iconSize.dp,
+                        size = sizeConfig.iconSize,
                         color = if (disabled) {
                             styleConfig.iconColor.copy(alpha = 0.38f)
                         } else {
@@ -240,7 +241,7 @@ fun ButtonCTA(
  * @property verticalPadding Vertical padding in dp
  * @property borderRadius Corner radius in dp
  * @property minWidth Minimum button width in dp
- * @property iconSize Icon size in dp
+ * @property iconSize Icon size in Dp (changed from Int to Dp for A3)
  * @property iconTextSpacing Spacing between icon and text in dp
  */
 private data class SizeConfig(
@@ -251,7 +252,7 @@ private data class SizeConfig(
     val verticalPadding: Int,
     val borderRadius: Int,
     val minWidth: Int,
-    val iconSize: Int,
+    val iconSize: Dp,
     val iconTextSpacing: Int
 )
 
@@ -280,14 +281,16 @@ private fun getSizeConfig(size: ButtonSize): SizeConfig {
             touchTargetHeight = DesignTokens.tap_area_minimum.toInt(), // Requirement 13.1: Extends to 44dp for accessibility (tapAreaMinimum)
             typography = TextStyle(
                 fontSize = DesignTokens.font_size_100.sp,
-                fontWeight = FontWeight(DesignTokens.font_weight_400.toInt()),
-                lineHeight = DesignTokens.line_height_100.sp
-            ), // typography.bodyMd
+                fontWeight = FontWeight(DesignTokens.font_weight_500.toInt()),
+                lineHeight = DesignTokens.line_height_100.sp,
+                fontFamily = androidx.compose.ui.text.font.FontFamily.Default,
+                letterSpacing = DesignTokens.letter_spacing_100.sp
+            ), // A2: typography.labelMd (medium weight for button emphasis)
             horizontalPadding = DesignTokens.space_inset_200.toInt(), // space.inset.200 (16dp)
             verticalPadding = DesignTokens.space_inset_100.toInt(),   // space.inset.100 (8dp)
             borderRadius = DesignTokens.radius_100.toInt(),            // radius100 (8dp)
             minWidth = 56,          // Requirement 6.1
-            iconSize = DesignTokens.icon_size_100.value.toInt(),      // icon.size100 (24dp)
+            iconSize = DesignTokens.icon_size_100,      // A3: icon.size100 (24dp) - use Dp directly
             iconTextSpacing = DesignTokens.space_grouped_tight.toInt() // space.grouped.tight (4dp)
         )
         ButtonSize.MEDIUM -> SizeConfig(
@@ -295,14 +298,16 @@ private fun getSizeConfig(size: ButtonSize): SizeConfig {
             touchTargetHeight = 48, // Requirement 13.2: Meets 44dp minimum
             typography = TextStyle(
                 fontSize = DesignTokens.font_size_100.sp,
-                fontWeight = FontWeight(DesignTokens.font_weight_400.toInt()),
-                lineHeight = DesignTokens.line_height_100.sp
-            ), // typography.bodyMd
+                fontWeight = FontWeight(DesignTokens.font_weight_500.toInt()),
+                lineHeight = DesignTokens.line_height_100.sp,
+                fontFamily = androidx.compose.ui.text.font.FontFamily.Default,
+                letterSpacing = DesignTokens.letter_spacing_100.sp
+            ), // A2: typography.labelMd (medium weight for button emphasis)
             horizontalPadding = DesignTokens.space_inset_300.toInt(), // space.inset.300 (24dp)
             verticalPadding = DesignTokens.space_inset_150.toInt(),   // space.inset.150 (12dp)
             borderRadius = DesignTokens.radius_150.toInt(),            // radius150 (12dp)
             minWidth = 72,          // Requirement 6.2
-            iconSize = DesignTokens.icon_size_100.value.toInt(),      // icon.size100 (24dp)
+            iconSize = DesignTokens.icon_size_100,      // A3: icon.size100 (24dp) - use Dp directly
             iconTextSpacing = DesignTokens.space_grouped_normal.toInt() // space.grouped.normal (8dp)
         )
         ButtonSize.LARGE -> SizeConfig(
@@ -310,14 +315,16 @@ private fun getSizeConfig(size: ButtonSize): SizeConfig {
             touchTargetHeight = 56, // Requirement 13.2: Exceeds 44dp minimum
             typography = TextStyle(
                 fontSize = DesignTokens.font_size_125.sp,
-                fontWeight = FontWeight(DesignTokens.font_weight_400.toInt()),
-                lineHeight = DesignTokens.line_height_125.sp
-            ), // typography.bodyLg
+                fontWeight = FontWeight(DesignTokens.font_weight_500.toInt()),
+                lineHeight = DesignTokens.line_height_125.sp,
+                fontFamily = androidx.compose.ui.text.font.FontFamily.Default,
+                letterSpacing = DesignTokens.letter_spacing_125.sp
+            ), // A2: typography.labelLg (medium weight for button emphasis)
             horizontalPadding = DesignTokens.space_inset_400.toInt(), // space.inset.400 (32dp)
             verticalPadding = DesignTokens.space_inset_150.toInt(),   // space.inset.150 (12dp)
             borderRadius = DesignTokens.radius_200.toInt(),            // radius200 (16dp)
             minWidth = 80,          // Requirement 6.3
-            iconSize = DesignTokens.icon_size_125.value.toInt(),      // icon.size125 (32dp)
+            iconSize = DesignTokens.icon_size_125,      // A3: icon.size125 (32dp) - use Dp directly
             iconTextSpacing = DesignTokens.space_grouped_normal.toInt() // space.grouped.normal (8dp)
         )
     }

@@ -214,8 +214,10 @@ interface ButtonProps {
 The ButtonCTA component uses the following design tokens:
 
 ### Typography Tokens
-- `typography.bodyMd` - Small and medium button text (16px, 400 weight, 24px line height)
-- `typography.bodyLg` - Large button text (18px, 400 weight, 28px line height)
+- `typography.labelMd` - Small and medium button text (16px, 500 weight, 24px line height)
+- `typography.labelLg` - Large button text (18px, 500 weight, 28px line height)
+
+**Rationale**: Buttons use label tokens with medium weight (500) instead of body tokens (400) for visual emphasis and clarity. Label tokens are semantically appropriate for interactive UI controls.
 
 ### Spacing Tokens
 
@@ -241,17 +243,18 @@ The ButtonCTA component uses the following design tokens:
 
 **Semantic Tokens**:
 - `color.primary` - Primary button background, secondary/tertiary text and border
-- `color.text.onPrimary` - Text color on primary background (white) - Web and Android
+- `color.text.onPrimary` - Text color on primary background (white)
 - `color.background` - Secondary button background (white)
-- `color.icon.opticalBalance` - Icon optical weight compensation (20% lighter blend) - Android
+- `color.print.default` - Print media text color (Web only)
 
-**Primitive Tokens** (used when semantic token doesn't exist):
-- `white100` - Text color on primary background - iOS only (no semantic `color.text.onPrimary` exists in iOS token generation)
+**Blend Tokens**:
+- `blend.iconOpticalBalance` (blend200 LIGHTER = 8% lighter) - Icon optical weight compensation for secondary/tertiary buttons
+- `blend.disabledDesaturate` (12% less saturated) - Disabled state appearance
 
 **Platform-Specific Notes**:
-- **Web**: Uses CSS custom properties for all tokens
-- **iOS**: Uses `white100` primitive token for text on primary background (semantic token not generated for iOS)
-- **Android**: Uses semantic tokens including `color.text.onPrimary` and `color.icon.opticalBalance`
+- **Web**: Uses CSS custom properties for all tokens, including blend tokens for optical balance and disabled states
+- **iOS**: Uses semantic tokens with blend tokens for optical balance
+- **Android**: Uses semantic tokens with blend tokens for optical balance
 
 ### Border Radius Tokens
 - `radius100` (8px) - Small button border radius
@@ -268,18 +271,25 @@ The ButtonCTA component uses the following design tokens:
 - `opacity.pressed` (16%) - Pressed state overlay
 
 **iOS Platform**:
-- Scale transform to 0.97 (97%) on press
+- `scale096` (0.96 scale) - Press scale transform
 - `motion.buttonPress` - Press animation timing (duration150 + easingAccelerate)
+- **Platform Pattern**: iOS uses scale + motion token pairing for platform-specific tactile feedback
 
 **Android Platform**:
 - Material ripple effect with `color.primary` at 16% opacity
 
 ### Accessibility Tokens
 
-**Touch Targets**:
-- Small buttons: 40px visual height, extends to 44px touch target (WCAG 2.1 AA)
-- Medium buttons: 48px height (meets 44px minimum)
-- Large buttons: 56px height (exceeds 44px minimum)
+**Touch Targets** (using Tap Area tokens):
+- `tapArea.minimum` (44px) - Minimum touch target for small buttons
+- `tapArea.recommended` (48px) - Recommended touch target for medium buttons
+- `tapArea.comfortable` (52px) - Comfortable touch target for large buttons
+
+**Height Calculation Strategy**:
+- Heights are calculated from padding + lineHeight (not hard-coded)
+- Visual sizes can be smaller than tap targets
+- Tap Area tokens ensure WCAG 2.1 AA compliance via minHeight
+- Example: Small button may appear 40px visually but has 44px minHeight via `tapArea.minimum`
 
 **Focus Indicators** (Web):
 - `accessibility.focus.width` (2px) - Focus outline width
@@ -290,15 +300,14 @@ The ButtonCTA component uses the following design tokens:
 - `icon.size100` (24px) - Small and medium button icon size
 - `icon.size125` (32px) - Large button icon size
 
-### Token Gaps Identified
+### Component-Specific Tokens
 
-**Missing Semantic Tokens**:
-1. `color.text.onPrimary` - Not generated for iOS platform (using `white100` primitive as workaround)
-2. `color.icon.opticalBalance` - Not available as semantic token on iOS (using `color.primary` directly)
+**ButtonCTA Minimum Width Tokens**:
+- `buttonCTA.minWidth.small` (56px) - Minimum width for small buttons (7 × 8px baseline grid)
+- `buttonCTA.minWidth.medium` (72px) - Minimum width for medium buttons (9 × 8px baseline grid)
+- `buttonCTA.minWidth.large` (80px) - Minimum width for large buttons (10 × 8px baseline grid)
 
-**Rationale for Primitive Token Usage**:
-- iOS implementation uses `white100` primitive token because the semantic `color.text.onPrimary` token is not generated for the iOS platform
-- This is documented as a token gap that should be addressed in future token system improvements
+**Rationale**: Component-specific tokens with semantic naming (small/medium/large) provide clarity for button sizing while maintaining compositional architecture. Values align to baseline grid but don't need to match existing primitive tokens.
 
 ---
 

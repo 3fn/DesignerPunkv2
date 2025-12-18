@@ -190,12 +190,15 @@ struct ButtonCTA: View {
             )
         }
         .buttonStyle(PlainButtonStyle())
-        // Requirement 17.2: Scale transform to 0.97 (97%) on press with motion token animation
-        // Component-specific press animation values (iOS platform pattern)
-        // Scale: 0.97 (3% reduction for tactile feedback)
+        // Requirement 17.2: Scale transform on press with motion token animation
+        // iOS platform pattern: scale + motion pairing for tactile feedback
+        // Scale: scale096 (0.96 = 4% reduction, using existing token instead of 0.97)
         // Motion: motionButtonPress (150ms with accelerate easing for immediate response)
-        .scaleEffect(isPressed ? 0.97 : 1.0)
-        .animation(motionButtonPress, value: isPressed)
+        .scaleEffect(isPressed ? DesignTokens.scale096 : DesignTokens.scale100)
+        .animation(
+            DesignTokens.Easing.easingAccelerate.speed(1.0 / DesignTokens.Duration.duration150),
+            value: isPressed
+        )
         // Track pressed state for scale transform
         .simultaneousGesture(
             DragGesture(minimumDistance: 0)
@@ -219,14 +222,15 @@ struct ButtonCTA: View {
     
     /// Typography token based on button size
     /// Requirements: 1.5-1.7, 16.4 (Dynamic Type support)
+    /// Uses labelMd/labelLg tokens (fontWeight500) for visual emphasis and clarity
     private var typography: Font {
         switch size {
         case .small, .medium:
-            // typography.bodyMd with Dynamic Type support
-            return .system(size: 16, weight: .regular, design: .default)
+            // typography.labelMd with Dynamic Type support (16pt, fontWeight500)
+            return .system(size: DesignTokens.typographyLabelMd.fontSize, weight: .medium, design: .default)
         case .large:
-            // typography.bodyLg with Dynamic Type support
-            return .system(size: 18, weight: .regular, design: .default)
+            // typography.labelLg with Dynamic Type support (18pt, fontWeight500)
+            return .system(size: DesignTokens.typographyLabelLg.fontSize, weight: .medium, design: .default)
         }
     }
     
@@ -235,11 +239,11 @@ struct ButtonCTA: View {
     private var horizontalPadding: CGFloat {
         switch size {
         case .small:
-            return 16 // space.inset.200
+            return DesignTokens.spaceInset200 // 16pt
         case .medium:
-            return 24 // space.inset.300
+            return DesignTokens.spaceInset300 // 24pt
         case .large:
-            return 32 // space.inset.400
+            return DesignTokens.spaceInset400 // 32pt
         }
     }
     
@@ -248,9 +252,9 @@ struct ButtonCTA: View {
     private var verticalPadding: CGFloat {
         switch size {
         case .small:
-            return 8 // space.inset.100
+            return DesignTokens.spaceInset100 // 8pt
         case .medium, .large:
-            return 12 // space.inset.150
+            return DesignTokens.spaceInset150 // 12pt
         }
     }
     
@@ -259,11 +263,11 @@ struct ButtonCTA: View {
     private var borderRadius: CGFloat {
         switch size {
         case .small:
-            return 8 // radius100
+            return DesignTokens.radius100 // 8pt
         case .medium:
-            return 12 // radius150
+            return DesignTokens.radius150 // 12pt
         case .large:
-            return 16 // radius200
+            return DesignTokens.radius200 // 16pt
         }
     }
     
@@ -293,11 +297,11 @@ struct ButtonCTA: View {
     private var touchTargetHeight: CGFloat {
         switch size {
         case .small:
-            return tapAreaMinimum // Extends from 40px visual to 44px touch target (Requirement 13.1, 13.3, 13.4)
+            return DesignTokens.tapAreaMinimum // Extends from 40px visual to 44px touch target (Requirement 13.1, 13.3, 13.4)
         case .medium:
-            return tapAreaRecommended // Meets 44px minimum (Requirement 13.2)
+            return DesignTokens.tapAreaRecommended // Meets 44px minimum (Requirement 13.2)
         case .large:
-            return tapAreaComfortable // Exceeds 44px minimum (Requirement 13.2)
+            return DesignTokens.tapAreaComfortable // Exceeds 44px minimum (Requirement 13.2)
         }
     }
     
@@ -306,9 +310,9 @@ struct ButtonCTA: View {
     private var iconSize: CGFloat {
         switch size {
         case .small, .medium:
-            return 24 // icon.size100
+            return DesignTokens.iconSize100 // 24pt
         case .large:
-            return 32 // icon.size125
+            return DesignTokens.iconSize125 // 28pt
         }
     }
     
@@ -317,9 +321,9 @@ struct ButtonCTA: View {
     private var iconTextSpacing: CGFloat {
         switch size {
         case .small:
-            return 4 // space.grouped.tight
+            return DesignTokens.spaceGroupedTight // 4pt
         case .medium, .large:
-            return 8 // space.grouped.normal
+            return DesignTokens.spaceGroupedNormal // 8pt
         }
     }
     
@@ -330,9 +334,9 @@ struct ButtonCTA: View {
     private var backgroundColor: Color {
         switch style {
         case .primary:
-            return colorPrimary // Semantic token: color.primary
+            return Color(DesignTokens.colorPrimary) // Semantic token: color.primary
         case .secondary:
-            return colorBackground // Semantic token: color.background (white)
+            return Color(DesignTokens.colorBackground) // Semantic token: color.background (white)
         case .tertiary:
             return Color.clear // transparent
         }
@@ -343,9 +347,9 @@ struct ButtonCTA: View {
     private var textColor: Color {
         switch style {
         case .primary:
-            return white100 // Primitive token: white100 (no semantic colorTextOnPrimary exists)
+            return Color(DesignTokens.colorTextOnPrimary) // Semantic token: color.text.onPrimary
         case .secondary, .tertiary:
-            return colorPrimary // Semantic token: color.primary
+            return Color(DesignTokens.colorPrimary) // Semantic token: color.primary
         }
     }
     
@@ -356,7 +360,7 @@ struct ButtonCTA: View {
         case .primary, .tertiary:
             return Color.clear // No border
         case .secondary:
-            return colorPrimary // Semantic token: color.primary
+            return Color(DesignTokens.colorPrimary) // Semantic token: color.primary
         }
     }
     
@@ -365,9 +369,9 @@ struct ButtonCTA: View {
     private var borderWidth: CGFloat {
         switch style {
         case .primary, .tertiary:
-            return 0 // No border
+            return DesignTokens.borderWidth000 // No border
         case .secondary:
-            return 1 // border.default
+            return DesignTokens.borderWidth100 // border.default (1pt)
         }
     }
     
@@ -376,28 +380,15 @@ struct ButtonCTA: View {
     private var iconColor: Color? {
         switch style {
         case .primary:
-            // Primary style: Use white100 (no semantic colorTextOnPrimary exists)
-            return white100 // Primitive token: white100
+            // Primary style: Use colorTextOnPrimary semantic token
+            return Color(DesignTokens.colorTextOnPrimary) // Semantic token: color.text.onPrimary
         case .secondary, .tertiary:
-            // Secondary/Tertiary: Use color.primary
-            // TODO: Evaluate optical balance token elevation (blend200 with BlendDirection.LIGHTER)
-            // Currently using colorPrimary directly as no semantic icon.opticalBalance token exists
-            return colorPrimary // Semantic token: color.primary
+            // Secondary/Tertiary: Use color.primary with optical balance blend
+            // Apply blend200 (8% lighter) for optical weight compensation
+            return Color(DesignTokens.colorPrimary).opacity(1.0 + DesignTokens.colorIconOpticalBalance) // color.primary + blend200 LIGHTER
         }
     }
 }
-
-// MARK: - Design Token Constants
-
-// Color tokens - Semantic tokens from DesignTokens.ios.swift
-private let colorPrimary = Color(red: 103/255, green: 80/255, blue: 164/255) // purple300 - #6750A4
-private let colorBackground = Color(red: 255/255, green: 255/255, blue: 255/255) // white100 - #FFFFFF
-private let white100 = Color(red: 255/255, green: 255/255, blue: 255/255) // white100 - #FFFFFF (primitive token for text on primary)
-
-// Accessibility tokens - Tap area tokens from TapAreaTokens.ts
-private let tapAreaMinimum: CGFloat = 44 // tapAreaMinimum - WCAG 2.1 AA minimum (44pt)
-private let tapAreaRecommended: CGFloat = 48 // tapAreaRecommended - Enhanced usability (48pt)
-private let tapAreaComfortable: CGFloat = 56 // tapAreaComfortable - Comfortable interaction (56pt)
 
 /**
  * SwiftUI preview for ButtonCTA component.

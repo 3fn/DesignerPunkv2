@@ -26,12 +26,12 @@
   justify-content: center;
   gap: var(--space-grouped-normal); /* Default icon-text spacing: 8px */
   
-  /* Typography - Default to medium size */
-  font-family: var(--typography-body-md-font-family);
-  font-size: var(--typography-body-md-font-size);
-  font-weight: var(--typography-body-md-font-weight);
-  line-height: var(--typography-body-md-line-height);
-  letter-spacing: var(--typography-body-md-letter-spacing);
+  /* Typography - Default to medium size (labelMd for UI controls) */
+  font-family: var(--typography-label-md-font-family);
+  font-size: var(--typography-label-md-font-size);
+  font-weight: var(--typography-label-md-font-weight);
+  line-height: var(--typography-label-md-line-height);
+  letter-spacing: var(--typography-label-md-letter-spacing);
   
   /* Text alignment */
   text-align: center;
@@ -62,84 +62,87 @@
    ========================================================================== */
 
 /**
- * Small button (40px height)
+ * Small button (40px calculated height)
  * 
- * - Height: 40px (aligns to 8px baseline grid)
+ * - Min height: tapAreaMinimum (44px) for accessibility
+ * - Calculated height: ~40px (padding + lineHeight)
  * - Horizontal padding: space.inset.200 (16px)
  * - Vertical padding: space.inset.100 (8px)
  * - Border radius: radius100 (8px)
- * - Typography: typography.bodyMd
+ * - Typography: typography.labelMd (medium weight for UI controls)
  * - Icon size: icon.size100 (24px)
  * - Icon spacing: space.grouped.tight (4px)
- * - Min width: 56px
+ * - Min width: buttonCTA.minWidth.small (56px)
  */
 .button-cta--small {
-  min-height: 40px;
-  min-width: 56px;
+  min-height: var(--tap-area-minimum); /* 44px for accessibility */
+  min-width: 56px; /* buttonCTA.minWidth.small */
   padding: var(--space-inset-100) var(--space-inset-200); /* 8px 16px */
   border-radius: var(--radius-100); /* 8px */
   gap: var(--space-grouped-tight); /* 4px for icon-text spacing */
   
-  /* Typography: bodyMd (same as base) */
-  font-family: var(--typography-body-md-font-family);
-  font-size: var(--typography-body-md-font-size);
-  font-weight: var(--typography-body-md-font-weight);
-  line-height: var(--typography-body-md-line-height);
-  letter-spacing: var(--typography-body-md-letter-spacing);
+  /* Typography: labelMd (medium weight for UI controls) */
+  font-family: var(--typography-label-md-font-family);
+  font-size: var(--typography-label-md-font-size);
+  font-weight: var(--typography-label-md-font-weight);
+  line-height: var(--typography-label-md-line-height);
+  letter-spacing: var(--typography-label-md-letter-spacing);
 }
 
 /**
- * Medium button (48px height) - Default size
+ * Medium button (48px calculated height) - Default size
  * 
- * - Height: 48px (aligns to 8px baseline grid)
+ * - Min height: tapAreaRecommended (48px) for better usability
+ * - Calculated height: ~48px (padding + lineHeight)
  * - Horizontal padding: space.inset.300 (24px)
  * - Vertical padding: space.inset.150 (12px)
  * - Border radius: radius150 (12px)
- * - Typography: typography.bodyMd
+ * - Typography: typography.labelMd (medium weight for UI controls)
  * - Icon size: icon.size100 (24px)
  * - Icon spacing: space.grouped.normal (8px)
- * - Min width: 72px
+ * - Min width: buttonCTA.minWidth.medium (72px)
  */
 .button-cta--medium {
-  min-height: 48px;
-  min-width: 72px;
+  min-height: var(--tap-area-recommended); /* 48px for better usability */
+  min-width: 72px; /* buttonCTA.minWidth.medium */
   padding: var(--space-inset-150) var(--space-inset-300); /* 12px 24px */
   border-radius: var(--radius-150); /* 12px */
   gap: var(--space-grouped-normal); /* 8px for icon-text spacing */
   
-  /* Typography: bodyMd (same as base) */
-  font-family: var(--typography-body-md-font-family);
-  font-size: var(--typography-body-md-font-size);
-  font-weight: var(--typography-body-md-font-weight);
-  line-height: var(--typography-body-md-line-height);
-  letter-spacing: var(--typography-body-md-letter-spacing);
+  /* Typography: labelMd (medium weight for UI controls) */
+  font-family: var(--typography-label-md-font-family);
+  font-size: var(--typography-label-md-font-size);
+  font-weight: var(--typography-label-md-font-weight);
+  line-height: var(--typography-label-md-line-height);
+  letter-spacing: var(--typography-label-md-letter-spacing);
 }
 
 /**
- * Large button (56px height)
+ * Large button (56px calculated height)
  * 
- * - Height: 56px (aligns to 8px baseline grid)
+ * - Min height: tapAreaComfortable (56px) for comfortable interaction
+ * - Calculated height: ~56px (padding + lineHeight)
  * - Horizontal padding: space.inset.400 (32px)
  * - Vertical padding: space.inset.150 (12px)
  * - Border radius: radius200 (16px)
- * - Typography: typography.bodyLg
+ * - Typography: typography.labelLg (medium weight for UI controls)
  * - Icon size: icon.size125 (32px)
  * - Icon spacing: space.grouped.normal (8px)
- * - Min width: 80px
+ * - Min width: buttonCTA.minWidth.large (80px)
  */
 .button-cta--large {
-  min-height: 56px;
-  min-width: 80px;
+  min-height: var(--tap-area-comfortable); /* 56px for comfortable interaction */
+  min-width: 80px; /* buttonCTA.minWidth.large */
   padding: var(--space-inset-150) var(--space-inset-400); /* 12px 32px */
   border-radius: var(--radius-200); /* 16px */
   gap: var(--space-grouped-normal); /* 8px for icon-text spacing */
   
-  /* Typography: bodyLg */
-  font-family: var(--typography-body-lg-font-family);
-  font-size: var(--typography-body-lg-font-size);
-  font-weight: var(--typography-body-lg-font-weight);
-  line-height: var(--typography-body-lg-line-height);
-  letter-spacing: var(--typography-body-lg-letter-spacing);
+  /* Typography: labelLg (medium weight for UI controls) */
+  font-family: var(--typography-label-lg-font-family);
+  font-size: var(--typography-label-lg-font-size);
+  font-weight: var(--typography-label-lg-font-weight);
+  line-height: var(--typography-label-lg-line-height);
+  letter-spacing: var(--typography-label-lg-letter-spacing);
 }
 
 /* ==========================================================================
@@ -165,13 +168,13 @@
  * 
  * - Background: color.background
  * - Text: color.primary
- * - Border: 1px solid color.primary
+ * - Border: border.borderDefault solid color.primary
  * - Medium visual emphasis
  */
 .button-cta--secondary {
   background-color: var(--color-background);
   color: var(--color-primary);
-  border: 1px solid var(--color-primary);
+  border: var(--border-border-default) solid var(--color-primary);
 }
 
 /**
@@ -211,19 +214,23 @@
  * Icon optical balance for secondary and tertiary buttons.
  * 
  * Icons appear heavier than text at the same color due to stroke density.
- * Apply 20% lighter blend for optical weight compensation.
+ * Should use color.icon.opticalBalance blend token (8% lighter).
  * 
- * Note: This would ideally use color.icon.opticalBalance blend token,
- * but CSS doesn't support color blending directly. Implementation options:
- * 1. Use filter: brightness(1.2) as approximation
- * 2. Generate blended color values at build time
- * 3. Use opacity: 0.8 as alternative (affects transparency)
+ * CSS Limitation: CSS doesn't support color blending directly via custom properties.
+ * The blend token exists in the token system but cannot be applied in CSS without:
+ * 1. Build-time color calculation (generate blended color values)
+ * 2. CSS color-mix() function (limited browser support as of 2025)
+ * 3. Filter approximation (current approach: brightness(1.08) ≈ 8% lighter)
  * 
- * Current approach: Use filter for approximation
+ * Current approach: Use filter: brightness(1.08) as approximation of 8% lighter blend.
+ * This is a close approximation but not identical to the blend token's color math.
+ * 
+ * Future improvement: Generate blended color values at build time and expose as
+ * CSS custom properties (e.g., --color-icon-optical-balance-primary).
  */
 .button-cta--secondary .button-cta__icon,
 .button-cta--tertiary .button-cta__icon {
-  filter: brightness(1.2);
+  filter: brightness(1.08); /* Approximates color.icon.opticalBalance (8% lighter) */
 }
 
 /* ==========================================================================
@@ -313,14 +320,28 @@
 /**
  * Disabled state.
  * 
- * - Reduced opacity for visual feedback
+ * Should use blend.disabledDesaturate token (12% less saturated).
+ * 
+ * CSS Limitation: CSS doesn't support desaturation blending directly via custom properties.
+ * The blend token exists in the token system but cannot be applied in CSS without:
+ * 1. Build-time color calculation (generate desaturated color values)
+ * 2. CSS filter: saturate() function (affects all colors, not just base color)
+ * 3. Opacity approximation (current approach: opacity 0.6 ≈ muted appearance)
+ * 
+ * Current approach: Use opacity: 0.6 as approximation of desaturated appearance.
+ * This is not identical to the blend token's desaturation math but provides
+ * similar visual feedback for disabled state.
+ * 
+ * Future improvement: Generate desaturated color values at build time and expose as
+ * CSS custom properties (e.g., --color-primary-disabled-desaturated).
+ * 
  * - Cursor changes to not-allowed
  * - Prevents interaction
  * - Maintains color contrast for accessibility
  */
 .button-cta:disabled,
 .button-cta--disabled {
-  opacity: 0.5;
+  opacity: 0.6; /* Approximates blend.disabledDesaturate (12% less saturated) */
   cursor: not-allowed;
   pointer-events: none;
 }
@@ -349,12 +370,13 @@
  * - Remove interactive states
  * - Ensure text is visible
  * - Simplify visual styling
+ * - Use color.print.default token for print media
  */
 @media print {
   .button-cta {
     background-color: transparent !important;
-    color: #000 !important;
-    border: 1px solid #000 !important;
+    color: var(--color-print-default) !important;
+    border: var(--border-border-default) solid var(--color-print-default) !important;
     box-shadow: none !important;
   }
   
@@ -372,14 +394,15 @@
  * 
  * - Force borders for all button styles
  * - Ensure focus indicators are visible
+ * - Use border.borderThick and border.borderThicker tokens
  */
 @media (prefers-contrast: high) {
   .button-cta {
-    border: 2px solid currentColor;
+    border: var(--border-border-thick) solid currentColor; /* 2px */
   }
   
   .button-cta:focus-visible {
-    outline-width: 3px;
+    outline-width: var(--border-border-thicker); /* 3px */
   }
 }
 
