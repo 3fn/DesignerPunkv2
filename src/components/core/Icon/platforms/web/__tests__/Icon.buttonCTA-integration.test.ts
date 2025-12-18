@@ -90,9 +90,8 @@ describe('Icon + ButtonCTA Integration', () => {
       const shadowRoot = button.shadowRoot;
       const iconSpan = shadowRoot!.querySelector('.button-cta__icon');
       
-      // Medium button should use 24px icon
-      expect(iconSpan!.innerHTML).toContain('width="24"');
-      expect(iconSpan!.innerHTML).toContain('height="24"');
+      // Medium button should use 24px icon (via icon--size-100 CSS class)
+      expect(iconSpan!.innerHTML).toContain('icon--size-100');
     });
 
     it('should use correct icon size for large buttons', async () => {
@@ -107,9 +106,8 @@ describe('Icon + ButtonCTA Integration', () => {
       const shadowRoot = button.shadowRoot;
       const iconSpan = shadowRoot!.querySelector('.button-cta__icon');
       
-      // Large button should use 32px icon
-      expect(iconSpan!.innerHTML).toContain('width="32"');
-      expect(iconSpan!.innerHTML).toContain('height="32"');
+      // Large button should use 32px icon (via icon--size-200 CSS class)
+      expect(iconSpan!.innerHTML).toContain('icon--size-200');
     });
   });
 
@@ -229,8 +227,8 @@ describe('Icon + ButtonCTA Integration', () => {
       const shadowRoot = button.shadowRoot;
       const iconSpan = shadowRoot!.querySelector('.button-cta__icon');
       
-      expect(iconSpan!.innerHTML).toContain('width="24"');
-      expect(iconSpan!.innerHTML).toContain('height="24"');
+      // Small button uses 24px icon (via icon--size-100 CSS class)
+      expect(iconSpan!.innerHTML).toContain('icon--size-100');
     });
 
     it('should render medium button with 24px icon', async () => {
@@ -245,8 +243,8 @@ describe('Icon + ButtonCTA Integration', () => {
       const shadowRoot = button.shadowRoot;
       const iconSpan = shadowRoot!.querySelector('.button-cta__icon');
       
-      expect(iconSpan!.innerHTML).toContain('width="24"');
-      expect(iconSpan!.innerHTML).toContain('height="24"');
+      // Medium button uses 24px icon (via icon--size-100 CSS class)
+      expect(iconSpan!.innerHTML).toContain('icon--size-100');
     });
 
     it('should render large button with 32px icon', async () => {
@@ -261,8 +259,8 @@ describe('Icon + ButtonCTA Integration', () => {
       const shadowRoot = button.shadowRoot;
       const iconSpan = shadowRoot!.querySelector('.button-cta__icon');
       
-      expect(iconSpan!.innerHTML).toContain('width="32"');
-      expect(iconSpan!.innerHTML).toContain('height="32"');
+      // Large button uses 32px icon (via icon--size-200 CSS class)
+      expect(iconSpan!.innerHTML).toContain('icon--size-200');
     });
   });
 
@@ -446,7 +444,8 @@ describe('Icon + ButtonCTA Integration', () => {
       expect(buttonElement!.classList.contains('button-cta--primary')).toBe(true);
       expect(buttonElement!.getAttribute('data-testid')).toBe('test-button');
       expect(iconSpan).toBeTruthy();
-      expect(iconSpan!.innerHTML).toContain('width="32"'); // Large button = 32px icon
+      // Large button uses 32px icon (via icon--size-200 CSS class)
+      expect(iconSpan!.innerHTML).toContain('icon--size-200');
       expect(labelSpan!.textContent).toBe('Full Featured Button');
     });
   });

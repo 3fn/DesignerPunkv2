@@ -343,6 +343,28 @@ Due to the process-oriented nature of this spec (audit → confirm → implement
 - Immediate updates: Would interrupt audit flow
 - No updates: Would lose valuable insights
 
+### Decision 5: Investigation-First Test Resolution
+
+**Context**: After Task 2 completion, Icon test failures were discovered (27 failing tests). Should we immediately fix or investigate first?
+
+**Decision**: Create Task 2.FIX with investigation-first approach before proceeding to ButtonCTA audit.
+
+**Rationale**: 
+- Test failures have ambiguous root causes (implementation bugs vs test issues vs design mismatches)
+- Investigation prevents premature fixes based on assumptions
+- Documenting findings helps future test debugging
+- Clean test baseline before ButtonCTA audit prevents inherited issues
+
+**Alternatives Considered**:
+- Immediate fixes: Risk fixing wrong things or missing deeper issues
+- Defer to end: Would carry test debt through ButtonCTA work
+- Skip investigation: Would miss learning opportunities about test infrastructure
+
+**Investigation Structure**:
+- 2.FIX.1: Investigate web component rendering failures (24 tests)
+- 2.FIX.2: Investigate ButtonCTA integration test failures (6 tests)
+- 2.FIX.3-5: Implement fixes based on investigation findings
+
 ---
 
 ## Artifacts

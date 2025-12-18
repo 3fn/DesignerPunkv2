@@ -168,6 +168,100 @@ This implementation plan follows the three-phase approach (Audit → Confirm →
     - Document any test failures for investigation
     - _Requirements: 3.4, 3.5_
 
+- [x] 2.FIX Icon Test Failures Resolution
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  
+  **Success Criteria:**
+  - Root causes of test failures identified and documented
+  - Web component rendering issues resolved
+  - ButtonCTA integration test issues resolved
+  - All Icon tests pass
+  - Investigation findings documented for future reference
+  
+  **Primary Artifacts:**
+  - `findings/icon-test-investigation.md`
+  - Fixed Icon web component implementation (if needed)
+  - Fixed/updated ButtonCTA integration tests (if needed)
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/023-component-token-compliance-audit/completion/task-2-fix-parent-completion.md`
+  - Summary: `docs/specs/023-component-token-compliance-audit/task-2-fix-summary.md`
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool
+  - Commit: `./.kiro/hooks/commit-task.sh "Task 2.FIX Complete: Icon Test Failures Resolution"`
+
+  - [x] 2.FIX.1 Investigate Icon web component rendering failures
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Examine why `shadowRoot?.querySelector('svg')` returns undefined in tests
+    - Compare working tests (Icon.test.ts) vs failing tests (lifecycle, rendering)
+    - Check web component registration and lifecycle hooks
+    - Check test environment setup and JSDOM configuration
+    - Document root cause in `findings/icon-test-investigation.md`
+    - Document recommended fix approach
+    - _Requirements: 3.5, 9.4_
+
+  - [x] 2.FIX.2 Investigate ButtonCTA integration test failures
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Examine Icon's actual rendering output (CSS classes vs attributes)
+    - Review ButtonCTA's expectations for Icon sizing
+    - Determine if issue is test expectations, Icon implementation, or integration contract
+    - Check if Icon should output width/height attributes for certain use cases
+    - Document root cause in `findings/icon-test-investigation.md`
+    - Document recommended fix approach
+    - _Requirements: 3.5, 6.2, 9.4_
+
+  - [x] 2.FIX.3 Implement web component rendering fixes
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Implement fixes based on investigation findings from 2.FIX.1
+    - Fix web component registration if needed
+    - Fix lifecycle hooks if needed
+    - Fix test environment setup if needed
+    - Verify Icon.lifecycle.test.ts passes
+    - Verify Icon.rendering.test.ts passes
+    - _Requirements: 3.5, 9.4_
+
+  - [x] 2.FIX.4 Implement ButtonCTA integration fixes
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Implement fixes based on investigation findings from 2.FIX.2
+    - Update Icon implementation if design requires width/height attributes
+    - Update ButtonCTA integration tests if expectations are incorrect
+    - Update integration contract documentation if needed
+    - Verify Icon.buttonCTA-integration.test.ts passes
+    - _Requirements: 3.5, 6.2, 9.4_
+
+  - [x] 2.FIX.5 Verify all Icon tests pass
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Run full Icon test suite: `npx jest src/components/core/Icon --no-coverage`
+    - Verify all 88 tests pass (currently 61 passing, 27 failing)
+    - Document any remaining issues
+    - Update investigation findings with final results
+    - _Requirements: 3.5, 9.4_
+
+  - [x] 2.FIX.6 Create Test Development Standards steering document
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Review findings from 2.FIX.1 and 2.FIX.2 investigations
+    - Review Spec 017 design doc for test lifecycle guidance
+    - Review .kiro/specs/023-component-token-compliance-audit/findings/test-development-standards-planning.md
+    - Create `.kiro/steering/Test Development Standards.md`
+    - Document web component testing patterns (JSDOM setup, async lifecycle)
+    - Document integration testing patterns (behavior vs implementation)
+    - Define evergreen vs temporary test categories with decision framework
+    - Establish guidelines for testing behavior vs philosophical preferences
+    - Include anti-patterns to avoid with concrete examples from Icon tests
+    - Provide test lifecycle management guidance (write, update, delete, retire)
+    - Cross-reference Component Development Guide and Spec 017 design doc
+    - _Requirements: 7.1, 7.2, 7.3, 9.4_
+
 - [ ] 3. ButtonCTA Holistic Audit & Confirmation
 
   **Type**: Parent

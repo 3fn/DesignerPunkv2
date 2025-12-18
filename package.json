@@ -50,10 +50,7 @@
   },
   "jest": {
     "preset": "ts-jest",
-    "testEnvironment": "node",
-    "testMatch": [
-      "**/__tests__/**/*.test.ts"
-    ]
+    "testEnvironment": "node"
   },
   "dependencies": {
     "@octokit/rest": "^20.0.0",
