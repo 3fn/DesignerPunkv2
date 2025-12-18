@@ -302,6 +302,8 @@ export class TextInputField extends HTMLElement {
       .input-element:focus-visible {
         outline: var(--accessibility-focus-width) solid var(--accessibility-focus-color);
         outline-offset: var(--accessibility-focus-offset);
+        /* Focus ring transition using motion.focusTransition token (A2) */
+        transition: outline-color var(--motion-focus-transition-duration) var(--motion-focus-transition-easing);
       }
       
       /* Ensure focus ring is visible in all states */
@@ -399,6 +401,7 @@ export class TextInputField extends HTMLElement {
       /* Respect prefers-reduced-motion */
       @media (prefers-reduced-motion: reduce) {
         .input-element,
+        .input-element:focus-visible,
         .input-label,
         .trailing-icon-container {
           transition: none;

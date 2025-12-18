@@ -222,8 +222,11 @@ The TextInputField component uses the following design tokens:
   - Used for label floating animation
   - Used for icon fade in/out animations (error, success, info icons)
 - `motion.focusTransition` - Focus state transition timing (duration150 + easingStandard)
-  - Used for focus ring opacity animation
+  - Used for focus ring opacity animation (all platforms)
+  - Web: CSS transition with `var(--motion-focus-transition-duration)` and `var(--motion-focus-transition-easing)`
+  - iOS/Android: Native animation with motion token values
 - `scale088` - Typography scale for label animation (0.88 × fontSize100 = 14px)
+- `easingStandard` - Standard easing curve (0.4, 0.0, 0.2, 1.0) for all animations
 
 ### Border Tokens
 
@@ -237,15 +240,32 @@ The TextInputField component uses the following design tokens:
 - `accessibility.focus.offset` - Focus ring offset (2px)
 - `accessibility.focus.color` - Focus ring color
 
+### Icon Tokens
+
+- `icon.size100` - Icon size for status indicators (24px)
+  - Used for error, success, and info icons
+  - Web: `iconSizes.size100`
+  - iOS: `iconSize100` constant
+  - Android: `iconSize100` constant
+
 ### Blend Tokens
 
 - `blend.focusSaturate` - Focus state emphasis (8% more saturated)
+  - **Status**: Documented but not yet implemented (escalated to Spec 024)
+  - **Current Behavior**: All platforms use `color.primary` directly without saturation enhancement
+  - **Future Implementation**: Will require blend token runtime infrastructure for color manipulation
 
 ### Token Usage Philosophy
 
 **No Fallback Values**: This component intentionally does not use fallback values for missing tokens. If a required token is missing, the component will fail loudly with a clear error message indicating which token is missing and where it's needed. This ensures token system issues are caught immediately during development rather than masked by fallbacks.
 
 **Explicit Error Handling**: When tokens cannot be resolved, the component throws descriptive errors (e.g., "Required motion token missing: --motion-float-label-duration"). This approach maintains token system integrity and prevents silent failures in production.
+
+**Cross-Platform Token Consistency**: As of Spec 023 (Component Token Compliance Audit), all platforms use consistent token reference patterns:
+- Icon sizes use generated `icon.size100` token constants
+- Motion tokens include both duration and easing values
+- Focus transitions use `motion.focusTransition` token on all platforms
+- All token references follow platform-specific patterns (CSS custom properties for web, constants for iOS/Android)
 
 ---
 
@@ -469,6 +489,16 @@ TextInputField's status icons are exposed through the component's visual design 
 ---
 
 ## Changelog
+
+### v1.0.1 (December 2025) - Token Compliance Improvements
+
+**Spec 023: Component Token Compliance Audit**
+
+- ✅ Standardized icon size token references across all platforms
+- ✅ Added focus transition animation to web implementation using `motion.focusTransition` token
+- ✅ Extracted easing curve constant in Android implementation
+- ✅ Improved cross-platform token reference consistency
+- 📋 Documented blend token escalation status (Spec 024)
 
 ### v1.0.0 (December 2025)
 

@@ -106,25 +106,25 @@ struct TextInputField: View {
     private var labelFont: Font {
         if isLabelFloated {
             // labelMdFloat: 14pt (scale088 × fontSize100)
-            return Font.system(size: typographyLabelMdFloatFontSize)
-                .weight(typographyLabelMdFloatFontWeight)
+            return Font.system(size: DesignTokens.typography.labelMdFloat.fontSize)
+                .weight(DesignTokens.typography.labelMdFloat.fontWeight)
         } else {
             // labelMd: 16pt
-            return Font.system(size: typographyLabelMdFontSize)
-                .weight(typographyLabelMdFontWeight)
+            return Font.system(size: DesignTokens.typography.labelMd.fontSize)
+                .weight(DesignTokens.typography.labelMd.fontWeight)
         }
     }
     
     /// Label color based on state
     private var labelColor: Color {
         if hasError {
-            return colorError
+            return Color(DesignTokens.color.error.strong)
         } else if isSuccess {
-            return colorSuccessStrong
+            return Color(DesignTokens.color.success.strong)
         } else if isFocused {
-            return colorPrimary
+            return Color(DesignTokens.color.primary)
         } else {
-            return colorTextMuted
+            return Color(DesignTokens.color.text.muted)
         }
     }
     
@@ -132,7 +132,7 @@ struct TextInputField: View {
     private var labelOffset: CGFloat {
         if isLabelFloated {
             // Float above input with grouped.tight spacing
-            return -(typographyLabelMdLineHeight + spaceGroupedTight)
+            return -(DesignTokens.typography.labelMd.lineHeight + DesignTokens.space.grouped.tight)
         } else {
             // Center inside input
             return 0
@@ -142,13 +142,13 @@ struct TextInputField: View {
     /// Border color based on state
     private var borderColor: Color {
         if hasError {
-            return colorError
+            return Color(DesignTokens.color.error.strong)
         } else if isSuccess {
-            return colorSuccessStrong
+            return Color(DesignTokens.color.success.strong)
         } else if isFocused {
-            return colorPrimary
+            return Color(DesignTokens.color.primary)
         } else {
-            return colorBorder
+            return Color(DesignTokens.color.border)
         }
     }
     
@@ -180,7 +180,7 @@ struct TextInputField: View {
                         .foregroundColor(labelColor)
                         .offset(y: labelOffset)
                         .animation(
-                            reduceMotion ? .none : motionFloatLabel,
+                            reduceMotion ? .none : Animation.timingCurve(0.4, 0.0, 0.2, 1.0, duration: DesignTokens.motion.floatLabel.duration),
                             value: isLabelFloated
                         )
                         .allowsHitTesting(false) // Label doesn't intercept touches
@@ -189,7 +189,7 @@ struct TextInputField: View {
                             labelAnimationComplete = false
                             
                             // Mark animation as complete after motion.floatLabel duration
-                            DispatchQueue.main.asyncAfter(deadline: .now() + motionFloatLabelDuration) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + DesignTokens.motion.floatLabel.duration) {
                                 labelAnimationComplete = true
                             }
                         }
@@ -253,48 +253,48 @@ struct TextInputField: View {
                 
                 // Trailing icon (error, success, or info)
                 if showErrorIcon {
-                    Icon(name: "x", size: iconSize100, color: colorError)
-                        .padding(.trailing, spaceInset100)
+                    Icon(name: "x", size: DesignTokens.icon.size100, color: Color(DesignTokens.color.error.strong))
+                        .padding(.trailing, DesignTokens.space.inset.100)
                         .transition(.opacity)
                         .animation(
-                            reduceMotion ? .none : motionFloatLabel,
+                            reduceMotion ? .none : Animation.timingCurve(0.4, 0.0, 0.2, 1.0, duration: DesignTokens.motion.floatLabel.duration),
                             value: showErrorIcon
                         )
                 } else if showSuccessIcon {
-                    Icon(name: "check", size: iconSize100, color: colorSuccessStrong)
-                        .padding(.trailing, spaceInset100)
+                    Icon(name: "check", size: DesignTokens.icon.size100, color: Color(DesignTokens.color.success.strong))
+                        .padding(.trailing, DesignTokens.space.inset.100)
                         .transition(.opacity)
                         .animation(
-                            reduceMotion ? .none : motionFloatLabel,
+                            reduceMotion ? .none : Animation.timingCurve(0.4, 0.0, 0.2, 1.0, duration: DesignTokens.motion.floatLabel.duration),
                             value: showSuccessIcon
                         )
                 } else if showInfoIconVisible {
-                    Icon(name: "info", size: iconSize100, color: colorTextMuted)
-                        .padding(.trailing, spaceInset100)
+                    Icon(name: "info", size: DesignTokens.icon.size100, color: Color(DesignTokens.color.text.muted))
+                        .padding(.trailing, DesignTokens.space.inset.100)
                         .transition(.opacity)
                         .animation(
-                            reduceMotion ? .none : motionFloatLabel,
+                            reduceMotion ? .none : Animation.timingCurve(0.4, 0.0, 0.2, 1.0, duration: DesignTokens.motion.floatLabel.duration),
                             value: showInfoIconVisible
                         )
                 }
             }
-            .frame(minHeight: tapAreaRecommended) // WCAG minimum touch target
+            .frame(minHeight: DesignTokens.accessibility.tapArea.recommended) // WCAG minimum touch target
             
             // Helper text (persistent)
             if let helperText = helperText {
                 Text(helperText)
-                    .font(Font.system(size: typographyCaptionFontSize)
-                        .weight(typographyCaptionFontWeight))
-                    .foregroundColor(colorTextMuted)
+                    .font(Font.system(size: DesignTokens.typography.caption.fontSize)
+                        .weight(DesignTokens.typography.caption.fontWeight))
+                    .foregroundColor(Color(DesignTokens.color.text.muted))
                     .accessibilityIdentifier("\(id)-helper")
             }
             
             // Error message (conditional)
             if let errorMessage = errorMessage {
                 Text(errorMessage)
-                    .font(Font.system(size: typographyCaptionFontSize)
-                        .weight(typographyCaptionFontWeight))
-                    .foregroundColor(colorError)
+                    .font(Font.system(size: DesignTokens.typography.caption.fontSize)
+                        .weight(DesignTokens.typography.caption.fontWeight))
+                    .foregroundColor(Color(DesignTokens.color.error.strong))
                     .accessibilityIdentifier("\(id)-error")
             }
         }
@@ -348,102 +348,50 @@ struct CustomTextFieldStyle: TextFieldStyle {
     let isSuccess: Bool
     let hasTrailingIcon: Bool
     
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
+    
     func _body(configuration: TextField<Self._Label>) -> some View {
         configuration
-            .font(Font.system(size: typographyInputFontSize)
-                .weight(typographyInputFontWeight))
-            .foregroundColor(colorTextDefault)
-            .padding(.leading, spaceInset100)
-            .padding(.vertical, spaceInset100)
-            .padding(.trailing, hasTrailingIcon ? 0 : spaceInset100) // No trailing padding if icon present
-            .background(colorBackground)
+            .font(Font.system(size: DesignTokens.typography.input.fontSize)
+                .weight(DesignTokens.typography.input.fontWeight))
+            .foregroundColor(Color(DesignTokens.color.text.default))
+            .padding(.leading, DesignTokens.space.inset.100)
+            .padding(.vertical, DesignTokens.space.inset.100)
+            .padding(.trailing, hasTrailingIcon ? 0 : DesignTokens.space.inset.100) // No trailing padding if icon present
+            .background(Color(DesignTokens.color.background))
             .overlay(
-                RoundedRectangle(cornerRadius: radius150)
-                    .stroke(borderColor, lineWidth: borderDefault)
+                RoundedRectangle(cornerRadius: DesignTokens.radius150)
+                    .stroke(borderColor, lineWidth: DesignTokens.border.default)
             )
             .overlay(
                 // Focus ring for keyboard navigation (WCAG 2.4.7 Focus Visible)
                 // Visible in all states when focused
-                RoundedRectangle(cornerRadius: radius150)
-                    .stroke(accessibilityFocusColor, lineWidth: accessibilityFocusWidth)
-                    .padding(-accessibilityFocusOffset)
+                RoundedRectangle(cornerRadius: DesignTokens.radius150)
+                    .stroke(Color(DesignTokens.color.primary), lineWidth: DesignTokens.accessibility.focus.width)
+                    .padding(-DesignTokens.accessibility.focus.offset)
                     .opacity(isFocused ? 1 : 0)
                     .animation(
-                        reduceMotion ? .none : motionFocusTransition,
+                        reduceMotion ? .none : Animation.timingCurve(0.4, 0.0, 0.2, 1.0, duration: DesignTokens.motion.focusTransition.duration),
                         value: isFocused
                     )
             )
     }
 }
 
-// MARK: - Design Token Constants
+// MARK: - Design Token Usage
 
-// Typography tokens - semantic tokens (generated by build system)
-// These reference semantic typography tokens from TypographyTokens.ts
-
-// Typography tokens - labelMd (16pt)
-private let typographyLabelMdFontSize: CGFloat // typography.labelMd.fontSize
-private let typographyLabelMdLineHeight: CGFloat // typography.labelMd.lineHeight
-private let typographyLabelMdFontWeight: Font.Weight // typography.labelMd.fontWeight
-private let typographyLabelMdLetterSpacing: CGFloat // typography.labelMd.letterSpacing
-
-// Typography tokens - labelMdFloat (14pt, via scale088 × fontSize100)
-private let typographyLabelMdFloatFontSize: CGFloat // typography.labelMdFloat.fontSize
-private let typographyLabelMdFloatLineHeight: CGFloat // typography.labelMdFloat.lineHeight
-private let typographyLabelMdFloatFontWeight: Font.Weight // typography.labelMdFloat.fontWeight
-private let typographyLabelMdFloatLetterSpacing: CGFloat // typography.labelMdFloat.letterSpacing
-
-// Typography tokens - input (16pt)
-private let typographyInputFontSize: CGFloat // typography.input.fontSize
-private let typographyInputLineHeight: CGFloat // typography.input.lineHeight
-private let typographyInputFontWeight: Font.Weight // typography.input.fontWeight
-private let typographyInputLetterSpacing: CGFloat // typography.input.letterSpacing
-
-// Typography tokens - caption (13pt)
-private let typographyCaptionFontSize: CGFloat // typography.caption.fontSize
-private let typographyCaptionLineHeight: CGFloat // typography.caption.lineHeight
-private let typographyCaptionFontWeight: Font.Weight // typography.caption.fontWeight
-private let typographyCaptionLetterSpacing: CGFloat // typography.caption.letterSpacing
-
-// Color tokens - semantic tokens (generated by build system)
-// These reference semantic color tokens from ColorTokens.ts
-private let colorTextMuted: Color // color.text.muted
-private let colorTextDefault: Color // color.text.default
-private let colorPrimary: Color // color.primary
-private let colorError: Color // color.error.strong
-private let colorSuccessStrong: Color // color.success.strong
-private let colorBorder: Color // color.border
-private let colorBackground: Color // color.background
-
-// Spacing tokens - semantic tokens (generated by build system)
-// These reference semantic spacing tokens from SpacingTokens.ts
-private let spaceInset100: CGFloat // space.inset.100 (8px)
-private let spaceGroupedTight: CGFloat // space.grouped.tight (4px)
-private let spaceGroupedMinimal: CGFloat // space.grouped.minimal (2px)
-
-// Motion tokens - motion.floatLabel (duration250 + easingStandard)
-// Generated by build system from MotionTokens.ts
-private let motionFloatLabelDuration: TimeInterval // motion.floatLabel.duration (0.25s / 250ms)
-// Easing: cubic-bezier(0.4, 0.0, 0.2, 1.0) - Material Design standard curve
-
-// Duration tokens - primitive tokens (generated by build system)
-private let duration150: TimeInterval // duration150 (150ms) - Fast interactions (focus states)
-
-// Border tokens - primitive tokens (generated by build system)
-// These reference primitive border tokens
-private let borderDefault: CGFloat // border.default (1px)
-private let radius150: CGFloat // radius150 (12px)
-
-// Accessibility tokens - semantic tokens (generated by build system)
-// These reference accessibility tokens from AccessibilityTokens.ts
-private let tapAreaRecommended: CGFloat // accessibility.tapArea.recommended (48px)
-private let accessibilityFocusWidth: CGFloat // accessibility.focus.width (2px)
-private let accessibilityFocusOffset: CGFloat // accessibility.focus.offset (2px)
-private let accessibilityFocusColor: Color // color.primary (focus ring color)
-
-// Icon size tokens - semantic tokens (generated by build system)
-// These reference icon size tokens from IconTokens.ts
-private let iconSize100: CGFloat // icon.size100 (24pt) - standard icon size for bodyMd, labelMd, input typography
+// This component uses DesignTokens directly throughout the implementation.
+// All token references follow the pattern: DesignTokens.category.subcategory.property
+// 
+// Token categories used:
+// - typography: labelMd, labelMdFloat, input, caption
+// - color: text.muted, text.default, primary, error.strong, success.strong, border, background
+// - space: inset.100, grouped.tight, grouped.minimal
+// - motion: floatLabel, focusTransition
+// - border: default
+// - radius: radius150
+// - accessibility: tapArea.recommended, focus.width, focus.offset
+// - icon: size100
 
 // MARK: - Preview
 

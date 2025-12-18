@@ -140,7 +140,7 @@ fun TextInputField(
     } else {
         tween(
             durationMillis = motionFloatLabelDuration,
-            easing = CubicBezierEasing(0.4f, 0.0f, 0.2f, 1.0f) // easingStandard
+            easing = easingStandard
         )
     }
     
@@ -345,17 +345,17 @@ fun TextInputField(
                 when {
                     showErrorIcon -> Icon(
                         name = "x",
-                        size = DesignTokens.icon_size_100.value.dp, // icon.size100 (24dp) - standard size for bodyMd/labelMd/input typography
+                        size = iconSize100.dp, // icon.size100 (24dp) - standard size for bodyMd/labelMd/input typography
                         color = colorError
                     )
                     showSuccessIcon -> Icon(
                         name = "check",
-                        size = DesignTokens.icon_size_100.value.dp, // icon.size100 (24dp) - standard size for bodyMd/labelMd/input typography
+                        size = iconSize100.dp, // icon.size100 (24dp) - standard size for bodyMd/labelMd/input typography
                         color = colorSuccessStrong
                     )
                     showInfoIconVisible -> Icon(
                         name = "info",
-                        size = DesignTokens.icon_size_100.value.dp, // icon.size100 (24dp) - standard size for bodyMd/labelMd/input typography
+                        size = iconSize100.dp, // icon.size100 (24dp) - standard size for bodyMd/labelMd/input typography
                         color = colorTextMuted
                     )
                 }
@@ -453,11 +453,14 @@ private const val spaceGroupedMinimal: Float // Generated from space.grouped.min
 
 // Motion tokens - motion.floatLabel (duration250 + easingStandard)
 private const val motionFloatLabelDuration: Int // Generated from motion.floatLabel.duration (250ms)
-// Easing: cubic-bezier(0.4, 0.0, 0.2, 1.0) - Material Design standard curve
+private val easingStandard = CubicBezierEasing(0.4f, 0.0f, 0.2f, 1.0f) // Generated from motion.floatLabel.easing - Material Design standard curve
 
 // Border tokens
 private const val borderDefault: Float // Generated from border.default
 private const val radius150: Float // Generated from radius.150
+
+// Icon tokens
+private const val iconSize100: Float // Generated from icon.size100 (24dp)
 
 // Accessibility tokens
 private const val tapAreaRecommended: Float // Generated from accessibility.tapArea.recommended (48dp minimum)
