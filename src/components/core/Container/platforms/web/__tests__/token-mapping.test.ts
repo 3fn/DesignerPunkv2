@@ -120,8 +120,8 @@ describe('mapOpacityToCSS', () => {
     expect(mapOpacityToCSS('opacity.ghost' as OpacityTokenName)).toBe('opacity: var(--opacity-ghost)');
   });
 
-  it('returns empty string for null value', () => {
-    expect(mapOpacityToCSS(null)).toBe('');
+  it('defaults to opacity.subtle for null value (cross-platform consistency)', () => {
+    expect(mapOpacityToCSS(null)).toBe('opacity: var(--opacity-subtle)');
   });
 });
 
@@ -141,11 +141,13 @@ describe('mapLayeringToCSS', () => {
 });
 
 describe('buildContainerStyles', () => {
-  it('builds CSS with single prop', () => {
+  it('builds CSS with single prop (plus default opacity)', () => {
     const styles = buildContainerStyles({
       padding: '200'
     });
-    expect(styles).toBe('padding: var(--space-inset-200)');
+    // Opacity is always included with default value
+    expect(styles).toContain('padding: var(--space-inset-200)');
+    expect(styles).toContain('opacity: var(--opacity-subtle)');
   });
 
   it('builds CSS with multiple props', () => {
@@ -182,30 +184,34 @@ describe('buildContainerStyles', () => {
     expect(styles).toContain('z-index: var(--zIndex-modal)');
   });
 
-  it('omits styles for none values', () => {
+  it('omits styles for none values (except default opacity)', () => {
     const styles = buildContainerStyles({
       padding: 'none',
       border: 'none',
       borderRadius: 'none'
     });
     
-    expect(styles).toBe('');
+    // Only opacity is included (with default value)
+    expect(styles).toBe('opacity: var(--opacity-subtle)');
   });
 
-  it('omits styles for null values', () => {
+  it('omits styles for null values (except opacity which has default)', () => {
     const styles = buildContainerStyles({
       padding: null,
       background: null,
-      shadow: null
+      shadow: null,
+      opacity: null
     });
     
-    expect(styles).toBe('');
+    // Opacity defaults to opacity.subtle even when null
+    expect(styles).toBe('opacity: var(--opacity-subtle)');
   });
 
-  it('omits styles for undefined values', () => {
+  it('applies default opacity when no props provided', () => {
     const styles = buildContainerStyles({});
     
-    expect(styles).toBe('');
+    // Opacity defaults to opacity.subtle even when not specified
+    expect(styles).toBe('opacity: var(--opacity-subtle)');
   });
 
   it('formats styles with semicolons and newlines', () => {
@@ -253,10 +259,10 @@ describe('Integration: Token mapping with Container props', () => {
 
     expect(styles).toContain('padding: var(--space-inset-100)');
     expect(styles).toContain('border-radius: var(--radius050)');
+    expect(styles).toContain('opacity: var(--opacity-subtle)'); // Default opacity always included
     expect(styles).not.toContain('background');
     expect(styles).not.toContain('box-shadow');
     expect(styles).not.toContain('border:');
-    expect(styles).not.toContain('opacity');
     expect(styles).not.toContain('z-index');
   });
 });

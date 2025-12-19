@@ -147,9 +147,10 @@ func mapBorderRadiusToCornerRadius(_ borderRadius: BorderRadiusValue) -> CGFloat
  * 
  * Converts color token name to SwiftUI Color.
  * Returns Color.clear if token name is nil or empty.
+ * Defaults to colorCanvas (white100) for invalid token names.
  * 
- * Note: This is a placeholder implementation. The actual implementation
- * will use generated token constants from the build system.
+ * Note: Token constants will be replaced by generated Swift constants
+ * when the token generation system is complete.
  * 
  * @param tokenName - Color token name (e.g., "color.primary")
  * @returns SwiftUI Color
@@ -159,32 +160,45 @@ func mapBorderRadiusToCornerRadius(_ borderRadius: BorderRadiusValue) -> CGFloat
  * resolveColorToken("color.primary") // Returns primary color
  * resolveColorToken("color.surface") // Returns surface color
  * resolveColorToken(nil) // Returns Color.clear
+ * resolveColorToken("invalid") // Returns colorCanvas (white100)
  * ```
  * 
  * @see Requirements 2.2, 4.1-4.4
+ * @see Confirmed Action A1 (H1) - Implement actual token resolution
+ * @see Confirmed Action E1 (A1) - Use color.canvas as default
  */
 func resolveColorToken(_ tokenName: String?) -> Color {
     guard let tokenName = tokenName, !tokenName.isEmpty else {
         return Color.clear
     }
     
-    // TODO: Implement token resolution via generated token constants
-    // This will be replaced by actual token lookup from generated Swift constants
-    // For now, return a placeholder color
-    
-    // Example of what the generated code might look like:
-    // switch tokenName {
-    // case "color.primary":
-    //     return colorPrimary
-    // case "color.surface":
-    //     return colorSurface
-    // case "color.background":
-    //     return colorBackground
-    // default:
-    //     return Color.clear
-    // }
-    
-    return Color.blue // Placeholder
+    // Token resolution using switch statement
+    // Will be replaced by generated token constants from build system
+    switch tokenName {
+    case "color.primary":
+        return colorPrimary
+    case "color.secondary":
+        return colorSecondary
+    case "color.surface":
+        return colorSurface
+    case "color.background":
+        return colorBackground
+    case "color.canvas":
+        return colorCanvas
+    case "color.error":
+        return colorError
+    case "color.success":
+        return colorSuccess
+    case "color.warning":
+        return colorWarning
+    case "color.info":
+        return colorInfo
+    case "color.border":
+        return colorBorder
+    default:
+        // Default to canvas (white100) for invalid token names
+        return colorCanvas
+    }
 }
 
 // MARK: - Shadow Mapping
@@ -207,8 +221,8 @@ struct ShadowProperties {
  * Converts shadow token name to ShadowProperties containing color, radius, and offsets.
  * Returns zero shadow (clear color, 0 radius) if token name is nil or empty.
  * 
- * Note: This is a placeholder implementation. The actual implementation
- * will use generated token constants from the build system.
+ * Note: Token constants will be replaced by generated Swift constants
+ * when the token generation system is complete.
  * 
  * @param tokenName - Shadow token name (e.g., "shadow.container")
  * @returns ShadowProperties with color, radius, x, and y
@@ -223,43 +237,55 @@ struct ShadowProperties {
  * ```
  * 
  * @see Requirements 2.3, 5.1-5.4
+ * @see Confirmed Action A1 (H1) - Implement actual token resolution
+ * @see Confirmed Action M1 (I2) - Use existing shadow tokens
  */
 func resolveShadowToken(_ tokenName: String?) -> ShadowProperties {
     guard let tokenName = tokenName, !tokenName.isEmpty else {
         return ShadowProperties(color: Color.clear, radius: 0, x: 0, y: 0)
     }
     
-    // TODO: Implement shadow token resolution via generated token constants
-    // This will be replaced by actual token lookup from generated Swift constants
-    // For now, return placeholder shadow properties
-    
-    // Example of what the generated code might look like:
-    // switch tokenName {
-    // case "shadow.container":
-    //     return ShadowProperties(
-    //         color: shadowContainerColor,
-    //         radius: shadowContainerRadius,
-    //         x: shadowContainerX,
-    //         y: shadowContainerY
-    //     )
-    // case "shadow.modal":
-    //     return ShadowProperties(
-    //         color: shadowModalColor,
-    //         radius: shadowModalRadius,
-    //         x: shadowModalX,
-    //         y: shadowModalY
-    //     )
-    // default:
-    //     return ShadowProperties(color: .clear, radius: 0, x: 0, y: 0)
-    // }
-    
-    // Placeholder shadow
-    return ShadowProperties(
-        color: Color.black.opacity(0.1),
-        radius: 8,
-        x: 0,
-        y: 4
-    )
+    // Token resolution using switch statement
+    // Will be replaced by generated token constants from build system
+    switch tokenName {
+    case "shadow.sunrise":
+        return ShadowProperties(
+            color: shadowSunriseColor,
+            radius: shadowSunriseRadius,
+            x: shadowSunriseX,
+            y: shadowSunriseY
+        )
+    case "shadow.noon":
+        return ShadowProperties(
+            color: shadowNoonColor,
+            radius: shadowNoonRadius,
+            x: shadowNoonX,
+            y: shadowNoonY
+        )
+    case "shadow.dusk":
+        return ShadowProperties(
+            color: shadowDuskColor,
+            radius: shadowDuskRadius,
+            x: shadowDuskX,
+            y: shadowDuskY
+        )
+    case "shadow.container":
+        return ShadowProperties(
+            color: shadowContainerColor,
+            radius: shadowContainerRadius,
+            x: shadowContainerX,
+            y: shadowContainerY
+        )
+    case "shadow.modal":
+        return ShadowProperties(
+            color: shadowModalColor,
+            radius: shadowModalRadius,
+            x: shadowModalX,
+            y: shadowModalY
+        )
+    default:
+        return ShadowProperties(color: Color.clear, radius: 0, x: 0, y: 0)
+    }
 }
 
 // MARK: - Opacity Mapping
@@ -269,46 +295,46 @@ func resolveShadowToken(_ tokenName: String?) -> ShadowProperties {
  * 
  * Converts opacity token name to Double value (0.0 to 1.0).
  * Returns 1.0 (fully opaque) if token name is nil or empty.
+ * Defaults to opacitySubtle (0.88) for invalid token names.
  * 
- * Note: This is a placeholder implementation. The actual implementation
- * will use generated token constants from the build system.
+ * Note: Token constants will be replaced by generated Swift constants
+ * when the token generation system is complete.
  * 
  * @param tokenName - Opacity token name (e.g., "opacity.subtle")
  * @returns Opacity value as Double (0.0 to 1.0)
  * 
  * @example
  * ```swift
- * resolveOpacityToken("opacity.subtle") // Returns 0.9
- * resolveOpacityToken("opacity.ghost") // Returns 0.3
+ * resolveOpacityToken("opacity.subtle") // Returns 0.88
+ * resolveOpacityToken("opacity.ghost") // Returns 0.32
  * resolveOpacityToken(nil) // Returns 1.0
+ * resolveOpacityToken("invalid") // Returns 0.88 (opacity.subtle)
  * ```
  * 
  * @see Requirements 8.1-8.4
+ * @see Confirmed Action A1 (H1) - Implement actual token resolution
+ * @see Confirmed Action M2 (I3) - Use opacity.subtle as default
  */
 func resolveOpacityToken(_ tokenName: String?) -> Double {
     guard let tokenName = tokenName, !tokenName.isEmpty else {
         return 1.0
     }
     
-    // TODO: Implement opacity token resolution via generated token constants
-    // This will be replaced by actual token lookup from generated Swift constants
-    // For now, return placeholder opacity
-    
-    // Example of what the generated code might look like:
-    // switch tokenName {
-    // case "opacity.subtle":
-    //     return opacitySubtle
-    // case "opacity.medium":
-    //     return opacityMedium
-    // case "opacity.heavy":
-    //     return opacityHeavy
-    // case "opacity.ghost":
-    //     return opacityGhost
-    // default:
-    //     return 1.0
-    // }
-    
-    return 0.9 // Placeholder
+    // Token resolution using switch statement
+    // Will be replaced by generated token constants from build system
+    switch tokenName {
+    case "opacity.subtle":
+        return opacitySubtle  // Maps to opacity1100 (0.88)
+    case "opacity.medium":
+        return opacityMedium  // Maps to opacity900 (0.72)
+    case "opacity.heavy":
+        return opacityHeavy   // Maps to opacity600 (0.48)
+    case "opacity.ghost":
+        return opacityGhost   // Maps to opacity400 (0.32)
+    default:
+        // Default to opacity.subtle (0.88) for invalid token names
+        return opacitySubtle
+    }
 }
 
 // MARK: - Layering Mapping
@@ -369,6 +395,11 @@ func mapLayeringToZIndex(_ layering: LayeringValue?) -> Double {
  * - Color tokens: src/tokens/semantic/ColorTokens.ts
  * - Opacity tokens: src/tokens/semantic/OpacityTokens.ts
  * - Shadow tokens: src/tokens/semantic/ShadowTokens.ts
+ * 
+ * Note: Once token generation produces Swift constants, these will be replaced
+ * with imports from generated token files.
+ * 
+ * @see Confirmed Action A4 (I4) - Replace with imports from generated files
  */
 
 // Space.inset tokens (padding)
@@ -397,5 +428,50 @@ private let zIndexModal: Int = 400
 private let zIndexToast: Int = 500
 private let zIndexTooltip: Int = 600
 
-// Color tokens
+// Color tokens (semantic)
+private let colorPrimary: Color = Color.blue
+private let colorSecondary: Color = Color.purple
+private let colorSurface: Color = Color.white
+private let colorBackground: Color = Color(white: 0.98)
+private let colorCanvas: Color = Color.white  // white100 - default page background
+private let colorError: Color = Color.red
+private let colorSuccess: Color = Color.green
+private let colorWarning: Color = Color.orange
+private let colorInfo: Color = Color.blue
 private let colorBorder: Color = Color.gray.opacity(0.3)
+
+// Opacity tokens (semantic)
+private let opacitySubtle: Double = 0.88   // opacity1100 (base × 11 = 0.08 × 11)
+private let opacityMedium: Double = 0.72   // opacity900 (base × 9 = 0.08 × 9)
+private let opacityHeavy: Double = 0.48    // opacity600 (base × 6 = 0.08 × 6)
+private let opacityGhost: Double = 0.32    // opacity400 (base × 4 = 0.08 × 4)
+
+// Shadow tokens (semantic) - sunrise
+private let shadowSunriseColor: Color = Color.black.opacity(0.08)
+private let shadowSunriseRadius: CGFloat = 2
+private let shadowSunriseX: CGFloat = 0
+private let shadowSunriseY: CGFloat = 1
+
+// Shadow tokens (semantic) - noon
+private let shadowNoonColor: Color = Color.black.opacity(0.12)
+private let shadowNoonRadius: CGFloat = 4
+private let shadowNoonX: CGFloat = 0
+private let shadowNoonY: CGFloat = 2
+
+// Shadow tokens (semantic) - dusk
+private let shadowDuskColor: Color = Color.black.opacity(0.16)
+private let shadowDuskRadius: CGFloat = 8
+private let shadowDuskX: CGFloat = 0
+private let shadowDuskY: CGFloat = 4
+
+// Shadow tokens (semantic) - container
+private let shadowContainerColor: Color = Color.black.opacity(0.12)
+private let shadowContainerRadius: CGFloat = 4
+private let shadowContainerX: CGFloat = 0
+private let shadowContainerY: CGFloat = 2
+
+// Shadow tokens (semantic) - modal
+private let shadowModalColor: Color = Color.black.opacity(0.20)
+private let shadowModalRadius: CGFloat = 16
+private let shadowModalX: CGFloat = 0
+private let shadowModalY: CGFloat = 8

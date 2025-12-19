@@ -200,22 +200,24 @@ export function mapShadowToCSS(shadow: ShadowTokenName | null): string {
  * Map opacity token to CSS opacity property
  * 
  * Converts opacity prop value (opacity token name) to CSS opacity property.
- * Returns empty string if no opacity provided.
+ * Defaults to opacity.subtle (0.88) when no value provided for cross-platform consistency.
  * 
  * @param opacity - Opacity token name
- * @returns CSS opacity property or empty string
+ * @returns CSS opacity property with token reference
  * 
  * @example
  * ```typescript
  * mapOpacityToCSS('opacity.subtle') // Returns 'opacity: var(--opacity-subtle)'
  * mapOpacityToCSS('opacity.ghost') // Returns 'opacity: var(--opacity-ghost)'
+ * mapOpacityToCSS(null) // Returns 'opacity: var(--opacity-subtle)' (default)
  * ```
  * 
  * @see Requirements 8.1-8.4
+ * @see Confirmed Action A4 - Web opacity default consistency
  */
 export function mapOpacityToCSS(opacity: OpacityTokenName | null): string {
   if (!opacity) {
-    return '';
+    return 'opacity: var(--opacity-subtle)';
   }
 
   return `opacity: ${tokenToCssVar(opacity)}`;

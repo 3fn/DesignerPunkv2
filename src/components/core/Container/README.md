@@ -277,7 +277,8 @@ Container references the following design system tokens:
 
 ### Color Tokens
 - All semantic color tokens (via generated `ColorTokenName` type)
-- Examples: `color.surface`, `color.background`, `color.primary`
+- Examples: `color.surface`, `color.background`, `color.primary`, `color.canvas`
+- `color.canvas` - Default canvas background color (white100) - used as default when no background specified
 - `color.border` - Border color (applied automatically)
 
 ### Shadow Tokens
@@ -296,7 +297,8 @@ Container references the following design system tokens:
 
 ### Opacity Tokens
 - All semantic opacity tokens (via generated `OpacityTokenName` type)
-- Examples: `opacity.subtle`, `opacity.medium`, `opacity.heavy`, `opacity.ghost`
+- Examples: `opacity.subtle` (0.88), `opacity.medium` (0.72), `opacity.heavy` (0.48), `opacity.ghost` (0.32)
+- Default: `opacity.subtle` (0.88) when no opacity value specified
 
 ### Layering Tokens (Platform-Specific)
 
@@ -324,15 +326,22 @@ Container references the following design system tokens:
 - Uses CSS custom properties: `var(--border-emphasis)`, `var(--space-grouped-minimal)`
 - Focus outline: `var(--border-emphasis)` for width, `var(--space-grouped-minimal)` for offset
 - High contrast mode: `var(--border-emphasis)` for border width
+- Default opacity: `opacity.subtle` (0.88) when no value specified (consistent with iOS/Android)
 
 **iOS Platform**:
 - Uses Swift constants from generated token files
 - Token values are compile-time constants
+- Token resolution functions map token names to constants (color, shadow, opacity)
+- Default opacity: `opacity.subtle` (0.88) when no value specified
 
 **Android Platform**:
 - Uses DesignTokens references: `DesignTokens.space_inset_050.dp`, `DesignTokens.border_default.dp`
 - All token values converted to Dp units
 - Color tokens: `Color(DesignTokens.color_border)`
+- Token resolution functions map token names to constants (color, shadow, opacity)
+- Default color: `color.canvas` (white100) when invalid token provided
+- Default opacity: `opacity.subtle` (0.88f) when no value specified
+- Shadow tokens mapped to elevation values following Material Design guidelines
 
 ### Token Cleanup Notes
 

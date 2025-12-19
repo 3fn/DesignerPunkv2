@@ -139,8 +139,13 @@ fun getRoundedCornerShape(borderRadius: BorderRadiusValue): RoundedCornerShape {
  * Converts color token name to Compose Color.
  * Returns Color.Transparent if token name is null or empty.
  * 
- * Note: This is a placeholder implementation. The actual implementation
- * will use generated token constants from the build system.
+ * Token Resolution:
+ * - Uses generated token constants from DesignTokens
+ * - Defaults to colorCanvas (white100) for invalid token names
+ * - Returns Color.Transparent for null/empty input
+ * 
+ * Note: Tokens regenerated Dec 18, 2025 to include color.canvas (Task 8.1) and all semantic tokens.
+ * See dist/DesignTokens.android.kt for complete list of generated tokens.
  * 
  * @param tokenName Color token name (e.g., "color.primary")
  * @return Compose Color
@@ -150,28 +155,39 @@ fun getRoundedCornerShape(borderRadius: BorderRadiusValue): RoundedCornerShape {
  * resolveColorToken("color.primary") // Returns primary color
  * resolveColorToken("color.surface") // Returns surface color
  * resolveColorToken(null) // Returns Color.Transparent
+ * resolveColorToken("invalid") // Returns colorCanvas (white100)
  * ```
  * 
  * @see Requirements 2.2, 4.1-4.4
+ * @see Confirmed Actions: A1, M3 (Escalate - requires color.canvas token)
  */
 fun resolveColorToken(tokenName: String?): Color {
     if (tokenName.isNullOrEmpty()) {
         return Color.Transparent
     }
     
-    // TODO: Implement token resolution via generated token constants
-    // This will be replaced by actual token lookup from generated Kotlin constants
-    // For now, return a placeholder color
-    
-    // Example of what the generated code might look like:
-    // return when (tokenName) {
-    //     "color.primary" -> colorPrimary
-    //     "color.surface" -> colorSurface
-    //     "color.background" -> colorBackground
-    //     else -> Color.Transparent
-    // }
-    
-    return Color.Blue // Placeholder
+    // Use generated token constants from DesignTokens
+    return when (tokenName) {
+        "color.primary" -> colorPrimary
+        "color.surface" -> colorSurface
+        "color.background" -> colorBackground
+        "color.error.strong" -> colorErrorStrong
+        "color.error.subtle" -> colorErrorSubtle
+        "color.success.strong" -> colorSuccessStrong
+        "color.success.subtle" -> colorSuccessSubtle
+        "color.warning.strong" -> colorWarningStrong
+        "color.warning.subtle" -> colorWarningSubtle
+        "color.info.strong" -> colorInfoStrong
+        "color.info.subtle" -> colorInfoSubtle
+        "color.canvas" -> colorCanvas  // New token (white100)
+        "color.border" -> colorBorder
+        "color.text.default" -> colorTextDefault
+        "color.text.muted" -> colorTextMuted
+        "color.text.subtle" -> colorTextSubtle
+        "color.text.onPrimary" -> colorTextOnPrimary
+        "color.icon.default" -> colorIconDefault
+        else -> colorCanvas  // Default to canvas (white100)
+    }
 }
 
 // MARK: - Shadow Mapping
@@ -240,40 +256,42 @@ fun mapShadowToElevation(tokenName: String?): Dp {
  * Converts opacity token name to Float value (0.0 to 1.0).
  * Returns 1.0f (fully opaque) if token name is null or empty.
  * 
- * Note: This is a placeholder implementation. The actual implementation
- * will use generated token constants from the build system.
+ * Token Resolution:
+ * - Uses generated token constants from DesignTokens
+ * - Defaults to opacitySubtle (0.88f) for invalid token names
+ * - Returns 1.0f for null/empty input
+ * 
+ * Note: Tokens regenerated Dec 18, 2025 to include semantic opacity tokens.
+ * Semantic tokens map to primitives: opacity.subtle→opacity1100, opacity.medium→opacity900,
+ * opacity.heavy→opacity600, opacity.ghost→opacity400.
  * 
  * @param tokenName Opacity token name (e.g., "opacity.subtle")
  * @return Opacity value as Float (0.0 to 1.0)
  * 
  * @example
  * ```kotlin
- * resolveOpacityToken("opacity.subtle") // Returns opacitySubtle
- * resolveOpacityToken("opacity.ghost") // Returns opacityGhost
+ * resolveOpacityToken("opacity.subtle") // Returns 0.88f (opacity1100)
+ * resolveOpacityToken("opacity.ghost") // Returns 0.32f (opacity400)
  * resolveOpacityToken(null) // Returns 1.0f
+ * resolveOpacityToken("invalid") // Returns 0.88f (opacity.subtle)
  * ```
  * 
  * @see Requirements 8.1-8.4
+ * @see Confirmed Actions: M5 (Use opacity.subtle as default)
  */
 fun resolveOpacityToken(tokenName: String?): Float {
     if (tokenName.isNullOrEmpty()) {
         return 1.0f
     }
     
-    // TODO: Implement opacity token resolution via generated token constants
-    // This will be replaced by actual token lookup from generated Kotlin constants
-    // For now, return placeholder opacity
-    
-    // Example of what the generated code might look like:
-    // return when (tokenName) {
-    //     "opacity.subtle" -> opacitySubtle
-    //     "opacity.medium" -> opacityMedium
-    //     "opacity.heavy" -> opacityHeavy
-    //     "opacity.ghost" -> opacityGhost
-    //     else -> 1.0f
-    // }
-    
-    return 0.9f // Placeholder
+    // Use generated token constants from DesignTokens
+    return when (tokenName) {
+        "opacity.subtle" -> opacitySubtle    // Maps to opacity1100 (0.88f)
+        "opacity.medium" -> opacityMedium    // Maps to opacity900 (0.72f)
+        "opacity.heavy" -> opacityHeavy      // Maps to opacity600 (0.48f)
+        "opacity.ghost" -> opacityGhost      // Maps to opacity400 (0.32f)
+        else -> opacitySubtle  // Default to opacity.subtle (0.88f)
+    }
 }
 
 // MARK: - Layering Mapping
@@ -358,4 +376,29 @@ private val elevationToast: Dp = DesignTokens.elevation_toast.dp
 private val elevationTooltip: Dp = DesignTokens.elevation_tooltip.dp
 
 // Color tokens
+// Regenerated Dec 18, 2025 - includes color.canvas (Task 8.1) and all semantic tokens
 private val colorBorder: Color = Color(DesignTokens.color_border)
+private val colorPrimary: Color = Color(DesignTokens.color_primary)
+private val colorSurface: Color = Color(DesignTokens.color_surface)
+private val colorBackground: Color = Color(DesignTokens.color_background)
+private val colorErrorStrong: Color = Color(DesignTokens.color_error_strong)
+private val colorErrorSubtle: Color = Color(DesignTokens.color_error_subtle)
+private val colorSuccessStrong: Color = Color(DesignTokens.color_success_strong)
+private val colorSuccessSubtle: Color = Color(DesignTokens.color_success_subtle)
+private val colorWarningStrong: Color = Color(DesignTokens.color_warning_strong)
+private val colorWarningSubtle: Color = Color(DesignTokens.color_warning_subtle)
+private val colorInfoStrong: Color = Color(DesignTokens.color_info_strong)
+private val colorInfoSubtle: Color = Color(DesignTokens.color_info_subtle)
+private val colorCanvas: Color = Color(DesignTokens.color_canvas)  // New in Task 8.1
+private val colorTextDefault: Color = Color(DesignTokens.color_text_default)
+private val colorTextMuted: Color = Color(DesignTokens.color_text_muted)
+private val colorTextSubtle: Color = Color(DesignTokens.color_text_subtle)
+private val colorTextOnPrimary: Color = Color(DesignTokens.color_text_on_primary)
+private val colorIconDefault: Color = Color(DesignTokens.color_icon_default)
+
+// Opacity tokens
+// Regenerated Dec 18, 2025 - includes all semantic opacity tokens
+private val opacitySubtle: Float = DesignTokens.opacity_subtle    // Maps to opacity1100 (0.88f)
+private val opacityMedium: Float = DesignTokens.opacity_medium    // Maps to opacity900 (0.72f)
+private val opacityHeavy: Float = DesignTokens.opacity_heavy      // Maps to opacity600 (0.48f)
+private val opacityGhost: Float = DesignTokens.opacity_ghost      // Maps to opacity400 (0.32f)

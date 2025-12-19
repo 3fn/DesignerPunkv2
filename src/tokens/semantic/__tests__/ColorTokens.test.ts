@@ -259,6 +259,40 @@ describe('Semantic Color Tokens - Palette Update', () => {
     });
   });
 
+  describe('Canvas Token Exists', () => {
+    it('should have color.canvas token', () => {
+      expect(colorTokens['color.canvas']).toBeDefined();
+    });
+
+    it('should reference white100 primitive for canvas', () => {
+      const token = colorTokens['color.canvas'];
+      expect(token.primitiveReferences.value).toBe('white100');
+    });
+
+    it('should verify white100 primitive exists', () => {
+      const token = colorTokens['color.canvas'];
+      const primitiveName = token.primitiveReferences.value;
+      expect(primitiveColorTokens).toHaveProperty(primitiveName);
+    });
+
+    it('should have COLOR category for canvas token', () => {
+      expect(colorTokens['color.canvas'].category).toBe(SemanticCategory.COLOR);
+    });
+
+    it('should have meaningful context for canvas token', () => {
+      const token = colorTokens['color.canvas'];
+      expect(token.context).toBeTruthy();
+      expect(token.context.toLowerCase()).toContain('canvas');
+    });
+
+    it('should describe canvas as default surface for pages', () => {
+      const token = colorTokens['color.canvas'];
+      expect(token.description).toBeTruthy();
+      expect(token.description.toLowerCase()).toContain('canvas');
+      expect(token.description.toLowerCase()).toContain('background');
+    });
+  });
+
   describe('New Glow Tokens Exist', () => {
     it('should have glow.neonGreen token', () => {
       expect(colorTokens['glow.neonGreen']).toBeDefined();
@@ -328,8 +362,8 @@ describe('Semantic Color Tokens - Palette Update', () => {
   });
 
   describe('Token Count Validation', () => {
-    it('should have exactly 27 color tokens', () => {
-      expect(colorTokenNames.length).toBe(27);
+    it('should have exactly 28 color tokens', () => {
+      expect(colorTokenNames.length).toBe(28);
     });
 
     it('should pass validateColorTokenCount()', () => {
@@ -337,7 +371,7 @@ describe('Semantic Color Tokens - Palette Update', () => {
     });
 
     it('should have correct token count breakdown', () => {
-      // 1 brand + 2 success + 2 warning + 2 error + 2 info + 2 attention/highlight + 2 tech/data + 4 text + 3 surfaces + 1 icon + 1 print + 5 glow = 27
+      // 1 brand + 2 success + 2 warning + 2 error + 2 info + 2 attention/highlight + 2 tech/data + 4 text + 4 surfaces + 1 icon + 1 print + 5 glow = 28
       const brandTokens = colorTokenNames.filter(n => n === 'color.primary');
       const successTokens = colorTokenNames.filter(n => n.startsWith('color.success'));
       const warningTokens = colorTokenNames.filter(n => n.startsWith('color.warning'));
@@ -346,7 +380,7 @@ describe('Semantic Color Tokens - Palette Update', () => {
       const attentionTokens = colorTokenNames.filter(n => n === 'color.attention' || n === 'color.highlight');
       const techDataTokens = colorTokenNames.filter(n => n === 'color.tech' || n === 'color.data');
       const textTokens = colorTokenNames.filter(n => n.startsWith('color.text'));
-      const surfaceTokens = colorTokenNames.filter(n => n === 'color.background' || n === 'color.surface' || n === 'color.border');
+      const surfaceTokens = colorTokenNames.filter(n => n === 'color.canvas' || n === 'color.background' || n === 'color.surface' || n === 'color.border');
       const glowTokens = colorTokenNames.filter(n => n.startsWith('glow.'));
 
       expect(brandTokens.length).toBe(1);
@@ -357,7 +391,7 @@ describe('Semantic Color Tokens - Palette Update', () => {
       expect(attentionTokens.length).toBe(2);
       expect(techDataTokens.length).toBe(2);
       expect(textTokens.length).toBe(4);
-      expect(surfaceTokens.length).toBe(3);
+      expect(surfaceTokens.length).toBe(4);
       expect(glowTokens.length).toBe(5);
     });
   });
@@ -412,9 +446,9 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(Array.isArray(tokens)).toBe(true);
       });
 
-      it('should return exactly 27 tokens', () => {
+      it('should return exactly 28 tokens', () => {
         const tokens = getAllColorTokens();
-        expect(tokens.length).toBe(27);
+        expect(tokens.length).toBe(28);
       });
 
       it('should include all new tokens', () => {

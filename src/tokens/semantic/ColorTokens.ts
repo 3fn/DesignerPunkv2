@@ -43,18 +43,20 @@
  * 5. Semantic Meaning in Shadow Token: The semantic meaning belongs in the shadow token
  *    name itself (shadow.dusk, shadow.sunrise) rather than in a separate color token.
  * 
- * Spec-aligned: 27 color semantic tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens)
+ * Spec-aligned: 28 color semantic tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token)
  * Note: color.secondary removed as part of color palette update (Spec 015)
  * Added: color.icon.default and color.print.default (Spec 023)
+ * Added: color.canvas (Spec 023 - Container token compliance)
  */
 
 import { SemanticToken, SemanticCategory } from '../../types/SemanticToken';
 
 /**
  * Semantic color tokens for systematic color usage
- * Total: 27 tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens)
+ * Total: 28 tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token)
  * Note: color.secondary removed as part of color palette update (Spec 015)
  * Added: color.icon.default and color.print.default (Spec 023)
+ * Added: color.canvas (Spec 023 - Container token compliance)
  */
 export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>> = {
   // Brand Identity (1 token)
@@ -201,7 +203,15 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
     description: 'White text for use on primary color backgrounds (buttons, badges, chips)'
   },
 
-  // Surfaces (3 tokens)
+  // Surfaces (4 tokens)
+  'color.canvas': {
+    name: 'color.canvas',
+    primitiveReferences: { value: 'white100' },
+    category: SemanticCategory.COLOR,
+    context: 'Base canvas color for page backgrounds',
+    description: 'Canvas background color - default surface for all pages'
+  },
+
   'color.background': {
     name: 'color.background',
     primitiveReferences: { value: 'white100' },
@@ -288,9 +298,10 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
 
 /**
  * Array of all color semantic token names for iteration
- * Total: 27 tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens)
+ * Total: 28 tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token)
  * Note: color.secondary removed as part of color palette update (Spec 015)
  * Added: color.icon.default and color.print.default (Spec 023)
+ * Added: color.canvas (Spec 023 - Container token compliance)
  */
 export const colorTokenNames = Object.keys(colorTokens);
 
@@ -309,12 +320,13 @@ export function getAllColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'
 }
 
 /**
- * Validate token count matches spec (27 tokens: 16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens)
+ * Validate token count matches spec (28 tokens: 16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token)
  * Note: color.secondary removed as part of color palette update (Spec 015)
  * Added: color.icon.default and color.print.default (Spec 023)
+ * Added: color.canvas (Spec 023 - Container token compliance)
  */
 export function validateColorTokenCount(): boolean {
-  const expectedCount = 27;
+  const expectedCount = 28;
   const actualCount = colorTokenNames.length;
   if (actualCount !== expectedCount) {
     console.warn(`Color token count mismatch: expected ${expectedCount}, got ${actualCount}`);
