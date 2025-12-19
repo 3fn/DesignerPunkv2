@@ -2,11 +2,11 @@
 inclusion: manual
 ---
 
-# Component Development Guide
+# Component Development and Practices Guide
 
 **Date**: 2025-11-17
-**Last Reviewed**: 2025-12-15
-**Purpose**: Guide AI agents in building components with appropriate token usage and True Native Architecture
+**Last Reviewed**: 2025-12-19
+**Purpose**: Guide AI agents in building components with appropriate token usage, True Native Architecture, and effective collaboration practices
 **Organization**: process-standard
 **Scope**: cross-project
 **Layer**: 3
@@ -69,6 +69,51 @@ inclusion: manual
 
 ---
 
+## Collaboration Practices and FAQs
+
+### When to Pause and Ask
+
+AI agents should pause implementation and ask Peter for clarification when:
+
+- **Token gaps:** "I need [semantic token] but it doesn't exist. Should I use [primitive token] as fallback, or should we create the semantic token first?"
+- **Design ambiguity:** "Design doc specifies fixed heights but calculated sizing seems more appropriate. Which approach should I use?"
+- **Platform idioms:** "Platform-native animation pattern conflicts with motion token usage. Should I prioritize platform UX or token compliance?"
+- **Judgment calls:** "I'm about to make a judgment call about [decision]. Should I proceed or get clarification first?"
+
+**Key Principle:** Pausing to ask is the correct behavior, not a failure. We lose more time correcting assumptive solutions than calling a timeout for clarity.
+
+### Clear Policies
+
+#### Icon Usage Policy
+
+- **Always use the Icon component** when displaying icons
+- **Never reference icon assets directly**
+- **Rationale:** Ensures consistent sizing via icon.size tokens, proper accessibility attributes, platform-appropriate rendering, and centralized icon management
+
+#### Sizing Strategy Policy
+
+- **Default to calculated sizing** (padding + content) unless explicitly told otherwise
+- **If design doc specifies fixed heights**, clarify whether calculated heights would work better
+- **Document sizing strategy** in component design docs
+
+#### Token Gap Policy
+
+- **When semantic tokens don't exist**, pause and ask for guidance
+- **Never assume primitive tokens are acceptable fallbacks**
+- **Document token gaps** in design docs for tracking
+
+#### Placeholder Policy
+
+- **Never use placeholder implementations** in production code
+- **Tooling will enforce this** through TypeScript types and tests
+- **If placeholders are needed during development**, pause and ask for guidance
+
+**For strategic guidance on cross-platform decisions**, see [Cross-Platform vs Platform-Specific Decision Framework](./Cross-Platform vs Platform-Specific Decision Framework.md)
+
+**For strategic guidance on token resolution**, see [Token Resolution Patterns](./Token Resolution Patterns.md)
+
+---
+
 ## Token Selection Decision Framework
 
 ### Step 1: Check Semantic Tokens First
@@ -93,6 +138,19 @@ inclusion: manual
 
 **Example**: Custom brand color not in semantic tokens
 - ✅ OK: Use `purple300` with comment: `// TODO: Evaluate for semantic token elevation`
+
+### What If Tokens Don't Exist?
+
+**When you need a token that doesn't exist:**
+
+1. **Pause and ask**: "I need [semantic token] for [use case]. Should I use [primitive token] as fallback, or should we create the semantic token first?"
+2. **Document the gap**: Add to design doc's "Token Gaps" section
+3. **Never assume**: Don't assume primitive tokens are acceptable fallbacks
+4. **Wait for guidance**: Let Peter decide whether to create token or use alternative approach
+
+**Why this matters**: Token gaps often indicate design system opportunities. Pausing to discuss prevents premature decisions and helps the design system evolve intentionally.
+
+**For strategic guidance on token resolution**, see [Token Resolution Patterns](./Token Resolution Patterns.md)
 
 ### Step 3: Create Component-Level Tokens for Variants
 
@@ -327,6 +385,25 @@ src/components/
 
 ---
 
+## What If Design Doc Is Unclear?
+
+**When design documentation leaves questions unanswered:**
+
+1. **Pause and ask**: "Design doc specifies [X] but [Y] seems more appropriate. Which approach should I use?"
+2. **Provide context**: Explain why you're uncertain and what alternatives you're considering
+3. **Don't assume**: Never make judgment calls on ambiguous design decisions
+4. **Document the question**: Add to design doc as an open question if it affects other components
+
+**Common ambiguities:**
+- Fixed heights vs calculated sizing
+- Platform-specific behavior vs cross-platform consistency
+- Token usage when multiple tokens could apply
+- Variant naming and organization
+
+**Why this matters**: Design ambiguity often reveals opportunities to improve the design system. Pausing to clarify prevents rework and ensures components align with design intent.
+
+---
+
 ## Component Token Files
 
 ### Purpose of tokens.ts
@@ -407,7 +484,7 @@ Button(
 
 **Key Point**: The build system generates platform-specific token values (CSS custom properties, Swift constants, Kotlin constants) from the semantic token references in `tokens.ts`.
 
-### Platform-Specific Nuances
+### What If Platform Requirements Don't Fit in Token Files?
 
 Platform implementations handle platform-specific requirements that are **not** in the component tokens file:
 
@@ -689,6 +766,26 @@ Before implementing icons in a component, verify:
 
 ---
 
+## What If Platform Idioms Conflict with Tokens?
+
+**When platform-native patterns conflict with token usage:**
+
+1. **Pause and ask**: "Platform-native [animation/interaction] conflicts with [token]. Should I prioritize platform UX or token compliance?"
+2. **Explain the conflict**: Describe the platform idiom and why it conflicts with tokens
+3. **Propose options**: Suggest alternatives (use tokens, use platform idiom, hybrid approach)
+4. **Wait for guidance**: Let Peter decide based on design system goals
+
+**Common conflicts:**
+- Motion tokens vs platform-native animations (iOS springs, Android ripples)
+- Sizing tokens vs platform accessibility requirements (44pt iOS touch targets)
+- Color tokens vs platform-specific UI conventions (system colors, semantic colors)
+
+**Decision framework**: See [Cross-Platform vs Platform-Specific Decision Framework](./Cross-Platform vs Platform-Specific Decision Framework.md) for strategic guidance on when to prioritize cross-platform consistency vs platform-appropriate UX.
+
+**Why this matters**: Platform idioms often provide superior UX, but deviating from tokens affects design system consistency. These decisions require design judgment, not assumptions.
+
+---
+
 ## Cross-Platform Token Consumption
 
 ### How Token Generation Works
@@ -767,7 +864,7 @@ Each platform uses its native syntax to consume the generated token values. The 
 
 ## Anti-Patterns to Avoid
 
-**Note**: This section intentionally uses the same heading as other steering documents because each document addresses anti-patterns specific to its domain. Component Development Guide focuses on token usage anti-patterns, while other documents cover their respective domains.
+**Note**: This section intentionally uses the same heading as other steering documents because each document addresses anti-patterns specific to its domain. Component Development and Practices Guide focuses on token usage anti-patterns, while other documents cover their respective domains.
 
 ### ❌ Using Primitives When Semantics Exist
 ```typescript

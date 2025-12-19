@@ -722,19 +722,23 @@ This implementation plan follows the three-phase approach (Audit → Confirm →
     - Document any test failures for investigation
     - _Requirements: 3.4, 3.5_
 
-- [ ] 9. Component Development Guide Updates
+- [x] 9. Component Development and Practices Guide Updates
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
   
   **Success Criteria:**
   - All accumulated findings synthesized
-  - Component Development Guide updated
+  - Component Development and Practices Guide updated with new sections
+  - Two new steering documents created (Cross-Platform Decision Framework, Token Resolution Patterns)
   - Updates align with MCP documentation requirements
   - No contradictions with existing content
+  - Cross-references updated throughout documentation
   
   **Primary Artifacts:**
-  - Updated `.kiro/steering/Component Development Guide.md`
+  - Updated `.kiro/steering/Component Development and Practices Guide.md`
+  - New `.kiro/steering/Cross-Platform vs Platform-Specific Decision Framework.md`
+  - New `.kiro/steering/Token Resolution Patterns.md`
   - `findings/component-dev-guide-opportunities.md` (finalized)
   
   **Completion Documentation:**
@@ -744,9 +748,9 @@ This implementation plan follows the three-phase approach (Audit → Confirm →
   **Post-Completion:**
   - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
   - Mark complete: Use `taskStatus` tool
-  - Commit: `./.kiro/hooks/commit-task.sh "Task 9 Complete: Component Development Guide Updates"`
+  - Commit: `./.kiro/hooks/commit-task.sh "Task 9 Complete: Component Development and Practices Guide Updates"`
 
-  - [ ] 9.1 Review accumulated guide opportunities
+  - [x] 9.1 Review accumulated guide opportunities
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Review `findings/component-dev-guide-opportunities.md`
@@ -755,22 +759,63 @@ This implementation plan follows the three-phase approach (Audit → Confirm →
     - Flag any contradictions with existing content
     - _Requirements: 7.2, 7.4_
 
-  - [ ] 9.2 Update Component Development Guide
-    **Type**: Implementation
-    **Validation**: Tier 2 - Standard
-    - Implement prioritized updates
-    - Ensure MCP documentation formatting compliance
-    - Add new sections if needed
-    - Update existing sections if needed
-    - _Requirements: 7.3_
+  - [x] 9.REVIEW **CHECKPOINT**: Review guide opportunities with human, refine scope
+    **Type**: Architecture
+    **Validation**: Tier 3 - Comprehensive
+    - Present accumulated opportunities document to human
+    - Discuss each opportunity to understand real underlying patterns
+    - Refine opportunity descriptions to capture actual guidance needed
+    - Adjust priorities based on human feedback
+    - Identify any missing opportunities or patterns
+    - Create refined opportunities list for Task 9.2 implementation
+    - _Requirements: 7.2, 7.4_
 
-  - [ ] 9.3 Verify guide updates
+  - [ ] 9.2 Update Component Development Guide and Create New Steering Docs
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    - Verify MCP server can parse updated guide
-    - Verify cross-references are valid
-    - Verify no broken links
-    - _Requirements: 7.3_
+    
+    **Component Development and Practices Guide Updates:**
+    - ✅ Rename to "Component Development and Practices Guide"
+    - ✅ Add "Collaboration Practices and FAQs" section with clear policies
+    - ✅ Improve section headings for problem-oriented queries
+    - ✅ Add "What If" sections for common scenarios
+    - ✅ Update cross-references to new steering docs
+    
+    **New Steering Docs Created:**
+    - ✅ "Cross-Platform vs Platform-Specific Decision Framework.md"
+    - ✅ "Token Resolution Patterns.md"
+    
+    **Documentation Standards Applied:**
+    - ✅ MCP documentation formatting compliance
+    - ✅ Strategic guidance over tactical examples
+    - ✅ Decision frameworks and clear policies included
+    - ✅ Cross-references between related documents added
+    
+    _Requirements: 7.3_
+    _Reference: component-dev-guide-opportunities-refined.md_
+
+  - [x] 9.3 Verify guide updates and new steering docs
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    
+    **MCP Server Validation:**
+    - Verify MCP server can parse updated Component Development and Practices Guide
+    - Verify MCP server can parse new "Cross-Platform vs Platform-Specific Decision Framework"
+    - Verify MCP server can parse new "Token Resolution Patterns"
+    - Verify section headings are discoverable via MCP queries
+    
+    **Cross-Reference Validation:**
+    - Verify all links to new steering docs work
+    - Verify all references from new docs to existing docs work
+    - Verify no broken links in any updated documents
+    
+    **Documentation Quality:**
+    - Verify strategic guidance is clear and actionable
+    - Verify decision frameworks are easy to follow
+    - Verify policies are explicit and unambiguous
+    
+    _Requirements: 7.3_
+    _Reference: component-dev-guide-opportunities-refined.md_
 
 - [ ] 10. Final Verification & Spec 017 Closure
 

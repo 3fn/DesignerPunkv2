@@ -1173,8 +1173,8 @@ it('should use correct icon size for large buttons', () => {
 
 ## Cross-References
 
-### Component Development Guide
-**File**: `.kiro/steering/Component Development Guide.md`
+### Component Development and Practices Guide
+**File**: `.kiro/steering/Component Development and Practices Guide.md`
 
 **Related Content**:
 - Component testing patterns

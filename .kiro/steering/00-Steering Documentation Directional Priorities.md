@@ -105,16 +105,16 @@ get_section({ path: ".kiro/steering/Spec Planning Standards.md", heading: "Tasks
 
 **Confirmation**: Reply "I've queried Spec Planning Standards via MCP!" after accessing
 
-### 2. Component Development Guide
+### 2. Component Development and Practices Guide
 **Access**: MCP query required (not auto-loaded)
 **When needed**: Building or modifying components
 
 **How to access**:
 ```
-get_section({ path: ".kiro/steering/Component Development Guide.md", heading: "Token Selection Decision Framework" })
+get_section({ path: ".kiro/steering/Component Development and Practices Guide.md", heading: "Token Selection Decision Framework" })
 ```
 
-**Confirmation**: Reply "I've queried Component Development Guide via MCP!" after accessing
+**Confirmation**: Reply "I've queried Component Development and Practices Guide via MCP!" after accessing
 
 **How to use**: 
 - Read the "AI Agent Reading Priorities" section at the top
@@ -125,12 +125,12 @@ get_section({ path: ".kiro/steering/Component Development Guide.md", heading: "T
 
 **Confirmation**: Reply "I've reviewed the Spec Planning Standards!" after reading
 
-### 2. Component Development Guide
+### 2. Component Development and Practices Guide
 **Trigger**: Building or modifying components
 
-**File**: #[[file:.kiro/steering/Component Development Guide.md]]
+**File**: #[[file:.kiro/steering/Component Development and Practices Guide.md]]
 
-**Confirmation**: Reply "I've reviewed the Component Development Guide!" after reading
+**Confirmation**: Reply "I've reviewed the Component Development and Practices Guide!" after reading
 
 ### 3. A Vision of the Future
 **Trigger**: Need greater context on DesignerPunk vision (optional)
@@ -159,7 +159,7 @@ These documents are available ONLY via MCP queries:
 | Document | Path | Tokens |
 |----------|------|--------|
 | Spec Planning Standards | `.kiro/steering/Spec Planning Standards.md` | ~27,000 |
-| Component Development Guide | `.kiro/steering/Component Development Guide.md` | ~7,000 |
+| Component Development and Practices Guide | `.kiro/steering/Component Development and Practices Guide.md` | ~9,000 |
 
 ### How to Access MCP-Only Documents
 
@@ -203,17 +203,17 @@ These documents remain auto-loaded:
 
 2. **Request document summary** (~200 tokens)
    ```
-   get_document_summary({ path: ".kiro/steering/Component Development Guide.md" })
+   get_document_summary({ path: ".kiro/steering/Component Development and Practices Guide.md" })
    ```
 
 3. **Request specific section** (~2,000 tokens)
    ```
-   get_section({ path: ".kiro/steering/Component Development Guide.md", heading: "Token Selection Decision Framework" })
+   get_section({ path: ".kiro/steering/Component Development and Practices Guide.md", heading: "Token Selection Decision Framework" })
    ```
 
 4. **Request full document** (only if needed)
    ```
-   get_document_full({ path: ".kiro/steering/Component Development Guide.md" })
+   get_document_full({ path: ".kiro/steering/Component Development and Practices Guide.md" })
    ```
 
 ### Available Tools
