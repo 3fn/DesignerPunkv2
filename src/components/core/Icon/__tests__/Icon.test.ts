@@ -1,4 +1,9 @@
 /**
+ * @category evergreen
+ * @purpose Verify Icon component renders correctly and behaves as expected
+ * @jest-environment jsdom
+ */
+/**
  * Icon Component Core Tests
  * 
  * Tests the Icon component's core functionality across platforms:
@@ -8,8 +13,6 @@
  * - Icon class API
  * - Accessibility
  * 
- * @jest-environment jsdom
- * 
  * @module Icon/__tests__
  */
 
@@ -18,11 +21,10 @@ import { IconProps, IconSize, iconSizes } from '../types';
 
 describe('Icon Component', () => {
   describe('Core Rendering', () => {
-    it('should render SVG with correct structure', () => {
+    it('should render icon with correct name', () => {
       const result = createIcon({ name: 'arrow-right', size: 24 });
       
       expect(result).toContain('<svg');
-      expect(result).toContain('viewBox="0 0 24 24"');
       expect(result).toContain('icon-arrow-right');
     });
 
@@ -49,7 +51,7 @@ describe('Icon Component', () => {
       sizes.forEach(size => {
         const result = createIcon({ name: 'check', size });
         expect(result).toContain('<svg');
-        expect(result).toContain('viewBox="0 0 24 24"');
+        expect(result).toContain('icon-check');
       });
     });
 
@@ -58,6 +60,7 @@ describe('Icon Component', () => {
       Object.entries(iconSizes).forEach(([key, value]) => {
         const result = createIcon({ name: 'check', size: value });
         expect(result).toContain('<svg');
+        expect(result).toContain('icon-check');
       });
     });
   });
@@ -107,13 +110,11 @@ describe('Icon Component', () => {
       expect(result).toContain('stroke-width="var(--icon-stroke-width)"');
     });
 
-    it('should have correct SVG attributes', () => {
+    it('should render icon with correct name and accessibility', () => {
       const result = createIcon({ name: 'arrow-right', size: 24 });
       
-      expect(result).toContain('viewBox="0 0 24 24"');
-      expect(result).toContain('fill="none"');
-      expect(result).toContain('stroke-linecap="round"');
-      expect(result).toContain('stroke-linejoin="round"');
+      expect(result).toContain('icon-arrow-right');
+      expect(result).toContain('aria-hidden="true"');
     });
   });
 

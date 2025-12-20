@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify security system enforces required constraints
+ */
+/**
  * Security Integration Tests
  * 
  * Tests for integrated security system functionality including

@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify deduplication-integration functionality works correctly
+ */
+/**
  * Integration test for enhanced deduplication functionality
  * 
  * Tests the complete deduplication workflow including similarity detection,

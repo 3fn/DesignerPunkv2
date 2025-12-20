@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify EdgeCases functionality works correctly
+ */
+/**
  * Edge Case Tests for Release Analysis System
  * 
  * Tests for unusual scenarios, boundary conditions, and error cases

@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify LetterSpacing tokens are correctly defined and structured
+ */
+/**
  * Letter Spacing Tokens Unit Tests
  * 
  * Tests for letter spacing token precision targeting and em-based values.

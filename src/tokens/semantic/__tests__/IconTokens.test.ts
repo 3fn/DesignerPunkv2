@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify Icon tokens are correctly defined and structured
+ */
+/**
  * Icon Size Token Calculation Tests
  * 
  * Tests for icon size token calculation functions and token structure.

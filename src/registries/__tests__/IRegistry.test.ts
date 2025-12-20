@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify I registry provides correct token lookup and management
+ */
+/**
  * Tests for IRegistry interface
  * 
  * These tests verify that the IRegistry interface can be properly implemented

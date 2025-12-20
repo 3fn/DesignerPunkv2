@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify VersionHistory functionality works correctly
+ */
+/**
  * Unit tests for VersionHistory
  * 
  * Tests version history tracking, analysis, and comparison functionality

@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build system generates required outputs with correct structure
+ */
+/**
  * Interface Validation Functional Tests
  * 
  * End-to-end tests verifying interface validation detects mismatches

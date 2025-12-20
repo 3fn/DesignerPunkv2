@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify system performance meets requirements and thresholds
+ */
+/**
  * Token Generation Performance Tests
  * 
  * Tests performance requirements for token generation to ensure <5ms

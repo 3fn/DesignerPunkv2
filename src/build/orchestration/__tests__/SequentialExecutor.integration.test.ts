@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build system generates required outputs with correct structure
+ */
+/**
  * Integration tests for SequentialExecutor
  */
 

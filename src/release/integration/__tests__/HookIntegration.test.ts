@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify system integration works correctly across components
+ */
+/**
  * Hook Integration Tests
  * 
  * Tests hook system integration with isolated mocks.

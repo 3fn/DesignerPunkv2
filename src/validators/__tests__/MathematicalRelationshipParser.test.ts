@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify MathematicalRelationshipParser validation catches invalid patterns and enforces rules
+ */
+/**
  * Mathematical Relationship Parser Tests
  * 
  * Tests the parser's ability to handle various mathematical relationship formats

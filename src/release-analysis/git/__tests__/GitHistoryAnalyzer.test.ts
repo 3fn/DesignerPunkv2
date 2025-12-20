@@ -1,3 +1,7 @@
+/**
+ * @category evergreen
+ * @purpose Verify GitHistoryAnalyzer functionality works correctly
+ */
 import { GitHistoryAnalyzer, GitTag, GitChanges, AnalysisScope } from '../GitHistoryAnalyzer';
 import { CompletionDocument } from '../../types/AnalysisTypes';
 import { execSync } from 'child_process';

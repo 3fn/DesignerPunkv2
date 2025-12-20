@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify Accessibility tokens are correctly defined and structured
+ */
+/**
  * Accessibility Tokens Unit Tests
  * 
  * Tests for accessibility token structure, WCAG compliance, and compositional architecture.

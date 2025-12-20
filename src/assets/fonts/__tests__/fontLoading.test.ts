@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify fontLoading functionality works correctly
+ */
+/**
  * Web Font Loading Tests
  * 
  * Tests for font loading behavior, fallback handling, and FOIT prevention.

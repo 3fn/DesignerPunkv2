@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify HookScripts functionality works correctly
+ */
+/**
  * Tests for release detection workflow
  * 
  * Validates that the manual release detection workflow is properly documented

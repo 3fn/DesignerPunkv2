@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify BlendCrossPlatformConsistency functionality works correctly
+ */
+/**
  * Blend Token Cross-Platform Consistency Tests
  * 
  * Tests that blend values and utilities produce mathematically identical

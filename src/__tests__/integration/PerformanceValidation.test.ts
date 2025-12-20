@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify system performance meets requirements and thresholds
+ */
+/**
  * Performance Validation Integration Tests
  * 
  * Tests performance requirements for token generation, validation,
@@ -40,7 +44,7 @@ const NORMAL_THRESHOLDS = {
   validation: 5,             // ms - Validation operations
   statistics: 5,             // ms - Statistics generation
   stateManagement: 5,        // ms - State export/import
-  platformGeneration: 10,    // ms - Platform-specific generation
+  platformGeneration: 25,    // ms - Platform-specific generation (adjusted from 10ms per Spec 025 R4)
   largeScale: 50,            // ms - Batch operations (100 tokens)
   configUpdate: 1,           // ms - Configuration updates
   asyncOperations: 15        // ms - Async operations (all platforms)

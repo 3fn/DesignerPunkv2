@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify iOS format generator produces correct platform-specific output
+ */
+/**
  * iOSFormatGenerator Semantic Token Tests
  * 
  * Tests for semantic token formatting methods added in task 3.1

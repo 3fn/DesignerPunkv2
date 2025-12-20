@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify CrossPlatformConsistency validation catches invalid patterns and enforces rules
+ */
+/**
  * Cross-Platform Consistency Validation Unit Tests
  * 
  * Tests for cross-platform mathematical consistency validation, tolerance calculations,

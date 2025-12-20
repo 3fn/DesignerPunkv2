@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify CompositionPatterns validation catches invalid patterns and enforces rules
+ */
+/**
  * Composition Pattern Validator Tests
  * 
  * Comprehensive test coverage for composition pattern validation including

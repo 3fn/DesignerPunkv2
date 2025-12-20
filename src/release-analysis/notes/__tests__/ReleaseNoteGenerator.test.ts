@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify ReleaseNoteGenerator functionality works correctly
+ */
+/**
  * Tests for ReleaseNoteGenerator
  * 
  * Validates release note generation functionality including markdown formatting,

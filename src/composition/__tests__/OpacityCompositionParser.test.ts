@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify OpacityCompositionParser functionality works correctly
+ */
+/**
  * Opacity Composition Parser Tests
  * 
  * Tests parsing and validation of "color at opacity" composition syntax.

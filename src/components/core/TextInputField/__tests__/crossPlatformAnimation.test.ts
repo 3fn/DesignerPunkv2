@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify crossPlatformAnimation component renders correctly and behaves as expected
+ */
+/**
  * Cross-Platform Animation Consistency Tests
  * 
  * Verifies that TextInputField animations are mathematically equivalent across

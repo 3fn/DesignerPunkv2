@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify release system functionality works correctly
+ */
+/**
  * Integration Tests for Automation Layer
  * 
  * Tests the complete automation workflow:

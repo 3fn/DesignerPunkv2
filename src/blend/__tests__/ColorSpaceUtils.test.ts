@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify ColorSpaceUtils functionality works correctly
+ */
+/**
  * Color Space Conversion Utilities Tests
  * 
  * Tests for RGB ↔ HSL ↔ Hex color space conversions

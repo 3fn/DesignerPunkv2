@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify BorderWidth tokens are correctly defined and structured
+ */
+/**
  * Border Width Tokens Unit Tests
  * 
  * Tests for border width token structure, mathematical relationships, and cross-platform consistency.
@@ -43,13 +47,13 @@ describe('Border Width Tokens', () => {
     });
 
     test('should have correct token names', () => {
-      expect(borderWidthTokenNames).toEqual(['borderWidth100', 'borderWidth200', 'borderWidth400']);
-      expect(borderWidthTokenNames).toHaveLength(3);
+      expect(borderWidthTokenNames).toEqual(['borderWidth000', 'borderWidth100', 'borderWidth200', 'borderWidth400']);
+      expect(borderWidthTokenNames).toHaveLength(4);
     });
 
     test('should have all tokens in borderWidthTokens object', () => {
       expect(Object.keys(borderWidthTokens)).toEqual(borderWidthTokenNames);
-      expect(Object.keys(borderWidthTokens)).toHaveLength(3);
+      expect(Object.keys(borderWidthTokens)).toHaveLength(4);
     });
   });
 
@@ -126,11 +130,11 @@ describe('Border Width Tokens', () => {
     test('getAllBorderWidthTokens should return all tokens as array', () => {
       const allTokens = getAllBorderWidthTokens();
       
-      expect(allTokens).toHaveLength(3);
+      expect(allTokens).toHaveLength(4);
       expect(allTokens.every(token => token.category === TokenCategory.BORDER_WIDTH)).toBe(true);
       
       const tokenNames = allTokens.map(token => token.name).sort();
-      expect(tokenNames).toEqual(['borderWidth100', 'borderWidth200', 'borderWidth400']);
+      expect(tokenNames).toEqual(['borderWidth000', 'borderWidth100', 'borderWidth200', 'borderWidth400']);
     });
 
     test('borderWidthTokenNames should match exported tokens', () => {
@@ -246,11 +250,11 @@ describe('Border Width Tokens', () => {
     test('should integrate with token registry patterns', () => {
       // Test borderWidthTokens object structure
       expect(typeof borderWidthTokens).toBe('object');
-      expect(Object.keys(borderWidthTokens)).toHaveLength(3);
+      expect(Object.keys(borderWidthTokens)).toHaveLength(4);
       
       // Test borderWidthTokenNames array
       expect(Array.isArray(borderWidthTokenNames)).toBe(true);
-      expect(borderWidthTokenNames).toHaveLength(3);
+      expect(borderWidthTokenNames).toHaveLength(4);
       
       // Test helper functions exist
       expect(typeof getBorderWidthToken).toBe('function');
@@ -278,7 +282,7 @@ describe('Border Width Tokens', () => {
         count++;
       });
       
-      expect(count).toBe(3);
+      expect(count).toBe(4);
     });
   });
 
@@ -317,7 +321,7 @@ describe('Border Width Tokens', () => {
     test('should export getAllBorderWidthTokens from index', () => {
       expect(typeof indexGetAllBorderWidthTokens).toBe('function');
       const tokens = indexGetAllBorderWidthTokens();
-      expect(tokens).toHaveLength(3);
+      expect(tokens).toHaveLength(4);
     });
 
     test('should export BORDER_WIDTH_BASE_VALUE from index', () => {
@@ -336,8 +340,9 @@ describe('Border Width Tokens', () => {
         (token: any) => token.category === TokenCategory.BORDER_WIDTH
       );
       
-      expect(borderWidthTokensInArray).toHaveLength(3);
+      expect(borderWidthTokensInArray).toHaveLength(4);
       expect(borderWidthTokensInArray.map((t: any) => t.name).sort()).toEqual([
+        'borderWidth000',
         'borderWidth100',
         'borderWidth200',
         'borderWidth400'
@@ -347,9 +352,10 @@ describe('Border Width Tokens', () => {
     test('should return border width tokens from getTokensByCategory()', () => {
       const borderWidthTokensFromCategory = getTokensByCategory(TokenCategory.BORDER_WIDTH);
       
-      expect(borderWidthTokensFromCategory).toHaveLength(3);
+      expect(borderWidthTokensFromCategory).toHaveLength(4);
       expect(borderWidthTokensFromCategory.every((token: any) => token.category === TokenCategory.BORDER_WIDTH)).toBe(true);
       expect(borderWidthTokensFromCategory.map((t: any) => t.name).sort()).toEqual([
+        'borderWidth000',
         'borderWidth100',
         'borderWidth200',
         'borderWidth400'

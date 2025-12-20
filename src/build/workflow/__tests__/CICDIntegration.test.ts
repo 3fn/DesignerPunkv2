@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build system integration produces correct outputs for all platforms
+ */
+/**
  * Tests for CI/CD Integration
  */
 

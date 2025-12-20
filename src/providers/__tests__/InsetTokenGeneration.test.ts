@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify provider functionality works correctly
+ */
+/**
  * Inset Token Generation Tests
  * 
  * Tests for platform generator output of renamed inset spacing tokens.

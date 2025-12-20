@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify LineHeightTokensFormulaValidation tokens are correctly defined and structured
+ */
+/**
  * LineHeightTokens Formula Validation Tests
  * 
  * Validates that formula-based baseValue calculations match original hard values

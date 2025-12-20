@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify system integration works correctly across components
+ */
+/**
  * Integration Tests: Analysis → Coordination Integration
  * 
  * Mock Strategy:

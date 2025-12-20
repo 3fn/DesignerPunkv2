@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build system generates required outputs with correct structure
+ */
+/**
  * Parallel Executor Tests
  * 
  * Tests for parallel build execution functionality including:

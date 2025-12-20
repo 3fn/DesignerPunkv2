@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify provider system supplies correct values for token generation
+ */
+/**
  * Unit Provider Services Unit Tests
  * 
  * Tests for mathematical accuracy of unit conversions across web, iOS, and Android platforms.

@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build system generates required outputs with correct structure
+ */
+/**
  * Build Mode Tests
  * 
  * Tests for build mode support including development and production

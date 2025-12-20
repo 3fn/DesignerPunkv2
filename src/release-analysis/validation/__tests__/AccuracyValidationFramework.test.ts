@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify AccuracyValidationFramework functionality works correctly
+ */
+/**
  * Tests for AccuracyValidationFramework
  * 
  * Comprehensive tests for accuracy validation including test case execution,

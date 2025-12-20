@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify AIReadableMathematicalRelationships tokens are correctly defined and structured
+ */
+/**
  * AI-Readable Mathematical Relationships Verification
  * 
  * This test verifies that refactored tokens meet the requirements for AI-readable

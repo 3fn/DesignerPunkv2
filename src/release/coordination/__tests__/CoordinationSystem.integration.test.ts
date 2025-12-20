@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify release system functionality works correctly
+ */
+/**
  * Coordination System Integration Tests
  * 
  * Tests for end-to-end coordination system functionality including:

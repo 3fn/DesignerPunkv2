@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build generators produce correct file formats for target platforms
+ */
+/**
  * Android Shadow Generator Tests
  * 
  * Tests for Android Kotlin shadow translation

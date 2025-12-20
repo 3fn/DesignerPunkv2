@@ -1,3 +1,7 @@
+/**
+ * @category evergreen
+ * @purpose Verify NamingConventions functionality works correctly
+ */
 import { describe, it, expect } from '@jest/globals';
 import { NamingConventionManager } from '../NamingConventionManager';
 import {

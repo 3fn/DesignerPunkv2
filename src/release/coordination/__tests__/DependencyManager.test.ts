@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify release system functionality works correctly
+ */
+/**
  * DependencyManager Tests
  * 
  * Tests for dependency graph analysis, conflict detection, and compatibility validation.

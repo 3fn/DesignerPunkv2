@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify BlendCompositionParser functionality works correctly
+ */
+/**
  * Blend Composition Parser Tests
  * 
  * Tests for parsing "color with blend direction" syntax

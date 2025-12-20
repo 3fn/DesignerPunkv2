@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify iosFontLoadingValidation functionality works correctly
+ */
+/**
  * iOS Font Loading Validation Tests
  * 
  * Validates iOS font loading behavior including:

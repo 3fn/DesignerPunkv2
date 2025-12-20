@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify androidFontLoadingValidation functionality works correctly
+ */
+/**
  * Android Font Loading Validation Tests
  * 
  * Validates Android font loading behavior including:

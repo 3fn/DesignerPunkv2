@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify validation coordinator integrates validation systems correctly
+ */
+/**
  * ValidationCoordinator Tests
  * 
  * Tests for ValidationCoordinator to ensure it validates tokens without registering them.

@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify system integration works correctly across components
+ */
+/**
  * Error Handling Integration Tests for Release Analysis System
  * 
  * Tests comprehensive error handling and recovery scenarios across

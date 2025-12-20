@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify provider functionality works correctly
+ */
+/**
  * Android Accessibility Token Generation Tests
  * Tests for generateAccessibilityTokens() method added in Task 2.3
  */

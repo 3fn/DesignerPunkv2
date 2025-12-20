@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify improved-test-example functionality works correctly
+ */
+/**
  * Example of improved test using fixtures
  * 
  * This demonstrates how tests should be written to avoid hard-coded values

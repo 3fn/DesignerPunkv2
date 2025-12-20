@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify ErrorHandling functionality works correctly
+ */
+/**
  * Error Handling Integration Tests
  * 
  * Tests error handling and recovery scenarios for build system integration,

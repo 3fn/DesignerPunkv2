@@ -1,10 +1,13 @@
 /**
+ * @category evergreen
+ * @purpose Verify Icon.buttonCTA-integration component integration behavior
+ * @jest-environment jsdom
+ */
+/**
  * Icon + ButtonCTA Integration Tests
  * 
  * Tests that verify ButtonCTA component integrates correctly with Icon module
  * and that no code changes are needed in ButtonCTA after Icon web component conversion.
- * 
- * @jest-environment jsdom
  * 
  * @module Icon/platforms/web/__tests__
  */

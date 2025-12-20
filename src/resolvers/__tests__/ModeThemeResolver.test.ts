@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify ModeThemeResolver functionality works correctly
+ */
+/**
  * ModeThemeResolver Unit Tests
  * 
  * Tests for core mode/theme resolution logic handling colorToken[systemMode][userTheme] pattern.

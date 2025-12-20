@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify Color tokens are correctly defined and structured
+ */
+/**
  * Semantic Color Token Tests
  * 
  * Tests for semantic color token updates as part of color palette refresh.

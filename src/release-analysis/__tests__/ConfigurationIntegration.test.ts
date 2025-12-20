@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify system integration works correctly across components
+ */
+/**
  * Configuration Integration Tests for Release Analysis System
  * 
  * Tests configuration loading, validation, merging, and application

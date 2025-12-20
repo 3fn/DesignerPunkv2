@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify AccessibilityTokenGeneration generator produces correct output format
+ */
+/**
  * Accessibility Token Generation Tests
  * 
  * Tests cross-platform generation of accessibility tokens (focus indicators)

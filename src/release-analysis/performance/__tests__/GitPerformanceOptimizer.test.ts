@@ -1,3 +1,7 @@
+/**
+ * @category evergreen
+ * @purpose Verify system performance meets requirements and thresholds
+ */
 import { GitPerformanceOptimizer } from '../GitPerformanceOptimizer';
 import { execSync } from 'child_process';
 import { existsSync } from 'fs';

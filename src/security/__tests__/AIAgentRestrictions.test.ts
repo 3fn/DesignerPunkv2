@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify AI agent restrictions enforce safety constraints
+ */
+/**
  * AI Agent Restrictions Tests
  * 
  * Tests for AI agent restriction enforcement system

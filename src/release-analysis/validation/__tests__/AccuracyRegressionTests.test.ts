@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify AccuracyRegressionTests functionality works correctly
+ */
+/**
  * Accuracy Regression Tests
  * 
  * Regression tests to ensure extraction and categorization accuracy

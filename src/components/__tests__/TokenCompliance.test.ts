@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify TokenCompliance component renders correctly and behaves as expected
+ */
+/**
  * Token Compliance Tests
  * 
  * Evergreen prevention tests that scan all components for token compliance violations.
@@ -6,12 +10,17 @@
  * 
  * Tests verify:
  * - No hard-coded RGB color values across all platforms
- * - No hard-coded fallback patterns (|| with hard-coded values)
- * - No hard-coded spacing values
+ * - No problematic hard-coded fallback patterns (allows defensive defaults)
+ * - No undocumented hard-coded spacing values (allows documented generated CSS)
  * - No hard-coded motion durations
  * - No hard-coded typography values
  * 
- * Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 8.1
+ * REFINED (Spec 025 Task 4.2):
+ * - R1: Fallback patterns distinguish acceptable defaults from problematic masking
+ * - R2: Spacing detection distinguishes documented vs undocumented hard-coded values
+ * - R3: Overall refinement reduces false positives while maintaining compliance goals
+ * 
+ * Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 8.1, 14.3, 14.4, 14.5 (Spec 025)
  * 
  * @module components/__tests__/TokenCompliance
  */
@@ -254,13 +263,24 @@ describe('Token Compliance - All Components', () => {
      * Detects hard-coded fallback patterns using || operator with numeric values.
      * Pattern: || <number> (e.g., || 250, || 8, || 16)
      * 
-     * These patterns mask missing tokens and prevent early detection of issues.
-     * Components should fail loudly when tokens are missing rather than using fallbacks.
+     * REFINED (Spec 025 R1): Distinguishes acceptable vs problematic fallbacks.
+     * - Acceptable: Default values for optional attributes (e.g., || 24 for default size)
+     * - Problematic: Fallbacks that mask missing required tokens
      * 
-     * Requirements: 1.5, 8.1
+     * Acceptable patterns are intentional defensive programming.
+     * Problematic patterns prevent early detection of missing tokens.
+     * 
+     * Requirements: 1.5, 8.1, 14.3, 14.4 (Spec 025)
      */
-    it('should not contain || number fallback patterns', () => {
+    it('should not contain problematic || number fallback patterns', () => {
       const violations: Array<{ file: string; line: number; content: string }> = [];
+      
+      // Acceptable fallback patterns (default values for optional attributes)
+      const acceptablePatterns = [
+        /\|\|\s*['"`]?\d+['"`]?\s*[;,)].*(?:size|width|height|dimension)/i,  // Size-related defaults
+        /getAttribute.*\|\|\s*['"`]?\d+['"`]?/i,                              // getAttribute with default
+        /\.size\s*\|\|\s*['"`]?\d+['"`]?/i,                                   // .size property with default
+      ];
       
       componentFiles.forEach(file => {
         const content = fs.readFileSync(file, 'utf-8');
@@ -279,11 +299,16 @@ describe('Token Compliance - All Components', () => {
           }
           
           if (fallbackPattern.test(line)) {
-            violations.push({
-              file: path.relative(process.cwd(), file),
-              line: index + 1,
-              content: line.trim()
-            });
+            // Check if this matches any acceptable pattern
+            const isAcceptable = acceptablePatterns.some(pattern => pattern.test(line));
+            
+            if (!isAcceptable) {
+              violations.push({
+                file: path.relative(process.cwd(), file),
+                line: index + 1,
+                content: line.trim()
+              });
+            }
           }
         });
       });
@@ -294,9 +319,10 @@ describe('Token Compliance - All Components', () => {
           .join('\n\n');
         
         throw new Error(
-          `Found ${violations.length} hard-coded || number fallback pattern(s):\n\n${violationDetails}\n\n` +
-          `Components should fail loudly when tokens are missing rather than using fallback values.\n` +
-          `Replace with explicit error handling that throws or logs when tokens are unavailable.`
+          `Found ${violations.length} problematic || number fallback pattern(s):\n\n${violationDetails}\n\n` +
+          `Components should fail loudly when required tokens are missing.\n` +
+          `Replace with explicit error handling that throws or logs when tokens are unavailable.\n\n` +
+          `Note: Default values for optional attributes (e.g., || 24 for default size) are acceptable.`
         );
       }
     });
@@ -307,13 +333,26 @@ describe('Token Compliance - All Components', () => {
      * Detects hard-coded fallback patterns using || operator with string values.
      * Pattern: || 'string' or || "string" (e.g., || '250ms', || "8px")
      * 
-     * These patterns mask missing tokens and prevent early detection of issues.
-     * Components should fail loudly when tokens are missing rather than using fallbacks.
+     * REFINED (Spec 025 R1): Distinguishes acceptable vs problematic fallbacks.
+     * - Acceptable: Default values for optional attributes (e.g., || '24' for default size)
+     * - Acceptable: Default CSS classes (e.g., || 'icon--size-100' for default size class)
+     * - Problematic: Fallbacks that mask missing required tokens
      * 
-     * Requirements: 1.5, 8.1
+     * Acceptable patterns are intentional defensive programming.
+     * Problematic patterns prevent early detection of missing tokens.
+     * 
+     * Requirements: 1.5, 8.1, 14.3, 14.4 (Spec 025)
      */
-    it('should not contain || string fallback patterns', () => {
+    it('should not contain problematic || string fallback patterns', () => {
       const violations: Array<{ file: string; line: number; content: string }> = [];
+      
+      // Acceptable fallback patterns (default values for optional attributes)
+      const acceptablePatterns = [
+        /\|\|\s*['"`]\d+['"`]/,                    // Numeric string defaults (|| '24')
+        /\|\|\s*['"`]icon--size-\d+['"`]/,         // Icon size class defaults (|| 'icon--size-100')
+        /getAttribute.*\|\|\s*['"`][^'"`]*['"`]/,  // getAttribute with default
+        /\.size\s*\|\|\s*['"`][^'"`]*['"`]/,       // .size property with default
+      ];
       
       componentFiles.forEach(file => {
         const content = fs.readFileSync(file, 'utf-8');
@@ -332,11 +371,16 @@ describe('Token Compliance - All Components', () => {
           }
           
           if (fallbackPattern.test(line)) {
-            violations.push({
-              file: path.relative(process.cwd(), file),
-              line: index + 1,
-              content: line.trim()
-            });
+            // Check if this matches any acceptable pattern
+            const isAcceptable = acceptablePatterns.some(pattern => pattern.test(line));
+            
+            if (!isAcceptable) {
+              violations.push({
+                file: path.relative(process.cwd(), file),
+                line: index + 1,
+                content: line.trim()
+              });
+            }
           }
         });
       });
@@ -347,9 +391,10 @@ describe('Token Compliance - All Components', () => {
           .join('\n\n');
         
         throw new Error(
-          `Found ${violations.length} hard-coded || string fallback pattern(s):\n\n${violationDetails}\n\n` +
-          `Components should fail loudly when tokens are missing rather than using fallback values.\n` +
-          `Replace with explicit error handling that throws or logs when tokens are unavailable.`
+          `Found ${violations.length} problematic || string fallback pattern(s):\n\n${violationDetails}\n\n` +
+          `Components should fail loudly when required tokens are missing.\n` +
+          `Replace with explicit error handling that throws or logs when tokens are unavailable.\n\n` +
+          `Note: Default values for optional attributes (e.g., || '24', || 'icon--size-100') are acceptable.`
         );
       }
     });
@@ -418,9 +463,16 @@ describe('Token Compliance - All Components', () => {
      * - iOS: Hard-coded CGFloat values (e.g., .padding(.horizontal, 8))
      * - Android: Hard-coded .dp values (e.g., padding(horizontal = 8.dp))
      * 
-     * Requirements: 1.2, 8.1
+     * REFINED (Spec 025 R2): Distinguishes documented vs undocumented hard-coded values.
+     * - Documented: Values followed by token comments
+     * - Undocumented: Values without token comments
+     * 
+     * Documented values are typically generated CSS from token system.
+     * Undocumented values are problematic hard-coded values.
+     * 
+     * Requirements: 1.2, 8.1, 14.4, 14.5 (Spec 025)
      */
-    it('should not contain hard-coded spacing values', () => {
+    it('should not contain undocumented hard-coded spacing values', () => {
       const violations: Array<{ file: string; line: number; content: string; platform: string }> = [];
       
       componentFiles.forEach(file => {
@@ -448,9 +500,11 @@ describe('Token Compliance - All Components', () => {
           let hasViolation = false;
           
           if (platform === 'web') {
-            // Web: Look for hard-coded px values in padding, margin, gap, width, height
-            // Pattern: padding: 8px, margin: 16px, gap: 4px, etc.
-            const webSpacingPattern = /(padding|margin|gap|width|height|top|right|bottom|left|inset)[\s:]+\d+px/i;
+            // Web: Look for hard-coded px values WITHOUT token documentation comments
+            // Pattern: padding: 8px (without /* token.name */ comment)
+            // Matches: "padding: 8px;" or "margin: 16px"
+            // Excludes: "min-width: 56px; /* buttonCTA.minWidth.small */"
+            const webSpacingPattern = /(padding|margin|gap|width|height|top|right|bottom|left|inset)[\s:]+\d+px(?!\s*\/\*)/i;
             if (webSpacingPattern.test(line)) {
               hasViolation = true;
             }
@@ -487,11 +541,12 @@ describe('Token Compliance - All Components', () => {
           .join('\n\n');
         
         throw new Error(
-          `Found ${violations.length} hard-coded spacing value(s):\n\n${violationDetails}\n\n` +
+          `Found ${violations.length} undocumented hard-coded spacing value(s):\n\n${violationDetails}\n\n` +
           `Use spacing tokens instead:\n` +
           `- Web: var(--space-inset-normal), var(--space-separated-200)\n` +
           `- iOS: spaceInsetNormal, spaceSeparated200\n` +
-          `- Android: spaceInsetNormal.dp, spaceSeparated200.dp`
+          `- Android: spaceInsetNormal.dp, spaceSeparated200.dp\n\n` +
+          `Note: Values with token documentation comments (e.g., /* token.name */) are allowed (generated CSS).`
         );
       }
     });

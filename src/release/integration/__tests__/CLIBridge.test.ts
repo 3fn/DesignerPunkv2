@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify system integration works correctly across components
+ */
+/**
  * Unit Tests for CLI Bridge
  * 
  * Tests CLI execution, output capture, timeout handling, and error recovery.

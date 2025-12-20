@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build system generates required outputs with correct structure
+ */
+/**
  * Method Signature Validator Tests
  * 
  * Tests for method signature validation across platforms

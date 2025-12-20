@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify release system functionality works correctly
+ */
+/**
  * Tests for GitOperations
  * 
  * Tests git commit, tag, and push operations with rollback capabilities

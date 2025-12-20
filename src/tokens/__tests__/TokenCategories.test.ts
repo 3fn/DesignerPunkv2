@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify TokenCategories tokens are correctly defined and structured
+ */
+/**
  * Token Categories Unit Tests
  * 
  * Tests for token category organization, mathematical relationships, and family-specific validation.

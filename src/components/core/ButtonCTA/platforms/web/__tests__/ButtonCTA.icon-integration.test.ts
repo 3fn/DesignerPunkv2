@@ -1,10 +1,13 @@
 /**
+ * @category evergreen
+ * @purpose Verify ButtonCTA component integrates correctly with Icon component
+ * @jest-environment jsdom
+ */
+/**
  * ButtonCTA Icon Integration Tests
  * 
  * Tests icon integration with the Icon System (Spec 004).
  * Validates icon rendering, sizing, color, spacing, and accessibility.
- * 
- * @jest-environment jsdom
  * 
  * @module ButtonCTA/platforms/web/__tests__/icon-integration
  */
@@ -88,8 +91,8 @@ describe('ButtonCTA Icon Integration', () => {
       const shadowRoot = button.shadowRoot;
       const svg = shadowRoot!.querySelector('svg');
       
-      expect(svg!.getAttribute('width')).toBe('24');
-      expect(svg!.getAttribute('height')).toBe('24');
+      // Check for size class instead of attributes
+      expect(svg!.classList.contains('icon--size-100')).toBe(true);
     });
 
     it('should use icon.size100 (24px) for medium button', () => {
@@ -102,8 +105,8 @@ describe('ButtonCTA Icon Integration', () => {
       const shadowRoot = button.shadowRoot;
       const svg = shadowRoot!.querySelector('svg');
       
-      expect(svg!.getAttribute('width')).toBe('24');
-      expect(svg!.getAttribute('height')).toBe('24');
+      // Check for size class instead of attributes
+      expect(svg!.classList.contains('icon--size-100')).toBe(true);
     });
 
     it('should use icon.size125 (32px) for large button', () => {
@@ -116,8 +119,8 @@ describe('ButtonCTA Icon Integration', () => {
       const shadowRoot = button.shadowRoot;
       const svg = shadowRoot!.querySelector('svg');
       
-      expect(svg!.getAttribute('width')).toBe('32');
-      expect(svg!.getAttribute('height')).toBe('32');
+      // Check for size class instead of attributes
+      expect(svg!.classList.contains('icon--size-200')).toBe(true);
     });
   });
 
@@ -311,7 +314,7 @@ describe('ButtonCTA Icon Integration', () => {
       const svg = shadowRoot!.querySelector('svg');
       
       expect(svg).not.toBeNull();
-      expect(svg!.getAttribute('width')).toBe('24');
+      expect(svg!.classList.contains('icon--size-100')).toBe(true);
     });
 
     it('should render icon with large secondary button', () => {
@@ -326,7 +329,7 @@ describe('ButtonCTA Icon Integration', () => {
       const svg = shadowRoot!.querySelector('svg');
       
       expect(svg).not.toBeNull();
-      expect(svg!.getAttribute('width')).toBe('32');
+      expect(svg!.classList.contains('icon--size-200')).toBe(true);
     });
 
     it('should render icon with medium tertiary button', () => {
@@ -341,7 +344,7 @@ describe('ButtonCTA Icon Integration', () => {
       const svg = shadowRoot!.querySelector('svg');
       
       expect(svg).not.toBeNull();
-      expect(svg!.getAttribute('width')).toBe('24');
+      expect(svg!.classList.contains('icon--size-100')).toBe(true);
     });
   });
 });

@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify ValidationPipeline functionality works correctly
+ */
+/**
  * ValidationPipeline Integration Tests
  * 
  * Tests the ValidationPipeline's integration with TokenEngine to ensure

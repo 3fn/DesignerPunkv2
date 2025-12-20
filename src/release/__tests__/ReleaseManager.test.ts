@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify release system functionality works correctly
+ */
+/**
  * ReleaseManager Unit Tests
  * 
  * Mock Strategy:

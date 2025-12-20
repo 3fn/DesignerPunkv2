@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build system generates required outputs with correct structure
+ */
+/**
  * Android Build Validator Tests
  * 
  * Tests for Android build output validation including:

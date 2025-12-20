@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify release system functionality works correctly
+ */
+/**
  * Configuration System Integration Tests
  * 
  * Tests for configuration loading, validation, merging, migration,

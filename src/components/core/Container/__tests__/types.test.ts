@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify types component renders correctly and behaves as expected
+ */
+/**
  * Container Types Test
  * 
  * Tests TypeScript type definitions for Container component.

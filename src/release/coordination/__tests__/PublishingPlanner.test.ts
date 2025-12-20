@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify release system functionality works correctly
+ */
+/**
  * Publishing Planner Tests
  * 
  * Tests for publishing order optimization, staged publishing, and rollback capabilities.

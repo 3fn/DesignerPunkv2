@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify system integration works correctly across components
+ */
+/**
  * Integration Tests for CLI Integration Bridge
  * 
  * These tests validate the complete CLI integration workflow with real CLI execution,

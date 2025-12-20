@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify ResponsiveGridGeneration generator produces correct output format
+ */
+/**
  * Responsive Grid Generation Tests
  * 
  * Tests for responsive grid CSS generation with:

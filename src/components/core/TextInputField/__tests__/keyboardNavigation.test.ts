@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify keyboardNavigation component renders correctly and behaves as expected
+ */
+/**
  * @jest-environment jsdom
  */
 

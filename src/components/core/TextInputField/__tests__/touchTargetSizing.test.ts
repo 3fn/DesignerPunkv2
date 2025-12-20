@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify touchTargetSizing component renders correctly and behaves as expected
+ */
+/**
  * @jest-environment jsdom
  */
 

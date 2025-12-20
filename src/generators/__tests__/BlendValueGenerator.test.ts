@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify BlendValue generator produces correct output format
+ */
+/**
  * Blend Value Generator Tests
  * 
  * Tests blend value generation for all platforms with correct formatting.

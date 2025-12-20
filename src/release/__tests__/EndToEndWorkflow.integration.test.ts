@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify publishing workflow coordinates release process correctly
+ */
+/**
  * End-to-End Release Workflow Integration Tests
  * 
  * Mock Strategy:

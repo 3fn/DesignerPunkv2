@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify NPM publisher handles package publishing correctly
+ */
+/**
  * NpmPublisher Tests
  * 
  * Mock Strategy:

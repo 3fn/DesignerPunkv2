@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify contamination prevention system blocks unsafe operations
+ */
+/**
  * Contamination Prevention Tests
  * 
  * Tests for contamination vector detection and prevention

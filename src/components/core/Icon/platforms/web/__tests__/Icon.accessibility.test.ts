@@ -1,4 +1,9 @@
 /**
+ * @category evergreen
+ * @purpose Verify Icon.accessibility component renders correctly and behaves as expected
+ * @jest-environment jsdom
+ */
+/**
  * Icon Web Component - Accessibility Tests
  * 
  * Tests accessibility features of the Icon web component:
@@ -8,8 +13,6 @@
  * - test-id attribute for automated testing
  * 
  * Requirements: 5.1, 5.2
- * 
- * @jest-environment jsdom
  */
 
 import { DPIcon } from '../Icon.web';

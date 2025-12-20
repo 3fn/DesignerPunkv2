@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify SemanticToken validation catches invalid patterns and enforces rules
+ */
+/**
  * Semantic Token Validator Tests
  * 
  * Comprehensive test coverage for semantic token validation including

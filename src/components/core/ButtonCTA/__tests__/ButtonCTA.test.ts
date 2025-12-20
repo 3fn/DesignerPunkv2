@@ -1,12 +1,15 @@
 /**
+ * @category evergreen
+ * @purpose Verify ButtonCTA component renders correctly and behaves as expected
+ * @jest-environment jsdom
+ */
+/**
  * Unit tests for ButtonCTA component rendering
  * 
  * Tests component rendering with various props, size variants, variant styles,
  * icon integration, text wrapping, and disabled state.
  * 
  * Requirements: 1.1-1.7, 2.1-2.4, 7.1-7.4, 8.1-8.6
- * 
- * @jest-environment jsdom
  */
 
 import { ButtonCTA } from '../platforms/web/ButtonCTA.web';

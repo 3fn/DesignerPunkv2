@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify CrossPlatformConsistency functionality works correctly
+ */
+/**
  * Cross-Platform Consistency Integration Tests
  * 
  * Tests mathematical consistency and proportional relationships across

@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify release system functionality works correctly
+ */
+/**
  * Regression Tests for Extraction Logic Improvements
  * 
  * These tests validate the specific extraction logic fixes implemented in Task 2.5:

@@ -1,3 +1,7 @@
+/**
+ * @category evergreen
+ * @purpose Verify system performance meets requirements and thresholds
+ */
 import { PerformanceBenchmarkRunner } from '../PerformanceBenchmarkRunner';
 import { AnalysisConfigManager } from '../../config/AnalysisConfigManager';
 import { join } from 'path';

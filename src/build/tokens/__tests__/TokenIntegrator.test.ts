@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify TokenIntegrator tokens are correctly defined and structured
+ */
+/**
  * Token Integrator Tests
  * 
  * Tests F1 token system integration with the build system

@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify colorInheritanceValidation component renders correctly and behaves as expected
+ */
+/**
  * Color Inheritance Validation Tests
  * 
  * Validates that components automatically inherit new colors from updated semantic tokens.

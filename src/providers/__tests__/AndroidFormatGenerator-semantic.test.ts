@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify Android format generator produces correct platform-specific output
+ */
+/**
  * AndroidFormatGenerator Semantic Token Tests
  * 
  * Tests for semantic token formatting methods added in task 4.1

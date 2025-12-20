@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify release system functionality works correctly
+ */
+/**
  * Comprehensive Configuration System Tests
  * 
  * Tests for all configuration operations including loading, validation,

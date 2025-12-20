@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify BorderWidth tokens are correctly defined and structured
+ */
+/**
  * Semantic Border Width Tokens Unit Tests
  * 
  * Tests for semantic border width token structure and primitive references.

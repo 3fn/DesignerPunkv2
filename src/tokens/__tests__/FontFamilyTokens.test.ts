@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify FontFamily tokens are correctly defined and structured
+ */
+/**
  * Font Family Tokens Unit Tests
  * 
  * Tests for font family token categorical values and platform consistency.

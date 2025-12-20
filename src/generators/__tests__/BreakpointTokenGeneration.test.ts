@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify BreakpointTokenGeneration generator produces correct output format
+ */
+/**
  * Breakpoint Token Generation Tests
  * 
  * Tests that breakpoint tokens are correctly generated for all platforms

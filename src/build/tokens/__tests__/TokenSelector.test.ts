@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify TokenSelector tokens are correctly defined and structured
+ */
+/**
  * Token Selector Tests
  * 
  * Tests token selection priority logic: semantic → primitive → component

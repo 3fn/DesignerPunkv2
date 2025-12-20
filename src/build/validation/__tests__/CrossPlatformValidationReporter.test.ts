@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build system generates required outputs with correct structure
+ */
+/**
  * Tests for CrossPlatformValidationReporter
  * 
  * Validates that the reporter correctly aggregates results from:

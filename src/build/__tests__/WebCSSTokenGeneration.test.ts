@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build system generates required outputs with correct structure
+ */
+/**
  * Web CSS Token Generation Tests
  * 
  * Tests CSS custom property generation from F1 tokens

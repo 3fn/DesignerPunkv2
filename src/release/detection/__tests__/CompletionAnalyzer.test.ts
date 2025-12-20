@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify release system functionality works correctly
+ */
+/**
  * Unit Tests for Completion Document Analyzer
  * 
  * Tests completion document parsing accuracy, content extraction,

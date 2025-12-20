@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify MotionTokens.property tokens are correctly defined and structured
+ */
+/**
  * Motion Tokens Property-Based Tests
  * 
  * Property-based tests for motion tokens using fast-check.

@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify ButtonCTA.tokens component renders correctly and behaves as expected
+ */
+/**
  * ButtonCTA Component Tokens Tests
  * 
  * Validates that ButtonCTA component tokens are properly defined and accessible.

@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify system integration works correctly across components
+ */
+/**
  * Unit Tests for CLI Error Handler
  * 
  * Tests error categorization, retry logic, fallback mechanisms, and recovery strategies.

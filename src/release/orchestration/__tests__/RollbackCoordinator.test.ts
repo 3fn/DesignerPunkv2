@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify release system functionality works correctly
+ */
+/**
  * Rollback Coordinator Tests
  * 
  * Tests comprehensive rollback mechanisms across all release components

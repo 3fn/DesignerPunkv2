@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify iosFontConfiguration functionality works correctly
+ */
+/**
  * iOS Font Configuration Tests
  * 
  * Validates that iOS font integration documentation is complete and accurate

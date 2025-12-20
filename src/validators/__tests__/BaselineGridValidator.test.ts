@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify BaselineGrid validation catches invalid patterns and enforces rules
+ */
+/**
  * BaselineGridValidator Unit Tests
  * 
  * Tests for baseline grid alignment validation with strategic flexibility support.

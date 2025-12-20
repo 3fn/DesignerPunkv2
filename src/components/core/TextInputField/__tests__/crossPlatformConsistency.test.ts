@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify crossPlatformConsistency component renders correctly and behaves as expected
+ */
+/**
  * Cross-Platform Consistency Tests for TextInputField
  * 
  * Verifies that the TextInputField component maintains consistent behavior
@@ -339,7 +343,7 @@ describe('TextInputField Cross-Platform Consistency', () => {
       
       // iOS: overlay with RoundedRectangle stroke
       expect(iosContent).toContain('RoundedRectangle');
-      expect(iosContent).toContain('.stroke(accessibilityFocusColor');
+      expect(iosContent).toContain('.stroke(Color(DesignTokens.color.primary)');
       
       // Android: border modifier when focused
       expect(androidContent).toContain('if (isFocused)');
@@ -349,12 +353,12 @@ describe('TextInputField Cross-Platform Consistency', () => {
     test('all platforms use same focus ring styling', () => {
       // Focus ring width: 2px/pt/dp - no fallback pattern (fail loudly)
       expect(webContent).toContain('var(--accessibility-focus-width)');
-      expect(iosContent).toContain('accessibilityFocusWidth');
+      expect(iosContent).toContain('accessibility.focus.width');
       expect(androidContent).toContain('accessibilityFocusWidth');
       
       // Focus ring offset: 2px/pt/dp - no fallback pattern (fail loudly)
       expect(webContent).toContain('var(--accessibility-focus-offset)');
-      expect(iosContent).toContain('accessibilityFocusOffset');
+      expect(iosContent).toContain('accessibility.focus.offset');
       expect(androidContent).toContain('accessibilityFocusOffset');
       
       // Focus ring color: primary
@@ -381,10 +385,10 @@ describe('TextInputField Cross-Platform Consistency', () => {
       // Web: typography.caption
       expect(webContent).toContain('--typography-caption-font-size');
       
-      // iOS: typographyCaptionFontSize
-      expect(iosContent).toContain('typographyCaptionFontSize');
+      // iOS: typography.caption.fontSize (nested structure)
+      expect(iosContent).toContain('typography.caption.fontSize');
       
-      // Android: typographyCaptionFontSize
+      // Android: typographyCaptionFontSize (flat structure)
       expect(androidContent).toContain('typographyCaptionFontSize');
     });
   });

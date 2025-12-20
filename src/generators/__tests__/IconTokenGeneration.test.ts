@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify IconTokenGeneration generator produces correct output format
+ */
+/**
  * Icon Size Token Cross-Platform Generation Tests
  * 
  * Tests for icon size token generation across web, iOS, and Android platforms.

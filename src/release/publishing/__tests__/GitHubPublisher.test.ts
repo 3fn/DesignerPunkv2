@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify GitHub publisher handles package publishing correctly
+ */
+/**
  * GitHubPublisher Tests
  * 
  * Tests GitHub API integration including authentication, release creation,

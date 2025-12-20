@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify OpacityPlatformTranslation functionality works correctly
+ */
+/**
  * Opacity Platform Translation Integration Tests
  * 
  * Integration tests for opacity token platform translation across web, iOS, and Android.

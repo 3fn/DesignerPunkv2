@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify release system functionality works correctly
+ */
+/**
  * AI Collaboration Interface Tests
  * 
  * Tests AI-friendly interfaces for release management system

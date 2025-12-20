@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify release system functionality works correctly
+ */
+/**
  * PackageCoordinator Tests
  * 
  * Tests for multi-package version coordination and dependency management.

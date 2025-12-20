@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build system generates required outputs with correct structure
+ */
+/**
  * Incremental Builder Tests
  * 
  * Tests for incremental build support including change detection,

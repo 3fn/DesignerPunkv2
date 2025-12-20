@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build generators produce correct file formats for target platforms
+ */
+/**
  * Tests for SourceMapGenerator
  */
 

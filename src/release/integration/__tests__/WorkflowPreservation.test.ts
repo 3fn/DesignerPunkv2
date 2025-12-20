@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify system integration works correctly across components
+ */
+/**
  * WorkflowPreservation Unit Tests
  * 
  * Tests workflow preservation logic with isolated mocks.

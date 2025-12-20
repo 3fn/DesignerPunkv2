@@ -1,4 +1,9 @@
 /**
+ * @category evergreen
+ * @purpose Verify Icon.web component renders correctly and behaves as expected
+ * @jest-environment jsdom
+ */
+/**
  * Icon Component Tests for Web Platform
  * 
  * Tests the Icon component's core functionality including:
@@ -7,8 +12,6 @@
  * - Accessibility
  * - Invalid name handling
  * - Custom className application
- * 
- * @jest-environment jsdom
  * 
  * @module Icon/platforms/web/__tests__
  */

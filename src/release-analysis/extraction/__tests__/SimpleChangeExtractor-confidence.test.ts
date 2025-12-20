@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify SimpleChangeExtractor-confidence functionality works correctly
+ */
+/**
  * Integration tests for SimpleChangeExtractor confidence metrics functionality
  * 
  * Tests the integration between SimpleChangeExtractor and ConfidenceMetrics

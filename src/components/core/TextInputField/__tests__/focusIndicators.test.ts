@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify focusIndicators component renders correctly and behaves as expected
+ */
+/**
  * Focus Indicators Tests
  * 
  * Tests for TextInputField focus ring indicators using accessibility tokens.
@@ -88,10 +92,10 @@ describe('TextInputField Focus Indicators', () => {
       // Verify focus ring overlay exists
       expect(iosComponentContent).toContain('Focus ring');
       
-      // Verify accessibility tokens are used
-      expect(iosComponentContent).toContain('accessibilityFocusColor');
-      expect(iosComponentContent).toContain('accessibilityFocusWidth');
-      expect(iosComponentContent).toContain('accessibilityFocusOffset');
+      // Verify accessibility tokens are used (nested structure)
+      expect(iosComponentContent).toContain('accessibility.focus.width');
+      expect(iosComponentContent).toContain('accessibility.focus.offset');
+      expect(iosComponentContent).toContain('color.primary'); // Focus ring uses primary color
       
       // Verify focus ring is visible when focused
       expect(iosComponentContent).toContain('.opacity(isFocused ? 1 : 0)');

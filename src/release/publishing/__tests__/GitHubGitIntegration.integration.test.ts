@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify system integration works correctly across components
+ */
+/**
  * GitHub and Git Operations Integration Tests
  * 
  * Tests coordination between GitOperations (Task 6) and GitHubPublisher (Task 7)

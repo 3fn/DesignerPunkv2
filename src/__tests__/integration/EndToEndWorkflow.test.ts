@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify EndToEndWorkflow functionality works correctly
+ */
+/**
  * End-to-End Workflow Integration Tests
  * 
  * Tests complete workflows from token definition through validation

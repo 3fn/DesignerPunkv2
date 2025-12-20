@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build system generates required outputs with correct structure
+ */
+/**
  * Android Builder - Kotlin Token Generation Tests
  * Tests for task 4.2: Kotlin token generation
  */

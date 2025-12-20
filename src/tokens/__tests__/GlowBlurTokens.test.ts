@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify GlowBlur tokens are correctly defined and structured
+ */
+/**
  * Glow Blur Token Tests
  * 
  * Tests for glow blur primitive tokens to verify:

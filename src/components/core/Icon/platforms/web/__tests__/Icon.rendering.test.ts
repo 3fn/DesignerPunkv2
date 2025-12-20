@@ -1,4 +1,9 @@
 /**
+ * @category evergreen
+ * @purpose Verify Icon.rendering component renders correctly and behaves as expected
+ * @jest-environment jsdom
+ */
+/**
  * Icon Web Component Rendering Tests
  * 
  * Tests the DPIcon web component's rendering behavior:
@@ -6,8 +11,6 @@
  * - CSS class application for sizing
  * - Icon name rendering
  * - Size variant coverage
- * 
- * @jest-environment jsdom
  * 
  * @module Icon/platforms/web/__tests__
  */

@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify provider system supplies correct values for token generation
+ */
+/**
  * Path Provider Tests
  * 
  * Tests platform-specific file organization, path generation, and build system integration

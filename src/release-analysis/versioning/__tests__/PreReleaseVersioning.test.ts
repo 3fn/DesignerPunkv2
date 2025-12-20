@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify PreReleaseVersioning functionality works correctly
+ */
+/**
  * Unit tests for Pre-Release Version Management
  * 
  * Tests alpha, beta, and rc version generation, progression, and promotion

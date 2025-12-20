@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify I validation catches invalid patterns and enforces rules
+ */
+/**
  * IValidator Interface Tests
  * 
  * Tests to verify the IValidator interface contract (sync-only)

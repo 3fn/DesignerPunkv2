@@ -1,3 +1,7 @@
+/**
+ * @category evergreen
+ * @purpose Verify system performance meets requirements and thresholds
+ */
 import { PerformanceOptimizedAnalyzer } from '../PerformanceOptimizedAnalyzer';
 import { GitPerformanceOptimizer } from '../GitPerformanceOptimizer';
 import { DocumentParsingCache } from '../DocumentParsingCache';

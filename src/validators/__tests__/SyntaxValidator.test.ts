@@ -1,3 +1,7 @@
+/**
+ * @category evergreen
+ * @purpose Verify Syntax validation catches invalid patterns and enforces rules
+ */
 import { describe, it, expect } from '@jest/globals';
 import { SyntaxValidator } from '../SyntaxValidator';
 

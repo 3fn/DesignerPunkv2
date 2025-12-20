@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify type definitions are correct and complete
+ */
+/**
  * Component Types Tests
  * 
  * Tests for component type definitions to ensure type safety and correctness.

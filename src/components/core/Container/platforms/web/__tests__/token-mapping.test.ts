@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify token-mapping component renders correctly and behaves as expected
+ */
+/**
  * Token-to-CSS Mapping Tests
  * 
  * Tests for token-to-CSS conversion functions that map Container props

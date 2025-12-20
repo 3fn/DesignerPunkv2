@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build system generates required outputs with correct structure
+ */
+/**
  * Error Handler Integration Tests
  * 
  * Tests for ErrorHandler integration with ErrorReporter

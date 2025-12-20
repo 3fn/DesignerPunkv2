@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify stateManagement component renders correctly and behaves as expected
+ */
+/**
  * State Management Tests
  * 
  * Tests for TextInputField state machine logic, label positioning,

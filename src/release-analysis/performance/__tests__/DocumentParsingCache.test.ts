@@ -1,3 +1,7 @@
+/**
+ * @category evergreen
+ * @purpose Verify DocumentParsingCache functionality works correctly
+ */
 import { DocumentParsingCache } from '../DocumentParsingCache';
 import { statSync } from 'fs';
 import { join } from 'path';

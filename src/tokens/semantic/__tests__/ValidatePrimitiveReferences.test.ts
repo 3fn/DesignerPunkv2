@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify ValidatePrimitiveReferences tokens are correctly defined and structured
+ */
+/**
  * Validate Primitive References Test
  * 
  * This test validates that all primitiveReferences in semantic tokens

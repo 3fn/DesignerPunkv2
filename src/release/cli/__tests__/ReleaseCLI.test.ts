@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify release system functionality works correctly
+ */
+/**
  * ReleaseCLI Unit Tests
  * 
  * Tests CLI command parsing, execution, and interactive prompts.

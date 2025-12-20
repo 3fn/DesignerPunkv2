@@ -362,14 +362,33 @@ export class SemanticTokenValidator implements IValidator<SemanticValidationInpu
           }
         } else {
           // For other multi-reference tokens (including icon tokens), validate all references exist
+          // UPDATED (Spec 025 F4): Support custom multiplier pattern (custom:X.XXX)
           for (const [prop, ref] of Object.entries(refs)) {
-            if (typeof ref === 'string' && !primitiveNames.has(ref)) {
-              invalidReferences.push({
-                semanticToken: semantic.name,
-                property: prop,
-                reference: ref,
-                reason: `Semantic token '${semantic.name}' has invalid ${prop} reference '${ref}'`
-              });
+            if (typeof ref === 'string') {
+              // Check if it's a custom multiplier (e.g., custom:1.231)
+              const isCustomMultiplier = ref.startsWith('custom:');
+              
+              if (isCustomMultiplier) {
+                // Validate that the custom multiplier is a valid number
+                const multiplierValue = parseFloat(ref.slice('custom:'.length));
+                if (isNaN(multiplierValue)) {
+                  invalidReferences.push({
+                    semanticToken: semantic.name,
+                    property: prop,
+                    reference: ref,
+                    reason: `Semantic token '${semantic.name}' has invalid custom multiplier '${ref}' (must be a valid number)`
+                  });
+                }
+                // Valid custom multiplier - continue to next reference
+              } else if (!primitiveNames.has(ref)) {
+                // Not a custom multiplier and not in primitive registry - invalid
+                invalidReferences.push({
+                  semanticToken: semantic.name,
+                  property: prop,
+                  reference: ref,
+                  reason: `Semantic token '${semantic.name}' has invalid ${prop} reference '${ref}'`
+                });
+              }
             }
           }
         }
@@ -390,7 +409,8 @@ export class SemanticTokenValidator implements IValidator<SemanticValidationInpu
       const suggestions = [
         'Verify that all referenced primitive tokens exist in the primitive token registry',
         'Check for typos in primitive token names',
-        'Ensure typography tokens include all required properties: fontSize, lineHeight, fontFamily, fontWeight, letterSpacing'
+        'Ensure typography tokens include all required properties: fontSize, lineHeight, fontFamily, fontWeight, letterSpacing',
+        'For custom multipliers, use format: custom:X.XXX (e.g., custom:1.231)'
       ];
 
       return {

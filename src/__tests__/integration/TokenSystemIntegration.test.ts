@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify system integration works correctly across components
+ */
+/**
  * Token System Integration Tests
  * 
  * Comprehensive integration tests validating the complete token system

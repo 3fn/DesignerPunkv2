@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify ChangeCategorizationSystem functionality works correctly
+ */
+/**
  * Tests for Change Categorization System
  * 
  * Validates the sophisticated classification logic for different change types,

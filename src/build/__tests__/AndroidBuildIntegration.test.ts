@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build system integration produces correct outputs for all platforms
+ */
+/**
  * Android Build Integration Tests
  * 
  * Integration tests for Android build and validation workflow

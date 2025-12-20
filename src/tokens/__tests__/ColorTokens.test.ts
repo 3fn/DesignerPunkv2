@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify Color tokens are correctly defined and structured
+ */
+/**
  * Color Tokens Unit Tests
  * 
  * Tests for mode-aware color token structure, systematic color families, and cross-platform consistency.

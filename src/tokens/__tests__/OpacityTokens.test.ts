@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify Opacity tokens are correctly defined and structured
+ */
+/**
  * Opacity Tokens Unit Tests
  * 
  * Tests for opacity token structure, mathematical relationships, and cross-platform consistency.

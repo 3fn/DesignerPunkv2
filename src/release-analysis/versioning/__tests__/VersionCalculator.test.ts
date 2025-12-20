@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify VersionCalculator functionality works correctly
+ */
+/**
  * Unit tests for VersionCalculator
  * 
  * Tests semantic version calculation, validation, and pre-release handling

@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build system generates required outputs with correct structure
+ */
+/**
  * Error Documentation Tests
  * 
  * Tests for error documentation, suggestions, and formatting functionality.

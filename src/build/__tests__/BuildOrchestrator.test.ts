@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build orchestration coordinates token generation and platform builds
+ */
+/**
  * Build Orchestrator Tests
  * 
  * Tests for the BuildOrchestrator implementation including:

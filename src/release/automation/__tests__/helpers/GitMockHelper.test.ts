@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify release system functionality works correctly
+ */
+/**
  * Tests for GitMockHelper utility
  * 
  * Validates that GitMockHelper correctly configures mocks for git operations,

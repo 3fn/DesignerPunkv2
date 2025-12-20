@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify system integration works correctly across components
+ */
+/**
  * Tests for Release Analysis Integration
  * 
  * Validates the integration interface provides clean access to analysis results

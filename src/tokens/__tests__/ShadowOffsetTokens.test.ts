@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify ShadowOffset tokens are correctly defined and structured
+ */
+/**
  * Shadow Offset Tokens Unit Tests
  * 
  * Tests for shadow offset token structure, mathematical relationships, and cross-platform consistency.
@@ -80,8 +84,8 @@ describe('Shadow Offset Tokens', () => {
     });
 
     test('should have correct token names for shadowOffsetY', () => {
-      expect(shadowOffsetYNames).toEqual(['100', '200', '300', '400']);
-      expect(shadowOffsetYNames).toHaveLength(4);
+      expect(shadowOffsetYNames).toEqual(['000', '100', '200', '300', '400']);
+      expect(shadowOffsetYNames).toHaveLength(5);
     });
 
     test('should have all tokens in shadowOffsetX object', () => {
@@ -91,7 +95,7 @@ describe('Shadow Offset Tokens', () => {
 
     test('should have all tokens in shadowOffsetY object', () => {
       expect(Object.keys(shadowOffsetY)).toEqual(shadowOffsetYNames);
-      expect(Object.keys(shadowOffsetY)).toHaveLength(4);
+      expect(Object.keys(shadowOffsetY)).toHaveLength(5);
     });
   });
 
@@ -195,11 +199,11 @@ describe('Shadow Offset Tokens', () => {
     test('getAllShadowOffsetYTokens should return all tokens as array', () => {
       const allTokens = getAllShadowOffsetYTokens();
       
-      expect(allTokens).toHaveLength(4);
+      expect(allTokens).toHaveLength(5);
       expect(allTokens.every(token => token.category === TokenCategory.SHADOW)).toBe(true);
       
       const tokenNames = allTokens.map(token => token.name.split('.')[1]).sort();
-      expect(tokenNames).toEqual(['100', '200', '300', '400']);
+      expect(tokenNames).toEqual(['000', '100', '200', '300', '400']);
     });
   });
 
@@ -360,8 +364,8 @@ describe('Shadow Offset Tokens', () => {
         (token: any) => token.category === TokenCategory.SHADOW
       );
       
-      // Should have 9 X tokens + 4 Y tokens + 5 blur tokens + 5 opacity tokens = 23 total
-      expect(shadowTokensInArray).toHaveLength(23);
+      // Should have 9 X tokens + 5 Y tokens + 5 blur tokens + 5 opacity tokens = 24 total
+      expect(shadowTokensInArray).toHaveLength(24);
     });
 
     test('should return shadow offset tokens from getTokensByCategory()', () => {

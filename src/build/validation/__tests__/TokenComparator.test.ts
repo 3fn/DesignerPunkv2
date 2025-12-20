@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build system generates required outputs with correct structure
+ */
+/**
  * Token Comparator Tests
  * 
  * Tests token value comparison across platforms for primitive, semantic,

@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build system generates required outputs with correct structure
+ */
+/**
  * Web Build Validator Tests
  * 
  * Tests validation of Web build output including:

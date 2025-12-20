@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify tokens component renders correctly and behaves as expected
+ */
+/**
  * Container Token Mappings Tests
  * 
  * Tests for component-level token reference mappings.

@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify Blend tokens are correctly defined and structured
+ */
+/**
  * Blend Tokens Unit Tests
  * 
  * Tests for blend token structure, mathematical relationships, and cross-platform consistency.

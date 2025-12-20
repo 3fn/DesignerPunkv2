@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify AdvancedReleaseCLI functionality works correctly
+ */
+/**
  * Tests for Advanced Release Analysis CLI
  * 
  * Tests the enhanced CLI features including interactive mode, configuration management,

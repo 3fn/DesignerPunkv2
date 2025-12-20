@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify WebColorResolver functionality works correctly
+ */
+/**
  * WebColorResolver Unit Tests
  * 
  * Tests for Web CSS custom property generation and media query handling.

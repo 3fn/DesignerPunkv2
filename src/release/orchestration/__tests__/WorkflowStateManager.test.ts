@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify publishing workflow coordinates release process correctly
+ */
+/**
  * Workflow State Manager Tests
  * 
  * Tests workflow state tracking, persistence, validation, and recovery.

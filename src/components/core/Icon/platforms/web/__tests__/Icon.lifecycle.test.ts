@@ -1,12 +1,15 @@
 /**
+ * @category evergreen
+ * @purpose Verify Icon component lifecycle behavior and rendering
+ * @jest-environment jsdom
+ */
+/**
  * Icon Web Component Lifecycle Tests
  * 
  * Tests the DPIcon web component's lifecycle behavior:
  * - connectedCallback (initial render)
  * - attributeChangedCallback (reactive updates)
  * - Property getters and setters
- * 
- * @jest-environment jsdom
  * 
  * @module Icon/platforms/web/__tests__
  */
@@ -26,7 +29,7 @@ describe('Icon Web Component Lifecycle', () => {
     await customElements.whenDefined('dp-icon');
   });
 
-  describe('connectedCallback', () => {
+  describe('Icon Rendering', () => {
     it('should render icon when added to DOM', async () => {
       const element = document.createElement('dp-icon') as DPIcon;
       element.setAttribute('name', 'arrow-right');
@@ -34,7 +37,7 @@ describe('Icon Web Component Lifecycle', () => {
       
       document.body.appendChild(element);
       
-      // Wait for connectedCallback to fire
+      // Wait for rendering to complete
       await new Promise(resolve => setTimeout(resolve, 0));
       
       const svg = element.shadowRoot?.querySelector('svg');
@@ -49,7 +52,7 @@ describe('Icon Web Component Lifecycle', () => {
       const element = document.createElement('dp-icon') as DPIcon;
       document.body.appendChild(element);
       
-      // Wait for connectedCallback to fire
+      // Wait for rendering to complete
       await new Promise(resolve => setTimeout(resolve, 0));
       
       const svg = element.shadowRoot?.querySelector('svg');
@@ -61,13 +64,13 @@ describe('Icon Web Component Lifecycle', () => {
     });
   });
 
-  describe('attributeChangedCallback', () => {
+  describe('Reactive Updates', () => {
     it('should update when size attribute changes', async () => {
       const element = document.createElement('dp-icon') as DPIcon;
       element.setAttribute('size', '24');
       document.body.appendChild(element);
       
-      // Wait for connectedCallback to fire
+      // Wait for rendering to complete
       await new Promise(resolve => setTimeout(resolve, 0));
       
       let svg = element.shadowRoot?.querySelector('svg');
@@ -76,7 +79,7 @@ describe('Icon Web Component Lifecycle', () => {
       // Change size
       element.setAttribute('size', '32');
       
-      // Wait for attributeChangedCallback to fire
+      // Wait for update to complete
       await new Promise(resolve => setTimeout(resolve, 0));
       
       svg = element.shadowRoot?.querySelector('svg');
@@ -90,7 +93,7 @@ describe('Icon Web Component Lifecycle', () => {
       element.setAttribute('name', 'arrow-right');
       document.body.appendChild(element);
       
-      // Wait for connectedCallback to fire
+      // Wait for rendering to complete
       await new Promise(resolve => setTimeout(resolve, 0));
       
       let svg = element.shadowRoot?.querySelector('svg');
@@ -99,7 +102,7 @@ describe('Icon Web Component Lifecycle', () => {
       // Change name
       element.setAttribute('name', 'check');
       
-      // Wait for attributeChangedCallback to fire
+      // Wait for update to complete
       await new Promise(resolve => setTimeout(resolve, 0));
       
       svg = element.shadowRoot?.querySelector('svg');
@@ -113,7 +116,7 @@ describe('Icon Web Component Lifecycle', () => {
       element.setAttribute('color', 'inherit');
       document.body.appendChild(element);
       
-      // Wait for connectedCallback to fire
+      // Wait for rendering to complete
       await new Promise(resolve => setTimeout(resolve, 0));
       
       let svg = element.shadowRoot?.querySelector('svg');
@@ -122,7 +125,7 @@ describe('Icon Web Component Lifecycle', () => {
       // Change to token
       element.setAttribute('color', 'color-primary');
       
-      // Wait for attributeChangedCallback to fire
+      // Wait for update to complete
       await new Promise(resolve => setTimeout(resolve, 0));
       
       svg = element.shadowRoot?.querySelector('svg');
@@ -135,7 +138,7 @@ describe('Icon Web Component Lifecycle', () => {
       const element = document.createElement('dp-icon') as DPIcon;
       document.body.appendChild(element);
       
-      // Wait for connectedCallback to fire
+      // Wait for rendering to complete
       await new Promise(resolve => setTimeout(resolve, 0));
       
       // Change multiple attributes
@@ -143,7 +146,7 @@ describe('Icon Web Component Lifecycle', () => {
       element.setAttribute('size', '32');
       element.setAttribute('color', 'color-success');
       
-      // Wait for attributeChangedCallback to fire
+      // Wait for updates to complete
       await new Promise(resolve => setTimeout(resolve, 0));
       
       const svg = element.shadowRoot?.querySelector('svg');
@@ -155,12 +158,12 @@ describe('Icon Web Component Lifecycle', () => {
     });
   });
 
-  describe('Property Getters and Setters', () => {
+  describe('Property API', () => {
     it('should get and set name property', async () => {
       const element = document.createElement('dp-icon') as DPIcon;
       document.body.appendChild(element);
       
-      // Wait for connectedCallback to fire
+      // Wait for rendering to complete
       await new Promise(resolve => setTimeout(resolve, 0));
       
       element.name = 'arrow-right';
@@ -174,7 +177,7 @@ describe('Icon Web Component Lifecycle', () => {
       const element = document.createElement('dp-icon') as DPIcon;
       document.body.appendChild(element);
       
-      // Wait for connectedCallback to fire
+      // Wait for rendering to complete
       await new Promise(resolve => setTimeout(resolve, 0));
       
       element.size = 32;
@@ -184,17 +187,17 @@ describe('Icon Web Component Lifecycle', () => {
       document.body.removeChild(element);
     });
 
-    it('should trigger re-render when properties change', async () => {
+    it('should update rendering when properties change', async () => {
       const element = document.createElement('dp-icon') as DPIcon;
       document.body.appendChild(element);
       
-      // Wait for connectedCallback to fire
+      // Wait for rendering to complete
       await new Promise(resolve => setTimeout(resolve, 0));
       
       element.name = 'check';
       element.size = 32;
       
-      // Wait for attributeChangedCallback to fire
+      // Wait for updates to complete
       await new Promise(resolve => setTimeout(resolve, 0));
       
       const svg = element.shadowRoot?.querySelector('svg');

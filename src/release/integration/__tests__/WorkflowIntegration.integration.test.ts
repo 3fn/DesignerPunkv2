@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify system integration works correctly across components
+ */
+/**
  * Workflow Integration Tests
  * 
  * Tests integration between hook system, workflow preservation, and AI collaboration.

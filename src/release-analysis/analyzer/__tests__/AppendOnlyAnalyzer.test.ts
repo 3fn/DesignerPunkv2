@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify AppendOnlyAnalyzer functionality works correctly
+ */
+/**
  * Unit tests for AppendOnlyAnalyzer
  * 
  * Tests the append-only analysis functionality that enables O(m) complexity

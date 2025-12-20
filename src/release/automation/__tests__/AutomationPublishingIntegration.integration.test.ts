@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify system integration works correctly across components
+ */
+/**
  * Automation → Publishing Integration Tests
  * 
  * Tests integration between automation layer (Task 6) and publishing system (Task 7)

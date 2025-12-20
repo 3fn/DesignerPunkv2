@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify integration component integration behavior
+ */
+/**
  * @jest-environment jsdom
  */
 
@@ -30,8 +34,7 @@ describe('TextInputField Integration Tests', () => {
         });
 
         expect(errorIcon).toContain('x-circle');
-        expect(errorIcon).toContain('width="24"');
-        expect(errorIcon).toContain('height="24"');
+        expect(errorIcon).toContain('icon--size-100'); // 24px = size100
         expect(errorIcon).toContain('var(--color-error)');
       });
 
@@ -84,9 +87,8 @@ describe('TextInputField Integration Tests', () => {
           color: 'color-error'
         });
 
-        // Icon should be 24px as specified in design
-        expect(errorIcon).toContain('width="24"');
-        expect(errorIcon).toContain('height="24"');
+        // Icon should use size100 class (24px as specified in design)
+        expect(errorIcon).toContain('icon--size-100');
       });
     });
 
@@ -99,8 +101,7 @@ describe('TextInputField Integration Tests', () => {
         });
 
         expect(successIcon).toContain('check');
-        expect(successIcon).toContain('width="24"');
-        expect(successIcon).toContain('height="24"');
+        expect(successIcon).toContain('icon--size-100'); // 24px = size100
         expect(successIcon).toContain('var(--color-success)');
       });
 
@@ -156,8 +157,7 @@ describe('TextInputField Integration Tests', () => {
         });
 
         expect(infoIcon).toContain('info');
-        expect(infoIcon).toContain('width="24"');
-        expect(infoIcon).toContain('height="24"');
+        expect(infoIcon).toContain('icon--size-100'); // 24px = size100
         expect(infoIcon).toContain('var(--color-text-muted)');
       });
 

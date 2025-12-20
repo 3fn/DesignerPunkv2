@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify WCAG validation catches invalid patterns and enforces rules
+ */
+/**
  * WCAGValidator Unit Tests
  * 
  * Tests for WCAG compliance validation of accessibility tokens.

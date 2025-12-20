@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify UsageTracking functionality works correctly
+ */
+/**
  * Unit tests for Usage Tracking System
  * 
  * Tests usage pattern tracking and analysis including:

@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify token file generation produces valid output files for all platforms
+ */
+/**
  * Token File Generator Tests
  * 
  * Tests token file generation orchestration, cross-platform consistency,
@@ -350,12 +354,20 @@ describe('TokenFileGenerator', () => {
       });
     });
 
-    it('should include same token count across platforms', () => {
+    // UPDATED (Spec 025 F3): Verify behavior instead of hardcoded token counts
+    // Tests should survive token system evolution
+    it('should generate valid tokens for all platforms', () => {
       const results = generator.generateAll();
 
+      // Verify all platforms generate tokens
+      results.forEach(result => {
+        expect(result.tokenCount).toBeGreaterThan(0);
+        expect(result.valid).toBe(true);
+      });
+
+      // Verify cross-platform consistency (same count across platforms)
       const tokenCounts = results.map(r => r.tokenCount);
       const uniqueCounts = new Set(tokenCounts);
-
       expect(uniqueCounts.size).toBe(1); // All platforms should have same count
     });
   });

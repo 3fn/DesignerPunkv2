@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify ConfidenceMetrics functionality works correctly
+ */
+/**
  * Tests for ConfidenceMetrics system
  * 
  * Validates confidence scoring, quality indicators, uncertainty flagging,

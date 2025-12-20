@@ -1,3 +1,7 @@
+/**
+ * @category evergreen
+ * @purpose Verify NewDocumentDetector functionality works correctly
+ */
 import { NewDocumentDetector } from '../NewDocumentDetector';
 import { execSync } from 'child_process';
 import * as globModule from 'glob';

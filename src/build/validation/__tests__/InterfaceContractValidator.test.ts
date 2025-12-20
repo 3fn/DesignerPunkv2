@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build system generates required outputs with correct structure
+ */
+/**
  * Interface Contract Validator Tests
  * 
  * Tests for F2-specific interface contract validation that ensures

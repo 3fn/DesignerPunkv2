@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify SpacingTokensFormulaValidation tokens are correctly defined and structured
+ */
+/**
  * Spacing Tokens Formula Validation Tests
  * 
  * Validates that refactored formulas produce the same values as original hard values.

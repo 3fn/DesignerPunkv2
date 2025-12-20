@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify AnalysisStateManager functionality works correctly
+ */
+/**
  * Unit tests for AnalysisStateManager
  * 
  * Tests state loading, saving, validation, and error handling.

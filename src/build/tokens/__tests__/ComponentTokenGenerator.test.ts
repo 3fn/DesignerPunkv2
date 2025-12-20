@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify ComponentTokenGenerator tokens are correctly defined and structured
+ */
+/**
  * Component Token Generator Tests
  * 
  * Tests component token generation when semantic and primitive tokens are insufficient

@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build system generates required outputs with correct structure
+ */
+/**
  * iOS Builder Tests
  * 
  * Tests for iOS platform builder functionality

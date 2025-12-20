@@ -20,7 +20,10 @@ module.exports = {
   // TypeScript preset for ts-jest
   preset: 'ts-jest',
   
-  // Node.js environment appropriate for infrastructure tests
+  // Default test environment is 'node' (Jest default)
+  // Per-file @jest-environment annotations override this default
+  // Web component tests use @jest-environment jsdom for DOM APIs
+  // Most tests (token, build, validation) use default node environment
   testEnvironment: 'node',
   
   // Restrict test discovery to src/ directory only (F1)

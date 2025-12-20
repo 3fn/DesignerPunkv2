@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify ThreeTier validation catches invalid patterns and enforces rules
+ */
+/**
  * Unit tests for ThreeTierValidator
  * 
  * Tests comprehensive three-tier validation system including:

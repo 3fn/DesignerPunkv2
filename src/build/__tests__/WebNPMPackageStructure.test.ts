@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build system generates required outputs with correct structure
+ */
+/**
  * Web NPM Package Structure Tests
  * 
  * Tests NPM package generation with proper structure

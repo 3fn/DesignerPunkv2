@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build system generates required outputs with correct structure
+ */
+/**
  * Parallel Executor Integration Tests
  * 
  * Integration tests verifying ParallelExecutor works correctly

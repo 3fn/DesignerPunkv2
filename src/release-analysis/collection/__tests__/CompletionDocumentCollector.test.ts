@@ -1,3 +1,7 @@
+/**
+ * @category evergreen
+ * @purpose Verify CompletionDocumentCollector functionality works correctly
+ */
 import { CompletionDocumentCollector, DocumentFilter } from '../CompletionDocumentCollector';
 import { DEFAULT_ANALYSIS_CONFIG } from '../../config/AnalysisConfig';
 import { GitChanges } from '../../git/GitHistoryAnalyzer';

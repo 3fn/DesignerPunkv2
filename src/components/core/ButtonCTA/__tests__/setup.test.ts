@@ -1,4 +1,9 @@
 /**
+ * @category evergreen
+ * @purpose Verify setup component renders correctly and behaves as expected
+ * @jest-environment jsdom
+ */
+/**
  * Test infrastructure smoke test
  * 
  * Verifies that:
@@ -8,8 +13,6 @@
  * - Test utilities function correctly
  * 
  * Task 6.1: Set up test infrastructure
- * 
- * @jest-environment jsdom
  */
 
 import {

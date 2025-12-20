@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify system integration works correctly across components
+ */
+/**
  * Workflow Integration Tests for Release Analysis System
  * 
  * Tests the integration between components in realistic scenarios

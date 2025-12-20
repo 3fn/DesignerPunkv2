@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify AnalysisValidator functionality works correctly
+ */
+/**
  * Tests for AnalysisValidator
  * 
  * Comprehensive test suite for validation system including version validation,

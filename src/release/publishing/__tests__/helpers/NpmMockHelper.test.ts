@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify release system functionality works correctly
+ */
+/**
  * NpmMockHelper Unit Tests
  * 
  * Tests the NpmMockHelper utility to ensure it correctly mocks npm command sequences.

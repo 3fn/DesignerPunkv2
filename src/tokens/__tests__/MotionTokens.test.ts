@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify Motion tokens are correctly defined and structured
+ */
+/**
  * Motion Tokens Unit Tests
  * 
  * Tests for primitive motion tokens (duration, easing, scale) covering:

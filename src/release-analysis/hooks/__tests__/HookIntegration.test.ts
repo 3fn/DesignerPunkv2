@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify system integration works correctly across components
+ */
+/**
  * Integration Tests for Hook System
  * 
  * Task 7.5: Test Hook Integration

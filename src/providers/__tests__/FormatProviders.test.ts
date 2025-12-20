@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify provider system supplies correct values for token generation
+ */
+/**
  * Format Provider Services Unit Tests
  * 
  * Tests for platform-specific syntax generation, naming convention consistency,

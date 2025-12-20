@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify AnalysisReporter functionality works correctly
+ */
+/**
  * Tests for AnalysisReporter
  * 
  * Comprehensive test suite covering report generation, formatting, and persistence.

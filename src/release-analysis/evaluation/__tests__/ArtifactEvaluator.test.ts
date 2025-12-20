@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify ArtifactEvaluator functionality works correctly
+ */
+/**
  * Tests for Artifact Evaluation Framework
  * 
  * Validates the systematic evaluation of extraction approaches

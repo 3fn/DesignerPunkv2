@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify ReleaseCLI functionality works correctly
+ */
+/**
  * Tests for Release Analysis CLI
  * 
  * Optimization Strategy:

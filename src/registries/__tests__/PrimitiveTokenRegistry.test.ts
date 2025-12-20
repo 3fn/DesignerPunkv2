@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify PrimitiveToken registry provides correct token lookup and management
+ */
+/**
  * PrimitiveTokenRegistry Unit Tests
  * 
  * Tests for primitive token registration, retrieval, validation, and category organization.

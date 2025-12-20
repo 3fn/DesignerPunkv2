@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify system performance meets requirements and thresholds
+ */
+/**
  * Performance Regression Tests for Release Analysis System
  * 
  * Tests that verify the append-only optimization maintains O(m) complexity

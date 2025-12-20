@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify FontWeight tokens are correctly defined and structured
+ */
+/**
  * Font Weight Tokens Unit Tests
  * 
  * Tests for font weight token numeric progression and mathematical relationships.

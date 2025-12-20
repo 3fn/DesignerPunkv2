@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build system generates required outputs with correct structure
+ */
+/**
  * Build System Compatibility Integration Tests
  * 
  * Tests integration with common build systems (webpack, rollup, vite, esbuild)

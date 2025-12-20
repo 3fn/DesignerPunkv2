@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify SimpleChangeExtractor functionality works correctly
+ */
+/**
  * Tests for SimpleChangeExtractor
  * 
  * Validates pattern-based change extraction functionality including

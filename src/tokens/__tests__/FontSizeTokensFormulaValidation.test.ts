@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify FontSizeTokensFormulaValidation tokens are correctly defined and structured
+ */
+/**
  * FontSizeTokens Formula Validation Tests
  * 
  * Validates that refactored formulas produce the same values as original hard values.

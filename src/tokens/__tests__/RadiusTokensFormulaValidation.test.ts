@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify RadiusTokensFormulaValidation tokens are correctly defined and structured
+ */
+/**
  * Formula Validation Tests for RadiusTokens
  * 
  * Validates that refactored formulas produce the same values as original hard values.

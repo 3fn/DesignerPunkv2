@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify integration functionality works correctly
+ */
+/**
  * Integration test for pattern-based change extraction
  * 
  * Tests the complete workflow from completion documents to extracted changes

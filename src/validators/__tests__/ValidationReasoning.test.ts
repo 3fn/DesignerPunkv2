@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify ValidationReasoning validation catches invalid patterns and enforces rules
+ */
+/**
  * Unit tests for ValidationReasoning
  * 
  * Tests mathematical reasoning generation for validation results including:

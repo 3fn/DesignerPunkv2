@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify AndroidColorResolver functionality works correctly
+ */
+/**
  * AndroidColorResolver Unit Tests
  * 
  * Tests for Android resource qualifier generation and configuration detection.

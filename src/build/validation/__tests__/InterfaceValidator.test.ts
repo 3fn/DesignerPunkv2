@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build system generates required outputs with correct structure
+ */
+/**
  * Interface Validator Tests
  * 
  * Tests for cross-platform interface validation functionality.

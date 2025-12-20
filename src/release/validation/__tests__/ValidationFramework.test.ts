@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify release system functionality works correctly
+ */
+/**
  * Validation Framework Tests
  * 
  * Tests for the comprehensive release validation system

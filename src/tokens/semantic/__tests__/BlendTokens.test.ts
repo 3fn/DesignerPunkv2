@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify Blend tokens are correctly defined and structured
+ */
+/**
  * Semantic Blend Tokens Unit Tests
  * 
  * Tests for semantic blend token structure, primitive references, and blend directions.

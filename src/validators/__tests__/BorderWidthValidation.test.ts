@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify BorderWidthValidation validation catches invalid patterns and enforces rules
+ */
+/**
  * Unit tests for Border Width Mathematical Relationship Validation
  * 
  * Tests border width token validation including:

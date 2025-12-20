@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify Web format generator produces correct platform-specific output
+ */
+/**
  * WebFormatGenerator Semantic Token Tests
  * 
  * Tests for semantic token formatting methods added in task 2.1

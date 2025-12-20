@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify Motion tokens are correctly defined and structured
+ */
+/**
  * Semantic Motion Token Tests
  * 
  * Tests for semantic motion token structure and utility functions.

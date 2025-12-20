@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify BlendUtility generator produces correct output format
+ */
+/**
  * Blend Utility Generator Tests
  * 
  * Tests web blend utility generation with correct TypeScript output

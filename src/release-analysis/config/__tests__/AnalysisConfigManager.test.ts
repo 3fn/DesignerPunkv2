@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify AnalysisConfigManager functionality works correctly
+ */
+/**
  * Tests for Analysis Configuration Manager
  */
 

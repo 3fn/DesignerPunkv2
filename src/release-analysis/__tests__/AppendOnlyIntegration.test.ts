@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify system integration works correctly across components
+ */
+/**
  * Integration tests for Append-Only Analysis System
  * 
  * Tests end-to-end append-only flow with temporary git repository:

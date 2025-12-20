@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify release system functionality works correctly
+ */
+/**
  * Error Recovery Tests
  * 
  * Tests error recovery strategies, retry logic, and partial completion handling

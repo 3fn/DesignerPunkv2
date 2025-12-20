@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify BlendCalculator functionality works correctly
+ */
+/**
  * BlendCalculator Integration Tests
  * 
  * Tests the BlendCalculator orchestrator with all blend directions

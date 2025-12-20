@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify UnitConverter tokens are correctly defined and structured
+ */
+/**
  * Unit Converter Tests
  * 
  * Validates cross-platform unit conversion from F1 unitless baseValues

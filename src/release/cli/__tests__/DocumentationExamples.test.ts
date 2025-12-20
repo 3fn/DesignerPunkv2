@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify release system functionality works correctly
+ */
+/**
  * Documentation Examples Validation Tests
  * 
  * Validates that documentation examples are accurate and executable.

@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build system generates required outputs with correct structure
+ */
+/**
  * Progress Tracker Tests
  * 
  * Tests for build progress tracking functionality including:

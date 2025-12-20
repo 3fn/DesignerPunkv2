@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify release system functionality works correctly
+ */
+/**
  * Unit Tests for Release Detection System
  * 
  * Tests completion document parsing accuracy, confidence scoring algorithm,

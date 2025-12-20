@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify publishing workflow coordinates release process correctly
+ */
+/**
  * Publishing Workflow Integration Tests
  * 
  * Tests complete publishing workflow including GitHub releases and npm publishing.

@@ -1,3 +1,7 @@
+/**
+ * @category evergreen
+ * @purpose Verify GitHistoryAnalyzer.integration functionality works correctly
+ */
 import { GitHistoryAnalyzer } from '../GitHistoryAnalyzer';
 import { execSync } from 'child_process';
 import { mkdtempSync, rmSync, writeFileSync } from 'fs';

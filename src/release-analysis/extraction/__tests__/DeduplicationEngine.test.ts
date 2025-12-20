@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify DeduplicationEngine functionality works correctly
+ */
+/**
  * Tests for DeduplicationEngine
  * 
  * Verifies deduplication functionality including similarity detection,

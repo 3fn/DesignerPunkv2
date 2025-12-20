@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify PlatformConstraints validation catches invalid patterns and enforces rules
+ */
+/**
  * Platform Constraint Handler Unit Tests
  * 
  * Tests for platform-specific constraint identification, handling, and graceful degradation.

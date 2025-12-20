@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify system integration works correctly across components
+ */
+/**
  * Tests for AnalysisResultParser
  * 
  * Mock Strategy:

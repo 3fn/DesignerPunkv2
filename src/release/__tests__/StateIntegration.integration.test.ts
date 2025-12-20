@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify system integration works correctly across components
+ */
+/**
  * State Integration Tests
  * 
  * Tests integration of WorkflowStateManager with ReleaseManager and ReleasePipeline.

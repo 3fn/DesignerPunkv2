@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify system integration works correctly across components
+ */
+/**
  * System Integration Tests for Release Analysis
  * 
  * Comprehensive tests covering the complete release analysis workflow

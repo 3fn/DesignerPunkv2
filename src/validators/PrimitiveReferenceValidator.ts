@@ -26,6 +26,10 @@ export class PrimitiveReferenceValidator {
 
   /**
    * Validate that a semantic token references valid primitive tokens
+   * 
+   * UPDATED (Spec 025 F4): Supports custom multiplier pattern (custom:X.XXX)
+   * Custom multipliers are used for optical corrections in icon sizing.
+   * See: src/tokens/semantic/IconTokens.ts
    */
   validate(
     semanticToken: SemanticToken,
@@ -68,6 +72,18 @@ export class PrimitiveReferenceValidator {
         continue;
       }
 
+      // Check if reference is a custom multiplier (e.g., custom:1.231)
+      if (this.isCustomMultiplier(reference)) {
+        // Validate that the custom multiplier is a valid number
+        const multiplierValue = this.parseCustomMultiplier(reference);
+        if (isNaN(multiplierValue)) {
+          invalidReferences.push(`${key}: ${reference} (invalid custom multiplier)`);
+        } else {
+          validReferences.push(`${key}: ${reference} (custom multiplier)`);
+        }
+        continue;
+      }
+
       // Check if primitive token exists
       const primitiveToken = this.primitiveRegistry.get(reference);
       if (!primitiveToken) {
@@ -103,7 +119,8 @@ export class PrimitiveReferenceValidator {
         suggestions: [
           'Verify primitive token names are correct',
           'Register referenced primitive tokens before semantic tokens',
-          'Check for typos in primitive token references'
+          'Check for typos in primitive token references',
+          'For custom multipliers, use format: custom:X.XXX (e.g., custom:1.231)'
         ],
         mathematicalReasoning: 'Semantic tokens must reference valid primitives to maintain mathematical relationships'
       };
@@ -151,6 +168,31 @@ export class PrimitiveReferenceValidator {
     ];
 
     return rawValuePatterns.some(pattern => pattern.test(reference));
+  }
+
+  /**
+   * Check if a reference is a custom multiplier (e.g., custom:1.231)
+   * 
+   * Custom multipliers are used for optical corrections in icon sizing.
+   * Format: 'custom:X.XXX' where X.XXX is the multiplier value
+   * 
+   * See: src/tokens/semantic/IconTokens.ts
+   */
+  private isCustomMultiplier(reference: string): boolean {
+    return reference.startsWith('custom:');
+  }
+
+  /**
+   * Parse a custom multiplier string to extract the numeric value
+   * 
+   * @param reference - Custom multiplier string (e.g., 'custom:1.231')
+   * @returns Numeric multiplier value, or NaN if invalid
+   */
+  private parseCustomMultiplier(reference: string): number {
+    if (!this.isCustomMultiplier(reference)) {
+      return NaN;
+    }
+    return parseFloat(reference.slice('custom:'.length));
   }
 
   /**

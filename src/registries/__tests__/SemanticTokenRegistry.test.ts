@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify SemanticToken registry provides correct token lookup and management
+ */
+/**
  * Semantic Token Registry Tests
  * 
  * Comprehensive test coverage for semantic token registration, validation,

@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify OptimizationValidation functionality works correctly
+ */
+/**
  * Optimization Validation Tests
  * 
  * Tests optimization effectiveness including tree-shaking, caching,

@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify componentTypographyInheritance component renders correctly and behaves as expected
+ */
+/**
  * Component Typography Token Structure Validation Tests
  * 
  * Validates typography token system integrity:

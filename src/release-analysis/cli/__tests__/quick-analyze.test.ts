@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify quick-analyze functionality works correctly
+ */
+/**
  * Tests for Quick Analysis Mode
  * 
  * Validates quick analysis performance, caching, and output formatting

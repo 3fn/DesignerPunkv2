@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify RadiusStrategicFlexibilityValidation tokens are correctly defined and structured
+ */
+/**
  * Validation tests for RadiusTokens strategic flexibility preservation
  * 
  * Verifies that strategic flexibility tokens remain unchanged after formula refactoring:

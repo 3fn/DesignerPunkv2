@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify SemanticTokenIntegration tokens are correctly defined and structured
+ */
+/**
  * Semantic Token Integration Tests
  * 
  * Tests for semantic token barrel export, utility functions, and registry integration

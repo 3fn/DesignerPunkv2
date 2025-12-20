@@ -1,4 +1,8 @@
 /**
+ * @category evergreen
+ * @purpose Verify build generators produce correct file formats for target platforms
+ */
+/**
  * WebShadowGenerator Tests
  * 
  * Tests for Web CSS shadow translation functionality
