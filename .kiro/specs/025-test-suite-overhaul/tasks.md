@@ -97,7 +97,7 @@ The sequential approach enables:
     - Create `findings/infrastructure-confirmed-actions.md`
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 12.4, 12.5_
 
-- [ ] 2. Infrastructure Implementation & Verification
+- [x] 2. Infrastructure Implementation & Verification
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -151,7 +151,7 @@ The sequential approach enables:
     - Verify utilities work correctly
     - _Requirements: 5.1, 5.2, 6.5_
 
-  - [ ] 2.4 Run Infrastructure tests and verify green
+  - [x] 2.4 Run Infrastructure tests and verify green
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run tests affected by Infrastructure changes
