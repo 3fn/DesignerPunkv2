@@ -108,9 +108,16 @@ Each section follows this workflow:
 
 3. **Findings Documentation**
    - Create findings document for each section
-   - Categorize each test with recommendation
+   - Categorize each test with nuanced recommendation
    - Include rationale for each recommendation
    - Document patterns and anti-patterns discovered
+
+**Recommendation Types** (nuanced, not binary):
+- **Delete** - No longer provides value, retirement criteria met
+- **Fix** - Checks right thing wrong way (e.g., implementation instead of behavior)
+- **Refine** - Too strict or too loose, needs adjusted criteria
+- **Convert** - Change from temporary to evergreen with new criteria
+- **Keep** - Already aligned with standards
 
 4. **Implementation (After Confirmation)**
    - Fix tests that check wrong things
@@ -186,14 +193,17 @@ Each section follows this workflow:
 
 **Rationale**: Test Development Standards document captures lessons from Icon test fixes - apply those lessons systematically.
 
-### Decision 5: Preserve Component Test Wins
+### Decision 5: Audit All Tests (Not Just Failing)
 
-**Approach**: Protect component tests that are currently passing (Icon, ButtonCTA, TextInputField, Container)
+**Approach**: Audit both failing AND passing tests for TDS alignment
 
 **Rationale**:
-- These tests demonstrate good patterns after Spec 023
-- Use them as reference implementations
-- Don't undo successful work
+- Passing tests might have same anti-patterns (just haven't broken yet)
+- Comprehensive TDS alignment prevents future issues
+- Icon/ButtonCTA/etc are reference examples, but still audit them
+- Don't assume Spec 023 was perfect
+
+**Scope**: All tests in System Implementation section, prioritizing failing tests first.
 
 ### Decision 6: Different Criteria for Release Analysis
 
@@ -206,6 +216,50 @@ Each section follows this workflow:
 - Not Test Development Standards standards (those apply to product tests)
 
 **Rationale**: Development tooling tests have different purpose and requirements than product tests.
+
+### Decision 7: Sequential Section Execution
+
+**Approach**: Complete sections sequentially (Infrastructure → System Implementation → Release Analysis)
+
+**Rationale**:
+- Smaller test runs = faster feedback
+- Learn patterns from earlier sections
+- Less cognitive load
+- Can prioritize if time becomes issue
+
+### Decision 8: Adjust Performance Targets (Not Optimize)
+
+**Approach**: For Release Analysis tests, adjust timeout values to realistic targets rather than optimizing code performance
+
+**Rationale**:
+- Performance optimization is separate concern (different spec)
+- This spec focuses on test quality, not code performance
+- Realistic targets let us validate test suite works
+- Can optimize later if performance becomes actual bottleneck
+
+### Decision 9: Findings Document Format (Spec 011 Pattern)
+
+**Approach**: Pattern-based findings documents inspired by Spec 011's successful format
+
+**Format**:
+- Group failures by pattern (not test-by-test)
+- For each pattern: TDS reference, recommendation, impact, rationale, examples
+- No task references (tasks don't exist yet during audit)
+- Summary table showing pattern → test count → impact
+
+**Recommendation Types** (nuanced, not binary):
+- **Delete** - No longer provides value, retirement criteria met
+- **Fix** - Checks right thing wrong way (e.g., implementation instead of behavior)
+- **Refine** - Too strict or too loose, needs adjusted criteria
+- **Convert** - Change from temporary to evergreen with new criteria
+- **Keep** - Already aligned with standards
+
+**Rationale**:
+- Spec 011 used this format successfully
+- Scannable and actionable
+- Avoids redundancy
+- Findings inform tasks (not the other way around)
+- Nuanced recommendations avoid binary "good vs bad" thinking
 
 ---
 
@@ -308,9 +362,9 @@ Section 3: Release Analysis Audit (~200-300 failures)
 - Token system validation tests
 
 **Temporary Tests (Review for Retirement):**
-- Spec 017 token compliance tests (migration complete?)
-- Spec 023 token compliance tests (audit complete?)
-- Hard-coded value detection tests (cleanup complete?)
+- Tests marked temporary during Spec 017 work (throughout codebase)
+- Tests marked temporary during Spec 023 work (throughout codebase)
+- Hard-coded value detection tests (evaluate if cleanup complete)
 
 **Infrastructure Tests:**
 - Jest configuration validation
@@ -466,8 +520,8 @@ After each section's audit:
 - ✅ **0 failing test suites** (down from 391)
 - ✅ **0 failing tests** (down from 797)
 - ✅ **All tests categorized** as evergreen or temporary
-- ✅ **Test execution time** < 15 minutes (currently ~10 min for `npm test`, but with failures)
 - ✅ **100% of tests** follow Test Development Standards
+- ✅ **New performance baseline established** after fixes (no predetermined target)
 
 ### Qualitative Metrics
 
@@ -555,7 +609,7 @@ After each section's audit:
 
 ### Blocks
 
-- **Spec 026: Blend Token Infrastructure** - Need reliable tests before implementing new features
+- **Spec 024: Blend Token Infrastructure** - Need reliable tests before implementing new features
 - **Future Component Development** - Need trustworthy test suite for validation
 - **CI/CD Reliability** - Need green tests for automated validation
 
@@ -563,40 +617,36 @@ After each section's audit:
 
 ## Open Questions
 
-1. **Should we audit passing tests too?**
-   - Current approach: Focus only on failing tests
-   - Alternative: Audit all tests for Test Development Standards alignment
-   - Decision needed: Scope boundary for this spec
+### Resolved Questions
 
-2. **What's the retirement criteria for Spec 017/023 temporary tests?**
-   - Need to review: Are migrations complete?
-   - Need to determine: Can we delete these tests now?
-   - Decision needed: Which temporary tests can be retired?
+✅ **Should we audit passing tests too?** 
+- **Decision**: Yes - Audit all tests for TDS alignment, not just failing tests
 
-3. **Should token compliance tests be evergreen or temporary?**
-   - Current state: Detecting patterns that may be intentional
-   - Question: Are these tests checking temporary constraints or permanent requirements?
-   - Decision needed: Categorize token compliance tests
+✅ **How do we handle tests that reveal real bugs?**
+- **Decision**: Document in findings, discuss during Human Confirmation
 
-4. **How do we handle tests that reveal real bugs?**
-   - Process: Fix bug or document as known issue?
-   - Priority: Fix immediately or defer to separate spec?
-   - Decision needed: Bug fix workflow during audit
+✅ **Should we optimize performance or adjust test targets?**
+- **Decision**: Adjust targets (Option A) - Performance optimization is separate concern
 
-5. **Should we optimize performance or adjust test targets?**
-   - Release Analysis tests: Performance not meeting targets
-   - Option A: Adjust timeout values to realistic targets
-   - Option B: Optimize release analysis performance
-   - Decision needed: Which approach for Section 3?
+✅ **Should sections be audited sequentially or in parallel?**
+- **Decision**: Sequential - Smaller test runs, learn patterns, less cognitive load
 
-6. **Should sections be audited sequentially or in parallel?**
-   - Sequential: Complete one section before starting next
-   - Parallel: Audit multiple sections simultaneously
-   - Decision needed: Workflow and resource allocation
+✅ **What level of detail for findings documents?**
+- **Decision**: Pattern-based format inspired by Spec 011 (group by pattern, show examples, no task references)
 
-7. **What level of detail for findings documents?**
-   - Option A: High-level categorization with patterns
-   - Option B: Test-by-test analysis with specific recommendations
+### Open Questions for Discussion
+
+1. **What's the retirement criteria for Spec 017/023 temporary tests?**
+   - **Approach**: Evaluate during audit phase
+   - **Process**: Flag tests marked "TEMPORARY" from Spec 017/023, evaluate if retirement criteria met
+   - **Decision**: Audit will reveal whether migrations/cleanups are complete
+   - **Note**: This is a question the audit should answer, not a pre-audit decision
+
+2. **Token compliance tests - Evergreen or Temporary?**
+   - **Decision**: Evergreen (token compliance is permanent requirement)
+   - **Action**: Refine during audit (update evaluation criteria)
+   - **Rationale**: The goal (token compliance) is valuable, but implementation (what counts as violation) needs refinement
+   - **Example**: Tests detecting `|| 'fallback'` patterns may be too strict if fallbacks are intentional defensive programming
    - Decision needed: Findings document format and detail level
 
 ---
