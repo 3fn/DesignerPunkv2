@@ -1,9 +1,10 @@
 /**
+ * @jest-environment jsdom
+ */
+
+/**
  * @category evergreen
  * @purpose Verify labelAssociation component renders correctly and behaves as expected
- */
-/**
- * @jest-environment jsdom
  */
 
 /**
@@ -13,26 +14,19 @@
  * Validates Requirement 7.1: Label association with for attribute.
  */
 
-import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
-
-// Import web component to register it
-import '../platforms/web/TextInputField.web';
+import { describe, it, expect, beforeAll, beforeEach, afterEach } from '@jest/globals';
+import { injectMotionTokensInContainer } from './setup';
 
 describe('TextInputField Label Association', () => {
   let container: HTMLElement;
-  let styleElement: HTMLStyleElement;
+  
+  // Import component before tests
+  beforeAll(async () => {
+    // Import component (dynamic import)
+    await import('../platforms/web/TextInputField.web');
+  });
   
   beforeEach(() => {
-    // Add CSS custom properties for motion tokens
-    styleElement = document.createElement('style');
-    styleElement.textContent = `
-      :root {
-        --motion-float-label-duration: 250ms;
-        --motion-float-label-easing: ease-out;
-      }
-    `;
-    document.head.appendChild(styleElement);
-    
     // Create container for tests
     container = document.createElement('div');
     document.body.appendChild(container);
@@ -41,21 +35,28 @@ describe('TextInputField Label Association', () => {
   afterEach(() => {
     // Clean up
     document.body.removeChild(container);
-    document.head.removeChild(styleElement);
   });
+
+  /**
+   * Helper to set innerHTML and inject motion tokens into all components.
+   * This works around JSDOM's limitation where CSS custom properties on :root
+   * don't inherit into Shadow DOM elements.
+   */
+  function setContainerHTML(html: string): void {
+    container.innerHTML = html;
+    injectMotionTokensInContainer(container);
+  }
   
   describe('Web Platform', () => {
     it('should have label with for attribute matching input id', () => {
-      // Web component is now registered via test setup file
-      
       // Create component
-      container.innerHTML = `
+      setContainerHTML(`
         <text-input-field
           id="test-input"
           label="Email"
           value=""
         ></text-input-field>
-      `;
+      `);
       
       // Wait for component to render
       const component = container.querySelector('text-input-field') as any;
@@ -80,16 +81,14 @@ describe('TextInputField Label Association', () => {
     });
     
     it('should focus input when label is clicked', () => {
-      // Web component is now registered via test setup file
-      
       // Create component
-      container.innerHTML = `
+      setContainerHTML(`
         <text-input-field
           id="test-input"
           label="Email"
           value=""
         ></text-input-field>
-      `;
+      `);
       
       const component = container.querySelector('text-input-field') as any;
       const shadowRoot = component.shadowRoot;
@@ -110,17 +109,15 @@ describe('TextInputField Label Association', () => {
     });
     
     it('should have programmatic association for screen readers', () => {
-      // Web component is now registered via test setup file
-      
       // Create component with helper text
-      container.innerHTML = `
+      setContainerHTML(`
         <text-input-field
           id="test-input"
           label="Email"
           value=""
           helper-text="Enter your email address"
         ></text-input-field>
-      `;
+      `);
       
       const component = container.querySelector('text-input-field') as any;
       const shadowRoot = component.shadowRoot;
@@ -138,17 +135,15 @@ describe('TextInputField Label Association', () => {
     });
     
     it('should associate error message with input for screen readers', () => {
-      // Web component is now registered via test setup file
-      
       // Create component with error
-      container.innerHTML = `
+      setContainerHTML(`
         <text-input-field
           id="test-input"
           label="Email"
           value="invalid"
           error-message="Please enter a valid email"
         ></text-input-field>
-      `;
+      `);
       
       const component = container.querySelector('text-input-field') as any;
       const shadowRoot = component.shadowRoot;
@@ -172,10 +167,8 @@ describe('TextInputField Label Association', () => {
     });
     
     it('should associate both helper text and error message with input', () => {
-      // Web component is now registered via test setup file
-      
       // Create component with both helper text and error
-      container.innerHTML = `
+      setContainerHTML(`
         <text-input-field
           id="test-input"
           label="Email"
@@ -183,7 +176,7 @@ describe('TextInputField Label Association', () => {
           helper-text="Enter your email address"
           error-message="Please enter a valid email"
         ></text-input-field>
-      `;
+      `);
       
       const component = container.querySelector('text-input-field') as any;
       const shadowRoot = component.shadowRoot;
@@ -198,16 +191,14 @@ describe('TextInputField Label Association', () => {
     });
     
     it('should maintain label association when label floats', () => {
-      // Web component is now registered via test setup file
-      
       // Create component
-      container.innerHTML = `
+      setContainerHTML(`
         <text-input-field
           id="test-input"
           label="Email"
           value=""
         ></text-input-field>
-      `;
+      `);
       
       const component = container.querySelector('text-input-field') as any;
       const shadowRoot = component.shadowRoot;
@@ -233,18 +224,16 @@ describe('TextInputField Label Association', () => {
   
   describe('Cross-Platform Accessibility', () => {
     it('should have consistent label text across platforms', () => {
-      // Web component is now registered via test setup file
-      
       const labelText = 'Email Address';
       
       // Web
-      container.innerHTML = `
+      setContainerHTML(`
         <text-input-field
           id="test-input"
           label="${labelText}"
           value=""
         ></text-input-field>
-      `;
+      `);
       
       const component = container.querySelector('text-input-field') as any;
       const shadowRoot = component.shadowRoot;
@@ -260,17 +249,15 @@ describe('TextInputField Label Association', () => {
     });
     
     it('should indicate required fields consistently', () => {
-      // Web component is now registered via test setup file
-      
       // Web
-      container.innerHTML = `
+      setContainerHTML(`
         <text-input-field
           id="test-input"
           label="Email"
           value=""
           required
         ></text-input-field>
-      `;
+      `);
       
       const component = container.querySelector('text-input-field') as any;
       const shadowRoot = component.shadowRoot;

@@ -151,7 +151,10 @@ export function generateIconSizeTokens(): Record<string, Omit<SemanticToken, 'pr
  * Parse a multiplier value from primitiveReferences
  * Returns the numeric value whether it's a lineHeight reference or custom multiplier
  */
-export function parseMultiplier(multiplierRef: string): number {
+export function parseMultiplier(multiplierRef: string | undefined): number {
+  if (!multiplierRef) {
+    throw new Error('Multiplier reference is undefined');
+  }
   if (multiplierRef.startsWith(CUSTOM_MULTIPLIER_PREFIX)) {
     return parseFloat(multiplierRef.slice(CUSTOM_MULTIPLIER_PREFIX.length));
   }
@@ -166,7 +169,10 @@ export function parseMultiplier(multiplierRef: string): number {
 /**
  * Check if a multiplier is a custom value (not a lineHeight reference)
  */
-export function isCustomMultiplier(multiplierRef: string): boolean {
+export function isCustomMultiplier(multiplierRef: string | undefined): boolean {
+  if (!multiplierRef) {
+    return false;
+  }
   return multiplierRef.startsWith(CUSTOM_MULTIPLIER_PREFIX);
 }
 

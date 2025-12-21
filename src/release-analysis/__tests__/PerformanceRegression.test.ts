@@ -96,9 +96,13 @@ describe('Performance Regression Tests', () => {
 
   /**
    * Helper function to create multiple completion documents in batch
+   * Includes retry logic for git operations to handle flaky test environments
+   * @param count Number of documents to create
+   * @param batchCommit Whether to commit all documents in a single commit
+   * @param startIndex Starting index for document numbering (default: 1)
    */
-  function createCompletionDocuments(count: number, batchCommit: boolean = true): void {
-    for (let i = 1; i <= count; i++) {
+  function createCompletionDocuments(count: number, batchCommit: boolean = true, startIndex: number = 1): void {
+    for (let i = startIndex; i < startIndex + count; i++) {
       const specName = `${String(i).padStart(3, '0')}-test-spec`;
       const docPath = path.join(
         tempDir,
@@ -124,13 +128,48 @@ Implemented feature ${i}
 Added functionality for feature ${i}
       `);
 
-      // Add to git
-      execSync(`git add "${docPath}"`, { cwd: tempDir });
+      // Add to git - ensure file is properly staged
+      try {
+        execSync(`git add "${docPath}"`, { cwd: tempDir, stdio: 'pipe' });
+      } catch (error) {
+        console.error(`Failed to stage file ${docPath}:`, error);
+        throw error;
+      }
     }
 
     // Commit all documents in a single commit if batch mode
     if (batchCommit) {
-      execSync(`git commit -m "Add ${count} completion documents"`, { cwd: tempDir });
+      // Retry logic for git commit (3 retries with 100ms delay)
+      let retries = 3;
+      let lastError: Error | null = null;
+      
+      while (retries > 0) {
+        try {
+          // Verify files are staged before committing
+          const status = execSync('git status --porcelain', { cwd: tempDir, encoding: 'utf-8' });
+          if (!status.trim()) {
+            console.warn('No files staged for commit');
+            return;
+          }
+          
+          execSync(`git commit -m "Add ${count} completion documents"`, { cwd: tempDir, stdio: 'pipe' });
+          return; // Success - exit the function
+        } catch (error) {
+          lastError = error as Error;
+          retries--;
+          if (retries > 0) {
+            // Wait 100ms before retry to allow file system to settle
+            const waitStart = Date.now();
+            while (Date.now() - waitStart < 100) {
+              // Busy wait (synchronous delay)
+            }
+          }
+        }
+      }
+      
+      // All retries exhausted
+      console.error(`Failed to commit ${count} documents after 3 retries:`, lastError);
+      throw lastError;
     }
   }
 
@@ -323,18 +362,18 @@ Implemented feature ${index}
       await orchestrator.analyze();
 
       // Measure time to analyze 5 new documents with 100 existing
-      createCompletionDocuments(5, true); // Let helper handle git operations
+      createCompletionDocuments(5, true, 101); // Create docs 101-105
       
       const start1 = Date.now();
       const result1 = await orchestrator.analyze();
       const duration1 = Date.now() - start1;
 
       // Create 400 more documents (total 505)
-      createCompletionDocuments(400, true); // Let helper handle git operations
+      createCompletionDocuments(400, true, 106); // Create docs 106-505
       await orchestrator.analyze();
 
       // Measure time to analyze 5 new documents with 505 existing
-      createCompletionDocuments(5, true); // Let helper handle git operations
+      createCompletionDocuments(5, true, 506); // Create docs 506-510
       
       const start2 = Date.now();
       const result2 = await orchestrator.analyze();
@@ -355,7 +394,7 @@ Implemented feature ${index}
       console.log(`   5 new docs (100 total): ${duration1}ms`);
       console.log(`   5 new docs (505 total): ${duration2}ms`);
       console.log(`   Ratio: ${ratio.toFixed(2)}x (should be <3x for O(m))`);
-    }, 15000); // 15s timeout for O(m) complexity verification
+    }, 60000); // 60s timeout for O(m) complexity verification (creating 510 documents + multiple analyses)
 
     it('should verify performance scales with new documents, not total', async () => {
       // Arrange: Create 200 documents and analyze

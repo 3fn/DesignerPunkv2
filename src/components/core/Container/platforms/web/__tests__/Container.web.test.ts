@@ -1,9 +1,10 @@
 /**
+ * @jest-environment jsdom
+ */
+
+/**
  * @category evergreen
  * @purpose Verify Container.web component renders correctly and behaves as expected
- */
-/**
- * @jest-environment jsdom
  */
 
 /**

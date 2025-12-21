@@ -1,9 +1,10 @@
 /**
+ * @jest-environment jsdom
+ */
+
+/**
  * @category evergreen
  * @purpose Verify CrossPlatform component renders correctly and behaves as expected
- */
-/**
- * @jest-environment jsdom
  */
 
 /**

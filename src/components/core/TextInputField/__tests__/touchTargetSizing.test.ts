@@ -1,9 +1,10 @@
 /**
+ * @jest-environment jsdom
+ */
+
+/**
  * @category evergreen
  * @purpose Verify touchTargetSizing component renders correctly and behaves as expected
- */
-/**
- * @jest-environment jsdom
  */
 
 /**
@@ -15,10 +16,17 @@
  * Requirements: 5.2, 5.3
  */
 
-import { TextInputField } from '../platforms/web/TextInputField.web';
+import { injectMotionTokens } from './setup';
 
 describe('TextInputField - Touch Target Sizing', () => {
-  beforeAll(() => {
+  let TextInputField: any;
+  
+  // Import component before tests
+  beforeAll(async () => {
+    // Import component (dynamic import)
+    const module = await import('../platforms/web/TextInputField.web');
+    TextInputField = module.TextInputField;
+    
     // Register the custom element if not already registered
     if (!customElements.get('text-input-field')) {
       customElements.define('text-input-field', TextInputField);
@@ -28,29 +36,35 @@ describe('TextInputField - Touch Target Sizing', () => {
   beforeEach(() => {
     // Clear any existing elements
     document.body.innerHTML = '';
-    
-    // Add CSS custom properties for motion tokens
-    const styleElement = document.createElement('style');
-    styleElement.textContent = `
-      :root {
-        --motion-float-label-duration: 250ms;
-        --motion-float-label-easing: ease-out;
-      }
-    `;
-    document.head.appendChild(styleElement);
   });
+
+  /**
+   * Helper to create a component and inject motion tokens.
+   * This works around JSDOM's limitation where CSS custom properties on :root
+   * don't inherit into Shadow DOM elements.
+   */
+  function createComponent(attributes: Record<string, string> = {}): HTMLElement {
+    const component = document.createElement('text-input-field') as any;
+    Object.entries(attributes).forEach(([key, value]) => {
+      component.setAttribute(key, value);
+    });
+    document.body.appendChild(component);
+    // Inject motion tokens into Shadow DOM after component is in DOM
+    injectMotionTokens(component);
+    return component;
+  }
 
   describe('Minimum Touch Target Height', () => {
     it('should use tapAreaRecommended token for minimum height', () => {
       // Create component
-      const component = document.createElement('text-input-field') as TextInputField;
-      component.setAttribute('id', 'test-input');
-      component.setAttribute('label', 'Test Label');
-      component.setAttribute('value', '');
-      document.body.appendChild(component);
+      const component = createComponent({
+        id: 'test-input',
+        label: 'Test Label',
+        value: ''
+      });
 
       // Get shadow root
-      const shadowRoot = component.shadowRoot;
+      const shadowRoot = (component as any).shadowRoot;
       expect(shadowRoot).not.toBeNull();
 
       // Get input wrapper
@@ -68,14 +82,14 @@ describe('TextInputField - Touch Target Sizing', () => {
 
     it('should ensure input element meets 48px minimum', () => {
       // Create component
-      const component = document.createElement('text-input-field') as TextInputField;
-      component.setAttribute('id', 'test-input');
-      component.setAttribute('label', 'Test Label');
-      component.setAttribute('value', '');
-      document.body.appendChild(component);
+      const component = createComponent({
+        id: 'test-input',
+        label: 'Test Label',
+        value: ''
+      });
 
       // Get shadow root
-      const shadowRoot = component.shadowRoot;
+      const shadowRoot = (component as any).shadowRoot;
       expect(shadowRoot).not.toBeNull();
 
       // Get input element
@@ -92,13 +106,13 @@ describe('TextInputField - Touch Target Sizing', () => {
 
     it('should maintain minimum height in all states', () => {
       // Create component
-      const component = document.createElement('text-input-field') as TextInputField;
-      component.setAttribute('id', 'test-input');
-      component.setAttribute('label', 'Test Label');
-      component.setAttribute('value', '');
-      document.body.appendChild(component);
+      const component = createComponent({
+        id: 'test-input',
+        label: 'Test Label',
+        value: ''
+      });
 
-      const shadowRoot = component.shadowRoot!;
+      const shadowRoot = (component as any).shadowRoot!;
       const inputWrapper = shadowRoot.querySelector('.input-wrapper') as HTMLElement;
 
       // Test default state
@@ -137,13 +151,13 @@ describe('TextInputField - Touch Target Sizing', () => {
   describe('Touch Target Accessibility', () => {
     it('should provide adequate touch target for mobile devices', () => {
       // Create component
-      const component = document.createElement('text-input-field') as TextInputField;
-      component.setAttribute('id', 'test-input');
-      component.setAttribute('label', 'Test Label');
-      component.setAttribute('value', '');
-      document.body.appendChild(component);
+      const component = createComponent({
+        id: 'test-input',
+        label: 'Test Label',
+        value: ''
+      });
 
-      const shadowRoot = component.shadowRoot!;
+      const shadowRoot = (component as any).shadowRoot!;
       const inputWrapper = shadowRoot.querySelector('.input-wrapper') as HTMLElement;
 
       // Get bounding rect to check actual rendered size
@@ -157,14 +171,14 @@ describe('TextInputField - Touch Target Sizing', () => {
 
     it('should maintain touch target with helper text', () => {
       // Create component with helper text
-      const component = document.createElement('text-input-field') as TextInputField;
-      component.setAttribute('id', 'test-input');
-      component.setAttribute('label', 'Test Label');
-      component.setAttribute('value', '');
-      component.setAttribute('helper-text', 'Helper text');
-      document.body.appendChild(component);
+      const component = createComponent({
+        id: 'test-input',
+        label: 'Test Label',
+        value: '',
+        'helper-text': 'Helper text'
+      });
 
-      const shadowRoot = component.shadowRoot!;
+      const shadowRoot = (component as any).shadowRoot!;
       const inputWrapper = shadowRoot.querySelector('.input-wrapper') as HTMLElement;
 
       // Input wrapper should still maintain minimum height
@@ -175,14 +189,14 @@ describe('TextInputField - Touch Target Sizing', () => {
 
     it('should maintain touch target with error message', () => {
       // Create component with error message
-      const component = document.createElement('text-input-field') as TextInputField;
-      component.setAttribute('id', 'test-input');
-      component.setAttribute('label', 'Test Label');
-      component.setAttribute('value', '');
-      component.setAttribute('error-message', 'Error message');
-      document.body.appendChild(component);
+      const component = createComponent({
+        id: 'test-input',
+        label: 'Test Label',
+        value: '',
+        'error-message': 'Error message'
+      });
 
-      const shadowRoot = component.shadowRoot!;
+      const shadowRoot = (component as any).shadowRoot!;
       const inputWrapper = shadowRoot.querySelector('.input-wrapper') as HTMLElement;
 
       // Input wrapper should still maintain minimum height
@@ -193,14 +207,14 @@ describe('TextInputField - Touch Target Sizing', () => {
 
     it('should maintain touch target with trailing icon', () => {
       // Create component with success state (shows trailing icon)
-      const component = document.createElement('text-input-field') as TextInputField;
-      component.setAttribute('id', 'test-input');
-      component.setAttribute('label', 'Test Label');
-      component.setAttribute('value', 'test value');
-      component.setAttribute('is-success', 'true');
-      document.body.appendChild(component);
+      const component = createComponent({
+        id: 'test-input',
+        label: 'Test Label',
+        value: 'test value',
+        'is-success': 'true'
+      });
 
-      const shadowRoot = component.shadowRoot!;
+      const shadowRoot = (component as any).shadowRoot!;
       const inputWrapper = shadowRoot.querySelector('.input-wrapper') as HTMLElement;
 
       // Input wrapper should still maintain minimum height
@@ -213,13 +227,13 @@ describe('TextInputField - Touch Target Sizing', () => {
   describe('Token Usage', () => {
     it('should reference tapAreaRecommended token in CSS', () => {
       // Create component
-      const component = document.createElement('text-input-field') as TextInputField;
-      component.setAttribute('id', 'test-input');
-      component.setAttribute('label', 'Test Label');
-      component.setAttribute('value', '');
-      document.body.appendChild(component);
+      const component = createComponent({
+        id: 'test-input',
+        label: 'Test Label',
+        value: ''
+      });
 
-      const shadowRoot = component.shadowRoot!;
+      const shadowRoot = (component as any).shadowRoot!;
       const styleElement = shadowRoot.querySelector('style');
       expect(styleElement).not.toBeNull();
 
@@ -234,13 +248,13 @@ describe('TextInputField - Touch Target Sizing', () => {
 
     it('should use token for both wrapper and input element', () => {
       // Create component
-      const component = document.createElement('text-input-field') as TextInputField;
-      component.setAttribute('id', 'test-input');
-      component.setAttribute('label', 'Test Label');
-      component.setAttribute('value', '');
-      document.body.appendChild(component);
+      const component = createComponent({
+        id: 'test-input',
+        label: 'Test Label',
+        value: ''
+      });
 
-      const shadowRoot = component.shadowRoot!;
+      const shadowRoot = (component as any).shadowRoot!;
       const styleElement = shadowRoot.querySelector('style');
       const cssText = styleElement!.textContent || '';
 

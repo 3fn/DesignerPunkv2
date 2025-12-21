@@ -1,9 +1,10 @@
 /**
+ * @jest-environment jsdom
+ */
+
+/**
  * @category evergreen
  * @purpose Verify integration component integration behavior
- */
-/**
- * @jest-environment jsdom
  */
 
 /**

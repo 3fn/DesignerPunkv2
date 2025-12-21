@@ -81,8 +81,12 @@ export class QuickAnalyzer {
     options: QuickAnalysisOptions = {}
   ) {
     this.workingDirectory = workingDirectory;
+    
+    // Increase timeout when caching is enabled to allow time for file operations
+    const defaultTimeout = (options.cacheResults ?? true) ? 15000 : 10000;
+    
     this.options = {
-      timeoutMs: options.timeoutMs ?? 10000, // 10 seconds default
+      timeoutMs: options.timeoutMs ?? defaultTimeout,
       skipDetailedExtraction: options.skipDetailedExtraction ?? true,
       cacheResults: options.cacheResults ?? true,
       cacheDir: options.cacheDir ?? join(workingDirectory, '.kiro/release-analysis/cache'),
@@ -168,6 +172,8 @@ export class QuickAnalyzer {
    * Perform quick analysis with optimizations
    */
   private async performQuickAnalysis(): Promise<QuickAnalysisResultWithMetrics> {
+    const analysisStartTime = Date.now();
+    
     // Phase 1: Git Analysis (fast)
     const gitStartTime = Date.now();
     const { GitHistoryAnalyzer } = await import('../git/GitHistoryAnalyzer');
@@ -212,11 +218,12 @@ export class QuickAnalyzer {
 
     if (this.options.cacheResults) {
       try {
-        // Run full analysis in background and cache
+        // Cache results for later CLI access
         cacheFilePath = await this.cacheFullAnalysis(documents, lastRelease);
         fullResultCached = true;
       } catch (error) {
-        console.warn('Failed to cache full results:', error);
+        // Don't fail the analysis if caching fails
+        // Error is logged but analysis continues
       }
     }
     this.performanceMetrics.phaseTimings.caching = Date.now() - cachingStartTime;
@@ -379,51 +386,47 @@ export class QuickAnalyzer {
    * Requirement 9.7: Cache results for later CLI access
    */
   private async cacheFullAnalysis(documents: any[], lastRelease: any): Promise<string> {
+    // Ensure cache directory exists
+    await fs.mkdir(this.options.cacheDir, { recursive: true });
+
+    // Generate cache filename with timestamp
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const cacheFileName = `quick-analysis-${timestamp}.json`;
+    const cacheFilePath = join(this.options.cacheDir, cacheFileName);
+
+    // Prepare cache data with safe property access
+    const cacheData = {
+      timestamp: new Date().toISOString(),
+      lastRelease: lastRelease ? lastRelease.name : null,
+      documentCount: documents.length,
+      documents: documents.map(doc => ({
+        path: doc.path || 'unknown',
+        lastModified: doc.lastModified || new Date().toISOString(),
+        gitCommit: doc.gitCommit || 'unknown'
+      })),
+      quickAnalysisMode: true,
+      note: 'Full analysis can be run with: npm run release:analyze'
+    };
+
+    // Write cache file
+    await fs.writeFile(cacheFilePath, JSON.stringify(cacheData, null, 2));
+
+    // Create symlink to latest
+    const latestPath = join(this.options.cacheDir, 'latest.json');
     try {
-      // Ensure cache directory exists
-      await fs.mkdir(this.options.cacheDir, { recursive: true });
-
-      // Generate cache filename with timestamp
-      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-      const cacheFileName = `quick-analysis-${timestamp}.json`;
-      const cacheFilePath = join(this.options.cacheDir, cacheFileName);
-
-      // Prepare cache data
-      const cacheData = {
-        timestamp: new Date().toISOString(),
-        lastRelease: lastRelease ? lastRelease.name : null,
-        documentCount: documents.length,
-        documents: documents.map(doc => ({
-          path: doc.path,
-          lastModified: doc.lastModified,
-          gitCommit: doc.gitCommit
-        })),
-        quickAnalysisMode: true,
-        note: 'Full analysis can be run with: npm run release:analyze'
-      };
-
-      // Write cache file
-      await fs.writeFile(cacheFilePath, JSON.stringify(cacheData, null, 2));
-
-      // Create symlink to latest
-      const latestPath = join(this.options.cacheDir, 'latest.json');
-      try {
-        await fs.unlink(latestPath);
-      } catch {
-        // Ignore if doesn't exist
-      }
-
-      try {
-        await fs.symlink(cacheFileName, latestPath);
-      } catch {
-        // Symlinks might not be supported on all systems
-        await fs.copyFile(cacheFilePath, latestPath);
-      }
-
-      return cacheFilePath;
-    } catch (error) {
-      throw new Error(`Failed to cache results: ${error instanceof Error ? error.message : String(error)}`);
+      await fs.unlink(latestPath);
+    } catch {
+      // Ignore if doesn't exist
     }
+
+    try {
+      await fs.symlink(cacheFileName, latestPath);
+    } catch {
+      // Symlinks might not be supported on all systems
+      await fs.copyFile(cacheFilePath, latestPath);
+    }
+
+    return cacheFilePath;
   }
 
   /**

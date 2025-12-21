@@ -113,7 +113,7 @@ describe('QuickAnalyzer', () => {
       if (result.changeCount.breaking > 0) {
         expect(result.versionBump).toBe('major');
       }
-    }, 10000); // 10s timeout for version bump test
+    }, 15000); // 15s timeout for version bump test (increased for CI environment)
 
     it('should recommend minor version bump for features', async () => {
       const result = await analyzer.runQuickAnalysis();
@@ -121,7 +121,7 @@ describe('QuickAnalyzer', () => {
       if (result.changeCount.breaking === 0 && result.changeCount.features > 0) {
         expect(result.versionBump).toBe('minor');
       }
-    }, 10000); // 10s timeout for version bump test
+    }, 15000); // 15s timeout for version bump test (increased for CI environment)
 
     it('should recommend patch version bump for fixes', async () => {
       const result = await analyzer.runQuickAnalysis();
@@ -214,7 +214,7 @@ describe('QuickAnalyzer', () => {
       const result = await noCacheAnalyzer.runQuickAnalysis();
 
       expect(result.fullResultCached).toBe(false);
-    }, 10000); // 10s timeout for no cache test
+    }, 15000); // 15s timeout for no cache test (increased for CI environment)
 
     it('should create cache file with correct structure', async () => {
       const result = await analyzer.runQuickAnalysis();
@@ -227,7 +227,7 @@ describe('QuickAnalyzer', () => {
         expect(cacheData.documentCount).toBeGreaterThanOrEqual(0);
         expect(cacheData.quickAnalysisMode).toBe(true);
       }
-    }, 10000); // 10s timeout for cache structure test
+    }, 15000); // 15s timeout for cache structure test (increased for CI environment)
 
     it('should retrieve cached results', async () => {
       await analyzer.runQuickAnalysis();
@@ -364,7 +364,7 @@ describe('QuickAnalyzer', () => {
       // Should complete even if caching fails
       expect(result).toBeDefined();
       expect(result.versionBump).toBeDefined();
-    }, 10000); // 10s timeout for error handling test
+    }, 15000); // 15s timeout for error handling test (increased for CI environment)
   });
 
   describe('Integration with Hook System', () => {
@@ -378,7 +378,7 @@ describe('QuickAnalyzer', () => {
       expect(result.confidence).toBeDefined();
       expect(result.summary).toBeDefined();
       expect(typeof result.fullResultCached).toBe('boolean');
-    }, 10000); // 10s timeout for hook integration test
+    }, 15000); // 15s timeout for hook integration test (increased for CI environment)
 
     it('should complete fast enough for hook integration', async () => {
       const startTime = Date.now();

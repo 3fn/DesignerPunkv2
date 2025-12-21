@@ -1,9 +1,10 @@
 /**
+ * @jest-environment jsdom
+ */
+
+/**
  * @category evergreen
  * @purpose Verify keyboardNavigation component renders correctly and behaves as expected
- */
-/**
- * @jest-environment jsdom
  */
 
 /**
@@ -17,42 +18,46 @@
  * Requirements: 6.1, 6.2, 6.3
  */
 
-import '../platforms/web/TextInputField.web';
+import { injectMotionTokensInContainer, injectMotionTokens } from './setup';
 
 describe('TextInputField - Keyboard Navigation', () => {
   let container: HTMLDivElement;
-  let styleElement: HTMLStyleElement;
+
+  // Import component before tests
+  beforeAll(async () => {
+    // Import component (dynamic import)
+    await import('../platforms/web/TextInputField.web');
+  });
 
   beforeEach(() => {
-    // Add CSS custom properties for motion tokens
-    styleElement = document.createElement('style');
-    styleElement.textContent = `
-      :root {
-        --motion-float-label-duration: 250ms;
-        --motion-float-label-easing: ease-out;
-      }
-    `;
-    document.head.appendChild(styleElement);
-    
     container = document.createElement('div');
     document.body.appendChild(container);
   });
 
   afterEach(() => {
     document.body.removeChild(container);
-    document.head.removeChild(styleElement);
   });
+
+  /**
+   * Helper to set innerHTML and inject motion tokens into all components.
+   * This works around JSDOM's limitation where CSS custom properties on :root
+   * don't inherit into Shadow DOM elements.
+   */
+  function setContainerHTML(html: string): void {
+    container.innerHTML = html;
+    injectMotionTokensInContainer(container);
+  }
 
   describe('Tab Key Focus (Requirement 6.1)', () => {
     it('should focus input when Tab key is pressed', () => {
       // Create component
-      container.innerHTML = `
+      setContainerHTML(`
         <text-input-field
           id="test-input"
           label="Email"
           value=""
         ></text-input-field>
-      `;
+      `);
 
       const component = container.querySelector('text-input-field') as any;
       const input = component.shadowRoot.querySelector('.input-element') as HTMLInputElement;
@@ -68,13 +73,13 @@ describe('TextInputField - Keyboard Navigation', () => {
     });
 
     it('should display focus state when input receives focus via Tab', () => {
-      container.innerHTML = `
+      setContainerHTML(`
         <text-input-field
           id="test-input"
           label="Email"
           value=""
         ></text-input-field>
-      `;
+      `);
 
       const component = container.querySelector('text-input-field') as any;
       const input = component.shadowRoot.querySelector('.input-element') as HTMLInputElement;
@@ -88,22 +93,19 @@ describe('TextInputField - Keyboard Navigation', () => {
     });
 
     it('should show focus ring when input receives keyboard focus', () => {
-      container.innerHTML = `
+      setContainerHTML(`
         <text-input-field
           id="test-input"
           label="Email"
           value=""
         ></text-input-field>
-      `;
+      `);
 
       const component = container.querySelector('text-input-field') as any;
       const input = component.shadowRoot.querySelector('.input-element') as HTMLInputElement;
 
       // Focus input (simulating Tab key)
       input.focus();
-
-      // Get computed styles
-      const styles = window.getComputedStyle(input);
 
       // Verify input is focused (focus ring is applied via CSS :focus-visible)
       expect(component.shadowRoot.activeElement).toBe(input);
@@ -122,6 +124,8 @@ describe('TextInputField - Keyboard Navigation', () => {
         ></text-input-field>
       `;
       container.appendChild(form);
+      // Inject tokens into the component inside the form
+      injectMotionTokensInContainer(form);
 
       const component = form.querySelector('text-input-field') as any;
       const input = component.shadowRoot.querySelector('.input-element') as HTMLInputElement;
@@ -164,6 +168,8 @@ describe('TextInputField - Keyboard Navigation', () => {
         ></text-input-field>
       `;
       container.appendChild(form);
+      // Inject tokens into the component inside the form
+      injectMotionTokensInContainer(form);
 
       const component = form.querySelector('text-input-field') as any;
       const input = component.shadowRoot.querySelector('.input-element') as HTMLInputElement;
@@ -180,7 +186,7 @@ describe('TextInputField - Keyboard Navigation', () => {
   describe('Keyboard Navigation Flow (Requirement 6.3)', () => {
     it('should maintain proper tab order with multiple inputs', () => {
       // Create multiple inputs
-      container.innerHTML = `
+      setContainerHTML(`
         <text-input-field
           id="input-1"
           label="First Name"
@@ -196,7 +202,7 @@ describe('TextInputField - Keyboard Navigation', () => {
           label="Email"
           value=""
         ></text-input-field>
-      `;
+      `);
 
       const components = container.querySelectorAll('text-input-field');
       const input1 = (components[0] as any).shadowRoot.querySelector('.input-element') as HTMLInputElement;
@@ -217,14 +223,14 @@ describe('TextInputField - Keyboard Navigation', () => {
     });
 
     it('should lose focus when navigating away from input', () => {
-      container.innerHTML = `
+      setContainerHTML(`
         <text-input-field
           id="test-input"
           label="Email"
           value=""
         ></text-input-field>
         <button id="next-button">Next</button>
-      `;
+      `);
 
       const component = container.querySelector('text-input-field') as any;
       const input = component.shadowRoot.querySelector('.input-element') as HTMLInputElement;
@@ -246,13 +252,13 @@ describe('TextInputField - Keyboard Navigation', () => {
     });
 
     it('should update to appropriate state when losing focus', () => {
-      container.innerHTML = `
+      setContainerHTML(`
         <text-input-field
           id="test-input"
           label="Email"
           value=""
         ></text-input-field>
-      `;
+      `);
 
       const component = container.querySelector('text-input-field') as any;
       const input = component.shadowRoot.querySelector('.input-element') as HTMLInputElement;
@@ -275,13 +281,13 @@ describe('TextInputField - Keyboard Navigation', () => {
     });
 
     it('should maintain filled state when navigating away from filled input', () => {
-      container.innerHTML = `
+      setContainerHTML(`
         <text-input-field
           id="test-input"
           label="Email"
           value="test@example.com"
         ></text-input-field>
-      `;
+      `);
 
       const component = container.querySelector('text-input-field') as any;
       const input = component.shadowRoot.querySelector('.input-element') as HTMLInputElement;
@@ -299,7 +305,7 @@ describe('TextInputField - Keyboard Navigation', () => {
     });
 
     it('should handle rapid focus changes correctly', () => {
-      container.innerHTML = `
+      setContainerHTML(`
         <text-input-field
           id="input-1"
           label="First Name"
@@ -310,7 +316,7 @@ describe('TextInputField - Keyboard Navigation', () => {
           label="Last Name"
           value=""
         ></text-input-field>
-      `;
+      `);
 
       const component1 = container.querySelectorAll('text-input-field')[0] as any;
       const component2 = container.querySelectorAll('text-input-field')[1] as any;
@@ -337,13 +343,13 @@ describe('TextInputField - Keyboard Navigation', () => {
 
   describe('Focus Ring Visibility (WCAG 2.4.7)', () => {
     it('should show focus ring in all states', () => {
-      container.innerHTML = `
+      setContainerHTML(`
         <text-input-field
           id="test-input"
           label="Email"
           value=""
         ></text-input-field>
-      `;
+      `);
 
       const component = container.querySelector('text-input-field') as any;
       const input = component.shadowRoot.querySelector('.input-element') as HTMLInputElement;
@@ -356,14 +362,14 @@ describe('TextInputField - Keyboard Navigation', () => {
     });
 
     it('should show focus ring in error state', () => {
-      container.innerHTML = `
+      setContainerHTML(`
         <text-input-field
           id="test-input"
           label="Email"
           value="invalid"
           error-message="Please enter a valid email"
         ></text-input-field>
-      `;
+      `);
 
       const component = container.querySelector('text-input-field') as any;
       const input = component.shadowRoot.querySelector('.input-element') as HTMLInputElement;
@@ -378,14 +384,14 @@ describe('TextInputField - Keyboard Navigation', () => {
     });
 
     it('should show focus ring in success state', () => {
-      container.innerHTML = `
+      setContainerHTML(`
         <text-input-field
           id="test-input"
           label="Email"
           value="test@example.com"
           is-success="true"
         ></text-input-field>
-      `;
+      `);
 
       const component = container.querySelector('text-input-field') as any;
       const input = component.shadowRoot.querySelector('.input-element') as HTMLInputElement;
@@ -402,13 +408,13 @@ describe('TextInputField - Keyboard Navigation', () => {
 
   describe('Label Click Focus (Requirement 6.2)', () => {
     it('should focus input when label is clicked', () => {
-      container.innerHTML = `
+      setContainerHTML(`
         <text-input-field
           id="test-input"
           label="Email"
           value=""
         ></text-input-field>
-      `;
+      `);
 
       const component = container.querySelector('text-input-field') as any;
       const input = component.shadowRoot.querySelector('.input-element') as HTMLInputElement;

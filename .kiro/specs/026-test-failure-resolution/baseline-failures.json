@@ -1,0 +1,218 @@
+{
+  "timestamp": "2025-12-20T00:00:00.000Z",
+  "totalFailingSuites": 24,
+  "totalFailingTests": 45,
+  "totalPassingSuites": 222,
+  "totalPassingTests": 5497,
+  "uniqueFailureSignatures": [
+    {
+      "id": "pattern-1-htmlelement-container-web",
+      "testFile": "src/components/core/Container/platforms/web/__tests__/Container.web.test.ts",
+      "errorType": "ReferenceError",
+      "errorMessage": "HTMLElement is not defined",
+      "sourceFile": "src/components/core/Container/platforms/web/Container.web.ts",
+      "sourceLine": 111,
+      "pattern": "HTMLElement Environment Configuration"
+    },
+    {
+      "id": "pattern-1-htmlelement-container-crossplatform",
+      "testFile": "src/components/core/Container/__tests__/integration/CrossPlatform.test.ts",
+      "errorType": "ReferenceError",
+      "errorMessage": "HTMLElement is not defined",
+      "sourceFile": "src/components/core/Container/platforms/web/Container.web.ts",
+      "sourceLine": 111,
+      "pattern": "HTMLElement Environment Configuration"
+    },
+    {
+      "id": "pattern-1-htmlelement-textinput-touch",
+      "testFile": "src/components/core/TextInputField/__tests__/touchTargetSizing.test.ts",
+      "errorType": "ReferenceError",
+      "errorMessage": "HTMLElement is not defined",
+      "sourceFile": "src/components/core/Icon/platforms/web/Icon.web.ts",
+      "sourceLine": 212,
+      "pattern": "HTMLElement Environment Configuration"
+    },
+    {
+      "id": "pattern-1-htmlelement-textinput-screenreader",
+      "testFile": "src/components/core/TextInputField/__tests__/screenReaderSupport.test.ts",
+      "errorType": "ReferenceError",
+      "errorMessage": "HTMLElement is not defined",
+      "sourceFile": "src/components/core/Icon/platforms/web/Icon.web.ts",
+      "sourceLine": 212,
+      "pattern": "HTMLElement Environment Configuration"
+    },
+    {
+      "id": "pattern-1-htmlelement-textinput-label",
+      "testFile": "src/components/core/TextInputField/__tests__/labelAssociation.test.ts",
+      "errorType": "ReferenceError",
+      "errorMessage": "HTMLElement is not defined",
+      "sourceFile": "src/components/core/Icon/platforms/web/Icon.web.ts",
+      "sourceLine": 212,
+      "pattern": "HTMLElement Environment Configuration"
+    },
+    {
+      "id": "pattern-1-htmlelement-textinput-integration",
+      "testFile": "src/components/core/TextInputField/__tests__/integration.test.ts",
+      "errorType": "ReferenceError",
+      "errorMessage": "HTMLElement is not defined",
+      "sourceFile": "src/components/core/Icon/platforms/web/Icon.web.ts",
+      "sourceLine": 212,
+      "pattern": "HTMLElement Environment Configuration"
+    },
+    {
+      "id": "pattern-1-htmlelement-textinput-keyboard",
+      "testFile": "src/components/core/TextInputField/__tests__/keyboardNavigation.test.ts",
+      "errorType": "ReferenceError",
+      "errorMessage": "HTMLElement is not defined",
+      "sourceFile": "src/components/core/Icon/platforms/web/Icon.web.ts",
+      "sourceLine": 212,
+      "pattern": "HTMLElement Environment Configuration"
+    },
+    {
+      "id": "pattern-1-htmlelement-container-test",
+      "testFile": "src/components/core/Container/__tests__/Container.test.ts",
+      "errorType": "ReferenceError",
+      "errorMessage": "HTMLElement is not defined",
+      "sourceFile": "src/components/core/Container/platforms/web/Container.web.ts",
+      "sourceLine": 111,
+      "pattern": "HTMLElement Environment Configuration"
+    },
+    {
+      "id": "pattern-2-undefined-property-icon-verify-all",
+      "testFile": "src/generators/__tests__/IconTokenGeneration.test.ts",
+      "testName": "should verify all icon sizes match fontSize × multiplier formula",
+      "errorType": "TypeError",
+      "errorMessage": "Cannot read properties of undefined (reading 'startsWith')",
+      "sourceFile": "src/tokens/semantic/IconTokens.ts",
+      "sourceLine": 155,
+      "pattern": "Type Safety - Undefined Property Access"
+    },
+    {
+      "id": "pattern-2-undefined-property-icon-ios",
+      "testFile": "src/generators/__tests__/IconTokenGeneration.test.ts",
+      "testName": "should verify iOS values match calculated sizes",
+      "errorType": "TypeError",
+      "errorMessage": "Cannot read properties of undefined (reading 'startsWith')",
+      "sourceFile": "src/tokens/semantic/IconTokens.ts",
+      "sourceLine": 155,
+      "pattern": "Type Safety - Undefined Property Access"
+    },
+    {
+      "id": "pattern-2-undefined-property-icon-android",
+      "testFile": "src/generators/__tests__/IconTokenGeneration.test.ts",
+      "testName": "should verify Android values match calculated sizes",
+      "errorType": "TypeError",
+      "errorMessage": "Cannot read properties of undefined (reading 'startsWith')",
+      "sourceFile": "src/tokens/semantic/IconTokens.ts",
+      "sourceLine": 155,
+      "pattern": "Type Safety - Undefined Property Access"
+    },
+    {
+      "id": "pattern-3-crossplatform-icon-kotlin",
+      "testFile": "src/generators/__tests__/IconTokenGeneration.test.ts",
+      "testName": "should generate Kotlin icon size tokens with correct naming",
+      "errorType": "AssertionError",
+      "errorMessage": "expect(received).toContain(expected)",
+      "pattern": "Cross-Platform Token Consistency"
+    },
+    {
+      "id": "pattern-3-crossplatform-token-counts",
+      "testFile": "src/generators/__tests__/TokenFileGenerator.test.ts",
+      "testName": "should validate consistent token counts across platforms",
+      "errorType": "AssertionError",
+      "errorMessage": "expect(received).toBe(expected) // Object.is equality - Expected: true, Received: false",
+      "pattern": "Cross-Platform Token Consistency"
+    },
+    {
+      "id": "pattern-4-performance-large-scale",
+      "testFile": "src/__tests__/integration/PerformanceValidation.test.ts",
+      "testName": "should handle 100 tokens without regression",
+      "errorType": "AssertionError",
+      "errorMessage": "expect(received).toBeLessThan(expected) - Expected: < 4, Received: 5.410165999999663",
+      "pattern": "Performance and Timing Issues"
+    },
+    {
+      "id": "pattern-4-performance-git-commit",
+      "testFile": "src/release-analysis/__tests__/PerformanceRegression.test.ts",
+      "testName": "should verify time is proportional to new documents, not total documents",
+      "errorType": "Error",
+      "errorMessage": "Command failed: git commit -m \"Add 5 completion documents\"",
+      "pattern": "Performance and Timing Issues"
+    },
+    {
+      "id": "pattern-4-timeout-quick-analysis-1",
+      "testFile": "src/release-analysis/hooks/__tests__/HookIntegration.test.ts",
+      "testName": "should optimize for speed with skipDetailedExtraction",
+      "errorType": "Timeout",
+      "errorMessage": "Exceeded timeout of 15000 ms for a test",
+      "pattern": "Performance and Timing Issues"
+    },
+    {
+      "id": "pattern-4-timeout-quick-analysis-2",
+      "testFile": "src/release-analysis/hooks/__tests__/HookIntegration.test.ts",
+      "testName": "should complete analysis in under 5 seconds with append-only optimization",
+      "errorType": "AssertionError",
+      "errorMessage": "expect(received).toBeLessThan(expected) - Expected: < 5000, Received: 5005",
+      "pattern": "Performance and Timing Issues"
+    },
+    {
+      "id": "pattern-4-timeout-concise-summary",
+      "testFile": "src/release-analysis/hooks/__tests__/HookIntegration.test.ts",
+      "testName": "should provide concise one-line summary",
+      "errorType": "Timeout",
+      "errorMessage": "Exceeded timeout of 10000 ms for a test",
+      "pattern": "Performance and Timing Issues"
+    },
+    {
+      "id": "pattern-4-timeout-change-counts",
+      "testFile": "src/release-analysis/hooks/__tests__/HookIntegration.test.ts",
+      "testName": "should include change counts",
+      "errorType": "Timeout",
+      "errorMessage": "Exceeded timeout of 10000 ms for a test",
+      "pattern": "Performance and Timing Issues"
+    },
+    {
+      "id": "pattern-4-timeout-major-version",
+      "testFile": "src/release-analysis/cli/__tests__/quick-analyze.test.ts",
+      "testName": "should recommend major version bump for breaking changes",
+      "errorType": "Timeout",
+      "errorMessage": "Exceeded timeout of 10000 ms for a test",
+      "pattern": "Performance and Timing Issues"
+    },
+    {
+      "id": "pattern-5-cache-validation",
+      "testFile": "src/release-analysis/hooks/__tests__/HookIntegration.test.ts",
+      "testName": "should cache analysis results when enabled",
+      "errorType": "AssertionError",
+      "errorMessage": "expect(received).toBe(expected) // Object.is equality - Expected: true, Received: false",
+      "pattern": "Cache Validation"
+    }
+  ],
+  "patternSummary": {
+    "pattern-1-htmlelement": {
+      "name": "HTMLElement Environment Configuration",
+      "affectedTests": 8,
+      "affectedSuites": 8
+    },
+    "pattern-2-undefined-property": {
+      "name": "Type Safety - Undefined Property Access",
+      "affectedTests": 3,
+      "affectedSuites": 1
+    },
+    "pattern-3-crossplatform": {
+      "name": "Cross-Platform Token Consistency",
+      "affectedTests": 2,
+      "affectedSuites": 2
+    },
+    "pattern-4-performance-timing": {
+      "name": "Performance and Timing Issues",
+      "affectedTests": 6,
+      "affectedSuites": 3
+    },
+    "pattern-5-cache": {
+      "name": "Cache Validation",
+      "affectedTests": 1,
+      "affectedSuites": 1
+    }
+  }
+}
