@@ -16,20 +16,16 @@
 
 import {
   TextInputFieldProps,
-  TextInputFieldState,
-  LabelAnimationState
+  TextInputFieldState
 } from '../../types';
 import {
   createInitialState,
-  createInitialAnimationState,
   handleFocus,
   handleBlur,
   handleValueChange,
   handleValidationChange,
   calculateLabelPosition,
-  calculateIconVisibility,
-  startLabelAnimation,
-  completeLabelAnimation
+  calculateIconVisibility
 } from '../../stateManagement';
 import { createIcon } from '../../../Icon/platforms/web/Icon.web';
 import { iconSizes } from '../../../Icon/types';
@@ -42,7 +38,6 @@ import { iconSizes } from '../../../Icon/types';
 export class TextInputField extends HTMLElement {
   // Component state
   private state: TextInputFieldState;
-  private animationState: LabelAnimationState;
   
   // DOM references
   private container: HTMLDivElement | null = null;
@@ -62,7 +57,6 @@ export class TextInputField extends HTMLElement {
     
     // Initialize state
     this.state = createInitialState(this.getPropsFromAttributes());
-    this.animationState = createInitialAnimationState();
   }
   
   /**
@@ -168,7 +162,7 @@ export class TextInputField extends HTMLElement {
   private render(): void {
     const props = this.getPropsFromAttributes();
     const labelPosition = calculateLabelPosition(this.state);
-    const iconVisibility = calculateIconVisibility(this.state, this.animationState);
+    const iconVisibility = calculateIconVisibility(this.state);
     
     // Create container
     if (!this.container) {
@@ -456,14 +450,7 @@ export class TextInputField extends HTMLElement {
    * Handle focus event
    */
   private onFocus = (): void => {
-    const previousFloated = this.state.isLabelFloated;
     this.state = handleFocus(this.state);
-    
-    // Start animation if label wasn't already floated
-    if (!previousFloated) {
-      this.animationState = startLabelAnimation('up');
-    }
-    
     this.updateLabelPosition();
     
     // Dispatch focus event
@@ -474,14 +461,7 @@ export class TextInputField extends HTMLElement {
    * Handle blur event
    */
   private onBlur = (): void => {
-    const previousFloated = this.state.isLabelFloated;
     this.state = handleBlur(this.state);
-    
-    // Start animation if label should return
-    if (previousFloated && !this.state.isLabelFloated) {
-      this.animationState = startLabelAnimation('down');
-    }
-    
     this.updateLabelPosition();
     
     // Dispatch blur event
@@ -530,17 +510,9 @@ export class TextInputField extends HTMLElement {
       wrapper.classList.toggle('success', this.state.isSuccess);
     }
     
-    // Complete animation after transition
-    if (this.animationState.isAnimating) {
-      // Read animation duration from CSS custom property (motion.floatLabel token)
-      // Falls back to 250ms if token not available
-      const duration = this.getAnimationDuration();
-      setTimeout(() => {
-        this.animationState = completeLabelAnimation(this.animationState);
-        // Re-render to update icon visibility after animation completes
-        this.updateIconVisibility();
-      }, duration);
-    }
+    // Icon visibility is now handled by CSS transition-delay
+    // No JavaScript timing coordination needed
+    this.updateIconVisibility();
   }
   
   /**
@@ -549,12 +521,13 @@ export class TextInputField extends HTMLElement {
   private updateIconVisibility(): void {
     if (!this.container) return;
     
-    const iconVisibility = calculateIconVisibility(this.state, this.animationState);
+    const iconVisibility = calculateIconVisibility(this.state);
     const iconContainer = this.container.querySelector('.trailing-icon-container') as HTMLElement;
     
     if (!iconContainer) return;
     
-    // Show/hide icon based on visibility state and animation completion
+    // Show/hide icon based on visibility state
+    // CSS transition-delay handles animation timing coordination
     const shouldShow = iconVisibility.showErrorIcon || 
                       iconVisibility.showSuccessIcon || 
                       iconVisibility.showInfoIcon;
@@ -566,35 +539,6 @@ export class TextInputField extends HTMLElement {
     }
   }
   
-  /**
-   * Get animation duration from CSS custom property (motion.floatLabel token)
-   * Throws error if token not available (fail loudly)
-   */
-  private getAnimationDuration(): number {
-    if (!this.labelElement) {
-      throw new Error('TextInputField: labelElement is required to read animation duration');
-    }
-    
-    const computedStyle = getComputedStyle(this.labelElement);
-    const durationStr = computedStyle.getPropertyValue('--motion-float-label-duration').trim();
-    
-    if (!durationStr) {
-      console.error('TextInputField: --motion-float-label-duration token not found');
-      throw new Error('Required motion token missing: --motion-float-label-duration');
-    }
-    
-    // Parse duration (could be "250ms" or "0.25s")
-    const duration = parseFloat(durationStr);
-    if (isNaN(duration)) {
-      console.error(`TextInputField: Invalid duration value: ${durationStr}`);
-      throw new Error(`Invalid motion token value: --motion-float-label-duration = ${durationStr}`);
-    }
-    
-    if (durationStr.endsWith('s') && !durationStr.endsWith('ms')) {
-      return duration * 1000; // Convert seconds to milliseconds
-    }
-    return duration; // Already in milliseconds
-  }
 }
 
 // Register custom element
