@@ -90,19 +90,3 @@ export interface TextInputFieldState {
   /** Whether info icon should be shown (from props) */
   showInfoIcon?: boolean;
 }
-
-/**
- * Label Animation State
- * 
- * Tracks label animation for coordinated icon timing.
- */
-export interface LabelAnimationState {
-  /** Whether label is currently animating */
-  isAnimating: boolean;
-  
-  /** Animation direction (float up or return down) */
-  direction: 'up' | 'down';
-  
-  /** Animation progress (0-1) */
-  progress: number;
-}

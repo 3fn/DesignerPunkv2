@@ -15,7 +15,7 @@
  * Requirements: 1.1, 1.4, 2.1, 2.3, 4.4
  */
 
-import { TextInputFieldState, TextInputFieldProps, LabelAnimationState } from './types';
+import { TextInputFieldState, TextInputFieldProps } from './types';
 
 /**
  * Label Position Result
@@ -103,32 +103,31 @@ export function calculateLabelPosition(state: TextInputFieldState): LabelPositio
 /**
  * Calculate Icon Visibility
  * 
- * Determines which icons should be visible based on state and animation progress.
- * Icons appear after label float animation completes to avoid spatial conflicts.
+ * Determines which icons should be visible based on component state.
+ * CSS transition-delay handles animation timing coordination, so this function
+ * only needs to consider the current state (no animation state required).
  * 
  * Icon visibility rules:
- * - Error icon: Shows when hasError && label floated && animation complete
- * - Success icon: Shows when isSuccess && label floated && animation complete
- * - Info icon: Shows when showInfoIcon && (focused or filled) && animation complete
+ * - Error icon: Shows when hasError && label floated
+ * - Success icon: Shows when isSuccess && label floated
+ * - Info icon: Shows when showInfoIcon && (focused or filled)
+ * 
+ * Note: Animation timing is now handled by CSS transition-delay on the icon
+ * container, eliminating the need for JavaScript-based animation coordination.
  * 
  * @param state - Current component state
- * @param animationState - Current label animation state
  * @returns Icon visibility configuration
  * 
- * Requirements: 4.4, 4.5
+ * Requirements: 3.1, 3.2
  */
-export function calculateIconVisibility(
-  state: TextInputFieldState,
-  animationState: LabelAnimationState
-): IconVisibility {
-  // Icons appear after label floats (no spatial conflict)
+export function calculateIconVisibility(state: TextInputFieldState): IconVisibility {
+  // Icons appear when label is floated (CSS handles animation timing)
   const labelFloated = state.isLabelFloated;
-  const animationComplete = !animationState.isAnimating || animationState.progress >= 1.0;
   
   return {
-    showErrorIcon: state.hasError && labelFloated && animationComplete,
-    showSuccessIcon: state.isSuccess && labelFloated && animationComplete,
-    showInfoIcon: !!state.showInfoIcon && (state.isFocused || state.isFilled) && animationComplete
+    showErrorIcon: state.hasError && labelFloated,
+    showSuccessIcon: state.isSuccess && labelFloated,
+    showInfoIcon: !!state.showInfoIcon && (state.isFocused || state.isFilled)
   };
 }
 
@@ -253,73 +252,5 @@ export function handleValidationChange(
     ...currentState,
     hasError: !!errorMessage,
     isSuccess: !!isSuccess
-  };
-}
-
-/**
- * Create Initial Animation State
- * 
- * Creates the initial animation state (no animation in progress).
- * 
- * @returns Initial animation state
- */
-export function createInitialAnimationState(): LabelAnimationState {
-  return {
-    isAnimating: false,
-    direction: 'up',
-    progress: 1.0
-  };
-}
-
-/**
- * Start Label Animation
- * 
- * Initiates label animation in the specified direction.
- * 
- * @param direction - Animation direction ('up' for float, 'down' for return)
- * @returns Animation state with animation started
- */
-export function startLabelAnimation(direction: 'up' | 'down'): LabelAnimationState {
-  return {
-    isAnimating: true,
-    direction,
-    progress: 0.0
-  };
-}
-
-/**
- * Update Animation Progress
- * 
- * Updates animation progress (0-1).
- * 
- * @param currentState - Current animation state
- * @param progress - Animation progress (0-1)
- * @returns Updated animation state
- */
-export function updateAnimationProgress(
-  currentState: LabelAnimationState,
-  progress: number
-): LabelAnimationState {
-  return {
-    ...currentState,
-    progress: Math.max(0, Math.min(1, progress)) // Clamp to 0-1
-  };
-}
-
-/**
- * Complete Label Animation
- * 
- * Marks animation as complete.
- * 
- * @param currentState - Current animation state
- * @returns Animation state with animation complete
- */
-export function completeLabelAnimation(
-  currentState: LabelAnimationState
-): LabelAnimationState {
-  return {
-    ...currentState,
-    isAnimating: false,
-    progress: 1.0
   };
 }
