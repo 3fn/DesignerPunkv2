@@ -205,7 +205,7 @@ export class TextInputField extends HTMLElement {
     
     // Build HTML structure
     this.container.innerHTML = `
-      <div class="input-wrapper ${this.state.hasError ? 'error' : ''} ${this.state.isSuccess ? 'success' : ''} ${this.state.isFocused ? 'focused' : ''}">
+      <div class="input-wrapper ${this.state.hasError ? 'error' : ''} ${this.state.isSuccess ? 'success' : ''} ${this.state.isFocused ? 'focused' : ''} ${this.state.isFilled ? 'filled' : ''}">
         <label 
           for="${props.id}" 
           class="input-label ${labelPosition.isFloated ? 'floated' : ''}"
@@ -390,8 +390,28 @@ export class TextInputField extends HTMLElement {
         align-items: center;
         justify-content: center;
         pointer-events: none;
-        opacity: 1;
+        /* Base state: hidden with delayed appearance (waits for label animation) */
+        opacity: 0;
         transition: opacity var(--motion-float-label-duration) var(--motion-float-label-easing);
+        transition-delay: var(--motion-float-label-duration);
+      }
+      
+      /* Icons visible when focused (after label animation delay) */
+      .input-wrapper.focused .trailing-icon-container {
+        opacity: 1;
+        transition-delay: var(--motion-float-label-duration);
+      }
+      
+      /* Icons visible when filled (after label animation delay) */
+      .input-wrapper.filled .trailing-icon-container {
+        opacity: 1;
+        transition-delay: var(--motion-float-label-duration);
+      }
+      
+      /* Icons hide immediately when unfocusing empty input (no delay) */
+      .input-wrapper:not(.focused):not(.filled) .trailing-icon-container {
+        opacity: 0;
+        transition-delay: 0ms;
       }
       
       .trailing-icon {
@@ -505,6 +525,7 @@ export class TextInputField extends HTMLElement {
     const wrapper = this.container.querySelector('.input-wrapper');
     if (wrapper) {
       wrapper.classList.toggle('focused', this.state.isFocused);
+      wrapper.classList.toggle('filled', this.state.isFilled);
       wrapper.classList.toggle('error', this.state.hasError);
       wrapper.classList.toggle('success', this.state.isSuccess);
     }
