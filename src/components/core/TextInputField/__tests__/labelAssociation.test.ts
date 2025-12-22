@@ -12,10 +12,13 @@
  * 
  * Tests for TextInputField label association and accessibility.
  * Validates Requirement 7.1: Label association with for attribute.
+ * 
+ * Note: Motion token injection is no longer required. CSS transition-delay
+ * now handles animation timing coordination, and motion tokens are applied
+ * via CSS custom properties defined in the component styles.
  */
 
 import { describe, it, expect, beforeAll, beforeEach, afterEach } from '@jest/globals';
-import { injectMotionTokensInContainer } from './setup';
 
 describe('TextInputField Label Association', () => {
   let container: HTMLElement;
@@ -38,13 +41,11 @@ describe('TextInputField Label Association', () => {
   });
 
   /**
-   * Helper to set innerHTML and inject motion tokens into all components.
-   * This works around JSDOM's limitation where CSS custom properties on :root
-   * don't inherit into Shadow DOM elements.
+   * Helper to set innerHTML for test components.
+   * Motion token injection is no longer needed - CSS handles animation timing.
    */
   function setContainerHTML(html: string): void {
     container.innerHTML = html;
-    injectMotionTokensInContainer(container);
   }
   
   describe('Web Platform', () => {

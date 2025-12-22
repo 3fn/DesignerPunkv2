@@ -15,10 +15,12 @@
  * - Enter key form submission
  * - Keyboard navigation flow
  * 
+ * Note: Motion token injection is no longer required. CSS transition-delay
+ * now handles animation timing coordination, and motion tokens are applied
+ * via CSS custom properties defined in the component styles.
+ * 
  * Requirements: 6.1, 6.2, 6.3
  */
-
-import { injectMotionTokensInContainer, injectMotionTokens } from './setup';
 
 describe('TextInputField - Keyboard Navigation', () => {
   let container: HTMLDivElement;
@@ -39,13 +41,11 @@ describe('TextInputField - Keyboard Navigation', () => {
   });
 
   /**
-   * Helper to set innerHTML and inject motion tokens into all components.
-   * This works around JSDOM's limitation where CSS custom properties on :root
-   * don't inherit into Shadow DOM elements.
+   * Helper to set innerHTML for test components.
+   * Motion token injection is no longer needed - CSS handles animation timing.
    */
   function setContainerHTML(html: string): void {
     container.innerHTML = html;
-    injectMotionTokensInContainer(container);
   }
 
   describe('Tab Key Focus (Requirement 6.1)', () => {
@@ -124,8 +124,6 @@ describe('TextInputField - Keyboard Navigation', () => {
         ></text-input-field>
       `;
       container.appendChild(form);
-      // Inject tokens into the component inside the form
-      injectMotionTokensInContainer(form);
 
       const component = form.querySelector('text-input-field') as any;
       const input = component.shadowRoot.querySelector('.input-element') as HTMLInputElement;
@@ -168,8 +166,6 @@ describe('TextInputField - Keyboard Navigation', () => {
         ></text-input-field>
       `;
       container.appendChild(form);
-      // Inject tokens into the component inside the form
-      injectMotionTokensInContainer(form);
 
       const component = form.querySelector('text-input-field') as any;
       const input = component.shadowRoot.querySelector('.input-element') as HTMLInputElement;

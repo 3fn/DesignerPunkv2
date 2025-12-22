@@ -7,6 +7,11 @@
  * 
  * Tests for TextInputField state machine logic, label positioning,
  * and icon visibility calculations.
+ * 
+ * Note: Animation timing coordination is now handled by CSS transition-delay
+ * on the icon container. The calculateIconVisibility function no longer requires
+ * an animationState parameter - it determines visibility based on component state only.
+ * See design.md for details on the CSS-based animation approach.
  */
 
 import {
@@ -16,13 +21,9 @@ import {
   handleFocus,
   handleBlur,
   handleValueChange,
-  handleValidationChange,
-  createInitialAnimationState,
-  startLabelAnimation,
-  updateAnimationProgress,
-  completeLabelAnimation
+  handleValidationChange
 } from '../stateManagement';
-import { TextInputFieldState, TextInputFieldProps, LabelAnimationState } from '../types';
+import { TextInputFieldState, TextInputFieldProps } from '../types';
 
 describe('State Management', () => {
   describe('calculateLabelPosition', () => {
@@ -134,6 +135,13 @@ describe('State Management', () => {
     });
   });
 
+  /**
+   * Icon Visibility Tests
+   * 
+   * These tests verify that calculateIconVisibility correctly determines
+   * icon visibility based on component state. Animation timing coordination
+   * is handled by CSS transition-delay, so these tests only verify state-based logic.
+   */
   describe('calculateIconVisibility', () => {
     it('should hide all icons when label is not floated', () => {
       const state: TextInputFieldState = {
@@ -145,43 +153,15 @@ describe('State Management', () => {
         showInfoIcon: true
       };
 
-      const animationState: LabelAnimationState = {
-        isAnimating: false,
-        direction: 'up',
-        progress: 1.0
-      };
-
-      const result = calculateIconVisibility(state, animationState);
+      // CSS transition-delay handles animation timing - state determines visibility
+      const result = calculateIconVisibility(state);
 
       expect(result.showErrorIcon).toBe(false);
       expect(result.showSuccessIcon).toBe(false);
       expect(result.showInfoIcon).toBe(false);
     });
 
-    it('should hide all icons when animation is in progress', () => {
-      const state: TextInputFieldState = {
-        isFocused: true,
-        isFilled: false,
-        hasError: true,
-        isSuccess: false,
-        isLabelFloated: true,
-        showInfoIcon: true
-      };
-
-      const animationState: LabelAnimationState = {
-        isAnimating: true,
-        direction: 'up',
-        progress: 0.5
-      };
-
-      const result = calculateIconVisibility(state, animationState);
-
-      expect(result.showErrorIcon).toBe(false);
-      expect(result.showSuccessIcon).toBe(false);
-      expect(result.showInfoIcon).toBe(false);
-    });
-
-    it('should show error icon when label floated and animation complete', () => {
+    it('should show error icon when label is floated and has error', () => {
       const state: TextInputFieldState = {
         isFocused: true,
         isFilled: false,
@@ -190,20 +170,15 @@ describe('State Management', () => {
         isLabelFloated: true
       };
 
-      const animationState: LabelAnimationState = {
-        isAnimating: false,
-        direction: 'up',
-        progress: 1.0
-      };
-
-      const result = calculateIconVisibility(state, animationState);
+      // CSS transition-delay handles animation timing - state determines visibility
+      const result = calculateIconVisibility(state);
 
       expect(result.showErrorIcon).toBe(true);
       expect(result.showSuccessIcon).toBe(false);
       expect(result.showInfoIcon).toBe(false);
     });
 
-    it('should show success icon when label floated and animation complete', () => {
+    it('should show success icon when label is floated and is success', () => {
       const state: TextInputFieldState = {
         isFocused: false,
         isFilled: true,
@@ -212,20 +187,15 @@ describe('State Management', () => {
         isLabelFloated: true
       };
 
-      const animationState: LabelAnimationState = {
-        isAnimating: false,
-        direction: 'up',
-        progress: 1.0
-      };
-
-      const result = calculateIconVisibility(state, animationState);
+      // CSS transition-delay handles animation timing - state determines visibility
+      const result = calculateIconVisibility(state);
 
       expect(result.showErrorIcon).toBe(false);
       expect(result.showSuccessIcon).toBe(true);
       expect(result.showInfoIcon).toBe(false);
     });
 
-    it('should show info icon when focused and animation complete', () => {
+    it('should show info icon when focused', () => {
       const state: TextInputFieldState = {
         isFocused: true,
         isFilled: false,
@@ -235,20 +205,15 @@ describe('State Management', () => {
         showInfoIcon: true
       };
 
-      const animationState: LabelAnimationState = {
-        isAnimating: false,
-        direction: 'up',
-        progress: 1.0
-      };
-
-      const result = calculateIconVisibility(state, animationState);
+      // CSS transition-delay handles animation timing - state determines visibility
+      const result = calculateIconVisibility(state);
 
       expect(result.showErrorIcon).toBe(false);
       expect(result.showSuccessIcon).toBe(false);
       expect(result.showInfoIcon).toBe(true);
     });
 
-    it('should show info icon when filled and animation complete', () => {
+    it('should show info icon when filled', () => {
       const state: TextInputFieldState = {
         isFocused: false,
         isFilled: true,
@@ -258,13 +223,8 @@ describe('State Management', () => {
         showInfoIcon: true
       };
 
-      const animationState: LabelAnimationState = {
-        isAnimating: false,
-        direction: 'up',
-        progress: 1.0
-      };
-
-      const result = calculateIconVisibility(state, animationState);
+      // CSS transition-delay handles animation timing - state determines visibility
+      const result = calculateIconVisibility(state);
 
       expect(result.showErrorIcon).toBe(false);
       expect(result.showSuccessIcon).toBe(false);
@@ -281,13 +241,8 @@ describe('State Management', () => {
         showInfoIcon: true
       };
 
-      const animationState: LabelAnimationState = {
-        isAnimating: false,
-        direction: 'up',
-        progress: 1.0
-      };
-
-      const result = calculateIconVisibility(state, animationState);
+      // CSS transition-delay handles animation timing - state determines visibility
+      const result = calculateIconVisibility(state);
 
       expect(result.showInfoIcon).toBe(false);
     });
@@ -528,89 +483,12 @@ describe('State Management', () => {
     });
   });
 
-  describe('Animation State Management', () => {
-    describe('createInitialAnimationState', () => {
-      it('should create initial animation state with no animation', () => {
-        const state = createInitialAnimationState();
-
-        expect(state.isAnimating).toBe(false);
-        expect(state.direction).toBe('up');
-        expect(state.progress).toBe(1.0);
-      });
-    });
-
-    describe('startLabelAnimation', () => {
-      it('should start animation in up direction', () => {
-        const state = startLabelAnimation('up');
-
-        expect(state.isAnimating).toBe(true);
-        expect(state.direction).toBe('up');
-        expect(state.progress).toBe(0.0);
-      });
-
-      it('should start animation in down direction', () => {
-        const state = startLabelAnimation('down');
-
-        expect(state.isAnimating).toBe(true);
-        expect(state.direction).toBe('down');
-        expect(state.progress).toBe(0.0);
-      });
-    });
-
-    describe('updateAnimationProgress', () => {
-      it('should update animation progress', () => {
-        const currentState: LabelAnimationState = {
-          isAnimating: true,
-          direction: 'up',
-          progress: 0.0
-        };
-
-        const newState = updateAnimationProgress(currentState, 0.5);
-
-        expect(newState.progress).toBe(0.5);
-        expect(newState.isAnimating).toBe(true);
-      });
-
-      it('should clamp progress to 0-1 range (lower bound)', () => {
-        const currentState: LabelAnimationState = {
-          isAnimating: true,
-          direction: 'up',
-          progress: 0.5
-        };
-
-        const newState = updateAnimationProgress(currentState, -0.5);
-
-        expect(newState.progress).toBe(0.0);
-      });
-
-      it('should clamp progress to 0-1 range (upper bound)', () => {
-        const currentState: LabelAnimationState = {
-          isAnimating: true,
-          direction: 'up',
-          progress: 0.5
-        };
-
-        const newState = updateAnimationProgress(currentState, 1.5);
-
-        expect(newState.progress).toBe(1.0);
-      });
-    });
-
-    describe('completeLabelAnimation', () => {
-      it('should mark animation as complete', () => {
-        const currentState: LabelAnimationState = {
-          isAnimating: true,
-          direction: 'up',
-          progress: 0.8
-        };
-
-        const newState = completeLabelAnimation(currentState);
-
-        expect(newState.isAnimating).toBe(false);
-        expect(newState.progress).toBe(1.0);
-      });
-    });
-  });
+  // Note: Animation State Management tests have been removed.
+  // Animation timing coordination is now handled by CSS transition-delay
+  // on the icon container. The JavaScript animation state functions
+  // (createInitialAnimationState, startLabelAnimation, updateAnimationProgress,
+  // completeLabelAnimation) have been removed from stateManagement.ts.
+  // See design.md for details on the CSS-based animation approach.
 
   describe('State Machine Transitions', () => {
     it('should transition from Empty, Not Focused to Empty, Focused', () => {

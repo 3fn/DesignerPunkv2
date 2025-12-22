@@ -182,7 +182,7 @@ This implementation plan converts the TextInputField animation refactor design i
     - Ensure component builds without errors
     - Manual verification: Component renders correctly
 
-- [ ] 4. Update Test Suite
+- [x] 4. Update Test Suite
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -211,7 +211,7 @@ This implementation plan converts the TextInputField animation refactor design i
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 Complete: Update Test Suite"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 4.1 Remove test setup helpers from setup.ts
+  - [x] 4.1 Remove test setup helpers from setup.ts
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Remove `injectMotionTokens()` function
@@ -221,7 +221,7 @@ This implementation plan converts the TextInputField animation refactor design i
     - Remove `:root` CSS custom property injection
     - _Requirements: 6.1, 6.2, 6.3_
 
-  - [ ] 4.2 Update stateManagement.test.ts
+  - [x] 4.2 Update stateManagement.test.ts
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Remove `LabelAnimationState` import
@@ -232,7 +232,7 @@ This implementation plan converts the TextInputField animation refactor design i
     - Add comment explaining CSS now handles animation timing
     - _Requirements: 8.1, 8.2_
 
-  - [ ] 4.3 Update integration.test.ts
+  - [x] 4.3 Update integration.test.ts
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Remove `LabelAnimationState` import
@@ -244,7 +244,7 @@ This implementation plan converts the TextInputField animation refactor design i
     - Add comment explaining CSS handles animation timing coordination
     - _Requirements: 8.3, 8.4, 8.6, 8.7_
 
-  - [ ] 4.4 Update keyboardNavigation.test.ts
+  - [x] 4.4 Update keyboardNavigation.test.ts
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Remove `injectMotionTokensInContainer` import
@@ -253,21 +253,21 @@ This implementation plan converts the TextInputField animation refactor design i
     - Remove all `injectMotionTokensInContainer(form)` calls
     - _Requirements: 6.1, 6.2_
 
-  - [ ] 4.5 Update labelAssociation.test.ts
+  - [x] 4.5 Update labelAssociation.test.ts
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Remove `injectMotionTokensInContainer` import
     - Remove `injectMotionTokensInContainer(container)` call in `setContainerHTML()`
     - _Requirements: 6.1, 6.2_
 
-  - [ ] 4.6 Update touchTargetSizing.test.ts
+  - [x] 4.6 Update touchTargetSizing.test.ts
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Remove `injectMotionTokens` import
     - Remove `injectMotionTokens(component)` call in component creation
     - _Requirements: 6.1, 6.2_
 
-  - [ ] 4.7 Checkpoint - Run test suite
+  - [x] 4.7 Checkpoint - Run test suite
     **Type**: Implementation
     **Validation**: Tier 1 - Minimal
     - Run `npm test` to verify all tests pass

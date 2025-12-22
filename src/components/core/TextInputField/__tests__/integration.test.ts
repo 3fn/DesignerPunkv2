@@ -16,13 +16,18 @@
  * - Form integration (submission, validation)
  * - Cross-platform token usage
  * 
+ * Note: Animation timing coordination is now handled by CSS transition-delay
+ * on the icon container. Tests no longer need to verify JavaScript-based
+ * animation state management. The calculateIconVisibility function now
+ * determines visibility based solely on component state.
+ * 
  * Requirements: 4.1, 4.2, 4.3, 8.1, 8.2
  */
 
 import { createIcon } from '../../Icon/platforms/web/Icon.web';
 import { getMotionToken } from '../../../../tokens/semantic/MotionTokens';
 import { calculateIconVisibility } from '../stateManagement';
-import { TextInputFieldState, LabelAnimationState } from '../types';
+import { TextInputFieldState } from '../types';
 
 describe('TextInputField Integration Tests', () => {
   describe('Icon Component Integration', () => {
@@ -48,37 +53,12 @@ describe('TextInputField Integration Tests', () => {
           isLabelFloated: true
         };
 
-        const animationState: LabelAnimationState = {
-          isAnimating: false,
-          direction: 'up',
-          progress: 1.0
-        };
-
-        const visibility = calculateIconVisibility(state, animationState);
+        // CSS transition-delay handles animation timing coordination
+        const visibility = calculateIconVisibility(state);
 
         expect(visibility.showErrorIcon).toBe(true);
         expect(visibility.showSuccessIcon).toBe(false);
         expect(visibility.showInfoIcon).toBe(false);
-      });
-
-      it('should hide error icon during label animation', () => {
-        const state: TextInputFieldState = {
-          isFocused: true,
-          isFilled: false,
-          hasError: true,
-          isSuccess: false,
-          isLabelFloated: true
-        };
-
-        const animationState: LabelAnimationState = {
-          isAnimating: true,
-          direction: 'up',
-          progress: 0.5
-        };
-
-        const visibility = calculateIconVisibility(state, animationState);
-
-        expect(visibility.showErrorIcon).toBe(false);
       });
 
       it('should use correct icon size for error icon', () => {
@@ -115,37 +95,12 @@ describe('TextInputField Integration Tests', () => {
           isLabelFloated: true
         };
 
-        const animationState: LabelAnimationState = {
-          isAnimating: false,
-          direction: 'up',
-          progress: 1.0
-        };
-
-        const visibility = calculateIconVisibility(state, animationState);
+        // CSS transition-delay handles animation timing coordination
+        const visibility = calculateIconVisibility(state);
 
         expect(visibility.showErrorIcon).toBe(false);
         expect(visibility.showSuccessIcon).toBe(true);
         expect(visibility.showInfoIcon).toBe(false);
-      });
-
-      it('should hide success icon during label animation', () => {
-        const state: TextInputFieldState = {
-          isFocused: false,
-          isFilled: true,
-          hasError: false,
-          isSuccess: true,
-          isLabelFloated: true
-        };
-
-        const animationState: LabelAnimationState = {
-          isAnimating: true,
-          direction: 'up',
-          progress: 0.5
-        };
-
-        const visibility = calculateIconVisibility(state, animationState);
-
-        expect(visibility.showSuccessIcon).toBe(false);
       });
     });
 
@@ -172,13 +127,8 @@ describe('TextInputField Integration Tests', () => {
           showInfoIcon: true
         };
 
-        const animationState: LabelAnimationState = {
-          isAnimating: false,
-          direction: 'up',
-          progress: 1.0
-        };
-
-        const visibility = calculateIconVisibility(state, animationState);
+        // CSS transition-delay handles animation timing coordination
+        const visibility = calculateIconVisibility(state);
 
         expect(visibility.showInfoIcon).toBe(true);
       });
@@ -193,13 +143,8 @@ describe('TextInputField Integration Tests', () => {
           showInfoIcon: true
         };
 
-        const animationState: LabelAnimationState = {
-          isAnimating: false,
-          direction: 'up',
-          progress: 1.0
-        };
-
-        const visibility = calculateIconVisibility(state, animationState);
+        // CSS transition-delay handles animation timing coordination
+        const visibility = calculateIconVisibility(state);
 
         expect(visibility.showInfoIcon).toBe(true);
       });
@@ -214,62 +159,16 @@ describe('TextInputField Integration Tests', () => {
           showInfoIcon: true
         };
 
-        const animationState: LabelAnimationState = {
-          isAnimating: false,
-          direction: 'up',
-          progress: 1.0
-        };
-
-        const visibility = calculateIconVisibility(state, animationState);
+        // CSS transition-delay handles animation timing coordination
+        const visibility = calculateIconVisibility(state);
 
         expect(visibility.showInfoIcon).toBe(false);
       });
     });
 
-    describe('Icon Coordination with Label Animation', () => {
-      it('should hide all icons during label float animation', () => {
-        const state: TextInputFieldState = {
-          isFocused: true,
-          isFilled: false,
-          hasError: true,
-          isSuccess: false,
-          isLabelFloated: true,
-          showInfoIcon: true
-        };
-
-        const animationState: LabelAnimationState = {
-          isAnimating: true,
-          direction: 'up',
-          progress: 0.5
-        };
-
-        const visibility = calculateIconVisibility(state, animationState);
-
-        expect(visibility.showErrorIcon).toBe(false);
-        expect(visibility.showSuccessIcon).toBe(false);
-        expect(visibility.showInfoIcon).toBe(false);
-      });
-
-      it('should show appropriate icon after animation completes', () => {
-        const state: TextInputFieldState = {
-          isFocused: true,
-          isFilled: false,
-          hasError: true,
-          isSuccess: false,
-          isLabelFloated: true
-        };
-
-        const animationState: LabelAnimationState = {
-          isAnimating: false,
-          direction: 'up',
-          progress: 1.0
-        };
-
-        const visibility = calculateIconVisibility(state, animationState);
-
-        expect(visibility.showErrorIcon).toBe(true);
-      });
-    });
+    // Note: "Icon Coordination with Label Animation" tests removed.
+    // Animation timing is now handled by CSS transition-delay on the icon container.
+    // JavaScript no longer tracks animation state for icon visibility coordination.
   });
 
   describe('Motion Token Integration', () => {
@@ -313,36 +212,9 @@ describe('TextInputField Integration Tests', () => {
         expect(floatLabelMotion?.primitiveReferences.easing).toBe('easingStandard');
       });
 
-      it('should coordinate icon timing with label animation', () => {
-        // Icons should appear after label animation completes (250ms)
-        const state: TextInputFieldState = {
-          isFocused: true,
-          isFilled: false,
-          hasError: true,
-          isSuccess: false,
-          isLabelFloated: true
-        };
-
-        // During animation (progress < 1.0)
-        const duringAnimation: LabelAnimationState = {
-          isAnimating: true,
-          direction: 'up',
-          progress: 0.8
-        };
-
-        const visibilityDuring = calculateIconVisibility(state, duringAnimation);
-        expect(visibilityDuring.showErrorIcon).toBe(false);
-
-        // After animation completes (progress = 1.0)
-        const afterAnimation: LabelAnimationState = {
-          isAnimating: false,
-          direction: 'up',
-          progress: 1.0
-        };
-
-        const visibilityAfter = calculateIconVisibility(state, afterAnimation);
-        expect(visibilityAfter.showErrorIcon).toBe(true);
-      });
+      // Note: "coordinate icon timing with label animation" test removed.
+      // Animation timing coordination is now handled by CSS transition-delay.
+      // The motion token values are applied via CSS custom properties.
     });
 
     describe('Scale Token Integration', () => {
@@ -556,8 +428,11 @@ describe('TextInputField Integration Tests', () => {
   });
 
   describe('End-to-End Integration Scenarios', () => {
-    describe('Complete User Flow with Icons and Animation', () => {
+    describe('Complete User Flow with Icons', () => {
       it('should handle complete focus → fill → validate → blur flow', () => {
+        // Note: Animation timing is now handled by CSS transition-delay.
+        // This test verifies state-based icon visibility without animation state.
+        
         // Start: Empty, not focused
         let state: TextInputFieldState = {
           isFocused: false,
@@ -567,63 +442,44 @@ describe('TextInputField Integration Tests', () => {
           isLabelFloated: false
         };
 
-        let animationState: LabelAnimationState = {
-          isAnimating: false,
-          direction: 'up',
-          progress: 1.0
-        };
-
         // Step 1: User focuses input
         state = { ...state, isFocused: true, isLabelFloated: true };
-        animationState = { isAnimating: true, direction: 'up', progress: 0.0 };
         
-        // During animation, no icons visible
-        let visibility = calculateIconVisibility(state, animationState);
+        // No icons visible yet (no error/success state)
+        let visibility = calculateIconVisibility(state);
         expect(visibility.showErrorIcon).toBe(false);
         expect(visibility.showSuccessIcon).toBe(false);
 
-        // Step 2: Animation completes
-        animationState = { isAnimating: false, direction: 'up', progress: 1.0 };
-        
-        // Step 3: User types value
+        // Step 2: User types value
         state = { ...state, isFilled: true };
 
-        // Step 4: External validation succeeds
+        // Step 3: External validation succeeds
         state = { ...state, isSuccess: true };
         
-        // Success icon should now be visible
-        visibility = calculateIconVisibility(state, animationState);
+        // Success icon should now be visible (CSS handles timing)
+        visibility = calculateIconVisibility(state);
         expect(visibility.showSuccessIcon).toBe(true);
 
-        // Step 5: User blurs input
+        // Step 4: User blurs input
         state = { ...state, isFocused: false };
         
         // Success icon should remain visible
-        visibility = calculateIconVisibility(state, animationState);
+        visibility = calculateIconVisibility(state);
         expect(visibility.showSuccessIcon).toBe(true);
       });
 
       it('should handle error state with icon coordination', () => {
         // Start: Filled, focused
-        let state: TextInputFieldState = {
+        const state: TextInputFieldState = {
           isFocused: true,
           isFilled: true,
-          hasError: false,
+          hasError: true,
           isSuccess: false,
           isLabelFloated: true
         };
-
-        let animationState: LabelAnimationState = {
-          isAnimating: false,
-          direction: 'up',
-          progress: 1.0
-        };
-
-        // External validation fails
-        state = { ...state, hasError: true };
         
-        // Error icon should be visible
-        const visibility = calculateIconVisibility(state, animationState);
+        // Error icon should be visible (CSS handles timing)
+        const visibility = calculateIconVisibility(state);
         expect(visibility.showErrorIcon).toBe(true);
         
         // Verify error icon can be created
@@ -638,42 +494,8 @@ describe('TextInputField Integration Tests', () => {
       });
     });
 
-    describe('Motion Token and Icon Timing Coordination', () => {
-      it('should coordinate icon appearance with motion token timing', () => {
-        const floatLabelMotion = getMotionToken('motion.floatLabel');
-        
-        // Motion token specifies 250ms duration
-        expect(floatLabelMotion?.primitiveReferences.duration).toBe('duration250');
-        
-        // Icons should appear after this duration
-        const state: TextInputFieldState = {
-          isFocused: true,
-          isFilled: false,
-          hasError: true,
-          isSuccess: false,
-          isLabelFloated: true
-        };
-
-        // During 250ms animation
-        const duringAnimation: LabelAnimationState = {
-          isAnimating: true,
-          direction: 'up',
-          progress: 0.5
-        };
-        
-        let visibility = calculateIconVisibility(state, duringAnimation);
-        expect(visibility.showErrorIcon).toBe(false);
-
-        // After 250ms animation completes
-        const afterAnimation: LabelAnimationState = {
-          isAnimating: false,
-          direction: 'up',
-          progress: 1.0
-        };
-        
-        visibility = calculateIconVisibility(state, afterAnimation);
-        expect(visibility.showErrorIcon).toBe(true);
-      });
-    });
+    // Note: "Motion Token and Icon Timing Coordination" tests removed.
+    // Animation timing coordination is now handled by CSS transition-delay.
+    // The motion token values are applied via CSS custom properties, not JavaScript.
   });
 });
