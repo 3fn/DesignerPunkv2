@@ -160,7 +160,7 @@
     - Write unit test: console warning appears when tokens not loaded
     - _Requirements: 3.2, 3.3, 3.4_
 
-- [ ] 4. Implement custom element auto-registration
+- [x] 4. Implement custom element auto-registration
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -185,7 +185,7 @@
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 Complete: Implement custom element auto-registration"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 4.1 Verify component registration
+  - [x] 4.1 Verify component registration
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Write unit tests verifying all four components register on bundle load
@@ -193,7 +193,7 @@
     - Test UMD bundle registration and global object
     - _Requirements: 1.2, 1.3, 2.2, 2.3, 4.1, 4.2, 4.3, 4.4_
 
-  - [ ] 4.2 Write property test for registration idempotency
+  - [x] 4.2 Write property test for registration idempotency
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - **Property 2: Registration Idempotency**
