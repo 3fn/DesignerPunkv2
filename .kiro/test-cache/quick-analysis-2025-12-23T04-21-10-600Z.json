@@ -1,7 +1,7 @@
 {
-  "timestamp": "2025-12-22T17:41:29.259Z",
+  "timestamp": "2025-12-23T04:21:10.600Z",
   "lastRelease": "v1.0.0",
-  "documentCount": 355,
+  "documentCount": 356,
   "documents": [
     {
       "path": ".kiro/specs/010-container-component/completion/task-1-parent-completion.md",
@@ -1392,6 +1392,11 @@
       "path": ".kiro/specs/027-textinputfield-animation-refactor/completion/task-5-parent-completion.md",
       "lastModified": "2025-12-22T14:05:21.137Z",
       "gitCommit": "97b9551c47fa6338f47a1ce8892e4888521990c1"
+    },
+    {
+      "path": ".kiro/specs/028-web-component-browser-distribution/completion/task-1-parent-completion.md",
+      "lastModified": "2025-12-23T02:11:46.465Z",
+      "gitCommit": "4c81c9699569654154c25b6c48bbd56fed33bb4e"
     },
     {
       "path": ".kiro/specs/release-management-system/completion/task-10-2-completion.md",

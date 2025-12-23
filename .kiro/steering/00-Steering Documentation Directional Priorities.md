@@ -51,6 +51,9 @@ The documentation is organized like a meal experience:
 - Update your understanding of when that section applies
 - Consider if the trigger conditions should be refined
 
+**⚠️ SPECIAL CASE: Spec Documents**
+If you are about to create or modify **ANY spec document** (design-outline.md, requirements.md, design.md, tasks.md), you MUST query Spec Planning Standards via MCP FIRST. This is **not optional**. See "Tier 2: MCP-Only Documents" section for details.
+
 ---
 
 ## Tier 1: Always-Loaded Documents
@@ -94,16 +97,57 @@ Core project context and development practices. Read completely.
 
 These documents are **NOT auto-loaded**. Query them via MCP when needed.
 
+---
+
+### ⚠️ CRITICAL: Spec Planning Standards is an ABSOLUTE REQUIREMENT
+
+**WHEN working on ANY spec documents (requirements.md, design.md, tasks.md), you MUST query Spec Planning Standards via MCP BEFORE creating or modifying these files.**
+
+**This is NOT optional. This is NOT a suggestion. This is an ABSOLUTE REQUIREMENT.**
+
+**Why this matters:**
+- Spec documents have specific formatting requirements that are NOT intuitive
+- Tasks.md has a precise structure including task type classification, validation tiers, and completion documentation paths
+- Failure to query Spec Planning Standards WILL result in incorrectly formatted documents that require rework
+- This has happened before and caused wasted effort - learn from this mistake
+
+**What happens if you skip this:**
+- ❌ Tasks will be formatted incorrectly (wrong structure, missing fields)
+- ❌ Requirements will lack proper EARS format or acceptance criteria
+- ❌ Design documents will miss required sections
+- ❌ Peter will have to ask another agent to fix your work
+- ❌ Time, tokens, and effort will be wasted
+
+**The correct workflow:**
+1. **BEFORE** creating/modifying any spec document, query the relevant section via MCP
+2. Read the formatting requirements completely
+3. Follow the format exactly
+4. Confirm you've queried the standards in your response
+
+---
+
 ### 1. Spec Planning Standards
 **Access**: MCP query required (not auto-loaded)
-**When needed**: Creating or updating specification documents
+**When needed**: Creating or updating specification documents (requirements.md, design.md, tasks.md)
+
+**MANDATORY SECTIONS TO QUERY:**
+- **For requirements.md**: Query "Requirements Document Format" section
+- **For design.md**: Query "Design Document Format" section  
+- **For tasks.md**: Query "Tasks Document Format" AND "Task Type Classification" sections
 
 **How to access**:
+```
+get_document_summary({ path: ".kiro/steering/Spec Planning Standards.md" })
+```
+
+Then query the specific section you need:
 ```
 get_section({ path: ".kiro/steering/Spec Planning Standards.md", heading: "Tasks Document Format" })
 ```
 
-**Confirmation**: Reply "I've queried Spec Planning Standards via MCP!" after accessing
+**REQUIRED Confirmation**: You MUST reply "I've queried Spec Planning Standards via MCP and reviewed [section name]!" after accessing. If you do not include this confirmation, you have NOT followed the requirement.
+
+---
 
 ### 2. Component Development and Practices Guide
 **Access**: MCP query required (not auto-loaded)
@@ -115,22 +159,6 @@ get_section({ path: ".kiro/steering/Component Development and Practices Guide.md
 ```
 
 **Confirmation**: Reply "I've queried Component Development and Practices Guide via MCP!" after accessing
-
-**How to use**: 
-- Read the "AI Agent Reading Priorities" section at the top
-- If creating requirements: Read Requirements Document Format only
-- If creating design: Read Design Document Format only
-- If creating tasks: Read Tasks Document Format and Task Type Classification only
-- If executing tasks: Read Validation and Documentation sections for your task's tier only
-
-**Confirmation**: Reply "I've reviewed the Spec Planning Standards!" after reading
-
-### 2. Component Development and Practices Guide
-**Trigger**: Building or modifying components
-
-**File**: #[[file:.kiro/steering/Component Development and Practices Guide.md]]
-
-**Confirmation**: Reply "I've reviewed the Component Development and Practices Guide!" after reading
 
 ### 3. A Vision of the Future
 **Trigger**: Need greater context on DesignerPunk vision (optional)
