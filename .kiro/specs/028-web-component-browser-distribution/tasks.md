@@ -252,7 +252,7 @@
     - Write test verifying import resolves to ESM bundle
     - _Requirements: 6.4_
 
-- [ ] 7. Implement bundle size tracking
+- [x] 7. Implement bundle size tracking
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -277,7 +277,7 @@
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 7 Complete: Implement bundle size tracking"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 7.1 Add size reporting to build script
+  - [x] 7.1 Add size reporting to build script
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Calculate raw and gzipped sizes for each bundle
@@ -285,14 +285,14 @@
     - Calculate and display total size
     - _Requirements: 7.3, 11.1, 11.2, 11.3_
 
-  - [ ] 7.2 Implement soft ceiling warning
+  - [x] 7.2 Implement soft ceiling warning
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add 100KB gzipped threshold check
     - Output warning if any bundle exceeds threshold
     - _Requirements: 11.4_
 
-  - [ ] 7.3 Verify build error handling
+  - [x] 7.3 Verify build error handling
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test that build fails with descriptive error on bundle generation failure
