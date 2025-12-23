@@ -310,7 +310,7 @@ export class TextInputField extends HTMLElement {
       }
       
       .input-wrapper.error .input-element {
-        border-color: var(--color-error);
+        border-color: var(--color-error-strong);
       }
       
       .input-wrapper.success .input-element {
@@ -346,7 +346,7 @@ export class TextInputField extends HTMLElement {
       }
       
       .input-wrapper.error .input-label {
-        color: var(--color-error);
+        color: var(--color-error-strong);
       }
       
       .input-wrapper.success .input-label {
@@ -372,7 +372,7 @@ export class TextInputField extends HTMLElement {
         line-height: var(--typography-caption-line-height);
         font-weight: var(--typography-caption-font-weight);
         letter-spacing: var(--typography-caption-letter-spacing);
-        color: var(--color-error);
+        color: var(--color-error-strong);
       }
       
       .trailing-icon-container {

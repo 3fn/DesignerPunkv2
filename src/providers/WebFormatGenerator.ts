@@ -240,8 +240,9 @@ export class WebFormatGenerator extends BaseFormatProvider {
   }
 
   /**
-   * Format a multi-reference semantic token (typography)
+   * Format a multi-reference semantic token (typography, shadow)
    * Generates individual CSS custom properties for each property
+   * For shadow tokens, also generates a composite box-shadow value
    */
   formatMultiReferenceToken(semantic: SemanticToken): string {
     // Get all primitive references except 'value' and 'default' which are for single-reference tokens
@@ -269,7 +270,43 @@ export class WebFormatGenerator extends BaseFormatProvider {
       return `  ${cssSemanticName}-${cssKey}: var(${cssPrimitiveRef});`;
     }).join('\n');
     
+    // For shadow tokens, also generate a composite box-shadow value
+    // This allows components to use: box-shadow: var(--shadow-container)
+    if (semantic.category === 'shadow') {
+      const compositeToken = this.formatCompositeShadowToken(semantic, cssSemanticName);
+      return properties + '\n' + compositeToken;
+    }
+    
     return properties;
+  }
+
+  /**
+   * Format a composite shadow token for CSS box-shadow usage
+   * Generates: --shadow-container: <offset-x> <offset-y> <blur> rgba(0, 0, 0, <opacity>);
+   * 
+   * This allows components to use: box-shadow: var(--shadow-container)
+   * instead of manually composing individual shadow properties.
+   * 
+   * @param semantic - Shadow semantic token
+   * @param cssSemanticName - CSS custom property name (e.g., '--shadow-container')
+   * @returns CSS custom property string with composite box-shadow value
+   */
+  private formatCompositeShadowToken(semantic: SemanticToken, cssSemanticName: string): string {
+    // Build composite shadow value using var() references to individual properties
+    // Format: offset-x offset-y blur rgba(0, 0, 0, opacity)
+    // Using var() references allows the composite to stay in sync with individual properties
+    const offsetX = `var(${cssSemanticName}-offset-x)`;
+    const offsetY = `var(${cssSemanticName}-offset-y)`;
+    const blur = `var(${cssSemanticName}-blur)`;
+    const opacity = `var(${cssSemanticName}-opacity)`;
+    
+    // Use rgba with opacity variable for the shadow color
+    // Note: CSS doesn't allow var() inside rgba() directly, so we use a calc-based approach
+    // or rely on the browser's ability to handle this in modern CSS
+    // For maximum compatibility, we compose the shadow using individual var() references
+    const compositeValue = `${offsetX} ${offsetY} ${blur} rgba(0, 0, 0, ${opacity})`;
+    
+    return `  ${cssSemanticName}: ${compositeValue};`;
   }
 
   /**

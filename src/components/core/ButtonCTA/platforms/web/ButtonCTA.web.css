@@ -394,15 +394,15 @@
  * 
  * - Force borders for all button styles
  * - Ensure focus indicators are visible
- * - Use border.borderThick and border.borderThicker tokens
+ * - Use border.borderEmphasis (2px) and border.borderHeavy (4px) tokens
  */
 @media (prefers-contrast: high) {
   .button-cta {
-    border: var(--border-border-thick) solid currentColor; /* 2px */
+    border: var(--border-border-emphasis) solid currentColor; /* 2px */
   }
   
   .button-cta:focus-visible {
-    outline-width: var(--border-border-thicker); /* 3px */
+    outline-width: var(--border-border-heavy); /* 4px */
   }
 }
 

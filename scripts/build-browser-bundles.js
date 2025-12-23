@@ -93,19 +93,41 @@ async function buildBundle(options) {
 
 /**
  * Copy token CSS file to browser distribution
+ * Tries multiple source locations for flexibility
  * @returns {boolean} True if copy succeeded
  */
 function copyTokenCSS() {
-  const sourcePath = 'output/web/DesignTokens.web.css';
+  // Possible source locations for the token CSS file
+  // Priority order: output/ (primary), dist/ (fallback)
+  const possibleSources = [
+    'output/DesignTokens.web.css',
+    'dist/DesignTokens.web.css',
+    'output/web/DesignTokens.web.css',
+    'dist/web/DesignTokens.web.css'
+  ];
+  
   const destPath = path.join(OUTPUT_DIR, 'tokens.css');
   
-  if (!fs.existsSync(sourcePath)) {
-    console.warn(`⚠️  Token CSS not found at ${sourcePath}`);
+  // Find the first existing source file
+  let sourcePath = null;
+  for (const candidate of possibleSources) {
+    if (fs.existsSync(candidate)) {
+      sourcePath = candidate;
+      break;
+    }
+  }
+  
+  if (!sourcePath) {
+    console.warn(`⚠️  Token CSS not found in any of these locations:`);
+    for (const candidate of possibleSources) {
+      console.warn(`      - ${candidate}`);
+    }
     console.warn('   Run the token build first to generate DesignTokens.web.css');
     return false;
   }
   
   fs.copyFileSync(sourcePath, destPath);
+  console.log(`      Copied from: ${sourcePath}`);
   return true;
 }
 

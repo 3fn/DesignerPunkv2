@@ -72,17 +72,17 @@ export const borderTokenMap: Record<BorderValue, string> = {
  * Maps borderRadius prop values to radius token names.
  * 
  * Token values:
- * - radius050: 4px
- * - radius100: 8px
- * - radius200: 16px
+ * - radius-050: 4px
+ * - radius-100: 8px
+ * - radius-200: 16px
  * 
  * @see Requirements 2.5, 7.1-7.4
  */
 export const borderRadiusTokenMap: Record<BorderRadiusValue, string> = {
   'none': '',
-  'tight': 'radius050',
-  'normal': 'radius100',
-  'loose': 'radius200'
+  'tight': 'radius-050',
+  'normal': 'radius-100',
+  'loose': 'radius-200'
 };
 
 /**
@@ -193,7 +193,7 @@ export function getBorderToken(border: BorderValue): string {
  * 
  * @example
  * ```typescript
- * getBorderRadiusToken('normal') // Returns 'radius100'
+ * getBorderRadiusToken('normal') // Returns 'radius-100'
  * getBorderRadiusToken('none') // Returns ''
  * ```
  */

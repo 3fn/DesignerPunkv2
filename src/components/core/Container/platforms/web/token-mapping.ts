@@ -127,7 +127,7 @@ export function mapBorderToCSS(border: BorderValue | null): string {
  * 
  * @example
  * ```typescript
- * mapBorderRadiusToCSS('normal') // Returns 'border-radius: var(--radius100)'
+ * mapBorderRadiusToCSS('normal') // Returns 'border-radius: var(--radius-100)'
  * mapBorderRadiusToCSS('none') // Returns ''
  * ```
  * 
@@ -277,7 +277,7 @@ export function mapLayeringToCSS(layering: LayeringValue | null): string {
  * // padding: var(--space-inset-200);
  * // background: var(--color-surface);
  * // box-shadow: var(--shadow-container);
- * // border-radius: var(--radius100)
+ * // border-radius: var(--radius-100)
  * ```
  */
 export function buildContainerStyles(props: {
