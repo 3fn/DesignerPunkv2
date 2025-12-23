@@ -200,7 +200,7 @@
     - Pre-register element, load bundle, verify no error
     - **Validates: Requirements 4.5**
 
-- [ ] 5. Checkpoint - Verify core bundle functionality
+- [x] 5. Checkpoint - Verify core bundle functionality
 
   **Type**: Implementation
   **Validation**: Tier 2 - Standard
@@ -211,7 +211,7 @@
   - Ask user if questions arise
   - _Requirements: 1.1, 1.2, 2.1, 2.2, 3.4_
 
-- [ ] 6. Configure npm package exports
+- [x] 6. Configure npm package exports
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -237,7 +237,7 @@
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 6 Complete: Configure npm package exports"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 6.1 Update package.json exports
+  - [x] 6.1 Update package.json exports
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Add `exports` field with import/require conditions
@@ -246,7 +246,7 @@
     - Add `./tokens.css` export mapping
     - _Requirements: 6.1, 6.2, 6.3_
 
-  - [ ] 6.2 Verify bundler resolution
+  - [x] 6.2 Verify bundler resolution
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Write test verifying import resolves to ESM bundle

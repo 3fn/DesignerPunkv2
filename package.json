@@ -2,7 +2,18 @@
   "name": "designer-punk-v2",
   "version": "1.0.0",
   "description": "True Native cross-platform design system with mathematical foundations",
-  "main": "index.js",
+  "main": "./dist/TokenEngine.js",
+  "module": "./dist/browser/designerpunk.esm.js",
+  "browser": "./dist/browser/designerpunk.esm.js",
+  "types": "./dist/TokenEngine.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/browser/designerpunk.esm.js",
+      "require": "./dist/TokenEngine.js",
+      "types": "./dist/TokenEngine.d.ts"
+    },
+    "./tokens.css": "./dist/browser/tokens.css"
+  },
   "scripts": {
     "generate:types": "ts-node scripts/generate-token-types.ts",
     "prebuild": "npm run generate:types",
