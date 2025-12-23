@@ -6,7 +6,8 @@
   "scripts": {
     "generate:types": "ts-node scripts/generate-token-types.ts",
     "prebuild": "npm run generate:types",
-    "build": "tsc --skipLibCheck && npm run build:validate",
+    "build": "tsc --skipLibCheck && npm run build:validate && npm run build:browser",
+    "build:browser": "node scripts/build-browser-bundles.js",
     "build:watch": "tsc --watch --skipLibCheck",
     "build:verify": "node verify-build.js",
     "build:validate": "npx ts-node src/validators/buildValidation.ts",
@@ -40,6 +41,7 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^20.0.0",
     "@types/semver": "^7.7.1",
+    "esbuild": "^0.27.2",
     "fast-check": "^4.4.0",
     "jest": "^30.0.0",
     "jest-environment-jsdom": "^30.2.0",
