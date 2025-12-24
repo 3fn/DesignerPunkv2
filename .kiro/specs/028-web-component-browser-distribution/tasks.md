@@ -298,7 +298,7 @@
     - Test that build fails with descriptive error on bundle generation failure
     - _Requirements: 7.4_
 
-- [ ] 8. Create demo page
+- [x] 8. Create demo page
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -475,7 +475,7 @@
       
       - _Requirements: 8.2, 8.3 (components render correctly with interactivity)_
 
-- [ ] 9. Create AI agent guidance documentation
+- [x] 9. Create AI agent guidance documentation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -502,7 +502,7 @@
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 9 Complete: Create AI agent guidance documentation"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 9.1 Create Browser Distribution Guide
+  - [x] 9.1 Create Browser Distribution Guide
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `.kiro/steering/Browser Distribution Guide.md`
@@ -511,22 +511,24 @@
     - Document UMD loading pattern with example
     - _Requirements: 9.1, 9.2, 9.3_
 
-  - [ ] 9.2 Add troubleshooting guidance
+  - [~] 9.2 Add troubleshooting guidance (SKIPPED - consolidated into 9.1)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    - Document "tokens not loaded" troubleshooting
-    - Document "component not rendering" troubleshooting
-    - Document common integration issues
+    **Status**: Skipped - Content consolidated into Browser Distribution Guide (Task 9.1)
+    - Document "tokens not loaded" troubleshooting ✓ (in Browser Distribution Guide)
+    - Document "component not rendering" troubleshooting ✓ (in Browser Distribution Guide)
+    - Document common integration issues ✓ (in Browser Distribution Guide)
     - _Requirements: 9.4_
+    - **Completion**: `.kiro/specs/028-web-component-browser-distribution/completion/task-9-2-skipped.md`
 
-  - [ ] 9.3 Write property test for MCP format compliance
+  - [x] 9.3 Write property test for MCP format compliance
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - **Property 4: MCP Documentation Format Compliance**
     - Verify all required metadata fields present
     - **Validates: Requirements 9.2**
 
-  - [ ] 9.4 Verify MCP queryability
+  - [x] 9.4 Verify MCP queryability
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test that documentation is indexed by MCP server

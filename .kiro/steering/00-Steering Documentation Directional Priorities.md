@@ -160,10 +160,14 @@ get_section({ path: ".kiro/steering/Component Development and Practices Guide.md
 
 **Confirmation**: Reply "I've queried Component Development and Practices Guide via MCP!" after accessing
 
+---
+
 ### 3. A Vision of the Future
 **Trigger**: Need greater context on DesignerPunk vision (optional)
 
 **File**: #[[file:.kiro/steering/A Vision of the Future.md]]
+
+---
 
 ### 4. Token Usage Guidance
 **Trigger**: Working with tokens
@@ -173,6 +177,20 @@ get_section({ path: ".kiro/steering/Component Development and Practices Guide.md
 - Related guides in #[[file:.kiro/specs/typography-token-expansion]]
 
 **Confirmation**: Reply "I've reviewed the Token guidance!" after reading
+
+---
+
+### 5. Browser Distribution Guide
+**Trigger**: Working with browser distribution, web components, or bundle loading
+
+**File**: #[[file:.kiro/steering/Browser Distribution Guide.md]]
+
+**How to access**:
+```
+get_section({ path: ".kiro/steering/Browser Distribution Guide.md", heading: "Troubleshooting" })
+```
+
+**Confirmation**: Reply "I've queried Browser Distribution Guide via MCP!" after accessing
 
 ---
 
