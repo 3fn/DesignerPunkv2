@@ -43,7 +43,7 @@ const BASE_STYLES = `
   }
   
   .container:focus {
-    outline: var(--border-emphasis) solid var(--color-primary);
+    outline: var(--border-border-emphasis) solid var(--color-primary);
     outline-offset: var(--space-grouped-minimal);
   }
   
@@ -52,7 +52,7 @@ const BASE_STYLES = `
   }
   
   .container:focus-visible {
-    outline: var(--border-emphasis) solid var(--color-primary);
+    outline: var(--border-border-emphasis) solid var(--color-primary);
     outline-offset: var(--space-grouped-minimal);
   }
   
@@ -65,7 +65,7 @@ const BASE_STYLES = `
   
   @media (prefers-contrast: high) {
     .container {
-      border-width: var(--border-emphasis);
+      border-width: var(--border-border-emphasis);
     }
   }
   

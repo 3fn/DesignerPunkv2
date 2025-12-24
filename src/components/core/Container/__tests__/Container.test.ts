@@ -348,18 +348,18 @@ describe('Container Component', () => {
     describe('getBorderToken', () => {
       it('should return correct token for border values', () => {
         expect(getBorderToken('none')).toBe('');
-        expect(getBorderToken('default')).toBe('border.default');
-        expect(getBorderToken('emphasis')).toBe('border.emphasis');
-        expect(getBorderToken('heavy')).toBe('border.heavy');
+        expect(getBorderToken('default')).toBe('border.border.default');
+        expect(getBorderToken('emphasis')).toBe('border.border.emphasis');
+        expect(getBorderToken('heavy')).toBe('border.border.heavy');
       });
     });
 
     describe('getBorderRadiusToken', () => {
       it('should return correct token for border radius values', () => {
         expect(getBorderRadiusToken('none')).toBe('');
-        expect(getBorderRadiusToken('tight')).toBe('radius050');
-        expect(getBorderRadiusToken('normal')).toBe('radius100');
-        expect(getBorderRadiusToken('loose')).toBe('radius200');
+        expect(getBorderRadiusToken('tight')).toBe('radius-050');
+        expect(getBorderRadiusToken('normal')).toBe('radius-100');
+        expect(getBorderRadiusToken('loose')).toBe('radius-200');
       });
     });
 

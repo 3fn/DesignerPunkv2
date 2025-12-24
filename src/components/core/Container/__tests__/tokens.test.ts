@@ -46,9 +46,9 @@ describe('Container Token Mappings', () => {
   describe('borderTokenMap', () => {
     it('should map border values to border tokens', () => {
       expect(borderTokenMap['none']).toBe('');
-      expect(borderTokenMap['default']).toBe('border.default');
-      expect(borderTokenMap['emphasis']).toBe('border.emphasis');
-      expect(borderTokenMap['heavy']).toBe('border.heavy');
+      expect(borderTokenMap['default']).toBe('border.border.default');
+      expect(borderTokenMap['emphasis']).toBe('border.border.emphasis');
+      expect(borderTokenMap['heavy']).toBe('border.border.heavy');
     });
 
     it('should have entries for all BorderValue types', () => {
@@ -62,9 +62,9 @@ describe('Container Token Mappings', () => {
   describe('borderRadiusTokenMap', () => {
     it('should map border radius values to radius tokens', () => {
       expect(borderRadiusTokenMap['none']).toBe('');
-      expect(borderRadiusTokenMap['tight']).toBe('radius050');
-      expect(borderRadiusTokenMap['normal']).toBe('radius100');
-      expect(borderRadiusTokenMap['loose']).toBe('radius200');
+      expect(borderRadiusTokenMap['tight']).toBe('radius-050');
+      expect(borderRadiusTokenMap['normal']).toBe('radius-100');
+      expect(borderRadiusTokenMap['loose']).toBe('radius-200');
     });
 
     it('should have entries for all BorderRadiusValue types', () => {
@@ -137,18 +137,18 @@ describe('Container Token Mappings', () => {
   describe('getBorderToken', () => {
     it('should return correct token name for border values', () => {
       expect(getBorderToken('none')).toBe('');
-      expect(getBorderToken('default')).toBe('border.default');
-      expect(getBorderToken('emphasis')).toBe('border.emphasis');
-      expect(getBorderToken('heavy')).toBe('border.heavy');
+      expect(getBorderToken('default')).toBe('border.border.default');
+      expect(getBorderToken('emphasis')).toBe('border.border.emphasis');
+      expect(getBorderToken('heavy')).toBe('border.border.heavy');
     });
   });
 
   describe('getBorderRadiusToken', () => {
     it('should return correct token name for border radius values', () => {
       expect(getBorderRadiusToken('none')).toBe('');
-      expect(getBorderRadiusToken('tight')).toBe('radius050');
-      expect(getBorderRadiusToken('normal')).toBe('radius100');
-      expect(getBorderRadiusToken('loose')).toBe('radius200');
+      expect(getBorderRadiusToken('tight')).toBe('radius-050');
+      expect(getBorderRadiusToken('normal')).toBe('radius-100');
+      expect(getBorderRadiusToken('loose')).toBe('radius-200');
     });
   });
 
@@ -205,17 +205,17 @@ describe('Container Token Mappings', () => {
     });
 
     it('should use direct primitive names for radius tokens', () => {
-      // Radius tokens use direct primitive names (no dot notation)
-      expect(borderRadiusTokenMap['tight']).toBe('radius050');
-      expect(borderRadiusTokenMap['normal']).toBe('radius100');
-      expect(borderRadiusTokenMap['loose']).toBe('radius200');
+      // Radius tokens use hyphenated primitive names
+      expect(borderRadiusTokenMap['tight']).toBe('radius-050');
+      expect(borderRadiusTokenMap['normal']).toBe('radius-100');
+      expect(borderRadiusTokenMap['loose']).toBe('radius-200');
     });
 
     it('should use direct primitive names for border width tokens', () => {
-      // Border width tokens use direct primitive names (no dot notation)
-      expect(borderTokenMap['default']).toBe('border.default');
-      expect(borderTokenMap['emphasis']).toBe('border.emphasis');
-      expect(borderTokenMap['heavy']).toBe('border.heavy');
+      // Border width tokens use dot notation with double "border" (category + semantic name)
+      expect(borderTokenMap['default']).toBe('border.border.default');
+      expect(borderTokenMap['emphasis']).toBe('border.border.emphasis');
+      expect(borderTokenMap['heavy']).toBe('border.border.heavy');
     });
   });
 

@@ -33,7 +33,7 @@ describe('tokenToCssVar', () => {
   });
 
   it('handles single-level token names', () => {
-    expect(tokenToCssVar('radius100')).toBe('var(--radius100)');
+    expect(tokenToCssVar('radius-100')).toBe('var(--radius-100)');
   });
 
   it('handles multi-level token names', () => {
@@ -62,9 +62,9 @@ describe('mapPaddingToCSS', () => {
 
 describe('mapBorderToCSS', () => {
   it('maps border values to CSS border with width and color tokens', () => {
-    expect(mapBorderToCSS('default')).toBe('border: var(--border-default) solid var(--color-border)');
-    expect(mapBorderToCSS('emphasis')).toBe('border: var(--border-emphasis) solid var(--color-border)');
-    expect(mapBorderToCSS('heavy')).toBe('border: var(--border-heavy) solid var(--color-border)');
+    expect(mapBorderToCSS('default')).toBe('border: var(--border-border-default) solid var(--color-border)');
+    expect(mapBorderToCSS('emphasis')).toBe('border: var(--border-border-emphasis) solid var(--color-border)');
+    expect(mapBorderToCSS('heavy')).toBe('border: var(--border-border-heavy) solid var(--color-border)');
   });
 
   it('returns empty string for none value', () => {
@@ -78,9 +78,9 @@ describe('mapBorderToCSS', () => {
 
 describe('mapBorderRadiusToCSS', () => {
   it('maps border radius values to CSS border-radius with radius tokens', () => {
-    expect(mapBorderRadiusToCSS('tight')).toBe('border-radius: var(--radius050)');
-    expect(mapBorderRadiusToCSS('normal')).toBe('border-radius: var(--radius100)');
-    expect(mapBorderRadiusToCSS('loose')).toBe('border-radius: var(--radius200)');
+    expect(mapBorderRadiusToCSS('tight')).toBe('border-radius: var(--radius-050)');
+    expect(mapBorderRadiusToCSS('normal')).toBe('border-radius: var(--radius-100)');
+    expect(mapBorderRadiusToCSS('loose')).toBe('border-radius: var(--radius-200)');
   });
 
   it('returns empty string for none value', () => {
@@ -165,7 +165,7 @@ describe('buildContainerStyles', () => {
     expect(styles).toContain('padding: var(--space-inset-200)');
     expect(styles).toContain('background: var(--color-surface)');
     expect(styles).toContain('box-shadow: var(--shadow-container)');
-    expect(styles).toContain('border-radius: var(--radius100)');
+    expect(styles).toContain('border-radius: var(--radius-100)');
   });
 
   it('builds CSS with all props', () => {
@@ -182,8 +182,8 @@ describe('buildContainerStyles', () => {
     expect(styles).toContain('padding: var(--space-inset-300)');
     expect(styles).toContain('background: var(--color-primary)');
     expect(styles).toContain('box-shadow: var(--shadow-modal)');
-    expect(styles).toContain('border: var(--border-emphasis) solid var(--color-border)');
-    expect(styles).toContain('border-radius: var(--radius200)');
+    expect(styles).toContain('border: var(--border-border-emphasis) solid var(--color-border)');
+    expect(styles).toContain('border-radius: var(--radius-200)');
     expect(styles).toContain('opacity: var(--opacity-subtle)');
     expect(styles).toContain('z-index: var(--zIndex-modal)');
   });
@@ -248,8 +248,8 @@ describe('Integration: Token mapping with Container props', () => {
     expect(styles).toContain('padding: var(--space-inset-200)');
     expect(styles).toContain('background: var(--color-primary)');
     expect(styles).toContain('box-shadow: var(--shadow-container)');
-    expect(styles).toContain('border: var(--border-default) solid var(--color-border)');
-    expect(styles).toContain('border-radius: var(--radius100)');
+    expect(styles).toContain('border: var(--border-border-default) solid var(--color-border)');
+    expect(styles).toContain('border-radius: var(--radius-100)');
     expect(styles).toContain('opacity: var(--opacity-subtle)');
     expect(styles).toContain('z-index: var(--zIndex-navigation)');
   });
@@ -262,7 +262,7 @@ describe('Integration: Token mapping with Container props', () => {
     });
 
     expect(styles).toContain('padding: var(--space-inset-100)');
-    expect(styles).toContain('border-radius: var(--radius050)');
+    expect(styles).toContain('border-radius: var(--radius-050)');
     expect(styles).toContain('opacity: var(--opacity-subtle)'); // Default opacity always included
     expect(styles).not.toContain('background');
     expect(styles).not.toContain('box-shadow');

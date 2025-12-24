@@ -105,7 +105,7 @@ class TextInputField extends HTMLElement {
           align-items: center;
           min-height: var(--tap-area-recommended);
           background: var(--color-background);
-          border: var(--border-default) solid var(--color-border);
+          border: var(--border-border-default) solid var(--color-border);
           border-radius: var(--radius-150);
           padding: var(--space-inset-100);
           transition: border-color var(--motion-float-label-duration) var(--motion-float-label-easing);

@@ -53,17 +53,21 @@ export const paddingTokenMap: Record<PaddingValue, string> = {
  * Border color is always color.border token.
  * 
  * Token values:
- * - border.default: 1px
- * - border.emphasis: 2px
- * - border.heavy: 4px
+ * - border.border.default: 1px
+ * - border.border.emphasis: 2px
+ * - border.border.heavy: 4px
+ * 
+ * Note: The double "border" in the token name (border.border.default) is intentional.
+ * The first "border" is the category prefix, the second is part of the semantic name.
+ * This converts to CSS custom property: --border-border-default
  * 
  * @see Requirements 2.4, 6.1-6.5
  */
 export const borderTokenMap: Record<BorderValue, string> = {
   'none': '',
-  'default': 'border.default',
-  'emphasis': 'border.emphasis',
-  'heavy': 'border.heavy'
+  'default': 'border.border.default',
+  'emphasis': 'border.border.emphasis',
+  'heavy': 'border.border.heavy'
 };
 
 /**
@@ -177,7 +181,7 @@ export function getPaddingToken(padding: PaddingValue): string {
  * 
  * @example
  * ```typescript
- * getBorderToken('default') // Returns 'border.default'
+ * getBorderToken('default') // Returns 'border.border.default'
  * getBorderToken('none') // Returns ''
  * ```
  */

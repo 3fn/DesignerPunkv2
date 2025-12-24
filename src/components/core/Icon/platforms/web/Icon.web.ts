@@ -84,7 +84,23 @@ export function createIcon(props: IconProps): string {
   // Load SVG content based on icon name
   const svgContent = loadIconSVG(name);
   
-  // Map size to CSS class (using icon size token scale)
+  // Map size to pixel value for explicit SVG dimensions
+  // This ensures icons render correctly regardless of CSS context (Shadow DOM, etc.)
+  const sizePixelMap: Record<IconSize, number> = {
+    13: 16,   // icon-size-050: 16px
+    18: 20,   // icon-size-075: 20px
+    24: 24,   // icon-size-100: 24px
+    28: 28,   // icon-size-125: 28px
+    32: 32,   // icon-size-200: 32px
+    36: 36,   // icon-size-400: 36px
+    40: 40,   // icon-size-500: 40px
+    44: 44,   // icon-size-600: 44px
+    48: 48    // icon-size-700: 48px
+  };
+  
+  const sizePixels = sizePixelMap[size] || 24;
+  
+  // Map size to CSS class (using icon size token scale) - kept for semantic styling
   const sizeClassMap: Record<IconSize, string> = {
     13: 'icon--size-050',
     18: 'icon--size-075',
@@ -107,8 +123,9 @@ export function createIcon(props: IconProps): string {
     ? 'currentColor' 
     : `var(--${color})`; // Token reference becomes CSS custom property
   
-  // Determine stroke width using token
-  const strokeWidth = 'var(--icon-stroke-width)';
+  // Use hardcoded stroke width (2px) for reliable rendering
+  // This matches --icon-stroke-width which references --border-width-200 (2px)
+  const strokeWidth = '2';
   
   // Build style attribute
   const styleStr = Object.entries(style)
@@ -125,7 +142,8 @@ export function createIcon(props: IconProps): string {
   // Build style attribute
   const styleAttr = styleStr ? ` style="${styleStr}"` : '';
   
-  return `<svg viewBox="0 0 24 24" fill="none" stroke="${strokeColor}" stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round" class="${classAttr}" aria-hidden="true"${testIDAttr}${styleAttr}>${svgContent}</svg>`;
+  // Set explicit width/height on SVG for reliable rendering across all contexts
+  return `<svg width="${sizePixels}" height="${sizePixels}" viewBox="0 0 24 24" fill="none" stroke="${strokeColor}" stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round" class="${classAttr}" aria-hidden="true"${testIDAttr}${styleAttr}>${svgContent}</svg>`;
 }
 
 /**
@@ -322,8 +340,9 @@ export class DPIcon extends HTMLElement {
       ? 'currentColor' 
       : `var(--${color})`;
     
-    // Use stroke width token
-    const strokeWidth = 'var(--icon-stroke-width)';
+    // Use hardcoded stroke width (2px) for reliable Shadow DOM rendering
+    // This matches --icon-stroke-width which references --border-width-200 (2px)
+    const strokeWidth = '2';
     
     // Generate test ID attribute
     const testIDAttr = testID ? ` data-testid="${testID}"` : '';

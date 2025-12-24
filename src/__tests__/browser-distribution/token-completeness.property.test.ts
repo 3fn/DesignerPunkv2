@@ -60,10 +60,6 @@ describe('Property 1: Token CSS Completeness', () => {
    * conventions or are composite tokens.
    */
   const PROPERTY_ALIASES: Record<string, string> = {
-    // Border tokens use different naming in CSS vs source
-    'border-default': 'border-border-default',
-    'border-emphasis': 'border-border-emphasis',
-    'border-heavy': 'border-border-heavy',
     // Shadow hover is a composite token
     'shadow-hover': 'shadow-hover-offset-x', // Check for any shadow-hover-* token
   };

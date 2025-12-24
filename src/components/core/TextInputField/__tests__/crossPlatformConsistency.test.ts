@@ -186,7 +186,8 @@ describe('TextInputField Cross-Platform Consistency', () => {
   describe('Border Token Consistency', () => {
     test('all platforms use consistent border token references', () => {
       // Border width token reference
-      expect(webContent).toContain('--border-default');
+      // Note: Web uses --border-border-default (double "border" is intentional - category + semantic name)
+      expect(webContent).toContain('--border-border-default');
       expect(iosContent).toContain('border.default');
       expect(androidContent).toContain('borderDefault');
       

@@ -46,7 +46,7 @@
   /* Uses color tokens: var(--color-surface), var(--color-background), etc. */
   
   /* Border - Applied via token-mapping when border prop is set */
-  /* Uses border tokens: var(--border-default), var(--border-emphasis), var(--border-heavy) */
+  /* Uses border tokens: var(--border-border-default), var(--border-border-emphasis), var(--border-border-heavy) */
   /* Border color uses: var(--color-border) */
   
   /* Border radius - Applied via token-mapping when borderRadius prop is set */

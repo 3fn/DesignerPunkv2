@@ -5,14 +5,25 @@
  * and comprehensive interaction states. Follows True Native Architecture with
  * build-time platform separation.
  * 
+ * Uses <dp-icon> web component for icon rendering, following the same component
+ * composition pattern as iOS and Android platforms. This ensures cross-platform
+ * consistency and single source of truth for icon rendering.
+ * 
  * @module ButtonCTA/platforms/web
  */
 
 /// <reference lib="dom" />
 
 import { ButtonSize, ButtonStyle } from '../../types';
-import { createIcon } from '../../../Icon/platforms/web/Icon.web';
+// Import DPIcon to ensure it's registered before ButtonCTA uses it
+import '../../../Icon/platforms/web/Icon.web';
 import { IconSize, iconSizes } from '../../../Icon/types';
+
+// Import CSS as string for browser bundle compatibility
+// The esbuild CSS-as-string plugin transforms this import into a JS string export
+// @see scripts/esbuild-css-plugin.js
+// @see Requirements: 8.2, 8.3 (components render correctly in browser bundles)
+import buttonStyles from './ButtonCTA.web.css';
 
 /**
  * Map ButtonCTA size to appropriate IconSize using explicit token references.
@@ -264,7 +275,11 @@ export class ButtonCTA extends HTMLElement {
    * Render the component.
    * 
    * Generates the button HTML with appropriate classes, icon, and label.
-   * Loads CSS from external file and injects into shadow DOM.
+   * CSS is imported as a string and injected into shadow DOM via <style> tag
+   * for browser bundle compatibility.
+   * 
+   * Uses <dp-icon> web component for icon rendering, following the same
+   * component composition pattern as iOS and Android platforms.
    */
   private render(): void {
     const label = this.label;
@@ -283,16 +298,11 @@ export class ButtonCTA extends HTMLElement {
       disabled ? 'button-cta--disabled' : ''
     ].filter(Boolean).join(' ');
     
-    // Generate icon HTML if icon prop provided
+    // Get icon size for button size variant
     // Icon sizes are type-safe mapped from button size:
     // - Small/Medium: 24px (iconSize100)
     // - Large: 32px (iconSize125)
     const iconSize: IconSize = getIconSizeForButton(size);
-    const iconHTML = icon ? createIcon({ 
-      name: icon as any, // Type assertion since IconName is from Icon types
-      size: iconSize,
-      color: 'inherit'
-    }) : '';
     
     // Generate label class
     const labelClass = noWrap ? 'button-cta__label--no-wrap' : 'button-cta__label';
@@ -300,13 +310,17 @@ export class ButtonCTA extends HTMLElement {
     // Generate test ID attribute
     const testIDAttr = testID ? ` data-testid="${testID}"` : '';
     
-    // Load CSS from external file
-    // In production, this would be bundled or loaded via link tag
-    const styleLink = `<link rel="stylesheet" href="./ButtonCTA.web.css">`;
+    // Use imported CSS string in <style> tag for browser bundle compatibility
+    // This approach bundles CSS into JS, avoiding external CSS file dependencies
+    // @see scripts/esbuild-css-plugin.js
+    // @see Requirements: 8.2, 8.3 (components render correctly in browser bundles)
     
     // Render shadow DOM content
+    // Uses <dp-icon> web component for icon rendering (component composition pattern)
+    // This matches iOS and Android platforms which use Icon() component composition
+    // @see Requirements: 8.2, 8.3 (components render correctly with interactivity)
     this._shadowRoot.innerHTML = `
-      ${styleLink}
+      <style>${buttonStyles}</style>
       <button 
         class="${buttonClasses}"
         type="button"
@@ -315,7 +329,7 @@ export class ButtonCTA extends HTMLElement {
         ${testIDAttr}
         aria-label="${label}"
       >
-        ${icon ? `<span class="button-cta__icon" aria-hidden="true">${iconHTML}</span>` : ''}
+        ${icon ? `<span class="button-cta__icon" aria-hidden="true"><dp-icon name="${icon}" size="${iconSize}" color="inherit"></dp-icon></span>` : ''}
         <span class="${labelClass}">${label}</span>
       </button>
     `;

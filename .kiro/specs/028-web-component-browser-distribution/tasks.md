@@ -322,7 +322,7 @@
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 8 Complete: Create demo page"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 8.1 Create demo HTML file
+  - [x] 8.1 Create demo HTML file
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Create `dist/browser/demo.html` template
@@ -331,13 +331,149 @@
     - Add all four components with example props
     - _Requirements: 8.1, 8.2_
 
-  - [ ] 8.2 Add interactivity demonstrations
+  - [x] 8.2 Add interactivity demonstrations
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add focus state demonstrations
     - Add click handler demonstrations
     - Verify page works from local file server
     - _Requirements: 8.3, 8.4_
+
+  - [x] 8.3 Fix component CSS bundling for browser distribution
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    
+    **Problem**: Web components load external CSS files via `<link>` tags in shadow DOM, but these CSS files aren't included in the browser bundle. Components render but appear unstyled.
+    
+    **Approved Solution**: esbuild CSS-as-string plugin (Option 3) - CSS in separate files during development, bundled into JS at build time. This matches industry standard (Lit, Shoelace).
+    
+    - [x] 8.3.1 Research and propose CSS bundling solution
+      **Type**: Research
+      **Validation**: Tier 1 - Minimal
+      - Investigate current component CSS loading approach
+      - Evaluate options: inline CSS at build time, copy CSS files, constructable stylesheets
+      - Document trade-offs and recommend solution
+      - **Checkpoint**: Get user approval before implementation
+      - _Requirements: 8.2 (components render correctly)_
+    
+    - [x] 8.3.2 Create esbuild CSS-as-string plugin
+      **Type**: Implementation
+      **Validation**: Tier 2 - Standard
+      - Create `scripts/esbuild-css-plugin.js`
+      - Intercept `.css` imports and return content as JS string export
+      - Add TypeScript declaration for CSS imports (`src/types/css.d.ts`)
+      - _Requirements: 8.2_
+    
+    - [x] 8.3.3 Update ButtonCTA to use imported CSS
+      **Type**: Implementation
+      **Validation**: Tier 2 - Standard
+      - Change from `<link rel="stylesheet" href="./ButtonCTA.web.css">` to imported CSS string
+      - Import CSS file: `import buttonStyles from './ButtonCTA.web.css';`
+      - Use `<style>${buttonStyles}</style>` in shadow DOM
+      - _Requirements: 8.2, 8.3_
+    
+    - [x] 8.3.4 Update build script to use CSS plugin
+      **Type**: Implementation
+      **Validation**: Tier 1 - Minimal
+      - Import CSS plugin in `scripts/build-browser-bundles.js`
+      - Add plugin to esbuild configuration
+      - Verify build completes without errors
+      - _Requirements: 8.2_
+    
+    - [x] 8.3.5 Update tests for new CSS loading approach
+      **Type**: Implementation
+      **Validation**: Tier 2 - Standard
+      - Update any tests that check for `<link>` tags in shadow DOM
+      - Add test verifying CSS is bundled into JS (no external CSS file requests)
+      - Verify existing bundle-loading tests still pass
+      - _Requirements: 8.2_
+    
+    - [x] 8.3.6 Verify demo page styling
+      **Type**: Implementation
+      **Validation**: Tier 2 - Standard
+      - Rebuild browser bundles with CSS plugin
+      - Open demo.html and verify ButtonCTA is properly styled
+      - Verify all interactive states work (hover, focus, active)
+      - _Requirements: 8.2, 8.3, 8.4_
+    
+    - [ ]* 8.3.7 Revert Icon to external CSS for consistency (optional)
+      **Type**: Implementation
+      **Validation**: Tier 1 - Minimal
+      - Move Icon's inline CSS back to external `Icon.web.css` file
+      - Update Icon to use imported CSS string pattern
+      - Ensures all components use consistent CSS loading approach
+      - _Requirements: 8.2_
+
+    - [x] 8.3.8 Fix border token naming inconsistency in TextInputField
+      **Type**: Bug Fix
+      **Validation**: Tier 2 - Standard
+      
+      **Problem**: TextInputField uses `--border-default` but tokens.css defines `--border-border-default`. This causes input borders to not render because the CSS variable doesn't exist.
+      
+      **Root Cause**: Naming inconsistency between component code and token generation:
+      - tokens.css outputs: `--border-border-default` (with double "border")
+      - TextInputField uses: `--border-default` (without double "border")
+      - ButtonCTA correctly uses: `--border-border-default`
+      
+      **Current Workaround**: Test file `token-completeness.property.test.ts` has a `PROPERTY_ALIASES` mapping that masks this bug during testing.
+      
+      **Fix Required**:
+      - Update TextInputField.web.ts line ~284 to use `--border-border-default`
+      - Audit other components for similar border token naming issues
+      - Remove the workaround alias from test file once all components are fixed
+      - _Requirements: 8.2 (components render correctly)_
+
+    - [x] 8.3.9 Architectural review: ButtonCTA icon composition
+      **Type**: Research
+      **Validation**: Tier 1 - Minimal
+      
+      **Problem**: ButtonCTA uses `createIcon()` function which returns an SVG string. The SVG has CSS classes like `icon--size-100`, but those CSS rules are defined in the Icon component's Shadow DOM styles, not in ButtonCTA's Shadow DOM. This causes icons to render at 0x0 dimensions.
+      
+      **Current Workaround**: Added explicit `width` and `height` attributes to SVG in `createIcon()` function.
+      
+      **Architectural Question**: Should ButtonCTA use `<dp-icon>` web component instead of `createIcon()` function for proper component composition?
+      
+      **Trade-offs to evaluate**:
+      - `createIcon()`: Simpler, no nested Shadow DOM, but CSS isolation issues
+      - `<dp-icon>`: Proper encapsulation, but nested Shadow DOM complexity
+      
+      **Checkpoint**: Document findings and get user decision before implementation
+      - _Requirements: 8.2, 8.3 (components render correctly with interactivity)_
+      
+      **Decision**: Migrate to `<dp-icon>` for cross-platform consistency with iOS and Android.
+      **Completion**: `.kiro/specs/028-web-component-browser-distribution/completion/task-8-3-9-completion.md`
+
+    - [x] 8.3.10 Migrate ButtonCTA to use `<dp-icon>` component
+      **Type**: Implementation
+      **Validation**: Tier 2 - Standard
+      
+      **Background**: Architectural review (8.3.9) determined that ButtonCTA should use `<dp-icon>` web component instead of `createIcon()` function for cross-platform consistency. iOS and Android both use component composition (`Icon()`), and web should follow the same pattern.
+      
+      **Implementation Steps**:
+      1. Update ButtonCTA render method to use `<dp-icon>` instead of `createIcon()` string injection
+      2. Remove `createIcon` and related imports from ButtonCTA
+      3. Verify color inheritance works via `currentColor` across Shadow DOM boundary
+      4. Update tests to handle nested Shadow DOM (ButtonCTA → dp-icon)
+      5. Verify demo page still renders icons correctly
+      6. Remove duplicated size mapping logic (now handled by DPIcon)
+      
+      **Code Change**:
+      ```typescript
+      // Before (string injection)
+      const iconHTML = icon ? createIcon({ name, size, color: 'inherit' }) : '';
+      ${icon ? `<span class="button-cta__icon">${iconHTML}</span>` : ''}
+      
+      // After (component composition)
+      ${icon ? `<dp-icon name="${icon}" size="${iconSize}" class="button-cta__icon" aria-hidden="true"></dp-icon>` : ''}
+      ```
+      
+      **Benefits**:
+      - Cross-platform alignment with iOS/Android
+      - Single source of truth for icon rendering
+      - AI agent clarity (same pattern across all platforms)
+      - Removes duplicated size mapping logic
+      
+      - _Requirements: 8.2, 8.3 (components render correctly with interactivity)_
 
 - [ ] 9. Create AI agent guidance documentation
 

@@ -6,18 +6,22 @@
 /**
  * Icon + ButtonCTA Integration Tests
  * 
- * Tests that verify ButtonCTA component integrates correctly with Icon module
- * and that no code changes are needed in ButtonCTA after Icon web component conversion.
+ * Tests that verify ButtonCTA component integrates correctly with Icon module.
+ * ButtonCTA now uses <dp-icon> web component for icon rendering, following
+ * the same component composition pattern as iOS and Android platforms.
  * 
  * @module Icon/platforms/web/__tests__
  */
 
-import { createIcon } from '../Icon.web';
+import { createIcon, DPIcon } from '../Icon.web';
 import { ButtonCTA } from '../../../../ButtonCTA/platforms/web/ButtonCTA.web';
 
 describe('Icon + ButtonCTA Integration', () => {
   beforeEach(() => {
-    // Ensure custom element is registered
+    // Ensure custom elements are registered
+    if (!customElements.get('dp-icon')) {
+      customElements.define('dp-icon', DPIcon);
+    }
     if (!customElements.get('button-cta')) {
       customElements.define('button-cta', ButtonCTA);
     }
@@ -28,14 +32,28 @@ describe('Icon + ButtonCTA Integration', () => {
   // Helper function to wait for component to render
   const waitForRender = () => new Promise(resolve => setTimeout(resolve, 0));
 
-  describe('ButtonCTA imports createIcon successfully', () => {
+  /**
+   * Helper to get the SVG element from nested Shadow DOM.
+   * ButtonCTA → dp-icon → SVG
+   */
+  function getIconSvg(button: ButtonCTA): SVGElement | null {
+    const shadowRoot = button.shadowRoot;
+    if (!shadowRoot) return null;
+    
+    const dpIcon = shadowRoot.querySelector('dp-icon') as DPIcon | null;
+    if (!dpIcon || !dpIcon.shadowRoot) return null;
+    
+    return dpIcon.shadowRoot.querySelector('svg');
+  }
+
+  describe('createIcon function still available', () => {
     it('should import createIcon from Icon module', () => {
-      // Verify createIcon is available for import
+      // Verify createIcon is available for import (backward compatibility)
       expect(typeof createIcon).toBe('function');
     });
 
     it('should be able to call createIcon with ButtonCTA parameters', () => {
-      // Simulate ButtonCTA calling createIcon
+      // Simulate calling createIcon (for backward compatibility)
       const result = createIcon({
         name: 'arrow-right' as any,
         size: 24,
@@ -47,8 +65,8 @@ describe('Icon + ButtonCTA Integration', () => {
     });
   });
 
-  describe('ButtonCTA renders icons using createIcon', () => {
-    it('should render button with icon using createIcon', async () => {
+  describe('ButtonCTA renders icons using dp-icon component', () => {
+    it('should render button with icon using dp-icon component', async () => {
       const button = document.createElement('button-cta') as ButtonCTA;
       button.label = 'Click me';
       button.icon = 'arrow-right';
@@ -60,11 +78,18 @@ describe('Icon + ButtonCTA Integration', () => {
       const shadowRoot = button.shadowRoot;
       expect(shadowRoot).toBeTruthy();
 
-      // Verify icon is rendered in shadow DOM
+      // Verify dp-icon is rendered in shadow DOM
       const iconSpan = shadowRoot!.querySelector('.button-cta__icon');
       expect(iconSpan).toBeTruthy();
-      expect(iconSpan!.innerHTML).toContain('<svg');
-      expect(iconSpan!.innerHTML).toContain('arrow-right');
+      
+      const dpIcon = iconSpan!.querySelector('dp-icon');
+      expect(dpIcon).toBeTruthy();
+      expect(dpIcon!.getAttribute('name')).toBe('arrow-right');
+      
+      // Verify SVG is in nested Shadow DOM
+      const svg = getIconSvg(button);
+      expect(svg).toBeTruthy();
+      expect(svg!.classList.contains('icon-arrow-right')).toBe(true);
     });
 
     it('should render button without icon when icon prop not provided', async () => {
@@ -91,10 +116,14 @@ describe('Icon + ButtonCTA Integration', () => {
       await waitForRender();
 
       const shadowRoot = button.shadowRoot;
-      const iconSpan = shadowRoot!.querySelector('.button-cta__icon');
+      const dpIcon = shadowRoot!.querySelector('dp-icon');
       
-      // Medium button should use 24px icon (via icon--size-100 CSS class)
-      expect(iconSpan!.innerHTML).toContain('icon--size-100');
+      // Medium button should use 24px icon
+      expect(dpIcon!.getAttribute('size')).toBe('24');
+      
+      // Verify size class in nested Shadow DOM
+      const svg = getIconSvg(button);
+      expect(svg!.classList.contains('icon--size-100')).toBe(true);
     });
 
     it('should use correct icon size for large buttons', async () => {
@@ -107,15 +136,19 @@ describe('Icon + ButtonCTA Integration', () => {
       await waitForRender();
 
       const shadowRoot = button.shadowRoot;
-      const iconSpan = shadowRoot!.querySelector('.button-cta__icon');
+      const dpIcon = shadowRoot!.querySelector('dp-icon');
       
-      // Large button should use 32px icon (via icon--size-200 CSS class)
-      expect(iconSpan!.innerHTML).toContain('icon--size-200');
+      // Large button should use 32px icon
+      expect(dpIcon!.getAttribute('size')).toBe('32');
+      
+      // Verify size class in nested Shadow DOM
+      const svg = getIconSvg(button);
+      expect(svg!.classList.contains('icon--size-200')).toBe(true);
     });
   });
 
-  describe('ButtonCTA icon rendering unchanged', () => {
-    it('should render icon with aria-hidden="true"', async () => {
+  describe('ButtonCTA icon rendering with dp-icon', () => {
+    it('should render icon with aria-hidden="true" on SVG', async () => {
       const button = document.createElement('button-cta') as ButtonCTA;
       button.label = 'Submit';
       button.icon = 'check';
@@ -123,11 +156,9 @@ describe('Icon + ButtonCTA Integration', () => {
 
       await waitForRender();
 
-      const shadowRoot = button.shadowRoot;
-      const iconSpan = shadowRoot!.querySelector('.button-cta__icon');
-      
-      // Icon should have aria-hidden attribute
-      expect(iconSpan!.innerHTML).toContain('aria-hidden="true"');
+      // SVG in nested Shadow DOM should have aria-hidden
+      const svg = getIconSvg(button);
+      expect(svg!.getAttribute('aria-hidden')).toBe('true');
     });
 
     it('should render icon with currentColor for color inheritance', async () => {
@@ -138,14 +169,12 @@ describe('Icon + ButtonCTA Integration', () => {
 
       await waitForRender();
 
-      const shadowRoot = button.shadowRoot;
-      const iconSpan = shadowRoot!.querySelector('.button-cta__icon');
-      
-      // Icon should use currentColor for stroke
-      expect(iconSpan!.innerHTML).toContain('stroke="currentColor"');
+      // SVG in nested Shadow DOM should use currentColor
+      const svg = getIconSvg(button);
+      expect(svg!.getAttribute('stroke')).toBe('currentColor');
     });
 
-    it('should wrap icon in span with button-cta__icon class', async () => {
+    it('should wrap dp-icon in span with button-cta__icon class', async () => {
       const button = document.createElement('button-cta') as ButtonCTA;
       button.label = 'Submit';
       button.icon = 'check';
@@ -159,6 +188,10 @@ describe('Icon + ButtonCTA Integration', () => {
       expect(iconSpan).toBeTruthy();
       expect(iconSpan!.classList.contains('button-cta__icon')).toBe(true);
       expect(iconSpan!.getAttribute('aria-hidden')).toBe('true');
+      
+      // dp-icon should be inside the span
+      const dpIcon = iconSpan!.querySelector('dp-icon');
+      expect(dpIcon).toBeTruthy();
     });
 
     it('should place icon before label text', async () => {
@@ -208,11 +241,15 @@ describe('Icon + ButtonCTA Integration', () => {
         await waitForRender();
 
         const shadowRoot = button.shadowRoot;
-        const iconSpan = shadowRoot!.querySelector('.button-cta__icon');
+        const dpIcon = shadowRoot!.querySelector('dp-icon');
         
-        expect(iconSpan).toBeTruthy();
-        expect(iconSpan!.innerHTML).toContain('<svg');
-        expect(iconSpan!.innerHTML).toContain(`icon-${iconName}`);
+        expect(dpIcon).toBeTruthy();
+        expect(dpIcon!.getAttribute('name')).toBe(iconName);
+        
+        // Verify SVG in nested Shadow DOM
+        const svg = getIconSvg(button);
+        expect(svg).toBeTruthy();
+        expect(svg!.classList.contains(`icon-${iconName}`)).toBe(true);
       });
     });
   });
@@ -228,10 +265,13 @@ describe('Icon + ButtonCTA Integration', () => {
       await waitForRender();
 
       const shadowRoot = button.shadowRoot;
-      const iconSpan = shadowRoot!.querySelector('.button-cta__icon');
+      const dpIcon = shadowRoot!.querySelector('dp-icon');
       
-      // Small button uses 24px icon (via icon--size-100 CSS class)
-      expect(iconSpan!.innerHTML).toContain('icon--size-100');
+      // Small button uses 24px icon
+      expect(dpIcon!.getAttribute('size')).toBe('24');
+      
+      const svg = getIconSvg(button);
+      expect(svg!.classList.contains('icon--size-100')).toBe(true);
     });
 
     it('should render medium button with 24px icon', async () => {
@@ -244,10 +284,13 @@ describe('Icon + ButtonCTA Integration', () => {
       await waitForRender();
 
       const shadowRoot = button.shadowRoot;
-      const iconSpan = shadowRoot!.querySelector('.button-cta__icon');
+      const dpIcon = shadowRoot!.querySelector('dp-icon');
       
-      // Medium button uses 24px icon (via icon--size-100 CSS class)
-      expect(iconSpan!.innerHTML).toContain('icon--size-100');
+      // Medium button uses 24px icon
+      expect(dpIcon!.getAttribute('size')).toBe('24');
+      
+      const svg = getIconSvg(button);
+      expect(svg!.classList.contains('icon--size-100')).toBe(true);
     });
 
     it('should render large button with 32px icon', async () => {
@@ -260,10 +303,13 @@ describe('Icon + ButtonCTA Integration', () => {
       await waitForRender();
 
       const shadowRoot = button.shadowRoot;
-      const iconSpan = shadowRoot!.querySelector('.button-cta__icon');
+      const dpIcon = shadowRoot!.querySelector('dp-icon');
       
-      // Large button uses 32px icon (via icon--size-200 CSS class)
-      expect(iconSpan!.innerHTML).toContain('icon--size-200');
+      // Large button uses 32px icon
+      expect(dpIcon!.getAttribute('size')).toBe('32');
+      
+      const svg = getIconSvg(button);
+      expect(svg!.classList.contains('icon--size-200')).toBe(true);
     });
   });
 
@@ -279,10 +325,10 @@ describe('Icon + ButtonCTA Integration', () => {
 
       const shadowRoot = button.shadowRoot;
       const buttonElement = shadowRoot!.querySelector('button');
-      const iconSpan = shadowRoot!.querySelector('.button-cta__icon');
+      const dpIcon = shadowRoot!.querySelector('dp-icon');
       
       expect(buttonElement!.classList.contains('button-cta--primary')).toBe(true);
-      expect(iconSpan).toBeTruthy();
+      expect(dpIcon).toBeTruthy();
     });
 
     it('should render secondary button with icon', async () => {
@@ -296,10 +342,10 @@ describe('Icon + ButtonCTA Integration', () => {
 
       const shadowRoot = button.shadowRoot;
       const buttonElement = shadowRoot!.querySelector('button');
-      const iconSpan = shadowRoot!.querySelector('.button-cta__icon');
+      const dpIcon = shadowRoot!.querySelector('dp-icon');
       
       expect(buttonElement!.classList.contains('button-cta--secondary')).toBe(true);
-      expect(iconSpan).toBeTruthy();
+      expect(dpIcon).toBeTruthy();
     });
 
     it('should render tertiary button with icon', async () => {
@@ -313,15 +359,15 @@ describe('Icon + ButtonCTA Integration', () => {
 
       const shadowRoot = button.shadowRoot;
       const buttonElement = shadowRoot!.querySelector('button');
-      const iconSpan = shadowRoot!.querySelector('.button-cta__icon');
+      const dpIcon = shadowRoot!.querySelector('dp-icon');
       
       expect(buttonElement!.classList.contains('button-cta--tertiary')).toBe(true);
-      expect(iconSpan).toBeTruthy();
+      expect(dpIcon).toBeTruthy();
     });
   });
 
-  describe('ButtonCTA requires no code changes', () => {
-    it('should work with existing ButtonCTA implementation', async () => {
+  describe('ButtonCTA component composition pattern', () => {
+    it('should work with dp-icon component composition', async () => {
       // Create button using existing API
       const button = document.createElement('button-cta') as ButtonCTA;
       button.label = 'Test Button';
@@ -339,8 +385,10 @@ describe('Icon + ButtonCTA Integration', () => {
       const buttonElement = shadowRoot!.querySelector('button');
       expect(buttonElement).toBeTruthy();
 
-      const iconSpan = shadowRoot!.querySelector('.button-cta__icon');
-      expect(iconSpan).toBeTruthy();
+      // Verify dp-icon is used (component composition)
+      const dpIcon = shadowRoot!.querySelector('dp-icon');
+      expect(dpIcon).toBeTruthy();
+      expect(dpIcon!.tagName.toLowerCase()).toBe('dp-icon');
 
       const labelSpan = shadowRoot!.querySelector('.button-cta__label');
       expect(labelSpan).toBeTruthy();
@@ -356,8 +404,8 @@ describe('Icon + ButtonCTA Integration', () => {
       await waitForRender();
 
       let shadowRoot = button.shadowRoot;
-      let iconSpan = shadowRoot!.querySelector('.button-cta__icon');
-      expect(iconSpan!.innerHTML).toContain('icon-check');
+      let dpIcon = shadowRoot!.querySelector('dp-icon');
+      expect(dpIcon!.getAttribute('name')).toBe('check');
 
       // Change icon
       button.icon = 'arrow-right';
@@ -365,8 +413,8 @@ describe('Icon + ButtonCTA Integration', () => {
       await waitForRender();
 
       shadowRoot = button.shadowRoot;
-      iconSpan = shadowRoot!.querySelector('.button-cta__icon');
-      expect(iconSpan!.innerHTML).toContain('icon-arrow-right');
+      dpIcon = shadowRoot!.querySelector('dp-icon');
+      expect(dpIcon!.getAttribute('name')).toBe('arrow-right');
     });
 
     it('should handle removing icon', async () => {
@@ -402,15 +450,15 @@ describe('Icon + ButtonCTA Integration', () => {
 
       const shadowRoot = button.shadowRoot;
       const buttonElement = shadowRoot!.querySelector('button');
-      const iconSpan = shadowRoot!.querySelector('.button-cta__icon');
+      const dpIcon = shadowRoot!.querySelector('dp-icon');
       
       expect(buttonElement!.hasAttribute('disabled')).toBe(true);
-      expect(iconSpan).toBeTruthy();
+      expect(dpIcon).toBeTruthy();
     });
   });
 
   describe('Requirements Compliance', () => {
-    it('should meet Requirement 6.1: ButtonCTA imports createIcon successfully', () => {
+    it('should meet Requirement 6.1: createIcon still available for backward compatibility', () => {
       // Verify createIcon is importable and usable
       expect(typeof createIcon).toBe('function');
       
@@ -424,7 +472,7 @@ describe('Icon + ButtonCTA Integration', () => {
       expect(result).toContain('<svg');
     });
 
-    it('should meet Requirement 6.2: ButtonCTA continues working without changes', async () => {
+    it('should meet Requirement 6.2: ButtonCTA uses dp-icon for cross-platform consistency', async () => {
       // Create button with all features
       const button = document.createElement('button-cta') as ButtonCTA;
       button.label = 'Full Featured Button';
@@ -439,16 +487,24 @@ describe('Icon + ButtonCTA Integration', () => {
       // Verify all features work
       const shadowRoot = button.shadowRoot;
       const buttonElement = shadowRoot!.querySelector('button');
-      const iconSpan = shadowRoot!.querySelector('.button-cta__icon');
+      const dpIcon = shadowRoot!.querySelector('dp-icon');
       const labelSpan = shadowRoot!.querySelector('.button-cta__label');
       
       expect(buttonElement).toBeTruthy();
       expect(buttonElement!.classList.contains('button-cta--large')).toBe(true);
       expect(buttonElement!.classList.contains('button-cta--primary')).toBe(true);
       expect(buttonElement!.getAttribute('data-testid')).toBe('test-button');
-      expect(iconSpan).toBeTruthy();
-      // Large button uses 32px icon (via icon--size-200 CSS class)
-      expect(iconSpan!.innerHTML).toContain('icon--size-200');
+      
+      // Verify dp-icon is used with correct attributes
+      expect(dpIcon).toBeTruthy();
+      expect(dpIcon!.getAttribute('name')).toBe('check');
+      expect(dpIcon!.getAttribute('size')).toBe('32'); // Large button = 32px icon
+      expect(dpIcon!.getAttribute('color')).toBe('inherit');
+      
+      // Verify SVG in nested Shadow DOM
+      const svg = getIconSvg(button);
+      expect(svg!.classList.contains('icon--size-200')).toBe(true);
+      
       expect(labelSpan!.textContent).toBe('Full Featured Button');
     });
   });

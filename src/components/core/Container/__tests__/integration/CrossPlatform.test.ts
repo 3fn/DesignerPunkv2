@@ -60,17 +60,18 @@ describe('Container Cross-Platform Integration', () => {
           const tokenName = getBorderToken(value);
           
           // All platforms should reference the same border token
-          expect(tokenName).toBe(`border.${value}`);
-          expect(tokenName).toMatch(/^border\./);
+          // Note: The double "border" (border.border.X) is intentional - first is category, second is semantic name
+          expect(tokenName).toBe(`border.border.${value}`);
+          expect(tokenName).toMatch(/^border\.border\./);
         });
       });
 
       it('should map border radius tokens consistently across platforms', () => {
         const radiusMap: Record<BorderRadiusValue, string> = {
           'none': '',
-          'tight': 'radius050',
-          'normal': 'radius100',
-          'loose': 'radius200'
+          'tight': 'radius-050',
+          'normal': 'radius-100',
+          'loose': 'radius-200'
         };
         
         Object.entries(radiusMap).forEach(([value, expectedToken]) => {
@@ -146,13 +147,13 @@ describe('Container Cross-Platform Integration', () => {
 
         // Verify token references are correct
         expect(getPaddingToken('200')).toBe('space.inset.200');
-        expect(getBorderToken('default')).toBe('border.default');
-        expect(getBorderRadiusToken('normal')).toBe('radius100');
+        expect(getBorderToken('default')).toBe('border.border.default');
+        expect(getBorderRadiusToken('normal')).toBe('radius-100');
         
         // These token references would generate platform-specific values:
-        // Web: var(--space-inset-200), var(--border-default), var(--radius-100)
-        // iOS: spaceInset200, borderDefault, radius100
-        // Android: spaceInset200.dp, borderDefault.dp, radius100.dp
+        // Web: var(--space-inset-200), var(--border-border-default), var(--radius-100)
+        // iOS: spaceInset200, borderBorderDefault, radius100
+        // Android: spaceInset200.dp, borderBorderDefault.dp, radius100.dp
         
         // All platforms reference the same semantic tokens
         expect(container.shadowRoot?.querySelector('.container')).toBeTruthy();
@@ -189,8 +190,8 @@ describe('Container Cross-Platform Integration', () => {
 
         // Verify all token mappings are consistent
         expect(getPaddingToken('300')).toBe('space.inset.300');
-        expect(getBorderToken('emphasis')).toBe('border.emphasis');
-        expect(getBorderRadiusToken('normal')).toBe('radius100');
+        expect(getBorderToken('emphasis')).toBe('border.border.emphasis');
+        expect(getBorderRadiusToken('normal')).toBe('radius-100');
         expect(getLayeringToken('navigation', 'web')).toBe('zIndex.navigation');
         
         // All platforms would generate equivalent visual output from these tokens
@@ -221,8 +222,8 @@ describe('Container Cross-Platform Integration', () => {
         borderValues.forEach(value => {
           const token = getBorderToken(value);
           
-          // Should resolve to semantic token
-          expect(token).toMatch(/^border\./);
+          // Should resolve to semantic token (border.border.X format)
+          expect(token).toMatch(/^border\.border\./);
           expect(token).not.toContain('px');
         });
       });
@@ -233,8 +234,8 @@ describe('Container Cross-Platform Integration', () => {
         radiusValues.forEach(value => {
           const token = getBorderRadiusToken(value);
           
-          // Should resolve to primitive token (no dot notation)
-          expect(token).toMatch(/^radius\d+$/);
+          // Should resolve to primitive token (hyphenated format: radius-XXX)
+          expect(token).toMatch(/^radius-\d+$/);
           expect(token).not.toContain('.');
         });
       });
@@ -287,8 +288,8 @@ describe('Container Cross-Platform Integration', () => {
         // Android: Kotlin constants (spaceInset200.dp)
         
         expect(paddingToken).toBe('space.inset.200');
-        expect(borderToken).toBe('border.default');
-        expect(radiusToken).toBe('radius100');
+        expect(borderToken).toBe('border.border.default');
+        expect(radiusToken).toBe('radius-100');
       });
 
       it('should maintain token reference consistency for generated output', () => {
@@ -509,8 +510,8 @@ describe('Container Cross-Platform Integration', () => {
 
       // Verify token resolution
       expect(getPaddingToken('300')).toBe('space.inset.300');
-      expect(getBorderToken('emphasis')).toBe('border.emphasis');
-      expect(getBorderRadiusToken('normal')).toBe('radius100');
+      expect(getBorderToken('emphasis')).toBe('border.border.emphasis');
+      expect(getBorderRadiusToken('normal')).toBe('radius-100');
       expect(getLayeringToken('modal', 'web')).toBe('zIndex.modal');
       
       // Verify rendering
@@ -573,8 +574,8 @@ describe('Container Cross-Platform Integration', () => {
       // Both containers should resolve tokens consistently
       expect(getPaddingToken('300')).toBe('space.inset.300');
       expect(getPaddingToken('100')).toBe('space.inset.100');
-      expect(getBorderRadiusToken('normal')).toBe('radius100');
-      expect(getBorderRadiusToken('tight')).toBe('radius050');
+      expect(getBorderRadiusToken('normal')).toBe('radius-100');
+      expect(getBorderRadiusToken('tight')).toBe('radius-050');
       
       // Both containers should render correctly
       expect(outerContainer.shadowRoot?.querySelector('.container')).toBeTruthy();

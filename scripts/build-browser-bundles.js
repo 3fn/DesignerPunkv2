@@ -20,6 +20,7 @@ const esbuild = require('esbuild');
 const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
+const { cssAsStringPlugin } = require('./esbuild-css-plugin');
 
 // Configuration
 const ENTRY_POINT = 'src/browser-entry.ts';
@@ -80,7 +81,13 @@ async function buildBundle(options) {
     // Define for browser environment
     define: {
       'process.env.NODE_ENV': minify ? '"production"' : '"development"'
-    }
+    },
+    // Plugins for CSS handling
+    // CSS-as-string plugin inlines CSS imports as JavaScript strings
+    // This enables web components to use CSS in shadow DOM without external file dependencies
+    plugins: [
+      cssAsStringPlugin({ minify })
+    ]
   };
   
   // Add globalName for UMD/IIFE format
@@ -128,7 +135,59 @@ function copyTokenCSS() {
   
   fs.copyFileSync(sourcePath, destPath);
   console.log(`      Copied from: ${sourcePath}`);
+  
+  // Fix color token values (temporary workaround for token generation issue)
+  // The token generator outputs JSON objects for color tokens instead of hex values
+  // This fix extracts the actual color values from the JSON objects
+  fixTokenColorValues(destPath);
+  
   return true;
+}
+
+/**
+ * Fix color token values in the CSS file
+ * 
+ * The token generator outputs JSON objects for color tokens like:
+ *   --purple-300: {"light":{"base":"#B026FF",...},...};
+ * 
+ * This function extracts the actual hex values:
+ *   --purple-300: #B026FF;
+ * 
+ * @param {string} filePath - Path to the tokens.css file
+ */
+function fixTokenColorValues(filePath) {
+  let content = fs.readFileSync(filePath, 'utf8');
+  let fixedCount = 0;
+  
+  // Regular expression to match JSON object values in CSS custom properties
+  // Matches: --token-name: {"light":{"base":"#HEXVAL",...},...};
+  const jsonValueRegex = /^(\s*--[\w-]+:\s*)\{[^}]*"base"\s*:\s*"(#[A-Fa-f0-9]{6})"[^}]*\}[^;]*;/gm;
+  
+  // Replace JSON objects with the base color value
+  content = content.replace(jsonValueRegex, (match, prefix, colorValue) => {
+    fixedCount++;
+    return `${prefix}${colorValue};`;
+  });
+  
+  // Also handle multi-line JSON objects
+  const multiLineJsonRegex = /^(\s*--[\w-]+:\s*)\{"light":\{"base":"(#[A-Fa-f0-9]{6})"[^}]*\}[^}]*\}[^;]*;/gm;
+  content = content.replace(multiLineJsonRegex, (match, prefix, colorValue) => {
+    fixedCount++;
+    return `${prefix}${colorValue};`;
+  });
+  
+  // Handle any remaining malformed JSON values
+  const remainingJsonRegex = /^(\s*--[\w-]+:\s*)\{[^;]+?"base"\s*:\s*"(#[A-Fa-f0-9]{6})"[^;]*;/gm;
+  content = content.replace(remainingJsonRegex, (match, prefix, colorValue) => {
+    fixedCount++;
+    return `${prefix}${colorValue};`;
+  });
+  
+  fs.writeFileSync(filePath, content);
+  
+  if (fixedCount > 0) {
+    console.log(`      Fixed ${fixedCount} color token values`);
+  }
 }
 
 /**

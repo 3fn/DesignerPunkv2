@@ -221,7 +221,7 @@ describe('ContainerWeb', () => {
       document.body.appendChild(container);
       
       const style = container.shadowRoot?.querySelector('style');
-      expect(style?.textContent).toContain('border: var(--border-default) solid var(--color-border)');
+      expect(style?.textContent).toContain('border: var(--border-border-default) solid var(--color-border)');
     });
 
     it('should apply border-radius styles when border-radius attribute is set', () => {
@@ -230,7 +230,7 @@ describe('ContainerWeb', () => {
       document.body.appendChild(container);
       
       const style = container.shadowRoot?.querySelector('style');
-      expect(style?.textContent).toContain('border-radius: var(--radius100)');
+      expect(style?.textContent).toContain('border-radius: var(--radius-100)');
     });
 
     it('should apply opacity styles when opacity attribute is set', () => {

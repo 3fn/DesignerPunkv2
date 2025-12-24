@@ -52,6 +52,16 @@ module.exports = {
     '<rootDir>/dist/'
   ],
   
+  // Module name mapping for CSS imports
+  // Web components import CSS files as strings for browser bundle compatibility
+  // In Jest, we mock these imports to return an empty string
+  // @see src/types/css.d.ts for TypeScript declaration
+  // @see scripts/esbuild-css-plugin.js for build-time transformation
+  // @see Requirements: 8.2, 8.3 (components render correctly in browser bundles)
+  moduleNameMapper: {
+    '\\.css$': '<rootDir>/src/__tests__/__mocks__/styleMock.js'
+  },
+  
   // Timeout for infrastructure tests (F2)
   testTimeout: 10000, // 10 seconds
   
