@@ -97,8 +97,8 @@ private fun getIconResource(name: String): Int {
 @Composable
 fun IconPreview() {
     androidx.compose.foundation.layout.Column(
-        modifier = Modifier.padding(DesignTokens.space_200.dp),
-        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp)
+        modifier = Modifier.padding(DesignTokens.space_200),
+        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200)
     ) {
         // Different sizes (icon_size_050 through icon_size_150)
         // Note: Additional sizes available (icon_size_200 through icon_size_700)
@@ -107,7 +107,7 @@ fun IconPreview() {
             style = androidx.compose.material3.MaterialTheme.typography.labelMedium
         )
         androidx.compose.foundation.layout.Row(
-            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp),
+            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200),
             verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
         ) {
             Icon(name = "arrow-right", size = DesignTokens.icon_size_050)
@@ -123,7 +123,7 @@ fun IconPreview() {
             style = androidx.compose.material3.MaterialTheme.typography.labelMedium
         )
         androidx.compose.foundation.layout.Row(
-            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp)
+            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200)
         ) {
             Icon(name = "check", size = DesignTokens.icon_size_100)
             Icon(name = "x", size = DesignTokens.icon_size_100)
@@ -141,7 +141,7 @@ fun IconPreview() {
             LocalContentColor provides Color.Blue
         ) {
             androidx.compose.foundation.layout.Row(
-                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp)
+                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200)
             ) {
                 Icon(name = "arrow-right", size = DesignTokens.icon_size_100)
                 Icon(name = "check", size = DesignTokens.icon_size_100)
@@ -155,7 +155,7 @@ fun IconPreview() {
             style = androidx.compose.material3.MaterialTheme.typography.labelMedium
         )
         androidx.compose.foundation.layout.Row(
-            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp)
+            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200)
         ) {
             Icon(name = "x", size = DesignTokens.icon_size_100, color = Color.Red)
             Icon(name = "minus", size = DesignTokens.icon_size_100, color = Color.Red)
@@ -168,7 +168,7 @@ fun IconPreview() {
             style = androidx.compose.material3.MaterialTheme.typography.labelMedium
         )
         androidx.compose.foundation.layout.Row(
-            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200.dp)
+            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200)
         ) {
             Icon(name = "check", size = DesignTokens.icon_size_100, color = Color.Green)
             Icon(name = "plus", size = DesignTokens.icon_size_100, color = Color.Green)

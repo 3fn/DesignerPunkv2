@@ -98,7 +98,17 @@ export function createIcon(props: IconProps): string {
     48: 48    // icon-size-700: 48px
   };
   
-  const sizePixels = sizePixelMap[size] || 24;
+  const sizePixels = sizePixelMap[size];
+  
+  // Fail loudly if size is not a valid IconSize value
+  // This follows the "fail loudly" philosophy to surface issues early during development
+  if (sizePixels === undefined) {
+    throw new Error(
+      `Invalid icon size: ${size}. ` +
+      `Valid sizes are: ${Object.keys(sizePixelMap).join(', ')}. ` +
+      `Ensure you're using a valid IconSize value (13, 18, 24, 28, 32, 36, 40, 44, 48).`
+    );
+  }
   
   // Map size to CSS class (using icon size token scale) - kept for semantic styling
   const sizeClassMap: Record<IconSize, string> = {
@@ -113,7 +123,7 @@ export function createIcon(props: IconProps): string {
     48: 'icon--size-700'
   };
   
-  const sizeClass = sizeClassMap[size] || 'icon--size-100';
+  const sizeClass = sizeClassMap[size];
   
   // Build class attribute with size class
   const classAttr = `icon ${sizeClass} icon-${name} ${className}`.trim();
@@ -123,9 +133,9 @@ export function createIcon(props: IconProps): string {
     ? 'currentColor' 
     : `var(--${color})`; // Token reference becomes CSS custom property
   
-  // Use hardcoded stroke width (2px) for reliable rendering
-  // This matches --icon-stroke-width which references --border-width-200 (2px)
-  const strokeWidth = '2';
+  // Use CSS variable for stroke width to follow token-first design system approach
+  // This references --icon-stroke-width which is defined in the token stylesheet
+  const strokeWidth = 'var(--icon-stroke-width)';
   
   // Build style attribute
   const styleStr = Object.entries(style)
@@ -259,7 +269,9 @@ export class DPIcon extends HTMLElement {
    * @param newValue - New attribute value
    */
   attributeChangedCallback(_name: string, oldValue: string | null, newValue: string | null): void {
-    if (oldValue !== newValue) {
+    // Only re-render if the element is connected to the DOM
+    // This prevents errors during initial attribute setup before connectedCallback
+    if (oldValue !== newValue && this.isConnected) {
       this.render();
     }
   }
@@ -274,10 +286,30 @@ export class DPIcon extends HTMLElement {
   }
   
   get size(): IconSize {
-    const size = parseInt(this.getAttribute('size') || '24', 10);
+    const sizeAttr = this.getAttribute('size');
+    
+    // If no size attribute is provided, throw an error
+    // This follows the "fail loudly" philosophy to surface issues early during development
+    if (!sizeAttr) {
+      throw new Error(
+        `Missing required "size" attribute on <dp-icon>. ` +
+        `Valid sizes are: 13, 18, 24, 28, 32, 36, 40, 44, 48.`
+      );
+    }
+    
+    const size = parseInt(sizeAttr, 10);
     // Validate size is one of the allowed IconSize values
     const validSizes: IconSize[] = [13, 18, 24, 28, 32, 36, 40, 44, 48];
-    return validSizes.includes(size as IconSize) ? (size as IconSize) : 24;
+    
+    if (!validSizes.includes(size as IconSize)) {
+      throw new Error(
+        `Invalid icon size: ${size}. ` +
+        `Valid sizes are: ${validSizes.join(', ')}. ` +
+        `Ensure you're using a valid IconSize value.`
+      );
+    }
+    
+    return size as IconSize;
   }
   
   set size(value: IconSize) {
@@ -333,16 +365,16 @@ export class DPIcon extends HTMLElement {
       48: 'icon--size-700'
     };
     
-    const sizeClass = sizeClassMap[size] || 'icon--size-100';
+    const sizeClass = sizeClassMap[size];
     
     // Determine stroke color
     const strokeColor = color === 'inherit' 
       ? 'currentColor' 
       : `var(--${color})`;
     
-    // Use hardcoded stroke width (2px) for reliable Shadow DOM rendering
-    // This matches --icon-stroke-width which references --border-width-200 (2px)
-    const strokeWidth = '2';
+    // Use CSS variable for stroke width to follow token-first design system approach
+    // This references --icon-stroke-width which is defined in the token stylesheet
+    const strokeWidth = 'var(--icon-stroke-width)';
     
     // Generate test ID attribute
     const testIDAttr = testID ? ` data-testid="${testID}"` : '';

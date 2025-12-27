@@ -164,7 +164,7 @@ fun TextInputField(
     val labelOffsetY by animateDpAsState(
         targetValue = if (isLabelFloated) {
             // Float above input with grouped.tight spacing
-            -(typographyLabelMdLineHeight.dp + spaceGroupedTight.dp)
+            -(typographyLabelMdLineHeight + spaceGroupedTight)
         } else {
             // Center inside input
             0.dp
@@ -219,7 +219,7 @@ fun TextInputField(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = tapAreaRecommended.dp), // WCAG minimum touch target
+                .heightIn(min = tapAreaRecommended), // WCAG minimum touch target
             verticalAlignment = Alignment.CenterVertically
         ) {
             // Input field with label
@@ -254,28 +254,28 @@ fun TextInputField(
                     }
                     .background(
                         color = colorBackground,
-                        shape = RoundedCornerShape(radius150.dp)
+                        shape = RoundedCornerShape(radius150)
                     )
                     .border(
-                        width = borderDefault.dp,
+                        width = borderDefault,
                         color = borderColor,
-                        shape = RoundedCornerShape(radius150.dp)
+                        shape = RoundedCornerShape(radius150)
                     )
                     // Focus ring for keyboard navigation (WCAG 2.4.7 Focus Visible)
                     // Visible in all states when focused
                     .then(
                         if (isFocused) {
                             Modifier.border(
-                                width = accessibilityFocusWidth.dp,
+                                width = accessibilityFocusWidth,
                                 color = accessibilityFocusColor,
-                                shape = RoundedCornerShape(radius150.dp)
+                                shape = RoundedCornerShape(radius150)
                             )
-                            .padding(accessibilityFocusOffset.dp)
+                            .padding(accessibilityFocusOffset)
                         } else {
                             Modifier
                         }
                     )
-                    .padding(spaceInset100.dp),
+                    .padding(spaceInset100),
                 textStyle = LocalTextStyle.current.copy(
                     fontSize = typographyInputFontSize.sp,
                     lineHeight = typographyInputLineHeight.sp,
@@ -329,33 +329,33 @@ fun TextInputField(
                     modifier = Modifier
                         .align(Alignment.CenterStart)
                         .offset(
-                            x = spaceInset100.dp,
+                            x = spaceInset100,
                             y = labelOffsetY
                         )
-                        .padding(horizontal = spaceGroupedTight.dp) // Small padding for better readability
+                        .padding(horizontal = spaceGroupedTight) // Small padding for better readability
                 )
             }
             
             // Trailing icon (error, success, or info) with fade animation
             Box(
                 modifier = Modifier
-                    .padding(end = spaceInset100.dp)
+                    .padding(end = spaceInset100)
                     .graphicsLayer(alpha = iconOpacity)
             ) {
                 when {
                     showErrorIcon -> Icon(
                         name = "x",
-                        size = iconSize100.dp, // icon.size100 (24dp) - standard size for bodyMd/labelMd/input typography
+                        size = iconSize100, // icon.size100 (24dp) - standard size for bodyMd/labelMd/input typography
                         color = colorError
                     )
                     showSuccessIcon -> Icon(
                         name = "check",
-                        size = iconSize100.dp, // icon.size100 (24dp) - standard size for bodyMd/labelMd/input typography
+                        size = iconSize100, // icon.size100 (24dp) - standard size for bodyMd/labelMd/input typography
                         color = colorSuccessStrong
                     )
                     showInfoIconVisible -> Icon(
                         name = "info",
-                        size = iconSize100.dp, // icon.size100 (24dp) - standard size for bodyMd/labelMd/input typography
+                        size = iconSize100, // icon.size100 (24dp) - standard size for bodyMd/labelMd/input typography
                         color = colorTextMuted
                     )
                 }
@@ -364,7 +364,7 @@ fun TextInputField(
         
         // Helper text (persistent)
         if (helperText != null) {
-            Spacer(modifier = Modifier.height(spaceGroupedMinimal.dp))
+            Spacer(modifier = Modifier.height(spaceGroupedMinimal))
             Text(
                 text = helperText,
                 style = TextStyle(
@@ -374,13 +374,13 @@ fun TextInputField(
                     letterSpacing = typographyCaptionLetterSpacing.sp,
                     color = colorTextMuted
                 ),
-                modifier = Modifier.padding(start = spaceInset100.dp)
+                modifier = Modifier.padding(start = spaceInset100)
             )
         }
         
         // Error message (conditional)
         if (errorMessage != null) {
-            Spacer(modifier = Modifier.height(spaceGroupedMinimal.dp))
+            Spacer(modifier = Modifier.height(spaceGroupedMinimal))
             Text(
                 text = errorMessage,
                 style = TextStyle(
@@ -390,7 +390,7 @@ fun TextInputField(
                     letterSpacing = typographyCaptionLetterSpacing.sp,
                     color = colorError
                 ),
-                modifier = Modifier.padding(start = spaceInset100.dp)
+                modifier = Modifier.padding(start = spaceInset100)
             )
         }
     }
@@ -415,7 +415,7 @@ private fun getKeyboardType(type: InputType): KeyboardType {
 
 // Typography tokens - labelMd (typography.labelMd)
 private const val typographyLabelMdFontSize: Float // Generated from typography.labelMd.fontSize
-private const val typographyLabelMdLineHeight: Float // Generated from typography.labelMd.lineHeight
+private val typographyLabelMdLineHeight: Dp // Generated from typography.labelMd.lineHeight (Dp for layout calculations)
 private const val typographyLabelMdFontWeight: Int // Generated from typography.labelMd.fontWeight
 private const val typographyLabelMdLetterSpacing: Float // Generated from typography.labelMd.letterSpacing
 
@@ -446,24 +446,24 @@ private val colorSuccessStrong: Color // Generated from color.success.strong
 private val colorBorder: Color // Generated from color.border
 private val colorBackground: Color // Generated from color.background
 
-// Spacing tokens (semantic)
-private const val spaceInset100: Float // Generated from space.inset.100
-private const val spaceGroupedTight: Float // Generated from space.grouped.tight
-private const val spaceGroupedMinimal: Float // Generated from space.grouped.minimal
+// Spacing tokens (semantic) - Dp type (generator handles unit conversion)
+private val spaceInset100: Dp // Generated from space.inset.100
+private val spaceGroupedTight: Dp // Generated from space.grouped.tight
+private val spaceGroupedMinimal: Dp // Generated from space.grouped.minimal
 
 // Motion tokens - motion.floatLabel (duration250 + easingStandard)
 private const val motionFloatLabelDuration: Int // Generated from motion.floatLabel.duration (250ms)
 private val easingStandard = CubicBezierEasing(0.4f, 0.0f, 0.2f, 1.0f) // Generated from motion.floatLabel.easing - Material Design standard curve
 
-// Border tokens
-private const val borderDefault: Float // Generated from border.default
-private const val radius150: Float // Generated from radius.150
+// Border tokens - Dp type (generator handles unit conversion)
+private val borderDefault: Dp // Generated from border.default
+private val radius150: Dp // Generated from radius.150
 
-// Icon tokens
-private const val iconSize100: Float // Generated from icon.size100 (24dp)
+// Icon tokens - Dp type (generator handles unit conversion)
+private val iconSize100: Dp // Generated from icon.size100 (24dp)
 
-// Accessibility tokens
-private const val tapAreaRecommended: Float // Generated from accessibility.tapArea.recommended (48dp minimum)
-private const val accessibilityFocusWidth: Float // Generated from accessibility.focus.width
-private const val accessibilityFocusOffset: Float // Generated from accessibility.focus.offset
+// Accessibility tokens - Dp type (generator handles unit conversion)
+private val tapAreaRecommended: Dp // Generated from accessibility.tapArea.recommended (48dp minimum)
+private val accessibilityFocusWidth: Dp // Generated from accessibility.focus.width
+private val accessibilityFocusOffset: Dp // Generated from accessibility.focus.offset
 private val accessibilityFocusColor: Color // Generated from accessibility.focus.color

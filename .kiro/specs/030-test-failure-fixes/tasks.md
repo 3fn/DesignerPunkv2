@@ -141,12 +141,12 @@ This implementation plan addresses 40 failing tests through a 5-phase approach, 
 
 ### Phase 2: Code Fixes
 
-- [ ] 4. Icon Component CSS Variable Fix
+- [x] 4. Icon Component CSS Variable Fix
   **Type**: Implementation
   **Validation**: Tier 2: Standard
   **Success Criteria**: Icon component uses CSS variable, 2 tests pass
   
-  - [ ] 4.1 Update Icon component to use CSS variable
+  - [x] 4.1 Update Icon component to use CSS variable
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Locate Icon component file
@@ -154,7 +154,7 @@ This implementation plan addresses 40 failing tests through a 5-phase approach, 
     - Verify component renders correctly
     - _Requirements: 2.1_
   
-  - [ ] 4.2 Define CSS variable in token stylesheet
+  - [x] 4.2 Define CSS variable in token stylesheet
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Locate token stylesheet (IconTokens.css or equivalent)
@@ -162,7 +162,7 @@ This implementation plan addresses 40 failing tests through a 5-phase approach, 
     - Verify CSS variable is accessible
     - _Requirements: 2.2_
   
-  - [ ] 4.3 Verify Icon component fix
+  - [x] 4.3 Verify Icon component fix
     **Type**: Setup
     **Validation**: Tier 1: Minimal
     - Run Icon component tests
@@ -176,12 +176,12 @@ This implementation plan addresses 40 failing tests through a 5-phase approach, 
 
 ---
 
-- [ ] 5. Remove Problematic Patterns
+- [x] 5. Remove Problematic Patterns
   **Type**: Implementation
   **Validation**: Tier 2: Standard
   **Success Criteria**: Fallbacks removed, .dp suffixes removed, ~15 tests pass
   
-  - [ ] 5.1 Remove || 24 fallback pattern
+  - [x] 5.1 Remove || 24 fallback pattern
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Search codebase for `|| 24` fallback patterns
@@ -190,7 +190,7 @@ This implementation plan addresses 40 failing tests through a 5-phase approach, 
     - Run affected tests to verify fix
     - _Requirements: 3.1, 3.2_
   
-  - [ ] 5.2 Remove .dp suffix from Android token references
+  - [x] 5.2 Remove .dp suffix from Android token references
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Search Android code for `.dp` suffix on token references
@@ -199,7 +199,7 @@ This implementation plan addresses 40 failing tests through a 5-phase approach, 
     - Run affected tests to verify fix
     - _Requirements: 4.1, 4.2_
   
-  - [ ] 5.3 Verify problematic pattern removal
+  - [x] 5.3 Verify problematic pattern removal
     **Type**: Setup
     **Validation**: Tier 1: Minimal
     - Run full test suite
@@ -215,12 +215,12 @@ This implementation plan addresses 40 failing tests through a 5-phase approach, 
 
 ### Phase 3: Expectation Adjustments
 
-- [ ] 6. LineHeight Formula Expectation Updates
+- [x] 6. LineHeight Formula Expectation Updates
   **Type**: Implementation
   **Validation**: Tier 2: Standard
   **Success Criteria**: 4 lineHeight tests pass with formula-based expectations
   
-  - [ ] 6.1 Verify lineHeight formula correctness
+  - [x] 6.1 Verify lineHeight formula correctness
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Review lineHeight formula implementation
@@ -228,7 +228,7 @@ This implementation plan addresses 40 failing tests through a 5-phase approach, 
     - Document formula and expected values
     - _Requirements: 5.1_
   
-  - [ ] 6.2 Update lineHeight test expectations
+  - [x] 6.2 Update lineHeight test expectations
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Locate lineHeight token test file
@@ -237,7 +237,7 @@ This implementation plan addresses 40 failing tests through a 5-phase approach, 
     - Run affected tests to verify fix
     - _Requirements: 5.2_
   
-  - [ ] 6.3 Verify lineHeight expectation updates
+  - [x] 6.3 Verify lineHeight expectation updates
     **Type**: Setup
     **Validation**: Tier 1: Minimal
     - Run all lineHeight tests

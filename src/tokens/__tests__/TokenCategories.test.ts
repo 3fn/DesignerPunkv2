@@ -188,9 +188,10 @@ describe('Token Categories', () => {
       const lineHeight100 = getLineHeightToken('lineHeight100');
       const lineHeight150 = getLineHeightToken('lineHeight150');
 
-      expect(lineHeight050?.baseValue).toBe(1.0); // Tight
-      expect(lineHeight100?.baseValue).toBe(1.5); // Base
-      expect(lineHeight150?.baseValue).toBe(1.4); // H6 line height (4pt subgrid aligned)
+      // Precision-targeted values for 8pt vertical rhythm alignment
+      expect(lineHeight050?.baseValue).toBe(1.538); // fontSize050 (13) × 1.538 ≈ 20 (8pt × 2.5)
+      expect(lineHeight100?.baseValue).toBe(1.5);   // Base value: fontSize100 (16) × 1.5 = 24 (8pt × 3)
+      expect(lineHeight150?.baseValue).toBe(1.4);   // fontSize150 (20) × 1.4 = 28 (8pt × 3.5)
     });
   });
 

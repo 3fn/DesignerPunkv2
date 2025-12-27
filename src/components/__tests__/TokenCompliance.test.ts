@@ -309,24 +309,17 @@ describe('Token Compliance - All Components', () => {
      * Detects hard-coded fallback patterns using || operator with numeric values.
      * Pattern: || <number> (e.g., || 250, || 8, || 16)
      * 
-     * REFINED (Spec 025 R1): Distinguishes acceptable vs problematic fallbacks.
-     * - Acceptable: Default values for optional attributes (e.g., || 24 for default size)
-     * - Problematic: Fallbacks that mask missing required tokens
+     * UPDATED (Spec 030): Following "fail loudly" philosophy, ALL numeric fallback
+     * patterns are now considered problematic. Components should throw errors
+     * when required values are missing rather than silently falling back.
      * 
-     * Acceptable patterns are intentional defensive programming.
-     * Problematic patterns prevent early detection of missing tokens.
+     * Previous acceptable patterns (e.g., || 24 for default size) have been
+     * removed in favor of explicit error handling.
      * 
-     * Requirements: 1.5, 8.1, 14.3, 14.4 (Spec 025)
+     * Requirements: 3.1, 3.2 (Spec 030)
      */
     it('should not contain problematic || number fallback patterns', () => {
       const violations: Array<{ file: string; line: number; content: string }> = [];
-      
-      // Acceptable fallback patterns (default values for optional attributes)
-      const acceptablePatterns = [
-        /\|\|\s*['"`]?\d+['"`]?\s*[;,)].*(?:size|width|height|dimension)/i,  // Size-related defaults
-        /getAttribute.*\|\|\s*['"`]?\d+['"`]?/i,                              // getAttribute with default
-        /\.size\s*\|\|\s*['"`]?\d+['"`]?/i,                                   // .size property with default
-      ];
       
       componentFiles.forEach(file => {
         const content = fs.readFileSync(file, 'utf-8');
@@ -345,16 +338,11 @@ describe('Token Compliance - All Components', () => {
           }
           
           if (fallbackPattern.test(line)) {
-            // Check if this matches any acceptable pattern
-            const isAcceptable = acceptablePatterns.some(pattern => pattern.test(line));
-            
-            if (!isAcceptable) {
-              violations.push({
-                file: path.relative(process.cwd(), file),
-                line: index + 1,
-                content: line.trim()
-              });
-            }
+            violations.push({
+              file: path.relative(process.cwd(), file),
+              line: index + 1,
+              content: line.trim()
+            });
           }
         });
       });
@@ -367,8 +355,7 @@ describe('Token Compliance - All Components', () => {
         throw new Error(
           `Found ${violations.length} problematic || number fallback pattern(s):\n\n${violationDetails}\n\n` +
           `Components should fail loudly when required tokens are missing.\n` +
-          `Replace with explicit error handling that throws or logs when tokens are unavailable.\n\n` +
-          `Note: Default values for optional attributes (e.g., || 24 for default size) are acceptable.`
+          `Replace with explicit error handling that throws or logs when tokens are unavailable.`
         );
       }
     });
@@ -379,26 +366,18 @@ describe('Token Compliance - All Components', () => {
      * Detects hard-coded fallback patterns using || operator with string values.
      * Pattern: || 'string' or || "string" (e.g., || '250ms', || "8px")
      * 
-     * REFINED (Spec 025 R1): Distinguishes acceptable vs problematic fallbacks.
-     * - Acceptable: Default values for optional attributes (e.g., || '24' for default size)
-     * - Acceptable: Default CSS classes (e.g., || 'icon--size-100' for default size class)
-     * - Problematic: Fallbacks that mask missing required tokens
+     * UPDATED (Spec 030): Following "fail loudly" philosophy, ALL string fallback
+     * patterns containing numeric values are now considered problematic. Components
+     * should throw errors when required values are missing rather than silently
+     * falling back.
      * 
-     * Acceptable patterns are intentional defensive programming.
-     * Problematic patterns prevent early detection of missing tokens.
+     * Previous acceptable patterns (e.g., || '24', || 'icon--size-100') have been
+     * removed in favor of explicit error handling.
      * 
-     * Requirements: 1.5, 8.1, 14.3, 14.4 (Spec 025)
+     * Requirements: 3.1, 3.2 (Spec 030)
      */
     it('should not contain problematic || string fallback patterns', () => {
       const violations: Array<{ file: string; line: number; content: string }> = [];
-      
-      // Acceptable fallback patterns (default values for optional attributes)
-      const acceptablePatterns = [
-        /\|\|\s*['"`]\d+['"`]/,                    // Numeric string defaults (|| '24')
-        /\|\|\s*['"`]icon--size-\d+['"`]/,         // Icon size class defaults (|| 'icon--size-100')
-        /getAttribute.*\|\|\s*['"`][^'"`]*['"`]/,  // getAttribute with default
-        /\.size\s*\|\|\s*['"`][^'"`]*['"`]/,       // .size property with default
-      ];
       
       componentFiles.forEach(file => {
         const content = fs.readFileSync(file, 'utf-8');
@@ -417,16 +396,11 @@ describe('Token Compliance - All Components', () => {
           }
           
           if (fallbackPattern.test(line)) {
-            // Check if this matches any acceptable pattern
-            const isAcceptable = acceptablePatterns.some(pattern => pattern.test(line));
-            
-            if (!isAcceptable) {
-              violations.push({
-                file: path.relative(process.cwd(), file),
-                line: index + 1,
-                content: line.trim()
-              });
-            }
+            violations.push({
+              file: path.relative(process.cwd(), file),
+              line: index + 1,
+              content: line.trim()
+            });
           }
         });
       });
@@ -439,8 +413,7 @@ describe('Token Compliance - All Components', () => {
         throw new Error(
           `Found ${violations.length} problematic || string fallback pattern(s):\n\n${violationDetails}\n\n` +
           `Components should fail loudly when required tokens are missing.\n` +
-          `Replace with explicit error handling that throws or logs when tokens are unavailable.\n\n` +
-          `Note: Default values for optional attributes (e.g., || '24', || 'icon--size-100') are acceptable.`
+          `Replace with explicit error handling that throws or logs when tokens are unavailable.`
         );
       }
     });

@@ -59,6 +59,7 @@ describe('Icon Accessibility', () => {
 
       iconNames.forEach(iconName => {
         const icon = document.createElement('dp-icon') as DPIcon;
+        icon.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
         icon.name = iconName as any;
         document.body.appendChild(icon);
 
@@ -74,6 +75,7 @@ describe('Icon Accessibility', () => {
     it('should maintain aria-hidden="true" after attribute changes', () => {
       // Requirement 5.1: aria-hidden should persist through updates
       const icon = document.createElement('dp-icon') as DPIcon;
+      icon.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
       icon.name = 'arrow-right';
       document.body.appendChild(icon);
 
@@ -95,6 +97,7 @@ describe('Icon Accessibility', () => {
     it('should not be announced by screen readers', () => {
       // Requirement 5.1: Icon should not be announced by screen readers
       const icon = document.createElement('dp-icon') as DPIcon;
+      icon.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
       icon.name = 'arrow-right';
       document.body.appendChild(icon);
 
@@ -116,6 +119,7 @@ describe('Icon Accessibility', () => {
     it('should not have focusable elements', () => {
       // Requirement 5.1: Icon should not be focusable
       const icon = document.createElement('dp-icon') as DPIcon;
+      icon.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
       icon.name = 'arrow-right';
       document.body.appendChild(icon);
 
@@ -139,6 +143,7 @@ describe('Icon Accessibility', () => {
       button.setAttribute('aria-label', 'Submit form');
       
       const icon = document.createElement('dp-icon') as DPIcon;
+      icon.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
       icon.name = 'arrow-right';
       
       button.appendChild(icon);
@@ -160,6 +165,7 @@ describe('Icon Accessibility', () => {
       const button = document.createElement('button');
       
       const icon = document.createElement('dp-icon') as DPIcon;
+      icon.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
       icon.name = 'arrow-right';
       
       const text = document.createTextNode('Next');
@@ -184,6 +190,7 @@ describe('Icon Accessibility', () => {
       const button = document.createElement('button');
       
       const icon = document.createElement('dp-icon') as DPIcon;
+      icon.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
       icon.name = 'check';
       
       const text = document.createTextNode('Confirm');
@@ -209,6 +216,7 @@ describe('Icon Accessibility', () => {
     it('should add data-testid attribute when testID prop provided', () => {
       // Requirement 5.2: test-id attribute should work for automated testing
       const icon = document.createElement('dp-icon') as DPIcon;
+      icon.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
       icon.name = 'arrow-right';
       icon.testID = 'my-icon';
       document.body.appendChild(icon);
@@ -224,6 +232,7 @@ describe('Icon Accessibility', () => {
     it('should not add data-testid when testID not provided', () => {
       // Requirement 5.2: data-testid should only be added when explicitly set
       const icon = document.createElement('dp-icon') as DPIcon;
+      icon.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
       icon.name = 'arrow-right';
       document.body.appendChild(icon);
 
@@ -238,6 +247,7 @@ describe('Icon Accessibility', () => {
     it('should update data-testid when testID changes', () => {
       // Requirement 5.2: data-testid should update reactively
       const icon = document.createElement('dp-icon') as DPIcon;
+      icon.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
       icon.name = 'arrow-right';
       icon.testID = 'icon-1';
       document.body.appendChild(icon);
@@ -259,6 +269,7 @@ describe('Icon Accessibility', () => {
     it('should remove data-testid when testID set to null', () => {
       // Requirement 5.2: data-testid should be removable
       const icon = document.createElement('dp-icon') as DPIcon;
+      icon.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
       icon.name = 'arrow-right';
       icon.testID = 'my-icon';
       document.body.appendChild(icon);
@@ -280,6 +291,7 @@ describe('Icon Accessibility', () => {
     it('should work with automated testing tools', () => {
       // Requirement 5.2: test-id should enable automated testing
       const icon = document.createElement('dp-icon') as DPIcon;
+      icon.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
       icon.name = 'arrow-right';
       icon.testID = 'submit-icon';
       document.body.appendChild(icon);
@@ -300,6 +312,7 @@ describe('Icon Accessibility', () => {
       // Requirement 5.1: WHEN the Icon Web Component renders THEN 
       // the Icon Web Component SHALL set aria-hidden="true" on SVG
       const icon = document.createElement('dp-icon') as DPIcon;
+      icon.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
       icon.name = 'arrow-right';
       document.body.appendChild(icon);
 
@@ -315,6 +328,7 @@ describe('Icon Accessibility', () => {
       // Requirement 5.2: WHEN the "test-id" attribute changes THEN 
       // the Icon Web Component SHALL update the data-testid attribute
       const icon = document.createElement('dp-icon') as DPIcon;
+      icon.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
       icon.name = 'arrow-right';
       icon.testID = 'test-icon';
       document.body.appendChild(icon);

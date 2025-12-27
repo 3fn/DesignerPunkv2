@@ -34,6 +34,7 @@ describe('Icon Web Component Rendering', () => {
   describe('Shadow DOM Structure', () => {
     it('should render SVG in shadow DOM', async () => {
       const element = document.createElement('dp-icon') as DPIcon;
+      element.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
       document.body.appendChild(element);
       
       // Wait for connectedCallback to fire
@@ -62,6 +63,7 @@ describe('Icon Web Component Rendering', () => {
 
     it('should use currentColor for stroke', async () => {
       const element = document.createElement('dp-icon') as DPIcon;
+      element.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
       document.body.appendChild(element);
       
       // Wait for connectedCallback to fire
@@ -71,6 +73,29 @@ describe('Icon Web Component Rendering', () => {
       expect(svg?.getAttribute('stroke')).toBe('currentColor');
       
       document.body.removeChild(element);
+    });
+    
+    it('should throw error when size attribute is missing', () => {
+      const element = document.createElement('dp-icon') as DPIcon;
+      
+      // Accessing the size getter without setting the attribute should throw
+      // This tests the "fail loudly" philosophy - missing required attributes throw errors
+      expect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        element.size;
+      }).toThrow('Missing required "size" attribute on <dp-icon>');
+    });
+    
+    it('should throw error when size attribute is invalid', () => {
+      const element = document.createElement('dp-icon') as DPIcon;
+      element.setAttribute('size', '99'); // Invalid size
+      
+      // Accessing the size getter with an invalid value should throw
+      // This tests the "fail loudly" philosophy - invalid values throw errors
+      expect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        element.size;
+      }).toThrow('Invalid icon size: 99');
     });
   });
 
@@ -82,6 +107,8 @@ describe('Icon Web Component Rendering', () => {
     sampleIcons.forEach((iconName) => {
       it(`should render ${iconName} icon`, async () => {
         const element = document.createElement('dp-icon') as DPIcon;
+        // Set size first to avoid error during attribute change callback
+        element.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
         element.setAttribute('name', iconName);
         document.body.appendChild(element);
         
@@ -169,6 +196,8 @@ describe('Icon Web Component Rendering', () => {
 
     it('should update when name attribute changes', async () => {
       const element = document.createElement('dp-icon') as DPIcon;
+      // Set size first to avoid error during attribute change callback
+      element.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
       element.setAttribute('name', 'arrow-right');
       document.body.appendChild(element);
       

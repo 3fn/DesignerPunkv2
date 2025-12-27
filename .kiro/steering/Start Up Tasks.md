@@ -6,7 +6,7 @@ inclusion: always
 
 **Date**: 2025-10-20
 **Last Reviewed**: 2025-12-15
-**Purpose**: Essential checklist for every task (date check, Jest commands, test selection)
+**Purpose**: Essential checklist for every task (date check, Jest commands, test selection, completion sequence)
 **Organization**: process-standard
 **Scope**: cross-project
 **Layer**: 1
@@ -96,3 +96,45 @@ inclusion: always
    - Most parent tasks only need functional validation
    
    **Default assumption**: Use `npm test` for parent tasks unless working on release-analysis/release-detection systems.
+
+5. **CRITICAL: Task Completion Sequence (MUST FOLLOW)**
+   
+   **DO NOT mark tasks complete before completing the required steps for that task type.**
+   
+   ---
+   
+   **For SUBTASKS:**
+   1. [ ] Run targeted tests relevant to the change (not full suite)
+   2. [ ] Create completion doc: `.kiro/specs/[spec]/completion/task-N-M-completion.md`
+   3. [ ] Mark subtask complete (use `taskStatus` tool)
+   4. [ ] **STOP** and wait for user authorization
+   
+   ---
+   
+   **For PARENT TASKS (Implementation or Architecture type):**
+   1. [ ] Run full validation (`npm test`) - see #4 for test command selection
+   2. [ ] Mark parent task complete (use `taskStatus` tool) **AFTER** validation passes
+   3. [ ] Create completion doc: `.kiro/specs/[spec]/completion/task-N-completion.md`
+   4. [ ] Create summary doc: `docs/specs/[spec]/task-N-summary.md`
+   5. [ ] Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+   6. [ ] Commit changes: `./.kiro/hooks/commit-task.sh "Task N Complete: Description"`
+   7. [ ] **STOP** and wait for user authorization
+   
+   ---
+   
+   **For PARENT TASKS (Setup or Documentation type):**
+   1. [ ] Verify artifacts created/updated as specified
+   2. [ ] Mark parent task complete (use `taskStatus` tool)
+   3. [ ] Create completion doc: `.kiro/specs/[spec]/completion/task-N-completion.md`
+   4. [ ] Create summary doc: `docs/specs/[spec]/task-N-summary.md`
+   5. [ ] Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+   6. [ ] Commit changes: `./.kiro/hooks/commit-task.sh "Task N Complete: Description"`
+   7. [ ] **STOP** and wait for user authorization
+   
+   ---
+   
+   **Key Rules:**
+   - **Implementation/Architecture tasks**: Validation MUST pass before marking complete
+   - **All parent tasks**: Create BOTH completion doc AND summary doc
+   - **All tasks**: STOP after completion - never auto-proceed to next task
+   - **Task types are defined in tasks.md** - check the `**Type**:` field

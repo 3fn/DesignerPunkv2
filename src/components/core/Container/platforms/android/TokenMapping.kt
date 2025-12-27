@@ -348,32 +348,33 @@ fun mapLayeringToElevation(layering: LayeringValue?): Dp {
 // Import DesignTokens for token references
 import com.designerpunk.tokens.DesignTokens
 
-// Space.inset tokens (padding)
-private val spaceInset050: Dp = DesignTokens.space_inset_050.dp
-private val spaceInset100: Dp = DesignTokens.space_inset_100.dp
-private val spaceInset150: Dp = DesignTokens.space_inset_150.dp
-private val spaceInset200: Dp = DesignTokens.space_inset_200.dp
-private val spaceInset300: Dp = DesignTokens.space_inset_300.dp
-private val spaceInset400: Dp = DesignTokens.space_inset_400.dp
+// Space.inset tokens (padding) - Dp type (generator handles unit conversion)
+private val spaceInset050: Dp = DesignTokens.space_inset_050
+private val spaceInset100: Dp = DesignTokens.space_inset_100
+private val spaceInset150: Dp = DesignTokens.space_inset_150
+private val spaceInset200: Dp = DesignTokens.space_inset_200
+private val spaceInset300: Dp = DesignTokens.space_inset_300
+private val spaceInset400: Dp = DesignTokens.space_inset_400
 
-// Border tokens
-private val borderDefault: Dp = DesignTokens.border_default.dp
-private val borderEmphasis: Dp = DesignTokens.border_emphasis.dp
-private val borderHeavy: Dp = DesignTokens.border_heavy.dp
+// Border tokens - Dp type (generator handles unit conversion)
+private val borderDefault: Dp = DesignTokens.border_default
+private val borderEmphasis: Dp = DesignTokens.border_emphasis
+private val borderHeavy: Dp = DesignTokens.border_heavy
 
-// Radius tokens
-private val radius050: Dp = DesignTokens.radius_050.dp
-private val radius100: Dp = DesignTokens.radius_100.dp
-private val radius200: Dp = DesignTokens.radius_200.dp
+// Radius tokens - Dp type (generator handles unit conversion)
+private val radius050: Dp = DesignTokens.radius_050
+private val radius100: Dp = DesignTokens.radius_100
+private val radius200: Dp = DesignTokens.radius_200
 
 // Elevation tokens (layering - Android-specific)
 // On Android, elevation handles both stacking order and shadow rendering
-private val elevationContainer: Dp = DesignTokens.elevation_container.dp
-private val elevationNavigation: Dp = DesignTokens.elevation_navigation.dp
-private val elevationDropdown: Dp = DesignTokens.elevation_dropdown.dp
-private val elevationModal: Dp = DesignTokens.elevation_modal.dp
-private val elevationToast: Dp = DesignTokens.elevation_toast.dp
-private val elevationTooltip: Dp = DesignTokens.elevation_tooltip.dp
+// Dp type (generator handles unit conversion)
+private val elevationContainer: Dp = DesignTokens.elevation_container
+private val elevationNavigation: Dp = DesignTokens.elevation_navigation
+private val elevationDropdown: Dp = DesignTokens.elevation_dropdown
+private val elevationModal: Dp = DesignTokens.elevation_modal
+private val elevationToast: Dp = DesignTokens.elevation_toast
+private val elevationTooltip: Dp = DesignTokens.elevation_tooltip
 
 // Color tokens
 // Regenerated Dec 18, 2025 - includes color.canvas (Task 8.1) and all semantic tokens

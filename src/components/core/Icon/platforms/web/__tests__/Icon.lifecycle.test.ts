@@ -49,18 +49,15 @@ describe('Icon Web Component Lifecycle', () => {
     });
 
     it('should render with default values if no attributes set', async () => {
+      // This test verifies that missing size attribute throws an error
+      // following the "fail loudly" philosophy
       const element = document.createElement('dp-icon') as DPIcon;
-      document.body.appendChild(element);
       
-      // Wait for rendering to complete
-      await new Promise(resolve => setTimeout(resolve, 0));
-      
-      const svg = element.shadowRoot?.querySelector('svg');
-      expect(svg).toBeTruthy();
-      expect(svg?.classList.contains('icon-circle')).toBe(true); // Default name
-      expect(svg?.classList.contains('icon--size-100')).toBe(true); // Default size (24)
-      
-      document.body.removeChild(element);
+      // Accessing size without setting it should throw
+      expect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        element.size;
+      }).toThrow('Missing required "size" attribute on <dp-icon>');
     });
   });
 
@@ -90,6 +87,7 @@ describe('Icon Web Component Lifecycle', () => {
 
     it('should update when name attribute changes', async () => {
       const element = document.createElement('dp-icon') as DPIcon;
+      element.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
       element.setAttribute('name', 'arrow-right');
       document.body.appendChild(element);
       
@@ -113,6 +111,7 @@ describe('Icon Web Component Lifecycle', () => {
 
     it('should update when color attribute changes', async () => {
       const element = document.createElement('dp-icon') as DPIcon;
+      element.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
       element.setAttribute('color', 'inherit');
       document.body.appendChild(element);
       
@@ -136,6 +135,7 @@ describe('Icon Web Component Lifecycle', () => {
 
     it('should handle multiple attribute changes', async () => {
       const element = document.createElement('dp-icon') as DPIcon;
+      element.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
       document.body.appendChild(element);
       
       // Wait for rendering to complete
@@ -161,6 +161,7 @@ describe('Icon Web Component Lifecycle', () => {
   describe('Property API', () => {
     it('should get and set name property', async () => {
       const element = document.createElement('dp-icon') as DPIcon;
+      element.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
       document.body.appendChild(element);
       
       // Wait for rendering to complete
@@ -175,6 +176,7 @@ describe('Icon Web Component Lifecycle', () => {
 
     it('should get and set size property', async () => {
       const element = document.createElement('dp-icon') as DPIcon;
+      element.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
       document.body.appendChild(element);
       
       // Wait for rendering to complete
@@ -189,6 +191,7 @@ describe('Icon Web Component Lifecycle', () => {
 
     it('should update rendering when properties change', async () => {
       const element = document.createElement('dp-icon') as DPIcon;
+      element.setAttribute('size', '24'); // Required attribute - fail loudly philosophy
       document.body.appendChild(element);
       
       // Wait for rendering to complete
