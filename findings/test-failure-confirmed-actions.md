@@ -1,346 +1,354 @@
-# Test Failure Confirmed Actions
+# Test Failure Audit - Confirmed Actions
 
-**Date**: 2025-12-20
-**Spec**: 026 - Test Failure Resolution
-**Reviewed By**: Peter Michaels Allen
-**Status**: Confirmed
-**Organization**: audit-findings
-**Scope**: cross-project
+**Date**: December 26, 2025
+**Spec**: 029 - Test Failure Audit
+**Confirmed By**: Peter Michaels Allen
 
 ---
 
-## Executive Summary
+## Summary
 
-This document confirms the actions to be taken for resolving all 45 test failures across 24 test suites. All 5 failure patterns have been reviewed and approved for implementation. The goal is to achieve 0 test suite failures and 0 test failures.
+| Category | Pattern Count | Test Count |
+|----------|---------------|------------|
+| Fix Test | 5 | 18 |
+| Fix Code | 3 | 10 |
+| Investigate | 1 | 6 |
+| Adjust Test Configuration | 1 | 3 |
+| Adjust Expectations | 3 | 13 |
+| Defer | 0 | 0 |
 
-**Key Decisions**:
-- All 5 patterns will be addressed (no deferrals)
-- Patterns 3 & 4 require investigation checkpoints before implementing fixes
-- Priority order approved as recommended
-- Sequential implementation with regression prevention between each pattern
-
----
-
-## Confirmed Fix Categories
-
-### Category 1: Pattern 1 - HTMLElement Environment Configuration
-
-**Action**: Fix Jest environment configuration to provide HTMLElement API for web component tests
-
-**Priority**: High (Immediate - unblocks 8 test suites)
-
-**Root Cause**: Jest test environment not providing HTMLElement API that web components require
-
-**Affected Tests**: 8 test suites, 8 tests
-- Container integration tests
-- Container web platform tests
-- TextInputField accessibility tests (5 suites)
-- Container component tests
-
-**Implementation Approach**:
-1. Update Jest configuration to use proper test environment for web components
-2. Likely need `testEnvironment: 'jsdom'` or custom environment setup
-3. Verify HTMLElement is available in test context
-4. Run affected test suites to confirm they pass
-
-**Expected Impact**: All 8 test suites should pass immediately after environment fix
-
-**Special Considerations**: 
-- This is a test configuration issue, not a code bug
-- Low risk - only affects test environment
-- Should be quick fix with high impact
+**Total**: 11 patterns covering 40 failing tests
 
 ---
 
-### Category 2: Pattern 2 - Type Safety (Undefined Property Access)
+## Confirmed Actions (Priority Order)
 
-**Action**: Fix undefined property access in IconTokens.ts by adding proper null checks
+### Priority 1: P4 - Icon Undefined Multiplier (Fix Test)
 
-**Priority**: High (Immediate - fixes real bugs)
+**Pattern**: Icon Token Generation - Undefined Multiplier Reference
+**Tests Affected**: 6 tests
+**Action**: Fix Test - Exclude `icon.strokeWidth` from size validation
 
-**Root Cause**: Code attempts to call `multiplierRef.startsWith()` when `multiplierRef` parameter is undefined
+**Rationale**: The `icon.strokeWidth` token doesn't have a multiplier (it's a fixed value, not a size-based token). The test should exclude this token from the size validation that expects a multiplier reference.
 
-**Affected Tests**: 1 test suite, 3 tests
-- Icon token generation verification tests (all 3 platform tests)
-
-**Implementation Approach**:
-1. Review IconTokens.ts line 155 where error occurs
-2. Add null/undefined check before accessing `multiplierRef.startsWith()`
-3. Determine appropriate fallback behavior when `multiplierRef` is undefined
-4. Run icon token generation tests to verify fix
-
-**Expected Impact**: All 3 tests in IconTokenGeneration.test.ts should pass
-
-**Special Considerations**:
-- This is a real bug in token generation logic
-- Need to understand intended behavior when multiplierRef is undefined
-- May reveal design issue in how multiplier references are passed
+**Notes**: 
+- Scientific method approach: Fix test first, then reevaluate if null check is needed
+- If issue persists after test fix, revisit defensive null check in `parseMultiplier()`
 
 ---
 
-### Category 3: Pattern 5 - Cache Validation
+### Priority 2: P5 - Icon Missing CSS Variable (Fix Code)
 
-**Action**: Investigate and fix cache functionality that's not working as expected
+**Pattern**: Icon Component Missing CSS Variable for strokeWidth
+**Tests Affected**: 2 tests
+**Action**: Fix Code - Update Icon component to use CSS variable
 
-**Priority**: Medium (After high-priority fixes)
+**Rationale**: The component outputs hard-coded `stroke-width="2"` instead of `var(--icon-stroke-width)`. This violates the token-first design system approach.
 
-**Root Cause**: Cache functionality not creating/using cache as expected in tests
-
-**Affected Tests**: 1 test suite, 1 test
-- Hook integration cache test
-
-**Implementation Approach**:
-1. Review cache implementation in release-analysis hooks
-2. Understand why `fullResultCached` is returning false when cache should be enabled
-3. Determine if this is a cache implementation bug or test expectation issue
-4. Fix cache functionality or adjust test expectations based on findings
-5. Run cache test to verify fix
-
-**Expected Impact**: Cache test should pass, cache functionality should work correctly
-
-**Special Considerations**:
-- Cache is a performance optimization feature
-- Need to ensure cache invalidation works correctly
-- May affect release analysis performance
+**Notes**: 
+- Update Icon component to use `var(--icon-stroke-width)` CSS variable
+- Ensure CSS variable is defined in token stylesheet
 
 ---
 
-### Category 4: Pattern 3 - Cross-Platform Token Consistency
+### Priority 3: P7 - Icon Fallback `|| 24` (Fix Code)
 
-**Action**: Investigate root causes, checkpoint with Peter, then implement approved fixes
+**Pattern**: Token Compliance - Problematic Fallback Pattern
+**Tests Affected**: 1 test (part of 2-test pattern)
+**Action**: Fix Code - Remove fallback, fail loudly
 
-**Priority**: Medium (After cache fix, before performance)
+**Rationale**: At this stage of development, fallbacks prevent diagnosing issues. The `|| 24` fallback masks potential problems. Remove it to fail loudly and surface issues early.
 
-**Root Cause**: Token generation producing inconsistent results across platforms (needs investigation)
-
-**Affected Tests**: 2 test suites, 3 tests
-- Icon token generation platform test
-- Accessibility token generation consistency tests (2 tests)
-
-**Known Context from Peter**:
-- iOS and Web use same naming convention for icon assets, different from Android (implementation mistake)
-- Some code may call icon assets directly instead of using icon component (design smell)
-- May be platform-specific accessibility patterns
-
-**Implementation Approach**:
-
-**Phase 1: Investigation (Task 3.5.1)**
-1. Review icon token generation for platform naming differences
-2. Search codebase for direct icon asset calls (bypassing component)
-3. Review accessibility token generation for platform-specific patterns
-4. Document findings with specific examples
-5. Identify root causes for each failing test
-
-**Phase 2: Checkpoint (Task 3.5.2)**
-- Present investigation findings to Peter
-- Discuss whether issues are:
-  - Test expectations that need adjustment
-  - Real bugs in token generation
-  - Design issues requiring architectural changes
-- Confirm fix approach before implementation
-
-**Phase 3: Implementation (Task 3.5.3)**
-- Implement approved fixes based on checkpoint discussion
-- Run affected tests to verify fixes
-- Document solutions applied
-
-**Expected Impact**: All 3 cross-platform consistency tests should pass
-
-**Special Considerations**:
-- May reveal architectural issues requiring broader changes
-- Icon naming convention mismatch is known issue
-- Direct asset calls bypass component abstraction (design smell)
-- Investigation may uncover additional issues
+**Notes**:
+- "Fail loudly" philosophy for current development stage
+- Fallbacks can be reconsidered for production hardening later
 
 ---
 
-### Category 5: Pattern 4 - Performance and Timing Issues
+### Priority 4: P7 - Android `.dp` Suffix (Fix Code)
 
-**Action**: Investigate root causes, checkpoint with Peter, then implement approved fixes
+**Pattern**: Token Compliance - Android Hard-Coded Units
+**Tests Affected**: ~14 instances across multiple tests
+**Action**: Fix Code - Remove `.dp` suffix from token references
 
-**Priority**: Low (Last category, but still must achieve 0 failures)
+**Rationale**: The generator already handles the `.Dp` type conversion. Token references in code should not include the `.dp` suffix - units are applied at build time.
 
-**Root Cause**: Test timeouts and git operation failures (needs investigation to determine if real performance issues or test setup problems)
-
-**Affected Tests**: 10 test suites, 30 tests
-- Performance regression tests (git operation failures)
-- Hook integration tests (timeouts, performance assertions)
-- CLI quick-analyze tests (timeouts)
-
-**Implementation Approach**:
-
-**Phase 1: Investigation (Task 3.6.1)**
-1. Analyze git operation failures in test scenarios
-   - Why are git commits failing in tests?
-   - Is this a test isolation issue?
-   - Do tests need better git setup/teardown?
-
-2. Analyze timeout issues
-   - Which tests are timing out and why?
-   - Are timeouts too aggressive (5010ms vs 5000ms target)?
-   - Are tests running slower than expected?
-
-3. Analyze performance assertions
-   - Are performance targets realistic?
-   - Is there actual performance degradation?
-   - Are tests environment-dependent?
-
-4. Document findings with specific root causes for each failure type
-
-**Phase 2: Checkpoint (Task 3.6.2)**
-- Present investigation findings to Peter
-- Discuss whether issues are:
-  - Real performance problems requiring optimization
-  - Test setup/isolation issues requiring test fixes
-  - Unrealistic test expectations requiring timeout adjustments
-  - Environment-dependent issues requiring different approach
-- Confirm fix approach before implementation
-
-**Phase 3: Implementation (Task 3.6.3)**
-- Implement approved fixes based on checkpoint discussion
-- May include:
-  - Performance optimizations (if real issues found)
-  - Test setup improvements (if isolation issues found)
-  - Timeout adjustments (if expectations unrealistic)
-  - Test environment improvements (if environment-dependent)
-- Run affected tests to verify fixes
-- Document solutions applied
-
-**Expected Impact**: All 30 performance/timing tests should pass
-
-**Special Considerations**:
-- Largest failure count (30 tests) but may have simple fixes
-- Don't want to mask real performance issues by just increasing timeouts
-- Git operation failures suggest test setup issues
-- Some timeouts barely exceed limits (5010ms vs 5000ms) - may just need adjustment
-- Investigation will reveal whether these are real problems or test issues
+**Notes**:
+- Affects tokens like `DesignTokens.space_200.dp`, `radius150.dp`, `iconSize100.dp`
+- Remove `.dp` from token instances; generator handles unit conversion
 
 ---
 
-## Implementation Order
+### Priority 5: P1 - LineHeight Formula Mismatch (Adjust Expectations)
 
-The following order balances impact, effort, and dependencies:
+**Pattern**: LineHeight Token Formula Mismatch
+**Tests Affected**: 4 tests
+**Action**: Adjust Expectations - Update test expectations to match formula outputs
 
-1. **Category 1: Pattern 1 - HTMLElement Environment** (High Priority, Low Effort)
-   - Immediate impact: unblocks 8 test suites
-   - Low risk: test configuration only
-   - Quick win to build momentum
+**Rationale**: The formula-based approach is the source of truth. The hardcoded "original" values in tests are legacy artifacts. Update test expectations to match actual formula outputs.
 
-2. **Category 2: Pattern 2 - Type Safety** (High Priority, Low Effort)
-   - Fixes real bugs in token generation
-   - Clear fix: add null checks
-   - Important for system correctness
-
-3. **Category 3: Pattern 5 - Cache Validation** (Medium Priority, Medium Effort)
-   - Ensures performance optimization works
-   - Investigate cache implementation
-   - Fix before investigating other patterns
-
-4. **Category 4: Pattern 3 - Cross-Platform Consistency** (Medium Priority, Medium Effort)
-   - Investigation → Checkpoint → Implementation
-   - May reveal architectural issues
-   - Peter's context provides good starting points
-
-5. **Category 5: Pattern 4 - Performance/Timing** (Low Priority, Variable Effort)
-   - Investigation → Checkpoint → Implementation
-   - Largest test count but may have simple fixes
-   - Investigation will determine real vs test issues
+**Notes**:
+- Verify formula is mathematically correct first
+- Document formula and expected values in test file
 
 ---
 
-## Investigation Checkpoints
+### Priority 6: P2 - Border Width Structure Mismatch (Fix Test)
 
-Two patterns require investigation checkpoints before implementation:
+**Pattern**: Semantic Border Width Token Structure Mismatch
+**Tests Affected**: 3 tests
+**Action**: Fix Test - Update test expectations to match actual token structure
 
-### Checkpoint 1: Pattern 3 (Cross-Platform Consistency)
+**Rationale**: The implementation is the source of truth for the current design system. Tests should validate the actual token structure, not an outdated expectation.
 
-**When**: After completing investigation (Task 3.5.1)
-
-**Purpose**: Review findings and confirm fix approach before implementation
-
-**Discussion Points**:
-- What root causes were found?
-- Are issues in tests, code, or architecture?
-- What fix approach is appropriate?
-- Any broader implications discovered?
-
-**Outcome**: Confirmed fix approach for Task 3.5.3
-
-### Checkpoint 2: Pattern 4 (Performance/Timing)
-
-**When**: After completing investigation (Task 3.6.1)
-
-**Purpose**: Review findings and confirm fix approach before implementation
-
-**Discussion Points**:
-- Are there real performance issues?
-- Are test setup/isolation issues present?
-- Are timeout expectations realistic?
-- What fix approach is appropriate?
-
-**Outcome**: Confirmed fix approach for Task 3.6.3
+**Notes**:
+- Review current SemanticBorderWidthTokens implementation
+- Update expected token names and count
+- Ensure tests validate meaningful properties
 
 ---
 
-## Success Criteria
+### Priority 7: P3 - Shadow Offset Token Count (Fix Test)
 
-### Per-Category Success
-- **Category 1**: 8 test suites pass (HTMLElement tests)
-- **Category 2**: 3 tests pass (icon token generation)
-- **Category 3**: 1 test passes (cache validation)
-- **Category 4**: 3 tests pass (cross-platform consistency)
-- **Category 5**: 30 tests pass (performance/timing)
+**Pattern**: Shadow Offset Token Naming/Export Issues
+**Tests Affected**: 2 tests
+**Action**: Fix Test - Update expected count from 24 to 26
 
-### Overall Success
-- ✅ 0 failing test suites (down from 24)
-- ✅ 0 failing tests (down from 45)
-- ✅ 246 total test suites passing
-- ✅ 5555+ total tests passing
-- ✅ Zero unique failure instances (baseline comparison)
-- ✅ No regressions introduced during fixes
+**Rationale**: Investigation confirmed the token system has 26 primitive tokens (including shadow offset tokens), not 24. The test expectation is outdated.
+
+**Notes**:
+- Token names confirmed correct: `shadowOffsetY050` through `shadowOffsetY400`
+- Update count expectation in test file
 
 ---
 
-## Regression Prevention
+### Priority 8: P7 - iOS Regex False Positive (Fix Test)
 
-Each category will follow this workflow:
-1. Implement fixes for the category
-2. Run `npm test` to verify fixes
-3. Extract current failure signatures
-4. Compare against baseline (from Task 3.1)
-5. If new failures detected: investigate and fix regression before proceeding
-6. If no new failures: document fix and proceed to next category
+**Pattern**: Token Compliance - iOS DesignTokens False Positive
+**Tests Affected**: 6 instances
+**Action**: Fix Test - Exclude `DesignTokens.` lines from regex pattern
 
-This ensures no new failures are introduced while fixing existing failures.
+**Rationale**: Lines like `DesignTokens.space.inset.100` are valid semantic token references, not hard-coded values. The regex pattern incorrectly flags these as violations.
 
----
-
-## Deferred Items
-
-**None**. All 5 patterns will be addressed in this spec to achieve the goal of 0 test suite failures and 0 test failures.
+**Notes**:
+- These are semantic token references, not primitive values
+- Improve regex to distinguish between token references and hard-coded values
 
 ---
 
-## Notes
+### Priority 9: P7 - Android `0.dp` Exception (Fix Test)
 
-### Investigation Approach
+**Pattern**: Token Compliance - Android Zero Value Edge Case
+**Tests Affected**: 1 instance
+**Action**: Fix Test - Add exception for `0.dp` literal
 
-For Patterns 3 & 4, investigation will:
-- Identify specific root causes for each failing test
-- Determine whether issues are in tests, code, or architecture
-- Provide concrete recommendations with rationale
-- Enable informed decision-making at checkpoints
+**Rationale**: `0.dp` is a valid edge case - zero doesn't need a token reference. This is an acceptable literal value.
 
-### Goal Alignment
-
-This confirmed actions document aligns with Peter's stated goal: **"My aim is to get to 0 test suite failures and 0 test failures"**
-
-All patterns will be addressed systematically with:
-- Clear understanding of root causes
-- Appropriate fix approaches
-- Regression prevention between categories
-- Investigation checkpoints where needed
+**Notes**:
+- Add explicit exception for `0.dp` in compliance test
+- Document as valid edge case
 
 ---
 
-*This confirmed actions document provides clear direction for implementation phase with approved priorities, investigation checkpoints, and success criteria.*
+### Priority 10: P7 - Web CSS Regex (Fix Test)
+
+**Pattern**: Token Compliance - Web CSS Comment False Positives
+**Tests Affected**: 3 instances
+**Action**: Fix Test - Improve regex to handle CSS comments
+
+**Rationale**: The regex pattern incorrectly flags values in CSS comments as violations. Improve pattern to exclude commented code.
+
+**Notes**:
+- Improve regex to skip CSS comment blocks
+- Ensure actual violations are still caught
+
+---
+
+### Priority 11: P8 - Icon/Token Structure Mismatch (Fix Test)
+
+**Pattern**: Icon/Token Structure Mismatch
+**Tests Affected**: 2 tests
+**Action**: Fix Test - Update test expectations to match generated tokens
+
+**Rationale**: The generation logic is the source of truth. Manual definitions in tests should be updated to match actual generated tokens.
+
+**Notes**:
+- Review generated token output vs test expectations
+- Remove redundant manual definitions
+
+---
+
+### Priority 12: P6 - Cross-Platform Consistency (Investigate)
+
+**Pattern**: Cross-Platform Token Consistency Failures
+**Tests Affected**: 6 tests
+**Action**: Investigate → Create acknowledged differences registry + refine tests
+
+**Rationale**: Some platform differences are intentional (platform-specific affordances). Need to document which differences are authorized and update tests to allow them.
+
+**Notes**:
+- Review each cross-platform difference
+- Create registry of acknowledged/authorized differences
+- Update tests to allow intentional differences
+- Fix generation code for unintentional inconsistencies
+
+---
+
+### Priority 13: P9 - Performance Regression (Adjust Test Configuration)
+
+**Pattern**: Performance Regression - Threshold Exceeded
+**Tests Affected**: 3 tests
+**Action**: Adjust Test Configuration - Run performance tests in isolation OR increase thresholds
+
+**Investigation Findings** (Task 3.1.1 Complete):
+- **Root Cause**: Test environment interference, NOT code inefficiency
+- **Evidence**: Tests PASS when run in isolation (1.255s, all 32 tests pass) but FAIL in full suite
+- **Isolated Performance**: Within 35% of November 2025 baseline (actually BETTER for state export)
+- **Full Suite Overhead**: 5-25x higher execution times due to Jest worker overhead, concurrent tests, shared resources
+- **Code Changes**: No changes to TokenEngine, registries, or validation since baseline
+
+**Rationale**: Investigation confirmed the issue is test environment interference, not code degradation. The actual operations perform at or better than November 2025 baseline when measured in isolation.
+
+**Recommended Fix Options**:
+1. **Option A (Preferred)**: Run PerformanceValidation.test.ts in isolation via separate npm script
+2. **Option B**: Increase thresholds to account for full-suite overhead (Statistics: 2ms→30ms, State Export: 2ms→15ms, Large Scale: 5ms→15ms)
+
+**Notes**:
+- See `findings/p9-performance-investigation.md` for full investigation report
+- No code optimization needed - performance is within baseline
+- Document environment sensitivity in test file
+
+---
+
+### Priority 14: P10 - Release Analysis Timeout (Adjust Expectations)
+
+**Pattern**: Release Analysis Performance/Timeout Issues
+**Tests Affected**: 5 tests
+**Action**: Adjust Expectations - Increase thresholds 20-33%
+
+**Rationale**: Tests barely miss threshold (0.06% over). Repository growth is the primary cause, not code inefficiency.
+
+**Proposed Adjustments**:
+- Quick analysis: 10000ms → 12000ms (20% increase)
+- skipDetailedExtraction: 20000ms → 25000ms (25% increase)
+- Pipeline persistence: 15000ms → 20000ms (33% increase)
+
+**Notes**:
+- Document repository growth as justification
+- Consider git operation optimization as future enhancement
+
+---
+
+### Priority 15: P11 - QuickAnalyzer Timeout (Adjust Expectations)
+
+**Pattern**: QuickAnalyzer Timeout Failures
+**Tests Affected**: 5 tests
+**Action**: Adjust Expectations - Increase threshold to 12000ms
+
+**Rationale**: Tests miss threshold by 19-21ms (0.19-0.21%) - within measurement noise. Repository growth explains the marginal overage.
+
+**Proposed Adjustments**:
+- All QuickAnalyzer tests: 10000ms → 12000ms (20% increase)
+
+**Notes**:
+- Document repository growth as justification
+- Consider append-only log optimization as future enhancement
+
+---
+
+## Deferred Actions
+
+**None** - All 11 patterns have confirmed actions for Spec 030.
+
+---
+
+## Decisions Made
+
+### Decision 1: Scientific Method for P4
+
+**Options**: 
+- A) Fix both test and add null check simultaneously
+- B) Fix test first, reevaluate null check if issue persists
+
+**Decision**: B - Fix test first
+
+**Rationale**: "If you change two variables, you can't identify what change caused the resulting behavior." Fix one thing at a time to isolate the cause.
+
+---
+
+### Decision 2: Fail Loudly Philosophy for Fallbacks
+
+**Options**:
+- A) Make fallbacks "acceptable" with documentation
+- B) Remove fallbacks to fail loudly
+
+**Decision**: B - Remove fallbacks
+
+**Rationale**: At this stage of development, fallbacks prevent diagnosing issues. We want to surface problems early, not mask them.
+
+---
+
+### Decision 3: Android `.dp` Unit Handling
+
+**Options**:
+- A) Update generator to handle `.dp` in token references
+- B) Remove `.dp` from token references (generator already handles units)
+
+**Decision**: B - Remove `.dp` from token references
+
+**Rationale**: The generator already handles the `.Dp` type conversion. Token references should not include units - they're applied at build time.
+
+---
+
+### Decision 4: P9 Investigation Task
+
+**Options**:
+- A) Immediately adjust thresholds
+- B) Immediately optimize code
+- C) Create investigation task first
+
+**Decision**: C - Create investigation task (Task 3.1.1)
+
+**Rationale**: The 15x degradation could be degradation, scale, or bug. All are hypothetical possibilities. Investigation needed before committing to a fix approach.
+
+---
+
+### Decision 5: Cross-Platform Differences Registry
+
+**Options**:
+- A) Make all platforms identical
+- B) Create acknowledged differences registry
+
+**Decision**: B - Create acknowledged differences registry
+
+**Rationale**: Platform-specific affordances are expected and intentional. Document which differences are authorized and update tests to reflect this reality.
+
+---
+
+## Action Summary by Category
+
+### Fix Test (5 patterns, 18 tests)
+- P4: Exclude `icon.strokeWidth` from size validation
+- P2: Update border width token expectations
+- P3: Update shadow offset count from 24 to 26
+- P7 (partial): iOS regex, Android `0.dp` exception, Web CSS regex
+- P8: Update icon/token structure expectations
+
+### Fix Code (3 patterns, 10 tests)
+- P5: Icon component use CSS variable for strokeWidth
+- P7 (partial): Remove `|| 24` fallback, remove `.dp` suffix from Android tokens
+
+### Investigate (1 pattern, 6 tests)
+- P6: Cross-platform consistency → acknowledged differences registry
+
+### Adjust Test Configuration (1 pattern, 3 tests)
+- P9: Performance regression → Run tests in isolation OR increase thresholds (investigation complete)
+
+### Adjust Expectations (3 patterns, 13 tests)
+- P1: LineHeight formula expectations
+- P10: Release analysis timeouts (20-33% increase)
+- P11: QuickAnalyzer timeouts (20% increase)
+
+---
+
+**Status**: Task 3.2 Complete - Confirmed actions documented and ready for Spec 030 implementation.

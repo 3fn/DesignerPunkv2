@@ -194,6 +194,23 @@ get_section({ path: ".kiro/steering/Browser Distribution Guide.md", heading: "Tr
 
 ---
 
+### 6. Test Failure Audit Methodology
+**Trigger**: Conducting test failure audits, completing specs (clean exit audit), investigating performance issues
+
+**File**: #[[file:.kiro/steering/Test Failure Audit Methodology.md]]
+
+**How to access**:
+get_document_summary({ path: ".kiro/steering/Test Failure Audit Methodology.md" })
+
+Then query the specific section you need:
+```
+get_section({ path: ".kiro/steering/Test Failure Audit Methodology.md", heading: "Audit Workflow Steps" }) get_section({ path: ".kiro/steering/Test Failure Audit Methodology.md", heading: "Clean Exit Audit Requirement" }) get_section({ path: ".kiro/steering/Test Failure Audit Methodology.md", heading: "Performance Investigation Protocol" })
+```
+
+**Confirmation**: Reply "I've queried Test Failure Audit Methodology via MCP!" after accessing
+
+---
+
 ## MCP Documentation Server (Primary for Large Docs)
 
 The MCP Documentation Server is the **primary source** for large steering documents. AI agents MUST query MCP for these documents rather than expecting them to be auto-loaded.
@@ -205,7 +222,8 @@ These documents are available ONLY via MCP queries:
 | Document | Path | Tokens |
 |----------|------|--------|
 | Spec Planning Standards | `.kiro/steering/Spec Planning Standards.md` | ~27,000 |
-| Component Development and Practices Guide | `.kiro/steering/Component Development and Practices Guide.md` | ~9,000 |
+| Component Development and Practices Guide | `.kiro/steering/Component Development and Practices Guide.md` | ~9,000 | Test Failure Audit Methodology | `.kiro/steering/Test Failure Audit Methodology.md` | ~8,000 |
+
 
 ### How to Access MCP-Only Documents
 
