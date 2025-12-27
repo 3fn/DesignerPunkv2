@@ -1,7 +1,7 @@
 {
-  "timestamp": "2025-12-27T05:51:41.703Z",
+  "timestamp": "2025-12-27T06:42:18.168Z",
   "lastRelease": "v1.0.0",
-  "documentCount": 368,
+  "documentCount": 370,
   "documents": [
     {
       "path": ".kiro/specs/010-container-component/completion/task-1-parent-completion.md",
@@ -1457,6 +1457,16 @@
       "path": ".kiro/specs/028-web-component-browser-distribution/completion/task-9-4-completion.md",
       "lastModified": "2025-12-24T04:51:29.744Z",
       "gitCommit": "1bb007be442a76c61152162e8221be0e3304defc"
+    },
+    {
+      "path": ".kiro/specs/030-test-failure-fixes/completion/task-1-completion.md",
+      "lastModified": "2025-12-27T05:36:37.709Z",
+      "gitCommit": "9f40104940c85290537c956738abbb5bdc1ddf1f"
+    },
+    {
+      "path": ".kiro/specs/030-test-failure-fixes/completion/task-2-completion.md",
+      "lastModified": "2025-12-27T05:53:48.199Z",
+      "gitCommit": "9f40104940c85290537c956738abbb5bdc1ddf1f"
     },
     {
       "path": ".kiro/specs/release-management-system/completion/task-10-2-completion.md",

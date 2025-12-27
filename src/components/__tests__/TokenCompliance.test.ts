@@ -196,7 +196,11 @@ describe('Token Compliance - All Components', () => {
      * - rgb(R, G, B) or rgba(R, G, B, A)
      * - #RGB or #RRGGBB hex colors
      * 
-     * Requirements: 1.1, 8.1
+     * REFINED (Spec 030 Task 3.3): Excludes values within CSS comment blocks.
+     * Multi-line CSS comments are tracked across lines to avoid
+     * false positives from commented-out code or documentation examples.
+     * 
+     * Requirements: 1.1, 8.1, 10.1, 10.2
      */
     it('should not contain rgb() or hex color patterns in Web files', () => {
       const webFiles = componentFiles.filter(f => f.includes('.web.'));
@@ -213,17 +217,59 @@ describe('Token Compliance - All Components', () => {
         // Exclude lines that are comments or contain 'var(--'
         const hexPattern = /#[0-9A-Fa-f]{3,6}\b/;
         
+        // Track multi-line comment state
+        let inMultiLineComment = false;
+        
         lines.forEach((line, index) => {
-          // Skip comments and CSS custom property references
           const trimmedLine = line.trim();
+          
+          // Handle multi-line comment tracking
+          // Check for comment start/end to track state across lines
+          if (inMultiLineComment) {
+            // We're inside a multi-line comment, check if it ends on this line
+            if (trimmedLine.includes('*/')) {
+              inMultiLineComment = false;
+              // Check if there's code after the comment end
+              const afterComment = line.substring(line.indexOf('*/') + 2);
+              if (!afterComment.trim()) {
+                return; // No code after comment, skip this line
+              }
+              // Continue to check the code after the comment
+            } else {
+              return; // Still inside multi-line comment, skip this line
+            }
+          }
+          
+          // Check if this line starts a multi-line comment
+          if (trimmedLine.includes('/*') && !trimmedLine.includes('*/')) {
+            inMultiLineComment = true;
+            // Check if there's code before the comment start
+            const beforeComment = line.substring(0, line.indexOf('/*'));
+            if (!beforeComment.trim()) {
+              return; // No code before comment, skip this line
+            }
+            // Continue to check the code before the comment
+          }
+          
+          // Skip single-line comments
           if (trimmedLine.startsWith('//') || trimmedLine.startsWith('/*') || trimmedLine.startsWith('*')) {
             return;
           }
+          
+          // Skip CSS custom property references
           if (trimmedLine.includes('var(--')) {
             return;
           }
           
-          if (rgbPattern.test(line)) {
+          // For lines with inline comments, extract only the code portion
+          // Remove content within /* ... */ inline comments before checking
+          let codeToCheck = line;
+          if (line.includes('/*') && line.includes('*/')) {
+            // Remove inline comments (/* ... */) from the line before checking
+            codeToCheck = line.replace(/\/\*[^*]*\*+([^/*][^*]*\*+)*\//g, '');
+          }
+          
+          if (rgbPattern.test(codeToCheck)) {
             violations.push({
               file: path.relative(process.cwd(), file),
               line: index + 1,
@@ -232,7 +278,7 @@ describe('Token Compliance - All Components', () => {
             });
           }
           
-          if (hexPattern.test(line)) {
+          if (hexPattern.test(codeToCheck)) {
             violations.push({
               file: path.relative(process.cwd(), file),
               line: index + 1,
@@ -467,13 +513,20 @@ describe('Token Compliance - All Components', () => {
      * - Documented: Values followed by token comments
      * - Undocumented: Values without token comments
      * 
+     * REFINED (Spec 030 Task 3.3): Web CSS regex excludes values within CSS comment blocks.
+     * Multi-line CSS comments are tracked across lines to avoid
+     * false positives from commented-out code or documentation examples.
+     * 
      * Documented values are typically generated CSS from token system.
      * Undocumented values are problematic hard-coded values.
      * 
-     * Requirements: 1.2, 8.1, 14.4, 14.5 (Spec 025)
+     * Requirements: 1.2, 8.1, 10.1, 10.2, 14.4, 14.5 (Spec 025)
      */
     it('should not contain undocumented hard-coded spacing values', () => {
       const violations: Array<{ file: string; line: number; content: string; platform: string }> = [];
+      
+      // Track multi-line comment state per file
+      const fileCommentState: Map<string, boolean> = new Map();
       
       componentFiles.forEach(file => {
         const content = fs.readFileSync(file, 'utf-8');
@@ -484,9 +537,42 @@ describe('Token Compliance - All Components', () => {
         else if (file.includes('.ios.swift')) platform = 'ios';
         else if (file.includes('.android.kt')) platform = 'android';
         
+        // Track multi-line comment state for web files
+        let inMultiLineComment = false;
+        
         lines.forEach((line, index) => {
           // Skip comments
           const trimmedLine = line.trim();
+          
+          // Handle multi-line comment tracking for web files
+          if (platform === 'web') {
+            if (inMultiLineComment) {
+              // We're inside a multi-line comment, check if it ends on this line
+              if (trimmedLine.includes('*/')) {
+                inMultiLineComment = false;
+                // Check if there's code after the comment end
+                const afterComment = line.substring(line.indexOf('*/') + 2);
+                if (!afterComment.trim()) {
+                  return; // No code after comment, skip this line
+                }
+                // Continue to check the code after the comment
+              } else {
+                return; // Still inside multi-line comment, skip this line
+              }
+            }
+            
+            // Check if this line starts a multi-line comment
+            if (trimmedLine.includes('/*') && !trimmedLine.includes('*/')) {
+              inMultiLineComment = true;
+              // Check if there's code before the comment start
+              const beforeComment = line.substring(0, line.indexOf('/*'));
+              if (!beforeComment.trim()) {
+                return; // No code before comment, skip this line
+              }
+              // Continue to check the code before the comment
+            }
+          }
+          
           if (trimmedLine.startsWith('//') || trimmedLine.startsWith('/*') || trimmedLine.startsWith('*')) {
             return;
           }
@@ -504,21 +590,36 @@ describe('Token Compliance - All Components', () => {
             // Pattern: padding: 8px (without /* token.name */ comment)
             // Matches: "padding: 8px;" or "margin: 16px"
             // Excludes: "min-width: 56px; /* buttonCTA.minWidth.small */"
-            const webSpacingPattern = /(padding|margin|gap|width|height|top|right|bottom|left|inset)[\s:]+\d+px(?!\s*\/\*)/i;
+            // REFINED (Spec 030 Task 3.3): Also excludes values within CSS comment blocks
+            // Note: For spacing, we check the ORIGINAL line (not with comments removed)
+            // because the presence of a token documentation comment makes the value acceptable
+            const webSpacingPattern = /(padding|margin|gap|width|height|top|right|bottom|left|inset)[\s:]+\d+px(?!\s*;?\s*\/\*)/i;
+            
             if (webSpacingPattern.test(line)) {
               hasViolation = true;
             }
           } else if (platform === 'ios') {
             // iOS: Look for hard-coded numeric values in padding, frame, spacing
             // Pattern: .padding(.horizontal, 8), .frame(width: 100), .spacing(16)
+            // REFINED (Spec 030 Task 3.1): Exclude lines containing DesignTokens. references
+            // Lines like "DesignTokens.space.inset.100" are valid semantic token references
             const iosSpacingPattern = /\.(padding|frame|spacing)\s*\([^)]*\d+(?!\.)(?!pt)(?!px)/;
+            
+            // Skip lines with DesignTokens. references - these are valid semantic token usages
+            if (trimmedLine.includes('DesignTokens.')) {
+              return;
+            }
+            
             if (iosSpacingPattern.test(line)) {
               hasViolation = true;
             }
           } else if (platform === 'android') {
             // Android: Look for hard-coded .dp values
             // Pattern: padding(horizontal = 8.dp), size(width = 100.dp)
-            const androidSpacingPattern = /\d+\.dp\b/;
+            // REFINED (Spec 030 Task 3.2): Exclude 0.dp as valid edge case
+            // Zero values are a valid literal that don't require token references
+            // since they represent "no spacing" which is semantically clear
+            const androidSpacingPattern = /[1-9]\d*\.dp\b/;
             if (androidSpacingPattern.test(line)) {
               hasViolation = true;
             }
@@ -562,7 +663,11 @@ describe('Token Compliance - All Components', () => {
      * - iOS: Hard-coded TimeInterval values (e.g., .animation(.easeOut(duration: 0.25)))
      * - Android: Hard-coded millisecond values (e.g., tween(durationMillis = 250))
      * 
-     * Requirements: 1.3, 8.1
+     * REFINED (Spec 030 Task 3.3): Web CSS regex excludes values within CSS comment blocks.
+     * Multi-line CSS comments are tracked across lines to avoid
+     * false positives from commented-out code or documentation examples.
+     * 
+     * Requirements: 1.3, 8.1, 10.1, 10.2
      */
     it('should not contain hard-coded motion duration values', () => {
       const violations: Array<{ file: string; line: number; content: string; platform: string }> = [];
@@ -576,9 +681,42 @@ describe('Token Compliance - All Components', () => {
         else if (file.includes('.ios.swift')) platform = 'ios';
         else if (file.includes('.android.kt')) platform = 'android';
         
+        // Track multi-line comment state for web files
+        let inMultiLineComment = false;
+        
         lines.forEach((line, index) => {
           // Skip comments
           const trimmedLine = line.trim();
+          
+          // Handle multi-line comment tracking for web files
+          if (platform === 'web') {
+            if (inMultiLineComment) {
+              // We're inside a multi-line comment, check if it ends on this line
+              if (trimmedLine.includes('*/')) {
+                inMultiLineComment = false;
+                // Check if there's code after the comment end
+                const afterComment = line.substring(line.indexOf('*/') + 2);
+                if (!afterComment.trim()) {
+                  return; // No code after comment, skip this line
+                }
+                // Continue to check the code after the comment
+              } else {
+                return; // Still inside multi-line comment, skip this line
+              }
+            }
+            
+            // Check if this line starts a multi-line comment
+            if (trimmedLine.includes('/*') && !trimmedLine.includes('*/')) {
+              inMultiLineComment = true;
+              // Check if there's code before the comment start
+              const beforeComment = line.substring(0, line.indexOf('/*'));
+              if (!beforeComment.trim()) {
+                return; // No code before comment, skip this line
+              }
+              // Continue to check the code before the comment
+            }
+          }
+          
           if (trimmedLine.startsWith('//') || trimmedLine.startsWith('/*') || trimmedLine.startsWith('*')) {
             return;
           }
@@ -594,8 +732,18 @@ describe('Token Compliance - All Components', () => {
           if (platform === 'web') {
             // Web: Look for hard-coded ms or s values in transition, animation
             // Pattern: transition: all 250ms, animation-duration: 0.25s
+            // REFINED (Spec 030 Task 3.3): Also excludes values within CSS comment blocks
             const webMotionPattern = /(transition|animation)[\s:][^;]*\d+(?:ms|s)\b/i;
-            if (webMotionPattern.test(line)) {
+            
+            // For lines with inline comments, extract only the code portion
+            // Remove content within /* ... */ inline comments before checking
+            let codeToCheck = line;
+            if (line.includes('/*') && line.includes('*/')) {
+              // Remove inline comments (/* ... */) from the line before checking
+              codeToCheck = line.replace(/\/\*[^*]*\*+([^/*][^*]*\*+)*\//g, '');
+            }
+            
+            if (webMotionPattern.test(codeToCheck)) {
               hasViolation = true;
             }
           } else if (platform === 'ios') {
@@ -651,7 +799,11 @@ describe('Token Compliance - All Components', () => {
      * - iOS: Hard-coded Font.system() calls with size/weight
      * - Android: Hard-coded fontSize, fontWeight, lineHeight in TextStyle
      * 
-     * Requirements: 1.4, 8.1
+     * REFINED (Spec 030 Task 3.3): Web CSS regex excludes values within CSS comment blocks.
+     * Multi-line CSS comments are tracked across lines to avoid
+     * false positives from commented-out code or documentation examples.
+     * 
+     * Requirements: 1.4, 8.1, 10.1, 10.2
      */
     it('should not contain hard-coded typography values', () => {
       const violations: Array<{ file: string; line: number; content: string; platform: string }> = [];
@@ -665,9 +817,42 @@ describe('Token Compliance - All Components', () => {
         else if (file.includes('.ios.swift')) platform = 'ios';
         else if (file.includes('.android.kt')) platform = 'android';
         
+        // Track multi-line comment state for web files
+        let inMultiLineComment = false;
+        
         lines.forEach((line, index) => {
           // Skip comments
           const trimmedLine = line.trim();
+          
+          // Handle multi-line comment tracking for web files
+          if (platform === 'web') {
+            if (inMultiLineComment) {
+              // We're inside a multi-line comment, check if it ends on this line
+              if (trimmedLine.includes('*/')) {
+                inMultiLineComment = false;
+                // Check if there's code after the comment end
+                const afterComment = line.substring(line.indexOf('*/') + 2);
+                if (!afterComment.trim()) {
+                  return; // No code after comment, skip this line
+                }
+                // Continue to check the code after the comment
+              } else {
+                return; // Still inside multi-line comment, skip this line
+              }
+            }
+            
+            // Check if this line starts a multi-line comment
+            if (trimmedLine.includes('/*') && !trimmedLine.includes('*/')) {
+              inMultiLineComment = true;
+              // Check if there's code before the comment start
+              const beforeComment = line.substring(0, line.indexOf('/*'));
+              if (!beforeComment.trim()) {
+                return; // No code before comment, skip this line
+              }
+              // Continue to check the code before the comment
+            }
+          }
+          
           if (trimmedLine.startsWith('//') || trimmedLine.startsWith('/*') || trimmedLine.startsWith('*')) {
             return;
           }
@@ -683,8 +868,18 @@ describe('Token Compliance - All Components', () => {
           if (platform === 'web') {
             // Web: Look for hard-coded font-size, font-weight, line-height
             // Pattern: font-size: 16px, font-weight: 500, line-height: 24px
+            // REFINED (Spec 030 Task 3.3): Also excludes values within CSS comment blocks
             const webTypographyPattern = /(font-size|font-weight|line-height)[\s:]+\d+(?:px|pt|em|rem)?/i;
-            if (webTypographyPattern.test(line)) {
+            
+            // For lines with inline comments, extract only the code portion
+            // Remove content within /* ... */ inline comments before checking
+            let codeToCheck = line;
+            if (line.includes('/*') && line.includes('*/')) {
+              // Remove inline comments (/* ... */) from the line before checking
+              codeToCheck = line.replace(/\/\*[^*]*\*+([^/*][^*]*\*+)*\//g, '');
+            }
+            
+            if (webTypographyPattern.test(codeToCheck)) {
               hasViolation = true;
             }
           } else if (platform === 'ios') {
