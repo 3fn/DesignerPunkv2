@@ -38,8 +38,9 @@ describe('Icon Size Token Cross-Platform Generation', () => {
       const result = generator.generateWebTokens();
 
       // Verify all 11 icon size tokens are present
-      const iconTokenNames = Object.keys(iconTokens);
-      iconTokenNames.forEach(tokenName => {
+      // Exclude icon.strokeWidth as it's a fixed value property, not a size-based token
+      const iconSizeTokenNames = Object.keys(iconTokens).filter(name => name.startsWith('icon.size'));
+      iconSizeTokenNames.forEach(tokenName => {
         // Convert to CSS custom property format: icon.size100 -> --icon-size-100
         const cssName = tokenName.replace('icon.size', '--icon-size-');
         expect(result.content).toContain(cssName);
@@ -94,8 +95,9 @@ describe('Icon Size Token Cross-Platform Generation', () => {
       const result = generator.generateiOSTokens();
 
       // Verify all 11 icon size tokens are present
-      const iconTokenNames = Object.keys(iconTokens);
-      iconTokenNames.forEach(tokenName => {
+      // Exclude icon.strokeWidth as it's a fixed value property, not a size-based token
+      const iconSizeTokenNames = Object.keys(iconTokens).filter(name => name.startsWith('icon.size'));
+      iconSizeTokenNames.forEach(tokenName => {
         // Convert to Swift camelCase format: icon.size100 -> iconSize100
         const swiftName = tokenName.replace('icon.size', 'iconSize');
         expect(result.content).toContain(swiftName);
@@ -150,8 +152,9 @@ describe('Icon Size Token Cross-Platform Generation', () => {
       const result = generator.generateAndroidTokens();
 
       // Verify all 11 icon size tokens are present
-      const iconTokenNames = Object.keys(iconTokens);
-      iconTokenNames.forEach(tokenName => {
+      // Exclude icon.strokeWidth as it's a fixed value property, not a size-based token
+      const iconSizeTokenNames = Object.keys(iconTokens).filter(name => name.startsWith('icon.size'));
+      iconSizeTokenNames.forEach(tokenName => {
         // Convert to Kotlin snake_case format: icon.size100 -> icon_size_100
         const kotlinName = tokenName.replace('icon.size', 'icon_size_');
         expect(result.content).toContain(kotlinName);
@@ -328,7 +331,10 @@ describe('Icon Size Token Cross-Platform Generation', () => {
     it('should verify all icon sizes match fontSize × multiplier formula', () => {
       const webResult = generator.generateWebTokens();
 
-      Object.entries(iconTokens).forEach(([tokenName, token]) => {
+      // Filter to only icon size tokens (exclude icon.strokeWidth which is a fixed value, not size-based)
+      Object.entries(iconTokens)
+        .filter(([tokenName]) => tokenName.startsWith('icon.size'))
+        .forEach(([tokenName, token]) => {
         const scale = tokenName.replace('icon.size', '');
         const fontSize = fontSizeTokens[`fontSize${scale}`];
         const multiplierRef = token.primitiveReferences.multiplier;
@@ -344,7 +350,10 @@ describe('Icon Size Token Cross-Platform Generation', () => {
     it('should verify iOS values match calculated sizes', () => {
       const iosResult = generator.generateiOSTokens();
 
-      Object.entries(iconTokens).forEach(([tokenName, token]) => {
+      // Filter to only icon size tokens (exclude icon.strokeWidth which is a fixed value, not size-based)
+      Object.entries(iconTokens)
+        .filter(([tokenName]) => tokenName.startsWith('icon.size'))
+        .forEach(([tokenName, token]) => {
         const scale = tokenName.replace('icon.size', '');
         const fontSize = fontSizeTokens[`fontSize${scale}`];
         const multiplierRef = token.primitiveReferences.multiplier;
@@ -360,7 +369,10 @@ describe('Icon Size Token Cross-Platform Generation', () => {
     it('should verify Android values match calculated sizes', () => {
       const androidResult = generator.generateAndroidTokens();
 
-      Object.entries(iconTokens).forEach(([tokenName, token]) => {
+      // Filter to only icon size tokens (exclude icon.strokeWidth which is a fixed value, not size-based)
+      Object.entries(iconTokens)
+        .filter(([tokenName]) => tokenName.startsWith('icon.size'))
+        .forEach(([tokenName, token]) => {
         const scale = tokenName.replace('icon.size', '');
         const fontSize = fontSizeTokens[`fontSize${scale}`];
         const multiplierRef = token.primitiveReferences.multiplier;

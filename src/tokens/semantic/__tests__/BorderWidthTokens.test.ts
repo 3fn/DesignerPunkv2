@@ -10,6 +10,7 @@
  */
 
 import {
+  borderNone,
   borderDefault,
   borderEmphasis,
   borderHeavy,
@@ -20,6 +21,9 @@ import {
 describe('Semantic Border Width Tokens', () => {
   describe('Token Structure', () => {
     test('should use { value: "primitiveTokenName" } pattern', () => {
+      expect(borderNone).toHaveProperty('value');
+      expect(typeof borderNone.value).toBe('string');
+      
       expect(borderDefault).toHaveProperty('value');
       expect(typeof borderDefault.value).toBe('string');
       
@@ -31,15 +35,20 @@ describe('Semantic Border Width Tokens', () => {
     });
 
     test('should have all semantic tokens in SemanticBorderWidthTokens object', () => {
+      expect(SemanticBorderWidthTokens).toHaveProperty('borderNone');
       expect(SemanticBorderWidthTokens).toHaveProperty('borderDefault');
       expect(SemanticBorderWidthTokens).toHaveProperty('borderEmphasis');
       expect(SemanticBorderWidthTokens).toHaveProperty('borderHeavy');
       
-      expect(Object.keys(SemanticBorderWidthTokens)).toHaveLength(3);
+      expect(Object.keys(SemanticBorderWidthTokens)).toHaveLength(4);
     });
   });
 
   describe('Primitive References', () => {
+    test('borderNone should reference borderWidth000', () => {
+      expect(borderNone.value).toBe('borderWidth000');
+    });
+
     test('borderDefault should reference borderWidth100', () => {
       expect(borderDefault.value).toBe('borderWidth100');
     });
@@ -53,8 +62,9 @@ describe('Semantic Border Width Tokens', () => {
     });
 
     test('all semantic tokens should reference valid primitive token names', () => {
-      const validPrimitiveNames = ['borderWidth100', 'borderWidth200', 'borderWidth400'];
+      const validPrimitiveNames = ['borderWidth000', 'borderWidth100', 'borderWidth200', 'borderWidth400'];
       
+      expect(validPrimitiveNames).toContain(borderNone.value);
       expect(validPrimitiveNames).toContain(borderDefault.value);
       expect(validPrimitiveNames).toContain(borderEmphasis.value);
       expect(validPrimitiveNames).toContain(borderHeavy.value);
@@ -63,6 +73,7 @@ describe('Semantic Border Width Tokens', () => {
 
   describe('Semantic Token Object', () => {
     test('SemanticBorderWidthTokens should match individual exports', () => {
+      expect(SemanticBorderWidthTokens.borderNone).toEqual(borderNone);
       expect(SemanticBorderWidthTokens.borderDefault).toEqual(borderDefault);
       expect(SemanticBorderWidthTokens.borderEmphasis).toEqual(borderEmphasis);
       expect(SemanticBorderWidthTokens.borderHeavy).toEqual(borderHeavy);
@@ -79,6 +90,7 @@ describe('Semantic Border Width Tokens', () => {
     test('SemanticBorderWidthTokenKey should include all token names', () => {
       // This is a compile-time check, but we can verify the keys exist
       const keys: SemanticBorderWidthTokenKey[] = [
+        'borderNone',
         'borderDefault',
         'borderEmphasis',
         'borderHeavy'
@@ -104,6 +116,7 @@ describe('Semantic Border Width Tokens', () => {
       // This test verifies the pattern - semantic tokens reference primitives by name,
       // not by importing the primitive token objects
       // The values should be strings, not objects
+      expect(typeof borderNone.value).toBe('string');
       expect(typeof borderDefault.value).toBe('string');
       expect(typeof borderEmphasis.value).toBe('string');
       expect(typeof borderHeavy.value).toBe('string');
@@ -111,16 +124,16 @@ describe('Semantic Border Width Tokens', () => {
   });
 
   describe('Token Count', () => {
-    test('should have exactly 3 semantic border width tokens', () => {
+    test('should have exactly 4 semantic border width tokens', () => {
       const tokenCount = Object.keys(SemanticBorderWidthTokens).length;
-      expect(tokenCount).toBe(3);
+      expect(tokenCount).toBe(4);
     });
 
     test('should match the number of primitive border width tokens', () => {
-      // We have 3 primitive tokens (borderWidth100, borderWidth200, borderWidth400)
-      // and 3 semantic tokens (borderDefault, borderEmphasis, borderHeavy)
+      // We have 4 primitive tokens (borderWidth000, borderWidth100, borderWidth200, borderWidth400)
+      // and 4 semantic tokens (borderNone, borderDefault, borderEmphasis, borderHeavy)
       const semanticCount = Object.keys(SemanticBorderWidthTokens).length;
-      expect(semanticCount).toBe(3);
+      expect(semanticCount).toBe(4);
     });
   });
 });

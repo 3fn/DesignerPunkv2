@@ -750,7 +750,10 @@ describe('Icon Size Token Structure Validation', () => {
       expect(Object.keys(generatedTokens)).toHaveLength(sizeTokenCount);
       
       // Verify each generated token matches manual definition
-      Object.entries(iconTokens).forEach(([name, manualToken]) => {
+      // Filter to only size tokens - generateIconSizeTokens() doesn't generate property tokens like icon.strokeWidth
+      Object.entries(iconTokens)
+        .filter(([name]) => name.startsWith('icon.size'))
+        .forEach(([name, manualToken]) => {
         const generatedToken = generatedTokens[name];
         
         expect(generatedToken).toBeDefined();

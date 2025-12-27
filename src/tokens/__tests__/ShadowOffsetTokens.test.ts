@@ -84,8 +84,10 @@ describe('Shadow Offset Tokens', () => {
     });
 
     test('should have correct token names for shadowOffsetY', () => {
-      expect(shadowOffsetYNames).toEqual(['000', '100', '200', '300', '400']);
+      // Object.keys() returns keys in insertion order, but numeric-like keys may be reordered
+      const expectedNames = ['000', '100', '200', '300', '400'];
       expect(shadowOffsetYNames).toHaveLength(5);
+      expect(shadowOffsetYNames.sort()).toEqual(expectedNames.sort());
     });
 
     test('should have all tokens in shadowOffsetX object', () => {
@@ -94,7 +96,7 @@ describe('Shadow Offset Tokens', () => {
     });
 
     test('should have all tokens in shadowOffsetY object', () => {
-      expect(Object.keys(shadowOffsetY)).toEqual(shadowOffsetYNames);
+      expect(Object.keys(shadowOffsetY).sort()).toEqual(shadowOffsetYNames.sort());
       expect(Object.keys(shadowOffsetY)).toHaveLength(5);
     });
   });
@@ -364,8 +366,9 @@ describe('Shadow Offset Tokens', () => {
         (token: any) => token.category === TokenCategory.SHADOW
       );
       
-      // Should have 9 X tokens + 5 Y tokens + 5 blur tokens + 5 opacity tokens = 24 total
-      expect(shadowTokensInArray).toHaveLength(24);
+      // Should have 9 X tokens + 5 Y tokens + 6 blur tokens + 6 opacity tokens = 26 total
+      // (blur and opacity each include a "None" variant: shadowBlurNone, shadowOpacityNone)
+      expect(shadowTokensInArray).toHaveLength(26);
     });
 
     test('should return shadow offset tokens from getTokensByCategory()', () => {
