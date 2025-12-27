@@ -1,7 +1,7 @@
 {
-  "timestamp": "2025-12-27T15:44:27.790Z",
+  "timestamp": "2025-12-27T17:11:34.665Z",
   "lastRelease": "v1.0.0",
-  "documentCount": 370,
+  "documentCount": 374,
   "documents": [
     {
       "path": ".kiro/specs/010-container-component/completion/task-1-parent-completion.md",
@@ -1467,6 +1467,26 @@
       "path": ".kiro/specs/030-test-failure-fixes/completion/task-2-completion.md",
       "lastModified": "2025-12-27T05:53:48.199Z",
       "gitCommit": "9f40104940c85290537c956738abbb5bdc1ddf1f"
+    },
+    {
+      "path": ".kiro/specs/030-test-failure-fixes/completion/task-4-completion.md",
+      "lastModified": "2025-12-27T07:13:18.453Z",
+      "gitCommit": "47286ec64e5c89e031cecf8cf384c376b12484de"
+    },
+    {
+      "path": ".kiro/specs/030-test-failure-fixes/completion/task-5-completion.md",
+      "lastModified": "2025-12-27T15:46:41.842Z",
+      "gitCommit": "47286ec64e5c89e031cecf8cf384c376b12484de"
+    },
+    {
+      "path": ".kiro/specs/030-test-failure-fixes/completion/task-6-1-completion.md",
+      "lastModified": "2025-12-27T15:53:26.958Z",
+      "gitCommit": "47286ec64e5c89e031cecf8cf384c376b12484de"
+    },
+    {
+      "path": ".kiro/specs/030-test-failure-fixes/completion/task-6-completion.md",
+      "lastModified": "2025-12-27T16:03:44.608Z",
+      "gitCommit": "47286ec64e5c89e031cecf8cf384c376b12484de"
     },
     {
       "path": ".kiro/specs/release-management-system/completion/task-10-2-completion.md",

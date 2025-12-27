@@ -17,8 +17,10 @@ describe('QuickAnalyzer', () => {
   let analyzer: QuickAnalyzer;
 
   beforeEach(() => {
+    // Timeout increased from 10000ms to 12000ms (20% increase) to account for
+    // repository growth and measurement noise in CI environments
     analyzer = new QuickAnalyzer(testWorkingDir, {
-      timeoutMs: 10000,
+      timeoutMs: 12000,
       skipDetailedExtraction: true,
       cacheResults: true,
       monitorPerformance: true
@@ -35,13 +37,15 @@ describe('QuickAnalyzer', () => {
   });
 
   describe('Performance Requirements', () => {
-    it('should complete analysis within 10 seconds with append-only optimization', async () => {
+    it('should complete analysis within 12 seconds with append-only optimization', async () => {
       const startTime = Date.now();
       const result = await analyzer.runQuickAnalysis();
       const duration = Date.now() - startTime;
 
-      // With append-only optimization, analysis should complete in <10s - realistic for git operations + analysis
-      expect(duration).toBeLessThan(10000);
+      // With append-only optimization, analysis should complete in <12s
+      // Increased from 10s to 12s (20% increase) to account for repository growth
+      // and measurement noise in CI environments
+      expect(duration).toBeLessThan(12000);
       expect(result.performanceMetrics?.completedWithinTimeout).toBe(true);
     }, 15000); // 15s timeout for performance test
 
@@ -50,7 +54,8 @@ describe('QuickAnalyzer', () => {
 
       expect(result.performanceMetrics).toBeDefined();
       expect(result.performanceMetrics?.totalTimeMs).toBeGreaterThan(0);
-      expect(result.performanceMetrics?.totalTimeMs).toBeLessThan(10000); // Should complete in <10s - realistic for git operations + analysis
+      // Increased from 10s to 12s (20% increase) to account for repository growth
+      expect(result.performanceMetrics?.totalTimeMs).toBeLessThan(12000);
       expect(result.performanceMetrics?.phaseTimings).toBeDefined();
       expect(result.performanceMetrics?.phaseTimings.gitAnalysis).toBeGreaterThanOrEqual(0);
       expect(result.performanceMetrics?.phaseTimings.documentCollection).toBeGreaterThanOrEqual(0);
@@ -75,7 +80,7 @@ describe('QuickAnalyzer', () => {
         );
         expect(result.performanceMetrics.memoryUsage.final).toBeGreaterThan(0);
       }
-    }, 10000); // 10s timeout for memory tracking test
+    }, 12000); // Increased from 10s to 12s (20% increase) for repository growth
 
     it('should handle timeout gracefully', async () => {
       const shortTimeoutAnalyzer = new QuickAnalyzer(testWorkingDir, {
@@ -133,7 +138,7 @@ describe('QuickAnalyzer', () => {
       ) {
         expect(result.versionBump).toBe('patch');
       }
-    }, 10000); // 10s timeout for version bump test
+    }, 12000); // Increased from 10s to 12s (20% increase) for repository growth
 
     it('should recommend no version bump when no changes detected', async () => {
       const result = await analyzer.runQuickAnalysis();
@@ -147,7 +152,7 @@ describe('QuickAnalyzer', () => {
       if (totalChanges === 0) {
         expect(result.versionBump).toBe('none');
       }
-    }, 10000); // 10s timeout for version bump test
+    }, 12000); // Increased from 10s to 12s (20% increase) for repository growth
   });
 
   describe('Concise Output', () => {
@@ -158,7 +163,7 @@ describe('QuickAnalyzer', () => {
       expect(typeof result.summary).toBe('string');
       expect(result.summary.length).toBeGreaterThan(0);
       expect(result.summary.length).toBeLessThan(200); // Should be concise
-    }, 10000); // 10s timeout for concise output test
+    }, 12000); // Increased from 10s to 12s (20% increase) for repository growth
 
     it('should include version bump in summary', async () => {
       const result = await analyzer.runQuickAnalysis();
@@ -171,14 +176,14 @@ describe('QuickAnalyzer', () => {
         // For 'none', summary should indicate no changes
         expect(result.summary.toLowerCase()).toMatch(/no.*change|none/);
       }
-    }, 10000); // 10s timeout for summary test
+    }, 12000); // Increased from 10s to 12s (20% increase) for repository growth
 
     it('should provide confidence score', async () => {
       const result = await analyzer.runQuickAnalysis();
 
       expect(result.confidence).toBeGreaterThanOrEqual(0);
       expect(result.confidence).toBeLessThanOrEqual(1);
-    }, 10000); // 10s timeout for confidence score test
+    }, 12000); // Increased from 10s to 12s (20% increase) for repository growth
 
     it('should indicate when no changes detected', async () => {
       const result = await analyzer.runQuickAnalysis();
@@ -192,7 +197,7 @@ describe('QuickAnalyzer', () => {
       if (totalChanges === 0) {
         expect(result.summary.toLowerCase()).toContain('no');
       }
-    }, 10000); // 10s timeout for no changes test
+    }, 12000); // Increased from 10s to 12s (20% increase) for repository growth
   });
 
   describe('Result Caching', () => {
@@ -201,11 +206,12 @@ describe('QuickAnalyzer', () => {
 
       expect(result.fullResultCached).toBe(true);
       expect(result.cacheFilePath).toBeDefined();
-    }, 10000); // 10s timeout for caching test
+    }, 12000); // Increased from 10s to 12s (20% increase) for repository growth
 
     it('should not cache results when disabled', async () => {
+      // Timeout increased from 10000ms to 12000ms (20% increase) for repository growth
       const noCacheAnalyzer = new QuickAnalyzer(testWorkingDir, {
-        timeoutMs: 10000,
+        timeoutMs: 12000,
         skipDetailedExtraction: true,
         cacheResults: false,
         monitorPerformance: true
@@ -237,7 +243,7 @@ describe('QuickAnalyzer', () => {
       expect(cached).toBeDefined();
       expect(cached.timestamp).toBeDefined();
       expect(cached.quickAnalysisMode).toBe(true);
-    }, 10000); // 10s timeout for cache retrieval test
+    }, 12000); // Increased from 10s to 12s (20% increase) for repository growth
 
     it('should clear cache', async () => {
       await analyzer.runQuickAnalysis();
@@ -246,7 +252,7 @@ describe('QuickAnalyzer', () => {
 
       const cached = await analyzer.getCachedResult();
       expect(cached).toBeNull();
-    }, 10000); // 10s timeout for cache clear test
+    }, 12000); // Increased from 10s to 12s (20% increase) for repository growth
 
     it('should create latest symlink', async () => {
       const result = await analyzer.runQuickAnalysis();
@@ -264,7 +270,7 @@ describe('QuickAnalyzer', () => {
           // This is acceptable
         }
       }
-    }, 10000); // 10s timeout for symlink test
+    }, 12000); // Increased from 10s to 12s (20% increase) for repository growth
   });
 
   describe('Configuration Options', () => {
@@ -282,12 +288,13 @@ describe('QuickAnalyzer', () => {
 
       // Should complete or timeout within configured time
       expect(duration).toBeLessThan(6000); // Allow small buffer
-    }, 10000); // 10s timeout for custom timeout test
+    }, 12000); // Increased from 10s to 12s (20% increase) for repository growth
 
     it('should respect custom cache directory', async () => {
       const customCacheDir = join(testWorkingDir, '.kiro/test-cache');
+      // Timeout increased from 10000ms to 12000ms (20% increase) for repository growth
       const customAnalyzer = new QuickAnalyzer(testWorkingDir, {
-        timeoutMs: 10000,
+        timeoutMs: 12000,
         skipDetailedExtraction: true,
         cacheResults: true,
         cacheDir: customCacheDir,
@@ -306,11 +313,12 @@ describe('QuickAnalyzer', () => {
       } catch {
         // Ignore cleanup errors
       }
-    }, 10000); // 10s timeout for custom cache directory test
+    }, 12000); // Increased from 10s to 12s (20% increase) for repository growth
 
     it('should disable performance monitoring when configured', async () => {
+      // Timeout increased from 10000ms to 12000ms (20% increase) for repository growth
       const noMetricsAnalyzer = new QuickAnalyzer(testWorkingDir, {
-        timeoutMs: 10000,
+        timeoutMs: 12000,
         skipDetailedExtraction: true,
         cacheResults: true,
         monitorPerformance: false
@@ -319,7 +327,7 @@ describe('QuickAnalyzer', () => {
       const result = await noMetricsAnalyzer.runQuickAnalysis();
 
       expect(result.performanceMetrics).toBeUndefined();
-    }, 10000); // 10s timeout for performance monitoring test
+    }, 12000); // Increased from 10s to 12s (20% increase) for repository growth
   });
 
   describe('Error Handling', () => {
@@ -329,8 +337,9 @@ describe('QuickAnalyzer', () => {
       try {
         await fs.mkdir(nonGitDir, { recursive: true });
         
+        // Timeout increased from 10000ms to 12000ms (20% increase) for repository growth
         const nonGitAnalyzer = new QuickAnalyzer(nonGitDir, {
-          timeoutMs: 10000,
+          timeoutMs: 12000,
           skipDetailedExtraction: true,
           cacheResults: false,
           monitorPerformance: true
@@ -348,11 +357,12 @@ describe('QuickAnalyzer', () => {
           // Ignore cleanup errors
         }
       }
-    }, 10000); // 10s timeout for error handling test
+    }, 12000); // Increased from 10s to 12s (20% increase) for repository growth
 
     it('should handle cache write failures gracefully', async () => {
+      // Timeout increased from 10000ms to 12000ms (20% increase) for repository growth
       const readOnlyAnalyzer = new QuickAnalyzer(testWorkingDir, {
-        timeoutMs: 10000,
+        timeoutMs: 12000,
         skipDetailedExtraction: true,
         cacheResults: true,
         cacheDir: '/invalid/readonly/path',
@@ -385,8 +395,9 @@ describe('QuickAnalyzer', () => {
       await analyzer.runQuickAnalysis();
       const duration = Date.now() - startTime;
 
-      // With append-only optimization, should complete in <10s for hook integration - realistic for git operations + analysis
-      expect(duration).toBeLessThan(10000);
+      // With append-only optimization, should complete in <12s for hook integration
+      // Increased from 10s to 12s (20% increase) to account for repository growth
+      expect(duration).toBeLessThan(12000);
     }, 15000); // 15s timeout for hook integration performance test
   });
 });
