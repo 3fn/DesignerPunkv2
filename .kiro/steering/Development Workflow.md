@@ -20,7 +20,7 @@ inclusion: always
 
 **Layer Context**: This is a Layer 2 (Frameworks and Patterns) document that provides reusable task completion workflows. It's always loaded but contains extensive conditional sections for specialized scenarios like hook debugging and setup.
 
-### WHEN Executing Normal Tasks THEN Read:
+### WHEN Executing Normal Tasks THEN **MUST** Read:
 1. ✅ **Task Completion Workflow** (MUST READ)
 2. ✅ **Spec Planning** (brief reference)
 3. ✅ **Hook System Usage** (basic commands)

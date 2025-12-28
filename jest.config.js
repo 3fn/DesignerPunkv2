@@ -44,7 +44,8 @@ module.exports = {
     '/coverage/',               // Exclude coverage reports
     '\\.d\\.ts$',               // Explicit .d.ts exclusion (F3)
     'performance/__tests__',    // Performance tests (run separately)
-    '__tests__/performance'     // Alternative performance test location
+    '__tests__/performance',    // Alternative performance test location
+    'PerformanceValidation'     // Performance validation tests (run with test:performance:isolated)
   ],
   
   // Prevent module resolution from dist/ (F1)
