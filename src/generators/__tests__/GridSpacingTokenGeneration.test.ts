@@ -184,9 +184,16 @@ describe('Grid Spacing Token Generation', () => {
       const iosResult = generator.generateiOSTokens();
       const androidResult = generator.generateAndroidTokens();
       
-      // All platforms should have the same semantic token count
+      // Web and iOS should have the same semantic token count
       expect(webResult.semanticTokenCount).toBe(iosResult.semanticTokenCount);
-      expect(iosResult.semanticTokenCount).toBe(androidResult.semanticTokenCount);
+      
+      // Android may have platform-specific tokens (e.g., elevation.none)
+      // Use validateCrossPlatformConsistency for nuanced comparison
+      const results = generator.generateAll();
+      const validation = generator.validateCrossPlatformConsistency(results);
+      
+      // Validation should pass (accounts for documented platform-specific tokens)
+      expect(validation.consistent).toBe(true);
       
       // All platforms should be valid
       expect(webResult.valid).toBe(true);

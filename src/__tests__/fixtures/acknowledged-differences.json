@@ -1,8 +1,20 @@
 {
   "$schema": "./acknowledged-differences.schema.json",
-  "version": "1.0.0",
-  "lastUpdated": "2025-12-27",
+  "version": "1.1.0",
+  "lastUpdated": "2025-12-28",
   "description": "Registry of acknowledged platform-specific differences that are intentional and authorized. These differences are expected due to platform-native requirements and design guidelines.",
+  "platformSpecificTokens": {
+    "description": "Tokens that exist only on specific platforms due to platform-native requirements",
+    "tokens": [
+      {
+        "token": "elevation.none",
+        "platform": "android",
+        "reason": "Android Material Design requires an explicit 0dp elevation baseline. Web/iOS z-index systems don't need a 'zero' token as elements without z-index naturally stack in document order.",
+        "authorizedBy": "Peter Michaels Allen",
+        "date": "2025-12-28"
+      }
+    ]
+  },
   "acknowledgedDifferences": [
     {
       "token": "typography.fontSize.*",

@@ -343,11 +343,13 @@ describe('Accessibility Token Generation', () => {
     it('should maintain consistent semantic token count across platforms', () => {
       const results = generator.generateAll();
 
-      const semanticCounts = results.map(r => r.semanticTokenCount);
-      const uniqueCounts = new Set(semanticCounts);
+      // Use validateCrossPlatformConsistency for nuanced comparison
+      // This accounts for documented platform-specific tokens (e.g., Android elevation.none)
+      const validation = generator.validateCrossPlatformConsistency(results);
 
-      // All platforms should have same semantic token count
-      expect(uniqueCounts.size).toBe(1);
+      // Validation should pass (accounts for documented platform-specific tokens)
+      expect(validation.consistent).toBe(true);
+      expect(validation.issues).toHaveLength(0);
     });
   });
 });

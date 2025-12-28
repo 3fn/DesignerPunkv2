@@ -497,7 +497,7 @@ describe('CLI Integration Tests', () => {
           expect(error.category).toBeDefined();
         }
       }
-    }, 30000); // 30 second timeout for integration test with real CLI execution
+    }, 45000); // 45 second timeout for integration test with real CLI execution (increased for repository growth)
 
     it('should provide convenience methods for common queries', async () => {
       // Test that the wrapper interface provides expected methods

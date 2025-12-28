@@ -23,6 +23,37 @@ export type DifferenceCategory =
   | 'behavior'; // Different runtime behavior
 
 /**
+ * A platform-specific token that exists only on certain platforms
+ */
+export interface PlatformSpecificToken {
+  /** Token name (e.g., 'elevation.none') */
+  token: string;
+  
+  /** Platform where this token exists */
+  platform: Platform;
+  
+  /** Explanation of why this token is platform-specific */
+  reason: string;
+  
+  /** Name of the person who authorized this difference */
+  authorizedBy: string;
+  
+  /** ISO 8601 date when this was authorized */
+  date: string;
+}
+
+/**
+ * Platform-specific tokens section
+ */
+export interface PlatformSpecificTokensSection {
+  /** Description of this section */
+  description: string;
+  
+  /** List of platform-specific tokens */
+  tokens: PlatformSpecificToken[];
+}
+
+/**
  * A single acknowledged platform-specific difference
  */
 export interface AcknowledgedDifference {
@@ -81,11 +112,50 @@ export interface AcknowledgedDifferencesRegistry {
   /** Human-readable description of the registry purpose */
   description?: string;
   
+  /** Platform-specific tokens that exist only on certain platforms */
+  platformSpecificTokens?: PlatformSpecificTokensSection;
+  
   /** List of acknowledged platform-specific differences */
   acknowledgedDifferences: AcknowledgedDifference[];
   
   /** Rules for validating new difference entries */
   validationRules?: ValidationRules;
+}
+
+/**
+ * Get the count of platform-specific tokens for a given platform
+ * 
+ * @param registry - The acknowledged differences registry
+ * @param platform - The platform to check
+ * @returns Number of platform-specific tokens for that platform
+ */
+export function getPlatformSpecificTokenCount(
+  registry: AcknowledgedDifferencesRegistry,
+  platform: Platform
+): number {
+  if (!registry.platformSpecificTokens?.tokens) {
+    return 0;
+  }
+  return registry.platformSpecificTokens.tokens.filter(t => t.platform === platform).length;
+}
+
+/**
+ * Get the list of platform-specific token names for a given platform
+ * 
+ * @param registry - The acknowledged differences registry
+ * @param platform - The platform to check
+ * @returns Array of token names that are specific to that platform
+ */
+export function getPlatformSpecificTokenNames(
+  registry: AcknowledgedDifferencesRegistry,
+  platform: Platform
+): string[] {
+  if (!registry.platformSpecificTokens?.tokens) {
+    return [];
+  }
+  return registry.platformSpecificTokens.tokens
+    .filter(t => t.platform === platform)
+    .map(t => t.token);
 }
 
 /**

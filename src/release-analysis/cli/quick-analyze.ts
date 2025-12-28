@@ -4,7 +4,8 @@
  * Quick Analysis Mode for Release Analysis System
  * 
  * Optimized analysis mode that completes in <10 seconds for automatic hook integration.
- * Provides concise output suitable for AI agent feedback while caching full results.
+ * Uses append-only optimization to analyze only NEW documents since last analysis,
+ * achieving O(m) complexity where m = new documents instead of O(n) where n = total documents.
  * 
  * Requirements addressed:
  * - 9.2: Quick analysis mode completes in <10 seconds
@@ -14,7 +15,9 @@
 
 import { promises as fs } from 'fs';
 import { join } from 'path';
-import { AnalysisResult, QuickAnalysisResult } from '../types/AnalysisTypes';
+import { QuickAnalysisResult } from '../types/AnalysisTypes';
+import { AnalysisStateManager } from '../state/AnalysisStateManager';
+import { NewDocumentDetector } from '../detection/NewDocumentDetector';
 
 export interface QuickAnalysisOptions {
   /** Maximum time to spend on analysis (milliseconds) */
@@ -75,6 +78,8 @@ export class QuickAnalyzer {
   private workingDirectory: string;
   private options: Required<QuickAnalysisOptions>;
   private performanceMetrics: PerformanceMetrics;
+  private stateManager: AnalysisStateManager;
+  private documentDetector: NewDocumentDetector;
 
   constructor(
     workingDirectory: string = process.cwd(),
@@ -94,6 +99,10 @@ export class QuickAnalyzer {
     };
 
     this.performanceMetrics = this.initializePerformanceMetrics();
+    
+    // Initialize append-only optimization components
+    this.stateManager = new AnalysisStateManager();
+    this.documentDetector = new NewDocumentDetector();
   }
 
   /**
@@ -169,39 +178,35 @@ export class QuickAnalyzer {
   }
 
   /**
-   * Perform quick analysis with optimizations
+   * Perform quick analysis with append-only optimization
+   * Uses incremental detection to analyze only NEW documents since last analysis,
+   * achieving O(m) complexity where m = new documents instead of O(n) where n = total documents.
    */
   private async performQuickAnalysis(): Promise<QuickAnalysisResultWithMetrics> {
-    const analysisStartTime = Date.now();
-    
-    // Phase 1: Git Analysis (fast)
-    const gitStartTime = Date.now();
-    const { GitHistoryAnalyzer } = await import('../git/GitHistoryAnalyzer');
-    const gitAnalyzer = new GitHistoryAnalyzer(this.workingDirectory);
-
-    let lastRelease;
+    // Validate working directory exists
     try {
-      lastRelease = await gitAnalyzer.findLastRelease();
+      await fs.access(this.workingDirectory);
     } catch {
-      lastRelease = null;
+      throw new Error(`Working directory does not exist: ${this.workingDirectory}`);
     }
 
-    const changes = lastRelease 
-      ? await gitAnalyzer.getChangesSince(lastRelease.name)
-      : { commits: [], addedFiles: [], modifiedFiles: [], deletedFiles: [], timeRange: { from: new Date(), to: new Date() } };
-
-    this.performanceMetrics.phaseTimings.gitAnalysis = Date.now() - gitStartTime;
+    // Phase 1: Load previous state (fast - just reading a JSON file)
+    const stateStartTime = Date.now();
+    const state = await this.stateManager.loadState();
+    const lastCommit = state?.lastAnalyzedCommit || null;
+    this.performanceMetrics.phaseTimings.gitAnalysis = Date.now() - stateStartTime;
     this.updatePeakMemory();
 
-    // Phase 2: Document Collection (optimized)
+    // Phase 2: Detect only NEW documents since last analysis (append-only optimization)
     const collectionStartTime = Date.now();
-    const documents = await gitAnalyzer.findCompletionDocuments(changes);
+    const newDocumentPaths = await this.documentDetector.detectNewDocuments(lastCommit);
     this.performanceMetrics.phaseTimings.documentCollection = Date.now() - collectionStartTime;
-    this.performanceMetrics.documentsProcessed = documents.length;
+    this.performanceMetrics.documentsProcessed = newDocumentPaths.length;
     this.updatePeakMemory();
 
-    // Phase 3: Quick Change Extraction (simplified)
+    // Phase 3: Quick Change Extraction (only for NEW documents)
     const extractionStartTime = Date.now();
+    const documents = await this.loadDocumentContents(newDocumentPaths);
     const quickChanges = await this.performQuickExtraction(documents);
     this.performanceMetrics.phaseTimings.changeExtraction = Date.now() - extractionStartTime;
     this.updatePeakMemory();
@@ -219,27 +224,52 @@ export class QuickAnalyzer {
     if (this.options.cacheResults) {
       try {
         // Cache results for later CLI access
-        cacheFilePath = await this.cacheFullAnalysis(documents, lastRelease);
+        cacheFilePath = await this.cacheFullAnalysis(documents, lastCommit);
         fullResultCached = true;
       } catch (error) {
         // Don't fail the analysis if caching fails
-        // Error is logged but analysis continues
+        console.warn(`Warning: Failed to cache analysis results: ${error instanceof Error ? error.message : String(error)}`);
       }
     }
     this.performanceMetrics.phaseTimings.caching = Date.now() - cachingStartTime;
 
     // Generate concise summary
-    const summary = this.generateConciseSummary(quickChanges, versionBump);
+    const summary = this.generateConciseSummary(quickChanges, versionBump, newDocumentPaths.length);
 
     return {
       versionBump,
       changeCount: quickChanges,
-      confidence: this.calculateQuickConfidence(quickChanges, documents.length),
+      confidence: this.calculateQuickConfidence(quickChanges, newDocumentPaths.length),
       summary,
       fullResultCached,
       cacheFilePath,
       performanceMetrics: this.options.monitorPerformance ? this.performanceMetrics : undefined
     };
+  }
+
+  /**
+   * Load document contents from file paths
+   * Used for quick extraction of new documents only
+   */
+  private async loadDocumentContents(documentPaths: string[]): Promise<any[]> {
+    const documents: any[] = [];
+    
+    for (const docPath of documentPaths) {
+      try {
+        const content = await fs.readFile(docPath, 'utf-8');
+        documents.push({
+          path: docPath,
+          content,
+          lastModified: new Date().toISOString(),
+          gitCommit: 'unknown'
+        });
+      } catch (error) {
+        // Skip documents that can't be read
+        console.warn(`Warning: Could not read ${docPath}: ${error instanceof Error ? error.message : String(error)}`);
+      }
+    }
+    
+    return documents;
   }
 
   /**
@@ -351,12 +381,16 @@ export class QuickAnalyzer {
    */
   private generateConciseSummary(
     changes: { breaking: number; features: number; fixes: number; improvements: number },
-    versionBump: 'major' | 'minor' | 'patch' | 'none'
+    versionBump: 'major' | 'minor' | 'patch' | 'none',
+    newDocumentCount: number = 0
   ): string {
     const totalChanges = changes.breaking + changes.features + changes.fixes + changes.improvements;
 
     if (totalChanges === 0) {
-      return 'No significant changes detected';
+      if (newDocumentCount === 0) {
+        return 'No new documents since last analysis';
+      }
+      return `Analyzed ${newDocumentCount} new document(s) - no significant changes detected`;
     }
 
     const parts: string[] = [];
@@ -378,14 +412,14 @@ export class QuickAnalyzer {
     }
 
     const summary = parts.join(', ');
-    return `${versionBump.toUpperCase()} version bump recommended: ${summary}`;
+    return `${versionBump.toUpperCase()} version bump recommended (${newDocumentCount} new docs): ${summary}`;
   }
 
   /**
    * Cache full analysis results for later CLI access
    * Requirement 9.7: Cache results for later CLI access
    */
-  private async cacheFullAnalysis(documents: any[], lastRelease: any): Promise<string> {
+  private async cacheFullAnalysis(documents: any[], lastCommit: string | null): Promise<string> {
     // Ensure cache directory exists
     await fs.mkdir(this.options.cacheDir, { recursive: true });
 
@@ -397,7 +431,7 @@ export class QuickAnalyzer {
     // Prepare cache data with safe property access
     const cacheData = {
       timestamp: new Date().toISOString(),
-      lastRelease: lastRelease ? lastRelease.name : null,
+      lastAnalyzedCommit: lastCommit,
       documentCount: documents.length,
       documents: documents.map(doc => ({
         path: doc.path || 'unknown',
@@ -405,6 +439,7 @@ export class QuickAnalyzer {
         gitCommit: doc.gitCommit || 'unknown'
       })),
       quickAnalysisMode: true,
+      appendOnlyOptimization: true,
       note: 'Full analysis can be run with: npm run release:analyze'
     };
 

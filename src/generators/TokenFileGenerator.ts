@@ -610,13 +610,56 @@ export class TokenFileGenerator {
 
   /**
    * Validate mathematical consistency across platforms
-   * Extended to include semantic token validation
+   * Extended to include semantic token validation with nuanced platform-specific token handling
+   * 
+   * Platform-specific tokens (documented in acknowledged-differences.json) are excluded from
+   * count comparisons. For example, Android has elevation.none (0dp baseline) while web/iOS
+   * don't need a "zero" z-index token.
    */
   validateCrossPlatformConsistency(results: GenerationResult[]): {
     consistent: boolean;
     issues: string[];
+    platformSpecificTokens?: { platform: string; tokens: string[] }[];
   } {
     const issues: string[] = [];
+    const platformSpecificInfo: { platform: string; tokens: string[] }[] = [];
+
+    // Check that all platforms generated successfully FIRST (most critical)
+    const invalidPlatforms = results.filter(r => !r.valid);
+    if (invalidPlatforms.length > 0) {
+      invalidPlatforms.forEach(r => {
+        issues.push(`${r.platform} generation failed: ${r.errors?.join(', ')}`);
+      });
+    }
+
+    // Load acknowledged differences registry for platform-specific token handling
+    let acknowledgedDifferences: any = null;
+    try {
+      // Try multiple paths since this file may be run from different locations
+      try {
+        acknowledgedDifferences = require('../__tests__/fixtures/acknowledged-differences.json');
+      } catch {
+        acknowledgedDifferences = require('../../__tests__/fixtures/acknowledged-differences.json');
+      }
+    } catch (e) {
+      // Registry not available, proceed with strict validation
+    }
+
+    // Get platform-specific token counts from registry
+    const platformSpecificCounts: Record<string, number> = {};
+    if (acknowledgedDifferences?.platformSpecificTokens?.tokens) {
+      for (const token of acknowledgedDifferences.platformSpecificTokens.tokens) {
+        platformSpecificCounts[token.platform] = (platformSpecificCounts[token.platform] || 0) + 1;
+        
+        // Track for reporting
+        const existing = platformSpecificInfo.find(p => p.platform === token.platform);
+        if (existing) {
+          existing.tokens.push(token.token);
+        } else {
+          platformSpecificInfo.push({ platform: token.platform, tokens: [token.token] });
+        }
+      }
+    }
 
     // Check that all platforms have the same primitive token count
     const tokenCounts = results.map(r => r.tokenCount);
@@ -626,28 +669,50 @@ export class TokenFileGenerator {
       issues.push(`Primitive token count mismatch across platforms: ${Array.from(uniqueCounts).join(', ')}`);
     }
 
-    // Check that all platforms have the same semantic token count
+    // Check semantic token counts with platform-specific token adjustment
+    // Only apply adjustment if the raw counts suggest platform-specific tokens are present
+    // (i.e., the difference between platforms matches the expected platform-specific count)
     const semanticTokenCounts = results.map(r => r.semanticTokenCount);
-    const uniqueSemanticCounts = new Set(semanticTokenCounts);
+    const uniqueRawCounts = new Set(semanticTokenCounts);
+    
+    // First check if raw counts are already consistent
+    if (uniqueRawCounts.size === 1) {
+      // All platforms have same count - no adjustment needed
+      // This handles mock data and cases where platform-specific tokens aren't present
+    } else {
+      // Raw counts differ - check if the difference matches platform-specific tokens
+      const normalizedSemanticCounts = results.map(r => {
+        const platformSpecificCount = platformSpecificCounts[r.platform] || 0;
+        return {
+          platform: r.platform,
+          original: r.semanticTokenCount,
+          normalized: r.semanticTokenCount - platformSpecificCount,
+          platformSpecific: platformSpecificCount
+        };
+      });
 
-    if (uniqueSemanticCounts.size > 1) {
-      issues.push(`Semantic token count mismatch across platforms: ${Array.from(uniqueSemanticCounts).join(', ')}`);
+      const uniqueNormalizedCounts = new Set(normalizedSemanticCounts.map(c => c.normalized));
+
+      if (uniqueNormalizedCounts.size > 1) {
+        // Still mismatched after adjustment - report the issue
+        const countDetails = normalizedSemanticCounts
+          .map(c => `${c.platform}=${c.original}${c.platformSpecific > 0 ? ` (${c.platformSpecific} platform-specific)` : ''}`)
+          .join(', ');
+        issues.push(`Semantic token count mismatch across platforms (after excluding platform-specific tokens): ${countDetails}`);
+      }
+      // If normalized counts are consistent, the difference was due to documented platform-specific tokens
     }
 
-    // Verify all platforms have same semantic token names
-    // Extract token names from generated content for each platform
+    // Verify all platforms have same semantic token names (excluding platform-specific)
     const semanticTokenNames = this.extractSemanticTokenNames(results);
 
     if (semanticTokenNames.length > 0) {
-      // Get the first platform's token names as reference
       const referenceNames = semanticTokenNames[0].names;
       const referencePlatform = semanticTokenNames[0].platform;
 
-      // Compare other platforms against reference
       for (let i = 1; i < semanticTokenNames.length; i++) {
         const current = semanticTokenNames[i];
 
-        // Check if token names match
         const missingInCurrent = referenceNames.filter(name => !current.names.includes(name));
         const extraInCurrent = current.names.filter(name => !referenceNames.includes(name));
 
@@ -665,15 +730,12 @@ export class TokenFileGenerator {
     const relationships = this.extractPrimitiveSemanticRelationships(results);
 
     if (relationships.length > 0) {
-      // Get the first platform's relationships as reference
       const referenceRelationships = relationships[0].relationships;
       const referencePlatform = relationships[0].platform;
 
-      // Compare other platforms against reference
       for (let i = 1; i < relationships.length; i++) {
         const current = relationships[i];
 
-        // Check each semantic token's primitive references
         for (const [semanticName, primitiveRefs] of Object.entries(referenceRelationships)) {
           const currentRefs = current.relationships[semanticName];
 
@@ -682,14 +744,12 @@ export class TokenFileGenerator {
             continue;
           }
 
-          // Compare primitive references
           const refKeys = Object.keys(primitiveRefs).sort();
           const currKeys = Object.keys(currentRefs).sort();
 
           if (JSON.stringify(refKeys) !== JSON.stringify(currKeys)) {
             issues.push(`${current.platform} has different primitive references for '${semanticName}' compared to ${referencePlatform}`);
           } else {
-            // Check that reference values match
             for (const key of refKeys) {
               if (primitiveRefs[key] !== currentRefs[key]) {
                 issues.push(`${current.platform} semantic token '${semanticName}' references '${currentRefs[key]}' for ${key}, but ${referencePlatform} references '${primitiveRefs[key]}'`);
@@ -700,17 +760,10 @@ export class TokenFileGenerator {
       }
     }
 
-    // Check that all platforms generated successfully
-    const invalidPlatforms = results.filter(r => !r.valid);
-    if (invalidPlatforms.length > 0) {
-      invalidPlatforms.forEach(r => {
-        issues.push(`${r.platform} generation failed: ${r.errors?.join(', ')}`);
-      });
-    }
-
     return {
       consistent: issues.length === 0,
-      issues
+      issues,
+      platformSpecificTokens: platformSpecificInfo.length > 0 ? platformSpecificInfo : undefined
     };
   }
 
