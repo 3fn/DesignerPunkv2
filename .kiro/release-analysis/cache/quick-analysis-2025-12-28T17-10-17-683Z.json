@@ -1,9 +1,0 @@
-{
-  "timestamp": "2025-12-28T17:10:17.684Z",
-  "lastAnalyzedCommit": "ec9595fb983e6e9cc0622d0b6e5a3b816e98dc87",
-  "documentCount": 0,
-  "documents": [],
-  "quickAnalysisMode": true,
-  "appendOnlyOptimization": true,
-  "note": "Full analysis can be run with: npm run release:analyze"
-}
