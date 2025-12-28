@@ -7,11 +7,46 @@
  * 
  * Tests mathematical consistency and proportional relationships across
  * web, iOS, and Android platforms to ensure near-identical visual results.
+ * 
+ * Uses acknowledged differences registry to allow documented platform-specific differences
+ * while ensuring undocumented differences still fail validation.
  */
 
 import { TokenEngine } from '../../TokenEngine';
 import { TokenCategory } from '../../types';
 import type { PrimitiveToken } from '../../types';
+
+// Import acknowledged differences registry for allowing documented platform differences
+import acknowledgedDifferencesData from '../fixtures/acknowledged-differences.json';
+import { 
+  AcknowledgedDifferencesRegistry, 
+  isDifferenceAcknowledged,
+  Platform 
+} from '../fixtures/acknowledged-differences.types';
+
+// Type assertion for the imported JSON
+const acknowledgedDifferences: AcknowledgedDifferencesRegistry = acknowledgedDifferencesData as AcknowledgedDifferencesRegistry;
+
+/**
+ * Helper function to check if a validation result's inconsistencies are all acknowledged
+ * @param tokenName - The token name for registry lookup
+ * @param platforms - Array of platforms involved
+ * @returns true if all platform pair differences are acknowledged
+ */
+function arePlatformDifferencesAcknowledged(
+  tokenName: string,
+  platforms: Platform[]
+): boolean {
+  // Check all platform pairs
+  for (let i = 0; i < platforms.length - 1; i++) {
+    for (let j = i + 1; j < platforms.length; j++) {
+      if (!isDifferenceAcknowledged(acknowledgedDifferences, tokenName, platforms[i], platforms[j])) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
 
 describe('Cross-Platform Consistency Integration', () => {
   let engine: TokenEngine;
@@ -676,6 +711,7 @@ describe('Cross-Platform Consistency Integration', () => {
 
     it('should detect cross-platform inconsistencies', () => {
       // Register token with inconsistent platform values
+      // This is an UNDOCUMENTED difference (not in acknowledged-differences.json)
       const inconsistentToken: PrimitiveToken = {
         name: 'spaceInconsistent',
         category: TokenCategory.SPACING,
@@ -706,9 +742,69 @@ describe('Cross-Platform Consistency Integration', () => {
         r.level === 'Warning' || r.level === 'Error'
       );
 
+      // Verify this is NOT an acknowledged difference (undocumented)
+      const isAcknowledged = arePlatformDifferencesAcknowledged(
+        'spaceInconsistent',
+        ['web', 'ios', 'android']
+      );
+      expect(isAcknowledged).toBe(false);
+
       // If no warnings/errors found, the validation may have changed behavior
       // This is acceptable as long as the token was registered
       expect(warnings.length).toBeGreaterThanOrEqual(0);
+    });
+  });
+
+  describe('Acknowledged Differences Registry Integration', () => {
+    it('should load acknowledged differences registry', () => {
+      expect(acknowledgedDifferences).toBeDefined();
+      expect(acknowledgedDifferences.version).toBeDefined();
+      expect(acknowledgedDifferences.acknowledgedDifferences.length).toBeGreaterThan(0);
+    });
+
+    it('should recognize documented spacing unit differences', () => {
+      // Spacing tokens use different units across platforms (px, pt, dp)
+      // This is documented in the registry
+      const isAcknowledged = isDifferenceAcknowledged(
+        acknowledgedDifferences,
+        'spacing.inset.100',
+        'web',
+        'ios'
+      );
+      expect(isAcknowledged).toBe(true);
+    });
+
+    it('should recognize documented typography unit differences', () => {
+      // Typography tokens use different units (rem, pt, sp)
+      const isAcknowledged = isDifferenceAcknowledged(
+        acknowledgedDifferences,
+        'typography.fontSize.body',
+        'web',
+        'android'
+      );
+      expect(isAcknowledged).toBe(true);
+    });
+
+    it('should not acknowledge undocumented differences', () => {
+      // A completely custom token should not be acknowledged
+      const isAcknowledged = isDifferenceAcknowledged(
+        acknowledgedDifferences,
+        'customUndocumentedToken.value',
+        'web',
+        'ios'
+      );
+      expect(isAcknowledged).toBe(false);
+    });
+
+    it('should allow documented tap area differences', () => {
+      // Tap area minimums differ by platform (44pt iOS, 48dp Android)
+      const isAcknowledged = isDifferenceAcknowledged(
+        acknowledgedDifferences,
+        'accessibility.tapArea.minimum',
+        'ios',
+        'android'
+      );
+      expect(isAcknowledged).toBe(true);
     });
   });
 

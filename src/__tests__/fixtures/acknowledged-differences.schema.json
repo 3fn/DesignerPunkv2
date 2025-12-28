@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "acknowledged-differences.schema.json",
+  "title": "Acknowledged Differences Registry",
+  "description": "Schema for documenting intentional platform-specific differences in the design token system",
+  "type": "object",
+  "required": ["version", "lastUpdated", "acknowledgedDifferences"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Reference to this schema file"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of the registry format"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO 8601 date when the registry was last updated"
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of the registry purpose"
+    },
+    "acknowledgedDifferences": {
+      "type": "array",
+      "description": "List of acknowledged platform-specific differences",
+      "items": {
+        "$ref": "#/definitions/AcknowledgedDifference"
+      }
+    },
+    "validationRules": {
+      "type": "object",
+      "description": "Rules for validating new difference entries",
+      "properties": {
+        "allowedDifferenceTypes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["unit", "syntax", "naming", "scale", "format", "value", "behavior"]
+          }
+        },
+        "requireRationale": {
+          "type": "boolean",
+          "default": true
+        },
+        "requireAuthorization": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    }
+  },
+  "definitions": {
+    "AcknowledgedDifference": {
+      "type": "object",
+      "required": ["token", "platforms", "difference", "rationale", "authorizedBy", "date"],
+      "properties": {
+        "token": {
+          "type": "string",
+          "description": "Token path pattern (e.g., 'spacing.inset.100' or 'typography.fontSize.*' for wildcards)",
+          "minLength": 1
+        },
+        "platforms": {
+          "type": "array",
+          "description": "Platforms affected by this difference",
+          "items": {
+            "$ref": "#/definitions/Platform"
+          },
+          "minItems": 2,
+          "uniqueItems": true
+        },
+        "difference": {
+          "type": "string",
+          "description": "Clear description of what differs between platforms",
+          "minLength": 10
+        },
+        "rationale": {
+          "type": "string",
+          "description": "Explanation of why this difference is intentional and acceptable",
+          "minLength": 20
+        },
+        "authorizedBy": {
+          "type": "string",
+          "description": "Name of the person who authorized this difference",
+          "minLength": 1
+        },
+        "date": {
+          "type": "string",
+          "format": "date",
+          "description": "ISO 8601 date when this difference was authorized"
+        },
+        "category": {
+          "type": "string",
+          "description": "Optional category for grouping related differences",
+          "enum": ["unit", "syntax", "naming", "scale", "format", "value", "behavior"]
+        },
+        "notes": {
+          "type": "string",
+          "description": "Optional additional notes or context"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Platform": {
+      "type": "string",
+      "enum": ["web", "ios", "android"],
+      "description": "Supported platform identifiers"
+    }
+  }
+}

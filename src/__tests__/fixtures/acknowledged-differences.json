@@ -1,0 +1,115 @@
+{
+  "$schema": "./acknowledged-differences.schema.json",
+  "version": "1.0.0",
+  "lastUpdated": "2025-12-27",
+  "description": "Registry of acknowledged platform-specific differences that are intentional and authorized. These differences are expected due to platform-native requirements and design guidelines.",
+  "acknowledgedDifferences": [
+    {
+      "token": "typography.fontSize.*",
+      "platforms": ["web", "ios", "android"],
+      "difference": "Web uses REM units (relative to 16px base), iOS uses pt (points), Android uses sp (scale-independent pixels)",
+      "rationale": "Platform-native typography units ensure proper scaling with user accessibility settings. REM on web respects browser font size preferences, pt on iOS respects Dynamic Type, sp on Android respects system font scale.",
+      "authorizedBy": "Peter Michaels Allen",
+      "date": "2025-12-27"
+    },
+    {
+      "token": "spacing.*",
+      "platforms": ["web", "ios", "android"],
+      "difference": "Web uses px, iOS uses pt, Android uses dp",
+      "rationale": "Platform-native spacing units ensure consistent physical dimensions across device densities. All three units are designed to represent approximately the same physical size (1/160 inch at standard density).",
+      "authorizedBy": "Peter Michaels Allen",
+      "date": "2025-12-27"
+    },
+    {
+      "token": "elevation.*",
+      "platforms": ["web", "ios", "android"],
+      "difference": "Web uses z-index (arbitrary integers), iOS uses zIndex (small integers), Android uses elevation dp (Material Design scale: 4dp, 8dp, 16dp, 24dp)",
+      "rationale": "Elevation/layering systems are fundamentally different across platforms. Web z-index is purely stacking order, iOS zIndex is similar, but Android elevation combines stacking with visual shadow depth following Material Design guidelines.",
+      "authorizedBy": "Peter Michaels Allen",
+      "date": "2025-12-27"
+    },
+    {
+      "token": "shadow.*",
+      "platforms": ["web", "ios", "android"],
+      "difference": "Web/iOS use shadow primitives (offset, blur, spread, color), Android uses elevation dp values",
+      "rationale": "Android Material Design uses elevation-based shadows that are automatically calculated by the system, while web and iOS require explicit shadow composition. This is a fundamental platform architecture difference.",
+      "authorizedBy": "Peter Michaels Allen",
+      "date": "2025-12-27"
+    },
+    {
+      "token": "motion.duration.*",
+      "platforms": ["web", "ios", "android"],
+      "difference": "Web uses milliseconds (ms), iOS uses TimeInterval (seconds), Android uses milliseconds (ms)",
+      "rationale": "Platform-native animation APIs use different time units. iOS TimeInterval is in seconds for consistency with Foundation framework, while web CSS and Android use milliseconds.",
+      "authorizedBy": "Peter Michaels Allen",
+      "date": "2025-12-27"
+    },
+    {
+      "token": "motion.easing.*",
+      "platforms": ["web", "ios", "android"],
+      "difference": "Web uses cubic-bezier() CSS function, iOS uses Animation.timingCurve(), Android uses PathInterpolator or cubic-bezier equivalent",
+      "rationale": "Platform-native animation APIs have different syntax for defining easing curves, but all use the same underlying cubic-bezier mathematical model with identical control points.",
+      "authorizedBy": "Peter Michaels Allen",
+      "date": "2025-12-27"
+    },
+    {
+      "token": "accessibility.tapArea.*",
+      "platforms": ["web", "ios", "android"],
+      "difference": "iOS minimum tap area is 44pt (Apple HIG), Android minimum is 48dp (Material Design), Web follows WCAG 2.5.5 (44x44 CSS pixels)",
+      "rationale": "Platform accessibility guidelines specify different minimum touch target sizes. These are intentional platform-specific affordances to meet each platform's accessibility requirements.",
+      "authorizedBy": "Peter Michaels Allen",
+      "date": "2025-12-27"
+    },
+    {
+      "token": "fontFamily.*",
+      "platforms": ["web", "ios", "android"],
+      "difference": "System font stacks differ: Web uses system-ui fallback chain, iOS uses SF Pro (system default), Android uses Roboto (system default)",
+      "rationale": "Platform system fonts are intentionally different to provide native look and feel. Custom fonts (Inter) are consistent across platforms, but system font fallbacks are platform-specific.",
+      "authorizedBy": "Peter Michaels Allen",
+      "date": "2025-12-27"
+    },
+    {
+      "token": "naming.convention",
+      "platforms": ["web", "ios", "android"],
+      "difference": "Web uses kebab-case (--space-100), iOS uses camelCase (space100), Android uses snake_case (space_100)",
+      "rationale": "Platform naming conventions follow established language and framework standards: CSS custom properties use kebab-case, Swift uses camelCase, Kotlin uses snake_case for constants.",
+      "authorizedBy": "Peter Michaels Allen",
+      "date": "2025-12-27"
+    },
+    {
+      "token": "color.format",
+      "platforms": ["web", "ios", "android"],
+      "difference": "Web uses hex (#RRGGBB) or rgba(), iOS uses Color struct with RGB components, Android uses Color.argb() or hex integers",
+      "rationale": "Platform color APIs have different representations. The underlying RGB values are mathematically identical, only the syntax differs.",
+      "authorizedBy": "Peter Michaels Allen",
+      "date": "2025-12-27"
+    },
+    {
+      "token": "borderRadius.*",
+      "platforms": ["web", "ios", "android"],
+      "difference": "Web uses px, iOS uses CGFloat (pt), Android uses dp",
+      "rationale": "Platform-native units for corner radius ensure consistent visual appearance across device densities.",
+      "authorizedBy": "Peter Michaels Allen",
+      "date": "2025-12-27"
+    },
+    {
+      "token": "lineHeight.*",
+      "platforms": ["web", "ios", "android"],
+      "difference": "All platforms use unitless multipliers, but iOS may use absolute pt values in some contexts",
+      "rationale": "Unitless line-height multipliers are preferred for scalability, but iOS UIKit sometimes requires absolute values. SwiftUI supports unitless multipliers.",
+      "authorizedBy": "Peter Michaels Allen",
+      "date": "2025-12-27"
+    }
+  ],
+  "validationRules": {
+    "allowedDifferenceTypes": [
+      "unit",
+      "syntax",
+      "naming",
+      "scale",
+      "format"
+    ],
+    "requireRationale": true,
+    "requireAuthorization": true
+  }
+}
