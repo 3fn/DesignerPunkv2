@@ -108,12 +108,17 @@ Execute a four-phase audit to understand blend token infrastructure gaps, extrac
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
   
+  **Phase 1 Context**: Definition infrastructure is complete. The gap is in runtime application - the bridge from definition to consumption. Phase 2 must answer: "How do other token families bridge this gap, and can blend tokens follow the same pattern?"
+  
+  **Priority Context**: Component states (hover, focus, pressed, disabled) are critical for accurate deliverable feedback. This phase should pay particular attention to how components currently implement these states and what workarounds are being used.
+  
   **Success Criteria:**
   - Current generator patterns documented
   - Current token output patterns documented for all platforms
   - Current component consumption patterns documented
   - Blend token expected vs actual usage gap identified
   - AI agent usability issues identified and documented
+  - **Key question answered: How do other token families bridge definition to consumption?**
   - Human checkpoint completed with approval to proceed
   
   **Primary Artifacts:**
@@ -135,10 +140,11 @@ Execute a four-phase audit to understand blend token infrastructure gaps, extrac
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Review `src/generators/` directory structure
-    - Document how unified generator works
+    - Document how unified generator works (or if it exists)
     - Document platform-specific generation patterns
     - Identify extension points for new token types
-    - Note how other token families (opacity, color) integrate
+    - **KEY: Note how other token families (opacity, color) integrate and whether their output appears in build artifacts**
+    - **KEY: Determine if blend generators' output is in build pipeline or orphaned**
     - _Requirements: 2.1, 2.2_
 
   - [ ] 2.2 Document token output patterns
@@ -147,17 +153,18 @@ Execute a four-phase audit to understand blend token infrastructure gaps, extrac
     - Document web output pattern (CSS variables, TypeScript)
     - Document iOS output pattern (Swift)
     - Document Android output pattern (Kotlin)
-    - Note how runtime utilities are generated (if any)
-    - Compare with blend token expectations
+    - **KEY: Note how runtime utilities are generated (if any) for color/opacity tokens**
+    - **KEY: Compare with blend token expectations - is the gap unique to blends or systemic?**
     - _Requirements: 2.2, 2.3_
 
   - [ ] 2.3 Document component consumption patterns
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Review how components reference tokens (web, iOS, Android)
-    - Document patterns for interactive states (hover, focus, pressed)
-    - Identify any existing runtime color manipulation
+    - **KEY: Document patterns for interactive states (hover, focus, pressed, disabled)**
+    - **KEY: Identify workarounds being used (e.g., `color.primary` directly instead of blend-modified)**
     - Note TextInputField's current approach (uses color.primary directly)
+    - Note ButtonCTA's current approach for disabled states
     - _Requirements: 2.3, 2.4_
 
   - [ ] 2.4 Analyze blend token usage gap
@@ -165,8 +172,9 @@ Execute a four-phase audit to understand blend token infrastructure gaps, extrac
     **Validation**: Tier 3 - Comprehensive
     - Document EXPECTED usage (per blend-tokens spec, component READMEs)
     - Document ACTUAL usage (search codebase for blend token references)
-    - Identify the usability gap (what prevents expected usage)
+    - **KEY: Identify the specific usability gap (what prevents expected usage)**
     - Assess if blend tokens are compositional and how
+    - **KEY: If other token families have similar gaps, note for future action (stay blend-focused)**
     - _Requirements: 3.1, 3.2, 3.3, 3.4_
 
   - [ ] 2.5 Assess AI agent usability
@@ -176,7 +184,7 @@ Execute a four-phase audit to understand blend token infrastructure gaps, extrac
     - Evaluate if guidance exists for when/how to use blend tokens
     - Evaluate if semantic token names are intuitive
     - Evaluate if color/blend relationship is documented
-    - Test what happens when trying to use a blend token today
+    - **KEY: Test what happens when trying to use a blend token today (practical usability)**
     - Document specific usability issues and recommendations
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
 
@@ -186,6 +194,7 @@ Execute a four-phase audit to understand blend token infrastructure gaps, extrac
     - Create `findings/current-system-assessment.md`
     - Create `findings/pattern-inventory.md`
     - Create `findings/blend-usage-analysis.md` (includes AI agent findings)
+    - **Include answer to key question: How do other token families bridge definition to consumption?**
     - _Requirements: 2.5, 2.6, 3.5, 4.7_
 
   - [ ] 2.7 Human Checkpoint 2
@@ -349,6 +358,17 @@ Execute a four-phase audit to understand blend token infrastructure gaps, extrac
 - Implementation (if warranted) will be a **separate spec**
 - All recommendations must use **current system patterns**, not historical assumptions
 - **AI agent usability** is an explicit focus area
+- **Scope**: Stay blend-focused; surface other token family gaps for future action but don't investigate in depth
+- **Priority**: Component states (hover, focus, pressed, disabled) are critical for accurate deliverable feedback
+
+---
+
+## Phase 1 Completion Record
+
+**Completed**: December 28, 2025
+**Human Checkpoint**: Approved by Peter Michaels Allen
+**Key Finding**: Definition infrastructure complete; gap is in runtime application bridge
+**Deliverables**: `findings/needs-catalog.md`, `findings/extracted-needs.md`
 
 ---
 

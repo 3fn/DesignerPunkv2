@@ -2,9 +2,10 @@
 
 **Date**: December 28, 2025
 **Spec**: 024 - Blend Token Infrastructure Audit
-**Status**: Design Phase
+**Status**: Phase 2 - Current System Assessment
 **Dependencies**: blend-tokens, 023-component-token-compliance-audit
 **Type**: Audit
+**Phase 1 Complete**: December 28, 2025 (Human Checkpoint 1 Approved)
 
 ---
 
@@ -13,6 +14,88 @@
 This design document defines the methodology for auditing blend token infrastructure. The audit follows a four-phase workflow adapted from the Test Failure Audit Methodology, modified for feature gap analysis rather than test failure resolution.
 
 **Critical Principle**: Past escalations and expectations were written at a specific point in time. This audit divorces the *underlying needs* from the *implementation expectations* of that era. Any implementation recommendations must align with the system's current structure, standards, and patterns.
+
+---
+
+## Phase 1 Findings Summary
+
+**Completed**: December 28, 2025
+**Human Checkpoint**: Approved
+
+### Key Discovery: Definition Infrastructure is Complete
+
+Phase 1 revealed that the blend token **definition infrastructure is more complete than expected**:
+
+| Component | Status | Evidence |
+|-----------|--------|----------|
+| Primitive tokens (blend100-blend500) | ✅ Complete | `src/tokens/BlendTokens.ts` |
+| Semantic tokens (hoverDarker, focusSaturate, etc.) | ✅ Complete | `src/tokens/semantic/BlendTokens.ts` |
+| Calculation algorithms | ✅ Complete | `src/blend/BlendCalculator.ts`, `ColorSpaceUtils.ts` |
+| Platform generators | ✅ Complete | `src/generators/BlendValueGenerator.ts`, `BlendUtilityGenerator.ts` |
+| Composition parsers | ✅ Complete | `src/composition/BlendCompositionParser.ts` |
+| Documentation | ✅ Complete | Usage guides, AI agent guidance |
+
+### The Real Gap: Runtime Application Bridge
+
+The gap is **narrower but deeper** than originally anticipated:
+
+**What exists**: Token definitions, calculation algorithms, generators, parsers, documentation
+**What's missing**: The bridge from "token definition" to "component consumption"
+
+Specifically:
+1. Generated utilities are not in the build output
+2. No component patterns exist for applying blend modifications
+3. Components use `color.primary` directly instead of blend-modified colors
+
+### Single Root Cause
+
+All Spec 023 escalations (NC-018, NC-019, NC-020, NC-021) trace back to the same root cause: blend tokens are defined but not consumable by components.
+
+### Lineage Summary
+
+| Category | Count | Items |
+|----------|-------|-------|
+| Built-and-current | 14 | Core infrastructure (tokens, calculators, generators, parsers, docs) |
+| Built-but-outdated | 1 | NC-011: "Unified generator integration" claim |
+| Escalated-never-addressed | 1 | NC-018: E1:H1 - Runtime application infrastructure |
+| Still-needed | 3 | NC-019, NC-020, NC-021: Component blend token usage |
+
+### Extracted User Needs (10 total)
+
+| ID | Theme | Need |
+|----|-------|------|
+| UN-001 | Interactive States | Clear focus state visual distinction |
+| UN-002 | Interactive States | Hover state visual feedback |
+| UN-003 | Interactive States | Pressed/active state feedback |
+| UN-004 | Disabled States | Disabled element recognition |
+| UN-005 | Visual Hierarchy | Icon visual weight balance |
+| UN-006 | Theme Consistency | Consistent color transformations |
+| UN-007 | Theme Consistency | Theme-aware color modifications |
+| UN-008 | Developer Experience | Predictable component behavior |
+| UN-009 | Developer Experience | AI agent guidance for token selection ✅ Complete |
+| UN-010 | Cross-Platform | Identical visual behavior across platforms |
+
+### Historical Context (from Human Checkpoint discussion)
+
+The gap likely resulted from **oversight combined with system immaturity**. Blend tokens were planned quickly out of necessity rather than with the careful consideration given to color and typography tokens. The generators were built and marked "complete," but the integration into the build pipeline was never finished - like building a factory without connecting it to the distribution network.
+
+---
+
+## Priority Context
+
+**Component states are critical.** Blends are used extensively for interactive states (hover, focus, pressed, disabled). Getting these states working as intended is essential for:
+- Providing accurate feedback on current component implementations
+- Ensuring deliverables reflect intended design behavior
+- Validating the design system's interactive patterns
+
+---
+
+## Audit Scope Refinement
+
+**Primary Focus**: Blend token infrastructure gaps
+**Secondary**: Surface notable gaps in other token families for future action
+
+If Phase 2 discovers that other token families (opacity, color) have similar "definition exists but no consumption bridge" problems, these will be documented but not investigated in depth. The audit stays blend-focused.
 
 ---
 
@@ -368,40 +451,48 @@ Each checkpoint validates:
 
 ---
 
-## Known Context (Pre-Audit)
+## Known Context (Updated Post-Phase 1)
 
-### From blend-tokens Spec (Marked Complete)
+### From blend-tokens Spec (Verified in Phase 1)
 
-**Tasks marked complete but potentially incomplete:**
-- Task 4: Integrate Blend Tokens with Unified Generator
-  - 4.1 Implement blend value generator
-  - 4.2 Implement web blend utility generator
-  - 4.3 Implement iOS blend utility generator
-  - 4.4 Implement Android blend utility generator
-  - 4.5 Create cross-platform consistency tests
-- Task 5: Implement Composition Support
-  - 5.1 Implement blend composition parser
-  - 5.2 Implement blend + opacity composition
-  - 5.3 Create composition tests
+**All tasks verified as complete with artifacts existing:**
+- Task 1: Primitive blend tokens ✅
+- Task 2: Calculation algorithms ✅
+- Task 3: Semantic blend tokens ✅
+- Task 4: Platform generators ✅ (generators exist, but output not in build pipeline)
+- Task 5: Composition support ✅
+- Task 6: Documentation ✅
 
-**What appears to exist:**
-- Primitive blend tokens (blend100-blend500)
-- Semantic blend tokens (blend.hoverDarker, etc.)
-- BlendCalculator class with all four directions
-- Color space utilities (RGB↔HSL)
+**What actually exists (verified):**
+- `src/tokens/BlendTokens.ts` - Primitive tokens with mathematical relationships
+- `src/tokens/semantic/BlendTokens.ts` - Semantic tokens with AI agent guidance
+- `src/blend/BlendCalculator.ts` - Orchestrator for all four blend directions
+- `src/blend/ColorSpaceUtils.ts` - RGB↔HSL conversion utilities
+- `src/generators/BlendValueGenerator.ts` - Platform-specific value generation
+- `src/generators/BlendUtilityGenerator.ts` - Platform-specific utility generation
+- `src/composition/BlendCompositionParser.ts` - "color with blend direction" syntax
+- `src/composition/OpacityCompositionParser.ts` - Blend + opacity composition
+- Documentation guides in `.kiro/specs/blend-tokens/`
 
-**What appears missing:**
-- BlendValueGenerator.ts
-- BlendUtilityGenerator.ts
-- BlendComposition.ts
-- Platform-specific utility output
+**What's missing (the actual gap):**
+- Generator output integrated into build pipeline
+- Component patterns for consuming blend utilities
+- Runtime application of blend modifications to colors
 
-### From Spec 023 Escalations
+### From Spec 023 Escalations (Verified in Phase 1)
 
 **E1: H1 - Blend Token Runtime Application Infrastructure**
-- Finding: `blend.focusSaturate` documented but not implemented
-- Components use `color.primary` directly
-- Escalated to "Spec 024" (never created)
+- Finding: `blend.focusSaturate` documented but components can't consume it
+- Root cause: No bridge from token definition to component consumption
+- All escalations (NC-018, NC-019, NC-020, NC-021) trace to this single gap
+
+### Phase 2 Key Question
+
+**How do other token families bridge definition to consumption?**
+- Do color tokens have runtime utilities in the build output?
+- Do opacity tokens have runtime utilities in the build output?
+- What patterns exist that blend tokens could follow?
+- Is this gap unique to blend tokens or systemic?
 
 ---
 
