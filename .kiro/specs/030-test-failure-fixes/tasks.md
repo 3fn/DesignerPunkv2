@@ -361,14 +361,105 @@ This implementation plan addresses 40 failing tests through a 5-phase approach, 
 
 ---
 
-### Phase 5: Final Verification
+### Phase 5: Remaining Failure Resolution
 
-- [ ] 10. Test Suite Verification
+**Note**: Task 10.1 revealed 14 additional test failures not addressed by the original 40-test scope. These failures fall into three categories: cross-platform generator tests (5), performance/timeout tests (6), and functional issues (2). Tasks 11 and 12 address these before final verification.
+
+---
+
+- [x] 11. Remaining Test Failure Audit
+  **Type**: Architecture
+  **Validation**: Tier 2: Standard
+  **Success Criteria**: All 14 failures categorized with root cause and fix approach documented
+  
+  - [x] 11.1 Categorize failures by root cause
+    **Type**: Architecture
+    **Validation**: Tier 2: Standard
+    - Analyze each of the 14 failing tests
+    - Group by category: cross-platform (5), performance (6), functional (2)
+    - Identify root cause for each failure
+    - Determine if fix is test change, code change, or threshold adjustment
+    - _Requirements: 15.1, 15.2_
+  
+  - [x] 11.2 Determine fix approach for each category
+    **Type**: Architecture
+    **Validation**: Tier 2: Standard
+    - Cross-platform generator tests: Determine if acknowledged-differences registry applies
+    - Performance tests: Determine if further threshold increases or isolation needed
+    - Functional tests: Identify code changes required
+    - Document recommended approach for each after reviewing with Peter
+    - _Requirements: 15.2, 15.3_
+  
+  - [x] 11.3 Create audit findings document
+    **Type**: Setup
+    **Validation**: Tier 1: Minimal
+    - Create `.kiro/specs/030-test-failure-fixes/completion/task-11-audit-findings.md`
+    - Document all 14 failures with root cause and recommended fix
+    - Update Task 12 subtasks based on findings
+    - _Requirements: 15.1_
+
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/030-test-failure-fixes/completion/task-11-completion.md`
+  - Summary: `docs/specs/030-test-failure-fixes/task-11-summary.md`
+
+---
+
+- [ ] 12. Remaining Test Failure Resolution
+  **Type**: Implementation
+  **Validation**: Tier 2: Standard
+  **Success Criteria**: All 16 remaining failures resolved, tests pass
+  
+  - [ ] 12.1 Cross-platform generator fixes (nuanced validation)
+    **Type**: Implementation
+    **Validation**: Tier 2: Standard
+    - Investigate token differences between iOS (145) and Android (144)
+    - Identify which tokens are platform-specific
+    - Update `validateCrossPlatformConsistency()` to exclude platform-specific tokens from count comparison
+    - Document platform-specific tokens in acknowledged-differences registry
+    - Run affected tests to verify fix
+    - _Requirements: 15.2_
+  
+  - [ ] 12.2 Performance threshold and timeout adjustments
+    **Type**: Implementation
+    **Validation**: Tier 2: Standard
+    - Update performance thresholds: 12000ms → 13000ms (8% increase)
+    - Update test timeouts: quick-analyze cache (12s→18s), skipDetailedExtraction (25s→35s), StateIntegration (15s→25s)
+    - Add comments documenting repository growth justification
+    - Run affected tests to verify fix
+    - _Requirements: 15.2_
+  
+  - [ ] 12.3 Functional issue fixes (cache and summary)
+    **Type**: Implementation
+    **Validation**: Tier 2: Standard
+    - Debug cache implementation in QuickAnalyzer
+    - Fix `fullResultCached` flag setting
+    - Fix `latest.json` symlink/copy logic
+    - Verify summary format matches test expectations
+    - Run affected tests to verify fix
+    - _Requirements: 15.2_
+  
+  - [ ] 12.4 Verify all remaining fixes
+    **Type**: Setup
+    **Validation**: Tier 1: Minimal
+    - Run full test suite
+    - Confirm all 16 previously failing tests now pass
+    - Document any remaining issues
+    - _Requirements: 15.2, 15.3_
+
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/030-test-failure-fixes/completion/task-12-completion.md`
+  - Summary: `docs/specs/030-test-failure-fixes/task-12-summary.md`
+
+---
+
+### Phase 6: Final Verification
+
+- [ ] 13. Test Suite Verification
   **Type**: Architecture
   **Validation**: Tier 3: Comprehensive
-  **Success Criteria**: All 40 tests pass, exit code 0, no regressions
+  **Success Criteria**: All tests pass, exit code 0, no regressions
   
-  - [ ] 10.1 Run full test suite
+  - [ ] 13.1 Run full test suite
     **Type**: Setup
     **Validation**: Tier 1: Minimal
     - Execute `npm test`
@@ -376,7 +467,7 @@ This implementation plan addresses 40 failing tests through a 5-phase approach, 
     - Document total test count and pass rate
     - _Requirements: 15.1_
   
-  - [ ] 10.2 Verify no new failures
+  - [ ] 13.2 Verify no new failures
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Compare test results to pre-fix baseline
@@ -384,7 +475,7 @@ This implementation plan addresses 40 failing tests through a 5-phase approach, 
     - Document any unexpected changes
     - _Requirements: 15.2_
   
-  - [ ] 10.3 Verify no regressions
+  - [ ] 13.3 Verify no regressions
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Confirm all previously passing tests still pass
@@ -392,17 +483,17 @@ This implementation plan addresses 40 failing tests through a 5-phase approach, 
     - Document final test suite status
     - _Requirements: 15.3_
   
-  - [ ] 10.4 Create final verification report
+  - [ ] 13.4 Create final verification report
     **Type**: Setup
     **Validation**: Tier 1: Minimal
-    - Document all fixes applied
+    - Document all fixes applied (original 40 + additional 14)
     - Record final test counts
     - Note any remaining issues for future specs
     - _Requirements: 15.1, 15.2, 15.3_
 
   **Completion Documentation:**
-  - Detailed: `.kiro/specs/030-test-failure-fixes/completion/task-10-completion.md`
-  - Summary: `docs/specs/030-test-failure-fixes/task-10-summary.md`
+  - Detailed: `.kiro/specs/030-test-failure-fixes/completion/task-13-completion.md`
+  - Summary: `docs/specs/030-test-failure-fixes/task-13-summary.md`
 
 ---
 
@@ -414,7 +505,10 @@ This implementation plan addresses 40 failing tests through a 5-phase approach, 
 | Phase 2 Complete | Task 5 | ~17 additional fixes |
 | Phase 3 Complete | Task 7 | ~14 additional fixes |
 | Phase 4 Complete | Task 9 | ~9 additional fixes |
-| Phase 5 Complete | Task 10 | 0 failures, exit code 0 |
+| Phase 5 Initial | Task 10.1 | 14 remaining failures identified |
+| Phase 5 Audit | Task 11 | All 14 failures categorized with fix approach |
+| Phase 5 Resolution | Task 12 | All 14 remaining failures resolved |
+| Phase 6 Complete | Task 13 | 0 failures, exit code 0 |
 
 ---
 
@@ -425,7 +519,36 @@ This implementation plan addresses 40 failing tests through a 5-phase approach, 
 - Checkpoints ensure incremental validation
 - Scientific method: one change at a time, verify after each
 - If a fix introduces new failures, stop and investigate before proceeding
+- **Task 10 paused**: Initial verification (10.1) revealed 14 additional failures outside original scope
+- **Tasks 11-12 added**: Audit and resolution of remaining failures before final verification
+- **Task 13**: Final verification moved from Task 10 to allow for complete resolution first
 
 ---
 
-**Status**: Tasks Complete - Ready for Implementation
+## Remaining Failures (from Task 10.1)
+
+The following 14 tests were identified as failing during initial verification:
+
+### Cross-Platform Generator Tests (5 tests)
+1. `GridSpacingTokenGeneration.test.ts` - should generate same grid spacing token count across all platforms
+2. `GridSpacingTokenGeneration.test.ts` - should maintain primitive token references across platforms
+3. `BreakpointTokenGeneration.test.ts` - should maintain mathematical consistency across platforms
+4. `AccessibilityTokenGeneration.test.ts` - should validate cross-platform consistency
+5. `AccessibilityTokenGeneration.test.ts` - should maintain consistent semantic token count across platforms
+6. `TokenFileGenerator.test.ts` - should validate consistent token counts across platforms
+
+### Performance/Timeout Tests (6 tests)
+7. `quick-analyze.test.ts` - should complete analysis within 12 seconds (12025ms actual)
+8. `quick-analyze.test.ts` - should respect custom cache directory (timeout)
+9. `HookIntegration.test.ts` - should complete quick analysis within 12 seconds (12003ms actual)
+10. `HookIntegration.test.ts` - should optimize for speed with skipDetailedExtraction (timeout)
+11. `StateIntegration.integration.test.ts` - should persist state after each pipeline stage (timeout)
+12. `StateIntegration.integration.test.ts` - should update context with stage results (timeout)
+
+### Functional Test Failures (2 tests)
+13. `HookIntegration.test.ts` - should provide concise one-line summary
+14. `HookIntegration.test.ts` - should cache analysis results when enabled
+
+---
+
+**Status**: In Progress - Tasks 11-13 added for remaining failure resolution

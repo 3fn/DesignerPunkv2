@@ -66,7 +66,16 @@ Phase 3: Expectations        Phase 4: Investigation
            │                            │
            └──────────┬─────────────────┘
                       ▼
-              Phase 5: Verification
+         Phase 5: Remaining Resolution
+         ┌─────────────────────────────┐
+         │ • Audit 14 new failures     │
+         │ • Cross-platform generators │
+         │ • Performance thresholds    │
+         │ • Functional fixes          │
+         └─────────────────────────────┘
+                      │
+                      ▼
+              Phase 6: Verification
               ┌─────────────────────┐
               │ • Full test suite   │
               │ • Regression check  │
@@ -362,7 +371,10 @@ npm run test:all           # Including performance tests
 | After Phase 2 | `npm test` | ~17 fewer failures |
 | After Phase 3 | `npm test` | ~14 fewer failures |
 | After Phase 4 | `npm test` | ~9 fewer failures |
-| After Phase 5 | `npm test` | 0 failures, exit code 0 |
+| After Phase 5 Initial | `npm test` | 14 remaining failures identified |
+| After Phase 5 Audit | N/A | All 14 failures categorized |
+| After Phase 5 Resolution | `npm test` | All 14 remaining failures resolved |
+| After Phase 6 | `npm test` | 0 failures, exit code 0 |
 
 ---
 
@@ -426,4 +438,81 @@ npm run test:all           # Including performance tests
 
 ---
 
-**Status**: Design Complete - Ready for Tasks Phase
+## Phase 5 Extension: Remaining Failure Resolution
+
+### Discovery Context
+
+During Phase 5 initial verification (Task 10.1), 14 additional test failures were discovered that were not part of the original 40-test scope from Spec 029. These failures fall into three distinct categories requiring targeted resolution.
+
+### Remaining Failure Categories
+
+#### Category 1: Cross-Platform Generator Tests (5 tests)
+
+**Root Cause Hypothesis**: Generator-level cross-platform consistency tests use different validation logic than the `CrossPlatformConsistency.test.ts` file addressed in Task 9. The acknowledged-differences registry may not apply to these generator-specific tests.
+
+**Affected Files**:
+- `src/generators/__tests__/GridSpacingTokenGeneration.test.ts`
+- `src/generators/__tests__/BreakpointTokenGeneration.test.ts`
+- `src/generators/__tests__/AccessibilityTokenGeneration.test.ts`
+- `src/generators/__tests__/TokenFileGenerator.test.ts`
+
+**Potential Fixes**:
+- Extend acknowledged-differences registry to generator tests
+- Update generator test expectations to match actual platform outputs
+- Investigate if token count differences are intentional platform affordances
+
+#### Category 2: Performance/Timeout Tests (6 tests)
+
+**Root Cause Hypothesis**: Despite 20% timeout increases in Task 7, some tests are marginally exceeding thresholds (by 3-25ms) or timing out completely. This suggests either:
+- Repository growth has exceeded the 20% buffer
+- Test environment variability is higher than anticipated
+- Some tests need larger timeout increases
+
+**Affected Files**:
+- `src/release-analysis/cli/__tests__/quick-analyze.test.ts`
+- `src/release-analysis/hooks/__tests__/HookIntegration.test.ts`
+- `src/release/__tests__/StateIntegration.integration.test.ts`
+
+**Potential Fixes**:
+- Increase timeouts by additional 25-50% for marginal failures
+- Implement test isolation for consistently slow tests
+- Add performance monitoring to identify bottlenecks
+
+#### Category 3: Functional Test Failures (2 tests)
+
+**Root Cause Hypothesis**: These appear to be actual functional issues in the release analysis system, not threshold or expectation problems.
+
+**Affected Tests**:
+1. `should provide concise one-line summary` - Summary format validation failing
+2. `should cache analysis results when enabled` - Cache functionality not working
+
+**Potential Fixes**:
+- Investigate summary generation logic
+- Debug cache implementation
+- May require code changes rather than test changes
+
+### Resolution Strategy
+
+The resolution follows the same scientific method approach as the original phases:
+
+1. **Audit First (Task 11)**: Categorize all 14 failures with root cause analysis
+2. **Targeted Fixes (Task 12)**: Apply fixes by category, one at a time
+3. **Verify (Task 13)**: Run full test suite to confirm all fixes work together
+
+### Design Decision: Scope Extension
+
+**Options**:
+- A) Create new Spec 031 for remaining failures
+- B) Extend Spec 030 with additional tasks
+
+**Decision**: B - Extend Spec 030
+
+**Rationale**: 
+- The 14 failures are within the same problem domain (test failures)
+- Creating a new spec for 14 tests would be disproportionate overhead
+- Keeping resolution within Spec 030 maintains cohesive documentation
+- The audit-then-resolve pattern mirrors the Spec 029 → 030 relationship at smaller scale
+
+---
+
+**Status**: Design Extended - Tasks 11-13 added for remaining failure resolution
