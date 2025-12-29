@@ -7,10 +7,46 @@
  * This module provides both a web component (<dp-icon>) and backward-compatible
  * functional API (createIcon, Icon class) for maximum flexibility.
  * 
+ * Uses blend utilities for optical balance adjustment when icons are paired with text.
+ * The lighterBlend function compensates for icons appearing heavier than adjacent text
+ * due to stroke density and fill area.
+ * 
  * @module Icon/platforms/web
  */
 
 import { IconProps, IconName, IconSize } from '../../types';
+// Import blend utilities for optical balance calculations
+import {
+  hexToRgb,
+  rgbToHex,
+  calculateLighterBlend
+} from '../../../../../blend';
+
+// Blend token value for icon optical balance (from semantic blend tokens)
+// This matches the CSS custom property: --blend-icon-lighter (color.icon.opticalBalance)
+const BLEND_ICON_LIGHTER = 0.08; // blend200
+
+/**
+ * Apply lighter blend to a hex color string for optical balance.
+ * 
+ * Icons often appear heavier than adjacent text at the same color due to
+ * stroke density and fill area. This function applies a subtle lightening
+ * to compensate for this optical illusion.
+ * 
+ * @param color - Hex color string (e.g., "#A855F7")
+ * @param blendValue - Blend amount as decimal (0.0-1.0)
+ * @returns Lightened hex color string
+ */
+function lighterBlend(color: string, blendValue: number): string {
+  try {
+    const rgb = hexToRgb(color);
+    const blended = calculateLighterBlend(rgb, blendValue);
+    return rgbToHex(blended);
+  } catch {
+    // Return original color if parsing fails
+    return color;
+  }
+}
 
 /**
  * Load SVG content for a given icon name.
@@ -79,7 +115,7 @@ function loadIconSVG(name: IconName): string {
  * ```
  */
 export function createIcon(props: IconProps): string {
-  const { name, size, className = '', style = {}, testID, color = 'inherit' } = props;
+  const { name, size, className = '', style = {}, testID, color = 'inherit', opticalBalance = false } = props;
   
   // Load SVG content based on icon name
   const svgContent = loadIconSVG(name);
@@ -128,10 +164,23 @@ export function createIcon(props: IconProps): string {
   // Build class attribute with size class
   const classAttr = `icon ${sizeClass} icon-${name} ${className}`.trim();
   
-  // Determine stroke color based on color prop
-  const strokeColor = color === 'inherit' 
-    ? 'currentColor' 
-    : `var(--${color})`; // Token reference becomes CSS custom property
+  // Determine stroke color based on color prop and optical balance
+  // When opticalBalance is true and color is a hex value, apply lighterBlend
+  // to compensate for icons appearing heavier than adjacent text
+  let strokeColor: string;
+  if (color === 'inherit') {
+    strokeColor = 'currentColor';
+  } else if (opticalBalance && color.startsWith('#')) {
+    // Apply optical balance using lighterBlend with blend.iconLighter token (8% lighter)
+    // This uses blend utilities instead of CSS filter: brightness() workaround
+    strokeColor = lighterBlend(color, BLEND_ICON_LIGHTER);
+  } else if (color.startsWith('#')) {
+    // Direct hex color without optical balance
+    strokeColor = color;
+  } else {
+    // Token reference becomes CSS custom property
+    strokeColor = `var(--${color})`;
+  }
   
   // Use CSS variable for stroke width to follow token-first design system approach
   // This references --icon-stroke-width which is defined in the token stylesheet
@@ -244,7 +293,7 @@ export class DPIcon extends HTMLElement {
    * Observed attributes for automatic re-rendering on change.
    */
   static get observedAttributes(): string[] {
-    return ['name', 'size', 'color', 'test-id'];
+    return ['name', 'size', 'color', 'test-id', 'optical-balance'];
   }
   
   constructor() {
@@ -337,6 +386,26 @@ export class DPIcon extends HTMLElement {
   }
   
   /**
+   * Get the optical balance state.
+   * 
+   * When true, applies lighterBlend to the color for optical weight compensation.
+   */
+  get opticalBalance(): boolean {
+    return this.getAttribute('optical-balance') === 'true';
+  }
+  
+  /**
+   * Set the optical balance state.
+   */
+  set opticalBalance(value: boolean) {
+    if (value) {
+      this.setAttribute('optical-balance', 'true');
+    } else {
+      this.removeAttribute('optical-balance');
+    }
+  }
+  
+  /**
    * Render the component into shadow DOM.
    * 
    * Generates SVG markup with currentColor inheritance and injects it into
@@ -348,6 +417,7 @@ export class DPIcon extends HTMLElement {
     const size = this.size;
     const color = this.color;
     const testID = this.testID;
+    const opticalBalance = this.opticalBalance;
     
     // Load SVG content
     const svgContent = loadIconSVG(name);
@@ -367,10 +437,23 @@ export class DPIcon extends HTMLElement {
     
     const sizeClass = sizeClassMap[size];
     
-    // Determine stroke color
-    const strokeColor = color === 'inherit' 
-      ? 'currentColor' 
-      : `var(--${color})`;
+    // Determine stroke color based on color prop and optical balance
+    // When opticalBalance is true and color is a hex value, apply lighterBlend
+    // to compensate for icons appearing heavier than adjacent text
+    let strokeColor: string;
+    if (color === 'inherit') {
+      strokeColor = 'currentColor';
+    } else if (opticalBalance && color.startsWith('#')) {
+      // Apply optical balance using lighterBlend with blend.iconLighter token (8% lighter)
+      // This uses blend utilities instead of CSS filter: brightness() workaround
+      strokeColor = lighterBlend(color, BLEND_ICON_LIGHTER);
+    } else if (color.startsWith('#')) {
+      // Direct hex color without optical balance
+      strokeColor = color;
+    } else {
+      // Token reference becomes CSS custom property
+      strokeColor = `var(--${color})`;
+    }
     
     // Use CSS variable for stroke width to follow token-first design system approach
     // This references --icon-stroke-width which is defined in the token stylesheet

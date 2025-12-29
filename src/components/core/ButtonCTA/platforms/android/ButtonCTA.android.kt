@@ -7,6 +7,10 @@
  * Follows True Native Architecture with platform-specific Jetpack Compose implementation
  * while maintaining API consistency with web and iOS platforms.
  * 
+ * Uses blend utilities for state colors (hover, pressed, disabled, icon) instead of
+ * opacity or Material ripple workarounds. This ensures cross-platform consistency with
+ * Web and iOS implementations.
+ * 
  * Part of the DesignerPunk CTA Button Component system.
  * 
  * @module ButtonCTA/platforms/android
@@ -17,9 +21,9 @@ package com.designerpunk.components.core
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -33,6 +37,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.designerpunk.tokens.DesignTokens
+// Import blend utilities (Color extension functions from BlendUtilities.android.kt)
+import com.designerpunk.tokens.darkerBlend
+import com.designerpunk.tokens.lighterBlend
+import com.designerpunk.tokens.desaturate
+
+// Blend token values (from semantic blend tokens)
+// These match the CSS custom properties: --blend-hover-darker, --blend-pressed-darker, etc.
+private const val BLEND_HOVER_DARKER: Float = 0.08f      // blend200
+private const val BLEND_PRESSED_DARKER: Float = 0.12f   // blend300
+private const val BLEND_DISABLED_DESATURATE: Float = 0.12f // blend300
+private const val BLEND_ICON_LIGHTER: Float = 0.08f     // blend200 (color.icon.opticalBalance)
 
 /**
  * Button size variants
@@ -69,9 +84,12 @@ enum class ButtonStyle {
 /**
  * ButtonCTA component for Android platform.
  * 
- * Renders a call-to-action button with Material3 Button composable, supporting
+ * Renders a call-to-action button with Material3 Surface composable, supporting
  * three size variants, three visual styles, optional leading icons, and
- * platform-specific interaction patterns (Material ripple effect).
+ * blend utility-based state colors for cross-platform consistency.
+ * 
+ * Uses blend utilities instead of Material ripple for pressed state to ensure
+ * visual consistency with Web and iOS implementations.
  * 
  * Usage:
  * ```kotlin
@@ -104,7 +122,7 @@ enum class ButtonStyle {
  * - 2.1-2.4: Visual styles (primary, secondary, tertiary)
  * - 8.1-8.6: Icon support with leading position
  * - 13.1-13.4: Touch target accessibility (44dp minimum)
- * - 17.3: Platform-specific Material ripple effect
+ * - 7.1-7.5: Blend utility state colors (hover, pressed, disabled, icon)
  * 
  * @param label Button text label (required)
  * @param size Button size variant (default: MEDIUM)
@@ -126,25 +144,17 @@ fun ButtonCTA(
     testID: String? = null,
     disabled: Boolean = false
 ) {
-    // Remember interaction source for ripple effect
-    // Requirement 17.3: Material ripple effect with color.primary at 16% opacity
+    // Remember interaction source for tracking pressed state
     val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
     
     // Get size-based configuration
     val sizeConfig = getSizeConfig(size)
     
-    // Get style-based configuration
-    val styleConfig = getStyleConfig(style)
+    // Get style-based configuration with blend utilities
+    val styleConfig = getStyleConfig(style, isPressed, disabled)
     
-    // Requirement 17.3: Configure Material ripple effect
-    // Ripple color is color.primary at 16% opacity, emanates from touch point
-    val colorPrimary = Color(DesignTokens.color_primary)
-    val rippleIndication = rememberRipple(
-        color = colorPrimary.copy(alpha = 0.16f)
-    )
-    
-    // Use Surface with clickable modifier to apply custom ripple
-    // This provides more control over ripple appearance than Material3 Button
+    // Use Surface with clickable modifier (no ripple indication for cross-platform consistency)
     Surface(
         modifier = Modifier
             // Requirement 13.1-13.4: Touch target accessibility (44dp minimum)
@@ -154,19 +164,15 @@ fun ButtonCTA(
             .widthIn(min = sizeConfig.minWidth.dp)
             // Requirement 16.5: Test tag for automated testing
             .testTag(testID ?: "")
-            // Requirement 17.3: Apply clickable with custom ripple indication
+            // Apply clickable without ripple indication (blend colors handle state feedback)
             .clickable(
                 onClick = onPress,
                 enabled = !disabled,
                 interactionSource = interactionSource,
-                indication = rippleIndication
+                indication = null // No ripple - using blend colors for state feedback
             ),
-        // Requirement 2.1-2.3: Background color based on style
-        color = if (disabled) {
-            styleConfig.backgroundColor.copy(alpha = 0.38f)
-        } else {
-            styleConfig.backgroundColor
-        },
+        // Requirement 2.1-2.3, 7.1-7.5: Background color based on style and state
+        color = styleConfig.backgroundColor,
         // Requirement 5.1-5.3: Border radius based on size
         shape = RoundedCornerShape(sizeConfig.borderRadius.dp),
         // Requirement 2.2: Border for secondary style
@@ -195,17 +201,13 @@ fun ButtonCTA(
                 icon?.let { iconName ->
                     // Requirement 8.1: Render icon in leading position (left of text)
                     // Requirement 8.2-8.3: Use correct icon size based on button size
-                    // Requirement 9.1-9.2: Apply icon color with optical balance
+                    // Requirement 9.1-9.2: Apply icon color with optical balance using blend utility
                     // Requirement 16.3: Mark icon as decorative (contentDescription = null)
                     // A3: Use Dp directly without conversion
                     Icon(
                         name = iconName,
                         size = sizeConfig.iconSize,
-                        color = if (disabled) {
-                            styleConfig.iconColor.copy(alpha = 0.38f)
-                        } else {
-                            styleConfig.iconColor
-                        }
+                        color = styleConfig.iconColor
                     )
                 }
                 
@@ -214,11 +216,7 @@ fun ButtonCTA(
                 Text(
                     text = label,
                     style = sizeConfig.typography,
-                    color = if (disabled) {
-                        styleConfig.textColor.copy(alpha = 0.38f)
-                    } else {
-                        styleConfig.textColor
-                    },
+                    color = styleConfig.textColor,
                     // Requirement 7.1-7.4: Text wrapping behavior
                     maxLines = if (noWrap) 1 else Int.MAX_VALUE,
                     overflow = if (noWrap) TextOverflow.Ellipsis else TextOverflow.Visible,
@@ -334,10 +332,11 @@ private fun getSizeConfig(size: ButtonSize): SizeConfig {
  * Style configuration data class
  * 
  * Encapsulates all style-related properties for a button visual style.
+ * Uses blend utilities for state colors (pressed, disabled, icon optical balance).
  * 
- * @property backgroundColor Background color
+ * @property backgroundColor Background color (includes state-based blend)
  * @property textColor Text color
- * @property iconColor Icon color (with optical balance for secondary/tertiary)
+ * @property iconColor Icon color (with optical balance using blend utility)
  * @property borderWidth Border width in dp
  * @property borderColor Border color
  */
@@ -350,70 +349,69 @@ private data class StyleConfig(
 )
 
 /**
- * Get style configuration for a button visual style.
+ * Get style configuration for a button visual style with state-based blend colors.
  * 
  * Returns configuration object with all style-related properties based on
- * semantic color tokens and compositional architecture.
+ * semantic color tokens and blend utilities for state colors.
+ * 
+ * Uses blend utilities instead of opacity/ripple workarounds for cross-platform
+ * consistency with Web and iOS implementations.
  * 
  * Requirements:
  * - 2.1-2.4: Visual styles (primary, secondary, tertiary)
- * - 9.1-9.3: Icon color with optical balance
+ * - 7.1-7.5: Blend utility state colors (hover, pressed, disabled, icon)
+ * - 9.1-9.3: Icon color with optical balance using blend utility
  * 
  * @param style Button visual style
- * @return Style configuration object
+ * @param isPressed Whether button is currently pressed
+ * @param disabled Whether button is disabled
+ * @return Style configuration object with blend-calculated colors
  */
-private fun getStyleConfig(style: ButtonStyle): StyleConfig {
+private fun getStyleConfig(style: ButtonStyle, isPressed: Boolean, disabled: Boolean): StyleConfig {
     // Import semantic color tokens from generated constants
     val colorPrimary = Color(DesignTokens.color_primary)           // color.primary (purple)
     val colorBackground = Color(DesignTokens.color_background)     // color.background (white)
     val colorTextOnPrimary = Color(DesignTokens.color_text_on_primary) // color.text.onPrimary (white)
     
-    // Calculate optical balance color: primary + 20% lighter (blend200)
-    // color.icon.opticalBalance applies blend200 (20% lighter) to primary for visual weight compensation
-    val blendAmount = DesignTokens.color_icon_optical_balance
-    val colorIconOpticalBalance = lightenColor(colorPrimary, blendAmount)
+    // Calculate state-based background colors using blend utilities
+    val primaryBgColor = when {
+        disabled -> colorPrimary.desaturate(BLEND_DISABLED_DESATURATE) // 12% less saturated
+        isPressed -> colorPrimary.darkerBlend(BLEND_PRESSED_DARKER)    // 12% darker
+        else -> colorPrimary
+    }
+    
+    val secondaryBgColor = when {
+        disabled -> colorBackground
+        isPressed -> colorBackground.darkerBlend(BLEND_PRESSED_DARKER) // 12% darker
+        else -> colorBackground
+    }
+    
+    // Calculate icon colors with optical balance using blend utility
+    // lighterBlend(color, blend.iconLighter) = 8% lighter for optical weight compensation
+    val primaryIconColor = colorTextOnPrimary.lighterBlend(BLEND_ICON_LIGHTER)
+    val secondaryIconColor = colorPrimary.lighterBlend(BLEND_ICON_LIGHTER)
     
     return when (style) {
         ButtonStyle.PRIMARY -> StyleConfig(
-            backgroundColor = colorPrimary,      // Requirement 2.1: color.primary
-            textColor = colorTextOnPrimary,      // Requirement 2.1: color.text.onPrimary
-            iconColor = colorTextOnPrimary,      // Requirement 9.1: color.text.onPrimary
+            backgroundColor = primaryBgColor,        // Requirement 2.1, 7.2, 7.3: color.primary with blend states
+            textColor = colorTextOnPrimary,          // Requirement 2.1: color.text.onPrimary
+            iconColor = primaryIconColor,            // Requirement 9.1, 7.4: color.text.onPrimary with optical balance
             borderWidth = 0,
             borderColor = Color.Transparent
         )
         ButtonStyle.SECONDARY -> StyleConfig(
-            backgroundColor = colorBackground,   // Requirement 2.2: color.background
-            textColor = colorPrimary,            // Requirement 2.2: color.primary
-            iconColor = colorIconOpticalBalance, // Requirement 9.2: color.primary with optical balance
+            backgroundColor = secondaryBgColor,      // Requirement 2.2, 7.2: color.background with blend states
+            textColor = colorPrimary,                // Requirement 2.2: color.primary
+            iconColor = secondaryIconColor,          // Requirement 9.2, 7.4: color.primary with optical balance
             borderWidth = DesignTokens.border_border_default.toInt(), // border.default (1dp)
-            borderColor = colorPrimary           // Requirement 2.2: color.primary
+            borderColor = colorPrimary               // Requirement 2.2: color.primary
         )
         ButtonStyle.TERTIARY -> StyleConfig(
-            backgroundColor = Color.Transparent, // Requirement 2.3: transparent
-            textColor = colorPrimary,            // Requirement 2.3: color.primary
-            iconColor = colorIconOpticalBalance, // Requirement 9.2: color.primary with optical balance
+            backgroundColor = Color.Transparent,     // Requirement 2.3: transparent
+            textColor = colorPrimary,                // Requirement 2.3: color.primary
+            iconColor = secondaryIconColor,          // Requirement 9.2, 7.4: color.primary with optical balance
             borderWidth = 0,
             borderColor = Color.Transparent
         )
     }
-}
-
-/**
- * Lighten a color by a specified blend amount.
- * 
- * Applies the blend token (20% lighter) to achieve optical weight compensation
- * for icons paired with text.
- * 
- * @param color Base color to lighten
- * @param blendAmount Blend amount (0.0 to 1.0, where 0.2 = 20% lighter)
- * @return Lightened color
- */
-private fun lightenColor(color: Color, blendAmount: Float): Color {
-    val factor = 1.0f + blendAmount
-    return Color(
-        red = (color.red * factor).coerceAtMost(1.0f),
-        green = (color.green * factor).coerceAtMost(1.0f),
-        blue = (color.blue * factor).coerceAtMost(1.0f),
-        alpha = color.alpha
-    )
 }

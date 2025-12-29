@@ -249,6 +249,22 @@ export interface ContainerProps {
    * @platform ios
    */
   ignoresSafeArea?: boolean;
+  
+  // Interaction
+  /**
+   * Whether hover state is enabled
+   * 
+   * When true, Container shows a darkened background on hover using
+   * darkerBlend(color.surface, blend.hoverDarker) - 8% darker.
+   * 
+   * Platform-specific implementation:
+   * - Web: CSS :hover pseudo-class with blend utility
+   * - iOS: SwiftUI .onHover modifier (macOS/iPadOS with pointer)
+   * - Android: Compose hoverable modifier (desktop/ChromeOS with pointer)
+   * 
+   * @default false
+   */
+  hoverable?: boolean;
 }
 
 /**

@@ -132,4 +132,58 @@ describe('Icon Component', () => {
       expect(result).toContain('data-testid="my-icon"');
     });
   });
+
+  describe('Optical Balance', () => {
+    it('should not apply optical balance by default', () => {
+      const result = createIcon({ name: 'arrow-right', size: 24, color: '#A855F7' });
+      // Without optical balance, the color should be used directly
+      expect(result).toContain('stroke="#A855F7"');
+    });
+
+    it('should apply lighterBlend when opticalBalance is true with hex color', () => {
+      const result = createIcon({ name: 'arrow-right', size: 24, color: '#A855F7', opticalBalance: true });
+      // With optical balance, the color should be lightened (8% lighter)
+      // The exact value depends on the blend calculation, but it should NOT be the original color
+      expect(result).not.toContain('stroke="#A855F7"');
+      // Should contain a hex color (lightened version)
+      expect(result).toMatch(/stroke="#[0-9A-Fa-f]{6}"/);
+    });
+
+    it('should not apply optical balance when color is inherit', () => {
+      const result = createIcon({ name: 'arrow-right', size: 24, color: 'inherit', opticalBalance: true });
+      // With inherit, should use currentColor regardless of opticalBalance
+      expect(result).toContain('stroke="currentColor"');
+    });
+
+    it('should not apply optical balance when color is a token reference', () => {
+      const result = createIcon({ name: 'arrow-right', size: 24, color: 'color-primary', opticalBalance: true });
+      // Token references should become CSS custom properties, not lightened
+      expect(result).toContain('stroke="var(--color-primary)"');
+    });
+
+    it('should apply optical balance to different hex colors', () => {
+      // Test with white
+      const whiteResult = createIcon({ name: 'check', size: 24, color: '#FFFFFF', opticalBalance: true });
+      expect(whiteResult).toMatch(/stroke="#[0-9A-Fa-f]{6}"/);
+      
+      // Test with black
+      const blackResult = createIcon({ name: 'check', size: 24, color: '#000000', opticalBalance: true });
+      expect(blackResult).toMatch(/stroke="#[0-9A-Fa-f]{6}"/);
+      // Black lightened should not be pure black
+      expect(blackResult).not.toContain('stroke="#000000"');
+      
+      // Test with a mid-tone color
+      const midResult = createIcon({ name: 'check', size: 24, color: '#808080', opticalBalance: true });
+      expect(midResult).toMatch(/stroke="#[0-9A-Fa-f]{6}"/);
+      expect(midResult).not.toContain('stroke="#808080"');
+    });
+
+    it('should use default opticalBalance of false when not specified', () => {
+      const withoutProp = createIcon({ name: 'arrow-right', size: 24, color: '#FF0000' });
+      const withFalse = createIcon({ name: 'arrow-right', size: 24, color: '#FF0000', opticalBalance: false });
+      // Both should produce the same result (original color)
+      expect(withoutProp).toContain('stroke="#FF0000"');
+      expect(withFalse).toContain('stroke="#FF0000"');
+    });
+  });
 });

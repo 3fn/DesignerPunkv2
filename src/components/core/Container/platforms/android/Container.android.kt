@@ -4,19 +4,28 @@
  * Jetpack Compose implementation of the Container component using modifier chains.
  * Provides structural wrapping with individual styling capabilities.
  * 
+ * Uses blend utilities for hover state colors instead of opacity workarounds.
+ * This ensures cross-platform consistency with Web and iOS implementations.
+ * 
  * @see ../../../types.ts for ContainerProps interface
  * @see ../../../tokens.ts for token reference mappings
  * @see .kiro/specs/010-container-component/design.md for complete design documentation
+ * @see .kiro/specs/031-blend-infrastructure-implementation for blend utilities
  */
 
 package com.designerpunk.components.core
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
@@ -26,6 +35,35 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import android.util.Log
+
+// Blend token value for hover state (from semantic blend tokens)
+// This matches the CSS custom property: --blend-hover-darker
+private const val BLEND_HOVER_DARKER: Float = 0.08f    // blend200
+
+/**
+ * Apply darker blend to a Color by overlaying black
+ * 
+ * @param amount Blend amount as decimal (0.0f-1.0f)
+ * @return Darkened Color
+ * 
+ * @example
+ * ```kotlin
+ * val hoverColor = Color.Blue.darkerBlend(0.08f)
+ * // Returns 8% darker blue
+ * ```
+ */
+fun Color.darkerBlend(amount: Float): Color {
+    // Clamp amount to valid range
+    val clampedAmount = amount.coerceIn(0.0f, 1.0f)
+    
+    // Blend with black (0, 0, 0)
+    return Color(
+        red = this.red * (1 - clampedAmount),
+        green = this.green * (1 - clampedAmount),
+        blue = this.blue * (1 - clampedAmount),
+        alpha = this.alpha
+    )
+}
 
 /**
  * Container Composable
@@ -42,11 +80,13 @@ import android.util.Log
  * - Opacity via semantic opacity tokens
  * - Layering via elevation tokens (handles both z-order and shadow on Android)
  * - Accessibility content description support
+ * - Hover state support via blend utilities (desktop/ChromeOS with pointer)
  * 
  * Android-Specific Behavior:
  * - Elevation tokens handle both stacking order and shadow rendering
  * - If both layering and shadow props are provided, layering takes precedence
  * - Development warning logged when both props are used
+ * - Hover state uses darkerBlend for cross-platform consistency
  * 
  * @example
  * ```kotlin
@@ -64,6 +104,15 @@ import android.util.Log
  *     layering = LayeringValue.Navigation
  * ) {
  *     Text("Content")
+ * }
+ * 
+ * // With hover state enabled
+ * Container(
+ *     padding = PaddingValue.P200,
+ *     background = "color.surface",
+ *     hoverable = true
+ * ) {
+ *     Text("Hoverable content")
  * }
  * 
  * // With accessibility
@@ -84,6 +133,7 @@ import android.util.Log
  * @param opacity Opacity token name (default: null)
  * @param layering Layering value for elevation (default: null)
  * @param accessibilityLabel Accessibility content description (default: null)
+ * @param hoverable Whether hover state is enabled (default: false)
  * @param modifier Additional Compose modifiers (default: Modifier)
  * @param content Child composable content
  */
@@ -97,6 +147,7 @@ fun Container(
     opacity: String? = null,
     layering: LayeringValue? = null,
     accessibilityLabel: String? = null,
+    hoverable: Boolean = false,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
@@ -110,8 +161,28 @@ fun Container(
         )
     }
     
+    // Set up hover interaction source for hover state tracking
+    val interactionSource = remember { MutableInteractionSource() }
+    val isHovered by interactionSource.collectIsHoveredAsState()
+    
+    // Calculate background color with hover state
+    val baseBackgroundColor = if (background != null) resolveColorToken(background) else Color.Transparent
+    val currentBackgroundColor = if (hoverable && isHovered) {
+        baseBackgroundColor.darkerBlend(BLEND_HOVER_DARKER)
+    } else {
+        baseBackgroundColor
+    }
+    
     // Build modifier chain with all styling
     val containerModifier = modifier
+        .then(
+            // Apply hoverable modifier if enabled
+            if (hoverable) {
+                Modifier.hoverable(interactionSource = interactionSource)
+            } else {
+                Modifier
+            }
+        )
         .then(
             // Apply padding
             if (padding != PaddingValue.None) {
@@ -136,15 +207,11 @@ fun Container(
             }
         )
         .then(
-            // Apply background color
-            if (background != null) {
-                Modifier.background(
-                    color = resolveColorToken(background),
-                    shape = getRoundedCornerShape(borderRadius)
-                )
-            } else {
-                Modifier
-            }
+            // Apply background color (with hover state consideration)
+            Modifier.background(
+                color = currentBackgroundColor,
+                shape = getRoundedCornerShape(borderRadius)
+            )
         )
         .then(
             // Apply border

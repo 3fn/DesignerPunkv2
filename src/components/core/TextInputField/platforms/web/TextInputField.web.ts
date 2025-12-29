@@ -6,18 +6,26 @@
  * 
  * Features:
  * - Float label animation (labelMd → labelMdFloat)
- * - Color animation (text.subtle → primary)
+ * - Color animation (text.subtle → primary with blend.focusSaturate)
  * - Position animation (translateY)
  * - Respects prefers-reduced-motion
  * - WCAG 2.1 AA compliant
+ * - Uses blend utilities for state colors (focus, disabled) instead of opacity workarounds
  * 
- * Requirements: 1.1, 1.2, 1.3, 1.5, 8.3
+ * Requirements: 1.1, 1.2, 1.3, 1.5, 8.1, 8.2, 8.3, 13.1
  */
 
 import {
   TextInputFieldProps,
   TextInputFieldState
 } from '../../types';
+// Import blend utilities for state color calculations
+import {
+  hexToRgb,
+  rgbToHex,
+  calculateSaturateBlend,
+  calculateDesaturateBlend
+} from '../../../../../blend';
 import {
   createInitialState,
   handleFocus,
@@ -30,10 +38,52 @@ import {
 import { createIcon } from '../../../Icon/platforms/web/Icon.web';
 import { iconSizes } from '../../../Icon/types';
 
+// Blend token values (from semantic blend tokens)
+// These match the CSS custom properties: --blend-focus-saturate, --blend-disabled-desaturate
+const BLEND_FOCUS_SATURATE = 0.08;      // blend200 - 8% more saturated for focus emphasis
+const BLEND_DISABLED_DESATURATE = 0.12; // blend300 - 12% less saturated for disabled state
+
+/**
+ * Apply saturate blend to a hex color string.
+ * 
+ * @param color - Hex color string (e.g., "#A855F7")
+ * @param blendValue - Blend amount as decimal (0.0-1.0)
+ * @returns Saturated hex color string
+ */
+function saturate(color: string, blendValue: number): string {
+  try {
+    const rgb = hexToRgb(color);
+    const blended = calculateSaturateBlend(rgb, blendValue);
+    return rgbToHex(blended);
+  } catch {
+    // Return original color if parsing fails
+    return color;
+  }
+}
+
+/**
+ * Apply desaturate blend to a hex color string.
+ * 
+ * @param color - Hex color string (e.g., "#A855F7")
+ * @param blendValue - Blend amount as decimal (0.0-1.0)
+ * @returns Desaturated hex color string
+ */
+function desaturate(color: string, blendValue: number): string {
+  try {
+    const rgb = hexToRgb(color);
+    const blended = calculateDesaturateBlend(rgb, blendValue);
+    return rgbToHex(blended);
+  } catch {
+    // Return original color if parsing fails
+    return color;
+  }
+}
+
 /**
  * TextInputField Web Component
  * 
  * Custom element implementing the float label pattern with animated transitions.
+ * Uses blend utilities for state colors (focus, disabled) instead of opacity workarounds.
  */
 export class TextInputField extends HTMLElement {
   // Component state
@@ -48,6 +98,10 @@ export class TextInputField extends HTMLElement {
   
   // Shadow DOM
   private _shadowRoot: ShadowRoot;
+  
+  // Cached blend colors for state styling
+  private _focusColor: string = '';
+  private _disabledColor: string = '';
   
   constructor() {
     super();
@@ -83,7 +137,8 @@ export class TextInputField extends HTMLElement {
       'read-only',
       'required',
       'max-length',
-      'autocomplete'
+      'autocomplete',
+      'disabled'
     ];
   }
   
@@ -91,8 +146,45 @@ export class TextInputField extends HTMLElement {
    * Connected callback - called when element is added to DOM
    */
   connectedCallback(): void {
+    this._calculateBlendColors();
     this.render();
     this.attachEventListeners();
+  }
+  
+  /**
+   * Calculate blend colors from CSS custom properties.
+   * 
+   * Reads base colors from CSS custom properties and applies blend utilities
+   * to generate state colors (focus, disabled).
+   * 
+   * Uses blend utilities instead of opacity workarounds for
+   * cross-platform consistency with iOS and Android implementations.
+   * 
+   * Focus: saturate(color.primary, blend.focusSaturate) - 8% more saturated
+   * Disabled: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
+   */
+  private _calculateBlendColors(): void {
+    // Get computed styles to read CSS custom properties
+    const computedStyle = getComputedStyle(document.documentElement);
+    
+    // Get base color from CSS custom properties
+    const primaryColor = computedStyle.getPropertyValue('--color-primary').trim();
+    
+    if (!primaryColor) {
+      // Fallback to CSS custom properties if computed value not available
+      // This ensures we still use tokens even if calculation fails
+      console.warn('TextInputField: --color-primary computed value not found, using token reference');
+      this._focusColor = 'var(--color-primary)';
+      this._disabledColor = 'var(--color-text-muted)';
+      return;
+    }
+    
+    // Calculate blend colors using blend utilities
+    // Focus: saturate(color.primary, blend.focusSaturate) - 8% more saturated for emphasis
+    this._focusColor = saturate(primaryColor, BLEND_FOCUS_SATURATE);
+    
+    // Disabled: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
+    this._disabledColor = desaturate(primaryColor, BLEND_DISABLED_DESATURATE);
   }
   
   /**
@@ -197,9 +289,20 @@ export class TextInputField extends HTMLElement {
       });
     }
     
+    // Generate blend color CSS custom properties
+    // These are component-specific calculated values (not design tokens)
+    // Using _tif prefix to distinguish from design token references
+    const blendColorStyles = `
+      --_tif-focus-color: ${this._focusColor};
+      --_tif-disabled-color: ${this._disabledColor};
+    `;
+    
+    // Check disabled state
+    const isDisabled = this.hasAttribute('disabled');
+    
     // Build HTML structure
     this.container.innerHTML = `
-      <div class="input-wrapper ${this.state.hasError ? 'error' : ''} ${this.state.isSuccess ? 'success' : ''} ${this.state.isFocused ? 'focused' : ''} ${this.state.isFilled ? 'filled' : ''}">
+      <div class="input-wrapper ${this.state.hasError ? 'error' : ''} ${this.state.isSuccess ? 'success' : ''} ${this.state.isFocused ? 'focused' : ''} ${this.state.isFilled ? 'filled' : ''} ${isDisabled ? 'disabled' : ''}" style="${blendColorStyles}">
         <label 
           for="${props.id}" 
           class="input-label ${labelPosition.isFloated ? 'floated' : ''}"
@@ -213,6 +316,7 @@ export class TextInputField extends HTMLElement {
           value="${props.value}"
           placeholder="${labelPosition.isFloated && props.placeholder ? props.placeholder : ''}"
           ${props.readOnly ? 'readonly' : ''}
+          ${isDisabled ? 'disabled' : ''}
           ${props.required ? 'required' : ''}
           ${props.maxLength ? `maxlength="${props.maxLength}"` : ''}
           ${props.autocomplete ? `autocomplete="${props.autocomplete}"` : ''}
@@ -289,7 +393,8 @@ export class TextInputField extends HTMLElement {
       }
       
       .input-element:focus {
-        border-color: var(--color-primary);
+        /* Focus: saturate(color.primary, blend.focusSaturate) - 8% more saturated */
+        border-color: var(--_tif-focus-color, var(--color-primary));
       }
       
       /* Focus ring for keyboard navigation (WCAG 2.4.7 Focus Visible) */
@@ -298,6 +403,14 @@ export class TextInputField extends HTMLElement {
         outline-offset: var(--accessibility-focus-offset);
         /* Focus ring transition using motion.focusTransition token (A2) */
         transition: outline-color var(--motion-focus-transition-duration) var(--motion-focus-transition-easing);
+      }
+      
+      /* Disabled state: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated */
+      .input-element:disabled {
+        border-color: var(--_tif-disabled-color, var(--color-border));
+        color: var(--color-text-muted);
+        cursor: not-allowed;
+        opacity: 1; /* Remove opacity workaround - use desaturated color instead */
       }
       
       /* Ensure focus ring is visible in all states */
@@ -342,7 +455,8 @@ export class TextInputField extends HTMLElement {
       }
       
       .input-wrapper.focused .input-label.floated {
-        color: var(--color-primary);
+        /* Focus: saturate(color.primary, blend.focusSaturate) - 8% more saturated */
+        color: var(--_tif-focus-color, var(--color-primary));
       }
       
       .input-wrapper.error .input-label {
@@ -351,6 +465,11 @@ export class TextInputField extends HTMLElement {
       
       .input-wrapper.success .input-label {
         color: var(--color-success-strong);
+      }
+      
+      /* Disabled state label: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated */
+      .input-wrapper.disabled .input-label {
+        color: var(--_tif-disabled-color, var(--color-text-muted));
       }
       
       .helper-text {

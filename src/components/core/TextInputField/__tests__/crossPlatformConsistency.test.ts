@@ -346,8 +346,8 @@ describe('TextInputField Cross-Platform Consistency', () => {
       expect(iosContent).toContain('RoundedRectangle');
       expect(iosContent).toContain('.stroke(Color(DesignTokens.color.primary)');
       
-      // Android: border modifier when focused
-      expect(androidContent).toContain('if (isFocused)');
+      // Android: border modifier when focused (and not disabled)
+      expect(androidContent).toContain('if (isFocused && !isDisabled)');
       expect(androidContent).toContain('Modifier.border');
     });
     

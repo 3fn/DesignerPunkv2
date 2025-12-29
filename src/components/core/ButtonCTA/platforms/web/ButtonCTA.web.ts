@@ -9,6 +9,10 @@
  * composition pattern as iOS and Android platforms. This ensures cross-platform
  * consistency and single source of truth for icon rendering.
  * 
+ * Uses blend utilities for state colors (hover, pressed, disabled, icon) instead of
+ * opacity or filter workarounds. This ensures cross-platform consistency with iOS
+ * and Android implementations.
+ * 
  * @module ButtonCTA/platforms/web
  */
 
@@ -18,6 +22,75 @@ import { ButtonSize, ButtonStyle } from '../../types';
 // Import DPIcon to ensure it's registered before ButtonCTA uses it
 import '../../../Icon/platforms/web/Icon.web';
 import { IconSize, iconSizes } from '../../../Icon/types';
+// Import blend utilities for state color calculations
+import {
+  hexToRgb,
+  rgbToHex,
+  calculateDarkerBlend,
+  calculateLighterBlend,
+  calculateDesaturateBlend
+} from '../../../../../blend';
+
+// Blend token values (from semantic blend tokens)
+// These match the CSS custom properties: --blend-hover-darker, --blend-pressed-darker, etc.
+const BLEND_HOVER_DARKER = 0.08;    // blend200
+const BLEND_PRESSED_DARKER = 0.12;  // blend300
+const BLEND_DISABLED_DESATURATE = 0.12; // blend300
+const BLEND_ICON_LIGHTER = 0.08;    // blend200 (color.icon.opticalBalance)
+
+/**
+ * Apply darker blend to a hex color string.
+ * 
+ * @param color - Hex color string (e.g., "#A855F7")
+ * @param blendValue - Blend amount as decimal (0.0-1.0)
+ * @returns Darkened hex color string
+ */
+function darkerBlend(color: string, blendValue: number): string {
+  try {
+    const rgb = hexToRgb(color);
+    const blended = calculateDarkerBlend(rgb, blendValue);
+    return rgbToHex(blended);
+  } catch {
+    // Return original color if parsing fails
+    return color;
+  }
+}
+
+/**
+ * Apply lighter blend to a hex color string.
+ * 
+ * @param color - Hex color string (e.g., "#A855F7")
+ * @param blendValue - Blend amount as decimal (0.0-1.0)
+ * @returns Lightened hex color string
+ */
+function lighterBlend(color: string, blendValue: number): string {
+  try {
+    const rgb = hexToRgb(color);
+    const blended = calculateLighterBlend(rgb, blendValue);
+    return rgbToHex(blended);
+  } catch {
+    // Return original color if parsing fails
+    return color;
+  }
+}
+
+/**
+ * Apply desaturate blend to a hex color string.
+ * 
+ * @param color - Hex color string (e.g., "#A855F7")
+ * @param blendValue - Blend amount as decimal (0.0-1.0)
+ * @returns Desaturated hex color string
+ */
+function desaturate(color: string, blendValue: number): string {
+  try {
+    const rgb = hexToRgb(color);
+    const blended = calculateDesaturateBlend(rgb, blendValue);
+    return rgbToHex(blended);
+  } catch {
+    // Return original color if parsing fails
+    return color;
+  }
+}
 
 // Import CSS as string for browser bundle compatibility
 // The esbuild CSS-as-string plugin transforms this import into a JS string export
@@ -73,6 +146,7 @@ function getIconSizeForButton(buttonSize: ButtonSize): IconSize {
  * - Semantic `<button>` element with proper accessibility
  * - Token-based styling via CSS custom properties
  * - Supports text wrapping by default (accessibility-first)
+ * - Uses blend utilities for state colors (hover, pressed, disabled, icon)
  * - WCAG 2.1 AA compliant:
  *   - Keyboard navigation (Tab, Enter, Space)
  *   - Focus indicators with 3:1 contrast ratio
@@ -111,6 +185,13 @@ export class ButtonCTA extends HTMLElement {
   private _shadowRoot: ShadowRoot;
   private _button: HTMLButtonElement | null = null;
   
+  // Cached blend colors for state styling
+  private _hoverColor: string = '';
+  private _pressedColor: string = '';
+  private _disabledColor: string = '';
+  private _iconColor: string = '';
+  private _iconOpticalBalanceColor: string = '';
+  
   /**
    * Observed attributes for automatic re-rendering on change.
    * 
@@ -131,10 +212,58 @@ export class ButtonCTA extends HTMLElement {
    * Called when the element is added to the DOM.
    * 
    * Performs initial render and sets up event listeners.
+   * Calculates blend colors from CSS custom properties.
    */
   connectedCallback(): void {
+    this._calculateBlendColors();
     this.render();
     this._attachEventListeners();
+  }
+  
+  /**
+   * Calculate blend colors from CSS custom properties.
+   * 
+   * Reads base colors from CSS custom properties and applies blend utilities
+   * to generate state colors (hover, pressed, disabled, icon).
+   * 
+   * Uses blend utilities instead of opacity/filter workarounds for
+   * cross-platform consistency with iOS and Android implementations.
+   * 
+   * @throws Error if required color tokens are missing from CSS custom properties
+   */
+  private _calculateBlendColors(): void {
+    // Get computed styles to read CSS custom properties
+    const computedStyle = getComputedStyle(document.documentElement);
+    
+    // Get base colors from CSS custom properties
+    // Fail loudly if required tokens are missing
+    const primaryColor = computedStyle.getPropertyValue('--color-primary').trim();
+    const onPrimaryColor = computedStyle.getPropertyValue('--color-text-on-primary').trim();
+    
+    if (!primaryColor) {
+      throw new Error('ButtonCTA: Required token --color-primary is missing from CSS custom properties');
+    }
+    if (!onPrimaryColor) {
+      throw new Error('ButtonCTA: Required token --color-text-on-primary is missing from CSS custom properties');
+    }
+    
+    // Calculate blend colors using blend utilities
+    // Hover: darkerBlend(color.primary, blend.hoverDarker) - 8% darker
+    this._hoverColor = darkerBlend(primaryColor, BLEND_HOVER_DARKER);
+    
+    // Pressed: darkerBlend(color.primary, blend.pressedDarker) - 12% darker
+    this._pressedColor = darkerBlend(primaryColor, BLEND_PRESSED_DARKER);
+    
+    // Disabled: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
+    this._disabledColor = desaturate(primaryColor, BLEND_DISABLED_DESATURATE);
+    
+    // Icon for primary buttons: lighterBlend(color.onPrimary, blend.iconLighter) - 8% lighter
+    // This provides optical balance for icons on primary background
+    this._iconColor = lighterBlend(onPrimaryColor, BLEND_ICON_LIGHTER);
+    
+    // Icon for secondary/tertiary buttons: lighterBlend(color.primary, blend.iconLighter) - 8% lighter
+    // This provides optical balance for icons on light background
+    this._iconOpticalBalanceColor = lighterBlend(primaryColor, BLEND_ICON_LIGHTER);
   }
   
   /**
@@ -280,6 +409,9 @@ export class ButtonCTA extends HTMLElement {
    * 
    * Uses <dp-icon> web component for icon rendering, following the same
    * component composition pattern as iOS and Android platforms.
+   * 
+   * Applies blend colors via CSS custom properties for state styling
+   * (hover, pressed, disabled, icon) instead of opacity/filter workarounds.
    */
   private render(): void {
     const label = this.label;
@@ -310,6 +442,17 @@ export class ButtonCTA extends HTMLElement {
     // Generate test ID attribute
     const testIDAttr = testID ? ` data-testid="${testID}"` : '';
     
+    // Generate blend color CSS custom properties
+    // These are component-specific calculated values (not design tokens)
+    // Using _cta prefix to distinguish from design token references
+    const blendColorStyles = `
+      --_cta-hover-bg: ${this._hoverColor};
+      --_cta-pressed-bg: ${this._pressedColor};
+      --_cta-disabled-bg: ${this._disabledColor};
+      --_cta-icon-color: ${this._iconColor};
+      --_cta-icon-optical: ${this._iconOpticalBalanceColor};
+    `;
+    
     // Use imported CSS string in <style> tag for browser bundle compatibility
     // This approach bundles CSS into JS, avoiding external CSS file dependencies
     // @see scripts/esbuild-css-plugin.js
@@ -328,6 +471,7 @@ export class ButtonCTA extends HTMLElement {
         ${disabled ? 'disabled aria-disabled="true"' : 'aria-disabled="false"'}
         ${testIDAttr}
         aria-label="${label}"
+        style="${blendColorStyles}"
       >
         ${icon ? `<span class="button-cta__icon" aria-hidden="true"><dp-icon name="${icon}" size="${iconSize}" color="inherit"></dp-icon></span>` : ''}
         <span class="${labelClass}">${label}</span>

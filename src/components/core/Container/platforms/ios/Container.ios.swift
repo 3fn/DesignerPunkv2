@@ -4,12 +4,20 @@
  * SwiftUI view implementation of the Container component using modifier chains.
  * Provides structural wrapping with individual styling capabilities.
  * 
+ * Uses blend utilities for hover state colors instead of opacity workarounds.
+ * This ensures cross-platform consistency with Web and Android implementations.
+ * 
  * @see ../../../types.ts for ContainerProps interface
  * @see ../../../tokens.ts for token reference mappings
  * @see .kiro/specs/010-container-component/design.md for complete design documentation
+ * @see .kiro/specs/031-blend-infrastructure-implementation for blend utilities
  */
 
 import SwiftUI
+
+// Blend token value for hover state (from semantic blend tokens)
+// This matches the CSS custom property: --blend-hover-darker
+private let BLEND_HOVER_DARKER: Double = 0.08    // blend200
 
 /**
  * Container SwiftUI View
@@ -27,6 +35,7 @@ import SwiftUI
  * - Layering via z-index tokens
  * - Safe area control (iOS-specific)
  * - Accessibility label support
+ * - Hover state support via blend utilities (macOS/iPadOS with pointer)
  * 
  * @example
  * ```swift
@@ -44,6 +53,15 @@ import SwiftUI
  *     layering: .navigation
  * ) {
  *     Text("Content")
+ * }
+ * 
+ * // With hover state enabled
+ * Container(
+ *     padding: .p200,
+ *     background: "color.surface",
+ *     hoverable: true
+ * ) {
+ *     Text("Hoverable content")
  * }
  * 
  * // With safe area control
@@ -86,8 +104,16 @@ struct Container<Content: View>: View {
     /// Accessibility label
     let accessibilityLabel: String?
     
+    /// Whether hover state is enabled
+    let hoverable: Bool
+    
     /// Child content
     let content: Content
+    
+    // MARK: - State
+    
+    /// Tracks hover state for pointer interactions (macOS/iPadOS)
+    @State private var isHovered: Bool = false
     
     // MARK: - Initialization
     
@@ -103,6 +129,7 @@ struct Container<Content: View>: View {
      * @param layering Layering value for z-index (default: nil)
      * @param ignoresSafeArea Whether to ignore safe area (default: false)
      * @param accessibilityLabel Accessibility label (default: nil)
+     * @param hoverable Whether hover state is enabled (default: false)
      * @param content Child content builder
      */
     init(
@@ -115,6 +142,7 @@ struct Container<Content: View>: View {
         layering: LayeringValue? = nil,
         ignoresSafeArea: Bool = false,
         accessibilityLabel: String? = nil,
+        hoverable: Bool = false,
         @ViewBuilder content: () -> Content
     ) {
         self.padding = padding
@@ -126,6 +154,7 @@ struct Container<Content: View>: View {
         self.layering = layering
         self.ignoresSafeArea = ignoresSafeArea
         self.accessibilityLabel = accessibilityLabel
+        self.hoverable = hoverable
         self.content = content()
     }
     
@@ -134,12 +163,19 @@ struct Container<Content: View>: View {
     var body: some View {
         content
             .padding(paddingValue)
-            .background(backgroundValue)
+            .background(currentBackgroundColor)
             .cornerRadius(cornerRadiusValue)
             .overlay(borderOverlay)
             .shadow(color: shadowColor, radius: shadowRadius, x: shadowX, y: shadowY)
             .opacity(opacityValue)
             .zIndex(zIndexValue)
+            .if(hoverable) { view in
+                view.onHover { hovering in
+                    withAnimation(motionFocusTransition) {
+                        isHovered = hovering
+                    }
+                }
+            }
             .if(ignoresSafeArea) { view in
                 view.ignoresSafeArea(.all)
             }
@@ -168,6 +204,21 @@ struct Container<Content: View>: View {
      */
     private var backgroundValue: Color {
         return resolveColorToken(background)
+    }
+    
+    /**
+     * Current background color considering hover state
+     * 
+     * Returns darkened color when hoverable and hovered,
+     * otherwise returns the base background color.
+     * 
+     * Uses darkerBlend(color.surface, blend.hoverDarker) - 8% darker
+     */
+    private var currentBackgroundColor: Color {
+        if hoverable && isHovered {
+            return backgroundValue.darkerBlend(BLEND_HOVER_DARKER)
+        }
+        return backgroundValue
     }
     
     /**
@@ -334,4 +385,52 @@ extension View {
 
 // MARK: - Token Mapping
 // Token resolution functions are now in TokenMapping.swift
+
+// MARK: - Color Blend Extension
+
+/**
+ * Color extension for blend utilities
+ * 
+ * Provides blend operations for SwiftUI Color type.
+ * Uses the same algorithm as Web and Android implementations
+ * for cross-platform consistency.
+ */
+extension Color {
+    /**
+     * Apply darker blend by overlaying black
+     * 
+     * @param amount Blend amount as decimal (0.0-1.0)
+     * @returns Darkened Color
+     * 
+     * @example
+     * ```swift
+     * let hoverColor = Color.blue.darkerBlend(0.08)
+     * // Returns 8% darker blue
+     * ```
+     */
+    func darkerBlend(_ amount: Double) -> Color {
+        // Clamp amount to valid range
+        let clampedAmount = max(0.0, min(1.0, amount))
+        
+        // Get UIColor components
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        
+        UIColor(self).getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        
+        // Blend with black (0, 0, 0)
+        let blendedRed = red * (1 - clampedAmount)
+        let blendedGreen = green * (1 - clampedAmount)
+        let blendedBlue = blue * (1 - clampedAmount)
+        
+        return Color(
+            red: Double(blendedRed),
+            green: Double(blendedGreen),
+            blue: Double(blendedBlue),
+            opacity: Double(alpha)
+        )
+    }
+}
 

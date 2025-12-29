@@ -243,4 +243,47 @@ export interface IconProps {
    * - Simple button/link contexts where parent color is correct
    */
   color?: 'inherit' | string;
+  
+  /**
+   * Optional optical balance adjustment using blend utilities.
+   * 
+   * When true, applies lighterBlend(color, blend.iconLighter) to the icon color
+   * to compensate for icons appearing heavier than adjacent text due to stroke
+   * density and fill area. This uses the design system's blend token
+   * (color.icon.opticalBalance = 8% lighter) instead of CSS filters.
+   * 
+   * This prop requires a hex color to be provided via the `color` prop.
+   * When `color` is 'inherit' or not provided, optical balance cannot be applied
+   * because the actual color value is not known at render time.
+   * 
+   * Platform-specific behavior:
+   * - Web: Applies lighterBlend() to the hex color value
+   * - iOS: Applies Color.lighterBlend() extension method
+   * - Android: Applies Color.lighterBlend() extension function
+   * 
+   * @default false
+   * 
+   * @example
+   * ```typescript
+   * // Apply optical balance to a specific color
+   * <Icon name="arrow-right" size={24} color="#A855F7" opticalBalance={true} />
+   * 
+   * // In a button context with icon-text pairing
+   * <button>
+   *   <Icon name="check" size={24} color="#FFFFFF" opticalBalance={true} />
+   *   <span>Submit</span>
+   * </button>
+   * ```
+   * 
+   * **When to use optical balance:**
+   * - Icon paired with text label where icon appears heavier
+   * - Icons on solid color backgrounds (buttons, badges)
+   * - When visual weight balance is important for design consistency
+   * 
+   * **When NOT to use optical balance:**
+   * - Icon is the only element (no text to balance against)
+   * - Icon uses color inheritance (color='inherit')
+   * - Icon already uses a lighter color variant
+   */
+  opticalBalance?: boolean;
 }

@@ -97,8 +97,8 @@ describe('TextInputField Focus Indicators', () => {
       expect(iosComponentContent).toContain('accessibility.focus.offset');
       expect(iosComponentContent).toContain('color.primary'); // Focus ring uses primary color
       
-      // Verify focus ring is visible when focused
-      expect(iosComponentContent).toContain('.opacity(isFocused ? 1 : 0)');
+      // Verify focus ring is visible when focused (and not disabled)
+      expect(iosComponentContent).toContain('.opacity(isFocused && !isDisabled ? 1 : 0)');
     });
     
     it('should have focus ring animation that respects reduce motion', () => {
@@ -129,8 +129,8 @@ describe('TextInputField Focus Indicators', () => {
       expect(androidComponentContent).toContain('accessibilityFocusColor');
       expect(androidComponentContent).toContain('accessibilityFocusOffset');
       
-      // Verify focus ring is conditional on focus state
-      expect(androidComponentContent).toContain('if (isFocused)');
+      // Verify focus ring is conditional on focus state (and not disabled)
+      expect(androidComponentContent).toContain('if (isFocused && !isDisabled)');
     });
   });
   
@@ -156,20 +156,22 @@ describe('TextInputField Focus Indicators', () => {
       
       // iOS: Verify focus ring is not conditional on error/success state
       // (it should always show when focused, regardless of validation state)
+      // Note: Focus ring is hidden when disabled (isDisabled check is expected)
       const iosFocusRingSection = iosContent.substring(
         iosContent.indexOf('// Focus ring'),
         iosContent.indexOf('// Focus ring') + 500
       );
-      expect(iosFocusRingSection).toContain('.opacity(isFocused ? 1 : 0)');
+      expect(iosFocusRingSection).toContain('.opacity(isFocused && !isDisabled ? 1 : 0)');
       expect(iosFocusRingSection).not.toContain('hasError');
       expect(iosFocusRingSection).not.toContain('isSuccess');
       
       // Android: Verify focus ring is not conditional on error/success state
+      // Note: Focus ring is hidden when disabled (isDisabled check is expected)
       const androidFocusRingSection = androidContent.substring(
         androidContent.indexOf('// Focus ring'),
         androidContent.indexOf('// Focus ring') + 500
       );
-      expect(androidFocusRingSection).toContain('if (isFocused)');
+      expect(androidFocusRingSection).toContain('if (isFocused && !isDisabled)');
       expect(androidFocusRingSection).not.toContain('hasError');
       expect(androidFocusRingSection).not.toContain('isSuccess');
     });

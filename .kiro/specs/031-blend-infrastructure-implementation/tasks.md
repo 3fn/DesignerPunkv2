@@ -105,7 +105,7 @@ This implementation plan addresses the blend token infrastructure gap identified
 
 ---
 
-- [ ] 2. Component Updates
+- [x] 2. Component Updates
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -132,7 +132,7 @@ This implementation plan addresses the blend token infrastructure gap identified
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Component Updates"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 2.1 Update ButtonCTA component
+  - [x] 2.1 Update ButtonCTA component
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace `opacity: 0.92` hover with `darkerBlend(color.primary, blend.hoverDarker)`
@@ -144,7 +144,7 @@ This implementation plan addresses the blend token infrastructure gap identified
     - Remove Android Material ripple pressed workaround
     - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5, 13.1, 13.2, 13.3, 13.4_
 
-  - [ ] 2.2 Update TextInputField component
+  - [x] 2.2 Update TextInputField component
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace direct `color.primary` focus with `saturate(color.primary, blend.focusSaturate)`
@@ -152,21 +152,21 @@ This implementation plan addresses the blend token infrastructure gap identified
     - Update Web, iOS, and Android implementations
     - _Requirements: 8.1, 8.2, 8.3, 13.1_
 
-  - [ ] 2.3 Update Container component
+  - [x] 2.3 Update Container component
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add hover state using `darkerBlend(color.surface, blend.hoverDarker)`
     - Update Web, iOS, and Android implementations
     - _Requirements: 9.1, 9.2_
 
-  - [ ] 2.4 Update Icon component
+  - [x] 2.4 Update Icon component
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace CSS filter optical balance with `lighterBlend(color, blend.iconLighter)`
     - Update Web, iOS, and Android implementations
     - _Requirements: 10.1, 10.2, 13.2_
 
-  - [ ] 2.5 Write Layer 2 validation tests (Token-Naming)
+  - [x] 2.5 Write Layer 2 validation tests (Token-Naming)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create static analysis tests for component token usage

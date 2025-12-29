@@ -214,23 +214,15 @@
  * Icon optical balance for secondary and tertiary buttons.
  * 
  * Icons appear heavier than text at the same color due to stroke density.
- * Should use color.icon.opticalBalance blend token (8% lighter).
+ * Uses blend utility calculated color (lighterBlend with blend.iconLighter)
+ * instead of filter workaround for cross-platform consistency.
  * 
- * CSS Limitation: CSS doesn't support color blending directly via custom properties.
- * The blend token exists in the token system but cannot be applied in CSS without:
- * 1. Build-time color calculation (generate blended color values)
- * 2. CSS color-mix() function (limited browser support as of 2025)
- * 3. Filter approximation (current approach: brightness(1.08) ≈ 8% lighter)
- * 
- * Current approach: Use filter: brightness(1.08) as approximation of 8% lighter blend.
- * This is a close approximation but not identical to the blend token's color math.
- * 
- * Future improvement: Generate blended color values at build time and expose as
- * CSS custom properties (e.g., --color-icon-optical-balance-primary).
+ * The --_cta-icon-optical custom property is set by the component
+ * using lighterBlend(color.primary, blend.iconLighter) = 8% lighter.
  */
 .button-cta--secondary .button-cta__icon,
 .button-cta--tertiary .button-cta__icon {
-  filter: brightness(1.08); /* Approximates color.icon.opticalBalance (8% lighter) */
+  color: var(--_cta-icon-optical);
 }
 
 /* ==========================================================================
@@ -273,22 +265,27 @@
 /**
  * Hover state (web only).
  * 
- * - Applies 8% opacity overlay (opacity.hover)
- * - Cursor changes to pointer
- * - Smooth transition
+ * Uses blend utility calculated color (darkerBlend with blend.hoverDarker)
+ * instead of opacity workaround for cross-platform consistency.
+ * 
+ * The --_cta-hover-bg custom property is set by the component
+ * using darkerBlend(color.primary, blend.hoverDarker) = 8% darker.
  */
-.button-cta:hover:not(:disabled) {
-  opacity: calc(1 - var(--opacity-100)); /* 100% - 8% = 92% */
+.button-cta--primary:hover:not(:disabled) {
+  background-color: var(--_cta-hover-bg);
 }
 
 /**
  * Pressed/Active state.
  * 
- * - Applies 16% opacity overlay (opacity.pressed)
- * - Visual feedback for click/tap
+ * Uses blend utility calculated color (darkerBlend with blend.pressedDarker)
+ * instead of opacity workaround for cross-platform consistency.
+ * 
+ * The --_cta-pressed-bg custom property is set by the component
+ * using darkerBlend(color.primary, blend.pressedDarker) = 12% darker.
  */
-.button-cta:active:not(:disabled) {
-  opacity: calc(1 - var(--opacity-200)); /* 100% - 16% = 84% */
+.button-cta--primary:active:not(:disabled) {
+  background-color: var(--_cta-pressed-bg);
 }
 
 /**
@@ -320,20 +317,11 @@
 /**
  * Disabled state.
  * 
- * Should use blend.disabledDesaturate token (12% less saturated).
+ * Uses blend utility calculated color (desaturate with blend.disabledDesaturate)
+ * instead of opacity workaround for cross-platform consistency.
  * 
- * CSS Limitation: CSS doesn't support desaturation blending directly via custom properties.
- * The blend token exists in the token system but cannot be applied in CSS without:
- * 1. Build-time color calculation (generate desaturated color values)
- * 2. CSS filter: saturate() function (affects all colors, not just base color)
- * 3. Opacity approximation (current approach: opacity 0.6 ≈ muted appearance)
- * 
- * Current approach: Use opacity: 0.6 as approximation of desaturated appearance.
- * This is not identical to the blend token's desaturation math but provides
- * similar visual feedback for disabled state.
- * 
- * Future improvement: Generate desaturated color values at build time and expose as
- * CSS custom properties (e.g., --color-primary-disabled-desaturated).
+ * The --button-disabled-color custom property is set by the component
+ * using desaturate(color.primary, blend.disabledDesaturate) = 12% less saturated.
  * 
  * - Cursor changes to not-allowed
  * - Prevents interaction
@@ -341,9 +329,13 @@
  */
 .button-cta:disabled,
 .button-cta--disabled {
-  opacity: 0.6; /* Approximates blend.disabledDesaturate (12% less saturated) */
   cursor: not-allowed;
   pointer-events: none;
+}
+
+.button-cta--primary:disabled,
+.button-cta--primary.button-cta--disabled {
+  background-color: var(--_cta-disabled-bg);
 }
 
 /* ==========================================================================

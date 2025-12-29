@@ -16,8 +16,21 @@
 import { createIcon, DPIcon } from '../Icon.web';
 import { ButtonCTA } from '../../../../ButtonCTA/platforms/web/ButtonCTA.web';
 
+/**
+ * Set up required CSS custom properties for ButtonCTA blend utilities.
+ * ButtonCTA uses blend utilities that read base colors from CSS custom properties.
+ */
+function setupBlendColorProperties(): void {
+  document.documentElement.style.setProperty('--color-primary', '#A855F7');
+  document.documentElement.style.setProperty('--color-text-on-primary', '#FFFFFF');
+  document.documentElement.style.setProperty('--color-background', '#FFFFFF');
+}
+
 describe('Icon + ButtonCTA Integration', () => {
   beforeEach(() => {
+    // Set up CSS custom properties required for blend utilities
+    setupBlendColorProperties();
+    
     // Ensure custom elements are registered
     if (!customElements.get('dp-icon')) {
       customElements.define('dp-icon', DPIcon);

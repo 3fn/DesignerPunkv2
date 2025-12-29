@@ -12,6 +12,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
 import com.designerpunk.tokens.DesignTokens
+// Import blend utilities from generated BlendUtilities.android.kt
+import com.designerpunk.blend.lighterBlend
+
+// Blend token value for icon optical balance (from semantic blend tokens)
+// This matches the design token: color.icon.opticalBalance (blend200 = 8% lighter)
+private const val BLEND_ICON_LIGHTER: Float = 0.08f
 
 /**
  * Icon component for Android platform
@@ -19,25 +25,46 @@ import com.designerpunk.tokens.DesignTokens
  * Renders Icon from VectorDrawable resources with automatic color inheritance.
  * Icons are decorative (contentDescription = null) and inherit tint from LocalContentColor.
  * 
+ * Uses blend utilities for optical balance adjustment when icons are paired with text.
+ * The lighterBlend function compensates for icons appearing heavier than adjacent text
+ * due to stroke density and fill area.
+ * 
  * This component serves as the reference implementation for Rosetta pattern token usage.
  * 
  * @param name Icon name (e.g., "arrow-right", "check", "settings")
  * @param size Icon size in Dp (use DesignTokens.icon_size_050 through icon_size_700 tokens)
  * @param color Optional color override for optical weight compensation (null = inherit)
+ * @param opticalBalance Whether to apply lighterBlend for optical weight compensation (default = false)
  * @param modifier Optional modifier for additional styling
+ * 
+ * Requirements:
+ * - 10.1, 10.2: Optical balance using blend utilities (lighterBlend instead of CSS filters)
+ * - 13.2: No filter: brightness() workarounds
  */
 @Composable
 fun Icon(
     name: String,
     size: Dp,
     color: Color? = null,
+    opticalBalance: Boolean = false,
     modifier: Modifier = Modifier
 ) {
+    // Compute final color with optional optical balance adjustment
+    val finalColor = when {
+        color != null && opticalBalance -> {
+            // Apply optical balance using lighterBlend with blend.iconLighter token (8% lighter)
+            // This uses blend utilities instead of opacity or filter workarounds
+            color.lighterBlend(BLEND_ICON_LIGHTER)
+        }
+        color != null -> color
+        else -> LocalContentColor.current
+    }
+    
     Icon(
         painter = painterResource(id = getIconResource(name)),
         contentDescription = null, // Decorative icon - hidden from TalkBack
         modifier = modifier.size(size),
-        tint = color ?: LocalContentColor.current // Use override or default to LocalContentColor
+        tint = finalColor
     )
 }
 
@@ -85,13 +112,14 @@ private fun getIconResource(name: String): Int {
 }
 
 /**
- * Preview for Icon component showing different sizes and colors
+ * Preview for Icon component showing different sizes, colors, and optical balance
  * 
  * Demonstrates:
  * - Five common size variants (icon_size_050 through icon_size_150)
  * - Note: Additional sizes available (icon_size_200 through icon_size_700)
  * - Multiple icon types at standard size
  * - Color inheritance with different tint colors
+ * - Optical balance comparison (with and without)
  */
 @Preview(showBackground = true, name = "Icon Sizes and Colors")
 @Composable
@@ -173,6 +201,34 @@ fun IconPreview() {
             Icon(name = "check", size = DesignTokens.icon_size_100, color = Color.Green)
             Icon(name = "plus", size = DesignTokens.icon_size_100, color = Color.Green)
             Icon(name = "arrow-up", size = DesignTokens.icon_size_100, color = Color.Green)
+        }
+        
+        // Optical balance demonstration
+        androidx.compose.material3.Text(
+            text = "Optical Balance (8% Lighter)",
+            style = androidx.compose.material3.MaterialTheme.typography.labelMedium
+        )
+        androidx.compose.foundation.layout.Row(
+            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(DesignTokens.space_200)
+        ) {
+            androidx.compose.foundation.layout.Column(
+                horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+            ) {
+                Icon(name = "arrow-right", size = DesignTokens.icon_size_100, color = Color.Blue)
+                androidx.compose.material3.Text(
+                    text = "Without",
+                    style = androidx.compose.material3.MaterialTheme.typography.labelSmall
+                )
+            }
+            androidx.compose.foundation.layout.Column(
+                horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+            ) {
+                Icon(name = "arrow-right", size = DesignTokens.icon_size_100, color = Color.Blue, opticalBalance = true)
+                androidx.compose.material3.Text(
+                    text = "With Balance",
+                    style = androidx.compose.material3.MaterialTheme.typography.labelSmall
+                )
+            }
         }
     }
 }

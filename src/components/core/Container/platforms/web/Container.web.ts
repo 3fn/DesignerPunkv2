@@ -4,7 +4,11 @@
  * Web platform implementation using Custom Elements with Shadow DOM.
  * Provides style encapsulation and semantic HTML support.
  * 
+ * Uses blend utilities for hover state colors instead of opacity workarounds.
+ * This ensures cross-platform consistency with iOS and Android implementations.
+ * 
  * @see .kiro/specs/010-container-component/design.md for complete design
+ * @see .kiro/specs/031-blend-infrastructure-implementation for blend utilities
  * @see Requirements 10.1, 11.1, 11.2
  */
 
@@ -21,12 +25,43 @@ import type {
   ColorTokenName,
   ShadowTokenName
 } from '../../../../../types/generated/TokenTypes';
+// Import blend utilities for hover state color calculations
+import {
+  hexToRgb,
+  rgbToHex,
+  calculateDarkerBlend
+} from '../../../../../blend';
+
+// Blend token value for hover state (from semantic blend tokens)
+// This matches the CSS custom property: --blend-hover-darker
+const BLEND_HOVER_DARKER = 0.08;    // blend200
+
+/**
+ * Apply darker blend to a hex color string.
+ * 
+ * @param color - Hex color string (e.g., "#FFFFFF")
+ * @param blendValue - Blend amount as decimal (0.0-1.0)
+ * @returns Darkened hex color string
+ */
+function darkerBlend(color: string, blendValue: number): string {
+  try {
+    const rgb = hexToRgb(color);
+    const blended = calculateDarkerBlend(rgb, blendValue);
+    return rgbToHex(blended);
+  } catch {
+    // Return original color if parsing fails
+    return color;
+  }
+}
 
 /**
  * Base styles for Container component
  * 
  * These styles provide the foundation for Container's visual appearance.
  * All token-based styling is applied via the buildContainerStyles function.
+ * 
+ * Hover state uses blend utilities for cross-platform consistency:
+ * - darkerBlend(color.surface, blend.hoverDarker) - 8% darker
  * 
  * @see styles.css for detailed documentation of each style rule
  */
@@ -40,6 +75,11 @@ const BASE_STYLES = `
     box-sizing: border-box;
     display: block;
     width: 100%;
+    transition: background-color var(--motion-focus-transition-duration) var(--motion-focus-transition-easing);
+  }
+  
+  .container--hoverable:hover {
+    background-color: var(--_container-hover-bg, inherit);
   }
   
   .container:focus {
@@ -110,6 +150,9 @@ const BASE_STYLES = `
  */
 export class ContainerWeb extends HTMLElement {
   private _shadowRoot: ShadowRoot;
+  
+  // Cached blend color for hover state
+  private _hoverColor: string = '';
 
   /**
    * Observed attributes for the custom element
@@ -127,7 +170,8 @@ export class ContainerWeb extends HTMLElement {
       'opacity',
       'layering',
       'semantic',
-      'accessibility-label'
+      'accessibility-label',
+      'hoverable'
     ];
   }
 
@@ -141,15 +185,72 @@ export class ContainerWeb extends HTMLElement {
    * Called when element is inserted into the DOM
    * 
    * Lifecycle method that triggers initial render.
+   * Calculates blend colors from CSS custom properties.
    */
   connectedCallback(): void {
+    this._calculateBlendColors();
     this.render();
+  }
+  
+  /**
+   * Calculate blend colors from CSS custom properties.
+   * 
+   * Reads base colors from CSS custom properties and applies blend utilities
+   * to generate hover state color.
+   * 
+   * Uses blend utilities instead of opacity workarounds for
+   * cross-platform consistency with iOS and Android implementations.
+   */
+  private _calculateBlendColors(): void {
+    // Get computed styles to read CSS custom properties
+    const computedStyle = getComputedStyle(document.documentElement);
+    
+    // Get surface color from CSS custom properties for hover state
+    // Use background prop if set, otherwise default to surface color
+    const background = this.getAttribute('background');
+    let baseColor = '';
+    
+    if (background) {
+      // Convert token name to CSS custom property format
+      const cssVarName = `--${background.replace(/\./g, '-')}`;
+      baseColor = computedStyle.getPropertyValue(cssVarName).trim();
+    }
+    
+    // Fallback to surface color if no background or couldn't resolve
+    if (!baseColor) {
+      baseColor = computedStyle.getPropertyValue('--color-surface').trim();
+    }
+    
+    // If still no color, use canvas color token (white100)
+    if (!baseColor) {
+      baseColor = computedStyle.getPropertyValue('--color-canvas').trim();
+    }
+    
+    // Final fallback - use background color token
+    // If tokens are not loaded, this will result in an empty string
+    // which is acceptable as the hover effect simply won't apply
+    if (!baseColor) {
+      baseColor = computedStyle.getPropertyValue('--color-background').trim();
+    }
+    
+    // If no color could be resolved from tokens, skip hover color calculation
+    // This follows the "fail loudly" philosophy - if tokens aren't loaded,
+    // the hover effect won't work, which is visible during development
+    if (!baseColor) {
+      this._hoverColor = '';
+      return;
+    }
+    
+    // Calculate hover color using blend utilities
+    // Hover: darkerBlend(color.surface, blend.hoverDarker) - 8% darker
+    this._hoverColor = darkerBlend(baseColor, BLEND_HOVER_DARKER);
   }
 
   /**
    * Called when an observed attribute changes
    * 
    * Triggers re-render when any observed attribute is modified.
+   * Recalculates blend colors when background changes.
    * 
    * @param name - Attribute name that changed
    * @param oldValue - Previous attribute value
@@ -158,6 +259,10 @@ export class ContainerWeb extends HTMLElement {
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     // Only re-render if the value actually changed
     if (oldValue !== newValue) {
+      // Recalculate blend colors if background changed
+      if (name === 'background') {
+        this._calculateBlendColors();
+      }
       this.render();
     }
   }
@@ -169,6 +274,7 @@ export class ContainerWeb extends HTMLElement {
    * - Style element with token-based CSS
    * - Semantic HTML element (or div by default)
    * - Slot for child content
+   * - Hover state support via blend utilities
    */
   private render(): void {
     // Get attribute values
@@ -181,6 +287,7 @@ export class ContainerWeb extends HTMLElement {
     const layering = this.getAttribute('layering') as LayeringValue | null;
     const semantic = (this.getAttribute('semantic') as SemanticHTMLElement) || 'div';
     const accessibilityLabel = this.getAttribute('accessibility-label');
+    const hoverable = this.getAttribute('hoverable') === 'true';
 
     // Build CSS styles from attributes
     const styles = this.buildStyles({
@@ -199,6 +306,17 @@ export class ContainerWeb extends HTMLElement {
     const accessibilityAttrs = accessibilityLabel 
       ? `aria-label="${accessibilityLabel.replace(/"/g, '&quot;')}"` 
       : '';
+    
+    // Build class names including hoverable state
+    const containerClasses = ['container'];
+    if (hoverable) {
+      containerClasses.push('container--hoverable');
+    }
+    
+    // Generate blend color CSS custom property for hover state
+    // This is a component-specific calculated value (not a design token)
+    // Using _container prefix to distinguish from design token references
+    const hoverColorStyle = hoverable ? `--_container-hover-bg: ${this._hoverColor};` : '';
 
     // Render Shadow DOM content
     this._shadowRoot.innerHTML = `
@@ -209,7 +327,7 @@ export class ContainerWeb extends HTMLElement {
           ${styles}
         }
       </style>
-      <${semantic} class="container" ${accessibilityAttrs}>
+      <${semantic} class="${containerClasses.join(' ')}" ${accessibilityAttrs} style="${hoverColorStyle}">
         <slot></slot>
       </${semantic}>
     `;

@@ -6,16 +6,70 @@
  * 
  * Features:
  * - Float label animation (labelMd → labelMdFloat)
- * - Color animation (text.subtle → primary)
+ * - Color animation (text.subtle → primary with blend.focusSaturate)
  * - Offset animation (translateY)
  * - Trailing icon support (error, success, info)
  * - Respects accessibilityReduceMotion
  * - WCAG 2.1 AA compliant
+ * - Uses blend utilities for state colors (focus, disabled) instead of opacity workarounds
  * 
- * Requirements: 1.1, 1.2, 1.3, 1.5, 4.1, 4.2, 4.3, 8.4
+ * Requirements: 1.1, 1.2, 1.3, 1.5, 4.1, 4.2, 4.3, 8.1, 8.2, 8.4, 13.1
  */
 
 import SwiftUI
+
+// MARK: - Blend Token Constants
+
+/// Blend token values (from semantic blend tokens)
+/// Focus: saturate(color.primary, blend.focusSaturate) - 8% more saturated
+private let blendFocusSaturate: Double = 0.08
+
+/// Disabled: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
+private let blendDisabledDesaturate: Double = 0.12
+
+// MARK: - Blend Utility Functions
+
+/// Apply saturate blend to a Color by increasing HSL saturation
+/// - Parameters:
+///   - color: Base color
+///   - amount: Saturation increase as decimal (0.0-1.0)
+/// - Returns: Saturated color
+private func saturate(_ color: Color, amount: Double) -> Color {
+    // Convert Color to UIColor to access RGB components
+    let uiColor = UIColor(color)
+    var hue: CGFloat = 0
+    var saturation: CGFloat = 0
+    var brightness: CGFloat = 0
+    var alpha: CGFloat = 0
+    
+    uiColor.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+    
+    // Increase saturation by amount, clamped to 0-1
+    let newSaturation = min(1.0, saturation + CGFloat(amount))
+    
+    return Color(hue: Double(hue), saturation: Double(newSaturation), brightness: Double(brightness), opacity: Double(alpha))
+}
+
+/// Apply desaturate blend to a Color by decreasing HSL saturation
+/// - Parameters:
+///   - color: Base color
+///   - amount: Saturation decrease as decimal (0.0-1.0)
+/// - Returns: Desaturated color
+private func desaturate(_ color: Color, amount: Double) -> Color {
+    // Convert Color to UIColor to access RGB components
+    let uiColor = UIColor(color)
+    var hue: CGFloat = 0
+    var saturation: CGFloat = 0
+    var brightness: CGFloat = 0
+    var alpha: CGFloat = 0
+    
+    uiColor.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+    
+    // Decrease saturation by amount, clamped to 0-1
+    let newSaturation = max(0.0, saturation - CGFloat(amount))
+    
+    return Color(hue: Double(hue), saturation: Double(newSaturation), brightness: Double(brightness), opacity: Double(alpha))
+}
 
 /**
  * TextInputField SwiftUI View
@@ -74,6 +128,9 @@ struct TextInputField: View {
     /// Maximum length for input value
     let maxLength: Int?
     
+    /// Disabled state
+    let isDisabled: Bool
+    
     // MARK: - State
     
     /// Whether input currently has focus
@@ -116,13 +173,20 @@ struct TextInputField: View {
     }
     
     /// Label color based on state
+    /// Uses blend utilities for focus and disabled states:
+    /// - Focus: saturate(color.primary, blend.focusSaturate) - 8% more saturated
+    /// - Disabled: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
     private var labelColor: Color {
         if hasError {
             return Color(DesignTokens.color.error.strong)
         } else if isSuccess {
             return Color(DesignTokens.color.success.strong)
+        } else if isDisabled {
+            // Disabled: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
+            return desaturate(Color(DesignTokens.color.primary), amount: blendDisabledDesaturate)
         } else if isFocused {
-            return Color(DesignTokens.color.primary)
+            // Focus: saturate(color.primary, blend.focusSaturate) - 8% more saturated
+            return saturate(Color(DesignTokens.color.primary), amount: blendFocusSaturate)
         } else {
             return Color(DesignTokens.color.text.muted)
         }
@@ -140,13 +204,20 @@ struct TextInputField: View {
     }
     
     /// Border color based on state
+    /// Uses blend utilities for focus and disabled states:
+    /// - Focus: saturate(color.primary, blend.focusSaturate) - 8% more saturated
+    /// - Disabled: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
     private var borderColor: Color {
         if hasError {
             return Color(DesignTokens.color.error.strong)
         } else if isSuccess {
             return Color(DesignTokens.color.success.strong)
+        } else if isDisabled {
+            // Disabled: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
+            return desaturate(Color(DesignTokens.color.primary), amount: blendDisabledDesaturate)
         } else if isFocused {
-            return Color(DesignTokens.color.primary)
+            // Focus: saturate(color.primary, blend.focusSaturate) - 8% more saturated
+            return saturate(Color(DesignTokens.color.primary), amount: blendFocusSaturate)
         } else {
             return Color(DesignTokens.color.border)
         }
@@ -202,10 +273,11 @@ struct TextInputField: View {
                                 isFocused: isFocused,
                                 hasError: hasError,
                                 isSuccess: isSuccess,
+                                isDisabled: isDisabled,
                                 hasTrailingIcon: showErrorIcon || showSuccessIcon || showInfoIconVisible
                             ))
                             .focused($isFocused)
-                            .disabled(readOnly)
+                            .disabled(readOnly || isDisabled)
                             .textContentType(autocomplete)
                             .onChange(of: value) { newValue in
                                 // Enforce max length
@@ -228,10 +300,11 @@ struct TextInputField: View {
                                 isFocused: isFocused,
                                 hasError: hasError,
                                 isSuccess: isSuccess,
+                                isDisabled: isDisabled,
                                 hasTrailingIcon: showErrorIcon || showSuccessIcon || showInfoIconVisible
                             ))
                             .focused($isFocused)
-                            .disabled(readOnly)
+                            .disabled(readOnly || isDisabled)
                             .textContentType(autocomplete)
                             .keyboardType(keyboardTypeForInputType(type))
                             .onChange(of: value) { newValue in
@@ -340,12 +413,14 @@ enum InputType {
 
 /**
  * Custom text field style for consistent appearance
+ * Uses blend utilities for disabled state styling
  */
 struct CustomTextFieldStyle: TextFieldStyle {
     let borderColor: Color
     let isFocused: Bool
     let hasError: Bool
     let isSuccess: Bool
+    let isDisabled: Bool
     let hasTrailingIcon: Bool
     
     @Environment(\.accessibilityReduceMotion) var reduceMotion
@@ -354,7 +429,7 @@ struct CustomTextFieldStyle: TextFieldStyle {
         configuration
             .font(Font.system(size: DesignTokens.typography.input.fontSize)
                 .weight(DesignTokens.typography.input.fontWeight))
-            .foregroundColor(Color(DesignTokens.color.text.default))
+            .foregroundColor(isDisabled ? Color(DesignTokens.color.text.muted) : Color(DesignTokens.color.text.default))
             .padding(.leading, DesignTokens.space.inset.100)
             .padding(.vertical, DesignTokens.space.inset.100)
             .padding(.trailing, hasTrailingIcon ? 0 : DesignTokens.space.inset.100) // No trailing padding if icon present
@@ -365,11 +440,11 @@ struct CustomTextFieldStyle: TextFieldStyle {
             )
             .overlay(
                 // Focus ring for keyboard navigation (WCAG 2.4.7 Focus Visible)
-                // Visible in all states when focused
+                // Visible in all states when focused (not when disabled)
                 RoundedRectangle(cornerRadius: DesignTokens.radius150)
                     .stroke(Color(DesignTokens.color.primary), lineWidth: DesignTokens.accessibility.focus.width)
                     .padding(-DesignTokens.accessibility.focus.offset)
-                    .opacity(isFocused ? 1 : 0)
+                    .opacity(isFocused && !isDisabled ? 1 : 0)
                     .animation(
                         reduceMotion ? .none : Animation.timingCurve(0.4, 0.0, 0.2, 1.0, duration: DesignTokens.motion.focusTransition.duration),
                         value: isFocused
@@ -392,6 +467,7 @@ struct CustomTextFieldStyle: TextFieldStyle {
 // - radius: radius150
 // - accessibility: tapArea.recommended, focus.width, focus.offset
 // - icon: size100
+// - blend: focusSaturate (8%), disabledDesaturate (12%)
 
 // MARK: - Preview
 
@@ -416,7 +492,8 @@ struct TextInputField_Previews: PreviewProvider {
                 placeholder: nil,
                 readOnly: false,
                 required: false,
-                maxLength: nil
+                maxLength: nil,
+                isDisabled: false
             )
             
             // Filled state
@@ -436,7 +513,8 @@ struct TextInputField_Previews: PreviewProvider {
                 placeholder: nil,
                 readOnly: false,
                 required: false,
-                maxLength: nil
+                maxLength: nil,
+                isDisabled: false
             )
             
             // Error state
@@ -456,7 +534,8 @@ struct TextInputField_Previews: PreviewProvider {
                 placeholder: nil,
                 readOnly: false,
                 required: true,
-                maxLength: nil
+                maxLength: nil,
+                isDisabled: false
             )
             
             // Success state
@@ -476,7 +555,29 @@ struct TextInputField_Previews: PreviewProvider {
                 placeholder: nil,
                 readOnly: false,
                 required: false,
-                maxLength: nil
+                maxLength: nil,
+                isDisabled: false
+            )
+            
+            // Disabled state
+            TextInputField(
+                id: "preview-disabled",
+                label: "Email",
+                value: .constant("user@example.com"),
+                onChange: nil,
+                onFocus: nil,
+                onBlur: nil,
+                helperText: "This field is disabled",
+                errorMessage: nil,
+                isSuccess: false,
+                showInfoIcon: false,
+                type: .email,
+                autocomplete: .emailAddress,
+                placeholder: nil,
+                readOnly: false,
+                required: false,
+                maxLength: nil,
+                isDisabled: true
             )
         }
         .padding()

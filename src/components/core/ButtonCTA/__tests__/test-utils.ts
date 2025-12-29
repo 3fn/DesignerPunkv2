@@ -5,17 +5,53 @@
  * - Custom element registration
  * - Shadow DOM rendering waits
  * - Component cleanup
+ * - CSS custom property setup for blend utilities
  * 
  * Task 6.1: Set up test infrastructure
+ * Task 2.1: Updated to support blend utility CSS custom properties
  */
 
 import { ButtonCTA } from '../platforms/web/ButtonCTA.web';
 
 /**
+ * Set up required CSS custom properties for ButtonCTA blend utilities.
+ * 
+ * ButtonCTA uses blend utilities that read base colors from CSS custom properties.
+ * This function sets up the required properties in the test environment.
+ * 
+ * Required properties:
+ * - --color-primary: Base primary color for blend calculations
+ * - --color-text-on-primary: Text color on primary background
+ * 
+ * @see ButtonCTA._calculateBlendColors() for usage
+ */
+export function setupBlendColorProperties(): void {
+  // Set up required CSS custom properties on document root
+  // These values match the design system's semantic color tokens
+  document.documentElement.style.setProperty('--color-primary', '#A855F7');
+  document.documentElement.style.setProperty('--color-text-on-primary', '#FFFFFF');
+  document.documentElement.style.setProperty('--color-background', '#FFFFFF');
+}
+
+/**
+ * Clean up CSS custom properties set by setupBlendColorProperties
+ */
+export function cleanupBlendColorProperties(): void {
+  document.documentElement.style.removeProperty('--color-primary');
+  document.documentElement.style.removeProperty('--color-text-on-primary');
+  document.documentElement.style.removeProperty('--color-background');
+}
+
+/**
  * Register the ButtonCTA custom element if not already registered
  * Prevents "already defined" errors in test suites
+ * 
+ * Also sets up required CSS custom properties for blend utilities.
  */
 export function registerButtonCTA(): void {
+  // Set up CSS custom properties required for blend utilities
+  setupBlendColorProperties();
+  
   if (!customElements.get('button-cta')) {
     customElements.define('button-cta', ButtonCTA);
   }

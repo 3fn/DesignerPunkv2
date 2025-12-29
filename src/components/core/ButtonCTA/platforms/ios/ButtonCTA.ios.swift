@@ -7,12 +7,26 @@
  * Follows True Native Architecture with platform-specific SwiftUI implementation
  * while maintaining API consistency with web and Android platforms.
  * 
+ * Uses blend utilities for state colors (hover, pressed, disabled, icon) instead of
+ * opacity or scale workarounds. This ensures cross-platform consistency with Web
+ * and Android implementations.
+ * 
  * Part of the DesignerPunk CTA Button Component system.
  * 
  * @module ButtonCTA/platforms/ios
  */
 
 import SwiftUI
+
+// Import blend utilities (Color extensions from BlendUtilities.ios.swift)
+// These provide darkerBlend, lighterBlend, saturate, desaturate methods on Color
+
+// Blend token values (from semantic blend tokens)
+// These match the CSS custom properties: --blend-hover-darker, --blend-pressed-darker, etc.
+private let BLEND_HOVER_DARKER: Double = 0.08      // blend200
+private let BLEND_PRESSED_DARKER: Double = 0.12   // blend300
+private let BLEND_DISABLED_DESATURATE: Double = 0.12 // blend300
+private let BLEND_ICON_LIGHTER: Double = 0.08     // blend200 (color.icon.opticalBalance)
 
 /**
  * Button size variants
@@ -181,7 +195,7 @@ struct ButtonCTA: View {
             .padding(.horizontal, horizontalPadding)
             .padding(.vertical, verticalPadding)
             .frame(minWidth: minWidth, minHeight: touchTargetHeight)
-            .background(backgroundColor)
+            .background(currentBackgroundColor)
             .cornerRadius(borderRadius)
             .overlay(
                 // Requirement 17.5: Render border inside frame bounds
@@ -190,16 +204,8 @@ struct ButtonCTA: View {
             )
         }
         .buttonStyle(PlainButtonStyle())
-        // Requirement 17.2: Scale transform on press with motion token animation
-        // iOS platform pattern: scale + motion pairing for tactile feedback
-        // Scale: scale096 (0.96 = 4% reduction, using existing token instead of 0.97)
-        // Motion: motionButtonPress (150ms with accelerate easing for immediate response)
-        .scaleEffect(isPressed ? DesignTokens.scale096 : DesignTokens.scale100)
-        .animation(
-            DesignTokens.Easing.easingAccelerate.speed(1.0 / DesignTokens.Duration.duration150),
-            value: isPressed
-        )
-        // Track pressed state for scale transform
+        // Track pressed state for blend color changes
+        // Uses blend utilities instead of scaleEffect workaround for cross-platform consistency
         .simultaneousGesture(
             DragGesture(minimumDistance: 0)
                 .onChanged { _ in
@@ -216,6 +222,49 @@ struct ButtonCTA: View {
         .accessibilityIdentifier(testID ?? "")
         // Requirement 17.4: Respect safe area insets for full-width buttons
         .edgesIgnoringSafeArea([]) // Respects safe area by default
+    }
+    
+    // MARK: - Blend Color Computed Properties
+    
+    /// Current background color based on state (normal, hover, pressed, disabled)
+    /// Uses blend utilities instead of opacity/scale workarounds
+    private var currentBackgroundColor: Color {
+        if disabled {
+            // Disabled: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
+            return disabledBackgroundColor
+        } else if isPressed {
+            // Pressed: darkerBlend(color.primary, blend.pressedDarker) - 12% darker
+            return pressedBackgroundColor
+        } else {
+            // Normal state
+            return backgroundColor
+        }
+    }
+    
+    /// Pressed state background color using blend utility
+    /// darkerBlend(color.primary, blend.pressedDarker) = 12% darker
+    private var pressedBackgroundColor: Color {
+        switch style {
+        case .primary:
+            return Color(DesignTokens.colorPrimary).darkerBlend(BLEND_PRESSED_DARKER)
+        case .secondary:
+            return Color(DesignTokens.colorBackground).darkerBlend(BLEND_PRESSED_DARKER)
+        case .tertiary:
+            return Color.clear
+        }
+    }
+    
+    /// Disabled state background color using blend utility
+    /// desaturate(color.primary, blend.disabledDesaturate) = 12% less saturated
+    private var disabledBackgroundColor: Color {
+        switch style {
+        case .primary:
+            return Color(DesignTokens.colorPrimary).desaturate(BLEND_DISABLED_DESATURATE)
+        case .secondary:
+            return Color(DesignTokens.colorBackground)
+        case .tertiary:
+            return Color.clear
+        }
     }
     
     // MARK: - Size-Based Computed Properties
@@ -377,15 +426,17 @@ struct ButtonCTA: View {
     
     /// Icon color based on button style with optical balance
     /// Requirements: 9.1-9.3
+    /// Uses blend utilities instead of opacity workaround for cross-platform consistency
     private var iconColor: Color? {
         switch style {
         case .primary:
-            // Primary style: Use colorTextOnPrimary semantic token
-            return Color(DesignTokens.colorTextOnPrimary) // Semantic token: color.text.onPrimary
+            // Primary style: Use colorTextOnPrimary with optical balance blend
+            // lighterBlend(color.onPrimary, blend.iconLighter) = 8% lighter
+            return Color(DesignTokens.colorTextOnPrimary).lighterBlend(BLEND_ICON_LIGHTER)
         case .secondary, .tertiary:
             // Secondary/Tertiary: Use color.primary with optical balance blend
-            // Apply blend200 (8% lighter) for optical weight compensation
-            return Color(DesignTokens.colorPrimary).opacity(1.0 + DesignTokens.colorIconOpticalBalance) // color.primary + blend200 LIGHTER
+            // lighterBlend(color.primary, blend.iconLighter) = 8% lighter
+            return Color(DesignTokens.colorPrimary).lighterBlend(BLEND_ICON_LIGHTER)
         }
     }
 }

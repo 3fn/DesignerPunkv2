@@ -14,10 +14,23 @@
 
 import { ButtonCTA } from '../platforms/web/ButtonCTA.web';
 
+/**
+ * Set up required CSS custom properties for ButtonCTA blend utilities.
+ * ButtonCTA uses blend utilities that read base colors from CSS custom properties.
+ */
+function setupBlendColorProperties(): void {
+  document.documentElement.style.setProperty('--color-primary', '#A855F7');
+  document.documentElement.style.setProperty('--color-text-on-primary', '#FFFFFF');
+  document.documentElement.style.setProperty('--color-background', '#FFFFFF');
+}
+
 describe('ButtonCTA Component Rendering', () => {
   let container: HTMLElement;
   
   beforeEach(() => {
+    // Set up CSS custom properties required for blend utilities
+    setupBlendColorProperties();
+    
     // Create a container for each test
     container = document.createElement('div');
     document.body.appendChild(container);

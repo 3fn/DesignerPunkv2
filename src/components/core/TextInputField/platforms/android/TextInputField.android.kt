@@ -6,13 +6,14 @@
  * 
  * Features:
  * - Float label animation (labelMd → labelMdFloat)
- * - Color animation (text.subtle → primary)
+ * - Color animation (text.subtle → primary with blend.focusSaturate)
  * - Offset animation (translateY)
  * - Trailing icon support (error, success, info)
  * - Respects reduce motion settings
  * - WCAG 2.1 AA compliant
+ * - Uses blend utilities for state colors (focus, disabled) instead of opacity workarounds
  * 
- * Requirements: 1.1, 1.2, 1.3, 1.5, 4.1, 4.2, 4.3, 8.5
+ * Requirements: 1.1, 1.2, 1.3, 1.5, 4.1, 4.2, 4.3, 8.1, 8.2, 8.3, 8.5, 13.1
  */
 
 package com.designerpunk.components.core
@@ -51,6 +52,18 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import android.provider.Settings
+// Import blend utilities (Color extension functions from BlendUtilities.android.kt)
+import com.designerpunk.tokens.saturate
+import com.designerpunk.tokens.desaturate
+
+// MARK: - Blend Token Constants
+
+/// Blend token values (from semantic blend tokens)
+/// Focus: saturate(color.primary, blend.focusSaturate) - 8% more saturated
+private const val BLEND_FOCUS_SATURATE: Float = 0.08f
+
+/// Disabled: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
+private const val BLEND_DISABLED_DESATURATE: Float = 0.12f
 
 /**
  * Input type enumeration
@@ -87,6 +100,7 @@ enum class InputType {
  * @param maxLength Maximum length for input value
  * @param imeAction IME action for keyboard
  * @param keyboardActions Keyboard actions
+ * @param isDisabled Disabled state
  */
 @Composable
 fun TextInputField(
@@ -107,7 +121,8 @@ fun TextInputField(
     required: Boolean = false,
     maxLength: Int? = null,
     imeAction: ImeAction = ImeAction.Done,
-    keyboardActions: KeyboardActions = KeyboardActions.Default
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    isDisabled: Boolean = false
 ) {
     // State
     var isFocused by remember { mutableStateOf(false) }
@@ -177,7 +192,8 @@ fun TextInputField(
         targetValue = when {
             hasError -> colorError
             isSuccess -> colorSuccessStrong
-            isFocused -> colorPrimary
+            isDisabled -> colorPrimary.desaturate(BLEND_DISABLED_DESATURATE) // 12% less saturated
+            isFocused -> colorPrimary.saturate(BLEND_FOCUS_SATURATE) // 8% more saturated
             else -> colorTextMuted
         },
         animationSpec = animationSpec,
@@ -188,7 +204,8 @@ fun TextInputField(
         targetValue = when {
             hasError -> colorError
             isSuccess -> colorSuccessStrong
-            isFocused -> colorPrimary
+            isDisabled -> colorPrimary.desaturate(BLEND_DISABLED_DESATURATE) // 12% less saturated
+            isFocused -> colorPrimary.saturate(BLEND_FOCUS_SATURATE) // 8% more saturated
             else -> colorBorder
         },
         animationSpec = animationSpec,
@@ -262,9 +279,9 @@ fun TextInputField(
                         shape = RoundedCornerShape(radius150)
                     )
                     // Focus ring for keyboard navigation (WCAG 2.4.7 Focus Visible)
-                    // Visible in all states when focused
+                    // Visible in all states when focused (not when disabled)
                     .then(
-                        if (isFocused) {
+                        if (isFocused && !isDisabled) {
                             Modifier.border(
                                 width = accessibilityFocusWidth,
                                 color = accessibilityFocusColor,
@@ -281,7 +298,7 @@ fun TextInputField(
                     lineHeight = typographyInputLineHeight.sp,
                     fontWeight = FontWeight(typographyInputFontWeight),
                     letterSpacing = typographyInputLetterSpacing.sp,
-                    color = colorTextDefault
+                    color = if (isDisabled) colorTextMuted else colorTextDefault
                 ),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = getKeyboardType(type),
@@ -289,7 +306,7 @@ fun TextInputField(
                 ),
                 keyboardActions = keyboardActions,
                 singleLine = true,
-                readOnly = readOnly,
+                readOnly = readOnly || isDisabled,
                 visualTransformation = if (type == InputType.PASSWORD) {
                     PasswordVisualTransformation()
                 } else {
@@ -467,3 +484,7 @@ private val tapAreaRecommended: Dp // Generated from accessibility.tapArea.recom
 private val accessibilityFocusWidth: Dp // Generated from accessibility.focus.width
 private val accessibilityFocusOffset: Dp // Generated from accessibility.focus.offset
 private val accessibilityFocusColor: Color // Generated from accessibility.focus.color
+
+// Blend tokens - used via extension functions from BlendUtilities.android.kt
+// - blend.focusSaturate (8%) - saturate(color, amount) for focus state
+// - blend.disabledDesaturate (12%) - desaturate(color, amount) for disabled state
