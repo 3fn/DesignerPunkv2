@@ -2,6 +2,7 @@
 
 **A True Native Cross-Platform Design System with Mathematical Foundations**
 
+[![Version](https://img.shields.io/badge/Version-2.1.0-purple)](RELEASE-NOTES-v2.1.0.md)
 [![Repository](https://img.shields.io/badge/GitHub-DesignerPunkv2-blue)](https://github.com/3fn/DesignerPunkv2)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
@@ -62,6 +63,7 @@ DesignerPunk addresses the fundamental challenge of AI collaboration: **fuzzy te
 
 **Token System Status** - Comprehensive primitive and semantic token implementation
 - **~245+ tokens implemented**: Spacing (12), Typography (40+), Color (45+), Radius (12), Accessibility (8), Shadow (23), Glow (9), Layering (12), Border Width (3), Opacity (14), Blend (5), Motion (12)
+- **Blend Infrastructure**: Complete blend utility generation integrated into build pipeline with theme-aware wrappers for all platforms
 - **Semantic layer**: Color, spacing, typography, shadow, layering, border, opacity, and blend compositions with hierarchical structure
 - **Typography system**: Complete size variant coverage (Xs/Sm/Md/Lg) for labels, code, and buttons with consistent naming conventions and display font family for all headings (h1-h6)
 - **Cross-platform generation**: Web CSS, iOS Swift, and Android Kotlin with platform-native conventions and semantic token references
@@ -71,6 +73,7 @@ DesignerPunk addresses the fundamental challenge of AI collaboration: **fuzzy te
 - **Detailed analysis**: See [Design Token Coverage Analysis](design-token-coverage-analysis.md) for complete breakdown
 
 **Completed Specifications**
+- [Blend Infrastructure Implementation](/.kiro/specs/031-blend-infrastructure-implementation/) - Complete blend utility generation with build pipeline integration, theme-aware wrappers, and component updates (v2.1.0)
 - [Typography Token Expansion](/.kiro/specs/typography-token-expansion/) - Complete size variant system (Xs/Sm/Md/Lg) for labels, code, and buttons with compositional color architecture, inline emphasis patterns, and strategic flexibility documentation
 - [Spec Standards Refinement](/.kiro/specs/spec-standards-refinement/) - Three-tier validation and documentation system
 - [Shadow and Glow Token System](/.kiro/specs/shadow-glow-token-system/) - Complete shadow and glow primitives with lighting framework and semantic compositions
@@ -91,6 +94,16 @@ DesignerPunk addresses the fundamental challenge of AI collaboration: **fuzzy te
 - Mathematical token integration in component APIs
 
 ### ✅ Recently Completed
+
+**Blend Infrastructure Implementation** (December 2025) - v2.1.0
+- BlendUtilityGenerator integrated into TokenFileGenerator build pipeline
+- Platform-native runtime utilities generated for Web (TypeScript), iOS (Swift), and Android (Kotlin)
+- Four blend operations: `darkerBlend()`, `lighterBlend()`, `saturate()`, `desaturate()`
+- Theme-aware wrapper functions (`getBlendUtilities()` for Web, Color extensions for iOS/Android)
+- All four core components updated to use blend utilities (ButtonCTA, TextInputField, Container, Icon)
+- All workarounds removed (opacity, filter, scaleEffect, Material ripple)
+- Two-layer validation: Layer 1 (numerical precision ±1 RGB) and Layer 2 (token-naming validation)
+- 150 blend-specific tests with cross-platform consistency verification
 
 **Typography Token System Refinement** (December 2025)
 - Complete size variant coverage (Xs/Sm/Md/Lg) for labels, code, and buttons
@@ -116,13 +129,15 @@ DesignerPunk addresses the fundamental challenge of AI collaboration: **fuzzy te
 - Three size variants (small, medium, large) with WCAG 2.1 AA touch targets
 - Three visual variants (primary, secondary, tertiary) for emphasis hierarchy
 - Optional leading icons with optical weight compensation
-- Platform-specific interactions (ripple on Android, scale on iOS, hover on web)
+- **Blend utility integration**: Hover (`darkerBlend`), pressed (`darkerBlend`), disabled (`desaturate`), icon (`lighterBlend`)
+- Platform-specific interactions with theme-aware blend utilities
 - Complete token-based styling with zero hard-coded values
 - Comprehensive validation examples and accessibility compliance
 
 **[Container](src/components/core/Container/)** - Primitive Layout Component
 - Foundational primitive exposing individual styling capabilities
 - Token-first architecture (padding, background, shadow, border, radius, opacity, layering)
+- **Blend utility integration**: Hover state using `darkerBlend(color.surface, blend.hoverDarker)`
 - Generated type safety for flexible token acceptance
 - Platform-specific implementations (web Shadow DOM, SwiftUI, Jetpack Compose)
 - Nested container support with mathematical radius relationships
@@ -132,6 +147,7 @@ DesignerPunk addresses the fundamental challenge of AI collaboration: **fuzzy te
 - 15 Feather icons covering common UI patterns (navigation, actions, UI elements)
 - Eight size variants (13-48px) calculated from typography line heights
 - Automatic color inheritance from parent components
+- **Blend utility integration**: Optical balance using `lighterBlend(color, blend.iconLighter)`
 - Type-safe icon names with TypeScript autocomplete
 - Web component API (`<dp-icon>`) with Shadow DOM encapsulation
 - Backward-compatible functional API (`createIcon()`)
@@ -141,6 +157,7 @@ DesignerPunk addresses the fundamental challenge of AI collaboration: **fuzzy te
 - Float label pattern with smooth animated transitions using motion tokens
 - Validation states (error, success) with visual indicators and icons
 - Helper text support with conditional error messages
+- **Blend utility integration**: Focus (`saturate`), disabled (`desaturate`) states
 - Full accessibility compliance (WCAG 2.1 AA, keyboard navigation, screen readers)
 - Responsive width (100% container) with minimum touch target height (48px)
 - Cross-platform consistent animations (web, iOS, Android)
