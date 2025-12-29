@@ -15,9 +15,9 @@
 
 import SwiftUI
 
-// Blend token value for hover state (from semantic blend tokens)
-// This matches the CSS custom property: --blend-hover-darker
-private let BLEND_HOVER_DARKER: Double = 0.08    // blend200
+// Note: Theme-aware blend utilities are provided via Color extensions in
+// ThemeAwareBlendUtilities.ios.swift. The hoverBlend() semantic extension
+// uses BlendTokenValues.hoverDarker (8%) for consistent state styling.
 
 /**
  * Container SwiftUI View
@@ -212,11 +212,15 @@ struct Container<Content: View>: View {
      * Returns darkened color when hoverable and hovered,
      * otherwise returns the base background color.
      * 
-     * Uses darkerBlend(color.surface, blend.hoverDarker) - 8% darker
+     * Uses hoverBlend() semantic extension from ThemeAwareBlendUtilities.ios.swift
+     * which applies darkerBlend(color.surface, blend.hoverDarker) - 8% darker
+     * 
+     * @see Requirements: 9.1 - Container hover state
+     * @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
      */
     private var currentBackgroundColor: Color {
         if hoverable && isHovered {
-            return backgroundValue.darkerBlend(BLEND_HOVER_DARKER)
+            return backgroundValue.hoverBlend()
         }
         return backgroundValue
     }
@@ -386,51 +390,7 @@ extension View {
 // MARK: - Token Mapping
 // Token resolution functions are now in TokenMapping.swift
 
-// MARK: - Color Blend Extension
-
-/**
- * Color extension for blend utilities
- * 
- * Provides blend operations for SwiftUI Color type.
- * Uses the same algorithm as Web and Android implementations
- * for cross-platform consistency.
- */
-extension Color {
-    /**
-     * Apply darker blend by overlaying black
-     * 
-     * @param amount Blend amount as decimal (0.0-1.0)
-     * @returns Darkened Color
-     * 
-     * @example
-     * ```swift
-     * let hoverColor = Color.blue.darkerBlend(0.08)
-     * // Returns 8% darker blue
-     * ```
-     */
-    func darkerBlend(_ amount: Double) -> Color {
-        // Clamp amount to valid range
-        let clampedAmount = max(0.0, min(1.0, amount))
-        
-        // Get UIColor components
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
-        
-        UIColor(self).getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        
-        // Blend with black (0, 0, 0)
-        let blendedRed = red * (1 - clampedAmount)
-        let blendedGreen = green * (1 - clampedAmount)
-        let blendedBlue = blue * (1 - clampedAmount)
-        
-        return Color(
-            red: Double(blendedRed),
-            green: Double(blendedGreen),
-            blue: Double(blendedBlue),
-            opacity: Double(alpha)
-        )
-    }
-}
+// Note: Color blend extensions (darkerBlend, lighterBlend, saturate, desaturate)
+// and semantic blend functions (hoverBlend, pressedBlend, focusBlend, etc.)
+// are provided by ThemeAwareBlendUtilities.ios.swift
 

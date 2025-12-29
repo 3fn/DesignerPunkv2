@@ -35,35 +35,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import android.util.Log
-
-// Blend token value for hover state (from semantic blend tokens)
-// This matches the CSS custom property: --blend-hover-darker
-private const val BLEND_HOVER_DARKER: Float = 0.08f    // blend200
-
-/**
- * Apply darker blend to a Color by overlaying black
- * 
- * @param amount Blend amount as decimal (0.0f-1.0f)
- * @return Darkened Color
- * 
- * @example
- * ```kotlin
- * val hoverColor = Color.Blue.darkerBlend(0.08f)
- * // Returns 8% darker blue
- * ```
- */
-fun Color.darkerBlend(amount: Float): Color {
-    // Clamp amount to valid range
-    val clampedAmount = amount.coerceIn(0.0f, 1.0f)
-    
-    // Blend with black (0, 0, 0)
-    return Color(
-        red = this.red * (1 - clampedAmount),
-        green = this.green * (1 - clampedAmount),
-        blue = this.blue * (1 - clampedAmount),
-        alpha = this.alpha
-    )
-}
+// Import theme-aware blend utilities for hover state color calculations
+// Uses hoverBlend() semantic extension for consistent state styling across components
+// @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
+import com.designerpunk.tokens.hoverBlend
 
 /**
  * Container Composable
@@ -166,9 +141,13 @@ fun Container(
     val isHovered by interactionSource.collectIsHoveredAsState()
     
     // Calculate background color with hover state
+    // Uses hoverBlend() semantic extension from ThemeAwareBlendUtilities.android.kt
+    // which applies darkerBlend(color.surface, blend.hoverDarker) - 8% darker
+    // @see Requirements: 9.1 - Container hover state
+    // @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
     val baseBackgroundColor = if (background != null) resolveColorToken(background) else Color.Transparent
     val currentBackgroundColor = if (hoverable && isHovered) {
-        baseBackgroundColor.darkerBlend(BLEND_HOVER_DARKER)
+        baseBackgroundColor.hoverBlend()
     } else {
         baseBackgroundColor
     }

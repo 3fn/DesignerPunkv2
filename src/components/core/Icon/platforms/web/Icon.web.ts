@@ -7,46 +7,23 @@
  * This module provides both a web component (<dp-icon>) and backward-compatible
  * functional API (createIcon, Icon class) for maximum flexibility.
  * 
- * Uses blend utilities for optical balance adjustment when icons are paired with text.
- * The lighterBlend function compensates for icons appearing heavier than adjacent text
- * due to stroke density and fill area.
+ * Uses theme-aware blend utilities for optical balance adjustment when icons are 
+ * paired with text. The iconColor() function from getBlendUtilities() compensates 
+ * for icons appearing heavier than adjacent text due to stroke density and fill area.
  * 
  * @module Icon/platforms/web
+ * @see Requirements: 10.1, 10.2, 11.1, 11.2, 11.3 - Optical balance using theme-aware blend utilities
  */
 
 import { IconProps, IconName, IconSize } from '../../types';
-// Import blend utilities for optical balance calculations
-import {
-  hexToRgb,
-  rgbToHex,
-  calculateLighterBlend
-} from '../../../../../blend';
+// Import theme-aware blend utilities for optical balance calculations
+// Uses getBlendUtilities() factory for consistent state styling across components
+// @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
+import { getBlendUtilities, BlendUtilitiesResult } from '../../../../../blend/ThemeAwareBlendUtilities.web';
 
-// Blend token value for icon optical balance (from semantic blend tokens)
-// This matches the CSS custom property: --blend-icon-lighter (color.icon.opticalBalance)
-const BLEND_ICON_LIGHTER = 0.08; // blend200
-
-/**
- * Apply lighter blend to a hex color string for optical balance.
- * 
- * Icons often appear heavier than adjacent text at the same color due to
- * stroke density and fill area. This function applies a subtle lightening
- * to compensate for this optical illusion.
- * 
- * @param color - Hex color string (e.g., "#A855F7")
- * @param blendValue - Blend amount as decimal (0.0-1.0)
- * @returns Lightened hex color string
- */
-function lighterBlend(color: string, blendValue: number): string {
-  try {
-    const rgb = hexToRgb(color);
-    const blended = calculateLighterBlend(rgb, blendValue);
-    return rgbToHex(blended);
-  } catch {
-    // Return original color if parsing fails
-    return color;
-  }
-}
+// Create blend utilities instance for icon optical balance
+// Uses getBlendUtilities() factory for cross-platform consistency
+const blendUtils: BlendUtilitiesResult = getBlendUtilities();
 
 /**
  * Load SVG content for a given icon name.
@@ -165,15 +142,18 @@ export function createIcon(props: IconProps): string {
   const classAttr = `icon ${sizeClass} icon-${name} ${className}`.trim();
   
   // Determine stroke color based on color prop and optical balance
-  // When opticalBalance is true and color is a hex value, apply lighterBlend
-  // to compensate for icons appearing heavier than adjacent text
+  // When opticalBalance is true and color is a hex value, apply iconColor()
+  // from theme-aware blend utilities to compensate for icons appearing heavier than adjacent text
+  // @see Requirements: 10.1, 10.2 - Optical balance using blend utilities
+  // @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
   let strokeColor: string;
   if (color === 'inherit') {
     strokeColor = 'currentColor';
   } else if (opticalBalance && color.startsWith('#')) {
-    // Apply optical balance using lighterBlend with blend.iconLighter token (8% lighter)
+    // Apply optical balance using iconColor() from theme-aware blend utilities
+    // Uses lighterBlend(color, blend.iconLighter) internally (8% lighter)
     // This uses blend utilities instead of CSS filter: brightness() workaround
-    strokeColor = lighterBlend(color, BLEND_ICON_LIGHTER);
+    strokeColor = blendUtils.iconColor(color);
   } else if (color.startsWith('#')) {
     // Direct hex color without optical balance
     strokeColor = color;
@@ -438,15 +418,18 @@ export class DPIcon extends HTMLElement {
     const sizeClass = sizeClassMap[size];
     
     // Determine stroke color based on color prop and optical balance
-    // When opticalBalance is true and color is a hex value, apply lighterBlend
-    // to compensate for icons appearing heavier than adjacent text
+    // When opticalBalance is true and color is a hex value, apply iconColor()
+    // from theme-aware blend utilities to compensate for icons appearing heavier than adjacent text
+    // @see Requirements: 10.1, 10.2 - Optical balance using blend utilities
+    // @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
     let strokeColor: string;
     if (color === 'inherit') {
       strokeColor = 'currentColor';
     } else if (opticalBalance && color.startsWith('#')) {
-      // Apply optical balance using lighterBlend with blend.iconLighter token (8% lighter)
+      // Apply optical balance using iconColor() from theme-aware blend utilities
+      // Uses lighterBlend(color, blend.iconLighter) internally (8% lighter)
       // This uses blend utilities instead of CSS filter: brightness() workaround
-      strokeColor = lighterBlend(color, BLEND_ICON_LIGHTER);
+      strokeColor = blendUtils.iconColor(color);
     } else if (color.startsWith('#')) {
       // Direct hex color without optical balance
       strokeColor = color;

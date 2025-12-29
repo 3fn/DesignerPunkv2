@@ -25,34 +25,10 @@ import type {
   ColorTokenName,
   ShadowTokenName
 } from '../../../../../types/generated/TokenTypes';
-// Import blend utilities for hover state color calculations
-import {
-  hexToRgb,
-  rgbToHex,
-  calculateDarkerBlend
-} from '../../../../../blend';
-
-// Blend token value for hover state (from semantic blend tokens)
-// This matches the CSS custom property: --blend-hover-darker
-const BLEND_HOVER_DARKER = 0.08;    // blend200
-
-/**
- * Apply darker blend to a hex color string.
- * 
- * @param color - Hex color string (e.g., "#FFFFFF")
- * @param blendValue - Blend amount as decimal (0.0-1.0)
- * @returns Darkened hex color string
- */
-function darkerBlend(color: string, blendValue: number): string {
-  try {
-    const rgb = hexToRgb(color);
-    const blended = calculateDarkerBlend(rgb, blendValue);
-    return rgbToHex(blended);
-  } catch {
-    // Return original color if parsing fails
-    return color;
-  }
-}
+// Import theme-aware blend utilities for hover state color calculations
+// Uses getBlendUtilities() factory for consistent state styling across components
+// @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
+import { getBlendUtilities, BlendUtilitiesResult } from '../../../../../blend/ThemeAwareBlendUtilities.web';
 
 /**
  * Base styles for Container component
@@ -151,6 +127,11 @@ const BASE_STYLES = `
 export class ContainerWeb extends HTMLElement {
   private _shadowRoot: ShadowRoot;
   
+  // Theme-aware blend utilities instance
+  // Uses getBlendUtilities() factory for consistent state styling
+  // @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
+  private _blendUtils: BlendUtilitiesResult;
+  
   // Cached blend color for hover state
   private _hoverColor: string = '';
 
@@ -179,6 +160,11 @@ export class ContainerWeb extends HTMLElement {
     super();
     // Attach Shadow DOM with open mode for style encapsulation
     this._shadowRoot = this.attachShadow({ mode: 'open' });
+    
+    // Initialize theme-aware blend utilities
+    // Uses getBlendUtilities() factory for consistent state styling
+    // @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
+    this._blendUtils = getBlendUtilities();
   }
 
   /**
@@ -195,11 +181,17 @@ export class ContainerWeb extends HTMLElement {
   /**
    * Calculate blend colors from CSS custom properties.
    * 
-   * Reads base colors from CSS custom properties and applies blend utilities
-   * to generate hover state color.
+   * Reads base colors from CSS custom properties and applies theme-aware blend
+   * utilities to generate hover state color.
    * 
-   * Uses blend utilities instead of opacity workarounds for
-   * cross-platform consistency with iOS and Android implementations.
+   * Uses getBlendUtilities() factory functions instead of direct blend calculations
+   * for cross-platform consistency with iOS and Android implementations.
+   * 
+   * State color mappings:
+   * - Hover: darkerBlend(color.surface, blend.hoverDarker) - 8% darker
+   * 
+   * @see Requirements: 9.1 - Container hover state
+   * @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
    */
   private _calculateBlendColors(): void {
     // Get computed styles to read CSS custom properties
@@ -241,9 +233,10 @@ export class ContainerWeb extends HTMLElement {
       return;
     }
     
-    // Calculate hover color using blend utilities
-    // Hover: darkerBlend(color.surface, blend.hoverDarker) - 8% darker
-    this._hoverColor = darkerBlend(baseColor, BLEND_HOVER_DARKER);
+    // Calculate hover color using theme-aware blend utilities
+    // Uses semantic convenience function from getBlendUtilities()
+    // @see Requirements: 9.1 - Hover uses darkerBlend(color.surface, blend.hoverDarker)
+    this._hoverColor = this._blendUtils.hoverColor(baseColor);
   }
 
   /**

@@ -56,6 +56,12 @@ inclusion: manual
 4. ✅ **Icon Integration Anti-Patterns** (what NOT to do)
 5. ✅ **Icon Integration Checklist** (verification steps)
 
+**WHEN implementing interaction states (hover, pressed, focus, disabled) THEN read:**
+1. ✅ **Blend Utility Integration** (how to use blend utilities for state colors)
+2. ✅ **Semantic Blend Token Reference** (which token/function for each state)
+3. ✅ **Blend Utility Anti-Patterns** (what NOT to do - no opacity, no filters)
+4. ✅ **Blend Tokens Guide**: `docs/tokens/blend-tokens.md` (complete reference)
+
 **WHEN troubleshooting component issues THEN read:**
 1. ✅ **Anti-Patterns to Avoid** (common mistakes)
 2. ✅ **Validation Checklist** (what to verify)
@@ -859,6 +865,124 @@ Each platform uses its native syntax to consume the generated token values. The 
 - **Spacing**: `space.separated.normal` between containers
 - **Shadow**: `shadow.dusk` or `shadow.sunrise`
 - **Border radius**: `radius100` or `radius150`
+
+---
+
+## Blend Utility Integration
+
+### Overview
+
+Blend utilities enable components to create new opaque colors for interaction states (hover, pressed, focus, disabled) rather than using opacity-based workarounds. All components should use blend utilities for state color modifications.
+
+### When to Use Blend Utilities
+
+**Use blend utilities for**:
+- Hover state colors (darken or lighten based on background)
+- Pressed state colors (stronger darkening than hover)
+- Focus state colors (increased saturation for emphasis)
+- Disabled state colors (desaturation for muted appearance)
+- Icon optical balance (lightening for visual weight compensation)
+
+### Web Platform Usage
+
+```typescript
+import { getBlendUtilities } from '@designerpunk/tokens/ThemeAwareBlendUtilities';
+
+class MyComponent extends HTMLElement {
+  connectedCallback() {
+    // Read theme color from CSS custom properties
+    const computedStyle = getComputedStyle(document.documentElement);
+    const primaryColor = computedStyle.getPropertyValue('--color-primary').trim();
+    
+    // Get blend utilities
+    const blendUtils = getBlendUtilities();
+    
+    // Calculate state colors
+    this._hoverColor = blendUtils.hoverColor(primaryColor);      // 8% darker
+    this._pressedColor = blendUtils.pressedColor(primaryColor);  // 12% darker
+    this._disabledColor = blendUtils.disabledColor(primaryColor); // 12% desaturated
+    this._focusColor = blendUtils.focusColor(primaryColor);      // 8% more saturated
+  }
+}
+```
+
+### iOS Platform Usage
+
+```swift
+struct MyComponent: View {
+    let primaryColor: Color
+    
+    var body: some View {
+        Button(action: {}) {
+            Text(label)
+        }
+        .background(isPressed ? primaryColor.pressedBlend() : 
+                    isHovered ? primaryColor.hoverBlend() : 
+                    primaryColor)
+    }
+}
+```
+
+### Android Platform Usage
+
+```kotlin
+@Composable
+fun MyComponent(primaryColor: Color) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    
+    Button(
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (isPressed) primaryColor.pressedBlend() else primaryColor
+        )
+    ) {
+        Text(label)
+    }
+}
+```
+
+### Semantic Blend Token Reference
+
+| State | Token | Function | Value |
+|-------|-------|----------|-------|
+| Hover (light bg) | `blend.hoverDarker` | `hoverColor()` | 8% darker |
+| Hover (dark bg) | `blend.hoverLighter` | `lighterBlend(color, 0.08)` | 8% lighter |
+| Pressed | `blend.pressedDarker` | `pressedColor()` | 12% darker |
+| Focus | `blend.focusSaturate` | `focusColor()` | 8% more saturated |
+| Disabled | `blend.disabledDesaturate` | `disabledColor()` | 12% desaturated |
+| Container hover | `blend.containerHoverDarker` | `darkerBlend(color, 0.04)` | 4% darker |
+| Icon optical | `color.icon.opticalBalance` | `iconColor()` | 8% lighter |
+
+### Blend Utility Anti-Patterns
+
+**❌ Don't use opacity for state colors**:
+```typescript
+// WRONG: Opacity creates transparency, not new colors
+const hoverStyle = { opacity: 0.92 };
+```
+
+**❌ Don't use CSS filters for color modification**:
+```typescript
+// WRONG: Filters are not cross-platform consistent
+const iconStyle = { filter: 'brightness(1.08)' };
+```
+
+**❌ Don't use platform-specific workarounds**:
+```swift
+// WRONG: iOS scaleEffect as pressed state workaround
+.scaleEffect(isPressed ? 0.96 : 1.0)
+```
+
+**✅ Do use blend utilities**:
+```typescript
+// CORRECT: Blend utilities produce consistent opaque colors
+const hoverColor = blendUtils.hoverColor(primaryColor);
+```
+
+### Related Documentation
+
+- [Blend Tokens Guide](../docs/tokens/blend-tokens.md) - Complete blend token reference
+- [Blend Infrastructure Design](../.kiro/specs/031-blend-infrastructure-implementation/design.md) - Architecture decisions
 
 ---
 

@@ -492,6 +492,15 @@ The Token Category Pattern Guide provides the definitive patterns for adding new
 - **Related Documentation**:
   - [Glow Tokens Guide](./tokens/glow-tokens.md) - Glow primitive token reference with usage examples
 
+### Blend Tokens
+
+- **File**: `src/tokens/BlendTokens.ts`
+- **Description**: Blend tokens for color modifications (darken, lighten, saturate, desaturate) with 5-token scale from 4% to 20% in 4% increments
+- **Base Value**: 0.04 (4%)
+- **Scale**: 5 tokens (blend100-blend500) with systematic multiples of base value
+- **Related Documentation**:
+  - [Blend Tokens Guide](./tokens/blend-tokens.md) - Complete blend token reference with utility functions and theme-aware patterns
+
 ---
 
 ## Semantic Tokens
@@ -530,6 +539,15 @@ The Token Category Pattern Guide provides the definitive patterns for adding new
 - **Related Guides**:
   - [Shadow Tokens Guide](./tokens/shadow-tokens.md) - Complete shadow token reference with usage examples and lighting framework concepts
   - [Lighting Framework Guide](../.kiro/specs/shadow-glow-token-system/lighting-framework.md) - Conceptual framework for light source positioning and shadow quality
+
+### Semantic Blend Tokens
+
+- **File**: `src/tokens/semantic/BlendTokens.ts`
+- **Description**: Semantic blend tokens providing contextual meaning for common color modification use cases (hover, pressed, focus, disabled states) with explicit blend direction
+- **Tokens**: 7 semantic tokens (blend.hoverDarker, blend.hoverLighter, blend.pressedDarker, blend.focusSaturate, blend.disabledDesaturate, blend.containerHoverDarker, color.icon.opticalBalance)
+- **Related Guides**:
+  - [Blend Tokens Guide](./tokens/blend-tokens.md) - Complete blend token reference with utility functions and theme-aware patterns
+  - [Blend Infrastructure Design](../.kiro/specs/031-blend-infrastructure-implementation/design.md) - Architecture and design decisions for blend token infrastructure
 
 ### Layering Tokens
 

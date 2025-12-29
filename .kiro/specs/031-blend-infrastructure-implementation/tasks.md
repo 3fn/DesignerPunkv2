@@ -179,7 +179,7 @@ This implementation plan addresses the blend token infrastructure gap identified
 
 ---
 
-- [ ] 3. Theme Support
+- [x] 3. Theme Support
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -205,33 +205,92 @@ This implementation plan addresses the blend token infrastructure gap identified
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Theme Support"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 3.1 Create theme-aware wrapper functions
+  - [x] 3.1 Create theme-aware wrapper functions
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    - Create `useBlendUtilities` hook for Web (React)
+    - Create `getBlendUtilities()` factory and `createBlendUtilities()` for Web (vanilla TypeScript)
     - Create theme-aware extensions for iOS (SwiftUI)
     - Create theme-aware extensions for Android (Compose)
     - Wrappers automatically use current theme's color values
     - _Requirements: 11.4_
+    
+    **Note**: Original implementation completed with React-style naming (`useBlendUtilities`). 
+    Refactor subtasks below correct this to align with vanilla Web Component architecture.
 
-  - [ ] 3.2 Update components to use theme context
+  - [x] 3.1.REFACTOR.1 Update ThemeAwareBlendUtilities.web.ts naming and documentation
+    **Type**: Implementation
+    **Validation**: Tier 1 - Minimal
+    - Rename `useBlendUtilities` to `getBlendUtilities` (primary export)
+    - Remove React-specific documentation and comments
+    - Add documentation about CSS custom property integration pattern
+    - Keep `createBlendUtilities()` as factory function
+    - Ensure exports align with vanilla TypeScript patterns
+
+  - [x] 3.1.REFACTOR.2 Update ThemeAwareBlendUtilities tests
+    **Type**: Implementation
+    **Validation**: Tier 1 - Minimal
+    - Update test descriptions to remove React references
+    - Rename test cases from "useBlendUtilities" to "getBlendUtilities"
+    - Ensure tests validate vanilla TypeScript patterns
+
+  - [x] 3.1.REFACTOR.3 Update task 3.1 completion documentation
+    **Type**: Documentation
+    **Validation**: Tier 1 - Minimal
+    - Update completion doc to reflect corrected architecture
+    - Document the refactoring that was performed
+    - Note lessons learned about architecture assumptions
+
+  - [x] 3.2 Update ButtonCTA to use theme-aware blend utilities
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    - Integrate theme-aware wrappers into ButtonCTA
-    - Integrate theme-aware wrappers into TextInputField
-    - Integrate theme-aware wrappers into Container
-    - Integrate theme-aware wrappers into Icon
-    - _Requirements: 11.1, 11.2, 11.3_
+    - Web: Integrate `getBlendUtilities()` for hover/pressed/disabled states
+    - iOS: Use Color extensions with SwiftUI environment for theme colors
+    - Android: Use Color extensions with Compose MaterialTheme for theme colors
+    - Ensure hover uses `darkerBlend(color.primary, blend.hoverDarker)`
+    - Ensure pressed uses `darkerBlend(color.primary, blend.pressedDarker)`
+    - Ensure disabled uses `desaturate(color.primary, blend.disabledDesaturate)`
+    - Ensure icon uses `lighterBlend(color.onPrimary, blend.iconLighter)`
+    - _Requirements: 11.1, 11.2, 11.3, 7.1, 7.2, 7.3, 7.4_
 
-  - [ ] 3.3 Write theme switching tests
+  - [x] 3.3 Update TextInputField to use theme-aware blend utilities
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Web: Integrate `getBlendUtilities()` for focus/disabled states
+    - iOS: Use Color extensions with SwiftUI environment for theme colors
+    - Android: Use Color extensions with Compose MaterialTheme for theme colors
+    - Ensure focus uses `saturate(color.primary, blend.focusSaturate)`
+    - Ensure disabled uses `desaturate(color.primary, blend.disabledDesaturate)`
+    - _Requirements: 11.1, 11.2, 11.3, 8.1, 8.2_
+
+  - [x] 3.4 Update Container to use theme-aware blend utilities
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Web: Integrate `getBlendUtilities()` for hover state
+    - iOS: Use Color extensions with SwiftUI environment for theme colors
+    - Android: Use Color extensions with Compose MaterialTheme for theme colors
+    - Ensure hover uses `darkerBlend(color.surface, blend.hoverDarker)`
+    - _Requirements: 11.1, 11.2, 11.3, 9.1_
+
+  - [x] 3.5 Update Icon to use theme-aware blend utilities
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Web: Integrate `getBlendUtilities()` for optical balance
+    - iOS: Use Color extensions with SwiftUI environment for theme colors
+    - Android: Use Color extensions with Compose MaterialTheme for theme colors
+    - Ensure icon color uses `lighterBlend(color, blend.iconLighter)`
+    - _Requirements: 11.1, 11.2, 11.3, 10.1_
+
+  - [x] 3.6 Write theme switching tests ✅
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test light theme produces appropriate blend results
     - Test dark theme produces appropriate blend results
     - Test theme switching updates component colors
     - _Requirements: 11.1, 11.2, 11.3_
+    - **Completed**: December 29, 2025
+    - **Tests**: 34 tests passing in `src/blend/__tests__/ThemeSwitching.test.ts`
 
-  - [ ] 3.4 Update documentation
+  - [x] 3.7 Update documentation
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Update component guides with blend utility usage examples

@@ -12,12 +12,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
 import com.designerpunk.tokens.DesignTokens
-// Import blend utilities from generated BlendUtilities.android.kt
-import com.designerpunk.blend.lighterBlend
-
-// Blend token value for icon optical balance (from semantic blend tokens)
-// This matches the design token: color.icon.opticalBalance (blend200 = 8% lighter)
-private const val BLEND_ICON_LIGHTER: Float = 0.08f
+// Import theme-aware blend utilities from ThemeAwareBlendUtilities.android.kt
+// Uses iconBlend() extension for consistent optical balance across components
+// @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
+import com.designerpunk.tokens.iconBlend
 
 /**
  * Icon component for Android platform
@@ -25,20 +23,21 @@ private const val BLEND_ICON_LIGHTER: Float = 0.08f
  * Renders Icon from VectorDrawable resources with automatic color inheritance.
  * Icons are decorative (contentDescription = null) and inherit tint from LocalContentColor.
  * 
- * Uses blend utilities for optical balance adjustment when icons are paired with text.
- * The lighterBlend function compensates for icons appearing heavier than adjacent text
- * due to stroke density and fill area.
+ * Uses theme-aware blend utilities for optical balance adjustment when icons are paired 
+ * with text. The iconBlend() extension from ThemeAwareBlendUtilities compensates for 
+ * icons appearing heavier than adjacent text due to stroke density and fill area.
  * 
  * This component serves as the reference implementation for Rosetta pattern token usage.
  * 
  * @param name Icon name (e.g., "arrow-right", "check", "settings")
  * @param size Icon size in Dp (use DesignTokens.icon_size_050 through icon_size_700 tokens)
  * @param color Optional color override for optical weight compensation (null = inherit)
- * @param opticalBalance Whether to apply lighterBlend for optical weight compensation (default = false)
+ * @param opticalBalance Whether to apply iconBlend() for optical weight compensation (default = false)
  * @param modifier Optional modifier for additional styling
  * 
  * Requirements:
- * - 10.1, 10.2: Optical balance using blend utilities (lighterBlend instead of CSS filters)
+ * - 10.1, 10.2: Optical balance using theme-aware blend utilities (iconBlend() instead of CSS filters)
+ * - 11.1, 11.2, 11.3: Theme-aware utilities for cross-platform consistency
  * - 13.2: No filter: brightness() workarounds
  */
 @Composable
@@ -50,11 +49,14 @@ fun Icon(
     modifier: Modifier = Modifier
 ) {
     // Compute final color with optional optical balance adjustment
+    // Uses theme-aware iconBlend() extension for cross-platform consistency
+    // @see Requirements: 10.1, 10.2, 11.1, 11.2, 11.3 - Theme-aware optical balance
     val finalColor = when {
         color != null && opticalBalance -> {
-            // Apply optical balance using lighterBlend with blend.iconLighter token (8% lighter)
-            // This uses blend utilities instead of opacity or filter workarounds
-            color.lighterBlend(BLEND_ICON_LIGHTER)
+            // Apply optical balance using iconBlend() from ThemeAwareBlendUtilities
+            // Uses lighterBlend(color, blend.iconLighter) internally (8% lighter)
+            // This uses theme-aware blend utilities instead of opacity or filter workarounds
+            color.iconBlend()
         }
         color != null -> color
         else -> LocalContentColor.current

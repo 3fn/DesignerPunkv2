@@ -10,22 +10,23 @@
  * - Position animation (translateY)
  * - Respects prefers-reduced-motion
  * - WCAG 2.1 AA compliant
- * - Uses blend utilities for state colors (focus, disabled) instead of opacity workarounds
+ * - Uses theme-aware blend utilities for state colors (focus, disabled) instead of opacity workarounds
  * 
- * Requirements: 1.1, 1.2, 1.3, 1.5, 8.1, 8.2, 8.3, 13.1
+ * Uses theme-aware blend utilities (getBlendUtilities() factory) for state colors
+ * instead of direct blend calculations. This ensures cross-platform consistency
+ * with iOS and Android implementations.
+ * 
+ * Requirements: 1.1, 1.2, 1.3, 1.5, 8.1, 8.2, 8.3, 11.1, 11.2, 11.3, 13.1
  */
 
 import {
   TextInputFieldProps,
   TextInputFieldState
 } from '../../types';
-// Import blend utilities for state color calculations
-import {
-  hexToRgb,
-  rgbToHex,
-  calculateSaturateBlend,
-  calculateDesaturateBlend
-} from '../../../../../blend';
+// Import theme-aware blend utilities for state color calculations
+// Uses getBlendUtilities() factory for consistent state styling across components
+// @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
+import { getBlendUtilities, BlendUtilitiesResult } from '../../../../../blend/ThemeAwareBlendUtilities.web';
 import {
   createInitialState,
   handleFocus,
@@ -38,52 +39,14 @@ import {
 import { createIcon } from '../../../Icon/platforms/web/Icon.web';
 import { iconSizes } from '../../../Icon/types';
 
-// Blend token values (from semantic blend tokens)
-// These match the CSS custom properties: --blend-focus-saturate, --blend-disabled-desaturate
-const BLEND_FOCUS_SATURATE = 0.08;      // blend200 - 8% more saturated for focus emphasis
-const BLEND_DISABLED_DESATURATE = 0.12; // blend300 - 12% less saturated for disabled state
-
-/**
- * Apply saturate blend to a hex color string.
- * 
- * @param color - Hex color string (e.g., "#A855F7")
- * @param blendValue - Blend amount as decimal (0.0-1.0)
- * @returns Saturated hex color string
- */
-function saturate(color: string, blendValue: number): string {
-  try {
-    const rgb = hexToRgb(color);
-    const blended = calculateSaturateBlend(rgb, blendValue);
-    return rgbToHex(blended);
-  } catch {
-    // Return original color if parsing fails
-    return color;
-  }
-}
-
-/**
- * Apply desaturate blend to a hex color string.
- * 
- * @param color - Hex color string (e.g., "#A855F7")
- * @param blendValue - Blend amount as decimal (0.0-1.0)
- * @returns Desaturated hex color string
- */
-function desaturate(color: string, blendValue: number): string {
-  try {
-    const rgb = hexToRgb(color);
-    const blended = calculateDesaturateBlend(rgb, blendValue);
-    return rgbToHex(blended);
-  } catch {
-    // Return original color if parsing fails
-    return color;
-  }
-}
-
 /**
  * TextInputField Web Component
  * 
  * Custom element implementing the float label pattern with animated transitions.
- * Uses blend utilities for state colors (focus, disabled) instead of opacity workarounds.
+ * Uses theme-aware blend utilities for state colors (focus, disabled) instead of opacity workarounds.
+ * 
+ * Uses getBlendUtilities() factory for consistent state styling across components.
+ * @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
  */
 export class TextInputField extends HTMLElement {
   // Component state
@@ -99,6 +62,11 @@ export class TextInputField extends HTMLElement {
   // Shadow DOM
   private _shadowRoot: ShadowRoot;
   
+  // Theme-aware blend utilities instance
+  // Uses getBlendUtilities() factory for consistent state styling
+  // @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
+  private _blendUtils: BlendUtilitiesResult;
+  
   // Cached blend colors for state styling
   private _focusColor: string = '';
   private _disabledColor: string = '';
@@ -108,6 +76,11 @@ export class TextInputField extends HTMLElement {
     
     // Initialize shadow DOM
     this._shadowRoot = this.attachShadow({ mode: 'open' });
+    
+    // Initialize theme-aware blend utilities
+    // Uses getBlendUtilities() factory for consistent state styling
+    // @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
+    this._blendUtils = getBlendUtilities();
     
     // Initialize state
     this.state = createInitialState(this.getPropsFromAttributes());
@@ -154,14 +127,18 @@ export class TextInputField extends HTMLElement {
   /**
    * Calculate blend colors from CSS custom properties.
    * 
-   * Reads base colors from CSS custom properties and applies blend utilities
-   * to generate state colors (focus, disabled).
+   * Reads base colors from CSS custom properties and applies theme-aware blend
+   * utilities to generate state colors (focus, disabled).
    * 
-   * Uses blend utilities instead of opacity workarounds for
-   * cross-platform consistency with iOS and Android implementations.
+   * Uses getBlendUtilities() factory functions instead of direct blend calculations
+   * for cross-platform consistency with iOS and Android implementations.
    * 
-   * Focus: saturate(color.primary, blend.focusSaturate) - 8% more saturated
-   * Disabled: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
+   * State color mappings:
+   * - Focus: saturate(color.primary, blend.focusSaturate) - 8% more saturated
+   * - Disabled: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
+   * 
+   * @see Requirements: 8.1, 8.2 - TextInputField state colors
+   * @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
    */
   private _calculateBlendColors(): void {
     // Get computed styles to read CSS custom properties
@@ -179,12 +156,13 @@ export class TextInputField extends HTMLElement {
       return;
     }
     
-    // Calculate blend colors using blend utilities
-    // Focus: saturate(color.primary, blend.focusSaturate) - 8% more saturated for emphasis
-    this._focusColor = saturate(primaryColor, BLEND_FOCUS_SATURATE);
+    // Calculate blend colors using theme-aware blend utilities
+    // Uses semantic convenience functions from getBlendUtilities()
+    // @see Requirements: 8.1 - Focus uses saturate(color.primary, blend.focusSaturate)
+    this._focusColor = this._blendUtils.focusColor(primaryColor);
     
-    // Disabled: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
-    this._disabledColor = desaturate(primaryColor, BLEND_DISABLED_DESATURATE);
+    // @see Requirements: 8.2 - Disabled uses desaturate(color.primary, blend.disabledDesaturate)
+    this._disabledColor = this._blendUtils.disabledColor(primaryColor);
   }
   
   /**

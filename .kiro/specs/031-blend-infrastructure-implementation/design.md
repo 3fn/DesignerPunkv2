@@ -464,32 +464,110 @@ const disabledColor = desaturate(DesignTokens.color.primary, DesignTokens.blend.
 
 ## Theme-Aware Utilities
 
-### Theme Context Integration
+### Platform-Specific Theme Integration
+
+DesignerPunk uses a True Native Architecture with build-time platform separation. Each platform has its own idiomatic approach to theme-awareness:
+
+#### Web (Vanilla Web Components)
+
+Web components use CSS custom properties for theming. Theme-aware blend utilities read colors from CSS custom properties on `document.documentElement` and apply blend calculations.
 
 ```typescript
-// Theme-aware wrapper (Web)
-function useBlendUtilities() {
-  const theme = useTheme(); // Gets current theme context
-  
+// Theme-aware utility factory (Web - Vanilla JS)
+function getBlendUtilities() {
   return {
     hoverColor: (baseColor: string) => 
-      darkerBlend(baseColor, DesignTokens.blend.hoverDarker),
+      darkerBlend(baseColor, BlendTokenValues.hoverDarker),
     pressedColor: (baseColor: string) => 
-      darkerBlend(baseColor, DesignTokens.blend.pressedDarker),
+      darkerBlend(baseColor, BlendTokenValues.pressedDarker),
     focusColor: (baseColor: string) => 
-      saturate(baseColor, DesignTokens.blend.focusSaturate),
+      saturate(baseColor, BlendTokenValues.focusSaturate),
     disabledColor: (baseColor: string) => 
-      desaturate(baseColor, DesignTokens.blend.disabledDesaturate),
+      desaturate(baseColor, BlendTokenValues.disabledDesaturate),
   };
+}
+
+// Usage in Web Component
+class ButtonCTA extends HTMLElement {
+  connectedCallback() {
+    // Read theme colors from CSS custom properties
+    const computedStyle = getComputedStyle(document.documentElement);
+    const primaryColor = computedStyle.getPropertyValue('--color-primary').trim();
+    
+    // Apply blend utilities
+    const blendUtils = getBlendUtilities();
+    this._hoverColor = blendUtils.hoverColor(primaryColor);
+  }
+}
+```
+
+#### iOS (SwiftUI)
+
+SwiftUI uses environment-based theming with `@Environment(\.colorScheme)`. Theme-aware extensions on `Color` provide semantic blend operations.
+
+```swift
+// Theme-aware Color extensions (iOS)
+extension Color {
+    func hoverBlend() -> Color {
+        return self.darkerBlend(BlendTokenValues.hoverDarker)
+    }
+    
+    func pressedBlend() -> Color {
+        return self.darkerBlend(BlendTokenValues.pressedDarker)
+    }
+}
+
+// Usage in SwiftUI View
+struct ButtonCTA: View {
+    @Environment(\.colorScheme) var colorScheme
+    
+    var body: some View {
+        Button(action: {}) {
+            Text(label)
+        }
+        .background(primaryColor.hoverBlend())
+    }
+}
+```
+
+#### Android (Jetpack Compose)
+
+Compose uses `MaterialTheme` and `isSystemInDarkTheme()` for theming. Theme-aware extensions on `Color` provide semantic blend operations.
+
+```kotlin
+// Theme-aware Color extensions (Android)
+fun Color.hoverBlend(): Color {
+    return this.darkerBlend(BlendTokenValues.hoverDarker)
+}
+
+fun Color.pressedBlend(): Color {
+    return this.darkerBlend(BlendTokenValues.pressedDarker)
+}
+
+// Usage in Compose
+@Composable
+fun ButtonCTA() {
+    val primaryColor = MaterialTheme.colorScheme.primary
+    
+    Button(
+        colors = ButtonDefaults.buttonColors(
+            containerColor = primaryColor.hoverBlend()
+        )
+    ) {
+        Text(label)
+    }
 }
 ```
 
 ### Theme Switching Behavior
 
-When theme context changes:
-1. Components re-render with new base colors
-2. Blend utilities apply same operations to new colors
-3. Result: Appropriate blend results for light/dark mode
+Theme switching works differently per platform:
+
+**Web**: CSS custom properties change (via class toggle or media query), components read new values on next interaction or via `MutationObserver`.
+
+**iOS**: `@Environment(\.colorScheme)` triggers SwiftUI view updates automatically.
+
+**Android**: `isSystemInDarkTheme()` or `MaterialTheme` changes trigger Compose recomposition.
 
 ---
 

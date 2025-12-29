@@ -103,11 +103,17 @@ function readComponentSource(filePath: string): string {
 
 /**
  * Check if source contains blend utility import/usage
+ * 
+ * Supports both direct blend utility usage and theme-aware utility usage:
+ * - Direct: calculateDarkerBlend, darkerBlend, etc.
+ * - Theme-aware: getBlendUtilities, hoverBlend, pressedBlend, disabledBlend, iconBlend
  */
 function hasBlendUtilityUsage(source: string, platform: 'web' | 'ios' | 'android'): boolean {
   if (platform === 'web') {
     // Web: Check for blend utility imports and function calls
+    // Supports both direct blend utilities and theme-aware utilities
     return (
+      // Direct blend utilities
       source.includes('calculateDarkerBlend') ||
       source.includes('calculateLighterBlend') ||
       source.includes('calculateSaturateBlend') ||
@@ -115,16 +121,31 @@ function hasBlendUtilityUsage(source: string, platform: 'web' | 'ios' | 'android
       source.includes('darkerBlend') ||
       source.includes('lighterBlend') ||
       source.includes('saturate') ||
-      source.includes('desaturate')
+      source.includes('desaturate') ||
+      // Theme-aware blend utilities
+      source.includes('getBlendUtilities') ||
+      source.includes('createBlendUtilities') ||
+      source.includes('hoverColor') ||
+      source.includes('pressedColor') ||
+      source.includes('disabledColor') ||
+      source.includes('iconColor') ||
+      source.includes('ThemeAwareBlendUtilities')
     );
   } else if (platform === 'ios') {
     // iOS: Check for Color extension method calls OR standalone blend functions
-    // iOS can use either .darkerBlend() method syntax or standalone saturate()/desaturate() functions
+    // Supports both direct blend utilities and theme-aware utilities
     return (
+      // Direct blend utilities
       source.includes('.darkerBlend(') ||
       source.includes('.lighterBlend(') ||
       source.includes('.saturate(') ||
       source.includes('.desaturate(') ||
+      // Theme-aware blend utilities (semantic methods)
+      source.includes('.hoverBlend(') ||
+      source.includes('.pressedBlend(') ||
+      source.includes('.focusBlend(') ||
+      source.includes('.disabledBlend(') ||
+      source.includes('.iconBlend(') ||
       // Also check for standalone function definitions (private func saturate/desaturate)
       /private\s+func\s+saturate\s*\(/.test(source) ||
       /private\s+func\s+desaturate\s*\(/.test(source) ||
@@ -134,27 +155,67 @@ function hasBlendUtilityUsage(source: string, platform: 'web' | 'ios' | 'android
     );
   } else {
     // Android: Check for Color extension function calls
+    // Supports both direct blend utilities and theme-aware utilities
     return (
+      // Direct blend utilities
       source.includes('.darkerBlend(') ||
       source.includes('.lighterBlend(') ||
       source.includes('.saturate(') ||
-      source.includes('.desaturate(')
+      source.includes('.desaturate(') ||
+      // Theme-aware blend utilities (semantic methods)
+      source.includes('.hoverBlend(') ||
+      source.includes('.pressedBlend(') ||
+      source.includes('.focusBlend(') ||
+      source.includes('.disabledBlend(') ||
+      source.includes('.iconBlend(')
     );
   }
 }
 
 /**
  * Check for specific blend token value usage
+ * 
+ * Supports both direct token value definitions and theme-aware utility usage:
+ * - Direct: BLEND_HOVER_DARKER = 0.08, etc.
+ * - Theme-aware: Uses BlendTokenValues from ThemeAwareBlendUtilities (values encapsulated)
+ * 
+ * When theme-aware utilities are used, the token values are defined in the utility files,
+ * not in the component files. This function checks for both patterns.
  */
 function hasBlendTokenValue(source: string, tokenValue: number): boolean {
-  // Check for the token value in various formats
-  const patterns = [
+  // Check for the token value in various formats (direct definition)
+  const directPatterns = [
     new RegExp(`${tokenValue}\\b`),           // Direct value: 0.08
     new RegExp(`${tokenValue}f\\b`),          // Kotlin float: 0.08f
     new RegExp(`BLEND_.*=\\s*${tokenValue}`), // Constant definition
   ];
   
-  return patterns.some(pattern => pattern.test(source));
+  // Check for theme-aware utility usage (values encapsulated in utility files)
+  // When using theme-aware utilities, the component doesn't define the values directly
+  const themeAwarePatterns = [
+    // Web: getBlendUtilities(), createBlendUtilities(), BlendUtilitiesResult
+    /getBlendUtilities\s*\(\s*\)/,
+    /createBlendUtilities\s*\(\s*\)/,
+    /ThemeAwareBlendUtilities/,
+    /BlendUtilitiesResult/,
+    // iOS: hoverBlend(), pressedBlend(), disabledBlend(), iconBlend()
+    /\.hoverBlend\s*\(\s*\)/,
+    /\.pressedBlend\s*\(\s*\)/,
+    /\.focusBlend\s*\(\s*\)/,
+    /\.disabledBlend\s*\(\s*\)/,
+    /\.iconBlend\s*\(\s*\)/,
+    // Android: hoverBlend(), pressedBlend(), disabledBlend(), iconBlend()
+    /import.*hoverBlend/,
+    /import.*pressedBlend/,
+    /import.*disabledBlend/,
+    /import.*iconBlend/,
+  ];
+  
+  // Return true if either direct values or theme-aware utilities are used
+  const hasDirectValue = directPatterns.some(pattern => pattern.test(source));
+  const hasThemeAwareUsage = themeAwarePatterns.some(pattern => pattern.test(source));
+  
+  return hasDirectValue || hasThemeAwareUsage;
 }
 
 /**

@@ -7,26 +7,21 @@
  * Follows True Native Architecture with platform-specific SwiftUI implementation
  * while maintaining API consistency with web and Android platforms.
  * 
- * Uses blend utilities for state colors (hover, pressed, disabled, icon) instead of
- * opacity or scale workarounds. This ensures cross-platform consistency with Web
- * and Android implementations.
+ * Uses theme-aware blend utilities (Color extensions with SwiftUI environment) for
+ * state colors (hover, pressed, disabled, icon) instead of opacity or scale workarounds.
+ * This ensures cross-platform consistency with Web and Android implementations.
  * 
  * Part of the DesignerPunk CTA Button Component system.
  * 
  * @module ButtonCTA/platforms/ios
+ * @see Requirements: 7.1, 7.2, 7.3, 7.4, 11.1, 11.2, 11.3
  */
 
 import SwiftUI
 
-// Import blend utilities (Color extensions from BlendUtilities.ios.swift)
-// These provide darkerBlend, lighterBlend, saturate, desaturate methods on Color
-
-// Blend token values (from semantic blend tokens)
-// These match the CSS custom properties: --blend-hover-darker, --blend-pressed-darker, etc.
-private let BLEND_HOVER_DARKER: Double = 0.08      // blend200
-private let BLEND_PRESSED_DARKER: Double = 0.12   // blend300
-private let BLEND_DISABLED_DESATURATE: Double = 0.12 // blend300
-private let BLEND_ICON_LIGHTER: Double = 0.08     // blend200 (color.icon.opticalBalance)
+// Import theme-aware blend utilities (Color extensions from ThemeAwareBlendUtilities.ios.swift)
+// These provide semantic blend methods: hoverBlend(), pressedBlend(), disabledBlend(), iconBlend()
+// @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
 
 /**
  * Button size variants
@@ -65,7 +60,10 @@ enum ButtonStyle {
  * 
  * Renders a call-to-action button with SwiftUI Button component, supporting
  * three size variants, three visual styles, optional leading icons, and
- * platform-specific interaction patterns (scale transform on press).
+ * theme-aware blend utilities for state colors.
+ * 
+ * Uses theme-aware Color extensions (hoverBlend(), pressedBlend(), disabledBlend(),
+ * iconBlend()) with SwiftUI environment for automatic theme color updates.
  * 
  * Usage:
  * ```swift
@@ -96,9 +94,10 @@ enum ButtonStyle {
  * Requirements:
  * - 1.1-1.7: Size variants (small: 40px, medium: 48px, large: 56px)
  * - 2.1-2.4: Visual styles (primary, secondary, tertiary)
+ * - 7.1-7.4: Blend utility state colors (hover, pressed, disabled, icon)
  * - 8.1-8.6: Icon support with leading position
+ * - 11.1-11.3: Theme-aware blend utilities with SwiftUI environment
  * - 13.1-13.4: Touch target accessibility (44px minimum)
- * - 17.2: Platform-specific scale transform on press
  */
 struct ButtonCTA: View {
     // MARK: - Properties
@@ -227,13 +226,14 @@ struct ButtonCTA: View {
     // MARK: - Blend Color Computed Properties
     
     /// Current background color based on state (normal, hover, pressed, disabled)
-    /// Uses blend utilities instead of opacity/scale workarounds
+    /// Uses theme-aware blend utilities (Color extensions) for cross-platform consistency
+    /// @see Requirements: 7.1, 7.2, 7.3, 11.1, 11.2, 11.3
     private var currentBackgroundColor: Color {
         if disabled {
-            // Disabled: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
+            // @see Requirements: 7.3 - Disabled uses desaturate(color.primary, blend.disabledDesaturate)
             return disabledBackgroundColor
         } else if isPressed {
-            // Pressed: darkerBlend(color.primary, blend.pressedDarker) - 12% darker
+            // @see Requirements: 7.2 - Pressed uses darkerBlend(color.primary, blend.pressedDarker)
             return pressedBackgroundColor
         } else {
             // Normal state
@@ -241,25 +241,27 @@ struct ButtonCTA: View {
         }
     }
     
-    /// Pressed state background color using blend utility
-    /// darkerBlend(color.primary, blend.pressedDarker) = 12% darker
+    /// Pressed state background color using theme-aware blend utility
+    /// Uses pressedBlend() which applies darkerBlend with blend.pressedDarker (12%)
+    /// @see Requirements: 7.2, 11.1, 11.2, 11.3
     private var pressedBackgroundColor: Color {
         switch style {
         case .primary:
-            return Color(DesignTokens.colorPrimary).darkerBlend(BLEND_PRESSED_DARKER)
+            return Color(DesignTokens.colorPrimary).pressedBlend()
         case .secondary:
-            return Color(DesignTokens.colorBackground).darkerBlend(BLEND_PRESSED_DARKER)
+            return Color(DesignTokens.colorBackground).pressedBlend()
         case .tertiary:
             return Color.clear
         }
     }
     
-    /// Disabled state background color using blend utility
-    /// desaturate(color.primary, blend.disabledDesaturate) = 12% less saturated
+    /// Disabled state background color using theme-aware blend utility
+    /// Uses disabledBlend() which applies desaturate with blend.disabledDesaturate (12%)
+    /// @see Requirements: 7.3, 11.1, 11.2, 11.3
     private var disabledBackgroundColor: Color {
         switch style {
         case .primary:
-            return Color(DesignTokens.colorPrimary).desaturate(BLEND_DISABLED_DESATURATE)
+            return Color(DesignTokens.colorPrimary).disabledBlend()
         case .secondary:
             return Color(DesignTokens.colorBackground)
         case .tertiary:
@@ -425,18 +427,18 @@ struct ButtonCTA: View {
     }
     
     /// Icon color based on button style with optical balance
-    /// Requirements: 9.1-9.3
-    /// Uses blend utilities instead of opacity workaround for cross-platform consistency
+    /// Uses theme-aware blend utility iconBlend() for cross-platform consistency
+    /// @see Requirements: 7.4, 9.1-9.3, 11.1, 11.2, 11.3
     private var iconColor: Color? {
         switch style {
         case .primary:
             // Primary style: Use colorTextOnPrimary with optical balance blend
-            // lighterBlend(color.onPrimary, blend.iconLighter) = 8% lighter
-            return Color(DesignTokens.colorTextOnPrimary).lighterBlend(BLEND_ICON_LIGHTER)
+            // iconBlend() applies lighterBlend with blend.iconLighter (8%)
+            return Color(DesignTokens.colorTextOnPrimary).iconBlend()
         case .secondary, .tertiary:
             // Secondary/Tertiary: Use color.primary with optical balance blend
-            // lighterBlend(color.primary, blend.iconLighter) = 8% lighter
-            return Color(DesignTokens.colorPrimary).lighterBlend(BLEND_ICON_LIGHTER)
+            // iconBlend() applies lighterBlend with blend.iconLighter (8%)
+            return Color(DesignTokens.colorPrimary).iconBlend()
         }
     }
 }

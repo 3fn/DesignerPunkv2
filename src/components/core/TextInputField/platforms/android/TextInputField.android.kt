@@ -11,9 +11,14 @@
  * - Trailing icon support (error, success, info)
  * - Respects reduce motion settings
  * - WCAG 2.1 AA compliant
- * - Uses blend utilities for state colors (focus, disabled) instead of opacity workarounds
+ * - Uses theme-aware blend utilities (Color extensions with Compose MaterialTheme) for
+ *   state colors (focus, disabled) instead of opacity workarounds
  * 
- * Requirements: 1.1, 1.2, 1.3, 1.5, 4.1, 4.2, 4.3, 8.1, 8.2, 8.3, 8.5, 13.1
+ * Uses theme-aware Color extensions (focusBlend(), disabledBlend()) with Compose
+ * MaterialTheme for automatic theme color updates. This ensures cross-platform
+ * consistency with Web and iOS implementations.
+ * 
+ * Requirements: 1.1, 1.2, 1.3, 1.5, 4.1, 4.2, 4.3, 8.1, 8.2, 8.3, 8.5, 11.1, 11.2, 11.3, 13.1
  */
 
 package com.designerpunk.components.core
@@ -52,18 +57,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import android.provider.Settings
-// Import blend utilities (Color extension functions from BlendUtilities.android.kt)
-import com.designerpunk.tokens.saturate
-import com.designerpunk.tokens.desaturate
-
-// MARK: - Blend Token Constants
-
-/// Blend token values (from semantic blend tokens)
-/// Focus: saturate(color.primary, blend.focusSaturate) - 8% more saturated
-private const val BLEND_FOCUS_SATURATE: Float = 0.08f
-
-/// Disabled: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
-private const val BLEND_DISABLED_DESATURATE: Float = 0.12f
+// Import theme-aware blend utilities (Color extension functions from ThemeAwareBlendUtilities.android.kt)
+// These provide semantic blend methods: focusBlend(), disabledBlend()
+// @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
+import com.designerpunk.tokens.focusBlend
+import com.designerpunk.tokens.disabledBlend
 
 /**
  * Input type enumeration
@@ -192,8 +190,12 @@ fun TextInputField(
         targetValue = when {
             hasError -> colorError
             isSuccess -> colorSuccessStrong
-            isDisabled -> colorPrimary.desaturate(BLEND_DISABLED_DESATURATE) // 12% less saturated
-            isFocused -> colorPrimary.saturate(BLEND_FOCUS_SATURATE) // 8% more saturated
+            // @see Requirements: 8.2 - Disabled uses desaturate(color.primary, blend.disabledDesaturate)
+            // Uses disabledBlend() which applies desaturate with blend.disabledDesaturate (12%)
+            isDisabled -> colorPrimary.disabledBlend()
+            // @see Requirements: 8.1 - Focus uses saturate(color.primary, blend.focusSaturate)
+            // Uses focusBlend() which applies saturate with blend.focusSaturate (8%)
+            isFocused -> colorPrimary.focusBlend()
             else -> colorTextMuted
         },
         animationSpec = animationSpec,
@@ -204,8 +206,12 @@ fun TextInputField(
         targetValue = when {
             hasError -> colorError
             isSuccess -> colorSuccessStrong
-            isDisabled -> colorPrimary.desaturate(BLEND_DISABLED_DESATURATE) // 12% less saturated
-            isFocused -> colorPrimary.saturate(BLEND_FOCUS_SATURATE) // 8% more saturated
+            // @see Requirements: 8.2 - Disabled uses desaturate(color.primary, blend.disabledDesaturate)
+            // Uses disabledBlend() which applies desaturate with blend.disabledDesaturate (12%)
+            isDisabled -> colorPrimary.disabledBlend()
+            // @see Requirements: 8.1 - Focus uses saturate(color.primary, blend.focusSaturate)
+            // Uses focusBlend() which applies saturate with blend.focusSaturate (8%)
+            isFocused -> colorPrimary.focusBlend()
             else -> colorBorder
         },
         animationSpec = animationSpec,
@@ -485,6 +491,7 @@ private val accessibilityFocusWidth: Dp // Generated from accessibility.focus.wi
 private val accessibilityFocusOffset: Dp // Generated from accessibility.focus.offset
 private val accessibilityFocusColor: Color // Generated from accessibility.focus.color
 
-// Blend tokens - used via extension functions from BlendUtilities.android.kt
-// - blend.focusSaturate (8%) - saturate(color, amount) for focus state
-// - blend.disabledDesaturate (12%) - desaturate(color, amount) for disabled state
+// Blend tokens - used via theme-aware extension functions from ThemeAwareBlendUtilities.android.kt
+// - focusBlend() - applies saturate with blend.focusSaturate (8%) for focus state
+// - disabledBlend() - applies desaturate with blend.disabledDesaturate (12%) for disabled state
+// @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities

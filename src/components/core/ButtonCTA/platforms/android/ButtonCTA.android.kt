@@ -7,13 +7,14 @@
  * Follows True Native Architecture with platform-specific Jetpack Compose implementation
  * while maintaining API consistency with web and iOS platforms.
  * 
- * Uses blend utilities for state colors (hover, pressed, disabled, icon) instead of
- * opacity or Material ripple workarounds. This ensures cross-platform consistency with
- * Web and iOS implementations.
+ * Uses theme-aware blend utilities (Color extensions with Compose MaterialTheme) for
+ * state colors (hover, pressed, disabled, icon) instead of opacity or Material ripple
+ * workarounds. This ensures cross-platform consistency with Web and iOS implementations.
  * 
  * Part of the DesignerPunk CTA Button Component system.
  * 
  * @module ButtonCTA/platforms/android
+ * @see Requirements: 7.1, 7.2, 7.3, 7.4, 11.1, 11.2, 11.3
  */
 
 package com.designerpunk.components.core
@@ -37,17 +38,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.designerpunk.tokens.DesignTokens
-// Import blend utilities (Color extension functions from BlendUtilities.android.kt)
-import com.designerpunk.tokens.darkerBlend
-import com.designerpunk.tokens.lighterBlend
-import com.designerpunk.tokens.desaturate
-
-// Blend token values (from semantic blend tokens)
-// These match the CSS custom properties: --blend-hover-darker, --blend-pressed-darker, etc.
-private const val BLEND_HOVER_DARKER: Float = 0.08f      // blend200
-private const val BLEND_PRESSED_DARKER: Float = 0.12f   // blend300
-private const val BLEND_DISABLED_DESATURATE: Float = 0.12f // blend300
-private const val BLEND_ICON_LIGHTER: Float = 0.08f     // blend200 (color.icon.opticalBalance)
+// Import theme-aware blend utilities (Color extension functions from ThemeAwareBlendUtilities.android.kt)
+// These provide semantic blend methods: hoverBlend(), pressedBlend(), disabledBlend(), iconBlend()
+// @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
+import com.designerpunk.tokens.hoverBlend
+import com.designerpunk.tokens.pressedBlend
+import com.designerpunk.tokens.disabledBlend
+import com.designerpunk.tokens.iconBlend
 
 /**
  * Button size variants
@@ -86,10 +83,10 @@ enum class ButtonStyle {
  * 
  * Renders a call-to-action button with Material3 Surface composable, supporting
  * three size variants, three visual styles, optional leading icons, and
- * blend utility-based state colors for cross-platform consistency.
+ * theme-aware blend utilities for state colors.
  * 
- * Uses blend utilities instead of Material ripple for pressed state to ensure
- * visual consistency with Web and iOS implementations.
+ * Uses theme-aware Color extensions (hoverBlend(), pressedBlend(), disabledBlend(),
+ * iconBlend()) with Compose MaterialTheme for automatic theme color updates.
  * 
  * Usage:
  * ```kotlin
@@ -120,9 +117,10 @@ enum class ButtonStyle {
  * Requirements:
  * - 1.1-1.7: Size variants (small: 40dp, medium: 48dp, large: 56dp)
  * - 2.1-2.4: Visual styles (primary, secondary, tertiary)
+ * - 7.1-7.4: Blend utility state colors (hover, pressed, disabled, icon)
  * - 8.1-8.6: Icon support with leading position
+ * - 11.1-11.3: Theme-aware blend utilities with Compose MaterialTheme
  * - 13.1-13.4: Touch target accessibility (44dp minimum)
- * - 7.1-7.5: Blend utility state colors (hover, pressed, disabled, icon)
  * 
  * @param label Button text label (required)
  * @param size Button size variant (default: MEDIUM)
@@ -352,15 +350,17 @@ private data class StyleConfig(
  * Get style configuration for a button visual style with state-based blend colors.
  * 
  * Returns configuration object with all style-related properties based on
- * semantic color tokens and blend utilities for state colors.
+ * semantic color tokens and theme-aware blend utilities for state colors.
  * 
- * Uses blend utilities instead of opacity/ripple workarounds for cross-platform
- * consistency with Web and iOS implementations.
+ * Uses theme-aware Color extensions (hoverBlend(), pressedBlend(), disabledBlend(),
+ * iconBlend()) instead of direct blend calculations for cross-platform consistency
+ * with Web and iOS implementations.
  * 
  * Requirements:
  * - 2.1-2.4: Visual styles (primary, secondary, tertiary)
- * - 7.1-7.5: Blend utility state colors (hover, pressed, disabled, icon)
+ * - 7.1-7.4: Blend utility state colors (hover, pressed, disabled, icon)
  * - 9.1-9.3: Icon color with optical balance using blend utility
+ * - 11.1-11.3: Theme-aware blend utilities with Compose MaterialTheme
  * 
  * @param style Button visual style
  * @param isPressed Whether button is currently pressed
@@ -373,23 +373,28 @@ private fun getStyleConfig(style: ButtonStyle, isPressed: Boolean, disabled: Boo
     val colorBackground = Color(DesignTokens.color_background)     // color.background (white)
     val colorTextOnPrimary = Color(DesignTokens.color_text_on_primary) // color.text.onPrimary (white)
     
-    // Calculate state-based background colors using blend utilities
+    // Calculate state-based background colors using theme-aware blend utilities
+    // @see Requirements: 7.1, 7.2, 7.3, 11.1, 11.2, 11.3
     val primaryBgColor = when {
-        disabled -> colorPrimary.desaturate(BLEND_DISABLED_DESATURATE) // 12% less saturated
-        isPressed -> colorPrimary.darkerBlend(BLEND_PRESSED_DARKER)    // 12% darker
+        // @see Requirements: 7.3 - Disabled uses desaturate(color.primary, blend.disabledDesaturate)
+        disabled -> colorPrimary.disabledBlend()
+        // @see Requirements: 7.2 - Pressed uses darkerBlend(color.primary, blend.pressedDarker)
+        isPressed -> colorPrimary.pressedBlend()
         else -> colorPrimary
     }
     
     val secondaryBgColor = when {
         disabled -> colorBackground
-        isPressed -> colorBackground.darkerBlend(BLEND_PRESSED_DARKER) // 12% darker
+        // @see Requirements: 7.2 - Pressed uses darkerBlend for secondary background
+        isPressed -> colorBackground.pressedBlend()
         else -> colorBackground
     }
     
-    // Calculate icon colors with optical balance using blend utility
-    // lighterBlend(color, blend.iconLighter) = 8% lighter for optical weight compensation
-    val primaryIconColor = colorTextOnPrimary.lighterBlend(BLEND_ICON_LIGHTER)
-    val secondaryIconColor = colorPrimary.lighterBlend(BLEND_ICON_LIGHTER)
+    // Calculate icon colors with optical balance using theme-aware blend utility
+    // iconBlend() applies lighterBlend with blend.iconLighter (8%) for optical weight compensation
+    // @see Requirements: 7.4, 11.1, 11.2, 11.3
+    val primaryIconColor = colorTextOnPrimary.iconBlend()
+    val secondaryIconColor = colorPrimary.iconBlend()
     
     return when (style) {
         ButtonStyle.PRIMARY -> StyleConfig(

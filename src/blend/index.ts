@@ -24,3 +24,14 @@ export {
   BlendCalculator,
   calculateBlend
 } from './BlendCalculator';
+
+// Theme-aware blend utilities for Web (React)
+export {
+  useBlendUtilities,
+  getBlendUtilities,
+  createBlendUtilities,
+  BlendTokenValues,
+  BlendUtilitiesResult,
+  BlendThemeContext,
+  ThemeMode
+} from './ThemeAwareBlendUtilities.web';

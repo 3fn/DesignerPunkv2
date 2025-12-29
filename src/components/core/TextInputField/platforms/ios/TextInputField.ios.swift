@@ -11,65 +11,21 @@
  * - Trailing icon support (error, success, info)
  * - Respects accessibilityReduceMotion
  * - WCAG 2.1 AA compliant
- * - Uses blend utilities for state colors (focus, disabled) instead of opacity workarounds
+ * - Uses theme-aware blend utilities (Color extensions with SwiftUI environment) for
+ *   state colors (focus, disabled) instead of opacity workarounds
  * 
- * Requirements: 1.1, 1.2, 1.3, 1.5, 4.1, 4.2, 4.3, 8.1, 8.2, 8.4, 13.1
+ * Uses theme-aware Color extensions (focusBlend(), disabledBlend()) with SwiftUI
+ * environment for automatic theme color updates. This ensures cross-platform
+ * consistency with Web and Android implementations.
+ * 
+ * Requirements: 1.1, 1.2, 1.3, 1.5, 4.1, 4.2, 4.3, 8.1, 8.2, 8.4, 11.1, 11.2, 11.3, 13.1
  */
 
 import SwiftUI
 
-// MARK: - Blend Token Constants
-
-/// Blend token values (from semantic blend tokens)
-/// Focus: saturate(color.primary, blend.focusSaturate) - 8% more saturated
-private let blendFocusSaturate: Double = 0.08
-
-/// Disabled: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
-private let blendDisabledDesaturate: Double = 0.12
-
-// MARK: - Blend Utility Functions
-
-/// Apply saturate blend to a Color by increasing HSL saturation
-/// - Parameters:
-///   - color: Base color
-///   - amount: Saturation increase as decimal (0.0-1.0)
-/// - Returns: Saturated color
-private func saturate(_ color: Color, amount: Double) -> Color {
-    // Convert Color to UIColor to access RGB components
-    let uiColor = UIColor(color)
-    var hue: CGFloat = 0
-    var saturation: CGFloat = 0
-    var brightness: CGFloat = 0
-    var alpha: CGFloat = 0
-    
-    uiColor.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
-    
-    // Increase saturation by amount, clamped to 0-1
-    let newSaturation = min(1.0, saturation + CGFloat(amount))
-    
-    return Color(hue: Double(hue), saturation: Double(newSaturation), brightness: Double(brightness), opacity: Double(alpha))
-}
-
-/// Apply desaturate blend to a Color by decreasing HSL saturation
-/// - Parameters:
-///   - color: Base color
-///   - amount: Saturation decrease as decimal (0.0-1.0)
-/// - Returns: Desaturated color
-private func desaturate(_ color: Color, amount: Double) -> Color {
-    // Convert Color to UIColor to access RGB components
-    let uiColor = UIColor(color)
-    var hue: CGFloat = 0
-    var saturation: CGFloat = 0
-    var brightness: CGFloat = 0
-    var alpha: CGFloat = 0
-    
-    uiColor.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
-    
-    // Decrease saturation by amount, clamped to 0-1
-    let newSaturation = max(0.0, saturation - CGFloat(amount))
-    
-    return Color(hue: Double(hue), saturation: Double(newSaturation), brightness: Double(brightness), opacity: Double(alpha))
-}
+// Import theme-aware blend utilities (Color extensions from ThemeAwareBlendUtilities.ios.swift)
+// These provide semantic blend methods: focusBlend(), disabledBlend()
+// @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
 
 /**
  * TextInputField SwiftUI View
@@ -173,20 +129,23 @@ struct TextInputField: View {
     }
     
     /// Label color based on state
-    /// Uses blend utilities for focus and disabled states:
-    /// - Focus: saturate(color.primary, blend.focusSaturate) - 8% more saturated
-    /// - Disabled: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
+    /// Uses theme-aware blend utilities (Color extensions) for focus and disabled states:
+    /// - Focus: focusBlend() applies saturate(color.primary, blend.focusSaturate) - 8% more saturated
+    /// - Disabled: disabledBlend() applies desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
+    /// @see Requirements: 8.1, 8.2, 11.1, 11.2, 11.3
     private var labelColor: Color {
         if hasError {
             return Color(DesignTokens.color.error.strong)
         } else if isSuccess {
             return Color(DesignTokens.color.success.strong)
         } else if isDisabled {
-            // Disabled: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
-            return desaturate(Color(DesignTokens.color.primary), amount: blendDisabledDesaturate)
+            // @see Requirements: 8.2 - Disabled uses desaturate(color.primary, blend.disabledDesaturate)
+            // Uses disabledBlend() which applies desaturate with blend.disabledDesaturate (12%)
+            return Color(DesignTokens.color.primary).disabledBlend()
         } else if isFocused {
-            // Focus: saturate(color.primary, blend.focusSaturate) - 8% more saturated
-            return saturate(Color(DesignTokens.color.primary), amount: blendFocusSaturate)
+            // @see Requirements: 8.1 - Focus uses saturate(color.primary, blend.focusSaturate)
+            // Uses focusBlend() which applies saturate with blend.focusSaturate (8%)
+            return Color(DesignTokens.color.primary).focusBlend()
         } else {
             return Color(DesignTokens.color.text.muted)
         }
@@ -204,20 +163,23 @@ struct TextInputField: View {
     }
     
     /// Border color based on state
-    /// Uses blend utilities for focus and disabled states:
-    /// - Focus: saturate(color.primary, blend.focusSaturate) - 8% more saturated
-    /// - Disabled: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
+    /// Uses theme-aware blend utilities (Color extensions) for focus and disabled states:
+    /// - Focus: focusBlend() applies saturate(color.primary, blend.focusSaturate) - 8% more saturated
+    /// - Disabled: disabledBlend() applies desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
+    /// @see Requirements: 8.1, 8.2, 11.1, 11.2, 11.3
     private var borderColor: Color {
         if hasError {
             return Color(DesignTokens.color.error.strong)
         } else if isSuccess {
             return Color(DesignTokens.color.success.strong)
         } else if isDisabled {
-            // Disabled: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
-            return desaturate(Color(DesignTokens.color.primary), amount: blendDisabledDesaturate)
+            // @see Requirements: 8.2 - Disabled uses desaturate(color.primary, blend.disabledDesaturate)
+            // Uses disabledBlend() which applies desaturate with blend.disabledDesaturate (12%)
+            return Color(DesignTokens.color.primary).disabledBlend()
         } else if isFocused {
-            // Focus: saturate(color.primary, blend.focusSaturate) - 8% more saturated
-            return saturate(Color(DesignTokens.color.primary), amount: blendFocusSaturate)
+            // @see Requirements: 8.1 - Focus uses saturate(color.primary, blend.focusSaturate)
+            // Uses focusBlend() which applies saturate with blend.focusSaturate (8%)
+            return Color(DesignTokens.color.primary).focusBlend()
         } else {
             return Color(DesignTokens.color.border)
         }
@@ -467,7 +429,11 @@ struct CustomTextFieldStyle: TextFieldStyle {
 // - radius: radius150
 // - accessibility: tapArea.recommended, focus.width, focus.offset
 // - icon: size100
-// - blend: focusSaturate (8%), disabledDesaturate (12%)
+//
+// Theme-aware blend utilities (Color extensions from ThemeAwareBlendUtilities.ios.swift):
+// - focusBlend() - applies saturate with blend.focusSaturate (8%) for focus state
+// - disabledBlend() - applies desaturate with blend.disabledDesaturate (12%) for disabled state
+// @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
 
 // MARK: - Preview
 

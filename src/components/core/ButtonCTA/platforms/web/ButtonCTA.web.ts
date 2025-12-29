@@ -9,11 +9,12 @@
  * composition pattern as iOS and Android platforms. This ensures cross-platform
  * consistency and single source of truth for icon rendering.
  * 
- * Uses blend utilities for state colors (hover, pressed, disabled, icon) instead of
- * opacity or filter workarounds. This ensures cross-platform consistency with iOS
- * and Android implementations.
+ * Uses theme-aware blend utilities for state colors (hover, pressed, disabled, icon)
+ * instead of opacity or filter workarounds. This ensures cross-platform consistency
+ * with iOS and Android implementations.
  * 
  * @module ButtonCTA/platforms/web
+ * @see Requirements: 7.1, 7.2, 7.3, 7.4, 11.1, 11.2, 11.3
  */
 
 /// <reference lib="dom" />
@@ -22,75 +23,10 @@ import { ButtonSize, ButtonStyle } from '../../types';
 // Import DPIcon to ensure it's registered before ButtonCTA uses it
 import '../../../Icon/platforms/web/Icon.web';
 import { IconSize, iconSizes } from '../../../Icon/types';
-// Import blend utilities for state color calculations
-import {
-  hexToRgb,
-  rgbToHex,
-  calculateDarkerBlend,
-  calculateLighterBlend,
-  calculateDesaturateBlend
-} from '../../../../../blend';
-
-// Blend token values (from semantic blend tokens)
-// These match the CSS custom properties: --blend-hover-darker, --blend-pressed-darker, etc.
-const BLEND_HOVER_DARKER = 0.08;    // blend200
-const BLEND_PRESSED_DARKER = 0.12;  // blend300
-const BLEND_DISABLED_DESATURATE = 0.12; // blend300
-const BLEND_ICON_LIGHTER = 0.08;    // blend200 (color.icon.opticalBalance)
-
-/**
- * Apply darker blend to a hex color string.
- * 
- * @param color - Hex color string (e.g., "#A855F7")
- * @param blendValue - Blend amount as decimal (0.0-1.0)
- * @returns Darkened hex color string
- */
-function darkerBlend(color: string, blendValue: number): string {
-  try {
-    const rgb = hexToRgb(color);
-    const blended = calculateDarkerBlend(rgb, blendValue);
-    return rgbToHex(blended);
-  } catch {
-    // Return original color if parsing fails
-    return color;
-  }
-}
-
-/**
- * Apply lighter blend to a hex color string.
- * 
- * @param color - Hex color string (e.g., "#A855F7")
- * @param blendValue - Blend amount as decimal (0.0-1.0)
- * @returns Lightened hex color string
- */
-function lighterBlend(color: string, blendValue: number): string {
-  try {
-    const rgb = hexToRgb(color);
-    const blended = calculateLighterBlend(rgb, blendValue);
-    return rgbToHex(blended);
-  } catch {
-    // Return original color if parsing fails
-    return color;
-  }
-}
-
-/**
- * Apply desaturate blend to a hex color string.
- * 
- * @param color - Hex color string (e.g., "#A855F7")
- * @param blendValue - Blend amount as decimal (0.0-1.0)
- * @returns Desaturated hex color string
- */
-function desaturate(color: string, blendValue: number): string {
-  try {
-    const rgb = hexToRgb(color);
-    const blended = calculateDesaturateBlend(rgb, blendValue);
-    return rgbToHex(blended);
-  } catch {
-    // Return original color if parsing fails
-    return color;
-  }
-}
+// Import theme-aware blend utilities for state color calculations
+// Uses getBlendUtilities() factory for consistent state styling across components
+// @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
+import { getBlendUtilities, BlendUtilitiesResult } from '../../../../../blend/ThemeAwareBlendUtilities.web';
 
 // Import CSS as string for browser bundle compatibility
 // The esbuild CSS-as-string plugin transforms this import into a JS string export
@@ -185,6 +121,11 @@ export class ButtonCTA extends HTMLElement {
   private _shadowRoot: ShadowRoot;
   private _button: HTMLButtonElement | null = null;
   
+  // Theme-aware blend utilities instance
+  // Uses getBlendUtilities() factory for consistent state styling
+  // @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
+  private _blendUtils: BlendUtilitiesResult;
+  
   // Cached blend colors for state styling
   private _hoverColor: string = '';
   private _pressedColor: string = '';
@@ -206,6 +147,11 @@ export class ButtonCTA extends HTMLElement {
     
     // Attach shadow DOM for style encapsulation
     this._shadowRoot = this.attachShadow({ mode: 'open' });
+    
+    // Initialize theme-aware blend utilities
+    // Uses getBlendUtilities() factory for consistent state styling
+    // @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
+    this._blendUtils = getBlendUtilities();
   }
   
   /**
@@ -223,12 +169,20 @@ export class ButtonCTA extends HTMLElement {
   /**
    * Calculate blend colors from CSS custom properties.
    * 
-   * Reads base colors from CSS custom properties and applies blend utilities
-   * to generate state colors (hover, pressed, disabled, icon).
+   * Reads base colors from CSS custom properties and applies theme-aware blend
+   * utilities to generate state colors (hover, pressed, disabled, icon).
    * 
-   * Uses blend utilities instead of opacity/filter workarounds for
-   * cross-platform consistency with iOS and Android implementations.
+   * Uses getBlendUtilities() factory functions instead of direct blend calculations
+   * for cross-platform consistency with iOS and Android implementations.
    * 
+   * State color mappings:
+   * - Hover: darkerBlend(color.primary, blend.hoverDarker) - 8% darker
+   * - Pressed: darkerBlend(color.primary, blend.pressedDarker) - 12% darker
+   * - Disabled: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
+   * - Icon: lighterBlend(color.onPrimary, blend.iconLighter) - 8% lighter
+   * 
+   * @see Requirements: 7.1, 7.2, 7.3, 7.4 - ButtonCTA state colors
+   * @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
    * @throws Error if required color tokens are missing from CSS custom properties
    */
   private _calculateBlendColors(): void {
@@ -247,23 +201,23 @@ export class ButtonCTA extends HTMLElement {
       throw new Error('ButtonCTA: Required token --color-text-on-primary is missing from CSS custom properties');
     }
     
-    // Calculate blend colors using blend utilities
-    // Hover: darkerBlend(color.primary, blend.hoverDarker) - 8% darker
-    this._hoverColor = darkerBlend(primaryColor, BLEND_HOVER_DARKER);
+    // Calculate blend colors using theme-aware blend utilities
+    // Uses semantic convenience functions from getBlendUtilities()
+    // @see Requirements: 7.1 - Hover uses darkerBlend(color.primary, blend.hoverDarker)
+    this._hoverColor = this._blendUtils.hoverColor(primaryColor);
     
-    // Pressed: darkerBlend(color.primary, blend.pressedDarker) - 12% darker
-    this._pressedColor = darkerBlend(primaryColor, BLEND_PRESSED_DARKER);
+    // @see Requirements: 7.2 - Pressed uses darkerBlend(color.primary, blend.pressedDarker)
+    this._pressedColor = this._blendUtils.pressedColor(primaryColor);
     
-    // Disabled: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
-    this._disabledColor = desaturate(primaryColor, BLEND_DISABLED_DESATURATE);
+    // @see Requirements: 7.3 - Disabled uses desaturate(color.primary, blend.disabledDesaturate)
+    this._disabledColor = this._blendUtils.disabledColor(primaryColor);
     
-    // Icon for primary buttons: lighterBlend(color.onPrimary, blend.iconLighter) - 8% lighter
-    // This provides optical balance for icons on primary background
-    this._iconColor = lighterBlend(onPrimaryColor, BLEND_ICON_LIGHTER);
+    // @see Requirements: 7.4 - Icon uses lighterBlend(color.onPrimary, blend.iconLighter)
+    // Icon for primary buttons: provides optical balance for icons on primary background
+    this._iconColor = this._blendUtils.iconColor(onPrimaryColor);
     
-    // Icon for secondary/tertiary buttons: lighterBlend(color.primary, blend.iconLighter) - 8% lighter
-    // This provides optical balance for icons on light background
-    this._iconOpticalBalanceColor = lighterBlend(primaryColor, BLEND_ICON_LIGHTER);
+    // Icon for secondary/tertiary buttons: provides optical balance for icons on light background
+    this._iconOpticalBalanceColor = this._blendUtils.iconColor(primaryColor);
   }
   
   /**
