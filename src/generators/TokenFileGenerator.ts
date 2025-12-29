@@ -4,6 +4,8 @@
  * Orchestrates the generation of platform-specific token constant files.
  * Generates DesignTokens.web.css, DesignTokens.ios.swift, and DesignTokens.android.kt
  * with mathematical consistency across all platforms.
+ * 
+ * Also generates BlendUtilities for each platform via BlendUtilityGenerator integration.
  */
 
 import { PrimitiveToken, TokenCategory } from '../types/PrimitiveToken';
@@ -14,6 +16,7 @@ import { AndroidFormatGenerator } from '../providers/AndroidFormatGenerator';
 import { FileMetadata } from '../providers/FormatProvider';
 import { getAllPrimitiveTokens, getTokensByCategory, durationTokens, easingTokens, scaleTokens } from '../tokens';
 import { getAllSemanticTokens, getAllZIndexTokens, getAllElevationTokens, motionTokens } from '../tokens/semantic';
+import { BlendUtilityGenerator, BlendUtilityGenerationOptions } from './BlendUtilityGenerator';
 
 export interface GenerationOptions {
   outputDir?: string;
@@ -33,6 +36,19 @@ export interface GenerationResult {
   warnings?: string[];
 }
 
+export interface BlendUtilityResult {
+  platform: 'web' | 'ios' | 'android';
+  filePath: string;
+  content: string;
+  valid: boolean;
+  errors?: string[];
+}
+
+export interface AllGenerationResults {
+  tokens: GenerationResult[];
+  blendUtilities: BlendUtilityResult[];
+}
+
 /**
  * Token File Generator
  * Generates platform-specific token constant files with mathematical consistency
@@ -41,11 +57,13 @@ export class TokenFileGenerator {
   private webGenerator: WebFormatGenerator;
   private iosGenerator: iOSFormatGenerator;
   private androidGenerator: AndroidFormatGenerator;
+  private blendUtilityGenerator: BlendUtilityGenerator;
 
   constructor() {
     this.webGenerator = new WebFormatGenerator();
     this.iosGenerator = new iOSFormatGenerator();
     this.androidGenerator = new AndroidFormatGenerator('kotlin');
+    this.blendUtilityGenerator = new BlendUtilityGenerator();
   }
 
   /**
@@ -59,6 +77,159 @@ export class TokenFileGenerator {
     results.push(this.generateAndroidTokens(options));
 
     return results;
+  }
+
+  /**
+   * Generate all platform-specific token files AND blend utilities
+   * This is the comprehensive generation method that produces all artifacts
+   */
+  generateAllWithBlendUtilities(options: GenerationOptions = {}): AllGenerationResults {
+    const tokenResults = this.generateAll(options);
+    const blendResults = this.generateBlendUtilities(options);
+
+    return {
+      tokens: tokenResults,
+      blendUtilities: blendResults
+    };
+  }
+
+  /**
+   * Generate blend utilities for all platforms
+   * 
+   * @param options - Generation options
+   * @returns Array of blend utility generation results
+   */
+  generateBlendUtilities(options: GenerationOptions = {}): BlendUtilityResult[] {
+    const { outputDir = 'output', includeComments = true } = options;
+    const blendOptions: BlendUtilityGenerationOptions = { includeComments };
+    const results: BlendUtilityResult[] = [];
+
+    // Generate Web blend utilities
+    try {
+      const webContent = this.blendUtilityGenerator.generateWebBlendUtilities(blendOptions);
+      results.push({
+        platform: 'web',
+        filePath: `${outputDir}/BlendUtilities.web.ts`,
+        content: webContent,
+        valid: this.validateWebBlendUtilitySyntax(webContent)
+      });
+    } catch (error) {
+      results.push({
+        platform: 'web',
+        filePath: `${outputDir}/BlendUtilities.web.ts`,
+        content: '',
+        valid: false,
+        errors: [`Web blend utility generation failed: ${error instanceof Error ? error.message : String(error)}`]
+      });
+    }
+
+    // Generate iOS blend utilities
+    try {
+      const iosContent = this.blendUtilityGenerator.generateiOSBlendUtilities(blendOptions);
+      results.push({
+        platform: 'ios',
+        filePath: `${outputDir}/BlendUtilities.ios.swift`,
+        content: iosContent,
+        valid: this.validateiOSBlendUtilitySyntax(iosContent)
+      });
+    } catch (error) {
+      results.push({
+        platform: 'ios',
+        filePath: `${outputDir}/BlendUtilities.ios.swift`,
+        content: '',
+        valid: false,
+        errors: [`iOS blend utility generation failed: ${error instanceof Error ? error.message : String(error)}`]
+      });
+    }
+
+    // Generate Android blend utilities
+    try {
+      const androidContent = this.blendUtilityGenerator.generateAndroidBlendUtilities(blendOptions);
+      results.push({
+        platform: 'android',
+        filePath: `${outputDir}/BlendUtilities.android.kt`,
+        content: androidContent,
+        valid: this.validateAndroidBlendUtilitySyntax(androidContent)
+      });
+    } catch (error) {
+      results.push({
+        platform: 'android',
+        filePath: `${outputDir}/BlendUtilities.android.kt`,
+        content: '',
+        valid: false,
+        errors: [`Android blend utility generation failed: ${error instanceof Error ? error.message : String(error)}`]
+      });
+    }
+
+    return results;
+  }
+
+  /**
+   * Validate Web blend utility TypeScript syntax
+   * Basic validation to ensure generated code has expected structure
+   */
+  private validateWebBlendUtilitySyntax(content: string): boolean {
+    // Check for required function exports
+    const requiredFunctions = ['darkerBlend', 'lighterBlend', 'saturate', 'desaturate'];
+    const hasAllFunctions = requiredFunctions.every(fn => 
+      content.includes(`export function ${fn}`)
+    );
+
+    // Check for required type definitions
+    const hasRgbInterface = content.includes('interface RGB');
+    const hasHslInterface = content.includes('interface HSL');
+
+    // Check for required utility functions
+    const hasHexToRgb = content.includes('function hexToRgb');
+    const hasRgbToHex = content.includes('function rgbToHex');
+
+    return hasAllFunctions && hasRgbInterface && hasHslInterface && hasHexToRgb && hasRgbToHex;
+  }
+
+  /**
+   * Validate iOS blend utility Swift syntax
+   * Basic validation to ensure generated code has expected structure
+   */
+  private validateiOSBlendUtilitySyntax(content: string): boolean {
+    // Check for required imports
+    const hasSwiftUIImport = content.includes('import SwiftUI');
+
+    // Check for Color extension
+    const hasColorExtension = content.includes('extension Color');
+
+    // Check for required methods
+    const requiredMethods = ['darkerBlend', 'lighterBlend', 'saturate', 'desaturate'];
+    const hasAllMethods = requiredMethods.every(method => 
+      content.includes(`func ${method}`)
+    );
+
+    // Check for required structs
+    const hasRgbStruct = content.includes('struct RGB');
+    const hasHslStruct = content.includes('struct HSL');
+
+    return hasSwiftUIImport && hasColorExtension && hasAllMethods && hasRgbStruct && hasHslStruct;
+  }
+
+  /**
+   * Validate Android blend utility Kotlin syntax
+   * Basic validation to ensure generated code has expected structure
+   */
+  private validateAndroidBlendUtilitySyntax(content: string): boolean {
+    // Check for required package and imports
+    const hasPackage = content.includes('package com.designerpunk.tokens');
+    const hasColorImport = content.includes('import androidx.compose.ui.graphics.Color');
+
+    // Check for required extension functions
+    const requiredFunctions = ['darkerBlend', 'lighterBlend', 'saturate', 'desaturate'];
+    const hasAllFunctions = requiredFunctions.every(fn => 
+      content.includes(`fun Color.${fn}`)
+    );
+
+    // Check for required data classes
+    const hasRgbClass = content.includes('data class RGB');
+    const hasHslClass = content.includes('data class HSL');
+
+    return hasPackage && hasColorImport && hasAllFunctions && hasRgbClass && hasHslClass;
   }
 
   /**

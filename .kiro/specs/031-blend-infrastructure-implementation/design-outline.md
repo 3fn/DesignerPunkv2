@@ -30,7 +30,7 @@ This design outline defines the scope, approach, and success criteria for implem
 | Component Updates | Update existing components to use blend utilities |
 | Theme Support | Create theme-aware wrapper functions |
 | Documentation | Update component guides and AI agent guidance |
-| Cross-Platform Testing | Validate visual parity across platforms |
+| Two-Layer Validation | Numerical precision tests + token-naming validation |
 
 ### Out of Scope
 
@@ -97,7 +97,7 @@ This design outline defines the scope, approach, and success criteria for implem
 | 1.3 | Generate iOS utilities (`dist/BlendUtilities.ios.swift`) |
 | 1.4 | Generate Android utilities (`dist/BlendUtilities.android.kt`) |
 | 1.5 | Export utilities from package |
-| 1.6 | Cross-platform validation tests |
+| 1.6 | Layer 1 validation: Cross-platform numerical precision tests (±1 RGB) |
 
 **Estimated Effort**: 2-3 days
 
@@ -113,7 +113,7 @@ This design outline defines the scope, approach, and success criteria for implem
 | 2.3 | Update Container (hover) |
 | 2.4 | Update Icon (optical balance) |
 | 2.5 | Remove workarounds from all components |
-| 2.6 | Component integration tests |
+| 2.6 | Layer 2 validation: Token-naming integration tests |
 
 **Estimated Effort**: 3-5 days
 
@@ -197,6 +197,58 @@ DesignTokens.color_primary.darkerBlend(DesignTokens.blend_hover_darker)
 
 ---
 
+## Validation Strategy
+
+### Two-Layer Validation Approach
+
+This spec uses a two-layer validation strategy that separates concerns and enables future Figma QA integration.
+
+#### Layer 1: Blend Utility Tests (Numerical Precision)
+
+**Purpose**: Validate the math is correct in blend utility functions.
+
+| Test Type | Description | Tolerance |
+|-----------|-------------|-----------|
+| Cross-platform consistency | Same inputs produce same RGB outputs across Web/iOS/Android | ±1 on 0-255 RGB scale |
+| Boundary conditions | No overflow, no negative values, valid color output | Exact |
+| Algorithm correctness | darkerBlend darkens, lighterBlend lightens, etc. | Directional validation |
+
+**Reference Implementation**: TypeScript (Web) serves as the source of truth. iOS and Android implementations must produce numerically identical results.
+
+**Rationale**: Numerical precision testing catches algorithm drift and platform math library differences. The ±1 RGB tolerance accounts for floating-point rounding while catching real bugs.
+
+#### Layer 2: Component Integration Tests (Token-Naming Validation)
+
+**Purpose**: Validate components use the correct blend utility + token combinations for each state.
+
+| Test Type | Description | Example |
+|-----------|-------------|---------|
+| Token usage | Component uses correct token for state | ButtonCTA hover uses `darkerBlend(color.primary, blend.hoverDarker)` |
+| Semantic correctness | State maps to expected blend operation | Hover → darkerBlend, Focus → saturate, Disabled → desaturate |
+| Workaround removal | No hardcoded values or CSS hacks | No `opacity: 0.92`, no `filter: brightness()` |
+
+**Rationale**: Token-naming validation catches "developer used wrong token" bugs, which are more common than calculation bugs. This approach aligns with how design systems work (semantic intent over literal values).
+
+### Future Figma QA Integration
+
+**Design Decision**: The token-naming validation layer is intentionally designed to enable future Figma integration.
+
+**Why Token-Naming Over Numerical for Figma**:
+- Figma's variables tooling doesn't support complex expressions (can't compute `darkerBlend()`)
+- Figma can't render blend tokens as lighten/darken functions
+- But Figma *can* have semantically-named variables like `button/primary/hover`
+- QA becomes: "Does the code use the semantically equivalent token?" not "Does the hex match?"
+
+**Future Integration Path**:
+1. Figma defines variables with semantic names matching our token structure
+2. Figma MCP extracts variable names from design components
+3. Validation compares: Figma variable name ↔ Code token usage
+4. Actual color values are a *consequence* of correct token usage, not the thing being tested
+
+**Not In Scope for This Spec**: Figma integration is a future direction, not a deliverable of Spec 031. This spec establishes the foundation that makes that integration possible.
+
+---
+
 ## Success Criteria
 
 ### Technical Success Criteria
@@ -205,7 +257,8 @@ DesignTokens.color_primary.darkerBlend(DesignTokens.blend_hover_darker)
 |-----------|------------|
 | BlendUtilityGenerator integrated into build pipeline | Build produces utility files |
 | Utilities generated for all three platforms | Files exist in dist/ |
-| Cross-platform tests pass | Identical color results |
+| Layer 1 tests pass | Numerical precision within ±1 RGB |
+| Layer 2 tests pass | Components use correct token combinations |
 | Package exports utilities correctly | Import works in consuming code |
 | No breaking changes | Existing token imports unchanged |
 
@@ -243,10 +296,11 @@ DesignTokens.color_primary.darkerBlend(DesignTokens.blend_hover_darker)
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|------------|--------|------------|
-| Color calculation precision | Low | Medium | Use existing BlendCalculator algorithms |
-| Platform-specific color handling | Medium | Medium | Extensive cross-platform testing |
+| Color calculation precision | Low | Medium | Use existing BlendCalculator algorithms; ±1 RGB tolerance |
+| Platform-specific color handling | Medium | Medium | Layer 1 numerical precision tests with TypeScript as reference |
 | Bundle size increase | Low | Low | Utilities are small (~2KB per platform) |
 | Breaking changes | Low | High | Additive changes only, no removal |
+| Token-naming drift | Low | Medium | Layer 2 tests validate semantic correctness |
 
 ### Adoption Risks
 

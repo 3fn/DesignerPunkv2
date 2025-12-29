@@ -12,6 +12,17 @@
       "require": "./dist/TokenEngine.js",
       "types": "./dist/TokenEngine.d.ts"
     },
+    "./BlendUtilities": {
+      "import": "./dist/BlendUtilities.web.ts",
+      "require": "./dist/BlendUtilities.web.ts",
+      "types": "./dist/BlendUtilities.web.ts",
+      "default": "./dist/BlendUtilities.web.ts"
+    },
+    "./blend": {
+      "import": "./dist/blend/index.js",
+      "require": "./dist/blend/index.js",
+      "types": "./dist/blend/index.d.ts"
+    },
     "./tokens.css": "./dist/browser/tokens.css"
   },
   "scripts": {
