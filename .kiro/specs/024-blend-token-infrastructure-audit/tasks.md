@@ -226,7 +226,7 @@ Execute a four-phase audit to understand blend token infrastructure gaps, extrac
 
 ---
 
-- [ ] 3. Phase 3: Gap Analysis & Confirmation
+- [x] 3. Phase 3: Gap Analysis & Confirmation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -251,7 +251,7 @@ Execute a four-phase audit to understand blend token infrastructure gaps, extrac
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Phase 3 Gap Analysis"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 3.1 Assess need validity
+  - [x] 3.1 Assess need validity
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     - For each extracted need from Phase 1:
@@ -261,7 +261,7 @@ Execute a four-phase audit to understand blend token infrastructure gaps, extrac
     - Document validity assessment for each need
     - _Requirements: 5.1, 5.2_
 
-  - [ ] 3.2 Propose modern solutions
+  - [x] 3.2 Propose modern solutions
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     - For each valid need:
@@ -272,7 +272,7 @@ Execute a four-phase audit to understand blend token infrastructure gaps, extrac
     - Do NOT assume original implementation approach is correct
     - _Requirements: 5.2, 6.1, 6.2_
 
-  - [ ] 3.3 Categorize gaps
+  - [x] 3.3 Categorize gaps
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Categorize each gap as: implement, defer, or close
@@ -281,7 +281,7 @@ Execute a four-phase audit to understand blend token infrastructure gaps, extrac
     - For close: Document why need is no longer valid
     - _Requirements: 5.3, 5.7, 5.8_
 
-  - [ ] 3.4 Produce gap analysis deliverable
+  - [x] 3.4 Produce gap analysis deliverable
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `findings/gap-analysis.md`
@@ -290,7 +290,7 @@ Execute a four-phase audit to understand blend token infrastructure gaps, extrac
     - Include categorization with rationale
     - _Requirements: 5.4_
 
-  - [ ] 3.5 Human Checkpoint 3
+  - [x] 3.5 Human Checkpoint 3
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Present gap analysis to human reviewer
@@ -299,8 +299,14 @@ Execute a four-phase audit to understand blend token infrastructure gaps, extrac
     - Document any feedback or corrections
     - Obtain approval to proceed to Phase 4
     - _Requirements: 5.5_
+    - **Completed**: December 28, 2025
+    - **Reviewer**: Peter Michaels Allen
+    - **Decisions**:
+      - No deferrals - all 9 valid needs to IMPLEMENT
+      - Add design-outline creation to Phase 4 for Spec 031
+    - **Rationale**: Stable foundation for volume component production; workarounds would become technical debt
 
-  - [ ] 3.6 Produce confirmed actions deliverable
+  - [x] 3.6 Produce confirmed actions deliverable
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `findings/confirmed-actions.md`
@@ -317,12 +323,14 @@ Execute a four-phase audit to understand blend token infrastructure gaps, extrac
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
   
   **Success Criteria:**
+  - Design-outline created for Spec 031-blend-infrastructure-implementation
   - Implementation recommendations produced using current patterns
   - AI agent guidance requirements documented
   - Clean exit verified (no issues silently ignored)
   - New implementation spec recommended if warranted
   
   **Primary Artifacts:**
+  - `.kiro/specs/031-blend-infrastructure-implementation/design-outline.md`
   - `findings/implementation-recommendations.md`
   - Clean exit verification in completion doc
   
@@ -336,18 +344,28 @@ Execute a four-phase audit to understand blend token infrastructure gaps, extrac
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 Complete: Phase 4 Deliverables & Clean Exit"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 4.1 Produce implementation recommendations
+  - [ ] 4.1 Create design-outline for Spec 031
+    **Type**: Architecture
+    **Validation**: Tier 3 - Comprehensive
+    - Create `.kiro/specs/031-blend-infrastructure-implementation/design-outline.md`
+    - Define scope: Runtime utility integration for blend tokens
+    - Define approach: Integrate BlendUtilityGenerator into build pipeline
+    - Define success criteria: All 9 gaps addressed
+    - Reference this audit's findings for context
+    - Include Phase 0/1/2/3 structure from gap-analysis.md
+    - _Requirements: 6.1, 6.2_
+
+  - [ ] 4.2 Produce implementation recommendations
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     - Based on confirmed actions, create implementation plan
     - Use current system patterns (from Phase 2)
     - Include AI agent guidance requirements
     - Do NOT use original implementation expectations
-    - If implementation warranted, recommend new spec (e.g., 031-blend-infrastructure-implementation)
-    - If implementation NOT warranted, document why and alternatives
+    - Reference design-outline created in 4.1
     - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6_
 
-  - [ ] 4.2 Verify clean exit
+  - [ ] 4.3 Verify clean exit
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Review all discovered issues
@@ -357,7 +375,7 @@ Execute a four-phase audit to understand blend token infrastructure gaps, extrac
     - Produce clean exit summary
     - _Requirements: 7.1, 7.2, 7.3, 7.4_
 
-  - [ ] 4.3 Final documentation
+  - [ ] 4.4 Final documentation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `findings/implementation-recommendations.md`
