@@ -1,0 +1,119 @@
+{
+  "timestamp": "2025-12-29T00:08:13.362Z",
+  "lastRelease": "v2.0.0",
+  "documentCount": 22,
+  "documents": [
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-1-1-completion.md",
+      "lastModified": "2025-12-28T20:39:22.224Z",
+      "gitCommit": "70287979fb791577c4be089a1fa63f3007fc3503"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-1-2-completion.md",
+      "lastModified": "2025-12-28T20:42:29.962Z",
+      "gitCommit": "70287979fb791577c4be089a1fa63f3007fc3503"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-1-3-completion.md",
+      "lastModified": "2025-12-28T20:46:16.150Z",
+      "gitCommit": "70287979fb791577c4be089a1fa63f3007fc3503"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-1-4-completion.md",
+      "lastModified": "2025-12-28T20:49:40.797Z",
+      "gitCommit": "70287979fb791577c4be089a1fa63f3007fc3503"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-1-5-completion.md",
+      "lastModified": "2025-12-28T20:54:44.553Z",
+      "gitCommit": "70287979fb791577c4be089a1fa63f3007fc3503"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-1-6-completion.md",
+      "lastModified": "2025-12-28T21:14:06.765Z",
+      "gitCommit": "70287979fb791577c4be089a1fa63f3007fc3503"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-1-parent-completion.md",
+      "lastModified": "2025-12-28T21:15:04.433Z",
+      "gitCommit": "70287979fb791577c4be089a1fa63f3007fc3503"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-1-completion.md",
+      "lastModified": "2025-12-28T21:50:29.939Z",
+      "gitCommit": "e6122864dee619c6ec9ad17a1d5561c9f86af3c4"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-2-completion.md",
+      "lastModified": "2025-12-28T22:00:55.620Z",
+      "gitCommit": "e6122864dee619c6ec9ad17a1d5561c9f86af3c4"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-3-completion.md",
+      "lastModified": "2025-12-28T22:05:52.754Z",
+      "gitCommit": "e6122864dee619c6ec9ad17a1d5561c9f86af3c4"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-4-completion.md",
+      "lastModified": "2025-12-28T22:10:28.201Z",
+      "gitCommit": "e6122864dee619c6ec9ad17a1d5561c9f86af3c4"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-5-completion.md",
+      "lastModified": "2025-12-28T22:16:54.892Z",
+      "gitCommit": "e6122864dee619c6ec9ad17a1d5561c9f86af3c4"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-6-completion.md",
+      "lastModified": "2025-12-28T22:23:24.680Z",
+      "gitCommit": "e6122864dee619c6ec9ad17a1d5561c9f86af3c4"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-7-completion.md",
+      "lastModified": "2025-12-28T22:35:54.291Z",
+      "gitCommit": "e6122864dee619c6ec9ad17a1d5561c9f86af3c4"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-parent-completion.md",
+      "lastModified": "2025-12-28T22:37:22.147Z",
+      "gitCommit": "e6122864dee619c6ec9ad17a1d5561c9f86af3c4"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-3-1-completion.md",
+      "lastModified": "2025-12-28T22:43:11.841Z",
+      "gitCommit": "12f7524030b52eab698a255a37561f55df02d710"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-3-2-completion.md",
+      "lastModified": "2025-12-28T23:09:55.502Z",
+      "gitCommit": "12f7524030b52eab698a255a37561f55df02d710"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-3-3-completion.md",
+      "lastModified": "2025-12-28T23:15:00.273Z",
+      "gitCommit": "12f7524030b52eab698a255a37561f55df02d710"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-3-4-completion.md",
+      "lastModified": "2025-12-28T23:23:12.536Z",
+      "gitCommit": "12f7524030b52eab698a255a37561f55df02d710"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-3-5-completion.md",
+      "lastModified": "2025-12-28T23:53:39.943Z",
+      "gitCommit": "12f7524030b52eab698a255a37561f55df02d710"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-3-6-completion.md",
+      "lastModified": "2025-12-28T23:58:48.936Z",
+      "gitCommit": "12f7524030b52eab698a255a37561f55df02d710"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-3-parent-completion.md",
+      "lastModified": "2025-12-29T00:07:27.248Z",
+      "gitCommit": "12f7524030b52eab698a255a37561f55df02d710"
+    }
+  ],
+  "quickAnalysisMode": true,
+  "note": "Full analysis can be run with: npm run release:analyze"
+}
