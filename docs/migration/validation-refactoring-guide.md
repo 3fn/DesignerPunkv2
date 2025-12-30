@@ -3,7 +3,11 @@
 **Date**: November 9, 2025
 **Purpose**: Guide for migrating from old validation pattern to new separation of concerns pattern
 **Organization**: process-standard
-**Scope**: architecture-separation-of-concerns
+**Scope**: architecture-separation-of-concerns  
+**Last Reviewed**: December 30, 2025  
+**Status**: Active Reference
+
+> **MCP Exclusion Note**: This document is intentionally excluded from the MCP documentation server. Migration guides serve a different purpose than steering/MCP documentation—they are architecture-specific transition guides that help users migrate between patterns, not ongoing development guidance for AI agents. The patterns documented here remain relevant for understanding the current architecture and troubleshooting validation issues, but the primary architectural guidance lives in `docs/architecture/registry-validator-pattern.md`.
 
 ---
 

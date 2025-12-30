@@ -4,7 +4,11 @@
 **Version**: 2.0.0  
 **Type**: Major Version (Breaking Changes)  
 **Organization**: migration-guide  
-**Scope**: cross-project
+**Scope**: cross-project  
+**Last Reviewed**: December 30, 2025  
+**Status**: Historical Reference (Migration Complete)
+
+> **MCP Exclusion Note**: This document is intentionally excluded from the MCP documentation server. Migration guides serve a different purpose than steering/MCP documentation—they are version-specific transition guides for users migrating between states, not ongoing development guidance for AI agents. This content remains valuable as historical reference but is not needed for day-to-day design system maintenance.
 
 ---
 
