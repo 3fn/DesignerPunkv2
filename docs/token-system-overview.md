@@ -1,57 +1,125 @@
 # Token System Overview
 
-**Date**: October 22, 2025
+**Date**: December 29, 2025
+**Last Updated**: December 29, 2025
 **Purpose**: Master document mapping token files to their documentation guides
 **Organization**: process-standard
 **Scope**: cross-project
+**Layer**: 2
 
 ---
 
-## Getting Started with the Token System
+## Document Outline
 
-### New to the System?
+This document is organized for efficient MCP section queries. Use `get_section` with these headings:
 
-If you're new to the DesignerPunk token system, we recommend this learning path:
+| Section | Purpose |
+|---------|---------|
+| [Quick Reference](#quick-reference) | Token counts, file locations, status summary |
+| [Getting Started](#getting-started) | Learning path for new users and AI agents |
+| [System Architecture](#system-architecture) | Validators, registries, coordinators |
+| [Primitive Tokens](#primitive-tokens) | All primitive token files and descriptions |
+| [Semantic Tokens](#semantic-tokens) | All semantic token files and descriptions |
+| [Blend Infrastructure](#blend-infrastructure) | Blend utilities and theme-aware patterns |
+| [Token Generation](#token-generation) | Cross-platform generation system |
+| [Related Documentation](#related-documentation) | Links to specs, guides, and patterns |
 
-1. **[Token Ecosystem Narrative](./concepts/token-ecosystem-narrative.md)** - Understand the conceptual foundation through the business localization metaphor. This narrative explains the "why" behind the architecture and helps you build a mental model of how tokens, developers, components, platforms, and the build system work together.
+---
 
-2. **[Token System Overview](#introduction)** (this document) - Navigate to specific token files and documentation guides. Use this as your reference for finding token implementations and related documentation.
+## Quick Reference
 
-3. **[Token Category Pattern Guide](../.kiro/specs/token-system/token-category-pattern-guide.md)** - Learn how to add new token categories following established patterns. Essential reading before creating new token types.
+### Token Inventory Summary
 
-### Already Familiar?
+| Category | Primitive Count | Semantic Count | Status |
+|----------|-----------------|----------------|--------|
+| Spacing | 12 | 20+ | ✅ Complete |
+| Typography | 40+ | 25+ | ✅ Complete |
+| Color | 45+ | 15+ | ✅ Complete |
+| Radius | 12 | 6 | ✅ Complete |
+| Shadow | 23 | 8 | ✅ Complete |
+| Glow | 9 | 3 | ✅ Complete |
+| Blend | 5 | 7 | ✅ Complete |
+| Opacity | 14 | 8 | ✅ Complete |
+| Border Width | 3 | 5 | ✅ Complete |
+| Layering | - | 12 | ✅ Complete |
+| Motion | 12 | 1+ | ✅ Complete |
+| Accessibility | - | 8 | ✅ Complete |
+| Breakpoint | 4 | - | ✅ Complete |
+| Grid Spacing | - | 8 | ✅ Complete |
+| Density | 4 | - | ✅ Complete |
+| Tap Area | 4 | - | ✅ Complete |
+| **Total** | **~185** | **~125** | **~310 tokens** |
 
-Jump directly to:
-- [Primitive Tokens](#primitive-tokens) - Find specific token implementation files
+### Key File Locations
+
+```
+src/tokens/                    # Primitive tokens
+src/tokens/semantic/           # Semantic tokens
+src/blend/                     # Blend utilities
+dist/                          # Generated platform files
+docs/tokens/                   # Token guides
+```
+
+### Current Version
+
+- **Token System**: Phase 1 Complete
+- **Blend Infrastructure**: v2.1.0 (December 2025)
+- **Test Coverage**: 6,000+ tests, 262 suites
+
+---
+
+## Getting Started
+
+### Learning Path for New Users
+
+1. **[Token Ecosystem Narrative](./concepts/token-ecosystem-narrative.md)** - Understand the conceptual foundation through the business localization metaphor
+2. **[Token System Overview](#introduction)** (this document) - Navigate to specific token files and documentation
+3. **[Token Category Pattern Guide](../.kiro/specs/token-system/token-category-pattern-guide.md)** - Learn patterns for adding new token categories
+
+### Quick Navigation
+
+- [Primitive Tokens](#primitive-tokens) - Find primitive token implementation files
 - [Semantic Tokens](#semantic-tokens) - Find semantic token compositions
+- [Blend Infrastructure](#blend-infrastructure) - Blend utilities and theme-aware patterns
 - [Related Documentation](#related-documentation) - Explore specifications and guides
 
 ### For AI Agents
 
-This learning path is designed to help you build the correct mental model of the token system before making implementation decisions. Following this path will help you:
-- Understand the architectural principles that guide token design
-- Make decisions that align with the system's philosophy
-- Apply systematic skepticism effectively by understanding the "why" behind patterns
-- Avoid common mistakes that come from incomplete context
+This document is optimized for MCP section queries. Key patterns:
 
-**Recommendation**: Even if you're familiar with design token systems in general, read the Token Ecosystem Narrative to understand DesignerPunk's specific approach.
+- **Finding token files**: Query "Primitive Tokens" or "Semantic Tokens" sections
+- **Understanding blend utilities**: Query "Blend Infrastructure" section
+- **Cross-platform generation**: Query "Token Generation" section
+- **Architecture patterns**: Query "System Architecture" section
+
+**Recommendation**: Read the Token Ecosystem Narrative to understand DesignerPunk's specific approach before making implementation decisions.
 
 ---
 
 ## Introduction
 
-This document provides an overview of the DesignerPunk token system, mapping each token type to its implementation file and related documentation guides. The token system follows a mathematical foundation with a primitive→semantic hierarchy, enabling cross-platform consistency and AI-human collaboration through precise, unambiguous design language.
+The DesignerPunk token system provides a mathematical foundation for cross-platform design consistency. It follows a primitive→semantic hierarchy where:
 
-The token system is organized into two main categories:
-- **Primitive Tokens**: Base-level tokens with mathematical relationships (fontSize, spacing, colors, etc.)
-- **Semantic Tokens**: Higher-level tokens that compose primitives for specific use cases (typography, semantic colors, etc.)
+- **Primitive Tokens**: Base-level tokens with mathematical relationships (fontSize, spacing, colors)
+- **Semantic Tokens**: Higher-level tokens that compose primitives for specific use cases (typography, semantic colors)
 
-### System Architecture
+### Core Principles
 
-The token system follows a clear separation of concerns with three main components:
+1. **Mathematical Foundation**: 8px baseline grid with 1.125 modular scale
+2. **Cross-Platform Consistency**: Same token values across Web, iOS, Android
+3. **Primitive→Semantic Hierarchy**: Semantic tokens reference primitives by name
+4. **AI-Friendly**: Unambiguous relationships enable reliable AI collaboration
+
+---
+
+## System Architecture
+
+### Component Overview
+
+The token system follows a clear separation of concerns:
 
 **Validators** (IValidator implementations):
-- Validate tokens against specific criteria (baseline grid, mathematical relationships, etc.)
+- Validate tokens against specific criteria (baseline grid, mathematical relationships)
 - Return structured validation results (Pass/Warning/Error)
 - Focus solely on validation logic
 
@@ -65,102 +133,403 @@ The token system follows a clear separation of concerns with three main componen
 - Call validators before registration
 - Handle validation failures appropriately
 
-For detailed information on how these components interact, see the [Registry-Validator Interaction Pattern](../architecture/registry-validator-pattern.md).
+### Validation Pattern
 
----
-
-## Validation Flow
-
-The token system uses a **caller-validates-then-registers** pattern where validation happens before registration:
+The system uses a **caller-validates-then-registers** pattern:
 
 ```typescript
-// 1. Caller validates the token
+// 1. Validate the token
 const validationResult = validator.validate(token);
 
-// 2. Caller checks validation result
+// 2. Check validation result
 if (validationResult.valid) {
-  // 3. Caller registers the token
+  // 3. Register the token
   registry.register(token);
 } else {
-  // 4. Caller handles validation failure
+  // 4. Handle validation failure
   throw new Error(`Validation failed: ${validationResult.errors.join(', ')}`);
 }
 ```
 
-### Validation Workflow
+### Validators
 
-**Step 1: Token Creation**
-- Tokens are created with mathematical relationships and metadata
-- Primitive tokens define base values (fontSize100 = 16, space100 = 8)
-- Semantic tokens reference primitive tokens (colorPrimary references purple300)
+- **BaselineGridValidator**: Ensures spacing aligns to 4px/8px grid
+- **SemanticTokenValidator**: Verifies primitive references exist
+- **SyntaxValidator**: Checks token structure and naming
+- **ThreeTierValidator**: Orchestrates multiple validators with Pass/Warning/Error levels
 
-**Step 2: Validation**
-- Validators check tokens against specific criteria:
-  - **BaselineGridValidator**: Ensures spacing aligns to 4px/8px grid
-  - **SemanticTokenValidator**: Verifies primitive references exist
-  - **SyntaxValidator**: Checks token structure and naming
-  - **ThreeTierValidator**: Orchestrates multiple validators with Pass/Warning/Error levels
+### Related Architecture Documentation
 
-**Step 3: Registration**
-- If validation passes, tokens are registered in appropriate registry
-- **PrimitiveTokenRegistry**: Stores primitive tokens (fontSize, spacing, colors)
-- **SemanticTokenRegistry**: Stores semantic tokens (typography, semantic colors)
-
-**Step 4: Generation**
-- Registered tokens are used to generate platform-specific files
-- Cross-platform consistency maintained through unitless base values
-- Platform formatters convert to native syntax (CSS, Swift, Kotlin)
-
-### Validation Interfaces
-
-The token system uses common interfaces to ensure consistent validation and storage contracts:
-
-**IValidator Interface**:
-```typescript
-interface IValidator<TInput = any> {
-  validate(input: TInput): ValidationResult | Promise<ValidationResult>;
-  readonly name: string;
-}
-```
-
-**IRegistry Interface**:
-```typescript
-interface IRegistry<TToken> {
-  register(token: TToken, options?: RegistrationOptions): void;
-  query(): TToken[];
-  get(name: string): TToken | undefined;
-  has(name: string): boolean;
-  readonly name: string;
-}
-```
-
-These interfaces enable:
-- **Polymorphic usage**: Work with any validator or registry through common interface
-- **Type safety**: TypeScript enforces correct usage patterns
-- **Testability**: Easy to test validation and registration independently
-- **Consistency**: Unambiguous pattern applied uniformly across system
-
-For complete details on validation patterns, usage examples, and guidelines for AI agents, see the [Registry-Validator Interaction Pattern](../architecture/registry-validator-pattern.md).
-
-**Migrating from Old Pattern**: If you're updating code that used the old validation pattern (where registries and generators performed validation), see the [Validation Refactoring Migration Guide](./migration/validation-refactoring-guide.md) for step-by-step migration instructions and troubleshooting.
+- [Registry-Validator Interaction Pattern](../architecture/registry-validator-pattern.md) - Definitive guide for validation and registration patterns
 
 ---
 
-## Semantic Token Generation
+## Primitive Tokens
+
+### Typography Primitives
+
+#### Font Size Tokens
+- **File**: `src/tokens/FontSizeTokens.ts`
+- **Description**: Font size tokens based on 1.125 modular scale (major second)
+- **Base Value**: 16px (standard browser default)
+- **Scale**: 1.125 modular scale ratio
+- **Tokens**: fontSize050 (13px) through fontSize600 (41px)
+
+#### Line Height Tokens
+- **File**: `src/tokens/LineHeightTokens.ts`
+- **Description**: Line height tokens using precision multipliers for 8pt vertical rhythm
+- **Base Value**: 1.5 (optimal reading ratio)
+- **Tokens**: lineHeight075 through lineHeight200
+
+#### Font Weight Tokens
+- **File**: `src/tokens/FontWeightTokens.ts`
+- **Description**: Standard numeric font weight values with systematic progression
+- **Base Value**: 400 (normal weight)
+- **Tokens**: fontWeight100 through fontWeight900
+
+#### Font Family Tokens
+- **File**: `src/tokens/FontFamilyTokens.ts`
+- **Description**: Categorical font stack definitions for different use cases
+- **Tokens**: fontFamilySystem, fontFamilyMono, fontFamilyDisplay, fontFamilyBody
+
+#### Letter Spacing Tokens
+- **File**: `src/tokens/LetterSpacingTokens.ts`
+- **Description**: Unitless em-based values for character spacing adjustments
+- **Base Value**: 0 (normal spacing)
+- **Tokens**: letterSpacingTight (-0.05em) through letterSpacingLoose (0.05em)
+
+### Spacing Primitives
+
+#### Spacing Tokens
+- **File**: `src/tokens/SpacingTokens.ts`
+- **Description**: 8-unit baseline grid with strategic flexibility exceptions
+- **Base Value**: 8px
+- **Grid**: 8-unit baseline with 4px subgrid alignment
+- **Tokens**: space050 (4px), space075 (6px), space100 (8px), space150 (12px), space200 (16px), etc.
+- **Related Guide**: [Spacing Tokens Guide](./tokens/spacing-tokens.md)
+
+### Color Primitives
+
+#### Color Tokens
+- **File**: `src/tokens/ColorTokens.ts`
+- **Description**: Mode-aware and theme-aware color primitives with systematic color families
+- **Families**: gray, black, white, yellow, orange, purple, violet, cyan, teal
+- **Modes**: Light/dark mode support
+- **Themes**: Base and WCAG-compliant themes
+- **Shadow Colors**: shadowBlack100, shadowBlue100, shadowOrange100, shadowGray100 (art theory-based)
+
+### Shape Primitives
+
+#### Radius Tokens
+- **File**: `src/tokens/RadiusTokens.ts`
+- **Description**: Border radius values following 8-unit baseline grid
+- **Base Value**: 8px
+- **Tokens**: radius050 (4px), radius100 (8px), radius200 (16px), radiusFull (9999px)
+
+#### Border Width Tokens
+- **File**: `src/tokens/BorderWidthTokens.ts`
+- **Description**: Border width values with doubling progression
+- **Tokens**: borderWidth100 (1px), borderWidth200 (2px), borderWidth400 (4px)
+
+### Effect Primitives
+
+#### Shadow Offset Tokens
+- **File**: `src/tokens/ShadowOffsetTokens.ts`
+- **Description**: Shadow direction based on light source position (sun arc concept)
+- **Base Value**: 4px (4px baseline grid alignment)
+- **Positions**: sunrise, morning, noon, afternoon, sunset
+- **Related Guide**: [Shadow Tokens Guide](./tokens/shadow-tokens.md)
+
+#### Shadow Blur Tokens
+- **File**: `src/tokens/ShadowBlurTokens.ts`
+- **Description**: Shadow edge definition based on quality and depth
+- **Quality Levels**: hard, moderate, soft
+- **Depth Levels**: depth100, depth200, depth300
+
+#### Shadow Opacity Tokens
+- **File**: `src/tokens/ShadowOpacityTokens.ts`
+- **Description**: Shadow darkness based on quality and depth
+- **Base Value**: 0.3 (unitless)
+- **Range**: 0.1-0.5
+
+#### Glow Blur Tokens
+- **File**: `src/tokens/GlowBlurTokens.ts`
+- **Description**: Extended blur range for radial emphasis effects
+- **Base Value**: 8px
+- **Tokens**: glowBlur100 (8px) through glowBlur500 (64px)
+- **Related Guide**: [Glow Tokens Guide](./tokens/glow-tokens.md)
+
+#### Glow Opacity Tokens
+- **File**: `src/tokens/GlowOpacityTokens.ts`
+- **Description**: Decreasing progression for multi-layer glow effects
+- **Base Value**: 0.8 (unitless)
+- **Tokens**: glowOpacity100 (0.8) through glowOpacity400 (0.2)
+
+#### Opacity Tokens
+- **File**: `src/tokens/OpacityTokens.ts`
+- **Description**: Comprehensive opacity progression for various use cases
+- **Range**: opacity005 (0.05) through opacity100 (1.0)
+- **Count**: 14 tokens
+
+#### Blend Tokens
+- **File**: `src/tokens/BlendTokens.ts`
+- **Description**: Blend amount scale for color modifications
+- **Base Value**: 0.04 (4%)
+- **Scale**: 5 tokens in 4% increments (blend100=4% through blend500=20%)
+- **Related Guide**: [Blend Tokens Guide](./tokens/blend-tokens.md)
+
+### Motion Primitives
+
+#### Duration Tokens
+- **File**: `src/tokens/DurationTokens.ts`
+- **Description**: Animation timing with linear progression
+- **Tokens**: duration150 (150ms fast), duration250 (250ms standard), duration350 (350ms deliberate)
+
+#### Easing Tokens
+- **File**: `src/tokens/EasingTokens.ts`
+- **Description**: Material Design cubic-bezier curves for natural motion
+- **Tokens**: easingStandard, easingDecelerate, easingAccelerate
+
+#### Scale Tokens
+- **File**: `src/tokens/ScaleTokens.ts`
+- **Description**: Transform scale factors for size-based animations
+- **Range**: scale088 (0.88) through scale108 (1.08)
+- **Progression**: 8-interval steps
+
+### Layout Primitives
+
+#### Breakpoint Tokens
+- **File**: `src/tokens/BreakpointTokens.ts`
+- **Description**: Viewport width definitions for responsive layouts
+- **Tokens**: breakpointXs (320px), breakpointSm (375px), breakpointMd (1024px), breakpointLg (1440px)
+
+#### Density Tokens
+- **File**: `src/tokens/DensityTokens.ts`
+- **Description**: Selective scaling factors for functional tokens
+- **Range**: 0.75x through 1.5x
+
+#### Tap Area Tokens
+- **File**: `src/tokens/TapAreaTokens.ts`
+- **Description**: WCAG 2.1 AA/AAA compliant touch target sizes
+- **Range**: 44pt through 64pt
+
+---
+
+## Semantic Tokens
+
+### Typography Semantics
+
+#### Typography Tokens
+- **File**: `src/tokens/semantic/TypographyTokens.ts`
+- **Description**: Complete typography styles combining fontSize, lineHeight, fontFamily, fontWeight, letterSpacing
+- **Categories**:
+  - Body: bodySm, bodyMd, bodyLg
+  - Labels: labelXs, labelSm, labelMd, labelLg
+  - Code: codeSm, codeMd, codeLg
+  - Buttons: buttonSm, buttonMd, buttonLg
+  - Headings: h1-h6 (all using display font family)
+  - Display: display, displayLarge
+- **Related Guides**:
+  - [Compositional Color Guide](../.kiro/specs/typography-token-expansion/compositional-color-guide.md)
+  - [Strategic Flexibility Guide](../.kiro/specs/typography-token-expansion/strategic-flexibility-guide.md)
+  - [Inline Emphasis Guide](../.kiro/specs/typography-token-expansion/inline-emphasis-guide.md)
+  - [Migration Guide](../.kiro/specs/typography-token-expansion/migration-guide.md)
+
+### Color Semantics
+
+#### Semantic Color Tokens
+- **File**: `src/tokens/semantic/ColorTokens.ts`
+- **Description**: Purpose-driven color assignments for UI elements
+- **Tokens**: color.primary, color.error, color.success, color.warning, color.info, color.text, color.background, color.surface
+
+### Spacing Semantics
+
+#### Semantic Spacing Tokens
+- **File**: `src/tokens/semantic/SpacingTokens.ts`
+- **Description**: Layout pattern-specific spacing values
+- **Layout Tokens** (external spacing):
+  - space.grouped.* - Elements in same logical group (2-12pt)
+  - space.related.* - Connected but distinct elements (8-24pt)
+  - space.separated.* - Independent elements (16-32pt)
+  - space.sectioned.* - Major section boundaries (32-48pt)
+- **Inset Tokens** (internal spacing):
+  - space.inset.tight (4pt)
+  - space.inset.normal (8pt)
+  - space.inset.comfortable (12pt)
+  - space.inset.spacious (16pt)
+  - space.inset.expansive (24pt)
+- **Related Guide**: [Spacing Tokens Guide](./tokens/spacing-tokens.md)
+
+#### Grid Spacing Tokens
+- **File**: `src/tokens/semantic/GridSpacingTokens.ts`
+- **Description**: Gutter and margin tokens for responsive grid layouts
+- **Tokens**: 8 semantic tokens referencing spacing primitives per breakpoint
+
+### Effect Semantics
+
+#### Semantic Shadow Tokens
+- **File**: `src/tokens/semantic/ShadowTokens.ts`
+- **Description**: Complete shadow compositions for specific use cases
+- **Tokens**: shadow.container, shadow.modal, shadow.hover, shadow.fab
+- **Composition**: offsetX, offsetY, blur, opacity, color primitives
+- **Related Guides**:
+  - [Shadow Tokens Guide](./tokens/shadow-tokens.md)
+  - [Lighting Framework Guide](../.kiro/specs/shadow-glow-token-system/lighting-framework.md)
+
+#### Semantic Opacity Tokens
+- **File**: `src/tokens/semantic/OpacityTokens.ts`
+- **Description**: Purpose-driven opacity values
+- **Tokens**: opacity.disabled, opacity.overlay, opacity.hover, opacity.pressed, opacity.ghost
+
+#### Semantic Blend Tokens
+- **File**: `src/tokens/semantic/BlendTokens.ts`
+- **Description**: Contextual blend amounts for interaction states
+- **Tokens**: blend.hoverDarker, blend.hoverLighter, blend.pressedDarker, blend.focusSaturate, blend.disabledDesaturate, blend.containerHoverDarker, color.icon.opticalBalance
+- **Related Guides**:
+  - [Blend Tokens Guide](./tokens/blend-tokens.md)
+  - [Blend Infrastructure Design](../.kiro/specs/031-blend-infrastructure-implementation/design.md)
+
+### Shape Semantics
+
+#### Semantic Radius Tokens
+- **File**: `src/tokens/semantic/RadiusTokens.ts`
+- **Description**: Component-specific border radius values
+- **Tokens**: radius.button, radius.card, radius.input, radius.modal, radius.pill, radius.circle
+
+#### Semantic Border Width Tokens
+- **File**: `src/tokens/semantic/BorderWidthTokens.ts`
+- **Description**: Component-specific border widths
+- **Tokens**: border.input, border.divider, border.focus, border.card, border.emphasis
+
+### Layering Semantics
+
+#### Layering Tokens (Unified Entry Point)
+- **File**: `src/tokens/semantic/LayeringTokens.ts`
+- **Description**: Unified API re-exporting z-index and elevation tokens
+- **Helpers**: `getAllLayeringTokens()`, `getLayeringTokensByPlatform(platform)`
+
+#### Z-Index Tokens (Web + iOS)
+- **File**: `src/tokens/semantic/ZIndexTokens.ts`
+- **Description**: Stacking order tokens for web and iOS
+- **Values**: 100-based increments (100, 200, 300, 400, 500, 600)
+- **Levels**: container, navigation, dropdown, modal, toast, tooltip
+
+#### Elevation Tokens (Android)
+- **File**: `src/tokens/semantic/ElevationTokens.ts`
+- **Description**: Material Design elevation tokens for Android
+- **Values**: Material Design scale (4dp, 8dp, 16dp, 24dp)
+- **Related Guide**: [Layering Tokens Guide](./tokens/layering-tokens.md)
+
+### Motion Semantics
+
+#### Semantic Motion Tokens
+- **File**: `src/tokens/semantic/MotionTokens.ts`
+- **Description**: Compositional animation tokens combining duration, easing, and scale
+- **Tokens**: motion.floatLabel (250ms + easingStandard for text input animations)
+
+### Accessibility Semantics
+
+#### Accessibility Tokens
+- **File**: `src/tokens/semantic/AccessibilityTokens.ts`
+- **Description**: WCAG-compliant accessibility tokens
+- **Documentation**: `src/tokens/semantic/AccessibilityTokens.README.md`
+- **Count**: 8 tokens
+
+### Icon Semantics
+
+#### Icon Tokens
+- **File**: `src/tokens/semantic/IconTokens.ts`
+- **Description**: Icon sizing tokens calculated from typography line heights
+- **Sizes**: 8 variants (13px-48px)
+
+### Style Compositions
+
+#### Style Tokens
+- **File**: `src/tokens/semantic/StyleTokens.ts`
+- **Description**: Complete component styling patterns combining multiple primitives
+
+---
+
+## Blend Infrastructure
 
 ### Overview
 
-The DesignerPunk token system generates platform-specific files that include both primitive and semantic tokens. Semantic tokens reference primitive tokens by name (not resolved values), preserving the architectural relationships between tokens across all platforms.
+The blend infrastructure (v2.1.0, December 2025) provides cross-platform color blending utilities integrated into the build pipeline. This addresses the gap where blend tokens defined calculation parameters but no mechanism existed to execute the calculations.
 
-**Key Benefits**:
-- **Visible Relationships**: Developers can see that `colorPrimary` references `purple300`, not just that both are `#9333EA`
-- **Cross-Platform Consistency**: Same semantic token names work across web, iOS, and Android
-- **Reference Maintenance**: Changing a primitive token automatically updates all semantic tokens that reference it
-- **AI-Friendly**: Unambiguous token relationships enable reliable AI-human collaboration
+### Blend Utility Functions
+
+Four blend operations are available on all platforms:
+
+| Function | Purpose | Example Use Case |
+|----------|---------|------------------|
+| `darkerBlend(color, amount)` | Darken a color | Hover states, pressed states |
+| `lighterBlend(color, amount)` | Lighten a color | Icon optical balance |
+| `saturate(color, amount)` | Increase saturation | Focus states |
+| `desaturate(color, amount)` | Decrease saturation | Disabled states |
+
+### Generated Files
+
+```
+dist/BlendUtilities.web.ts      # TypeScript for Web
+dist/BlendUtilities.ios.swift   # Swift Color extensions
+dist/BlendUtilities.android.kt  # Kotlin Color extensions
+```
+
+### Theme-Aware Wrappers
+
+**Web (TypeScript)**:
+```typescript
+import { getBlendUtilities, createBlendUtilities } from '@designerpunk/tokens/BlendUtilities';
+
+// Factory function returns utilities bound to current theme
+const blend = getBlendUtilities();
+const hoverColor = blend.darkerBlend(color.primary, blend.hoverDarker);
+```
+
+**iOS (SwiftUI)**:
+```swift
+// Color extensions with SwiftUI environment integration
+let hoverColor = Color.primary.darkerBlend(amount: BlendTokens.hoverDarker)
+```
+
+**Android (Compose)**:
+```kotlin
+// Color extensions with MaterialTheme integration
+val hoverColor = MaterialTheme.colorScheme.primary.darkerBlend(BlendTokens.hoverDarker)
+```
+
+### Component Integration
+
+All four core components use blend utilities:
+
+| Component | Blend Usage |
+|-----------|-------------|
+| ButtonCTA | hover (darkerBlend), pressed (darkerBlend), disabled (desaturate), icon (lighterBlend) |
+| TextInputField | focus (saturate), disabled (desaturate) |
+| Container | hover (darkerBlend) |
+| Icon | optical balance (lighterBlend) |
+
+### Validation
+
+- **Layer 1**: Numerical precision (±1 RGB tolerance across platforms)
+- **Layer 2**: Token-naming validation (correct blend utility + token combinations)
+- **Tests**: 150 blend-specific tests
+
+### Related Documentation
+
+- [Blend Tokens Guide](./tokens/blend-tokens.md) - Complete reference with utility functions and patterns
+- [Blend Infrastructure Design](../.kiro/specs/031-blend-infrastructure-implementation/design.md) - Architecture and design decisions
+- [Component Development Guide](../.kiro/steering/Component%20Development%20and%20Practices%20Guide.md) - Blend utility integration patterns
+
+---
+
+## Token Generation
+
+### Overview
+
+The token generation system produces platform-specific files that include both primitive and semantic tokens. Semantic tokens reference primitives by name (not resolved values), preserving architectural relationships.
 
 ### Generated File Structure
-
-All generated platform files follow this structure:
 
 ```
 // Header Comment (usage guidance)
@@ -170,26 +539,19 @@ All generated platform files follow this structure:
 // Mathematical foundation
 // ============================================
 
-[All primitive tokens - fontSize100, space100, purple300, etc.]
+[All primitive tokens]
 
 // ============================================
 // SEMANTIC TOKENS  
 // Use these for UI development
 // ============================================
 
-[All semantic tokens - colorPrimary, typographyBodyMd, etc.]
+[All semantic tokens with primitive references]
 ```
 
-**Usage Guidance**: The generated files include header comments directing developers to:
-1. Use semantic tokens (colorPrimary, spacingGroupedNormal) for all UI development
-2. Use primitive tokens (purple300, space100) only when no semantic token exists
-3. Refer to comments showing semantic → primitive relationships
-
-### Platform-Specific Output Examples
+### Platform Output Examples
 
 #### Web (CSS Custom Properties)
-
-**Single-Reference Token** (color, spacing, border):
 ```css
 /* Primitive */
 :root {
@@ -204,30 +566,7 @@ All generated platform files follow this structure:
 }
 ```
 
-**Multi-Reference Token** (typography):
-```css
-/* Primitives */
-:root {
-  --font-size-100: 16px;
-  --line-height-100: 24px;
-  --font-family-body: system-ui;
-  --font-weight-400: 400;
-  --letter-spacing-100: 0;
-}
-
-/* Semantic (references multiple primitives) */
-:root {
-  --typography-body-md-font-size: var(--font-size-100);
-  --typography-body-md-line-height: var(--line-height-100);
-  --typography-body-md-font-family: var(--font-family-body);
-  --typography-body-md-font-weight: var(--font-weight-400);
-  --typography-body-md-letter-spacing: var(--letter-spacing-100);
-}
-```
-
 #### iOS (Swift)
-
-**Single-Reference Token**:
 ```swift
 struct DesignTokens {
     // Primitive
@@ -240,38 +579,7 @@ struct DesignTokens {
 }
 ```
 
-**Multi-Reference Token**:
-```swift
-struct Typography {
-    let fontSize: CGFloat
-    let lineHeight: CGFloat
-    let fontFamily: String
-    let fontWeight: UIFont.Weight
-    let letterSpacing: CGFloat
-}
-
-struct DesignTokens {
-    // Primitives
-    static let fontSize100: CGFloat = 16
-    static let lineHeight100: CGFloat = 24
-    static let fontFamilyBody = "system-ui"
-    static let fontWeight400 = UIFont.Weight.regular
-    static let letterSpacing100: CGFloat = 0
-    
-    // Semantic (references multiple primitives)
-    static let typographyBodyMd = Typography(
-        fontSize: fontSize100,
-        lineHeight: lineHeight100,
-        fontFamily: fontFamilyBody,
-        fontWeight: fontWeight400,
-        letterSpacing: letterSpacing100
-    )
-}
-```
-
 #### Android (Kotlin)
-
-**Single-Reference Token**:
 ```kotlin
 object DesignTokens {
     // Primitive
@@ -284,106 +592,22 @@ object DesignTokens {
 }
 ```
 
-**Multi-Reference Token**:
-```kotlin
-data class Typography(
-    val fontSize: TextUnit,
-    val lineHeight: TextUnit,
-    val fontFamily: String,
-    val fontWeight: FontWeight,
-    val letterSpacing: TextUnit
-)
-
-object DesignTokens {
-    // Primitives
-    val font_size_100 = 16.sp
-    val line_height_100 = 24.sp
-    val font_family_body = "system-ui"
-    val font_weight_400 = FontWeight.Normal
-    val letter_spacing_100 = 0.sp
-    
-    // Semantic (references multiple primitives)
-    val typography_body_md = Typography(
-        fontSize = font_size_100,
-        lineHeight = line_height_100,
-        fontFamily = font_family_body,
-        fontWeight = font_weight_400,
-        letterSpacing = letter_spacing_100
-    )
-}
-```
-
 ### Platform Naming Conventions
 
-The token generation system automatically converts token names to platform-appropriate conventions:
+| Platform | Convention | Prefix | Example |
+|----------|-----------|--------|---------|
+| Web | kebab-case | `--` | `--font-size-100` |
+| iOS | camelCase | none | `fontSize100` |
+| Android | snake_case | none | `font_size_100` |
 
-| Platform | Convention | Prefix | Example Primitive | Example Semantic |
-|----------|-----------|--------|-------------------|------------------|
-| **Web** | `kebab-case` | `--` | `--font-size-100` | `--color-primary` |
-| **iOS** | `camelCase` | none | `fontSize100` | `colorPrimary` |
-| **Android** | `snake_case` | none | `font_size_100` | `color_primary` |
+### Generator Components
 
-**Dot Notation Handling**: Semantic tokens use dot notation in source definitions (e.g., `color.primary`, `typography.bodyMd`). The platform formatters automatically convert these:
-- **Web**: `color.primary` → `--color-primary`
-- **iOS**: `color.primary` → `colorPrimary`
-- **Android**: `color.primary` → `color_primary`
-
-### Primitive→Semantic Reference Maintenance
-
-The generation system maintains references rather than resolving to values:
-
-**Why References Matter**:
-- **Architectural Clarity**: Developers see that `colorPrimary` comes from `purple300`
-- **Automatic Updates**: Changing `purple300` automatically updates `colorPrimary`
-- **AI Reasoning**: AI agents can understand token relationships for better collaboration
-- **Debugging**: Clear token chains make debugging easier
-
-**How It Works**:
-1. Semantic tokens define primitive references in source: `{ value: 'purple300' }`
-2. Generator validates that referenced primitives exist
-3. Platform formatters output references using platform syntax:
-   - Web: `var(--purple-300)`
-   - iOS: `purple300` (constant reference)
-   - Android: `purple_300` (property reference)
-
-### Semantic Token Source Files
-
-All semantic tokens are defined in TypeScript source files that the generation system reads:
-
-- **Color Tokens**: `src/tokens/semantic/ColorTokens.ts` - Semantic color assignments (primary, error, success, etc.)
-- **Spacing Tokens**: `src/tokens/semantic/SpacingTokens.ts` - Layout pattern spacing (grouped, related, separated, sectioned, inset)
-- **Typography Tokens**: `src/tokens/semantic/TypographyTokens.ts` - Complete typography styles (body, label, heading, display)
-- **Border Tokens**: `src/tokens/semantic/BorderWidthTokens.ts` - Semantic border widths (default, emphasis, heavy)
-- **Shadow Tokens**: `src/tokens/semantic/ShadowTokens.ts` - Complete shadow compositions (container, modal, hover, fab)
-- **Style Tokens**: `src/tokens/semantic/StyleTokens.ts` - Component styling patterns
-
-**Semantic Token Index**: `src/tokens/semantic/index.ts` provides utility functions:
-- `getAllSemanticTokens()` - Returns all semantic tokens as flat array
-- `getSemanticTokensByCategory()` - Filters tokens by category
-- `getSemanticToken()` - Retrieves specific token by name
-- `validateSemanticTokenStructure()` - Validates token structure
-
-### Cross-Platform Consistency
-
-The generation system ensures semantic tokens work identically across all platforms:
-
-**Consistent Token Names**: All platforms use the same semantic token names (converted to platform conventions)
-
-**Identical Relationships**: All platforms maintain the same primitive→semantic relationships
-
-**Platform-Appropriate Syntax**: Each platform uses its native syntax while preserving semantic meaning
-
-**Validation**: Cross-platform consistency is validated during generation to ensure no platform diverges
-
-### Related Documentation
-
-- **Semantic Token Generation Spec**: [`.kiro/specs/semantic-token-generation/design.md`](../.kiro/specs/semantic-token-generation/design.md) - Complete design and architecture for semantic token generation system
-- **Platform Naming Rules**: `src/naming/PlatformNamingRules.ts` - Source of truth for platform-specific naming conventions
-- **Token File Generator**: `src/generators/TokenFileGenerator.ts` - Main generator orchestrating platform-specific file generation
-- **Platform Formatters**: 
-  - `src/providers/WebFormatGenerator.ts` - Web/CSS formatting
-  - `src/providers/iOSFormatGenerator.ts` - iOS/Swift formatting
-  - `src/providers/AndroidFormatGenerator.ts` - Android/Kotlin formatting
+- **Token File Generator**: `src/generators/TokenFileGenerator.ts`
+- **Blend Utility Generator**: `src/generators/BlendUtilityGenerator.ts`
+- **Platform Formatters**:
+  - `src/providers/WebFormatGenerator.ts`
+  - `src/providers/iOSFormatGenerator.ts`
+  - `src/providers/AndroidFormatGenerator.ts`
 
 ---
 
@@ -391,246 +615,43 @@ The generation system ensures semantic tokens work identically across all platfo
 
 > ⚠️ **IMPORTANT**: Before adding a new token category, read the [Token Category Pattern Guide](../.kiro/specs/token-system/token-category-pattern-guide.md)
 
-The Token Category Pattern Guide provides the definitive patterns for adding new token categories to the system. It covers:
-
-- **Primitive Token Structure**: How to export complete PrimitiveToken objects with all required metadata
-- **Semantic Token Structure**: How to reference primitive tokens using `{ value: 'primitiveTokenName' }` format
-- **File Organization**: Where to place token files, tests, and how to integrate with index.ts
-- **What NOT to Do**: Common mistakes to avoid (no registration functions, no simple value exports)
-- **Complete Checklist**: Step-by-step checklist for adding new token categories
-- **Cross-References**: Links to example files (SpacingTokens, FontSizeTokens, semantic tokens)
-
-**Why this matters**: Following the established patterns ensures consistency, maintainability, and proper integration with the existing token infrastructure. The guide prevents common mistakes that were made during early token category implementations.
-
-**When to use**: Whenever you're creating a new token category (e.g., BorderWidthTokens, OpacityTokens, ShadowTokens, etc.)
-
----
-
-## Primitive Tokens
-
-### Font Size Tokens
-
-- **File**: `src/tokens/FontSizeTokens.ts`
-- **Description**: Font size tokens based on 1.125 modular scale (musical fourth) with systematic progression
-- **Base Value**: 16px (standard browser default)
-- **Scale**: 1.125 modular scale ratio
-
-### Spacing Tokens
-
-- **File**: `src/tokens/SpacingTokens.ts`
-- **Description**: Spacing tokens following 8-unit baseline grid alignment with strategic flexibility exceptions using numeric naming that exposes mathematical relationships
-- **Base Value**: 8px
-- **Grid**: 8-unit baseline grid with 4px subgrid alignment
-- **Related Guides**:
-  - [Spacing Tokens Guide](./tokens/spacing-tokens.md) - Complete spacing token reference with numeric naming convention, mathematical relationships, and cross-platform usage examples
-
-### Line Height Tokens
-
-- **File**: `src/tokens/LineHeightTokens.ts`
-- **Description**: Line height tokens using precision multipliers to align with 8pt vertical rhythm when combined with fontSize tokens
-- **Base Value**: 1.5 (optimal reading ratio)
-
-### Font Weight Tokens
-
-- **File**: `src/tokens/FontWeightTokens.ts`
-- **Description**: Font weight tokens following standard numeric font weight values with systematic progression
-- **Base Value**: 400 (normal weight)
-
-### Font Family Tokens
-
-- **File**: `src/tokens/FontFamilyTokens.ts`
-- **Description**: Font family tokens providing categorical font stack definitions for different use cases (system, mono, display, body)
-
-### Letter Spacing Tokens
-
-- **File**: `src/tokens/LetterSpacingTokens.ts`
-- **Description**: Letter spacing tokens providing unitless em-based values for character spacing adjustments
-- **Base Value**: 0 (normal spacing)
-
-### Color Tokens
-
-- **File**: `src/tokens/ColorTokens.ts`
-- **Description**: Mode-aware and theme-aware color primitive tokens with systematic color families (gray, black, white, yellow, orange, purple, violet, cyan, teal) supporting light/dark modes with base/wcag themes
-
-### Radius Tokens
-
-- **File**: `src/tokens/RadiusTokens.ts`
-- **Description**: Radius tokens following 8-unit baseline grid alignment with strategic flexibility exceptions for border radius values
-- **Base Value**: 8px
-
-### Shadow Tokens
-
-- **File**: `src/tokens/ShadowOffsetTokens.ts`
-- **Description**: Shadow offset tokens determining shadow direction based on light source position (sun arc: sunrise, morning, noon, afternoon, sunset)
-- **Base Value**: 4px (4px baseline grid alignment)
-
-- **File**: `src/tokens/ShadowBlurTokens.ts`
-- **Description**: Shadow blur tokens determining edge definition based on shadow quality (hard, moderate, soft) and depth (depth100, depth200, depth300)
-- **Base Value**: 4px
-
-- **File**: `src/tokens/ShadowOpacityTokens.ts`
-- **Description**: Shadow opacity tokens determining shadow darkness based on quality and depth
-- **Base Value**: 0.3 (unitless)
-
-- **File**: `src/tokens/ColorTokens.ts` (shadow color family)
-- **Description**: Shadow color primitives based on art theory (warm light creates cool shadows, cool light creates warm shadows) - shadowBlack100, shadowBlue100, shadowOrange100, shadowGray100
-- **Related Documentation**:
-  - [Shadow Tokens Guide](./tokens/shadow-tokens.md) - Complete shadow token reference with usage examples and lighting framework concepts
-
-### Glow Tokens
-
-- **File**: `src/tokens/GlowBlurTokens.ts`
-- **Description**: Glow blur tokens with extended blur range for radial emphasis effects
-- **Base Value**: 8px
-
-- **File**: `src/tokens/GlowOpacityTokens.ts`
-- **Description**: Glow opacity tokens with decreasing progression for multi-layer glow effects
-- **Base Value**: 0.8 (unitless)
-
-- **File**: `src/tokens/semantic/ColorTokens.ts` (glow color semantics)
-- **Description**: Glow color semantics referencing vibrant primitive colors (purple500, cyan500, yellow500) for neon emphasis effects
-- **Related Documentation**:
-  - [Glow Tokens Guide](./tokens/glow-tokens.md) - Glow primitive token reference with usage examples
-
-### Blend Tokens
-
-- **File**: `src/tokens/BlendTokens.ts`
-- **Description**: Blend tokens for color modifications (darken, lighten, saturate, desaturate) with 5-token scale from 4% to 20% in 4% increments
-- **Base Value**: 0.04 (4%)
-- **Scale**: 5 tokens (blend100-blend500) with systematic multiples of base value
-- **Related Documentation**:
-  - [Blend Tokens Guide](./tokens/blend-tokens.md) - Complete blend token reference with utility functions and theme-aware patterns
-
----
-
-## Semantic Tokens
-
-### Typography Tokens
-
-- **File**: `src/tokens/semantic/TypographyTokens.ts`
-- **Description**: Semantic typography tokens combining fontSize, lineHeight, fontFamily, fontWeight, and letterSpacing primitives to create complete typography styles for different use cases (body, label, heading, display)
-- **Related Guides**:
-  - [Compositional Color Guide](../.kiro/specs/typography-token-expansion/compositional-color-guide.md) - Explains why typography tokens don't include color properties
-  - [Strategic Flexibility Guide](../.kiro/specs/typography-token-expansion/strategic-flexibility-guide.md) - Explains size variant decisions (labelXs vs bodyXs)
-  - [Inline Emphasis Guide](../.kiro/specs/typography-token-expansion/inline-emphasis-guide.md) - Explains platform-native emphasis patterns
-  - [Migration Guide](../.kiro/specs/typography-token-expansion/migration-guide.md) - Provides migration path for renamed tokens
-
-### Semantic Color Tokens
-
-- **File**: `src/tokens/semantic/ColorTokens.ts`
-- **Description**: Semantic color tokens providing purpose-driven color assignments for UI elements (primary, error, success, warning, info) that reference primitive color tokens
-
-### Semantic Spacing Tokens
-
-- **File**: `src/tokens/semantic/SpacingTokens.ts`
-- **Description**: Semantic spacing tokens providing layout pattern-specific spacing values (grouped, related, separated, sectioned, inset) that reference primitive spacing tokens
-- **Related Guides**:
-  - [Spacing Tokens Guide](./tokens/spacing-tokens.md) - Complete spacing token reference with numeric naming convention, mathematical relationships, and usage examples
-
-### Style Tokens
-
-- **File**: `src/tokens/semantic/StyleTokens.ts`
-- **Description**: Semantic style tokens combining multiple primitives for complete component styling patterns (shadows, borders, effects)
-
-### Semantic Shadow Tokens
-
-- **File**: `src/tokens/semantic/ShadowTokens.ts`
-- **Description**: Semantic shadow tokens composing offsetX, offsetY, blur, opacity, and color primitives to create complete shadow styles for specific use cases (container, modal, hover, fab) with lighting framework concepts (sun arc positions and shadow quality)
-- **Related Guides**:
-  - [Shadow Tokens Guide](./tokens/shadow-tokens.md) - Complete shadow token reference with usage examples and lighting framework concepts
-  - [Lighting Framework Guide](../.kiro/specs/shadow-glow-token-system/lighting-framework.md) - Conceptual framework for light source positioning and shadow quality
-
-### Semantic Blend Tokens
-
-- **File**: `src/tokens/semantic/BlendTokens.ts`
-- **Description**: Semantic blend tokens providing contextual meaning for common color modification use cases (hover, pressed, focus, disabled states) with explicit blend direction
-- **Tokens**: 7 semantic tokens (blend.hoverDarker, blend.hoverLighter, blend.pressedDarker, blend.focusSaturate, blend.disabledDesaturate, blend.containerHoverDarker, color.icon.opticalBalance)
-- **Related Guides**:
-  - [Blend Tokens Guide](./tokens/blend-tokens.md) - Complete blend token reference with utility functions and theme-aware patterns
-  - [Blend Infrastructure Design](../.kiro/specs/031-blend-infrastructure-implementation/design.md) - Architecture and design decisions for blend token infrastructure
-
-### Layering Tokens
-
-The Layering Token System provides platform-specific semantic tokens for controlling element stacking order across web, iOS, and Android platforms. Unlike other token categories that follow a primitive→semantic hierarchy, layering tokens are **semantic-only** with no primitive token layer.
-
-**Why Semantic-Only?**
-
-Layering tokens are an architectural exception to the typical primitive→semantic pattern because:
-- **Ordinal Values**: Z-index and elevation values establish ordering, not mathematical relationships
-- **Platform-Specific Scales**: Web uses arbitrary z-index values (100, 200, 300), Android uses Material Design elevation scale (4dp, 8dp, 16dp), iOS uses small integers (1, 2, 3)
-- **Component-Driven**: Layering is about component stacking order (modal above dropdown), not mathematical progressions
-
-**Two Token Sets**:
-
-1. **Z-Index Tokens** (Web + iOS)
-   - **File**: `src/tokens/semantic/ZIndexTokens.ts`
-   - **Description**: Stacking order tokens for web and iOS platforms that control z-axis positioning independently from visual depth (shadows)
-   - **Platform**: Web, iOS
-   - **Values**: 100-based increments (100, 200, 300, 400, 500, 600)
-   - **Usage**: Use independently with shadow tokens for visual depth
-
-2. **Elevation Tokens** (Android)
-   - **File**: `src/tokens/semantic/ElevationTokens.ts`
-   - **Description**: Material Design elevation tokens for Android that handle both stacking order and shadow rendering
-   - **Platform**: Android
-   - **Values**: Material Design scale (4dp, 8dp, 16dp, 24dp)
-   - **Usage**: Elevation handles both z-order and shadow (Material Design convention)
-
-**Unified Entry Point**:
-- **File**: `src/tokens/semantic/LayeringTokens.ts`
-- **Description**: Unified API that re-exports all layering tokens and provides platform-agnostic helper functions
-- **Helpers**: `getAllLayeringTokens()`, `getLayeringTokensByPlatform(platform)`
-
-**Semantic Levels** (consistent across platforms):
-- `container` - Base z-index for container components (cards, panels, surfaces)
-- `navigation` - Persistent navigation (headers, sidebars, sticky elements)
-- `dropdown` - Temporary overlay content (dropdowns, popovers, menus)
-- `modal` - Modal overlay content (dialogs, sheets, overlays)
-- `toast` - Notification elements (toasts, snackbars, alerts)
-- `tooltip` - Always-visible elements (tooltips, critical overlays)
-
-**Related Documentation**:
-- [Layering Tokens Guide](./tokens/layering-tokens.md) - Complete layering token reference with platform-specific usage examples and AI agent generation rules
-- [Layering Token System Design](../.kiro/specs/layering-token-system/design.md) - Architecture and design decisions for platform-specific layering tokens
+The guide covers:
+- Primitive token structure with required metadata
+- Semantic token structure with `{ value: 'primitiveTokenName' }` format
+- File organization and index.ts integration
+- Common mistakes to avoid
+- Complete checklist for new categories
 
 ---
 
 ## Related Documentation
 
 ### Conceptual Foundation
-
-- [Token Ecosystem Narrative](./concepts/token-ecosystem-narrative.md) - Understand the token system through the business localization metaphor
+- [Token Ecosystem Narrative](./concepts/token-ecosystem-narrative.md) - Business localization metaphor
 
 ### Architecture
-
-- [Registry-Validator Interaction Pattern](../architecture/registry-validator-pattern.md) - Definitive guide for validation and registration patterns with usage examples and guidelines for AI agents
+- [Registry-Validator Interaction Pattern](../architecture/registry-validator-pattern.md) - Validation and registration patterns
 
 ### Process Standards
+- [Token Category Pattern Guide](../.kiro/specs/token-system/token-category-pattern-guide.md) - Adding new token categories
 
-- [Token Category Pattern Guide](../.kiro/specs/token-system/token-category-pattern-guide.md) - Definitive guide for adding new token categories with complete patterns and checklist
+### Token Guides
+- [Spacing Tokens Guide](./tokens/spacing-tokens.md)
+- [Shadow Tokens Guide](./tokens/shadow-tokens.md)
+- [Glow Tokens Guide](./tokens/glow-tokens.md)
+- [Blend Tokens Guide](./tokens/blend-tokens.md)
+- [Layering Tokens Guide](./tokens/layering-tokens.md)
 
 ### Specifications
-
-- [Typography Token Expansion](../.kiro/specs/typography-token-expansion/design.md) - Comprehensive design and architecture for typography token system
-- [Mathematical Token System](../.kiro/specs/mathematical-token-system/design.md) - Mathematical foundations and validation system for all tokens
-- [Cross-Platform Build System](../.kiro/specs/cross-platform-build-system/design.md) - Token generation and platform-specific conversion system
-- [Shadow and Glow Token System](../.kiro/specs/shadow-glow-token-system/design.md) - Shadow and glow token architecture with lighting framework concepts and cross-platform translation
+- [Typography Token Expansion](../.kiro/specs/typography-token-expansion/design.md)
+- [Shadow and Glow Token System](../.kiro/specs/shadow-glow-token-system/design.md)
+- [Blend Infrastructure Implementation](../.kiro/specs/031-blend-infrastructure-implementation/design.md)
+- [Layering Token System](../.kiro/specs/layering-token-system/design.md)
+- [Responsive Layout System](../.kiro/specs/responsive-layout-system/design.md)
 
 ### Project Overview
-
-- [README](../README.md) - Project overview, getting started guide, and high-level architecture
-
-### How to Use This Document
-
-This document serves as a navigation hub for the token system:
-
-1. **Find Token Files**: Use the Primitive Tokens and Semantic Tokens sections to locate specific token implementation files
-2. **Understand Token Architecture**: Follow the Related Guides links to learn about design decisions and architectural patterns
-3. **Explore Specifications**: Use the Related Documentation section to dive deeper into system design and implementation details
-4. **Navigate to Project Context**: Use the README link for broader project context and getting started information
-
-The token system follows a primitive→semantic hierarchy where semantic tokens compose primitive tokens to create higher-level design patterns. This mathematical foundation enables cross-platform consistency and reliable AI-human collaboration through precise, unambiguous design language.
+- [README](../README.md) - Project overview and high-level architecture
 
 ---
 
-*This overview provides navigation to token files and their related documentation guides.*
+*This overview provides navigation to token files and their related documentation guides. Last updated December 29, 2025.*
