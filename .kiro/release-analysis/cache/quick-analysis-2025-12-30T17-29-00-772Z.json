@@ -1,0 +1,380 @@
+{
+  "timestamp": "2025-12-30T17:29:00.772Z",
+  "lastAnalyzedCommit": "ec9595fb983e6e9cc0622d0b6e5a3b816e98dc87",
+  "documentCount": 74,
+  "documents": [
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-1-1-completion.md",
+      "lastModified": "2025-12-30T17:29:00.763Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-1-2-completion.md",
+      "lastModified": "2025-12-30T17:29:00.764Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-1-3-completion.md",
+      "lastModified": "2025-12-30T17:29:00.764Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-1-4-completion.md",
+      "lastModified": "2025-12-30T17:29:00.764Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-1-5-completion.md",
+      "lastModified": "2025-12-30T17:29:00.764Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-1-6-completion.md",
+      "lastModified": "2025-12-30T17:29:00.764Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-1-parent-completion.md",
+      "lastModified": "2025-12-30T17:29:00.765Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-1-completion.md",
+      "lastModified": "2025-12-30T17:29:00.765Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-2-completion.md",
+      "lastModified": "2025-12-30T17:29:00.765Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-3-completion.md",
+      "lastModified": "2025-12-30T17:29:00.765Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-4-completion.md",
+      "lastModified": "2025-12-30T17:29:00.765Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-5-completion.md",
+      "lastModified": "2025-12-30T17:29:00.765Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-6-completion.md",
+      "lastModified": "2025-12-30T17:29:00.765Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-7-completion.md",
+      "lastModified": "2025-12-30T17:29:00.765Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-parent-completion.md",
+      "lastModified": "2025-12-30T17:29:00.765Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-3-1-completion.md",
+      "lastModified": "2025-12-30T17:29:00.766Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-3-2-completion.md",
+      "lastModified": "2025-12-30T17:29:00.766Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-3-3-completion.md",
+      "lastModified": "2025-12-30T17:29:00.766Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-3-4-completion.md",
+      "lastModified": "2025-12-30T17:29:00.766Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-3-5-completion.md",
+      "lastModified": "2025-12-30T17:29:00.766Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-3-6-completion.md",
+      "lastModified": "2025-12-30T17:29:00.766Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-3-parent-completion.md",
+      "lastModified": "2025-12-30T17:29:00.766Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-4-1-completion.md",
+      "lastModified": "2025-12-30T17:29:00.766Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-4-2-completion.md",
+      "lastModified": "2025-12-30T17:29:00.766Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-4-3-completion.md",
+      "lastModified": "2025-12-30T17:29:00.766Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-4-4-completion.md",
+      "lastModified": "2025-12-30T17:29:00.766Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-4-parent-completion.md",
+      "lastModified": "2025-12-30T17:29:00.766Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/030-test-failure-fixes/completion/task-12-1-completion.md",
+      "lastModified": "2025-12-30T17:29:00.766Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/030-test-failure-fixes/completion/task-12-2-completion.md",
+      "lastModified": "2025-12-30T17:29:00.766Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/030-test-failure-fixes/completion/task-12-3-completion.md",
+      "lastModified": "2025-12-30T17:29:00.766Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/030-test-failure-fixes/completion/task-12-4-completion.md",
+      "lastModified": "2025-12-30T17:29:00.767Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/030-test-failure-fixes/completion/task-12-completion.md",
+      "lastModified": "2025-12-30T17:29:00.767Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/030-test-failure-fixes/completion/task-13-1-completion.md",
+      "lastModified": "2025-12-30T17:29:00.767Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/030-test-failure-fixes/completion/task-13-2-completion.md",
+      "lastModified": "2025-12-30T17:29:00.767Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/030-test-failure-fixes/completion/task-13-3-completion.md",
+      "lastModified": "2025-12-30T17:29:00.767Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/030-test-failure-fixes/completion/task-13-completion.md",
+      "lastModified": "2025-12-30T17:29:00.767Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-1-1-completion.md",
+      "lastModified": "2025-12-30T17:29:00.767Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-1-2-completion.md",
+      "lastModified": "2025-12-30T17:29:00.767Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-1-3-completion.md",
+      "lastModified": "2025-12-30T17:29:00.767Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-1-4-completion.md",
+      "lastModified": "2025-12-30T17:29:00.767Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-1-5-completion.md",
+      "lastModified": "2025-12-30T17:29:00.767Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-1-6-completion.md",
+      "lastModified": "2025-12-30T17:29:00.767Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-1-parent-completion.md",
+      "lastModified": "2025-12-30T17:29:00.767Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-2-1-completion.md",
+      "lastModified": "2025-12-30T17:29:00.767Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-2-2-completion.md",
+      "lastModified": "2025-12-30T17:29:00.768Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-2-3-completion.md",
+      "lastModified": "2025-12-30T17:29:00.768Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-2-4-completion.md",
+      "lastModified": "2025-12-30T17:29:00.768Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-2-5-completion.md",
+      "lastModified": "2025-12-30T17:29:00.768Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-2-parent-completion.md",
+      "lastModified": "2025-12-30T17:29:00.768Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-3-1-completion.md",
+      "lastModified": "2025-12-30T17:29:00.768Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-3-2-completion.md",
+      "lastModified": "2025-12-30T17:29:00.768Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-3-3-completion.md",
+      "lastModified": "2025-12-30T17:29:00.768Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-3-4-completion.md",
+      "lastModified": "2025-12-30T17:29:00.768Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-3-5-completion.md",
+      "lastModified": "2025-12-30T17:29:00.768Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-3-6-completion.md",
+      "lastModified": "2025-12-30T17:29:00.768Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-3-7-completion.md",
+      "lastModified": "2025-12-30T17:29:00.768Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-3-parent-completion.md",
+      "lastModified": "2025-12-30T17:29:00.768Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-6-checkpoint-completion.md",
+      "lastModified": "2025-12-30T17:29:00.768Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-1-1-completion.md",
+      "lastModified": "2025-12-30T17:29:00.768Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-1-2-completion.md",
+      "lastModified": "2025-12-30T17:29:00.768Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-1-3-completion.md",
+      "lastModified": "2025-12-30T17:29:00.769Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-1-parent-completion.md",
+      "lastModified": "2025-12-30T17:29:00.769Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-2-1-completion.md",
+      "lastModified": "2025-12-30T17:29:00.769Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-2-2-completion.md",
+      "lastModified": "2025-12-30T17:29:00.769Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-2-parent-completion.md",
+      "lastModified": "2025-12-30T17:29:00.769Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-3-1-completion.md",
+      "lastModified": "2025-12-30T17:29:00.769Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-3-2-completion.md",
+      "lastModified": "2025-12-30T17:29:00.769Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-3-parent-completion.md",
+      "lastModified": "2025-12-30T17:29:00.769Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-4-1-completion.md",
+      "lastModified": "2025-12-30T17:29:00.769Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-4-2-completion.md",
+      "lastModified": "2025-12-30T17:29:00.769Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-4-parent-completion.md",
+      "lastModified": "2025-12-30T17:29:00.769Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-5-1-completion.md",
+      "lastModified": "2025-12-30T17:29:00.769Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-5-2-completion.md",
+      "lastModified": "2025-12-30T17:29:00.769Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-5-parent-completion.md",
+      "lastModified": "2025-12-30T17:29:00.769Z",
+      "gitCommit": "unknown"
+    }
+  ],
+  "quickAnalysisMode": true,
+  "appendOnlyOptimization": true,
+  "note": "Full analysis can be run with: npm run release:analyze"
+}
