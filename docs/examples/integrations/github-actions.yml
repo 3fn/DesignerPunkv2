@@ -1,5 +1,6 @@
 # GitHub Actions Workflow for Automated Releases
 # Place this file in: .github/workflows/release.yml
+# Last Reviewed: 2025-12-30
 
 name: Automated Release
 

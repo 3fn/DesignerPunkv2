@@ -1,9 +1,16 @@
+---
+inclusion: manual
+---
+
 # Motion Token Usage Documentation
 
-**Date**: December 6, 2025  
-**Purpose**: Motion token reference and usage guide  
-**Organization**: token-documentation  
+**Date**: December 6, 2025
+**Last Reviewed**: 2025-12-30
+**Purpose**: Motion token reference and usage guide
+**Organization**: token-documentation
 **Scope**: motion-token-system
+**Layer**: 3
+**Relevant Tasks**: component-development, token-selection
 
 ---
 
@@ -647,6 +654,8 @@ expect(Number.isInteger(scaledSize)).toBe(true);
 - [Token System Overview](../token-system-overview.md) - Complete token system architecture
 - [Motion Token Design Document](../../.kiro/specs/014-motion-token-system/design.md) - Detailed design decisions and rationale
 - [Motion Token Requirements](../../.kiro/specs/014-motion-token-system/requirements.md) - System requirements and acceptance criteria
+- [Component Development Guide](./Component Development and Practices Guide.md) - Token usage in component development
+- [Token Resolution Patterns](./Token Resolution Patterns.md) - Strategic guidance on token type selection and validation
 
 ---
 

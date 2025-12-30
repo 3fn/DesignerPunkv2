@@ -2,7 +2,8 @@
 
 **Difficulty**: Beginner  
 **Time**: 15-20 minutes  
-**Prerequisites**: Node.js 16+, Git configured
+**Prerequisites**: Node.js 16+, Git configured  
+**Last Reviewed**: 2025-12-30
 
 ---
 

@@ -425,4 +425,11 @@ fun FontTestScreen() {
 
 ---
 
+## Font Availability Note
+
+**Rajdhani-Light.ttf (300 weight)**: This font file exists in the source assets but is not actively used in the current design system. The design system uses Regular (400), Medium (500), SemiBold (600), and Bold (700) weights. If Light weight is needed in the future, the file is available in `src/assets/fonts/rajdhani/` and can be added to `res/font/` as `rajdhani_light.ttf`.
+
+---
+
 **Requirements**: 8.1, 8.2, 8.3, 8.4, 8.5
+**Last Reviewed**: 2025-12-30

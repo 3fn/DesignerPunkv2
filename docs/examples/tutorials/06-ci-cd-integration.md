@@ -2,7 +2,8 @@
 
 **Difficulty**: Intermediate  
 **Time**: 30 minutes  
-**Prerequisites**: Completed [First Release](./01-first-release.md), CI/CD experience
+**Prerequisites**: Completed [First Release](./01-first-release.md), CI/CD experience  
+**Last Reviewed**: 2025-12-30
 
 ---
 

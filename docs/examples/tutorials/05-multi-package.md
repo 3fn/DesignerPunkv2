@@ -2,7 +2,8 @@
 
 **Difficulty**: Advanced  
 **Time**: 45 minutes  
-**Prerequisites**: Completed [Major Release](./04-major-release.md)
+**Prerequisites**: Completed [Major Release](./04-major-release.md)  
+**Last Reviewed**: 2025-12-30
 
 ---
 

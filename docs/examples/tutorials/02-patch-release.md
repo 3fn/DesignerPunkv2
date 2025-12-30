@@ -2,7 +2,8 @@
 
 **Difficulty**: Beginner  
 **Time**: 10 minutes  
-**Prerequisites**: Completed [First Release](./01-first-release.md)
+**Prerequisites**: Completed [First Release](./01-first-release.md)  
+**Last Reviewed**: 2025-12-30
 
 ---
 

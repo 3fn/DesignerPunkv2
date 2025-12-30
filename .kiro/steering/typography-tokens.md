@@ -1,9 +1,16 @@
+---
+inclusion: manual
+---
+
 # Typography Tokens Guide
 
-**Date**: December 9, 2025  
-**Purpose**: Complete reference for typography tokens with font family usage and weight mapping guidance  
-**Organization**: token-documentation  
+**Date**: December 9, 2025
+**Last Reviewed**: 2025-12-30
+**Purpose**: Complete reference for typography tokens with font family usage and weight mapping guidance
+**Organization**: token-documentation
 **Scope**: cross-project
+**Layer**: 3
+**Relevant Tasks**: component-development, token-selection
 
 ---
 
@@ -579,6 +586,8 @@ val interFamily = FontFamily(
 - [iOS Font Setup](../platform-integration/ios-font-setup.md) - iOS font configuration and implementation
 - [Android Font Setup](../platform-integration/android-font-setup.md) - Android font configuration and implementation
 - [Token System Overview](../token-system-overview.md) - Complete token system architecture
+- [Component Development Guide](./Component Development and Practices Guide.md) - Token usage in component development
+- [Token Resolution Patterns](./Token Resolution Patterns.md) - Strategic guidance on token type selection and validation
 
 ---
 

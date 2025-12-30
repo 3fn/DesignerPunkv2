@@ -1,6 +1,7 @@
 # Release Management System - Usage Guide
 
 **Date**: November 28, 2025  
+**Last Reviewed**: 2025-12-30  
 **Purpose**: Comprehensive guide for using the DesignerPunk Release Management System  
 **Organization**: process-standard  
 **Scope**: cross-project

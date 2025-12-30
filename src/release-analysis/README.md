@@ -1616,8 +1616,8 @@ For more detailed information, see the complete documentation suite:
 
 - **[Documentation Index](docs/index.md)** - Complete navigation guide
 - **[Usage Guide](docs/usage-guide.md)** - Step-by-step usage instructions with examples
-- **[Configuration Reference](docs/configuration-reference.md)** - Complete configuration options
-- **[Troubleshooting Guide](docs/troubleshooting-guide.md)** - Systematic problem resolution
+- **[Configuration Reference](../../docs/release-management/configuration-reference.md)** - Complete configuration options
+- **[Troubleshooting Guide](../../docs/release-management/troubleshooting-guide.md)** - Systematic problem resolution
 - **[Integration Examples](docs/integration-examples.md)** - Project-specific integration patterns
 
 ### Component Documentation

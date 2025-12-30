@@ -1,6 +1,7 @@
 # Security Best Practices
 
 **Date**: November 28, 2025  
+**Last Reviewed**: 2025-12-30  
 **Purpose**: Security guidelines for release management system  
 **Audience**: DevOps engineers, security teams, system administrators
 

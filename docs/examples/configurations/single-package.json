@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft-07/schema#",
-  "description": "Single package project configuration - Minimal setup for projects with one package.json",
+  "description": "Single package project configuration - Minimal setup for projects with one package.json (Last Reviewed: 2025-12-30)",
   
   "workingDirectory": ".",
   "dryRun": false,

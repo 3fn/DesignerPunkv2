@@ -1,9 +1,16 @@
+---
+inclusion: manual
+---
+
 # Spacing Tokens Guide
 
-**Date**: November 26, 2025  
-**Purpose**: Complete reference for spacing tokens with numeric naming convention and mathematical relationships  
-**Organization**: token-documentation  
+**Date**: November 26, 2025
+**Last Reviewed**: 2025-12-30
+**Purpose**: Complete reference for spacing tokens with numeric naming convention and mathematical relationships
+**Organization**: token-documentation
 **Scope**: cross-project
+**Layer**: 3
+**Relevant Tasks**: component-development, token-selection
 
 ---
 
@@ -377,6 +384,8 @@ If you're migrating from the old subjective naming convention, see the [Inset To
 - **Inset Token Renaming Spec**: `.kiro/specs/011-inset-token-renaming/design.md` - Design decisions for numeric naming
 - **Migration Guide**: `.kiro/specs/011-inset-token-renaming/migration-guide.md` - Migration from old to new names
 - **Mathematical Token System**: `.kiro/specs/mathematical-token-system/design.md` - Mathematical foundations
+- **Component Development Guide**: `./Component Development and Practices Guide.md` - Token usage in component development
+- **Token Resolution Patterns**: `./Token Resolution Patterns.md` - Strategic guidance on token type selection and validation
 
 ---
 

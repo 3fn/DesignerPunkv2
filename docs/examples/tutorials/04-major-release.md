@@ -2,7 +2,8 @@
 
 **Difficulty**: Intermediate  
 **Time**: 30 minutes  
-**Prerequisites**: Completed [Minor Release](./03-minor-release.md)
+**Prerequisites**: Completed [Minor Release](./03-minor-release.md)  
+**Last Reviewed**: 2025-12-30
 
 ---
 

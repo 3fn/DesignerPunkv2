@@ -1,9 +1,16 @@
+---
+inclusion: manual
+---
+
 # Layering Tokens
 
 **Date**: October 28, 2025
+**Last Reviewed**: 2025-12-30
 **Purpose**: Documentation guide for the Layering Token System
 **Organization**: token-documentation
 **Scope**: cross-project
+**Layer**: 3
+**Relevant Tasks**: component-development, token-selection
 
 ---
 
@@ -664,6 +671,8 @@ Tokens are ordered from lowest to highest stacking order:
 - [Shadow Tokens](./shadow-tokens.md) - Shadow token system that integrates with layering tokens
 - [Glow Tokens](./glow-tokens.md) - Glow token system for visual effects
 - [Token System Overview](../token-system-overview.md) - Complete token system architecture
+- [Component Development Guide](./Component Development and Practices Guide.md) - Token usage in component development
+- [Token Resolution Patterns](./Token Resolution Patterns.md) - Strategic guidance on token type selection and validation
 
 ---
 

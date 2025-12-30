@@ -2,7 +2,8 @@
 
 **Difficulty**: Beginner  
 **Time**: 15 minutes  
-**Prerequisites**: Completed [Patch Release](./02-patch-release.md)
+**Prerequisites**: Completed [Patch Release](./02-patch-release.md)  
+**Last Reviewed**: 2025-12-30
 
 ---
 

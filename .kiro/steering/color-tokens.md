@@ -1,9 +1,16 @@
+---
+inclusion: manual
+---
+
 # Color Tokens Guide
 
-**Date**: December 8, 2025  
-**Purpose**: Complete reference for color tokens with semantic meanings and accessible usage guidance  
-**Organization**: token-documentation  
+**Date**: December 8, 2025
+**Last Reviewed**: 2025-12-30
+**Purpose**: Complete reference for color tokens with semantic meanings and accessible usage guidance
+**Organization**: token-documentation
 **Scope**: cross-project
+**Layer**: 3
+**Relevant Tasks**: component-development, token-selection
 
 ---
 
@@ -478,6 +485,8 @@ Use semantic color tokens for:
 - **Token System Overview**: `docs/token-system-overview.md` - Complete token system reference
 - **Color Palette Update Spec**: `.kiro/specs/015-color-palette-update/design.md` - Design decisions for color updates
 - **WCAG Guidelines**: [Web Content Accessibility Guidelines 2.1](https://www.w3.org/WAI/WCAG21/quickref/) - Official WCAG reference
+- **Component Development Guide**: `.kiro/steering/Component Development and Practices Guide.md` - Token usage in component development
+- **Token Resolution Patterns**: `.kiro/steering/Token Resolution Patterns.md` - Strategic guidance on token type selection and validation
 
 ---
 

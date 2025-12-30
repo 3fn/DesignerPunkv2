@@ -2,7 +2,8 @@
 
 **Difficulty**: Intermediate  
 **Time**: 30-45 minutes  
-**Prerequisites**: Existing project with version control
+**Prerequisites**: Existing project with version control  
+**Last Reviewed**: 2025-12-30
 
 ---
 

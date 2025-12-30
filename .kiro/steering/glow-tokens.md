@@ -1,9 +1,16 @@
+---
+inclusion: manual
+---
+
 # Glow Token Usage Documentation
 
-**Date**: October 24, 2025  
-**Purpose**: Glow token reference and usage guide  
-**Organization**: token-documentation  
+**Date**: October 24, 2025
+**Last Reviewed**: 2025-12-30
+**Purpose**: Glow token reference and usage guide
+**Organization**: token-documentation
 **Scope**: shadow-glow-token-system
+**Layer**: 3
+**Relevant Tasks**: component-development, token-selection
 
 ---
 
@@ -461,6 +468,8 @@ The current primitive tokens provide the foundation for experimentation and proo
 - [Token System Overview](../token-system-overview.md) - Complete token system architecture
 - [Shadow and Glow Design Document](../../.kiro/specs/shadow-glow-token-system/design.md) - Detailed design decisions and rationale
 - [Shadow and Glow Requirements](../../.kiro/specs/shadow-glow-token-system/requirements.md) - System requirements and acceptance criteria
+- [Component Development Guide](./Component Development and Practices Guide.md) - Token usage in component development
+- [Token Resolution Patterns](./Token Resolution Patterns.md) - Strategic guidance on token type selection and validation
 
 ---
 

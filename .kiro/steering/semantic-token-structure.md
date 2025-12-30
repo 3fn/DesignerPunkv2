@@ -1,9 +1,16 @@
+---
+inclusion: manual
+---
+
 # Semantic Token Structure Guide
 
 **Date**: November 17, 2025
+**Last Reviewed**: 2025-12-30
 **Purpose**: Document SemanticToken interface requirements and usage patterns
 **Organization**: token-documentation
 **Scope**: cross-project
+**Layer**: 3
+**Relevant Tasks**: component-development, token-creation
 
 ---
 
@@ -749,6 +756,8 @@ Layering tokens (ZIndexTokens and ElevationTokens) are an architectural exceptio
   - `src/tokens/semantic/SpacingTokens.ts` - Spacing semantic tokens
   - `src/tokens/semantic/ShadowTokens.ts` - Shadow semantic tokens
 - **Validation Tests**: `src/tokens/semantic/__tests__/SemanticTokenIntegration.test.ts` - Token structure validation tests
+- **Component Development Guide**: `./Component Development and Practices Guide.md` - Token usage in component development
+- **Token Resolution Patterns**: `./Token Resolution Patterns.md` - Strategic guidance on token type selection and validation
 
 ---
 

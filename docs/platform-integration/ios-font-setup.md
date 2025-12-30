@@ -405,10 +405,16 @@ This documentation addresses the following requirements from Spec 015:
 
 - [Font Family Tokens](../../src/tokens/FontFamilyTokens.ts) - Token definitions
 - [Typography Tokens](../../src/tokens/semantic/TypographyTokens.ts) - Semantic typography
-- [Web Font Loading](../web-font-loading.md) - Web platform font integration
-- [Android Font Integration](../android-font-setup.md) - Android platform font integration
+- [Android Font Integration](./android-font-setup.md) - Android platform font integration
+
+---
+
+## Font Availability Note
+
+**Rajdhani-Light.ttf (300 weight)**: This font file exists in the source assets but is not actively used in the current design system. The design system uses Regular (400), Medium (500), SemiBold (600), and Bold (700) weights. If Light weight is needed in the future, the file is available in `src/assets/fonts/rajdhani/`.
 
 ---
 
 **Organization**: platform-integration
 **Scope**: 015-color-palette-update
+**Last Reviewed**: 2025-12-30

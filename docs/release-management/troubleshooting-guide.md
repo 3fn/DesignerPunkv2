@@ -1,6 +1,7 @@
 # Release Management System - Troubleshooting Guide
 
 **Date**: November 28, 2025  
+**Last Reviewed**: 2025-12-30  
 **Purpose**: Solutions for common issues and problems  
 **Organization**: process-standard  
 **Scope**: cross-project
@@ -1003,8 +1004,8 @@ tail -50 .kiro/logs/release-manager.log
 
 ### Resources
 
-- **Usage Guide**: `docs/release-management-guide.md`
-- **Configuration Reference**: `docs/configuration-reference.md`
+- **Usage Guide**: `docs/release-management/release-management-guide.md`
+- **Configuration Reference**: `docs/release-management/configuration-reference.md`
 - **GitHub Issues**: https://github.com/3fn/DesignerPunkv2/issues
 - **Spec Documents**: `.kiro/specs/release-management-system/`
 
