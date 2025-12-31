@@ -163,25 +163,42 @@ get_section({ path: ".kiro/steering/Component Development and Practices Guide.md
 ---
 
 ### 3. A Vision of the Future
-**Trigger**: Need greater context on DesignerPunk vision (optional)
+**When needed**: Need greater context on DesignerPunk vision (optional)
 
 **File**: #[[file:.kiro/steering/A Vision of the Future.md]]
 
+**How to access**:
+```
+get_document_summary({ path: ".kiro/steering/A Vision of the Future.md" })
+```
+
+
 ---
 
-### 4. Token Usage Guidance
-**Trigger**: Working with tokens
 
-**Files**: 
-- #[[file:docs/token-system-overview.md]]
-- Related guides in #[[file:.kiro/specs/typography-token-expansion]]
 
-**Confirmation**: Reply "I've reviewed the Token guidance!" after reading
+### 4. Token Quick Reference
+**When needed**: Working with design tokens, component development, token selection
+
+**File**: #[[file:.kiro/steering/Token Quick Reference.md]]
+
+**How to access**:
+```
+get_document_summary({ path: ".kiro/steering/Token Quick Reference.md" })
+```
+
+Then query the specific section you need:
+```
+get_section({ path: ".kiro/steering/Token Quick Reference.md", heading: "Token Documentation Map" })
+get_section({ path: ".kiro/steering/Token Quick Reference.md", heading: "Common Patterns" })
+```
+
+**Confirmation**: Reply "I've queried Token Quick Reference via MCP!" after accessing
 
 ---
 
 ### 5. Browser Distribution Guide
-**Trigger**: Working with browser distribution, web components, or bundle loading
+**When needed**: Working with browser distribution, web components, or bundle loading
 
 **File**: #[[file:.kiro/steering/Browser Distribution Guide.md]]
 
@@ -195,7 +212,7 @@ get_section({ path: ".kiro/steering/Browser Distribution Guide.md", heading: "Tr
 ---
 
 ### 6. Test Failure Audit Methodology
-**Trigger**: Conducting test failure audits, completing specs (clean exit audit), investigating performance issues
+**When needed**: Conducting test failure audits, completing specs (clean exit audit), investigating performance issues
 
 **File**: #[[file:.kiro/steering/Test Failure Audit Methodology.md]]
 
@@ -209,6 +226,25 @@ get_section({ path: ".kiro/steering/Test Failure Audit Methodology.md", heading:
 
 **Confirmation**: Reply "I've queried Test Failure Audit Methodology via MCP!" after accessing
 
+
+### 7. Release Management System
+**When needed**: Working with release management, understanding release pipeline, task completion workflows
+
+**File**: #[[file:.kiro/steering/Release Management System.md]]
+
+**How to access**:
+```
+get_document_summary({ path: ".kiro/steering/Release Management System.md" })
+```
+
+Then query the specific section you need:
+```
+get_section({ path: ".kiro/steering/Release Management System.md", heading: "Release Pipeline Architecture" })
+get_section({ path: ".kiro/steering/Release Management System.md", heading: "AI Agent Decision Points" })
+```
+
+**Confirmation**: Reply "I've queried Release Management System via MCP!" after accessing
+
 ---
 
 ## MCP Documentation Server (Primary for Large Docs)
@@ -219,11 +255,12 @@ The MCP Documentation Server is the **primary source** for large steering docume
 
 These documents are available ONLY via MCP queries:
 
-| Document | Path | Tokens |
-|----------|------|--------|
-| Spec Planning Standards | `.kiro/steering/Spec Planning Standards.md` | ~27,000 |
-| Component Development and Practices Guide | `.kiro/steering/Component Development and Practices Guide.md` | ~9,000 | Test Failure Audit Methodology | `.kiro/steering/Test Failure Audit Methodology.md` | ~8,000 |
 
+| Document | Path |
+|----------|------|
+| Spec Planning Standards | `.kiro/steering/Spec Planning Standards.md` |
+| Component Development and Practices Guide | `.kiro/steering/Component Development and Practices Guide.md` |
+| Test Failure Audit Methodology | `.kiro/steering/Test Failure Audit Methodology.md` |
 
 ### How to Access MCP-Only Documents
 
@@ -282,26 +319,19 @@ These documents remain auto-loaded:
 
 ### Available Tools
 
-| Tool | Purpose | Typical Tokens |
-|------|---------|----------------|
-| `get_documentation_map` | List all documents with metadata | ~500 |
-| `get_document_summary` | Get metadata + outline | ~200 |
-| `get_document_full` | Get complete content | 2,000-15,000 |
-| `get_section` | Get specific section by heading | ~2,000 |
-| `list_cross_references` | List document links | ~100 |
-| `validate_metadata` | Debug metadata issues | ~50 |
-| `get_index_health` | Check server status | ~50 |
-| `rebuild_index` | Force re-indexing | ~50 |
 
-### Token Efficiency
+| Tool | Purpose |
+|------|---------|
+| `get_documentation_map` | List all documents with metadata |
+| `get_document_summary` | Get metadata + outline |
+| `get_document_full` | Get complete content |
+| `get_section` | Get specific section by heading |
+| `list_cross_references` | List document links |
+| `validate_metadata` | Debug metadata issues |
+| `get_index_health` | Check server status |
+| `rebuild_index` | Force re-indexing |
 
-- **Old approach**: Load all docs upfront (~112k tokens)
-- **MCP approach**: Map + summary + section (~2,700 tokens)
-- **Typical savings**: 97% token reduction
 
-For detailed documentation, see `mcp-server/README.md`.
-
----
 
 ## Completion Confirmation
 

@@ -1,8 +1,13 @@
 ---
-inclusion: always
+inclusion: manual
 ---
 
 # Token Quick Reference
+
+## Token System Overview
+
+For comprehensive understanding of the token system architecture, mathematical foundations, and cross-platform strategy, see:
+- **Token System Overview**: `docs/token-system-overview.md`
 
 ## Purpose
 

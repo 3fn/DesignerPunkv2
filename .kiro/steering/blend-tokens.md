@@ -489,7 +489,7 @@ blend500 = base × 5 = 0.04 × 5 = 0.20 (20%)
 - **Semantic Blend Source**: `src/tokens/semantic/BlendTokens.ts` - Semantic blend token definitions
 - **Theme-Aware Utilities**: `src/blend/ThemeAwareBlendUtilities.web.ts` - Web platform utilities
 - **Token System Overview**: `docs/token-system-overview.md` - Complete token system reference
-- **Color Tokens Guide**: `docs/tokens/color-tokens.md` - Color token reference
+- **Color Tokens Guide**: `.kiro/steering/color-tokens.md` - Color token reference
 - **Blend Infrastructure Spec**: `.kiro/specs/031-blend-infrastructure-implementation/design.md` - Architecture and design decisions
 - **Component Development Guide**: `.kiro/steering/Component Development and Practices Guide.md` - Token usage in component development
 - **Token Resolution Patterns**: `.kiro/steering/Token Resolution Patterns.md` - Strategic guidance on token type selection and validation

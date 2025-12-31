@@ -60,7 +60,7 @@ inclusion: manual
 1. ✅ **Blend Utility Integration** (how to use blend utilities for state colors)
 2. ✅ **Semantic Blend Token Reference** (which token/function for each state)
 3. ✅ **Blend Utility Anti-Patterns** (what NOT to do - no opacity, no filters)
-4. ✅ **Blend Tokens Guide**: `docs/tokens/blend-tokens.md` (complete reference)
+4. ✅ **Blend Tokens Guide**: `.kiro/steering/blend-tokens.md` (complete reference)
 
 **WHEN troubleshooting component issues THEN read:**
 1. ✅ **Anti-Patterns to Avoid** (common mistakes)
@@ -981,7 +981,7 @@ const hoverColor = blendUtils.hoverColor(primaryColor);
 
 ### Related Documentation
 
-- [Blend Tokens Guide](../docs/tokens/blend-tokens.md) - Complete blend token reference
+- [Blend Tokens Guide](blend-tokens.md) - Complete blend token reference
 - [Blend Infrastructure Design](../.kiro/specs/031-blend-infrastructure-implementation/design.md) - Architecture decisions
 
 ---

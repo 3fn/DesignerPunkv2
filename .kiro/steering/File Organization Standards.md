@@ -293,7 +293,7 @@ When creating cross-references, calculate relative paths based on the source doc
 **Scope**: cross-project
 ```
 **Purpose**: Foundational token system documentation and guides
-**Location**: `docs/tokens/` directory
+**Location**: `.kiro/steering/` directory (token-specific docs)
 **Examples**: Shadow tokens guide, glow tokens guide, layering tokens guide
 **Rationale**: Added based on Phase 1 audit findings (2 files). Token documentation is distinct from spec-guide (which is spec-specific) because token docs are foundational, cross-project references that explain token system concepts used across multiple specs.
 
@@ -397,7 +397,7 @@ docs/specs/[spec-name]/                   # Public-facing documentation (TRIGGER
 
 ### Token Documentation
 ```
-docs/tokens/                              # Foundational token system documentation
+.kiro/steering/                           # Token documentation (with other steering docs)
 ├── shadow-tokens.md                      # Shadow token system guide
 ├── glow-tokens.md                        # Glow token system guide
 ├── layering-tokens.md                    # Layering token system guide
@@ -453,7 +453,7 @@ When creating any new file, include organization metadata in the header:
 - **spec-summary**: Move to `docs/specs/[spec-name]/` directory
 - **spec-guide**: Move to `docs/specs/[spec-name]/guides/` directory
 - **audit-findings**: Move to `.kiro/audits/` directory
-- **token-documentation**: Move to `docs/tokens/` directory
+- **token-documentation**: Keep in `.kiro/steering/` (with other steering docs)
 - **process-standard**: Keep in `.kiro/steering/` or move to `docs/processes/`
 - **working-document**: Keep in root or appropriate working directory
 
@@ -571,7 +571,7 @@ mv .kiro/specs/my-spec/old-guide.md ./old-guide.md
    - `spec-summary` → `docs/specs/[spec-name]/`
    - `spec-guide` → `docs/specs/[spec-name]/guides/`
    - `audit-findings` → `.kiro/audits/`
-   - `token-documentation` → `docs/tokens/`
+   - `token-documentation` → `.kiro/steering/`
    - `process-standard` → `.kiro/steering/` or `docs/processes/`
 3. Update any cross-references in other files to reflect the new location
 4. Commit the changes manually

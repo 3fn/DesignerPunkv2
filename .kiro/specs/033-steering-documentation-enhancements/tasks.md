@@ -329,7 +329,7 @@ This implementation plan creates comprehensive token documentation plus meta-gui
 
 ---
 
-- [ ] 8. Update Meta-guide (D5)
+- [x] 8. Update Meta-guide (D5)
 
   **Type**: Parent
   **Validation**: Tier 2 - Standard
@@ -347,7 +347,7 @@ This implementation plan creates comprehensive token documentation plus meta-gui
   - Detailed: `.kiro/specs/033-steering-documentation-enhancements/completion/task-8-completion.md`
   - Summary: `docs/specs/033-steering-documentation-enhancements/task-8-summary.md`
 
-  - [ ] 8.1 Add Token Quick Reference to Tier 1
+  - [x] 8.1 Add Token Quick Reference to Tier 1
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Use grep to find Tier 1 insertion point
@@ -355,7 +355,7 @@ This implementation plan creates comprehensive token documentation plus meta-gui
     - Verify insertion via targeted grep
     - _Requirements: 5.2, 5.3, 5.4_
 
-  - [ ] 8.2 Add Release Management System to Tier 2
+  - [x] 8.2 Add Release Management System to Tier 2
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Use grep to find Tier 2 insertion point
