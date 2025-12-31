@@ -159,10 +159,22 @@ export class ButtonCTA extends HTMLElement {
    * 
    * Performs initial render and sets up event listeners.
    * Calculates blend colors from CSS custom properties.
+   * 
+   * Defers blend color calculation until document is ready to ensure
+   * CSS custom properties are available from parsed stylesheets.
    */
   connectedCallback(): void {
-    this._calculateBlendColors();
-    this.render();
+    // Defer blend color calculation until styles are loaded
+    // This handles the case where custom elements are defined before CSS is parsed
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        this._calculateBlendColors();
+        this.render();
+      }, { once: true });
+    } else {
+      this._calculateBlendColors();
+      this.render();
+    }
     this._attachEventListeners();
   }
   
