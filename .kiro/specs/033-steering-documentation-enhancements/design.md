@@ -9,12 +9,15 @@
 
 ## Overview
 
-This spec creates four documentation artifacts to fill gaps identified by Spec 032:
+This spec creates comprehensive token documentation to fill gaps identified by Spec 032:
 
 1. **D1**: Release Management System steering doc (conceptual mental model)
 2. **D2**: Token documentation gap analysis (audit report)
-3. **D3**: Token Quick Reference (routing table)
-4. **D4**: docs/tokens/ README (signposting)
+3. **D2.1**: Layout token docs (radius-tokens.md, border-tokens.md, spacing-tokens.md update)
+4. **D2.2**: Effect & interaction token docs (opacity-tokens.md, accessibility-tokens.md)
+5. **D2.3**: Responsive token docs (responsive-tokens.md)
+6. **D3**: Token Quick Reference (routing table - now complete coverage)
+7. **D4**: docs/tokens/ README (signposting)
 
 Plus updates to the meta-guide (`00-Steering Documentation Directional Priorities.md`).
 
@@ -40,8 +43,19 @@ Plus updates to the meta-guide (`00-Steering Documentation Directional Prioritie
 │  Layer 2: MCP-queryable docs (inclusion: manual)                │
 │    ├── Release Management System.md  ◄── NEW (D1)               │
 │    ├── color-tokens.md                                          │
-│    ├── spacing-tokens.md                                        │
-│    └── ... (9 token docs)                                       │
+│    ├── spacing-tokens.md (updated for Grid Spacing)             │
+│    ├── typography-tokens.md                                      │
+│    ├── shadow-tokens.md                                          │
+│    ├── glow-tokens.md                                            │
+│    ├── blend-tokens.md                                           │
+│    ├── layering-tokens.md                                        │
+│    ├── motion-tokens.md                                          │
+│    ├── radius-tokens.md  ◄── NEW (D2.1)                         │
+│    ├── border-tokens.md  ◄── NEW (D2.1)                         │
+│    ├── opacity-tokens.md  ◄── NEW (D2.2)                        │
+│    ├── accessibility-tokens.md  ◄── NEW (D2.2)                  │
+│    ├── responsive-tokens.md  ◄── NEW (D2.3)                     │
+│    └── semantic-token-structure.md                               │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -51,17 +65,17 @@ Plus updates to the meta-guide (`00-Steering Documentation Directional Prioritie
 ┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
 │  Token Quick     │     │  MCP Query       │     │  Full Token      │
 │  Reference (D3)  │────►│  (progressive    │────►│  Reference Docs  │
-│  ~1,500 tokens   │     │   disclosure)    │     │  ~47,000 tokens  │
+│  ~1,500 tokens   │     │   disclosure)    │     │  (14 docs total) │
 │  inclusion:always│     │                  │     │  inclusion:manual│
 └──────────────────┘     └──────────────────┘     └──────────────────┘
         │
-        │ Routes to correct doc
+        │ Routes to correct doc (complete coverage)
         ▼
-┌──────────────────┐
-│  Gap Analysis    │
-│  (D2) identifies │
-│  missing docs    │
-└──────────────────┘
+┌──────────────────┐     ┌──────────────────┐
+│  Gap Analysis    │────►│  Tasks 3-5       │
+│  (D2) identifies │     │  Fill all gaps   │
+│  missing docs    │     │  (5 new docs)    │
+└──────────────────┘     └──────────────────┘
 ```
 
 ---
@@ -147,6 +161,168 @@ inclusion: manual
 
 ---
 
+### D2.1: Layout Token Documentation
+
+**Files**: 
+- `.kiro/steering/radius-tokens.md`
+- `.kiro/steering/border-tokens.md`
+- `.kiro/steering/spacing-tokens.md` (update)
+
+**Front Matter** (for new files):
+```yaml
+---
+inclusion: manual
+---
+```
+
+**Structure for radius-tokens.md**:
+```markdown
+# Radius Tokens
+
+## Overview
+[Purpose of radius tokens in the design system]
+
+## Primitive Radius Tokens
+[Scale values: none, sm, md, lg, xl, full]
+[Mathematical foundation and relationships]
+
+## Semantic Radius Tokens
+[Component-specific radius: button, card, input, modal, etc.]
+[Usage patterns and when to use each]
+
+## Cross-Platform Considerations
+[Web (px/rem), iOS (CGFloat), Android (dp)]
+[Platform-specific rendering notes]
+
+## Usage Examples
+[Common patterns and combinations]
+```
+
+**Structure for border-tokens.md**:
+```markdown
+# Border Tokens
+
+## Overview
+[Purpose of border width tokens]
+
+## Primitive Border Width Tokens
+[Scale values: none, thin, medium, thick]
+
+## Semantic Border Width Tokens
+[Component-specific: input, card, divider, focus ring]
+
+## Usage Patterns
+[Form elements, cards, dividers, focus indicators]
+
+## Cross-Platform Considerations
+[Platform-specific border rendering]
+```
+
+**Token Target**: ~2,000-3,000 tokens each
+
+---
+
+### D2.2: Effect & Interaction Token Documentation
+
+**Files**:
+- `.kiro/steering/opacity-tokens.md`
+- `.kiro/steering/accessibility-tokens.md`
+
+**Front Matter**:
+```yaml
+---
+inclusion: manual
+---
+```
+
+**Structure for opacity-tokens.md**:
+```markdown
+# Opacity Tokens
+
+## Overview
+[Purpose of opacity tokens]
+
+## Primitive Opacity Tokens
+[Scale values: 0, 10, 20, ..., 100]
+
+## Semantic Opacity Tokens
+[Overlays, disabled states, hover effects, backgrounds]
+
+## Usage Patterns
+[Modal overlays, disabled buttons, hover states]
+
+## Accessibility Considerations
+[Contrast requirements, visibility concerns]
+```
+
+**Structure for accessibility-tokens.md**:
+```markdown
+# Accessibility Tokens
+
+## Overview
+[Purpose of accessibility-focused tokens]
+
+## Focus Indicator Tokens
+[Focus ring colors, widths, offsets]
+
+## Tap Area Tokens
+[Minimum touch target sizes per WCAG]
+[Platform-specific requirements (44pt iOS, 48dp Android)]
+
+## Icon Tokens
+[Icon sizing scale]
+[Spacing and alignment]
+
+## WCAG 2.1 AA Compliance
+[How these tokens support accessibility requirements]
+
+## Usage Patterns
+[Interactive elements, touch targets, icon usage]
+```
+
+**Token Target**: ~2,000-3,000 tokens each
+
+---
+
+### D2.3: Responsive Token Documentation
+
+**File**: `.kiro/steering/responsive-tokens.md`
+
+**Front Matter**:
+```yaml
+---
+inclusion: manual
+---
+```
+
+**Structure**:
+```markdown
+# Responsive Tokens
+
+## Overview
+[Purpose of responsive design tokens]
+
+## Breakpoint Tokens
+[Screen size breakpoints: xs, sm, md, lg, xl, xxl]
+[Media query values and usage]
+
+## Density Tokens
+[UI density scaling: compact, normal, comfortable]
+[When to use each density level]
+
+## Responsive Design Patterns
+[Mobile-first approach]
+[Adaptive vs responsive strategies]
+
+## Cross-Platform Considerations
+[Web media queries vs native platform breakpoints]
+[Platform-specific density handling]
+```
+
+**Token Target**: ~2,000-3,000 tokens
+
+---
+
 ### D3: Token Quick Reference
 
 **File**: `.kiro/steering/Token Quick Reference.md`
@@ -177,10 +353,12 @@ inclusion: always
 | Blend | Color blending | blend-tokens.md |
 | Layering | Z-index layers | layering-tokens.md |
 | Motion | Animation timing | motion-tokens.md |
+| Radius | Corner rounding | radius-tokens.md |
+| Border | Border widths | border-tokens.md |
+| Opacity | Transparency values | opacity-tokens.md |
+| Accessibility | Focus, tap areas, icons | accessibility-tokens.md |
+| Responsive | Breakpoints, density | responsive-tokens.md |
 | Semantic Structure | Token architecture | semantic-token-structure.md |
-
-## Documentation Gaps
-[Token types identified in gap analysis without docs - "documentation pending"]
 
 ## Common Patterns
 [Most frequently used token combinations]
@@ -269,9 +447,14 @@ This spec creates documentation artifacts, not code. No data models required.
 
 ### Gap Analysis Edge Cases
 
-- **No gaps found**: Report "Token documentation is complete" - D3 proceeds normally
-- **Minor gaps found**: Note in D3 with "documentation pending" markers, recommend follow-up spec
-- **Major gaps found**: Same as minor - D3 proceeds, follow-up spec recommended
+- **No gaps found**: Report "Token documentation is complete" - proceed to D3
+- **Gaps found**: Tasks 3-5 fill all identified gaps before D3 creation
+
+### Token Documentation Creation
+
+- **Source file not found**: Log error, skip that token type, document in completion notes
+- **Existing doc conflict**: Review existing doc, update rather than replace
+- **Token count exceeded**: Trim content, focus on essential information
 
 ### Meta-guide Update Failures
 
@@ -301,6 +484,7 @@ Since this spec creates documentation (not code), validation focuses on:
 | R3 (Token Quick Reference) | Token count check, MCP query test |
 | R4 (README) | File exists with required content |
 | R5 (Meta-guide) | Grep verification of new entries |
+| R6 (Fill Gaps) | Verify all 5 new docs exist with correct structure |
 
 ---
 

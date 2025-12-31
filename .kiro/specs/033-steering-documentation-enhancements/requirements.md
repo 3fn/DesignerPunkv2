@@ -103,24 +103,51 @@ All deliverables address the same core problem: AI agents lack the mental models
 
 ---
 
+### Requirement 6: Fill Token Documentation Gaps
+
+**User Story**: As an AI agent, I want complete token documentation coverage, so that I can find guidance for any token type in the design system.
+
+#### Acceptance Criteria
+
+1. WHEN the gap analysis identifies missing token documentation THEN the System SHALL create steering docs for all identified gaps
+2. WHEN creating new token docs THEN each doc SHALL follow the existing token documentation patterns (structure, front matter, content depth)
+3. WHEN creating new token docs THEN each doc SHALL use `inclusion: manual` front matter
+4. WHEN Grid Spacing tokens are identified as a gap THEN the System SHALL update the existing `spacing-tokens.md` rather than create a new doc
+5. WHEN Accessibility, Tap Area, and Icon tokens are documented THEN they SHALL be consolidated into a single `accessibility-tokens.md` doc for cohesion
+
+**Token Documentation to Create:**
+- `radius-tokens.md` - Radius primitive and semantic tokens
+- `border-tokens.md` - Border width primitive and semantic tokens
+- `opacity-tokens.md` - Opacity primitive and semantic tokens
+- `accessibility-tokens.md` - Accessibility, Tap Area, and Icon tokens
+- `responsive-tokens.md` - Breakpoint and Density tokens
+
+**Token Documentation to Update:**
+- `spacing-tokens.md` - Add Grid Spacing section
+
+---
+
 ## Non-Functional Requirements
 
 ### NFR1: Token Efficiency
 
 - Release Management System doc: Target ~2,000-3,000 tokens (conceptual, not exhaustive)
 - Token Quick Reference: Target ~1,000-1,500 tokens (routing table, not reference)
-- Both docs should enable progressive disclosure—provide enough to route, not enough to overwhelm
+- New token docs: Target ~2,000-3,000 tokens each (comprehensive but focused)
+- All docs should enable progressive disclosure—provide enough to route, not enough to overwhelm
 
 ### NFR2: Boundary Clarity
 
 - Release Management System doc must have clear boundary with Development Workflow
 - Token Quick Reference must have clear boundary with full token reference docs
+- New token docs must follow existing documentation patterns for consistency
 - No duplication of content that exists elsewhere
 
 ### NFR3: Implementation Safety
 
 - Meta-guide updates must use bash-only approach to protect AI agent context
-- Gap analysis must not block Token Quick Reference—proceed with existing docs, note gaps
+- Gap analysis informs documentation creation tasks
+- All new token docs use `inclusion: manual` to keep always-loaded context lean
 
 ---
 
