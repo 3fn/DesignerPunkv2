@@ -126,7 +126,7 @@ This implementation plan creates comprehensive token documentation plus meta-gui
 
 ---
 
-- [ ] 3. Create Layout Token Documentation (D2.1)
+- [x] 3. Create Layout Token Documentation (D2.1)
 
   **Type**: Parent
   **Validation**: Tier 2 - Standard
@@ -144,7 +144,7 @@ This implementation plan creates comprehensive token documentation plus meta-gui
   - Detailed: `.kiro/specs/033-steering-documentation-enhancements/completion/task-3-completion.md`
   - Summary: `docs/specs/033-steering-documentation-enhancements/task-3-summary.md`
 
-  - [ ] 3.1 Create radius-tokens.md
+  - [x] 3.1 Create radius-tokens.md
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Review `src/tokens/RadiusTokens.ts` and `src/tokens/semantic/RadiusTokens.ts`
@@ -155,7 +155,7 @@ This implementation plan creates comprehensive token documentation plus meta-gui
     - Include cross-platform considerations
     - _Requirements: 6.1, 6.2, 6.3_
 
-  - [ ] 3.2 Create border-tokens.md
+  - [x] 3.2 Create border-tokens.md
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Review `src/tokens/BorderWidthTokens.ts` and `src/tokens/semantic/BorderWidthTokens.ts`
@@ -166,7 +166,7 @@ This implementation plan creates comprehensive token documentation plus meta-gui
     - Include usage patterns for form elements, cards, dividers
     - _Requirements: 6.1, 6.2, 6.3_
 
-  - [ ] 3.3 Update spacing-tokens.md for Grid Spacing
+  - [x] 3.3 Update spacing-tokens.md for Grid Spacing
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Review `src/tokens/semantic/GridSpacingTokens.ts`

@@ -362,6 +362,169 @@ export const chipTokens = {
 
 ---
 
+## Grid Spacing Tokens
+
+Grid spacing tokens define gutter and margin values for responsive grid layouts. These semantic tokens reference primitive spacing tokens for consistency with the 8px baseline grid.
+
+### Overview
+
+Grid spacing serves two primary purposes:
+- **Grid Gutter**: Spacing between grid columns
+- **Grid Margin**: Container margins at page edges
+
+**Platform Strategy**:
+- **Web**: Uses breakpoint-specific tokens (Xs/Sm/Md/Lg) for responsive grid systems
+- **Native (iOS/Android)**: Uses dedicated native tokens for consistent adaptive layouts
+
+### Web Grid Gutter Tokens
+
+Grid gutter tokens define spacing between columns at different breakpoints. Values scale with layout complexity to maintain visual hierarchy.
+
+| Token Name | Primitive Reference | Value | Breakpoint | Column Count | Use Case |
+|------------|---------------------|-------|------------|--------------|----------|
+| `gridGutterXs` | space200 | 16px | xs | 4 columns | Compact gutter for mobile layouts with limited screen space |
+| `gridGutterSm` | space250 | 20px | sm | 8 columns | Standard gutter for large mobile and small tablet layouts |
+| `gridGutterMd` | space300 | 24px | md | 12 columns | Comfortable gutter for desktop and tablet layouts |
+| `gridGutterLg` | space400 | 32px | lg | 16 columns | Generous gutter for large desktop and wide screen layouts |
+
+**Scaling Pattern**: Grid gutter increases with column count to prevent visual crowding as layout complexity grows.
+
+### Web Grid Margin Tokens
+
+Grid margin tokens define container margins at page edges for different breakpoints.
+
+| Token Name | Primitive Reference | Value | Breakpoint | Use Case |
+|------------|---------------------|-------|------------|----------|
+| `gridMarginXs` | space300 | 24px | xs | Compact container margins for mobile layouts |
+| `gridMarginSm` | space300 | 24px | sm | Standard container margins for large mobile layouts |
+| `gridMarginMd` | space400 | 32px | md | Comfortable container margins for desktop layouts |
+| `gridMarginLg` | space500 | 40px | lg | Generous container margins for large desktop layouts |
+
+**Note**: `gridMarginSm` currently references `space300` (24px). The design specification calls for `space350` (28px), but this token doesn't exist in the primitive spacing scale yet.
+
+### Native Platform Grid Tokens
+
+Native platforms (iOS, Android) use dedicated grid tokens that reference Sm-level values for consistent adaptive layouts.
+
+| Token Name | Primitive Reference | Value | Platform | Use Case |
+|------------|---------------------|-------|----------|----------|
+| `gridGutterNative` | space250 | 20px | iOS, Android | Standard gutter spacing for native adaptive layouts |
+| `gridMarginNative` | space300 | 24px | iOS, Android | Standard container margins for native adaptive layouts |
+
+**Why Sm-level values?**: Native platforms use adaptive layouts rather than responsive breakpoints. Sm-level values provide a balanced default that works well across device sizes.
+
+### Grid Spacing Patterns
+
+#### Responsive Grid Layout (Web)
+
+```css
+/* CSS Grid with responsive gutters and margins */
+.grid-container {
+  display: grid;
+  padding-left: var(--grid-margin-xs);
+  padding-right: var(--grid-margin-xs);
+  gap: var(--grid-gutter-xs);
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media (min-width: 600px) {
+  .grid-container {
+    padding-left: var(--grid-margin-sm);
+    padding-right: var(--grid-margin-sm);
+    gap: var(--grid-gutter-sm);
+    grid-template-columns: repeat(8, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .grid-container {
+    padding-left: var(--grid-margin-md);
+    padding-right: var(--grid-margin-md);
+    gap: var(--grid-gutter-md);
+    grid-template-columns: repeat(12, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .grid-container {
+    padding-left: var(--grid-margin-lg);
+    padding-right: var(--grid-margin-lg);
+    gap: var(--grid-gutter-lg);
+    grid-template-columns: repeat(16, 1fr);
+  }
+}
+```
+
+#### Native Adaptive Layout (iOS)
+
+```swift
+struct GridContainer: View {
+    var body: some View {
+        LazyVGrid(
+            columns: adaptiveColumns,
+            spacing: DesignTokens.gridGutterNative
+        ) {
+            // Grid content
+        }
+        .padding(.horizontal, DesignTokens.gridMarginNative)
+    }
+    
+    private var adaptiveColumns: [GridItem] {
+        [GridItem(.adaptive(minimum: 150, maximum: 300))]
+    }
+}
+```
+
+#### Native Adaptive Layout (Android)
+
+```kotlin
+@Composable
+fun GridContainer(content: @Composable () -> Unit) {
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(minSize = 150.dp),
+        contentPadding = PaddingValues(horizontal = DesignTokens.gridMarginNative),
+        horizontalArrangement = Arrangement.spacedBy(DesignTokens.gridGutterNative),
+        verticalArrangement = Arrangement.spacedBy(DesignTokens.gridGutterNative)
+    ) {
+        // Grid content
+    }
+}
+```
+
+### Grid Spacing Mathematical Relationships
+
+Grid spacing tokens maintain clear relationships with the primitive spacing scale:
+
+```
+Grid Gutter Progression:
+gridGutterXs (16px) = space200 = 2 × space100
+gridGutterSm (20px) = space250 = 2.5 × space100
+gridGutterMd (24px) = space300 = 3 × space100
+gridGutterLg (32px) = space400 = 4 × space100
+
+Grid Margin Progression:
+gridMarginXs (24px) = space300 = 3 × space100
+gridMarginSm (24px) = space300 = 3 × space100
+gridMarginMd (32px) = space400 = 4 × space100
+gridMarginLg (40px) = space500 = 5 × space100
+```
+
+**Pattern**: Both gutter and margin values increase by approximately 1× base unit per breakpoint level, maintaining proportional relationships as layouts scale.
+
+### When to Use Grid Spacing Tokens
+
+**Use grid spacing tokens when**:
+- Building responsive grid layouts with consistent column spacing
+- Defining container margins that scale with viewport size
+- Creating adaptive layouts for native platforms
+
+**Use other spacing tokens when**:
+- Spacing within components (use inset tokens)
+- Spacing between related elements (use layout spacing tokens)
+- Custom spacing needs outside grid context (use primitive tokens)
+
+---
+
 ## Migration from Old Names
 
 If you're migrating from the old subjective naming convention, see the [Inset Token Renaming Migration Guide](../../.kiro/specs/011-inset-token-renaming/migration-guide.md) for complete mapping tables and migration instructions.
@@ -380,6 +543,7 @@ If you're migrating from the old subjective naming convention, see the [Inset To
 
 - **Spacing Token Source**: `src/tokens/SpacingTokens.ts` - Primitive spacing token definitions
 - **Semantic Spacing Source**: `src/tokens/semantic/SpacingTokens.ts` - Semantic spacing token definitions
+- **Grid Spacing Source**: `src/tokens/semantic/GridSpacingTokens.ts` - Grid spacing semantic token definitions
 - **Token System Overview**: `docs/token-system-overview.md` - Complete token system reference
 - **Inset Token Renaming Spec**: `.kiro/specs/011-inset-token-renaming/design.md` - Design decisions for numeric naming
 - **Migration Guide**: `.kiro/specs/011-inset-token-renaming/migration-guide.md` - Migration from old to new names
