@@ -177,7 +177,7 @@ This implementation plan creates comprehensive token documentation plus meta-gui
 
 ---
 
-- [ ] 4. Create Effect & Interaction Token Documentation (D2.2)
+- [x] 4. Create Effect & Interaction Token Documentation (D2.2)
 
   **Type**: Parent
   **Validation**: Tier 2 - Standard
@@ -194,7 +194,7 @@ This implementation plan creates comprehensive token documentation plus meta-gui
   - Detailed: `.kiro/specs/033-steering-documentation-enhancements/completion/task-4-completion.md`
   - Summary: `docs/specs/033-steering-documentation-enhancements/task-4-summary.md`
 
-  - [ ] 4.1 Create opacity-tokens.md
+  - [x] 4.1 Create opacity-tokens.md
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Review `src/tokens/OpacityTokens.ts` and `src/tokens/semantic/OpacityTokens.ts`
@@ -205,7 +205,7 @@ This implementation plan creates comprehensive token documentation plus meta-gui
     - Include usage patterns and accessibility considerations
     - _Requirements: 6.1, 6.2, 6.3_
 
-  - [ ] 4.2 Create accessibility-tokens.md
+  - [x] 4.2 Create accessibility-tokens.md
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Review `src/tokens/semantic/AccessibilityTokens.ts`
