@@ -22,6 +22,8 @@
  * Requirements: 6.1, 6.2, 6.3
  */
 
+import { setupBlendColorProperties, cleanupBlendColorProperties } from './test-utils';
+
 describe('TextInputField - Keyboard Navigation', () => {
   let container: HTMLDivElement;
 
@@ -32,12 +34,18 @@ describe('TextInputField - Keyboard Navigation', () => {
   });
 
   beforeEach(() => {
+    // Set up CSS custom properties required for blend utilities
+    setupBlendColorProperties();
+    
     container = document.createElement('div');
     document.body.appendChild(container);
   });
 
   afterEach(() => {
     document.body.removeChild(container);
+    
+    // Clean up CSS custom properties
+    cleanupBlendColorProperties();
   });
 
   /**

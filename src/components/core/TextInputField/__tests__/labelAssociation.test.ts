@@ -19,6 +19,7 @@
  */
 
 import { describe, it, expect, beforeAll, beforeEach, afterEach } from '@jest/globals';
+import { setupBlendColorProperties, cleanupBlendColorProperties } from './test-utils';
 
 describe('TextInputField Label Association', () => {
   let container: HTMLElement;
@@ -30,6 +31,9 @@ describe('TextInputField Label Association', () => {
   });
   
   beforeEach(() => {
+    // Set up CSS custom properties required for blend utilities
+    setupBlendColorProperties();
+    
     // Create container for tests
     container = document.createElement('div');
     document.body.appendChild(container);
@@ -38,6 +42,9 @@ describe('TextInputField Label Association', () => {
   afterEach(() => {
     // Clean up
     document.body.removeChild(container);
+    
+    // Clean up CSS custom properties
+    cleanupBlendColorProperties();
   });
 
   /**

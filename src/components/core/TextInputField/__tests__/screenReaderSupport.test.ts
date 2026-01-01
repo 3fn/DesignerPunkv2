@@ -18,13 +18,22 @@
  */
 
 import { TextInputField } from '../platforms/web/TextInputField.web';
+import { setupBlendColorProperties, cleanupBlendColorProperties } from './test-utils';
 
 describe('TextInputField - Screen Reader Support', () => {
   beforeEach(() => {
+    // Set up CSS custom properties required for blend utilities
+    setupBlendColorProperties();
+    
     // Register custom element if not already registered
     if (!customElements.get('text-input-field')) {
       customElements.define('text-input-field', TextInputField);
     }
+  });
+
+  afterEach(() => {
+    // Clean up CSS custom properties
+    cleanupBlendColorProperties();
   });
 
   describe('aria-describedby association', () => {

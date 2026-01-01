@@ -15,15 +15,15 @@ This implementation plan establishes the Stemma System foundation for systematic
 
 ### Phase 1: Foundation and Infrastructure
 - Establish Stemma System principles and governance
-- Audit existing components (ButtonCTA, PD-Container, TextInputField) for compliance
+- Audit existing components (ButtonCTA, Container, TextInputField, Icon) for compliance
 - Create Component Quick Reference routing table
 - Set up MCP documentation infrastructure
 
 ### Phase 2: Form Inputs Family Implementation
-- Migrate TextInputField to Input-Text-Base (with audit remediation)
+- Migrate TextInputField to Input-Text-Base (test migration with lessons learned)
 - Update demo page (only consumer)
 - Implement three semantic components (Email, Password, PhoneNumber)
-- Remediate ButtonCTA and PD-Container per audit findings
+- Remediate ButtonCTA, Container, and Icon per audit findings (apply lessons from test migration)
 - Validate cross-platform behavioral consistency
 
 ### Phase 3: System Completion and Future Planning
@@ -109,17 +109,17 @@ This implementation plan establishes the Stemma System foundation for systematic
 
 ---
 
-- [ ] 2. Audit Existing Components for Stemma System Compliance
+- [x] 2. Audit Existing Components for Stemma System Compliance
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
   
   **Success Criteria:**
-  - ButtonCTA, PD-Container, and TextInputField analyzed across all platforms
+  - ButtonCTA, Container, TextInputField, and Icon analyzed across all platforms
   - Audit findings documented with naming, behavioral contract, token usage, and cross-platform gaps
   - Human-AI checkpoint completed with prioritized remediation scope
   - Remediation recommendations documented with specific steps and effort estimates
-  - Approved remediation scope ready for execution
+  - Approved remediation scope ready for execution (full remediation with test-first approach)
   
   **Primary Artifacts:**
   - `.kiro/specs/034-component-architecture-system/audit/existing-component-audit.md`
@@ -136,16 +136,20 @@ This implementation plan establishes the Stemma System foundation for systematic
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Existing Component Audit"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 2.1 Analyze existing component implementations
+  - [x] 2.1 Analyze existing component implementations
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Status**: Complete
     - Review ButtonCTA across web, iOS, and Android
-    - Review PD-Container across web, iOS, and Android
+    - Review Container across web, iOS, and Android
     - Review TextInputField across web, iOS, and Android
+    - Review Icon across web, iOS, and Android (added at Task 2.3 checkpoint)
     - Document current naming, behaviors, properties, and token usage
     - _Requirements: R3_
+    - **Completion**: `.kiro/specs/034-component-architecture-system/completion/task-2-1-completion.md`
+    - **Audit Document**: `.kiro/specs/034-component-architecture-system/audit/existing-component-audit.md`
 
-  - [ ] 2.2 Document audit findings
+  - [x] 2.2 Document audit findings
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Identify naming convention gaps (vs [Family]-[Type]-[Variant] pattern)
@@ -154,7 +158,7 @@ This implementation plan establishes the Stemma System foundation for systematic
     - Identify cross-platform inconsistencies
     - _Requirements: R3_
 
-  - [ ] 2.3 Human-AI Checkpoint: Review findings and prioritize
+  - [x] 2.3 Human-AI Checkpoint: Review findings and prioritize
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     - Present audit findings to Human for review
@@ -163,7 +167,7 @@ This implementation plan establishes the Stemma System foundation for systematic
     - Document approved priorities
     - _Requirements: R3_
 
-  - [ ] 2.4 Create remediation recommendations
+  - [x] 2.4 Create remediation recommendations
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Document specific remediation steps for each component
@@ -171,7 +175,7 @@ This implementation plan establishes the Stemma System foundation for systematic
     - Align recommendations with approved priorities
     - _Requirements: R3_
 
-  - [ ] 2.5 Human-AI Checkpoint: Approve remediation scope
+  - [x] 2.5 Human-AI Checkpoint: Approve remediation scope
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     - Present remediation recommendations to Human
@@ -243,10 +247,12 @@ This implementation plan establishes the Stemma System foundation for systematic
 
 ---
 
-- [ ] 4. Migrate TextInputField to Input-Text-Base
+- [ ] 4. Migrate TextInputField to Input-Text-Base (Test Migration)
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  
+  **Note**: This is the "test migration" to validate the pattern before applying to ButtonCTA, Container, and Icon in Task 6. Lessons learned here inform subsequent migrations.
   
   **Success Criteria:**
   - TextInputField renamed to Input-Text-Base across all platforms
@@ -255,11 +261,13 @@ This implementation plan establishes the Stemma System foundation for systematic
   - Cross-platform behavioral consistency maintained
   - Migration guidance documented for reference
   - Audit-approved remediation items for TextInputField completed
+  - **Lessons learned documented for application to Task 6 migrations**
   
   **Primary Artifacts:**
   - `src/components/Input-Text-Base/` (web)
   - iOS and Android Input-Text-Base implementations
   - Updated demo page
+  - **Lessons learned document for Task 6**
   
   **Completion Documentation:**
   - Detailed: `.kiro/specs/034-component-architecture-system/completion/task-4-completion.md`
@@ -270,6 +278,15 @@ This implementation plan establishes the Stemma System foundation for systematic
   - Mark complete: Use `taskStatus` tool to update task status
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 Complete: TextInputField Migration"`
   - Verify: Check GitHub for committed changes
+
+  - [ ] 4.0 Human-AI Checkpoint: Align on migration approach
+    **Type**: Architecture
+    **Validation**: Tier 3 - Comprehensive
+    - Review audit findings for TextInputField (F1.3, F2.4)
+    - Discuss migration approach and potential challenges
+    - Agree on schema structure and contract formalization
+    - Confirm test migration scope and success criteria
+    - _Requirements: R3, R4_
 
   - [ ] 4.1 Analyze current TextInputField implementation
     **Type**: Implementation
@@ -304,6 +321,15 @@ This implementation plan establishes the Stemma System foundation for systematic
     - Test foundational behaviors (focusable, validatable, float-label)
     - Document any platform-specific considerations
     - _Requirements: R4, R6_
+
+  - [ ] 4.5 Capture lessons learned for Task 6
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Document what worked well in the migration
+    - Document challenges encountered and solutions
+    - Create checklist for subsequent migrations (ButtonCTA, Container, Icon)
+    - Note any schema patterns to reuse
+    - _Requirements: R3, R4_
 
 ---
 
@@ -371,21 +397,27 @@ At this point, the Form Inputs family is fully implemented with Input-Text-Base 
 
 ---
 
-- [ ] 6. Remediate Existing Components (ButtonCTA, PD-Container)
+- [ ] 6. Remediate Existing Components (ButtonCTA, Container, Icon)
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
   
+  **Note**: Apply lessons learned from Task 4 (TextInputField test migration) to these three component migrations.
+  
   **Success Criteria:**
   - Audit-approved remediation items for ButtonCTA completed
-  - Audit-approved remediation items for PD-Container completed
+  - Audit-approved remediation items for Container completed
+  - Audit-approved remediation items for Icon completed
   - Components follow Stemma System naming and architectural patterns
   - Cross-platform behavioral consistency maintained
   - Remediation documented for reference
+  - Lessons learned from Task 4 applied successfully
   
   **Primary Artifacts:**
-  - Updated ButtonCTA implementations (web, iOS, Android)
-  - Updated PD-Container implementations (web, iOS, Android)
+  - Updated ButtonCTA → Button-CTA-Primary implementations (web, iOS, Android)
+  - Updated Container → Container-Layout-Base implementations (web, iOS, Android)
+  - Updated Icon → Icon-Feather-Base implementations (web, iOS, Android)
+  - YAML schemas for all three components
   - Remediation completion documentation
   
   **Completion Documentation:**
@@ -398,29 +430,50 @@ At this point, the Form Inputs family is fully implemented with Input-Text-Base 
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 6 Complete: Existing Component Remediation"`
   - Verify: Check GitHub for committed changes
 
+  - [ ] 6.0 Human-AI Checkpoint: Review lessons learned and align on approach
+    **Type**: Architecture
+    **Validation**: Tier 3 - Comprehensive
+    - Review lessons learned from Task 4 (TextInputField migration)
+    - Discuss how to apply lessons to ButtonCTA, Container, Icon
+    - Confirm schema structure patterns to reuse
+    - Agree on migration order and approach for remaining components
+    - _Requirements: R3_
+
   - [ ] 6.1 Remediate ButtonCTA per audit recommendations
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    - Apply audit-approved remediation items
-    - Update naming if required by audit findings
-    - Update behavioral contracts and token usage
+    - Apply audit-approved remediation items (F1.1, F2.2)
+    - Rename to Button-CTA-Primary following naming convention
+    - Create YAML schema with formal behavioral contracts
+    - Update web element registration
     - Verify cross-platform consistency
     - _Requirements: R3_
 
-  - [ ] 6.2 Remediate PD-Container per audit recommendations
+  - [ ] 6.2 Remediate Container per audit recommendations
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    - Apply audit-approved remediation items
-    - Update naming if required by audit findings
-    - Update behavioral contracts and token usage
+    - Apply audit-approved remediation items (F1.2, F2.3)
+    - Rename to Container-Layout-Base following naming convention
+    - Create YAML schema with formal behavioral contracts
+    - Update web element registration
     - Verify cross-platform consistency
     - _Requirements: R3_
 
-  - [ ] 6.3 Human-AI Checkpoint: Verify remediation complete
+  - [ ] 6.3 Remediate Icon per audit recommendations
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Apply audit-approved remediation items (F1.5, F2.6)
+    - Rename to Icon-Feather-Base following naming convention
+    - Create YAML schema with formal behavioral contracts
+    - Update web element registration
+    - Verify cross-platform consistency
+    - _Requirements: R3_
+
+  - [ ] 6.4 Human-AI Checkpoint: Verify remediation complete
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     - Review remediation results with Human
-    - Confirm all approved items addressed
+    - Confirm all approved items addressed for all 3 components
     - Document any deferred items for future work
     - _Requirements: R3_
 
@@ -830,9 +883,9 @@ At this point, the Form Inputs family is fully implemented with Input-Text-Base 
 The Component Architecture System implementation is complete when:
 
 1. **Stemma System Foundation**: Complete architectural principles, governance, and naming conventions established
-2. **Existing Component Audit**: ButtonCTA, PD-Container, and TextInputField audited with Human-approved remediation scope
+2. **Existing Component Audit**: ButtonCTA, Container, TextInputField, and Icon audited with Human-approved remediation scope
 3. **Form Inputs Family**: Input-Text-Base and three semantic components (Email, Password, PhoneNumber) implemented across all platforms
-4. **Existing Component Remediation**: ButtonCTA and PD-Container remediated per audit-approved scope
+4. **Existing Component Remediation**: ButtonCTA, Container, and Icon remediated per audit-approved scope (using lessons learned from TextInputField test migration)
 5. **Component Quick Reference**: Routing table created for all 11 families with MCP documentation paths (~1,600 tokens soft target)
 6. **Health Guardrails**: IDE linting rules providing real-time development guidance
 7. **MCP Documentation**: Progressive disclosure system implemented for all families (detailed for 3, structural for 8) via designerpunk-docs (Systems MCP)

@@ -20,6 +20,30 @@
  * Requirements: 5.2, 5.3
  */
 
+/**
+ * Set up required CSS custom properties for TextInputField blend utilities.
+ * 
+ * TextInputField uses blend utilities that read base colors from CSS custom properties.
+ * This function sets up the required properties in the test environment.
+ * 
+ * Required properties:
+ * - --color-primary: Base primary color for blend calculations
+ * 
+ * @see TextInputField._calculateBlendColors() for usage
+ */
+function setupBlendColorProperties(): void {
+  // Set up required CSS custom properties on document root
+  // These values match the design system's semantic color tokens
+  document.documentElement.style.setProperty('--color-primary', '#A855F7');
+}
+
+/**
+ * Clean up CSS custom properties set by setupBlendColorProperties
+ */
+function cleanupBlendColorProperties(): void {
+  document.documentElement.style.removeProperty('--color-primary');
+}
+
 describe('TextInputField - Touch Target Sizing', () => {
   let TextInputField: any;
   
@@ -36,8 +60,16 @@ describe('TextInputField - Touch Target Sizing', () => {
   });
 
   beforeEach(() => {
+    // Set up CSS custom properties required for blend utilities
+    setupBlendColorProperties();
+    
     // Clear any existing elements
     document.body.innerHTML = '';
+  });
+
+  afterEach(() => {
+    // Clean up CSS custom properties
+    cleanupBlendColorProperties();
   });
 
   /**
