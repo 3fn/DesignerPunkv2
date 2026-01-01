@@ -14,6 +14,7 @@
 
 // Import all web components
 import { TextInputField } from './components/core/TextInputField/platforms/web/TextInputField.web';
+import { InputTextBase } from './components/core/Input-Text-Base/platforms/web/InputTextBase.web';
 import { ButtonCTA } from './components/core/ButtonCTA/platforms/web/ButtonCTA.web';
 import { DPIcon } from './components/core/Icon/platforms/web/Icon.web';
 import { ContainerWeb } from './components/core/Container/platforms/web/Container.web';
@@ -76,6 +77,7 @@ function safeDefine(name: string, constructor: CustomElementConstructor): void {
 // Auto-register all components
 // Requirements: 4.1, 4.2, 4.3, 4.4
 safeDefine('text-input-field', TextInputField);
+safeDefine('input-text-base', InputTextBase);
 safeDefine('button-cta', ButtonCTA);
 safeDefine('dp-icon', DPIcon);
 safeDefine('dp-container', ContainerWeb);
@@ -93,7 +95,7 @@ if (typeof document !== 'undefined') {
 
 // Export all components for UMD global access and ESM imports
 // Requirements: 1.2, 2.3
-export { TextInputField, ButtonCTA, DPIcon, ContainerWeb };
+export { TextInputField, InputTextBase, ButtonCTA, DPIcon, ContainerWeb };
 
 // Also export with more intuitive names for the UMD global
 export const Icon = DPIcon;

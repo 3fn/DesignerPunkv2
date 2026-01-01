@@ -247,7 +247,7 @@ This implementation plan establishes the Stemma System foundation for systematic
 
 ---
 
-- [ ] 4. Migrate TextInputField to Input-Text-Base (Test Migration)
+- [x] 4. Migrate TextInputField to Input-Text-Base (Test Migration)
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -279,7 +279,7 @@ This implementation plan establishes the Stemma System foundation for systematic
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 Complete: TextInputField Migration"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 4.0 Human-AI Checkpoint: Align on migration approach
+  - [x] 4.0 Human-AI Checkpoint: Align on migration approach
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     - Review audit findings for TextInputField (F1.3, F2.4)
@@ -288,7 +288,7 @@ This implementation plan establishes the Stemma System foundation for systematic
     - Confirm test migration scope and success criteria
     - _Requirements: R3, R4_
 
-  - [ ] 4.1 Analyze current TextInputField implementation
+  - [x] 4.1 Analyze current TextInputField implementation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Review web, iOS, and Android implementations
@@ -297,16 +297,18 @@ This implementation plan establishes the Stemma System foundation for systematic
     - Cross-reference with audit findings from Task 2
     - _Requirements: R4_
 
-  - [ ] 4.2 Rename and restructure component
+  - [x] 4.2 Rename and restructure component
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Status**: Complete
     - Rename to Input-Text-Base following naming convention
     - Refactor to serve as primitive base with foundational behaviors
     - Update component schema with behavioral contracts
     - Apply audit-approved remediation items
     - _Requirements: R4_
+    - **Completion**: `.kiro/specs/034-component-architecture-system/completion/task-4-2-completion.md`
 
-  - [ ] 4.3 Update demo page
+  - [x] 4.3 Update demo page
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update demo page to use Input-Text-Base
@@ -314,7 +316,7 @@ This implementation plan establishes the Stemma System foundation for systematic
     - Document migration steps for reference
     - _Requirements: R4_
 
-  - [ ] 4.4 Validate cross-platform consistency
+  - [x] 4.4 Validate cross-platform consistency
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Verify behavioral contracts work across platforms
@@ -322,7 +324,7 @@ This implementation plan establishes the Stemma System foundation for systematic
     - Document any platform-specific considerations
     - _Requirements: R4, R6_
 
-  - [ ] 4.5 Capture lessons learned for Task 6
+  - [x] 4.5 Capture lessons learned for Task 6
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Document what worked well in the migration

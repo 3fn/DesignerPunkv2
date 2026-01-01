@@ -316,7 +316,22 @@ Routing table for component documentation - helps find right MCP document
 
 ### Component Schema Format
 
-Components are defined using YAML schemas that capture behavioral contracts and inheritance relationships:
+Components are defined using YAML schemas that capture behavioral contracts and inheritance relationships.
+
+**Schema File Location**: Each component's YAML schema lives in its component directory to maintain colocation with implementation. This ensures schemas stay in sync with code and enables atomic changes when components are renamed or moved.
+
+**Pattern**: `src/components/core/[Component-Name]/[Component-Name].schema.yaml`
+
+**Examples**:
+- `src/components/core/Input-Text-Base/Input-Text-Base.schema.yaml`
+- `src/components/core/Button-CTA-Primary/Button-CTA-Primary.schema.yaml`
+- `src/components/core/Container-Layout-Base/Container-Layout-Base.schema.yaml`
+
+**Rationale**:
+- **Colocation**: Schema lives with the code it describes
+- **Discoverability**: Opening a component folder shows everything about that component
+- **Atomic changes**: Renaming/moving a component moves its schema too
+- **Consistency**: Follows existing pattern of `types.ts`, `tokens.ts` in component directories
 
 ```yaml
 ComponentSchema:

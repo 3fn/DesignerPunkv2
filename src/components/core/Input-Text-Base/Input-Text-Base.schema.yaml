@@ -1,0 +1,342 @@
+# Input-Text-Base Component Schema
+#
+# Stemma System: Form Inputs Family
+# Component Type: Primitive (Base)
+# Naming Convention: [Family]-[Type]-[Variant] = Input-Text-Base
+#
+# This schema defines the behavioral contracts and properties for the
+# Input-Text-Base component, which serves as the foundational primitive
+# for all text input components in the Form Inputs family.
+
+name: Input-Text-Base
+type: primitive
+family: FormInputs
+version: "1.0.0"
+readiness: production-ready
+
+# Component description
+description: |
+  Foundational text input component implementing the float label pattern with
+  animated transitions. Serves as the primitive base for all semantic text input
+  components (Email, Password, PhoneNumber, etc.) in the Form Inputs family.
+
+# Reusable behaviors this component implements
+behaviors:
+  - focusable
+  - validatable
+  - float-label
+  - accessible
+
+# Component properties (public API)
+properties:
+  id:
+    type: string
+    required: true
+    description: Unique identifier for the input element
+  
+  label:
+    type: string
+    required: true
+    description: Label text (floats between placeholder and floated positions)
+  
+  value:
+    type: string
+    required: true
+    description: Current input value
+  
+  onChange:
+    type: "(value: string) => void"
+    required: true
+    description: Callback when value changes
+  
+  onFocus:
+    type: "() => void"
+    required: false
+    description: Callback when input receives focus
+  
+  onBlur:
+    type: "() => void"
+    required: false
+    description: Callback when input loses focus
+  
+  helperText:
+    type: string
+    required: false
+    description: Helper text displayed below input (persistent)
+  
+  errorMessage:
+    type: string
+    required: false
+    description: Error message displayed below helper text (conditional)
+  
+  isSuccess:
+    type: boolean
+    required: false
+    default: false
+    description: Success state indicator (shows success icon)
+  
+  showInfoIcon:
+    type: boolean
+    required: false
+    default: false
+    description: Info icon support (shows info icon, triggers helper text)
+  
+  type:
+    type: "'text' | 'email' | 'password' | 'tel' | 'url'"
+    required: false
+    default: "'text'"
+    description: Input type
+  
+  autocomplete:
+    type: string
+    required: false
+    description: Autocomplete attribute for browser autofill
+  
+  placeholder:
+    type: string
+    required: false
+    description: Placeholder text (only shown when label is floated and input is empty)
+  
+  readOnly:
+    type: boolean
+    required: false
+    default: false
+    description: Read-only state (alternative to disabled)
+  
+  required:
+    type: boolean
+    required: false
+    default: false
+    description: Required field indicator
+  
+  maxLength:
+    type: number
+    required: false
+    description: Maximum length for input value
+  
+  testID:
+    type: string
+    required: false
+    description: Test ID for automated testing
+  
+  className:
+    type: string
+    required: false
+    description: Additional CSS class names (web only)
+
+# Behavioral contracts - guarantees this component provides
+# These 9 contracts define the foundational behaviors that all semantic
+# text input components inherit from Input-Text-Base
+contracts:
+  focusable:
+    description: Can receive keyboard focus
+    behavior: |
+      Component can receive focus via Tab key navigation.
+      Focus state is visually indicated and triggers label animation.
+    wcag: "2.1.1 Keyboard"
+    platforms: [web, ios, android]
+    validation: |
+      - Tab key moves focus to input
+      - Focus state is visually distinct
+      - Focus triggers label float animation
+  
+  float_label_animation:
+    description: Label animates on focus
+    behavior: |
+      Label smoothly transitions from placeholder position inside input
+      to floated position above input when focused or filled.
+      Animation uses motion.floatLabel token (250ms, standard easing).
+    wcag: "2.3.3 Animation from Interactions"
+    platforms: [web, ios, android]
+    validation: |
+      - Label animates from inside to above input on focus
+      - Label stays floated when input has content
+      - Animation respects prefers-reduced-motion
+      - Animation timing matches motion.floatLabel token
+  
+  validates_on_blur:
+    description: Validation triggers on blur
+    behavior: |
+      Validation state is evaluated when input loses focus.
+      Error or success state is applied based on validation result.
+    wcag: "3.3.1 Error Identification"
+    platforms: [web, ios, android]
+    validation: |
+      - Blur event triggers validation callback
+      - Error state applied when validation fails
+      - Success state applied when validation succeeds
+  
+  error_state_display:
+    description: Shows error message and styling
+    behavior: |
+      When in error state, component displays:
+      - Red border (color.error)
+      - Red label text (color.error)
+      - Error icon (trailing position)
+      - Error message below helper text
+    wcag: "3.3.1 Error Identification, 1.4.1 Use of Color"
+    platforms: [web, ios, android]
+    validation: |
+      - Border color changes to error color
+      - Label color changes to error color
+      - Error icon appears in trailing position
+      - Error message is displayed and associated via aria-describedby
+      - Error state announced to screen readers
+  
+  success_state_display:
+    description: Shows success styling
+    behavior: |
+      When in success state, component displays:
+      - Green border (color.success.strong)
+      - Green label text (color.success.strong)
+      - Success icon (trailing position)
+    wcag: "1.4.1 Use of Color"
+    platforms: [web, ios, android]
+    validation: |
+      - Border color changes to success color
+      - Label color changes to success color
+      - Success icon appears in trailing position
+  
+  disabled_state:
+    description: Prevents interaction when disabled
+    behavior: |
+      When disabled, component:
+      - Cannot receive focus
+      - Cannot be edited
+      - Uses desaturated colors (blend.disabledDesaturate)
+      - Shows cursor: not-allowed (web)
+    wcag: "4.1.2 Name, Role, Value"
+    platforms: [web, ios, android]
+    validation: |
+      - Input cannot receive focus when disabled
+      - Input value cannot be changed when disabled
+      - Visual styling indicates disabled state
+      - Disabled state communicated to assistive technology
+  
+  trailing_icon_display:
+    description: Shows contextual trailing icons
+    behavior: |
+      Trailing icon area displays contextual icons:
+      - Error icon when hasError && label floated
+      - Success icon when isSuccess && label floated
+      - Info icon when showInfoIcon && (focused or filled)
+      Icons fade in after label animation completes.
+    wcag: "1.4.1 Use of Color"
+    platforms: [web, ios, android]
+    validation: |
+      - Only one icon displayed at a time (priority: error > success > info)
+      - Icons appear after label animation completes
+      - Icons use appropriate semantic colors
+      - Icons are decorative (hidden from screen readers)
+  
+  focus_ring:
+    description: WCAG 2.4.7 focus visible indicator
+    behavior: |
+      When focused via keyboard, component displays:
+      - 2px focus ring (accessibility.focus.width)
+      - 2px offset (accessibility.focus.offset)
+      - Primary color (accessibility.focus.color)
+      Focus ring visible in all states (default, error, success).
+    wcag: "2.4.7 Focus Visible"
+    platforms: [web, ios, android]
+    validation: |
+      - Focus ring appears on keyboard focus
+      - Focus ring meets 3:1 contrast ratio
+      - Focus ring visible in error and success states
+      - Focus ring uses :focus-visible (web) for keyboard-only
+  
+  reduced_motion_support:
+    description: Respects prefers-reduced-motion
+    behavior: |
+      When user has reduced motion preference:
+      - Label position changes instantly (no animation)
+      - Icon visibility changes instantly (no animation)
+      - Focus ring transitions instantly (no animation)
+    wcag: "2.3.3 Animation from Interactions"
+    platforms: [web, ios, android]
+    validation: |
+      - Animations disabled when prefers-reduced-motion: reduce
+      - State changes still occur, just without animation
+      - Functionality unchanged with reduced motion
+
+# Design tokens this component requires
+tokens:
+  typography:
+    - typography.labelMd
+    - typography.labelMdFloat
+    - typography.input
+    - typography.caption
+  color:
+    - color.text.muted
+    - color.text.default
+    - color.primary
+    - color.error
+    - color.error.strong
+    - color.success.strong
+    - color.border
+    - color.background
+  spacing:
+    - space.inset.100
+    - space.grouped.tight
+    - space.grouped.minimal
+  motion:
+    - motion.floatLabel
+    - motion.focusTransition
+  border:
+    - borderDefault
+    - radius150
+  accessibility:
+    - tapAreaRecommended
+    - accessibility.focus.width
+    - accessibility.focus.offset
+    - accessibility.focus.color
+  icon:
+    - icon.size100
+  blend:
+    - blend.focusSaturate
+    - blend.disabledDesaturate
+
+# Supported platforms
+platforms:
+  - web
+  - ios
+  - android
+
+# Platform-specific implementation notes
+platform_notes:
+  web:
+    element: "<input-text-base>"
+    implementation: Web Component with Shadow DOM
+    file: platforms/web/InputTextBase.web.ts
+  ios:
+    implementation: SwiftUI View
+    file: platforms/ios/InputTextBase.ios.swift
+  android:
+    implementation: Jetpack Compose Composable
+    file: platforms/android/InputTextBase.android.kt
+
+# Semantic components that inherit from this primitive
+semantic_variants:
+  - name: Input-Text-Email
+    extends: email_format validation, email autocomplete
+    status: planned
+  - name: Input-Text-Password
+    extends: secure input, password toggle
+    status: planned
+  - name: Input-Text-PhoneNumber
+    extends: phone formatting, international validation
+    status: planned
+
+# Accessibility compliance
+accessibility:
+  wcag_level: AA
+  compliance:
+    - "1.4.1 Use of Color - Error/success states use icons, not just color"
+    - "1.4.3 Contrast (Minimum) - All text meets 4.5:1 contrast"
+    - "1.4.11 Non-text Contrast - Focus ring meets 3:1 contrast"
+    - "2.1.1 Keyboard - Fully keyboard accessible"
+    - "2.4.7 Focus Visible - Clear focus indicator"
+    - "2.3.3 Animation from Interactions - Respects reduced motion"
+    - "3.3.1 Error Identification - Errors clearly identified"
+    - "3.3.2 Labels or Instructions - Label always visible"
+    - "4.1.2 Name, Role, Value - Proper ARIA attributes"

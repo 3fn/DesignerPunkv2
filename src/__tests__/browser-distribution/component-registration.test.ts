@@ -41,14 +41,16 @@ describe('Component Registration', () => {
     it('should contain safeDefine and all component registrations', () => {
       expect(bundleContent).toContain('safeDefine');
       expect(bundleContent).toContain('text-input-field');
+      expect(bundleContent).toContain('input-text-base');
       expect(bundleContent).toContain('button-cta');
       expect(bundleContent).toContain('dp-icon');
       expect(bundleContent).toContain('dp-container');
     });
 
-    it('should register all four custom elements via safeDefine', () => {
+    it('should register all five custom elements via safeDefine', () => {
       // Requirements 4.1, 4.2, 4.3, 4.4
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]text-input-field['"]/);
+      expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]input-text-base['"]/);
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]button-cta['"]/);
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]dp-icon['"]/);
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]dp-container['"]/);
@@ -57,6 +59,7 @@ describe('Component Registration', () => {
     it('should export all component classes', () => {
       // Requirements 1.2, 1.3
       expect(bundleContent).toMatch(/export\s*\{[^}]*TextInputField[^}]*\}/);
+      expect(bundleContent).toMatch(/export\s*\{[^}]*InputTextBase[^}]*\}/);
       expect(bundleContent).toMatch(/export\s*\{[^}]*ButtonCTA[^}]*\}/);
       expect(bundleContent).toMatch(/export\s*\{[^}]*DPIcon[^}]*\}/);
       expect(bundleContent).toMatch(/export\s*\{[^}]*ContainerWeb[^}]*\}/);
@@ -116,8 +119,9 @@ describe('Component Registration', () => {
       expect(mockContext.DesignerPunk).toBeDefined();
     });
 
-    it('should register all four custom elements (Req 2.3, 4.1-4.4)', () => {
+    it('should register all five custom elements (Req 2.3, 4.1-4.4)', () => {
       expect(registeredElements.has('text-input-field')).toBe(true);
+      expect(registeredElements.has('input-text-base')).toBe(true);
       expect(registeredElements.has('button-cta')).toBe(true);
       expect(registeredElements.has('dp-icon')).toBe(true);
       expect(registeredElements.has('dp-container')).toBe(true);
@@ -126,6 +130,7 @@ describe('Component Registration', () => {
     it('should expose all components in DesignerPunk global', () => {
       const dp = mockContext.DesignerPunk as Record<string, unknown>;
       expect(dp.TextInputField).toBeDefined();
+      expect(dp.InputTextBase).toBeDefined();
       expect(dp.ButtonCTA).toBeDefined();
       expect(dp.DPIcon).toBeDefined();
       expect(dp.ContainerWeb).toBeDefined();
@@ -148,20 +153,22 @@ describe('Component Registration', () => {
 
     it('should have correct component imports', () => {
       expect(content).toContain("import { TextInputField }");
+      expect(content).toContain("import { InputTextBase }");
       expect(content).toContain("import { ButtonCTA }");
       expect(content).toContain("import { DPIcon }");
       expect(content).toContain("import { ContainerWeb }");
     });
 
-    it('should have safeDefine calls for all four components', () => {
+    it('should have safeDefine calls for all five components', () => {
       expect(content).toContain("safeDefine('text-input-field', TextInputField)");
+      expect(content).toContain("safeDefine('input-text-base', InputTextBase)");
       expect(content).toContain("safeDefine('button-cta', ButtonCTA)");
       expect(content).toContain("safeDefine('dp-icon', DPIcon)");
       expect(content).toContain("safeDefine('dp-container', ContainerWeb)");
     });
 
     it('should export all components for UMD global access', () => {
-      expect(content).toContain('export { TextInputField, ButtonCTA, DPIcon, ContainerWeb }');
+      expect(content).toContain('export { TextInputField, InputTextBase, ButtonCTA, DPIcon, ContainerWeb }');
       expect(content).toContain('export const Icon = DPIcon');
       expect(content).toContain('export const Container = ContainerWeb');
     });
