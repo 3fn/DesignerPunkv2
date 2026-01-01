@@ -247,6 +247,27 @@ get_section({ path: ".kiro/steering/Release Management System.md", heading: "AI 
 
 ---
 
+### 8. Component Quick Reference
+**When needed**: Building UI compositions, selecting components, understanding component architecture
+
+**File**: #[[file:.kiro/steering/Component Quick Reference.md]]
+
+**How to access**:
+```
+get_document_summary({ path: ".kiro/steering/Component Quick Reference.md" })
+```
+
+Then query the specific section you need:
+```
+get_section({ path: ".kiro/steering/Component Quick Reference.md", heading: "Component Selection Guide" })
+get_section({ path: ".kiro/steering/Component Quick Reference.md", heading: "Common UI Compositions" })
+get_section({ path: ".kiro/steering/Component Quick Reference.md", heading: "MCP Query Examples" })
+```
+
+**Confirmation**: Reply "I've queried Component Quick Reference via MCP!" after accessing
+
+---
+
 ## MCP Documentation Server (Primary for Large Docs)
 
 The MCP Documentation Server is the **primary source** for large steering documents. AI agents MUST query MCP for these documents rather than expecting them to be auto-loaded.
@@ -260,6 +281,7 @@ These documents are available ONLY via MCP queries:
 |----------|------|
 | Spec Planning Standards | `.kiro/steering/Spec Planning Standards.md` |
 | Component Development and Practices Guide | `.kiro/steering/Component Development and Practices Guide.md` |
+| Component Quick Reference | `.kiro/steering/Component Quick Reference.md` |
 | Test Failure Audit Methodology | `.kiro/steering/Test Failure Audit Methodology.md` |
 
 ### How to Access MCP-Only Documents
