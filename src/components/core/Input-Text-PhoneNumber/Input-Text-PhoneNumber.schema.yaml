@@ -1,0 +1,423 @@
+# Input-Text-PhoneNumber Component Schema
+#
+# Stemma System: Form Inputs Family
+# Component Type: Semantic (inherits from Input-Text-Base)
+# Naming Convention: [Family]-[Type]-[Variant] = Input-Text-PhoneNumber
+#
+# This schema defines the behavioral contracts and properties for the
+# Input-Text-PhoneNumber component, which extends Input-Text-Base with
+# phone number formatting and international validation functionality.
+
+name: Input-Text-PhoneNumber
+type: semantic
+family: FormInputs
+inherits: Input-Text-Base
+version: "1.0.0"
+readiness: production-ready
+
+# Component description
+description: |
+  Phone number input component extending Input-Text-Base with phone-specific
+  formatting and validation functionality. Formats phone numbers as user types
+  using country-specific patterns and validates format on blur. Supports
+  international phone number formats.
+
+# Reusable behaviors this component implements (inherited + extended)
+behaviors:
+  - focusable              # Inherited from Input-Text-Base
+  - validatable            # Inherited from Input-Text-Base
+  - float-label            # Inherited from Input-Text-Base
+  - accessible             # Inherited from Input-Text-Base
+  - phone-validation       # Extended: Phone format validation
+  - phone-formatting       # Extended: Auto-format as user types
+  - international-support  # Extended: Multiple country formats
+
+# Component properties (extends Input-Text-Base)
+properties:
+  # Inherited from Input-Text-Base
+  id:
+    type: string
+    required: true
+    description: Unique identifier for the input element
+  
+  label:
+    type: string
+    required: true
+    description: Label text (floats between placeholder and floated positions)
+  
+  value:
+    type: string
+    required: true
+    description: Current input value
+  
+  onChange:
+    type: "(value: string) => void"
+    required: true
+    description: Callback when value changes
+  
+  onFocus:
+    type: "() => void"
+    required: false
+    description: Callback when input receives focus
+  
+  onBlur:
+    type: "() => void"
+    required: false
+    description: Callback when input loses focus
+  
+  helperText:
+    type: string
+    required: false
+    description: Helper text displayed below input (persistent)
+  
+  errorMessage:
+    type: string
+    required: false
+    description: Error message from props (takes precedence over validation error)
+  
+  isSuccess:
+    type: boolean
+    required: false
+    default: false
+    description: Success state indicator (shows success icon)
+  
+  showInfoIcon:
+    type: boolean
+    required: false
+    default: false
+    description: Info icon support (shows info icon, triggers helper text)
+  
+  placeholder:
+    type: string
+    required: false
+    description: Placeholder text (only shown when label is floated and input is empty)
+  
+  readOnly:
+    type: boolean
+    required: false
+    default: false
+    description: Read-only state (alternative to disabled)
+  
+  required:
+    type: boolean
+    required: false
+    default: false
+    description: Required field indicator
+  
+  maxLength:
+    type: number
+    required: false
+    description: Maximum length for input value
+  
+  testID:
+    type: string
+    required: false
+    description: Test ID for automated testing
+  
+  className:
+    type: string
+    required: false
+    description: Additional CSS class names (web only)
+  
+  # Fixed properties for phone input
+  type:
+    type: "'tel'"
+    required: false
+    default: "'tel'"
+    fixed: true
+    description: Input type is fixed to 'tel' for this semantic component
+  
+  autocomplete:
+    type: "'tel'"
+    required: false
+    default: "'tel'"
+    fixed: true
+    description: Autocomplete is fixed to 'tel' for browser autofill support
+  
+  # Phone number-specific properties
+  countryCode:
+    type: string
+    required: false
+    default: "'US'"
+    description: ISO 3166-1 alpha-2 country code for formatting and validation
+  
+  showCountrySelector:
+    type: boolean
+    required: false
+    default: false
+    description: Whether to show the country code selector
+  
+  onCountryChange:
+    type: "(countryCode: string) => void"
+    required: false
+    description: Callback when country code changes
+  
+  autoFormat:
+    type: boolean
+    required: false
+    default: true
+    description: Whether to format the phone number as the user types
+  
+  customValidator:
+    type: "(phoneNumber: string, countryCode: string) => boolean"
+    required: false
+    description: Custom phone validation function (overrides default country-based validation)
+  
+  invalidPhoneMessage:
+    type: string
+    required: false
+    default: "'Please enter a valid phone number'"
+    description: Custom error message for invalid phone format
+  
+  onValidate:
+    type: "(isValid: boolean, errorMessage?: string) => void"
+    required: false
+    description: Callback when validation occurs (on blur)
+
+# Behavioral contracts - guarantees this component provides
+# Inherits all 9 contracts from Input-Text-Base plus 3 phone-specific contracts
+contracts:
+  # Inherited contracts from Input-Text-Base
+  focusable:
+    inherited: true
+    description: Can receive keyboard focus
+    wcag: "2.1.1 Keyboard"
+    platforms: [web, ios, android]
+  
+  float_label_animation:
+    inherited: true
+    description: Label animates on focus
+    wcag: "2.3.3 Animation from Interactions"
+    platforms: [web, ios, android]
+  
+  validates_on_blur:
+    inherited: true
+    description: Validation triggers on blur
+    wcag: "3.3.1 Error Identification"
+    platforms: [web, ios, android]
+  
+  error_state_display:
+    inherited: true
+    description: Shows error message and styling
+    wcag: "3.3.1 Error Identification, 1.4.1 Use of Color"
+    platforms: [web, ios, android]
+  
+  success_state_display:
+    inherited: true
+    description: Shows success styling
+    wcag: "1.4.1 Use of Color"
+    platforms: [web, ios, android]
+  
+  disabled_state:
+    inherited: true
+    description: Prevents interaction when disabled
+    wcag: "4.1.2 Name, Role, Value"
+    platforms: [web, ios, android]
+  
+  trailing_icon_display:
+    inherited: true
+    description: Shows contextual trailing icons
+    wcag: "1.4.1 Use of Color"
+    platforms: [web, ios, android]
+  
+  focus_ring:
+    inherited: true
+    description: WCAG 2.4.7 focus visible indicator
+    wcag: "2.4.7 Focus Visible"
+    platforms: [web, ios, android]
+  
+  reduced_motion_support:
+    inherited: true
+    description: Respects prefers-reduced-motion
+    wcag: "2.3.3 Animation from Interactions"
+    platforms: [web, ios, android]
+  
+  # Phone number-specific contracts
+  validates_phone_format:
+    description: Validates phone number against country-specific patterns
+    behavior: |
+      On blur, validates the input value against country-specific phone number pattern.
+      If validation fails, displays error state with appropriate error message.
+      Custom validator function can override default validation.
+    wcag: "3.3.1 Error Identification"
+    platforms: [web, ios, android]
+    validation: |
+      - Phone validation triggers on blur
+      - Valid phone numbers pass validation (10 digits for US)
+      - Invalid phone numbers fail validation (wrong digit count)
+      - Empty values pass validation (use required for empty check)
+      - Custom validator overrides default when provided
+  
+  provides_phone_formatting:
+    description: Formats phone numbers as user types
+    behavior: |
+      As user types digits, automatically formats the phone number according
+      to the selected country's format pattern. For example, US format:
+      (###) ###-#### formats as user types each digit.
+    wcag: "3.3.2 Labels or Instructions"
+    platforms: [web, ios, android]
+    validation: |
+      - Digits are formatted as user types
+      - Non-digit characters are stripped
+      - Format follows country-specific pattern
+      - Backspace removes formatting appropriately
+  
+  supports_international_formats:
+    description: Handles multiple country phone number formats
+    behavior: |
+      Supports phone number formats for multiple countries including
+      US, CA, GB, DE, FR, AU, JP, IN, BR, MX. Each country has its own
+      format pattern and expected digit count.
+    wcag: "3.3.2 Labels or Instructions"
+    platforms: [web, ios, android]
+    validation: |
+      - US/CA: (###) ###-#### (10 digits)
+      - GB: #### ### #### (11 digits)
+      - DE: #### ####### (11 digits)
+      - FR: ## ## ## ## ## (10 digits)
+      - Country selector available when enabled
+
+# Design tokens this component requires (inherited from Input-Text-Base)
+tokens:
+  # All tokens inherited from Input-Text-Base
+  typography:
+    - typography.labelMd
+    - typography.labelMdFloat
+    - typography.input
+    - typography.caption
+  color:
+    - color.text.muted
+    - color.text.default
+    - color.primary
+    - color.error
+    - color.error.strong
+    - color.success.strong
+    - color.border
+    - color.background
+  spacing:
+    - space.inset.100
+    - space.grouped.tight
+    - space.grouped.minimal
+  motion:
+    - motion.floatLabel
+    - motion.focusTransition
+  border:
+    - borderDefault
+    - radius150
+  accessibility:
+    - tapAreaRecommended
+    - accessibility.focus.width
+    - accessibility.focus.offset
+    - accessibility.focus.color
+  icon:
+    - icon.size100
+  blend:
+    - blend.focusSaturate
+    - blend.disabledDesaturate
+
+# Supported platforms
+platforms:
+  - web
+  - ios
+  - android
+
+# Platform-specific implementation notes
+platform_notes:
+  web:
+    element: "<input-text-phone-number>"
+    implementation: Web Component wrapping Input-Text-Base
+    file: platforms/web/InputTextPhoneNumber.web.ts
+    keyboard: Telephone keyboard on mobile browsers
+    autocomplete: autocomplete="tel" attribute
+  ios:
+    implementation: SwiftUI View wrapping InputTextBase
+    file: platforms/ios/InputTextPhoneNumber.ios.swift
+    keyboard: UIKeyboardType.phonePad
+    autocomplete: UITextContentType.telephoneNumber
+  android:
+    implementation: Jetpack Compose Composable wrapping InputTextBase
+    file: platforms/android/InputTextPhoneNumber.android.kt
+    keyboard: KeyboardType.Phone
+    autocomplete: Autofill framework phone type
+
+# Inheritance relationship
+inheritance:
+  parent: Input-Text-Base
+  extends:
+    - phone_format validation
+    - phone_number formatting
+    - international_format support
+  fixed_properties:
+    type: tel
+    autocomplete: tel
+
+# Accessibility compliance (inherited + extended)
+accessibility:
+  wcag_level: AA
+  compliance:
+    # Inherited from Input-Text-Base
+    - "1.4.1 Use of Color - Error/success states use icons, not just color"
+    - "1.4.3 Contrast (Minimum) - All text meets 4.5:1 contrast"
+    - "1.4.11 Non-text Contrast - Focus ring meets 3:1 contrast"
+    - "2.1.1 Keyboard - Fully keyboard accessible"
+    - "2.4.7 Focus Visible - Clear focus indicator"
+    - "2.3.3 Animation from Interactions - Respects reduced motion"
+    - "3.3.1 Error Identification - Errors clearly identified"
+    - "3.3.2 Labels or Instructions - Label always visible"
+    - "4.1.2 Name, Role, Value - Proper ARIA attributes"
+    # Phone number-specific
+    - "1.3.5 Identify Input Purpose - Phone autocomplete enabled"
+
+# Supported countries
+supported_countries:
+  - code: US
+    name: United States
+    dialCode: "+1"
+    format: "(###) ###-####"
+    digitCount: 10
+  - code: CA
+    name: Canada
+    dialCode: "+1"
+    format: "(###) ###-####"
+    digitCount: 10
+  - code: GB
+    name: United Kingdom
+    dialCode: "+44"
+    format: "#### ### ####"
+    digitCount: 11
+  - code: DE
+    name: Germany
+    dialCode: "+49"
+    format: "#### #######"
+    digitCount: 11
+  - code: FR
+    name: France
+    dialCode: "+33"
+    format: "## ## ## ## ##"
+    digitCount: 10
+  - code: AU
+    name: Australia
+    dialCode: "+61"
+    format: "#### ### ###"
+    digitCount: 10
+  - code: JP
+    name: Japan
+    dialCode: "+81"
+    format: "###-####-####"
+    digitCount: 11
+  - code: IN
+    name: India
+    dialCode: "+91"
+    format: "##### #####"
+    digitCount: 10
+  - code: BR
+    name: Brazil
+    dialCode: "+55"
+    format: "(##) #####-####"
+    digitCount: 11
+  - code: MX
+    name: Mexico
+    dialCode: "+52"
+    format: "## #### ####"
+    digitCount: 10
+

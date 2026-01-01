@@ -42,15 +42,17 @@ describe('Component Registration', () => {
       expect(bundleContent).toContain('safeDefine');
       expect(bundleContent).toContain('text-input-field');
       expect(bundleContent).toContain('input-text-base');
+      expect(bundleContent).toContain('input-text-email');
       expect(bundleContent).toContain('button-cta');
       expect(bundleContent).toContain('dp-icon');
       expect(bundleContent).toContain('dp-container');
     });
 
-    it('should register all five custom elements via safeDefine', () => {
+    it('should register all six custom elements via safeDefine', () => {
       // Requirements 4.1, 4.2, 4.3, 4.4
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]text-input-field['"]/);
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]input-text-base['"]/);
+      expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]input-text-email['"]/);
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]button-cta['"]/);
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]dp-icon['"]/);
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]dp-container['"]/);
@@ -60,6 +62,7 @@ describe('Component Registration', () => {
       // Requirements 1.2, 1.3
       expect(bundleContent).toMatch(/export\s*\{[^}]*TextInputField[^}]*\}/);
       expect(bundleContent).toMatch(/export\s*\{[^}]*InputTextBase[^}]*\}/);
+      expect(bundleContent).toMatch(/export\s*\{[^}]*InputTextEmail[^}]*\}/);
       expect(bundleContent).toMatch(/export\s*\{[^}]*ButtonCTA[^}]*\}/);
       expect(bundleContent).toMatch(/export\s*\{[^}]*DPIcon[^}]*\}/);
       expect(bundleContent).toMatch(/export\s*\{[^}]*ContainerWeb[^}]*\}/);
@@ -154,21 +157,23 @@ describe('Component Registration', () => {
     it('should have correct component imports', () => {
       expect(content).toContain("import { TextInputField }");
       expect(content).toContain("import { InputTextBase }");
+      expect(content).toContain("import { InputTextEmail }");
       expect(content).toContain("import { ButtonCTA }");
       expect(content).toContain("import { DPIcon }");
       expect(content).toContain("import { ContainerWeb }");
     });
 
-    it('should have safeDefine calls for all five components', () => {
+    it('should have safeDefine calls for all six components', () => {
       expect(content).toContain("safeDefine('text-input-field', TextInputField)");
       expect(content).toContain("safeDefine('input-text-base', InputTextBase)");
+      expect(content).toContain("safeDefine('input-text-email', InputTextEmail)");
       expect(content).toContain("safeDefine('button-cta', ButtonCTA)");
       expect(content).toContain("safeDefine('dp-icon', DPIcon)");
       expect(content).toContain("safeDefine('dp-container', ContainerWeb)");
     });
 
     it('should export all components for UMD global access', () => {
-      expect(content).toContain('export { TextInputField, InputTextBase, ButtonCTA, DPIcon, ContainerWeb }');
+      expect(content).toContain('export { TextInputField, InputTextBase, InputTextEmail, ButtonCTA, DPIcon, ContainerWeb }');
       expect(content).toContain('export const Icon = DPIcon');
       expect(content).toContain('export const Container = ContainerWeb');
     });
