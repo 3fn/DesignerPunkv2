@@ -4,6 +4,16 @@ inclusion: manual
 
 # Token Quick Reference
 
+**Date**: 2025-12-01
+**Purpose**: Routing table for token documentation - helps AI agents find the right MCP document for each token type
+**Organization**: process-standard
+**Scope**: cross-project
+**Layer**: 2
+**Relevant Tasks**: component-development, token-selection, styling
+**Last Reviewed**: 2026-01-01
+
+---
+
 ## Token System Overview
 
 For comprehensive understanding of the token system architecture, mathematical foundations, and cross-platform strategy, see:

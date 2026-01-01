@@ -1,0 +1,872 @@
+# Implementation Plan: Component Architecture System
+
+**Date**: 2025-12-31
+**Spec**: 034 - Component Architecture System
+**Status**: Implementation Planning
+**Dependencies**: None
+
+---
+
+## Overview
+
+This implementation plan establishes the Stemma System foundation for systematic component development across web, iOS, and Android platforms. The plan focuses on creating infrastructure, implementing the Form Inputs family as the primary example, and establishing patterns for future component family development.
+
+## Implementation Strategy
+
+### Phase 1: Foundation and Infrastructure
+- Establish Stemma System principles and governance
+- Audit existing components (ButtonCTA, PD-Container, TextInputField) for compliance
+- Create Component Quick Reference routing table
+- Set up MCP documentation infrastructure
+
+### Phase 2: Form Inputs Family Implementation
+- Migrate TextInputField to Input-Text-Base (with audit remediation)
+- Update demo page (only consumer)
+- Implement three semantic components (Email, Password, PhoneNumber)
+- Remediate ButtonCTA and PD-Container per audit findings
+- Validate cross-platform behavioral consistency
+
+### Phase 3: System Completion and Future Planning
+- Implement health guardrails and validation
+- Create structural foundation for all 11 component families
+- Update Test Development Standards with linting integration
+- Create design-outline drafts for Avatars and Navigation families
+
+---
+
+## Task List
+
+- [x] 1. Establish Stemma System Foundation
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  
+  **Success Criteria:**
+  - Stemma System principles document created with governance guidelines
+  - AI-optimal naming convention documented with [Family]-[Type]-[Variant] pattern
+  - Component schema format established with YAML structure
+  - Readiness status system defined (Production Ready, Beta, Placeholder, Deprecated)
+  - Primitive vs semantic usage philosophy documented
+  
+  **Primary Artifacts:**
+  - `.kiro/steering/stemma-system-principles.md`
+  - Component schema format documentation
+  - Architectural diagrams showing Rosetta + Stemma integration
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/034-component-architecture-system/completion/task-1-completion.md`
+  - Summary: `docs/specs/034-component-architecture-system/task-1-summary.md` (triggers release detection)
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 1 Complete: Stemma System Foundation"`
+  - Verify: Check GitHub for committed changes
+
+  - [x] 1.1 Create Stemma System principles document
+    **Type**: Architecture
+    **Validation**: Tier 3 - Comprehensive
+    - Define family inheritance patterns and behavioral contracts
+    - Document composition relationships and cross-platform consistency
+    - Establish governance guidelines for component development
+    - _Requirements: R1_
+
+  - [x] 1.2 Document AI-optimal naming convention
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Define [Family]-[Type]-[Variant] pattern with examples
+    - Document "Base" suffix for primitives
+    - Create naming validation rules
+    - _Requirements: R2_
+
+  - [x] 1.3 Establish component schema format
+    **Type**: Architecture
+    **Validation**: Tier 3 - Comprehensive
+    - Create YAML schema structure with all required fields
+    - Define behavioral contracts format
+    - Document inheritance relationship representation
+    - _Requirements: R1, R10_
+
+  - [x] 1.4 Define readiness status system
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Define Production Ready, Beta, Placeholder, Deprecated indicators
+    - Document usage recommendations for each status
+    - Create status transition guidelines
+    - Add `inclusion: manual` front-matter to any steering documents created
+    - Run MCP health check: `mcp_designerpunk_docs_get_index_health()` and rebuild if needed
+    - _Requirements: R13_
+
+  - [x] 1.5 Document primitive vs semantic usage philosophy
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Explain when primitives are legitimate (coverage gaps)
+    - Contrast with token usage philosophy (where primitives are discouraged)
+    - Provide decision guidance for component selection
+    - Add `inclusion: manual` front-matter to any steering documents created
+    - Run MCP health check: `mcp_designerpunk_docs_get_index_health()` and rebuild if needed
+    - _Requirements: R9_
+
+---
+
+- [ ] 2. Audit Existing Components for Stemma System Compliance
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  
+  **Success Criteria:**
+  - ButtonCTA, PD-Container, and TextInputField analyzed across all platforms
+  - Audit findings documented with naming, behavioral contract, token usage, and cross-platform gaps
+  - Human-AI checkpoint completed with prioritized remediation scope
+  - Remediation recommendations documented with specific steps and effort estimates
+  - Approved remediation scope ready for execution
+  
+  **Primary Artifacts:**
+  - `.kiro/specs/034-component-architecture-system/audit/existing-component-audit.md`
+  - Remediation recommendations document
+  - Prioritized remediation scope (Human-approved)
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/034-component-architecture-system/completion/task-2-completion.md`
+  - Summary: `docs/specs/034-component-architecture-system/task-2-summary.md` (triggers release detection)
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Existing Component Audit"`
+  - Verify: Check GitHub for committed changes
+
+  - [ ] 2.1 Analyze existing component implementations
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Review ButtonCTA across web, iOS, and Android
+    - Review PD-Container across web, iOS, and Android
+    - Review TextInputField across web, iOS, and Android
+    - Document current naming, behaviors, properties, and token usage
+    - _Requirements: R3_
+
+  - [ ] 2.2 Document audit findings
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Identify naming convention gaps (vs [Family]-[Type]-[Variant] pattern)
+    - Identify behavioral contract gaps
+    - Identify token usage issues (inline styles, missing tokens)
+    - Identify cross-platform inconsistencies
+    - _Requirements: R3_
+
+  - [ ] 2.3 Human-AI Checkpoint: Review findings and prioritize
+    **Type**: Architecture
+    **Validation**: Tier 3 - Comprehensive
+    - Present audit findings to Human for review
+    - Discuss gap severity and remediation priority
+    - Agree on remediation scope (what to fix in this spec vs defer)
+    - Document approved priorities
+    - _Requirements: R3_
+
+  - [ ] 2.4 Create remediation recommendations
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Document specific remediation steps for each component
+    - Include effort estimates for each remediation item
+    - Align recommendations with approved priorities
+    - _Requirements: R3_
+
+  - [ ] 2.5 Human-AI Checkpoint: Approve remediation scope
+    **Type**: Architecture
+    **Validation**: Tier 3 - Comprehensive
+    - Present remediation recommendations to Human
+    - Confirm scope for this spec vs future work
+    - Document final approved remediation scope
+    - _Requirements: R3_
+
+---
+
+- [ ] 3. Create Component Quick Reference System
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  
+  **Success Criteria:**
+  - Component Quick Reference document created (~1,600 tokens soft target)
+  - All 11 component families included in routing table
+  - Common composition patterns documented (Login Form, Feed Post)
+  - MCP query examples with progressive disclosure workflow
+  - Integration with existing designerpunk-docs MCP server
+  
+  **Primary Artifacts:**
+  - `.kiro/steering/Component Quick Reference.md`
+  - MCP document path definitions for all families
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/034-component-architecture-system/completion/task-3-completion.md`
+  - Summary: `docs/specs/034-component-architecture-system/task-3-summary.md` (triggers release detection)
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Component Quick Reference System"`
+  - Verify: Check GitHub for committed changes
+
+  - [ ] 3.1 Create Component Quick Reference document
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Follow Token Quick Reference format and structure
+    - Include purpose statement as routing table (not comprehensive reference)
+    - Target ~1,600 tokens for efficient loading
+    - Add `inclusion: manual` front-matter to `.kiro/steering/Component Quick Reference.md`
+    - Run MCP health check: `mcp_designerpunk_docs_get_index_health()` and rebuild if needed
+    - _Requirements: R5_
+
+  - [ ] 3.2 Create routing table for all 11 families
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Include family name, shared need/purpose, MCP document path
+    - Cover all families regardless of implementation status
+    - Use consistent table format
+    - _Requirements: R5, R10_
+
+  - [ ] 3.3 Document common composition patterns
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Create Login Form pattern (Form Inputs + Buttons)
+    - Create Feed Post pattern (Avatars + Buttons + Data Displays)
+    - Show component and token combinations
+    - _Requirements: R5_
+
+  - [ ] 3.4 Add MCP query examples
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Document progressive disclosure workflow (summary → section → full)
+    - Include get_document_summary, get_section, get_document_full examples
+    - Integrate with existing designerpunk-docs MCP server
+    - _Requirements: R5, R7_
+
+---
+
+- [ ] 4. Migrate TextInputField to Input-Text-Base
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  
+  **Success Criteria:**
+  - TextInputField renamed to Input-Text-Base across all platforms
+  - Component follows Stemma System naming and architectural patterns
+  - Demo page updated to use Input-Text-Base (only consumer)
+  - Cross-platform behavioral consistency maintained
+  - Migration guidance documented for reference
+  - Audit-approved remediation items for TextInputField completed
+  
+  **Primary Artifacts:**
+  - `src/components/Input-Text-Base/` (web)
+  - iOS and Android Input-Text-Base implementations
+  - Updated demo page
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/034-component-architecture-system/completion/task-4-completion.md`
+  - Summary: `docs/specs/034-component-architecture-system/task-4-summary.md` (triggers release detection)
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 Complete: TextInputField Migration"`
+  - Verify: Check GitHub for committed changes
+
+  - [ ] 4.1 Analyze current TextInputField implementation
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Review web, iOS, and Android implementations
+    - Document current behaviors and properties
+    - Identify token usage and dependencies
+    - Cross-reference with audit findings from Task 2
+    - _Requirements: R4_
+
+  - [ ] 4.2 Rename and restructure component
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Rename to Input-Text-Base following naming convention
+    - Refactor to serve as primitive base with foundational behaviors
+    - Update component schema with behavioral contracts
+    - Apply audit-approved remediation items
+    - _Requirements: R4_
+
+  - [ ] 4.3 Update demo page
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Update demo page to use Input-Text-Base
+    - Verify functionality preserved
+    - Document migration steps for reference
+    - _Requirements: R4_
+
+  - [ ] 4.4 Validate cross-platform consistency
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Verify behavioral contracts work across platforms
+    - Test foundational behaviors (focusable, validatable, float-label)
+    - Document any platform-specific considerations
+    - _Requirements: R4, R6_
+
+---
+
+- [ ] 5. Implement Form Inputs Semantic Components
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  
+  **Success Criteria:**
+  - Input-Text-Email implemented with email validation and autocomplete
+  - Input-Text-Password implemented with secure input and toggle
+  - Input-Text-PhoneNumber implemented with formatting and international validation
+  - All components inherit from Input-Text-Base correctly
+  - Cross-platform behavioral consistency verified for all three
+  
+  **Primary Artifacts:**
+  - `src/components/Input-Text-Email/` (web + iOS + Android)
+  - `src/components/Input-Text-Password/` (web + iOS + Android)
+  - `src/components/Input-Text-PhoneNumber/` (web + iOS + Android)
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/034-component-architecture-system/completion/task-5-completion.md`
+  - Summary: `docs/specs/034-component-architecture-system/task-5-summary.md` (triggers release detection)
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 5 Complete: Form Inputs Semantic Components"`
+  - Verify: Check GitHub for committed changes
+
+  - [ ] 5.1 Implement Input-Text-Email Component
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Create Input-Text-Email inheriting from Input-Text-Base
+    - Add email validation and autocomplete functionality
+    - Implement across web, iOS, and Android platforms
+    - Create component schema and documentation
+    - _Requirements: R4_
+
+  - [ ] 5.2 Implement Input-Text-Password Component
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Create Input-Text-Password inheriting from Input-Text-Base
+    - Add secure input and password-specific behaviors
+    - Implement password toggle functionality
+    - Implement across web, iOS, and Android platforms
+    - Create component schema and documentation
+    - _Requirements: R4_
+
+  - [ ] 5.3 Implement Input-Text-PhoneNumber Component
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Create Input-Text-PhoneNumber inheriting from Input-Text-Base
+    - Add phone number formatting and validation
+    - Implement international format support
+    - Implement across web, iOS, and Android platforms
+    - Create component schema and documentation
+    - _Requirements: R4_
+
+---
+
+**Checkpoint: Form Inputs Family Complete**
+
+At this point, the Form Inputs family is fully implemented with Input-Text-Base and three semantic components. This validates the Stemma System patterns before expanding to infrastructure and remaining families.
+
+---
+
+- [ ] 6. Remediate Existing Components (ButtonCTA, PD-Container)
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  
+  **Success Criteria:**
+  - Audit-approved remediation items for ButtonCTA completed
+  - Audit-approved remediation items for PD-Container completed
+  - Components follow Stemma System naming and architectural patterns
+  - Cross-platform behavioral consistency maintained
+  - Remediation documented for reference
+  
+  **Primary Artifacts:**
+  - Updated ButtonCTA implementations (web, iOS, Android)
+  - Updated PD-Container implementations (web, iOS, Android)
+  - Remediation completion documentation
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/034-component-architecture-system/completion/task-6-completion.md`
+  - Summary: `docs/specs/034-component-architecture-system/task-6-summary.md` (triggers release detection)
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 6 Complete: Existing Component Remediation"`
+  - Verify: Check GitHub for committed changes
+
+  - [ ] 6.1 Remediate ButtonCTA per audit recommendations
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Apply audit-approved remediation items
+    - Update naming if required by audit findings
+    - Update behavioral contracts and token usage
+    - Verify cross-platform consistency
+    - _Requirements: R3_
+
+  - [ ] 6.2 Remediate PD-Container per audit recommendations
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Apply audit-approved remediation items
+    - Update naming if required by audit findings
+    - Update behavioral contracts and token usage
+    - Verify cross-platform consistency
+    - _Requirements: R3_
+
+  - [ ] 6.3 Human-AI Checkpoint: Verify remediation complete
+    **Type**: Architecture
+    **Validation**: Tier 3 - Comprehensive
+    - Review remediation results with Human
+    - Confirm all approved items addressed
+    - Document any deferred items for future work
+    - _Requirements: R3_
+
+---
+
+- [ ] 7. Create MCP Documentation Infrastructure
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  
+  **Note**: This task extends the existing designerpunk-docs MCP server (Systems MCP). Application MCP is deferred to a future spec per R15.
+  
+  **Success Criteria:**
+  - MCP document structure template created
+  - Detailed MCP documentation for Form Inputs family
+  - Structural MCP documentation for remaining 10 families (placeholders)
+  - Progressive disclosure workflow validated
+  - Integration with designerpunk-docs MCP server complete (Systems MCP)
+  - Documentation structure supports future Application MCP extraction
+  
+  **Primary Artifacts:**
+  - `.kiro/steering/form-inputs-components.md`
+  - Placeholder MCP documents for 10 families
+  - MCP document structure template
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/034-component-architecture-system/completion/task-7-completion.md`
+  - Summary: `docs/specs/034-component-architecture-system/task-7-summary.md` (triggers release detection)
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 7 Complete: MCP Documentation Infrastructure"`
+  - Verify: Check GitHub for committed changes
+
+  - [ ] 7.1 Create MCP document structure template
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Define metadata, sections, and progressive disclosure support
+    - Document required sections for each family type
+    - Create template for implemented vs placeholder families
+    - Add `inclusion: manual` front-matter to any steering documents created
+    - Run MCP health check: `mcp_designerpunk_docs_get_index_health()` and rebuild if needed
+    - _Requirements: R7_
+
+  - [ ] 7.2 Create Form Inputs family MCP documentation
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Document inheritance structures and behavioral contracts
+    - Include usage guidelines and token dependencies
+    - Add cross-platform notes and examples
+    - Add `inclusion: manual` front-matter to `.kiro/steering/form-inputs-components.md`
+    - Run MCP health check: `mcp_designerpunk_docs_get_index_health()` and rebuild if needed
+    - _Requirements: R7_
+
+  - [ ] 7.3 Create structural MCP documentation for remaining families
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Create placeholder documents for 10 families
+    - Include inheritance structures and planned components
+    - Mark as placeholder status with clear indicators
+    - Add `inclusion: manual` front-matter to all steering documents created
+    - Run MCP health check: `mcp_designerpunk_docs_get_index_health()` and rebuild if needed
+    - _Requirements: R7, R10_
+
+  - [ ] 7.4 Validate MCP integration
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Test progressive disclosure workflow
+    - Verify routing paths work correctly
+    - Validate query performance with designerpunk-docs server
+    - _Requirements: R7_
+
+---
+
+- [ ] 8. Implement Health Guardrails and Validation
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  
+  **Success Criteria:**
+  - IDE linting rules for component naming convention validation
+  - Token usage validation catching inline styles and missing tokens
+  - Required property validation against component schemas
+  - Basic accessibility compliance checks
+  - Clear error messages with correction guidance
+  
+  **Primary Artifacts:**
+  - Linting rule configurations
+  - Validation error message templates
+  - Health guardrails documentation
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/034-component-architecture-system/completion/task-8-completion.md`
+  - Summary: `docs/specs/034-component-architecture-system/task-8-summary.md` (triggers release detection)
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 8 Complete: Health Guardrails and Validation"`
+  - Verify: Check GitHub for committed changes
+
+  - [ ] 8.1 Create linting rules for naming convention
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Implement [Family]-[Type]-[Variant] pattern validation
+    - Add "Base" suffix detection for primitives
+    - Create clear error messages for violations
+    - _Requirements: R8_
+
+  - [ ] 8.2 Implement token usage validation
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Detect inline styles and missing token references
+    - Validate token usage against component contracts
+    - Provide suggestions for correct token usage
+    - _Requirements: R8_
+
+  - [ ] 8.3 Add property and accessibility validation
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Check required properties against component schemas
+    - Validate property values against contracts
+    - Implement basic WCAG accessibility checks
+    - _Requirements: R8_
+
+  - [ ] 8.4 Create error guidance system
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Create error message templates with correction guidance
+    - Link errors to relevant documentation
+    - Integrate with IDE for real-time feedback
+    - _Requirements: R8_
+
+---
+
+- [ ] 9. Validate Cross-Platform Behavioral Consistency
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  
+  **Success Criteria:**
+  - Behavioral contract validation framework established
+  - Automated testing suite for cross-platform consistency
+  - Form Inputs family validated across web, iOS, and Android
+  - Platform-specific implementation guidelines documented
+  - Validation process established for future families
+  
+  **Primary Artifacts:**
+  - Cross-platform validation test suite
+  - Platform implementation guidelines
+  - Validation results documentation
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/034-component-architecture-system/completion/task-9-completion.md`
+  - Summary: `docs/specs/034-component-architecture-system/task-9-summary.md` (triggers release detection)
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 9 Complete: Cross-Platform Behavioral Consistency"`
+  - Verify: Check GitHub for committed changes
+
+  - [ ] 9.1 Define behavioral contract validation framework
+    **Type**: Architecture
+    **Validation**: Tier 3 - Comprehensive
+    - Establish validation criteria for behavioral contracts
+    - Define what "identical behavior" means across platforms
+    - Create validation checklist for each contract type
+    - _Requirements: R6_
+
+  - [ ] 9.2 Create automated testing suite
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Implement tests verifying behavioral contracts
+    - Test across web, iOS, and Android platforms
+    - Create test reporting for consistency verification
+    - _Requirements: R6_
+
+  - [ ] 9.3 Validate Form Inputs family
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Run validation suite on all Form Inputs components
+    - Document any platform-specific considerations
+    - Verify all behavioral contracts are honored
+    - _Requirements: R6_
+
+  - [ ] 9.4 Document platform implementation guidelines
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Create guidelines for maintaining consistency
+    - Document acceptable platform-specific optimizations
+    - Establish validation process for future families
+    - _Requirements: R6_
+
+---
+
+- [ ] 10. Create Structural Foundation for All Component Families
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  
+  **Success Criteria:**
+  - All 11 component families have structural definitions
+  - Inheritance structures documented for each family
+  - Component Quick Reference updated with all families
+  - Placeholder MCP documentation complete for 8 families
+  - Readiness indicators set for all families
+  
+  **Primary Artifacts:**
+  - Family structure definitions for all 11 families
+  - Updated Component Quick Reference
+  - Complete placeholder MCP documentation
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/034-component-architecture-system/completion/task-10-completion.md`
+  - Summary: `docs/specs/034-component-architecture-system/task-10-summary.md` (triggers release detection)
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 10 Complete: Structural Foundation for All Families"`
+  - Verify: Check GitHub for committed changes
+
+  - [ ] 10.1 Define inheritance structures for all families
+    **Type**: Architecture
+    **Validation**: Tier 3 - Comprehensive
+    - Document primitive and semantic components for each family
+    - Define behavioral contracts and relationships
+    - Create component relationship diagrams
+    - _Requirements: R10_
+
+  - [ ] 10.2 Update Component Quick Reference
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Ensure all 11 families have routing entries
+    - Update shared needs/purposes for each family
+    - Verify MCP document paths are correct
+    - _Requirements: R5, R10_
+
+  - [ ] 10.3 Complete placeholder MCP documentation
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Ensure all 8 placeholder families have MCP documents
+    - Set appropriate readiness indicators (Placeholder)
+    - Document planned components and relationships
+    - _Requirements: R7, R10_
+
+---
+
+- [ ] 11. Create Component Family Development Standards
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  
+  **Success Criteria:**
+  - Family creation guidelines documented with step-by-step process
+  - Component family templates created (schema, inheritance, contracts)
+  - Validation checklist established for new families
+  - MCP documentation patterns documented
+  - Review process defined for compliance
+  
+  **Primary Artifacts:**
+  - `.kiro/steering/component-family-development-standards.md`
+  - Family creation templates
+  - Validation checklist
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/034-component-architecture-system/completion/task-11-completion.md`
+  - Summary: `docs/specs/034-component-architecture-system/task-11-summary.md` (triggers release detection)
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 11 Complete: Component Family Development Standards"`
+  - Verify: Check GitHub for committed changes
+
+  - [ ] 11.1 Create family creation guidelines
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Document step-by-step process for new families
+    - Include decision criteria for primitive vs semantic
+    - Provide examples from Form Inputs implementation
+    - Add `inclusion: manual` front-matter to `.kiro/steering/component-family-development-standards.md`
+    - Run MCP health check: `mcp_designerpunk_docs_get_index_health()` and rebuild if needed
+    - _Requirements: R12_
+
+  - [ ] 11.2 Develop component family templates
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Create schema format templates
+    - Create inheritance pattern templates
+    - Create behavioral contract templates
+    - _Requirements: R12_
+
+  - [ ] 11.3 Establish validation and review process
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Create validation checklist for new families
+    - Define review process for compliance
+    - Document integration requirements
+    - _Requirements: R12_
+
+---
+
+- [ ] 12. Update Test Development Standards with Linting Integration
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  
+  **Success Criteria:**
+  - Test Development Standards updated with Stemma System linting guidance
+  - Clear guidance on linting vs testing for different validation types
+  - Integrated workflow documented combining linting and testing
+  - Examples showing combined validation approach
+  
+  **Primary Artifacts:**
+  - Updated Test Development Standards document
+  - Linting integration examples
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/034-component-architecture-system/completion/task-12-completion.md`
+  - Summary: `docs/specs/034-component-architecture-system/task-12-summary.md` (triggers release detection)
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 12 Complete: Test Development Standards Update"`
+  - Verify: Check GitHub for committed changes
+
+  - [ ] 12.1 Analyze current Test Development Standards
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Review existing testing categories and patterns
+    - Identify integration points for linting
+    - Document current validation gaps
+    - _Requirements: R14_
+
+  - [ ] 12.2 Document linting and testing integration
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Clarify when to use linting vs testing
+    - Document dual validation approach
+    - Create decision guidance for validation type selection
+    - _Requirements: R14_
+
+  - [ ] 12.3 Create integrated workflow examples
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Show component development with combined validation
+    - Include linting, unit tests, integration tests, property tests
+    - Document workflow for different task types
+    - _Requirements: R14_
+
+---
+
+- [ ] 13. Create Design-Outline Drafts for Future Development
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  
+  **Success Criteria:**
+  - 035-avatars-family design-outline draft created with technical requirements
+  - 036-navigation-family design-outline draft created with technical requirements
+  - Drafts incorporate lessons learned from Stemma System implementation
+  - Technical considerations documented for future spec completion
+  - Application MCP considerations noted for future planning (per R15)
+  
+  **Primary Artifacts:**
+  - `.kiro/specs/035-avatars-family/design-outline.md` (draft)
+  - `.kiro/specs/036-navigation-family/design-outline.md` (draft)
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/034-component-architecture-system/completion/task-13-completion.md`
+  - Summary: `docs/specs/034-component-architecture-system/task-13-summary.md` (triggers release detection)
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 13 Complete: Future Development Design-Outline Drafts"`
+  - Verify: Check GitHub for committed changes
+
+  - [ ] 13.1 Create 035-avatars-family design-outline draft
+    **Type**: Setup
+    **Validation**: Tier 1 - Minimal
+    - Create spec directory structure
+    - Document technical requirements and considerations
+    - Include lessons learned from Stemma System implementation
+    - Note considerations for future requirements, design, and tasks documents
+    - Include Application MCP considerations (when to create dedicated product development MCP)
+    - _Requirements: R11, R15_
+
+  - [ ] 13.2 Create 036-navigation-family design-outline draft
+    **Type**: Setup
+    **Validation**: Tier 1 - Minimal
+    - Create spec directory structure
+    - Document technical requirements and considerations
+    - Include lessons learned from Stemma System implementation
+    - Note considerations for future requirements, design, and tasks documents
+    - Include Application MCP considerations (when to create dedicated product development MCP)
+    - _Requirements: R11, R15_
+
+---
+
+## Success Criteria
+
+The Component Architecture System implementation is complete when:
+
+1. **Stemma System Foundation**: Complete architectural principles, governance, and naming conventions established
+2. **Existing Component Audit**: ButtonCTA, PD-Container, and TextInputField audited with Human-approved remediation scope
+3. **Form Inputs Family**: Input-Text-Base and three semantic components (Email, Password, PhoneNumber) implemented across all platforms
+4. **Existing Component Remediation**: ButtonCTA and PD-Container remediated per audit-approved scope
+5. **Component Quick Reference**: Routing table created for all 11 families with MCP documentation paths (~1,600 tokens soft target)
+6. **Health Guardrails**: IDE linting rules providing real-time development guidance
+7. **MCP Documentation**: Progressive disclosure system implemented for all families (detailed for 3, structural for 8) via designerpunk-docs (Systems MCP)
+8. **Cross-Platform Consistency**: Behavioral contracts validated across web, iOS, and Android platforms
+9. **Development Standards**: Component family creation guidelines and Test Development Standards integration complete
+10. **Future Design-Outlines**: 035-avatars-family and 036-navigation-family design-outline drafts created with technical considerations (including Application MCP planning)
+11. **System Validation**: Behavioral properties verified through property-based testing, integration properties through automated tests, structural properties through static analysis
+12. **Documentation Complete**: All architectural decisions, patterns, and usage guidelines documented
+13. **Application MCP Preparation**: Documentation structure designed to support future Application MCP extraction (per R15)
+
+## Validation Requirements
+
+### Property-Based Testing (Evergreen)
+Behavioral properties (Properties 1-3) must be implemented as property-based tests with minimum 100 iterations each, tagged with "Feature: component-architecture-system, Property [N]".
+
+### Integration Testing (Evergreen)
+Integration properties (Properties 4-5) must be implemented as integration tests verifying consistency across system components.
+
+### Static Analysis (Evergreen)
+Structural properties (Properties 6-8) must be verified through static analysis of documentation and configuration files.
+
+### Manual Verification (Evergreen)
+Process properties (Properties 9-10) require manual review against established checklists.
+
+### Temporary Tests (Retire After Completion)
+- Audit-related tests checking specific anti-patterns in ButtonCTA/PD-Container (retire after remediation)
+- Migration tracking tests for TextInputField → Input-Text-Base (retire after migration complete)
+
+### Cross-Platform Validation
+Form Inputs family components must demonstrate identical behavioral contracts across web, iOS, and Android platforms while maintaining platform-appropriate implementations.
+
+### Documentation Completeness
+All component families must have MCP documentation (detailed for implemented families, structural for placeholders) accessible through Component Quick Reference routing table.
+
+---
+
+*This implementation plan establishes the complete Stemma System foundation while providing practical implementation through the Form Inputs family and creating infrastructure for systematic component family development.*
