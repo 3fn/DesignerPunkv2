@@ -62,6 +62,7 @@
   "devDependencies": {
     "@types/glob": "^8.1.0",
     "@types/jest": "^30.0.0",
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "^20.0.0",
     "@types/semver": "^7.7.1",
     "esbuild": "^0.27.2",
