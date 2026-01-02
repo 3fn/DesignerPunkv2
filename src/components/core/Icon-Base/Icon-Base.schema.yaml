@@ -1,0 +1,302 @@
+# Icon-Base Component Schema
+#
+# Stemma System: Icons Family
+# Component Type: Primitive (Base)
+# Naming Convention: [Family]-[Type] = Icon-Base
+#
+# This schema defines the behavioral contracts and properties for the
+# Icon-Base component, which serves as the foundational primitive
+# for all icon components in the Icons family.
+#
+# Rationale: Icon-Base is a primitive component that renders inline SVG icons
+# with currentColor inheritance for automatic color matching. It serves as the
+# building block for semantic icon components by providing consistent sizing,
+# color inheritance, and optical balance capabilities.
+
+name: Icon-Base
+type: primitive
+family: Icons
+version: "1.0.0"
+readiness: production-ready
+
+# Component description
+description: |
+  Foundational icon component rendering inline SVG icons with currentColor
+  inheritance for automatic color matching. Serves as the primitive base for
+  all icon components in the Icons family.
+  
+  Icon-Base provides consistent sizing calculated from typography scale,
+  color inheritance from parent elements, and optional optical balance
+  adjustment for icon-text pairing. Icons are decorative and hidden from
+  assistive technology.
+
+# Reusable behaviors this component implements
+behaviors:
+  - renderable
+  - colorable
+  - sizable
+  - accessible-decorative
+
+# Component properties (public API)
+properties:
+  name:
+    type: IconBaseName
+    required: true
+    description: |
+      Icon name (type-safe). Must be one of the available IconBaseName values.
+      Available icons include navigation (arrow-right, arrow-left, arrow-up,
+      arrow-down, chevron-right), actions (check, x, x-circle, info, plus, minus),
+      UI elements (circle, heart), and complex (settings, user, mail, calendar).
+  
+  size:
+    type: IconBaseSize
+    required: true
+    description: |
+      Icon size in pixels. Must be one of the predefined IconBaseSize values
+      (13, 18, 24, 28, 32, 36, 40, 44, 48). Sizes are calculated from
+      fontSize × lineHeight formula to maintain optical balance with paired
+      typography.
+      - 13px (size050): caption, legal, labelXs
+      - 18px (size075): bodySm, buttonSm, labelSm
+      - 24px (size100): bodyMd, buttonMd, labelMd, input (standard)
+      - 28px (size150): h6
+      - 32px (size125/200/300): bodyLg, buttonLg, h5, h4
+      - 36px (size400): h3
+      - 40px (size500): h2
+      - 44px (size600): h1
+      - 48px (size700): display
+  
+  color:
+    type: "'inherit' | string"
+    required: false
+    default: "'inherit'"
+    description: |
+      Color override for optical weight compensation.
+      - 'inherit' (default): Use color inheritance (currentColor on web,
+        template mode on iOS, LocalContentColor on Android)
+      - Token reference: Design system token name (e.g., 'color-text-secondary')
+      - Hex color: Direct hex color value (e.g., '#A855F7')
+  
+  opticalBalance:
+    type: boolean
+    required: false
+    default: false
+    description: |
+      Optional optical balance adjustment using blend utilities. When true,
+      applies lighterBlend(color, blend.iconLighter) to the icon color to
+      compensate for icons appearing heavier than adjacent text due to stroke
+      density and fill area. Uses the design system's blend token (8% lighter).
+      Requires a hex color to be provided via the color prop.
+  
+  className:
+    type: string
+    required: false
+    default: undefined
+    description: |
+      Additional CSS class names (web only). Allows custom styling on web
+      platform. Ignored on iOS and Android.
+    platform: web
+  
+  style:
+    type: "Record<string, any>"
+    required: false
+    default: undefined
+    description: |
+      Style overrides (web only). Accepts standard CSS properties as a
+      JavaScript object. Ignored on iOS and Android.
+    platform: web
+  
+  testID:
+    type: string
+    required: false
+    default: undefined
+    description: |
+      Test identifier for automated testing. Platform-specific implementation:
+      - Web: data-testid attribute
+      - iOS: accessibilityIdentifier
+      - Android: testTag
+
+# Behavioral contracts - guarantees this component provides
+# These 5 contracts define the foundational behaviors for Icon-Base
+contracts:
+  renders_svg:
+    description: Renders inline SVG with correct viewBox and stroke attributes
+    behavior: |
+      Icon-Base renders an inline SVG element with:
+      - viewBox="0 0 24 24" (Feather Icons standard)
+      - fill="none" (stroke-based icons)
+      - stroke-linecap="round"
+      - stroke-linejoin="round"
+      - stroke-width from --icon-stroke-width token
+      SVG content is loaded based on icon name from internal icon map.
+    wcag: N/A
+    platforms: [web, ios, android]
+    validation: |
+      - SVG element renders with correct viewBox
+      - Stroke attributes match Feather Icons specification
+      - Icon content matches requested name
+      - Fallback to 'circle' icon if name not found
+  
+  color_inheritance:
+    description: Inherits color from parent via currentColor
+    behavior: |
+      By default, Icon-Base inherits color from its parent element using
+      platform-specific color inheritance mechanisms:
+      - Web: stroke="currentColor" CSS property
+      - iOS: .renderingMode(.template) with .foregroundColor(.primary)
+      - Android: tint = LocalContentColor.current
+      This enables automatic color matching with surrounding text and UI.
+    wcag: "1.4.1 Use of Color"
+    platforms: [web, ios, android]
+    validation: |
+      - Icon color matches parent element color when color='inherit'
+      - Color changes when parent color changes
+      - Color inheritance works in all contexts (buttons, links, text)
+  
+  size_variants:
+    description: Supports 11 size variants calculated from typography scale
+    behavior: |
+      Icon-Base supports 11 size variants calculated from fontSize × lineHeight
+      formula to maintain optical balance with paired typography. Each size
+      corresponds to a typography scale level:
+      - size050: 13px (caption, legal, labelXs)
+      - size075: 18px (bodySm, buttonSm, labelSm)
+      - size100: 24px (bodyMd, buttonMd, labelMd, input) - standard
+      - size125: 32px (bodyLg, buttonLg, labelLg)
+      - size150: 28px (h6)
+      - size200: 32px (h5)
+      - size300: 32px (h4)
+      - size400: 36px (h3)
+      - size500: 40px (h2)
+      - size600: 44px (h1)
+      - size700: 48px (display)
+    wcag: N/A
+    platforms: [web, ios, android]
+    validation: |
+      - All 9 IconBaseSize values (13, 18, 24, 28, 32, 36, 40, 44, 48) render correctly
+      - Icon dimensions match specified size
+      - Size maintains aspect ratio (square icons)
+      - Invalid sizes throw descriptive error
+  
+  optical_balance:
+    description: Optional 8% lighter blend for icon-text pairing
+    behavior: |
+      When opticalBalance prop is true and a hex color is provided, Icon-Base
+      applies lighterBlend(color, blend.iconLighter) to compensate for icons
+      appearing heavier than adjacent text due to stroke density and fill area.
+      Uses theme-aware blend utilities for cross-platform consistency:
+      - Web: blendUtils.iconColor(hexColor)
+      - iOS: color.iconBlend()
+      - Android: color.iconBlend()
+      Optical balance is NOT applied when:
+      - color='inherit' (actual color unknown at render time)
+      - color is a token reference (CSS custom property)
+      - opticalBalance=false (default)
+    wcag: "1.4.3 Contrast (Minimum)"
+    platforms: [web, ios, android]
+    validation: |
+      - Hex color is lightened by 8% when opticalBalance=true
+      - Original color used when opticalBalance=false
+      - currentColor used when color='inherit' regardless of opticalBalance
+      - CSS custom property used when color is token reference
+  
+  accessibility_hidden:
+    description: Decorative icons hidden from assistive technology
+    behavior: |
+      Icon-Base icons are decorative and hidden from assistive technology.
+      Parent elements (buttons, links) provide accessible labels through
+      their text content or aria-label attributes.
+      Platform-specific implementation:
+      - Web: aria-hidden="true" attribute on SVG
+      - iOS: .accessibilityHidden(true) modifier
+      - Android: contentDescription = null
+    wcag: "1.1.1 Non-text Content"
+    platforms: [web, ios, android]
+    validation: |
+      - Icons not announced by screen readers
+      - Icons not included in accessibility tree
+      - Parent elements provide accessible context
+
+# Design tokens this component requires
+tokens:
+  icon:
+    - icon.size050
+    - icon.size075
+    - icon.size100
+    - icon.size125
+    - icon.size150
+    - icon.size200
+    - icon.size300
+    - icon.size400
+    - icon.size500
+    - icon.size600
+    - icon.size700
+    - icon.strokeWidth
+  blend:
+    - blend.iconLighter
+  color:
+    - color.print.default
+
+# Supported platforms
+platforms:
+  - web
+  - ios
+  - android
+
+# Platform-specific implementation notes
+platform_notes:
+  web:
+    element: "<icon-base>"
+    legacy_element: "<dp-icon>"
+    implementation: Web Component with Shadow DOM
+    file: platforms/web/IconBase.web.ts
+    notes: |
+      - Uses Shadow DOM for style encapsulation
+      - Inline SVG rendering with currentColor inheritance
+      - CSS classes for size variants (icon-base--size-*)
+      - Supports className and style props for customization
+      - Legacy <dp-icon> tag supported for backward compatibility
+  ios:
+    implementation: SwiftUI View
+    file: platforms/ios/IconBase.ios.swift
+    notes: |
+      - Uses Image from Asset Catalog with template rendering mode
+      - Color inheritance via .foregroundColor(.primary)
+      - Optical balance via iconBlend() extension
+      - testID via .accessibilityIdentifier()
+      - Legacy Icon typealias for backward compatibility
+  android:
+    implementation: Jetpack Compose Composable
+    file: platforms/android/IconBase.android.kt
+    notes: |
+      - Uses Icon composable with painterResource
+      - Color inheritance via LocalContentColor.current
+      - Optical balance via iconBlend() extension function
+      - Decorative icons use contentDescription = null
+      - Legacy Icon composable wrapper for backward compatibility
+
+# Semantic components that inherit from this primitive
+semantic_variants:
+  - name: Icon-Status
+    extends: Status-specific icons with semantic colors
+    status: planned
+  - name: Icon-Action
+    extends: Action icons with interactive states
+    status: planned
+  - name: Icon-Navigation
+    extends: Navigation icons with directional semantics
+    status: planned
+
+# Accessibility compliance
+accessibility:
+  wcag_level: AA
+  compliance:
+    - "1.1.1 Non-text Content - Icons are decorative and hidden from AT"
+    - "1.4.1 Use of Color - Color inheritance ensures consistency"
+    - "1.4.3 Contrast (Minimum) - Optical balance maintains contrast"
+    - "1.4.11 Non-text Contrast - Stroke width meets contrast requirements"
+  aria_attributes:
+    - aria-hidden: "true" (always, icons are decorative)
+  platform_accessibility:
+    ios: ".accessibilityHidden(true) for VoiceOver"
+    android: "contentDescription = null for TalkBack"

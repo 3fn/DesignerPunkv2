@@ -522,27 +522,31 @@ At this point, the Form Inputs family is fully implemented with Input-Text-Base 
       - _Requirements: R3_
       - **Completion**: `.kiro/specs/034-component-architecture-system/completion/task-6-2-2-completion.md`
 
-  - [ ] 6.3 Remediate Icon → Icon-Base
+  - [x] 6.3 Remediate Icon → Icon-Base
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Apply audit-approved remediation items (F1.5, F2.6)
     - 5 behavioral contracts to formalize
     - Note: Using `Icon-Base` per refined naming convention - Base serves as the Type for foundational components
     - _Requirements: R3_
+    - **Completion**: `.kiro/specs/034-component-architecture-system/completion/task-6-3-completion.md`
 
-    - [ ] 6.3.1 Rename and restructure Icon files
+    - [x] 6.3.1 Rename and restructure Icon files
       **Type**: Implementation
       **Validation**: Tier 2 - Standard
+      **Status**: Complete
       - Create new directory: `src/components/core/Icon-Base/`
       - Migrate and rename files across web, iOS, Android platforms
       - Update browser-entry.ts with dual registration (backward compatibility)
       - Update demo page HTML tags and JS selectors
       - Update/migrate existing tests (imports and selectors only)
       - _Requirements: R3_
+      - **Completion**: `.kiro/specs/034-component-architecture-system/completion/task-6-3-1-completion.md`
 
-    - [ ] 6.3.2 Create Icon-Base schema and validate
+    - [x] 6.3.2 Create Icon-Base schema and validate
       **Type**: Implementation
       **Validation**: Tier 2 - Standard
+      **Status**: Complete
       - Create `Icon-Base.schema.yaml` using Input-Text-Base template
       - Formalize 5 behavioral contracts
       - Document all properties with types and defaults
@@ -550,6 +554,7 @@ At this point, the Form Inputs family is fully implemented with Input-Text-Base 
       - Validate cross-platform behavioral consistency
       - Create README.md with component documentation
       - _Requirements: R3_
+      - **Completion**: `.kiro/specs/034-component-architecture-system/completion/task-6-3-2-completion.md`
 
   - [ ] 6.4 Human-AI Checkpoint: Verify remediation complete
     **Type**: Architecture

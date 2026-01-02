@@ -45,17 +45,20 @@ describe('Component Registration', () => {
       expect(bundleContent).toContain('input-text-email');
       expect(bundleContent).toContain('button-cta');
       expect(bundleContent).toContain('dp-icon');
+      expect(bundleContent).toContain('icon-base');
       expect(bundleContent).toContain('dp-container');
       expect(bundleContent).toContain('container-base');
     });
 
-    it('should register all six custom elements via safeDefine', () => {
+    it('should register all eight custom elements via safeDefine', () => {
       // Requirements 4.1, 4.2, 4.3, 4.4
+      // Includes dual registration for Icon (dp-icon + icon-base) and Container (dp-container + container-base)
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]text-input-field['"]/);
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]input-text-base['"]/);
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]input-text-email['"]/);
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]button-cta['"]/);
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]dp-icon['"]/);
+      expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]icon-base['"]/);
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]dp-container['"]/);
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]container-base['"]/);
     });
@@ -67,6 +70,7 @@ describe('Component Registration', () => {
       expect(bundleContent).toMatch(/export\s*\{[^}]*InputTextEmail[^}]*\}/);
       expect(bundleContent).toMatch(/export\s*\{[^}]*ButtonCTA[^}]*\}/);
       expect(bundleContent).toMatch(/export\s*\{[^}]*DPIcon[^}]*\}/);
+      expect(bundleContent).toMatch(/export\s*\{[^}]*IconBaseElement[^}]*\}/);
       expect(bundleContent).toMatch(/export\s*\{[^}]*ContainerWeb[^}]*\}/);
       expect(bundleContent).toMatch(/export\s*\{[^}]*ContainerBaseWeb[^}]*\}/);
     });
@@ -125,11 +129,13 @@ describe('Component Registration', () => {
       expect(mockContext.DesignerPunk).toBeDefined();
     });
 
-    it('should register all five custom elements (Req 2.3, 4.1-4.4)', () => {
+    it('should register all eight custom elements (Req 2.3, 4.1-4.4)', () => {
+      // Includes dual registration for Icon (dp-icon + icon-base) and Container (dp-container + container-base)
       expect(registeredElements.has('text-input-field')).toBe(true);
       expect(registeredElements.has('input-text-base')).toBe(true);
       expect(registeredElements.has('button-cta')).toBe(true);
       expect(registeredElements.has('dp-icon')).toBe(true);
+      expect(registeredElements.has('icon-base')).toBe(true);
       expect(registeredElements.has('dp-container')).toBe(true);
       expect(registeredElements.has('container-base')).toBe(true);
     });
@@ -140,13 +146,15 @@ describe('Component Registration', () => {
       expect(dp.InputTextBase).toBeDefined();
       expect(dp.ButtonCTA).toBeDefined();
       expect(dp.DPIcon).toBeDefined();
+      expect(dp.IconBaseElement).toBeDefined();
       expect(dp.ContainerWeb).toBeDefined();
       expect(dp.ContainerBaseWeb).toBeDefined();
     });
 
-    it('should expose Icon and Container aliases', () => {
+    it('should expose Icon, IconBase, Container, and ContainerBase aliases', () => {
       const dp = mockContext.DesignerPunk as Record<string, unknown>;
       expect(dp.Icon).toBe(dp.DPIcon);
+      expect(dp.IconBase).toBe(dp.IconBaseElement);
       expect(dp.Container).toBe(dp.ContainerWeb);
       expect(dp.ContainerBase).toBe(dp.ContainerBaseWeb);
     });
@@ -165,24 +173,28 @@ describe('Component Registration', () => {
       expect(content).toContain("import { InputTextBase }");
       expect(content).toContain("import { InputTextEmail }");
       expect(content).toContain("import { ButtonCTA }");
+      expect(content).toContain("import { IconBaseElement }");
       expect(content).toContain("import { DPIcon }");
       expect(content).toContain("import { ContainerWeb }");
       expect(content).toContain("import { ContainerBaseWeb }");
     });
 
-    it('should have safeDefine calls for all six components', () => {
+    it('should have safeDefine calls for all eight components', () => {
+      // Includes dual registration for Icon (dp-icon + icon-base) and Container (dp-container + container-base)
       expect(content).toContain("safeDefine('text-input-field', TextInputField)");
       expect(content).toContain("safeDefine('input-text-base', InputTextBase)");
       expect(content).toContain("safeDefine('input-text-email', InputTextEmail)");
       expect(content).toContain("safeDefine('button-cta', ButtonCTA)");
       expect(content).toContain("safeDefine('dp-icon', DPIcon)");
+      expect(content).toContain("safeDefine('icon-base', IconBaseElement)");
       expect(content).toContain("safeDefine('dp-container', ContainerWeb)");
       expect(content).toContain("safeDefine('container-base', ContainerBaseWeb)");
     });
 
     it('should export all components for UMD global access', () => {
-      expect(content).toContain('export { TextInputField, InputTextBase, InputTextEmail, ButtonCTA, DPIcon, ContainerWeb, ContainerBaseWeb }');
+      expect(content).toContain('export { TextInputField, InputTextBase, InputTextEmail, ButtonCTA, DPIcon, IconBaseElement, ContainerWeb, ContainerBaseWeb }');
       expect(content).toContain('export const Icon = DPIcon');
+      expect(content).toContain('export const IconBase = IconBaseElement');
       expect(content).toContain('export const Container = ContainerWeb');
       expect(content).toContain('export const ContainerBase = ContainerBaseWeb');
     });

@@ -18,6 +18,9 @@ import { InputTextBase } from './components/core/Input-Text-Base/platforms/web/I
 import { InputTextEmail } from './components/core/Input-Text-Email/platforms/web/InputTextEmail.web';
 // Button-CTA - Stemma System naming (standalone component, no behavioral variants)
 import { ButtonCTA } from './components/core/Button-CTA/platforms/web/ButtonCTA.web';
+// Icon-Base - Stemma System naming (foundational primitive component)
+import { IconBaseElement } from './components/core/Icon-Base/platforms/web/IconBase.web';
+// Legacy Icon import for backward compatibility
 import { DPIcon } from './components/core/Icon/platforms/web/Icon.web';
 import { ContainerWeb } from './components/core/Container/platforms/web/Container.web';
 // Container-Base - Stemma System naming (foundational primitive component)
@@ -85,7 +88,9 @@ safeDefine('input-text-base', InputTextBase);
 safeDefine('input-text-email', InputTextEmail);
 // Button-CTA - Primary registration (Stemma System naming)
 safeDefine('button-cta', ButtonCTA);
-safeDefine('dp-icon', DPIcon);
+// Icon - Dual registration for backward compatibility
+safeDefine('dp-icon', DPIcon);  // Legacy tag (backward compatibility)
+safeDefine('icon-base', IconBaseElement);  // New Stemma System tag
 // Container - Dual registration for backward compatibility
 safeDefine('dp-container', ContainerWeb);  // Legacy tag (backward compatibility)
 safeDefine('container-base', ContainerBaseWeb);  // New Stemma System tag
@@ -103,9 +108,10 @@ if (typeof document !== 'undefined') {
 
 // Export all components for UMD global access and ESM imports
 // Requirements: 1.2, 2.3
-export { TextInputField, InputTextBase, InputTextEmail, ButtonCTA, DPIcon, ContainerWeb, ContainerBaseWeb };
+export { TextInputField, InputTextBase, InputTextEmail, ButtonCTA, DPIcon, IconBaseElement, ContainerWeb, ContainerBaseWeb };
 
 // Also export with more intuitive names for the UMD global
 export const Icon = DPIcon;
+export const IconBase = IconBaseElement;
 export const Container = ContainerWeb;
 export const ContainerBase = ContainerBaseWeb;

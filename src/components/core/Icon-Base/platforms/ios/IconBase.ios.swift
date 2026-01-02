@@ -1,0 +1,299 @@
+/**
+ * Icon-Base Component for iOS Platform
+ * 
+ * Stemma System: Icons Family
+ * Component Type: Primitive (Base)
+ * Naming Convention: [Family]-[Type] = Icon-Base
+ * 
+ * Renders icons from Asset Catalog with template rendering mode for color tinting.
+ * Icons automatically inherit foreground color from SwiftUI environment.
+ * 
+ * Uses theme-aware blend utilities for optical balance adjustment when icons are 
+ * paired with text. The iconBlend() extension from ThemeAwareBlendUtilities compensates 
+ * for icons appearing heavier than adjacent text due to stroke density and fill area.
+ * 
+ * Part of the DesignerPunk Icon System infrastructure.
+ * 
+ * @module Icon-Base/platforms/ios
+ * @see Requirements: 10.1, 10.2, 11.1, 11.2, 11.3 - Optical balance using theme-aware blend utilities
+ */
+
+import SwiftUI
+
+// Import theme-aware blend utilities from ThemeAwareBlendUtilities.ios.swift
+// Uses iconBlend() extension for consistent optical balance across components
+// @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
+
+/**
+ * Icon-Base component for iOS platform.
+ * 
+ * Renders Image from Asset Catalog with template rendering mode for color tinting.
+ * Icons inherit foreground color from environment and are hidden from VoiceOver
+ * for accessibility (decorative icons only).
+ * 
+ * Supports optical balance adjustment using theme-aware blend utilities instead of 
+ * opacity or filter workarounds. When opticalBalance is true, applies iconBlend()
+ * from ThemeAwareBlendUtilities to compensate for icons appearing heavier than adjacent text.
+ * 
+ * Usage:
+ * ```swift
+ * // Basic usage with token (REQUIRED - do not use raw numbers)
+ * IconBase(name: "arrow-right", size: DesignTokens.iconSize100)
+ * 
+ * // With custom color
+ * IconBase(name: "check", size: DesignTokens.iconSize150)
+ *     .foregroundColor(.blue)
+ * 
+ * // With optical balance for icon-text pairing
+ * IconBase(name: "arrow-right", size: DesignTokens.iconSize100, color: .white, opticalBalance: true)
+ * 
+ * // In a button with testID
+ * Button(action: action) {
+ *     HStack {
+ *         IconBase(name: "arrow-right", size: DesignTokens.iconSize100, testID: "next-button-icon")
+ *         Text("Next")
+ *     }
+ * }
+ * 
+ * // ❌ INCORRECT - Do not use raw numeric values
+ * // IconBase(name: "arrow-right", size: 24)  // This violates design system compliance
+ * ```
+ * 
+ * Requirements:
+ * - 1.1: Unified icon component API across platforms
+ * - 1.2: Type-safe icon names (enforced by Swift string type)
+ * - 1.3: Type-safe icon sizes (token-only approach for design system compliance)
+ * - 2.1, 2.2, 2.3: Size variants via icon size tokens (iconSize050-iconSize700)
+ * - 3.2: Color inheritance via template rendering mode
+ * - 7.2: Accessibility (hidden from VoiceOver, testID support for testing)
+ * - 10.1, 10.2: Optical balance using theme-aware blend utilities (iconBlend() instead of CSS filters)
+ * - 11.1, 11.2, 11.3: Theme-aware utilities for cross-platform consistency
+ * - 13.2: No filter: brightness() workarounds
+ */
+struct IconBase: View {
+    /// Icon name (references Asset Catalog image set)
+    let name: String
+    
+    /// Icon size from design tokens (token-only approach)
+    /// - Important: Only pass values from DesignTokens.iconSizeXXX. Raw numeric values are not supported.
+    let size: CGFloat
+    
+    /// Optional color override for optical weight compensation
+    /// - nil (default): Uses .primary color (inherits from environment)
+    /// - Color value: Uses specified color for optical balance
+    let color: Color?
+    
+    /// Optional optical balance adjustment using theme-aware blend utilities
+    /// - false (default): Use color as-is
+    /// - true: Apply iconBlend() from ThemeAwareBlendUtilities for optical weight compensation
+    /// - Note: Requires color to be specified (not nil) for optical balance to take effect
+    /// @see Requirements: 10.1, 10.2, 11.1, 11.2, 11.3 - Theme-aware optical balance
+    let opticalBalance: Bool
+    
+    /// Optional test identifier for UI testing
+    let testID: String?
+    
+    /// Initialize IconBase with token-based sizing
+    /// - Parameters:
+    ///   - name: Icon name from Asset Catalog
+    ///   - size: Icon size token from DesignTokens (e.g., DesignTokens.iconSize100)
+    ///            Do NOT pass raw numeric values - only use design tokens
+    ///   - color: Optional color override for optical balance
+    ///   - opticalBalance: Whether to apply lighterBlend for optical weight compensation
+    ///   - testID: Optional test identifier for UI testing
+    /// - Important: This component enforces token-only sizing for design system compliance.
+    ///              Always use DesignTokens.iconSizeXXX values, never raw numbers.
+    init(name: String, size: CGFloat, color: Color? = nil, opticalBalance: Bool = false, testID: String? = nil) {
+        self.name = name
+        self.size = size
+        self.color = color
+        self.opticalBalance = opticalBalance
+        self.testID = testID
+    }
+    
+    /// Compute the final color with optional optical balance adjustment
+    /// Uses theme-aware iconBlend() extension for cross-platform consistency
+    /// @see Requirements: 10.1, 10.2, 11.1, 11.2, 11.3 - Theme-aware optical balance
+    private var finalColor: Color {
+        guard let baseColor = color else {
+            return .primary
+        }
+        
+        if opticalBalance {
+            // Apply optical balance using iconBlend() from ThemeAwareBlendUtilities
+            // Uses lighterBlend(color, blend.iconLighter) internally (8% lighter)
+            // This uses theme-aware blend utilities instead of opacity or filter workarounds
+            return baseColor.iconBlend()
+        }
+        
+        return baseColor
+    }
+    
+    var body: some View {
+        Image(name)
+            .resizable()
+            .renderingMode(.template)
+            .frame(width: size, height: size)
+            .foregroundColor(finalColor)
+            .accessibilityHidden(true)
+            .accessibilityIdentifier(testID ?? "")
+    }
+}
+
+/**
+ * SwiftUI preview for IconBase component.
+ * 
+ * Shows icons at different sizes using design tokens and with different colors
+ * to demonstrate size variants, color inheritance, and optical balance.
+ * 
+ * Note: Preview uses token references (DesignTokens.iconSizeXXX) to demonstrate
+ * correct token usage pattern.
+ */
+struct IconBase_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack(spacing: 20) {
+            // Size variants using design tokens
+            Text("Size Variants (Token-Based)")
+                .font(.headline)
+            
+            HStack(spacing: 16) {
+                VStack {
+                    IconBase(name: "arrow-right", size: DesignTokens.iconSize075)
+                    Text("iconSize075 (20pt)")
+                        .font(.caption)
+                }
+                
+                VStack {
+                    IconBase(name: "arrow-right", size: DesignTokens.iconSize100)
+                    Text("iconSize100 (24pt)")
+                        .font(.caption)
+                }
+                
+                VStack {
+                    IconBase(name: "arrow-right", size: DesignTokens.iconSize200)
+                    Text("iconSize200 (32pt)")
+                        .font(.caption)
+                }
+                
+                VStack {
+                    IconBase(name: "arrow-right", size: DesignTokens.iconSize500)
+                    Text("iconSize500 (40pt)")
+                        .font(.caption)
+                }
+            }
+            
+            Divider()
+            
+            // Color inheritance (default)
+            Text("Color Inheritance (Default)")
+                .font(.headline)
+            
+            HStack(spacing: 16) {
+                IconBase(name: "check", size: DesignTokens.iconSize100)
+                    .foregroundColor(.green)
+                
+                IconBase(name: "x", size: DesignTokens.iconSize100)
+                    .foregroundColor(.red)
+                
+                IconBase(name: "heart", size: DesignTokens.iconSize100)
+                    .foregroundColor(.pink)
+                
+                IconBase(name: "settings", size: DesignTokens.iconSize100)
+                    .foregroundColor(.blue)
+            }
+            
+            Divider()
+            
+            // Color override (explicit)
+            Text("Color Override (Explicit)")
+                .font(.headline)
+            
+            HStack(spacing: 16) {
+                IconBase(name: "check", size: DesignTokens.iconSize100, color: .green)
+                IconBase(name: "x", size: DesignTokens.iconSize100, color: .red)
+                IconBase(name: "heart", size: DesignTokens.iconSize100, color: .pink)
+                IconBase(name: "settings", size: DesignTokens.iconSize100, color: .blue)
+            }
+            
+            Divider()
+            
+            // Optical balance demonstration
+            Text("Optical Balance (8% Lighter)")
+                .font(.headline)
+            
+            HStack(spacing: 16) {
+                VStack {
+                    IconBase(name: "arrow-right", size: DesignTokens.iconSize100, color: .blue)
+                    Text("Without")
+                        .font(.caption)
+                }
+                
+                VStack {
+                    IconBase(name: "arrow-right", size: DesignTokens.iconSize100, color: .blue, opticalBalance: true)
+                    Text("With Balance")
+                        .font(.caption)
+                }
+            }
+            
+            // Optical balance on dark background
+            HStack(spacing: 16) {
+                VStack {
+                    IconBase(name: "check", size: DesignTokens.iconSize100, color: .white)
+                    Text("Without")
+                        .font(.caption)
+                        .foregroundColor(.white)
+                }
+                
+                VStack {
+                    IconBase(name: "check", size: DesignTokens.iconSize100, color: .white, opticalBalance: true)
+                    Text("With Balance")
+                        .font(.caption)
+                        .foregroundColor(.white)
+                }
+            }
+            .padding()
+            .background(Color.blue)
+            .cornerRadius(8)
+            
+            Divider()
+            
+            // testID support demonstration
+            Text("testID Support")
+                .font(.headline)
+            
+            HStack(spacing: 16) {
+                IconBase(name: "arrow-right", size: DesignTokens.iconSize100, testID: "arrow-icon")
+                IconBase(name: "check", size: DesignTokens.iconSize100, testID: "check-icon")
+            }
+            
+            Divider()
+            
+            // Icon variety
+            Text("Icon Variety")
+                .font(.headline)
+            
+            HStack(spacing: 16) {
+                IconBase(name: "arrow-left", size: DesignTokens.iconSize100)
+                IconBase(name: "arrow-up", size: DesignTokens.iconSize100)
+                IconBase(name: "arrow-down", size: DesignTokens.iconSize100)
+                IconBase(name: "chevron-right", size: DesignTokens.iconSize100)
+            }
+            
+            HStack(spacing: 16) {
+                IconBase(name: "plus", size: DesignTokens.iconSize100)
+                IconBase(name: "minus", size: DesignTokens.iconSize100)
+                IconBase(name: "circle", size: DesignTokens.iconSize100)
+                IconBase(name: "user", size: DesignTokens.iconSize100)
+            }
+            
+            HStack(spacing: 16) {
+                IconBase(name: "mail", size: DesignTokens.iconSize100)
+                IconBase(name: "calendar", size: DesignTokens.iconSize100)
+            }
+        }
+        .padding()
+    }
+}
+
+// Legacy alias for backward compatibility
+typealias Icon = IconBase
