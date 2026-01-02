@@ -268,6 +268,24 @@ get_section({ path: ".kiro/steering/Component Quick Reference.md", heading: "MCP
 
 ---
 
+### 9. Test Development Standards
+**When needed**: Writing tests, debugging test failures, understanding test patterns, using Stemma System validators
+
+**File**: #[[file:.kiro/steering/Test Development Standards.md]]
+
+**How to access**:
+get_document_summary({ path: ".kiro/steering/Test Development Standards.md" })
+
+
+Then query the specific section you need:
+```
+get_section({ path: ".kiro/steering/Test Development Standards.md", heading: "Test Categories" }) get_section({ path: ".kiro/steering/Test Development Standards.md", heading: "Web Component Testing Patterns" }) get_section({ path: ".kiro/steering/Test Development Standards.md", heading: "Linting and Testing Integration" }) get_section({ path: ".kiro/steering/Test Development Standards.md", heading: "Integrated Workflow Examples" })
+```
+
+**Confirmation**: Reply "I've queried Test Development Standards via MCP!" after accessing
+
+---
+
 ## MCP Documentation Server (Primary for Large Docs)
 
 The MCP Documentation Server is the **primary source** for large steering documents. AI agents MUST query MCP for these documents rather than expecting them to be auto-loaded.
@@ -282,7 +300,7 @@ These documents are available ONLY via MCP queries:
 | Spec Planning Standards | `.kiro/steering/Spec Planning Standards.md` |
 | Component Development and Practices Guide | `.kiro/steering/Component Development and Practices Guide.md` |
 | Component Quick Reference | `.kiro/steering/Component Quick Reference.md` |
-| Test Failure Audit Methodology | `.kiro/steering/Test Failure Audit Methodology.md` |
+| Test Failure Audit Methodology | `.kiro/steering/Test Failure Audit Methodology.md` | Test Development Standards | `.kiro/steering/Test Development Standards.md` |
 
 ### How to Access MCP-Only Documents
 

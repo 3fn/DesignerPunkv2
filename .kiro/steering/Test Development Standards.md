@@ -24,6 +24,7 @@ inclusion: manual
 3. ✅ **Test Lifecycle Management** (when to write/update/delete)
 4. ✅ **Anti-Patterns** (avoid common mistakes)
 5. ❌ **SKIP**: Web component patterns (unless testing web components)
+6. ❌ **SKIP**: Linting integration (unless using Stemma validators)
 
 ### WHEN Testing Web Components THEN Read:
 1. ✅ **Web Component Testing Patterns** (JSDOM setup, async lifecycle)
@@ -36,6 +37,13 @@ inclusion: manual
 2. ✅ **Testing Philosophy** (behavior vs philosophical preferences)
 3. ✅ **Anti-Patterns** (integration test specific issues)
 4. ❌ **SKIP**: Web component patterns (unless integrating web components)
+
+### WHEN Using Stemma System Validators THEN Read:
+1. ✅ **Linting and Testing Integration** (when to use linting vs testing)
+2. ✅ **Stemma System Validators** (available validators and usage)
+3. ✅ **Decision Framework: Linting vs Testing** (choose validation type)
+4. ✅ **Complementary Validation Patterns** (combine linting and testing)
+5. ✅ **Stemma System Validation Checklist** (complete validation workflow)
 
 ### WHEN Debugging Test Failures THEN Read:
 1. ✅ **Anti-Patterns** (identify if test has known issues)
@@ -1171,7 +1179,837 @@ it('should use correct icon size for large buttons', () => {
 
 ---
 
+## Linting and Testing Integration
+
+### Overview
+
+The Stemma System introduces static analysis validators that complement runtime testing. Understanding when to use linting vs testing is essential for efficient validation without duplicating effort.
+
+**Dual Validation Approach**:
+- **Static Analysis (Linting)**: Validates structure, naming, and configuration at development time
+- **Runtime Testing**: Validates behavior, contracts, and interactions during test execution
+- **Together**: Comprehensive coverage with minimal redundancy
+
+### Validation Types
+
+| Validation Type | Mechanism | When Applied | What It Validates |
+|-----------------|-----------|--------------|-------------------|
+| **Static Analysis** | Linting/Validators | During development (IDE) | Structure, naming, configuration |
+| **Unit Tests** | Runtime | During test execution | Specific examples, edge cases |
+| **Integration Tests** | Runtime | During test execution | Component interaction, contracts |
+| **Property Tests** | Runtime | During test execution | Universal properties across inputs |
+| **Manual Validation** | Human review | During development | Documentation quality, UX |
+
+### Stemma System Validators
+
+The Stemma System provides four validators for static analysis:
+
+| Validator | Purpose | What It Catches |
+|-----------|---------|-----------------|
+| **StemmaComponentNamingValidator** | Naming convention compliance | Invalid [Family]-[Type]-[Variant] patterns, missing Base suffix |
+| **StemmaTokenUsageValidator** | Token usage compliance | Inline styles, hard-coded values, missing token references |
+| **StemmaPropertyAccessibilityValidator** | Property and accessibility | Missing required properties, WCAG violations |
+| **StemmaErrorGuidanceSystem** | Error guidance | Provides correction guidance and documentation links |
+
+**Import Example**:
+```typescript
+import {
+  validateComponentName,
+  validateTokenUsage,
+  validatePropertyAndAccessibility,
+  getErrorGuidance
+} from '../validators';
+```
+
+### When to Use Linting vs Testing
+
+#### Use Linting (Static Analysis) For:
+
+**Structural Validation**:
+- Component naming convention compliance
+- Token usage patterns (detecting inline styles)
+- Required property presence
+- Schema compliance
+- Configuration validation
+
+**Why Linting is Better**:
+- Immediate feedback during development
+- No runtime overhead
+- Catches issues before tests run
+- Consistent enforcement across codebase
+
+**Example - Naming Convention**:
+```typescript
+// Linting catches this immediately
+const result = validateComponentName('ButtonPrimary');
+// Error: Missing family prefix, should be "Button-CTA-Primary" or similar
+```
+
+#### Use Testing (Runtime) For:
+
+**Behavioral Validation**:
+- Component renders correctly
+- User interactions work as expected
+- Integration contracts are honored
+- Accessibility features function properly
+- Cross-platform consistency
+
+**Why Testing is Better**:
+- Validates actual behavior
+- Tests real user scenarios
+- Catches runtime issues
+- Verifies integration contracts
+
+**Example - Behavior**:
+```typescript
+// Testing validates actual behavior
+it('should render icon at correct size', () => {
+  const button = createButtonCTA({ size: 'small', icon: 'arrow-right' });
+  const icon = button.querySelector('.button-cta__icon');
+  expect(icon!.innerHTML).toContain('icon--size-100');
+});
+```
+
+### Decision Framework: Linting vs Testing
+
+**Ask these questions to determine validation type**:
+
+1. **Can this be validated without running code?**
+   - Yes → Linting
+   - No → Testing
+
+2. **Is this about structure or behavior?**
+   - Structure → Linting
+   - Behavior → Testing
+
+3. **Does this require user interaction simulation?**
+   - Yes → Testing
+   - No → Consider linting
+
+4. **Is this checking a naming convention or pattern?**
+   - Yes → Linting
+   - No → Testing
+
+5. **Does this need to verify runtime state?**
+   - Yes → Testing
+   - No → Linting
+
+**Decision Matrix**:
+
+| Validation Need | Linting | Testing | Both |
+|-----------------|---------|---------|------|
+| Component naming | ✅ | | |
+| Token usage patterns | ✅ | | |
+| Required properties present | ✅ | | |
+| Schema compliance | ✅ | | |
+| Component renders correctly | | ✅ | |
+| User interactions work | | ✅ | |
+| Integration contracts honored | | ✅ | |
+| Accessibility features work | | ✅ | |
+| WCAG compliance | ✅ | ✅ | ✅ |
+| Cross-platform consistency | | ✅ | |
+| Token values are correct | | ✅ | |
+
+### Complementary Validation Patterns
+
+#### Pattern 1: Linting + Unit Tests
+
+**Use Case**: Component development with structural and behavioral validation
+
+**Linting Validates**:
+- Component name follows [Family]-[Type]-[Variant] pattern
+- Token references are used (no inline styles)
+- Required properties are defined in schema
+
+**Unit Tests Validate**:
+- Component renders with correct output
+- Properties affect rendering correctly
+- Edge cases are handled
+
+**Example**:
+```typescript
+// Linting (static analysis)
+const namingResult = validateComponentName('Input-Text-Email');
+// ✅ Valid: Family=Input, Type=Text, Variant=Email
+
+// Unit Test (runtime)
+it('should render email input with correct type', () => {
+  const input = createInputTextEmail({ label: 'Email' });
+  expect(input.getAttribute('type')).toBe('email');
+});
+```
+
+#### Pattern 2: Linting + Integration Tests
+
+**Use Case**: Component integration with contract validation
+
+**Linting Validates**:
+- Both components follow naming conventions
+- Token usage is consistent
+- Properties match schema contracts
+
+**Integration Tests Validate**:
+- Components work together correctly
+- Integration contracts are honored
+- Data flows correctly between components
+
+**Example**:
+```typescript
+// Linting (static analysis)
+const buttonResult = validateComponentName('Button-CTA');
+const iconResult = validateComponentName('Icon-Base');
+// ✅ Both valid
+
+// Integration Test (runtime)
+it('should render button with icon at correct size', () => {
+  const button = createButtonCTA({ icon: 'arrow-right', size: 'small' });
+  const iconSpan = button.querySelector('.button-cta__icon');
+  expect(iconSpan!.innerHTML).toContain('icon--size-100');
+});
+```
+
+#### Pattern 3: Linting + Property Tests
+
+**Use Case**: Universal property validation across inputs
+
+**Linting Validates**:
+- Component structure is correct
+- Token patterns are followed
+- Schema is valid
+
+**Property Tests Validate**:
+- Properties hold for all valid inputs
+- Invariants are maintained
+- Contracts are universally honored
+
+**Example**:
+```typescript
+// Linting (static analysis)
+const schemaResult = validatePropertyAndAccessibility(
+  'Input-Text-Base',
+  { label: 'Test', value: '' },
+  schema
+);
+// ✅ Required properties present
+
+// Property Test (runtime)
+it.prop([fc.string().filter(s => s.trim().length > 0)])(
+  'should always render label for non-empty strings',
+  (label) => {
+    const input = createInputTextBase({ label });
+    const labelElement = input.querySelector('label');
+    expect(labelElement?.textContent).toBe(label);
+  }
+);
+```
+
+### Avoiding Validation Duplication
+
+**Anti-Pattern**: Testing what linting already validates
+
+❌ **Bad - Duplicates Linting**:
+```typescript
+// Linting already validates naming convention
+it('should have correct component name format', () => {
+  expect(componentName).toMatch(/^[A-Z][a-z]+-[A-Z][a-z]+-[A-Z][a-z]+$/);
+});
+```
+
+✅ **Good - Tests Behavior**:
+```typescript
+// Test actual behavior, not naming
+it('should render with correct accessibility attributes', () => {
+  const input = createInputTextEmail({ label: 'Email' });
+  expect(input.getAttribute('aria-label')).toBe('Email');
+});
+```
+
+**Anti-Pattern**: Linting what requires runtime validation
+
+❌ **Bad - Can't Lint Behavior**:
+```typescript
+// Can't validate rendering without running code
+const result = validateComponentRendersCorrectly('Button-CTA');
+```
+
+✅ **Good - Test Behavior**:
+```typescript
+// Test actual rendering behavior
+it('should render button with correct variant class', () => {
+  const button = createButtonCTA({ variant: 'primary' });
+  expect(button.classList.contains('button-cta--primary')).toBe(true);
+});
+```
+
+### Validation Workflow
+
+**Recommended Order**:
+
+1. **Pre-Development**: Schema validation (linting)
+   - Validate component schema structure
+   - Check naming convention compliance
+   - Verify token references
+
+2. **During Development**: Real-time linting (IDE)
+   - Immediate feedback on naming issues
+   - Token usage validation
+   - Property completeness checks
+
+3. **Post-Development**: Test execution (runtime)
+   - Unit tests for specific behavior
+   - Integration tests for contracts
+   - Property tests for universal properties
+
+4. **Pre-Merge**: Complete validation suite
+   - All linting passes
+   - All tests pass
+   - Manual review complete
+
+### Stemma System Validation Checklist
+
+**For New Components**:
+
+- [ ] **Naming**: `validateComponentName()` passes
+- [ ] **Token Usage**: `validateTokenUsage()` passes
+- [ ] **Properties**: `validatePropertyAndAccessibility()` passes
+- [ ] **Unit Tests**: Core behavior tested
+- [ ] **Integration Tests**: Contracts with dependencies tested
+- [ ] **Accessibility Tests**: WCAG compliance verified
+
+**For Component Updates**:
+
+- [ ] **Linting**: All validators still pass
+- [ ] **Existing Tests**: All tests still pass
+- [ ] **New Behavior**: New tests added for new behavior
+- [ ] **Contracts**: Integration contracts still honored
+
+### Cross-Reference to Validators
+
+**Validator Source Files**:
+- `src/validators/StemmaComponentNamingValidator.ts` - Naming convention validation
+- `src/validators/StemmaTokenUsageValidator.ts` - Token usage validation
+- `src/validators/StemmaPropertyAccessibilityValidator.ts` - Property and accessibility validation
+- `src/validators/StemmaErrorGuidanceSystem.ts` - Error guidance and IDE integration
+
+**Validator Tests**:
+- `src/validators/__tests__/StemmaComponentNamingValidator.test.ts`
+- `src/validators/__tests__/StemmaTokenUsageValidator.test.ts`
+- `src/validators/__tests__/StemmaPropertyAccessibilityValidator.test.ts`
+- `src/validators/__tests__/StemmaErrorGuidanceSystem.test.ts`
+
+**Behavioral Contract Tests**:
+- `src/__tests__/stemma-system/behavioral-contract-validation.test.ts`
+- `src/__tests__/stemma-system/form-inputs-contracts.test.ts`
+- `src/__tests__/stemma-system/cross-platform-consistency.test.ts`
+
+---
+
+## Integrated Workflow Examples
+
+This section provides concrete examples of combined validation workflows for different development scenarios. Each example shows how linting, unit tests, integration tests, and property tests work together.
+
+### Example 1: New Component Development Workflow
+
+**Scenario**: Creating a new semantic component `Input-Text-Search` that inherits from `Input-Text-Base`.
+
+#### Phase 1: Pre-Development Validation (Linting)
+
+Before writing any code, validate the component design:
+
+```typescript
+import { validateComponentName, validatePropertyAndAccessibility } from '../validators';
+
+// Step 1: Validate component name follows Stemma conventions
+const nameResult = validateComponentName('Input-Text-Search');
+console.log(nameResult);
+// ✅ { valid: true, family: 'Input', type: 'Text', variant: 'Search' }
+
+// Step 2: Validate schema structure
+const schemaResult = validatePropertyAndAccessibility(
+  'Input-Text-Search',
+  {
+    label: 'Search',
+    placeholder: 'Search...',
+    value: '',
+    // Required properties for Input-Text-Base inheritance
+  },
+  inputTextSearchSchema
+);
+// ✅ All required properties present
+```
+
+**Checkpoint**: All linting validations pass before proceeding to implementation.
+
+#### Phase 2: Implementation with Real-Time Linting
+
+During development, IDE linting provides immediate feedback:
+
+```typescript
+// src/components/core/Input-Text-Search/platforms/web/InputTextSearch.web.ts
+
+import { InputTextBase } from '../../Input-Text-Base';
+import { validateTokenUsage } from '../../../../../validators';
+
+export class InputTextSearch extends InputTextBase {
+  // IDE linting catches issues immediately:
+  
+  // ❌ BAD - Linting error: Inline style detected
+  // this.style.width = '200px';
+  
+  // ✅ GOOD - Uses token reference
+  // this.classList.add('input-text-search--width-standard');
+  
+  render() {
+    // Token usage validation during development
+    const tokenResult = validateTokenUsage(this.outerHTML);
+    // Catches any inline styles or hard-coded values
+  }
+}
+```
+
+#### Phase 3: Unit Tests (Runtime Validation)
+
+After implementation, write unit tests for specific behavior:
+
+```typescript
+// src/components/core/Input-Text-Search/__tests__/InputTextSearch.test.ts
+
+describe('Input-Text-Search', () => {
+  // Test 1: Core functionality
+  it('should render search input with correct type', () => {
+    const input = createInputTextSearch({ label: 'Search' });
+    expect(input.getAttribute('type')).toBe('search');
+  });
+
+  // Test 2: Search-specific behavior
+  it('should show clear button when value is present', () => {
+    const input = createInputTextSearch({ label: 'Search', value: 'test' });
+    const clearButton = input.querySelector('.input-text-search__clear');
+    expect(clearButton).toBeTruthy();
+  });
+
+  // Test 3: Inherited behavior from Input-Text-Base
+  it('should apply float label animation', () => {
+    const input = createInputTextSearch({ label: 'Search' });
+    input.focus();
+    expect(input.classList.contains('input-text--label-floated')).toBe(true);
+  });
+
+  // Test 4: Accessibility
+  it('should have correct ARIA attributes', () => {
+    const input = createInputTextSearch({ label: 'Search' });
+    expect(input.getAttribute('role')).toBe('searchbox');
+    expect(input.getAttribute('aria-label')).toBe('Search');
+  });
+});
+```
+
+#### Phase 4: Integration Tests (Contract Validation)
+
+Test integration with other components:
+
+```typescript
+// src/components/core/Input-Text-Search/__tests__/InputTextSearch.integration.test.ts
+
+describe('Input-Text-Search Integration', () => {
+  // Test 1: Integration with Icon-Base
+  it('should render search icon using Icon-Base', () => {
+    const input = createInputTextSearch({ label: 'Search', showIcon: true });
+    const iconSpan = input.querySelector('.input-text-search__icon');
+    
+    // Verify integration contract - Icon-Base CSS class present
+    expect(iconSpan!.innerHTML).toContain('icon--size-100');
+  });
+
+  // Test 2: Integration with Button-CTA (clear button)
+  it('should use Button-CTA for clear action', () => {
+    const input = createInputTextSearch({ label: 'Search', value: 'test' });
+    const clearButton = input.querySelector('.input-text-search__clear');
+    
+    // Verify Button-CTA integration
+    expect(clearButton!.classList.contains('button-cta')).toBe(true);
+  });
+
+  // Test 3: Form integration
+  it('should work within form submission', () => {
+    const form = document.createElement('form');
+    const input = createInputTextSearch({ label: 'Search', name: 'query' });
+    form.appendChild(input);
+    
+    input.value = 'test query';
+    const formData = new FormData(form);
+    expect(formData.get('query')).toBe('test query');
+  });
+});
+```
+
+#### Phase 5: Property Tests (Universal Properties)
+
+Validate properties that should hold for all inputs:
+
+```typescript
+// src/components/core/Input-Text-Search/__tests__/InputTextSearch.property.test.ts
+
+import * as fc from 'fast-check';
+
+describe('Input-Text-Search Properties', () => {
+  // Property 1: Label always renders for non-empty strings
+  it.prop([fc.string().filter(s => s.trim().length > 0)])(
+    'should always render label for non-empty strings',
+    (label) => {
+      const input = createInputTextSearch({ label });
+      const labelElement = input.querySelector('label');
+      expect(labelElement?.textContent).toBe(label);
+    }
+  );
+
+  // Property 2: Value round-trip
+  it.prop([fc.string()])(
+    'should preserve value through get/set cycle',
+    (value) => {
+      const input = createInputTextSearch({ label: 'Search' });
+      input.value = value;
+      expect(input.value).toBe(value);
+    }
+  );
+
+  // Property 3: Clear button visibility
+  it.prop([fc.string().filter(s => s.length > 0)])(
+    'should show clear button for any non-empty value',
+    (value) => {
+      const input = createInputTextSearch({ label: 'Search', value });
+      const clearButton = input.querySelector('.input-text-search__clear');
+      expect(clearButton).toBeTruthy();
+    }
+  );
+});
+```
+
+#### Phase 6: Pre-Merge Validation
+
+Complete validation checklist before merging:
+
+```bash
+# 1. Run all linting validators
+npm run lint:stemma
+
+# 2. Run unit tests
+npm test -- src/components/core/Input-Text-Search/__tests__/InputTextSearch.test.ts
+
+# 3. Run integration tests
+npm test -- src/components/core/Input-Text-Search/__tests__/InputTextSearch.integration.test.ts
+
+# 4. Run property tests
+npm test -- src/components/core/Input-Text-Search/__tests__/InputTextSearch.property.test.ts
+
+# 5. Run full test suite
+npm test
+```
+
+---
+
+### Example 2: Component Migration Workflow
+
+**Scenario**: Migrating existing `SearchInput` component to Stemma System naming (`Input-Text-Search`).
+
+#### Phase 1: Pre-Migration Analysis
+
+```typescript
+import { validateComponentName } from '../validators';
+
+// Validate old name (expected to fail)
+const oldNameResult = validateComponentName('SearchInput');
+// ❌ { valid: false, error: 'Missing family prefix' }
+
+// Validate new name
+const newNameResult = validateComponentName('Input-Text-Search');
+// ✅ { valid: true, family: 'Input', type: 'Text', variant: 'Search' }
+```
+
+#### Phase 2: Create Temporary Migration Tests
+
+```typescript
+// TEMPORARY TEST - Delete after migration complete
+// Retirement Criteria: SearchInput fully migrated to Input-Text-Search
+
+describe('SearchInput Migration (TEMPORARY)', () => {
+  it('should have backward compatibility alias', () => {
+    // Old import still works during migration
+    const { SearchInput } = require('../legacy/SearchInput');
+    const { InputTextSearch } = require('../Input-Text-Search');
+    
+    // Both should produce equivalent output
+    const oldInput = new SearchInput({ label: 'Search' });
+    const newInput = new InputTextSearch({ label: 'Search' });
+    
+    expect(oldInput.render()).toEqual(newInput.render());
+  });
+});
+```
+
+#### Phase 3: Update Existing Tests
+
+```typescript
+// Before: Tests using old component name
+describe('SearchInput', () => {
+  it('should render search input', () => {
+    const input = createSearchInput({ label: 'Search' });
+    // ...
+  });
+});
+
+// After: Tests using new Stemma System name
+describe('Input-Text-Search', () => {
+  it('should render search input', () => {
+    const input = createInputTextSearch({ label: 'Search' });
+    // ...
+  });
+});
+```
+
+#### Phase 4: Validate Migration Complete
+
+```typescript
+// Run linting to verify all references updated
+import { validateTokenUsage } from '../validators';
+
+// Check no references to old component name remain
+const codebaseResult = validateTokenUsage(codebaseContent);
+// Should not find 'SearchInput' references
+```
+
+#### Phase 5: Delete Temporary Tests
+
+After migration is complete, delete temporary tests with clear commit message:
+
+```
+Delete temporary SearchInput migration tests
+
+Retirement criteria met:
+- SearchInput fully migrated to Input-Text-Search
+- All imports updated to new name
+- Backward compatibility period complete
+
+These tests verified migration progress and are no longer needed.
+```
+
+---
+
+### Example 3: Integration Contract Update Workflow
+
+**Scenario**: Updating Button-CTA to use new Icon-Base sizing tokens.
+
+#### Phase 1: Validate Contract Change
+
+```typescript
+import { validateComponentName, validateTokenUsage } from '../validators';
+
+// Verify both components follow Stemma conventions
+validateComponentName('Button-CTA');  // ✅
+validateComponentName('Icon-Base');   // ✅
+
+// Document the contract change
+// OLD: Button-CTA passes pixel values to Icon
+// NEW: Button-CTA passes token references to Icon
+```
+
+#### Phase 2: Update Integration Tests
+
+```typescript
+// Before: Tests checked pixel values (implementation detail)
+it('should render 24px icon for small buttons', () => {
+  const button = createButtonCTA({ size: 'small', icon: 'arrow-right' });
+  const iconSpan = button.querySelector('.button-cta__icon');
+  // ❌ BAD - Tests implementation detail
+  expect(iconSpan!.innerHTML).toContain('width="24"');
+});
+
+// After: Tests check contract (token-based sizing)
+it('should use correct icon size token for small buttons', () => {
+  const button = createButtonCTA({ size: 'small', icon: 'arrow-right' });
+  const iconSpan = button.querySelector('.button-cta__icon');
+  // ✅ GOOD - Tests integration contract
+  expect(iconSpan!.innerHTML).toContain('icon--size-100');
+});
+```
+
+#### Phase 3: Add Contract Property Tests
+
+```typescript
+describe('Button-CTA + Icon-Base Contract Properties', () => {
+  // Property: Icon size always matches button size variant
+  it.prop([fc.constantFrom('small', 'medium', 'large')])(
+    'should use correct icon size for button variant',
+    (size) => {
+      const button = createButtonCTA({ size, icon: 'arrow-right' });
+      const iconSpan = button.querySelector('.button-cta__icon');
+      
+      const expectedClass = size === 'large' ? 'icon--size-200' : 'icon--size-100';
+      expect(iconSpan!.innerHTML).toContain(expectedClass);
+    }
+  );
+});
+```
+
+#### Phase 4: Validate No Regression
+
+```bash
+# Run integration tests
+npm test -- src/components/core/Button-CTA/__tests__/ButtonCTA.icon-integration.test.ts
+
+# Run behavioral contract tests
+npm test -- src/__tests__/stemma-system/behavioral-contract-validation.test.ts
+
+# Run cross-platform consistency tests
+npm test -- src/__tests__/stemma-system/cross-platform-consistency.test.ts
+```
+
+---
+
+### Example 4: Cross-Platform Consistency Workflow
+
+**Scenario**: Ensuring Input-Text-Email behaves consistently across web, iOS, and Android.
+
+#### Phase 1: Define Behavioral Contracts
+
+```yaml
+# Input-Text-Email.schema.yaml
+behavioral_contracts:
+  - name: email_validation
+    description: Validates email format on blur
+    platforms: [web, ios, android]
+    
+  - name: email_autocomplete
+    description: Provides email autocomplete suggestions
+    platforms: [web, ios, android]
+    
+  - name: keyboard_type
+    description: Shows email-optimized keyboard
+    platforms: [ios, android]
+```
+
+#### Phase 2: Write Cross-Platform Contract Tests
+
+```typescript
+// src/__tests__/stemma-system/input-text-email-contracts.test.ts
+
+describe('Input-Text-Email Cross-Platform Contracts', () => {
+  const platforms = ['web', 'ios', 'android'];
+  
+  platforms.forEach(platform => {
+    describe(`${platform} platform`, () => {
+      // Contract 1: Email validation
+      it('should validate email format on blur', () => {
+        const input = createInputTextEmail({ label: 'Email', platform });
+        input.value = 'invalid-email';
+        input.blur();
+        
+        expect(input.validity.valid).toBe(false);
+        expect(input.validationMessage).toContain('email');
+      });
+
+      // Contract 2: Email autocomplete
+      it('should have email autocomplete attribute', () => {
+        const input = createInputTextEmail({ label: 'Email', platform });
+        expect(input.getAttribute('autocomplete')).toBe('email');
+      });
+    });
+  });
+
+  // Platform-specific tests (acceptable variations)
+  describe('Platform-specific behavior', () => {
+    it('should show email keyboard on iOS', () => {
+      const input = createInputTextEmail({ label: 'Email', platform: 'ios' });
+      expect(input.keyboardType).toBe('emailAddress');
+    });
+
+    it('should show email keyboard on Android', () => {
+      const input = createInputTextEmail({ label: 'Email', platform: 'android' });
+      expect(input.inputType).toBe('textEmailAddress');
+    });
+  });
+});
+```
+
+#### Phase 3: Validate with Contract Test Reporter
+
+```typescript
+import { ContractTestReporter } from '../stemma-system/contract-test-reporter';
+
+const reporter = new ContractTestReporter();
+
+// Run contract validation
+const results = reporter.validateContracts('Input-Text-Email', [
+  'email_validation',
+  'email_autocomplete',
+  'keyboard_type'
+]);
+
+// Generate report
+console.log(reporter.generateReport());
+// Output:
+// Input-Text-Email Contract Validation
+// =====================================
+// ✅ email_validation: PASS (web, ios, android)
+// ✅ email_autocomplete: PASS (web, ios, android)
+// ✅ keyboard_type: PASS (ios, android) - N/A for web
+```
+
+---
+
+### Workflow Summary by Task Type
+
+| Task Type | Linting | Unit Tests | Integration Tests | Property Tests | Manual Review |
+|-----------|---------|------------|-------------------|----------------|---------------|
+| **New Component** | ✅ Pre-dev + During | ✅ Core behavior | ✅ Dependencies | ✅ Universal props | ✅ Accessibility |
+| **Component Migration** | ✅ Name validation | ✅ Update existing | ✅ Contract preservation | ⚪ If applicable | ✅ Breaking changes |
+| **Contract Update** | ✅ Token usage | ⚪ If behavior changes | ✅ Contract tests | ✅ Contract props | ✅ API changes |
+| **Cross-Platform** | ✅ Schema validation | ✅ Platform-specific | ✅ Contract consistency | ✅ Behavioral props | ✅ UX consistency |
+| **Bug Fix** | ⚪ If structural | ✅ Regression test | ⚪ If integration | ⚪ If universal | ⚪ If UX impact |
+
+**Legend**: ✅ Required | ⚪ Conditional | ❌ Not needed
+
+---
+
+### Quick Reference: Validation Commands
+
+```bash
+# Linting validation
+npm run lint:stemma                    # Run all Stemma validators
+npm run lint:stemma:naming             # Component naming only
+npm run lint:stemma:tokens             # Token usage only
+
+# Unit tests
+npm test -- path/to/component.test.ts  # Single test file
+npm test -- --testPathPattern=Button   # Pattern matching
+
+# Integration tests
+npm test -- --testPathPattern=integration
+
+# Property tests
+npm test -- --testPathPattern=property
+
+# Stemma system tests
+npm test -- src/__tests__/stemma-system/
+
+# Full validation suite
+npm test                               # All tests
+npm run test:all                       # Including performance tests
+```
+
+---
+
 ## Cross-References
+
+### Behavioral Contract Validation Framework
+**File**: `.kiro/steering/behavioral-contract-validation-framework.md`
+
+**Related Content**:
+- Behavioral contract validation criteria
+- Cross-platform consistency validation
+- Contract test patterns
+
+**When to Reference**: When writing behavioral contract tests or validating cross-platform consistency.
 
 ### Component Development and Practices Guide
 **File**: `.kiro/steering/Component Development and Practices Guide.md`
