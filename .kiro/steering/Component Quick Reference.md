@@ -10,7 +10,7 @@ inclusion: manual
 **Scope**: cross-project
 **Layer**: 2
 **Relevant Tasks**: component-development, ui-composition, feature-building
-**Last Reviewed**: 2026-01-01
+**Last Reviewed**: 2026-01-02
 
 ---
 
@@ -25,6 +25,8 @@ For comprehensive understanding of the Stemma System architecture, family inheri
 This document serves as a routing table for component documentation—it helps AI agents quickly find the right MCP document for each component family without loading full reference docs. This is not a reference itself; it routes to where component details are documented.
 
 ## Component Documentation Map
+
+All 11 component families have MCP-queryable documentation. Production families have full implementation details; placeholder families have structural definitions for future development.
 
 | Component Family | Shared Need/Purpose | MCP Document Path | Status |
 |------------------|---------------------|-------------------|--------|
@@ -42,32 +44,37 @@ This document serves as a routing table for component documentation—it helps A
 
 **Status Legend**: 🟢 Production Ready | 🟡 Beta | 🔴 Placeholder | ⚠️ Deprecated
 
+**Family Count**: 4 Production Ready, 7 Placeholder (structural definitions for future development)
+
 ## Naming Convention
 
 Components follow the **[Family]-[Type]-[Variant]** pattern:
-- **Primitives**: Use "Base" suffix (e.g., `Input-Text-Base`, `Button-CTA-Primary`)
+- **Primitives**: Use "Base" suffix when semantic variants exist (e.g., `Input-Text-Base`, `Container-Base`, `Icon-Base`)
+- **Standalone Components**: No suffix when no behavioral variants exist (e.g., `Button-CTA`)
 - **Semantics**: Use descriptive variants (e.g., `Input-Text-Email`, `Input-Text-Password`)
+
+**Key Distinction**: The `-Base` suffix indicates a primitive that serves as foundation for semantic variants. Standalone components like `Button-CTA` don't need `-Base` because styling is handled via props, not behavioral inheritance.
 
 ## Common Composition Patterns
 
 ### Login Form
 - **Form Inputs**: `Input-Text-Email`, `Input-Text-Password`
-- **Buttons**: `Button-CTA-Primary` (submit)
+- **Buttons**: `Button-CTA` (submit, variant="primary")
 - **Containers**: `Container-Base` (form wrapper)
 - **Tokens**: `spacing-tokens.md` → stack patterns, `color-tokens.md` → form colors
 
 ### Feed Post
-- **Avatars**: `Avatar-User-Base`
-- **Buttons**: `Button-Icon-Base`, `Button-CTA-Secondary`
-- **Data Displays**: `Display-Text-Base`, `Display-Media-Base`
-- **Containers**: `Container-Card-Base`
+- **Avatars**: `Avatar-Base` (planned)
+- **Buttons**: `Button-CTA` (variant="secondary" for actions)
+- **Data Displays**: `Display-Base` (planned)
+- **Containers**: `Container-Base` (card wrapper)
 - **Tokens**: `shadow-tokens.md` → card elevation, `spacing-tokens.md` → content spacing
 
 ### Settings Panel
-- **Form Inputs**: `Input-Text-Base`, `Input-Toggle-Base`
-- **Containers**: `Container-Section-Base`
-- **Dividers**: `Divider-Horizontal-Base`
-- **Navigation**: `Nav-List-Base`
+- **Form Inputs**: `Input-Text-Base` (for custom inputs)
+- **Containers**: `Container-Base` (section wrapper)
+- **Dividers**: `Divider-Base` (planned)
+- **Navigation**: `Nav-Base` (planned)
 - **Tokens**: `layering-tokens.md` → panel stacking, `radius-tokens.md` → section corners
 
 ## MCP Query Examples
@@ -128,6 +135,9 @@ get_section({ path: ".kiro/steering/form-inputs-components.md", heading: "Cross-
 
 // Get component schema definitions
 get_section({ path: ".kiro/steering/button-components.md", heading: "Component Schemas" })
+
+// Get placeholder family planned characteristics
+get_section({ path: ".kiro/steering/modal-components.md", heading: "Planned Characteristics" })
 ```
 
 **Returns**: Section content with parent heading context for document location.
@@ -191,7 +201,7 @@ get_section({ path: ".kiro/steering/form-inputs-components.md", heading: "Input-
 get_section({ path: ".kiro/steering/form-inputs-components.md", heading: "Input-Text-Password" })
 
 // Step 3: Get button for submit action
-get_section({ path: ".kiro/steering/button-components.md", heading: "Button-CTA-Primary" })
+get_section({ path: ".kiro/steering/button-components.md", heading: "Button-CTA" })
 
 // Step 4: Get container for layout
 get_section({ path: ".kiro/steering/container-components.md", heading: "Container-Base" })
