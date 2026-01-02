@@ -30,9 +30,9 @@ import * as path from 'path';
 // Component source file paths
 const COMPONENT_PATHS = {
   buttonCTA: {
-    web: 'src/components/core/ButtonCTA/platforms/web/ButtonCTA.web.ts',
-    ios: 'src/components/core/ButtonCTA/platforms/ios/ButtonCTA.ios.swift',
-    android: 'src/components/core/ButtonCTA/platforms/android/ButtonCTA.android.kt'
+    web: 'src/components/core/Button-CTA/platforms/web/ButtonCTA.web.ts',
+    ios: 'src/components/core/Button-CTA/platforms/ios/ButtonCTA.ios.swift',
+    android: 'src/components/core/Button-CTA/platforms/android/ButtonCTA.android.kt'
   },
   textInputField: {
     web: 'src/components/core/TextInputField/platforms/web/TextInputField.web.ts',

@@ -1,3 +1,4 @@
 {
-    "kiroAgent.configureMCP": "Enabled"
+    "kiroAgent.configureMCP": "Enabled",
+    "html.autoClosingTags": false
 }

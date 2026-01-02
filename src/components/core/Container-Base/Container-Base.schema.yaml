@@ -1,0 +1,383 @@
+# Container-Base Component Schema
+#
+# Stemma System: Containers Family
+# Component Type: Primitive (Base)
+# Naming Convention: [Family]-[Type] = Container-Base
+#
+# This schema defines the behavioral contracts and properties for the
+# Container-Base component, which serves as the foundational primitive
+# for all container components in the Containers family.
+#
+# Rationale: Container-Base is a primitive component that provides structural
+# wrapping with individual styling capabilities. It serves as the building
+# block for semantic components (Card, Panel, Hero) by exposing granular
+# styling props that map to design system tokens.
+
+name: Container-Base
+type: primitive
+family: Containers
+version: "1.0.0"
+readiness: production-ready
+
+# Component description
+description: |
+  Foundational container component providing structural wrapping with individual
+  styling capabilities. Serves as the primitive base for all semantic container
+  components (Card, Panel, Hero, etc.) in the Containers family.
+  
+  Container-Base exposes granular styling props that map directly to design system
+  tokens, enabling flexible composition while maintaining design system consistency.
+  Supports semantic HTML elements (web), safe area handling (iOS), and native
+  elevation (Android).
+
+# Reusable behaviors this component implements
+behaviors:
+  - containable
+  - styleable
+  - accessible
+  - hoverable
+
+# Component properties (public API)
+properties:
+  padding:
+    type: "'none' | '050' | '100' | '150' | '200' | '300' | '400'"
+    required: false
+    default: undefined
+    description: |
+      Internal padding for the container. Maps to space.inset tokens.
+      - none: No padding
+      - 050: 4px (space.inset.050)
+      - 100: 8px (space.inset.100)
+      - 150: 12px (space.inset.150)
+      - 200: 16px (space.inset.200)
+      - 300: 24px (space.inset.300)
+      - 400: 32px (space.inset.400)
+  
+  background:
+    type: ColorTokenName
+    required: false
+    default: undefined
+    description: |
+      Background color for the container. Accepts any semantic color token name.
+      Use generated ColorTokenName type for compile-time validation.
+  
+  shadow:
+    type: ShadowTokenName
+    required: false
+    default: undefined
+    description: |
+      Shadow for the container. Accepts any semantic shadow token name.
+      Note: On Android, if both shadow and layering props are provided,
+      layering takes precedence (elevation handles both stacking and shadow).
+  
+  border:
+    type: "'none' | 'default' | 'emphasis' | 'heavy'"
+    required: false
+    default: undefined
+    description: |
+      Border width for the container. Maps to border tokens.
+      - none: No border
+      - default: 1px (border.border.default)
+      - emphasis: 2px (border.border.emphasis)
+      - heavy: 4px (border.border.heavy)
+      Border color uses color.border token.
+  
+  borderRadius:
+    type: "'none' | 'tight' | 'normal' | 'loose'"
+    required: false
+    default: undefined
+    description: |
+      Border radius for the container. Maps to radius tokens.
+      - none: No border radius (0px)
+      - tight: 4px (radius-050)
+      - normal: 8px (radius-100)
+      - loose: 16px (radius-200)
+  
+  opacity:
+    type: OpacityTokenName
+    required: false
+    default: undefined
+    description: |
+      Opacity for the container. Accepts any semantic opacity token name.
+      Use generated OpacityTokenName type for compile-time validation.
+  
+  layering:
+    type: "'container' | 'navigation' | 'dropdown' | 'modal' | 'toast' | 'tooltip'"
+    required: false
+    default: undefined
+    description: |
+      Stacking order for the container. Maps to platform-specific tokens:
+      - Web/iOS: z-index tokens (zIndex.container through zIndex.tooltip)
+      - Android: elevation tokens (handles both stacking order and shadow)
+  
+  semantic:
+    type: "'div' | 'section' | 'article' | 'aside' | 'nav' | 'header' | 'footer' | 'main' | 'fieldset'"
+    required: false
+    default: "'div'"
+    description: |
+      Semantic HTML element to render (web only). Allows Container-Base to
+      render as semantic HTML elements for improved accessibility and SEO.
+      Ignored on iOS and Android platforms.
+    platform: web
+  
+  accessibilityLabel:
+    type: string
+    required: false
+    default: undefined
+    description: |
+      Accessibility label for the container. Platform-specific implementation:
+      - Web: aria-label attribute
+      - iOS: .accessibilityLabel() modifier
+      - Android: contentDescription in semantics
+  
+  ignoresSafeArea:
+    type: boolean
+    required: false
+    default: false
+    description: |
+      Whether to ignore safe area insets (iOS only). When true, Container-Base
+      extends into safe area regions (notch, home indicator).
+      Ignored on web and Android platforms.
+    platform: ios
+  
+  hoverable:
+    type: boolean
+    required: false
+    default: false
+    description: |
+      Whether hover state is enabled. When true, Container-Base shows a
+      darkened background on hover using darkerBlend(color.surface, blend.hoverDarker).
+      Platform-specific implementation:
+      - Web: CSS :hover pseudo-class with blend utility
+      - iOS: SwiftUI .onHover modifier (macOS/iPadOS with pointer)
+      - Android: Compose hoverable modifier (desktop/ChromeOS with pointer)
+  
+  children:
+    type: any
+    required: false
+    description: |
+      Child content to render inside the container. Platform-specific types:
+      - Web: HTMLElement children via slot
+      - iOS: SwiftUI View via @ViewBuilder
+      - Android: Composable content lambda
+
+
+# Behavioral contracts - guarantees this component provides
+# These 7 contracts define the foundational behaviors for Container-Base
+contracts:
+  contains_children:
+    description: Can contain child components
+    behavior: |
+      Container-Base can contain any child components or content.
+      Children are rendered inside the container with applied styling.
+      Platform-specific implementation:
+      - Web: Uses <slot> element for content projection
+      - iOS: Uses @ViewBuilder for child content
+      - Android: Uses Composable content lambda
+    wcag: "1.3.1 Info and Relationships"
+    platforms: [web, ios, android]
+    validation: |
+      - Child content renders inside container
+      - Container styling does not affect child styling
+      - Children maintain their own accessibility properties
+  
+  applies_padding:
+    description: Applies consistent internal padding
+    behavior: |
+      When padding prop is set, Container-Base applies uniform padding
+      on all sides using space.inset tokens. Padding values follow the
+      8px baseline grid with mathematical relationships.
+    wcag: "1.4.12 Text Spacing"
+    platforms: [web, ios, android]
+    validation: |
+      - Padding applied uniformly on all sides
+      - Padding values match space.inset token values
+      - Padding does not affect child component spacing
+      - 'none' value results in zero padding
+  
+  applies_background:
+    description: Applies background color styling
+    behavior: |
+      When background prop is set, Container-Base applies the specified
+      semantic color token as the background color. Background color
+      is applied behind all child content.
+    wcag: "1.4.3 Contrast (Minimum)"
+    platforms: [web, ios, android]
+    validation: |
+      - Background color matches specified token value
+      - Background renders behind all child content
+      - Background respects border radius when set
+      - Undefined background results in transparent
+  
+  applies_shadow:
+    description: Applies shadow/elevation styling
+    behavior: |
+      When shadow prop is set, Container-Base applies the specified
+      semantic shadow token. Platform-specific implementation:
+      - Web/iOS: Shadow rendered using shadow token values
+      - Android: Shadow rendered via elevation (if layering not set)
+      Note: On Android, layering prop takes precedence over shadow.
+    wcag: "1.4.11 Non-text Contrast"
+    platforms: [web, ios, android]
+    validation: |
+      - Shadow matches specified token values
+      - Shadow respects border radius when set
+      - Android: layering takes precedence over shadow
+      - Undefined shadow results in no shadow
+  
+  applies_border:
+    description: Applies border styling
+    behavior: |
+      When border prop is set, Container-Base applies a border with
+      the specified width using border tokens. Border color is always
+      color.border token for consistency. Border respects border radius.
+    wcag: "1.4.11 Non-text Contrast"
+    platforms: [web, ios, android]
+    validation: |
+      - Border width matches specified token value
+      - Border color uses color.border token
+      - Border respects border radius when set
+      - 'none' value results in no border
+  
+  applies_radius:
+    description: Applies border radius styling
+    behavior: |
+      When borderRadius prop is set, Container-Base applies rounded
+      corners using radius tokens. Border radius affects background,
+      border, and shadow rendering.
+    wcag: N/A
+    platforms: [web, ios, android]
+    validation: |
+      - Border radius matches specified token value
+      - Radius applied to all four corners uniformly
+      - Background clips to border radius
+      - Shadow respects border radius
+      - 'none' value results in sharp corners
+  
+  hover_state:
+    description: Visual feedback on hover (pointer devices only)
+    behavior: |
+      When hoverable prop is true and user hovers with a pointer device,
+      Container-Base shows visual feedback by darkening the background
+      using darkerBlend(color.surface, blend.hoverDarker) - 8% darker.
+      Transition uses motion.focusTransition token for smooth animation.
+    wcag: "1.4.13 Content on Hover or Focus"
+    platforms: [web, ios, android]
+    validation: |
+      - Background darkens on hover when hoverable is true
+      - Hover uses blend.hoverDarker token (8% darker)
+      - Transition uses motion.focusTransition timing
+      - Hover state only applies with pointer devices
+      - iOS: Only on macOS/iPadOS with pointer
+      - Android: Only on desktop/ChromeOS with pointer
+
+# Design tokens this component requires
+tokens:
+  spacing:
+    - space.inset.050
+    - space.inset.100
+    - space.inset.150
+    - space.inset.200
+    - space.inset.300
+    - space.inset.400
+  color:
+    - color.background
+    - color.surface
+    - color.border
+    - color.canvas
+  shadow:
+    - shadow.container
+    - shadow.navigation
+    - shadow.dropdown
+    - shadow.modal
+    - shadow.toast
+    - shadow.tooltip
+  border:
+    - border.border.default
+    - border.border.emphasis
+    - border.border.heavy
+  radius:
+    - radius-050
+    - radius-100
+    - radius-200
+  layering:
+    - zIndex.container
+    - zIndex.navigation
+    - zIndex.dropdown
+    - zIndex.modal
+    - zIndex.toast
+    - zIndex.tooltip
+  elevation:
+    - elevation.container
+    - elevation.navigation
+    - elevation.dropdown
+    - elevation.modal
+    - elevation.toast
+    - elevation.tooltip
+  motion:
+    - motion.focusTransition
+  blend:
+    - blend.hoverDarker
+
+# Supported platforms
+platforms:
+  - web
+  - ios
+  - android
+
+# Platform-specific implementation notes
+platform_notes:
+  web:
+    element: "<container-base>"
+    legacy_element: "<dp-container>"
+    implementation: Web Component with Shadow DOM
+    file: platforms/web/ContainerBase.web.ts
+    notes: |
+      - Uses Shadow DOM for style encapsulation
+      - Supports semantic HTML elements via semantic prop
+      - Hover state uses CSS :hover with blend utilities
+      - Legacy <dp-container> tag supported for backward compatibility
+  ios:
+    implementation: SwiftUI View
+    file: platforms/ios/ContainerBase.ios.swift
+    notes: |
+      - Uses SwiftUI modifier chains for styling
+      - Supports safe area control via ignoresSafeArea prop
+      - Hover state uses .onHover modifier (macOS/iPadOS with pointer)
+      - Uses @ViewBuilder for child content
+  android:
+    implementation: Jetpack Compose Composable
+    file: platforms/android/ContainerBase.android.kt
+    notes: |
+      - Uses Compose modifier chains for styling
+      - Elevation tokens handle both stacking order and shadow
+      - If both layering and shadow props provided, layering takes precedence
+      - Hover state uses hoverable modifier (desktop/ChromeOS with pointer)
+      - Development warning logged when both layering and shadow used
+
+# Semantic components that inherit from this primitive
+semantic_variants:
+  - name: Container-Card
+    extends: Card-specific styling and behaviors
+    status: planned
+  - name: Container-Panel
+    extends: Panel-specific styling and behaviors
+    status: planned
+  - name: Container-Hero
+    extends: Hero section styling and behaviors
+    status: planned
+
+# Accessibility compliance
+accessibility:
+  wcag_level: AA
+  compliance:
+    - "1.3.1 Info and Relationships - Semantic HTML elements supported (web)"
+    - "1.4.3 Contrast (Minimum) - Background colors use semantic tokens"
+    - "1.4.11 Non-text Contrast - Borders and shadows use semantic tokens"
+    - "1.4.12 Text Spacing - Padding uses semantic spacing tokens"
+    - "1.4.13 Content on Hover or Focus - Hover state provides visual feedback"
+  aria_attributes:
+    - aria-label: accessibilityLabel prop value (web)
+  platform_accessibility:
+    ios: ".accessibilityLabel() modifier for VoiceOver"
+    android: "contentDescription in semantics for TalkBack"

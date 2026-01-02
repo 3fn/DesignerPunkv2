@@ -197,7 +197,7 @@ describe('CSS Bundling for Browser Distribution', () => {
      * for the CSS-as-string import pattern.
      */
     it('should have ButtonCTA CSS source file', () => {
-      const cssPath = path.join(process.cwd(), 'src/components/core/ButtonCTA/platforms/web/ButtonCTA.web.css');
+      const cssPath = path.join(process.cwd(), 'src/components/core/Button-CTA/platforms/web/ButtonCTA.web.css');
       expect(fs.existsSync(cssPath)).toBe(true);
       
       const cssContent = fs.readFileSync(cssPath, 'utf-8');

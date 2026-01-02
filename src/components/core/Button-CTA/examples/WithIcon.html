@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--
+    VALIDATION FILE - NOT DOCUMENTATION
+    
+    This HTML file validates that Button-CTA examples work correctly.
+    It is NOT the source of truth for component documentation.
+    
+    For component usage and examples, see: ../README.md
+    
+    Stemma System Naming: [Family]-[Type] = Button-CTA
+    Component Type: Standalone (no behavioral variants)
+    
+    Purpose: Automated validation that examples remain functional
+    Usage: Run validation script or open in browser for manual testing
+  -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Button-CTA Validation - With Icon</title>
+  <style>
+    body {
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 24px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .example-section {
+      margin-bottom: 32px;
+      padding: 16px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+    }
+    
+    .example-section h2 {
+      margin-top: 0;
+      font-size: 18px;
+      font-family: Rajdhani, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .example-section p {
+      color: #666;
+      margin-bottom: 16px;
+    }
+    
+    .button-container {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    
+    .comparison {
+      display: flex;
+      gap: 16px;
+      margin-top: 12px;
+    }
+    
+    .comparison-item {
+      flex: 1;
+      padding: 12px;
+      background: #f9f9f9;
+      border-radius: 4px;
+    }
+    
+    .comparison-item h3 {
+      margin: 0 0 8px 0;
+      font-size: 14px;
+      font-family: Rajdhani, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-weight: 600;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="font-family: Rajdhani, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 600;">Button-CTA - Icon Integration Examples</h1>
+  
+  <div style="background: #e6fff5; padding: 16px; border-radius: 8px; border-left: 4px solid #00FF88; margin-bottom: 24px;">
+    <strong style="font-family: Rajdhani, sans-serif;">✨ Updated Design System:</strong> Buttons use Rajdhani typography and integrate seamlessly with the Icon system.
+  </div>
+  
+  <div class="example-section">
+    <h2>Example 1: Button with Leading Icon</h2>
+    <p>Buttons can include an optional leading icon to enhance meaning and visual appeal.</p>
+    <div class="button-container">
+      <button-cta label="Save" icon="save"></button-cta>
+      <button-cta label="Delete" icon="trash-2" variant="secondary"></button-cta>
+      <button-cta label="Settings" icon="settings" variant="tertiary"></button-cta>
+    </div>
+  </div>
+  
+  <div class="example-section">
+    <h2>Example 2: Icon Size Selection</h2>
+    <p>Icon size automatically adjusts based on button size: size100 (24px) for small/medium, size125 (32px) for large.</p>
+    <div class="button-container">
+      <button-cta label="Small" icon="check" size="small"></button-cta>
+      <button-cta label="Medium" icon="check" size="medium"></button-cta>
+      <button-cta label="Large" icon="check" size="large"></button-cta>
+    </div>
+  </div>
+  
+  <div class="example-section">
+    <h2>Example 3: Optical Balance Effect</h2>
+    <p>Secondary and tertiary buttons apply optical balance blend to icons for visual weight compensation.</p>
+    <div class="comparison">
+      <div class="comparison-item">
+        <h3>Primary (No Blend)</h3>
+        <button-cta label="Primary" icon="star" variant="primary"></button-cta>
+      </div>
+      <div class="comparison-item">
+        <h3>Secondary (With Blend)</h3>
+        <button-cta label="Secondary" icon="star" variant="secondary"></button-cta>
+      </div>
+      <div class="comparison-item">
+        <h3>Tertiary (With Blend)</h3>
+        <button-cta label="Tertiary" icon="star" variant="tertiary"></button-cta>
+      </div>
+    </div>
+  </div>
+  
+  <div class="example-section">
+    <h2>Example 4: Icon-Text Spacing</h2>
+    <p>Spacing between icon and text adjusts based on button size: tight (4px) for small, normal (8px) for medium/large.</p>
+    <div class="button-container">
+      <button-cta label="Small Spacing" icon="arrow-right" size="small"></button-cta>
+      <button-cta label="Medium Spacing" icon="arrow-right" size="medium"></button-cta>
+      <button-cta label="Large Spacing" icon="arrow-right" size="large"></button-cta>
+    </div>
+  </div>
+  
+  <div class="example-section">
+    <h2>Example 5: With and Without Icons</h2>
+    <p>Comparison showing buttons with and without icons for the same action.</p>
+    <div class="comparison">
+      <div class="comparison-item">
+        <h3>Without Icon</h3>
+        <button-cta label="Continue"></button-cta>
+      </div>
+      <div class="comparison-item">
+        <h3>With Icon</h3>
+        <button-cta label="Continue" icon="arrow-right"></button-cta>
+      </div>
+    </div>
+  </div>
+  
+  <script type="module">
+    // Import the Button-CTA web component
+    // Stemma System: Button-CTA follows [Family]-[Type] naming pattern
+    import { ButtonCTA } from '../platforms/web/ButtonCTA.web.js';
+    
+    // Note: Icons are automatically rendered by the Button-CTA component
+    // using the Icon System (Spec 004). The icon prop accepts any valid
+    // icon name from the Feather icon set.
+    
+    // Icon behavior:
+    // - Icons are marked as decorative (aria-hidden="true")
+    // - Icon color inherits from button text color
+    // - Optical balance blend applied to secondary/tertiary styles
+    // - Icon size scales with button size
+    // - Icon-text spacing follows design system tokens
+  </script>
+</body>
+</html>

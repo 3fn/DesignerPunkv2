@@ -32,8 +32,8 @@ describe('Property 1: Token CSS Completeness', () => {
    */
   const COMPONENT_SOURCE_FILES = [
     'src/components/core/TextInputField/platforms/web/TextInputField.web.ts',
-    'src/components/core/ButtonCTA/platforms/web/ButtonCTA.web.ts',
-    'src/components/core/ButtonCTA/platforms/web/ButtonCTA.web.css',
+    'src/components/core/Button-CTA/platforms/web/ButtonCTA.web.ts',
+    'src/components/core/Button-CTA/platforms/web/ButtonCTA.web.css',
     'src/components/core/Icon/platforms/web/Icon.web.ts',
     'src/components/core/Icon/platforms/web/Icon.web.css',
     'src/components/core/Container/platforms/web/Container.web.ts',

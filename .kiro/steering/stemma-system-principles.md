@@ -229,49 +229,87 @@ extended_contracts:
 
 The Stemma System uses a structured naming convention designed for AI agent discoverability and systematic component organization. The pattern encodes hierarchy and relationships directly in component names.
 
-**Pattern**: `[Family]-[Type]-[Variant]`
+**Core Patterns**:
+
+| Pattern | When to Use | Example |
+|---------|-------------|---------|
+| `[Family]-[Type]` | When Type is descriptive enough | `Button-CTA`, `Button-Icon` |
+| `[Family]-Base` | Foundational component with no specific type | `Container-Base`, `Icon-Base` |
+| `[Family]-[Type]-Base` | Primitive with semantic variants | `Input-Text-Base` |
+| `[Family]-[Type]-[Variant]` | Semantic variant | `Input-Text-Email` |
+
+**Key Insight**: `-Base` can be either a Type OR a Variant depending on context. It simply means "foundational."
+
+**Decision Framework**:
+
+| Scenario | Pattern | Example | Rationale |
+|----------|---------|---------|-----------|
+| **Standalone component with descriptive type** | `[Family]-[Type]` | `Button-CTA` | Type (CTA) is descriptive; no variant needed |
+| **Foundational component, no specific type** | `[Family]-Base` | `Container-Base`, `Icon-Base` | Base serves as the Type - it's the foundational implementation |
+| **Primitive with semantic variants** | `[Family]-[Type]-Base` | `Input-Text-Base` | Base is the Variant; semantic variants inherit from this |
+| **Semantic variant** | `[Family]-[Type]-[Variant]` | `Input-Text-Email` | Variant describes specialized behavior |
+
+**Key Distinction: Styling Props vs Behavioral Variants**
+
+- **Styling props** (e.g., `variant="primary"`, `variant="secondary"`) are handled within a single component
+- **Behavioral variants** (e.g., email validation, password masking) require separate component implementations
+
+**Examples**:
+- `Button-CTA` - Standalone component with `variant` prop for primary/secondary/tertiary styling
+- `Container-Base` - Foundational container; `-Base` is the Type (no more specific type needed)
+- `Icon-Base` - Foundational icon; `-Base` is the Type
+- `Input-Text-Base` - Foundational text input; `-Base` is the Variant (Email, Password inherit from this)
+- `Input-Text-Email` - Behavioral variant with email-specific validation and keyboard
 
 **Pattern Segments**:
 
 | Segment | Purpose | Format | Examples |
 |---------|---------|--------|----------|
 | **Family** | Groups related components by shared purpose | PascalCase noun | `Input`, `Button`, `Container`, `Avatar` |
-| **Type** | Specifies the component category within family | PascalCase noun | `Text`, `CTA`, `Icon`, `User` |
-| **Variant** | Distinguishes specific use case or primitive status | PascalCase noun or `Base` | `Base`, `Email`, `Password`, `Primary` |
+| **Type** | Specifies the component category within family | PascalCase noun or `Base` | `Text`, `CTA`, `Base`, `User` |
+| **Variant** | (Optional) Distinguishes behavioral variants or primitive status | PascalCase noun or `Base` | `Base`, `Email`, `Password` |
 
-#### Primitive Component Naming (Base Suffix)
+#### Understanding `-Base` in Context
 
-**Rule**: All primitive components MUST use the `Base` suffix as their variant.
+The `-Base` suffix is flexible and context-dependent:
 
-The `Base` suffix is a reserved keyword that signals:
-- This is the foundational component for the family
-- Semantic components inherit from this component
-- This component provides core behaviors shared by all variants
-- Legitimate for direct use when no semantic variant exists
+**As a Type** (`[Family]-Base`):
+- Used when the family has no meaningful type distinction
+- The component IS the foundational implementation
+- Examples: `Container-Base`, `Icon-Base`, `Divider-Base`
 
-**Primitive Naming Pattern**: `[Family]-[Type]-Base`
+**As a Variant** (`[Family]-[Type]-Base`):
+- Used when the family has multiple types AND semantic variants exist
+- Indicates this is the primitive that semantic variants inherit from
+- Examples: `Input-Text-Base` (has Email, Password variants), `Avatar-User-Base` (has Profile, Thumbnail variants)
 
-| Family | Primitive Component | Description |
-|--------|---------------------|-------------|
-| Form Inputs | `Input-Text-Base` | Foundational text input with core behaviors |
-| Buttons | `Button-CTA-Base` | Foundational call-to-action button |
-| Containers | `Container-Layout-Base` | Foundational layout container |
-| Icons | `Icon-System-Base` | Foundational system icon |
-| Modals | `Modal-Dialog-Base` | Foundational dialog modal |
-| Avatars | `Avatar-User-Base` | Foundational user avatar |
-| Badges | `Badge-Status-Base` | Foundational status badge |
-| Data Displays | `DataDisplay-Text-Base` | Foundational text display |
-| Dividers | `Divider-Line-Base` | Foundational line divider |
-| Loading | `Loading-Spinner-Base` | Foundational loading spinner |
-| Navigation | `Nav-Link-Base` | Foundational navigation link |
+**When NOT to use `-Base`**:
+- When a more descriptive Type exists: `Button-CTA` not `Button-Base`
+- When naming a semantic variant: `Input-Text-Email` not `Input-Text-Base-Email`
+
+#### Component Family Naming Examples
+
+| Family | Primitive Component | Pattern Used | Rationale |
+|--------|---------------------|--------------|-----------|
+| Form Inputs | `Input-Text-Base` | `[Family]-[Type]-Base` | Has semantic variants (Email, Password, PhoneNumber) |
+| Buttons | `Button-CTA` | `[Family]-[Type]` | CTA is descriptive; styling via props |
+| Containers | `Container-Base` | `[Family]-Base` | No specific type needed; Base IS the type |
+| Icons | `Icon-Base` | `[Family]-Base` | No specific type needed; Base IS the type |
+| Modals | `Modal-Dialog-Base` | `[Family]-[Type]-Base` | Dialog is a type; may have variants |
+| Avatars | `Avatar-User-Base` | `[Family]-[Type]-Base` | User is a type; has Profile, Thumbnail variants |
+| Badges | `Badge-Status-Base` | `[Family]-[Type]-Base` | Status is a type; may have variants |
+| Data Displays | `DataDisplay-Text-Base` | `[Family]-[Type]-Base` | Text is a type; may have variants |
+| Dividers | `Divider-Base` | `[Family]-Base` | No specific type needed |
+| Loading | `Loading-Spinner-Base` | `[Family]-[Type]-Base` | Spinner is a type; may have variants |
+| Navigation | `Nav-Link-Base` | `[Family]-[Type]-Base` | Link is a type; may have variants |
 
 #### Semantic Component Naming (Descriptive Variants)
 
-**Rule**: Semantic components use descriptive variant names that indicate their specialized purpose.
+**Rule**: Semantic components use descriptive variant names that indicate their specialized **behavioral** purpose.
 
 **Semantic Naming Pattern**: `[Family]-[Type]-[DescriptiveVariant]`
 
-**Form Inputs Family Examples**:
+**Form Inputs Family Examples** (behavioral variants with distinct validation/keyboard):
 | Component | Inherits From | Specialized Purpose |
 |-----------|---------------|---------------------|
 | `Input-Text-Email` | `Input-Text-Base` | Email validation + autocomplete |
@@ -280,14 +318,14 @@ The `Base` suffix is a reserved keyword that signals:
 | `Input-Text-Search` | `Input-Text-Base` | Search functionality + clear button |
 | `Input-Text-URL` | `Input-Text-Base` | URL validation + protocol handling |
 
-**Buttons Family Examples**:
-| Component | Inherits From | Specialized Purpose |
-|-----------|---------------|---------------------|
-| `Button-CTA-Primary` | `Button-CTA-Base` | Primary action emphasis |
-| `Button-CTA-Secondary` | `Button-CTA-Base` | Secondary action styling |
-| `Button-CTA-Destructive` | `Button-CTA-Base` | Destructive action warning |
-| `Button-Icon-Close` | `Button-Icon-Base` | Close/dismiss action |
-| `Button-Icon-Menu` | `Button-Icon-Base` | Menu toggle action |
+**Buttons Family Examples** (standalone components with styling props):
+| Component | Type | Specialized Purpose |
+|-----------|------|---------------------|
+| `Button-CTA` | Standalone | Call-to-action with `variant` prop (primary/secondary/tertiary) |
+| `Button-Icon-Close` | Standalone | Close/dismiss action icon button |
+| `Button-Icon-Menu` | Standalone | Menu toggle action icon button |
+
+**Note**: Button components use `[Family]-[Type]` pattern because styling variations (primary, secondary, tertiary) are handled via props, not separate component implementations.
 
 **Avatars Family Examples**:
 | Component | Inherits From | Specialized Purpose |
@@ -302,35 +340,38 @@ The following validation rules MUST be enforced for all component names:
 
 **Rule 1: Pattern Compliance**
 ```
-VALID:   [Family]-[Type]-[Variant]
+VALID:   [Family]-[Type]-[Variant]   (3 segments)
+VALID:   [Family]-[Type]             (2 segments)
+VALID:   [Family]-Base               (2 segments, Base as Type)
 INVALID: [Family][Type][Variant]     (missing hyphens)
 INVALID: [family]-[type]-[variant]   (lowercase)
-INVALID: [Family]-[Variant]          (missing Type)
 INVALID: [Type]-[Variant]            (missing Family)
 ```
 
 **Rule 2: PascalCase Enforcement**
 ```
 VALID:   Input-Text-Email
-VALID:   Button-CTA-Primary
+VALID:   Container-Base
+VALID:   Button-CTA
 INVALID: input-text-email            (all lowercase)
 INVALID: INPUT-TEXT-EMAIL            (all uppercase)
 INVALID: Input-text-Email            (inconsistent case)
 INVALID: input_text_email            (underscores)
 ```
 
-**Rule 3: Base Suffix Reservation**
+**Rule 3: Base Usage (Flexible)**
 ```
-VALID:   Input-Text-Base             (primitive component)
-VALID:   Input-Text-Email            (semantic component)
-INVALID: Input-Text-BaseEmail        (Base not as suffix)
-INVALID: Input-Text-EmailBase        (Base combined with variant)
-INVALID: Input-Base-Text             (Base in wrong position)
+VALID:   Container-Base              (Base as Type - foundational component)
+VALID:   Icon-Base                   (Base as Type - foundational component)
+VALID:   Input-Text-Base             (Base as Variant - primitive with semantic variants)
+INVALID: Input-Text-BaseEmail        (Base not as suffix when used as Variant)
+INVALID: Input-Text-EmailBase        (Base combined with variant name)
 ```
 
 **Rule 4: Hyphen Separator Requirement**
 ```
 VALID:   Input-Text-PhoneNumber      (hyphens between segments)
+VALID:   Container-Base              (hyphens between segments)
 INVALID: InputTextPhoneNumber        (no separators)
 INVALID: Input_Text_PhoneNumber      (underscores)
 INVALID: Input.Text.PhoneNumber      (dots)
@@ -339,15 +380,17 @@ INVALID: Input.Text.PhoneNumber      (dots)
 **Rule 5: Segment Count Validation**
 ```
 VALID:   Input-Text-Base             (3 segments)
-VALID:   Button-CTA-Primary          (3 segments)
-INVALID: Input-Base                  (2 segments - missing Type)
+VALID:   Input-Text-Email            (3 segments)
+VALID:   Button-CTA                  (2 segments)
+VALID:   Container-Base              (2 segments, Base as Type)
+VALID:   Icon-Base                   (2 segments, Base as Type)
 INVALID: Input-Text-Email-Validated  (4 segments - too many)
 INVALID: TextInput                   (1 segment - missing structure)
 ```
 
 **Rule 6: Reserved Keywords**
 ```
-RESERVED: Base     (only for primitive components)
+RESERVED: Base     (for foundational components - as Type or Variant)
 RESERVED: Abstract (not used - use Base instead)
 RESERVED: Core     (not used - use Base instead)
 RESERVED: Default  (not used - use Base instead)
@@ -359,11 +402,10 @@ When naming validation fails, provide clear guidance:
 
 | Violation | Error Message | Correction |
 |-----------|---------------|------------|
-| Missing hyphens | "Component name must use hyphens between segments: [Family]-[Type]-[Variant]" | Add hyphens between segments |
+| Missing hyphens | "Component name must use hyphens between segments" | Add hyphens between segments |
 | Wrong case | "Component name must use PascalCase for all segments" | Capitalize first letter of each word |
-| Missing segment | "Component name must have exactly 3 segments: [Family]-[Type]-[Variant]" | Add missing segment |
-| Invalid Base usage | "'Base' suffix is reserved for primitive components only" | Use descriptive variant name |
-| Reserved keyword | "'[keyword]' is reserved. Use 'Base' for primitives or descriptive name for semantics" | Replace with appropriate name |
+| Too many segments | "Component name should have 2-3 segments maximum" | Simplify naming |
+| Reserved keyword misuse | "'[keyword]' is reserved. Use 'Base' for foundational components" | Replace with appropriate name |
 
 #### AI Agent Benefits
 
@@ -406,14 +448,16 @@ Name: Avatar-User-Profile
 
 | Question | Answer |
 |----------|--------|
-| What pattern do I use? | `[Family]-[Type]-[Variant]` |
-| How do I name a primitive? | Use `Base` as the variant: `Input-Text-Base` |
-| How do I name a semantic? | Use descriptive variant: `Input-Text-Email` |
+| What pattern do I use? | See decision framework above - depends on whether Type is descriptive or Base is needed |
+| How do I name a foundational component with no specific type? | `[Family]-Base` (e.g., `Container-Base`, `Icon-Base`) |
+| How do I name a primitive with semantic variants? | `[Family]-[Type]-Base` (e.g., `Input-Text-Base`) |
+| How do I name a standalone with descriptive type? | `[Family]-[Type]` (e.g., `Button-CTA`) |
+| How do I name a semantic variant? | `[Family]-[Type]-[Variant]` (e.g., `Input-Text-Email`) |
 | What case do I use? | PascalCase for all segments |
 | What separator do I use? | Hyphens (`-`) between segments |
-| How many segments? | Exactly 3 segments |
+| How many segments? | 2 or 3 depending on pattern |
 | Can I use underscores? | No, only hyphens |
-| Is "Base" reserved? | Yes, only for primitive components |
+| Is "Base" reserved? | Yes, for foundational components - can be Type or Variant |
 
 ### Readiness Status Governance
 

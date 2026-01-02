@@ -416,9 +416,9 @@ At this point, the Form Inputs family is fully implemented with Input-Text-Base 
   - Lessons learned from Task 4 applied successfully
   
   **Primary Artifacts:**
-  - Updated ButtonCTA → Button-CTA-Primary implementations (web, iOS, Android)
-  - Updated Container → Container-Layout-Base implementations (web, iOS, Android)
-  - Updated Icon → Icon-Feather-Base implementations (web, iOS, Android)
+  - Updated ButtonCTA → Button-CTA implementations (web, iOS, Android)
+  - Updated Container → Container-Base implementations (web, iOS, Android)
+  - Updated Icon → Icon-Base implementations (web, iOS, Android)
   - YAML schemas for all three components
   - Remediation completion documentation
   
@@ -432,44 +432,124 @@ At this point, the Form Inputs family is fully implemented with Input-Text-Base 
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 6 Complete: Existing Component Remediation"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 6.0 Human-AI Checkpoint: Review lessons learned and align on approach
+  - [x] 6.0 Human-AI Checkpoint: Review lessons learned and align on approach
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     - Review lessons learned from Task 4 (TextInputField migration)
     - Discuss how to apply lessons to ButtonCTA, Container, Icon
     - Confirm schema structure patterns to reuse
     - Agree on migration order and approach for remaining components
+    - Update tasks.md with finer-grained subtasks based on lessons learned
     - _Requirements: R3_
+    - **Lessons Learned Reference**: `.kiro/specs/034-component-architecture-system/completion/task-4-5-completion.md`
 
-  - [ ] 6.1 Remediate ButtonCTA per audit recommendations
+  - [x] 6.1 Remediate ButtonCTA → Button-CTA-Primary
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Apply audit-approved remediation items (F1.1, F2.2)
-    - Rename to Button-CTA-Primary following naming convention
-    - Create YAML schema with formal behavioral contracts
-    - Update web element registration
-    - Verify cross-platform consistency
+    - 7 behavioral contracts to formalize
     - _Requirements: R3_
 
-  - [ ] 6.2 Remediate Container per audit recommendations
+    - [x] 6.1.1 Rename and restructure ButtonCTA files
+      **Type**: Implementation
+      **Validation**: Tier 2 - Standard
+      **Status**: Complete
+      - Create new directory: `src/components/core/Button-CTA-Primary/`
+      - Migrate and rename files across web, iOS, Android platforms
+      - Update browser-entry.ts with dual registration (backward compatibility)
+      - Update demo page HTML tags and JS selectors
+      - Update/migrate existing tests (imports and selectors only)
+      - _Requirements: R3_
+      - **Completion**: `.kiro/specs/034-component-architecture-system/completion/task-6-1-1-completion.md`
+
+    - [x] 6.1.2 Create Button-CTA-Primary schema and validate
+      **Type**: Implementation
+      **Validation**: Tier 2 - Standard
+      - Create `Button-CTA-Primary.schema.yaml` using Input-Text-Base template
+      - Formalize 7 behavioral contracts with WCAG references
+      - Document all properties with types and defaults
+      - Document token dependencies
+      - Validate cross-platform behavioral consistency
+      - Create README.md with component documentation
+      - _Requirements: R3_
+
+    - [x] 6.1.3 REVISION: Refine naming convention and rename Button-CTA-Primary → Button-CTA
+      **Type**: Architecture
+      **Validation**: Tier 2 - Standard
+      **Status**: Complete
+      **Rationale**: Human-AI checkpoint identified that variant segment should only be used when behavioral variants exist. Button-CTA has no behavioral variants (only styling props via `variant` prop), so `-Primary` suffix is misleading.
+      - Update `stemma-system-principles.md` with refined naming convention
+      - Document `[Family]-[Type]` vs `[Family]-[Type]-[Variant]` decision framework
+      - Clarify that `-Base` suffix only needed when semantic variants exist
+      - Rename directory: `src/components/core/Button-CTA-Primary/` → `src/components/core/Button-CTA/`
+      - Rename all files (schema, tokens, types, platform implementations)
+      - Update schema name field and type to reflect standalone component
+      - Update README.md with new naming
+      - Update browser-entry.ts registration (keep `<button-cta>` custom element)
+      - Update tests (imports, describe blocks, file paths)
+      - Run tests to validate rename
+      - _Requirements: R2_
+      - **Completion**: `.kiro/specs/034-component-architecture-system/completion/task-6-1-3-completion.md`
+
+  - [x] 6.2 Remediate Container → Container-Base
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Apply audit-approved remediation items (F1.2, F2.3)
-    - Rename to Container-Layout-Base following naming convention
-    - Create YAML schema with formal behavioral contracts
-    - Update web element registration
-    - Verify cross-platform consistency
+    - 7 behavioral contracts to formalize
+    - Note: Using `Container-Base` per refined naming convention - Base serves as the Type for foundational components
     - _Requirements: R3_
 
-  - [ ] 6.3 Remediate Icon per audit recommendations
+    - [x] 6.2.1 Rename and restructure Container files
+      **Type**: Implementation
+      **Validation**: Tier 2 - Standard
+      - Create new directory: `src/components/core/Container-Base/`
+      - Migrate and rename files across web, iOS, Android platforms
+      - Update browser-entry.ts with dual registration (backward compatibility)
+      - Update demo page HTML tags and JS selectors
+      - Update/migrate existing tests (imports and selectors only)
+      - _Requirements: R3_
+
+    - [x] 6.2.2 Create Container-Base schema and validate
+      **Type**: Implementation
+      **Validation**: Tier 2 - Standard
+      **Status**: Complete
+      - Create `Container-Base.schema.yaml` using Input-Text-Base template
+      - Formalize 7 behavioral contracts
+      - Document all properties with types and defaults
+      - Document token dependencies
+      - Validate cross-platform behavioral consistency
+      - Create README.md with component documentation
+      - _Requirements: R3_
+      - **Completion**: `.kiro/specs/034-component-architecture-system/completion/task-6-2-2-completion.md`
+
+  - [ ] 6.3 Remediate Icon → Icon-Base
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Apply audit-approved remediation items (F1.5, F2.6)
-    - Rename to Icon-Feather-Base following naming convention
-    - Create YAML schema with formal behavioral contracts
-    - Update web element registration
-    - Verify cross-platform consistency
+    - 5 behavioral contracts to formalize
+    - Note: Using `Icon-Base` per refined naming convention - Base serves as the Type for foundational components
     - _Requirements: R3_
+
+    - [ ] 6.3.1 Rename and restructure Icon files
+      **Type**: Implementation
+      **Validation**: Tier 2 - Standard
+      - Create new directory: `src/components/core/Icon-Base/`
+      - Migrate and rename files across web, iOS, Android platforms
+      - Update browser-entry.ts with dual registration (backward compatibility)
+      - Update demo page HTML tags and JS selectors
+      - Update/migrate existing tests (imports and selectors only)
+      - _Requirements: R3_
+
+    - [ ] 6.3.2 Create Icon-Base schema and validate
+      **Type**: Implementation
+      **Validation**: Tier 2 - Standard
+      - Create `Icon-Base.schema.yaml` using Input-Text-Base template
+      - Formalize 5 behavioral contracts
+      - Document all properties with types and defaults
+      - Document token dependencies
+      - Validate cross-platform behavioral consistency
+      - Create README.md with component documentation
+      - _Requirements: R3_
 
   - [ ] 6.4 Human-AI Checkpoint: Verify remediation complete
     **Type**: Architecture

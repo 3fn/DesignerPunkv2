@@ -53,7 +53,7 @@ Components follow the **[Family]-[Type]-[Variant]** pattern:
 ### Login Form
 - **Form Inputs**: `Input-Text-Email`, `Input-Text-Password`
 - **Buttons**: `Button-CTA-Primary` (submit)
-- **Containers**: `Container-Layout-Base` (form wrapper)
+- **Containers**: `Container-Base` (form wrapper)
 - **Tokens**: `spacing-tokens.md` → stack patterns, `color-tokens.md` → form colors
 
 ### Feed Post
@@ -194,7 +194,7 @@ get_section({ path: ".kiro/steering/form-inputs-components.md", heading: "Input-
 get_section({ path: ".kiro/steering/button-components.md", heading: "Button-CTA-Primary" })
 
 // Step 4: Get container for layout
-get_section({ path: ".kiro/steering/container-components.md", heading: "Container-Layout-Base" })
+get_section({ path: ".kiro/steering/container-components.md", heading: "Container-Base" })
 ```
 
 ## Related Documentation

@@ -325,7 +325,7 @@ Components are defined using YAML schemas that capture behavioral contracts and 
 **Examples**:
 - `src/components/core/Input-Text-Base/Input-Text-Base.schema.yaml`
 - `src/components/core/Button-CTA-Primary/Button-CTA-Primary.schema.yaml`
-- `src/components/core/Container-Layout-Base/Container-Layout-Base.schema.yaml`
+- `src/components/core/Container-Base/Container-Base.schema.yaml`
 
 **Rationale**:
 - **Colocation**: Schema lives with the code it describes

@@ -816,7 +816,7 @@ Input-Text-Base:
   # Composition
   composition:
     can_contain: []
-    contained_by: [Container-Form-Base, Container-Layout-Base]
+    contained_by: [Container-Form-Base, Container-Base]
     slots: []
 ```
 
@@ -984,7 +984,7 @@ src/components/
 │   │   ├── Button-CTA-Primary.yaml
 │   │   └── Button-Icon-Base.yaml
 │   └── containers/
-│       ├── Container-Layout-Base.yaml
+│       ├── Container-Base.yaml
 │       └── Container-Form-Base.yaml
 ```
 
@@ -1010,7 +1010,7 @@ SchemaRegistry:
         - Button-CTA-Secondary
         - Button-CTA-Destructive
     Containers:
-      primitive: Container-Layout-Base
+      primitive: Container-Base
       semantics:
         - Container-Form-Base
 ```

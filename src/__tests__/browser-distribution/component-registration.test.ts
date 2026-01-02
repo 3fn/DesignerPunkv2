@@ -46,6 +46,7 @@ describe('Component Registration', () => {
       expect(bundleContent).toContain('button-cta');
       expect(bundleContent).toContain('dp-icon');
       expect(bundleContent).toContain('dp-container');
+      expect(bundleContent).toContain('container-base');
     });
 
     it('should register all six custom elements via safeDefine', () => {
@@ -56,6 +57,7 @@ describe('Component Registration', () => {
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]button-cta['"]/);
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]dp-icon['"]/);
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]dp-container['"]/);
+      expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]container-base['"]/);
     });
 
     it('should export all component classes', () => {
@@ -66,6 +68,7 @@ describe('Component Registration', () => {
       expect(bundleContent).toMatch(/export\s*\{[^}]*ButtonCTA[^}]*\}/);
       expect(bundleContent).toMatch(/export\s*\{[^}]*DPIcon[^}]*\}/);
       expect(bundleContent).toMatch(/export\s*\{[^}]*ContainerWeb[^}]*\}/);
+      expect(bundleContent).toMatch(/export\s*\{[^}]*ContainerBaseWeb[^}]*\}/);
     });
   });
 
@@ -128,6 +131,7 @@ describe('Component Registration', () => {
       expect(registeredElements.has('button-cta')).toBe(true);
       expect(registeredElements.has('dp-icon')).toBe(true);
       expect(registeredElements.has('dp-container')).toBe(true);
+      expect(registeredElements.has('container-base')).toBe(true);
     });
 
     it('should expose all components in DesignerPunk global', () => {
@@ -137,12 +141,14 @@ describe('Component Registration', () => {
       expect(dp.ButtonCTA).toBeDefined();
       expect(dp.DPIcon).toBeDefined();
       expect(dp.ContainerWeb).toBeDefined();
+      expect(dp.ContainerBaseWeb).toBeDefined();
     });
 
     it('should expose Icon and Container aliases', () => {
       const dp = mockContext.DesignerPunk as Record<string, unknown>;
       expect(dp.Icon).toBe(dp.DPIcon);
       expect(dp.Container).toBe(dp.ContainerWeb);
+      expect(dp.ContainerBase).toBe(dp.ContainerBaseWeb);
     });
   });
 
@@ -161,6 +167,7 @@ describe('Component Registration', () => {
       expect(content).toContain("import { ButtonCTA }");
       expect(content).toContain("import { DPIcon }");
       expect(content).toContain("import { ContainerWeb }");
+      expect(content).toContain("import { ContainerBaseWeb }");
     });
 
     it('should have safeDefine calls for all six components', () => {
@@ -170,12 +177,14 @@ describe('Component Registration', () => {
       expect(content).toContain("safeDefine('button-cta', ButtonCTA)");
       expect(content).toContain("safeDefine('dp-icon', DPIcon)");
       expect(content).toContain("safeDefine('dp-container', ContainerWeb)");
+      expect(content).toContain("safeDefine('container-base', ContainerBaseWeb)");
     });
 
     it('should export all components for UMD global access', () => {
-      expect(content).toContain('export { TextInputField, InputTextBase, InputTextEmail, ButtonCTA, DPIcon, ContainerWeb }');
+      expect(content).toContain('export { TextInputField, InputTextBase, InputTextEmail, ButtonCTA, DPIcon, ContainerWeb, ContainerBaseWeb }');
       expect(content).toContain('export const Icon = DPIcon');
       expect(content).toContain('export const Container = ContainerWeb');
+      expect(content).toContain('export const ContainerBase = ContainerBaseWeb');
     });
   });
 });

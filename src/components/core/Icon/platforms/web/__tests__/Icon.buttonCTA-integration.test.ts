@@ -14,7 +14,7 @@
  */
 
 import { createIcon, DPIcon } from '../Icon.web';
-import { ButtonCTA } from '../../../../ButtonCTA/platforms/web/ButtonCTA.web';
+import { ButtonCTA } from '../../../../Button-CTA/platforms/web/ButtonCTA.web';
 
 /**
  * Set up required CSS custom properties for ButtonCTA blend utilities.

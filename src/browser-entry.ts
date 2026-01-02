@@ -16,9 +16,12 @@
 import { TextInputField } from './components/core/TextInputField/platforms/web/TextInputField.web';
 import { InputTextBase } from './components/core/Input-Text-Base/platforms/web/InputTextBase.web';
 import { InputTextEmail } from './components/core/Input-Text-Email/platforms/web/InputTextEmail.web';
-import { ButtonCTA } from './components/core/ButtonCTA/platforms/web/ButtonCTA.web';
+// Button-CTA - Stemma System naming (standalone component, no behavioral variants)
+import { ButtonCTA } from './components/core/Button-CTA/platforms/web/ButtonCTA.web';
 import { DPIcon } from './components/core/Icon/platforms/web/Icon.web';
 import { ContainerWeb } from './components/core/Container/platforms/web/Container.web';
+// Container-Base - Stemma System naming (foundational primitive component)
+import { ContainerBaseWeb } from './components/core/Container-Base/platforms/web/ContainerBase.web';
 
 /**
  * Check if design tokens are loaded in the document.
@@ -80,9 +83,12 @@ function safeDefine(name: string, constructor: CustomElementConstructor): void {
 safeDefine('text-input-field', TextInputField);
 safeDefine('input-text-base', InputTextBase);
 safeDefine('input-text-email', InputTextEmail);
+// Button-CTA - Primary registration (Stemma System naming)
 safeDefine('button-cta', ButtonCTA);
 safeDefine('dp-icon', DPIcon);
-safeDefine('dp-container', ContainerWeb);
+// Container - Dual registration for backward compatibility
+safeDefine('dp-container', ContainerWeb);  // Legacy tag (backward compatibility)
+safeDefine('container-base', ContainerBaseWeb);  // New Stemma System tag
 
 // Check tokens after DOM is ready
 // This ensures the check runs after stylesheets have been parsed
@@ -97,8 +103,9 @@ if (typeof document !== 'undefined') {
 
 // Export all components for UMD global access and ESM imports
 // Requirements: 1.2, 2.3
-export { TextInputField, InputTextBase, InputTextEmail, ButtonCTA, DPIcon, ContainerWeb };
+export { TextInputField, InputTextBase, InputTextEmail, ButtonCTA, DPIcon, ContainerWeb, ContainerBaseWeb };
 
 // Also export with more intuitive names for the UMD global
 export const Icon = DPIcon;
 export const Container = ContainerWeb;
+export const ContainerBase = ContainerBaseWeb;
