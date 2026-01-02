@@ -1,26 +1,28 @@
 /**
  * @category evergreen
- * @purpose Verify Button-CTA component integrates correctly with Icon component
+ * @purpose Verify Button-CTA component integrates correctly with Icon-Base component
  * @jest-environment jsdom
  */
 /**
  * Button-CTA Icon Integration Tests
  * 
- * Tests icon integration with the Icon System (Spec 004).
+ * Tests icon integration with the Icon-Base component (Stemma System).
  * Validates icon rendering, sizing, color, spacing, and accessibility.
  * 
  * Stemma System Naming: [Family]-[Type] = Button-CTA
  * Component Type: Standalone (no behavioral variants)
  * 
- * Note: Button-CTA now uses <dp-icon> web component for icon rendering,
+ * Note: Button-CTA uses <icon-base> web component for icon rendering,
  * following the same component composition pattern as iOS and Android.
- * Tests must traverse nested Shadow DOM (Button-CTA → dp-icon) to access SVG.
+ * Tests must traverse nested Shadow DOM (Button-CTA → icon-base) to access SVG.
+ * 
+ * Migrated from legacy Icon to Icon-Base as part of Task 6.5.
  * 
  * @module Button-CTA/platforms/web/__tests__/icon-integration
  */
 
 import { ButtonCTA } from '../ButtonCTA.web';
-import { DPIcon } from '../../../../Icon/platforms/web/Icon.web';
+import { IconBaseElement } from '../../../../Icon-Base/platforms/web/IconBase.web';
 
 /**
  * Set up required CSS custom properties for Button-CTA blend utilities.
@@ -38,8 +40,8 @@ describe('Button-CTA Icon Integration', () => {
     setupBlendColorProperties();
     
     // Ensure custom elements are registered
-    if (!customElements.get('dp-icon')) {
-      customElements.define('dp-icon', DPIcon);
+    if (!customElements.get('icon-base')) {
+      customElements.define('icon-base', IconBaseElement);
     }
     if (!customElements.get('button-cta')) {
       customElements.define('button-cta', ButtonCTA);
@@ -53,16 +55,16 @@ describe('Button-CTA Icon Integration', () => {
 
   /**
    * Helper to get the SVG element from nested Shadow DOM.
-   * Button-CTA → dp-icon → SVG
+   * Button-CTA → icon-base → SVG
    */
   function getIconSvg(button: ButtonCTA): SVGElement | null {
     const shadowRoot = button.shadowRoot;
     if (!shadowRoot) return null;
     
-    const dpIcon = shadowRoot.querySelector('dp-icon') as DPIcon | null;
-    if (!dpIcon || !dpIcon.shadowRoot) return null;
+    const iconBase = shadowRoot.querySelector('icon-base') as IconBaseElement | null;
+    if (!iconBase || !iconBase.shadowRoot) return null;
     
-    return dpIcon.shadowRoot.querySelector('svg');
+    return iconBase.shadowRoot.querySelector('svg');
   }
 
   describe('Icon Rendering', () => {
@@ -80,15 +82,15 @@ describe('Button-CTA Icon Integration', () => {
       const iconContainer = shadowRoot!.querySelector('.button-cta__icon');
       expect(iconContainer).not.toBeNull();
 
-      // Check for dp-icon element
-      const dpIcon = iconContainer!.querySelector('dp-icon');
-      expect(dpIcon).not.toBeNull();
-      expect(dpIcon!.getAttribute('name')).toBe('arrow-right');
+      // Check for icon-base element
+      const iconBase = iconContainer!.querySelector('icon-base');
+      expect(iconBase).not.toBeNull();
+      expect(iconBase!.getAttribute('name')).toBe('arrow-right');
 
       // Check for SVG element in nested Shadow DOM
       const svg = getIconSvg(button);
       expect(svg).not.toBeNull();
-      expect(svg!.classList.contains('icon-arrow-right')).toBe(true);
+      expect(svg!.classList.contains('icon-base-arrow-right')).toBe(true);
     });
 
     it('should not render icon when icon prop not provided', () => {
@@ -111,13 +113,13 @@ describe('Button-CTA Icon Integration', () => {
       document.body.appendChild(button);
 
       let svg = getIconSvg(button);
-      expect(svg!.classList.contains('icon-arrow-right')).toBe(true);
+      expect(svg!.classList.contains('icon-base-arrow-right')).toBe(true);
 
       // Change icon
       button.icon = 'check';
 
       svg = getIconSvg(button);
-      expect(svg!.classList.contains('icon-check')).toBe(true);
+      expect(svg!.classList.contains('icon-base-check')).toBe(true);
     });
   });
 
@@ -130,14 +132,14 @@ describe('Button-CTA Icon Integration', () => {
       document.body.appendChild(button);
 
       const shadowRoot = button.shadowRoot;
-      const dpIcon = shadowRoot!.querySelector('dp-icon');
+      const iconBase = shadowRoot!.querySelector('icon-base');
       
-      // Check dp-icon has correct size attribute
-      expect(dpIcon!.getAttribute('size')).toBe('24');
+      // Check icon-base has correct size attribute
+      expect(iconBase!.getAttribute('size')).toBe('24');
       
       // Check for size class in nested Shadow DOM
       const svg = getIconSvg(button);
-      expect(svg!.classList.contains('icon--size-100')).toBe(true);
+      expect(svg!.classList.contains('icon-base--size-100')).toBe(true);
     });
 
     it('should use icon.size100 (24px) for medium button', () => {
@@ -148,14 +150,14 @@ describe('Button-CTA Icon Integration', () => {
       document.body.appendChild(button);
 
       const shadowRoot = button.shadowRoot;
-      const dpIcon = shadowRoot!.querySelector('dp-icon');
+      const iconBase = shadowRoot!.querySelector('icon-base');
       
-      // Check dp-icon has correct size attribute
-      expect(dpIcon!.getAttribute('size')).toBe('24');
+      // Check icon-base has correct size attribute
+      expect(iconBase!.getAttribute('size')).toBe('24');
       
       // Check for size class in nested Shadow DOM
       const svg = getIconSvg(button);
-      expect(svg!.classList.contains('icon--size-100')).toBe(true);
+      expect(svg!.classList.contains('icon-base--size-100')).toBe(true);
     });
 
     it('should use icon.size125 (32px) for large button', () => {
@@ -166,14 +168,14 @@ describe('Button-CTA Icon Integration', () => {
       document.body.appendChild(button);
 
       const shadowRoot = button.shadowRoot;
-      const dpIcon = shadowRoot!.querySelector('dp-icon');
+      const iconBase = shadowRoot!.querySelector('icon-base');
       
-      // Check dp-icon has correct size attribute (iconSizes.size125 = 32)
-      expect(dpIcon!.getAttribute('size')).toBe('32');
+      // Check icon-base has correct size attribute (iconSizes.size125 = 32)
+      expect(iconBase!.getAttribute('size')).toBe('32');
       
       // Check for size class in nested Shadow DOM
       const svg = getIconSvg(button);
-      expect(svg!.classList.contains('icon--size-200')).toBe(true);
+      expect(svg!.classList.contains('icon-base--size-200')).toBe(true);
     });
   });
 
@@ -186,10 +188,10 @@ describe('Button-CTA Icon Integration', () => {
       document.body.appendChild(button);
 
       const shadowRoot = button.shadowRoot;
-      const dpIcon = shadowRoot!.querySelector('dp-icon');
+      const iconBase = shadowRoot!.querySelector('icon-base');
       
-      // Check dp-icon has inherit color
-      expect(dpIcon!.getAttribute('color')).toBe('inherit');
+      // Check icon-base has inherit color
+      expect(iconBase!.getAttribute('color')).toBe('inherit');
       
       // Icon should use currentColor (inherits from button)
       const svg = getIconSvg(button);
@@ -204,10 +206,10 @@ describe('Button-CTA Icon Integration', () => {
       document.body.appendChild(button);
 
       const shadowRoot = button.shadowRoot;
-      const dpIcon = shadowRoot!.querySelector('dp-icon');
+      const iconBase = shadowRoot!.querySelector('icon-base');
       
-      // Check dp-icon has inherit color
-      expect(dpIcon!.getAttribute('color')).toBe('inherit');
+      // Check icon-base has inherit color
+      expect(iconBase!.getAttribute('color')).toBe('inherit');
       
       // Icon should use currentColor (inherits from button)
       const svg = getIconSvg(button);
@@ -222,10 +224,10 @@ describe('Button-CTA Icon Integration', () => {
       document.body.appendChild(button);
 
       const shadowRoot = button.shadowRoot;
-      const dpIcon = shadowRoot!.querySelector('dp-icon');
+      const iconBase = shadowRoot!.querySelector('icon-base');
       
-      // Check dp-icon has inherit color
-      expect(dpIcon!.getAttribute('color')).toBe('inherit');
+      // Check icon-base has inherit color
+      expect(iconBase!.getAttribute('color')).toBe('inherit');
       
       // Icon should use currentColor (inherits from button)
       const svg = getIconSvg(button);
@@ -306,7 +308,7 @@ describe('Button-CTA Icon Integration', () => {
       expect(iconContainer!.getAttribute('aria-hidden')).toBe('true');
     });
 
-    it('should mark dp-icon SVG as decorative with aria-hidden', () => {
+    it('should mark icon-base SVG as decorative with aria-hidden', () => {
       const button = document.createElement('button-cta') as ButtonCTA;
       button.label = 'Click me';
       button.icon = 'arrow-right';
@@ -371,8 +373,8 @@ describe('Button-CTA Icon Integration', () => {
       const iconContainer = shadowRoot!.querySelector('.button-cta__icon');
       expect(iconContainer).not.toBeNull();
       
-      const dpIcon = iconContainer!.querySelector('dp-icon');
-      expect(dpIcon).not.toBeNull();
+      const iconBase = iconContainer!.querySelector('icon-base');
+      expect(iconBase).not.toBeNull();
       
       // Nested Shadow DOM access
       const svg = getIconSvg(button);
@@ -390,13 +392,13 @@ describe('Button-CTA Icon Integration', () => {
       document.body.appendChild(button);
 
       const shadowRoot = button.shadowRoot;
-      const dpIcon = shadowRoot!.querySelector('dp-icon');
+      const iconBase = shadowRoot!.querySelector('icon-base');
       
-      expect(dpIcon).not.toBeNull();
-      expect(dpIcon!.getAttribute('size')).toBe('24');
+      expect(iconBase).not.toBeNull();
+      expect(iconBase!.getAttribute('size')).toBe('24');
       
       const svg = getIconSvg(button);
-      expect(svg!.classList.contains('icon--size-100')).toBe(true);
+      expect(svg!.classList.contains('icon-base--size-100')).toBe(true);
     });
 
     it('should render icon with large secondary button', () => {
@@ -408,13 +410,13 @@ describe('Button-CTA Icon Integration', () => {
       document.body.appendChild(button);
 
       const shadowRoot = button.shadowRoot;
-      const dpIcon = shadowRoot!.querySelector('dp-icon');
+      const iconBase = shadowRoot!.querySelector('icon-base');
       
-      expect(dpIcon).not.toBeNull();
-      expect(dpIcon!.getAttribute('size')).toBe('32');
+      expect(iconBase).not.toBeNull();
+      expect(iconBase!.getAttribute('size')).toBe('32');
       
       const svg = getIconSvg(button);
-      expect(svg!.classList.contains('icon--size-200')).toBe(true);
+      expect(svg!.classList.contains('icon-base--size-200')).toBe(true);
     });
 
     it('should render icon with medium tertiary button', () => {
@@ -426,32 +428,32 @@ describe('Button-CTA Icon Integration', () => {
       document.body.appendChild(button);
 
       const shadowRoot = button.shadowRoot;
-      const dpIcon = shadowRoot!.querySelector('dp-icon');
+      const iconBase = shadowRoot!.querySelector('icon-base');
       
-      expect(dpIcon).not.toBeNull();
-      expect(dpIcon!.getAttribute('size')).toBe('24');
+      expect(iconBase).not.toBeNull();
+      expect(iconBase!.getAttribute('size')).toBe('24');
       
       const svg = getIconSvg(button);
-      expect(svg!.classList.contains('icon--size-100')).toBe(true);
+      expect(svg!.classList.contains('icon-base--size-100')).toBe(true);
     });
   });
 
   describe('Component Composition Pattern', () => {
-    it('should use dp-icon web component (cross-platform consistency)', () => {
+    it('should use icon-base web component (cross-platform consistency)', () => {
       const button = document.createElement('button-cta') as ButtonCTA;
       button.label = 'Test';
       button.icon = 'arrow-right';
       document.body.appendChild(button);
 
       const shadowRoot = button.shadowRoot;
-      const dpIcon = shadowRoot!.querySelector('dp-icon');
+      const iconBase = shadowRoot!.querySelector('icon-base');
       
-      // Verify dp-icon is used (not raw SVG injection)
-      expect(dpIcon).not.toBeNull();
-      expect(dpIcon!.tagName.toLowerCase()).toBe('dp-icon');
+      // Verify icon-base is used (not raw SVG injection)
+      expect(iconBase).not.toBeNull();
+      expect(iconBase!.tagName.toLowerCase()).toBe('icon-base');
     });
 
-    it('should pass correct attributes to dp-icon', () => {
+    it('should pass correct attributes to icon-base', () => {
       const button = document.createElement('button-cta') as ButtonCTA;
       button.label = 'Test';
       button.icon = 'check';
@@ -459,11 +461,11 @@ describe('Button-CTA Icon Integration', () => {
       document.body.appendChild(button);
 
       const shadowRoot = button.shadowRoot;
-      const dpIcon = shadowRoot!.querySelector('dp-icon');
+      const iconBase = shadowRoot!.querySelector('icon-base');
       
-      expect(dpIcon!.getAttribute('name')).toBe('check');
-      expect(dpIcon!.getAttribute('size')).toBe('32'); // Large button = 32px icon
-      expect(dpIcon!.getAttribute('color')).toBe('inherit');
+      expect(iconBase!.getAttribute('name')).toBe('check');
+      expect(iconBase!.getAttribute('size')).toBe('32'); // Large button = 32px icon
+      expect(iconBase!.getAttribute('color')).toBe('inherit');
     });
   });
 });

@@ -168,8 +168,8 @@ describe('Property 3: Minification Effectiveness', () => {
     const REQUIRED_COMPONENTS = [
       'TextInputField',
       'ButtonCTA',
-      'DPIcon',
-      'ContainerWeb',
+      'IconBaseElement',
+      'ContainerBaseWeb',
     ];
 
     test.each(BUNDLES)(

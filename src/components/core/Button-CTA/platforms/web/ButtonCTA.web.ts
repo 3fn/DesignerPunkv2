@@ -8,7 +8,7 @@
  * Stemma System Naming: [Family]-[Type] = Button-CTA
  * Component Type: Standalone (no behavioral variants)
  * 
- * Uses <dp-icon> web component for icon rendering, following the same component
+ * Uses <icon-base> web component for icon rendering, following the same component
  * composition pattern as iOS and Android platforms. This ensures cross-platform
  * consistency and single source of truth for icon rendering.
  * 
@@ -23,9 +23,10 @@
 /// <reference lib="dom" />
 
 import { ButtonSize, ButtonStyle } from '../../types';
-// Import DPIcon to ensure it's registered before ButtonCTA uses it
-import '../../../Icon/platforms/web/Icon.web';
-import { IconSize, iconSizes } from '../../../Icon/types';
+// Import Icon-Base to ensure it's registered before ButtonCTA uses it
+// Migrated from legacy Icon directory to Icon-Base (Stemma System naming)
+import '../../../Icon-Base/platforms/web/IconBase.web';
+import { IconBaseSize, iconBaseSizes } from '../../../Icon-Base/types';
 // Import theme-aware blend utilities for state color calculations
 // Uses getBlendUtilities() factory for consistent state styling across components
 // @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
@@ -38,33 +39,33 @@ import { getBlendUtilities, BlendUtilitiesResult } from '../../../../../blend/Th
 import buttonStyles from './ButtonCTA.web.css';
 
 /**
- * Map Button-CTA size to appropriate IconSize using explicit token references.
+ * Map Button-CTA size to appropriate IconBaseSize using explicit token references.
  * 
  * Provides type-safe mapping from button size variants to icon sizes:
- * - small/medium: iconSizes.size100 (24px)
- * - large: iconSizes.size125 (32px)
+ * - small/medium: iconBaseSizes.size100 (24px)
+ * - large: iconBaseSizes.size125 (32px)
  * 
  * Fails loudly if icon size token is missing to prevent silent fallback issues.
  * 
  * @param buttonSize - Button size variant
- * @returns Type-safe IconSize value from token reference
+ * @returns Type-safe IconBaseSize value from token reference
  * @throws Error if icon size token is missing
  */
-function getIconSizeForButton(buttonSize: ButtonSize): IconSize {
-  let iconSize: IconSize;
+function getIconSizeForButton(buttonSize: ButtonSize): IconBaseSize {
+  let iconSize: IconBaseSize;
   
   switch (buttonSize) {
     case 'small':
     case 'medium':
-      iconSize = iconSizes.size100;
+      iconSize = iconBaseSizes.size100;
       if (!iconSize) {
-        throw new Error('ButtonCTA: iconSizes.size100 token is missing');
+        throw new Error('ButtonCTA: iconBaseSizes.size100 token is missing');
       }
       break;
     case 'large':
-      iconSize = iconSizes.size125;
+      iconSize = iconBaseSizes.size125;
       if (!iconSize) {
-        throw new Error('ButtonCTA: iconSizes.size125 token is missing');
+        throw new Error('ButtonCTA: iconBaseSizes.size125 token is missing');
       }
       break;
     default:
@@ -401,9 +402,9 @@ export class ButtonCTA extends HTMLElement {
     
     // Get icon size for button size variant
     // Icon sizes are type-safe mapped from button size:
-    // - Small/Medium: 24px (iconSize100)
-    // - Large: 32px (iconSize125)
-    const iconSize: IconSize = getIconSizeForButton(size);
+    // - Small/Medium: 24px (iconBaseSize100)
+    // - Large: 32px (iconBaseSize125)
+    const iconSize: IconBaseSize = getIconSizeForButton(size);
     
     // Generate label class
     const labelClass = noWrap ? 'button-cta__label--no-wrap' : 'button-cta__label';
@@ -428,8 +429,8 @@ export class ButtonCTA extends HTMLElement {
     // @see Requirements: 8.2, 8.3 (components render correctly in browser bundles)
     
     // Render shadow DOM content
-    // Uses <dp-icon> web component for icon rendering (component composition pattern)
-    // This matches iOS and Android platforms which use Icon() component composition
+    // Uses <icon-base> web component for icon rendering (component composition pattern)
+    // This matches iOS and Android platforms which use IconBase() component composition
     // @see Requirements: 8.2, 8.3 (components render correctly with interactivity)
     this._shadowRoot.innerHTML = `
       <style>${buttonStyles}</style>
@@ -442,7 +443,7 @@ export class ButtonCTA extends HTMLElement {
         aria-label="${label}"
         style="${blendColorStyles}"
       >
-        ${icon ? `<span class="button-cta__icon" aria-hidden="true"><dp-icon name="${icon}" size="${iconSize}" color="inherit"></dp-icon></span>` : ''}
+        ${icon ? `<span class="button-cta__icon" aria-hidden="true"><icon-base name="${icon}" size="${iconSize}" color="inherit"></icon-base></span>` : ''}
         <span class="${labelClass}">${label}</span>
       </button>
     `;

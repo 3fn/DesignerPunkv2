@@ -40,7 +40,6 @@ describe('Component Registration', () => {
 
     it('should contain safeDefine and all component registrations', () => {
       expect(bundleContent).toContain('safeDefine');
-      expect(bundleContent).toContain('text-input-field');
       expect(bundleContent).toContain('input-text-base');
       expect(bundleContent).toContain('input-text-email');
       expect(bundleContent).toContain('button-cta');
@@ -50,10 +49,10 @@ describe('Component Registration', () => {
       expect(bundleContent).toContain('container-base');
     });
 
-    it('should register all eight custom elements via safeDefine', () => {
+    it('should register all seven custom elements via safeDefine', () => {
       // Requirements 4.1, 4.2, 4.3, 4.4
       // Includes dual registration for Icon (dp-icon + icon-base) and Container (dp-container + container-base)
-      expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]text-input-field['"]/);
+      // Note: text-input-field removed - use input-text-base instead (Stemma System migration)
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]input-text-base['"]/);
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]input-text-email['"]/);
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]button-cta['"]/);
@@ -65,13 +64,11 @@ describe('Component Registration', () => {
 
     it('should export all component classes', () => {
       // Requirements 1.2, 1.3
-      expect(bundleContent).toMatch(/export\s*\{[^}]*TextInputField[^}]*\}/);
+      // Note: Stemma System migration - legacy exports removed, using new naming
       expect(bundleContent).toMatch(/export\s*\{[^}]*InputTextBase[^}]*\}/);
       expect(bundleContent).toMatch(/export\s*\{[^}]*InputTextEmail[^}]*\}/);
       expect(bundleContent).toMatch(/export\s*\{[^}]*ButtonCTA[^}]*\}/);
-      expect(bundleContent).toMatch(/export\s*\{[^}]*DPIcon[^}]*\}/);
       expect(bundleContent).toMatch(/export\s*\{[^}]*IconBaseElement[^}]*\}/);
-      expect(bundleContent).toMatch(/export\s*\{[^}]*ContainerWeb[^}]*\}/);
       expect(bundleContent).toMatch(/export\s*\{[^}]*ContainerBaseWeb[^}]*\}/);
     });
   });
@@ -129,9 +126,9 @@ describe('Component Registration', () => {
       expect(mockContext.DesignerPunk).toBeDefined();
     });
 
-    it('should register all eight custom elements (Req 2.3, 4.1-4.4)', () => {
+    it('should register all seven custom elements (Req 2.3, 4.1-4.4)', () => {
       // Includes dual registration for Icon (dp-icon + icon-base) and Container (dp-container + container-base)
-      expect(registeredElements.has('text-input-field')).toBe(true);
+      // Note: text-input-field removed - use input-text-base instead (Stemma System migration)
       expect(registeredElements.has('input-text-base')).toBe(true);
       expect(registeredElements.has('button-cta')).toBe(true);
       expect(registeredElements.has('dp-icon')).toBe(true);
@@ -142,21 +139,21 @@ describe('Component Registration', () => {
 
     it('should expose all components in DesignerPunk global', () => {
       const dp = mockContext.DesignerPunk as Record<string, unknown>;
-      expect(dp.TextInputField).toBeDefined();
+      // Note: Stemma System migration - legacy exports removed, using new naming
       expect(dp.InputTextBase).toBeDefined();
       expect(dp.ButtonCTA).toBeDefined();
-      expect(dp.DPIcon).toBeDefined();
       expect(dp.IconBaseElement).toBeDefined();
-      expect(dp.ContainerWeb).toBeDefined();
       expect(dp.ContainerBaseWeb).toBeDefined();
     });
 
-    it('should expose Icon, IconBase, Container, and ContainerBase aliases', () => {
+    it('should expose Icon, IconBase, Container, ContainerBase, and TextInputField aliases', () => {
       const dp = mockContext.DesignerPunk as Record<string, unknown>;
-      expect(dp.Icon).toBe(dp.DPIcon);
+      expect(dp.Icon).toBe(dp.IconBaseElement);
       expect(dp.IconBase).toBe(dp.IconBaseElement);
-      expect(dp.Container).toBe(dp.ContainerWeb);
+      expect(dp.Container).toBe(dp.ContainerBaseWeb);
       expect(dp.ContainerBase).toBe(dp.ContainerBaseWeb);
+      // Legacy alias for backward compatibility
+      expect(dp.TextInputField).toBe(dp.InputTextBase);
     });
   });
 
@@ -169,34 +166,35 @@ describe('Component Registration', () => {
     });
 
     it('should have correct component imports', () => {
-      expect(content).toContain("import { TextInputField }");
+      // Note: Stemma System migration - legacy imports removed, using new naming
       expect(content).toContain("import { InputTextBase }");
       expect(content).toContain("import { InputTextEmail }");
       expect(content).toContain("import { ButtonCTA }");
       expect(content).toContain("import { IconBaseElement }");
-      expect(content).toContain("import { DPIcon }");
-      expect(content).toContain("import { ContainerWeb }");
       expect(content).toContain("import { ContainerBaseWeb }");
     });
 
-    it('should have safeDefine calls for all eight components', () => {
+    it('should have safeDefine calls for all seven components', () => {
       // Includes dual registration for Icon (dp-icon + icon-base) and Container (dp-container + container-base)
-      expect(content).toContain("safeDefine('text-input-field', TextInputField)");
+      // Note: text-input-field removed - use input-text-base instead (Stemma System migration)
       expect(content).toContain("safeDefine('input-text-base', InputTextBase)");
       expect(content).toContain("safeDefine('input-text-email', InputTextEmail)");
       expect(content).toContain("safeDefine('button-cta', ButtonCTA)");
-      expect(content).toContain("safeDefine('dp-icon', DPIcon)");
       expect(content).toContain("safeDefine('icon-base', IconBaseElement)");
-      expect(content).toContain("safeDefine('dp-container', ContainerWeb)");
+      expect(content).toContain("safeDefine('dp-icon', IconBaseElement)");
       expect(content).toContain("safeDefine('container-base', ContainerBaseWeb)");
+      expect(content).toContain("safeDefine('dp-container', ContainerBaseWeb)");
     });
 
     it('should export all components for UMD global access', () => {
-      expect(content).toContain('export { TextInputField, InputTextBase, InputTextEmail, ButtonCTA, DPIcon, IconBaseElement, ContainerWeb, ContainerBaseWeb }');
-      expect(content).toContain('export const Icon = DPIcon');
+      // Note: Stemma System migration - legacy exports removed, using new naming
+      expect(content).toContain('export { InputTextBase, InputTextEmail, ButtonCTA, IconBaseElement, ContainerBaseWeb }');
+      expect(content).toContain('export const Icon = IconBaseElement');
       expect(content).toContain('export const IconBase = IconBaseElement');
-      expect(content).toContain('export const Container = ContainerWeb');
+      expect(content).toContain('export const Container = ContainerBaseWeb');
       expect(content).toContain('export const ContainerBase = ContainerBaseWeb');
+      // Legacy alias for backward compatibility
+      expect(content).toContain('export const TextInputField = InputTextBase');
     });
   });
 });

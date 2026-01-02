@@ -49,9 +49,9 @@ DesignerPunk provides browser-ready web component bundles that work directly in 
 
 **Available Components:**
 - `<button-cta>` - Call-to-action button with variants and icon support
-- `<text-input-field>` - Text input with validation states and helper text
-- `<dp-icon>` - Icon component with size and color variants
-- `<dp-container>` - Layout container with padding, background, and shadow options
+- `<input-text-base>` - Text input with validation states and helper text
+- `<icon-base>` / `<dp-icon>` - Icon component with size and color variants
+- `<container-base>` / `<dp-container>` - Layout container with padding, background, and shadow options
 
 ---
 
@@ -73,7 +73,7 @@ The fastest way to get started with DesignerPunk web components:
 <body>
   <!-- Step 2: Use components -->
   <button-cta label="Click Me" variant="primary"></button-cta>
-  <text-input-field label="Email" placeholder="you@example.com"></text-input-field>
+  <input-text-base label="Email" placeholder="you@example.com"></input-text-base>
   
   <!-- Step 3: Load the bundle (ESM recommended) -->
   <script type="module" src="dist/browser/designerpunk.esm.js"></script>
@@ -109,19 +109,19 @@ ES Modules provide the best developer experience with native browser support, tr
 </head>
 <body>
   <!-- Components can be used immediately in HTML -->
-  <dp-container padding="200" background="color-surface" border-radius="normal">
+  <container-base padding="200" background="color-surface" border-radius="normal">
     <h1>Welcome</h1>
-    <text-input-field 
+    <input-text-base 
       label="Username" 
       placeholder="Enter your username"
       helper-text="Choose a unique username"
-    ></text-input-field>
+    ></input-text-base>
     <button-cta 
       label="Sign Up" 
       variant="primary" 
       icon="arrow-right"
     ></button-cta>
-  </dp-container>
+  </container-base>
 
   <!-- ESM bundle - components auto-register -->
   <script type="module" src="dist/browser/designerpunk.esm.js"></script>
@@ -134,11 +134,11 @@ ES Modules provide the best developer experience with native browser support, tr
 ```html
 <script type="module">
   // Import the bundle (components auto-register on import)
-  import { ButtonCTA, TextInputField, DPIcon, ContainerWeb } from './dist/browser/designerpunk.esm.js';
+  import { ButtonCTA, InputTextBase, IconBaseElement, ContainerBaseWeb } from './dist/browser/designerpunk.esm.js';
   
   // Wait for components to be defined
   await customElements.whenDefined('button-cta');
-  await customElements.whenDefined('text-input-field');
+  await customElements.whenDefined('input-text-base');
   
   // Add event listeners
   const button = document.querySelector('button-cta');
@@ -146,7 +146,7 @@ ES Modules provide the best developer experience with native browser support, tr
     console.log('Button pressed!', event.detail);
   });
   
-  const input = document.querySelector('text-input-field');
+  const input = document.querySelector('input-text-base');
   input.addEventListener('change', (event) => {
     console.log('Input changed:', event.detail.value);
   });
@@ -197,7 +197,7 @@ UMD (Universal Module Definition) provides broader browser compatibility and exp
 <body>
   <!-- Components can be used immediately in HTML -->
   <button-cta label="Click Me" variant="primary"></button-cta>
-  <text-input-field label="Email" placeholder="you@example.com"></text-input-field>
+  <input-text-base label="Email" placeholder="you@example.com"></input-text-base>
 
   <!-- UMD bundle - no type="module" needed -->
   <script src="dist/browser/designerpunk.umd.js"></script>
@@ -212,7 +212,7 @@ UMD (Universal Module Definition) provides broader browser compatibility and exp
 <script>
   // Components are available via window.DesignerPunk
   console.log('Available components:', Object.keys(window.DesignerPunk));
-  // Output: ['TextInputField', 'ButtonCTA', 'DPIcon', 'ContainerWeb', 'Icon', 'Container']
+  // Output: ['InputTextBase', 'ButtonCTA', 'IconBaseElement', 'ContainerBaseWeb', 'Icon', 'IconBase', 'Container', 'ContainerBase', 'TextInputField']
   
   // Wait for DOM and components to be ready
   document.addEventListener('DOMContentLoaded', function() {
@@ -222,7 +222,7 @@ UMD (Universal Module Definition) provides broader browser compatibility and exp
       console.log('Button pressed!', event.detail);
     });
     
-    var input = document.querySelector('text-input-field');
+    var input = document.querySelector('input-text-base');
     input.addEventListener('change', function(event) {
       console.log('Input changed:', event.detail.value);
     });
@@ -327,38 +327,38 @@ Call-to-action button with variants, sizes, and icon support.
 **Events:**
 - `press` - Fired when button is clicked or activated via keyboard
 
-### TextInputField (`<text-input-field>`)
+### InputTextBase (`<input-text-base>`)
 
 Text input with validation states, helper text, and accessibility features.
 
 ```html
 <!-- Basic usage -->
-<text-input-field label="Username" placeholder="Enter username"></text-input-field>
+<input-text-base label="Username" placeholder="Enter username"></input-text-base>
 
 <!-- With helper text -->
-<text-input-field 
+<input-text-base 
   label="Email" 
   type="email" 
   placeholder="you@example.com"
   helper-text="We'll never share your email"
-></text-input-field>
+></input-text-base>
 
 <!-- Error state -->
-<text-input-field 
+<input-text-base 
   label="Password" 
   type="password"
   error-message="Password must be at least 8 characters"
-></text-input-field>
+></input-text-base>
 
 <!-- Success state -->
-<text-input-field 
+<input-text-base 
   label="Code" 
   value="123456"
   is-success="true"
-></text-input-field>
+></input-text-base>
 
 <!-- Required field -->
-<text-input-field label="Full Name" required></text-input-field>
+<input-text-base label="Full Name" required></input-text-base>
 ```
 
 **Events:**
@@ -366,55 +366,63 @@ Text input with validation states, helper text, and accessibility features.
 - `focus` - Fired when input receives focus
 - `blur` - Fired when input loses focus
 
-### Icon (`<dp-icon>`)
+### Icon (`<icon-base>` / `<dp-icon>`)
 
 Icon component with size and color variants.
 
 ```html
-<!-- Basic usage -->
+<!-- Basic usage (Stemma System naming) -->
+<icon-base name="arrow-right" size="24"></icon-base>
+
+<!-- Legacy tag (backward compatibility) -->
 <dp-icon name="arrow-right" size="24"></dp-icon>
 
 <!-- Size variants -->
-<dp-icon name="heart" size="13"></dp-icon>
-<dp-icon name="heart" size="18"></dp-icon>
-<dp-icon name="heart" size="24"></dp-icon>
-<dp-icon name="heart" size="32"></dp-icon>
-<dp-icon name="heart" size="48"></dp-icon>
+<icon-base name="heart" size="13"></icon-base>
+<icon-base name="heart" size="18"></icon-base>
+<icon-base name="heart" size="24"></icon-base>
+<icon-base name="heart" size="32"></icon-base>
+<icon-base name="heart" size="48"></icon-base>
 
 <!-- Color variants (using token names) -->
-<dp-icon name="check" size="24" color="color-success-strong"></dp-icon>
-<dp-icon name="x" size="24" color="color-error"></dp-icon>
-<dp-icon name="info" size="24" color="color-primary"></dp-icon>
+<icon-base name="check" size="24" color="color-success-strong"></icon-base>
+<icon-base name="x" size="24" color="color-error"></icon-base>
+<icon-base name="info" size="24" color="color-primary"></icon-base>
 ```
 
 **Available Icons:**
 `arrow-right`, `arrow-left`, `arrow-up`, `arrow-down`, `check`, `x`, `plus`, `minus`, `info`, `settings`, `user`, `heart`, `mail`, `calendar`, `star`, `chevron-down`, `chevron-up`, `chevron-left`, `chevron-right`
 
-### Container (`<dp-container>`)
+### Container (`<container-base>` / `<dp-container>`)
 
 Layout container with padding, background, shadow, and border options.
 
 ```html
-<!-- Basic usage -->
+<!-- Basic usage (Stemma System naming) -->
+<container-base padding="200" background="color-surface" border-radius="normal">
+  <p>Content goes here</p>
+</container-base>
+
+<!-- Legacy tag (backward compatibility) -->
 <dp-container padding="200" background="color-surface" border-radius="normal">
   <p>Content goes here</p>
 </dp-container>
 
 <!-- With shadow -->
-<dp-container padding="300" background="color-surface" shadow="shadow-container" border-radius="normal">
+<container-base padding="300" background="color-surface" shadow="shadow-container" border-radius="normal">
   <p>Elevated content</p>
-</dp-container>
+</container-base>
 
 <!-- With border -->
-<dp-container padding="200" border="default" border-radius="normal">
+<container-base padding="200" border="default" border-radius="normal">
   <p>Bordered content</p>
-</dp-container>
+</container-base>
 
 <!-- Semantic HTML -->
-<dp-container padding="200" semantic="article" accessibility-label="Article section">
+<container-base padding="200" semantic="article" accessibility-label="Article section">
   <h2>Article Title</h2>
   <p>Article content</p>
-</dp-container>
+</container-base>
 ```
 
 **Attributes:**

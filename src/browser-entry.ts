@@ -12,17 +12,13 @@
  * @see .kiro/specs/028-web-component-browser-distribution/design.md
  */
 
-// Import all web components
-import { TextInputField } from './components/core/TextInputField/platforms/web/TextInputField.web';
+// Import all web components - Stemma System naming convention
 import { InputTextBase } from './components/core/Input-Text-Base/platforms/web/InputTextBase.web';
 import { InputTextEmail } from './components/core/Input-Text-Email/platforms/web/InputTextEmail.web';
 // Button-CTA - Stemma System naming (standalone component, no behavioral variants)
 import { ButtonCTA } from './components/core/Button-CTA/platforms/web/ButtonCTA.web';
 // Icon-Base - Stemma System naming (foundational primitive component)
 import { IconBaseElement } from './components/core/Icon-Base/platforms/web/IconBase.web';
-// Legacy Icon import for backward compatibility
-import { DPIcon } from './components/core/Icon/platforms/web/Icon.web';
-import { ContainerWeb } from './components/core/Container/platforms/web/Container.web';
 // Container-Base - Stemma System naming (foundational primitive component)
 import { ContainerBaseWeb } from './components/core/Container-Base/platforms/web/ContainerBase.web';
 
@@ -81,19 +77,18 @@ function safeDefine(name: string, constructor: CustomElementConstructor): void {
   }
 }
 
-// Auto-register all components
+// Auto-register all components - Stemma System naming
 // Requirements: 4.1, 4.2, 4.3, 4.4
-safeDefine('text-input-field', TextInputField);
 safeDefine('input-text-base', InputTextBase);
 safeDefine('input-text-email', InputTextEmail);
 // Button-CTA - Primary registration (Stemma System naming)
 safeDefine('button-cta', ButtonCTA);
-// Icon - Dual registration for backward compatibility
-safeDefine('dp-icon', DPIcon);  // Legacy tag (backward compatibility)
-safeDefine('icon-base', IconBaseElement);  // New Stemma System tag
-// Container - Dual registration for backward compatibility
-safeDefine('dp-container', ContainerWeb);  // Legacy tag (backward compatibility)
-safeDefine('container-base', ContainerBaseWeb);  // New Stemma System tag
+// Icon-Base - Stemma System naming (foundational primitive component)
+safeDefine('icon-base', IconBaseElement);
+safeDefine('dp-icon', IconBaseElement);  // Legacy tag (backward compatibility)
+// Container-Base - Stemma System naming (foundational primitive component)
+safeDefine('container-base', ContainerBaseWeb);
+safeDefine('dp-container', ContainerBaseWeb);  // Legacy tag (backward compatibility)
 
 // Check tokens after DOM is ready
 // This ensures the check runs after stylesheets have been parsed
@@ -108,10 +103,12 @@ if (typeof document !== 'undefined') {
 
 // Export all components for UMD global access and ESM imports
 // Requirements: 1.2, 2.3
-export { TextInputField, InputTextBase, InputTextEmail, ButtonCTA, DPIcon, IconBaseElement, ContainerWeb, ContainerBaseWeb };
+export { InputTextBase, InputTextEmail, ButtonCTA, IconBaseElement, ContainerBaseWeb };
 
 // Also export with more intuitive names for the UMD global
-export const Icon = DPIcon;
+export const Icon = IconBaseElement;
 export const IconBase = IconBaseElement;
-export const Container = ContainerWeb;
+export const Container = ContainerBaseWeb;
 export const ContainerBase = ContainerBaseWeb;
+// Legacy alias for backward compatibility
+export const TextInputField = InputTextBase;

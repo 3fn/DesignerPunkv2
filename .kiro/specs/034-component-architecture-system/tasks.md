@@ -556,7 +556,7 @@ At this point, the Form Inputs family is fully implemented with Input-Text-Base 
       - _Requirements: R3_
       - **Completion**: `.kiro/specs/034-component-architecture-system/completion/task-6-3-2-completion.md`
 
-  - [ ] 6.4 Human-AI Checkpoint: Verify remediation complete
+  - [x] 6.4 Human-AI Checkpoint: Verify remediation complete
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     - Review remediation results with Human
@@ -564,9 +564,108 @@ At this point, the Form Inputs family is fully implemented with Input-Text-Base 
     - Document any deferred items for future work
     - _Requirements: R3_
 
+  - [x] 6.5 Update Button-CTA to use Icon-Base
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Status**: Complete
+    - Update Button-CTA web component to import from Icon-Base instead of legacy Icon
+    - Update import paths in ButtonCTA.web.ts
+    - Run tests to verify icon integration still works
+    - _Requirements: R3_
+    - **Completion**: `.kiro/specs/034-component-architecture-system/completion/task-6-5-completion.md`
+
+  - [x] 6.6 Port missing assets, update remaining Icon imports, and cleanup
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Status**: Complete
+    - Update Input-Text-Base to import from Icon-Base (instead of legacy Icon)
+    - Update TextInputField to import from Icon-Base (will be deleted in 6.7, but needed for tests to pass)
+    - Port Icon assets (xcassets, res, web assets) to Icon-Base if needed
+    - Port Container TokenMapping files to Container-Base (if not already present)
+    - Evaluate TextInputField accessibility tests for porting (or document as future work)
+    - _Requirements: R3_
+    - **Completion**: `.kiro/specs/034-component-architecture-system/completion/task-6-6-completion.md`
+
+  - [x] 6.7 Port accessibility tests to Input-Text-Base
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Rationale**: TextInputField has comprehensive accessibility test coverage (5 test files) that validates WCAG 2.1 AA compliance. These tests are critical for ensuring Input-Text-Base maintains the same accessibility standards. Tests need adaptation for Input-Text-Base's structure while preserving accessibility validation.
+    - Port accessibility tests from TextInputField to Input-Text-Base
+    - Adapt tests for Input-Text-Base component structure and naming
+    - Ensure all WCAG 2.1 AA compliance tests pass
+    - _Requirements: R3_
+
+    - [x] 6.7.1 Port screenReaderSupport tests
+      **Type**: Implementation
+      **Validation**: Tier 2 - Standard
+      - Port `TextInputField/__tests__/screenReaderSupport.test.ts` to Input-Text-Base
+      - Adapt aria-describedby, aria-invalid, and role="alert" tests
+      - Update component selectors and custom element names
+      - Verify WCAG 2.1 AA screen reader compliance
+      - _Requirements: R3_
+
+    - [x] 6.7.2 Port labelAssociation tests
+      **Type**: Implementation
+      **Validation**: Tier 2 - Standard
+      - Port `TextInputField/__tests__/labelAssociation.test.ts` to Input-Text-Base
+      - Adapt label-input association tests (for attribute, programmatic association)
+      - Update component selectors and custom element names
+      - Verify Requirement 7.1 compliance
+      - _Requirements: R3_
+
+    - [x] 6.7.3 Port focusIndicators tests
+      **Type**: Implementation
+      **Validation**: Tier 2 - Standard
+      - Port `TextInputField/__tests__/focusIndicators.test.ts` to Input-Text-Base
+      - Adapt focus ring token usage tests
+      - Update file paths for platform implementations
+      - Verify WCAG 2.4.7 Focus Visible compliance
+      - _Requirements: R3_
+
+    - [x] 6.7.4 Port keyboardNavigation tests
+      **Type**: Implementation
+      **Validation**: Tier 2 - Standard
+      **Status**: Complete
+      - Port `TextInputField/__tests__/keyboardNavigation.test.ts` to Input-Text-Base
+      - Adapt Tab key focus, Enter key submission, and navigation flow tests
+      - Update component selectors and custom element names
+      - Verify Requirements 6.1, 6.2, 6.3 compliance
+      - _Requirements: R3_
+      - **Completion**: `.kiro/specs/034-component-architecture-system/completion/task-6-7-4-completion.md`
+
+    - [x] 6.7.5 Port touchTargetSizing tests
+      **Type**: Implementation
+      **Validation**: Tier 2 - Standard
+      - Port `TextInputField/__tests__/touchTargetSizing.test.ts` to Input-Text-Base
+      - Adapt touch target minimum height tests (48px WCAG requirement)
+      - Update component selectors and custom element names
+      - Verify Requirements 5.2, 5.3 compliance
+      - _Requirements: R3_
+
+  - [x] 6.8 Delete legacy component directories
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Status**: Complete
+    - Delete `src/components/core/Container/` (legacy)
+    - Delete `src/components/core/Icon/` (legacy)
+    - Delete `src/components/core/TextInputField/` (legacy)
+    - Update browser-entry.ts if needed
+    - Run full test suite to verify nothing breaks
+    - _Requirements: R3_
+    - **Completion**: `.kiro/specs/034-component-architecture-system/completion/task-6-8-completion.md`
+
+  - [x] 6.9 Final Human-AI Checkpoint: Confirm Task 6 complete
+    **Type**: Architecture
+    **Validation**: Tier 3 - Comprehensive
+    - Review cleanup results with Human
+    - Confirm all legacy directories removed
+    - Confirm all components use Stemma System naming
+    - Document Task 6 as complete
+    - _Requirements: R3_
+
 ---
 
-- [ ] 7. Create MCP Documentation Infrastructure
+- [x] 7. Create MCP Documentation Infrastructure
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -596,7 +695,7 @@ At this point, the Form Inputs family is fully implemented with Input-Text-Base 
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 7 Complete: MCP Documentation Infrastructure"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 7.1 Create MCP document structure template
+  - [x] 7.1 Create MCP document structure template
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Define metadata, sections, and progressive disclosure support
@@ -606,7 +705,7 @@ At this point, the Form Inputs family is fully implemented with Input-Text-Base 
     - Run MCP health check: `mcp_designerpunk_docs_get_index_health()` and rebuild if needed
     - _Requirements: R7_
 
-  - [ ] 7.2 Create Form Inputs family MCP documentation
+  - [x] 7.2 Create Form Inputs family MCP documentation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Document inheritance structures and behavioral contracts
@@ -616,7 +715,7 @@ At this point, the Form Inputs family is fully implemented with Input-Text-Base 
     - Run MCP health check: `mcp_designerpunk_docs_get_index_health()` and rebuild if needed
     - _Requirements: R7_
 
-  - [ ] 7.3 Create structural MCP documentation for remaining families
+  - [x] 7.3 Create structural MCP documentation for remaining families
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create placeholder documents for 10 families
@@ -625,8 +724,9 @@ At this point, the Form Inputs family is fully implemented with Input-Text-Base 
     - Add `inclusion: manual` front-matter to all steering documents created
     - Run MCP health check: `mcp_designerpunk_docs_get_index_health()` and rebuild if needed
     - _Requirements: R7, R10_
+    - **Completion**: `.kiro/specs/034-component-architecture-system/completion/task-7-3-completion.md`
 
-  - [ ] 7.4 Validate MCP integration
+  - [x] 7.4 Validate MCP integration
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test progressive disclosure workflow

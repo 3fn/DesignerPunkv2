@@ -193,11 +193,11 @@ describe('Bundler Resolution', () => {
       const esmPath = path.join(BROWSER_DIST_DIR, 'designerpunk.esm.js');
       const content = fs.readFileSync(esmPath, 'utf-8');
 
-      // Verify ESM export syntax
+      // Verify ESM export syntax (Stemma System naming)
       expect(content).toMatch(/export\s*\{[^}]*TextInputField[^}]*\}/);
       expect(content).toMatch(/export\s*\{[^}]*ButtonCTA[^}]*\}/);
-      expect(content).toMatch(/export\s*\{[^}]*DPIcon[^}]*\}/);
-      expect(content).toMatch(/export\s*\{[^}]*ContainerWeb[^}]*\}/);
+      expect(content).toMatch(/export\s*\{[^}]*IconBaseElement[^}]*\}/);
+      expect(content).toMatch(/export\s*\{[^}]*ContainerBaseWeb[^}]*\}/);
     });
 
     it('should not have CommonJS syntax in ESM bundle', () => {

@@ -45,8 +45,8 @@ import {
   calculateLabelPosition,
   calculateIconVisibility
 } from '../../stateManagement';
-import { createIcon } from '../../../Icon/platforms/web/Icon.web';
-import { iconSizes } from '../../../Icon/types';
+import { createIcon } from '../../../Icon-Base/platforms/web/IconBase.web';
+import { iconSizes } from '../../../Icon-Base/types';
 
 /**
  * Input-Text-Base Web Component

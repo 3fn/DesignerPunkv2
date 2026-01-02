@@ -35,19 +35,19 @@ const COMPONENT_PATHS = {
     android: 'src/components/core/Button-CTA/platforms/android/ButtonCTA.android.kt'
   },
   textInputField: {
-    web: 'src/components/core/TextInputField/platforms/web/TextInputField.web.ts',
-    ios: 'src/components/core/TextInputField/platforms/ios/TextInputField.ios.swift',
-    android: 'src/components/core/TextInputField/platforms/android/TextInputField.android.kt'
+    web: 'src/components/core/Input-Text-Base/platforms/web/InputTextBase.web.ts',
+    ios: 'src/components/core/Input-Text-Base/platforms/ios/InputTextBase.ios.swift',
+    android: 'src/components/core/Input-Text-Base/platforms/android/InputTextBase.android.kt'
   },
   container: {
-    web: 'src/components/core/Container/platforms/web/Container.web.ts',
-    ios: 'src/components/core/Container/platforms/ios/Container.ios.swift',
-    android: 'src/components/core/Container/platforms/android/Container.android.kt'
+    web: 'src/components/core/Container-Base/platforms/web/ContainerBase.web.ts',
+    ios: 'src/components/core/Container-Base/platforms/ios/ContainerBase.ios.swift',
+    android: 'src/components/core/Container-Base/platforms/android/ContainerBase.android.kt'
   },
   icon: {
-    web: 'src/components/core/Icon/platforms/web/Icon.web.ts',
-    ios: 'src/components/core/Icon/platforms/ios/Icon.ios.swift',
-    android: 'src/components/core/Icon/platforms/android/Icon.android.kt'
+    web: 'src/components/core/Icon-Base/platforms/web/IconBase.web.ts',
+    ios: 'src/components/core/Icon-Base/platforms/ios/IconBase.ios.swift',
+    android: 'src/components/core/Icon-Base/platforms/android/IconBase.android.kt'
   }
 };
 

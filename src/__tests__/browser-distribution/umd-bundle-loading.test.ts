@@ -69,11 +69,11 @@ describe('UMD Bundle Loading', () => {
       const bundleContent = fs.readFileSync(UMD_BUNDLE, 'utf-8');
 
       // Components should be accessible via the namespace
-      // Actual component names from browser-entry.ts exports
-      expect(bundleContent).toContain('TextInputField');
+      // Actual component names from browser-entry.ts exports (Stemma System naming)
+      expect(bundleContent).toContain('InputTextBase');
       expect(bundleContent).toContain('ButtonCTA');
-      expect(bundleContent).toContain('DPIcon');
-      expect(bundleContent).toContain('ContainerWeb');
+      expect(bundleContent).toContain('IconBaseElement');
+      expect(bundleContent).toContain('ContainerBaseWeb');
     });
   });
 
@@ -124,7 +124,8 @@ describe('UMD Bundle Loading', () => {
       // Minified bundle should still export components
       // Note: Minification may mangle internal names, but exports should remain
       // Check for custom element tag names which are preserved as strings
-      expect(bundleContent).toContain('text-input-field');
+      // Note: Stemma System migration - text-input-field removed, using input-text-base instead
+      expect(bundleContent).toContain('input-text-base');
       expect(bundleContent).toContain('button-cta');
       expect(bundleContent).toContain('dp-icon');
       expect(bundleContent).toContain('dp-container');

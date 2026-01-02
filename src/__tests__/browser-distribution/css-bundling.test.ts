@@ -67,19 +67,19 @@ describe('CSS Bundling for Browser Distribution', () => {
     it('should contain Icon CSS styles in ESM bundle', () => {
       const bundleContent = fs.readFileSync(ESM_BUNDLE_PATH, 'utf-8');
       
-      // Icon CSS should be inlined - check for distinctive CSS rules
-      // Icon component uses .icon class (not .dp-icon)
-      expect(bundleContent).toContain('.icon');
-      expect(bundleContent).toContain('.icon--size-100');
+      // Icon-Base CSS should be inlined - check for distinctive CSS rules
+      // Icon-Base component uses .icon-base class (Stemma System naming)
+      expect(bundleContent).toContain('.icon-base');
+      expect(bundleContent).toContain('.icon-base--size-100');
     });
 
     it('should contain Icon CSS styles in UMD bundle', () => {
       const bundleContent = fs.readFileSync(UMD_BUNDLE_PATH, 'utf-8');
       
-      // Icon CSS should be inlined
-      // Icon component uses .icon class (not .dp-icon)
-      expect(bundleContent).toContain('.icon');
-      expect(bundleContent).toContain('.icon--size-100');
+      // Icon-Base CSS should be inlined
+      // Icon-Base component uses .icon-base class (Stemma System naming)
+      expect(bundleContent).toContain('.icon-base');
+      expect(bundleContent).toContain('.icon-base--size-100');
     });
   });
 
@@ -205,12 +205,12 @@ describe('CSS Bundling for Browser Distribution', () => {
     });
 
     it('should have Icon CSS source file', () => {
-      const cssPath = path.join(process.cwd(), 'src/components/core/Icon/platforms/web/Icon.web.css');
+      const cssPath = path.join(process.cwd(), 'src/components/core/Icon-Base/platforms/web/styles.css');
       expect(fs.existsSync(cssPath)).toBe(true);
       
       const cssContent = fs.readFileSync(cssPath, 'utf-8');
-      // Icon component uses .icon class (not .dp-icon)
-      expect(cssContent).toContain('.icon');
+      // Icon-Base component uses .icon-base class (Stemma System naming)
+      expect(cssContent).toContain('.icon-base');
     });
   });
 

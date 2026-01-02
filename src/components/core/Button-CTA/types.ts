@@ -10,7 +10,7 @@
  * @module Button-CTA/types
  */
 
-import { IconName } from '../Icon/types';
+import { IconBaseName } from '../Icon-Base/types';
 
 /**
  * Button size variants
@@ -162,7 +162,7 @@ export interface ButtonProps {
    * - Icons are marked as decorative (aria-hidden) for accessibility
    * - Icon-text spacing follows semantic spacing tokens
    * 
-   * @see {@link IconName} for available icon names
+   * @see {@link IconBaseName} for available icon names
    * 
    * @example
    * ```typescript
@@ -171,7 +171,7 @@ export interface ButtonProps {
    * icon="plus"         // Add action icon
    * ```
    */
-  icon?: IconName;
+  icon?: IconBaseName;
   
   /**
    * Prevent text wrapping (optional, default: false)

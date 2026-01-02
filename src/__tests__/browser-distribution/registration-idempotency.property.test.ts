@@ -34,9 +34,10 @@ describe('Property 2: Registration Idempotency', () => {
 
   /**
    * Component names that are registered by the browser bundle
+   * Note: Stemma System migration - text-input-field removed, using input-text-base instead
    */
   const COMPONENT_NAMES = [
-    'text-input-field',
+    'input-text-base',
     'button-cta',
     'dp-icon',
     'dp-container',

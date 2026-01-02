@@ -53,11 +53,11 @@ describe('Browser Bundle Loading', () => {
     it('should export expected components', () => {
       const bundleContent = fs.readFileSync(ESM_BUNDLE_PATH, 'utf-8');
 
-      // Check for component exports in the export statement
+      // Check for component exports in the export statement (Stemma System naming)
       expect(bundleContent).toContain('TextInputField');
       expect(bundleContent).toContain('ButtonCTA');
-      expect(bundleContent).toContain('DPIcon');
-      expect(bundleContent).toContain('ContainerWeb');
+      expect(bundleContent).toContain('IconBaseElement');
+      expect(bundleContent).toContain('ContainerBaseWeb');
     });
 
     it('should contain safeDefine function for idempotent registration', () => {
@@ -109,11 +109,11 @@ describe('Browser Bundle Loading', () => {
     it('should contain all component classes', () => {
       const bundleContent = fs.readFileSync(UMD_BUNDLE_PATH, 'utf-8');
 
-      // Check for component class definitions
+      // Check for component class definitions (Stemma System naming)
       expect(bundleContent).toContain('TextInputField');
       expect(bundleContent).toContain('ButtonCTA');
-      expect(bundleContent).toContain('DPIcon');
-      expect(bundleContent).toContain('ContainerWeb');
+      expect(bundleContent).toContain('IconBaseElement');
+      expect(bundleContent).toContain('ContainerBaseWeb');
     });
   });
 
@@ -194,13 +194,13 @@ describe('Browser Bundle Loading', () => {
       const context = vm.createContext(mockWindow);
       script.runInContext(context);
 
-      // Check that DesignerPunk global has expected exports
+      // Check that DesignerPunk global has expected exports (Stemma System naming)
       const designerPunk = mockWindow.DesignerPunk as Record<string, unknown>;
       expect(designerPunk).toBeDefined();
       expect(designerPunk.TextInputField).toBeDefined();
       expect(designerPunk.ButtonCTA).toBeDefined();
-      expect(designerPunk.DPIcon).toBeDefined();
-      expect(designerPunk.ContainerWeb).toBeDefined();
+      expect(designerPunk.IconBaseElement).toBeDefined();
+      expect(designerPunk.ContainerBaseWeb).toBeDefined();
     });
 
     it('should expose utility functions as internal (not exported)', () => {
@@ -221,9 +221,11 @@ describe('Browser Bundle Loading', () => {
       script.runInContext(context);
 
       const designerPunk = mockWindow.DesignerPunk as Record<string, unknown>;
-      // Check for alias exports (Icon = DPIcon, Container = ContainerWeb)
+      // Check for alias exports (Icon = IconBaseElement, Container = ContainerBaseWeb)
       expect(designerPunk.Icon).toBeDefined();
+      expect(designerPunk.IconBase).toBeDefined();
       expect(designerPunk.Container).toBeDefined();
+      expect(designerPunk.ContainerBase).toBeDefined();
     });
 
     it('should have expected export structure', () => {
@@ -236,14 +238,16 @@ describe('Browser Bundle Loading', () => {
 
       const designerPunk = mockWindow.DesignerPunk as Record<string, unknown>;
       
-      // Verify the export structure matches browser-entry.ts exports
+      // Verify the export structure matches browser-entry.ts exports (Stemma System naming)
       const exportKeys = Object.keys(designerPunk);
       expect(exportKeys).toContain('TextInputField');
       expect(exportKeys).toContain('ButtonCTA');
-      expect(exportKeys).toContain('DPIcon');
-      expect(exportKeys).toContain('ContainerWeb');
+      expect(exportKeys).toContain('IconBaseElement');
+      expect(exportKeys).toContain('ContainerBaseWeb');
       expect(exportKeys).toContain('Icon');
+      expect(exportKeys).toContain('IconBase');
       expect(exportKeys).toContain('Container');
+      expect(exportKeys).toContain('ContainerBase');
     });
   });
 

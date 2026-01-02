@@ -202,3 +202,4 @@ get_section({ path: ".kiro/steering/container-components.md", heading: "Containe
 - **Primitive vs Semantic Philosophy**: `.kiro/steering/primitive-vs-semantic-usage-philosophy.md`
 - **Component Readiness System**: `.kiro/steering/component-readiness-status-system.md`
 - **Token Quick Reference**: `.kiro/steering/Token Quick Reference.md`
+- **MCP Component Family Document Template**: `.kiro/steering/mcp-component-family-document-template.md` - Template for creating new family documentation
