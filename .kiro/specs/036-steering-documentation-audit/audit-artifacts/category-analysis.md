@@ -533,26 +533,309 @@ For each token doc, classify content as:
 
 ---
 
-## Candidate Prefixes Summary
+## Category Prefix Proposals (Task 6.3)
 
-Based on family analysis, these prefixes are recommended:
+**Date Completed**: 2026-01-03
+**Status**: Proposals pending human approval at Checkpoint 2
 
-| Prefix | Family | Doc Count | Total Tokens | Purpose |
-|--------|--------|-----------|--------------|---------|
-| `Token-Family-` | Token Family Specs | 14* | 71,272 | Specific token type specifications |
-| `Token-` | Token Infrastructure | 2 | 5,497 | Token usage patterns and resolution |
-| `Component-Family-` | Component Family Specs | 11 | 22,236 | Specific component family specifications |
-| `Component-` | Component Infrastructure | 9 | 57,801 | Component development frameworks/standards |
-| `Test-` | Testing Documentation | 3 | 36,141 | Testing standards and methodologies |
-| `Process-` | Process/Workflow | 4 | 63,701 | Development workflows and standards |
+Per Requirements 5.3, 5.4, and 5.5, the following categorical prefixes are proposed as **candidates** for human review. These are NOT decisions - all prefix implementations require explicit human approval.
 
-*Token Family count pending content analysis - some docs may be reclassified as Token infrastructure
+---
 
-**Note**: Prefix decisions deferred to Checkpoint 2 approval per Requirements 5.5, 5.7.
+### Proposed Prefix 1: `Token-` (Token Infrastructure)
+
+**Purpose**: Identify documents that describe how to use, select, and resolve tokens across the design system.
+
+**Scope**: 
+- Token usage patterns and resolution logic
+- Token selection decision frameworks
+- Cross-token guidance and philosophy
+- SemanticToken interface documentation
+
+**Documents Affected**: 2 documents (5,497 tokens)
+
+| Current Name | Proposed Name |
+|--------------|---------------|
+| Token Quick Reference.md | Token-Quick-Reference.md |
+| Token Resolution Patterns.md | Token-Resolution-Patterns.md |
+
+**Rationale**: 
+- Clear distinction from Token-Family docs (specific token types)
+- Aligns with Component- vs Component-Family- pattern
+- Improves MCP query precision for infrastructure vs family content
+
+**Edge Case Note**: `semantic-token-structure.md` may belong here instead of Token-Family (see Edge Case 4). Pending human decision.
+
+---
+
+### Proposed Prefix 2: `Token-Family-` (Token Family Specifications)
+
+**Purpose**: Identify documents that specify individual token types in the Rosetta System.
+
+**Scope**:
+- Specific token type definitions (color, typography, spacing, etc.)
+- Token values and usage examples for each type
+- Token-specific validation rules
+- Per-family implementation guidance
+
+**Documents Affected**: 14 documents (71,272 tokens)*
+
+| Current Name | Proposed Name |
+|--------------|---------------|
+| accessibility-tokens.md | Token-Family-Accessibility.md |
+| blend-tokens.md | Token-Family-Blend.md |
+| border-tokens.md | Token-Family-Border.md |
+| color-tokens.md | Token-Family-Color.md |
+| glow-tokens.md | Token-Family-Glow.md |
+| layering-tokens.md | Token-Family-Layering.md |
+| motion-tokens.md | Token-Family-Motion.md |
+| opacity-tokens.md | Token-Family-Opacity.md |
+| radius-tokens.md | Token-Family-Radius.md |
+| responsive-tokens.md | Token-Family-Responsive.md |
+| semantic-token-structure.md | Token-Family-Semantic-Structure.md* |
+| shadow-tokens.md | Token-Family-Shadow.md |
+| spacing-tokens.md | Token-Family-Spacing.md |
+| typography-tokens.md | Token-Family-Typography.md |
+
+*`semantic-token-structure.md` classification pending Edge Case 4 resolution
+
+**Rationale**:
+- Mirrors Component-Family- pattern for consistency
+- Distinguishes family specs from infrastructure docs
+- Enables precise MCP queries for specific token types
+- All docs follow existing `*-tokens.md` pattern
+
+**Edge Case Note**: Content analysis (Edge Case 1) may reveal some docs contain extractable infrastructure content. Final count may change.
+
+---
+
+### Proposed Prefix 3: `Component-` (Component Infrastructure)
+
+**Purpose**: Identify documents that describe how to build, structure, and document components.
+
+**Scope**:
+- Component development frameworks and standards
+- Component templates and schema formats
+- Component readiness and inheritance structures
+- Stemma System component selection philosophy
+
+**Documents Affected**: 9 documents (57,801 tokens)
+
+| Current Name | Proposed Name |
+|--------------|---------------|
+| Component Development and Practices Guide.md | Component-Development-Guide.md |
+| Component Quick Reference.md | Component-Quick-Reference.md |
+| component-family-development-standards.md | Component-Development-Standards.md |
+| component-family-inheritance-structures.md | Component-Inheritance-Structures.md |
+| component-family-templates.md | Component-Templates.md |
+| component-readiness-status-system.md | Component-Readiness-Status.md |
+| component-schema-format.md | Component-Schema-Format.md |
+| mcp-component-family-document-template.md | Component-MCP-Document-Template.md |
+| primitive-vs-semantic-usage-philosophy.md | Component-Primitive-vs-Semantic-Philosophy.md |
+
+**Rationale**:
+- Clear distinction from Component-Family- docs (specific component families)
+- Groups all component development guidance together
+- Improves discoverability for component development tasks
+- `primitive-vs-semantic-usage-philosophy.md` included because it's about component selection (Stemma System)
+
+---
+
+### Proposed Prefix 4: `Component-Family-` (Component Family Specifications)
+
+**Purpose**: Identify documents that specify individual UI component families.
+
+**Scope**:
+- Specific component family definitions (button, icon, container, etc.)
+- Component variants and states
+- Component-specific usage guidelines
+- Per-family implementation patterns
+
+**Documents Affected**: 11 documents (22,236 tokens)
+
+| Current Name | Proposed Name |
+|--------------|---------------|
+| avatar-components.md | Component-Family-Avatar.md |
+| badge-components.md | Component-Family-Badge.md |
+| button-components.md | Component-Family-Button.md |
+| container-components.md | Component-Family-Container.md |
+| data-display-components.md | Component-Family-Data-Display.md |
+| divider-components.md | Component-Family-Divider.md |
+| form-inputs-components.md | Component-Family-Form-Inputs.md |
+| icon-components.md | Component-Family-Icon.md |
+| loading-components.md | Component-Family-Loading.md |
+| modal-components.md | Component-Family-Modal.md |
+| navigation-components.md | Component-Family-Navigation.md |
+
+**Rationale**:
+- Mirrors Token-Family- pattern for consistency
+- Distinguishes family specs from infrastructure docs
+- Enables precise MCP queries for specific component families
+- All docs follow existing `*-components.md` pattern
+
+---
+
+### Proposed Prefix 5: `Test-` (Testing Documentation)
+
+**Purpose**: Identify documents that describe testing standards, methodologies, and validation frameworks.
+
+**Scope**:
+- Test development standards and patterns
+- Test failure audit methodologies
+- Behavioral contract validation
+- Testing integration guidance
+
+**Documents Affected**: 3 documents (36,141 tokens)
+
+| Current Name | Proposed Name |
+|--------------|---------------|
+| Test Development Standards.md | Test-Development-Standards.md |
+| Test Failure Audit Methodology.md | Test-Failure-Audit-Methodology.md |
+| behavioral-contract-validation-framework.md | Test-Behavioral-Contract-Validation.md |
+
+**Rationale**:
+- Groups all testing-related guidance together
+- Improves discoverability for testing tasks
+- `behavioral-contract-validation-framework.md` included because validation is testing-focused
+
+**Edge Case Note**: `behavioral-contract-validation-framework.md` could alternatively belong to Component- (see Edge Case 6). Current placement based on validation focus.
+
+---
+
+### Proposed Prefix 6: `Process-` (Process/Workflow Documentation)
+
+**Purpose**: Identify documents that describe development workflows, standards, and task definitions.
+
+**Scope**:
+- Development workflow procedures
+- File organization standards
+- Spec planning standards
+- Task type definitions
+
+**Documents Affected**: 4 documents (63,701 tokens)
+
+| Current Name | Proposed Name |
+|--------------|---------------|
+| Development Workflow.md | Process-Development-Workflow.md |
+| File Organization Standards.md | Process-File-Organization.md |
+| Spec Planning Standards.md | Process-Spec-Planning.md |
+| Task-Type-Definitions.md | Process-Task-Type-Definitions.md |
+
+**Rationale**:
+- Groups all process/workflow guidance together
+- Improves discoverability for workflow-related queries
+- Consistent with requirements candidate prefix list
+
+**⚠️ HIGH IMPACT NOTE**: `Development Workflow.md` and `File Organization Standards.md` are **always-loaded** Layer 2 documents. Renaming these requires:
+- Updating all references in meta-guide
+- Updating all cross-references in other docs
+- MCP server re-indexing
+- Extra validation due to high usage
+
+**Recommendation**: Execute always-loaded doc renames in a dedicated batch with extra validation (see Edge Case 8).
+
+---
+
+### Prefixes NOT Proposed
+
+The following candidate prefixes from Requirements were evaluated but NOT proposed:
+
+| Candidate Prefix | Reason Not Proposed |
+|------------------|---------------------|
+| `Standard-` | Overlaps with `Process-` and `Test-`. Standards are embedded in process and testing docs, not a separate family. |
+| `Guide-` | Too generic. Most docs are guides. Would not improve categorization. |
+
+---
+
+## Prefix Proposal Summary
+
+| Prefix | Family | Doc Count | Total Tokens | Layer(s) | Load Behavior |
+|--------|--------|-----------|--------------|----------|---------------|
+| `Token-` | Token Infrastructure | 2 | 5,497 | 2 | Manual (MCP) |
+| `Token-Family-` | Token Family Specs | 14* | 71,272 | 3 | Conditional |
+| `Component-` | Component Infrastructure | 9 | 57,801 | 2-3 | Manual (MCP) |
+| `Component-Family-` | Component Family Specs | 11 | 22,236 | 3 | Conditional |
+| `Test-` | Testing Documentation | 3 | 36,141 | 2 | Manual (MCP) |
+| `Process-` | Process/Workflow | 4 | 63,701 | 2 | Mixed** |
+
+*Pending Edge Case 1 and 4 resolution
+**2 always-loaded, 2 manual
+
+**Total Documents with Proposed Prefixes**: 43 of 55 (78.2%)
+**Total Tokens Affected**: 256,648 tokens
+
+---
+
+## Implementation Considerations
+
+### Naming Format
+
+All renamed files will follow **Kebab-Title-Case** format per Requirement 5.1:
+- `Token-Quick-Reference.md` (not `token-quick-reference.md`)
+- `Component-Family-Button.md` (not `component-family-button.md`)
+
+### Prefix Hierarchy
+
+The proposed prefixes create a clear hierarchy:
+```
+Token-                    (Infrastructure - how to use tokens)
+├── Token-Family-         (Specifications - specific token types)
+
+Component-                (Infrastructure - how to build components)
+├── Component-Family-     (Specifications - specific component families)
+
+Test-                     (Testing standards and methodologies)
+
+Process-                  (Development workflows and standards)
+```
+
+### MCP Query Benefits
+
+Prefixes enable more precise MCP queries:
+```
+# Query all token infrastructure
+get_documentation_map() → filter by "Token-" prefix (excludes Token-Family-)
+
+# Query specific token family
+get_document_summary({ path: ".kiro/steering/Token-Family-Color.md" })
+
+# Query all component development guidance
+get_documentation_map() → filter by "Component-" prefix (excludes Component-Family-)
+```
+
+### Batch Execution Recommendation
+
+Based on impact analysis, recommend executing prefix changes in batches:
+
+| Batch | Documents | Rationale |
+|-------|-----------|-----------|
+| 1 | Token-Family-* (14 docs) | Lowest risk - conditional loading, clear pattern |
+| 2 | Component-Family-* (11 docs) | Low risk - conditional loading, clear pattern |
+| 3 | Token-* (2 docs) | Low risk - manual loading, small count |
+| 4 | Component-* (9 docs) | Medium risk - includes Layer 2 docs |
+| 5 | Test-* (3 docs) | Medium risk - includes Layer 2 docs |
+| 6 | Process-* (4 docs) | **High risk** - includes 2 always-loaded docs |
+
+---
+
+## Human Decisions Required at Checkpoint 2
+
+The following decisions are required before prefix implementation:
+
+1. **Approve/Modify Prefix Proposals**: Accept, modify, or reject each proposed prefix
+2. **Edge Case 1**: Token content analysis approach (A/B/C options)
+3. **Edge Case 4**: `semantic-token-structure.md` classification (Token- vs Token-Family-)
+4. **Edge Case 8**: Always-loaded document handling (apply prefix vs keep current names)
+5. **Batch Execution Order**: Approve or modify recommended batch sequence
+
+**Note**: All prefix implementations deferred to Checkpoint 2 approval per Requirements 5.5, 5.7, 5.8.
 
 ---
 
 ## Document Grouping Analysis
+
+**Date Updated**: 2026-01-03
+**Status**: Task 6.3 Complete - Prefix proposals documented above
 
 ### By Topic/Purpose
 
@@ -595,7 +878,9 @@ Based on family analysis, these prefixes are recommended:
 - 43 of 55 documents (78.2%) belong to identified families
 - **12 documents identified as standalone (21.8%)** - Task 4.2 complete
 - Token and Component families are the largest (25 docs combined, 45.5%)
+- **6 categorical prefixes proposed** - Task 6.3 complete
 - Prefix recommendations are candidates pending Checkpoint 2 approval
 - Some families span multiple layers (e.g., Component Infrastructure spans Layer 2 and 3)
 - **Near-family pair identified**: 2 platform-related docs could form family if 1+ more added
 - **Special case**: stemma-system-principles.md kept standalone due to cross-system scope
+- **High-impact consideration**: 2 always-loaded docs (Development Workflow, File Organization Standards) require careful handling

@@ -426,23 +426,315 @@
    Query: `get_section({ path: ".kiro/steering/File Organization Standards.md", heading: "Organization Implementation" })`
    ```
 
-### Human Decisions Required
+### Human Decisions - APPROVED at Checkpoint 1
 
-1. **Release Detection Canonical Source**
-   - **Option A**: Release Management System.md (conceptual home)
-   - **Option B**: Development Workflow.md (operational home)
-   - **Option C**: Split - concepts in Release Management, operations in Development Workflow
-   - **Recommendation**: Option C - keeps operational troubleshooting in workflow context
+**Date Approved**: 2026-01-03
 
-2. **Completion Documentation Consolidation**
-   - **Option A**: Consolidate into Spec Planning Standards.md
-   - **Option B**: Create new dedicated "Completion Documentation Guide.md"
-   - **Recommendation**: Option A - Spec Planning Standards already has most comprehensive content
+1. **Release Detection Canonical Source** ✅ DECIDED
+   - **Decision**: Move operational troubleshooting FROM Development Workflow TO Release Management System
+   - **Development Workflow keeps**: WHEN to trigger release detection + priming/MCP query to RMS
+   - **Release Management System gets**: HOW to run it, operational troubleshooting, hook debugging, manual triggers
+   - **Rationale**: Reduces Development Workflow load while making RMS the comprehensive operational guide
 
-3. **behavioral-contract-validation-framework.md Tier Naming**
-   - **Option A**: Rename to "Contract Validation Level 1/2/3" to avoid collision
-   - **Option B**: Keep current naming with clarification note
-   - **Recommendation**: Option A - prevents confusion with documentation validation tiers
+2. **Completion Documentation Consolidation** ✅ DECIDED
+   - **Decision**: Create standalone "Completion Documentation Guide.md" (Layer 2, manual)
+   - **Start Up Tasks**: Add checklist item "Query Completion Documentation Guide via MCP before starting any task from a Tasks doc"
+   - **All other docs**: Priming + MCP query to the new guide
+   - **Rationale**: Reduces Development Workflow load, ensures discoverability via Start Up Tasks checklist
+
+3. **Tier Naming Collision** ✅ DECIDED
+   - **Decision**: Rename behavioral contract validation to use "Basic/Extended/Full Contract Validation" (no numbered tiers)
+   - **Documentation Validation**: Keeps "Tier 1/2/3" naming
+   - **Rationale**: Eliminates collision, self-documenting terminology, AI agent optimal
+
+---
+
+## Consolidation Proposals (Task 6.2)
+
+**Date**: 2026-01-03
+**Status**: Analysis Phase - Proposals Pending Human Approval at Checkpoint 2
+
+### Proposal 1: Validation Tiers Consolidation
+
+**Canonical Source**: Spec Planning Standards.md
+
+**Current State**:
+- Spec Planning Standards.md: Comprehensive tier definitions (~200 lines)
+- Task-Type-Definitions.md: Duplicated tier definitions per task type (~100 lines, ~400 tokens)
+
+**Proposed Changes**:
+
+| Document | Current Content | Proposed Content | Token Impact |
+|----------|-----------------|------------------|--------------|
+| Task-Type-Definitions.md | Full tier definitions repeated per task type | Brief priming + MCP query direction | -400 tokens |
+| Spec Planning Standards.md | Keep as-is (canonical source) | No change | 0 |
+
+**Priming Template for Task-Type-Definitions.md**:
+```markdown
+### Validation Tier
+
+Each task type has an associated validation tier. For complete tier definitions and requirements, query Spec Planning Standards via MCP:
+
+**MCP Query**: `get_section({ path: ".kiro/steering/Spec Planning Standards.md", heading: "Validation Tiers" })`
+
+**Quick Reference**:
+- **Tier 1 (Minimal)**: Setup/Documentation tasks - artifact verification only
+- **Tier 2 (Standard)**: Implementation tasks - functional validation
+- **Tier 3 (Comprehensive)**: Architecture tasks - full validation suite
+```
+
+**Estimated Token Savings**: ~400 tokens from Task-Type-Definitions.md
+
+---
+
+### Proposal 2: Release Detection Consolidation
+
+**Canonical Source**: Release Management System.md (for operational details)
+
+**Current State**:
+- Development Workflow.md: ~300 lines of release detection content (hooks, troubleshooting, dependency chains)
+- Release Management System.md: ~100 lines of pipeline overview
+
+**Proposed Changes**:
+
+| Document | Current Content | Proposed Content | Token Impact |
+|----------|-----------------|------------------|--------------|
+| Development Workflow.md | Extensive hook integration, troubleshooting, dependency chains (~300 lines) | Brief priming (~30 lines) + MCP query direction | -1,100 tokens |
+| Release Management System.md | Pipeline overview only | Add operational troubleshooting, hook debugging, manual triggers | +800 tokens |
+
+**Priming Template for Development Workflow.md**:
+```markdown
+## Release Detection
+
+Release detection triggers automatically when parent task summary documents are created in `docs/specs/[spec-name]/`.
+
+**Key Points**:
+- Summary documents trigger automatic release detection (manual files only)
+- AI-assisted workflows require manual trigger: `./.kiro/hooks/release-manager.sh auto`
+- Hook depends on file organization completing first
+
+**For detailed guidance** on release detection pipeline, troubleshooting, hook debugging, and manual triggers, query Release Management System via MCP:
+
+**MCP Query**: `get_document_full({ path: ".kiro/steering/Release Management System.md" })`
+```
+
+**Content to Move to Release Management System.md**:
+- Agent Hook Dependency Chains section
+- Hook troubleshooting procedures
+- Manual trigger commands
+- Common issues and solutions for release detection
+
+**Estimated Token Savings**: ~300 tokens net (1,100 removed from Dev Workflow, 800 added to RMS)
+
+---
+
+### Proposal 3: File Organization Consolidation
+
+**Canonical Source**: File Organization Standards.md
+
+**Current State**:
+- Development Workflow.md: ~200 lines of file organization content (scope, Kiro IDE behavior, organization workflow)
+- File Organization Standards.md: ~1,500 lines comprehensive coverage
+
+**Proposed Changes**:
+
+| Document | Current Content | Proposed Content | Token Impact |
+|----------|-----------------|------------------|--------------|
+| Development Workflow.md | File Organization Scope, Kiro IDE File Watching Behavior, Automatic File Organization sections (~200 lines) | Brief priming (~20 lines) + MCP query direction | -720 tokens |
+| File Organization Standards.md | Keep as-is (canonical source) | No change | 0 |
+
+**Priming Template for Development Workflow.md**:
+```markdown
+## File Organization
+
+File organization is handled automatically via agent hooks when tasks are marked complete.
+
+**Key Points**:
+- Agent hook scans root directory for files with **Organization** metadata
+- User confirmation required before moving files
+- Cross-references updated automatically
+
+**For detailed guidance** on metadata-driven organization, naming conventions, directory structure, and Kiro IDE file watching behavior, query File Organization Standards via MCP:
+
+**MCP Query**: `get_section({ path: ".kiro/steering/File Organization Standards.md", heading: "Organization Implementation" })`
+```
+
+**Sections to Remove from Development Workflow.md**:
+- "File Organization Scope" section
+- "Kiro IDE File Watching Behavior" section
+- Detailed "Automatic File Organization" content (keep brief priming)
+
+**Estimated Token Savings**: ~720 tokens from Development Workflow.md
+
+---
+
+### Proposal 4: Completion Documentation Consolidation
+
+**Canonical Source**: NEW - Completion Documentation Guide.md (to be created)
+
+**Current State**:
+- File Organization Standards.md: ~100 lines (naming, organization)
+- Development Workflow.md: ~50 lines (workflow steps)
+- Spec Planning Standards.md: ~150 lines (documentation tiers)
+- Start Up Tasks.md: ~20 lines (checklist items)
+- Release Management System.md: ~30 lines (pipeline context)
+
+**Proposed Changes**:
+
+| Document | Current Content | Proposed Content | Token Impact |
+|----------|-----------------|------------------|--------------|
+| NEW: Completion Documentation Guide.md | N/A | Comprehensive guide consolidating all completion doc guidance | +1,500 tokens |
+| Development Workflow.md | Completion doc workflow steps (~50 lines) | Brief priming + MCP query | -160 tokens |
+| File Organization Standards.md | Completion doc naming/organization (~100 lines) | Brief priming + MCP query | -320 tokens |
+| Spec Planning Standards.md | Keep documentation tier content (canonical for tiers) | Add cross-reference to new guide | 0 |
+| Start Up Tasks.md | Keep checklist items (appropriate priming) | Add MCP query reminder | +20 tokens |
+| Release Management System.md | Keep pipeline context (appropriate priming) | No change | 0 |
+
+**New Document Structure - Completion Documentation Guide.md**:
+```markdown
+# Completion Documentation Guide
+
+**Date**: 2026-01-03
+**Purpose**: Comprehensive guide for creating completion and summary documentation
+**Organization**: process-standard
+**Scope**: cross-project
+**Layer**: 2
+**Relevant Tasks**: all-tasks
+
+## Overview
+
+This guide consolidates all guidance for creating completion documentation, including:
+- When to create completion docs (subtasks vs parent tasks)
+- What content to include (documentation tiers)
+- Where to place files (directory structure)
+- How to name files (naming conventions)
+- Why summary docs matter (release detection)
+
+## Two-Document Workflow
+
+[Consolidated content explaining detailed completion docs + summary docs]
+
+## Documentation Tiers
+
+[Reference to Spec Planning Standards for tier definitions]
+
+## Naming Conventions
+
+[Consolidated from File Organization Standards]
+
+## Directory Structure
+
+[Consolidated from File Organization Standards]
+
+## Cross-References
+
+[Consolidated from File Organization Standards]
+
+## Release Detection Integration
+
+[Consolidated from Development Workflow and Release Management System]
+```
+
+**Priming Template for Development Workflow.md**:
+```markdown
+## Completion Documentation
+
+After completing parent tasks, create both detailed completion docs and summary docs.
+
+**Quick Reference**:
+- **Detailed doc**: `.kiro/specs/[spec-name]/completion/task-N-completion.md`
+- **Summary doc**: `docs/specs/[spec-name]/task-N-summary.md`
+
+**For comprehensive guidance** on completion documentation workflow, naming conventions, and content requirements, query Completion Documentation Guide via MCP:
+
+**MCP Query**: `get_document_full({ path: ".kiro/steering/Completion Documentation Guide.md" })`
+```
+
+**Addition to Start Up Tasks.md**:
+```markdown
+6. **CRITICAL: Query Completion Documentation Guide Before Task Execution**
+   
+   **WHEN starting any task from a Tasks doc THEN you MUST:**
+   - Query Completion Documentation Guide via MCP
+   - Understand completion doc requirements for your task type
+   
+   **MCP Query**: `get_document_full({ path: ".kiro/steering/Completion Documentation Guide.md" })`
+```
+
+**Estimated Token Impact**: +1,040 tokens net (1,500 new guide - 460 removed from other docs)
+
+**Rationale**: While this adds tokens overall, it:
+1. Creates a single source of truth (reduces confusion)
+2. Removes fragmented guidance from always-loaded docs (Development Workflow, File Organization Standards)
+3. Makes completion doc guidance discoverable via Start Up Tasks checklist
+4. Reduces cognitive load for agents (one place to look)
+
+---
+
+### Proposal 5: Tier Naming Collision Resolution
+
+**Canonical Source**: Spec Planning Standards.md (for documentation validation tiers)
+
+**Current State**:
+- Spec Planning Standards.md: Uses "Tier 1/2/3" for documentation validation
+- behavioral-contract-validation-framework.md: Uses "Tier 1/2/3" for behavioral contract validation
+
+**Proposed Changes**:
+
+| Document | Current Content | Proposed Content | Token Impact |
+|----------|-----------------|------------------|--------------|
+| behavioral-contract-validation-framework.md | "Tier 1/2/3" naming | "Basic/Extended/Full Contract Validation" | ~0 (rename only) |
+| Spec Planning Standards.md | Keep "Tier 1/2/3" naming | No change | 0 |
+
+**Renaming Mapping**:
+| Current Name | New Name |
+|--------------|----------|
+| Tier 1 Contract Validation | Basic Contract Validation |
+| Tier 2 Contract Validation | Extended Contract Validation |
+| Tier 3 Contract Validation | Full Contract Validation |
+
+**Estimated Token Impact**: ~0 (terminology change, not content reduction)
+
+**Rationale**: Eliminates naming collision that could confuse AI agents. Self-documenting terminology ("Basic/Extended/Full") is clearer than numbered tiers.
+
+---
+
+## Consolidation Summary
+
+### Token Impact Summary
+
+| Proposal | Source Document | Token Change | Net Impact |
+|----------|-----------------|--------------|------------|
+| 1. Validation Tiers | Task-Type-Definitions.md | -400 | -400 |
+| 2. Release Detection | Development Workflow.md | -1,100 | |
+| 2. Release Detection | Release Management System.md | +800 | -300 |
+| 3. File Organization | Development Workflow.md | -720 | -720 |
+| 4. Completion Docs | NEW: Completion Documentation Guide.md | +1,500 | |
+| 4. Completion Docs | Development Workflow.md | -160 | |
+| 4. Completion Docs | File Organization Standards.md | -320 | |
+| 4. Completion Docs | Start Up Tasks.md | +20 | +1,040 |
+| 5. Tier Naming | behavioral-contract-validation-framework.md | ~0 | ~0 |
+| **TOTAL** | | | **-380 tokens** |
+
+### Session Start Load Impact
+
+**Current Session Start Load**: 39,124 tokens
+
+**Changes to Always-Loaded Documents**:
+- Development Workflow.md: -1,980 tokens (release detection + file organization + completion docs)
+- File Organization Standards.md: -320 tokens (completion docs)
+- Start Up Tasks.md: +20 tokens (MCP query reminder)
+
+**Projected Session Start Load**: 36,844 tokens (-2,280 tokens, -5.8%)
+
+### MCP Query Directions Summary
+
+| Topic | MCP Query |
+|-------|-----------|
+| Validation Tiers | `get_section({ path: ".kiro/steering/Spec Planning Standards.md", heading: "Validation Tiers" })` |
+| Release Detection | `get_document_full({ path: ".kiro/steering/Release Management System.md" })` |
+| File Organization | `get_section({ path: ".kiro/steering/File Organization Standards.md", heading: "Organization Implementation" })` |
+| Completion Documentation | `get_document_full({ path: ".kiro/steering/Completion Documentation Guide.md" })` |
 
 ---
 

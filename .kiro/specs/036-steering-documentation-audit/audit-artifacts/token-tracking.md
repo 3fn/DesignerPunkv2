@@ -79,45 +79,47 @@
 
 #### Token Documentation (14 docs)
 
-| Document | Layer | Tokens | Always Loaded? | Source |
+| Document | Layer | Tokens | Inclusion Mode | Source |
 |----------|-------|--------|----------------|--------|
-| accessibility-tokens.md | 3 | 4,973 | Conditional | MCP get_documentation_map |
-| blend-tokens.md | 3 | 4,014 | Conditional | MCP get_documentation_map |
-| border-tokens.md | 3 | 3,628 | Conditional | MCP get_documentation_map |
-| color-tokens.md | 3 | 5,279 | Conditional | MCP get_documentation_map |
-| glow-tokens.md | 3 | 4,058 | Conditional | MCP get_documentation_map |
-| layering-tokens.md | 3 | 5,007 | Conditional | MCP get_documentation_map |
-| motion-tokens.md | 3 | 5,360 | Conditional | MCP get_documentation_map |
-| opacity-tokens.md | 3 | 4,523 | Conditional | MCP get_documentation_map |
-| radius-tokens.md | 3 | 3,523 | Conditional | MCP get_documentation_map |
-| responsive-tokens.md | 3 | 5,311 | Conditional | MCP get_documentation_map |
-| semantic-token-structure.md | 3 | 8,871 | Conditional | MCP get_documentation_map |
-| shadow-tokens.md | 3 | 6,378 | Conditional | MCP get_documentation_map |
-| spacing-tokens.md | 3 | 5,489 | Conditional | MCP get_documentation_map |
-| typography-tokens.md | 3 | 4,858 | Conditional | MCP get_documentation_map |
+| accessibility-tokens.md | 3 | 4,973 | **Manual** | MCP get_documentation_map |
+| blend-tokens.md | 3 | 4,014 | **Manual** | MCP get_documentation_map |
+| border-tokens.md | 3 | 3,628 | **Manual** | MCP get_documentation_map |
+| color-tokens.md | 3 | 5,279 | **Manual** | MCP get_documentation_map |
+| glow-tokens.md | 3 | 4,058 | **Manual** | MCP get_documentation_map |
+| layering-tokens.md | 3 | 5,007 | **Manual** | MCP get_documentation_map |
+| motion-tokens.md | 3 | 5,360 | **Manual** | MCP get_documentation_map |
+| opacity-tokens.md | 3 | 4,523 | **Manual** | MCP get_documentation_map |
+| radius-tokens.md | 3 | 3,523 | **Manual** | MCP get_documentation_map |
+| responsive-tokens.md | 3 | 5,311 | **Manual** | MCP get_documentation_map |
+| semantic-token-structure.md | 3 | 8,871 | **Manual** | MCP get_documentation_map |
+| shadow-tokens.md | 3 | 6,378 | **Manual** | MCP get_documentation_map |
+| spacing-tokens.md | 3 | 5,489 | **Manual** | MCP get_documentation_map |
+| typography-tokens.md | 3 | 4,858 | **Manual** | MCP get_documentation_map |
 
 **Token Documentation Total**: 71,272 tokens (14 documents)
+**⚠️ CORRECTED**: All token docs are `inclusion: manual`, not conditional.
 
 #### Component Documentation (12 docs - Layer 3 only)
 
 **Note**: Original task estimated 18 docs, but actual count is 12 Layer 3 component docs. Additional 7 component-related docs exist in Layer 2 (already counted in Layer 2 section).
 
-| Document | Layer | Tokens | Always Loaded? | Source |
+| Document | Layer | Tokens | Inclusion Mode | Source |
 |----------|-------|--------|----------------|--------|
-| avatar-components.md | 3 | 1,133 | Conditional | MCP get_documentation_map |
-| badge-components.md | 3 | 1,130 | Conditional | MCP get_documentation_map |
-| button-components.md | 3 | 3,094 | Conditional | MCP get_documentation_map |
-| container-components.md | 3 | 3,143 | Conditional | MCP get_documentation_map |
-| data-display-components.md | 3 | 1,131 | Conditional | MCP get_documentation_map |
-| divider-components.md | 3 | 1,002 | Conditional | MCP get_documentation_map |
-| form-inputs-components.md | 3 | 5,183 | Conditional | MCP get_documentation_map |
-| icon-components.md | 3 | 3,015 | Conditional | MCP get_documentation_map |
-| loading-components.md | 3 | 1,067 | Conditional | MCP get_documentation_map |
-| modal-components.md | 3 | 1,226 | Conditional | MCP get_documentation_map |
-| navigation-components.md | 3 | 1,112 | Conditional | MCP get_documentation_map |
-| Component Development and Practices Guide.md | 3 | 11,208 | Conditional | MCP get_documentation_map |
+| avatar-components.md | 3 | 1,133 | **Manual** | MCP get_documentation_map |
+| badge-components.md | 3 | 1,130 | **Manual** | MCP get_documentation_map |
+| button-components.md | 3 | 3,094 | **Manual** | MCP get_documentation_map |
+| container-components.md | 3 | 3,143 | **Manual** | MCP get_documentation_map |
+| data-display-components.md | 3 | 1,131 | **Manual** | MCP get_documentation_map |
+| divider-components.md | 3 | 1,002 | **Manual** | MCP get_documentation_map |
+| form-inputs-components.md | 3 | 5,183 | **Manual** | MCP get_documentation_map |
+| icon-components.md | 3 | 3,015 | **Manual** | MCP get_documentation_map |
+| loading-components.md | 3 | 1,067 | **Manual** | MCP get_documentation_map |
+| modal-components.md | 3 | 1,226 | **Manual** | MCP get_documentation_map |
+| navigation-components.md | 3 | 1,112 | **Manual** | MCP get_documentation_map |
+| Component Development and Practices Guide.md | 3 | 11,208 | **Manual** | MCP get_documentation_map |
 
 **Component Documentation Total**: 33,444 tokens (12 documents)
+**⚠️ CORRECTED**: All component docs are `inclusion: manual`, not conditional.
 
 **Component Family Docs Breakdown**:
 - Implemented families (with schemas): button, container, form-inputs, icon = 14,435 tokens
@@ -140,14 +142,15 @@
 
 **Note**: Original task estimated ~12 remaining docs, but actual count is 4 Layer 3 infrastructure/guide docs. The discrepancy is because Component Development and Practices Guide was already counted in the Component Documentation section.
 
-| Document | Layer | Tokens | Always Loaded? | Source |
+| Document | Layer | Tokens | Inclusion Mode | Source |
 |----------|-------|--------|----------------|--------|
-| A Vision of the Future.md | 3 | 8,856 | Conditional | MCP get_documentation_map |
-| BUILD-SYSTEM-SETUP.md | 3 | 1,975 | Conditional | MCP get_documentation_map |
-| Browser Distribution Guide.md | 3 | 4,220 | Conditional | MCP get_documentation_map |
-| Technology Stack.md | 3 | 762 | Conditional | MCP get_documentation_map |
+| A Vision of the Future.md | 3 | 8,856 | **Manual** | MCP get_documentation_map |
+| BUILD-SYSTEM-SETUP.md | 3 | 1,975 | **Manual** | MCP get_documentation_map |
+| Browser Distribution Guide.md | 3 | 4,220 | **Conditional** | MCP get_documentation_map |
+| Technology Stack.md | 3 | 762 | **Conditional** | MCP get_documentation_map |
 
 **Remaining Documentation Total**: 15,813 tokens (4 documents)
+**Note**: Only Browser Distribution Guide and Technology Stack are truly conditional (with triggers). A Vision of the Future and BUILD-SYSTEM-SETUP are manual.
 
 ---
 
@@ -196,11 +199,16 @@
 | Category | Doc Count | Total Tokens | % of Total |
 |----------|-----------|--------------|------------|
 | Always Loaded (Session Start) | 6 | 39,124 | 13.9% |
-| Manual (MCP Query) | 20 | 132,526 | 47.1% |
-| Conditional (Task-Based) | 29 | 110,029 | 39.1% |
+| Manual (MCP Query) | 47 | 237,569 | 84.3% |
+| Conditional (Task-Based) | 2 | 4,982 | 1.8% |
 | **TOTAL** | **55** | **281,679** | **100%** |
 
-**Note**: Manual = Layer 2 docs with `inclusion: manual`. Conditional = Layer 3 docs with `inclusion: conditional`.
+**⚠️ CORRECTED (Task 6.1)**: Original analysis incorrectly assumed Layer 3 = conditional. Actual front-matter audit reveals:
+- **Always**: 6 docs (Layer 0-2 with `inclusion: always`)
+- **Manual**: 47 docs (Layer 2-3 with `inclusion: manual`)
+- **Conditional**: Only 2 docs (Browser Distribution Guide, Technology Stack)
+
+**Implication**: Almost all Layer 3 docs are `manual`, not `conditional`. This means they're loaded via MCP query, not automatically based on task type triggers.
 
 ---
 
