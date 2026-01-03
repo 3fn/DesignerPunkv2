@@ -94,12 +94,12 @@ This implementation plan follows a three-phase audit methodology with Human-Agen
     - Document file, line number, and context in legacy-naming-report.md
     - _Requirements: 1.1, 1.2, 1.6_
 
-- [ ] 3. Redundancy Analysis
+- [x] 3. Redundancy Analysis
   **Type**: Documentation
   **Validation**: Tier 2 - Standard
   **Success Criteria**: Redundant content identified and classified as harmful or intentional priming
   
-  - [ ] 3.1 Identify cross-document content overlap
+  - [x] 3.1 Identify cross-document content overlap
     **Type**: Documentation
     **Validation**: Tier 2 - Standard
     - Use MCP `list_cross_references()` on key documents
@@ -107,7 +107,7 @@ This implementation plan follows a three-phase audit methodology with Human-Agen
     - Document in redundancy-analysis.md
     - _Requirements: 3.1, 3.2_
   
-  - [ ] 3.2 Classify redundancy as harmful or priming
+  - [x] 3.2 Classify redundancy as harmful or priming
     **Type**: Documentation
     **Validation**: Tier 2 - Standard
     - For each redundant topic, assess: Is this detailed duplication or light priming?
