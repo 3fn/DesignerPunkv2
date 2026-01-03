@@ -2,14 +2,18 @@
 
 **Date**: 2026-01-03
 **Spec**: 036 - Steering Documentation Audit
-**Status**: Implementation Planning
+**Status**: Execution Ready
 **Dependencies**: None
 
 ---
 
 ## Overview
 
-This implementation plan follows a three-phase audit methodology with Human-Agent checkpoints. Execution tasks (Phase 4+) are placeholders that will be defined after Checkpoint 3 approval based on audit findings.
+This implementation plan follows a three-phase audit methodology with Human-Agent checkpoints. Phases 1-3 (Discovery, Analysis, Implementation Planning) are complete. Phase 4 (Execution) is ready to begin.
+
+**Checkpoint 3 Approved**: 2026-01-03
+**Execution Tasks**: 13 parent tasks (Tasks 10-22), 18 batches total
+**Estimated Timeline**: 10-15 sessions
 
 **Task Type Note**: All tasks in this spec are Documentation type (no code produced), so validation follows documentation-appropriate patterns rather than code testing.
 
@@ -242,7 +246,7 @@ This implementation plan follows a three-phase audit methodology with Human-Agen
     - Define MCP health checks
     - Define reference integrity checks
 
-- [ ] 9. **CHECKPOINT 3: Present Implementation Plan**
+- [x] 9. **CHECKPOINT 3: Present Implementation Plan**
   **Type**: Documentation
   **Validation**: Tier 2 - Standard
   **Success Criteria**: Human has reviewed task list and approved execution
@@ -255,41 +259,156 @@ This implementation plan follows a three-phase audit methodology with Human-Agen
 
 ---
 
-### Phase 4: Execution (Placeholder)
+### Phase 4: Execution
 
-**Note**: Execution tasks will be defined after Checkpoint 3 approval based on audit findings and approved recommendations.
+**Note**: Execution tasks defined after Checkpoint 3 approval (2026-01-03). See `audit-artifacts/execution-task-list.md` for detailed task breakdown.
 
-- [ ] 10. Execution Batch 1: [TBD]
-  **Type**: [TBD]
-  **Validation**: [TBD]
-  **Success Criteria**: [TBD based on approved recommendations]
+- [ ] 10. Batch 0: Rosetta System Content Analysis
+  **Type**: Documentation
+  **Validation**: Tier 1 - Minimal
+  **Success Criteria**: All 14 token docs analyzed, infrastructure vs family classification finalized
   
-  - Tasks to be defined after Checkpoint 3
+  - [ ] 10.1 Analyze semantic-token-structure.md content
+  - [ ] 10.2 Analyze 13 remaining token docs for infrastructure content
+  - [ ] 10.3 Document findings: infrastructure vs family content split
+  - [ ] 10.4 Determine if rosetta-system-principles.md needed
+  - [ ] 10.5 Update Edge Case 4 classification decision
+  - _Requirements: 5.7, 5.8_
 
-- [ ] 11. Execution Batch 2: [TBD]
-  **Type**: [TBD]
-  **Validation**: [TBD]
-  **Success Criteria**: [TBD based on approved recommendations]
+- [ ] 11. Batch 1: New Document Creation
+  **Type**: Documentation
+  **Validation**: Tier 1 - Minimal
+  **Success Criteria**: New documents created with proper metadata, MCP indexes them
   
-  - Tasks to be defined after Checkpoint 3
+  - [ ] 11.1 Create Completion Documentation Guide.md
+  - [ ] 11.2 Create Process-Cross-Reference-Standards.md
+  - [ ] 11.3 Create rosetta-system-principles.md (if needed per Batch 0)
+  - _Requirements: 3.3, 3.7_
 
-- [ ] 12. Execution Batch N: [TBD]
-  **Type**: [TBD]
-  **Validation**: [TBD]
-  **Success Criteria**: [TBD based on approved recommendations]
+- [ ] 12. Batch 2: Development Workflow Slimming
+  **Type**: Documentation
+  **Validation**: Tier 2 - Standard
+  **Success Criteria**: ~1,980 tokens removed, priming + MCP query directions work
   
-  - Tasks to be defined after Checkpoint 3
+  - [ ] 12.1 Replace Release Detection detailed content with priming + MCP query
+  - [ ] 12.2 Replace File Organization detailed content with priming + MCP query
+  - [ ] 12.3 Replace Completion Documentation content with priming + MCP query
+  - [ ] 12.4 Update AI Agent Reading Priorities section
+  - [ ] 12.5 Validate all MCP query directions work
+  - _Requirements: 3.3, 3.4, 3.7_
 
-- [ ] 13. Reference Updates and Final Validation
-  **Type**: [TBD]
-  **Validation**: [TBD]
-  **Success Criteria**: All references updated, MCP index healthy, zero legacy naming
+- [ ] 13. Batch 3: File Organization Standards Slimming
+  **Type**: Documentation
+  **Validation**: Tier 2 - Standard
+  **Success Criteria**: ~6,120 tokens removed, cross-reference content accessible via MCP
   
-  - Update all hard references (markdown links)
-  - Update all soft references (prose mentions)
-  - Validate MCP index health
-  - Verify zero legacy naming instances
-  - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 1.8_
+  - [ ] 13.1 Move Cross-Reference Standards section to Process-Cross-Reference-Standards.md
+  - [ ] 13.2 Move Anti-Patterns section to Process-Cross-Reference-Standards.md
+  - [ ] 13.3 Move completion doc naming/organization to Completion Documentation Guide.md
+  - [ ] 13.4 Add priming + MCP query directions for moved content
+  - [ ] 13.5 Update AI Agent Reading Priorities section
+  - _Requirements: 3.3, 3.4, 3.7_
+
+- [ ] 14. Batch 4: Release Management System Expansion
+  **Type**: Documentation
+  **Validation**: Tier 1 - Minimal
+  **Success Criteria**: Operational content added, document structure logical
+  
+  - [ ] 14.1 Add Agent Hook Dependency Chains section
+  - [ ] 14.2 Add Hook Troubleshooting section
+  - [ ] 14.3 Add Manual Trigger Commands section
+  - [ ] 14.4 Update document structure and navigation
+  - _Requirements: 3.3, 3.7_
+
+- [ ] 15. Batch 5-6: Validation Tiers and Tier Naming
+  **Type**: Documentation
+  **Validation**: Tier 1 - Minimal
+  **Success Criteria**: Single source of truth for validation tiers, no naming collision
+  
+  - [ ] 15.1 Verify Task-Type-Definitions.md has complete tier definitions
+  - [ ] 15.2 Replace Spec Planning Standards tier definitions with priming + MCP query
+  - [ ] 15.3 Rename behavioral contract tiers (Basic/Extended/Full Contract Validation)
+  - [ ] 15.4 Update any cross-references to validation tiers
+  - _Requirements: 3.3, 3.4_
+
+- [ ] 16. Batch 7: Start Up Tasks Update
+  **Type**: Documentation
+  **Validation**: Tier 1 - Minimal
+  **Success Criteria**: MCP query reminder added for Completion Documentation Guide
+  
+  - [ ] 16.1 Add checklist item for querying Completion Documentation Guide via MCP
+  - _Requirements: 4.3_
+
+- [ ] 17. Batch 8-9: Legacy Naming Fixes
+  **Type**: Documentation
+  **Validation**: Tier 2 - Standard
+  **Success Criteria**: All 39 legacy naming instances fixed, zero legacy naming
+  
+  - [ ] 17.1 Fix legacy naming in low-risk documents (10 instances in 6 docs)
+  - [ ] 17.2 Fix legacy naming in medium-risk documents (30 instances in 3 docs)
+  - [ ] 17.3 Verify zero legacy naming instances via grep
+  - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8_
+
+- [ ] 18. Batch 10-12: Low-Risk Prefix Renames
+  **Type**: Documentation
+  **Validation**: Tier 2 - Standard
+  **Success Criteria**: 27-28 docs renamed, MCP indexes new names, cross-references updated
+  
+  - [ ] 18.1 Apply Token-Family- prefix (13-14 docs)
+  - [ ] 18.2 Apply Component-Family- prefix (11 docs)
+  - [ ] 18.3 Apply Token- prefix (2-3 docs)
+  - [ ] 18.4 Update all cross-references to renamed files
+  - [ ] 18.5 Re-index MCP server and validate
+  - _Requirements: 5.3, 5.4, 5.5, 6.1, 6.2, 6.6_
+
+- [ ] 19. Batch 13-14: Medium-Risk Prefix Renames
+  **Type**: Documentation
+  **Validation**: Tier 2 - Standard
+  **Success Criteria**: 12 docs renamed, MCP indexes new names, cross-references updated
+  
+  - [ ] 19.1 Apply Component- prefix (9 docs)
+  - [ ] 19.2 Apply Test- prefix (3 docs)
+  - [ ] 19.3 Update all cross-references to renamed files
+  - [ ] 19.4 Re-index MCP server and validate
+  - _Requirements: 5.3, 5.4, 5.5, 6.1, 6.2, 6.6_
+
+- [ ] 20. Batch 15: High-Risk Prefix Renames (Process-)
+  **Type**: Documentation
+  **Validation**: Tier 2 - Standard
+  **Success Criteria**: 4 always-loaded docs renamed, session start works correctly
+  
+  - [ ] 20.1 Create backup branch before execution
+  - [ ] 20.2 Apply Process- prefix (4 docs including 2 always-loaded)
+  - [ ] 20.3 Update meta-guide references
+  - [ ] 20.4 Update all cross-references to renamed files
+  - [ ] 20.5 Re-index MCP server and validate
+  - [ ] 20.6 Test session start behavior
+  - _Requirements: 5.3, 5.4, 5.5, 6.1, 6.2, 6.3, 6.6_
+
+- [ ] 21. Batch 16: Meta-Guide Updates
+  **Type**: Documentation
+  **Validation**: Tier 2 - Standard
+  **Success Criteria**: All file references updated, MCP query examples work
+  
+  - [ ] 21.1 Update Tier 1 document references with new names
+  - [ ] 21.2 Update Tier 2 MCP query examples with new paths
+  - [ ] 21.3 Add Completion Documentation Guide to Tier 2
+  - [ ] 21.4 Add Process-Cross-Reference-Standards.md to Tier 2
+  - [ ] 21.5 Validate all MCP query directions work
+  - _Requirements: 6.3, 6.4, 6.6_
+
+- [ ] 22. Batch 17: Final Validation
+  **Type**: Documentation
+  **Validation**: Tier 2 - Standard
+  **Success Criteria**: MCP index healthy, all 55+ docs indexed, zero legacy naming, all cross-references valid
+  
+  - [ ] 22.1 Verify MCP index health
+  - [ ] 22.2 Verify all documents indexed
+  - [ ] 22.3 Verify zero legacy naming instances
+  - [ ] 22.4 Verify all cross-references resolve
+  - [ ] 22.5 Verify session start load reduced (~11,000 tokens saved)
+  - [ ] 22.6 Document final token counts and savings
+  - _Requirements: 1.8, 2.4, 6.5, 6.6_
 
 ---
 
@@ -304,6 +423,9 @@ This implementation plan follows a three-phase audit methodology with Human-Agen
 
 - All tasks in this spec are Documentation type - no code is produced
 - Meta-guide must be accessed via bash commands only (Requirement 7)
-- Execution tasks (Phase 4) are placeholders until Checkpoint 3 approval
+- Phase 4 execution tasks defined after Checkpoint 3 approval (2026-01-03)
 - Human-Agent checkpoints are mandatory pause points - do not proceed without explicit approval
+- See `audit-artifacts/` for detailed execution task list, batch plan, rollback strategy, and validation criteria
+- High-risk batches (12, 13, 20, 21) require backup branches before execution
+- MCP re-indexing required after each rename batch
 
