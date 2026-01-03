@@ -70,3 +70,19 @@ Thumbs.db
 # Release working files (temporary files that accumulate quickly)
 .kiro/release-triggers/
 .kiro/release-state/
+
+# Local archive (personal reference files)
+.archive/
+
+# Root-level test outputs (should use test-output/ folder)
+test-output*.txt
+test-results*.txt
+test-baseline*.txt
+
+# Temporary markdown files
+temp-*.md
+
+# Performance measurement outputs
+performance-*.json
+*-baseline.txt
+*-baseline.json
