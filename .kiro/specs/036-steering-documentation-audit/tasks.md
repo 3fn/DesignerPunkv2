@@ -68,26 +68,26 @@ This implementation plan follows a three-phase audit methodology with Human-Agen
     - Calculate total and session start load percentage
     - _Requirements: 2.1, 2.2, 2.3, 2.4_
 
-- [ ] 2. Legacy Naming Audit
+- [x] 2. Legacy Naming Audit
   **Type**: Documentation
   **Validation**: Tier 1 - Minimal
   **Success Criteria**: All legacy naming instances identified and documented in legacy-naming-report.md
   
-  - [ ] 2.1 Scan for `<dp-icon>` and `<dp-container>` patterns
+  - [x] 2.1 Scan for `<dp-icon>` and `<dp-container>` patterns
     **Type**: Documentation
     **Validation**: Tier 1 - Minimal
     - Use grep to find all instances in `.kiro/steering/`
     - Document file, line number, and context in legacy-naming-report.md
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
   
-  - [ ] 2.2 Scan for `TextInputField` and `DPIcon` patterns
+  - [x] 2.2 Scan for `TextInputField` and `DPIcon` patterns
     **Type**: Documentation
     **Validation**: Tier 1 - Minimal
     - Use grep to find all instances in `.kiro/steering/`
     - Document file, line number, and context in legacy-naming-report.md
     - _Requirements: 1.1, 1.2, 1.5, 1.7_
   
-  - [ ] 2.3 Scan for "Legacy Icon" and related phrases
+  - [x] 2.3 Scan for "Legacy Icon" and related phrases
     **Type**: Documentation
     **Validation**: Tier 1 - Minimal
     - Use grep to find all instances in `.kiro/steering/`
