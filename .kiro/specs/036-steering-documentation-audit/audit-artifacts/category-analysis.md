@@ -3,6 +3,7 @@
 **Date**: 2026-01-03
 **Spec**: 036 - Steering Documentation Audit
 **Status**: Discovery Phase - Task 4.2 Complete
+**Last Updated**: 2026-01-03 (Batch 0 Analysis Complete)
 
 ---
 
@@ -10,14 +11,14 @@
 
 | Family | Document Count | Proposed Prefix | Rationale |
 |--------|----------------|-----------------|-----------|
-| Token Family Specs | 14* | `Token-Family-` | Specific token type documentation (pending content analysis) |
+| Token Family Specs | 13 | `Token-Family-` | Specific token type documentation (confirmed via Batch 0 analysis) |
 | Component Family Specs | 11 | `Component-Family-` | All documents describe specific component families (avatar, badge, button, etc.) |
 | Component Infrastructure | 9 | `Component-` | All documents describe component development frameworks, standards, and templates |
-| Token Infrastructure | 2 | `Token-` | Documents describe token usage patterns and resolution |
+| Token Infrastructure | 3 | `Token-` | Documents describe token usage patterns, resolution, and SemanticToken interface |
 | Testing Documentation | 3 | `Test-` | All documents describe testing standards, methodologies, and validation |
 | Process/Workflow | 4 | `Process-` | All documents describe development workflows, standards, and task definitions |
 
-*Token Family count pending content analysis - some docs may contain infrastructure content requiring extraction
+**Batch 0 Update**: Token Family count reduced from 14 to 13; Token Infrastructure increased from 2 to 3 (semantic-token-structure.md moved based on content analysis)
 
 **Total Documents in Families**: 43 of 55 documents (78.2%)
 
@@ -25,32 +26,33 @@
 
 ## Family Details
 
-### Family 1: Token Documentation (14 documents)
+### Family 1: Token Family Specifications (13 documents) ← Updated after Batch 0
 
-**Proposed Prefix**: `Token-`
+**Proposed Prefix**: `Token-Family-`
 **Purpose**: Specific token type documentation for the design system
 **Layer**: 3 (Specific Implementations)
 **Load Behavior**: Conditional (task-based)
 
 | Current Name | Proposed Name |
 |--------------|---------------|
-| accessibility-tokens.md | Token-Accessibility.md |
-| blend-tokens.md | Token-Blend.md |
-| border-tokens.md | Token-Border.md |
-| color-tokens.md | Token-Color.md |
-| glow-tokens.md | Token-Glow.md |
-| layering-tokens.md | Token-Layering.md |
-| motion-tokens.md | Token-Motion.md |
-| opacity-tokens.md | Token-Opacity.md |
-| radius-tokens.md | Token-Radius.md |
-| responsive-tokens.md | Token-Responsive.md |
-| semantic-token-structure.md | Token-Semantic-Structure.md |
-| shadow-tokens.md | Token-Shadow.md |
-| spacing-tokens.md | Token-Spacing.md |
-| typography-tokens.md | Token-Typography.md |
+| accessibility-tokens.md | Token-Family-Accessibility.md |
+| blend-tokens.md | Token-Family-Blend.md |
+| border-tokens.md | Token-Family-Border.md |
+| color-tokens.md | Token-Family-Color.md |
+| glow-tokens.md | Token-Family-Glow.md |
+| layering-tokens.md | Token-Family-Layering.md |
+| motion-tokens.md | Token-Family-Motion.md |
+| opacity-tokens.md | Token-Family-Opacity.md |
+| radius-tokens.md | Token-Family-Radius.md |
+| responsive-tokens.md | Token-Family-Responsive.md |
+| shadow-tokens.md | Token-Family-Shadow.md |
+| spacing-tokens.md | Token-Family-Spacing.md |
+| typography-tokens.md | Token-Family-Typography.md |
 
-**Total Tokens**: 71,272 tokens
-**Rationale**: Clear, cohesive family with consistent naming pattern. All documents follow `*-tokens.md` pattern already. Prefix standardization improves discoverability and MCP query precision.
+**Note**: `semantic-token-structure.md` moved to Token Infrastructure (Token- prefix) based on Batch 0 content analysis.
+
+**Total Tokens**: 62,401 tokens (updated)
+**Rationale**: Clear, cohesive family with consistent naming pattern. All documents follow `*-tokens.md` pattern and contain actual token definitions and values. Prefix standardization improves discoverability and MCP query precision.
 
 ---
 
@@ -107,7 +109,7 @@
 ### Family 4: Token Infrastructure (2 documents)
 
 **Proposed Prefix**: `Token-`
-**Purpose**: Token usage patterns, resolution, and philosophy
+**Purpose**: Token usage patterns, resolution, SemanticToken interface, and philosophy
 **Layer**: 2 (Frameworks and Patterns)
 **Load Behavior**: Manual (MCP query)
 
@@ -115,13 +117,14 @@
 |--------------|---------------|
 | Token Quick Reference.md | Token-Quick-Reference.md |
 | Token Resolution Patterns.md | Token-Resolution-Patterns.md |
+| semantic-token-structure.md | Token-Semantic-Structure.md |
 
-**Total Tokens**: 5,497 tokens
-**Rationale**: Documents describe how to use and select tokens (infrastructure), not specific token types.
+**Total Tokens**: 14,368 tokens (updated after Batch 0 analysis)
+**Rationale**: Documents describe how to use, select, and structure tokens (infrastructure), not specific token types.
+
+**Batch 0 Update**: `semantic-token-structure.md` added based on content analysis confirming it describes the SemanticToken interface (infrastructure) rather than specific token definitions (family spec).
 
 **Note**: `primitive-vs-semantic-usage-philosophy.md` was originally grouped here but is actually about **component selection** (Stemma System), not token infrastructure. Moved to Component Infrastructure family.
-
-**⚠️ EDGE CASE - REQUIRES DEEPER ANALYSIS**: See "Token Documentation Content Analysis" section below for discussion of Token-Family vs Token infrastructure distinction.
 
 ---
 
@@ -247,59 +250,39 @@ Per Requirements 5.7 and 5.8, the following documents have unclear categorizatio
 
 ---
 
-### Edge Case 1: Token Documentation Content Analysis (Structural)
+### Edge Case 1: Token Documentation Content Analysis (Structural) ✅ RESOLVED
 
-**⚠️ CRITICAL FINDING: Token docs require deeper content analysis before final categorization**
+**⚠️ RESOLVED: Batch 0 content analysis completed - clean binary split confirmed**
 
-**The Problem:**
-The current 14 "Token Documentation" files are assumed to be Token-Family specs (like Component-Family specs), but this assumption hasn't been validated through content analysis. Some docs may contain:
+**Original Problem:**
+The 14 "Token Documentation" files were assumed to be Token-Family specs, but this assumption hadn't been validated through content analysis.
 
-1. **Pure Family Spec** - Only describes a specific token type (e.g., "here are all the color tokens")
-2. **Pure Infrastructure** - Only describes how to use/select/resolve tokens generally
-3. **Mixed Content** - Contains both family-specific content AND infrastructure content that should be extracted
+**Resolution (Batch 0 Analysis - 2026-01-03):**
 
-**Why This Matters:**
-- The Component system has clear separation: `Component-Family-*` (specific families) vs `Component-*` (infrastructure)
-- The Token system (Rosetta System) lacks this parallel structure
-- No `rosetta-system-principles.md` equivalent exists for tokens
-- Token docs may have "how to use tokens" content mixed into each family doc (redundancy)
+Content analysis of all 14 token documents revealed a **clean binary split**:
 
-**Documents Requiring Content Analysis:**
+| Classification | Doc Count | Total Tokens | Percentage |
+|----------------|-----------|--------------|------------|
+| **Infrastructure** | 1 | 8,871 | 12.4% |
+| **Family Spec** | 13 | 62,401 | 87.6% |
+| **Mixed** | 0 | 0 | 0% |
 
-| Document | Suspected Classification | Needs Analysis? |
-|----------|-------------------------|-----------------|
-| semantic-token-structure.md | Likely Infrastructure (describes SemanticToken interface) | ✅ Yes |
-| color-tokens.md | Likely Family Spec | ✅ Verify |
-| typography-tokens.md | Likely Family Spec | ✅ Verify |
-| spacing-tokens.md | Likely Family Spec | ✅ Verify |
-| shadow-tokens.md | Likely Family Spec | ✅ Verify |
-| glow-tokens.md | Likely Family Spec | ✅ Verify |
-| blend-tokens.md | Likely Family Spec | ✅ Verify |
-| border-tokens.md | Likely Family Spec | ✅ Verify |
-| radius-tokens.md | Likely Family Spec | ✅ Verify |
-| opacity-tokens.md | Likely Family Spec | ✅ Verify |
-| motion-tokens.md | Likely Family Spec | ✅ Verify |
-| layering-tokens.md | Likely Family Spec | ✅ Verify |
-| responsive-tokens.md | Likely Family Spec | ✅ Verify |
-| accessibility-tokens.md | Likely Family Spec | ✅ Verify |
+**Key Findings:**
+1. **No mixed content documents found** - Token docs cleanly separate into infrastructure vs family
+2. **One reclassification needed** - `semantic-token-structure.md` moves to Token Infrastructure (see Edge Case 4)
+3. **No rosetta-system-principles.md needed** - Existing Token Infrastructure docs are sufficient
+4. **13 docs confirmed as pure Family Specs** - All contain actual token definitions and values
 
-**Proposed Classification Framework:**
+**Documents Confirmed as Token-Family-:**
+- accessibility-tokens.md, blend-tokens.md, border-tokens.md, color-tokens.md
+- glow-tokens.md, layering-tokens.md, motion-tokens.md, opacity-tokens.md
+- radius-tokens.md, responsive-tokens.md, shadow-tokens.md, spacing-tokens.md
+- typography-tokens.md
 
-For each token doc, classify content as:
-- **Family Content**: Specific token definitions, values, usage examples for that token type
-- **Infrastructure Content**: General token concepts, SemanticToken interface, validation patterns, cross-token guidance
+**Document Moved to Token-:**
+- semantic-token-structure.md (100% infrastructure content)
 
-**Possible Outcomes:**
-1. **Binary split works** - Most docs are pure family specs, 1-2 are pure infrastructure → Simple rename
-2. **Mixed content found** - Some docs contain extractable infrastructure content → Requires content restructuring
-3. **Rosetta System principles needed** - Infrastructure content should be consolidated into a new `rosetta-system-principles.md`
-
-**Human Decision Required:**
-- A) Execute content restructuring within this spec
-- B) Spin off a separate "Rosetta System Documentation Alignment" spec
-- C) Accept current classification without deeper analysis
-
-**Recommendation**: Option A - Perform content analysis during Phase 2 Analysis to inform prefix decisions.
+**Validation Reference**: See `.kiro/specs/036-steering-documentation-audit/audit-artifacts/token-infrastructure-vs-family-findings.md` for complete analysis.
 
 ---
 
@@ -362,30 +345,48 @@ For each token doc, classify content as:
 
 ---
 
-### Edge Case 4: semantic-token-structure.md
+### Edge Case 4: semantic-token-structure.md ✅ RESOLVED
 
 **Document**: `semantic-token-structure.md`
-**Tokens**: 3,847
-**Current Status**: Token Family (assumed)
+**Tokens**: 8,871 (corrected from initial estimate)
+**Original Status**: Token Family (assumed)
+**Resolution Date**: 2026-01-03 (Batch 0 Analysis)
 
-**Possible Categories:**
+**Resolution**: **MOVE TO TOKEN INFRASTRUCTURE (Token- prefix)**
 
-| Category | Prefix | Rationale |
-|----------|--------|-----------|
-| Token Family | `Token-Family-` | Follows `*-tokens.md` naming pattern |
-| Token Infrastructure | `Token-` | Describes SemanticToken interface (infrastructure, not a specific token type) |
+**Evidence from Batch 0 Content Analysis**:
 
-**Why This is Unclear:**
-- Name follows `*-token*.md` pattern suggesting Token Family
-- BUT content describes the SemanticToken interface structure
-- This is infrastructure (how semantic tokens work) not a family spec (what tokens exist)
-- Similar to how `component-schema-format.md` is Component Infrastructure, not Component Family
+The comprehensive content analysis performed in Tasks 10.1-10.3 confirmed:
 
-**Human Decision Required:**
-- A) Keep in Token Family (accept naming pattern over content)
-- B) Move to Token Infrastructure (content-based classification)
+1. **100% Infrastructure Content** - Document describes the SemanticToken TypeScript interface that ALL semantic tokens must implement
+2. **0% Family-Specific Content** - Contains no actual token definitions or values
+3. **Documents 5 Required Fields** - name, primitiveReferences, category, context, description
+4. **Documents 3 Optional Fields** - primitiveTokens, platforms, _meta
+5. **Provides Validation Requirements** - Applicable to ANY token type
+6. **All Examples Reference Other Files** - e.g., "See `color.primary` token in `src/tokens/semantic/ColorTokens.ts`"
 
-**Recommendation**: Option B - Move to Token Infrastructure. Content describes infrastructure (SemanticToken interface), not a specific token family.
+**Key Quote from Document**:
+> "The SemanticToken interface defines the contract for all semantic tokens in the system"
+
+**Parallel**: Similar to `component-schema-format.md` which is Component Infrastructure, not Component Family.
+
+**Classification Decision**:
+- ❌ ~~Token-Family-~~ (naming pattern does not match content)
+- ✅ **Token-** (content-based classification - describes infrastructure for ALL tokens)
+
+**Impact on Document Counts**:
+
+| Family | Original Count | Updated Count | Change |
+|--------|----------------|---------------|--------|
+| Token Infrastructure | 2 | 3 | +1 |
+| Token Family Specs | 14 | 13 | -1 |
+
+**Updated Token Infrastructure Family**:
+1. Token Quick Reference.md
+2. Token Resolution Patterns.md
+3. **semantic-token-structure.md** ← Moved from Token Family
+
+**Validation Reference**: See `.kiro/specs/036-steering-documentation-audit/audit-artifacts/token-infrastructure-vs-family-findings.md` for complete analysis.
 
 ---
 
@@ -499,20 +500,21 @@ For each token doc, classify content as:
 
 ## Edge Cases Summary
 
-| Edge Case | Document(s) | Current Status | Recommendation |
-|-----------|-------------|----------------|----------------|
-| 1. Token Content Analysis | 14 token docs | Token Family | Perform content analysis in Phase 2 |
-| 2. stemma-system-principles.md | 1 doc | Standalone | Keep standalone |
-| 3. primitive-vs-semantic-usage-philosophy.md | 1 doc | Component Infrastructure | Keep in Component Infrastructure |
-| 4. semantic-token-structure.md | 1 doc | Token Family | Move to Token Infrastructure |
-| 5. Platform Documentation Pair | 2 docs | Standalone | Keep standalone |
-| 6. behavioral-contract-validation-framework.md | 1 doc | Testing Documentation | Keep in Testing Documentation |
-| 7. Task-Type-Definitions.md | 1 doc | Process/Workflow | Keep in Process/Workflow |
-| 8. Always-Loaded Prefix Changes | 2 docs | Process/Workflow | Apply prefix in dedicated batch |
+| Edge Case | Document(s) | Current Status | Recommendation | Resolution |
+|-----------|-------------|----------------|----------------|------------|
+| 1. Token Content Analysis | 14 token docs | Token Family | Perform content analysis in Phase 2 | ✅ **RESOLVED** - Clean binary split confirmed (Batch 0) |
+| 2. stemma-system-principles.md | 1 doc | Standalone | Keep standalone | Pending Checkpoint 2 |
+| 3. primitive-vs-semantic-usage-philosophy.md | 1 doc | Component Infrastructure | Keep in Component Infrastructure | Pending Checkpoint 2 |
+| 4. semantic-token-structure.md | 1 doc | Token Family | Move to Token Infrastructure | ✅ **RESOLVED** - Moved to Token- prefix (Batch 0) |
+| 5. Platform Documentation Pair | 2 docs | Standalone | Keep standalone | Pending Checkpoint 2 |
+| 6. behavioral-contract-validation-framework.md | 1 doc | Testing Documentation | Keep in Testing Documentation | Pending Checkpoint 2 |
+| 7. Task-Type-Definitions.md | 1 doc | Process/Workflow | Keep in Process/Workflow | Pending Checkpoint 2 |
+| 8. Always-Loaded Prefix Changes | 2 docs | Process/Workflow | Apply prefix in dedicated batch | Pending Checkpoint 2 |
 
 **Total Documents with Edge Case Status**: 23 documents (7 individual + 14 token docs + 2 platform docs)
 
-**Human Decisions Required at Checkpoint 2**: 8 decisions
+**Edge Cases Resolved in Batch 0**: 2 (Edge Cases 1 and 4)
+**Human Decisions Required at Checkpoint 2**: 6 decisions (reduced from 8)
 
 ---
 
@@ -552,19 +554,20 @@ Per Requirements 5.3, 5.4, and 5.5, the following categorical prefixes are propo
 - Cross-token guidance and philosophy
 - SemanticToken interface documentation
 
-**Documents Affected**: 2 documents (5,497 tokens)
+**Documents Affected**: 3 documents (14,368 tokens) ← Updated after Batch 0 analysis
 
 | Current Name | Proposed Name |
 |--------------|---------------|
 | Token Quick Reference.md | Token-Quick-Reference.md |
 | Token Resolution Patterns.md | Token-Resolution-Patterns.md |
+| semantic-token-structure.md | Token-Semantic-Structure.md |
 
 **Rationale**: 
 - Clear distinction from Token-Family docs (specific token types)
 - Aligns with Component- vs Component-Family- pattern
 - Improves MCP query precision for infrastructure vs family content
 
-**Edge Case Note**: `semantic-token-structure.md` may belong here instead of Token-Family (see Edge Case 4). Pending human decision.
+**Batch 0 Resolution**: `semantic-token-structure.md` confirmed as Token Infrastructure (not Token-Family) based on content analysis. See Edge Case 4 resolution above.
 
 ---
 
@@ -578,7 +581,7 @@ Per Requirements 5.3, 5.4, and 5.5, the following categorical prefixes are propo
 - Token-specific validation rules
 - Per-family implementation guidance
 
-**Documents Affected**: 14 documents (71,272 tokens)*
+**Documents Affected**: 13 documents (62,401 tokens) ← Updated after Batch 0 analysis
 
 | Current Name | Proposed Name |
 |--------------|---------------|
