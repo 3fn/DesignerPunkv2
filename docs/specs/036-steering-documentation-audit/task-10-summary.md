@@ -19,14 +19,14 @@ Analyzed all 14 token documentation files to determine infrastructure vs family 
 
 - Confirmed clean binary split: 1 infrastructure doc, 13 family spec docs, 0 mixed content
 - Reclassified `semantic-token-structure.md` from Token-Family- to Token- prefix
-- Determined `rosetta-system-principles.md` is NOT needed (Task 11.3 will be skipped)
+- **Human Decision**: `rosetta-system-principles.md` WILL be created for architectural symmetry (Task 11.3 proceeds)
 - Updated `category-analysis.md` with resolved Edge Cases 1 and 4
 
 ## Impact
 
 - ✅ Token-Family- prefix: 13 documents (62,401 tokens)
 - ✅ Token- prefix: 3 documents (14,368 tokens)
-- ✅ Batch 1 scope reduced (skip rosetta-system-principles.md creation)
+- ✅ Batch 1 scope: 3 new documents (including rosetta-system-principles.md)
 - ✅ Human decisions at Checkpoint 2 reduced from 8 to 6
 
 ---

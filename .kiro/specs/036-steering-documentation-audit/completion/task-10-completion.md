@@ -38,7 +38,7 @@ Analyze all 14 token documentation files to determine the infrastructure vs fami
 
 1. **Clean binary split confirmed** - Token docs cleanly separate into infrastructure vs family with no mixed content
 2. **One reclassification needed** - `semantic-token-structure.md` moves from Token-Family- to Token- prefix
-3. **No rosetta-system-principles.md needed** - Existing Token Infrastructure docs are sufficient
+3. **rosetta-system-principles.md WILL BE CREATED** - Human decision for architectural symmetry (overrides technical "not needed" finding)
 4. **Edge Cases 1 and 4 resolved** - Both marked as resolved in category-analysis.md
 
 ### Classification Decision
@@ -57,7 +57,7 @@ Analyze all 14 token documentation files to determine the infrastructure vs fami
 | 10.1 | Analyze semantic-token-structure.md content | ✅ Complete |
 | 10.2 | Analyze 13 remaining token docs for infrastructure content | ✅ Complete |
 | 10.3 | Document findings: infrastructure vs family content split | ✅ Complete |
-| 10.4 | Determine if rosetta-system-principles.md needed | ✅ Complete (NOT needed) |
+| 10.4 | Determine if rosetta-system-principles.md needed | ✅ Complete (PROCEED - human override) |
 | 10.5 | Update Edge Case 4 classification decision | ✅ Complete |
 
 ---
@@ -84,8 +84,8 @@ Analyze all 14 token documentation files to determine the infrastructure vs fami
 ## Impact on Subsequent Batches
 
 ### Batch 1 (Task 11) Impact
-- **Task 11.3 SKIP** - `rosetta-system-principles.md` creation is NOT needed
-- Batch 1 scope reduced to 2 new documents instead of 3
+- **Task 11.3 PROCEED** - `rosetta-system-principles.md` WILL be created (human decision for architectural symmetry)
+- Batch 1 scope remains 3 new documents
 
 ### Batch 10-12 (Task 18) Impact
 - Token-Family- prefix applies to 13 docs (not 14)

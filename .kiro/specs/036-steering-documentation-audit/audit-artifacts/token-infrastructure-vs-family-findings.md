@@ -134,29 +134,37 @@ Based on this analysis, the prefix assignments should be:
 
 ## Rosetta System Principles Decision
 
-### Finding: No rosetta-system-principles.md Needed
+### Finding: rosetta-system-principles.md WILL BE CREATED
 
-The analysis reveals that:
+**Original Analysis Conclusion:** No rosetta-system-principles.md needed (infrastructure content not scattered)
 
-1. **Infrastructure content is NOT scattered** - It's concentrated in one document (semantic-token-structure.md)
-2. **No extraction needed** - The 13 family spec docs are pure family content
-3. **Clean separation exists** - The binary split is already clean
+**Human Decision (2026-01-03):** CREATE rosetta-system-principles.md for architectural symmetry
 
-### Comparison to Stemma System
+**Rationale for Human Override:**
+
+The original analysis focused on *redundancy elimination* - whether infrastructure content was scattered and needed consolidation. The answer was no. However, the human collaborator identified a different goal: *architectural completeness and symmetry*.
 
 | Aspect | Stemma System (Components) | Rosetta System (Tokens) |
 |--------|---------------------------|------------------------|
-| Principles Doc | stemma-system-principles.md | **Not needed** |
+| Principles Doc | stemma-system-principles.md ✅ | rosetta-system-principles.md ✅ (to be created) |
 | Infrastructure Docs | 9 Component-* docs | 3 Token-* docs |
 | Family Spec Docs | 11 Component-Family-* docs | 13 Token-Family-* docs |
-| Content Separation | Clean | Clean |
 
-**Rationale**: The Stemma System has `stemma-system-principles.md` because component naming conventions are complex and cross-cutting. The Rosetta System's infrastructure is simpler and already well-contained in:
-- Token Quick Reference.md (routing table)
-- Token Resolution Patterns.md (resolution logic)
-- semantic-token-structure.md (interface documentation)
+**Why Create It:**
 
-Creating a `rosetta-system-principles.md` would be redundant - the existing three infrastructure docs adequately cover the Rosetta System's foundational concepts.
+1. **Conceptual Parity** - Stemma System : Components :: Rosetta System : Tokens
+2. **Discoverability** - AI agents can find the foundational token philosophy doc by name
+3. **Future-Proofing** - Natural home for cross-cutting token concepts as system evolves
+4. **Content Gap** - Existing Token Infrastructure docs are operational/reference, not philosophical
+
+**Proposed Content for rosetta-system-principles.md:**
+- Philosophy behind primitive → semantic hierarchy
+- Mathematical foundations (modular scales, baseline grids)
+- Cross-token relationships and dependencies
+- The "why" behind token architecture decisions
+- Naming conventions for tokens
+
+**Impact on Task 11.3:** PROCEED with creation (not skip)
 
 ---
 
