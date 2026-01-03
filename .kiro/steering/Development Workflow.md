@@ -21,12 +21,17 @@ inclusion: always
 **Layer Context**: This is a Layer 2 (Frameworks and Patterns) document that provides reusable task completion workflows. It's always loaded but contains extensive conditional sections for specialized scenarios like hook debugging and setup.
 
 ### WHEN Executing Normal Tasks THEN **MUST** Read:
-1. ✅ **Task Completion Workflow** (MUST READ)
-2. ✅ **Spec Planning** (brief reference)
+1. ✅ **Task Completion Workflow** (MUST READ - includes completion documentation quick reference)
+2. ✅ **Spec Planning** (brief reference - points to Spec Planning Standards via MCP)
 3. ✅ **Hook System Usage** (basic commands)
 4. ✅ **Quality Standards** (MUST READ)
 5. ✅ **Workflow Improvements** (context)
 6. ❌ **SKIP**: Agent Hook Dependency Chains, Troubleshooting sections, Hook Integration details
+
+**MCP Queries for Detailed Guidance** (query when needed):
+- **Completion Documentation**: `get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading: "Two-Document Workflow" })`
+- **Release Detection**: `get_section({ path: ".kiro/steering/Release Management System.md", heading: "Release Pipeline Architecture" })`
+- **File Organization**: `get_section({ path: ".kiro/steering/File Organization Standards.md", heading: "Organization Implementation (Conditional Loading)" })`
 
 ### WHEN Debugging Hook Issues THEN Read:
 1. ✅ **Task Completion Workflow** (context)
@@ -35,11 +40,20 @@ inclusion: always
 4. ✅ **Hook Integration** (understand automation details)
 5. ❌ **SKIP**: Spec Planning, Workflow Improvements
 
+**MCP Queries for Detailed Guidance** (query when needed):
+- **Release Detection Troubleshooting**: `get_section({ path: ".kiro/steering/Release Management System.md", heading: "AI Agent Decision Points" })`
+
 ### WHEN Setting Up or Modifying Hooks THEN Read:
 1. ✅ **Agent Hook Dependency Chains** (understand configuration)
 2. ✅ **Kiro Agent Hook Integration** (setup details)
 3. ✅ **Troubleshooting** (reference for testing)
 4. ❌ **SKIP**: Task Completion Workflow, Quality Standards
+
+### WHEN Creating Completion Documentation THEN Read:
+1. ✅ **Task Completion Workflow** (quick reference section)
+2. ✅ Query **Completion Documentation Guide** via MCP for detailed guidance:
+   - `get_document_full({ path: ".kiro/steering/Completion Documentation Guide.md" })`
+   - Or specific sections: `get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading: "Documentation Tiers" })`
 
 ---
 
@@ -65,6 +79,25 @@ inclusion: always
 - Triggers agent hooks for automatic release detection
 - Maintains consistent task tracking in tasks.md
 - Enables automation without manual steps
+
+**Completion Documentation Quick Reference**:
+- **Parent tasks require TWO documents**: detailed completion doc + summary doc
+- **Detailed doc**: `.kiro/specs/[spec-name]/completion/task-N-completion.md` (internal)
+- **Summary doc**: `docs/specs/[spec-name]/task-N-summary.md` (triggers release detection)
+- **Subtasks**: Only need detailed completion doc (no summary)
+
+**For detailed guidance** on documentation tiers, naming conventions, templates, and the two-document workflow, query Completion Documentation Guide via MCP:
+
+```
+get_document_full({ path: ".kiro/steering/Completion Documentation Guide.md" })
+```
+
+Or query specific sections:
+```
+get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading: "Two-Document Workflow" })
+get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading: "Documentation Tiers" })
+get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading: "Naming Conventions" })
+```
 
 ### Alternative Process (Script-based without Automation)
 1. **Complete Task Work**: Implement all requirements and create specified artifacts
@@ -1459,254 +1492,56 @@ To verify hooks are triggering and executing correctly:
 
 ### Automatic File Organization
 
-**Trigger**: Task status changes to "completed"  
-**Hook**: `.kiro/agent-hooks/organize-after-task.sh`  
-**Purpose**: Automatically organize files based on **Organization** metadata
+File organization triggers automatically when task status changes to "completed" via the `taskStatus` tool.
 
-#### Workflow
-1. **Detection**: Kiro detects task completion event
-2. **Scanning**: Agent hook scans for files with organization metadata
-3. **Preview**: Shows user what files would be organized
-4. **Confirmation**: Prompts user for approval before organizing
-5. **Organization**: Moves files and updates cross-references
-6. **Commit**: Automatically commits organization changes
+**Key Points**:
+- Hook scans root directory for files with **Organization** metadata
+- User confirmation required before moving files (safety feature)
+- Cross-references automatically updated after file moves
+- Manual fallback: `./.kiro/agent-hooks/organize-by-metadata.sh`
 
-#### Safety Features
-- **Human Control**: User confirmation required for all file moves
-- **Metadata Validation**: Validates organization metadata before organizing
-- **Dry-Run Preview**: Shows what will be organized before execution
-- **Cross-Reference Updates**: Automatically maintains link integrity
-- **Fallback Available**: Manual organization always available
-
-#### User Experience
-```
-🤖 [Agent Hook] Task completion detected - checking for file organization needs...
-🤖 [Agent Hook] Found files that need organization:
-  - new-document.md -> strategic-framework/ (framework-strategic, cross-spec)
-
-Would you like to organize these files now? [y/N]: y
-
-📁 Moving: ./new-document.md -> strategic-framework/new-document.md
-✅ Organized: new-document.md -> strategic-framework/
-📁 Updating cross-references...
-✅ Cross-references updated
-✅ Organization complete!
-```
-
-#### Configuration
-- **Auto-Approve**: `false` (requires human confirmation)
+**Quick Reference**:
+- **Hook**: `.kiro/agent-hooks/organize-after-task.sh`
 - **Timeout**: 10 minutes (allows time for user interaction)
-- **Integration**: Seamless with existing task completion workflow
-- **Fallback**: Manual hooks available if automation fails
+- **Scope**: Root directory only (subdirectories intentionally excluded)
 
-### Benefits of Agent Hook Integration
+**For detailed guidance** on file organization workflow, metadata values, directory structure, scope rationale, and manual organization options, query File Organization Standards via MCP:
 
-#### Immediate Benefits
-- **Automatic Organization**: Files organized immediately after task completion
-- **Prevents Clutter**: No accumulation of unorganized files in root directory
-- **Maintains Quality**: Cross-reference integrity preserved automatically
-- **Reduces Manual Work**: Organization happens with minimal user intervention
-
-#### Long-Term Benefits
-- **Scalable Organization**: Pattern works as project grows and more specs are created
-- **Consistent Application**: Organization standards applied automatically across all development
-- **Knowledge Preservation**: Framework artifacts properly separated from spec-specific work
-- **Developer Experience**: Clean, navigable project structure maintained without manual effort
-
-#### Process-First Validation
-- ✅ **Manual Process Proven**: File organization validated manually before automation
-- ✅ **Hook Enhancement**: Automation enhances proven processes rather than replacing them
-- ✅ **Safety Maintained**: All safety features from manual process preserved in automation
-- ✅ **Human Override**: Manual organization always available as fallback option
-
----
-
-### File Organization Scope
-
-**Intentional Design**: File organization scans **root directory only**, not subdirectories
-
-#### Why Root Directory Only?
-
-The file organization system is intentionally designed to scan only the root directory for files needing organization. This design decision is based on the typical workflow pattern:
-
-1. **Completion Documents in Subdirectories**: Task completion documents are created directly in `.kiro/specs/[spec-name]/completion/` subdirectories and don't need organization
-2. **New Files in Root**: New documentation, analysis, and framework files are typically created in the root directory during development
-3. **Targeted Organization**: The system focuses on organizing new files that accumulate in root, not reorganizing existing subdirectory structures
-
-#### Rationale
-
-- **Completion docs already organized**: Files created in `.kiro/specs/*/completion/` are already in their correct location
-- **Root directory clutter prevention**: New files created during development typically appear in root and need organization
-- **Subdirectory stability**: Files in subdirectories are usually already organized and shouldn't be moved automatically
-- **Clear scope boundary**: Limiting scope to root directory makes the automation predictable and safe
-
-#### Manual Organization for Subdirectory Files
-
-If you need to organize files that are already in subdirectories:
-
-**Option 1: Move to Root Temporarily**
-1. Move the file from subdirectory to root directory
-2. Add appropriate **Organization** metadata to the file header
-3. Mark a task complete to trigger automatic organization
-4. The file will be organized to its correct location based on metadata
-
-**Option 2: Manual Organization**
-1. Add **Organization** metadata to the file header
-2. Manually move the file to the appropriate directory based on metadata value:
-   - `framework-strategic` → `strategic-framework/`
-   - `spec-validation` → `.kiro/specs/[spec-name]/validation/`
-   - `spec-completion` → `.kiro/specs/[spec-name]/completion/`
-   - `process-standard` → `.kiro/steering/` or `docs/processes/`
-3. Update any cross-references in other files to reflect the new location
-4. Commit the changes manually
-
-**Option 3: Use organize-by-metadata.sh Directly**
-```bash
-# Run organization script directly (scans root only by default)
-./.kiro/agent-hooks/organize-by-metadata.sh
-
-# For subdirectory files, move to root first, then run script
+```
+get_document_full({ path: ".kiro/steering/File Organization Standards.md" })
 ```
 
-#### Scope Behavior Summary
-
-| Location | Automatic Organization | Manual Organization |
-|----------|----------------------|---------------------|
-| Root directory | ✅ Yes (on task completion) | ✅ Yes (anytime) |
-| Subdirectories | ❌ No (intentionally excluded) | ✅ Yes (manual process) |
-| Completion docs | ❌ No (already organized) | ✅ Yes (if needed) |
-
-**Note**: This scope limitation is an intentional design decision that keeps the automation focused and predictable. Files in subdirectories are assumed to be already organized or require manual review before moving.
+Or query specific sections:
+```
+get_section({ path: ".kiro/steering/File Organization Standards.md", heading: "Organization Implementation (Conditional Loading)" })
+get_section({ path: ".kiro/steering/File Organization Standards.md", heading: "File Organization Scope (Conditional Loading)" })
+```
 
 ---
 
-### Automatic Release Detection
+### Release Detection
 
-**Trigger**: Parent task summary document creation in `docs/specs/[spec-name]/` (manual file operations only)
+Release detection triggers automatically when parent task summary documents are created in `docs/specs/[spec-name]/`.
 
-**Important Hook Limitation**: Kiro IDE's `fileCreated` and `fileSaved` hooks only trigger for **manual file operations through the IDE UI**, not for programmatically created files by AI agents. This requires a hybrid approach:
-
-- **Automatic hooks**: Work for manually created/edited files through IDE UI
-- **Manual trigger**: Required for AI-assisted workflows after summary document creation
-
-**How it works**:
-1. Complete parent task work
-2. Create detailed completion document: `.kiro/specs/[spec-name]/completion/task-N-parent-completion.md` (Tier 3 comprehensive)
-3. Create summary document: `docs/specs/[spec-name]/task-N-summary.md` (concise, commit-style)
-4. **[AUTOMATIC - Manual Files Only]** Kiro IDE detects summary file creation and triggers release detection hook (only for manually created files)
-5. **[MANUAL - CRITICAL AI Workflows]** Run `./.kiro/hooks/release-manager.sh auto` to trigger release detection (standard practice for AI-assisted workflows)
-6. Release manager scans for completion documents and creates trigger files
-7. Release analysis can be run to calculate version bump and generate notes
-
-**File naming**: 
-- Summary docs: `task-N-summary.md` in `docs/specs/[spec-name]/` (triggers hook for manual files)
-- Detailed docs: `task-N-parent-completion.md` in `.kiro/specs/[spec-name]/completion/` (internal)
-
-**Why two documents?**:
+**Key Points**:
+- Summary documents in `docs/specs/` trigger automatic release detection (manual files only)
+- AI-assisted workflows require manual trigger: `./.kiro/hooks/release-manager.sh auto`
+- Hook depends on file organization completing first (via `runAfter` dependency)
 - `.kiro/` directory is filtered from Kiro IDE file watching (hooks don't trigger there)
-- Summary docs serve dual purpose: hook trigger + release note content
-- Detailed docs remain internal for comprehensive knowledge preservation
 
-**Hybrid Approach - When Hooks Trigger**:
-- ✅ **Manual file creation**: User creates summary document through IDE UI → Hook triggers automatically
-- ✅ **Manual file edits**: User edits existing summary document through IDE UI → Hook triggers automatically
-- ❌ **AI-created files**: AI agent creates summary document programmatically → Hook does NOT trigger (requires manual trigger)
-- ❌ **Script-created files**: Files created via scripts or command line → Hook does NOT trigger (requires manual trigger)
+**Quick Reference**:
+- **Summary docs**: `docs/specs/[spec-name]/task-N-summary.md` (triggers hooks)
+- **Detailed docs**: `.kiro/specs/[spec-name]/completion/task-N-parent-completion.md` (internal)
+- **Manual trigger**: `./.kiro/hooks/release-manager.sh auto`
 
-**Standard Practice for AI-Assisted Workflows**:
-1. AI agent creates summary document programmatically
-2. **Manually run**: `./.kiro/hooks/release-manager.sh auto` to trigger release detection
-3. Verify trigger files created in `.kiro/release-triggers/`
+**For detailed guidance** on release detection pipeline, troubleshooting, hook debugging, and manual triggers, query Release Management System via MCP:
 
-**Subtask completion documents** use format `task-N.M-completion.md` in `.kiro/` and do NOT trigger automatic release detection (by design - only parent tasks represent complete features)
-
----
-
-### Manual Release Detection
-
-**When to use**:
-- Automatic detection didn't trigger
-- Want to re-run release detection
-- Testing or debugging
-- Edge cases
-
-**How to trigger**:
-1. Open Agent Hooks panel in Kiro IDE
-2. Find "Manual Release Detection" hook
-3. Click "Run" or "▶" button
-4. Confirm execution
-
-**Alternative**: Run script directly: `./.kiro/hooks/release-manager.sh auto`
-
----
-
-### Kiro IDE File Watching Behavior
-
-**Important**: The `.kiro/` directory is filtered from Kiro IDE's file watching system. This means hooks that trigger on file creation, modification, or deletion will not fire for files within the `.kiro/` directory structure.
-
-#### Directories Where Hooks Will NOT Trigger
-
-❌ **Hooks will NOT trigger** for files created, modified, or deleted in:
-- `.kiro/specs/` - Spec documents and completion documentation
-- `.kiro/hooks/` - Hook scripts and configurations
-- `.kiro/logs/` - Log files
-- `.kiro/agent-hooks/` - Agent hook scripts
-- `.kiro/release-triggers/` - Release trigger files
-- `.kiro/steering/` - Process documentation and standards
-- Any subdirectory of `.kiro/` - All subdirectories are filtered
-
-#### Directories Where Hooks WILL Trigger
-
-✅ **Hooks WILL trigger** for files created, modified, or deleted in:
-- `docs/` - Documentation directory (including `docs/specs/`)
-- `src/` - Source code directory
-- `strategic-framework/` - Strategic framework documents
-- `preserved-knowledge/` - Preserved knowledge documents
-- Root directory - Files in the project root
-- Any non-hidden directory - Directories not starting with `.`
-
-#### Why This Matters for Release Detection
-
-The `.kiro/` directory filtering is the reason for the two-document workflow for parent task completion:
-
-**Detailed Completion Documents** (`.kiro/specs/[spec-name]/completion/`):
-- Location: `.kiro/specs/[spec-name]/completion/task-N-parent-completion.md`
-- Purpose: Comprehensive Tier 3 internal documentation
-- Hook Behavior: **Does NOT trigger hooks** (in filtered directory)
-- Audience: Internal team, comprehensive knowledge preservation
-
-**Summary Documents** (`docs/specs/[spec-name]/`):
-- Location: `docs/specs/[spec-name]/task-N-summary.md`
-- Purpose: Concise, commit-style public-facing summary
-- Hook Behavior: **DOES trigger hooks** (in watched directory)
-- Audience: Public-facing, release notes, hook trigger
-
-#### Common Mistake: Wrong Summary Document Location
-
-**Problem**: Creating summary document in `.kiro/` directory instead of `docs/`
-
-```bash
-# ❌ WRONG - This won't trigger hooks (.kiro/ directory is filtered)
-.kiro/specs/[spec-name]/task-1-summary.md
-
-# ✅ CORRECT - This triggers hooks (docs/ directory is watched)
-docs/specs/[spec-name]/task-1-summary.md
+```
+get_document_full({ path: ".kiro/steering/Release Management System.md" })
 ```
 
-**Solution**: Always create summary documents in `docs/specs/[spec-name]/` to ensure automatic release detection triggers correctly.
-
-#### Design Rationale
-
-The `.kiro/` directory filtering is an intentional design decision by Kiro IDE:
-
-**Benefits**:
-- **Reduces Noise**: Internal tooling files don't trigger unnecessary hook executions
-- **Performance**: Fewer file watch events improves IDE performance
-- **Clear Separation**: Internal files (`.kiro/`) vs public files (`docs/`, `src/`)
-- **Predictable Behavior**: Developers know which directories trigger automation
-
-**Implications**:
-- Summary documents must be in watched directories to trigger hooks
-- Detailed completion docs can remain in `.kiro/` for internal organization
-- Hook testing requires files in watched directories
-- File organization automation focuses on root directory (watched) not `.kiro/` (filtered)
+Or query specific sections:
+```
+get_section({ path: ".kiro/steering/Release Management System.md", heading: "Release Pipeline Architecture" })
+get_section({ path: ".kiro/steering/Release Management System.md", heading: "AI Agent Decision Points" })
+```
