@@ -456,26 +456,28 @@
 
 ### Proposal 1: Validation Tiers Consolidation
 
-**Canonical Source**: Spec Planning Standards.md
+**Canonical Source**: Task-Type-Definitions.md *(REVISED at Checkpoint 2)*
 
 **Current State**:
-- Spec Planning Standards.md: Comprehensive tier definitions (~200 lines)
-- Task-Type-Definitions.md: Duplicated tier definitions per task type (~100 lines, ~400 tokens)
+- Spec Planning Standards.md: Comprehensive tier definitions (~200 lines, ~800 tokens)
+- Task-Type-Definitions.md: Tier definitions per task type (~100 lines)
+
+**Rationale for Revision**: Task-Type-Definitions was created specifically to make task type information more accessible because Spec Planning Standards is large (27,135 tokens). Making Task-Type-Definitions the canonical source improves discoverability.
 
 **Proposed Changes**:
 
 | Document | Current Content | Proposed Content | Token Impact |
 |----------|-----------------|------------------|--------------|
-| Task-Type-Definitions.md | Full tier definitions repeated per task type | Brief priming + MCP query direction | -400 tokens |
-| Spec Planning Standards.md | Keep as-is (canonical source) | No change | 0 |
+| Task-Type-Definitions.md | Keep as-is (canonical source) | No change | 0 |
+| Spec Planning Standards.md | Full tier definitions | Brief priming + MCP query direction | -800 tokens |
 
-**Priming Template for Task-Type-Definitions.md**:
+**Priming Template for Spec Planning Standards.md**:
 ```markdown
-### Validation Tier
+### Validation Tiers
 
-Each task type has an associated validation tier. For complete tier definitions and requirements, query Spec Planning Standards via MCP:
+Each task type has an associated validation tier. For complete tier definitions and requirements, query Task-Type-Definitions via MCP:
 
-**MCP Query**: `get_section({ path: ".kiro/steering/Spec Planning Standards.md", heading: "Validation Tiers" })`
+**MCP Query**: `get_section({ path: ".kiro/steering/Task-Type-Definitions.md", heading: "Validation Tiers" })`
 
 **Quick Reference**:
 - **Tier 1 (Minimal)**: Setup/Documentation tasks - artifact verification only
@@ -483,7 +485,7 @@ Each task type has an associated validation tier. For complete tier definitions 
 - **Tier 3 (Comprehensive)**: Architecture tasks - full validation suite
 ```
 
-**Estimated Token Savings**: ~400 tokens from Task-Type-Definitions.md
+**Estimated Token Savings**: ~800 tokens from Spec Planning Standards.md
 
 ---
 
