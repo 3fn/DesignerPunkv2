@@ -5,7 +5,7 @@ inclusion: always
 # Start Up Tasks
 
 **Date**: 2025-10-20
-**Last Reviewed**: 2025-12-15
+**Last Reviewed**: 2026-01-03
 **Purpose**: Essential checklist for every task (date check, Jest commands, test selection, completion sequence)
 **Organization**: process-standard
 **Scope**: cross-project
@@ -100,6 +100,12 @@ inclusion: always
 5. **CRITICAL: Task Completion Sequence (MUST FOLLOW)**
    
    **DO NOT mark tasks complete before completing the required steps for that task type.**
+   
+   **📖 Query Completion Documentation Guide via MCP for detailed guidance:**
+   ```
+   get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading: "Two-Document Workflow" })
+   get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading: "Documentation Tiers" })
+   ```
    
    ---
    

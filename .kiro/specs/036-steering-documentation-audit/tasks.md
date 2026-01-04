@@ -334,12 +334,12 @@ This implementation plan follows a three-phase audit methodology with Human-Agen
   - [x] 15.4 Update any cross-references to validation tiers
   - _Requirements: 3.3, 3.4_
 
-- [ ] 16. Batch 7: Start Up Tasks Update
+- [x] 16. Batch 7: Start Up Tasks Update
   **Type**: Documentation
   **Validation**: Tier 1 - Minimal
   **Success Criteria**: MCP query reminder added for Completion Documentation Guide
   
-  - [ ] 16.1 Add checklist item for querying Completion Documentation Guide via MCP
+  - [x] 16.1 Add checklist item for querying Completion Documentation Guide via MCP
   - _Requirements: 4.3_
 
 - [ ] 17. Batch 8-9: Legacy Naming Fixes
