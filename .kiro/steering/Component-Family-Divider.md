@@ -126,7 +126,7 @@ Divider-Base (Primitive) [PLANNED]
 
 ## Related Documentation
 
-- [Component Quick Reference](./Component%20Quick%20Reference.md) - Family routing table
+- [Component Quick Reference](./Component-Quick-Reference.md) - Family routing table
 - [Stemma System Principles](./stemma-system-principles.md) - Architecture overview
 
 ---

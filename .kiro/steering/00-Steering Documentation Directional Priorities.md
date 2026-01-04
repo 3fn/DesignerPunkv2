@@ -149,16 +149,16 @@ get_section({ path: ".kiro/steering/Spec Planning Standards.md", heading: "Tasks
 
 ---
 
-### 2. Component Development and Practices Guide
+### 2. Component Development Guide
 **Access**: MCP query required (not auto-loaded)
 **When needed**: Building or modifying components
 
 **How to access**:
 ```
-get_section({ path: ".kiro/steering/Component Development and Practices Guide.md", heading: "Token Selection Decision Framework" })
+get_section({ path: ".kiro/steering/Component-Development-Guide.md", heading: "Token Selection Decision Framework" })
 ```
 
-**Confirmation**: Reply "I've queried Component Development and Practices Guide via MCP!" after accessing
+**Confirmation**: Reply "I've queried Component Development Guide via MCP!" after accessing
 
 ---
 
@@ -214,14 +214,14 @@ get_section({ path: ".kiro/steering/Browser Distribution Guide.md", heading: "Tr
 ### 6. Test Failure Audit Methodology
 **When needed**: Conducting test failure audits, completing specs (clean exit audit), investigating performance issues
 
-**File**: #[[file:.kiro/steering/Test Failure Audit Methodology.md]]
+**File**: #[[file:.kiro/steering/Test-Failure-Audit-Methodology.md]]
 
 **How to access**:
-get_document_summary({ path: ".kiro/steering/Test Failure Audit Methodology.md" })
+get_document_summary({ path: ".kiro/steering/Test-Failure-Audit-Methodology.md" })
 
 Then query the specific section you need:
 ```
-get_section({ path: ".kiro/steering/Test Failure Audit Methodology.md", heading: "Audit Workflow Steps" }) get_section({ path: ".kiro/steering/Test Failure Audit Methodology.md", heading: "Clean Exit Audit Requirement" }) get_section({ path: ".kiro/steering/Test Failure Audit Methodology.md", heading: "Performance Investigation Protocol" })
+get_section({ path: ".kiro/steering/Test-Failure-Audit-Methodology.md", heading: "Audit Workflow Steps" }) get_section({ path: ".kiro/steering/Test-Failure-Audit-Methodology.md", heading: "Clean Exit Audit Requirement" }) get_section({ path: ".kiro/steering/Test-Failure-Audit-Methodology.md", heading: "Performance Investigation Protocol" })
 ```
 
 **Confirmation**: Reply "I've queried Test Failure Audit Methodology via MCP!" after accessing
@@ -250,18 +250,18 @@ get_section({ path: ".kiro/steering/Release Management System.md", heading: "AI 
 ### 8. Component Quick Reference
 **When needed**: Building UI compositions, selecting components, understanding component architecture
 
-**File**: #[[file:.kiro/steering/Component Quick Reference.md]]
+**File**: #[[file:.kiro/steering/Component-Quick-Reference.md]]
 
 **How to access**:
 ```
-get_document_summary({ path: ".kiro/steering/Component Quick Reference.md" })
+get_document_summary({ path: ".kiro/steering/Component-Quick-Reference.md" })
 ```
 
 Then query the specific section you need:
 ```
-get_section({ path: ".kiro/steering/Component Quick Reference.md", heading: "Component Selection Guide" })
-get_section({ path: ".kiro/steering/Component Quick Reference.md", heading: "Common UI Compositions" })
-get_section({ path: ".kiro/steering/Component Quick Reference.md", heading: "MCP Query Examples" })
+get_section({ path: ".kiro/steering/Component-Quick-Reference.md", heading: "Component Selection Guide" })
+get_section({ path: ".kiro/steering/Component-Quick-Reference.md", heading: "Common UI Compositions" })
+get_section({ path: ".kiro/steering/Component-Quick-Reference.md", heading: "MCP Query Examples" })
 ```
 
 **Confirmation**: Reply "I've queried Component Quick Reference via MCP!" after accessing
@@ -271,15 +271,15 @@ get_section({ path: ".kiro/steering/Component Quick Reference.md", heading: "MCP
 ### 9. Test Development Standards
 **When needed**: Writing tests, debugging test failures, understanding test patterns, using Stemma System validators
 
-**File**: #[[file:.kiro/steering/Test Development Standards.md]]
+**File**: #[[file:.kiro/steering/Test-Development-Standards.md]]
 
 **How to access**:
-get_document_summary({ path: ".kiro/steering/Test Development Standards.md" })
+get_document_summary({ path: ".kiro/steering/Test-Development-Standards.md" })
 
 
 Then query the specific section you need:
 ```
-get_section({ path: ".kiro/steering/Test Development Standards.md", heading: "Test Categories" }) get_section({ path: ".kiro/steering/Test Development Standards.md", heading: "Web Component Testing Patterns" }) get_section({ path: ".kiro/steering/Test Development Standards.md", heading: "Linting and Testing Integration" }) get_section({ path: ".kiro/steering/Test Development Standards.md", heading: "Integrated Workflow Examples" })
+get_section({ path: ".kiro/steering/Test-Development-Standards.md", heading: "Test Categories" }) get_section({ path: ".kiro/steering/Test-Development-Standards.md", heading: "Web Component Testing Patterns" }) get_section({ path: ".kiro/steering/Test-Development-Standards.md", heading: "Linting and Testing Integration" }) get_section({ path: ".kiro/steering/Test-Development-Standards.md", heading: "Integrated Workflow Examples" })
 ```
 
 **Confirmation**: Reply "I've queried Test Development Standards via MCP!" after accessing
@@ -298,9 +298,10 @@ These documents are available ONLY via MCP queries:
 | Document | Path |
 |----------|------|
 | Spec Planning Standards | `.kiro/steering/Spec Planning Standards.md` |
-| Component Development and Practices Guide | `.kiro/steering/Component Development and Practices Guide.md` |
-| Component Quick Reference | `.kiro/steering/Component Quick Reference.md` |
-| Test Failure Audit Methodology | `.kiro/steering/Test Failure Audit Methodology.md` | Test Development Standards | `.kiro/steering/Test Development Standards.md` |
+| Component Development Guide | `.kiro/steering/Component-Development-Guide.md` |
+| Component Quick Reference | `.kiro/steering/Component-Quick-Reference.md` |
+| Test Failure Audit Methodology | `.kiro/steering/Test-Failure-Audit-Methodology.md` |
+| Test Development Standards | `.kiro/steering/Test-Development-Standards.md` |
 
 ### How to Access MCP-Only Documents
 
@@ -344,17 +345,17 @@ These documents remain auto-loaded:
 
 2. **Request document summary** (~200 tokens)
    ```
-   get_document_summary({ path: ".kiro/steering/Component Development and Practices Guide.md" })
+   get_document_summary({ path: ".kiro/steering/Component-Development-Guide.md" })
    ```
 
 3. **Request specific section** (~2,000 tokens)
    ```
-   get_section({ path: ".kiro/steering/Component Development and Practices Guide.md", heading: "Token Selection Decision Framework" })
+   get_section({ path: ".kiro/steering/Component-Development-Guide.md", heading: "Token Selection Decision Framework" })
    ```
 
 4. **Request full document** (only if needed)
    ```
-   get_document_full({ path: ".kiro/steering/Component Development and Practices Guide.md" })
+   get_document_full({ path: ".kiro/steering/Component-Development-Guide.md" })
    ```
 
 ### Available Tools

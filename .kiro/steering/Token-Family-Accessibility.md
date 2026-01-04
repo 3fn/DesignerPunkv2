@@ -643,7 +643,7 @@ When implementing accessibility features:
 - **Tap Area Token Source**: `src/tokens/TapAreaTokens.ts` - Touch target token definitions
 - **Icon Token Source**: `src/tokens/semantic/IconTokens.ts` - Icon size token definitions
 - **Token System Overview**: `docs/token-system-overview.md` - Complete token system reference
-- **Component Development Guide**: `./Component Development and Practices Guide.md` - Token usage in component development
+- **Component Development Guide**: `./Component-Development-Guide.md` - Token usage in component development
 - **Spacing Tokens Guide**: `./Token-Family-Spacing.md` - Related spacing token documentation
 - **Typography Tokens Guide**: `./Token-Family-Typography.md` - Related typography token documentation
 

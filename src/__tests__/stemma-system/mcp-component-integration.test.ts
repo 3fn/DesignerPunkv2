@@ -24,7 +24,7 @@ import * as path from 'path';
 
 describe('MCP Component Integration: Component Quick Reference', () => {
   const STEERING_DIR = path.join(process.cwd(), '.kiro/steering');
-  const COMPONENT_QUICK_REFERENCE_PATH = '.kiro/steering/Component Quick Reference.md';
+  const COMPONENT_QUICK_REFERENCE_PATH = '.kiro/steering/Component-Quick-Reference.md';
 
   // All 11 component family document paths from the routing table
   const COMPONENT_FAMILY_DOCS = [
@@ -430,7 +430,7 @@ describe('MCP Component Integration: Component Quick Reference', () => {
 
     it('Component Quick Reference should be discoverable', () => {
       const steeringFiles = fs.readdirSync(STEERING_DIR).filter(f => f.endsWith('.md'));
-      expect(steeringFiles).toContain('Component Quick Reference.md');
+      expect(steeringFiles).toContain('Component-Quick-Reference.md');
     });
   });
 });

@@ -415,7 +415,7 @@ When applying border radius:
 - **Semantic Radius Source**: `src/tokens/semantic/RadiusTokens.ts` - Semantic radius token definitions
 - **Token System Overview**: `docs/token-system-overview.md` - Complete token system reference
 - **Mathematical Token System**: `.kiro/specs/mathematical-token-system/design.md` - Mathematical foundations
-- **Component Development Guide**: `./Component Development and Practices Guide.md` - Token usage in component development
+- **Component Development Guide**: `./Component-Development-Guide.md` - Token usage in component development
 - **Token Resolution Patterns**: `./Token-Resolution-Patterns.md` - Strategic guidance on token type selection and validation
 - **Spacing Tokens Guide**: `./Token-Family-Spacing.md` - Related spacing token documentation
 

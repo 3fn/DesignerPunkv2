@@ -353,8 +353,8 @@ All platforms implement the same behavioral contracts:
 
 ## Related Documentation
 
-- [Component Quick Reference](./Component%20Quick%20Reference.md) - Family routing table
+- [Component Quick Reference](./Component-Quick-Reference.md) - Family routing table
 - [Stemma System Principles](./stemma-system-principles.md) - Architecture overview
-- [Token Quick Reference](./Token%20Quick%20Reference.md) - Token documentation
-- [MCP Component Family Document Template](./mcp-component-family-document-template.md) - Template specification
+- [Token Quick Reference](./Token-Quick-Reference.md) - Token documentation
+- [MCP Component Family Document Template](./Component-MCP-Document-Template.md) - Template specification
 - [Button-CTA Schema](../../../src/components/core/Button-CTA/Button-CTA.schema.yaml) - Full schema definition

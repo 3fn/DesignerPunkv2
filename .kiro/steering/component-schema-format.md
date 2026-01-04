@@ -20,7 +20,7 @@ This document defines the formal YAML schema structure for Stemma System compone
 
 **Related Documentation**:
 - [Stemma System Principles](./stemma-system-principles.md) - Core principles and governance
-- [Component Development and Practices Guide](./Component%20Development%20and%20Practices%20Guide.md) - Implementation guidance
+- [Component Development Guide](./Component-Development-Guide.md) - Implementation guidance
 
 ---
 
@@ -189,7 +189,7 @@ ReadinessStatus:
   - deprecated                    # ⚠️ Being phased out
 ```
 
-**Detailed Guidance**: For comprehensive readiness status definitions, usage recommendations, transition checklists, and consistency requirements, see [Component Readiness Status System](./component-readiness-status-system.md).
+**Detailed Guidance**: For comprehensive readiness status definitions, usage recommendations, transition checklists, and consistency requirements, see [Component Readiness Status System](./Component-Readiness-Status.md).
 
 ### SlotDefinition
 
@@ -1045,9 +1045,9 @@ Schema files support:
 ## Related Documentation
 
 - [Stemma System Principles](./stemma-system-principles.md) - Core principles and governance
-- [Component Readiness Status System](./component-readiness-status-system.md) - Comprehensive readiness status definitions and transition guidelines
-- [Component Development and Practices Guide](./Component%20Development%20and%20Practices%20Guide.md) - Implementation guidance
-- [Token Quick Reference](./Token%20Quick%20Reference.md) - Token documentation routing
+- [Component Readiness Status System](./Component-Readiness-Status.md) - Comprehensive readiness status definitions and transition guidelines
+- [Component Development Guide](./Component-Development-Guide.md) - Implementation guidance
+- [Token Quick Reference](./Token-Quick-Reference.md) - Token documentation routing
 
 ---
 

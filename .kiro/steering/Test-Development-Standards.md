@@ -2002,7 +2002,7 @@ npm run test:all                       # Including performance tests
 ## Cross-References
 
 ### Behavioral Contract Validation Framework
-**File**: `.kiro/steering/behavioral-contract-validation-framework.md`
+**File**: `.kiro/steering/Test-Behavioral-Contract-Validation.md`
 
 **Related Content**:
 - Behavioral contract validation criteria
@@ -2011,8 +2011,8 @@ npm run test:all                       # Including performance tests
 
 **When to Reference**: When writing behavioral contract tests or validating cross-platform consistency.
 
-### Component Development and Practices Guide
-**File**: `.kiro/steering/Component Development and Practices Guide.md`
+### Component Development Guide
+**File**: `.kiro/steering/Component-Development-Guide.md`
 
 **Related Content**:
 - Component testing patterns

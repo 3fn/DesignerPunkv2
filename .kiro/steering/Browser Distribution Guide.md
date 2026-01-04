@@ -546,7 +546,7 @@ npx serve .
 ## Related Documentation
 
 - [Technology Stack](./Technology Stack.md) - Platform technology choices
-- [Component Development and Practices Guide](./Component Development and Practices Guide.md) - Component implementation guidance
+- [Component Development Guide](./Component-Development-Guide.md) - Component implementation guidance
 - [Token System Overview](../../docs/token-system-overview.md) - Complete token system documentation
 
 ---

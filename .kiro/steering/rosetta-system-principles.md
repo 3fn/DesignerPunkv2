@@ -580,7 +580,7 @@ get_section({ path: ".kiro/steering/rosetta-system-principles.md", heading: "Mat
 - [Token System Overview](../docs/token-system-overview.md) - Master document mapping token files
 - [Token Quick Reference](./Token-Quick-Reference.md) - Token documentation routing
 - [Token Architecture 2.0 Mathematics](../preserved-knowledge/token-architecture-2-0-mathematics.md) - Detailed mathematical formulas
-- [Component Development and Practices Guide](./Component Development and Practices Guide.md) - Token selection and component patterns
+- [Component Development Guide](./Component-Development-Guide.md) - Token selection and component patterns
 
 ---
 

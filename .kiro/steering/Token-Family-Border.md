@@ -463,7 +463,7 @@ When applying border widths:
 - **Semantic Border Width Source**: `src/tokens/semantic/BorderWidthTokens.ts` - Semantic border width token definitions
 - **Token System Overview**: `docs/token-system-overview.md` - Complete token system reference
 - **Mathematical Token System**: `.kiro/specs/mathematical-token-system/design.md` - Mathematical foundations
-- **Component Development Guide**: `./Component Development and Practices Guide.md` - Token usage in component development
+- **Component Development Guide**: `./Component-Development-Guide.md` - Token usage in component development
 - **Token Resolution Patterns**: `./Token-Resolution-Patterns.md` - Strategic guidance on token type selection and validation
 - **Radius Tokens Guide**: `./Token-Family-Radius.md` - Related radius token documentation
 - **Spacing Tokens Guide**: `./Token-Family-Spacing.md` - Related spacing token documentation

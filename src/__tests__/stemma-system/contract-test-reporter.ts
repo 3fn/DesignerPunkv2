@@ -4,7 +4,7 @@
  * Utility for generating test reports for behavioral contract validation.
  * Provides structured output for cross-platform consistency verification.
  *
- * @see .kiro/steering/behavioral-contract-validation-framework.md
+ * @see .kiro/steering/Test-Behavioral-Contract-Validation.md
  */
 
 import * as fs from 'fs';

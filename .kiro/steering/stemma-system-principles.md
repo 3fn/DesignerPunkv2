@@ -474,7 +474,7 @@ Name: Avatar-User-Profile
 3. Deprecation requires: migration path documented, replacement identified
 4. Status changes require Human-AI checkpoint
 
-**Detailed Guidance**: For comprehensive readiness status definitions, usage recommendations, transition checklists, and consistency requirements, see [Component Readiness Status System](./component-readiness-status-system.md).
+**Detailed Guidance**: For comprehensive readiness status definitions, usage recommendations, transition checklists, and consistency requirements, see [Component Readiness Status System](./Component-Readiness-Status.md).
 
 
 
@@ -482,7 +482,7 @@ Name: Avatar-User-Profile
 
 ## Component Schema Format
 
-**Detailed Specification**: For the complete formal schema specification including validation rules, inheritance resolution, and tooling integration, see [Component Schema Format Specification](./component-schema-format.md).
+**Detailed Specification**: For the complete formal schema specification including validation rules, inheritance resolution, and tooling integration, see [Component Schema Format Specification](./Component-Schema-Format.md).
 
 ### YAML Schema Structure
 
@@ -649,7 +649,7 @@ Input-Text-Email:
 
 ## Primitive vs Semantic Usage Philosophy
 
-**Detailed Guidance**: For comprehensive decision frameworks, examples, and anti-patterns, see [Primitive vs Semantic Usage Philosophy](./primitive-vs-semantic-usage-philosophy.md).
+**Detailed Guidance**: For comprehensive decision frameworks, examples, and anti-patterns, see [Primitive vs Semantic Usage Philosophy](./Component-Primitive-vs-Semantic-Philosophy.md).
 
 ### Key Distinction from Token Philosophy
 
@@ -892,10 +892,10 @@ get_section({ path: ".kiro/steering/stemma-system-principles.md", heading: "Comp
 
 ## Related Documentation
 
-- [Primitive vs Semantic Usage Philosophy](./primitive-vs-semantic-usage-philosophy.md) - Comprehensive decision guidance for component selection
-- [Component Schema Format Specification](./component-schema-format.md) - Formal schema structure and validation rules
-- [Component Readiness Status System](./component-readiness-status-system.md) - Comprehensive readiness status definitions and transition guidelines
-- [Component Development and Practices Guide](./Component Development and Practices Guide.md) - Token selection and component patterns
+- [Primitive vs Semantic Usage Philosophy](./Component-Primitive-vs-Semantic-Philosophy.md) - Comprehensive decision guidance for component selection
+- [Component Schema Format Specification](./Component-Schema-Format.md) - Formal schema structure and validation rules
+- [Component Readiness Status System](./Component-Readiness-Status.md) - Comprehensive readiness status definitions and transition guidelines
+- [Component Development Guide](./Component-Development-Guide.md) - Token selection and component patterns
 - [Token Quick Reference](./Token-Quick-Reference.md) - Token documentation routing
 - [Cross-Platform vs Platform-Specific Decision Framework](./Cross-Platform vs Platform-Specific Decision Framework.md) - Platform decision guidance
 

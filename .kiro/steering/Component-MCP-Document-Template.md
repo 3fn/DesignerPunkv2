@@ -24,9 +24,9 @@ This document defines the standard structure for component family MCP documentat
 4. **Cross-Platform Coverage**: All platforms documented consistently
 
 **Related Documentation**:
-- [Component Quick Reference](./Component%20Quick%20Reference.md) - Routing table for all families
+- [Component Quick Reference](./Component-Quick-Reference.md) - Routing table for all families
 - [Stemma System Principles](./stemma-system-principles.md) - Core architecture
-- [Component Schema Format](./component-schema-format.md) - YAML schema specification
+- [Component Schema Format](./Component-Schema-Format.md) - YAML schema specification
 
 ---
 
@@ -253,7 +253,7 @@ Components in this family consume these design tokens:
 
 ### Related Token Documentation
 
-- [Token Quick Reference](./Token%20Quick%20Reference.md)
+- [Token Quick Reference](./Token-Quick-Reference.md)
 - [Specific token guide if applicable]
 ```
 
@@ -356,10 +356,10 @@ Components in this family consume these design tokens:
 ```markdown
 ## Related Documentation
 
-- [Component Quick Reference](./Component%20Quick%20Reference.md) - Family routing table
+- [Component Quick Reference](./Component-Quick-Reference.md) - Family routing table
 - [Stemma System Principles](./stemma-system-principles.md) - Architecture overview
-- [Component Schema Format](./component-schema-format.md) - YAML schema specification
-- [Token Quick Reference](./Token%20Quick%20Reference.md) - Token documentation
+- [Component Schema Format](./Component-Schema-Format.md) - YAML schema specification
+- [Token Quick Reference](./Token-Quick-Reference.md) - Token documentation
 - [Specific related guide] - [Description]
 ```
 
@@ -615,7 +615,7 @@ inclusion: manual
 
 ## Related Documentation
 
-- [Component Quick Reference](./Component%20Quick%20Reference.md) - Family routing table
+- [Component Quick Reference](./Component-Quick-Reference.md) - Family routing table
 - [Stemma System Principles](./stemma-system-principles.md) - Architecture overview
 
 ---

@@ -787,7 +787,7 @@ When implementing responsive design:
 - **Spacing Tokens Guide**: `./Token-Family-Spacing.md` - Spacing tokens affected by density
 - **Typography Tokens Guide**: `./Token-Family-Typography.md` - Typography tokens affected by density
 - **Accessibility Tokens Guide**: `./Token-Family-Accessibility.md` - Tap area tokens affected by density
-- **Component Development Guide**: `./Component Development and Practices Guide.md` - Token usage in component development
+- **Component Development Guide**: `./Component-Development-Guide.md` - Token usage in component development
 
 ---
 

@@ -270,8 +270,8 @@ src/components/core/Button-CTA/
 ## Related Documentation
 
 - [Stemma System Principles](/.kiro/steering/stemma-system-principles.md)
-- [Component Quick Reference](/.kiro/steering/Component%20Quick%20Reference.md)
-- [Component Schema Format](/.kiro/steering/component-schema-format.md)
+- [Component Quick Reference](/.kiro/steering/Component-Quick-Reference.md)
+- [Component Schema Format](/.kiro/steering/Component-Schema-Format.md)
 
 ---
 

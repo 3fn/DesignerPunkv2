@@ -22,7 +22,7 @@ The Component Readiness Status System provides standardized indicators that comm
 
 **Related Documentation**:
 - [Stemma System Principles](./stemma-system-principles.md) - Core principles and governance
-- [Component Schema Format Specification](./component-schema-format.md) - Schema structure including readiness field
+- [Component Schema Format Specification](./Component-Schema-Format.md) - Schema structure including readiness field
 
 ---
 
@@ -590,8 +590,8 @@ When AI agents encounter readiness-related issues:
 ## Related Documentation
 
 - [Stemma System Principles](./stemma-system-principles.md) - Core principles and governance
-- [Component Schema Format Specification](./component-schema-format.md) - Schema structure
-- [Component Quick Reference](./Component%20Quick%20Reference.md) - Component routing table
+- [Component Schema Format Specification](./Component-Schema-Format.md) - Schema structure
+- [Component Quick Reference](./Component-Quick-Reference.md) - Component routing table
 
 ---
 

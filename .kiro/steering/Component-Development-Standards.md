@@ -472,13 +472,13 @@ Create the MCP-queryable documentation for the family.
 7. Cross-Platform Notes
 8. Related Documentation
 
-**Use the MCP Component Family Document Template**: `.kiro/steering/mcp-component-family-document-template.md`
+**Use the MCP Component Family Document Template**: `.kiro/steering/Component-MCP-Document-Template.md`
 
 #### Step 5.2: Update Component Quick Reference
 
 Add the new family to the Component Quick Reference routing table.
 
-**Location**: `.kiro/steering/Component Quick Reference.md`
+**Location**: `.kiro/steering/Component-Quick-Reference.md`
 
 **Add entry**:
 ```markdown
@@ -489,7 +489,7 @@ Add the new family to the Component Quick Reference routing table.
 
 Add the new family to the Component Family Inheritance Structures document.
 
-**Location**: `.kiro/steering/component-family-inheritance-structures.md`
+**Location**: `.kiro/steering/Component-Inheritance-Structures.md`
 
 **Add section with**:
 - Inheritance structure diagram
@@ -732,7 +732,7 @@ Complete these checks for documentation:
 - [ ] **Status Indicator Set**: Appropriate readiness status shown
 
 #### Inheritance Structures Validation
-- [ ] **Family Section Added**: New section in component-family-inheritance-structures.md
+- [ ] **Family Section Added**: New section in Component-Inheritance-Structures.md
 - [ ] **Hierarchy Diagram Included**: ASCII or Mermaid diagram showing inheritance
 - [ ] **Component Table Complete**: All components listed with type, inherits, status, description
 - [ ] **Behavioral Contracts Listed**: Key contracts documented
@@ -1022,7 +1022,7 @@ Add new family to the Component Quick Reference routing table:
 
 #### Family Section
 
-Add new family section to `component-family-inheritance-structures.md`:
+Add new family section to `Component-Inheritance-Structures.md`:
 
 ```markdown
 ## [Family Name] Family
@@ -1177,12 +1177,12 @@ Use this checklist to verify all integration requirements are met:
 ## Related Documentation
 
 - [Stemma System Principles](./stemma-system-principles.md) - Core architecture and governance
-- [Component Family Templates](./component-family-templates.md) - Ready-to-use schema, inheritance, and contract templates
-- [Component Family Inheritance Structures](./component-family-inheritance-structures.md) - All family structures
-- [Component Quick Reference](./Component%20Quick%20Reference.md) - Family routing table
-- [MCP Component Family Document Template](./mcp-component-family-document-template.md) - Documentation template
+- [Component Family Templates](./Component-Templates.md) - Ready-to-use schema, inheritance, and contract templates
+- [Component Family Inheritance Structures](./Component-Inheritance-Structures.md) - All family structures
+- [Component Quick Reference](./Component-Quick-Reference.md) - Family routing table
+- [MCP Component Family Document Template](./Component-MCP-Document-Template.md) - Documentation template
 - [Form Inputs Components](./Component-Family-Form-Inputs.md) - Reference implementation
-- [Behavioral Contract Validation Framework](./behavioral-contract-validation-framework.md) - Contract validation criteria
+- [Behavioral Contract Validation Framework](./Test-Behavioral-Contract-Validation.md) - Contract validation criteria
 
 ---
 

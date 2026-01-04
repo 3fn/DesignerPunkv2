@@ -11,7 +11,7 @@
  * Input-Text-Password, Input-Text-PhoneNumber) honor their behavioral contracts
  * consistently across web, iOS, and Android platforms.
  *
- * @see .kiro/steering/behavioral-contract-validation-framework.md
+ * @see .kiro/steering/Test-Behavioral-Contract-Validation.md
  * @see src/components/core/Input-Text-Base/Input-Text-Base.schema.yaml
  * @validates Requirements R6.1, R6.2, R6.3, R6.4, R6.5
  */

@@ -654,7 +654,7 @@ expect(Number.isInteger(scaledSize)).toBe(true);
 - [Token System Overview](../token-system-overview.md) - Complete token system architecture
 - [Motion Token Design Document](../../.kiro/specs/014-motion-token-system/design.md) - Detailed design decisions and rationale
 - [Motion Token Requirements](../../.kiro/specs/014-motion-token-system/requirements.md) - System requirements and acceptance criteria
-- [Component Development Guide](./Component Development and Practices Guide.md) - Token usage in component development
+- [Component Development Guide](./Component-Development-Guide.md) - Token usage in component development
 - [Token Resolution Patterns](./Token-Resolution-Patterns.md) - Strategic guidance on token type selection and validation
 
 ---

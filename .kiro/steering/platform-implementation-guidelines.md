@@ -754,10 +754,10 @@ android_patterns:
 
 ## Related Documentation
 
-- [Behavioral Contract Validation Framework](./behavioral-contract-validation-framework.md) - Validation criteria and checklists
+- [Behavioral Contract Validation Framework](./Test-Behavioral-Contract-Validation.md) - Validation criteria and checklists
 - [Stemma System Principles](./stemma-system-principles.md) - Core behavioral contract definitions
-- [Component Schema Format Specification](./component-schema-format.md) - Schema structure for contracts
-- [Component Development and Practices Guide](./Component Development and Practices Guide.md) - Component implementation guidance
+- [Component Schema Format Specification](./Component-Schema-Format.md) - Schema structure for contracts
+- [Component Development Guide](./Component-Development-Guide.md) - Component implementation guidance
 
 ---
 

@@ -14,7 +14,7 @@
  * - Same observable outcomes on all platforms
  * - Same accessibility semantics on all platforms
  *
- * @see .kiro/steering/behavioral-contract-validation-framework.md
+ * @see .kiro/steering/Test-Behavioral-Contract-Validation.md
  * @see .kiro/specs/034-component-architecture-system/design.md
  * @validates Requirements R6.1, R6.2, R6.3, R6.4, R6.5
  */

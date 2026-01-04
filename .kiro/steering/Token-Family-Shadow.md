@@ -729,7 +729,7 @@ Shadow values preferably align to the 4px baseline grid:
 - [Token System Overview](../token-system-overview.md) - Complete token system architecture
 - [Shadow and Glow Design Document](../../.kiro/specs/shadow-glow-token-system/design.md) - Detailed design decisions and rationale
 - [Shadow and Glow Requirements](../../.kiro/specs/shadow-glow-token-system/requirements.md) - System requirements and acceptance criteria
-- [Component Development Guide](./Component Development and Practices Guide.md) - Token usage in component development
+- [Component Development Guide](./Component-Development-Guide.md) - Token usage in component development
 - [Token Resolution Patterns](./Token-Resolution-Patterns.md) - Strategic guidance on token type selection and validation
 
 ---

@@ -566,7 +566,7 @@ When applying opacity:
 - **Semantic Opacity Source**: `src/tokens/semantic/OpacityTokens.ts` - Semantic opacity token definitions
 - **Token System Overview**: `docs/token-system-overview.md` - Complete token system reference
 - **Mathematical Token System**: `.kiro/specs/mathematical-token-system/design.md` - Mathematical foundations
-- **Component Development Guide**: `./Component Development and Practices Guide.md` - Token usage in component development
+- **Component Development Guide**: `./Component-Development-Guide.md` - Token usage in component development
 - **Token Resolution Patterns**: `./Token-Resolution-Patterns.md` - Strategic guidance on token type selection and validation
 - **Color Tokens Guide**: `./Token-Family-Color.md` - Related color token documentation (opacity often combined with colors)
 

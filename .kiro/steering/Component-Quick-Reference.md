@@ -18,7 +18,7 @@ inclusion: manual
 
 For comprehensive understanding of the Stemma System architecture, family inheritance patterns, and cross-platform strategy, see:
 - **Stemma System Principles**: `.kiro/steering/stemma-system-principles.md`
-- **Component Schema Format**: `.kiro/steering/component-schema-format.md`
+- **Component Schema Format**: `.kiro/steering/Component-Schema-Format.md`
 
 ## Purpose
 
@@ -209,7 +209,7 @@ get_section({ path: ".kiro/steering/Component-Family-Container.md", heading: "Co
 
 ## Related Documentation
 
-- **Primitive vs Semantic Philosophy**: `.kiro/steering/primitive-vs-semantic-usage-philosophy.md`
-- **Component Readiness System**: `.kiro/steering/component-readiness-status-system.md`
+- **Primitive vs Semantic Philosophy**: `.kiro/steering/Component-Primitive-vs-Semantic-Philosophy.md`
+- **Component Readiness System**: `.kiro/steering/Component-Readiness-Status.md`
 - **Token Quick Reference**: `.kiro/steering/Token-Quick-Reference.md`
-- **MCP Component Family Document Template**: `.kiro/steering/mcp-component-family-document-template.md` - Template for creating new family documentation
+- **MCP Component Family Document Template**: `.kiro/steering/Component-MCP-Document-Template.md` - Template for creating new family documentation

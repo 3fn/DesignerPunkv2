@@ -491,7 +491,7 @@ blend500 = base × 5 = 0.04 × 5 = 0.20 (20%)
 - **Token System Overview**: `docs/token-system-overview.md` - Complete token system reference
 - **Color Tokens Guide**: `.kiro/steering/Token-Family-Color.md` - Color token reference
 - **Blend Infrastructure Spec**: `.kiro/specs/031-blend-infrastructure-implementation/design.md` - Architecture and design decisions
-- **Component Development Guide**: `.kiro/steering/Component Development and Practices Guide.md` - Token usage in component development
+- **Component Development Guide**: `.kiro/steering/Component-Development-Guide.md` - Token usage in component development
 - **Token Resolution Patterns**: `.kiro/steering/Token-Resolution-Patterns.md` - Strategic guidance on token type selection and validation
 
 ---

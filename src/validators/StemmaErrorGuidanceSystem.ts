@@ -183,8 +183,8 @@ export interface AggregatedValidationResult {
 export const DOCUMENTATION_LINKS = {
   // Stemma System documentation
   STEMMA_PRINCIPLES: '.kiro/steering/stemma-system-principles.md',
-  COMPONENT_QUICK_REFERENCE: '.kiro/steering/Component Quick Reference.md',
-  COMPONENT_DEVELOPMENT_GUIDE: '.kiro/steering/Component Development and Practices Guide.md',
+  COMPONENT_QUICK_REFERENCE: '.kiro/steering/Component-Quick-Reference.md',
+  COMPONENT_DEVELOPMENT_GUIDE: '.kiro/steering/Component-Development-Guide.md',
   
   // Component family documentation
   FORM_INPUTS_COMPONENTS: '.kiro/steering/form-inputs-components.md',
@@ -199,7 +199,7 @@ export const DOCUMENTATION_LINKS = {
   WCAG_GUIDELINES: 'https://www.w3.org/WAI/WCAG21/quickref/',
   
   // MCP query examples
-  MCP_QUERY_EXAMPLES: '.kiro/steering/Component Quick Reference.md#mcp-query-examples',
+  MCP_QUERY_EXAMPLES: '.kiro/steering/Component-Quick-Reference.md#mcp-query-examples',
 } as const;
 
 

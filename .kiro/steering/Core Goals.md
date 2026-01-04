@@ -47,8 +47,8 @@ DesignerPunk is a True Native cross-platform design system with mathematical fou
 - Inform Human partner if hard-coded values are necessary
 
 **For detailed token guidance, see:**
-- Component development: `Component Development and Practices Guide.md` (Layer 3, conditional)
-- Token selection: Component Development and Practices Guide's "Token Selection Decision Framework"
+- Component development: `Component-Development-Guide.md` (Layer 3, conditional)
+- Token selection: Component Development Guide's "Token Selection Decision Framework"
 
 **Documentation Approach:**
 - Maintain concept-based documentation preventing contamination vectors
