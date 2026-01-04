@@ -9,10 +9,12 @@
 
 ## Overview
 
-This implementation plan follows a three-phase audit methodology with Human-Agent checkpoints. Phases 1-3 (Discovery, Analysis, Implementation Planning) are complete. Phase 4 (Execution) is ready to begin.
+This implementation plan follows a three-phase audit methodology with Human-Agent checkpoints. Phases 1-3 (Discovery, Analysis, Implementation Planning) are complete. Phase 4 (Execution) is complete. Phase 5 (Additional Optimization) added based on human review.
 
 **Checkpoint 3 Approved**: 2026-01-03
-**Execution Tasks**: 13 parent tasks (Tasks 10-22), 18 batches total
+**Phase 4 Complete**: 2026-01-04
+**Phase 5 Added**: 2026-01-04 (human-requested additional optimization)
+**Execution Tasks**: 14 parent tasks (Tasks 10-23), 19 batches total
 **Estimated Timeline**: 10-15 sessions
 
 **Task Type Note**: All tasks in this spec are Documentation type (no code produced), so validation follows documentation-appropriate patterns rather than code testing.
@@ -400,7 +402,7 @@ This implementation plan follows a three-phase audit methodology with Human-Agen
   - [x] 21.5 Validate all MCP query directions work
   - _Requirements: 6.3, 6.4, 6.6_
 
-- [x] 22. Batch 17: Final Validation
+- [x] 22. Batch 17: Final Validation (Phase 1)
   **Type**: Documentation
   **Validation**: Tier 2 - Standard
   **Success Criteria**: MCP index healthy, all 55+ docs indexed, zero legacy naming, all cross-references valid
@@ -412,6 +414,83 @@ This implementation plan follows a three-phase audit methodology with Human-Agen
   - [x] 22.5 Verify session start load reduced (~11,000 tokens saved)
   - [x] 22.6 Document final token counts and savings
   - _Requirements: 1.8, 2.4, 6.5, 6.6_
+
+---
+
+### Phase 5: Additional Optimization (Human-Requested)
+
+**Note**: Task 23 added after Phase 4 completion based on human review identifying additional optimization opportunities in Process-Development-Workflow.md.
+
+- [ ] 23. Batch 18: Development Workflow Deep Optimization
+  **Type**: Documentation
+  **Validation**: Tier 2 - Standard
+  **Success Criteria**: ~9,000 tokens removed from Process-Development-Workflow.md, hook content consolidated into dedicated document, session start load reduced to ~19,000 tokens
+  
+  - [ ] 23.1 Create Process-Hook-Operations.md
+    **Type**: Documentation
+    **Validation**: Tier 1 - Minimal
+    - Create new document with `inclusion: manual` for hook-related operational content
+    - Include proper metadata (Layer 2, process-standard organization)
+    - Structure: Overview, Dependency Chains, Troubleshooting, Best Practices
+    - _Requirements: 3.3, 3.7_
+  
+  - [ ] 23.2 Move Agent Hook Dependency Chains section (~3,500 tokens)
+    **Type**: Documentation
+    **Validation**: Tier 1 - Minimal
+    - Move entire "Agent Hook Dependency Chains (Conditional Loading)" section to Process-Hook-Operations.md
+    - Includes: Overview, Configuration Example, Dependency Chain Behavior (all subsections), Troubleshooting Hook Dependencies, Best Practices (all 6 subsections)
+    - _Requirements: 3.3, 3.4_
+  
+  - [ ] 23.3 Move Troubleshooting section (~4,000 tokens)
+    **Type**: Documentation
+    **Validation**: Tier 1 - Minimal
+    - Move entire "Troubleshooting (Conditional Loading)" section to Process-Hook-Operations.md
+    - Includes: Common Issues, Error Recovery, Hook Troubleshooting (all subsections), Release Detection Not Triggering, Quick Reference Diagnostic Commands
+    - _Requirements: 3.3, 3.4_
+  
+  - [ ] 23.4 Move Kiro Agent Hook Integration section (~1,500 tokens)
+    **Type**: Documentation
+    **Validation**: Tier 1 - Minimal
+    - Move entire "Kiro Agent Hook Integration (Conditional Loading)" section to Process-Hook-Operations.md
+    - Includes: Agent Hook Execution Order, Automatic File Organization, Release Detection
+    - _Requirements: 3.3, 3.4_
+  
+  - [ ] 23.5 Delete Implementation Timeline section
+    **Type**: Documentation
+    **Validation**: Tier 1 - Minimal
+    - Remove "Workflow Improvements" section (aspirational content, no longer needed)
+    - This section contains "Current State", "Current Enhancements", "Future Enhancements" - all outdated
+    - _Requirements: 3.3_
+  
+  - [ ] 23.6 Add priming + MCP query directions
+    **Type**: Documentation
+    **Validation**: Tier 1 - Minimal
+    - Replace moved sections with priming (what/why, 3-4 sentences) + MCP query directions
+    - Update AI Agent Reading Priorities to reference new document
+    - _Requirements: 3.4, 3.7_
+  
+  - [ ] 23.7 Update meta-guide with new MCP query paths
+    **Type**: Documentation
+    **Validation**: Tier 1 - Minimal
+    - Add Process-Hook-Operations.md to Tier 2 MCP-Only Documents
+    - Add MCP query examples for hook operations
+    - _Requirements: 6.3, 6.4_
+  
+  - [ ] 23.8 Re-index MCP and validate
+    **Type**: Documentation
+    **Validation**: Tier 2 - Standard
+    - Rebuild MCP index
+    - Verify new document indexed correctly
+    - Verify all MCP query directions work
+    - _Requirements: 6.6_
+  
+  - [ ] 23.9 Update final token counts and savings
+    **Type**: Documentation
+    **Validation**: Tier 1 - Minimal
+    - Update token-tracking.md with new totals
+    - Document additional savings achieved
+    - Update Task 22.6 documentation to reflect final numbers
+    - _Requirements: 2.4_
 
 ---
 

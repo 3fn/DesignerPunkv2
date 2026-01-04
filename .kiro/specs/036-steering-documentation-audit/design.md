@@ -2,7 +2,7 @@
 
 **Date**: 2026-01-03
 **Spec**: 036 - Steering Documentation Audit
-**Status**: Design Phase
+**Status**: Execution Phase (Phase 5 in progress)
 **Dependencies**: None
 
 ---
@@ -11,7 +11,11 @@
 
 This design defines the methodology, phases, and artifacts for auditing 55 steering documents. The audit will identify legacy naming, measure token load, classify redundancy, and propose naming conventions - all while respecting Human-Agent checkpoints before implementation decisions.
 
-The audit is structured in three phases with explicit checkpoints, ensuring human control over all significant decisions.
+The audit is structured in five phases with explicit checkpoints, ensuring human control over all significant decisions:
+
+- **Phase 1-3**: Discovery, Analysis, Implementation Planning (completed)
+- **Phase 4**: Execution - Initial batches through final validation (completed)
+- **Phase 5**: Deep Optimization - Additional token reduction through content extraction (in progress)
 
 ---
 
@@ -65,6 +69,20 @@ The audit is structured in three phases with explicit checkpoints, ensuring huma
 │  │ Batch 1     │→ │ Batch 2     │→ │ Batch N     │                  │
 │  │ Execute     │  │ Execute     │  │ Execute     │                  │
 │  └─────────────┘  └─────────────┘  └─────────────┘                  │
+└─────────────────────────────────────────────────────────────────────┘
+                               ↓
+┌─────────────────────────────────────────────────────────────────────┐
+│                   PHASE 5: DEEP OPTIMIZATION                        │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌────────────┐  │
+│  │ Identify    │  │ Extract to  │  │ Add Priming │  │ Update     │  │
+│  │ Conditional │  │ Manual-Load │  │ + MCP Query │  │ Meta-Guide │  │
+│  │ Sections    │  │ Documents   │  │ Directions  │  │            │  │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └────────────┘  │
+│                              ↓                                      │
+│                    ┌─────────────────┐                              │
+│                    │  VALIDATION     │ ← Re-index MCP, verify       │
+│                    │  & TOKEN COUNT  │   token savings achieved     │
+│                    └─────────────────┘                              │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -403,4 +421,32 @@ Tasks will be defined after Checkpoint 3 approval. Placeholder structure:
 - Batch 2: [TBD based on approved recommendations]
 - ...
 - Final: Reference updates and validation
+
+### Phase 5: Deep Optimization Tasks (Task 23)
+
+After Phase 4 validation achieved 28.1% token reduction (39,124 → 28,137 tokens), analysis identified additional optimization opportunities in always-loaded documents.
+
+**Target**: `Process-Development-Workflow.md` (14,207 tokens)
+
+**Strategy**: Extract conditional sections to new manual-load document, replace with priming + MCP query directions.
+
+**Sections to Extract** (~9,000 tokens):
+1. Agent Hook Dependency Chains (~3,500 tokens)
+2. Troubleshooting (~4,000 tokens)
+3. Kiro Agent Hook Integration (~1,500 tokens)
+
+**New Document**: `Process-Hook-Operations.md` (inclusion: manual)
+
+**Expected Outcome**: Session start load reduced from ~28,000 to ~19,000 tokens
+
+**Tasks**:
+- 23.1: Create `Process-Hook-Operations.md` with proper metadata
+- 23.2: Move Agent Hook Dependency Chains section
+- 23.3: Move Troubleshooting section
+- 23.4: Move Kiro Agent Hook Integration section
+- 23.5: Delete Implementation Timeline section
+- 23.6: Add priming + MCP query directions to source document
+- 23.7: Update meta-guide with new MCP query paths
+- 23.8: Re-index MCP and validate
+- 23.9: Update final token counts and savings
 
