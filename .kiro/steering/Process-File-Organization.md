@@ -288,8 +288,8 @@ get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading:
 ```
 .kiro/steering/                           # Always-active process guidance
 ├── Core Goals.md                         # Project principles and development approach
-├── Development Workflow.md               # Task completion and git practices
-├── File Organization Standards.md        # This document
+├── Process-Development-Workflow.md       # Task completion and git practices
+├── Process-File-Organization.md          # This document
 └── [other-process-standards].md          # Additional process documentation
 
 docs/processes/                           # Detailed process documentation

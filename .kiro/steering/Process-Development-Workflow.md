@@ -31,7 +31,7 @@ inclusion: always
 **MCP Queries for Detailed Guidance** (query when needed):
 - **Completion Documentation**: `get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading: "Two-Document Workflow" })`
 - **Release Detection**: `get_section({ path: ".kiro/steering/Release Management System.md", heading: "Release Pipeline Architecture" })`
-- **File Organization**: `get_section({ path: ".kiro/steering/File Organization Standards.md", heading: "Organization Implementation (Conditional Loading)" })`
+- **File Organization**: `get_section({ path: ".kiro/steering/Process-File-Organization.md", heading: "Organization Implementation (Conditional Loading)" })`
 
 ### WHEN Debugging Hook Issues THEN Read:
 1. ✅ **Task Completion Workflow** (context)
@@ -143,7 +143,7 @@ get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading:
 
 **WHEN creating or updating specification documents (requirements.md, design.md, tasks.md):**
 
-See **Spec Planning Standards** (`.kiro/steering/Spec Planning Standards.md`) for complete guidance on:
+See **Spec Planning Standards** (`.kiro/steering/Process-Spec-Planning.md`) for complete guidance on:
 - Requirements format (EARS, user stories, acceptance criteria)
 - Design document structure and principles
 - Tasks document format with task type classification
@@ -1508,13 +1508,13 @@ File organization triggers automatically when task status changes to "completed"
 **For detailed guidance** on file organization workflow, metadata values, directory structure, scope rationale, and manual organization options, query File Organization Standards via MCP:
 
 ```
-get_document_full({ path: ".kiro/steering/File Organization Standards.md" })
+get_document_full({ path: ".kiro/steering/Process-File-Organization.md" })
 ```
 
 Or query specific sections:
 ```
-get_section({ path: ".kiro/steering/File Organization Standards.md", heading: "Organization Implementation (Conditional Loading)" })
-get_section({ path: ".kiro/steering/File Organization Standards.md", heading: "File Organization Scope (Conditional Loading)" })
+get_section({ path: ".kiro/steering/Process-File-Organization.md", heading: "Organization Implementation (Conditional Loading)" })
+get_section({ path: ".kiro/steering/Process-File-Organization.md", heading: "File Organization Scope (Conditional Loading)" })
 ```
 
 ---

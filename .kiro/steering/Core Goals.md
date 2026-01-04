@@ -36,9 +36,9 @@ DesignerPunk is a True Native cross-platform design system with mathematical fou
 - Repository: https://github.com/3fn/DesignerPunkv2 (single-branch workflow on main)
 
 **For detailed workflow guidance, see:**
-- Task completion: `Development Workflow.md` (Layer 2)
-- File organization: `File Organization Standards.md` (Layer 2)
-- Spec planning: `Spec Planning Standards.md` (Layer 2, conditional)
+- Task completion: `Process-Development-Workflow.md` (Layer 2)
+- File organization: `Process-File-Organization.md` (Layer 2)
+- Spec planning: `Process-Spec-Planning.md` (Layer 2, conditional)
 
 **Token Usage:**
 - Always prioritize design tokens over hard-coded values

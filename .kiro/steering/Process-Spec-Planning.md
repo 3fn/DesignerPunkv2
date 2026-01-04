@@ -34,7 +34,7 @@ inclusion: manual
 ### WHEN Creating Tasks Document THEN Read:
 1. ✅ **Tasks Document Format** (MUST READ)
 2. ✅ **Task Type Classification System** (MUST READ - understand Setup/Implementation/Architecture)
-3. ✅ **Reference: Task Type Definitions** (`.kiro/steering/Task-Type-Definitions.md` - if unclear on classification)
+3. ✅ **Reference: Task Type Definitions** (`.kiro/steering/Process-Task-Type-Definitions.md` - if unclear on classification)
 4. ✅ **Spec Workflow: Phase 3** (scroll to Spec Workflow section)
 5. ❌ **SKIP**: Detailed validation tiers, detailed documentation tiers, rationale sections
 
@@ -718,7 +718,7 @@ When encountering a task pattern not covered by existing definitions:
 
 For detailed task type definitions with comprehensive examples, see:
 
-**Task Type Definitions**: `.kiro/steering/Task-Type-Definitions.md`
+**Task Type Definitions**: `.kiro/steering/Process-Task-Type-Definitions.md`
 
 This living document provides:
 - Detailed definitions for each task type
@@ -1019,9 +1019,9 @@ The three validation tiers (Minimal, Standard, Comprehensive) align with task ty
 **For detailed tier definitions**, including required checks, validation examples, and failure handling, query Task-Type-Definitions via MCP:
 
 ```
-get_section({ path: ".kiro/steering/Task-Type-Definitions.md", heading: "Setup Tasks" })
-get_section({ path: ".kiro/steering/Task-Type-Definitions.md", heading: "Implementation Tasks" })
-get_section({ path: ".kiro/steering/Task-Type-Definitions.md", heading: "Architecture Tasks" })
+get_section({ path: ".kiro/steering/Process-Task-Type-Definitions.md", heading: "Setup Tasks" })
+get_section({ path: ".kiro/steering/Process-Task-Type-Definitions.md", heading: "Implementation Tasks" })
+get_section({ path: ".kiro/steering/Process-Task-Type-Definitions.md", heading: "Architecture Tasks" })
 ```
 
 **Quick Reference**:
@@ -2319,7 +2319,7 @@ When creating cross-references, calculate relative paths based on the source doc
    - Assess complexity and risk (low vs medium vs high)
    - Assign task type (Setup, Implementation, or Architecture)
    - Add **Type** and **Validation** metadata to each subtask
-   - Reference **Task Type Definitions** (`.kiro/steering/Task-Type-Definitions.md`) for classification guidance
+   - Reference **Task Type Definitions** (`.kiro/steering/Process-Task-Type-Definitions.md`) for classification guidance
    - Prompt human for clarification if task type is ambiguous
 4. Add success criteria at primary task level
 5. Include artifacts and completion documentation paths

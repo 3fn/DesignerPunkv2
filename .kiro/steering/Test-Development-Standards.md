@@ -2032,7 +2032,7 @@ npm run test:all                       # Including performance tests
 **When to Reference**: When planning cleanup or migration work that requires temporary tests.
 
 ### Development Workflow
-**File**: `.kiro/steering/Development Workflow.md`
+**File**: `.kiro/steering/Process-Development-Workflow.md`
 
 **Related Content**:
 - Test execution practices

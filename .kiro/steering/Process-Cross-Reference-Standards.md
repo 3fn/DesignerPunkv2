@@ -657,6 +657,6 @@ Cross-references should be navigation aids, not content dependencies:
 
 **MCP Queries**:
 ```
-get_section({ path: ".kiro/steering/File Organization Standards.md", heading: "Required Metadata Fields" })
+get_section({ path: ".kiro/steering/Process-File-Organization.md", heading: "Required Metadata Fields" })
 get_document_full({ path: ".kiro/steering/Completion Documentation Guide.md" })
 ```

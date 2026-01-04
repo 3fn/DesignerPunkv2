@@ -18,7 +18,7 @@ import { join } from 'path';
 describe('Release Detection Workflow', () => {
   const projectRoot = process.cwd();
   const releaseManagerPath = join(projectRoot, '.kiro/hooks/release-manager.sh');
-  const workflowDocPath = join(projectRoot, '.kiro/steering/Development Workflow.md');
+  const workflowDocPath = join(projectRoot, '.kiro/steering/Process-Development-Workflow.md');
 
   describe('Release Manager Script', () => {
     it('should exist and be executable', async () => {

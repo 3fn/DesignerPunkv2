@@ -34,7 +34,7 @@ inclusion: manual
 
 **Also query Development Workflow** for comprehensive hook troubleshooting:
 ```
-get_section({ path: ".kiro/steering/Development Workflow.md", heading: "Hook Troubleshooting" })
+get_section({ path: ".kiro/steering/Process-Development-Workflow.md", heading: "Hook Troubleshooting" })
 ```
 
 ### WHEN Understanding Release Architecture

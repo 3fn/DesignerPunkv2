@@ -62,13 +62,13 @@ If you are about to create or modify **ANY spec document** (design-outline.md, r
 
 These documents are always loaded but contain extensive conditional sections. **Read the "AI Agent Reading Priorities" section at the top FIRST** to understand what applies to your current task and what to skip.
 
-#### 1. Development Workflow
-**File**: #[[file:.kiro/steering/Development Workflow.md]]
+#### 1. Process-Development-Workflow
+**File**: #[[file:.kiro/steering/Process-Development-Workflow.md]]
 
 **How to use**: Read the "AI Agent Reading Priorities" section at the top to determine which sections apply to your current work. Most tasks only need the Task Completion Workflow and Quality Standards sections.
 
-#### 2. File Organization Standards
-**File**: #[[file:.kiro/steering/File Organization Standards.md]]
+#### 2. Process-File-Organization
+**File**: #[[file:.kiro/steering/Process-File-Organization.md]]
 
 **How to use**: Read the "AI Agent Reading Priorities" section at the top. If you're just completing a normal task, focus on the Required Metadata Fields and Organization Implementation sections.
 
@@ -137,12 +137,12 @@ These documents are **NOT auto-loaded**. Query them via MCP when needed.
 
 **How to access**:
 ```
-get_document_summary({ path: ".kiro/steering/Spec Planning Standards.md" })
+get_document_summary({ path: ".kiro/steering/Process-Spec-Planning.md" })
 ```
 
 Then query the specific section you need:
 ```
-get_section({ path: ".kiro/steering/Spec Planning Standards.md", heading: "Tasks Document Format" })
+get_section({ path: ".kiro/steering/Process-Spec-Planning.md", heading: "Tasks Document Format" })
 ```
 
 **REQUIRED Confirmation**: You MUST reply "I've queried Spec Planning Standards via MCP and reviewed [section name]!" after accessing. If you do not include this confirmation, you have NOT followed the requirement.
@@ -297,7 +297,7 @@ These documents are available ONLY via MCP queries:
 
 | Document | Path |
 |----------|------|
-| Spec Planning Standards | `.kiro/steering/Spec Planning Standards.md` |
+| Spec Planning Standards | `.kiro/steering/Process-Spec-Planning.md` |
 | Component Development Guide | `.kiro/steering/Component-Development-Guide.md` |
 | Component Quick Reference | `.kiro/steering/Component-Quick-Reference.md` |
 | Test Failure Audit Methodology | `.kiro/steering/Test-Failure-Audit-Methodology.md` |
@@ -312,12 +312,12 @@ get_documentation_map()
 
 **Step 2**: Get document summary to understand structure
 ```
-get_document_summary({ path: ".kiro/steering/Spec Planning Standards.md" })
+get_document_summary({ path: ".kiro/steering/Process-Spec-Planning.md" })
 ```
 
 **Step 3**: Get specific section you need
 ```
-get_section({ path: ".kiro/steering/Spec Planning Standards.md", heading: "Tasks Document Format" })
+get_section({ path: ".kiro/steering/Process-Spec-Planning.md", heading: "Tasks Document Format" })
 ```
 
 ### When to Use MCP
@@ -333,8 +333,8 @@ These documents remain auto-loaded:
 - Core Goals (~550 tokens)
 - Start Up Tasks (~700 tokens)
 - This Meta-Guide (~2,000 tokens)
-- Development Workflow (~16,000 tokens) - strategic reading applies
-- File Organization Standards (~16,000 tokens) - strategic reading applies
+- Process-Development-Workflow (~16,000 tokens) - strategic reading applies
+- Process-File-Organization (~16,000 tokens) - strategic reading applies
 
 ### Progressive Disclosure Workflow
 

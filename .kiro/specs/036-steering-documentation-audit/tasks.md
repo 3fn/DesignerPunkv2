@@ -375,17 +375,17 @@ This implementation plan follows a three-phase audit methodology with Human-Agen
   - [x] 19.4 Re-index MCP server and validate
   - _Requirements: 5.3, 5.4, 5.5, 6.1, 6.2, 6.6_
 
-- [ ] 20. Batch 15: High-Risk Prefix Renames (Process-)
+- [x] 20. Batch 15: High-Risk Prefix Renames (Process-)
   **Type**: Documentation
   **Validation**: Tier 2 - Standard
   **Success Criteria**: 4 always-loaded docs renamed, session start works correctly
   
-  - [ ] 20.1 Create backup branch before execution
-  - [ ] 20.2 Apply Process- prefix (4 docs including 2 always-loaded)
-  - [ ] 20.3 Update meta-guide references
-  - [ ] 20.4 Update all cross-references to renamed files
-  - [ ] 20.5 Re-index MCP server and validate
-  - [ ] 20.6 Test session start behavior
+  - [x] 20.1 Create backup branch before execution
+  - [x] 20.2 Apply Process- prefix (4 docs including 2 always-loaded)
+  - [x] 20.3 Update meta-guide references
+  - [x] 20.4 Update all cross-references to renamed files
+  - [x] 20.5 Re-index MCP server and validate
+  - [x] 20.6 Test session start behavior
   - _Requirements: 5.3, 5.4, 5.5, 6.1, 6.2, 6.3, 6.6_
 
 - [ ] 21. Batch 16: Meta-Guide Updates
