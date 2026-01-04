@@ -486,7 +486,7 @@ Use semantic color tokens for:
 - **Color Palette Update Spec**: `.kiro/specs/015-color-palette-update/design.md` - Design decisions for color updates
 - **WCAG Guidelines**: [Web Content Accessibility Guidelines 2.1](https://www.w3.org/WAI/WCAG21/quickref/) - Official WCAG reference
 - **Component Development Guide**: `.kiro/steering/Component Development and Practices Guide.md` - Token usage in component development
-- **Token Resolution Patterns**: `.kiro/steering/Token Resolution Patterns.md` - Strategic guidance on token type selection and validation
+- **Token Resolution Patterns**: `.kiro/steering/Token-Resolution-Patterns.md` - Strategic guidance on token type selection and validation
 
 ---
 

@@ -517,7 +517,7 @@ metadata:
 **Query component readiness**:
 ```
 get_section({ 
-  path: ".kiro/steering/form-inputs-components.md", 
+  path: ".kiro/steering/Component-Family-Form-Inputs.md", 
   heading: "Component Readiness" 
 })
 ```
@@ -540,17 +540,17 @@ get_section({
 
 | Component Family | Shared Need/Purpose | Status | MCP Document Path |
 |------------------|---------------------|--------|-------------------|
-| Buttons | User interaction and actions | 🟢 | `.kiro/steering/button-components.md` |
-| Form Inputs | Data collection and validation | 🟢 | `.kiro/steering/form-inputs-components.md` |
-| Containers | Layout and content organization | 🟢 | `.kiro/steering/container-components.md` |
-| Icons | Visual communication | 🔴 | `.kiro/steering/icon-components.md` |
-| Modals | Overlay interactions | 🔴 | `.kiro/steering/modal-components.md` |
-| Avatars | Identity representation | 🔴 | `.kiro/steering/avatar-components.md` |
-| Badges & Tags | Status and labeling | 🔴 | `.kiro/steering/badge-components.md` |
-| Data Displays | Information presentation | 🔴 | `.kiro/steering/data-display-components.md` |
-| Dividers | Visual separation | 🔴 | `.kiro/steering/divider-components.md` |
-| Loading | Progress indication | 🔴 | `.kiro/steering/loading-components.md` |
-| Navigation | Wayfinding | 🔴 | `.kiro/steering/navigation-components.md` |
+| Buttons | User interaction and actions | 🟢 | `.kiro/steering/Component-Family-Button.md` |
+| Form Inputs | Data collection and validation | 🟢 | `.kiro/steering/Component-Family-Form-Inputs.md` |
+| Containers | Layout and content organization | 🟢 | `.kiro/steering/Component-Family-Container.md` |
+| Icons | Visual communication | 🔴 | `.kiro/steering/Component-Family-Icon.md` |
+| Modals | Overlay interactions | 🔴 | `.kiro/steering/Component-Family-Modal.md` |
+| Avatars | Identity representation | 🔴 | `.kiro/steering/Component-Family-Avatar.md` |
+| Badges & Tags | Status and labeling | 🔴 | `.kiro/steering/Component-Family-Badge.md` |
+| Data Displays | Information presentation | 🔴 | `.kiro/steering/Component-Family-Data-Display.md` |
+| Dividers | Visual separation | 🔴 | `.kiro/steering/Component-Family-Divider.md` |
+| Loading | Progress indication | 🔴 | `.kiro/steering/Component-Family-Loading.md` |
+| Navigation | Wayfinding | 🔴 | `.kiro/steering/Component-Family-Navigation.md` |
 ```
 
 ---

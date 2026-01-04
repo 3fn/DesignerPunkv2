@@ -549,7 +549,7 @@ If you're migrating from the old subjective naming convention, see the [Inset To
 - **Migration Guide**: `.kiro/specs/011-inset-token-renaming/migration-guide.md` - Migration from old to new names
 - **Mathematical Token System**: `.kiro/specs/mathematical-token-system/design.md` - Mathematical foundations
 - **Component Development Guide**: `./Component Development and Practices Guide.md` - Token usage in component development
-- **Token Resolution Patterns**: `./Token Resolution Patterns.md` - Strategic guidance on token type selection and validation
+- **Token Resolution Patterns**: `./Token-Resolution-Patterns.md` - Strategic guidance on token type selection and validation
 
 ---
 

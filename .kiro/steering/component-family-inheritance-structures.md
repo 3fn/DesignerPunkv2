@@ -93,8 +93,8 @@ Input-Text-Base (Primitive) │ ├── Input-Text-Email (Semantic) │ └─
 
 ### MCP Documentation
 
-- **Full Documentation**: `.kiro/steering/form-inputs-components.md`
-- **Query**: `get_document_full({ path: ".kiro/steering/form-inputs-components.md" })`
+- **Full Documentation**: `.kiro/steering/Component-Family-Form-Inputs.md`
+- **Query**: `get_document_full({ path: ".kiro/steering/Component-Family-Form-Inputs.md" })`
 
 ---
 
@@ -145,8 +145,8 @@ Button-CTA uses the `[Family]-[Type]` pattern (not `[Family]-[Type]-Base`) becau
 
 ### MCP Documentation
 
-- **Full Documentation**: `.kiro/steering/button-components.md`
-- **Query**: `get_document_full({ path: ".kiro/steering/button-components.md" })`
+- **Full Documentation**: `.kiro/steering/Component-Family-Button.md`
+- **Query**: `get_document_full({ path: ".kiro/steering/Component-Family-Button.md" })`
 
 ---
 
@@ -199,8 +199,8 @@ Container-Base uses the `[Family]-Base` pattern because:
 
 ### MCP Documentation
 
-- **Full Documentation**: `.kiro/steering/container-components.md`
-- **Query**: `get_document_full({ path: ".kiro/steering/container-components.md" })`
+- **Full Documentation**: `.kiro/steering/Component-Family-Container.md`
+- **Query**: `get_document_full({ path: ".kiro/steering/Component-Family-Container.md" })`
 
 ---
 
@@ -248,8 +248,8 @@ Icon-Base uses the `[Family]-Base` pattern because:
 
 ### MCP Documentation
 
-- **Full Documentation**: `.kiro/steering/icon-components.md`
-- **Query**: `get_document_full({ path: ".kiro/steering/icon-components.md" })`
+- **Full Documentation**: `.kiro/steering/Component-Family-Icon.md`
+- **Query**: `get_document_full({ path: ".kiro/steering/Component-Family-Icon.md" })`
 
 ---
 
@@ -302,8 +302,8 @@ Modal-Base (Primitive) [Placeholder] │ ├── Modal-Dialog (Semantic) [Plac
 
 ### MCP Documentation
 
-- **Full Documentation**: `.kiro/steering/modal-components.md`
-- **Query**: `get_document_full({ path: ".kiro/steering/modal-components.md" })`
+- **Full Documentation**: `.kiro/steering/Component-Family-Modal.md`
+- **Query**: `get_document_full({ path: ".kiro/steering/Component-Family-Modal.md" })`
 
 ---
 
@@ -352,8 +352,8 @@ Avatar-Base (Primitive) [Placeholder] │ ├── Avatar-User (Semantic) [Plac
 
 ### MCP Documentation
 
-- **Full Documentation**: `.kiro/steering/avatar-components.md`
-- **Query**: `get_document_full({ path: ".kiro/steering/avatar-components.md" })`
+- **Full Documentation**: `.kiro/steering/Component-Family-Avatar.md`
+- **Query**: `get_document_full({ path: ".kiro/steering/Component-Family-Avatar.md" })`
 
 ---
 
@@ -403,8 +403,8 @@ Badge-Base (Primitive) [Placeholder] │ ├── Badge-Status (Semantic) [Plac
 
 ### MCP Documentation
 
-- **Full Documentation**: `.kiro/steering/badge-components.md`
-- **Query**: `get_document_full({ path: ".kiro/steering/badge-components.md" })`
+- **Full Documentation**: `.kiro/steering/Component-Family-Badge.md`
+- **Query**: `get_document_full({ path: ".kiro/steering/Component-Family-Badge.md" })`
 
 ---
 
@@ -455,8 +455,8 @@ Display-Base (Primitive) [Placeholder] │ ├── Display-Text (Semantic) [Pl
 
 ### MCP Documentation
 
-- **Full Documentation**: `.kiro/steering/data-display-components.md`
-- **Query**: `get_document_full({ path: ".kiro/steering/data-display-components.md" })`
+- **Full Documentation**: `.kiro/steering/Component-Family-Data-Display.md`
+- **Query**: `get_document_full({ path: ".kiro/steering/Component-Family-Data-Display.md" })`
 
 ---
 
@@ -501,8 +501,8 @@ Divider-Base (Primitive) [Placeholder] │ ├── Divider-Horizontal (Semanti
 
 ### MCP Documentation
 
-- **Full Documentation**: `.kiro/steering/divider-components.md`
-- **Query**: `get_document_full({ path: ".kiro/steering/divider-components.md" })`
+- **Full Documentation**: `.kiro/steering/Component-Family-Divider.md`
+- **Query**: `get_document_full({ path: ".kiro/steering/Component-Family-Divider.md" })`
 
 ---
 
@@ -549,8 +549,8 @@ Loading-Base (Primitive) [Placeholder] │ ├── Loading-Spinner (Semantic) 
 
 ### MCP Documentation
 
-- **Full Documentation**: `.kiro/steering/loading-components.md`
-- **Query**: `get_document_full({ path: ".kiro/steering/loading-components.md" })`
+- **Full Documentation**: `.kiro/steering/Component-Family-Loading.md`
+- **Query**: `get_document_full({ path: ".kiro/steering/Component-Family-Loading.md" })`
 
 ---
 
@@ -600,8 +600,8 @@ Nav-Base (Primitive) [Placeholder] │ ├── Nav-Tabs (Semantic) [Placeholde
 
 ### MCP Documentation
 
-- **Full Documentation**: `.kiro/steering/navigation-components.md`
-- **Query**: `get_document_full({ path: ".kiro/steering/navigation-components.md" })`
+- **Full Documentation**: `.kiro/steering/Component-Family-Navigation.md`
+- **Query**: `get_document_full({ path: ".kiro/steering/Component-Family-Navigation.md" })`
 
 ---
 

@@ -278,9 +278,9 @@ get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading:
 ### Token Documentation
 ```
 .kiro/steering/                           # Token documentation (with other steering docs)
-├── shadow-tokens.md                      # Shadow token system guide
-├── glow-tokens.md                        # Glow token system guide
-├── layering-tokens.md                    # Layering token system guide
+├── Token-Family-Shadow.md                # Shadow token system guide
+├── Token-Family-Glow.md                  # Glow token system guide
+├── Token-Family-Layering.md              # Layering token system guide
 └── [other-token-guides].md               # Additional token documentation
 ```
 

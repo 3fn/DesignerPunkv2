@@ -392,7 +392,7 @@ Create a semantic component when:
 
 - [Stemma System Principles](./stemma-system-principles.md) - Core component architecture principles
 - [Component Development and Practices Guide](./Component Development and Practices Guide.md) - Token selection framework
-- [Token Quick Reference](./Token Quick Reference.md) - Token documentation routing
+- [Token Quick Reference](./Token-Quick-Reference.md) - Token documentation routing
 - [Component Schema Format](./component-schema-format.md) - Component definition structure
 
 ---

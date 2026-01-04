@@ -60,7 +60,7 @@ inclusion: manual
 1. ✅ **Blend Utility Integration** (how to use blend utilities for state colors)
 2. ✅ **Semantic Blend Token Reference** (which token/function for each state)
 3. ✅ **Blend Utility Anti-Patterns** (what NOT to do - no opacity, no filters)
-4. ✅ **Blend Tokens Guide**: `.kiro/steering/blend-tokens.md` (complete reference)
+4. ✅ **Blend Tokens Guide**: `.kiro/steering/Token-Family-Blend.md` (complete reference)
 
 **WHEN troubleshooting component issues THEN read:**
 1. ✅ **Anti-Patterns to Avoid** (common mistakes)
@@ -116,7 +116,7 @@ AI agents should pause implementation and ask Peter for clarification when:
 
 **For strategic guidance on cross-platform decisions**, see [Cross-Platform vs Platform-Specific Decision Framework](./Cross-Platform vs Platform-Specific Decision Framework.md)
 
-**For strategic guidance on token resolution**, see [Token Resolution Patterns](./Token Resolution Patterns.md)
+**For strategic guidance on token resolution**, see [Token Resolution Patterns](./Token-Resolution-Patterns.md)
 
 ---
 
@@ -156,7 +156,7 @@ AI agents should pause implementation and ask Peter for clarification when:
 
 **Why this matters**: Token gaps often indicate design system opportunities. Pausing to discuss prevents premature decisions and helps the design system evolve intentionally.
 
-**For strategic guidance on token resolution**, see [Token Resolution Patterns](./Token Resolution Patterns.md)
+**For strategic guidance on token resolution**, see [Token Resolution Patterns](./Token-Resolution-Patterns.md)
 
 ### Step 3: Create Component-Level Tokens for Variants
 
@@ -981,7 +981,7 @@ const hoverColor = blendUtils.hoverColor(primaryColor);
 
 ### Related Documentation
 
-- [Blend Tokens Guide](blend-tokens.md) - Complete blend token reference
+- [Blend Tokens Guide](Token-Family-Blend.md) - Complete blend token reference
 - [Blend Infrastructure Design](../.kiro/specs/031-blend-infrastructure-implementation/design.md) - Architecture decisions
 
 ---

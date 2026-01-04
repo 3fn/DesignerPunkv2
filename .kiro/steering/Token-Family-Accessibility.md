@@ -644,8 +644,8 @@ When implementing accessibility features:
 - **Icon Token Source**: `src/tokens/semantic/IconTokens.ts` - Icon size token definitions
 - **Token System Overview**: `docs/token-system-overview.md` - Complete token system reference
 - **Component Development Guide**: `./Component Development and Practices Guide.md` - Token usage in component development
-- **Spacing Tokens Guide**: `./spacing-tokens.md` - Related spacing token documentation
-- **Typography Tokens Guide**: `./typography-tokens.md` - Related typography token documentation
+- **Spacing Tokens Guide**: `./Token-Family-Spacing.md` - Related spacing token documentation
+- **Typography Tokens Guide**: `./Token-Family-Typography.md` - Related typography token documentation
 
 ---
 

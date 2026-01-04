@@ -567,8 +567,8 @@ When applying opacity:
 - **Token System Overview**: `docs/token-system-overview.md` - Complete token system reference
 - **Mathematical Token System**: `.kiro/specs/mathematical-token-system/design.md` - Mathematical foundations
 - **Component Development Guide**: `./Component Development and Practices Guide.md` - Token usage in component development
-- **Token Resolution Patterns**: `./Token Resolution Patterns.md` - Strategic guidance on token type selection and validation
-- **Color Tokens Guide**: `./color-tokens.md` - Related color token documentation (opacity often combined with colors)
+- **Token Resolution Patterns**: `./Token-Resolution-Patterns.md` - Strategic guidance on token type selection and validation
+- **Color Tokens Guide**: `./Token-Family-Color.md` - Related color token documentation (opacity often combined with colors)
 
 ---
 

@@ -247,8 +247,8 @@ Button components resolve tokens through the Rosetta System's semantic-to-primit
 
 ### Related Token Documentation
 
-- [Token Quick Reference](./Token%20Quick%20Reference.md) - Token routing table
-- [Blend Tokens](./blend-tokens.md) - Blend token details
+- [Token Quick Reference](./Token-Quick-Reference.md) - Token routing table
+- [Blend Tokens](./Token-Family-Blend.md) - Blend token details
 
 ---
 

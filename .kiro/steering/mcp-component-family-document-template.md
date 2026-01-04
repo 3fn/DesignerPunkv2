@@ -16,7 +16,7 @@ inclusion: manual
 
 ## Overview
 
-This document defines the standard structure for component family MCP documentation. All component family documents (e.g., `form-inputs-components.md`, `button-components.md`) must follow this template to ensure:
+This document defines the standard structure for component family MCP documentation. All component family documents (e.g., `Component-Family-Form-Inputs.md`, `Component-Family-Button.md`) must follow this template to ensure:
 
 1. **Progressive Disclosure Support**: Documents work with MCP's three-stage query workflow
 2. **Consistent Structure**: AI agents can predict document organization
@@ -679,11 +679,11 @@ get_index_health()
 rebuild_index()
 
 // 3. Verify document is indexed
-get_document_summary({ path: ".kiro/steering/[family]-components.md" })
+get_document_summary({ path: ".kiro/steering/Component-Family-[FamilyName].md" })
 
 // 4. Test section queries
-get_section({ path: ".kiro/steering/[family]-components.md", heading: "Family Overview" })
-get_section({ path: ".kiro/steering/[family]-components.md", heading: "Behavioral Contracts" })
+get_section({ path: ".kiro/steering/Component-Family-[FamilyName].md", heading: "Family Overview" })
+get_section({ path: ".kiro/steering/Component-Family-[FamilyName].md", heading: "Behavioral Contracts" })
 ```
 
 ---

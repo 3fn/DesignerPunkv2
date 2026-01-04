@@ -180,17 +180,17 @@ get_document_summary({ path: ".kiro/steering/A Vision of the Future.md" })
 ### 4. Token Quick Reference
 **When needed**: Working with design tokens, component development, token selection
 
-**File**: #[[file:.kiro/steering/Token Quick Reference.md]]
+**File**: #[[file:.kiro/steering/Token-Quick-Reference.md]]
 
 **How to access**:
 ```
-get_document_summary({ path: ".kiro/steering/Token Quick Reference.md" })
+get_document_summary({ path: ".kiro/steering/Token-Quick-Reference.md" })
 ```
 
 Then query the specific section you need:
 ```
-get_section({ path: ".kiro/steering/Token Quick Reference.md", heading: "Token Documentation Map" })
-get_section({ path: ".kiro/steering/Token Quick Reference.md", heading: "Common Patterns" })
+get_section({ path: ".kiro/steering/Token-Quick-Reference.md", heading: "Token Documentation Map" })
+get_section({ path: ".kiro/steering/Token-Quick-Reference.md", heading: "Common Patterns" })
 ```
 
 **Confirmation**: Reply "I've queried Token Quick Reference via MCP!" after accessing

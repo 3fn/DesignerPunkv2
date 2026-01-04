@@ -30,17 +30,17 @@ All 11 component families have MCP-queryable documentation. Production families 
 
 | Component Family | Shared Need/Purpose | MCP Document Path | Status |
 |------------------|---------------------|-------------------|--------|
-| Buttons | User interaction and actions | `.kiro/steering/button-components.md` | 🟢 Production |
-| Form Inputs | Data collection and validation | `.kiro/steering/form-inputs-components.md` | 🟢 Production |
-| Containers | Layout and content organization | `.kiro/steering/container-components.md` | 🟢 Production |
-| Icons | Visual communication | `.kiro/steering/icon-components.md` | 🟢 Production |
-| Modals | Overlay interactions | `.kiro/steering/modal-components.md` | 🔴 Placeholder |
-| Avatars | Identity representation | `.kiro/steering/avatar-components.md` | 🔴 Placeholder |
-| Badges & Tags | Status and labeling | `.kiro/steering/badge-components.md` | 🔴 Placeholder |
-| Data Displays | Information presentation | `.kiro/steering/data-display-components.md` | 🔴 Placeholder |
-| Dividers | Visual separation | `.kiro/steering/divider-components.md` | 🔴 Placeholder |
-| Loading | Progress indication | `.kiro/steering/loading-components.md` | 🔴 Placeholder |
-| Navigation | Wayfinding | `.kiro/steering/navigation-components.md` | 🔴 Placeholder |
+| Buttons | User interaction and actions | `.kiro/steering/Component-Family-Button.md` | 🟢 Production |
+| Form Inputs | Data collection and validation | `.kiro/steering/Component-Family-Form-Inputs.md` | 🟢 Production |
+| Containers | Layout and content organization | `.kiro/steering/Component-Family-Container.md` | 🟢 Production |
+| Icons | Visual communication | `.kiro/steering/Component-Family-Icon.md` | 🟢 Production |
+| Modals | Overlay interactions | `.kiro/steering/Component-Family-Modal.md` | 🔴 Placeholder |
+| Avatars | Identity representation | `.kiro/steering/Component-Family-Avatar.md` | 🔴 Placeholder |
+| Badges & Tags | Status and labeling | `.kiro/steering/Component-Family-Badge.md` | 🔴 Placeholder |
+| Data Displays | Information presentation | `.kiro/steering/Component-Family-Data-Display.md` | 🔴 Placeholder |
+| Dividers | Visual separation | `.kiro/steering/Component-Family-Divider.md` | 🔴 Placeholder |
+| Loading | Progress indication | `.kiro/steering/Component-Family-Loading.md` | 🔴 Placeholder |
+| Navigation | Wayfinding | `.kiro/steering/Component-Family-Navigation.md` | 🔴 Placeholder |
 
 **Status Legend**: 🟢 Production Ready | 🟡 Beta | 🔴 Placeholder | ⚠️ Deprecated
 
@@ -61,21 +61,21 @@ Components follow the **[Family]-[Type]-[Variant]** pattern:
 - **Form Inputs**: `Input-Text-Email`, `Input-Text-Password`
 - **Buttons**: `Button-CTA` (submit, variant="primary")
 - **Containers**: `Container-Base` (form wrapper)
-- **Tokens**: `spacing-tokens.md` → stack patterns, `color-tokens.md` → form colors
+- **Tokens**: `Token-Family-Spacing.md` → stack patterns, `Token-Family-Color.md` → form colors
 
 ### Feed Post
 - **Avatars**: `Avatar-Base` (planned)
 - **Buttons**: `Button-CTA` (variant="secondary" for actions)
 - **Data Displays**: `Display-Base` (planned)
 - **Containers**: `Container-Base` (card wrapper)
-- **Tokens**: `shadow-tokens.md` → card elevation, `spacing-tokens.md` → content spacing
+- **Tokens**: `Token-Family-Shadow.md` → card elevation, `Token-Family-Spacing.md` → content spacing
 
 ### Settings Panel
 - **Form Inputs**: `Input-Text-Base` (for custom inputs)
 - **Containers**: `Container-Base` (section wrapper)
 - **Dividers**: `Divider-Base` (planned)
 - **Navigation**: `Nav-Base` (planned)
-- **Tokens**: `layering-tokens.md` → panel stacking, `radius-tokens.md` → section corners
+- **Tokens**: `Token-Family-Layering.md` → panel stacking, `Token-Family-Radius.md` → section corners
 
 ## MCP Query Examples
 
@@ -99,16 +99,16 @@ Returns metadata and outline (~200 tokens) to understand document structure befo
 
 ```
 // Understand Form Inputs family structure
-get_document_summary({ path: ".kiro/steering/form-inputs-components.md" })
+get_document_summary({ path: ".kiro/steering/Component-Family-Form-Inputs.md" })
 
 // Understand Button family structure
-get_document_summary({ path: ".kiro/steering/button-components.md" })
+get_document_summary({ path: ".kiro/steering/Component-Family-Button.md" })
 
 // Understand Container family structure
-get_document_summary({ path: ".kiro/steering/container-components.md" })
+get_document_summary({ path: ".kiro/steering/Component-Family-Container.md" })
 
 // Understand Icon family structure
-get_document_summary({ path: ".kiro/steering/icon-components.md" })
+get_document_summary({ path: ".kiro/steering/Component-Family-Icon.md" })
 ```
 
 **Returns**: Document metadata (purpose, layer, relevant tasks) plus section outline with headings.
@@ -119,25 +119,25 @@ Returns targeted content (~500-2,000 tokens) for specific information needs:
 
 ```
 // Get component behavioral contracts
-get_section({ path: ".kiro/steering/form-inputs-components.md", heading: "Behavioral Contracts" })
+get_section({ path: ".kiro/steering/Component-Family-Form-Inputs.md", heading: "Behavioral Contracts" })
 
 // Get inheritance structure
-get_section({ path: ".kiro/steering/button-components.md", heading: "Inheritance Structure" })
+get_section({ path: ".kiro/steering/Component-Family-Button.md", heading: "Inheritance Structure" })
 
 // Get token dependencies
-get_section({ path: ".kiro/steering/container-components.md", heading: "Token Dependencies" })
+get_section({ path: ".kiro/steering/Component-Family-Container.md", heading: "Token Dependencies" })
 
 // Get usage guidelines
-get_section({ path: ".kiro/steering/icon-components.md", heading: "Usage Guidelines" })
+get_section({ path: ".kiro/steering/Component-Family-Icon.md", heading: "Usage Guidelines" })
 
 // Get cross-platform notes
-get_section({ path: ".kiro/steering/form-inputs-components.md", heading: "Cross-Platform Notes" })
+get_section({ path: ".kiro/steering/Component-Family-Form-Inputs.md", heading: "Cross-Platform Notes" })
 
 // Get component schema definitions
-get_section({ path: ".kiro/steering/button-components.md", heading: "Component Schemas" })
+get_section({ path: ".kiro/steering/Component-Family-Button.md", heading: "Component Schemas" })
 
 // Get placeholder family planned characteristics
-get_section({ path: ".kiro/steering/modal-components.md", heading: "Planned Characteristics" })
+get_section({ path: ".kiro/steering/Component-Family-Modal.md", heading: "Planned Characteristics" })
 ```
 
 **Returns**: Section content with parent heading context for document location.
@@ -148,10 +148,10 @@ Returns complete content (~2,000-10,000 tokens) when comprehensive reference is 
 
 ```
 // Full Form Inputs family reference
-get_document_full({ path: ".kiro/steering/form-inputs-components.md" })
+get_document_full({ path: ".kiro/steering/Component-Family-Form-Inputs.md" })
 
 // Full Button family reference
-get_document_full({ path: ".kiro/steering/button-components.md" })
+get_document_full({ path: ".kiro/steering/Component-Family-Button.md" })
 ```
 
 **Use sparingly**: Only when you need complete component family documentation.
@@ -165,10 +165,10 @@ The `designerpunk-docs` server provides additional tools for documentation manag
 get_documentation_map()
 
 // List cross-references in a document
-list_cross_references({ path: ".kiro/steering/form-inputs-components.md" })
+list_cross_references({ path: ".kiro/steering/Component-Family-Form-Inputs.md" })
 
 // Validate document metadata schema
-validate_metadata({ path: ".kiro/steering/button-components.md" })
+validate_metadata({ path: ".kiro/steering/Component-Family-Button.md" })
 
 // Check documentation index health
 get_index_health()
@@ -194,22 +194,22 @@ rebuild_index()
 **Example: Building a Login Form:**
 ```
 // Step 1: Get Form Inputs overview
-get_document_summary({ path: ".kiro/steering/form-inputs-components.md" })
+get_document_summary({ path: ".kiro/steering/Component-Family-Form-Inputs.md" })
 
 // Step 2: Get specific component contracts
-get_section({ path: ".kiro/steering/form-inputs-components.md", heading: "Input-Text-Email" })
-get_section({ path: ".kiro/steering/form-inputs-components.md", heading: "Input-Text-Password" })
+get_section({ path: ".kiro/steering/Component-Family-Form-Inputs.md", heading: "Input-Text-Email" })
+get_section({ path: ".kiro/steering/Component-Family-Form-Inputs.md", heading: "Input-Text-Password" })
 
 // Step 3: Get button for submit action
-get_section({ path: ".kiro/steering/button-components.md", heading: "Button-CTA" })
+get_section({ path: ".kiro/steering/Component-Family-Button.md", heading: "Button-CTA" })
 
 // Step 4: Get container for layout
-get_section({ path: ".kiro/steering/container-components.md", heading: "Container-Base" })
+get_section({ path: ".kiro/steering/Component-Family-Container.md", heading: "Container-Base" })
 ```
 
 ## Related Documentation
 
 - **Primitive vs Semantic Philosophy**: `.kiro/steering/primitive-vs-semantic-usage-philosophy.md`
 - **Component Readiness System**: `.kiro/steering/component-readiness-status-system.md`
-- **Token Quick Reference**: `.kiro/steering/Token Quick Reference.md`
+- **Token Quick Reference**: `.kiro/steering/Token-Quick-Reference.md`
 - **MCP Component Family Document Template**: `.kiro/steering/mcp-component-family-document-template.md` - Template for creating new family documentation

@@ -431,8 +431,8 @@ Form Inputs components resolve tokens through the Rosetta System's semantic-to-p
 
 ### Related Token Documentation
 
-- [Token Quick Reference](./Token%20Quick%20Reference.md) - Token routing table
-- [Typography Tokens](./typography-tokens.md) - Typography token details
+- [Token Quick Reference](./Token-Quick-Reference.md) - Token routing table
+- [Typography Tokens](./Token-Family-Typography.md) - Typography token details
 
 ---
 

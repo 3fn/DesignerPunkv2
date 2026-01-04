@@ -416,8 +416,8 @@ When applying border radius:
 - **Token System Overview**: `docs/token-system-overview.md` - Complete token system reference
 - **Mathematical Token System**: `.kiro/specs/mathematical-token-system/design.md` - Mathematical foundations
 - **Component Development Guide**: `./Component Development and Practices Guide.md` - Token usage in component development
-- **Token Resolution Patterns**: `./Token Resolution Patterns.md` - Strategic guidance on token type selection and validation
-- **Spacing Tokens Guide**: `./spacing-tokens.md` - Related spacing token documentation
+- **Token Resolution Patterns**: `./Token-Resolution-Patterns.md` - Strategic guidance on token type selection and validation
+- **Spacing Tokens Guide**: `./Token-Family-Spacing.md` - Related spacing token documentation
 
 ---
 

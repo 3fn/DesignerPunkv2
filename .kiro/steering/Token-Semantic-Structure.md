@@ -757,7 +757,7 @@ Layering tokens (ZIndexTokens and ElevationTokens) are an architectural exceptio
   - `src/tokens/semantic/ShadowTokens.ts` - Shadow semantic tokens
 - **Validation Tests**: `src/tokens/semantic/__tests__/SemanticTokenIntegration.test.ts` - Token structure validation tests
 - **Component Development Guide**: `./Component Development and Practices Guide.md` - Token usage in component development
-- **Token Resolution Patterns**: `./Token Resolution Patterns.md` - Strategic guidance on token type selection and validation
+- **Token Resolution Patterns**: `./Token-Resolution-Patterns.md` - Strategic guidance on token type selection and validation
 
 ---
 

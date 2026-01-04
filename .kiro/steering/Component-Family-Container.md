@@ -256,9 +256,9 @@ Container components resolve tokens through the Rosetta System's semantic-to-pri
 
 ### Related Token Documentation
 
-- [Token Quick Reference](./Token%20Quick%20Reference.md) - Token routing table
-- [Shadow Tokens](./shadow-tokens.md) - Shadow token details
-- [Layering Tokens](./layering-tokens.md) - Layering token details
+- [Token Quick Reference](./Token-Quick-Reference.md) - Token routing table
+- [Shadow Tokens](./Token-Family-Shadow.md) - Shadow token details
+- [Layering Tokens](./Token-Family-Layering.md) - Layering token details
 
 ---
 

@@ -460,7 +460,7 @@ For each semantic variant:
 
 Create the MCP-queryable documentation for the family.
 
-**Location**: `.kiro/steering/[family-name]-components.md`
+**Location**: `.kiro/steering/Component-Family-[FamilyName].md`
 
 **Required Sections**:
 1. Family Overview
@@ -482,7 +482,7 @@ Add the new family to the Component Quick Reference routing table.
 
 **Add entry**:
 ```markdown
-| [Family Name] | [Shared Need] | `.kiro/steering/[family-name]-components.md` | [Status] |
+| [Family Name] | [Shared Need] | `.kiro/steering/Component-Family-[FamilyName].md` | [Status] |
 ```
 
 #### Step 5.3: Update Inheritance Structures Document
@@ -613,7 +613,7 @@ The Form Inputs family serves as the reference implementation for family creatio
 | Artifact | Location |
 |----------|----------|
 | Primitive Schema | `src/components/core/Input-Text-Base/Input-Text-Base.schema.yaml` |
-| MCP Documentation | `.kiro/steering/form-inputs-components.md` |
+| MCP Documentation | `.kiro/steering/Component-Family-Form-Inputs.md` |
 | Web Implementation | `src/components/core/Input-Text-Base/platforms/web/InputTextBase.web.ts` |
 | iOS Implementation | `src/components/core/Input-Text-Base/platforms/ios/InputTextBase.ios.swift` |
 | Android Implementation | `src/components/core/Input-Text-Base/platforms/android/InputTextBase.android.kt` |
@@ -719,7 +719,7 @@ Complete these checks during and after implementation:
 Complete these checks for documentation:
 
 #### MCP Documentation Validation
-- [ ] **Family Document Created**: `.kiro/steering/[family-name]-components.md`
+- [ ] **Family Document Created**: `.kiro/steering/Component-Family-[FamilyName].md`
 - [ ] **Front-Matter Correct**: `inclusion: manual` in YAML front-matter
 - [ ] **Required Sections Present**: Overview, Inheritance Structure, Behavioral Contracts, Component Schemas, Token Dependencies, Usage Guidelines, Cross-Platform Notes
 - [ ] **Progressive Disclosure Supported**: Document structure supports summary → section → full queries
@@ -975,7 +975,7 @@ This section documents the requirements for integrating new component families w
 
 New family MCP documents must be registered with the designerpunk-docs MCP server:
 
-1. **Create Document**: Place family document at `.kiro/steering/[family-name]-components.md`
+1. **Create Document**: Place family document at `.kiro/steering/Component-Family-[FamilyName].md`
 2. **Add Front-Matter**: Include `inclusion: manual` in YAML front-matter
 3. **Verify Indexing**: Run `mcp_designerpunk_docs_get_index_health()` to verify document is indexed
 4. **Rebuild if Needed**: Run `mcp_designerpunk_docs_rebuild_index()` if document not appearing
@@ -1009,7 +1009,7 @@ progressive_disclosure_requirements:
 Add new family to the Component Quick Reference routing table:
 
 ```markdown
-| [Family Name] | [Shared Need/Purpose] | `.kiro/steering/[family-name]-components.md` | [Status] |
+| [Family Name] | [Shared Need/Purpose] | `.kiro/steering/Component-Family-[FamilyName].md` | [Status] |
 ```
 
 **Entry Requirements**:
@@ -1028,7 +1028,7 @@ Add new family section to `component-family-inheritance-structures.md`:
 ## [Family Name] Family
 
 **Shared Need**: [Purpose statement]
-**MCP Documentation**: `.kiro/steering/[family-name]-components.md`
+**MCP Documentation**: `.kiro/steering/Component-Family-[FamilyName].md`
 
 ### Inheritance Structure
 
@@ -1181,7 +1181,7 @@ Use this checklist to verify all integration requirements are met:
 - [Component Family Inheritance Structures](./component-family-inheritance-structures.md) - All family structures
 - [Component Quick Reference](./Component%20Quick%20Reference.md) - Family routing table
 - [MCP Component Family Document Template](./mcp-component-family-document-template.md) - Documentation template
-- [Form Inputs Components](./form-inputs-components.md) - Reference implementation
+- [Form Inputs Components](./Component-Family-Form-Inputs.md) - Reference implementation
 - [Behavioral Contract Validation Framework](./behavioral-contract-validation-framework.md) - Contract validation criteria
 
 ---

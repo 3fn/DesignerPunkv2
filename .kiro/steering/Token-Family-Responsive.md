@@ -784,9 +784,9 @@ When implementing responsive design:
 - **Breakpoint Token Source**: `src/tokens/BreakpointTokens.ts` - Breakpoint token definitions
 - **Density Token Source**: `src/tokens/DensityTokens.ts` - Density token definitions
 - **Token System Overview**: `docs/token-system-overview.md` - Complete token system reference
-- **Spacing Tokens Guide**: `./spacing-tokens.md` - Spacing tokens affected by density
-- **Typography Tokens Guide**: `./typography-tokens.md` - Typography tokens affected by density
-- **Accessibility Tokens Guide**: `./accessibility-tokens.md` - Tap area tokens affected by density
+- **Spacing Tokens Guide**: `./Token-Family-Spacing.md` - Spacing tokens affected by density
+- **Typography Tokens Guide**: `./Token-Family-Typography.md` - Typography tokens affected by density
+- **Accessibility Tokens Guide**: `./Token-Family-Accessibility.md` - Tap area tokens affected by density
 - **Component Development Guide**: `./Component Development and Practices Guide.md` - Token usage in component development
 
 ---

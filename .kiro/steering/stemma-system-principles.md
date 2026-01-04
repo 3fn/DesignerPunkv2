@@ -896,7 +896,7 @@ get_section({ path: ".kiro/steering/stemma-system-principles.md", heading: "Comp
 - [Component Schema Format Specification](./component-schema-format.md) - Formal schema structure and validation rules
 - [Component Readiness Status System](./component-readiness-status-system.md) - Comprehensive readiness status definitions and transition guidelines
 - [Component Development and Practices Guide](./Component Development and Practices Guide.md) - Token selection and component patterns
-- [Token Quick Reference](./Token Quick Reference.md) - Token documentation routing
+- [Token Quick Reference](./Token-Quick-Reference.md) - Token documentation routing
 - [Cross-Platform vs Platform-Specific Decision Framework](./Cross-Platform vs Platform-Specific Decision Framework.md) - Platform decision guidance
 
 ---
