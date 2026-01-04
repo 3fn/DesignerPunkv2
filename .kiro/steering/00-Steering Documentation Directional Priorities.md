@@ -327,6 +327,30 @@ get_section({ path: ".kiro/steering/Process-Cross-Reference-Standards.md", headi
 
 **Confirmation**: Reply "I've queried Process-Cross-Reference-Standards via MCP!" after accessing
 
+---
+
+### 12. Process-Hook-Operations
+**When needed**: Debugging hook issues, understanding hook dependencies, setting up or modifying hooks, troubleshooting automation failures
+
+**File**: #[[file:.kiro/steering/Process-Hook-Operations.md]]
+
+**How to access**:
+```
+get_document_summary({ path: ".kiro/steering/Process-Hook-Operations.md" })
+```
+
+Then query the specific section you need:
+```
+get_section({ path: ".kiro/steering/Process-Hook-Operations.md", heading: "Agent Hook Dependency Chains" })
+get_section({ path: ".kiro/steering/Process-Hook-Operations.md", heading: "Dependency Chain Behavior" })
+get_section({ path: ".kiro/steering/Process-Hook-Operations.md", heading: "Troubleshooting" })
+get_section({ path: ".kiro/steering/Process-Hook-Operations.md", heading: "Common Issues and Solutions" })
+get_section({ path: ".kiro/steering/Process-Hook-Operations.md", heading: "Release Detection Not Triggering" })
+get_section({ path: ".kiro/steering/Process-Hook-Operations.md", heading: "Best Practices" })
+```
+
+**Confirmation**: Reply "I've queried Process-Hook-Operations via MCP!" after accessing
+
 
 ## MCP Documentation Server (Primary for Large Docs)
 
@@ -346,6 +370,7 @@ These documents are available ONLY via MCP queries:
 | Test Development Standards | `.kiro/steering/Test-Development-Standards.md` |
 | Completion Documentation Guide | `.kiro/steering/Completion Documentation Guide.md` |
 | Process-Cross-Reference-Standards | `.kiro/steering/Process-Cross-Reference-Standards.md` |
+| Process-Hook-Operations | `.kiro/steering/Process-Hook-Operations.md` |
 
 ### How to Access MCP-Only Documents
 
