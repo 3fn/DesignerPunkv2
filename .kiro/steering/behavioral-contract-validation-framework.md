@@ -58,7 +58,7 @@ Two platform implementations are considered **behaviorally equivalent** when:
 
 ## Validation Criteria for Behavioral Contracts
 
-### Tier 1: Core Behavioral Validation (Required)
+### Basic Contract Validation (Required)
 
 Every behavioral contract MUST pass these validation criteria:
 
@@ -108,7 +108,7 @@ validation_criteria:
       - Accessibility audit
 ```
 
-### Tier 2: Cross-Platform Consistency Validation (Required)
+### Extended Contract Validation (Required)
 
 #### 2.1 Platform Parity Check
 ```yaml
@@ -140,7 +140,7 @@ validation_criteria:
       - Behavioral comparison report
 ```
 
-### Tier 3: Accessibility Compliance Validation (Required for WCAG-referenced contracts)
+### Full Contract Validation (Required for WCAG-referenced contracts)
 
 #### 3.1 WCAG Compliance Check
 ```yaml

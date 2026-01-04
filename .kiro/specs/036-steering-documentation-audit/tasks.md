@@ -323,15 +323,15 @@ This implementation plan follows a three-phase audit methodology with Human-Agen
   - [x] 14.4 Update document structure and navigation
   - _Requirements: 3.3, 3.7_
 
-- [ ] 15. Batch 5-6: Validation Tiers and Tier Naming
+- [x] 15. Batch 5-6: Validation Tiers and Tier Naming
   **Type**: Documentation
   **Validation**: Tier 1 - Minimal
   **Success Criteria**: Single source of truth for validation tiers, no naming collision
   
-  - [ ] 15.1 Verify Task-Type-Definitions.md has complete tier definitions
-  - [ ] 15.2 Replace Spec Planning Standards tier definitions with priming + MCP query
-  - [ ] 15.3 Rename behavioral contract tiers (Basic/Extended/Full Contract Validation)
-  - [ ] 15.4 Update any cross-references to validation tiers
+  - [x] 15.1 Verify Task-Type-Definitions.md has complete tier definitions
+  - [x] 15.2 Replace Spec Planning Standards tier definitions with priming + MCP query
+  - [x] 15.3 Rename behavioral contract tiers (Basic/Extended/Full Contract Validation)
+  - [x] 15.4 Update any cross-references to validation tiers
   - _Requirements: 3.3, 3.4_
 
 - [ ] 16. Batch 7: Start Up Tasks Update
