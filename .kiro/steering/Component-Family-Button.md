@@ -357,4 +357,4 @@ All platforms implement the same behavioral contracts:
 - [Stemma System Principles](./stemma-system-principles.md) - Architecture overview
 - [Token Quick Reference](./Token-Quick-Reference.md) - Token documentation
 - [MCP Component Family Document Template](./Component-MCP-Document-Template.md) - Template specification
-- [Button-CTA Schema](../../../src/components/core/Button-CTA/Button-CTA.schema.yaml) - Full schema definition
+- [Button-CTA Schema](../../src/components/core/Button-CTA/Button-CTA.schema.yaml) - Full schema definition

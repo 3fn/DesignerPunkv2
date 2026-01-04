@@ -577,9 +577,9 @@ get_section({ path: ".kiro/steering/rosetta-system-principles.md", heading: "Mat
 ## Related Documentation
 
 - [Stemma System Principles](./stemma-system-principles.md) - Relational foundation for component development
-- [Token System Overview](../docs/token-system-overview.md) - Master document mapping token files
+- [Token System Overview](../../docs/token-system-overview.md) - Master document mapping token files
 - [Token Quick Reference](./Token-Quick-Reference.md) - Token documentation routing
-- [Token Architecture 2.0 Mathematics](../preserved-knowledge/token-architecture-2-0-mathematics.md) - Detailed mathematical formulas
+- [Token Architecture 2.0 Mathematics](../../preserved-knowledge/token-architecture-2-0-mathematics.md) - Detailed mathematical formulas
 - [Component Development Guide](./Component-Development-Guide.md) - Token selection and component patterns
 
 ---

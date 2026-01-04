@@ -583,9 +583,9 @@ val interFamily = FontFamily(
 
 - [Color Tokens Guide](./Token-Family-Color.md) - Color token system and semantic meanings
 - [Spacing Tokens Guide](./Token-Family-Spacing.md) - Spacing token system and layout patterns
-- [iOS Font Setup](../platform-integration/ios-font-setup.md) - iOS font configuration and implementation
-- [Android Font Setup](../platform-integration/android-font-setup.md) - Android font configuration and implementation
-- [Token System Overview](../token-system-overview.md) - Complete token system architecture
+- [iOS Font Setup](../../docs/platform-integration/ios-font-setup.md) - iOS font configuration and implementation
+- [Android Font Setup](../../docs/platform-integration/android-font-setup.md) - Android font configuration and implementation
+- [Token System Overview](../../docs/token-system-overview.md) - Complete token system architecture
 - [Component Development Guide](./Component-Development-Guide.md) - Token usage in component development
 - [Token Resolution Patterns](./Token-Resolution-Patterns.md) - Strategic guidance on token type selection and validation
 

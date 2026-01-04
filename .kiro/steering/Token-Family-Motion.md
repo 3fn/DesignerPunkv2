@@ -651,7 +651,7 @@ expect(Number.isInteger(scaledSize)).toBe(true);
 ## Related Documentation
 
 - [Shadow Token Documentation](./Token-Family-Shadow.md) - Shadow primitive tokens for depth effects
-- [Token System Overview](../token-system-overview.md) - Complete token system architecture
+- [Token System Overview](../../docs/token-system-overview.md) - Complete token system architecture
 - [Motion Token Design Document](../../.kiro/specs/014-motion-token-system/design.md) - Detailed design decisions and rationale
 - [Motion Token Requirements](../../.kiro/specs/014-motion-token-system/requirements.md) - System requirements and acceptance criteria
 - [Component Development Guide](./Component-Development-Guide.md) - Token usage in component development

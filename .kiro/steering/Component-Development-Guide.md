@@ -982,7 +982,7 @@ const hoverColor = blendUtils.hoverColor(primaryColor);
 ### Related Documentation
 
 - [Blend Tokens Guide](Token-Family-Blend.md) - Complete blend token reference
-- [Blend Infrastructure Design](../.kiro/specs/031-blend-infrastructure-implementation/design.md) - Architecture decisions
+- [Blend Infrastructure Design](../specs/031-blend-infrastructure-implementation/design.md) - Architecture decisions
 
 ---
 

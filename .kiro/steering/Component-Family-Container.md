@@ -375,4 +375,4 @@ All platforms implement the same behavioral contracts:
 - [Stemma System Principles](./stemma-system-principles.md) - Architecture overview
 - [Token Quick Reference](./Token-Quick-Reference.md) - Token documentation
 - [MCP Component Family Document Template](./Component-MCP-Document-Template.md) - Template specification
-- [Container-Base Schema](../../../src/components/core/Container-Base/Container-Base.schema.yaml) - Full schema definition
+- [Container-Base Schema](../../src/components/core/Container-Base/Container-Base.schema.yaml) - Full schema definition
