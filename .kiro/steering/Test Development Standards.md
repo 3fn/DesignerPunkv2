@@ -363,23 +363,23 @@ it('should use correct icon size for small buttons', () => {
 **Implementation**:
 
 ```typescript
-import { DPIcon } from '../Icon.web';
+import { IconBaseElement } from '../Icon.web';
 
 describe('Icon Web Component Lifecycle', () => {
   beforeAll(() => {
     // Ensure custom element is registered
-    if (!customElements.get('dp-icon')) {
-      customElements.define('dp-icon', DPIcon);
+    if (!customElements.get('icon-base')) {
+      customElements.define('icon-base', IconBaseElement);
     }
   });
 
   beforeEach(async () => {
     // Wait for custom element to be defined
-    await customElements.whenDefined('dp-icon');
+    await customElements.whenDefined('icon-base');
   });
 
   it('should render icon when added to DOM', async () => {
-    const element = document.createElement('dp-icon') as DPIcon;
+    const element = document.createElement('icon-base') as IconBaseElement;
     element.setAttribute('name', 'arrow-right');
     element.setAttribute('size', '24');
     
@@ -417,9 +417,9 @@ describe('Icon Web Component Lifecycle', () => {
 
 ```typescript
 it('should render SVG in shadow DOM', async () => {
-  await customElements.whenDefined('dp-icon');
+  await customElements.whenDefined('icon-base');
   
-  const element = document.createElement('dp-icon') as DPIcon;
+  const element = document.createElement('icon-base') as IconBaseElement;
   element.setAttribute('name', 'check');
   document.body.appendChild(element);
   
@@ -451,9 +451,9 @@ it('should render SVG in shadow DOM', async () => {
 
 ```typescript
 it('should update when size attribute changes', async () => {
-  await customElements.whenDefined('dp-icon');
+  await customElements.whenDefined('icon-base');
   
-  const element = document.createElement('dp-icon') as DPIcon;
+  const element = document.createElement('icon-base') as IconBaseElement;
   element.setAttribute('name', 'arrow-right');
   element.setAttribute('size', '24');
   document.body.appendChild(element);
@@ -727,7 +727,7 @@ it('should apply correct size class', () => {
 ❌ **Bad**:
 ```typescript
 it('should render icon when added to DOM', () => {
-  const element = document.createElement('dp-icon') as DPIcon;
+  const element = document.createElement('icon-base') as IconBaseElement;
   element.setAttribute('name', 'arrow-right');
   document.body.appendChild(element);
   
@@ -746,9 +746,9 @@ it('should render icon when added to DOM', () => {
 ✅ **Good**:
 ```typescript
 it('should render icon when added to DOM', async () => {
-  await customElements.whenDefined('dp-icon');
+  await customElements.whenDefined('icon-base');
   
-  const element = document.createElement('dp-icon') as DPIcon;
+  const element = document.createElement('icon-base') as IconBaseElement;
   element.setAttribute('name', 'arrow-right');
   document.body.appendChild(element);
   
@@ -779,16 +779,16 @@ it('should render icon when added to DOM', async () => {
 ```typescript
 describe('Icon Web Component', () => {
   it('should render', () => {
-    // Assumes dp-icon is registered, but doesn't verify
-    const element = document.createElement('dp-icon') as DPIcon;
-    // Test fails because element isn't actually a DPIcon instance
+    // Assumes icon-base is registered, but doesn't verify
+    const element = document.createElement('icon-base') as IconBaseElement;
+    // Test fails because element isn't actually an IconBaseElement instance
   });
 });
 ```
 
 **Why This Fails**:
 - Custom element might not be registered in test environment
-- `document.createElement('dp-icon')` returns `HTMLElement`, not `DPIcon`
+- `document.createElement('icon-base')` returns `HTMLElement`, not `IconBaseElement`
 - Element doesn't have custom element behavior
 - Tests fail with confusing errors
 
@@ -797,19 +797,19 @@ describe('Icon Web Component', () => {
 describe('Icon Web Component', () => {
   beforeAll(() => {
     // Explicitly register custom element
-    if (!customElements.get('dp-icon')) {
-      customElements.define('dp-icon', DPIcon);
+    if (!customElements.get('icon-base')) {
+      customElements.define('icon-base', IconBaseElement);
     }
   });
 
   beforeEach(async () => {
     // Wait for element to be defined
-    await customElements.whenDefined('dp-icon');
+    await customElements.whenDefined('icon-base');
   });
 
   it('should render', async () => {
-    const element = document.createElement('dp-icon') as DPIcon;
-    // Now element is actually a DPIcon instance
+    const element = document.createElement('icon-base') as IconBaseElement;
+    // Now element is actually an IconBaseElement instance
     document.body.appendChild(element);
     await new Promise(resolve => setTimeout(resolve, 0));
     
@@ -1080,17 +1080,17 @@ describe('createIcon', () => {
 ```typescript
 describe('Icon Web Component Lifecycle', () => {
   beforeAll(() => {
-    if (!customElements.get('dp-icon')) {
-      customElements.define('dp-icon', DPIcon);
+    if (!customElements.get('icon-base')) {
+      customElements.define('icon-base', IconBaseElement);
     }
   });
 
   beforeEach(async () => {
-    await customElements.whenDefined('dp-icon');
+    await customElements.whenDefined('icon-base');
   });
 
   it('should render icon when added to DOM', async () => {
-    const element = document.createElement('dp-icon') as DPIcon;
+    const element = document.createElement('icon-base') as IconBaseElement;
     element.setAttribute('name', 'arrow-right');
     document.body.appendChild(element);
     

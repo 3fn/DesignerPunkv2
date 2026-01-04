@@ -555,7 +555,7 @@ const iconElement = createIcon({
 
 **However**: Even internal icons MUST use icon size tokens for sizing.
 
-**Example - TextInputField Status Icons**:
+**Example - Input-Text-Base Status Icons**:
 ```swift
 // iOS: SF Symbols for status indicators (internal implementation)
 // ✅ CORRECT: Use icon size token
@@ -601,10 +601,10 @@ This component uses direct SF Symbols for status indicators because:
 **Using Icon Component**:
 ```html
 <!-- Web component API (recommended) -->
-<dp-icon name="arrow-right" size="24"></dp-icon>
+<icon-base name="arrow-right" size="24"></icon-base>
 
 <!-- With color override -->
-<dp-icon name="check" size="24" color="color-success"></dp-icon>
+<icon-base name="check" size="24" color="color-success"></icon-base>
 ```
 
 **Using Icon Size Tokens in CSS**:
@@ -1063,18 +1063,18 @@ export interface ButtonProps {
 
 ```html
 <!-- DON'T: Same radius creates awkward visual overlap -->
-<dp-container borderRadius="normal" padding="200">
-  <dp-container borderRadius="normal">
+<container-base borderRadius="normal" padding="200">
+  <container-base borderRadius="normal">
     Awkward corner overlap
-  </dp-container>
-</dp-container>
+  </container-base>
+</container-base>
 
 <!-- DO: Reduce inner radius by padding amount -->
-<dp-container borderRadius="normal" padding="200">
-  <dp-container borderRadius="none">
+<container-base borderRadius="normal" padding="200">
+  <container-base borderRadius="none">
     Harmonious corner alignment
-  </dp-container>
-</dp-container>
+  </container-base>
+</container-base>
 ```
 
 **Mathematical relationship**: `inner borderRadius = outer borderRadius - padding`

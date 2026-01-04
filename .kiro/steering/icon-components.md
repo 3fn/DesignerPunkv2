@@ -312,7 +312,7 @@ Icon components resolve tokens through the Rosetta System's semantic-to-primitiv
 #### Web
 
 - Uses Shadow DOM for style encapsulation
-- Custom element registration: `<icon-base>` (legacy: `<dp-icon>`)
+- Custom element registration: `<icon-base>`
 - Inline SVG rendering with currentColor inheritance
 - CSS classes for size variants (icon-base--size-*)
 - Supports className and style props for customization
@@ -323,7 +323,7 @@ Icon components resolve tokens through the Rosetta System's semantic-to-primitiv
 - Color inheritance via `.foregroundColor(.primary)`
 - Optical balance via `iconBlend()` extension
 - testID via `.accessibilityIdentifier()`
-- Legacy Icon typealias for backward compatibility
+- Icon typealias for backward compatibility
 
 #### Android
 
@@ -331,7 +331,7 @@ Icon components resolve tokens through the Rosetta System's semantic-to-primitiv
 - Color inheritance via `LocalContentColor.current`
 - Optical balance via `iconBlend()` extension function
 - Decorative icons use `contentDescription = null`
-- Legacy Icon composable wrapper for backward compatibility
+- Icon composable wrapper for backward compatibility
 
 ### Behavioral Consistency
 

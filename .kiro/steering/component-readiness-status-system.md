@@ -195,9 +195,9 @@ readiness: deprecated
 
 **Visual Indicator Usage**:
 ```markdown
-## TextInputField ⚠️
+## Input-Text-Base ⚠️
 
-Deprecated. Migrate to Input-Text-Base or semantic variants (Input-Text-Email, Input-Text-Password).
+Deprecated. Migrate to semantic variants (Input-Text-Email, Input-Text-Password).
 ```
 
 **Deprecated Component Expectations**:
@@ -478,14 +478,14 @@ Avatar-User-Base:
 
 **Deprecated Component**:
 ```yaml
-TextInputField:
-  name: TextInputField
+Input-Text-Base:
+  name: Input-Text-Base
   type: primitive
   family: FormInputs
   readiness: deprecated
   deprecation:
-    replacement: Input-Text-Base
-    migration_guide: "./migration/textinputfield-to-input-text-base.md"
+    replacement: Input-Text-Email, Input-Text-Password
+    migration_guide: "./migration/input-text-base-to-semantic-variants.md"
     removal_date: "2026-06-01"
   # ... rest of schema
 ```

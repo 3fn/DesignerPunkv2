@@ -342,14 +342,14 @@ This implementation plan follows a three-phase audit methodology with Human-Agen
   - [x] 16.1 Add checklist item for querying Completion Documentation Guide via MCP
   - _Requirements: 4.3_
 
-- [ ] 17. Batch 8-9: Legacy Naming Fixes
+- [x] 17. Batch 8-9: Legacy Naming Fixes
   **Type**: Documentation
   **Validation**: Tier 2 - Standard
   **Success Criteria**: All 39 legacy naming instances fixed, zero legacy naming
   
-  - [ ] 17.1 Fix legacy naming in low-risk documents (10 instances in 6 docs)
-  - [ ] 17.2 Fix legacy naming in medium-risk documents (30 instances in 3 docs)
-  - [ ] 17.3 Verify zero legacy naming instances via grep
+  - [x] 17.1 Fix legacy naming in low-risk documents (10 instances in 6 docs)
+  - [x] 17.2 Fix legacy naming in medium-risk documents (30 instances in 3 docs)
+  - [x] 17.3 Verify zero legacy naming instances via grep
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8_
 
 - [ ] 18. Batch 10-12: Low-Risk Prefix Renames

@@ -348,7 +348,7 @@ const disabledColor = blendUtils.disabledColor(primaryColor); // desaturate 12%
 const iconColor = blendUtils.iconColor(onPrimaryColor);      // lighterBlend 8%
 ```
 
-### TextInputField Component
+### Input-Text-Base Component
 
 ```typescript
 const blendUtils = getBlendUtilities();

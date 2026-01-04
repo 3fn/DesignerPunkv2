@@ -50,8 +50,8 @@ DesignerPunk provides browser-ready web component bundles that work directly in 
 **Available Components:**
 - `<button-cta>` - Call-to-action button with variants and icon support
 - `<input-text-base>` - Text input with validation states and helper text
-- `<icon-base>` / `<dp-icon>` - Icon component with size and color variants
-- `<container-base>` / `<dp-container>` - Layout container with padding, background, and shadow options
+- `<icon-base>` - Icon component with size and color variants
+- `<container-base>` - Layout container with padding, background, and shadow options
 
 ---
 
@@ -212,7 +212,7 @@ UMD (Universal Module Definition) provides broader browser compatibility and exp
 <script>
   // Components are available via window.DesignerPunk
   console.log('Available components:', Object.keys(window.DesignerPunk));
-  // Output: ['InputTextBase', 'ButtonCTA', 'IconBaseElement', 'ContainerBaseWeb', 'Icon', 'IconBase', 'Container', 'ContainerBase', 'TextInputField']
+  // Output: ['InputTextBase', 'ButtonCTA', 'IconBaseElement', 'ContainerBaseWeb', 'Icon', 'IconBase', 'Container', 'ContainerBase']
   
   // Wait for DOM and components to be ready
   document.addEventListener('DOMContentLoaded', function() {
@@ -366,16 +366,13 @@ Text input with validation states, helper text, and accessibility features.
 - `focus` - Fired when input receives focus
 - `blur` - Fired when input loses focus
 
-### Icon (`<icon-base>` / `<dp-icon>`)
+### Icon (`<icon-base>`)
 
 Icon component with size and color variants.
 
 ```html
-<!-- Basic usage (Stemma System naming) -->
+<!-- Basic usage -->
 <icon-base name="arrow-right" size="24"></icon-base>
-
-<!-- Legacy tag (backward compatibility) -->
-<dp-icon name="arrow-right" size="24"></dp-icon>
 
 <!-- Size variants -->
 <icon-base name="heart" size="13"></icon-base>
@@ -393,20 +390,15 @@ Icon component with size and color variants.
 **Available Icons:**
 `arrow-right`, `arrow-left`, `arrow-up`, `arrow-down`, `check`, `x`, `plus`, `minus`, `info`, `settings`, `user`, `heart`, `mail`, `calendar`, `star`, `chevron-down`, `chevron-up`, `chevron-left`, `chevron-right`
 
-### Container (`<container-base>` / `<dp-container>`)
+### Container (`<container-base>`)
 
 Layout container with padding, background, shadow, and border options.
 
 ```html
-<!-- Basic usage (Stemma System naming) -->
+<!-- Basic usage -->
 <container-base padding="200" background="color-surface" border-radius="normal">
   <p>Content goes here</p>
 </container-base>
-
-<!-- Legacy tag (backward compatibility) -->
-<dp-container padding="200" background="color-surface" border-radius="normal">
-  <p>Content goes here</p>
-</dp-container>
 
 <!-- With shadow -->
 <container-base padding="300" background="color-surface" shadow="shadow-container" border-radius="normal">
@@ -509,7 +501,7 @@ Layout container with padding, background, shadow, and border options.
 
 2. **Use correct event names:**
    - ButtonCTA: `press` (not `click`)
-   - TextInputField: `change`, `focus`, `blur`
+   - Input-Text-Base: `change`, `focus`, `blur`
 
 3. **Check event detail:**
    ```javascript

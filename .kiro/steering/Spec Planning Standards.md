@@ -2777,7 +2777,7 @@ Create contracts in `.kiro/specs/integration-contracts/[provider]-[consumer].md`
 - **Status**: ✅ Available and tested
 
 ### Icon Web Component
-- **API**: `<dp-icon name="..." size="..." color="..."></dp-icon>`
+- **API**: `<icon-base name="..." size="..." color="..."></icon-base>`
 - **Status**: ✅ Available and tested
 
 ---

@@ -340,7 +340,7 @@ Container components resolve tokens through the Rosetta System's semantic-to-pri
 #### Web
 
 - Uses Shadow DOM for style encapsulation
-- Custom element registration: `<container-base>` (legacy: `<dp-container>`)
+- Custom element registration: `<container-base>`
 - Supports semantic HTML elements via semantic prop
 - Hover state uses CSS `:hover` with blend utilities
 
