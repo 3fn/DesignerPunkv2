@@ -41,10 +41,16 @@ DesignerPunk is a True Native cross-platform design system with mathematical fou
 - Spec planning: `Process-Spec-Planning.md` (Layer 2, conditional)
 
 **Token Usage:**
-- Always prioritize design tokens over hard-coded values
+- **Always** prioritize design tokens over hard-coded values
 - Use semantic tokens before primitive tokens
 - All tokens must follow Rosetta System: mathematical relationships, unitless values, primitive→semantic hierarchy
 - Inform Human partner if hard-coded values are necessary
+
+**Token-First in Specs:**
+- Specs reference tokens, not pixel values: `icon.size100` not `24px`
+- Hard values in source docs (design-outlines) **must** be translated to token references when available
+- Format: `token.name` with value as comment only when needed for clarity
+- Query Token Quick Reference via MCP when uncertain which token to use
 
 **For detailed token guidance, see:**
 - Component development: `Component-Development-Guide.md` (Layer 3, conditional)

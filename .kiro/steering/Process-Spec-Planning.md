@@ -26,6 +26,29 @@ inclusion: manual
 2. ✅ **Spec Workflow: Phase 1** (scroll to Spec Workflow section)
 3. ❌ **SKIP**: Design format, Tasks format, Validation system, Documentation system, Rationale
 
+### WHEN Creating Component Spec (Button, Input, Card, etc.) THEN Also Query:
+
+**In addition to the standard requirements/design/tasks sections above**, query these MCP documents for component-specific patterns:
+
+1. ✅ **Component-Templates** - Query "Behavioral Contract Templates" section for:
+   - Interaction contracts (Focusable, Pressable, Hoverable)
+   - State contracts (Disabled, Error, Success, Loading)
+   - Accessibility contracts (Focus Ring, Reduced Motion, Screen Reader Hidden)
+   - Visual contracts (Pressed State, Float Label Animation)
+
+2. ✅ **Component-Quick-Reference** - Query for:
+   - Stemma System naming conventions
+   - Common composition patterns
+   - Component documentation map
+
+**MCP Queries**:
+```
+get_section({ path: ".kiro/steering/Component-Templates.md", heading: "Behavioral Contract Templates" })
+get_section({ path: ".kiro/steering/Component-Quick-Reference.md", heading: "Naming Convention" })
+```
+
+**Why**: Component specs need behavioral contracts for interaction states, accessibility patterns, and platform-specific behaviors that generic spec guidance doesn't cover.
+
 ### WHEN Creating Design Document THEN Read:
 1. ✅ **Design Document Format** (MUST READ)
 2. ✅ **Spec Workflow: Phase 2** (scroll to Spec Workflow section)
