@@ -7,7 +7,7 @@
 **Total Documents**: 59 (55 original + 4 new documents created during audit)
 **Total Tokens (Post-Audit)**: 296,402 tokens
 **Session Start Load (Post-Audit)**: 18,152 tokens (6.1% of steering docs)
-**Observed Context Usage**: ~35% baseline (estimated, Kiro UI, Claude Opus 4.5, fresh "Hi" session, post-Phase 5)
+**Observed Context Usage**: 34% baseline (Kiro UI, Claude Opus 4.5, fresh "Hi" session, post-Phase 5)
 
 ---
 
@@ -395,7 +395,7 @@ The 13.9% only measures steering-to-steering ratio. Your actual context load inc
 
 | Metric | Pre-Audit | Post-Phase 4 | Post-Phase 5 | Total Improvement |
 |--------|-----------|--------------|--------------|-------------------|
-| Observed Context Usage ("Hi" test) | ~45% | ~40% | **~35%** (est.) | **-10 percentage points** |
+| Observed Context Usage ("Hi" test) | ~45% | ~40% | **34%** | **-11 percentage points** |
 | Session Start Tokens | 39,124 | 28,137 | 18,152 | -20,972 tokens |
 
 **Test Conditions**: Fresh Kiro session, Claude Opus 4.5, "Hi" prompt only
@@ -557,7 +557,7 @@ The Steering Documentation Audit (Spec 036) successfully achieved and exceeded i
 | Total Steering Docs | 281,679 tokens | 296,155 tokens | 296,402 tokens | +14,723 tokens (+5.2%) |
 | Document Count | 55 | 58 | 59 | +4 new documents |
 | Session Start % | 13.9% | 9.5% | **6.1%** | **-7.8 percentage points** |
-| Observed Context Usage | ~45% | ~40% | **~35%** (est.) | **-10 percentage points** |
+| Observed Context Usage | ~45% | ~40% | **34%** | **-11 percentage points** |
 
 ### Final Token Counts by Layer (Post-Phase 5)
 
@@ -659,14 +659,14 @@ The Steering Documentation Audit (Spec 036) successfully achieved and exceeded i
 | MCP index health | Healthy | Healthy | ✅ |
 | All documents indexed | 59 docs | 59 docs | ✅ 100% |
 | Cross-references valid | All valid | All valid | ✅ |
-| Real-world context improvement | Measurable | -10 percentage points (est.) | ✅ |
+| Real-world context improvement | Measurable | -11 percentage points | ✅ |
 
 ### Real-World Impact
 
 | Metric | Pre-Audit | Post-Phase 4 | Post-Phase 5 | Total Improvement |
 |--------|-----------|--------------|--------------|-------------------|
-| Fresh session context ("Hi" test) | ~45% | ~40% | **~35%** (est.) | **-10 percentage points** |
-| Available headroom for work | ~55% | ~60% | **~65%** (est.) | **+10 percentage points** |
+| Fresh session context ("Hi" test) | ~45% | ~40% | **34%** | **-11 percentage points** |
+| Available headroom for work | ~55% | ~60% | **66%** | **+11 percentage points** |
 | Session start tokens | 39,124 | 28,137 | 18,152 | -20,972 tokens |
 
 **Test Conditions**: Fresh Kiro session, Claude Opus 4.5, "Hi" prompt only
@@ -688,7 +688,7 @@ The Steering Documentation Audit (Spec 036) successfully achieved and exceeded i
 The Steering Documentation Audit successfully achieved and exceeded all primary objectives:
 
 1. **✅ Token Savings**: Reduced session start load by 20,972 tokens (**53.6% reduction** - nearly double the original target)
-2. **✅ Real-World Impact**: Estimated context usage reduction from ~45% to ~35% (-10 percentage points)
+2. **✅ Real-World Impact**: Context usage reduced from ~45% to 34% (-11 percentage points)
 3. **✅ Legacy Naming**: Eliminated all 39 legacy naming instances
 4. **✅ Documentation Quality**: Created 4 new canonical source documents
 5. **✅ MCP Integration**: All 59 documents properly indexed and queryable
