@@ -286,6 +286,48 @@ get_section({ path: ".kiro/steering/Test-Development-Standards.md", heading: "Te
 
 ---
 
+### 10. Completion Documentation Guide
+**When needed**: Creating completion documentation, understanding two-document workflow, parent task completion
+
+**File**: #[[file:.kiro/steering/Completion Documentation Guide.md]]
+
+**How to access**:
+```
+get_document_summary({ path: ".kiro/steering/Completion Documentation Guide.md" })
+```
+
+Then query the specific section you need:
+```
+get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading: "Two-Document Workflow" })
+get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading: "Documentation Tiers" })
+get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading: "Naming Conventions" })
+get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading: "Document Templates" })
+```
+
+**Confirmation**: Reply "I've queried Completion Documentation Guide via MCP!" after accessing
+
+---
+
+### 11. Process-Cross-Reference-Standards
+**When needed**: Adding cross-references to documentation, understanding cross-reference patterns, avoiding anti-patterns
+
+**File**: #[[file:.kiro/steering/Process-Cross-Reference-Standards.md]]
+
+**How to access**:
+```
+get_document_summary({ path: ".kiro/steering/Process-Cross-Reference-Standards.md" })
+```
+
+Then query the specific section you need:
+```
+get_section({ path: ".kiro/steering/Process-Cross-Reference-Standards.md", heading: "How to Format Cross-References" })
+get_section({ path: ".kiro/steering/Process-Cross-Reference-Standards.md", heading: "Common Cross-Reference Patterns" })
+get_section({ path: ".kiro/steering/Process-Cross-Reference-Standards.md", heading: "Anti-Patterns to Avoid" })
+```
+
+**Confirmation**: Reply "I've queried Process-Cross-Reference-Standards via MCP!" after accessing
+
+
 ## MCP Documentation Server (Primary for Large Docs)
 
 The MCP Documentation Server is the **primary source** for large steering documents. AI agents MUST query MCP for these documents rather than expecting them to be auto-loaded.
@@ -302,6 +344,8 @@ These documents are available ONLY via MCP queries:
 | Component Quick Reference | `.kiro/steering/Component-Quick-Reference.md` |
 | Test Failure Audit Methodology | `.kiro/steering/Test-Failure-Audit-Methodology.md` |
 | Test Development Standards | `.kiro/steering/Test-Development-Standards.md` |
+| Completion Documentation Guide | `.kiro/steering/Completion Documentation Guide.md` |
+| Process-Cross-Reference-Standards | `.kiro/steering/Process-Cross-Reference-Standards.md` |
 
 ### How to Access MCP-Only Documents
 
