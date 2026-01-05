@@ -84,21 +84,18 @@ enum class ButtonIconSize {
     /**
      * Inset (padding) token value for this size variant
      * 
-     * Token mapping:
-     * - SMALL: buttonIcon.inset.small (8dp) → references space.inset.100
-     * - MEDIUM: buttonIcon.inset.medium (10dp) → unique value, no semantic equivalent
-     * - LARGE: buttonIcon.inset.large (12dp) → references space.inset.150
-     * 
-     * Note: SMALL and LARGE use semantic token references from DesignTokens.
-     * MEDIUM uses a component-specific value (10dp) as there's no semantic equivalent.
+     * Uses generated ButtonIconTokens from ComponentTokens.android.kt:
+     * - SMALL: ButtonIconTokens.insetSmall (8dp, references space100)
+     * - MEDIUM: ButtonIconTokens.insetMedium (10dp, references space125)
+     * - LARGE: ButtonIconTokens.insetLarge (12dp, references space150)
      * 
      * @see Requirements 10.1, 10.2, 10.3
      */
     val inset: Dp
         get() = when (this) {
-            SMALL -> DesignTokens.space_inset_100.dp   // buttonIcon.inset.small (8dp)
-            MEDIUM -> 10.dp                            // buttonIcon.inset.medium (unique value)
-            LARGE -> DesignTokens.space_inset_150.dp   // buttonIcon.inset.large (12dp)
+            SMALL -> ButtonIconTokens.insetSmall    // 8dp (references space100)
+            MEDIUM -> ButtonIconTokens.insetMedium  // 10dp (references space125)
+            LARGE -> ButtonIconTokens.insetLarge    // 12dp (references space150)
         }
     
     /**
@@ -184,12 +181,12 @@ fun ButtonIcon(
     // Focus ring buffer size (accessibility.focus.offset + accessibility.focus.width)
     // Uses token references: space_025 (2dp offset) + border_width_200 (2dp width) = 4dp total
     // @see Requirements 1.4, 6.3
-    val focusBuffer = (DesignTokens.accessibility_focus_offset + DesignTokens.accessibility_focus_width).dp
+    val focusBuffer = DesignTokens.accessibility_focus_offset + DesignTokens.accessibility_focus_width
     
     // Minimum touch target size (tapAreaRecommended = 48dp)
     // Ensures WCAG 2.5.5 and 2.5.8 compliance for all sizes
     // @see Requirements 5.1, 5.2, 5.3, 5.4, 5.5
-    val minTouchTarget = DesignTokens.tap_area_recommended.dp  // 48dp
+    val minTouchTarget = DesignTokens.tap_area_recommended  // 48dp
     
     // Get colors based on variant
     val backgroundColor = getBackgroundColor(variant)
@@ -300,7 +297,7 @@ private fun getIconColor(variant: ButtonIconVariant): Color {
  */
 private fun getBorderWidth(variant: ButtonIconVariant): Dp {
     return when (variant) {
-        ButtonIconVariant.SECONDARY -> DesignTokens.border_border_default.dp  // borderDefault (1dp)
+        ButtonIconVariant.SECONDARY -> DesignTokens.border_border_default  // borderDefault (1dp)
         ButtonIconVariant.PRIMARY, ButtonIconVariant.TERTIARY -> 0.dp
     }
 }
@@ -346,8 +343,8 @@ private fun getRippleColor(variant: ButtonIconVariant): Color {
 @Composable
 fun ButtonIconPreview() {
     Column(
-        modifier = Modifier.padding(DesignTokens.space_200.dp),
-        verticalArrangement = Arrangement.spacedBy(DesignTokens.space_300.dp)
+        modifier = Modifier.padding(DesignTokens.space_200),
+        verticalArrangement = Arrangement.spacedBy(DesignTokens.space_300)
     ) {
         // Size variants
         androidx.compose.material3.Text(
@@ -356,7 +353,7 @@ fun ButtonIconPreview() {
         )
         
         Row(
-            horizontalArrangement = Arrangement.spacedBy(DesignTokens.space_200.dp),
+            horizontalArrangement = Arrangement.spacedBy(DesignTokens.space_200),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -407,7 +404,7 @@ fun ButtonIconPreview() {
             style = androidx.compose.material3.MaterialTheme.typography.labelMedium
         )
         
-        Row(horizontalArrangement = Arrangement.spacedBy(DesignTokens.space_200.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(DesignTokens.space_200)) {
             ButtonIcon(
                 icon = "plus",
                 ariaLabel = "Add",
@@ -441,7 +438,7 @@ fun ButtonIconPreview() {
             style = androidx.compose.material3.MaterialTheme.typography.labelMedium
         )
         
-        Row(horizontalArrangement = Arrangement.spacedBy(DesignTokens.space_200.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(DesignTokens.space_200)) {
             ButtonIcon(
                 icon = "heart",
                 ariaLabel = "Favorite",
@@ -475,7 +472,7 @@ fun ButtonIconPreview() {
             style = androidx.compose.material3.MaterialTheme.typography.labelMedium
         )
         
-        Row(horizontalArrangement = Arrangement.spacedBy(DesignTokens.space_200.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(DesignTokens.space_200)) {
             ButtonIcon(
                 icon = "x",
                 ariaLabel = "Close",
@@ -509,7 +506,7 @@ fun ButtonIconPreview() {
             style = androidx.compose.material3.MaterialTheme.typography.labelMedium
         )
         
-        Row(horizontalArrangement = Arrangement.spacedBy(DesignTokens.space_200.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(DesignTokens.space_200)) {
             ButtonIcon(
                 icon = "arrow-right",
                 ariaLabel = "Next",
@@ -533,14 +530,14 @@ fun ButtonIconPreview() {
             style = androidx.compose.material3.MaterialTheme.typography.labelMedium
         )
         
-        Row(horizontalArrangement = Arrangement.spacedBy(DesignTokens.space_200.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(DesignTokens.space_200)) {
             ButtonIcon(icon = "arrow-left", ariaLabel = "Back", onPress = {})
             ButtonIcon(icon = "arrow-up", ariaLabel = "Up", onPress = {})
             ButtonIcon(icon = "arrow-down", ariaLabel = "Down", onPress = {})
             ButtonIcon(icon = "chevron-right", ariaLabel = "Forward", onPress = {})
         }
         
-        Row(horizontalArrangement = Arrangement.spacedBy(DesignTokens.space_200.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(DesignTokens.space_200)) {
             ButtonIcon(icon = "plus", ariaLabel = "Add", onPress = {})
             ButtonIcon(icon = "minus", ariaLabel = "Remove", onPress = {})
             ButtonIcon(icon = "user", ariaLabel = "Profile", onPress = {})

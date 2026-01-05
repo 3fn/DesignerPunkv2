@@ -24,6 +24,11 @@
 /**
  * Component-level custom properties for token consumption.
  * These map semantic tokens to component-specific usage.
+ * 
+ * Inset tokens are consumed from generated ComponentTokens.web.css:
+ * - --buttonicon-inset-large: var(--space-150)
+ * - --buttonicon-inset-medium: var(--space-125)
+ * - --buttonicon-inset-small: var(--space-100)
  */
 :host {
   /* Focus ring tokens */
@@ -48,6 +53,11 @@
   --button-icon-color-primary: var(--color-primary);
   --button-icon-color-contrast: var(--color-contrast-on-primary);
   --button-icon-color-bg-subtle: var(--color-background-primary-subtle);
+  
+  /* Component token references (from generated ComponentTokens.web.css) */
+  --button-icon-inset-large: var(--buttonicon-inset-large);
+  --button-icon-inset-medium: var(--buttonicon-inset-medium);
+  --button-icon-inset-small: var(--buttonicon-inset-small);
 }
 
 /* ==========================================================================
@@ -129,8 +139,8 @@
  * @see Requirements 1.1, 5.3, 5.4, 5.5
  */
 .button-icon--small {
-  /* Padding using buttonIcon.inset.small token (8px) */
-  padding: 8px; /* buttonIcon.inset.small */
+  /* Padding using generated buttonIcon.inset.small token (8px) */
+  padding: var(--button-icon-inset-small);
   
   /* Explicit sizing for consistent circular shape */
   /* Visual circle = icon (13px) + padding (8px × 2) ≈ 29px, use 32px for grid */
@@ -156,8 +166,8 @@
  * @see Requirements 1.2, 5.2
  */
 .button-icon--medium {
-  /* Padding using buttonIcon.inset.medium token (10px) */
-  padding: 10px; /* buttonIcon.inset.medium */
+  /* Padding using generated buttonIcon.inset.medium token (10px) */
+  padding: var(--button-icon-inset-medium);
   
   /* Explicit sizing for consistent circular shape */
   /* Visual circle = icon (18px) + padding (10px × 2) = 38px, use 40px for grid */
@@ -183,8 +193,8 @@
  * @see Requirements 1.3, 5.1
  */
 .button-icon--large {
-  /* Padding using buttonIcon.inset.large token (12px) */
-  padding: 12px; /* buttonIcon.inset.large */
+  /* Padding using generated buttonIcon.inset.large token (12px) */
+  padding: var(--button-icon-inset-large);
   
   /* Explicit sizing for consistent circular shape */
   /* Visual circle = icon (24px) + padding (12px × 2) = 48px */

@@ -63,18 +63,21 @@ enum ButtonIconSize {
     }
     
     /// Inset (padding) token value for this size variant
-    /// - small: buttonIcon.inset.small (8pt, references space.inset.100)
-    /// - medium: buttonIcon.inset.medium (10pt, unique value)
-    /// - large: buttonIcon.inset.large (12pt, references space.inset.150)
+    /// 
+    /// Uses generated ButtonIconTokens from ComponentTokens.ios.swift:
+    /// - small: ButtonIconTokens.insetSmall (8pt, references space.inset.100)
+    /// - medium: ButtonIconTokens.insetMedium (10pt, references space.inset.125)
+    /// - large: ButtonIconTokens.insetLarge (12pt, references space.inset.150)
+    /// 
     /// @see Requirements 10.1, 10.2, 10.3
     var inset: CGFloat {
         switch self {
         case .small:
-            return 8   // buttonIcon.inset.small (references space.inset.100)
+            return ButtonIconTokens.insetSmall   // 8pt (references space100)
         case .medium:
-            return 10  // buttonIcon.inset.medium (unique value, no semantic equivalent)
+            return ButtonIconTokens.insetMedium  // 10pt (references space125)
         case .large:
-            return 12  // buttonIcon.inset.large (references space.inset.150)
+            return ButtonIconTokens.insetLarge   // 12pt (references space150)
         }
     }
     

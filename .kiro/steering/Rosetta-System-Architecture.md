@@ -30,6 +30,32 @@ This document provides a high-level architectural overview of the Rosetta System
 
 ---
 
+## Token Consumption Rule
+
+**Tokens are pre-unitized. Never add platform units when consuming tokens.**
+
+The token generators apply platform-appropriate units during build:
+- **Web**: `rem`, `px` (CSS custom properties)
+- **iOS**: `CGFloat` (points, implicit)
+- **Android**: `Dp` (density-independent pixels)
+
+| Platform | ✅ Correct | ❌ Wrong |
+|----------|-----------|----------|
+| Android | `DesignTokens.space_200` | `DesignTokens.space_200.dp` |
+| Android | `ButtonIconTokens.insetSmall` | `ButtonIconTokens.insetSmall.dp` |
+| iOS | `DesignTokens.space200` | `DesignTokens.space200.pt` |
+| Web | `var(--space-200)` | `var(--space-200)px` |
+
+This applies to **all token types**: primitive, semantic, and component tokens.
+
+**Why?** The unitless architecture enables:
+- Single source of truth for values
+- Platform generators handle unit conversion
+- Prevents double-unit bugs (e.g., `16.dp.dp`)
+- Consistent consumption pattern across all platforms
+
+---
+
 ## Token Pipeline Architecture
 
 The Rosetta System processes tokens through a five-stage pipeline:
