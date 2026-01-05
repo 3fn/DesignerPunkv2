@@ -25,6 +25,18 @@ export type {
   PlatformUnit
 } from './UnitConverter';
 
+// Component Token Definition API (new hybrid approach)
+export type {
+  PrimitiveTokenReference,
+  TokenWithReference,
+  TokenWithValue,
+  TokenDefinition,
+  ComponentTokenConfig,
+  RegisteredComponentToken,
+  ComponentTokenValues,
+} from './defineComponentTokens';
+export { defineComponentTokens } from './defineComponentTokens';
+
 // Implementations
 export { TokenIntegratorImpl } from './TokenIntegrator';
 export { TokenSelector } from './TokenSelector';

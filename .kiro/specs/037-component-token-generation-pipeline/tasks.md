@@ -42,7 +42,7 @@ Each task builds incrementally on previous work, with Button-Icon serving as the
 
 ---
 
-- [ ] 2. Implement Component Token Authoring Infrastructure
+- [x] 2. Implement Component Token Authoring Infrastructure
   **Type**: Architecture
   **Validation**: Tier 3 - Comprehensive
   **Success Criteria**:
@@ -52,7 +52,7 @@ Each task builds incrementally on previous work, with Button-Icon serving as the
   - Registry supports getAll(), getByComponent(), getByFamily() queries
   - Naming conflicts are detected and reported with descriptive errors
   
-  - [ ] 2.1 Create `defineComponentTokens()` helper function
+  - [x] 2.1 Create `defineComponentTokens()` helper function
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/build/tokens/defineComponentTokens.ts`
@@ -65,7 +65,7 @@ Each task builds incrementally on previous work, with Button-Icon serving as the
     - Export all interfaces and the helper function
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6_
 
-  - [ ] 2.2 Create ComponentTokenRegistry
+  - [x] 2.2 Create ComponentTokenRegistry
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/registries/ComponentTokenRegistry.ts`
@@ -80,7 +80,7 @@ Each task builds incrementally on previous work, with Button-Icon serving as the
     - Export singleton instance
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
 
-  - [ ] 2.3 Write unit tests for defineComponentTokens and ComponentTokenRegistry
+  - [x] 2.3 Write unit tests for defineComponentTokens and ComponentTokenRegistry
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/build/tokens/__tests__/defineComponentTokens.test.ts`

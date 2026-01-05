@@ -351,6 +351,27 @@ get_section({ path: ".kiro/steering/Process-Hook-Operations.md", heading: "Best 
 
 **Confirmation**: Reply "I've queried Process-Hook-Operations via MCP!" after accessing
 
+---
+
+### 13. Rosetta System Architecture
+**When needed**: Understanding token pipeline architecture, finding subsystem entry points, debugging token generation, component token integration
+
+**File**: #[[file:.kiro/steering/Rosetta-System-Architecture.md]]
+
+**How to access**:
+```
+get_document_summary({ path: ".kiro/steering/Rosetta-System-Architecture.md" })
+```
+
+Then query the specific section you need:
+```
+get_section({ path: ".kiro/steering/Rosetta-System-Architecture.md", heading: "Token Pipeline Architecture" })
+get_section({ path: ".kiro/steering/Rosetta-System-Architecture.md", heading: "Component Token Integration" })
+get_section({ path: ".kiro/steering/Rosetta-System-Architecture.md", heading: "Subsystem Entry Points Summary" })
+```
+
+**Confirmation**: Reply "I've queried Rosetta System Architecture via MCP!" after accessing
+
 
 ## MCP Documentation Server (Primary for Large Docs)
 
@@ -371,6 +392,7 @@ These documents are available ONLY via MCP queries:
 | Completion Documentation Guide | `.kiro/steering/Completion Documentation Guide.md` |
 | Process-Cross-Reference-Standards | `.kiro/steering/Process-Cross-Reference-Standards.md` |
 | Process-Hook-Operations | `.kiro/steering/Process-Hook-Operations.md` |
+| Rosetta System Architecture | `.kiro/steering/Rosetta-System-Architecture.md` |
 
 ### How to Access MCP-Only Documents
 
