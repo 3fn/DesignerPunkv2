@@ -1,0 +1,4 @@
+# Placeholder for web platform implementation
+# Files to be created:
+# - ButtonIcon.web.ts (Web Component implementation)
+# - ButtonIcon.web.css (Web styles)

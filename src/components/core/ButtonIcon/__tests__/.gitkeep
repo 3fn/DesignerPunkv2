@@ -1,0 +1,4 @@
+# Placeholder for ButtonIcon tests
+# Files to be created:
+# - ButtonIcon.test.ts (Cross-platform tests)
+# - ButtonIcon.properties.test.ts (Property-based tests)
