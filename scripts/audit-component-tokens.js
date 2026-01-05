@@ -259,7 +259,7 @@ class TokenMatcher {
       'color.text.default': { primitive: 'gray300', description: 'Primary text color' },
       'color.text.muted': { primitive: 'gray200', description: 'Muted text color' },
       'color.text.subtle': { primitive: 'gray100', description: 'Subtle text color' },
-      'color.text.onPrimary': { primitive: 'white100', description: 'Text on primary backgrounds' },
+      'color.contrast.onPrimary': { primitive: 'white100', description: 'Contrast color for content on primary backgrounds' },
       
       // Surfaces
       'color.background': { primitive: 'white100', description: 'Primary background' },

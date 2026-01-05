@@ -273,7 +273,7 @@ const TOKEN_REFERENCE_PATTERNS = {
 export const TOKEN_CATEGORIES = {
   color: [
     'color.primary', 'color.secondary', 'color.error', 'color.success',
-    'color.text.default', 'color.text.muted', 'color.text.onPrimary',
+    'color.text.default', 'color.text.muted', 'color.contrast.onPrimary',
     'color.background', 'color.surface', 'color.border',
   ],
   spacing: [

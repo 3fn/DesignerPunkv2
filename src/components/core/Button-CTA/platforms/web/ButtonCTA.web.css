@@ -156,13 +156,13 @@
  * Primary button style (filled background)
  * 
  * - Background: color.primary
- * - Text: color.text.onPrimary (white100)
+ * - Text: color.contrast.onPrimary (white100)
  * - Border: none
  * - Highest visual emphasis
  */
 .button-cta--primary {
   background-color: var(--color-primary);
-  color: var(--color-text-on-primary);
+  color: var(--color-contrast-on-primary);
   border: none;
 }
 

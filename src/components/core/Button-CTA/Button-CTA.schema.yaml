@@ -226,7 +226,7 @@ tokens:
     - typography.labelLg
   color:
     - color.primary
-    - color.text.onPrimary
+    - color.contrast.onPrimary
     - color.text.primary
     - color.background
     - color.border
@@ -324,7 +324,7 @@ size_variants:
 visual_variants:
   primary:
     background: color.primary
-    text: color.text.onPrimary
+    text: color.contrast.onPrimary
     border: none
     emphasis: highest
   secondary:

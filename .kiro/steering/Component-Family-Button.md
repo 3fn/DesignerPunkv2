@@ -166,7 +166,7 @@ All Button-CTA instances implement these 7 foundational contracts:
 
 | Variant | Background | Text | Border | Emphasis |
 |---------|------------|------|--------|----------|
-| primary | color.primary | color.text.onPrimary | none | highest |
+| primary | color.primary | color.contrast.onPrimary | none | highest |
 | secondary | color.background | color.primary | 1px color.primary | medium |
 | tertiary | transparent | color.primary | none | lowest |
 
@@ -224,7 +224,7 @@ Components in the Buttons family consume these design tokens:
 | Typography | `typography.button.*` | Button text sizing |
 | Typography | `typography.labelMd`, `typography.labelLg` | Label typography |
 | Color | `color.primary` | Primary button background |
-| Color | `color.text.onPrimary` | Text on primary background |
+| Color | `color.contrast.onPrimary` | Content (text/icons) on primary background |
 | Color | `color.text.primary` | Secondary/tertiary text |
 | Color | `color.background` | Secondary button background |
 | Color | `color.border` | Secondary button border |

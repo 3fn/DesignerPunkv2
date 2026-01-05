@@ -42,9 +42,16 @@ DesignerPunk is a True Native cross-platform design system with mathematical fou
 
 **Token Usage:**
 - **Always** prioritize design tokens over hard-coded values
-- Use semantic tokens before primitive tokens
+- **MUST** use semantic tokens first — only use primitive tokens when no semantic token exists for the use case
 - All tokens must follow Rosetta System: mathematical relationships, unitless values, primitive→semantic hierarchy
-- Inform Human partner if hard-coded values are necessary
+- Inform user if hard-coded values are necessary
+
+**Token Selection Priority (MUST follow this order):**
+1. **Semantic tokens** — purpose-built for specific use cases (e.g., `tapAreaRecommended` for touch targets, `color.contrast.onPrimary` for content on primary backgrounds)
+2. **Primitive tokens** — only when no semantic token exists for the use case
+3. **Hard-coded values** — only as last resort, requires user approval
+
+**Why semantic first?** Semantic tokens are self-documenting, theme-aware, and encode design intent. Using `tapAreaRecommended` instead of `space600` makes code readable and maintainable.
 
 **Token-First in Specs:**
 - Specs reference tokens, not pixel values: `icon.size100` not `24px`

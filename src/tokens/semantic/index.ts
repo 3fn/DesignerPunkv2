@@ -73,7 +73,8 @@ export {
   radiusSmall,
   radiusNormal,
   radiusLarge,
-  radiusFull
+  radiusFull,
+  radiusCircle
 } from './RadiusTokens';
 
 export {

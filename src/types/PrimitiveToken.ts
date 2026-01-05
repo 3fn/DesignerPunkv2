@@ -46,11 +46,20 @@ export interface ColorTokenValue {
 
 /**
  * Platform-specific values for cross-platform consistency with per-family unit application
+ * 
+ * Unit types:
+ * - Standard units: px, rem, pt, dp, sp, em
+ * - Unitless: unitless (for line-height, font-weight, etc.)
+ * - Typography: fontFamily, fontWeight
+ * - Color: hex
+ * - Percentage: % (for percentage-based values like border-radius: 50%)
+ * - Shape: shape (for platform-specific shape values like iOS Circle())
+ * - Percent: percent (for numeric percentage values like Android 50%)
  */
 export interface PlatformValues {
-  web: { value: number | string | ColorTokenValue; unit: 'px' | 'rem' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' | 'hex' };
-  ios: { value: number | string | ColorTokenValue; unit: 'pt' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' | 'hex' };
-  android: { value: number | string | ColorTokenValue; unit: 'dp' | 'sp' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' | 'hex' };
+  web: { value: number | string | ColorTokenValue; unit: 'px' | 'rem' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' | 'hex' | '%' };
+  ios: { value: number | string | ColorTokenValue; unit: 'pt' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' | 'hex' | 'shape' };
+  android: { value: number | string | ColorTokenValue; unit: 'dp' | 'sp' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' | 'hex' | 'percent' };
 }
 
 /**

@@ -185,7 +185,7 @@ fun resolveColorToken(tokenName: String?): Color {
         "color.text.default" -> colorTextDefault
         "color.text.muted" -> colorTextMuted
         "color.text.subtle" -> colorTextSubtle
-        "color.text.onPrimary" -> colorTextOnPrimary
+        "color.contrast.onPrimary" -> colorContrastOnPrimary
         "color.icon.default" -> colorIconDefault
         else -> colorCanvas  // Default to canvas (white100)
     }
@@ -395,7 +395,7 @@ private val colorCanvas: Color = Color(DesignTokens.color_canvas)  // New in Tas
 private val colorTextDefault: Color = Color(DesignTokens.color_text_default)
 private val colorTextMuted: Color = Color(DesignTokens.color_text_muted)
 private val colorTextSubtle: Color = Color(DesignTokens.color_text_subtle)
-private val colorTextOnPrimary: Color = Color(DesignTokens.color_text_on_primary)
+private val colorContrastOnPrimary: Color = Color(DesignTokens.color_contrast_on_primary)
 private val colorIconDefault: Color = Color(DesignTokens.color_icon_default)
 
 // Opacity tokens

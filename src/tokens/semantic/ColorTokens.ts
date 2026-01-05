@@ -43,20 +43,22 @@
  * 5. Semantic Meaning in Shadow Token: The semantic meaning belongs in the shadow token
  *    name itself (shadow.dusk, shadow.sunrise) rather than in a separate color token.
  * 
- * Spec-aligned: 28 color semantic tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token)
+ * Spec-aligned: 29 color semantic tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle)
  * Note: color.secondary removed as part of color palette update (Spec 015)
  * Added: color.icon.default and color.print.default (Spec 023)
  * Added: color.canvas (Spec 023 - Container token compliance)
+ * Added: color.background.primary.subtle (Spec 035 - Button-Icon Component)
  */
 
 import { SemanticToken, SemanticCategory } from '../../types/SemanticToken';
 
 /**
  * Semantic color tokens for systematic color usage
- * Total: 28 tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token)
+ * Total: 29 tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle)
  * Note: color.secondary removed as part of color palette update (Spec 015)
  * Added: color.icon.default and color.print.default (Spec 023)
  * Added: color.canvas (Spec 023 - Container token compliance)
+ * Added: color.background.primary.subtle (Spec 035 - Button-Icon Component)
  */
 export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>> = {
   // Brand Identity (1 token)
@@ -195,15 +197,15 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
     description: 'Subtle gray for tertiary and very subtle text elements'
   },
 
-  'color.text.onPrimary': {
-    name: 'color.text.onPrimary',
+  'color.contrast.onPrimary': {
+    name: 'color.contrast.onPrimary',
     primitiveReferences: { value: 'white100' },
     category: SemanticCategory.COLOR,
-    context: 'Text color for content on primary-colored backgrounds',
-    description: 'White text for use on primary color backgrounds (buttons, badges, chips)'
+    context: 'Contrast color for content (text, icons) on primary-colored backgrounds',
+    description: 'White color for use on primary color backgrounds - semantically accurate for both text and icons, aligns with WCAG terminology'
   },
 
-  // Surfaces (4 tokens)
+  // Surfaces (5 tokens)
   'color.canvas': {
     name: 'color.canvas',
     primitiveReferences: { value: 'white100' },
@@ -218,6 +220,14 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
     category: SemanticCategory.COLOR,
     context: 'Primary background color for main surfaces',
     description: 'Primary white background for main content areas'
+  },
+
+  'color.background.primary.subtle': {
+    name: 'color.background.primary.subtle',
+    primitiveReferences: { value: 'purple100' },
+    category: SemanticCategory.COLOR,
+    context: 'Subtle primary background for hover states and selections',
+    description: 'Subtle purple tint background for secondary button hover states, selected list items, and hover states on cards/containers'
   },
 
   'color.surface': {
@@ -298,10 +308,11 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
 
 /**
  * Array of all color semantic token names for iteration
- * Total: 28 tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token)
+ * Total: 29 tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle)
  * Note: color.secondary removed as part of color palette update (Spec 015)
  * Added: color.icon.default and color.print.default (Spec 023)
  * Added: color.canvas (Spec 023 - Container token compliance)
+ * Added: color.background.primary.subtle (Spec 035 - Button-Icon Component)
  */
 export const colorTokenNames = Object.keys(colorTokens);
 
@@ -320,13 +331,14 @@ export function getAllColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'
 }
 
 /**
- * Validate token count matches spec (28 tokens: 16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token)
+ * Validate token count matches spec (29 tokens: 16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle)
  * Note: color.secondary removed as part of color palette update (Spec 015)
  * Added: color.icon.default and color.print.default (Spec 023)
  * Added: color.canvas (Spec 023 - Container token compliance)
+ * Added: color.background.primary.subtle (Spec 035 - Button-Icon Component)
  */
 export function validateColorTokenCount(): boolean {
-  const expectedCount = 28;
+  const expectedCount = 29;
   const actualCount = colorTokenNames.length;
   if (actualCount !== expectedCount) {
     console.warn(`Color token count mismatch: expected ${expectedCount}, got ${actualCount}`);

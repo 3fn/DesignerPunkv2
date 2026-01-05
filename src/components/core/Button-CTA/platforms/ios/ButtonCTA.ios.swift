@@ -401,7 +401,7 @@ struct ButtonCTA: View {
     private var textColor: Color {
         switch style {
         case .primary:
-            return Color(DesignTokens.colorTextOnPrimary) // Semantic token: color.text.onPrimary
+            return Color(DesignTokens.colorContrastOnPrimary) // Semantic token: color.contrast.onPrimary
         case .secondary, .tertiary:
             return Color(DesignTokens.colorPrimary) // Semantic token: color.primary
         }
@@ -435,9 +435,9 @@ struct ButtonCTA: View {
     private var iconColor: Color? {
         switch style {
         case .primary:
-            // Primary style: Use colorTextOnPrimary with optical balance blend
+            // Primary style: Use colorContrastOnPrimary with optical balance blend
             // iconBlend() applies lighterBlend with blend.iconLighter (8%)
-            return Color(DesignTokens.colorTextOnPrimary).iconBlend()
+            return Color(DesignTokens.colorContrastOnPrimary).iconBlend()
         case .secondary, .tertiary:
             // Secondary/Tertiary: Use color.primary with optical balance blend
             // iconBlend() applies lighterBlend with blend.iconLighter (8%)

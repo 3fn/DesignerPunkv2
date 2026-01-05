@@ -208,13 +208,13 @@ export class ButtonCTA extends HTMLElement {
     // Get base colors from CSS custom properties
     // Fail loudly if required tokens are missing
     const primaryColor = computedStyle.getPropertyValue('--color-primary').trim();
-    const onPrimaryColor = computedStyle.getPropertyValue('--color-text-on-primary').trim();
+    const onPrimaryColor = computedStyle.getPropertyValue('--color-contrast-on-primary').trim();
     
     if (!primaryColor) {
       throw new Error('ButtonCTA: Required token --color-primary is missing from CSS custom properties');
     }
     if (!onPrimaryColor) {
-      throw new Error('ButtonCTA: Required token --color-text-on-primary is missing from CSS custom properties');
+      throw new Error('ButtonCTA: Required token --color-contrast-on-primary is missing from CSS custom properties');
     }
     
     // Calculate blend colors using theme-aware blend utilities

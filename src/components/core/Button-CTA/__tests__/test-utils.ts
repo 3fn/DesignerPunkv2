@@ -21,7 +21,7 @@ import { ButtonCTA } from '../platforms/web/ButtonCTA.web';
  * 
  * Required properties:
  * - --color-primary: Base primary color for blend calculations
- * - --color-text-on-primary: Text color on primary background
+ * - --color-contrast-on-primary: Content color on primary background
  * 
  * @see ButtonCTA._calculateBlendColors() for usage
  */
@@ -29,7 +29,7 @@ export function setupBlendColorProperties(): void {
   // Set up required CSS custom properties on document root
   // These values match the design system's semantic color tokens
   document.documentElement.style.setProperty('--color-primary', '#A855F7');
-  document.documentElement.style.setProperty('--color-text-on-primary', '#FFFFFF');
+  document.documentElement.style.setProperty('--color-contrast-on-primary', '#FFFFFF');
   document.documentElement.style.setProperty('--color-background', '#FFFFFF');
 }
 
@@ -38,7 +38,7 @@ export function setupBlendColorProperties(): void {
  */
 export function cleanupBlendColorProperties(): void {
   document.documentElement.style.removeProperty('--color-primary');
-  document.documentElement.style.removeProperty('--color-text-on-primary');
+  document.documentElement.style.removeProperty('--color-contrast-on-primary');
   document.documentElement.style.removeProperty('--color-background');
 }
 

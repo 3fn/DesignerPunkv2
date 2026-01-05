@@ -366,8 +366,8 @@ describe('Semantic Color Tokens - Palette Update', () => {
   });
 
   describe('Token Count Validation', () => {
-    it('should have exactly 28 color tokens', () => {
-      expect(colorTokenNames.length).toBe(28);
+    it('should have exactly 29 color tokens', () => {
+      expect(colorTokenNames.length).toBe(29);
     });
 
     it('should pass validateColorTokenCount()', () => {
@@ -384,6 +384,7 @@ describe('Semantic Color Tokens - Palette Update', () => {
       const attentionTokens = colorTokenNames.filter(n => n === 'color.attention' || n === 'color.highlight');
       const techDataTokens = colorTokenNames.filter(n => n === 'color.tech' || n === 'color.data');
       const textTokens = colorTokenNames.filter(n => n.startsWith('color.text'));
+      const contrastTokens = colorTokenNames.filter(n => n.startsWith('color.contrast'));
       const surfaceTokens = colorTokenNames.filter(n => n === 'color.canvas' || n === 'color.background' || n === 'color.surface' || n === 'color.border');
       const glowTokens = colorTokenNames.filter(n => n.startsWith('glow.'));
 
@@ -394,7 +395,8 @@ describe('Semantic Color Tokens - Palette Update', () => {
       expect(infoTokens.length).toBe(2);
       expect(attentionTokens.length).toBe(2);
       expect(techDataTokens.length).toBe(2);
-      expect(textTokens.length).toBe(4);
+      expect(textTokens.length).toBe(3); // color.text.default, color.text.muted, color.text.subtle
+      expect(contrastTokens.length).toBe(1); // color.contrast.onPrimary
       expect(surfaceTokens.length).toBe(4);
       expect(glowTokens.length).toBe(5);
     });
@@ -450,9 +452,9 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(Array.isArray(tokens)).toBe(true);
       });
 
-      it('should return exactly 28 tokens', () => {
+      it('should return exactly 29 tokens', () => {
         const tokens = getAllColorTokens();
-        expect(tokens.length).toBe(28);
+        expect(tokens.length).toBe(29);
       });
 
       it('should include all new tokens', () => {

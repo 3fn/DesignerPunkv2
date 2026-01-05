@@ -5,7 +5,7 @@ inclusion: manual
 # Color Tokens Guide
 
 **Date**: December 8, 2025
-**Last Reviewed**: 2025-12-30
+**Last Reviewed**: 2026-01-04
 **Purpose**: Complete reference for color tokens with semantic meanings and accessible usage guidance
 **Organization**: token-documentation
 **Scope**: cross-project
@@ -21,119 +21,130 @@ The DesignerPunk color token system provides a mathematically consistent and sem
 **Key Principles**:
 - **Semantic Meaning**: Each color family has a clear semantic purpose (success, error, warning, etc.)
 - **Primitive→Semantic Architecture**: Semantic tokens reference primitive color families
-- **Mode-Aware Values**: Colors adapt to light/dark modes and WCAG compliance levels
+- **Mode-Aware Values**: Colors support light/dark modes with base/wcag themes
 - **Cross-Platform Consistency**: Unitless color values convert to platform-specific formats
-- **Accessibility First**: All color combinations meet WCAG 2.1 AA contrast requirements
+- **Accessibility First**: WCAG theme variants ensure contrast compliance
 
 ---
 
-## Color Families
+## Primitive Color Families
 
-### Brand Colors
+### Gray Scale - Neutral Surfaces and Text
 
-**Purple** - Primary brand color for interactive elements and brand identity
+| Token Name | Light Base | Dark Base | Use Case |
+|------------|------------|-----------|----------|
+| `gray100` | #B8B6C8 | #B8B6C8 | Subtle backgrounds, muted text |
+| `gray200` | #68658A | #68658A | Secondary text, borders |
+| `gray300` | #2D2B3E | #2D2B3E | Primary text, prominent borders |
+| `gray400` | #1F1D2E | #1F1D2E | Strong text, container backgrounds |
+| `gray500` | #15131F | #15131F | Deep backgrounds, high contrast text |
 
-| Token Name | Light Mode (Base) | Light Mode (WCAG) | Dark Mode (Base) | Dark Mode (WCAG) | Use Case |
-|------------|-------------------|-------------------|------------------|------------------|----------|
-| `purple100` | #F3E5F5 | #E1BEE7 | #4A148C | #6A1B9A | Subtle backgrounds, hover states |
-| `purple200` | #CE93D8 | #BA68C8 | #7B1FA2 | #8E24AA | Light accents, secondary elements |
-| `purple300` | #AB47BC | #9C27B0 | #9C27B0 | #AB47BC | Medium emphasis, borders |
-| `purple400` | #8E24AA | #7B1FA2 | #BA68C8 | #CE93D8 | Primary interactive elements |
-| `purple500` | #6A1B9A | #4A148C | #E1BEE7 | #F3E5F5 | High emphasis, strong accents |
+**Mathematical Relationship**: Systematic gray scale with purple undertones for brand cohesion.
 
-**Mathematical Relationship**: Purple family uses Material Design purple palette with mode-aware inversions for dark mode.
+### Black Scale - Deep Backgrounds and Containers
 
-### Status Colors
+| Token Name | Light Base | Light WCAG | Dark Base | Dark WCAG | Use Case |
+|------------|------------|------------|-----------|-----------|----------|
+| `black100` | #3A3A45 | #52525C | #3A3A45 | #52525C | Subtle container backgrounds |
+| `black200` | #22222A | #2E2E38 | #22222A | #2E2E38 | Container backgrounds, surfaces |
+| `black300` | #0A0A0F | #0A0A0F | #0A0A0F | #0A0A0F | Primary backgrounds, deep containers |
+| `black400` | #06060A | #06060A | #06060A | #06060A | Very dark system backgrounds |
+| `black500` | #000000 | #000000 | #000000 | #000000 | Pure black, maximum contrast |
 
-**Green** - Success states, positive feedback, confirmation actions
+### White Scale - Light Surfaces and Primary Text
 
-| Token Name | Light Mode (Base) | Light Mode (WCAG) | Dark Mode (Base) | Dark Mode (WCAG) | Use Case |
-|------------|-------------------|-------------------|------------------|------------------|----------|
-| `green100` | #E8F5E9 | #C8E6C9 | #1B5E20 | #2E7D32 | Subtle success backgrounds |
-| `green200` | #81C784 | #66BB6A | #388E3C | #43A047 | Light success accents |
-| `green300` | #4CAF50 | #43A047 | #4CAF50 | #66BB6A | Medium success emphasis |
-| `green400` | #00FF88 | #00E676 | #69F0AE | #00FF88 | Primary success color (electric green) |
-| `green500` | #00E676 | #00C853 | #B9F6CA | #E8F5E9 | High emphasis success, neon glow |
+| Token Name | Light Base | Dark Base | Use Case |
+|------------|------------|-----------|----------|
+| `white100` | #FFFFFF | #FFFFFF | Pure white, maximum contrast, primary surfaces |
+| `white200` | #F5F5FA | #F5F5FA | Near-white, subtle surface variations |
+| `white300` | #E8E8F0 | #E8E8F0 | Light gray-white, secondary surfaces |
+| `white400` | #C5C5D5 | #C5C5D5 | Medium gray-white, borders and dividers |
+| `white500` | #9999AB | #9999AB | Dark gray-white, muted text |
 
-**Mathematical Relationship**: Green family uses electric green (#00FF88) as the base color (green400) with Material Design green palette for supporting variants.
+### Purple Scale - Primary Brand and Focus States
 
-**Pink** - Error states, destructive actions, critical warnings
+| Token Name | Light Base | Dark Base | Use Case |
+|------------|------------|-----------|----------|
+| `purple100` | #F3E0FF | #F3E0FF | Subtle brand backgrounds, highlights |
+| `purple200` | #D98AFF | #D98AFF | Brand accents, secondary elements |
+| `purple300` | #B026FF | #B026FF | **Primary brand color** - CTAs, links |
+| `purple400` | #8D1ECC | #8D1ECC | Brand text, secondary brand elements |
+| `purple500` | #63158F | #63158F | Darkest brand, neon glow effects |
 
-| Token Name | Light Mode (Base) | Light Mode (WCAG) | Dark Mode (Base) | Dark Mode (WCAG) | Use Case |
-|------------|-------------------|-------------------|------------------|------------------|----------|
-| `pink100` | #FCE4EC | #F8BBD0 | #880E4F | #AD1457 | Subtle error backgrounds |
-| `pink200` | #F06292 | #EC407A | #C2185B | #D81B60 | Light error accents |
-| `pink300` | #E91E63 | #D81B60 | #E91E63 | #EC407A | Medium error emphasis |
-| `pink400` | #FF1493 | #E91E63 | #F06292 | #FF1493 | Primary error color (hot pink) |
-| `pink500` | #C2185B | #880E4F | #F8BBD0 | #FCE4EC | High emphasis error, neon glow |
+**Mathematical Relationship**: Electric purple (#B026FF) as base with systematic progression.
 
-**Mathematical Relationship**: Pink family uses hot pink (#FF1493) as the base color (pink400) with Material Design pink palette for supporting variants.
+### Green Scale - Success States and Positive Feedback
 
-**Orange** - Warning states, caution indicators, important notices
+| Token Name | Light Base | Light WCAG | Dark Base | Dark WCAG | Use Case |
+|------------|------------|------------|-----------|-----------|----------|
+| `green100` | #E6FFF5 | #E8F5E9 | #E6FFF5 | #B3FFB3 | Subtle success backgrounds |
+| `green200` | #80FFBB | #4CAF50 | #80FFBB | #66FF66 | Success highlights (AA Large ~3:1) |
+| `green300` | #33FF99 | #388E3C | #33FF99 | #33E033 | Success accents (AA ~4.5:1) |
+| `green400` | #00FF88 | #1B5E20 | #00FF88 | #26B326 | **Primary success** - electric green |
+| `green500` | #00CC6E | #0D3010 | #00CC6E | #145914 | Neon green glow effects |
 
-| Token Name | Light Mode (Base) | Light Mode (WCAG) | Dark Mode (Base) | Dark Mode (WCAG) | Use Case |
-|------------|-------------------|-------------------|------------------|------------------|----------|
-| `orange100` | #FFF8E1 | #FFECB3 | #FF6F00 | #FF8F00 | Subtle warning backgrounds |
-| `orange200` | #FFD54F | #FFCA28 | #FFA000 | #FFB300 | Light warning accents |
-| `orange300` | #FFC107 | #FFB300 | #FFC107 | #FFCA28 | Medium warning emphasis |
-| `orange400` | #FFA000 | #FF8F00 | #FFD54F | #FFE082 | Primary warning color |
-| `orange500` | #FF8F00 | #FF6F00 | #FFECB3 | #FFF8E1 | High emphasis warning |
+**Mathematical Relationship**: Electric green (#00FF88) as base with WCAG-compliant variants.
 
-**Mathematical Relationship**: Orange family uses Material Design amber palette with mode-aware inversions for dark mode.
+### Pink Scale - Error States and Urgent Feedback
 
-### Accent Colors
+| Token Name | Light Base | Light WCAG | Dark Base | Dark WCAG | Use Case |
+|------------|------------|------------|-----------|-----------|----------|
+| `pink100` | #FFDAE8 | #FCE4EC | #FFDAE8 | #FFB3D1 | Subtle error backgrounds |
+| `pink200` | #FF82B4 | #E91E63 | #FF82B4 | #FF6BA3 | Error highlights (AA Large ~3:1) |
+| `pink300` | #FF2A6D | #C2185B | #FF2A6D | #E63075 | Base pink (AA ~4.5:1) |
+| `pink400` | #CC2257 | #880E4F | #CC2257 | #B32659 | **Primary error** - hot pink |
+| `pink500` | #801537 | #4D0829 | #801537 | #5C1A33 | Neon pink glow effects |
 
-**Yellow** - Attention-grabbing elements, highlights, emphasis
+**Mathematical Relationship**: Hot pink (#FF2A6D) as base with WCAG-compliant variants.
 
-| Token Name | Light Mode (Base) | Light Mode (WCAG) | Dark Mode (Base) | Dark Mode (WCAG) | Use Case |
-|------------|-------------------|-------------------|------------------|------------------|----------|
-| `yellow100` | #FFFDE7 | #FFF9C4 | #F57F17 | #F9A825 | Subtle highlight backgrounds |
-| `yellow200` | #FFF176 | #FFEE58 | #FBC02D | #FDD835 | Light highlight accents |
-| `yellow300` | #FFEB3B | #FDD835 | #FFEB3B | #FFEE58 | Medium highlight emphasis |
-| `yellow400` | #FBC02D | #F9A825 | #FFF176 | #FFF59D | Primary attention color |
-| `yellow500` | #F9A825 | #F57F17 | #FFF9C4 | #FFFDE7 | High emphasis attention |
+### Orange Scale - Warning States and Secondary CTAs
 
-**Mathematical Relationship**: Yellow family uses Material Design yellow palette with mode-aware inversions for dark mode.
+| Token Name | Light Base | Light WCAG | Dark Base | Dark WCAG | Use Case |
+|------------|------------|------------|-----------|-----------|----------|
+| `orange100` | #FFE5DC | #FFF3E0 | #FFE5DC | #FFD9A3 | Subtle warning backgrounds |
+| `orange200` | #FFB8A0 | #F59E00 | #FFB8A0 | #FFB84D | Warm accents (AA Large ~3:1) |
+| `orange300` | #FF6B35 | #B87500 | #FF6B35 | #D99500 | Approachable warnings (AA ~4.5:1) |
+| `orange400` | #CC5529 | #8C5A00 | #CC5529 | #A67000 | **Primary warning** |
+| `orange500` | #8F3C1D | #4D3100 | #8F3C1D | #5C3D00 | Warning text on light backgrounds |
 
-**Cyan** - Tech/data visualization, informational elements, cool accents
+### Yellow Scale - High-Energy CTAs and Attention
 
-| Token Name | Light Mode (Base) | Light Mode (WCAG) | Dark Mode (Base) | Dark Mode (WCAG) | Use Case |
-|------------|-------------------|-------------------|------------------|------------------|----------|
-| `cyan100` | #E0F7FA | #B2EBF2 | #006064 | #00838F | Subtle tech backgrounds |
-| `cyan200` | #4DD0E1 | #26C6DA | #00ACC1 | #00BCD4 | Light tech accents |
-| `cyan300` | #00BCD4 | #00ACC1 | #00BCD4 | #26C6DA | Medium tech emphasis |
-| `cyan400` | #00ACC1 | #0097A7 | #4DD0E1 | #80DEEA | Primary tech/data color |
-| `cyan500` | #0097A7 | #006064 | #B2EBF2 | #E0F7FA | High emphasis tech |
+| Token Name | Light Base | Light WCAG | Dark Base | Dark WCAG | Use Case |
+|------------|------------|------------|-----------|-----------|----------|
+| `yellow100` | #FEFBCC | #FEFBCC | #FEFBCC | #FCF680 | Subtle highlight backgrounds |
+| `yellow200` | #FCF680 | #FCF680 | #FCF680 | #F9F002 | Warning highlights |
+| `yellow300` | #F9F002 | #F9F002 | #F9F002 | #C7C002 | **Bright yellow** - high-energy CTAs |
+| `yellow400` | #C7C002 | #C7C002 | #C7C002 | #8F8B01 | **Attention color** |
+| `yellow500` | #8F8B01 | #8F8B01 | #8F8B01 | #8F8B01 | Neon yellow glow effects |
 
-**Mathematical Relationship**: Cyan family uses Material Design cyan palette with mode-aware inversions for dark mode.
+### Cyan Scale - Tech Elements and Data Visualization
 
-**Teal** - Informational states, neutral positive feedback, secondary accents
+| Token Name | Light Base | Dark Base | Use Case |
+|------------|------------|-----------|----------|
+| `cyan100` | #CCFBFF | #CCFBFF | Subtle tech backgrounds |
+| `cyan200` | #80F6FF | #80F6FF | Tech accents, link highlights |
+| `cyan300` | #00F0FF | #00F0FF | **Data visualization** - bright cyan |
+| `cyan400` | #00C0CC | #00C0CC | **Tech elements** - dark cyan |
+| `cyan500` | #00888F | #00888F | Neon cyan glow effects |
 
-| Token Name | Light Mode (Base) | Light Mode (WCAG) | Dark Mode (Base) | Dark Mode (WCAG) | Use Case |
-|------------|-------------------|-------------------|------------------|------------------|----------|
-| `teal100` | #E0F2F1 | #B2DFDB | #004D40 | #00695C | Subtle info backgrounds |
-| `teal200` | #4DB6AC | #26A69A | #00897B | #009688 | Light info accents |
-| `teal300` | #009688 | #00897B | #009688 | #26A69A | Medium info emphasis |
-| `teal400` | #00897B | #00796B | #4DB6AC | #80CBC4 | Primary info color |
-| `teal500` | #00796B | #004D40 | #B2DFDB | #E0F2F1 | High emphasis info |
+### Teal Scale - Informational States
 
-**Mathematical Relationship**: Teal family uses Material Design teal palette with mode-aware inversions for dark mode.
+| Token Name | Light Base | Light WCAG | Dark Base | Dark WCAG | Use Case |
+|------------|------------|------------|-----------|-----------|----------|
+| `teal100` | #D9E8EA | #D9E8EA | #D9E8EA | #D9E8EA | Subtle info backgrounds |
+| `teal200` | #4D9BA5 | #4D9BA5 | #4D9BA5 | #4D9BA5 | Info accents |
+| `teal300` | #1A535C | #1A535C | #1A535C | #00F0FF | Secondary UI elements |
+| `teal400` | #15424A | #15424A | #15424A | #15424A | **Info strong** - dark teal |
+| `teal500` | #0F2E33 | #0F2E33 | #0F2E33 | #0F2E33 | Info text on light backgrounds |
 
-### Neutral Colors
+### Shadow Colors - Ambient Light Tinting
 
-**Gray** - Text, borders, backgrounds, neutral UI elements
-
-| Token Name | Light Mode (Base) | Light Mode (WCAG) | Dark Mode (Base) | Dark Mode (WCAG) | Use Case |
-|------------|-------------------|-------------------|------------------|------------------|----------|
-| `gray100` | #F5F5F5 | #EEEEEE | #212121 | #424242 | Subtle backgrounds |
-| `gray200` | #E0E0E0 | #BDBDBD | #424242 | #616161 | Light borders, dividers |
-| `gray300` | #BDBDBD | #9E9E9E | #616161 | #757575 | Medium borders, disabled states |
-| `gray400` | #9E9E9E | #757575 | #9E9E9E | #BDBDBD | Secondary text, icons |
-| `gray500` | #757575 | #616161 | #BDBDBD | #E0E0E0 | Primary text, strong borders |
-| `gray600` | #616161 | #424242 | #E0E0E0 | #EEEEEE | High contrast text |
-| `gray700` | #424242 | #212121 | #EEEEEE | #F5F5F5 | Maximum contrast text |
-
-**Mathematical Relationship**: Gray family uses Material Design gray palette with mode-aware inversions for dark mode.
+| Token Name | Value | Use Case |
+|------------|-------|----------|
+| `shadowBlack100` | #000000 | Pure black - neutral lighting (noon) |
+| `shadowBlue100` | #141928 | Cool blue-gray - warm light creates cool shadows |
+| `shadowOrange100` | #19140F | Warm gray - cool light creates warm shadows |
+| `shadowGray100` | #0F141E | Blue-gray - overcast/ambient lighting |
 
 ---
 
@@ -141,77 +152,109 @@ The DesignerPunk color token system provides a mathematically consistent and sem
 
 Semantic color tokens provide contextual meaning for specific UI purposes. They reference primitive color families and adapt to light/dark modes automatically.
 
-### Brand & Interactive
+**Total: 28 semantic color tokens**
 
-| Token Name | Primitive Reference | Semantic Meaning | Use Case |
-|------------|---------------------|------------------|----------|
-| `color.primary` | purple400 | Primary brand color | Buttons, links, primary actions |
-| `color.primaryHover` | purple300 | Primary hover state | Interactive element hover |
-| `color.primaryPressed` | purple500 | Primary pressed state | Interactive element press |
+### Brand & Interactive (1 token)
 
-### Status & Feedback
+| Token Name | Primitive Reference | Use Case |
+|------------|---------------------|----------|
+| `color.primary` | purple300 (#B026FF) | Primary brand color - buttons, links, CTAs |
 
-| Token Name | Primitive Reference | Semantic Meaning | Use Case |
-|------------|---------------------|------------------|----------|
-| `color.success.strong` | green400 | Strong success indicator | Success buttons, confirmation icons |
-| `color.success.subtle` | green100 | Subtle success background | Success message backgrounds |
-| `color.error.strong` | pink400 | Strong error indicator | Error buttons, critical warnings |
-| `color.error.subtle` | pink100 | Subtle error background | Error message backgrounds |
-| `color.warning.strong` | orange400 | Strong warning indicator | Warning buttons, caution icons |
-| `color.warning.subtle` | orange100 | Subtle warning background | Warning message backgrounds |
-| `color.info.strong` | teal400 | Strong info indicator | Info buttons, informational icons |
-| `color.info.subtle` | teal100 | Subtle info background | Info message backgrounds |
+### Status & Feedback (8 tokens)
 
-### Accent & Emphasis
+| Token Name | Primitive Reference | Use Case |
+|------------|---------------------|----------|
+| `color.success.strong` | green400 (#00FF88) | Strong success - icons, text, buttons |
+| `color.success.subtle` | green100 (#E6FFF5) | Subtle success - backgrounds |
+| `color.warning.strong` | orange400 (#CC5529) | Strong warning - icons, text, buttons |
+| `color.warning.subtle` | orange100 (#FFE5DC) | Subtle warning - backgrounds |
+| `color.error.strong` | pink400 (#CC2257) | Strong error - icons, text, buttons |
+| `color.error.subtle` | pink100 (#FFDAE8) | Subtle error - backgrounds |
+| `color.info.strong` | teal400 (#15424A) | Strong info - icons, text, buttons |
+| `color.info.subtle` | teal100 (#D9E8EA) | Subtle info - backgrounds |
 
-| Token Name | Primitive Reference | Semantic Meaning | Use Case |
-|------------|---------------------|------------------|----------|
-| `color.attention` | yellow400 | Attention-grabbing | Highlights, important notices |
-| `color.highlight` | yellow300 | Content highlighting | Search results, emphasized text |
-| `color.tech` | cyan400 | Technical/data elements | Code blocks, data visualizations |
-| `color.data` | cyan300 | Data visualization | Charts, graphs, metrics |
+### Attention & Highlight (2 tokens)
 
-### Glow Effects
+| Token Name | Primitive Reference | Use Case |
+|------------|---------------------|----------|
+| `color.attention` | yellow400 (#C7C002) | Attention-grabbing elements, notifications |
+| `color.highlight` | yellow300 (#F9F002) | Highlighted text, emphasized content |
 
-| Token Name | Primitive Reference | Semantic Meaning | Use Case |
-|------------|---------------------|------------------|----------|
-| `glow.neonGreen` | green500 | Neon green glow | Success glow effects, positive emphasis |
-| `glow.neonPink` | pink500 | Neon pink glow | Error glow effects, critical emphasis |
+### Tech & Data (2 tokens)
 
-### Text Colors
+| Token Name | Primitive Reference | Use Case |
+|------------|---------------------|----------|
+| `color.tech` | cyan400 (#00C0CC) | Technical elements, code snippets |
+| `color.data` | cyan300 (#00F0FF) | Data visualization, metrics |
 
-| Token Name | Primitive Reference | Semantic Meaning | Use Case |
-|------------|---------------------|------------------|----------|
-| `color.text.default` | gray700 | Default text color | Body text, primary content |
-| `color.text.secondary` | gray500 | Secondary text color | Supporting text, captions |
-| `color.text.tertiary` | gray400 | Tertiary text color | Placeholder text, disabled text |
-| `color.text.onPrimary` | gray100 | Text on primary background | Text on purple buttons |
-| `color.text.onSuccess` | gray100 | Text on success background | Text on green buttons |
-| `color.text.onError` | gray100 | Text on error background | Text on pink buttons |
+### Text Hierarchy (3 tokens)
 
-### Surface & Background
+| Token Name | Primitive Reference | Use Case |
+|------------|---------------------|----------|
+| `color.text.default` | gray300 (#2D2B3E) | Primary text - body content |
+| `color.text.muted` | gray200 (#68658A) | Secondary text - less prominent |
+| `color.text.subtle` | gray100 (#B8B6C8) | Tertiary text - very subtle elements |
 
-| Token Name | Primitive Reference | Semantic Meaning | Use Case |
-|------------|---------------------|------------------|----------|
-| `color.background` | gray100 | Default background | Page backgrounds, card backgrounds |
-| `color.surface` | gray100 | Surface color | Elevated surfaces, cards |
-| `color.surfaceElevated` | gray100 | Elevated surface | Modals, popovers, tooltips |
+### Contrast Colors (1 token)
 
-### Borders
+| Token Name | Primitive Reference | Use Case |
+|------------|---------------------|----------|
+| `color.contrast.onPrimary` | white100 (#FFFFFF) | Content (text/icons) on primary backgrounds |
 
-| Token Name | Primitive Reference | Semantic Meaning | Use Case |
-|------------|---------------------|------------------|----------|
-| `color.border` | gray300 | Default border | Input borders, card borders |
-| `color.borderStrong` | gray500 | Strong border | Emphasized borders, dividers |
-| `color.borderSubtle` | gray200 | Subtle border | Light dividers, subtle separators |
+### Surfaces & Backgrounds (4 tokens)
+
+| Token Name | Primitive Reference | Use Case |
+|------------|---------------------|----------|
+| `color.canvas` | white100 (#FFFFFF) | Base canvas - page backgrounds |
+| `color.background` | white100 (#FFFFFF) | Primary background - main content areas |
+| `color.surface` | white200 (#F5F5FA) | Surface - cards, elevated containers |
+| `color.border` | gray100 (#B8B6C8) | Borders - UI element borders, dividers |
+
+### Icon & Print (2 tokens)
+
+| Token Name | Primitive Reference | Use Case |
+|------------|---------------------|----------|
+| `color.icon.default` | gray200 (#68658A) | Default icon color - optical balance |
+| `color.print.default` | black100 (#3A3A45) | Print media - optimal printing quality |
+
+### Glow Effects (5 tokens)
+
+| Token Name | Primitive Reference | Use Case |
+|------------|---------------------|----------|
+| `glow.neonPurple` | purple500 (#63158F) | Purple glow - brand emphasis |
+| `glow.neonCyan` | cyan500 (#00888F) | Cyan glow - tech emphasis |
+| `glow.neonYellow` | yellow500 (#8F8B01) | Yellow glow - attention emphasis |
+| `glow.neonGreen` | green500 (#00CC6E) | Green glow - success emphasis |
+| `glow.neonPink` | pink500 (#801537) | Pink glow - error emphasis |
 
 ---
 
 ## Accessibility & WCAG Compliance
 
+### Mode-Aware Values
+
+Color tokens include mode-aware values that automatically adapt to light/dark modes and WCAG compliance levels:
+
+**Base Mode**: Standard color values optimized for visual appeal (cyberpunk aesthetic)
+**WCAG Mode**: Adjusted color values that guarantee WCAG 2.1 AA compliance
+
+**Example**:
+```typescript
+green400: {
+  light: {
+    base: '#00FF88',    // Electric green (cyberpunk)
+    wcag: '#1B5E20'     // WCAG-compliant darker green
+  },
+  dark: {
+    base: '#00FF88',    // Electric green
+    wcag: '#26B326'     // WCAG-compliant green for dark mode
+  }
+}
+```
+
 ### Contrast Requirements
 
-All color combinations in the DesignerPunk system meet **WCAG 2.1 AA** contrast requirements:
+All WCAG theme color combinations meet **WCAG 2.1 AA** contrast requirements:
 
 **Text Contrast** (Success Criterion 1.4.3):
 - Normal text (< 18pt): Minimum 4.5:1 contrast ratio
@@ -220,50 +263,17 @@ All color combinations in the DesignerPunk system meet **WCAG 2.1 AA** contrast 
 **Non-Text Contrast** (Success Criterion 1.4.11):
 - UI components and graphical objects: Minimum 3:1 contrast ratio
 
-### Mode-Aware Values
-
-Color tokens include mode-aware values that automatically adapt to light/dark modes and WCAG compliance levels:
-
-**Base Mode**: Standard color values optimized for visual appeal
-**WCAG Mode**: Adjusted color values that guarantee WCAG 2.1 AA compliance
-
-**Example**:
-```typescript
-purple400: {
-  light: {
-    base: '#8E24AA',    // Visually appealing purple
-    wcag: '#7B1FA2'     // WCAG-compliant darker purple
-  },
-  dark: {
-    base: '#BA68C8',    // Visually appealing light purple
-    wcag: '#CE93D8'     // WCAG-compliant lighter purple
-  }
-}
-```
-
-### Accessible Color Combinations
-
-**Text on Backgrounds**:
-- `color.text.default` (gray700) on `color.background` (gray100): ✅ 12.63:1 contrast
-- `color.text.secondary` (gray500) on `color.background` (gray100): ✅ 4.61:1 contrast
-- `color.text.onPrimary` (gray100) on `color.primary` (purple400): ✅ 4.54:1 contrast
-
-**Interactive Elements**:
-- `color.primary` (purple400) on `color.background` (gray100): ✅ 3.12:1 contrast (UI component)
-- `color.success.strong` (green400) on `color.background` (gray100): ✅ 3.45:1 contrast (UI component)
-- `color.error.strong` (pink400) on `color.background` (gray100): ✅ 3.78:1 contrast (UI component)
-
 ### Usage Guidelines for Accessibility
 
 **Do**:
 - Use semantic color tokens for consistent accessible color combinations
+- Use WCAG theme variants when accessibility compliance is required
 - Test color combinations with WCAG contrast checkers
 - Provide text alternatives for color-coded information
-- Use sufficient color contrast for all text and UI elements
 
 **Don't**:
 - Rely solely on color to convey meaning (use icons or text)
-- Use low-contrast color combinations for text
+- Use base theme colors for text without verifying contrast
 - Use color alone to indicate interactive states
 - Ignore WCAG mode values when accessibility is required
 
@@ -275,12 +285,12 @@ purple400: {
 
 Color tokens use hex color values that convert to platform-specific formats:
 
-**Base Value**: #8E24AA (hex color)
+**Base Value**: #B026FF (hex color)
 
 **Platform Conversion**:
-- **Web**: #8E24AA (hex) or rgb(142, 36, 170)
-- **iOS**: UIColor(red: 142/255, green: 36/255, blue: 170/255, alpha: 1.0)
-- **Android**: Color(0xFF8E24AA)
+- **Web**: #B026FF (hex) or rgb(176, 38, 255)
+- **iOS**: UIColor(red: 176/255, green: 38/255, blue: 255/255, alpha: 1.0)
+- **Android**: Color(0xFFB026FF)
 
 ### Platform-Specific Output
 
@@ -289,25 +299,16 @@ Color tokens use hex color values that convert to platform-specific formats:
 ```css
 :root {
   /* Primitive Color Tokens */
-  --purple-100: #F3E5F5;
-  --purple-400: #8E24AA;
+  --purple-300: #B026FF;
   --green-400: #00FF88;
-  --pink-400: #FF1493;
+  --pink-400: #CC2257;
+  --gray-300: #2D2B3E;
   
   /* Semantic Color Tokens */
-  --color-primary: var(--purple-400);
+  --color-primary: var(--purple-300);
   --color-success-strong: var(--green-400);
   --color-error-strong: var(--pink-400);
-  --color-text-default: var(--gray-700);
-}
-
-/* Dark mode */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --purple-400: #BA68C8;
-    --green-400: #69F0AE;
-    --pink-400: #F06292;
-  }
+  --color-text-default: var(--gray-300);
 }
 ```
 
@@ -316,20 +317,14 @@ Color tokens use hex color values that convert to platform-specific formats:
 ```swift
 struct DesignTokens {
     // Primitive Color Tokens
-    static let purple100 = UIColor(hex: "#F3E5F5")
-    static let purple400 = UIColor(hex: "#8E24AA")
+    static let purple300 = UIColor(hex: "#B026FF")
     static let green400 = UIColor(hex: "#00FF88")
-    static let pink400 = UIColor(hex: "#FF1493")
+    static let pink400 = UIColor(hex: "#CC2257")
     
     // Semantic Color Tokens
-    static let colorPrimary = purple400
+    static let colorPrimary = purple300
     static let colorSuccessStrong = green400
     static let colorErrorStrong = pink400
-    
-    // Dark mode support
-    static let colorPrimaryDark = UIColor(hex: "#BA68C8")
-    static let colorSuccessStrongDark = UIColor(hex: "#69F0AE")
-    static let colorErrorStrongDark = UIColor(hex: "#F06292")
 }
 ```
 
@@ -338,20 +333,14 @@ struct DesignTokens {
 ```kotlin
 object DesignTokens {
     // Primitive Color Tokens
-    val purple_100 = Color(0xFFF3E5F5)
-    val purple_400 = Color(0xFF8E24AA)
+    val purple_300 = Color(0xFFB026FF)
     val green_400 = Color(0xFF00FF88)
-    val pink_400 = Color(0xFFFF1493)
+    val pink_400 = Color(0xFFCC2257)
     
     // Semantic Color Tokens
-    val color_primary = purple_400
+    val color_primary = purple_300
     val color_success_strong = green_400
     val color_error_strong = pink_400
-    
-    // Dark mode support
-    val color_primary_dark = Color(0xFFBA68C8)
-    val color_success_strong_dark = Color(0xFF69F0AE)
-    val color_error_strong_dark = Color(0xFFF06292)
 }
 ```
 
@@ -372,7 +361,7 @@ Use primitive color tokens when:
 // Component-level token referencing primitive
 export const chipTokens = {
   background: 'purple100',  // Light purple background
-  border: 'purple300'       // Medium purple border
+  border: 'purple200'       // Medium purple border
 };
 ```
 
@@ -381,7 +370,7 @@ export const chipTokens = {
 Use semantic color tokens for:
 - Interactive elements (buttons, links, form inputs)
 - Status indicators (success, error, warning, info)
-- Text colors (default, secondary, tertiary)
+- Text colors (default, muted, subtle)
 - Backgrounds and surfaces
 - Standard UI patterns
 
@@ -390,7 +379,7 @@ Use semantic color tokens for:
 // Component using semantic tokens
 <Button 
   background="color.primary"
-  textColor="color.text.onPrimary"
+  textColor="color.contrast.onPrimary"
 >
   Submit
 </Button>
@@ -406,6 +395,10 @@ Use semantic color tokens for:
 ```
 
 ### Color Semantic Meanings
+
+**Purple = Brand**: Primary brand color, interactive elements, brand identity
+- Use for: Primary buttons, links, brand elements
+- Don't use for: Status indicators (use green/pink/orange/teal)
 
 **Green = Success**: Positive feedback, confirmation actions, successful operations
 - Use for: Success messages, confirmation buttons, positive status indicators
@@ -431,62 +424,16 @@ Use semantic color tokens for:
 - Use for: Info messages, help text, neutral notifications
 - Don't use for: Success states (use green) or primary brand (use purple)
 
-**Purple = Brand**: Primary brand color, interactive elements, brand identity
-- Use for: Primary buttons, links, brand elements
-- Don't use for: Status indicators (use green/pink/orange/teal)
-
----
-
-## Breaking Changes from Previous Version
-
-### Removed Colors
-
-**Violet Family** (violet100-500): Removed completely
-- **Migration**: Use `purple700` for any components that referenced `color.secondary`
-- **Rationale**: Simplified color palette, violet was redundant with purple
-
-### Updated Semantic Tokens
-
-**Success Colors**: Changed from cyan to green
-- `color.success.strong`: cyan400 → green400
-- `color.success.subtle`: cyan100 → green100
-- **Visual Impact**: Success states now show electric green instead of cyan
-
-**Error Colors**: Changed from orange to pink
-- `color.error.strong`: orange300 → pink400
-- `color.error.subtle`: Added (references pink100)
-- **Visual Impact**: Error states now show hot pink instead of orange
-
-**Warning Colors**: Changed from yellow to orange
-- `color.warning.strong`: yellow400 → orange400
-- `color.warning.subtle`: yellow100 → orange100
-- **Visual Impact**: Warning states now show orange instead of bright yellow
-
-### New Semantic Tokens
-
-**Attention & Highlight**: New tokens for yellow usage
-- `color.attention`: References yellow400
-- `color.highlight`: References yellow300
-
-**Tech & Data**: New tokens for cyan usage
-- `color.tech`: References cyan400
-- `color.data`: References cyan300
-
-**Glow Effects**: New tokens for neon effects
-- `glow.neonGreen`: References green500
-- `glow.neonPink`: References pink500
-
 ---
 
 ## Related Documentation
 
-- **Color Token Source**: `src/tokens/ColorTokens.ts` - Primitive color token definitions
+- **Primitive Color Source**: `src/tokens/ColorTokens.ts` - Primitive color token definitions
 - **Semantic Color Source**: `src/tokens/semantic/ColorTokens.ts` - Semantic color token definitions
 - **Token System Overview**: `docs/token-system-overview.md` - Complete token system reference
 - **Color Palette Update Spec**: `.kiro/specs/015-color-palette-update/design.md` - Design decisions for color updates
 - **WCAG Guidelines**: [Web Content Accessibility Guidelines 2.1](https://www.w3.org/WAI/WCAG21/quickref/) - Official WCAG reference
 - **Component Development Guide**: `.kiro/steering/Component-Development-Guide.md` - Token usage in component development
-- **Token Resolution Patterns**: `.kiro/steering/Token-Resolution-Patterns.md` - Strategic guidance on token type selection and validation
 
 ---
 

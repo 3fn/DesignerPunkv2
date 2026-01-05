@@ -182,6 +182,23 @@ export const radiusTokens: Record<string, PrimitiveToken> = {
     isStrategicFlexibility: true, // Special strategic flexibility for full radius
     isPrecisionTargeted: false,
     platforms: generateRadiusPlatformValues(9999)
+  },
+
+  radiusHalf: {
+    name: 'radiusHalf',
+    category: TokenCategory.RADIUS,
+    baseValue: 50,
+    familyBaseValue: RADIUS_BASE_VALUE,
+    description: 'Half radius (50%) - creates perfect circles when applied to square elements. Used for circular buttons, avatars, badges, and other circular UI elements.',
+    mathematicalRelationship: 'percentage = 50% (creates circle from square)',
+    baselineGridAlignment: false, // Percentage-based, not pixel-based
+    isStrategicFlexibility: true, // Special strategic flexibility for percentage-based radius
+    isPrecisionTargeted: false,
+    platforms: {
+      web: { value: '50%', unit: '%' },
+      ios: { value: 'Circle', unit: 'shape' },
+      android: { value: 50, unit: 'percent' }
+    }
   }
 };
 

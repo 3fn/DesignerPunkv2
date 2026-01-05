@@ -374,7 +374,7 @@ private fun getButtonCTAStyleConfig(style: ButtonCTAStyle, isPressed: Boolean, d
     // Import semantic color tokens from generated constants
     val colorPrimary = Color(DesignTokens.color_primary)           // color.primary (purple)
     val colorBackground = Color(DesignTokens.color_background)     // color.background (white)
-    val colorTextOnPrimary = Color(DesignTokens.color_text_on_primary) // color.text.onPrimary (white)
+    val colorContrastOnPrimary = Color(DesignTokens.color_contrast_on_primary) // color.contrast.onPrimary (white)
     
     // Calculate state-based background colors using theme-aware blend utilities
     // @see Requirements: 7.1, 7.2, 7.3, 11.1, 11.2, 11.3
@@ -396,14 +396,14 @@ private fun getButtonCTAStyleConfig(style: ButtonCTAStyle, isPressed: Boolean, d
     // Calculate icon colors with optical balance using theme-aware blend utility
     // iconBlend() applies lighterBlend with blend.iconLighter (8%) for optical weight compensation
     // @see Requirements: 7.4, 11.1, 11.2, 11.3
-    val primaryIconColor = colorTextOnPrimary.iconBlend()
+    val primaryIconColor = colorContrastOnPrimary.iconBlend()
     val secondaryIconColor = colorPrimary.iconBlend()
     
     return when (style) {
         ButtonCTAStyle.PRIMARY -> ButtonCTAStyleConfig(
             backgroundColor = primaryBgColor,        // Requirement 2.1, 7.2, 7.3: color.primary with blend states
-            textColor = colorTextOnPrimary,          // Requirement 2.1: color.text.onPrimary
-            iconColor = primaryIconColor,            // Requirement 9.1, 7.4: color.text.onPrimary with optical balance
+            textColor = colorContrastOnPrimary,      // Requirement 2.1: color.contrast.onPrimary
+            iconColor = primaryIconColor,            // Requirement 9.1, 7.4: color.contrast.onPrimary with optical balance
             borderWidth = 0,
             borderColor = Color.Transparent
         )

@@ -146,6 +146,32 @@ export const radiusLarge = { value: 'radius200' } as RadiusSemanticToken;
 export const radiusFull = { value: 'radiusFull' } as RadiusSemanticToken;
 
 /**
+ * Circle radius for true circular elements.
+ * 
+ * References: radiusHalf (50%)
+ * 
+ * Use cases:
+ * - Circular buttons: Button-Icon components requiring perfect circles
+ * - Avatars: User profile images in circular format
+ * - Badges: Notification badges and status indicators
+ * - Circular indicators: Progress indicators, status dots
+ * - Icon containers: Circular backgrounds for icons
+ * 
+ * Visual style: Perfect circle (50% border-radius creates circle from square)
+ * 
+ * Platform output:
+ * - Web: 50% (CSS percentage-based border-radius)
+ * - iOS: Circle() clip shape (SwiftUI native circular clipping)
+ * - Android: CircleShape (Jetpack Compose native circular shape)
+ * 
+ * Rationale: Unlike radiusFull (9999px) which creates pills from rectangles,
+ * radiusCircle uses percentage-based radius to create true circles from
+ * square elements. This is the preferred approach for Button-Icon and
+ * other components that must maintain circular shape regardless of size.
+ */
+export const radiusCircle = { value: 'radiusHalf' } as RadiusSemanticToken;
+
+/**
  * Semantic radius tokens object for registry integration.
  */
 export const SemanticRadiusTokens = {
@@ -155,6 +181,7 @@ export const SemanticRadiusTokens = {
   radiusNormal,
   radiusLarge,
   radiusFull,
+  radiusCircle,
 } as const;
 
 /**
@@ -188,12 +215,23 @@ export type SemanticRadiusTokenKey = keyof typeof SemanticRadiusTokens;
  *    → Use radiusLarge
  *    → Prominent, soft rounding for emphasized elements
  * 
- * 6. Pills and circular elements (badges, avatars)?
+ * 6. Pills and pill-shaped elements (elongated badges, pill buttons)?
  *    → Use radiusFull
- *    → Perfect circles or pill shapes
+ *    → Creates pill shapes from rectangular elements
  * 
- * 7. Component-specific needs?
- *    → Prioritize semantic tokens (radiusNone through radiusFull)
+ * 7. True circular elements (icon buttons, avatars, circular badges)?
+ *    → Use radiusCircle
+ *    → Creates perfect circles from square elements
+ *    → Preferred for Button-Icon, avatars, status indicators
+ *    → Uses percentage-based radius (50%) for true circular shape
+ * 
+ * 8. Component-specific needs?
+ *    → Prioritize semantic tokens (radiusNone through radiusCircle)
  *    → If semantic tokens don't meet requirements, use primitive tokens
  *    → If primitive tokens don't meet requirements, request component-specific token
+ * 
+ * Key distinction: radiusFull vs radiusCircle
+ * - radiusFull (9999px): Creates pills from rectangles, circles from squares
+ * - radiusCircle (50%): Creates true circles from squares using percentage
+ * - For Button-Icon and similar circular components, prefer radiusCircle
  */

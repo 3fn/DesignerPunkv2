@@ -30,7 +30,7 @@ import { IconBaseElement } from '../../../../Icon-Base/platforms/web/IconBase.we
  */
 function setupBlendColorProperties(): void {
   document.documentElement.style.setProperty('--color-primary', '#A855F7');
-  document.documentElement.style.setProperty('--color-text-on-primary', '#FFFFFF');
+  document.documentElement.style.setProperty('--color-contrast-on-primary', '#FFFFFF');
   document.documentElement.style.setProperty('--color-background', '#FFFFFF');
 }
 

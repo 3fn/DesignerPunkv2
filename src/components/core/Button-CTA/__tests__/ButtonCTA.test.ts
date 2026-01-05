@@ -23,7 +23,7 @@ import { ButtonCTA } from '../platforms/web/ButtonCTA.web';
  */
 function setupBlendColorProperties(): void {
   document.documentElement.style.setProperty('--color-primary', '#A855F7');
-  document.documentElement.style.setProperty('--color-text-on-primary', '#FFFFFF');
+  document.documentElement.style.setProperty('--color-contrast-on-primary', '#FFFFFF');
   document.documentElement.style.setProperty('--color-background', '#FFFFFF');
 }
 

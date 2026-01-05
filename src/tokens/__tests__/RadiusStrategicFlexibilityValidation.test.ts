@@ -69,13 +69,36 @@ describe('RadiusTokens Strategic Flexibility Preservation', () => {
     });
   });
 
-  describe('getStrategicFlexibilityRadiusTokens helper', () => {
-    it('should return exactly 4 strategic flexibility tokens', () => {
-      const strategicTokens = getStrategicFlexibilityRadiusTokens();
-      expect(strategicTokens).toHaveLength(4);
+  describe('radiusHalf strategic flexibility token', () => {
+    it('should preserve hard value of 50 (percentage)', () => {
+      expect(radiusTokens.radiusHalf.baseValue).toBe(50);
     });
 
-    it('should include radius075, radius125, radius250, and radiusFull', () => {
+    it('should maintain isStrategicFlexibility flag as true', () => {
+      expect(radiusTokens.radiusHalf.isStrategicFlexibility).toBe(true);
+    });
+
+    it('should preserve percentage-based mathematical relationship', () => {
+      expect(radiusTokens.radiusHalf.mathematicalRelationship).toBe('percentage = 50% (creates circle from square)');
+    });
+
+    it('should have platform-specific percentage values', () => {
+      expect(radiusTokens.radiusHalf.platforms.web.value).toBe('50%');
+      expect(radiusTokens.radiusHalf.platforms.web.unit).toBe('%');
+      expect(radiusTokens.radiusHalf.platforms.ios.value).toBe('Circle');
+      expect(radiusTokens.radiusHalf.platforms.ios.unit).toBe('shape');
+      expect(radiusTokens.radiusHalf.platforms.android.value).toBe(50);
+      expect(radiusTokens.radiusHalf.platforms.android.unit).toBe('percent');
+    });
+  });
+
+  describe('getStrategicFlexibilityRadiusTokens helper', () => {
+    it('should return exactly 5 strategic flexibility tokens', () => {
+      const strategicTokens = getStrategicFlexibilityRadiusTokens();
+      expect(strategicTokens).toHaveLength(5);
+    });
+
+    it('should include radius075, radius125, radius250, radiusFull, and radiusHalf', () => {
       const strategicTokens = getStrategicFlexibilityRadiusTokens();
       const tokenNames = strategicTokens.map(token => token.name);
       
@@ -83,6 +106,7 @@ describe('RadiusTokens Strategic Flexibility Preservation', () => {
       expect(tokenNames).toContain('radius125');
       expect(tokenNames).toContain('radius250');
       expect(tokenNames).toContain('radiusFull');
+      expect(tokenNames).toContain('radiusHalf');
     });
 
     it('should verify all strategic tokens have isStrategicFlexibility = true', () => {

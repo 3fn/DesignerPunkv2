@@ -148,7 +148,7 @@ ButtonCTA(
 
 | Variant | Background | Text | Border | Emphasis |
 |---------|------------|------|--------|----------|
-| `primary` | color.primary | color.text.onPrimary | none | Highest |
+| `primary` | color.primary | color.contrast.onPrimary | none | Highest |
 | `secondary` | color.background | color.primary | 1px color.primary | Medium |
 | `tertiary` | transparent | color.primary | none | Lowest |
 
@@ -162,7 +162,7 @@ ButtonCTA(
 
 ### Color
 - `color.primary` - Primary variant background, secondary/tertiary text
-- `color.text.onPrimary` - Primary variant text
+- `color.contrast.onPrimary` - Primary variant text/icons
 - `color.background` - Secondary variant background
 - `color.border` - Secondary variant border
 
