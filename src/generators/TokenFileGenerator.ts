@@ -17,6 +17,7 @@ import { FileMetadata } from '../providers/FormatProvider';
 import { getAllPrimitiveTokens, getTokensByCategory, durationTokens, easingTokens, scaleTokens } from '../tokens';
 import { getAllSemanticTokens, getAllZIndexTokens, getAllElevationTokens, motionTokens } from '../tokens/semantic';
 import { BlendUtilityGenerator, BlendUtilityGenerationOptions } from './BlendUtilityGenerator';
+import { ComponentTokenRegistry, RegisteredComponentToken } from '../registries/ComponentTokenRegistry';
 
 export interface GenerationOptions {
   outputDir?: string;
@@ -47,6 +48,20 @@ export interface BlendUtilityResult {
 export interface AllGenerationResults {
   tokens: GenerationResult[];
   blendUtilities: BlendUtilityResult[];
+}
+
+/**
+ * Result of component token generation for a single platform
+ */
+export interface ComponentTokenGenerationResult {
+  platform: 'web' | 'ios' | 'android';
+  filePath: string;
+  content: string;
+  tokenCount: number;
+  componentCount: number;
+  valid: boolean;
+  errors?: string[];
+  warnings?: string[];
 }
 
 /**
@@ -162,6 +177,491 @@ export class TokenFileGenerator {
     }
 
     return results;
+  }
+
+  /**
+   * Generate component tokens for all platforms
+   * 
+   * Queries ComponentTokenRegistry.getAll() for tokens to generate.
+   * Generates output grouped by component.
+   * Maintains primitive token references in output (not inline values).
+   * 
+   * @param options - Generation options
+   * @returns Array of component token generation results for each platform
+   * 
+   * @see Requirements 5.1, 5.2, 5.3, 5.4 in .kiro/specs/037-component-token-generation-pipeline/requirements.md
+   */
+  generateComponentTokens(options: GenerationOptions = {}): ComponentTokenGenerationResult[] {
+    const { outputDir = 'dist', version = '1.0.0', includeComments = true } = options;
+    const results: ComponentTokenGenerationResult[] = [];
+
+    // Get all registered component tokens
+    const allTokens = ComponentTokenRegistry.getAll();
+    
+    // Group tokens by component
+    const tokensByComponent = this.groupTokensByComponent(allTokens);
+    const componentCount = Object.keys(tokensByComponent).length;
+
+    // Generate for each platform
+    results.push(this.generateWebComponentTokens(tokensByComponent, outputDir, version, includeComments));
+    results.push(this.generateiOSComponentTokens(tokensByComponent, outputDir, version, includeComments));
+    results.push(this.generateAndroidComponentTokens(tokensByComponent, outputDir, version, includeComments));
+
+    return results;
+  }
+
+  /**
+   * Group component tokens by component name
+   * 
+   * @param tokens - Array of registered component tokens
+   * @returns Map of component name to tokens
+   */
+  private groupTokensByComponent(tokens: RegisteredComponentToken[]): Record<string, RegisteredComponentToken[]> {
+    const grouped: Record<string, RegisteredComponentToken[]> = {};
+    
+    for (const token of tokens) {
+      if (!grouped[token.component]) {
+        grouped[token.component] = [];
+      }
+      grouped[token.component].push(token);
+    }
+    
+    return grouped;
+  }
+
+  /**
+   * Generate Web CSS component tokens
+   * 
+   * Generates CSS custom properties referencing primitive tokens.
+   * Format: --button-icon-inset-large: var(--space-150);
+   * 
+   * @param tokensByComponent - Tokens grouped by component
+   * @param outputDir - Output directory
+   * @param version - Version string
+   * @param includeComments - Whether to include comments
+   * @returns Generation result for web platform
+   */
+  private generateWebComponentTokens(
+    tokensByComponent: Record<string, RegisteredComponentToken[]>,
+    outputDir: string,
+    version: string,
+    includeComments: boolean
+  ): ComponentTokenGenerationResult {
+    const lines: string[] = [];
+    const timestamp = new Date().toISOString();
+    let tokenCount = 0;
+
+    // Header
+    lines.push('/**');
+    lines.push(' * DesignerPunk Design System - Component Tokens');
+    lines.push(` * Generated: ${timestamp}`);
+    lines.push(` * Version: ${version}`);
+    lines.push(' * Platform: Web (CSS Custom Properties)');
+    lines.push(' *');
+    lines.push(' * Component-specific tokens that reference primitive tokens.');
+    lines.push(' * Use these for component-level styling consistency.');
+    lines.push(' */');
+    lines.push('');
+    lines.push(':root {');
+
+    // Generate tokens grouped by component
+    const components = Object.keys(tokensByComponent).sort();
+    
+    for (const component of components) {
+      const tokens = tokensByComponent[component];
+      
+      if (includeComments) {
+        lines.push('');
+        lines.push(`  /* ${component} Component Tokens */`);
+      }
+      
+      for (const token of tokens) {
+        const cssTokenName = this.formatWebComponentTokenName(token);
+        const cssValue = this.formatWebComponentTokenValue(token);
+        
+        if (includeComments && token.reasoning) {
+          lines.push(`  /* ${token.reasoning} */`);
+        }
+        
+        lines.push(`  ${cssTokenName}: ${cssValue};`);
+        tokenCount++;
+      }
+    }
+
+    lines.push('}');
+
+    const content = lines.join('\n');
+    const validation = this.validateWebComponentTokenSyntax(content);
+
+    return {
+      platform: 'web',
+      filePath: `${outputDir}/ComponentTokens.web.css`,
+      content,
+      tokenCount,
+      componentCount: components.length,
+      valid: validation.valid,
+      errors: validation.errors
+    };
+  }
+
+  /**
+   * Generate iOS Swift component tokens
+   * 
+   * Generates Swift constants referencing primitive tokens.
+   * Format: public static let insetLarge: CGFloat = SpacingTokens.space150
+   * 
+   * @param tokensByComponent - Tokens grouped by component
+   * @param outputDir - Output directory
+   * @param version - Version string
+   * @param includeComments - Whether to include comments
+   * @returns Generation result for iOS platform
+   */
+  private generateiOSComponentTokens(
+    tokensByComponent: Record<string, RegisteredComponentToken[]>,
+    outputDir: string,
+    version: string,
+    includeComments: boolean
+  ): ComponentTokenGenerationResult {
+    const lines: string[] = [];
+    const timestamp = new Date().toISOString();
+    let tokenCount = 0;
+
+    // Header
+    lines.push('///');
+    lines.push('/// DesignerPunk Design System - Component Tokens');
+    lines.push(`/// Generated: ${timestamp}`);
+    lines.push(`/// Version: ${version}`);
+    lines.push('/// Platform: iOS (Swift Constants)');
+    lines.push('///');
+    lines.push('/// Component-specific tokens that reference primitive tokens.');
+    lines.push('/// Use these for component-level styling consistency.');
+    lines.push('///');
+    lines.push('');
+    lines.push('import UIKit');
+    lines.push('');
+
+    // Generate tokens grouped by component (each component as an enum)
+    const components = Object.keys(tokensByComponent).sort();
+    
+    for (const component of components) {
+      const tokens = tokensByComponent[component];
+      const enumName = `${component}Tokens`;
+      
+      if (includeComments) {
+        lines.push(`/// ${component} Component Tokens`);
+      }
+      lines.push(`public enum ${enumName} {`);
+      
+      for (const token of tokens) {
+        const swiftConstName = this.formatiOSComponentTokenName(token);
+        const swiftType = this.getiOSComponentTokenType(token);
+        const swiftValue = this.formatiOSComponentTokenValue(token);
+        
+        if (includeComments && token.reasoning) {
+          lines.push(`    /// ${token.reasoning}`);
+        }
+        
+        lines.push(`    public static let ${swiftConstName}: ${swiftType} = ${swiftValue}`);
+        tokenCount++;
+      }
+      
+      lines.push('}');
+      lines.push('');
+    }
+
+    const content = lines.join('\n');
+    const validation = this.validateiOSComponentTokenSyntax(content);
+
+    return {
+      platform: 'ios',
+      filePath: `${outputDir}/ComponentTokens.ios.swift`,
+      content,
+      tokenCount,
+      componentCount: components.length,
+      valid: validation.valid,
+      errors: validation.errors
+    };
+  }
+
+  /**
+   * Generate Android Kotlin component tokens
+   * 
+   * Generates Kotlin constants referencing primitive tokens.
+   * Format: val insetLarge = SpacingTokens.space150
+   * 
+   * @param tokensByComponent - Tokens grouped by component
+   * @param outputDir - Output directory
+   * @param version - Version string
+   * @param includeComments - Whether to include comments
+   * @returns Generation result for Android platform
+   */
+  private generateAndroidComponentTokens(
+    tokensByComponent: Record<string, RegisteredComponentToken[]>,
+    outputDir: string,
+    version: string,
+    includeComments: boolean
+  ): ComponentTokenGenerationResult {
+    const lines: string[] = [];
+    const timestamp = new Date().toISOString();
+    let tokenCount = 0;
+
+    // Header
+    lines.push('/**');
+    lines.push(' * DesignerPunk Design System - Component Tokens');
+    lines.push(` * Generated: ${timestamp}`);
+    lines.push(` * Version: ${version}`);
+    lines.push(' * Platform: Android (Kotlin Constants)');
+    lines.push(' *');
+    lines.push(' * Component-specific tokens that reference primitive tokens.');
+    lines.push(' * Use these for component-level styling consistency.');
+    lines.push(' */');
+    lines.push('');
+    lines.push('package com.designerpunk.tokens');
+    lines.push('');
+
+    // Generate tokens grouped by component (each component as an object)
+    const components = Object.keys(tokensByComponent).sort();
+    
+    for (const component of components) {
+      const tokens = tokensByComponent[component];
+      const objectName = `${component}Tokens`;
+      
+      if (includeComments) {
+        lines.push(`/** ${component} Component Tokens */`);
+      }
+      lines.push(`object ${objectName} {`);
+      
+      for (const token of tokens) {
+        const kotlinConstName = this.formatAndroidComponentTokenName(token);
+        const kotlinValue = this.formatAndroidComponentTokenValue(token);
+        
+        if (includeComments && token.reasoning) {
+          lines.push(`    // ${token.reasoning}`);
+        }
+        
+        lines.push(`    val ${kotlinConstName} = ${kotlinValue}`);
+        tokenCount++;
+      }
+      
+      lines.push('}');
+      lines.push('');
+    }
+
+    const content = lines.join('\n');
+    const validation = this.validateAndroidComponentTokenSyntax(content);
+
+    return {
+      platform: 'android',
+      filePath: `${outputDir}/ComponentTokens.android.kt`,
+      content,
+      tokenCount,
+      componentCount: components.length,
+      valid: validation.valid,
+      errors: validation.errors
+    };
+  }
+
+  /**
+   * Format component token name for Web CSS
+   * Converts 'buttonicon.inset.large' to '--button-icon-inset-large'
+   */
+  private formatWebComponentTokenName(token: RegisteredComponentToken): string {
+    // Convert component.property.variant to kebab-case CSS custom property
+    const parts = token.name.split('.');
+    const kebabName = parts.map(part => 
+      part.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
+    ).join('-');
+    return `--${kebabName}`;
+  }
+
+  /**
+   * Format component token value for Web CSS
+   * Returns var(--space-150) for primitive references, or raw value
+   */
+  private formatWebComponentTokenValue(token: RegisteredComponentToken): string {
+    if (token.primitiveReference) {
+      // Convert primitive reference to CSS custom property reference
+      // e.g., 'space150' -> 'var(--space-150)'
+      const cssRef = token.primitiveReference
+        .replace(/([a-z])([A-Z])/g, '$1-$2')
+        .replace(/([a-zA-Z])(\d)/g, '$1-$2')
+        .toLowerCase();
+      return `var(--${cssRef})`;
+    }
+    // Return raw value for non-reference tokens
+    return String(token.value);
+  }
+
+  /**
+   * Format component token name for iOS Swift
+   * Converts 'buttonicon.inset.large' to 'insetLarge'
+   */
+  private formatiOSComponentTokenName(token: RegisteredComponentToken): string {
+    // Extract property name from full token name (remove component prefix)
+    const parts = token.name.split('.');
+    // Skip the component name (first part), join remaining parts in camelCase
+    const propertyParts = parts.slice(1);
+    if (propertyParts.length === 0) {
+      return parts[0];
+    }
+    return propertyParts.map((part, index) => 
+      index === 0 ? part : part.charAt(0).toUpperCase() + part.slice(1)
+    ).join('');
+  }
+
+  /**
+   * Get Swift type for component token based on family
+   */
+  private getiOSComponentTokenType(token: RegisteredComponentToken): string {
+    switch (token.family) {
+      case 'spacing':
+      case 'radius':
+      case 'fontSize':
+      case 'tapArea':
+      case 'borderWidth':
+        return 'CGFloat';
+      case 'color':
+        return 'UIColor';
+      default:
+        return 'CGFloat';
+    }
+  }
+
+  /**
+   * Format component token value for iOS Swift
+   * Returns SpacingTokens.space150 for primitive references, or raw value
+   */
+  private formatiOSComponentTokenValue(token: RegisteredComponentToken): string {
+    if (token.primitiveReference) {
+      // Convert primitive reference to Swift constant reference
+      // e.g., 'space150' -> 'SpacingTokens.space150'
+      const familyClass = this.getFamilyClassName(token.family);
+      return `${familyClass}.${token.primitiveReference}`;
+    }
+    // Return raw value for non-reference tokens
+    return String(token.value);
+  }
+
+  /**
+   * Format component token name for Android Kotlin
+   * Converts 'buttonicon.inset.large' to 'insetLarge'
+   */
+  private formatAndroidComponentTokenName(token: RegisteredComponentToken): string {
+    // Same as iOS - extract property name from full token name
+    const parts = token.name.split('.');
+    const propertyParts = parts.slice(1);
+    if (propertyParts.length === 0) {
+      return parts[0];
+    }
+    return propertyParts.map((part, index) => 
+      index === 0 ? part : part.charAt(0).toUpperCase() + part.slice(1)
+    ).join('');
+  }
+
+  /**
+   * Format component token value for Android Kotlin
+   * Returns SpacingTokens.space150 for primitive references, or raw value
+   */
+  private formatAndroidComponentTokenValue(token: RegisteredComponentToken): string {
+    if (token.primitiveReference) {
+      // Convert primitive reference to Kotlin constant reference
+      // e.g., 'space150' -> 'SpacingTokens.space150'
+      const familyClass = this.getFamilyClassName(token.family);
+      return `${familyClass}.${token.primitiveReference}`;
+    }
+    // Return raw value for non-reference tokens
+    return String(token.value);
+  }
+
+  /**
+   * Get the class name for a token family
+   * Used for generating primitive token references
+   */
+  private getFamilyClassName(family: string): string {
+    const familyClassMap: Record<string, string> = {
+      'spacing': 'SpacingTokens',
+      'radius': 'RadiusTokens',
+      'fontSize': 'FontSizeTokens',
+      'color': 'ColorTokens',
+      'tapArea': 'TapAreaTokens',
+      'borderWidth': 'BorderWidthTokens',
+      'lineHeight': 'LineHeightTokens',
+      'fontWeight': 'FontWeightTokens',
+      'fontFamily': 'FontFamilyTokens'
+    };
+    return familyClassMap[family] || `${family.charAt(0).toUpperCase() + family.slice(1)}Tokens`;
+  }
+
+  /**
+   * Validate Web component token CSS syntax
+   */
+  private validateWebComponentTokenSyntax(content: string): { valid: boolean; errors?: string[] } {
+    const errors: string[] = [];
+
+    // Check for :root selector
+    if (!content.includes(':root {')) {
+      errors.push('Missing :root selector');
+    }
+
+    // Check for balanced braces
+    const openBraces = (content.match(/{/g) || []).length;
+    const closeBraces = (content.match(/}/g) || []).length;
+    if (openBraces !== closeBraces) {
+      errors.push('Unbalanced braces in CSS');
+    }
+
+    return {
+      valid: errors.length === 0,
+      errors: errors.length > 0 ? errors : undefined
+    };
+  }
+
+  /**
+   * Validate iOS component token Swift syntax
+   */
+  private validateiOSComponentTokenSyntax(content: string): { valid: boolean; errors?: string[] } {
+    const errors: string[] = [];
+
+    // Check for UIKit import
+    if (!content.includes('import UIKit')) {
+      errors.push('Missing UIKit import');
+    }
+
+    // Check for balanced braces
+    const openBraces = (content.match(/{/g) || []).length;
+    const closeBraces = (content.match(/}/g) || []).length;
+    if (openBraces !== closeBraces) {
+      errors.push('Unbalanced braces in Swift');
+    }
+
+    return {
+      valid: errors.length === 0,
+      errors: errors.length > 0 ? errors : undefined
+    };
+  }
+
+  /**
+   * Validate Android component token Kotlin syntax
+   */
+  private validateAndroidComponentTokenSyntax(content: string): { valid: boolean; errors?: string[] } {
+    const errors: string[] = [];
+
+    // Check for package declaration
+    if (!content.includes('package com.designerpunk.tokens')) {
+      errors.push('Missing package declaration');
+    }
+
+    // Check for balanced braces
+    const openBraces = (content.match(/{/g) || []).length;
+    const closeBraces = (content.match(/}/g) || []).length;
+    if (openBraces !== closeBraces) {
+      errors.push('Unbalanced braces in Kotlin');
+    }
+
+    return {
+      valid: errors.length === 0,
+      errors: errors.length > 0 ? errors : undefined
+    };
   }
 
   /**

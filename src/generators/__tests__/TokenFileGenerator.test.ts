@@ -670,4 +670,248 @@ describe('TokenFileGenerator', () => {
       });
     });
   });
+
+  describe('Component Token Generation', () => {
+    // Import ComponentTokenRegistry for testing
+    const { ComponentTokenRegistry } = require('../../registries/ComponentTokenRegistry');
+
+    beforeEach(() => {
+      // Clear registry before each test
+      ComponentTokenRegistry.clear();
+    });
+
+    afterEach(() => {
+      // Clean up after each test
+      ComponentTokenRegistry.clear();
+    });
+
+    it('should generate component tokens for all platforms', () => {
+      // Register test component tokens
+      ComponentTokenRegistry.registerBatch('ButtonIcon', [
+        {
+          name: 'buttonicon.inset.large',
+          component: 'ButtonIcon',
+          family: 'spacing',
+          value: 12,
+          primitiveReference: 'space150',
+          reasoning: 'Large inset for button icon padding'
+        },
+        {
+          name: 'buttonicon.inset.medium',
+          component: 'ButtonIcon',
+          family: 'spacing',
+          value: 10,
+          primitiveReference: 'space125',
+          reasoning: 'Medium inset for button icon padding'
+        }
+      ]);
+
+      const results = generator.generateComponentTokens();
+
+      expect(results).toHaveLength(3);
+      expect(results.map(r => r.platform)).toEqual(['web', 'ios', 'android']);
+    });
+
+    it('should generate valid Web CSS component tokens', () => {
+      ComponentTokenRegistry.registerBatch('ButtonIcon', [
+        {
+          name: 'buttonicon.inset.large',
+          component: 'ButtonIcon',
+          family: 'spacing',
+          value: 12,
+          primitiveReference: 'space150',
+          reasoning: 'Large inset for button icon padding'
+        }
+      ]);
+
+      const results = generator.generateComponentTokens();
+      const webResult = results.find(r => r.platform === 'web');
+
+      expect(webResult).toBeDefined();
+      expect(webResult!.valid).toBe(true);
+      expect(webResult!.filePath).toBe('dist/ComponentTokens.web.css');
+      expect(webResult!.content).toContain(':root {');
+      expect(webResult!.content).toContain('--buttonicon-inset-large');
+      expect(webResult!.content).toContain('var(--space-150)');
+      expect(webResult!.tokenCount).toBe(1);
+      expect(webResult!.componentCount).toBe(1);
+    });
+
+    it('should generate valid iOS Swift component tokens', () => {
+      ComponentTokenRegistry.registerBatch('ButtonIcon', [
+        {
+          name: 'buttonicon.inset.large',
+          component: 'ButtonIcon',
+          family: 'spacing',
+          value: 12,
+          primitiveReference: 'space150',
+          reasoning: 'Large inset for button icon padding'
+        }
+      ]);
+
+      const results = generator.generateComponentTokens();
+      const iosResult = results.find(r => r.platform === 'ios');
+
+      expect(iosResult).toBeDefined();
+      expect(iosResult!.valid).toBe(true);
+      expect(iosResult!.filePath).toBe('dist/ComponentTokens.ios.swift');
+      expect(iosResult!.content).toContain('import UIKit');
+      expect(iosResult!.content).toContain('public enum ButtonIconTokens');
+      expect(iosResult!.content).toContain('insetLarge');
+      expect(iosResult!.content).toContain('SpacingTokens.space150');
+      expect(iosResult!.tokenCount).toBe(1);
+    });
+
+    it('should generate valid Android Kotlin component tokens', () => {
+      ComponentTokenRegistry.registerBatch('ButtonIcon', [
+        {
+          name: 'buttonicon.inset.large',
+          component: 'ButtonIcon',
+          family: 'spacing',
+          value: 12,
+          primitiveReference: 'space150',
+          reasoning: 'Large inset for button icon padding'
+        }
+      ]);
+
+      const results = generator.generateComponentTokens();
+      const androidResult = results.find(r => r.platform === 'android');
+
+      expect(androidResult).toBeDefined();
+      expect(androidResult!.valid).toBe(true);
+      expect(androidResult!.filePath).toBe('dist/ComponentTokens.android.kt');
+      expect(androidResult!.content).toContain('package com.designerpunk.tokens');
+      expect(androidResult!.content).toContain('object ButtonIconTokens');
+      expect(androidResult!.content).toContain('insetLarge');
+      expect(androidResult!.content).toContain('SpacingTokens.space150');
+      expect(androidResult!.tokenCount).toBe(1);
+    });
+
+    it('should group tokens by component', () => {
+      // Register tokens for multiple components
+      ComponentTokenRegistry.registerBatch('ButtonIcon', [
+        {
+          name: 'buttonicon.inset.large',
+          component: 'ButtonIcon',
+          family: 'spacing',
+          value: 12,
+          primitiveReference: 'space150',
+          reasoning: 'Large inset'
+        }
+      ]);
+      ComponentTokenRegistry.registerBatch('TextInput', [
+        {
+          name: 'textinput.padding.horizontal',
+          component: 'TextInput',
+          family: 'spacing',
+          value: 16,
+          primitiveReference: 'space200',
+          reasoning: 'Horizontal padding'
+        }
+      ]);
+
+      const results = generator.generateComponentTokens();
+      const webResult = results.find(r => r.platform === 'web');
+
+      expect(webResult!.componentCount).toBe(2);
+      expect(webResult!.content).toContain('ButtonIcon Component Tokens');
+      expect(webResult!.content).toContain('TextInput Component Tokens');
+    });
+
+    it('should maintain primitive token references (not inline values)', () => {
+      ComponentTokenRegistry.registerBatch('ButtonIcon', [
+        {
+          name: 'buttonicon.inset.large',
+          component: 'ButtonIcon',
+          family: 'spacing',
+          value: 12,
+          primitiveReference: 'space150',
+          reasoning: 'Large inset'
+        }
+      ]);
+
+      const results = generator.generateComponentTokens();
+      
+      // Web should use var() reference
+      const webResult = results.find(r => r.platform === 'web');
+      expect(webResult!.content).toContain('var(--space-150)');
+      expect(webResult!.content).not.toMatch(/--buttonicon-inset-large:\s*12;/);
+
+      // iOS should use constant reference
+      const iosResult = results.find(r => r.platform === 'ios');
+      expect(iosResult!.content).toContain('SpacingTokens.space150');
+      expect(iosResult!.content).not.toMatch(/insetLarge.*=\s*12$/m);
+
+      // Android should use constant reference
+      const androidResult = results.find(r => r.platform === 'android');
+      expect(androidResult!.content).toContain('SpacingTokens.space150');
+      expect(androidResult!.content).not.toMatch(/insetLarge\s*=\s*12$/m);
+    });
+
+    it('should handle tokens without primitive references', () => {
+      ComponentTokenRegistry.registerBatch('Custom', [
+        {
+          name: 'custom.value',
+          component: 'Custom',
+          family: 'spacing',
+          value: 14,
+          reasoning: 'Custom value without primitive reference'
+        }
+      ]);
+
+      const results = generator.generateComponentTokens();
+      const webResult = results.find(r => r.platform === 'web');
+
+      // Should use raw value when no primitive reference
+      expect(webResult!.content).toContain('--custom-value: 14;');
+    });
+
+    it('should include reasoning comments when includeComments is true', () => {
+      ComponentTokenRegistry.registerBatch('ButtonIcon', [
+        {
+          name: 'buttonicon.inset.large',
+          component: 'ButtonIcon',
+          family: 'spacing',
+          value: 12,
+          primitiveReference: 'space150',
+          reasoning: 'Large inset for button icon padding'
+        }
+      ]);
+
+      const results = generator.generateComponentTokens({ includeComments: true });
+      const webResult = results.find(r => r.platform === 'web');
+
+      expect(webResult!.content).toContain('Large inset for button icon padding');
+    });
+
+    it('should use custom output directory', () => {
+      ComponentTokenRegistry.registerBatch('ButtonIcon', [
+        {
+          name: 'buttonicon.inset.large',
+          component: 'ButtonIcon',
+          family: 'spacing',
+          value: 12,
+          primitiveReference: 'space150',
+          reasoning: 'Large inset'
+        }
+      ]);
+
+      const results = generator.generateComponentTokens({ outputDir: 'custom/output' });
+
+      expect(results[0].filePath).toBe('custom/output/ComponentTokens.web.css');
+      expect(results[1].filePath).toBe('custom/output/ComponentTokens.ios.swift');
+      expect(results[2].filePath).toBe('custom/output/ComponentTokens.android.kt');
+    });
+
+    it('should handle empty registry gracefully', () => {
+      const results = generator.generateComponentTokens();
+
+      expect(results).toHaveLength(3);
+      results.forEach(result => {
+        expect(result.valid).toBe(true);
+        expect(result.tokenCount).toBe(0);
+        expect(result.componentCount).toBe(0);
+      });
+    });
+  });
 });
