@@ -122,15 +122,17 @@ describe('Release Detection Workflow', () => {
       
       // Should document automatic hook triggering on summary document creation
       expect(workflowContent).toContain('summary document');
-      expect(workflowContent).toContain('task-*-summary.md');
+      // Doc uses task-N-summary.md as placeholder pattern (N = task number)
+      expect(workflowContent).toContain('task-N-summary.md');
     });
 
     it('should document hybrid approach', async () => {
       const workflowContent = await fs.readFile(workflowDocPath, 'utf-8');
       
-      // Should document that AI-created files require manual trigger
+      // Should document that AI-created files require manual release detection
+      // (automatic hooks only work for manual IDE file operations)
       expect(workflowContent).toContain('AI-created files');
-      expect(workflowContent).toContain('manual trigger');
+      expect(workflowContent).toContain('Manual Release Detection');
     });
   });
 

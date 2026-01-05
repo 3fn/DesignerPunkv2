@@ -446,7 +446,7 @@ This implementation plan converts the Button-Icon Component design into actionab
   - Mark complete: Use `taskStatus` tool to update task status
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 6 Complete: Create Component Tests"`
 
-  - [ ] 6.1 Set up test infrastructure
+  - [x] 6.1 Set up test infrastructure
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Configure Jest for web components
@@ -455,7 +455,7 @@ This implementation plan converts the Button-Icon Component design into actionab
     - Write one smoke test to verify setup works
     - _Requirements: Testing infrastructure_
 
-  - [ ] 6.2 Write property-based tests (Properties 1-7)
+  - [x] 6.2 Write property-based tests (Properties 1-7)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - **Property 1**: Size→Token Mapping - verify all sizes use correct tokens
@@ -467,7 +467,7 @@ This implementation plan converts the Button-Icon Component design into actionab
     - **Property 7**: Touch Target Minimum - verify all sizes meet 48px
     - _Requirements: 1.1-1.4, 2.1-2.3, 3.1, 4.2, 4.5, 5.1-5.4_
 
-  - [ ] 6.3 Write property-based tests (Properties 8-13)
+  - [x] 6.3 Write property-based tests (Properties 8-13)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - **Property 8**: Focus Ring Styling - verify focus ring tokens and containment
@@ -478,7 +478,7 @@ This implementation plan converts the Button-Icon Component design into actionab
     - **Property 13**: Icon Component Integration - verify Icon props
     - _Requirements: 6.1-6.3, 7.1-7.4, 8.1-8.3, 9.1-9.2, 12.1-12.2, 13.1-13.4_
 
-  - [ ] 6.4 Write unit tests for edge cases
+  - [x] 6.4 Write unit tests for edge cases
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test default prop values (size: medium, variant: primary)
@@ -487,7 +487,7 @@ This implementation plan converts the Button-Icon Component design into actionab
     - Test box-shadow technique for secondary border
     - _Requirements: 1.5, 2.4, 6.4, 6.5, 9.3_
 
-  - [ ] 6.5 Integrate Stemma validators
+  - [x] 6.5 Integrate Stemma validators
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add component naming validation

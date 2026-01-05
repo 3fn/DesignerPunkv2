@@ -5,7 +5,7 @@ inclusion: always
 # Core Goals
 
 **Date**: 2025-10-20
-**Last Reviewed**: 2025-12-15
+**Last Reviewed**: 2026-01-05
 **Purpose**: Core project context and development practices for DesignerPunk design system
 **Organization**: process-standard
 **Scope**: cross-project
@@ -48,8 +48,12 @@ DesignerPunk is a True Native cross-platform design system with mathematical fou
 
 **Token Selection Priority (MUST follow this order):**
 1. **Semantic tokens** — purpose-built for specific use cases (e.g., `tapAreaRecommended` for touch targets, `color.contrast.onPrimary` for content on primary backgrounds)
-2. **Primitive tokens** — only when no semantic token exists for the use case
-3. **Hard-coded values** — only as last resort, requires user approval
+2. **Primitive tokens** — when no semantic token exists, check if a primitive token provides the needed value
+3. **Component tokens referencing primitives** — when a component needs a semantic name but the value exists as a primitive, create a component token that references the primitive (e.g., `buttonIcon.inset.medium = space125`)
+4. **Hard-coded values** — only as last resort, requires user approval
+
+**Component Token Construction Rule:**
+Component tokens must either reference an existing primitive token OR conform to how that primitive token family's values are defined. Never introduce arbitrary values at the component level that don't align with the underlying token family's value system.
 
 **Why semantic first?** Semantic tokens are self-documenting, theme-aware, and encode design intent. Using `tapAreaRecommended` instead of `space600` makes code readable and maintainable.
 

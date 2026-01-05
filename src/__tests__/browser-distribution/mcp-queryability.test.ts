@@ -277,11 +277,11 @@ describe('MCP Queryability: Browser Distribution Guide', () => {
       expect(content).toContain('Components Unstyled');
 
       // Should have component reference
-      // Note: Stemma System migration - text-input-field removed, using input-text-base instead
+      // Note: Stemma System migration - components now use *-base suffix pattern
       expect(content).toContain('button-cta');
       expect(content).toContain('input-text-base');
-      expect(content).toContain('dp-icon');
-      expect(content).toContain('dp-container');
+      expect(content).toContain('icon-base');
+      expect(content).toContain('container-base');
     });
 
     /**

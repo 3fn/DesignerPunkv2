@@ -27,18 +27,19 @@ describe('MCP Component Integration: Component Quick Reference', () => {
   const COMPONENT_QUICK_REFERENCE_PATH = '.kiro/steering/Component-Quick-Reference.md';
 
   // All 11 component family document paths from the routing table
+  // Note: File naming follows Component-Family-*.md pattern per Stemma System conventions
   const COMPONENT_FAMILY_DOCS = [
-    { family: 'Buttons', path: '.kiro/steering/button-components.md', status: 'Production' },
-    { family: 'Form Inputs', path: '.kiro/steering/form-inputs-components.md', status: 'Production' },
-    { family: 'Containers', path: '.kiro/steering/container-components.md', status: 'Production' },
-    { family: 'Icons', path: '.kiro/steering/icon-components.md', status: 'Production' },
-    { family: 'Modals', path: '.kiro/steering/modal-components.md', status: 'Placeholder' },
-    { family: 'Avatars', path: '.kiro/steering/avatar-components.md', status: 'Placeholder' },
-    { family: 'Badges & Tags', path: '.kiro/steering/badge-components.md', status: 'Placeholder' },
-    { family: 'Data Displays', path: '.kiro/steering/data-display-components.md', status: 'Placeholder' },
-    { family: 'Dividers', path: '.kiro/steering/divider-components.md', status: 'Placeholder' },
-    { family: 'Loading', path: '.kiro/steering/loading-components.md', status: 'Placeholder' },
-    { family: 'Navigation', path: '.kiro/steering/navigation-components.md', status: 'Placeholder' },
+    { family: 'Buttons', path: '.kiro/steering/Component-Family-Button.md', status: 'Production' },
+    { family: 'Form Inputs', path: '.kiro/steering/Component-Family-Form-Inputs.md', status: 'Production' },
+    { family: 'Containers', path: '.kiro/steering/Component-Family-Container.md', status: 'Production' },
+    { family: 'Icons', path: '.kiro/steering/Component-Family-Icon.md', status: 'Production' },
+    { family: 'Modals', path: '.kiro/steering/Component-Family-Modal.md', status: 'Placeholder' },
+    { family: 'Avatars', path: '.kiro/steering/Component-Family-Avatar.md', status: 'Placeholder' },
+    { family: 'Badges & Tags', path: '.kiro/steering/Component-Family-Badge.md', status: 'Placeholder' },
+    { family: 'Data Displays', path: '.kiro/steering/Component-Family-Data-Display.md', status: 'Placeholder' },
+    { family: 'Dividers', path: '.kiro/steering/Component-Family-Divider.md', status: 'Placeholder' },
+    { family: 'Loading', path: '.kiro/steering/Component-Family-Loading.md', status: 'Placeholder' },
+    { family: 'Navigation', path: '.kiro/steering/Component-Family-Navigation.md', status: 'Placeholder' },
   ];
 
   describe('Component Quick Reference Document Structure', () => {

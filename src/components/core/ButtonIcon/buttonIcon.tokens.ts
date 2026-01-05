@@ -14,37 +14,39 @@
  * - Android: Kotlin constants (buttonIconInsetLarge.dp)
  * 
  * Token Relationships:
- * - buttonIcon.inset.large (12px) references space.inset.150
- * - buttonIcon.inset.medium (10px) is a unique value (no semantic equivalent)
- * - buttonIcon.inset.small (8px) references space.inset.100
+ * - buttonIcon.inset.large (12px) references space150
+ * - buttonIcon.inset.medium (10px) references space125 (strategic flexibility token)
+ * - buttonIcon.inset.small (8px) references space100
  * 
  * @see .kiro/specs/035-button-icon-component/design.md for token consumption strategy
  * @see .kiro/specs/034-component-architecture-system for Stemma System details
  */
 
+import { spacingTokens } from '../../../tokens/SpacingTokens';
+
 /**
  * Button-Icon inset (padding) token values
  * 
  * Maps size variants to padding values in pixels.
- * These values follow the 8px baseline grid with mathematical relationships.
+ * These values reference primitive spacing tokens to maintain mathematical consistency.
  * 
  * Token values:
- * - large: 12px (1.5 × base, references space.inset.150)
- * - medium: 10px (unique value, no semantic equivalent)
- * - small: 8px (1 × base, references space.inset.100)
+ * - large: 12px (1.5 × base, references space150)
+ * - medium: 10px (1.25 × base, references space125 strategic flexibility token)
+ * - small: 8px (1 × base, references space100)
  * 
  * @see Requirements 10.1, 10.2, 10.3
  */
 export const ButtonIconTokens = {
   inset: {
-    /** Large size padding - references space.inset.150 (12px) */
-    large: 12,
+    /** Large size padding - references space150 (12px) */
+    large: spacingTokens.space150.baseValue,
     
-    /** Medium size padding - unique value, no semantic equivalent (10px) */
-    medium: 10,
+    /** Medium size padding - references space125 strategic flexibility token (10px) */
+    medium: spacingTokens.space125.baseValue,
     
-    /** Small size padding - references space.inset.100 (8px) */
-    small: 8,
+    /** Small size padding - references space100 (8px) */
+    small: spacingTokens.space100.baseValue,
   },
 } as const;
 
