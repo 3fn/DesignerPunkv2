@@ -8,11 +8,13 @@
 export { RegistryCoordinator } from './RegistryCoordinator';
 export type { RegistryCoordinationStats } from './RegistryCoordinator';
 
-export { ValidationCoordinator } from './ValidationCoordinator';
+export { ValidationCoordinator, validateFamilyConformance } from './ValidationCoordinator';
 export type { 
   ValidationCoordinatorConfig,
   ValidationOptions,
-  ComprehensiveValidationReport
+  ComprehensiveValidationReport,
+  ComponentTokenValidationResult,
+  FamilyConformanceResult
 } from './ValidationCoordinator';
 
 export { TranslationCoordinator } from './TranslationCoordinator';

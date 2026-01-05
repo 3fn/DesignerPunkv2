@@ -1,1686 +1,1706 @@
 {
-  "timestamp": "2026-01-05T20:28:18.710Z",
+  "timestamp": "2026-01-05T21:16:15.991Z",
   "lastAnalyzedCommit": "ec9595fb983e6e9cc0622d0b6e5a3b816e98dc87",
-  "documentCount": 336,
+  "documentCount": 340,
   "documents": [
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-1-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.617Z",
+      "lastModified": "2026-01-05T21:16:15.896Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-1-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.618Z",
+      "lastModified": "2026-01-05T21:16:15.899Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-1-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.621Z",
+      "lastModified": "2026-01-05T21:16:15.900Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-1-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.621Z",
+      "lastModified": "2026-01-05T21:16:15.911Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-1-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.621Z",
+      "lastModified": "2026-01-05T21:16:15.913Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-1-6-completion.md",
-      "lastModified": "2026-01-05T20:28:18.621Z",
+      "lastModified": "2026-01-05T21:16:15.913Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-1-parent-completion.md",
-      "lastModified": "2026-01-05T20:28:18.621Z",
+      "lastModified": "2026-01-05T21:16:15.914Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.621Z",
+      "lastModified": "2026-01-05T21:16:15.914Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.621Z",
+      "lastModified": "2026-01-05T21:16:15.914Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.621Z",
+      "lastModified": "2026-01-05T21:16:15.914Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.621Z",
+      "lastModified": "2026-01-05T21:16:15.915Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.621Z",
+      "lastModified": "2026-01-05T21:16:15.915Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-6-completion.md",
-      "lastModified": "2026-01-05T20:28:18.621Z",
+      "lastModified": "2026-01-05T21:16:15.915Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-7-completion.md",
-      "lastModified": "2026-01-05T20:28:18.621Z",
+      "lastModified": "2026-01-05T21:16:15.915Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-2-parent-completion.md",
-      "lastModified": "2026-01-05T20:28:18.621Z",
+      "lastModified": "2026-01-05T21:16:15.915Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-3-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.622Z",
+      "lastModified": "2026-01-05T21:16:15.915Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-3-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.622Z",
+      "lastModified": "2026-01-05T21:16:15.915Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-3-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.622Z",
+      "lastModified": "2026-01-05T21:16:15.916Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-3-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.622Z",
+      "lastModified": "2026-01-05T21:16:15.916Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-3-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.622Z",
+      "lastModified": "2026-01-05T21:16:15.916Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-3-6-completion.md",
-      "lastModified": "2026-01-05T20:28:18.622Z",
+      "lastModified": "2026-01-05T21:16:15.916Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-3-parent-completion.md",
-      "lastModified": "2026-01-05T20:28:18.623Z",
+      "lastModified": "2026-01-05T21:16:15.916Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-4-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.623Z",
+      "lastModified": "2026-01-05T21:16:15.916Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-4-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.623Z",
+      "lastModified": "2026-01-05T21:16:15.917Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-4-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.623Z",
+      "lastModified": "2026-01-05T21:16:15.917Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-4-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.623Z",
+      "lastModified": "2026-01-05T21:16:15.917Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/024-blend-token-infrastructure-audit/completion/task-4-parent-completion.md",
-      "lastModified": "2026-01-05T20:28:18.623Z",
+      "lastModified": "2026-01-05T21:16:15.917Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/030-test-failure-fixes/completion/task-12-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.623Z",
+      "lastModified": "2026-01-05T21:16:15.918Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/030-test-failure-fixes/completion/task-12-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.623Z",
+      "lastModified": "2026-01-05T21:16:15.919Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/030-test-failure-fixes/completion/task-12-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.623Z",
+      "lastModified": "2026-01-05T21:16:15.919Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/030-test-failure-fixes/completion/task-12-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.623Z",
+      "lastModified": "2026-01-05T21:16:15.919Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/030-test-failure-fixes/completion/task-12-completion.md",
-      "lastModified": "2026-01-05T20:28:18.624Z",
+      "lastModified": "2026-01-05T21:16:15.919Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/030-test-failure-fixes/completion/task-13-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.624Z",
+      "lastModified": "2026-01-05T21:16:15.919Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/030-test-failure-fixes/completion/task-13-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.624Z",
+      "lastModified": "2026-01-05T21:16:15.920Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/030-test-failure-fixes/completion/task-13-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.625Z",
+      "lastModified": "2026-01-05T21:16:15.920Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/030-test-failure-fixes/completion/task-13-completion.md",
-      "lastModified": "2026-01-05T20:28:18.625Z",
+      "lastModified": "2026-01-05T21:16:15.920Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-1-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.625Z",
+      "lastModified": "2026-01-05T21:16:15.920Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-1-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.625Z",
+      "lastModified": "2026-01-05T21:16:15.920Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-1-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.625Z",
+      "lastModified": "2026-01-05T21:16:15.920Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-1-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.625Z",
+      "lastModified": "2026-01-05T21:16:15.920Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-1-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.626Z",
+      "lastModified": "2026-01-05T21:16:15.920Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-1-6-completion.md",
-      "lastModified": "2026-01-05T20:28:18.626Z",
+      "lastModified": "2026-01-05T21:16:15.920Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-1-parent-completion.md",
-      "lastModified": "2026-01-05T20:28:18.626Z",
+      "lastModified": "2026-01-05T21:16:15.920Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-2-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.626Z",
+      "lastModified": "2026-01-05T21:16:15.923Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-2-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.626Z",
+      "lastModified": "2026-01-05T21:16:15.923Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-2-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.626Z",
+      "lastModified": "2026-01-05T21:16:15.924Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-2-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.626Z",
+      "lastModified": "2026-01-05T21:16:15.924Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-2-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.627Z",
+      "lastModified": "2026-01-05T21:16:15.926Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-2-parent-completion.md",
-      "lastModified": "2026-01-05T20:28:18.627Z",
+      "lastModified": "2026-01-05T21:16:15.926Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-3-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.628Z",
+      "lastModified": "2026-01-05T21:16:15.926Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-3-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.628Z",
+      "lastModified": "2026-01-05T21:16:15.926Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-3-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.628Z",
+      "lastModified": "2026-01-05T21:16:15.927Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-3-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.628Z",
+      "lastModified": "2026-01-05T21:16:15.927Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-3-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.628Z",
+      "lastModified": "2026-01-05T21:16:15.927Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-3-6-completion.md",
-      "lastModified": "2026-01-05T20:28:18.628Z",
+      "lastModified": "2026-01-05T21:16:15.927Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-3-7-completion.md",
-      "lastModified": "2026-01-05T20:28:18.628Z",
+      "lastModified": "2026-01-05T21:16:15.927Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-3-parent-completion.md",
-      "lastModified": "2026-01-05T20:28:18.628Z",
+      "lastModified": "2026-01-05T21:16:15.928Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/031-blend-infrastructure-implementation/completion/task-6-checkpoint-completion.md",
-      "lastModified": "2026-01-05T20:28:18.628Z",
+      "lastModified": "2026-01-05T21:16:15.928Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-1-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.628Z",
+      "lastModified": "2026-01-05T21:16:15.928Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-1-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.629Z",
+      "lastModified": "2026-01-05T21:16:15.928Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-1-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.629Z",
+      "lastModified": "2026-01-05T21:16:15.928Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-1-parent-completion.md",
-      "lastModified": "2026-01-05T20:28:18.629Z",
+      "lastModified": "2026-01-05T21:16:15.928Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-10-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.630Z",
+      "lastModified": "2026-01-05T21:16:15.929Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-10-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.630Z",
+      "lastModified": "2026-01-05T21:16:15.929Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-10-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.630Z",
+      "lastModified": "2026-01-05T21:16:15.929Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-10-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.630Z",
+      "lastModified": "2026-01-05T21:16:15.929Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-10-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.631Z",
+      "lastModified": "2026-01-05T21:16:15.930Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-10-parent-completion.md",
-      "lastModified": "2026-01-05T20:28:18.631Z",
+      "lastModified": "2026-01-05T21:16:15.930Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-2-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.631Z",
+      "lastModified": "2026-01-05T21:16:15.930Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-2-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.631Z",
+      "lastModified": "2026-01-05T21:16:15.931Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-2-parent-completion.md",
-      "lastModified": "2026-01-05T20:28:18.631Z",
+      "lastModified": "2026-01-05T21:16:15.931Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-3-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.631Z",
+      "lastModified": "2026-01-05T21:16:15.931Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-3-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.632Z",
+      "lastModified": "2026-01-05T21:16:15.931Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-3-parent-completion.md",
-      "lastModified": "2026-01-05T20:28:18.632Z",
+      "lastModified": "2026-01-05T21:16:15.932Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-4-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.633Z",
+      "lastModified": "2026-01-05T21:16:15.932Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-4-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.634Z",
+      "lastModified": "2026-01-05T21:16:15.932Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-4-parent-completion.md",
-      "lastModified": "2026-01-05T20:28:18.634Z",
+      "lastModified": "2026-01-05T21:16:15.932Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-5-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.635Z",
+      "lastModified": "2026-01-05T21:16:15.932Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-5-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.635Z",
+      "lastModified": "2026-01-05T21:16:15.932Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-5-parent-completion.md",
-      "lastModified": "2026-01-05T20:28:18.635Z",
+      "lastModified": "2026-01-05T21:16:15.932Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-6-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.635Z",
+      "lastModified": "2026-01-05T21:16:15.933Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-6-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.636Z",
+      "lastModified": "2026-01-05T21:16:15.933Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-6-parent-completion.md",
-      "lastModified": "2026-01-05T20:28:18.636Z",
+      "lastModified": "2026-01-05T21:16:15.933Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-7-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.636Z",
+      "lastModified": "2026-01-05T21:16:15.933Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-7-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.636Z",
+      "lastModified": "2026-01-05T21:16:15.933Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-7-parent-completion.md",
-      "lastModified": "2026-01-05T20:28:18.636Z",
+      "lastModified": "2026-01-05T21:16:15.933Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-8-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.636Z",
+      "lastModified": "2026-01-05T21:16:15.933Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-8-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.637Z",
+      "lastModified": "2026-01-05T21:16:15.933Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-8-parent-completion.md",
-      "lastModified": "2026-01-05T20:28:18.637Z",
+      "lastModified": "2026-01-05T21:16:15.934Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-9-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.637Z",
+      "lastModified": "2026-01-05T21:16:15.934Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-9-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.637Z",
+      "lastModified": "2026-01-05T21:16:15.934Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/032-documentation-architecture-audit/completion/task-9-parent-completion.md",
-      "lastModified": "2026-01-05T20:28:18.637Z",
+      "lastModified": "2026-01-05T21:16:15.935Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-1-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.637Z",
+      "lastModified": "2026-01-05T21:16:15.935Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-1-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.638Z",
+      "lastModified": "2026-01-05T21:16:15.935Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-1-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.638Z",
+      "lastModified": "2026-01-05T21:16:15.935Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.638Z",
+      "lastModified": "2026-01-05T21:16:15.936Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-2-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.638Z",
+      "lastModified": "2026-01-05T21:16:15.936Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-2-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.639Z",
+      "lastModified": "2026-01-05T21:16:15.936Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-2-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.639Z",
+      "lastModified": "2026-01-05T21:16:15.936Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.639Z",
+      "lastModified": "2026-01-05T21:16:15.937Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-3-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.639Z",
+      "lastModified": "2026-01-05T21:16:15.937Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-3-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.639Z",
+      "lastModified": "2026-01-05T21:16:15.937Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-3-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.639Z",
+      "lastModified": "2026-01-05T21:16:15.938Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.639Z",
+      "lastModified": "2026-01-05T21:16:15.938Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-4-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.639Z",
+      "lastModified": "2026-01-05T21:16:15.939Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-4-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.639Z",
+      "lastModified": "2026-01-05T21:16:15.940Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.639Z",
+      "lastModified": "2026-01-05T21:16:15.940Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-5-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.639Z",
+      "lastModified": "2026-01-05T21:16:15.940Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.640Z",
+      "lastModified": "2026-01-05T21:16:15.941Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-6-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.640Z",
+      "lastModified": "2026-01-05T21:16:15.941Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-6-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.641Z",
+      "lastModified": "2026-01-05T21:16:15.941Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-6-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.641Z",
+      "lastModified": "2026-01-05T21:16:15.942Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-6-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.641Z",
+      "lastModified": "2026-01-05T21:16:15.942Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-6-completion.md",
-      "lastModified": "2026-01-05T20:28:18.641Z",
+      "lastModified": "2026-01-05T21:16:15.942Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-7-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.641Z",
+      "lastModified": "2026-01-05T21:16:15.943Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-7-completion.md",
-      "lastModified": "2026-01-05T20:28:18.642Z",
+      "lastModified": "2026-01-05T21:16:15.943Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-8-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.642Z",
+      "lastModified": "2026-01-05T21:16:15.943Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-8-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.642Z",
+      "lastModified": "2026-01-05T21:16:15.943Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-8-completion.md",
-      "lastModified": "2026-01-05T20:28:18.642Z",
+      "lastModified": "2026-01-05T21:16:15.943Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-9-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.642Z",
+      "lastModified": "2026-01-05T21:16:15.943Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-9-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.642Z",
+      "lastModified": "2026-01-05T21:16:15.943Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/033-steering-documentation-enhancements/completion/task-9-completion.md",
-      "lastModified": "2026-01-05T20:28:18.642Z",
+      "lastModified": "2026-01-05T21:16:15.944Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-1-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.642Z",
+      "lastModified": "2026-01-05T21:16:15.944Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-1-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.642Z",
+      "lastModified": "2026-01-05T21:16:15.944Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-1-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.643Z",
+      "lastModified": "2026-01-05T21:16:15.944Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-1-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.643Z",
+      "lastModified": "2026-01-05T21:16:15.944Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-1-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.643Z",
+      "lastModified": "2026-01-05T21:16:15.944Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.643Z",
+      "lastModified": "2026-01-05T21:16:15.944Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-10-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.643Z",
+      "lastModified": "2026-01-05T21:16:15.944Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-10-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.643Z",
+      "lastModified": "2026-01-05T21:16:15.944Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-10-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.643Z",
+      "lastModified": "2026-01-05T21:16:15.944Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-10-completion.md",
-      "lastModified": "2026-01-05T20:28:18.643Z",
+      "lastModified": "2026-01-05T21:16:15.944Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-11-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.643Z",
+      "lastModified": "2026-01-05T21:16:15.944Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-11-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.643Z",
+      "lastModified": "2026-01-05T21:16:15.945Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-11-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.644Z",
+      "lastModified": "2026-01-05T21:16:15.945Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-11-completion.md",
-      "lastModified": "2026-01-05T20:28:18.644Z",
+      "lastModified": "2026-01-05T21:16:15.945Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-12-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.645Z",
+      "lastModified": "2026-01-05T21:16:15.945Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-12-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.645Z",
+      "lastModified": "2026-01-05T21:16:15.945Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-12-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.645Z",
+      "lastModified": "2026-01-05T21:16:15.945Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-12-completion.md",
-      "lastModified": "2026-01-05T20:28:18.645Z",
+      "lastModified": "2026-01-05T21:16:15.945Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-2-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.645Z",
+      "lastModified": "2026-01-05T21:16:15.945Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-2-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.645Z",
+      "lastModified": "2026-01-05T21:16:15.945Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-2-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.645Z",
+      "lastModified": "2026-01-05T21:16:15.945Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-2-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.645Z",
+      "lastModified": "2026-01-05T21:16:15.945Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-2-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.645Z",
+      "lastModified": "2026-01-05T21:16:15.945Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.645Z",
+      "lastModified": "2026-01-05T21:16:15.945Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-3-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.645Z",
+      "lastModified": "2026-01-05T21:16:15.946Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-3-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.645Z",
+      "lastModified": "2026-01-05T21:16:15.946Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-3-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.645Z",
+      "lastModified": "2026-01-05T21:16:15.946Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-3-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.646Z",
+      "lastModified": "2026-01-05T21:16:15.946Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.646Z",
+      "lastModified": "2026-01-05T21:16:15.946Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-4-0-completion.md",
-      "lastModified": "2026-01-05T20:28:18.647Z",
+      "lastModified": "2026-01-05T21:16:15.946Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-4-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.647Z",
+      "lastModified": "2026-01-05T21:16:15.946Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-4-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.647Z",
+      "lastModified": "2026-01-05T21:16:15.946Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-4-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.647Z",
+      "lastModified": "2026-01-05T21:16:15.946Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-4-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.648Z",
+      "lastModified": "2026-01-05T21:16:15.946Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-4-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.648Z",
+      "lastModified": "2026-01-05T21:16:15.946Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.648Z",
+      "lastModified": "2026-01-05T21:16:15.946Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-5-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.648Z",
+      "lastModified": "2026-01-05T21:16:15.947Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-5-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.648Z",
+      "lastModified": "2026-01-05T21:16:15.947Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-5-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.649Z",
+      "lastModified": "2026-01-05T21:16:15.947Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.649Z",
+      "lastModified": "2026-01-05T21:16:15.947Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-6-0-completion.md",
-      "lastModified": "2026-01-05T20:28:18.649Z",
+      "lastModified": "2026-01-05T21:16:15.947Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-6-1-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.649Z",
+      "lastModified": "2026-01-05T21:16:15.947Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-6-1-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.650Z",
+      "lastModified": "2026-01-05T21:16:15.947Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-6-1-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.650Z",
+      "lastModified": "2026-01-05T21:16:15.947Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-6-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.650Z",
+      "lastModified": "2026-01-05T21:16:15.947Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-6-2-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.650Z",
+      "lastModified": "2026-01-05T21:16:15.948Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-6-2-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.650Z",
+      "lastModified": "2026-01-05T21:16:15.948Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-6-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.650Z",
+      "lastModified": "2026-01-05T21:16:15.948Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-6-3-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.650Z",
+      "lastModified": "2026-01-05T21:16:15.948Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-6-3-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.651Z",
+      "lastModified": "2026-01-05T21:16:15.948Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-6-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.651Z",
+      "lastModified": "2026-01-05T21:16:15.948Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-6-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.651Z",
+      "lastModified": "2026-01-05T21:16:15.948Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-6-6-completion.md",
-      "lastModified": "2026-01-05T20:28:18.651Z",
+      "lastModified": "2026-01-05T21:16:15.948Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-6-7-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.651Z",
+      "lastModified": "2026-01-05T21:16:15.948Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-6-7-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.651Z",
+      "lastModified": "2026-01-05T21:16:15.948Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-6-7-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.651Z",
+      "lastModified": "2026-01-05T21:16:15.948Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-6-7-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.651Z",
+      "lastModified": "2026-01-05T21:16:15.948Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-6-7-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.651Z",
+      "lastModified": "2026-01-05T21:16:15.948Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-6-7-completion.md",
-      "lastModified": "2026-01-05T20:28:18.651Z",
+      "lastModified": "2026-01-05T21:16:15.949Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-6-8-completion.md",
-      "lastModified": "2026-01-05T20:28:18.651Z",
+      "lastModified": "2026-01-05T21:16:15.949Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-7-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.651Z",
+      "lastModified": "2026-01-05T21:16:15.949Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-7-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.651Z",
+      "lastModified": "2026-01-05T21:16:15.949Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-7-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.652Z",
+      "lastModified": "2026-01-05T21:16:15.949Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-7-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.652Z",
+      "lastModified": "2026-01-05T21:16:15.949Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-7-completion.md",
-      "lastModified": "2026-01-05T20:28:18.652Z",
+      "lastModified": "2026-01-05T21:16:15.949Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-8-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.652Z",
+      "lastModified": "2026-01-05T21:16:15.949Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-8-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.652Z",
+      "lastModified": "2026-01-05T21:16:15.949Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-8-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.652Z",
+      "lastModified": "2026-01-05T21:16:15.949Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-8-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.652Z",
+      "lastModified": "2026-01-05T21:16:15.949Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-8-completion.md",
-      "lastModified": "2026-01-05T20:28:18.654Z",
+      "lastModified": "2026-01-05T21:16:15.950Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-9-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.654Z",
+      "lastModified": "2026-01-05T21:16:15.950Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-9-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.654Z",
+      "lastModified": "2026-01-05T21:16:15.950Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-9-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.654Z",
+      "lastModified": "2026-01-05T21:16:15.950Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-9-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.654Z",
+      "lastModified": "2026-01-05T21:16:15.950Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/034-component-architecture-system/completion/task-9-completion.md",
-      "lastModified": "2026-01-05T20:28:18.654Z",
+      "lastModified": "2026-01-05T21:16:15.950Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-1-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.654Z",
+      "lastModified": "2026-01-05T21:16:15.950Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-1-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.654Z",
+      "lastModified": "2026-01-05T21:16:15.950Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-1-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.654Z",
+      "lastModified": "2026-01-05T21:16:15.951Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-1-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.654Z",
+      "lastModified": "2026-01-05T21:16:15.951Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-1-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.654Z",
+      "lastModified": "2026-01-05T21:16:15.951Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-1-parent-completion.md",
-      "lastModified": "2026-01-05T20:28:18.654Z",
+      "lastModified": "2026-01-05T21:16:15.951Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-2-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.654Z",
+      "lastModified": "2026-01-05T21:16:15.951Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-2-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.654Z",
+      "lastModified": "2026-01-05T21:16:15.952Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-2-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.655Z",
+      "lastModified": "2026-01-05T21:16:15.952Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-2-parent-completion.md",
-      "lastModified": "2026-01-05T20:28:18.655Z",
+      "lastModified": "2026-01-05T21:16:15.952Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-3-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.655Z",
+      "lastModified": "2026-01-05T21:16:15.952Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-3-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.655Z",
+      "lastModified": "2026-01-05T21:16:15.952Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-3-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.655Z",
+      "lastModified": "2026-01-05T21:16:15.952Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-3-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.655Z",
+      "lastModified": "2026-01-05T21:16:15.952Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-3-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.655Z",
+      "lastModified": "2026-01-05T21:16:15.952Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-3-6-completion.md",
-      "lastModified": "2026-01-05T20:28:18.656Z",
+      "lastModified": "2026-01-05T21:16:15.953Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-3-7-completion.md",
-      "lastModified": "2026-01-05T20:28:18.657Z",
+      "lastModified": "2026-01-05T21:16:15.953Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-3-8-completion.md",
-      "lastModified": "2026-01-05T20:28:18.657Z",
+      "lastModified": "2026-01-05T21:16:15.953Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-3-parent-completion.md",
-      "lastModified": "2026-01-05T20:28:18.657Z",
+      "lastModified": "2026-01-05T21:16:15.953Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-4-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.659Z",
+      "lastModified": "2026-01-05T21:16:15.953Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-4-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.659Z",
+      "lastModified": "2026-01-05T21:16:15.953Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-4-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.659Z",
+      "lastModified": "2026-01-05T21:16:15.954Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-4-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.660Z",
+      "lastModified": "2026-01-05T21:16:15.954Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-4-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.661Z",
+      "lastModified": "2026-01-05T21:16:15.954Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-4-parent-completion.md",
-      "lastModified": "2026-01-05T20:28:18.661Z",
+      "lastModified": "2026-01-05T21:16:15.954Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-5-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.661Z",
+      "lastModified": "2026-01-05T21:16:15.954Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-5-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.662Z",
+      "lastModified": "2026-01-05T21:16:15.954Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-5-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.662Z",
+      "lastModified": "2026-01-05T21:16:15.954Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-5-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.663Z",
+      "lastModified": "2026-01-05T21:16:15.956Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-5-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.663Z",
+      "lastModified": "2026-01-05T21:16:15.956Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-5-parent-completion.md",
-      "lastModified": "2026-01-05T20:28:18.663Z",
+      "lastModified": "2026-01-05T21:16:15.956Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-6-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.665Z",
+      "lastModified": "2026-01-05T21:16:15.957Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-6-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.665Z",
+      "lastModified": "2026-01-05T21:16:15.957Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-6-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.665Z",
+      "lastModified": "2026-01-05T21:16:15.957Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-6-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.666Z",
+      "lastModified": "2026-01-05T21:16:15.957Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/035-button-icon-component/completion/task-6-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.666Z",
+      "lastModified": "2026-01-05T21:16:15.957Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-1-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.666Z",
+      "lastModified": "2026-01-05T21:16:15.958Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-1-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.667Z",
+      "lastModified": "2026-01-05T21:16:15.958Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-1-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.667Z",
+      "lastModified": "2026-01-05T21:16:15.958Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-1-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.668Z",
+      "lastModified": "2026-01-05T21:16:15.958Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-1-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.668Z",
+      "lastModified": "2026-01-05T21:16:15.958Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-1-6-completion.md",
-      "lastModified": "2026-01-05T20:28:18.668Z",
+      "lastModified": "2026-01-05T21:16:15.959Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.668Z",
+      "lastModified": "2026-01-05T21:16:15.959Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-10-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.668Z",
+      "lastModified": "2026-01-05T21:16:15.960Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-10-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.668Z",
+      "lastModified": "2026-01-05T21:16:15.960Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-10-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.669Z",
+      "lastModified": "2026-01-05T21:16:15.960Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-10-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.669Z",
+      "lastModified": "2026-01-05T21:16:15.960Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-10-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.669Z",
+      "lastModified": "2026-01-05T21:16:15.961Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-10-completion.md",
-      "lastModified": "2026-01-05T20:28:18.669Z",
+      "lastModified": "2026-01-05T21:16:15.961Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-11-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.669Z",
+      "lastModified": "2026-01-05T21:16:15.961Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-11-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.670Z",
+      "lastModified": "2026-01-05T21:16:15.962Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-11-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.670Z",
+      "lastModified": "2026-01-05T21:16:15.963Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-11-completion.md",
-      "lastModified": "2026-01-05T20:28:18.670Z",
+      "lastModified": "2026-01-05T21:16:15.963Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-12-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.671Z",
+      "lastModified": "2026-01-05T21:16:15.964Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-12-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.671Z",
+      "lastModified": "2026-01-05T21:16:15.964Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-12-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.672Z",
+      "lastModified": "2026-01-05T21:16:15.964Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-12-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.672Z",
+      "lastModified": "2026-01-05T21:16:15.964Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-12-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.672Z",
+      "lastModified": "2026-01-05T21:16:15.965Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-12-completion.md",
-      "lastModified": "2026-01-05T20:28:18.672Z",
+      "lastModified": "2026-01-05T21:16:15.965Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-13-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.672Z",
+      "lastModified": "2026-01-05T21:16:15.965Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-13-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.672Z",
+      "lastModified": "2026-01-05T21:16:15.965Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-13-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.672Z",
+      "lastModified": "2026-01-05T21:16:15.965Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-13-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.672Z",
+      "lastModified": "2026-01-05T21:16:15.965Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-13-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.673Z",
+      "lastModified": "2026-01-05T21:16:15.965Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-13-completion.md",
-      "lastModified": "2026-01-05T20:28:18.673Z",
+      "lastModified": "2026-01-05T21:16:15.965Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-14-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.673Z",
+      "lastModified": "2026-01-05T21:16:15.965Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-14-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.673Z",
+      "lastModified": "2026-01-05T21:16:15.966Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-14-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.673Z",
+      "lastModified": "2026-01-05T21:16:15.966Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-14-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.673Z",
+      "lastModified": "2026-01-05T21:16:15.966Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-14-completion.md",
-      "lastModified": "2026-01-05T20:28:18.674Z",
+      "lastModified": "2026-01-05T21:16:15.966Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-15-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.674Z",
+      "lastModified": "2026-01-05T21:16:15.967Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-15-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.674Z",
+      "lastModified": "2026-01-05T21:16:15.967Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-15-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.674Z",
+      "lastModified": "2026-01-05T21:16:15.967Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-15-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.675Z",
+      "lastModified": "2026-01-05T21:16:15.967Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-15-completion.md",
-      "lastModified": "2026-01-05T20:28:18.675Z",
+      "lastModified": "2026-01-05T21:16:15.967Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-16-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.675Z",
+      "lastModified": "2026-01-05T21:16:15.967Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-16-completion.md",
-      "lastModified": "2026-01-05T20:28:18.675Z",
+      "lastModified": "2026-01-05T21:16:15.967Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-17-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.675Z",
+      "lastModified": "2026-01-05T21:16:15.967Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-17-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.676Z",
+      "lastModified": "2026-01-05T21:16:15.967Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-17-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.676Z",
+      "lastModified": "2026-01-05T21:16:15.967Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-17-completion.md",
-      "lastModified": "2026-01-05T20:28:18.676Z",
+      "lastModified": "2026-01-05T21:16:15.967Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-18-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.676Z",
+      "lastModified": "2026-01-05T21:16:15.968Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-18-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.676Z",
+      "lastModified": "2026-01-05T21:16:15.968Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-18-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.677Z",
+      "lastModified": "2026-01-05T21:16:15.968Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-18-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.677Z",
+      "lastModified": "2026-01-05T21:16:15.968Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-18-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.677Z",
+      "lastModified": "2026-01-05T21:16:15.968Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-18-completion.md",
-      "lastModified": "2026-01-05T20:28:18.677Z",
+      "lastModified": "2026-01-05T21:16:15.969Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-19-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.677Z",
+      "lastModified": "2026-01-05T21:16:15.969Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-19-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.677Z",
+      "lastModified": "2026-01-05T21:16:15.969Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-19-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.677Z",
+      "lastModified": "2026-01-05T21:16:15.969Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-19-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.677Z",
+      "lastModified": "2026-01-05T21:16:15.970Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-19-completion.md",
-      "lastModified": "2026-01-05T20:28:18.677Z",
+      "lastModified": "2026-01-05T21:16:15.970Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-2-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.677Z",
+      "lastModified": "2026-01-05T21:16:15.970Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-2-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.678Z",
+      "lastModified": "2026-01-05T21:16:15.970Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-2-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.678Z",
+      "lastModified": "2026-01-05T21:16:15.971Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.678Z",
+      "lastModified": "2026-01-05T21:16:15.972Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-20-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.678Z",
+      "lastModified": "2026-01-05T21:16:15.972Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-20-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.679Z",
+      "lastModified": "2026-01-05T21:16:15.972Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-20-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.679Z",
+      "lastModified": "2026-01-05T21:16:15.972Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-20-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.679Z",
+      "lastModified": "2026-01-05T21:16:15.972Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-20-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.679Z",
+      "lastModified": "2026-01-05T21:16:15.972Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-20-6-completion.md",
-      "lastModified": "2026-01-05T20:28:18.679Z",
+      "lastModified": "2026-01-05T21:16:15.973Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-20-completion.md",
-      "lastModified": "2026-01-05T20:28:18.679Z",
+      "lastModified": "2026-01-05T21:16:15.973Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-21-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.679Z",
+      "lastModified": "2026-01-05T21:16:15.974Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-21-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.680Z",
+      "lastModified": "2026-01-05T21:16:15.974Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-21-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.681Z",
+      "lastModified": "2026-01-05T21:16:15.974Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-21-completion.md",
-      "lastModified": "2026-01-05T20:28:18.681Z",
+      "lastModified": "2026-01-05T21:16:15.974Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-22-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.681Z",
+      "lastModified": "2026-01-05T21:16:15.975Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-22-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.681Z",
+      "lastModified": "2026-01-05T21:16:15.975Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-22-6-completion.md",
-      "lastModified": "2026-01-05T20:28:18.681Z",
+      "lastModified": "2026-01-05T21:16:15.975Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-22-completion.md",
-      "lastModified": "2026-01-05T20:28:18.682Z",
+      "lastModified": "2026-01-05T21:16:15.975Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-23-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.682Z",
+      "lastModified": "2026-01-05T21:16:15.975Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-23-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.682Z",
+      "lastModified": "2026-01-05T21:16:15.976Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-23-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.682Z",
+      "lastModified": "2026-01-05T21:16:15.976Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-23-7-completion.md",
-      "lastModified": "2026-01-05T20:28:18.683Z",
+      "lastModified": "2026-01-05T21:16:15.976Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-23-8-completion.md",
-      "lastModified": "2026-01-05T20:28:18.684Z",
+      "lastModified": "2026-01-05T21:16:15.976Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-23-9-completion.md",
-      "lastModified": "2026-01-05T20:28:18.685Z",
+      "lastModified": "2026-01-05T21:16:15.976Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-23-completion.md",
-      "lastModified": "2026-01-05T20:28:18.685Z",
+      "lastModified": "2026-01-05T21:16:15.976Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-3-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.686Z",
+      "lastModified": "2026-01-05T21:16:15.977Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-3-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.686Z",
+      "lastModified": "2026-01-05T21:16:15.977Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.686Z",
+      "lastModified": "2026-01-05T21:16:15.977Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-4-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.686Z",
+      "lastModified": "2026-01-05T21:16:15.977Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-4-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.686Z",
+      "lastModified": "2026-01-05T21:16:15.977Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-4-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.687Z",
+      "lastModified": "2026-01-05T21:16:15.977Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.687Z",
+      "lastModified": "2026-01-05T21:16:15.977Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-5-completion.md",
-      "lastModified": "2026-01-05T20:28:18.687Z",
+      "lastModified": "2026-01-05T21:16:15.977Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-6-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.687Z",
+      "lastModified": "2026-01-05T21:16:15.978Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-6-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.688Z",
+      "lastModified": "2026-01-05T21:16:15.978Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-6-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.688Z",
+      "lastModified": "2026-01-05T21:16:15.978Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-6-completion.md",
-      "lastModified": "2026-01-05T20:28:18.688Z",
+      "lastModified": "2026-01-05T21:16:15.978Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-7-completion.md",
-      "lastModified": "2026-01-05T20:28:18.688Z",
+      "lastModified": "2026-01-05T21:16:15.978Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-8-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.689Z",
+      "lastModified": "2026-01-05T21:16:15.978Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-8-2-completion.md",
-      "lastModified": "2026-01-05T20:28:18.689Z",
+      "lastModified": "2026-01-05T21:16:15.978Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-8-3-completion.md",
-      "lastModified": "2026-01-05T20:28:18.689Z",
+      "lastModified": "2026-01-05T21:16:15.979Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-8-4-completion.md",
-      "lastModified": "2026-01-05T20:28:18.689Z",
+      "lastModified": "2026-01-05T21:16:15.979Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-8-completion.md",
-      "lastModified": "2026-01-05T20:28:18.689Z",
+      "lastModified": "2026-01-05T21:16:15.979Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/036-steering-documentation-audit/completion/task-9-completion.md",
-      "lastModified": "2026-01-05T20:28:18.690Z",
+      "lastModified": "2026-01-05T21:16:15.979Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/037-component-token-generation-pipeline/completion/task-1-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.690Z",
+      "lastModified": "2026-01-05T21:16:15.979Z",
       "gitCommit": "unknown"
     },
     {
       "path": ".kiro/specs/037-component-token-generation-pipeline/completion/task-1-completion.md",
-      "lastModified": "2026-01-05T20:28:18.690Z",
+      "lastModified": "2026-01-05T21:16:15.980Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/037-component-token-generation-pipeline/completion/task-2-1-completion.md",
+      "lastModified": "2026-01-05T21:16:15.980Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/037-component-token-generation-pipeline/completion/task-2-2-completion.md",
+      "lastModified": "2026-01-05T21:16:15.980Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/037-component-token-generation-pipeline/completion/task-2-3-completion.md",
+      "lastModified": "2026-01-05T21:16:15.981Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": ".kiro/specs/037-component-token-generation-pipeline/completion/task-2-completion.md",
+      "lastModified": "2026-01-05T21:16:15.981Z",
       "gitCommit": "unknown"
     }
   ],

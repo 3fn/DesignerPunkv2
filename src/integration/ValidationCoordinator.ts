@@ -4,14 +4,20 @@
  * Coordinates validation services across the token system, managing three-tier
  * validation, usage pattern analysis, and comprehensive validation reporting.
  * Integrates with registries to provide system-wide validation insights.
+ * 
+ * Also provides component token validation for the component token generation pipeline.
+ * @see Requirements 3.1-3.6 in .kiro/specs/037-component-token-generation-pipeline/requirements.md
  */
 
 import { ThreeTierValidator, ThreeTierValidationContext, ThreeTierValidationResult } from '../validators/ThreeTierValidator';
 import { PrimitiveTokenRegistry } from '../registries/PrimitiveTokenRegistry';
 import { SemanticTokenRegistry } from '../registries/SemanticTokenRegistry';
+import { ComponentTokenRegistry, RegisteredComponentToken } from '../registries/ComponentTokenRegistry';
 import { MathematicalRelationshipParser } from '../validators/MathematicalRelationshipParser';
 import type { PrimitiveToken, SemanticToken, ValidationResult } from '../types';
 import { TokenCategory, SemanticCategory } from '../types';
+import { SPACING_BASE_VALUE } from '../tokens/SpacingTokens';
+import { RADIUS_BASE_VALUE } from '../tokens/RadiusTokens';
 
 /**
  * Validation coordinator configuration
@@ -69,6 +75,223 @@ export interface ComprehensiveValidationReport {
     };
     categoryUsage: Record<string, number>;
   };
+}
+
+/**
+ * Component token validation result
+ * 
+ * Result of validating a single component token.
+ * @see Requirements 3.1-3.6 in .kiro/specs/037-component-token-generation-pipeline/requirements.md
+ */
+export interface ComponentTokenValidationResult {
+  /** Whether the token passed validation */
+  valid: boolean;
+  /** Validation errors (if any) */
+  errors: string[];
+  /** Validation warnings (if any) */
+  warnings: string[];
+}
+
+/**
+ * Family conformance validation result
+ * 
+ * Result of validating a value against a token family's value definition pattern.
+ * @see Requirements 3.2, 3.3 in .kiro/specs/037-component-token-generation-pipeline/requirements.md
+ */
+export interface FamilyConformanceResult {
+  /** Whether the value conforms to the family pattern */
+  valid: boolean;
+  /** Error message if validation failed */
+  message: string;
+  /** Warning message (e.g., value matches existing primitive) */
+  warning?: string;
+}
+
+/**
+ * Family-aware value validation
+ * 
+ * Validates that a component token value conforms to the family's value definition pattern.
+ * Different token families use different validation patterns:
+ * 
+ * 1. FORMULA-BASED FAMILIES (spacing, radius):
+ *    - Values must be derivable from BASE_VALUE × multiplier
+ *    - Base values imported from actual token implementation files
+ *    - Example: spacing uses SPACING_BASE_VALUE (8) from SpacingTokens.ts
+ * 
+ * 2. MODULAR SCALE FAMILIES (fontSize):
+ *    - Values follow exponential scale: BASE × ratio^n
+ *    - Example: fontSize uses 16px base with 1.125 ratio
+ * 
+ * 3. DISCRETE VALUE FAMILIES (color):
+ *    - Component tokens should reference existing primitives
+ *    - Custom numeric values are not allowed
+ * 
+ * 4. UNKNOWN FAMILIES:
+ *    - Allowed with warning suggesting adding validation or using primitive reference
+ * 
+ * @param family - The token family name (e.g., 'spacing', 'radius', 'fontSize', 'color')
+ * @param value - The numeric value to validate
+ * @param primitiveRegistry - The primitive token registry for checking existing primitives
+ * @returns Validation result with valid flag, message, and optional warning
+ * 
+ * @see src/tokens/SpacingTokens.ts - SPACING_BASE_VALUE
+ * @see src/tokens/RadiusTokens.ts - RADIUS_BASE_VALUE
+ * @see Requirements 3.2, 3.3 in .kiro/specs/037-component-token-generation-pipeline/requirements.md
+ */
+export function validateFamilyConformance(
+  family: string,
+  value: number,
+  primitiveRegistry: PrimitiveTokenRegistry
+): FamilyConformanceResult {
+  switch (family) {
+    // ============================================
+    // FORMULA-BASED FAMILIES: BASE_VALUE × multiplier
+    // ============================================
+    
+    case 'spacing': {
+      const multiplier = value / SPACING_BASE_VALUE;
+      
+      // Valid multipliers match those used in SpacingTokens.ts primitive definitions
+      // Check if multiplier produces a value derivable from the base
+      // Multipliers: 0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 2, 2.5, 3, 4, 5, 6, 8 (0.25 increments up to 8)
+      const isValidMultiplier = multiplier >= 0 && 
+                                 multiplier <= 8.0 && 
+                                 (multiplier * 4) % 1 === 0; // 0.25 increments
+      
+      if (!isValidMultiplier) {
+        return { 
+          valid: false, 
+          message: `Spacing value ${value} is not derivable from SPACING_BASE_VALUE (${SPACING_BASE_VALUE}). ` +
+                   `Use SPACING_BASE_VALUE * multiplier (e.g., ${SPACING_BASE_VALUE} * 1.25 = ${SPACING_BASE_VALUE * 1.25}).`
+        };
+      }
+      
+      // Check if this value matches an existing primitive (suggest reference instead)
+      const existingPrimitive = primitiveRegistry.query({ category: TokenCategory.SPACING })
+        .find((t: PrimitiveToken) => t.baseValue === value);
+      
+      if (existingPrimitive) {
+        return { 
+          valid: true, 
+          message: '',
+          warning: `Value ${value} matches existing primitive '${existingPrimitive.name}'. ` +
+                   `Consider using a reference instead of a custom value.`
+        };
+      }
+      
+      return { valid: true, message: '' };
+    }
+
+    case 'radius': {
+      if (value < 0) {
+        return { 
+          valid: false, 
+          message: 'Radius values must be non-negative.' 
+        };
+      }
+      
+      // Special case: 9999 is valid for pill/full radius
+      if (value === 9999) {
+        return { valid: true, message: '' };
+      }
+      
+      // Special case: 0 is always valid
+      if (value === 0) {
+        return { valid: true, message: '' };
+      }
+      
+      const multiplier = value / RADIUS_BASE_VALUE;
+      
+      // Valid multipliers match those used in RadiusTokens.ts primitive definitions
+      // Multipliers: 0, 0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4 (0.25 increments up to 4)
+      const isValidMultiplier = multiplier >= 0 && 
+                                 multiplier <= 4.0 && 
+                                 (multiplier * 4) % 1 === 0; // 0.25 increments
+      
+      if (!isValidMultiplier) {
+        return { 
+          valid: false, 
+          message: `Radius value ${value} is not derivable from RADIUS_BASE_VALUE (${RADIUS_BASE_VALUE}). ` +
+                   `Use RADIUS_BASE_VALUE * multiplier or 9999 for pill shape.`
+        };
+      }
+      
+      // Check if this value matches an existing primitive
+      const existingPrimitive = primitiveRegistry.query({ category: TokenCategory.RADIUS })
+        .find((t: PrimitiveToken) => t.baseValue === value);
+      
+      if (existingPrimitive) {
+        return { 
+          valid: true, 
+          message: '',
+          warning: `Value ${value} matches existing primitive '${existingPrimitive.name}'. ` +
+                   `Consider using a reference instead of a custom value.`
+        };
+      }
+      
+      return { valid: true, message: '' };
+    }
+
+    // ============================================
+    // MODULAR SCALE FAMILIES: BASE × ratio^n
+    // ============================================
+    
+    case 'fontSize': {
+      // Typography uses modular scale
+      const FONT_BASE_VALUE = 16; // Standard base
+      const SCALE_RATIO = 1.125;
+      
+      if (value <= 0) {
+        return { 
+          valid: false, 
+          message: 'Font size values must be positive.' 
+        };
+      }
+      
+      // Check if value is approximately on the modular scale
+      const logValue = Math.log(value / FONT_BASE_VALUE) / Math.log(SCALE_RATIO);
+      const nearestStep = Math.round(logValue);
+      const expectedValue = FONT_BASE_VALUE * Math.pow(SCALE_RATIO, nearestStep);
+      const tolerance = 0.5; // Allow 0.5px tolerance for rounding
+      
+      if (Math.abs(value - expectedValue) > tolerance) {
+        return { 
+          valid: false, 
+          message: `Font size ${value} does not follow the 1.125 modular scale from base ${FONT_BASE_VALUE}px. ` +
+                   `Expected approximately ${expectedValue.toFixed(1)}px.`
+        };
+      }
+      return { valid: true, message: '' };
+    }
+
+    // ============================================
+    // DISCRETE VALUE FAMILIES: Specific values, no formula
+    // ============================================
+    
+    case 'color': {
+      // Color tokens use hex values - component tokens should reference primitives
+      // If a custom value is provided, it should be a valid hex or the developer
+      // should be using a reference instead
+      return { 
+        valid: false, 
+        message: `Color family does not support custom numeric values. ` +
+                 `Use a reference to an existing color primitive instead.`
+      };
+    }
+
+    // ============================================
+    // UNKNOWN FAMILIES: Allow with warning
+    // ============================================
+    
+    default:
+      // Unknown family - allow but warn that validation may be incomplete
+      return { 
+        valid: true, 
+        message: '',
+        warning: `Family '${family}' does not have specific validation rules. ` +
+                 `Consider adding validation for this family or using a primitive reference.`
+      };
+  }
 }
 
 /**
@@ -465,5 +688,93 @@ export class ValidationCoordinator {
    */
   getConfig(): Readonly<ValidationCoordinatorConfig> {
     return { ...this.config };
+  }
+
+  // ============================================================================
+  // Component Token Validation
+  // ============================================================================
+
+  /**
+   * Validate a single component token
+   * 
+   * Validates that the component token meets all requirements:
+   * - Has a non-empty reasoning string (Requirement 3.4)
+   * - If it has a primitive reference, the reference exists in PrimitiveTokenRegistry (Requirement 3.5)
+   * - If it has a custom value, the value conforms to the family's value definition pattern (Requirement 3.2, 3.3)
+   * 
+   * @param token - The component token to validate
+   * @returns Validation result with errors and warnings
+   * 
+   * @see Requirements 3.1-3.6 in .kiro/specs/037-component-token-generation-pipeline/requirements.md
+   */
+  validateComponentToken(token: RegisteredComponentToken): ComponentTokenValidationResult {
+    const errors: string[] = [];
+    const warnings: string[] = [];
+
+    // Rule 1: Reasoning is required (Requirement 3.4)
+    if (!token.reasoning || token.reasoning.trim() === '') {
+      errors.push(
+        `Token "${token.name}" is missing required reasoning. ` +
+        `Add a reasoning string explaining why this token exists.`
+      );
+    }
+
+    // Rule 2: Validate primitive reference if present (Requirement 3.5)
+    if (token.primitiveReference) {
+      if (!this.primitiveRegistry.has(token.primitiveReference)) {
+        errors.push(
+          `Token "${token.name}" references non-existent primitive "${token.primitiveReference}". ` +
+          `Ensure the primitive token is registered in PrimitiveTokenRegistry.`
+        );
+      }
+    } else {
+      // Rule 3: Validate family conformance for custom values (Requirement 3.2, 3.3)
+      const familyResult = validateFamilyConformance(token.family, token.value, this.primitiveRegistry);
+      
+      if (!familyResult.valid) {
+        errors.push(
+          `Token "${token.name}" value ${token.value} does not conform to ${token.family} family pattern. ` +
+          familyResult.message
+        );
+      }
+      
+      if (familyResult.warning) {
+        warnings.push(`Token "${token.name}": ${familyResult.warning}`);
+      }
+    }
+
+    return {
+      valid: errors.length === 0,
+      errors,
+      warnings,
+    };
+  }
+
+  /**
+   * Validate all registered component tokens
+   * 
+   * Validates all tokens currently in the ComponentTokenRegistry.
+   * Returns a combined result with all errors and warnings.
+   * 
+   * @returns Combined validation result for all component tokens
+   * 
+   * @see Requirements 3.1, 3.4, 3.5, 3.6 in .kiro/specs/037-component-token-generation-pipeline/requirements.md
+   */
+  validateAllComponentTokens(): ComponentTokenValidationResult {
+    const allTokens = ComponentTokenRegistry.getAll();
+    const allErrors: string[] = [];
+    const allWarnings: string[] = [];
+
+    for (const token of allTokens) {
+      const result = this.validateComponentToken(token);
+      allErrors.push(...result.errors);
+      allWarnings.push(...result.warnings);
+    }
+
+    return {
+      valid: allErrors.length === 0,
+      errors: allErrors,
+      warnings: allWarnings,
+    };
   }
 }
