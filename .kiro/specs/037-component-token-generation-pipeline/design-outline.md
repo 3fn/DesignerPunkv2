@@ -1,7 +1,7 @@
 # Design Outline: Component Token Generation Pipeline
 
 **Date**: 2026-01-05
-**Status**: Draft
+**Status**: Complete
 **Purpose**: Document the Rosetta System architecture, integrate component tokens into the generation pipeline, and ensure platform files consume generated tokens instead of hard-coded values
 
 ## Problem Statement
@@ -39,31 +39,31 @@ Create a `defineComponentTokens()` helper that bridges lightweight authoring wit
 - Lightweight authoring experience (close to component implementation)
 - Explicit token family connections (not implicit through imports)
 - Required reasoning documentation (forces explanation of why token exists)
-- Full primitive token references (enables pipeline to extract relationships)
+- Full primitive token references OR family-conformant values
+- Family-aware validation (not one-size-fits-all)
 - Deferred complexity (usage tracking, approval workflows added later if needed)
 
 **Proposed API**:
 ```typescript
 // buttonIcon.tokens.ts - Hybrid approach
-import { spacingTokens } from '../../../tokens/SpacingTokens';
+import { spacingTokens, SPACING_BASE_VALUE } from '../../../tokens/SpacingTokens';
 import { defineComponentTokens } from '../../../build/tokens/defineComponentTokens';
 
 export const ButtonIconTokens = defineComponentTokens({
   component: 'ButtonIcon',
-  family: 'spacing',  // Explicit family connection
+  family: 'spacing',
   
   tokens: {
+    // Option A: Reference existing primitive (preferred)
     'inset.large': {
-      value: spacingTokens.space150,  // Full token reference
+      reference: spacingTokens.space150,
       reasoning: 'Padding for large variant, aligns with space150 for visual consistency',
     },
-    'inset.medium': {
-      value: spacingTokens.space125,
-      reasoning: 'Padding for medium variant, uses strategic flexibility token for 10px',
-    },
-    'inset.small': {
-      value: spacingTokens.space100,
-      reasoning: 'Padding for small variant, aligns with base spacing unit',
+    
+    // Option B: Conform to family's value definition pattern (when no primitive exists)
+    'inset.custom': {
+      value: SPACING_BASE_VALUE * 1.75,  // Uses family's formula pattern
+      reasoning: 'Custom spacing for unique layout requirement, no existing primitive at 14px',
     },
   },
 });
@@ -72,11 +72,11 @@ export const ButtonIconTokens = defineComponentTokens({
 **What this provides**:
 - ✅ Lightweight authoring (still close to component)
 - ✅ Explicit family connection (`family: 'spacing'`)
-- ✅ Full token reference (not just `.baseValue`) — enables pipeline to extract relationship
-- ✅ Required reasoning (forces documentation)
+- ✅ Full token reference OR family-conformant value
+- ✅ Required reasoning (in ALL cases)
 - ✅ Component association (`component: 'ButtonIcon'`)
-- ✅ Pipeline can derive platform values from the referenced token
-- ✅ Pipeline can track promotion candidates based on usage patterns (if we want that later)
+- ✅ Family-aware validation (rejects magic numbers)
+- ✅ Pipeline can derive platform values from the referenced token or computed value
 
 **What we defer**:
 - ❌ Runtime usage tracking (add later if needed)
@@ -133,41 +133,39 @@ See **[preliminary-audit-findings.md](./preliminary-audit-findings.md)** for det
 
 ### Spec 035 Implementation Progress (Updated 2026-01-05)
 
-**Important Discovery**: During late-night work on Spec 035, the component token → primitive reference pattern was already implemented! The actual `buttonIcon.tokens.ts` file now correctly references primitive tokens:
+**Status: ✅ COMPLETE**
 
-**Current Implementation** (uncommitted):
+Spec 035 (Button-Icon Component) is now complete. During implementation, the component token → primitive reference pattern was established:
+
+**Current Implementation**:
 ```typescript
 import { spacingTokens } from '../../../tokens/SpacingTokens';
 
 export const ButtonIconTokens = {
   inset: {
-    large: spacingTokens.space150.baseValue,   // ✅ References primitive!
-    medium: spacingTokens.space125.baseValue,  // ✅ References primitive!
-    small: spacingTokens.space100.baseValue,   // ✅ References primitive!
+    large: spacingTokens.space150.baseValue,   // ✅ References primitive
+    medium: spacingTokens.space125.baseValue,  // ✅ References primitive
+    small: spacingTokens.space100.baseValue,   // ✅ References primitive
   },
 } as const;
 ```
 
-**What This Means**:
-- ✅ Component token → primitive reference pattern is **proven and working**
-- ✅ `space125` strategic flexibility token correctly identified (was thought to have "no semantic equivalent")
-- ✅ 95 Button-Icon tests pass
+**What Spec 035 Delivered**:
+- ✅ Button-Icon component (web, iOS, Android platforms)
+- ✅ Component token → primitive reference pattern (proven)
+- ✅ 95+ tests passing (setup, unit, property-based, Stemma validators)
+- ✅ `space125` strategic flexibility token correctly identified
+
+**Known Limitation** (to be resolved by Spec 037):
 - ⚠️ Platform files (iOS, Android) still have hard-coded values
-- ⚠️ TokenCompliance test still fails for platform files (expected - pipeline not connected)
+- ⚠️ TokenCompliance test fails for platform files (expected — pipeline not connected)
+- ⚠️ Current format is lightweight but lacks explicit family connection and reasoning
 
-**Remaining Gap**: Platform implementation files need to consume generated tokens instead of hard-coded values. This requires connecting component tokens to the generation pipeline.
-
-### Spec 035 vs Spec 037 Relationship
-
-The specs are complementary:
-- **Spec 035**: Defined what Button-Icon needs + implemented component token pattern
-- **Spec 037**: Provides the pipeline mechanism to generate platform-consumable output
-
-**Spec 035 Status**:
-- Tasks 1-5: ✅ Complete
-- Task 6.1-6.4: ✅ Complete (test infrastructure + tests)
-- Task 6.5: ⏳ Pending (Stemma validators integration)
-- Uncommitted changes need to be committed
+**Spec 037 will**:
+- Upgrade to hybrid `defineComponentTokens()` format
+- Connect component tokens to generation pipeline
+- Generate platform-consumable output
+- Resolve TokenCompliance failures
 
 ### What Exists
 - `src/build/tokens/ComponentTokenGenerator.ts` - Generation infrastructure (exists, not connected)
@@ -315,6 +313,49 @@ This avoids premature commitment to implementation tasks before understanding th
 - Existing `ComponentToken` infrastructure may need deprecation or simplification
 - Migration path needed for any existing component tokens using old format
 
+### Decision 2: Component Token Value Validation
+
+**Context**: Component tokens that don't reference existing primitives need validation to ensure they conform to the token system's mathematical principles.
+
+**Key Insight**: Not all token families use formulas. The validation must be family-aware.
+
+**Decision**: Component tokens must either:
+1. **Reference an existing primitive token** (always valid), OR
+2. **Conform to how that primitive token family's values are defined**
+
+**Examples**:
+- **Spacing family** (formula-based): `SPACING_BASE_VALUE * 1.75` ✅, `14` ❌
+- **Color family** (hex values): Must follow color system patterns
+- **Radius family** (formula-based): `RADIUS_BASE_VALUE * multiplier` ✅
+
+**Reasoning required in ALL cases** — even when referencing a primitive, explain why this token exists.
+
+**Validation approach**:
+1. Look up the family's value definition pattern
+2. Verify the component token conforms to that pattern
+3. Reject values that don't conform (e.g., magic numbers)
+4. Require reasoning field to be non-empty
+
+**Rationale**:
+- Maintains mathematical consistency across the token system
+- Prevents "magic numbers" that break the system's principles
+- Family-aware validation is more accurate than one-size-fits-all
+- Explicit reasoning forces documentation of design decisions
+
+### Decision 3: Global Component Token Registry
+
+**Context**: Should component tokens be managed per-component or globally?
+
+**Decision**: Global registry with component namespacing
+
+**Rationale** (optimized for AI agent developers):
+- Single query point: "What component tokens exist?" → one call
+- Cross-component awareness: Can detect naming conflicts, suggest reuse
+- Simpler mental model: One registry pattern, same as primitives/semantics
+- Pipeline integration: One collection mechanism, not N per component
+
+**Namespacing**: Tokens are namespaced by component (e.g., `buttonIcon.inset.large`, `ctaButton.padding.medium`)
+
 ## Related Files
 
 ### Documentation
@@ -354,22 +395,14 @@ This avoids premature commitment to implementation tasks before understanding th
 - ~~What gaps will the audit reveal?~~ → See [preliminary-audit-findings.md](./preliminary-audit-findings.md)
 - ~~Should we use existing ComponentToken interface or simplify?~~ → **Hybrid approach**: New `defineComponentTokens()` API that's lightweight to author but produces rich metadata
 - ~~Implement in 037 or create 038?~~ → **Implement in 037** with hybrid approach
+- ~~Platform output format?~~ → **CSS custom properties referencing primitives** (e.g., `--button-icon-inset-medium: var(--space-125)`) — maintains token chain
+- ~~Validation strictness?~~ → **Reference primitive OR conform to family's value definition pattern**; reasoning required in ALL cases (see Decision 2 below)
+- ~~Registry scope?~~ → **Global registry** — optimal for AI agent developers (single query point, cross-component awareness)
+- ~~Existing infrastructure?~~ → **Deprecate** `ComponentToken.ts` and `ComponentTokenGenerator.ts` — hybrid approach supersedes them
 
-### Awaiting Resolution During Implementation
-1. **Platform output format**: Should component tokens generate:
-   - CSS custom properties referencing primitives (e.g., `--button-icon-inset-medium: var(--space-125)`)
-   - Direct values with comments (e.g., `--button-icon-inset-medium: 10px; /* space125 */`)
-   - **Leaning toward**: CSS custom properties referencing primitives (maintains token chain)
-
-2. **Validation strictness**: Should component tokens be **required** to reference primitives, or allowed to define unique values when no primitive exists?
-   - **Leaning toward**: Required to reference primitives OR provide explicit reasoning for unique value
-
-3. **Registry scope**: Should ComponentTokenRegistry be per-component or global?
-   - **Leaning toward**: Global registry that collects from all component token files
-
-4. **Existing infrastructure**: What to do with `ComponentToken.ts` and `ComponentTokenGenerator.ts`?
-   - **Options**: Deprecate, simplify to align with hybrid, or keep as "advanced" option
-
-### Technical Questions (to resolve during implementation)
-5. How should the generation step be triggered (build script, watch mode, manual)?
-6. Should `defineComponentTokens()` return the tokens for immediate use, or just register them?
+### To Resolve During Phase 1 (Architecture Documentation)
+1. **Generation trigger**: How should the generation step be triggered (build script, watch mode, manual)?
+   - Will align with existing primitive/semantic generation patterns
+   
+2. **Return value**: Should `defineComponentTokens()` return the tokens for immediate use, or just register them?
+   - Depends on how tokens are consumed in the pipeline
