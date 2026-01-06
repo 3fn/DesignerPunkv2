@@ -114,6 +114,11 @@ describe('Component Registration', () => {
         },
         console: { warn: jest.fn(), log: jest.fn(), error: jest.fn() },
         HTMLElement: class MockHTMLElement {},
+        // Browser animation API - required for token loading check
+        requestAnimationFrame: jest.fn((callback: () => void) => {
+          callback();
+          return 0;
+        }),
       };
 
       // Execute bundle once
@@ -188,7 +193,7 @@ describe('Component Registration', () => {
 
     it('should export all components for UMD global access', () => {
       // Note: Stemma System migration - legacy exports removed, using new naming
-      expect(content).toContain('export { InputTextBase, InputTextEmail, ButtonCTA, IconBaseElement, ContainerBaseWeb }');
+      expect(content).toContain('export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb }');
       expect(content).toContain('export const Icon = IconBaseElement');
       expect(content).toContain('export const IconBase = IconBaseElement');
       expect(content).toContain('export const Container = ContainerBaseWeb');

@@ -152,11 +152,13 @@ describe('Browser Bundle Loading', () => {
         emotionReact: mockEmotionReact,
         document: {
           documentElement: {},
+          readyState: 'complete', // Simulate DOM already loaded
           createElement: jest.fn(() => ({
             attachShadow: jest.fn(() => ({
               appendChild: jest.fn(),
             })),
           })),
+          addEventListener: jest.fn(),
         },
         getComputedStyle: jest.fn(() => ({
           getPropertyValue: jest.fn(() => ''),
@@ -171,6 +173,11 @@ describe('Browser Bundle Loading', () => {
           error: jest.fn(),
         },
         HTMLElement: class MockHTMLElement {},
+        // Browser animation API - required for token loading check
+        requestAnimationFrame: jest.fn((callback: () => void) => {
+          callback();
+          return 0;
+        }),
       };
     }
 

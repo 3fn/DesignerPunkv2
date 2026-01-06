@@ -134,7 +134,7 @@ This implementation plan covers the Vertical List Buttons component (`Button-Ver
     - _Requirements: 19.1, 19.2, 19.3, 19.5_
 
 
-- [ ] 4. Implement Web Component
+- [x] 4. Implement Web Component
 
   **Type**: Architecture
   **Validation**: Tier 3: Comprehensive
@@ -156,7 +156,7 @@ This implementation plan covers the Vertical List Buttons component (`Button-Ver
   - Detailed: `.kiro/specs/038-vertical-list-buttons/completion/task-4-completion.md`
   - Summary: `docs/specs/038-vertical-list-buttons/task-4-summary.md` (triggers release detection)
 
-  - [ ] 4.1 Create web component base structure
+  - [x] 4.1 Create web component base structure
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Create `ButtonVerticalList.web.ts` custom element
@@ -165,7 +165,7 @@ This implementation plan covers the Vertical List Buttons component (`Button-Ver
     - Wire up onSelectionChange callback
     - _Requirements: 1.1, 1.2, 1.4_
 
-  - [ ] 4.2 Implement button rendering and layout
+  - [x] 4.2 Implement button rendering and layout
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Render semantic `<button>` elements for each item
@@ -176,7 +176,7 @@ This implementation plan covers the Vertical List Buttons component (`Button-Ver
     - Apply `space.grouped.normal` gap between buttons
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 14.3_
 
-  - [ ] 4.3 Implement icon and label rendering
+  - [x] 4.3 Implement icon and label rendering
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Render label with `typography.buttonMd`
@@ -186,7 +186,7 @@ This implementation plan covers the Vertical List Buttons component (`Button-Ver
     - Apply `space.grouped.loose` spacing for icon-label gap
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 4.1, 10.1, 10.2, 10.3_
 
-  - [ ] 4.4 Implement Tap mode visual states
+  - [x] 4.4 Implement Tap mode visual states
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Apply `color.background` and `color.text.primary` for rest state
@@ -196,7 +196,7 @@ This implementation plan covers the Vertical List Buttons component (`Button-Ver
     - Apply `cursor: pointer` on hover
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 17.1_
 
-  - [ ] 4.5 Implement Select mode visual states
+  - [x] 4.5 Implement Select mode visual states
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Apply not-selected state: `color.select.notSelected.background`, `color.select.notSelected` text, no border, no checkmark
@@ -205,7 +205,7 @@ This implementation plan covers the Vertical List Buttons component (`Button-Ver
     - Apply `space.grouped.loose` for label-checkmark gap
     - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9, 6.10, 4.2_
 
-  - [ ] 4.6 Implement Select mode animations
+  - [x] 4.6 Implement Select mode animations
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Implement border fade-out animation on deselected button (T=0)
@@ -215,7 +215,7 @@ This implementation plan covers the Vertical List Buttons component (`Button-Ver
     - Use Button-Icon Secondary hover animation specs
     - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5_
 
-  - [ ] 4.7 Implement Multi-Select mode visual states
+  - [x] 4.7 Implement Multi-Select mode visual states
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Apply unchecked state: `color.background`, `color.text.primary`, no border, no checkmark
@@ -223,7 +223,7 @@ This implementation plan covers the Vertical List Buttons component (`Button-Ver
     - Render checkmark with optical balance blend
     - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 8.7, 8.8, 8.9_
 
-  - [ ] 4.8 Implement Multi-Select mode animations
+  - [x] 4.8 Implement Multi-Select mode animations
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Implement checkmark fade-in on check
@@ -231,7 +231,7 @@ This implementation plan covers the Vertical List Buttons component (`Button-Ver
     - Ensure independent animation per button
     - _Requirements: 9.1, 9.2, 9.3_
 
-  - [ ] 4.9 Implement hover and press states for all modes
+  - [x] 4.9 Implement hover and press states for all modes
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Apply `opacity.hover` overlay on hover (all modes)
@@ -239,7 +239,7 @@ This implementation plan covers the Vertical List Buttons component (`Button-Ver
     - Ensure overlay applies on top of current visual state
     - _Requirements: 11.1, 11.2, 11.3_
 
-  - [ ] 4.10 Implement focus states
+  - [x] 4.10 Implement focus states
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Apply focus outline with `accessibility.focus.width`
@@ -248,7 +248,7 @@ This implementation plan covers the Vertical List Buttons component (`Button-Ver
     - Use `:focus-visible` for keyboard-only focus
     - _Requirements: 12.1, 12.2, 12.3, 12.4, 12.5_
 
-  - [ ] 4.11 Implement keyboard navigation
+  - [x] 4.11 Implement keyboard navigation
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Handle Tab to focus first/selected button
@@ -257,7 +257,7 @@ This implementation plan covers the Vertical List Buttons component (`Button-Ver
     - Handle Enter/Space to trigger action (Tap) or toggle selection (Select/Multi-Select)
     - _Requirements: 13.1, 13.2, 13.3, 13.4, 13.5, 13.6, 13.7_
 
-  - [ ] 4.12 Implement accessibility attributes
+  - [x] 4.12 Implement accessibility attributes
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Apply `role="radiogroup"` for Select mode container
@@ -266,7 +266,7 @@ This implementation plan covers the Vertical List Buttons component (`Button-Ver
     - Apply `aria-hidden="true"` to icons
     - _Requirements: 14.1, 14.2, 14.4, 14.5_
 
-  - [ ] 4.13 Checkpoint - Web component validation
+  - [x] 4.13 Checkpoint - Web component validation
     **Type**: Setup
     **Validation**: Tier 1: Minimal
     - Ensure all web tests pass

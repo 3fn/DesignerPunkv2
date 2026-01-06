@@ -104,6 +104,11 @@ describe('Property 2: Registration Idempotency', () => {
       },
       console: { warn: jest.fn(), log: jest.fn(), error: jest.fn() },
       HTMLElement: class MockHTMLElement {},
+      // Browser animation API - required for token loading check
+      requestAnimationFrame: jest.fn((callback: () => void) => {
+        callback();
+        return 0;
+      }),
       // Return the registered elements map for verification
       _registeredElements: registeredElements,
     };
