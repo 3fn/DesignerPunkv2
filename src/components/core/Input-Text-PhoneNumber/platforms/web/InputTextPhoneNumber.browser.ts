@@ -165,11 +165,14 @@ class InputTextPhoneNumber extends HTMLElement {
           position: relative;
           display: flex;
           align-items: center;
-          min-height: var(--tap-area-recommended);
+          min-height: var(--tap-area-comfortable);
           background: var(--color-background);
           border: var(--border-border-default) solid var(--color-border);
           border-radius: var(--radius-150);
-          padding: var(--space-inset-100);
+          padding-top: var(--space-inset-200);
+          padding-bottom: var(--space-inset-none);
+          padding-left: var(--space-inset-100);
+          padding-right: var(--space-inset-100);
           transition: border-color var(--motion-float-label-duration) var(--motion-float-label-easing);
         }
 

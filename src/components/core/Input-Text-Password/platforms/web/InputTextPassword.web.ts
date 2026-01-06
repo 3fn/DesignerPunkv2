@@ -120,6 +120,8 @@ export class InputTextPassword extends HTMLElement {
     if (name === 'value') {
       this._hasBeenValidated = false;
       this._isPasswordValid = true;
+      // Don't re-render for value changes - handled by onChange to preserve focus
+      return;
     }
     
     if (this.isConnected) {
@@ -228,7 +230,10 @@ export class InputTextPassword extends HTMLElement {
       .toggle-button {
         position: absolute;
         right: var(--space-inset-100, 12px);
-        top: 50%;
+        /* Position to vertically center within the input field */
+        /* The input field has min-height of tap-area-comfortable (56px) */
+        /* Center the button at 28px from top (half of 56px input height) */
+        top: calc(var(--tap-area-comfortable, 56px) / 2);
         transform: translateY(-50%);
         background: transparent;
         border: none;
@@ -333,25 +338,33 @@ export class InputTextPassword extends HTMLElement {
   /**
    * Handle focus event
    */
-  private onFocus = (event: Event): void => {
+  private onFocus = (_event: Event): void => {
     this.dispatchEvent(new CustomEvent('focus', { bubbles: true, composed: true }));
   };
   
   /**
    * Handle blur event - triggers password validation
    */
-  private onBlur = (event: Event): void => {
+  private onBlur = (_event: Event): void => {
     const value = this.getAttribute('value') || '';
     const requirements = this.getRequirements();
+    const invalidPasswordMessage = this.getAttribute('invalid-password-message') || DEFAULT_INVALID_PASSWORD_MESSAGE;
     
     // Validate password on blur
     const validationResult = validatePassword(value, requirements);
     this._hasBeenValidated = true;
     this._isPasswordValid = validationResult.isValid;
     
-    // Re-render to show validation error if needed
-    this.render();
-    this.attachEventListeners();
+    // Update inner component's error-message attribute directly without re-rendering
+    // This preserves focus and avoids DOM destruction
+    if (this._baseInput) {
+      const propsErrorMessage = this.getAttribute('error-message') || '';
+      if (!propsErrorMessage && !this._isPasswordValid) {
+        this._baseInput.setAttribute('error-message', invalidPasswordMessage);
+      } else if (!propsErrorMessage && this._isPasswordValid) {
+        this._baseInput.removeAttribute('error-message');
+      }
+    }
     
     // Dispatch blur event
     this.dispatchEvent(new CustomEvent('blur', { bubbles: true, composed: true }));
@@ -375,16 +388,18 @@ export class InputTextPassword extends HTMLElement {
     const customEvent = event as CustomEvent;
     const newValue = customEvent.detail?.value || '';
     
-    // Update value attribute
+    // Update value attribute (this will trigger attributeChangedCallback)
+    // But we DON'T want to re-render here as it would destroy focus
     this.setAttribute('value', newValue);
     
     // Clear validation state when user types
     this._hasBeenValidated = false;
     this._isPasswordValid = true;
     
-    // Re-render to clear error state
-    this.render();
-    this.attachEventListeners();
+    // Update the inner input's value attribute directly without re-rendering
+    if (this._baseInput) {
+      this._baseInput.setAttribute('value', newValue);
+    }
     
     // Forward change event
     this.dispatchEvent(new CustomEvent('change', {

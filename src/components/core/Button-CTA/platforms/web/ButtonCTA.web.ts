@@ -172,14 +172,37 @@ export class ButtonCTA extends HTMLElement {
     // This handles the case where custom elements are defined before CSS is parsed
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => {
-        this._calculateBlendColors();
+        this._calculateBlendColorsWithRetry();
         this.render();
       }, { once: true });
     } else {
-      this._calculateBlendColors();
+      this._calculateBlendColorsWithRetry();
       this.render();
     }
     this._attachEventListeners();
+  }
+  
+  /**
+   * Calculate blend colors with retry logic for CSS loading race conditions.
+   * 
+   * Uses requestAnimationFrame to ensure CSS is fully applied before reading
+   * custom properties. Falls back to default colors if tokens are still unavailable.
+   */
+  private _calculateBlendColorsWithRetry(): void {
+    try {
+      this._calculateBlendColors();
+    } catch (error) {
+      // CSS might not be fully applied yet, retry after next frame
+      requestAnimationFrame(() => {
+        try {
+          this._calculateBlendColors();
+          this.render(); // Re-render with correct colors
+        } catch (retryError) {
+          // Log warning but don't break the component
+          console.warn('ButtonCTA: Could not calculate blend colors, using CSS fallbacks', retryError);
+        }
+      });
+    }
   }
   
   /**

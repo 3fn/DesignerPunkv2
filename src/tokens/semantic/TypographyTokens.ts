@@ -313,7 +313,7 @@ export const typographyTokens: Record<string, Omit<SemanticToken, 'primitiveToke
       // Formula: fontSize100 (16px) × scale088 (0.88) = 14.08px → rounds to 14px
       // Result: 14px matches fontSize075 baseValue, ensuring consistent rendering
       fontSize: 'fontSize075', // Uses fontSize075 (14px) as the calculated result of 16px × 0.88
-      lineHeight: 'lineHeight100',
+      lineHeight: 'lineHeight075',
       fontFamily: 'fontFamilyBody',
       fontWeight: 'fontWeight500',
       letterSpacing: 'letterSpacing100'

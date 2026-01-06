@@ -15,10 +15,14 @@
 // Import all web components - Stemma System naming convention
 import { InputTextBase } from './components/core/Input-Text-Base/platforms/web/InputTextBase.web';
 import { InputTextEmail } from './components/core/Input-Text-Email/platforms/web/InputTextEmail.web';
+import { InputTextPassword } from './components/core/Input-Text-Password/platforms/web/InputTextPassword.web';
+import { InputTextPhoneNumber } from './components/core/Input-Text-PhoneNumber/platforms/web/InputTextPhoneNumber.web';
 // Button-CTA - Stemma System naming (standalone component, no behavioral variants)
 import { ButtonCTA } from './components/core/Button-CTA/platforms/web/ButtonCTA.web';
 // Icon-Base - Stemma System naming (foundational primitive component)
 import { IconBaseElement } from './components/core/Icon-Base/platforms/web/IconBase.web';
+// Button-Icon - Stemma System naming (circular icon-only button)
+import { ButtonIcon } from './components/core/ButtonIcon/platforms/web/ButtonIcon.web';
 // Container-Base - Stemma System naming (foundational primitive component)
 import { ContainerBaseWeb } from './components/core/Container-Base/platforms/web/ContainerBase.web';
 
@@ -81,29 +85,40 @@ function safeDefine(name: string, constructor: CustomElementConstructor): void {
 // Requirements: 4.1, 4.2, 4.3, 4.4
 safeDefine('input-text-base', InputTextBase);
 safeDefine('input-text-email', InputTextEmail);
+safeDefine('input-text-password', InputTextPassword);
+safeDefine('input-text-phone-number', InputTextPhoneNumber);
 // Button-CTA - Primary registration (Stemma System naming)
 safeDefine('button-cta', ButtonCTA);
 // Icon-Base - Stemma System naming (foundational primitive component)
 safeDefine('icon-base', IconBaseElement);
-safeDefine('dp-icon', IconBaseElement);  // Legacy tag (backward compatibility)
+// Legacy dp-icon tag requires a separate class (Web Components spec doesn't allow same class for multiple elements)
+class DpIconElement extends IconBaseElement {}
+safeDefine('dp-icon', DpIconElement);  // Legacy tag (backward compatibility)
+// Button-Icon - Stemma System naming (circular icon-only button)
+safeDefine('button-icon', ButtonIcon);
 // Container-Base - Stemma System naming (foundational primitive component)
 safeDefine('container-base', ContainerBaseWeb);
-safeDefine('dp-container', ContainerBaseWeb);  // Legacy tag (backward compatibility)
+// Legacy dp-container tag requires a separate class (Web Components spec doesn't allow same class for multiple elements)
+class DpContainerElement extends ContainerBaseWeb {}
+safeDefine('dp-container', DpContainerElement);  // Legacy tag (backward compatibility)
 
-// Check tokens after DOM is ready
-// This ensures the check runs after stylesheets have been parsed
+// Check tokens after DOM is ready and CSS is applied
+// Uses requestAnimationFrame to ensure stylesheets have been fully parsed and applied
 if (typeof document !== 'undefined') {
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', checkTokensLoaded);
+    document.addEventListener('DOMContentLoaded', () => {
+      // Defer to next frame to ensure CSS is applied
+      requestAnimationFrame(() => checkTokensLoaded());
+    });
   } else {
-    // DOM is already ready, check immediately
-    checkTokensLoaded();
+    // DOM is already ready, defer to next frame for CSS
+    requestAnimationFrame(() => checkTokensLoaded());
   }
 }
 
 // Export all components for UMD global access and ESM imports
 // Requirements: 1.2, 2.3
-export { InputTextBase, InputTextEmail, ButtonCTA, IconBaseElement, ContainerBaseWeb };
+export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb };
 
 // Also export with more intuitive names for the UMD global
 export const Icon = IconBaseElement;

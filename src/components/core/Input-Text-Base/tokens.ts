@@ -17,7 +17,7 @@
  * - Spacing: Uses inset tokens for padding, grouped tokens for element spacing
  * - Motion: Uses motion.floatLabel semantic token for label animation timing
  * - Border: Uses borderDefault for standard border, radius150 for rounded corners
- * - Accessibility: Uses focus tokens for keyboard navigation indicators, tapAreaRecommended for touch targets
+ * - Accessibility: Uses focus tokens for keyboard navigation indicators, tapAreaComfortable for touch targets
  * - Blend: Uses focusSaturate for enhanced focus state emphasis
  */
 
@@ -95,10 +95,18 @@ export const colorTokens = {
  * Spacing token references for Input-Text-Base
  * 
  * Uses inset tokens for internal padding and grouped tokens for element spacing.
+ * Asymmetric vertical padding: larger top padding for floated label clearance,
+ * no bottom padding since input text sits at the bottom of the input box.
  */
 export const spacingTokens = {
-  /** Input padding (horizontal and vertical) - 8px */
-  inputPadding: 'space.inset.100',
+  /** Input top padding (16px) - provides clearance for floated label */
+  inputPaddingTop: 'space.inset.200',
+  
+  /** Input bottom padding (0px) - input text sits at bottom */
+  inputPaddingBottom: 'space.inset.none',
+  
+  /** Input horizontal padding (8px) */
+  inputPaddingHorizontal: 'space.inset.100',
   
   /** Space between floated label and input - 4px */
   labelOffset: 'space.grouped.tight',
@@ -142,11 +150,11 @@ export const borderTokens = {
 /**
  * Accessibility token references for Input-Text-Base
  * 
- * Uses accessibility.focus tokens for keyboard navigation indicators and tapAreaRecommended for touch targets.
+ * Uses accessibility.focus tokens for keyboard navigation indicators and tapAreaComfortable for touch targets.
  */
 export const accessibilityTokens = {
-  /** Minimum touch target height (48px) for WCAG compliance */
-  minHeight: 'tapAreaRecommended',
+  /** Minimum touch target height (56px) for comfortable interaction */
+  minHeight: 'tapAreaComfortable',
   
   /** Focus ring width (2px) */
   focusWidth: 'accessibility.focus.width',

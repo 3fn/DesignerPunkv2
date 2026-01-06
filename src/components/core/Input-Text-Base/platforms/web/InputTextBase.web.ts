@@ -124,14 +124,38 @@ export class InputTextBase extends HTMLElement {
     // Defer blend color calculation until styles are loaded
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => {
-        this._calculateBlendColors();
+        this._calculateBlendColorsWithRetry();
         this.render();
+        this.attachEventListeners();
       }, { once: true });
     } else {
-      this._calculateBlendColors();
+      this._calculateBlendColorsWithRetry();
       this.render();
+      this.attachEventListeners();
     }
-    this.attachEventListeners();
+  }
+  
+  /**
+   * Calculate blend colors with retry logic for CSS loading race conditions.
+   * 
+   * Uses requestAnimationFrame to ensure CSS is fully applied before reading
+   * custom properties. Falls back to default colors if tokens are still unavailable.
+   */
+  private _calculateBlendColorsWithRetry(): void {
+    try {
+      this._calculateBlendColors();
+    } catch (error) {
+      // CSS might not be fully applied yet, retry after next frame
+      requestAnimationFrame(() => {
+        try {
+          this._calculateBlendColors();
+          this.render(); // Re-render with correct colors
+        } catch (retryError) {
+          // Log warning but don't break the component
+          console.warn('InputTextBase: Could not calculate blend colors, using CSS fallbacks', retryError);
+        }
+      });
+    }
   }
   
   /**
@@ -166,6 +190,11 @@ export class InputTextBase extends HTMLElement {
     if (name === 'value') {
       this.state = handleValueChange(this.state, newValue || '');
       this.updateLabelPosition();
+      // Update input element value directly without re-rendering to preserve focus
+      if (this.inputElement && this.inputElement.value !== (newValue || '')) {
+        this.inputElement.value = newValue || '';
+      }
+      return; // Don't re-render for value changes - preserves focus
     } else if (name === 'error-message') {
       this.state = handleValidationChange(
         this.state,
@@ -326,13 +355,15 @@ export class InputTextBase extends HTMLElement {
       .input-wrapper {
         position: relative;
         width: 100%;
-        min-height: var(--tap-area-recommended);
+        min-height: var(--tap-area-comfortable);
       }
       
       .input-element {
         width: 100%;
-        min-height: var(--tap-area-recommended);
-        padding: var(--space-inset-100);
+        min-height: var(--tap-area-comfortable);
+        padding-top: var(--space-inset-200);
+        padding-bottom: var(--space-inset-none);
+        padding-left: var(--space-inset-100);
         padding-right: calc(var(--space-inset-100) + var(--icon-size-100) + var(--space-inset-100));
         font-family: var(--typography-input-font-family);
         font-size: var(--typography-input-font-size);

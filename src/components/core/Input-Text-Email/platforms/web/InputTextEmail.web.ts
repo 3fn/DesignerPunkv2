@@ -103,6 +103,8 @@ export class InputTextEmail extends HTMLElement {
     if (name === 'value') {
       this._hasBeenValidated = false;
       this._isEmailValid = true;
+      // Don't re-render for value changes - handled by onChange to preserve focus
+      return;
     }
     
     if (this.isConnected) {
@@ -201,24 +203,32 @@ export class InputTextEmail extends HTMLElement {
   /**
    * Handle focus event
    */
-  private onFocus = (event: Event): void => {
+  private onFocus = (_event: Event): void => {
     this.dispatchEvent(new CustomEvent('focus', { bubbles: true, composed: true }));
   };
   
   /**
    * Handle blur event - triggers email validation
    */
-  private onBlur = (event: Event): void => {
+  private onBlur = (_event: Event): void => {
     const value = this.getAttribute('value') || '';
+    const invalidEmailMessage = this.getAttribute('invalid-email-message') || DEFAULT_INVALID_EMAIL_MESSAGE;
     
     // Validate email on blur
     const validationResult = validateEmail(value);
     this._hasBeenValidated = true;
     this._isEmailValid = validationResult.isValid;
     
-    // Re-render to show validation error if needed
-    this.render();
-    this.attachEventListeners();
+    // Update inner component's error-message attribute directly without re-rendering
+    // This preserves focus and avoids DOM destruction
+    if (this._baseInput) {
+      const propsErrorMessage = this.getAttribute('error-message') || '';
+      if (!propsErrorMessage && !this._isEmailValid) {
+        this._baseInput.setAttribute('error-message', invalidEmailMessage);
+      } else if (!propsErrorMessage && this._isEmailValid) {
+        this._baseInput.removeAttribute('error-message');
+      }
+    }
     
     // Dispatch blur event
     this.dispatchEvent(new CustomEvent('blur', { bubbles: true, composed: true }));
@@ -241,16 +251,18 @@ export class InputTextEmail extends HTMLElement {
     const customEvent = event as CustomEvent;
     const newValue = customEvent.detail?.value || '';
     
-    // Update value attribute
+    // Update value attribute (this will trigger attributeChangedCallback)
+    // But we DON'T want to re-render here as it would destroy focus
     this.setAttribute('value', newValue);
     
     // Clear validation state when user types
     this._hasBeenValidated = false;
     this._isEmailValid = true;
     
-    // Re-render to clear error state
-    this.render();
-    this.attachEventListeners();
+    // Update the inner input's value attribute directly without re-rendering
+    if (this._baseInput) {
+      this._baseInput.setAttribute('value', newValue);
+    }
     
     // Forward change event
     this.dispatchEvent(new CustomEvent('change', {

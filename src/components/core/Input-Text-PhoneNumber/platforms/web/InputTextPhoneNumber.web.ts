@@ -133,6 +133,8 @@ export class InputTextPhoneNumber extends HTMLElement {
       this._formattedValue = formatPhoneNumber(this._rawDigits, this._currentCountryCode);
       this._hasBeenValidated = false;
       this._isPhoneValid = true;
+      // Don't re-render for value changes - handled by onChange to preserve focus
+      return;
     }
     
     if (this.isConnected) {
@@ -234,22 +236,31 @@ export class InputTextPhoneNumber extends HTMLElement {
   /**
    * Handle focus event
    */
-  private onFocus = (event: Event): void => {
+  private onFocus = (_event: Event): void => {
     this.dispatchEvent(new CustomEvent('focus', { bubbles: true, composed: true }));
   };
   
   /**
    * Handle blur event - triggers phone validation
    */
-  private onBlur = (event: Event): void => {
+  private onBlur = (_event: Event): void => {
+    const invalidPhoneMessage = this.getAttribute('invalid-phone-message') || DEFAULT_INVALID_PHONE_MESSAGE;
+    
     // Validate phone on blur
     const validationResult = validatePhoneNumber(this._rawDigits, this._currentCountryCode);
     this._hasBeenValidated = true;
     this._isPhoneValid = validationResult.isValid;
     
-    // Re-render to show validation error if needed
-    this.render();
-    this.attachEventListeners();
+    // Update inner component's error-message attribute directly without re-rendering
+    // This preserves focus and avoids DOM destruction
+    if (this._baseInput) {
+      const propsErrorMessage = this.getAttribute('error-message') || '';
+      if (!propsErrorMessage && !this._isPhoneValid) {
+        this._baseInput.setAttribute('error-message', invalidPhoneMessage);
+      } else if (!propsErrorMessage && this._isPhoneValid) {
+        this._baseInput.removeAttribute('error-message');
+      }
+    }
     
     // Dispatch blur event
     this.dispatchEvent(new CustomEvent('blur', { bubbles: true, composed: true }));
@@ -293,9 +304,11 @@ export class InputTextPhoneNumber extends HTMLElement {
     const displayValue = autoFormat ? formatted : rawDigits;
     this.setAttribute('value', displayValue);
     
-    // Re-render to update display
-    this.render();
-    this.attachEventListeners();
+    // Update the inner input's value attribute directly without re-rendering
+    // This preserves focus while updating the displayed value
+    if (this._baseInput) {
+      this._baseInput.setAttribute('value', displayValue);
+    }
     
     // Forward change event with both formatted and raw values
     this.dispatchEvent(new CustomEvent('change', {
