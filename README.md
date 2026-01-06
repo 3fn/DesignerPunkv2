@@ -1,8 +1,8 @@
-# DesignerPunk v3
+# DesignerPunk v4
 
 **A True Native Cross-Platform Design System with Mathematical Foundations**
 
-[![Version](https://img.shields.io/badge/Version-3.0.0-purple)](RELEASE-NOTES-v3.0.0.md)
+[![Version](https://img.shields.io/badge/Version-4.0.0-purple)](RELEASE-NOTES-4.0.0.md)
 [![Repository](https://img.shields.io/badge/GitHub-DesignerPunkv2-blue)](https://github.com/3fn/DesignerPunkv2)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
@@ -37,9 +37,11 @@ DesignerPunk has completed its **robust token system architecture** (Rosetta Sys
 
 **Rosetta System** - Mathematical Token Foundation (Complete)
 - **~245+ tokens implemented**: Comprehensive primitive and semantic token ecosystem
+- **Three-tier token architecture**: Primitive → Semantic → Component token layers
 - **Cross-platform generation**: Web CSS, iOS Swift, Android Kotlin with platform-native conventions
 - **Mathematical precision**: 8px baseline grid with strategic flexibility (space075=6, space100=8, space150=12)
 - **Semantic architecture**: Hierarchical spacing (layout vs inset), complete typography variants, contextual colors
+- **Component tokens**: NEW in v4.0.0 - `defineComponentTokens()` API for component-specific token authoring
 - **Advanced features**: Blend utilities, shadow/glow systems, motion tokens, responsive layout tokens
 
 **Stemma System** - Component Architecture Framework (NEW in v3.0.0)
@@ -109,6 +111,15 @@ With the Stemma System foundation complete, future development focuses on:
 
 ### ✅ Recently Completed
 
+**Component Token Generation Pipeline** (January 2026) - v4.0.0
+- New architectural layer: Primitive → Semantic → Component → Platform Output
+- `defineComponentTokens()` API for lightweight component token authoring
+- `ComponentTokenRegistry` for global token collection and querying
+- Cross-platform generation (CSS, Swift, Kotlin) maintaining token chain references
+- Family-aware validation with formula-based mathematical consistency checks
+- Button-Icon serves as reference implementation
+- Input-Text components updated with improved touch targets (56px) and asymmetric padding
+
 **Stemma System Foundation** (January 2026) - v3.0.0
 - Complete component architecture framework with AI-optimal naming conventions
 - Form Inputs family fully implemented (4 components across 3 platforms)
@@ -136,8 +147,13 @@ With the Stemma System foundation complete, future development focuses on:
 ### Foundation Systems (Phase 1)
 
 #### F1. Mathematical Token System (Rosetta System)
-**Status**: ✅ Complete (~245+ tokens)
+**Status**: ✅ Complete (~245+ tokens + Component Token Layer)
 **Purpose**: Mathematical foundation for consistent design relationships
+
+**Token Architecture** (Three-Tier System):
+- **Primitive Tokens**: Base mathematical values (space100=8, fontSize100=16)
+- **Semantic Tokens**: Purpose-driven references (color.primary → purple300)
+- **Component Tokens**: NEW - Component-specific tokens with explicit reasoning (`defineComponentTokens()` API)
 
 **Primitive Token Families** (16 categories, ~170+ tokens implemented):
 - **Spacing** (12 tokens): Base 8 (space050=4, space100=8, space200=16, space075=6 strategic flexibility)
@@ -242,6 +258,14 @@ With the Stemma System foundation complete, future development focuses on:
 - **Cross-Platform Consistency**: Same semantic token names across all platforms with platform-appropriate syntax
 - **Architectural Clarity**: Developers see token relationships (colorPrimary comes from purple300)
 - **Automatic Updates**: Changing primitive tokens automatically updates all semantic references
+
+**Component Token System** (NEW in v4.0.0):
+- **`defineComponentTokens()` API**: Lightweight authoring with explicit metadata and reasoning
+- **ComponentTokenRegistry**: Global registry for token collection, querying by component or family
+- **Family-Aware Validation**: Formula-based validation for spacing, radius, fontSize families
+- **Cross-Platform Generation**: CSS custom properties, Swift constants, Kotlin constants
+- **Token Chain Preservation**: Generated output references primitives (not inline values)
+- **Reference Implementation**: Button-Icon component demonstrates the complete pattern
 
 **Phase 1 Token Foundation Complete** ✅
 All critical token categories implemented and ready for component development:
@@ -474,6 +498,33 @@ HOWEVER, here's why this might be wrong:
 - If fields have complex validation, space.related.normal might provide better separation
 - For mobile interfaces, space.grouped.tight might be more appropriate
 - Consider whether inset tokens (space.inset.normal) are needed for internal padding"
+```
+
+### Component Token Authoring (NEW in v4.0.0)
+```typescript
+// Define component-specific tokens with explicit reasoning
+import { defineComponentTokens } from '@/build/tokens/defineComponentTokens';
+import { spacingTokens } from '@/tokens/SpacingTokens';
+
+export const ButtonIconTokens = defineComponentTokens({
+  component: 'buttonicon',
+  family: 'spacing',
+  tokens: {
+    insetLarge: {
+      reference: spacingTokens.space150,  // References primitive
+      reasoning: 'Large size uses space150 for comfortable touch targets',
+    },
+    insetMedium: {
+      reference: spacingTokens.space125,
+      reasoning: 'Medium size uses space125 for balanced proportions',
+    },
+  },
+});
+
+// Generated output maintains token chain:
+// CSS: --button-icon-inset-large: var(--space-150)
+// Swift: ButtonIconTokens.insetLarge = SpacingTokens.space150
+// Kotlin: ButtonIconTokens.insetLarge = SpacingTokens.space150
 ```
 
 ### Semantic Spacing Intent
