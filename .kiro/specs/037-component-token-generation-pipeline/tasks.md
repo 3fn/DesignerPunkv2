@@ -265,10 +265,10 @@ Each task builds incrementally on previous work, with Button-Icon serving as the
 
 ---
 
-- [ ] 6. Deprecate Existing Infrastructure
+- [x] 6. Deprecate Existing Infrastructure
   **Type**: Setup
   **Validation**: Tier 1 - Minimal
-  - [ ] 6.1 Mark old component token files as deprecated
+  - [x] 6.1 Mark old component token files as deprecated
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Add deprecation notice to `src/build/tokens/ComponentToken.ts`
@@ -277,7 +277,7 @@ Each task builds incrementally on previous work, with Button-Icon serving as the
     - Point to defineComponentTokens() as replacement
     - _Requirements: 7.1, 7.2, 7.3_
 
-  - [ ] 6.2 Update documentation references
+  - [x] 6.2 Update documentation references
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Update any documentation referencing old approach

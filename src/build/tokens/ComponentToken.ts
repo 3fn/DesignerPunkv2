@@ -6,6 +6,45 @@
  * 
  * Component tokens are the fallback in the priority system:
  * semantic → primitive → component
+ * 
+ * @deprecated This interface is deprecated and will be removed in a future version.
+ * Use the new `defineComponentTokens()` helper from `src/build/tokens/defineComponentTokens.ts` instead.
+ * 
+ * Migration guide:
+ * - Replace `ComponentToken` interface usage with `defineComponentTokens()` helper
+ * - The new API provides lightweight authoring with automatic registry integration
+ * - See `.kiro/specs/037-component-token-generation-pipeline/design.md` for architecture details
+ * 
+ * @example
+ * ```typescript
+ * // OLD (deprecated):
+ * const token: ComponentToken = {
+ *   name: 'buttonIcon.inset.large',
+ *   category: 'spacing',
+ *   baseValue: 12,
+ *   component: 'ButtonIcon',
+ *   reasoning: 'Large button padding',
+ *   // ... many more required fields
+ * };
+ * 
+ * // NEW (recommended):
+ * import { defineComponentTokens } from './defineComponentTokens';
+ * import { spacingTokens } from '../../tokens/SpacingTokens';
+ * 
+ * const ButtonIconTokens = defineComponentTokens({
+ *   component: 'ButtonIcon',
+ *   family: 'spacing',
+ *   tokens: {
+ *     'inset.large': {
+ *       reference: spacingTokens.space150,
+ *       reasoning: 'Large button requires 12px padding for visual balance',
+ *     },
+ *   },
+ * });
+ * ```
+ * 
+ * @see defineComponentTokens - The new recommended API for component tokens
+ * @see ComponentTokenRegistry - Global registry for component token management
  */
 
 import { Platform, PlatformValue } from './types';
@@ -18,6 +57,9 @@ import { TokenCategory } from './PlatformTokens';
  * 1. Semantic tokens cannot achieve design requirements
  * 2. Primitive tokens cannot achieve design requirements
  * 3. Mathematical reasoning justifies the new token
+ * 
+ * @deprecated Use `defineComponentTokens()` from `./defineComponentTokens` instead.
+ * The new API provides a simpler interface with automatic registry integration.
  */
 export interface ComponentToken {
   /** Unique component token name */
@@ -50,6 +92,9 @@ export interface ComponentToken {
 
 /**
  * Platform-specific component token values
+ * 
+ * @deprecated Use `defineComponentTokens()` from `./defineComponentTokens` instead.
+ * Platform values are now generated automatically by the token generation pipeline.
  */
 export interface ComponentTokenPlatforms {
   /** iOS value in pt */
@@ -64,6 +109,9 @@ export interface ComponentTokenPlatforms {
 
 /**
  * Reference to primitive token
+ * 
+ * @deprecated Use `TokenWithReference` from `./defineComponentTokens` instead.
+ * The new API uses direct primitive token references with automatic value extraction.
  */
 export interface TokenReference {
   /** Primitive token name */
@@ -78,6 +126,9 @@ export interface TokenReference {
 
 /**
  * Component token usage tracking
+ * 
+ * @deprecated Usage tracking is no longer part of the component token API.
+ * Use `defineComponentTokens()` from `./defineComponentTokens` instead.
  */
 export interface ComponentTokenUsage {
   /** Number of times used */
@@ -98,6 +149,9 @@ export interface ComponentTokenUsage {
 
 /**
  * Component token metadata
+ * 
+ * @deprecated Metadata is now handled automatically by `ComponentTokenRegistry`.
+ * Use `defineComponentTokens()` from `./defineComponentTokens` instead.
  */
 export interface ComponentTokenMetadata {
   /** Creation timestamp */
@@ -124,6 +178,9 @@ export interface ComponentTokenMetadata {
 
 /**
  * Component token generator interface
+ * 
+ * @deprecated Use `defineComponentTokens()` from `./defineComponentTokens` instead.
+ * Token generation is now handled automatically by the helper function.
  */
 export interface ComponentTokenGenerator {
   /**
@@ -153,6 +210,9 @@ export interface ComponentTokenGenerator {
 
 /**
  * Component token specification for generation
+ * 
+ * @deprecated Use `ComponentTokenConfig` from `./defineComponentTokens` instead.
+ * The new API uses a simpler configuration interface.
  */
 export interface ComponentTokenSpec {
   /** Component token name */
@@ -179,6 +239,9 @@ export interface ComponentTokenSpec {
 
 /**
  * Component token validation result
+ * 
+ * @deprecated Validation is now handled by `ValidationCoordinator.validateComponentToken()`.
+ * Use `defineComponentTokens()` from `./defineComponentTokens` for token creation.
  */
 export interface ComponentTokenValidationResult {
   /** Whether token is valid */
@@ -199,6 +262,9 @@ export interface ComponentTokenValidationResult {
 
 /**
  * Promotion recommendation for component token
+ * 
+ * @deprecated Promotion tracking is no longer part of the component token API.
+ * Use `defineComponentTokens()` from `./defineComponentTokens` instead.
  */
 export interface PromotionRecommendation {
   /** Whether token should be promoted */

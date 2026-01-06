@@ -1,7 +1,7 @@
 # Token System Overview
 
 **Date**: December 29, 2025
-**Last Updated**: December 29, 2025
+**Last Updated**: January 5, 2026
 **Purpose**: Master document mapping token files to their documentation guides
 **Organization**: process-standard
 **Scope**: cross-project
@@ -20,6 +20,7 @@ This document is organized for efficient MCP section queries. Use `get_section` 
 | [System Architecture](#system-architecture) | Validators, registries, coordinators |
 | [Primitive Tokens](#primitive-tokens) | All primitive token files and descriptions |
 | [Semantic Tokens](#semantic-tokens) | All semantic token files and descriptions |
+| [Component Tokens](#component-tokens) | Component-specific tokens and authoring API |
 | [Blend Infrastructure](#blend-infrastructure) | Blend utilities and theme-aware patterns |
 | [Token Generation](#token-generation) | Cross-platform generation system |
 | [Related Documentation](#related-documentation) | Links to specs, guides, and patterns |
@@ -55,6 +56,7 @@ This document is organized for efficient MCP section queries. Use `get_section` 
 ```
 src/tokens/                    # Primitive tokens
 src/tokens/semantic/           # Semantic tokens
+src/components/*/tokens.ts     # Component tokens
 src/blend/                     # Blend utilities
 dist/                          # Generated platform files
 docs/tokens/                   # Token guides
@@ -447,6 +449,137 @@ if (validationResult.valid) {
 #### Style Tokens
 - **File**: `src/tokens/semantic/StyleTokens.ts`
 - **Description**: Complete component styling patterns combining multiple primitives
+
+---
+
+## Component Tokens
+
+### Overview
+
+Component tokens represent a third layer in the token hierarchy, sitting between semantic tokens and platform implementations. They provide component-specific values when existing primitive or semantic tokens are mathematically insufficient for design requirements.
+
+**Token Hierarchy**:
+```
+Primitive Tokens (Mathematical Foundation)
+    └── Semantic Tokens (Purpose-Driven Compositions)
+            └── Component Tokens (Component-Specific Values)
+```
+
+### When to Use Component Tokens
+
+Component tokens should be created when:
+1. Existing semantic tokens don't provide the exact value needed
+2. The value is specific to a single component
+3. The value references a primitive token (preferred) or conforms to a token family's mathematical pattern
+
+### Authoring API
+
+Component tokens are defined using the `defineComponentTokens()` helper:
+
+```typescript
+// src/components/[ComponentName]/tokens.ts
+import { defineComponentTokens } from '../../build/tokens/defineComponentTokens';
+import { spacingTokens } from '../../tokens/SpacingTokens';
+
+export const ComponentNameTokens = defineComponentTokens({
+  component: 'ComponentName',
+  family: 'spacing',
+  tokens: {
+    'inset.large': {
+      reference: spacingTokens.space150,
+      reasoning: 'Explanation of why this token exists',
+    },
+    'inset.medium': {
+      reference: spacingTokens.space125,
+      reasoning: 'Medium inset for balanced visual weight',
+    },
+  },
+});
+```
+
+**Key Characteristics**:
+- **Explicit component and family association**: Each token set declares its component and token family
+- **Required reasoning**: Every token must include a reasoning string explaining its purpose
+- **Primitive references preferred**: Tokens should reference existing primitives when possible
+- **Automatic registration**: Tokens are automatically registered with `ComponentTokenRegistry`
+
+### Component Token Registry
+
+The `ComponentTokenRegistry` provides query methods for component tokens:
+
+| Method | Purpose |
+|--------|---------|
+| `getAll()` | Retrieve all registered component tokens |
+| `getByComponent(name)` | Get tokens for a specific component |
+| `getByFamily(family)` | Get tokens by token family (spacing, radius, etc.) |
+| `has(tokenName)` | Check if a token exists |
+| `get(tokenName)` | Get a specific token by name |
+
+### Validation
+
+Component tokens are validated by `ValidationCoordinator`:
+- **Reasoning requirement**: Non-empty reasoning string required
+- **Primitive reference validation**: Referenced primitives must exist
+- **Family conformance**: Custom values must conform to family patterns
+
+### Generated Output
+
+Component tokens generate platform-specific files:
+
+```
+dist/ComponentTokens.web.css      # CSS custom properties
+dist/ComponentTokens.ios.swift    # Swift constants
+dist/ComponentTokens.android.kt   # Kotlin constants
+```
+
+**Output Examples**:
+
+```css
+/* Web CSS */
+:root {
+  --button-icon-inset-large: var(--space-150);
+  --button-icon-inset-medium: var(--space-125);
+}
+```
+
+```swift
+// iOS Swift
+public enum ButtonIconTokens {
+  public static let insetLarge: CGFloat = SpacingTokens.space150
+  public static let insetMedium: CGFloat = SpacingTokens.space125
+}
+```
+
+```kotlin
+// Android Kotlin
+object ButtonIconTokens {
+  val insetLarge = SpacingTokens.space150
+  val insetMedium = SpacingTokens.space125
+}
+```
+
+### Existing Component Tokens
+
+#### ButtonIcon Tokens
+- **File**: `src/components/core/ButtonIcon/buttonIcon.tokens.ts`
+- **Family**: spacing
+- **Tokens**: inset.large, inset.medium, inset.small
+- **Description**: Inset spacing for icon button variants
+
+### Migration from Old Approach
+
+The previous component token infrastructure (`ComponentToken.ts`, `ComponentTokenGenerator.ts`) is deprecated. Use `defineComponentTokens()` for all new component tokens.
+
+**Key differences**:
+- **OLD**: Manual token generation with explicit platform values
+- **NEW**: Automatic value extraction from primitive references
+- **OLD**: Separate validation and promotion checking
+- **NEW**: Integrated validation through ValidationCoordinator
+
+### Related Documentation
+
+- [Rosetta System Architecture](../.kiro/steering/Rosetta-System-Architecture.md) - Pipeline architecture and component token flow
+- [Component Development Guide](../.kiro/steering/Component-Development-Guide.md) - Token selection and component patterns
 
 ---
 

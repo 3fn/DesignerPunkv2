@@ -6,6 +6,58 @@
  * 
  * Component tokens are the fallback in the priority system:
  * semantic → primitive → component
+ * 
+ * @deprecated This class is deprecated and will be removed in a future version.
+ * Use the new `defineComponentTokens()` helper from `src/build/tokens/defineComponentTokens.ts` instead.
+ * 
+ * Migration guide:
+ * - Replace `ComponentTokenGenerator` class usage with `defineComponentTokens()` helper
+ * - The new API handles token generation, validation, and registry integration automatically
+ * - Validation is now handled by `ValidationCoordinator.validateComponentToken()`
+ * - See `.kiro/specs/037-component-token-generation-pipeline/design.md` for architecture details
+ * 
+ * Key differences:
+ * - OLD: Manual token generation with explicit platform values
+ * - NEW: Automatic value extraction from primitive references
+ * - OLD: Separate validation and promotion checking
+ * - NEW: Integrated validation through ValidationCoordinator
+ * - OLD: Complex ComponentToken interface with many required fields
+ * - NEW: Lightweight defineComponentTokens() with minimal required fields
+ * 
+ * @example
+ * ```typescript
+ * // OLD (deprecated):
+ * const generator = new ComponentTokenGenerator(primitiveRegistry);
+ * const token = generator.generate({
+ *   name: 'buttonIcon.inset.large',
+ *   category: 'spacing',
+ *   baseValue: 12,
+ *   component: 'ButtonIcon',
+ *   reasoning: 'Large button padding',
+ *   createdBy: 'developer',
+ * });
+ * const validation = generator.validate(token);
+ * 
+ * // NEW (recommended):
+ * import { defineComponentTokens } from './defineComponentTokens';
+ * import { spacingTokens } from '../../tokens/SpacingTokens';
+ * 
+ * const ButtonIconTokens = defineComponentTokens({
+ *   component: 'ButtonIcon',
+ *   family: 'spacing',
+ *   tokens: {
+ *     'inset.large': {
+ *       reference: spacingTokens.space150,
+ *       reasoning: 'Large button requires 12px padding for visual balance',
+ *     },
+ *   },
+ * });
+ * // Validation happens automatically through ValidationCoordinator
+ * ```
+ * 
+ * @see defineComponentTokens - The new recommended API for component tokens
+ * @see ValidationCoordinator - For component token validation
+ * @see ComponentTokenRegistry - Global registry for component token management
  */
 
 import {
@@ -30,6 +82,9 @@ import { TokenCategory } from '../../types/PrimitiveToken';
  * - Cross-platform unit conversion
  * - Usage tracking
  * - Promotion candidate detection
+ * 
+ * @deprecated Use `defineComponentTokens()` from `./defineComponentTokens` instead.
+ * The new API handles token generation, validation, and registry integration automatically.
  */
 export class ComponentTokenGenerator implements IComponentTokenGenerator {
   constructor(private primitiveRegistry: PrimitiveTokenRegistry) {}
