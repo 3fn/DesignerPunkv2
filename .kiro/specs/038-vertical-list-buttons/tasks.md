@@ -63,7 +63,7 @@ This implementation plan covers the Vertical List Buttons component (`Button-Ver
     - _Requirements: New Semantic Tokens Required section_
 
 
-- [ ] 2. Create Component Token
+- [x] 2. Create Component Token
 
   **Type**: Setup
   **Validation**: Tier 1: Minimal
@@ -79,7 +79,7 @@ This implementation plan covers the Vertical List Buttons component (`Button-Ver
   - Detailed: `.kiro/specs/038-vertical-list-buttons/completion/task-2-completion.md`
   - Summary: `docs/specs/038-vertical-list-buttons/task-2-summary.md` (triggers release detection)
 
-  - [ ] 2.1 Define vertical padding component token
+  - [x] 2.1 Define vertical padding component token
     **Type**: Setup
     **Validation**: Tier 1: Minimal
     - Create `verticalListButton.padding.vertical` token referencing `space075`
