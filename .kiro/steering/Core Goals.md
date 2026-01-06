@@ -46,6 +46,18 @@ DesignerPunk is a True Native cross-platform design system with mathematical fou
 - All tokens must follow Rosetta System: mathematical relationships, unitless values, primitive→semantic hierarchy
 - Inform user if hard-coded values are necessary
 
+**Token Governance (Autonomy Levels):**
+- **Semantic tokens**: Use freely (verify semantic correctness)
+- **Primitive tokens**: Requires prior context (spec docs) or human acknowledgment
+- **Component tokens**: Requires explicit human approval before use
+- **Creating ANY token**: Always requires human review — no autonomous token creation
+
+**For detailed governance**, query Token Governance via MCP:
+```
+get_section({ path: ".kiro/steering/Token-Governance.md", heading: "Token Selection Matrix" })
+get_section({ path: ".kiro/steering/Token-Governance.md", heading: "Token Usage Governance" })
+```
+
 **Token Selection Priority (MUST follow this order):**
 1. **Semantic tokens** — purpose-built for specific use cases (e.g., `tapAreaRecommended` for touch targets, `color.contrast.onPrimary` for content on primary backgrounds)
 2. **Primitive tokens** — when no semantic token exists, check if a primitive token provides the needed value
@@ -64,6 +76,7 @@ Component tokens must either reference an existing primitive token OR conform to
 - Query Token Quick Reference via MCP when uncertain which token to use
 
 **For detailed token guidance, see:**
+- Token governance: `Token-Governance.md` (Layer 2, MCP-accessible) — Selection, usage, and creation governance
 - Component development: `Component-Development-Guide.md` (Layer 3, conditional)
 - Token selection: Component Development Guide's "Token Selection Decision Framework"
 

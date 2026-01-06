@@ -328,82 +328,7 @@ export const ComponentNameTokens = defineComponentTokens({
 - Helper function: `src/build/tokens/defineComponentTokens.ts`
 - Component token registry: `src/registries/ComponentTokenRegistry.ts`
 
----
-
-## Creating New Component Tokens (Migration Pattern)
-
-When creating component tokens for a new component, follow this pattern:
-
-### Step 1: Create Token File
-
-Create `src/components/[ComponentName]/tokens.ts`:
-
-```typescript
-import { defineComponentTokens } from '../../build/tokens/defineComponentTokens';
-import { spacingTokens } from '../../tokens/SpacingTokens';
-// Import other token families as needed
-
-export const ComponentNameTokens = defineComponentTokens({
-  component: 'ComponentName',
-  family: 'spacing', // or 'radius', 'fontSize', etc.
-  tokens: {
-    'tokenName': {
-      reference: spacingTokens.space100, // Reference existing primitive
-      reasoning: 'Clear explanation of why this token exists',
-    },
-  },
-});
-```
-
-### Step 2: Token Definition Options
-
-**Option A: Reference Primitive (Preferred)**
-```typescript
-'inset.large': {
-  reference: spacingTokens.space150,
-  reasoning: 'Large inset provides comfortable touch target padding',
-}
-```
-
-**Option B: Family-Conformant Value**
-```typescript
-'custom.spacing': {
-  value: 14, // Must conform to family's mathematical pattern
-  reasoning: 'Custom value needed for specific design requirement',
-}
-```
-
-### Step 3: Consume in Platform Files
-
-**Web (CSS)**:
-```css
-.component {
-  padding: var(--component-name-inset-large);
-}
-```
-
-**iOS (Swift)**:
-```swift
-.padding(ComponentNameTokens.insetLarge)
-```
-
-**Android (Kotlin)**:
-```kotlin
-Modifier.padding(ComponentNameTokens.insetLarge)
-```
-
-### Validation Requirements
-
-All component tokens must:
-1. Include a non-empty `reasoning` string
-2. Either reference an existing primitive OR provide a family-conformant value
-3. Use the correct token family for the value type
-
-### Deprecated Infrastructure
-
-The following files are deprecated and should NOT be used for new component tokens:
-- `src/build/tokens/ComponentToken.ts` - Use `defineComponentTokens()` instead
-- `src/build/tokens/ComponentTokenGenerator.ts` - Use `defineComponentTokens()` instead
+**Token Creation Governance**: Creating component tokens requires human approval. See [Token Governance Guide](./Token-Governance.md) for decision matrix and review requirements.
 
 ---
 
@@ -446,8 +371,10 @@ get_document_full({ path: ".kiro/steering/Rosetta-System-Architecture.md" })
 # Get specific sections
 get_section({ path: ".kiro/steering/Rosetta-System-Architecture.md", heading: "Token Pipeline Architecture" })
 get_section({ path: ".kiro/steering/Rosetta-System-Architecture.md", heading: "Component Token Integration" })
-get_section({ path: ".kiro/steering/Rosetta-System-Architecture.md", heading: "Creating New Component Tokens (Migration Pattern)" })
 get_section({ path: ".kiro/steering/Rosetta-System-Architecture.md", heading: "Subsystem Entry Points Summary" })
+
+# For token creation governance and guides
+get_section({ path: ".kiro/steering/Token-Governance.md", heading: "Token Creation Guides" })
 ```
 
 ---

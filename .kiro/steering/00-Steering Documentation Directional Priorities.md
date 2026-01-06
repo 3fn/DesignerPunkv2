@@ -372,6 +372,29 @@ get_section({ path: ".kiro/steering/Rosetta-System-Architecture.md", heading: "S
 
 **Confirmation**: Reply "I've queried Rosetta System Architecture via MCP!" after accessing
 
+---
+
+### 14. Token Governance
+**When needed**: Token selection decisions, token usage governance, token creation decisions, understanding autonomy levels for different token types
+
+**File**: #[[file:.kiro/steering/Token-Governance.md]]
+
+**How to access**:
+```
+get_document_summary({ path: ".kiro/steering/Token-Governance.md" })
+```
+
+Then query the specific section you need:
+```
+get_section({ path: ".kiro/steering/Token-Governance.md", heading: "Token Selection Matrix" })
+get_section({ path: ".kiro/steering/Token-Governance.md", heading: "Token Usage Governance" })
+get_section({ path: ".kiro/steering/Token-Governance.md", heading: "Token Creation Governance" })
+get_section({ path: ".kiro/steering/Token-Governance.md", heading: "Prior Acknowledgment" })
+get_section({ path: ".kiro/steering/Token-Governance.md", heading: "Decision Examples" })
+```
+
+**Confirmation**: Reply "I've queried Token Governance via MCP!" after accessing
+
 
 ## MCP Documentation Server (Primary for Large Docs)
 
@@ -393,6 +416,7 @@ These documents are available ONLY via MCP queries:
 | Process-Cross-Reference-Standards | `.kiro/steering/Process-Cross-Reference-Standards.md` |
 | Process-Hook-Operations | `.kiro/steering/Process-Hook-Operations.md` |
 | Rosetta System Architecture | `.kiro/steering/Rosetta-System-Architecture.md` |
+| Token Governance | `.kiro/steering/Token-Governance.md` |
 
 ### How to Access MCP-Only Documents
 
