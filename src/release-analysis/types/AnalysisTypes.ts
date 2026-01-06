@@ -19,7 +19,7 @@ export interface DocumentMetadata {
   task?: string;
   spec?: string;
   status?: string;
-  type: 'task-completion' | 'spec-completion' | 'other';
+  type: 'task-summary' | 'task-completion' | 'spec-completion' | 'other';
 }
 
 export interface ExtractedChanges {

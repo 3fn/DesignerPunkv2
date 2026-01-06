@@ -39,10 +39,10 @@ describe('NewDocumentDetector', () => {
   describe('detectNewDocuments', () => {
     it('should detect new documents with valid git history', async () => {
       const sinceCommit = 'abc123';
-      const gitOutput = `.kiro/specs/spec-001/completion/task-1-completion.md
-.kiro/specs/spec-002/completion/task-2-completion.md
+      const gitOutput = `docs/specs/spec-001/task-1-summary.md
+docs/specs/spec-002/task-2-summary.md
 src/some-other-file.ts
-.kiro/specs/spec-003/completion/task-3-completion.md`;
+docs/specs/spec-003/task-3-summary.md`;
 
       mockExecSync.mockReturnValue(gitOutput);
 
@@ -53,37 +53,37 @@ src/some-other-file.ts
         { encoding: 'utf-8' }
       );
       expect(result).toEqual([
-        '.kiro/specs/spec-001/completion/task-1-completion.md',
-        '.kiro/specs/spec-002/completion/task-2-completion.md',
-        '.kiro/specs/spec-003/completion/task-3-completion.md'
+        'docs/specs/spec-001/task-1-summary.md',
+        'docs/specs/spec-002/task-2-summary.md',
+        'docs/specs/spec-003/task-3-summary.md'
       ]);
       expect(consoleLogSpy).toHaveBeenCalledWith(
-        `Found 3 new completion documents since ${sinceCommit}`
+        `Found 3 new task summary documents since ${sinceCommit}`
       );
     });
 
-    it('should filter out non-completion documents', async () => {
+    it('should filter out non-summary documents', async () => {
       const sinceCommit = 'abc123';
-      const gitOutput = `.kiro/specs/spec-001/completion/task-1-completion.md
-.kiro/specs/spec-001/requirements.md
-.kiro/specs/spec-001/design.md
+      const gitOutput = `docs/specs/spec-001/task-1-summary.md
+docs/specs/spec-001/requirements.md
+docs/specs/spec-001/design.md
 src/components/Button.tsx
-.kiro/specs/spec-002/completion/task-2-completion.md`;
+docs/specs/spec-002/task-2-summary.md`;
 
       mockExecSync.mockReturnValue(gitOutput);
 
       const result = await detector.detectNewDocuments(sinceCommit);
 
       expect(result).toEqual([
-        '.kiro/specs/spec-001/completion/task-1-completion.md',
-        '.kiro/specs/spec-002/completion/task-2-completion.md'
+        'docs/specs/spec-001/task-1-summary.md',
+        'docs/specs/spec-002/task-2-summary.md'
       ]);
     });
 
     it('should fall back to full scan when sinceCommit is null', async () => {
       const allDocs = [
-        '.kiro/specs/spec-001/completion/task-1-completion.md',
-        '.kiro/specs/spec-002/completion/task-2-completion.md'
+        'docs/specs/spec-001/task-1-summary.md',
+        'docs/specs/spec-002/task-2-summary.md'
       ];
       
       // Mock glob to call callback with results
@@ -101,15 +101,15 @@ src/components/Button.tsx
         'No previous analysis found, performing full scan'
       );
       expect(consoleLogSpy).toHaveBeenCalledWith(
-        `Full scan found ${allDocs.length} total completion documents`
+        `Full scan found ${allDocs.length} total task summary documents`
       );
     });
 
     it('should fall back to full scan when git command fails', async () => {
       const sinceCommit = 'abc123';
       const allDocs = [
-        '.kiro/specs/spec-001/completion/task-1-completion.md',
-        '.kiro/specs/spec-002/completion/task-2-completion.md'
+        'docs/specs/spec-001/task-1-summary.md',
+        'docs/specs/spec-002/task-2-summary.md'
       ];
       
       mockExecSync.mockImplementation(() => {
@@ -131,7 +131,7 @@ src/components/Button.tsx
         expect.any(Error)
       );
       expect(consoleLogSpy).toHaveBeenCalledWith(
-        `Full scan found ${allDocs.length} total completion documents`
+        `Full scan found ${allDocs.length} total task summary documents`
       );
     });
 
@@ -143,11 +143,11 @@ src/components/Button.tsx
 
       expect(result).toEqual([]);
       expect(consoleLogSpy).toHaveBeenCalledWith(
-        `Found 0 new completion documents since ${sinceCommit}`
+        `Found 0 new task summary documents since ${sinceCommit}`
       );
     });
 
-    it('should handle git output with only non-completion files', async () => {
+    it('should handle git output with only non-summary files', async () => {
       const sinceCommit = 'abc123';
       const gitOutput = `src/components/Button.tsx
 README.md
@@ -159,7 +159,7 @@ package.json`;
 
       expect(result).toEqual([]);
       expect(consoleLogSpy).toHaveBeenCalledWith(
-        `Found 0 new completion documents since ${sinceCommit}`
+        `Found 0 new task summary documents since ${sinceCommit}`
       );
     });
   });

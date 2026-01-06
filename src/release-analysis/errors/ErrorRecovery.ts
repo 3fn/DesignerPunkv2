@@ -466,8 +466,11 @@ export class DocumentErrorRecovery {
     return null;
   }
 
-  private inferDocumentType(filePath: string): 'task-completion' | 'spec-completion' | 'other' {
-    if (filePath.includes('task-') && filePath.includes('-completion')) {
+  private inferDocumentType(filePath: string): 'task-summary' | 'task-completion' | 'spec-completion' | 'other' {
+    // Primary: task summary documents in docs/specs/
+    if (filePath.match(/task-\d+-summary\.md$/)) {
+      return 'task-summary';
+    } else if (filePath.includes('task-') && filePath.includes('-completion')) {
       return 'task-completion';
     } else if (filePath.includes('spec-completion')) {
       return 'spec-completion';

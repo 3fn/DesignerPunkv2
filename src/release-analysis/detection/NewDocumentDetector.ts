@@ -2,27 +2,30 @@ import { execSync } from 'child_process';
 import { glob } from 'glob';
 
 /**
- * Detects new completion documents using git history
+ * Detects new task summary documents using git history
  * 
- * This class provides methods to identify completion documents that have been
+ * This class provides methods to identify task summary documents that have been
  * added since a specific commit, with fallback to full document scanning when
  * git is unavailable or fails.
+ * 
+ * Summary documents are located in docs/specs/[spec-name]/task-*-summary.md
+ * and are designed for external consumption (release notes, changelogs).
  */
 export class NewDocumentDetector {
   /**
-   * Detect new completion documents since a specific commit
+   * Detect new task summary documents since a specific commit
    * 
    * Uses git diff to find files added after the specified commit.
    * Falls back to full document scan if git fails or sinceCommit is null.
    * 
    * @param sinceCommit - Git commit hash to compare against (null triggers full scan)
-   * @returns Array of file paths for new completion documents
+   * @returns Array of file paths for new task summary documents
    */
   async detectNewDocuments(sinceCommit: string | null): Promise<string[]> {
     // If no previous commit, fall back to full scan
     if (!sinceCommit) {
       console.warn('No previous analysis found, performing full scan');
-      return this.getAllCompletionDocuments();
+      return this.getAllSummaryDocuments();
     }
 
     try {
@@ -30,33 +33,32 @@ export class NewDocumentDetector {
       const gitCommand = `git diff --name-only --diff-filter=A ${sinceCommit} HEAD`;
       const output = execSync(gitCommand, { encoding: 'utf-8' });
 
-      // Filter for completion documents
+      // Filter for task summary documents in docs/specs/
       const allNewFiles = output.split('\n').filter(Boolean);
-      const newCompletionDocs = allNewFiles.filter(file =>
-        file.includes('.kiro/specs/') &&
-        file.includes('/completion/') &&
-        file.endsWith('.md')
+      const newSummaryDocs = allNewFiles.filter(file =>
+        file.startsWith('docs/specs/') &&
+        file.match(/task-\d+-summary\.md$/)
       );
 
-      console.log(`Found ${newCompletionDocs.length} new completion documents since ${sinceCommit}`);
-      return newCompletionDocs;
+      console.log(`Found ${newSummaryDocs.length} new task summary documents since ${sinceCommit}`);
+      return newSummaryDocs;
 
     } catch (error) {
       console.error('Git command failed, falling back to full scan:', error);
-      return this.getAllCompletionDocuments();
+      return this.getAllSummaryDocuments();
     }
   }
 
   /**
-   * Get all completion documents (fallback when git unavailable)
+   * Get all task summary documents (fallback when git unavailable)
    * 
-   * Uses glob to find all completion documents in the project.
+   * Uses glob to find all task summary documents in the project.
    * This is the fallback method when git is unavailable or fails.
    * 
-   * @returns Array of file paths for all completion documents
+   * @returns Array of file paths for all task summary documents
    */
-  async getAllCompletionDocuments(): Promise<string[]> {
-    const pattern = '.kiro/specs/**/completion/*.md';
+  async getAllSummaryDocuments(): Promise<string[]> {
+    const pattern = 'docs/specs/**/task-*-summary.md';
     
     // Wrap glob in a Promise since glob v7 uses callbacks
     const files = await new Promise<string[]>((resolve, reject) => {
@@ -69,8 +71,16 @@ export class NewDocumentDetector {
       });
     });
     
-    console.log(`Full scan found ${files.length} total completion documents`);
+    console.log(`Full scan found ${files.length} total task summary documents`);
     return files;
+  }
+
+  /**
+   * @deprecated Use getAllSummaryDocuments instead
+   * Kept for backward compatibility during transition
+   */
+  async getAllCompletionDocuments(): Promise<string[]> {
+    return this.getAllSummaryDocuments();
   }
 
   /**

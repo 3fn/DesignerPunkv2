@@ -56,7 +56,7 @@ export interface DocumentFilter {
 /**
  * Document type classification
  */
-export type DocumentType = 'task-completion' | 'spec-completion' | 'other';
+export type DocumentType = 'task-summary' | 'task-completion' | 'spec-completion' | 'other';
 
 /**
  * Document validation result

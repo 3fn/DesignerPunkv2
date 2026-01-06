@@ -102,7 +102,7 @@ describe('Performance Regression Tests', () => {
   });
 
   /**
-   * Helper function to create multiple completion documents in batch
+   * Helper function to create multiple task summary documents in batch
    * Includes retry logic for git operations to handle flaky test environments
    * @param count Number of documents to create
    * @param batchCommit Whether to commit all documents in a single commit
@@ -113,26 +113,38 @@ describe('Performance Regression Tests', () => {
       const specName = `${String(i).padStart(3, '0')}-test-spec`;
       const docPath = path.join(
         tempDir,
-        '.kiro',
+        'docs',
         'specs',
         specName,
-        'completion',
-        'task-1-completion.md'
+        `task-1-summary.md`
       );
       const docDir = path.dirname(docPath);
 
       // Create directory structure
       fs.mkdirSync(docDir, { recursive: true });
 
-      // Write document with minimal content
+      // Write document with What/Why/Impact format
       fs.writeFileSync(docPath, `
-# Task 1 Completion
+# Task 1 Summary: Implement Feature ${i}
 
-## Summary
-Implemented feature ${i}
+**Date**: 2025-01-15
+**Task**: 1. Implement feature ${i}
+**Spec**: ${specName}
 
-## Implementation Details
-Added functionality for feature ${i}
+---
+
+## What
+
+Implemented feature ${i} with full test coverage.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
+- Tests passing
       `);
 
       // Add to git - ensure file is properly staged
@@ -159,7 +171,7 @@ Added functionality for feature ${i}
             return;
           }
           
-          execSync(`git commit -m "Add ${count} completion documents"`, { cwd: tempDir, stdio: 'pipe' });
+          execSync(`git commit -m "Add ${count} task summary documents"`, { cwd: tempDir, stdio: 'pipe' });
           return; // Success - exit the function
         } catch (error) {
           lastError = error as Error;
@@ -181,34 +193,48 @@ Added functionality for feature ${i}
   }
 
   /**
-   * Helper function to create a single completion document
+   * Helper function to create a single task summary document
    */
   function createSingleDocument(index: number): void {
     const specName = `${String(index).padStart(3, '0')}-test-spec`;
     const docPath = path.join(
       tempDir,
-      '.kiro',
+      'docs',
       'specs',
       specName,
-      'completion',
-      'task-1-completion.md'
+      `task-1-summary.md`
     );
     const docDir = path.dirname(docPath);
 
     // Create directory structure
     fs.mkdirSync(docDir, { recursive: true });
 
-    // Write document
+    // Write document with What/Why/Impact format
     fs.writeFileSync(docPath, `
-# Task 1 Completion
+# Task 1 Summary: Implement Feature ${index}
 
-## Summary
-Implemented feature ${index}
+**Date**: 2025-01-15
+**Task**: 1. Implement feature ${index}
+**Spec**: ${specName}
+
+---
+
+## What
+
+Implemented feature ${index}.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
     `);
 
     // Add and commit
     execSync(`git add "${docPath}"`, { cwd: tempDir });
-    execSync(`git commit -m "Add completion document ${index}"`, { cwd: tempDir });
+    execSync(`git commit -m "Add task summary document ${index}"`, { cwd: tempDir });
   }
 
   describe('Performance Target: 179 Documents', () => {

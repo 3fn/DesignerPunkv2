@@ -437,19 +437,19 @@ export class GitHistoryAnalyzer {
   }
 
   /**
-   * Check if a file path represents a completion document
+   * Check if a file path represents a task summary document
+   * 
+   * Task summary documents are located in docs/specs/[spec-name]/task-*-summary.md
+   * and are designed for external consumption (release notes, changelogs).
    */
   private isCompletionDocument(filePath: string): boolean {
-    // Look for completion documents in .kiro/specs/*/completion/ directories
-    const completionPattern = /\.kiro\/specs\/[^\/]+\/completion\/.*\.md$/;
+    // Primary pattern: task summary documents in docs/specs/
+    const summaryPattern = /^docs\/specs\/[^\/]+\/task-\d+-summary\.md$/;
     
-    // Also look for task completion documents and spec completion summaries
-    const taskCompletionPattern = /task-\d+-completion\.md$/;
-    const specCompletionPattern = /spec-completion-summary\.md$/;
+    // Also match task summary documents anywhere (for flexibility)
+    const taskSummaryPattern = /task-\d+-summary\.md$/;
     
-    return completionPattern.test(filePath) || 
-           taskCompletionPattern.test(filePath) || 
-           specCompletionPattern.test(filePath);
+    return summaryPattern.test(filePath) || taskSummaryPattern.test(filePath);
   }
 
   /**
@@ -497,7 +497,10 @@ export class GitHistoryAnalyzer {
   }
 
   /**
-   * Extract metadata from completion document content
+   * Extract metadata from task summary document content
+   * 
+   * Task summary documents use a What/Why/Impact format designed for
+   * external consumption (release notes, changelogs).
    */
   private extractDocumentMetadata(content: string, filePath: string): DocumentMetadata {
     const metadata: DocumentMetadata = {
@@ -532,8 +535,12 @@ export class GitHistoryAnalyzer {
       metadata.status = statusMatch[1].trim();
     }
 
-    // Determine document type based on path and content
-    if (filePath.includes('task-') && filePath.includes('-completion.md')) {
+    // Determine document type based on path
+    // Primary: task summary documents in docs/specs/
+    if (filePath.match(/task-\d+-summary\.md$/)) {
+      metadata.type = 'task-summary';
+    } else if (filePath.includes('task-') && filePath.includes('-completion.md')) {
+      // Legacy: internal completion documents (for backward compatibility)
       metadata.type = 'task-completion';
     } else if (filePath.includes('spec-completion')) {
       metadata.type = 'spec-completion';

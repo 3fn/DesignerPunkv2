@@ -1,0 +1,380 @@
+{
+  "timestamp": "2026-01-06T18:28:24.182Z",
+  "lastAnalyzedCommit": "ec9595fb983e6e9cc0622d0b6e5a3b816e98dc87",
+  "documentCount": 74,
+  "documents": [
+    {
+      "path": "docs/specs/024-blend-token-infrastructure-audit/task-1-summary.md",
+      "lastModified": "2026-01-06T18:28:24.149Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/024-blend-token-infrastructure-audit/task-2-summary.md",
+      "lastModified": "2026-01-06T18:28:24.149Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/024-blend-token-infrastructure-audit/task-3-summary.md",
+      "lastModified": "2026-01-06T18:28:24.149Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/024-blend-token-infrastructure-audit/task-4-summary.md",
+      "lastModified": "2026-01-06T18:28:24.149Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/030-test-failure-fixes/task-12-summary.md",
+      "lastModified": "2026-01-06T18:28:24.150Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/030-test-failure-fixes/task-13-summary.md",
+      "lastModified": "2026-01-06T18:28:24.150Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/031-blend-infrastructure-implementation/task-1-summary.md",
+      "lastModified": "2026-01-06T18:28:24.150Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/031-blend-infrastructure-implementation/task-2-summary.md",
+      "lastModified": "2026-01-06T18:28:24.150Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/031-blend-infrastructure-implementation/task-3-summary.md",
+      "lastModified": "2026-01-06T18:28:24.150Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/032-documentation-architecture-audit/task-1-summary.md",
+      "lastModified": "2026-01-06T18:28:24.151Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/032-documentation-architecture-audit/task-10-summary.md",
+      "lastModified": "2026-01-06T18:28:24.151Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/032-documentation-architecture-audit/task-2-summary.md",
+      "lastModified": "2026-01-06T18:28:24.151Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/032-documentation-architecture-audit/task-3-summary.md",
+      "lastModified": "2026-01-06T18:28:24.151Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/032-documentation-architecture-audit/task-4-summary.md",
+      "lastModified": "2026-01-06T18:28:24.153Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/032-documentation-architecture-audit/task-5-summary.md",
+      "lastModified": "2026-01-06T18:28:24.153Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/032-documentation-architecture-audit/task-6-summary.md",
+      "lastModified": "2026-01-06T18:28:24.154Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/032-documentation-architecture-audit/task-7-summary.md",
+      "lastModified": "2026-01-06T18:28:24.154Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/032-documentation-architecture-audit/task-8-summary.md",
+      "lastModified": "2026-01-06T18:28:24.154Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/032-documentation-architecture-audit/task-9-summary.md",
+      "lastModified": "2026-01-06T18:28:24.154Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/033-steering-documentation-enhancements/task-1-summary.md",
+      "lastModified": "2026-01-06T18:28:24.155Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/033-steering-documentation-enhancements/task-2-summary.md",
+      "lastModified": "2026-01-06T18:28:24.155Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/033-steering-documentation-enhancements/task-3-summary.md",
+      "lastModified": "2026-01-06T18:28:24.155Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/033-steering-documentation-enhancements/task-4-summary.md",
+      "lastModified": "2026-01-06T18:28:24.156Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/033-steering-documentation-enhancements/task-5-summary.md",
+      "lastModified": "2026-01-06T18:28:24.156Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/033-steering-documentation-enhancements/task-6-summary.md",
+      "lastModified": "2026-01-06T18:28:24.157Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/033-steering-documentation-enhancements/task-7-summary.md",
+      "lastModified": "2026-01-06T18:28:24.158Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/033-steering-documentation-enhancements/task-8-summary.md",
+      "lastModified": "2026-01-06T18:28:24.159Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/033-steering-documentation-enhancements/task-9-summary.md",
+      "lastModified": "2026-01-06T18:28:24.159Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/034-component-architecture-system/task-1-summary.md",
+      "lastModified": "2026-01-06T18:28:24.159Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/034-component-architecture-system/task-10-summary.md",
+      "lastModified": "2026-01-06T18:28:24.160Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/034-component-architecture-system/task-11-summary.md",
+      "lastModified": "2026-01-06T18:28:24.160Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/034-component-architecture-system/task-12-summary.md",
+      "lastModified": "2026-01-06T18:28:24.161Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/034-component-architecture-system/task-2-summary.md",
+      "lastModified": "2026-01-06T18:28:24.161Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/034-component-architecture-system/task-3-summary.md",
+      "lastModified": "2026-01-06T18:28:24.162Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/034-component-architecture-system/task-4-summary.md",
+      "lastModified": "2026-01-06T18:28:24.162Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/034-component-architecture-system/task-5-summary.md",
+      "lastModified": "2026-01-06T18:28:24.163Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/034-component-architecture-system/task-7-summary.md",
+      "lastModified": "2026-01-06T18:28:24.163Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/034-component-architecture-system/task-8-summary.md",
+      "lastModified": "2026-01-06T18:28:24.163Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/034-component-architecture-system/task-9-summary.md",
+      "lastModified": "2026-01-06T18:28:24.164Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/035-button-icon-component/task-1-summary.md",
+      "lastModified": "2026-01-06T18:28:24.164Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/035-button-icon-component/task-2-summary.md",
+      "lastModified": "2026-01-06T18:28:24.165Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/035-button-icon-component/task-3-summary.md",
+      "lastModified": "2026-01-06T18:28:24.165Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/035-button-icon-component/task-4-summary.md",
+      "lastModified": "2026-01-06T18:28:24.165Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/035-button-icon-component/task-5-summary.md",
+      "lastModified": "2026-01-06T18:28:24.165Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/036-steering-documentation-audit/task-1-summary.md",
+      "lastModified": "2026-01-06T18:28:24.166Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/036-steering-documentation-audit/task-10-summary.md",
+      "lastModified": "2026-01-06T18:28:24.166Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/036-steering-documentation-audit/task-11-summary.md",
+      "lastModified": "2026-01-06T18:28:24.166Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/036-steering-documentation-audit/task-12-summary.md",
+      "lastModified": "2026-01-06T18:28:24.166Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/036-steering-documentation-audit/task-13-summary.md",
+      "lastModified": "2026-01-06T18:28:24.167Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/036-steering-documentation-audit/task-14-summary.md",
+      "lastModified": "2026-01-06T18:28:24.167Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/036-steering-documentation-audit/task-15-summary.md",
+      "lastModified": "2026-01-06T18:28:24.168Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/036-steering-documentation-audit/task-16-summary.md",
+      "lastModified": "2026-01-06T18:28:24.168Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/036-steering-documentation-audit/task-17-summary.md",
+      "lastModified": "2026-01-06T18:28:24.168Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/036-steering-documentation-audit/task-18-summary.md",
+      "lastModified": "2026-01-06T18:28:24.168Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/036-steering-documentation-audit/task-19-summary.md",
+      "lastModified": "2026-01-06T18:28:24.170Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/036-steering-documentation-audit/task-2-summary.md",
+      "lastModified": "2026-01-06T18:28:24.170Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/036-steering-documentation-audit/task-20-summary.md",
+      "lastModified": "2026-01-06T18:28:24.171Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/036-steering-documentation-audit/task-21-summary.md",
+      "lastModified": "2026-01-06T18:28:24.171Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/036-steering-documentation-audit/task-22-summary.md",
+      "lastModified": "2026-01-06T18:28:24.172Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/036-steering-documentation-audit/task-23-summary.md",
+      "lastModified": "2026-01-06T18:28:24.172Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/036-steering-documentation-audit/task-3-summary.md",
+      "lastModified": "2026-01-06T18:28:24.173Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/036-steering-documentation-audit/task-4-summary.md",
+      "lastModified": "2026-01-06T18:28:24.174Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/036-steering-documentation-audit/task-6-summary.md",
+      "lastModified": "2026-01-06T18:28:24.176Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/036-steering-documentation-audit/task-7-summary.md",
+      "lastModified": "2026-01-06T18:28:24.177Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/036-steering-documentation-audit/task-8-summary.md",
+      "lastModified": "2026-01-06T18:28:24.178Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/036-steering-documentation-audit/task-9-summary.md",
+      "lastModified": "2026-01-06T18:28:24.178Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/037-component-token-generation-pipeline/task-1-summary.md",
+      "lastModified": "2026-01-06T18:28:24.179Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/037-component-token-generation-pipeline/task-2-summary.md",
+      "lastModified": "2026-01-06T18:28:24.179Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/037-component-token-generation-pipeline/task-3-summary.md",
+      "lastModified": "2026-01-06T18:28:24.179Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/037-component-token-generation-pipeline/task-4-summary.md",
+      "lastModified": "2026-01-06T18:28:24.179Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/037-component-token-generation-pipeline/task-5-summary.md",
+      "lastModified": "2026-01-06T18:28:24.179Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/037-component-token-generation-pipeline/task-6-summary.md",
+      "lastModified": "2026-01-06T18:28:24.179Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/037-component-token-generation-pipeline/task-7-summary.md",
+      "lastModified": "2026-01-06T18:28:24.180Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/steering-token-first-enhancement/task-1-summary.md",
+      "lastModified": "2026-01-06T18:28:24.180Z",
+      "gitCommit": "unknown"
+    }
+  ],
+  "quickAnalysisMode": true,
+  "appendOnlyOptimization": true,
+  "note": "Full analysis can be run with: npm run release:analyze"
+}

@@ -155,31 +155,42 @@ D\told-file.ts`;
   });
 
   describe('findCompletionDocuments', () => {
-    it('should find completion documents from Git changes', async () => {
+    it('should find task summary documents from Git changes', async () => {
       const mockChanges: GitChanges = {
         commits: [],
         addedFiles: [
-          '.kiro/specs/feature-a/completion/task-1-completion.md',
+          'docs/specs/feature-a/task-1-summary.md',
           'src/feature.ts',
-          '.kiro/specs/feature-b/completion/spec-completion-summary.md'
+          'docs/specs/feature-b/task-2-summary.md'
         ],
         modifiedFiles: [
-          '.kiro/specs/feature-a/completion/task-2-completion.md',
+          'docs/specs/feature-a/task-3-summary.md',
           'README.md'
         ],
         deletedFiles: [],
         timeRange: { from: new Date(), to: new Date() }
       };
 
-      const mockContent = `# Task 1 Completion
+      const mockContent = `# Task 1 Summary: Implement Feature
 
 **Date**: 2025-01-15
-**Task**: 1.1 Implement feature
+**Task**: 1. Implement feature
 **Spec**: F1 - Feature A
-**Status**: Complete
 
-## Summary
-Task completed successfully.`;
+---
+
+## What
+
+Implemented the new feature with full test coverage.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
+- Tests passing`;
 
       // Mock file system operations
       mockExistsSync.mockReturnValue(true);
@@ -196,16 +207,16 @@ Task completed successfully.`;
 
       const result = await analyzer.findCompletionDocuments(mockChanges);
 
-      expect(result).toHaveLength(3); // 3 completion documents found
-      expect(result[0].path).toBe('.kiro/specs/feature-a/completion/task-1-completion.md');
-      expect(result[0].metadata.type).toBe('task-completion');
-      expect(result[0].metadata.task).toBe('1.1 Implement feature');
+      expect(result).toHaveLength(3); // 3 task summary documents found
+      expect(result[0].path).toBe('docs/specs/feature-a/task-1-summary.md');
+      expect(result[0].metadata.type).toBe('task-summary');
+      expect(result[0].metadata.task).toBe('1. Implement feature');
     });
 
-    it('should handle missing completion documents gracefully', async () => {
+    it('should handle missing task summary documents gracefully', async () => {
       const mockChanges: GitChanges = {
         commits: [],
-        addedFiles: ['.kiro/specs/feature-a/completion/task-1-completion.md'],
+        addedFiles: ['docs/specs/feature-a/task-1-summary.md'],
         modifiedFiles: [],
         deletedFiles: [],
         timeRange: { from: new Date(), to: new Date() }
@@ -218,13 +229,13 @@ Task completed successfully.`;
       expect(result).toHaveLength(0);
     });
 
-    it('should filter out non-completion documents', async () => {
+    it('should filter out non-summary documents', async () => {
       const mockChanges: GitChanges = {
         commits: [],
         addedFiles: [
           'src/feature.ts',
           'README.md',
-          '.kiro/specs/feature-a/requirements.md'
+          'docs/specs/feature-a/requirements.md'
         ],
         modifiedFiles: [],
         deletedFiles: [],
@@ -245,11 +256,11 @@ Task completed successfully.`;
         toCommit: 'def456',
         completionDocuments: [
           {
-            path: '.kiro/specs/feature/completion/task-1-completion.md',
+            path: 'docs/specs/feature/task-1-summary.md',
             content: '',
             lastModified: new Date(),
             gitCommit: 'abc123',
-            metadata: { title: 'Task 1', type: 'task-completion' }
+            metadata: { title: 'Task 1 Summary', type: 'task-summary' }
           }
         ],
         analysisDate: new Date()
@@ -305,7 +316,7 @@ Task completed successfully.`;
       expect(result.errors).toContain('From commit invalid-commit does not exist');
     });
 
-    it('should detect missing completion documents', () => {
+    it('should detect missing task summary documents', () => {
       const mockScope: AnalysisScope = {
         toCommit: 'def456',
         completionDocuments: [
@@ -314,7 +325,7 @@ Task completed successfully.`;
             content: '',
             lastModified: new Date(),
             gitCommit: 'abc123',
-            metadata: { title: 'Missing', type: 'task-completion' }
+            metadata: { title: 'Missing', type: 'task-summary' }
           }
         ],
         analysisDate: new Date()
@@ -371,41 +382,55 @@ Task completed successfully.`;
       expect(isReleaseTag('1.0')).toBe(false);
     });
 
-    it('should identify completion documents correctly', () => {
+    it('should identify task summary documents correctly', () => {
       const analyzer = new GitHistoryAnalyzer();
       const isCompletionDocument = (analyzer as any).isCompletionDocument.bind(analyzer);
       
-      expect(isCompletionDocument('.kiro/specs/feature/completion/task-1-completion.md')).toBe(true);
-      expect(isCompletionDocument('.kiro/specs/feature/completion/spec-completion-summary.md')).toBe(true);
-      expect(isCompletionDocument('task-2-completion.md')).toBe(true);
+      // Primary pattern: task summary documents in docs/specs/
+      expect(isCompletionDocument('docs/specs/feature/task-1-summary.md')).toBe(true);
+      expect(isCompletionDocument('docs/specs/037-component-token/task-7-summary.md')).toBe(true);
+      expect(isCompletionDocument('task-2-summary.md')).toBe(true);
       
+      // Should NOT match old completion document patterns
+      expect(isCompletionDocument('.kiro/specs/feature/completion/task-1-completion.md')).toBe(false);
+      expect(isCompletionDocument('.kiro/specs/feature/completion/spec-completion-summary.md')).toBe(false);
       expect(isCompletionDocument('.kiro/specs/feature/requirements.md')).toBe(false);
       expect(isCompletionDocument('src/feature.ts')).toBe(false);
       expect(isCompletionDocument('README.md')).toBe(false);
     });
 
-    it('should extract document metadata correctly', () => {
+    it('should extract document metadata correctly from task summary format', () => {
       const analyzer = new GitHistoryAnalyzer();
       const extractMetadata = (analyzer as any).extractDocumentMetadata.bind(analyzer);
       
-      const content = `# Task 1 Completion
+      const content = `# Task 1 Summary: Implement Feature
 
 **Date**: 2025-01-15
-**Task**: 1.1 Implement feature
+**Task**: 1. Implement feature
 **Spec**: F1 - Feature A
-**Status**: Complete
 
-## Summary
-Task completed successfully.`;
+---
 
-      const metadata = extractMetadata(content, '.kiro/specs/feature/completion/task-1-completion.md');
+## What
+
+Implemented the new feature with full test coverage.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
+- Tests passing`;
+
+      const metadata = extractMetadata(content, 'docs/specs/feature/task-1-summary.md');
       
-      expect(metadata.title).toBe('Task 1 Completion');
+      expect(metadata.title).toBe('Task 1 Summary: Implement Feature');
       expect(metadata.date).toBe('2025-01-15');
-      expect(metadata.task).toBe('1.1 Implement feature');
+      expect(metadata.task).toBe('1. Implement feature');
       expect(metadata.spec).toBe('F1 - Feature A');
-      expect(metadata.status).toBe('Complete');
-      expect(metadata.type).toBe('task-completion');
+      expect(metadata.type).toBe('task-summary');
     });
   });
 });

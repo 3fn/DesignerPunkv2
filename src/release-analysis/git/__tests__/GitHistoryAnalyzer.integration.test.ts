@@ -38,23 +38,34 @@ describe('GitHistoryAnalyzer Integration Tests', () => {
       // Create and tag a release
       execSync('git tag v1.0.0', { cwd: tempDir });
 
-      // Add completion document
-      const completionDir = join(tempDir, '.kiro', 'specs', 'test-feature', 'completion');
-      execSync(`mkdir -p "${completionDir}"`, { cwd: tempDir });
+      // Add task summary document (new pattern: docs/specs/*/task-*-summary.md)
+      const summaryDir = join(tempDir, 'docs', 'specs', 'test-feature');
+      execSync(`mkdir -p "${summaryDir}"`, { cwd: tempDir });
       
-      const completionContent = `# Task 1 Completion
+      const summaryContent = `# Task 1 Summary: Implement Test Feature
 
 **Date**: 2025-01-15
-**Task**: 1.1 Implement test feature
+**Task**: 1. Implement test feature
 **Spec**: F1 - Test Feature
-**Status**: Complete
 
-## Summary
-Test task completed successfully.`;
+---
 
-      writeFileSync(join(completionDir, 'task-1-completion.md'), completionContent);
+## What
+
+Implemented the test feature with full test coverage.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
+- Tests passing`;
+
+      writeFileSync(join(summaryDir, 'task-1-summary.md'), summaryContent);
       execSync('git add .', { cwd: tempDir });
-      execSync('git commit -m "Add task completion"', { cwd: tempDir });
+      execSync('git commit -m "Add task summary"', { cwd: tempDir });
 
       // Test finding last release
       const lastRelease = await analyzer.findLastRelease();
@@ -64,15 +75,15 @@ Test task completed successfully.`;
       // Test getting changes since release
       const changes = await analyzer.getChangesSince('v1.0.0');
       expect(changes.commits).toHaveLength(1);
-      expect(changes.commits[0].message).toBe('Add task completion');
-      expect(changes.addedFiles).toContain('.kiro/specs/test-feature/completion/task-1-completion.md');
+      expect(changes.commits[0].message).toBe('Add task summary');
+      expect(changes.addedFiles).toContain('docs/specs/test-feature/task-1-summary.md');
 
-      // Test finding completion documents
-      const completionDocs = await analyzer.findCompletionDocuments(changes);
-      expect(completionDocs).toHaveLength(1);
-      expect(completionDocs[0].path).toBe('.kiro/specs/test-feature/completion/task-1-completion.md');
-      expect(completionDocs[0].metadata.task).toBe('1.1 Implement test feature');
-      expect(completionDocs[0].metadata.type).toBe('task-completion');
+      // Test finding task summary documents
+      const summaryDocs = await analyzer.findCompletionDocuments(changes);
+      expect(summaryDocs).toHaveLength(1);
+      expect(summaryDocs[0].path).toBe('docs/specs/test-feature/task-1-summary.md');
+      expect(summaryDocs[0].metadata.task).toBe('1. Implement test feature');
+      expect(summaryDocs[0].metadata.type).toBe('task-summary');
     });
 
     it('should handle repository with no releases', async () => {

@@ -87,10 +87,10 @@ describe('Append-Only Integration Tests', () => {
   });
 
   /**
-   * Helper function to create a completion document in the test repository
+   * Helper function to create a task summary document in the test repository
    */
   function createCompletionDocument(specName: string, taskNumber: string, content: string): string {
-    const docPath = path.join(tempDir, '.kiro', 'specs', specName, 'completion', `task-${taskNumber}-completion.md`);
+    const docPath = path.join(tempDir, 'docs', 'specs', specName, `task-${taskNumber}-summary.md`);
     const docDir = path.dirname(docPath);
 
     // Create directory structure
@@ -101,7 +101,7 @@ describe('Append-Only Integration Tests', () => {
 
     // Add and commit to git
     execSync(`git add "${docPath}"`, { cwd: tempDir });
-    execSync(`git commit -m "Add ${specName} task ${taskNumber} completion"`, { cwd: tempDir });
+    execSync(`git commit -m "Add ${specName} task ${taskNumber} summary"`, { cwd: tempDir });
 
     return docPath;
   }
@@ -115,25 +115,51 @@ describe('Append-Only Integration Tests', () => {
 
   describe('End-to-End Append-Only Flow', () => {
     it('should perform full analysis when no state exists', async () => {
-      // Arrange: Create two completion documents
+      // Arrange: Create two task summary documents
       createCompletionDocument('001-test-spec', '1', `
-# Task 1 Completion
+# Task 1 Summary: Implement Feature A
 
-## Summary
-Implemented test feature A
+**Date**: 2025-01-15
+**Task**: 1. Implement feature A
+**Spec**: 001-test-spec
 
-## Implementation Details
-Added new functionality for feature A
+---
+
+## What
+
+Implemented test feature A with full test coverage.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
+- Tests passing
       `);
 
       createCompletionDocument('002-test-spec', '1', `
-# Task 1 Completion
+# Task 1 Summary: Implement Feature B
 
-## Summary
-Implemented test feature B
+**Date**: 2025-01-15
+**Task**: 1. Implement feature B
+**Spec**: 002-test-spec
 
-## Implementation Details
-Added new functionality for feature B
+---
+
+## What
+
+Implemented test feature B with full test coverage.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
+- Tests passing
       `);
 
       // Act: Run analysis (no state exists)
@@ -155,17 +181,47 @@ Added new functionality for feature B
     it('should analyze only new documents when state exists', async () => {
       // Arrange: Create initial documents and run first analysis
       createCompletionDocument('001-test-spec', '1', `
-# Task 1 Completion
+# Task 1 Summary: Implement Feature A
 
-## Summary
-Implemented test feature A
+**Date**: 2025-01-15
+**Task**: 1. Implement feature A
+**Spec**: 001-test-spec
+
+---
+
+## What
+
+Implemented test feature A.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
       `);
 
       createCompletionDocument('002-test-spec', '1', `
-# Task 1 Completion
+# Task 1 Summary: Implement Feature B
 
-## Summary
-Implemented test feature B
+**Date**: 2025-01-15
+**Task**: 1. Implement feature B
+**Spec**: 002-test-spec
+
+---
+
+## What
+
+Implemented test feature B.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
       `);
 
       // First analysis
@@ -174,10 +230,25 @@ Implemented test feature B
 
       // Create new document after first analysis
       createCompletionDocument('003-test-spec', '1', `
-# Task 1 Completion
+# Task 1 Summary: Implement Feature C
 
-## Summary
-Implemented test feature C
+**Date**: 2025-01-15
+**Task**: 1. Implement feature C
+**Spec**: 003-test-spec
+
+---
+
+## What
+
+Implemented test feature C.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
       `);
 
       // Act: Run second analysis (state exists)
@@ -197,10 +268,25 @@ Implemented test feature C
     it('should preserve existing results unchanged during append', async () => {
       // Arrange: Create initial documents and run first analysis
       createCompletionDocument('001-test-spec', '1', `
-# Task 1 Completion
+# Task 1 Summary: Original Feature A
 
-## Summary
-Original feature A
+**Date**: 2025-01-15
+**Task**: 1. Original feature A
+**Spec**: 001-test-spec
+
+---
+
+## What
+
+Original feature A implementation.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
       `);
 
       const firstResult = await orchestrator.analyze();
@@ -208,10 +294,25 @@ Original feature A
 
       // Create new document
       createCompletionDocument('002-test-spec', '1', `
-# Task 1 Completion
+# Task 1 Summary: New Feature B
 
-## Summary
-New feature B
+**Date**: 2025-01-15
+**Task**: 1. New feature B
+**Spec**: 002-test-spec
+
+---
+
+## What
+
+New feature B implementation.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
       `);
 
       // Act: Run second analysis
@@ -227,10 +328,25 @@ New feature B
     it('should handle no new documents correctly (no-op)', async () => {
       // Arrange: Create documents and run first analysis
       createCompletionDocument('001-test-spec', '1', `
-# Task 1 Completion
+# Task 1 Summary: Test Feature
 
-## Summary
-Test feature
+**Date**: 2025-01-15
+**Task**: 1. Test feature
+**Spec**: 001-test-spec
+
+---
+
+## What
+
+Test feature implementation.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
       `);
 
       const firstResult = await orchestrator.analyze();
@@ -256,17 +372,47 @@ Test feature
     it('should force full analysis when reset command is used', async () => {
       // Arrange: Create documents and run first analysis
       createCompletionDocument('001-test-spec', '1', `
-# Task 1 Completion
+# Task 1 Summary: Test Feature A
 
-## Summary
-Test feature A
+**Date**: 2025-01-15
+**Task**: 1. Test feature A
+**Spec**: 001-test-spec
+
+---
+
+## What
+
+Test feature A implementation.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
       `);
 
       createCompletionDocument('002-test-spec', '1', `
-# Task 1 Completion
+# Task 1 Summary: Test Feature B
 
-## Summary
-Test feature B
+**Date**: 2025-01-15
+**Task**: 1. Test feature B
+**Spec**: 002-test-spec
+
+---
+
+## What
+
+Test feature B implementation.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
       `);
 
       await orchestrator.analyze();
@@ -295,10 +441,25 @@ Test feature B
     it('should track performance metrics correctly', async () => {
       // Arrange: Create documents
       createCompletionDocument('001-test-spec', '1', `
-# Task 1 Completion
+# Task 1 Summary: Test Feature
 
-## Summary
-Test feature
+**Date**: 2025-01-15
+**Task**: 1. Test feature
+**Spec**: 001-test-spec
+
+---
+
+## What
+
+Test feature implementation.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
       `);
 
       // Act: Run analysis
@@ -326,10 +487,25 @@ Test feature
       // Arrange: Create initial documents
       for (let i = 1; i <= 5; i++) {
         createCompletionDocument(`00${i}-test-spec`, '1', `
-# Task 1 Completion
+# Task 1 Summary: Test Feature ${i}
 
-## Summary
-Test feature ${i}
+**Date**: 2025-01-15
+**Task**: 1. Test feature ${i}
+**Spec**: 00${i}-test-spec
+
+---
+
+## What
+
+Test feature ${i} implementation.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
         `);
       }
 
@@ -339,10 +515,25 @@ Test feature ${i}
 
       // Create one new document
       createCompletionDocument('006-test-spec', '1', `
-# Task 1 Completion
+# Task 1 Summary: Test Feature 6
 
-## Summary
-Test feature 6
+**Date**: 2025-01-15
+**Task**: 1. Test feature 6
+**Spec**: 006-test-spec
+
+---
+
+## What
+
+Test feature 6 implementation.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
       `);
 
       // Act: Second analysis (incremental)
@@ -364,10 +555,25 @@ Test feature 6
     it('should not update state if analysis fails', async () => {
       // Arrange: Create a document
       createCompletionDocument('001-test-spec', '1', `
-# Task 1 Completion
+# Task 1 Summary: Test Feature
 
-## Summary
-Test feature
+**Date**: 2025-01-15
+**Task**: 1. Test feature
+**Spec**: 001-test-spec
+
+---
+
+## What
+
+Test feature implementation.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
       `);
 
       // Run first analysis successfully
@@ -376,7 +582,7 @@ Test feature
       const originalCommit = state!.lastAnalyzedCommit;
 
       // Create a malformed document that will cause analysis to fail
-      const badDocPath = path.join(tempDir, '.kiro', 'specs', '002-bad-spec', 'completion', 'task-1-completion.md');
+      const badDocPath = path.join(tempDir, 'docs', 'specs', '002-bad-spec', 'task-1-summary.md');
       fs.mkdirSync(path.dirname(badDocPath), { recursive: true });
       fs.writeFileSync(badDocPath, ''); // Empty file
       execSync(`git add "${badDocPath}"`, { cwd: tempDir });
@@ -397,10 +603,25 @@ Test feature
     it('should handle git failures gracefully', async () => {
       // Arrange: Create documents
       createCompletionDocument('001-test-spec', '1', `
-# Task 1 Completion
+# Task 1 Summary: Test Feature
 
-## Summary
-Test feature
+**Date**: 2025-01-15
+**Task**: 1. Test feature
+**Spec**: 001-test-spec
+
+---
+
+## What
+
+Test feature implementation.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
       `);
 
       // Run first analysis
@@ -437,17 +658,47 @@ Test feature
     it('should maintain correct order of accumulated results', async () => {
       // Arrange: Create documents in specific order
       const doc1Path = createCompletionDocument('001-test-spec', '1', `
-# Task 1 Completion
+# Task 1 Summary: First Feature
 
-## Summary
-First feature
+**Date**: 2025-01-15
+**Task**: 1. First feature
+**Spec**: 001-test-spec
+
+---
+
+## What
+
+First feature implementation.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
       `);
 
       const doc2Path = createCompletionDocument('002-test-spec', '1', `
-# Task 1 Completion
+# Task 1 Summary: Second Feature
 
-## Summary
-Second feature
+**Date**: 2025-01-15
+**Task**: 1. Second feature
+**Spec**: 002-test-spec
+
+---
+
+## What
+
+Second feature implementation.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
       `);
 
       // First analysis
@@ -455,10 +706,25 @@ Second feature
 
       // Create third document
       const doc3Path = createCompletionDocument('003-test-spec', '1', `
-# Task 1 Completion
+# Task 1 Summary: Third Feature
 
-## Summary
-Third feature
+**Date**: 2025-01-15
+**Task**: 1. Third feature
+**Spec**: 003-test-spec
+
+---
+
+## What
+
+Third feature implementation.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
       `);
 
       // Act: Second analysis
@@ -474,10 +740,25 @@ Third feature
     it('should include all required fields in analysis results', async () => {
       // Arrange: Create document
       createCompletionDocument('001-test-spec', '1', `
-# Task 1 Completion
+# Task 1 Summary: Test Feature With All Fields
 
-## Summary
-Test feature with all fields
+**Date**: 2025-01-15
+**Task**: 1. Test feature with all fields
+**Spec**: 001-test-spec
+
+---
+
+## What
+
+Test feature with all fields implementation.
+
+## Why
+
+This feature enables users to perform new actions.
+
+## Impact
+
+- New capability added
       `);
 
       // Act: Run analysis

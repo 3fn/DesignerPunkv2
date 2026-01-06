@@ -11,6 +11,7 @@
  * - highlight = yellow (emphasized content)
  * - tech = cyan (technical elements)
  * - data = cyan (data visualization)
+ * - select = cyan/gray (selection states for Select/Multi-Select components)
  * - glow colors = vibrant neon colors for emphasis effects
  * 
  * All color tokens reference mode-aware primitive color tokens that support
@@ -43,22 +44,24 @@
  * 5. Semantic Meaning in Shadow Token: The semantic meaning belongs in the shadow token
  *    name itself (shadow.dusk, shadow.sunrise) rather than in a separate color token.
  * 
- * Spec-aligned: 29 color semantic tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle)
+ * Spec-aligned: 33 color semantic tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle + 4 select tokens)
  * Note: color.secondary removed as part of color palette update (Spec 015)
  * Added: color.icon.default and color.print.default (Spec 023)
  * Added: color.canvas (Spec 023 - Container token compliance)
  * Added: color.background.primary.subtle (Spec 035 - Button-Icon Component)
+ * Added: color.select.* tokens (Spec 038 - Vertical List Buttons)
  */
 
 import { SemanticToken, SemanticCategory } from '../../types/SemanticToken';
 
 /**
  * Semantic color tokens for systematic color usage
- * Total: 29 tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle)
+ * Total: 33 tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle + 4 select tokens)
  * Note: color.secondary removed as part of color palette update (Spec 015)
  * Added: color.icon.default and color.print.default (Spec 023)
  * Added: color.canvas (Spec 023 - Container token compliance)
  * Added: color.background.primary.subtle (Spec 035 - Button-Icon Component)
+ * Added: color.select.* tokens (Spec 038 - Vertical List Buttons)
  */
 export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>> = {
   // Brand Identity (1 token)
@@ -303,16 +306,50 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
     category: SemanticCategory.COLOR,
     context: 'Neon pink glow color for emphasis effects',
     description: 'Vibrant pink glow referencing pink500'
+  },
+
+  // Select State Colors (4 tokens) - Spec 038: Vertical List Buttons
+  'color.select.selected': {
+    name: 'color.select.selected',
+    primitiveReferences: { value: 'cyan400' },
+    category: SemanticCategory.COLOR,
+    context: 'Foreground color for selected state in selection components',
+    description: 'Cyan foreground color for selected state - used for label text, border, and checkmark base in Select/Multi-Select modes'
+  },
+
+  'color.select.selected.background': {
+    name: 'color.select.selected.background',
+    primitiveReferences: { value: 'cyan100' },
+    category: SemanticCategory.COLOR,
+    context: 'Background fill for selected state in selection components',
+    description: 'Light cyan background for selected state in Select and Multi-Select modes'
+  },
+
+  'color.select.notSelected': {
+    name: 'color.select.notSelected',
+    primitiveReferences: { value: 'gray200' },
+    category: SemanticCategory.COLOR,
+    context: 'Foreground color for not-selected state in Select mode',
+    description: 'Gray foreground color for not-selected state - used for label text in Select mode'
+  },
+
+  'color.select.notSelected.background': {
+    name: 'color.select.notSelected.background',
+    primitiveReferences: { value: 'gray100' },
+    category: SemanticCategory.COLOR,
+    context: 'Background fill for not-selected state in Select mode',
+    description: 'Light gray background for not-selected state in Select mode'
   }
 };
 
 /**
  * Array of all color semantic token names for iteration
- * Total: 29 tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle)
+ * Total: 33 tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle + 4 select tokens)
  * Note: color.secondary removed as part of color palette update (Spec 015)
  * Added: color.icon.default and color.print.default (Spec 023)
  * Added: color.canvas (Spec 023 - Container token compliance)
  * Added: color.background.primary.subtle (Spec 035 - Button-Icon Component)
+ * Added: color.select.* tokens (Spec 038 - Vertical List Buttons)
  */
 export const colorTokenNames = Object.keys(colorTokens);
 
@@ -331,14 +368,15 @@ export function getAllColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'
 }
 
 /**
- * Validate token count matches spec (29 tokens: 16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle)
+ * Validate token count matches spec (33 tokens: 16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle + 4 select tokens)
  * Note: color.secondary removed as part of color palette update (Spec 015)
  * Added: color.icon.default and color.print.default (Spec 023)
  * Added: color.canvas (Spec 023 - Container token compliance)
  * Added: color.background.primary.subtle (Spec 035 - Button-Icon Component)
+ * Added: color.select.* tokens (Spec 038 - Vertical List Buttons)
  */
 export function validateColorTokenCount(): boolean {
-  const expectedCount = 29;
+  const expectedCount = 33;
   const actualCount = colorTokenNames.length;
   if (actualCount !== expectedCount) {
     console.warn(`Color token count mismatch: expected ${expectedCount}, got ${actualCount}`);

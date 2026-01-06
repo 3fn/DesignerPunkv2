@@ -366,8 +366,8 @@ describe('Semantic Color Tokens - Palette Update', () => {
   });
 
   describe('Token Count Validation', () => {
-    it('should have exactly 29 color tokens', () => {
-      expect(colorTokenNames.length).toBe(29);
+    it('should have exactly 33 color tokens', () => {
+      expect(colorTokenNames.length).toBe(33);
     });
 
     it('should pass validateColorTokenCount()', () => {
@@ -452,9 +452,9 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(Array.isArray(tokens)).toBe(true);
       });
 
-      it('should return exactly 29 tokens', () => {
+      it('should return exactly 33 tokens', () => {
         const tokens = getAllColorTokens();
-        expect(tokens.length).toBe(29);
+        expect(tokens.length).toBe(33);
       });
 
       it('should include all new tokens', () => {
@@ -568,6 +568,163 @@ describe('Semantic Color Tokens - Palette Update', () => {
 
     it('should satisfy Requirement 2.6: color.secondary is removed', () => {
       expect(colorTokens['color.secondary']).toBeUndefined();
+    });
+  });
+
+  /**
+   * Select Color Token Tests
+   * 
+   * Tests for Select color tokens added in Spec 038: Vertical List Buttons.
+   * Validates that Select tokens reference correct primitives and have proper structure.
+   */
+  describe('Select Color Tokens (Spec 038)', () => {
+    describe('Token Existence', () => {
+      it('should have color.select.selected token', () => {
+        expect(colorTokens['color.select.selected']).toBeDefined();
+      });
+
+      it('should have color.select.selected.background token', () => {
+        expect(colorTokens['color.select.selected.background']).toBeDefined();
+      });
+
+      it('should have color.select.notSelected token', () => {
+        expect(colorTokens['color.select.notSelected']).toBeDefined();
+      });
+
+      it('should have color.select.notSelected.background token', () => {
+        expect(colorTokens['color.select.notSelected.background']).toBeDefined();
+      });
+    });
+
+    describe('Primitive References', () => {
+      it('should reference cyan400 primitive for selected foreground', () => {
+        const token = colorTokens['color.select.selected'];
+        expect(token.primitiveReferences.value).toBe('cyan400');
+      });
+
+      it('should reference cyan100 primitive for selected background', () => {
+        const token = colorTokens['color.select.selected.background'];
+        expect(token.primitiveReferences.value).toBe('cyan100');
+      });
+
+      it('should reference gray200 primitive for not-selected foreground', () => {
+        const token = colorTokens['color.select.notSelected'];
+        expect(token.primitiveReferences.value).toBe('gray200');
+      });
+
+      it('should reference gray100 primitive for not-selected background', () => {
+        const token = colorTokens['color.select.notSelected.background'];
+        expect(token.primitiveReferences.value).toBe('gray100');
+      });
+
+      it('should verify cyan400 primitive exists', () => {
+        const token = colorTokens['color.select.selected'];
+        const primitiveName = token.primitiveReferences.value;
+        expect(primitiveColorTokens).toHaveProperty(primitiveName);
+      });
+
+      it('should verify cyan100 primitive exists', () => {
+        const token = colorTokens['color.select.selected.background'];
+        const primitiveName = token.primitiveReferences.value;
+        expect(primitiveColorTokens).toHaveProperty(primitiveName);
+      });
+
+      it('should verify gray200 primitive exists', () => {
+        const token = colorTokens['color.select.notSelected'];
+        const primitiveName = token.primitiveReferences.value;
+        expect(primitiveColorTokens).toHaveProperty(primitiveName);
+      });
+
+      it('should verify gray100 primitive exists', () => {
+        const token = colorTokens['color.select.notSelected.background'];
+        const primitiveName = token.primitiveReferences.value;
+        expect(primitiveColorTokens).toHaveProperty(primitiveName);
+      });
+    });
+
+    describe('Token Structure', () => {
+      it('should have COLOR category for all select tokens', () => {
+        expect(colorTokens['color.select.selected'].category).toBe(SemanticCategory.COLOR);
+        expect(colorTokens['color.select.selected.background'].category).toBe(SemanticCategory.COLOR);
+        expect(colorTokens['color.select.notSelected'].category).toBe(SemanticCategory.COLOR);
+        expect(colorTokens['color.select.notSelected.background'].category).toBe(SemanticCategory.COLOR);
+      });
+
+      it('should have meaningful context for selected tokens', () => {
+        const selectedToken = colorTokens['color.select.selected'];
+        expect(selectedToken.context).toBeTruthy();
+        expect(selectedToken.context.toLowerCase()).toContain('selected');
+
+        const selectedBgToken = colorTokens['color.select.selected.background'];
+        expect(selectedBgToken.context).toBeTruthy();
+        expect(selectedBgToken.context.toLowerCase()).toContain('selected');
+      });
+
+      it('should have meaningful context for not-selected tokens', () => {
+        const notSelectedToken = colorTokens['color.select.notSelected'];
+        expect(notSelectedToken.context).toBeTruthy();
+        expect(notSelectedToken.context.toLowerCase()).toContain('not-selected');
+
+        const notSelectedBgToken = colorTokens['color.select.notSelected.background'];
+        expect(notSelectedBgToken.context).toBeTruthy();
+        expect(notSelectedBgToken.context.toLowerCase()).toContain('not-selected');
+      });
+
+      it('should have descriptions for all select tokens', () => {
+        expect(colorTokens['color.select.selected'].description).toBeTruthy();
+        expect(colorTokens['color.select.selected.background'].description).toBeTruthy();
+        expect(colorTokens['color.select.notSelected'].description).toBeTruthy();
+        expect(colorTokens['color.select.notSelected.background'].description).toBeTruthy();
+      });
+    });
+
+    describe('Utility Function Access', () => {
+      it('should return color.select.selected via getColorToken()', () => {
+        const token = getColorToken('color.select.selected');
+        expect(token).toBeDefined();
+        expect(token?.name).toBe('color.select.selected');
+      });
+
+      it('should return color.select.selected.background via getColorToken()', () => {
+        const token = getColorToken('color.select.selected.background');
+        expect(token).toBeDefined();
+        expect(token?.name).toBe('color.select.selected.background');
+      });
+
+      it('should return color.select.notSelected via getColorToken()', () => {
+        const token = getColorToken('color.select.notSelected');
+        expect(token).toBeDefined();
+        expect(token?.name).toBe('color.select.notSelected');
+      });
+
+      it('should return color.select.notSelected.background via getColorToken()', () => {
+        const token = getColorToken('color.select.notSelected.background');
+        expect(token).toBeDefined();
+        expect(token?.name).toBe('color.select.notSelected.background');
+      });
+
+      it('should include all select tokens in getAllColorTokens()', () => {
+        const tokens = getAllColorTokens();
+        const tokenNames = tokens.map(t => t.name);
+
+        expect(tokenNames).toContain('color.select.selected');
+        expect(tokenNames).toContain('color.select.selected.background');
+        expect(tokenNames).toContain('color.select.notSelected');
+        expect(tokenNames).toContain('color.select.notSelected.background');
+      });
+    });
+
+    describe('Token Count Includes Select Tokens', () => {
+      it('should have exactly 4 select tokens', () => {
+        const selectTokens = colorTokenNames.filter(n => n.startsWith('color.select'));
+        expect(selectTokens.length).toBe(4);
+      });
+
+      it('should include select tokens in total count of 33', () => {
+        // Verify total count includes the 4 new select tokens
+        expect(colorTokenNames.length).toBe(33);
+        expect(validateColorTokenCount()).toBe(true);
+      });
     });
   });
 });

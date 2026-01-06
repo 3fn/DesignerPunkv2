@@ -183,7 +183,7 @@ export interface FileOrganizationEvent {
   organizedAt: Date;
   
   /** Organization type */
-  organizationType: 'task-completion' | 'spec-completion' | 'manual';
+  organizationType: 'task-summary' | 'task-completion' | 'spec-completion' | 'manual';
   
   /** Git commit hash if available */
   gitCommit?: string;
@@ -325,7 +325,7 @@ export interface CompletionDocument {
   path: string;
   
   /** Document type */
-  type: 'task-completion' | 'spec-completion';
+  type: 'task-summary' | 'task-completion' | 'spec-completion';
   
   /** Associated spec */
   spec: string;

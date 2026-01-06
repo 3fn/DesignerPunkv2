@@ -132,8 +132,8 @@ export class AnalysisResultParser {
   /**
    * Parse document type
    */
-  private parseDocumentType(value: any): 'task-completion' | 'spec-completion' | 'other' {
-    const validTypes = ['task-completion', 'spec-completion', 'other'];
+  private parseDocumentType(value: any): 'task-summary' | 'task-completion' | 'spec-completion' | 'other' {
+    const validTypes = ['task-summary', 'task-completion', 'spec-completion', 'other'];
     if (!validTypes.includes(value)) {
       throw new JSONParseError(`Invalid document type: ${value}. Must be one of: ${validTypes.join(', ')}`, 'type', value);
     }
