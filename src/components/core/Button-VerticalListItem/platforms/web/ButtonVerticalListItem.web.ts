@@ -100,18 +100,28 @@ function validateRequiredTokens(): void {
 }
 
 /**
- * Get the padding-block value based on the visual state.
+ * Get the padding-block value based on the visual state and error state.
  * 
  * Uses padding compensation to maintain constant 48px height:
  * - Rest state (1px border): 11px padding
  * - Selected state (2px border): 10px padding
  * 
+ * When error=true in Select mode (rest, selected, notSelected), emphasis border
+ * is applied, so padding must also be adjusted to maintain height stability.
+ * 
  * @param visualState - Current visual state
+ * @param error - Whether error state is active
  * @returns Padding value in pixels as string (e.g., "11px")
  */
-function getPaddingBlockForState(visualState: VisualState): string {
+function getPaddingBlockForState(visualState: VisualState, error: boolean = false): string {
+  // Determine if emphasis border (2px) is needed:
+  // 1. 'selected' state always uses emphasis border
+  // 2. Error state in Select mode (rest, selected, notSelected) uses emphasis border
+  const isSelectModeState = visualState === 'rest' || visualState === 'selected' || visualState === 'notSelected';
+  const needsEmphasisBorder = requiresEmphasisBorder(visualState) || (error && isSelectModeState);
+  
   const variant: VerticalListItemPaddingBlockVariant = 
-    requiresEmphasisBorder(visualState) ? 'selected' : 'rest';
+    needsEmphasisBorder ? 'selected' : 'rest';
   const paddingValue = getVerticalListItemPaddingBlock(variant);
   return `${paddingValue}px`;
 }
@@ -554,8 +564,8 @@ export class ButtonVerticalListItem extends HTMLElement {
     // Get visual state styles with error overlay if applicable
     const styles: VisualStateStyles = getVisualStateStylesWithError(visualState, error);
     
-    // Get padding-block value based on visual state (padding compensation)
-    const paddingBlock = getPaddingBlockForState(visualState);
+    // Get padding-block value based on visual state and error state (padding compensation)
+    const paddingBlock = getPaddingBlockForState(visualState, error);
     
     // Icon size for leading icon and checkmark (24px = iconBaseSizes.size100)
     const iconSize = iconBaseSizes.size100;
