@@ -59,9 +59,11 @@
   --vlbi-description-line-height: var(--typography-body-sm-line-height, 1.5);
   --vlbi-description-color: var(--color-text-muted);
   
-  /* Transition tokens */
-  --vlbi-transition-duration: 250ms;
-  --vlbi-transition-easing: ease;
+  /* Transition tokens - using motion.selectionTransition semantic token */
+  /* @see Requirement 7.1, New Tokens Required (motion.selectionTransition) */
+  /* No fallbacks - fail loudly if tokens not loaded */
+  --vlbi-transition-duration: var(--motion-selection-transition-duration);
+  --vlbi-transition-easing: var(--motion-selection-transition-easing);
   
   /* Blend tokens for interactive states */
   --vlbi-hover-brightness: 0.95;
@@ -321,8 +323,10 @@
  * - Color: Inherits from visual state (via --vlbi-icon-color)
  * - Position: Far right, vertically centered (handled by parent flexbox)
  * - Marked as decorative (aria-hidden="true" in HTML)
+ * - Base transition for fade-in (always applied, regardless of checkmarkTransition prop)
  * 
  * @see Requirements 2.1, 2.2, 2.3, 2.4, 2.5
+ * @see Requirement 7.2 - Checkmark always fades in
  */
 .vertical-list-item__checkmark {
   flex-shrink: 0;
@@ -330,28 +334,40 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-}
-
-/**
- * Checkmark fade transition.
- * 
- * Smooth opacity transition for checkmark visibility changes.
- * 
- * @see Requirement 7.2
- */
-.vertical-list-item__checkmark--fade {
+  /* Base transition for fade-in (always applied) */
   transition: opacity var(--vlbi-transition-duration) var(--vlbi-transition-easing),
               visibility var(--vlbi-transition-duration) var(--vlbi-transition-easing);
 }
 
 /**
- * Checkmark instant transition.
+ * Checkmark fade transition mode.
  * 
- * No animation when hiding checkmark (instant hide).
+ * When checkmarkTransition='fade', both fade-in and fade-out are animated.
+ * The transition is inherited from the base .vertical-list-item__checkmark class.
  * 
- * @see Requirement 7.4
+ * @see Requirement 7.3 - Fade out when checkmarkTransition='fade'
  */
-.vertical-list-item__checkmark--instant {
+.vertical-list-item__checkmark--fade {
+  /* Inherits transition from base class - both fade-in and fade-out animated */
+  /* This class exists as a semantic marker and for specificity matching with --instant */
+  opacity: inherit;
+}
+
+/**
+ * Checkmark instant hide transition mode.
+ * 
+ * When checkmarkTransition='instant', the checkmark hides immediately without animation.
+ * However, fade-IN is still animated (asymmetric behavior).
+ * 
+ * This is achieved by:
+ * 1. Base class provides fade-in transition
+ * 2. When hidden, we override with instant transition for immediate hide
+ * 
+ * @see Requirement 7.2 - Checkmark always fades in
+ * @see Requirement 7.4 - Instant hide when checkmarkTransition='instant'
+ */
+.vertical-list-item__checkmark--instant.vertical-list-item__checkmark--hidden {
+  /* Override transition to none for instant hide */
   transition: none;
 }
 

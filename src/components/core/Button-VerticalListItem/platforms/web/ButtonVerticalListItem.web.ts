@@ -39,6 +39,7 @@ import '../../../Icon-Base/platforms/web/IconBase.web';
  * The component will fail loudly if any of these are missing.
  */
 const REQUIRED_CSS_VARIABLES = [
+  // Color tokens
   '--color-background',
   '--color-text-default',
   '--color-text-muted',
@@ -48,15 +49,22 @@ const REQUIRED_CSS_VARIABLES = [
   '--color-select-not-selected-subtle',
   '--color-error-strong',
   '--color-error-subtle',
+  // Border tokens
   '--border-border-default',
   '--border-border-emphasis',
+  // Radius tokens
   '--radius-normal',
+  // Spacing tokens
   '--space-inset-200',
   '--space-grouped-loose',
+  // Accessibility tokens
   '--accessibility-tap-area-recommended',
   '--accessibility-focus-width',
   '--accessibility-focus-offset',
   '--accessibility-focus-color',
+  // Motion tokens (semantic) - required for animations
+  '--motion-selection-transition-duration',
+  '--motion-selection-transition-easing',
 ] as const;
 
 /**
@@ -526,13 +534,15 @@ export class ButtonVerticalListItem extends HTMLElement {
           text-align: start;
           cursor: pointer;
           
-          /* Animation */
+          /* Animation - using motion.selectionTransition semantic token */
+          /* @see Requirement 7.1, New Tokens Required (motion.selectionTransition) */
+          /* No fallbacks - fail loudly if tokens not loaded */
           transition: 
-            background 250ms ease,
-            border-color 250ms ease,
-            border-width 250ms ease,
-            padding 250ms ease,
-            color 250ms ease;
+            background var(--motion-selection-transition-duration) var(--motion-selection-transition-easing),
+            border-color var(--motion-selection-transition-duration) var(--motion-selection-transition-easing),
+            border-width var(--motion-selection-transition-duration) var(--motion-selection-transition-easing),
+            padding var(--motion-selection-transition-duration) var(--motion-selection-transition-easing),
+            color var(--motion-selection-transition-duration) var(--motion-selection-transition-easing);
         }
         
         /* Interactive states */
@@ -581,17 +591,30 @@ export class ButtonVerticalListItem extends HTMLElement {
           flex-shrink: 0;
         }
         
-        /* Checkmark (selection indicator) */
+        /* Checkmark (selection indicator) - base transition for fade-in */
+        /* Checkmark always fades IN regardless of checkmarkTransition setting */
+        /* @see Requirement 7.2 */
+        /* No fallbacks - fail loudly if tokens not loaded */
         .vertical-list-item__checkmark {
           flex-shrink: 0;
           color: var(--vlbi-icon-color);
+          /* Base transition for fade-in (always applied) */
+          transition: opacity var(--motion-selection-transition-duration) var(--motion-selection-transition-easing),
+                      visibility var(--motion-selection-transition-duration) var(--motion-selection-transition-easing);
         }
         
+        /* Fade mode: both fade-in and fade-out animated (inherits from base) */
+        /* @see Requirement 7.3 */
         .vertical-list-item__checkmark--fade {
-          transition: opacity var(--motion-selection-transition-duration, 250ms) var(--motion-selection-transition-easing, ease);
+          /* Inherits transition from base class */
+          /* This class exists as a semantic marker */
+          opacity: inherit;
         }
         
-        .vertical-list-item__checkmark--instant {
+        /* Instant mode: only applies instant hide when checkmark is hidden */
+        /* Fade-in still animated (asymmetric behavior) */
+        /* @see Requirement 7.4 */
+        .vertical-list-item__checkmark--instant.vertical-list-item__checkmark--hidden {
           transition: none;
         }
         

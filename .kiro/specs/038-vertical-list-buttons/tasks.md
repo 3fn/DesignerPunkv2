@@ -200,7 +200,7 @@ This implementation plan creates the `Button-VerticalListItem` component — a "
     - Use flexbox with gap property for consistent spacing
     - _Requirements: 4.6, 4.7_
 
-- [ ] 4. Animation and Transitions
+- [x] 4. Animation and Transitions
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -225,15 +225,19 @@ This implementation plan creates the `Button-VerticalListItem` component — a "
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 Complete: Animation and Transitions"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 4.1 Implement state transition animations
+  - [x] 4.1 Implement state transition animations
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    - Add CSS transitions using `motion.selectionTransition` token (250ms, standard easing)
+    - Create `motion.selectionTransition` semantic token in `src/tokens/semantic/MotionTokens.ts`
+      - Duration: `duration250` (250ms)
+      - Easing: `easingStandard`
+      - Context: Selection state transitions for selectable elements
+    - Update CSS to use token-generated CSS variables (`--motion-selection-transition-duration`, `--motion-selection-transition-easing`)
     - Animate background, border-color, border-width, padding, color properties
     - Ensure padding and border-width animate together for height stability
-    - _Requirements: 7.1_
+    - _Requirements: 7.1, New Tokens Required (motion.selectionTransition)_
 
-  - [ ] 4.2 Implement checkmark animation
+  - [x] 4.2 Implement checkmark animation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement fade-in animation when checkmark becomes visible
@@ -241,13 +245,18 @@ This implementation plan creates the `Button-VerticalListItem` component — a "
     - Implement instant hide when `checkmarkTransition='instant'`
     - _Requirements: 7.2, 7.3, 7.4_
 
-  - [ ] 4.3 Implement transition delay
+  - [x] 4.3 Implement transition delay
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Accept `transitionDelay` prop (milliseconds)
     - Apply CSS `transition-delay` property
     - Enable parent pattern to create staggered animations
     - _Requirements: 7.5_
+    
+    **Learnings from 4.1/4.2:**
+    - **No fallback values**: Use `var(--token-name)` without fallbacks per fail-loudly philosophy
+    - **Token validation**: If adding new token dependencies, add them to `REQUIRED_CSS_VARIABLES` array
+    - **Inline styles already support transitionDelay**: The `transitionDelayStyle` variable is already generated in render() - just verify it's applied correctly without fallbacks
 
 - [ ] 5. Event Handling and Accessibility
 

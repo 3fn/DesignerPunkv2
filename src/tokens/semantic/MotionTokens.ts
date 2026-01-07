@@ -87,6 +87,16 @@ export const motionTokens: Record<string, SemanticMotionToken> = {
     category: SemanticCategory.INTERACTION,
     context: 'Modal and overlay slide animations',
     description: 'Deliberate motion for modal entry with decelerate easing (350ms, decelerate curve). Used when modals, drawers, or overlays slide into view, creating a natural entrance effect that settles into place.'
+  },
+  'motion.selectionTransition': {
+    name: 'motion.selectionTransition',
+    primitiveReferences: {
+      duration: 'duration250',
+      easing: 'easingStandard'
+    },
+    category: SemanticCategory.INTERACTION,
+    context: 'Selection state transitions for selectable elements',
+    description: 'Standard motion for selection state changes with balanced easing (250ms, standard curve). Used when selectable elements (buttons, list items, checkboxes) transition between selected/unselected states, providing smooth visual feedback for user selections.'
   }
 };
 
