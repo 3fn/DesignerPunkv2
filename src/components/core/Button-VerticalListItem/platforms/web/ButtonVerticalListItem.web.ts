@@ -19,7 +19,7 @@
 
 /// <reference lib="dom" />
 
-import { VisualState, CheckmarkTransition, VerticalListButtonItemProps } from '../../types';
+import { VisualState, CheckmarkTransition } from '../../types';
 import { IconBaseName, iconBaseSizes } from '../../../Icon-Base/types';
 import { 
   getVisualStateStylesWithError, 
@@ -33,6 +33,13 @@ import {
 
 // Import Icon-Base to ensure it's registered before ButtonVerticalListItem uses it
 import '../../../Icon-Base/platforms/web/IconBase.web';
+
+// Import CSS as string for browser bundle compatibility
+// The esbuild CSS-as-string plugin transforms this import into a JS string export
+// This follows the same pattern as Button-CTA for consistency across components
+// @see scripts/esbuild-css-plugin.js
+// @see src/types/css.d.ts
+import componentStyles from './ButtonVerticalListItem.styles.css';
 
 /**
  * Required CSS custom properties that must be present for the component to function.
@@ -187,6 +194,12 @@ export class ButtonVerticalListItem extends HTMLElement {
    * Observed attributes for automatic re-rendering on change.
    * 
    * When these attributes change, attributeChangedCallback is invoked.
+   * 
+   * Note: 'disabled' is intentionally observed to throw an error if set.
+   * This component explicitly does NOT support disabled states per accessibility
+   * standards — unavailable options should be hidden, not disabled.
+   * 
+   * @see Requirements 10.2
    */
   static get observedAttributes(): string[] {
     return [
@@ -197,7 +210,8 @@ export class ButtonVerticalListItem extends HTMLElement {
       'error',
       'checkmark-transition',
       'transition-delay',
-      'test-id'
+      'test-id',
+      'disabled' // Observed to throw error if set (fail loudly)
     ];
   }
   
@@ -259,12 +273,27 @@ export class ButtonVerticalListItem extends HTMLElement {
    * Called when an observed attribute changes.
    * 
    * Triggers re-render to reflect the new attribute value.
+   * Throws error if 'disabled' attribute is set (fail loudly philosophy).
    * 
-   * @param _name - Attribute name (unused, prefixed with underscore)
+   * @param name - Attribute name
    * @param oldValue - Previous attribute value
    * @param newValue - New attribute value
+   * @throws Error if 'disabled' attribute is set
+   * @see Requirements 10.2
    */
-  attributeChangedCallback(_name: string, oldValue: string | null, newValue: string | null): void {
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+    // Fail loudly if disabled attribute is set
+    // This component explicitly does NOT support disabled states per accessibility standards
+    // Unavailable options should be hidden, not disabled
+    // @see Requirements 10.2
+    if (name === 'disabled') {
+      throw new Error(
+        'Button-VerticalListItem: The "disabled" attribute is not supported. ' +
+        'Per accessibility standards, unavailable options should be hidden rather than disabled. ' +
+        'Remove the disabled attribute and hide the component instead.'
+      );
+    }
+    
     // Only re-render if the element is connected to the DOM and value changed
     if (oldValue !== newValue && this.isConnected && this._tokensValidated) {
       this.render();
@@ -414,6 +443,41 @@ export class ButtonVerticalListItem extends HTMLElement {
     }
   }
   
+  /**
+   * Disabled property getter.
+   * 
+   * Always returns false because this component does not support disabled states.
+   * Per accessibility standards, unavailable options should be hidden, not disabled.
+   * 
+   * @returns Always false
+   * @see Requirements 10.2
+   */
+  get disabled(): boolean {
+    return false;
+  }
+  
+  /**
+   * Disabled property setter.
+   * 
+   * Throws an error if called with true. This component explicitly does NOT support
+   * disabled states per accessibility standards — unavailable options should be hidden,
+   * not disabled.
+   * 
+   * @param value - The disabled value (must be false)
+   * @throws Error if value is true
+   * @see Requirements 10.2
+   */
+  set disabled(value: boolean) {
+    if (value) {
+      throw new Error(
+        'Button-VerticalListItem: The "disabled" property is not supported. ' +
+        'Per accessibility standards, unavailable options should be hidden rather than disabled. ' +
+        'Set disabled to false or hide the component instead.'
+      );
+    }
+    // If value is false, do nothing (component is already not disabled)
+  }
+  
   // ─────────────────────────────────────────────────────────────────
   // Event Callback Properties
   // ─────────────────────────────────────────────────────────────────
@@ -469,9 +533,13 @@ export class ButtonVerticalListItem extends HTMLElement {
    * Render the component.
    * 
    * Generates the button HTML with appropriate classes, icons, and content.
+   * CSS is imported as a string and injected into shadow DOM via <style> tag
+   * for browser bundle compatibility. This follows the same pattern as Button-CTA.
+   * 
    * Uses CSS logical properties (padding-block, padding-inline) for RTL support.
    * 
    * @see Requirements 10.1, 11.1
+   * @see scripts/esbuild-css-plugin.js
    */
   private render(): void {
     const label = this.label;
@@ -503,148 +571,6 @@ export class ButtonVerticalListItem extends HTMLElement {
       ? 'vertical-list-item__checkmark--instant' 
       : 'vertical-list-item__checkmark--fade';
     
-    // Inline CSS for Shadow DOM styling
-    // Uses CSS logical properties for RTL support
-    const componentStyles = `
-      <style>
-        :host {
-          display: block;
-          width: 100%;
-        }
-        
-        .vertical-list-item {
-          /* Layout */
-          display: flex;
-          align-items: center;
-          gap: var(--space-grouped-loose);
-          width: 100%;
-          min-height: var(--accessibility-tap-area-recommended);
-          
-          /* Spacing - uses logical properties for RTL */
-          padding-block: var(--vlbi-padding-block);
-          padding-inline: var(--space-inset-200);
-          
-          /* Visual */
-          background: var(--vlbi-background);
-          border: var(--vlbi-border-width) solid var(--vlbi-border-color);
-          border-radius: var(--radius-normal);
-          
-          /* Typography */
-          font-family: inherit;
-          text-align: start;
-          cursor: pointer;
-          
-          /* Animation - using motion.selectionTransition semantic token */
-          /* @see Requirement 7.1, New Tokens Required (motion.selectionTransition) */
-          /* No fallbacks - fail loudly if tokens not loaded */
-          transition: 
-            background var(--motion-selection-transition-duration) var(--motion-selection-transition-easing),
-            border-color var(--motion-selection-transition-duration) var(--motion-selection-transition-easing),
-            border-width var(--motion-selection-transition-duration) var(--motion-selection-transition-easing),
-            padding var(--motion-selection-transition-duration) var(--motion-selection-transition-easing),
-            color var(--motion-selection-transition-duration) var(--motion-selection-transition-easing);
-        }
-        
-        /* Interactive states */
-        .vertical-list-item:hover {
-          filter: brightness(0.95);
-        }
-        
-        .vertical-list-item:active {
-          filter: brightness(0.90);
-        }
-        
-        .vertical-list-item:focus-visible {
-          outline: var(--accessibility-focus-width) solid var(--accessibility-focus-color);
-          outline-offset: var(--accessibility-focus-offset);
-        }
-        
-        /* Content container */
-        .vertical-list-item__content {
-          display: flex;
-          flex-direction: column;
-          flex: 1;
-          min-width: 0; /* Allow text truncation */
-        }
-        
-        /* Label */
-        .vertical-list-item__label {
-          color: var(--vlbi-label-color);
-          font-size: var(--typography-button-md-font-size, 1rem);
-          font-weight: var(--typography-button-md-font-weight, 500);
-          line-height: var(--typography-button-md-line-height, 1.5);
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-        
-        /* Description */
-        .vertical-list-item__description {
-          color: var(--color-text-muted);
-          font-size: var(--typography-body-sm-font-size, 0.875rem);
-          font-weight: var(--typography-body-sm-font-weight, 400);
-          line-height: var(--typography-body-sm-line-height, 1.5);
-        }
-        
-        /* Leading icon */
-        .vertical-list-item__leading-icon {
-          flex-shrink: 0;
-        }
-        
-        /* Checkmark (selection indicator) - base transition for fade-in */
-        /* Checkmark always fades IN regardless of checkmarkTransition setting */
-        /* @see Requirement 7.2 */
-        /* No fallbacks - fail loudly if tokens not loaded */
-        .vertical-list-item__checkmark {
-          flex-shrink: 0;
-          color: var(--vlbi-icon-color);
-          /* Base transition for fade-in (always applied) */
-          transition: opacity var(--motion-selection-transition-duration) var(--motion-selection-transition-easing),
-                      visibility var(--motion-selection-transition-duration) var(--motion-selection-transition-easing);
-        }
-        
-        /* Fade mode: both fade-in and fade-out animated (inherits from base) */
-        /* @see Requirement 7.3 */
-        .vertical-list-item__checkmark--fade {
-          /* Inherits transition from base class */
-          /* This class exists as a semantic marker */
-          opacity: inherit;
-        }
-        
-        /* Instant mode: only applies instant hide when checkmark is hidden */
-        /* Fade-in still animated (asymmetric behavior) */
-        /* @see Requirement 7.4 */
-        .vertical-list-item__checkmark--instant.vertical-list-item__checkmark--hidden {
-          transition: none;
-        }
-        
-        .vertical-list-item__checkmark--hidden {
-          opacity: 0;
-          visibility: hidden;
-        }
-        
-        .vertical-list-item__checkmark--visible {
-          opacity: 1;
-          visibility: visible;
-        }
-        
-        /* High contrast mode */
-        @media (prefers-contrast: high) {
-          .vertical-list-item {
-            border-width: var(--border-border-emphasis) !important;
-          }
-        }
-        
-        /* Reduced motion */
-        @media (prefers-reduced-motion: reduce) {
-          .vertical-list-item,
-          .vertical-list-item__checkmark--fade {
-            transition: none;
-          }
-        }
-      </style>
-    `;
-    
     // Build leading icon HTML using Icon-Base's optical-balance prop
     // Resolves the CSS variable to hex and lets Icon-Base apply the 8% lighter blend
     // @see Requirements 4.5, 9.1
@@ -670,8 +596,11 @@ export class ButtonVerticalListItem extends HTMLElement {
     const checkmarkHtml = `<span class="vertical-list-item__checkmark ${checkmarkTransitionClass} ${checkmarkVisibilityClass}" aria-hidden="true"><icon-base name="check" size="${iconSize}" color="${checkmarkColorHex}" optical-balance="true"></icon-base></span>`;
     
     // Render shadow DOM content
+    // Uses imported CSS string in <style> tag for browser bundle compatibility
+    // This approach bundles CSS into JS, avoiding external CSS file dependencies
+    // @see scripts/esbuild-css-plugin.js (same pattern as Button-CTA)
     this._shadowRoot.innerHTML = `
-      ${componentStyles}
+      <style>${componentStyles}</style>
       <button
         class="vertical-list-item ${styles.cssClass}"
         type="button"
