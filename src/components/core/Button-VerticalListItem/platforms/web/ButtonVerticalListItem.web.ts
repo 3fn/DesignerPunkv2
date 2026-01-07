@@ -101,6 +101,31 @@ function getPaddingBlockForState(visualState: VisualState): string {
   return `${paddingValue}px`;
 }
 
+/**
+ * Resolve a CSS variable reference to its computed hex color value.
+ * 
+ * Takes a CSS variable reference like 'var(--color-text-default)' and returns
+ * the computed hex color value by reading from document.documentElement.
+ * 
+ * @param cssVarReference - CSS variable reference (e.g., 'var(--color-text-default)')
+ * @returns Computed hex color value (e.g., '#FFFFFF') or the original value if not resolvable
+ */
+function resolveCssVariableToHex(cssVarReference: string): string {
+  // Extract the variable name from var(--name) format
+  const match = cssVarReference.match(/var\(([^)]+)\)/);
+  if (!match) {
+    // Not a CSS variable reference, return as-is
+    return cssVarReference;
+  }
+  
+  const varName = match[1].trim();
+  const computedStyle = getComputedStyle(document.documentElement);
+  const computedValue = computedStyle.getPropertyValue(varName).trim();
+  
+  // Return the computed value (should be a hex color)
+  return computedValue || cssVarReference;
+}
+
 
 /**
  * ButtonVerticalListItem Web Component
@@ -554,7 +579,6 @@ export class ButtonVerticalListItem extends HTMLElement {
         /* Leading icon */
         .vertical-list-item__leading-icon {
           flex-shrink: 0;
-          color: var(--vlbi-icon-color);
         }
         
         /* Checkmark (selection indicator) */
@@ -598,10 +622,14 @@ export class ButtonVerticalListItem extends HTMLElement {
       </style>
     `;
     
-    // Build leading icon HTML
-    const leadingIconHtml = leadingIcon 
-      ? `<span class="vertical-list-item__leading-icon"><icon-base name="${leadingIcon}" size="${iconSize}" color="inherit"></icon-base></span>`
-      : '';
+    // Build leading icon HTML using Icon-Base's optical-balance prop
+    // Resolves the CSS variable to hex and lets Icon-Base apply the 8% lighter blend
+    // @see Requirements 4.5, 9.1
+    let leadingIconHtml = '';
+    if (leadingIcon) {
+      const iconColorHex = resolveCssVariableToHex(styles.iconColor);
+      leadingIconHtml = `<span class="vertical-list-item__leading-icon"><icon-base name="${leadingIcon}" size="${iconSize}" color="${iconColorHex}" optical-balance="true"></icon-base></span>`;
+    }
     
     // Build description HTML
     const descriptionHtml = description 
@@ -609,10 +637,14 @@ export class ButtonVerticalListItem extends HTMLElement {
       : '';
     
     // Build checkmark HTML (always rendered, visibility controlled by CSS)
+    // Uses Icon-Base's optical-balance prop to apply 8% lighter blend
+    // Uses color.select.selected.strong (or color.error.strong in error state)
+    // @see Requirements 2.3, 2.4, 9.2
     const checkmarkVisibilityClass = styles.checkmarkVisible 
       ? 'vertical-list-item__checkmark--visible' 
       : 'vertical-list-item__checkmark--hidden';
-    const checkmarkHtml = `<span class="vertical-list-item__checkmark ${checkmarkTransitionClass} ${checkmarkVisibilityClass}" aria-hidden="true"><icon-base name="check" size="${iconSize}" color="inherit"></icon-base></span>`;
+    const checkmarkColorHex = resolveCssVariableToHex(styles.iconColor);
+    const checkmarkHtml = `<span class="vertical-list-item__checkmark ${checkmarkTransitionClass} ${checkmarkVisibilityClass}" aria-hidden="true"><icon-base name="check" size="${iconSize}" color="${checkmarkColorHex}" optical-balance="true"></icon-base></span>`;
     
     // Render shadow DOM content
     this._shadowRoot.innerHTML = `

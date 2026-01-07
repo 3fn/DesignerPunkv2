@@ -294,14 +294,17 @@
  * Leading icon container styling.
  * 
  * - Flex-shrink: 0 to prevent icon from shrinking
- * - Color: Inherits from visual state (via --vlbi-icon-color)
+ * - Color: Passed directly to Icon-Base with optical balance applied via blend utilities
  * - Position: Far left, vertically centered (handled by parent flexbox)
  * 
- * @see Requirements 4.4, 4.5
+ * Note: Optical balance (8% lighter) is applied at render time using the blend
+ * utilities' iconColor() function, not via CSS filter. This ensures mathematical
+ * consistency with the design system's color.icon.opticalBalance token.
+ * 
+ * @see Requirements 4.4, 4.5, 9.1
  */
 .vertical-list-item__leading-icon {
   flex-shrink: 0;
-  color: var(--vlbi-icon-color);
   display: inline-flex;
   align-items: center;
   justify-content: center;
