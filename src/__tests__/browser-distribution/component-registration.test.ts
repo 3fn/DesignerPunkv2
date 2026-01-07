@@ -43,22 +43,18 @@ describe('Component Registration', () => {
       expect(bundleContent).toContain('input-text-base');
       expect(bundleContent).toContain('input-text-email');
       expect(bundleContent).toContain('button-cta');
-      expect(bundleContent).toContain('dp-icon');
       expect(bundleContent).toContain('icon-base');
-      expect(bundleContent).toContain('dp-container');
       expect(bundleContent).toContain('container-base');
     });
 
-    it('should register all seven custom elements via safeDefine', () => {
+    it('should register all five custom elements via safeDefine', () => {
       // Requirements 4.1, 4.2, 4.3, 4.4
-      // Includes dual registration for Icon (dp-icon + icon-base) and Container (dp-container + container-base)
       // Note: text-input-field removed - use input-text-base instead (Stemma System migration)
+      // Note: dp-icon and dp-container deprecated names removed
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]input-text-base['"]/);
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]input-text-email['"]/);
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]button-cta['"]/);
-      expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]dp-icon['"]/);
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]icon-base['"]/);
-      expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]dp-container['"]/);
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]container-base['"]/);
     });
 
@@ -131,14 +127,12 @@ describe('Component Registration', () => {
       expect(mockContext.DesignerPunk).toBeDefined();
     });
 
-    it('should register all seven custom elements (Req 2.3, 4.1-4.4)', () => {
-      // Includes dual registration for Icon (dp-icon + icon-base) and Container (dp-container + container-base)
+    it('should register all five custom elements (Req 2.3, 4.1-4.4)', () => {
       // Note: text-input-field removed - use input-text-base instead (Stemma System migration)
+      // Note: dp-icon and dp-container deprecated names removed
       expect(registeredElements.has('input-text-base')).toBe(true);
       expect(registeredElements.has('button-cta')).toBe(true);
-      expect(registeredElements.has('dp-icon')).toBe(true);
       expect(registeredElements.has('icon-base')).toBe(true);
-      expect(registeredElements.has('dp-container')).toBe(true);
       expect(registeredElements.has('container-base')).toBe(true);
     });
 
@@ -179,16 +173,14 @@ describe('Component Registration', () => {
       expect(content).toContain("import { ContainerBaseWeb }");
     });
 
-    it('should have safeDefine calls for all seven components', () => {
-      // Includes dual registration for Icon (dp-icon + icon-base) and Container (dp-container + container-base)
+    it('should have safeDefine calls for all five components', () => {
       // Note: text-input-field removed - use input-text-base instead (Stemma System migration)
+      // Note: dp-icon and dp-container deprecated names removed
       expect(content).toContain("safeDefine('input-text-base', InputTextBase)");
       expect(content).toContain("safeDefine('input-text-email', InputTextEmail)");
       expect(content).toContain("safeDefine('button-cta', ButtonCTA)");
       expect(content).toContain("safeDefine('icon-base', IconBaseElement)");
-      expect(content).toContain("safeDefine('dp-icon', IconBaseElement)");
       expect(content).toContain("safeDefine('container-base', ContainerBaseWeb)");
-      expect(content).toContain("safeDefine('dp-container', ContainerBaseWeb)");
     });
 
     it('should export all components for UMD global access', () => {

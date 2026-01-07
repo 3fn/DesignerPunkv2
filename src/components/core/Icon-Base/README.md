@@ -152,18 +152,6 @@ Icon-Base implements 5 behavioral contracts:
 - Icons use `contentDescription = null` (Android)
 - Parent elements should provide accessible labels
 
-## Backward Compatibility
-
-For migration from the legacy `Icon` component:
-
-```typescript
-// Legacy imports still work
-import { Icon, createIcon, IconName, IconSize, iconSizes } from '@designerpunk/components';
-
-// Legacy HTML tag still works
-<dp-icon name="arrow-right" size="24"></dp-icon>
-```
-
 ## Related Components
 
 - **Icon** (legacy): Original icon component, now aliased to Icon-Base

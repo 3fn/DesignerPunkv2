@@ -400,7 +400,7 @@ export class ButtonCTA extends HTMLElement {
    * CSS is imported as a string and injected into shadow DOM via <style> tag
    * for browser bundle compatibility.
    * 
-   * Uses <dp-icon> web component for icon rendering, following the same
+   * Uses <icon-base> web component for icon rendering, following the same
    * component composition pattern as iOS and Android platforms.
    * 
    * Applies blend colors via CSS custom properties for state styling

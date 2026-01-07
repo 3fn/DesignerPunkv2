@@ -212,7 +212,6 @@ See `Container-Base.schema.yaml` for detailed contract specifications.
 - Uses Shadow DOM for style encapsulation
 - Supports semantic HTML elements via `semantic` prop
 - Hover state uses CSS `:hover` pseudo-class with blend utilities
-- Legacy `<dp-container>` tag supported for backward compatibility
 
 ### iOS
 - Uses SwiftUI modifier chains for styling
@@ -252,20 +251,6 @@ Container-Base provides comprehensive accessibility support:
 - **1.4.11 Non-text Contrast**: Borders and shadows use semantic tokens
 - **1.4.12 Text Spacing**: Padding uses semantic spacing tokens
 - **1.4.13 Content on Hover or Focus**: Hover state provides visual feedback
-
----
-
-## Backward Compatibility
-
-The legacy `<dp-container>` tag continues to work for backward compatibility. New implementations should use `<container-base>` following Stemma System naming conventions.
-
-```html
-<!-- Legacy (still works) -->
-<dp-container padding="200">Content</dp-container>
-
-<!-- New Stemma System naming (recommended) -->
-<container-base padding="200">Content</container-base>
-```
 
 ---
 

@@ -329,14 +329,12 @@ platforms:
 platform_notes:
   web:
     element: "<container-base>"
-    legacy_element: "<dp-container>"
     implementation: Web Component with Shadow DOM
     file: platforms/web/ContainerBase.web.ts
     notes: |
       - Uses Shadow DOM for style encapsulation
       - Supports semantic HTML elements via semantic prop
       - Hover state uses CSS :hover with blend utilities
-      - Legacy <dp-container> tag supported for backward compatibility
   ios:
     implementation: SwiftUI View
     file: platforms/ios/ContainerBase.ios.swift

@@ -247,7 +247,6 @@ platforms:
 platform_notes:
   web:
     element: "<icon-base>"
-    legacy_element: "<dp-icon>"
     implementation: Web Component with Shadow DOM
     file: platforms/web/IconBase.web.ts
     notes: |
@@ -255,7 +254,6 @@ platform_notes:
       - Inline SVG rendering with currentColor inheritance
       - CSS classes for size variants (icon-base--size-*)
       - Supports className and style props for customization
-      - Legacy <dp-icon> tag supported for backward compatibility
   ios:
     implementation: SwiftUI View
     file: platforms/ios/IconBase.ios.swift
@@ -296,7 +294,7 @@ accessibility:
     - "1.4.3 Contrast (Minimum) - Optical balance maintains contrast"
     - "1.4.11 Non-text Contrast - Stroke width meets contrast requirements"
   aria_attributes:
-    - aria-hidden: "true" (always, icons are decorative)
+    - aria-hidden: "true"  # always, icons are decorative
   platform_accessibility:
     ios: ".accessibilityHidden(true) for VoiceOver"
     android: "contentDescription = null for TalkBack"

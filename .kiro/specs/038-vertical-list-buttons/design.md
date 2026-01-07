@@ -1,119 +1,193 @@
-# Design Document: Vertical List Buttons
+# Design Document: Vertical List Button Item
 
-**Date**: January 6, 2026
-**Spec**: 038 - Vertical List Buttons
+**Date**: January 7, 2026
+**Spec**: 038 - Vertical List Button Item
 **Status**: Design Phase
-**Dependencies**: Icon Component, Icon Size Tokens, Accessibility Tokens
+**Dependencies**: 
+- `Icon-Base` — Icon component for leading icons and checkmark indicator
+- `Button-CTA` — Shares focus state patterns and padding compensation approach
 
 ---
 
 ## Overview
 
-Vertical List Buttons (`Button-VerticalList`) is a component family for presenting actionable choices in a stacked vertical layout. The component supports three interaction modes through a single `mode` prop:
+The Vertical List Button Item (`Button-VerticalListItem`) is a "dumb" presentational component that renders visual states based on props received from a parent container. It handles no selection logic internally — all state management is delegated to the parent pattern (Vertical List Buttons Pattern).
 
-- **Tap**: Traditional tap-and-go behavior
-- **Select**: Single-selection (radio-button style)
-- **Multi-Select**: Multiple-selection (checkbox style)
+The component supports three usage modes through its `visualState` prop:
+- **Tap Mode**: Simple action buttons (`rest` state only)
+- **Select Mode**: Single-selection radio-style behavior (`rest`, `selected`, `notSelected`)
+- **Multi-Select Mode**: Checkbox-style behavior (`checked`, `unchecked`)
 
-The component follows True Native Architecture with build-time platform separation, using semantic tokens for all styling and integrating with the Icon component for icon rendering.
+### Key Design Principles
+
+1. **Prop-Driven Rendering**: Component appearance is entirely determined by props
+2. **Height Stability**: Padding compensation ensures constant 48px height across all states
+3. **Token-First**: All styling uses design tokens, no hard-coded values
+4. **Accessibility-First**: WCAG 2.1 AA compliance, no disabled states
 
 ---
 
 ## Architecture
 
-### Component Structure
-
-The component uses a single-component architecture with a `mode` prop rather than three separate components. This approach keeps the codebase DRY since the three modes share 80%+ of their implementation.
-
 ```
-src/components/core/ButtonVerticalList/
-├── README.md                           # Component documentation
-├── types.ts                            # Shared TypeScript interfaces
-├── __tests__/                          # Cross-platform tests
-├── examples/                           # Usage examples
-└── platforms/                          # Platform-specific implementations
-    ├── web/
-    │   ├── ButtonVerticalList.web.ts   # Web implementation
-    │   └── ButtonVerticalList.web.css  # Web component styles
-    ├── ios/
-    │   └── ButtonVerticalList.ios.swift # iOS implementation (SwiftUI)
-    └── android/
-        └── ButtonVerticalList.android.kt # Android implementation (Compose)
+┌─────────────────────────────────────────────────────────────────┐
+│                    Parent Pattern (Container)                    │
+│  - Manages selection mode (tap/select/multi-select)             │
+│  - Coordinates visual states across items                        │
+│  - Handles ARIA roles and keyboard navigation                    │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              │ Props: visualState, error, callbacks
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                  Button-VerticalListItem                         │
+│  ┌─────────────────────────────────────────────────────────┐    │
+│  │  [Icon]  Label Text                          [✓]        │    │
+│  │          Description text (optional)                    │    │
+│  └─────────────────────────────────────────────────────────┘    │
+│                                                                  │
+│  Responsibilities:                                               │
+│  - Render visual state based on props                           │
+│  - Apply interactive overlays (hover, pressed, focus)           │
+│  - Emit events (onClick, onFocus, onBlur)                       │
+│  - Animate state transitions                                     │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-### Stemma Registration
+### Component Boundaries
 
-```typescript
-// Stemma component registration
-{
-  name: 'Button-VerticalList',
-  category: 'buttons',
-  description: 'Vertical list of actionable buttons with tap, select, or multi-select modes',
-  status: 'stable',
-  variants: {
-    mode: ['tap', 'select', 'multiSelect']
-  }
-}
-```
+| Responsibility | Owner |
+|----------------|-------|
+| Visual state rendering | Button-VerticalListItem |
+| Interactive overlays | Button-VerticalListItem |
+| Event emission | Button-VerticalListItem |
+| State transitions/animation | Button-VerticalListItem |
+| Selection logic | Parent Pattern |
+| Mode management | Parent Pattern |
+| ARIA roles/states | Parent Pattern |
+| Keyboard navigation | Parent Pattern |
 
 ---
 
 ## Components and Interfaces
 
-### Type Definitions
+### Props Interface
 
 ```typescript
-// types.ts - Platform-agnostic interfaces
-
-export type VerticalListButtonMode = 'tap' | 'select' | 'multiSelect';
-
-export interface VerticalListButtonItem {
-  /** Unique identifier for the button */
-  id: string;
-  
-  /** Button label text */
+interface VerticalListButtonItemProps {
+  // Content
   label: string;
-  
-  /** Optional description text below label */
   description?: string;
+  leadingIcon?: IconBaseName;
   
-  /** Optional leading icon */
-  icon?: IconName;
+  // Visual state (controlled by parent)
+  visualState: 'rest' | 'selected' | 'notSelected' | 'checked' | 'unchecked';
   
-  /** Action handler for tap mode */
-  onTap?: () => void;
-}
-
-export interface VerticalListButtonGroupProps {
-  /** Interaction mode */
-  mode: VerticalListButtonMode;
+  // Error state (Select and Multi-Select modes only)
+  error?: boolean;
   
-  /** Array of button items */
-  items: VerticalListButtonItem[];
+  // Animation control
+  checkmarkTransition?: 'fade' | 'instant';
+  transitionDelay?: number;
   
-  /** Currently selected item ID(s) - for select/multiSelect modes */
-  selectedIds?: string[];
-  
-  /** Selection change handler - for select/multiSelect modes */
-  onSelectionChange?: (selectedIds: string[]) => void;
-  
-  /** Optional test ID */
-  testID?: string;
+  // Events
+  onClick?: () => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }
 ```
 
-### State Management
+### Visual State Mapping
 
 ```typescript
-// Internal state management per mode
+type VisualStateStyles = {
+  background: string;
+  borderWidth: string;
+  borderColor: string;
+  labelColor: string;
+  iconColor: string;
+  checkmarkVisible: boolean;
+};
 
-// Tap mode: No selection state, just action triggers
-// Select mode: Single selectedId, enforced by component
-// Multi-Select mode: Array of selectedIds, toggled independently
+const visualStateMap: Record<VisualState, VisualStateStyles> = {
+  rest: {
+    background: 'var(--color-background)',
+    borderWidth: 'var(--border-default)',
+    borderColor: 'transparent',
+    labelColor: 'var(--color-text-default)',
+    iconColor: 'var(--color-text-default)', // + optical balance
+    checkmarkVisible: false,
+  },
+  selected: {
+    background: 'var(--color-select-selected-subtle)',
+    borderWidth: 'var(--border-emphasis)',
+    borderColor: 'var(--color-select-selected-strong)',
+    labelColor: 'var(--color-select-selected-strong)',
+    iconColor: 'var(--color-select-selected-strong)', // + optical balance
+    checkmarkVisible: true,
+  },
+  notSelected: {
+    background: 'var(--color-select-not-selected-subtle)',
+    borderWidth: 'var(--border-default)',
+    borderColor: 'transparent',
+    labelColor: 'var(--color-select-not-selected-strong)',
+    iconColor: 'var(--color-select-not-selected-strong)', // + optical balance
+    checkmarkVisible: false,
+  },
+  checked: {
+    background: 'var(--color-select-selected-subtle)',
+    borderWidth: 'var(--border-default)',
+    borderColor: 'transparent',
+    labelColor: 'var(--color-select-selected-strong)',
+    iconColor: 'var(--color-select-selected-strong)', // + optical balance
+    checkmarkVisible: true,
+  },
+  unchecked: {
+    background: 'var(--color-background)',
+    borderWidth: 'var(--border-default)',
+    borderColor: 'transparent',
+    labelColor: 'var(--color-text-default)',
+    iconColor: 'var(--color-text-default)', // + optical balance
+    checkmarkVisible: false,
+  },
+};
+```
 
-interface InternalState {
-  focusedIndex: number;
-  // Selection state managed via props (controlled component)
+### Error State Overlay
+
+Error styling is applied on top of base visual states, with mode-specific treatment:
+
+```typescript
+function applyErrorStyles(
+  baseStyles: VisualStateStyles,
+  visualState: VisualState
+): VisualStateStyles {
+  const isSelectMode = ['rest', 'selected', 'notSelected'].includes(visualState);
+  const isMultiSelectMode = ['checked', 'unchecked'].includes(visualState);
+  
+  if (isSelectMode) {
+    // Select mode: full error treatment (border + background + colors)
+    return {
+      ...baseStyles,
+      background: 'var(--color-error-subtle)',
+      borderWidth: 'var(--border-emphasis)',
+      borderColor: 'var(--color-error-strong)',
+      labelColor: 'var(--color-error-strong)',
+      iconColor: 'var(--color-error-strong)',
+    };
+  }
+  
+  if (isMultiSelectMode) {
+    // Multi-Select mode: text/icon colors only (no border/background change)
+    return {
+      ...baseStyles,
+      labelColor: 'var(--color-error-strong)',
+      iconColor: 'var(--color-error-strong)',
+    };
+  }
+  
+  // Tap mode: error has no effect
+  return baseStyles;
 }
 ```
 
@@ -121,340 +195,524 @@ interface InternalState {
 
 ## Data Models
 
-### Token Mapping
+### Component Token Definitions
 
-| Property | Token | Value |
-|----------|-------|-------|
-| Min Height | `accessibility.tapAreaRecommended` | 48px |
-| Border Radius | `radiusNormal` | 8px |
-| Vertical Padding | `verticalListButton.padding.vertical` → `space075` | 6px |
-| Horizontal Padding | `space.inset.200` | 16px |
-| Button Gap | `space.grouped.normal` | 8px |
-| Icon-Label Gap | `space.grouped.loose` | 12px |
-| Label-Checkmark Gap | `space.grouped.loose` | 12px |
+```typescript
+// Button-VerticalListItem/tokens.ts
+import { defineComponentTokens } from '../../../build/tokens';
+import { spacingTokens, SPACING_BASE_VALUE } from '../../../tokens/SpacingTokens';
 
-### Color Token Mapping by Mode and State
+export const VerticalListItemTokens = defineComponentTokens({
+  component: 'VerticalListItem',
+  family: 'spacing',
+  tokens: {
+    'paddingBlock.rest': {
+      value: SPACING_BASE_VALUE * 1.375, // 11px
+      reasoning: 'Block padding at rest state (1px border). 11px padding + 1px border = 12px per side, achieving 48px total with 24px content.',
+    },
+    'paddingBlock.selected': {
+      reference: spacingTokens.space125, // 10px
+      reasoning: 'Block padding when selected (2px border). 10px padding + 2px border = 12px per side, maintaining 48px total with 24px content.',
+    },
+  },
+});
+```
 
-#### Tap Mode
-| State | Background | Text | Border |
-|-------|------------|------|--------|
-| Rest | `color.background` | `color.text.primary` | None |
-| Hover | + `opacity.hover` | `color.text.primary` | None |
-| Pressed | + `opacity.pressed` | `color.text.primary` | None |
+### Height Stability Math
 
-#### Select Mode
-| State | Background | Text | Border | Checkmark |
-|-------|------------|------|--------|-----------|
-| Not Selected | `color.select.notSelected.background` | `color.select.notSelected` | None | Hidden |
-| Selected | `color.select.selected.background` | `color.select.selected` | `borderEmphasis` | Visible |
+```
+Total Height = (Border × 2) + (Padding × 2) + Content
 
-#### Multi-Select Mode
-| State | Background | Text | Border | Checkmark |
-|-------|------------|------|--------|-----------|
-| Unchecked | `color.background` | `color.text.primary` | None | Hidden |
-| Checked | `color.select.selected.background` | `color.select.selected` | None | Visible |
+Rest State:
+  48px = (1px × 2) + (11px × 2) + 24px
+  48px = 2px + 22px + 24px ✓
 
-### Description Text
-- Always uses `color.text.secondary` regardless of selection state
-- Uses `typography.bodySm` for styling
+Selected State:
+  48px = (2px × 2) + (10px × 2) + 24px
+  48px = 4px + 20px + 24px ✓
+```
 
 ---
 
 ## Correctness Properties
 
-*A property is a characteristic or behavior that should hold true across all valid executions of a system—essentially, a formal statement about what the system should do. Properties serve as the bridge between human-readable specifications and machine-verifiable correctness guarantees.*
+*A property is a characteristic or behavior that should hold true across all valid executions of a system — essentially, a formal statement about what the system should do. Properties serve as the bridge between human-readable specifications and machine-verifiable correctness guarantees.*
 
-### Property 1: Mode Behavior Correctness
+### Property 1: Visual State Styling Consistency
 
-*For any* Vertical List Button group:
-- In Tap mode, tapping any button SHALL trigger that button's action callback
-- In Select mode, at most one button SHALL be selected at any time
-- In Multi-Select mode, any combination of buttons (including none or all) SHALL be selectable
+*For any* valid `visualState` value, the component SHALL render with the correct background, border, and text colors as defined in the visual state mapping.
 
 **Validates: Requirements 1.1, 1.2, 1.3, 1.4, 1.5**
 
-### Property 2: Selection State Transitions
+### Property 2: Selection Indicator Visibility
 
-*For any* Vertical List Button group in Select mode with a selected button:
-- Tapping a different button SHALL result in exactly one button being selected (the newly tapped one)
-- The previously selected button SHALL transition to not-selected state
+*For any* `visualState`, the Selection_Indicator (checkmark) SHALL be visible if and only if the state is `selected` or `checked`.
 
-*For any* Vertical List Button group in Multi-Select mode:
-- Tapping a button SHALL toggle only that button's state
-- Other buttons' states SHALL remain unchanged
+**Validates: Requirements 2.1, 2.2**
 
-**Validates: Requirements 1.3, 1.5**
+### Property 3: Selection Indicator Color
 
-### Property 3: Token Application Correctness
+*For any* visible Selection_Indicator, the color SHALL be `color.select.selected.strong` (with optical balance) when `error` is false, and `color.error.strong` (with optical balance) when `error` is true.
 
-*For any* Vertical List Button in any mode and state:
-- The rendered background color SHALL match the token specified for that mode/state combination
-- The rendered text color SHALL match the token specified for that mode/state combination
-- The rendered border (if any) SHALL match the token specified for that mode/state combination
-- The checkmark visibility SHALL match the specification for that mode/state combination
+**Validates: Requirements 2.3, 2.4**
 
-**Validates: Requirements 5.1, 5.2, 5.5, 6.1-6.8, 8.1-8.8**
+### Property 4: Error Styling for Select Mode
 
-### Property 4: Spacing Token Application
+*For any* Select mode visual state (`rest`, `selected`, `notSelected`) with `error=true`, the component SHALL render with `color.error.subtle` background, `borderEmphasis` border width, and `color.error.strong` border color.
 
-*For any* Vertical List Button:
-- Vertical padding SHALL equal `space075` (6px)
-- Horizontal padding SHALL equal `space.inset.200` (16px)
-- Gap between buttons SHALL equal `space.grouped.normal` (8px)
-- Icon-label gap (when icon present) SHALL equal `space.grouped.loose` (12px)
-- Label-checkmark gap (when checkmark visible) SHALL equal `space.grouped.loose` (12px)
+**Validates: Requirements 3.1**
 
-**Validates: Requirements 3.4, 3.5, 3.6, 4.1, 4.2**
+### Property 5: Error Styling for Multi-Select Mode
 
-### Property 5: Sizing Constraints
+*For any* Multi-Select mode visual state (`checked`, `unchecked`) with `error=true`, the component SHALL render with `color.error.strong` label and icon colors only, with no change to background or border.
 
-*For any* Vertical List Button:
-- Rendered height SHALL be >= `accessibility.tapAreaRecommended` (48px)
-- Rendered width SHALL equal 100% of container width
-- Border radius SHALL equal `radiusNormal`
+**Validates: Requirements 3.2**
 
-**Validates: Requirements 3.1, 3.2, 3.3, 15.1, 15.2**
+### Property 6: Label Presence and Typography
 
-### Property 6: Keyboard Navigation Correctness
+*For any* component instance, the label SHALL always be present and styled with `typography.buttonMd`.
 
-*For any* Vertical List Button group with n buttons:
-- Arrow Down from button i SHALL focus button (i+1) mod n
-- Arrow Up from button i SHALL focus button (i-1+n) mod n
-- Enter/Space on focused button in Tap mode SHALL trigger action
-- Enter/Space on focused button in Select/Multi-Select mode SHALL toggle selection
+**Validates: Requirements 4.1**
 
-**Validates: Requirements 13.1, 13.2, 13.3, 13.4, 13.5, 13.6, 13.7**
+### Property 7: Description Rendering
 
-### Property 7: Accessibility Attribute Correctness
+*For any* component instance with a `description` prop, the description SHALL be displayed below the label using `typography.bodySm` and `color.text.muted` regardless of visual state.
 
-*For any* Vertical List Button group on web:
-- Select mode container SHALL have `role="radiogroup"`
-- Multi-Select mode container SHALL have `role="group"`
-- All buttons SHALL use semantic `<button>` elements
-- Selection state SHALL be announced via `aria-checked` or `aria-selected`
-- Icons SHALL have `aria-hidden="true"`
+**Validates: Requirements 4.2, 4.3**
 
-**Validates: Requirements 14.1, 14.2, 14.3, 14.4, 14.5**
+### Property 8: Leading Icon Rendering
 
-### Property 8: Color Contrast Compliance
+*For any* component instance with a `leadingIcon` prop, the icon SHALL be displayed on the far left with the same color as the label (with optical balance applied).
 
-*For any* Vertical List Button in any state:
-- Label text to background contrast ratio SHALL be >= 4.5:1
-- Description text to background contrast ratio SHALL be >= 4.5:1
-- Focus outline to adjacent color contrast ratio SHALL be >= 3:1
+**Validates: Requirements 4.4, 4.5**
 
-**Validates: Requirements 16.1, 16.2, 16.3**
+### Property 9: Internal Spacing Consistency
 
-### Property 9: Icon Rendering Correctness
+*For any* internal spacing between elements (icon-to-label, label-to-checkmark), the gap SHALL be `space.grouped.loose` (12px).
 
-*For any* Vertical List Button with a leading icon:
-- Icon SHALL be rendered via Icon component
-- Icon size SHALL match `typography.buttonMd` via icon size formula
-- Icon color SHALL have `color.icon.opticalBalance` blend applied
+**Validates: Requirements 4.6, 4.7**
 
-*For any* Vertical List Button with visible checkmark:
-- Checkmark SHALL be rendered via Icon component
-- Checkmark size SHALL match `typography.buttonMd` via icon size formula
-- Checkmark color SHALL be `color.select.selected` with `color.icon.opticalBalance` blend applied
+### Property 10: Static Sizing Constraints
 
-**Validates: Requirements 2.3, 2.4, 2.5, 6.9, 6.10, 8.9**
+*For any* component instance, the width SHALL be 100% of container, border radius SHALL be `radiusNormal` (8px), and inline padding SHALL be `space.inset.200` (16px).
 
-### Property 10: Description Text Consistency
+**Validates: Requirements 5.2, 5.3, 5.4**
 
-*For any* Vertical List Button with description:
-- Description color SHALL be `color.text.secondary`
-- Description color SHALL remain `color.text.secondary` regardless of selection state
-- Description SHALL be positioned below label
+### Property 11: Padding Compensation Correctness
 
-**Validates: Requirements 10.1, 10.2, 10.3**
+*For any* visual state, the padding-block value SHALL be coordinated with border-width such that:
+- When `borderDefault` (1px): padding-block = 11px
+- When `borderEmphasis` (2px): padding-block = 10px
+
+This ensures the total height (border + padding + content) remains constant at 48px. The property tests the *mechanism* (padding compensation), not just the *outcome* (height).
+
+**Validates: Requirements 5.1, 6.1, 6.2, 6.3**
+
+### Property 12: Transition Token Usage
+
+*For any* visual state change, the component SHALL animate using `motion.selectionTransition` (250ms, standard easing) for background, border, padding, and color properties.
+
+**Validates: Requirements 7.1**
+
+### Property 13: Interactive State Overlays
+
+*For any* interactive state (hover, pressed, focus), the component SHALL apply the correct overlay or outline using the appropriate blend/accessibility tokens.
+
+**Validates: Requirements 8.1, 8.2, 8.3**
+
+### Property 14: Icon Sizing Consistency
+
+*For any* icon in the component (leading icon or checkmark), the size SHALL be `iconBaseSizes.size100` (24px).
+
+**Validates: Requirements 9.1, 9.2**
+
+### Property 15: No Disabled State Support
+
+*For any* component instance, the `disabled` attribute SHALL never be applied. The component explicitly does not support disabled states.
+
+**Validates: Requirements 10.2**
+
+### Property 16: RTL Layout Adaptation
+
+*For any* RTL document context, the layout SHALL automatically adapt with leading icon on the right and checkmark on the left, without additional configuration.
+
+**Validates: Requirements 11.2, 11.3**
+
+### Property 17: Event Callback Invocation
+
+*For any* provided event callback (`onClick`, `onFocus`, `onBlur`), the component SHALL invoke it when the corresponding user interaction occurs.
+
+**Validates: Requirements 12.1, 12.2, 12.3**
 
 ---
 
 ## Error Handling
 
+### Fail Loudly Philosophy
+
+This component follows the "fail loudly" principle — errors should surface immediately during development rather than silently degrading at runtime.
+
+**No Fallback Values**: The component SHALL NOT use hard-coded fallback values when tokens are missing. Hard values won't pass validation and mask configuration issues.
+
+```typescript
+// ❌ WRONG - Silent fallback masks token issues
+const padding = getComputedStyle(element).getPropertyValue('--vlbi-padding-block') || '11px';
+
+// ✅ CORRECT - Fail loudly if token missing
+const padding = getComputedStyle(element).getPropertyValue('--vlbi-padding-block');
+if (!padding) {
+  throw new Error(
+    'Missing required CSS variable --vlbi-padding-block. ' +
+    'Ensure Rosetta-generated tokens are loaded.'
+  );
+}
+```
+
 ### Invalid Props
 
-| Error Condition | Handling |
-|-----------------|----------|
-| Empty items array | Render nothing, log warning |
-| Duplicate item IDs | Log warning, use first occurrence |
-| Invalid mode value | Default to 'tap', log warning |
-| selectedIds with tap mode | Ignore selectedIds, log warning |
-| Missing onSelectionChange with select/multiSelect | Log warning (uncontrolled behavior) |
+| Scenario | Handling |
+|----------|----------|
+| Missing `label` | TypeScript compile error (required prop) |
+| Invalid `visualState` | TypeScript compile error (union type) |
+| `error=true` in Tap mode | Silently ignored (no effect) — this is intentional, not an error |
+| Invalid `leadingIcon` name | Icon-Base component throws error (fail loudly) |
+| Missing token CSS variables | Throw descriptive error (fail loudly) |
 
-### Runtime Errors
+### Edge Cases
 
-| Error Condition | Handling |
-|-----------------|----------|
-| Icon not found | Render without icon, log warning |
-| Token resolution failure | Use fallback values, log error |
+| Scenario | Behavior |
+|----------|----------|
+| Very long label text | Text truncates with ellipsis |
+| Very long description | Text wraps to multiple lines |
+| Missing Icon-Base dependency | Build-time error |
+| RTL without logical properties | Fallback to physical properties (degraded) — log warning |
+| Missing Rosetta CSS | Throw error with clear message |
 
 ---
 
 ## Testing Strategy
 
-### Unit Tests
+### Testing Philosophy
 
-Unit tests verify specific examples and edge cases:
+Following Test Development Standards:
+- **Test behavior, not implementation**: Verify what the component does, not how it does it
+- **Test contracts, not details**: Focus on the API contract with consumers
+- **Evergreen tests only**: All tests verify permanent behavior (no temporary migration tests)
 
-1. **Mode Behavior**
-   - Tap mode triggers action on tap
-   - Select mode enforces single selection
-   - Multi-Select mode allows multiple selections
+### Test Categories
 
-2. **Visual States**
-   - Correct tokens applied for each mode/state combination
-   - Border visibility matches specification
-   - Checkmark visibility matches specification
+All tests for this component are **Evergreen** — they verify permanent behavior and contracts that should be maintained indefinitely.
 
-3. **Edge Cases**
-   - Empty items array
-   - Single item
-   - Very long labels (text wrapping)
-   - Missing optional props
+### Unit Tests (Evergreen)
 
-### Property-Based Tests
+Unit tests verify specific examples and edge cases. Focus on behavior, not implementation details.
 
-Property tests verify universal properties across generated inputs:
+**Rendering Behavior Tests**:
+- Component renders with required props (label visible, correct element type)
+- Each visual state produces correct visual appearance (test CSS classes, not inline styles)
+- Error state applies correct styling per mode
+- Description renders when provided
+- Leading icon renders when provided
 
-1. **Selection Invariants** (Property 1, 2)
-   - Generate random button groups and interaction sequences
-   - Verify selection constraints are maintained
+**Accessibility Behavior Tests**:
+- Renders as semantic `<button>` element
+- Checkmark has `aria-hidden="true"` (decorative)
+- Focus outline appears on keyboard focus (`:focus-visible`)
+- No disabled attribute ever applied
 
-2. **Token Application** (Property 3, 4)
-   - Generate buttons with random mode/state combinations
-   - Verify correct tokens are applied
+**Event Behavior Tests**:
+- onClick callback fires on click/tap
+- onFocus callback fires on focus
+- onBlur callback fires on blur
 
-3. **Keyboard Navigation** (Property 6)
-   - Generate random button groups
-   - Verify arrow key navigation wraps correctly
+### Property-Based Tests (Evergreen)
 
-4. **Accessibility** (Property 7, 8)
-   - Generate buttons in all modes
-   - Verify ARIA attributes and contrast ratios
+Property tests verify universal properties across all inputs using the `fast-check` library. Each test runs minimum 100 iterations.
 
-### Integration Tests
+**Test File**: `Button-VerticalListItem.properties.test.ts`
 
-1. **Animation Behavior** (Requirements 7.x, 9.x)
-   - Visual regression tests for animation sequences
-   - Timing verification for staggered animations
+1. **Visual State Styling Property**
+   - Generate random visual states
+   - Verify component applies correct CSS class for that state
+   - **Tag**: Feature: 038-vertical-list-buttons, Property 1: Visual State Styling Consistency
+   - **Tests behavior**: "Component renders correct appearance for state"
+   - **Does NOT test**: Specific CSS property values (implementation detail)
 
-2. **Platform-Specific Behavior**
-   - iOS haptic feedback
-   - Android ripple effect
-   - Web cursor styles
+2. **Padding Compensation Property**
+   - Generate random visual states
+   - Verify padding-block value matches expected for border-width
+   - **Tag**: Feature: 038-vertical-list-buttons, Property 11: Padding Compensation Correctness
+   - **Tests behavior**: "Padding adjusts when border changes"
+   - **Does NOT test**: Computed height (outcome, not mechanism)
+
+3. **Selection Indicator Visibility Property**
+   - Generate random visual states
+   - Verify checkmark visibility matches state (selected/checked = visible)
+   - **Tag**: Feature: 038-vertical-list-buttons, Property 2: Selection Indicator Visibility
+   - **Tests behavior**: "Checkmark appears for selected states"
+   - **Does NOT test**: How checkmark is hidden (CSS display vs visibility)
+
+4. **Error State Property**
+   - Generate random visual states with error=true
+   - Verify mode-specific error treatment (Select vs Multi-Select)
+   - **Tag**: Feature: 038-vertical-list-buttons, Properties 4, 5: Error Styling
+   - **Tests behavior**: "Error styling differs by mode"
+   - **Does NOT test**: Specific color values (use CSS class presence)
+
+5. **Event Callback Property**
+   - Generate random callback configurations
+   - Verify callbacks are invoked on interaction
+   - **Tag**: Feature: 038-vertical-list-buttons, Property 17: Event Callback Invocation
+   - **Tests contract**: "Provided callbacks are called"
+   - **Does NOT test**: Event object details (implementation)
+
+### Web Component Testing Patterns
+
+Following JSDOM patterns from Test Development Standards:
+
+```typescript
+describe('Button-VerticalListItem Web Component', () => {
+  beforeAll(() => {
+    // Register custom element once
+    if (!customElements.get('vertical-list-button-item')) {
+      customElements.define('vertical-list-button-item', VerticalListButtonItem);
+    }
+  });
+
+  beforeEach(async () => {
+    // Wait for element definition
+    await customElements.whenDefined('vertical-list-button-item');
+  });
+
+  it('should render with correct visual state class', async () => {
+    const element = document.createElement('vertical-list-button-item');
+    element.setAttribute('label', 'Test Label');
+    element.setAttribute('visual-state', 'selected');
+    
+    document.body.appendChild(element);
+    
+    // Wait for connectedCallback
+    await new Promise(resolve => setTimeout(resolve, 0));
+    
+    // Test behavior: correct class applied
+    const button = element.shadowRoot?.querySelector('button');
+    expect(button?.classList.contains('vertical-list-item--selected')).toBe(true);
+    
+    document.body.removeChild(element);
+  });
+});
+```
+
+### Integration Tests (Evergreen)
+
+**Test File**: `Button-VerticalListItem.integration.test.ts`
+
+1. **Token Integration**
+   - Verify component consumes Rosetta-generated CSS variables
+   - Verify component tokens are registered with ComponentTokenRegistry
+   - **Tests contract**: "Component uses design system tokens"
+
+2. **Icon-Base Integration**
+   - Verify Icon-Base component renders correctly within button
+   - Verify icon size prop is passed correctly (`iconBaseSizes.size100`)
+   - **Tests contract**: "Icons render at correct size"
+
+### What NOT to Test
+
+Following "Don't Test Philosophical Preferences":
+
+❌ **Don't test**: "Component uses CSS logical properties"
+- This is a preference about implementation
+- Test RTL behavior instead (icons swap sides)
+
+❌ **Don't test**: "Component uses specific CSS variable names"
+- This is implementation detail
+- Test that styling is correct for each state
+
+❌ **Don't test**: "Animation uses exactly 250ms duration"
+- This is implementation detail
+- Test that transitions occur (not their timing)
+
+❌ **Don't test**: "Component token value is exactly 11"
+- This is implementation detail
+- Test that padding compensation works (height stable)
+
+### Fail Loudly in Tests
+
+Tests should verify the component fails loudly when tokens are missing:
+
+```typescript
+it('should throw error when required token is missing', async () => {
+  // Remove token CSS variable
+  document.documentElement.style.removeProperty('--vlbi-padding-block-rest');
+  
+  const element = document.createElement('vertical-list-button-item');
+  element.setAttribute('label', 'Test');
+  
+  // Expect error, not silent fallback
+  await expect(async () => {
+    document.body.appendChild(element);
+    await new Promise(resolve => setTimeout(resolve, 0));
+  }).rejects.toThrow('Missing required CSS variable');
+  
+  // Restore token
+  document.documentElement.style.setProperty('--vlbi-padding-block-rest', '11px');
+});
+```
+
+**No Hard-Coded Fallbacks**: Tests should verify the component does NOT use fallback values. Hard values won't pass validation and mask configuration issues.
 
 ---
 
 ## Design Decisions
 
-### Decision 1: Single Component with Mode Prop
+### Decision 1: Padding Compensation vs. Box-Sizing
 
-**Context**: Three interaction models (Tap, Select, Multi-Select) could be implemented as separate components or a single component with a mode prop.
+**Options Considered**:
+1. Padding compensation (reduce padding when border increases)
+2. `box-sizing: border-box` with fixed height
+3. Inner container with fixed height
 
-**Decision**: Single component with `mode` prop.
+**Decision**: Padding compensation
 
-**Rationale**: The three modes share 80%+ of implementation (sizing, spacing, typography, icons, hover/press states). A single component keeps the codebase DRY and simplifies maintenance.
+**Rationale**: 
+- Matches existing Button-CTA pattern for consistency
+- Provides smooth animation between states (padding animates with border)
+- Avoids nested containers that complicate layout
 
-**Alternatives Considered**:
-- Three separate components: More code duplication, harder to maintain
-- Container + Item pattern: Added complexity without significant benefit
+**Trade-offs**: 
+- Requires component tokens for state-specific padding values
+- More complex CSS than simple box-sizing approach
 
-### Decision 2: Staggered Selection Animation
+### Decision 2: Error Treatment by Mode
 
-**Context**: When selection changes in Select mode, both the deselected and newly selected buttons need visual updates.
+**Options Considered**:
+1. Uniform error treatment across all modes
+2. Mode-specific error treatment (current approach)
+3. No error state support
 
-**Decision**: Stagger the animations with 50% delay—deselected button starts animating out at T=0, newly selected button starts animating in at T=50%.
+**Decision**: Mode-specific error treatment
 
-**Rationale**: Creates a smooth "handoff" effect that guides the user's eye from the deselecting item to the selecting item. Avoids visual chaos of simultaneous animations while keeping total transition time snappy (1.5x single animation duration).
+**Rationale**:
+- Select mode uses visible borders, so error should include border styling
+- Multi-Select mode uses transparent borders, so error should only affect text/icon
+- Maintains visual consistency within each mode's design language
 
-### Decision 3: Instant Checkmark Removal in Select Mode
+**Trade-offs**:
+- More complex implementation
+- Developers must understand mode-specific behavior
 
-**Context**: When selection changes in Select mode, the checkmark on the deselected button could fade out or disappear instantly.
+### Decision 3: Component Token for 11px Padding
 
-**Decision**: Checkmark disappears instantly (no fade) on the deselected button; checkmark fades in on the newly selected button.
+**Options Considered**:
+1. Create new primitive token `space137`
+2. Use `TokenWithValue` in component token definition
+3. Hard-code the value
 
-**Rationale**: The border animation already communicates the "handoff." Having the checkmark also animate out would be redundant and slow things down. Instant removal keeps focus on the new selection.
+**Decision**: Use `TokenWithValue` with formula `SPACING_BASE_VALUE * 1.375`
 
-### Decision 4: Controlled Component Pattern
+**Rationale**:
+- Component tokens exist for exactly this case (primitives insufficient)
+- Formula conforms to spacing family's mathematical foundation
+- Avoids polluting primitive token space with one-off values
 
-**Context**: Selection state could be managed internally (uncontrolled) or via props (controlled).
-
-**Decision**: Controlled component pattern—selection state passed via `selectedIds` prop, changes reported via `onSelectionChange` callback.
-
-**Rationale**: Gives parent components full control over selection state, enabling integration with form libraries, state management, and complex UI flows.
-
----
-
-## New Semantic Tokens
-
-### Select Color Token Family
-
-| Token | Primitive Reference | Hex Value | Purpose |
-|-------|---------------------|-----------|---------|
-| `color.select.selected` | `cyan400` | #00C0CC | Foreground color for selected state (text, border, checkmark base) |
-| `color.select.selected.background` | `cyan100` | #CCFBFF | Background fill for selected state |
-| `color.select.notSelected` | `gray200` | #68658A | Foreground color for not-selected state (text) |
-| `color.select.notSelected.background` | `gray100` | #B8B6C8 | Background fill for not-selected state |
-
-### Component Token
-
-| Token | References | Purpose |
-|-------|------------|---------|
-| `verticalListButton.padding.vertical` | `space075` | Top and bottom internal padding |
-
----
-
-## Animation Specifications
-
-### Select Mode Border Animation
-
-Uses same animation specs as Button-Icon Secondary hover state:
-- Duration: [Reference Button-Icon spec]
-- Easing: [Reference Button-Icon spec]
-- Property: border opacity/visibility
-
-**Stagger Sequence**:
-1. T=0: Deselected button border fade-out begins
-2. T=50%: Newly selected button border fade-in begins
-3. T=100%: Deselected button fade-out completes
-4. T=150%: Newly selected button fade-in completes
-
-### Checkmark Animation
-
-**Select Mode**:
-- Deselected: Instant removal (no animation)
-- Newly selected: Fade in
-
-**Multi-Select Mode**:
-- Check: Fade in
-- Uncheck: Fade out
+**Trade-offs**:
+- Value is component-specific, not reusable
+- If other components need 11px, may want to promote to primitive
 
 ---
 
-## Platform Implementation Notes
+## Platform Considerations
 
-### Web
-- Custom element: `<button-vertical-list>`
-- Shadow DOM for style encapsulation
-- CSS custom properties for token consumption
-- `role="radiogroup"` for Select mode, `role="group"` for Multi-Select
-- `:focus-visible` for keyboard focus styling
-- `cursor: pointer` on hover
+### Web Implementation
 
-### iOS (SwiftUI)
-- `VStack` for button layout
-- `ForEach` for button rendering
-- `@State` for focus management
-- Haptic feedback via `UIImpactFeedbackGenerator`
-- VoiceOver support via accessibility modifiers
+```typescript
+// Simplified structure
+class VerticalListButtonItem extends HTMLElement {
+  static get observedAttributes() {
+    return ['visual-state', 'error', 'checkmark-transition', 'transition-delay'];
+  }
+  
+  render() {
+    const styles = this.computeStyles();
+    const padding = this.computePadding();
+    
+    return html`
+      <button
+        class="vertical-list-item"
+        style="
+          --vlbi-background: ${styles.background};
+          --vlbi-border-width: ${styles.borderWidth};
+          --vlbi-border-color: ${styles.borderColor};
+          --vlbi-padding-block: ${padding};
+        "
+        @click=${this.handleClick}
+        @focus=${this.handleFocus}
+        @blur=${this.handleBlur}
+      >
+        ${this.leadingIcon ? html`<icon-base name=${this.leadingIcon} size="24"></icon-base>` : ''}
+        <div class="content">
+          <span class="label">${this.label}</span>
+          ${this.description ? html`<span class="description">${this.description}</span>` : ''}
+        </div>
+        ${styles.checkmarkVisible ? html`<icon-base name="check" size="24" aria-hidden="true"></icon-base>` : ''}
+      </button>
+    `;
+  }
+}
+```
 
-### Android (Jetpack Compose)
-- `Column` for button layout
-- `LazyColumn` for large lists (optional optimization)
-- Material ripple effect via `Modifier.clickable`
-- TalkBack support via semantics modifiers
+### CSS Structure
+
+```css
+.vertical-list-item {
+  /* Layout */
+  display: flex;
+  align-items: center;
+  gap: var(--space-grouped-loose);
+  width: 100%;
+  min-height: var(--accessibility-tap-area-recommended);
+  
+  /* Spacing - uses logical properties for RTL */
+  padding-block: var(--vlbi-padding-block);
+  padding-inline: var(--space-inset-200);
+  
+  /* Visual */
+  background: var(--vlbi-background);
+  border: var(--vlbi-border-width) solid var(--vlbi-border-color);
+  border-radius: var(--radius-normal);
+  
+  /* Animation */
+  transition: 
+    background var(--motion-selection-transition-duration) var(--motion-selection-transition-easing),
+    border-color var(--motion-selection-transition-duration) var(--motion-selection-transition-easing),
+    border-width var(--motion-selection-transition-duration) var(--motion-selection-transition-easing),
+    padding var(--motion-selection-transition-duration) var(--motion-selection-transition-easing);
+}
+
+.vertical-list-item:hover {
+  background: color-mix(in srgb, var(--vlbi-background), var(--blend-hover-darker));
+}
+
+.vertical-list-item:active {
+  background: color-mix(in srgb, var(--vlbi-background), var(--blend-pressed-darker));
+}
+
+.vertical-list-item:focus-visible {
+  outline: var(--accessibility-focus-width) solid var(--accessibility-focus-color);
+  outline-offset: var(--accessibility-focus-offset);
+}
+```
 
 ---
 
-*This design document provides comprehensive architectural guidance for implementing the Vertical List Buttons component family.*
+## Related Specs
+
+- **XXX-vertical-list-buttons-pattern**: Container pattern that consumes this component
+- **Button-CTA**: Shares focus state patterns and padding compensation approach
+- **Icon-Base**: Icon component used for leading icons and checkmark
+- **037-component-token-generation-pipeline**: Component token architecture
+
+---
+
+*This design document captures component-level architecture and implementation details. Ready to proceed to task planning.*

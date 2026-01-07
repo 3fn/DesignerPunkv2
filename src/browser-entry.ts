@@ -91,16 +91,10 @@ safeDefine('input-text-phone-number', InputTextPhoneNumber);
 safeDefine('button-cta', ButtonCTA);
 // Icon-Base - Stemma System naming (foundational primitive component)
 safeDefine('icon-base', IconBaseElement);
-// Legacy dp-icon tag requires a separate class (Web Components spec doesn't allow same class for multiple elements)
-class DpIconElement extends IconBaseElement {}
-safeDefine('dp-icon', DpIconElement);  // Legacy tag (backward compatibility)
 // Button-Icon - Stemma System naming (circular icon-only button)
 safeDefine('button-icon', ButtonIcon);
 // Container-Base - Stemma System naming (foundational primitive component)
 safeDefine('container-base', ContainerBaseWeb);
-// Legacy dp-container tag requires a separate class (Web Components spec doesn't allow same class for multiple elements)
-class DpContainerElement extends ContainerBaseWeb {}
-safeDefine('dp-container', DpContainerElement);  // Legacy tag (backward compatibility)
 
 // Check tokens after DOM is ready and CSS is applied
 // Uses requestAnimationFrame to ensure stylesheets have been fully parsed and applied

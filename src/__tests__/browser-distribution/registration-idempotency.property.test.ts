@@ -39,8 +39,8 @@ describe('Property 2: Registration Idempotency', () => {
   const COMPONENT_NAMES = [
     'input-text-base',
     'button-cta',
-    'dp-icon',
-    'dp-container',
+    'icon-base',
+    'container-base',
   ];
 
   let bundleContent: string;

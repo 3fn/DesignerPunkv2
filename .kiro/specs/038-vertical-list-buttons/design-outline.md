@@ -1,60 +1,103 @@
-# Design Outline: Vertical List Buttons
+# Design Outline: Vertical List Button Item
 
 **Date**: January 6, 2026
-**Spec**: 038 - Vertical List Buttons
-**Status**: Design Outline (Pre-Requirements)
+**Spec**: 038 - Vertical List Button Item
+**Status**: Design Outline (Pre-Requirements) - REVISION 6
 **Author**: Peter Michaels Allen
+**Last Updated**: January 6, 2026
+
+---
+
+## Revision History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 6.0 | 2026-01-06 | Error state only for Select/Multi-Select; Added border width animation (1px→2px) with padding compensation; Added motion.selectionTransition token; Explicit background color animation |
+| 5.0 | 2026-01-06 | Broke down visual states by mode type; Fixed radius token to semantic `radiusNormal`; Added `.strong` suffix to Select foreground tokens for consistency |
+| 4.0 | 2026-01-06 | Added error visual state; Updated padding to platform-specific component tokens; Added logical properties for web; Renamed Select tokens from `.background` to `.subtle` |
+| 3.0 | 2026-01-06 | Refocused on individual button component; Pattern-level concerns moved to XXX-vertical-list-buttons-pattern |
+| 2.0 | 2026-01-06 | Added three-state Select mode (Rest, Selected, Not Selected); Added border stability section; Clarified token architecture |
+| 1.0 | 2026-01-06 | Initial design outline |
 
 ---
 
 ## Component Overview
 
-Vertical List Buttons are a component family for presenting actionable choices in a stacked vertical layout. They're commonly used for settings screens, selection flows, onboarding choices, and multi-step forms.
+The Vertical List Button Item is an individual button component designed for use within vertical list contexts. It renders visual states based on props received from a parent container/pattern.
 
-**Key Characteristic**: Always used in sets of two or more, displayed vertically.
+**Key Characteristic**: This component is "dumb" — it renders based on props and emits events. Selection logic, mode behavior, and state coordination are owned by the parent pattern (see XXX-vertical-list-buttons-pattern).
+
+**Relationship to Pattern**: This component is consumed by the Vertical List Buttons Pattern, which manages selection modes, state transitions, and accessibility semantics at the container level.
 
 ---
 
-## Interaction Models
+## Visual States by Mode
 
-### 1. Tap Mode
-Traditional tap-and-go behavior. User taps a button, action fires immediately.
+The component receives a `visualState` prop that determines its appearance. Available states depend on the mode set by the parent pattern.
 
-**Use Cases**: Navigation menus, settings options, action lists
+### Tap Mode States
 
-**Visual Characteristics**:
-- No border outline
-- No selection indicator
+| Visual State | Background | Border Width | Border Color | Label Color | Icon Color | Checkmark |
+|--------------|------------|--------------|--------------|-------------|------------|-----------|
+| `rest` | `color.background` | `borderDefault` (1px) | `transparent` | `color.text.default` | `color.text.default` + optical balance | Hidden |
 
-### 2. Select Mode  
-Single-selection behavior. User taps to select one button (showing selected state), then waits for a separate confirmation action. Only one item can be selected at a time.
+**Note**: Tap mode does not support error state (nothing to validate).
 
-**Use Cases**: Single-choice questions, preference selection, radio-button-style choices
+### Select Mode States
 
-**Visual Characteristics**:
-- Border outline (`borderDefault`) in Not Selected state
-- No border in Selected state
-- Checkmark indicator on far right when selected
+| Visual State | Background | Border Width | Border Color | Label Color | Icon Color | Checkmark |
+|--------------|------------|--------------|--------------|-------------|------------|-----------|
+| `rest` | `color.background` | `borderDefault` (1px) | `color.border` | `color.text.default` | `color.text.default` + optical balance | Hidden |
+| `selected` | `color.select.selected.subtle` | `borderEmphasis` (2px) | `color.select.selected.strong` | `color.select.selected.strong` | `color.select.selected.strong` + optical balance | Visible |
+| `notSelected` | `color.select.notSelected.subtle` | `borderDefault` (1px) | `transparent` | `color.select.notSelected.strong` | `color.select.notSelected.strong` + optical balance | Hidden |
 
-### 3. Multi-Select Mode
-Multiple-selection behavior. User can select one or more buttons (showing "checked" state), then waits for a separate confirmation action.
+### Multi-Select Mode States
 
-**Use Cases**: Multi-choice questions, filter selection, checkbox-style choices
+| Visual State | Background | Border Width | Border Color | Label Color | Icon Color | Checkmark |
+|--------------|------------|--------------|--------------|-------------|------------|-----------|
+| `unchecked` | `color.background` | `borderDefault` (1px) | `transparent` | `color.text.default` | `color.text.default` + optical balance | Hidden |
+| `checked` | `color.select.selected.subtle` | `borderDefault` (1px) | `transparent` | `color.select.selected.strong` | `color.select.selected.strong` + optical balance | Visible |
 
-**Visual Characteristics**:
-- No border outline
-- Checkmark indicator on far right when selected
-- Items toggle between Rest and Selected states
+### Error State (Select and Multi-Select Only)
+
+Error can be applied on top of Select or Multi-Select visual states. The error treatment differs by mode to maintain consistency with each mode's visual language.
+
+**Select Mode + Error:**
+Select mode uses visible borders, so error state includes border and background changes.
+
+| Visual State | Background | Border Width | Border Color | Label Color | Icon Color | Checkmark |
+|--------------|------------|--------------|--------------|-------------|------------|-----------|
+| Any Select state + `error` | `color.error.subtle` | `borderEmphasis` (2px) | `color.error.strong` | `color.error.strong` | `color.error.strong` + optical balance | Per base state |
+
+**Multi-Select Mode + Error:**
+Multi-Select mode uses transparent borders, so error state only changes text/icon colors (no border or background change).
+
+| Visual State | Background | Border Width | Border Color | Label Color | Icon Color | Checkmark |
+|--------------|------------|--------------|--------------|-------------|------------|-----------|
+| `unchecked` + `error` | `color.background` | `borderDefault` (1px) | `transparent` | `color.error.strong` | `color.error.strong` + optical balance | Hidden |
+| `checked` + `error` | `color.select.selected.subtle` | `borderDefault` (1px) | `transparent` | `color.error.strong` | `color.error.strong` + optical balance | Visible |
+
+**Note**: Error state is NOT available for Tap mode (nothing to validate).
+
+### Interactive States (Overlays)
+
+These apply on top of any visual state:
+
+| State | Treatment |
+|-------|-----------|
+| Hover | + `blend.hoverDarker` overlay |
+| Pressed | + `blend.pressedDarker` overlay |
+| Focus | `accessibility.focus.*` tokens (outline) |
 
 ---
 
 ## Anatomy
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│  [Icon]  Label Text                          [✓]        │
-│          Description text (optional)                    │
-└─────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│  [Icon]  Label Text                          [✓]            │
+│          Description text (optional)                        │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ### Elements
@@ -64,39 +107,88 @@ Multiple-selection behavior. User can select one or more buttons (showing "check
 | Label | Yes | Left (after icon if present) | Primary button text |
 | Description | No | Below label | Secondary explanatory text |
 | Leading Icon | No | Far left, inline with label | Optional visual indicator |
-| Selection Indicator | Conditional | Far right | Checkmark for Select/Multi-Select modes when selected |
+| Selection Indicator | Conditional | Far right | Checkmark when `selected` or `checked` |
 
 ---
 
-## Spacing
+## Spacing and Border Width Coordination
 
-### Button List Spacing
+### The Challenge
+
+Border width changes from `borderDefault` (1px) to `borderEmphasis` (2px) when transitioning to selected state. Without compensation, this would cause a 2px total height change (1px per side).
+
+### The Solution: Padding Compensation
+
+When border width increases, padding decreases by the same amount to maintain constant total height. This follows the same pattern used in Button-CTA secondary's hover state.
+
+### Platform-Specific Padding Values
+
+**At Rest (1px border):**
+
+| Platform | Border | Padding (each) | Content | Total |
+|----------|--------|----------------|---------|-------|
+| Web | 1px × 2 = 2px | 11px × 2 = 22px | 24px | 48px |
+| iOS | 1px × 2 = 2px | 11px × 2 = 22px | 24px | 48px |
+| Android | 1px × 2 = 2px | 11px × 2 = 22px | 24px | 48px |
+
+**When Selected (2px border):**
+
+| Platform | Border | Padding (each) | Content | Total |
+|----------|--------|----------------|---------|-------|
+| Web | 2px × 2 = 4px | 10px × 2 = 20px | 24px | 48px |
+| iOS | 2px × 2 = 4px | 10px × 2 = 20px | 24px | 48px |
+| Android | 2px × 2 = 4px | 10px × 2 = 20px | 24px | 48px |
+
+**Content height**: `typography.buttonMd` = fontSize100 (16px) × lineHeight100 (1.5) = 24px
+
+### Component Tokens for Padding
+
+```typescript
+// Button-VerticalListItem/tokens.ts
+export const verticalListItemTokens = defineComponentTokens({
+  component: 'Button-VerticalListItem',
+  family: 'spacing',
+  tokens: {
+    'paddingBlock.rest': {
+      reference: 'space137',  // 11px (if exists) or define as component token
+      reasoning: 'Block padding at rest state (1px border). 11px padding + 1px border = 12px per side, achieving 48px total with 24px content.'
+    },
+    'paddingBlock.selected': {
+      reference: 'space125',  // 10px
+      reasoning: 'Block padding when selected (2px border). 10px padding + 2px border = 12px per side, maintaining 48px total with 24px content.'
+    }
+  }
+});
+```
+
+**Note**: If `space137` (11px) doesn't exist as a primitive, we may need to create it as a strategic flexibility token, or use a component-specific value.
+
+### Internal Button Spacing (Non-Animated)
+
 | Relationship | Token | Value | Notes |
 |--------------|-------|-------|-------|
-| Gap between buttons | `space.grouped.normal` | 8px | Vertical stack spacing |
-
-### Internal Button Spacing
-| Relationship | Token | Value | Notes |
-|--------------|-------|-------|-------|
-| Top/Bottom padding | Component token → `space075` | 6px | Vertical inset |
-| Left/Right padding | `space.inset.200` | 16px | Horizontal inset |
+| Inline padding (left/right) | `space.inset.200` | 16px | Horizontal inset (constant) |
 | Icon to Label | `space.grouped.loose` | 12px | Leading icon spacing |
 | Label to Checkmark | `space.grouped.loose` | 12px | Selection indicator spacing |
+
+### Logical Properties (Web)
+
+Web implementation MUST use CSS logical properties for RTL support:
+- `padding-block-start` / `padding-block-end` instead of `padding-top` / `padding-bottom`
+- `padding-inline-start` / `padding-inline-end` instead of `padding-left` / `padding-right`
 
 ---
 
 ## Typography
 
-| Element | Token | Notes |
-|---------|-------|-------|
-| Label | `typography.buttonMd` | Primary text styling |
-| Description | `typography.bodySm` | Secondary text styling |
+| Element | Token | CSS Variable | Notes |
+|---------|-------|--------------|-------|
+| Label | `typography.buttonMd` | `--typography-button-md-*` | Primary text styling |
+| Description | `typography.bodySm` | `--typography-body-sm-*` | Secondary text styling |
 
-### Text Colors
-| Element | Default/Tap | Select (Not Selected) | Select (Selected) / Multi-Select (Checked) |
-|---------|-------------|----------------------|-------------------------------------------|
-| Label | `color.text.primary` | `color.select.notSelected` | `color.select.selected` |
-| Description | `color.text.secondary` | `color.text.secondary` | `color.text.secondary` |
+### Description Text Color
+
+Description text always uses `color.text.muted` regardless of visual state.
 
 ---
 
@@ -104,61 +196,54 @@ Multiple-selection behavior. User can select one or more buttons (showing "check
 
 | Property | Token | Value | Notes |
 |----------|-------|-------|-------|
-| Min Height | `accessibility.tapAreaRecommended` | 48px | Comfortable touch target |
+| Min Height | `accessibility.tapAreaRecommended` | 48px | Comfortable touch target (constant) |
 | Width | N/A | 100% | Always fills container width |
-| Border Radius | `radiusNormal` | 8px | All three interaction types |
+| Border Radius | `radiusNormal` | 8px | Semantic token (references `radius100`) |
 
 ---
 
-## Visual States by Interaction Model
+## Animation
 
-### Tap Mode States
+The component animates transitions between visual states using the `motion.selectionTransition` token.
 
-| State | Background | Border | Text Color |
-|-------|------------|--------|------------|
-| Rest | `color.background` | None | `color.text.primary` |
-| Hover | + `opacity.hover` overlay | None | `color.text.primary` |
-| Pressed | + `opacity.pressed` overlay | None | `color.text.primary` |
+### Animated Properties
 
-### Select Mode States
+All of the following properties animate together when visual state changes:
 
-| State | Background | Border | Text Color | Checkmark |
-|-------|------------|--------|------------|-----------|
-| Not Selected | `color.select.notSelected.background` | None | `color.select.notSelected` | Hidden |
-| Selected | `color.select.selected.background` | `borderEmphasis` (animated) | `color.select.selected` | Visible |
-| Hover | + `opacity.hover` overlay | (per selection state) | (per selection state) | (per selection state) |
-| Pressed | + `opacity.pressed` overlay | (per selection state) | (per selection state) | (per selection state) |
+| Property | Animation |
+|----------|-----------|
+| Background color | Smooth transition between state colors |
+| Border color | Smooth transition (transparent ↔ visible) |
+| Border width | Smooth transition (1px ↔ 2px) |
+| Padding | Compensates for border width change (11px ↔ 10px) |
+| Text color | Smooth transition between state colors |
+| Icon color | Smooth transition between state colors |
 
-#### Select Mode Animation Behavior
+### Motion Token
 
-When selection changes between items, a staggered animation sequence creates a smooth "handoff" effect:
+**`motion.selectionTransition`** (NEW TOKEN REQUIRED)
+- Duration: `duration250` (250ms)
+- Easing: `easingStandard`
+- Context: Selection state transitions for selectable elements
+- Description: Deliberate motion for selection state changes with balanced easing. Used when items transition between rest, selected, and not-selected states.
 
-**Animation Sequence:**
-1. **T=0**: Previously selected item begins border fade-out animation
-2. **T=50%**: Newly selected item begins border fade-in animation (delayed by 50% of animation duration)
-3. **T=100%**: Previously selected item completes fade-out
-4. **T=150%**: Newly selected item completes fade-in
+### Checkmark Animation
 
-**Animation Specs:**
-- Uses same animation specs as Button-Icon Secondary hover state
-- Border animates from none → `borderEmphasis` (fade-in) or `borderEmphasis` → none (fade-out)
-- Stagger delay = 50% of single animation duration
+- Fades in when becoming visible (uses `motion.selectionTransition`)
+- Fades out when becoming hidden, OR instant hide (controlled by `checkmarkTransition` prop)
+- Instant hide used in Select mode when selection changes to another item (border animation communicates the handoff)
 
-**Rationale:**
-- Guides user's eye from deselecting to selecting item
-- Avoids visual chaos of simultaneous animations
-- Total transition time is 1.5x single animation duration (still feels snappy)
+### Props for Animation Control
 
-**Future Consideration:** If this pattern proves successful, consider formalizing the stagger timing as a semantic token (e.g., `animation.stagger.selection`) for reuse in Horizontal List Buttons and other selection components.
-
-### Multi-Select Mode States
-
-| State | Background | Border | Text Color | Checkmark |
-|-------|------------|--------|------------|-----------|
-| Rest (Unchecked) | `color.background` | None | `color.text.primary` | Hidden |
-| Selected (Checked) | `color.select.selected.background` | None | `color.select.selected` | Visible |
-| Hover | + `opacity.hover` overlay | None | (per selection state) | (per selection state) |
-| Pressed | + `opacity.pressed` overlay | None | (per selection state) | (per selection state) |
+```typescript
+interface AnimationProps {
+  // Allows parent to control checkmark transition behavior
+  checkmarkTransition?: 'fade' | 'instant';
+  
+  // Allows parent to delay this item's transition for staggered effects
+  transitionDelay?: number; // milliseconds
+}
+```
 
 ---
 
@@ -173,37 +258,46 @@ When selection changes between items, a staggered animation sequence creates a s
 ### Selection Indicator (Checkmark)
 - Position: Far right, vertically centered to button height
 - Size: Matches `typography.buttonMd` using icon size formula (`fontSize × lineHeight`)
-- Color: `color.select.selected` with `color.icon.opticalBalance` blend applied
-- Visibility: Only shown when item is in Selected state (Select/Multi-Select modes)
+- Color: `color.select.selected.strong` with `color.icon.opticalBalance` blend applied (or `color.error.strong` in error state)
+- Visibility: Only shown when `visualState` is `selected` or `checked`
 - Implementation: Uses Icon component, not direct assets
-
-### Checkmark Animation Behavior
-
-**Multi-Select Mode:**
-- Checkmark fades in when item is checked
-- Checkmark fades out when item is unchecked
-- Each item animates independently
-
-**Select Mode (single-selection):**
-- When selection changes from one item to another:
-  - Checkmark on deselected item disappears **instantly** (no fade)
-  - Checkmark on newly selected item fades in
-- Rationale: The border animation already communicates the "handoff"; instant checkmark removal keeps focus on the new selection
 
 ---
 
-## New Semantic Tokens Required
+## Semantic Tokens Used
 
 ### Select Color Token Family
 
-| Token | Primitive Reference | Hex Value | Purpose |
-|-------|---------------------|-----------|---------|
-| `color.select.selected` | `cyan400` | #00C0CC | Foreground color for selected state (text, border, icon base) |
-| `color.select.selected.background` | `cyan100` | #CCFBFF | Background fill for selected state |
-| `color.select.notSelected` | `gray200` | #68658A | Foreground color for not-selected state (text) |
-| `color.select.notSelected.background` | `gray100` | #B8B6C8 | Background fill for not-selected state |
+| Token | CSS Variable | Purpose |
+|-------|--------------|---------|
+| `color.select.selected.strong` | `--color-select-selected-strong` | Foreground color for selected state (text, border, icon base) |
+| `color.select.selected.subtle` | `--color-select-selected-subtle` | Background fill for selected state |
+| `color.select.notSelected.strong` | `--color-select-not-selected-strong` | Foreground color for not-selected state (text, icon base) |
+| `color.select.notSelected.subtle` | `--color-select-not-selected-subtle` | Background fill for not-selected state |
 
-**Design Rationale**: The cyan palette provides a distinct "selection" semantic that's separate from primary (purple) and success (green). Cyan has a digital, interface-y feel that fits the DesignerPunk aesthetic while remaining semantically neutral about the "positivity" of the selection.
+### Error Color Tokens
+
+| Token | CSS Variable | Purpose |
+|-------|--------------|---------|
+| `color.error.strong` | `--color-error-strong` | Foreground color for error state (text, border, icon) |
+| `color.error.subtle` | `--color-error-subtle` | Background fill for error state |
+
+### Border Width Tokens
+
+| Token | CSS Variable | Value | Purpose |
+|-------|--------------|-------|---------|
+| `borderDefault` | `--border-default` | 1px | Rest state border width |
+| `borderEmphasis` | `--border-emphasis` | 2px | Selected/error state border width |
+
+### Motion Token (NEW)
+
+| Token | Duration | Easing | Purpose |
+|-------|----------|--------|---------|
+| `motion.selectionTransition` | 250ms | standard | Selection state changes |
+
+**Token Naming Pattern**: All semantic color families use consistent suffixes:
+- `.strong` = foreground (text, border, icon)
+- `.subtle` = background
 
 ---
 
@@ -216,51 +310,75 @@ When selection changes between items, a staggered animation sequence creates a s
 ### No Disabled States
 Per accessibility standards, disabled states are not supported. Unavailable options should be hidden rather than shown as disabled.
 
-### Screen Reader Support
-- Selection state changes announced
-- Checkmark icons marked as decorative (state communicated via ARIA)
-
-### Keyboard Navigation
-- Tab to enter button group
-- Arrow keys to navigate within group
-- Enter/Space to activate (Tap) or toggle selection (Select/Multi-Select)
-
 ### Focus States
 - Uses `accessibility.focus.*` tokens (same as ButtonCTA)
 - `accessibility.focus.width` for outline width
 - `accessibility.focus.offset` for outline offset
 - `accessibility.focus.color` for outline color
 
+### ARIA (Component Level)
+- Component renders as `<button>` element
+- ARIA role and checked state are set by parent pattern based on mode
+- Checkmark icon marked as decorative (`aria-hidden="true"`)
+
 ---
 
 ## Platform Considerations
 
 ### Web
-- Semantic `<button>` elements within list container
-- `role="radiogroup"` for Select mode, `role="group"` for Multi-Select
+- Semantic `<button>` element
 - `:focus-visible` for keyboard focus indicators
+- CSS custom properties for theming
+- Logical properties for RTL support
+- CSS transitions for animation
 
 ### iOS
 - Native button styling with SwiftUI
-- Haptic feedback on selection changes
-- VoiceOver support with selection state announcements
+- Uses `strokeBorder` for border rendering (inside view bounds)
+- Haptic feedback delegated to parent pattern
+- VoiceOver: label and state announced
+- SwiftUI animation for state transitions
 
 ### Android
 - Material-style ripple effects
-- TalkBack support with selection state announcements
+- Border modifier draws inside composable bounds
+- TalkBack: label and state announced
 - Proper touch target sizing
+- Compose animation for state transitions
 
 ---
 
-## Layout Options Summary
+## Props/API Surface
 
-### Icon Configuration
-- **None**: No leading icon
-- **Leading**: Icon positioned left with `space.grouped.loose` gap to label
-
-### Description Configuration
-- **None**: Label only
-- **With Description**: Description text below label using `typography.bodySm`
+```typescript
+interface VerticalListButtonItemProps {
+  // Content
+  label: string;
+  description?: string;
+  leadingIcon?: IconName;
+  
+  // Visual state (controlled by parent)
+  // Tap mode: 'rest'
+  // Select mode: 'rest' | 'selected' | 'notSelected'
+  // Multi-Select mode: 'unchecked' | 'checked'
+  visualState: 'rest' | 'selected' | 'notSelected' | 'checked' | 'unchecked';
+  
+  // Error state (Select and Multi-Select modes only)
+  error?: boolean;
+  
+  // Interactive states
+  disabled?: never; // Explicitly not supported
+  
+  // Animation control (for parent coordination)
+  checkmarkTransition?: 'fade' | 'instant';
+  transitionDelay?: number;
+  
+  // Events
+  onClick?: () => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
+}
+```
 
 ---
 
@@ -268,59 +386,93 @@ Per accessibility standards, disabled states are not supported. Unavailable opti
 
 | Question | Decision |
 |----------|----------|
-| Dividers | Not included (future component) |
-| Min height | `tapAreaRecommended` (48px) |
-| Gap between buttons | `space.grouped.normal` (8px) |
-| Top/Bottom padding | Component token → `space075` (6px) |
-| Left/Right padding | `space.inset.200` (16px) |
+| Min height | `accessibility.tapAreaRecommended` (48px) |
+| Block padding (rest) | 11px (with 1px border) |
+| Block padding (selected) | 10px (with 2px border) |
+| Inline padding | `space.inset.200` (16px) |
 | Icon-label spacing | `space.grouped.loose` (12px) |
 | Label-checkmark spacing | `space.grouped.loose` (12px) |
-| Border radius | `radiusNormal` (all types) |
-| Item count limit | No ceiling |
+| Border radius | `radiusNormal` (semantic token, 8px) |
+| Border width (rest) | `borderDefault` (1px) |
+| Border width (selected) | `borderEmphasis` (2px) |
 | Width behavior | Always full-width of container |
 | Disabled states | Not supported (accessibility standard) |
-| Select border | `borderEmphasis` on Selected (animated), none on Not Selected |
+| Height stability | Padding compensation when border width changes |
 | Icon sizing | Matches `typography.buttonMd` via icon size formula |
 | Icon implementation | Uses Icon component |
 | Checkmark color | Base color + `color.icon.opticalBalance` blend |
-| Checkmark animation (Multi-Select) | Fade in/out on check/uncheck |
-| Checkmark animation (Select) | Instant disappear on deselect, fade in on select |
-| Selection animation | Staggered 50% delay, reuses Button-Icon Secondary hover specs |
-| Description text color | `color.text.secondary` |
+| Description text color | `color.text.muted` |
 | Focus states | Uses `accessibility.focus.*` tokens |
+| Token architecture | Semantic tokens consumed directly; component tokens via Rosetta pipeline |
+| Select token naming | `.strong` (foreground) + `.subtle` (background) for consistency |
+| Error state | Only for Select/Multi-Select modes |
+| Error visual (Select) | `color.error.strong` (foreground), `color.error.subtle` (background), `borderEmphasis` border |
+| Error visual (Multi-Select) | `color.error.strong` (text/icon only), no border or background change |
+| Logical properties | Required for web (RTL support) |
+| Animation token | `motion.selectionTransition` (250ms, standard easing) |
+| Animated properties | Background, border color, border width, padding, text color, icon color |
 
 ---
 
-## Future Considerations
+## New Tokens Required
 
-### Selection Animation Token
-If the staggered selection animation pattern proves successful in this component, consider formalizing as semantic tokens for reuse:
-- `animation.stagger.selection` — 50% delay ratio for selection handoff animations
-- Could apply to: Horizontal List Buttons, Tab bars, Segmented controls, etc.
+### Motion Token
+
+```typescript
+'motion.selectionTransition': {
+  name: 'motion.selectionTransition',
+  primitiveReferences: {
+    duration: 'duration250',
+    easing: 'easingStandard'
+  },
+  category: SemanticCategory.INTERACTION,
+  context: 'Selection state transitions for selectable elements',
+  description: 'Deliberate motion for selection state changes with balanced easing (250ms, standard curve). Used when items transition between rest, selected, and not-selected states in selection components like vertical list buttons, radio groups, and checkboxes.'
+}
+```
+
+### Spacing Token (If Needed)
+
+If `space137` (11px) doesn't exist, consider adding as strategic flexibility token:
+- `space137` = 11px (space100 × 1.375)
+- Purpose: Padding compensation for 1px→2px border transitions
 
 ---
 
-## Related Components
+## Token Architecture Notes
 
-- **ButtonCTA**: Standalone action buttons
-- **ButtonIcon**: Icon-only buttons
-- **Icon System**: Icon rendering and color inheritance
+**Implementation Guidance**: This component should consume tokens directly from the Rosetta-generated CSS. Do not create intermediary CSS custom properties (pseudo-tokens) in the component.
+
+**Correct Pattern**:
+```css
+/* Use semantic tokens directly */
+background-color: var(--color-background);
+padding-block: var(--vertical-list-item-padding-block-rest);
+padding-inline: var(--space-inset-200);
+border-radius: var(--radius-normal);
+border-width: var(--border-default);
+transition: all var(--motion-selection-transition-duration) var(--motion-selection-transition-easing);
+```
+
+**Component Tokens**: Platform-specific values and state-dependent values (like `paddingBlock.rest` vs `paddingBlock.selected`) are defined in the component's `tokens.ts` file using `defineComponentTokens()`. The Rosetta pipeline generates platform-specific output.
+
+---
+
+## Related Specs
+
+- **XXX-vertical-list-buttons-pattern**: The container pattern that consumes this component
+- **ButtonCTA (005)**: Standalone action buttons — shares focus state patterns and padding compensation approach
+- **ButtonIcon (035)**: Icon-only buttons — shares animation specs
+- **Icon System (004)**: Icon rendering and color inheritance
 
 ---
 
 ## Stemma Structure
 
-**Component Name**: `Button-VerticalList`
+**Component Name**: `Button-VerticalListItem`
 
-**Approach**: Single component with `mode` prop (Option B)
-
-**Mode Variants**:
-- `tap` — Traditional tap-and-go behavior
-- `select` — Single-selection (radio-button style)
-- `multiSelect` — Multiple-selection (checkbox style)
-
-**Rationale**: The three modes share 80%+ of implementation (sizing, spacing, typography, icons, hover/press states). A single component with a `mode` prop keeps the codebase DRY and simplifies maintenance.
+**Rationale**: This is a single component that renders different visual states based on props. The parent pattern determines which state to pass based on mode and selection logic.
 
 ---
 
-*This design outline captures finalized design decisions. Ready to proceed to formal requirements document.*
+*This design outline captures component-level decisions. Ready to proceed to formal requirements document.*

@@ -1,90 +1,108 @@
-# Task 1.3 Completion: Write Unit Tests for Select Color Tokens
+# Task 1.3 Completion: Implement Component Tokens
 
-**Date**: January 6, 2026
-**Task**: 1.3 Write unit tests for Select color tokens
-**Type**: Implementation
+**Date**: January 7, 2026
+**Task**: 1.3 Implement component tokens
 **Status**: Complete
 **Organization**: spec-completion
 **Scope**: 038-vertical-list-buttons
 
 ---
 
-## Artifacts Modified
+## Summary
 
-- `src/tokens/semantic/__tests__/ColorTokens.test.ts` - Added 23 new tests for Select color tokens
+Implemented component tokens for Button-VerticalListItem using the `defineComponentTokens()` API. Created two tokens for padding compensation that maintain constant 48px height across visual states.
 
-## Test Coverage
+---
 
-### Test Categories Added
+## Artifacts Created
 
-1. **Token Existence (4 tests)**
-   - Verifies all 4 Select tokens are defined in colorTokens
+### Primary Artifact
+- `src/components/core/Button-VerticalListItem/buttonVerticalListItem.tokens.ts`
 
-2. **Primitive References (8 tests)**
-   - Verifies correct primitive token references
-   - Verifies referenced primitives exist in primitive token registry
+### Updated Files
+- `src/components/core/Button-VerticalListItem/index.ts` - Added token exports
 
-3. **Token Structure (4 tests)**
-   - Verifies COLOR category for all tokens
-   - Verifies meaningful context descriptions
-   - Verifies descriptions are present
+---
 
-4. **Utility Function Access (5 tests)**
-   - Verifies getColorToken() returns correct tokens
-   - Verifies getAllColorTokens() includes all Select tokens
+## Implementation Details
 
-5. **Token Count Validation (2 tests)**
-   - Verifies exactly 4 Select tokens exist
-   - Verifies total count is 33 (includes Select tokens)
+### Tokens Defined
 
-### Test Results
+| Token Name | Value | Pattern | Reference |
+|------------|-------|---------|-----------|
+| `paddingBlock.rest` | 11px | TokenWithValue | `SPACING_BASE_VALUE * 1.375` |
+| `paddingBlock.selected` | 10px | TokenWithReference | `space125` |
+
+### Height Stability Math
 
 ```
-npm test -- --testPathPatterns="ColorTokens.test.ts"
+Total Height = (Border × 2) + (Padding × 2) + Content
 
-Test Suites: 2 passed, 2 total
-Tests:       157 passed, 157 total
+Rest State (1px border):
+  48px = (1px × 2) + (11px × 2) + 24px
+  48px = 2px + 22px + 24px ✓
+
+Selected State (2px border):
+  48px = (2px × 2) + (10px × 2) + 24px
+  48px = 4px + 20px + 24px ✓
 ```
 
-**Breakdown:**
-- Original tests: 134
-- New Select token tests: 23
-- Total: 157 tests passing
+### Token Registration Verification
 
-## Test Implementation Details
+Verified tokens register correctly with ComponentTokenRegistry:
+- `verticallistitem.paddingBlock.rest` = 11 (TokenWithValue)
+- `verticallistitem.paddingBlock.selected` = 10 (references space125)
 
-### Token Registration Tests
+---
+
+## Requirements Validated
+
+- **6.1**: WHEN border width is `borderDefault` (1px) THEN block padding SHALL be 11px per side ✓
+- **6.2**: WHEN border width is `borderEmphasis` (2px) THEN block padding SHALL be 10px per side ✓
+
+---
+
+## Testing
+
+- TypeScript compilation: ✓ No errors
+- Token registration: ✓ Verified via ts-node execution
+- ComponentTokenRegistry tests: ✓ All 36 tests pass
+
+---
+
+## Exports Added
 
 ```typescript
-it('should have color.select.selected token', () => {
-  expect(colorTokens['color.select.selected']).toBeDefined();
-});
+// From index.ts
+export {
+  VerticalListItemTokens,
+  getVerticalListItemPaddingBlock,
+  getVerticalListItemPaddingBlockTokenReference,
+  VerticalListItemPaddingBlockTokenReferences
+} from './buttonVerticalListItem.tokens';
+export type { VerticalListItemPaddingBlockVariant } from './buttonVerticalListItem.tokens';
 ```
 
-### Token Value Resolution Tests
+---
 
-```typescript
-it('should reference cyan400 primitive for selected foreground', () => {
-  const token = colorTokens['color.select.selected'];
-  expect(token.primitiveReferences.value).toBe('cyan400');
-});
-```
+## Design Decisions
 
-### Cross-Platform Generation Tests
+### TokenWithValue for 11px Padding
+Used `TokenWithValue` pattern with formula `SPACING_BASE_VALUE * 1.375` because:
+- No primitive token exists for 11px
+- Formula conforms to spacing family's mathematical foundation
+- Component tokens exist for exactly this case (primitives insufficient)
 
-The existing test infrastructure validates cross-platform generation through:
-- `validateColorTokenCount()` function
-- `getAllColorTokens()` array validation
-- Primitive reference existence checks
+### TokenWithReference for 10px Padding
+Used `TokenWithReference` pattern referencing `space125` because:
+- Primitive token already exists (strategic flexibility token)
+- Maintains token chain for proper platform output generation
+- Follows established pattern from ButtonIcon component
 
-## Requirements Satisfied
-
-- ✅ Test token registration
-- ✅ Test token value resolution
-- ✅ Test cross-platform generation (via existing infrastructure)
-- ✅ All tests passing
+---
 
 ## Related Documents
 
-- Requirements: `.kiro/specs/038-vertical-list-buttons/requirements.md` (New Semantic Tokens Required section)
-- Design: `.kiro/specs/038-vertical-list-buttons/design.md` (New Semantic Tokens section)
+- Design: `.kiro/specs/038-vertical-list-buttons/design.md`
+- Requirements: `.kiro/specs/038-vertical-list-buttons/requirements.md`
+- Reference Implementation: `src/components/core/ButtonIcon/buttonIcon.tokens.ts`

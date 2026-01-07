@@ -1,634 +1,409 @@
-# Implementation Plan: Vertical List Buttons
+# Implementation Plan: Vertical List Button Item
 
-**Date**: January 6, 2026
-**Spec**: 038 - Vertical List Buttons
+**Date**: January 7, 2026
+**Spec**: 038 - Vertical List Button Item
 **Status**: Implementation Planning
-**Dependencies**: Icon Component, Icon Size Tokens, Accessibility Tokens
+**Dependencies**: 
+- `Icon-Base` — Icon component for leading icons and checkmark indicator
+- `Button-CTA` — Shares focus state patterns and padding compensation approach
 
 ---
 
 ## Overview
 
-This implementation plan covers the Vertical List Buttons component (`Button-VerticalList`) with three interaction modes (Tap, Select, Multi-Select). The plan is organized into phases: token creation, component setup, core implementation, platform implementations, testing, and documentation.
+This implementation plan creates the `Button-VerticalListItem` component — a "dumb" presentational component that renders visual states based on props. The component supports Tap, Select, and Multi-Select modes through its `visualState` prop.
+
+**Implementation Approach**:
+1. Set up component structure and tokens
+2. Implement core rendering logic with visual state mapping
+3. Add interactive states and animations
+4. Implement accessibility features
+5. Write tests following Test Development Standards
 
 ---
 
 ## Task List
 
-- [x] 1. Create Select Color Token Family
+- [ ] 1. Component Foundation
 
-  **Type**: Implementation
-  **Validation**: Tier 2: Standard
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
   
   **Success Criteria:**
-  - Four new Select color tokens created and registered with SemanticTokenRegistry
-  - Tokens follow compositional architecture (reference primitive tokens)
-  - Cross-platform generation working (web CSS, iOS Swift, Android Kotlin)
-  - Token values validated against design specifications
+  - Component renders with all required props
+  - Component tokens registered with ComponentTokenRegistry
+  - Directory structure follows Stemma System conventions
+  - TypeScript types exported correctly
   
   **Primary Artifacts:**
-  - `src/tokens/semantic/ColorTokens.ts` (updated with Select color tokens)
-  - Platform-specific generated token files
+  - `src/components/core/Button-VerticalListItem/` directory structure
+  - `src/components/core/Button-VerticalListItem/types.ts`
+  - `src/components/core/Button-VerticalListItem/buttonVerticalListItem.tokens.ts`
+  - `src/components/core/Button-VerticalListItem/index.ts`
   
   **Completion Documentation:**
-  - Detailed: `.kiro/specs/038-vertical-list-buttons/completion/task-1-completion.md`
+  - Detailed: `.kiro/specs/038-vertical-list-buttons/completion/task-1-parent-completion.md`
   - Summary: `docs/specs/038-vertical-list-buttons/task-1-summary.md` (triggers release detection)
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 1 Complete: Component Foundation"`
+  - Verify: Check GitHub for committed changes
 
-  - [x] 1.1 Define Select color tokens in SemanticColorTokens
+  - [x] 1.1 Create directory structure
+    **Type**: Setup
+    **Validation**: Tier 1 - Minimal
+    - Create `src/components/core/Button-VerticalListItem/` directory
+    - Create `src/components/core/Button-VerticalListItem/platforms/web/` subdirectory
+    - Create `src/components/core/Button-VerticalListItem/__tests__/` subdirectory
+    - _Requirements: N/A (structural setup)_
+
+  - [x] 1.2 Define TypeScript types and interfaces
     **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Add `color.select.selected` token (cyan400)
-    - Add `color.select.selected.background` token (cyan100)
-    - Add `color.select.notSelected` token (gray200)
-    - Add `color.select.notSelected.background` token (gray100)
-    - Ensure tokens reference appropriate primitive colors
-    - Register tokens with SemanticTokenRegistry
-    - _Requirements: New Semantic Tokens Required section_
+    **Validation**: Tier 2 - Standard
+    - Create `types.ts` with `VerticalListButtonItemProps` interface
+    - Define `VisualState` union type (`'rest' | 'selected' | 'notSelected' | 'checked' | 'unchecked'`)
+    - Export types from `index.ts`
+    - _Requirements: Props/API Surface from design_
 
-  - [x] 1.2 Verify token generation across platforms
+  - [x] 1.3 Implement component tokens
     **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Run token generation for web (CSS custom properties)
-    - Run token generation for iOS (Swift constants)
-    - Run token generation for Android (Kotlin constants)
-    - Verify generated output matches expected format
-    - _Requirements: 18.1_
+    **Validation**: Tier 2 - Standard
+    - Create `buttonVerticalListItem.tokens.ts`
+    - Define `paddingBlock.rest` using `TokenWithValue` pattern (`SPACING_BASE_VALUE * 1.375`)
+    - Define `paddingBlock.selected` referencing `space125`
+    - Verify tokens register with ComponentTokenRegistry
+    - _Requirements: 6.1, 6.2_
 
-  - [x] 1.3 Write unit tests for Select color tokens
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Test token registration
-    - Test token value resolution
-    - Test cross-platform generation
-    - _Requirements: New Semantic Tokens Required section_
+- [ ] 2. Visual State Rendering
 
-
-- [x] 2. Create Component Token
-
-  **Type**: Setup
-  **Validation**: Tier 1: Minimal
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
   
   **Success Criteria:**
-  - Vertical padding component token created and registered
-  - Token references primitive `space075` correctly
+  - All 5 visual states render with correct styling
+  - Error state applies mode-specific treatment
+  - Component fails loudly when tokens missing (no fallbacks)
+  - CSS uses logical properties for RTL support
   
   **Primary Artifacts:**
-  - Component token definition file
+  - `src/components/core/Button-VerticalListItem/platforms/web/ButtonVerticalListItem.web.ts`
+  - `src/components/core/Button-VerticalListItem/platforms/web/ButtonVerticalListItem.styles.css`
   
   **Completion Documentation:**
-  - Detailed: `.kiro/specs/038-vertical-list-buttons/completion/task-2-completion.md`
+  - Detailed: `.kiro/specs/038-vertical-list-buttons/completion/task-2-parent-completion.md`
   - Summary: `docs/specs/038-vertical-list-buttons/task-2-summary.md` (triggers release detection)
-
-  - [x] 2.1 Define vertical padding component token
-    **Type**: Setup
-    **Validation**: Tier 1: Minimal
-    - Create `verticalListButton.padding.vertical` token referencing `space075`
-    - Register with component token system
-    - _Requirements: 3.4, Component Tokens Required section_
-
-
-- [x] 3. Set Up Component Structure
-
-  **Type**: Setup
-  **Validation**: Tier 1: Minimal
   
-  **Success Criteria:**
-  - Component directory follows True Native Architecture pattern
-  - All required subdirectories and placeholder files created
-  - Shared type definitions exported
-  - Component registered with Stemma system
-  
-  **Primary Artifacts:**
-  - `src/components/core/ButtonVerticalList/` directory structure
-  - `src/components/core/ButtonVerticalList/types.ts`
-  - Stemma registration
-  
-  **Completion Documentation:**
-  - Detailed: `.kiro/specs/038-vertical-list-buttons/completion/task-3-completion.md`
-  - Summary: `docs/specs/038-vertical-list-buttons/task-3-summary.md` (triggers release detection)
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Visual State Rendering"`
+  - Verify: Check GitHub for committed changes
 
-  - [x] 3.1 Create directory structure
-    **Type**: Setup
-    **Validation**: Tier 1: Minimal
-    - Create `src/components/core/ButtonVerticalList/` directory
-    - Create `platforms/web/`, `platforms/ios/`, `platforms/android/` subdirectories
-    - Create `__tests__/` and `examples/` directories
-    - _Requirements: 18.3_
-
-  - [x] 3.2 Create shared type definitions
+  - [ ] 2.1 Implement visual state mapping
     **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Create `types.ts` with `VerticalListButtonMode` type
-    - Create `VerticalListButtonItem` interface
-    - Create `VerticalListButtonGroupProps` interface
-    - Export all types
-    - _Requirements: 1.1, 1.2, 1.4, 2.1, 2.2, 2.3_
-
-  - [x] 3.3 Register component with Stemma
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Register `Button-VerticalList` with Stemma system
-    - Add category, description, status metadata
-    - Register mode variants (`tap`, `select`, `multiSelect`)
-    - Document all props with types and descriptions
-    - _Requirements: 19.1, 19.2, 19.3, 19.5_
-
-
-- [x] 4. Implement Web Component
-
-  **Type**: Architecture
-  **Validation**: Tier 3: Comprehensive
-  
-  **Success Criteria:**
-  - Web button component renders with all three modes
-  - Token-based styling via CSS custom properties working
-  - Icon integration with Icon component functional
-  - All interaction states (hover, pressed, focus) working correctly
-  - Select mode border animation with stagger working
-  - Accessibility features (WCAG 2.1 AA) implemented and validated
-  
-  **Primary Artifacts:**
-  - `src/components/core/ButtonVerticalList/platforms/web/ButtonVerticalList.web.ts`
-  - `src/components/core/ButtonVerticalList/platforms/web/ButtonVerticalList.web.css`
-  - Web-specific interaction patterns
-  
-  **Completion Documentation:**
-  - Detailed: `.kiro/specs/038-vertical-list-buttons/completion/task-4-completion.md`
-  - Summary: `docs/specs/038-vertical-list-buttons/task-4-summary.md` (triggers release detection)
-
-  - [x] 4.1 Create web component base structure
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Create `ButtonVerticalList.web.ts` custom element
-    - Set up Shadow DOM with CSS custom properties
-    - Implement prop handling for mode, items, selectedIds
-    - Wire up onSelectionChange callback
-    - _Requirements: 1.1, 1.2, 1.4_
-
-  - [x] 4.2 Implement button rendering and layout
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Render semantic `<button>` elements for each item
-    - Apply min-height of `accessibility.tapAreaRecommended`
-    - Apply full-width layout (100% container width)
-    - Apply `radiusNormal` border radius
-    - Apply vertical and horizontal padding tokens
-    - Apply `space.grouped.normal` gap between buttons
-    - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 14.3_
-
-  - [x] 4.3 Implement icon and label rendering
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Render label with `typography.buttonMd`
-    - Render optional description with `typography.bodySm` and `color.text.secondary`
-    - Render optional leading icon via Icon component
-    - Apply icon size formula and optical balance blend
-    - Apply `space.grouped.loose` spacing for icon-label gap
-    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 4.1, 10.1, 10.2, 10.3_
-
-  - [x] 4.4 Implement Tap mode visual states
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Apply `color.background` and `color.text.primary` for rest state
-    - Apply `opacity.hover` overlay on hover
-    - Apply `opacity.pressed` overlay on press
-    - Ensure no border and no checkmark displayed
-    - Apply `cursor: pointer` on hover
-    - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 17.1_
-
-  - [x] 4.5 Implement Select mode visual states
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Apply not-selected state: `color.select.notSelected.background`, `color.select.notSelected` text, no border, no checkmark
-    - Apply selected state: `color.select.selected.background`, `color.select.selected` text, `borderEmphasis` border, checkmark visible
-    - Render checkmark with optical balance blend
-    - Apply `space.grouped.loose` for label-checkmark gap
-    - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9, 6.10, 4.2_
-
-  - [x] 4.6 Implement Select mode animations
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Implement border fade-out animation on deselected button (T=0)
-    - Implement border fade-in animation on newly selected button (T=50% stagger)
-    - Implement instant checkmark removal on deselected button
-    - Implement checkmark fade-in on newly selected button
-    - Use Button-Icon Secondary hover animation specs
-    - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5_
-
-  - [x] 4.7 Implement Multi-Select mode visual states
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Apply unchecked state: `color.background`, `color.text.primary`, no border, no checkmark
-    - Apply checked state: `color.select.selected.background`, `color.select.selected` text, no border, checkmark visible
-    - Render checkmark with optical balance blend
-    - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 8.7, 8.8, 8.9_
-
-  - [x] 4.8 Implement Multi-Select mode animations
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Implement checkmark fade-in on check
-    - Implement checkmark fade-out on uncheck
-    - Ensure independent animation per button
-    - _Requirements: 9.1, 9.2, 9.3_
-
-  - [x] 4.9 Implement hover and press states for all modes
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Apply `opacity.hover` overlay on hover (all modes)
-    - Apply `opacity.pressed` overlay on press (all modes)
-    - Ensure overlay applies on top of current visual state
-    - _Requirements: 11.1, 11.2, 11.3_
-
-  - [x] 4.10 Implement focus states
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Apply focus outline with `accessibility.focus.width`
-    - Apply `accessibility.focus.color` for outline color
-    - Position outline `accessibility.focus.offset` outside button bounds
-    - Use `:focus-visible` for keyboard-only focus
-    - _Requirements: 12.1, 12.2, 12.3, 12.4, 12.5_
-
-  - [x] 4.11 Implement keyboard navigation
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Handle Tab to focus first/selected button
-    - Handle Arrow Down to move focus to next button (with wrap)
-    - Handle Arrow Up to move focus to previous button (with wrap)
-    - Handle Enter/Space to trigger action (Tap) or toggle selection (Select/Multi-Select)
-    - _Requirements: 13.1, 13.2, 13.3, 13.4, 13.5, 13.6, 13.7_
-
-  - [x] 4.12 Implement accessibility attributes
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Apply `role="radiogroup"` for Select mode container
-    - Apply `role="group"` for Multi-Select mode container
-    - Apply `aria-checked` or `aria-selected` for selection state
-    - Apply `aria-hidden="true"` to icons
-    - _Requirements: 14.1, 14.2, 14.4, 14.5_
-
-  - [x] 4.13 Checkpoint - Web component validation
-    **Type**: Setup
-    **Validation**: Tier 1: Minimal
-    - Ensure all web tests pass
-    - Ask user if questions arise
-
-
-
-- [ ] 5. Implement iOS Component
-
-  **Type**: Architecture
-  **Validation**: Tier 3: Comprehensive
-  
-  **Success Criteria:**
-  - iOS button component renders with all three modes
-  - Token-based styling via Swift constants working
-  - Icon integration with Icon component functional
-  - Platform-specific interaction (scale transform on press) working
-  - Touch target accessibility (44pt minimum) implemented
-  
-  **Primary Artifacts:**
-  - `src/components/core/ButtonVerticalList/platforms/ios/ButtonVerticalList.ios.swift`
-  - iOS-specific interaction patterns (scale transform)
-  
-  **Completion Documentation:**
-  - Detailed: `.kiro/specs/038-vertical-list-buttons/completion/task-5-completion.md`
-  - Summary: `docs/specs/038-vertical-list-buttons/task-5-summary.md` (triggers release detection)
-
-  - [ ] 5.1 Create iOS component structure
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Create `ButtonVerticalList.ios.swift` SwiftUI view
-    - Implement prop handling for mode, items, selectedIds
-    - Wire up onSelectionChange callback
-    - _Requirements: 1.1, 1.2, 1.4_
-
-  - [ ] 5.2 Implement iOS layout and styling
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Use `VStack` for button layout with `space.grouped.normal` spacing
-    - Apply min-height of `accessibility.tapAreaRecommended`
-    - Apply full-width layout
-    - Apply `radiusNormal` border radius
-    - Apply padding tokens
-    - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6_
-
-  - [ ] 5.3 Implement iOS visual states
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Implement Tap mode states
-    - Implement Select mode states with border animation
-    - Implement Multi-Select mode states
-    - Apply hover/press overlays
-    - _Requirements: 5.x, 6.x, 7.x, 8.x, 9.x, 11.x_
-
-  - [ ] 5.4 Implement iOS accessibility
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Add VoiceOver support with selection state announcements
-    - Mark icons as decorative
-    - Support Dynamic Type
-    - _Requirements: 14.6_
-
-  - [ ] 5.5 Implement iOS haptic feedback
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Add haptic feedback on selection changes (Select/Multi-Select modes)
-    - Use `UIImpactFeedbackGenerator`
-    - _Requirements: 17.2_
-
-
-- [ ] 6. Implement Android Component
-
-  **Type**: Architecture
-  **Validation**: Tier 3: Comprehensive
-  
-  **Success Criteria:**
-  - Android button component renders with all three modes
-  - Token-based styling via Kotlin constants working
-  - Icon integration with Icon component functional
-  - Platform-specific interaction (Material ripple) working
-  - Touch target accessibility (44dp minimum) implemented
-  
-  **Primary Artifacts:**
-  - `src/components/core/ButtonVerticalList/platforms/android/ButtonVerticalList.android.kt`
-  - Android-specific interaction patterns (Material ripple)
-  
-  **Completion Documentation:**
-  - Detailed: `.kiro/specs/038-vertical-list-buttons/completion/task-6-completion.md`
-  - Summary: `docs/specs/038-vertical-list-buttons/task-6-summary.md` (triggers release detection)
-
-  - [ ] 6.1 Create Android component structure
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Create `ButtonVerticalList.android.kt` Compose composable
-    - Implement prop handling for mode, items, selectedIds
-    - Wire up onSelectionChange callback
-    - _Requirements: 1.1, 1.2, 1.4_
-
-  - [ ] 6.2 Implement Android layout and styling
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Use `Column` for button layout with `space.grouped.normal` spacing
-    - Apply min-height of `accessibility.tapAreaRecommended`
-    - Apply full-width layout
-    - Apply `radiusNormal` border radius
-    - Apply padding tokens
-    - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6_
-
-  - [ ] 6.3 Implement Android visual states
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Implement Tap mode states
-    - Implement Select mode states with border animation
-    - Implement Multi-Select mode states
-    - Apply hover/press overlays
-    - _Requirements: 5.x, 6.x, 7.x, 8.x, 9.x, 11.x_
-
-  - [ ] 6.4 Implement Android accessibility
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Add TalkBack support with selection state announcements
-    - Mark icons as decorative via semantics
-    - _Requirements: 14.7_
-
-  - [ ] 6.5 Implement Android ripple effect
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Add Material ripple effect on press
-    - Use `Modifier.clickable` with ripple indication
-    - _Requirements: 17.3_
-
-
-- [ ] 7. Checkpoint - Cross-Platform Validation
-
-  **Type**: Setup
-  **Validation**: Tier 1: Minimal
-  
-  **Success Criteria:**
-  - Identical token values across all platforms
-  - Identical visual proportions
-  - Stemma validation passes
-  
-  **Completion Documentation:**
-  - Detailed: `.kiro/specs/038-vertical-list-buttons/completion/task-7-completion.md`
-  - Summary: `docs/specs/038-vertical-list-buttons/task-7-summary.md` (triggers release detection)
-
-  - [ ] 7.1 Verify cross-platform token consistency
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Verify identical token values across web, iOS, Android
-    - Verify identical visual proportions
-    - _Requirements: 18.1, 18.2_
-
-  - [ ] 7.2 Run Stemma validators
-    **Type**: Setup
-    **Validation**: Tier 1: Minimal
-    - Run all Stemma System validators
-    - Fix any validation errors
-    - _Requirements: 19.4_
-
-
-- [ ] 8. Write Tests
-
-  **Type**: Implementation
-  **Validation**: Tier 2: Standard
-  
-  **Success Criteria:**
-  - Unit tests cover all component rendering scenarios
-  - Interaction tests verify all user interactions work correctly
-  - Accessibility tests validate WCAG 2.1 AA compliance
-  - Property tests verify universal correctness properties
-  - Test coverage meets 90%+ for unit tests
-  
-  **Primary Artifacts:**
-  - `src/components/core/ButtonVerticalList/__tests__/ButtonVerticalList.test.ts`
-  - `src/components/core/ButtonVerticalList/__tests__/ButtonVerticalList.accessibility.test.ts`
-  - `src/components/core/ButtonVerticalList/__tests__/ButtonVerticalList.property.test.ts`
-  
-  **Completion Documentation:**
-  - Detailed: `.kiro/specs/038-vertical-list-buttons/completion/task-8-completion.md`
-  - Summary: `docs/specs/038-vertical-list-buttons/task-8-summary.md` (triggers release detection)
-
-  - [ ] 8.1 Write unit tests for mode behavior
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Test Tap mode triggers action on tap
-    - Test Select mode enforces single selection
-    - Test Multi-Select mode allows multiple selections
-    - Test selection state transitions
+    **Validation**: Tier 2 - Standard
+    - Create `visualStateMap` object mapping states to CSS classes
+    - Implement `getVisualStateStyles()` function
+    - Apply correct tokens for each state (background, border, text colors)
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5_
 
-  - [ ] 8.2 Write unit tests for visual states
+  - [ ] 2.2 Implement error state overlay
     **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Test correct tokens applied for each mode/state
-    - Test border visibility matches specification
-    - Test checkmark visibility matches specification
-    - _Requirements: 5.x, 6.x, 8.x_
+    **Validation**: Tier 2 - Standard
+    - Create `applyErrorStyles()` function
+    - Implement Select mode error treatment (border + background + colors)
+    - Implement Multi-Select mode error treatment (colors only)
+    - Ensure Tap mode ignores error prop
+    - _Requirements: 3.1, 3.2, 3.3, 3.4_
 
-  - [ ] 8.3 Write unit tests for keyboard navigation
+  - [ ] 2.3 Implement web component structure
     **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Test Tab focuses first/selected button
-    - Test Arrow keys move focus with wrapping
-    - Test Enter/Space activates button
-    - _Requirements: 13.x_
+    **Validation**: Tier 2 - Standard
+    - Create `ButtonVerticalListItem` web component class
+    - Implement `connectedCallback` with fail-loudly token validation
+    - Implement `attributeChangedCallback` for reactive updates
+    - Use CSS logical properties (`padding-block`, `padding-inline`)
+    - _Requirements: 10.1, 11.1_
 
-  - [ ] 8.4 Write unit tests for accessibility
+  - [ ] 2.4 Create CSS styles
     **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Test ARIA roles applied correctly
-    - Test selection state announced
-    - Test icons marked as decorative
-    - _Requirements: 14.x_
+    **Validation**: Tier 2 - Standard
+    - Create `ButtonVerticalListItem.styles.css`
+    - Define base styles with token CSS variables
+    - Define state-specific modifier classes
+    - Implement hover/pressed overlays using blend tokens
+    - Implement focus-visible outline using accessibility tokens
+    - _Requirements: 5.1, 5.2, 5.3, 5.4, 8.1, 8.2, 8.3, 8.4_
 
-  - [ ] 8.5 Write property tests for selection invariants
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - **Property 1: Mode Behavior Correctness**
-    - **Property 2: Selection State Transitions**
-    - Generate random button groups and interaction sequences
-    - Verify selection constraints maintained
-    - _Requirements: 1.x_
+- [ ] 3. Content and Icons
 
-  - [ ] 8.6 Write property tests for token application
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - **Property 3: Token Application Correctness**
-    - **Property 4: Spacing Token Application**
-    - **Property 5: Sizing Constraints**
-    - Generate buttons with random mode/state combinations
-    - Verify correct tokens applied
-    - _Requirements: 3.x, 4.x, 5.x, 6.x, 8.x_
-
-  - [ ] 8.7 Write property tests for keyboard navigation
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - **Property 6: Keyboard Navigation Correctness**
-    - Generate random button groups
-    - Verify arrow key navigation wraps correctly
-    - _Requirements: 13.x_
-
-  - [ ] 8.8 Write property tests for accessibility
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - **Property 7: Accessibility Attribute Correctness**
-    - **Property 8: Color Contrast Compliance**
-    - Generate buttons in all modes
-    - Verify ARIA attributes and contrast ratios
-    - _Requirements: 14.x, 16.x_
-
-
-- [ ] 9. Create Documentation
-
-  **Type**: Implementation
-  **Validation**: Tier 2: Standard
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
   
   **Success Criteria:**
-  - README serves as single source of truth for component usage
-  - Examples demonstrate all component variants and features
-  - Documentation explains token consumption and customization
-  - Accessibility guidance provided for proper usage
-  - Cross-platform considerations documented
+  - Label always renders with correct typography
+  - Description renders when provided with muted color
+  - Leading icon renders with optical balance
+  - Selection indicator (checkmark) shows/hides based on state
+  - Icons use Icon-Base component with correct size
   
   **Primary Artifacts:**
-  - `src/components/core/ButtonVerticalList/README.md`
-  - `src/components/core/ButtonVerticalList/examples/` directory
+  - Updated `ButtonVerticalListItem.web.ts` with content rendering
+  - Updated `ButtonVerticalListItem.styles.css` with content styles
   
   **Completion Documentation:**
-  - Detailed: `.kiro/specs/038-vertical-list-buttons/completion/task-9-completion.md`
-  - Summary: `docs/specs/038-vertical-list-buttons/task-9-summary.md` (triggers release detection)
+  - Detailed: `.kiro/specs/038-vertical-list-buttons/completion/task-3-parent-completion.md`
+  - Summary: `docs/specs/038-vertical-list-buttons/task-3-summary.md` (triggers release detection)
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Content and Icons"`
+  - Verify: Check GitHub for committed changes
 
-  - [ ] 9.1 Create README.md with usage guidelines
+  - [ ] 3.1 Implement label and description rendering
     **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Write component overview
-    - Document all props with types and descriptions
-    - Include installation/import instructions
-    - _Requirements: 20.1_
+    **Validation**: Tier 2 - Standard
+    - Render label with `typography.buttonMd` styling
+    - Conditionally render description with `typography.bodySm` styling
+    - Apply `color.text.muted` to description regardless of visual state
+    - _Requirements: 4.1, 4.2, 4.3_
 
-  - [ ] 9.2 Add code examples for each mode
+  - [ ] 3.2 Implement leading icon rendering
     **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Add Tap mode example
-    - Add Select mode example
-    - Add Multi-Select mode example
-    - _Requirements: 20.2_
+    **Validation**: Tier 2 - Standard
+    - Conditionally render Icon-Base component when `leadingIcon` prop provided
+    - Pass `iconBaseSizes.size100` (24px) to Icon-Base
+    - Apply label color with optical balance blend
+    - Position far left, vertically centered
+    - _Requirements: 4.4, 4.5, 9.1_
 
-  - [ ] 9.3 Add code examples for each platform
+  - [ ] 3.3 Implement selection indicator (checkmark)
     **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Add web (TypeScript) example
-    - Add iOS (SwiftUI) example
-    - Add Android (Kotlin Compose) example
-    - _Requirements: 20.3_
+    **Validation**: Tier 2 - Standard
+    - Render Icon-Base checkmark when `visualState` is `selected` or `checked`
+    - Pass `iconBaseSizes.size100` (24px) to Icon-Base
+    - Apply `color.select.selected.strong` with optical balance (or `color.error.strong` in error state)
+    - Add `aria-hidden="true"` for accessibility
+    - Position far right, vertically centered
+    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 9.2_
 
-  - [ ] 9.4 Add accessibility documentation
+  - [ ] 3.4 Implement internal spacing
     **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Document keyboard navigation behavior
-    - Document screen reader behavior per platform
-    - Document ARIA attributes used
-    - _Requirements: 20.4_
+    **Validation**: Tier 2 - Standard
+    - Apply `space.grouped.loose` (12px) gap between icon and label
+    - Apply `space.grouped.loose` (12px) gap between label and checkmark
+    - Use flexbox with gap property for consistent spacing
+    - _Requirements: 4.6, 4.7_
 
-  - [ ] 9.5 Add do's and don'ts
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Document common use cases
-    - Document anti-patterns to avoid
-    - Include guidance on mode selection
-    - _Requirements: 20.5_
+- [ ] 4. Animation and Transitions
 
-  - [ ] 9.6 Add visual state examples
-    **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Include examples showing rest, hover, pressed states
-    - Include examples showing selected/not-selected states
-    - Include examples showing focus state
-    - _Requirements: 20.6_
-
-
-- [ ] 10. Final Validation
-
-  **Type**: Setup
-  **Validation**: Tier 1: Minimal
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
   
   **Success Criteria:**
-  - All tests pass
-  - Color contrast compliance verified
-  - Stemma validation passes
+  - Visual state transitions animate smoothly
+  - Padding compensation animates with border width
+  - Checkmark fades in/out based on `checkmarkTransition` prop
+  - Transition delay prop works correctly
+  
+  **Primary Artifacts:**
+  - Updated CSS with transition properties
+  - Updated component with animation control props
   
   **Completion Documentation:**
-  - Detailed: `.kiro/specs/038-vertical-list-buttons/completion/task-10-completion.md`
-  - Summary: `docs/specs/038-vertical-list-buttons/task-10-summary.md` (triggers release detection)
+  - Detailed: `.kiro/specs/038-vertical-list-buttons/completion/task-4-parent-completion.md`
+  - Summary: `docs/specs/038-vertical-list-buttons/task-4-summary.md` (triggers release detection)
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 Complete: Animation and Transitions"`
+  - Verify: Check GitHub for committed changes
 
-  - [ ] 10.1 Run full test suite
-    **Type**: Setup
-    **Validation**: Tier 1: Minimal
-    - Run `npm test` to validate all tests pass
-    - Fix any failing tests
-
-  - [ ] 10.2 Verify color contrast compliance
+  - [ ] 4.1 Implement state transition animations
     **Type**: Implementation
-    **Validation**: Tier 2: Standard
-    - Verify 4.5:1 contrast for label text
-    - Verify 4.5:1 contrast for description text
-    - Verify 3:1 contrast for focus outline
-    - _Requirements: 16.1, 16.2, 16.3_
+    **Validation**: Tier 2 - Standard
+    - Add CSS transitions using `motion.selectionTransition` token (250ms, standard easing)
+    - Animate background, border-color, border-width, padding, color properties
+    - Ensure padding and border-width animate together for height stability
+    - _Requirements: 7.1_
 
-  - [ ] 10.3 Final checkpoint
+  - [ ] 4.2 Implement checkmark animation
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Implement fade-in animation when checkmark becomes visible
+    - Implement fade-out animation when `checkmarkTransition='fade'`
+    - Implement instant hide when `checkmarkTransition='instant'`
+    - _Requirements: 7.2, 7.3, 7.4_
+
+  - [ ] 4.3 Implement transition delay
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Accept `transitionDelay` prop (milliseconds)
+    - Apply CSS `transition-delay` property
+    - Enable parent pattern to create staggered animations
+    - _Requirements: 7.5_
+
+- [ ] 5. Event Handling and Accessibility
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  
+  **Success Criteria:**
+  - Event callbacks fire correctly (onClick, onFocus, onBlur)
+  - Component renders as semantic `<button>` element
+  - No disabled state support (per accessibility standards)
+  - RTL layout adapts automatically
+  
+  **Primary Artifacts:**
+  - Updated component with event handlers
+  - Accessibility attributes applied correctly
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/038-vertical-list-buttons/completion/task-5-parent-completion.md`
+  - Summary: `docs/specs/038-vertical-list-buttons/task-5-summary.md` (triggers release detection)
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 5 Complete: Event Handling and Accessibility"`
+  - Verify: Check GitHub for committed changes
+
+  - [ ] 5.1 Implement event handlers
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Implement `onClick` callback invocation on click/tap
+    - Implement `onFocus` callback invocation on focus
+    - Implement `onBlur` callback invocation on blur
+    - _Requirements: 12.1, 12.2, 12.3_
+
+  - [ ] 5.2 Implement accessibility features
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Ensure component renders as `<button>` element
+    - Explicitly NOT support disabled state (throw error if attempted)
+    - Verify checkmark has `aria-hidden="true"`
+    - _Requirements: 10.1, 10.2, 10.4_
+
+  - [ ] 5.3 Verify RTL support
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Verify CSS logical properties work in RTL context
+    - Verify leading icon appears on right in RTL
+    - Verify checkmark appears on left in RTL
+    - _Requirements: 11.1, 11.2, 11.3_
+
+- [ ] 6. Testing
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  
+  **Success Criteria:**
+  - All unit tests pass
+  - All property-based tests pass (100+ iterations each)
+  - Integration tests verify token and Icon-Base integration
+  - Tests follow Test Development Standards (behavior not implementation)
+  
+  **Primary Artifacts:**
+  - `src/components/core/Button-VerticalListItem/__tests__/ButtonVerticalListItem.unit.test.ts`
+  - `src/components/core/Button-VerticalListItem/__tests__/ButtonVerticalListItem.properties.test.ts`
+  - `src/components/core/Button-VerticalListItem/__tests__/ButtonVerticalListItem.integration.test.ts`
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/038-vertical-list-buttons/completion/task-6-parent-completion.md`
+  - Summary: `docs/specs/038-vertical-list-buttons/task-6-summary.md` (triggers release detection)
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 6 Complete: Testing"`
+  - Verify: Check GitHub for committed changes
+
+  - [ ] 6.1 Write unit tests
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Test rendering behavior (component renders with required props)
+    - Test visual state behavior (correct CSS classes applied)
+    - Test error state behavior (mode-specific treatment)
+    - Test accessibility behavior (semantic button, aria-hidden checkmark)
+    - Test event behavior (callbacks fire on interaction)
+    - Follow JSDOM web component patterns (async, whenDefined, setTimeout)
+    - _Requirements: All_
+
+  - [ ] 6.2 Write property-based tests
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Property 1: Visual State Styling Consistency (100+ iterations)
+    - Property 2: Selection Indicator Visibility (100+ iterations)
+    - Property 11: Padding Compensation Correctness (100+ iterations)
+    - Property 17: Event Callback Invocation (100+ iterations)
+    - Tag each test with Feature and Property number
+    - _Requirements: Properties 1, 2, 11, 17 from design_
+
+  - [ ] 6.3 Write integration tests
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Test token integration (component uses Rosetta CSS variables)
+    - Test Icon-Base integration (icons render at correct size)
+    - Test fail-loudly behavior (throws when tokens missing)
+    - _Requirements: Token Dependencies from requirements_
+
+  - [ ] 6.4 Write fail-loudly tests
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Test component throws when required CSS variables missing
+    - Test component does NOT use hard-coded fallback values
+    - Verify error messages are descriptive
+    - _Requirements: Fail Loudly Philosophy from design_
+
+- [ ] 7. Final Checkpoint
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  
+  **Success Criteria:**
+  - All tests pass (`npm test`)
+  - Component exports correctly from index.ts
+  - No TypeScript errors
+  - Component ready for consumption by parent pattern
+  
+  **Primary Artifacts:**
+  - Complete `Button-VerticalListItem` component
+  - All test files passing
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/038-vertical-list-buttons/completion/task-7-parent-completion.md`
+  - Summary: `docs/specs/038-vertical-list-buttons/task-7-summary.md` (triggers release detection)
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 7 Complete: Final Checkpoint"`
+  - Verify: Check GitHub for committed changes
+
+  - [ ] 7.1 Run full test suite
     **Type**: Setup
-    **Validation**: Tier 1: Minimal
-    - Ensure all tests pass
-    - Ensure Stemma validation passes
-    - Ask user if questions arise
+    **Validation**: Tier 1 - Minimal
+    - Run `npm test` and verify all tests pass
+    - Address any failing tests
+    - _Requirements: All_
+
+  - [ ] 7.2 Verify exports
+    **Type**: Setup
+    **Validation**: Tier 1 - Minimal
+    - Verify `index.ts` exports component, types, and tokens
+    - Verify no TypeScript compilation errors
+    - _Requirements: N/A (structural verification)_
 
 ---
 
 ## Notes
 
-- All tasks are required for comprehensive implementation
-- Each task references specific requirements for traceability
-- Checkpoints ensure incremental validation
-- Property tests validate universal correctness properties
-- Unit tests validate specific examples and edge cases
+- All tasks follow Test Development Standards (test behavior, not implementation)
+- Component follows "fail loudly" philosophy — no hard-coded fallbacks
+- Property-based tests run 100+ iterations each
+- Web component tests use JSDOM async patterns (whenDefined, setTimeout)
+- Tasks marked with specific Requirements from requirements.md for traceability

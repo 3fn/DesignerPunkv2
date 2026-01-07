@@ -125,10 +125,11 @@ describe('UMD Bundle Loading', () => {
       // Note: Minification may mangle internal names, but exports should remain
       // Check for custom element tag names which are preserved as strings
       // Note: Stemma System migration - text-input-field removed, using input-text-base instead
+      // Note: dp-icon and dp-container deprecated names removed
       expect(bundleContent).toContain('input-text-base');
       expect(bundleContent).toContain('button-cta');
-      expect(bundleContent).toContain('dp-icon');
-      expect(bundleContent).toContain('dp-container');
+      expect(bundleContent).toContain('icon-base');
+      expect(bundleContent).toContain('container-base');
     });
 
     it('should be valid JavaScript', () => {

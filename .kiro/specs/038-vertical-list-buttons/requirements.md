@@ -1,321 +1,241 @@
-# Requirements Document: Vertical List Buttons
+# Requirements Document: Vertical List Button Item
 
 **Date**: January 6, 2026
-**Spec**: 038 - Vertical List Buttons
+**Spec**: 038 - Vertical List Button Item
 **Status**: Requirements Phase
-**Dependencies**: Icon Component, Icon Size Tokens, Accessibility Tokens
+**Dependencies**: 
+- `Icon-Base` — Icon component for leading icons and checkmark indicator
+- `Button-CTA` — Shares focus state patterns and padding compensation approach
 
 ---
 
 ## Introduction
 
-Vertical List Buttons are a component family for presenting actionable choices in a stacked vertical layout. The component supports three interaction models (Tap, Select, Multi-Select) to accommodate different selection patterns while maintaining consistent visual design and accessibility standards.
+The Vertical List Button Item is an individual button component designed for use within vertical list contexts. It renders visual states based on props received from a parent container/pattern, functioning as a "dumb" component that emits events and displays state without managing selection logic.
 
-The component follows True Native Architecture with build-time platform separation for web, iOS, and Android. All styling uses semantic or primitive tokens from the mathematical token system, with new Select color tokens introduced in this spec.
-
-**Key Architectural Principles**:
-- **True Native Architecture**: Separate implementations per platform (web, iOS, Android)
-- **Token-based design**: All styling uses semantic or primitive tokens (no hard-coded values)
-- **Mathematical foundation**: Sizing follows 8px baseline grid with strategic flexibility
-- **Accessibility-first**: WCAG 2.1 AA compliance for touch targets, color contrast, keyboard navigation
-- **Icon component integration**: Uses Icon component for all icon rendering
+This component is consumed by the Vertical List Buttons Pattern (XXX-vertical-list-buttons-pattern), which manages selection modes, state transitions, and accessibility semantics at the container level.
 
 ---
 
 ## Glossary
 
-- **Vertical List Button**: Individual button within a vertically stacked button group
-- **Tap Mode**: Interaction model where button tap triggers immediate action
-- **Select Mode**: Single-selection interaction model where one item can be selected at a time
-- **Multi-Select Mode**: Multiple-selection interaction model where multiple items can be selected
-- **Selection Indicator**: Checkmark icon displayed on far right when item is selected
-- **Leading Icon**: Optional icon displayed on far left, inline with label
-- **True Native Architecture**: Build-time platform separation with platform-specific implementations
-- **Semantic Token**: Token with contextual meaning that references primitive tokens
-- **Component Token**: Token scoped to a specific component, referencing primitive tokens
-- **Icon Size Formula**: Icon size calculation: `fontSize × lineHeight` of paired typography
+- **Button_VerticalListItem**: The individual button component that renders visual states based on props
+- **Visual_State**: The appearance mode of the button (rest, selected, notSelected, checked, unchecked)
+- **Mode**: The selection behavior context set by the parent pattern (Tap, Select, Multi-Select)
+- **Selection_Indicator**: The checkmark icon shown when an item is selected or checked
+- **Padding_Compensation**: The technique of reducing padding when border width increases to maintain constant total height
+- **Optical_Balance**: Color adjustment applied to icons to achieve visual consistency with text
 
 ---
 
 ## Requirements
 
-### Requirement 1: Interaction Models
+### Requirement 1: Visual State Rendering
 
-**User Story**: As a product designer, I want three interaction models (Tap, Select, Multi-Select), so that I can use the appropriate selection pattern for different UI contexts.
-
-#### Acceptance Criteria
-
-1. WHEN the Vertical List Button group is instantiated with mode "tap" THEN the component SHALL trigger the button's action immediately on tap/click
-2. WHEN the Vertical List Button group is instantiated with mode "select" THEN the component SHALL allow only one button to be selected at a time
-3. WHEN the Vertical List Button group is instantiated with mode "select" AND a button is tapped THEN the component SHALL deselect the previously selected button and select the tapped button
-4. WHEN the Vertical List Button group is instantiated with mode "multiSelect" THEN the component SHALL allow multiple buttons to be selected simultaneously
-5. WHEN the Vertical List Button group is instantiated with mode "multiSelect" AND a button is tapped THEN the component SHALL toggle that button's selected state without affecting other buttons
-
-### Requirement 2: Button Anatomy
-
-**User Story**: As a product designer, I want buttons to support optional icons and descriptions, so that I can enhance button meaning with visual indicators and explanatory text.
+**User Story**: As a developer, I want the button to render different visual appearances based on its visual state prop, so that users can perceive the current selection status.
 
 #### Acceptance Criteria
 
-1. WHEN a Vertical List Button is instantiated with label prop THEN the component SHALL render the label text using `typography.buttonMd`
-2. WHEN a Vertical List Button is instantiated with description prop THEN the component SHALL render description text below the label using `typography.bodySm`
-3. WHEN a Vertical List Button is instantiated with icon prop THEN the component SHALL render the icon in leading position (far left) using the Icon component
-4. WHEN a Vertical List Button renders a leading icon THEN the component SHALL size the icon to match `typography.buttonMd` using the icon size formula (`fontSize × lineHeight`)
-5. WHEN a Vertical List Button renders a leading icon THEN the component SHALL apply `color.icon.opticalBalance` blend to the icon color
+1. WHEN visualState is `rest` THEN Button_VerticalListItem SHALL render with `color.background` background, `borderDefault` (1px) border width, and `color.text.default` label color
+2. WHEN visualState is `selected` THEN Button_VerticalListItem SHALL render with `color.select.selected.subtle` background, `borderEmphasis` (2px) border width, `color.select.selected.strong` border color, and `color.select.selected.strong` label color
+3. WHEN visualState is `notSelected` THEN Button_VerticalListItem SHALL render with `color.select.notSelected.subtle` background, `borderDefault` (1px) border width, transparent border color, and `color.select.notSelected.strong` label color
+4. WHEN visualState is `checked` THEN Button_VerticalListItem SHALL render with `color.select.selected.subtle` background, `borderDefault` (1px) border width, transparent border color, and `color.select.selected.strong` label color
+5. WHEN visualState is `unchecked` THEN Button_VerticalListItem SHALL render with `color.background` background, `borderDefault` (1px) border width, transparent border color, and `color.text.default` label color
 
-### Requirement 3: Sizing and Layout
+### Requirement 2: Selection Indicator Display
 
-**User Story**: As a product designer, I want buttons to have consistent sizing and fill their container width, so that button lists maintain visual consistency and alignment.
-
-#### Acceptance Criteria
-
-1. WHEN a Vertical List Button renders THEN the component SHALL enforce minimum height of `accessibility.tapAreaRecommended` (48px)
-2. WHEN a Vertical List Button renders THEN the component SHALL expand to fill 100% width of its container
-3. WHEN a Vertical List Button renders THEN the component SHALL use `radiusNormal` for border radius
-4. WHEN a Vertical List Button renders THEN the component SHALL use component token referencing `space075` (6px) for top and bottom padding
-5. WHEN a Vertical List Button renders THEN the component SHALL use `space.inset.200` (16px) for left and right padding
-6. WHEN a Vertical List Button group renders multiple buttons THEN the component SHALL use `space.grouped.normal` (8px) for vertical gap between buttons
-
-### Requirement 4: Internal Spacing
-
-**User Story**: As a product designer, I want consistent spacing between button elements, so that icons, labels, and selection indicators maintain balanced visual relationships.
+**User Story**: As a user, I want to see a checkmark when an item is selected or checked, so that I can clearly identify my selections.
 
 #### Acceptance Criteria
 
-1. WHEN a Vertical List Button renders with a leading icon THEN the component SHALL use `space.grouped.loose` (12px) between icon and label
-2. WHEN a Vertical List Button renders with a selection indicator THEN the component SHALL use `space.grouped.loose` (12px) between label and checkmark
-3. WHEN a Vertical List Button renders with both icon and selection indicator THEN the component SHALL position icon on far left and checkmark on far right with label in between
+1. WHEN visualState is `selected` OR `checked` THEN Button_VerticalListItem SHALL display the Selection_Indicator (checkmark) on the far right
+2. WHEN visualState is `rest`, `notSelected`, OR `unchecked` THEN Button_VerticalListItem SHALL hide the Selection_Indicator
+3. WHEN Selection_Indicator is visible THEN it SHALL use `color.select.selected.strong` with `color.icon.opticalBalance` blend applied
+4. WHEN Selection_Indicator is visible AND error is true THEN it SHALL use `color.error.strong` with `color.icon.opticalBalance` blend applied
+5. WHEN Selection_Indicator is displayed THEN it SHALL be marked as decorative with `aria-hidden="true"`
 
-### Requirement 5: Tap Mode Visual States
+### Requirement 3: Error State Rendering
 
-**User Story**: As a product designer, I want Tap mode buttons to show appropriate visual feedback, so that users understand the button is interactive.
-
-#### Acceptance Criteria
-
-1. WHEN a Vertical List Button in Tap mode renders in rest state THEN the component SHALL use `color.background` for background and `color.text.primary` for label
-2. WHEN a Vertical List Button in Tap mode renders in rest state THEN the component SHALL NOT display a border
-3. WHEN a Vertical List Button in Tap mode receives hover interaction (web) THEN the component SHALL apply `opacity.hover` overlay
-4. WHEN a Vertical List Button in Tap mode receives press interaction THEN the component SHALL apply `opacity.pressed` overlay
-5. WHEN a Vertical List Button in Tap mode renders THEN the component SHALL NOT display a selection indicator
-
-### Requirement 6: Select Mode Visual States
-
-**User Story**: As a product designer, I want Select mode buttons to clearly indicate selected and not-selected states, so that users understand which option is currently chosen.
+**User Story**: As a developer, I want to apply error styling to indicate validation failures, so that users understand when their selection is invalid.
 
 #### Acceptance Criteria
 
-1. WHEN a Vertical List Button in Select mode renders in not-selected state THEN the component SHALL use `color.select.notSelected.background` for background
-2. WHEN a Vertical List Button in Select mode renders in not-selected state THEN the component SHALL use `color.select.notSelected` for label text
-3. WHEN a Vertical List Button in Select mode renders in not-selected state THEN the component SHALL NOT display a border
-4. WHEN a Vertical List Button in Select mode renders in not-selected state THEN the component SHALL NOT display the selection indicator (checkmark)
-5. WHEN a Vertical List Button in Select mode renders in selected state THEN the component SHALL use `color.select.selected.background` for background
-6. WHEN a Vertical List Button in Select mode renders in selected state THEN the component SHALL use `color.select.selected` for label text
-7. WHEN a Vertical List Button in Select mode renders in selected state THEN the component SHALL display `borderEmphasis` border
-8. WHEN a Vertical List Button in Select mode renders in selected state THEN the component SHALL display the selection indicator (checkmark) on far right
-9. WHEN a Vertical List Button in Select mode renders the checkmark THEN the component SHALL use `color.select.selected` with `color.icon.opticalBalance` blend applied
-10. WHEN a Vertical List Button in Select mode renders the checkmark THEN the component SHALL size the checkmark to match `typography.buttonMd` using the icon size formula
+1. WHEN error is true AND visualState is any Select mode state (rest, selected, notSelected) THEN Button_VerticalListItem SHALL render with `color.error.subtle` background, `borderEmphasis` (2px) border width, and `color.error.strong` border color
+2. WHEN error is true AND visualState is any Multi-Select mode state (checked, unchecked) THEN Button_VerticalListItem SHALL render with `color.error.strong` label and icon colors only (no border or background change)
+3. WHEN error is true THEN label and icon colors SHALL be `color.error.strong` regardless of mode
+4. IF visualState is `rest` in Tap mode context THEN error prop SHALL have no effect (Tap mode has nothing to validate)
 
-### Requirement 7: Select Mode Animation
+### Requirement 4: Content Layout
 
-**User Story**: As a product designer, I want Select mode to animate selection changes smoothly, so that users receive clear visual feedback when changing their selection.
+**User Story**: As a user, I want the button content to be clearly organized with label, optional description, and optional icon, so that I can understand each option.
 
 #### Acceptance Criteria
 
-1. WHEN selection changes in Select mode THEN the component SHALL animate the border on the newly selected button using the same animation specs as Button-Icon Secondary hover state
-2. WHEN selection changes in Select mode THEN the component SHALL begin the deselected button's border fade-out animation at T=0
-3. WHEN selection changes in Select mode THEN the component SHALL begin the newly selected button's border fade-in animation at T=50% of the animation duration (staggered delay)
-4. WHEN selection changes in Select mode THEN the component SHALL remove the checkmark from the deselected button instantly (no fade animation)
-5. WHEN selection changes in Select mode THEN the component SHALL fade in the checkmark on the newly selected button
+1. THE Button_VerticalListItem SHALL always display a label using `typography.buttonMd` styling
+2. WHEN description is provided THEN Button_VerticalListItem SHALL display it below the label using `typography.bodySm` styling
+3. WHEN description is displayed THEN it SHALL use `color.text.muted` color regardless of visual state
+4. WHEN leadingIcon is provided THEN Button_VerticalListItem SHALL display it on the far left, vertically centered to button height
+5. WHEN leadingIcon is displayed THEN it SHALL use the same color as the label with `color.icon.opticalBalance` blend applied
+6. THE spacing between leadingIcon and label SHALL be `space.grouped.loose` (12px)
+7. THE spacing between label and Selection_Indicator SHALL be `space.grouped.loose` (12px)
 
-### Requirement 8: Multi-Select Mode Visual States
+### Requirement 5: Sizing and Touch Targets
 
-**User Story**: As a product designer, I want Multi-Select mode buttons to clearly indicate checked and unchecked states, so that users understand which options are currently selected.
-
-#### Acceptance Criteria
-
-1. WHEN a Vertical List Button in Multi-Select mode renders in unchecked state THEN the component SHALL use `color.background` for background
-2. WHEN a Vertical List Button in Multi-Select mode renders in unchecked state THEN the component SHALL use `color.text.primary` for label text
-3. WHEN a Vertical List Button in Multi-Select mode renders in unchecked state THEN the component SHALL NOT display a border
-4. WHEN a Vertical List Button in Multi-Select mode renders in unchecked state THEN the component SHALL NOT display the selection indicator (checkmark)
-5. WHEN a Vertical List Button in Multi-Select mode renders in checked state THEN the component SHALL use `color.select.selected.background` for background
-6. WHEN a Vertical List Button in Multi-Select mode renders in checked state THEN the component SHALL use `color.select.selected` for label text
-7. WHEN a Vertical List Button in Multi-Select mode renders in checked state THEN the component SHALL NOT display a border
-8. WHEN a Vertical List Button in Multi-Select mode renders in checked state THEN the component SHALL display the selection indicator (checkmark) on far right
-9. WHEN a Vertical List Button in Multi-Select mode renders the checkmark THEN the component SHALL use `color.select.selected` with `color.icon.opticalBalance` blend applied
-
-### Requirement 9: Multi-Select Mode Animation
-
-**User Story**: As a product designer, I want Multi-Select mode to animate checkmark appearance smoothly, so that users receive clear visual feedback when toggling selections.
+**User Story**: As a user, I want buttons that are easy to tap on touch devices, so that I can interact comfortably without precision.
 
 #### Acceptance Criteria
 
-1. WHEN a button is checked in Multi-Select mode THEN the component SHALL fade in the checkmark
-2. WHEN a button is unchecked in Multi-Select mode THEN the component SHALL fade out the checkmark
-3. WHEN multiple buttons are toggled in Multi-Select mode THEN each button SHALL animate independently
+1. THE Button_VerticalListItem SHALL have a minimum height of `accessibility.tapAreaRecommended` (48px)
+2. THE Button_VerticalListItem SHALL fill 100% of its container width
+3. THE Button_VerticalListItem SHALL use `radiusNormal` (8px) for border radius
+4. THE inline padding (left/right) SHALL be `space.inset.200` (16px)
 
-### Requirement 10: Description Text Styling
+### Requirement 6: Height Stability with Padding Compensation
 
-**User Story**: As a product designer, I want description text to use secondary styling, so that it's visually subordinate to the label while remaining readable.
-
-#### Acceptance Criteria
-
-1. WHEN a Vertical List Button renders with description THEN the component SHALL use `color.text.secondary` for description text color
-2. WHEN a Vertical List Button renders with description THEN the component SHALL maintain `color.text.secondary` for description regardless of selection state
-3. WHEN a Vertical List Button renders with description THEN the component SHALL position description below the label within the button bounds
-
-### Requirement 11: Hover and Press States
-
-**User Story**: As a product designer, I want all button modes to show hover and press feedback, so that users understand the buttons are interactive.
+**User Story**: As a user, I want the button height to remain constant when selection state changes, so that the layout doesn't shift unexpectedly.
 
 #### Acceptance Criteria
 
-1. WHEN any Vertical List Button receives hover interaction (web) THEN the component SHALL apply `opacity.hover` overlay while maintaining current visual state
-2. WHEN any Vertical List Button receives press interaction THEN the component SHALL apply `opacity.pressed` overlay while maintaining current visual state
-3. WHEN a Vertical List Button in Select or Multi-Select mode is in selected state AND receives hover/press THEN the component SHALL apply overlay on top of selected styling
+1. WHEN border width is `borderDefault` (1px) THEN block padding SHALL be 11px per side
+2. WHEN border width is `borderEmphasis` (2px) THEN block padding SHALL be 10px per side
+3. THE total button height SHALL remain constant at 48px regardless of border width changes
+4. WHEN transitioning between visual states THEN padding and border width SHALL animate together to maintain height stability
 
-### Requirement 12: Focus States
+### Requirement 7: Animation and Transitions
 
-**User Story**: As a keyboard user, I want buttons to show clear focus indicators, so that I can navigate the interface using keyboard controls.
-
-#### Acceptance Criteria
-
-1. WHEN a Vertical List Button receives keyboard focus THEN the component SHALL render outline with `accessibility.focus.width`
-2. WHEN a Vertical List Button renders focus outline THEN the component SHALL use `accessibility.focus.color` for outline color
-3. WHEN a Vertical List Button renders focus outline THEN the component SHALL position outline `accessibility.focus.offset` outside button bounds
-4. WHEN a Vertical List Button receives focus via mouse click THEN the component SHALL NOT render focus outline (focus-visible only)
-5. WHEN a Vertical List Button receives focus via keyboard navigation THEN the component SHALL render focus outline
-
-### Requirement 13: Keyboard Navigation
-
-**User Story**: As a keyboard user, I want to navigate and interact with button lists using standard keyboard controls, so that I can use the interface without a mouse.
+**User Story**: As a user, I want smooth visual transitions when selection state changes, so that the interface feels polished and responsive.
 
 #### Acceptance Criteria
 
-1. WHEN a Vertical List Button group receives Tab key THEN the component SHALL focus the first (or currently selected) button in the group
-2. WHEN a button in the group has focus AND receives Arrow Down key THEN the component SHALL move focus to the next button
-3. WHEN a button in the group has focus AND receives Arrow Up key THEN the component SHALL move focus to the previous button
-4. WHEN a button has focus AND receives Enter or Space key in Tap mode THEN the component SHALL trigger the button's action
-5. WHEN a button has focus AND receives Enter or Space key in Select or Multi-Select mode THEN the component SHALL toggle the button's selection state
-6. WHEN the last button has focus AND receives Arrow Down key THEN the component SHALL wrap focus to the first button
-7. WHEN the first button has focus AND receives Arrow Up key THEN the component SHALL wrap focus to the last button
+1. WHEN visualState changes THEN Button_VerticalListItem SHALL animate background color, border color, border width, padding, text color, and icon color using `motion.selectionTransition` (250ms, standard easing)
+2. WHEN Selection_Indicator becomes visible THEN it SHALL fade in using `motion.selectionTransition`
+3. WHEN checkmarkTransition prop is `fade` AND Selection_Indicator becomes hidden THEN it SHALL fade out using `motion.selectionTransition`
+4. WHEN checkmarkTransition prop is `instant` AND Selection_Indicator becomes hidden THEN it SHALL hide immediately without animation
+5. WHEN transitionDelay prop is provided THEN Button_VerticalListItem SHALL delay its transition by the specified milliseconds
 
-### Requirement 14: Screen Reader Accessibility
+### Requirement 8: Interactive States
 
-**User Story**: As a screen reader user, I want button lists to announce their purpose and state clearly, so that I understand the available options and current selections.
+**User Story**: As a user, I want visual feedback when I hover over or press a button, so that I know the interface is responding to my actions.
 
 #### Acceptance Criteria
 
-1. WHEN a Vertical List Button group renders in Select mode on web THEN the component SHALL use `role="radiogroup"` on the container
-2. WHEN a Vertical List Button group renders in Multi-Select mode on web THEN the component SHALL use `role="group"` on the container
-3. WHEN a Vertical List Button renders on web THEN the component SHALL use semantic button element
-4. WHEN a Vertical List Button renders with selection state THEN the component SHALL announce selection state to screen readers (aria-checked or aria-selected as appropriate)
-5. WHEN a Vertical List Button renders leading icon or checkmark THEN the component SHALL mark icons as decorative (aria-hidden on web)
-6. WHEN a Vertical List Button renders on iOS THEN the component SHALL support VoiceOver with selection state announcements
-7. WHEN a Vertical List Button renders on Android THEN the component SHALL support TalkBack with selection state announcements
+1. WHEN user hovers over Button_VerticalListItem THEN it SHALL apply `blend.hoverDarker` overlay on top of current visual state
+2. WHEN user presses Button_VerticalListItem THEN it SHALL apply `blend.pressedDarker` overlay on top of current visual state
+3. WHEN Button_VerticalListItem receives keyboard focus THEN it SHALL display focus outline using `accessibility.focus.width`, `accessibility.focus.offset`, and `accessibility.focus.color` tokens
+4. THE Button_VerticalListItem SHALL use `:focus-visible` for keyboard focus indicators (web platform)
 
-### Requirement 15: Touch Target Accessibility
+### Requirement 9: Icon Sizing
 
-**User Story**: As a mobile user, I want buttons to meet touch target requirements, so that I can reliably tap buttons on touch devices.
+**User Story**: As a developer, I want icons to be sized consistently with the button typography, so that the visual hierarchy is maintained.
 
 #### Acceptance Criteria
 
-1. WHEN a Vertical List Button renders THEN the component SHALL maintain minimum height of `accessibility.tapAreaRecommended` (48px)
-2. WHEN a Vertical List Button renders at full container width THEN the component SHALL provide touch target across entire button width
-3. WHEN a Vertical List Button renders on iOS or Android THEN the component SHALL use platform-appropriate touch feedback
+1. THE leadingIcon SHALL use `iconBaseSizes.size100` (24px) to match `typography.buttonMd`
+2. THE Selection_Indicator SHALL use `iconBaseSizes.size100` (24px) to match `typography.buttonMd`
+3. WHEN icons are rendered THEN they SHALL use the Icon-Base component with the `size` prop
 
-### Requirement 16: Color Contrast Accessibility
+### Requirement 10: Accessibility Compliance
 
-**User Story**: As a user with visual impairments, I want button text and backgrounds to meet WCAG 2.1 AA color contrast requirements, so that I can read button labels clearly.
-
-#### Acceptance Criteria
-
-1. WHEN a Vertical List Button renders in any state THEN the component SHALL achieve minimum 4.5:1 contrast ratio between label text and background
-2. WHEN a Vertical List Button renders description text THEN the component SHALL achieve minimum 4.5:1 contrast ratio between description text and background
-3. WHEN a Vertical List Button renders focus outline THEN the component SHALL achieve minimum 3:1 contrast ratio between outline and adjacent colors
-
-### Requirement 17: Platform-Specific Interaction Patterns
-
-**User Story**: As a platform user, I want buttons to follow platform-native interaction patterns, so that buttons feel natural and familiar on each platform.
+**User Story**: As a user with accessibility needs, I want the button to work with assistive technologies, so that I can use the interface effectively.
 
 #### Acceptance Criteria
 
-1. WHEN a Vertical List Button renders on web THEN the component SHALL apply cursor pointer on hover
-2. WHEN a Vertical List Button renders on iOS THEN the component SHALL apply haptic feedback on selection changes (Select/Multi-Select modes)
-3. WHEN a Vertical List Button renders on Android THEN the component SHALL apply Material ripple effect on press
+1. THE Button_VerticalListItem SHALL render as a semantic `<button>` element (web platform)
+2. THE Button_VerticalListItem SHALL NOT support disabled states (unavailable options should be hidden, not disabled)
+3. WHEN Button_VerticalListItem is focused THEN screen readers SHALL announce the label and current state
+4. THE Selection_Indicator icon SHALL be marked as decorative with `aria-hidden="true"`
 
-### Requirement 18: Cross-Platform Consistency
+### Requirement 11: RTL Support (Web Platform)
 
-**User Story**: As a product designer, I want buttons to maintain consistent visual design across all platforms, so that the brand experience remains unified.
-
-#### Acceptance Criteria
-
-1. WHEN a Vertical List Button renders on any platform THEN the component SHALL use identical token values for sizing, spacing, typography, and colors
-2. WHEN a Vertical List Button renders on any platform THEN the component SHALL maintain identical visual proportions (height, padding, border radius)
-3. WHEN a Vertical List Button renders on any platform THEN the component SHALL follow True Native Architecture with separate platform implementations
-
-### Requirement 19: Stemma Compliance
-
-**User Story**: As a design system maintainer, I want the component to be Stemma compliant, so that it integrates properly with the component registry and validation system.
+**User Story**: As a developer building for international audiences, I want the component to support right-to-left layouts, so that the interface works correctly in RTL languages.
 
 #### Acceptance Criteria
 
-1. WHEN the component is registered THEN it SHALL use the Stemma naming convention `Button-VerticalList`
-2. WHEN the component is registered THEN it SHALL include required Stemma metadata (category, description, status)
-3. WHEN the component defines mode variants THEN it SHALL register `tap`, `select`, and `multiSelect` as valid mode values with Stemma
-4. WHEN the component is validated THEN it SHALL pass all Stemma System validators
-5. WHEN the component exposes props THEN it SHALL document all props with types and descriptions in Stemma-compatible format
+1. THE web implementation SHALL use CSS logical properties for padding (`padding-block-start`, `padding-block-end`, `padding-inline-start`, `padding-inline-end`)
+2. WHEN rendered in RTL context THEN leadingIcon SHALL appear on the right and Selection_Indicator on the left
+3. THE layout SHALL automatically adapt to document direction without additional configuration
 
-### Requirement 20: Documentation
+### Requirement 12: Event Handling
 
-**User Story**: As a developer, I want comprehensive documentation for the component, so that I can understand how to use it correctly and consistently.
+**User Story**: As a developer, I want the button to emit events for user interactions, so that the parent pattern can respond appropriately.
 
 #### Acceptance Criteria
 
-1. WHEN the component is released THEN it SHALL include a README.md with usage guidelines
-2. WHEN the component documentation is created THEN it SHALL include code examples for each interaction mode (Tap, Select, Multi-Select)
-3. WHEN the component documentation is created THEN it SHALL include code examples for each platform (web, iOS, Android)
-4. WHEN the component documentation is created THEN it SHALL include accessibility considerations and screen reader behavior
-5. WHEN the component documentation is created THEN it SHALL include do's and don'ts for common use cases
-6. WHEN the component documentation is created THEN it SHALL include visual examples showing all states (rest, hover, pressed, selected, focus)
+1. WHEN user clicks/taps Button_VerticalListItem THEN it SHALL call the onClick callback if provided
+2. WHEN Button_VerticalListItem receives focus THEN it SHALL call the onFocus callback if provided
+3. WHEN Button_VerticalListItem loses focus THEN it SHALL call the onBlur callback if provided
 
 ---
 
-## New Semantic Tokens Required
+## Token Dependencies
 
-### Select Color Token Family
+### Existing Tokens Required
 
-The following semantic tokens must be created for selection state styling:
+| Token | Purpose |
+|-------|---------|
+| `color.background` | Rest state background |
+| `color.text.default` | Rest state text color |
+| `color.text.muted` | Description text color |
+| `color.border` | Select mode rest state border |
+| `color.select.selected.strong` | Selected state foreground |
+| `color.select.selected.subtle` | Selected state background |
+| `color.select.notSelected.strong` | Not-selected state foreground |
+| `color.select.notSelected.subtle` | Not-selected state background |
+| `color.error.strong` | Error state foreground |
+| `color.error.subtle` | Error state background |
+| `color.icon.opticalBalance` | Icon color adjustment |
+| `blend.hoverDarker` | Hover overlay |
+| `blend.pressedDarker` | Pressed overlay |
+| `accessibility.focus.width` | Focus outline width |
+| `accessibility.focus.offset` | Focus outline offset |
+| `accessibility.focus.color` | Focus outline color |
+| `accessibility.tapAreaRecommended` | Minimum touch target |
+| `borderDefault` | 1px border width |
+| `borderEmphasis` | 2px border width |
+| `radiusNormal` | Border radius |
+| `space.inset.200` | Inline padding |
+| `space.grouped.loose` | Internal spacing |
+| `typography.buttonMd` | Label typography |
+| `typography.bodySm` | Description typography |
 
-| Token | Primitive Reference | Hex Value | Purpose |
-|-------|---------------------|-----------|---------|
-| `color.select.selected` | `cyan400` | #00C0CC | Foreground color for selected state (label text, border, checkmark base) |
-| `color.select.selected.background` | `cyan100` | #CCFBFF | Background fill for selected state |
-| `color.select.notSelected` | `gray200` | #68658A | Foreground color for not-selected state (label text in Select mode) |
-| `color.select.notSelected.background` | `gray100` | #B8B6C8 | Background fill for not-selected state (Select mode) |
+### New Tokens Required
 
-### Component Tokens Required
+| Token | Purpose | Specification |
+|-------|---------|---------------|
+| `motion.selectionTransition` | Selection state animation | duration: 250ms, easing: standard |
 
-| Token | References | Purpose |
-|-------|------------|---------|
-| `verticalListButton.padding.vertical` | `space075` | Top and bottom internal padding |
+### Component Tokens (Defined in Component)
+
+| Token | Formula | Value | Purpose |
+|-------|---------|-------|---------|
+| `verticalListItem.paddingBlock.rest` | `SPACING_BASE_VALUE * 1.375` | 11 | Block padding at rest state (with 1px border) |
+| `verticalListItem.paddingBlock.selected` | references `space125` | 10 | Block padding when selected (with 2px border) |
+
+**Note**: The 11px padding value uses the `TokenWithValue` pattern in `defineComponentTokens()` with the formula `SPACING_BASE_VALUE * 1.375`. This conforms to the spacing family's mathematical foundation and passes validation. The `paddingBlock.selected` token references the existing `space125` primitive.
 
 ---
 
-## Dependencies
+## Platform Considerations
 
-### Icon Component
-- **Usage**: All icons (leading icons, checkmark) rendered via Icon component
-- **Integration**: Icon color inheritance, optical balance blend application
-- **Reference**: `src/components/core/Icon/`
+### Web
+- Semantic `<button>` element
+- CSS logical properties for RTL support
+- CSS custom properties for theming
+- CSS transitions for animation
+- `:focus-visible` for keyboard focus
 
-### Icon Size Tokens
-- **Usage**: Icon sizing via formula (`fontSize × lineHeight` of paired typography)
-- **Reference**: `src/tokens/semantic/IconSizeTokens.ts`
+### iOS
+- Native button styling with SwiftUI
+- `strokeBorder` for border rendering (inside view bounds)
+- VoiceOver: label and state announced
+- SwiftUI animation for state transitions
 
-### Accessibility Tokens
-- **Usage**: Focus state styling (`accessibility.focus.*` tokens), touch target sizing (`accessibility.tapAreaRecommended`)
-- **Reference**: `src/tokens/semantic/AccessibilityTokens.ts`
+### Android
+- Material-style ripple effects
+- Border modifier draws inside composable bounds
+- TalkBack: label and state announced
+- Compose animation for state transitions
 
 ---
 
-*This requirements document provides comprehensive EARS-format requirements with acceptance criteria for the Vertical List Buttons component family.*
+*This requirements document captures component-level behavior. Selection logic, mode management, and container-level accessibility are owned by the Vertical List Buttons Pattern (XXX-vertical-list-buttons-pattern).*
