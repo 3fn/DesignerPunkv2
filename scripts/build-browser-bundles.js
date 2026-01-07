@@ -101,40 +101,94 @@ async function buildBundle(options) {
 /**
  * Copy token CSS file to browser distribution
  * Tries multiple source locations for flexibility
+ * Merges DesignTokens.web.css and ComponentTokens.web.css into a single tokens.css
  * @returns {boolean} True if copy succeeded
  */
 function copyTokenCSS() {
-  // Possible source locations for the token CSS file
+  // Possible source locations for the design token CSS file
   // Priority order: output/ (primary), dist/ (fallback)
-  const possibleSources = [
+  const possibleDesignTokenSources = [
     'output/DesignTokens.web.css',
     'dist/DesignTokens.web.css',
     'output/web/DesignTokens.web.css',
     'dist/web/DesignTokens.web.css'
   ];
   
+  // Possible source locations for the component token CSS file
+  const possibleComponentTokenSources = [
+    'output/ComponentTokens.web.css',
+    'dist/ComponentTokens.web.css',
+    'output/web/ComponentTokens.web.css',
+    'dist/web/ComponentTokens.web.css'
+  ];
+  
   const destPath = path.join(OUTPUT_DIR, 'tokens.css');
   
-  // Find the first existing source file
-  let sourcePath = null;
-  for (const candidate of possibleSources) {
+  // Find the first existing design token source file
+  let designTokenSourcePath = null;
+  for (const candidate of possibleDesignTokenSources) {
     if (fs.existsSync(candidate)) {
-      sourcePath = candidate;
+      designTokenSourcePath = candidate;
       break;
     }
   }
   
-  if (!sourcePath) {
-    console.warn(`⚠️  Token CSS not found in any of these locations:`);
-    for (const candidate of possibleSources) {
+  if (!designTokenSourcePath) {
+    console.warn(`⚠️  Design Token CSS not found in any of these locations:`);
+    for (const candidate of possibleDesignTokenSources) {
       console.warn(`      - ${candidate}`);
     }
     console.warn('   Run the token build first to generate DesignTokens.web.css');
     return false;
   }
   
-  fs.copyFileSync(sourcePath, destPath);
-  console.log(`      Copied from: ${sourcePath}`);
+  // Find the first existing component token source file (optional)
+  let componentTokenSourcePath = null;
+  for (const candidate of possibleComponentTokenSources) {
+    if (fs.existsSync(candidate)) {
+      componentTokenSourcePath = candidate;
+      break;
+    }
+  }
+  
+  // Read design tokens
+  let combinedContent = fs.readFileSync(designTokenSourcePath, 'utf-8');
+  console.log(`      Copied design tokens from: ${designTokenSourcePath}`);
+  
+  // Append component tokens if they exist
+  if (componentTokenSourcePath) {
+    const componentContent = fs.readFileSync(componentTokenSourcePath, 'utf-8');
+    
+    // Extract the :root { ... } content from component tokens and merge
+    // Component tokens CSS has its own :root block, we need to merge them
+    const componentRootMatch = componentContent.match(/:root\s*\{([^}]*(?:\{[^}]*\}[^}]*)*)\}/s);
+    
+    if (componentRootMatch) {
+      // Insert component tokens before the closing } of the design tokens :root block
+      const componentTokensContent = componentRootMatch[1];
+      
+      // Find the last :root closing brace in design tokens and insert before it
+      const lastRootClose = combinedContent.lastIndexOf('}');
+      if (lastRootClose !== -1) {
+        combinedContent = 
+          combinedContent.slice(0, lastRootClose) + 
+          '\n\n  /* ============================================\n' +
+          '   * COMPONENT TOKENS\n' +
+          '   * Generated from ComponentTokenRegistry\n' +
+          '   * ============================================ */\n' +
+          componentTokensContent +
+          '\n' +
+          combinedContent.slice(lastRootClose);
+      }
+    }
+    
+    console.log(`      Merged component tokens from: ${componentTokenSourcePath}`);
+  } else {
+    console.log(`      Note: No component tokens found (ComponentTokens.web.css)`);
+  }
+  
+  // Write combined content
+  fs.writeFileSync(destPath, combinedContent);
   
   // Fix color token values (temporary workaround for token generation issue)
   // The token generator outputs JSON objects for color tokens instead of hex values

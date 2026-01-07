@@ -144,8 +144,12 @@ This component is consumed by the Vertical List Buttons Pattern (XXX-vertical-li
 2. THE Button_VerticalListItem SHALL NOT support disabled states (unavailable options should be hidden, not disabled)
 3. WHEN Button_VerticalListItem is focused THEN screen readers SHALL announce the label and current state
 4. THE Selection_Indicator icon SHALL be marked as decorative with `aria-hidden="true"`
+5. WHEN using VoiceOver on iOS THEN Button_VerticalListItem SHALL announce the label and current selection state
+6. WHEN using TalkBack on Android THEN Button_VerticalListItem SHALL announce the label and current selection state
+7. THE iOS implementation SHALL use native SwiftUI accessibility modifiers for VoiceOver support
+8. THE Android implementation SHALL use Compose semantics for TalkBack support
 
-### Requirement 11: RTL Support (Web Platform)
+### Requirement 11: RTL Support
 
 **User Story**: As a developer building for international audiences, I want the component to support right-to-left layouts, so that the interface works correctly in RTL languages.
 
@@ -154,6 +158,10 @@ This component is consumed by the Vertical List Buttons Pattern (XXX-vertical-li
 1. THE web implementation SHALL use CSS logical properties for padding (`padding-block-start`, `padding-block-end`, `padding-inline-start`, `padding-inline-end`)
 2. WHEN rendered in RTL context THEN leadingIcon SHALL appear on the right and Selection_Indicator on the left
 3. THE layout SHALL automatically adapt to document direction without additional configuration
+4. THE iOS implementation SHALL use SwiftUI's automatic RTL layout support via `Environment(\.layoutDirection)`
+5. THE Android implementation SHALL use Compose's automatic RTL layout support via `LocalLayoutDirection`
+6. WHEN iOS app language is RTL THEN the layout SHALL mirror automatically using SwiftUI's built-in RTL handling
+7. WHEN Android app language is RTL THEN the layout SHALL mirror automatically using Compose's built-in RTL handling
 
 ### Requirement 12: Event Handling
 
@@ -164,6 +172,32 @@ This component is consumed by the Vertical List Buttons Pattern (XXX-vertical-li
 1. WHEN user clicks/taps Button_VerticalListItem THEN it SHALL call the onClick callback if provided
 2. WHEN Button_VerticalListItem receives focus THEN it SHALL call the onFocus callback if provided
 3. WHEN Button_VerticalListItem loses focus THEN it SHALL call the onBlur callback if provided
+
+### Requirement 13: Platform-Specific Rendering (iOS)
+
+**User Story**: As an iOS developer, I want the button to use native SwiftUI patterns, so that it integrates seamlessly with the iOS platform.
+
+#### Acceptance Criteria
+
+1. THE iOS implementation SHALL use SwiftUI for native rendering
+2. THE iOS implementation SHALL use `strokeBorder` modifier for border rendering (draws inside view bounds)
+3. WHEN visual state changes THEN iOS implementation SHALL animate using SwiftUI's `withAnimation` with `motion.selectionTransition` timing
+4. THE iOS implementation SHALL support haptic feedback delegation to the parent pattern
+5. THE iOS implementation SHALL use SwiftUI's `@State` or `@Binding` for reactive prop updates
+6. THE iOS implementation SHALL render borders inside the view bounds (not outside) to maintain consistent sizing
+
+### Requirement 14: Platform-Specific Rendering (Android)
+
+**User Story**: As an Android developer, I want the button to use native Jetpack Compose patterns, so that it integrates seamlessly with the Android platform.
+
+#### Acceptance Criteria
+
+1. THE Android implementation SHALL use Jetpack Compose for native rendering
+2. THE Android implementation SHALL apply Material-style ripple effects for touch feedback
+3. WHEN visual state changes THEN Android implementation SHALL animate using Compose's `animateColorAsState` and related animation APIs with `motion.selectionTransition` timing
+4. THE Android implementation SHALL use border modifier that draws inside composable bounds
+5. THE Android implementation SHALL use Compose's `remember` and state hoisting patterns for reactive prop updates
+6. THE Android implementation SHALL ensure proper touch target sizing meets Material Design guidelines (minimum 48dp)
 
 ---
 
@@ -223,18 +257,26 @@ This component is consumed by the Vertical List Buttons Pattern (XXX-vertical-li
 - CSS custom properties for theming
 - CSS transitions for animation
 - `:focus-visible` for keyboard focus
+- Shadow DOM for style encapsulation (web component)
 
 ### iOS
-- Native button styling with SwiftUI
-- `strokeBorder` for border rendering (inside view bounds)
-- VoiceOver: label and state announced
-- SwiftUI animation for state transitions
+- Native SwiftUI implementation
+- `strokeBorder` modifier for border rendering (inside view bounds)
+- VoiceOver: label and state announced via accessibility modifiers
+- SwiftUI `withAnimation` for state transitions using `motion.selectionTransition` timing
+- `Environment(\.layoutDirection)` for automatic RTL support
+- Haptic feedback delegated to parent pattern
+- `@State`/`@Binding` for reactive prop updates
 
 ### Android
-- Material-style ripple effects
+- Native Jetpack Compose implementation
+- Material-style ripple effects via `Modifier.clickable` with `indication`
 - Border modifier draws inside composable bounds
-- TalkBack: label and state announced
-- Compose animation for state transitions
+- TalkBack: label and state announced via Compose semantics
+- Compose animation APIs (`animateColorAsState`, `animateDpAsState`) for state transitions
+- `LocalLayoutDirection` for automatic RTL support
+- State hoisting pattern for reactive prop updates
+- Minimum 48dp touch targets per Material Design guidelines
 
 ---
 

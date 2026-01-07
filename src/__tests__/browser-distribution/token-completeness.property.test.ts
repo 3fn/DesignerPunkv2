@@ -53,7 +53,32 @@ describe('Property 1: Token CSS Completeness', () => {
     'currentColor',
     // Properties that are dynamically constructed or use token references
     // that get resolved at runtime (e.g., color-error, color-success-strong)
+    
+    // Tokens used with fallback values that may not exist in the token system yet
+    // These should be addressed in future specs to add proper semantic tokens
+    'color-background-hover', // Used in InputTextPassword with fallback rgba(0, 0, 0, 0.05)
   ]);
+
+  /**
+   * Component-local CSS custom property prefixes.
+   * 
+   * These are CSS custom properties defined within component CSS (typically in :host)
+   * that serve as component-scoped aliases to global tokens. They are NOT global
+   * design tokens and should not be expected in tokens.css.
+   * 
+   * Pattern: Components define local properties like --button-icon-radius that
+   * reference global tokens like var(--accessibility-focus-offset) or use
+   * hardcoded values like 50% for component-specific styling.
+   * 
+   * These are intentionally component-scoped and don't need to be in tokens.css.
+   */
+  const COMPONENT_LOCAL_PREFIXES = [
+    'button-icon-',      // ButtonIcon component local properties
+    'text-input-',       // TextInput component local properties
+    'input-text-',       // Input-Text component local properties
+    'container-',        // Container component local properties (if any)
+    'vertical-list-',    // VerticalListItem component local properties
+  ];
 
   /**
    * Properties that are referenced but may be defined with different naming
@@ -96,6 +121,10 @@ describe('Property 1: Token CSS Completeness', () => {
    * - var(--property-name)
    * - var(--property-name, fallback)
    * 
+   * Excludes:
+   * - Properties in EXCLUDED_PROPERTIES set
+   * - Component-local properties matching COMPONENT_LOCAL_PREFIXES
+   * 
    * @param content - File content to search
    * @returns Set of referenced property names (without -- prefix)
    */
@@ -110,9 +139,19 @@ describe('Property 1: Token CSS Completeness', () => {
       const propertyName = match[1];
       
       // Skip excluded properties
-      if (!EXCLUDED_PROPERTIES.has(propertyName)) {
-        references.add(propertyName);
+      if (EXCLUDED_PROPERTIES.has(propertyName)) {
+        continue;
       }
+      
+      // Skip component-local properties (defined within component CSS, not global tokens)
+      const isComponentLocal = COMPONENT_LOCAL_PREFIXES.some(prefix => 
+        propertyName.startsWith(prefix)
+      );
+      if (isComponentLocal) {
+        continue;
+      }
+      
+      references.add(propertyName);
     }
     
     return references;

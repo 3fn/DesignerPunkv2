@@ -2,12 +2,27 @@
 /**
  * Generate Platform-Specific Token Files
  * 
- * This script generates DesignTokens files for web, iOS, and Android platforms.
+ * This script generates DesignTokens files for web, iOS, and Android platforms,
+ * as well as ComponentTokens files for component-specific tokens registered
+ * via the Rosetta System's ComponentTokenRegistry.
+ * 
+ * Output files:
+ * - dist/DesignTokens.web.css (primitive + semantic tokens)
+ * - dist/DesignTokens.ios.swift
+ * - dist/DesignTokens.android.kt
+ * - dist/ComponentTokens.web.css (component tokens from registry)
+ * - dist/ComponentTokens.ios.swift
+ * - dist/ComponentTokens.android.kt
  */
 
 import { TokenFileGenerator } from '../src/generators/TokenFileGenerator';
 import * as fs from 'fs';
 import * as path from 'path';
+
+// Import component token files to trigger registration with ComponentTokenRegistry
+// These imports cause defineComponentTokens() to execute, which registers tokens
+import '../src/components/core/ButtonIcon/buttonIcon.tokens';
+import '../src/components/core/Button-VerticalListItem/buttonVerticalListItem.tokens';
 
 async function main() {
   console.log('🚀 Generating platform-specific token files...\n');
@@ -21,7 +36,7 @@ async function main() {
   }
 
   try {
-    // Generate all platform files
+    // Generate all platform files (primitive + semantic tokens)
     const results = generator.generateAll({
       outputDir,
       version: '1.0.0',
@@ -29,15 +44,15 @@ async function main() {
       groupByCategory: true
     });
 
-    // Write files to disk
+    // Write design token files to disk
     for (const result of results) {
       if (result.valid) {
         fs.writeFileSync(result.filePath, result.content, 'utf-8');
       }
     }
 
-    // Report results
-    console.log('📊 Generation Results:\n');
+    // Report design token results
+    console.log('📊 Design Token Generation Results:\n');
     for (const result of results) {
       const status = result.valid ? '✅' : '❌';
       console.log(`${status} ${result.platform.toUpperCase()}`);
@@ -57,8 +72,40 @@ async function main() {
       console.log('');
     }
 
-    const allValid = results.every((r: any) => r.valid);
-    if (allValid) {
+    // Generate component tokens (from ComponentTokenRegistry)
+    console.log('📊 Component Token Generation Results:\n');
+    const componentResults = generator.generateComponentTokens({
+      outputDir,
+      version: '1.0.0',
+      includeComments: true
+    });
+
+    // Write component token files to disk
+    for (const result of componentResults) {
+      if (result.valid) {
+        fs.writeFileSync(result.filePath, result.content, 'utf-8');
+      }
+    }
+
+    // Report component token results
+    for (const result of componentResults) {
+      const status = result.valid ? '✅' : '❌';
+      console.log(`${status} ${result.platform.toUpperCase()} Component Tokens`);
+      console.log(`   File: ${result.filePath}`);
+      console.log(`   Tokens: ${result.tokenCount} component tokens`);
+      
+      if (result.errors && result.errors.length > 0) {
+        console.log(`   ❌ Errors: ${result.errors.length}`);
+        result.errors.forEach((e: string) => console.log(`      - ${e}`));
+      }
+      
+      console.log('');
+    }
+
+    const allDesignValid = results.every((r: any) => r.valid);
+    const allComponentValid = componentResults.every((r: any) => r.valid);
+    
+    if (allDesignValid && allComponentValid) {
       console.log('✨ All platform files generated successfully!');
       process.exit(0);
     } else {

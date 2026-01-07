@@ -26,5 +26,23 @@ export {
 } from './buttonVerticalListItem.tokens';
 export type { VerticalListItemPaddingBlockVariant } from './buttonVerticalListItem.tokens';
 
-// Platform implementations are imported directly from their platform-specific paths
+// Export visual state mapping (Task 2.1)
+export {
+  visualStateMap,
+  getVisualStateStyles,
+  isCheckmarkVisible,
+  getVisualStateCssClass,
+  isSelectModeState,
+  isMultiSelectModeState,
+  requiresEmphasisBorder,
+  // Error state overlay (Task 2.2)
+  applyErrorStyles,
+  getVisualStateStylesWithError
+} from './platforms/web/visualStateMapping';
+export type { VisualStateStyles } from './platforms/web/visualStateMapping';
+
+// Export web component (Task 2.3)
+export { ButtonVerticalListItem } from './platforms/web/ButtonVerticalListItem.web';
+
+// Platform implementations can also be imported directly from their platform-specific paths
 // e.g., import { ButtonVerticalListItem } from './platforms/web/ButtonVerticalListItem.web';

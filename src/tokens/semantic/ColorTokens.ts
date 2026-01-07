@@ -309,32 +309,32 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
   },
 
   // Select State Colors (4 tokens) - Spec 038: Vertical List Buttons
-  'color.select.selected': {
-    name: 'color.select.selected',
+  'color.select.selected.strong': {
+    name: 'color.select.selected.strong',
     primitiveReferences: { value: 'cyan400' },
     category: SemanticCategory.COLOR,
     context: 'Foreground color for selected state in selection components',
     description: 'Cyan foreground color for selected state - used for label text, border, and checkmark base in Select/Multi-Select modes'
   },
 
-  'color.select.selected.background': {
-    name: 'color.select.selected.background',
+  'color.select.selected.subtle': {
+    name: 'color.select.selected.subtle',
     primitiveReferences: { value: 'cyan100' },
     category: SemanticCategory.COLOR,
     context: 'Background fill for selected state in selection components',
     description: 'Light cyan background for selected state in Select and Multi-Select modes'
   },
 
-  'color.select.notSelected': {
-    name: 'color.select.notSelected',
+  'color.select.notSelected.strong': {
+    name: 'color.select.notSelected.strong',
     primitiveReferences: { value: 'gray200' },
     category: SemanticCategory.COLOR,
     context: 'Foreground color for not-selected state in Select mode',
     description: 'Gray foreground color for not-selected state - used for label text in Select mode'
   },
 
-  'color.select.notSelected.background': {
-    name: 'color.select.notSelected.background',
+  'color.select.notSelected.subtle': {
+    name: 'color.select.notSelected.subtle',
     primitiveReferences: { value: 'gray100' },
     category: SemanticCategory.COLOR,
     context: 'Background fill for not-selected state in Select mode',

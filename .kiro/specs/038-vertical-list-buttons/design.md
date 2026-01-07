@@ -344,6 +344,36 @@ This ensures the total height (border + padding + content) remains constant at 4
 
 **Validates: Requirements 12.1, 12.2, 12.3**
 
+### Property 18: iOS Native Rendering
+
+*For any* iOS implementation, the component SHALL use SwiftUI with `strokeBorder` modifier for border rendering (inside view bounds) and `withAnimation` for state transitions.
+
+**Validates: Requirements 13.1, 13.2, 13.3, 13.6**
+
+### Property 19: iOS Accessibility
+
+*For any* iOS implementation, VoiceOver SHALL announce the label and current selection state using native SwiftUI accessibility modifiers.
+
+**Validates: Requirements 10.5, 10.7**
+
+### Property 20: Android Native Rendering
+
+*For any* Android implementation, the component SHALL use Jetpack Compose with Material ripple effects and Compose animation APIs for state transitions.
+
+**Validates: Requirements 14.1, 14.2, 14.3**
+
+### Property 21: Android Accessibility
+
+*For any* Android implementation, TalkBack SHALL announce the label and current selection state using Compose semantics.
+
+**Validates: Requirements 10.6, 10.8**
+
+### Property 22: Cross-Platform RTL Support
+
+*For any* platform (Web, iOS, Android), the layout SHALL automatically adapt to RTL context using platform-native mechanisms without additional configuration.
+
+**Validates: Requirements 11.4, 11.5, 11.6, 11.7**
+
 ---
 
 ## Error Handling
@@ -516,6 +546,168 @@ describe('Button-VerticalListItem Web Component', () => {
    - Verify Icon-Base component renders correctly within button
    - Verify icon size prop is passed correctly (`iconBaseSizes.size100`)
    - **Tests contract**: "Icons render at correct size"
+
+### iOS Testing Patterns (SwiftUI)
+
+**Test File**: `VerticalListButtonItemTests.swift`
+
+```swift
+import XCTest
+import SwiftUI
+import ViewInspector
+@testable import DesignerPunk
+
+final class VerticalListButtonItemTests: XCTestCase {
+    
+    func testRendersWithCorrectVisualState() throws {
+        let sut = VerticalListButtonItem(
+            label: "Test Label",
+            visualState: .selected
+        )
+        
+        let view = try sut.inspect()
+        // Verify selected state styling is applied
+        // Test behavior: correct appearance for state
+    }
+    
+    func testVoiceOverAccessibility() throws {
+        let sut = VerticalListButtonItem(
+            label: "Settings",
+            visualState: .selected
+        )
+        
+        let view = try sut.inspect()
+        let accessibilityLabel = try view.accessibilityLabel().string()
+        let accessibilityValue = try view.accessibilityValue().string()
+        
+        XCTAssertEqual(accessibilityLabel, "Settings")
+        XCTAssertEqual(accessibilityValue, "Selected")
+    }
+    
+    func testPaddingCompensation() throws {
+        // Test that padding adjusts when border width changes
+        let restState = VerticalListButtonItem(label: "Test", visualState: .rest)
+        let selectedState = VerticalListButtonItem(label: "Test", visualState: .selected)
+        
+        // Verify padding values differ based on border width
+        // Rest: 11px padding (1px border)
+        // Selected: 10px padding (2px border)
+    }
+    
+    func testRTLLayoutAdaptation() throws {
+        // Test that layout mirrors in RTL context
+        let sut = VerticalListButtonItem(
+            label: "Test",
+            leadingIcon: "settings",
+            visualState: .selected
+        )
+        
+        // Verify leading icon appears on right in RTL
+        // Verify checkmark appears on left in RTL
+    }
+}
+```
+
+### Android Testing Patterns (Compose)
+
+**Test File**: `VerticalListButtonItemTest.kt`
+
+```kotlin
+package com.designerpunk.components.button
+
+import androidx.compose.ui.test.*
+import androidx.compose.ui.test.junit4.createComposeRule
+import org.junit.Rule
+import org.junit.Test
+
+class VerticalListButtonItemTest {
+    
+    @get:Rule
+    val composeTestRule = createComposeRule()
+    
+    @Test
+    fun rendersWithCorrectVisualState() {
+        composeTestRule.setContent {
+            VerticalListButtonItem(
+                label = "Test Label",
+                visualState = VisualState.SELECTED
+            )
+        }
+        
+        // Verify selected state styling is applied
+        composeTestRule.onNodeWithText("Test Label").assertExists()
+    }
+    
+    @Test
+    fun talkBackAccessibility() {
+        composeTestRule.setContent {
+            VerticalListButtonItem(
+                label = "Settings",
+                visualState = VisualState.SELECTED
+            )
+        }
+        
+        composeTestRule
+            .onNodeWithContentDescription("Settings")
+            .assertExists()
+        
+        // Verify state description for TalkBack
+        composeTestRule
+            .onNode(hasStateDescription("Selected"))
+            .assertExists()
+    }
+    
+    @Test
+    fun paddingCompensation() {
+        // Test that padding adjusts when border width changes
+        composeTestRule.setContent {
+            Column {
+                VerticalListButtonItem(
+                    label = "Rest",
+                    visualState = VisualState.REST
+                )
+                VerticalListButtonItem(
+                    label = "Selected",
+                    visualState = VisualState.SELECTED
+                )
+            }
+        }
+        
+        // Verify both buttons have same total height (48dp)
+        // despite different border widths
+    }
+    
+    @Test
+    fun rtlLayoutAdaptation() {
+        composeTestRule.setContent {
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                VerticalListButtonItem(
+                    label = "Test",
+                    leadingIcon = "settings",
+                    visualState = VisualState.SELECTED
+                )
+            }
+        }
+        
+        // Verify leading icon appears on right in RTL
+        // Verify checkmark appears on left in RTL
+    }
+    
+    @Test
+    fun materialRippleEffect() {
+        composeTestRule.setContent {
+            VerticalListButtonItem(
+                label = "Test",
+                visualState = VisualState.REST,
+                onClick = {}
+            )
+        }
+        
+        // Verify ripple indication is applied on click
+        composeTestRule.onNodeWithText("Test").performClick()
+    }
+}
+```
 
 ### What NOT to Test
 
@@ -702,6 +894,487 @@ class VerticalListButtonItem extends HTMLElement {
   outline: var(--accessibility-focus-width) solid var(--accessibility-focus-color);
   outline-offset: var(--accessibility-focus-offset);
 }
+```
+
+### iOS Implementation (SwiftUI)
+
+```swift
+import SwiftUI
+
+/// Visual state for the vertical list button item
+enum VisualState: String {
+    case rest
+    case selected
+    case notSelected
+    case checked
+    case unchecked
+}
+
+/// Checkmark transition behavior
+enum CheckmarkTransition {
+    case fade
+    case instant
+}
+
+/// Button-VerticalListItem for iOS
+/// A "dumb" presentational component that renders visual states based on props.
+struct VerticalListButtonItem: View {
+    // Content
+    let label: String
+    var description: String?
+    var leadingIcon: String?
+    
+    // Visual state (controlled by parent)
+    let visualState: VisualState
+    
+    // Error state
+    var error: Bool = false
+    
+    // Animation control
+    var checkmarkTransition: CheckmarkTransition = .fade
+    var transitionDelay: Double = 0
+    
+    // Events
+    var onClick: (() -> Void)?
+    var onFocus: (() -> Void)?
+    var onBlur: (() -> Void)?
+    
+    // Design tokens (injected from Rosetta-generated values)
+    @Environment(\.designTokens) private var tokens
+    @Environment(\.layoutDirection) private var layoutDirection
+    
+    // Computed styles based on visual state
+    private var styles: VisualStateStyles {
+        let baseStyles = visualStateMap[visualState] ?? .rest
+        return error ? applyErrorStyles(baseStyles) : baseStyles
+    }
+    
+    // Padding compensation for border width changes
+    private var paddingBlock: CGFloat {
+        let requiresEmphasisBorder = visualState == .selected || 
+            (error && isSelectMode)
+        return requiresEmphasisBorder ? 10 : 11  // 10px for 2px border, 11px for 1px border
+    }
+    
+    private var isSelectMode: Bool {
+        [.rest, .selected, .notSelected].contains(visualState)
+    }
+    
+    var body: some View {
+        Button(action: { onClick?() }) {
+            HStack(spacing: tokens.spaceGroupedLoose) {
+                // Leading icon (optional)
+                if let iconName = leadingIcon {
+                    IconBase(name: iconName, size: tokens.iconSize100)
+                        .foregroundColor(styles.iconColor)
+                }
+                
+                // Content (label + description)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(label)
+                        .font(tokens.typographyButtonMd)
+                        .foregroundColor(styles.labelColor)
+                    
+                    if let desc = description {
+                        Text(desc)
+                            .font(tokens.typographyBodySm)
+                            .foregroundColor(tokens.colorTextMuted)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
+                // Selection indicator (checkmark)
+                if styles.checkmarkVisible {
+                    IconBase(name: "check", size: tokens.iconSize100)
+                        .foregroundColor(styles.iconColor)
+                        .opacity(checkmarkTransition == .fade ? 1 : 1)
+                        .transition(.opacity)
+                        .accessibilityHidden(true)
+                }
+            }
+            .padding(.vertical, paddingBlock)
+            .padding(.horizontal, tokens.spaceInset200)
+            .frame(minHeight: tokens.tapAreaRecommended)
+            .background(styles.background)
+            .overlay(
+                // Border using strokeBorder (draws inside view bounds)
+                RoundedRectangle(cornerRadius: tokens.radiusNormal)
+                    .strokeBorder(
+                        styles.borderColor,
+                        lineWidth: styles.borderWidth
+                    )
+            )
+            .cornerRadius(tokens.radiusNormal)
+        }
+        .buttonStyle(VerticalListButtonStyle())
+        .animation(
+            .easeInOut(duration: tokens.motionSelectionTransitionDuration)
+                .delay(transitionDelay),
+            value: visualState
+        )
+        .animation(
+            .easeInOut(duration: tokens.motionSelectionTransitionDuration)
+                .delay(transitionDelay),
+            value: error
+        )
+        .accessibilityLabel(label)
+        .accessibilityValue(accessibilityStateDescription)
+    }
+    
+    private var accessibilityStateDescription: String {
+        switch visualState {
+        case .selected: return "Selected"
+        case .notSelected: return "Not selected"
+        case .checked: return "Checked"
+        case .unchecked: return "Unchecked"
+        case .rest: return ""
+        }
+    }
+}
+
+/// Custom button style for hover/pressed states
+struct VerticalListButtonStyle: ButtonStyle {
+    @Environment(\.designTokens) private var tokens
+    
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .brightness(configuration.isPressed ? -0.1 : 0)  // Pressed overlay
+    }
+}
+
+/// Visual state styles structure
+struct VisualStateStyles {
+    let background: Color
+    let borderWidth: CGFloat
+    let borderColor: Color
+    let labelColor: Color
+    let iconColor: Color
+    let checkmarkVisible: Bool
+    
+    static let rest = VisualStateStyles(
+        background: .designToken(.colorBackground),
+        borderWidth: 1,
+        borderColor: .clear,
+        labelColor: .designToken(.colorTextDefault),
+        iconColor: .designToken(.colorTextDefault),
+        checkmarkVisible: false
+    )
+    
+    // ... other states defined similarly
+}
+```
+
+### Android Implementation (Jetpack Compose)
+
+```kotlin
+package com.designerpunk.components.button
+
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
+
+/**
+ * Visual state for the vertical list button item
+ */
+enum class VisualState {
+    REST, SELECTED, NOT_SELECTED, CHECKED, UNCHECKED
+}
+
+/**
+ * Checkmark transition behavior
+ */
+enum class CheckmarkTransition {
+    FADE, INSTANT
+}
+
+/**
+ * Button-VerticalListItem for Android
+ * A "dumb" presentational component that renders visual states based on props.
+ * 
+ * @param label Primary button text (required)
+ * @param description Secondary explanatory text (optional)
+ * @param leadingIcon Icon name for leading icon (optional)
+ * @param visualState Current visual state controlled by parent
+ * @param error Whether error styling should be applied
+ * @param checkmarkTransition How checkmark should animate when hiding
+ * @param transitionDelay Delay before transition starts (milliseconds)
+ * @param onClick Callback when button is clicked
+ * @param onFocus Callback when button receives focus
+ * @param onBlur Callback when button loses focus
+ * @param modifier Modifier for the component
+ */
+@Composable
+fun VerticalListButtonItem(
+    label: String,
+    visualState: VisualState,
+    modifier: Modifier = Modifier,
+    description: String? = null,
+    leadingIcon: String? = null,
+    error: Boolean = false,
+    checkmarkTransition: CheckmarkTransition = CheckmarkTransition.FADE,
+    transitionDelay: Int = 0,
+    onClick: (() -> Unit)? = null,
+    onFocus: (() -> Unit)? = null,
+    onBlur: (() -> Unit)? = null
+) {
+    // Design tokens from Rosetta
+    val tokens = LocalDesignTokens.current
+    val layoutDirection = LocalLayoutDirection.current
+    
+    // Compute styles based on visual state and error
+    val styles = remember(visualState, error) {
+        computeStyles(visualState, error, tokens)
+    }
+    
+    // Animated values for smooth transitions
+    val animationSpec = tween<Color>(
+        durationMillis = tokens.motionSelectionTransitionDuration,
+        delayMillis = transitionDelay
+    )
+    val dpAnimationSpec = tween<Dp>(
+        durationMillis = tokens.motionSelectionTransitionDuration,
+        delayMillis = transitionDelay
+    )
+    
+    val animatedBackground by animateColorAsState(
+        targetValue = styles.background,
+        animationSpec = animationSpec,
+        label = "background"
+    )
+    val animatedBorderColor by animateColorAsState(
+        targetValue = styles.borderColor,
+        animationSpec = animationSpec,
+        label = "borderColor"
+    )
+    val animatedBorderWidth by animateDpAsState(
+        targetValue = styles.borderWidth,
+        animationSpec = dpAnimationSpec,
+        label = "borderWidth"
+    )
+    val animatedLabelColor by animateColorAsState(
+        targetValue = styles.labelColor,
+        animationSpec = animationSpec,
+        label = "labelColor"
+    )
+    
+    // Padding compensation for border width changes
+    val paddingBlock = if (styles.borderWidth == 2.dp) 10.dp else 11.dp
+    
+    // Interaction source for ripple effect
+    val interactionSource = remember { MutableInteractionSource() }
+    
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .heightIn(min = tokens.tapAreaRecommended)
+            .clip(RoundedCornerShape(tokens.radiusNormal))
+            .background(animatedBackground)
+            .border(
+                width = animatedBorderWidth,
+                color = animatedBorderColor,
+                shape = RoundedCornerShape(tokens.radiusNormal)
+            )
+            .clickable(
+                interactionSource = interactionSource,
+                indication = rememberRipple(),  // Material ripple effect
+                onClick = { onClick?.invoke() }
+            )
+            .padding(
+                vertical = paddingBlock,
+                horizontal = tokens.spaceInset200
+            )
+            .semantics {
+                contentDescription = label
+                stateDescription = getAccessibilityStateDescription(visualState)
+            }
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(tokens.spaceGroupedLoose),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Leading icon (optional)
+            leadingIcon?.let { iconName ->
+                IconBase(
+                    name = iconName,
+                    size = tokens.iconSize100,
+                    color = animatedLabelColor
+                )
+            }
+            
+            // Content (label + description)
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = label,
+                    style = tokens.typographyButtonMd,
+                    color = animatedLabelColor
+                )
+                
+                description?.let { desc ->
+                    Text(
+                        text = desc,
+                        style = tokens.typographyBodySm,
+                        color = tokens.colorTextMuted
+                    )
+                }
+            }
+            
+            // Selection indicator (checkmark)
+            if (styles.checkmarkVisible) {
+                IconBase(
+                    name = "check",
+                    size = tokens.iconSize100,
+                    color = styles.iconColor,
+                    modifier = Modifier.semantics { 
+                        // Mark as decorative (aria-hidden equivalent)
+                    }
+                )
+            }
+        }
+    }
+}
+
+/**
+ * Compute visual styles based on state and error
+ */
+private fun computeStyles(
+    visualState: VisualState,
+    error: Boolean,
+    tokens: DesignTokens
+): VisualStateStyles {
+    val baseStyles = when (visualState) {
+        VisualState.REST -> VisualStateStyles(
+            background = tokens.colorBackground,
+            borderWidth = 1.dp,
+            borderColor = Color.Transparent,
+            labelColor = tokens.colorTextDefault,
+            iconColor = tokens.colorTextDefault,
+            checkmarkVisible = false
+        )
+        VisualState.SELECTED -> VisualStateStyles(
+            background = tokens.colorSelectSelectedSubtle,
+            borderWidth = 2.dp,
+            borderColor = tokens.colorSelectSelectedStrong,
+            labelColor = tokens.colorSelectSelectedStrong,
+            iconColor = tokens.colorSelectSelectedStrong,
+            checkmarkVisible = true
+        )
+        VisualState.NOT_SELECTED -> VisualStateStyles(
+            background = tokens.colorSelectNotSelectedSubtle,
+            borderWidth = 1.dp,
+            borderColor = Color.Transparent,
+            labelColor = tokens.colorSelectNotSelectedStrong,
+            iconColor = tokens.colorSelectNotSelectedStrong,
+            checkmarkVisible = false
+        )
+        VisualState.CHECKED -> VisualStateStyles(
+            background = tokens.colorSelectSelectedSubtle,
+            borderWidth = 1.dp,
+            borderColor = Color.Transparent,
+            labelColor = tokens.colorSelectSelectedStrong,
+            iconColor = tokens.colorSelectSelectedStrong,
+            checkmarkVisible = true
+        )
+        VisualState.UNCHECKED -> VisualStateStyles(
+            background = tokens.colorBackground,
+            borderWidth = 1.dp,
+            borderColor = Color.Transparent,
+            labelColor = tokens.colorTextDefault,
+            iconColor = tokens.colorTextDefault,
+            checkmarkVisible = false
+        )
+    }
+    
+    // Apply error styling if needed
+    return if (error) {
+        applyErrorStyles(baseStyles, visualState, tokens)
+    } else {
+        baseStyles
+    }
+}
+
+/**
+ * Apply error styling based on mode
+ */
+private fun applyErrorStyles(
+    baseStyles: VisualStateStyles,
+    visualState: VisualState,
+    tokens: DesignTokens
+): VisualStateStyles {
+    val isSelectMode = visualState in listOf(
+        VisualState.REST, 
+        VisualState.SELECTED, 
+        VisualState.NOT_SELECTED
+    )
+    val isMultiSelectMode = visualState in listOf(
+        VisualState.CHECKED, 
+        VisualState.UNCHECKED
+    )
+    
+    return when {
+        isSelectMode -> baseStyles.copy(
+            background = tokens.colorErrorSubtle,
+            borderWidth = 2.dp,
+            borderColor = tokens.colorErrorStrong,
+            labelColor = tokens.colorErrorStrong,
+            iconColor = tokens.colorErrorStrong
+        )
+        isMultiSelectMode -> baseStyles.copy(
+            labelColor = tokens.colorErrorStrong,
+            iconColor = tokens.colorErrorStrong
+        )
+        else -> baseStyles  // Tap mode: no error effect
+    }
+}
+
+/**
+ * Get accessibility state description for TalkBack
+ */
+private fun getAccessibilityStateDescription(visualState: VisualState): String {
+    return when (visualState) {
+        VisualState.SELECTED -> "Selected"
+        VisualState.NOT_SELECTED -> "Not selected"
+        VisualState.CHECKED -> "Checked"
+        VisualState.UNCHECKED -> "Unchecked"
+        VisualState.REST -> ""
+    }
+}
+
+/**
+ * Visual state styles data class
+ */
+data class VisualStateStyles(
+    val background: Color,
+    val borderWidth: Dp,
+    val borderColor: Color,
+    val labelColor: Color,
+    val iconColor: Color,
+    val checkmarkVisible: Boolean
+)
 ```
 
 ---
