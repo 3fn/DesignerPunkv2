@@ -457,7 +457,7 @@ describe('Button-VerticalListItem Integration Tests', () => {
       let style = shadowButton?.getAttribute('style') || '';
       
       // Rest state: 1px border, 11px padding
-      expect(style).toContain('--vlbi-border-width: var(--border-border-default)');
+      expect(style).toContain('--vlbi-border-width: var(--border-default)');
       expect(style).toContain('--vlbi-padding-block: 11px');
       
       cleanupVerticalListButtonItem(button);
@@ -471,7 +471,7 @@ describe('Button-VerticalListItem Integration Tests', () => {
       style = shadowButton?.getAttribute('style') || '';
       
       // Selected state: 2px border, 10px padding
-      expect(style).toContain('--vlbi-border-width: var(--border-border-emphasis)');
+      expect(style).toContain('--vlbi-border-width: var(--border-emphasis)');
       expect(style).toContain('--vlbi-padding-block: 10px');
     });
   });

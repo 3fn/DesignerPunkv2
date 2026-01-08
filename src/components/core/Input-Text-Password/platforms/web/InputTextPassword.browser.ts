@@ -179,7 +179,7 @@ class InputTextPassword extends HTMLElement {
           align-items: center;
           min-height: var(--tap-area-comfortable);
           background: var(--color-background);
-          border: var(--border-border-default) solid var(--color-border);
+          border: var(--border-default) solid var(--color-border);
           border-radius: var(--radius-150);
           padding-top: var(--space-inset-200);
           padding-bottom: var(--space-inset-none);

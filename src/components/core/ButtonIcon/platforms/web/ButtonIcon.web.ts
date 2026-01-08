@@ -378,8 +378,8 @@ export class ButtonIcon extends HTMLElement {
         --button-icon-transition: var(--duration-150);
         
         /* Border tokens */
-        --button-icon-border-default: var(--border-border-default);
-        --button-icon-border-emphasis: var(--border-border-emphasis);
+        --button-icon-border-default: var(--border-default);
+        --button-icon-border-emphasis: var(--border-emphasis);
         
         /* Color tokens */
         --button-icon-color-primary: var(--color-primary);

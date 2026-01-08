@@ -50,7 +50,7 @@ describe('Visual State Mapping', () => {
       const styles = getVisualStateStyles('rest');
       
       expect(styles.background).toBe('var(--color-background)');
-      expect(styles.borderWidth).toBe('var(--border-border-default)');
+      expect(styles.borderWidth).toBe('var(--border-default)');
       expect(styles.borderColor).toBe('transparent');
       expect(styles.labelColor).toBe('var(--color-text-default)');
       expect(styles.checkmarkVisible).toBe(false);
@@ -61,7 +61,7 @@ describe('Visual State Mapping', () => {
       const styles = getVisualStateStyles('selected');
       
       expect(styles.background).toBe('var(--color-select-selected-subtle)');
-      expect(styles.borderWidth).toBe('var(--border-border-emphasis)');
+      expect(styles.borderWidth).toBe('var(--border-emphasis)');
       expect(styles.borderColor).toBe('var(--color-select-selected-strong)');
       expect(styles.labelColor).toBe('var(--color-select-selected-strong)');
       expect(styles.checkmarkVisible).toBe(true);
@@ -72,7 +72,7 @@ describe('Visual State Mapping', () => {
       const styles = getVisualStateStyles('notSelected');
       
       expect(styles.background).toBe('var(--color-select-not-selected-subtle)');
-      expect(styles.borderWidth).toBe('var(--border-border-default)');
+      expect(styles.borderWidth).toBe('var(--border-default)');
       expect(styles.borderColor).toBe('transparent');
       expect(styles.labelColor).toBe('var(--color-select-not-selected-strong)');
       expect(styles.checkmarkVisible).toBe(false);
@@ -83,7 +83,7 @@ describe('Visual State Mapping', () => {
       const styles = getVisualStateStyles('checked');
       
       expect(styles.background).toBe('var(--color-select-selected-subtle)');
-      expect(styles.borderWidth).toBe('var(--border-border-default)');
+      expect(styles.borderWidth).toBe('var(--border-default)');
       expect(styles.borderColor).toBe('transparent');
       expect(styles.labelColor).toBe('var(--color-select-selected-strong)');
       expect(styles.checkmarkVisible).toBe(true);
@@ -94,7 +94,7 @@ describe('Visual State Mapping', () => {
       const styles = getVisualStateStyles('unchecked');
       
       expect(styles.background).toBe('var(--color-background)');
-      expect(styles.borderWidth).toBe('var(--border-border-default)');
+      expect(styles.borderWidth).toBe('var(--border-default)');
       expect(styles.borderColor).toBe('transparent');
       expect(styles.labelColor).toBe('var(--color-text-default)');
       expect(styles.checkmarkVisible).toBe(false);
@@ -249,7 +249,7 @@ describe('Error State Overlay', () => {
         const errorStyles = applyErrorStyles(baseStyles, 'rest');
         
         expect(errorStyles.background).toBe('var(--color-error-subtle)');
-        expect(errorStyles.borderWidth).toBe('var(--border-border-emphasis)');
+        expect(errorStyles.borderWidth).toBe('var(--border-emphasis)');
         expect(errorStyles.borderColor).toBe('var(--color-error-strong)');
         expect(errorStyles.labelColor).toBe('var(--color-error-strong)');
         expect(errorStyles.iconColor).toBe('var(--color-error-strong)');
@@ -261,7 +261,7 @@ describe('Error State Overlay', () => {
         const errorStyles = applyErrorStyles(baseStyles, 'selected');
         
         expect(errorStyles.background).toBe('var(--color-error-subtle)');
-        expect(errorStyles.borderWidth).toBe('var(--border-border-emphasis)');
+        expect(errorStyles.borderWidth).toBe('var(--border-emphasis)');
         expect(errorStyles.borderColor).toBe('var(--color-error-strong)');
         expect(errorStyles.labelColor).toBe('var(--color-error-strong)');
         expect(errorStyles.iconColor).toBe('var(--color-error-strong)');
@@ -273,7 +273,7 @@ describe('Error State Overlay', () => {
         const errorStyles = applyErrorStyles(baseStyles, 'notSelected');
         
         expect(errorStyles.background).toBe('var(--color-error-subtle)');
-        expect(errorStyles.borderWidth).toBe('var(--border-border-emphasis)');
+        expect(errorStyles.borderWidth).toBe('var(--border-emphasis)');
         expect(errorStyles.borderColor).toBe('var(--color-error-strong)');
         expect(errorStyles.labelColor).toBe('var(--color-error-strong)');
         expect(errorStyles.iconColor).toBe('var(--color-error-strong)');
@@ -400,7 +400,7 @@ describe('Error State Overlay', () => {
       expect(errorStyles.borderColor).toBe('var(--color-error-strong)');
       expect(errorStyles.labelColor).toBe('var(--color-error-strong)');
       expect(errorStyles.iconColor).toBe('var(--color-error-strong)');
-      expect(errorStyles.borderWidth).toBe('var(--border-border-emphasis)');
+      expect(errorStyles.borderWidth).toBe('var(--border-emphasis)');
     });
 
     it('should use consistent error color for label and icon', () => {

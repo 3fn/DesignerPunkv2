@@ -173,15 +173,20 @@ export const radiusCircle = { value: 'radiusHalf' } as RadiusSemanticToken;
 
 /**
  * Semantic radius tokens object for registry integration.
+ * 
+ * Note: Keys use short names (none, subtle, small, etc.) because the
+ * getAllSemanticTokens() function adds a 'radius.' prefix when generating
+ * CSS output. This produces correct CSS variable names like --radius-none
+ * instead of --radius-radius-none.
  */
 export const SemanticRadiusTokens = {
-  radiusNone,
-  radiusSubtle,
-  radiusSmall,
-  radiusNormal,
-  radiusLarge,
-  radiusFull,
-  radiusCircle,
+  none: radiusNone,
+  subtle: radiusSubtle,
+  small: radiusSmall,
+  normal: radiusNormal,
+  large: radiusLarge,
+  full: radiusFull,
+  circle: radiusCircle,
 } as const;
 
 /**

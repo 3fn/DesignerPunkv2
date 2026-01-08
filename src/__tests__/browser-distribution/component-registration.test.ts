@@ -185,7 +185,8 @@ describe('Component Registration', () => {
 
     it('should export all components for UMD global access', () => {
       // Note: Stemma System migration - legacy exports removed, using new naming
-      expect(content).toContain('export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb }');
+      // ButtonVerticalListItem added as part of spec 038
+      expect(content).toContain('export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb, ButtonVerticalListItem }');
       expect(content).toContain('export const Icon = IconBaseElement');
       expect(content).toContain('export const IconBase = IconBaseElement');
       expect(content).toContain('export const Container = ContainerBaseWeb');

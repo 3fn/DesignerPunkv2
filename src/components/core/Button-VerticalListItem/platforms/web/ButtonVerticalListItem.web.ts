@@ -56,16 +56,16 @@ const REQUIRED_CSS_VARIABLES = [
   '--color-select-not-selected-subtle',
   '--color-error-strong',
   '--color-error-subtle',
-  // Border tokens
-  '--border-border-default',
-  '--border-border-emphasis',
+  // Border tokens (semantic)
+  '--border-default',
+  '--border-emphasis',
   // Radius tokens
-  '--radius-normal',
+  '--radius-100',  // radiusNormal = 8px
   // Spacing tokens
   '--space-inset-200',
   '--space-grouped-loose',
   // Accessibility tokens
-  '--accessibility-tap-area-recommended',
+  '--tap-area-recommended',  // 48px touch target
   '--accessibility-focus-width',
   '--accessibility-focus-offset',
   '--accessibility-focus-color',

@@ -36,18 +36,18 @@ export function setupRequiredTokens(): void {
   root.style.setProperty('--color-error-subtle', '#FEF2F2');
   
   // Border tokens
-  root.style.setProperty('--border-border-default', '1px');
-  root.style.setProperty('--border-border-emphasis', '2px');
+  root.style.setProperty('--border-default', '1px');
+  root.style.setProperty('--border-emphasis', '2px');
   
   // Radius tokens
-  root.style.setProperty('--radius-normal', '8px');
+  root.style.setProperty('--radius-100', '8px');
   
   // Spacing tokens
   root.style.setProperty('--space-inset-200', '16px');
   root.style.setProperty('--space-grouped-loose', '12px');
   
   // Accessibility tokens
-  root.style.setProperty('--accessibility-tap-area-recommended', '48px');
+  root.style.setProperty('--tap-area-recommended', '48px');
   root.style.setProperty('--accessibility-focus-width', '2px');
   root.style.setProperty('--accessibility-focus-offset', '2px');
   root.style.setProperty('--accessibility-focus-color', '#2563EB');
@@ -75,18 +75,18 @@ export function cleanupRequiredTokens(): void {
   root.style.removeProperty('--color-error-subtle');
   
   // Border tokens
-  root.style.removeProperty('--border-border-default');
-  root.style.removeProperty('--border-border-emphasis');
+  root.style.removeProperty('--border-default');
+  root.style.removeProperty('--border-emphasis');
   
   // Radius tokens
-  root.style.removeProperty('--radius-normal');
+  root.style.removeProperty('--radius-100');
   
   // Spacing tokens
   root.style.removeProperty('--space-inset-200');
   root.style.removeProperty('--space-grouped-loose');
   
   // Accessibility tokens
-  root.style.removeProperty('--accessibility-tap-area-recommended');
+  root.style.removeProperty('--tap-area-recommended');
   root.style.removeProperty('--accessibility-focus-width');
   root.style.removeProperty('--accessibility-focus-offset');
   root.style.removeProperty('--accessibility-focus-color');

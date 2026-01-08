@@ -63,7 +63,7 @@ export const paddingTokenMap: Record<PaddingValue, string> = {
  * 
  * Note: The double "border" in the token name (border.border.default) is intentional.
  * The first "border" is the category prefix, the second is part of the semantic name.
- * This converts to CSS custom property: --border-border-default
+ * This converts to CSS custom property: --border-default
  * 
  * @see Requirements 2.4, 6.1-6.5
  */

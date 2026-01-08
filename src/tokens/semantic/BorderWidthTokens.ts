@@ -108,12 +108,17 @@ export const borderHeavy = { value: 'borderWidth400' } as BorderWidthSemanticTok
 
 /**
  * Semantic border width tokens object for registry integration.
+ * 
+ * Note: Keys use short names (none, default, emphasis, heavy) because the
+ * getAllSemanticTokens() function adds a 'border.' prefix when generating
+ * CSS output. This produces correct CSS variable names like --border-none
+ * instead of --border-none.
  */
 export const SemanticBorderWidthTokens = {
-  borderNone,
-  borderDefault,
-  borderEmphasis,
-  borderHeavy,
+  none: borderNone,
+  default: borderDefault,
+  emphasis: borderEmphasis,
+  heavy: borderHeavy,
 } as const;
 
 /**

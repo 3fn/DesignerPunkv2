@@ -35,10 +35,10 @@ describe('Semantic Border Width Tokens', () => {
     });
 
     test('should have all semantic tokens in SemanticBorderWidthTokens object', () => {
-      expect(SemanticBorderWidthTokens).toHaveProperty('borderNone');
-      expect(SemanticBorderWidthTokens).toHaveProperty('borderDefault');
-      expect(SemanticBorderWidthTokens).toHaveProperty('borderEmphasis');
-      expect(SemanticBorderWidthTokens).toHaveProperty('borderHeavy');
+      expect(SemanticBorderWidthTokens).toHaveProperty('none');
+      expect(SemanticBorderWidthTokens).toHaveProperty('default');
+      expect(SemanticBorderWidthTokens).toHaveProperty('emphasis');
+      expect(SemanticBorderWidthTokens).toHaveProperty('heavy');
       
       expect(Object.keys(SemanticBorderWidthTokens)).toHaveLength(4);
     });
@@ -73,10 +73,10 @@ describe('Semantic Border Width Tokens', () => {
 
   describe('Semantic Token Object', () => {
     test('SemanticBorderWidthTokens should match individual exports', () => {
-      expect(SemanticBorderWidthTokens.borderNone).toEqual(borderNone);
-      expect(SemanticBorderWidthTokens.borderDefault).toEqual(borderDefault);
-      expect(SemanticBorderWidthTokens.borderEmphasis).toEqual(borderEmphasis);
-      expect(SemanticBorderWidthTokens.borderHeavy).toEqual(borderHeavy);
+      expect(SemanticBorderWidthTokens.none).toEqual(borderNone);
+      expect(SemanticBorderWidthTokens.default).toEqual(borderDefault);
+      expect(SemanticBorderWidthTokens.emphasis).toEqual(borderEmphasis);
+      expect(SemanticBorderWidthTokens.heavy).toEqual(borderHeavy);
     });
 
     test('should be immutable (as const)', () => {
@@ -89,11 +89,13 @@ describe('Semantic Border Width Tokens', () => {
   describe('Type Safety', () => {
     test('SemanticBorderWidthTokenKey should include all token names', () => {
       // This is a compile-time check, but we can verify the keys exist
+      // Note: Keys are now short names (none, default, emphasis, heavy) to avoid
+      // double-prefix in CSS output (border.none → --border-none, not --border-none)
       const keys: SemanticBorderWidthTokenKey[] = [
-        'borderNone',
-        'borderDefault',
-        'borderEmphasis',
-        'borderHeavy'
+        'none',
+        'default',
+        'emphasis',
+        'heavy'
       ];
       
       keys.forEach(key => {

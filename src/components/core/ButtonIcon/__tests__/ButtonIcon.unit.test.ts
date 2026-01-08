@@ -511,8 +511,8 @@ describe('Button-Icon Unit Tests (Edge Cases)', () => {
       const styleContent = styleElement?.textContent || '';
       
       // Verify border token CSS variables are defined in :host
-      expect(styleContent).toContain('--button-icon-border-default: var(--border-border-default)');
-      expect(styleContent).toContain('--button-icon-border-emphasis: var(--border-border-emphasis)');
+      expect(styleContent).toContain('--button-icon-border-default: var(--border-default)');
+      expect(styleContent).toContain('--button-icon-border-emphasis: var(--border-emphasis)');
     });
     
     it('should apply secondary class correctly', async () => {

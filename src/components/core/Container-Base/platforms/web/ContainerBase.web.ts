@@ -64,7 +64,7 @@ const BASE_STYLES = `
   }
   
   .container-base:focus {
-    outline: var(--border-border-emphasis) solid var(--color-primary);
+    outline: var(--border-emphasis) solid var(--color-primary);
     outline-offset: var(--space-grouped-minimal);
   }
   
@@ -73,7 +73,7 @@ const BASE_STYLES = `
   }
   
   .container-base:focus-visible {
-    outline: var(--border-border-emphasis) solid var(--color-primary);
+    outline: var(--border-emphasis) solid var(--color-primary);
     outline-offset: var(--space-grouped-minimal);
   }
   
@@ -86,7 +86,7 @@ const BASE_STYLES = `
   
   @media (prefers-contrast: high) {
     .container-base {
-      border-width: var(--border-border-emphasis);
+      border-width: var(--border-emphasis);
     }
   }
   

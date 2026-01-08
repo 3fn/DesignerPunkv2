@@ -45,8 +45,8 @@
   --vlbi-focus-color: var(--accessibility-focus-color);
   
   /* Sizing tokens */
-  --vlbi-min-height: var(--accessibility-tap-area-recommended);
-  --vlbi-radius: var(--radius-normal);
+  --vlbi-min-height: var(--tap-area-recommended);
+  --vlbi-radius: var(--radius-100);
   --vlbi-padding-inline: var(--space-inset-200);
   --vlbi-gap: var(--space-grouped-loose);
   

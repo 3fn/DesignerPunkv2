@@ -164,7 +164,8 @@ describe('getAllSemanticTokens', () => {
     // Verify border tokens are included
     const borderTokens = tokens.filter(t => t.category === SemanticCategory.BORDER);
     expect(borderTokens.length).toBeGreaterThan(0);
-    expect(borderTokens.some(t => t.name === 'border.borderDefault')).toBe(true);
+    // Note: Key is 'default' but prefix 'border.' is added, so name is 'border.default'
+    expect(borderTokens.some(t => t.name === 'border.default')).toBe(true);
   });
 
   it('should return correct count of semantic tokens', () => {

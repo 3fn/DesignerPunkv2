@@ -78,6 +78,7 @@ describe('Property 1: Token CSS Completeness', () => {
     'input-text-',       // Input-Text component local properties
     'container-',        // Container component local properties (if any)
     'vertical-list-',    // VerticalListItem component local properties
+    'vlbi-',             // Button-VerticalListItem component local properties (short prefix)
   ];
 
   /**

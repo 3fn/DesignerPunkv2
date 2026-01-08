@@ -372,7 +372,7 @@ export class InputTextBase extends HTMLElement {
         letter-spacing: var(--typography-input-letter-spacing);
         color: var(--color-text-default);
         background: var(--color-background);
-        border: var(--border-border-default) solid var(--color-border);
+        border: var(--border-default) solid var(--color-border);
         border-radius: var(--radius-150);
         outline: none;
         box-sizing: border-box;

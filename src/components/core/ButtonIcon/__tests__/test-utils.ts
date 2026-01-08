@@ -44,8 +44,8 @@ export function setupButtonIconTokens(): void {
   document.documentElement.style.setProperty('--accessibility-focus-color', '#A855F7');
   
   // Border tokens
-  document.documentElement.style.setProperty('--border-border-default', '1px');
-  document.documentElement.style.setProperty('--border-border-emphasis', '2px');
+  document.documentElement.style.setProperty('--border-default', '1px');
+  document.documentElement.style.setProperty('--border-emphasis', '2px');
   
   // Animation token
   document.documentElement.style.setProperty('--duration-150', '150ms');
@@ -64,8 +64,8 @@ export function cleanupButtonIconTokens(): void {
   document.documentElement.style.removeProperty('--accessibility-focus-offset');
   document.documentElement.style.removeProperty('--accessibility-focus-width');
   document.documentElement.style.removeProperty('--accessibility-focus-color');
-  document.documentElement.style.removeProperty('--border-border-default');
-  document.documentElement.style.removeProperty('--border-border-emphasis');
+  document.documentElement.style.removeProperty('--border-default');
+  document.documentElement.style.removeProperty('--border-emphasis');
   document.documentElement.style.removeProperty('--duration-150');
   document.documentElement.style.removeProperty('--icon-stroke-width');
 }

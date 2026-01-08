@@ -99,7 +99,7 @@ export function mapPaddingToCSS(padding: PaddingValue | null): string {
  * 
  * @example
  * ```typescript
- * mapBorderToCSS('default') // Returns 'border: var(--border-border-default) solid var(--color-border)'
+ * mapBorderToCSS('default') // Returns 'border: var(--border-default) solid var(--color-border)'
  * mapBorderToCSS('none') // Returns ''
  * ```
  * 

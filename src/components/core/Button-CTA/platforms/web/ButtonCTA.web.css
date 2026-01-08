@@ -177,7 +177,7 @@
 .button-cta--secondary {
   background-color: var(--color-background);
   color: var(--color-primary);
-  border: var(--border-border-default) solid var(--color-primary);
+  border: var(--border-default) solid var(--color-primary);
 }
 
 /**
@@ -371,7 +371,7 @@
   .button-cta {
     background-color: transparent !important;
     color: var(--color-print-default) !important;
-    border: var(--border-border-default) solid var(--color-print-default) !important;
+    border: var(--border-default) solid var(--color-print-default) !important;
     box-shadow: none !important;
   }
   
@@ -393,11 +393,11 @@
  */
 @media (prefers-contrast: high) {
   .button-cta {
-    border: var(--border-border-emphasis) solid currentColor; /* 2px */
+    border: var(--border-emphasis) solid currentColor; /* 2px */
   }
   
   .button-cta:focus-visible {
-    outline-width: var(--border-border-heavy); /* 4px */
+    outline-width: var(--border-heavy); /* 4px */
   }
 }
 

@@ -68,6 +68,7 @@ export {
 
 export {
   SemanticRadiusTokens,
+  // Individual exports for direct usage (original names preserved)
   radiusNone,
   radiusSubtle,
   radiusSmall,
@@ -144,6 +145,7 @@ import { colorTokens } from './ColorTokens';
 import { spacingTokens } from './SpacingTokens';
 import { typographyTokens } from './TypographyTokens';
 import { SemanticBorderWidthTokens } from './BorderWidthTokens';
+import { SemanticRadiusTokens } from './RadiusTokens';
 import { shadowTokens } from './ShadowTokens';
 import { opacityTokens } from './OpacityTokens';
 import { blendTokens } from './BlendTokens';
@@ -184,6 +186,21 @@ export function getSemanticToken(name: string): Omit<SemanticToken, 'primitiveTo
         category: SemanticCategory.BORDER,
         context: `Border width for ${borderName.replace(/([A-Z])/g, ' $1').toLowerCase().trim()}`,
         description: `Semantic border width token: ${borderName}`
+      };
+    }
+  }
+
+  // Check radius tokens
+  if (name.startsWith('radius.')) {
+    const radiusName = name.replace('radius.', '');
+    const token = SemanticRadiusTokens[radiusName as keyof typeof SemanticRadiusTokens];
+    if (token) {
+      return {
+        name,
+        primitiveReferences: { value: token.value },
+        category: SemanticCategory.LAYOUT,
+        context: `Border radius for ${radiusName.replace(/([A-Z])/g, ' $1').toLowerCase().trim()}`,
+        description: `Semantic radius token: ${radiusName}`
       };
     }
   }
@@ -390,6 +407,17 @@ export function getAllSemanticTokens(): Array<Omit<SemanticToken, 'primitiveToke
     });
   }
 
+  // Add radius tokens
+  for (const [name, token] of Object.entries(SemanticRadiusTokens)) {
+    tokens.push({
+      name: `radius.${name}`,
+      primitiveReferences: { value: token.value },
+      category: SemanticCategory.LAYOUT,
+      context: `Border radius for ${name.replace(/([A-Z])/g, ' $1').toLowerCase().trim()}`,
+      description: `Semantic radius token: ${name}`
+    });
+  }
+
   // Add spacing tokens (flatten hierarchical structure)
   for (const [category, levels] of Object.entries(spacingTokens)) {
     for (const [level, token] of Object.entries(levels)) {
@@ -553,6 +581,7 @@ export function getSemanticTokenStats() {
     typographyTokens: Object.keys(typographyTokens).length,
     spacingTokens: allTokens.filter(t => t.category === SemanticCategory.SPACING).length,
     borderTokens: Object.keys(SemanticBorderWidthTokens).length,
+    radiusTokens: Object.keys(SemanticRadiusTokens).length,
     shadowTokens: Object.keys(shadowTokens).length,
     opacityTokens: Object.keys(opacityTokens).length,
     blendTokens: Object.keys(blendTokens).length,

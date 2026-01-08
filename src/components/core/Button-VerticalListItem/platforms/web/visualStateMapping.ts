@@ -59,8 +59,8 @@ export interface VisualStateStyles {
  * - color.select.selected.subtle → --color-select-selected-subtle (background)
  * - color.select.notSelected.strong → --color-select-not-selected-strong (foreground)
  * - color.select.notSelected.subtle → --color-select-not-selected-subtle (background)
- * - border.borderDefault → --border-border-default (1px)
- * - border.borderEmphasis → --border-border-emphasis (2px)
+ * - border.default → --border-default (1px)
+ * - border.emphasis → --border-emphasis (2px)
  * 
  * @see Requirements 1.1, 1.2, 1.3, 1.4, 1.5 for visual state specifications
  */
@@ -77,7 +77,7 @@ export const visualStateMap: Record<VisualState, VisualStateStyles> = {
    */
   rest: {
     background: 'var(--color-background)',
-    borderWidth: 'var(--border-border-default)',
+    borderWidth: 'var(--border-default)',
     borderColor: 'transparent',
     labelColor: 'var(--color-text-default)',
     iconColor: 'var(--color-text-default)',
@@ -97,7 +97,7 @@ export const visualStateMap: Record<VisualState, VisualStateStyles> = {
    */
   selected: {
     background: 'var(--color-select-selected-subtle)',
-    borderWidth: 'var(--border-border-emphasis)',
+    borderWidth: 'var(--border-emphasis)',
     borderColor: 'var(--color-select-selected-strong)',
     labelColor: 'var(--color-select-selected-strong)',
     iconColor: 'var(--color-select-selected-strong)',
@@ -117,7 +117,7 @@ export const visualStateMap: Record<VisualState, VisualStateStyles> = {
    */
   notSelected: {
     background: 'var(--color-select-not-selected-subtle)',
-    borderWidth: 'var(--border-border-default)',
+    borderWidth: 'var(--border-default)',
     borderColor: 'transparent',
     labelColor: 'var(--color-select-not-selected-strong)',
     iconColor: 'var(--color-select-not-selected-strong)',
@@ -137,7 +137,7 @@ export const visualStateMap: Record<VisualState, VisualStateStyles> = {
    */
   checked: {
     background: 'var(--color-select-selected-subtle)',
-    borderWidth: 'var(--border-border-default)',
+    borderWidth: 'var(--border-default)',
     borderColor: 'transparent',
     labelColor: 'var(--color-select-selected-strong)',
     iconColor: 'var(--color-select-selected-strong)',
@@ -157,7 +157,7 @@ export const visualStateMap: Record<VisualState, VisualStateStyles> = {
    */
   unchecked: {
     background: 'var(--color-background)',
-    borderWidth: 'var(--border-border-default)',
+    borderWidth: 'var(--border-default)',
     borderColor: 'transparent',
     labelColor: 'var(--color-text-default)',
     iconColor: 'var(--color-text-default)',
@@ -322,7 +322,7 @@ export function requiresEmphasisBorder(state: VisualState): boolean {
  * // Select mode: full error treatment
  * const errorStyles = applyErrorStyles(getVisualStateStyles('selected'), 'selected');
  * // errorStyles.background === 'var(--color-error-subtle)'
- * // errorStyles.borderWidth === 'var(--border-border-emphasis)'
+ * // errorStyles.borderWidth === 'var(--border-emphasis)'
  * // errorStyles.borderColor === 'var(--color-error-strong)'
  * 
  * // Multi-Select mode: colors only
@@ -341,7 +341,7 @@ export function applyErrorStyles(
     return {
       ...baseStyles,
       background: 'var(--color-error-subtle)',
-      borderWidth: 'var(--border-border-emphasis)',
+      borderWidth: 'var(--border-emphasis)',
       borderColor: 'var(--color-error-strong)',
       labelColor: 'var(--color-error-strong)',
       iconColor: 'var(--color-error-strong)',
