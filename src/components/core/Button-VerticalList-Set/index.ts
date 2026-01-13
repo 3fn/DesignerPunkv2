@@ -19,6 +19,9 @@ export type {
   DerivedItemState
 } from './types';
 
+// Export state derivation function
+export { deriveItemStates } from './types';
+
 // Export component tokens (to be implemented in Task 2.3)
 // export { ButtonVerticalListSetTokens } from './Button-VerticalList-Set.tokens';
 

@@ -12,7 +12,7 @@
  * @module Button-VerticalList-Set/types
  */
 
-import { VerticalListButtonItemProps } from '../Button-VerticalList-Item/types';
+import type { VisualState } from '../Button-VerticalList-Item/types';
 
 /**
  * Selection mode for the button set.
@@ -329,7 +329,7 @@ export interface DerivedItemState {
   /**
    * Visual state for the item.
    */
-  visualState: 'rest' | 'selected' | 'notSelected' | 'checked' | 'unchecked';
+  visualState: VisualState;
   
   /**
    * Transition delay in milliseconds for animation coordination.
@@ -360,4 +360,93 @@ export interface DerivedItemState {
    * Tabindex for roving tabindex pattern.
    */
   tabIndex: number;
+}
+
+// ─────────────────────────────────────────────────────────────────
+// State Derivation Functions
+// ─────────────────────────────────────────────────────────────────
+
+/**
+ * Derive visual states for all items based on mode and selection state.
+ * 
+ * This is the core state derivation logic that transforms controlled props
+ * (mode, selectedIndex, selectedIndices) into visual states for each child item.
+ * The Set component uses this to determine what visual state to pass to each
+ * Button-VerticalList-Item child.
+ * 
+ * State derivation rules by mode:
+ * 
+ * **Tap Mode**:
+ * - All items are always in `rest` state
+ * - No selection tracking
+ * 
+ * **Select Mode**:
+ * - No selection (selectedIndex === null): All items in `rest` state
+ * - Selection exists: Selected item is `selected`, all others are `notSelected`
+ * 
+ * **MultiSelect Mode**:
+ * - Items in selectedIndices array are `checked`
+ * - Items not in selectedIndices array are `unchecked`
+ * 
+ * @param mode - The selection mode ('tap', 'select', or 'multiSelect')
+ * @param selectedIndex - The selected index for Select mode (null if no selection)
+ * @param selectedIndices - Array of selected indices for MultiSelect mode
+ * @param itemCount - Total number of items in the list
+ * @returns Array of VisualState values, one for each item
+ * 
+ * @example
+ * ```typescript
+ * // Tap mode - all items rest
+ * deriveItemStates('tap', null, [], 3);
+ * // Returns: ['rest', 'rest', 'rest']
+ * 
+ * // Select mode - no selection
+ * deriveItemStates('select', null, [], 3);
+ * // Returns: ['rest', 'rest', 'rest']
+ * 
+ * // Select mode - item 1 selected
+ * deriveItemStates('select', 1, [], 3);
+ * // Returns: ['notSelected', 'selected', 'notSelected']
+ * 
+ * // MultiSelect mode - items 0 and 2 checked
+ * deriveItemStates('multiSelect', null, [0, 2], 3);
+ * // Returns: ['checked', 'unchecked', 'checked']
+ * ```
+ * 
+ * @see Requirements 3.1, 4.1, 4.2, 5.1, 9.6
+ */
+export function deriveItemStates(
+  mode: SelectionMode,
+  selectedIndex: number | null,
+  selectedIndices: number[],
+  itemCount: number
+): VisualState[] {
+  switch (mode) {
+    case 'tap':
+      // Tap mode: All items always in rest state
+      // No selection tracking - items are simple action buttons
+      return Array(itemCount).fill('rest');
+      
+    case 'select':
+      // Select mode: Single-selection (radio-button style)
+      if (selectedIndex === null) {
+        // No selection - all items in rest state
+        return Array(itemCount).fill('rest');
+      }
+      // Selection exists - selected item is 'selected', others are 'notSelected'
+      return Array(itemCount).fill(null).map((_, i) => 
+        i === selectedIndex ? 'selected' : 'notSelected'
+      );
+      
+    case 'multiSelect':
+      // MultiSelect mode: Multiple-selection (checkbox style)
+      // Items in selectedIndices are 'checked', others are 'unchecked'
+      return Array(itemCount).fill(null).map((_, i) =>
+        selectedIndices.includes(i) ? 'checked' : 'unchecked'
+      );
+      
+    default:
+      // Fallback to rest state for unknown modes
+      return Array(itemCount).fill('rest');
+  }
 }

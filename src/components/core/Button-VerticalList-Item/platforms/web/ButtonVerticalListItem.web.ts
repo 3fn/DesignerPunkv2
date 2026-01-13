@@ -253,6 +253,8 @@ export class ButtonVerticalListItem extends HTMLElement {
       'checkmark-transition',
       'transition-delay',
       'test-id',
+      'role',           // ARIA role (button, radio, checkbox) - set by parent Set
+      'aria-checked',   // ARIA checked state - set by parent Set
       'disabled' // Observed to throw error if set (fail loudly)
     ];
   }
@@ -594,6 +596,75 @@ export class ButtonVerticalListItem extends HTMLElement {
   }
   
   // ─────────────────────────────────────────────────────────────────
+  // ARIA Properties (controlled by parent Set)
+  // ─────────────────────────────────────────────────────────────────
+  
+  /**
+   * Get the ARIA role for the item.
+   * 
+   * The role is controlled by the parent Set component based on mode:
+   * - Tap mode: 'button'
+   * - Select mode: 'radio'
+   * - MultiSelect mode: 'checkbox'
+   * 
+   * @returns The ARIA role ('button', 'radio', or 'checkbox')
+   * @see Requirements 3.4, 4.7, 5.5
+   */
+  get itemRole(): 'button' | 'radio' | 'checkbox' {
+    const role = this.getAttribute('role');
+    if (role === 'radio' || role === 'checkbox') {
+      return role;
+    }
+    return 'button';
+  }
+  
+  /**
+   * Set the ARIA role for the item.
+   * 
+   * @param value - The ARIA role ('button', 'radio', or 'checkbox')
+   * @see Requirements 3.4, 4.7, 5.5
+   */
+  set itemRole(value: 'button' | 'radio' | 'checkbox') {
+    this.setAttribute('role', value);
+  }
+  
+  /**
+   * Get the ARIA checked state.
+   * 
+   * Used in Select mode (radio) and MultiSelect mode (checkbox) to indicate
+   * whether the item is selected/checked.
+   * 
+   * Note: Named 'itemAriaChecked' to avoid conflict with HTMLElement.ariaChecked
+   * which has a different type signature (string | null).
+   * 
+   * @returns true if checked, false if not checked, undefined if not applicable
+   * @see Requirements 4.7, 5.5
+   */
+  get itemAriaChecked(): boolean | undefined {
+    const checked = this.getAttribute('aria-checked');
+    if (checked === 'true') return true;
+    if (checked === 'false') return false;
+    return undefined;
+  }
+  
+  /**
+   * Set the ARIA checked state.
+   * 
+   * Note: Named 'itemAriaChecked' to avoid conflict with HTMLElement.ariaChecked
+   * which has a different type signature (string | null).
+   * 
+   * @param value - true if checked, false if not checked, undefined to remove
+   * @see Requirements 4.7, 5.5
+   */
+  set itemAriaChecked(value: boolean | undefined) {
+    if (value === undefined) {
+      this.removeAttribute('aria-checked');
+    } else {
+      this.setAttribute('aria-checked', value.toString());
+    }
+  }
+  
+  // ─────────────────────────────────────────────────────────────────
   // Event Callback Properties
   // ─────────────────────────────────────────────────────────────────
   
@@ -733,6 +804,10 @@ export class ButtonVerticalListItem extends HTMLElement {
     // Get padding-block value based on visual state and error state (padding compensation)
     const paddingBlock = getPaddingBlockForState(visualState, error);
     
+    // Get ARIA attributes (controlled by parent Set)
+    const itemRole = this.itemRole;
+    const itemAriaChecked = this.itemAriaChecked;
+    
     // ─────────────────────────────────────────────────────────────────
     // Update button element
     // ─────────────────────────────────────────────────────────────────
@@ -742,6 +817,19 @@ export class ButtonVerticalListItem extends HTMLElement {
     
     // Update aria-label
     this._button.setAttribute('aria-label', label);
+    
+    // Update ARIA role (controlled by parent Set based on mode)
+    // @see Requirements 3.4, 4.7, 5.5
+    this._button.setAttribute('role', itemRole);
+    
+    // Update aria-checked (for radio and checkbox roles)
+    // @see Requirements 4.7, 5.5
+    if (itemRole === 'radio' || itemRole === 'checkbox') {
+      this._button.setAttribute('aria-checked', itemAriaChecked === true ? 'true' : 'false');
+    } else {
+      // Button role doesn't use aria-checked
+      this._button.removeAttribute('aria-checked');
+    }
     
     // Update test ID
     if (testID) {

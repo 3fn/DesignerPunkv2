@@ -176,7 +176,7 @@ This implementation follows a phased approach:
     - Handle `mode`, `selectedIndex`, `selectedIndices`, `error`, `errorMessage` props
     - _Requirements: 2.2, 9.1, 9.2_
 
-- [ ] 3. Implement Mode Behaviors
+- [x] 3. Implement Mode Behaviors
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -203,7 +203,7 @@ This implementation follows a phased approach:
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Mode Behaviors"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 3.1 Implement state derivation logic
+  - [x] 3.1 Implement state derivation logic
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     - Implement `deriveItemStates()` function per design
@@ -211,7 +211,7 @@ This implementation follows a phased approach:
     - Derive visual states from controlled props only
     - _Requirements: 3.1, 4.1, 4.2, 5.1, 9.6_
 
-  - [ ] 3.2 Implement Tap mode behavior
+  - [x] 3.2 Implement Tap mode behavior
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Handle click events on child items
@@ -219,7 +219,7 @@ This implementation follows a phased approach:
     - Ensure no selection state tracking
     - _Requirements: 3.2, 3.3, 9.5_
 
-  - [ ] 3.3 Implement Select mode behavior
+  - [x] 3.3 Implement Select mode behavior
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Handle selection changes
@@ -228,7 +228,7 @@ This implementation follows a phased approach:
     - Update child visual states correctly
     - _Requirements: 4.2, 4.3, 4.4, 4.5, 9.3_
 
-  - [ ] 3.4 Implement MultiSelect mode behavior
+  - [x] 3.4 Implement MultiSelect mode behavior
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Handle toggle behavior for items
@@ -236,7 +236,7 @@ This implementation follows a phased approach:
     - Update child visual states correctly
     - _Requirements: 5.2, 5.3, 9.4_
 
-  - [ ] 3.5 Wire up child item communication
+  - [x] 3.5 Wire up child item communication
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Pass `visualState` prop to child items
@@ -245,7 +245,7 @@ This implementation follows a phased approach:
     - Listen for click events from children
     - _Requirements: 7.1, 9.6_
 
-- [ ] 4. Implement Accessibility
+- [x] 4. Implement Accessibility
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -271,7 +271,7 @@ This implementation follows a phased approach:
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 Complete: Accessibility"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 4.1 Implement ARIA roles per mode
+  - [x] 4.1 Implement ARIA roles per mode
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Apply `role="group"` for tap mode
@@ -280,7 +280,7 @@ This implementation follows a phased approach:
     - Pass appropriate `role` and `aria-checked` to child items
     - _Requirements: 3.4, 4.6, 4.7, 5.4, 5.5_
 
-  - [ ] 4.2 Implement keyboard navigation
+  - [x] 4.2 Implement keyboard navigation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Handle Arrow Up/Down for focus movement
@@ -289,7 +289,7 @@ This implementation follows a phased approach:
     - Implement focus wrapping at boundaries
     - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5_
 
-  - [ ] 4.3 Implement roving tabindex
+  - [x] 4.3 Implement roving tabindex
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Track focused item index internally
