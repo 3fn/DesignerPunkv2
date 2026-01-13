@@ -2,7 +2,7 @@
 
 **A True Native Cross-Platform Design System with Mathematical Foundations**
 
-[![Version](https://img.shields.io/badge/Version-4.0.0-purple)](RELEASE-NOTES-4.0.0.md)
+[![Version](https://img.shields.io/badge/Version-4.1.0-purple)](RELEASE-NOTES-4.1.0.md)
 [![Repository](https://img.shields.io/badge/GitHub-DesignerPunkv2-blue)](https://github.com/3fn/DesignerPunkv2)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
@@ -65,6 +65,8 @@ DesignerPunk has completed its **robust token system architecture** (Rosetta Sys
 | Component | Description | Behavioral Contracts |
 |-----------|-------------|---------------------|
 | `Button-CTA` | Call-to-action button with size/visual variants and blend utilities | 7 contracts |
+| `Button-Icon` | Icon-only button with blend utilities and incremental DOM | 5 contracts |
+| `Button-VerticalListItem` | Vertical list selection button with leading/trailing icons | 6 contracts |
 | `Container-Base` | Primitive layout component with token-based styling | 7 contracts |
 | `Icon-Base` | Cross-platform icon system with 15 Feather icons | 5 contracts |
 
@@ -110,6 +112,13 @@ With the Stemma System foundation complete, future development focuses on:
 4. **Additional Semantic Components**: Expanding Form Inputs and other families
 
 ### ✅ Recently Completed
+
+**Component Alignment & Vertical List Buttons** (January 2026) - v4.1.0
+- New `Button-VerticalListItem` component for vertical list selection (Web, iOS, Android)
+- All button/input components aligned to consistent architectural patterns
+- Blend utilities, incremental DOM, semantic motion tokens standardized across components
+- Component Development Guide updated with canonical implementation patterns
+- Deprecated component name aliases removed
 
 **Component Token Generation Pipeline** (January 2026) - v4.0.0
 - New architectural layer: Primitive → Semantic → Component → Platform Output
