@@ -66,14 +66,15 @@ describe('Property 1: Token CSS Completeness', () => {
    * that serve as component-scoped aliases to global tokens. They are NOT global
    * design tokens and should not be expected in tokens.css.
    * 
-   * Pattern: Components define local properties like --button-icon-radius that
+   * Pattern: Components define local properties like --_bi-radius that
    * reference global tokens like var(--accessibility-focus-offset) or use
    * hardcoded values like 50% for component-specific styling.
    * 
    * These are intentionally component-scoped and don't need to be in tokens.css.
    */
   const COMPONENT_LOCAL_PREFIXES = [
-    'button-icon-',      // ButtonIcon component local properties
+    '_bi-',              // ButtonIcon component local properties (--_bi-*)
+    'button-icon-',      // ButtonIcon component local properties (legacy)
     'text-input-',       // TextInput component local properties
     'input-text-',       // Input-Text component local properties
     'container-',        // Container component local properties (if any)

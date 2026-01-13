@@ -29,6 +29,8 @@
  * @see Requirements: 1.1-1.4, 2.1-2.3, 3.1, 4.2, 4.5, 5.1-5.4
  */
 
+import * as fs from 'fs';
+import * as path from 'path';
 import * as fc from 'fast-check';
 import {
   registerButtonIcon,
@@ -41,6 +43,33 @@ import {
 } from './test-utils';
 import { ButtonIconSize, ButtonIconVariant } from '../types';
 import { IconBaseName } from '../../Icon-Base/types';
+
+// ============================================================================
+// Helper Functions
+// ============================================================================
+
+/**
+ * Read the actual CSS file content for CSS validation tests.
+ * Since Jest mocks CSS imports to return empty strings, we need to read
+ * the actual CSS file for tests that validate CSS content.
+ */
+function readCSSFileContent(): string {
+  const cssPath = path.resolve(process.cwd(), 'src/components/core/Button-Icon/platforms/web/ButtonIcon.web.css');
+  if (fs.existsSync(cssPath)) {
+    return fs.readFileSync(cssPath, 'utf-8');
+  }
+  return '';
+}
+
+// Cache CSS content to avoid repeated file reads
+let cachedCSSContent: string | null = null;
+
+function getCSSContent(): string {
+  if (cachedCSSContent === null) {
+    cachedCSSContent = readCSSFileContent();
+  }
+  return cachedCSSContent;
+}
 
 // ============================================================================
 // Test Data Generators
@@ -193,6 +222,8 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
     });
     
     it('should have size-specific CSS rules in shadow DOM styles', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           sizeArbitrary,
@@ -202,14 +233,8 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, size });
             
             try {
-              // Verify the shadow DOM contains style element with size-specific rules
-              const styleElement = button.shadowRoot?.querySelector('style');
-              expect(styleElement).toBeTruthy();
-              
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify size-specific CSS class exists in styles
-              expect(styleContent).toContain(`.button-icon--${size}`);
+              // Verify size-specific CSS class exists in CSS file
+              expect(cssContent).toContain(`.button-icon--${size}`);
               
               return true;
             } finally {
@@ -238,6 +263,8 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
      * **Feature: button-icon-component, Property 2: Focus Buffer Presence**
      */
     it('should have focus buffer CSS variable defined in styles', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           sizeArbitrary,
@@ -248,17 +275,11 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, size, variant });
             
             try {
-              // Verify the shadow DOM contains style element with focus buffer
-              const styleElement = button.shadowRoot?.querySelector('style');
-              expect(styleElement).toBeTruthy();
-              
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify focus buffer CSS variable is defined
-              expect(styleContent).toContain('--button-icon-focus-buffer');
+              // Verify focus buffer CSS variable is defined in CSS file
+              expect(cssContent).toContain('--_bi-focus-buffer');
               
               // Verify margin is applied using the focus buffer variable
-              expect(styleContent).toContain('margin: var(--button-icon-focus-buffer)');
+              expect(cssContent).toContain('margin: var(--_bi-focus-buffer)');
               
               return true;
             } finally {
@@ -271,6 +292,8 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
     });
     
     it('should have focus ring CSS rules in styles', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           sizeArbitrary,
@@ -281,18 +304,13 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, size, variant });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              expect(styleElement).toBeTruthy();
-              
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify focus-visible rule exists
-              expect(styleContent).toContain(':focus-visible');
+              // Verify focus-visible rule exists in CSS file
+              expect(cssContent).toContain(':focus-visible');
               
               // Verify focus ring tokens are referenced
-              expect(styleContent).toContain('--button-icon-focus-width');
-              expect(styleContent).toContain('--button-icon-focus-color');
-              expect(styleContent).toContain('--button-icon-focus-offset');
+              expect(cssContent).toContain('--_bi-focus-width');
+              expect(cssContent).toContain('--_bi-focus-color');
+              expect(cssContent).toContain('--_bi-focus-offset');
               
               return true;
             } finally {
@@ -351,6 +369,8 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
     });
     
     it('should have variant-specific CSS rules in shadow DOM styles', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           variantArbitrary,
@@ -360,13 +380,8 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, variant });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              expect(styleElement).toBeTruthy();
-              
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify variant-specific CSS class exists in styles
-              expect(styleContent).toContain(`.button-icon--${variant}`);
+              // Verify variant-specific CSS class exists in CSS file
+              expect(cssContent).toContain(`.button-icon--${variant}`);
               
               return true;
             } finally {
@@ -379,6 +394,8 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
     });
     
     it('should have primary variant with background color token', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           iconNameArbitrary,
@@ -391,14 +408,11 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
             });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Primary should reference color-primary for background
-              expect(styleContent).toContain('--button-icon-color-primary');
+              // Primary should reference color-primary for background in CSS file
+              expect(cssContent).toContain('--_bi-color-primary');
               
               // Verify primary class has background-color rule
-              const primarySection = styleContent.match(/\.button-icon--primary\s*\{[^}]+\}/);
+              const primarySection = cssContent.match(/\.button-icon--primary\s*\{[^}]+\}/);
               expect(primarySection).toBeTruthy();
               expect(primarySection?.[0]).toContain('background-color');
               
@@ -413,6 +427,8 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
     });
     
     it('should have secondary variant with box-shadow border technique', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           iconNameArbitrary,
@@ -425,11 +441,8 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
             });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Secondary should use box-shadow technique for border
-              const secondarySection = styleContent.match(/\.button-icon--secondary\s*\{[^}]+\}/);
+              // Secondary should use box-shadow technique for border in CSS file
+              const secondarySection = cssContent.match(/\.button-icon--secondary\s*\{[^}]+\}/);
               expect(secondarySection).toBeTruthy();
               expect(secondarySection?.[0]).toContain('box-shadow');
               expect(secondarySection?.[0]).toContain('transparent');
@@ -445,6 +458,8 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
     });
     
     it('should have tertiary variant with transparent background', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           iconNameArbitrary,
@@ -457,11 +472,8 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
             });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Tertiary should have transparent background
-              const tertiarySection = styleContent.match(/\.button-icon--tertiary\s*\{[^}]+\}/);
+              // Tertiary should have transparent background in CSS file
+              const tertiarySection = cssContent.match(/\.button-icon--tertiary\s*\{[^}]+\}/);
               expect(tertiarySection).toBeTruthy();
               expect(tertiarySection?.[0]).toContain('transparent');
               
@@ -492,6 +504,8 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
      * **Feature: button-icon-component, Property 4: Circular Shape Token**
      */
     it('should use radiusCircle token (50%) for border-radius', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           sizeArbitrary,
@@ -502,16 +516,11 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, size, variant });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              expect(styleElement).toBeTruthy();
-              
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify radiusCircle CSS variable is defined as 50%
-              expect(styleContent).toContain('--button-icon-radius: 50%');
+              // Verify radiusCircle CSS variable is defined as 50% in CSS file
+              expect(cssContent).toContain('--_bi-radius: 50%');
               
               // Verify border-radius uses the variable
-              expect(styleContent).toContain('border-radius: var(--button-icon-radius)');
+              expect(cssContent).toContain('border-radius: var(--_bi-radius)');
               
               return true;
             } finally {
@@ -524,6 +533,8 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
     });
     
     it('should maintain circular shape during interaction states', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           sizeArbitrary,
@@ -534,16 +545,13 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, size, variant });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify hover, active, and focus states maintain border-radius
-              expect(styleContent).toContain('.button-icon:hover');
-              expect(styleContent).toContain('.button-icon:active');
-              expect(styleContent).toContain('.button-icon:focus');
+              // Verify hover, active, and focus states maintain border-radius in CSS file
+              expect(cssContent).toContain('.button-icon:hover');
+              expect(cssContent).toContain('.button-icon:active');
+              expect(cssContent).toContain('.button-icon:focus');
               
               // Verify the interaction states section maintains border-radius
-              const interactionSection = styleContent.match(/\.button-icon:hover[\s\S]*?border-radius/);
+              const interactionSection = cssContent.match(/\.button-icon:hover[\s\S]*?border-radius/);
               expect(interactionSection).toBeTruthy();
               
               return true;
@@ -771,6 +779,8 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
      * **Feature: button-icon-component, Property 7: Touch Target Minimum**
      */
     it('should have touch target extension CSS for small size', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           variantArbitrary,
@@ -785,16 +795,12 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
             });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              expect(styleElement).toBeTruthy();
+              // Verify small size has ::after pseudo-element for touch target extension in CSS file
+              expect(cssContent).toContain('.button-icon--small::after');
               
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify small size has ::after pseudo-element for touch target extension
-              expect(styleContent).toContain('.button-icon--small::after');
-              
-              // Verify the ::after extends to 48px (tapAreaRecommended)
-              expect(styleContent).toContain('48px');
+              // Verify the ::after extends to tapAreaRecommended using token reference
+              // @see Requirements 6.1, 6.3 - Token-referenced sizing
+              expect(cssContent).toContain('var(--_bi-touch-target)');
               
               return true;
             } finally {
@@ -807,6 +813,8 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
     });
     
     it('should have position: relative for small size touch target extension', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           variantArbitrary,
@@ -821,11 +829,8 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
             });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify base button has position: relative (required for ::after positioning)
-              expect(styleContent).toContain('position: relative');
+              // Verify base button has position: relative (required for ::after positioning) in CSS file
+              expect(cssContent).toContain('position: relative');
               
               // Verify small class is applied
               expect(hasClass(button, 'button-icon--small')).toBe(true);
@@ -841,6 +846,8 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
     });
     
     it('should have large size meeting minimum touch target without extension', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           variantArbitrary,
@@ -855,13 +862,11 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
             });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify large size is 48px (meets tapAreaRecommended)
-              const largeSection = styleContent.match(/\.button-icon--large\s*\{[^}]+\}/);
+              // Verify large size uses token reference (not hard-coded 48px)
+              // @see Requirements 6.1, 6.3 - Token-referenced sizing
+              const largeSection = cssContent.match(/\.button-icon--large\s*\{[^}]+\}/);
               expect(largeSection).toBeTruthy();
-              expect(largeSection?.[0]).toContain('48px');
+              expect(largeSection?.[0]).toContain('var(--_bi-size-large)');
               
               // Verify large class is applied
               expect(hasClass(button, 'button-icon--large')).toBe(true);
@@ -877,6 +882,8 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
     });
     
     it('should have medium size with focus buffer meeting minimum touch target', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           variantArbitrary,
@@ -891,13 +898,11 @@ describe('Button-Icon Property-Based Tests (Properties 1-7)', () => {
             });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify medium size is 40px (with 4px margin on each side = 48px total)
-              const mediumSection = styleContent.match(/\.button-icon--medium\s*\{[^}]+\}/);
+              // Verify medium size uses token reference (not hard-coded 40px)
+              // @see Requirements 6.1, 6.3 - Token-referenced sizing
+              const mediumSection = cssContent.match(/\.button-icon--medium\s*\{[^}]+\}/);
               expect(mediumSection).toBeTruthy();
-              expect(mediumSection?.[0]).toContain('40px');
+              expect(mediumSection?.[0]).toContain('var(--_bi-size-medium)');
               
               // Verify medium class is applied
               expect(hasClass(button, 'button-icon--medium')).toBe(true);

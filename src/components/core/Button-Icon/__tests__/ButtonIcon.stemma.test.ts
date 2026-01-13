@@ -47,7 +47,7 @@ import {
 // ============================================================================
 
 const COMPONENT_NAME = 'Button-Icon';
-const COMPONENT_DIR = 'src/components/core/ButtonIcon';
+const COMPONENT_DIR = 'src/components/core/Button-Icon';
 const WEB_COMPONENT_PATH = `${COMPONENT_DIR}/platforms/web/ButtonIcon.web.ts`;
 const TYPES_PATH = `${COMPONENT_DIR}/types.ts`;
 const TOKENS_PATH = `${COMPONENT_DIR}/buttonIcon.tokens.ts`;
@@ -170,11 +170,20 @@ describe('Button-Icon Stemma Validators', () => {
      */
     
     let webComponentSource: string;
+    let cssSource: string;
+    let combinedSource: string;
+    
+    const CSS_PATH = `${COMPONENT_DIR}/platforms/web/ButtonIcon.web.css`;
     
     beforeAll(() => {
       if (fileExists(WEB_COMPONENT_PATH)) {
         webComponentSource = readFileContent(WEB_COMPONENT_PATH);
       }
+      if (fileExists(CSS_PATH)) {
+        cssSource = readFileContent(CSS_PATH);
+      }
+      // Combine sources for validation (CSS is imported as string via esbuild plugin)
+      combinedSource = (webComponentSource || '') + (cssSource || '');
     });
     
     it('should detect web platform from file path', () => {
@@ -257,43 +266,45 @@ describe('Button-Icon Stemma Validators', () => {
     });
     
     it('should use CSS custom properties for all token values', () => {
-      if (!webComponentSource) {
-        console.warn('Web component file not found, skipping test');
+      if (!combinedSource) {
+        console.warn('Component files not found, skipping test');
         return;
       }
       
       // Check for expected CSS custom property patterns defined in :host
-      // These are the component-level token mappings
+      // These are the component-level token mappings (now in external CSS file)
+      // Updated to use --_bi-* naming convention per Requirements 7.3, 7.4
       const expectedTokenPatterns = [
-        '--button-icon-focus-offset',
-        '--button-icon-focus-width',
-        '--button-icon-focus-color',
-        '--button-icon-radius',
-        '--button-icon-transition',
-        '--button-icon-border-default',
-        '--button-icon-border-emphasis',
-        '--button-icon-color-primary',
-        '--button-icon-color-contrast',
+        '--_bi-focus-offset',
+        '--_bi-focus-width',
+        '--_bi-focus-color',
+        '--_bi-radius',
+        '--_bi-transition',
+        '--_bi-border-default',
+        '--_bi-border-emphasis',
+        '--_bi-color-primary',
+        '--_bi-color-contrast',
       ];
       
       for (const pattern of expectedTokenPatterns) {
-        expect(webComponentSource).toContain(pattern);
+        expect(combinedSource).toContain(pattern);
       }
     });
     
     it('should reference semantic tokens via CSS custom properties', () => {
-      if (!webComponentSource) {
-        console.warn('Web component file not found, skipping test');
+      if (!combinedSource) {
+        console.warn('Component files not found, skipping test');
         return;
       }
       
-      // Check for semantic token references in :host block
+      // Check for semantic token references in :host block (now in external CSS file)
       // These map component tokens to semantic design system tokens
       const semanticTokenReferences = [
         'var(--accessibility-focus-offset)',
         'var(--accessibility-focus-width)',
         'var(--accessibility-focus-color)',
-        'var(--duration-150)',
+        'var(--motion-button-press-duration)',  // Semantic motion token (replaces primitive --duration-150)
+        'var(--motion-button-press-easing)',    // Semantic motion token (replaces hard-coded ease-in-out)
         'var(--border-default)',
         'var(--border-emphasis)',
         'var(--color-primary)',
@@ -302,7 +313,7 @@ describe('Button-Icon Stemma Validators', () => {
       ];
       
       for (const reference of semanticTokenReferences) {
-        expect(webComponentSource).toContain(reference);
+        expect(combinedSource).toContain(reference);
       }
     });
   });
@@ -421,11 +432,20 @@ describe('Button-Icon Stemma Validators', () => {
      */
     
     let webComponentSource: string;
+    let cssSource: string;
+    let combinedSource: string;
+    
+    const CSS_PATH = `${COMPONENT_DIR}/platforms/web/ButtonIcon.web.css`;
     
     beforeAll(() => {
       if (fileExists(WEB_COMPONENT_PATH)) {
         webComponentSource = readFileContent(WEB_COMPONENT_PATH);
       }
+      if (fileExists(CSS_PATH)) {
+        cssSource = readFileContent(CSS_PATH);
+      }
+      // Combine sources for validation (CSS is imported as string via esbuild plugin)
+      combinedSource = (webComponentSource || '') + (cssSource || '');
     });
     
     it('should apply aria-label attribute to button element', () => {
@@ -473,14 +493,14 @@ describe('Button-Icon Stemma Validators', () => {
     });
     
     it('should implement focus-visible for keyboard-only focus indicators', () => {
-      if (!webComponentSource) {
-        console.warn('Web component file not found, skipping test');
+      if (!combinedSource) {
+        console.warn('Component files not found, skipping test');
         return;
       }
       
-      // Check for :focus-visible CSS rule
-      expect(webComponentSource).toContain(':focus-visible');
-      expect(webComponentSource).toContain(':focus:not(:focus-visible)');
+      // Check for :focus-visible CSS rule (now in external CSS file)
+      expect(combinedSource).toContain(':focus-visible');
+      expect(combinedSource).toContain(':focus:not(:focus-visible)');
     });
     
     it('should support testID for automated testing', () => {
@@ -505,36 +525,36 @@ describe('Button-Icon Stemma Validators', () => {
     });
     
     it('should implement touch target extension for small size', () => {
-      if (!webComponentSource) {
-        console.warn('Web component file not found, skipping test');
+      if (!combinedSource) {
+        console.warn('Component files not found, skipping test');
         return;
       }
       
-      // Check for touch target extension CSS using ::after pseudo-element
-      expect(webComponentSource).toContain('.button-icon--small::after');
-      // Touch target extends to 48px (tapAreaRecommended)
-      expect(webComponentSource).toMatch(/width:\s*48px/);
-      expect(webComponentSource).toMatch(/height:\s*48px/);
+      // Check for touch target extension CSS using ::after pseudo-element (now in external CSS file)
+      expect(combinedSource).toContain('.button-icon--small::after');
+      // Touch target extends to tapAreaRecommended using token reference
+      // @see Requirements 6.1, 6.3 - Token-referenced sizing
+      expect(combinedSource).toContain('var(--_bi-touch-target)');
     });
     
     it('should support high contrast mode', () => {
-      if (!webComponentSource) {
-        console.warn('Web component file not found, skipping test');
+      if (!combinedSource) {
+        console.warn('Component files not found, skipping test');
         return;
       }
       
-      // Check for high contrast media query
-      expect(webComponentSource).toContain('prefers-contrast: high');
+      // Check for high contrast media query (now in external CSS file)
+      expect(combinedSource).toContain('prefers-contrast: high');
     });
     
     it('should support reduced motion preference', () => {
-      if (!webComponentSource) {
-        console.warn('Web component file not found, skipping test');
+      if (!combinedSource) {
+        console.warn('Component files not found, skipping test');
         return;
       }
       
-      // Check for reduced motion media query
-      expect(webComponentSource).toContain('prefers-reduced-motion: reduce');
+      // Check for reduced motion media query (now in external CSS file)
+      expect(combinedSource).toContain('prefers-reduced-motion: reduce');
     });
   });
   

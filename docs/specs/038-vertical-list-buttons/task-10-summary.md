@@ -42,9 +42,27 @@ During demo creation, a critical bug was discovered and fixed in the semantic to
 
 **Result**: CSS output now correctly generates `--radius-none`, `--radius-normal`, `--border-default`, etc.
 
+## Post-Completion Enhancement: Incremental DOM Updates (January 9, 2026)
+
+After initial completion, a rendering architecture issue was identified and fixed:
+
+**Problem**: The web component's `render()` method used full DOM replacement on every attribute change, which broke CSS transitions (transitions require the same element to exist before and after property changes).
+
+**Solution**: Refactored to incremental DOM update architecture:
+- `_createDOM()` — Called once, creates full DOM structure
+- `_updateDOM()` — Called on attribute changes, updates only changed properties via CSS custom properties
+
+**Benefits**:
+- CSS transitions now animate smoothly between states
+- Focus preserved on state changes
+- No screen reader interruptions
+- Better performance (no DOM thrashing)
+
+**Demo Enhancement**: Added "Working Examples — Real Behavior" section demonstrating Single-Select, Multi-Select, and Tap Mode behaviors.
+
 ## Spec Completion
 
-With Task 10 complete, **spec 038-vertical-list-buttons is now COMPLETE**. The Button-VerticalListItem component is ready for production use across all platforms.
+With Task 10 complete and the incremental DOM update enhancement, **spec 038-vertical-list-buttons is now COMPLETE**. The Button-VerticalListItem component is ready for production use across all platforms with smooth CSS transitions.
 
 ---
 

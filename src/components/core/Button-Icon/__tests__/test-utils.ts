@@ -28,7 +28,7 @@ import { ButtonIconSize, ButtonIconVariant } from '../types';
  * - --color-background-primary-subtle: Subtle background for hover states
  * - --accessibility-focus-*: Focus ring tokens
  * - --border-*: Border width tokens
- * - --duration-150: Animation duration token
+ * - --motion-button-press-*: Semantic motion tokens for button press feedback
  * 
  * @see ButtonIcon._generateStyles() for usage
  */
@@ -47,8 +47,11 @@ export function setupButtonIconTokens(): void {
   document.documentElement.style.setProperty('--border-default', '1px');
   document.documentElement.style.setProperty('--border-emphasis', '2px');
   
-  // Animation token
-  document.documentElement.style.setProperty('--duration-150', '150ms');
+  // Semantic motion tokens for button press feedback
+  // Uses motion.buttonPress semantic token (150ms, accelerate easing)
+  // @see Requirements: 3.2, 3.3, 3.4 - Semantic motion token usage
+  document.documentElement.style.setProperty('--motion-button-press-duration', '150ms');
+  document.documentElement.style.setProperty('--motion-button-press-easing', 'cubic-bezier(0.4, 0.0, 1, 1)');
   
   // Icon stroke width token (required by Icon-Base)
   document.documentElement.style.setProperty('--icon-stroke-width', '2');
@@ -66,7 +69,8 @@ export function cleanupButtonIconTokens(): void {
   document.documentElement.style.removeProperty('--accessibility-focus-color');
   document.documentElement.style.removeProperty('--border-default');
   document.documentElement.style.removeProperty('--border-emphasis');
-  document.documentElement.style.removeProperty('--duration-150');
+  document.documentElement.style.removeProperty('--motion-button-press-duration');
+  document.documentElement.style.removeProperty('--motion-button-press-easing');
   document.documentElement.style.removeProperty('--icon-stroke-width');
 }
 

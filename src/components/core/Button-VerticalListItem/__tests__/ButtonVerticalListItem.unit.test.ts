@@ -80,7 +80,10 @@ describe('Button-VerticalListItem Unit Tests', () => {
       button = await createVerticalListButtonItem({ label: 'Test Label' });
       
       const descriptionElement = getDescriptionElement(button);
-      expect(descriptionElement).toBeNull();
+      // With incremental update architecture, element exists but is hidden
+      expect(descriptionElement).toBeTruthy();
+      expect(descriptionElement?.style.display).toBe('none');
+      expect(descriptionElement?.textContent).toBe('');
     });
     
     it('should render leading icon when provided', async () => {
@@ -102,7 +105,9 @@ describe('Button-VerticalListItem Unit Tests', () => {
       button = await createVerticalListButtonItem({ label: 'Test Label' });
       
       const leadingIconElement = getLeadingIconElement(button);
-      expect(leadingIconElement).toBeNull();
+      // With incremental update architecture, element exists but is hidden
+      expect(leadingIconElement).toBeTruthy();
+      expect(leadingIconElement?.style.display).toBe('none');
     });
     
     it('should apply test ID when provided', async () => {

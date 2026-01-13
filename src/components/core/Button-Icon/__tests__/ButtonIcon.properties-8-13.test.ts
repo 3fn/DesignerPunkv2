@@ -28,6 +28,8 @@
  * @see Requirements: 6.1-6.3, 7.1-7.4, 8.1-8.3, 9.1-9.2, 12.1-12.2, 13.1-13.4
  */
 
+import * as fs from 'fs';
+import * as path from 'path';
 import * as fc from 'fast-check';
 import {
   registerButtonIcon,
@@ -40,6 +42,33 @@ import {
 } from './test-utils';
 import { ButtonIconSize, ButtonIconVariant } from '../types';
 import { IconBaseName } from '../../Icon-Base/types';
+
+// ============================================================================
+// Helper Functions
+// ============================================================================
+
+/**
+ * Read the actual CSS file content for CSS validation tests.
+ * Since Jest mocks CSS imports to return empty strings, we need to read
+ * the actual CSS file for tests that validate CSS content.
+ */
+function readCSSFileContent(): string {
+  const cssPath = path.resolve(process.cwd(), 'src/components/core/Button-Icon/platforms/web/ButtonIcon.web.css');
+  if (fs.existsSync(cssPath)) {
+    return fs.readFileSync(cssPath, 'utf-8');
+  }
+  return '';
+}
+
+// Cache CSS content to avoid repeated file reads
+let cachedCSSContent: string | null = null;
+
+function getCSSContent(): string {
+  if (cachedCSSContent === null) {
+    cachedCSSContent = readCSSFileContent();
+  }
+  return cachedCSSContent;
+}
 
 // ============================================================================
 // Test Data Generators
@@ -134,6 +163,8 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
      * **Feature: button-icon-component, Property 8: Focus Ring Styling**
      */
     it('should have focus ring CSS variables defined', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           sizeArbitrary,
@@ -144,15 +175,10 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, size, variant });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              expect(styleElement).toBeTruthy();
-              
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify focus ring CSS variables are defined in :host
-              expect(styleContent).toContain('--button-icon-focus-width');
-              expect(styleContent).toContain('--button-icon-focus-color');
-              expect(styleContent).toContain('--button-icon-focus-offset');
+              // Verify focus ring CSS variables are defined in CSS file
+              expect(cssContent).toContain('--_bi-focus-width');
+              expect(cssContent).toContain('--_bi-focus-color');
+              expect(cssContent).toContain('--_bi-focus-offset');
               
               return true;
             } finally {
@@ -166,6 +192,8 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
 
     
     it('should use focus-visible for keyboard-only focus indicators', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           sizeArbitrary,
@@ -176,15 +204,12 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, size, variant });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify :focus-visible rule exists for keyboard-only focus
-              expect(styleContent).toContain('.button-icon:focus-visible');
+              // Verify :focus-visible rule exists for keyboard-only focus in CSS file
+              expect(cssContent).toContain('.button-icon:focus-visible');
               
               // Verify outline uses focus ring tokens
-              expect(styleContent).toContain('outline: var(--button-icon-focus-width) solid var(--button-icon-focus-color)');
-              expect(styleContent).toContain('outline-offset: var(--button-icon-focus-offset)');
+              expect(cssContent).toContain('outline: var(--_bi-focus-width) solid var(--_bi-focus-color)');
+              expect(cssContent).toContain('outline-offset: var(--_bi-focus-offset)');
               
               return true;
             } finally {
@@ -197,6 +222,8 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
     });
     
     it('should hide focus ring on mouse click (focus:not(:focus-visible))', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           sizeArbitrary,
@@ -207,12 +234,9 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, size, variant });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify focus:not(:focus-visible) rule removes outline on mouse click
-              expect(styleContent).toContain('.button-icon:focus:not(:focus-visible)');
-              expect(styleContent).toContain('outline: none');
+              // Verify focus:not(:focus-visible) rule removes outline on mouse click in CSS file
+              expect(cssContent).toContain('.button-icon:focus:not(:focus-visible)');
+              expect(cssContent).toContain('outline: none');
               
               return true;
             } finally {
@@ -235,13 +259,18 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
      * Property 9: Hover State Styling
      * 
      * *For any* Button-Icon variant on hover, the component SHALL apply the
-     * correct blend token (blend.hoverDarker) to the appropriate element
+     * correct blend utility calculated color to the appropriate element
      * while maintaining circular shape.
      * 
      * **Validates: Requirements 7.1, 7.2, 7.3, 7.4**
      * **Feature: button-icon-component, Property 9: Hover State Styling**
+     * 
+     * Note: Updated to use blend utilities instead of filter: brightness()
+     * @see Requirements 1.1, 1.5, 1.6 - Blend utility adoption
      */
     it('should have hover state CSS rules for all variants', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           variantArbitrary,
@@ -251,11 +280,8 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, variant });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify hover rule exists for the variant
-              expect(styleContent).toContain(`.button-icon--${variant}:hover`);
+              // Verify hover rule exists for the variant in CSS file
+              expect(cssContent).toContain(`.button-icon--${variant}:hover`);
               
               return true;
             } finally {
@@ -267,7 +293,9 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
       );
     });
     
-    it('should apply brightness filter for hover darkening (blend.hoverDarker)', async () => {
+    it('should apply blend utility calculated color for hover state', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           variantArbitrary,
@@ -277,13 +305,16 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, variant });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify hover uses brightness filter (0.92 = 8% darker)
-              const hoverSection = styleContent.match(new RegExp(`\\.button-icon--${variant}:hover\\s*\\{[^}]+\\}`));
+              // Verify hover uses blend utility CSS custom property
+              const hoverSection = cssContent.match(new RegExp(`\\.button-icon--${variant}:hover\\s*\\{[^}]+\\}`));
               expect(hoverSection).toBeTruthy();
-              expect(hoverSection?.[0]).toContain('filter: brightness(0.92)');
+              
+              // Primary uses background-color, secondary/tertiary use color
+              if (variant === 'primary') {
+                expect(hoverSection?.[0]).toContain('background-color: var(--_bi-hover-bg)');
+              } else {
+                expect(hoverSection?.[0]).toContain('color: var(--_bi-hover-bg)');
+              }
               
               return true;
             } finally {
@@ -297,6 +328,8 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
 
     
     it('should apply subtle background on secondary hover', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           iconNameArbitrary,
@@ -305,16 +338,13 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, variant: 'secondary' });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify secondary hover has subtle background
-              const hoverSection = styleContent.match(/\.button-icon--secondary:hover\s*\{[^}]+\}/);
+              // Verify secondary hover has subtle background in CSS file
+              const hoverSection = cssContent.match(/\.button-icon--secondary:hover\s*\{[^}]+\}/);
               expect(hoverSection).toBeTruthy();
-              expect(hoverSection?.[0]).toContain('background-color: var(--button-icon-color-bg-subtle)');
+              expect(hoverSection?.[0]).toContain('background-color: var(--_bi-color-bg-subtle)');
               
-              // Verify border becomes visible on hover
-              expect(hoverSection?.[0]).toContain('border-color: var(--button-icon-color-primary)');
+              // Verify border uses blend utility calculated color
+              expect(hoverSection?.[0]).toContain('border-color: var(--_bi-hover-bg)');
               
               return true;
             } finally {
@@ -327,6 +357,8 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
     });
     
     it('should maintain circular shape during hover state', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           sizeArbitrary,
@@ -337,12 +369,9 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, size, variant });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify hover state maintains border-radius
-              expect(styleContent).toContain('.button-icon:hover');
-              expect(styleContent).toContain('border-radius: var(--button-icon-radius)');
+              // Verify hover state maintains border-radius in CSS file
+              expect(cssContent).toContain('.button-icon:hover');
+              expect(cssContent).toContain('border-radius: var(--_bi-radius)');
               
               return true;
             } finally {
@@ -365,13 +394,18 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
      * Property 10: Pressed State Styling
      * 
      * *For any* Button-Icon variant on press, the component SHALL apply the
-     * correct blend token (blend.pressedDarker) to the appropriate element
-     * while maintaining circular shape.
+     * correct blend utility calculated color (blend.pressedDarker) to the 
+     * appropriate element while maintaining circular shape.
      * 
      * **Validates: Requirements 8.1, 8.2, 8.3, 8.6**
      * **Feature: button-icon-component, Property 10: Pressed State Styling**
+     * 
+     * Note: Updated to use blend utilities instead of filter: brightness()
+     * @see Requirements 1.2, 1.5, 1.6 - Blend utility adoption
      */
     it('should have active/pressed state CSS rules for all variants', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           variantArbitrary,
@@ -381,11 +415,8 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, variant });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify active rule exists for the variant
-              expect(styleContent).toContain(`.button-icon--${variant}:active`);
+              // Verify active rule exists for the variant in CSS file
+              expect(cssContent).toContain(`.button-icon--${variant}:active`);
               
               return true;
             } finally {
@@ -397,7 +428,9 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
       );
     });
     
-    it('should apply brightness filter for pressed darkening (blend.pressedDarker)', async () => {
+    it('should apply blend utility calculated color for pressed state', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           variantArbitrary,
@@ -407,13 +440,16 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, variant });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify active uses brightness filter (0.88 = 12% darker)
-              const activeSection = styleContent.match(new RegExp(`\\.button-icon--${variant}:active\\s*\\{[^}]+\\}`));
+              // Verify pressed uses blend utility CSS custom property
+              const activeSection = cssContent.match(new RegExp(`\\.button-icon--${variant}:active\\s*\\{[^}]+\\}`));
               expect(activeSection).toBeTruthy();
-              expect(activeSection?.[0]).toContain('filter: brightness(0.88)');
+              
+              // Primary uses background-color, secondary/tertiary use color
+              if (variant === 'primary') {
+                expect(activeSection?.[0]).toContain('background-color: var(--_bi-pressed-bg)');
+              } else {
+                expect(activeSection?.[0]).toContain('color: var(--_bi-pressed-bg)');
+              }
               
               return true;
             } finally {
@@ -427,6 +463,8 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
 
     
     it('should apply subtle background on secondary pressed', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           iconNameArbitrary,
@@ -435,16 +473,13 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, variant: 'secondary' });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify secondary active has subtle background
-              const activeSection = styleContent.match(/\.button-icon--secondary:active\s*\{[^}]+\}/);
+              // Verify secondary active has subtle background in CSS file
+              const activeSection = cssContent.match(/\.button-icon--secondary:active\s*\{[^}]+\}/);
               expect(activeSection).toBeTruthy();
-              expect(activeSection?.[0]).toContain('background-color: var(--button-icon-color-bg-subtle)');
+              expect(activeSection?.[0]).toContain('background-color: var(--_bi-color-bg-subtle)');
               
-              // Verify border becomes visible on active
-              expect(activeSection?.[0]).toContain('border-color: var(--button-icon-color-primary)');
+              // Verify border uses blend utility calculated color
+              expect(activeSection?.[0]).toContain('border-color: var(--_bi-pressed-bg)');
               
               return true;
             } finally {
@@ -457,6 +492,8 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
     });
     
     it('should maintain circular shape during pressed state', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           sizeArbitrary,
@@ -467,12 +504,9 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, size, variant });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify active state maintains border-radius
-              expect(styleContent).toContain('.button-icon:active');
-              expect(styleContent).toContain('border-radius: var(--button-icon-radius)');
+              // Verify active state maintains border-radius in CSS file
+              expect(cssContent).toContain('.button-icon:active');
+              expect(cssContent).toContain('border-radius: var(--_bi-radius)');
               
               return true;
             } finally {
@@ -502,6 +536,8 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
      * **Feature: button-icon-component, Property 11: Secondary Border No Layout Shift**
      */
     it('should reserve 2px border space with transparent border in default state', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           sizeArbitrary,
@@ -511,13 +547,10 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, size, variant: 'secondary' });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify secondary has transparent border reserving 2px space
-              const secondarySection = styleContent.match(/\.button-icon--secondary\s*\{[^}]+\}/);
+              // Verify secondary has transparent border reserving 2px space in CSS file
+              const secondarySection = cssContent.match(/\.button-icon--secondary\s*\{[^}]+\}/);
               expect(secondarySection).toBeTruthy();
-              expect(secondarySection?.[0]).toContain('border: var(--button-icon-border-emphasis) solid transparent');
+              expect(secondarySection?.[0]).toContain('border: var(--_bi-border-emphasis) solid transparent');
               
               return true;
             } finally {
@@ -530,6 +563,8 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
     });
     
     it('should use box-shadow technique to simulate 1px border', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           sizeArbitrary,
@@ -539,13 +574,10 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, size, variant: 'secondary' });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify secondary uses inset box-shadow for 1px visual border
-              const secondarySection = styleContent.match(/\.button-icon--secondary\s*\{[^}]+\}/);
+              // Verify secondary uses inset box-shadow for 1px visual border in CSS file
+              const secondarySection = cssContent.match(/\.button-icon--secondary\s*\{[^}]+\}/);
               expect(secondarySection).toBeTruthy();
-              expect(secondarySection?.[0]).toContain('box-shadow: inset 0 0 0 var(--button-icon-border-default)');
+              expect(secondarySection?.[0]).toContain('box-shadow: inset 0 0 0 var(--_bi-border-default)');
               
               return true;
             } finally {
@@ -559,6 +591,8 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
 
     
     it('should remove box-shadow on hover/active when actual border is shown', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           iconNameArbitrary,
@@ -567,16 +601,13 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, variant: 'secondary' });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify hover removes box-shadow (actual border takes over)
-              const hoverSection = styleContent.match(/\.button-icon--secondary:hover\s*\{[^}]+\}/);
+              // Verify hover removes box-shadow (actual border takes over) in CSS file
+              const hoverSection = cssContent.match(/\.button-icon--secondary:hover\s*\{[^}]+\}/);
               expect(hoverSection).toBeTruthy();
               expect(hoverSection?.[0]).toContain('box-shadow: none');
               
-              // Verify active removes box-shadow (actual border takes over)
-              const activeSection = styleContent.match(/\.button-icon--secondary:active\s*\{[^}]+\}/);
+              // Verify active removes box-shadow (actual border takes over) in CSS file
+              const activeSection = cssContent.match(/\.button-icon--secondary:active\s*\{[^}]+\}/);
               expect(activeSection).toBeTruthy();
               expect(activeSection?.[0]).toContain('box-shadow: none');
               
@@ -591,6 +622,8 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
     });
     
     it('should have consistent button dimensions across all secondary states', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           sizeArbitrary,
@@ -608,11 +641,8 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
               
               // The box-shadow technique ensures dimensions stay constant
               // because border space is always reserved (2px transparent)
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify size-specific dimensions are defined
-              const sizeSection = styleContent.match(new RegExp(`\\.button-icon--${size}\\s*\\{[^}]+\\}`));
+              // Verify size-specific dimensions are defined in CSS file
+              const sizeSection = cssContent.match(new RegExp(`\\.button-icon--${size}\\s*\\{[^}]+\\}`));
               expect(sizeSection).toBeTruthy();
               expect(sizeSection?.[0]).toContain('width:');
               expect(sizeSection?.[0]).toContain('height:');
@@ -638,13 +668,14 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
      * Property 12: Animation Tokens
      * 
      * *For any* Button-Icon state transition (default↔hover, default↔pressed),
-     * the transition SHALL use duration150 token for timing and standard
-     * ease-in-out easing.
+     * the transition SHALL use semantic motion.buttonPress token for timing and easing.
      * 
-     * **Validates: Requirements 12.1, 12.2**
+     * **Validates: Requirements 3.2, 3.3, 3.4**
      * **Feature: button-icon-component, Property 12: Animation Tokens**
      */
-    it('should define transition CSS variable using duration150 token', async () => {
+    it('should define transition CSS variables using semantic motion.buttonPress token', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           sizeArbitrary,
@@ -655,11 +686,10 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, size, variant });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify transition CSS variable references duration-150 token
-              expect(styleContent).toContain('--button-icon-transition: var(--duration-150)');
+              // Verify transition CSS variables reference semantic motion.buttonPress token
+              // @see Requirements: 3.2, 3.3, 3.4 - Semantic motion token usage
+              expect(cssContent).toContain('--_bi-transition-duration: var(--motion-button-press-duration)');
+              expect(cssContent).toContain('--_bi-transition-easing: var(--motion-button-press-easing)');
               
               return true;
             } finally {
@@ -671,7 +701,9 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
       );
     });
     
-    it('should apply transition to state-changing properties', async () => {
+    it('should apply transition to state-changing properties using semantic motion tokens', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           sizeArbitrary,
@@ -682,15 +714,11 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, size, variant });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify transition is applied to relevant properties
-              expect(styleContent).toContain('transition:');
-              expect(styleContent).toContain('var(--button-icon-transition)');
-              
-              // Verify ease-in-out easing is used
-              expect(styleContent).toContain('ease-in-out');
+              // Verify transition is applied to relevant properties in CSS file
+              expect(cssContent).toContain('transition:');
+              // Verify semantic motion token references are used
+              expect(cssContent).toContain('var(--_bi-transition-duration)');
+              expect(cssContent).toContain('var(--_bi-transition-easing)');
               
               return true;
             } finally {
@@ -703,7 +731,9 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
     });
 
     
-    it('should transition background-color, border-color, color, and box-shadow', async () => {
+    it('should transition background-color, border-color, color, and box-shadow using semantic motion tokens', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           sizeArbitrary,
@@ -714,14 +744,12 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, size, variant });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify transition includes all state-changing properties
-              expect(styleContent).toContain('background-color var(--button-icon-transition)');
-              expect(styleContent).toContain('border-color var(--button-icon-transition)');
-              expect(styleContent).toContain('color var(--button-icon-transition)');
-              expect(styleContent).toContain('box-shadow var(--button-icon-transition)');
+              // Verify transition includes all state-changing properties in CSS file
+              // Using semantic motion tokens for duration and easing
+              expect(cssContent).toContain('background-color var(--_bi-transition-duration) var(--_bi-transition-easing)');
+              expect(cssContent).toContain('border-color var(--_bi-transition-duration) var(--_bi-transition-easing)');
+              expect(cssContent).toContain('color var(--_bi-transition-duration) var(--_bi-transition-easing)');
+              expect(cssContent).toContain('box-shadow var(--_bi-transition-duration) var(--_bi-transition-easing)');
               
               return true;
             } finally {
@@ -734,6 +762,8 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
     });
     
     it('should respect prefers-reduced-motion media query', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           sizeArbitrary,
@@ -744,12 +774,9 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, size, variant });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify reduced motion media query exists
-              expect(styleContent).toContain('@media (prefers-reduced-motion: reduce)');
-              expect(styleContent).toContain('transition: none');
+              // Verify reduced motion media query exists in CSS file
+              expect(cssContent).toContain('@media (prefers-reduced-motion: reduce)');
+              expect(cssContent).toContain('transition: none');
               
               return true;
             } finally {
@@ -862,6 +889,8 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
     });
     
     it('should have icon color defined per variant in CSS', async () => {
+      const cssContent = getCSSContent();
+      
       await fc.assert(
         fc.asyncProperty(
           variantArbitrary,
@@ -871,18 +900,15 @@ describe('Button-Icon Property-Based Tests (Properties 8-13)', () => {
             const button = await createButtonIcon({ icon, ariaLabel, variant });
             
             try {
-              const styleElement = button.shadowRoot?.querySelector('style');
-              const styleContent = styleElement?.textContent || '';
-              
-              // Verify variant-specific color is defined
-              const variantSection = styleContent.match(new RegExp(`\\.button-icon--${variant}\\s*\\{[^}]+\\}`));
+              // Verify variant-specific color is defined in CSS file
+              const variantSection = cssContent.match(new RegExp(`\\.button-icon--${variant}\\s*\\{[^}]+\\}`));
               expect(variantSection).toBeTruthy();
               
               // Primary uses contrast color, secondary/tertiary use primary color
               if (variant === 'primary') {
-                expect(variantSection?.[0]).toContain('color: var(--button-icon-color-contrast)');
+                expect(variantSection?.[0]).toContain('color: var(--_bi-color-contrast)');
               } else {
-                expect(variantSection?.[0]).toContain('color: var(--button-icon-color-primary)');
+                expect(variantSection?.[0]).toContain('color: var(--_bi-color-primary)');
               }
               
               return true;

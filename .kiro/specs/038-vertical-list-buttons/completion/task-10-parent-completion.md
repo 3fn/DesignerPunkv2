@@ -150,9 +150,55 @@ All requirements from the requirements document have been validated across all p
 
 ---
 
+## Post-Completion Enhancement: Incremental DOM Updates
+
+**Date**: January 9, 2026
+
+After initial completion, a critical rendering architecture issue was identified and fixed:
+
+### Problem Identified
+The web component's `render()` method used full DOM replacement (`innerHTML = ...`) on every attribute change. This broke CSS transitions because:
+- CSS transitions require the same element to exist before and after property changes
+- Full DOM replacement creates new elements, so the browser sees "old element removed, new element added"
+- No transition occurs because there's nothing to transition from
+
+Additional issues with full re-render:
+- Focus loss on every state change (button element replaced)
+- Screen reader announcement interruptions
+- Unnecessary DOM thrashing in lists with many items
+
+### Solution Implemented
+Refactored to incremental DOM update architecture:
+
+1. **Split rendering into two phases:**
+   - `_createDOM()` — Called once on first render, creates full DOM structure
+   - `_updateDOM()` — Called on attribute changes, updates only changed properties
+
+2. **Always render containers** — Leading icon and description containers are always present, hidden via `display: none` when not needed. This preserves DOM element identity.
+
+3. **Update via CSS custom properties** — Instead of replacing innerHTML, use `style.setProperty()` to update CSS variables, which CSS transitions can animate.
+
+4. **Cache element references** — Store references to elements that need updating (`_button`, `_labelEl`, `_descriptionEl`, etc.) to avoid repeated DOM queries.
+
+### Files Modified
+- `src/components/core/Button-VerticalListItem/platforms/web/ButtonVerticalListItem.web.ts` — Refactored render architecture
+- `src/components/core/Button-VerticalListItem/__tests__/test-utils.ts` — Added `--radius-normal` token
+- `src/components/core/Button-VerticalListItem/__tests__/ButtonVerticalListItem.unit.test.ts` — Updated tests for new architecture
+
+### Test Results After Fix
+All 146 Button-VerticalListItem tests pass.
+
+### Demo Enhancement
+Added "Working Examples — Real Behavior" section to `dist/browser/vertical-list-button-item-demo.html` demonstrating:
+- Single-Select Mode (radio-like behavior)
+- Multi-Select Mode (checkbox-like behavior)
+- Tap Mode (action buttons)
+
+---
+
 ## Spec Completion Status
 
-With Task 10 complete, the entire spec 038-vertical-list-buttons is now **COMPLETE**.
+With Task 10 complete and the incremental DOM update enhancement, the entire spec 038-vertical-list-buttons is now **COMPLETE**.
 
 All 10 parent tasks have been implemented:
 1. ✅ Component Foundation
@@ -166,7 +212,7 @@ All 10 parent tasks have been implemented:
 9. ✅ Android Implementation (Jetpack Compose)
 10. ✅ Cross-Platform Final Checkpoint
 
-The Button-VerticalListItem component is now ready for consumption by the parent pattern (Vertical List Buttons Pattern) on all three platforms.
+The Button-VerticalListItem component is now ready for consumption by the parent pattern (Vertical List Buttons Pattern) on all three platforms, with smooth CSS transitions working correctly.
 
 ---
 

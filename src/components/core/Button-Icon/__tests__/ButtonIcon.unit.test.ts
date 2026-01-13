@@ -20,6 +20,8 @@
  * @see Requirements: 1.5, 2.4, 6.4, 6.5, 9.3
  */
 
+import * as fs from 'fs';
+import * as path from 'path';
 import {
   registerButtonIcon,
   createButtonIcon,
@@ -30,6 +32,23 @@ import {
 } from './test-utils';
 import { ButtonIcon } from '../platforms/web/ButtonIcon.web';
 import { BUTTON_ICON_DEFAULTS } from '../types';
+
+// ============================================================================
+// Helper Functions
+// ============================================================================
+
+/**
+ * Read the actual CSS file content for CSS validation tests.
+ * Since Jest mocks CSS imports to return empty strings, we need to read
+ * the actual CSS file for tests that validate CSS content.
+ */
+function readCSSFileContent(): string {
+  const cssPath = path.resolve(process.cwd(), 'src/components/core/Button-Icon/platforms/web/ButtonIcon.web.css');
+  if (fs.existsSync(cssPath)) {
+    return fs.readFileSync(cssPath, 'utf-8');
+  }
+  return '';
+}
 
 // ============================================================================
 // Test Suite
@@ -203,6 +222,13 @@ describe('Button-Icon Unit Tests (Edge Cases)', () => {
      * **Validates: Requirements 6.4, 6.5**
      */
     let button: ButtonIcon;
+    let cssContent: string;
+    
+    beforeAll(() => {
+      // Read actual CSS file content for CSS validation tests
+      // Jest mocks CSS imports to return empty strings, so we read the file directly
+      cssContent = readCSSFileContent();
+    });
     
     afterEach(() => {
       if (button) {
@@ -216,17 +242,12 @@ describe('Button-Icon Unit Tests (Edge Cases)', () => {
         ariaLabel: 'Settings'
       });
       
-      const styleElement = button.shadowRoot?.querySelector('style');
-      expect(styleElement).toBeTruthy();
-      
-      const styleContent = styleElement?.textContent || '';
-      
-      // Verify :focus-visible rule exists
-      expect(styleContent).toContain('.button-icon:focus-visible');
+      // Verify :focus-visible rule exists in CSS file
+      expect(cssContent).toContain('.button-icon:focus-visible');
       
       // Verify focus ring styling is applied on :focus-visible
-      expect(styleContent).toContain('outline: var(--button-icon-focus-width) solid var(--button-icon-focus-color)');
-      expect(styleContent).toContain('outline-offset: var(--button-icon-focus-offset)');
+      expect(cssContent).toContain('outline: var(--_bi-focus-width) solid var(--_bi-focus-color)');
+      expect(cssContent).toContain('outline-offset: var(--_bi-focus-offset)');
     });
     
     it('should have :focus:not(:focus-visible) rule to hide focus ring on mouse click', async () => {
@@ -235,16 +256,11 @@ describe('Button-Icon Unit Tests (Edge Cases)', () => {
         ariaLabel: 'Settings'
       });
       
-      const styleElement = button.shadowRoot?.querySelector('style');
-      expect(styleElement).toBeTruthy();
-      
-      const styleContent = styleElement?.textContent || '';
-      
-      // Verify :focus:not(:focus-visible) rule exists
-      expect(styleContent).toContain('.button-icon:focus:not(:focus-visible)');
+      // Verify :focus:not(:focus-visible) rule exists in CSS file
+      expect(cssContent).toContain('.button-icon:focus:not(:focus-visible)');
       
       // Verify outline is removed on mouse click focus
-      expect(styleContent).toContain('outline: none');
+      expect(cssContent).toContain('outline: none');
     });
     
     it('should have focus ring tokens defined in :host', async () => {
@@ -253,13 +269,10 @@ describe('Button-Icon Unit Tests (Edge Cases)', () => {
         ariaLabel: 'Confirm'
       });
       
-      const styleElement = button.shadowRoot?.querySelector('style');
-      const styleContent = styleElement?.textContent || '';
-      
-      // Verify focus ring CSS variables are defined
-      expect(styleContent).toContain('--button-icon-focus-width');
-      expect(styleContent).toContain('--button-icon-focus-color');
-      expect(styleContent).toContain('--button-icon-focus-offset');
+      // Verify focus ring CSS variables are defined in CSS file
+      expect(cssContent).toContain('--_bi-focus-width');
+      expect(cssContent).toContain('--_bi-focus-color');
+      expect(cssContent).toContain('--_bi-focus-offset');
     });
     
     it('should reference accessibility focus tokens for focus ring', async () => {
@@ -268,13 +281,10 @@ describe('Button-Icon Unit Tests (Edge Cases)', () => {
         ariaLabel: 'Information'
       });
       
-      const styleElement = button.shadowRoot?.querySelector('style');
-      const styleContent = styleElement?.textContent || '';
-      
-      // Verify focus ring variables reference accessibility tokens
-      expect(styleContent).toContain('--button-icon-focus-offset: var(--accessibility-focus-offset)');
-      expect(styleContent).toContain('--button-icon-focus-width: var(--accessibility-focus-width)');
-      expect(styleContent).toContain('--button-icon-focus-color: var(--accessibility-focus-color)');
+      // Verify focus ring variables reference accessibility tokens in CSS file
+      expect(cssContent).toContain('--_bi-focus-offset: var(--accessibility-focus-offset)');
+      expect(cssContent).toContain('--_bi-focus-width: var(--accessibility-focus-width)');
+      expect(cssContent).toContain('--_bi-focus-color: var(--accessibility-focus-color)');
     });
     
     it('should have focus buffer margin for self-contained focus ring', async () => {
@@ -283,14 +293,11 @@ describe('Button-Icon Unit Tests (Edge Cases)', () => {
         ariaLabel: 'Settings'
       });
       
-      const styleElement = button.shadowRoot?.querySelector('style');
-      const styleContent = styleElement?.textContent || '';
-      
-      // Verify focus buffer is defined (4px = focus.offset + focus.width)
-      expect(styleContent).toContain('--button-icon-focus-buffer: 4px');
+      // Verify focus buffer is defined (4px = focus.offset + focus.width) in CSS file
+      expect(cssContent).toContain('--_bi-focus-buffer: 4px');
       
       // Verify margin uses focus buffer
-      expect(styleContent).toContain('margin: var(--button-icon-focus-buffer)');
+      expect(cssContent).toContain('margin: var(--_bi-focus-buffer)');
     });
   });
   
@@ -414,6 +421,13 @@ describe('Button-Icon Unit Tests (Edge Cases)', () => {
      * **Validates: Requirements 9.3**
      */
     let button: ButtonIcon;
+    let cssContent: string;
+    
+    beforeAll(() => {
+      // Read actual CSS file content for CSS validation tests
+      // Jest mocks CSS imports to return empty strings, so we read the file directly
+      cssContent = readCSSFileContent();
+    });
     
     afterEach(() => {
       if (button) {
@@ -428,15 +442,12 @@ describe('Button-Icon Unit Tests (Edge Cases)', () => {
         variant: 'secondary'
       });
       
-      const styleElement = button.shadowRoot?.querySelector('style');
-      const styleContent = styleElement?.textContent || '';
-      
-      // Find secondary variant CSS rule
-      const secondarySection = styleContent.match(/\.button-icon--secondary\s*\{[^}]+\}/);
+      // Find secondary variant CSS rule in CSS file
+      const secondarySection = cssContent.match(/\.button-icon--secondary\s*\{[^}]+\}/);
       expect(secondarySection).toBeTruthy();
       
       // Verify transparent border reserving 2px (borderEmphasis) space
-      expect(secondarySection?.[0]).toContain('border: var(--button-icon-border-emphasis) solid transparent');
+      expect(secondarySection?.[0]).toContain('border: var(--_bi-border-emphasis) solid transparent');
     });
     
     it('should use inset box-shadow to simulate 1px border', async () => {
@@ -446,16 +457,13 @@ describe('Button-Icon Unit Tests (Edge Cases)', () => {
         variant: 'secondary'
       });
       
-      const styleElement = button.shadowRoot?.querySelector('style');
-      const styleContent = styleElement?.textContent || '';
-      
-      // Find secondary variant CSS rule
-      const secondarySection = styleContent.match(/\.button-icon--secondary\s*\{[^}]+\}/);
+      // Find secondary variant CSS rule in CSS file
+      const secondarySection = cssContent.match(/\.button-icon--secondary\s*\{[^}]+\}/);
       expect(secondarySection).toBeTruthy();
       
       // Verify inset box-shadow simulating 1px (borderDefault) border
-      expect(secondarySection?.[0]).toContain('box-shadow: inset 0 0 0 var(--button-icon-border-default)');
-      expect(secondarySection?.[0]).toContain('var(--button-icon-color-primary)');
+      expect(secondarySection?.[0]).toContain('box-shadow: inset 0 0 0 var(--_bi-border-default)');
+      expect(secondarySection?.[0]).toContain('var(--_bi-color-primary)');
     });
     
     it('should remove box-shadow on hover when actual border is shown', async () => {
@@ -465,18 +473,15 @@ describe('Button-Icon Unit Tests (Edge Cases)', () => {
         variant: 'secondary'
       });
       
-      const styleElement = button.shadowRoot?.querySelector('style');
-      const styleContent = styleElement?.textContent || '';
-      
-      // Find secondary hover CSS rule
-      const hoverSection = styleContent.match(/\.button-icon--secondary:hover\s*\{[^}]+\}/);
+      // Find secondary hover CSS rule in CSS file
+      const hoverSection = cssContent.match(/\.button-icon--secondary:hover\s*\{[^}]+\}/);
       expect(hoverSection).toBeTruthy();
       
       // Verify box-shadow is removed on hover
       expect(hoverSection?.[0]).toContain('box-shadow: none');
       
-      // Verify actual border color is applied
-      expect(hoverSection?.[0]).toContain('border-color: var(--button-icon-color-primary)');
+      // Verify blend utility calculated color is used for border (--_bi-hover-bg)
+      expect(hoverSection?.[0]).toContain('border-color: var(--_bi-hover-bg)');
     });
     
     it('should remove box-shadow on active when actual border is shown', async () => {
@@ -486,18 +491,15 @@ describe('Button-Icon Unit Tests (Edge Cases)', () => {
         variant: 'secondary'
       });
       
-      const styleElement = button.shadowRoot?.querySelector('style');
-      const styleContent = styleElement?.textContent || '';
-      
-      // Find secondary active CSS rule
-      const activeSection = styleContent.match(/\.button-icon--secondary:active\s*\{[^}]+\}/);
+      // Find secondary active CSS rule in CSS file
+      const activeSection = cssContent.match(/\.button-icon--secondary:active\s*\{[^}]+\}/);
       expect(activeSection).toBeTruthy();
       
       // Verify box-shadow is removed on active
       expect(activeSection?.[0]).toContain('box-shadow: none');
       
-      // Verify actual border color is applied
-      expect(activeSection?.[0]).toContain('border-color: var(--button-icon-color-primary)');
+      // Verify blend utility calculated color is used for border (--_bi-pressed-bg)
+      expect(activeSection?.[0]).toContain('border-color: var(--_bi-pressed-bg)');
     });
     
     it('should have border token CSS variables defined', async () => {
@@ -507,12 +509,9 @@ describe('Button-Icon Unit Tests (Edge Cases)', () => {
         variant: 'secondary'
       });
       
-      const styleElement = button.shadowRoot?.querySelector('style');
-      const styleContent = styleElement?.textContent || '';
-      
-      // Verify border token CSS variables are defined in :host
-      expect(styleContent).toContain('--button-icon-border-default: var(--border-default)');
-      expect(styleContent).toContain('--button-icon-border-emphasis: var(--border-emphasis)');
+      // Verify border token CSS variables are defined in :host in CSS file
+      expect(cssContent).toContain('--_bi-border-default: var(--border-default)');
+      expect(cssContent).toContain('--_bi-border-emphasis: var(--border-emphasis)');
     });
     
     it('should apply secondary class correctly', async () => {
@@ -538,23 +537,21 @@ describe('Button-Icon Unit Tests (Edge Cases)', () => {
         size: 'medium'
       });
       
-      const styleElement = button.shadowRoot?.querySelector('style');
-      const styleContent = styleElement?.textContent || '';
-      
-      // Verify medium size dimensions are defined
-      const mediumSection = styleContent.match(/\.button-icon--medium\s*\{[^}]+\}/);
+      // Verify medium size dimensions use token references in CSS file
+      // @see Requirements 6.1, 6.3 - Token-referenced sizing
+      const mediumSection = cssContent.match(/\.button-icon--medium\s*\{[^}]+\}/);
       expect(mediumSection).toBeTruthy();
-      expect(mediumSection?.[0]).toContain('width: 40px');
-      expect(mediumSection?.[0]).toContain('height: 40px');
+      expect(mediumSection?.[0]).toContain('width: var(--_bi-size-medium)');
+      expect(mediumSection?.[0]).toContain('height: var(--_bi-size-medium)');
       
       // Verify secondary hover doesn't change dimensions (no width/height override)
-      const hoverSection = styleContent.match(/\.button-icon--secondary:hover\s*\{[^}]+\}/);
+      const hoverSection = cssContent.match(/\.button-icon--secondary:hover\s*\{[^}]+\}/);
       expect(hoverSection).toBeTruthy();
       expect(hoverSection?.[0]).not.toContain('width:');
       expect(hoverSection?.[0]).not.toContain('height:');
       
       // Verify secondary active doesn't change dimensions (no width/height override)
-      const activeSection = styleContent.match(/\.button-icon--secondary:active\s*\{[^}]+\}/);
+      const activeSection = cssContent.match(/\.button-icon--secondary:active\s*\{[^}]+\}/);
       expect(activeSection).toBeTruthy();
       expect(activeSection?.[0]).not.toContain('width:');
       expect(activeSection?.[0]).not.toContain('height:');

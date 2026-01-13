@@ -39,8 +39,9 @@ export function setupRequiredTokens(): void {
   root.style.setProperty('--border-default', '1px');
   root.style.setProperty('--border-emphasis', '2px');
   
-  // Radius tokens
+  // Radius tokens (semantic + primitive for reference resolution)
   root.style.setProperty('--radius-100', '8px');
+  root.style.setProperty('--radius-normal', '8px');
   
   // Spacing tokens
   root.style.setProperty('--space-inset-200', '16px');
@@ -80,6 +81,7 @@ export function cleanupRequiredTokens(): void {
   
   // Radius tokens
   root.style.removeProperty('--radius-100');
+  root.style.removeProperty('--radius-normal');
   
   // Spacing tokens
   root.style.removeProperty('--space-inset-200');

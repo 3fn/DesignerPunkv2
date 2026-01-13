@@ -13,6 +13,12 @@
  * Follows the "fail loudly" philosophy — errors surface immediately during development
  * rather than silently degrading at runtime.
  * 
+ * RENDERING ARCHITECTURE:
+ * Uses incremental DOM updates rather than full re-renders to enable CSS transitions.
+ * - _createDOM(): Called once on first render, creates the full DOM structure
+ * - _updateDOM(): Called on attribute changes, updates only changed properties
+ * This preserves DOM element identity, allowing CSS transitions to animate smoothly.
+ * 
  * @module Button-VerticalListItem/platforms/web
  * @see Requirements: 10.1, 11.1
  */
@@ -60,7 +66,7 @@ const REQUIRED_CSS_VARIABLES = [
   '--border-default',
   '--border-emphasis',
   // Radius tokens
-  '--radius-100',  // radiusNormal = 8px
+  '--radius-normal',  // radiusNormal = 8px
   // Spacing tokens
   '--space-inset-200',
   '--space-grouped-loose',
@@ -164,6 +170,7 @@ function resolveCssVariableToHex(cssVarReference: string): string {
  * - Token-based styling via CSS custom properties
  * - CSS logical properties for RTL support
  * - Fail-loudly token validation
+ * - Incremental DOM updates for smooth CSS transitions
  * - WCAG 2.1 AA compliant:
  *   - Keyboard navigation (Tab, Enter, Space)
  *   - Focus indicators with proper contrast
@@ -192,8 +199,17 @@ function resolveCssVariableToHex(cssVarReference: string): string {
  */
 export class ButtonVerticalListItem extends HTMLElement {
   private _shadowRoot: ShadowRoot;
-  private _button: HTMLButtonElement | null = null;
   private _tokensValidated: boolean = false;
+  private _domCreated: boolean = false;
+  
+  // Cached DOM element references for incremental updates
+  private _button: HTMLButtonElement | null = null;
+  private _labelEl: HTMLSpanElement | null = null;
+  private _descriptionEl: HTMLSpanElement | null = null;
+  private _leadingIconContainer: HTMLSpanElement | null = null;
+  private _leadingIconEl: HTMLElement | null = null;
+  private _checkmarkContainer: HTMLSpanElement | null = null;
+  private _checkmarkIconEl: HTMLElement | null = null;
   
   // Event callbacks (set via properties, not attributes)
   private _onClick: (() => void) | undefined;
@@ -266,8 +282,7 @@ export class ButtonVerticalListItem extends HTMLElement {
       this._tokensValidated = true;
     }
     
-    this.render();
-    this._attachEventListeners();
+    this._render();
   }
   
   /**
@@ -282,7 +297,7 @@ export class ButtonVerticalListItem extends HTMLElement {
   /**
    * Called when an observed attribute changes.
    * 
-   * Triggers re-render to reflect the new attribute value.
+   * Triggers incremental DOM update to reflect the new attribute value.
    * Throws error if 'disabled' attribute is set (fail loudly philosophy).
    * 
    * @param name - Attribute name
@@ -304,11 +319,9 @@ export class ButtonVerticalListItem extends HTMLElement {
       );
     }
     
-    // Only re-render if the element is connected to the DOM and value changed
-    if (oldValue !== newValue && this.isConnected && this._tokensValidated) {
-      this.render();
-      // Re-attach event listeners after re-render
-      this._attachEventListeners();
+    // Only update if the element is connected to the DOM, value changed, and DOM exists
+    if (oldValue !== newValue && this.isConnected && this._tokensValidated && this._domCreated) {
+      this._updateDOM();
     }
   }
   
@@ -536,22 +549,83 @@ export class ButtonVerticalListItem extends HTMLElement {
 
   
   // ─────────────────────────────────────────────────────────────────
-  // Rendering
+  // Rendering (Incremental Update Architecture)
   // ─────────────────────────────────────────────────────────────────
   
   /**
-   * Render the component.
+   * Main render entry point.
    * 
-   * Generates the button HTML with appropriate classes, icons, and content.
-   * CSS is imported as a string and injected into shadow DOM via <style> tag
-   * for browser bundle compatibility. This follows the same pattern as Button-CTA.
+   * Routes to _createDOM() for first render or _updateDOM() for subsequent updates.
+   * This architecture enables CSS transitions by preserving DOM element identity.
+   */
+  private _render(): void {
+    if (!this._domCreated) {
+      this._createDOM();
+      this._domCreated = true;
+      this._attachEventListeners();
+    } else {
+      this._updateDOM();
+    }
+  }
+  
+  /**
+   * Create the initial DOM structure (called once).
    * 
-   * Uses CSS logical properties (padding-block, padding-inline) for RTL support.
+   * Creates all elements including containers that may be hidden.
+   * This ensures DOM elements exist for CSS transitions to work.
    * 
    * @see Requirements 10.1, 11.1
-   * @see scripts/esbuild-css-plugin.js
    */
-  private render(): void {
+  private _createDOM(): void {
+    const iconSize = iconBaseSizes.size100;
+    
+    // Create the shadow DOM structure with all containers
+    // Leading icon container is always present (visibility controlled via CSS)
+    // Checkmark container is always present (visibility controlled via CSS)
+    this._shadowRoot.innerHTML = `
+      <style>${componentStyles}</style>
+      <button
+        class="vertical-list-item"
+        type="button"
+        role="button"
+      >
+        <span class="vertical-list-item__leading-icon">
+          <icon-base size="${iconSize}" optical-balance="true"></icon-base>
+        </span>
+        <div class="vertical-list-item__content">
+          <span class="vertical-list-item__label"></span>
+          <span class="vertical-list-item__description"></span>
+        </div>
+        <span class="vertical-list-item__checkmark" aria-hidden="true">
+          <icon-base name="check" size="${iconSize}" optical-balance="true"></icon-base>
+        </span>
+      </button>
+    `;
+    
+    // Cache element references for incremental updates
+    this._button = this._shadowRoot.querySelector('button');
+    this._labelEl = this._shadowRoot.querySelector('.vertical-list-item__label');
+    this._descriptionEl = this._shadowRoot.querySelector('.vertical-list-item__description');
+    this._leadingIconContainer = this._shadowRoot.querySelector('.vertical-list-item__leading-icon');
+    this._leadingIconEl = this._leadingIconContainer?.querySelector('icon-base') || null;
+    this._checkmarkContainer = this._shadowRoot.querySelector('.vertical-list-item__checkmark');
+    this._checkmarkIconEl = this._checkmarkContainer?.querySelector('icon-base') || null;
+    
+    // Apply initial state
+    this._updateDOM();
+  }
+  
+  /**
+   * Update existing DOM elements (called on attribute changes).
+   * 
+   * Only updates properties that need to change, preserving DOM element identity.
+   * This enables CSS transitions to animate smoothly between states.
+   * 
+   * @see Requirements 10.1, 11.1
+   */
+  private _updateDOM(): void {
+    if (!this._button) return;
+    
     const label = this.label;
     const description = this.description;
     const leadingIcon = this.leadingIcon;
@@ -567,77 +641,97 @@ export class ButtonVerticalListItem extends HTMLElement {
     // Get padding-block value based on visual state and error state (padding compensation)
     const paddingBlock = getPaddingBlockForState(visualState, error);
     
-    // Icon size for leading icon and checkmark (24px = iconBaseSizes.size100)
-    const iconSize = iconBaseSizes.size100;
+    // ─────────────────────────────────────────────────────────────────
+    // Update button element
+    // ─────────────────────────────────────────────────────────────────
     
-    // Generate test ID attribute
-    const testIDAttr = testID ? ` data-testid="${testID}"` : '';
+    // Update CSS class (for semantic markers and potential state-specific overrides)
+    this._button.className = `vertical-list-item ${styles.cssClass}`;
     
-    // Generate transition delay style
-    const transitionDelayStyle = transitionDelay > 0 ? `transition-delay: ${transitionDelay}ms;` : '';
+    // Update aria-label
+    this._button.setAttribute('aria-label', label);
     
-    // Generate checkmark transition class
-    const checkmarkTransitionClass = checkmarkTransition === 'instant' 
-      ? 'vertical-list-item__checkmark--instant' 
-      : 'vertical-list-item__checkmark--fade';
-    
-    // Build leading icon HTML using Icon-Base's optical-balance prop
-    // Resolves the CSS variable to hex and lets Icon-Base apply the 8% lighter blend
-    // @see Requirements 4.5, 9.1
-    let leadingIconHtml = '';
-    if (leadingIcon) {
-      const iconColorHex = resolveCssVariableToHex(styles.iconColor);
-      leadingIconHtml = `<span class="vertical-list-item__leading-icon"><icon-base name="${leadingIcon}" size="${iconSize}" color="${iconColorHex}" optical-balance="true"></icon-base></span>`;
+    // Update test ID
+    if (testID) {
+      this._button.setAttribute('data-testid', testID);
+    } else {
+      this._button.removeAttribute('data-testid');
     }
     
-    // Build description HTML
-    const descriptionHtml = description 
-      ? `<span class="vertical-list-item__description">${description}</span>`
-      : '';
+    // Update CSS custom properties (these drive the visual styling and transitions)
+    this._button.style.setProperty('--vlbi-background', styles.background);
+    this._button.style.setProperty('--vlbi-border-width', styles.borderWidth);
+    this._button.style.setProperty('--vlbi-border-color', styles.borderColor);
+    this._button.style.setProperty('--vlbi-padding-block', paddingBlock);
+    this._button.style.setProperty('--vlbi-label-color', styles.labelColor);
+    this._button.style.setProperty('--vlbi-icon-color', styles.iconColor);
     
-    // Build checkmark HTML (always rendered, visibility controlled by CSS)
-    // Uses Icon-Base's optical-balance prop to apply 8% lighter blend
-    // Uses color.select.selected.strong (or color.error.strong in error state)
-    // @see Requirements 2.3, 2.4, 9.2
-    const checkmarkVisibilityClass = styles.checkmarkVisible 
-      ? 'vertical-list-item__checkmark--visible' 
-      : 'vertical-list-item__checkmark--hidden';
-    const checkmarkColorHex = resolveCssVariableToHex(styles.iconColor);
-    const checkmarkHtml = `<span class="vertical-list-item__checkmark ${checkmarkTransitionClass} ${checkmarkVisibilityClass}" aria-hidden="true"><icon-base name="check" size="${iconSize}" color="${checkmarkColorHex}" optical-balance="true"></icon-base></span>`;
+    // Update transition delay
+    if (transitionDelay > 0) {
+      this._button.style.transitionDelay = `${transitionDelay}ms`;
+    } else {
+      this._button.style.transitionDelay = '';
+    }
     
-    // Render shadow DOM content
-    // Uses imported CSS string in <style> tag for browser bundle compatibility
-    // This approach bundles CSS into JS, avoiding external CSS file dependencies
-    // @see scripts/esbuild-css-plugin.js (same pattern as Button-CTA)
-    this._shadowRoot.innerHTML = `
-      <style>${componentStyles}</style>
-      <button
-        class="vertical-list-item ${styles.cssClass}"
-        type="button"
-        role="button"
-        aria-label="${label}"
-        style="
-          --vlbi-background: ${styles.background};
-          --vlbi-border-width: ${styles.borderWidth};
-          --vlbi-border-color: ${styles.borderColor};
-          --vlbi-padding-block: ${paddingBlock};
-          --vlbi-label-color: ${styles.labelColor};
-          --vlbi-icon-color: ${styles.iconColor};
-          ${transitionDelayStyle}
-        "
-        ${testIDAttr}
-      >
-        ${leadingIconHtml}
-        <div class="vertical-list-item__content">
-          <span class="vertical-list-item__label">${label}</span>
-          ${descriptionHtml}
-        </div>
-        ${checkmarkHtml}
-      </button>
-    `;
+    // ─────────────────────────────────────────────────────────────────
+    // Update label
+    // ─────────────────────────────────────────────────────────────────
     
-    // Store reference to button element for event handling
-    this._button = this._shadowRoot.querySelector('button');
+    if (this._labelEl) {
+      this._labelEl.textContent = label;
+    }
+    
+    // ─────────────────────────────────────────────────────────────────
+    // Update description (show/hide via display)
+    // ─────────────────────────────────────────────────────────────────
+    
+    if (this._descriptionEl) {
+      if (description) {
+        this._descriptionEl.textContent = description;
+        this._descriptionEl.style.display = '';
+      } else {
+        this._descriptionEl.textContent = '';
+        this._descriptionEl.style.display = 'none';
+      }
+    }
+    
+    // ─────────────────────────────────────────────────────────────────
+    // Update leading icon (show/hide via display, update icon name and color)
+    // ─────────────────────────────────────────────────────────────────
+    
+    if (this._leadingIconContainer && this._leadingIconEl) {
+      if (leadingIcon) {
+        const iconColorHex = resolveCssVariableToHex(styles.iconColor);
+        this._leadingIconEl.setAttribute('name', leadingIcon);
+        this._leadingIconEl.setAttribute('color', iconColorHex);
+        this._leadingIconContainer.style.display = '';
+      } else {
+        this._leadingIconContainer.style.display = 'none';
+      }
+    }
+    
+    // ─────────────────────────────────────────────────────────────────
+    // Update checkmark (visibility via CSS classes, color update)
+    // ─────────────────────────────────────────────────────────────────
+    
+    if (this._checkmarkContainer && this._checkmarkIconEl) {
+      // Update checkmark color
+      const checkmarkColorHex = resolveCssVariableToHex(styles.iconColor);
+      this._checkmarkIconEl.setAttribute('color', checkmarkColorHex);
+      
+      // Update transition mode class
+      const transitionClass = checkmarkTransition === 'instant' 
+        ? 'vertical-list-item__checkmark--instant' 
+        : 'vertical-list-item__checkmark--fade';
+      
+      // Update visibility class
+      const visibilityClass = styles.checkmarkVisible 
+        ? 'vertical-list-item__checkmark--visible' 
+        : 'vertical-list-item__checkmark--hidden';
+      
+      // Set all classes at once
+      this._checkmarkContainer.className = `vertical-list-item__checkmark ${transitionClass} ${visibilityClass}`;
+    }
   }
   
   // ─────────────────────────────────────────────────────────────────

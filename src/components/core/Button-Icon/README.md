@@ -342,7 +342,7 @@ Uses `radiusCircle` semantic token (50%) instead of hardcoded values.
 ## File Structure
 
 ```
-src/components/core/ButtonIcon/
+src/components/core/Button-Icon/
 ├── buttonIcon.tokens.ts          # Component-specific tokens
 ├── types.ts                      # Shared type definitions
 ├── README.md                     # This documentation

@@ -22,7 +22,7 @@ import { ButtonCTA } from './components/core/Button-CTA/platforms/web/ButtonCTA.
 // Icon-Base - Stemma System naming (foundational primitive component)
 import { IconBaseElement } from './components/core/Icon-Base/platforms/web/IconBase.web';
 // Button-Icon - Stemma System naming (circular icon-only button)
-import { ButtonIcon } from './components/core/ButtonIcon/platforms/web/ButtonIcon.web';
+import { ButtonIcon } from './components/core/Button-Icon/platforms/web/ButtonIcon.web';
 // Container-Base - Stemma System naming (foundational primitive component)
 import { ContainerBaseWeb } from './components/core/Container-Base/platforms/web/ContainerBase.web';
 // Button-VerticalListItem - Stemma System naming (vertical list button item)

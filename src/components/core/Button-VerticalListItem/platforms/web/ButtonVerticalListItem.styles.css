@@ -46,7 +46,7 @@
   
   /* Sizing tokens */
   --vlbi-min-height: var(--tap-area-recommended);
-  --vlbi-radius: var(--radius-100);
+  --vlbi-radius: var(--radius-normal);
   --vlbi-padding-inline: var(--space-inset-200);
   --vlbi-gap: var(--space-grouped-loose);
   

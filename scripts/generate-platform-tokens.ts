@@ -21,7 +21,7 @@ import * as path from 'path';
 
 // Import component token files to trigger registration with ComponentTokenRegistry
 // These imports cause defineComponentTokens() to execute, which registers tokens
-import '../src/components/core/ButtonIcon/buttonIcon.tokens';
+import '../src/components/core/Button-Icon/buttonIcon.tokens';
 import '../src/components/core/Button-VerticalListItem/buttonVerticalListItem.tokens';
 
 async function main() {
