@@ -1,0 +1,166 @@
+/**
+ * Button-VerticalList-Set Component Styles for Web Platform
+ * 
+ * Token-based styling using CSS custom properties from the mathematical token system.
+ * All values reference semantic or primitive tokens - zero hard-coded values.
+ * 
+ * Stemma System Naming: [Family]-[Type] = Button-VerticalList-Set
+ * Component Type: Pattern (container/orchestrator)
+ * Custom Element Tag: <button-vertical-list-set>
+ * 
+ * Key Design Decisions:
+ * - Flexbox column layout for vertical stacking
+ * - Token-based gap spacing (space.grouped.normal = 8px)
+ * - Full width container (100%)
+ * - Error message positioned above list with role="alert"
+ * - Component-scoped CSS custom properties with --_vls-* prefix
+ * 
+ * @module Button-VerticalList-Set/platforms/web/styles
+ * @see Requirements: 2.3, 2.4, 2.5, 11.1, 11.3, 11.4
+ */
+
+/* ==========================================================================
+   CSS Custom Properties (Token References)
+   ========================================================================== */
+
+/**
+ * Component-level custom properties for token consumption.
+ * These map semantic tokens to component-specific usage.
+ * 
+ * Naming Convention: --_vls-* pattern signals component-scoped (internal) properties
+ * @see Requirements: 11.3 - CSS custom property naming convention
+ */
+:host {
+  /* Display - block-level container */
+  display: block;
+  
+  /* Sizing - fill parent width */
+  /* @see Requirement 2.5 */
+  width: 100%;
+  
+  /* Spacing tokens */
+  /* @see Requirement 2.4 - space.grouped.normal (8px) for gap between items */
+  --_vls-gap: var(--space-grouped-normal);
+  
+  /* Typography tokens for error message */
+  /* @see Design: typography.body.small for error message */
+  --_vls-error-font-size: var(--typography-body-sm-font-size, 0.875rem);
+  --_vls-error-font-weight: var(--typography-body-sm-font-weight, 400);
+  --_vls-error-line-height: var(--typography-body-sm-line-height, 1.5);
+  
+  /* Color tokens for error message */
+  /* @see Design: color.error.strong for error message text */
+  --_vls-error-color: var(--color-error-strong);
+  
+  /* Spacing for error message */
+  --_vls-error-margin-bottom: var(--space-grouped-normal);
+}
+
+/* ==========================================================================
+   Container Styles
+   ========================================================================== */
+
+/**
+ * Main container styling.
+ * 
+ * - Flexbox column layout for vertical stacking of child items
+ * - Token-based gap spacing between items
+ * - Full width to fill parent container
+ * 
+ * @see Requirements 2.3, 2.4, 2.5
+ */
+.vls-container {
+  /* Layout - flexbox column for vertical stacking */
+  /* @see Requirement 2.3 */
+  display: flex;
+  flex-direction: column;
+  
+  /* Spacing - token-based gap between child items */
+  /* @see Requirement 2.4 - space.grouped.normal (8px) */
+  gap: var(--_vls-gap);
+  
+  /* Sizing - fill parent width */
+  /* @see Requirement 2.5 */
+  width: 100%;
+}
+
+/* ==========================================================================
+   Error Message Styles
+   ========================================================================== */
+
+/**
+ * Error message styling.
+ * 
+ * - Positioned above the list (first child in container)
+ * - Uses role="alert" for screen reader announcement (set in HTML)
+ * - Typography: typography.body.small
+ * - Color: color.error.strong
+ * - No background (text only)
+ * 
+ * @see Design: Error Message Styling section
+ * @see Requirements: 7.2 - Error message display
+ */
+.vls-error-message {
+  /* Typography - body small */
+  font-size: var(--_vls-error-font-size);
+  font-weight: var(--_vls-error-font-weight);
+  line-height: var(--_vls-error-line-height);
+  
+  /* Color - error strong for text */
+  color: var(--_vls-error-color);
+  
+  /* Spacing - margin below error message */
+  margin-bottom: var(--_vls-error-margin-bottom);
+  
+  /* No background - text only */
+  background: transparent;
+  
+  /* Reset margins */
+  margin-top: 0;
+  padding: 0;
+}
+
+/* ==========================================================================
+   High Contrast Mode Support
+   ========================================================================== */
+
+/**
+ * Ensure error message remains visible in Windows High Contrast Mode.
+ */
+@media (prefers-contrast: high) {
+  .vls-error-message {
+    /* Ensure error text is visible with system colors */
+    color: CanvasText;
+  }
+}
+
+/* ==========================================================================
+   Reduced Motion Support
+   ========================================================================== */
+
+/**
+ * Respect user preference for reduced motion.
+ * 
+ * Note: The Set component itself doesn't have animations,
+ * but this is included for consistency and future-proofing.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .vls-container {
+    /* No transitions on container */
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+/**
+ * Optimize appearance for print.
+ */
+@media print {
+  .vls-error-message {
+    /* Ensure error message is visible in print */
+    color: #000 !important;
+  }
+}

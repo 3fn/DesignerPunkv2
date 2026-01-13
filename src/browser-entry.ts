@@ -27,6 +27,8 @@ import { ButtonIcon } from './components/core/Button-Icon/platforms/web/ButtonIc
 import { ContainerBaseWeb } from './components/core/Container-Base/platforms/web/ContainerBase.web';
 // Button-VerticalList-Item - Stemma System naming (vertical list button item)
 import { ButtonVerticalListItem } from './components/core/Button-VerticalList-Item/platforms/web/ButtonVerticalListItem.web';
+// Button-VerticalList-Set - Stemma System naming (vertical list button set container)
+import { ButtonVerticalListSet } from './components/core/Button-VerticalList-Set/platforms/web/ButtonVerticalListSet.web';
 
 /**
  * Check if design tokens are loaded in the document.
@@ -99,6 +101,8 @@ safeDefine('button-icon', ButtonIcon);
 safeDefine('container-base', ContainerBaseWeb);
 // Button-VerticalList-Item - Stemma System naming (vertical list button item)
 safeDefine('button-vertical-list-item', ButtonVerticalListItem);
+// Button-VerticalList-Set - Stemma System naming (vertical list button set container)
+safeDefine('button-vertical-list-set', ButtonVerticalListSet);
 
 // Check tokens after DOM is ready and CSS is applied
 // Uses requestAnimationFrame to ensure stylesheets have been fully parsed and applied
@@ -116,7 +120,7 @@ if (typeof document !== 'undefined') {
 
 // Export all components for UMD global access and ESM imports
 // Requirements: 1.2, 2.3
-export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb, ButtonVerticalListItem };
+export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb, ButtonVerticalListItem, ButtonVerticalListSet };
 
 // Also export with more intuitive names for the UMD global
 export const Icon = IconBaseElement;
@@ -124,5 +128,6 @@ export const IconBase = IconBaseElement;
 export const Container = ContainerBaseWeb;
 export const ContainerBase = ContainerBaseWeb;
 export const VerticalListButtonItem = ButtonVerticalListItem;
+export const VerticalListButtonSet = ButtonVerticalListSet;
 // Legacy alias for backward compatibility
 export const TextInputField = InputTextBase;

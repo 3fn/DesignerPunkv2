@@ -47,10 +47,12 @@ describe('Component Registration', () => {
       expect(bundleContent).toContain('container-base');
     });
 
-    it('should register all five custom elements via safeDefine', () => {
+    it('should register all custom elements via safeDefine', () => {
       // Requirements 4.1, 4.2, 4.3, 4.4
       // Note: text-input-field removed - use input-text-base instead (Stemma System migration)
       // Note: dp-icon and dp-container deprecated names removed
+      // Note: button-vertical-list-item added in spec 038
+      // Note: button-vertical-list-set added in spec 041
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]input-text-base['"]/);
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]input-text-email['"]/);
       expect(bundleContent).toMatch(/safeDefine\s*\(\s*['"]button-cta['"]/);
@@ -127,9 +129,11 @@ describe('Component Registration', () => {
       expect(mockContext.DesignerPunk).toBeDefined();
     });
 
-    it('should register all five custom elements (Req 2.3, 4.1-4.4)', () => {
+    it('should register all custom elements (Req 2.3, 4.1-4.4)', () => {
       // Note: text-input-field removed - use input-text-base instead (Stemma System migration)
       // Note: dp-icon and dp-container deprecated names removed
+      // Note: button-vertical-list-item added in spec 038
+      // Note: button-vertical-list-set added in spec 041
       expect(registeredElements.has('input-text-base')).toBe(true);
       expect(registeredElements.has('button-cta')).toBe(true);
       expect(registeredElements.has('icon-base')).toBe(true);
@@ -186,7 +190,8 @@ describe('Component Registration', () => {
     it('should export all components for UMD global access', () => {
       // Note: Stemma System migration - legacy exports removed, using new naming
       // ButtonVerticalListItem added as part of spec 038
-      expect(content).toContain('export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb, ButtonVerticalListItem }');
+      // ButtonVerticalListSet added as part of spec 041
+      expect(content).toContain('export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb, ButtonVerticalListItem, ButtonVerticalListSet }');
       expect(content).toContain('export const Icon = IconBaseElement');
       expect(content).toContain('export const IconBase = IconBaseElement');
       expect(content).toContain('export const Container = ContainerBaseWeb');
