@@ -164,12 +164,12 @@ This implementation plan aligns four web components (Button-CTA, Button-Vertical
 
 ### Task 4: Input-Text-Base Alignment
 
-- [ ] 4. Input-Text-Base Alignment
+- [x] 4. Input-Text-Base Alignment
   **Type**: Implementation
   **Validation**: Tier 2: Standard
   **Success Criteria**: Input-Text-Base uses external CSS file
 
-  - [ ] 4.1 Extract inline CSS to external file
+  - [x] 4.1 Extract inline CSS to external file
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Create `Input-Text-Base/platforms/web/InputTextBase.web.css`

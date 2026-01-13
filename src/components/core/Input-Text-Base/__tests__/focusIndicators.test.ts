@@ -16,13 +16,68 @@
  * Stemma System: Form Inputs Family
  * Component Type: Primitive (Base)
  * 
- * Requirements: 2.2, 6.4, 7.3, R3
+ * Note: CSS is now in an external file (InputTextBase.web.css) and imported
+ * as a string. In Jest, CSS imports are mocked to return empty strings.
+ * Tests that need to verify CSS content read the CSS file directly.
+ * 
+ * Requirements: 2.2, 5.2, 5.3, 5.4, 6.4, 7.3, R3
  * Ported from: TextInputField/__tests__/focusIndicators.test.ts
  */
 
+import * as fs from 'fs';
+import * as path from 'path';
 import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import { InputTextBase } from '../platforms/web/InputTextBase.web';
 import { setupBlendColorProperties, cleanupBlendColorProperties } from './test-utils';
+
+// ============================================================================
+// Helper Functions
+// ============================================================================
+
+/**
+ * Read the actual CSS file content for CSS validation tests.
+ * 
+ * In Jest, CSS imports are mocked to return empty strings for performance.
+ * Tests that need to verify CSS content read the file directly.
+ * 
+ * @see Requirements: 5.2, 5.3, 5.4 (external CSS file with esbuild plugin pattern)
+ */
+function readCSSFileContent(): string {
+  const cssPath = path.resolve(process.cwd(), 'src/components/core/Input-Text-Base/platforms/web/InputTextBase.web.css');
+  if (fs.existsSync(cssPath)) {
+    return fs.readFileSync(cssPath, 'utf-8');
+  }
+  return '';
+}
+
+/**
+ * Read the TypeScript source file for implementation validation.
+ */
+function readTSFileContent(): string {
+  const tsPath = path.resolve(process.cwd(), 'src/components/core/Input-Text-Base/platforms/web/InputTextBase.web.ts');
+  if (fs.existsSync(tsPath)) {
+    return fs.readFileSync(tsPath, 'utf-8');
+  }
+  return '';
+}
+
+// Cache file contents to avoid repeated reads
+let cachedCSSContent: string | null = null;
+let cachedTSContent: string | null = null;
+
+function getCSSContent(): string {
+  if (cachedCSSContent === null) {
+    cachedCSSContent = readCSSFileContent();
+  }
+  return cachedCSSContent;
+}
+
+function getTSContent(): string {
+  if (cachedTSContent === null) {
+    cachedTSContent = readTSFileContent();
+  }
+  return cachedTSContent;
+}
 
 describe('Input-Text-Base Focus Indicators', () => {
   beforeEach(() => {
@@ -65,45 +120,36 @@ describe('Input-Text-Base Focus Indicators', () => {
   
   describe('Web Platform Focus Ring', () => {
     it('should have focus-visible styles with accessibility tokens', () => {
-      // Read web component implementation
-      const fs = require('fs');
-      const path = require('path');
-      const webComponentPath = path.join(__dirname, '../platforms/web/InputTextBase.web.ts');
-      const webComponentContent = fs.readFileSync(webComponentPath, 'utf-8');
+      // Read CSS file directly (Jest mocks CSS imports to empty strings)
+      const cssContent = getCSSContent();
       
       // Verify focus-visible selector exists
-      expect(webComponentContent).toContain(':focus-visible');
+      expect(cssContent).toContain(':focus-visible');
       
       // Verify accessibility.focus.width token is used
-      expect(webComponentContent).toContain('var(--accessibility-focus-width');
+      expect(cssContent).toContain('var(--accessibility-focus-width');
       
       // Verify accessibility.focus.color token is used
-      expect(webComponentContent).toContain('var(--accessibility-focus-color');
+      expect(cssContent).toContain('var(--accessibility-focus-color');
       
       // Verify accessibility.focus.offset token is used
-      expect(webComponentContent).toContain('var(--accessibility-focus-offset');
+      expect(cssContent).toContain('var(--accessibility-focus-offset');
     });
     
     it('should have focus ring visible in error state', () => {
-      // Read web component implementation
-      const fs = require('fs');
-      const path = require('path');
-      const webComponentPath = path.join(__dirname, '../platforms/web/InputTextBase.web.ts');
-      const webComponentContent = fs.readFileSync(webComponentPath, 'utf-8');
+      // Read CSS file directly (Jest mocks CSS imports to empty strings)
+      const cssContent = getCSSContent();
       
       // Verify focus ring is visible in error state
-      expect(webComponentContent).toContain('.input-wrapper.error .input-element:focus-visible');
+      expect(cssContent).toContain('.input-wrapper.error .input-element:focus-visible');
     });
     
     it('should have focus ring visible in success state', () => {
-      // Read web component implementation
-      const fs = require('fs');
-      const path = require('path');
-      const webComponentPath = path.join(__dirname, '../platforms/web/InputTextBase.web.ts');
-      const webComponentContent = fs.readFileSync(webComponentPath, 'utf-8');
+      // Read CSS file directly (Jest mocks CSS imports to empty strings)
+      const cssContent = getCSSContent();
       
       // Verify focus ring is visible in success state
-      expect(webComponentContent).toContain('.input-wrapper.success .input-element:focus-visible');
+      expect(cssContent).toContain('.input-wrapper.success .input-element:focus-visible');
     });
   });
   
@@ -157,21 +203,19 @@ describe('Input-Text-Base Focus Indicators', () => {
     it('should have focus ring visible in all component states', () => {
       // This test verifies that focus ring implementation doesn't exclude any states
       
-      // Read all platform implementations
-      const fs = require('fs');
-      const path = require('path');
+      // Read CSS file directly (Jest mocks CSS imports to empty strings)
+      const cssContent = getCSSContent();
       
-      const webPath = path.join(__dirname, '../platforms/web/InputTextBase.web.ts');
+      // Read iOS and Android implementations
       const iosPath = path.join(__dirname, '../platforms/ios/InputTextBase.ios.swift');
       const androidPath = path.join(__dirname, '../platforms/android/InputTextBase.android.kt');
       
-      const webContent = fs.readFileSync(webPath, 'utf-8');
       const iosContent = fs.readFileSync(iosPath, 'utf-8');
       const androidContent = fs.readFileSync(androidPath, 'utf-8');
       
       // Web: Verify focus ring works in error and success states
-      expect(webContent).toContain('.input-wrapper.error .input-element:focus-visible');
-      expect(webContent).toContain('.input-wrapper.success .input-element:focus-visible');
+      expect(cssContent).toContain('.input-wrapper.error .input-element:focus-visible');
+      expect(cssContent).toContain('.input-wrapper.success .input-element:focus-visible');
       
       // iOS: Verify focus ring is not conditional on error/success state
       // (it should always show when focused, regardless of validation state)
@@ -190,21 +234,19 @@ describe('Input-Text-Base Focus Indicators', () => {
   
   describe('WCAG 2.4.7 Focus Visible Compliance', () => {
     it('should have focus ring implementation in all platforms', () => {
-      // Read all platform implementations
-      const fs = require('fs');
-      const path = require('path');
+      // Read CSS file directly (Jest mocks CSS imports to empty strings)
+      const cssContent = getCSSContent();
       
-      const webPath = path.join(__dirname, '../platforms/web/InputTextBase.web.ts');
+      // Read iOS and Android implementations
       const iosPath = path.join(__dirname, '../platforms/ios/InputTextBase.ios.swift');
       const androidPath = path.join(__dirname, '../platforms/android/InputTextBase.android.kt');
       
-      const webContent = fs.readFileSync(webPath, 'utf-8');
       const iosContent = fs.readFileSync(iosPath, 'utf-8');
       const androidContent = fs.readFileSync(androidPath, 'utf-8');
       
       // Verify focus ring implementation exists in all platforms
       // Web: Uses :focus-visible pseudo-class
-      expect(webContent).toContain(':focus-visible');
+      expect(cssContent).toContain(':focus-visible');
       
       // iOS: Uses overlay with opacity based on focus state
       expect(iosContent).toContain('.opacity(isFocused && !isDisabled ? 1 : 0)');
@@ -214,25 +256,23 @@ describe('Input-Text-Base Focus Indicators', () => {
     });
 
     it('should document WCAG 2.4.7 compliance in behavioral contracts', () => {
-      // Read all platform implementations
-      const fs = require('fs');
-      const path = require('path');
+      // Read TypeScript file for behavioral contracts
+      const tsContent = getTSContent();
       
-      const webPath = path.join(__dirname, '../platforms/web/InputTextBase.web.ts');
+      // Read iOS and Android implementations
       const iosPath = path.join(__dirname, '../platforms/ios/InputTextBase.ios.swift');
       const androidPath = path.join(__dirname, '../platforms/android/InputTextBase.android.kt');
       
-      const webContent = fs.readFileSync(webPath, 'utf-8');
       const iosContent = fs.readFileSync(iosPath, 'utf-8');
       const androidContent = fs.readFileSync(androidPath, 'utf-8');
       
       // Verify behavioral contracts mention focus_ring
-      expect(webContent).toContain('focus_ring');
+      expect(tsContent).toContain('focus_ring');
       expect(iosContent).toContain('focus_ring');
       expect(androidContent).toContain('focus_ring');
       
       // Verify WCAG 2.4.7 is mentioned in behavioral contracts
-      expect(webContent).toContain('WCAG 2.4.7');
+      expect(tsContent).toContain('WCAG 2.4.7');
       expect(iosContent).toContain('WCAG 2.4.7');
       expect(androidContent).toContain('WCAG 2.4.7');
     });
@@ -240,20 +280,15 @@ describe('Input-Text-Base Focus Indicators', () => {
 
   describe('Reduced Motion Support', () => {
     it('should respect prefers-reduced-motion in web implementation', () => {
-      // Read web component implementation
-      const fs = require('fs');
-      const path = require('path');
-      const webComponentPath = path.join(__dirname, '../platforms/web/InputTextBase.web.ts');
-      const webComponentContent = fs.readFileSync(webComponentPath, 'utf-8');
+      // Read CSS file directly (Jest mocks CSS imports to empty strings)
+      const cssContent = getCSSContent();
       
       // Verify prefers-reduced-motion media query is used
-      expect(webComponentContent).toContain('prefers-reduced-motion');
+      expect(cssContent).toContain('prefers-reduced-motion');
     });
 
     it('should respect accessibilityReduceMotion in iOS implementation', () => {
       // Read iOS component implementation
-      const fs = require('fs');
-      const path = require('path');
       const iosComponentPath = path.join(__dirname, '../platforms/ios/InputTextBase.ios.swift');
       const iosComponentContent = fs.readFileSync(iosComponentPath, 'utf-8');
       
@@ -264,8 +299,6 @@ describe('Input-Text-Base Focus Indicators', () => {
 
     it('should respect reduce motion settings in Android implementation', () => {
       // Read Android component implementation
-      const fs = require('fs');
-      const path = require('path');
       const androidComponentPath = path.join(__dirname, '../platforms/android/InputTextBase.android.kt');
       const androidComponentContent = fs.readFileSync(androidComponentPath, 'utf-8');
       

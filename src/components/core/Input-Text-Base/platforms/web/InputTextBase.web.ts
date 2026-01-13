@@ -48,6 +48,12 @@ import {
 import { createIcon } from '../../../Icon-Base/platforms/web/IconBase.web';
 import { iconSizes } from '../../../Icon-Base/types';
 
+// Import CSS as string for browser bundle compatibility
+// The esbuild CSS-as-string plugin transforms this import into a JS string export
+// @see scripts/esbuild-css-plugin.js
+// @see Requirements: 5.2, 5.3, 5.4 (external CSS file with esbuild plugin pattern)
+import inputTextBaseStyles from './InputTextBase.web.css';
+
 /**
  * Input-Text-Base Web Component
  * 
@@ -322,9 +328,10 @@ export class InputTextBase extends HTMLElement {
       ` : ''}
     `;
     
-    // Add styles
+    // Add styles using imported CSS string
+    // @see Requirements: 5.2, 5.3, 5.4 (external CSS file with esbuild plugin pattern)
     const style = document.createElement('style');
-    style.textContent = this.getStyles();
+    style.textContent = inputTextBaseStyles;
     
     // Clear shadow root and append new content
     this._shadowRoot.innerHTML = '';
@@ -336,186 +343,6 @@ export class InputTextBase extends HTMLElement {
     this.labelElement = this._shadowRoot.querySelector('.input-label');
     this.helperTextElement = this._shadowRoot.querySelector('.helper-text');
     this.errorMessageElement = this._shadowRoot.querySelector('.error-message');
-  }
-  
-  /**
-   * Get component styles
-   */
-  private getStyles(): string {
-    return `
-      :host {
-        display: block;
-        width: 100%;
-      }
-      
-      .input-text-base {
-        width: 100%;
-      }
-      
-      .input-wrapper {
-        position: relative;
-        width: 100%;
-        min-height: var(--tap-area-comfortable);
-      }
-      
-      .input-element {
-        width: 100%;
-        min-height: var(--tap-area-comfortable);
-        padding-top: var(--space-inset-200);
-        padding-bottom: var(--space-inset-none);
-        padding-left: var(--space-inset-100);
-        padding-right: calc(var(--space-inset-100) + var(--icon-size-100) + var(--space-inset-100));
-        font-family: var(--typography-input-font-family);
-        font-size: var(--typography-input-font-size);
-        line-height: var(--typography-input-line-height);
-        font-weight: var(--typography-input-font-weight);
-        letter-spacing: var(--typography-input-letter-spacing);
-        color: var(--color-text-default);
-        background: var(--color-background);
-        border: var(--border-default) solid var(--color-border);
-        border-radius: var(--radius-150);
-        outline: none;
-        box-sizing: border-box;
-        transition: border-color var(--motion-float-label-duration) var(--motion-float-label-easing);
-      }
-      
-      .input-element:focus {
-        border-color: var(--_itb-focus-color, var(--color-primary));
-      }
-      
-      .input-element:focus-visible {
-        outline: var(--accessibility-focus-width) solid var(--accessibility-focus-color);
-        outline-offset: var(--accessibility-focus-offset);
-        transition: outline-color var(--motion-focus-transition-duration) var(--motion-focus-transition-easing);
-      }
-      
-      .input-element:disabled {
-        border-color: var(--_itb-disabled-color, var(--color-border));
-        color: var(--color-text-muted);
-        cursor: not-allowed;
-        opacity: 1;
-      }
-      
-      .input-wrapper.error .input-element:focus-visible {
-        outline-color: var(--accessibility-focus-color);
-      }
-      
-      .input-wrapper.success .input-element:focus-visible {
-        outline-color: var(--accessibility-focus-color);
-      }
-      
-      .input-wrapper.error .input-element {
-        border-color: var(--color-error-strong);
-      }
-      
-      .input-wrapper.success .input-element {
-        border-color: var(--color-success-strong);
-      }
-      
-      .input-label {
-        position: absolute;
-        left: var(--space-inset-100);
-        top: 50%;
-        transform: translateY(-50%);
-        font-family: var(--typography-label-md-font-family);
-        font-size: var(--typography-label-md-font-size);
-        line-height: var(--typography-label-md-line-height);
-        font-weight: var(--typography-label-md-font-weight);
-        letter-spacing: var(--typography-label-md-letter-spacing);
-        color: var(--color-text-muted);
-        pointer-events: none;
-        transition: 
-          transform var(--motion-float-label-duration) var(--motion-float-label-easing),
-          font-size var(--motion-float-label-duration) var(--motion-float-label-easing),
-          color var(--motion-float-label-duration) var(--motion-float-label-easing);
-      }
-      
-      .input-label.floated {
-        transform: translateY(calc(-100% - var(--space-grouped-tight)));
-        font-size: var(--typography-label-md-float-font-size);
-        line-height: var(--typography-label-md-float-line-height);
-      }
-      
-      .input-wrapper.focused .input-label.floated {
-        color: var(--_itb-focus-color, var(--color-primary));
-      }
-      
-      .input-wrapper.error .input-label {
-        color: var(--color-error-strong);
-      }
-      
-      .input-wrapper.success .input-label {
-        color: var(--color-success-strong);
-      }
-      
-      .input-wrapper.disabled .input-label {
-        color: var(--_itb-disabled-color, var(--color-text-muted));
-      }
-      
-      .helper-text {
-        margin: var(--space-grouped-minimal) 0 0 0;
-        padding: 0;
-        font-family: var(--typography-caption-font-family);
-        font-size: var(--typography-caption-font-size);
-        line-height: var(--typography-caption-line-height);
-        font-weight: var(--typography-caption-font-weight);
-        letter-spacing: var(--typography-caption-letter-spacing);
-        color: var(--color-text-muted);
-      }
-      
-      .error-message {
-        margin: var(--space-grouped-minimal) 0 0 0;
-        padding: 0;
-        font-family: var(--typography-caption-font-family);
-        font-size: var(--typography-caption-font-size);
-        line-height: var(--typography-caption-line-height);
-        font-weight: var(--typography-caption-font-weight);
-        letter-spacing: var(--typography-caption-letter-spacing);
-        color: var(--color-error-strong);
-      }
-      
-      .trailing-icon-container {
-        position: absolute;
-        right: var(--space-inset-100);
-        top: 50%;
-        transform: translateY(-50%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity var(--motion-float-label-duration) var(--motion-float-label-easing);
-        transition-delay: var(--motion-float-label-duration);
-      }
-      
-      .input-wrapper.focused .trailing-icon-container {
-        opacity: 1;
-        transition-delay: var(--motion-float-label-duration);
-      }
-      
-      .input-wrapper.filled .trailing-icon-container {
-        opacity: 1;
-        transition-delay: var(--motion-float-label-duration);
-      }
-      
-      .input-wrapper:not(.focused):not(.filled) .trailing-icon-container {
-        opacity: 0;
-        transition-delay: 0ms;
-      }
-      
-      .trailing-icon {
-        display: block;
-      }
-      
-      @media (prefers-reduced-motion: reduce) {
-        .input-element,
-        .input-element:focus-visible,
-        .input-label,
-        .trailing-icon-container {
-          transition: none;
-        }
-      }
-    `;
   }
   
   /**

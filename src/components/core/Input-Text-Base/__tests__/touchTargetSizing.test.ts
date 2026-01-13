@@ -20,13 +20,49 @@
  * now handles animation timing coordination, and motion tokens are applied
  * via CSS custom properties defined in the component styles.
  * 
- * Requirements: 5.2, 5.3, R3
+ * Note: CSS is now in an external file (InputTextBase.web.css) and imported
+ * as a string. In Jest, CSS imports are mocked to return empty strings.
+ * Tests that need to verify CSS content read the CSS file directly.
+ * 
+ * Requirements: 5.2, 5.3, 5.4, R3
  * Ported from: TextInputField/__tests__/touchTargetSizing.test.ts
  */
 
+import * as fs from 'fs';
+import * as path from 'path';
 import { describe, it, expect, beforeEach, afterEach, beforeAll } from '@jest/globals';
 import { InputTextBase } from '../platforms/web/InputTextBase.web';
 import { setupBlendColorProperties, cleanupBlendColorProperties } from './test-utils';
+
+// ============================================================================
+// Helper Functions
+// ============================================================================
+
+/**
+ * Read the actual CSS file content for CSS validation tests.
+ * 
+ * In Jest, CSS imports are mocked to return empty strings for performance.
+ * Tests that need to verify CSS content read the file directly.
+ * 
+ * @see Requirements: 5.2, 5.3, 5.4 (external CSS file with esbuild plugin pattern)
+ */
+function readCSSFileContent(): string {
+  const cssPath = path.resolve(process.cwd(), 'src/components/core/Input-Text-Base/platforms/web/InputTextBase.web.css');
+  if (fs.existsSync(cssPath)) {
+    return fs.readFileSync(cssPath, 'utf-8');
+  }
+  return '';
+}
+
+// Cache CSS content to avoid repeated reads
+let cachedCSSContent: string | null = null;
+
+function getCSSContent(): string {
+  if (cachedCSSContent === null) {
+    cachedCSSContent = readCSSFileContent();
+  }
+  return cachedCSSContent;
+}
 
 describe('Input-Text-Base - Touch Target Sizing', () => {
   // Import component before tests
@@ -65,53 +101,23 @@ describe('Input-Text-Base - Touch Target Sizing', () => {
 
   describe('Minimum Touch Target Height', () => {
     it('should use tapAreaComfortable token for minimum height', () => {
-      // Create component
-      const component = createComponent({
-        id: 'test-input',
-        label: 'Test Label',
-        value: ''
-      });
-
-      // Get shadow root
-      const shadowRoot = (component as any).shadowRoot;
-      expect(shadowRoot).not.toBeNull();
-
-      // Get style element and verify CSS contains token reference
-      // Note: JSDOM doesn't compute CSS custom properties, so we check CSS text directly
-      const styleElement = shadowRoot!.querySelector('style');
-      expect(styleElement).not.toBeNull();
-      
-      const cssText = styleElement!.textContent || '';
+      // Read CSS file directly (Jest mocks CSS imports to empty strings)
+      const cssContent = getCSSContent();
       
       // Verify input-wrapper uses tapAreaComfortable token for min-height
-      expect(cssText).toMatch(/\.input-wrapper[\s\S]*?min-height:\s*var\(--tap-area-comfortable\)/);
+      expect(cssContent).toMatch(/\.input-wrapper[\s\S]*?min-height:\s*var\(--tap-area-comfortable\)/);
     });
 
     it('should ensure input element meets 56px comfortable height', () => {
-      // Create component
-      const component = createComponent({
-        id: 'test-input',
-        label: 'Test Label',
-        value: ''
-      });
-
-      // Get shadow root
-      const shadowRoot = (component as any).shadowRoot;
-      expect(shadowRoot).not.toBeNull();
-
-      // Get style element and verify CSS contains token reference
-      // Note: JSDOM doesn't compute CSS custom properties, so we check CSS text directly
-      const styleElement = shadowRoot!.querySelector('style');
-      expect(styleElement).not.toBeNull();
-      
-      const cssText = styleElement!.textContent || '';
+      // Read CSS file directly (Jest mocks CSS imports to empty strings)
+      const cssContent = getCSSContent();
       
       // Verify input-element uses tapAreaComfortable token for min-height
-      expect(cssText).toMatch(/\.input-element[\s\S]*?min-height:\s*var\(--tap-area-comfortable\)/);
+      expect(cssContent).toMatch(/\.input-element[\s\S]*?min-height:\s*var\(--tap-area-comfortable\)/);
     });
 
     it('should maintain minimum height in all states', () => {
-      // Create component
+      // Create component to verify it renders correctly
       const component = createComponent({
         id: 'test-input',
         label: 'Test Label',
@@ -120,17 +126,12 @@ describe('Input-Text-Base - Touch Target Sizing', () => {
 
       const shadowRoot = (component as any).shadowRoot!;
       
-      // Get style element and verify CSS contains token reference
-      // Note: JSDOM doesn't compute CSS custom properties, so we check CSS text directly
-      // The CSS is static and applies to all states via the same rule
-      const styleElement = shadowRoot.querySelector('style');
-      expect(styleElement).not.toBeNull();
-      
-      const cssText = styleElement!.textContent || '';
+      // Read CSS file directly (Jest mocks CSS imports to empty strings)
+      const cssContent = getCSSContent();
       
       // Verify min-height is set via token (applies to all states)
-      expect(cssText).toMatch(/\.input-wrapper[\s\S]*?min-height:\s*var\(--tap-area-comfortable\)/);
-      expect(cssText).toMatch(/\.input-element[\s\S]*?min-height:\s*var\(--tap-area-comfortable\)/);
+      expect(cssContent).toMatch(/\.input-wrapper[\s\S]*?min-height:\s*var\(--tap-area-comfortable\)/);
+      expect(cssContent).toMatch(/\.input-element[\s\S]*?min-height:\s*var\(--tap-area-comfortable\)/);
       
       // Verify state classes exist and can be applied
       const inputWrapper = shadowRoot.querySelector('.input-wrapper') as HTMLElement;
@@ -147,9 +148,8 @@ describe('Input-Text-Base - Touch Target Sizing', () => {
       component.removeAttribute('error-message');
       component.setAttribute('is-success', 'true');
       
-      // CSS token reference remains constant across all states
-      const updatedCssText = shadowRoot.querySelector('style')!.textContent || '';
-      expect(updatedCssText).toMatch(/min-height:\s*var\(--tap-area-comfortable\)/);
+      // CSS token reference remains constant across all states (verified via file read)
+      expect(cssContent).toMatch(/min-height:\s*var\(--tap-area-comfortable\)/);
     });
   });
 
@@ -189,11 +189,9 @@ describe('Input-Text-Base - Touch Target Sizing', () => {
       const inputWrapper = shadowRoot.querySelector('.input-wrapper') as HTMLElement;
       expect(inputWrapper).not.toBeNull();
 
-      // Verify CSS contains token reference for min-height
-      // Note: JSDOM doesn't compute CSS custom properties, so we check CSS text directly
-      const styleElement = shadowRoot.querySelector('style');
-      const cssText = styleElement!.textContent || '';
-      expect(cssText).toMatch(/\.input-wrapper[\s\S]*?min-height:\s*var\(--tap-area-comfortable\)/);
+      // Read CSS file directly (Jest mocks CSS imports to empty strings)
+      const cssContent = getCSSContent();
+      expect(cssContent).toMatch(/\.input-wrapper[\s\S]*?min-height:\s*var\(--tap-area-comfortable\)/);
     });
 
     it('should maintain touch target with error message', () => {
@@ -211,11 +209,9 @@ describe('Input-Text-Base - Touch Target Sizing', () => {
       const inputWrapper = shadowRoot.querySelector('.input-wrapper') as HTMLElement;
       expect(inputWrapper).not.toBeNull();
 
-      // Verify CSS contains token reference for min-height
-      // Note: JSDOM doesn't compute CSS custom properties, so we check CSS text directly
-      const styleElement = shadowRoot.querySelector('style');
-      const cssText = styleElement!.textContent || '';
-      expect(cssText).toMatch(/\.input-wrapper[\s\S]*?min-height:\s*var\(--tap-area-comfortable\)/);
+      // Read CSS file directly (Jest mocks CSS imports to empty strings)
+      const cssContent = getCSSContent();
+      expect(cssContent).toMatch(/\.input-wrapper[\s\S]*?min-height:\s*var\(--tap-area-comfortable\)/);
     });
 
     it('should maintain touch target with trailing icon', () => {
@@ -233,50 +229,30 @@ describe('Input-Text-Base - Touch Target Sizing', () => {
       const inputWrapper = shadowRoot.querySelector('.input-wrapper') as HTMLElement;
       expect(inputWrapper).not.toBeNull();
 
-      // Verify CSS contains token reference for min-height
-      // Note: JSDOM doesn't compute CSS custom properties, so we check CSS text directly
-      const styleElement = shadowRoot.querySelector('style');
-      const cssText = styleElement!.textContent || '';
-      expect(cssText).toMatch(/\.input-wrapper[\s\S]*?min-height:\s*var\(--tap-area-comfortable\)/);
+      // Read CSS file directly (Jest mocks CSS imports to empty strings)
+      const cssContent = getCSSContent();
+      expect(cssContent).toMatch(/\.input-wrapper[\s\S]*?min-height:\s*var\(--tap-area-comfortable\)/);
     });
   });
 
   describe('Token Usage', () => {
     it('should reference tapAreaComfortable token in CSS', () => {
-      // Create component
-      const component = createComponent({
-        id: 'test-input',
-        label: 'Test Label',
-        value: ''
-      });
-
-      const shadowRoot = (component as any).shadowRoot!;
-      const styleElement = shadowRoot.querySelector('style');
-      expect(styleElement).not.toBeNull();
-
-      const cssText = styleElement!.textContent || '';
+      // Read CSS file directly (Jest mocks CSS imports to empty strings)
+      const cssContent = getCSSContent();
 
       // Should reference tapAreaComfortable token
-      expect(cssText).toContain('--tap-area-comfortable');
+      expect(cssContent).toContain('--tap-area-comfortable');
     });
 
     it('should use token for both wrapper and input element', () => {
-      // Create component
-      const component = createComponent({
-        id: 'test-input',
-        label: 'Test Label',
-        value: ''
-      });
-
-      const shadowRoot = (component as any).shadowRoot!;
-      const styleElement = shadowRoot.querySelector('style');
-      const cssText = styleElement!.textContent || '';
+      // Read CSS file directly (Jest mocks CSS imports to empty strings)
+      const cssContent = getCSSContent();
 
       // Should apply to input-wrapper
-      expect(cssText).toMatch(/\.input-wrapper[\s\S]*?min-height[\s\S]*?--tap-area-comfortable/);
+      expect(cssContent).toMatch(/\.input-wrapper[\s\S]*?min-height[\s\S]*?--tap-area-comfortable/);
       
       // Should apply to input-element
-      expect(cssText).toMatch(/\.input-element[\s\S]*?min-height[\s\S]*?--tap-area-comfortable/);
+      expect(cssContent).toMatch(/\.input-element[\s\S]*?min-height[\s\S]*?--tap-area-comfortable/);
     });
   });
 
@@ -306,16 +282,13 @@ describe('Input-Text-Base - Touch Target Sizing', () => {
   });
 
   describe('Platform Implementation Verification', () => {
-    it('should have touch target sizing in web implementation', () => {
-      // Read web component implementation
-      const fs = require('fs');
-      const path = require('path');
-      const webComponentPath = path.join(__dirname, '../platforms/web/InputTextBase.web.ts');
-      const webComponentContent = fs.readFileSync(webComponentPath, 'utf-8');
+    it('should have touch target sizing in web implementation CSS', () => {
+      // Read CSS file directly (Jest mocks CSS imports to empty strings)
+      const cssContent = getCSSContent();
       
       // Verify tap-area-comfortable token is used for min-height
-      expect(webComponentContent).toContain('--tap-area-comfortable');
-      expect(webComponentContent).toContain('min-height');
+      expect(cssContent).toContain('--tap-area-comfortable');
+      expect(cssContent).toContain('min-height');
     });
 
     it('should have touch target sizing in iOS implementation', () => {
