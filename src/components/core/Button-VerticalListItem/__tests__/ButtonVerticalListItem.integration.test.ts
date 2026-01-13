@@ -56,12 +56,12 @@ describe('Button-VerticalListItem Integration Tests', () => {
       const style = shadowButton?.getAttribute('style') || '';
       
       // Check that component sets CSS custom properties for visual state
-      expect(style).toContain('--vlbi-background');
-      expect(style).toContain('--vlbi-border-width');
-      expect(style).toContain('--vlbi-border-color');
-      expect(style).toContain('--vlbi-padding-block');
-      expect(style).toContain('--vlbi-label-color');
-      expect(style).toContain('--vlbi-icon-color');
+      expect(style).toContain('--_vlbi-background');
+      expect(style).toContain('--_vlbi-border-width');
+      expect(style).toContain('--_vlbi-border-color');
+      expect(style).toContain('--_vlbi-padding-block');
+      expect(style).toContain('--_vlbi-label-color');
+      expect(style).toContain('--_vlbi-icon-color');
     });
     
     it('should use token-based values for selected state', async () => {
@@ -102,7 +102,7 @@ describe('Button-VerticalListItem Integration Tests', () => {
       
       let shadowButton = getShadowButton(button);
       let style = shadowButton?.getAttribute('style') || '';
-      expect(style).toContain('--vlbi-padding-block: 11px');
+      expect(style).toContain('--_vlbi-padding-block: 11px');
       
       cleanupVerticalListButtonItem(button);
       
@@ -114,7 +114,7 @@ describe('Button-VerticalListItem Integration Tests', () => {
       
       shadowButton = getShadowButton(button);
       style = shadowButton?.getAttribute('style') || '';
-      expect(style).toContain('--vlbi-padding-block: 10px');
+      expect(style).toContain('--_vlbi-padding-block: 10px');
     });
     
     it('should use motion tokens for transitions', async () => {
@@ -124,7 +124,7 @@ describe('Button-VerticalListItem Integration Tests', () => {
       });
       
       // Verify the component's CSS references motion tokens
-      // The CSS file uses --vlbi-transition-duration which references --motion-selection-transition-duration
+      // The CSS file uses --_vlbi-transition-duration which references --motion-selection-transition-duration
       const shadowRoot = button.shadowRoot;
       expect(shadowRoot).toBeTruthy();
       
@@ -426,7 +426,7 @@ describe('Button-VerticalListItem Integration Tests', () => {
       const style = shadowButton?.getAttribute('style') || '';
       
       // Verify padding value matches component token (11px for rest state)
-      expect(style).toContain('--vlbi-padding-block: 11px');
+      expect(style).toContain('--_vlbi-padding-block: 11px');
       
       cleanupVerticalListButtonItem(button);
       
@@ -440,7 +440,7 @@ describe('Button-VerticalListItem Integration Tests', () => {
       const selectedStyle = selectedButton?.getAttribute('style') || '';
       
       // Verify padding value matches component token (10px for selected state)
-      expect(selectedStyle).toContain('--vlbi-padding-block: 10px');
+      expect(selectedStyle).toContain('--_vlbi-padding-block: 10px');
     });
     
     it('should maintain height stability across visual states', async () => {
@@ -457,8 +457,8 @@ describe('Button-VerticalListItem Integration Tests', () => {
       let style = shadowButton?.getAttribute('style') || '';
       
       // Rest state: 1px border, 11px padding
-      expect(style).toContain('--vlbi-border-width: var(--border-default)');
-      expect(style).toContain('--vlbi-padding-block: 11px');
+      expect(style).toContain('--_vlbi-border-width: var(--border-default)');
+      expect(style).toContain('--_vlbi-padding-block: 11px');
       
       cleanupVerticalListButtonItem(button);
       
@@ -471,8 +471,8 @@ describe('Button-VerticalListItem Integration Tests', () => {
       style = shadowButton?.getAttribute('style') || '';
       
       // Selected state: 2px border, 10px padding
-      expect(style).toContain('--vlbi-border-width: var(--border-emphasis)');
-      expect(style).toContain('--vlbi-padding-block: 10px');
+      expect(style).toContain('--_vlbi-border-width: var(--border-emphasis)');
+      expect(style).toContain('--_vlbi-padding-block: 10px');
     });
   });
 });

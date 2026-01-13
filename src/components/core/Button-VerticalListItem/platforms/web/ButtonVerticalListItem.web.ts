@@ -40,6 +40,11 @@ import {
 // Import Icon-Base to ensure it's registered before ButtonVerticalListItem uses it
 import '../../../Icon-Base/platforms/web/IconBase.web';
 
+// Import theme-aware blend utilities for state color calculations
+// Uses getBlendUtilities() factory for consistent state styling across components
+// @see Requirements: 1.3, 1.4, 1.5, 1.6 - Blend utility adoption
+import { getBlendUtilities, BlendUtilitiesResult } from '../../../../../blend/ThemeAwareBlendUtilities.web';
+
 // Import CSS as string for browser bundle compatibility
 // The esbuild CSS-as-string plugin transforms this import into a JS string export
 // This follows the same pattern as Button-CTA for consistency across components
@@ -211,6 +216,16 @@ export class ButtonVerticalListItem extends HTMLElement {
   private _checkmarkContainer: HTMLSpanElement | null = null;
   private _checkmarkIconEl: HTMLElement | null = null;
   
+  // Theme-aware blend utilities instance
+  // Uses getBlendUtilities() factory for consistent state styling
+  // @see Requirements: 1.3, 1.4, 1.5, 1.6 - Blend utility adoption
+  private _blendUtils: BlendUtilitiesResult;
+  
+  // Cached blend colors for state styling
+  // These replace CSS filter: brightness() for mathematically correct state colors
+  private _hoverColor: string = '';
+  private _pressedColor: string = '';
+  
   // Event callbacks (set via properties, not attributes)
   private _onClick: (() => void) | undefined;
   private _onFocus: (() => void) | undefined;
@@ -246,6 +261,11 @@ export class ButtonVerticalListItem extends HTMLElement {
     
     // Attach shadow DOM for style encapsulation
     this._shadowRoot = this.attachShadow({ mode: 'open' });
+    
+    // Initialize theme-aware blend utilities
+    // Uses getBlendUtilities() factory for consistent state styling
+    // @see Requirements: 1.3, 1.4, 1.5, 1.6 - Blend utility adoption
+    this._blendUtils = getBlendUtilities();
   }
   
   /**
@@ -282,7 +302,75 @@ export class ButtonVerticalListItem extends HTMLElement {
       this._tokensValidated = true;
     }
     
+    // Calculate blend colors for hover/pressed states
+    // @see Requirements: 1.3, 1.4, 1.5, 1.6 - Blend utility adoption
+    this._calculateBlendColorsWithRetry();
+    
     this._render();
+  }
+  
+  /**
+   * Calculate blend colors with retry logic for CSS loading race conditions.
+   * 
+   * Uses requestAnimationFrame to ensure CSS is fully applied before reading
+   * custom properties. Falls back to default colors if tokens are still unavailable.
+   * 
+   * @see Requirements: 1.3, 1.4, 1.5, 1.6 - Blend utility adoption
+   */
+  private _calculateBlendColorsWithRetry(): void {
+    try {
+      this._calculateBlendColors();
+    } catch (error) {
+      // CSS might not be fully applied yet, retry after next frame
+      requestAnimationFrame(() => {
+        try {
+          this._calculateBlendColors();
+          this._render(); // Re-render with correct colors
+        } catch (retryError) {
+          // Log warning but don't break the component
+          console.warn('ButtonVerticalListItem: Could not calculate blend colors, using CSS fallbacks', retryError);
+        }
+      });
+    }
+  }
+  
+  /**
+   * Calculate blend colors from CSS custom properties.
+   * 
+   * Reads base background color from CSS custom properties and applies theme-aware
+   * blend utilities to generate state colors (hover, pressed).
+   * 
+   * Uses getBlendUtilities() factory functions instead of CSS filter: brightness()
+   * for cross-platform consistency with iOS and Android implementations.
+   * 
+   * State color mappings:
+   * - Hover: darkerBlend(color.background, blend.hoverDarker) - 8% darker
+   * - Pressed: darkerBlend(color.background, blend.pressedDarker) - 12% darker
+   * 
+   * @see Requirements: 1.3, 1.4 - Blend utility adoption for hover/pressed states
+   * @see Requirements: 1.5 - SHALL NOT use CSS filter: brightness()
+   * @see Requirements: 1.6 - Apply via component-scoped CSS custom properties
+   * @throws Error if required color tokens are missing from CSS custom properties
+   */
+  private _calculateBlendColors(): void {
+    // Get computed styles to read CSS custom properties
+    const computedStyle = getComputedStyle(document.documentElement);
+    
+    // Get base background color from CSS custom properties
+    // This is the color that hover/pressed states will be calculated from
+    const backgroundColor = computedStyle.getPropertyValue('--color-background').trim();
+    
+    if (!backgroundColor) {
+      throw new Error('ButtonVerticalListItem: Required token --color-background is missing from CSS custom properties');
+    }
+    
+    // Calculate blend colors using theme-aware blend utilities
+    // Uses semantic convenience functions from getBlendUtilities()
+    // @see Requirements: 1.3 - Hover uses hoverColor() (8% darker)
+    this._hoverColor = this._blendUtils.hoverColor(backgroundColor);
+    
+    // @see Requirements: 1.4 - Pressed uses pressedColor() (12% darker)
+    this._pressedColor = this._blendUtils.pressedColor(backgroundColor);
   }
   
   /**
@@ -659,12 +747,18 @@ export class ButtonVerticalListItem extends HTMLElement {
     }
     
     // Update CSS custom properties (these drive the visual styling and transitions)
-    this._button.style.setProperty('--vlbi-background', styles.background);
-    this._button.style.setProperty('--vlbi-border-width', styles.borderWidth);
-    this._button.style.setProperty('--vlbi-border-color', styles.borderColor);
-    this._button.style.setProperty('--vlbi-padding-block', paddingBlock);
-    this._button.style.setProperty('--vlbi-label-color', styles.labelColor);
-    this._button.style.setProperty('--vlbi-icon-color', styles.iconColor);
+    this._button.style.setProperty('--_vlbi-background', styles.background);
+    this._button.style.setProperty('--_vlbi-border-width', styles.borderWidth);
+    this._button.style.setProperty('--_vlbi-border-color', styles.borderColor);
+    this._button.style.setProperty('--_vlbi-padding-block', paddingBlock);
+    this._button.style.setProperty('--_vlbi-label-color', styles.labelColor);
+    this._button.style.setProperty('--_vlbi-icon-color', styles.iconColor);
+    
+    // Update blend color CSS custom properties for hover/pressed states
+    // These replace CSS filter: brightness() for mathematically correct state colors
+    // @see Requirements: 1.3, 1.4, 1.5, 1.6 - Blend utility adoption
+    this._button.style.setProperty('--_vlbi-hover-bg', this._hoverColor);
+    this._button.style.setProperty('--_vlbi-pressed-bg', this._pressedColor);
     
     // Update transition delay
     if (transitionDelay > 0) {

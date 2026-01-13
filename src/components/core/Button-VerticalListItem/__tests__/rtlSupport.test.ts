@@ -16,22 +16,22 @@ describe('RTL Support Verification', () => {
      * follows RTL-compatible patterns.
      */
     it('should use padding-block for vertical padding', () => {
-      // The CSS file uses padding-block: var(--vlbi-padding-block)
+      // The CSS file uses padding-block: var(--_vlbi-padding-block)
       // This is verified by examining the CSS source
-      // The component sets --vlbi-padding-block inline based on visual state
+      // The component sets --_vlbi-padding-block inline based on visual state
       
       // This test documents the requirement and confirms the pattern is used
       // Actual CSS is in ButtonVerticalListItem.styles.css:
-      // padding-block: var(--vlbi-padding-block);
+      // padding-block: var(--_vlbi-padding-block);
       expect(true).toBe(true); // Pattern verified in CSS source
     });
 
     it('should use padding-inline for horizontal padding', () => {
-      // The CSS file uses padding-inline: var(--vlbi-padding-inline)
+      // The CSS file uses padding-inline: var(--_vlbi-padding-inline)
       // This is verified by examining the CSS source
       
       // Actual CSS is in ButtonVerticalListItem.styles.css:
-      // padding-inline: var(--vlbi-padding-inline);
+      // padding-inline: var(--_vlbi-padding-inline);
       expect(true).toBe(true); // Pattern verified in CSS source
     });
 
@@ -65,7 +65,7 @@ describe('RTL Support Verification', () => {
       // Actual CSS is in ButtonVerticalListItem.styles.css:
       // display: flex;
       // align-items: center;
-      // gap: var(--vlbi-gap);
+      // gap: var(--_vlbi-gap);
       expect(true).toBe(true); // Pattern verified in CSS source
     });
 
@@ -173,8 +173,8 @@ describe('RTL Support Verification', () => {
  * 
  * 1. Logical padding properties:
  *    ```css
- *    padding-block: var(--vlbi-padding-block);
- *    padding-inline: var(--vlbi-padding-inline);
+ *    padding-block: var(--_vlbi-padding-block);
+ *    padding-inline: var(--_vlbi-padding-inline);
  *    ```
  * 
  * 2. Logical text alignment:
@@ -186,7 +186,7 @@ describe('RTL Support Verification', () => {
  *    ```css
  *    display: flex;
  *    align-items: center;
- *    gap: var(--vlbi-gap);
+ *    gap: var(--_vlbi-gap);
  *    ```
  * 
  * 4. Component structure (in render method):

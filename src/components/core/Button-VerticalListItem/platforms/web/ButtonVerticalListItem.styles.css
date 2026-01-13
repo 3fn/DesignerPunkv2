@@ -27,12 +27,15 @@
  * These map semantic tokens to component-specific usage.
  * 
  * Component tokens are set inline via style attribute for state-specific values:
- * - --vlbi-background: Background color for current visual state
- * - --vlbi-border-width: Border width for current visual state
- * - --vlbi-border-color: Border color for current visual state
- * - --vlbi-padding-block: Padding block for current visual state (padding compensation)
- * - --vlbi-label-color: Label text color for current visual state
- * - --vlbi-icon-color: Icon color for current visual state
+ * - --_vlbi-background: Background color for current visual state
+ * - --_vlbi-border-width: Border width for current visual state
+ * - --_vlbi-border-color: Border color for current visual state
+ * - --_vlbi-padding-block: Padding block for current visual state (padding compensation)
+ * - --_vlbi-label-color: Label text color for current visual state
+ * - --_vlbi-icon-color: Icon color for current visual state
+ * 
+ * Naming Convention: --_[abbrev]-* pattern signals component-scoped (internal) properties
+ * @see Requirements: 7.2, 7.4 - CSS custom property naming convention
  */
 :host {
   /* Display */
@@ -40,34 +43,36 @@
   width: 100%;
   
   /* Focus ring tokens */
-  --vlbi-focus-offset: var(--accessibility-focus-offset);
-  --vlbi-focus-width: var(--accessibility-focus-width);
-  --vlbi-focus-color: var(--accessibility-focus-color);
+  --_vlbi-focus-offset: var(--accessibility-focus-offset);
+  --_vlbi-focus-width: var(--accessibility-focus-width);
+  --_vlbi-focus-color: var(--accessibility-focus-color);
   
   /* Sizing tokens */
-  --vlbi-min-height: var(--tap-area-recommended);
-  --vlbi-radius: var(--radius-normal);
-  --vlbi-padding-inline: var(--space-inset-200);
-  --vlbi-gap: var(--space-grouped-loose);
+  --_vlbi-min-height: var(--tap-area-recommended);
+  --_vlbi-radius: var(--radius-normal);
+  --_vlbi-padding-inline: var(--space-inset-200);
+  --_vlbi-gap: var(--space-grouped-loose);
   
   /* Typography tokens */
-  --vlbi-label-font-size: var(--typography-button-md-font-size, 1rem);
-  --vlbi-label-font-weight: var(--typography-button-md-font-weight, 500);
-  --vlbi-label-line-height: var(--typography-button-md-line-height, 1.5);
-  --vlbi-description-font-size: var(--typography-body-sm-font-size, 0.875rem);
-  --vlbi-description-font-weight: var(--typography-body-sm-font-weight, 400);
-  --vlbi-description-line-height: var(--typography-body-sm-line-height, 1.5);
-  --vlbi-description-color: var(--color-text-muted);
+  --_vlbi-label-font-size: var(--typography-button-md-font-size, 1rem);
+  --_vlbi-label-font-weight: var(--typography-button-md-font-weight, 500);
+  --_vlbi-label-line-height: var(--typography-button-md-line-height, 1.5);
+  --_vlbi-description-font-size: var(--typography-body-sm-font-size, 0.875rem);
+  --_vlbi-description-font-weight: var(--typography-body-sm-font-weight, 400);
+  --_vlbi-description-line-height: var(--typography-body-sm-line-height, 1.5);
+  --_vlbi-description-color: var(--color-text-muted);
   
   /* Transition tokens - using motion.selectionTransition semantic token */
   /* @see Requirement 7.1, New Tokens Required (motion.selectionTransition) */
   /* No fallbacks - fail loudly if tokens not loaded */
-  --vlbi-transition-duration: var(--motion-selection-transition-duration);
-  --vlbi-transition-easing: var(--motion-selection-transition-easing);
+  --_vlbi-transition-duration: var(--motion-selection-transition-duration);
+  --_vlbi-transition-easing: var(--motion-selection-transition-easing);
   
-  /* Blend tokens for interactive states */
-  --vlbi-hover-brightness: 0.95;
-  --vlbi-pressed-brightness: 0.90;
+  /* Blend colors for interactive states are set via inline style from JS */
+  /* These use blend utilities for mathematically correct state colors */
+  /* @see Requirements: 1.3, 1.4, 1.5, 1.6 - Blend utility adoption */
+  /* --_vlbi-hover-bg: set by component via blend utilities */
+  /* --_vlbi-pressed-bg: set by component via blend utilities */
 }
 
 /* ==========================================================================
@@ -94,23 +99,23 @@
   /* Layout - flexbox for icon/content/checkmark alignment */
   display: flex;
   align-items: center;
-  gap: var(--vlbi-gap);
+  gap: var(--_vlbi-gap);
   width: 100%;
   
   /* Sizing - minimum height for touch target */
   /* @see Requirement 5.1 */
-  min-height: var(--vlbi-min-height);
+  min-height: var(--_vlbi-min-height);
   
   /* Spacing - CSS logical properties for RTL support */
   /* @see Requirement 11.1 */
-  padding-block: var(--vlbi-padding-block);
-  padding-inline: var(--vlbi-padding-inline);
+  padding-block: var(--_vlbi-padding-block);
+  padding-inline: var(--_vlbi-padding-inline);
   
   /* Visual - token-based styling */
   /* @see Requirement 5.3 */
-  background: var(--vlbi-background);
-  border: var(--vlbi-border-width) solid var(--vlbi-border-color);
-  border-radius: var(--vlbi-radius);
+  background: var(--_vlbi-background);
+  border: var(--_vlbi-border-width) solid var(--_vlbi-border-color);
+  border-radius: var(--_vlbi-radius);
   
   /* Typography */
   text-align: start;
@@ -121,12 +126,12 @@
   /* Animation - smooth state transitions */
   /* @see Requirement 7.1 */
   transition: 
-    background var(--vlbi-transition-duration) var(--vlbi-transition-easing),
-    border-color var(--vlbi-transition-duration) var(--vlbi-transition-easing),
-    border-width var(--vlbi-transition-duration) var(--vlbi-transition-easing),
-    padding var(--vlbi-transition-duration) var(--vlbi-transition-easing),
-    color var(--vlbi-transition-duration) var(--vlbi-transition-easing),
-    filter var(--vlbi-transition-duration) var(--vlbi-transition-easing);
+    background var(--_vlbi-transition-duration) var(--_vlbi-transition-easing),
+    background-color var(--_vlbi-transition-duration) var(--_vlbi-transition-easing),
+    border-color var(--_vlbi-transition-duration) var(--_vlbi-transition-easing),
+    border-width var(--_vlbi-transition-duration) var(--_vlbi-transition-easing),
+    padding var(--_vlbi-transition-duration) var(--_vlbi-transition-easing),
+    color var(--_vlbi-transition-duration) var(--_vlbi-transition-easing);
   
   /* Focus outline reset (custom focus ring implemented below) */
   outline: none;
@@ -139,14 +144,15 @@
 /**
  * Hover state styling.
  * 
- * Applies blend.hoverDarker overlay on top of current visual state.
- * Uses CSS filter brightness for cross-browser compatible blend effect.
+ * Uses blend utility calculated color via CSS custom property instead of
+ * CSS filter: brightness(). This ensures mathematically correct state colors
+ * that are consistent with iOS and Android implementations.
  * 
- * @see Requirement 8.1
+ * @see Requirement 1.3, 1.5 - Blend utility adoption, no filter: brightness()
  */
 .vertical-list-item:hover {
-  /* Apply blend.hoverDarker (approximately 5% darker) via brightness filter */
-  filter: brightness(var(--vlbi-hover-brightness));
+  /* Apply blend.hoverDarker (8% darker) via calculated CSS custom property */
+  background-color: var(--_vlbi-hover-bg);
 }
 
 /* ==========================================================================
@@ -156,14 +162,15 @@
 /**
  * Pressed/active state styling.
  * 
- * Applies blend.pressedDarker overlay on top of current visual state.
- * Uses CSS filter brightness for cross-browser compatible blend effect.
+ * Uses blend utility calculated color via CSS custom property instead of
+ * CSS filter: brightness(). This ensures mathematically correct state colors
+ * that are consistent with iOS and Android implementations.
  * 
- * @see Requirement 8.2
+ * @see Requirement 1.4, 1.5 - Blend utility adoption, no filter: brightness()
  */
 .vertical-list-item:active {
-  /* Apply blend.pressedDarker (approximately 10% darker) via brightness filter */
-  filter: brightness(var(--vlbi-pressed-brightness));
+  /* Apply blend.pressedDarker (12% darker) via calculated CSS custom property */
+  background-color: var(--_vlbi-pressed-bg);
 }
 
 /* ==========================================================================
@@ -182,8 +189,8 @@
  * @see Requirements 8.3, 8.4
  */
 .vertical-list-item:focus-visible {
-  outline: var(--vlbi-focus-width) solid var(--vlbi-focus-color);
-  outline-offset: var(--vlbi-focus-offset);
+  outline: var(--_vlbi-focus-width) solid var(--_vlbi-focus-color);
+  outline-offset: var(--_vlbi-focus-offset);
 }
 
 /**
@@ -206,7 +213,7 @@
  * Visual State Modifier Classes
  * 
  * These classes are applied to the button element based on the current visual state.
- * The actual styling values are applied via inline CSS custom properties (--vlbi-*)
+ * The actual styling values are applied via inline CSS custom properties (--_vlbi-*)
  * which are set dynamically based on the visual state mapping in visualStateMapping.ts.
  * 
  * This approach allows:
@@ -251,16 +258,16 @@
  * Label text styling.
  * 
  * - Typography: typography.buttonMd
- * - Color: Inherits from visual state (via --vlbi-label-color)
+ * - Color: Inherits from visual state (via --_vlbi-label-color)
  * - Truncation: Single line with ellipsis for overflow
  * 
  * @see Requirement 4.1
  */
 .vertical-list-item__label {
-  color: var(--vlbi-label-color);
-  font-size: var(--vlbi-label-font-size);
-  font-weight: var(--vlbi-label-font-weight);
-  line-height: var(--vlbi-label-line-height);
+  color: var(--_vlbi-label-color);
+  font-size: var(--_vlbi-label-font-size);
+  font-weight: var(--_vlbi-label-font-weight);
+  line-height: var(--_vlbi-label-line-height);
   
   /* Text truncation for long labels */
   overflow: hidden;
@@ -282,10 +289,10 @@
  * @see Requirements 4.2, 4.3
  */
 .vertical-list-item__description {
-  color: var(--vlbi-description-color);
-  font-size: var(--vlbi-description-font-size);
-  font-weight: var(--vlbi-description-font-weight);
-  line-height: var(--vlbi-description-line-height);
+  color: var(--_vlbi-description-color);
+  font-size: var(--_vlbi-description-font-size);
+  font-weight: var(--_vlbi-description-font-weight);
+  line-height: var(--_vlbi-description-line-height);
 }
 
 /* ==========================================================================
@@ -320,7 +327,7 @@
  * Checkmark container styling.
  * 
  * - Flex-shrink: 0 to prevent icon from shrinking
- * - Color: Inherits from visual state (via --vlbi-icon-color)
+ * - Color: Inherits from visual state (via --_vlbi-icon-color)
  * - Position: Far right, vertically centered (handled by parent flexbox)
  * - Marked as decorative (aria-hidden="true" in HTML)
  * - Base transition for fade-in (always applied, regardless of checkmarkTransition prop)
@@ -330,13 +337,13 @@
  */
 .vertical-list-item__checkmark {
   flex-shrink: 0;
-  color: var(--vlbi-icon-color);
+  color: var(--_vlbi-icon-color);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   /* Base transition for fade-in (always applied) */
-  transition: opacity var(--vlbi-transition-duration) var(--vlbi-transition-easing),
-              visibility var(--vlbi-transition-duration) var(--vlbi-transition-easing);
+  transition: opacity var(--_vlbi-transition-duration) var(--_vlbi-transition-easing),
+              visibility var(--_vlbi-transition-duration) var(--_vlbi-transition-easing);
 }
 
 /**

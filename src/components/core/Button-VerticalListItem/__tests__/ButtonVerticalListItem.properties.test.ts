@@ -394,7 +394,7 @@ describe('Button-VerticalListItem Property-Based Tests', () => {
               const shadowButton = getShadowButton(button);
               expect(shadowButton).toBeTruthy();
               
-              // Get the inline style which contains --vlbi-padding-block
+              // Get the inline style which contains --_vlbi-padding-block
               const style = shadowButton?.getAttribute('style') || '';
               
               // Determine expected padding based on whether emphasis border is needed
@@ -407,7 +407,7 @@ describe('Button-VerticalListItem Property-Based Tests', () => {
               const expectedPadding = expectedPaddingValues[expectedVariant];
               
               // Verify the padding value in the inline style
-              expect(style).toContain(`--vlbi-padding-block: ${expectedPadding}px`);
+              expect(style).toContain(`--_vlbi-padding-block: ${expectedPadding}px`);
               
               return true;
             } finally {

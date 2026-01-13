@@ -1,0 +1,55 @@
+{
+  "timestamp": "2026-01-13T16:09:23.129Z",
+  "lastAnalyzedCommit": "5e0b75a4aa01c76e306f730ac7d61628d95db062",
+  "documentCount": 9,
+  "documents": [
+    {
+      "path": "docs/specs/038-vertical-list-buttons/task-10-summary.md",
+      "lastModified": "2026-01-13T16:09:23.128Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/038-vertical-list-buttons/task-5-summary.md",
+      "lastModified": "2026-01-13T16:09:23.128Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/038-vertical-list-buttons/task-6-summary.md",
+      "lastModified": "2026-01-13T16:09:23.128Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/038-vertical-list-buttons/task-7-summary.md",
+      "lastModified": "2026-01-13T16:09:23.128Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/038-vertical-list-buttons/task-8-summary.md",
+      "lastModified": "2026-01-13T16:09:23.129Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/038-vertical-list-buttons/task-9-summary.md",
+      "lastModified": "2026-01-13T16:09:23.129Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/039-deprecated-component-names-removal/task-1-summary.md",
+      "lastModified": "2026-01-13T16:09:23.129Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/040-component-alignment/task-1-summary.md",
+      "lastModified": "2026-01-13T16:09:23.129Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/040-component-alignment/task-2-summary.md",
+      "lastModified": "2026-01-13T16:09:23.129Z",
+      "gitCommit": "unknown"
+    }
+  ],
+  "quickAnalysisMode": true,
+  "appendOnlyOptimization": true,
+  "note": "Full analysis can be run with: npm run release:analyze"
+}
