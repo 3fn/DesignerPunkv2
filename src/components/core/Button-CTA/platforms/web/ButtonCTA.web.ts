@@ -123,7 +123,17 @@ function getIconSizeForButton(buttonSize: ButtonSize): IconBaseSize {
  */
 export class ButtonCTA extends HTMLElement {
   private _shadowRoot: ShadowRoot;
+  
+  // Incremental DOM update tracking
+  // @see Requirements: 2.1, 2.2, 2.3, 2.4, 2.5 - Incremental DOM update strategy
+  private _domCreated: boolean = false;
+  
+  // Cached DOM element references for incremental updates
+  // @see Requirements: 2.4 - Cache references to DOM elements that will be updated
   private _button: HTMLButtonElement | null = null;
+  private _labelEl: HTMLSpanElement | null = null;
+  private _iconEl: HTMLElement | null = null;
+  private _iconContainer: HTMLSpanElement | null = null;
   
   // Theme-aware blend utilities instance
   // Uses getBlendUtilities() factory for consistent state styling
@@ -271,13 +281,16 @@ export class ButtonCTA extends HTMLElement {
   /**
    * Called when an observed attribute changes.
    * 
-   * Triggers re-render to reflect the new attribute value.
+   * Triggers incremental DOM update to reflect the new attribute value.
+   * Uses _updateDOM() instead of full render to preserve element identity
+   * for CSS transitions.
+   * 
+   * @see Requirements: 2.2, 2.3 - Update existing DOM elements via _updateDOM()
    */
   attributeChangedCallback(_name: string, oldValue: string | null, newValue: string | null): void {
-    if (oldValue !== newValue) {
-      this.render();
-      // Re-attach event listeners after re-render
-      this._attachEventListeners();
+    // Only update if value changed, element is connected, and DOM exists
+    if (oldValue !== newValue && this.isConnected && this._domCreated) {
+      this._updateDOM();
     }
   }
   
@@ -393,20 +406,45 @@ export class ButtonCTA extends HTMLElement {
     }
   }
   
+  // ============================================================================
+  // Rendering (Incremental Update Architecture)
+  // ============================================================================
+  
   /**
-   * Render the component.
+   * Main render entry point.
    * 
-   * Generates the button HTML with appropriate classes, icon, and label.
+   * Routes to _createDOM() for first render or _updateDOM() for subsequent updates.
+   * This architecture enables CSS transitions by preserving DOM element identity.
+   * 
+   * @see Requirements: 2.1, 2.2, 2.3, 2.4, 2.5 - Incremental DOM update strategy
+   */
+  private render(): void {
+    if (!this._domCreated) {
+      this._createDOM();
+      this._domCreated = true;
+      this._attachEventListeners();
+    } else {
+      this._updateDOM();
+    }
+  }
+  
+  /**
+   * Create the initial DOM structure (called once).
+   * 
+   * Creates all elements and caches references for incremental updates.
+   * This ensures DOM elements exist for CSS transitions to work.
+   * 
    * CSS is imported as a string and injected into shadow DOM via <style> tag
    * for browser bundle compatibility.
    * 
    * Uses <icon-base> web component for icon rendering, following the same
    * component composition pattern as iOS and Android platforms.
    * 
-   * Applies blend colors via CSS custom properties for state styling
-   * (hover, pressed, disabled, icon) instead of opacity/filter workarounds.
+   * @see Requirements: 2.1 - Create initial DOM structure via _createDOM()
+   * @see Requirements: 2.4 - Cache references to DOM elements
+   * @see Requirements: 8.2, 8.3 (components render correctly in browser bundles)
    */
-  private render(): void {
+  private _createDOM(): void {
     const label = this.label;
     const size = this.size;
     const variant = this.buttonVariant;
@@ -446,12 +484,7 @@ export class ButtonCTA extends HTMLElement {
       --_cta-icon-optical: ${this._iconOpticalBalanceColor};
     `;
     
-    // Use imported CSS string in <style> tag for browser bundle compatibility
-    // This approach bundles CSS into JS, avoiding external CSS file dependencies
-    // @see scripts/esbuild-css-plugin.js
-    // @see Requirements: 8.2, 8.3 (components render correctly in browser bundles)
-    
-    // Render shadow DOM content
+    // Create the shadow DOM structure
     // Uses <icon-base> web component for icon rendering (component composition pattern)
     // This matches iOS and Android platforms which use IconBase() component composition
     // @see Requirements: 8.2, 8.3 (components render correctly with interactivity)
@@ -466,13 +499,111 @@ export class ButtonCTA extends HTMLElement {
         aria-label="${label}"
         style="${blendColorStyles}"
       >
-        ${icon ? `<span class="button-cta__icon" aria-hidden="true"><icon-base name="${icon}" size="${iconSize}" color="inherit"></icon-base></span>` : ''}
+        <span class="button-cta__icon" aria-hidden="true" style="${icon ? '' : 'display: none;'}">
+          <icon-base name="${icon || ''}" size="${iconSize}" color="inherit"></icon-base>
+        </span>
         <span class="${labelClass}">${label}</span>
       </button>
     `;
     
-    // Store reference to button element for event handling
+    // Cache element references for incremental updates
+    // @see Requirements: 2.4 - Cache references to DOM elements that will be updated
     this._button = this._shadowRoot.querySelector('button');
+    this._labelEl = this._shadowRoot.querySelector('.button-cta__label, .button-cta__label--no-wrap');
+    this._iconContainer = this._shadowRoot.querySelector('.button-cta__icon');
+    this._iconEl = this._iconContainer?.querySelector('icon-base') || null;
+  }
+  
+  /**
+   * Update existing DOM elements (called on attribute changes).
+   * 
+   * Only updates properties that need to change, preserving DOM element identity.
+   * This enables CSS transitions to animate smoothly between states.
+   * 
+   * Uses direct DOM APIs (element.setAttribute, element.className, element.style)
+   * instead of innerHTML replacement.
+   * 
+   * @see Requirements: 2.2 - Update existing DOM elements via _updateDOM()
+   * @see Requirements: 2.3 - SHALL NOT replace innerHTML of the shadow root
+   * @see Requirements: 2.5 - Use direct DOM APIs for updates
+   */
+  private _updateDOM(): void {
+    if (!this._button || !this._labelEl) return;
+    
+    const label = this.label;
+    const size = this.size;
+    const variant = this.buttonVariant;
+    const icon = this.icon;
+    const noWrap = this.noWrap;
+    const disabled = this.disabled;
+    const testID = this.testID;
+    
+    // Get icon size for button size variant
+    const iconSize: IconBaseSize = getIconSizeForButton(size);
+    
+    // ─────────────────────────────────────────────────────────────────
+    // Update button element
+    // ─────────────────────────────────────────────────────────────────
+    
+    // Update CSS class (preserves element identity for transitions)
+    const buttonClasses = [
+      'button-cta',
+      `button-cta--${size}`,
+      `button-cta--${variant}`,
+      disabled ? 'button-cta--disabled' : ''
+    ].filter(Boolean).join(' ');
+    this._button.className = buttonClasses;
+    
+    // Update disabled state
+    if (disabled) {
+      this._button.setAttribute('disabled', '');
+      this._button.setAttribute('aria-disabled', 'true');
+    } else {
+      this._button.removeAttribute('disabled');
+      this._button.setAttribute('aria-disabled', 'false');
+    }
+    
+    // Update aria-label
+    this._button.setAttribute('aria-label', label);
+    
+    // Update test ID
+    if (testID) {
+      this._button.setAttribute('data-testid', testID);
+    } else {
+      this._button.removeAttribute('data-testid');
+    }
+    
+    // Update blend color CSS custom properties
+    this._button.style.setProperty('--_cta-hover-bg', this._hoverColor);
+    this._button.style.setProperty('--_cta-pressed-bg', this._pressedColor);
+    this._button.style.setProperty('--_cta-disabled-bg', this._disabledColor);
+    this._button.style.setProperty('--_cta-icon-color', this._iconColor);
+    this._button.style.setProperty('--_cta-icon-optical', this._iconOpticalBalanceColor);
+    
+    // ─────────────────────────────────────────────────────────────────
+    // Update label element
+    // ─────────────────────────────────────────────────────────────────
+    
+    // Update label text
+    this._labelEl.textContent = label;
+    
+    // Update label class for no-wrap
+    this._labelEl.className = noWrap ? 'button-cta__label--no-wrap' : 'button-cta__label';
+    
+    // ─────────────────────────────────────────────────────────────────
+    // Update icon element
+    // ─────────────────────────────────────────────────────────────────
+    
+    if (this._iconContainer && this._iconEl) {
+      // Show/hide icon container based on whether icon is set
+      if (icon) {
+        this._iconContainer.style.display = '';
+        this._iconEl.setAttribute('name', icon);
+        this._iconEl.setAttribute('size', String(iconSize));
+      } else {
+        this._iconContainer.style.display = 'none';
+      }
+    }
   }
   
   /**

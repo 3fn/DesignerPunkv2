@@ -101,9 +101,11 @@ describe('Button-CTA Icon Integration', () => {
       const shadowRoot = button.shadowRoot;
       expect(shadowRoot).not.toBeNull();
 
-      // Check that icon container doesn't exist
-      const iconContainer = shadowRoot!.querySelector('.button-cta__icon');
-      expect(iconContainer).toBeNull();
+      // With incremental DOM pattern, icon container exists but is hidden
+      // This enables CSS transitions when icon is added/removed dynamically
+      const iconContainer = shadowRoot!.querySelector('.button-cta__icon') as HTMLElement;
+      expect(iconContainer).not.toBeNull();
+      expect(iconContainer.style.display).toBe('none');
     });
 
     it('should update icon when icon prop changes', () => {

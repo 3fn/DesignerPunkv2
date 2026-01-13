@@ -95,12 +95,12 @@ This implementation plan aligns four web components (Button-CTA, Button-Vertical
 
 ### Task 2: Button-CTA Alignment
 
-- [ ] 2. Button-CTA Alignment
+- [x] 2. Button-CTA Alignment
   **Type**: Implementation
   **Validation**: Tier 2: Standard
   **Success Criteria**: Button-CTA uses incremental DOM and semantic motion tokens
 
-  - [ ] 2.1 Implement incremental DOM update pattern
+  - [x] 2.1 Implement incremental DOM update pattern
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Add `_domCreated` flag
@@ -111,14 +111,14 @@ This implementation plan aligns four web components (Button-CTA, Button-Vertical
     - Update `attributeChangedCallback()` to call `_updateDOM()` instead of full render
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5_
 
-  - [ ] 2.2 Add semantic motion token
+  - [x] 2.2 Add semantic motion token
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Update CSS transitions to use `--motion-button-press-duration` and `--motion-button-press-easing`
     - Remove primitive `--duration-150` with hard-coded `ease-in-out`
     - _Requirements: 3.1, 3.3, 3.4_
 
-  - [ ] 2.3 Write Button-CTA alignment tests
+  - [x] 2.3 Write Button-CTA alignment tests
     **Type**: Implementation
     **Validation**: Tier 2: Standard
     - Write evergreen tests for DOM element identity preservation
