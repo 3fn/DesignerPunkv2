@@ -5,7 +5,7 @@ inclusion: manual
 # Component Development and Practices Guide
 
 **Date**: 2025-11-17
-**Last Reviewed**: 2025-12-19
+**Last Reviewed**: 2026-01-13
 **Purpose**: Guide AI agents in building components with appropriate token usage, True Native Architecture, and effective collaboration practices
 **Organization**: process-standard
 **Scope**: cross-project
@@ -61,6 +61,18 @@ inclusion: manual
 2. ✅ **Semantic Blend Token Reference** (which token/function for each state)
 3. ✅ **Blend Utility Anti-Patterns** (what NOT to do - no opacity, no filters)
 4. ✅ **Blend Tokens Guide**: `.kiro/steering/Token-Family-Blend.md` (complete reference)
+
+**WHEN implementing components with CSS transitions THEN read:**
+1. ✅ **Incremental DOM Update Pattern** (architecture for preserving element identity)
+2. ✅ **Key Implementation Details** (DOM creation flag, element caching, conditional updates)
+3. ✅ **Incremental DOM Anti-Patterns** (what NOT to do - no innerHTML replacement)
+4. ✅ **Button-VerticalListItem Implementation** - canonical example
+
+**WHEN defining CSS custom properties in components THEN read:**
+1. ✅ **CSS Custom Property Naming Convention** (the `--_[abbrev]-*` pattern)
+2. ✅ **Component Abbreviation Reference** (standard abbreviations for each component)
+3. ✅ **When to Use Each Type** (design tokens vs component-scoped properties)
+4. ✅ **CSS Custom Property Naming Anti-Patterns** (what NOT to do)
 
 **WHEN troubleshooting component issues THEN read:**
 1. ✅ **Anti-Patterns to Avoid** (common mistakes)
@@ -874,6 +886,38 @@ Each platform uses its native syntax to consume the generated token values. The 
 
 Blend utilities enable components to create new opaque colors for interaction states (hover, pressed, focus, disabled) rather than using opacity-based workarounds. All components should use blend utilities for state color modifications.
 
+### Why Blend Utilities Over CSS Filters
+
+**CSS `filter: brightness()` has significant limitations** that make it unsuitable for production design systems:
+
+1. **Affects entire element, not just target property**: CSS filters apply to the entire element including text, icons, borders, and shadows. When you want to darken only the background on hover, `filter: brightness(0.92)` also darkens the text and any icons, creating unintended visual effects.
+
+2. **Not cross-platform consistent**: CSS filters are web-only. iOS and Android have different approaches to color manipulation, making it impossible to achieve visual consistency across platforms with filter-based solutions.
+
+3. **Produces transparency artifacts**: Brightness filters can create unexpected transparency or color shifts, especially with semi-transparent elements or complex backgrounds.
+
+4. **No design token integration**: Filter values like `brightness(0.92)` are arbitrary numbers that don't connect to the design token system. Blend utilities use semantic tokens (`blend.hoverDarker = 8%`) that can be updated system-wide.
+
+5. **Accessibility concerns**: Filter-based color changes may not maintain WCAG contrast ratios predictably, while blend utilities calculate mathematically correct color values that preserve accessibility compliance.
+
+**Blend utilities solve these problems by**:
+- Calculating new opaque colors that affect only the target property
+- Using the same mathematical formulas across web, iOS, and Android
+- Integrating with the design token system for consistent, maintainable values
+- Producing predictable, accessible color values
+
+### Canonical Implementation Example
+
+**Button-CTA** (`src/components/core/Button-CTA/platforms/web/ButtonCTA.web.ts`) serves as the canonical implementation example for blend utility integration. It demonstrates:
+
+- Importing `getBlendUtilities()` from the theme-aware blend utilities module
+- Initializing blend utilities in the constructor
+- Calculating state colors (hover, pressed, disabled, icon) in `connectedCallback()`
+- Applying calculated colors via CSS custom properties
+- Retry pattern for handling CSS custom property timing
+
+**Reference this implementation** when adding blend utilities to new components.
+
 ### When to Use Blend Utilities
 
 **Use blend utilities for**:
@@ -983,6 +1027,396 @@ const hoverColor = blendUtils.hoverColor(primaryColor);
 
 - [Blend Tokens Guide](Token-Family-Blend.md) - Complete blend token reference
 - [Blend Infrastructure Design](../specs/031-blend-infrastructure-implementation/design.md) - Architecture decisions
+
+---
+
+## Incremental DOM Update Pattern
+
+### Overview
+
+The incremental DOM update pattern enables CSS transitions to work correctly by preserving DOM element identity across attribute changes. Instead of replacing the entire shadow DOM on every update, components create the DOM structure once and then update existing elements directly.
+
+### Why Incremental DOM Over Full Re-renders
+
+**Full `innerHTML` replacement breaks CSS transitions** because:
+
+1. **Element identity is lost**: When you replace `innerHTML`, the browser destroys existing DOM elements and creates new ones. CSS transitions require the same element to exist before and after a property change—new elements have no "before" state to transition from.
+
+2. **Transition timing is reset**: Even if the new element has the same classes and styles, the browser treats it as a fresh element. Any in-progress transitions are cancelled, and new transitions start from scratch.
+
+3. **Performance overhead**: Full DOM replacement is more expensive than targeted property updates. The browser must parse HTML, create elements, attach event listeners, and recalculate styles for the entire subtree.
+
+4. **Event listener management**: Full replacement requires detaching and reattaching event listeners on every update, which is error-prone and inefficient.
+
+**Incremental DOM solves these problems by**:
+- Creating DOM elements once and caching references
+- Updating only the properties that changed via direct DOM APIs
+- Preserving element identity so CSS transitions animate smoothly
+- Reducing DOM manipulation overhead
+
+### Canonical Implementation Example
+
+**Button-VerticalListItem** (`src/components/core/Button-VerticalListItem/platforms/web/ButtonVerticalListItem.web.ts`) serves as the canonical implementation example for the incremental DOM pattern. It demonstrates:
+
+- `_domCreated` flag to track initial render state
+- `_createDOM()` method for one-time DOM structure creation
+- `_updateDOM()` method for targeted property updates
+- Cached element references (`_button`, `_labelEl`, `_iconEl`, etc.)
+- CSS custom property updates via `element.style.setProperty()`
+- Direct DOM API usage (`element.textContent`, `element.className`)
+
+**Reference this implementation** when adding incremental DOM updates to new components.
+
+### Architecture Pattern
+
+```typescript
+class MyComponent extends HTMLElement {
+  private _shadowRoot: ShadowRoot;
+  private _domCreated: boolean = false;
+  
+  // Cached DOM element references
+  private _button: HTMLButtonElement | null = null;
+  private _labelEl: HTMLSpanElement | null = null;
+  private _iconEl: HTMLElement | null = null;
+  
+  constructor() {
+    super();
+    this._shadowRoot = this.attachShadow({ mode: 'open' });
+  }
+  
+  connectedCallback(): void {
+    this._render();
+  }
+  
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+    // Only update if connected, value changed, and DOM exists
+    if (oldValue !== newValue && this.isConnected && this._domCreated) {
+      this._updateDOM();
+    }
+  }
+  
+  /**
+   * Main render entry point.
+   * Routes to _createDOM() for first render or _updateDOM() for subsequent updates.
+   */
+  private _render(): void {
+    if (!this._domCreated) {
+      this._createDOM();
+      this._domCreated = true;
+    } else {
+      this._updateDOM();
+    }
+  }
+  
+  /**
+   * Create the initial DOM structure (called once).
+   * Creates all elements including containers that may be hidden.
+   */
+  private _createDOM(): void {
+    this._shadowRoot.innerHTML = `
+      <style>${styles}</style>
+      <button class="my-component">
+        <span class="my-component__icon"></span>
+        <span class="my-component__label"></span>
+      </button>
+    `;
+    
+    // Cache element references for incremental updates
+    this._button = this._shadowRoot.querySelector('button');
+    this._labelEl = this._shadowRoot.querySelector('.my-component__label');
+    this._iconEl = this._shadowRoot.querySelector('.my-component__icon');
+    
+    // Apply initial state
+    this._updateDOM();
+  }
+  
+  /**
+   * Update existing DOM elements (called on attribute changes).
+   * Only updates properties that need to change, preserving element identity.
+   */
+  private _updateDOM(): void {
+    if (!this._button || !this._labelEl) return;
+    
+    // Direct DOM updates (preserves element identity for CSS transitions)
+    this._labelEl.textContent = this.label;
+    this._button.className = `my-component ${this._getStateClass()}`;
+    
+    // CSS custom property updates for dynamic styling
+    this._button.style.setProperty('--_mc-hover-bg', this._hoverColor);
+    this._button.style.setProperty('--_mc-pressed-bg', this._pressedColor);
+    
+    // Show/hide elements via display property
+    if (this._iconEl) {
+      this._iconEl.style.display = this.icon ? '' : 'none';
+    }
+  }
+}
+```
+
+### Key Implementation Details
+
+#### 1. DOM Creation Flag
+
+```typescript
+private _domCreated: boolean = false;
+```
+
+This flag ensures `_createDOM()` runs exactly once. All subsequent renders route through `_updateDOM()`.
+
+#### 2. Element Reference Caching
+
+```typescript
+// Cache references after DOM creation
+this._button = this._shadowRoot.querySelector('button');
+this._labelEl = this._shadowRoot.querySelector('.my-component__label');
+```
+
+Caching element references avoids repeated `querySelector` calls and provides type-safe access to DOM elements.
+
+#### 3. Conditional Updates in attributeChangedCallback
+
+```typescript
+attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+  if (oldValue !== newValue && this.isConnected && this._domCreated) {
+    this._updateDOM();
+  }
+}
+```
+
+Only call `_updateDOM()` when:
+- The value actually changed (`oldValue !== newValue`)
+- The element is connected to the DOM (`this.isConnected`)
+- The DOM has been created (`this._domCreated`)
+
+#### 4. CSS Custom Property Updates
+
+```typescript
+this._button.style.setProperty('--_mc-hover-bg', this._hoverColor);
+```
+
+Use `style.setProperty()` for CSS custom properties. This enables CSS transitions on properties driven by JavaScript-calculated values (like blend colors).
+
+#### 5. Show/Hide via Display Property
+
+```typescript
+this._iconEl.style.display = this.icon ? '' : 'none';
+```
+
+Toggle visibility using `display` property rather than removing/adding elements. This preserves element identity and enables fade transitions.
+
+### When to Use Incremental DOM
+
+**Use incremental DOM when**:
+- Component has CSS transitions on any property
+- Component updates frequently (e.g., on user interaction)
+- Component has complex DOM structure with many elements
+- Component uses blend utilities (calculated colors need to update smoothly)
+
+**All interactive components should use incremental DOM** to ensure CSS transitions work correctly.
+
+### Incremental DOM Anti-Patterns
+
+**❌ Don't replace innerHTML on attribute changes**:
+```typescript
+// WRONG: Breaks CSS transitions
+attributeChangedCallback() {
+  this._shadowRoot.innerHTML = this._generateHTML();
+}
+```
+
+**❌ Don't query elements on every update**:
+```typescript
+// WRONG: Inefficient and error-prone
+private _updateDOM(): void {
+  const button = this._shadowRoot.querySelector('button');
+  const label = this._shadowRoot.querySelector('.label');
+  // ...
+}
+```
+
+**❌ Don't remove and recreate elements for visibility**:
+```typescript
+// WRONG: Loses element identity
+if (showIcon) {
+  this._button.appendChild(this._createIcon());
+} else {
+  this._iconEl?.remove();
+}
+```
+
+**✅ Do cache element references**:
+```typescript
+// CORRECT: Cache once, reuse always
+private _createDOM(): void {
+  // ...
+  this._button = this._shadowRoot.querySelector('button');
+  this._labelEl = this._shadowRoot.querySelector('.label');
+}
+```
+
+**✅ Do use display property for visibility**:
+```typescript
+// CORRECT: Preserves element identity
+this._iconEl.style.display = showIcon ? '' : 'none';
+```
+
+### Related Documentation
+
+- [Button-VerticalListItem Implementation](../src/components/core/Button-VerticalListItem/platforms/web/ButtonVerticalListItem.web.ts) - Canonical example
+- [Blend Utility Integration](#blend-utility-integration) - State color calculation (often used with incremental DOM)
+
+---
+
+## CSS Custom Property Naming Convention
+
+### Overview
+
+CSS custom properties in components fall into two distinct categories that require different naming conventions to clearly communicate their purpose and scope:
+
+1. **Design system tokens**: Shared across all components, part of the public API
+2. **Component-scoped properties**: Internal to one component, calculated values or local overrides
+
+Without a clear naming convention, it's difficult to distinguish at a glance whether a property is safe to override externally (design token) or an internal implementation detail (component-scoped).
+
+### The `--_[abbrev]-*` Pattern
+
+All component-scoped CSS custom properties MUST use the `--_[abbrev]-*` naming pattern:
+
+```css
+/* Component-scoped (internal) - use underscore prefix */
+--_cta-hover-bg: #...;      /* Button-CTA internal */
+--_vlbi-background: #...;   /* Button-VerticalListItem internal */
+--_itb-focus-color: #...;   /* Input-Text-Base internal */
+--_bi-icon-color: #...;     /* ButtonIcon internal */
+
+/* Design system tokens (external) - no underscore */
+--color-primary: #...;
+--motion-button-press-duration: 150ms;
+--space-inset-200: 16px;
+```
+
+### Why This Pattern
+
+1. **Underscore signals "private"**: Borrowed from programming conventions (Python, JavaScript), the leading underscore indicates "internal implementation detail, don't depend on this externally"
+
+2. **Abbreviation keeps names readable**: Component names can be long; abbreviations keep CSS scannable while maintaining clarity
+
+3. **Clear visual distinction**: Easy to scan CSS and immediately identify which properties are component-internal vs design system tokens
+
+4. **Prevents external dependencies**: External code should never depend on component-scoped properties—they may change without notice
+
+### Component Abbreviation Reference
+
+| Component | Abbreviation | Example Properties |
+|-----------|--------------|-------------------|
+| Button-CTA | `_cta` | `--_cta-hover-bg`, `--_cta-pressed-bg` |
+| Button-VerticalListItem | `_vlbi` | `--_vlbi-background`, `--_vlbi-border-color` |
+| ButtonIcon | `_bi` | `--_bi-hover-bg`, `--_bi-icon-color` |
+| Input-Text-Base | `_itb` | `--_itb-focus-color`, `--_itb-disabled-color` |
+
+### When to Use Each Type
+
+**Use design system tokens (`--token-name`) when**:
+- The value comes from the token system (colors, spacing, typography)
+- The property should be themeable or overridable
+- The value is shared across multiple components
+- External consumers might need to reference the value
+
+**Use component-scoped properties (`--_abbrev-name`) when**:
+- The value is calculated at runtime (blend colors, dynamic sizing)
+- The property is an internal implementation detail
+- The value is specific to one component's internal logic
+- External code should NOT depend on or override the value
+
+### Implementation Example
+
+```css
+/* Button-CTA CSS showing both types */
+:host {
+  /* Design system tokens - external, themeable */
+  --color-primary: var(--color-primary);
+  --motion-button-press-duration: var(--motion-button-press-duration);
+  
+  /* Component-scoped properties - internal, calculated */
+  --_cta-hover-bg: /* calculated by blend utilities */;
+  --_cta-pressed-bg: /* calculated by blend utilities */;
+  --_cta-disabled-bg: /* calculated by blend utilities */;
+}
+
+.button-cta {
+  background-color: var(--color-primary);
+  transition: background-color var(--motion-button-press-duration) ease-out;
+}
+
+.button-cta:hover {
+  background-color: var(--_cta-hover-bg);
+}
+
+.button-cta:active {
+  background-color: var(--_cta-pressed-bg);
+}
+```
+
+### CSS Custom Property Naming Anti-Patterns
+
+**❌ Don't use full component names for internal properties**:
+```css
+/* WRONG: Too verbose, hard to scan */
+--button-vertical-list-item-hover-background: #...;
+
+/* CORRECT: Use abbreviation */
+--_vlbi-hover-bg: #...;
+```
+
+**❌ Don't omit underscore for internal properties**:
+```css
+/* WRONG: Looks like a design token, may be overridden externally */
+--cta-hover-bg: #...;
+
+/* CORRECT: Underscore signals internal */
+--_cta-hover-bg: #...;
+```
+
+**❌ Don't use component-scoped naming for design tokens**:
+```css
+/* WRONG: Design tokens shouldn't have component prefix */
+--_cta-primary-color: var(--color-primary);
+
+/* CORRECT: Reference design token directly */
+background-color: var(--color-primary);
+```
+
+**❌ Don't expose calculated values as design tokens**:
+```css
+/* WRONG: Calculated values are implementation details */
+--color-primary-hover: /* blend calculation */;
+
+/* CORRECT: Keep calculated values component-scoped */
+--_cta-hover-bg: /* blend calculation */;
+```
+
+### Documentation in CSS Files
+
+When using component-scoped properties, add a documentation comment explaining the naming convention:
+
+```css
+/**
+ * Component-scoped CSS custom properties
+ * 
+ * These properties are internal implementation details:
+ * - --_vlbi-background: Current background color for visual state
+ * - --_vlbi-border-color: Current border color for visual state
+ * - --_vlbi-icon-color: Icon color for current visual state
+ * 
+ * Naming Convention: --_[abbrev]-* pattern signals component-scoped (internal) properties
+ * @see Component Development Guide - CSS Custom Property Naming Convention
+ */
+```
+
+### Related Documentation
+
+- [Blend Utility Integration](#blend-utility-integration) - Calculated colors use component-scoped properties
+- [Incremental DOM Update Pattern](#incremental-dom-update-pattern) - CSS custom properties enable smooth transitions
 
 ---
 
