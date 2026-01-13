@@ -25,8 +25,8 @@ import { IconBaseElement } from './components/core/Icon-Base/platforms/web/IconB
 import { ButtonIcon } from './components/core/Button-Icon/platforms/web/ButtonIcon.web';
 // Container-Base - Stemma System naming (foundational primitive component)
 import { ContainerBaseWeb } from './components/core/Container-Base/platforms/web/ContainerBase.web';
-// Button-VerticalListItem - Stemma System naming (vertical list button item)
-import { ButtonVerticalListItem } from './components/core/Button-VerticalListItem/platforms/web/ButtonVerticalListItem.web';
+// Button-VerticalList-Item - Stemma System naming (vertical list button item)
+import { ButtonVerticalListItem } from './components/core/Button-VerticalList-Item/platforms/web/ButtonVerticalListItem.web';
 
 /**
  * Check if design tokens are loaded in the document.
@@ -97,8 +97,8 @@ safeDefine('icon-base', IconBaseElement);
 safeDefine('button-icon', ButtonIcon);
 // Container-Base - Stemma System naming (foundational primitive component)
 safeDefine('container-base', ContainerBaseWeb);
-// Button-VerticalListItem - Stemma System naming (vertical list button item)
-safeDefine('vertical-list-button-item', ButtonVerticalListItem);
+// Button-VerticalList-Item - Stemma System naming (vertical list button item)
+safeDefine('button-vertical-list-item', ButtonVerticalListItem);
 
 // Check tokens after DOM is ready and CSS is applied
 // Uses requestAnimationFrame to ensure stylesheets have been fully parsed and applied
