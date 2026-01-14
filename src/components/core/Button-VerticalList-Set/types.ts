@@ -363,6 +363,169 @@ export interface DerivedItemState {
 }
 
 // ─────────────────────────────────────────────────────────────────
+// Validation Result Type
+// ─────────────────────────────────────────────────────────────────
+
+/**
+ * Result of selection validation.
+ * 
+ * Contains the validation status and an optional error message
+ * to display to the user.
+ */
+export interface ValidationResult {
+  /**
+   * Whether the current selection is valid.
+   */
+  isValid: boolean;
+  
+  /**
+   * Error message to display if validation fails.
+   * Null when validation passes.
+   */
+  message: string | null;
+}
+
+// ─────────────────────────────────────────────────────────────────
+// Validation Functions
+// ─────────────────────────────────────────────────────────────────
+
+/**
+ * Validate the current selection state based on mode and constraints.
+ * 
+ * This function checks if the current selection meets the validation
+ * requirements based on the mode and configured constraints:
+ * 
+ * **Select Mode**:
+ * - If `required` is true, validation fails when no item is selected
+ * 
+ * **MultiSelect Mode**:
+ * - If `minSelections` is set, validation fails if fewer items are selected
+ * - If `maxSelections` is set, validation fails if more items are selected
+ * 
+ * **Tap Mode**:
+ * - No validation (always valid)
+ * 
+ * @param mode - The selection mode ('tap', 'select', or 'multiSelect')
+ * @param selectedIndex - The selected index for Select mode (null if no selection)
+ * @param selectedIndices - Array of selected indices for MultiSelect mode
+ * @param required - Whether a selection is required (Select mode only)
+ * @param minSelections - Minimum number of selections required (MultiSelect mode only)
+ * @param maxSelections - Maximum number of selections allowed (MultiSelect mode only)
+ * @returns ValidationResult with isValid flag and optional error message
+ * 
+ * @example
+ * ```typescript
+ * // Select mode - required but no selection
+ * validateSelection('select', null, [], true);
+ * // Returns: { isValid: false, message: 'Please select an option' }
+ * 
+ * // Select mode - required with selection
+ * validateSelection('select', 1, [], true);
+ * // Returns: { isValid: true, message: null }
+ * 
+ * // MultiSelect mode - minSelections not met
+ * validateSelection('multiSelect', null, [0], false, 2);
+ * // Returns: { isValid: false, message: 'Please select at least 2 options' }
+ * 
+ * // MultiSelect mode - maxSelections exceeded
+ * validateSelection('multiSelect', null, [0, 1, 2, 3], false, undefined, 3);
+ * // Returns: { isValid: false, message: 'Please select no more than 3 options' }
+ * ```
+ * 
+ * @see Requirements 7.3, 7.4, 7.5
+ */
+export function validateSelection(
+  mode: SelectionMode,
+  selectedIndex: number | null,
+  selectedIndices: number[],
+  required: boolean,
+  minSelections?: number,
+  maxSelections?: number
+): ValidationResult {
+  // Select mode: Check required constraint
+  // @see Requirement 7.3: "WHEN a valid selection is made AND required is true"
+  if (mode === 'select' && required && selectedIndex === null) {
+    return { isValid: false, message: 'Please select an option' };
+  }
+  
+  // MultiSelect mode: Check min/max constraints
+  if (mode === 'multiSelect') {
+    const count = selectedIndices.length;
+    
+    // @see Requirement 7.4: "WHEN minSelections is set THEN validate at least that many"
+    if (minSelections !== undefined && count < minSelections) {
+      return { 
+        isValid: false, 
+        message: `Please select at least ${minSelections} option${minSelections > 1 ? 's' : ''}` 
+      };
+    }
+    
+    // @see Requirement 7.5: "WHEN maxSelections is set THEN prevent selecting more"
+    // Note: This validation is for display purposes; actual prevention is in canSelectItem()
+    if (maxSelections !== undefined && count > maxSelections) {
+      return { 
+        isValid: false, 
+        message: `Please select no more than ${maxSelections} option${maxSelections > 1 ? 's' : ''}` 
+      };
+    }
+  }
+  
+  // Tap mode has no validation requirements
+  // All other cases are valid
+  return { isValid: true, message: null };
+}
+
+/**
+ * Check if an item can be selected in MultiSelect mode.
+ * 
+ * This function enforces the `maxSelections` constraint by preventing
+ * selection of additional items when the maximum is reached.
+ * 
+ * Rules:
+ * - Items that are already selected can always be deselected
+ * - New items can only be selected if under the maxSelections limit
+ * 
+ * @param index - The index of the item to check
+ * @param selectedIndices - Array of currently selected indices
+ * @param maxSelections - Maximum number of selections allowed (optional)
+ * @returns true if the item can be selected/toggled, false otherwise
+ * 
+ * @example
+ * ```typescript
+ * // Can deselect an already selected item (even at max)
+ * canSelectItem(0, [0, 1, 2], 3);
+ * // Returns: true (can deselect)
+ * 
+ * // Cannot select new item when at max
+ * canSelectItem(3, [0, 1, 2], 3);
+ * // Returns: false (at max, can't select more)
+ * 
+ * // Can select when under max
+ * canSelectItem(3, [0, 1], 3);
+ * // Returns: true (under max)
+ * ```
+ * 
+ * @see Requirement 7.5
+ */
+export function canSelectItem(
+  index: number,
+  selectedIndices: number[],
+  maxSelections?: number
+): boolean {
+  // Can always deselect an already selected item
+  if (selectedIndices.includes(index)) {
+    return true;
+  }
+  
+  // Check if at max selections
+  if (maxSelections !== undefined && selectedIndices.length >= maxSelections) {
+    return false;  // At max, can't select more
+  }
+  
+  return true;
+}
+
+// ─────────────────────────────────────────────────────────────────
 // State Derivation Functions
 // ─────────────────────────────────────────────────────────────────
 

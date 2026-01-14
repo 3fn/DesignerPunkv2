@@ -26,7 +26,7 @@ import type {
   SetInternalState
 } from '../../types';
 
-import { deriveItemStates } from '../../types';
+import { deriveItemStates, validateSelection, canSelectItem } from '../../types';
 
 // Import CSS as string for browser bundle compatibility
 // The esbuild CSS-as-string plugin transforms this import into a JS string export
@@ -468,6 +468,43 @@ export class ButtonVerticalListSet extends HTMLElement {
   }
   
   // ─────────────────────────────────────────────────────────────────
+  // Public Methods
+  // ─────────────────────────────────────────────────────────────────
+  
+  /**
+   * Validate the current selection state.
+   * 
+   * Checks if the current selection meets the validation requirements
+   * based on the mode and configured constraints (required, minSelections, maxSelections).
+   * 
+   * This method can be called externally to validate the selection before
+   * form submission or other actions.
+   * 
+   * @returns ValidationResult with isValid flag and optional error message
+   * 
+   * @example
+   * ```typescript
+   * const set = document.querySelector('button-vertical-list-set');
+   * const result = set.validate();
+   * if (!result.isValid) {
+   *   console.log(result.message); // "Please select an option"
+   * }
+   * ```
+   * 
+   * @see Requirements 7.3, 7.4, 7.5
+   */
+  validate(): { isValid: boolean; message: string | null } {
+    return validateSelection(
+      this._mode,
+      this._selectedIndex,
+      this._selectedIndices,
+      this._required,
+      this._minSelections,
+      this._maxSelections
+    );
+  }
+  
+  // ─────────────────────────────────────────────────────────────────
   // Rendering (Incremental Update Architecture)
   // ─────────────────────────────────────────────────────────────────
   
@@ -871,8 +908,11 @@ export class ButtonVerticalListSet extends HTMLElement {
    * update the selectedIndex prop. The visual state update happens when the
    * attribute changes.
    * 
+   * Also handles error clearing: when a valid selection is made and required is true,
+   * the error state is cleared automatically.
+   * 
    * @param clickedIndex - The index of the clicked item
-   * @see Requirements 4.2, 4.3, 4.4, 4.5, 9.3
+   * @see Requirements 4.2, 4.3, 4.4, 4.5, 7.3, 9.3
    */
   private _handleSelectModeClick(clickedIndex: number): void {
     // Determine the new selection state
@@ -886,6 +926,33 @@ export class ButtonVerticalListSet extends HTMLElement {
       // Clicking a different item selects it
       // @see Requirement 4.2, 4.4: "selecting an item SHALL set that item to selected state"
       newSelectedIndex = clickedIndex;
+    }
+    
+    // Clear error on valid selection
+    // @see Requirement 7.3: "WHEN a valid selection is made AND required is true THEN clear error"
+    if (this._error && this._required && newSelectedIndex !== null) {
+      // Validate the new selection
+      const validation = validateSelection(
+        this._mode,
+        newSelectedIndex,
+        this._selectedIndices,
+        this._required,
+        this._minSelections,
+        this._maxSelections
+      );
+      
+      if (validation.isValid) {
+        // Clear error state
+        this._error = false;
+        this._errorMessage = undefined;
+        this.removeAttribute('error');
+        this.removeAttribute('error-message');
+        
+        // Update DOM to reflect cleared error
+        if (this._domCreated) {
+          this._updateDOM();
+        }
+      }
     }
     
     // Invoke the callback with the new selection
@@ -906,10 +973,21 @@ export class ButtonVerticalListSet extends HTMLElement {
    * update the selectedIndices prop. The visual state update happens when the
    * attribute changes.
    * 
+   * Also handles:
+   * - Max selection enforcement: prevents selecting beyond maxSelections
+   * - Error clearing: clears error when selection becomes valid
+   * 
    * @param clickedIndex - The index of the clicked item
-   * @see Requirements 5.2, 5.3, 9.4
+   * @see Requirements 5.2, 5.3, 7.4, 7.5, 9.4
    */
   private _handleMultiSelectModeClick(clickedIndex: number): void {
+    // Check if the item can be selected (respects maxSelections)
+    // @see Requirement 7.5: "WHEN maxSelections is set THEN prevent selecting more"
+    if (!canSelectItem(clickedIndex, this._selectedIndices, this._maxSelections)) {
+      // At max selections and trying to select a new item - do nothing
+      return;
+    }
+    
     // Create a new array to avoid mutating the existing one
     let newSelectedIndices: number[];
     
@@ -921,6 +999,33 @@ export class ButtonVerticalListSet extends HTMLElement {
       // Item is currently unchecked - add it to selection (toggle to checked)
       // @see Requirement 5.2: "toggling an item SHALL toggle between checked and unchecked"
       newSelectedIndices = [...this._selectedIndices, clickedIndex];
+    }
+    
+    // Clear error on valid selection
+    // @see Requirement 7.4: "WHEN minSelections is set THEN validate at least that many"
+    if (this._error) {
+      // Validate the new selection
+      const validation = validateSelection(
+        this._mode,
+        this._selectedIndex,
+        newSelectedIndices,
+        this._required,
+        this._minSelections,
+        this._maxSelections
+      );
+      
+      if (validation.isValid) {
+        // Clear error state
+        this._error = false;
+        this._errorMessage = undefined;
+        this.removeAttribute('error');
+        this.removeAttribute('error-message');
+        
+        // Update DOM to reflect cleared error
+        if (this._domCreated) {
+          this._updateDOM();
+        }
+      }
     }
     
     // Invoke the callback with the complete array of selected indices
