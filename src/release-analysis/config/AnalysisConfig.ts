@@ -353,7 +353,8 @@ export const DEFAULT_ANALYSIS_CONFIG: AnalysisConfig = {
       'README.md',
       '*.test.ts',
       '*.spec.ts',
-      'docs/**',
+      'docs/processes/**',
+      'docs/guides/**',
       'examples/**'
     ]
   },
