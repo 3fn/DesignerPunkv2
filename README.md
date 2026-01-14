@@ -2,7 +2,7 @@
 
 **A True Native Cross-Platform Design System with Mathematical Foundations**
 
-[![Version](https://img.shields.io/badge/Version-4.1.0-purple)](RELEASE-NOTES-4.1.0.md)
+[![Version](https://img.shields.io/badge/Version-4.2.0-purple)](RELEASE-NOTES-4.2.0.md)
 [![Repository](https://img.shields.io/badge/GitHub-DesignerPunkv2-blue)](https://github.com/3fn/DesignerPunkv2)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
@@ -113,6 +113,16 @@ With the Stemma System foundation complete, future development focuses on:
 4. **Additional Semantic Components**: Expanding Form Inputs and other families
 
 ### ✅ Recently Completed
+
+**Vertical List Buttons Pattern** (January 2026) - v4.2.0
+- New `Button-VerticalList-Set` container component for vertical list selection patterns
+- Three interaction modes: Tap (action buttons), Select (single-selection), MultiSelect (checkbox-style)
+- Full cross-platform support: Web (Web Components), iOS (SwiftUI), Android (Jetpack Compose)
+- Controlled component API with validation (required, minSelections, maxSelections)
+- Animation coordination with staggered transitions (125ms handoff)
+- Keyboard navigation with roving tabindex pattern
+- Component rename: `Button-VerticalListItem` → `Button-VerticalList-Item` for naming consistency
+- Accessibility fixes: `delegatesFocus: true`, single click event per interaction
 
 **Component Alignment & Vertical List Buttons** (January 2026) - v4.1.0
 - New `Button-VerticalList-Set` container component for vertical list selection patterns (Web, iOS, Android)
