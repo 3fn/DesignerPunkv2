@@ -161,6 +161,7 @@
 @media print {
   .vls-error-message {
     /* Ensure error message is visible in print */
-    color: #000 !important;
+    /* @see color.print.default token for print media */
+    color: var(--color-print-default) !important;
   }
 }
