@@ -526,6 +526,179 @@ export function canSelectItem(
 }
 
 // ─────────────────────────────────────────────────────────────────
+// Animation Timing Functions
+// ─────────────────────────────────────────────────────────────────
+
+/**
+ * Calculate staggered transition delays for selection changes in Select mode.
+ * 
+ * When selection changes from one item to another, the deselecting item
+ * starts its animation immediately (0ms) while the selecting item starts
+ * with a 125ms delay. This creates a smooth "handoff" effect that guides
+ * the user's eye from the old selection to the new selection.
+ * 
+ * The 125ms delay represents 50% of the 250ms animation duration, providing
+ * visual continuity without making the transition feel slow.
+ * 
+ * @param previousIndex - The index of the previously selected item (deselecting)
+ * @param newIndex - The index of the newly selected item (selecting)
+ * @param itemCount - Total number of items in the list
+ * @returns Array of transition delays in milliseconds, one for each item
+ * 
+ * @example
+ * ```typescript
+ * // Selection changes from item 0 to item 2 in a 4-item list
+ * calculateStaggeredDelays(0, 2, 4);
+ * // Returns: [0, 0, 125, 0]
+ * // Item 0 (deselecting): 0ms delay - starts immediately
+ * // Item 2 (selecting): 125ms delay - starts at 50% of animation
+ * // Other items: 0ms delay (no animation needed)
+ * ```
+ * 
+ * @see Requirements 6.1: "WHEN selection changes between items THEN deselecting item gets 0ms, selecting item gets 125ms"
+ * @see Design Decision 3: Staggered animation with 50% overlap
+ */
+export function calculateStaggeredDelays(
+  previousIndex: number,
+  newIndex: number,
+  itemCount: number
+): number[] {
+  const delays = Array(itemCount).fill(0);
+  
+  // Deselecting item starts immediately
+  delays[previousIndex] = 0;
+  
+  // Selecting item starts at 50% of animation duration (125ms of 250ms)
+  // This creates the staggered "handoff" effect
+  delays[newIndex] = 125;
+  
+  return delays;
+}
+
+/**
+ * Calculate transition delays for the first selection in Select mode.
+ * 
+ * When the first selection is made (transitioning from all-rest state),
+ * all items animate simultaneously with 0ms delay. This is because there's
+ * no "handoff" needed - we're just transitioning from rest to selected/notSelected.
+ * 
+ * @param itemCount - Total number of items in the list
+ * @returns Array of transition delays in milliseconds (all 0ms)
+ * 
+ * @example
+ * ```typescript
+ * // First selection in a 3-item list
+ * calculateFirstSelectionDelays(3);
+ * // Returns: [0, 0, 0]
+ * // All items animate simultaneously
+ * ```
+ * 
+ * @see Requirements 6.2: "WHEN first selection is made THEN all items get 0ms (simultaneous)"
+ */
+export function calculateFirstSelectionDelays(itemCount: number): number[] {
+  return Array(itemCount).fill(0);
+}
+
+/**
+ * Calculate transition delays for deselection in Select mode.
+ * 
+ * When the selected item is re-engaged to clear selection (deselection),
+ * all items animate simultaneously with 0ms delay. This returns all items
+ * to the rest state together.
+ * 
+ * @param itemCount - Total number of items in the list
+ * @returns Array of transition delays in milliseconds (all 0ms)
+ * 
+ * @example
+ * ```typescript
+ * // Deselection in a 3-item list
+ * calculateDeselectionDelays(3);
+ * // Returns: [0, 0, 0]
+ * // All items animate simultaneously back to rest
+ * ```
+ * 
+ * @see Requirements 6.3: "WHEN deselection occurs THEN all items get 0ms (simultaneous)"
+ */
+export function calculateDeselectionDelays(itemCount: number): number[] {
+  return Array(itemCount).fill(0);
+}
+
+/**
+ * Calculate transition delay for a toggled item in MultiSelect mode.
+ * 
+ * In MultiSelect mode, each item animates independently when toggled.
+ * The toggled item gets 0ms delay (immediate animation), and other items
+ * are not affected.
+ * 
+ * @param toggledIndex - The index of the item being toggled
+ * @param itemCount - Total number of items in the list
+ * @returns Array of transition delays in milliseconds (all 0ms, independent animation)
+ * 
+ * @example
+ * ```typescript
+ * // Toggle item 1 in a 3-item list
+ * calculateMultiSelectDelay(1, 3);
+ * // Returns: [0, 0, 0]
+ * // All items have 0ms delay - toggled item animates immediately,
+ * // other items don't need animation coordination
+ * ```
+ * 
+ * @see Requirements 6.4: "WHEN items toggle in MultiSelect mode THEN toggled item gets 0ms (independent)"
+ */
+export function calculateMultiSelectDelay(toggledIndex: number, itemCount: number): number[] {
+  // In MultiSelect mode, each item animates independently
+  // All items have 0ms delay - the toggled item animates immediately
+  // Other items don't need coordination since they're not changing
+  return Array(itemCount).fill(0);
+}
+
+/**
+ * Determine the checkmark transition behavior for an item.
+ * 
+ * In Select mode, when an item is being deselected, the checkmark should
+ * disappear instantly while the border animates. This keeps focus on the
+ * new selection while the border animation provides the transition feedback.
+ * 
+ * For all other cases (selecting, multiSelect toggle), the checkmark
+ * animates normally.
+ * 
+ * @param isDeselecting - Whether the item is being deselected
+ * @param mode - The selection mode ('tap', 'select', or 'multiSelect')
+ * @returns 'instant' for deselecting items in Select mode, 'animated' otherwise
+ * 
+ * @example
+ * ```typescript
+ * // Deselecting item in Select mode
+ * getCheckmarkTransition(true, 'select');
+ * // Returns: 'instant'
+ * 
+ * // Selecting item in Select mode
+ * getCheckmarkTransition(false, 'select');
+ * // Returns: 'animated'
+ * 
+ * // Any item in MultiSelect mode
+ * getCheckmarkTransition(true, 'multiSelect');
+ * // Returns: 'animated'
+ * ```
+ * 
+ * @see Requirements 6.5: "checkmarkTransition='instant' on deselecting items in Select mode"
+ * @see Design Decision 4: Instant checkmark on deselection
+ */
+export function getCheckmarkTransition(
+  isDeselecting: boolean,
+  mode: SelectionMode
+): 'animated' | 'instant' {
+  // In Select mode, deselecting items get instant checkmark removal
+  // This keeps focus on the new selection while border animates
+  if (mode === 'select' && isDeselecting) {
+    return 'instant';
+  }
+  
+  // All other cases use animated checkmark transition
+  return 'animated';
+}
+
+// ─────────────────────────────────────────────────────────────────
 // State Derivation Functions
 // ─────────────────────────────────────────────────────────────────
 

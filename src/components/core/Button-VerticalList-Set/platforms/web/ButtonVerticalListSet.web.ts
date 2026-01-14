@@ -26,7 +26,16 @@ import type {
   SetInternalState
 } from '../../types';
 
-import { deriveItemStates, validateSelection, canSelectItem } from '../../types';
+import { 
+  deriveItemStates, 
+  validateSelection, 
+  canSelectItem,
+  calculateStaggeredDelays,
+  calculateFirstSelectionDelays,
+  calculateDeselectionDelays,
+  calculateMultiSelectDelay,
+  getCheckmarkTransition
+} from '../../types';
 
 // Import CSS as string for browser bundle compatibility
 // The esbuild CSS-as-string plugin transforms this import into a JS string export
@@ -622,17 +631,19 @@ export class ButtonVerticalListSet extends HTMLElement {
   /**
    * Update child Button-VerticalList-Item elements.
    * 
-   * Propagates visual state, transition delay, error state, and ARIA attributes to children.
-   * Uses deriveItemStates() to calculate visual states from controlled props.
-   * Also sets up roving tabindex pattern for keyboard navigation.
+   * Propagates visual state, transition delay, checkmark transition, error state,
+   * and ARIA attributes to children. Uses deriveItemStates() to calculate visual
+   * states from controlled props. Also sets up roving tabindex pattern for
+   * keyboard navigation.
    * 
    * Communication props passed to children:
    * - `visual-state`: Derived from controlled props (mode, selectedIndex, selectedIndices)
    * - `transition-delay`: Animation timing coordination (calculated in Task 6)
+   * - `checkmark-transition`: Checkmark animation behavior ('fade' or 'instant')
    * - `error`: Error state propagation to all children
    * - `tabindex`: Roving tabindex for keyboard navigation (0 for focused, -1 for others)
    * 
-   * @see Requirements 3.1, 4.1, 4.2, 5.1, 7.1, 8.6, 9.6
+   * @see Requirements 3.1, 4.1, 4.2, 5.1, 6.5, 7.1, 8.6, 9.6
    */
   private _updateChildItems(): void {
     // Get all slotted children
@@ -652,9 +663,12 @@ export class ButtonVerticalListSet extends HTMLElement {
     );
     
     // Calculate transition delays for animation coordination
-    // Full timing logic will be implemented in Task 6 (Animation Coordination)
-    // For now, use default delay of 0ms for all items
+    // @see Requirements 6.1, 6.2, 6.3, 6.4: Animation timing coordination
     const transitionDelays = this._calculateTransitionDelays(itemCount, visualStates);
+    
+    // Calculate checkmark transitions for animation coordination
+    // @see Requirement 6.5: "checkmarkTransition='instant' on deselecting items in Select mode"
+    const checkmarkTransitions = this._calculateCheckmarkTransitions(itemCount, visualStates);
     
     // Determine ARIA role for items based on mode
     // @see Requirements 3.4, 4.7, 5.5
@@ -678,6 +692,12 @@ export class ButtonVerticalListSet extends HTMLElement {
         // @see Requirements 6.1, 6.2, 6.3, 6.4: Animation timing coordination
         const transitionDelay = transitionDelays[index];
         child.setAttribute('transition-delay', String(transitionDelay));
+        
+        // Set checkmark transition for animation coordination
+        // @see Requirement 6.5: "checkmarkTransition='instant' on deselecting items in Select mode"
+        // Note: Map 'animated' to 'fade' for Item component compatibility
+        const checkmarkTransition = checkmarkTransitions[index];
+        child.setAttribute('checkmark-transition', checkmarkTransition === 'instant' ? 'instant' : 'fade');
         
         // Propagate error state to all children
         // @see Requirements 7.1: "pass error={true} to all child items"
@@ -766,14 +786,16 @@ export class ButtonVerticalListSet extends HTMLElement {
   /**
    * Calculate transition delays for animation coordination.
    * 
-   * This method provides the communication mechanism for passing transition delays
-   * to child items. The actual timing logic will be implemented in Task 6.
+   * This method coordinates animation timing across child items based on
+   * the current mode and selection state. It uses the animation timing
+   * functions from types.ts to determine appropriate delays.
    * 
-   * Animation timing rules (to be implemented in Task 6):
-   * - Selection change: Deselecting item gets 0ms, selecting item gets 125ms (staggered)
-   * - First selection: All items get 0ms (simultaneous)
-   * - Deselection: All items get 0ms (simultaneous)
-   * - MultiSelect toggle: Toggled item gets 0ms (independent)
+   * Animation timing rules:
+   * - **Select mode - Selection change**: Deselecting item gets 0ms, selecting item gets 125ms (staggered handoff)
+   * - **Select mode - First selection**: All items get 0ms (simultaneous)
+   * - **Select mode - Deselection**: All items get 0ms (simultaneous)
+   * - **MultiSelect mode - Toggle**: Toggled item gets 0ms (independent)
+   * - **Tap mode**: All items get 0ms (no selection state)
    * 
    * @param itemCount - Number of child items
    * @param visualStates - Array of visual states for each item
@@ -781,10 +803,116 @@ export class ButtonVerticalListSet extends HTMLElement {
    * @see Requirements 6.1, 6.2, 6.3, 6.4
    */
   private _calculateTransitionDelays(itemCount: number, visualStates: string[]): number[] {
-    // Default: All items have 0ms delay
-    // Full timing logic will be implemented in Task 6 (Animation Coordination)
-    // This placeholder ensures the communication mechanism is in place
+    // Tap mode: No animation coordination needed
+    if (this._mode === 'tap') {
+      return Array(itemCount).fill(0);
+    }
+    
+    // MultiSelect mode: Independent animation per item
+    // Each item animates immediately when toggled
+    // @see Requirement 6.4: "WHEN items toggle in MultiSelect mode THEN toggled item gets 0ms"
+    if (this._mode === 'multiSelect') {
+      // In multiSelect mode, we don't track previous state for staggering
+      // Each toggle is independent, so all items get 0ms delay
+      return calculateMultiSelectDelay(0, itemCount);
+    }
+    
+    // Select mode: Coordinate animation timing based on selection state
+    // @see Requirements 6.1, 6.2, 6.3
+    if (this._mode === 'select') {
+      const previousIndex = this._internalState.previousSelectedIndex;
+      const currentIndex = this._selectedIndex;
+      const isFirstSelection = this._internalState.isFirstSelection;
+      
+      // Case 1: First selection (no previous selection)
+      // All items animate simultaneously
+      // @see Requirement 6.2: "WHEN first selection is made THEN all items get 0ms"
+      if (isFirstSelection && currentIndex !== null) {
+        return calculateFirstSelectionDelays(itemCount);
+      }
+      
+      // Case 2: Deselection (clearing selection)
+      // All items animate simultaneously back to rest
+      // @see Requirement 6.3: "WHEN deselection occurs THEN all items get 0ms"
+      if (currentIndex === null && previousIndex !== null) {
+        return calculateDeselectionDelays(itemCount);
+      }
+      
+      // Case 3: Selection change (from one item to another)
+      // Staggered animation: deselecting item starts first, selecting item follows
+      // @see Requirement 6.1: "WHEN selection changes THEN deselecting gets 0ms, selecting gets 125ms"
+      if (previousIndex !== null && currentIndex !== null && previousIndex !== currentIndex) {
+        return calculateStaggeredDelays(previousIndex, currentIndex, itemCount);
+      }
+      
+      // Default: No animation coordination needed
+      return Array(itemCount).fill(0);
+    }
+    
+    // Fallback: No animation coordination
     return Array(itemCount).fill(0);
+  }
+  
+  /**
+   * Calculate checkmark transitions for animation coordination.
+   * 
+   * This method determines the checkmark transition behavior for each child item
+   * based on the current mode and selection state. In Select mode, deselecting
+   * items get 'instant' checkmark removal while selecting items get 'animated'.
+   * 
+   * Checkmark transition rules:
+   * - **Select mode - Deselecting item**: 'instant' (checkmark hides immediately)
+   * - **Select mode - Selecting item**: 'animated' (checkmark fades in)
+   * - **Select mode - Other items**: 'animated' (default)
+   * - **MultiSelect mode**: 'animated' (all items animate normally)
+   * - **Tap mode**: 'animated' (no checkmarks, but default to animated)
+   * 
+   * @param itemCount - Number of child items
+   * @param visualStates - Array of visual states for each item
+   * @returns Array of checkmark transition values ('animated' | 'instant')
+   * @see Requirement 6.5: "checkmarkTransition='instant' on deselecting items in Select mode"
+   */
+  private _calculateCheckmarkTransitions(itemCount: number, visualStates: string[]): ('animated' | 'instant')[] {
+    // Tap mode: No checkmarks, default to animated
+    if (this._mode === 'tap') {
+      return Array(itemCount).fill('animated');
+    }
+    
+    // MultiSelect mode: All items animate normally
+    // @see Requirement 6.5: Only Select mode uses instant checkmark removal
+    if (this._mode === 'multiSelect') {
+      return Array(itemCount).fill('animated');
+    }
+    
+    // Select mode: Determine which item is deselecting
+    // @see Requirement 6.5: "checkmarkTransition='instant' on deselecting items in Select mode"
+    if (this._mode === 'select') {
+      const previousIndex = this._internalState.previousSelectedIndex;
+      const currentIndex = this._selectedIndex;
+      
+      // Create array with default 'animated' transitions
+      const transitions: ('animated' | 'instant')[] = Array(itemCount).fill('animated');
+      
+      // Case: Selection change (from one item to another)
+      // The deselecting item (previousIndex) gets 'instant' checkmark removal
+      if (previousIndex !== null && currentIndex !== null && previousIndex !== currentIndex) {
+        // Use getCheckmarkTransition to determine the transition for the deselecting item
+        transitions[previousIndex] = getCheckmarkTransition(true, this._mode);
+        // Selecting item gets animated transition
+        transitions[currentIndex] = getCheckmarkTransition(false, this._mode);
+      }
+      
+      // Case: Deselection (clearing selection by clicking selected item)
+      // The deselecting item gets 'instant' checkmark removal
+      if (currentIndex === null && previousIndex !== null) {
+        transitions[previousIndex] = getCheckmarkTransition(true, this._mode);
+      }
+      
+      return transitions;
+    }
+    
+    // Fallback: All items animate normally
+    return Array(itemCount).fill('animated');
   }
   
   // ─────────────────────────────────────────────────────────────────
@@ -908,11 +1036,13 @@ export class ButtonVerticalListSet extends HTMLElement {
    * update the selectedIndex prop. The visual state update happens when the
    * attribute changes.
    * 
-   * Also handles error clearing: when a valid selection is made and required is true,
-   * the error state is cleared automatically.
+   * Also handles:
+   * - Error clearing: when a valid selection is made and required is true
+   * - Selection history tracking: updates previousSelectedIndex and isFirstSelection
+   *   for animation coordination
    * 
    * @param clickedIndex - The index of the clicked item
-   * @see Requirements 4.2, 4.3, 4.4, 4.5, 7.3, 9.3
+   * @see Requirements 4.2, 4.3, 4.4, 4.5, 6.1, 6.2, 6.3, 7.3, 9.3
    */
   private _handleSelectModeClick(clickedIndex: number): void {
     // Determine the new selection state
@@ -926,6 +1056,29 @@ export class ButtonVerticalListSet extends HTMLElement {
       // Clicking a different item selects it
       // @see Requirement 4.2, 4.4: "selecting an item SHALL set that item to selected state"
       newSelectedIndex = clickedIndex;
+    }
+    
+    // ─────────────────────────────────────────────────────────────────
+    // Selection History Tracking for Animation Coordination
+    // @see Requirements 6.1, 6.2, 6.3
+    // ─────────────────────────────────────────────────────────────────
+    
+    // Track previous selection for stagger calculation
+    // @see Requirement 6.1: "WHEN selection changes between items THEN 
+    // deselecting item gets 0ms, selecting item gets 125ms"
+    this._internalState.previousSelectedIndex = this._selectedIndex;
+    
+    // Handle deselection: reset isFirstSelection flag
+    // @see Requirement 6.3: "WHEN deselection occurs THEN all items get 0ms"
+    if (newSelectedIndex === null) {
+      // Deselection resets the first selection flag
+      // Next selection will be treated as "first selection" again
+      this._internalState.isFirstSelection = true;
+    } else if (this._internalState.isFirstSelection) {
+      // First selection made - clear the flag for future selections
+      // @see Requirement 6.2: "WHEN first selection is made THEN all items get 0ms"
+      // After this selection, subsequent selections will use staggered animation
+      this._internalState.isFirstSelection = false;
     }
     
     // Clear error on valid selection
