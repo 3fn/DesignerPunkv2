@@ -66,7 +66,7 @@ inclusion: manual
 1. ✅ **Incremental DOM Update Pattern** (architecture for preserving element identity)
 2. ✅ **Key Implementation Details** (DOM creation flag, element caching, conditional updates)
 3. ✅ **Incremental DOM Anti-Patterns** (what NOT to do - no innerHTML replacement)
-4. ✅ **Button-VerticalListItem Implementation** - canonical example
+4. ✅ **Button-VerticalList-Item Implementation** - canonical example
 
 **WHEN defining CSS custom properties in components THEN read:**
 1. ✅ **CSS Custom Property Naming Convention** (the `--_[abbrev]-*` pattern)
@@ -1056,7 +1056,7 @@ The incremental DOM update pattern enables CSS transitions to work correctly by 
 
 ### Canonical Implementation Example
 
-**Button-VerticalListItem** (`src/components/core/Button-VerticalListItem/platforms/web/ButtonVerticalListItem.web.ts`) serves as the canonical implementation example for the incremental DOM pattern. It demonstrates:
+**Button-VerticalList-Item** (`src/components/core/Button-VerticalList-Item/platforms/web/ButtonVerticalListItem.web.ts`) serves as the canonical implementation example for the incremental DOM pattern. It demonstrates:
 
 - `_domCreated` flag to track initial render state
 - `_createDOM()` method for one-time DOM structure creation
@@ -1262,7 +1262,7 @@ this._iconEl.style.display = showIcon ? '' : 'none';
 
 ### Related Documentation
 
-- [Button-VerticalListItem Implementation](../src/components/core/Button-VerticalListItem/platforms/web/ButtonVerticalListItem.web.ts) - Canonical example
+- [Button-VerticalList-Item Implementation](../src/components/core/Button-VerticalList-Item/platforms/web/ButtonVerticalListItem.web.ts) - Canonical example
 - [Blend Utility Integration](#blend-utility-integration) - State color calculation (often used with incremental DOM)
 
 ---
@@ -1285,7 +1285,7 @@ All component-scoped CSS custom properties MUST use the `--_[abbrev]-*` naming p
 ```css
 /* Component-scoped (internal) - use underscore prefix */
 --_cta-hover-bg: #...;      /* Button-CTA internal */
---_vlbi-background: #...;   /* Button-VerticalListItem internal */
+--_vlbi-background: #...;   /* Button-VerticalList-Item internal */
 --_itb-focus-color: #...;   /* Input-Text-Base internal */
 --_bi-icon-color: #...;     /* ButtonIcon internal */
 
@@ -1310,7 +1310,7 @@ All component-scoped CSS custom properties MUST use the `--_[abbrev]-*` naming p
 | Component | Abbreviation | Example Properties |
 |-----------|--------------|-------------------|
 | Button-CTA | `_cta` | `--_cta-hover-bg`, `--_cta-pressed-bg` |
-| Button-VerticalListItem | `_vlbi` | `--_vlbi-background`, `--_vlbi-border-color` |
+| Button-VerticalList-Item | `_vlbi` | `--_vlbi-background`, `--_vlbi-border-color` |
 | ButtonIcon | `_bi` | `--_bi-hover-bg`, `--_bi-icon-color` |
 | Input-Text-Base | `_itb` | `--_itb-focus-color`, `--_itb-disabled-color` |
 

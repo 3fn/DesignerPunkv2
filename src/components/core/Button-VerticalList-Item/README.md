@@ -420,14 +420,20 @@ src/components/core/Button-VerticalList-Item/
 │   │   ├── ButtonVerticalListItem.styles.css  # Web styles
 │   │   └── visualStateMapping.ts              # Visual state → styles mapping
 │   ├── ios/
-│   │   └── ButtonVerticalListItem.swift       # SwiftUI implementation
+│   │   ├── VerticalListButtonItem.ios.swift   # SwiftUI implementation
+│   │   ├── VisualStateStyles.swift            # Visual state styles
+│   │   └── VerticalListButtonItemTests.swift  # iOS unit tests
 │   └── android/
-│       └── ButtonVerticalListItem.kt          # Compose implementation
+│       ├── VerticalListButtonItem.kt          # Jetpack Compose implementation
+│       ├── VisualStateStyles.kt               # Visual state styles
+│       └── VerticalListButtonItemTest.kt      # Android unit tests
 └── __tests__/
     ├── ButtonVerticalListItem.unit.test.ts        # Unit tests
     ├── ButtonVerticalListItem.alignment.test.ts   # Alignment tests
     ├── ButtonVerticalListItem.integration.test.ts # Integration tests
-    └── ButtonVerticalListItem.properties.test.ts  # Property tests
+    ├── ButtonVerticalListItem.properties.test.ts  # Property tests
+    ├── visualStateMapping.test.ts                 # Visual state mapping tests
+    └── rtlSupport.test.ts                         # RTL support tests
 ```
 
 ---

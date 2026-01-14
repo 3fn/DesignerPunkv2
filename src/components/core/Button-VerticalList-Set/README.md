@@ -547,13 +547,22 @@ src/components/core/Button-VerticalList-Set/
 │   │   ├── ButtonVerticalListSet.web.ts      # Web Component implementation
 │   │   └── Button-VerticalList-Set.styles.css # Web styles
 │   ├── ios/
-│   │   └── ButtonVerticalListSet.swift       # SwiftUI implementation (planned)
+│   │   ├── ButtonVerticalListSet.swift       # SwiftUI implementation
+│   │   ├── ButtonVerticalListSetPreview.swift # SwiftUI Preview
+│   │   └── ButtonVerticalListSetTests.swift  # iOS unit tests
 │   └── android/
-│       └── ButtonVerticalListSet.kt          # Compose implementation (planned)
+│       ├── ButtonVerticalListSet.kt          # Jetpack Compose implementation
+│       ├── ButtonVerticalListSetPreview.kt   # Compose Preview
+│       └── ButtonVerticalListSetTest.kt      # Android unit tests
 └── __tests__/
     ├── ButtonVerticalListSet.unit.test.ts        # Unit tests
     ├── ButtonVerticalListSet.integration.test.ts # Integration tests
-    └── ButtonVerticalListSet.property.test.ts    # Property tests
+    ├── ButtonVerticalListSet.property.test.ts    # Property tests (1-9)
+    ├── ButtonVerticalListSet.property2.test.ts   # Property tests (10-18)
+    ├── crossPlatformConsistency.test.ts          # Cross-platform behavioral tests
+    ├── animationTiming.test.ts                   # Animation coordination tests
+    ├── deriveItemStates.test.ts                  # State derivation tests
+    └── validation.test.ts                        # Validation logic tests
 ```
 
 ---

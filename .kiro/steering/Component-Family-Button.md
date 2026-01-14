@@ -51,13 +51,38 @@ Button-CTA (Standalone)
         ├── primary (filled background, highest emphasis)
         ├── secondary (outlined, medium emphasis)
         └── tertiary (text-only, lowest emphasis)
+
+Button-Icon (Standalone)
+    │
+    └── Icon-only button with size variants
+
+Button-VerticalList-Set (Container/Orchestrator)
+    │
+    └── Manages selection behavior across modes:
+        ├── tap (action buttons, no selection)
+        ├── select (single-selection, radio-style)
+        └── multiSelect (multiple-selection, checkbox-style)
+    │
+    └── Contains: Button-VerticalList-Item children
+
+Button-VerticalList-Item (Presentational)
+    │
+    └── Visual states controlled by parent:
+        ├── rest (default state)
+        ├── selected (single-select active)
+        ├── notSelected (single-select inactive)
+        ├── checked (multi-select active)
+        └── unchecked (multi-select inactive)
 ```
 
-### Standalone Component
+### Component Overview
 
 | Component | Type | Status | Description |
 |-----------|------|--------|-------------|
 | Button-CTA | Standalone | 🟢 Production Ready | Call-to-action button with visual variants via props |
+| Button-Icon | Standalone | 🟢 Production Ready | Icon-only button with size variants |
+| Button-VerticalList-Set | Container | 🟢 Production Ready | Orchestrator for vertical list selection patterns |
+| Button-VerticalList-Item | Presentational | 🟢 Production Ready | Child item for vertical list selection |
 
 ### Naming Convention Note
 
@@ -213,6 +238,174 @@ ButtonCTA(
 
 ---
 
+### Button-VerticalList-Set
+
+**Type**: Container/Orchestrator
+**Status**: 🟢 Production Ready
+**Inherits**: None
+
+#### Purpose
+
+Container component that orchestrates selection behavior across child Button-VerticalList-Item components. Manages three interaction modes (tap, select, multiSelect), coordinates animation timing, handles keyboard navigation, and provides accessibility semantics.
+
+#### Properties
+
+| Property | Type | Required | Default | Description |
+|----------|------|----------|---------|-------------|
+| `mode` | `'tap' \| 'select' \| 'multiSelect'` | Yes | - | Selection mode |
+| `selectedIndex` | `number \| null` | No | `null` | Selected index (Select mode) |
+| `selectedIndices` | `number[]` | No | `[]` | Selected indices (MultiSelect mode) |
+| `required` | `boolean` | No | `false` | Selection required (Select mode) |
+| `minSelections` | `number` | No | - | Minimum selections (MultiSelect mode) |
+| `maxSelections` | `number` | No | - | Maximum selections (MultiSelect mode) |
+| `error` | `boolean` | No | `false` | Error state indicator |
+| `errorMessage` | `string` | No | - | Error message to display |
+| `onItemClick` | `(index: number) => void` | No | - | Item click callback (Tap mode) |
+| `onSelectionChange` | `(index: number \| null) => void` | No | - | Selection change callback (Select mode) |
+| `onMultiSelectionChange` | `(indices: number[]) => void` | No | - | Multi-selection change callback (MultiSelect mode) |
+| `testID` | `string` | No | - | Test identifier |
+
+#### Behavioral Contracts
+
+| Contract | Description | WCAG |
+|----------|-------------|------|
+| `mode_driven` | Behavior determined by mode prop | - |
+| `controlled_state` | Selection state managed by parent via props | - |
+| `state_coordination` | Derives and propagates visual states to children | - |
+| `animation_coordination` | Coordinates transition timing across children | 2.3.3 |
+| `keyboard_navigation` | Arrow keys, Home, End, Enter, Space support | 2.1.1 |
+| `roving_tabindex` | Single tab stop with arrow key navigation | 2.4.3 |
+| `error_propagation` | Error state propagates to all children | 3.3.1 |
+| `aria_roles` | Appropriate ARIA roles based on mode | 4.1.2 |
+
+#### Usage Example
+
+```html
+<!-- Web - Select mode -->
+<button-vertical-list-set mode="select" selected-index="0" required>
+  <button-vertical-list-item label="Option A"></button-vertical-list-item>
+  <button-vertical-list-item label="Option B"></button-vertical-list-item>
+  <button-vertical-list-item label="Option C"></button-vertical-list-item>
+</button-vertical-list-set>
+```
+
+```swift
+// iOS
+@State private var selectedOption: Int? = 0
+
+ButtonVerticalListSet(
+    mode: .select,
+    selectedIndex: $selectedOption,
+    required: true
+) {
+    ButtonVerticalListItem(label: "Option A")
+    ButtonVerticalListItem(label: "Option B")
+    ButtonVerticalListItem(label: "Option C")
+}
+```
+
+```kotlin
+// Android
+var selectedOption by remember { mutableStateOf<Int?>(0) }
+
+ButtonVerticalListSet(
+    mode = SelectionMode.Select,
+    selectedIndex = selectedOption,
+    onSelectionChange = { index -> selectedOption = index },
+    required = true
+) {
+    ButtonVerticalListItem(label = "Option A")
+    ButtonVerticalListItem(label = "Option B")
+    ButtonVerticalListItem(label = "Option C")
+}
+```
+
+---
+
+### Button-VerticalList-Item
+
+**Type**: Presentational
+**Status**: 🟢 Production Ready
+**Inherits**: None
+
+#### Purpose
+
+Presentational button component for vertical list selection patterns. Renders visual states based on props received from parent container (Button-VerticalList-Set), handling no selection logic internally.
+
+#### Properties
+
+| Property | Type | Required | Default | Description |
+|----------|------|----------|---------|-------------|
+| `label` | `string` | Yes | - | Button text label |
+| `description` | `string` | No | - | Secondary text below label |
+| `leadingIcon` | `IconName` | No | - | Optional leading icon |
+| `visualState` | `'rest' \| 'selected' \| 'notSelected' \| 'checked' \| 'unchecked'` | Yes | - | Visual state (controlled by parent) |
+| `error` | `boolean` | No | `false` | Error state indicator |
+| `checkmarkTransition` | `'fade' \| 'instant'` | No | `'fade'` | Checkmark hide transition |
+| `transitionDelay` | `number` | No | `0` | Transition delay in ms |
+| `onClick` | `() => void` | No | - | Click/tap handler |
+| `testID` | `string` | No | - | Test identifier |
+
+#### Visual States
+
+| State | Mode | Background | Border | Checkmark |
+|-------|------|------------|--------|-----------|
+| `rest` | Tap/Initial | `color.background` | 1px default | Hidden |
+| `selected` | Select | `color.select.selected.subtle` | 2px emphasis | Visible |
+| `notSelected` | Select | `color.select.notSelected.subtle` | 1px default | Hidden |
+| `checked` | MultiSelect | `color.background` | 1px default | Visible |
+| `unchecked` | MultiSelect | `color.background` | 1px default | Hidden |
+
+#### Behavioral Contracts
+
+| Contract | Description | WCAG |
+|----------|-------------|------|
+| `focusable` | Can receive keyboard focus | 2.1.1, 2.4.7 |
+| `pressable` | Responds to press/click events | 2.1.1 |
+| `hover_state` | Visual feedback on hover | 1.4.13 |
+| `pressed_state` | Visual feedback when pressed | 2.4.7 |
+| `visual_state_driven` | Renders appearance based on visualState prop | - |
+| `checkmark_animation` | Animated selection indicator | 2.3.3 |
+| `error_state_display` | Shows error styling when error=true | 3.3.1 |
+| `focus_ring` | WCAG 2.4.7 focus visible indicator | 2.4.7 |
+
+#### Usage Example
+
+```html
+<!-- Web -->
+<button-vertical-list-item
+  label="Dark Mode"
+  description="Automatically switch at sunset"
+  leading-icon="moon"
+  visual-state="selected"
+></button-vertical-list-item>
+```
+
+```swift
+// iOS
+ButtonVerticalListItem(
+    label: "Dark Mode",
+    description: "Automatically switch at sunset",
+    leadingIcon: "moon",
+    visualState: .selected
+) {
+    handleSelect()
+}
+```
+
+```kotlin
+// Android
+ButtonVerticalListItem(
+    label = "Dark Mode",
+    description = "Automatically switch at sunset",
+    leadingIcon = "moon",
+    visualState = VisualState.Selected,
+    onClick = { handleSelect() }
+)
+```
+
+---
+
 ## Token Dependencies
 
 ### Required Tokens
@@ -223,17 +416,30 @@ Components in the Buttons family consume these design tokens:
 |----------|---------------|---------|
 | Typography | `typography.button.*` | Button text sizing |
 | Typography | `typography.labelMd`, `typography.labelLg` | Label typography |
+| Typography | `typography.body.sm` | Description text, error messages |
 | Color | `color.primary` | Primary button background |
 | Color | `color.contrast.onPrimary` | Content (text/icons) on primary background |
 | Color | `color.text.primary` | Secondary/tertiary text |
+| Color | `color.text.muted` | Description text |
 | Color | `color.background` | Secondary button background |
 | Color | `color.border` | Secondary button border |
+| Color | `color.select.selected.strong` | Selected state border/text |
+| Color | `color.select.selected.subtle` | Selected state background |
+| Color | `color.select.notSelected.strong` | Not-selected state border/text |
+| Color | `color.select.notSelected.subtle` | Not-selected state background |
+| Color | `color.error.strong` | Error state border/text |
+| Color | `color.error.subtle` | Error state background |
 | Spacing | `space.inset.*` | Button padding |
 | Spacing | `space.inline.100` | Icon-label gap |
+| Spacing | `space.grouped.normal` | Gap between list items (8px) |
 | Motion | `motion.button.press` | Press animation timing |
 | Motion | `motion.button.hover` | Hover transition timing |
+| Motion | `motion.selectionTransition` | Selection animation (250ms) |
 | Border | `border.button.default` | Border width |
+| Border | `borderDefault` | 1px default border |
+| Border | `borderEmphasis` | 2px emphasis border |
 | Border | `radius.100`, `radius.150` | Border radius |
+| Border | `radiusNormal` | 8px border radius |
 | Accessibility | `accessibility.tapArea.recommended` | Touch target (48px) |
 | Accessibility | `accessibility.focus.*` | Focus ring styling |
 | Icon | `icon.size100`, `icon.size125` | Icon sizing |
@@ -312,11 +518,17 @@ Button components resolve tokens through the Rosetta System's semantic-to-primit
 
 ### Platform Implementations
 
-| Platform | Technology | File Location |
-|----------|------------|---------------|
-| Web | Web Components | `platforms/web/ButtonCTA.web.ts` |
-| iOS | SwiftUI | `platforms/ios/ButtonCTA.ios.swift` |
-| Android | Jetpack Compose | `platforms/android/ButtonCTA.android.kt` |
+| Component | Platform | Technology | File Location |
+|-----------|----------|------------|---------------|
+| Button-CTA | Web | Web Components | `platforms/web/ButtonCTA.web.ts` |
+| Button-CTA | iOS | SwiftUI | `platforms/ios/ButtonCTA.ios.swift` |
+| Button-CTA | Android | Jetpack Compose | `platforms/android/ButtonCTA.android.kt` |
+| Button-VerticalList-Set | Web | Web Components | `platforms/web/ButtonVerticalListSet.web.ts` |
+| Button-VerticalList-Set | iOS | SwiftUI | `platforms/ios/ButtonVerticalListSet.swift` |
+| Button-VerticalList-Set | Android | Jetpack Compose | `platforms/android/ButtonVerticalListSet.kt` |
+| Button-VerticalList-Item | Web | Web Components | `platforms/web/ButtonVerticalListItem.web.ts` |
+| Button-VerticalList-Item | iOS | SwiftUI | `platforms/ios/VerticalListButtonItem.ios.swift` |
+| Button-VerticalList-Item | Android | Jetpack Compose | `platforms/android/VerticalListButtonItem.kt` |
 
 ### Platform-Specific Behaviors
 
@@ -358,3 +570,5 @@ All platforms implement the same behavioral contracts:
 - [Token Quick Reference](./Token-Quick-Reference.md) - Token documentation
 - [MCP Component Family Document Template](./Component-MCP-Document-Template.md) - Template specification
 - [Button-CTA Schema](../../src/components/core/Button-CTA/Button-CTA.schema.yaml) - Full schema definition
+- [Button-VerticalList-Set README](../../src/components/core/Button-VerticalList-Set/README.md) - Set component documentation
+- [Button-VerticalList-Item README](../../src/components/core/Button-VerticalList-Item/README.md) - Item component documentation

@@ -66,7 +66,8 @@ DesignerPunk has completed its **robust token system architecture** (Rosetta Sys
 |-----------|-------------|---------------------|
 | `Button-CTA` | Call-to-action button with size/visual variants and blend utilities | 7 contracts |
 | `Button-Icon` | Icon-only button with blend utilities and incremental DOM | 5 contracts |
-| `Button-VerticalListItem` | Vertical list selection button with leading/trailing icons | 6 contracts |
+| `Button-VerticalList-Set` | Container/orchestrator for vertical list selection patterns | 9 contracts |
+| `Button-VerticalList-Item` | Presentational button for vertical list selection | 8 contracts |
 | `Container-Base` | Primitive layout component with token-based styling | 7 contracts |
 | `Icon-Base` | Cross-platform icon system with 15 Feather icons | 5 contracts |
 
@@ -114,7 +115,9 @@ With the Stemma System foundation complete, future development focuses on:
 ### ✅ Recently Completed
 
 **Component Alignment & Vertical List Buttons** (January 2026) - v4.1.0
-- New `Button-VerticalListItem` component for vertical list selection (Web, iOS, Android)
+- New `Button-VerticalList-Set` container component for vertical list selection patterns (Web, iOS, Android)
+- New `Button-VerticalList-Item` presentational component for vertical list items (Web, iOS, Android)
+- Three selection modes: Tap (action buttons), Select (single-selection), MultiSelect (checkbox-style)
 - All button/input components aligned to consistent architectural patterns
 - Blend utilities, incremental DOM, semantic motion tokens standardized across components
 - Component Development Guide updated with canonical implementation patterns
