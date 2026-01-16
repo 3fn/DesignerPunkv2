@@ -4,8 +4,8 @@ inclusion: manual
 
 # Test Development Standards
 
-**Date**: December 17, 2025
-**Last Reviewed**: December 17, 2025
+**Date**: 2025-12-17
+**Last Reviewed**: 2025-12-17
 **Purpose**: Establish sustainable test development practices that support system evolution
 **Organization**: process-standard
 **Scope**: cross-project

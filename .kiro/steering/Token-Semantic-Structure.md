@@ -4,7 +4,7 @@ inclusion: manual
 
 # Semantic Token Structure Guide
 
-**Date**: November 17, 2025
+**Date**: 2025-11-17
 **Last Reviewed**: 2025-12-30
 **Purpose**: Document SemanticToken interface requirements and usage patterns
 **Organization**: token-documentation

@@ -91,6 +91,12 @@ Essential checklist for every task (date check, Jest commands, test selection). 
 
 Core project context and development practices. Read completely.
 
+#### 6. AI-Collaboration-Principles
+**File**: #[[file:.kiro/steering/AI-Collaboration-Principles.md]]
+
+Core skepticism and candid communication requirements. Read completely.
+
+
 ---
 
 ## Tier 2: MCP-Only Documents
@@ -395,6 +401,27 @@ get_section({ path: ".kiro/steering/Token-Governance.md", heading: "Decision Exa
 
 **Confirmation**: Reply "I've queried Token Governance via MCP!" after accessing
 
+---
+
+### 15. AI-Collaboration-Framework
+**When needed**: Understanding detailed AI collaboration protocols, bias mitigation techniques, validation gates, devil's advocate protocols
+
+**File**: #[[file:.kiro/steering/AI-Collaboration-Framework.md]]
+
+**How to access**:
+```
+get_document_summary({ path: ".kiro/steering/AI-Collaboration-Framework.md" })
+```
+
+Then query the specific section you need:
+```
+get_section({ path: ".kiro/steering/AI-Collaboration-Framework.md", heading: "Objective Validation Gates" })
+get_section({ path: ".kiro/steering/AI-Collaboration-Framework.md", heading: "Mandatory Devil's Advocate Protocols" })
+get_section({ path: ".kiro/steering/AI-Collaboration-Framework.md", heading: "Candid vs Brutal Communication" })
+```
+
+**Confirmation**: Reply "I've queried AI-Collaboration-Framework via MCP!" after accessing
+
 
 ## MCP Documentation Server (Primary for Large Docs)
 
@@ -417,6 +444,7 @@ These documents are available ONLY via MCP queries:
 | Process-Hook-Operations | `.kiro/steering/Process-Hook-Operations.md` |
 | Rosetta System Architecture | `.kiro/steering/Rosetta-System-Architecture.md` |
 | Token Governance | `.kiro/steering/Token-Governance.md` |
+| AI-Collaboration-Framework | `.kiro/steering/AI-Collaboration-Framework.md` |
 
 ### How to Access MCP-Only Documents
 
@@ -447,6 +475,7 @@ These documents remain auto-loaded:
 - Personal Note (~600 tokens)
 - Core Goals (~550 tokens)
 - Start Up Tasks (~700 tokens)
+- AI-Collaboration-Principles (~800 tokens)
 - This Meta-Guide (~2,000 tokens)
 - Process-Development-Workflow (~16,000 tokens) - strategic reading applies
 - Process-File-Organization (~16,000 tokens) - strategic reading applies

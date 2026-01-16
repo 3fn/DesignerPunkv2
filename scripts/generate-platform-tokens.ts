@@ -23,6 +23,7 @@ import * as path from 'path';
 // These imports cause defineComponentTokens() to execute, which registers tokens
 import '../src/components/core/Button-Icon/buttonIcon.tokens';
 import '../src/components/core/Button-VerticalList-Item/Button-VerticalList-Item.tokens';
+import '../src/components/core/Avatar/avatar.tokens';
 
 async function main() {
   console.log('🚀 Generating platform-specific token files...\n');

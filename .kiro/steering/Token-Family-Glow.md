@@ -4,7 +4,7 @@ inclusion: manual
 
 # Glow Token Usage Documentation
 
-**Date**: October 24, 2025
+**Date**: 2025-10-24
 **Last Reviewed**: 2025-12-30
 **Purpose**: Glow token reference and usage guide
 **Organization**: token-documentation

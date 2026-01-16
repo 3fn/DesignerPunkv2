@@ -4,7 +4,7 @@ inclusion: manual
 
 # Spacing Tokens Guide
 
-**Date**: November 26, 2025
+**Date**: 2025-11-26
 **Last Reviewed**: 2025-12-30
 **Purpose**: Complete reference for spacing tokens with numeric naming convention and mathematical relationships
 **Organization**: token-documentation

@@ -4,7 +4,7 @@ inclusion: manual
 
 # Motion Token Usage Documentation
 
-**Date**: December 6, 2025
+**Date**: 2025-12-06
 **Last Reviewed**: 2025-12-30
 **Purpose**: Motion token reference and usage guide
 **Organization**: token-documentation

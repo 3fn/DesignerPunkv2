@@ -4,7 +4,7 @@ inclusion: manual
 
 # Typography Tokens Guide
 
-**Date**: December 9, 2025
+**Date**: 2025-12-09
 **Last Reviewed**: 2025-12-30
 **Purpose**: Complete reference for typography tokens with font family usage and weight mapping guidance
 **Organization**: token-documentation

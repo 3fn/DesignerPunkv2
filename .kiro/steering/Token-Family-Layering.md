@@ -4,7 +4,7 @@ inclusion: manual
 
 # Layering Tokens
 
-**Date**: October 28, 2025
+**Date**: 2025-10-28
 **Last Reviewed**: 2025-12-30
 **Purpose**: Documentation guide for the Layering Token System
 **Organization**: token-documentation

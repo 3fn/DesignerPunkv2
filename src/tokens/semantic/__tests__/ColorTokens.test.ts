@@ -366,8 +366,9 @@ describe('Semantic Color Tokens - Palette Update', () => {
   });
 
   describe('Token Count Validation', () => {
-    it('should have exactly 33 color tokens', () => {
-      expect(colorTokenNames.length).toBe(33);
+    it('should have exactly 38 color tokens', () => {
+      // 28 base + 1 background.primary.subtle + 4 select + 5 avatar = 38
+      expect(colorTokenNames.length).toBe(38);
     });
 
     it('should pass validateColorTokenCount()', () => {
@@ -452,9 +453,9 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(Array.isArray(tokens)).toBe(true);
       });
 
-      it('should return exactly 33 tokens', () => {
+      it('should return exactly 38 tokens', () => {
         const tokens = getAllColorTokens();
-        expect(tokens.length).toBe(33);
+        expect(tokens.length).toBe(38);
       });
 
       it('should include all new tokens', () => {
@@ -720,10 +721,190 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(selectTokens.length).toBe(4);
       });
 
-      it('should include select tokens in total count of 33', () => {
-        // Verify total count includes the 4 new select tokens
-        expect(colorTokenNames.length).toBe(33);
+      it('should include select tokens in total count of 38', () => {
+        // Verify total count includes the 4 select tokens and 5 avatar tokens
+        // 28 base + 1 background.primary.subtle + 4 select + 5 avatar = 38
+        expect(colorTokenNames.length).toBe(38);
         expect(validateColorTokenCount()).toBe(true);
+      });
+    });
+  });
+
+  // Avatar Color Tokens (Spec 042: Avatar Component)
+  describe('Avatar Color Tokens (Spec 042)', () => {
+    describe('Token Existence', () => {
+      it('should have color.avatar.human token', () => {
+        const token = colorTokens['color.avatar.human'];
+        expect(token).toBeDefined();
+        expect(token.name).toBe('color.avatar.human');
+      });
+
+      it('should have color.avatar.agent token', () => {
+        const token = colorTokens['color.avatar.agent'];
+        expect(token).toBeDefined();
+        expect(token.name).toBe('color.avatar.agent');
+      });
+
+      it('should have color.avatar.contrast.onHuman token', () => {
+        const token = colorTokens['color.avatar.contrast.onHuman'];
+        expect(token).toBeDefined();
+        expect(token.name).toBe('color.avatar.contrast.onHuman');
+      });
+
+      it('should have color.avatar.contrast.onAgent token', () => {
+        const token = colorTokens['color.avatar.contrast.onAgent'];
+        expect(token).toBeDefined();
+        expect(token.name).toBe('color.avatar.contrast.onAgent');
+      });
+
+      it('should have color.avatar.border token', () => {
+        const token = colorTokens['color.avatar.border'];
+        expect(token).toBeDefined();
+        expect(token.name).toBe('color.avatar.border');
+      });
+    });
+
+    describe('Primitive References', () => {
+      it('color.avatar.human should reference orange300', () => {
+        const token = colorTokens['color.avatar.human'];
+        expect(token.primitiveReferences.value).toBe('orange300');
+      });
+
+      it('color.avatar.agent should reference teal300', () => {
+        const token = colorTokens['color.avatar.agent'];
+        expect(token.primitiveReferences.value).toBe('teal300');
+      });
+
+      it('color.avatar.contrast.onHuman should reference white100', () => {
+        const token = colorTokens['color.avatar.contrast.onHuman'];
+        expect(token.primitiveReferences.value).toBe('white100');
+      });
+
+      it('color.avatar.contrast.onAgent should reference white100', () => {
+        const token = colorTokens['color.avatar.contrast.onAgent'];
+        expect(token.primitiveReferences.value).toBe('white100');
+      });
+
+      it('color.avatar.border should reference gray100', () => {
+        const token = colorTokens['color.avatar.border'];
+        expect(token.primitiveReferences.value).toBe('gray100');
+      });
+    });
+
+    describe('Token Structure', () => {
+      it('color.avatar.human should have correct category', () => {
+        const token = colorTokens['color.avatar.human'];
+        expect(token.category).toBe(SemanticCategory.COLOR);
+      });
+
+      it('color.avatar.agent should have correct category', () => {
+        const token = colorTokens['color.avatar.agent'];
+        expect(token.category).toBe(SemanticCategory.COLOR);
+      });
+
+      it('color.avatar.contrast.onHuman should have correct category', () => {
+        const token = colorTokens['color.avatar.contrast.onHuman'];
+        expect(token.category).toBe(SemanticCategory.COLOR);
+      });
+
+      it('color.avatar.contrast.onAgent should have correct category', () => {
+        const token = colorTokens['color.avatar.contrast.onAgent'];
+        expect(token.category).toBe(SemanticCategory.COLOR);
+      });
+
+      it('color.avatar.border should have correct category', () => {
+        const token = colorTokens['color.avatar.border'];
+        expect(token.category).toBe(SemanticCategory.COLOR);
+      });
+
+      it('color.avatar.human should have context and description', () => {
+        const token = colorTokens['color.avatar.human'];
+        expect(token.context).toBeDefined();
+        expect(token.context.length).toBeGreaterThan(0);
+        expect(token.description).toBeDefined();
+        expect(token.description.length).toBeGreaterThan(0);
+      });
+
+      it('color.avatar.agent should have context and description', () => {
+        const token = colorTokens['color.avatar.agent'];
+        expect(token.context).toBeDefined();
+        expect(token.context.length).toBeGreaterThan(0);
+        expect(token.description).toBeDefined();
+        expect(token.description.length).toBeGreaterThan(0);
+      });
+
+      it('color.avatar.contrast.onHuman should have context and description', () => {
+        const token = colorTokens['color.avatar.contrast.onHuman'];
+        expect(token.context).toBeDefined();
+        expect(token.context.length).toBeGreaterThan(0);
+        expect(token.description).toBeDefined();
+        expect(token.description.length).toBeGreaterThan(0);
+      });
+
+      it('color.avatar.contrast.onAgent should have context and description', () => {
+        const token = colorTokens['color.avatar.contrast.onAgent'];
+        expect(token.context).toBeDefined();
+        expect(token.context.length).toBeGreaterThan(0);
+        expect(token.description).toBeDefined();
+        expect(token.description.length).toBeGreaterThan(0);
+      });
+
+      it('color.avatar.border should have context and description', () => {
+        const token = colorTokens['color.avatar.border'];
+        expect(token.context).toBeDefined();
+        expect(token.context.length).toBeGreaterThan(0);
+        expect(token.description).toBeDefined();
+        expect(token.description.length).toBeGreaterThan(0);
+      });
+    });
+
+    describe('Utility Function Access', () => {
+      it('should return color.avatar.human via getColorToken()', () => {
+        const token = getColorToken('color.avatar.human');
+        expect(token).toBeDefined();
+        expect(token?.name).toBe('color.avatar.human');
+      });
+
+      it('should return color.avatar.agent via getColorToken()', () => {
+        const token = getColorToken('color.avatar.agent');
+        expect(token).toBeDefined();
+        expect(token?.name).toBe('color.avatar.agent');
+      });
+
+      it('should return color.avatar.contrast.onHuman via getColorToken()', () => {
+        const token = getColorToken('color.avatar.contrast.onHuman');
+        expect(token).toBeDefined();
+        expect(token?.name).toBe('color.avatar.contrast.onHuman');
+      });
+
+      it('should return color.avatar.contrast.onAgent via getColorToken()', () => {
+        const token = getColorToken('color.avatar.contrast.onAgent');
+        expect(token).toBeDefined();
+        expect(token?.name).toBe('color.avatar.contrast.onAgent');
+      });
+
+      it('should return color.avatar.border via getColorToken()', () => {
+        const token = getColorToken('color.avatar.border');
+        expect(token).toBeDefined();
+        expect(token?.name).toBe('color.avatar.border');
+      });
+
+      it('should include all avatar tokens in getAllColorTokens()', () => {
+        const tokens = getAllColorTokens();
+        const tokenNames = tokens.map(t => t.name);
+
+        expect(tokenNames).toContain('color.avatar.human');
+        expect(tokenNames).toContain('color.avatar.agent');
+        expect(tokenNames).toContain('color.avatar.contrast.onHuman');
+        expect(tokenNames).toContain('color.avatar.contrast.onAgent');
+        expect(tokenNames).toContain('color.avatar.border');
+      });
+    });
+
+    describe('Token Count Includes Avatar Tokens', () => {
+      it('should have exactly 5 avatar tokens', () => {
+        const avatarTokens = colorTokenNames.filter(n => n.startsWith('color.avatar'));
+        expect(avatarTokens.length).toBe(5);
       });
     });
   });

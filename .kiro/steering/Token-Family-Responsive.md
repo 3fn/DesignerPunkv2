@@ -4,7 +4,7 @@ inclusion: manual
 
 # Responsive Tokens Guide
 
-**Date**: December 30, 2025
+**Date**: 2025-12-30
 **Last Reviewed**: 2025-12-30
 **Purpose**: Complete reference for breakpoint and density tokens enabling responsive design across platforms
 **Organization**: token-documentation

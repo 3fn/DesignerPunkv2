@@ -4,7 +4,7 @@ inclusion: manual
 
 # Border Tokens Guide
 
-**Date**: December 30, 2025
+**Date**: 2025-12-30
 **Last Reviewed**: 2025-12-30
 **Purpose**: Complete reference for border width tokens with numeric naming convention and mathematical relationships
 **Organization**: token-documentation

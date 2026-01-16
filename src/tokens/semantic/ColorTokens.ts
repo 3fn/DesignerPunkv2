@@ -12,6 +12,9 @@
  * - tech = cyan (technical elements)
  * - data = cyan (data visualization)
  * - select = cyan/gray (selection states for Select/Multi-Select components)
+ * - avatar = orange/teal (avatar background colors for human/agent differentiation)
+ * - avatar.contrast = white (icon colors on avatar backgrounds for WCAG compliance)
+ * - avatar.border = gray (border color for avatar components)
  * - glow colors = vibrant neon colors for emphasis effects
  * 
  * All color tokens reference mode-aware primitive color tokens that support
@@ -44,24 +47,30 @@
  * 5. Semantic Meaning in Shadow Token: The semantic meaning belongs in the shadow token
  *    name itself (shadow.dusk, shadow.sunrise) rather than in a separate color token.
  * 
- * Spec-aligned: 33 color semantic tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle + 4 select tokens)
+ * Spec-aligned: 38 color semantic tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle + 4 select tokens + 5 avatar tokens)
  * Note: color.secondary removed as part of color palette update (Spec 015)
  * Added: color.icon.default and color.print.default (Spec 023)
  * Added: color.canvas (Spec 023 - Container token compliance)
  * Added: color.background.primary.subtle (Spec 035 - Button-Icon Component)
  * Added: color.select.* tokens (Spec 038 - Vertical List Buttons)
+ * Added: color.avatar.human and color.avatar.agent (Spec 042 - Avatar Component)
+ * Added: color.avatar.contrast.onHuman and color.avatar.contrast.onAgent (Spec 042 - Avatar Component)
+ * Added: color.avatar.border (Spec 042 - Avatar Component)
  */
 
 import { SemanticToken, SemanticCategory } from '../../types/SemanticToken';
 
 /**
  * Semantic color tokens for systematic color usage
- * Total: 33 tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle + 4 select tokens)
+ * Total: 38 tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle + 4 select tokens + 5 avatar tokens)
  * Note: color.secondary removed as part of color palette update (Spec 015)
  * Added: color.icon.default and color.print.default (Spec 023)
  * Added: color.canvas (Spec 023 - Container token compliance)
  * Added: color.background.primary.subtle (Spec 035 - Button-Icon Component)
  * Added: color.select.* tokens (Spec 038 - Vertical List Buttons)
+ * Added: color.avatar.human and color.avatar.agent (Spec 042 - Avatar Component)
+ * Added: color.avatar.contrast.onHuman and color.avatar.contrast.onAgent (Spec 042 - Avatar Component)
+ * Added: color.avatar.border (Spec 042 - Avatar Component)
  */
 export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>> = {
   // Brand Identity (1 token)
@@ -308,6 +317,47 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
     description: 'Vibrant pink glow referencing pink500'
   },
 
+  // Avatar Colors (5 tokens) - Spec 042: Avatar Component
+  'color.avatar.human': {
+    name: 'color.avatar.human',
+    primitiveReferences: { value: 'orange300' },
+    category: SemanticCategory.COLOR,
+    context: 'Background color for human avatars',
+    description: 'Orange background for human avatar circles - provides warm, approachable visual identity'
+  },
+
+  'color.avatar.agent': {
+    name: 'color.avatar.agent',
+    primitiveReferences: { value: 'teal300' },
+    category: SemanticCategory.COLOR,
+    context: 'Background color for AI agent avatars',
+    description: 'Teal background for AI agent hexagons - provides distinct, technical visual identity'
+  },
+
+  'color.avatar.contrast.onHuman': {
+    name: 'color.avatar.contrast.onHuman',
+    primitiveReferences: { value: 'white100' },
+    category: SemanticCategory.COLOR,
+    context: 'Icon color on human avatar background',
+    description: 'White icon color for use on human avatar orange background - ensures WCAG AA contrast compliance'
+  },
+
+  'color.avatar.contrast.onAgent': {
+    name: 'color.avatar.contrast.onAgent',
+    primitiveReferences: { value: 'white100' },
+    category: SemanticCategory.COLOR,
+    context: 'Icon color on AI agent avatar background',
+    description: 'White icon color for use on AI agent avatar teal background - ensures WCAG AA contrast compliance'
+  },
+
+  'color.avatar.border': {
+    name: 'color.avatar.border',
+    primitiveReferences: { value: 'gray100' },
+    category: SemanticCategory.COLOR,
+    context: 'Border color for avatars',
+    description: 'Gray border color for avatar components - provides subtle visual definition for both human and agent avatars'
+  },
+
   // Select State Colors (4 tokens) - Spec 038: Vertical List Buttons
   'color.select.selected.strong': {
     name: 'color.select.selected.strong',
@@ -344,12 +394,15 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
 
 /**
  * Array of all color semantic token names for iteration
- * Total: 33 tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle + 4 select tokens)
+ * Total: 38 tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle + 4 select tokens + 5 avatar tokens)
  * Note: color.secondary removed as part of color palette update (Spec 015)
  * Added: color.icon.default and color.print.default (Spec 023)
  * Added: color.canvas (Spec 023 - Container token compliance)
  * Added: color.background.primary.subtle (Spec 035 - Button-Icon Component)
  * Added: color.select.* tokens (Spec 038 - Vertical List Buttons)
+ * Added: color.avatar.human and color.avatar.agent (Spec 042 - Avatar Component)
+ * Added: color.avatar.contrast.onHuman and color.avatar.contrast.onAgent (Spec 042 - Avatar Component)
+ * Added: color.avatar.border (Spec 042 - Avatar Component)
  */
 export const colorTokenNames = Object.keys(colorTokens);
 
@@ -368,15 +421,18 @@ export function getAllColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'
 }
 
 /**
- * Validate token count matches spec (33 tokens: 16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle + 4 select tokens)
+ * Validate token count matches spec (38 tokens: 16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle + 4 select tokens + 5 avatar tokens)
  * Note: color.secondary removed as part of color palette update (Spec 015)
  * Added: color.icon.default and color.print.default (Spec 023)
  * Added: color.canvas (Spec 023 - Container token compliance)
  * Added: color.background.primary.subtle (Spec 035 - Button-Icon Component)
  * Added: color.select.* tokens (Spec 038 - Vertical List Buttons)
+ * Added: color.avatar.human and color.avatar.agent (Spec 042 - Avatar Component)
+ * Added: color.avatar.contrast.onHuman and color.avatar.contrast.onAgent (Spec 042 - Avatar Component)
+ * Added: color.avatar.border (Spec 042 - Avatar Component)
  */
 export function validateColorTokenCount(): boolean {
-  const expectedCount = 33;
+  const expectedCount = 38;
   const actualCount = colorTokenNames.length;
   if (actualCount !== expectedCount) {
     console.warn(`Color token count mismatch: expected ${expectedCount}, got ${actualCount}`);

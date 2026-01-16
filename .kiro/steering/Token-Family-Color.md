@@ -4,7 +4,7 @@ inclusion: manual
 
 # Color Tokens Guide
 
-**Date**: December 8, 2025
+**Date**: 2025-12-08
 **Last Reviewed**: 2026-01-04
 **Purpose**: Complete reference for color tokens with semantic meanings and accessible usage guidance
 **Organization**: token-documentation

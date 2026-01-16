@@ -4,7 +4,7 @@ inclusion: manual
 
 # Blend Tokens Guide
 
-**Date**: December 29, 2025
+**Date**: 2025-12-29
 **Last Reviewed**: 2025-12-30
 **Purpose**: Complete reference for blend tokens with utility functions and theme-aware patterns
 **Organization**: token-documentation
