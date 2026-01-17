@@ -533,7 +533,8 @@ export class AvatarBaseElement extends HTMLElement {
     ].filter(Boolean).join(' ');
     
     // Generate test ID attribute
-    const testIDAttr = testID ? ` data-testid="${testID}"` : '';
+    // Escape testID to prevent XSS attacks
+    const testIDAttr = testID ? ` data-testid="${this.escapeHtml(testID)}"` : '';
     
     // Generate aria-hidden attribute for decorative avatars
     // @see Requirements: 9.2 - Apply aria-hidden="true" when decorative prop is true

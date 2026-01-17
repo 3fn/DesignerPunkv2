@@ -288,15 +288,16 @@
  * When interactive prop is true, avatar shows visual feedback on hover
  * by increasing border width from borderDefault to borderEmphasis.
  * 
- * Uses duration-150 (150ms) for fast, responsive transition.
- * Note: motion.duration.fast token is specified in design but not yet
- * implemented in the token system. Using duration-150 as equivalent.
+ * Uses motion.focusTransition semantic token (150ms, standard easing) for
+ * fast, responsive transition. This semantic token is appropriate for
+ * interactive state transitions and matches the design requirement for
+ * motion.duration.fast.
  * 
  * @see Requirements: 8.1, 8.2, 8.3, 8.4 - Interactive hover state
  */
 .avatar--interactive {
   cursor: pointer;
-  transition: border-width var(--duration-150) var(--easing-standard);
+  transition: border-width var(--motion-focus-transition-duration) var(--motion-focus-transition-easing);
 }
 
 /**

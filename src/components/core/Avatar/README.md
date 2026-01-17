@@ -105,12 +105,129 @@ Avatar(type = AvatarType.Agent, size = AvatarSize.Lg)
 | xs-xl | `borderDefault` | `color.avatar.border` | `opacity.heavy` |
 | xxl | `borderEmphasis` | `color.contrast.onSurface` | 100% |
 
+## Wrapper-Delegated Interaction Pattern
+
+Avatar is a **visual-only component** that does not handle click/tap events directly. This is an intentional architectural decision that keeps Avatar simple while ensuring proper accessibility.
+
+### Why No onClick/onPress?
+
+1. **Separation of concerns**: Avatar handles visual representation; wrappers handle interaction
+2. **Accessibility compliance**: Wrappers (button, link) provide proper focus management, keyboard navigation, and screen reader announcements
+3. **Flexibility**: The same Avatar can be used in clickable and non-clickable contexts without prop changes
+4. **Touch target compliance**: Wrappers ensure minimum 44px touch targets per WCAG guidelines
+
+### Wrapper Responsibilities
+
+When using Avatar in an interactive context, the wrapper element is responsible for:
+
+| Responsibility | Implementation |
+|----------------|----------------|
+| Click/tap handling | Wrapper's `onClick`/`onPress` handler |
+| Focus ring | Wrapper's `:focus-visible` styles |
+| Touch target | Wrapper's minimum 44px dimensions |
+| Accessible name | Wrapper's `aria-label` or text content |
+| Keyboard navigation | Wrapper's native button/link behavior |
+
+### Usage Examples
+
+#### Clickable Avatar (Button Wrapper)
+
+```html
+<!-- Web: Button wrapper handles all interaction -->
+<button 
+  class="avatar-button" 
+  aria-label="View John Doe's profile"
+  onclick="openProfile('john-doe')"
+>
+  <avatar-base type="human" size="md" src="/john.jpg" alt="" decorative></avatar-base>
+</button>
+
+<style>
+.avatar-button {
+  /* Reset button styles */
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  
+  /* Ensure minimum touch target */
+  min-width: 44px;
+  min-height: 44px;
+  
+  /* Focus ring */
+  border-radius: 50%;
+}
+.avatar-button:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+</style>
+```
+
+#### Clickable Avatar (Link Wrapper)
+
+```html
+<!-- Web: Link wrapper for navigation -->
+<a href="/profile/john-doe" class="avatar-link" aria-label="John Doe's profile">
+  <avatar-base type="human" size="md" src="/john.jpg" alt="" decorative></avatar-base>
+</a>
+```
+
+#### Avatar with Adjacent Text
+
+```html
+<!-- When avatar is next to name, use decorative mode -->
+<button class="user-card" onclick="openProfile('john-doe')">
+  <avatar-base type="human" size="sm" decorative></avatar-base>
+  <span>John Doe</span>
+</button>
+```
+
+#### Non-Interactive Avatar
+
+```html
+<!-- Display-only avatar (no wrapper needed) -->
+<div class="profile-header">
+  <avatar-base type="human" size="xxl" src="/john.jpg" alt="John Doe"></avatar-base>
+  <h1>John Doe</h1>
+</div>
+```
+
+### iOS (SwiftUI)
+
+```swift
+// Button wrapper for interactive avatar
+Button(action: { openProfile() }) {
+    Avatar(type: .human, size: .md, src: profileURL, decorative: true)
+}
+.accessibilityLabel("View John Doe's profile")
+
+// NavigationLink wrapper
+NavigationLink(destination: ProfileView()) {
+    Avatar(type: .human, size: .md, src: profileURL, decorative: true)
+}
+```
+
+### Android (Compose)
+
+```kotlin
+// Clickable modifier for interactive avatar
+Box(
+    modifier = Modifier
+        .clickable { openProfile() }
+        .semantics { contentDescription = "View John Doe's profile" }
+) {
+    Avatar(type = AvatarType.Human, size = AvatarSize.Md, src = "...", decorative = true)
+}
+```
+
 ## Accessibility
 
 - **Shape differentiation**: Circle vs hexagon provides non-color-based entity recognition
-- **Decorative mode**: Use `decorative` prop when avatar is adjacent to name text
-- **Alt text**: Required when `src` is provided for human avatars
-- **Wrapper pattern**: Interactive avatars should be wrapped in button/link for proper focus handling
+- **Decorative mode**: Use `decorative` prop when avatar is adjacent to name text (wrapper provides accessible name)
+- **Alt text**: Required when `src` is provided for standalone human avatars
+- **Wrapper pattern**: Interactive avatars MUST be wrapped in button/link for proper focus handling
+- **Touch targets**: Wrapper must ensure minimum 44px touch target (WCAG 2.5.5)
 
 ## Platform Notes
 
