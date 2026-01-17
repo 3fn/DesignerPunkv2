@@ -149,16 +149,17 @@ public enum AvatarSize: String, CaseIterable {
     }
     
     /// Icon dimension in points (50% of avatar height)
-    /// Uses DesignTokens icon sizes where available, AvatarTokens for gap fillers (xs, xxl)
+    /// Uses DesignTokens icon size tokens where available, AvatarTokens for gap fillers (xs, xxl)
     /// @see Requirements: 3.1-3.6 - Icon sizing at 50% ratio
+    /// @see design.md AVATAR_ICON_SIZE_TOKENS mapping
     var iconDimension: CGFloat {
         switch self {
-        case .xs: return AvatarTokens.iconSizeXs    // 12px - component token gap filler
-        case .sm: return 16                          // iconSize050 (16px)
-        case .md: return 20                          // iconSize075 (20px)
-        case .lg: return 24                          // iconSize100 (24px)
-        case .xl: return 40                          // iconSize500 (40px)
-        case .xxl: return AvatarTokens.iconSizeXxl  // 64px - component token gap filler
+        case .xs: return AvatarTokens.iconSizeXs       // 12px - component token gap filler (no existing icon token)
+        case .sm: return DesignTokens.iconSize050     // 16px - references icon.size050
+        case .md: return DesignTokens.iconSize075     // 20px - references icon.size075
+        case .lg: return DesignTokens.iconSize100     // 24px - references icon.size100
+        case .xl: return DesignTokens.iconSize500     // 40px - references icon.size500
+        case .xxl: return AvatarTokens.iconSizeXxl    // 64px - component token gap filler (no existing icon token)
         }
     }
     
