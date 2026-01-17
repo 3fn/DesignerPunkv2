@@ -1,0 +1,87 @@
+<!--
+  Rounded Hexagon ClipPath for Avatar Agent Type
+  
+  Uses the Ana Tudor technique: polygon + circles at vertices for rounded corners.
+  clipPathUnits="objectBoundingBox" makes it responsive without JavaScript.
+  
+  Hexagon Geometry:
+  - Pointy-top orientation (vertex at top and bottom)
+  - Aspect ratio: cos(30°) ≈ 0.866 (width = height × 0.866)
+  - For objectBoundingBox, coordinates are normalized to 0-1 range
+  - Corner radius: 0.05 (relative to bounding box)
+  
+  Vertex Calculations (pointy-top hexagon):
+  - Top vertex: (0.5, 0)
+  - Top-right vertex: (0.933, 0.25) - where 0.933 ≈ 0.5 + 0.5/cos(30°) normalized
+  - Bottom-right vertex: (0.933, 0.75)
+  - Bottom vertex: (0.5, 1)
+  - Bottom-left vertex: (0.067, 0.75) - where 0.067 ≈ 0.5 - 0.5/cos(30°) normalized
+  - Top-left vertex: (0.067, 0.25)
+  
+  The circles at vertices create rounded corners via the Ana Tudor technique.
+  Each circle is positioned at the vertex with a small radius (0.05) to create
+  the rounded corner effect when combined with the polygon.
+  
+  @see .kiro/specs/042-avatar-component/design.md for implementation details
+  @see .kiro/specs/042-avatar-component/requirements.md Requirements 1.2, 1.3, 1.4, 11.1-11.4
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0">
+  <defs>
+    <!--
+      Rounded Hexagon ClipPath
+      
+      ID: rounded-hexagon
+      Usage: clip-path: url(#rounded-hexagon);
+      
+      The clipPath uses objectBoundingBox units, meaning all coordinates
+      are relative to the element being clipped (0-1 range).
+      This makes the clipPath responsive to any element size.
+    -->
+    <clipPath id="rounded-hexagon" clipPathUnits="objectBoundingBox">
+      <!--
+        Base hexagon polygon (pointy-top orientation)
+        
+        Vertices (clockwise from top):
+        1. Top:          (0.5, 0)
+        2. Top-right:    (0.933, 0.25)
+        3. Bottom-right: (0.933, 0.75)
+        4. Bottom:       (0.5, 1)
+        5. Bottom-left:  (0.067, 0.75)
+        6. Top-left:     (0.067, 0.25)
+        
+        The x-coordinates 0.933 and 0.067 account for the hexagon's
+        natural aspect ratio where width ≈ height × cos(30°) ≈ 0.866
+      -->
+      <polygon points="0.5,0 0.933,0.25 0.933,0.75 0.5,1 0.067,0.75 0.067,0.25" />
+      
+      <!--
+        Rounded corner circles (Ana Tudor technique)
+        
+        Each circle is positioned at a vertex with radius 0.05.
+        The circles extend slightly beyond the polygon edges,
+        creating smooth rounded corners when the clipPath is applied.
+        
+        Note: Circle positions are slightly inset from vertices
+        to create proper rounded corner effect.
+      -->
+      
+      <!-- Top vertex circle -->
+      <circle cx="0.5" cy="0.05" r="0.05" />
+      
+      <!-- Top-right vertex circle -->
+      <circle cx="0.89" cy="0.27" r="0.05" />
+      
+      <!-- Bottom-right vertex circle -->
+      <circle cx="0.89" cy="0.73" r="0.05" />
+      
+      <!-- Bottom vertex circle -->
+      <circle cx="0.5" cy="0.95" r="0.05" />
+      
+      <!-- Bottom-left vertex circle -->
+      <circle cx="0.11" cy="0.73" r="0.05" />
+      
+      <!-- Top-left vertex circle -->
+      <circle cx="0.11" cy="0.27" r="0.05" />
+    </clipPath>
+  </defs>
+</svg>

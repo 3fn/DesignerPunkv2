@@ -1,0 +1,4 @@
+# Avatar Component Tokens
+# Note: Main token definitions are in avatar.tokens.ts at the component root
+# This directory is for any additional token-related files if needed
+# See .kiro/specs/042-avatar-component/design.md for token definitions
