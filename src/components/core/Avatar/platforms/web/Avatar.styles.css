@@ -45,14 +45,15 @@
 /**
  * Human avatar shape (circle).
  * 
- * - Perfect circle via border-radius: 50%
+ * - Perfect circle via radiusHalf token (50%)
  * - Represents organic, natural human users
  * - Clips images to circular shape
  * 
  * @see Requirements: 1.1 - Human type renders as perfect circle
  */
 .avatar--human {
-  border-radius: 50%;
+  /* Use radiusHalf token for perfect circle - explicitly designed for avatars */
+  border-radius: var(--radius-half);
 }
 
 /**
@@ -339,4 +340,115 @@
   .avatar {
     border: var(--border-emphasis) solid currentColor;
   }
+}
+
+/* ==========================================================================
+   Icon Content Styles
+   ========================================================================== */
+
+/**
+ * Icon container within avatar.
+ * 
+ * Centers the icon within the avatar and applies appropriate sizing.
+ * Icon color is set based on avatar type for proper contrast.
+ * 
+ * @see Requirements: 3.1-3.8 - Icon content and sizing
+ * @see Requirements: 6.1, 6.2 - Icon colors for contrast
+ */
+.avatar__icon {
+  /* Layout */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Ensure icon doesn't overflow avatar bounds */
+  flex-shrink: 0;
+  
+  /* Line height reset for proper vertical centering */
+  line-height: 0;
+}
+
+/**
+ * Icon color for human avatar type.
+ * 
+ * Uses color.avatar.contrast.onHuman semantic token for proper contrast
+ * against the orange background.
+ * 
+ * @see Requirements: 6.1 - Human type icon uses color.avatar.contrast.onHuman
+ */
+.avatar__icon--human {
+  color: var(--color-avatar-contrast-on-human);
+}
+
+/**
+ * Icon color for agent avatar type.
+ * 
+ * Uses color.avatar.contrast.onAgent semantic token for proper contrast
+ * against the teal background.
+ * 
+ * @see Requirements: 6.2 - Agent type icon uses color.avatar.contrast.onAgent
+ */
+.avatar__icon--agent {
+  color: var(--color-avatar-contrast-on-agent);
+}
+
+/**
+ * SVG icon styling for custom-sized icons (xs and xxl).
+ * 
+ * Ensures SVG fills its container and inherits color from parent.
+ */
+.avatar__icon-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/**
+ * Icon-Base component styling within avatar.
+ * 
+ * Ensures the Icon-Base component inherits color from the avatar__icon container.
+ * The Icon-Base uses currentColor for stroke, so setting color on the container
+ * propagates to the icon.
+ */
+.avatar__icon .icon-base {
+  color: inherit;
+}
+
+/* ==========================================================================
+   Image Content Styles
+   ========================================================================== */
+
+/**
+ * Image content within avatar.
+ * 
+ * Displays profile images for human avatars. Images are:
+ * - Scaled to cover the entire avatar area (object-fit: cover)
+ * - Clipped to circle shape via parent border-radius
+ * - Full width/height to fill avatar container
+ * 
+ * @see Requirements: 5.1, 5.2, 5.3 - Image display and scaling
+ */
+.avatar__image {
+  /* Fill the entire avatar container */
+  width: 100%;
+  height: 100%;
+  
+  /* Scale image to cover container while maintaining aspect ratio */
+  /* @see Requirements: 5.2 - Use object-fit: cover for image scaling */
+  object-fit: cover;
+  
+  /* Ensure image doesn't overflow avatar bounds */
+  display: block;
+}
+
+/**
+ * Avatar with image - hide background color.
+ * 
+ * When an image is displayed, the background color should be hidden
+ * so the image is fully visible.
+ * 
+ * @see Requirements: 4.3 - Hide background when image is displayed
+ */
+.avatar--has-image {
+  background-color: transparent;
 }
