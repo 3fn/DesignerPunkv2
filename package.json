@@ -35,7 +35,7 @@
     "build:validate": "npx ts-node src/validators/buildValidation.ts",
     "test": "jest --testPathIgnorePatterns='performance/__tests__|__tests__/performance|PerformanceValidation'",
     "test:all": "jest",
-    "test:performance": "jest --testPathPattern='performance/__tests__|__tests__/performance'",
+    "test:performance": "jest --testPathPatterns='performance/__tests__|__tests__/performance'",
     "test:performance:isolated": "jest --config jest.performance.config.js --runInBand",
     "test:quick": "jest --testPathIgnorePatterns='(performance|integration)'",
     "test:watch": "jest --watch --testPathIgnorePatterns='performance/__tests__|__tests__/performance'",
