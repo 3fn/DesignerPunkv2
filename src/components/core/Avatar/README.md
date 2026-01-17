@@ -55,20 +55,43 @@ For detailed architectural decisions and rationale, see the [Design Outline](/.k
 
 ```swift
 // Human avatar with image
-Avatar(type: .human, size: .md, src: URL(string: "..."), alt: "John Doe")
+Avatar(type: .human, size: .md, src: URL(string: "https://example.com/photo.jpg"), alt: "John Doe")
 
 // Agent avatar
 Avatar(type: .agent, size: .lg)
+
+// Interactive avatar (shows hover visual feedback)
+Avatar(type: .human, size: .md, interactive: true)
+
+// Decorative avatar (hidden from VoiceOver)
+Avatar(type: .human, size: .sm, decorative: true)
+
+// Avatar with test ID
+Avatar(type: .human, size: .md, testID: "user-avatar")
 ```
 
 ### Android (Compose)
 
 ```kotlin
 // Human avatar with image
-Avatar(type = AvatarType.Human, size = AvatarSize.Md, src = "...", alt = "John Doe")
+Avatar(
+    type = AvatarType.Human,
+    size = AvatarSize.Md,
+    src = "https://example.com/photo.jpg",
+    alt = "John Doe"
+)
 
 // Agent avatar
 Avatar(type = AvatarType.Agent, size = AvatarSize.Lg)
+
+// Interactive avatar (shows hover visual feedback)
+Avatar(type = AvatarType.Human, size = AvatarSize.Md, interactive = true)
+
+// Decorative avatar (hidden from TalkBack)
+Avatar(type = AvatarType.Human, size = AvatarSize.Sm, decorative = true)
+
+// Avatar with test ID
+Avatar(type = AvatarType.Human, size = AvatarSize.Md, testID = "user-avatar")
 ```
 
 ## Token Consumption
@@ -213,6 +236,15 @@ Button(action: { openProfile() }) {
 NavigationLink(destination: ProfileView()) {
     Avatar(type: .human, size: .md, src: profileURL, decorative: true)
 }
+.accessibilityLabel("John Doe's profile")
+
+// Avatar with adjacent text (decorative)
+Button(action: { openProfile() }) {
+    HStack {
+        Avatar(type: .human, size: .sm, decorative: true)
+        Text("John Doe")
+    }
+}
 ```
 
 ### Android (Compose)
@@ -225,6 +257,15 @@ Box(
         .semantics { contentDescription = "View John Doe's profile" }
 ) {
     Avatar(type = AvatarType.Human, size = AvatarSize.Md, src = "...", decorative = true)
+}
+
+// Avatar with adjacent text (decorative)
+Row(
+    modifier = Modifier.clickable { openProfile() },
+    verticalAlignment = Alignment.CenterVertically
+) {
+    Avatar(type = AvatarType.Human, size = AvatarSize.Sm, decorative = true)
+    Text("John Doe")
 }
 ```
 
@@ -242,14 +283,81 @@ Box(
 - Custom element: `<avatar-base>`
 - Hexagon uses SVG clipPath with Ana Tudor technique for rounded corners
 - External CSS file with token-based custom properties
+- Hover transitions use CSS `transition` with `motion.duration.fast` token
+- Circle shape uses `border-radius: var(--radius-half)` (50%)
 
 ### iOS
 - SwiftUI View with custom `RoundedPointyTopHexagon` Shape
-- Uses `AsyncImage` for image loading with fallback
+- Uses `AsyncImage` for image loading with phase-based error handling
+- Hexagon corners use `addArc(tangent1End:tangent2End:radius:)` for smooth rounding
+- Hover state supported on macOS/iPadOS via `onHover` modifier
+- Accessibility via `.accessibilityHidden()`, `.accessibilityLabel()`, `.accessibilityIdentifier()`
 
 ### Android
 - Jetpack Compose Composable with custom `HexagonShape`
-- Uses Coil `AsyncImage` for image loading with fallback
+- Uses Coil `SubcomposeAsyncImage` for image loading with state-based error handling
+- Hexagon corners use `quadraticBezierTo` for smooth rounding
+- Hover state supported on desktop/ChromeOS via `hoverable` modifier
+- Accessibility via `semantics { invisibleToUser() }`, `contentDescription`, `testTag`
+
+## Cross-Platform Considerations
+
+### Visual Consistency
+
+All platforms render visually identical avatars despite using platform-native techniques:
+
+| Feature | Web | iOS | Android |
+|---------|-----|-----|---------|
+| Circle shape | CSS `border-radius: 50%` | `Circle()` clipShape | `CircleShape` clip |
+| Hexagon shape | SVG clipPath | Custom `Shape` with `addArc` | Custom `Shape` with `quadraticBezierTo` |
+| Image loading | Native `<img>` | `AsyncImage` | Coil `SubcomposeAsyncImage` |
+| Hover detection | CSS `:hover` | `onHover` modifier | `hoverable` modifier |
+
+### Hexagon Geometry
+
+All platforms use identical hexagon geometry:
+- **Orientation**: Pointy-top (vertex at top)
+- **Aspect ratio**: `cos(30°) ≈ 0.866` (width = height × 0.866)
+- **Corner radius**: 5% of minimum dimension
+- **Vertex positions**: Normalized to bounding box (0-1 range)
+
+### Known Platform Differences
+
+| Difference | Description | Impact |
+|------------|-------------|--------|
+| Hover transitions | Web uses smooth CSS transitions; native platforms use instant state changes | Acceptable - mobile platforms don't have traditional hover states |
+| Agent icon placeholder | Web uses "settings"; iOS/Android use "sparkles" | Visual only - will be unified when proper bot/AI icon is added |
+| Subpixel rendering | Minor anti-aliasing differences in shape edges | Imperceptible at normal viewing distances |
+
+### Accessibility Implementation
+
+| Feature | Web | iOS | Android |
+|---------|-----|-----|---------|
+| Decorative mode | `aria-hidden="true"` | `.accessibilityHidden(true)` | `semantics { invisibleToUser() }` |
+| Alt text | `alt` attribute | `.accessibilityLabel()` | `contentDescription` |
+| Test ID | `data-testid` | `.accessibilityIdentifier()` | `Modifier.testTag()` |
+| Default label (human) | N/A | "User avatar" | "User avatar" |
+| Default label (agent) | N/A | "AI agent avatar" | "AI agent avatar" |
+
+### Token Consistency
+
+All platforms use identical token values:
+
+| Token Category | Consistency |
+|----------------|-------------|
+| Size tokens (`avatar.size.*`) | ✅ Identical values (24-128px/pt/dp) |
+| Icon size tokens | ✅ 50% ratio maintained across all sizes |
+| Color tokens | ✅ Same hex values via token system |
+| Border tokens | ✅ Same widths and opacity values |
+
+### Testing Recommendations
+
+For complete cross-platform verification:
+
+1. **Web**: Test with NVDA/VoiceOver screen readers
+2. **iOS**: Test with VoiceOver on device/simulator
+3. **Android**: Test with TalkBack on device/emulator
+4. **All platforms**: Verify decorative mode skips avatar in screen reader navigation
 
 ## Related Documentation
 
