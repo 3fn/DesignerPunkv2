@@ -269,13 +269,14 @@
 /**
  * Enhanced border for xxl size.
  * 
- * Uses borderEmphasis width with color.contrast.onSurface at full opacity.
+ * Uses borderEmphasis width with white100 at full opacity.
  * 
  * @see Requirements: 7.3, 7.4 - xxl border styles
+ * @see design-outline.md - Border Styles section specifies white100 for xxl
  */
 .avatar--size-xxl {
   border-width: var(--border-emphasis);
-  border-color: var(--color-contrast-on-surface);
+  border-color: var(--white-100);
 }
 
 /* ==========================================================================

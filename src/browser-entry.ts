@@ -29,6 +29,8 @@ import { ContainerBaseWeb } from './components/core/Container-Base/platforms/web
 import { ButtonVerticalListItem } from './components/core/Button-VerticalList-Item/platforms/web/ButtonVerticalListItem.web';
 // Button-VerticalList-Set - Stemma System naming (vertical list button set container)
 import { ButtonVerticalListSet } from './components/core/Button-VerticalList-Set/platforms/web/ButtonVerticalListSet.web';
+// Avatar-Base - Stemma System naming (visual representation for users and AI agents)
+import { AvatarBaseElement } from './components/core/Avatar/platforms/web/Avatar.web';
 
 /**
  * Check if design tokens are loaded in the document.
@@ -103,6 +105,8 @@ safeDefine('container-base', ContainerBaseWeb);
 safeDefine('button-vertical-list-item', ButtonVerticalListItem);
 // Button-VerticalList-Set - Stemma System naming (vertical list button set container)
 safeDefine('button-vertical-list-set', ButtonVerticalListSet);
+// Avatar-Base - Stemma System naming (visual representation for users and AI agents)
+safeDefine('avatar-base', AvatarBaseElement);
 
 // Check tokens after DOM is ready and CSS is applied
 // Uses requestAnimationFrame to ensure stylesheets have been fully parsed and applied
@@ -120,7 +124,7 @@ if (typeof document !== 'undefined') {
 
 // Export all components for UMD global access and ESM imports
 // Requirements: 1.2, 2.3
-export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb, ButtonVerticalListItem, ButtonVerticalListSet };
+export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb, ButtonVerticalListItem, ButtonVerticalListSet, AvatarBaseElement };
 
 // Also export with more intuitive names for the UMD global
 export const Icon = IconBaseElement;
@@ -129,5 +133,8 @@ export const Container = ContainerBaseWeb;
 export const ContainerBase = ContainerBaseWeb;
 export const VerticalListButtonItem = ButtonVerticalListItem;
 export const VerticalListButtonSet = ButtonVerticalListSet;
+// Avatar - Intuitive alias for AvatarBaseElement
+export const Avatar = AvatarBaseElement;
+export const AvatarBase = AvatarBaseElement;
 // Legacy alias for backward compatibility
 export const TextInputField = InputTextBase;

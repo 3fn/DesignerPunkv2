@@ -34,8 +34,8 @@ All 11 component families have MCP-queryable documentation. Production families 
 | Form Inputs | Data collection and validation | `.kiro/steering/Component-Family-Form-Inputs.md` | 🟢 Production |
 | Containers | Layout and content organization | `.kiro/steering/Component-Family-Container.md` | 🟢 Production |
 | Icons | Visual communication | `.kiro/steering/Component-Family-Icon.md` | 🟢 Production |
+| Avatars | Identity representation | `.kiro/steering/Component-Family-Avatar.md` | 🟢 Production |
 | Modals | Overlay interactions | `.kiro/steering/Component-Family-Modal.md` | 🔴 Placeholder |
-| Avatars | Identity representation | `.kiro/steering/Component-Family-Avatar.md` | 🔴 Placeholder |
 | Badges & Tags | Status and labeling | `.kiro/steering/Component-Family-Badge.md` | 🔴 Placeholder |
 | Data Displays | Information presentation | `.kiro/steering/Component-Family-Data-Display.md` | 🔴 Placeholder |
 | Dividers | Visual separation | `.kiro/steering/Component-Family-Divider.md` | 🔴 Placeholder |
@@ -44,7 +44,7 @@ All 11 component families have MCP-queryable documentation. Production families 
 
 **Status Legend**: 🟢 Production Ready | 🟡 Beta | 🔴 Placeholder | ⚠️ Deprecated
 
-**Family Count**: 4 Production Ready, 7 Placeholder (structural definitions for future development)
+**Family Count**: 5 Production Ready, 6 Placeholder (structural definitions for future development)
 
 ## Naming Convention
 

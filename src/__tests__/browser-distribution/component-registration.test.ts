@@ -191,11 +191,15 @@ describe('Component Registration', () => {
       // Note: Stemma System migration - legacy exports removed, using new naming
       // ButtonVerticalListItem added as part of spec 038
       // ButtonVerticalListSet added as part of spec 041
-      expect(content).toContain('export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb, ButtonVerticalListItem, ButtonVerticalListSet }');
+      // AvatarBaseElement added as part of spec 042
+      expect(content).toContain('export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb, ButtonVerticalListItem, ButtonVerticalListSet, AvatarBaseElement }');
       expect(content).toContain('export const Icon = IconBaseElement');
       expect(content).toContain('export const IconBase = IconBaseElement');
       expect(content).toContain('export const Container = ContainerBaseWeb');
       expect(content).toContain('export const ContainerBase = ContainerBaseWeb');
+      // Avatar aliases for intuitive naming
+      expect(content).toContain('export const Avatar = AvatarBaseElement');
+      expect(content).toContain('export const AvatarBase = AvatarBaseElement');
       // Legacy alias for backward compatibility
       expect(content).toContain('export const TextInputField = InputTextBase');
     });

@@ -10,9 +10,16 @@ Avatar provides instant visual recognition of entity type through shape:
 
 This shape-based distinction improves accessibility by not relying on color alone.
 
-## Status
+## Architecture
 
-🚧 **Under Development** - See [tasks.md](/.kiro/specs/042-avatar-component/tasks.md) for implementation progress.
+Avatar follows the **True Native Architecture** pattern with separate implementations for each platform (web, iOS, Android) rather than runtime detection. Key architectural decisions:
+
+- **Shape-based entity differentiation**: Circle = Human, Hexagon = AI Agent
+- **Wrapper-delegated interaction**: Avatar provides visual feedback only; wrappers handle accessibility
+- **Token-based styling**: All values derived from semantic, primitive, or component tokens
+- **50% icon-to-avatar ratio**: Icons scale proportionally with avatar size
+
+For detailed architectural decisions and rationale, see the [Design Outline](/.kiro/specs/042-avatar-component/design-outline.md).
 
 ## Props
 
@@ -246,6 +253,6 @@ Box(
 
 ## Related Documentation
 
-- [Design Document](/.kiro/specs/042-avatar-component/design.md)
-- [Requirements](/.kiro/specs/042-avatar-component/requirements.md)
-- [Design Outline](/.kiro/specs/042-avatar-component/design-outline.md)
+- [Design Outline](/.kiro/specs/042-avatar-component/design-outline.md) - Architectural decisions and rationale
+- [Design Document](/.kiro/specs/042-avatar-component/design.md) - Detailed component architecture
+- [Requirements](/.kiro/specs/042-avatar-component/requirements.md) - EARS format requirements and acceptance criteria
