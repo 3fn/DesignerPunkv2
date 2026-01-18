@@ -2,7 +2,7 @@
 
 **A True Native Cross-Platform Design System with Mathematical Foundations**
 
-[![Version](https://img.shields.io/badge/Version-5.0.0-purple)](RELEASE-NOTES-5.0.0.md)
+[![Version](https://img.shields.io/badge/Version-5.0.0-purple)](docs/releases/RELEASE-NOTES-5.0.0.md)
 [![Repository](https://img.shields.io/badge/GitHub-DesignerPunkv2-blue)](https://github.com/3fn/DesignerPunkv2)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
