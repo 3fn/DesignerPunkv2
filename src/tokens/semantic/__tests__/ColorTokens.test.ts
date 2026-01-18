@@ -770,9 +770,9 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(token.primitiveReferences.value).toBe('orange300');
       });
 
-      it('color.avatar.agent should reference teal300', () => {
+      it('color.avatar.agent should reference teal200', () => {
         const token = colorTokens['color.avatar.agent'];
-        expect(token.primitiveReferences.value).toBe('teal300');
+        expect(token.primitiveReferences.value).toBe('teal200');
       });
 
       it('color.avatar.contrast.onHuman should reference white100', () => {

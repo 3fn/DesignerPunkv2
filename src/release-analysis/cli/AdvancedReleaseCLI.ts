@@ -22,7 +22,8 @@ import {
   VersionRecommendation, 
   ConfidenceMetrics,
   CompletionDocument,
-  UncertainDuplicateInfo
+  UncertainDuplicateInfo,
+  ChangeEvidence
 } from '../types/AnalysisTypes';
 
 /**
@@ -265,16 +266,128 @@ export class AdvancedReleaseCLI {
     const orchestratorResult = await orchestrator.analyzeFullReset();
     
     // Convert orchestrator result to CLI AnalysisResult format
-    return this.convertOrchestratorResult(orchestratorResult);
+    return await this.convertOrchestratorResult(orchestratorResult);
   }
 
   /**
    * Convert ReleaseAnalysisOrchestrator result to CLI AnalysisResult format
    */
-  private convertOrchestratorResult(orchestratorResult: any): AnalysisResult {
-    // The orchestrator returns a result that should be compatible with AnalysisResult
-    // This method ensures proper type conversion if needed
-    return orchestratorResult as AnalysisResult;
+  private async convertOrchestratorResult(orchestratorResult: any): Promise<AnalysisResult> {
+    // The orchestrator returns ReleaseAnalysisResult with results[], performanceMetrics, metadata
+    // We need to convert this to AnalysisResult with scope, changes, versionRecommendation, etc.
+    
+    const results = orchestratorResult.results || [];
+    const metadata = orchestratorResult.metadata || {};
+    
+    // Calculate version recommendation from accumulated results
+    const currentVersion = await this.getCurrentVersion();
+    
+    // Determine highest impact level from all results
+    let highestImpact: 'patch' | 'minor' | 'major' = 'patch';
+    for (const result of results) {
+      if (result.impactLevel === 'major') {
+        highestImpact = 'major';
+        break;
+      } else if (result.impactLevel === 'minor') {
+        highestImpact = 'minor';
+      }
+    }
+    
+    // Calculate recommended version
+    const versionParts = currentVersion.split('.').map(Number);
+    let recommendedVersion = currentVersion;
+    let bumpType: 'major' | 'minor' | 'patch' | 'none' = 'none';
+    
+    if (results.length > 0) {
+      bumpType = highestImpact;
+      if (highestImpact === 'major') {
+        recommendedVersion = `${versionParts[0] + 1}.0.0`;
+      } else if (highestImpact === 'minor') {
+        recommendedVersion = `${versionParts[0]}.${versionParts[1] + 1}.0`;
+      } else {
+        recommendedVersion = `${versionParts[0]}.${versionParts[1]}.${versionParts[2] + 1}`;
+      }
+    }
+    
+    // Build changes from results
+    const breakingChanges = results.filter((r: any) => r.impactLevel === 'major');
+    const minorChanges = results.filter((r: any) => r.impactLevel === 'minor');
+    const patchChanges = results.filter((r: any) => r.impactLevel === 'patch');
+    
+    // Build release notes from results
+    const releaseNotes = results.map((r: any) => `- ${r.releaseNoteContent}`).join('\n');
+    
+    // Build evidence from results
+    const evidence: ChangeEvidence[] = results.map((r: any) => ({
+      type: r.impactLevel === 'major' ? 'breaking' as const : 
+            r.impactLevel === 'minor' ? 'feature' as const : 'improvement' as const,
+      description: r.releaseNoteContent,
+      source: r.filePath,
+      impact: r.impactLevel === 'major' ? 'high' as const : 
+              r.impactLevel === 'minor' ? 'medium' as const : 'low' as const
+    }));
+    
+    return {
+      scope: {
+        toCommit: metadata.currentCommit || 'HEAD',
+        completionDocuments: [],
+        analysisDate: metadata.analyzedAt || new Date()
+      },
+      changes: {
+        breakingChanges: breakingChanges.map((r: any) => ({
+          id: r.filePath,
+          title: r.releaseNoteContent,
+          description: r.releaseNoteContent,
+          affectedAPIs: [],
+          source: r.filePath,
+          severity: 'high' as const
+        })),
+        newFeatures: minorChanges.map((r: any) => ({
+          id: r.filePath,
+          title: r.releaseNoteContent,
+          description: r.releaseNoteContent,
+          benefits: [],
+          requirements: [],
+          artifacts: [],
+          source: r.filePath,
+          category: 'feature' as const
+        })),
+        bugFixes: [],
+        improvements: patchChanges.map((r: any) => ({
+          id: r.filePath,
+          title: r.releaseNoteContent,
+          description: r.releaseNoteContent,
+          source: r.filePath,
+          type: 'improvement' as const,
+          impact: 'low' as const
+        })),
+        documentation: [],
+        metadata: {
+          documentsAnalyzed: results.length,
+          extractionConfidence: 0.8,
+          ambiguousItems: [],
+          filteredItems: []
+        }
+      },
+      versionRecommendation: {
+        currentVersion,
+        recommendedVersion,
+        bumpType,
+        confidence: 0.8,
+        rationale: results.length > 0 
+          ? `${results.length} changes detected (${breakingChanges.length} major, ${minorChanges.length} minor, ${patchChanges.length} patch)`
+          : 'No changes detected',
+        evidence
+      },
+      releaseNotes,
+      confidence: {
+        overall: 0.8,
+        extraction: 0.8,
+        categorization: 0.8,
+        deduplication: 0.95,
+        versionCalculation: 0.8
+      }
+    };
   }
 
   /**

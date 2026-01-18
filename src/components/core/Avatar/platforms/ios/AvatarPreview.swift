@@ -536,7 +536,7 @@ struct AvatarPreview_Previews: PreviewProvider {
                             Text("color.avatar.agent")
                                 .font(.caption)
                                 .fontDesign(.monospaced)
-                            Text("→ teal300")
+                            Text("→ teal200")
                                 .font(.caption2)
                                 .foregroundColor(.secondary)
                         }

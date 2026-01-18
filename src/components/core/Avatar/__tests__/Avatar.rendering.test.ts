@@ -114,33 +114,49 @@ describe('Avatar Component Rendering', () => {
     });
 
     /**
-     * @see Requirements: 11.1, 11.2 - SVG clipPath for hexagon shape
+     * @see Requirements: 11.1, 11.2 - SVG with Bézier curves for hexagon shape
      */
-    it('should include SVG clipPath definition for hexagon', async () => {
+    it('should include SVG with clipPath for hexagon', async () => {
       const avatar = document.createElement('avatar-base') as AvatarBaseElement;
       avatar.type = 'agent';
       document.body.appendChild(avatar);
       
       await new Promise(resolve => setTimeout(resolve, 0));
       
-      const clipPath = avatar.shadowRoot?.querySelector('#rounded-hexagon');
-      expect(clipPath).toBeTruthy();
-      expect(clipPath?.getAttribute('clipPathUnits')).toBe('objectBoundingBox');
+      // Agent type uses inline SVG with Bézier curves
+      const svg = avatar.shadowRoot?.querySelector('.avatar__hexagon-svg');
+      expect(svg).toBeTruthy();
+      
+      // SVG should have defs element
+      const defs = svg?.querySelector('defs');
+      expect(defs).toBeTruthy();
+      
+      // Defs should contain clipPath (check innerHTML since JSDOM may have SVG namespace issues)
+      const defsHTML = defs?.innerHTML || '';
+      expect(defsHTML).toContain('clipPath');
     });
 
-    it('should have hexagon polygon in clipPath', async () => {
+    it('should have hexagon path with Bézier curves in SVG', async () => {
       const avatar = document.createElement('avatar-base') as AvatarBaseElement;
       avatar.type = 'agent';
       document.body.appendChild(avatar);
       
       await new Promise(resolve => setTimeout(resolve, 0));
       
-      const polygon = avatar.shadowRoot?.querySelector('#rounded-hexagon polygon');
-      expect(polygon).toBeTruthy();
-      // Verify pointy-top hexagon vertices
-      const points = polygon?.getAttribute('points');
-      expect(points).toContain('0.5,0'); // Top vertex
-      expect(points).toContain('0.5,1'); // Bottom vertex
+      // Agent type uses inline SVG with clipPath containing path element
+      // Check via innerHTML since JSDOM may have SVG namespace issues with querySelector
+      const svg = avatar.shadowRoot?.querySelector('.avatar__hexagon-svg');
+      expect(svg).toBeTruthy();
+      
+      const svgHTML = svg?.innerHTML || '';
+      
+      // Should have clipPath element
+      expect(svgHTML).toContain('clipPath');
+      
+      // ClipPath should contain a path element with Bézier curve commands
+      expect(svgHTML).toContain('<path');
+      expect(svgHTML).toContain(' d="'); // Path d attribute
+      expect(svgHTML).toMatch(/d="[^"]*M[^"]*Q[^"]*Z/); // M, Q, Z commands in path
     });
   });
 

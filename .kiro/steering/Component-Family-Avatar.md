@@ -117,7 +117,7 @@ Avatar-Base (Primitive) [IMPLEMENTED]
 | Token | Purpose |
 |-------|---------|
 | `color.avatar.human` | Human avatar background (orange300) |
-| `color.avatar.agent` | Agent avatar background (teal300) |
+| `color.avatar.agent` | Agent avatar background (teal200) |
 | `color.avatar.contrast.onHuman` | Icon color on human background (white100) |
 | `color.avatar.contrast.onAgent` | Icon color on agent background (white100) |
 | `color.avatar.border` | Border color (gray100) |

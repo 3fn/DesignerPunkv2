@@ -176,14 +176,25 @@ describe('Avatar Web Component Lifecycle', () => {
       expect(container?.classList.contains('avatar--size-xl')).toBe(true);
     });
 
-    it('should include SVG clipPath definition for hexagon', async () => {
+    it('should include SVG for agent type avatars', async () => {
       const avatar = document.createElement('avatar-base') as AvatarBaseElement;
+      avatar.type = 'agent';
       document.body.appendChild(avatar);
       
       await new Promise(resolve => setTimeout(resolve, 0));
       
-      const clipPath = avatar.shadowRoot?.querySelector('#rounded-hexagon');
-      expect(clipPath).toBeTruthy();
+      // Agent type uses inline SVG with Bézier curves for hexagon shape
+      const svg = avatar.shadowRoot?.querySelector('.avatar__hexagon-svg');
+      expect(svg).toBeTruthy();
+      
+      // SVG should have defs element for clipPath definition
+      const defs = svg?.querySelector('defs');
+      expect(defs).toBeTruthy();
+      
+      // Defs should contain clipPath (check innerHTML since JSDOM may have SVG namespace issues)
+      const defsHTML = defs?.innerHTML || '';
+      expect(defsHTML).toContain('clipPath');
+      expect(defsHTML).toContain('path');
     });
 
     it('should include style element with CSS', async () => {
@@ -475,28 +486,48 @@ describe('Avatar Web Component Lifecycle', () => {
       expect(style?.textContent).toContain('inline-block');
     });
 
-    it('should have SVG defs element for clipPath', async () => {
+    it('should have SVG with defs and clipPath for agent type', async () => {
       const avatar = document.createElement('avatar-base') as AvatarBaseElement;
+      avatar.type = 'agent';
       document.body.appendChild(avatar);
       
       await new Promise(resolve => setTimeout(resolve, 0));
       
-      const svg = avatar.shadowRoot?.querySelector('svg');
+      // Agent type uses inline SVG with Bézier curves
+      const svg = avatar.shadowRoot?.querySelector('.avatar__hexagon-svg');
       expect(svg).toBeTruthy();
       expect(svg?.getAttribute('aria-hidden')).toBe('true');
       
+      // SVG should have defs element
       const defs = svg?.querySelector('defs');
       expect(defs).toBeTruthy();
+      
+      // Defs should contain clipPath (check innerHTML since JSDOM may have SVG namespace issues)
+      const defsHTML = defs?.innerHTML || '';
+      expect(defsHTML).toContain('clipPath');
     });
 
-    it('should have clipPath with objectBoundingBox units', async () => {
+    it('should have clipPath with path element for hexagon shape', async () => {
       const avatar = document.createElement('avatar-base') as AvatarBaseElement;
+      avatar.type = 'agent';
       document.body.appendChild(avatar);
       
       await new Promise(resolve => setTimeout(resolve, 0));
       
-      const clipPath = avatar.shadowRoot?.querySelector('#rounded-hexagon');
-      expect(clipPath?.getAttribute('clipPathUnits')).toBe('objectBoundingBox');
+      // Agent type uses inline SVG with clipPath containing path element
+      // Check via innerHTML since JSDOM may have SVG namespace issues with querySelector
+      const svg = avatar.shadowRoot?.querySelector('.avatar__hexagon-svg');
+      expect(svg).toBeTruthy();
+      
+      const svgHTML = svg?.innerHTML || '';
+      
+      // Should have clipPath element
+      expect(svgHTML).toContain('clipPath');
+      
+      // ClipPath should contain a path element with Bézier curve commands
+      expect(svgHTML).toContain('<path');
+      expect(svgHTML).toContain(' d="'); // Path d attribute
+      expect(svgHTML).toMatch(/d="[^"]*M[^"]*Q[^"]*Z/); // M, Q, Z commands in path
     });
 
     it('should have avatar container div', async () => {

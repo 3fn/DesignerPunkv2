@@ -766,7 +766,7 @@ private fun CrossPlatformConsistencySection() {
                             fontFamily = FontFamily.Monospace
                         )
                         Text(
-                            text = "→ teal300",
+                            text = "→ teal200",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

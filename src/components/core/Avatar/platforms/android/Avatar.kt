@@ -47,6 +47,9 @@ import kotlin.math.cos
 // Import IconBase component for icon rendering
 // @see Requirements: 15.4 - Use Icon Compose component
 import com.designerpunk.components.core.IconBase
+// Import DesignTokens for semantic color token references
+// @see Rosetta System Architecture - Token Consumption Rule
+import com.designerpunk.tokens.DesignTokens
 // Import Coil AsyncImage for image loading
 // @see Requirements: 5.1, 5.2, 5.3, 5.5, 5.6 - Image support
 import coil.compose.AsyncImage
@@ -88,41 +91,43 @@ object AvatarTokens {
     val iconSizeXxl: Dp = 64.dp
     
     // MARK: - Avatar Color Tokens
+    // These reference DesignTokens semantic color tokens for consistency with the Rosetta pipeline.
+    // When semantic tokens change, regenerate DesignTokens via: npx ts-node src/generators/generateTokenFiles.ts
     
     /**
      * Background color for human avatars
      * References: color.avatar.human → orange300
      * @see Requirements: 4.1 - Human type background color
      */
-    val colorHuman: Color = Color(0xFFFF6B35) // orange300 light base
+    val colorHuman: Color = Color(DesignTokens.color_avatar_human)
     
     /**
      * Background color for agent avatars
-     * References: color.avatar.agent → teal300
+     * References: color.avatar.agent → teal200
      * @see Requirements: 4.2 - Agent type background color
      */
-    val colorAgent: Color = Color(0xFF06B6D4) // teal300 light base
+    val colorAgent: Color = Color(DesignTokens.color_avatar_agent)
     
     /**
      * Icon color on human avatar background
      * References: color.avatar.contrast.onHuman → white100
      * @see Requirements: 6.1 - Human type icon contrast color
      */
-    val contrastOnHuman: Color = Color.White
+    val contrastOnHuman: Color = Color(DesignTokens.color_avatar_contrast_on_human)
     
     /**
      * Icon color on agent avatar background
      * References: color.avatar.contrast.onAgent → white100
      * @see Requirements: 6.2 - Agent type icon contrast color
      */
-    val contrastOnAgent: Color = Color.White
+    val contrastOnAgent: Color = Color(DesignTokens.color_avatar_contrast_on_agent)
     
     /**
      * Border color for avatars (xs through xl sizes)
      * References: color.avatar.border → gray100
      * @see Requirements: 7.2 - Border color for xs-xl sizes
      */
-    val borderColor: Color = Color(0xFF999999) // gray100 approximation
+    val borderColor: Color = Color(DesignTokens.color_avatar_border)
     
     /**
      * Border color for xxl size avatars
@@ -350,12 +355,10 @@ fun Avatar(
     }
     
     // Calculate avatar width based on type
-    // Human (circle): width = height
-    // Agent (hexagon): width = height × cos(30°) ≈ height × 0.866
-    val avatarWidth = when (type) {
-        AvatarType.Human -> size.dimension
-        AvatarType.Agent -> size.dimension * HexagonShape.ASPECT_RATIO.toFloat()
-    }.let { it.value.dp }
+    // Both human (circle) and agent (hexagon) now use 1:1 aspect ratio (square bounding box)
+    // The hexagon shape fits inside the square, maintaining its internal proportions
+    // This matches the web and iOS implementations for visual consistency
+    val avatarWidth = size.dimension
     
     // Determine background color based on type
     val backgroundColor = when (type) {
@@ -394,7 +397,7 @@ fun Avatar(
     
     // Build modifier chain
     val avatarModifier = modifier
-        .size(width = avatarWidth, height = size.dimension)
+        .size(avatarWidth)  // Square bounding box for both human and agent types
         .clip(shape)
         .background(if (shouldShowImage) Color.Transparent else backgroundColor)
         .border(width = currentBorderWidth, color = borderColor, shape = shape)

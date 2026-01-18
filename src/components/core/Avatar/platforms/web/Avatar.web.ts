@@ -29,19 +29,150 @@ import { createIconBase } from '../../../Icon-Base/platforms/web/IconBase.web';
 import avatarStyles from './Avatar.styles.css';
 
 /**
+ * Generate SVG path for a rounded hexagon using quadratic Bézier curves.
+ * 
+ * Creates a pointy-top hexagon with smooth rounded corners using Q (quadratic Bézier)
+ * commands. The hexagon fits within a square bounding box (1:1 aspect ratio) with
+ * the hexagon's natural proportions maintained inside.
+ * 
+ * Hexagon Geometry (pointy-top, inscribed in square):
+ * - 6 vertices with quadratic curves at each corner
+ * - Corner radius proportional to size
+ * - Pointy-top orientation (vertex at top and bottom)
+ * - Width = Height × cos(30°) ≈ 0.866 (hexagon fits inside square)
+ * 
+ * @param size - The size of the bounding box (width = height)
+ * @param cornerRadius - The radius for rounded corners (default: 8% of size)
+ * @returns SVG path string with M, L, and Q commands
+ * 
+ * @see Requirements: 1.2, 1.3, 1.4, 11.1-11.4 in .kiro/specs/042-avatar-component/requirements.md
+ */
+function generateRoundedHexagonPath(size: number, cornerRadius?: number): string {
+  // Default corner radius is 8% of size for visually pleasing rounded corners
+  const r = cornerRadius ?? size * 0.08;
+  
+  // Hexagon geometry calculations
+  // For a pointy-top hexagon inscribed in a square:
+  // - Center is at (size/2, size/2)
+  // - The hexagon's width = height × cos(30°) ≈ 0.866
+  // - We center the hexagon horizontally in the square
+  const cx = size / 2;
+  const cy = size / 2;
+  
+  // Hexagon dimensions (fits inside square bounding box)
+  // Height spans full size, width is narrower due to hexagon proportions
+  const hexHeight = size;
+  const hexWidth = size * Math.cos(Math.PI / 6); // cos(30°) ≈ 0.866
+  
+  // Calculate vertex positions (pointy-top orientation)
+  // Vertices numbered 0-5 starting from top, going clockwise
+  const halfWidth = hexWidth / 2;
+  const quarterHeight = hexHeight / 4;
+  
+  // Vertex coordinates (clockwise from top)
+  const vertices = [
+    { x: cx, y: 0 },                           // 0: Top vertex
+    { x: cx + halfWidth, y: quarterHeight },   // 1: Top-right vertex
+    { x: cx + halfWidth, y: 3 * quarterHeight }, // 2: Bottom-right vertex
+    { x: cx, y: hexHeight },                   // 3: Bottom vertex
+    { x: cx - halfWidth, y: 3 * quarterHeight }, // 4: Bottom-left vertex
+    { x: cx - halfWidth, y: quarterHeight },   // 5: Top-left vertex
+  ];
+  
+  // Build path with quadratic Bézier curves at corners
+  // For each vertex, we:
+  // 1. Draw a line to a point before the vertex (offset by corner radius)
+  // 2. Draw a quadratic curve through the vertex to a point after it
+  
+  const pathParts: string[] = [];
+  const numVertices = vertices.length;
+  
+  for (let i = 0; i < numVertices; i++) {
+    const curr = vertices[i];
+    const next = vertices[(i + 1) % numVertices];
+    const prev = vertices[(i - 1 + numVertices) % numVertices];
+    
+    // Calculate direction vectors
+    const toPrev = { x: prev.x - curr.x, y: prev.y - curr.y };
+    const toNext = { x: next.x - curr.x, y: next.y - curr.y };
+    
+    // Normalize direction vectors
+    const lenToPrev = Math.sqrt(toPrev.x * toPrev.x + toPrev.y * toPrev.y);
+    const lenToNext = Math.sqrt(toNext.x * toNext.x + toNext.y * toNext.y);
+    
+    const normToPrev = { x: toPrev.x / lenToPrev, y: toPrev.y / lenToPrev };
+    const normToNext = { x: toNext.x / lenToNext, y: toNext.y / lenToNext };
+    
+    // Calculate points before and after the vertex (offset by corner radius)
+    const beforeVertex = {
+      x: curr.x + normToPrev.x * r,
+      y: curr.y + normToPrev.y * r,
+    };
+    const afterVertex = {
+      x: curr.x + normToNext.x * r,
+      y: curr.y + normToNext.y * r,
+    };
+    
+    if (i === 0) {
+      // Start path at the point after the first vertex
+      pathParts.push(`M ${afterVertex.x.toFixed(2)} ${afterVertex.y.toFixed(2)}`);
+    } else {
+      // Line to point before current vertex
+      pathParts.push(`L ${beforeVertex.x.toFixed(2)} ${beforeVertex.y.toFixed(2)}`);
+      // Quadratic curve through vertex to point after vertex
+      pathParts.push(`Q ${curr.x.toFixed(2)} ${curr.y.toFixed(2)} ${afterVertex.x.toFixed(2)} ${afterVertex.y.toFixed(2)}`);
+    }
+  }
+  
+  // Close the path: line to before first vertex, then curve through it
+  const firstVertex = vertices[0];
+  const secondVertex = vertices[1];
+  const lastVertex = vertices[numVertices - 1];
+  
+  // Direction from first vertex to last and to second
+  const toLastFromFirst = { x: lastVertex.x - firstVertex.x, y: lastVertex.y - firstVertex.y };
+  const toSecondFromFirst = { x: secondVertex.x - firstVertex.x, y: secondVertex.y - firstVertex.y };
+  
+  const lenToLast = Math.sqrt(toLastFromFirst.x * toLastFromFirst.x + toLastFromFirst.y * toLastFromFirst.y);
+  const lenToSecond = Math.sqrt(toSecondFromFirst.x * toSecondFromFirst.x + toSecondFromFirst.y * toSecondFromFirst.y);
+  
+  const normToLast = { x: toLastFromFirst.x / lenToLast, y: toLastFromFirst.y / lenToLast };
+  const normToSecond = { x: toSecondFromFirst.x / lenToSecond, y: toSecondFromFirst.y / lenToSecond };
+  
+  const beforeFirst = {
+    x: firstVertex.x + normToLast.x * r,
+    y: firstVertex.y + normToLast.y * r,
+  };
+  const afterFirst = {
+    x: firstVertex.x + normToSecond.x * r,
+    y: firstVertex.y + normToSecond.y * r,
+  };
+  
+  // Line to before first vertex
+  pathParts.push(`L ${beforeFirst.x.toFixed(2)} ${beforeFirst.y.toFixed(2)}`);
+  // Curve through first vertex back to start point
+  pathParts.push(`Q ${firstVertex.x.toFixed(2)} ${firstVertex.y.toFixed(2)} ${afterFirst.x.toFixed(2)} ${afterFirst.y.toFixed(2)}`);
+  
+  // Close path
+  pathParts.push('Z');
+  
+  return pathParts.join(' ');
+}
+
+/**
  * Icon size mapping for Avatar sizes.
  * 
  * Maps avatar sizes to IconBaseSize values for the Icon component.
  * Uses existing icon tokens where available, with special handling for
- * xs and xxl which use component tokens (no IconBaseSize equivalent).
+ * xs and xxl which derive from icon.size050 using calc() multipliers.
  * 
  * Icon sizes maintain 50% ratio with avatar sizes:
- * - xs (24px avatar) → 12px icon (component token)
+ * - xs (24px avatar) → 12px icon (calc(icon.size050 × 0.75))
  * - sm (32px avatar) → 16px icon (icon.size050, IconBaseSize 13)
  * - md (40px avatar) → 20px icon (icon.size075, IconBaseSize 18)
  * - lg (48px avatar) → 24px icon (icon.size100, IconBaseSize 24)
  * - xl (80px avatar) → 40px icon (icon.size500, IconBaseSize 40)
- * - xxl (128px avatar) → 64px icon (component token)
+ * - xxl (128px avatar) → 64px icon (calc(icon.size050 × 4))
  * 
  * @see Requirements: 3.1-3.6 in .kiro/specs/042-avatar-component/requirements.md
  */
@@ -52,6 +183,23 @@ const AVATAR_ICON_SIZE_MAP: Record<AvatarSize, IconBaseSize | 'xs' | 'xxl'> = {
   lg: 24,      // 24px - maps to icon.size100
   xl: 40,      // 40px - maps to icon.size500
   xxl: 'xxl',  // 64px - uses avatar.icon.size.xxl component token
+};
+
+/**
+ * Avatar size to pixel value mapping.
+ * 
+ * Used for SVG rendering where we need actual pixel values.
+ * These values match the token-based CSS sizing.
+ * 
+ * @see Requirements: 2.1-2.6 in .kiro/specs/042-avatar-component/requirements.md
+ */
+const AVATAR_SIZE_PX: Record<AvatarSize, number> = {
+  xs: 24,   // space300
+  sm: 32,   // space400
+  md: 40,   // space500
+  lg: 48,   // space600
+  xl: 80,   // SPACING_BASE_VALUE * 10
+  xxl: 128, // SPACING_BASE_VALUE * 16
 };
 
 /**
@@ -326,8 +474,12 @@ export class AvatarBaseElement extends HTMLElement {
    * - Agent: 'settings' icon (placeholder for bot/AI)
    * 
    * Icon size is determined by avatar size using the 50% ratio mapping.
-   * For xs and xxl sizes, uses CSS custom properties from component tokens.
+   * For xs and xxl sizes, uses CSS calc() with icon tokens to derive the size.
    * For other sizes, uses the Icon-Base component with IconBaseSize values.
+   * 
+   * Icon Size Derivations (xs and xxl):
+   * - xs (12px) = icon.size050 (16px) × 0.75
+   * - xxl (64px) = icon.size050 (16px) × 4
    * 
    * @param type - Avatar type ('human' or 'agent')
    * @param size - Avatar size variant
@@ -339,16 +491,20 @@ export class AvatarBaseElement extends HTMLElement {
     const iconName = AVATAR_ICON_NAMES[type];
     const iconSize = AVATAR_ICON_SIZE_MAP[size];
     
-    // For xs and xxl sizes, we need to use CSS custom properties
+    // For xs and xxl sizes, we need to use CSS calc() with icon tokens
     // since there's no IconBaseSize equivalent for 12px and 64px
+    // Derive from icon.size050 (16px) to get proper px units
     if (iconSize === 'xs' || iconSize === 'xxl') {
-      // Use inline SVG with CSS custom property for size
-      // This allows the icon to use the avatar component tokens
-      const sizeVar = iconSize === 'xs' ? 'var(--avatar-icon-size-xs)' : 'var(--avatar-icon-size-xxl)';
+      // Use calc() with icon.size050 to derive the size with proper px units
+      // xs (12px) = icon.size050 (16px) × 0.75
+      // xxl (64px) = icon.size050 (16px) × 4
+      const sizeCalc = iconSize === 'xs' 
+        ? 'calc(var(--icon-size-050) * 0.75)' 
+        : 'calc(var(--icon-size-050) * 4)';
       const iconContent = this.getIconSVGContent(iconName);
       
       return `
-        <span class="avatar__icon avatar__icon--${type}" style="width: ${sizeVar}; height: ${sizeVar};">
+        <span class="avatar__icon avatar__icon--${type}" style="width: ${sizeCalc}; height: ${sizeCalc};">
           <svg 
             viewBox="0 0 24 24" 
             fill="none" 
@@ -510,6 +666,9 @@ export class AvatarBaseElement extends HTMLElement {
    * Generates the avatar structure with appropriate shape, size, and content.
    * Uses external CSS file (Avatar.styles.css) for token-based styling.
    * 
+   * For agent type, uses inline SVG with Bézier curves for true rounded corners
+   * instead of CSS clip-path (which clips borders and causes visual issues).
+   * 
    * @see Requirements: 1.1, 1.2, 1.3, 1.5, 2.1-2.7, 3.1-3.8, 5.1-5.5, 11.1, 15.1, 15.2
    */
   private render(): void {
@@ -549,53 +708,130 @@ export class AvatarBaseElement extends HTMLElement {
       );
     }
     
-    // Render shadow DOM content
-    // Uses external CSS file (Avatar.styles.css) for token-based styling
-    // @see Requirements: 1.1, 1.2, 1.3, 2.1-2.6 - Shape and size styling
-    this._shadowRoot.innerHTML = `
-      <!--
-        SVG ClipPath Definition for Rounded Hexagon (Agent Type)
-        
-        Uses the Ana Tudor technique: polygon + circles at vertices for rounded corners.
-        clipPathUnits="objectBoundingBox" makes it responsive without JavaScript.
-        
-        Hexagon Geometry:
-        - Pointy-top orientation (vertex at top and bottom)
-        - Aspect ratio: cos(30°) ≈ 0.866 (width = height × 0.866)
-        - Corner radius: 0.05 (relative to bounding box)
-        
-        @see Requirements: 1.2, 1.3, 1.4, 11.1, 11.2, 11.3, 11.4
-      -->
-      <svg width="0" height="0" aria-hidden="true">
-        <defs>
-          <clipPath id="rounded-hexagon" clipPathUnits="objectBoundingBox">
-            <!-- Base hexagon polygon (pointy-top orientation) -->
-            <polygon points="0.5,0 0.933,0.25 0.933,0.75 0.5,1 0.067,0.75 0.067,0.25" />
-            <!-- Rounded corner circles (Ana Tudor technique) -->
-            <circle cx="0.5" cy="0.05" r="0.05" />
-            <circle cx="0.89" cy="0.27" r="0.05" />
-            <circle cx="0.89" cy="0.73" r="0.05" />
-            <circle cx="0.5" cy="0.95" r="0.05" />
-            <circle cx="0.11" cy="0.73" r="0.05" />
-            <circle cx="0.11" cy="0.27" r="0.05" />
-          </clipPath>
-        </defs>
-      </svg>
-      
-      <style>
-        :host {
-          display: inline-block;
-        }
-        ${avatarStyles}
-      </style>
-      <div class="${avatarClasses}"${testIDAttr}${ariaHiddenAttr}>
-        ${this.renderContent(type, size, src, alt)}
-      </div>
-    `;
+    // Render different structures based on type
+    // Agent type uses SVG-based hexagon with Bézier curves for true rounded corners
+    // Human type uses CSS border-radius for circle shape
+    if (type === 'agent') {
+      this._shadowRoot.innerHTML = `
+        <style>
+          :host {
+            display: inline-block;
+          }
+          ${avatarStyles}
+        </style>
+        ${this.renderAgentSVG(size, interactive, decorative, testID)}
+      `;
+    } else {
+      // Human type uses standard div with CSS border-radius
+      this._shadowRoot.innerHTML = `
+        <style>
+          :host {
+            display: inline-block;
+          }
+          ${avatarStyles}
+        </style>
+        <div class="${avatarClasses}"${testIDAttr}${ariaHiddenAttr}>
+          ${this.renderContent(type, size, src, alt)}
+        </div>
+      `;
+    }
     
     // Attach error handler to image element if present
     // @see Requirements: 5.6 - Fall back to icon placeholder when image fails to load
     this.attachImageErrorHandler();
+  }
+  
+  /**
+   * Render agent avatar using inline SVG with Bézier curves.
+   * 
+   * Uses SVG path with quadratic Bézier curves (Q commands) for true rounded corners
+   * instead of the Ana Tudor technique (polygon + circles) which creates bumps.
+   * 
+   * SVG approach benefits:
+   * - True rounded corners with smooth transitions
+   * - Border applied via SVG stroke (not clipped like CSS border)
+   * - 1:1 aspect ratio (square bounding box, hexagon fits inside)
+   * - Interactive hover state works via CSS on stroke-width
+   * 
+   * @param size - Avatar size variant
+   * @param interactive - Whether avatar shows hover visual feedback
+   * @param decorative - Whether avatar is hidden from screen readers
+   * @param testID - Test ID for automated testing
+   * @returns HTML string for SVG-based agent avatar
+   * 
+   * @see Requirements: 1.2, 1.3, 1.4, 7.1-7.4, 11.1-11.4
+   */
+  private renderAgentSVG(size: AvatarSize, interactive: boolean, decorative: boolean, testID: string | null): string {
+    const sizePx = AVATAR_SIZE_PX[size];
+    const cornerRadius = sizePx * 0.08; // 8% of size for rounded corners
+    
+    // Generate the hexagon path with Bézier curves
+    const hexPath = generateRoundedHexagonPath(sizePx, cornerRadius);
+    
+    // Determine border width based on size and interactive state
+    // xs-xl: borderDefault (1px), xxl: borderEmphasis (2px)
+    // Interactive hover increases to borderEmphasis (handled in CSS)
+    const borderWidth = size === 'xxl' ? 2 : 1;
+    
+    // Generate CSS classes for the SVG container
+    const svgClasses = [
+      'avatar',
+      'avatar--agent',
+      `avatar--size-${size}`,
+      interactive ? 'avatar--interactive' : '',
+    ].filter(Boolean).join(' ');
+    
+    // Generate test ID attribute
+    const testIDAttr = testID ? ` data-testid="${this.escapeHtml(testID)}"` : '';
+    
+    // Generate aria-hidden attribute for decorative avatars
+    const ariaHiddenAttr = decorative ? ' aria-hidden="true"' : '';
+    
+    // Unique ID for clipPath (to avoid conflicts with multiple avatars)
+    const clipId = `hexagon-clip-${Math.random().toString(36).substr(2, 9)}`;
+    
+    // Render icon content
+    const iconContent = this.renderIconContent('agent', size);
+    
+    return `
+      <div class="${svgClasses}"${testIDAttr}${ariaHiddenAttr}>
+        <svg 
+          class="avatar__hexagon-svg"
+          width="${sizePx}" 
+          height="${sizePx}" 
+          viewBox="0 0 ${sizePx} ${sizePx}"
+          aria-hidden="true"
+        >
+          <defs>
+            <clipPath id="${clipId}">
+              <path d="${hexPath}" />
+            </clipPath>
+          </defs>
+          
+          <!-- Background fill -->
+          <path 
+            class="avatar__hexagon-bg"
+            d="${hexPath}" 
+            fill="var(--color-avatar-agent)"
+          />
+          
+          <!-- Border stroke -->
+          <path 
+            class="avatar__hexagon-border"
+            d="${hexPath}" 
+            fill="none"
+            stroke="${size === 'xxl' ? 'var(--white-100)' : 'var(--color-avatar-border)'}"
+            stroke-width="${borderWidth}"
+            stroke-opacity="${size === 'xxl' ? '1' : '0.48'}"
+          />
+        </svg>
+        
+        <!-- Icon content positioned over SVG -->
+        <div class="avatar__content" style="clip-path: url(#${clipId});">
+          ${iconContent}
+        </div>
+      </div>
+    `;
   }
   
   /**

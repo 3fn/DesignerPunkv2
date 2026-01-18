@@ -46,31 +46,33 @@ enum AvatarTokens {
     static let iconSizeXxl: CGFloat = 64
     
     // MARK: - Avatar Color Tokens
+    // These reference DesignTokens semantic color tokens for consistency with the Rosetta pipeline.
+    // When semantic tokens change, regenerate DesignTokens via: npx ts-node src/generators/generateTokenFiles.ts
     
     /// Background color for human avatars
     /// References: color.avatar.human → orange300
     /// @see Requirements: 4.1 - Human type background color
-    static let colorHuman: Color = Color(red: 1.0, green: 0.42, blue: 0.208) // #FF6B35 (orange300 light base)
+    static let colorHuman: Color = Color(DesignTokens.colorAvatarHuman)
     
     /// Background color for agent avatars
-    /// References: color.avatar.agent → teal300
+    /// References: color.avatar.agent → teal200
     /// @see Requirements: 4.2 - Agent type background color
-    static let colorAgent: Color = Color(red: 0.024, green: 0.714, blue: 0.831) // #06B6D4 (teal300 light base)
+    static let colorAgent: Color = Color(DesignTokens.colorAvatarAgent)
     
     /// Icon color on human avatar background
     /// References: color.avatar.contrast.onHuman → white100
     /// @see Requirements: 6.1 - Human type icon contrast color
-    static let contrastOnHuman: Color = .white
+    static let contrastOnHuman: Color = Color(DesignTokens.colorAvatarContrastOnHuman)
     
     /// Icon color on agent avatar background
     /// References: color.avatar.contrast.onAgent → white100
     /// @see Requirements: 6.2 - Agent type icon contrast color
-    static let contrastOnAgent: Color = .white
+    static let contrastOnAgent: Color = Color(DesignTokens.colorAvatarContrastOnAgent)
     
     /// Border color for avatars (xs through xl sizes)
     /// References: color.avatar.border → gray100
     /// @see Requirements: 7.2 - Border color for xs-xl sizes
-    static let borderColor: Color = Color(red: 0.6, green: 0.6, blue: 0.6) // gray100 approximation
+    static let borderColor: Color = Color(DesignTokens.colorAvatarBorder)
     
     /// Border color for xxl size avatars
     /// References: color.contrast.onSurface
@@ -395,18 +397,14 @@ public struct Avatar: View {
     /**
      * Avatar width based on type.
      * 
-     * - Human (circle): width = height
-     * - Agent (hexagon): width = height × cos(30°) ≈ height × 0.866
+     * Both human (circle) and agent (hexagon) now use 1:1 aspect ratio (square frame).
+     * The hexagon fits inside the square bounding box, matching web implementation.
      * 
-     * @see Requirements: 1.3 - Hexagon aspect ratio
+     * @see Requirements: 12.4 - 1:1 aspect ratio for hexagon
      */
     private var avatarWidth: CGFloat {
-        switch type {
-        case .human:
-            return size.dimension
-        case .agent:
-            return size.dimension * RoundedPointyTopHexagon.aspectRatio
-        }
+        // Both types use square frame (1:1 aspect ratio)
+        return size.dimension
     }
     
     // MARK: - Content
@@ -520,8 +518,8 @@ public struct Avatar: View {
      * Background color based on avatar type.
      * 
      * Uses semantic color tokens for avatar backgrounds:
-     * - Human: color.avatar.human → orange300 (#FF6B35)
-     * - Agent: color.avatar.agent → teal300 (#06B6D4)
+     * - Human: color.avatar.human → orange300
+     * - Agent: color.avatar.agent → teal200 (brighter than teal300)
      * 
      * @see Requirements: 4.1, 4.2 - Background colors per type
      */

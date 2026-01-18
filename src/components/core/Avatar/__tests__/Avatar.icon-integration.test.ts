@@ -251,9 +251,10 @@ describe('Avatar Icon Integration', () => {
      */
 
     /**
-     * @see Requirements: 3.1 - xs avatar uses avatar.icon.size.xs component token (12px)
+     * @see Requirements: 3.1 - xs avatar uses calc(icon.size050 × 0.75) = 12px
+     * Icon size derived from icon.size050 (16px) × 0.75 = 12px
      */
-    it('should use xs icon size for xs avatar (CSS custom property)', async () => {
+    it('should use xs icon size for xs avatar (CSS calc with icon token)', async () => {
       const avatar = document.createElement('avatar-base') as AvatarBaseElement;
       avatar.type = 'human';
       avatar.size = 'xs';
@@ -264,9 +265,9 @@ describe('Avatar Icon Integration', () => {
       const iconContainer = avatar.shadowRoot?.querySelector('.avatar__icon') as HTMLElement;
       expect(iconContainer).toBeTruthy();
       
-      // xs size uses CSS custom property var(--avatar-icon-size-xs)
+      // xs size uses calc() with icon.size050 token: calc(var(--icon-size-050) * 0.75)
       const style = iconContainer?.getAttribute('style') || '';
-      expect(style).toContain('var(--avatar-icon-size-xs)');
+      expect(style).toContain('calc(var(--icon-size-050) * 0.75)');
     });
 
     /**
@@ -346,9 +347,10 @@ describe('Avatar Icon Integration', () => {
     });
 
     /**
-     * @see Requirements: 3.6 - xxl avatar uses avatar.icon.size.xxl component token (64px)
+     * @see Requirements: 3.6 - xxl avatar uses calc(icon.size050 × 4) = 64px
+     * Icon size derived from icon.size050 (16px) × 4 = 64px
      */
-    it('should use xxl icon size for xxl avatar (CSS custom property)', async () => {
+    it('should use xxl icon size for xxl avatar (CSS calc with icon token)', async () => {
       const avatar = document.createElement('avatar-base') as AvatarBaseElement;
       avatar.type = 'human';
       avatar.size = 'xxl';
@@ -359,9 +361,9 @@ describe('Avatar Icon Integration', () => {
       const iconContainer = avatar.shadowRoot?.querySelector('.avatar__icon') as HTMLElement;
       expect(iconContainer).toBeTruthy();
       
-      // xxl size uses CSS custom property var(--avatar-icon-size-xxl)
+      // xxl size uses calc() with icon.size050 token: calc(var(--icon-size-050) * 4)
       const style = iconContainer?.getAttribute('style') || '';
-      expect(style).toContain('var(--avatar-icon-size-xxl)');
+      expect(style).toContain('calc(var(--icon-size-050) * 4)');
     });
   });
 
@@ -409,7 +411,8 @@ describe('Avatar Icon Integration', () => {
 
       const iconContainer = avatar.shadowRoot?.querySelector('.avatar__icon') as HTMLElement;
       const style = iconContainer?.getAttribute('style') || '';
-      expect(style).toContain('var(--avatar-icon-size-xs)');
+      // xs size uses calc() with icon.size050 token: calc(var(--icon-size-050) * 0.75)
+      expect(style).toContain('calc(var(--icon-size-050) * 0.75)');
     });
 
     it('should use xxl icon size for agent type with xxl size', async () => {
@@ -422,7 +425,8 @@ describe('Avatar Icon Integration', () => {
 
       const iconContainer = avatar.shadowRoot?.querySelector('.avatar__icon') as HTMLElement;
       const style = iconContainer?.getAttribute('style') || '';
-      expect(style).toContain('var(--avatar-icon-size-xxl)');
+      // xxl size uses calc() with icon.size050 token: calc(var(--icon-size-050) * 4)
+      expect(style).toContain('calc(var(--icon-size-050) * 4)');
     });
   });
 
@@ -626,7 +630,7 @@ describe('Avatar Icon Integration', () => {
       expect(svg?.classList.contains('icon-base--size-050')).toBe(false);
     });
 
-    it('should switch from standard size to CSS custom property size', async () => {
+    it('should switch from standard size to CSS calc size', async () => {
       const avatar = document.createElement('avatar-base') as AvatarBaseElement;
       avatar.type = 'human';
       avatar.size = 'md';
@@ -637,14 +641,15 @@ describe('Avatar Icon Integration', () => {
       let svg = avatar.shadowRoot?.querySelector('.avatar__icon svg');
       expect(svg?.classList.contains('icon-base--size-075')).toBe(true);
 
-      // Change to xxl (uses CSS custom property)
+      // Change to xxl (uses CSS calc with icon token)
       avatar.size = 'xxl';
 
       await new Promise(resolve => setTimeout(resolve, 0));
 
       const iconContainer = avatar.shadowRoot?.querySelector('.avatar__icon') as HTMLElement;
       const style = iconContainer?.getAttribute('style') || '';
-      expect(style).toContain('var(--avatar-icon-size-xxl)');
+      // xxl size uses calc() with icon.size050 token: calc(var(--icon-size-050) * 4)
+      expect(style).toContain('calc(var(--icon-size-050) * 4)');
     });
   });
 });

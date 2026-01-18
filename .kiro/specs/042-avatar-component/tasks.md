@@ -769,6 +769,214 @@ This implementation follows a phased approach:
     - Ensure all examples work on all platforms
     - _Requirements: 17.5_
 
+- [ ] 10. Post-Implementation Refinements
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  
+  **Context:**
+  Following initial implementation, this task addresses token derivation improvements
+  to eliminate hard-coded values and ensure proper token chain relationships. The avatar
+  component tokens should derive from existing icon tokens rather than using magic numbers
+  or spacing tokens (which output as rem). The key insight is that avatar size = icon size × 2,
+  so all avatar sizes can be derived from icon tokens using CSS calc() with multipliers.
+  
+  Additionally, visual feedback identified issues with the hexagon shape implementation:
+  - Rounded corners using polygon + circles (Ana Tudor technique) create nipple-like bumps
+  - CSS clip-path clips borders, causing partial border visibility at top/bottom
+  - Agent avatar background (teal300) is too dark
+  - Hexagon aspect ratio should be 1:1 (square) for visual balance
+  
+  The solution is to replace CSS clip-path with an SVG-based hexagon using quadratic
+  Bézier curves for true rounded corners, with SVG stroke for borders that won't be clipped.
+  
+  **Success Criteria:**
+  - Visual demo created showing all avatar sizes and styles
+  - Avatar size tokens derive from icon tokens using calc() multipliers (not spacing tokens)
+  - Avatar icon size tokens (xs, xxl) derive from icon.size050 with multipliers
+  - Token output format consistency verified across platforms (px units, not rem)
+  - All avatar/icon combinations render correctly after changes
+  - Agent avatar uses teal200 background (brighter than teal300)
+  - Hexagon has true rounded corners (no nipple bumps) via Bézier curves
+  - Hexagon borders render completely (not clipped) via SVG stroke
+  - Hexagon uses 1:1 aspect ratio (square bounding box)
+  - Cross-platform visual consistency maintained (web, iOS, Android)
+  
+  **Primary Artifacts:**
+  - Visual demo HTML file for avatar component
+  - Updated avatar size token derivations in avatar.tokens.ts (icon-based)
+  - Updated avatar icon size token derivations in avatar.tokens.ts
+  - Updated Avatar.styles.css with calc()-based sizing
+  - SVG-based hexagon implementation with Bézier curves (Avatar.web.ts)
+  - Updated color.avatar.agent token (teal200 reference)
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/042-avatar-component/completion/task-10-completion.md`
+  - Summary: `docs/specs/042-avatar-component/task-10-summary.md` (triggers release detection)
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 10 Complete: Post-Implementation Refinements"`
+  - Verify: Check GitHub for committed changes
+
+  - [x] 10.1 Create visual demo of all avatar sizes and styles
+    **Type**: Setup
+    **Validation**: Tier 1 - Minimal
+    - Create demo HTML file showing all 6 sizes (xs, sm, md, lg, xl, xxl)
+    - Include both human (circle) and agent (hexagon) types
+    - Include icon-only and image variants for human type
+    - Include interactive state examples
+    - Serve locally to verify visual rendering
+    - _Requirements: 2.1-2.6, 3.1-3.6_
+
+  - [x] 10.2 Derive avatar sizes from icon tokens using calc() multipliers
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Rationale**: Avatar size = icon size × 2 (50% ratio). By deriving from icon tokens,
+    we get proper px units and maintain the mathematical relationship explicitly.
+    
+    **Icon-to-Avatar Size Mapping:**
+    | Size | Icon Token | Multiplier | Avatar Size |
+    |------|------------|------------|-------------|
+    | xs   | icon.size050 (16px) | × 1.5 | 24px |
+    | sm   | icon.size050 (16px) | × 2 | 32px |
+    | md   | icon.size075 (20px) | × 2 | 40px |
+    | lg   | icon.size100 (24px) | × 2 | 48px |
+    | xl   | icon.size500 (40px) | × 2 | 80px |
+    | xxl  | icon.size050 (16px) | × 8 | 128px |
+    
+    **Implementation Steps:**
+    - Update Avatar.styles.css to use `calc(var(--icon-size-XXX) * N)` for avatar heights/widths
+    - Remove avatar.size.xl and avatar.size.xxl component tokens (no longer needed)
+    - Keep avatar.size.xs through avatar.size.lg as references to spacing tokens (they work)
+    - Verify generated CSS outputs proper px values via icon token chain
+    - Test all 6 avatar sizes render correctly
+    - _Requirements: 2.1-2.6, 14.1, 14.2_
+
+  - [x] 10.3 Derive avatar icon sizes from icon.size050 with multipliers
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Rationale**: xs (12px) and xxl (64px) icons have no direct icon tokens. Derive from
+    icon.size050 (16px) using multipliers to maintain token chain and get proper px units.
+    
+    **Icon Size Derivations:**
+    | Avatar | Icon Size | Derivation |
+    |--------|-----------|------------|
+    | xs     | 12px      | icon.size050 × 0.75 |
+    | xxl    | 64px      | icon.size050 × 4 |
+    
+    **Implementation Steps:**
+    - Update avatar.icon.size.xs to use `calc(var(--icon-size-050) * 0.75)` in CSS
+    - Update avatar.icon.size.xxl to use `calc(var(--icon-size-050) * 4)` in CSS
+    - Remove hard-coded values from avatar.tokens.ts for icon sizes
+    - Verify generated CSS outputs proper px values
+    - Test xs and xxl avatar icons render at correct sizes (12px and 64px)
+    - _Requirements: 3.1, 3.6, 14.1, 14.2_
+
+  - [x] 10.4 Remove `* 1px` hack from Avatar CSS
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Depends on**: 10.2, 10.3 (calc()-based sizing provides proper units)
+    - Locate and remove `calc(var(--avatar-size-xl) * 1px)` hack in Avatar.styles.css
+    - Locate and remove `calc(var(--avatar-size-xxl) * 1px)` hack in Avatar.styles.css
+    - The calc()-based icon derivations from 10.2 provide proper px units
+    - Verify avatar xl and xxl sizes render correctly after removal
+    - _Requirements: 2.5, 2.6_
+
+  - [x] 10.5 Verify token output format consistency
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Audit avatar-related tokens for unit consistency (px vs unitless)
+    - Verify all avatar size tokens output with consistent format
+    - Verify icon size tokens output as px/dp/pt (not REM)
+    - Ensure consistent output format across web, iOS, Android
+    - _Requirements: 14.1, 14.2_
+
+  - [x] 10.6 Update agent avatar background to teal200
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Rationale**: Visual feedback indicates teal300 is too dark. Changing to teal200 (#4D9BA5)
+    provides a brighter, more vibrant appearance for AI agent avatars.
+    
+    **Implementation Steps:**
+    - Update `color.avatar.agent` semantic token to reference `teal200` instead of `teal300`
+    - Update any documentation referencing teal300 for agent avatars
+    - Verify contrast ratio with white icon still meets WCAG AA (4.5:1)
+    - Update tests that assert teal300 reference
+    - Rebuild and verify visual appearance in demo
+    - _Requirements: 4.2, 6.2_
+
+  - [x] 10.7 Replace hexagon clip-path with SVG Bézier path
+    **Type**: Architecture
+    **Validation**: Tier 3 - Comprehensive
+    **Rationale**: Current polygon + circles (Ana Tudor technique) creates nipple-like bumps
+    at vertices. Quadratic Bézier curves provide true rounded corners with smooth transitions.
+    Additionally, clip-path clips borders, causing partial border visibility.
+    
+    **Technical Approach:**
+    - Replace CSS `clip-path: url(#rounded-hexagon)` with inline SVG container
+    - Use SVG `<path>` with quadratic Bézier curves (Q commands) for rounded hexagon
+    - Apply `stroke` to SVG path for borders (not CSS border which gets clipped)
+    - Apply `fill` for background color
+    - Use `<clipPath>` internally to clip icon/image content to hexagon shape
+    - Change aspect-ratio from 0.866 to 1 (square bounding box, hexagon fits inside)
+    
+    **Hexagon Path Geometry (pointy-top, 1:1 aspect ratio):**
+    - 6 vertices with quadratic curves at each corner
+    - Corner radius proportional to size (use token or percentage)
+    - Path defined in viewBox coordinates, scales with container
+    
+    **Implementation Steps:**
+    - Create SVG path string generator function for rounded hexagon
+    - Update Avatar.web.ts render method to use SVG container for agent type
+    - Move border styling from CSS to SVG stroke attributes
+    - Update Avatar.styles.css to remove clip-path and aspect-ratio for agent
+    - Ensure icon content clips correctly within hexagon
+    - Test all 6 sizes render correctly with proper borders
+    - Test interactive hover state (border width increase) works with SVG stroke
+    - Update tests for new SVG-based structure
+    - _Requirements: 1.2, 1.3, 1.4, 7.1-7.4, 11.1-11.4_
+
+  - [x] 10.8 Update iOS agent avatar hexagon implementation
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Depends on**: 10.7 (web implementation establishes pattern)
+    **Rationale**: iOS implementation should match web's Bézier curve approach for
+    visual consistency. SwiftUI Path with quadTo curves provides equivalent capability.
+    
+    **Implementation Steps:**
+    - Update Avatar.swift hexagon shape to use Path with quadratic curves
+    - Change aspect ratio to 1:1 (square frame)
+    - Apply stroke for borders instead of overlay
+    - Update background color reference to teal200
+    - Verify visual consistency with web implementation
+    - Update tests as needed
+    - _Requirements: 1.2, 1.3, 12.1-12.4, 14.1_
+
+  - [x] 10.9 Update Android agent avatar hexagon implementation
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Depends on**: 10.7 (web implementation establishes pattern)
+    **Rationale**: Android implementation should match web's Bézier curve approach for
+    visual consistency. Compose Path with quadraticBezierTo provides equivalent capability.
+    
+    **Implementation Steps:**
+    - Update Avatar.kt hexagon shape to use Path with quadraticBezierTo
+    - Change aspect ratio to 1:1 (square modifier)
+    - Apply stroke for borders using drawBehind or border modifier
+    - Update background color reference to teal200
+    - Verify visual consistency with web implementation
+    - Update tests as needed
+    - _Requirements: 1.2, 1.3, 13.1-13.4, 14.2_
+
+  - [ ]\* 10.10 Placeholder: Additional feedback items
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Reserved for additional issues discovered during testing
+    - Will be populated as feedback is collected
+    - _Requirements: TBD_
+
 ---
 
 ## Notes
@@ -780,4 +988,5 @@ This implementation follows a phased approach:
 - All tests follow the web component testing patterns from Test Development Standards
 - Cross-platform validation (Task 9) ensures behavioral consistency across all three platforms
 - Icon component integration assumes Spec 004 is complete and working
+- Task 10 addresses post-implementation refinements discovered after initial rollback
 

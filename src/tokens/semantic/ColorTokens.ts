@@ -328,10 +328,10 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
 
   'color.avatar.agent': {
     name: 'color.avatar.agent',
-    primitiveReferences: { value: 'teal300' },
+    primitiveReferences: { value: 'teal200' },
     category: SemanticCategory.COLOR,
     context: 'Background color for AI agent avatars',
-    description: 'Teal background for AI agent hexagons - provides distinct, technical visual identity'
+    description: 'Teal background for AI agent hexagons - provides distinct, technical visual identity (teal200 for brighter appearance)'
   },
 
   'color.avatar.contrast.onHuman': {

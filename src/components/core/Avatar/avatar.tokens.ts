@@ -13,17 +13,26 @@
  * - iOS: Swift constants (AvatarTokens.sizeXs)
  * - Android: Kotlin constants (AvatarTokens.sizeXs)
  * 
- * Token Relationships:
- * - avatar.size.xs (24px) references space300
- * - avatar.size.sm (32px) references space400
- * - avatar.size.md (40px) references space500
- * - avatar.size.lg (48px) references space600
- * - avatar.size.xl (80px) derivation: SPACING_BASE_VALUE * 10
- * - avatar.size.xxl (128px) derivation: SPACING_BASE_VALUE * 16
+ * IMPORTANT: Web Platform Token Strategy
+ * The web platform uses CSS calc() with icon tokens to derive avatar sizes,
+ * ensuring proper px units and maintaining the mathematical relationship
+ * (avatar size = icon size × multiplier). The component tokens defined here
+ * are primarily used for:
+ * - iOS and Android platforms (which don't use CSS calc())
+ * - Documentation and cross-referencing
+ * - Maintaining the token chain for traceability
  * 
- * Icon Size Token Relationships (gap fillers for sizes without existing icon tokens):
- * - avatar.icon.size.xs (12px) derivation: SPACING_BASE_VALUE * 1.5
- * - avatar.icon.size.xxl (64px) derivation: SPACING_BASE_VALUE * 8
+ * Web CSS Derivations (in Avatar.styles.css):
+ * - xs: calc(icon.size050 × 1.5) = 24px
+ * - sm: calc(icon.size050 × 2) = 32px
+ * - md: calc(icon.size075 × 2) = 40px
+ * - lg: calc(icon.size100 × 2) = 48px
+ * - xl: calc(icon.size500 × 2) = 80px
+ * - xxl: calc(icon.size050 × 8) = 128px
+ * 
+ * Icon Size Derivations (in Avatar.web.ts):
+ * - xs: calc(icon.size050 × 0.75) = 12px
+ * - xxl: calc(icon.size050 × 4) = 64px
  * 
  * @see .kiro/specs/042-avatar-component/design.md for token consumption strategy
  * @see .kiro/specs/034-component-architecture-system for Stemma System details
@@ -40,6 +49,9 @@ import { spacingTokens, SPACING_BASE_VALUE } from '../../../tokens/SpacingTokens
  * Each token either references a primitive spacing token or uses a family-conformant
  * derivation, and includes reasoning explaining why the token exists.
  * 
+ * NOTE: Web platform uses CSS calc() with icon tokens for sizing (see Avatar.styles.css).
+ * These component tokens are primarily used for iOS/Android platforms and documentation.
+ * 
  * Size token values:
  * - size.xs: 24px (3 × base, references space300)
  * - size.sm: 32px (4 × base, references space400)
@@ -48,9 +60,9 @@ import { spacingTokens, SPACING_BASE_VALUE } from '../../../tokens/SpacingTokens
  * - size.xl: 80px (10 × base, derivation)
  * - size.xxl: 128px (16 × base, derivation)
  * 
- * Icon size token values (gap fillers):
- * - icon.size.xs: 12px (1.5 × base, derivation) - no existing icon token for this size
- * - icon.size.xxl: 64px (8 × base, derivation) - no existing icon token for this size
+ * Icon size token values (gap fillers - web uses calc() instead):
+ * - icon.size.xs: 12px (1.5 × base, derivation) - web uses calc(icon.size050 × 0.75)
+ * - icon.size.xxl: 64px (8 × base, derivation) - web uses calc(icon.size050 × 4)
  * 
  * @see Requirements 2.1-2.6, 3.1, 3.6 in .kiro/specs/042-avatar-component/requirements.md
  */

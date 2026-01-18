@@ -2,7 +2,7 @@
 
 **A True Native Cross-Platform Design System with Mathematical Foundations**
 
-[![Version](https://img.shields.io/badge/Version-4.2.0-purple)](RELEASE-NOTES-4.2.0.md)
+[![Version](https://img.shields.io/badge/Version-5.0.0-purple)](RELEASE-NOTES-5.0.0.md)
 [![Repository](https://img.shields.io/badge/GitHub-DesignerPunkv2-blue)](https://github.com/3fn/DesignerPunkv2)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
@@ -64,6 +64,7 @@ DesignerPunk has completed its **robust token system architecture** (Rosetta Sys
 **Core Components** (Production Ready) - Migrated to Stemma System naming
 | Component | Description | Behavioral Contracts |
 |-----------|-------------|---------------------|
+| `Avatar` | User/AI agent representation with shape-based differentiation | 6 contracts |
 | `Button-CTA` | Call-to-action button with size/visual variants and blend utilities | 7 contracts |
 | `Button-Icon` | Icon-only button with blend utilities and incremental DOM | 5 contracts |
 | `Button-VerticalList-Set` | Container/orchestrator for vertical list selection patterns | 9 contracts |
@@ -113,6 +114,16 @@ With the Stemma System foundation complete, future development focuses on:
 4. **Additional Semantic Components**: Expanding Form Inputs and other families
 
 ### ✅ Recently Completed
+
+**Avatar Component** (January 2026) - v5.0.0
+- New `Avatar` component for representing users (Human) and AI agents (Agent)
+- Shape-based differentiation: circles for humans, hexagons for AI agents
+- Six size variants (xs through xxl) with 8px baseline grid alignment
+- Image support for human avatars with icon fallback
+- Interactive mode with hover visual feedback
+- Full cross-platform support: Web (Web Components), iOS (SwiftUI), Android (Jetpack Compose)
+- 5 new semantic color tokens, 6 avatar size tokens
+- AI Collaboration Framework steering documentation
 
 **Vertical List Buttons Pattern** (January 2026) - v4.2.0
 - New `Button-VerticalList-Set` container component for vertical list selection patterns

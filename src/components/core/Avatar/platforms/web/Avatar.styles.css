@@ -59,23 +59,30 @@
 /**
  * Agent avatar shape (hexagon).
  * 
- * Uses SVG clipPath for rounded hexagon with pointy-top orientation.
- * The aspect-ratio ensures the hexagon maintains its mathematical
- * proportions: width = height × cos(30°) ≈ 0.866
+ * Uses inline SVG with Bézier curves for true rounded corners.
+ * The SVG approach replaces CSS clip-path to avoid border clipping issues.
  * 
  * - Represents synthetic, constructed AI agents
  * - Pointy-top orientation for dynamic, crystalline feel
- * - Rounded corners via Ana Tudor technique (SVG clipPath)
+ * - True rounded corners via quadratic Bézier curves
+ * - 1:1 aspect ratio (square bounding box, hexagon fits inside)
  * 
  * @see Requirements: 1.2, 1.3, 1.4 - Hexagon shape with correct aspect ratio
- * @see Requirements: 11.1, 11.2, 11.3, 11.4 - SVG clipPath implementation
+ * @see Requirements: 11.1, 11.2, 11.3, 11.4 - SVG implementation
  */
 .avatar--agent {
-  /* Hexagon aspect ratio: cos(30°) ≈ 0.866 (width = height × 0.866) */
-  aspect-ratio: 0.866;
+  /* Square bounding box - hexagon fits inside with proper proportions */
+  aspect-ratio: 1;
   
-  /* SVG clipPath for rounded hexagon shape */
-  clip-path: url(#rounded-hexagon);
+  /* Position relative for absolute positioning of content overlay */
+  position: relative;
+  
+  /* Remove default border - handled by SVG stroke */
+  /* Using !important to override base .avatar border rules */
+  border: none !important;
+  
+  /* Transparent background - SVG provides the fill */
+  background-color: transparent;
 }
 
 /* ==========================================================================
@@ -83,115 +90,123 @@
    ========================================================================== */
 
 /**
- * Size variants using component tokens.
+ * Size variants derived from icon tokens using calc() multipliers.
  * 
- * All sizes reference avatar component tokens which in turn reference
- * spacing tokens or calculated values from the mathematical foundation.
+ * Avatar size = icon size × multiplier. This approach:
+ * - Maintains the mathematical relationship (avatar = 2× icon size)
+ * - Gets proper px units from icon tokens (not rem from spacing tokens)
+ * - Keeps token chain explicit and traceable
  * 
  * For agent type (hexagon), height is set and width is derived from aspect-ratio.
  * For human type (circle), both width and height must be set explicitly.
  * 
- * Token Relationships:
- * - xs: avatar.size.xs → space300 (24px)
- * - sm: avatar.size.sm → space400 (32px)
- * - md: avatar.size.md → space500 (40px)
- * - lg: avatar.size.lg → space600 (48px)
- * - xl: avatar.size.xl → SPACING_BASE_VALUE × 10 (80px)
- * - xxl: avatar.size.xxl → SPACING_BASE_VALUE × 16 (128px)
+ * Icon-to-Avatar Size Mapping:
+ * - xs: icon.size050 (16px) × 1.5 = 24px
+ * - sm: icon.size050 (16px) × 2 = 32px
+ * - md: icon.size075 (20px) × 2 = 40px
+ * - lg: icon.size100 (24px) × 2 = 48px
+ * - xl: icon.size500 (40px) × 2 = 80px
+ * - xxl: icon.size050 (16px) × 8 = 128px
  * 
- * @see Requirements: 2.1-2.6 - Size variants using component tokens
+ * @see Requirements: 2.1-2.6 - Size variants
  */
 
 /**
  * Extra small avatar (24px).
  * 
+ * Derived from icon.size050 (16px) × 1.5 = 24px
  * For inline mentions and compact UI contexts where minimal visual footprint is needed.
  * 
- * @see Requirements: 2.1 - xs size using avatar.size.xs token
+ * @see Requirements: 2.1 - xs size (24px)
  */
 .avatar--size-xs {
-  height: var(--avatar-size-xs);
+  height: calc(var(--icon-size-050) * 1.5);
 }
 
 /* Human type needs explicit width since it doesn't use aspect-ratio */
 .avatar--human.avatar--size-xs {
-  width: var(--avatar-size-xs);
+  width: calc(var(--icon-size-050) * 1.5);
 }
 
 /**
  * Small avatar (32px).
  * 
+ * Derived from icon.size050 (16px) × 2 = 32px
  * For list items and secondary UI contexts with moderate visual presence.
  * 
- * @see Requirements: 2.2 - sm size using avatar.size.sm token
+ * @see Requirements: 2.2 - sm size (32px)
  */
 .avatar--size-sm {
-  height: var(--avatar-size-sm);
+  height: calc(var(--icon-size-050) * 2);
 }
 
 .avatar--human.avatar--size-sm {
-  width: var(--avatar-size-sm);
+  width: calc(var(--icon-size-050) * 2);
 }
 
 /**
  * Medium avatar (40px) - Default size.
  * 
+ * Derived from icon.size075 (20px) × 2 = 40px
  * Provides balanced visual weight for most UI contexts.
  * 
- * @see Requirements: 2.3 - md size using avatar.size.md token
+ * @see Requirements: 2.3 - md size (40px)
  * @see Requirements: 2.7 - Default to "md" size when prop omitted
  */
 .avatar--size-md {
-  height: var(--avatar-size-md);
+  height: calc(var(--icon-size-075) * 2);
 }
 
 .avatar--human.avatar--size-md {
-  width: var(--avatar-size-md);
+  width: calc(var(--icon-size-075) * 2);
 }
 
 /**
  * Large avatar (48px).
  * 
+ * Derived from icon.size100 (24px) × 2 = 48px
  * For profile headers and primary UI contexts requiring prominent visual presence.
  * 
- * @see Requirements: 2.4 - lg size using avatar.size.lg token
+ * @see Requirements: 2.4 - lg size (48px)
  */
 .avatar--size-lg {
-  height: var(--avatar-size-lg);
+  height: calc(var(--icon-size-100) * 2);
 }
 
 .avatar--human.avatar--size-lg {
-  width: var(--avatar-size-lg);
+  width: calc(var(--icon-size-100) * 2);
 }
 
 /**
  * Extra large avatar (80px).
  * 
+ * Derived from icon.size500 (40px) × 2 = 80px
  * For profile pages and hero sections where avatar is a focal point.
  * 
- * @see Requirements: 2.5 - xl size using avatar.size.xl token
+ * @see Requirements: 2.5 - xl size (80px)
  */
 .avatar--size-xl {
-  height: calc(var(--avatar-size-xl) * 1px);
+  height: calc(var(--icon-size-500) * 2);
 }
 
 .avatar--human.avatar--size-xl {
-  width: calc(var(--avatar-size-xl) * 1px);
+  width: calc(var(--icon-size-500) * 2);
 }
 
 /**
  * Extra extra large avatar (128px).
  * 
+ * Derived from icon.size050 (16px) × 8 = 128px
  * For hero profiles and full-page profile views requiring maximum visual impact.
  * 
- * @see Requirements: 2.6 - xxl size using avatar.size.xxl token
+ * @see Requirements: 2.6 - xxl size (128px)
  */
 .avatar--size-xxl {
-  height: calc(var(--avatar-size-xxl) * 1px);
+  height: calc(var(--icon-size-050) * 8);
 }
 
 .avatar--human.avatar--size-xxl {
-  width: calc(var(--avatar-size-xxl) * 1px);
+  width: calc(var(--icon-size-050) * 8);
 }
 
 /* ==========================================================================
@@ -219,11 +234,13 @@
 /**
  * Agent avatar background (teal).
  * 
- * @see Requirements: 4.2 - Agent type uses color.avatar.agent token
+ * Note: Agent avatars use SVG fill (avatar__hexagon-bg) instead of CSS background-color.
+ * The background-color is set to transparent in the shape variant section to prevent
+ * a square background from showing behind the hexagon shape.
+ * 
+ * @see Requirements: 4.2 - Agent type uses color.avatar.agent token (applied via SVG fill)
  */
-.avatar--agent {
-  background-color: var(--color-avatar-agent);
-}
+/* .avatar--agent background handled by SVG fill - see .avatar__hexagon-bg */
 
 /* ==========================================================================
    Border Styles
@@ -453,4 +470,112 @@
  */
 .avatar--has-image {
   background-color: transparent;
+}
+
+
+/* ==========================================================================
+   Agent Avatar SVG Styles
+   ========================================================================== */
+
+/**
+ * SVG container for agent hexagon.
+ * 
+ * Positioned absolutely to fill the avatar container.
+ * The SVG contains the hexagon path with fill and stroke.
+ */
+.avatar__hexagon-svg {
+  /* Position at top-left of container */
+  position: absolute;
+  top: 0;
+  left: 0;
+  
+  /* Ensure SVG doesn't capture pointer events meant for content */
+  pointer-events: none;
+}
+
+/**
+ * Hexagon background fill.
+ * 
+ * Uses the agent avatar color token for fill.
+ */
+.avatar__hexagon-bg {
+  /* Fill color set inline via style attribute */
+}
+
+/**
+ * Hexagon border stroke.
+ * 
+ * Border is applied via SVG stroke instead of CSS border to avoid
+ * clipping issues with clip-path.
+ * 
+ * @see Requirements: 7.1-7.4 - Border styles per size
+ */
+.avatar__hexagon-border {
+  /* Stroke properties set inline via style attributes */
+  /* Transition for interactive hover state */
+  transition: stroke-width var(--motion-focus-transition-duration) var(--motion-focus-transition-easing);
+}
+
+/**
+ * Interactive hover state for agent hexagon border.
+ * 
+ * Increases stroke width on hover for visual feedback.
+ * 
+ * @see Requirements: 8.1, 8.2 - Interactive hover state
+ */
+.avatar--agent.avatar--interactive:hover .avatar__hexagon-border {
+  stroke-width: var(--border-emphasis);
+}
+
+/**
+ * Content container for agent avatar.
+ * 
+ * Positioned over the SVG hexagon and clipped to the hexagon shape.
+ * Contains the icon content.
+ */
+.avatar__content {
+  /* Position absolutely over the SVG */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
+  /* Center content */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Ensure content is above SVG */
+  z-index: 1;
+}
+
+/**
+ * Agent avatar size overrides.
+ * 
+ * For agent type, we need explicit width since aspect-ratio is 1:1.
+ * Height is set by the base size classes, width matches height.
+ */
+.avatar--agent.avatar--size-xs {
+  width: calc(var(--icon-size-050) * 1.5);
+}
+
+.avatar--agent.avatar--size-sm {
+  width: calc(var(--icon-size-050) * 2);
+}
+
+.avatar--agent.avatar--size-md {
+  width: calc(var(--icon-size-075) * 2);
+}
+
+.avatar--agent.avatar--size-lg {
+  width: calc(var(--icon-size-100) * 2);
+}
+
+.avatar--agent.avatar--size-xl {
+  width: calc(var(--icon-size-500) * 2);
+}
+
+.avatar--agent.avatar--size-xxl {
+  width: calc(var(--icon-size-050) * 8);
 }
