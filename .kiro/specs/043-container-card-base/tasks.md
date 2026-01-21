@@ -119,7 +119,7 @@ This spec implements Container-Card-Base as a type primitive component, includin
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Container-Card-Base Component Implementation"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 2.1 Create Container-Card-Base directory structure and schema
+  - [~] 2.1 Create Container-Card-Base directory structure and schema
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Create `src/components/core/Container-Card-Base/` directory
