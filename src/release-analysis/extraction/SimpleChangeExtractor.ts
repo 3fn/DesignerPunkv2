@@ -413,6 +413,13 @@ export class SimpleChangeExtractor {
     const ambiguousItems: string[] = [];
 
     for (const match of patternMatches) {
+      // Skip matches with zero confidence (negation patterns detected)
+      // This is a defensive check - findPatternMatches should already filter these,
+      // but we add this as a safety net
+      if (match.confidence === 0) {
+        continue;
+      }
+      
       if (match.confidence < this.config.confidenceThresholds.uncertaintyThreshold) {
         ambiguousItems.push(`${match.match} (line ${match.line})`);
       }
@@ -574,6 +581,11 @@ export class SimpleChangeExtractor {
         const line = lines[i];
         const lineContent = line.toLowerCase();
 
+        // Skip lines with negation patterns (e.g., "Breaking Changes: None")
+        if (this.hasNegationPattern(lineContent)) {
+          continue;
+        }
+
         if (this.config.breakingChangeKeywords.some(keyword =>
           lineContent.includes(keyword.toLowerCase())
         )) {
@@ -588,6 +600,32 @@ export class SimpleChangeExtractor {
     }
 
     return this.semanticDeduplicateBreakingChanges(breakingChanges);
+  }
+
+  /**
+   * Check if a line contains negation patterns indicating NO breaking changes
+   */
+  private hasNegationPattern(lineContent: string): boolean {
+    // Strip markdown formatting (bold, italic) before checking patterns
+    const strippedLine = lineContent.replace(/\*\*/g, '').replace(/\*/g, '').replace(/__/g, '').replace(/_/g, '');
+    
+    const negationPatterns = [
+      /breaking\s*changes?\s*[:\s]*none/i,
+      /breaking\s*changes?\s*[:\s]*n\/a/i,
+      /breaking\s*changes?\s*[:\s]*not applicable/i,
+      /no\s+breaking\s*changes?/i,
+      /breaking\s*changes?\s*[:\s]*0\b/i,
+      /breaking\s*changes?\s*[:\s]*zero/i,
+      /without\s+breaking\s*changes?/i,
+      /none\s*-?\s*all\s+existing/i,  // "None - all existing ... unchanged"
+    ];
+
+    for (const pattern of negationPatterns) {
+      if (pattern.test(strippedLine)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -891,6 +929,28 @@ export class SimpleChangeExtractor {
   ): Promise<BreakingChange | null> {
     if (!cleanLine) {
       return null;
+    }
+
+    // Strip markdown formatting before checking patterns
+    const strippedLine = cleanLine.replace(/\*\*/g, '').replace(/\*/g, '').replace(/__/g, '').replace(/_/g, '');
+    const lowerLine = strippedLine.toLowerCase();
+    
+    // Check for negation patterns - skip lines that indicate NO breaking changes
+    const negationPatterns = [
+      /breaking\s*changes?\s*[:\s]*none/i,
+      /breaking\s*changes?\s*[:\s]*n\/a/i,
+      /breaking\s*changes?\s*[:\s]*not applicable/i,
+      /no\s+breaking\s*changes?/i,
+      /breaking\s*changes?\s*[:\s]*0\b/i,
+      /breaking\s*changes?\s*[:\s]*zero/i,
+      /without\s+breaking\s*changes?/i,
+      /none\s*-?\s*all\s+existing/i,  // "None - all existing ... unchanged"
+    ];
+
+    for (const pattern of negationPatterns) {
+      if (pattern.test(lowerLine)) {
+        return null; // Skip this line - it indicates NO breaking changes
+      }
     }
 
     const id = generateId();
@@ -1652,6 +1712,13 @@ export class SimpleChangeExtractor {
     let matchCount = 0;
 
     for (const match of patternMatches) {
+      // Skip matches with zero confidence (negation patterns detected)
+      // This is a defensive check - findPatternMatches should already filter these,
+      // but we add this as a safety net
+      if (match.confidence === 0) {
+        continue;
+      }
+      
       totalConfidence += match.confidence;
       matchCount++;
 

@@ -2,7 +2,7 @@
 
 **A True Native Cross-Platform Design System with Mathematical Foundations**
 
-[![Version](https://img.shields.io/badge/Version-5.0.0-purple)](docs/releases/RELEASE-NOTES-5.0.0.md)
+[![Version](https://img.shields.io/badge/Version-5.1.0-purple)](docs/releases/RELEASE-NOTES-5.1.0.md)
 [![Repository](https://img.shields.io/badge/GitHub-DesignerPunkv2-blue)](https://github.com/3fn/DesignerPunkv2)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
@@ -70,6 +70,7 @@ DesignerPunk has completed its **robust token system architecture** (Rosetta Sys
 | `Button-VerticalList-Set` | Container/orchestrator for vertical list selection patterns | 9 contracts |
 | `Button-VerticalList-Item` | Presentational button for vertical list selection | 8 contracts |
 | `Container-Base` | Primitive layout component with token-based styling | 7 contracts |
+| `Container-Card-Base` | Type primitive for card UI patterns with curated props | 6 contracts |
 | `Icon-Base` | Cross-platform icon system with 15 Feather icons | 5 contracts |
 
 **Placeholder Families** (Structural Foundation Ready)
@@ -114,6 +115,16 @@ With the Stemma System foundation complete, future development focuses on:
 4. **Additional Semantic Components**: Expanding Form Inputs and other families
 
 ### ✅ Recently Completed
+
+**Container-Card-Base Component** (January 2026) - v5.1.0
+- New `Container-Card-Base` type primitive component for card UI patterns
+- Curated subset of Container-Base props with opinionated defaults
+- Zero-config card rendering with surface backgrounds, container shadows, rounded corners
+- Interactive behavior with blend utilities (8% hover, 12% press)
+- Full cross-platform support: Web (Web Components), iOS (SwiftUI), Android (Jetpack Compose)
+- Container-Base enhanced with directional padding props (`paddingVertical`, `paddingHorizontal`, `paddingBlockStart`, `paddingBlockEnd`, `paddingInlineStart`, `paddingInlineEnd`)
+- Container-Base enhanced with `borderColor` prop support
+- CSS logical properties for RTL internationalization support
 
 **Avatar Component** (January 2026) - v5.0.0
 - New `Avatar` component for representing users (Human) and AI agents (Agent)

@@ -172,6 +172,11 @@ export class PatternMatcher {
       if (index !== -1) {
         const confidence = this.calculateKeywordConfidence(keyword, line, context);
         
+        // Skip matches with zero confidence (negation patterns detected)
+        if (confidence === 0) {
+          continue;
+        }
+        
         matches.push({
           pattern: keyword,
           match: line.substring(index, index + keyword.length),
@@ -191,15 +196,60 @@ export class PatternMatcher {
    */
   private calculateKeywordConfidence(keyword: string, line: string, context: string): number {
     let confidence = 0.5; // Base confidence
+    
+    // Strip markdown formatting before checking patterns
+    const strippedLine = line.replace(/\*\*/g, '').replace(/\*/g, '').replace(/__/g, '').replace(/_/g, '');
+    const lowerLine = strippedLine.toLowerCase();
+    const lowerKeyword = keyword.toLowerCase();
+
+    // Properly escape special regex characters
+    const escapedKeyword = lowerKeyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    
+    // Check for explicit negation patterns first - these should completely filter out the match
+    // Patterns like "Breaking Changes: None", "No breaking changes", "breaking changes: n/a"
+    const explicitNegationPatterns = [
+      // Direct patterns: "breaking: none", "breaking none"
+      new RegExp(`${escapedKeyword}[:\\s]*none`, 'i'),
+      new RegExp(`${escapedKeyword}[:\\s]*n\\/a`, 'i'),
+      new RegExp(`${escapedKeyword}[:\\s]*not applicable`, 'i'),
+      // Compound phrase patterns with optional 's' suffix: "breaking changes: none"
+      new RegExp(`${escapedKeyword}s?[:\\s]*none`, 'i'),
+      new RegExp(`${escapedKeyword}s?[:\\s]*n\\/a`, 'i'),
+      new RegExp(`${escapedKeyword}s?[:\\s]*not applicable`, 'i'),
+      // Compound phrase patterns with " change(s)" suffix: "breaking changes: none"
+      // This handles keywords like "breaking" followed by " changes: none"
+      new RegExp(`${escapedKeyword}\\s+changes?[:\\s]*none`, 'i'),
+      new RegExp(`${escapedKeyword}\\s+changes?[:\\s]*n\\/a`, 'i'),
+      new RegExp(`${escapedKeyword}\\s+changes?[:\\s]*not applicable`, 'i'),
+      // Prefix negation patterns
+      new RegExp(`no\\s+${escapedKeyword}`, 'i'),
+      new RegExp(`no\\s+${escapedKeyword}s?`, 'i'),
+      new RegExp(`no\\s+${escapedKeyword}\\s+changes?`, 'i'),
+      new RegExp(`without\\s+${escapedKeyword}`, 'i'),
+      new RegExp(`without\\s+${escapedKeyword}s?`, 'i'),
+      new RegExp(`without\\s+${escapedKeyword}\\s+changes?`, 'i'),
+      // Zero/none patterns
+      new RegExp(`${escapedKeyword}[:\\s]*0\\b`, 'i'),
+      new RegExp(`${escapedKeyword}[:\\s]*zero`, 'i'),
+      new RegExp(`${escapedKeyword}[:\\s]*-\\s*none`, 'i'),
+      new RegExp(`${escapedKeyword}s?[:\\s]*-\\s*none`, 'i'),
+      new RegExp(`${escapedKeyword}\\s+changes?[:\\s]*-\\s*none`, 'i'),
+    ];
+
+    for (const pattern of explicitNegationPatterns) {
+      if (pattern.test(lowerLine)) {
+        return 0; // Completely filter out this match
+      }
+    }
 
     // Boost confidence for exact matches
-    if (line.toLowerCase().includes(keyword.toLowerCase())) {
+    if (lowerLine.includes(lowerKeyword)) {
       confidence += 0.2;
     }
 
     // Boost confidence for word boundaries
-    const wordBoundaryRegex = new RegExp(`\\b${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
-    if (wordBoundaryRegex.test(line)) {
+    const wordBoundaryRegex = new RegExp(`\\b${escapedKeyword}\\b`, 'i');
+    if (wordBoundaryRegex.test(strippedLine)) {
       confidence += 0.2;
     }
 
@@ -213,11 +263,11 @@ export class PatternMatcher {
       confidence += 0.1;
     }
 
-    // Reduce confidence for negation context
-    const negationWords = ['not', 'no', 'without', 'except', 'excluding'];
+    // Reduce confidence for negation context (general negation words nearby)
+    const negationWords = ['not', 'no', 'without', 'except', 'excluding', 'none', 'n/a', 'unchanged'];
     for (const negation of negationWords) {
-      if (line.toLowerCase().includes(negation)) {
-        confidence -= 0.2;
+      if (lowerLine.includes(negation)) {
+        confidence -= 0.3;
         break;
       }
     }
