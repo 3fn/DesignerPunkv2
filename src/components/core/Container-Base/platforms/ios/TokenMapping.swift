@@ -440,6 +440,8 @@ private let colorSuccess: Color = Color.green
 private let colorWarning: Color = Color.orange
 private let colorInfo: Color = Color.blue
 private let colorBorder: Color = Color.gray.opacity(0.3)
+private let colorBorderSubtle: Color = Color.gray.opacity(0.15)  // color.border.subtle
+private let colorBorderEmphasis: Color = Color.gray.opacity(0.5)  // color.border.emphasis
 
 // Opacity tokens (semantic)
 private let opacitySubtle: Double = 0.88   // opacity1100 (base × 11 = 0.08 × 11)

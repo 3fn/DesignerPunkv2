@@ -56,6 +56,122 @@ fun mapPaddingToDp(padding: PaddingValue): Dp {
     }
 }
 
+/**
+ * Map padding value to Compose Dp (single value helper)
+ * 
+ * Helper function to convert a single padding value to Dp.
+ * Used by calculateDirectionalPadding for individual edge calculations.
+ * 
+ * @param padding Padding value to convert
+ * @return Dp padding value
+ * 
+ * @see Requirements 1.1-1.10 - Directional padding
+ */
+fun mapPaddingValueToDp(padding: PaddingValue): Dp {
+    return when (padding) {
+        PaddingValue.None -> 0.dp
+        PaddingValue.P050 -> spaceInset050
+        PaddingValue.P100 -> spaceInset100
+        PaddingValue.P150 -> spaceInset150
+        PaddingValue.P200 -> spaceInset200
+        PaddingValue.P300 -> spaceInset300
+        PaddingValue.P400 -> spaceInset400
+    }
+}
+
+/**
+ * Calculate directional padding with override hierarchy
+ * 
+ * Implements the padding override hierarchy:
+ * 1. Individual edges (paddingBlockStart, etc.) - highest priority
+ * 2. Axis props (paddingVertical, paddingHorizontal) - medium priority
+ * 3. Uniform padding (padding prop) - lowest priority
+ * 
+ * Maps logical properties to physical edges:
+ * - blockStart -> top
+ * - blockEnd -> bottom
+ * - inlineStart -> start (respects layout direction)
+ * - inlineEnd -> end (respects layout direction)
+ * 
+ * @param uniform Base uniform padding (lowest priority)
+ * @param vertical Vertical axis padding (overrides uniform for top/bottom)
+ * @param horizontal Horizontal axis padding (overrides uniform for start/end)
+ * @param blockStart Top edge padding (highest priority)
+ * @param blockEnd Bottom edge padding (highest priority)
+ * @param inlineStart Start edge padding (highest priority)
+ * @param inlineEnd End edge padding (highest priority)
+ * @return PaddingValues with calculated padding values
+ * 
+ * @example
+ * ```kotlin
+ * // Uniform padding only
+ * calculateDirectionalPadding(PaddingValue.P200, null, null, null, null, null, null)
+ * // Returns PaddingValues(16.dp, 16.dp, 16.dp, 16.dp)
+ * 
+ * // With axis override
+ * calculateDirectionalPadding(PaddingValue.P200, PaddingValue.P100, null, null, null, null, null)
+ * // Returns PaddingValues(start=16.dp, top=8.dp, end=16.dp, bottom=8.dp)
+ * 
+ * // With individual edge override
+ * calculateDirectionalPadding(PaddingValue.P200, PaddingValue.P100, null, PaddingValue.P050, null, null, null)
+ * // Returns PaddingValues(start=16.dp, top=4.dp, end=16.dp, bottom=8.dp)
+ * ```
+ * 
+ * @see Requirements 1.1-1.10 - Directional padding
+ */
+fun calculateDirectionalPadding(
+    uniform: PaddingValue,
+    vertical: PaddingValue?,
+    horizontal: PaddingValue?,
+    blockStart: PaddingValue?,
+    blockEnd: PaddingValue?,
+    inlineStart: PaddingValue?,
+    inlineEnd: PaddingValue?
+): androidx.compose.foundation.layout.PaddingValues {
+    // Start with uniform padding as base
+    val uniformDp = mapPaddingValueToDp(uniform)
+    
+    // Calculate top (block-start) with override hierarchy
+    var top = uniformDp
+    if (vertical != null && vertical != PaddingValue.None) {
+        top = mapPaddingValueToDp(vertical)
+    }
+    if (blockStart != null) {
+        top = mapPaddingValueToDp(blockStart)
+    }
+    
+    // Calculate bottom (block-end) with override hierarchy
+    var bottom = uniformDp
+    if (vertical != null && vertical != PaddingValue.None) {
+        bottom = mapPaddingValueToDp(vertical)
+    }
+    if (blockEnd != null) {
+        bottom = mapPaddingValueToDp(blockEnd)
+    }
+    
+    // Calculate start (inline-start) with override hierarchy
+    // In Compose, start/end automatically respect layout direction
+    var start = uniformDp
+    if (horizontal != null && horizontal != PaddingValue.None) {
+        start = mapPaddingValueToDp(horizontal)
+    }
+    if (inlineStart != null) {
+        start = mapPaddingValueToDp(inlineStart)
+    }
+    
+    // Calculate end (inline-end) with override hierarchy
+    var end = uniformDp
+    if (horizontal != null && horizontal != PaddingValue.None) {
+        end = mapPaddingValueToDp(horizontal)
+    }
+    if (inlineEnd != null) {
+        end = mapPaddingValueToDp(inlineEnd)
+    }
+    
+    // Return PaddingValues with start/end which respects layout direction
+    return androidx.compose.foundation.layout.PaddingValues(start = start, top = top, end = end, bottom = bottom)
+}
+
 // MARK: - Border Mapping
 
 /**
@@ -101,6 +217,39 @@ fun mapBorderToWidth(border: BorderValue): Dp {
  */
 fun getBorderColor(): Color {
     return colorBorder
+}
+
+/**
+ * Resolve border color from token name
+ * 
+ * Returns the color for the border based on the borderColor prop.
+ * If borderColor is null, defaults to color.border.default.
+ * 
+ * @param borderColor Optional border color token name
+ * @return Compose Color for the border
+ * 
+ * @example
+ * ```kotlin
+ * resolveBorderColor("color.border.subtle") // Returns colorBorderSubtle
+ * resolveBorderColor(null) // Returns colorBorder (default)
+ * resolveBorderColor("color.border.emphasis") // Returns colorBorderEmphasis
+ * ```
+ * 
+ * @see Requirements 2.1, 2.2, 2.3 - Border color
+ */
+fun resolveBorderColor(borderColor: String?): Color {
+    if (borderColor.isNullOrEmpty()) {
+        // Default to color.border.default when not specified
+        return colorBorder
+    }
+    
+    // Resolve the border color token
+    return when (borderColor) {
+        "color.border.default" -> colorBorder
+        "color.border.subtle" -> colorBorderSubtle
+        "color.border.emphasis" -> colorBorderEmphasis
+        else -> colorBorder  // Fall back to default border color for unknown tokens
+    }
 }
 
 // MARK: - Border Radius Mapping
@@ -380,6 +529,8 @@ private val elevationTooltip: Dp = DesignTokens.elevation_tooltip
 // Color tokens
 // Regenerated Dec 18, 2025 - includes color.canvas (Task 8.1) and all semantic tokens
 private val colorBorder: Color = Color(DesignTokens.color_border)
+private val colorBorderSubtle: Color = Color(DesignTokens.color_border_subtle)  // color.border.subtle
+private val colorBorderEmphasis: Color = Color(DesignTokens.color_border_emphasis)  // color.border.emphasis
 private val colorPrimary: Color = Color(DesignTokens.color_primary)
 private val colorSurface: Color = Color(DesignTokens.color_surface)
 private val colorBackground: Color = Color(DesignTokens.color_background)

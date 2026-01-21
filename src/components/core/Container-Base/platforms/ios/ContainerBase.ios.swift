@@ -30,10 +30,11 @@ import SwiftUI
  * Uses SwiftUI modifier chains to apply styling based on props.
  * 
  * Features:
- * - Padding control via space.inset tokens
+ * - Padding control via space.inset tokens (uniform, axis, and individual edges)
+ * - Directional padding with override hierarchy (individual > axis > uniform)
  * - Background color via semantic color tokens
  * - Shadow via semantic shadow tokens
- * - Border via border width tokens
+ * - Border via border width tokens with configurable border color
  * - Border radius via radius tokens
  * - Opacity via semantic opacity tokens
  * - Layering via z-index tokens
@@ -41,11 +42,26 @@ import SwiftUI
  * - Accessibility label support
  * - Hover state support via blend utilities (macOS/iPadOS with pointer)
  * 
+ * Directional Padding:
+ * - paddingVertical/paddingHorizontal: Axis-level padding
+ * - paddingBlockStart/paddingBlockEnd: Individual vertical edges
+ * - paddingInlineStart/paddingInlineEnd: Individual horizontal edges
+ * - Override hierarchy: individual edges > axis props > uniform padding
+ * 
  * @example
  * ```swift
  * // Basic usage
  * ContainerBase(padding: .p200, background: "color.surface") {
  *     Text("Content")
+ * }
+ * 
+ * // With directional padding
+ * ContainerBase(
+ *     padding: .p200,
+ *     paddingVertical: .p100,
+ *     paddingBlockStart: .p050
+ * ) {
+ *     Text("Content with asymmetric padding")
  * }
  * 
  * // With multiple styling props
@@ -57,6 +73,15 @@ import SwiftUI
  *     layering: .navigation
  * ) {
  *     Text("Content")
+ * }
+ * 
+ * // With border color
+ * ContainerBase(
+ *     padding: .p200,
+ *     border: .default,
+ *     borderColor: "color.border.subtle"
+ * ) {
+ *     Text("Content with subtle border")
  * }
  * 
  * // With hover state enabled
@@ -77,12 +102,33 @@ import SwiftUI
  *     Text("Full screen content")
  * }
  * ```
+ * 
+ * @see Requirements 1.1-1.10 - Directional padding
+ * @see Requirements 2.1-2.3 - Border color
  */
 struct ContainerBase<Content: View>: View {
     // MARK: - Properties
     
-    /// Internal padding for the container
+    /// Internal padding for the container (uniform, lowest priority)
     let padding: ContainerBasePaddingValue
+    
+    /// Vertical (block-axis) padding - overrides uniform padding for vertical axis
+    let paddingVertical: ContainerBasePaddingValue?
+    
+    /// Horizontal (inline-axis) padding - overrides uniform padding for horizontal axis
+    let paddingHorizontal: ContainerBasePaddingValue?
+    
+    /// Block-start padding (top) - highest priority, overrides paddingVertical
+    let paddingBlockStart: ContainerBasePaddingValue?
+    
+    /// Block-end padding (bottom) - highest priority, overrides paddingVertical
+    let paddingBlockEnd: ContainerBasePaddingValue?
+    
+    /// Inline-start padding (leading/left in LTR) - highest priority, overrides paddingHorizontal
+    let paddingInlineStart: ContainerBasePaddingValue?
+    
+    /// Inline-end padding (trailing/right in LTR) - highest priority, overrides paddingHorizontal
+    let paddingInlineEnd: ContainerBasePaddingValue?
     
     /// Background color token name
     let background: String?
@@ -92,6 +138,9 @@ struct ContainerBase<Content: View>: View {
     
     /// Border width value
     let border: ContainerBaseBorderValue
+    
+    /// Border color token name (defaults to color.border.default when nil)
+    let borderColor: String?
     
     /// Border radius value
     let borderRadius: ContainerBaseBorderRadiusValue
@@ -125,9 +174,16 @@ struct ContainerBase<Content: View>: View {
      * Initialize ContainerBase with styling props
      * 
      * @param padding Internal padding (default: .none)
+     * @param paddingVertical Vertical axis padding (default: nil)
+     * @param paddingHorizontal Horizontal axis padding (default: nil)
+     * @param paddingBlockStart Block-start edge padding (default: nil)
+     * @param paddingBlockEnd Block-end edge padding (default: nil)
+     * @param paddingInlineStart Inline-start edge padding (default: nil)
+     * @param paddingInlineEnd Inline-end edge padding (default: nil)
      * @param background Background color token name (default: nil)
      * @param shadow Shadow token name (default: nil)
      * @param border Border width (default: .none)
+     * @param borderColor Border color token name (default: nil, uses color.border.default)
      * @param borderRadius Border radius (default: .none)
      * @param opacity Opacity token name (default: nil)
      * @param layering Layering value for z-index (default: nil)
@@ -138,9 +194,16 @@ struct ContainerBase<Content: View>: View {
      */
     init(
         padding: ContainerBasePaddingValue = .none,
+        paddingVertical: ContainerBasePaddingValue? = nil,
+        paddingHorizontal: ContainerBasePaddingValue? = nil,
+        paddingBlockStart: ContainerBasePaddingValue? = nil,
+        paddingBlockEnd: ContainerBasePaddingValue? = nil,
+        paddingInlineStart: ContainerBasePaddingValue? = nil,
+        paddingInlineEnd: ContainerBasePaddingValue? = nil,
         background: String? = nil,
         shadow: String? = nil,
         border: ContainerBaseBorderValue = .none,
+        borderColor: String? = nil,
         borderRadius: ContainerBaseBorderRadiusValue = .none,
         opacity: String? = nil,
         layering: ContainerBaseLayeringValue? = nil,
@@ -150,9 +213,16 @@ struct ContainerBase<Content: View>: View {
         @ViewBuilder content: () -> Content
     ) {
         self.padding = padding
+        self.paddingVertical = paddingVertical
+        self.paddingHorizontal = paddingHorizontal
+        self.paddingBlockStart = paddingBlockStart
+        self.paddingBlockEnd = paddingBlockEnd
+        self.paddingInlineStart = paddingInlineStart
+        self.paddingInlineEnd = paddingInlineEnd
         self.background = background
         self.shadow = shadow
         self.border = border
+        self.borderColor = borderColor
         self.borderRadius = borderRadius
         self.opacity = opacity
         self.layering = layering
@@ -191,13 +261,31 @@ struct ContainerBase<Content: View>: View {
     // MARK: - Computed Properties
     
     /**
-     * Padding value from token
+     * Padding value from token with override hierarchy
      * 
-     * Maps padding prop to EdgeInsets using space.inset tokens.
-     * Returns EdgeInsets.zero for .none.
+     * Calculates EdgeInsets using the override hierarchy:
+     * 1. Individual edges (paddingBlockStart, etc.) - highest priority
+     * 2. Axis props (paddingVertical, paddingHorizontal) - medium priority
+     * 3. Uniform padding (padding prop) - lowest priority
+     * 
+     * Maps logical properties to physical edges:
+     * - blockStart -> top
+     * - blockEnd -> bottom
+     * - inlineStart -> leading (left in LTR, right in RTL)
+     * - inlineEnd -> trailing (right in LTR, left in RTL)
+     * 
+     * @see Requirements 1.7, 1.8 - Override hierarchy
      */
     private var paddingValue: EdgeInsets {
-        return mapContainerBasePaddingToEdgeInsets(padding)
+        return calculateDirectionalPadding(
+            uniform: padding,
+            vertical: paddingVertical,
+            horizontal: paddingHorizontal,
+            blockStart: paddingBlockStart,
+            blockEnd: paddingBlockEnd,
+            inlineStart: paddingInlineStart,
+            inlineEnd: paddingInlineEnd
+        )
     }
     
     /**
@@ -242,14 +330,17 @@ struct ContainerBase<Content: View>: View {
     /**
      * Border overlay view
      * 
-     * Creates border overlay using border width and color.border token.
+     * Creates border overlay using border width and border color.
+     * Uses borderColor prop if provided, otherwise defaults to color.border.default.
      * Returns nil for .none border.
+     * 
+     * @see Requirements 2.1, 2.2, 2.3 - Border color
      */
     private var borderOverlay: some View {
         Group {
             if border != .none {
                 RoundedRectangle(cornerRadius: cornerRadiusValue)
-                    .stroke(getContainerBaseBorderColor(), lineWidth: mapContainerBaseBorderToLineWidth(border))
+                    .stroke(resolveContainerBaseBorderColor(borderColor), lineWidth: mapContainerBaseBorderToLineWidth(border))
             }
         }
     }
@@ -418,6 +509,103 @@ func mapContainerBasePaddingToEdgeInsets(_ padding: ContainerBasePaddingValue) -
     }
 }
 
+/**
+ * Calculate directional padding with override hierarchy
+ * 
+ * Implements the padding override hierarchy:
+ * 1. Individual edges (paddingBlockStart, etc.) - highest priority
+ * 2. Axis props (paddingVertical, paddingHorizontal) - medium priority
+ * 3. Uniform padding (padding prop) - lowest priority
+ * 
+ * Maps logical properties to physical edges:
+ * - blockStart -> top
+ * - blockEnd -> bottom
+ * - inlineStart -> leading (respects layout direction)
+ * - inlineEnd -> trailing (respects layout direction)
+ * 
+ * @param uniform Base uniform padding (lowest priority)
+ * @param vertical Vertical axis padding (overrides uniform for top/bottom)
+ * @param horizontal Horizontal axis padding (overrides uniform for leading/trailing)
+ * @param blockStart Top edge padding (highest priority)
+ * @param blockEnd Bottom edge padding (highest priority)
+ * @param inlineStart Leading edge padding (highest priority)
+ * @param inlineEnd Trailing edge padding (highest priority)
+ * @returns EdgeInsets with calculated padding values
+ * 
+ * @see Requirements 1.1-1.10 - Directional padding
+ */
+func calculateDirectionalPadding(
+    uniform: ContainerBasePaddingValue,
+    vertical: ContainerBasePaddingValue?,
+    horizontal: ContainerBasePaddingValue?,
+    blockStart: ContainerBasePaddingValue?,
+    blockEnd: ContainerBasePaddingValue?,
+    inlineStart: ContainerBasePaddingValue?,
+    inlineEnd: ContainerBasePaddingValue?
+) -> EdgeInsets {
+    // Start with uniform padding as base
+    let uniformInsets = mapContainerBasePaddingToEdgeInsets(uniform)
+    
+    // Calculate top (block-start) with override hierarchy
+    var top = uniformInsets.top
+    if let vertical = vertical, vertical != .none {
+        top = mapContainerBasePaddingValueToCGFloat(vertical)
+    }
+    if let blockStart = blockStart {
+        top = mapContainerBasePaddingValueToCGFloat(blockStart)
+    }
+    
+    // Calculate bottom (block-end) with override hierarchy
+    var bottom = uniformInsets.bottom
+    if let vertical = vertical, vertical != .none {
+        bottom = mapContainerBasePaddingValueToCGFloat(vertical)
+    }
+    if let blockEnd = blockEnd {
+        bottom = mapContainerBasePaddingValueToCGFloat(blockEnd)
+    }
+    
+    // Calculate leading (inline-start) with override hierarchy
+    var leading = uniformInsets.leading
+    if let horizontal = horizontal, horizontal != .none {
+        leading = mapContainerBasePaddingValueToCGFloat(horizontal)
+    }
+    if let inlineStart = inlineStart {
+        leading = mapContainerBasePaddingValueToCGFloat(inlineStart)
+    }
+    
+    // Calculate trailing (inline-end) with override hierarchy
+    var trailing = uniformInsets.trailing
+    if let horizontal = horizontal, horizontal != .none {
+        trailing = mapContainerBasePaddingValueToCGFloat(horizontal)
+    }
+    if let inlineEnd = inlineEnd {
+        trailing = mapContainerBasePaddingValueToCGFloat(inlineEnd)
+    }
+    
+    return EdgeInsets(top: top, leading: leading, bottom: bottom, trailing: trailing)
+}
+
+/**
+ * Map padding value to CGFloat
+ * 
+ * Helper function to convert a single padding value to CGFloat.
+ * Used by calculateDirectionalPadding for individual edge calculations.
+ * 
+ * @param padding Padding value to convert
+ * @returns CGFloat padding value in points
+ */
+func mapContainerBasePaddingValueToCGFloat(_ padding: ContainerBasePaddingValue) -> CGFloat {
+    switch padding {
+    case .none: return 0
+    case .p050: return spaceInset050 /* space.inset.050 */
+    case .p100: return spaceInset100 /* space.inset.100 */
+    case .p150: return spaceInset150 /* space.inset.150 */
+    case .p200: return spaceInset200 /* space.inset.200 */
+    case .p300: return spaceInset300 /* space.inset.300 */
+    case .p400: return spaceInset400 /* space.inset.400 */
+    }
+}
+
 func resolveContainerBaseColorToken(_ tokenName: String?) -> Color {
     // Implementation would resolve token to Color
     return tokenName != nil ? Color.gray : Color.clear
@@ -446,6 +634,37 @@ func mapContainerBaseBorderToLineWidth(_ border: ContainerBaseBorderValue) -> CG
 func getContainerBaseBorderColor() -> Color {
     // Implementation would return color.border token value
     return Color.gray
+}
+
+/**
+ * Resolve border color from token name
+ * 
+ * Returns the color for the border based on the borderColor prop.
+ * If borderColor is nil, defaults to color.border.default.
+ * 
+ * @param borderColor Optional border color token name
+ * @returns SwiftUI Color for the border
+ * 
+ * @see Requirements 2.1, 2.2, 2.3 - Border color
+ */
+func resolveContainerBaseBorderColor(_ borderColor: String?) -> Color {
+    guard let borderColor = borderColor, !borderColor.isEmpty else {
+        // Default to color.border.default when not specified
+        return colorBorder
+    }
+    
+    // Resolve the border color token
+    switch borderColor {
+    case "color.border.default":
+        return colorBorder
+    case "color.border.subtle":
+        return colorBorderSubtle
+    case "color.border.emphasis":
+        return colorBorderEmphasis
+    default:
+        // Fall back to default border color for unknown tokens
+        return colorBorder
+    }
 }
 
 func resolveContainerBaseShadowToken(_ tokenName: String?) -> ContainerBaseShadowProperties {

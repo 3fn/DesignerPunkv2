@@ -10,11 +10,24 @@
  * Uses blend utilities for hover state colors instead of opacity workarounds.
  * This ensures cross-platform consistency with Web and iOS implementations.
  * 
+ * Features:
+ * - Padding control via space.inset tokens (uniform, axis, and individual edges)
+ * - Directional padding with override hierarchy (individual > axis > uniform)
+ * - Background color via semantic color tokens
+ * - Shadow via semantic shadow tokens (or elevation via layering)
+ * - Border via border width tokens with configurable border color
+ * - Border radius via radius tokens
+ * - Opacity via semantic opacity tokens
+ * - Layering via elevation tokens (handles both z-order and shadow on Android)
+ * - Accessibility content description support
+ * - Hover state support via blend utilities (desktop/ChromeOS with pointer)
+ * 
  * @see ../../../types.ts for ContainerBaseProps interface
  * @see ../../../tokens.ts for token reference mappings
  * @see .kiro/specs/010-container-component/design.md for complete design documentation
  * @see .kiro/specs/034-component-architecture-system for Stemma System details
  * @see .kiro/specs/031-blend-infrastructure-implementation for blend utilities
+ * @see .kiro/specs/043-container-card-base for directional padding requirements
  */
 
 package com.designerpunk.components.core
@@ -25,6 +38,7 @@ import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -37,7 +51,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalLayoutDirection
 import android.util.Log
 // Import theme-aware blend utilities for hover state color calculations
 // Uses hoverBlend() semantic extension for consistent state styling across components
@@ -51,27 +67,44 @@ import com.designerpunk.tokens.hoverBlend
  * Uses Jetpack Compose modifier chains to apply styling based on parameters.
  * 
  * Features:
- * - Padding control via space.inset tokens
+ * - Padding control via space.inset tokens (uniform, axis, and individual edges)
+ * - Directional padding with override hierarchy (individual > axis > uniform)
  * - Background color via semantic color tokens
  * - Shadow via semantic shadow tokens (or elevation via layering)
- * - Border via border width tokens
+ * - Border via border width tokens with configurable border color
  * - Border radius via radius tokens
  * - Opacity via semantic opacity tokens
  * - Layering via elevation tokens (handles both z-order and shadow on Android)
  * - Accessibility content description support
  * - Hover state support via blend utilities (desktop/ChromeOS with pointer)
  * 
+ * Directional Padding:
+ * - paddingVertical/paddingHorizontal: Axis-level padding
+ * - paddingBlockStart/paddingBlockEnd: Individual vertical edges
+ * - paddingInlineStart/paddingInlineEnd: Individual horizontal edges (respects RTL)
+ * - Override hierarchy: individual edges > axis props > uniform padding
+ * 
  * Android-Specific Behavior:
  * - Elevation tokens handle both stacking order and shadow rendering
  * - If both layering and shadow props are provided, layering takes precedence
  * - Development warning logged when both props are used
  * - Hover state uses darkerBlend for cross-platform consistency
+ * - Inline padding respects layout direction (LTR/RTL)
  * 
  * @example
  * ```kotlin
  * // Basic usage
  * ContainerBase(padding = ContainerBasePaddingValue.P200, background = "color.surface") {
  *     Text("Content")
+ * }
+ * 
+ * // With directional padding
+ * ContainerBase(
+ *     padding = ContainerBasePaddingValue.P200,
+ *     paddingVertical = ContainerBasePaddingValue.P100,
+ *     paddingBlockStart = ContainerBasePaddingValue.P050
+ * ) {
+ *     Text("Content with asymmetric padding")
  * }
  * 
  * // With multiple styling props
@@ -83,6 +116,15 @@ import com.designerpunk.tokens.hoverBlend
  *     layering = ContainerBaseLayeringValue.Navigation
  * ) {
  *     Text("Content")
+ * }
+ * 
+ * // With border color
+ * ContainerBase(
+ *     padding = ContainerBasePaddingValue.P200,
+ *     border = ContainerBaseBorderValue.Default,
+ *     borderColor = "color.border.subtle"
+ * ) {
+ *     Text("Content with subtle border")
  * }
  * 
  * // With hover state enabled
@@ -105,9 +147,16 @@ import com.designerpunk.tokens.hoverBlend
  * ```
  * 
  * @param padding Internal padding for the container (default: ContainerBasePaddingValue.None)
+ * @param paddingVertical Vertical (block-axis) padding - overrides uniform padding for vertical axis
+ * @param paddingHorizontal Horizontal (inline-axis) padding - overrides uniform padding for horizontal axis
+ * @param paddingBlockStart Block-start padding (top) - highest priority, overrides paddingVertical
+ * @param paddingBlockEnd Block-end padding (bottom) - highest priority, overrides paddingVertical
+ * @param paddingInlineStart Inline-start padding (start/left in LTR) - highest priority, overrides paddingHorizontal
+ * @param paddingInlineEnd Inline-end padding (end/right in LTR) - highest priority, overrides paddingHorizontal
  * @param background Background color token name (default: null)
  * @param shadow Shadow token name (default: null)
  * @param border Border width (default: ContainerBaseBorderValue.None)
+ * @param borderColor Border color token name (default: null, uses color.border.default)
  * @param borderRadius Border radius (default: ContainerBaseBorderRadiusValue.None)
  * @param opacity Opacity token name (default: null)
  * @param layering Layering value for elevation (default: null)
@@ -115,13 +164,23 @@ import com.designerpunk.tokens.hoverBlend
  * @param hoverable Whether hover state is enabled (default: false)
  * @param modifier Additional Compose modifiers (default: Modifier)
  * @param content Child composable content
+ * 
+ * @see Requirements 1.1-1.10 - Directional padding
+ * @see Requirements 2.1-2.3 - Border color
  */
 @Composable
 fun ContainerBase(
     padding: ContainerBasePaddingValue = ContainerBasePaddingValue.None,
+    paddingVertical: ContainerBasePaddingValue? = null,
+    paddingHorizontal: ContainerBasePaddingValue? = null,
+    paddingBlockStart: ContainerBasePaddingValue? = null,
+    paddingBlockEnd: ContainerBasePaddingValue? = null,
+    paddingInlineStart: ContainerBasePaddingValue? = null,
+    paddingInlineEnd: ContainerBasePaddingValue? = null,
     background: String? = null,
     shadow: String? = null,
     border: ContainerBaseBorderValue = ContainerBaseBorderValue.None,
+    borderColor: String? = null,
     borderRadius: ContainerBaseBorderRadiusValue = ContainerBaseBorderRadiusValue.None,
     opacity: String? = null,
     layering: ContainerBaseLayeringValue? = null,
@@ -140,6 +199,9 @@ fun ContainerBase(
         )
     }
     
+    // Get layout direction for inline padding calculations
+    val layoutDirection = LocalLayoutDirection.current
+    
     // Set up hover interaction source for hover state tracking
     val interactionSource = remember { MutableInteractionSource() }
     val isHovered by interactionSource.collectIsHoveredAsState()
@@ -156,6 +218,23 @@ fun ContainerBase(
         baseBackgroundColor
     }
     
+    // Calculate directional padding with override hierarchy
+    // @see Requirements 1.1-1.10 - Directional padding
+    val calculatedPadding = calculateContainerBaseDirectionalPadding(
+        uniform = padding,
+        vertical = paddingVertical,
+        horizontal = paddingHorizontal,
+        blockStart = paddingBlockStart,
+        blockEnd = paddingBlockEnd,
+        inlineStart = paddingInlineStart,
+        inlineEnd = paddingInlineEnd,
+        layoutDirection = layoutDirection
+    )
+    
+    // Resolve border color (defaults to color.border.default when null)
+    // @see Requirements 2.1-2.3 - Border color
+    val resolvedBorderColor = resolveContainerBaseBorderColor(borderColor)
+    
     // Build modifier chain with all styling
     val containerModifier = modifier
         .then(
@@ -167,12 +246,8 @@ fun ContainerBase(
             }
         )
         .then(
-            // Apply padding
-            if (padding != ContainerBasePaddingValue.None) {
-                Modifier.padding(mapContainerBasePaddingToDp(padding))
-            } else {
-                Modifier
-            }
+            // Apply directional padding using PaddingValues
+            Modifier.padding(calculatedPadding)
         )
         .then(
             // Apply elevation (handles both z-order and shadow on Android)
@@ -197,11 +272,11 @@ fun ContainerBase(
             )
         )
         .then(
-            // Apply border
+            // Apply border with configurable color
             if (border != ContainerBaseBorderValue.None) {
                 Modifier.border(
                     width = mapContainerBaseBorderToWidth(border),
-                    color = getContainerBaseBorderColor(),
+                    color = resolvedBorderColor,
                     shape = getContainerBaseRoundedCornerShape(borderRadius)
                 )
             } else {
@@ -311,9 +386,115 @@ fun mapContainerBasePaddingToDp(padding: ContainerBasePaddingValue): Dp {
     }
 }
 
+/**
+ * Calculate directional padding with override hierarchy
+ * 
+ * Implements the padding override hierarchy:
+ * 1. Individual edges (paddingBlockStart, etc.) - highest priority
+ * 2. Axis props (paddingVertical, paddingHorizontal) - medium priority
+ * 3. Uniform padding (padding prop) - lowest priority
+ * 
+ * Maps logical properties to physical edges:
+ * - blockStart -> top
+ * - blockEnd -> bottom
+ * - inlineStart -> start (respects layout direction)
+ * - inlineEnd -> end (respects layout direction)
+ * 
+ * @param uniform Base uniform padding (lowest priority)
+ * @param vertical Vertical axis padding (overrides uniform for top/bottom)
+ * @param horizontal Horizontal axis padding (overrides uniform for start/end)
+ * @param blockStart Top edge padding (highest priority)
+ * @param blockEnd Bottom edge padding (highest priority)
+ * @param inlineStart Start edge padding (highest priority)
+ * @param inlineEnd End edge padding (highest priority)
+ * @param layoutDirection Current layout direction for RTL support
+ * @returns PaddingValues with calculated padding values
+ * 
+ * @see Requirements 1.1-1.10 - Directional padding
+ */
+fun calculateContainerBaseDirectionalPadding(
+    uniform: ContainerBasePaddingValue,
+    vertical: ContainerBasePaddingValue?,
+    horizontal: ContainerBasePaddingValue?,
+    blockStart: ContainerBasePaddingValue?,
+    blockEnd: ContainerBasePaddingValue?,
+    inlineStart: ContainerBasePaddingValue?,
+    inlineEnd: ContainerBasePaddingValue?,
+    layoutDirection: LayoutDirection
+): PaddingValues {
+    // Start with uniform padding as base
+    val uniformDp = mapContainerBasePaddingToDp(uniform)
+    
+    // Calculate top (block-start) with override hierarchy
+    var top = uniformDp
+    if (vertical != null && vertical != ContainerBasePaddingValue.None) {
+        top = mapContainerBasePaddingToDp(vertical)
+    }
+    if (blockStart != null) {
+        top = mapContainerBasePaddingToDp(blockStart)
+    }
+    
+    // Calculate bottom (block-end) with override hierarchy
+    var bottom = uniformDp
+    if (vertical != null && vertical != ContainerBasePaddingValue.None) {
+        bottom = mapContainerBasePaddingToDp(vertical)
+    }
+    if (blockEnd != null) {
+        bottom = mapContainerBasePaddingToDp(blockEnd)
+    }
+    
+    // Calculate start (inline-start) with override hierarchy
+    // In Compose, start/end automatically respect layout direction
+    var start = uniformDp
+    if (horizontal != null && horizontal != ContainerBasePaddingValue.None) {
+        start = mapContainerBasePaddingToDp(horizontal)
+    }
+    if (inlineStart != null) {
+        start = mapContainerBasePaddingToDp(inlineStart)
+    }
+    
+    // Calculate end (inline-end) with override hierarchy
+    var end = uniformDp
+    if (horizontal != null && horizontal != ContainerBasePaddingValue.None) {
+        end = mapContainerBasePaddingToDp(horizontal)
+    }
+    if (inlineEnd != null) {
+        end = mapContainerBasePaddingToDp(inlineEnd)
+    }
+    
+    // Return PaddingValues with start/end which respects layout direction
+    return PaddingValues(start = start, top = top, end = end, bottom = bottom)
+}
+
 fun resolveContainerBaseColorToken(tokenName: String): Color {
     // Implementation would resolve token to Color
     return Color.Gray
+}
+
+/**
+ * Resolve border color from token name
+ * 
+ * Returns the color for the border based on the borderColor prop.
+ * If borderColor is null, defaults to color.border.default.
+ * 
+ * @param borderColor Optional border color token name
+ * @returns Compose Color for the border
+ * 
+ * @see Requirements 2.1, 2.2, 2.3 - Border color
+ */
+fun resolveContainerBaseBorderColor(borderColor: String?): Color {
+    if (borderColor.isNullOrEmpty()) {
+        // Default to color.border.default when not specified
+        return colorBorder
+    }
+    
+    // Resolve the border color token
+    return when (borderColor) {
+        "color.border.default" -> colorBorder
+        "color.border.subtle" -> colorBorderSubtle
+        "color.border.emphasis" -> colorBorderEmphasis
+        else -> colorBorder  // Fall back to default border color for unknown tokens
+    }
 }
 
 fun mapContainerBaseBorderToWidth(border: ContainerBaseBorderValue): Dp {

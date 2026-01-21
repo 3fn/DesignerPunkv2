@@ -45,6 +45,7 @@ properties:
     default: undefined
     description: |
       Internal padding for the container. Maps to space.inset tokens.
+      Applied uniformly to all sides unless overridden by axis or edge props.
       - none: No padding
       - 050: 4px (space.inset.050)
       - 100: 8px (space.inset.100)
@@ -52,6 +53,119 @@ properties:
       - 200: 16px (space.inset.200)
       - 300: 24px (space.inset.300)
       - 400: 32px (space.inset.400)
+      
+      Override hierarchy (highest to lowest priority):
+      1. Individual edges (paddingBlockStart, paddingBlockEnd, paddingInlineStart, paddingInlineEnd)
+      2. Axis props (paddingVertical, paddingHorizontal)
+      3. Uniform padding (this prop)
+  
+  paddingVertical:
+    type: "'none' | '050' | '100' | '150' | '200' | '300' | '400'"
+    required: false
+    default: undefined
+    description: |
+      Vertical (block-axis) padding for the container. Maps to space.inset tokens.
+      Applies to block-start and block-end (top and bottom in LTR/RTL).
+      Overrides uniform padding for vertical axis; overridden by individual edge props.
+      - none: No padding
+      - 050: 4px (space.inset.050)
+      - 100: 8px (space.inset.100)
+      - 150: 12px (space.inset.150)
+      - 200: 16px (space.inset.200)
+      - 300: 24px (space.inset.300)
+      - 400: 32px (space.inset.400)
+      
+      Web implementation: Uses CSS logical property padding-block.
+  
+  paddingHorizontal:
+    type: "'none' | '050' | '100' | '150' | '200' | '300' | '400'"
+    required: false
+    default: undefined
+    description: |
+      Horizontal (inline-axis) padding for the container. Maps to space.inset tokens.
+      Applies to inline-start and inline-end (left and right in LTR; right and left in RTL).
+      Overrides uniform padding for horizontal axis; overridden by individual edge props.
+      - none: No padding
+      - 050: 4px (space.inset.050)
+      - 100: 8px (space.inset.100)
+      - 150: 12px (space.inset.150)
+      - 200: 16px (space.inset.200)
+      - 300: 24px (space.inset.300)
+      - 400: 32px (space.inset.400)
+      
+      Web implementation: Uses CSS logical property padding-inline.
+  
+  paddingBlockStart:
+    type: "'none' | '050' | '100' | '150' | '200' | '300' | '400'"
+    required: false
+    default: undefined
+    description: |
+      Block-start padding for the container. Maps to space.inset tokens.
+      Applies to block-start edge only (top in horizontal writing modes).
+      Highest priority - overrides both paddingVertical and uniform padding.
+      - none: No padding
+      - 050: 4px (space.inset.050)
+      - 100: 8px (space.inset.100)
+      - 150: 12px (space.inset.150)
+      - 200: 16px (space.inset.200)
+      - 300: 24px (space.inset.300)
+      - 400: 32px (space.inset.400)
+      
+      Web implementation: Uses CSS logical property padding-block-start.
+  
+  paddingBlockEnd:
+    type: "'none' | '050' | '100' | '150' | '200' | '300' | '400'"
+    required: false
+    default: undefined
+    description: |
+      Block-end padding for the container. Maps to space.inset tokens.
+      Applies to block-end edge only (bottom in horizontal writing modes).
+      Highest priority - overrides both paddingVertical and uniform padding.
+      - none: No padding
+      - 050: 4px (space.inset.050)
+      - 100: 8px (space.inset.100)
+      - 150: 12px (space.inset.150)
+      - 200: 16px (space.inset.200)
+      - 300: 24px (space.inset.300)
+      - 400: 32px (space.inset.400)
+      
+      Web implementation: Uses CSS logical property padding-block-end.
+  
+  paddingInlineStart:
+    type: "'none' | '050' | '100' | '150' | '200' | '300' | '400'"
+    required: false
+    default: undefined
+    description: |
+      Inline-start padding for the container. Maps to space.inset tokens.
+      Applies to inline-start edge only (left in LTR; right in RTL).
+      Highest priority - overrides both paddingHorizontal and uniform padding.
+      - none: No padding
+      - 050: 4px (space.inset.050)
+      - 100: 8px (space.inset.100)
+      - 150: 12px (space.inset.150)
+      - 200: 16px (space.inset.200)
+      - 300: 24px (space.inset.300)
+      - 400: 32px (space.inset.400)
+      
+      Web implementation: Uses CSS logical property padding-inline-start.
+  
+  paddingInlineEnd:
+    type: "'none' | '050' | '100' | '150' | '200' | '300' | '400'"
+    required: false
+    default: undefined
+    description: |
+      Inline-end padding for the container. Maps to space.inset tokens.
+      Applies to inline-end edge only (right in LTR; left in RTL).
+      Highest priority - overrides both paddingHorizontal and uniform padding.
+      - none: No padding
+      - 050: 4px (space.inset.050)
+      - 100: 8px (space.inset.100)
+      - 150: 12px (space.inset.150)
+      - 200: 16px (space.inset.200)
+      - 300: 24px (space.inset.300)
+      - 400: 32px (space.inset.400)
+      
+      Web implementation: Uses CSS logical property padding-inline-end.
   
   background:
     type: ColorTokenName
@@ -80,7 +194,23 @@ properties:
       - default: 1px (border.border.default)
       - emphasis: 2px (border.border.emphasis)
       - heavy: 4px (border.border.heavy)
-      Border color uses color.border token.
+      Border color uses borderColor prop or defaults to color.border.default.
+  
+  borderColor:
+    type: ColorTokenName
+    required: false
+    default: undefined
+    description: |
+      Border color for the container. Accepts any semantic color token name.
+      Use generated ColorTokenName type for compile-time validation.
+      - When specified: Uses the provided color token for border color
+      - When undefined: Defaults to color.border.default
+      - When border is 'none': borderColor has no visible effect
+      
+      Common values:
+      - color.border.default: Standard border color
+      - color.border.subtle: Subtle/muted border color
+      - color.border.emphasis: Emphasized border color
   
   borderRadius:
     type: "'none' | 'tight' | 'normal' | 'loose'"
@@ -182,18 +312,36 @@ contracts:
       - Children maintain their own accessibility properties
   
   applies_padding:
-    description: Applies consistent internal padding
+    description: Applies consistent internal padding with override hierarchy
     behavior: |
-      When padding prop is set, Container-Base applies uniform padding
-      on all sides using space.inset tokens. Padding values follow the
-      8px baseline grid with mathematical relationships.
+      Container-Base supports three levels of padding control with a clear
+      override hierarchy (highest to lowest priority):
+      
+      1. Individual edges (paddingBlockStart, paddingBlockEnd, paddingInlineStart, paddingInlineEnd)
+         - Override axis props for their specific edge
+         - Use CSS logical properties on web for RTL support
+      
+      2. Axis props (paddingVertical, paddingHorizontal)
+         - paddingVertical: Applies to block-start and block-end
+         - paddingHorizontal: Applies to inline-start and inline-end
+         - Override uniform padding for their axis
+      
+      3. Uniform padding (padding prop)
+         - Applies to all four sides equally
+         - Lowest priority, overridden by axis and edge props
+      
+      All padding values use space.inset tokens following the 8px baseline grid.
+      Web implementation uses CSS logical properties for internationalization:
+      - padding-block, padding-inline for axis props
+      - padding-block-start, padding-block-end, padding-inline-start, padding-inline-end for edge props
     wcag: "1.4.12 Text Spacing"
     platforms: [web, ios, android]
     validation: |
-      - Padding applied uniformly on all sides
       - Padding values match space.inset token values
-      - Padding does not affect child component spacing
-      - 'none' value results in zero padding
+      - Override hierarchy: individual edges > axis props > uniform padding
+      - 'none' value results in zero padding for that level
+      - Web: Uses CSS logical properties for RTL support
+      - iOS/Android: Maps logical properties to physical edges based on layout direction
   
   applies_background:
     description: Applies background color styling
@@ -226,18 +374,24 @@ contracts:
       - Undefined shadow results in no shadow
   
   applies_border:
-    description: Applies border styling
+    description: Applies border styling with configurable color
     behavior: |
       When border prop is set, Container-Base applies a border with
-      the specified width using border tokens. Border color is always
-      color.border token for consistency. Border respects border radius.
+      the specified width using border tokens. Border color is controlled
+      by the borderColor prop:
+      - When borderColor is specified: Uses the provided color token
+      - When borderColor is undefined: Defaults to color.border.default
+      - When border is 'none': borderColor has no visible effect
+      
+      Border respects border radius when set.
     wcag: "1.4.11 Non-text Contrast"
     platforms: [web, ios, android]
     validation: |
       - Border width matches specified token value
-      - Border color uses color.border token
+      - Border color uses borderColor prop or defaults to color.border.default
       - Border respects border radius when set
-      - 'none' value results in no border
+      - 'none' border value results in no border (borderColor ignored)
+      - borderColor without border prop has no visible effect
   
   applies_radius:
     description: Applies border radius styling
@@ -283,7 +437,9 @@ tokens:
   color:
     - color.background
     - color.surface
-    - color.border
+    - color.border.default
+    - color.border.subtle
+    - color.border.emphasis
     - color.canvas
   shadow:
     - shadow.container

@@ -145,13 +145,25 @@ export class ContainerBaseWeb extends HTMLElement {
    * 
    * These attributes trigger attributeChangedCallback when modified.
    * Includes all Container-Base props that can be set via HTML attributes.
+   * 
+   * Directional padding attributes use kebab-case:
+   * - padding-vertical, padding-horizontal (axis props)
+   * - padding-block-start, padding-block-end (individual vertical edges)
+   * - padding-inline-start, padding-inline-end (individual horizontal edges)
    */
   static get observedAttributes(): string[] {
     return [
       'padding',
+      'padding-vertical',
+      'padding-horizontal',
+      'padding-block-start',
+      'padding-block-end',
+      'padding-inline-start',
+      'padding-inline-end',
       'background',
       'shadow',
       'border',
+      'border-color',
       'border-radius',
       'opacity',
       'layering',
@@ -273,13 +285,30 @@ export class ContainerBaseWeb extends HTMLElement {
    * - Semantic HTML element (or div by default)
    * - Slot for child content
    * - Hover state support via blend utilities
+   * 
+   * Directional padding uses CSS logical properties for RTL support:
+   * - padding-block, padding-inline for axis props
+   * - padding-block-start, padding-block-end, padding-inline-start, padding-inline-end for edges
    */
   private render(): void {
-    // Get attribute values
+    // Get attribute values - uniform padding
     const padding = this.getAttribute('padding') as PaddingValue | null;
+    
+    // Get attribute values - directional padding (axis props)
+    const paddingVertical = this.getAttribute('padding-vertical') as PaddingValue | null;
+    const paddingHorizontal = this.getAttribute('padding-horizontal') as PaddingValue | null;
+    
+    // Get attribute values - directional padding (individual edges)
+    const paddingBlockStart = this.getAttribute('padding-block-start') as PaddingValue | null;
+    const paddingBlockEnd = this.getAttribute('padding-block-end') as PaddingValue | null;
+    const paddingInlineStart = this.getAttribute('padding-inline-start') as PaddingValue | null;
+    const paddingInlineEnd = this.getAttribute('padding-inline-end') as PaddingValue | null;
+    
+    // Get attribute values - visual styling
     const background = this.getAttribute('background') as ColorTokenName | null;
     const shadow = this.getAttribute('shadow') as ShadowTokenName | null;
     const border = this.getAttribute('border') as BorderValue | null;
+    const borderColor = this.getAttribute('border-color') as ColorTokenName | null;
     const borderRadius = this.getAttribute('border-radius') as BorderRadiusValue | null;
     const opacity = this.getAttribute('opacity') as OpacityTokenName | null;
     const layering = this.getAttribute('layering') as LayeringValue | null;
@@ -290,9 +319,16 @@ export class ContainerBaseWeb extends HTMLElement {
     // Build CSS styles from attributes
     const styles = this.buildStyles({
       padding,
+      paddingVertical,
+      paddingHorizontal,
+      paddingBlockStart,
+      paddingBlockEnd,
+      paddingInlineStart,
+      paddingInlineEnd,
       background,
       shadow,
       border,
+      borderColor,
       borderRadius,
       opacity,
       layering
@@ -338,15 +374,23 @@ export class ContainerBaseWeb extends HTMLElement {
    * Only includes styles for props that are actually set.
    * 
    * Uses the token-mapping module for consistent token-to-CSS conversion.
+   * Directional padding uses CSS logical properties for RTL support.
    * 
    * @param props - Object containing prop values
    * @returns CSS string with token-based styles
    */
   private buildStyles(props: {
     padding: PaddingValue | null;
+    paddingVertical: PaddingValue | null;
+    paddingHorizontal: PaddingValue | null;
+    paddingBlockStart: PaddingValue | null;
+    paddingBlockEnd: PaddingValue | null;
+    paddingInlineStart: PaddingValue | null;
+    paddingInlineEnd: PaddingValue | null;
     background: ColorTokenName | null;
     shadow: ShadowTokenName | null;
     border: BorderValue | null;
+    borderColor: ColorTokenName | null;
     borderRadius: BorderRadiusValue | null;
     opacity: OpacityTokenName | null;
     layering: LayeringValue | null;
