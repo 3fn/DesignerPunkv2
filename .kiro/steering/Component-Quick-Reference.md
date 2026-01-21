@@ -46,6 +46,25 @@ All 11 component families have MCP-queryable documentation. Production families 
 
 **Family Count**: 5 Production Ready, 6 Placeholder (structural definitions for future development)
 
+### Type Primitives
+
+Type primitives are specialized components within a family that provide opinionated defaults and curated prop subsets for specific use cases. They compose family primitives (like Container-Base) rather than inheriting from them.
+
+| Type Primitive | Family | Purpose | MCP Document Path | Status |
+|----------------|--------|---------|-------------------|--------|
+| Container-Card-Base | Containers | Card-specific styling with curated props and interactive behavior | `.kiro/steering/Component-Family-Container.md` | 🟢 Production |
+
+**Type Primitive Characteristics**:
+- **Curated API**: Exposes only use-case-appropriate props and values
+- **Opinionated Defaults**: Zero-config rendering with sensible defaults
+- **Composition Pattern**: Uses family primitive internally (not inheritance)
+- **Escape Hatch**: Developers can use family primitive directly for full flexibility
+
+For detailed Container-Card-Base documentation including props mapping, interactive behavior, and usage examples:
+```
+get_section({ path: ".kiro/steering/Component-Family-Container.md", heading: "Container-Card-Base" })
+```
+
 ## Naming Convention
 
 Components follow the **[Family]-[Type]-[Variant]** pattern:
@@ -67,7 +86,7 @@ Components follow the **[Family]-[Type]-[Variant]** pattern:
 - **Avatars**: `Avatar-Base` (planned)
 - **Buttons**: `Button-CTA` (variant="secondary" for actions)
 - **Data Displays**: `Display-Base` (planned)
-- **Containers**: `Container-Base` (card wrapper)
+- **Containers**: `Container-Card-Base` (card wrapper with interactive support)
 - **Tokens**: `Token-Family-Shadow.md` → card elevation, `Token-Family-Spacing.md` → content spacing
 
 ### Settings Panel
@@ -109,6 +128,9 @@ get_document_summary({ path: ".kiro/steering/Component-Family-Container.md" })
 
 // Understand Icon family structure
 get_document_summary({ path: ".kiro/steering/Component-Family-Icon.md" })
+
+// Get Container-Card-Base type primitive details
+get_section({ path: ".kiro/steering/Component-Family-Container.md", heading: "Container-Card-Base" })
 ```
 
 **Returns**: Document metadata (purpose, layer, relevant tasks) plus section outline with headings.

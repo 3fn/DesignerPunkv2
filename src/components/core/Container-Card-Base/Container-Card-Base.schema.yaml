@@ -1,0 +1,481 @@
+# Container-Card-Base Component Schema
+#
+# Stemma System: Containers Family
+# Component Type: Type Primitive (Card)
+# Naming Convention: [Family]-[Type]-[Variant] = Container-Card-Base
+#
+# This schema defines the behavioral contracts and properties for the
+# Container-Card-Base component, which serves as the type primitive
+# for all card components in the Containers family.
+#
+# Rationale: Container-Card-Base is a type primitive that provides
+# card-specific styling and behaviors through a curated subset of
+# Container-Base's API. It uses composition (not inheritance) to
+# expose only card-appropriate props and values.
+
+name: Container-Card-Base
+type: type-primitive
+family: Containers
+version: "1.0.0"
+readiness: development
+
+# Component description
+description: |
+  Type primitive container component providing card-specific styling and
+  behaviors. Uses Container-Base internally via composition and exposes
+  a curated subset of props appropriate for card use cases.
+  
+  Design Philosophy: Inspired by Spotify Encore and Shopify Polaris—opinionated
+  defaults with constrained flexibility. The base provides consistent card
+  styling through a filtered subset of Container-Base's API; semantic variants
+  handle content-specific layouts.
+  
+  Key Features:
+  - Zero-config card rendering with sensible defaults
+  - Curated prop subset (only card-appropriate values)
+  - Interactive behavior (hover, press, focus, keyboard)
+  - ARIA semantics based on role prop
+  - Cross-platform consistency
+
+# Reusable behaviors this component implements
+behaviors:
+  - containable
+  - styleable
+  - accessible
+  - interactive
+
+# Component properties (public API)
+# Note: This is a CURATED SUBSET of Container-Base props
+properties:
+  # Padding props (curated subset)
+  padding:
+    type: "'none' | '100' | '150' | '200'"
+    required: false
+    default: "'150'"
+    description: |
+      Internal padding for the card. Maps to space.inset tokens.
+      Curated subset of Container-Base padding values appropriate for cards.
+      - none: No padding
+      - 100: 8px (space.inset.100)
+      - 150: 12px (space.inset.150) [DEFAULT]
+      - 200: 16px (space.inset.200)
+      
+      Override hierarchy (highest to lowest priority):
+      1. Individual edges (paddingBlockStart, paddingBlockEnd, paddingInlineStart, paddingInlineEnd)
+      2. Axis props (paddingVertical, paddingHorizontal)
+      3. Uniform padding (this prop)
+  
+  paddingVertical:
+    type: "'none' | '050' | '100' | '150' | '200'"
+    required: false
+    default: undefined
+    description: |
+      Vertical (block-axis) padding for the card. Maps to space.inset tokens.
+      Includes '050' for fine-tuning vertical rhythm with typography.
+      - none: No padding
+      - 050: 4px (space.inset.050)
+      - 100: 8px (space.inset.100)
+      - 150: 12px (space.inset.150)
+      - 200: 16px (space.inset.200)
+  
+  paddingHorizontal:
+    type: "'none' | '100' | '150' | '200'"
+    required: false
+    default: undefined
+    description: |
+      Horizontal (inline-axis) padding for the card. Maps to space.inset tokens.
+      - none: No padding
+      - 100: 8px (space.inset.100)
+      - 150: 12px (space.inset.150)
+      - 200: 16px (space.inset.200)
+  
+  paddingBlockStart:
+    type: "'none' | '050' | '100' | '150' | '200'"
+    required: false
+    default: undefined
+    description: |
+      Block-start padding for the card. Maps to space.inset tokens.
+      Includes '050' for fine-tuning vertical rhythm with typography.
+      Highest priority - overrides both paddingVertical and uniform padding.
+  
+  paddingBlockEnd:
+    type: "'none' | '050' | '100' | '150' | '200'"
+    required: false
+    default: undefined
+    description: |
+      Block-end padding for the card. Maps to space.inset tokens.
+      Includes '050' for fine-tuning vertical rhythm with typography.
+      Highest priority - overrides both paddingVertical and uniform padding.
+  
+  paddingInlineStart:
+    type: "'none' | '100' | '150' | '200'"
+    required: false
+    default: undefined
+    description: |
+      Inline-start padding for the card. Maps to space.inset tokens.
+      Highest priority - overrides both paddingHorizontal and uniform padding.
+  
+  paddingInlineEnd:
+    type: "'none' | '100' | '150' | '200'"
+    required: false
+    default: undefined
+    description: |
+      Inline-end padding for the card. Maps to space.inset tokens.
+      Highest priority - overrides both paddingHorizontal and uniform padding.
+  
+  # Visual styling props (curated subset)
+  background:
+    type: "'surface.primary' | 'surface.secondary' | 'surface.tertiary'"
+    required: false
+    default: "'surface.primary'"
+    description: |
+      Background color for the card. Curated to surface colors only.
+      - surface.primary: Primary surface color [DEFAULT]
+      - surface.secondary: Secondary surface color
+      - surface.tertiary: Tertiary surface color
+  
+  shadow:
+    type: "'none' | 'container'"
+    required: false
+    default: "'container'"
+    description: |
+      Shadow for the card. Curated to container shadow only.
+      - none: No shadow
+      - container: Container shadow [DEFAULT]
+  
+  border:
+    type: "'none' | 'default'"
+    required: false
+    default: "'none'"
+    description: |
+      Border for the card. Curated to subtle border only.
+      - none: No border [DEFAULT]
+      - default: 1px border using borderColor
+  
+  borderColor:
+    type: "'border.default' | 'border.subtle'"
+    required: false
+    default: "'border.default'"
+    description: |
+      Border color for the card. Curated to card-appropriate colors.
+      - border.default: Standard border color [DEFAULT]
+      - border.subtle: Subtle/muted border color
+      Only visible when border is 'default'.
+  
+  borderRadius:
+    type: "'normal' | 'loose'"
+    required: false
+    default: "'normal'"
+    description: |
+      Border radius for the card. Curated to rounded values only.
+      - normal: 8px (radius-100) [DEFAULT]
+      - loose: 16px (radius-200)
+  
+  # Semantic HTML (web only)
+  semantic:
+    type: "'div' | 'section' | 'article'"
+    required: false
+    default: "'div'"
+    description: |
+      Semantic HTML element to render (web only). Curated to card-appropriate elements.
+      - div: Generic container [DEFAULT]
+      - section: Thematic grouping of content
+      - article: Self-contained composition
+    platform: web
+  
+  # Accessibility
+  accessibilityLabel:
+    type: string
+    required: false
+    default: undefined
+    description: |
+      Accessibility label for the card. Platform-specific implementation:
+      - Web: aria-label attribute
+      - iOS: .accessibilityLabel() modifier
+      - Android: contentDescription in semantics
+  
+  # Card-specific interactivity
+  interactive:
+    type: boolean
+    required: false
+    default: false
+    description: |
+      Whether the card is interactive. When true:
+      - Enables hover feedback (8% darker via blend.hoverDarker)
+      - Enables press feedback (12% darker via blend.pressedDarker)
+      - Makes card focusable via keyboard navigation
+      - Applies ARIA role based on role prop
+      - Internally sets hoverable: true on Container-Base
+  
+  onPress:
+    type: "() => void"
+    required: false
+    default: undefined
+    description: |
+      Callback when card is pressed/clicked. Only triggered when interactive is true.
+      Keyboard activation:
+      - role='button': Enter or Space triggers onPress
+      - role='link': Only Enter triggers onPress (Space does NOT trigger)
+  
+  role:
+    type: "'button' | 'link'"
+    required: false
+    default: "'button'"
+    description: |
+      ARIA role for interactive cards. Only applies when interactive is true.
+      - button: Card acts as a button (Enter/Space activates) [DEFAULT]
+      - link: Card acts as a link (only Enter activates)
+  
+  # Standard props
+  children:
+    type: any
+    required: false
+    description: |
+      Child content to render inside the card. Platform-specific types:
+      - Web: HTMLElement children via slot
+      - iOS: SwiftUI View via @ViewBuilder
+      - Android: Composable content lambda
+  
+  testID:
+    type: string
+    required: false
+    default: undefined
+    description: |
+      Test identifier for automated testing. Platform-specific implementation:
+      - Web: data-testid attribute
+      - iOS: accessibilityIdentifier
+      - Android: testTag in semantics
+
+
+# Props NOT exposed (filtered from Container-Base)
+excluded_props:
+  - opacity: "Not appropriate for cards - use background color variants instead"
+  - layering: "Cards don't need z-index control - use layout composition"
+  - ignoresSafeArea: "Cards should respect safe areas"
+  - hoverable: "Derived from interactive prop - not directly exposed"
+
+
+# Behavioral contracts - guarantees this component provides
+contracts:
+  provides_visual_boundary:
+    description: Card has clear visual separation from background
+    behavior: |
+      Container-Card-Base provides visual boundary separation through:
+      - Background color (default: color.surface.primary)
+      - Shadow (default: shadow.container)
+      - Border radius (default: radius.normal)
+      
+      These defaults ensure cards are visually distinct without configuration.
+    wcag: "1.4.11 Non-text Contrast"
+    platforms: [web, ios, android]
+    validation: |
+      - Card is visually distinct from surrounding content
+      - Default styling provides clear boundary
+      - Shadow or border provides depth/separation
+  
+  provides_consistent_padding:
+    description: Content has consistent internal spacing
+    behavior: |
+      Container-Card-Base applies consistent internal padding using
+      space.inset tokens. Default padding is space.inset.150 (12px).
+      
+      Padding override hierarchy:
+      1. Individual edges (paddingBlockStart, etc.)
+      2. Axis props (paddingVertical, paddingHorizontal)
+      3. Uniform padding (padding prop)
+    wcag: "1.4.12 Text Spacing"
+    platforms: [web, ios, android]
+    validation: |
+      - Default padding is space.inset.150
+      - Padding values match space.inset token values
+      - Override hierarchy is respected
+  
+  provides_rounded_corners:
+    description: Card has rounded corners per token
+    behavior: |
+      Container-Card-Base applies rounded corners using radius tokens.
+      Default is radius.normal (8px). Only rounded values are available
+      (no sharp corners) to maintain card visual language.
+    wcag: N/A
+    platforms: [web, ios, android]
+    validation: |
+      - Default border radius is radius.normal (8px)
+      - Only 'normal' and 'loose' values available
+      - Corners are consistently rounded
+  
+  provides_hover_feedback:
+    description: Background darkens on hover (8% via blend token)
+    behavior: |
+      When interactive is true and user hovers with a pointer device,
+      Container-Card-Base darkens the background by 8% using
+      blend.hoverDarker token. Transition uses motion.focusTransition.
+    wcag: "1.4.13 Content on Hover or Focus"
+    platforms: [web]
+    validation: |
+      - Background darkens on hover when interactive is true
+      - Darkening uses blend.hoverDarker (8%)
+      - Transition uses motion.focusTransition timing
+      - Only applies with pointer devices
+  
+  provides_press_feedback:
+    description: Background darkens on press (12% via blend.pressedDarker, no scale)
+    behavior: |
+      When interactive is true and user presses/taps the card,
+      Container-Card-Base darkens the background by 12% using
+      blend.pressedDarker token. No scale transform is applied
+      to avoid layout shift in card grids.
+    wcag: "2.1.1 Keyboard"
+    platforms: [web, ios, android]
+    validation: |
+      - Background darkens on press when interactive is true
+      - Darkening uses blend.pressedDarker (12%)
+      - No scale transform applied
+      - Feedback is immediate on press, ease-out on release
+  
+  provides_focus_indication:
+    description: Visible focus ring using established focus pattern
+    behavior: |
+      When interactive is true and card receives keyboard focus,
+      Container-Card-Base displays a visible focus ring using the
+      established DesignerPunk focus pattern.
+    wcag: "2.4.7 Focus Visible"
+    platforms: [web, ios, android]
+    validation: |
+      - Focus ring visible when card has keyboard focus
+      - Focus ring meets WCAG contrast requirements
+      - Focus ring uses established focus pattern
+  
+  supports_keyboard_activation:
+    description: Enter activates; Space activates if role="button"
+    behavior: |
+      When interactive is true:
+      - role='button': Both Enter and Space trigger onPress
+      - role='link': Only Enter triggers onPress (Space scrolls page)
+    wcag: "2.1.1 Keyboard"
+    platforms: [web]
+    validation: |
+      - Enter key triggers onPress for both roles
+      - Space key triggers onPress only for role='button'
+      - Space key does NOT trigger onPress for role='link'
+  
+  applies_aria_role:
+    description: Applies role="button" or role="link" based on prop
+    behavior: |
+      When interactive is true, Container-Card-Base applies the
+      appropriate ARIA role based on the role prop:
+      - role='button': Applies role="button"
+      - role='link': Applies role="link"
+      When interactive is false, no ARIA role is applied.
+    wcag: "4.1.2 Name, Role, Value"
+    platforms: [web]
+    validation: |
+      - role="button" applied when interactive and role='button'
+      - role="link" applied when interactive and role='link'
+      - No role applied when interactive is false
+
+
+# Default semantic tokens used
+default_tokens:
+  padding: space.inset.150
+  background: color.surface.primary
+  shadow: shadow.container
+  borderRadius: radius.normal
+  borderColor: color.border.default
+  hoverFeedback: blend.hoverDarker
+  pressFeedback: blend.pressedDarker
+  focusTransition: motion.focusTransition
+
+
+# Design tokens this component requires
+tokens:
+  spacing:
+    - space.inset.050
+    - space.inset.100
+    - space.inset.150
+    - space.inset.200
+  color:
+    - color.surface.primary
+    - color.surface.secondary
+    - color.surface.tertiary
+    - color.border.default
+    - color.border.subtle
+  shadow:
+    - shadow.container
+  radius:
+    - radius-100
+    - radius-200
+  motion:
+    - motion.focusTransition
+  blend:
+    - blend.hoverDarker
+    - blend.pressedDarker
+
+
+# Supported platforms
+platforms:
+  - web
+  - ios
+  - android
+
+
+# Platform-specific implementation notes
+platform_notes:
+  web:
+    element: "<container-card-base>"
+    implementation: Web Component composing Container-Base
+    file: platforms/web/ContainerCardBase.web.ts
+    notes: |
+      - Composes Container-Base internally
+      - Uses Shadow DOM for style encapsulation
+      - Supports semantic HTML elements via semantic prop
+      - Hover state uses CSS :hover with blend utilities
+      - Press state uses :active with blend utilities
+      - Focus ring uses established focus pattern
+      - Keyboard activation based on role prop
+  ios:
+    implementation: SwiftUI View composing ContainerBase
+    file: platforms/ios/ContainerCardBase.ios.swift
+    notes: |
+      - Composes ContainerBase internally
+      - Uses SwiftUI modifier chains for styling
+      - Hover state uses .onHover modifier (macOS/iPadOS with pointer)
+      - Press state uses .simultaneousGesture for tap feedback
+      - Accessibility traits based on interactive and role props
+  android:
+    implementation: Jetpack Compose Composable composing ContainerBase
+    file: platforms/android/ContainerCardBase.android.kt
+    notes: |
+      - Composes ContainerBase internally
+      - Uses Compose modifier chains for styling
+      - Hover state uses hoverable modifier (desktop/ChromeOS with pointer)
+      - Press state uses clickable with indication
+      - Semantics based on interactive and role props
+
+
+# Semantic components that inherit from this type primitive
+semantic_variants:
+  - name: Container-Card-Senator
+    extends: Senator content format card
+    status: planned
+  - name: Container-Card-Bill
+    extends: Bill content format card
+    status: planned
+
+
+# Accessibility compliance
+accessibility:
+  wcag_level: AA
+  compliance:
+    - "1.4.11 Non-text Contrast - Visual boundary provides clear separation"
+    - "1.4.12 Text Spacing - Padding uses semantic spacing tokens"
+    - "1.4.13 Content on Hover or Focus - Hover state provides visual feedback"
+    - "2.1.1 Keyboard - Keyboard activation supported for interactive cards"
+    - "2.4.7 Focus Visible - Focus ring visible for interactive cards"
+    - "4.1.2 Name, Role, Value - ARIA role applied for interactive cards"
+  aria_attributes:
+    - aria-label: accessibilityLabel prop value (web)
+    - role: button or link based on role prop (web, when interactive)
+  platform_accessibility:
+    ios: ".accessibilityLabel() and .accessibilityAddTraits() for VoiceOver"
+    android: "contentDescription and role in semantics for TalkBack"
+
