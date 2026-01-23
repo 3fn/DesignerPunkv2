@@ -1,0 +1,179 @@
+/**
+ * Badge-Count-Notification Styles for Web Platform
+ * 
+ * Stemma System: Badge Family
+ * Component Type: Semantic Variant (inherits from Badge-Count-Base)
+ * 
+ * Token-based styling using CSS custom properties.
+ * Extends Badge-Count-Base styles with notification-specific colors.
+ * 
+ * Fixed Colors (not configurable):
+ * - Background: color.badge.background.notification (pink400)
+ * - Text: color.badge.text.notification (white100)
+ * - Contrast Ratio: 6.33:1 (exceeds WCAG AA 4.5:1)
+ * 
+ * @see .kiro/specs/044-badge-base/design.md for design specification
+ * @see Requirements 3.1-3.10, 4.7 in .kiro/specs/044-badge-base/requirements.md
+ */
+
+/* ============================================================================
+ * Base Badge Styles (inherited from Badge-Count-Base)
+ * ============================================================================ */
+
+.badge-count-notification {
+  /* Layout - centered content */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  
+  /* Shape - radiusHalf (50%) for circular/pill */
+  border-radius: var(--radius-half, 50%);
+  
+  /* Fixed notification colors - not configurable */
+  /* @see Requirement 3.1 - notification-specific color tokens */
+  background-color: var(--color-badge-background-notification);
+  color: var(--color-badge-text-notification);
+  
+  /* Non-interactive */
+  pointer-events: none;
+  user-select: none;
+  
+  /* Prevent focus */
+  outline: none;
+  
+  /* Text alignment */
+  text-align: center;
+}
+
+/* ============================================================================
+ * Size Variants (inherited from Badge-Count-Base)
+ * ============================================================================ */
+
+/* Small (sm) */
+.badge-count-notification--sm {
+  /* Typography: typography.labelXs */
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-050);
+  line-height: var(--line-height-050);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-tight);
+  
+  /* Padding: space.inset.none (v), space.inset.050 (h) */
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: var(--space-050);
+  padding-right: var(--space-050);
+  
+  /* Min-width = line-height for circular single digits */
+  min-width: var(--line-height-050);
+  /* Min-height = line-height for consistent height */
+  min-height: var(--line-height-050);
+}
+
+/* Medium (md) - default */
+.badge-count-notification--md {
+  /* Typography: typography.labelSm */
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-075);
+  line-height: var(--line-height-075);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-tight);
+  
+  /* Padding: space.inset.none (v), space.inset.050 (h) */
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: var(--space-050);
+  padding-right: var(--space-050);
+  
+  /* Min-width = line-height for circular single digits */
+  min-width: var(--line-height-075);
+  /* Min-height = line-height for consistent height */
+  min-height: var(--line-height-075);
+}
+
+/* Large (lg) */
+.badge-count-notification--lg {
+  /* Typography: typography.labelMd */
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-100);
+  line-height: var(--line-height-100);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-normal);
+  
+  /* Padding: space.inset.050 (v), space.inset.100 (h) */
+  padding-top: var(--space-050);
+  padding-bottom: var(--space-050);
+  padding-left: var(--space-100);
+  padding-right: var(--space-100);
+  
+  /* Min-width = line-height for circular single digits */
+  min-width: var(--line-height-100);
+  /* Min-height = line-height + padding for consistent height */
+  min-height: calc(var(--line-height-100) + var(--space-050) * 2);
+}
+
+/* ============================================================================
+ * Count Text
+ * ============================================================================ */
+
+.badge-count-notification__text {
+  /* Inherit typography from parent */
+  font: inherit;
+  color: inherit;
+  
+  /* Prevent text selection */
+  user-select: none;
+  
+  /* Ensure text doesn't wrap */
+  white-space: nowrap;
+}
+
+/* ============================================================================
+ * Visually Hidden Announcement Text
+ * 
+ * Screen reader only text for live region announcements.
+ * Uses standard visually-hidden pattern that remains accessible to AT.
+ * 
+ * @see Requirement 3.8 - aria-live="polite" and aria-atomic="true"
+ * ============================================================================ */
+
+.badge-count-notification__announcement {
+  /* Visually hidden but accessible to screen readers */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================================================
+ * Accessibility
+ * ============================================================================ */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .badge-count-notification {
+    border: 1px solid currentColor;
+  }
+}
+
+/* Reduced motion - no animations to reduce */
+@media (prefers-reduced-motion: reduce) {
+  .badge-count-notification {
+    transition: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .badge-count-notification {
+    background-color: transparent;
+    border: 1px solid currentColor;
+    color: inherit;
+  }
+}

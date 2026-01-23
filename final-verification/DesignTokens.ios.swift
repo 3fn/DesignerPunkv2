@@ -1,6 +1,6 @@
 ///
 /// DesignerPunk Design System - iOS Tokens
-/// Generated: 2026-01-14T14:43:03.019Z
+/// Generated: 2026-01-23T22:59:30.739Z
 /// Version: 1.0.0
 /// Platform: iOS (Swift Constants)
 ///
@@ -485,6 +485,13 @@ public struct DesignTokens {
     public static let glowNeonYellow = yellow500
     public static let glowNeonGreen = green500
     public static let glowNeonPink = pink500
+    public static let colorAvatarHuman = orange300
+    public static let colorAvatarAgent = teal200
+    public static let colorAvatarContrastOnHuman = white100
+    public static let colorAvatarContrastOnAgent = white100
+    public static let colorAvatarBorder = gray100
+    public static let colorBadgeBackgroundNotification = pink400
+    public static let colorBadgeTextNotification = white100
     public static let colorSelectSelectedStrong = cyan400
     public static let colorSelectSelectedSubtle = cyan100
     public static let colorSelectNotSelectedStrong = gray200

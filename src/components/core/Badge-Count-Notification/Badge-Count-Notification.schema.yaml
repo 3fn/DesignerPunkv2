@@ -1,0 +1,241 @@
+# Badge-Count-Notification Component Schema
+#
+# Stemma System: Badge Family
+# Component Type: Semantic Variant (inherits from Badge-Count-Base)
+# Naming Convention: [Family]-[Type]-[Variant] = Badge-Count-Notification
+#
+# This schema defines the behavioral contracts and properties for the
+# Badge-Count-Notification component, which extends Badge-Count-Base with
+# notification-specific styling and live region announcements for screen readers.
+#
+# Rationale: Badge-Count-Notification is a semantic variant that provides
+# notification count badge functionality with predefined colors and accessibility
+# announcements. It inherits all Badge-Count-Base behavior and adds notification
+# semantics, live region announcements, and pluralized announcement text.
+
+name: Badge-Count-Notification
+type: semantic
+family: Badge
+inherits: Badge-Count-Base
+version: "1.0.0"
+readiness: production-ready
+
+# Component description
+description: |
+  Semantic variant notification count badge with predefined styling and live region
+  announcements for screen readers. Extends Badge-Count-Base with notification-specific
+  colors and accessibility features.
+  
+  Key Characteristics:
+  - Inherits all Badge-Count-Base behavior (count display, max truncation, showZero)
+  - Fixed notification colors (pink400 background, white100 text)
+  - Live region announcements for accessibility
+  - Pluralized announcement text ("1 notification", "5 notifications")
+  - Optional announceChanges prop (default: true)
+  
+  Fixed Colors (not configurable):
+  - Background: color.badge.background.notification (pink400 #CC2257)
+  - Text: color.badge.text.notification (white100 #FFFFFF)
+  - Contrast Ratio: 6.33:1 (exceeds WCAG AA 4.5:1)
+
+# Reusable behaviors this component implements
+# Note: Inherits all behaviors from Badge-Count-Base
+behaviors:
+  # Inherited from Badge-Count-Base (for reference)
+  # - renderable
+  # - sizable
+  # - accessible-decorative
+  # - truncatable
+  # Extended behaviors
+  - live-region-announcements
+  - notification-semantics
+
+# Component properties (public API)
+# Note: Inherits all properties from Badge-Count-Base
+properties:
+  # Inherited properties are available but not redefined here
+  # See Badge-Count-Base.schema.yaml for inherited properties:
+  # - count (required): Numeric value to display
+  # - max (default: 99): Maximum before showing "[max]+"
+  # - showZero (default: false): Whether to show badge when count is 0
+  # - size (default: 'md'): Size variant ('sm' | 'md' | 'lg')
+  # - testID: Test identifier
+  
+  # Extended properties (unique to this variant)
+  announceChanges:
+    type: boolean
+    required: false
+    default: true
+    description: |
+      Whether to announce count changes to screen readers.
+      
+      When true (default), count changes are announced via live regions:
+      - Web: aria-live="polite", aria-atomic="true", visually hidden text
+      - iOS: .accessibilityAddTraits(.updatesFrequently), UIAccessibility.post(notification:)
+      - Android: LiveRegionMode.Polite, announceForAccessibility()
+      
+      When false, count changes are not announced. Use this when:
+      - Parent component handles announcements
+      - Frequent updates would be disruptive
+      - Badge is in a context where announcements are redundant
+
+# Behavioral contracts
+# Note: Inherits all contracts from Badge-Count-Base
+contracts:
+  # Inherited contracts (for reference)
+  # - displays_count: See Badge-Count-Base.schema.yaml
+  # - truncates_at_max: See Badge-Count-Base.schema.yaml
+  # - circular_single_digit: See Badge-Count-Base.schema.yaml
+  # - pill_multi_digit: See Badge-Count-Base.schema.yaml
+  # - non_interactive: See Badge-Count-Base.schema.yaml
+  # - color_contrast: See Badge-Count-Base.schema.yaml
+  # - text_scaling: See Badge-Count-Base.schema.yaml
+  
+  # Extended contracts (unique to this variant)
+  notification_semantics:
+    description: Conveys notification/alert meaning through color
+    behavior: |
+      Badge-Count-Notification uses fixed notification colors that convey
+      urgency and importance:
+      - Background: color.badge.background.notification (pink400 #CC2257)
+      - Text: color.badge.text.notification (white100 #FFFFFF)
+      
+      These colors are not configurable by consumers, ensuring consistent
+      notification semantics across the application. The pink/magenta color
+      is commonly associated with notifications and alerts.
+      
+      Contrast Ratio: 6.33:1 (exceeds WCAG AA 4.5:1 minimum)
+    wcag: "1.3.1 Info and Relationships"
+    platforms: [web, ios, android]
+    validation: |
+      - Background color is pink400 (#CC2257)
+      - Text color is white100 (#FFFFFF)
+      - Colors are not configurable via props
+      - Contrast ratio meets WCAG AA (4.5:1)
+  
+  announces_count_changes:
+    description: Announces count changes to screen readers when enabled
+    behavior: |
+      When announceChanges is true (default), Badge-Count-Notification
+      announces count changes to screen readers via platform-specific
+      live region implementations:
+      
+      Web:
+      - aria-live="polite" for non-interruptive announcements
+      - aria-atomic="true" to announce entire content
+      - Visually hidden announcement text for screen readers
+      
+      iOS:
+      - .accessibilityAddTraits(.updatesFrequently) marks as live region
+      - UIAccessibility.post(notification:) announces changes
+      
+      Android:
+      - LiveRegionMode.Polite in semantics modifier
+      - announceForAccessibility() for explicit announcements
+      
+      Announcements only occur when:
+      - announceChanges is true
+      - There was a previous count (not initial render)
+      - The count has actually changed
+    wcag: "4.1.3 Status Messages"
+    platforms: [web, ios, android]
+    validation: |
+      - Live region attributes present when announceChanges=true
+      - Announcements occur on count changes
+      - No announcements on initial render
+      - No announcements when announceChanges=false
+  
+  pluralized_announcements:
+    description: Uses correct pluralization in announcements
+    behavior: |
+      Badge-Count-Notification uses grammatically correct pluralization
+      in screen reader announcements:
+      
+      - count=1: "1 notification" (singular)
+      - count=5: "5 notifications" (plural)
+      - count>max: "[max] or more notifications" (overflow)
+      
+      Examples with default max=99:
+      - count=1 → "1 notification"
+      - count=42 → "42 notifications"
+      - count=100 → "99 or more notifications"
+      
+      This ensures natural language announcements that are easy to understand.
+    wcag: "4.1.3 Status Messages"
+    platforms: [web, ios, android]
+    validation: |
+      - count=1 announces "1 notification"
+      - count>1 announces "[count] notifications"
+      - count>max announces "[max] or more notifications"
+
+# Design tokens this component requires
+# Note: Inherits all tokens from Badge-Count-Base
+tokens:
+  # Inherited tokens (for reference)
+  # See Badge-Count-Base.schema.yaml for inherited tokens:
+  # - typography: typography.labelXs, typography.labelSm, typography.labelMd
+  # - spacing: space.inset.none, space.inset.050, space.inset.100
+  # - radius: radiusHalf
+  
+  # Additional tokens (unique to this variant)
+  color:
+    - color.badge.background.notification
+    - color.badge.text.notification
+
+# Supported platforms
+platforms:
+  - web
+  - ios
+  - android
+
+# Platform-specific implementation notes
+platform_notes:
+  web:
+    element: "<badge-count-notification>"
+    implementation: Web Component with Shadow DOM
+    file: platforms/web/BadgeCountNotification.web.ts
+    notes: |
+      - Extends Badge-Count-Base web implementation patterns
+      - Uses Shadow DOM for style encapsulation
+      - CSS custom properties for token consumption
+      - aria-live="polite" and aria-atomic="true" for announcements
+      - Visually hidden announcement text via CSS
+      - pointer-events: none for non-interactivity
+  ios:
+    implementation: SwiftUI View
+    file: platforms/ios/BadgeCountNotification.ios.swift
+    notes: |
+      - Extends Badge-Count-Base iOS implementation patterns
+      - Token consumption via DesignTokens enum
+      - .accessibilityAddTraits(.updatesFrequently) for live region
+      - UIAccessibility.post(notification:) for announcements
+      - Capsule shape for circular/pill rendering
+  android:
+    implementation: Jetpack Compose Composable
+    file: platforms/android/BadgeCountNotification.android.kt
+    notes: |
+      - Extends Badge-Count-Base Android implementation patterns
+      - Token consumption via DesignTokens object
+      - LiveRegionMode.Polite in semantics modifier
+      - announceForAccessibility() for explicit announcements
+      - CircleShape for circular/pill rendering
+
+# Accessibility compliance
+accessibility:
+  wcag_level: AA
+  compliance:
+    # Inherited from Badge-Count-Base
+    - "1.3.1 Info and Relationships - Count value conveys meaning"
+    - "1.4.3 Contrast (Minimum) - Text meets 6.33:1 contrast ratio"
+    - "1.4.4 Resize Text - Scales with user font preferences"
+    - "1.4.11 Non-text Contrast - Badge boundary visible"
+    # Extended for notification variant
+    - "4.1.3 Status Messages - Live region announcements for count changes"
+  aria_attributes:
+    - aria-live="polite"
+    - aria-atomic="true"
+  platform_accessibility:
+    web: "Live region with aria-live='polite' announces count changes"
+    ios: "UIAccessibility.post(notification:) announces count changes"
+    android: "LiveRegionMode.Polite with announceForAccessibility()"
+
