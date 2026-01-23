@@ -1,0 +1,215 @@
+# Badge-Label-Base Behavioral Contracts
+#
+# Stemma System: Badge Family
+# Component Type: Type Primitive (Label)
+#
+# This file defines the behavioral contracts for Badge-Label-Base.
+# Contracts are guarantees the component provides to consumers.
+#
+# Contract Categories:
+# - Content: How the component displays content
+# - Interaction: How the component responds to user input
+# - Accessibility: How the component supports assistive technology
+# - Visual: How the component appears and styles itself
+#
+# @see Badge-Label-Base.schema.yaml for full component schema
+# @see .kiro/specs/044-badge-base/design.md for design specification
+
+version: "1.0.0"
+component: Badge-Label-Base
+family: Badge
+
+# ============================================================================
+# Content Contracts
+# ============================================================================
+
+contracts:
+  # ---------------------------------------------------------------------------
+  # displays_label
+  # ---------------------------------------------------------------------------
+  displays_label:
+    category: content
+    description: Renders text label visibly
+    behavior: |
+      Badge-Label-Base renders the provided label text visibly within the badge.
+      Text uses typography tokens based on size variant:
+      - sm: typography.labelXs (13px, medium weight, 1.538 line-height)
+      - md: typography.labelSm (14px, medium weight, 1.429 line-height)
+      - lg: typography.labelMd (16px, medium weight, 1.5 line-height)
+      Text color uses color.text.default token for consistent theming.
+    wcag: "1.3.1 Info and Relationships"
+    platforms: [web, ios, android]
+    validation:
+      - Label text is visible in the rendered badge
+      - Typography matches size variant specification
+      - Text color uses design token, not hardcoded value
+      - Font weight is medium (500)
+    test_approach: |
+      - Render badge with label prop
+      - Verify text content matches label prop value
+      - Verify computed font-size matches size variant
+      - Verify text is visible (not hidden or zero-opacity)
+
+  # ---------------------------------------------------------------------------
+  # supports_icon
+  # ---------------------------------------------------------------------------
+  supports_icon:
+    category: content
+    description: Optionally displays leading icon via Icon-Base
+    behavior: |
+      When icon prop is provided, Badge-Label-Base renders a leading icon
+      using the Icon-Base component. Icon characteristics:
+      - Size determined by badge size:
+        - sm: icon.size050 (13px)
+        - md: icon.size075 (18px)
+        - lg: icon.size100 (24px)
+      - Color inherits from badge context (color.icon.default)
+      - Gap between icon and text:
+        - sm: space.grouped.minimal (2px)
+        - md/lg: space.grouped.tight (4px)
+      - Icon is decorative and hidden from assistive technology
+    wcag: "1.3.1 Info and Relationships"
+    platforms: [web, ios, android]
+    validation:
+      - Icon renders before label text when icon prop provided
+      - Icon size matches badge size specification
+      - Icon color uses design token
+      - Icon is hidden from screen readers
+      - Gap between icon and text matches specification
+    test_approach: |
+      - Render badge with icon prop
+      - Verify icon-base element is present
+      - Verify icon appears before label text
+      - Verify icon has aria-hidden="true" (web)
+      - Verify icon size matches size variant
+
+  # ---------------------------------------------------------------------------
+  # supports_truncation
+  # ---------------------------------------------------------------------------
+  supports_truncation:
+    category: content
+    description: Truncates with ellipsis when truncate=true; full text accessible
+    behavior: |
+      When truncate prop is true, Badge-Label-Base truncates text at
+      badge.label.maxWidth (120px) with ellipsis. Full text remains
+      accessible for assistive technology:
+      - Web: title attribute provides full text on hover
+      - iOS: accessibilityLabel contains full text
+      - Android: contentDescription contains full text
+      When truncate is false (default), badge grows to fit content.
+    wcag: "1.3.1 Info and Relationships"
+    platforms: [web, ios, android]
+    validation:
+      - Text truncates with ellipsis at 120px when truncate=true
+      - Full text accessible via platform-appropriate mechanism
+      - Badge grows to fit content when truncate=false
+      - Ellipsis character appears when text overflows
+    test_approach: |
+      - Render badge with long label and truncate=true
+      - Verify max-width is 120px
+      - Verify text-overflow is ellipsis
+      - Verify title attribute contains full label (web)
+      - Render badge with truncate=false
+      - Verify badge width exceeds 120px for long text
+
+# ============================================================================
+# Interaction Contracts
+# ============================================================================
+
+  # ---------------------------------------------------------------------------
+  # non_interactive
+  # ---------------------------------------------------------------------------
+  non_interactive:
+    category: interaction
+    description: Does not respond to user interaction
+    behavior: |
+      Badge-Label-Base is read-only and non-interactive:
+      - Not focusable via keyboard navigation (no tabindex)
+      - Does not respond to click, tap, or keyboard events
+      - No hover or press visual feedback
+      - pointer-events: none (web)
+      - No gesture handlers (native)
+      This ensures badges serve purely as visual indicators.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Badge cannot receive keyboard focus
+      - Click/tap events do not trigger any action
+      - No visual feedback on hover or press
+      - Badge is not in accessibility focus order
+      - pointer-events is none (web)
+      - user-select is none (web)
+    test_approach: |
+      - Attempt to focus badge via Tab key
+      - Verify badge does not receive focus
+      - Click badge and verify no event handlers fire
+      - Verify pointer-events: none in computed styles (web)
+      - Verify no tabindex attribute present
+
+# ============================================================================
+# Accessibility Contracts
+# ============================================================================
+
+  # ---------------------------------------------------------------------------
+  # color_contrast
+  # ---------------------------------------------------------------------------
+  color_contrast:
+    category: accessibility
+    description: Meets WCAG AA contrast requirements (4.5:1)
+    behavior: |
+      Badge-Label-Base uses design tokens that ensure WCAG AA compliance:
+      - Text color (color.text.default) on background (color.surface)
+      - Contrast ratio meets or exceeds 4.5:1 for normal text
+      - Icon color (color.icon.default) maintains visual consistency
+      High contrast mode support via CSS media query (web).
+    wcag: "1.4.3 Contrast (Minimum)"
+    platforms: [web, ios, android]
+    validation:
+      - Text/background contrast ratio >= 4.5:1
+      - Colors use design tokens, not hardcoded values
+      - High contrast mode applies border for visibility (web)
+    test_approach: |
+      - Calculate contrast ratio between text and background colors
+      - Verify ratio >= 4.5:1
+      - Verify colors reference design tokens
+      - Test with prefers-contrast: high media query (web)
+
+  # ---------------------------------------------------------------------------
+  # text_scaling
+  # ---------------------------------------------------------------------------
+  text_scaling:
+    category: accessibility
+    description: Scales proportionally with user font size preferences
+    behavior: |
+      Badge-Label-Base respects user font size preferences:
+      - Web: Uses relative units (rem-based tokens) that scale with root font size
+      - iOS: Respects Dynamic Type settings
+      - Android: Respects system font scale settings
+      Badge dimensions scale proportionally without content clipping.
+    wcag: "1.4.4 Resize Text"
+    platforms: [web, ios, android]
+    validation:
+      - Badge scales when user increases system font size to 200%
+      - Content remains visible without clipping
+      - Layout maintains integrity at larger sizes
+    test_approach: |
+      - Set root font-size to 200% (web)
+      - Verify badge dimensions scale proportionally
+      - Verify text remains visible and readable
+      - Verify no overflow or clipping occurs
+
+# ============================================================================
+# Contract Summary
+# ============================================================================
+
+summary:
+  total_contracts: 6
+  categories:
+    content: 3
+    interaction: 1
+    accessibility: 2
+  wcag_coverage:
+    - "1.3.1 Info and Relationships"
+    - "1.4.3 Contrast (Minimum)"
+    - "1.4.4 Resize Text"
+  platforms: [web, ios, android]

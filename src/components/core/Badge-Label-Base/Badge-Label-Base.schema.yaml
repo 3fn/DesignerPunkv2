@@ -1,0 +1,279 @@
+# Badge-Label-Base Component Schema
+#
+# Stemma System: Badge Family
+# Component Type: Type Primitive (Label)
+# Naming Convention: [Family]-[Type]-[Variant] = Badge-Label-Base
+#
+# This schema defines the behavioral contracts and properties for the
+# Badge-Label-Base component, which serves as the type primitive
+# for all label badge components in the Badge family.
+#
+# Rationale: Badge-Label-Base is a type primitive that provides label badge
+# functionality for displaying categorization, status, or metadata text.
+# It is read-only and non-interactive, designed for compact inline use.
+# Semantic variants (if needed) will inherit from this base.
+
+name: Badge-Label-Base
+type: type-primitive
+family: Badge
+version: "1.0.0"
+readiness: production-ready
+
+# Component description
+description: |
+  Type primitive label badge component for displaying categorization, status,
+  or metadata text in a compact visual indicator.
+  
+  Key Characteristics:
+  - Read-only: Display-only, no click/tap behavior
+  - Non-interactive: Not focusable, not in tab order
+  - Compact: Small footprint, designed for inline use
+  - Informational: Conveys status or metadata at a glance
+  
+  Badge-Label-Base supports three size variants (sm, md, lg), optional leading
+  icons via Icon-Base integration, and text truncation with accessibility
+  support for full text access.
+
+# Reusable behaviors this component implements
+behaviors:
+  - renderable
+  - sizable
+  - accessible-decorative
+  - truncatable
+
+# Component properties (public API)
+properties:
+  label:
+    type: string
+    required: true
+    description: |
+      Badge text content (required). The label text to display inside the badge.
+      When truncate is enabled, full text remains accessible via title attribute
+      (web) or accessibility label (native platforms).
+  
+  size:
+    type: "'sm' | 'md' | 'lg'"
+    required: false
+    default: "'md'"
+    description: |
+      Size variant determining typography, spacing, and icon size tokens.
+      - sm: typography.labelXs, space.inset.none (v), space.inset.050 (h), icon.size050
+      - md: typography.labelSm, space.inset.050 (v), space.inset.100 (h), icon.size075 [DEFAULT]
+      - lg: typography.labelMd, space.inset.100 (v), space.inset.150 (h), icon.size100
+  
+  icon:
+    type: IconBaseName
+    required: false
+    default: undefined
+    description: |
+      Optional leading icon name. When provided, renders an icon before the
+      label text using Icon-Base component. Icon size is automatically
+      determined by badge size. Icon is marked as decorative (aria-hidden="true"
+      on web, accessibilityHidden on iOS, contentDescription=null on Android).
+  
+  truncate:
+    type: boolean
+    required: false
+    default: false
+    description: |
+      Enable truncation at component-defined max-width (badge.label.maxWidth = 120px).
+      When true, text is truncated with ellipsis. Full text remains accessible via:
+      - Web: title attribute on badge element
+      - iOS: accessibilityLabel on view
+      - Android: contentDescription in semantics
+  
+  testID:
+    type: string
+    required: false
+    default: undefined
+    description: |
+      Test identifier for automated testing. Platform-specific implementation:
+      - Web: data-testid attribute
+      - iOS: accessibilityIdentifier
+      - Android: testTag in semantics
+
+# Behavioral contracts - guarantees this component provides
+contracts:
+  displays_label:
+    description: Renders text label visibly
+    behavior: |
+      Badge-Label-Base renders the provided label text visibly within the badge.
+      Text uses typography tokens based on size variant:
+      - sm: typography.labelXs (13px, medium weight)
+      - md: typography.labelSm (14px, medium weight)
+      - lg: typography.labelMd (16px, medium weight)
+      Text color uses color.text.default token for consistent theming.
+    wcag: "1.3.1 Info and Relationships"
+    platforms: [web, ios, android]
+    validation: |
+      - Label text is visible in the rendered badge
+      - Typography matches size variant specification
+      - Text color uses design token, not hardcoded value
+  
+  non_interactive:
+    description: Does not respond to user interaction
+    behavior: |
+      Badge-Label-Base is read-only and non-interactive:
+      - Not focusable via keyboard navigation (no tabindex)
+      - Does not respond to click, tap, or keyboard events
+      - No hover or press visual feedback
+      - pointer-events: none (web)
+      - No gesture handlers (native)
+      This ensures badges serve purely as visual indicators.
+    wcag: null
+    platforms: [web, ios, android]
+    validation: |
+      - Badge cannot receive keyboard focus
+      - Click/tap events do not trigger any action
+      - No visual feedback on hover or press
+      - Badge is not in accessibility focus order
+  
+  supports_icon:
+    description: Optionally displays leading icon via Icon-Base
+    behavior: |
+      When icon prop is provided, Badge-Label-Base renders a leading icon
+      using the Icon-Base component. Icon characteristics:
+      - Size determined by badge size (sm: 13px, md: 18px, lg: 24px)
+      - Color inherits from badge (color.icon.default)
+      - Gap between icon and text uses space.grouped tokens
+      - Icon is decorative and hidden from assistive technology
+    wcag: "1.3.1 Info and Relationships"
+    platforms: [web, ios, android]
+    validation: |
+      - Icon renders before label text when icon prop provided
+      - Icon size matches badge size specification
+      - Icon color uses design token
+      - Icon is hidden from screen readers (aria-hidden="true")
+  
+  supports_truncation:
+    description: Truncates with ellipsis when truncate=true; full text accessible
+    behavior: |
+      When truncate prop is true, Badge-Label-Base truncates text at
+      badge.label.maxWidth (120px) with ellipsis. Full text remains
+      accessible for assistive technology:
+      - Web: title attribute provides full text on hover
+      - iOS: accessibilityLabel contains full text
+      - Android: contentDescription contains full text
+      When truncate is false, badge grows to fit content.
+    wcag: "1.3.1 Info and Relationships"
+    platforms: [web, ios, android]
+    validation: |
+      - Text truncates with ellipsis at 120px when truncate=true
+      - Full text accessible via platform-appropriate mechanism
+      - Badge grows to fit content when truncate=false
+  
+  color_contrast:
+    description: Meets WCAG AA contrast requirements (4.5:1)
+    behavior: |
+      Badge-Label-Base uses design tokens that ensure WCAG AA compliance:
+      - Text color (color.text.default) on background (color.surface)
+      - Contrast ratio meets or exceeds 4.5:1 for normal text
+      - Icon color (color.icon.default) maintains visual consistency
+      High contrast mode support via CSS media query (web).
+    wcag: "1.4.3 Contrast (Minimum)"
+    platforms: [web, ios, android]
+    validation: |
+      - Text/background contrast ratio >= 4.5:1
+      - Colors use design tokens, not hardcoded values
+      - High contrast mode applies border for visibility (web)
+  
+  text_scaling:
+    description: Scales proportionally with user font size preferences
+    behavior: |
+      Badge-Label-Base respects user font size preferences:
+      - Web: Uses relative units (rem-based tokens) that scale with root font size
+      - iOS: Respects Dynamic Type settings
+      - Android: Respects system font scale settings
+      Badge dimensions scale proportionally without content clipping.
+    wcag: "1.4.4 Resize Text"
+    platforms: [web, ios, android]
+    validation: |
+      - Badge scales when user increases system font size to 200%
+      - Content remains visible without clipping
+      - Layout maintains integrity at larger sizes
+
+# Design tokens this component requires
+tokens:
+  typography:
+    - typography.labelXs
+    - typography.labelSm
+    - typography.labelMd
+  color:
+    - color.surface
+    - color.text.default
+    - color.icon.default
+  spacing:
+    - space.inset.none
+    - space.inset.050
+    - space.inset.100
+    - space.inset.150
+    - space.grouped.minimal
+    - space.grouped.tight
+  radius:
+    - radiusSubtle
+  icon:
+    - icon.size050
+    - icon.size075
+    - icon.size100
+  component:
+    - badge.label.maxWidth
+
+# Supported platforms
+platforms:
+  - web
+  - ios
+  - android
+
+# Platform-specific implementation notes
+platform_notes:
+  web:
+    element: "<badge-label-base>"
+    implementation: Web Component with Shadow DOM
+    file: platforms/web/BadgeLabelBase.web.ts
+    notes: |
+      - Uses Shadow DOM for style encapsulation
+      - CSS custom properties for token consumption
+      - title attribute for truncated text accessibility
+      - pointer-events: none for non-interactivity
+      - Imports Icon-Base web component for icon rendering
+  ios:
+    implementation: SwiftUI View
+    file: platforms/ios/BadgeLabelBase.ios.swift
+    notes: |
+      - Uses SwiftUI HStack for icon + label layout
+      - Token consumption via DesignTokens enum
+      - accessibilityLabel for truncated text accessibility
+      - accessibilityHidden(true) on icon for decorative marking
+      - Uses IconBase SwiftUI component for icon rendering
+  android:
+    implementation: Jetpack Compose Composable
+    file: platforms/android/BadgeLabelBase.android.kt
+    notes: |
+      - Uses Compose Row for icon + label layout
+      - Token consumption via DesignTokens object
+      - contentDescription in semantics for truncated text accessibility
+      - Uses IconBase composable for icon rendering
+
+# Semantic components that inherit from this type primitive
+semantic_variants:
+  - name: Badge-Label-Status
+    extends: Status-specific label badges with semantic colors
+    status: planned
+  - name: Badge-Label-Category
+    extends: Category-specific label badges with custom styling
+    status: planned
+
+# Accessibility compliance
+accessibility:
+  wcag_level: AA
+  compliance:
+    - "1.3.1 Info and Relationships - Label text conveys meaning"
+    - "1.4.3 Contrast (Minimum) - Text meets 4.5:1 contrast ratio"
+    - "1.4.4 Resize Text - Scales with user font preferences"
+    - "1.4.11 Non-text Contrast - Badge boundary visible"
+  aria_attributes:
+    - aria-hidden: "true"  # on icon only, badge text is readable
+  platform_accessibility:
+    web: "title attribute for truncated text, aria-hidden on icon"
+    ios: "accessibilityLabel for full text, accessibilityHidden on icon"
+    android: "contentDescription for full text, null contentDescription on icon"

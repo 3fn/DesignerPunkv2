@@ -1,0 +1,165 @@
+/**
+ * Badge-Label-Base Styles for Web Platform
+ * 
+ * Stemma System: Badge Family
+ * Component Type: Type Primitive (Label)
+ * 
+ * Token-based styling using CSS custom properties.
+ * All values reference design tokens for consistency and theming support.
+ * 
+ * @see .kiro/specs/044-badge-base/design.md for design specification
+ * @see Requirements 1.1-1.10, 4.1-4.8 in .kiro/specs/044-badge-base/requirements.md
+ */
+
+/* ============================================================================
+ * Base Badge Styles
+ * ============================================================================ */
+
+.badge-label {
+  /* Layout */
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  
+  /* Shape - radiusSubtle (2px) */
+  border-radius: var(--radius-subtle);
+  
+  /* Colors - default surface/text */
+  background-color: var(--color-surface);
+  color: var(--color-text-default);
+  
+  /* Non-interactive */
+  pointer-events: none;
+  user-select: none;
+  
+  /* Prevent focus */
+  outline: none;
+}
+
+/* ============================================================================
+ * Size Variants
+ * ============================================================================ */
+
+/* Small (sm) */
+.badge-label--sm {
+  /* Typography: typography.labelXs */
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-050);
+  line-height: var(--line-height-050);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-tight);
+  
+  /* Padding: space.inset.none (v), space.inset.050 (h) */
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: var(--space-050);
+  padding-right: var(--space-050);
+  
+  /* Icon gap: space.grouped.minimal */
+  gap: var(--space-025);
+}
+
+/* Medium (md) - default */
+.badge-label--md {
+  /* Typography: typography.labelSm */
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-075);
+  line-height: var(--line-height-075);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-tight);
+  
+  /* Padding: space.inset.050 (v), space.inset.100 (h) */
+  padding-top: var(--space-050);
+  padding-bottom: var(--space-050);
+  padding-left: var(--space-100);
+  padding-right: var(--space-100);
+  
+  /* Icon gap: space.grouped.tight */
+  gap: var(--space-050);
+}
+
+/* Large (lg) */
+.badge-label--lg {
+  /* Typography: typography.labelMd */
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-100);
+  line-height: var(--line-height-100);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-normal);
+  
+  /* Padding: space.inset.100 (v), space.inset.150 (h) */
+  padding-top: var(--space-100);
+  padding-bottom: var(--space-100);
+  padding-left: var(--space-150);
+  padding-right: var(--space-150);
+  
+  /* Icon gap: space.grouped.tight */
+  gap: var(--space-050);
+}
+
+/* ============================================================================
+ * Label Text
+ * ============================================================================ */
+
+.badge-label__text {
+  /* Inherit typography from parent */
+  font: inherit;
+  color: inherit;
+  
+  /* Prevent text selection */
+  user-select: none;
+}
+
+/* Truncation modifier */
+.badge-label__text--truncate {
+  /* Truncation with ellipsis */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  
+  /* Max-width from component token: badge.label.maxWidth (120px) */
+  max-width: var(--badge-label-max-width);
+}
+
+/* ============================================================================
+ * Icon Container
+ * ============================================================================ */
+
+.badge-label__icon {
+  /* Flex shrink prevention */
+  flex-shrink: 0;
+  
+  /* Inherit color for icon */
+  color: inherit;
+  
+  /* Vertical alignment */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================================
+ * Accessibility
+ * ============================================================================ */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .badge-label {
+    border: 1px solid currentColor;
+  }
+}
+
+/* Reduced motion - no animations to reduce */
+@media (prefers-reduced-motion: reduce) {
+  .badge-label {
+    transition: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .badge-label {
+    background-color: transparent;
+    border: 1px solid currentColor;
+  }
+}
