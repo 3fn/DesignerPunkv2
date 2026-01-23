@@ -1,0 +1,154 @@
+/**
+ * Badge-Count-Base Styles for Web Platform
+ * 
+ * Stemma System: Badge Family
+ * Component Type: Type Primitive (Count)
+ * 
+ * Token-based styling using CSS custom properties.
+ * All values reference design tokens for consistency and theming support.
+ * 
+ * Shape behavior:
+ * - Single digit (1-9): Circular (width = height via min-width = line-height)
+ * - Multi-digit (10+): Pill shape (expands horizontally with padding)
+ * 
+ * @see .kiro/specs/044-badge-base/design.md for design specification
+ * @see Requirements 2.1-2.13, 4.3, 4.4 in .kiro/specs/044-badge-base/requirements.md
+ */
+
+/* ============================================================================
+ * Base Badge Styles
+ * ============================================================================ */
+
+.badge-count {
+  /* Layout - centered content */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  
+  /* Shape - radiusHalf (50%) for circular/pill */
+  border-radius: var(--radius-half, 50%);
+  
+  /* Colors - default surface/text */
+  background-color: var(--color-surface);
+  color: var(--color-text-default);
+  
+  /* Non-interactive */
+  pointer-events: none;
+  user-select: none;
+  
+  /* Prevent focus */
+  outline: none;
+  
+  /* Text alignment */
+  text-align: center;
+}
+
+/* ============================================================================
+ * Size Variants
+ * ============================================================================ */
+
+/* Small (sm) */
+.badge-count--sm {
+  /* Typography: typography.labelXs */
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-050);
+  line-height: var(--line-height-050);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-tight);
+  
+  /* Padding: space.inset.none (v), space.inset.050 (h) */
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: var(--space-050);
+  padding-right: var(--space-050);
+  
+  /* Min-width = line-height for circular single digits */
+  min-width: var(--line-height-050);
+  /* Min-height = line-height for consistent height */
+  min-height: var(--line-height-050);
+}
+
+/* Medium (md) - default */
+.badge-count--md {
+  /* Typography: typography.labelSm */
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-075);
+  line-height: var(--line-height-075);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-tight);
+  
+  /* Padding: space.inset.none (v), space.inset.050 (h) */
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: var(--space-050);
+  padding-right: var(--space-050);
+  
+  /* Min-width = line-height for circular single digits */
+  min-width: var(--line-height-075);
+  /* Min-height = line-height for consistent height */
+  min-height: var(--line-height-075);
+}
+
+/* Large (lg) */
+.badge-count--lg {
+  /* Typography: typography.labelMd */
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-100);
+  line-height: var(--line-height-100);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-normal);
+  
+  /* Padding: space.inset.050 (v), space.inset.100 (h) */
+  padding-top: var(--space-050);
+  padding-bottom: var(--space-050);
+  padding-left: var(--space-100);
+  padding-right: var(--space-100);
+  
+  /* Min-width = line-height for circular single digits */
+  min-width: var(--line-height-100);
+  /* Min-height = line-height + padding for consistent height */
+  min-height: calc(var(--line-height-100) + var(--space-050) * 2);
+}
+
+/* ============================================================================
+ * Count Text
+ * ============================================================================ */
+
+.badge-count__text {
+  /* Inherit typography from parent */
+  font: inherit;
+  color: inherit;
+  
+  /* Prevent text selection */
+  user-select: none;
+  
+  /* Ensure text doesn't wrap */
+  white-space: nowrap;
+}
+
+/* ============================================================================
+ * Accessibility
+ * ============================================================================ */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .badge-count {
+    border: 1px solid currentColor;
+  }
+}
+
+/* Reduced motion - no animations to reduce */
+@media (prefers-reduced-motion: reduce) {
+  .badge-count {
+    transition: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .badge-count {
+    background-color: transparent;
+    border: 1px solid currentColor;
+  }
+}

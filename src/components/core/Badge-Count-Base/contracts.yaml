@@ -1,0 +1,245 @@
+# Badge-Count-Base Behavioral Contracts
+#
+# Stemma System: Badge Family
+# Component Type: Type Primitive (Count)
+#
+# This file defines the behavioral contracts for Badge-Count-Base.
+# Contracts are guarantees the component provides to consumers.
+#
+# Contract Categories:
+# - Content: How the component displays content
+# - Shape: How the component adapts its shape
+# - Interaction: How the component responds to user input
+# - Accessibility: How the component supports assistive technology
+#
+# @see Badge-Count-Base.schema.yaml for full component schema
+# @see .kiro/specs/044-badge-base/design.md for design specification
+
+version: "1.0.0"
+component: Badge-Count-Base
+family: Badge
+
+# ============================================================================
+# Content Contracts
+# ============================================================================
+
+contracts:
+  # ---------------------------------------------------------------------------
+  # displays_count
+  # ---------------------------------------------------------------------------
+  displays_count:
+    category: content
+    description: Shows numeric value
+    behavior: |
+      Badge-Count-Base renders the provided count value visibly within the badge.
+      Text uses typography tokens based on size variant:
+      - sm: typography.labelXs (13px, medium weight, 1.538 line-height)
+      - md: typography.labelSm (14px, medium weight, 1.429 line-height)
+      - lg: typography.labelMd (16px, medium weight, 1.5 line-height)
+      Text color uses color.text.default token for consistent theming.
+      Count is displayed as-is unless it exceeds max value.
+    wcag: "1.3.1 Info and Relationships"
+    platforms: [web, ios, android]
+    validation:
+      - Count value is visible in the rendered badge
+      - Typography matches size variant specification
+      - Text color uses design token, not hardcoded value
+      - Font weight is medium (500)
+    test_approach: |
+      - Render badge with count prop
+      - Verify text content matches count prop value
+      - Verify computed font-size matches size variant
+      - Verify text is visible (not hidden or zero-opacity)
+
+  # ---------------------------------------------------------------------------
+  # truncates_at_max
+  # ---------------------------------------------------------------------------
+  truncates_at_max:
+    category: content
+    description: Shows "[max]+" when count exceeds max
+    behavior: |
+      When count exceeds the max value (default: 99), Badge-Count-Base
+      displays "[max]+" instead of the actual count. For example:
+      - count=100, max=99 → displays "99+"
+      - count=1000, max=99 → displays "99+"
+      - count=50, max=99 → displays "50"
+      - count=99, max=99 → displays "99" (exact match shows value)
+      This prevents badges from becoming too wide with large numbers.
+    wcag: "1.3.1 Info and Relationships"
+    platforms: [web, ios, android]
+    validation:
+      - Count at or below max displays exact value
+      - Count above max displays "[max]+"
+      - Plus sign (+) appears after max value
+      - Custom max values are respected
+    test_approach: |
+      - Render badge with count=50, max=99
+      - Verify displays "50"
+      - Render badge with count=100, max=99
+      - Verify displays "99+"
+      - Render badge with count=99, max=99
+      - Verify displays "99" (not "99+")
+
+# ============================================================================
+# Shape Contracts
+# ============================================================================
+
+  # ---------------------------------------------------------------------------
+  # circular_single_digit
+  # ---------------------------------------------------------------------------
+  circular_single_digit:
+    category: shape
+    description: Renders circular for single-digit counts
+    behavior: |
+      When displaying a single digit (1-9), Badge-Count-Base renders as
+      a circle by setting min-width equal to line-height:
+      - sm: min-width = 16px (line-height-050)
+      - md: min-width = 20px (line-height-075)
+      - lg: min-width = 24px (line-height-100)
+      Combined with radiusHalf (50%), this creates a perfect circle.
+      Text is centered horizontally and vertically within the circle.
+      Zero (0) also renders as circular when showZero=true.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Single-digit counts render as circular shape
+      - Width equals height for single digits
+      - Text is centered within the circle
+      - radiusHalf (50%) applied for circular appearance
+    test_approach: |
+      - Render badge with count=5
+      - Verify min-width equals line-height for size
+      - Verify border-radius is 50%
+      - Verify text is centered (text-align: center)
+
+  # ---------------------------------------------------------------------------
+  # pill_multi_digit
+  # ---------------------------------------------------------------------------
+  pill_multi_digit:
+    category: shape
+    description: Renders pill shape for multi-digit counts
+    behavior: |
+      When displaying multi-digit counts (10+) or overflow text (e.g., "99+"),
+      Badge-Count-Base expands horizontally with padding to create a pill shape.
+      The radiusHalf (50%) creates rounded ends on the pill.
+      Horizontal padding ensures text doesn't touch the edges.
+      
+      Shape transitions:
+      - 1-9: Circular (width = height)
+      - 10-99: Pill (width > height)
+      - 100+ (or >max): Pill with "[max]+" text
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Multi-digit counts render as pill shape
+      - Width exceeds height for multi-digit counts
+      - Rounded ends maintained via radiusHalf
+      - Horizontal padding applied
+    test_approach: |
+      - Render badge with count=50
+      - Verify width exceeds min-width
+      - Verify border-radius is 50%
+      - Render badge with count=100, max=99
+      - Verify displays "99+" in pill shape
+
+# ============================================================================
+# Interaction Contracts
+# ============================================================================
+
+  # ---------------------------------------------------------------------------
+  # non_interactive
+  # ---------------------------------------------------------------------------
+  non_interactive:
+    category: interaction
+    description: Does not respond to user interaction
+    behavior: |
+      Badge-Count-Base is read-only and non-interactive:
+      - Not focusable via keyboard navigation (no tabindex)
+      - Does not respond to click, tap, or keyboard events
+      - No hover or press visual feedback
+      - pointer-events: none (web)
+      - No gesture handlers (native)
+      This ensures badges serve purely as visual indicators.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Badge cannot receive keyboard focus
+      - Click/tap events do not trigger any action
+      - No visual feedback on hover or press
+      - Badge is not in accessibility focus order
+      - pointer-events is none (web)
+      - user-select is none (web)
+    test_approach: |
+      - Attempt to focus badge via Tab key
+      - Verify badge does not receive focus
+      - Click badge and verify no event handlers fire
+      - Verify pointer-events: none in computed styles (web)
+      - Verify no tabindex attribute present
+
+# ============================================================================
+# Accessibility Contracts
+# ============================================================================
+
+  # ---------------------------------------------------------------------------
+  # color_contrast
+  # ---------------------------------------------------------------------------
+  color_contrast:
+    category: accessibility
+    description: Meets WCAG AA contrast requirements (4.5:1)
+    behavior: |
+      Badge-Count-Base uses design tokens that ensure WCAG AA compliance:
+      - Text color (color.text.default) on background (color.surface)
+      - Contrast ratio meets or exceeds 4.5:1 for normal text
+      High contrast mode support via CSS media query (web).
+    wcag: "1.4.3 Contrast (Minimum)"
+    platforms: [web, ios, android]
+    validation:
+      - Text/background contrast ratio >= 4.5:1
+      - Colors use design tokens, not hardcoded values
+      - High contrast mode applies border for visibility (web)
+    test_approach: |
+      - Calculate contrast ratio between text and background colors
+      - Verify ratio >= 4.5:1
+      - Verify colors reference design tokens
+      - Test with prefers-contrast: high media query (web)
+
+  # ---------------------------------------------------------------------------
+  # text_scaling
+  # ---------------------------------------------------------------------------
+  text_scaling:
+    category: accessibility
+    description: Scales proportionally with user font size preferences
+    behavior: |
+      Badge-Count-Base respects user font size preferences:
+      - Web: Uses relative units (rem-based tokens) that scale with root font size
+      - iOS: Respects Dynamic Type settings
+      - Android: Respects system font scale settings
+      Badge dimensions scale proportionally without content clipping.
+    wcag: "1.4.4 Resize Text"
+    platforms: [web, ios, android]
+    validation:
+      - Badge scales when user increases system font size to 200%
+      - Content remains visible without clipping
+      - Layout maintains integrity at larger sizes
+    test_approach: |
+      - Set root font-size to 200% (web)
+      - Verify badge dimensions scale proportionally
+      - Verify text remains visible and readable
+      - Verify no overflow or clipping occurs
+
+# ============================================================================
+# Contract Summary
+# ============================================================================
+
+summary:
+  total_contracts: 7
+  categories:
+    content: 2
+    shape: 2
+    interaction: 1
+    accessibility: 2
+  wcag_coverage:
+    - "1.3.1 Info and Relationships"
+    - "1.4.3 Contrast (Minimum)"
+    - "1.4.4 Resize Text"
+  platforms: [web, ios, android]

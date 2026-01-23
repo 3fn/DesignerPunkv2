@@ -1,0 +1,278 @@
+# Badge-Count-Base Component Schema
+#
+# Stemma System: Badge Family
+# Component Type: Type Primitive (Count)
+# Naming Convention: [Family]-[Type]-[Variant] = Badge-Count-Base
+#
+# This schema defines the behavioral contracts and properties for the
+# Badge-Count-Base component, which serves as the type primitive
+# for all count badge components in the Badge family.
+#
+# Rationale: Badge-Count-Base is a type primitive that provides count badge
+# functionality for displaying numeric values like notification counts or
+# quantities. It is read-only and non-interactive, designed for compact inline use.
+# Semantic variants (like Badge-Count-Notification) inherit from this base.
+
+name: Badge-Count-Base
+type: type-primitive
+family: Badge
+version: "1.0.0"
+readiness: production-ready
+
+# Component description
+description: |
+  Type primitive count badge component for displaying numeric values like
+  notification counts or quantities in a compact visual indicator.
+  
+  Key Characteristics:
+  - Read-only: Display-only, no click/tap behavior
+  - Non-interactive: Not focusable, not in tab order
+  - Compact: Small footprint, designed for inline use
+  - Informational: Conveys numeric status at a glance
+  
+  Badge-Count-Base supports three size variants (sm, md, lg), automatic shape
+  adaptation (circular for single digits, pill for multi-digit), max truncation
+  (e.g., "99+"), and showZero behavior control.
+  
+  Shape Behavior:
+  - Single digit (1-9): Circular shape (width equals height)
+  - Multi-digit (10+): Pill shape with horizontal padding
+  - Overflow (>max): Shows "[max]+" (e.g., "99+")
+
+# Reusable behaviors this component implements
+behaviors:
+  - renderable
+  - sizable
+  - accessible-decorative
+  - truncatable
+
+# Component properties (public API)
+properties:
+  count:
+    type: number
+    required: true
+    description: |
+      Numeric value to display (required). The count to display inside the badge.
+      Negative values are rendered as absolute value or 0.
+      NaN values are rendered as 0.
+  
+  max:
+    type: number
+    required: false
+    default: 99
+    description: |
+      Maximum before showing "[max]+". When count exceeds this value,
+      displays "[max]+" (e.g., "99+"). If max is 0 or negative, uses default (99).
+  
+  showZero:
+    type: boolean
+    required: false
+    default: false
+    description: |
+      Whether to show badge when count is 0.
+      - false (default): Badge is not rendered when count is 0
+      - true: Badge renders showing "0"
+  
+  size:
+    type: "'sm' | 'md' | 'lg'"
+    required: false
+    default: "'md'"
+    description: |
+      Size variant determining typography and spacing tokens.
+      - sm: typography.labelXs, space.inset.none (v), space.inset.050 (h), minWidth=16px
+      - md: typography.labelSm, space.inset.none (v), space.inset.050 (h), minWidth=20px [DEFAULT]
+      - lg: typography.labelMd, space.inset.050 (v), space.inset.100 (h), minWidth=24px
+  
+  testID:
+    type: string
+    required: false
+    default: undefined
+    description: |
+      Test identifier for automated testing. Platform-specific implementation:
+      - Web: data-testid attribute
+      - iOS: accessibilityIdentifier
+      - Android: testTag in semantics
+
+# Behavioral contracts - guarantees this component provides
+contracts:
+  displays_count:
+    description: Shows numeric value
+    behavior: |
+      Badge-Count-Base renders the provided count value visibly within the badge.
+      Text uses typography tokens based on size variant:
+      - sm: typography.labelXs (13px, medium weight)
+      - md: typography.labelSm (14px, medium weight)
+      - lg: typography.labelMd (16px, medium weight)
+      Text color uses color.text.default token for consistent theming.
+      Count is displayed as-is unless it exceeds max value.
+    wcag: "1.3.1 Info and Relationships"
+    platforms: [web, ios, android]
+    validation: |
+      - Count value is visible in the rendered badge
+      - Typography matches size variant specification
+      - Text color uses design token, not hardcoded value
+  
+  truncates_at_max:
+    description: Shows "[max]+" when count exceeds max
+    behavior: |
+      When count exceeds the max value (default: 99), Badge-Count-Base
+      displays "[max]+" instead of the actual count. For example:
+      - count=100, max=99 → displays "99+"
+      - count=1000, max=99 → displays "99+"
+      - count=50, max=99 → displays "50"
+      This prevents badges from becoming too wide with large numbers.
+    wcag: "1.3.1 Info and Relationships"
+    platforms: [web, ios, android]
+    validation: |
+      - Count at or below max displays exact value
+      - Count above max displays "[max]+"
+      - Plus sign (+) appears after max value
+  
+  circular_single_digit:
+    description: Renders circular for single-digit counts
+    behavior: |
+      When displaying a single digit (1-9), Badge-Count-Base renders as
+      a circle by setting min-width equal to line-height:
+      - sm: min-width = 16px (line-height-050)
+      - md: min-width = 20px (line-height-075)
+      - lg: min-width = 24px (line-height-100)
+      Combined with radiusHalf (50%), this creates a perfect circle.
+      Text is centered horizontally and vertically within the circle.
+    wcag: null
+    platforms: [web, ios, android]
+    validation: |
+      - Single-digit counts render as circular shape
+      - Width equals height for single digits
+      - Text is centered within the circle
+  
+  pill_multi_digit:
+    description: Renders pill shape for multi-digit counts
+    behavior: |
+      When displaying multi-digit counts (10+) or overflow text (e.g., "99+"),
+      Badge-Count-Base expands horizontally with padding to create a pill shape.
+      The radiusHalf (50%) creates rounded ends on the pill.
+      Horizontal padding ensures text doesn't touch the edges.
+    wcag: null
+    platforms: [web, ios, android]
+    validation: |
+      - Multi-digit counts render as pill shape
+      - Width exceeds height for multi-digit counts
+      - Rounded ends maintained via radiusHalf
+  
+  non_interactive:
+    description: Does not respond to user interaction
+    behavior: |
+      Badge-Count-Base is read-only and non-interactive:
+      - Not focusable via keyboard navigation (no tabindex)
+      - Does not respond to click, tap, or keyboard events
+      - No hover or press visual feedback
+      - pointer-events: none (web)
+      - No gesture handlers (native)
+      This ensures badges serve purely as visual indicators.
+    wcag: null
+    platforms: [web, ios, android]
+    validation: |
+      - Badge cannot receive keyboard focus
+      - Click/tap events do not trigger any action
+      - No visual feedback on hover or press
+      - Badge is not in accessibility focus order
+  
+  color_contrast:
+    description: Meets WCAG AA contrast requirements (4.5:1)
+    behavior: |
+      Badge-Count-Base uses design tokens that ensure WCAG AA compliance:
+      - Text color (color.text.default) on background (color.surface)
+      - Contrast ratio meets or exceeds 4.5:1 for normal text
+      High contrast mode support via CSS media query (web).
+    wcag: "1.4.3 Contrast (Minimum)"
+    platforms: [web, ios, android]
+    validation: |
+      - Text/background contrast ratio >= 4.5:1
+      - Colors use design tokens, not hardcoded values
+      - High contrast mode applies border for visibility (web)
+  
+  text_scaling:
+    description: Scales proportionally with user font size preferences
+    behavior: |
+      Badge-Count-Base respects user font size preferences:
+      - Web: Uses relative units (rem-based tokens) that scale with root font size
+      - iOS: Respects Dynamic Type settings
+      - Android: Respects system font scale settings
+      Badge dimensions scale proportionally without content clipping.
+    wcag: "1.4.4 Resize Text"
+    platforms: [web, ios, android]
+    validation: |
+      - Badge scales when user increases system font size to 200%
+      - Content remains visible without clipping
+      - Layout maintains integrity at larger sizes
+
+# Design tokens this component requires
+tokens:
+  typography:
+    - typography.labelXs
+    - typography.labelSm
+    - typography.labelMd
+  color:
+    - color.surface
+    - color.text.default
+  spacing:
+    - space.inset.none
+    - space.inset.050
+    - space.inset.100
+  radius:
+    - radiusHalf
+
+# Supported platforms
+platforms:
+  - web
+  - ios
+  - android
+
+# Platform-specific implementation notes
+platform_notes:
+  web:
+    element: "<badge-count-base>"
+    implementation: Web Component with Shadow DOM
+    file: platforms/web/BadgeCountBase.web.ts
+    notes: |
+      - Uses Shadow DOM for style encapsulation
+      - CSS custom properties for token consumption
+      - pointer-events: none for non-interactivity
+      - min-width set via CSS for circular shape
+      - radiusHalf (50%) for circular/pill shape
+  ios:
+    implementation: SwiftUI View
+    file: platforms/ios/BadgeCountBase.ios.swift
+    notes: |
+      - Uses SwiftUI frame modifiers for min-width
+      - Token consumption via DesignTokens enum
+      - Capsule shape for circular/pill rendering
+      - Non-interactive via disabled state
+  android:
+    implementation: Jetpack Compose Composable
+    file: platforms/android/BadgeCountBase.android.kt
+    notes: |
+      - Uses Compose Modifier.widthIn for min-width
+      - Token consumption via DesignTokens object
+      - RoundedCornerShape(50%) for circular/pill shape
+      - Non-interactive via no click handlers
+
+# Semantic components that inherit from this type primitive
+semantic_variants:
+  - name: Badge-Count-Notification
+    extends: Notification-specific count badges with semantic colors and live region announcements
+    status: planned
+
+# Accessibility compliance
+accessibility:
+  wcag_level: AA
+  compliance:
+    - "1.3.1 Info and Relationships - Count value conveys meaning"
+    - "1.4.3 Contrast (Minimum) - Text meets 4.5:1 contrast ratio"
+    - "1.4.4 Resize Text - Scales with user font preferences"
+    - "1.4.11 Non-text Contrast - Badge boundary visible"
+  aria_attributes: []
+  platform_accessibility:
+    web: "Count text readable by screen readers"
+    ios: "Count accessible via VoiceOver"
+    android: "Count accessible via TalkBack"
