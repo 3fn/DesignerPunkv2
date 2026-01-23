@@ -366,9 +366,9 @@ describe('Semantic Color Tokens - Palette Update', () => {
   });
 
   describe('Token Count Validation', () => {
-    it('should have exactly 38 color tokens', () => {
-      // 28 base + 1 background.primary.subtle + 4 select + 5 avatar = 38
-      expect(colorTokenNames.length).toBe(38);
+    it('should have exactly 40 color tokens', () => {
+      // 28 base + 1 background.primary.subtle + 4 select + 5 avatar + 2 badge = 40
+      expect(colorTokenNames.length).toBe(40);
     });
 
     it('should pass validateColorTokenCount()', () => {
@@ -453,9 +453,9 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(Array.isArray(tokens)).toBe(true);
       });
 
-      it('should return exactly 38 tokens', () => {
+      it('should return exactly 40 tokens', () => {
         const tokens = getAllColorTokens();
-        expect(tokens.length).toBe(38);
+        expect(tokens.length).toBe(40);
       });
 
       it('should include all new tokens', () => {
@@ -721,10 +721,10 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(selectTokens.length).toBe(4);
       });
 
-      it('should include select tokens in total count of 38', () => {
-        // Verify total count includes the 4 select tokens and 5 avatar tokens
-        // 28 base + 1 background.primary.subtle + 4 select + 5 avatar = 38
-        expect(colorTokenNames.length).toBe(38);
+      it('should include select tokens in total count of 40', () => {
+        // Verify total count includes the 4 select tokens and 5 avatar tokens and 2 badge tokens
+        // 28 base + 1 background.primary.subtle + 4 select + 5 avatar + 2 badge = 40
+        expect(colorTokenNames.length).toBe(40);
         expect(validateColorTokenCount()).toBe(true);
       });
     });
@@ -905,6 +905,161 @@ describe('Semantic Color Tokens - Palette Update', () => {
       it('should have exactly 5 avatar tokens', () => {
         const avatarTokens = colorTokenNames.filter(n => n.startsWith('color.avatar'));
         expect(avatarTokens.length).toBe(5);
+      });
+    });
+  });
+
+  /**
+   * Badge Color Token Tests
+   * 
+   * Tests for Badge color tokens added in Spec 044: Badge Component Family.
+   * Validates that Badge tokens reference correct primitives and have proper structure.
+   * Following industry-standard naming pattern: [semantic token family].[component].[property].[variant]
+   */
+  describe('Badge Color Tokens (Spec 044)', () => {
+    describe('Token Existence', () => {
+      it('should have color.badge.background.notification token', () => {
+        expect(colorTokens['color.badge.background.notification']).toBeDefined();
+      });
+
+      it('should have color.badge.text.notification token', () => {
+        expect(colorTokens['color.badge.text.notification']).toBeDefined();
+      });
+    });
+
+    describe('Primitive References', () => {
+      it('should reference pink400 primitive for notification background', () => {
+        const token = colorTokens['color.badge.background.notification'];
+        expect(token.primitiveReferences.value).toBe('pink400');
+      });
+
+      it('should reference white100 primitive for notification text', () => {
+        const token = colorTokens['color.badge.text.notification'];
+        expect(token.primitiveReferences.value).toBe('white100');
+      });
+
+      it('should verify pink400 primitive exists', () => {
+        const token = colorTokens['color.badge.background.notification'];
+        const primitiveName = token.primitiveReferences.value;
+        expect(primitiveColorTokens).toHaveProperty(primitiveName);
+      });
+
+      it('should verify white100 primitive exists', () => {
+        const token = colorTokens['color.badge.text.notification'];
+        const primitiveName = token.primitiveReferences.value;
+        expect(primitiveColorTokens).toHaveProperty(primitiveName);
+      });
+    });
+
+    describe('Token Structure', () => {
+      it('should have COLOR category for badge background token', () => {
+        expect(colorTokens['color.badge.background.notification'].category).toBe(SemanticCategory.COLOR);
+      });
+
+      it('should have COLOR category for badge text token', () => {
+        expect(colorTokens['color.badge.text.notification'].category).toBe(SemanticCategory.COLOR);
+      });
+
+      it('should have meaningful context for badge background token', () => {
+        const token = colorTokens['color.badge.background.notification'];
+        expect(token.context).toBeTruthy();
+        expect(token.context.toLowerCase()).toContain('notification');
+        expect(token.context.toLowerCase()).toContain('badge');
+      });
+
+      it('should have meaningful context for badge text token', () => {
+        const token = colorTokens['color.badge.text.notification'];
+        expect(token.context).toBeTruthy();
+        expect(token.context.toLowerCase()).toContain('notification');
+        expect(token.context.toLowerCase()).toContain('badge');
+      });
+
+      it('should have descriptions for all badge tokens', () => {
+        expect(colorTokens['color.badge.background.notification'].description).toBeTruthy();
+        expect(colorTokens['color.badge.text.notification'].description).toBeTruthy();
+      });
+
+      it('should follow industry-standard naming pattern [family].[component].[property].[variant]', () => {
+        // Verify naming pattern: color.badge.background.notification
+        const bgToken = colorTokens['color.badge.background.notification'];
+        expect(bgToken.name).toBe('color.badge.background.notification');
+        const bgParts = bgToken.name.split('.');
+        expect(bgParts[0]).toBe('color');      // semantic token family
+        expect(bgParts[1]).toBe('badge');      // component
+        expect(bgParts[2]).toBe('background'); // property
+        expect(bgParts[3]).toBe('notification'); // variant
+
+        // Verify naming pattern: color.badge.text.notification
+        const textToken = colorTokens['color.badge.text.notification'];
+        expect(textToken.name).toBe('color.badge.text.notification');
+        const textParts = textToken.name.split('.');
+        expect(textParts[0]).toBe('color');      // semantic token family
+        expect(textParts[1]).toBe('badge');      // component
+        expect(textParts[2]).toBe('text');       // property
+        expect(textParts[3]).toBe('notification'); // variant
+      });
+    });
+
+    describe('Utility Function Access', () => {
+      it('should return color.badge.background.notification via getColorToken()', () => {
+        const token = getColorToken('color.badge.background.notification');
+        expect(token).toBeDefined();
+        expect(token?.name).toBe('color.badge.background.notification');
+      });
+
+      it('should return color.badge.text.notification via getColorToken()', () => {
+        const token = getColorToken('color.badge.text.notification');
+        expect(token).toBeDefined();
+        expect(token?.name).toBe('color.badge.text.notification');
+      });
+
+      it('should include all badge tokens in getAllColorTokens()', () => {
+        const tokens = getAllColorTokens();
+        const tokenNames = tokens.map(t => t.name);
+
+        expect(tokenNames).toContain('color.badge.background.notification');
+        expect(tokenNames).toContain('color.badge.text.notification');
+      });
+    });
+
+    describe('Token Count Includes Badge Tokens', () => {
+      it('should have exactly 2 badge tokens', () => {
+        const badgeTokens = colorTokenNames.filter(n => n.startsWith('color.badge'));
+        expect(badgeTokens.length).toBe(2);
+      });
+
+      it('should include badge tokens in total count of 40', () => {
+        // Verify total count includes the 2 badge tokens
+        // 28 base + 1 background.primary.subtle + 4 select + 5 avatar + 2 badge = 40
+        expect(colorTokenNames.length).toBe(40);
+        expect(validateColorTokenCount()).toBe(true);
+      });
+    });
+
+    describe('Requirements Coverage (Spec 044)', () => {
+      it('should satisfy Requirement 4.7: Badge-Count-Notification uses notification color tokens', () => {
+        expect(colorTokens['color.badge.background.notification']).toBeDefined();
+        expect(colorTokens['color.badge.text.notification']).toBeDefined();
+      });
+
+      it('should satisfy Requirement 9.1: color.badge.background.notification references pink400', () => {
+        const token = colorTokens['color.badge.background.notification'];
+        expect(token.primitiveReferences.value).toBe('pink400');
+      });
+
+      it('should satisfy Requirement 9.2: color.badge.text.notification references white100', () => {
+        const token = colorTokens['color.badge.text.notification'];
+        expect(token.primitiveReferences.value).toBe('white100');
+      });
+
+      it('should satisfy Requirement 9.7: tokens follow industry-standard naming pattern', () => {
+        // Pattern: [semantic token family].[component].[property].[variant]
+        const bgToken = colorTokens['color.badge.background.notification'];
+        const textToken = colorTokens['color.badge.text.notification'];
+        
+        // Both tokens follow the pattern
+        expect(bgToken.name.split('.').length).toBe(4);
+        expect(textToken.name.split('.').length).toBe(4);
       });
     });
   });

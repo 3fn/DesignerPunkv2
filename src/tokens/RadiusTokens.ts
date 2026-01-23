@@ -70,14 +70,14 @@ export const radiusTokens: Record<string, PrimitiveToken> = {
   radius075: {
     name: 'radius075',
     category: TokenCategory.RADIUS,
-    baseValue: 6,
+    baseValue: RADIUS_BASE_VALUE * 0.75,
     familyBaseValue: RADIUS_BASE_VALUE,
     description: 'Medium-small radius - 0.75x base value (strategic flexibility)',
     mathematicalRelationship: 'base × 0.75 = 8 × 0.75 = 6',
     baselineGridAlignment: false, // Strategic flexibility exception
     isStrategicFlexibility: true,
     isPrecisionTargeted: false,
-    platforms: generateRadiusPlatformValues(6)
+    platforms: generateRadiusPlatformValues(RADIUS_BASE_VALUE * 0.75)
   },
 
   radius100: {
@@ -96,14 +96,14 @@ export const radiusTokens: Record<string, PrimitiveToken> = {
   radius125: {
     name: 'radius125',
     category: TokenCategory.RADIUS,
-    baseValue: 10,
+    baseValue: RADIUS_BASE_VALUE * 1.25,
     familyBaseValue: RADIUS_BASE_VALUE,
     description: 'Medium radius - 1.25x base value (strategic flexibility)',
     mathematicalRelationship: 'base × 1.25 = 8 × 1.25 = 10',
     baselineGridAlignment: false, // Strategic flexibility exception
     isStrategicFlexibility: true,
     isPrecisionTargeted: false,
-    platforms: generateRadiusPlatformValues(10)
+    platforms: generateRadiusPlatformValues(RADIUS_BASE_VALUE * 1.25)
   },
 
   radius150: {
@@ -135,14 +135,14 @@ export const radiusTokens: Record<string, PrimitiveToken> = {
   radius250: {
     name: 'radius250',
     category: TokenCategory.RADIUS,
-    baseValue: 20,
+    baseValue: RADIUS_BASE_VALUE * 2.5,
     familyBaseValue: RADIUS_BASE_VALUE,
     description: 'Extra large radius - 2.5x base value (strategic flexibility)',
     mathematicalRelationship: 'base × 2.5 = 8 × 2.5 = 20',
     baselineGridAlignment: false, // Strategic flexibility exception
     isStrategicFlexibility: true,
     isPrecisionTargeted: false,
-    platforms: generateRadiusPlatformValues(20)
+    platforms: generateRadiusPlatformValues(RADIUS_BASE_VALUE * 2.5)
   },
 
   radius300: {

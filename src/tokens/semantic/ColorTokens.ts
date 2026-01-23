@@ -15,6 +15,7 @@
  * - avatar = orange/teal (avatar background colors for human/agent differentiation)
  * - avatar.contrast = white (icon colors on avatar backgrounds for WCAG compliance)
  * - avatar.border = gray (border color for avatar components)
+ * - badge = pink/white (notification badge colors for high-visibility alerts)
  * - glow colors = vibrant neon colors for emphasis effects
  * 
  * All color tokens reference mode-aware primitive color tokens that support
@@ -47,7 +48,7 @@
  * 5. Semantic Meaning in Shadow Token: The semantic meaning belongs in the shadow token
  *    name itself (shadow.dusk, shadow.sunrise) rather than in a separate color token.
  * 
- * Spec-aligned: 38 color semantic tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle + 4 select tokens + 5 avatar tokens)
+ * Spec-aligned: 40 color semantic tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle + 4 select tokens + 5 avatar tokens + 2 badge tokens)
  * Note: color.secondary removed as part of color palette update (Spec 015)
  * Added: color.icon.default and color.print.default (Spec 023)
  * Added: color.canvas (Spec 023 - Container token compliance)
@@ -56,13 +57,14 @@
  * Added: color.avatar.human and color.avatar.agent (Spec 042 - Avatar Component)
  * Added: color.avatar.contrast.onHuman and color.avatar.contrast.onAgent (Spec 042 - Avatar Component)
  * Added: color.avatar.border (Spec 042 - Avatar Component)
+ * Added: color.badge.background.notification and color.badge.text.notification (Spec 044 - Badge Component Family)
  */
 
 import { SemanticToken, SemanticCategory } from '../../types/SemanticToken';
 
 /**
  * Semantic color tokens for systematic color usage
- * Total: 38 tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle + 4 select tokens + 5 avatar tokens)
+ * Total: 40 tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle + 4 select tokens + 5 avatar tokens + 2 badge tokens)
  * Note: color.secondary removed as part of color palette update (Spec 015)
  * Added: color.icon.default and color.print.default (Spec 023)
  * Added: color.canvas (Spec 023 - Container token compliance)
@@ -71,6 +73,7 @@ import { SemanticToken, SemanticCategory } from '../../types/SemanticToken';
  * Added: color.avatar.human and color.avatar.agent (Spec 042 - Avatar Component)
  * Added: color.avatar.contrast.onHuman and color.avatar.contrast.onAgent (Spec 042 - Avatar Component)
  * Added: color.avatar.border (Spec 042 - Avatar Component)
+ * Added: color.badge.background.notification and color.badge.text.notification (Spec 044 - Badge Component Family)
  */
 export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>> = {
   // Brand Identity (1 token)
@@ -358,6 +361,23 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
     description: 'Gray border color for avatar components - provides subtle visual definition for both human and agent avatars'
   },
 
+  // Badge Colors (2 tokens) - Spec 044: Badge Component Family
+  'color.badge.background.notification': {
+    name: 'color.badge.background.notification',
+    primitiveReferences: { value: 'pink400' },
+    category: SemanticCategory.COLOR,
+    context: 'Background color for notification badges',
+    description: 'Pink background for notification badges - provides high-visibility alert indication with 6.33:1 contrast ratio against white text'
+  },
+
+  'color.badge.text.notification': {
+    name: 'color.badge.text.notification',
+    primitiveReferences: { value: 'white100' },
+    category: SemanticCategory.COLOR,
+    context: 'Text color on notification badge background',
+    description: 'White text color for use on notification badge pink background - ensures WCAG AA contrast compliance (6.33:1 ratio)'
+  },
+
   // Select State Colors (4 tokens) - Spec 038: Vertical List Buttons
   'color.select.selected.strong': {
     name: 'color.select.selected.strong',
@@ -394,7 +414,7 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
 
 /**
  * Array of all color semantic token names for iteration
- * Total: 38 tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle + 4 select tokens + 5 avatar tokens)
+ * Total: 40 tokens (16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle + 4 select tokens + 5 avatar tokens + 2 badge tokens)
  * Note: color.secondary removed as part of color palette update (Spec 015)
  * Added: color.icon.default and color.print.default (Spec 023)
  * Added: color.canvas (Spec 023 - Container token compliance)
@@ -403,6 +423,7 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
  * Added: color.avatar.human and color.avatar.agent (Spec 042 - Avatar Component)
  * Added: color.avatar.contrast.onHuman and color.avatar.contrast.onAgent (Spec 042 - Avatar Component)
  * Added: color.avatar.border (Spec 042 - Avatar Component)
+ * Added: color.badge.background.notification and color.badge.text.notification (Spec 044 - Badge Component Family)
  */
 export const colorTokenNames = Object.keys(colorTokens);
 
@@ -421,7 +442,7 @@ export function getAllColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'
 }
 
 /**
- * Validate token count matches spec (38 tokens: 16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle + 4 select tokens + 5 avatar tokens)
+ * Validate token count matches spec (40 tokens: 16 original + 4 new color tokens + 5 glow tokens + 2 icon/print tokens + 1 canvas token + 1 background.primary.subtle + 4 select tokens + 5 avatar tokens + 2 badge tokens)
  * Note: color.secondary removed as part of color palette update (Spec 015)
  * Added: color.icon.default and color.print.default (Spec 023)
  * Added: color.canvas (Spec 023 - Container token compliance)
@@ -430,9 +451,10 @@ export function getAllColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'
  * Added: color.avatar.human and color.avatar.agent (Spec 042 - Avatar Component)
  * Added: color.avatar.contrast.onHuman and color.avatar.contrast.onAgent (Spec 042 - Avatar Component)
  * Added: color.avatar.border (Spec 042 - Avatar Component)
+ * Added: color.badge.background.notification and color.badge.text.notification (Spec 044 - Badge Component Family)
  */
 export function validateColorTokenCount(): boolean {
-  const expectedCount = 38;
+  const expectedCount = 40;
   const actualCount = colorTokenNames.length;
   if (actualCount !== expectedCount) {
     console.warn(`Color token count mismatch: expected ${expectedCount}, got ${actualCount}`);
