@@ -45,14 +45,14 @@ describe('Badge-Label-Base Tokens', () => {
 
   describe('Registry Registration', () => {
     test('should register maxWidth token with ComponentTokenRegistry', () => {
-      expect(ComponentTokenRegistry.has('badge-label-base.maxWidth')).toBe(true);
+      expect(ComponentTokenRegistry.has('badgelabelbase.maxWidth')).toBe(true);
     });
 
     test('should store correct metadata for maxWidth token', () => {
-      const token = ComponentTokenRegistry.get('badge-label-base.maxWidth');
+      const token = ComponentTokenRegistry.get('badgelabelbase.maxWidth');
       expect(token).toBeDefined();
-      expect(token?.name).toBe('badge-label-base.maxWidth');
-      expect(token?.component).toBe('Badge-Label-Base');
+      expect(token?.name).toBe('badgelabelbase.maxWidth');
+      expect(token?.component).toBe('BadgeLabelBase');
       expect(token?.family).toBe('spacing');
       expect(token?.value).toBe(120);
       expect(token?.primitiveReference).toBeUndefined();
@@ -60,14 +60,14 @@ describe('Badge-Label-Base Tokens', () => {
     });
 
     test('should be queryable by component name', () => {
-      const tokens = ComponentTokenRegistry.getByComponent('Badge-Label-Base');
+      const tokens = ComponentTokenRegistry.getByComponent('BadgeLabelBase');
       expect(tokens).toHaveLength(1);
-      expect(tokens[0].name).toBe('badge-label-base.maxWidth');
+      expect(tokens[0].name).toBe('badgelabelbase.maxWidth');
     });
 
     test('should be queryable by family', () => {
       const spacingTokens = ComponentTokenRegistry.getByFamily('spacing');
-      const badgeToken = spacingTokens.find(t => t.name === 'badge-label-base.maxWidth');
+      const badgeToken = spacingTokens.find(t => t.name === 'badgelabelbase.maxWidth');
       expect(badgeToken).toBeDefined();
     });
   });

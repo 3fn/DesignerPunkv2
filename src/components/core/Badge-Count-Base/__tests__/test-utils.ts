@@ -30,17 +30,35 @@ export function setupBadgeCountTokens(): void {
   // Radius tokens
   document.documentElement.style.setProperty('--radius-half', '50%');
   
-  // Typography tokens
-  document.documentElement.style.setProperty('--font-family-primary', 'Inter, sans-serif');
+  // Base typography tokens
+  document.documentElement.style.setProperty('--font-family-body', 'Inter, sans-serif');
   document.documentElement.style.setProperty('--font-size-050', '13px');
   document.documentElement.style.setProperty('--font-size-075', '14px');
   document.documentElement.style.setProperty('--font-size-100', '16px');
   document.documentElement.style.setProperty('--line-height-050', '16px');
   document.documentElement.style.setProperty('--line-height-075', '20px');
   document.documentElement.style.setProperty('--line-height-100', '24px');
-  document.documentElement.style.setProperty('--font-weight-medium', '500');
-  document.documentElement.style.setProperty('--letter-spacing-tight', '-0.01em');
-  document.documentElement.style.setProperty('--letter-spacing-normal', '0');
+  document.documentElement.style.setProperty('--font-weight-500', '500');
+  document.documentElement.style.setProperty('--letter-spacing-100', '0');
+  
+  // Composite typography tokens (used by badge components)
+  document.documentElement.style.setProperty('--typography-label-xs-font-family', 'var(--font-family-body)');
+  document.documentElement.style.setProperty('--typography-label-xs-font-size', 'var(--font-size-050)');
+  document.documentElement.style.setProperty('--typography-label-xs-line-height', 'var(--line-height-050)');
+  document.documentElement.style.setProperty('--typography-label-xs-font-weight', 'var(--font-weight-500)');
+  document.documentElement.style.setProperty('--typography-label-xs-letter-spacing', 'var(--letter-spacing-100)');
+  
+  document.documentElement.style.setProperty('--typography-label-sm-font-family', 'var(--font-family-body)');
+  document.documentElement.style.setProperty('--typography-label-sm-font-size', 'var(--font-size-075)');
+  document.documentElement.style.setProperty('--typography-label-sm-line-height', 'var(--line-height-075)');
+  document.documentElement.style.setProperty('--typography-label-sm-font-weight', 'var(--font-weight-500)');
+  document.documentElement.style.setProperty('--typography-label-sm-letter-spacing', 'var(--letter-spacing-100)');
+  
+  document.documentElement.style.setProperty('--typography-label-md-font-family', 'var(--font-family-body)');
+  document.documentElement.style.setProperty('--typography-label-md-font-size', 'var(--font-size-100)');
+  document.documentElement.style.setProperty('--typography-label-md-line-height', 'var(--line-height-100)');
+  document.documentElement.style.setProperty('--typography-label-md-font-weight', 'var(--font-weight-500)');
+  document.documentElement.style.setProperty('--typography-label-md-letter-spacing', 'var(--letter-spacing-100)');
   
   // Spacing tokens
   document.documentElement.style.setProperty('--space-050', '4px');
@@ -54,16 +72,31 @@ export function cleanupBadgeCountTokens(): void {
   document.documentElement.style.removeProperty('--color-surface');
   document.documentElement.style.removeProperty('--color-text-default');
   document.documentElement.style.removeProperty('--radius-half');
-  document.documentElement.style.removeProperty('--font-family-primary');
+  document.documentElement.style.removeProperty('--font-family-body');
   document.documentElement.style.removeProperty('--font-size-050');
   document.documentElement.style.removeProperty('--font-size-075');
   document.documentElement.style.removeProperty('--font-size-100');
   document.documentElement.style.removeProperty('--line-height-050');
   document.documentElement.style.removeProperty('--line-height-075');
   document.documentElement.style.removeProperty('--line-height-100');
-  document.documentElement.style.removeProperty('--font-weight-medium');
-  document.documentElement.style.removeProperty('--letter-spacing-tight');
-  document.documentElement.style.removeProperty('--letter-spacing-normal');
+  document.documentElement.style.removeProperty('--font-weight-500');
+  document.documentElement.style.removeProperty('--letter-spacing-100');
+  // Composite typography tokens
+  document.documentElement.style.removeProperty('--typography-label-xs-font-family');
+  document.documentElement.style.removeProperty('--typography-label-xs-font-size');
+  document.documentElement.style.removeProperty('--typography-label-xs-line-height');
+  document.documentElement.style.removeProperty('--typography-label-xs-font-weight');
+  document.documentElement.style.removeProperty('--typography-label-xs-letter-spacing');
+  document.documentElement.style.removeProperty('--typography-label-sm-font-family');
+  document.documentElement.style.removeProperty('--typography-label-sm-font-size');
+  document.documentElement.style.removeProperty('--typography-label-sm-line-height');
+  document.documentElement.style.removeProperty('--typography-label-sm-font-weight');
+  document.documentElement.style.removeProperty('--typography-label-sm-letter-spacing');
+  document.documentElement.style.removeProperty('--typography-label-md-font-family');
+  document.documentElement.style.removeProperty('--typography-label-md-font-size');
+  document.documentElement.style.removeProperty('--typography-label-md-line-height');
+  document.documentElement.style.removeProperty('--typography-label-md-font-weight');
+  document.documentElement.style.removeProperty('--typography-label-md-letter-spacing');
   document.documentElement.style.removeProperty('--space-050');
   document.documentElement.style.removeProperty('--space-100');
 }

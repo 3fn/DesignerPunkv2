@@ -234,7 +234,7 @@ describe('Badge-Count-Notification Stemma Validators', () => {
         '--color-badge-background-notification',
         '--color-badge-text-notification',
         '--radius-half',
-        '--font-size-',
+        '--typography-label-',  // Composite typography tokens (e.g., --typography-label-xs-font-size)
         '--space-',
       ];
 

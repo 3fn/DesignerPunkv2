@@ -326,7 +326,7 @@ describe('Badge-Label-Base Unit Tests', () => {
     });
 
     it('should reference component token for max-width', () => {
-      expect(cssContent).toContain('--badge-label-max-width');
+      expect(cssContent).toContain('--badge-label-base-max-width');
     });
   });
 

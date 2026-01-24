@@ -39,7 +39,7 @@ import { SPACING_BASE_VALUE } from '../../../tokens/SpacingTokens';
  * @see Requirements 4.8, 9.3, 9.4, 9.5 in .kiro/specs/044-badge-base/requirements.md
  */
 export const BadgeLabelBaseTokens = defineComponentTokens({
-  component: 'Badge-Label-Base',
+  component: 'BadgeLabelBase',
   family: 'spacing',
   tokens: {
     'maxWidth': {

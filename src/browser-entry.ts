@@ -31,6 +31,12 @@ import { ButtonVerticalListItem } from './components/core/Button-VerticalList-It
 import { ButtonVerticalListSet } from './components/core/Button-VerticalList-Set/platforms/web/ButtonVerticalListSet.web';
 // Avatar-Base - Stemma System naming (visual representation for users and AI agents)
 import { AvatarBaseElement } from './components/core/Avatar/platforms/web/Avatar.web';
+// Badge-Label-Base - Stemma System naming (label badge for categorization/status)
+import { BadgeLabelBase } from './components/core/Badge-Label-Base/platforms/web/BadgeLabelBase.web';
+// Badge-Count-Base - Stemma System naming (count badge for numeric values)
+import { BadgeCountBase } from './components/core/Badge-Count-Base/platforms/web/BadgeCountBase.web';
+// Badge-Count-Notification - Stemma System naming (notification badge with live regions)
+import { BadgeCountNotification } from './components/core/Badge-Count-Notification/platforms/web/BadgeCountNotification.web';
 
 /**
  * Check if design tokens are loaded in the document.
@@ -107,6 +113,12 @@ safeDefine('button-vertical-list-item', ButtonVerticalListItem);
 safeDefine('button-vertical-list-set', ButtonVerticalListSet);
 // Avatar-Base - Stemma System naming (visual representation for users and AI agents)
 safeDefine('avatar-base', AvatarBaseElement);
+// Badge-Label-Base - Stemma System naming (label badge for categorization/status)
+safeDefine('badge-label-base', BadgeLabelBase);
+// Badge-Count-Base - Stemma System naming (count badge for numeric values)
+safeDefine('badge-count-base', BadgeCountBase);
+// Badge-Count-Notification - Stemma System naming (notification badge with live regions)
+safeDefine('badge-count-notification', BadgeCountNotification);
 
 // Check tokens after DOM is ready and CSS is applied
 // Uses requestAnimationFrame to ensure stylesheets have been fully parsed and applied
@@ -124,7 +136,7 @@ if (typeof document !== 'undefined') {
 
 // Export all components for UMD global access and ESM imports
 // Requirements: 1.2, 2.3
-export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb, ButtonVerticalListItem, ButtonVerticalListSet, AvatarBaseElement };
+export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb, ButtonVerticalListItem, ButtonVerticalListSet, AvatarBaseElement, BadgeLabelBase, BadgeCountBase, BadgeCountNotification };
 
 // Also export with more intuitive names for the UMD global
 export const Icon = IconBaseElement;
@@ -136,5 +148,9 @@ export const VerticalListButtonSet = ButtonVerticalListSet;
 // Avatar - Intuitive alias for AvatarBaseElement
 export const Avatar = AvatarBaseElement;
 export const AvatarBase = AvatarBaseElement;
+// Badge - Intuitive aliases for badge components
+export const BadgeLabel = BadgeLabelBase;
+export const BadgeCount = BadgeCountBase;
+export const BadgeNotification = BadgeCountNotification;
 // Legacy alias for backward compatibility
 export const TextInputField = InputTextBase;

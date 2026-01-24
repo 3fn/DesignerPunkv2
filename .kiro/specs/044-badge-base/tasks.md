@@ -395,7 +395,7 @@ This implementation plan follows a progressive approach:
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 5 Complete: Browser Entry and Final Integration"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 5.1 Register components in browser entry
+  - [x] 5.1 Register components in browser entry
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Import Badge-Label-Base, Badge-Count-Base, Badge-Count-Notification in `browser-entry.ts`
@@ -403,7 +403,7 @@ This implementation plan follows a progressive approach:
     - Verify tree-shaking works (unused components not bundled)
     - _Requirements: 5.1, NFR-2_
 
-  - [ ] 5.2 Run full test suite and verify bundle size
+  - [x] 5.2 Run full test suite and verify bundle size
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run `npm test` to verify all tests pass
@@ -501,6 +501,98 @@ This implementation plan follows a progressive approach:
 
 ---
 
+- [x] 8. Component Token Generation Pipeline Fix
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  
+  **Root Cause (from Task 8.1 audit):**
+  Badge-Label-Base was registered with hyphenated name (`'Badge-Label-Base'`) instead of PascalCase (`'BadgeLabelBase'`). This is inconsistent with the established pattern used by all other components (ButtonIcon, VerticalListItem, Avatar). The generator is working correctly — it simply outputs the component name as registered.
+  
+  **Success Criteria:**
+  - Badge-Label-Base token registration uses PascalCase (`'BadgeLabelBase'`)
+  - Generated iOS Swift uses PascalCase enum names (e.g., `BadgeLabelBaseTokens`)
+  - Generated Android Kotlin uses PascalCase object names (e.g., `BadgeLabelBaseTokens`)
+  - iOS/Android badge implementations reference generated component tokens
+  - All component tokens regenerate with valid syntax
+  - Release detection triggered
+  
+  **Primary Artifacts:**
+  - `src/components/core/Badge-Label-Base/tokens.ts` (updated - component name fix)
+  - `src/components/core/Badge-Label-Base/platforms/ios/BadgeLabelBase.ios.swift` (updated)
+  - `src/components/core/Badge-Label-Base/platforms/android/BadgeLabelBase.android.kt` (updated)
+  - `dist/ComponentTokens.ios.swift` (regenerated)
+  - `dist/ComponentTokens.android.kt` (regenerated)
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/044-badge-base/completion/task-8-parent-completion.md`
+  - Summary: `docs/specs/044-badge-base/task-8-summary.md` (triggers release detection)
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 8 Complete: Component Token Generation Pipeline Fix"`
+  - Verify: Check GitHub for committed changes
+
+  - [x] 8.1 Audit current component token generation
+    **Type**: Investigation
+    **Validation**: Tier 1 - Minimal
+    - Document all components with hyphenated names in ComponentTokenRegistry
+    - Identify which generated tokens have invalid identifiers
+    - Document the exact lines in TokenFileGenerator.ts causing the issue
+    - Create findings document at `.kiro/specs/044-badge-base/completion/task-8-1-completion.md`
+    - Review findings with Peter and decide on next course of action — including possible updates remaining subtasks based on findings
+    - _Requirements: 9.3, 9.4_
+
+  - [x] 8.2 Fix Badge-Label-Base component token registration
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Root Cause**: Badge-Label-Base was registered with hyphenated name (`'Badge-Label-Base'`) instead of PascalCase (`'BadgeLabelBase'`), breaking the established convention used by all other components (ButtonIcon, VerticalListItem, Avatar).
+    - Update `src/components/core/Badge-Label-Base/tokens.ts` to use PascalCase component name
+    - Change `component: 'Badge-Label-Base'` to `component: 'BadgeLabelBase'`
+    - Update any related tests that reference the old component name
+    - Verify token registration uses correct name via ComponentTokenRegistry
+    - **Pattern Reference**: See `Button-VerticalList-Item/Button-VerticalList-Item.tokens.ts` which uses `component: 'VerticalListItem'`
+    - _Requirements: 9.3, 9.4, 9.5_
+
+  - [x] 8.3 Regenerate component tokens and verify syntax
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Run `npx ts-node scripts/generate-platform-tokens.ts` to regenerate
+    - Verify `dist/ComponentTokens.ios.swift` has `public enum BadgeLabelBaseTokens` (not `Badge-Label-BaseTokens`)
+    - Verify `dist/ComponentTokens.android.kt` has `object BadgeLabelBaseTokens` (not `Badge-Label-BaseTokens`)
+    - Confirm all component enum/object names are valid identifiers (no hyphens)
+    - _Requirements: 9.3, 9.4, 9.5_
+
+  - [x] 8.4 Update iOS Badge-Label-Base to reference generated token
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Update `BadgeLabelBase.ios.swift` to import/reference `BadgeLabelBaseTokens.maxWidth`
+    - Remove hardcoded `maxWidth: CGFloat = 120` value
+    - Verify component compiles with token reference
+    - _Requirements: 4.8, 5.2_
+
+  - [x] 8.5 Update Android Badge-Label-Base to reference generated token
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Update `BadgeLabelBase.android.kt` to use a single `BadgeLabelBaseTokens` object
+    - The object name should match the generated `ComponentTokens.android.kt` file
+    - Include `maxWidth = 120` (matching generated value) plus semantic token references
+    - Remove workaround calculation `DesignTokens.space_150 * 10`
+    - Reference pattern: See `BadgeLabelBase.ios.swift` (Task 8.4) or `Avatar.swift` for established pattern
+    - Verify component compiles with token reference
+    - _Requirements: 4.8, 5.3_
+
+  - [x] 8.6 Run tests and verify integration
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Run `npm test` to verify all tests pass
+    - Verify Stemma validators pass for badge components
+    - Document any additional components needing similar updates
+    - _Requirements: 7.5, 7.6, 7.7_
+
+---
+
 ## Requirements Traceability
 
 | Requirement | Tasks |
@@ -508,12 +600,12 @@ This implementation plan follows a progressive approach:
 | Req 1: Badge-Label-Base | 2.1, 2.2, 2.3, 2.4, 2.5, 2.6 |
 | Req 2: Badge-Count-Base | 3.1, 3.2, 3.3, 3.4, 3.5, 3.6 |
 | Req 3: Badge-Count-Notification | 4.1, 4.2, 4.3, 4.4, 4.5, 4.6 |
-| Req 4: Token Integration | 1.1, 1.2, 2.2, 3.2, 4.2 |
-| Req 5: Cross-Platform Consistency | 2.2-2.4, 3.2-3.4, 4.2-4.4, 5.1 |
+| Req 4: Token Integration | 1.1, 1.2, 2.2, 3.2, 4.2, 8.4, 8.5 |
+| Req 5: Cross-Platform Consistency | 2.2-2.4, 3.2-3.4, 4.2-4.4, 5.1, 8.4, 8.5 |
 | Req 6: Accessibility Compliance | 2.2-2.6, 3.2-3.6, 4.2-4.6 |
-| Req 7: Stemma System Alignment | 2.5, 2.6, 3.5, 3.6, 4.5, 4.6, 7.1 |
-| Req 8: Test Development Standards | 2.6, 3.6, 4.6 |
-| Req 9: Rosetta Pipeline Integration | 1.1, 1.2, 6.1 |
+| Req 7: Stemma System Alignment | 2.5, 2.6, 3.5, 3.6, 4.5, 4.6, 7.1, 8.6 |
+| Req 8: Test Development Standards | 2.6, 3.6, 4.6, 8.6 |
+| Req 9: Rosetta Pipeline Integration | 1.1, 1.2, 6.1, 8.1, 8.2, 8.3 |
 | NFR-1: Performance | 5.2 |
 | NFR-2: Bundle Size | 5.1, 5.2 |
 

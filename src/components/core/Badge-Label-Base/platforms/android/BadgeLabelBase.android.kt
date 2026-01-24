@@ -70,24 +70,32 @@ enum class BadgeLabelBaseSize {
 // MARK: - Badge-Label-Base Tokens
 
 /**
- * Badge-Label-Base specific design tokens.
+ * Badge-Label-Base component tokens.
  * 
- * These tokens are component-level tokens specific to the Badge-Label-Base component.
- * They reference or extend the core DesignTokens where possible.
+ * In a production Android project, the component token (maxWidth) would be imported
+ * from the generated `ComponentTokens.android.kt` file. For this reference implementation,
+ * we define the tokens here with the same name and values as the generated file.
  * 
+ * Component tokens (from generated ComponentTokens.android.kt):
+ * - maxWidth: 120 - Maximum width for truncated badges
+ * 
+ * Semantic token references (from DesignTokens):
+ * - cornerRadius, backgroundColor, textColor, iconColor
+ * 
+ * @see dist/ComponentTokens.android.kt - Generated component tokens
  * @see Requirements: 4.1, 4.2, 4.4, 4.5, 4.6, 4.8 - Token integration
  */
 private object BadgeLabelBaseTokens {
-    // MARK: - Component Token
+    // MARK: - Component Token (matches generated ComponentTokens.android.kt)
     
     /** Maximum width for truncated badges (120dp)
      * Component token: badge.label.maxWidth
      * Allows ~12-15 characters before ellipsis while maintaining compact badge appearance
      * Value follows spacing family pattern (8 × 15 = 120dp)
-     * Uses space_150 (12dp) × 10 = 120dp to maintain token-based approach
+     * Unitless value - apply .dp at point of use
      * @see Requirements: 4.8 - badge.label.maxWidth token
      */
-    val maxWidth: Dp = DesignTokens.space_150 * 10 // 12dp × 10 = 120dp (badge.label.maxWidth)
+    const val maxWidth: Int = 120  // badge.label.maxWidth
     
     // MARK: - Shape Token
     
@@ -276,7 +284,7 @@ fun BadgeLabelBase(
             maxLines = 1,
             overflow = if (truncate) TextOverflow.Ellipsis else TextOverflow.Clip,
             modifier = if (truncate) {
-                Modifier.widthIn(max = BadgeLabelBaseTokens.maxWidth)
+                Modifier.widthIn(max = BadgeLabelBaseTokens.maxWidth.dp)  // badge.label.maxWidth
             } else {
                 Modifier
             }

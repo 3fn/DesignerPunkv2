@@ -237,7 +237,7 @@ describe('Badge-Label-Base Stemma Validators', () => {
         '--color-surface',
         '--color-text-default',
         '--radius-subtle',
-        '--font-size-',
+        '--typography-label-',  // Composite typography tokens (e.g., --typography-label-xs-font-size)
         '--space-',
       ];
 

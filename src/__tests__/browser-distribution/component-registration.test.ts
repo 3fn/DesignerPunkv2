@@ -192,7 +192,8 @@ describe('Component Registration', () => {
       // ButtonVerticalListItem added as part of spec 038
       // ButtonVerticalListSet added as part of spec 041
       // AvatarBaseElement added as part of spec 042
-      expect(content).toContain('export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb, ButtonVerticalListItem, ButtonVerticalListSet, AvatarBaseElement }');
+      // Badge components added as part of spec 044
+      expect(content).toContain('export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb, ButtonVerticalListItem, ButtonVerticalListSet, AvatarBaseElement, BadgeLabelBase, BadgeCountBase, BadgeCountNotification }');
       expect(content).toContain('export const Icon = IconBaseElement');
       expect(content).toContain('export const IconBase = IconBaseElement');
       expect(content).toContain('export const Container = ContainerBaseWeb');
@@ -200,6 +201,10 @@ describe('Component Registration', () => {
       // Avatar aliases for intuitive naming
       expect(content).toContain('export const Avatar = AvatarBaseElement');
       expect(content).toContain('export const AvatarBase = AvatarBaseElement');
+      // Badge aliases for intuitive naming
+      expect(content).toContain('export const BadgeLabel = BadgeLabelBase');
+      expect(content).toContain('export const BadgeCount = BadgeCountBase');
+      expect(content).toContain('export const BadgeNotification = BadgeCountNotification');
       // Legacy alias for backward compatibility
       expect(content).toContain('export const TextInputField = InputTextBase');
     });

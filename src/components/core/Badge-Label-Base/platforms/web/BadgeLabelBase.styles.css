@@ -42,12 +42,12 @@
 
 /* Small (sm) */
 .badge-label--sm {
-  /* Typography: typography.labelXs */
-  font-family: var(--font-family-primary);
-  font-size: var(--font-size-050);
-  line-height: var(--line-height-050);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--letter-spacing-tight);
+  /* Typography: typography.labelXs - using composite token references */
+  font-family: var(--typography-label-xs-font-family);
+  font-size: var(--typography-label-xs-font-size);
+  line-height: var(--typography-label-xs-line-height);
+  font-weight: var(--typography-label-xs-font-weight);
+  letter-spacing: var(--typography-label-xs-letter-spacing);
   
   /* Padding: space.inset.none (v), space.inset.050 (h) */
   padding-top: 0;
@@ -61,12 +61,12 @@
 
 /* Medium (md) - default */
 .badge-label--md {
-  /* Typography: typography.labelSm */
-  font-family: var(--font-family-primary);
-  font-size: var(--font-size-075);
-  line-height: var(--line-height-075);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--letter-spacing-tight);
+  /* Typography: typography.labelSm - using composite token references */
+  font-family: var(--typography-label-sm-font-family);
+  font-size: var(--typography-label-sm-font-size);
+  line-height: var(--typography-label-sm-line-height);
+  font-weight: var(--typography-label-sm-font-weight);
+  letter-spacing: var(--typography-label-sm-letter-spacing);
   
   /* Padding: space.inset.050 (v), space.inset.100 (h) */
   padding-top: var(--space-050);
@@ -80,12 +80,12 @@
 
 /* Large (lg) */
 .badge-label--lg {
-  /* Typography: typography.labelMd */
-  font-family: var(--font-family-primary);
-  font-size: var(--font-size-100);
-  line-height: var(--line-height-100);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--letter-spacing-normal);
+  /* Typography: typography.labelMd - using composite token references */
+  font-family: var(--typography-label-md-font-family);
+  font-size: var(--typography-label-md-font-size);
+  line-height: var(--typography-label-md-line-height);
+  font-weight: var(--typography-label-md-font-weight);
+  letter-spacing: var(--typography-label-md-letter-spacing);
   
   /* Padding: space.inset.100 (v), space.inset.150 (h) */
   padding-top: var(--space-100);
@@ -117,8 +117,9 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   
-  /* Max-width from component token: badge.label.maxWidth (120px) */
-  max-width: var(--badge-label-max-width);
+  /* Max-width from component token: badge-label-base.maxWidth (120px)
+   * Uses generated token name with fallback for compatibility */
+  max-width: var(--badge-label-base-max-width, 120px);
 }
 
 /* ============================================================================

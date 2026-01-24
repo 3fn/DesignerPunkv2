@@ -28,15 +28,23 @@ import SwiftUI
 // MARK: - Badge-Label-Base Tokens
 
 /**
- * Badge-Label-Base specific design tokens.
+ * Badge-Label-Base component tokens.
  * 
- * These tokens are component-level tokens specific to the Badge-Label-Base component.
- * They reference or extend the core DesignTokens where possible.
+ * In a production iOS project, this enum would be imported from the generated
+ * `ComponentTokens.ios.swift` file. For this reference implementation, we define
+ * the tokens here with the same name and values as the generated file.
  * 
+ * Component tokens (from generated ComponentTokens.ios.swift):
+ * - maxWidth: 120px - Maximum width for truncated badges
+ * 
+ * Semantic token references (from DesignTokens):
+ * - cornerRadius, backgroundColor, textColor, iconColor
+ * 
+ * @see dist/ComponentTokens.ios.swift - Generated component tokens
  * @see Requirements: 4.1, 4.2, 4.4, 4.5, 4.6, 4.8 - Token integration
  */
 enum BadgeLabelBaseTokens {
-    // MARK: - Component Token
+    // MARK: - Component Token (matches generated ComponentTokens.ios.swift)
     
     /// Maximum width for truncated badges (120px)
     /// Component token: badge.label.maxWidth
@@ -329,11 +337,12 @@ public struct BadgeLabelBase: View {
      * Label text content with typography and optional truncation.
      * 
      * When truncate is true:
-     * - Text is limited to max-width (120px)
+     * - Text is limited to max-width (120px) from BadgeLabelBaseTokens
      * - Overflow is truncated with ellipsis
      * - Full text is accessible via accessibilityLabel on parent
      * 
-     * @see Requirements: 1.1, 1.5, 1.6, 4.1 - Label rendering and truncation
+     * @see Requirements: 1.1, 1.5, 1.6, 4.1, 4.8 - Label rendering and truncation
+     * @see dist/ComponentTokens.ios.swift - BadgeLabelBaseTokens.maxWidth
      */
     @ViewBuilder
     private var labelContent: some View {

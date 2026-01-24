@@ -50,12 +50,12 @@
 
 /* Small (sm) */
 .badge-count--sm {
-  /* Typography: typography.labelXs */
-  font-family: var(--font-family-primary);
-  font-size: var(--font-size-050);
-  line-height: var(--line-height-050);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--letter-spacing-tight);
+  /* Typography: typography.labelXs - using composite token references */
+  font-family: var(--typography-label-xs-font-family);
+  font-size: var(--typography-label-xs-font-size);
+  line-height: var(--typography-label-xs-line-height);
+  font-weight: var(--typography-label-xs-font-weight);
+  letter-spacing: var(--typography-label-xs-letter-spacing);
   
   /* Padding: space.inset.none (v), space.inset.050 (h) */
   padding-top: 0;
@@ -71,12 +71,12 @@
 
 /* Medium (md) - default */
 .badge-count--md {
-  /* Typography: typography.labelSm */
-  font-family: var(--font-family-primary);
-  font-size: var(--font-size-075);
-  line-height: var(--line-height-075);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--letter-spacing-tight);
+  /* Typography: typography.labelSm - using composite token references */
+  font-family: var(--typography-label-sm-font-family);
+  font-size: var(--typography-label-sm-font-size);
+  line-height: var(--typography-label-sm-line-height);
+  font-weight: var(--typography-label-sm-font-weight);
+  letter-spacing: var(--typography-label-sm-letter-spacing);
   
   /* Padding: space.inset.none (v), space.inset.050 (h) */
   padding-top: 0;
@@ -92,12 +92,12 @@
 
 /* Large (lg) */
 .badge-count--lg {
-  /* Typography: typography.labelMd */
-  font-family: var(--font-family-primary);
-  font-size: var(--font-size-100);
-  line-height: var(--line-height-100);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--letter-spacing-normal);
+  /* Typography: typography.labelMd - using composite token references */
+  font-family: var(--typography-label-md-font-family);
+  font-size: var(--typography-label-md-font-size);
+  line-height: var(--typography-label-md-line-height);
+  font-weight: var(--typography-label-md-font-weight);
+  letter-spacing: var(--typography-label-md-letter-spacing);
   
   /* Padding: space.inset.050 (v), space.inset.100 (h) */
   padding-top: var(--space-050);
