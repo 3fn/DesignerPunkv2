@@ -2,7 +2,7 @@
 
 **A True Native Cross-Platform Design System with Mathematical Foundations**
 
-[![Version](https://img.shields.io/badge/Version-5.1.0-purple)](docs/releases/RELEASE-NOTES-5.1.0.md)
+[![Version](https://img.shields.io/badge/Version-5.2.0-purple)](docs/releases/RELEASE-NOTES-5.2.0.md)
 [![Repository](https://img.shields.io/badge/GitHub-DesignerPunkv2-blue)](https://github.com/3fn/DesignerPunkv2)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
@@ -65,6 +65,9 @@ DesignerPunk has completed its **robust token system architecture** (Rosetta Sys
 | Component | Description | Behavioral Contracts |
 |-----------|-------------|---------------------|
 | `Avatar` | User/AI agent representation with shape-based differentiation | 6 contracts |
+| `Badge-Label-Base` | Label badge for categorization, status, metadata display | 6 contracts |
+| `Badge-Count-Base` | Numeric count badge with circular/pill shape behavior | 7 contracts |
+| `Badge-Count-Notification` | Notification badge with live region announcements | 10 contracts |
 | `Button-CTA` | Call-to-action button with size/visual variants and blend utilities | 7 contracts |
 | `Button-Icon` | Icon-only button with blend utilities and incremental DOM | 5 contracts |
 | `Button-VerticalList-Set` | Container/orchestrator for vertical list selection patterns | 9 contracts |
@@ -115,6 +118,19 @@ With the Stemma System foundation complete, future development focuses on:
 4. **Additional Semantic Components**: Expanding Form Inputs and other families
 
 ### ✅ Recently Completed
+
+**Badge Component Family** (January 2026) - v5.2.0
+- New `Badge-Label-Base` type primitive for categorization, status, and metadata display
+- New `Badge-Count-Base` type primitive for numeric counts with circular/pill shape behavior
+- New `Badge-Count-Notification` semantic variant with live region announcements
+- Three size variants (sm, md, lg) with token-based typography and spacing
+- Icon support via Icon-Base integration for Badge-Label-Base
+- Truncation behavior with accessibility support (title attribute, accessibility labels)
+- WCAG AA compliant notification colors (6.33:1 contrast ratio)
+- Full cross-platform support: Web (Web Components), iOS (SwiftUI), Android (Jetpack Compose)
+- 2 new semantic color tokens (`color.badge.background.notification`, `color.badge.text.notification`)
+- 1 new component token (`badge.label.maxWidth`)
+- MCP documentation with Component-Family-Badge.md steering document
 
 **Container-Card-Base Component** (January 2026) - v5.1.0
 - New `Container-Card-Base` type primitive component for card UI patterns
@@ -701,7 +717,7 @@ DesignerPunkv2/
 ### 2026 Q2: Advanced Patterns
 - Component composition patterns and layouts
 - Data Display component family
-- Badge and Loading component families
+- Loading component family
 - Cross-platform animation system expansion
 
 ### 2026 Q3-Q4: Production Readiness
