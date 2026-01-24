@@ -35,7 +35,7 @@ describe('MCP Component Integration: Component Quick Reference', () => {
     { family: 'Icons', path: '.kiro/steering/Component-Family-Icon.md', status: 'Production' },
     { family: 'Modals', path: '.kiro/steering/Component-Family-Modal.md', status: 'Placeholder' },
     { family: 'Avatars', path: '.kiro/steering/Component-Family-Avatar.md', status: 'Placeholder' },
-    { family: 'Badges & Tags', path: '.kiro/steering/Component-Family-Badge.md', status: 'Placeholder' },
+    { family: 'Badges & Tags', path: '.kiro/steering/Component-Family-Badge.md', status: 'Production' },
     { family: 'Data Displays', path: '.kiro/steering/Component-Family-Data-Display.md', status: 'Placeholder' },
     { family: 'Dividers', path: '.kiro/steering/Component-Family-Divider.md', status: 'Placeholder' },
     { family: 'Loading', path: '.kiro/steering/Component-Family-Loading.md', status: 'Placeholder' },
