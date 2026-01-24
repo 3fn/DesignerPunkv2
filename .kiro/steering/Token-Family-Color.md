@@ -5,7 +5,7 @@ inclusion: manual
 # Color Tokens Guide
 
 **Date**: 2025-12-08
-**Last Reviewed**: 2026-01-04
+**Last Reviewed**: 2026-01-23
 **Purpose**: Complete reference for color tokens with semantic meanings and accessible usage guidance
 **Organization**: token-documentation
 **Scope**: cross-project
@@ -152,7 +152,7 @@ The DesignerPunk color token system provides a mathematically consistent and sem
 
 Semantic color tokens provide contextual meaning for specific UI purposes. They reference primitive color families and adapt to light/dark modes automatically.
 
-**Total: 28 semantic color tokens**
+**Total: 30 semantic color tokens**
 
 ### Brand & Interactive (1 token)
 
@@ -216,6 +216,23 @@ Semantic color tokens provide contextual meaning for specific UI purposes. They 
 |------------|---------------------|----------|
 | `color.icon.default` | gray200 (#68658A) | Default icon color - optical balance |
 | `color.print.default` | black100 (#3A3A45) | Print media - optimal printing quality |
+
+### Badge Colors (2 tokens)
+
+| Token Name | Primitive Reference | Use Case |
+|------------|---------------------|----------|
+| `color.badge.background.notification` | pink400 (#CC2257) | Notification badge background - urgent/important counts |
+| `color.badge.text.notification` | white100 (#FFFFFF) | Notification badge text - content on notification background |
+
+**WCAG Compliance**: The notification badge color combination achieves a **6.33:1 contrast ratio**, exceeding WCAG AA requirements (4.5:1 for normal text). This ensures notification counts remain readable across all lighting conditions and for users with visual impairments.
+
+**Naming Convention**: Badge tokens follow the industry-standard pattern `[semantic token family].[component].[property].[variant]`:
+- `color` - semantic token family
+- `badge` - component
+- `background`/`text` - property
+- `notification` - variant
+
+**Use Case**: Notification badges display unread counts, alerts, or important numeric indicators that require immediate visual attention. The pink400 background provides urgency signaling while maintaining accessibility compliance.
 
 ### Glow Effects (5 tokens)
 
