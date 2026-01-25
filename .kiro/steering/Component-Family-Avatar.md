@@ -10,7 +10,7 @@ inclusion: manual
 **Scope**: cross-project
 **Layer**: 3
 **Relevant Tasks**: component-development, ui-composition
-**Last Reviewed**: 2026-01-16
+**Last Reviewed**: 2026-01-25
 
 ---
 
@@ -114,19 +114,41 @@ Avatar-Base (Primitive) [IMPLEMENTED]
 
 ### Color Tokens
 
-| Token | Purpose |
-|-------|---------|
-| `color.avatar.human` | Human avatar background (orange300) |
-| `color.avatar.agent` | Agent avatar background (teal200) |
-| `color.avatar.contrast.onHuman` | Icon color on human background (white100) |
-| `color.avatar.contrast.onAgent` | Icon color on agent background (white100) |
-| `color.avatar.border` | Border color (gray100) |
+Avatar uses a **compositional token architecture** where component tokens reference semantic concept tokens. This follows the Nathan Curtis concept-first naming model.
+
+#### Semantic Concept Tokens (Foundation)
+
+Avatar relies on two semantic concepts:
+
+| Concept | Token | Primitive | Purpose |
+|---------|-------|-----------|---------|
+| **Identity** | `color.identity.human` | orange300 | Human entity visual identity |
+| **Identity** | `color.identity.agent` | teal200 | AI agent entity visual identity |
+| **Contrast** | `color.contrast.onDark` | white100 | Content on dark/colored backgrounds |
+
+#### Component Tokens (Avatar-Specific)
+
+Component tokens follow the pattern: `color.{component}.{variant}.{property}`
+
+| Token | References | Purpose |
+|-------|------------|---------|
+| `color.avatar.human.background` | `color.identity.human` | Human avatar background color |
+| `color.avatar.agent.background` | `color.identity.agent` | Agent avatar background color |
+| `color.avatar.human.icon` | `color.contrast.onDark` | Icon color on human avatar |
+| `color.avatar.agent.icon` | `color.contrast.onDark` | Icon color on agent avatar |
+| `color.avatar.default.border` | gray100 | Border color for all avatar variants |
+
+**Why Component Tokens Reference Semantic Tokens**:
+- **Semantic clarity**: `color.avatar.human.background` clearly indicates avatar-specific usage
+- **Compositional architecture**: Component tokens reference semantic tokens, not primitives directly
+- **Maintainability**: If identity colors change, avatar automatically inherits the change
+- **Discoverability**: Developers can find all avatar colors grouped together
 
 ### Border Tokens
 
 | Size | Width Token | Color | Opacity |
 |------|-------------|-------|---------|
-| xs-xl | `borderDefault` | `color.avatar.border` | `opacity.heavy` |
+| xs-xl | `borderDefault` | `color.avatar.default.border` | `opacity.heavy` |
 | xxl | `borderEmphasis` | `color.contrast.onSurface` | 100% |
 
 ### Motion Tokens
@@ -225,17 +247,21 @@ When using Avatar in an interactive context, the wrapper element is responsible 
     "decorative": { "type": "boolean", "default": false },
     "testID": { "type": "string", "optional": true }
   },
-  "tokens": [
-    "avatar.size.*",
-    "avatar.icon.size.*",
-    "color.avatar.*",
-    "borderDefault",
-    "borderEmphasis",
-    "opacity.heavy",
-    "motion.duration.fast"
-  ]
+  "tokens": {
+    "size": ["avatar.size.*"],
+    "iconSize": ["avatar.icon.size.*", "icon.size*"],
+    "color": {
+      "semantic": ["color.identity.human", "color.identity.agent", "color.contrast.onDark"],
+      "component": ["color.avatar.human.background", "color.avatar.agent.background", "color.avatar.human.icon", "color.avatar.agent.icon", "color.avatar.default.border"]
+    },
+    "border": ["borderDefault", "borderEmphasis"],
+    "opacity": ["opacity.heavy"],
+    "motion": ["motion.duration.fast"]
+  }
 }
 ```
+
+**Token Architecture Note**: The schema distinguishes between semantic tokens (concept-level) and component tokens (avatar-specific). Component tokens reference semantic tokens, creating a compositional hierarchy.
 
 ---
 
@@ -243,7 +269,10 @@ When using Avatar in an interactive context, the wrapper element is responsible 
 
 - [Component Quick Reference](./Component-Quick-Reference.md) - Family routing table
 - [Stemma System Principles](./stemma-system-principles.md) - Architecture overview
+- [Token-Family-Color](./Token-Family-Color.md) - Color token reference including identity and contrast concepts
+- [Token Governance](./Token-Governance.md) - Token selection and usage governance
 - [Avatar README](../src/components/core/Avatar/README.md) - Component usage documentation
 - [Avatar Design Document](../.kiro/specs/042-avatar-component/design.md) - Detailed architecture
 - [Avatar Requirements](../.kiro/specs/042-avatar-component/requirements.md) - EARS format requirements
+- [Semantic Token Naming Design Authority](../.kiro/specs/051-semantic-token-naming-restructure/design-outline.md) - Naming model reference
 

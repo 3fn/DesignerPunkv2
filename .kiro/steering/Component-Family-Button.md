@@ -10,7 +10,7 @@ inclusion: manual
 **Scope**: cross-project
 **Layer**: 3
 **Relevant Tasks**: component-development, ui-composition, button-implementation
-**Last Reviewed**: 2026-01-02
+**Last Reviewed**: 2026-01-25
 
 ---
 
@@ -191,9 +191,39 @@ All Button-CTA instances implement these 7 foundational contracts:
 
 | Variant | Background | Text | Border | Emphasis |
 |---------|------------|------|--------|----------|
-| primary | color.primary | color.contrast.onPrimary | none | highest |
-| secondary | color.background | color.primary | 1px color.primary | medium |
-| tertiary | transparent | color.primary | none | lowest |
+| primary | color.action.primary | color.contrast.onDark | none | highest |
+| secondary | color.structure.canvas | color.action.primary | 1px color.action.primary | medium |
+| tertiary | transparent | color.action.primary | none | lowest |
+
+#### Emphasis Prop Guidance
+
+The `variant` prop controls **visual emphasis**, not action type. Both primary and secondary variants can be CTAs — the distinction is about visual hierarchy:
+
+| Emphasis Level | Variant | When to Use | Example |
+|----------------|---------|-------------|---------|
+| **Highest** | `primary` | Single, focused instances — hero moments, main CTAs | "Get Started" on landing page |
+| **Medium** | `secondary` | Alternative actions, clear secondary options | "Cancel" next to "Save" |
+| **Lowest** | `tertiary` | De-emphasized actions, repetitive instances | "Skip" or "Learn More" links |
+
+**Avoiding "Purple-ication"**: Use `primary` sparingly. When multiple CTAs appear together (e.g., action lists), use `secondary` to avoid overwhelming the UI with high-emphasis purple buttons.
+
+```html
+<!-- ✅ Good: Single hero CTA uses primary -->
+<button-cta label="Get Started" variant="primary"></button-cta>
+
+<!-- ✅ Good: List of actions uses secondary to avoid visual overload -->
+<div class="action-list">
+  <button-cta label="Edit Profile" variant="secondary"></button-cta>
+  <button-cta label="Change Password" variant="secondary"></button-cta>
+  <button-cta label="Manage Notifications" variant="secondary"></button-cta>
+</div>
+
+<!-- ❌ Avoid: Multiple primary buttons compete for attention -->
+<div class="action-list">
+  <button-cta label="Edit Profile" variant="primary"></button-cta>
+  <button-cta label="Change Password" variant="primary"></button-cta>
+</div>
+```
 
 #### Usage Example
 
@@ -350,11 +380,11 @@ Presentational button component for vertical list selection patterns. Renders vi
 
 | State | Mode | Background | Border | Checkmark |
 |-------|------|------------|--------|-----------|
-| `rest` | Tap/Initial | `color.background` | 1px default | Hidden |
-| `selected` | Select | `color.select.selected.subtle` | 2px emphasis | Visible |
-| `notSelected` | Select | `color.select.notSelected.subtle` | 1px default | Hidden |
-| `checked` | MultiSelect | `color.background` | 1px default | Visible |
-| `unchecked` | MultiSelect | `color.background` | 1px default | Hidden |
+| `rest` | Tap/Initial | `color.structure.canvas` | 1px default | Hidden |
+| `selected` | Select | `color.feedback.select.background.rest` | 2px emphasis | Visible |
+| `notSelected` | Select | `color.feedback.select.background.default` | 1px default | Hidden |
+| `checked` | MultiSelect | `color.structure.canvas` | 1px default | Visible |
+| `unchecked` | MultiSelect | `color.structure.canvas` | 1px default | Hidden |
 
 #### Behavioral Contracts
 
@@ -412,23 +442,47 @@ ButtonVerticalListItem(
 
 Components in the Buttons family consume these design tokens:
 
+Button uses a **compositional token architecture** where component styling references semantic concept tokens. This follows the Nathan Curtis concept-first naming model.
+
+#### Semantic Concept Tokens (Foundation)
+
+Button components rely on three semantic concepts:
+
+| Concept | Token | Primitive | Purpose |
+|---------|-------|-----------|---------|
+| **Action** | `color.action.primary` | purple300 | Emphasized action (single, focused instances) |
+| **Action** | `color.action.secondary` | black400 | De-emphasized action (repetitive, supporting instances) |
+| **Contrast** | `color.contrast.onDark` | white100 | Content on dark/colored backgrounds |
+| **Contrast** | `color.contrast.onLight` | black500 | Content on light backgrounds |
+| **Feedback** | `color.feedback.select.text.rest` | cyan400 | Selected state text/border |
+| **Feedback** | `color.feedback.select.background.rest` | cyan100 | Selected state background |
+| **Feedback** | `color.feedback.select.text.default` | gray200 | Not-selected state text/border |
+| **Feedback** | `color.feedback.select.background.default` | gray100 | Not-selected state background |
+| **Feedback** | `color.feedback.error.text` | pink400 | Error state text/border |
+| **Feedback** | `color.feedback.error.background` | pink100 | Error state background |
+| **Structure** | `color.structure.canvas` | white100 | Base background |
+| **Structure** | `color.structure.border` | gray100 | Default border color |
+
+#### Token Usage by Component
+
 | Category | Token Pattern | Purpose |
 |----------|---------------|---------|
 | Typography | `typography.button.*` | Button text sizing |
 | Typography | `typography.labelMd`, `typography.labelLg` | Label typography |
 | Typography | `typography.body.sm` | Description text, error messages |
-| Color | `color.primary` | Primary button background |
-| Color | `color.contrast.onPrimary` | Content (text/icons) on primary background |
+| Color | `color.action.primary` | Primary button background |
+| Color | `color.action.secondary` | Secondary button text/border |
+| Color | `color.contrast.onDark` | Content (text/icons) on primary background |
 | Color | `color.text.primary` | Secondary/tertiary text |
 | Color | `color.text.muted` | Description text |
-| Color | `color.background` | Secondary button background |
-| Color | `color.border` | Secondary button border |
-| Color | `color.select.selected.strong` | Selected state border/text |
-| Color | `color.select.selected.subtle` | Selected state background |
-| Color | `color.select.notSelected.strong` | Not-selected state border/text |
-| Color | `color.select.notSelected.subtle` | Not-selected state background |
-| Color | `color.error.strong` | Error state border/text |
-| Color | `color.error.subtle` | Error state background |
+| Color | `color.structure.canvas` | Secondary button background |
+| Color | `color.structure.border` | Secondary button border |
+| Color | `color.feedback.select.text.rest` | Selected state border/text |
+| Color | `color.feedback.select.background.rest` | Selected state background |
+| Color | `color.feedback.select.text.default` | Not-selected state border/text |
+| Color | `color.feedback.select.background.default` | Not-selected state background |
+| Color | `color.feedback.error.text` | Error state border/text |
+| Color | `color.feedback.error.background` | Error state background |
 | Spacing | `space.inset.*` | Button padding |
 | Spacing | `space.inline.100` | Icon-label gap |
 | Spacing | `space.grouped.normal` | Gap between list items (8px) |
@@ -446,6 +500,12 @@ Components in the Buttons family consume these design tokens:
 | Blend | `blend.hoverDarker` | Hover state (8% darker) |
 | Blend | `blend.pressedDarker` | Pressed state (12% darker) |
 | Blend | `blend.disabledDesaturate` | Disabled state (12% less saturated) |
+
+**Why Semantic Concept Tokens**:
+- **Action concept**: `color.action.primary` clearly indicates emphasized interactive elements
+- **Feedback concept**: `color.feedback.select.*` groups all selection-related colors together
+- **Contrast concept**: `color.contrast.onDark` ensures readable content on colored backgrounds
+- **Structure concept**: `color.structure.canvas` provides consistent base backgrounds
 
 ### Token Resolution
 
@@ -477,9 +537,10 @@ Button components resolve tokens through the Rosetta System's semantic-to-primit
 
 | Scenario | Recommended Variant | Rationale |
 |----------|---------------------|-----------|
-| Primary action (submit, save) | primary | Highest visual emphasis |
+| Primary action (submit, save) | primary | Highest visual emphasis — use for single, focused CTAs |
 | Secondary action (cancel, back) | secondary | Medium emphasis, clear alternative |
 | Tertiary action (skip, dismiss) | tertiary | Lowest emphasis, de-emphasized |
+| Multiple actions in a list | secondary | Avoid "purple-ication" — use primary sparingly |
 | Destructive action | primary (with error color) | High emphasis for important action |
 
 ### Common Patterns
@@ -568,7 +629,10 @@ All platforms implement the same behavioral contracts:
 - [Component Quick Reference](./Component-Quick-Reference.md) - Family routing table
 - [Stemma System Principles](./stemma-system-principles.md) - Architecture overview
 - [Token Quick Reference](./Token-Quick-Reference.md) - Token documentation
+- [Token-Family-Color](./Token-Family-Color.md) - Color token reference including action, feedback, and contrast concepts
+- [Token Governance](./Token-Governance.md) - Token selection and usage governance
 - [MCP Component Family Document Template](./Component-MCP-Document-Template.md) - Template specification
 - [Button-CTA Schema](../../src/components/core/Button-CTA/Button-CTA.schema.yaml) - Full schema definition
 - [Button-VerticalList-Set README](../../src/components/core/Button-VerticalList-Set/README.md) - Set component documentation
 - [Button-VerticalList-Item README](../../src/components/core/Button-VerticalList-Item/README.md) - Item component documentation
+- [Semantic Token Naming Design Authority](../.kiro/specs/051-semantic-token-naming-restructure/design-outline.md) - Naming model reference

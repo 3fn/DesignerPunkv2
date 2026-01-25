@@ -4,13 +4,13 @@ inclusion: manual
 
 # Rosetta System Architecture
 
-**Date**: 2026-01-05
+**Date**: 2026-01-25
 **Purpose**: High-level architecture guide for the Rosetta System token generation pipeline
 **Organization**: process-standard
 **Scope**: cross-project
 **Layer**: 2
 **Relevant Tasks**: token-development, component-development, pipeline-integration
-**Last Reviewed**: 2026-01-05
+**Last Reviewed**: 2026-01-25
 
 ---
 
@@ -53,6 +53,92 @@ This applies to **all token types**: primitive, semantic, and component tokens.
 - Platform generators handle unit conversion
 - Prevents double-unit bugs (e.g., `16.dp.dp`)
 - Consistent consumption pattern across all platforms
+
+---
+
+## RGBA Color Pipeline
+
+Color tokens use RGBA format at the primitive level, enabling native alpha channel support and direct mapping to platform-specific color APIs.
+
+### RGBA Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         RGBA COLOR PIPELINE                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   PRIMITIVE DEFINITION (Source of Truth)                                     │
+│   └── src/tokens/ColorTokens.ts                                             │
+│       └── Format: rgba(R, G, B, A) where R,G,B are 0-255, A is 0.0-1.0     │
+│       └── Example: 'purple-300': 'rgba(176, 38, 255, 1)'                    │
+│                                                                              │
+│                              │                                               │
+│                              ▼                                               │
+│                                                                              │
+│   SEMANTIC INHERITANCE                                                       │
+│   └── src/tokens/semantic/ColorSemanticTokens.ts                            │
+│       └── References primitives: 'color.action.primary': 'purple-300'       │
+│       └── Baked-in alpha: 'color.structure.border.subtle': 'rgba(...,0.48)'│
+│                                                                              │
+│                              │                                               │
+│                              ▼                                               │
+│                                                                              │
+│   PLATFORM GENERATION                                                        │
+│   └── src/providers/*FormatGenerator.ts                                     │
+│       ├── Web: rgba(R, G, B, A) → CSS rgba() format                         │
+│       ├── iOS: rgba(R, G, B, A) → UIColor(red:green:blue:alpha:)           │
+│       └── Android: rgba(R, G, B, A) → Color.argb(A×255, R, G, B)           │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Platform Output Formats
+
+Each platform generator transforms RGBA values to native color formats:
+
+| Platform | Input | Output Format | Example |
+|----------|-------|---------------|---------|
+| **Web** | `rgba(176, 38, 255, 1)` | CSS `rgba()` | `--purple-300: rgba(176, 38, 255, 1);` |
+| **iOS** | `rgba(176, 38, 255, 1)` | `UIColor(red:green:blue:alpha:)` | `UIColor(red: 0.69, green: 0.15, blue: 1.00, alpha: 1.00)` |
+| **Android** | `rgba(176, 38, 255, 1)` | `Color.argb()` | `Color.argb(255, 176, 38, 255)` |
+
+### Conversion Rules
+
+**Web (CSS)**:
+- RGBA values pass through unchanged
+- Format: `rgba(R, G, B, A)` where R,G,B are 0-255, A is 0.0-1.0
+
+**iOS (Swift)**:
+- RGB values normalized to 0.0-1.0 range (divide by 255)
+- Alpha preserved as-is (already 0.0-1.0)
+- Format: `UIColor(red: R/255, green: G/255, blue: B/255, alpha: A)`
+
+**Android (Kotlin)**:
+- Alpha converted from 0.0-1.0 to 0-255 range (multiply by 255)
+- RGB values preserved as integers
+- Format: `Color.argb(A×255, R, G, B)`
+
+### Baked-In Alpha Values
+
+Some semantic tokens have baked-in alpha values for specific use cases:
+
+```typescript
+// Example: Subtle border with 48% opacity
+'color.structure.border.subtle': 'rgba(184, 182, 200, 0.48)'
+```
+
+**Platform Output**:
+- **Web**: `--color-structure-border-subtle: rgba(184, 182, 200, 0.48);`
+- **iOS**: `UIColor(red: 0.72, green: 0.71, blue: 0.78, alpha: 0.48)`
+- **Android**: `Color.argb(122, 184, 182, 200)` (122 = 0.48 × 255)
+
+### Entry Points
+
+- Primitive color definitions: `src/tokens/ColorTokens.ts`
+- Semantic color tokens: `src/tokens/semantic/ColorSemanticTokens.ts`
+- Web generator: `src/providers/WebFormatGenerator.ts`
+- iOS generator: `src/providers/iOSFormatGenerator.ts`
+- Android generator: `src/providers/AndroidFormatGenerator.ts`
 
 ---
 
@@ -205,10 +291,16 @@ Registered tokens are transformed into platform-specific formats.
 │   └── Location: src/generators/TokenFileGenerator.ts                        │
 │                                                                              │
 │   Platform Format Generators                                                 │
-│   ├── WebFormatGenerator: CSS custom properties                             │
-│   ├── iOSFormatGenerator: Swift constants                                   │
-│   ├── AndroidFormatGenerator: Kotlin constants                              │
-│   └── Location: src/generators/*FormatGenerator.ts                          │
+│   ├── WebFormatGenerator: CSS custom properties (RGBA format)               │
+│   ├── iOSFormatGenerator: Swift constants (UIColor format)                  │
+│   ├── AndroidFormatGenerator: Kotlin constants (Color.argb format)          │
+│   └── Location: src/providers/*FormatGenerator.ts                           │
+│                                                                              │
+│   Color Format Conversion                                                    │
+│   ├── parseRgbaString(): Parse RGBA string to components                    │
+│   ├── rgbaStringToUIColor(): Convert to iOS UIColor format                  │
+│   ├── rgbaStringToColorArgb(): Convert to Android Color.argb format         │
+│   └── formatColorValue(): Handle mode-aware color objects                   │
 │                                                                              │
 │   Utility Generators                                                         │
 │   ├── BlendUtilityGenerator: Blend functions per platform                   │
@@ -219,9 +311,9 @@ Registered tokens are transformed into platform-specific formats.
 
 **Entry Points**:
 - Generation orchestration: `src/generators/TokenFileGenerator.ts`
-- Web generation: `src/generators/WebFormatGenerator.ts`
-- iOS generation: `src/generators/iOSFormatGenerator.ts`
-- Android generation: `src/generators/AndroidFormatGenerator.ts`
+- Web generation: `src/providers/WebFormatGenerator.ts`
+- iOS generation: `src/providers/iOSFormatGenerator.ts`
+- Android generation: `src/providers/AndroidFormatGenerator.ts`
 
 ### Stage 5: Platform Output
 
@@ -340,8 +432,10 @@ export const ComponentNameTokens = defineComponentTokens({
 | **Validation** | `src/integration/ValidationCoordinator.ts` | Validation orchestration |
 | **Registry** | `src/registries/` | Token storage and queries |
 | **Generation** | `src/generators/TokenFileGenerator.ts` | Platform output generation |
+| **Platform Generators** | `src/providers/*FormatGenerator.ts` | Platform-specific formatting |
 | **Output** | `dist/` | Generated platform files |
 | **Component Tokens** | `src/build/tokens/defineComponentTokens.ts` | Component token authoring |
+| **Color Tokens** | `src/tokens/ColorTokens.ts` | RGBA primitive definitions |
 
 ---
 
@@ -370,6 +464,7 @@ get_document_full({ path: ".kiro/steering/Rosetta-System-Architecture.md" })
 
 # Get specific sections
 get_section({ path: ".kiro/steering/Rosetta-System-Architecture.md", heading: "Token Pipeline Architecture" })
+get_section({ path: ".kiro/steering/Rosetta-System-Architecture.md", heading: "RGBA Color Pipeline" })
 get_section({ path: ".kiro/steering/Rosetta-System-Architecture.md", heading: "Component Token Integration" })
 get_section({ path: ".kiro/steering/Rosetta-System-Architecture.md", heading: "Subsystem Entry Points Summary" })
 
