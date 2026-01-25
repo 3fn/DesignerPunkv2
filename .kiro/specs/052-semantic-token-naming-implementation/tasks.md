@@ -341,7 +341,7 @@ This spec executes the semantic color token naming restructure defined in Spec 0
 
 ### Task 6: Component Updates (iOS)
 
-- [ ] 6. Component Updates (iOS)
+- [x] 6. Component Updates (iOS)
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -365,59 +365,59 @@ This spec executes the semantic color token naming restructure defined in Spec 0
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 6 Complete: Component Updates (iOS)"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 6.1 Update Avatar component (iOS)
+  - [x] 6.1 Update Avatar component (iOS)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update Swift to use new avatar token names
     - Verify UIColor references resolve correctly
     - _Requirements: 6.1_
 
-  - [ ] 6.2 Update Button-CTA component (iOS)
+  - [x] 6.2 Update Button-CTA component (iOS)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace `colorPrimary` with `colorActionPrimary`
     - Replace `colorContrastOnPrimary` with `colorContrastOnDark`
     - _Requirements: 6.2_
 
-  - [ ] 6.3 Update Button-Icon component (iOS)
+  - [x] 6.3 Update Button-Icon component (iOS)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace `colorPrimary` with `colorActionPrimary`
     - Replace `colorContrastOnPrimary` with `colorContrastOnDark`
     - _Requirements: 6.3_
 
-  - [ ] 6.4 Update Button-VerticalList-Item component (iOS)
+  - [x] 6.4 Update Button-VerticalList-Item component (iOS)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update to use `colorFeedbackSelect*` tokens
     - _Requirements: 6.4_
 
-  - [ ] 6.5 Update Button-VerticalList-Set component (iOS)
+  - [x] 6.5 Update Button-VerticalList-Set component (iOS)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace error token with `colorFeedbackErrorText`
     - _Requirements: 6.5_
 
-  - [ ] 6.6 Update Container-Base component (iOS)
+  - [x] 6.6 Update Container-Base component (iOS)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update focus outline to use accessibility token
     - _Requirements: 6.6_
 
-  - [ ] 6.7 Update Container-Card-Base component (iOS)
+  - [x] 6.7 Update Container-Card-Base component (iOS)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update focus outline to use accessibility token
     - Remove any hard-coded color fallbacks
     - _Requirements: 6.7_
 
-  - [ ] 6.8 Update Input-Text-Base component (iOS)
+  - [x] 6.8 Update Input-Text-Base component (iOS)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace error/success tokens with feedback concept tokens
     - _Requirements: 6.8_
 
-  - [ ] 6.9 Update Badge-Count-Notification component (iOS)
+  - [x] 6.9 Update Badge-Count-Notification component (iOS)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update to use reordered badge token names

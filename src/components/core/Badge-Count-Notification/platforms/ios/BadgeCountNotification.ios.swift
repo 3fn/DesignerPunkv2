@@ -31,8 +31,8 @@ import UIKit
  * 
  * Fixed notification colors - not configurable by consumers.
  * These tokens reference the semantic color tokens:
- * - color.badge.background.notification → pink400
- * - color.badge.text.notification → white100
+ * - color.badge.notification.background → pink400
+ * - color.badge.notification.text → white100
  * 
  * Contrast Ratio: 6.33:1 (exceeds WCAG AA 4.5:1)
  * 
@@ -42,14 +42,14 @@ enum BadgeCountNotificationTokens {
     // MARK: - Fixed Notification Colors
     
     /// Background color for notification badge
-    /// Uses semantic token: color.badge.background.notification
+    /// Uses semantic token: color.badge.notification.background
     /// @see Requirement 3.1 - notification-specific color tokens
-    static let backgroundColor: Color = Color(DesignTokens.colorBadgeBackgroundNotification)
+    static let backgroundColor: Color = Color(DesignTokens.colorBadgeNotificationBackground)
     
     /// Text color for notification badge
-    /// Uses semantic token: color.badge.text.notification
+    /// Uses semantic token: color.badge.notification.text
     /// @see Requirement 3.1 - notification-specific color tokens
-    static let textColor: Color = Color(DesignTokens.colorBadgeTextNotification)
+    static let textColor: Color = Color(DesignTokens.colorBadgeNotificationText)
 }
 
 // MARK: - Badge-Count-Notification Size Enum
@@ -162,8 +162,8 @@ public enum BadgeCountNotificationDefaults {
  * announcements for screen readers.
  * 
  * Fixed Colors (not configurable):
- * - Background: color.badge.background.notification (pink400)
- * - Text: color.badge.text.notification (white100)
+ * - Background: color.badge.notification.background (pink400)
+ * - Text: color.badge.notification.text (white100)
  * - Contrast Ratio: 6.33:1 (exceeds WCAG AA 4.5:1)
  * 
  * Accessibility Features:

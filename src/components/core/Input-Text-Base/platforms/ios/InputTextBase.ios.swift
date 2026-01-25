@@ -135,9 +135,9 @@ struct InputTextBase: View {
     /// Label color based on state
     private var labelColor: Color {
         if hasError {
-            return Color(DesignTokens.color.error.strong)
+            return Color(DesignTokens.colorFeedbackErrorText)
         } else if isSuccess {
-            return Color(DesignTokens.color.success.strong)
+            return Color(DesignTokens.colorFeedbackSuccessText)
         } else if isDisabled {
             return Color(DesignTokens.color.primary).disabledBlend()
         } else if isFocused {
@@ -159,9 +159,9 @@ struct InputTextBase: View {
     /// Border color based on state
     private var borderColor: Color {
         if hasError {
-            return Color(DesignTokens.color.error.strong)
+            return Color(DesignTokens.colorFeedbackErrorText)
         } else if isSuccess {
-            return Color(DesignTokens.color.success.strong)
+            return Color(DesignTokens.colorFeedbackSuccessText)
         } else if isDisabled {
             return Color(DesignTokens.color.primary).disabledBlend()
         } else if isFocused {
@@ -269,7 +269,7 @@ struct InputTextBase: View {
                 
                 // Trailing icon (error, success, or info)
                 if showErrorIcon {
-                    Icon(name: "x", size: DesignTokens.icon.size100, color: Color(DesignTokens.color.error.strong))
+                    Icon(name: "x", size: DesignTokens.icon.size100, color: Color(DesignTokens.colorFeedbackErrorText))
                         .padding(.trailing, DesignTokens.space.inset.100)
                         .transition(.opacity)
                         .animation(
@@ -277,7 +277,7 @@ struct InputTextBase: View {
                             value: showErrorIcon
                         )
                 } else if showSuccessIcon {
-                    Icon(name: "check", size: DesignTokens.icon.size100, color: Color(DesignTokens.color.success.strong))
+                    Icon(name: "check", size: DesignTokens.icon.size100, color: Color(DesignTokens.colorFeedbackSuccessText))
                         .padding(.trailing, DesignTokens.space.inset.100)
                         .transition(.opacity)
                         .animation(
@@ -310,7 +310,7 @@ struct InputTextBase: View {
                 Text(errorMessage)
                     .font(Font.system(size: DesignTokens.typography.caption.fontSize)
                         .weight(DesignTokens.typography.caption.fontWeight))
-                    .foregroundColor(Color(DesignTokens.color.error.strong))
+                    .foregroundColor(Color(DesignTokens.colorFeedbackErrorText))
                     .accessibilityIdentifier("\(id)-error")
             }
         }

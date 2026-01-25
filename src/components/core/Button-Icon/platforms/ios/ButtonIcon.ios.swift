@@ -91,9 +91,9 @@ enum ButtonIconSize {
  * Button-Icon visual style variants.
  * 
  * Determines background, border, and icon color styling:
- * - `primary`: Solid color.primary background, color.contrast.onPrimary icon
- * - `secondary`: Transparent background, borderDefault border with color.primary, color.primary icon
- * - `tertiary`: Transparent background, no border, color.primary icon
+ * - `primary`: Solid color.action.primary background, color.contrast.onDark icon
+ * - `secondary`: Transparent background, borderDefault border with color.action.primary, color.action.primary icon
+ * - `tertiary`: Transparent background, no border, color.action.primary icon
  * 
  * @see Requirements 2.1, 2.2, 2.3, 2.4
  */
@@ -185,28 +185,28 @@ struct ButtonIcon: View {
     }
     
     /// Background color based on variant
-    /// - primary: color.primary (solid fill)
+    /// - primary: color.action.primary (solid fill)
     /// - secondary/tertiary: transparent
     /// @see Requirements 2.1, 2.2, 2.3
     private var backgroundColor: Color {
         switch variant {
         case .primary:
-            return Color(DesignTokens.colorPrimary)
+            return Color(DesignTokens.colorActionPrimary)
         case .secondary, .tertiary:
             return Color.clear
         }
     }
     
     /// Icon color based on variant
-    /// - primary: color.contrast.onPrimary (white on primary background)
-    /// - secondary/tertiary: color.primary
+    /// - primary: color.contrast.onDark (white on primary background)
+    /// - secondary/tertiary: color.action.primary
     /// @see Requirements 2.1, 2.2, 2.3
     private var iconColor: Color {
         switch variant {
         case .primary:
-            return Color(DesignTokens.colorContrastOnPrimary)
+            return Color(DesignTokens.colorContrastOnDark)
         case .secondary, .tertiary:
-            return Color(DesignTokens.colorPrimary)
+            return Color(DesignTokens.colorActionPrimary)
         }
     }
     
@@ -224,13 +224,13 @@ struct ButtonIcon: View {
     }
     
     /// Border color for secondary variant
-    /// - secondary: color.primary
+    /// - secondary: color.action.primary
     /// - primary/tertiary: transparent
     /// @see Requirements 2.2
     private var borderColor: Color {
         switch variant {
         case .secondary:
-            return Color(DesignTokens.colorPrimary)
+            return Color(DesignTokens.colorActionPrimary)
         case .primary, .tertiary:
             return Color.clear
         }

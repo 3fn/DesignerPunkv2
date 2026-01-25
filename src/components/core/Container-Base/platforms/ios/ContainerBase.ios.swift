@@ -160,6 +160,9 @@ struct ContainerBase<Content: View>: View {
     /// Whether hover state is enabled
     let hoverable: Bool
     
+    /// Whether focus indicator is enabled (for keyboard navigation)
+    let focusable: Bool
+    
     /// Child content
     let content: Content
     
@@ -167,6 +170,10 @@ struct ContainerBase<Content: View>: View {
     
     /// Tracks hover state for pointer interactions (macOS/iPadOS)
     @State private var isHovered: Bool = false
+    
+    /// Tracks focus state for keyboard navigation (WCAG 2.4.7 Focus Visible)
+    /// @see src/tokens/semantic/AccessibilityTokens.ts
+    @FocusState private var isFocused: Bool
     
     // MARK: - Initialization
     
@@ -190,6 +197,7 @@ struct ContainerBase<Content: View>: View {
      * @param ignoresSafeArea Whether to ignore safe area (default: false)
      * @param accessibilityLabel Accessibility label (default: nil)
      * @param hoverable Whether hover state is enabled (default: false)
+     * @param focusable Whether focus indicator is enabled (default: false)
      * @param content Child content builder
      */
     init(
@@ -210,6 +218,7 @@ struct ContainerBase<Content: View>: View {
         ignoresSafeArea: Bool = false,
         accessibilityLabel: String? = nil,
         hoverable: Bool = false,
+        focusable: Bool = false,
         @ViewBuilder content: () -> Content
     ) {
         self.padding = padding
@@ -229,6 +238,7 @@ struct ContainerBase<Content: View>: View {
         self.ignoresSafeArea = ignoresSafeArea
         self.accessibilityLabel = accessibilityLabel
         self.hoverable = hoverable
+        self.focusable = focusable
         self.content = content()
     }
     
@@ -240,6 +250,7 @@ struct ContainerBase<Content: View>: View {
             .background(currentBackgroundColor)
             .cornerRadius(cornerRadiusValue)
             .overlay(borderOverlay)
+            .overlay(focusIndicatorOverlay)
             .shadow(color: shadowColor, radius: shadowRadius, x: shadowX, y: shadowY)
             .opacity(opacityValue)
             .zIndex(zIndexValue)
@@ -249,6 +260,9 @@ struct ContainerBase<Content: View>: View {
                         isHovered = hovering
                     }
                 }
+            }
+            .if(focusable) { view in
+                view.focused($isFocused)
             }
             .if(ignoresSafeArea) { view in
                 view.ignoresSafeArea(.all)
@@ -341,6 +355,30 @@ struct ContainerBase<Content: View>: View {
             if border != .none {
                 RoundedRectangle(cornerRadius: cornerRadiusValue)
                     .stroke(resolveContainerBaseBorderColor(borderColor), lineWidth: mapContainerBaseBorderToLineWidth(border))
+            }
+        }
+    }
+    
+    /**
+     * Focus indicator overlay view
+     * 
+     * Creates focus indicator overlay using accessibility tokens for WCAG 2.4.7 compliance.
+     * Uses accessibilityFocusColor, accessibilityFocusWidth, and accessibilityFocusOffset tokens.
+     * Only visible when focusable is true and container has focus.
+     * 
+     * @see src/tokens/semantic/AccessibilityTokens.ts
+     * @see WCAG 2.4.7 Focus Visible (Level AA)
+     * @see WCAG 1.4.11 Non-text Contrast (Level AA) - 3:1 minimum for focus indicators
+     * @see Requirements 6.6 - Container-Base focus outline uses accessibility token
+     */
+    private var focusIndicatorOverlay: some View {
+        Group {
+            if focusable {
+                RoundedRectangle(cornerRadius: cornerRadiusValue)
+                    .stroke(accessibilityFocusColor, lineWidth: accessibilityFocusWidth)
+                    .padding(-accessibilityFocusOffset)
+                    .opacity(isFocused ? 1 : 0)
+                    .animation(motionFocusTransition, value: isFocused)
             }
         }
     }
@@ -696,3 +734,22 @@ func mapContainerBaseLayeringToZIndex(_ layering: ContainerBaseLayeringValue?) -
 
 // Note: motionFocusTransition is imported from MotionTokens.swift
 // Uses motionEasingStandard.speed(1.0 / motionDurationFast) for consistent animation timing
+
+// MARK: - Accessibility Token Constants
+// These constants reference the generated accessibility tokens from DesignTokens.ios.swift
+// @see src/tokens/semantic/AccessibilityTokens.ts for token definitions
+// @see WCAG 2.4.7 Focus Visible (Level AA)
+// @see WCAG 1.4.11 Non-text Contrast (Level AA) - 3:1 minimum for focus indicators
+
+/// Focus indicator outline offset from component bounds (2px)
+/// References: accessibility.focus.offset → space025 primitive token
+let accessibilityFocusOffset: CGFloat = 2 /* space025 */
+
+/// Focus indicator outline width (2px)
+/// References: accessibility.focus.width → borderWidth200 primitive token
+let accessibilityFocusWidth: CGFloat = 2 /* borderWidth200 */
+
+/// Focus indicator outline color (purple300 - primary brand color)
+/// References: accessibility.focus.color → purple300 primitive token
+/// Ensures 3:1 contrast ratio per WCAG 1.4.11
+let accessibilityFocusColor: Color = Color(red: 0.69, green: 0.15, blue: 1.00) /* purple300 */

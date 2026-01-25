@@ -542,7 +542,7 @@ public struct ButtonVerticalListSet: View {
     private func errorMessageView(message: String) -> some View {
         Text(message)
             .font(.system(size: 14, weight: .regular))
-            .foregroundColor(Color(DesignTokens.colorErrorStrong))
+            .foregroundColor(Color(DesignTokens.colorFeedbackErrorText))
             .padding(.bottom, 8)
             .accessibilityAddTraits(.isStaticText)
             // role="alert" equivalent for VoiceOver - immediate announcement

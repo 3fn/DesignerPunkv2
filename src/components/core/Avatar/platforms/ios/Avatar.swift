@@ -50,29 +50,29 @@ enum AvatarTokens {
     // When semantic tokens change, regenerate DesignTokens via: npx ts-node src/generators/generateTokenFiles.ts
     
     /// Background color for human avatars
-    /// References: color.avatar.human → orange300
+    /// References: color.avatar.human.background → color.identity.human → orange300
     /// @see Requirements: 4.1 - Human type background color
-    static let colorHuman: Color = Color(DesignTokens.colorAvatarHuman)
+    static let colorHuman: Color = Color(DesignTokens.colorAvatarHumanBackground)
     
     /// Background color for agent avatars
-    /// References: color.avatar.agent → teal200
+    /// References: color.avatar.agent.background → color.identity.agent → teal200
     /// @see Requirements: 4.2 - Agent type background color
-    static let colorAgent: Color = Color(DesignTokens.colorAvatarAgent)
+    static let colorAgent: Color = Color(DesignTokens.colorAvatarAgentBackground)
     
     /// Icon color on human avatar background
-    /// References: color.avatar.contrast.onHuman → white100
+    /// References: color.avatar.human.icon → color.contrast.onDark → white100
     /// @see Requirements: 6.1 - Human type icon contrast color
-    static let contrastOnHuman: Color = Color(DesignTokens.colorAvatarContrastOnHuman)
+    static let contrastOnHuman: Color = Color(DesignTokens.colorAvatarHumanIcon)
     
     /// Icon color on agent avatar background
-    /// References: color.avatar.contrast.onAgent → white100
+    /// References: color.avatar.agent.icon → color.contrast.onDark → white100
     /// @see Requirements: 6.2 - Agent type icon contrast color
-    static let contrastOnAgent: Color = Color(DesignTokens.colorAvatarContrastOnAgent)
+    static let contrastOnAgent: Color = Color(DesignTokens.colorAvatarAgentIcon)
     
     /// Border color for avatars (xs through xl sizes)
-    /// References: color.avatar.border → gray100
+    /// References: color.avatar.default.border → gray100
     /// @see Requirements: 7.2 - Border color for xs-xl sizes
-    static let borderColor: Color = Color(DesignTokens.colorAvatarBorder)
+    static let borderColor: Color = Color(DesignTokens.colorAvatarDefaultBorder)
     
     /// Border color for xxl size avatars
     /// References: color.contrast.onSurface

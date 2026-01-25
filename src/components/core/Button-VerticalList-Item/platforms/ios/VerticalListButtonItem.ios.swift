@@ -620,29 +620,29 @@ extension DesignTokens {
     /// Requirements: 4.3
     public static let colorTextMuted: UIColor = UIColor.secondaryLabel
     
-    /// Selected state subtle background
+    /// Selected state subtle background (feedback.select.background.rest)
     /// Requirements: 1.2, 1.4
-    public static let colorSelectSelectedSubtle: UIColor = UIColor.systemBlue.withAlphaComponent(0.1)
+    public static let colorFeedbackSelectBackgroundRest: UIColor = UIColor.systemBlue.withAlphaComponent(0.1)
     
-    /// Selected state strong foreground
+    /// Selected state strong foreground (feedback.select.text.rest)
     /// Requirements: 1.2, 1.4, 2.3
-    public static let colorSelectSelectedStrong: UIColor = UIColor.systemBlue
+    public static let colorFeedbackSelectTextRest: UIColor = UIColor.systemBlue
     
-    /// Not selected state subtle background
+    /// Not selected state subtle background (feedback.select.background.default)
     /// Requirements: 1.3
-    public static let colorSelectNotSelectedSubtle: UIColor = UIColor.systemGray6
+    public static let colorFeedbackSelectBackgroundDefault: UIColor = UIColor.systemGray6
     
-    /// Not selected state strong foreground
+    /// Not selected state strong foreground (feedback.select.text.default)
     /// Requirements: 1.3
-    public static let colorSelectNotSelectedStrong: UIColor = UIColor.systemGray
+    public static let colorFeedbackSelectTextDefault: UIColor = UIColor.systemGray
     
-    /// Error state subtle background
+    /// Error state subtle background (feedback.error.background)
     /// Requirements: 3.1
-    public static let colorErrorSubtle: UIColor = UIColor.systemRed.withAlphaComponent(0.1)
+    public static let colorFeedbackErrorBackground: UIColor = UIColor.systemRed.withAlphaComponent(0.1)
     
-    /// Error state strong foreground
+    /// Error state strong foreground (feedback.error.text)
     /// Requirements: 3.1, 3.2, 3.3, 2.4
-    public static let colorErrorStrong: UIColor = UIColor.systemRed
+    public static let colorFeedbackErrorText: UIColor = UIColor.systemRed
     
     // MARK: - Typography Tokens
     

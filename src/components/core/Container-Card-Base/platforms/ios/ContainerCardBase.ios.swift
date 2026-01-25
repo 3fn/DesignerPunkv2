@@ -256,6 +256,9 @@ struct ContainerCardBase<Content: View>: View {
     /// Test identifier for automated testing
     let testID: String?
     
+    /// Whether the card shows focus indicator for keyboard navigation
+    let focusable: Bool
+    
     /// Child content
     let content: Content
     
@@ -266,6 +269,9 @@ struct ContainerCardBase<Content: View>: View {
     
     /// Tracks pressed state for tap feedback
     @State private var isPressed: Bool = false
+    
+    /// Tracks focus state for keyboard navigation (WCAG 2.4.7)
+    @FocusState private var isFocused: Bool
     
     // MARK: - Initialization
     
@@ -291,6 +297,7 @@ struct ContainerCardBase<Content: View>: View {
      * @param onPress Press callback (default: nil)
      * @param role ARIA role for interactive cards (default: .button)
      * @param testID Test identifier (default: nil)
+     * @param focusable Whether card shows focus indicator (default: false)
      * @param content Child content builder
      */
     init(
@@ -311,6 +318,7 @@ struct ContainerCardBase<Content: View>: View {
         onPress: (() -> Void)? = nil,
         role: CardRole = .button,
         testID: String? = nil,
+        focusable: Bool = false,
         @ViewBuilder content: () -> Content
     ) {
         self.padding = padding
@@ -330,6 +338,7 @@ struct ContainerCardBase<Content: View>: View {
         self.onPress = onPress
         self.role = role
         self.testID = testID
+        self.focusable = focusable
         self.content = content()
     }
     
@@ -341,7 +350,9 @@ struct ContainerCardBase<Content: View>: View {
             .background(currentBackgroundColor)
             .cornerRadius(cornerRadiusValue)
             .overlay(borderOverlay)
+            .overlay(focusIndicatorOverlay)
             .shadow(color: shadowColor, radius: shadowRadius, x: shadowX, y: shadowY)
+            .focused($isFocused)
             .if(interactive) { view in
                 view
                     // Hover state for pointer devices (macOS/iPadOS)
@@ -454,6 +465,29 @@ struct ContainerCardBase<Content: View>: View {
         if border != .none {
             RoundedRectangle(cornerRadius: cornerRadiusValue)
                 .stroke(mapCardBorderColorToColor(borderColor), lineWidth: mapCardBorderToLineWidth(border))
+        }
+    }
+    
+    /**
+     * Focus indicator overlay view
+     * 
+     * Creates focus indicator overlay using accessibility tokens for WCAG 2.4.7 compliance.
+     * Uses accessibilityFocusColor, accessibilityFocusWidth, and accessibilityFocusOffset tokens.
+     * Only visible when focusable is true and card has focus.
+     * 
+     * @see src/tokens/semantic/AccessibilityTokens.ts
+     * @see WCAG 2.4.7 Focus Visible (Level AA)
+     * @see WCAG 1.4.11 Non-text Contrast (Level AA) - 3:1 minimum for focus indicators
+     * @see Requirements 6.7 - Container-Card-Base focus outline uses accessibility token
+     */
+    @ViewBuilder
+    private var focusIndicatorOverlay: some View {
+        if focusable {
+            RoundedRectangle(cornerRadius: cornerRadiusValue)
+                .stroke(cardAccessibilityFocusColor, lineWidth: cardAccessibilityFocusWidth)
+                .padding(-cardAccessibilityFocusOffset)
+                .opacity(isFocused ? 1 : 0)
+                .animation(motionFocusTransition, value: isFocused)
         }
     }
     
@@ -777,6 +811,24 @@ let shadowContainerY: CGFloat = 2
 let motionFocusTransitionDuration: Double = 0.15 /* motion.focusTransition */
 let motionFocusTransition: Animation = .easeOut(duration: motionFocusTransitionDuration)
 
+// MARK: - Accessibility Focus Tokens
+// WCAG 2.4.7 Focus Visible (Level AA) - Focus indicator must be visible
+// WCAG 1.4.11 Non-text Contrast (Level AA) - 3:1 minimum for focus indicators
+// @see src/tokens/semantic/AccessibilityTokens.ts
+
+/// Focus indicator outline offset from component bounds (2px)
+/// References: accessibility.focus.offset → space025 primitive token
+let cardAccessibilityFocusOffset: CGFloat = 2 /* space025 */
+
+/// Focus indicator outline width (2px)
+/// References: accessibility.focus.width → borderWidth200 primitive token
+let cardAccessibilityFocusWidth: CGFloat = 2 /* borderWidth200 */
+
+/// Focus indicator outline color (purple300 - primary brand color)
+/// References: accessibility.focus.color → purple300 primitive token
+/// Ensures 3:1 contrast ratio per WCAG 1.4.11
+let cardAccessibilityFocusColor: Color = Color(red: 0.69, green: 0.15, blue: 1.00) /* purple300 */
+
 // MARK: - Preview
 
 /**
@@ -861,6 +913,26 @@ struct ContainerCardBase_Previews: PreviewProvider {
                         Text("Navigate to details")
                         Spacer()
                         Image(systemName: "chevron.right")
+                            .foregroundColor(.secondary)
+                    }
+                }
+                
+                Divider()
+                
+                // Focusable card (WCAG 2.4.7)
+                Text("Focusable Card")
+                    .font(.headline)
+                
+                ContainerCardBase(
+                    interactive: true,
+                    focusable: true,
+                    onPress: { print("Focusable card pressed") }
+                ) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Keyboard Accessible Card")
+                            .font(.headline)
+                        Text("Shows focus indicator when focused via keyboard")
+                            .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
                 }

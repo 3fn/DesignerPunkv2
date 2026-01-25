@@ -173,38 +173,38 @@ public struct VisualStateStyles: Equatable {
     )
     
     /// Selected state styles (Select mode)
-    /// Requirements: 1.2 - color.select.selected.subtle, borderEmphasis (2px), 
-    ///               color.select.selected.strong for border and label
+    /// Requirements: 1.2 - color.feedback.select.background.rest, borderEmphasis (2px), 
+    ///               color.feedback.select.text.rest for border and label
     public static let selected = VisualStateStyles(
-        background: Color(DesignTokens.colorSelectSelectedSubtle),
+        background: Color(DesignTokens.colorFeedbackSelectBackgroundRest),
         borderWidth: DesignTokens.borderBorderEmphasis,
-        borderColor: Color(DesignTokens.colorSelectSelectedStrong),
-        labelColor: Color(DesignTokens.colorSelectSelectedStrong),
-        iconColor: Color(DesignTokens.colorSelectSelectedStrong),
+        borderColor: Color(DesignTokens.colorFeedbackSelectTextRest),
+        labelColor: Color(DesignTokens.colorFeedbackSelectTextRest),
+        iconColor: Color(DesignTokens.colorFeedbackSelectTextRest),
         checkmarkVisible: true
     )
     
     /// Not selected state styles (Select mode)
-    /// Requirements: 1.3 - color.select.notSelected.subtle, borderDefault (1px),
-    ///               transparent border, color.select.notSelected.strong
+    /// Requirements: 1.3 - color.feedback.select.background.default, borderDefault (1px),
+    ///               transparent border, color.feedback.select.text.default
     public static let notSelected = VisualStateStyles(
-        background: Color(DesignTokens.colorSelectNotSelectedSubtle),
+        background: Color(DesignTokens.colorFeedbackSelectBackgroundDefault),
         borderWidth: DesignTokens.borderBorderDefault,
         borderColor: .clear,
-        labelColor: Color(DesignTokens.colorSelectNotSelectedStrong),
-        iconColor: Color(DesignTokens.colorSelectNotSelectedStrong),
+        labelColor: Color(DesignTokens.colorFeedbackSelectTextDefault),
+        iconColor: Color(DesignTokens.colorFeedbackSelectTextDefault),
         checkmarkVisible: false
     )
     
     /// Checked state styles (Multi-Select mode)
-    /// Requirements: 1.4 - color.select.selected.subtle, borderDefault (1px),
-    ///               transparent border, color.select.selected.strong
+    /// Requirements: 1.4 - color.feedback.select.background.rest, borderDefault (1px),
+    ///               transparent border, color.feedback.select.text.rest
     public static let checked = VisualStateStyles(
-        background: Color(DesignTokens.colorSelectSelectedSubtle),
+        background: Color(DesignTokens.colorFeedbackSelectBackgroundRest),
         borderWidth: DesignTokens.borderBorderDefault,
         borderColor: .clear,
-        labelColor: Color(DesignTokens.colorSelectSelectedStrong),
-        iconColor: Color(DesignTokens.colorSelectSelectedStrong),
+        labelColor: Color(DesignTokens.colorFeedbackSelectTextRest),
+        iconColor: Color(DesignTokens.colorFeedbackSelectTextRest),
         checkmarkVisible: true
     )
     
@@ -223,15 +223,15 @@ public struct VisualStateStyles: Equatable {
     // MARK: - Error State Styles
     
     /// Error state styles for Select mode (full treatment)
-    /// Requirements: 3.1 - color.error.subtle background, borderEmphasis (2px),
-    ///               color.error.strong for border, label, and icon
+    /// Requirements: 3.1 - color.feedback.error.background, borderEmphasis (2px),
+    ///               color.feedback.error.text for border, label, and icon
     public static func errorSelectMode(checkmarkVisible: Bool) -> VisualStateStyles {
         return VisualStateStyles(
-            background: Color(DesignTokens.colorErrorSubtle),
+            background: Color(DesignTokens.colorFeedbackErrorBackground),
             borderWidth: DesignTokens.borderBorderEmphasis,
-            borderColor: Color(DesignTokens.colorErrorStrong),
-            labelColor: Color(DesignTokens.colorErrorStrong),
-            iconColor: Color(DesignTokens.colorErrorStrong),
+            borderColor: Color(DesignTokens.colorFeedbackErrorText),
+            labelColor: Color(DesignTokens.colorFeedbackErrorText),
+            iconColor: Color(DesignTokens.colorFeedbackErrorText),
             checkmarkVisible: checkmarkVisible
         )
     }
@@ -243,8 +243,8 @@ public struct VisualStateStyles: Equatable {
             background: baseStyles.background,
             borderWidth: baseStyles.borderWidth,
             borderColor: baseStyles.borderColor,
-            labelColor: Color(DesignTokens.colorErrorStrong),
-            iconColor: Color(DesignTokens.colorErrorStrong),
+            labelColor: Color(DesignTokens.colorFeedbackErrorText),
+            iconColor: Color(DesignTokens.colorFeedbackErrorText),
             checkmarkVisible: baseStyles.checkmarkVisible
         )
     }
@@ -291,19 +291,19 @@ public func getStylesForState(_ visualState: VisualState) -> VisualStateStyles {
  * 
  * Error treatment is mode-specific:
  * - Select mode: Full error treatment (border + background + colors)
- *   - Background: color.error.subtle
- *   - Border: borderEmphasis (2px), color.error.strong
- *   - Label/Icon: color.error.strong
+ *   - Background: color.feedback.error.background
+ *   - Border: borderEmphasis (2px), color.feedback.error.text
+ *   - Label/Icon: color.feedback.error.text
  * - Multi-Select mode: Text/icon colors only (no border/background change)
  *   - Background: preserved from base state
  *   - Border: preserved from base state
- *   - Label/Icon: color.error.strong
+ *   - Label/Icon: color.feedback.error.text
  * - Tap mode (rest state only): No effect (nothing to validate)
  * 
  * Requirements:
  * - 3.1: Select mode error treatment (full treatment)
  * - 3.2: Multi-Select mode error treatment (colors only)
- * - 3.3: Error colors (color.error.strong for foreground)
+ * - 3.3: Error colors (color.feedback.error.text for foreground)
  * - 3.4: Tap mode ignores error prop
  * 
  * - Parameters:
