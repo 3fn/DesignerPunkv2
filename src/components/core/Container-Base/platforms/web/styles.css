@@ -117,10 +117,13 @@
  * 
  * When container receives focus (e.g., when used as a focusable element),
  * provide clear visual feedback for accessibility.
+ * 
+ * Uses accessibility tokens for consistent focus indicators across components.
+ * @see src/tokens/semantic/AccessibilityTokens.ts
  */
 .container-base:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: var(--accessibility-focus-width) solid var(--accessibility-focus-color);
+  outline-offset: var(--accessibility-focus-offset);
 }
 
 /**
@@ -134,8 +137,8 @@
 }
 
 .container-base:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: var(--accessibility-focus-width) solid var(--accessibility-focus-color);
+  outline-offset: var(--accessibility-focus-offset);
 }
 
 /**

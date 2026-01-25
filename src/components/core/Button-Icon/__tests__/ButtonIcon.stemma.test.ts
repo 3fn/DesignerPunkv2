@@ -307,8 +307,8 @@ describe('Button-Icon Stemma Validators', () => {
         'var(--motion-button-press-easing)',    // Semantic motion token (replaces hard-coded ease-in-out)
         'var(--border-default)',
         'var(--border-emphasis)',
-        'var(--color-primary)',
-        'var(--color-contrast-on-primary)',
+        'var(--color-action-primary)',          // Updated from --color-primary (Spec 052)
+        'var(--color-contrast-on-dark)',        // Updated from --color-contrast-on-primary (Spec 052)
         'var(--color-background-primary-subtle)',
       ];
       

@@ -53,17 +53,18 @@ export interface VisualStateStyles {
  * styling properties. All color values reference semantic tokens from the
  * design system.
  * 
- * Token Mapping:
+ * Token Mapping (Spec 052 - Semantic Token Naming):
  * - color.background → --color-background
  * - color.text.default → --color-text-default
- * - color.select.selected.strong → --color-select-selected-strong (foreground)
- * - color.select.selected.subtle → --color-select-selected-subtle (background)
- * - color.select.notSelected.strong → --color-select-not-selected-strong (foreground)
- * - color.select.notSelected.subtle → --color-select-not-selected-subtle (background)
+ * - color.feedback.select.text.rest → --color-feedback-select-text-rest (foreground, selected)
+ * - color.feedback.select.background.rest → --color-feedback-select-background-rest (background, selected)
+ * - color.feedback.select.text.default → --color-feedback-select-text-default (foreground, not selected)
+ * - color.feedback.select.background.default → --color-feedback-select-background-default (background, not selected)
  * - border.default → --border-default (1px)
  * - border.emphasis → --border-emphasis (2px)
  * 
  * @see Requirements 1.1, 1.2, 1.3, 1.4, 1.5 for visual state specifications
+ * @see .kiro/specs/052-semantic-token-naming-implementation for token migration
  */
 export const visualStateMap: Record<VisualState, VisualStateStyles> = {
   /**
@@ -89,19 +90,20 @@ export const visualStateMap: Record<VisualState, VisualStateStyles> = {
   /**
    * Selected state - Active selection in Select mode
    * 
-   * - Background: color.select.selected.subtle (subtle cyan)
-   * - Border: 2px color.select.selected.strong (emphasis cyan)
-   * - Text: color.select.selected.strong (strong cyan)
+   * - Background: color.feedback.select.background.rest (subtle cyan)
+   * - Border: 2px color.feedback.select.text.rest (emphasis cyan)
+   * - Text: color.feedback.select.text.rest (strong cyan)
    * - Checkmark: visible
    * 
    * @see Requirement 1.2
+   * @see Spec 052 - Semantic Token Naming Implementation
    */
   selected: {
-    background: 'var(--color-select-selected-subtle)',
+    background: 'var(--color-feedback-select-background-rest)',
     borderWidth: 'var(--border-emphasis)',
-    borderColor: 'var(--color-select-selected-strong)',
-    labelColor: 'var(--color-select-selected-strong)',
-    iconColor: 'var(--color-select-selected-strong)',
+    borderColor: 'var(--color-feedback-select-text-rest)',
+    labelColor: 'var(--color-feedback-select-text-rest)',
+    iconColor: 'var(--color-feedback-select-text-rest)',
     checkmarkVisible: true,
     cssClass: 'vertical-list-item--selected',
   },
@@ -109,19 +111,20 @@ export const visualStateMap: Record<VisualState, VisualStateStyles> = {
   /**
    * Not-selected state - Inactive item in Select mode
    * 
-   * - Background: color.select.notSelected.subtle (subtle gray)
+   * - Background: color.feedback.select.background.default (subtle gray)
    * - Border: 1px transparent
-   * - Text: color.select.notSelected.strong (muted gray)
+   * - Text: color.feedback.select.text.default (muted gray)
    * - Checkmark: hidden
    * 
    * @see Requirement 1.3
+   * @see Spec 052 - Semantic Token Naming Implementation
    */
   notSelected: {
-    background: 'var(--color-select-not-selected-subtle)',
+    background: 'var(--color-feedback-select-background-default)',
     borderWidth: 'var(--border-default)',
     borderColor: 'transparent',
-    labelColor: 'var(--color-select-not-selected-strong)',
-    iconColor: 'var(--color-select-not-selected-strong)',
+    labelColor: 'var(--color-feedback-select-text-default)',
+    iconColor: 'var(--color-feedback-select-text-default)',
     checkmarkVisible: false,
     cssClass: 'vertical-list-item--not-selected',
   },
@@ -129,19 +132,20 @@ export const visualStateMap: Record<VisualState, VisualStateStyles> = {
   /**
    * Checked state - Active selection in Multi-Select mode
    * 
-   * - Background: color.select.selected.subtle (subtle cyan)
+   * - Background: color.feedback.select.background.rest (subtle cyan)
    * - Border: 1px transparent (no emphasis border in multi-select)
-   * - Text: color.select.selected.strong (strong cyan)
+   * - Text: color.feedback.select.text.rest (strong cyan)
    * - Checkmark: visible
    * 
    * @see Requirement 1.4
+   * @see Spec 052 - Semantic Token Naming Implementation
    */
   checked: {
-    background: 'var(--color-select-selected-subtle)',
+    background: 'var(--color-feedback-select-background-rest)',
     borderWidth: 'var(--border-default)',
     borderColor: 'transparent',
-    labelColor: 'var(--color-select-selected-strong)',
-    iconColor: 'var(--color-select-selected-strong)',
+    labelColor: 'var(--color-feedback-select-text-rest)',
+    iconColor: 'var(--color-feedback-select-text-rest)',
     checkmarkVisible: true,
     cssClass: 'vertical-list-item--checked',
   },
@@ -181,7 +185,7 @@ export const visualStateMap: Record<VisualState, VisualStateStyles> = {
  * @example
  * ```typescript
  * const styles = getVisualStateStyles('selected');
- * // styles.background === 'var(--color-select-selected-background)'
+ * // styles.background === 'var(--color-feedback-select-background-rest)'
  * // styles.checkmarkVisible === true
  * // styles.cssClass === 'vertical-list-item--selected'
  * ```
@@ -317,19 +321,20 @@ export function requiresEmphasisBorder(state: VisualState): boolean {
  * @returns Modified VisualStateStyles with error styling applied
  * 
  * @see Requirements 3.1, 3.2, 3.3, 3.4
+ * @see Spec 052 - Semantic Token Naming Implementation
  * 
  * @example
  * ```typescript
  * // Select mode: full error treatment
  * const errorStyles = applyErrorStyles(getVisualStateStyles('selected'), 'selected');
- * // errorStyles.background === 'var(--color-error-subtle)'
+ * // errorStyles.background === 'var(--color-feedback-error-background)'
  * // errorStyles.borderWidth === 'var(--border-emphasis)'
- * // errorStyles.borderColor === 'var(--color-error-strong)'
+ * // errorStyles.borderColor === 'var(--color-feedback-error-text)'
  * 
  * // Multi-Select mode: colors only
  * const errorStyles = applyErrorStyles(getVisualStateStyles('checked'), 'checked');
- * // errorStyles.background === 'var(--color-select-selected-subtle)' (unchanged)
- * // errorStyles.labelColor === 'var(--color-error-strong)'
+ * // errorStyles.background === 'var(--color-feedback-select-background-rest)' (unchanged)
+ * // errorStyles.labelColor === 'var(--color-feedback-error-text)'
  * ```
  */
 export function applyErrorStyles(
@@ -339,13 +344,14 @@ export function applyErrorStyles(
   if (isSelectModeState(visualState)) {
     // Select mode: full error treatment (border + background + colors)
     // @see Requirement 3.1
+    // @see Spec 052 - Semantic Token Naming Implementation
     return {
       ...baseStyles,
-      background: 'var(--color-error-subtle)',
+      background: 'var(--color-feedback-error-background)',
       borderWidth: 'var(--border-emphasis)',
-      borderColor: 'var(--color-error-strong)',
-      labelColor: 'var(--color-error-strong)',
-      iconColor: 'var(--color-error-strong)',
+      borderColor: 'var(--color-feedback-error-text)',
+      labelColor: 'var(--color-feedback-error-text)',
+      iconColor: 'var(--color-feedback-error-text)',
       // Add error CSS class modifier
       cssClass: `${baseStyles.cssClass} vertical-list-item--error`,
     };
@@ -354,10 +360,11 @@ export function applyErrorStyles(
   if (isMultiSelectModeState(visualState)) {
     // Multi-Select mode: text/icon colors only (no border/background change)
     // @see Requirement 3.2
+    // @see Spec 052 - Semantic Token Naming Implementation
     return {
       ...baseStyles,
-      labelColor: 'var(--color-error-strong)',
-      iconColor: 'var(--color-error-strong)',
+      labelColor: 'var(--color-feedback-error-text)',
+      iconColor: 'var(--color-feedback-error-text)',
       // Add error CSS class modifier
       cssClass: `${baseStyles.cssClass} vertical-list-item--error`,
     };

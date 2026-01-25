@@ -140,12 +140,22 @@ export class WebFormatGenerator extends BaseFormatProvider {
 
   private formatCSSValue(value: number | string | object, unit: string): string {
     if (typeof value === 'object') {
-      // For color tokens with mode/theme structure, we'll need special handling
-      // For now, return as JSON string
+      // For color tokens with mode/theme structure, extract the light/base value
+      // and format as RGBA for CSS output
+      const colorValue = value as { light?: { base?: string }; dark?: { base?: string } };
+      if (colorValue.light?.base) {
+        // Return the RGBA string directly - it's already in CSS-compatible format
+        return colorValue.light.base;
+      }
+      // Fallback to JSON string for unknown structures
       return JSON.stringify(value);
     }
 
     if (typeof value === 'string') {
+      // Check if it's an RGBA string - return as-is for CSS
+      if (value.startsWith('rgba(')) {
+        return value;
+      }
       // Font family or other string values
       return value;
     }
@@ -166,9 +176,56 @@ export class WebFormatGenerator extends BaseFormatProvider {
         return String(value);
       case 'hex':
         return String(value);
+      case 'rgba':
+        // For RGBA unit, the value should already be an RGBA string
+        return String(value);
       default:
         return String(value);
     }
+  }
+
+  /**
+   * Parse an RGBA string into its component values
+   * Input: 'rgba(184, 182, 200, 1)' or 'rgba(184, 182, 200, 0.48)'
+   * Output: { r: 184, g: 182, b: 200, a: 1 } or { r: 184, g: 182, b: 200, a: 0.48 }
+   * 
+   * @param rgbaString - RGBA color string
+   * @returns Object with r, g, b, a values or null if parsing fails
+   */
+  parseRgbaString(rgbaString: string): { r: number; g: number; b: number; a: number } | null {
+    const match = rgbaString.match(/rgba\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\d.]+)\s*\)/);
+    if (!match) {
+      return null;
+    }
+    return {
+      r: parseInt(match[1], 10),
+      g: parseInt(match[2], 10),
+      b: parseInt(match[3], 10),
+      a: parseFloat(match[4])
+    };
+  }
+
+  /**
+   * Format a color token value for CSS output
+   * Handles both RGBA strings and mode-aware color objects
+   * 
+   * @param colorValue - Color value (string or mode-aware object)
+   * @returns CSS-compatible color string
+   */
+  formatColorValue(colorValue: string | object): string {
+    if (typeof colorValue === 'string') {
+      // Already an RGBA string, return as-is
+      return colorValue;
+    }
+    
+    // Mode-aware color object - extract light/base value
+    const modeAware = colorValue as { light?: { base?: string }; dark?: { base?: string } };
+    if (modeAware.light?.base) {
+      return modeAware.light.base;
+    }
+    
+    // Fallback
+    return JSON.stringify(colorValue);
   }
 
   protected generateCategoryComment(category: string): string {
@@ -182,6 +239,7 @@ export class WebFormatGenerator extends BaseFormatProvider {
   /**
    * Format a single-reference semantic token
    * Generates CSS custom property format: --color-primary: var(--purple-300);
+   * For baked-in RGBA values: --color-structure-border-subtle: rgba(184, 182, 200, 0.48);
    */
   formatSingleReferenceToken(semantic: SemanticToken): string {
     // Get the primitive reference name (e.g., 'purple300' from primitiveReferences)
@@ -195,12 +253,20 @@ export class WebFormatGenerator extends BaseFormatProvider {
 
     // Convert semantic token name to appropriate format
     const semanticName = this.getTokenName(semantic.name, semantic.category);
+    const cssSemanticName = semanticName.startsWith('--') ? semanticName : `--${semanticName}`;
+    
+    // Check if the primitive reference is a baked-in RGBA value
+    if (typeof primitiveRef === 'string' && primitiveRef.startsWith('rgba(')) {
+      // Baked-in RGBA value - output directly
+      const wcagComment = this.getWCAGComment(semantic);
+      const tokenLine = `  ${cssSemanticName}: ${primitiveRef};`;
+      return wcagComment ? `  ${wcagComment}\n${tokenLine}` : tokenLine;
+    }
     
     // CSS custom property format
     // Convert primitive reference to kebab-case for CSS
     // Use semantic category as a hint for the primitive token category
     const cssPrimitiveRefName = getPlatformTokenName(primitiveRef, this.platform, semantic.category as any);
-    const cssSemanticName = semanticName.startsWith('--') ? semanticName : `--${semanticName}`;
     const cssPrimitiveRef = cssPrimitiveRefName.startsWith('--') ? cssPrimitiveRefName : `--${cssPrimitiveRefName}`;
     
     // Add WCAG comment for accessibility tokens

@@ -187,7 +187,7 @@ This spec executes the semantic color token naming restructure defined in Spec 0
 
 ### Task 4: Platform Token Generation
 
-- [ ] 4. Platform Token Generation
+- [x] 4. Platform Token Generation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -217,7 +217,7 @@ This spec executes the semantic color token naming restructure defined in Spec 0
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 Complete: Platform Token Generation"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 4.1 Update Rosetta generators for RGBA output
+  - [x] 4.1 Update Rosetta generators for RGBA output
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update `src/generators/WebFormatGenerator.ts` for RGBA CSS output
@@ -226,7 +226,7 @@ This spec executes the semantic color token naming restructure defined in Spec 0
     - Verify generators handle baked-in alpha values correctly
     - _Requirements: 1.3, 1.4, 5.4_
 
-  - [ ] 4.2 Run platform token generation
+  - [x] 4.2 Run platform token generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Execute: `npx ts-node scripts/generate-platform-tokens.ts`
@@ -236,7 +236,7 @@ This spec executes the semantic color token naming restructure defined in Spec 0
     - Verify `dist/ComponentTokens.*` files regenerated
     - _Requirements: 5.1, 5.2, 5.3, 5.5_
 
-  - [ ] 4.3 Verify platform output formats
+  - [x] 4.3 Verify platform output formats
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Verify Web: `--color-feedback-success-text: rgba(74, 222, 128, 1);`
@@ -249,7 +249,7 @@ This spec executes the semantic color token naming restructure defined in Spec 0
 
 ### Task 5: Component Updates (Web)
 
-- [ ] 5. Component Updates (Web)
+- [x] 5. Component Updates (Web)
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -273,7 +273,7 @@ This spec executes the semantic color token naming restructure defined in Spec 0
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 5 Complete: Component Updates (Web)"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 5.1 Update Avatar component (Web)
+  - [x] 5.1 Update Avatar component (Web)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update CSS to use `--color-avatar-human-background`, `--color-avatar-agent-background`
@@ -282,21 +282,21 @@ This spec executes the semantic color token naming restructure defined in Spec 0
     - Replace `--white-100` primitive with semantic token
     - _Requirements: 6.1_
 
-  - [ ] 5.2 Update Button-CTA component (Web)
+  - [x] 5.2 Update Button-CTA component (Web)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace `--color-primary` with `--color-action-primary`
     - Replace `--color-contrast-on-primary` with `--color-contrast-on-dark`
     - _Requirements: 6.2_
 
-  - [ ] 5.3 Update Button-Icon component (Web)
+  - [x] 5.3 Update Button-Icon component (Web)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace `--color-primary` with `--color-action-primary`
     - Replace `--color-contrast-on-primary` with `--color-contrast-on-dark`
     - _Requirements: 6.3_
 
-  - [ ] 5.4 Update Button-VerticalList-Item component (Web)
+  - [x] 5.4 Update Button-VerticalList-Item component (Web)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update visualStateMapping.ts to use `color.feedback.select.*` tokens
@@ -304,33 +304,33 @@ This spec executes the semantic color token naming restructure defined in Spec 0
     - Replace `--color-select-selected-subtle` with `--color-feedback-select-background-rest`
     - _Requirements: 6.4_
 
-  - [ ] 5.5 Update Button-VerticalList-Set component (Web)
+  - [x] 5.5 Update Button-VerticalList-Set component (Web)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace `--color-error-strong` with `--color-feedback-error-text`
     - _Requirements: 6.5_
 
-  - [ ] 5.6 Update Container-Base component (Web)
+  - [x] 5.6 Update Container-Base component (Web)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace `--color-primary` focus outline with `--accessibility-focus-color`
     - _Requirements: 6.6_
 
-  - [ ] 5.7 Update Container-Card-Base component (Web)
+  - [x] 5.7 Update Container-Card-Base component (Web)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    - Replace `--color-primary` focus outline with `--accessibility-focus-color`
+    - Replace `--color-pr us-color`
     - Remove hard-coded `#A855F7` fallback
     - _Requirements: 6.7_
 
-  - [ ] 5.8 Update Input-Text-Base component (Web)
+  - [x] 5.8 Update Input-Text-Base component (Web)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace `--color-error-strong` with `--color-feedback-error-text`
     - Replace `--color-success-strong` with `--color-feedback-success-text`
     - _Requirements: 6.8_
 
-  - [ ] 5.9 Update Badge-Count-Notification component (Web)
+  - [x] 5.9 Update Badge-Count-Notification component (Web)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace `--color-badge-background-notification` with `--color-badge-notification-background`

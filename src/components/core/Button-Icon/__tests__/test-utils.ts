@@ -23,8 +23,8 @@ import { ButtonIconSize, ButtonIconVariant } from '../types';
  * This function sets up the required properties in the test environment.
  * 
  * Required properties:
- * - --color-primary: Base primary color
- * - --color-contrast-on-primary: Content color on primary background
+ * - --color-action-primary: Base action primary color (Spec 052 naming)
+ * - --color-contrast-on-dark: Content color on dark/primary background (Spec 052 naming)
  * - --color-background-primary-subtle: Subtle background for hover states
  * - --accessibility-focus-*: Focus ring tokens
  * - --border-*: Border width tokens
@@ -33,9 +33,9 @@ import { ButtonIconSize, ButtonIconVariant } from '../types';
  * @see ButtonIcon._generateStyles() for usage
  */
 export function setupButtonIconTokens(): void {
-  // Color tokens
-  document.documentElement.style.setProperty('--color-primary', '#A855F7');
-  document.documentElement.style.setProperty('--color-contrast-on-primary', '#FFFFFF');
+  // Color tokens (Spec 052 semantic token naming)
+  document.documentElement.style.setProperty('--color-action-primary', '#A855F7');
+  document.documentElement.style.setProperty('--color-contrast-on-dark', '#FFFFFF');
   document.documentElement.style.setProperty('--color-background-primary-subtle', '#F3E8FF');
   
   // Focus ring tokens
@@ -61,8 +61,8 @@ export function setupButtonIconTokens(): void {
  * Clean up CSS custom properties set by setupButtonIconTokens
  */
 export function cleanupButtonIconTokens(): void {
-  document.documentElement.style.removeProperty('--color-primary');
-  document.documentElement.style.removeProperty('--color-contrast-on-primary');
+  document.documentElement.style.removeProperty('--color-action-primary');
+  document.documentElement.style.removeProperty('--color-contrast-on-dark');
   document.documentElement.style.removeProperty('--color-background-primary-subtle');
   document.documentElement.style.removeProperty('--accessibility-focus-offset');
   document.documentElement.style.removeProperty('--accessibility-focus-width');

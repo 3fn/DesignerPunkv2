@@ -271,7 +271,7 @@ export class InputTextBase extends HTMLElement {
       trailingIconHTML = createIcon({
         name: 'check',
         size: iconSize,
-        color: 'color-success-strong',
+        color: 'color-feedback-success-text',
         className: 'trailing-icon success-icon'
       });
     } else if (iconVisibility.showInfoIcon) {

@@ -156,11 +156,15 @@ export class iOSFormatGenerator extends BaseFormatProvider {
 
   private formatSwiftValue(value: number | string | object, unit: string, swiftType: string): string {
     if (typeof value === 'object') {
-      // For color tokens with mode/theme structure, generate UIColor.dynamicColor
-      return this.formatDynamicColor(value);
+      // For color tokens with mode/theme structure, generate UIColor
+      return this.formatUIColor(value);
     }
 
     if (typeof value === 'string') {
+      // Check if it's an RGBA string - convert to UIColor format
+      if (value.startsWith('rgba(')) {
+        return this.rgbaStringToUIColor(value);
+      }
       if (swiftType === 'UIFont.Weight') {
         return this.formatFontWeight(value);
       }
@@ -178,6 +182,69 @@ export class iOSFormatGenerator extends BaseFormatProvider {
       default:
         return String(value);
     }
+  }
+
+  /**
+   * Parse an RGBA string into its component values
+   * Input: 'rgba(184, 182, 200, 1)' or 'rgba(184, 182, 200, 0.48)'
+   * Output: { r: 184, g: 182, b: 200, a: 1 } or { r: 184, g: 182, b: 200, a: 0.48 }
+   * 
+   * @param rgbaString - RGBA color string
+   * @returns Object with r, g, b, a values or null if parsing fails
+   */
+  parseRgbaString(rgbaString: string): { r: number; g: number; b: number; a: number } | null {
+    const match = rgbaString.match(/rgba\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\d.]+)\s*\)/);
+    if (!match) {
+      return null;
+    }
+    return {
+      r: parseInt(match[1], 10),
+      g: parseInt(match[2], 10),
+      b: parseInt(match[3], 10),
+      a: parseFloat(match[4])
+    };
+  }
+
+  /**
+   * Convert an RGBA string to UIColor format
+   * Input: 'rgba(184, 182, 200, 1)'
+   * Output: 'UIColor(red: 0.72, green: 0.71, blue: 0.78, alpha: 1.0)'
+   * 
+   * @param rgbaString - RGBA color string
+   * @returns UIColor initialization string
+   */
+  rgbaStringToUIColor(rgbaString: string): string {
+    const parsed = this.parseRgbaString(rgbaString);
+    if (!parsed) {
+      return `UIColor.clear /* Invalid RGBA: ${rgbaString} */`;
+    }
+    
+    // Convert 0-255 RGB values to 0-1 range for UIColor
+    const red = (parsed.r / 255).toFixed(2);
+    const green = (parsed.g / 255).toFixed(2);
+    const blue = (parsed.b / 255).toFixed(2);
+    const alpha = parsed.a.toFixed(2);
+    
+    return `UIColor(red: ${red}, green: ${green}, blue: ${blue}, alpha: ${alpha})`;
+  }
+
+  /**
+   * Format a mode-aware color object to UIColor
+   * Extracts light/base value and converts to UIColor format
+   * 
+   * @param colorValue - Mode-aware color object
+   * @returns UIColor initialization string
+   */
+  private formatUIColor(colorValue: object): string {
+    const modeAware = colorValue as { light?: { base?: string }; dark?: { base?: string } };
+    
+    // Extract the light/base RGBA value
+    if (modeAware.light?.base) {
+      return this.rgbaStringToUIColor(modeAware.light.base);
+    }
+    
+    // Fallback for unknown structures
+    return 'UIColor { traitCollection in /* dynamic color implementation */ }';
   }
 
   private formatFontWeight(weight: string | number): string {
@@ -198,12 +265,6 @@ export class iOSFormatGenerator extends BaseFormatProvider {
     }
   }
 
-  private formatDynamicColor(colorValue: object): string {
-    // For mode-aware colors, generate UIColor.dynamicColor
-    // This is a placeholder - actual implementation would need the color structure
-    return 'UIColor { traitCollection in /* dynamic color implementation */ }';
-  }
-
   protected generateCategoryComment(category: string): string {
     return `\n    // MARK: - ${category.toUpperCase()} TOKENS`;
   }
@@ -215,6 +276,7 @@ export class iOSFormatGenerator extends BaseFormatProvider {
   /**
    * Format a single-reference semantic token
    * Generates: static let colorPrimary = purple300
+   * For baked-in RGBA values: static let colorStructureBorderSubtle: UIColor = UIColor(red: 0.72, green: 0.71, blue: 0.78, alpha: 0.48)
    */
   formatSingleReferenceToken(semantic: SemanticToken): string {
     // Get the primitive reference name (e.g., 'purple300' from primitiveReferences)
@@ -229,6 +291,15 @@ export class iOSFormatGenerator extends BaseFormatProvider {
     // Convert semantic token name to appropriate format using platform naming rules
     // getPlatformTokenName will handle dot notation conversion (e.g., 'color.primary' -> 'colorPrimary')
     const semanticName = this.getTokenName(semantic.name, semantic.category);
+    
+    // Check if the primitive reference is a baked-in RGBA value
+    if (typeof primitiveRef === 'string' && primitiveRef.startsWith('rgba(')) {
+      // Baked-in RGBA value - convert to UIColor format
+      const uiColorValue = this.rgbaStringToUIColor(primitiveRef);
+      const wcagComment = this.getWCAGComment(semantic);
+      const tokenLine = `    public static let ${semanticName}: UIColor = ${uiColorValue}`;
+      return wcagComment ? `    ${wcagComment}\n${tokenLine}` : tokenLine;
+    }
     
     // Convert primitive reference to appropriate format
     const primitiveRefName = this.getTokenName(primitiveRef, semantic.category);

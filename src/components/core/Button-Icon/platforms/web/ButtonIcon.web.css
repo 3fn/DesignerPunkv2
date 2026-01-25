@@ -59,8 +59,8 @@
   --_bi-border-emphasis: var(--border-emphasis);
   
   /* Color tokens */
-  --_bi-color-primary: var(--color-primary);
-  --_bi-color-contrast: var(--color-contrast-on-primary);
+  --_bi-color-primary: var(--color-action-primary);
+  --_bi-color-contrast: var(--color-contrast-on-dark);
   --_bi-color-bg-subtle: var(--color-background-primary-subtle);
   
   /* ─────────────────────────────────────────────────────────────────────────

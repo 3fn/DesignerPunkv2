@@ -435,14 +435,6 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
     description: 'Border gray for standard UI element borders and dividers - provides clear visual separation'
   },
 
-  'color.structure.border.subtle': {
-    name: 'color.structure.border.subtle',
-    primitiveReferences: { value: 'rgba(184, 182, 200, 0.48)' },
-    category: SemanticCategory.COLOR,
-    context: 'Subtle border color with baked-in alpha for softer visual separation',
-    description: 'Subtle border with 48% opacity for softer visual separation - uses gray100 RGB values with baked-in alpha for cross-platform consistency'
-  },
-
   // Background Variants (1 token - kept for specific use case)
   'color.background.primary.subtle': {
     name: 'color.background.primary.subtle',
@@ -605,11 +597,14 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
  * - Removed: color.avatar.human, color.avatar.agent (moved to identity concept)
  * - Added: color.identity.human, color.identity.agent (2 tokens)
  * - Removed: color.canvas, color.background, color.surface, color.border (moved to structure concept)
- * - Added: color.structure.canvas, color.structure.surface, color.structure.border, 
- *   color.structure.border.subtle (4 tokens)
+ * - Added: color.structure.canvas, color.structure.surface, color.structure.border (3 tokens)
  * - Removed: color.avatar.contrast.onHuman, color.avatar.contrast.onAgent, color.avatar.border (old pattern)
  * - Added: color.avatar.human.background, color.avatar.agent.background, color.avatar.human.icon,
- *   color.avatar.agent.icon, color.avatar.default.border (5 tokens - Task 3.1)
+ *   color.avatar.agent.icon, color.avatar.default.border, color.avatar.default.border.subtle (6 tokens - Task 3.1 + Task 4)
+ * 
+ * Task 4 Fix: Moved color.structure.border.subtle (semantic) → color.avatar.default.border.subtle (component)
+ * Reason: Baked-in RGBA values belong in component tokens, not semantic tokens. The subtle border
+ * is Avatar-specific until more use cases emerge. Component tokens can have baked-in values.
  * 
  * See design authority: .kiro/specs/051-semantic-token-naming-restructure/design-outline.md
  */

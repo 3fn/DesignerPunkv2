@@ -91,7 +91,7 @@
  * @see Requirements 1.1, 1.2, 1.5, 1.6 - Blend utility adoption
  */
 .input-element:focus {
-  border-color: var(--_itb-focus-color, var(--color-primary));
+  border-color: var(--_itb-focus-color, var(--color-action-primary));
 }
 
 /**
@@ -134,11 +134,11 @@
 }
 
 .input-wrapper.error .input-element {
-  border-color: var(--color-error-strong);
+  border-color: var(--color-feedback-error-text);
 }
 
 .input-wrapper.success .input-element {
-  border-color: var(--color-success-strong);
+  border-color: var(--color-feedback-success-text);
 }
 
 /* ==========================================================================
@@ -184,18 +184,18 @@
  * Focused state label color - uses blend utility calculated color.
  */
 .input-wrapper.focused .input-label.floated {
-  color: var(--_itb-focus-color, var(--color-primary));
+  color: var(--_itb-focus-color, var(--color-action-primary));
 }
 
 /**
  * Validation state label colors.
  */
 .input-wrapper.error .input-label {
-  color: var(--color-error-strong);
+  color: var(--color-feedback-error-text);
 }
 
 .input-wrapper.success .input-label {
-  color: var(--color-success-strong);
+  color: var(--color-feedback-success-text);
 }
 
 /**
@@ -234,7 +234,7 @@
   line-height: var(--typography-caption-line-height);
   font-weight: var(--typography-caption-font-weight);
   letter-spacing: var(--typography-caption-letter-spacing);
-  color: var(--color-error-strong);
+  color: var(--color-feedback-error-text);
 }
 
 /* ==========================================================================

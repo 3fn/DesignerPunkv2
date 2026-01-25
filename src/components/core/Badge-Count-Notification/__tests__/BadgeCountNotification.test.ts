@@ -85,11 +85,11 @@ describe('Badge-Count-Notification Unit Tests', () => {
     });
 
     it('should use notification background color token', () => {
-      expect(cssContent).toContain('var(--color-badge-background-notification)');
+      expect(cssContent).toContain('var(--color-badge-notification-background)');
     });
 
     it('should use notification text color token', () => {
-      expect(cssContent).toContain('var(--color-badge-text-notification)');
+      expect(cssContent).toContain('var(--color-badge-notification-text)');
     });
 
     it('should not have configurable color props', async () => {

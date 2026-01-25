@@ -56,18 +56,21 @@ import componentStyles from './ButtonVerticalListItem.styles.css';
 /**
  * Required CSS custom properties that must be present for the component to function.
  * The component will fail loudly if any of these are missing.
+ * 
+ * Updated for Spec 052 - Semantic Token Naming Implementation:
+ * - color.select.* tokens migrated to color.feedback.select.* pattern
  */
 const REQUIRED_CSS_VARIABLES = [
   // Color tokens
   '--color-background',
   '--color-text-default',
   '--color-text-muted',
-  '--color-select-selected-strong',
-  '--color-select-selected-subtle',
-  '--color-select-not-selected-strong',
-  '--color-select-not-selected-subtle',
-  '--color-error-strong',
-  '--color-error-subtle',
+  '--color-feedback-select-text-rest',
+  '--color-feedback-select-background-rest',
+  '--color-feedback-select-text-default',
+  '--color-feedback-select-background-default',
+  '--color-feedback-error-text',
+  '--color-feedback-error-background',
   // Border tokens (semantic)
   '--border-default',
   '--border-emphasis',

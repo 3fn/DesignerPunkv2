@@ -225,10 +225,10 @@
 /**
  * Human avatar background (orange).
  * 
- * @see Requirements: 4.1 - Human type uses color.avatar.human token
+ * @see Requirements: 4.1 - Human type uses color.avatar.human.background token
  */
 .avatar--human {
-  background-color: var(--color-avatar-human);
+  background-color: var(--color-avatar-human-background);
 }
 
 /**
@@ -280,20 +280,20 @@
   /* Apply opacity.heavy (48%) to border color using color-mix
    * Note: opacity.heavy = 0.48, so we use 48% directly since color-mix
    * doesn't support calc() with decimal-to-percentage conversion */
-  border-color: color-mix(in srgb, var(--color-avatar-border) 48%, transparent);
+  border-color: color-mix(in srgb, var(--color-avatar-default-border) 48%, transparent);
 }
 
 /**
  * Enhanced border for xxl size.
  * 
- * Uses borderEmphasis width with white100 at full opacity.
+ * Uses borderEmphasis width with color.contrast.onDark at full opacity.
  * 
  * @see Requirements: 7.3, 7.4 - xxl border styles
  * @see design-outline.md - Border Styles section specifies white100 for xxl
  */
 .avatar--size-xxl {
   border-width: var(--border-emphasis);
-  border-color: var(--white-100);
+  border-color: var(--color-contrast-on-dark);
 }
 
 /* ==========================================================================
@@ -390,25 +390,25 @@
 /**
  * Icon color for human avatar type.
  * 
- * Uses color.avatar.contrast.onHuman semantic token for proper contrast
+ * Uses color.avatar.human.icon semantic token for proper contrast
  * against the orange background.
  * 
- * @see Requirements: 6.1 - Human type icon uses color.avatar.contrast.onHuman
+ * @see Requirements: 6.1 - Human type icon uses color.avatar.human.icon
  */
 .avatar__icon--human {
-  color: var(--color-avatar-contrast-on-human);
+  color: var(--color-avatar-human-icon);
 }
 
 /**
  * Icon color for agent avatar type.
  * 
- * Uses color.avatar.contrast.onAgent semantic token for proper contrast
+ * Uses color.avatar.agent.icon semantic token for proper contrast
  * against the teal background.
  * 
- * @see Requirements: 6.2 - Agent type icon uses color.avatar.contrast.onAgent
+ * @see Requirements: 6.2 - Agent type icon uses color.avatar.agent.icon
  */
 .avatar__icon--agent {
-  color: var(--color-avatar-contrast-on-agent);
+  color: var(--color-avatar-agent-icon);
 }
 
 /**

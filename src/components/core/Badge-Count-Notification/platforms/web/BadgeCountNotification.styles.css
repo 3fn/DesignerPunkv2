@@ -8,8 +8,8 @@
  * Extends Badge-Count-Base styles with notification-specific colors.
  * 
  * Fixed Colors (not configurable):
- * - Background: color.badge.background.notification (pink400)
- * - Text: color.badge.text.notification (white100)
+ * - Background: color.badge.notification.background (pink400)
+ * - Text: color.badge.notification.text (white100)
  * - Contrast Ratio: 6.33:1 (exceeds WCAG AA 4.5:1)
  * 
  * @see .kiro/specs/044-badge-base/design.md for design specification
@@ -32,8 +32,8 @@
   
   /* Fixed notification colors - not configurable */
   /* @see Requirement 3.1 - notification-specific color tokens */
-  background-color: var(--color-badge-background-notification);
-  color: var(--color-badge-text-notification);
+  background-color: var(--color-badge-notification-background);
+  color: var(--color-badge-notification-text);
   
   /* Non-interactive */
   pointer-events: none;

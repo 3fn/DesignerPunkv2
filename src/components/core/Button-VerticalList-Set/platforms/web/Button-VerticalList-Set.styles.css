@@ -49,8 +49,8 @@
   --_vls-error-line-height: var(--typography-body-sm-line-height, 1.5);
   
   /* Color tokens for error message */
-  /* @see Design: color.error.strong for error message text */
-  --_vls-error-color: var(--color-error-strong);
+  /* @see Design: color.feedback.error.text for error message text */
+  --_vls-error-color: var(--color-feedback-error-text);
   
   /* Spacing for error message */
   --_vls-error-margin-bottom: var(--space-grouped-normal);

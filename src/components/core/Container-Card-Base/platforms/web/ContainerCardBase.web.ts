@@ -82,8 +82,8 @@ const BASE_STYLES = `
   
   /* Focus styles for keyboard navigation */
   .container-card-base--interactive:focus {
-    outline: var(--border-emphasis, 2px) solid var(--color-primary, #A855F7);
-    outline-offset: var(--space-grouped-minimal, 2px);
+    outline: var(--accessibility-focus-width) solid var(--accessibility-focus-color);
+    outline-offset: var(--accessibility-focus-offset);
   }
   
   .container-card-base--interactive:focus:not(:focus-visible) {
@@ -91,8 +91,8 @@ const BASE_STYLES = `
   }
   
   .container-card-base--interactive:focus-visible {
-    outline: var(--border-emphasis, 2px) solid var(--color-primary, #A855F7);
-    outline-offset: var(--space-grouped-minimal, 2px);
+    outline: var(--accessibility-focus-width) solid var(--accessibility-focus-color);
+    outline-offset: var(--accessibility-focus-offset);
   }
   
   /* Reduced motion support */

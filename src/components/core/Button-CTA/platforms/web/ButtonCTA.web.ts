@@ -225,10 +225,10 @@ export class ButtonCTA extends HTMLElement {
    * for cross-platform consistency with iOS and Android implementations.
    * 
    * State color mappings:
-   * - Hover: darkerBlend(color.primary, blend.hoverDarker) - 8% darker
-   * - Pressed: darkerBlend(color.primary, blend.pressedDarker) - 12% darker
-   * - Disabled: desaturate(color.primary, blend.disabledDesaturate) - 12% less saturated
-   * - Icon: lighterBlend(color.onPrimary, blend.iconLighter) - 8% lighter
+   * - Hover: darkerBlend(color.action.primary, blend.hoverDarker) - 8% darker
+   * - Pressed: darkerBlend(color.action.primary, blend.pressedDarker) - 12% darker
+   * - Disabled: desaturate(color.action.primary, blend.disabledDesaturate) - 12% less saturated
+   * - Icon: lighterBlend(color.contrast.onDark, blend.iconLighter) - 8% lighter
    * 
    * @see Requirements: 7.1, 7.2, 7.3, 7.4 - Button-CTA state colors
    * @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
@@ -240,30 +240,31 @@ export class ButtonCTA extends HTMLElement {
     
     // Get base colors from CSS custom properties
     // Fail loudly if required tokens are missing
-    const primaryColor = computedStyle.getPropertyValue('--color-primary').trim();
-    const onPrimaryColor = computedStyle.getPropertyValue('--color-contrast-on-primary').trim();
+    // Updated to use new semantic token names (Spec 052)
+    const primaryColor = computedStyle.getPropertyValue('--color-action-primary').trim();
+    const onDarkColor = computedStyle.getPropertyValue('--color-contrast-on-dark').trim();
     
     if (!primaryColor) {
-      throw new Error('ButtonCTA: Required token --color-primary is missing from CSS custom properties');
+      throw new Error('ButtonCTA: Required token --color-action-primary is missing from CSS custom properties');
     }
-    if (!onPrimaryColor) {
-      throw new Error('ButtonCTA: Required token --color-contrast-on-primary is missing from CSS custom properties');
+    if (!onDarkColor) {
+      throw new Error('ButtonCTA: Required token --color-contrast-on-dark is missing from CSS custom properties');
     }
     
     // Calculate blend colors using theme-aware blend utilities
     // Uses semantic convenience functions from getBlendUtilities()
-    // @see Requirements: 7.1 - Hover uses darkerBlend(color.primary, blend.hoverDarker)
+    // @see Requirements: 7.1 - Hover uses darkerBlend(color.action.primary, blend.hoverDarker)
     this._hoverColor = this._blendUtils.hoverColor(primaryColor);
     
-    // @see Requirements: 7.2 - Pressed uses darkerBlend(color.primary, blend.pressedDarker)
+    // @see Requirements: 7.2 - Pressed uses darkerBlend(color.action.primary, blend.pressedDarker)
     this._pressedColor = this._blendUtils.pressedColor(primaryColor);
     
-    // @see Requirements: 7.3 - Disabled uses desaturate(color.primary, blend.disabledDesaturate)
+    // @see Requirements: 7.3 - Disabled uses desaturate(color.action.primary, blend.disabledDesaturate)
     this._disabledColor = this._blendUtils.disabledColor(primaryColor);
     
-    // @see Requirements: 7.4 - Icon uses lighterBlend(color.onPrimary, blend.iconLighter)
+    // @see Requirements: 7.4 - Icon uses lighterBlend(color.contrast.onDark, blend.iconLighter)
     // Icon for primary buttons: provides optical balance for icons on primary background
-    this._iconColor = this._blendUtils.iconColor(onPrimaryColor);
+    this._iconColor = this._blendUtils.iconColor(onDarkColor);
     
     // Icon for secondary/tertiary buttons: provides optical balance for icons on light background
     this._iconOpticalBalanceColor = this._blendUtils.iconColor(primaryColor);

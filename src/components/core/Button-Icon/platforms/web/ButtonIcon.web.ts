@@ -259,19 +259,19 @@ export class ButtonIcon extends HTMLElement {
     const computedStyle = getComputedStyle(document.documentElement);
     
     // Get base color from CSS custom properties
-    // For ButtonIcon, we use the primary color as the base for all variants
-    const primaryColor = computedStyle.getPropertyValue('--color-primary').trim();
+    // For ButtonIcon, we use the action primary color as the base for all variants
+    const primaryColor = computedStyle.getPropertyValue('--color-action-primary').trim();
     
     if (!primaryColor) {
-      throw new Error('ButtonIcon: Required token --color-primary is missing from CSS custom properties');
+      throw new Error('ButtonIcon: Required token --color-action-primary is missing from CSS custom properties');
     }
     
     // Calculate blend colors using theme-aware blend utilities
     // Uses semantic convenience functions from getBlendUtilities()
-    // @see Requirements: 1.1 - Hover uses darkerBlend(color.primary, blend.hoverDarker)
+    // @see Requirements: 1.1 - Hover uses darkerBlend(color.action.primary, blend.hoverDarker)
     this._hoverColor = this._blendUtils.hoverColor(primaryColor);
     
-    // @see Requirements: 1.2 - Pressed uses darkerBlend(color.primary, blend.pressedDarker)
+    // @see Requirements: 1.2 - Pressed uses darkerBlend(color.action.primary, blend.pressedDarker)
     this._pressedColor = this._blendUtils.pressedColor(primaryColor);
   }
   

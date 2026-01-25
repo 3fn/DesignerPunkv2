@@ -231,8 +231,8 @@ describe('Badge-Count-Notification Stemma Validators', () => {
       }
 
       const expectedTokenPatterns = [
-        '--color-badge-background-notification',
-        '--color-badge-text-notification',
+        '--color-badge-notification-background',
+        '--color-badge-notification-text',
         '--radius-half',
         '--typography-label-',  // Composite typography tokens (e.g., --typography-label-xs-font-size)
         '--space-',
@@ -250,8 +250,8 @@ describe('Badge-Count-Notification Stemma Validators', () => {
       }
 
       const notificationTokenReferences = [
-        'var(--color-badge-background-notification)',
-        'var(--color-badge-text-notification)',
+        'var(--color-badge-notification-background)',
+        'var(--color-badge-notification-text)',
       ];
 
       for (const reference of notificationTokenReferences) {
@@ -531,7 +531,7 @@ describe('Badge-Count-Notification Stemma Validators', () => {
         return;
       }
 
-      expect(cssSource).toContain('var(--color-badge-background-notification)');
+      expect(cssSource).toContain('var(--color-badge-notification-background)');
     });
 
     it('should use notification text color token', () => {
@@ -540,7 +540,7 @@ describe('Badge-Count-Notification Stemma Validators', () => {
         return;
       }
 
-      expect(cssSource).toContain('var(--color-badge-text-notification)');
+      expect(cssSource).toContain('var(--color-badge-notification-text)');
     });
 
     it('should implement pluralization logic', () => {

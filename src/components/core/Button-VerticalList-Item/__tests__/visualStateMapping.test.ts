@@ -60,10 +60,10 @@ describe('Visual State Mapping', () => {
     it('should return correct styles for selected state', () => {
       const styles = getVisualStateStyles('selected');
       
-      expect(styles.background).toBe('var(--color-select-selected-subtle)');
+      expect(styles.background).toBe('var(--color-feedback-select-background-rest)');
       expect(styles.borderWidth).toBe('var(--border-emphasis)');
-      expect(styles.borderColor).toBe('var(--color-select-selected-strong)');
-      expect(styles.labelColor).toBe('var(--color-select-selected-strong)');
+      expect(styles.borderColor).toBe('var(--color-feedback-select-text-rest)');
+      expect(styles.labelColor).toBe('var(--color-feedback-select-text-rest)');
       expect(styles.checkmarkVisible).toBe(true);
       expect(styles.cssClass).toBe('vertical-list-item--selected');
     });
@@ -71,10 +71,10 @@ describe('Visual State Mapping', () => {
     it('should return correct styles for notSelected state', () => {
       const styles = getVisualStateStyles('notSelected');
       
-      expect(styles.background).toBe('var(--color-select-not-selected-subtle)');
+      expect(styles.background).toBe('var(--color-feedback-select-background-default)');
       expect(styles.borderWidth).toBe('var(--border-default)');
       expect(styles.borderColor).toBe('transparent');
-      expect(styles.labelColor).toBe('var(--color-select-not-selected-strong)');
+      expect(styles.labelColor).toBe('var(--color-feedback-select-text-default)');
       expect(styles.checkmarkVisible).toBe(false);
       expect(styles.cssClass).toBe('vertical-list-item--not-selected');
     });
@@ -82,10 +82,10 @@ describe('Visual State Mapping', () => {
     it('should return correct styles for checked state', () => {
       const styles = getVisualStateStyles('checked');
       
-      expect(styles.background).toBe('var(--color-select-selected-subtle)');
+      expect(styles.background).toBe('var(--color-feedback-select-background-rest)');
       expect(styles.borderWidth).toBe('var(--border-default)');
       expect(styles.borderColor).toBe('transparent');
-      expect(styles.labelColor).toBe('var(--color-select-selected-strong)');
+      expect(styles.labelColor).toBe('var(--color-feedback-select-text-rest)');
       expect(styles.checkmarkVisible).toBe(true);
       expect(styles.cssClass).toBe('vertical-list-item--checked');
     });
@@ -248,11 +248,11 @@ describe('Error State Overlay', () => {
         const baseStyles = getVisualStateStyles('rest');
         const errorStyles = applyErrorStyles(baseStyles, 'rest');
         
-        expect(errorStyles.background).toBe('var(--color-error-subtle)');
+        expect(errorStyles.background).toBe('var(--color-feedback-error-background)');
         expect(errorStyles.borderWidth).toBe('var(--border-emphasis)');
-        expect(errorStyles.borderColor).toBe('var(--color-error-strong)');
-        expect(errorStyles.labelColor).toBe('var(--color-error-strong)');
-        expect(errorStyles.iconColor).toBe('var(--color-error-strong)');
+        expect(errorStyles.borderColor).toBe('var(--color-feedback-error-text)');
+        expect(errorStyles.labelColor).toBe('var(--color-feedback-error-text)');
+        expect(errorStyles.iconColor).toBe('var(--color-feedback-error-text)');
         expect(errorStyles.cssClass).toContain('vertical-list-item--error');
       });
 
@@ -260,11 +260,11 @@ describe('Error State Overlay', () => {
         const baseStyles = getVisualStateStyles('selected');
         const errorStyles = applyErrorStyles(baseStyles, 'selected');
         
-        expect(errorStyles.background).toBe('var(--color-error-subtle)');
+        expect(errorStyles.background).toBe('var(--color-feedback-error-background)');
         expect(errorStyles.borderWidth).toBe('var(--border-emphasis)');
-        expect(errorStyles.borderColor).toBe('var(--color-error-strong)');
-        expect(errorStyles.labelColor).toBe('var(--color-error-strong)');
-        expect(errorStyles.iconColor).toBe('var(--color-error-strong)');
+        expect(errorStyles.borderColor).toBe('var(--color-feedback-error-text)');
+        expect(errorStyles.labelColor).toBe('var(--color-feedback-error-text)');
+        expect(errorStyles.iconColor).toBe('var(--color-feedback-error-text)');
         expect(errorStyles.cssClass).toContain('vertical-list-item--error');
       });
 
@@ -272,11 +272,11 @@ describe('Error State Overlay', () => {
         const baseStyles = getVisualStateStyles('notSelected');
         const errorStyles = applyErrorStyles(baseStyles, 'notSelected');
         
-        expect(errorStyles.background).toBe('var(--color-error-subtle)');
+        expect(errorStyles.background).toBe('var(--color-feedback-error-background)');
         expect(errorStyles.borderWidth).toBe('var(--border-emphasis)');
-        expect(errorStyles.borderColor).toBe('var(--color-error-strong)');
-        expect(errorStyles.labelColor).toBe('var(--color-error-strong)');
-        expect(errorStyles.iconColor).toBe('var(--color-error-strong)');
+        expect(errorStyles.borderColor).toBe('var(--color-feedback-error-text)');
+        expect(errorStyles.labelColor).toBe('var(--color-feedback-error-text)');
+        expect(errorStyles.iconColor).toBe('var(--color-feedback-error-text)');
         expect(errorStyles.cssClass).toContain('vertical-list-item--error');
       });
 
@@ -299,8 +299,8 @@ describe('Error State Overlay', () => {
         const errorStyles = applyErrorStyles(baseStyles, 'checked');
         
         // Colors should change to error
-        expect(errorStyles.labelColor).toBe('var(--color-error-strong)');
-        expect(errorStyles.iconColor).toBe('var(--color-error-strong)');
+        expect(errorStyles.labelColor).toBe('var(--color-feedback-error-text)');
+        expect(errorStyles.iconColor).toBe('var(--color-feedback-error-text)');
         
         // Background and border should remain unchanged
         expect(errorStyles.background).toBe(baseStyles.background);
@@ -315,8 +315,8 @@ describe('Error State Overlay', () => {
         const errorStyles = applyErrorStyles(baseStyles, 'unchecked');
         
         // Colors should change to error
-        expect(errorStyles.labelColor).toBe('var(--color-error-strong)');
-        expect(errorStyles.iconColor).toBe('var(--color-error-strong)');
+        expect(errorStyles.labelColor).toBe('var(--color-feedback-error-text)');
+        expect(errorStyles.iconColor).toBe('var(--color-feedback-error-text)');
         
         // Background and border should remain unchanged
         expect(errorStyles.background).toBe(baseStyles.background);
@@ -366,8 +366,8 @@ describe('Error State Overlay', () => {
     it('should return error styles when error is true', () => {
       const styles = getVisualStateStylesWithError('selected', true);
       
-      expect(styles.background).toBe('var(--color-error-subtle)');
-      expect(styles.labelColor).toBe('var(--color-error-strong)');
+      expect(styles.background).toBe('var(--color-feedback-error-background)');
+      expect(styles.labelColor).toBe('var(--color-feedback-error-text)');
     });
 
     it('should default to no error when error parameter is omitted', () => {
@@ -380,14 +380,14 @@ describe('Error State Overlay', () => {
     it('should apply mode-specific error treatment', () => {
       // Select mode: full treatment
       const selectErrorStyles = getVisualStateStylesWithError('selected', true);
-      expect(selectErrorStyles.background).toBe('var(--color-error-subtle)');
-      expect(selectErrorStyles.borderColor).toBe('var(--color-error-strong)');
+      expect(selectErrorStyles.background).toBe('var(--color-feedback-error-background)');
+      expect(selectErrorStyles.borderColor).toBe('var(--color-feedback-error-text)');
       
       // Multi-Select mode: colors only
       const multiSelectErrorStyles = getVisualStateStylesWithError('checked', true);
       const checkedBaseStyles = getVisualStateStyles('checked');
       expect(multiSelectErrorStyles.background).toBe(checkedBaseStyles.background);
-      expect(multiSelectErrorStyles.labelColor).toBe('var(--color-error-strong)');
+      expect(multiSelectErrorStyles.labelColor).toBe('var(--color-feedback-error-text)');
     });
   });
 
@@ -395,11 +395,11 @@ describe('Error State Overlay', () => {
     it('should use correct error token references', () => {
       const errorStyles = applyErrorStyles(getVisualStateStyles('selected'), 'selected');
       
-      // Verify error tokens use CSS variable syntax
-      expect(errorStyles.background).toBe('var(--color-error-subtle)');
-      expect(errorStyles.borderColor).toBe('var(--color-error-strong)');
-      expect(errorStyles.labelColor).toBe('var(--color-error-strong)');
-      expect(errorStyles.iconColor).toBe('var(--color-error-strong)');
+      // Verify error tokens use CSS variable syntax (Spec 052 - Semantic Token Naming)
+      expect(errorStyles.background).toBe('var(--color-feedback-error-background)');
+      expect(errorStyles.borderColor).toBe('var(--color-feedback-error-text)');
+      expect(errorStyles.labelColor).toBe('var(--color-feedback-error-text)');
+      expect(errorStyles.iconColor).toBe('var(--color-feedback-error-text)');
       expect(errorStyles.borderWidth).toBe('var(--border-emphasis)');
     });
 
@@ -412,7 +412,7 @@ describe('Error State Overlay', () => {
         
         // Label and icon should always use the same error color
         expect(errorStyles.labelColor).toBe(errorStyles.iconColor);
-        expect(errorStyles.labelColor).toBe('var(--color-error-strong)');
+        expect(errorStyles.labelColor).toBe('var(--color-feedback-error-text)');
       });
     });
   });

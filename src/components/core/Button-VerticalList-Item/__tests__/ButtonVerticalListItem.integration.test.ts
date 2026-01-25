@@ -74,9 +74,9 @@ describe('Button-VerticalList-Item Integration Tests', () => {
       const shadowButton = getShadowButton(button);
       const style = shadowButton?.getAttribute('style') || '';
       
-      // Selected state should reference color.select.selected tokens
-      expect(style).toContain('var(--color-select-selected-subtle)');
-      expect(style).toContain('var(--color-select-selected-strong)');
+      // Selected state should reference color.feedback.select tokens (Spec 052)
+      expect(style).toContain('var(--color-feedback-select-background-rest)');
+      expect(style).toContain('var(--color-feedback-select-text-rest)');
     });
     
     it('should use token-based values for error state', async () => {
@@ -89,9 +89,9 @@ describe('Button-VerticalList-Item Integration Tests', () => {
       const shadowButton = getShadowButton(button);
       const style = shadowButton?.getAttribute('style') || '';
       
-      // Error state should reference color.error tokens
-      expect(style).toContain('var(--color-error-subtle)');
-      expect(style).toContain('var(--color-error-strong)');
+      // Error state should reference color.feedback.error tokens (Spec 052)
+      expect(style).toContain('var(--color-feedback-error-background)');
+      expect(style).toContain('var(--color-feedback-error-text)');
     });
     
     it('should apply padding compensation based on border width', async () => {

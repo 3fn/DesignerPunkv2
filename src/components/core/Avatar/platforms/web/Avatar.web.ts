@@ -812,7 +812,7 @@ export class AvatarBaseElement extends HTMLElement {
           <path 
             class="avatar__hexagon-bg"
             d="${hexPath}" 
-            fill="var(--color-avatar-agent)"
+            fill="var(--color-avatar-agent-background)"
           />
           
           <!-- Border stroke -->
@@ -820,7 +820,7 @@ export class AvatarBaseElement extends HTMLElement {
             class="avatar__hexagon-border"
             d="${hexPath}" 
             fill="none"
-            stroke="${size === 'xxl' ? 'var(--white-100)' : 'var(--color-avatar-border)'}"
+            stroke="${size === 'xxl' ? 'var(--color-contrast-on-dark)' : 'var(--color-avatar-default-border)'}"
             stroke-width="${borderWidth}"
             stroke-opacity="${size === 'xxl' ? '1' : '0.48'}"
           />

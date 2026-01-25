@@ -20,16 +20,18 @@ import { ButtonCTA } from '../platforms/web/ButtonCTA.web';
  * This function sets up the required properties in the test environment.
  * 
  * Required properties:
- * - --color-primary: Base primary color for blend calculations
- * - --color-contrast-on-primary: Content color on primary background
+ * - --color-action-primary: Base primary color for blend calculations
+ * - --color-contrast-on-dark: Content color on primary background
+ * 
+ * Updated to use new semantic token names (Spec 052).
  * 
  * @see ButtonCTA._calculateBlendColors() for usage
  */
 export function setupBlendColorProperties(): void {
   // Set up required CSS custom properties on document root
   // These values match the design system's semantic color tokens
-  document.documentElement.style.setProperty('--color-primary', '#A855F7');
-  document.documentElement.style.setProperty('--color-contrast-on-primary', '#FFFFFF');
+  document.documentElement.style.setProperty('--color-action-primary', '#A855F7');
+  document.documentElement.style.setProperty('--color-contrast-on-dark', '#FFFFFF');
   document.documentElement.style.setProperty('--color-background', '#FFFFFF');
 }
 
@@ -37,8 +39,8 @@ export function setupBlendColorProperties(): void {
  * Clean up CSS custom properties set by setupBlendColorProperties
  */
 export function cleanupBlendColorProperties(): void {
-  document.documentElement.style.removeProperty('--color-primary');
-  document.documentElement.style.removeProperty('--color-contrast-on-primary');
+  document.documentElement.style.removeProperty('--color-action-primary');
+  document.documentElement.style.removeProperty('--color-contrast-on-dark');
   document.documentElement.style.removeProperty('--color-background');
 }
 

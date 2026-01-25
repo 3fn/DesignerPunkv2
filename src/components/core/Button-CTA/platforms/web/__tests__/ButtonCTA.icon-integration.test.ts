@@ -27,10 +27,11 @@ import { IconBaseElement } from '../../../../Icon-Base/platforms/web/IconBase.we
 /**
  * Set up required CSS custom properties for Button-CTA blend utilities.
  * Button-CTA uses blend utilities that read base colors from CSS custom properties.
+ * Updated to use new semantic token names (Spec 052).
  */
 function setupBlendColorProperties(): void {
-  document.documentElement.style.setProperty('--color-primary', '#A855F7');
-  document.documentElement.style.setProperty('--color-contrast-on-primary', '#FFFFFF');
+  document.documentElement.style.setProperty('--color-action-primary', '#A855F7');
+  document.documentElement.style.setProperty('--color-contrast-on-dark', '#FFFFFF');
   document.documentElement.style.setProperty('--color-background', '#FFFFFF');
 }
 

@@ -156,14 +156,14 @@
 /**
  * Primary button style (filled background)
  * 
- * - Background: color.primary
- * - Text: color.contrast.onPrimary (white100)
+ * - Background: color.action.primary
+ * - Text: color.contrast.onDark (white100)
  * - Border: none
  * - Highest visual emphasis
  */
 .button-cta--primary {
-  background-color: var(--color-primary);
-  color: var(--color-contrast-on-primary);
+  background-color: var(--color-action-primary);
+  color: var(--color-contrast-on-dark);
   border: none;
 }
 
@@ -171,27 +171,27 @@
  * Secondary button style (outlined)
  * 
  * - Background: color.background
- * - Text: color.primary
- * - Border: border.borderDefault solid color.primary
+ * - Text: color.action.primary
+ * - Border: border.borderDefault solid color.action.primary
  * - Medium visual emphasis
  */
 .button-cta--secondary {
   background-color: var(--color-background);
-  color: var(--color-primary);
-  border: var(--border-default) solid var(--color-primary);
+  color: var(--color-action-primary);
+  border: var(--border-default) solid var(--color-action-primary);
 }
 
 /**
  * Tertiary button style (text-only)
  * 
  * - Background: transparent
- * - Text: color.primary
+ * - Text: color.action.primary
  * - Border: none
  * - Lowest visual emphasis
  */
 .button-cta--tertiary {
   background-color: transparent;
-  color: var(--color-primary);
+  color: var(--color-action-primary);
   border: none;
 }
 

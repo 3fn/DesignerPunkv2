@@ -21,20 +21,24 @@ import { IconBaseName } from '../../Icon-Base/types';
  * 
  * Button-VerticalList-Item requires these tokens to be present for fail-loudly validation.
  * This function sets up all required properties in the test environment.
+ * 
+ * Updated for Spec 052 - Semantic Token Naming Implementation:
+ * - color.select.* tokens migrated to color.feedback.select.* pattern
+ * - color.error.* tokens migrated to color.feedback.error.* pattern
  */
 export function setupRequiredTokens(): void {
   const root = document.documentElement;
   
-  // Color tokens
+  // Color tokens (Spec 052 - Semantic Token Naming)
   root.style.setProperty('--color-background', '#FFFFFF');
   root.style.setProperty('--color-text-default', '#1A1A1A');
   root.style.setProperty('--color-text-muted', '#6B7280');
-  root.style.setProperty('--color-select-selected-strong', '#06B6D4');
-  root.style.setProperty('--color-select-selected-subtle', '#ECFEFF');
-  root.style.setProperty('--color-select-not-selected-strong', '#6B7280');
-  root.style.setProperty('--color-select-not-selected-subtle', '#F3F4F6');
-  root.style.setProperty('--color-error-strong', '#DC2626');
-  root.style.setProperty('--color-error-subtle', '#FEF2F2');
+  root.style.setProperty('--color-feedback-select-text-rest', '#06B6D4');
+  root.style.setProperty('--color-feedback-select-background-rest', '#ECFEFF');
+  root.style.setProperty('--color-feedback-select-text-default', '#6B7280');
+  root.style.setProperty('--color-feedback-select-background-default', '#F3F4F6');
+  root.style.setProperty('--color-feedback-error-text', '#DC2626');
+  root.style.setProperty('--color-feedback-error-background', '#FEF2F2');
   
   // Border tokens
   root.style.setProperty('--border-default', '1px');
@@ -65,16 +69,16 @@ export function setupRequiredTokens(): void {
 export function cleanupRequiredTokens(): void {
   const root = document.documentElement;
   
-  // Color tokens
+  // Color tokens (Spec 052 - Semantic Token Naming)
   root.style.removeProperty('--color-background');
   root.style.removeProperty('--color-text-default');
   root.style.removeProperty('--color-text-muted');
-  root.style.removeProperty('--color-select-selected-strong');
-  root.style.removeProperty('--color-select-selected-subtle');
-  root.style.removeProperty('--color-select-not-selected-strong');
-  root.style.removeProperty('--color-select-not-selected-subtle');
-  root.style.removeProperty('--color-error-strong');
-  root.style.removeProperty('--color-error-subtle');
+  root.style.removeProperty('--color-feedback-select-text-rest');
+  root.style.removeProperty('--color-feedback-select-background-rest');
+  root.style.removeProperty('--color-feedback-select-text-default');
+  root.style.removeProperty('--color-feedback-select-background-default');
+  root.style.removeProperty('--color-feedback-error-text');
+  root.style.removeProperty('--color-feedback-error-background');
   
   // Border tokens
   root.style.removeProperty('--border-default');

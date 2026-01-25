@@ -24,8 +24,8 @@ import { BadgeCountSize } from '../types';
  */
 export function setupBadgeCountNotificationTokens(): void {
   // Notification-specific color tokens
-  document.documentElement.style.setProperty('--color-badge-background-notification', '#CC2257');
-  document.documentElement.style.setProperty('--color-badge-text-notification', '#FFFFFF');
+  document.documentElement.style.setProperty('--color-badge-notification-background', '#CC2257');
+  document.documentElement.style.setProperty('--color-badge-notification-text', '#FFFFFF');
   
   // Radius tokens
   document.documentElement.style.setProperty('--radius-half', '50%');
@@ -69,8 +69,8 @@ export function setupBadgeCountNotificationTokens(): void {
  * Clean up CSS custom properties set by setupBadgeCountNotificationTokens
  */
 export function cleanupBadgeCountNotificationTokens(): void {
-  document.documentElement.style.removeProperty('--color-badge-background-notification');
-  document.documentElement.style.removeProperty('--color-badge-text-notification');
+  document.documentElement.style.removeProperty('--color-badge-notification-background');
+  document.documentElement.style.removeProperty('--color-badge-notification-text');
   document.documentElement.style.removeProperty('--radius-half');
   document.documentElement.style.removeProperty('--font-family-body');
   document.documentElement.style.removeProperty('--font-size-050');

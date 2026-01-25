@@ -199,6 +199,10 @@ export class AndroidFormatGenerator extends BaseFormatProvider {
     }
 
     if (typeof value === 'string') {
+      // Check if it's an RGBA string - convert to Color.argb format
+      if (value.startsWith('rgba(')) {
+        return this.rgbaStringToColorArgb(value);
+      }
       return `"${value}"`;
     }
 
@@ -207,6 +211,59 @@ export class AndroidFormatGenerator extends BaseFormatProvider {
       return `${value}f`;
     }
     return String(value);
+  }
+
+  /**
+   * Parse an RGBA string into its component values
+   * Input: 'rgba(184, 182, 200, 1)' or 'rgba(184, 182, 200, 0.48)'
+   * Output: { r: 184, g: 182, b: 200, a: 1 } or { r: 184, g: 182, b: 200, a: 0.48 }
+   * 
+   * @param rgbaString - RGBA color string
+   * @returns Object with r, g, b, a values or null if parsing fails
+   */
+  parseRgbaString(rgbaString: string): { r: number; g: number; b: number; a: number } | null {
+    const match = rgbaString.match(/rgba\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\d.]+)\s*\)/);
+    if (!match) {
+      return null;
+    }
+    return {
+      r: parseInt(match[1], 10),
+      g: parseInt(match[2], 10),
+      b: parseInt(match[3], 10),
+      a: parseFloat(match[4])
+    };
+  }
+
+  /**
+   * Convert an RGBA string to Color.argb format
+   * Input: 'rgba(184, 182, 200, 1)'
+   * Output: 'Color.argb(255, 184, 182, 200)'
+   * 
+   * @param rgbaString - RGBA color string
+   * @returns Color.argb initialization string
+   */
+  rgbaStringToColorArgb(rgbaString: string): string {
+    const parsed = this.parseRgbaString(rgbaString);
+    if (!parsed) {
+      return `Color.TRANSPARENT /* Invalid RGBA: ${rgbaString} */`;
+    }
+    
+    // Convert alpha from 0-1 to 0-255 range for Color.argb
+    const alpha = Math.round(parsed.a * 255);
+    
+    return `Color.argb(${alpha}, ${parsed.r}, ${parsed.g}, ${parsed.b})`;
+  }
+
+  private formatKotlinColor(colorValue: object): string {
+    const modeAware = colorValue as { light?: { base?: string }; dark?: { base?: string } };
+    
+    // Extract the light/base RGBA value and convert to Color.argb
+    if (modeAware.light?.base) {
+      return this.rgbaStringToColorArgb(modeAware.light.base);
+    }
+    
+    // Fallback for unknown structures
+    return '0xFF000000.toInt() // placeholder';
   }
 
   private formatXMLValue(value: number | string | object, unit: string): string {
@@ -232,12 +289,6 @@ export class AndroidFormatGenerator extends BaseFormatProvider {
     }
   }
 
-  private formatKotlinColor(colorValue: object): string {
-    // Placeholder for color formatting
-    // Actual implementation would need the color structure
-    return '0xFF000000.toInt() // placeholder';
-  }
-
   protected generateCategoryComment(category: string): string {
     if (this.outputFormat === 'kotlin') {
       return `\n    // ${category.toUpperCase()} TOKENS`;
@@ -257,6 +308,7 @@ export class AndroidFormatGenerator extends BaseFormatProvider {
   /**
    * Format a single-reference semantic token
    * Generates: val colorPrimary = purple300
+   * For baked-in RGBA values: val colorStructureBorderSubtle = Color.argb(122, 184, 182, 200)
    */
   formatSingleReferenceToken(semantic: SemanticToken): string {
     // Get the primitive reference name (e.g., 'purple300' from primitiveReferences)
@@ -271,6 +323,31 @@ export class AndroidFormatGenerator extends BaseFormatProvider {
     // Convert semantic token name to appropriate format using platform naming rules
     // getPlatformTokenName will handle dot notation conversion (e.g., 'color.primary' -> 'color_primary')
     const semanticName = this.getTokenName(semantic.name, semantic.category);
+    
+    // Check if the primitive reference is a baked-in RGBA value
+    if (typeof primitiveRef === 'string' && primitiveRef.startsWith('rgba(')) {
+      // Baked-in RGBA value - convert to Color.argb format
+      const colorArgbValue = this.rgbaStringToColorArgb(primitiveRef);
+      const wcagComment = this.getWCAGComment(semantic);
+      
+      if (this.outputFormat === 'kotlin') {
+        const tokenLine = `    val ${semanticName} = ${colorArgbValue}`;
+        return wcagComment ? `    ${wcagComment}\n${tokenLine}` : tokenLine;
+      } else {
+        // XML format - output the color value directly
+        // Parse RGBA to get hex format for XML
+        const parsed = this.parseRgbaString(primitiveRef);
+        if (parsed) {
+          const alpha = Math.round(parsed.a * 255).toString(16).padStart(2, '0').toUpperCase();
+          const red = parsed.r.toString(16).padStart(2, '0').toUpperCase();
+          const green = parsed.g.toString(16).padStart(2, '0').toUpperCase();
+          const blue = parsed.b.toString(16).padStart(2, '0').toUpperCase();
+          const hexColor = `#${alpha}${red}${green}${blue}`;
+          const tokenLine = `    <color name="${semanticName}">${hexColor}</color>`;
+          return wcagComment ? `    ${wcagComment}\n${tokenLine}` : tokenLine;
+        }
+      }
+    }
     
     // Convert primitive reference to appropriate format
     const primitiveRefName = this.getTokenName(primitiveRef, semantic.category);

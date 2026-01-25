@@ -122,7 +122,7 @@ class InputTextBase extends HTMLElement {
         }
 
         .input-container.success {
-          border-color: var(--color-success-strong);
+          border-color: var(--color-feedback-success-text);
         }
 
         .input-container.disabled {
