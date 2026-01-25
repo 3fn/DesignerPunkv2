@@ -28,12 +28,14 @@
  * @see .kiro/specs/034-component-architecture-system for Stemma System details
  * @see .kiro/specs/031-blend-infrastructure-implementation for blend utilities
  * @see .kiro/specs/043-container-card-base for directional padding requirements
+ * @see src/tokens/semantic/AccessibilityTokens.ts for focus indicator tokens
  */
 
 package com.designerpunk.components.core
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
@@ -46,8 +48,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
@@ -59,6 +66,8 @@ import android.util.Log
 // Uses hoverBlend() semantic extension for consistent state styling across components
 // @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
 import com.designerpunk.tokens.hoverBlend
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 
 /**
  * Container-Base Composable
@@ -77,6 +86,7 @@ import com.designerpunk.tokens.hoverBlend
  * - Layering via elevation tokens (handles both z-order and shadow on Android)
  * - Accessibility content description support
  * - Hover state support via blend utilities (desktop/ChromeOS with pointer)
+ * - Focus indicator support via accessibility tokens (WCAG 2.4.7 Focus Visible)
  * 
  * Directional Padding:
  * - paddingVertical/paddingHorizontal: Axis-level padding
@@ -90,6 +100,7 @@ import com.designerpunk.tokens.hoverBlend
  * - Development warning logged when both props are used
  * - Hover state uses darkerBlend for cross-platform consistency
  * - Inline padding respects layout direction (LTR/RTL)
+ * - Focus indicator uses drawBehind for outline rendering
  * 
  * @example
  * ```kotlin
@@ -136,6 +147,15 @@ import com.designerpunk.tokens.hoverBlend
  *     Text("Hoverable content")
  * }
  * 
+ * // With focus indicator enabled (keyboard navigation)
+ * ContainerBase(
+ *     padding = ContainerBasePaddingValue.P200,
+ *     background = "color.surface",
+ *     focusable = true
+ * ) {
+ *     Text("Focusable content")
+ * }
+ * 
  * // With accessibility
  * ContainerBase(
  *     padding = ContainerBasePaddingValue.P200,
@@ -162,11 +182,13 @@ import com.designerpunk.tokens.hoverBlend
  * @param layering Layering value for elevation (default: null)
  * @param accessibilityLabel Accessibility content description (default: null)
  * @param hoverable Whether hover state is enabled (default: false)
+ * @param focusable Whether focus indicator is enabled (default: false)
  * @param modifier Additional Compose modifiers (default: Modifier)
  * @param content Child composable content
  * 
  * @see Requirements 1.1-1.10 - Directional padding
  * @see Requirements 2.1-2.3 - Border color
+ * @see Requirements 6.6 - Container-Base focus outline uses accessibility token
  */
 @Composable
 fun ContainerBase(
@@ -186,6 +208,7 @@ fun ContainerBase(
     layering: ContainerBaseLayeringValue? = null,
     accessibilityLabel: String? = null,
     hoverable: Boolean = false,
+    focusable: Boolean = false,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
@@ -205,6 +228,12 @@ fun ContainerBase(
     // Set up hover interaction source for hover state tracking
     val interactionSource = remember { MutableInteractionSource() }
     val isHovered by interactionSource.collectIsHoveredAsState()
+    
+    // Set up focus state tracking for keyboard navigation
+    // @see Requirements 6.6 - Container-Base focus outline uses accessibility token
+    // @see WCAG 2.4.7 Focus Visible (Level AA)
+    var isFocused by remember { mutableStateOf(false) }
+    val focusRequester = remember { FocusRequester() }
     
     // Calculate background color with hover state
     // Uses hoverBlend() semantic extension from ThemeAwareBlendUtilities.android.kt
@@ -296,6 +325,51 @@ fun ContainerBase(
             if (accessibilityLabel != null) {
                 Modifier.semantics {
                     contentDescription = accessibilityLabel
+                }
+            } else {
+                Modifier
+            }
+        )
+        .then(
+            // Apply focusable modifier and focus state tracking if enabled
+            // @see Requirements 6.6 - Container-Base focus outline uses accessibility token
+            // @see WCAG 2.4.7 Focus Visible (Level AA)
+            if (focusable) {
+                Modifier
+                    .focusRequester(focusRequester)
+                    .onFocusChanged { focusState ->
+                        isFocused = focusState.isFocused
+                    }
+                    .focusable()
+            } else {
+                Modifier
+            }
+        )
+        .then(
+            // Apply focus indicator overlay when focused
+            // Uses accessibility tokens for WCAG 2.4.7 compliance
+            // @see src/tokens/semantic/AccessibilityTokens.ts
+            // @see WCAG 1.4.11 Non-text Contrast (Level AA) - 3:1 minimum for focus indicators
+            if (focusable && isFocused) {
+                Modifier.drawBehind {
+                    val cornerRadiusPx = getContainerBaseCornerRadiusPx(borderRadius)
+                    val strokeWidth = accessibilityFocusWidth.toPx()
+                    val offset = accessibilityFocusOffset.toPx()
+                    
+                    // Draw focus indicator outline outside the component bounds
+                    drawRoundRect(
+                        color = accessibilityFocusColor,
+                        topLeft = androidx.compose.ui.geometry.Offset(-offset, -offset),
+                        size = androidx.compose.ui.geometry.Size(
+                            size.width + (offset * 2),
+                            size.height + (offset * 2)
+                        ),
+                        cornerRadius = androidx.compose.ui.geometry.CornerRadius(
+                            cornerRadiusPx + offset,
+                            cornerRadiusPx + offset
+                        ),
+                        style = Stroke(width = strokeWidth)
+                    )
                 }
             } else {
                 Modifier
@@ -544,3 +618,46 @@ fun resolveContainerBaseOpacityToken(tokenName: String): Float {
     // Implementation would resolve opacity token
     return 1.0f
 }
+
+/**
+ * Get corner radius in pixels for focus indicator drawing
+ * 
+ * Helper function to convert border radius enum to Float for drawRoundRect.
+ * 
+ * @param borderRadius Border radius value
+ * @returns Corner radius in pixels (Float)
+ */
+fun getContainerBaseCornerRadiusPx(borderRadius: ContainerBaseBorderRadiusValue): Float {
+    // Token references: radius-050, radius-100, radius-200
+    return when (borderRadius) {
+        ContainerBaseBorderRadiusValue.None -> 0f
+        ContainerBaseBorderRadiusValue.Tight -> 4f /* radius-050 = 4dp */
+        ContainerBaseBorderRadiusValue.Normal -> 8f /* radius-100 = 8dp */
+        ContainerBaseBorderRadiusValue.Loose -> 16f /* radius-200 = 16dp */
+    }
+}
+
+// MARK: - Accessibility Token Constants
+// These constants reference the generated accessibility tokens from DesignTokens.android.kt
+// @see src/tokens/semantic/AccessibilityTokens.ts for token definitions
+// @see WCAG 2.4.7 Focus Visible (Level AA)
+// @see WCAG 1.4.11 Non-text Contrast (Level AA) - 3:1 minimum for focus indicators
+
+/**
+ * Focus indicator outline offset from component bounds (2dp)
+ * References: accessibility.focus.offset → space025 primitive token
+ */
+val accessibilityFocusOffset: Dp = 2.dp /* space025 */
+
+/**
+ * Focus indicator outline width (2dp)
+ * References: accessibility.focus.width → borderWidth200 primitive token
+ */
+val accessibilityFocusWidth: Dp = 2.dp /* borderWidth200 */
+
+/**
+ * Focus indicator outline color (purple300 - primary brand color)
+ * References: accessibility.focus.color → purple300 primitive token
+ * Ensures 3:1 contrast ratio per WCAG 1.4.11
+ */
+val accessibilityFocusColor: Color = Color(0xFFB026FF) /* purple300 - rgba(176, 38, 255, 1) */

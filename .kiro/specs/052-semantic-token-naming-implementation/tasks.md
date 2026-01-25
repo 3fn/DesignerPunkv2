@@ -427,7 +427,7 @@ This spec executes the semantic color token naming restructure defined in Spec 0
 
 ### Task 7: Component Updates (Android)
 
-- [ ] 7. Component Updates (Android)
+- [x] 7. Component Updates (Android)
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -451,59 +451,59 @@ This spec executes the semantic color token naming restructure defined in Spec 0
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 7 Complete: Component Updates (Android)"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 7.1 Update Avatar component (Android)
+  - [x] 7.1 Update Avatar component (Android)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update Kotlin to use new avatar token names
     - Verify Color references resolve correctly
     - _Requirements: 6.1_
 
-  - [ ] 7.2 Update Button-CTA component (Android)
+  - [x] 7.2 Update Button-CTA component (Android)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace `colorPrimary` with `colorActionPrimary`
     - Replace `colorContrastOnPrimary` with `colorContrastOnDark`
     - _Requirements: 6.2_
 
-  - [ ] 7.3 Update Button-Icon component (Android)
+  - [x] 7.3 Update Button-Icon component (Android)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace `colorPrimary` with `colorActionPrimary`
     - Replace `colorContrastOnPrimary` with `colorContrastOnDark`
     - _Requirements: 6.3_
 
-  - [ ] 7.4 Update Button-VerticalList-Item component (Android)
+  - [x] 7.4 Update Button-VerticalList-Item component (Android)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update to use `colorFeedbackSelect*` tokens
     - _Requirements: 6.4_
 
-  - [ ] 7.5 Update Button-VerticalList-Set component (Android)
+  - [x] 7.5 Update Button-VerticalList-Set component (Android)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace error token with `colorFeedbackErrorText`
     - _Requirements: 6.5_
 
-  - [ ] 7.6 Update Container-Base component (Android)
+  - [x] 7.6 Update Container-Base component (Android)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update focus outline to use accessibility token
     - _Requirements: 6.6_
 
-  - [ ] 7.7 Update Container-Card-Base component (Android)
+  - [x] 7.7 Update Container-Card-Base component (Android)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update focus outline to use accessibility token
     - Remove any hard-coded color fallbacks
     - _Requirements: 6.7_
 
-  - [ ] 7.8 Update Input-Text-Base component (Android)
+  - [x] 7.8 Update Input-Text-Base component (Android)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Replace error/success tokens with feedback concept tokens
     - _Requirements: 6.8_
 
-  - [ ] 7.9 Update Badge-Count-Notification component (Android)
+  - [x] 7.9 Update Badge-Count-Notification component (Android)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update to use reordered badge token names

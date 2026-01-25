@@ -96,38 +96,38 @@ object AvatarTokens {
     
     /**
      * Background color for human avatars
-     * References: color.avatar.human → orange300
+     * References: color.avatar.human.background → color.identity.human → orange300
      * @see Requirements: 4.1 - Human type background color
      */
-    val colorHuman: Color = Color(DesignTokens.color_avatar_human)
+    val colorHuman: Color = Color(DesignTokens.color_avatar_human_background)
     
     /**
      * Background color for agent avatars
-     * References: color.avatar.agent → teal200
+     * References: color.avatar.agent.background → color.identity.agent → teal200
      * @see Requirements: 4.2 - Agent type background color
      */
-    val colorAgent: Color = Color(DesignTokens.color_avatar_agent)
+    val colorAgent: Color = Color(DesignTokens.color_avatar_agent_background)
     
     /**
      * Icon color on human avatar background
-     * References: color.avatar.contrast.onHuman → white100
+     * References: color.avatar.human.icon → color.contrast.onDark → white100
      * @see Requirements: 6.1 - Human type icon contrast color
      */
-    val contrastOnHuman: Color = Color(DesignTokens.color_avatar_contrast_on_human)
+    val contrastOnHuman: Color = Color(DesignTokens.color_avatar_human_icon)
     
     /**
      * Icon color on agent avatar background
-     * References: color.avatar.contrast.onAgent → white100
+     * References: color.avatar.agent.icon → color.contrast.onDark → white100
      * @see Requirements: 6.2 - Agent type icon contrast color
      */
-    val contrastOnAgent: Color = Color(DesignTokens.color_avatar_contrast_on_agent)
+    val contrastOnAgent: Color = Color(DesignTokens.color_avatar_agent_icon)
     
     /**
      * Border color for avatars (xs through xl sizes)
-     * References: color.avatar.border → gray100
+     * References: color.avatar.default.border → gray100
      * @see Requirements: 7.2 - Border color for xs-xl sizes
      */
-    val borderColor: Color = Color(DesignTokens.color_avatar_border)
+    val borderColor: Color = Color(DesignTokens.color_avatar_default_border)
     
     /**
      * Border color for xxl size avatars

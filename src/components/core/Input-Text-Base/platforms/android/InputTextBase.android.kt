@@ -190,10 +190,10 @@ fun InputTextBase(
     
     val labelColor by animateColorAsState(
         targetValue = when {
-            hasError -> colorError
-            isSuccess -> colorSuccessStrong
-            isDisabled -> colorPrimary.disabledBlend()
-            isFocused -> colorPrimary.focusBlend()
+            hasError -> colorFeedbackErrorText
+            isSuccess -> colorFeedbackSuccessText
+            isDisabled -> colorActionPrimary.disabledBlend()
+            isFocused -> colorActionPrimary.focusBlend()
             else -> colorTextMuted
         },
         animationSpec = animationSpec,
@@ -202,10 +202,10 @@ fun InputTextBase(
     
     val borderColor by animateColorAsState(
         targetValue = when {
-            hasError -> colorError
-            isSuccess -> colorSuccessStrong
-            isDisabled -> colorPrimary.disabledBlend()
-            isFocused -> colorPrimary.focusBlend()
+            hasError -> colorFeedbackErrorText
+            isSuccess -> colorFeedbackSuccessText
+            isDisabled -> colorActionPrimary.disabledBlend()
+            isFocused -> colorActionPrimary.focusBlend()
             else -> colorBorder
         },
         animationSpec = animationSpec,
@@ -309,7 +309,7 @@ fun InputTextBase(
                 } else {
                     VisualTransformation.None
                 },
-                cursorBrush = SolidColor(colorPrimary),
+                cursorBrush = SolidColor(colorActionPrimary),
                 decorationBox = { innerTextField ->
                     Box(
                         modifier = Modifier.fillMaxWidth(),
@@ -359,12 +359,12 @@ fun InputTextBase(
                     showErrorIcon -> Icon(
                         name = "x",
                         size = iconSize100,
-                        color = colorError
+                        color = colorFeedbackErrorText
                     )
                     showSuccessIcon -> Icon(
                         name = "check",
                         size = iconSize100,
-                        color = colorSuccessStrong
+                        color = colorFeedbackSuccessText
                     )
                     showInfoIconVisible -> Icon(
                         name = "info",
@@ -401,7 +401,7 @@ fun InputTextBase(
                     lineHeight = typographyCaptionLineHeight.sp,
                     fontWeight = FontWeight(typographyCaptionFontWeight),
                     letterSpacing = typographyCaptionLetterSpacing.sp,
-                    color = colorError
+                    color = colorFeedbackErrorText
                 ),
                 modifier = Modifier.padding(start = spaceInset100)
             )
@@ -452,9 +452,9 @@ private const val typographyCaptionLetterSpacing: Float // Generated from typogr
 // Color tokens (semantic)
 private val colorTextMuted: Color // Generated from color.text.muted
 private val colorTextDefault: Color // Generated from color.text.default
-private val colorPrimary: Color // Generated from color.primary
-private val colorError: Color // Generated from color.error
-private val colorSuccessStrong: Color // Generated from color.success.strong
+private val colorActionPrimary: Color // Generated from color.action.primary
+private val colorFeedbackErrorText: Color // Generated from color.feedback.error.text
+private val colorFeedbackSuccessText: Color // Generated from color.feedback.success.text
 private val colorBorder: Color // Generated from color.border
 private val colorBackground: Color // Generated from color.background
 

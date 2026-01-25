@@ -109,9 +109,9 @@ enum class ButtonIconSize {
  * Button-Icon visual style variants.
  * 
  * Determines background, border, and icon color styling:
- * - `PRIMARY`: Solid color.primary background, color.contrast.onPrimary icon
- * - `SECONDARY`: Transparent background, borderDefault border with color.primary, color.primary icon
- * - `TERTIARY`: Transparent background, no border, color.primary icon
+ * - `PRIMARY`: Solid color.action.primary background, color.contrast.onDark icon
+ * - `SECONDARY`: Transparent background, borderDefault border with color.action.primary, color.action.primary icon
+ * - `TERTIARY`: Transparent background, no border, color.action.primary icon
  * 
  * @see Requirements 2.1, 2.2, 2.3, 2.4
  */
@@ -265,27 +265,27 @@ fun ButtonIcon(
 
 /**
  * Get background color based on variant
- * - PRIMARY: color.primary (solid fill)
+ * - PRIMARY: color.action.primary (solid fill)
  * - SECONDARY/TERTIARY: transparent
  * @see Requirements 2.1, 2.2, 2.3
  */
 private fun getBackgroundColor(variant: ButtonIconVariant): Color {
     return when (variant) {
-        ButtonIconVariant.PRIMARY -> Color(DesignTokens.color_primary)
+        ButtonIconVariant.PRIMARY -> Color(DesignTokens.color_action_primary)
         ButtonIconVariant.SECONDARY, ButtonIconVariant.TERTIARY -> Color.Transparent
     }
 }
 
 /**
  * Get icon color based on variant
- * - PRIMARY: color.contrast.onPrimary (white on primary background)
- * - SECONDARY/TERTIARY: color.primary
+ * - PRIMARY: color.contrast.onDark (white on primary background)
+ * - SECONDARY/TERTIARY: color.action.primary
  * @see Requirements 2.1, 2.2, 2.3
  */
 private fun getIconColor(variant: ButtonIconVariant): Color {
     return when (variant) {
-        ButtonIconVariant.PRIMARY -> Color(DesignTokens.color_contrast_on_primary)
-        ButtonIconVariant.SECONDARY, ButtonIconVariant.TERTIARY -> Color(DesignTokens.color_primary)
+        ButtonIconVariant.PRIMARY -> Color(DesignTokens.color_contrast_on_dark)
+        ButtonIconVariant.SECONDARY, ButtonIconVariant.TERTIARY -> Color(DesignTokens.color_action_primary)
     }
 }
 
@@ -304,27 +304,27 @@ private fun getBorderWidth(variant: ButtonIconVariant): Dp {
 
 /**
  * Get border color for secondary variant
- * - SECONDARY: color.primary
+ * - SECONDARY: color.action.primary
  * - PRIMARY/TERTIARY: transparent
  * @see Requirements 2.2
  */
 private fun getBorderColor(variant: ButtonIconVariant): Color {
     return when (variant) {
-        ButtonIconVariant.SECONDARY -> Color(DesignTokens.color_primary)
+        ButtonIconVariant.SECONDARY -> Color(DesignTokens.color_action_primary)
         ButtonIconVariant.PRIMARY, ButtonIconVariant.TERTIARY -> Color.Transparent
     }
 }
 
 /**
  * Get ripple color based on variant for Material ripple effect
- * - PRIMARY: white ripple on primary background
- * - SECONDARY/TERTIARY: primary color ripple on transparent background
+ * - PRIMARY: white ripple on primary background (color.contrast.onDark)
+ * - SECONDARY/TERTIARY: primary color ripple on transparent background (color.action.primary)
  * @see Requirement 8.5
  */
 private fun getRippleColor(variant: ButtonIconVariant): Color {
     return when (variant) {
-        ButtonIconVariant.PRIMARY -> Color(DesignTokens.color_contrast_on_primary)
-        ButtonIconVariant.SECONDARY, ButtonIconVariant.TERTIARY -> Color(DesignTokens.color_primary)
+        ButtonIconVariant.PRIMARY -> Color(DesignTokens.color_contrast_on_dark)
+        ButtonIconVariant.SECONDARY, ButtonIconVariant.TERTIARY -> Color(DesignTokens.color_action_primary)
     }
 }
 

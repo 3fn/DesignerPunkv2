@@ -12,6 +12,7 @@
  * - Curated prop subset (only card-appropriate values)
  * - Interactive behavior (hover, press, focus)
  * - Accessibility semantics based on interactive and role props
+ * - Focus indicator support via accessibility tokens (WCAG 2.4.7 Focus Visible)
  * 
  * Uses blend utilities for hover/press state colors instead of opacity workarounds.
  * This ensures cross-platform consistency with Web and iOS implementations.
@@ -20,16 +21,16 @@
  * @see ../../../tokens.ts for token reference mappings
  * @see .kiro/specs/043-container-card-base/design.md for complete design documentation
  * @see .kiro/specs/034-component-architecture-system for Stemma System details
+ * @see src/tokens/semantic/AccessibilityTokens.ts for focus indicator tokens
  * @see Requirements 3.1-3.14, 4.1-4.7, 5.1-5.10, 6.1-6.5, 7.1-7.6
  */
 
 package com.designerpunk.components.core
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
@@ -40,10 +41,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
@@ -245,6 +253,7 @@ enum class CardRole {
  * @param borderRadius Border radius for the card (default: CardBorderRadius.Normal)
  * @param accessibilityLabel Accessibility content description (default: null)
  * @param interactive Whether the card is interactive (default: false)
+ * @param focusable Whether focus indicator is enabled for keyboard navigation (default: false)
  * @param onPress Callback when card is pressed/clicked (default: null)
  * @param role ARIA role for interactive cards (default: CardRole.Button)
  * @param testTag Test identifier for automated testing (default: null)
@@ -252,6 +261,7 @@ enum class CardRole {
  * @param content Child composable content
  * 
  * @see Requirements 3.1-3.14, 4.1-4.7, 5.1-5.10, 6.1-6.5, 7.1-7.6
+ * @see Requirements 6.7 - Container-Card-Base focus outline uses accessibility token
  */
 @Composable
 fun ContainerCardBase(
@@ -269,6 +279,7 @@ fun ContainerCardBase(
     borderRadius: CardBorderRadius = CardBorderRadius.Normal,
     accessibilityLabel: String? = null,
     interactive: Boolean = false,
+    focusable: Boolean = false,
     onPress: (() -> Unit)? = null,
     role: CardRole = CardRole.Button,
     testTag: String? = null,
@@ -282,6 +293,12 @@ fun ContainerCardBase(
     val interactionSource = remember { MutableInteractionSource() }
     val isHovered by interactionSource.collectIsHoveredAsState()
     val isPressed by interactionSource.collectIsPressedAsState()
+    
+    // Set up focus state tracking for keyboard navigation
+    // @see Requirements 6.7 - Container-Card-Base focus outline uses accessibility token
+    // @see WCAG 2.4.7 Focus Visible (Level AA)
+    var isFocused by remember { mutableStateOf(false) }
+    val focusRequester = remember { FocusRequester() }
     
     // Calculate background color with hover and press states
     // Uses hoverBlend() (8% darker) and pressedBlend() (12% darker) semantic extensions
@@ -385,6 +402,51 @@ fun ContainerCardBase(
                         CardRole.Link -> Role.Button // Compose doesn't have Role.Link, use Button
                     }
                 }
+            }
+        )
+        .then(
+            // Apply focusable modifier and focus state tracking if enabled
+            // @see Requirements 6.7 - Container-Card-Base focus outline uses accessibility token
+            // @see WCAG 2.4.7 Focus Visible (Level AA)
+            if (focusable) {
+                Modifier
+                    .focusRequester(focusRequester)
+                    .onFocusChanged { focusState ->
+                        isFocused = focusState.isFocused
+                    }
+                    .focusable()
+            } else {
+                Modifier
+            }
+        )
+        .then(
+            // Apply focus indicator overlay when focused
+            // Uses accessibility tokens for WCAG 2.4.7 compliance
+            // @see src/tokens/semantic/AccessibilityTokens.ts
+            // @see WCAG 1.4.11 Non-text Contrast (Level AA) - 3:1 minimum for focus indicators
+            if (focusable && isFocused) {
+                Modifier.drawBehind {
+                    val cornerRadiusPx = getCardCornerRadiusPx(borderRadius)
+                    val strokeWidth = accessibilityFocusWidth.toPx()
+                    val offset = accessibilityFocusOffset.toPx()
+                    
+                    // Draw focus indicator outline outside the component bounds
+                    drawRoundRect(
+                        color = accessibilityFocusColor,
+                        topLeft = androidx.compose.ui.geometry.Offset(-offset, -offset),
+                        size = androidx.compose.ui.geometry.Size(
+                            size.width + (offset * 2),
+                            size.height + (offset * 2)
+                        ),
+                        cornerRadius = androidx.compose.ui.geometry.CornerRadius(
+                            cornerRadiusPx + offset,
+                            cornerRadiusPx + offset
+                        ),
+                        style = Stroke(width = strokeWidth)
+                    )
+                }
+            } else {
+                Modifier
             }
         )
     
@@ -598,6 +660,24 @@ fun mapCardShadowToElevation(shadow: CardShadow): Dp {
     }
 }
 
+/**
+ * Get corner radius in pixels for focus indicator drawing
+ * 
+ * Helper function to convert border radius enum to Float for drawRoundRect.
+ * 
+ * @param borderRadius Border radius value
+ * @return Corner radius in pixels (Float)
+ * 
+ * @see Requirements 6.7 - Focus indicator drawing
+ */
+fun getCardCornerRadiusPx(borderRadius: CardBorderRadius): Float {
+    // Token references: radius-100, radius-200
+    return when (borderRadius) {
+        CardBorderRadius.Normal -> 8f /* radius-100 = 8dp */
+        CardBorderRadius.Loose -> 16f /* radius-200 = 16dp */
+    }
+}
+
 // MARK: - Token Constants
 // These reference the generated DesignTokens
 
@@ -627,6 +707,31 @@ private val shadowContainerElevation: Dp = DesignTokens.elevation_container /* s
 // Motion tokens
 // Note: Duration value 150 corresponds to motion.focusTransition token (150ms)
 private const val motionFocusTransitionDuration: Int = 150 /* motion.focusTransition */
+
+// MARK: - Accessibility Token Constants
+// These constants reference the generated accessibility tokens from DesignTokens.android.kt
+// @see src/tokens/semantic/AccessibilityTokens.ts for token definitions
+// @see WCAG 2.4.7 Focus Visible (Level AA)
+// @see WCAG 1.4.11 Non-text Contrast (Level AA) - 3:1 minimum for focus indicators
+
+/**
+ * Focus indicator outline offset from component bounds
+ * References: accessibility.focus.offset → space025 primitive token (2dp)
+ */
+private val accessibilityFocusOffset: Dp = DesignTokens.accessibility_focus_offset /* accessibility.focus.offset */
+
+/**
+ * Focus indicator outline width
+ * References: accessibility.focus.width → borderWidth200 primitive token (2dp)
+ */
+private val accessibilityFocusWidth: Dp = DesignTokens.accessibility_focus_width /* accessibility.focus.width */
+
+/**
+ * Focus indicator outline color (purple300 - primary brand color)
+ * References: accessibility.focus.color → purple300 primitive token
+ * Ensures 3:1 contrast ratio per WCAG 1.4.11
+ */
+private val accessibilityFocusColor: Color = Color(DesignTokens.accessibility_focus_color) /* accessibility.focus.color */
 
 // MARK: - Preview
 
@@ -660,6 +765,20 @@ fun ContainerCardBasePreview() {
             androidx.compose.foundation.layout.Column {
                 androidx.compose.material3.Text("Interactive Card", style = androidx.compose.material3.MaterialTheme.typography.titleSmall)
                 androidx.compose.material3.Text("Tap or hover to see state changes", style = androidx.compose.material3.MaterialTheme.typography.bodySmall)
+            }
+        }
+        
+        // Focusable card (keyboard navigation)
+        androidx.compose.material3.Text("Focusable Card", style = androidx.compose.material3.MaterialTheme.typography.titleMedium)
+        ContainerCardBase(
+            interactive = true,
+            focusable = true,
+            accessibilityLabel = "Focusable card for keyboard navigation",
+            onPress = { /* Handle press */ }
+        ) {
+            androidx.compose.foundation.layout.Column {
+                androidx.compose.material3.Text("Focusable Card", style = androidx.compose.material3.MaterialTheme.typography.titleSmall)
+                androidx.compose.material3.Text("Tab to focus, shows accessibility focus indicator", style = androidx.compose.material3.MaterialTheme.typography.bodySmall)
             }
         }
         

@@ -372,18 +372,18 @@ private data class ButtonCTAStyleConfig(
  */
 private fun getButtonCTAStyleConfig(style: ButtonCTAStyle, isPressed: Boolean, disabled: Boolean): ButtonCTAStyleConfig {
     // Import semantic color tokens from generated constants
-    val colorPrimary = Color(DesignTokens.color_primary)           // color.primary (purple)
-    val colorBackground = Color(DesignTokens.color_background)     // color.background (white)
-    val colorContrastOnPrimary = Color(DesignTokens.color_contrast_on_primary) // color.contrast.onPrimary (white)
+    val colorActionPrimary = Color(DesignTokens.color_action_primary)           // color.action.primary (purple)
+    val colorBackground = Color(DesignTokens.color_structure_canvas)     // color.structure.canvas (white)
+    val colorContrastOnDark = Color(DesignTokens.color_contrast_on_dark) // color.contrast.onDark (white)
     
     // Calculate state-based background colors using theme-aware blend utilities
     // @see Requirements: 7.1, 7.2, 7.3, 11.1, 11.2, 11.3
     val primaryBgColor = when {
-        // @see Requirements: 7.3 - Disabled uses desaturate(color.primary, blend.disabledDesaturate)
-        disabled -> colorPrimary.disabledBlend()
-        // @see Requirements: 7.2 - Pressed uses darkerBlend(color.primary, blend.pressedDarker)
-        isPressed -> colorPrimary.pressedBlend()
-        else -> colorPrimary
+        // @see Requirements: 7.3 - Disabled uses desaturate(color.action.primary, blend.disabledDesaturate)
+        disabled -> colorActionPrimary.disabledBlend()
+        // @see Requirements: 7.2 - Pressed uses darkerBlend(color.action.primary, blend.pressedDarker)
+        isPressed -> colorActionPrimary.pressedBlend()
+        else -> colorActionPrimary
     }
     
     val secondaryBgColor = when {
@@ -396,28 +396,28 @@ private fun getButtonCTAStyleConfig(style: ButtonCTAStyle, isPressed: Boolean, d
     // Calculate icon colors with optical balance using theme-aware blend utility
     // iconBlend() applies lighterBlend with blend.iconLighter (8%) for optical weight compensation
     // @see Requirements: 7.4, 11.1, 11.2, 11.3
-    val primaryIconColor = colorContrastOnPrimary.iconBlend()
-    val secondaryIconColor = colorPrimary.iconBlend()
+    val primaryIconColor = colorContrastOnDark.iconBlend()
+    val secondaryIconColor = colorActionPrimary.iconBlend()
     
     return when (style) {
         ButtonCTAStyle.PRIMARY -> ButtonCTAStyleConfig(
-            backgroundColor = primaryBgColor,        // Requirement 2.1, 7.2, 7.3: color.primary with blend states
-            textColor = colorContrastOnPrimary,      // Requirement 2.1: color.contrast.onPrimary
-            iconColor = primaryIconColor,            // Requirement 9.1, 7.4: color.contrast.onPrimary with optical balance
+            backgroundColor = primaryBgColor,        // Requirement 2.1, 7.2, 7.3: color.action.primary with blend states
+            textColor = colorContrastOnDark,      // Requirement 2.1: color.contrast.onDark
+            iconColor = primaryIconColor,            // Requirement 9.1, 7.4: color.contrast.onDark with optical balance
             borderWidth = 0,
             borderColor = Color.Transparent
         )
         ButtonCTAStyle.SECONDARY -> ButtonCTAStyleConfig(
-            backgroundColor = secondaryBgColor,      // Requirement 2.2, 7.2: color.background with blend states
-            textColor = colorPrimary,                // Requirement 2.2: color.primary
-            iconColor = secondaryIconColor,          // Requirement 9.2, 7.4: color.primary with optical balance
+            backgroundColor = secondaryBgColor,      // Requirement 2.2, 7.2: color.structure.canvas with blend states
+            textColor = colorActionPrimary,                // Requirement 2.2: color.action.primary
+            iconColor = secondaryIconColor,          // Requirement 9.2, 7.4: color.action.primary with optical balance
             borderWidth = DesignTokens.border_border_default.toInt(), // border.default (1dp)
-            borderColor = colorPrimary               // Requirement 2.2: color.primary
+            borderColor = colorActionPrimary               // Requirement 2.2: color.action.primary
         )
         ButtonCTAStyle.TERTIARY -> ButtonCTAStyleConfig(
             backgroundColor = Color.Transparent,     // Requirement 2.3: transparent
-            textColor = colorPrimary,                // Requirement 2.3: color.primary
-            iconColor = secondaryIconColor,          // Requirement 9.2, 7.4: color.primary with optical balance
+            textColor = colorActionPrimary,                // Requirement 2.3: color.action.primary
+            iconColor = secondaryIconColor,          // Requirement 9.2, 7.4: color.action.primary with optical balance
             borderWidth = 0,
             borderColor = Color.Transparent
         )

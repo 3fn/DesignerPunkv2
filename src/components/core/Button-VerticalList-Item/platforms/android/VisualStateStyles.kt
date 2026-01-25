@@ -61,40 +61,46 @@ val DesignTokens.Companion.color_text_default: Int
 val DesignTokens.Companion.color_text_muted: Int
     get() = 0xFF666666.toInt()
 
-/** Selected state subtle background - color.select.selected.subtle
+/** Selected state subtle background - color.feedback.select.background.rest
  * Requirements: 1.2, 1.4
+ * @see Spec 052 - Semantic Token Naming Implementation
  */
-val DesignTokens.Companion.color_select_selected_background: Int
+val DesignTokens.Companion.color_feedback_select_background_rest: Int
     get() = 0x1A6366F1.toInt() // 10% opacity of selected strong
 
-/** Selected state strong foreground - color.select.selected.strong
+/** Selected state strong foreground - color.feedback.select.text.rest
  * Requirements: 1.2, 1.4, 2.3
+ * @see Spec 052 - Semantic Token Naming Implementation
  */
-val DesignTokens.Companion.color_select_selected: Int
+val DesignTokens.Companion.color_feedback_select_text_rest: Int
     get() = 0xFF6366F1.toInt() // Indigo/purple
 
-/** Not selected state subtle background - color.select.notSelected.subtle
+/** Not selected state subtle background - color.feedback.select.background.default
  * Requirements: 1.3
+ * @see Spec 052 - Semantic Token Naming Implementation
  */
-val DesignTokens.Companion.color_select_not_selected_background: Int
+val DesignTokens.Companion.color_feedback_select_background_default: Int
     get() = 0xFFF5F5F5.toInt() // Light gray
 
-/** Not selected state strong foreground - color.select.notSelected.strong
+/** Not selected state strong foreground - color.feedback.select.text.default
  * Requirements: 1.3
+ * @see Spec 052 - Semantic Token Naming Implementation
  */
-val DesignTokens.Companion.color_select_not_selected: Int
+val DesignTokens.Companion.color_feedback_select_text_default: Int
     get() = 0xFF9CA3AF.toInt() // Gray
 
-/** Error state subtle background - color.error.subtle
+/** Error state subtle background - color.feedback.error.background
  * Requirements: 3.1
+ * @see Spec 052 - Semantic Token Naming Implementation
  */
-val DesignTokens.Companion.color_error_subtle: Int
+val DesignTokens.Companion.color_feedback_error_background: Int
     get() = 0x1AEF4444.toInt() // 10% opacity of error strong
 
-/** Error state strong foreground - color.error.strong
+/** Error state strong foreground - color.feedback.error.text
  * Requirements: 3.1, 3.2, 3.3, 2.4
+ * @see Spec 052 - Semantic Token Naming Implementation
  */
-val DesignTokens.Companion.color_error_strong: Int
+val DesignTokens.Companion.color_feedback_error_text: Int
     get() = 0xFFEF4444.toInt() // Red
 
 // MARK: - Border Tokens
@@ -268,41 +274,44 @@ data class VisualStateStyles(
         )
         
         /** Selected state styles (Select mode)
-         * Requirements: 1.2 - color.select.selected.subtle, borderEmphasis (2dp), 
-         *               color.select.selected.strong for border and label
+         * Requirements: 1.2 - color.feedback.select.background.rest, borderEmphasis (2dp), 
+         *               color.feedback.select.text.rest for border and label
+         * @see Spec 052 - Semantic Token Naming Implementation
          */
         val selected = VisualStateStyles(
-            background = Color(DesignTokens.color_select_selected_background),
+            background = Color(DesignTokens.color_feedback_select_background_rest),
             borderWidth = DesignTokens.border_border_emphasis.dp,
-            borderColor = Color(DesignTokens.color_select_selected),
-            labelColor = Color(DesignTokens.color_select_selected),
-            iconColor = Color(DesignTokens.color_select_selected),
+            borderColor = Color(DesignTokens.color_feedback_select_text_rest),
+            labelColor = Color(DesignTokens.color_feedback_select_text_rest),
+            iconColor = Color(DesignTokens.color_feedback_select_text_rest),
             checkmarkVisible = true
         )
         
         /** Not selected state styles (Select mode)
-         * Requirements: 1.3 - color.select.notSelected.subtle, borderDefault (1dp),
-         *               transparent border, color.select.notSelected.strong
+         * Requirements: 1.3 - color.feedback.select.background.default, borderDefault (1dp),
+         *               transparent border, color.feedback.select.text.default
+         * @see Spec 052 - Semantic Token Naming Implementation
          */
         val notSelected = VisualStateStyles(
-            background = Color(DesignTokens.color_select_not_selected_background),
+            background = Color(DesignTokens.color_feedback_select_background_default),
             borderWidth = DesignTokens.border_border_default.dp,
             borderColor = Color.Transparent,
-            labelColor = Color(DesignTokens.color_select_not_selected),
-            iconColor = Color(DesignTokens.color_select_not_selected),
+            labelColor = Color(DesignTokens.color_feedback_select_text_default),
+            iconColor = Color(DesignTokens.color_feedback_select_text_default),
             checkmarkVisible = false
         )
         
         /** Checked state styles (Multi-Select mode)
-         * Requirements: 1.4 - color.select.selected.subtle, borderDefault (1dp),
-         *               transparent border, color.select.selected.strong
+         * Requirements: 1.4 - color.feedback.select.background.rest, borderDefault (1dp),
+         *               transparent border, color.feedback.select.text.rest
+         * @see Spec 052 - Semantic Token Naming Implementation
          */
         val checked = VisualStateStyles(
-            background = Color(DesignTokens.color_select_selected_background),
+            background = Color(DesignTokens.color_feedback_select_background_rest),
             borderWidth = DesignTokens.border_border_default.dp,
             borderColor = Color.Transparent,
-            labelColor = Color(DesignTokens.color_select_selected),
-            iconColor = Color(DesignTokens.color_select_selected),
+            labelColor = Color(DesignTokens.color_feedback_select_text_rest),
+            iconColor = Color(DesignTokens.color_feedback_select_text_rest),
             checkmarkVisible = true
         )
         
@@ -322,27 +331,29 @@ data class VisualStateStyles(
         // MARK: - Error State Styles
         
         /** Error state styles for Select mode (full treatment)
-         * Requirements: 3.1 - color.error.subtle background, borderEmphasis (2dp),
-         *               color.error.strong for border, label, and icon
+         * Requirements: 3.1 - color.feedback.error.background, borderEmphasis (2dp),
+         *               color.feedback.error.text for border, label, and icon
+         * @see Spec 052 - Semantic Token Naming Implementation
          */
         fun errorSelectMode(checkmarkVisible: Boolean): VisualStateStyles {
             return VisualStateStyles(
-                background = Color(DesignTokens.color_error_subtle),
+                background = Color(DesignTokens.color_feedback_error_background),
                 borderWidth = DesignTokens.border_border_emphasis.dp,
-                borderColor = Color(DesignTokens.color_error_strong),
-                labelColor = Color(DesignTokens.color_error_strong),
-                iconColor = Color(DesignTokens.color_error_strong),
+                borderColor = Color(DesignTokens.color_feedback_error_text),
+                labelColor = Color(DesignTokens.color_feedback_error_text),
+                iconColor = Color(DesignTokens.color_feedback_error_text),
                 checkmarkVisible = checkmarkVisible
             )
         }
         
         /** Error state styles for Multi-Select mode (colors only)
          * Requirements: 3.2 - preserves background and border, only changes label/icon colors
+         * @see Spec 052 - Semantic Token Naming Implementation
          */
         fun errorMultiSelectMode(baseStyles: VisualStateStyles): VisualStateStyles {
             return baseStyles.copy(
-                labelColor = Color(DesignTokens.color_error_strong),
-                iconColor = Color(DesignTokens.color_error_strong)
+                labelColor = Color(DesignTokens.color_feedback_error_text),
+                iconColor = Color(DesignTokens.color_feedback_error_text)
             )
         }
     }
@@ -389,20 +400,22 @@ fun getVisualStateStyles(visualState: VisualState): VisualStateStyles {
  * 
  * Error treatment is mode-specific:
  * - Select mode: Full error treatment (border + background + colors)
- *   - Background: color.error.subtle
- *   - Border: borderEmphasis (2dp), color.error.strong
- *   - Label/Icon: color.error.strong
+ *   - Background: color.feedback.error.background
+ *   - Border: borderEmphasis (2dp), color.feedback.error.text
+ *   - Label/Icon: color.feedback.error.text
  * - Multi-Select mode: Text/icon colors only (no border/background change)
  *   - Background: preserved from base state
  *   - Border: preserved from base state
- *   - Label/Icon: color.error.strong
+ *   - Label/Icon: color.feedback.error.text
  * - Tap mode (rest state only): No effect (nothing to validate)
  * 
  * Requirements:
  * - 3.1: Select mode error treatment (full treatment)
  * - 3.2: Multi-Select mode error treatment (colors only)
- * - 3.3: Error colors (color.error.strong for foreground)
+ * - 3.3: Error colors (color.feedback.error.text for foreground)
  * - 3.4: Tap mode ignores error prop
+ * 
+ * @see Spec 052 - Semantic Token Naming Implementation
  * 
  * @param baseStyles The base visual state styles
  * @param visualState The current visual state

@@ -87,8 +87,8 @@ enum class BadgeCountNotificationSize {
  * 
  * Fixed notification colors - not configurable by consumers.
  * These tokens reference the semantic color tokens:
- * - color.badge.background.notification → pink400 (#CC2257)
- * - color.badge.text.notification → white100 (#FFFFFF)
+ * - color.badge.notification.background → pink400 (#CC2257)
+ * - color.badge.notification.text → white100 (#FFFFFF)
  * 
  * Contrast Ratio: 6.33:1 (exceeds WCAG AA 4.5:1)
  * 
@@ -98,16 +98,16 @@ private object BadgeCountNotificationTokens {
     // MARK: - Fixed Notification Colors
     
     /** Background color for notification badge
-     * References: color.badge.background.notification → pink400 (#CC2257)
+     * References: color.badge.notification.background → pink400 (#CC2257)
      * @see Requirement 3.1 - notification-specific color tokens
      */
-    val backgroundColor: Color = Color(DesignTokens.color_badge_background_notification)
+    val backgroundColor: Color = Color(DesignTokens.color_badge_notification_background)
     
     /** Text color for notification badge
-     * References: color.badge.text.notification → white100 (#FFFFFF)
+     * References: color.badge.notification.text → white100 (#FFFFFF)
      * @see Requirement 3.1 - notification-specific color tokens
      */
-    val textColor: Color = Color(DesignTokens.color_badge_text_notification)
+    val textColor: Color = Color(DesignTokens.color_badge_notification_text)
 }
 
 
@@ -237,8 +237,8 @@ private fun getAnnouncementText(count: Int, max: Int): String {
  * announcements for screen readers.
  * 
  * Fixed Colors (not configurable):
- * - Background: color.badge.background.notification (pink400 #CC2257)
- * - Text: color.badge.text.notification (white100 #FFFFFF)
+ * - Background: color.badge.notification.background (pink400 #CC2257)
+ * - Text: color.badge.notification.text (white100 #FFFFFF)
  * - Contrast Ratio: 6.33:1 (exceeds WCAG AA 4.5:1)
  * 
  * Accessibility Features:

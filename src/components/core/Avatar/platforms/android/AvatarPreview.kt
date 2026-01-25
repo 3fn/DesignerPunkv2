@@ -742,12 +742,12 @@ private fun CrossPlatformConsistencySection() {
                     Avatar(type = AvatarType.Human, size = AvatarSize.Md)
                     Column {
                         Text(
-                            text = "color.avatar.human",
+                            text = "color.avatar.human.background",
                             style = MaterialTheme.typography.labelSmall,
                             fontFamily = FontFamily.Monospace
                         )
                         Text(
-                            text = "→ orange300",
+                            text = "→ color.identity.human → orange300",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -761,12 +761,12 @@ private fun CrossPlatformConsistencySection() {
                     Avatar(type = AvatarType.Agent, size = AvatarSize.Md)
                     Column {
                         Text(
-                            text = "color.avatar.agent",
+                            text = "color.avatar.agent.background",
                             style = MaterialTheme.typography.labelSmall,
                             fontFamily = FontFamily.Monospace
                         )
                         Text(
-                            text = "→ teal200",
+                            text = "→ color.identity.agent → teal200",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -866,7 +866,7 @@ private fun BorderStylesSection() {
                 fontFamily = FontFamily.Monospace
             )
             Text(
-                text = "xs-xl color: color.avatar.border + opacity.heavy",
+                text = "xs-xl color: color.avatar.default.border + opacity.heavy",
                 style = MaterialTheme.typography.labelSmall,
                 fontFamily = FontFamily.Monospace
             )

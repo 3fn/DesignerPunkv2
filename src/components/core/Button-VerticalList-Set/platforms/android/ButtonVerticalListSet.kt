@@ -518,7 +518,7 @@ fun ButtonVerticalListSet(
         if (error && errorMessage != null) {
             Text(
                 text = errorMessage,
-                color = Color(DesignTokens.color_error_strong),
+                color = Color(DesignTokens.color_feedback_error_text),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Normal,
                 modifier = Modifier

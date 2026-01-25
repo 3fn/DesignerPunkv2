@@ -297,15 +297,15 @@ fun getRoundedCornerShape(borderRadius: BorderRadiusValue): RoundedCornerShape {
  * Note: Tokens regenerated Dec 18, 2025 to include color.canvas (Task 8.1) and all semantic tokens.
  * See dist/DesignTokens.android.kt for complete list of generated tokens.
  * 
- * @param tokenName Color token name (e.g., "color.primary")
+ * @param tokenName Color token name (e.g., "color.action.primary")
  * @return Compose Color
  * 
  * @example
  * ```kotlin
- * resolveColorToken("color.primary") // Returns primary color
- * resolveColorToken("color.surface") // Returns surface color
+ * resolveColorToken("color.action.primary") // Returns action primary color
+ * resolveColorToken("color.structure.surface") // Returns surface color
  * resolveColorToken(null) // Returns Color.Transparent
- * resolveColorToken("invalid") // Returns colorCanvas (white100)
+ * resolveColorToken("invalid") // Returns colorStructureCanvas (white100)
  * ```
  * 
  * @see Requirements 2.2, 4.1-4.4
@@ -317,26 +317,50 @@ fun resolveColorToken(tokenName: String?): Color {
     }
     
     // Use generated token constants from DesignTokens
+    // Updated for Spec 052 semantic token naming restructure
     return when (tokenName) {
-        "color.primary" -> colorPrimary
-        "color.surface" -> colorSurface
-        "color.background" -> colorBackground
-        "color.error.strong" -> colorErrorStrong
-        "color.error.subtle" -> colorErrorSubtle
-        "color.success.strong" -> colorSuccessStrong
-        "color.success.subtle" -> colorSuccessSubtle
-        "color.warning.strong" -> colorWarningStrong
-        "color.warning.subtle" -> colorWarningSubtle
-        "color.info.strong" -> colorInfoStrong
-        "color.info.subtle" -> colorInfoSubtle
-        "color.canvas" -> colorCanvas  // New token (white100)
-        "color.border" -> colorBorder
+        // Action concept tokens
+        "color.action.primary" -> colorActionPrimary
+        "color.action.secondary" -> colorActionSecondary
+        
+        // Structure concept tokens
+        "color.structure.canvas" -> colorStructureCanvas
+        "color.structure.surface" -> colorStructureSurface
+        "color.structure.border" -> colorStructureBorder
+        
+        // Feedback concept tokens
+        "color.feedback.error.text" -> colorFeedbackErrorText
+        "color.feedback.error.background" -> colorFeedbackErrorBackground
+        "color.feedback.error.border" -> colorFeedbackErrorBorder
+        "color.feedback.success.text" -> colorFeedbackSuccessText
+        "color.feedback.success.background" -> colorFeedbackSuccessBackground
+        "color.feedback.success.border" -> colorFeedbackSuccessBorder
+        "color.feedback.warning.text" -> colorFeedbackWarningText
+        "color.feedback.warning.background" -> colorFeedbackWarningBackground
+        "color.feedback.warning.border" -> colorFeedbackWarningBorder
+        "color.feedback.info.text" -> colorFeedbackInfoText
+        "color.feedback.info.background" -> colorFeedbackInfoBackground
+        "color.feedback.info.border" -> colorFeedbackInfoBorder
+        
+        // Contrast concept tokens
+        "color.contrast.onLight" -> colorContrastOnLight
+        "color.contrast.onDark" -> colorContrastOnDark
+        
+        // Text tokens
         "color.text.default" -> colorTextDefault
         "color.text.muted" -> colorTextMuted
         "color.text.subtle" -> colorTextSubtle
-        "color.contrast.onPrimary" -> colorContrastOnPrimary
+        
+        // Icon tokens
         "color.icon.default" -> colorIconDefault
-        else -> colorCanvas  // Default to canvas (white100)
+        
+        // Border tokens (semantic)
+        "color.border" -> colorBorder
+        "color.border.default" -> colorBorder
+        "color.border.subtle" -> colorBorderSubtle
+        "color.border.emphasis" -> colorBorderEmphasis
+        
+        else -> colorStructureCanvas  // Default to canvas (white100)
     }
 }
 
@@ -527,26 +551,45 @@ private val elevationToast: Dp = DesignTokens.elevation_toast
 private val elevationTooltip: Dp = DesignTokens.elevation_tooltip
 
 // Color tokens
-// Regenerated Dec 18, 2025 - includes color.canvas (Task 8.1) and all semantic tokens
-private val colorBorder: Color = Color(DesignTokens.color_border)
+// Updated Jan 25, 2026 - Spec 052 semantic token naming restructure
+// Border tokens
+private val colorBorder: Color = Color(DesignTokens.color_structure_border)
 private val colorBorderSubtle: Color = Color(DesignTokens.color_border_subtle)  // color.border.subtle
 private val colorBorderEmphasis: Color = Color(DesignTokens.color_border_emphasis)  // color.border.emphasis
-private val colorPrimary: Color = Color(DesignTokens.color_primary)
-private val colorSurface: Color = Color(DesignTokens.color_surface)
-private val colorBackground: Color = Color(DesignTokens.color_background)
-private val colorErrorStrong: Color = Color(DesignTokens.color_error_strong)
-private val colorErrorSubtle: Color = Color(DesignTokens.color_error_subtle)
-private val colorSuccessStrong: Color = Color(DesignTokens.color_success_strong)
-private val colorSuccessSubtle: Color = Color(DesignTokens.color_success_subtle)
-private val colorWarningStrong: Color = Color(DesignTokens.color_warning_strong)
-private val colorWarningSubtle: Color = Color(DesignTokens.color_warning_subtle)
-private val colorInfoStrong: Color = Color(DesignTokens.color_info_strong)
-private val colorInfoSubtle: Color = Color(DesignTokens.color_info_subtle)
-private val colorCanvas: Color = Color(DesignTokens.color_canvas)  // New in Task 8.1
+
+// Action concept tokens
+private val colorActionPrimary: Color = Color(DesignTokens.color_action_primary)
+private val colorActionSecondary: Color = Color(DesignTokens.color_action_secondary)
+
+// Structure concept tokens
+private val colorStructureCanvas: Color = Color(DesignTokens.color_structure_canvas)
+private val colorStructureSurface: Color = Color(DesignTokens.color_structure_surface)
+private val colorStructureBorder: Color = Color(DesignTokens.color_structure_border)
+
+// Feedback concept tokens
+private val colorFeedbackErrorText: Color = Color(DesignTokens.color_feedback_error_text)
+private val colorFeedbackErrorBackground: Color = Color(DesignTokens.color_feedback_error_background)
+private val colorFeedbackErrorBorder: Color = Color(DesignTokens.color_feedback_error_border)
+private val colorFeedbackSuccessText: Color = Color(DesignTokens.color_feedback_success_text)
+private val colorFeedbackSuccessBackground: Color = Color(DesignTokens.color_feedback_success_background)
+private val colorFeedbackSuccessBorder: Color = Color(DesignTokens.color_feedback_success_border)
+private val colorFeedbackWarningText: Color = Color(DesignTokens.color_feedback_warning_text)
+private val colorFeedbackWarningBackground: Color = Color(DesignTokens.color_feedback_warning_background)
+private val colorFeedbackWarningBorder: Color = Color(DesignTokens.color_feedback_warning_border)
+private val colorFeedbackInfoText: Color = Color(DesignTokens.color_feedback_info_text)
+private val colorFeedbackInfoBackground: Color = Color(DesignTokens.color_feedback_info_background)
+private val colorFeedbackInfoBorder: Color = Color(DesignTokens.color_feedback_info_border)
+
+// Contrast concept tokens
+private val colorContrastOnLight: Color = Color(DesignTokens.color_contrast_on_light)
+private val colorContrastOnDark: Color = Color(DesignTokens.color_contrast_on_dark)
+
+// Text tokens
 private val colorTextDefault: Color = Color(DesignTokens.color_text_default)
 private val colorTextMuted: Color = Color(DesignTokens.color_text_muted)
 private val colorTextSubtle: Color = Color(DesignTokens.color_text_subtle)
-private val colorContrastOnPrimary: Color = Color(DesignTokens.color_contrast_on_primary)
+
+// Icon tokens
 private val colorIconDefault: Color = Color(DesignTokens.color_icon_default)
 
 // Opacity tokens
