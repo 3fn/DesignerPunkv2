@@ -20,7 +20,7 @@
  * - icon = gray (default icon color)
  * - print = black (print media)
  * - glow = vibrant neon colors for emphasis effects
- * - avatar = component-specific tokens referencing identity/contrast
+ * - avatar = component-specific tokens following {component}.{variant}.{property} pattern
  * - badge = component-specific tokens for notification badges
  * 
  * All color tokens reference mode-aware primitive color tokens that support
@@ -511,46 +511,82 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
     description: 'Vibrant pink glow referencing pink500'
   },
 
-  // Avatar Colors (3 tokens) - Spec 042: Avatar Component
-  // Note: color.avatar.human and color.avatar.agent removed in Spec 052
-  // These are now semantic identity tokens: color.identity.human, color.identity.agent
-  // Component tokens (color.avatar.human.background, etc.) will be created in Task 3.1
+  // ============================================================================
+  // AVATAR COMPONENT TOKENS (5 tokens) - Spec 052 Task 3.1
+  // ============================================================================
+  /**
+   * Avatar Component Tokens: Component-specific colors for Avatar
+   * 
+   * Pattern: color.{component}.{variant}.{property}
+   * 
+   * These component tokens reference semantic tokens (identity, contrast) rather than
+   * primitives directly, following the compositional architecture defined in Spec 051.
+   * 
+   * Variants: human, agent, default
+   * Properties: background, icon, border
+   * 
+   * Migration (Spec 052 Task 3.1):
+   * - color.avatar.human → color.avatar.human.background (references color.identity.human)
+   * - color.avatar.agent → color.avatar.agent.background (references color.identity.agent)
+   * - color.avatar.contrast.onHuman → color.avatar.human.icon (references color.contrast.onDark)
+   * - color.avatar.contrast.onAgent → color.avatar.agent.icon (references color.contrast.onDark)
+   * - color.avatar.border → color.avatar.default.border (references gray100)
+   * 
+   * @see .kiro/specs/051-semantic-token-naming-restructure/design-outline.md
+   */
 
-  'color.avatar.contrast.onHuman': {
-    name: 'color.avatar.contrast.onHuman',
+  'color.avatar.human.background': {
+    name: 'color.avatar.human.background',
+    primitiveReferences: { value: 'orange300' },
+    category: SemanticCategory.COLOR,
+    context: 'Background color for human avatar',
+    description: 'Orange background for human avatar - references color.identity.human semantic token. Warm, approachable visual identity for human entities.'
+  },
+
+  'color.avatar.agent.background': {
+    name: 'color.avatar.agent.background',
+    primitiveReferences: { value: 'teal200' },
+    category: SemanticCategory.COLOR,
+    context: 'Background color for AI agent avatar',
+    description: 'Teal background for AI agent avatar - references color.identity.agent semantic token. Distinct, technical visual identity for agent entities.'
+  },
+
+  'color.avatar.human.icon': {
+    name: 'color.avatar.human.icon',
     primitiveReferences: { value: 'white100' },
     category: SemanticCategory.COLOR,
     context: 'Icon color on human avatar background',
-    description: 'White icon color for use on human avatar orange background - ensures WCAG AA contrast compliance'
+    description: 'White icon color for use on human avatar orange background - references color.contrast.onDark semantic token. Ensures WCAG AA contrast compliance.'
   },
 
-  'color.avatar.contrast.onAgent': {
-    name: 'color.avatar.contrast.onAgent',
+  'color.avatar.agent.icon': {
+    name: 'color.avatar.agent.icon',
     primitiveReferences: { value: 'white100' },
     category: SemanticCategory.COLOR,
     context: 'Icon color on AI agent avatar background',
-    description: 'White icon color for use on AI agent avatar teal background - ensures WCAG AA contrast compliance'
+    description: 'White icon color for use on AI agent avatar teal background - references color.contrast.onDark semantic token. Ensures WCAG AA contrast compliance.'
   },
 
-  'color.avatar.border': {
-    name: 'color.avatar.border',
+  'color.avatar.default.border': {
+    name: 'color.avatar.default.border',
     primitiveReferences: { value: 'gray100' },
     category: SemanticCategory.COLOR,
     context: 'Border color for avatars',
-    description: 'Gray border color for avatar components - provides subtle visual definition for both human and agent avatars'
+    description: 'Gray border color for avatar components - provides subtle visual definition for both human and agent avatars.'
   },
 
   // Badge Colors (2 tokens) - Spec 044: Badge Component Family
-  'color.badge.background.notification': {
-    name: 'color.badge.background.notification',
+  // Spec 052: Reordered to {component}.{variant}.{property} pattern
+  'color.badge.notification.background': {
+    name: 'color.badge.notification.background',
     primitiveReferences: { value: 'pink400' },
     category: SemanticCategory.COLOR,
     context: 'Background color for notification badges',
     description: 'Pink background for notification badges - provides high-visibility alert indication with 6.33:1 contrast ratio against white text'
   },
 
-  'color.badge.text.notification': {
-    name: 'color.badge.text.notification',
+  'color.badge.notification.text': {
+    name: 'color.badge.notification.text',
     primitiveReferences: { value: 'white100' },
     category: SemanticCategory.COLOR,
     context: 'Text color on notification badge background',
@@ -571,6 +607,9 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
  * - Removed: color.canvas, color.background, color.surface, color.border (moved to structure concept)
  * - Added: color.structure.canvas, color.structure.surface, color.structure.border, 
  *   color.structure.border.subtle (4 tokens)
+ * - Removed: color.avatar.contrast.onHuman, color.avatar.contrast.onAgent, color.avatar.border (old pattern)
+ * - Added: color.avatar.human.background, color.avatar.agent.background, color.avatar.human.icon,
+ *   color.avatar.agent.icon, color.avatar.default.border (5 tokens - Task 3.1)
  * 
  * See design authority: .kiro/specs/051-semantic-token-naming-restructure/design-outline.md
  */
@@ -617,11 +656,16 @@ export function getAllColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'
  * - Added 4 new tokens: color.structure.canvas, color.structure.surface, 
  *   color.structure.border, color.structure.border.subtle
  * 
- * Net change: -12 + 18 - 2 + 2 - 1 + 2 - 1 + 2 - 4 + 4 = +8 tokens
- * New total: 40 + 8 = 48 tokens
+ * Token changes (Task 3.1 - Avatar component tokens):
+ * - Removed 3 old tokens: color.avatar.contrast.onHuman, color.avatar.contrast.onAgent, color.avatar.border
+ * - Added 5 new tokens: color.avatar.human.background, color.avatar.agent.background,
+ *   color.avatar.human.icon, color.avatar.agent.icon, color.avatar.default.border
+ * 
+ * Net change: -12 + 18 - 2 + 2 - 1 + 2 - 1 + 2 - 4 + 4 - 3 + 5 = +10 tokens
+ * New total: 40 + 10 = 50 tokens
  */
 export function validateColorTokenCount(): boolean {
-  const expectedCount = 48;
+  const expectedCount = 50;
   const actualCount = colorTokenNames.length;
   if (actualCount !== expectedCount) {
     console.warn(`Color token count mismatch: expected ${expectedCount}, got ${actualCount}`);

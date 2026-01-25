@@ -186,7 +186,7 @@ describe('Avatar Icon Integration', () => {
 
   describe('Icon Color per Avatar Type', () => {
     /**
-     * @see Requirements: 6.1 - Human type icon uses color.avatar.contrast.onHuman semantic token
+     * @see Requirements: 6.1 - Human type icon uses color.avatar.human.icon semantic token
      */
     it('should apply human icon color class for human type', async () => {
       const avatar = document.createElement('avatar-base') as AvatarBaseElement;
@@ -201,7 +201,7 @@ describe('Avatar Icon Integration', () => {
     });
 
     /**
-     * @see Requirements: 6.2 - Agent type icon uses color.avatar.contrast.onAgent semantic token
+     * @see Requirements: 6.2 - Agent type icon uses color.avatar.agent.icon semantic token
      */
     it('should apply agent icon color class for agent type', async () => {
       const avatar = document.createElement('avatar-base') as AvatarBaseElement;

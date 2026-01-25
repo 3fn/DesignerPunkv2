@@ -1127,79 +1127,127 @@ describe('Semantic Color Tokens - Palette Update', () => {
 
   // Avatar Color Tokens (Spec 042: Avatar Component) - Updated for Spec 052
   // Note: color.avatar.human and color.avatar.agent removed in Spec 052
-  // These are now semantic identity tokens: color.identity.human, color.identity.agent
-  describe('Avatar Color Tokens (Spec 042, Updated Spec 052)', () => {
+  // Avatar component tokens follow {component}.{variant}.{property} pattern (Spec 052 Task 3.1)
+  describe('Avatar Color Tokens (Spec 042, Updated Spec 052 Task 3.1)', () => {
     describe('Token Existence', () => {
-      it('should have color.avatar.contrast.onHuman token', () => {
-        const token = colorTokens['color.avatar.contrast.onHuman'];
+      it('should have color.avatar.human.background token', () => {
+        const token = colorTokens['color.avatar.human.background'];
         expect(token).toBeDefined();
-        expect(token.name).toBe('color.avatar.contrast.onHuman');
+        expect(token.name).toBe('color.avatar.human.background');
       });
 
-      it('should have color.avatar.contrast.onAgent token', () => {
-        const token = colorTokens['color.avatar.contrast.onAgent'];
+      it('should have color.avatar.agent.background token', () => {
+        const token = colorTokens['color.avatar.agent.background'];
         expect(token).toBeDefined();
-        expect(token.name).toBe('color.avatar.contrast.onAgent');
+        expect(token.name).toBe('color.avatar.agent.background');
       });
 
-      it('should have color.avatar.border token', () => {
-        const token = colorTokens['color.avatar.border'];
+      it('should have color.avatar.human.icon token', () => {
+        const token = colorTokens['color.avatar.human.icon'];
         expect(token).toBeDefined();
-        expect(token.name).toBe('color.avatar.border');
+        expect(token.name).toBe('color.avatar.human.icon');
+      });
+
+      it('should have color.avatar.agent.icon token', () => {
+        const token = colorTokens['color.avatar.agent.icon'];
+        expect(token).toBeDefined();
+        expect(token.name).toBe('color.avatar.agent.icon');
+      });
+
+      it('should have color.avatar.default.border token', () => {
+        const token = colorTokens['color.avatar.default.border'];
+        expect(token).toBeDefined();
+        expect(token.name).toBe('color.avatar.default.border');
       });
     });
 
     describe('Primitive References', () => {
-      it('color.avatar.contrast.onHuman should reference white100', () => {
-        const token = colorTokens['color.avatar.contrast.onHuman'];
+      it('color.avatar.human.background should reference orange300 (via color.identity.human)', () => {
+        const token = colorTokens['color.avatar.human.background'];
+        expect(token.primitiveReferences.value).toBe('orange300');
+      });
+
+      it('color.avatar.agent.background should reference teal200 (via color.identity.agent)', () => {
+        const token = colorTokens['color.avatar.agent.background'];
+        expect(token.primitiveReferences.value).toBe('teal200');
+      });
+
+      it('color.avatar.human.icon should reference white100 (via color.contrast.onDark)', () => {
+        const token = colorTokens['color.avatar.human.icon'];
         expect(token.primitiveReferences.value).toBe('white100');
       });
 
-      it('color.avatar.contrast.onAgent should reference white100', () => {
-        const token = colorTokens['color.avatar.contrast.onAgent'];
+      it('color.avatar.agent.icon should reference white100 (via color.contrast.onDark)', () => {
+        const token = colorTokens['color.avatar.agent.icon'];
         expect(token.primitiveReferences.value).toBe('white100');
       });
 
-      it('color.avatar.border should reference gray100', () => {
-        const token = colorTokens['color.avatar.border'];
+      it('color.avatar.default.border should reference gray100', () => {
+        const token = colorTokens['color.avatar.default.border'];
         expect(token.primitiveReferences.value).toBe('gray100');
       });
     });
 
     describe('Token Structure', () => {
-      it('color.avatar.contrast.onHuman should have correct category', () => {
-        const token = colorTokens['color.avatar.contrast.onHuman'];
+      it('color.avatar.human.background should have correct category', () => {
+        const token = colorTokens['color.avatar.human.background'];
         expect(token.category).toBe(SemanticCategory.COLOR);
       });
 
-      it('color.avatar.contrast.onAgent should have correct category', () => {
-        const token = colorTokens['color.avatar.contrast.onAgent'];
+      it('color.avatar.agent.background should have correct category', () => {
+        const token = colorTokens['color.avatar.agent.background'];
         expect(token.category).toBe(SemanticCategory.COLOR);
       });
 
-      it('color.avatar.border should have correct category', () => {
-        const token = colorTokens['color.avatar.border'];
+      it('color.avatar.human.icon should have correct category', () => {
+        const token = colorTokens['color.avatar.human.icon'];
         expect(token.category).toBe(SemanticCategory.COLOR);
       });
 
-      it('color.avatar.contrast.onHuman should have context and description', () => {
-        const token = colorTokens['color.avatar.contrast.onHuman'];
+      it('color.avatar.agent.icon should have correct category', () => {
+        const token = colorTokens['color.avatar.agent.icon'];
+        expect(token.category).toBe(SemanticCategory.COLOR);
+      });
+
+      it('color.avatar.default.border should have correct category', () => {
+        const token = colorTokens['color.avatar.default.border'];
+        expect(token.category).toBe(SemanticCategory.COLOR);
+      });
+
+      it('color.avatar.human.background should have context and description', () => {
+        const token = colorTokens['color.avatar.human.background'];
         expect(token.context).toBeDefined();
         expect(token.context.length).toBeGreaterThan(0);
         expect(token.description).toBeDefined();
         expect(token.description.length).toBeGreaterThan(0);
       });
 
-      it('color.avatar.contrast.onAgent should have context and description', () => {
-        const token = colorTokens['color.avatar.contrast.onAgent'];
+      it('color.avatar.agent.background should have context and description', () => {
+        const token = colorTokens['color.avatar.agent.background'];
         expect(token.context).toBeDefined();
         expect(token.context.length).toBeGreaterThan(0);
         expect(token.description).toBeDefined();
         expect(token.description.length).toBeGreaterThan(0);
       });
 
-      it('color.avatar.border should have context and description', () => {
-        const token = colorTokens['color.avatar.border'];
+      it('color.avatar.human.icon should have context and description', () => {
+        const token = colorTokens['color.avatar.human.icon'];
+        expect(token.context).toBeDefined();
+        expect(token.context.length).toBeGreaterThan(0);
+        expect(token.description).toBeDefined();
+        expect(token.description.length).toBeGreaterThan(0);
+      });
+
+      it('color.avatar.agent.icon should have context and description', () => {
+        const token = colorTokens['color.avatar.agent.icon'];
+        expect(token.context).toBeDefined();
+        expect(token.context.length).toBeGreaterThan(0);
+        expect(token.description).toBeDefined();
+        expect(token.description.length).toBeGreaterThan(0);
+      });
+
+      it('color.avatar.default.border should have context and description', () => {
+        const token = colorTokens['color.avatar.default.border'];
         expect(token.context).toBeDefined();
         expect(token.context.length).toBeGreaterThan(0);
         expect(token.description).toBeDefined();
@@ -1208,38 +1256,52 @@ describe('Semantic Color Tokens - Palette Update', () => {
     });
 
     describe('Utility Function Access', () => {
-      it('should return color.avatar.contrast.onHuman via getColorToken()', () => {
-        const token = getColorToken('color.avatar.contrast.onHuman');
+      it('should return color.avatar.human.background via getColorToken()', () => {
+        const token = getColorToken('color.avatar.human.background');
         expect(token).toBeDefined();
-        expect(token?.name).toBe('color.avatar.contrast.onHuman');
+        expect(token?.name).toBe('color.avatar.human.background');
       });
 
-      it('should return color.avatar.contrast.onAgent via getColorToken()', () => {
-        const token = getColorToken('color.avatar.contrast.onAgent');
+      it('should return color.avatar.agent.background via getColorToken()', () => {
+        const token = getColorToken('color.avatar.agent.background');
         expect(token).toBeDefined();
-        expect(token?.name).toBe('color.avatar.contrast.onAgent');
+        expect(token?.name).toBe('color.avatar.agent.background');
       });
 
-      it('should return color.avatar.border via getColorToken()', () => {
-        const token = getColorToken('color.avatar.border');
+      it('should return color.avatar.human.icon via getColorToken()', () => {
+        const token = getColorToken('color.avatar.human.icon');
         expect(token).toBeDefined();
-        expect(token?.name).toBe('color.avatar.border');
+        expect(token?.name).toBe('color.avatar.human.icon');
       });
 
-      it('should include all remaining avatar tokens in getAllColorTokens()', () => {
+      it('should return color.avatar.agent.icon via getColorToken()', () => {
+        const token = getColorToken('color.avatar.agent.icon');
+        expect(token).toBeDefined();
+        expect(token?.name).toBe('color.avatar.agent.icon');
+      });
+
+      it('should return color.avatar.default.border via getColorToken()', () => {
+        const token = getColorToken('color.avatar.default.border');
+        expect(token).toBeDefined();
+        expect(token?.name).toBe('color.avatar.default.border');
+      });
+
+      it('should include all avatar tokens in getAllColorTokens()', () => {
         const tokens = getAllColorTokens();
         const tokenNames = tokens.map(t => t.name);
 
-        expect(tokenNames).toContain('color.avatar.contrast.onHuman');
-        expect(tokenNames).toContain('color.avatar.contrast.onAgent');
-        expect(tokenNames).toContain('color.avatar.border');
+        expect(tokenNames).toContain('color.avatar.human.background');
+        expect(tokenNames).toContain('color.avatar.agent.background');
+        expect(tokenNames).toContain('color.avatar.human.icon');
+        expect(tokenNames).toContain('color.avatar.agent.icon');
+        expect(tokenNames).toContain('color.avatar.default.border');
       });
     });
 
     describe('Token Count Includes Avatar Tokens', () => {
-      it('should have exactly 3 avatar tokens (after Spec 052 migration)', () => {
+      it('should have exactly 5 avatar tokens (after Spec 052 Task 3.1 migration)', () => {
         const avatarTokens = colorTokenNames.filter(n => n.startsWith('color.avatar'));
-        expect(avatarTokens.length).toBe(3);
+        expect(avatarTokens.length).toBe(5);
       });
     });
   });
@@ -1251,36 +1313,36 @@ describe('Semantic Color Tokens - Palette Update', () => {
    * Validates that Badge tokens reference correct primitives and have proper structure.
    * Following industry-standard naming pattern: [semantic token family].[component].[property].[variant]
    */
-  describe('Badge Color Tokens (Spec 044)', () => {
+  describe('Badge Color Tokens (Spec 044, Updated Spec 052)', () => {
     describe('Token Existence', () => {
-      it('should have color.badge.background.notification token', () => {
-        expect(colorTokens['color.badge.background.notification']).toBeDefined();
+      it('should have color.badge.notification.background token', () => {
+        expect(colorTokens['color.badge.notification.background']).toBeDefined();
       });
 
-      it('should have color.badge.text.notification token', () => {
-        expect(colorTokens['color.badge.text.notification']).toBeDefined();
+      it('should have color.badge.notification.text token', () => {
+        expect(colorTokens['color.badge.notification.text']).toBeDefined();
       });
     });
 
     describe('Primitive References', () => {
       it('should reference pink400 primitive for notification background', () => {
-        const token = colorTokens['color.badge.background.notification'];
+        const token = colorTokens['color.badge.notification.background'];
         expect(token.primitiveReferences.value).toBe('pink400');
       });
 
       it('should reference white100 primitive for notification text', () => {
-        const token = colorTokens['color.badge.text.notification'];
+        const token = colorTokens['color.badge.notification.text'];
         expect(token.primitiveReferences.value).toBe('white100');
       });
 
       it('should verify pink400 primitive exists', () => {
-        const token = colorTokens['color.badge.background.notification'];
+        const token = colorTokens['color.badge.notification.background'];
         const primitiveName = token.primitiveReferences.value;
         expect(primitiveColorTokens).toHaveProperty(primitiveName);
       });
 
       it('should verify white100 primitive exists', () => {
-        const token = colorTokens['color.badge.text.notification'];
+        const token = colorTokens['color.badge.notification.text'];
         const primitiveName = token.primitiveReferences.value;
         expect(primitiveColorTokens).toHaveProperty(primitiveName);
       });
@@ -1288,72 +1350,72 @@ describe('Semantic Color Tokens - Palette Update', () => {
 
     describe('Token Structure', () => {
       it('should have COLOR category for badge background token', () => {
-        expect(colorTokens['color.badge.background.notification'].category).toBe(SemanticCategory.COLOR);
+        expect(colorTokens['color.badge.notification.background'].category).toBe(SemanticCategory.COLOR);
       });
 
       it('should have COLOR category for badge text token', () => {
-        expect(colorTokens['color.badge.text.notification'].category).toBe(SemanticCategory.COLOR);
+        expect(colorTokens['color.badge.notification.text'].category).toBe(SemanticCategory.COLOR);
       });
 
       it('should have meaningful context for badge background token', () => {
-        const token = colorTokens['color.badge.background.notification'];
+        const token = colorTokens['color.badge.notification.background'];
         expect(token.context).toBeTruthy();
         expect(token.context.toLowerCase()).toContain('notification');
         expect(token.context.toLowerCase()).toContain('badge');
       });
 
       it('should have meaningful context for badge text token', () => {
-        const token = colorTokens['color.badge.text.notification'];
+        const token = colorTokens['color.badge.notification.text'];
         expect(token.context).toBeTruthy();
         expect(token.context.toLowerCase()).toContain('notification');
         expect(token.context.toLowerCase()).toContain('badge');
       });
 
       it('should have descriptions for all badge tokens', () => {
-        expect(colorTokens['color.badge.background.notification'].description).toBeTruthy();
-        expect(colorTokens['color.badge.text.notification'].description).toBeTruthy();
+        expect(colorTokens['color.badge.notification.background'].description).toBeTruthy();
+        expect(colorTokens['color.badge.notification.text'].description).toBeTruthy();
       });
 
-      it('should follow industry-standard naming pattern [family].[component].[property].[variant]', () => {
-        // Verify naming pattern: color.badge.background.notification
-        const bgToken = colorTokens['color.badge.background.notification'];
-        expect(bgToken.name).toBe('color.badge.background.notification');
+      it('should follow {component}.{variant}.{property} naming pattern (Spec 052)', () => {
+        // Verify naming pattern: color.badge.notification.background
+        const bgToken = colorTokens['color.badge.notification.background'];
+        expect(bgToken.name).toBe('color.badge.notification.background');
         const bgParts = bgToken.name.split('.');
-        expect(bgParts[0]).toBe('color');      // semantic token family
-        expect(bgParts[1]).toBe('badge');      // component
-        expect(bgParts[2]).toBe('background'); // property
-        expect(bgParts[3]).toBe('notification'); // variant
+        expect(bgParts[0]).toBe('color');        // semantic token family
+        expect(bgParts[1]).toBe('badge');        // component
+        expect(bgParts[2]).toBe('notification'); // variant
+        expect(bgParts[3]).toBe('background');   // property
 
-        // Verify naming pattern: color.badge.text.notification
-        const textToken = colorTokens['color.badge.text.notification'];
-        expect(textToken.name).toBe('color.badge.text.notification');
+        // Verify naming pattern: color.badge.notification.text
+        const textToken = colorTokens['color.badge.notification.text'];
+        expect(textToken.name).toBe('color.badge.notification.text');
         const textParts = textToken.name.split('.');
-        expect(textParts[0]).toBe('color');      // semantic token family
-        expect(textParts[1]).toBe('badge');      // component
-        expect(textParts[2]).toBe('text');       // property
-        expect(textParts[3]).toBe('notification'); // variant
+        expect(textParts[0]).toBe('color');        // semantic token family
+        expect(textParts[1]).toBe('badge');        // component
+        expect(textParts[2]).toBe('notification'); // variant
+        expect(textParts[3]).toBe('text');         // property
       });
     });
 
     describe('Utility Function Access', () => {
-      it('should return color.badge.background.notification via getColorToken()', () => {
-        const token = getColorToken('color.badge.background.notification');
+      it('should return color.badge.notification.background via getColorToken()', () => {
+        const token = getColorToken('color.badge.notification.background');
         expect(token).toBeDefined();
-        expect(token?.name).toBe('color.badge.background.notification');
+        expect(token?.name).toBe('color.badge.notification.background');
       });
 
-      it('should return color.badge.text.notification via getColorToken()', () => {
-        const token = getColorToken('color.badge.text.notification');
+      it('should return color.badge.notification.text via getColorToken()', () => {
+        const token = getColorToken('color.badge.notification.text');
         expect(token).toBeDefined();
-        expect(token?.name).toBe('color.badge.text.notification');
+        expect(token?.name).toBe('color.badge.notification.text');
       });
 
       it('should include all badge tokens in getAllColorTokens()', () => {
         const tokens = getAllColorTokens();
         const tokenNames = tokens.map(t => t.name);
 
-        expect(tokenNames).toContain('color.badge.background.notification');
-        expect(tokenNames).toContain('color.badge.text.notification');
+        expect(tokenNames).toContain('color.badge.notification.background');
+        expect(tokenNames).toContain('color.badge.notification.text');
       });
     });
 
@@ -1371,26 +1433,26 @@ describe('Semantic Color Tokens - Palette Update', () => {
       });
     });
 
-    describe('Requirements Coverage (Spec 044)', () => {
+    describe('Requirements Coverage (Spec 044, Updated Spec 052)', () => {
       it('should satisfy Requirement 4.7: Badge-Count-Notification uses notification color tokens', () => {
-        expect(colorTokens['color.badge.background.notification']).toBeDefined();
-        expect(colorTokens['color.badge.text.notification']).toBeDefined();
+        expect(colorTokens['color.badge.notification.background']).toBeDefined();
+        expect(colorTokens['color.badge.notification.text']).toBeDefined();
       });
 
-      it('should satisfy Requirement 9.1: color.badge.background.notification references pink400', () => {
-        const token = colorTokens['color.badge.background.notification'];
+      it('should satisfy Requirement 9.1: color.badge.notification.background references pink400', () => {
+        const token = colorTokens['color.badge.notification.background'];
         expect(token.primitiveReferences.value).toBe('pink400');
       });
 
-      it('should satisfy Requirement 9.2: color.badge.text.notification references white100', () => {
-        const token = colorTokens['color.badge.text.notification'];
+      it('should satisfy Requirement 9.2: color.badge.notification.text references white100', () => {
+        const token = colorTokens['color.badge.notification.text'];
         expect(token.primitiveReferences.value).toBe('white100');
       });
 
-      it('should satisfy Requirement 9.7: tokens follow industry-standard naming pattern', () => {
-        // Pattern: [semantic token family].[component].[property].[variant]
-        const bgToken = colorTokens['color.badge.background.notification'];
-        const textToken = colorTokens['color.badge.text.notification'];
+      it('should satisfy Requirement 9.7: tokens follow {component}.{variant}.{property} pattern (Spec 052)', () => {
+        // Pattern: [semantic token family].[component].[variant].[property]
+        const bgToken = colorTokens['color.badge.notification.background'];
+        const textToken = colorTokens['color.badge.notification.text'];
         
         // Both tokens follow the pattern
         expect(bgToken.name.split('.').length).toBe(4);
