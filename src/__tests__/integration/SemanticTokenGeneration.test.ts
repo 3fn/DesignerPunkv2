@@ -204,7 +204,7 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
       expect(result.content).toContain('purple_300');
       
       // Should contain semantic tokens in snake_case
-      expect(result.content).toContain('color_primary');
+      expect(result.content).toContain('color_action_primary');
       expect(result.content).toContain('space_grouped_normal');
     });
 
@@ -222,12 +222,12 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
 
       // Find a primitive token and a semantic token
       const space100Index = result.content.indexOf('space_100');
-      const colorPrimaryIndex = result.content.indexOf('color_primary');
+      const colorActionPrimaryIndex = result.content.indexOf('color_action_primary');
 
       // Primitive token should appear before semantic token
       expect(space100Index).toBeGreaterThan(-1);
-      expect(colorPrimaryIndex).toBeGreaterThan(-1);
-      expect(space100Index).toBeLessThan(colorPrimaryIndex);
+      expect(colorActionPrimaryIndex).toBeGreaterThan(-1);
+      expect(space100Index).toBeLessThan(colorActionPrimaryIndex);
     });
 
     it('should generate semantic tokens with primitive references', () => {
@@ -351,19 +351,19 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
 
     it('should use getPlatformTokenName() for consistent cross-platform naming', () => {
       // Test that getPlatformTokenName produces expected results for each platform
-      const testTokenName = 'color.primary';
+      const testTokenName = 'color.action.primary';
       
       // Web: kebab-case with -- prefix
       const webName = getPlatformTokenName(testTokenName, 'web', 'color' as any);
-      expect(webName).toBe('--color-primary');
+      expect(webName).toBe('--color-action-primary');
       
       // iOS: camelCase
       const iosName = getPlatformTokenName(testTokenName, 'ios', 'color' as any);
-      expect(iosName).toBe('colorPrimary');
+      expect(iosName).toBe('colorActionPrimary');
       
       // Android: snake_case
       const androidName = getPlatformTokenName(testTokenName, 'android', 'color' as any);
-      expect(androidName).toBe('color_primary');
+      expect(androidName).toBe('color_action_primary');
     });
   });
 

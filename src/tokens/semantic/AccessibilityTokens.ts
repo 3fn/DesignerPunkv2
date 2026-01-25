@@ -26,7 +26,7 @@ import { colorTokens } from './ColorTokens';
 // Reference primitive token names (not resolved values)
 const space025Ref = 'space025';  // Primitive token name
 const borderEmphasisRef = borderEmphasis.value;  // Already a primitive token name: 'borderWidth200'
-const colorPrimaryRef = colorTokens['color.primary'].primitiveReferences.value;  // Already a primitive token name: 'purple300'
+const colorPrimaryRef = colorTokens['color.action.primary'].primitiveReferences.value;  // Already a primitive token name: 'purple300'
 
 /**
  * Focus indicator token structure

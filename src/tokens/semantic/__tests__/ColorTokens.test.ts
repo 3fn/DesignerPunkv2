@@ -11,6 +11,13 @@
  * Task: 2.6 Write unit tests for semantic token updates
  * Spec: 015-color-palette-update
  * Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6
+ * 
+ * UPDATED (Spec 052): Token names migrated to concept-first pattern
+ * - Old: color.success.strong/subtle → New: color.feedback.success.text/background
+ * - Old: color.error.strong/subtle → New: color.feedback.error.text/background
+ * - Old: color.warning.strong/subtle → New: color.feedback.warning.text/background
+ * - Old: color.info.strong/subtle → New: color.feedback.info.text/background
+ * - Old: color.select.* → New: color.feedback.select.*
  */
 
 import {
@@ -24,144 +31,209 @@ import { colorTokens as primitiveColorTokens } from '../../ColorTokens';
 import { SemanticCategory } from '../../../types/SemanticToken';
 
 describe('Semantic Color Tokens - Palette Update', () => {
-  describe('Success Tokens Reference Green Primitives', () => {
-    it('should have color.success.strong token', () => {
-      expect(colorTokens['color.success.strong']).toBeDefined();
+  describe('Feedback Success Tokens Reference Green Primitives', () => {
+    it('should have color.feedback.success.text token', () => {
+      expect(colorTokens['color.feedback.success.text']).toBeDefined();
     });
 
-    it('should reference green400 primitive for strong success', () => {
-      const token = colorTokens['color.success.strong'];
+    it('should reference green400 primitive for success text', () => {
+      const token = colorTokens['color.feedback.success.text'];
       expect(token.primitiveReferences.value).toBe('green400');
     });
 
-    it('should have color.success.subtle token', () => {
-      expect(colorTokens['color.success.subtle']).toBeDefined();
+    it('should have color.feedback.success.background token', () => {
+      expect(colorTokens['color.feedback.success.background']).toBeDefined();
     });
 
-    it('should reference green100 primitive for subtle success', () => {
-      const token = colorTokens['color.success.subtle'];
+    it('should reference green100 primitive for success background', () => {
+      const token = colorTokens['color.feedback.success.background'];
       expect(token.primitiveReferences.value).toBe('green100');
     });
 
+    it('should have color.feedback.success.border token', () => {
+      expect(colorTokens['color.feedback.success.border']).toBeDefined();
+    });
+
+    it('should reference green400 primitive for success border', () => {
+      const token = colorTokens['color.feedback.success.border'];
+      expect(token.primitiveReferences.value).toBe('green400');
+    });
+
     it('should verify green400 primitive exists', () => {
-      const token = colorTokens['color.success.strong'];
+      const token = colorTokens['color.feedback.success.text'];
       const primitiveName = token.primitiveReferences.value;
       expect(primitiveColorTokens).toHaveProperty(primitiveName);
     });
 
     it('should verify green100 primitive exists', () => {
-      const token = colorTokens['color.success.subtle'];
+      const token = colorTokens['color.feedback.success.background'];
       const primitiveName = token.primitiveReferences.value;
       expect(primitiveColorTokens).toHaveProperty(primitiveName);
     });
 
     it('should have COLOR category for success tokens', () => {
-      expect(colorTokens['color.success.strong'].category).toBe(SemanticCategory.COLOR);
-      expect(colorTokens['color.success.subtle'].category).toBe(SemanticCategory.COLOR);
+      expect(colorTokens['color.feedback.success.text'].category).toBe(SemanticCategory.COLOR);
+      expect(colorTokens['color.feedback.success.background'].category).toBe(SemanticCategory.COLOR);
+      expect(colorTokens['color.feedback.success.border'].category).toBe(SemanticCategory.COLOR);
     });
 
     it('should have meaningful context for success tokens', () => {
-      const strongToken = colorTokens['color.success.strong'];
-      expect(strongToken.context).toBeTruthy();
-      expect(strongToken.context).toContain('success');
+      const textToken = colorTokens['color.feedback.success.text'];
+      expect(textToken.context).toBeTruthy();
+      expect(textToken.context).toContain('success');
 
-      const subtleToken = colorTokens['color.success.subtle'];
-      expect(subtleToken.context).toBeTruthy();
-      expect(subtleToken.context).toContain('success');
+      const bgToken = colorTokens['color.feedback.success.background'];
+      expect(bgToken.context).toBeTruthy();
+      expect(bgToken.context).toContain('success');
     });
   });
 
-  describe('Error Tokens Reference Pink Primitives', () => {
-    it('should have color.error.strong token', () => {
-      expect(colorTokens['color.error.strong']).toBeDefined();
+  describe('Feedback Error Tokens Reference Pink Primitives', () => {
+    it('should have color.feedback.error.text token', () => {
+      expect(colorTokens['color.feedback.error.text']).toBeDefined();
     });
 
-    it('should reference pink400 primitive for strong error', () => {
-      const token = colorTokens['color.error.strong'];
+    it('should reference pink400 primitive for error text', () => {
+      const token = colorTokens['color.feedback.error.text'];
       expect(token.primitiveReferences.value).toBe('pink400');
     });
 
-    it('should have color.error.subtle token', () => {
-      expect(colorTokens['color.error.subtle']).toBeDefined();
+    it('should have color.feedback.error.background token', () => {
+      expect(colorTokens['color.feedback.error.background']).toBeDefined();
     });
 
-    it('should reference pink100 primitive for subtle error', () => {
-      const token = colorTokens['color.error.subtle'];
+    it('should reference pink100 primitive for error background', () => {
+      const token = colorTokens['color.feedback.error.background'];
       expect(token.primitiveReferences.value).toBe('pink100');
     });
 
+    it('should have color.feedback.error.border token', () => {
+      expect(colorTokens['color.feedback.error.border']).toBeDefined();
+    });
+
+    it('should reference pink400 primitive for error border', () => {
+      const token = colorTokens['color.feedback.error.border'];
+      expect(token.primitiveReferences.value).toBe('pink400');
+    });
+
     it('should verify pink400 primitive exists', () => {
-      const token = colorTokens['color.error.strong'];
+      const token = colorTokens['color.feedback.error.text'];
       const primitiveName = token.primitiveReferences.value;
       expect(primitiveColorTokens).toHaveProperty(primitiveName);
     });
 
     it('should verify pink100 primitive exists', () => {
-      const token = colorTokens['color.error.subtle'];
+      const token = colorTokens['color.feedback.error.background'];
       const primitiveName = token.primitiveReferences.value;
       expect(primitiveColorTokens).toHaveProperty(primitiveName);
     });
 
     it('should have COLOR category for error tokens', () => {
-      expect(colorTokens['color.error.strong'].category).toBe(SemanticCategory.COLOR);
-      expect(colorTokens['color.error.subtle'].category).toBe(SemanticCategory.COLOR);
+      expect(colorTokens['color.feedback.error.text'].category).toBe(SemanticCategory.COLOR);
+      expect(colorTokens['color.feedback.error.background'].category).toBe(SemanticCategory.COLOR);
+      expect(colorTokens['color.feedback.error.border'].category).toBe(SemanticCategory.COLOR);
     });
 
     it('should have meaningful context for error tokens', () => {
-      const strongToken = colorTokens['color.error.strong'];
-      expect(strongToken.context).toBeTruthy();
-      expect(strongToken.context).toContain('error');
+      const textToken = colorTokens['color.feedback.error.text'];
+      expect(textToken.context).toBeTruthy();
+      expect(textToken.context).toContain('error');
 
-      const subtleToken = colorTokens['color.error.subtle'];
-      expect(subtleToken.context).toBeTruthy();
-      expect(subtleToken.context).toContain('error');
+      const bgToken = colorTokens['color.feedback.error.background'];
+      expect(bgToken.context).toBeTruthy();
+      expect(bgToken.context).toContain('error');
     });
   });
 
-  describe('Warning Tokens Reference Amber Primitives', () => {
-    it('should have color.warning.strong token', () => {
-      expect(colorTokens['color.warning.strong']).toBeDefined();
+  describe('Feedback Warning Tokens Reference Amber Primitives', () => {
+    it('should have color.feedback.warning.text token', () => {
+      expect(colorTokens['color.feedback.warning.text']).toBeDefined();
     });
 
-    it('should reference orange400 primitive for strong warning (amber)', () => {
-      const token = colorTokens['color.warning.strong'];
+    it('should reference orange400 primitive for warning text (amber)', () => {
+      const token = colorTokens['color.feedback.warning.text'];
       expect(token.primitiveReferences.value).toBe('orange400');
     });
 
-    it('should have color.warning.subtle token', () => {
-      expect(colorTokens['color.warning.subtle']).toBeDefined();
+    it('should have color.feedback.warning.background token', () => {
+      expect(colorTokens['color.feedback.warning.background']).toBeDefined();
     });
 
-    it('should reference orange100 primitive for subtle warning (amber)', () => {
-      const token = colorTokens['color.warning.subtle'];
+    it('should reference orange100 primitive for warning background (amber)', () => {
+      const token = colorTokens['color.feedback.warning.background'];
       expect(token.primitiveReferences.value).toBe('orange100');
     });
 
+    it('should have color.feedback.warning.border token', () => {
+      expect(colorTokens['color.feedback.warning.border']).toBeDefined();
+    });
+
+    it('should reference orange400 primitive for warning border', () => {
+      const token = colorTokens['color.feedback.warning.border'];
+      expect(token.primitiveReferences.value).toBe('orange400');
+    });
+
     it('should verify orange400 primitive exists', () => {
-      const token = colorTokens['color.warning.strong'];
+      const token = colorTokens['color.feedback.warning.text'];
       const primitiveName = token.primitiveReferences.value;
       expect(primitiveColorTokens).toHaveProperty(primitiveName);
     });
 
     it('should verify orange100 primitive exists', () => {
-      const token = colorTokens['color.warning.subtle'];
+      const token = colorTokens['color.feedback.warning.background'];
       const primitiveName = token.primitiveReferences.value;
       expect(primitiveColorTokens).toHaveProperty(primitiveName);
     });
 
     it('should have COLOR category for warning tokens', () => {
-      expect(colorTokens['color.warning.strong'].category).toBe(SemanticCategory.COLOR);
-      expect(colorTokens['color.warning.subtle'].category).toBe(SemanticCategory.COLOR);
+      expect(colorTokens['color.feedback.warning.text'].category).toBe(SemanticCategory.COLOR);
+      expect(colorTokens['color.feedback.warning.background'].category).toBe(SemanticCategory.COLOR);
+      expect(colorTokens['color.feedback.warning.border'].category).toBe(SemanticCategory.COLOR);
     });
 
     it('should have meaningful context for warning tokens', () => {
-      const strongToken = colorTokens['color.warning.strong'];
-      expect(strongToken.context).toBeTruthy();
-      expect(strongToken.context).toContain('warning');
+      const textToken = colorTokens['color.feedback.warning.text'];
+      expect(textToken.context).toBeTruthy();
+      expect(textToken.context).toContain('warning');
 
-      const subtleToken = colorTokens['color.warning.subtle'];
-      expect(subtleToken.context).toBeTruthy();
-      expect(subtleToken.context).toContain('warning');
+      const bgToken = colorTokens['color.feedback.warning.background'];
+      expect(bgToken.context).toBeTruthy();
+      expect(bgToken.context).toContain('warning');
+    });
+  });
+
+  describe('Feedback Info Tokens Reference Teal Primitives', () => {
+    it('should have color.feedback.info.text token', () => {
+      expect(colorTokens['color.feedback.info.text']).toBeDefined();
+    });
+
+    it('should reference teal400 primitive for info text', () => {
+      const token = colorTokens['color.feedback.info.text'];
+      expect(token.primitiveReferences.value).toBe('teal400');
+    });
+
+    it('should have color.feedback.info.background token', () => {
+      expect(colorTokens['color.feedback.info.background']).toBeDefined();
+    });
+
+    it('should reference teal100 primitive for info background', () => {
+      const token = colorTokens['color.feedback.info.background'];
+      expect(token.primitiveReferences.value).toBe('teal100');
+    });
+
+    it('should have color.feedback.info.border token', () => {
+      expect(colorTokens['color.feedback.info.border']).toBeDefined();
+    });
+
+    it('should reference teal400 primitive for info border', () => {
+      const token = colorTokens['color.feedback.info.border'];
+      expect(token.primitiveReferences.value).toBe('teal400');
+    });
+
+    it('should have COLOR category for info tokens', () => {
+      expect(colorTokens['color.feedback.info.text'].category).toBe(SemanticCategory.COLOR);
+      expect(colorTokens['color.feedback.info.background'].category).toBe(SemanticCategory.COLOR);
+      expect(colorTokens['color.feedback.info.border'].category).toBe(SemanticCategory.COLOR);
     });
   });
 
@@ -366,9 +438,16 @@ describe('Semantic Color Tokens - Palette Update', () => {
   });
 
   describe('Token Count Validation', () => {
-    it('should have exactly 40 color tokens', () => {
-      // 28 base + 1 background.primary.subtle + 4 select + 5 avatar + 2 badge = 40
-      expect(colorTokenNames.length).toBe(40);
+    it('should have exactly 48 color tokens', () => {
+      // Updated for Spec 052: 40 - 12 old + 18 new - 2 old + 2 new - 1 old + 2 new - 1 old + 2 new = 48
+      // Old tokens removed: color.success.strong/subtle, color.error.strong/subtle, 
+      // color.warning.strong/subtle, color.info.strong/subtle, color.select.* (12 total)
+      // New tokens added: color.feedback.{success|error|warning|info}.{text|background|border} (12)
+      // + color.feedback.select.{text|background|border}.{rest|default} (6) = 18 total
+      // Task 2.2: Removed color.avatar.human/agent (2), added color.identity.human/agent (2)
+      // Task 2.3: Removed color.primary (1), added color.action.primary/secondary (2)
+      // Task 2.4: Removed color.contrast.onPrimary (1), added color.contrast.onLight/onDark (2)
+      expect(colorTokenNames.length).toBe(48);
     });
 
     it('should pass validateColorTokenCount()', () => {
@@ -376,12 +455,13 @@ describe('Semantic Color Tokens - Palette Update', () => {
     });
 
     it('should have correct token count breakdown', () => {
-      // 1 brand + 2 success + 2 warning + 2 error + 2 info + 2 attention/highlight + 2 tech/data + 4 text + 4 surfaces + 1 icon + 1 print + 5 glow = 28
-      const brandTokens = colorTokenNames.filter(n => n === 'color.primary');
-      const successTokens = colorTokenNames.filter(n => n.startsWith('color.success'));
-      const warningTokens = colorTokenNames.filter(n => n.startsWith('color.warning'));
-      const errorTokens = colorTokenNames.filter(n => n.startsWith('color.error'));
-      const infoTokens = colorTokenNames.filter(n => n.startsWith('color.info'));
+      // Updated for Spec 052 feedback concept tokens, action concept tokens, and contrast concept tokens
+      const actionTokens = colorTokenNames.filter(n => n.startsWith('color.action.'));
+      const feedbackSuccessTokens = colorTokenNames.filter(n => n.startsWith('color.feedback.success'));
+      const feedbackErrorTokens = colorTokenNames.filter(n => n.startsWith('color.feedback.error'));
+      const feedbackWarningTokens = colorTokenNames.filter(n => n.startsWith('color.feedback.warning'));
+      const feedbackInfoTokens = colorTokenNames.filter(n => n.startsWith('color.feedback.info'));
+      const feedbackSelectTokens = colorTokenNames.filter(n => n.startsWith('color.feedback.select'));
       const attentionTokens = colorTokenNames.filter(n => n === 'color.attention' || n === 'color.highlight');
       const techDataTokens = colorTokenNames.filter(n => n === 'color.tech' || n === 'color.data');
       const textTokens = colorTokenNames.filter(n => n.startsWith('color.text'));
@@ -389,15 +469,16 @@ describe('Semantic Color Tokens - Palette Update', () => {
       const surfaceTokens = colorTokenNames.filter(n => n === 'color.canvas' || n === 'color.background' || n === 'color.surface' || n === 'color.border');
       const glowTokens = colorTokenNames.filter(n => n.startsWith('glow.'));
 
-      expect(brandTokens.length).toBe(1);
-      expect(successTokens.length).toBe(2);
-      expect(warningTokens.length).toBe(2);
-      expect(errorTokens.length).toBe(2);
-      expect(infoTokens.length).toBe(2);
+      expect(actionTokens.length).toBe(2); // color.action.primary, color.action.secondary
+      expect(feedbackSuccessTokens.length).toBe(3); // text, background, border
+      expect(feedbackErrorTokens.length).toBe(3); // text, background, border
+      expect(feedbackWarningTokens.length).toBe(3); // text, background, border
+      expect(feedbackInfoTokens.length).toBe(3); // text, background, border
+      expect(feedbackSelectTokens.length).toBe(6); // text/background/border × rest/default
       expect(attentionTokens.length).toBe(2);
       expect(techDataTokens.length).toBe(2);
       expect(textTokens.length).toBe(3); // color.text.default, color.text.muted, color.text.subtle
-      expect(contrastTokens.length).toBe(1); // color.contrast.onPrimary
+      expect(contrastTokens.length).toBe(2); // color.contrast.onLight, color.contrast.onDark
       expect(surfaceTokens.length).toBe(4);
       expect(glowTokens.length).toBe(5);
     });
@@ -405,22 +486,22 @@ describe('Semantic Color Tokens - Palette Update', () => {
 
   describe('Utility Functions', () => {
     describe('getColorToken()', () => {
-      it('should return color.success.strong token', () => {
-        const token = getColorToken('color.success.strong');
+      it('should return color.feedback.success.text token', () => {
+        const token = getColorToken('color.feedback.success.text');
         expect(token).toBeDefined();
-        expect(token?.name).toBe('color.success.strong');
+        expect(token?.name).toBe('color.feedback.success.text');
       });
 
-      it('should return color.error.strong token', () => {
-        const token = getColorToken('color.error.strong');
+      it('should return color.feedback.error.text token', () => {
+        const token = getColorToken('color.feedback.error.text');
         expect(token).toBeDefined();
-        expect(token?.name).toBe('color.error.strong');
+        expect(token?.name).toBe('color.feedback.error.text');
       });
 
-      it('should return color.warning.strong token', () => {
-        const token = getColorToken('color.warning.strong');
+      it('should return color.feedback.warning.text token', () => {
+        const token = getColorToken('color.feedback.warning.text');
         expect(token).toBeDefined();
-        expect(token?.name).toBe('color.warning.strong');
+        expect(token?.name).toBe('color.feedback.warning.text');
       });
 
       it('should return color.attention token', () => {
@@ -453,9 +534,9 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(Array.isArray(tokens)).toBe(true);
       });
 
-      it('should return exactly 40 tokens', () => {
+      it('should return exactly 48 tokens', () => {
         const tokens = getAllColorTokens();
-        expect(tokens.length).toBe(40);
+        expect(tokens.length).toBe(48);
       });
 
       it('should include all new tokens', () => {
@@ -541,18 +622,18 @@ describe('Semantic Color Tokens - Palette Update', () => {
 
   describe('Palette Update Requirements Coverage', () => {
     it('should satisfy Requirement 2.1: Success tokens reference green', () => {
-      expect(colorTokens['color.success.strong'].primitiveReferences.value).toBe('green400');
-      expect(colorTokens['color.success.subtle'].primitiveReferences.value).toBe('green100');
+      expect(colorTokens['color.feedback.success.text'].primitiveReferences.value).toBe('green400');
+      expect(colorTokens['color.feedback.success.background'].primitiveReferences.value).toBe('green100');
     });
 
     it('should satisfy Requirement 2.2: Error tokens reference pink', () => {
-      expect(colorTokens['color.error.strong'].primitiveReferences.value).toBe('pink400');
-      expect(colorTokens['color.error.subtle'].primitiveReferences.value).toBe('pink100');
+      expect(colorTokens['color.feedback.error.text'].primitiveReferences.value).toBe('pink400');
+      expect(colorTokens['color.feedback.error.background'].primitiveReferences.value).toBe('pink100');
     });
 
     it('should satisfy Requirement 2.3: Warning tokens reference amber (orange)', () => {
-      expect(colorTokens['color.warning.strong'].primitiveReferences.value).toBe('orange400');
-      expect(colorTokens['color.warning.subtle'].primitiveReferences.value).toBe('orange100');
+      expect(colorTokens['color.feedback.warning.text'].primitiveReferences.value).toBe('orange400');
+      expect(colorTokens['color.feedback.warning.background'].primitiveReferences.value).toBe('orange100');
     });
 
     it('should satisfy Requirement 2.4: New attention/highlight/tech/data tokens exist', () => {
@@ -573,71 +654,95 @@ describe('Semantic Color Tokens - Palette Update', () => {
   });
 
   /**
-   * Select Color Token Tests
+   * Feedback Select Color Token Tests (Spec 052)
    * 
-   * Tests for Select color tokens added in Spec 038: Vertical List Buttons.
+   * Tests for Feedback Select color tokens migrated from Spec 038: Vertical List Buttons.
    * Validates that Select tokens reference correct primitives and have proper structure.
+   * 
+   * UPDATED (Spec 052): Token names migrated to concept-first pattern
+   * - Old: color.select.selected.strong → New: color.feedback.select.text.rest
+   * - Old: color.select.selected.subtle → New: color.feedback.select.background.rest
+   * - Old: color.select.notSelected.strong → New: color.feedback.select.text.default
+   * - Old: color.select.notSelected.subtle → New: color.feedback.select.background.default
    */
-  describe('Select Color Tokens (Spec 038)', () => {
+  describe('Feedback Select Color Tokens (Spec 052)', () => {
     describe('Token Existence', () => {
-      it('should have color.select.selected.strong token', () => {
-        expect(colorTokens['color.select.selected.strong']).toBeDefined();
+      it('should have color.feedback.select.text.rest token', () => {
+        expect(colorTokens['color.feedback.select.text.rest']).toBeDefined();
       });
 
-      it('should have color.select.selected.subtle token', () => {
-        expect(colorTokens['color.select.selected.subtle']).toBeDefined();
+      it('should have color.feedback.select.background.rest token', () => {
+        expect(colorTokens['color.feedback.select.background.rest']).toBeDefined();
       });
 
-      it('should have color.select.notSelected.strong token', () => {
-        expect(colorTokens['color.select.notSelected.strong']).toBeDefined();
+      it('should have color.feedback.select.text.default token', () => {
+        expect(colorTokens['color.feedback.select.text.default']).toBeDefined();
       });
 
-      it('should have color.select.notSelected.subtle token', () => {
-        expect(colorTokens['color.select.notSelected.subtle']).toBeDefined();
+      it('should have color.feedback.select.background.default token', () => {
+        expect(colorTokens['color.feedback.select.background.default']).toBeDefined();
+      });
+
+      it('should have color.feedback.select.border.rest token', () => {
+        expect(colorTokens['color.feedback.select.border.rest']).toBeDefined();
+      });
+
+      it('should have color.feedback.select.border.default token', () => {
+        expect(colorTokens['color.feedback.select.border.default']).toBeDefined();
       });
     });
 
     describe('Primitive References', () => {
-      it('should reference cyan400 primitive for selected foreground', () => {
-        const token = colorTokens['color.select.selected.strong'];
+      it('should reference cyan400 primitive for selected text', () => {
+        const token = colorTokens['color.feedback.select.text.rest'];
         expect(token.primitiveReferences.value).toBe('cyan400');
       });
 
       it('should reference cyan100 primitive for selected background', () => {
-        const token = colorTokens['color.select.selected.subtle'];
+        const token = colorTokens['color.feedback.select.background.rest'];
         expect(token.primitiveReferences.value).toBe('cyan100');
       });
 
-      it('should reference gray200 primitive for not-selected foreground', () => {
-        const token = colorTokens['color.select.notSelected.strong'];
+      it('should reference gray200 primitive for not-selected text', () => {
+        const token = colorTokens['color.feedback.select.text.default'];
         expect(token.primitiveReferences.value).toBe('gray200');
       });
 
       it('should reference gray100 primitive for not-selected background', () => {
-        const token = colorTokens['color.select.notSelected.subtle'];
+        const token = colorTokens['color.feedback.select.background.default'];
         expect(token.primitiveReferences.value).toBe('gray100');
       });
 
+      it('should reference cyan400 primitive for selected border', () => {
+        const token = colorTokens['color.feedback.select.border.rest'];
+        expect(token.primitiveReferences.value).toBe('cyan400');
+      });
+
+      it('should reference gray200 primitive for not-selected border', () => {
+        const token = colorTokens['color.feedback.select.border.default'];
+        expect(token.primitiveReferences.value).toBe('gray200');
+      });
+
       it('should verify cyan400 primitive exists', () => {
-        const token = colorTokens['color.select.selected.strong'];
+        const token = colorTokens['color.feedback.select.text.rest'];
         const primitiveName = token.primitiveReferences.value;
         expect(primitiveColorTokens).toHaveProperty(primitiveName);
       });
 
       it('should verify cyan100 primitive exists', () => {
-        const token = colorTokens['color.select.selected.subtle'];
+        const token = colorTokens['color.feedback.select.background.rest'];
         const primitiveName = token.primitiveReferences.value;
         expect(primitiveColorTokens).toHaveProperty(primitiveName);
       });
 
       it('should verify gray200 primitive exists', () => {
-        const token = colorTokens['color.select.notSelected.strong'];
+        const token = colorTokens['color.feedback.select.text.default'];
         const primitiveName = token.primitiveReferences.value;
         expect(primitiveColorTokens).toHaveProperty(primitiveName);
       });
 
       it('should verify gray100 primitive exists', () => {
-        const token = colorTokens['color.select.notSelected.subtle'];
+        const token = colorTokens['color.feedback.select.background.default'];
         const primitiveName = token.primitiveReferences.value;
         expect(primitiveColorTokens).toHaveProperty(primitiveName);
       });
@@ -645,106 +750,386 @@ describe('Semantic Color Tokens - Palette Update', () => {
 
     describe('Token Structure', () => {
       it('should have COLOR category for all select tokens', () => {
-        expect(colorTokens['color.select.selected.strong'].category).toBe(SemanticCategory.COLOR);
-        expect(colorTokens['color.select.selected.subtle'].category).toBe(SemanticCategory.COLOR);
-        expect(colorTokens['color.select.notSelected.strong'].category).toBe(SemanticCategory.COLOR);
-        expect(colorTokens['color.select.notSelected.subtle'].category).toBe(SemanticCategory.COLOR);
+        expect(colorTokens['color.feedback.select.text.rest'].category).toBe(SemanticCategory.COLOR);
+        expect(colorTokens['color.feedback.select.background.rest'].category).toBe(SemanticCategory.COLOR);
+        expect(colorTokens['color.feedback.select.text.default'].category).toBe(SemanticCategory.COLOR);
+        expect(colorTokens['color.feedback.select.background.default'].category).toBe(SemanticCategory.COLOR);
+        expect(colorTokens['color.feedback.select.border.rest'].category).toBe(SemanticCategory.COLOR);
+        expect(colorTokens['color.feedback.select.border.default'].category).toBe(SemanticCategory.COLOR);
       });
 
       it('should have meaningful context for selected tokens', () => {
-        const selectedToken = colorTokens['color.select.selected.strong'];
+        const selectedToken = colorTokens['color.feedback.select.text.rest'];
         expect(selectedToken.context).toBeTruthy();
         expect(selectedToken.context.toLowerCase()).toContain('selected');
 
-        const selectedBgToken = colorTokens['color.select.selected.subtle'];
+        const selectedBgToken = colorTokens['color.feedback.select.background.rest'];
         expect(selectedBgToken.context).toBeTruthy();
         expect(selectedBgToken.context.toLowerCase()).toContain('selected');
       });
 
       it('should have meaningful context for not-selected tokens', () => {
-        const notSelectedToken = colorTokens['color.select.notSelected.strong'];
+        const notSelectedToken = colorTokens['color.feedback.select.text.default'];
         expect(notSelectedToken.context).toBeTruthy();
         expect(notSelectedToken.context.toLowerCase()).toContain('not-selected');
 
-        const notSelectedBgToken = colorTokens['color.select.notSelected.subtle'];
+        const notSelectedBgToken = colorTokens['color.feedback.select.background.default'];
         expect(notSelectedBgToken.context).toBeTruthy();
         expect(notSelectedBgToken.context.toLowerCase()).toContain('not-selected');
       });
 
       it('should have descriptions for all select tokens', () => {
-        expect(colorTokens['color.select.selected.strong'].description).toBeTruthy();
-        expect(colorTokens['color.select.selected.subtle'].description).toBeTruthy();
-        expect(colorTokens['color.select.notSelected.strong'].description).toBeTruthy();
-        expect(colorTokens['color.select.notSelected.subtle'].description).toBeTruthy();
+        expect(colorTokens['color.feedback.select.text.rest'].description).toBeTruthy();
+        expect(colorTokens['color.feedback.select.background.rest'].description).toBeTruthy();
+        expect(colorTokens['color.feedback.select.text.default'].description).toBeTruthy();
+        expect(colorTokens['color.feedback.select.background.default'].description).toBeTruthy();
+        expect(colorTokens['color.feedback.select.border.rest'].description).toBeTruthy();
+        expect(colorTokens['color.feedback.select.border.default'].description).toBeTruthy();
       });
     });
 
     describe('Utility Function Access', () => {
-      it('should return color.select.selected.strong via getColorToken()', () => {
-        const token = getColorToken('color.select.selected.strong');
+      it('should return color.feedback.select.text.rest via getColorToken()', () => {
+        const token = getColorToken('color.feedback.select.text.rest');
         expect(token).toBeDefined();
-        expect(token?.name).toBe('color.select.selected.strong');
+        expect(token?.name).toBe('color.feedback.select.text.rest');
       });
 
-      it('should return color.select.selected.subtle via getColorToken()', () => {
-        const token = getColorToken('color.select.selected.subtle');
+      it('should return color.feedback.select.background.rest via getColorToken()', () => {
+        const token = getColorToken('color.feedback.select.background.rest');
         expect(token).toBeDefined();
-        expect(token?.name).toBe('color.select.selected.subtle');
+        expect(token?.name).toBe('color.feedback.select.background.rest');
       });
 
-      it('should return color.select.notSelected.strong via getColorToken()', () => {
-        const token = getColorToken('color.select.notSelected.strong');
+      it('should return color.feedback.select.text.default via getColorToken()', () => {
+        const token = getColorToken('color.feedback.select.text.default');
         expect(token).toBeDefined();
-        expect(token?.name).toBe('color.select.notSelected.strong');
+        expect(token?.name).toBe('color.feedback.select.text.default');
       });
 
-      it('should return color.select.notSelected.subtle via getColorToken()', () => {
-        const token = getColorToken('color.select.notSelected.subtle');
+      it('should return color.feedback.select.background.default via getColorToken()', () => {
+        const token = getColorToken('color.feedback.select.background.default');
         expect(token).toBeDefined();
-        expect(token?.name).toBe('color.select.notSelected.subtle');
+        expect(token?.name).toBe('color.feedback.select.background.default');
       });
 
       it('should include all select tokens in getAllColorTokens()', () => {
         const tokens = getAllColorTokens();
         const tokenNames = tokens.map(t => t.name);
 
-        expect(tokenNames).toContain('color.select.selected.strong');
-        expect(tokenNames).toContain('color.select.selected.subtle');
-        expect(tokenNames).toContain('color.select.notSelected.strong');
-        expect(tokenNames).toContain('color.select.notSelected.subtle');
+        expect(tokenNames).toContain('color.feedback.select.text.rest');
+        expect(tokenNames).toContain('color.feedback.select.background.rest');
+        expect(tokenNames).toContain('color.feedback.select.text.default');
+        expect(tokenNames).toContain('color.feedback.select.background.default');
+        expect(tokenNames).toContain('color.feedback.select.border.rest');
+        expect(tokenNames).toContain('color.feedback.select.border.default');
       });
     });
 
     describe('Token Count Includes Select Tokens', () => {
-      it('should have exactly 4 select tokens', () => {
-        const selectTokens = colorTokenNames.filter(n => n.startsWith('color.select'));
-        expect(selectTokens.length).toBe(4);
+      it('should have exactly 6 feedback select tokens', () => {
+        const selectTokens = colorTokenNames.filter(n => n.startsWith('color.feedback.select'));
+        expect(selectTokens.length).toBe(6);
       });
 
-      it('should include select tokens in total count of 40', () => {
-        // Verify total count includes the 4 select tokens and 5 avatar tokens and 2 badge tokens
-        // 28 base + 1 background.primary.subtle + 4 select + 5 avatar + 2 badge = 40
-        expect(colorTokenNames.length).toBe(40);
+      it('should include select tokens in total count of 48', () => {
+        // Verify total count includes the 6 feedback select tokens
+        // Updated for Spec 052: 40 - 12 old + 18 new - 2 old + 2 new - 1 old + 2 new - 1 old + 2 new = 48
+        expect(colorTokenNames.length).toBe(48);
         expect(validateColorTokenCount()).toBe(true);
       });
     });
   });
 
-  // Avatar Color Tokens (Spec 042: Avatar Component)
-  describe('Avatar Color Tokens (Spec 042)', () => {
+  // Identity Concept Tokens (Spec 052: Semantic Token Naming Implementation)
+  describe('Identity Concept Tokens (Spec 052)', () => {
     describe('Token Existence', () => {
-      it('should have color.avatar.human token', () => {
+      it('should have color.identity.human token', () => {
+        const token = colorTokens['color.identity.human'];
+        expect(token).toBeDefined();
+        expect(token.name).toBe('color.identity.human');
+      });
+
+      it('should have color.identity.agent token', () => {
+        const token = colorTokens['color.identity.agent'];
+        expect(token).toBeDefined();
+        expect(token.name).toBe('color.identity.agent');
+      });
+    });
+
+    describe('Primitive References', () => {
+      it('color.identity.human should reference orange300', () => {
+        const token = colorTokens['color.identity.human'];
+        expect(token.primitiveReferences.value).toBe('orange300');
+      });
+
+      it('color.identity.agent should reference teal200', () => {
+        const token = colorTokens['color.identity.agent'];
+        expect(token.primitiveReferences.value).toBe('teal200');
+      });
+    });
+
+    describe('Token Structure', () => {
+      it('color.identity.human should have correct category', () => {
+        const token = colorTokens['color.identity.human'];
+        expect(token.category).toBe(SemanticCategory.COLOR);
+      });
+
+      it('color.identity.agent should have correct category', () => {
+        const token = colorTokens['color.identity.agent'];
+        expect(token.category).toBe(SemanticCategory.COLOR);
+      });
+
+      it('color.identity.human should have context and description', () => {
+        const token = colorTokens['color.identity.human'];
+        expect(token.context).toBeDefined();
+        expect(token.context.length).toBeGreaterThan(0);
+        expect(token.description).toBeDefined();
+        expect(token.description.length).toBeGreaterThan(0);
+      });
+
+      it('color.identity.agent should have context and description', () => {
+        const token = colorTokens['color.identity.agent'];
+        expect(token.context).toBeDefined();
+        expect(token.context.length).toBeGreaterThan(0);
+        expect(token.description).toBeDefined();
+        expect(token.description.length).toBeGreaterThan(0);
+      });
+    });
+
+    describe('Utility Function Access', () => {
+      it('should return color.identity.human via getColorToken()', () => {
+        const token = getColorToken('color.identity.human');
+        expect(token).toBeDefined();
+        expect(token?.name).toBe('color.identity.human');
+      });
+
+      it('should return color.identity.agent via getColorToken()', () => {
+        const token = getColorToken('color.identity.agent');
+        expect(token).toBeDefined();
+        expect(token?.name).toBe('color.identity.agent');
+      });
+
+      it('should include all identity tokens in getAllColorTokens()', () => {
+        const tokens = getAllColorTokens();
+        const tokenNames = tokens.map(t => t.name);
+
+        expect(tokenNames).toContain('color.identity.human');
+        expect(tokenNames).toContain('color.identity.agent');
+      });
+    });
+
+    describe('Token Count Includes Identity Tokens', () => {
+      it('should have exactly 2 identity tokens', () => {
+        const identityTokens = colorTokenNames.filter(n => n.startsWith('color.identity'));
+        expect(identityTokens.length).toBe(2);
+      });
+    });
+
+    describe('Migration from Avatar Tokens (Spec 052)', () => {
+      it('should NOT have old color.avatar.human token (migrated to color.identity.human)', () => {
         const token = colorTokens['color.avatar.human'];
-        expect(token).toBeDefined();
-        expect(token.name).toBe('color.avatar.human');
+        expect(token).toBeUndefined();
       });
 
-      it('should have color.avatar.agent token', () => {
+      it('should NOT have old color.avatar.agent token (migrated to color.identity.agent)', () => {
         const token = colorTokens['color.avatar.agent'];
+        expect(token).toBeUndefined();
+      });
+    });
+  });
+
+  // Action Concept Tokens (Spec 052: Semantic Token Naming Implementation)
+  describe('Action Concept Tokens (Spec 052)', () => {
+    describe('Token Existence', () => {
+      it('should have color.action.primary token', () => {
+        const token = colorTokens['color.action.primary'];
         expect(token).toBeDefined();
-        expect(token.name).toBe('color.avatar.agent');
+        expect(token.name).toBe('color.action.primary');
       });
 
+      it('should have color.action.secondary token', () => {
+        const token = colorTokens['color.action.secondary'];
+        expect(token).toBeDefined();
+        expect(token.name).toBe('color.action.secondary');
+      });
+    });
+
+    describe('Primitive References', () => {
+      it('color.action.primary should reference purple300', () => {
+        const token = colorTokens['color.action.primary'];
+        expect(token.primitiveReferences.value).toBe('purple300');
+      });
+
+      it('color.action.secondary should reference black400', () => {
+        const token = colorTokens['color.action.secondary'];
+        expect(token.primitiveReferences.value).toBe('black400');
+      });
+    });
+
+    describe('Token Structure', () => {
+      it('color.action.primary should have correct category', () => {
+        const token = colorTokens['color.action.primary'];
+        expect(token.category).toBe(SemanticCategory.COLOR);
+      });
+
+      it('color.action.secondary should have correct category', () => {
+        const token = colorTokens['color.action.secondary'];
+        expect(token.category).toBe(SemanticCategory.COLOR);
+      });
+
+      it('color.action.primary should have context and description', () => {
+        const token = colorTokens['color.action.primary'];
+        expect(token.context).toBeDefined();
+        expect(token.context.length).toBeGreaterThan(0);
+        expect(token.description).toBeDefined();
+        expect(token.description.length).toBeGreaterThan(0);
+      });
+
+      it('color.action.secondary should have context and description', () => {
+        const token = colorTokens['color.action.secondary'];
+        expect(token.context).toBeDefined();
+        expect(token.context.length).toBeGreaterThan(0);
+        expect(token.description).toBeDefined();
+        expect(token.description.length).toBeGreaterThan(0);
+      });
+    });
+
+    describe('Utility Function Access', () => {
+      it('should return color.action.primary via getColorToken()', () => {
+        const token = getColorToken('color.action.primary');
+        expect(token).toBeDefined();
+        expect(token?.name).toBe('color.action.primary');
+      });
+
+      it('should return color.action.secondary via getColorToken()', () => {
+        const token = getColorToken('color.action.secondary');
+        expect(token).toBeDefined();
+        expect(token?.name).toBe('color.action.secondary');
+      });
+
+      it('should include all action tokens in getAllColorTokens()', () => {
+        const tokens = getAllColorTokens();
+        const tokenNames = tokens.map(t => t.name);
+
+        expect(tokenNames).toContain('color.action.primary');
+        expect(tokenNames).toContain('color.action.secondary');
+      });
+    });
+
+    describe('Token Count Includes Action Tokens', () => {
+      it('should have exactly 2 action tokens', () => {
+        const actionTokens = colorTokenNames.filter(n => n.startsWith('color.action'));
+        expect(actionTokens.length).toBe(2);
+      });
+    });
+
+    describe('Migration from Brand Token (Spec 052)', () => {
+      it('should NOT have old color.primary token (migrated to color.action.primary)', () => {
+        const token = colorTokens['color.primary'];
+        expect(token).toBeUndefined();
+      });
+    });
+  });
+
+  // Contrast Concept Tokens (Spec 052: Semantic Token Naming Implementation)
+  describe('Contrast Concept Tokens (Spec 052)', () => {
+    describe('Token Existence', () => {
+      it('should have color.contrast.onLight token', () => {
+        const token = colorTokens['color.contrast.onLight'];
+        expect(token).toBeDefined();
+        expect(token.name).toBe('color.contrast.onLight');
+      });
+
+      it('should have color.contrast.onDark token', () => {
+        const token = colorTokens['color.contrast.onDark'];
+        expect(token).toBeDefined();
+        expect(token.name).toBe('color.contrast.onDark');
+      });
+    });
+
+    describe('Primitive References', () => {
+      it('color.contrast.onLight should reference black500', () => {
+        const token = colorTokens['color.contrast.onLight'];
+        expect(token.primitiveReferences.value).toBe('black500');
+      });
+
+      it('color.contrast.onDark should reference white100', () => {
+        const token = colorTokens['color.contrast.onDark'];
+        expect(token.primitiveReferences.value).toBe('white100');
+      });
+    });
+
+    describe('Token Structure', () => {
+      it('color.contrast.onLight should have correct category', () => {
+        const token = colorTokens['color.contrast.onLight'];
+        expect(token.category).toBe(SemanticCategory.COLOR);
+      });
+
+      it('color.contrast.onDark should have correct category', () => {
+        const token = colorTokens['color.contrast.onDark'];
+        expect(token.category).toBe(SemanticCategory.COLOR);
+      });
+
+      it('color.contrast.onLight should have context and description', () => {
+        const token = colorTokens['color.contrast.onLight'];
+        expect(token.context).toBeDefined();
+        expect(token.context.length).toBeGreaterThan(0);
+        expect(token.description).toBeDefined();
+        expect(token.description.length).toBeGreaterThan(0);
+      });
+
+      it('color.contrast.onDark should have context and description', () => {
+        const token = colorTokens['color.contrast.onDark'];
+        expect(token.context).toBeDefined();
+        expect(token.context.length).toBeGreaterThan(0);
+        expect(token.description).toBeDefined();
+        expect(token.description.length).toBeGreaterThan(0);
+      });
+    });
+
+    describe('Utility Function Access', () => {
+      it('should return color.contrast.onLight via getColorToken()', () => {
+        const token = getColorToken('color.contrast.onLight');
+        expect(token).toBeDefined();
+        expect(token?.name).toBe('color.contrast.onLight');
+      });
+
+      it('should return color.contrast.onDark via getColorToken()', () => {
+        const token = getColorToken('color.contrast.onDark');
+        expect(token).toBeDefined();
+        expect(token?.name).toBe('color.contrast.onDark');
+      });
+
+      it('should include all contrast tokens in getAllColorTokens()', () => {
+        const tokens = getAllColorTokens();
+        const tokenNames = tokens.map(t => t.name);
+
+        expect(tokenNames).toContain('color.contrast.onLight');
+        expect(tokenNames).toContain('color.contrast.onDark');
+      });
+    });
+
+    describe('Token Count Includes Contrast Tokens', () => {
+      it('should have exactly 2 contrast tokens', () => {
+        const contrastTokens = colorTokenNames.filter(n => n.startsWith('color.contrast'));
+        expect(contrastTokens.length).toBe(2);
+      });
+    });
+
+    describe('Migration from onPrimary Token (Spec 052)', () => {
+      it('should NOT have old color.contrast.onPrimary token (migrated to color.contrast.onDark)', () => {
+        const token = colorTokens['color.contrast.onPrimary'];
+        expect(token).toBeUndefined();
+      });
+    });
+  });
+
+  // Avatar Color Tokens (Spec 042: Avatar Component) - Updated for Spec 052
+  // Note: color.avatar.human and color.avatar.agent removed in Spec 052
+  // These are now semantic identity tokens: color.identity.human, color.identity.agent
+  describe('Avatar Color Tokens (Spec 042, Updated Spec 052)', () => {
+    describe('Token Existence', () => {
       it('should have color.avatar.contrast.onHuman token', () => {
         const token = colorTokens['color.avatar.contrast.onHuman'];
         expect(token).toBeDefined();
@@ -765,16 +1150,6 @@ describe('Semantic Color Tokens - Palette Update', () => {
     });
 
     describe('Primitive References', () => {
-      it('color.avatar.human should reference orange300', () => {
-        const token = colorTokens['color.avatar.human'];
-        expect(token.primitiveReferences.value).toBe('orange300');
-      });
-
-      it('color.avatar.agent should reference teal200', () => {
-        const token = colorTokens['color.avatar.agent'];
-        expect(token.primitiveReferences.value).toBe('teal200');
-      });
-
       it('color.avatar.contrast.onHuman should reference white100', () => {
         const token = colorTokens['color.avatar.contrast.onHuman'];
         expect(token.primitiveReferences.value).toBe('white100');
@@ -792,16 +1167,6 @@ describe('Semantic Color Tokens - Palette Update', () => {
     });
 
     describe('Token Structure', () => {
-      it('color.avatar.human should have correct category', () => {
-        const token = colorTokens['color.avatar.human'];
-        expect(token.category).toBe(SemanticCategory.COLOR);
-      });
-
-      it('color.avatar.agent should have correct category', () => {
-        const token = colorTokens['color.avatar.agent'];
-        expect(token.category).toBe(SemanticCategory.COLOR);
-      });
-
       it('color.avatar.contrast.onHuman should have correct category', () => {
         const token = colorTokens['color.avatar.contrast.onHuman'];
         expect(token.category).toBe(SemanticCategory.COLOR);
@@ -815,22 +1180,6 @@ describe('Semantic Color Tokens - Palette Update', () => {
       it('color.avatar.border should have correct category', () => {
         const token = colorTokens['color.avatar.border'];
         expect(token.category).toBe(SemanticCategory.COLOR);
-      });
-
-      it('color.avatar.human should have context and description', () => {
-        const token = colorTokens['color.avatar.human'];
-        expect(token.context).toBeDefined();
-        expect(token.context.length).toBeGreaterThan(0);
-        expect(token.description).toBeDefined();
-        expect(token.description.length).toBeGreaterThan(0);
-      });
-
-      it('color.avatar.agent should have context and description', () => {
-        const token = colorTokens['color.avatar.agent'];
-        expect(token.context).toBeDefined();
-        expect(token.context.length).toBeGreaterThan(0);
-        expect(token.description).toBeDefined();
-        expect(token.description.length).toBeGreaterThan(0);
       });
 
       it('color.avatar.contrast.onHuman should have context and description', () => {
@@ -859,18 +1208,6 @@ describe('Semantic Color Tokens - Palette Update', () => {
     });
 
     describe('Utility Function Access', () => {
-      it('should return color.avatar.human via getColorToken()', () => {
-        const token = getColorToken('color.avatar.human');
-        expect(token).toBeDefined();
-        expect(token?.name).toBe('color.avatar.human');
-      });
-
-      it('should return color.avatar.agent via getColorToken()', () => {
-        const token = getColorToken('color.avatar.agent');
-        expect(token).toBeDefined();
-        expect(token?.name).toBe('color.avatar.agent');
-      });
-
       it('should return color.avatar.contrast.onHuman via getColorToken()', () => {
         const token = getColorToken('color.avatar.contrast.onHuman');
         expect(token).toBeDefined();
@@ -889,12 +1226,10 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(token?.name).toBe('color.avatar.border');
       });
 
-      it('should include all avatar tokens in getAllColorTokens()', () => {
+      it('should include all remaining avatar tokens in getAllColorTokens()', () => {
         const tokens = getAllColorTokens();
         const tokenNames = tokens.map(t => t.name);
 
-        expect(tokenNames).toContain('color.avatar.human');
-        expect(tokenNames).toContain('color.avatar.agent');
         expect(tokenNames).toContain('color.avatar.contrast.onHuman');
         expect(tokenNames).toContain('color.avatar.contrast.onAgent');
         expect(tokenNames).toContain('color.avatar.border');
@@ -902,9 +1237,9 @@ describe('Semantic Color Tokens - Palette Update', () => {
     });
 
     describe('Token Count Includes Avatar Tokens', () => {
-      it('should have exactly 5 avatar tokens', () => {
+      it('should have exactly 3 avatar tokens (after Spec 052 migration)', () => {
         const avatarTokens = colorTokenNames.filter(n => n.startsWith('color.avatar'));
-        expect(avatarTokens.length).toBe(5);
+        expect(avatarTokens.length).toBe(3);
       });
     });
   });
@@ -1028,10 +1363,10 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(badgeTokens.length).toBe(2);
       });
 
-      it('should include badge tokens in total count of 40', () => {
+      it('should include badge tokens in total count of 48', () => {
         // Verify total count includes the 2 badge tokens
-        // 28 base + 1 background.primary.subtle + 4 select + 5 avatar + 2 badge = 40
-        expect(colorTokenNames.length).toBe(40);
+        // Updated for Spec 052: 40 - 12 old + 18 new - 2 old + 2 new - 1 old + 2 new - 1 old + 2 new = 48
+        expect(colorTokenNames.length).toBe(48);
         expect(validateColorTokenCount()).toBe(true);
       });
     });

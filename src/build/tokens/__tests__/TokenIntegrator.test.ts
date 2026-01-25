@@ -115,7 +115,7 @@ describe('TokenIntegrator - F1 Integration', () => {
 
       // Register semantic color tokens
       const colorSemantics = [
-        { ...semanticColorTokens['color.primary'], primitiveReferences: { value: 'purple300' } },
+        { ...semanticColorTokens['color.action.primary'], primitiveReferences: { value: 'purple300' } },
         { ...semanticColorTokens['color.text.default'], primitiveReferences: { value: 'gray300' } }
       ];
 
@@ -124,11 +124,11 @@ describe('TokenIntegrator - F1 Integration', () => {
       });
 
       // Verify tokens are registered
-      expect(semanticRegistry.has('color.primary')).toBe(true);
+      expect(semanticRegistry.has('color.action.primary')).toBe(true);
       expect(semanticRegistry.has('color.text.default')).toBe(true);
 
       // Verify token references
-      const primary = semanticRegistry.get('color.primary');
+      const primary = semanticRegistry.get('color.action.primary');
       expect(primary).toBeDefined();
       expect(primary?.primitiveReferences.value).toBe('purple300');
     });

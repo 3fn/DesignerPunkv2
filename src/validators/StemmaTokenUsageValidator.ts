@@ -269,11 +269,15 @@ const TOKEN_REFERENCE_PATTERNS = {
 
 /**
  * Known token categories for suggestions
+ * 
+ * Updated for Spec 052: Semantic Token Naming Implementation
+ * - color.primary → color.action.primary
+ * - color.contrast.onPrimary → color.contrast.onDark
  */
 export const TOKEN_CATEGORIES = {
   color: [
-    'color.primary', 'color.secondary', 'color.error', 'color.success',
-    'color.text.default', 'color.text.muted', 'color.contrast.onPrimary',
+    'color.action.primary', 'color.action.secondary', 'color.feedback.error.text', 'color.feedback.success.text',
+    'color.text.default', 'color.text.muted', 'color.contrast.onLight', 'color.contrast.onDark',
     'color.background', 'color.surface', 'color.border',
   ],
   spacing: [

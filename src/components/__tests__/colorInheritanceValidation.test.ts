@@ -15,6 +15,11 @@
  * 
  * Requirements: 2.7, 10.1, 10.2, 10.3
  * 
+ * UPDATED (Spec 052): Token names migrated to concept-first pattern
+ * - Old: color.success.strong → New: color.feedback.success.text
+ * - Old: color.error.strong → New: color.feedback.error.text
+ * - Old: color.warning.strong → New: color.feedback.warning.text
+ * 
  * @module components/__tests__/colorInheritanceValidation
  */
 
@@ -23,8 +28,8 @@ import { getColorToken as getPrimitiveColorToken } from '../../tokens/ColorToken
 
 describe('Color Inheritance Validation', () => {
   describe('Semantic Token Updates', () => {
-    it('should verify color.success.strong references green400 (not cyan400)', () => {
-      const successToken = colorTokens['color.success.strong'];
+    it('should verify color.feedback.success.text references green400 (not cyan400)', () => {
+      const successToken = colorTokens['color.feedback.success.text'];
       
       expect(successToken).toBeDefined();
       expect(successToken.primitiveReferences.value).toBe('green400');
@@ -33,8 +38,8 @@ describe('Color Inheritance Validation', () => {
       expect(successToken.primitiveReferences.value).not.toBe('cyan400');
     });
 
-    it('should verify color.error.strong references pink400 (not orange300)', () => {
-      const errorToken = colorTokens['color.error.strong'];
+    it('should verify color.feedback.error.text references pink400 (not orange300)', () => {
+      const errorToken = colorTokens['color.feedback.error.text'];
       
       expect(errorToken).toBeDefined();
       expect(errorToken.primitiveReferences.value).toBe('pink400');
@@ -43,8 +48,8 @@ describe('Color Inheritance Validation', () => {
       expect(errorToken.primitiveReferences.value).not.toBe('orange300');
     });
 
-    it('should verify color.warning.strong references amber (orange400, not yellow400)', () => {
-      const warningToken = colorTokens['color.warning.strong'];
+    it('should verify color.feedback.warning.text references amber (orange400, not yellow400)', () => {
+      const warningToken = colorTokens['color.feedback.warning.text'];
       
       expect(warningToken).toBeDefined();
       expect(warningToken.primitiveReferences.value).toBe('orange400');
@@ -95,10 +100,10 @@ describe('Color Inheritance Validation', () => {
   describe('Component Color Inheritance', () => {
     describe('ButtonCTA Success Variant', () => {
       it('should inherit green color through semantic token chain', () => {
-        // ButtonCTA would use color.success.strong for success variant
-        // Verify the token chain: ButtonCTA → color.success.strong → green400
+        // ButtonCTA would use color.feedback.success.text for success variant
+        // Verify the token chain: ButtonCTA → color.feedback.success.text → green400
         
-        const successToken = colorTokens['color.success.strong'];
+        const successToken = colorTokens['color.feedback.success.text'];
         const primitiveRef = successToken.primitiveReferences.value;
         
         expect(primitiveRef).toBe('green400');
@@ -110,7 +115,7 @@ describe('Color Inheritance Validation', () => {
       });
 
       it('should NOT use old cyan color for success', () => {
-        const successToken = colorTokens['color.success.strong'];
+        const successToken = colorTokens['color.feedback.success.text'];
         
         // Verify it doesn't reference cyan
         expect(successToken.primitiveReferences.value).not.toContain('cyan');
@@ -119,10 +124,10 @@ describe('Color Inheritance Validation', () => {
 
     describe('TextInputField Error State', () => {
       it('should inherit pink color through semantic token chain', () => {
-        // TextInputField uses color.error.strong for error state
-        // Verify the token chain: TextInputField → color.error.strong → pink400
+        // TextInputField uses color.feedback.error.text for error state
+        // Verify the token chain: TextInputField → color.feedback.error.text → pink400
         
-        const errorToken = colorTokens['color.error.strong'];
+        const errorToken = colorTokens['color.feedback.error.text'];
         const primitiveRef = errorToken.primitiveReferences.value;
         
         expect(primitiveRef).toBe('pink400');
@@ -134,7 +139,7 @@ describe('Color Inheritance Validation', () => {
       });
 
       it('should NOT use old orange color for error', () => {
-        const errorToken = colorTokens['color.error.strong'];
+        const errorToken = colorTokens['color.feedback.error.text'];
         
         // Verify it doesn't reference orange300 (old error color)
         expect(errorToken.primitiveReferences.value).not.toBe('orange300');
@@ -143,10 +148,10 @@ describe('Color Inheritance Validation', () => {
 
     describe('Warning States', () => {
       it('should inherit amber (orange) color through semantic token chain', () => {
-        // Components using color.warning.strong should get amber/orange
-        // Verify the token chain: Component → color.warning.strong → orange400
+        // Components using color.feedback.warning.text should get amber/orange
+        // Verify the token chain: Component → color.feedback.warning.text → orange400
         
-        const warningToken = colorTokens['color.warning.strong'];
+        const warningToken = colorTokens['color.feedback.warning.text'];
         const primitiveRef = warningToken.primitiveReferences.value;
         
         expect(primitiveRef).toBe('orange400');
@@ -157,7 +162,7 @@ describe('Color Inheritance Validation', () => {
       });
 
       it('should NOT use old yellow color for warning', () => {
-        const warningToken = colorTokens['color.warning.strong'];
+        const warningToken = colorTokens['color.feedback.warning.text'];
         
         // Verify it doesn't reference yellow400 (old warning color)
         expect(warningToken.primitiveReferences.value).not.toBe('yellow400');
@@ -186,20 +191,20 @@ describe('Color Inheritance Validation', () => {
 
     it('should verify components inherit colors without code changes', () => {
       // This test verifies the architectural principle:
-      // Components reference semantic tokens (e.g., color.success.strong)
+      // Components reference semantic tokens (e.g., color.feedback.success.text)
       // Semantic tokens reference primitive tokens (e.g., green400)
       // When primitive tokens change, components automatically inherit new colors
       
       // Verify the chain is intact for success colors
-      const successToken = colorTokens['color.success.strong'];
+      const successToken = colorTokens['color.feedback.success.text'];
       expect(successToken.primitiveReferences.value).toBe('green400');
       
       // Verify the chain is intact for error colors
-      const errorToken = colorTokens['color.error.strong'];
+      const errorToken = colorTokens['color.feedback.error.text'];
       expect(errorToken.primitiveReferences.value).toBe('pink400');
       
       // Verify the chain is intact for warning colors
-      const warningToken = colorTokens['color.warning.strong'];
+      const warningToken = colorTokens['color.feedback.warning.text'];
       expect(warningToken.primitiveReferences.value).toBe('orange400');
       
       // This confirms components using these semantic tokens will automatically

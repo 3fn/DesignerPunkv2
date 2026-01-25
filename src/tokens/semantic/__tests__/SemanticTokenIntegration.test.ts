@@ -45,9 +45,9 @@ describe('Semantic Token Barrel Export', () => {
 
 describe('getSemanticToken', () => {
   it('should retrieve color tokens by name', () => {
-    const token = getSemanticToken('color.primary');
+    const token = getSemanticToken('color.action.primary');
     expect(token).toBeDefined();
-    expect(token?.name).toBe('color.primary');
+    expect(token?.name).toBe('color.action.primary');
     expect(token?.category).toBe(SemanticCategory.COLOR);
   });
 
@@ -148,7 +148,7 @@ describe('getAllSemanticTokens', () => {
     // Verify color tokens are included
     const colorTokens = tokens.filter(t => t.category === SemanticCategory.COLOR);
     expect(colorTokens.length).toBeGreaterThan(0);
-    expect(colorTokens.some(t => t.name === 'color.primary')).toBe(true);
+    expect(colorTokens.some(t => t.name === 'color.action.primary')).toBe(true);
     
     // Verify spacing tokens are included
     const spacingTokens = tokens.filter(t => t.category === SemanticCategory.SPACING);
@@ -248,7 +248,7 @@ describe('getSemanticTokensByCategory', () => {
 
 describe('validateSemanticTokenStructure', () => {
   it('should validate correct token structure', () => {
-    const token = getSemanticToken('color.primary');
+    const token = getSemanticToken('color.action.primary');
     expect(token).toBeDefined();
     
     const result = validateSemanticTokenStructure(token!);
@@ -392,14 +392,14 @@ describe('SemanticTokenRegistry Integration', () => {
   });
 
   it('should register color semantic tokens', () => {
-    const token = getSemanticToken('color.primary');
+    const token = getSemanticToken('color.action.primary');
     expect(token).toBeDefined();
     
     // Registry just stores tokens (validation moved to validators)
     semanticRegistry.register(token!);
     
-    expect(semanticRegistry.has('color.primary')).toBe(true);
-    expect(semanticRegistry.get('color.primary')).toEqual(token);
+    expect(semanticRegistry.has('color.action.primary')).toBe(true);
+    expect(semanticRegistry.get('color.action.primary')).toEqual(token);
   });
 
   it('should register typography semantic tokens', () => {
