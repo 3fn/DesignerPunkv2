@@ -51,15 +51,15 @@ export interface ColorTokenValue {
  * - Standard units: px, rem, pt, dp, sp, em
  * - Unitless: unitless (for line-height, font-weight, etc.)
  * - Typography: fontFamily, fontWeight
- * - Color: hex
+ * - Color: hex, rgba (RGBA format for native alpha channel support)
  * - Percentage: % (for percentage-based values like border-radius: 50%)
  * - Shape: shape (for platform-specific shape values like iOS Circle())
  * - Percent: percent (for numeric percentage values like Android 50%)
  */
 export interface PlatformValues {
-  web: { value: number | string | ColorTokenValue; unit: 'px' | 'rem' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' | 'hex' | '%' };
-  ios: { value: number | string | ColorTokenValue; unit: 'pt' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' | 'hex' | 'shape' };
-  android: { value: number | string | ColorTokenValue; unit: 'dp' | 'sp' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' | 'hex' | 'percent' };
+  web: { value: number | string | ColorTokenValue; unit: 'px' | 'rem' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' | 'hex' | 'rgba' | '%' };
+  ios: { value: number | string | ColorTokenValue; unit: 'pt' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' | 'hex' | 'rgba' | 'shape' };
+  android: { value: number | string | ColorTokenValue; unit: 'dp' | 'sp' | 'unitless' | 'fontFamily' | 'fontWeight' | 'em' | 'hex' | 'rgba' | 'percent' };
 }
 
 /**

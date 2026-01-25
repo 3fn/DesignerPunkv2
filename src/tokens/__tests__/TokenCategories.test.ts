@@ -503,10 +503,10 @@ describe('Token Categories', () => {
       const allTokens = getAllColorTokens();
 
       allTokens.forEach(token => {
-        // Validate mode-aware structure integration
-        expect(token.platforms.web.unit).toBe('hex');
-        expect(token.platforms.ios.unit).toBe('hex');
-        expect(token.platforms.android.unit).toBe('hex');
+        // Validate mode-aware structure integration (Spec 052: RGBA Migration)
+        expect(token.platforms.web.unit).toBe('rgba');
+        expect(token.platforms.ios.unit).toBe('rgba');
+        expect(token.platforms.android.unit).toBe('rgba');
 
         // Validate color token flags are appropriate
         expect(token.baselineGridAlignment).toBe(false);
@@ -517,7 +517,7 @@ describe('Token Categories', () => {
 
     test('should integrate color families with systematic color scale', () => {
       expect(COLOR_SCALE).toEqual([100, 200, 300, 400, 500]);
-      expect(Object.keys(COLOR_FAMILIES)).toHaveLength(14); // 10 original + 4 shadow families
+      expect(Object.keys(COLOR_FAMILIES)).toHaveLength(15); // 10 original + 1 shadow + 4 shadow sub-families
 
       // Test that main families follow the full scale
       const mainFamilies = ['gray', 'black', 'white', 'yellow', 'orange', 'purple', 'green', 'pink', 'cyan', 'teal'];
@@ -547,10 +547,11 @@ describe('Token Categories', () => {
       const darkBase = resolveColorTokenValue(testToken, 'dark', 'base');
       const darkWcag = resolveColorTokenValue(testToken, 'dark', 'wcag');
 
-      expect(lightBase).toMatch(/^#[0-9A-F]{6}$/i);
-      expect(lightWcag).toMatch(/^#[0-9A-F]{6}$/i);
-      expect(darkBase).toMatch(/^#[0-9A-F]{6}$/i);
-      expect(darkWcag).toMatch(/^#[0-9A-F]{6}$/i);
+      // Spec 052: RGBA Migration - color tokens now use RGBA format
+      expect(lightBase).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
+      expect(lightWcag).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
+      expect(darkBase).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
+      expect(darkWcag).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
     });
 
     test('should maintain cross-platform consistency for mode-aware color tokens', () => {

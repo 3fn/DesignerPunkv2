@@ -257,7 +257,7 @@ export class IOSShadowGenerator {
   /**
    * Generate UIColor Swift code from color value
    * 
-   * @param colorValue - Color value (rgb string or UIColor code)
+   * @param colorValue - Color value (rgba string, rgb string, hex, or UIColor code)
    * @param opacity - Opacity value (0-1)
    * @returns Swift UIColor code
    */
@@ -265,6 +265,21 @@ export class IOSShadowGenerator {
     // If it's already UIColor code, return it
     if (colorValue.startsWith('UIColor')) {
       return colorValue;
+    }
+    
+    // Handle rgba() format (Spec 052: RGBA Migration)
+    if (colorValue.startsWith('rgba(')) {
+      const rgbaValues = colorValue.match(/rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)/);
+      
+      if (rgbaValues) {
+        const [, r, g, b, a] = rgbaValues;
+        const rNorm = parseInt(r) / 255;
+        const gNorm = parseInt(g) / 255;
+        const bNorm = parseInt(b) / 255;
+        const alpha = parseFloat(a);
+        
+        return `UIColor(red: ${rNorm.toFixed(3)}, green: ${gNorm.toFixed(3)}, blue: ${bNorm.toFixed(3)}, alpha: ${alpha.toFixed(1)})`;
+      }
     }
     
     // Handle rgb() format

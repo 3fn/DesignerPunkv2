@@ -66,7 +66,8 @@ describe('TokenIntegrator - F1 Integration', () => {
       const gray300 = primitiveRegistry.get('gray300');
       expect(gray300).toBeDefined();
       expect(gray300?.category).toBe('color');
-      expect(gray300?.platforms.web.unit).toBe('hex');
+      // Spec 052: RGBA Migration - color tokens now use RGBA format
+      expect(gray300?.platforms.web.unit).toBe('rgba');
     });
   });
 

@@ -59,11 +59,11 @@ describe('Color Tokens', () => {
         expect(colorValue.dark).toHaveProperty('base');
         expect(colorValue.dark).toHaveProperty('wcag');
         
-        // Validate all values are valid hex colors
-        expect(colorValue.light.base).toMatch(/^#[0-9A-F]{6}$/i);
-        expect(colorValue.light.wcag).toMatch(/^#[0-9A-F]{6}$/i);
-        expect(colorValue.dark.base).toMatch(/^#[0-9A-F]{6}$/i);
-        expect(colorValue.dark.wcag).toMatch(/^#[0-9A-F]{6}$/i);
+        // Validate all values are valid RGBA colors (Spec 052: RGBA Migration)
+        expect(colorValue.light.base).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
+        expect(colorValue.light.wcag).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
+        expect(colorValue.dark.base).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
+        expect(colorValue.dark.wcag).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
       });
     });
 
@@ -86,10 +86,10 @@ describe('Color Tokens', () => {
         expect(iosValue.dark.base).toBe(androidValue.dark.base);
         expect(iosValue.dark.wcag).toBe(androidValue.dark.wcag);
         
-        // Validate unit consistency
-        expect(token.platforms.web.unit).toBe('hex');
-        expect(token.platforms.ios.unit).toBe('hex');
-        expect(token.platforms.android.unit).toBe('hex');
+        // Validate unit consistency (Spec 052: RGBA Migration)
+        expect(token.platforms.web.unit).toBe('rgba');
+        expect(token.platforms.ios.unit).toBe('rgba');
+        expect(token.platforms.android.unit).toBe('rgba');
       });
     });
 
@@ -103,50 +103,38 @@ describe('Color Tokens', () => {
       COLOR_MODES.forEach(mode => {
         COLOR_THEMES.forEach(theme => {
           const resolvedValue = resolveColorTokenValue(testToken, mode, theme);
-          expect(resolvedValue).toMatch(/^#[0-9A-F]{6}$/i);
+          expect(resolvedValue).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
         });
       });
     });
   });
 
-  describe('Systematic Color Token Hex Value Accuracy', () => {
-    test('should have valid hex color values for all tokens', () => {
+  describe('Systematic Color Token RGBA Value Accuracy', () => {
+    test('should have valid RGBA color values for all tokens', () => {
       const allTokens = getAllColorTokens();
       
       allTokens.forEach(token => {
         const colorValue = token.platforms.web.value as ColorTokenValue;
         
-        // Test all mode/theme combinations for valid hex format
-        expect(colorValue.light.base).toMatch(/^#[0-9A-F]{6}$/i);
-        expect(colorValue.light.wcag).toMatch(/^#[0-9A-F]{6}$/i);
-        expect(colorValue.dark.base).toMatch(/^#[0-9A-F]{6}$/i);
-        expect(colorValue.dark.wcag).toMatch(/^#[0-9A-F]{6}$/i);
-        
-        // Validate hex values are uppercase
-        expect(colorValue.light.base).toBe(colorValue.light.base.toUpperCase());
-        expect(colorValue.light.wcag).toBe(colorValue.light.wcag.toUpperCase());
-        expect(colorValue.dark.base).toBe(colorValue.dark.base.toUpperCase());
-        expect(colorValue.dark.wcag).toBe(colorValue.dark.wcag.toUpperCase());
+        // Test all mode/theme combinations for valid RGBA format (Spec 052: RGBA Migration)
+        expect(colorValue.light.base).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
+        expect(colorValue.light.wcag).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
+        expect(colorValue.dark.base).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
+        expect(colorValue.dark.wcag).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
       });
     });
 
-    test('should have consistent hex value formatting across modes and themes', () => {
+    test('should have consistent RGBA value formatting across modes and themes', () => {
       const allTokens = getAllColorTokens();
       
       allTokens.forEach(token => {
         const colorValue = token.platforms.web.value as ColorTokenValue;
         
-        // All hex values should be 7 characters (#RRGGBB)
-        expect(colorValue.light.base).toHaveLength(7);
-        expect(colorValue.light.wcag).toHaveLength(7);
-        expect(colorValue.dark.base).toHaveLength(7);
-        expect(colorValue.dark.wcag).toHaveLength(7);
-        
-        // All should start with #
-        expect(colorValue.light.base).toMatch(/^#/);
-        expect(colorValue.light.wcag).toMatch(/^#/);
-        expect(colorValue.dark.base).toMatch(/^#/);
-        expect(colorValue.dark.wcag).toMatch(/^#/);
+        // All RGBA values should start with 'rgba(' (Spec 052: RGBA Migration)
+        expect(colorValue.light.base).toMatch(/^rgba\(/);
+        expect(colorValue.light.wcag).toMatch(/^rgba\(/);
+        expect(colorValue.dark.base).toMatch(/^rgba\(/);
+        expect(colorValue.dark.wcag).toMatch(/^rgba\(/);
       });
     });
 
@@ -299,12 +287,18 @@ describe('Color Tokens', () => {
     });
 
     test('should retrieve tokens by family correctly', () => {
-      Object.values(COLOR_FAMILIES).forEach(family => {
+      // Filter out individual shadow family names (shadowBlack, shadowBlue, etc.)
+      // as getColorTokensByFamily only supports 'shadow' for all shadow tokens
+      const supportedFamilies = Object.values(COLOR_FAMILIES).filter(f => 
+        !f.startsWith('shadow') || f === 'shadow'
+      );
+      
+      supportedFamilies.forEach(family => {
         const familyTokens = getColorTokensByFamily(family as any);
         
-        if (family.startsWith('shadow')) {
-          // Shadow color families have 1 token each (shadowBlack100, shadowBlue100, etc.)
-          expect(familyTokens).toHaveLength(1);
+        if (family === 'shadow') {
+          // Shadow color family returns all 4 shadow tokens when queried with 'shadow'
+          expect(familyTokens).toHaveLength(4);
           familyTokens.forEach(token => {
             expect(token.name).toMatch(/^shadow(Black|Blue|Orange|Gray)100$/);
           });
@@ -330,9 +324,9 @@ describe('Color Tokens', () => {
         expect(colorValue.light.wcag).toBeDefined();
         expect(colorValue.dark.wcag).toBeDefined();
         
-        // WCAG values should be valid hex colors
-        expect(colorValue.light.wcag).toMatch(/^#[0-9A-F]{6}$/i);
-        expect(colorValue.dark.wcag).toMatch(/^#[0-9A-F]{6}$/i);
+        // WCAG values should be valid RGBA colors (Spec 052: RGBA Migration)
+        expect(colorValue.light.wcag).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
+        expect(colorValue.dark.wcag).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
       });
     });
 
@@ -346,9 +340,9 @@ describe('Color Tokens', () => {
         expect(colorValue.light.base).toBeDefined();
         expect(colorValue.dark.base).toBeDefined();
         
-        // Base values should be valid hex colors
-        expect(colorValue.light.base).toMatch(/^#[0-9A-F]{6}$/i);
-        expect(colorValue.dark.base).toMatch(/^#[0-9A-F]{6}$/i);
+        // Base values should be valid RGBA colors (Spec 052: RGBA Migration)
+        expect(colorValue.light.base).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
+        expect(colorValue.dark.base).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
       });
     });
 
@@ -357,7 +351,7 @@ describe('Color Tokens', () => {
       
       // Test default resolution (light mode, base theme)
       const defaultValue = resolveColorTokenValue(testToken);
-      expect(defaultValue).toMatch(/^#[0-9A-F]{6}$/i);
+      expect(defaultValue).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
       
       // Test explicit mode and theme resolution
       const lightBase = resolveColorTokenValue(testToken, 'light', 'base');
@@ -365,10 +359,10 @@ describe('Color Tokens', () => {
       const darkBase = resolveColorTokenValue(testToken, 'dark', 'base');
       const darkWcag = resolveColorTokenValue(testToken, 'dark', 'wcag');
       
-      expect(lightBase).toMatch(/^#[0-9A-F]{6}$/i);
-      expect(lightWcag).toMatch(/^#[0-9A-F]{6}$/i);
-      expect(darkBase).toMatch(/^#[0-9A-F]{6}$/i);
-      expect(darkWcag).toMatch(/^#[0-9A-F]{6}$/i);
+      expect(lightBase).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
+      expect(lightWcag).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
+      expect(darkBase).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
+      expect(darkWcag).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
       
       // Default should match light base
       expect(defaultValue).toBe(lightBase);
@@ -450,8 +444,8 @@ describe('Color Tokens', () => {
       const baseTheme = resolveColorTokenValue(testToken, 'light', 'base');
       const wcagTheme = resolveColorTokenValue(testToken, 'light', 'wcag');
       
-      expect(baseTheme).toMatch(/^#[0-9A-F]{6}$/i);
-      expect(wcagTheme).toMatch(/^#[0-9A-F]{6}$/i);
+      expect(baseTheme).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
+      expect(wcagTheme).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
       
       // Themes may be different for accessibility compliance
       // (but we don't require them to be different as some colors may be compliant in base theme)
@@ -631,18 +625,18 @@ describe('Color Tokens', () => {
       const green400 = getColorToken('green400');
       const colorValue = green400.platforms.web.value as ColorTokenValue;
       
-      // Verify green400 has the electric green base color
-      expect(colorValue.light.base).toMatch(/^#[0-9A-F]{6}$/i);
-      expect(colorValue.dark.base).toMatch(/^#[0-9A-F]{6}$/i);
+      // Verify green400 has the electric green base color (Spec 052: RGBA Migration)
+      expect(colorValue.light.base).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
+      expect(colorValue.dark.base).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
       
-      // All green tokens should have valid hex values
+      // All green tokens should have valid RGBA values
       const greenFamily = Object.values(greenTokens);
       greenFamily.forEach(token => {
         const value = token.platforms.web.value as ColorTokenValue;
-        expect(value.light.base).toMatch(/^#[0-9A-F]{6}$/i);
-        expect(value.light.wcag).toMatch(/^#[0-9A-F]{6}$/i);
-        expect(value.dark.base).toMatch(/^#[0-9A-F]{6}$/i);
-        expect(value.dark.wcag).toMatch(/^#[0-9A-F]{6}$/i);
+        expect(value.light.base).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
+        expect(value.light.wcag).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
+        expect(value.dark.base).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
+        expect(value.dark.wcag).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
       });
     });
 
@@ -651,18 +645,18 @@ describe('Color Tokens', () => {
       const pink400 = getColorToken('pink400');
       const colorValue = pink400.platforms.web.value as ColorTokenValue;
       
-      // Verify pink400 has the hot pink base color
-      expect(colorValue.light.base).toMatch(/^#[0-9A-F]{6}$/i);
-      expect(colorValue.dark.base).toMatch(/^#[0-9A-F]{6}$/i);
+      // Verify pink400 has the hot pink base color (Spec 052: RGBA Migration)
+      expect(colorValue.light.base).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
+      expect(colorValue.dark.base).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
       
-      // All pink tokens should have valid hex values
+      // All pink tokens should have valid RGBA values
       const pinkFamily = Object.values(pinkTokens);
       pinkFamily.forEach(token => {
         const value = token.platforms.web.value as ColorTokenValue;
-        expect(value.light.base).toMatch(/^#[0-9A-F]{6}$/i);
-        expect(value.light.wcag).toMatch(/^#[0-9A-F]{6}$/i);
-        expect(value.dark.base).toMatch(/^#[0-9A-F]{6}$/i);
-        expect(value.dark.wcag).toMatch(/^#[0-9A-F]{6}$/i);
+        expect(value.light.base).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
+        expect(value.light.wcag).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
+        expect(value.dark.base).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
+        expect(value.dark.wcag).toMatch(/^rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*[\d.]+\)$/);
       });
     });
 
@@ -734,8 +728,9 @@ describe('Color Tokens', () => {
       expect(shadowBlack100.mathematicalRelationship).toContain('mode-agnostic');
       
       const colorValue = shadowBlack100.platforms.web.value as ColorTokenValue;
-      expect(colorValue.light.base).toBe('#000000');
-      expect(colorValue.dark.base).toBe('#000000');
+      // Spec 052: RGBA Migration - shadow colors now use RGBA format
+      expect(colorValue.light.base).toBe('rgba(0, 0, 0, 1)');
+      expect(colorValue.dark.base).toBe('rgba(0, 0, 0, 1)');
     });
 
     test('should validate shadowBlue100 token for sunrise/sunset lighting', () => {
@@ -747,8 +742,9 @@ describe('Color Tokens', () => {
       expect(shadowBlue100.mathematicalRelationship).toContain('mode-agnostic');
       
       const colorValue = shadowBlue100.platforms.web.value as ColorTokenValue;
-      expect(colorValue.light.base).toBe('#141928');
-      expect(colorValue.dark.base).toBe('#141928');
+      // Spec 052: RGBA Migration - shadow colors now use RGBA format
+      expect(colorValue.light.base).toBe('rgba(20, 25, 40, 1)');
+      expect(colorValue.dark.base).toBe('rgba(20, 25, 40, 1)');
     });
 
     test('should validate shadowOrange100 token for cool lighting environments', () => {
@@ -760,8 +756,9 @@ describe('Color Tokens', () => {
       expect(shadowOrange100.mathematicalRelationship).toContain('mode-agnostic');
       
       const colorValue = shadowOrange100.platforms.web.value as ColorTokenValue;
-      expect(colorValue.light.base).toBe('#19140F');
-      expect(colorValue.dark.base).toBe('#19140F');
+      // Spec 052: RGBA Migration - shadow colors now use RGBA format
+      expect(colorValue.light.base).toBe('rgba(25, 20, 15, 1)');
+      expect(colorValue.dark.base).toBe('rgba(25, 20, 15, 1)');
     });
 
     test('should validate shadowGray100 token for overcast/ambient lighting', () => {
@@ -773,8 +770,9 @@ describe('Color Tokens', () => {
       expect(shadowGray100.mathematicalRelationship).toContain('mode-agnostic');
       
       const colorValue = shadowGray100.platforms.web.value as ColorTokenValue;
-      expect(colorValue.light.base).toBe('#0F141E');
-      expect(colorValue.dark.base).toBe('#0F141E');
+      // Spec 052: RGBA Migration - shadow colors now use RGBA format
+      expect(colorValue.light.base).toBe('rgba(15, 20, 30, 1)');
+      expect(colorValue.dark.base).toBe('rgba(15, 20, 30, 1)');
     });
 
     test('should integrate shadow colors with token registry utilities', () => {

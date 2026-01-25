@@ -8,12 +8,15 @@
  * Color families: gray, black, white, yellow, orange, purple, green, pink, cyan, teal
  * Progression: 100-500 scale for systematic color relationships
  * Architecture: colorToken[systemMode][userTheme] resolution pattern
+ * 
+ * RGBA Migration (Spec 052): All primitive color tokens now use RGBA format for native
+ * alpha channel support and direct cross-platform color API mapping.
  */
 
 import { PrimitiveToken, TokenCategory, ColorTokenValue } from '../types/PrimitiveToken';
 
 /**
- * Color token base value (N/A for hex values, not mathematical)
+ * Color token base value (N/A for RGBA values, not mathematical)
  */
 export const COLOR_BASE_VALUE = 0; // N/A for categorical color tokens
 
@@ -34,24 +37,24 @@ export const grayTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#B8B6C8', wcag: '#B8B6C8' },
-          dark: { base: '#B8B6C8', wcag: '#B8B6C8' }
+          light: { base: 'rgba(184, 182, 200, 1)', wcag: 'rgba(184, 182, 200, 1)' },
+          dark: { base: 'rgba(184, 182, 200, 1)', wcag: 'rgba(184, 182, 200, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#B8B6C8', wcag: '#B8B6C8' },
-          dark: { base: '#B8B6C8', wcag: '#B8B6C8' }
+          light: { base: 'rgba(184, 182, 200, 1)', wcag: 'rgba(184, 182, 200, 1)' },
+          dark: { base: 'rgba(184, 182, 200, 1)', wcag: 'rgba(184, 182, 200, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#B8B6C8', wcag: '#B8B6C8' },
-          dark: { base: '#B8B6C8', wcag: '#B8B6C8' }
+          light: { base: 'rgba(184, 182, 200, 1)', wcag: 'rgba(184, 182, 200, 1)' },
+          dark: { base: 'rgba(184, 182, 200, 1)', wcag: 'rgba(184, 182, 200, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -69,24 +72,24 @@ export const grayTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#68658A', wcag: '#68658A' },
-          dark: { base: '#68658A', wcag: '#68658A' }
+          light: { base: 'rgba(104, 101, 138, 1)', wcag: 'rgba(104, 101, 138, 1)' },
+          dark: { base: 'rgba(104, 101, 138, 1)', wcag: 'rgba(104, 101, 138, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#68658A', wcag: '#68658A' },
-          dark: { base: '#68658A', wcag: '#68658A' }
+          light: { base: 'rgba(104, 101, 138, 1)', wcag: 'rgba(104, 101, 138, 1)' },
+          dark: { base: 'rgba(104, 101, 138, 1)', wcag: 'rgba(104, 101, 138, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#68658A', wcag: '#68658A' },
-          dark: { base: '#68658A', wcag: '#68658A' }
+          light: { base: 'rgba(104, 101, 138, 1)', wcag: 'rgba(104, 101, 138, 1)' },
+          dark: { base: 'rgba(104, 101, 138, 1)', wcag: 'rgba(104, 101, 138, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -104,24 +107,24 @@ export const grayTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#2D2B3E', wcag: '#2D2B3E' },
-          dark: { base: '#2D2B3E', wcag: '#2D2B3E' }
+          light: { base: 'rgba(45, 43, 62, 1)', wcag: 'rgba(45, 43, 62, 1)' },
+          dark: { base: 'rgba(45, 43, 62, 1)', wcag: 'rgba(45, 43, 62, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#2D2B3E', wcag: '#2D2B3E' },
-          dark: { base: '#2D2B3E', wcag: '#2D2B3E' }
+          light: { base: 'rgba(45, 43, 62, 1)', wcag: 'rgba(45, 43, 62, 1)' },
+          dark: { base: 'rgba(45, 43, 62, 1)', wcag: 'rgba(45, 43, 62, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#2D2B3E', wcag: '#2D2B3E' },
-          dark: { base: '#2D2B3E', wcag: '#2D2B3E' }
+          light: { base: 'rgba(45, 43, 62, 1)', wcag: 'rgba(45, 43, 62, 1)' },
+          dark: { base: 'rgba(45, 43, 62, 1)', wcag: 'rgba(45, 43, 62, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -139,24 +142,24 @@ export const grayTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#1F1D2E', wcag: '#1F1D2E' },
-          dark: { base: '#1F1D2E', wcag: '#1F1D2E' }
+          light: { base: 'rgba(31, 29, 46, 1)', wcag: 'rgba(31, 29, 46, 1)' },
+          dark: { base: 'rgba(31, 29, 46, 1)', wcag: 'rgba(31, 29, 46, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#1F1D2E', wcag: '#1F1D2E' },
-          dark: { base: '#1F1D2E', wcag: '#1F1D2E' }
+          light: { base: 'rgba(31, 29, 46, 1)', wcag: 'rgba(31, 29, 46, 1)' },
+          dark: { base: 'rgba(31, 29, 46, 1)', wcag: 'rgba(31, 29, 46, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#1F1D2E', wcag: '#1F1D2E' },
-          dark: { base: '#1F1D2E', wcag: '#1F1D2E' }
+          light: { base: 'rgba(31, 29, 46, 1)', wcag: 'rgba(31, 29, 46, 1)' },
+          dark: { base: 'rgba(31, 29, 46, 1)', wcag: 'rgba(31, 29, 46, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -174,24 +177,24 @@ export const grayTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#15131F', wcag: '#15131F' },
-          dark: { base: '#15131F', wcag: '#15131F' }
+          light: { base: 'rgba(21, 19, 31, 1)', wcag: 'rgba(21, 19, 31, 1)' },
+          dark: { base: 'rgba(21, 19, 31, 1)', wcag: 'rgba(21, 19, 31, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#15131F', wcag: '#15131F' },
-          dark: { base: '#15131F', wcag: '#15131F' }
+          light: { base: 'rgba(21, 19, 31, 1)', wcag: 'rgba(21, 19, 31, 1)' },
+          dark: { base: 'rgba(21, 19, 31, 1)', wcag: 'rgba(21, 19, 31, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#15131F', wcag: '#15131F' },
-          dark: { base: '#15131F', wcag: '#15131F' }
+          light: { base: 'rgba(21, 19, 31, 1)', wcag: 'rgba(21, 19, 31, 1)' },
+          dark: { base: 'rgba(21, 19, 31, 1)', wcag: 'rgba(21, 19, 31, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken
@@ -214,24 +217,24 @@ export const blackTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#3A3A45', wcag: '#52525C' },
-          dark: { base: '#3A3A45', wcag: '#52525C' }
+          light: { base: 'rgba(58, 58, 69, 1)', wcag: 'rgba(82, 82, 92, 1)' },
+          dark: { base: 'rgba(58, 58, 69, 1)', wcag: 'rgba(82, 82, 92, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#3A3A45', wcag: '#52525C' },
-          dark: { base: '#3A3A45', wcag: '#52525C' }
+          light: { base: 'rgba(58, 58, 69, 1)', wcag: 'rgba(82, 82, 92, 1)' },
+          dark: { base: 'rgba(58, 58, 69, 1)', wcag: 'rgba(82, 82, 92, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#3A3A45', wcag: '#52525C' },
-          dark: { base: '#3A3A45', wcag: '#52525C' }
+          light: { base: 'rgba(58, 58, 69, 1)', wcag: 'rgba(82, 82, 92, 1)' },
+          dark: { base: 'rgba(58, 58, 69, 1)', wcag: 'rgba(82, 82, 92, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -249,24 +252,24 @@ export const blackTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#22222A', wcag: '#2E2E38' },
-          dark: { base: '#22222A', wcag: '#2E2E38' }
+          light: { base: 'rgba(34, 34, 42, 1)', wcag: 'rgba(46, 46, 56, 1)' },
+          dark: { base: 'rgba(34, 34, 42, 1)', wcag: 'rgba(46, 46, 56, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#22222A', wcag: '#2E2E38' },
-          dark: { base: '#22222A', wcag: '#2E2E38' }
+          light: { base: 'rgba(34, 34, 42, 1)', wcag: 'rgba(46, 46, 56, 1)' },
+          dark: { base: 'rgba(34, 34, 42, 1)', wcag: 'rgba(46, 46, 56, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#22222A', wcag: '#2E2E38' },
-          dark: { base: '#22222A', wcag: '#2E2E38' }
+          light: { base: 'rgba(34, 34, 42, 1)', wcag: 'rgba(46, 46, 56, 1)' },
+          dark: { base: 'rgba(34, 34, 42, 1)', wcag: 'rgba(46, 46, 56, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -284,24 +287,24 @@ export const blackTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#0A0A0F', wcag: '#0A0A0F' },
-          dark: { base: '#0A0A0F', wcag: '#0A0A0F' }
+          light: { base: 'rgba(10, 10, 15, 1)', wcag: 'rgba(10, 10, 15, 1)' },
+          dark: { base: 'rgba(10, 10, 15, 1)', wcag: 'rgba(10, 10, 15, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#0A0A0F', wcag: '#0A0A0F' },
-          dark: { base: '#0A0A0F', wcag: '#0A0A0F' }
+          light: { base: 'rgba(10, 10, 15, 1)', wcag: 'rgba(10, 10, 15, 1)' },
+          dark: { base: 'rgba(10, 10, 15, 1)', wcag: 'rgba(10, 10, 15, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#0A0A0F', wcag: '#0A0A0F' },
-          dark: { base: '#0A0A0F', wcag: '#0A0A0F' }
+          light: { base: 'rgba(10, 10, 15, 1)', wcag: 'rgba(10, 10, 15, 1)' },
+          dark: { base: 'rgba(10, 10, 15, 1)', wcag: 'rgba(10, 10, 15, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -319,24 +322,24 @@ export const blackTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#06060A', wcag: '#06060A' },
-          dark: { base: '#06060A', wcag: '#06060A' }
+          light: { base: 'rgba(6, 6, 10, 1)', wcag: 'rgba(6, 6, 10, 1)' },
+          dark: { base: 'rgba(6, 6, 10, 1)', wcag: 'rgba(6, 6, 10, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#06060A', wcag: '#06060A' },
-          dark: { base: '#06060A', wcag: '#06060A' }
+          light: { base: 'rgba(6, 6, 10, 1)', wcag: 'rgba(6, 6, 10, 1)' },
+          dark: { base: 'rgba(6, 6, 10, 1)', wcag: 'rgba(6, 6, 10, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#06060A', wcag: '#06060A' },
-          dark: { base: '#06060A', wcag: '#06060A' }
+          light: { base: 'rgba(6, 6, 10, 1)', wcag: 'rgba(6, 6, 10, 1)' },
+          dark: { base: 'rgba(6, 6, 10, 1)', wcag: 'rgba(6, 6, 10, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -354,24 +357,24 @@ export const blackTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#000000', wcag: '#000000' },
-          dark: { base: '#000000', wcag: '#000000' }
+          light: { base: 'rgba(0, 0, 0, 1)', wcag: 'rgba(0, 0, 0, 1)' },
+          dark: { base: 'rgba(0, 0, 0, 1)', wcag: 'rgba(0, 0, 0, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#000000', wcag: '#000000' },
-          dark: { base: '#000000', wcag: '#000000' }
+          light: { base: 'rgba(0, 0, 0, 1)', wcag: 'rgba(0, 0, 0, 1)' },
+          dark: { base: 'rgba(0, 0, 0, 1)', wcag: 'rgba(0, 0, 0, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#000000', wcag: '#000000' },
-          dark: { base: '#000000', wcag: '#000000' }
+          light: { base: 'rgba(0, 0, 0, 1)', wcag: 'rgba(0, 0, 0, 1)' },
+          dark: { base: 'rgba(0, 0, 0, 1)', wcag: 'rgba(0, 0, 0, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken
@@ -394,24 +397,24 @@ export const whiteTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#FFFFFF', wcag: '#FFFFFF' },
-          dark: { base: '#FFFFFF', wcag: '#FFFFFF' }
+          light: { base: 'rgba(255, 255, 255, 1)', wcag: 'rgba(255, 255, 255, 1)' },
+          dark: { base: 'rgba(255, 255, 255, 1)', wcag: 'rgba(255, 255, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#FFFFFF', wcag: '#FFFFFF' },
-          dark: { base: '#FFFFFF', wcag: '#FFFFFF' }
+          light: { base: 'rgba(255, 255, 255, 1)', wcag: 'rgba(255, 255, 255, 1)' },
+          dark: { base: 'rgba(255, 255, 255, 1)', wcag: 'rgba(255, 255, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#FFFFFF', wcag: '#FFFFFF' },
-          dark: { base: '#FFFFFF', wcag: '#FFFFFF' }
+          light: { base: 'rgba(255, 255, 255, 1)', wcag: 'rgba(255, 255, 255, 1)' },
+          dark: { base: 'rgba(255, 255, 255, 1)', wcag: 'rgba(255, 255, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -429,24 +432,24 @@ export const whiteTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#F5F5FA', wcag: '#F5F5FA' },
-          dark: { base: '#F5F5FA', wcag: '#F5F5FA' }
+          light: { base: 'rgba(245, 245, 250, 1)', wcag: 'rgba(245, 245, 250, 1)' },
+          dark: { base: 'rgba(245, 245, 250, 1)', wcag: 'rgba(245, 245, 250, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#F5F5FA', wcag: '#F5F5FA' },
-          dark: { base: '#F5F5FA', wcag: '#F5F5FA' }
+          light: { base: 'rgba(245, 245, 250, 1)', wcag: 'rgba(245, 245, 250, 1)' },
+          dark: { base: 'rgba(245, 245, 250, 1)', wcag: 'rgba(245, 245, 250, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#F5F5FA', wcag: '#F5F5FA' },
-          dark: { base: '#F5F5FA', wcag: '#F5F5FA' }
+          light: { base: 'rgba(245, 245, 250, 1)', wcag: 'rgba(245, 245, 250, 1)' },
+          dark: { base: 'rgba(245, 245, 250, 1)', wcag: 'rgba(245, 245, 250, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -464,24 +467,24 @@ export const whiteTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#E8E8F0', wcag: '#E8E8F0' },
-          dark: { base: '#E8E8F0', wcag: '#E8E8F0' }
+          light: { base: 'rgba(232, 232, 240, 1)', wcag: 'rgba(232, 232, 240, 1)' },
+          dark: { base: 'rgba(232, 232, 240, 1)', wcag: 'rgba(232, 232, 240, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#E8E8F0', wcag: '#E8E8F0' },
-          dark: { base: '#E8E8F0', wcag: '#E8E8F0' }
+          light: { base: 'rgba(232, 232, 240, 1)', wcag: 'rgba(232, 232, 240, 1)' },
+          dark: { base: 'rgba(232, 232, 240, 1)', wcag: 'rgba(232, 232, 240, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#E8E8F0', wcag: '#E8E8F0' },
-          dark: { base: '#E8E8F0', wcag: '#E8E8F0' }
+          light: { base: 'rgba(232, 232, 240, 1)', wcag: 'rgba(232, 232, 240, 1)' },
+          dark: { base: 'rgba(232, 232, 240, 1)', wcag: 'rgba(232, 232, 240, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -499,24 +502,24 @@ export const whiteTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#C5C5D5', wcag: '#C5C5D5' },
-          dark: { base: '#C5C5D5', wcag: '#C5C5D5' }
+          light: { base: 'rgba(197, 197, 213, 1)', wcag: 'rgba(197, 197, 213, 1)' },
+          dark: { base: 'rgba(197, 197, 213, 1)', wcag: 'rgba(197, 197, 213, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#C5C5D5', wcag: '#C5C5D5' },
-          dark: { base: '#C5C5D5', wcag: '#C5C5D5' }
+          light: { base: 'rgba(197, 197, 213, 1)', wcag: 'rgba(197, 197, 213, 1)' },
+          dark: { base: 'rgba(197, 197, 213, 1)', wcag: 'rgba(197, 197, 213, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#C5C5D5', wcag: '#C5C5D5' },
-          dark: { base: '#C5C5D5', wcag: '#C5C5D5' }
+          light: { base: 'rgba(197, 197, 213, 1)', wcag: 'rgba(197, 197, 213, 1)' },
+          dark: { base: 'rgba(197, 197, 213, 1)', wcag: 'rgba(197, 197, 213, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -534,29 +537,31 @@ export const whiteTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#9999AB', wcag: '#9999AB' },
-          dark: { base: '#9999AB', wcag: '#9999AB' }
+          light: { base: 'rgba(153, 153, 171, 1)', wcag: 'rgba(153, 153, 171, 1)' },
+          dark: { base: 'rgba(153, 153, 171, 1)', wcag: 'rgba(153, 153, 171, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#9999AB', wcag: '#9999AB' },
-          dark: { base: '#9999AB', wcag: '#9999AB' }
+          light: { base: 'rgba(153, 153, 171, 1)', wcag: 'rgba(153, 153, 171, 1)' },
+          dark: { base: 'rgba(153, 153, 171, 1)', wcag: 'rgba(153, 153, 171, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#9999AB', wcag: '#9999AB' },
-          dark: { base: '#9999AB', wcag: '#9999AB' }
+          light: { base: 'rgba(153, 153, 171, 1)', wcag: 'rgba(153, 153, 171, 1)' },
+          dark: { base: 'rgba(153, 153, 171, 1)', wcag: 'rgba(153, 153, 171, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken
-};/**
+};
 
+
+/**
  * Yellow scale color tokens - High-energy CTAs and warnings
  */
 export const yellowTokens = {
@@ -573,24 +578,24 @@ export const yellowTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#FEFBCC', wcag: '#FEFBCC' },
-          dark: { base: '#FEFBCC', wcag: '#FCF680' }
+          light: { base: 'rgba(254, 251, 204, 1)', wcag: 'rgba(254, 251, 204, 1)' },
+          dark: { base: 'rgba(254, 251, 204, 1)', wcag: 'rgba(252, 246, 128, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#FEFBCC', wcag: '#FEFBCC' },
-          dark: { base: '#FEFBCC', wcag: '#FCF680' }
+          light: { base: 'rgba(254, 251, 204, 1)', wcag: 'rgba(254, 251, 204, 1)' },
+          dark: { base: 'rgba(254, 251, 204, 1)', wcag: 'rgba(252, 246, 128, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#FEFBCC', wcag: '#FEFBCC' },
-          dark: { base: '#FEFBCC', wcag: '#FCF680' }
+          light: { base: 'rgba(254, 251, 204, 1)', wcag: 'rgba(254, 251, 204, 1)' },
+          dark: { base: 'rgba(254, 251, 204, 1)', wcag: 'rgba(252, 246, 128, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -608,24 +613,24 @@ export const yellowTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#FCF680', wcag: '#FCF680' },
-          dark: { base: '#FCF680', wcag: '#F9F002' }
+          light: { base: 'rgba(252, 246, 128, 1)', wcag: 'rgba(252, 246, 128, 1)' },
+          dark: { base: 'rgba(252, 246, 128, 1)', wcag: 'rgba(249, 240, 2, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#FCF680', wcag: '#FCF680' },
-          dark: { base: '#FCF680', wcag: '#F9F002' }
+          light: { base: 'rgba(252, 246, 128, 1)', wcag: 'rgba(252, 246, 128, 1)' },
+          dark: { base: 'rgba(252, 246, 128, 1)', wcag: 'rgba(249, 240, 2, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#FCF680', wcag: '#FCF680' },
-          dark: { base: '#FCF680', wcag: '#F9F002' }
+          light: { base: 'rgba(252, 246, 128, 1)', wcag: 'rgba(252, 246, 128, 1)' },
+          dark: { base: 'rgba(252, 246, 128, 1)', wcag: 'rgba(249, 240, 2, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -643,24 +648,24 @@ export const yellowTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#F9F002', wcag: '#F9F002' },
-          dark: { base: '#F9F002', wcag: '#C7C002' }
+          light: { base: 'rgba(249, 240, 2, 1)', wcag: 'rgba(249, 240, 2, 1)' },
+          dark: { base: 'rgba(249, 240, 2, 1)', wcag: 'rgba(199, 192, 2, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#F9F002', wcag: '#F9F002' },
-          dark: { base: '#F9F002', wcag: '#C7C002' }
+          light: { base: 'rgba(249, 240, 2, 1)', wcag: 'rgba(249, 240, 2, 1)' },
+          dark: { base: 'rgba(249, 240, 2, 1)', wcag: 'rgba(199, 192, 2, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#F9F002', wcag: '#F9F002' },
-          dark: { base: '#F9F002', wcag: '#C7C002' }
+          light: { base: 'rgba(249, 240, 2, 1)', wcag: 'rgba(249, 240, 2, 1)' },
+          dark: { base: 'rgba(249, 240, 2, 1)', wcag: 'rgba(199, 192, 2, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -678,24 +683,24 @@ export const yellowTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#C7C002', wcag: '#C7C002' },
-          dark: { base: '#C7C002', wcag: '#8F8B01' }
+          light: { base: 'rgba(199, 192, 2, 1)', wcag: 'rgba(199, 192, 2, 1)' },
+          dark: { base: 'rgba(199, 192, 2, 1)', wcag: 'rgba(143, 139, 1, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#C7C002', wcag: '#C7C002' },
-          dark: { base: '#C7C002', wcag: '#8F8B01' }
+          light: { base: 'rgba(199, 192, 2, 1)', wcag: 'rgba(199, 192, 2, 1)' },
+          dark: { base: 'rgba(199, 192, 2, 1)', wcag: 'rgba(143, 139, 1, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#C7C002', wcag: '#C7C002' },
-          dark: { base: '#C7C002', wcag: '#8F8B01' }
+          light: { base: 'rgba(199, 192, 2, 1)', wcag: 'rgba(199, 192, 2, 1)' },
+          dark: { base: 'rgba(199, 192, 2, 1)', wcag: 'rgba(143, 139, 1, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -713,24 +718,24 @@ export const yellowTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#8F8B01', wcag: '#8F8B01' },
-          dark: { base: '#8F8B01', wcag: '#8F8B01' }
+          light: { base: 'rgba(143, 139, 1, 1)', wcag: 'rgba(143, 139, 1, 1)' },
+          dark: { base: 'rgba(143, 139, 1, 1)', wcag: 'rgba(143, 139, 1, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#8F8B01', wcag: '#8F8B01' },
-          dark: { base: '#8F8B01', wcag: '#8F8B01' }
+          light: { base: 'rgba(143, 139, 1, 1)', wcag: 'rgba(143, 139, 1, 1)' },
+          dark: { base: 'rgba(143, 139, 1, 1)', wcag: 'rgba(143, 139, 1, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#8F8B01', wcag: '#8F8B01' },
-          dark: { base: '#8F8B01', wcag: '#8F8B01' }
+          light: { base: 'rgba(143, 139, 1, 1)', wcag: 'rgba(143, 139, 1, 1)' },
+          dark: { base: 'rgba(143, 139, 1, 1)', wcag: 'rgba(143, 139, 1, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken
@@ -753,24 +758,24 @@ export const orangeTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#FFE5DC', wcag: '#FFF3E0' },
-          dark: { base: '#FFE5DC', wcag: '#FFD9A3' }
+          light: { base: 'rgba(255, 229, 220, 1)', wcag: 'rgba(255, 243, 224, 1)' },
+          dark: { base: 'rgba(255, 229, 220, 1)', wcag: 'rgba(255, 217, 163, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#FFE5DC', wcag: '#FFF3E0' },
-          dark: { base: '#FFE5DC', wcag: '#FFD9A3' }
+          light: { base: 'rgba(255, 229, 220, 1)', wcag: 'rgba(255, 243, 224, 1)' },
+          dark: { base: 'rgba(255, 229, 220, 1)', wcag: 'rgba(255, 217, 163, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#FFE5DC', wcag: '#FFF3E0' },
-          dark: { base: '#FFE5DC', wcag: '#FFD9A3' }
+          light: { base: 'rgba(255, 229, 220, 1)', wcag: 'rgba(255, 243, 224, 1)' },
+          dark: { base: 'rgba(255, 229, 220, 1)', wcag: 'rgba(255, 217, 163, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -788,24 +793,24 @@ export const orangeTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#FFB8A0', wcag: '#F59E00' },
-          dark: { base: '#FFB8A0', wcag: '#FFB84D' }
+          light: { base: 'rgba(255, 184, 160, 1)', wcag: 'rgba(245, 158, 0, 1)' },
+          dark: { base: 'rgba(255, 184, 160, 1)', wcag: 'rgba(255, 184, 77, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#FFB8A0', wcag: '#F59E00' },
-          dark: { base: '#FFB8A0', wcag: '#FFB84D' }
+          light: { base: 'rgba(255, 184, 160, 1)', wcag: 'rgba(245, 158, 0, 1)' },
+          dark: { base: 'rgba(255, 184, 160, 1)', wcag: 'rgba(255, 184, 77, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#FFB8A0', wcag: '#F59E00' },
-          dark: { base: '#FFB8A0', wcag: '#FFB84D' }
+          light: { base: 'rgba(255, 184, 160, 1)', wcag: 'rgba(245, 158, 0, 1)' },
+          dark: { base: 'rgba(255, 184, 160, 1)', wcag: 'rgba(255, 184, 77, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -823,24 +828,24 @@ export const orangeTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#FF6B35', wcag: '#B87500' },
-          dark: { base: '#FF6B35', wcag: '#D99500' }
+          light: { base: 'rgba(255, 107, 53, 1)', wcag: 'rgba(184, 117, 0, 1)' },
+          dark: { base: 'rgba(255, 107, 53, 1)', wcag: 'rgba(217, 149, 0, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#FF6B35', wcag: '#B87500' },
-          dark: { base: '#FF6B35', wcag: '#D99500' }
+          light: { base: 'rgba(255, 107, 53, 1)', wcag: 'rgba(184, 117, 0, 1)' },
+          dark: { base: 'rgba(255, 107, 53, 1)', wcag: 'rgba(217, 149, 0, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#FF6B35', wcag: '#B87500' },
-          dark: { base: '#FF6B35', wcag: '#D99500' }
+          light: { base: 'rgba(255, 107, 53, 1)', wcag: 'rgba(184, 117, 0, 1)' },
+          dark: { base: 'rgba(255, 107, 53, 1)', wcag: 'rgba(217, 149, 0, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -858,24 +863,24 @@ export const orangeTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#CC5529', wcag: '#8C5A00' },
-          dark: { base: '#CC5529', wcag: '#A67000' }
+          light: { base: 'rgba(204, 85, 41, 1)', wcag: 'rgba(140, 90, 0, 1)' },
+          dark: { base: 'rgba(204, 85, 41, 1)', wcag: 'rgba(166, 112, 0, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#CC5529', wcag: '#8C5A00' },
-          dark: { base: '#CC5529', wcag: '#A67000' }
+          light: { base: 'rgba(204, 85, 41, 1)', wcag: 'rgba(140, 90, 0, 1)' },
+          dark: { base: 'rgba(204, 85, 41, 1)', wcag: 'rgba(166, 112, 0, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#CC5529', wcag: '#8C5A00' },
-          dark: { base: '#CC5529', wcag: '#A67000' }
+          light: { base: 'rgba(204, 85, 41, 1)', wcag: 'rgba(140, 90, 0, 1)' },
+          dark: { base: 'rgba(204, 85, 41, 1)', wcag: 'rgba(166, 112, 0, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -893,24 +898,24 @@ export const orangeTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#8F3C1D', wcag: '#4D3100' },
-          dark: { base: '#8F3C1D', wcag: '#5C3D00' }
+          light: { base: 'rgba(143, 60, 29, 1)', wcag: 'rgba(77, 49, 0, 1)' },
+          dark: { base: 'rgba(143, 60, 29, 1)', wcag: 'rgba(92, 61, 0, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#8F3C1D', wcag: '#4D3100' },
-          dark: { base: '#8F3C1D', wcag: '#5C3D00' }
+          light: { base: 'rgba(143, 60, 29, 1)', wcag: 'rgba(77, 49, 0, 1)' },
+          dark: { base: 'rgba(143, 60, 29, 1)', wcag: 'rgba(92, 61, 0, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#8F3C1D', wcag: '#4D3100' },
-          dark: { base: '#8F3C1D', wcag: '#5C3D00' }
+          light: { base: 'rgba(143, 60, 29, 1)', wcag: 'rgba(77, 49, 0, 1)' },
+          dark: { base: 'rgba(143, 60, 29, 1)', wcag: 'rgba(92, 61, 0, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken
@@ -933,24 +938,24 @@ export const purpleTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#F3E0FF', wcag: '#F3E0FF' },
-          dark: { base: '#F3E0FF', wcag: '#F3E0FF' }
+          light: { base: 'rgba(243, 224, 255, 1)', wcag: 'rgba(243, 224, 255, 1)' },
+          dark: { base: 'rgba(243, 224, 255, 1)', wcag: 'rgba(243, 224, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#F3E0FF', wcag: '#F3E0FF' },
-          dark: { base: '#F3E0FF', wcag: '#F3E0FF' }
+          light: { base: 'rgba(243, 224, 255, 1)', wcag: 'rgba(243, 224, 255, 1)' },
+          dark: { base: 'rgba(243, 224, 255, 1)', wcag: 'rgba(243, 224, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#F3E0FF', wcag: '#F3E0FF' },
-          dark: { base: '#F3E0FF', wcag: '#F3E0FF' }
+          light: { base: 'rgba(243, 224, 255, 1)', wcag: 'rgba(243, 224, 255, 1)' },
+          dark: { base: 'rgba(243, 224, 255, 1)', wcag: 'rgba(243, 224, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -968,24 +973,24 @@ export const purpleTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#D98AFF', wcag: '#D98AFF' },
-          dark: { base: '#D98AFF', wcag: '#D98AFF' }
+          light: { base: 'rgba(217, 138, 255, 1)', wcag: 'rgba(217, 138, 255, 1)' },
+          dark: { base: 'rgba(217, 138, 255, 1)', wcag: 'rgba(217, 138, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#D98AFF', wcag: '#D98AFF' },
-          dark: { base: '#D98AFF', wcag: '#D98AFF' }
+          light: { base: 'rgba(217, 138, 255, 1)', wcag: 'rgba(217, 138, 255, 1)' },
+          dark: { base: 'rgba(217, 138, 255, 1)', wcag: 'rgba(217, 138, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#D98AFF', wcag: '#D98AFF' },
-          dark: { base: '#D98AFF', wcag: '#D98AFF' }
+          light: { base: 'rgba(217, 138, 255, 1)', wcag: 'rgba(217, 138, 255, 1)' },
+          dark: { base: 'rgba(217, 138, 255, 1)', wcag: 'rgba(217, 138, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -1003,24 +1008,24 @@ export const purpleTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#B026FF', wcag: '#B026FF' },
-          dark: { base: '#B026FF', wcag: '#B026FF' }
+          light: { base: 'rgba(176, 38, 255, 1)', wcag: 'rgba(176, 38, 255, 1)' },
+          dark: { base: 'rgba(176, 38, 255, 1)', wcag: 'rgba(176, 38, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#B026FF', wcag: '#B026FF' },
-          dark: { base: '#B026FF', wcag: '#B026FF' }
+          light: { base: 'rgba(176, 38, 255, 1)', wcag: 'rgba(176, 38, 255, 1)' },
+          dark: { base: 'rgba(176, 38, 255, 1)', wcag: 'rgba(176, 38, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#B026FF', wcag: '#B026FF' },
-          dark: { base: '#B026FF', wcag: '#B026FF' }
+          light: { base: 'rgba(176, 38, 255, 1)', wcag: 'rgba(176, 38, 255, 1)' },
+          dark: { base: 'rgba(176, 38, 255, 1)', wcag: 'rgba(176, 38, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -1038,24 +1043,24 @@ export const purpleTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#8D1ECC', wcag: '#8D1ECC' },
-          dark: { base: '#8D1ECC', wcag: '#8D1ECC' }
+          light: { base: 'rgba(141, 30, 204, 1)', wcag: 'rgba(141, 30, 204, 1)' },
+          dark: { base: 'rgba(141, 30, 204, 1)', wcag: 'rgba(141, 30, 204, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#8D1ECC', wcag: '#8D1ECC' },
-          dark: { base: '#8D1ECC', wcag: '#8D1ECC' }
+          light: { base: 'rgba(141, 30, 204, 1)', wcag: 'rgba(141, 30, 204, 1)' },
+          dark: { base: 'rgba(141, 30, 204, 1)', wcag: 'rgba(141, 30, 204, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#8D1ECC', wcag: '#8D1ECC' },
-          dark: { base: '#8D1ECC', wcag: '#8D1ECC' }
+          light: { base: 'rgba(141, 30, 204, 1)', wcag: 'rgba(141, 30, 204, 1)' },
+          dark: { base: 'rgba(141, 30, 204, 1)', wcag: 'rgba(141, 30, 204, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -1073,28 +1078,29 @@ export const purpleTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#63158F', wcag: '#63158F' },
-          dark: { base: '#63158F', wcag: '#63158F' }
+          light: { base: 'rgba(99, 21, 143, 1)', wcag: 'rgba(99, 21, 143, 1)' },
+          dark: { base: 'rgba(99, 21, 143, 1)', wcag: 'rgba(99, 21, 143, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#63158F', wcag: '#63158F' },
-          dark: { base: '#63158F', wcag: '#63158F' }
+          light: { base: 'rgba(99, 21, 143, 1)', wcag: 'rgba(99, 21, 143, 1)' },
+          dark: { base: 'rgba(99, 21, 143, 1)', wcag: 'rgba(99, 21, 143, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#63158F', wcag: '#63158F' },
-          dark: { base: '#63158F', wcag: '#63158F' }
+          light: { base: 'rgba(99, 21, 143, 1)', wcag: 'rgba(99, 21, 143, 1)' },
+          dark: { base: 'rgba(99, 21, 143, 1)', wcag: 'rgba(99, 21, 143, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken
 };
+
 
 /**
  * Pink scale color tokens - Error states and urgent feedback
@@ -1113,24 +1119,24 @@ export const pinkTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#FFDAE8', wcag: '#FCE4EC' },
-          dark: { base: '#FFDAE8', wcag: '#FFB3D1' }
+          light: { base: 'rgba(255, 218, 232, 1)', wcag: 'rgba(252, 228, 236, 1)' },
+          dark: { base: 'rgba(255, 218, 232, 1)', wcag: 'rgba(255, 179, 209, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#FFDAE8', wcag: '#FCE4EC' },
-          dark: { base: '#FFDAE8', wcag: '#FFB3D1' }
+          light: { base: 'rgba(255, 218, 232, 1)', wcag: 'rgba(252, 228, 236, 1)' },
+          dark: { base: 'rgba(255, 218, 232, 1)', wcag: 'rgba(255, 179, 209, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#FFDAE8', wcag: '#FCE4EC' },
-          dark: { base: '#FFDAE8', wcag: '#FFB3D1' }
+          light: { base: 'rgba(255, 218, 232, 1)', wcag: 'rgba(252, 228, 236, 1)' },
+          dark: { base: 'rgba(255, 218, 232, 1)', wcag: 'rgba(255, 179, 209, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -1148,24 +1154,24 @@ export const pinkTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#FF82B4', wcag: '#E91E63' },
-          dark: { base: '#FF82B4', wcag: '#FF6BA3' }
+          light: { base: 'rgba(255, 130, 180, 1)', wcag: 'rgba(233, 30, 99, 1)' },
+          dark: { base: 'rgba(255, 130, 180, 1)', wcag: 'rgba(255, 107, 163, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#FF82B4', wcag: '#E91E63' },
-          dark: { base: '#FF82B4', wcag: '#FF6BA3' }
+          light: { base: 'rgba(255, 130, 180, 1)', wcag: 'rgba(233, 30, 99, 1)' },
+          dark: { base: 'rgba(255, 130, 180, 1)', wcag: 'rgba(255, 107, 163, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#FF82B4', wcag: '#E91E63' },
-          dark: { base: '#FF82B4', wcag: '#FF6BA3' }
+          light: { base: 'rgba(255, 130, 180, 1)', wcag: 'rgba(233, 30, 99, 1)' },
+          dark: { base: 'rgba(255, 130, 180, 1)', wcag: 'rgba(255, 107, 163, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -1183,24 +1189,24 @@ export const pinkTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#FF2A6D', wcag: '#C2185B' },
-          dark: { base: '#FF2A6D', wcag: '#E63075' }
+          light: { base: 'rgba(255, 42, 109, 1)', wcag: 'rgba(194, 24, 91, 1)' },
+          dark: { base: 'rgba(255, 42, 109, 1)', wcag: 'rgba(230, 48, 117, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#FF2A6D', wcag: '#C2185B' },
-          dark: { base: '#FF2A6D', wcag: '#E63075' }
+          light: { base: 'rgba(255, 42, 109, 1)', wcag: 'rgba(194, 24, 91, 1)' },
+          dark: { base: 'rgba(255, 42, 109, 1)', wcag: 'rgba(230, 48, 117, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#FF2A6D', wcag: '#C2185B' },
-          dark: { base: '#FF2A6D', wcag: '#E63075' }
+          light: { base: 'rgba(255, 42, 109, 1)', wcag: 'rgba(194, 24, 91, 1)' },
+          dark: { base: 'rgba(255, 42, 109, 1)', wcag: 'rgba(230, 48, 117, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -1218,24 +1224,24 @@ export const pinkTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#CC2257', wcag: '#880E4F' },
-          dark: { base: '#CC2257', wcag: '#B32659' }
+          light: { base: 'rgba(204, 34, 87, 1)', wcag: 'rgba(136, 14, 79, 1)' },
+          dark: { base: 'rgba(204, 34, 87, 1)', wcag: 'rgba(179, 38, 89, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#CC2257', wcag: '#880E4F' },
-          dark: { base: '#CC2257', wcag: '#B32659' }
+          light: { base: 'rgba(204, 34, 87, 1)', wcag: 'rgba(136, 14, 79, 1)' },
+          dark: { base: 'rgba(204, 34, 87, 1)', wcag: 'rgba(179, 38, 89, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#CC2257', wcag: '#880E4F' },
-          dark: { base: '#CC2257', wcag: '#B32659' }
+          light: { base: 'rgba(204, 34, 87, 1)', wcag: 'rgba(136, 14, 79, 1)' },
+          dark: { base: 'rgba(204, 34, 87, 1)', wcag: 'rgba(179, 38, 89, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -1253,24 +1259,24 @@ export const pinkTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#801537', wcag: '#4D0829' },
-          dark: { base: '#801537', wcag: '#5C1A33' }
+          light: { base: 'rgba(128, 21, 55, 1)', wcag: 'rgba(77, 8, 41, 1)' },
+          dark: { base: 'rgba(128, 21, 55, 1)', wcag: 'rgba(92, 26, 51, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#801537', wcag: '#4D0829' },
-          dark: { base: '#801537', wcag: '#5C1A33' }
+          light: { base: 'rgba(128, 21, 55, 1)', wcag: 'rgba(77, 8, 41, 1)' },
+          dark: { base: 'rgba(128, 21, 55, 1)', wcag: 'rgba(92, 26, 51, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#801537', wcag: '#4D0829' },
-          dark: { base: '#801537', wcag: '#5C1A33' }
+          light: { base: 'rgba(128, 21, 55, 1)', wcag: 'rgba(77, 8, 41, 1)' },
+          dark: { base: 'rgba(128, 21, 55, 1)', wcag: 'rgba(92, 26, 51, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken
@@ -1293,24 +1299,24 @@ export const greenTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#E6FFF5', wcag: '#E8F5E9' },
-          dark: { base: '#E6FFF5', wcag: '#B3FFB3' }
+          light: { base: 'rgba(230, 255, 245, 1)', wcag: 'rgba(232, 245, 233, 1)' },
+          dark: { base: 'rgba(230, 255, 245, 1)', wcag: 'rgba(179, 255, 179, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#E6FFF5', wcag: '#E8F5E9' },
-          dark: { base: '#E6FFF5', wcag: '#B3FFB3' }
+          light: { base: 'rgba(230, 255, 245, 1)', wcag: 'rgba(232, 245, 233, 1)' },
+          dark: { base: 'rgba(230, 255, 245, 1)', wcag: 'rgba(179, 255, 179, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#E6FFF5', wcag: '#E8F5E9' },
-          dark: { base: '#E6FFF5', wcag: '#B3FFB3' }
+          light: { base: 'rgba(230, 255, 245, 1)', wcag: 'rgba(232, 245, 233, 1)' },
+          dark: { base: 'rgba(230, 255, 245, 1)', wcag: 'rgba(179, 255, 179, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -1328,24 +1334,24 @@ export const greenTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#80FFBB', wcag: '#4CAF50' },
-          dark: { base: '#80FFBB', wcag: '#66FF66' }
+          light: { base: 'rgba(128, 255, 187, 1)', wcag: 'rgba(76, 175, 80, 1)' },
+          dark: { base: 'rgba(128, 255, 187, 1)', wcag: 'rgba(102, 255, 102, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#80FFBB', wcag: '#4CAF50' },
-          dark: { base: '#80FFBB', wcag: '#66FF66' }
+          light: { base: 'rgba(128, 255, 187, 1)', wcag: 'rgba(76, 175, 80, 1)' },
+          dark: { base: 'rgba(128, 255, 187, 1)', wcag: 'rgba(102, 255, 102, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#80FFBB', wcag: '#4CAF50' },
-          dark: { base: '#80FFBB', wcag: '#66FF66' }
+          light: { base: 'rgba(128, 255, 187, 1)', wcag: 'rgba(76, 175, 80, 1)' },
+          dark: { base: 'rgba(128, 255, 187, 1)', wcag: 'rgba(102, 255, 102, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -1363,24 +1369,24 @@ export const greenTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#33FF99', wcag: '#388E3C' },
-          dark: { base: '#33FF99', wcag: '#33E033' }
+          light: { base: 'rgba(51, 255, 153, 1)', wcag: 'rgba(56, 142, 60, 1)' },
+          dark: { base: 'rgba(51, 255, 153, 1)', wcag: 'rgba(51, 224, 51, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#33FF99', wcag: '#388E3C' },
-          dark: { base: '#33FF99', wcag: '#33E033' }
+          light: { base: 'rgba(51, 255, 153, 1)', wcag: 'rgba(56, 142, 60, 1)' },
+          dark: { base: 'rgba(51, 255, 153, 1)', wcag: 'rgba(51, 224, 51, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#33FF99', wcag: '#388E3C' },
-          dark: { base: '#33FF99', wcag: '#33E033' }
+          light: { base: 'rgba(51, 255, 153, 1)', wcag: 'rgba(56, 142, 60, 1)' },
+          dark: { base: 'rgba(51, 255, 153, 1)', wcag: 'rgba(51, 224, 51, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -1398,24 +1404,24 @@ export const greenTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#00FF88', wcag: '#1B5E20' },
-          dark: { base: '#00FF88', wcag: '#26B326' }
+          light: { base: 'rgba(0, 255, 136, 1)', wcag: 'rgba(27, 94, 32, 1)' },
+          dark: { base: 'rgba(0, 255, 136, 1)', wcag: 'rgba(38, 179, 38, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#00FF88', wcag: '#1B5E20' },
-          dark: { base: '#00FF88', wcag: '#26B326' }
+          light: { base: 'rgba(0, 255, 136, 1)', wcag: 'rgba(27, 94, 32, 1)' },
+          dark: { base: 'rgba(0, 255, 136, 1)', wcag: 'rgba(38, 179, 38, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#00FF88', wcag: '#1B5E20' },
-          dark: { base: '#00FF88', wcag: '#26B326' }
+          light: { base: 'rgba(0, 255, 136, 1)', wcag: 'rgba(27, 94, 32, 1)' },
+          dark: { base: 'rgba(0, 255, 136, 1)', wcag: 'rgba(38, 179, 38, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -1433,28 +1439,29 @@ export const greenTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#00CC6E', wcag: '#0D3010' },
-          dark: { base: '#00CC6E', wcag: '#145914' }
+          light: { base: 'rgba(0, 204, 110, 1)', wcag: 'rgba(13, 48, 16, 1)' },
+          dark: { base: 'rgba(0, 204, 110, 1)', wcag: 'rgba(20, 89, 20, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#00CC6E', wcag: '#0D3010' },
-          dark: { base: '#00CC6E', wcag: '#145914' }
+          light: { base: 'rgba(0, 204, 110, 1)', wcag: 'rgba(13, 48, 16, 1)' },
+          dark: { base: 'rgba(0, 204, 110, 1)', wcag: 'rgba(20, 89, 20, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#00CC6E', wcag: '#0D3010' },
-          dark: { base: '#00CC6E', wcag: '#145914' }
+          light: { base: 'rgba(0, 204, 110, 1)', wcag: 'rgba(13, 48, 16, 1)' },
+          dark: { base: 'rgba(0, 204, 110, 1)', wcag: 'rgba(20, 89, 20, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken
 };
+
 
 /**
  * Cyan scale color tokens - Tech elements, links, and success states
@@ -1473,24 +1480,24 @@ export const cyanTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#CCFBFF', wcag: '#CCFBFF' },
-          dark: { base: '#CCFBFF', wcag: '#CCFBFF' }
+          light: { base: 'rgba(204, 251, 255, 1)', wcag: 'rgba(204, 251, 255, 1)' },
+          dark: { base: 'rgba(204, 251, 255, 1)', wcag: 'rgba(204, 251, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#CCFBFF', wcag: '#CCFBFF' },
-          dark: { base: '#CCFBFF', wcag: '#CCFBFF' }
+          light: { base: 'rgba(204, 251, 255, 1)', wcag: 'rgba(204, 251, 255, 1)' },
+          dark: { base: 'rgba(204, 251, 255, 1)', wcag: 'rgba(204, 251, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#CCFBFF', wcag: '#CCFBFF' },
-          dark: { base: '#CCFBFF', wcag: '#CCFBFF' }
+          light: { base: 'rgba(204, 251, 255, 1)', wcag: 'rgba(204, 251, 255, 1)' },
+          dark: { base: 'rgba(204, 251, 255, 1)', wcag: 'rgba(204, 251, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -1508,24 +1515,24 @@ export const cyanTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#80F6FF', wcag: '#80F6FF' },
-          dark: { base: '#80F6FF', wcag: '#80F6FF' }
+          light: { base: 'rgba(128, 246, 255, 1)', wcag: 'rgba(128, 246, 255, 1)' },
+          dark: { base: 'rgba(128, 246, 255, 1)', wcag: 'rgba(128, 246, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#80F6FF', wcag: '#80F6FF' },
-          dark: { base: '#80F6FF', wcag: '#80F6FF' }
+          light: { base: 'rgba(128, 246, 255, 1)', wcag: 'rgba(128, 246, 255, 1)' },
+          dark: { base: 'rgba(128, 246, 255, 1)', wcag: 'rgba(128, 246, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#80F6FF', wcag: '#80F6FF' },
-          dark: { base: '#80F6FF', wcag: '#80F6FF' }
+          light: { base: 'rgba(128, 246, 255, 1)', wcag: 'rgba(128, 246, 255, 1)' },
+          dark: { base: 'rgba(128, 246, 255, 1)', wcag: 'rgba(128, 246, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -1543,24 +1550,24 @@ export const cyanTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#00F0FF', wcag: '#00F0FF' },
-          dark: { base: '#00F0FF', wcag: '#00F0FF' }
+          light: { base: 'rgba(0, 240, 255, 1)', wcag: 'rgba(0, 240, 255, 1)' },
+          dark: { base: 'rgba(0, 240, 255, 1)', wcag: 'rgba(0, 240, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#00F0FF', wcag: '#00F0FF' },
-          dark: { base: '#00F0FF', wcag: '#00F0FF' }
+          light: { base: 'rgba(0, 240, 255, 1)', wcag: 'rgba(0, 240, 255, 1)' },
+          dark: { base: 'rgba(0, 240, 255, 1)', wcag: 'rgba(0, 240, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#00F0FF', wcag: '#00F0FF' },
-          dark: { base: '#00F0FF', wcag: '#00F0FF' }
+          light: { base: 'rgba(0, 240, 255, 1)', wcag: 'rgba(0, 240, 255, 1)' },
+          dark: { base: 'rgba(0, 240, 255, 1)', wcag: 'rgba(0, 240, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -1578,24 +1585,24 @@ export const cyanTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#00C0CC', wcag: '#00C0CC' },
-          dark: { base: '#00C0CC', wcag: '#00C0CC' }
+          light: { base: 'rgba(0, 192, 204, 1)', wcag: 'rgba(0, 192, 204, 1)' },
+          dark: { base: 'rgba(0, 192, 204, 1)', wcag: 'rgba(0, 192, 204, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#00C0CC', wcag: '#00C0CC' },
-          dark: { base: '#00C0CC', wcag: '#00C0CC' }
+          light: { base: 'rgba(0, 192, 204, 1)', wcag: 'rgba(0, 192, 204, 1)' },
+          dark: { base: 'rgba(0, 192, 204, 1)', wcag: 'rgba(0, 192, 204, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#00C0CC', wcag: '#00C0CC' },
-          dark: { base: '#00C0CC', wcag: '#00C0CC' }
+          light: { base: 'rgba(0, 192, 204, 1)', wcag: 'rgba(0, 192, 204, 1)' },
+          dark: { base: 'rgba(0, 192, 204, 1)', wcag: 'rgba(0, 192, 204, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -1613,24 +1620,24 @@ export const cyanTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#00888F', wcag: '#00888F' },
-          dark: { base: '#00888F', wcag: '#00888F' }
+          light: { base: 'rgba(0, 136, 143, 1)', wcag: 'rgba(0, 136, 143, 1)' },
+          dark: { base: 'rgba(0, 136, 143, 1)', wcag: 'rgba(0, 136, 143, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#00888F', wcag: '#00888F' },
-          dark: { base: '#00888F', wcag: '#00888F' }
+          light: { base: 'rgba(0, 136, 143, 1)', wcag: 'rgba(0, 136, 143, 1)' },
+          dark: { base: 'rgba(0, 136, 143, 1)', wcag: 'rgba(0, 136, 143, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#00888F', wcag: '#00888F' },
-          dark: { base: '#00888F', wcag: '#00888F' }
+          light: { base: 'rgba(0, 136, 143, 1)', wcag: 'rgba(0, 136, 143, 1)' },
+          dark: { base: 'rgba(0, 136, 143, 1)', wcag: 'rgba(0, 136, 143, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken
@@ -1653,24 +1660,24 @@ export const tealTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#D9E8EA', wcag: '#D9E8EA' },
-          dark: { base: '#D9E8EA', wcag: '#D9E8EA' }
+          light: { base: 'rgba(217, 232, 234, 1)', wcag: 'rgba(217, 232, 234, 1)' },
+          dark: { base: 'rgba(217, 232, 234, 1)', wcag: 'rgba(217, 232, 234, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#D9E8EA', wcag: '#D9E8EA' },
-          dark: { base: '#D9E8EA', wcag: '#D9E8EA' }
+          light: { base: 'rgba(217, 232, 234, 1)', wcag: 'rgba(217, 232, 234, 1)' },
+          dark: { base: 'rgba(217, 232, 234, 1)', wcag: 'rgba(217, 232, 234, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#D9E8EA', wcag: '#D9E8EA' },
-          dark: { base: '#D9E8EA', wcag: '#D9E8EA' }
+          light: { base: 'rgba(217, 232, 234, 1)', wcag: 'rgba(217, 232, 234, 1)' },
+          dark: { base: 'rgba(217, 232, 234, 1)', wcag: 'rgba(217, 232, 234, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -1688,24 +1695,24 @@ export const tealTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#4D9BA5', wcag: '#4D9BA5' },
-          dark: { base: '#4D9BA5', wcag: '#4D9BA5' }
+          light: { base: 'rgba(77, 155, 165, 1)', wcag: 'rgba(77, 155, 165, 1)' },
+          dark: { base: 'rgba(77, 155, 165, 1)', wcag: 'rgba(77, 155, 165, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#4D9BA5', wcag: '#4D9BA5' },
-          dark: { base: '#4D9BA5', wcag: '#4D9BA5' }
+          light: { base: 'rgba(77, 155, 165, 1)', wcag: 'rgba(77, 155, 165, 1)' },
+          dark: { base: 'rgba(77, 155, 165, 1)', wcag: 'rgba(77, 155, 165, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#4D9BA5', wcag: '#4D9BA5' },
-          dark: { base: '#4D9BA5', wcag: '#4D9BA5' }
+          light: { base: 'rgba(77, 155, 165, 1)', wcag: 'rgba(77, 155, 165, 1)' },
+          dark: { base: 'rgba(77, 155, 165, 1)', wcag: 'rgba(77, 155, 165, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -1723,24 +1730,24 @@ export const tealTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#1A535C', wcag: '#1A535C' },
-          dark: { base: '#1A535C', wcag: '#00F0FF' }
+          light: { base: 'rgba(26, 83, 92, 1)', wcag: 'rgba(26, 83, 92, 1)' },
+          dark: { base: 'rgba(26, 83, 92, 1)', wcag: 'rgba(0, 240, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#1A535C', wcag: '#1A535C' },
-          dark: { base: '#1A535C', wcag: '#00F0FF' }
+          light: { base: 'rgba(26, 83, 92, 1)', wcag: 'rgba(26, 83, 92, 1)' },
+          dark: { base: 'rgba(26, 83, 92, 1)', wcag: 'rgba(0, 240, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#1A535C', wcag: '#1A535C' },
-          dark: { base: '#1A535C', wcag: '#00F0FF' }
+          light: { base: 'rgba(26, 83, 92, 1)', wcag: 'rgba(26, 83, 92, 1)' },
+          dark: { base: 'rgba(26, 83, 92, 1)', wcag: 'rgba(0, 240, 255, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -1758,24 +1765,24 @@ export const tealTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#15424A', wcag: '#15424A' },
-          dark: { base: '#15424A', wcag: '#15424A' }
+          light: { base: 'rgba(21, 66, 74, 1)', wcag: 'rgba(21, 66, 74, 1)' },
+          dark: { base: 'rgba(21, 66, 74, 1)', wcag: 'rgba(21, 66, 74, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#15424A', wcag: '#15424A' },
-          dark: { base: '#15424A', wcag: '#15424A' }
+          light: { base: 'rgba(21, 66, 74, 1)', wcag: 'rgba(21, 66, 74, 1)' },
+          dark: { base: 'rgba(21, 66, 74, 1)', wcag: 'rgba(21, 66, 74, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#15424A', wcag: '#15424A' },
-          dark: { base: '#15424A', wcag: '#15424A' }
+          light: { base: 'rgba(21, 66, 74, 1)', wcag: 'rgba(21, 66, 74, 1)' },
+          dark: { base: 'rgba(21, 66, 74, 1)', wcag: 'rgba(21, 66, 74, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -1793,28 +1800,29 @@ export const tealTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#0F2E33', wcag: '#0F2E33' },
-          dark: { base: '#0F2E33', wcag: '#0F2E33' }
+          light: { base: 'rgba(15, 46, 51, 1)', wcag: 'rgba(15, 46, 51, 1)' },
+          dark: { base: 'rgba(15, 46, 51, 1)', wcag: 'rgba(15, 46, 51, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#0F2E33', wcag: '#0F2E33' },
-          dark: { base: '#0F2E33', wcag: '#0F2E33' }
+          light: { base: 'rgba(15, 46, 51, 1)', wcag: 'rgba(15, 46, 51, 1)' },
+          dark: { base: 'rgba(15, 46, 51, 1)', wcag: 'rgba(15, 46, 51, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#0F2E33', wcag: '#0F2E33' },
-          dark: { base: '#0F2E33', wcag: '#0F2E33' }
+          light: { base: 'rgba(15, 46, 51, 1)', wcag: 'rgba(15, 46, 51, 1)' },
+          dark: { base: 'rgba(15, 46, 51, 1)', wcag: 'rgba(15, 46, 51, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken
 };
+
 
 /**
  * Shadow color family - Systematic shadow colors following color family pattern
@@ -1840,24 +1848,24 @@ export const shadowColorTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#000000', wcag: '#000000' },
-          dark: { base: '#000000', wcag: '#000000' }
+          light: { base: 'rgba(0, 0, 0, 1)', wcag: 'rgba(0, 0, 0, 1)' },
+          dark: { base: 'rgba(0, 0, 0, 1)', wcag: 'rgba(0, 0, 0, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#000000', wcag: '#000000' },
-          dark: { base: '#000000', wcag: '#000000' }
+          light: { base: 'rgba(0, 0, 0, 1)', wcag: 'rgba(0, 0, 0, 1)' },
+          dark: { base: 'rgba(0, 0, 0, 1)', wcag: 'rgba(0, 0, 0, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#000000', wcag: '#000000' },
-          dark: { base: '#000000', wcag: '#000000' }
+          light: { base: 'rgba(0, 0, 0, 1)', wcag: 'rgba(0, 0, 0, 1)' },
+          dark: { base: 'rgba(0, 0, 0, 1)', wcag: 'rgba(0, 0, 0, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -1875,24 +1883,24 @@ export const shadowColorTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#141928', wcag: '#141928' },
-          dark: { base: '#141928', wcag: '#141928' }
+          light: { base: 'rgba(20, 25, 40, 1)', wcag: 'rgba(20, 25, 40, 1)' },
+          dark: { base: 'rgba(20, 25, 40, 1)', wcag: 'rgba(20, 25, 40, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#141928', wcag: '#141928' },
-          dark: { base: '#141928', wcag: '#141928' }
+          light: { base: 'rgba(20, 25, 40, 1)', wcag: 'rgba(20, 25, 40, 1)' },
+          dark: { base: 'rgba(20, 25, 40, 1)', wcag: 'rgba(20, 25, 40, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#141928', wcag: '#141928' },
-          dark: { base: '#141928', wcag: '#141928' }
+          light: { base: 'rgba(20, 25, 40, 1)', wcag: 'rgba(20, 25, 40, 1)' },
+          dark: { base: 'rgba(20, 25, 40, 1)', wcag: 'rgba(20, 25, 40, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -1910,24 +1918,24 @@ export const shadowColorTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#19140F', wcag: '#19140F' },
-          dark: { base: '#19140F', wcag: '#19140F' }
+          light: { base: 'rgba(25, 20, 15, 1)', wcag: 'rgba(25, 20, 15, 1)' },
+          dark: { base: 'rgba(25, 20, 15, 1)', wcag: 'rgba(25, 20, 15, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#19140F', wcag: '#19140F' },
-          dark: { base: '#19140F', wcag: '#19140F' }
+          light: { base: 'rgba(25, 20, 15, 1)', wcag: 'rgba(25, 20, 15, 1)' },
+          dark: { base: 'rgba(25, 20, 15, 1)', wcag: 'rgba(25, 20, 15, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#19140F', wcag: '#19140F' },
-          dark: { base: '#19140F', wcag: '#19140F' }
+          light: { base: 'rgba(25, 20, 15, 1)', wcag: 'rgba(25, 20, 15, 1)' },
+          dark: { base: 'rgba(25, 20, 15, 1)', wcag: 'rgba(25, 20, 15, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken,
@@ -1945,24 +1953,24 @@ export const shadowColorTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: '#0F141E', wcag: '#0F141E' },
-          dark: { base: '#0F141E', wcag: '#0F141E' }
+          light: { base: 'rgba(15, 20, 30, 1)', wcag: 'rgba(15, 20, 30, 1)' },
+          dark: { base: 'rgba(15, 20, 30, 1)', wcag: 'rgba(15, 20, 30, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: '#0F141E', wcag: '#0F141E' },
-          dark: { base: '#0F141E', wcag: '#0F141E' }
+          light: { base: 'rgba(15, 20, 30, 1)', wcag: 'rgba(15, 20, 30, 1)' },
+          dark: { base: 'rgba(15, 20, 30, 1)', wcag: 'rgba(15, 20, 30, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: '#0F141E', wcag: '#0F141E' },
-          dark: { base: '#0F141E', wcag: '#0F141E' }
+          light: { base: 'rgba(15, 20, 30, 1)', wcag: 'rgba(15, 20, 30, 1)' },
+          dark: { base: 'rgba(15, 20, 30, 1)', wcag: 'rgba(15, 20, 30, 1)' }
         } as ColorTokenValue,
-        unit: 'hex' as const
+        unit: 'rgba' as const
       }
     }
   } as PrimitiveToken
@@ -2009,14 +2017,85 @@ export function getAllColorTokens(): PrimitiveToken[] {
 }
 
 /**
- * Get color tokens by family (gray, black, white, etc.)
+ * Get color tokens by family
  */
-export function getColorTokensByFamily(family: 'gray' | 'black' | 'white' | 'yellow' | 'orange' | 'purple' | 'green' | 'pink' | 'cyan' | 'teal'): PrimitiveToken[] {
-  return Object.values(colorTokens).filter(token => token.name.startsWith(family));
+export function getColorTokensByFamily(family: 'gray' | 'black' | 'white' | 'yellow' | 'orange' | 'purple' | 'pink' | 'green' | 'cyan' | 'teal' | 'shadow'): PrimitiveToken[] {
+  switch (family) {
+    case 'gray':
+      return Object.values(grayTokens);
+    case 'black':
+      return Object.values(blackTokens);
+    case 'white':
+      return Object.values(whiteTokens);
+    case 'yellow':
+      return Object.values(yellowTokens);
+    case 'orange':
+      return Object.values(orangeTokens);
+    case 'purple':
+      return Object.values(purpleTokens);
+    case 'pink':
+      return Object.values(pinkTokens);
+    case 'green':
+      return Object.values(greenTokens);
+    case 'cyan':
+      return Object.values(cyanTokens);
+    case 'teal':
+      return Object.values(tealTokens);
+    case 'shadow':
+      return Object.values(shadowColorTokens);
+    default:
+      throw new Error(`Unknown color family: ${family}`);
+  }
 }
 
+
 /**
- * Get shadow color token by name
+ * Color family constants for systematic organization
+ */
+export const COLOR_FAMILIES = {
+  GRAY: 'gray',
+  BLACK: 'black',
+  WHITE: 'white',
+  YELLOW: 'yellow',
+  ORANGE: 'orange',
+  PURPLE: 'purple',
+  PINK: 'pink',
+  GREEN: 'green',
+  CYAN: 'cyan',
+  TEAL: 'teal',
+  SHADOW: 'shadow',
+  SHADOW_BLACK: 'shadowBlack',
+  SHADOW_BLUE: 'shadowBlue',
+  SHADOW_ORANGE: 'shadowOrange',
+  SHADOW_GRAY: 'shadowGray'
+} as const;
+export type ColorFamily = typeof COLOR_FAMILIES[keyof typeof COLOR_FAMILIES];
+
+/**
+ * Color scale constants (100-500 progression)
+ */
+export const COLOR_SCALE = [100, 200, 300, 400, 500] as const;
+export type ColorScale = typeof COLOR_SCALE[number];
+
+/**
+ * Color mode constants
+ */
+export const COLOR_MODES = ['light', 'dark'] as const;
+export type ColorMode = typeof COLOR_MODES[number];
+
+/**
+ * Color theme constants
+ */
+export const COLOR_THEMES = ['base', 'wcag'] as const;
+export type ColorTheme = typeof COLOR_THEMES[number];
+
+/**
+ * Shadow color token names for easy reference
+ */
+export const shadowColorTokenNames = Object.keys(shadowColorTokens) as Array<keyof typeof shadowColorTokens>;
+
+/**
+ * Get a specific shadow color token by name
  */
 export function getShadowColorToken(name: keyof typeof shadowColorTokens): PrimitiveToken {
   const token = shadowColorTokens[name];
@@ -2034,60 +2113,52 @@ export function getAllShadowColorTokens(): PrimitiveToken[] {
 }
 
 /**
- * Shadow color token names for easy reference
- */
-export const shadowColorTokenNames = Object.keys(shadowColorTokens) as Array<keyof typeof shadowColorTokens>;
-
-/**
- * Get shadow color tokens by family (shadowBlack, shadowBlue, shadowOrange, shadowGray)
+ * Get shadow color tokens by family
  */
 export function getShadowColorTokensByFamily(family: 'shadowBlack' | 'shadowBlue' | 'shadowOrange' | 'shadowGray'): PrimitiveToken[] {
-  return Object.values(shadowColorTokens).filter(token => token.name.startsWith(family));
+  const familyTokens = Object.entries(shadowColorTokens)
+    .filter(([name]) => name.startsWith(family))
+    .map(([, token]) => token);
+  return familyTokens;
 }
 
 /**
- * Get systematic color families for reference
- */
-export const COLOR_FAMILIES = {
-  GRAY: 'gray',
-  BLACK: 'black',
-  WHITE: 'white',
-  YELLOW: 'yellow',
-  ORANGE: 'orange',
-  PURPLE: 'purple',
-  GREEN: 'green',
-  PINK: 'pink',
-  CYAN: 'cyan',
-  TEAL: 'teal',
-  SHADOW_BLACK: 'shadowBlack',
-  SHADOW_BLUE: 'shadowBlue',
-  SHADOW_ORANGE: 'shadowOrange',
-  SHADOW_GRAY: 'shadowGray'
-} as const;
-
-/**
- * Color progression scale for reference
- */
-export const COLOR_SCALE = [100, 200, 300, 400, 500] as const;
-
-/**
- * Mode and theme options for color resolution
- */
-export const COLOR_MODES = ['light', 'dark'] as const;
-export const COLOR_THEMES = ['base', 'wcag'] as const;
-
-/**
- * Resolve color token value for specific mode and theme
+ * Resolve a color token value for a specific mode and theme
+ * 
+ * @param token - The color token object (PrimitiveToken)
+ * @param mode - The color mode ('light', 'dark') - defaults to 'light'
+ * @param theme - The color theme ('base', 'wcag') - defaults to 'base'
+ * @returns The resolved color value as a string (RGBA format)
  */
 export function resolveColorTokenValue(
   token: PrimitiveToken,
-  mode: 'light' | 'dark' = 'light',
-  theme: 'base' | 'wcag' = 'base'
+  mode: ColorMode = 'light',
+  theme: ColorTheme = 'base'
 ): string {
-  if (token.category !== TokenCategory.COLOR) {
-    throw new Error(`Token "${token.name}" is not a color token`);
+  if (!token || token.category !== TokenCategory.COLOR) {
+    throw new Error(`Token "${token?.name || 'unknown'}" is not a color token`);
   }
-
-  const colorValue = token.platforms.web.value as ColorTokenValue;
-  return colorValue[mode][theme];
+  
+  // Use web platform as the canonical source for color values
+  const platformValue = token.platforms.web;
+  if (!platformValue) {
+    throw new Error(`Web platform not found for token "${token.name}"`);
+  }
+  
+  const colorValue = platformValue.value as ColorTokenValue;
+  if (!colorValue || typeof colorValue !== 'object') {
+    throw new Error(`Invalid color value structure for token "${token.name}"`);
+  }
+  
+  const modeValue = colorValue[mode];
+  if (!modeValue) {
+    throw new Error(`Mode "${mode}" not found for token "${token.name}"`);
+  }
+  
+  const themeValue = modeValue[theme];
+  if (!themeValue) {
+    throw new Error(`Theme "${theme}" not found for token "${token.name}" in mode "${mode}"`);
+  }
+  
+  return themeValue;
 }

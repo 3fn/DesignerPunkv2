@@ -312,9 +312,9 @@ AI: "I notice 14px spacing is now needed in three components:
 
 This pattern suggests 14px might warrant a primitive token (space175 = 8 × 1.75).
 Should I:
-A) Create another component token (keep scoped)
-B) Propose creating space175 primitive and refactoring existing component tokens
-C) Something else?"
+A. Create another component token (keep scoped)
+B. Propose creating space175 primitive and refactoring existing component tokens
+C. Something else?"
 ```
 
 ---
