@@ -1,8 +1,8 @@
-# DesignerPunk v5
+# DesignerPunk v6
 
 **A True Native Cross-Platform Design System with Mathematical Foundations**
 
-[![Version](https://img.shields.io/badge/Version-5.2.0-purple)](docs/releases/RELEASE-NOTES-5.2.0.md)
+[![Version](https://img.shields.io/badge/Version-6.0.0-purple)](docs/releases/RELEASE-NOTES-6.0.0.md)
 [![Repository](https://img.shields.io/badge/GitHub-DesignerPunkv2-blue)](https://github.com/3fn/DesignerPunkv2)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
@@ -119,6 +119,20 @@ With the Stemma System foundation complete, future development focuses on:
 
 ### ✅ Recently Completed
 
+**Semantic Token Naming Restructure** (January 2026) - v6.0.0 ⚠️ BREAKING CHANGE
+- **Concept-based semantic color tokens**: Restructured from flat naming to five semantic concepts:
+  - `color.feedback.*` - Success, error, warning, info, select states
+  - `color.identity.*` - Human (orange300) and agent (teal200) identification
+  - `color.action.*` - Primary (purple300) and secondary (black400) actions
+  - `color.contrast.*` - Content on light (black500) and dark (white100) backgrounds
+  - `color.structure.*` - Canvas, surface, border, and border.subtle
+- **RGBA format migration**: All primitive color tokens converted from hex (#RRGGBB) to RGBA (rgba(R, G, B, 1))
+- **Opacity composition pattern**: `color.structure.border.subtle` uses gray100 + opacity600 composition
+- **Cross-platform generation**: Updated Web (CSS), iOS (Swift), Android (Kotlin) generators for RGBA output
+- **Component token alignment**: Badge tokens reordered to `{component}.{variant}.{property}` pattern
+- **Full component migration**: All 9 components updated across all 3 platforms
+- **Documentation refresh**: Token-Family-Color.md, Token-Governance.md, Token-Quick-Reference.md updated
+
 **Badge Component Family** (January 2026) - v5.2.0
 - New `Badge-Label-Base` type primitive for categorization, status, and metadata display
 - New `Badge-Count-Base` type primitive for numeric counts with circular/pill shape behavior
@@ -224,7 +238,7 @@ With the Stemma System foundation complete, future development focuses on:
   - Line Height: 11 tokens with precision multipliers (lineHeight100=1.5, 4pt subgrid aligned)
   - Letter Spacing: 5 tokens (-0.05em to 0.05em)
   - Size Variants: Complete Xs/Sm/Md/Lg coverage for labels, code, and buttons
-- **Color** (45+ tokens): Electric palette with light/dark modes and base/WCAG themes
+- **Color** (45+ tokens): Electric palette in RGBA format with light/dark modes and base/WCAG themes
 - **Radius** (12 tokens): Base 8 (radius050=4, radius100=8, radius200=16, radiusFull=9999)
 - **Tap Area** (4 tokens): WCAG 2.1 AA/AAA compliance (44pt-64pt)
 - **Density** (4 tokens): Selective scaling (0.75x-1.5x for functional tokens)
@@ -248,7 +262,12 @@ With the Stemma System foundation complete, future development focuses on:
   - Buttons: buttonSm, buttonMd, buttonLg (renamed for consistency)
   - Headings: h1-h6 (all using display font family)
   - Display: display, displayLarge (hero text)
-- **Colors**: Contextual references (color.primary, color.success, color.text, color.background)
+- **Colors**: Concept-based semantic organization (NEW in v6.0.0):
+  - `color.feedback.*` - Success, error, warning, info, select states with text/background/border variants
+  - `color.identity.*` - Human (orange300) and agent (teal200) identification
+  - `color.action.*` - Primary (purple300) and secondary (black400) actions
+  - `color.contrast.*` - Content on light (black500) and dark (white100) backgrounds
+  - `color.structure.*` - Canvas, surface, border, and border.subtle (with opacity composition)
 - **Shadows**: Complete shadow compositions (container, modal, hover, fab) with lighting framework
 - **Layering**: Platform-specific z-index (web/iOS) and elevation (Android) tokens
 - **Borders**: Component-specific border widths (input, divider, focus, card, emphasis)
