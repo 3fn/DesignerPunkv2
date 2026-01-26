@@ -447,7 +447,7 @@ describe('Badge-Count-Base Unit Tests', () => {
     });
 
     it('should use token-based colors for WCAG compliance', () => {
-      expect(cssContent).toContain('var(--color-surface');
+      expect(cssContent).toContain('var(--color-structure-surface');
       expect(cssContent).toContain('var(--color-text-default');
     });
   });

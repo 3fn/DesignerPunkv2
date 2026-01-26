@@ -783,15 +783,18 @@ export class TokenFileGenerator {
       // Detect single-reference vs multi-reference tokens
       // Single-reference tokens have:
       // - Only one key in primitiveReferences, OR
-      // - A 'value' or 'default' key (standard single-reference pattern)
+      // - A 'value' or 'default' key (standard single-reference pattern), OR
+      // - 'color' and 'opacity' keys (opacity composition pattern)
       const refs = Object.keys(semantic.primitiveReferences);
+      const isOpacityComposition = refs.includes('color') && refs.includes('opacity') && refs.length === 2;
       const isSingleReference = refs.length === 1 ||
         refs.includes('value') ||
-        refs.includes('default');
+        refs.includes('default') ||
+        isOpacityComposition;
 
       // Call appropriate formatter method for each token based on reference type
       if (isSingleReference) {
-        // Single-reference tokens (colors, spacing, borders)
+        // Single-reference tokens (colors, spacing, borders, opacity compositions)
         lines.push(generator.formatSingleReferenceToken(semantic as SemanticToken));
       } else {
         // Multi-reference tokens (typography with multiple properties)

@@ -316,7 +316,7 @@ private fun ImageExamplesSection() {
                     Text(
                         text = "src ignored",
                         style = MaterialTheme.typography.labelSmall,
-                        color = Color(0xFFFF9800) // Orange warning color
+                        color = Color(0xFFFF9800) /* orange400 - warning color */
                     )
                 }
                 

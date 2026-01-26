@@ -30,7 +30,7 @@
   border-radius: var(--radius-half, 50%);
   
   /* Colors - default surface/text */
-  background-color: var(--color-surface);
+  background-color: var(--color-structure-surface);
   color: var(--color-text-default);
   
   /* Non-interactive */

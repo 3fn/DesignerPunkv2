@@ -14,6 +14,9 @@
  * Note: Animation timing coordination is now handled by CSS transition-delay
  * on the icon container. The calculateIconVisibility function no longer requires
  * an animationState parameter - it determines visibility based on component state only.
+ * 
+ * UPDATED (Spec 052 - Task 9.3): Tests updated to verify behavior, not specific token names.
+ * Component tests should survive future refactoring without breaking.
  */
 
 import {
@@ -42,7 +45,7 @@ describe('State Management', () => {
 
       expect(result.isFloated).toBe(false);
       expect(result.fontSize).toBe('typography.labelMd');
-      expect(result.color).toBe('color.text.muted');
+      expect(result.color).toBeDefined();
       expect(result.position).toBe('inside');
     });
 
@@ -59,7 +62,7 @@ describe('State Management', () => {
 
       expect(result.isFloated).toBe(true);
       expect(result.fontSize).toBe('typography.labelMdFloat');
-      expect(result.color).toBe('color.primary');
+      expect(result.color).toBeDefined();
       expect(result.position).toBe('above');
     });
 
@@ -76,12 +79,20 @@ describe('State Management', () => {
 
       expect(result.isFloated).toBe(true);
       expect(result.fontSize).toBe('typography.labelMdFloat');
-      expect(result.color).toBe('color.text.muted');
+      expect(result.color).toBeDefined();
       expect(result.position).toBe('above');
     });
 
-    it('should use error color when in error state', () => {
-      const state: InputTextBaseState = {
+    it('should use different color when in error state vs default state', () => {
+      const defaultState: InputTextBaseState = {
+        isFocused: false,
+        isFilled: false,
+        hasError: false,
+        isSuccess: false,
+        isLabelFloated: false
+      };
+
+      const errorState: InputTextBaseState = {
         isFocused: true,
         isFilled: false,
         hasError: true,
@@ -89,13 +100,24 @@ describe('State Management', () => {
         isLabelFloated: true
       };
 
-      const result = calculateLabelPosition(state);
+      const defaultResult = calculateLabelPosition(defaultState);
+      const errorResult = calculateLabelPosition(errorState);
 
-      expect(result.color).toBe('color.error');
+      // Error state should have a different color than default
+      expect(errorResult.color).not.toBe(defaultResult.color);
+      expect(errorResult.color).toBeDefined();
     });
 
-    it('should use success color when in success state', () => {
-      const state: InputTextBaseState = {
+    it('should use different color when in success state vs default state', () => {
+      const defaultState: InputTextBaseState = {
+        isFocused: false,
+        isFilled: false,
+        hasError: false,
+        isSuccess: false,
+        isLabelFloated: false
+      };
+
+      const successState: InputTextBaseState = {
         isFocused: false,
         isFilled: true,
         hasError: false,
@@ -103,13 +125,24 @@ describe('State Management', () => {
         isLabelFloated: true
       };
 
-      const result = calculateLabelPosition(state);
+      const defaultResult = calculateLabelPosition(defaultState);
+      const successResult = calculateLabelPosition(successState);
 
-      expect(result.color).toBe('color.success');
+      // Success state should have a different color than default
+      expect(successResult.color).not.toBe(defaultResult.color);
+      expect(successResult.color).toBeDefined();
     });
 
     it('should prioritize error color over success color', () => {
-      const state: InputTextBaseState = {
+      const successOnlyState: InputTextBaseState = {
+        isFocused: false,
+        isFilled: true,
+        hasError: false,
+        isSuccess: true,
+        isLabelFloated: true
+      };
+
+      const errorAndSuccessState: InputTextBaseState = {
         isFocused: false,
         isFilled: true,
         hasError: true,
@@ -117,13 +150,33 @@ describe('State Management', () => {
         isLabelFloated: true
       };
 
-      const result = calculateLabelPosition(state);
+      const errorOnlyState: InputTextBaseState = {
+        isFocused: false,
+        isFilled: true,
+        hasError: true,
+        isSuccess: false,
+        isLabelFloated: true
+      };
 
-      expect(result.color).toBe('color.error');
+      const successResult = calculateLabelPosition(successOnlyState);
+      const errorAndSuccessResult = calculateLabelPosition(errorAndSuccessState);
+      const errorOnlyResult = calculateLabelPosition(errorOnlyState);
+
+      // When both error and success are true, error should take precedence
+      expect(errorAndSuccessResult.color).toBe(errorOnlyResult.color);
+      expect(errorAndSuccessResult.color).not.toBe(successResult.color);
     });
 
     it('should prioritize error color over focused color', () => {
-      const state: InputTextBaseState = {
+      const focusedState: InputTextBaseState = {
+        isFocused: true,
+        isFilled: false,
+        hasError: false,
+        isSuccess: false,
+        isLabelFloated: true
+      };
+
+      const errorAndFocusedState: InputTextBaseState = {
         isFocused: true,
         isFilled: false,
         hasError: true,
@@ -131,9 +184,45 @@ describe('State Management', () => {
         isLabelFloated: true
       };
 
-      const result = calculateLabelPosition(state);
+      const errorOnlyState: InputTextBaseState = {
+        isFocused: false,
+        isFilled: true,
+        hasError: true,
+        isSuccess: false,
+        isLabelFloated: true
+      };
 
-      expect(result.color).toBe('color.error');
+      const focusedResult = calculateLabelPosition(focusedState);
+      const errorAndFocusedResult = calculateLabelPosition(errorAndFocusedState);
+      const errorOnlyResult = calculateLabelPosition(errorOnlyState);
+
+      // When both error and focused are true, error should take precedence
+      expect(errorAndFocusedResult.color).toBe(errorOnlyResult.color);
+      expect(errorAndFocusedResult.color).not.toBe(focusedResult.color);
+    });
+
+    it('should use different color when focused vs unfocused (non-error, non-success)', () => {
+      const unfocusedState: InputTextBaseState = {
+        isFocused: false,
+        isFilled: true,
+        hasError: false,
+        isSuccess: false,
+        isLabelFloated: true
+      };
+
+      const focusedState: InputTextBaseState = {
+        isFocused: true,
+        isFilled: false,
+        hasError: false,
+        isSuccess: false,
+        isLabelFloated: true
+      };
+
+      const unfocusedResult = calculateLabelPosition(unfocusedState);
+      const focusedResult = calculateLabelPosition(focusedState);
+
+      // Focused state should have a different color than unfocused filled state
+      expect(focusedResult.color).not.toBe(unfocusedResult.color);
     });
   });
 

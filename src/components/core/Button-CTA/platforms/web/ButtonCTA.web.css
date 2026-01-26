@@ -176,7 +176,7 @@
  * - Medium visual emphasis
  */
 .button-cta--secondary {
-  background-color: var(--color-background);
+  background-color: var(--color-structure-canvas);
   color: var(--color-action-primary);
   border: var(--border-default) solid var(--color-action-primary);
 }

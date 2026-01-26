@@ -69,7 +69,7 @@ export function setupBadgeLabelTokens(): void {
   document.documentElement.style.setProperty('--space-150', '12px');
   
   // Component token (using correct generated name)
-  document.documentElement.style.setProperty('--badge-label-base-max-width', '120px');
+  document.documentElement.style.setProperty('--badgelabelbase-max-width', '120px');
   
   // Icon stroke width token (required by Icon-Base)
   document.documentElement.style.setProperty('--icon-stroke-width', '2');
@@ -112,7 +112,7 @@ export function cleanupBadgeLabelTokens(): void {
   document.documentElement.style.removeProperty('--space-050');
   document.documentElement.style.removeProperty('--space-100');
   document.documentElement.style.removeProperty('--space-150');
-  document.documentElement.style.removeProperty('--badge-label-base-max-width');
+  document.documentElement.style.removeProperty('--badgelabelbase-max-width');
   document.documentElement.style.removeProperty('--icon-stroke-width');
 }
 

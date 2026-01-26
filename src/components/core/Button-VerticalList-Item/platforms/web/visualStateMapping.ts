@@ -78,7 +78,7 @@ export const visualStateMap: Record<VisualState, VisualStateStyles> = {
    * @see Requirement 1.1
    */
   rest: {
-    background: 'var(--color-background)',
+    background: 'var(--color-structure-canvas)',
     borderWidth: 'var(--border-default)',
     borderColor: 'transparent',
     labelColor: 'var(--color-text-default)',
@@ -161,7 +161,7 @@ export const visualStateMap: Record<VisualState, VisualStateStyles> = {
    * @see Requirement 1.5
    */
   unchecked: {
-    background: 'var(--color-background)',
+    background: 'var(--color-structure-canvas)',
     borderWidth: 'var(--border-default)',
     borderColor: 'transparent',
     labelColor: 'var(--color-text-default)',

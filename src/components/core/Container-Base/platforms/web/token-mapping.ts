@@ -300,7 +300,7 @@ export function mapPaddingInlineEndToCSS(paddingInlineEnd: PaddingValue | null):
  * @example
  * ```typescript
  * mapBorderToCSS('default') // Returns 'border: var(--border-default) solid var(--color-border)'
- * mapBorderToCSS('default', 'color.border.subtle') // Returns 'border: var(--border-default) solid var(--color-border-subtle)'
+ * mapBorderToCSS('default', 'color.structure.border.subtle') // Returns 'border: var(--border-default) solid var(--color-structure-border-subtle)'
  * mapBorderToCSS('none') // Returns ''
  * ```
  * 

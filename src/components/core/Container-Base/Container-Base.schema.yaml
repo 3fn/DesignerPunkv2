@@ -209,7 +209,7 @@ properties:
       
       Common values:
       - color.border.default: Standard border color
-      - color.border.subtle: Subtle/muted border color
+      - color.structure.border.subtle: Subtle/muted border color
       - color.border.emphasis: Emphasized border color
   
   borderRadius:
@@ -438,7 +438,7 @@ tokens:
     - color.background
     - color.surface
     - color.border.default
-    - color.border.subtle
+    - color.structure.border.subtle
     - color.border.emphasis
     - color.canvas
   shadow:

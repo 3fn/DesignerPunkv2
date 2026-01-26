@@ -326,7 +326,7 @@ describe('Badge-Label-Base Unit Tests', () => {
     });
 
     it('should reference component token for max-width', () => {
-      expect(cssContent).toContain('--badge-label-base-max-width');
+      expect(cssContent).toContain('--badgelabelbase-max-width');
     });
   });
 
@@ -432,7 +432,7 @@ describe('Badge-Label-Base Unit Tests', () => {
     });
 
     it('should use token-based colors for WCAG compliance', () => {
-      expect(cssContent).toContain('var(--color-surface');
+      expect(cssContent).toContain('var(--color-structure-surface');
       expect(cssContent).toContain('var(--color-text-default');
     });
   });

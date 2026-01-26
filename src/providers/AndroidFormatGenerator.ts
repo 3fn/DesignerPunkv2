@@ -2,6 +2,8 @@ import { PrimitiveToken, SemanticToken } from '../types';
 import { BaseFormatProvider, FileMetadata } from './FormatProvider';
 import { TargetPlatform, OutputFormat } from '../types/TranslationOutput';
 import { getPlatformTokenName } from '../naming/PlatformNamingRules';
+import { getColorToken } from '../tokens/ColorTokens';
+import { getOpacityToken } from '../tokens/OpacityTokens';
 
 /**
  * Android-specific format generator
@@ -309,8 +311,15 @@ export class AndroidFormatGenerator extends BaseFormatProvider {
    * Format a single-reference semantic token
    * Generates: val colorPrimary = purple300
    * For baked-in RGBA values: val colorStructureBorderSubtle = Color.argb(122, 184, 182, 200)
+   * For opacity composition: val colorStructureBorderSubtle = Color.argb(122, 184, 182, 200)
    */
   formatSingleReferenceToken(semantic: SemanticToken): string {
+    // Check for opacity composition pattern (has 'color' and 'opacity' keys)
+    const refs = semantic.primitiveReferences as Record<string, string>;
+    if (refs.color && refs.opacity) {
+      return this.formatOpacityCompositionToken(semantic, refs.color, refs.opacity);
+    }
+
     // Get the primitive reference name (e.g., 'purple300' from primitiveReferences)
     const primitiveRef = semantic.primitiveReferences.value || 
                          semantic.primitiveReferences.default ||
@@ -362,6 +371,73 @@ export class AndroidFormatGenerator extends BaseFormatProvider {
       // XML format - reference another resource
       const resourceType = this.getXMLResourceType(semantic.category);
       const tokenLine = `    <${resourceType} name="${semanticName}">@${resourceType}/${primitiveRefName}</${resourceType}>`;
+      return wcagComment ? `    ${wcagComment}\n${tokenLine}` : tokenLine;
+    }
+  }
+
+  /**
+   * Format a semantic token with opacity composition
+   * Resolves color primitive to RGB values and opacity primitive to alpha value
+   * Output: Color.argb(alpha*255, r, g, b)
+   * 
+   * @param semantic - Semantic token with color+opacity composition
+   * @param colorRef - Color primitive token name (e.g., 'gray100')
+   * @param opacityRef - Opacity primitive token name (e.g., 'opacity600')
+   * @returns Kotlin constant or XML resource string with resolved Color.argb value
+   */
+  private formatOpacityCompositionToken(
+    semantic: SemanticToken,
+    colorRef: string,
+    opacityRef: string
+  ): string {
+    // Resolve color primitive to get RGB values
+    const colorToken = getColorToken(colorRef as any);
+    if (!colorToken) {
+      throw new Error(`Color primitive '${colorRef}' not found for token ${semantic.name}`);
+    }
+
+    // Resolve opacity primitive to get alpha value
+    const opacityToken = getOpacityToken(opacityRef);
+    if (!opacityToken) {
+      throw new Error(`Opacity primitive '${opacityRef}' not found for token ${semantic.name}`);
+    }
+
+    // Extract RGB values from color token's Android platform value
+    const colorValue = colorToken.platforms.android.value as { light?: { base?: string } };
+    const rgbaString = colorValue.light?.base;
+    if (!rgbaString) {
+      throw new Error(`Color token '${colorRef}' has no Android platform value`);
+    }
+
+    // Parse the RGBA string to get RGB components
+    const parsed = this.parseRgbaString(rgbaString);
+    if (!parsed) {
+      throw new Error(`Failed to parse RGBA value for color token '${colorRef}'`);
+    }
+
+    // Get opacity value (0.0 - 1.0) and convert to 0-255 range
+    const opacityValue = opacityToken.baseValue;
+    const alpha = Math.round(opacityValue * 255);
+
+    // Convert semantic token name to Android format
+    const semanticName = this.getTokenName(semantic.name, semantic.category);
+
+    // Add WCAG comment for accessibility tokens
+    const wcagComment = this.getWCAGComment(semantic);
+
+    if (this.outputFormat === 'kotlin') {
+      // Generate Color.argb format
+      const colorArgbValue = `Color.argb(${alpha}, ${parsed.r}, ${parsed.g}, ${parsed.b})`;
+      const tokenLine = `    val ${semanticName} = ${colorArgbValue}`;
+      return wcagComment ? `    ${wcagComment}\n${tokenLine}` : tokenLine;
+    } else {
+      // XML format - output hex color with alpha
+      const alphaHex = alpha.toString(16).padStart(2, '0').toUpperCase();
+      const redHex = parsed.r.toString(16).padStart(2, '0').toUpperCase();
+      const greenHex = parsed.g.toString(16).padStart(2, '0').toUpperCase();
+      const blueHex = parsed.b.toString(16).padStart(2, '0').toUpperCase();
+      const hexColor = `#${alphaHex}${redHex}${greenHex}${blueHex}`;
+      const tokenLine = `    <color name="${semanticName}">${hexColor}</color>`;
       return wcagComment ? `    ${wcagComment}\n${tokenLine}` : tokenLine;
     }
   }

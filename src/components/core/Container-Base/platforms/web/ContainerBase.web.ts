@@ -64,7 +64,7 @@ const BASE_STYLES = `
   }
   
   .container-base:focus {
-    outline: var(--border-emphasis) solid var(--color-primary);
+    outline: var(--border-emphasis) solid var(--color-action-primary);
     outline-offset: var(--space-grouped-minimal);
   }
   
@@ -73,7 +73,7 @@ const BASE_STYLES = `
   }
   
   .container-base:focus-visible {
-    outline: var(--border-emphasis) solid var(--color-primary);
+    outline: var(--border-emphasis) solid var(--color-action-primary);
     outline-offset: var(--space-grouped-minimal);
   }
   

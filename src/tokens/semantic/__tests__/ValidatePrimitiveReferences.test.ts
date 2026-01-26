@@ -69,15 +69,36 @@ describe('Primitive Reference Validation', () => {
 
       colorTokens.forEach(token => {
         if (token.primitiveReferences) {
-          Object.entries(token.primitiveReferences).forEach(([key, primitiveName]) => {
-            if (!allPrimitiveTokens.has(primitiveName)) {
+          // Check for opacity composition pattern: { color: 'primitiveName', opacity: 'opacityName' }
+          const refs = token.primitiveReferences as Record<string, string>;
+          if ('color' in refs && 'opacity' in refs) {
+            // Validate composite reference (color + opacity)
+            if (!allPrimitiveTokens.has(refs.color)) {
               invalidReferences.push({
                 token: token.name,
-                reference: primitiveName,
-                key
+                reference: refs.color,
+                key: 'color'
               });
             }
-          });
+            if (!allPrimitiveTokens.has(refs.opacity)) {
+              invalidReferences.push({
+                token: token.name,
+                reference: refs.opacity,
+                key: 'opacity'
+              });
+            }
+          } else {
+            // Standard single-value reference pattern: { value: 'primitiveName' }
+            Object.entries(refs).forEach(([key, primitiveName]) => {
+              if (!allPrimitiveTokens.has(primitiveName)) {
+                invalidReferences.push({
+                  token: token.name,
+                  reference: primitiveName,
+                  key
+                });
+              }
+            });
+          }
         }
       });
 
@@ -89,6 +110,24 @@ describe('Primitive Reference Validation', () => {
       }
 
       expect(invalidReferences).toHaveLength(0);
+    });
+
+    it('should validate opacity composition references correctly', () => {
+      const colorTokens = getAllColorTokens();
+      const compositeTokens = colorTokens.filter(token => {
+        const refs = token.primitiveReferences as Record<string, string>;
+        return 'color' in refs && 'opacity' in refs;
+      });
+
+      // Verify at least one composite token exists (color.structure.border.subtle)
+      expect(compositeTokens.length).toBeGreaterThan(0);
+
+      // Verify all composite tokens have valid references
+      compositeTokens.forEach(token => {
+        const refs = token.primitiveReferences as Record<string, string>;
+        expect(allPrimitiveTokens.has(refs.color)).toBe(true);
+        expect(allPrimitiveTokens.has(refs.opacity)).toBe(true);
+      });
     });
   });
 

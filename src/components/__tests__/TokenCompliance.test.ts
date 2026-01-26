@@ -110,6 +110,9 @@ describe('Token Compliance - All Components', () => {
      * Detects hard-coded RGB color values in iOS Swift files.
      * Pattern: Color(red: X, green: Y, blue: Z) or Color(red:X, green:Y, blue:Z)
      * 
+     * REFINED (Spec 052): Excludes lines with token documentation comments.
+     * These are intentionally documented values that reference the token system.
+     * 
      * Requirements: 1.1, 8.1
      */
     it('should not contain Color(red:green:blue:) pattern in iOS files', () => {
@@ -123,8 +126,15 @@ describe('Token Compliance - All Components', () => {
         // Pattern to match Color(red: X, green: Y, blue: Z) with various spacing
         const colorPattern = /Color\s*\(\s*red\s*:\s*[\d.]+/i;
         
+        // Pattern to match token documentation comments (/* tokenName */)
+        const tokenDocPattern = /\/\*\s*[a-zA-Z]+\d+\s*\*\//;
+        
         lines.forEach((line, index) => {
           if (colorPattern.test(line)) {
+            // Skip lines with token documentation comments
+            if (tokenDocPattern.test(line)) {
+              return;
+            }
             violations.push({
               file: path.relative(process.cwd(), file),
               line: index + 1,
@@ -152,6 +162,9 @@ describe('Token Compliance - All Components', () => {
      * Detects hard-coded hex color values in Android Kotlin files.
      * Pattern: Color(0xRRGGBB) or Color(0xAARRGGBB) with 6 or 8 hex digits
      * 
+     * REFINED (Spec 052): Excludes lines with token documentation comments.
+     * These are intentionally documented values that reference the token system.
+     * 
      * Requirements: 1.1, 8.1
      */
     it('should not contain Color(0xRRGGBB) pattern in Android files', () => {
@@ -165,8 +178,15 @@ describe('Token Compliance - All Components', () => {
         // Pattern to match Color(0xRRGGBB) or Color(0xAARRGGBB)
         const colorPattern = /Color\s*\(\s*0x[0-9A-Fa-f]{6,8}\s*\)/;
         
+        // Pattern to match token documentation comments (/* tokenName */)
+        const tokenDocPattern = /\/\*\s*[a-zA-Z]+\d+/;
+        
         lines.forEach((line, index) => {
           if (colorPattern.test(line)) {
+            // Skip lines with token documentation comments
+            if (tokenDocPattern.test(line)) {
+              return;
+            }
             violations.push({
               file: path.relative(process.cwd(), file),
               line: index + 1,

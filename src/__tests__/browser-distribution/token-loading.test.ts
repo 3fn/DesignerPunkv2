@@ -54,12 +54,14 @@ describe('Token Loading Behavior', () => {
 
     /**
      * Requirement 3.2: All CSS custom properties required by components SHALL be available
+     * Note: Token name updated from --color-primary to --color-action-primary per Spec 052
      */
-    it('should contain color-primary token used for token detection', () => {
+    it('should contain color-action-primary token used for token detection', () => {
       const content = fs.readFileSync(TOKENS_CSS_PATH, 'utf-8');
       
-      // The browser-entry.ts checks for --color-primary to detect if tokens are loaded
-      expect(content).toContain('--color-primary');
+      // The browser-entry.ts checks for --color-action-primary to detect if tokens are loaded
+      // Note: color.primary was renamed to color.action.primary in Spec 052
+      expect(content).toContain('--color-action-primary');
     });
   });
 
@@ -99,7 +101,8 @@ describe('Token Loading Behavior', () => {
       
       // Check for essential tokens that components use
       // Note: JSDOM has limited CSS support, so we verify the style element was added
-      expect(styleElement.textContent).toContain('--color-primary');
+      // Note: color.primary was renamed to color.action.primary in Spec 052
+      expect(styleElement.textContent).toContain('--color-action-primary');
       expect(styleElement.textContent).toContain('--color-text-default');
       expect(styleElement.textContent).toContain('--space-inset-100');
     });
@@ -108,15 +111,16 @@ describe('Token Loading Behavior', () => {
       const tokensContent = fs.readFileSync(TOKENS_CSS_PATH, 'utf-8');
       
       // Essential tokens that components reference
+      // Note: Token names updated per Spec 052 semantic token naming restructure
       const essentialTokens = [
-        '--color-primary',
-        '--color-error-strong',
-        '--color-success-strong',
+        '--color-action-primary',  // Renamed from --color-primary
+        '--color-feedback-error-text',  // Renamed from --color-error-strong
+        '--color-feedback-success-text',  // Renamed from --color-success-strong
         '--color-text-default',
         '--color-text-muted',
-        '--color-background',
-        '--color-surface',
-        '--color-border',
+        '--color-structure-canvas',  // Renamed from --color-background
+        '--color-structure-surface',  // Renamed from --color-surface
+        '--color-structure-border',  // Renamed from --color-border
         '--space-inset-100',
         '--radius-100',
         '--duration-150',
@@ -162,8 +166,9 @@ describe('Token Loading Behavior', () => {
 
       // Import and call the checkTokensLoaded function behavior
       // We simulate what browser-entry.ts does
+      // Note: color.primary was renamed to color.action.primary in Spec 052
       const testProperty = window.getComputedStyle(document.documentElement)
-        .getPropertyValue('--color-primary');
+        .getPropertyValue('--color-action-primary');
       
       if (!testProperty || testProperty.trim() === '') {
         console.warn(
@@ -193,8 +198,9 @@ describe('Token Loading Behavior', () => {
       });
 
       // Simulate the checkTokensLoaded function behavior
+      // Note: color.primary was renamed to color.action.primary in Spec 052
       const testProperty = window.getComputedStyle(document.documentElement)
-        .getPropertyValue('--color-primary');
+        .getPropertyValue('--color-action-primary');
       
       if (!testProperty || testProperty.trim() === '') {
         console.warn(
@@ -215,8 +221,9 @@ describe('Token Loading Behavior', () => {
       });
 
       // Simulate the checkTokensLoaded function behavior
+      // Note: color.primary was renamed to color.action.primary in Spec 052
       const testProperty = window.getComputedStyle(document.documentElement)
-        .getPropertyValue('--color-primary');
+        .getPropertyValue('--color-action-primary');
       
       if (!testProperty || testProperty.trim() === '') {
         console.warn(
@@ -244,8 +251,8 @@ describe('Token Loading Behavior', () => {
       // Verify checkTokensLoaded function exists
       expect(content).toContain('function checkTokensLoaded');
       
-      // Verify it checks for --color-primary
-      expect(content).toContain('--color-primary');
+      // Verify it checks for --color-action-primary (renamed from --color-primary in Spec 052)
+      expect(content).toContain('--color-action-primary');
       
       // Verify it uses getComputedStyle
       expect(content).toContain('getComputedStyle');
@@ -294,12 +301,13 @@ describe('Token Loading Behavior', () => {
       expect(bundleContent).toContain('tokens.css');
     });
 
-    it('should check for --color-primary token in ESM bundle', () => {
+    it('should check for --color-action-primary token in ESM bundle', () => {
       const esmBundlePath = path.join(BROWSER_DIST_DIR, 'designerpunk.esm.js');
       const bundleContent = fs.readFileSync(esmBundlePath, 'utf-8');
 
       // Verify the token check is in the bundle
-      expect(bundleContent).toContain('--color-primary');
+      // Note: color.primary was renamed to color.action.primary in Spec 052
+      expect(bundleContent).toContain('--color-action-primary');
       expect(bundleContent).toContain('getPropertyValue');
     });
   });
@@ -323,12 +331,13 @@ describe('Token Loading Behavior', () => {
       expect(bundleContent).toContain('tokens.css');
     });
 
-    it('should check for --color-primary token in UMD bundle', () => {
+    it('should check for --color-action-primary token in UMD bundle', () => {
       const umdBundlePath = path.join(BROWSER_DIST_DIR, 'designerpunk.umd.js');
       const bundleContent = fs.readFileSync(umdBundlePath, 'utf-8');
 
       // Verify the token check is in the bundle
-      expect(bundleContent).toContain('--color-primary');
+      // Note: color.primary was renamed to color.action.primary in Spec 052
+      expect(bundleContent).toContain('--color-action-primary');
       expect(bundleContent).toContain('getPropertyValue');
     });
   });

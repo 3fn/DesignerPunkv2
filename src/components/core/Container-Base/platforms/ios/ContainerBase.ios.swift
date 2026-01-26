@@ -79,7 +79,7 @@ import SwiftUI
  * ContainerBase(
  *     padding: .p200,
  *     border: .default,
- *     borderColor: "color.border.subtle"
+ *     borderColor: "color.structure.border.subtle"
  * ) {
  *     Text("Content with subtle border")
  * }
@@ -695,7 +695,7 @@ func resolveContainerBaseBorderColor(_ borderColor: String?) -> Color {
     switch borderColor {
     case "color.border.default":
         return colorBorder
-    case "color.border.subtle":
+    case "color.structure.border.subtle":
         return colorBorderSubtle
     case "color.border.emphasis":
         return colorBorderEmphasis

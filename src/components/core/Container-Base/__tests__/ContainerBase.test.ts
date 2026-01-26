@@ -405,15 +405,15 @@ describe('Container-Base Component', () => {
       });
 
       it('should use provided borderColor when specified', () => {
-        expect(mapBorderToCSS('default', 'color.border.subtle' as any)).toBe('border: var(--border-border-default) solid var(--color-border-subtle)');
+        expect(mapBorderToCSS('default', 'color.structure.border.subtle' as any)).toBe('border: var(--border-border-default) solid var(--color-structure-border-subtle)');
       });
 
       it('should return empty string for none border regardless of borderColor', () => {
-        expect(mapBorderToCSS('none', 'color.border.subtle' as any)).toBe('');
+        expect(mapBorderToCSS('none', 'color.structure.border.subtle' as any)).toBe('');
       });
 
       it('should return empty string for null border', () => {
-        expect(mapBorderToCSS(null, 'color.border.subtle' as any)).toBe('');
+        expect(mapBorderToCSS(null, 'color.structure.border.subtle' as any)).toBe('');
       });
     });
   });
@@ -461,9 +461,9 @@ describe('Container-Base Component', () => {
     it('should include borderColor when provided with border', () => {
       const styles = buildContainerBaseStyles({
         border: 'default',
-        borderColor: 'color.border.subtle' as any
+        borderColor: 'color.structure.border.subtle' as any
       });
-      expect(styles).toContain('border: var(--border-border-default) solid var(--color-border-subtle)');
+      expect(styles).toContain('border: var(--border-border-default) solid var(--color-structure-border-subtle)');
     });
 
     it('should use default border color when borderColor not provided', () => {
@@ -557,7 +557,7 @@ describe('Container-Base Component', () => {
       });
 
       it('should document borderColor supports subtle variant', () => {
-        // iOS resolveContainerBaseBorderColor supports "color.border.subtle"
+        // iOS resolveContainerBaseBorderColor supports "color.structure.border.subtle"
         // Maps to colorBorderSubtle in TokenMapping.swift
         expect(true).toBe(true); // Documentation test
       });
@@ -668,7 +668,7 @@ describe('Container-Base Component', () => {
       });
 
       it('should document borderColor supports subtle variant', () => {
-        // Android resolveContainerBaseBorderColor supports "color.border.subtle"
+        // Android resolveContainerBaseBorderColor supports "color.structure.border.subtle"
         // Maps to colorBorderSubtle in TokenMapping.kt
         expect(true).toBe(true); // Documentation test
       });

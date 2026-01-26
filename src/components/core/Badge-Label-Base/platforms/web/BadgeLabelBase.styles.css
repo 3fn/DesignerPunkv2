@@ -25,7 +25,7 @@
   border-radius: var(--radius-subtle);
   
   /* Colors - default surface/text */
-  background-color: var(--color-surface);
+  background-color: var(--color-structure-surface);
   color: var(--color-text-default);
   
   /* Non-interactive */
@@ -117,9 +117,9 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   
-  /* Max-width from component token: badge-label-base.maxWidth (120px)
+  /* Max-width from component token: badgelabelbase.maxWidth (120px)
    * Uses generated token name with fallback for compatibility */
-  max-width: var(--badge-label-base-max-width, 120px);
+  max-width: var(--badgelabelbase-max-width, 120px);
 }
 
 /* ============================================================================

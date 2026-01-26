@@ -166,8 +166,8 @@ class InputTextPhoneNumber extends HTMLElement {
           display: flex;
           align-items: center;
           min-height: var(--tap-area-comfortable);
-          background: var(--color-background);
-          border: var(--border-default) solid var(--color-border);
+          background: var(--color-structure-canvas);
+          border: var(--border-default) solid var(--color-structure-border);
           border-radius: var(--radius-150);
           padding-top: var(--space-inset-200);
           padding-bottom: var(--space-inset-none);
@@ -177,7 +177,7 @@ class InputTextPhoneNumber extends HTMLElement {
         }
 
         .input-container.focused {
-          border-color: var(--color-primary);
+          border-color: var(--color-action-primary);
         }
 
         .input-container.error {
@@ -231,7 +231,7 @@ class InputTextPhoneNumber extends HTMLElement {
           transform: translateY(0);
           font-size: var(--typography-label-md-float-font-size);
           line-height: var(--typography-label-md-float-line-height);
-          color: var(--color-primary);
+          color: var(--color-action-primary);
         }
 
         .input-container.error label {

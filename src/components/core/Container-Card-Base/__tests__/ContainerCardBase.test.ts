@@ -151,7 +151,7 @@ describe('Container-Card-Base Component', () => {
     describe('cardBorderColorTokenMap', () => {
       it('should map card border color values to correct tokens', () => {
         expect(cardBorderColorTokenMap['border.default']).toBe('color.border.default');
-        expect(cardBorderColorTokenMap['border.subtle']).toBe('color.border.subtle');
+        expect(cardBorderColorTokenMap['border.subtle']).toBe('color.structure.border.subtle');
       });
     });
 
@@ -249,7 +249,7 @@ describe('Container-Card-Base Component', () => {
     describe('getCardBorderColorToken', () => {
       it('should return correct token for border color value', () => {
         expect(getCardBorderColorToken('border.default')).toBe('color.border.default');
-        expect(getCardBorderColorToken('border.subtle')).toBe('color.border.subtle');
+        expect(getCardBorderColorToken('border.subtle')).toBe('color.structure.border.subtle');
       });
     });
 
@@ -571,7 +571,7 @@ describe('Container-Card-Base Component', () => {
       it('should have consistent border color token references for Android', () => {
         // Android CardBorderColor enum maps to same border color tokens
         expect(cardBorderColorTokenMap['border.default']).toBe('color.border.default');
-        expect(cardBorderColorTokenMap['border.subtle']).toBe('color.border.subtle');
+        expect(cardBorderColorTokenMap['border.subtle']).toBe('color.structure.border.subtle');
       });
     });
 

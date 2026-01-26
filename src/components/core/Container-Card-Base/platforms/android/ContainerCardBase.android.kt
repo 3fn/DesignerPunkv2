@@ -160,7 +160,7 @@ enum class CardBorder {
  */
 enum class CardBorderColor {
     BorderDefault,  // color.border.default [DEFAULT]
-    BorderSubtle    // color.border.subtle
+    BorderSubtle    // color.structure.border.subtle
 }
 
 /**
@@ -641,7 +641,7 @@ fun mapCardBorderToWidth(border: CardBorder): Dp {
 fun mapCardBorderColorToColor(borderColor: CardBorderColor): Color {
     return when (borderColor) {
         CardBorderColor.BorderDefault -> colorBorder /* color.border.default */
-        CardBorderColor.BorderSubtle -> colorBorderSubtle /* color.border.subtle */
+        CardBorderColor.BorderSubtle -> colorBorderSubtle /* color.structure.border.subtle */
     }
 }
 
@@ -699,7 +699,7 @@ private val colorSurfacePrimary: Color = Color(DesignTokens.color_surface_primar
 private val colorSurfaceSecondary: Color = Color(DesignTokens.color_surface_secondary) /* color.surface.secondary */
 private val colorSurfaceTertiary: Color = Color(DesignTokens.color_surface_tertiary) /* color.surface.tertiary */
 private val colorBorder: Color = Color(DesignTokens.color_border) /* color.border.default */
-private val colorBorderSubtle: Color = Color(DesignTokens.color_border_subtle) /* color.border.subtle */
+private val colorBorderSubtle: Color = Color(DesignTokens.color_structure_border_subtle) /* color.structure.border.subtle */
 
 // Shadow tokens (elevation on Android)
 private val shadowContainerElevation: Dp = DesignTokens.elevation_container /* shadow.container */

@@ -2,6 +2,8 @@ import { PrimitiveToken, SemanticToken } from '../types';
 import { BaseFormatProvider, FileMetadata } from './FormatProvider';
 import { TargetPlatform, OutputFormat } from '../types/TranslationOutput';
 import { getPlatformTokenName } from '../naming/PlatformNamingRules';
+import { getColorToken } from '../tokens/ColorTokens';
+import { getOpacityToken } from '../tokens/OpacityTokens';
 
 /**
  * iOS-specific format generator
@@ -277,8 +279,15 @@ export class iOSFormatGenerator extends BaseFormatProvider {
    * Format a single-reference semantic token
    * Generates: static let colorPrimary = purple300
    * For baked-in RGBA values: static let colorStructureBorderSubtle: UIColor = UIColor(red: 0.72, green: 0.71, blue: 0.78, alpha: 0.48)
+   * For opacity composition: static let colorStructureBorderSubtle: UIColor = UIColor(red: 0.72, green: 0.71, blue: 0.78, alpha: 0.48)
    */
   formatSingleReferenceToken(semantic: SemanticToken): string {
+    // Check for opacity composition pattern (has 'color' and 'opacity' keys)
+    const refs = semantic.primitiveReferences as Record<string, string>;
+    if (refs.color && refs.opacity) {
+      return this.formatOpacityCompositionToken(semantic, refs.color, refs.opacity);
+    }
+
     // Get the primitive reference name (e.g., 'purple300' from primitiveReferences)
     const primitiveRef = semantic.primitiveReferences.value || 
                          semantic.primitiveReferences.default ||
@@ -308,6 +317,68 @@ export class iOSFormatGenerator extends BaseFormatProvider {
     const wcagComment = this.getWCAGComment(semantic);
     const tokenLine = `    public static let ${semanticName} = ${primitiveRefName}`;
     
+    return wcagComment ? `    ${wcagComment}\n${tokenLine}` : tokenLine;
+  }
+
+  /**
+   * Format a semantic token with opacity composition
+   * Resolves color primitive to RGB values and opacity primitive to alpha value
+   * Output: UIColor(red: r/255, green: g/255, blue: b/255, alpha: alpha)
+   * 
+   * @param semantic - Semantic token with color+opacity composition
+   * @param colorRef - Color primitive token name (e.g., 'gray100')
+   * @param opacityRef - Opacity primitive token name (e.g., 'opacity600')
+   * @returns Swift constant declaration string with resolved UIColor value
+   */
+  private formatOpacityCompositionToken(
+    semantic: SemanticToken,
+    colorRef: string,
+    opacityRef: string
+  ): string {
+    // Resolve color primitive to get RGB values
+    const colorToken = getColorToken(colorRef as any);
+    if (!colorToken) {
+      throw new Error(`Color primitive '${colorRef}' not found for token ${semantic.name}`);
+    }
+
+    // Resolve opacity primitive to get alpha value
+    const opacityToken = getOpacityToken(opacityRef);
+    if (!opacityToken) {
+      throw new Error(`Opacity primitive '${opacityRef}' not found for token ${semantic.name}`);
+    }
+
+    // Extract RGB values from color token's iOS platform value
+    const colorValue = colorToken.platforms.ios.value as { light?: { base?: string } };
+    const rgbaString = colorValue.light?.base;
+    if (!rgbaString) {
+      throw new Error(`Color token '${colorRef}' has no iOS platform value`);
+    }
+
+    // Parse the RGBA string to get RGB components
+    const parsed = this.parseRgbaString(rgbaString);
+    if (!parsed) {
+      throw new Error(`Failed to parse RGBA value for color token '${colorRef}'`);
+    }
+
+    // Get opacity value (0.0 - 1.0)
+    const opacityValue = opacityToken.baseValue;
+
+    // Convert RGB from 0-255 to 0-1 range for UIColor
+    const red = (parsed.r / 255).toFixed(2);
+    const green = (parsed.g / 255).toFixed(2);
+    const blue = (parsed.b / 255).toFixed(2);
+    const alpha = opacityValue.toFixed(2);
+
+    // Generate UIColor initialization
+    const uiColorValue = `UIColor(red: ${red}, green: ${green}, blue: ${blue}, alpha: ${alpha})`;
+
+    // Convert semantic token name to Swift format
+    const semanticName = this.getTokenName(semantic.name, semantic.category);
+
+    // Add WCAG comment for accessibility tokens
+    const wcagComment = this.getWCAGComment(semantic);
+    const tokenLine = `    public static let ${semanticName}: UIColor = ${uiColorValue}`;
+
     return wcagComment ? `    ${wcagComment}\n${tokenLine}` : tokenLine;
   }
 

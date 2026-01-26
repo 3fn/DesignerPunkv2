@@ -121,7 +121,7 @@ enum CardBorder {
  */
 enum CardBorderColor {
     case borderDefault  // color.border.default [DEFAULT]
-    case borderSubtle   // color.border.subtle
+    case borderSubtle   // color.structure.border.subtle
 }
 
 /**
@@ -732,7 +732,7 @@ func mapCardBorderColorToColor(_ borderColor: CardBorderColor) -> Color {
     case .borderDefault:
         return colorBorder /* color.border.default */
     case .borderSubtle:
-        return colorBorderSubtle /* color.border.subtle */
+        return colorBorderSubtle /* color.structure.border.subtle */
     }
 }
 
@@ -798,7 +798,7 @@ let colorSurfacePrimary: Color = Color(UIColor.systemBackground)      /* color.s
 let colorSurfaceSecondary: Color = Color(UIColor.secondarySystemBackground)  /* color.surface.secondary */
 let colorSurfaceTertiary: Color = Color(UIColor.tertiarySystemBackground)    /* color.surface.tertiary */
 let colorBorder: Color = Color(UIColor.separator)                     /* color.border.default */
-let colorBorderSubtle: Color = Color(UIColor.separator).opacity(0.5)  /* color.border.subtle */
+let colorBorderSubtle: Color = Color(UIColor.separator).opacity(0.5)  /* color.structure.border.subtle */
 
 // Shadow tokens (shadow.container)
 let shadowContainerColor: Color = Color.black.opacity(0.1)

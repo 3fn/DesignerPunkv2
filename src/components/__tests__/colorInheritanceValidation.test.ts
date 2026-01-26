@@ -176,15 +176,37 @@ describe('Color Inheritance Validation', () => {
       
       semanticTokenNames.forEach(tokenName => {
         const semanticToken = colorTokens[tokenName];
-        const primitiveRef = semanticToken.primitiveReferences.value;
+        const primitiveRefs = semanticToken.primitiveReferences;
         
-        // Verify the referenced primitive token exists
-        const primitiveToken = getPrimitiveColorToken(primitiveRef as any);
-        expect(primitiveToken).toBeDefined();
-        
-        // Log for debugging
-        if (!primitiveToken) {
-          console.error(`Semantic token ${tokenName} references non-existent primitive ${primitiveRef}`);
+        // Handle both patterns:
+        // 1. Simple reference: { value: 'tokenName' }
+        // 2. Opacity composition: { color: 'tokenName', opacity: 'opacityToken' }
+        if (primitiveRefs.value) {
+          // Simple reference pattern
+          const primitiveRef = primitiveRefs.value;
+          const primitiveToken = getPrimitiveColorToken(primitiveRef as any);
+          expect(primitiveToken).toBeDefined();
+          
+          // Log for debugging
+          if (!primitiveToken) {
+            console.error(`Semantic token ${tokenName} references non-existent primitive ${primitiveRef}`);
+          }
+        } else if (primitiveRefs.color) {
+          // Opacity composition pattern
+          const colorRef = primitiveRefs.color;
+          const primitiveToken = getPrimitiveColorToken(colorRef as any);
+          expect(primitiveToken).toBeDefined();
+          
+          // Log for debugging
+          if (!primitiveToken) {
+            console.error(`Semantic token ${tokenName} references non-existent primitive color ${colorRef}`);
+          }
+          
+          // Verify opacity reference exists (optional - opacity tokens are in a different module)
+          expect(primitiveRefs.opacity).toBeDefined();
+        } else {
+          // Unknown pattern - fail the test
+          throw new Error(`Semantic token ${tokenName} has unknown primitiveReferences pattern: ${JSON.stringify(primitiveRefs)}`);
         }
       });
     });

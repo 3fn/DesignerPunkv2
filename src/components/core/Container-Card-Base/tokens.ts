@@ -115,7 +115,7 @@ export const cardBorderTokenMap: Record<CardBorderValue, string> = {
  */
 export const cardBorderColorTokenMap: Record<CardBorderColorValue, string> = {
   'border.default': 'color.border.default',
-  'border.subtle': 'color.border.subtle'
+  'border.subtle': 'color.structure.border.subtle'
 };
 
 /**

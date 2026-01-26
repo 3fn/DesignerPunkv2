@@ -41,7 +41,7 @@ import { BadgeCountNotification } from './components/core/Badge-Count-Notificati
 /**
  * Check if design tokens are loaded in the document.
  * 
- * Tests for the presence of a known CSS custom property (--color-primary)
+ * Tests for the presence of a known CSS custom property (--color-action-primary)
  * to determine if tokens.css has been loaded. If tokens are not detected,
  * logs a warning to help developers diagnose styling issues.
  * 
@@ -52,13 +52,15 @@ import { BadgeCountNotification } from './components/core/Badge-Count-Notificati
  * - Uses getComputedStyle to check for CSS custom property
  * - Logs a warning (not error) to avoid breaking the page
  * - Provides actionable guidance in the warning message
+ * - Note: Token name updated from --color-primary to --color-action-primary per Spec 052
  * 
  * @see Requirements 3.4
  */
 function checkTokensLoaded(): void {
   // Check for a known CSS custom property from the token system
+  // Note: color.primary was renamed to color.action.primary in Spec 052
   const testProperty = getComputedStyle(document.documentElement)
-    .getPropertyValue('--color-primary');
+    .getPropertyValue('--color-action-primary');
   
   if (!testProperty || testProperty.trim() === '') {
     console.warn(

@@ -230,7 +230,7 @@ fun getBorderColor(): Color {
  * 
  * @example
  * ```kotlin
- * resolveBorderColor("color.border.subtle") // Returns colorBorderSubtle
+ * resolveBorderColor("color.structure.border.subtle") // Returns colorBorderSubtle
  * resolveBorderColor(null) // Returns colorBorder (default)
  * resolveBorderColor("color.border.emphasis") // Returns colorBorderEmphasis
  * ```
@@ -246,7 +246,7 @@ fun resolveBorderColor(borderColor: String?): Color {
     // Resolve the border color token
     return when (borderColor) {
         "color.border.default" -> colorBorder
-        "color.border.subtle" -> colorBorderSubtle
+        "color.structure.border.subtle" -> colorBorderSubtle
         "color.border.emphasis" -> colorBorderEmphasis
         else -> colorBorder  // Fall back to default border color for unknown tokens
     }
@@ -357,7 +357,7 @@ fun resolveColorToken(tokenName: String?): Color {
         // Border tokens (semantic)
         "color.border" -> colorBorder
         "color.border.default" -> colorBorder
-        "color.border.subtle" -> colorBorderSubtle
+        "color.structure.border.subtle" -> colorBorderSubtle
         "color.border.emphasis" -> colorBorderEmphasis
         
         else -> colorStructureCanvas  // Default to canvas (white100)
@@ -554,7 +554,7 @@ private val elevationTooltip: Dp = DesignTokens.elevation_tooltip
 // Updated Jan 25, 2026 - Spec 052 semantic token naming restructure
 // Border tokens
 private val colorBorder: Color = Color(DesignTokens.color_structure_border)
-private val colorBorderSubtle: Color = Color(DesignTokens.color_border_subtle)  // color.border.subtle
+private val colorBorderSubtle: Color = Color(DesignTokens.color_structure_border_subtle)  // color.structure.border.subtle
 private val colorBorderEmphasis: Color = Color(DesignTokens.color_border_emphasis)  // color.border.emphasis
 
 // Action concept tokens

@@ -598,7 +598,7 @@ This spec executes the semantic color token naming restructure defined in Spec 0
 
 ### Task 9: Test Updates
 
-- [ ] 9. Test Updates
+- [x] 9. Test Updates
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -624,7 +624,7 @@ This spec executes the semantic color token naming restructure defined in Spec 0
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 9 Complete: Test Updates"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 9.1 Update token value tests
+  - [x] 9.1 Update token value tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update `ColorTokens.test.ts` for new token names
@@ -632,7 +632,36 @@ This spec executes the semantic color token naming restructure defined in Spec 0
     - Verify semantic tokens reference correct primitives
     - _Requirements: 8.1, 8.2_
 
-  - [ ] 9.2 Update platform output tests
+  - [x] 9.1.FIX Update component references from `color.border.subtle` to `color.structure.border.subtle`
+    **Type**: Implementation (Bug Fix)
+    **Validation**: Tier 2 - Standard
+    **Context**: Components were referencing `color.border.subtle` (old naming pattern) which doesn't exist. 
+    The token was renamed to `color.structure.border.subtle` per Spec 052 naming restructure but component 
+    references were not updated during the migration.
+    
+    **Files to update:**
+    - Container-Base (Web/iOS/Android):
+      - `src/components/core/Container-Base/platforms/android/ContainerBase.android.kt`
+      - `src/components/core/Container-Base/platforms/android/TokenMapping.kt`
+      - `src/components/core/Container-Base/platforms/ios/ContainerBase.ios.swift`
+      - `src/components/core/Container-Base/platforms/ios/TokenMapping.swift`
+      - `src/components/core/Container-Base/platforms/web/token-mapping.ts`
+      - `src/components/core/Container-Base/Container-Base.schema.yaml`
+      - `src/components/core/Container-Base/README.md`
+      - `src/components/core/Container-Base/__tests__/ContainerBase.test.ts`
+    - Container-Card-Base (Web/iOS/Android):
+      - `src/components/core/Container-Card-Base/tokens.ts`
+      - `src/components/core/Container-Card-Base/Container-Card-Base.schema.yaml`
+      - `src/components/core/Container-Card-Base/README.md`
+      - `src/components/core/Container-Card-Base/__tests__/ContainerCardBase.test.ts`
+      - `src/components/core/Container-Card-Base/platforms/android/ContainerCardBase.android.kt`
+      - `src/components/core/Container-Card-Base/platforms/ios/ContainerCardBase.ios.swift`
+    
+    **Change pattern:** `color.border.subtle` → `color.structure.border.subtle`
+    
+    _Requirements: 2.5, 6.6, 6.7_
+
+  - [x] 9.2 Update platform output tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test Web output format: `rgba(r, g, b, a)`
@@ -641,7 +670,7 @@ This spec executes the semantic color token naming restructure defined in Spec 0
     - Verify alpha channel preservation
     - _Requirements: 8.3_
 
-  - [ ] 9.3 Update component tests
+  - [x] 9.3 Update component tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update component tests to verify behavior (not token names)
@@ -649,13 +678,92 @@ This spec executes the semantic color token naming restructure defined in Spec 0
     - Remove any tests checking specific token names used internally
     - _Requirements: 8.2, 8.4_
 
-  - [ ] 9.4 Run full test suite
+  - [x] 9.4 Run full test suite
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Execute: `npm test`
     - Verify all tests pass
     - Document any platform-specific issues encountered
     - _Requirements: 8.4_
+
+  - [x] 9.4.FIX.1 Update `color.structure.border.subtle` to use opacity composition
+    **Type**: Implementation (Architecture Fix)
+    **Validation**: Tier 2 - Standard
+    **Context**: The `color.structure.border.subtle` token currently uses a baked-in RGBA value 
+    (`rgba(184, 182, 200, 0.48)`) which breaks the semantic→primitive reference pattern. This should 
+    use opacity composition: `gray100` color + `opacity600` (0.48) to align with the mathematical 
+    token foundation.
+    
+    **Changes:**
+    - Update `src/tokens/semantic/ColorTokens.ts`:
+      - Change `primitiveReferences: { value: 'rgba(184, 182, 200, 0.48)' }`
+      - To: `primitiveReferences: { color: 'gray100', opacity: 'opacity600' }`
+    - Add code comment explaining the composition pattern
+    
+    _Requirements: 1.4, 2.5_
+
+  - [x] 9.4.FIX.2 Update validation tests to recognize opacity composition references
+    **Type**: Implementation (Test Fix)
+    **Validation**: Tier 2 - Standard
+    **Context**: The `ValidatePrimitiveReferences.test.ts` currently expects all `primitiveReferences` 
+    to be single primitive token names. It needs to recognize composite references (color + opacity).
+    
+    **Changes:**
+    - Update `src/tokens/semantic/__tests__/ValidatePrimitiveReferences.test.ts`:
+      - Add logic to validate composite references where `color` and `opacity` keys exist
+      - Validate both the color primitive and opacity primitive exist
+    - Update `src/tokens/semantic/__tests__/ColorTokens.test.ts`:
+      - Update token count expectations (50 tokens)
+      - Update structure token count (4 tokens including border.subtle)
+      - Update primitive reference validation to handle composition
+    
+    _Requirements: 8.1, 8.2_
+
+  - [x] 9.4.FIX.3 Update generators to resolve opacity composition to RGBA output
+    **Type**: Implementation (Generator Fix)
+    **Validation**: Tier 2 - Standard
+    **Context**: Platform generators need to resolve composite color+opacity references to 
+    platform-specific RGBA output.
+    
+    **Changes:**
+    - Update `src/providers/WebFormatGenerator.ts`:
+      - Detect composite references (has `color` and `opacity` keys)
+      - Resolve color primitive to RGB values
+      - Resolve opacity primitive to alpha value
+      - Output: `rgba(r, g, b, alpha)`
+    - Update `src/providers/iOSFormatGenerator.ts`:
+      - Output: `UIColor(red: r/255, green: g/255, blue: b/255, alpha: alpha)`
+    - Update `src/providers/AndroidFormatGenerator.ts`:
+      - Output: `Color.argb(alpha*255, r, g, b)`
+    
+    _Requirements: 1.3, 5.4_
+
+  - [x] 9.4.FIX.4 Regenerate platform tokens and verify output
+    **Type**: Implementation (Verification)
+    **Validation**: Tier 2 - Standard
+    **Context**: After generator updates, regenerate platform tokens and verify the 
+    `color.structure.border.subtle` token outputs correctly on all platforms.
+    
+    **Steps:**
+    - Run: `npx ts-node scripts/generate-platform-tokens.ts`
+    - Verify Web output: `--color-structure-border-subtle: rgba(184, 182, 200, 0.48);`
+    - Verify iOS output: `colorStructureBorderSubtle = UIColor(red: 0.72, green: 0.71, blue: 0.78, alpha: 0.48)`
+    - Verify Android output: `colorStructureBorderSubtle = Color.argb(122, 184, 182, 200)`
+    
+    _Requirements: 5.1, 5.2, 5.3_
+
+  - [x] 9.4.FIX.5 Run full test suite and verify all tests pass
+    **Type**: Implementation (Verification)
+    **Validation**: Tier 2 - Standard
+    - Execute: `npm test`
+    - Verify all tests pass including:
+      - Token count validation (50 tokens)
+      - Primitive reference validation (composite references)
+      - Platform output format tests
+      - BuildOrchestrator tests
+    - Document resolution of the opacity composition pattern
+    
+    _Requirements: 8.4_
 
 ---
 
@@ -671,8 +779,8 @@ This spec executes the semantic color token naming restructure defined in Spec 0
 | 6. Component Updates (iOS) | Parent | 9 | iOS |
 | 7. Component Updates (Android) | Parent | 9 | Android |
 | 8. Documentation Updates | Parent | 7 | N/A |
-| 9. Test Updates | Parent | 4 | All |
+| 9. Test Updates | Parent | 9 (4 + 5 FIX) | All |
 
-**Total**: 9 parent tasks, 50 subtasks
+**Total**: 9 parent tasks, 55 subtasks (50 original + 5 FIX tasks)
 
 **Critical Path**: Tasks 1-4 must complete before Tasks 5-7 can begin (token generation before component updates).

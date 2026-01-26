@@ -49,7 +49,7 @@ describe('Visual State Mapping', () => {
     it('should return correct styles for rest state', () => {
       const styles = getVisualStateStyles('rest');
       
-      expect(styles.background).toBe('var(--color-background)');
+      expect(styles.background).toBe('var(--color-structure-canvas)');
       expect(styles.borderWidth).toBe('var(--border-default)');
       expect(styles.borderColor).toBe('transparent');
       expect(styles.labelColor).toBe('var(--color-text-default)');
@@ -93,7 +93,7 @@ describe('Visual State Mapping', () => {
     it('should return correct styles for unchecked state', () => {
       const styles = getVisualStateStyles('unchecked');
       
-      expect(styles.background).toBe('var(--color-background)');
+      expect(styles.background).toBe('var(--color-structure-canvas)');
       expect(styles.borderWidth).toBe('var(--border-default)');
       expect(styles.borderColor).toBe('transparent');
       expect(styles.labelColor).toBe('var(--color-text-default)');

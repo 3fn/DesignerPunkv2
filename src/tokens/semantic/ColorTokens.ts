@@ -435,6 +435,29 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
     description: 'Border gray for standard UI element borders and dividers - provides clear visual separation'
   },
 
+  /**
+   * Opacity Composition Pattern: color + opacity
+   * 
+   * This token uses opacity composition rather than a baked-in RGBA value.
+   * The primitiveReferences object contains separate `color` and `opacity` keys
+   * that platform generators resolve to the appropriate RGBA output:
+   * - Web: rgba(r, g, b, alpha)
+   * - iOS: UIColor(red:green:blue:alpha:)
+   * - Android: Color.argb(alpha, r, g, b)
+   * 
+   * This pattern aligns with the mathematical token foundation where opacity
+   * values are derived from the opacity token scale (opacity600 = 0.48).
+   * 
+   * @see src/tokens/OpacityTokens.ts for opacity scale definition
+   */
+  'color.structure.border.subtle': {
+    name: 'color.structure.border.subtle',
+    primitiveReferences: { color: 'gray100', opacity: 'opacity600' },
+    category: SemanticCategory.COLOR,
+    context: 'Subtle border color with transparency for softer visual separation',
+    description: 'Semi-transparent border (gray100 at opacity600/48%) for subtle visual separation - used by Container-Base, Container-Card-Base, and other components needing soft borders'
+  },
+
   // Background Variants (1 token - kept for specific use case)
   'color.background.primary.subtle': {
     name: 'color.background.primary.subtle',

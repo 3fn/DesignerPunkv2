@@ -67,7 +67,8 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
       expect(result.content).toContain('--purple-300');
       
       // Should contain semantic tokens with -- prefix and kebab-case
-      expect(result.content).toContain('--color-primary');
+      // Note: color.primary was renamed to color.action.primary in Spec 052
+      expect(result.content).toContain('--color-action-primary');
       expect(result.content).toContain('--space-grouped-normal');
     });
 
@@ -98,13 +99,14 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
       expect(primitiveCommentIndex).toBeLessThan(semanticCommentIndex);
 
       // Find a primitive token and a semantic token
+      // Note: color.primary was renamed to color.action.primary in Spec 052
       const space100Index = result.content.indexOf('--space-100');
-      const colorPrimaryIndex = result.content.indexOf('--color-primary');
+      const colorActionPrimaryIndex = result.content.indexOf('--color-action-primary');
 
       // Primitive token should appear before semantic token
       expect(space100Index).toBeGreaterThan(-1);
-      expect(colorPrimaryIndex).toBeGreaterThan(-1);
-      expect(space100Index).toBeLessThan(colorPrimaryIndex);
+      expect(colorActionPrimaryIndex).toBeGreaterThan(-1);
+      expect(space100Index).toBeLessThan(colorActionPrimaryIndex);
     });
   });
 
@@ -136,7 +138,8 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
       expect(result.content).toContain('purple300');
       
       // Should contain semantic tokens in camelCase (dots removed, proper casing)
-      expect(result.content).toContain('colorPrimary');
+      // Note: color.primary was renamed to color.action.primary in Spec 052
+      expect(result.content).toContain('colorActionPrimary');
       expect(result.content).toContain('spaceGroupedNormal');
     });
 
@@ -153,13 +156,14 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
       expect(primitiveCommentIndex).toBeLessThan(semanticCommentIndex);
 
       // Find a primitive token and a semantic token
+      // Note: color.primary was renamed to color.action.primary in Spec 052
       const space100Index = result.content.indexOf('space100');
-      const colorPrimaryIndex = result.content.indexOf('colorPrimary');
+      const colorActionPrimaryIndex = result.content.indexOf('colorActionPrimary');
 
       // Primitive token should appear before semantic token
       expect(space100Index).toBeGreaterThan(-1);
-      expect(colorPrimaryIndex).toBeGreaterThan(-1);
-      expect(space100Index).toBeLessThan(colorPrimaryIndex);
+      expect(colorActionPrimaryIndex).toBeGreaterThan(-1);
+      expect(space100Index).toBeLessThan(colorActionPrimaryIndex);
     });
 
     it('should generate semantic tokens with primitive references', () => {

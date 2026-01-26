@@ -398,7 +398,7 @@ tokens:
     - color.surface.secondary
     - color.surface.tertiary
     - color.border.default
-    - color.border.subtle
+    - color.structure.border.subtle
   shadow:
     - shadow.container
   radius:

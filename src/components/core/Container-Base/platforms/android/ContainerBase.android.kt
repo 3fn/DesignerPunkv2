@@ -133,7 +133,7 @@ import androidx.compose.runtime.setValue
  * ContainerBase(
  *     padding = ContainerBasePaddingValue.P200,
  *     border = ContainerBaseBorderValue.Default,
- *     borderColor = "color.border.subtle"
+ *     borderColor = "color.structure.border.subtle"
  * ) {
  *     Text("Content with subtle border")
  * }
@@ -565,7 +565,7 @@ fun resolveContainerBaseBorderColor(borderColor: String?): Color {
     // Resolve the border color token
     return when (borderColor) {
         "color.border.default" -> colorBorder
-        "color.border.subtle" -> colorBorderSubtle
+        "color.structure.border.subtle" -> colorBorderSubtle
         "color.border.emphasis" -> colorBorderEmphasis
         else -> colorBorder  // Fall back to default border color for unknown tokens
     }
@@ -647,13 +647,13 @@ fun getContainerBaseCornerRadiusPx(borderRadius: ContainerBaseBorderRadiusValue)
  * Focus indicator outline offset from component bounds (2dp)
  * References: accessibility.focus.offset → space025 primitive token
  */
-val accessibilityFocusOffset: Dp = 2.dp /* space025 */
+val accessibilityFocusOffset: Dp = space025 /* space025 */
 
 /**
  * Focus indicator outline width (2dp)
  * References: accessibility.focus.width → borderWidth200 primitive token
  */
-val accessibilityFocusWidth: Dp = 2.dp /* borderWidth200 */
+val accessibilityFocusWidth: Dp = borderWidth200 /* borderWidth200 */
 
 /**
  * Focus indicator outline color (purple300 - primary brand color)

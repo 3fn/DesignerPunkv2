@@ -319,7 +319,7 @@ These Container-Base props are intentionally excluded from Container-Card-Base:
 | Value | Token |
 |-------|-------|
 | `'border.default'` | `color.border.default` |
-| `'border.subtle'` | `color.border.subtle` |
+| `'border.subtle'` | `color.structure.border.subtle` |
 
 ### Border Radius Values
 

@@ -64,7 +64,7 @@ Container-Base is a foundational primitive component that provides structural wr
 <!-- Custom border color -->
 <container-base 
   border="default"
-  border-color="color.border.subtle"
+  border-color="color.structure.border.subtle"
   border-radius="normal"
 >
   <p>Content with subtle border</p>
@@ -122,7 +122,7 @@ ContainerBase(
 // Custom border color
 ContainerBase(
     border: .default,
-    borderColor: "color.border.subtle",
+    borderColor: "color.structure.border.subtle",
     borderRadius: .normal
 ) {
     Text("Content with subtle border")
@@ -188,7 +188,7 @@ ContainerBase(
 // Custom border color
 ContainerBase(
     border = ContainerBaseBorderValue.Default,
-    borderColor = "color.border.subtle",
+    borderColor = "color.structure.border.subtle",
     borderRadius = ContainerBaseBorderRadiusValue.Normal
 ) {
     Text("Content with subtle border")
@@ -316,7 +316,7 @@ The `borderColor` prop controls the color of the border independently from the b
 
 **Common border color tokens:**
 - `color.border.default` — Standard border color
-- `color.border.subtle` — Subtle/muted border color
+- `color.structure.border.subtle` — Subtle/muted border color
 - `color.border.emphasis` — Emphasized border color
 
 **Example:**
@@ -327,7 +327,7 @@ The `borderColor` prop controls the color of the border independently from the b
 </container-base>
 
 <!-- Custom border color -->
-<container-base border="default" border-color="color.border.subtle">
+<container-base border="default" border-color="color.structure.border.subtle">
   Content with subtle border
 </container-base>
 

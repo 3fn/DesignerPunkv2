@@ -234,7 +234,7 @@ describe('Badge-Label-Base Stemma Validators', () => {
       }
 
       const expectedTokenPatterns = [
-        '--color-surface',
+        '--color-structure-surface',
         '--color-text-default',
         '--radius-subtle',
         '--typography-label-',  // Composite typography tokens (e.g., --typography-label-xs-font-size)
@@ -253,7 +253,7 @@ describe('Badge-Label-Base Stemma Validators', () => {
       }
 
       const semanticTokenReferences = [
-        'var(--color-surface',
+        'var(--color-structure-surface',
         'var(--color-text-default',
         'var(--radius-subtle',
       ];

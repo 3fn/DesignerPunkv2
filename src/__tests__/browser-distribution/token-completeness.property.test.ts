@@ -205,17 +205,18 @@ describe('Property 1: Token CSS Completeness', () => {
      * Property: tokens.css should contain essential semantic tokens
      * 
      * Verifies that key semantic tokens used by components are present.
+     * Note: Token names updated per Spec 052 semantic token naming restructure
      */
     it('should contain essential semantic tokens', () => {
       const essentialTokens = [
-        'color-primary',
-        'color-error-strong',
-        'color-success-strong',
+        'color-action-primary',  // Renamed from color-primary
+        'color-feedback-error-text',  // Renamed from color-error-strong
+        'color-feedback-success-text',  // Renamed from color-success-strong
         'color-text-default',
         'color-text-muted',
-        'color-background',
-        'color-surface',
-        'color-border',
+        'color-structure-canvas',  // Renamed from color-background
+        'color-structure-surface',  // Renamed from color-surface
+        'color-structure-border',  // Renamed from color-border
         'typography-label-md-font-size',
         'typography-label-md-line-height',
         'typography-body-md-font-size',

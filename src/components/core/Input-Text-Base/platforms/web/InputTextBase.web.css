@@ -77,8 +77,8 @@
   font-weight: var(--typography-input-font-weight);
   letter-spacing: var(--typography-input-letter-spacing);
   color: var(--color-text-default);
-  background: var(--color-background);
-  border: var(--border-default) solid var(--color-border);
+  background: var(--color-structure-canvas);
+  border: var(--border-default) solid var(--color-structure-border);
   border-radius: var(--radius-150);
   outline: none;
   box-sizing: border-box;
@@ -112,7 +112,7 @@
  * @see Requirements 1.1, 1.2, 1.5, 1.6 - Blend utility adoption
  */
 .input-element:disabled {
-  border-color: var(--_itb-disabled-color, var(--color-border));
+  border-color: var(--_itb-disabled-color, var(--color-structure-border));
   color: var(--color-text-muted);
   cursor: not-allowed;
   opacity: 1;

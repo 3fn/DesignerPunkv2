@@ -47,11 +47,11 @@
   /* Uses space.inset tokens: var(--space-inset-050) through var(--space-inset-400) */
   
   /* Background - Applied via token-mapping when background prop is set */
-  /* Uses color tokens: var(--color-surface), var(--color-background), etc. */
+  /* Uses color tokens: var(--color-structure-surface), var(--color-structure-canvas), etc. */
   
   /* Border - Applied via token-mapping when border prop is set */
   /* Uses border tokens: var(--border-default), var(--border-emphasis), var(--border-heavy) */
-  /* Border color uses: var(--color-border) */
+  /* Border color uses: var(--color-structure-border) */
   
   /* Border radius - Applied via token-mapping when borderRadius prop is set */
   /* Uses radius tokens: var(--radius-050), var(--radius-100), var(--radius-200) */
@@ -190,7 +190,7 @@
  * Container-Base automatically adapts to dark mode through token values.
  * The build system generates appropriate token values for dark mode,
  * so no additional CSS is needed here. Token references like
- * var(--color-surface) automatically resolve to dark mode values.
+ * var(--color-structure-surface) automatically resolve to dark mode values.
  */
 @media (prefers-color-scheme: dark) {
   /* Token values automatically adapt to dark mode */

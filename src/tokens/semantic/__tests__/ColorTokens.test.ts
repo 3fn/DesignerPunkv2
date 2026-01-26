@@ -335,37 +335,87 @@ describe('Semantic Color Tokens - Palette Update', () => {
     });
   });
 
-  describe('Canvas Token Exists', () => {
-    it('should have color.canvas token', () => {
-      expect(colorTokens['color.canvas']).toBeDefined();
+  describe('Structure Concept Tokens (Spec 052)', () => {
+    describe('Canvas Token', () => {
+      it('should have color.structure.canvas token', () => {
+        expect(colorTokens['color.structure.canvas']).toBeDefined();
+      });
+
+      it('should reference white100 primitive for canvas', () => {
+        const token = colorTokens['color.structure.canvas'];
+        expect(token.primitiveReferences.value).toBe('white100');
+      });
+
+      it('should verify white100 primitive exists', () => {
+        const token = colorTokens['color.structure.canvas'];
+        const primitiveName = token.primitiveReferences.value;
+        expect(primitiveColorTokens).toHaveProperty(primitiveName);
+      });
+
+      it('should have COLOR category for canvas token', () => {
+        expect(colorTokens['color.structure.canvas'].category).toBe(SemanticCategory.COLOR);
+      });
+
+      it('should have meaningful context for canvas token', () => {
+        const token = colorTokens['color.structure.canvas'];
+        expect(token.context).toBeTruthy();
+        expect(token.context.toLowerCase()).toContain('canvas');
+      });
+
+      it('should describe canvas as default surface for pages', () => {
+        const token = colorTokens['color.structure.canvas'];
+        expect(token.description).toBeTruthy();
+        expect(token.description.toLowerCase()).toContain('canvas');
+        expect(token.description.toLowerCase()).toContain('background');
+      });
     });
 
-    it('should reference white100 primitive for canvas', () => {
-      const token = colorTokens['color.canvas'];
-      expect(token.primitiveReferences.value).toBe('white100');
+    describe('Surface Token', () => {
+      it('should have color.structure.surface token', () => {
+        expect(colorTokens['color.structure.surface']).toBeDefined();
+      });
+
+      it('should reference white200 primitive for surface', () => {
+        const token = colorTokens['color.structure.surface'];
+        expect(token.primitiveReferences.value).toBe('white200');
+      });
+
+      it('should have COLOR category for surface token', () => {
+        expect(colorTokens['color.structure.surface'].category).toBe(SemanticCategory.COLOR);
+      });
     });
 
-    it('should verify white100 primitive exists', () => {
-      const token = colorTokens['color.canvas'];
-      const primitiveName = token.primitiveReferences.value;
-      expect(primitiveColorTokens).toHaveProperty(primitiveName);
+    describe('Border Token', () => {
+      it('should have color.structure.border token', () => {
+        expect(colorTokens['color.structure.border']).toBeDefined();
+      });
+
+      it('should reference gray100 primitive for border', () => {
+        const token = colorTokens['color.structure.border'];
+        expect(token.primitiveReferences.value).toBe('gray100');
+      });
+
+      it('should have COLOR category for border token', () => {
+        expect(colorTokens['color.structure.border'].category).toBe(SemanticCategory.COLOR);
+      });
     });
 
-    it('should have COLOR category for canvas token', () => {
-      expect(colorTokens['color.canvas'].category).toBe(SemanticCategory.COLOR);
-    });
+    describe('Migration from Old Tokens (Spec 052)', () => {
+      it('should NOT have old color.canvas token (migrated to color.structure.canvas)', () => {
+        expect(colorTokens['color.canvas']).toBeUndefined();
+      });
 
-    it('should have meaningful context for canvas token', () => {
-      const token = colorTokens['color.canvas'];
-      expect(token.context).toBeTruthy();
-      expect(token.context.toLowerCase()).toContain('canvas');
-    });
+      it('should NOT have old color.surface token (migrated to color.structure.surface)', () => {
+        expect(colorTokens['color.surface']).toBeUndefined();
+      });
 
-    it('should describe canvas as default surface for pages', () => {
-      const token = colorTokens['color.canvas'];
-      expect(token.description).toBeTruthy();
-      expect(token.description.toLowerCase()).toContain('canvas');
-      expect(token.description.toLowerCase()).toContain('background');
+      it('should NOT have old color.border token (migrated to color.structure.border)', () => {
+        expect(colorTokens['color.border']).toBeUndefined();
+      });
+
+      it('should NOT have old color.background token (migrated to color.structure.canvas)', () => {
+        expect(colorTokens['color.background']).toBeUndefined();
+      });
     });
   });
 
@@ -438,16 +488,24 @@ describe('Semantic Color Tokens - Palette Update', () => {
   });
 
   describe('Token Count Validation', () => {
-    it('should have exactly 48 color tokens', () => {
-      // Updated for Spec 052: 40 - 12 old + 18 new - 2 old + 2 new - 1 old + 2 new - 1 old + 2 new = 48
-      // Old tokens removed: color.success.strong/subtle, color.error.strong/subtle, 
-      // color.warning.strong/subtle, color.info.strong/subtle, color.select.* (12 total)
-      // New tokens added: color.feedback.{success|error|warning|info}.{text|background|border} (12)
-      // + color.feedback.select.{text|background|border}.{rest|default} (6) = 18 total
-      // Task 2.2: Removed color.avatar.human/agent (2), added color.identity.human/agent (2)
-      // Task 2.3: Removed color.primary (1), added color.action.primary/secondary (2)
-      // Task 2.4: Removed color.contrast.onPrimary (1), added color.contrast.onLight/onDark (2)
-      expect(colorTokenNames.length).toBe(48);
+    it('should have exactly 50 color tokens', () => {
+      // Updated for Spec 052 semantic naming restructure:
+      // Feedback concept: 18 tokens (success/error/warning/info × text/background/border + select × 6)
+      // Identity concept: 2 tokens (human, agent)
+      // Action concept: 2 tokens (primary, secondary)
+      // Contrast concept: 2 tokens (onLight, onDark)
+      // Structure concept: 4 tokens (canvas, surface, border, border.subtle)
+      // Attention/Highlight: 2 tokens
+      // Tech/Data: 2 tokens
+      // Text hierarchy: 3 tokens (default, muted, subtle)
+      // Icon: 1 token (default)
+      // Print: 1 token (default)
+      // Background: 1 token (primary.subtle)
+      // Glow: 5 tokens (neonPurple, neonCyan, neonYellow, neonGreen, neonPink)
+      // Avatar component: 5 tokens (human.background, agent.background, human.icon, agent.icon, default.border)
+      // Badge component: 2 tokens (notification.background, notification.text)
+      // Total: 50 tokens (includes color.structure.border.subtle with opacity composition)
+      expect(colorTokenNames.length).toBe(50);
     });
 
     it('should pass validateColorTokenCount()', () => {
@@ -455,19 +513,22 @@ describe('Semantic Color Tokens - Palette Update', () => {
     });
 
     it('should have correct token count breakdown', () => {
-      // Updated for Spec 052 feedback concept tokens, action concept tokens, and contrast concept tokens
+      // Updated for Spec 052 semantic naming restructure
       const actionTokens = colorTokenNames.filter(n => n.startsWith('color.action.'));
       const feedbackSuccessTokens = colorTokenNames.filter(n => n.startsWith('color.feedback.success'));
       const feedbackErrorTokens = colorTokenNames.filter(n => n.startsWith('color.feedback.error'));
       const feedbackWarningTokens = colorTokenNames.filter(n => n.startsWith('color.feedback.warning'));
       const feedbackInfoTokens = colorTokenNames.filter(n => n.startsWith('color.feedback.info'));
       const feedbackSelectTokens = colorTokenNames.filter(n => n.startsWith('color.feedback.select'));
+      const identityTokens = colorTokenNames.filter(n => n.startsWith('color.identity.'));
       const attentionTokens = colorTokenNames.filter(n => n === 'color.attention' || n === 'color.highlight');
       const techDataTokens = colorTokenNames.filter(n => n === 'color.tech' || n === 'color.data');
       const textTokens = colorTokenNames.filter(n => n.startsWith('color.text'));
       const contrastTokens = colorTokenNames.filter(n => n.startsWith('color.contrast'));
-      const surfaceTokens = colorTokenNames.filter(n => n === 'color.canvas' || n === 'color.background' || n === 'color.surface' || n === 'color.border');
+      const structureTokens = colorTokenNames.filter(n => n.startsWith('color.structure.'));
       const glowTokens = colorTokenNames.filter(n => n.startsWith('glow.'));
+      const avatarTokens = colorTokenNames.filter(n => n.startsWith('color.avatar.'));
+      const badgeTokens = colorTokenNames.filter(n => n.startsWith('color.badge.'));
 
       expect(actionTokens.length).toBe(2); // color.action.primary, color.action.secondary
       expect(feedbackSuccessTokens.length).toBe(3); // text, background, border
@@ -475,12 +536,15 @@ describe('Semantic Color Tokens - Palette Update', () => {
       expect(feedbackWarningTokens.length).toBe(3); // text, background, border
       expect(feedbackInfoTokens.length).toBe(3); // text, background, border
       expect(feedbackSelectTokens.length).toBe(6); // text/background/border × rest/default
+      expect(identityTokens.length).toBe(2); // human, agent
       expect(attentionTokens.length).toBe(2);
       expect(techDataTokens.length).toBe(2);
       expect(textTokens.length).toBe(3); // color.text.default, color.text.muted, color.text.subtle
       expect(contrastTokens.length).toBe(2); // color.contrast.onLight, color.contrast.onDark
-      expect(surfaceTokens.length).toBe(4);
+      expect(structureTokens.length).toBe(4); // canvas, surface, border, border.subtle
       expect(glowTokens.length).toBe(5);
+      expect(avatarTokens.length).toBe(5); // human.background, agent.background, human.icon, agent.icon, default.border
+      expect(badgeTokens.length).toBe(2); // notification.background, notification.text
     });
   });
 
@@ -534,9 +598,9 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(Array.isArray(tokens)).toBe(true);
       });
 
-      it('should return exactly 48 tokens', () => {
+      it('should return exactly 50 tokens', () => {
         const tokens = getAllColorTokens();
-        expect(tokens.length).toBe(48);
+        expect(tokens.length).toBe(50);
       });
 
       it('should include all new tokens', () => {
@@ -596,8 +660,19 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(token.name).toBeTruthy();
         expect(token.name.length).toBeGreaterThan(0);
 
-        expect(token.primitiveReferences.value).toBeTruthy();
-        expect(token.primitiveReferences.value.length).toBeGreaterThan(0);
+        // Check for opacity composition pattern or standard value pattern
+        const refs = token.primitiveReferences as Record<string, string>;
+        if ('color' in refs && 'opacity' in refs) {
+          // Opacity composition pattern: { color: 'primitiveName', opacity: 'opacityName' }
+          expect(refs.color).toBeTruthy();
+          expect(refs.color.length).toBeGreaterThan(0);
+          expect(refs.opacity).toBeTruthy();
+          expect(refs.opacity.length).toBeGreaterThan(0);
+        } else {
+          // Standard single-value reference pattern: { value: 'primitiveName' }
+          expect(refs.value).toBeTruthy();
+          expect(refs.value.length).toBeGreaterThan(0);
+        }
 
         expect(token.category).toBeTruthy();
         expect(token.category).toBe(SemanticCategory.COLOR);
@@ -614,9 +689,30 @@ describe('Semantic Color Tokens - Palette Update', () => {
       const tokens = getAllColorTokens();
 
       tokens.forEach(token => {
-        const primitiveName = token.primitiveReferences.value;
-        expect(primitiveColorTokens).toHaveProperty(primitiveName);
+        const refs = token.primitiveReferences as Record<string, string>;
+        
+        // Check for opacity composition pattern: { color: 'primitiveName', opacity: 'opacityName' }
+        if ('color' in refs && 'opacity' in refs) {
+          // Validate composite reference (color + opacity)
+          // color.structure.border.subtle uses opacity composition per Spec 052 Task 9.4.FIX.1
+          expect(primitiveColorTokens).toHaveProperty(refs.color);
+          // Opacity primitive validation is handled by ValidatePrimitiveReferences.test.ts
+        } else {
+          // Standard single-value reference pattern: { value: 'primitiveName' }
+          const primitiveName = refs.value;
+          expect(primitiveColorTokens).toHaveProperty(primitiveName);
+        }
       });
+    });
+
+    it('should have color.structure.border.subtle with opacity composition', () => {
+      const token = colorTokens['color.structure.border.subtle'];
+      expect(token).toBeDefined();
+      
+      const refs = token.primitiveReferences as Record<string, string>;
+      // Verify opacity composition pattern (color + opacity)
+      expect(refs.color).toBe('gray100');
+      expect(refs.opacity).toBe('opacity600');
     });
   });
 
@@ -832,10 +928,10 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(selectTokens.length).toBe(6);
       });
 
-      it('should include select tokens in total count of 48', () => {
+      it('should include select tokens in total count of 50', () => {
         // Verify total count includes the 6 feedback select tokens
-        // Updated for Spec 052: 40 - 12 old + 18 new - 2 old + 2 new - 1 old + 2 new - 1 old + 2 new = 48
-        expect(colorTokenNames.length).toBe(48);
+        // Updated for Spec 052 semantic naming restructure: 50 total tokens
+        expect(colorTokenNames.length).toBe(50);
         expect(validateColorTokenCount()).toBe(true);
       });
     });
@@ -1425,10 +1521,10 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(badgeTokens.length).toBe(2);
       });
 
-      it('should include badge tokens in total count of 48', () => {
+      it('should include badge tokens in total count of 50', () => {
         // Verify total count includes the 2 badge tokens
-        // Updated for Spec 052: 40 - 12 old + 18 new - 2 old + 2 new - 1 old + 2 new - 1 old + 2 new = 48
-        expect(colorTokenNames.length).toBe(48);
+        // Updated for Spec 052 semantic naming restructure: 50 total tokens
+        expect(colorTokenNames.length).toBe(50);
         expect(validateColorTokenCount()).toBe(true);
       });
     });
