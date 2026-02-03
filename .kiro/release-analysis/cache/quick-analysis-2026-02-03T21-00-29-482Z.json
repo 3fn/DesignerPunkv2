@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-02-03T21:00:29.482Z",
+  "lastAnalyzedCommit": "111b0af68ac20882d8fd53b4be89de6e84a1bf0a",
+  "documentCount": 3,
+  "documents": [
+    {
+      "path": "docs/specs/052-semantic-token-naming-implementation/task-8-summary.md",
+      "lastModified": "2026-02-03T21:00:29.481Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/052-semantic-token-naming-implementation/task-9-summary.md",
+      "lastModified": "2026-02-03T21:00:29.482Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/055-semantic-radius-pill-rename/task-1-summary.md",
+      "lastModified": "2026-02-03T21:00:29.482Z",
+      "gitCommit": "unknown"
+    }
+  ],
+  "quickAnalysisMode": true,
+  "appendOnlyOptimization": true,
+  "note": "Full analysis can be run with: npm run release:analyze"
+}
