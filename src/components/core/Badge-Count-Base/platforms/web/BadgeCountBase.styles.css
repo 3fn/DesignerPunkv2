@@ -26,8 +26,8 @@
   justify-content: center;
   box-sizing: border-box;
   
-  /* Shape - radiusHalf (50%) for circular/pill */
-  border-radius: var(--radius-half, 50%);
+  /* Shape - radiusFull (9999px) for circular/pill */
+  border-radius: var(--radius-full);
   
   /* Colors - default surface/text */
   background-color: var(--color-structure-surface);
@@ -57,16 +57,14 @@
   font-weight: var(--typography-label-xs-font-weight);
   letter-spacing: var(--typography-label-xs-letter-spacing);
   
-  /* Padding: space.inset.none (v), space.inset.050 (h) */
+  /* No vertical padding - height determined by line-height */
   padding-top: 0;
   padding-bottom: 0;
   padding-left: var(--space-050);
   padding-right: var(--space-050);
   
-  /* Min-width = line-height for circular single digits */
-  min-width: var(--line-height-050);
-  /* Min-height = line-height for consistent height */
-  min-height: var(--line-height-050);
+  /* Min-width = computed line-height (font-size × line-height) for circular single digits */
+  min-width: calc(var(--typography-label-xs-font-size) * var(--typography-label-xs-line-height));
 }
 
 /* Medium (md) - default */
@@ -78,16 +76,14 @@
   font-weight: var(--typography-label-sm-font-weight);
   letter-spacing: var(--typography-label-sm-letter-spacing);
   
-  /* Padding: space.inset.none (v), space.inset.050 (h) */
+  /* No vertical padding - height determined by line-height */
   padding-top: 0;
   padding-bottom: 0;
   padding-left: var(--space-050);
   padding-right: var(--space-050);
   
-  /* Min-width = line-height for circular single digits */
-  min-width: var(--line-height-075);
-  /* Min-height = line-height for consistent height */
-  min-height: var(--line-height-075);
+  /* Min-width = computed line-height (font-size × line-height) for circular single digits */
+  min-width: calc(var(--typography-label-sm-font-size) * var(--typography-label-sm-line-height));
 }
 
 /* Large (lg) */
@@ -99,16 +95,14 @@
   font-weight: var(--typography-label-md-font-weight);
   letter-spacing: var(--typography-label-md-letter-spacing);
   
-  /* Padding: space.inset.050 (v), space.inset.100 (h) */
-  padding-top: var(--space-050);
-  padding-bottom: var(--space-050);
+  /* No vertical padding - height determined by line-height */
+  padding-top: 0;
+  padding-bottom: 0;
   padding-left: var(--space-100);
   padding-right: var(--space-100);
   
-  /* Min-width = line-height for circular single digits */
-  min-width: var(--line-height-100);
-  /* Min-height = line-height + padding for consistent height */
-  min-height: calc(var(--line-height-100) + var(--space-050) * 2);
+  /* Min-width = computed line-height (font-size × line-height) for circular single digits */
+  min-width: calc(var(--typography-label-md-font-size) * var(--typography-label-md-line-height));
 }
 
 /* ============================================================================

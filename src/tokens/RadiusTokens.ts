@@ -171,15 +171,15 @@ export const radiusTokens: Record<string, PrimitiveToken> = {
     platforms: generateRadiusPlatformValues(RADIUS_BASE_VALUE * 4)
   },
 
-  radiusFull: {
-    name: 'radiusFull',
+  radiusMax: {
+    name: 'radiusMax',
     category: TokenCategory.RADIUS,
     baseValue: 9999,
     familyBaseValue: RADIUS_BASE_VALUE,
-    description: 'Full radius - creates perfect circles/pills',
+    description: 'Maximum radius - creates perfect circles/pills',
     mathematicalRelationship: 'special case = 9999 (effectively infinite)',
-    baselineGridAlignment: false, // Special case for full radius
-    isStrategicFlexibility: true, // Special strategic flexibility for full radius
+    baselineGridAlignment: false, // Special case for maximum radius
+    isStrategicFlexibility: true, // Special strategic flexibility for maximum radius
     isPrecisionTargeted: false,
     platforms: generateRadiusPlatformValues(9999)
   },

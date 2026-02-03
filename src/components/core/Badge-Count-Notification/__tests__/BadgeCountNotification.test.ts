@@ -469,14 +469,15 @@ describe('Badge-Count-Notification Unit Tests', () => {
       cssContent = readCSSFileContent();
     });
 
-    it('should use radiusHalf (50%) for circular/pill shape', () => {
-      expect(cssContent).toContain('border-radius: var(--radius-half');
+    it('should use radiusFull (9999px) for circular/pill shape', () => {
+      expect(cssContent).toContain('border-radius: var(--radius-full');
     });
 
-    it('should define min-width for each size variant', () => {
-      expect(cssContent).toContain('min-width: var(--line-height-050)');
-      expect(cssContent).toContain('min-width: var(--line-height-075)');
-      expect(cssContent).toContain('min-width: var(--line-height-100)');
+    it('should define min-width equal to computed line-height for each size variant', () => {
+      // Each size uses calc(font-size × line-height) for min-width
+      expect(cssContent).toContain('min-width: calc(var(--typography-label-xs-font-size) * var(--typography-label-xs-line-height))');
+      expect(cssContent).toContain('min-width: calc(var(--typography-label-sm-font-size) * var(--typography-label-sm-line-height))');
+      expect(cssContent).toContain('min-width: calc(var(--typography-label-md-font-size) * var(--typography-label-md-line-height))');
     });
 
     it('should center content for circular shape', () => {

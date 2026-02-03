@@ -233,7 +233,7 @@ describe('Badge-Count-Base Stemma Validators', () => {
       const expectedTokenPatterns = [
         '--color-structure-surface',
         '--color-text-default',
-        '--radius-half',
+        '--radius-full',
         '--typography-label-',  // Composite typography tokens (e.g., --typography-label-xs-font-size)
         '--space-',
       ];
@@ -252,7 +252,7 @@ describe('Badge-Count-Base Stemma Validators', () => {
       const semanticTokenReferences = [
         'var(--color-structure-surface',
         'var(--color-text-default',
-        'var(--radius-half',
+        'var(--radius-full',
       ];
 
       for (const reference of semanticTokenReferences) {
@@ -504,13 +504,13 @@ describe('Badge-Count-Base Stemma Validators', () => {
       }
     });
 
-    it('should use radiusHalf (50%) for circular/pill shape', () => {
+    it('should use radiusFull (9999px) for circular/pill shape', () => {
       if (!cssSource) {
         console.warn('CSS file not found, skipping test');
         return;
       }
 
-      expect(cssSource).toContain('border-radius: var(--radius-half');
+      expect(cssSource).toContain('border-radius: var(--radius-full');
     });
 
     it('should define min-width for each size variant', () => {
@@ -519,10 +519,10 @@ describe('Badge-Count-Base Stemma Validators', () => {
         return;
       }
 
-      // Each size should have min-width equal to line-height
-      expect(cssSource).toContain('min-width: var(--line-height-050)');
-      expect(cssSource).toContain('min-width: var(--line-height-075)');
-      expect(cssSource).toContain('min-width: var(--line-height-100)');
+      // Each size uses calc(font-size × line-height) for min-width
+      expect(cssSource).toContain('min-width: calc(var(--typography-label-xs-font-size) * var(--typography-label-xs-line-height))');
+      expect(cssSource).toContain('min-width: calc(var(--typography-label-sm-font-size) * var(--typography-label-sm-line-height))');
+      expect(cssSource).toContain('min-width: calc(var(--typography-label-md-font-size) * var(--typography-label-md-line-height))');
     });
 
     it('should center content for circular shape', () => {

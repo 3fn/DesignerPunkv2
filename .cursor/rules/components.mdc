@@ -1,0 +1,47 @@
+---
+description: Component development guidelines
+globs: src/components/**/*.ts, src/components/**/*.swift, src/components/**/*.kt
+alwaysApply: false
+---
+
+# Component Development
+
+## True Native Architecture
+
+Components are built for **build-time platform separation**:
+- `*.web.ts` - Web implementation
+- `*.ios.swift` - iOS implementation  
+- `*.android.kt` - Android implementation
+
+No runtime platform detection - each platform gets its own native implementation.
+
+## Token-First Approach
+
+1. **Always** use design tokens over hard-coded values
+2. Use semantic tokens first, primitives only when no semantic exists
+3. Reference tokens by name: `icon.size100` not `24px`
+
+## Before Building Components
+
+Query the Component Development Guide:
+```
+get_section({ path: ".kiro/steering/Component-Development-Guide.md", heading: "Token Selection Decision Framework" })
+```
+
+For component selection and compositions:
+```
+get_section({ path: ".kiro/steering/Component-Quick-Reference.md", heading: "Component Selection Guide" })
+get_section({ path: ".kiro/steering/Component-Quick-Reference.md", heading: "Common UI Compositions" })
+```
+
+## Rosetta System
+
+All tokens follow the Rosetta System:
+- Mathematical relationships (modular scale, baseline grid)
+- Unitless values (platform applies appropriate units)
+- Primitive → Semantic hierarchy
+
+For architecture details:
+```
+get_section({ path: ".kiro/steering/Rosetta-System-Architecture.md", heading: "Token Pipeline Architecture" })
+```

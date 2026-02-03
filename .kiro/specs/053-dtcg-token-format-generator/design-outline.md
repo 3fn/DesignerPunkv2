@@ -655,16 +655,77 @@ Document for MCP server integration:
 
 ---
 
+## Open Questions (Must Resolve Before Requirements)
+
+The following questions must be answered before this spec can proceed to requirements.md:
+
+### OQ-053-1: Exact Token Inventory
+
+**Question**: What is the exact count of tokens in each category that will be exported?
+
+**Why it matters**: "~310 total" and "45+" are too vague for validation. We need precise counts to verify the generator exports everything.
+
+**Action required**: Audit Rosetta token sources and document exact counts per category.
+
+---
+
+### OQ-053-2: Composite Type Mapping
+
+**Question**: How exactly do DesignerPunk shadow and typography compositions map to DTCG composite type structures?
+
+**Why it matters**: DTCG has specific schemas for `shadow` and `typography` composite types. The outline marks these as "✅ Direct mapping" but doesn't show the actual structure transformation.
+
+**Action required**: Document the exact DTCG output structure for:
+- Shadow compositions (from `ShadowTokens.ts`)
+- Typography compositions (from `TypographyTokens.ts`)
+- Motion/transition compositions
+
+---
+
+### OQ-053-3: Alias Resolution Strategy
+
+**Question**: When should the generator emit alias references (`{color.purple.300}`) vs resolved values (`#B026FF`)?
+
+**Why it matters**: Both are valid DTCG. The choice affects:
+- File size (aliases are smaller)
+- Downstream tool compatibility (some tools don't resolve aliases)
+- Debugging experience (resolved values are easier to inspect)
+
+**Options to evaluate**:
+1. Always emit aliases for semantic tokens
+2. Provide a config option (`resolveAliases: boolean`)
+3. Emit both (aliases in `$value`, resolved in extensions)
+
+**Action required**: Decide on strategy and document rationale.
+
+---
+
+### OQ-053-4: Integration with Existing Generators
+
+**Question**: How does DTCGFormatGenerator integrate with the existing `generate-platform-tokens.ts` script?
+
+**Why it matters**: There's already a token generation pipeline. Adding DTCG output needs to fit cleanly.
+
+**Options to evaluate**:
+1. DTCGFormatGenerator runs alongside existing generators (parallel output)
+2. DTCGFormatGenerator becomes the new canonical source, existing generators consume DTCG
+3. Existing script is extended to include DTCG output
+
+**Action required**: Review `scripts/generate-platform-tokens.ts` and decide on integration approach.
+
+---
+
 ## Next Steps
 
 1. ✅ **Design outline created** — Architecture and decisions documented
 2. ✅ **DTCG spec researched** — Target version identified (2025.10)
-3. ⏳ **Create requirements.md** — EARS format
-4. ⏳ **Create design.md** — Detailed architecture
-5. ⏳ **Create tasks.md** — Implementation plan
-6. ⏳ **Implement DTCGFormatGenerator**
-7. ⏳ **Implement transformer architecture**
-8. ⏳ **Write documentation guides**
+3. ⏳ **Resolve open questions** — OQ-053-1 through OQ-053-4
+4. ⏳ **Create requirements.md** — EARS format (blocked by open questions)
+5. ⏳ **Create design.md** — Detailed architecture
+6. ⏳ **Create tasks.md** — Implementation plan
+7. ⏳ **Implement DTCGFormatGenerator**
+8. ⏳ **Implement transformer architecture**
+9. ⏳ **Write documentation guides**
 
 ---
 

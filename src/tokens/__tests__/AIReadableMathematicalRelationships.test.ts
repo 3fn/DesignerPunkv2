@@ -120,13 +120,13 @@ describe('AI-Readable Mathematical Relationships', () => {
       expect(radiusTokens.radius075.isStrategicFlexibility).toBe(true);
       expect(radiusTokens.radius125.isStrategicFlexibility).toBe(true);
       expect(radiusTokens.radius250.isStrategicFlexibility).toBe(true);
-      expect(radiusTokens.radiusFull.isStrategicFlexibility).toBe(true);
+      expect(radiusTokens.radiusMax.isStrategicFlexibility).toBe(true);
       
       // Verify they have numeric baseValue
       expect(typeof radiusTokens.radius075.baseValue).toBe('number');
       expect(typeof radiusTokens.radius125.baseValue).toBe('number');
       expect(typeof radiusTokens.radius250.baseValue).toBe('number');
-      expect(typeof radiusTokens.radiusFull.baseValue).toBe('number');
+      expect(typeof radiusTokens.radiusMax.baseValue).toBe('number');
     });
   });
 

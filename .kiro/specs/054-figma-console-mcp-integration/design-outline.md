@@ -634,18 +634,117 @@ async function preflight(): Promise<PreflightResult> {
 
 ---
 
+## Open Questions (Must Resolve Before Requirements)
+
+The following questions must be answered before this spec can proceed to requirements.md:
+
+### OQ-054-1: Local Mode Operational Burden
+
+**Question**: Is the Local Mode setup complexity acceptable for the intended workflow?
+
+**Why it matters**: Local Mode requires:
+- Figma Desktop running with `--remote-debugging-port=9222`
+- Desktop Bridge plugin installed and running
+- Manual process to start/verify before each sync
+
+**Context needed**:
+- How often will token sync occur? (Weekly? Per release? Ad-hoc?)
+- Who will run the sync? (Peter only? Any team member?)
+- Is this acceptable friction for the value delivered?
+
+**Action required**: Define the operational workflow and confirm the setup burden is acceptable.
+
+---
+
+### OQ-054-2: Sync Strategy and Data Loss Risk
+
+**Question**: How should the sync handle Figma-only variables that don't exist in DesignerPunk?
+
+**Why it matters**: "Full sync — Push all tokens, overwrite existing" will delete any variables added directly in Figma. This could cause data loss for:
+- Prototyping variables
+- Designer experiments
+- Project-specific overrides
+
+**Options to evaluate**:
+1. **Overwrite all** — Accept data loss, Figma is read-only for tokens
+2. **Dry run mode** — Show diff before committing, require confirmation
+3. **Additive only** — Never delete, only create/update
+4. **Namespaced protection** — Only manage variables in `designerpunk/*` namespace
+
+**Action required**: Decide on sync strategy and document the data loss policy.
+
+---
+
+### OQ-054-3: Translation Layer Tolerance Validation
+
+**Question**: Are the proposed tolerance rules (±2px spacing, ΔE < 3 color) appropriate for real-world Figma designs?
+
+**Why it matters**: If tolerances are too tight, everything shows as "approximate" or "no-match." If too loose, the translation loses precision.
+
+**Action required**: Test tolerance rules against actual Figma designs to validate they produce useful results. Document findings.
+
+---
+
+### OQ-054-4: Handling Truly Custom Values
+
+**Question**: What should the translation layer do when a Figma value has no match (exact or approximate) in the token system?
+
+**Why it matters**: The 80/20 problem framing says AI can interpret custom designs using DesignerPunk vocabulary. But for truly off-system values, the translation layer returns "no-match." What does AI do then?
+
+**Options to evaluate**:
+1. **Report raw value** — AI sees `{ "token": null, "rawValue": "37px" }` and improvises
+2. **Suggest nearest** — Always suggest closest token even if far off
+3. **Flag for review** — Mark as "requires design system decision"
+4. **Interpolation hint** — Suggest "between space.400 and space.500"
+
+**Action required**: Define the "no-match" behavior and document how AI should interpret it.
+
+---
+
+### OQ-054-5: Token Drift Detection
+
+**Question**: How do we detect and handle when Figma variables have been edited directly (diverged from DesignerPunk source)?
+
+**Why it matters**: If someone edits a Figma variable value directly, the next sync will silently overwrite their change. This could cause confusion or lost work.
+
+**Options to evaluate**:
+1. **Ignore drift** — DesignerPunk is source of truth, Figma edits are ephemeral
+2. **Detect and warn** — Pre-sync check shows diverged values, requires confirmation
+3. **Detect and block** — Refuse to sync until drift is resolved
+4. **Bidirectional merge** — Complex, probably out of scope
+
+**Action required**: Decide on drift handling policy and document it.
+
+---
+
+### OQ-054-6: Phased Implementation Strategy
+
+**Question**: Should this spec be split into phases to reduce risk and validate assumptions incrementally?
+
+**Proposed phases**:
+1. **Phase 1**: FigmaTransformer only (generate `DesignTokens.figma.json`, manual import)
+2. **Phase 2**: Read-only translation layer (AI interprets Figma in token language)
+3. **Phase 3**: Full sync workflow via Console MCP
+
+**Why it matters**: Full bidirectional sync is complex. Phasing allows validation of each piece before committing to the full workflow.
+
+**Action required**: Decide whether to implement as single spec or split into phases.
+
+---
+
 ## Next Steps
 
 1. ✅ **Design outline created** — Architecture and decisions documented
 2. ✅ **Dependency on Spec 053 defined** — Clear interface contract
-3. ⏳ **Wait for Spec 053 completion** — Transformer architecture must exist
-4. ⏳ **Create requirements.md** — EARS format
-5. ⏳ **Create design.md** — Detailed architecture
-6. ⏳ **Create tasks.md** — Implementation plan
-7. ⏳ **Implement FigmaTransformer**
-8. ⏳ **Implement TokenSyncWorkflow**
-9. ⏳ **Implement TokenTranslator**
-10. ⏳ **Configure Console MCP**
+3. ⏳ **Resolve open questions** — OQ-054-1 through OQ-054-6
+4. ⏳ **Wait for Spec 053 completion** — Transformer architecture must exist
+5. ⏳ **Create requirements.md** — EARS format (blocked by open questions)
+6. ⏳ **Create design.md** — Detailed architecture
+7. ⏳ **Create tasks.md** — Implementation plan
+8. ⏳ **Implement FigmaTransformer**
+9. ⏳ **Implement TokenSyncWorkflow**
+10. ⏳ **Implement TokenTranslator**
+11. ⏳ **Configure Console MCP**
 
 ---
 

@@ -46,7 +46,7 @@ All radius tokens derive from a base unit of **8px** (radius100):
 | `radius250` | 20px | 2.5 × base (radius100) | ❌ | Strategic flexibility for components |
 | `radius300` | 24px | 3 × base (radius100) | ✅ | Huge rounding, feature elements |
 | `radius400` | 32px | 4 × base (radius100) | ✅ | Maximum rounding |
-| `radiusFull` | 9999px | Special case (infinite) | ❌ | Perfect circles, pill shapes |
+| `radiusMax` | 9999px | Special case (infinite) | ❌ | Perfect circles, pill shapes |
 
 ### Baseline Grid Alignment
 
@@ -90,7 +90,7 @@ Semantic radius tokens provide contextual meaning for specific component pattern
 | `radiusSmall` | radius050 | 4px | Compact elements, chips, small buttons |
 | `radiusNormal` | radius100 | 8px | Standard elements, buttons, cards, modals |
 | `radiusLarge` | radius200 | 16px | Prominent elements, feature cards, hero sections |
-| `radiusFull` | radiusFull | 9999px | Pills, circular avatars, badges |
+| `radiusFull` | radiusMax | 9999px | Pills, circular avatars, badges |
 
 ### Semantic Token Details
 
@@ -159,7 +159,7 @@ Semantic radius tokens provide contextual meaning for specific component pattern
 
 #### radiusFull (Pills and Circles)
 
-**References**: radiusFull (9999px)
+**References**: radiusMax (9999px)
 
 **Use Cases**:
 - Pill-shaped buttons and badges
@@ -189,7 +189,7 @@ radius200 = radius100 × 2     = 16px
 radius250 = radius100 × 2.5   = 20px  (strategic flexibility)
 radius300 = radius100 × 3     = 24px
 radius400 = radius100 × 4     = 32px
-radiusFull = 9999px                   (special case)
+radiusMax = 9999px                    (special case)
 ```
 
 ### Doubling Pattern
@@ -245,7 +245,7 @@ Radius tokens use unitless base values that convert to platform-specific units:
   --radius-250: 20px;
   --radius-300: 24px;
   --radius-400: 32px;
-  --radius-full: 9999px;
+  --radius-max: 9999px;
   
   /* Semantic Radius Tokens */
   --radius-none: var(--radius-000);
@@ -253,7 +253,7 @@ Radius tokens use unitless base values that convert to platform-specific units:
   --radius-small: var(--radius-050);
   --radius-normal: var(--radius-100);
   --radius-large: var(--radius-200);
-  --radius-full-semantic: var(--radius-full);
+  --radius-full: var(--radius-max);
 }
 ```
 
@@ -273,7 +273,7 @@ struct DesignTokens {
     static let radius250: CGFloat = 20
     static let radius300: CGFloat = 24
     static let radius400: CGFloat = 32
-    static let radiusFull: CGFloat = 9999
+    static let radiusMax: CGFloat = 9999
     
     // Semantic Radius Tokens
     static let radiusNone = radius000
@@ -281,7 +281,7 @@ struct DesignTokens {
     static let radiusSmall = radius050
     static let radiusNormal = radius100
     static let radiusLarge = radius200
-    static let radiusFullSemantic = radiusFull
+    static let radiusFull = radiusMax
 }
 ```
 
@@ -301,7 +301,7 @@ object DesignTokens {
     val radius_250 = 20.dp
     val radius_300 = 24.dp
     val radius_400 = 32.dp
-    val radius_full = 9999.dp
+    val radius_max = 9999.dp
     
     // Semantic Radius Tokens
     val radius_none = radius_000
@@ -309,7 +309,7 @@ object DesignTokens {
     val radius_small = radius_050
     val radius_normal = radius_100
     val radius_large = radius_200
-    val radius_full_semantic = radius_full
+    val radius_full = radius_max
 }
 ```
 

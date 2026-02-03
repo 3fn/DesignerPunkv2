@@ -278,7 +278,7 @@ describe('Token Categories', () => {
 
       expect(baselineAlignedTokens.length).toBeGreaterThan(0);
       baselineAlignedTokens.forEach(token => {
-        if (token.name !== 'radiusFull') { // Special case
+        if (token.name !== 'radiusMax') { // Special case
           expect(token.baseValue % 8).toBe(0);
         }
       });
@@ -294,11 +294,11 @@ describe('Token Categories', () => {
     });
 
     test('should handle special case tokens', () => {
-      const radiusFull = getRadiusToken('radiusFull');
+      const radiusMax = getRadiusToken('radiusMax');
       const radius000 = getRadiusToken('radius000');
 
-      expect(radiusFull?.baseValue).toBe(9999); // Effectively infinite
-      expect(radiusFull?.isStrategicFlexibility).toBe(true);
+      expect(radiusMax?.baseValue).toBe(9999); // Effectively infinite
+      expect(radiusMax?.isStrategicFlexibility).toBe(true);
       expect(radius000?.baseValue).toBe(0); // No radius
       expect(radius000?.baselineGridAlignment).toBe(true);
     });
@@ -338,7 +338,7 @@ describe('Token Categories', () => {
       const radiusStrategic = getStrategicFlexibilityRadiusTokens();
 
       const spacingValues = spacingStrategic.map(token => token.baseValue);
-      const radiusValues = radiusStrategic.filter(token => token.name !== 'radiusFull').map(token => token.baseValue);
+      const radiusValues = radiusStrategic.filter(token => token.name !== 'radiusMax').map(token => token.baseValue);
 
       // Should share common strategic flexibility values
       expect(spacingValues.some(value => radiusValues.includes(value))).toBe(true);

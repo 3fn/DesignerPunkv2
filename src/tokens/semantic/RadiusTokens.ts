@@ -128,7 +128,7 @@ export const radiusLarge = { value: 'radius200' } as RadiusSemanticToken;
 /**
  * Full radius for pills and circular elements.
  * 
- * References: radiusFull (9999)
+ * References: radiusMax (9999)
  * 
  * Use cases:
  * - Pills: Pill-shaped buttons and badges
@@ -143,7 +143,7 @@ export const radiusLarge = { value: 'radius200' } as RadiusSemanticToken;
  * - iOS: 9999pt (effectively infinite)
  * - Android: 9999dp (effectively infinite)
  */
-export const radiusFull = { value: 'radiusFull' } as RadiusSemanticToken;
+export const radiusFull = { value: 'radiusMax' } as RadiusSemanticToken;
 
 /**
  * Circle radius for true circular elements.

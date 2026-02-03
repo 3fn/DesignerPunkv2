@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "documentation": {
+      "command": "node",
+      "args": ["mcp-server/dist/index.js"],
+      "env": {
+        "MCP_STEERING_DIR": ".kiro/steering/"
+      }
+    }
+  }
+}

@@ -233,7 +233,7 @@ describe('Badge-Count-Notification Stemma Validators', () => {
       const expectedTokenPatterns = [
         '--color-badge-notification-background',
         '--color-badge-notification-text',
-        '--radius-half',
+        '--radius-full',
         '--typography-label-',  // Composite typography tokens (e.g., --typography-label-xs-font-size)
         '--space-',
       ];

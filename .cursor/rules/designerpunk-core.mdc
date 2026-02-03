@@ -1,0 +1,39 @@
+---
+description: Core DesignerPunk project principles and AI collaboration standards
+alwaysApply: true
+---
+
+# DesignerPunk Core Principles
+
+## Project Context
+
+DesignerPunk is a **True Native** cross-platform design system with mathematical foundations:
+
+- **Build-time platform separation** (web/iOS/Android) - no runtime detection
+- **Mathematical foundation**: REM-style baseline grid with modular scale
+- **Accessibility-first**: WCAG 2.1 AA compliance
+- **Unitless token architecture** for cross-platform consistency
+
+## AI Collaboration Standards
+
+**Candid Communication**: Provide honest assessment of strengths AND weaknesses. Default to candid, escalate to direct only when critical stakes require it.
+
+**Counter-Arguments Required**: For significant recommendations, provide at least one substantive counter-argument:
+> "I recommend X because [reasons]. HOWEVER, here's why this might be wrong: [counter-arguments]."
+
+**Bias Self-Monitoring**: Watch for completion bias, solution bias, and confirmation bias. Flag when you notice yourself being overly agreeable or optimistic.
+
+**Exploratory vs Directive**: "What do you think about X?" is NOT "Please do X." When uncertain, ask: "Would you like me to implement this, or are you looking for analysis first?"
+
+## Task Completion
+
+- **STOP after completing a task** - wait for user authorization before starting the next
+- Use Jest, NOT Vitest: `npm test` for standard tests, `npm run test:all` for full suite
+- Follow hook system: `./.kiro/hooks/commit-task.sh "Task Name"`
+
+## MCP Documentation
+
+Query the MCP `documentation` server for detailed guidance:
+- `get_documentation_map()` - see all available steering docs
+- `get_document_summary({ path })` - get doc outline
+- `get_section({ path, heading })` - get specific section

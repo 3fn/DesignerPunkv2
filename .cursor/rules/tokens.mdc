@@ -1,0 +1,43 @@
+---
+description: Design token usage and governance rules
+globs: src/tokens/**/*.ts, src/components/**/*.ts
+alwaysApply: false
+---
+
+# Token Usage Rules
+
+## Token Selection Priority (MUST follow this order)
+
+1. **Semantic tokens** - purpose-built for use cases (e.g., `tapAreaRecommended`, `color.contrast.onPrimary`)
+2. **Primitive tokens** - when no semantic token exists
+3. **Component tokens referencing primitives** - when component needs semantic name but value exists as primitive
+4. **Hard-coded values** - LAST RESORT, requires user approval
+
+## Token Governance (Autonomy Levels)
+
+| Token Type | Autonomy |
+|------------|----------|
+| Semantic tokens | Use freely (verify semantic correctness) |
+| Primitive tokens | Requires prior context or human acknowledgment |
+| Component tokens | Requires explicit human approval |
+| Creating ANY token | Always requires human review |
+
+## Component Token Rule
+
+Component tokens must either:
+- Reference an existing primitive token, OR
+- Conform to how that primitive token family's values are defined
+
+Never introduce arbitrary values that don't align with the underlying token family.
+
+## In Specs
+
+Reference tokens, not pixel values: `icon.size100` not `24px`
+
+## For Detailed Guidance
+
+Query MCP:
+```
+get_section({ path: ".kiro/steering/Token-Governance.md", heading: "Token Selection Matrix" })
+get_section({ path: ".kiro/steering/Component-Development-Guide.md", heading: "Token Selection Decision Framework" })
+```

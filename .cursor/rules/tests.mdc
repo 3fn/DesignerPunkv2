@@ -1,0 +1,45 @@
+---
+description: Jest testing standards and commands
+globs: **/*.test.ts, **/*.test.tsx, src/__tests__/**/*
+alwaysApply: false
+---
+
+# Testing Standards
+
+## CRITICAL: This Project Uses Jest, NOT Vitest
+
+### Correct Jest Commands
+
+| Command | Purpose | Duration |
+|---------|---------|----------|
+| `npm test` | Unit/integration tests | ~10 min |
+| `npm run test:all` | ALL tests including performance | ~28 min |
+| `npm run test:performance` | Performance tests only | ~20 min |
+| `npm test -- <file>` | Specific test file | varies |
+| `npm run test:watch` | Watch mode | continuous |
+| `npm run test:coverage` | With coverage | ~12 min |
+
+### WRONG Commands (Will Fail)
+
+```bash
+# ❌ These are Vitest commands - DON'T USE
+npm test -- --run
+vitest
+```
+
+## Test Command Selection
+
+**Regular task completion:** `npm test`
+
+**Parent task completion:**
+- Default: `npm test`
+- If task modifies release-analysis/release-detection: `npm run test:all`
+- If performance-critical: `npm run test:all`
+
+## For Detailed Patterns
+
+Query MCP:
+```
+get_section({ path: ".kiro/steering/Test-Development-Standards.md", heading: "Test Categories" })
+get_section({ path: ".kiro/steering/Test-Development-Standards.md", heading: "Web Component Testing Patterns" })
+```

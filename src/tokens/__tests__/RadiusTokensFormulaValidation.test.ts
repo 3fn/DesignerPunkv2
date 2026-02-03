@@ -108,11 +108,11 @@ describe('RadiusTokens Formula Validation', () => {
       expect(radiusTokens.radius250.isStrategicFlexibility).toBe(true);
     });
 
-    it('radiusFull: should preserve hard value of 9999 (special case)', () => {
+    it('radiusMax: should preserve hard value of 9999 (special case)', () => {
       const expected = 9999;
       
-      expect(radiusTokens.radiusFull.baseValue).toBe(expected);
-      expect(radiusTokens.radiusFull.isStrategicFlexibility).toBe(true);
+      expect(radiusTokens.radiusMax.baseValue).toBe(expected);
+      expect(radiusTokens.radiusMax.isStrategicFlexibility).toBe(true);
     });
   });
 
@@ -143,7 +143,7 @@ describe('RadiusTokens Formula Validation', () => {
         { token: 'radius075', expected: 6 },
         { token: 'radius125', expected: 10 },
         { token: 'radius250', expected: 20 },
-        { token: 'radiusFull', expected: 9999 }
+        { token: 'radiusMax', expected: 9999 }
       ];
 
       testCases.forEach(({ token, expected }) => {
@@ -192,7 +192,7 @@ describe('RadiusTokens Formula Validation', () => {
         radius250: 20,
         radius300: 24,
         radius400: 32,
-        radiusFull: 9999
+        radiusMax: 9999
       };
 
       let matchCount = 0;

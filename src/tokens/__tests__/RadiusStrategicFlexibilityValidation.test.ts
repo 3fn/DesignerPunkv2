@@ -6,7 +6,7 @@
  * Validation tests for RadiusTokens strategic flexibility preservation
  * 
  * Verifies that strategic flexibility tokens remain unchanged after formula refactoring:
- * - radius075, radius125, radius250, radiusFull use hard values
+ * - radius075, radius125, radius250, radiusMax use hard values
  * - isStrategicFlexibility flags remain true
  */
 
@@ -55,17 +55,17 @@ describe('RadiusTokens Strategic Flexibility Preservation', () => {
     });
   });
 
-  describe('radiusFull strategic flexibility token', () => {
+  describe('radiusMax strategic flexibility token', () => {
     it('should preserve hard value of 9999', () => {
-      expect(radiusTokens.radiusFull.baseValue).toBe(9999);
+      expect(radiusTokens.radiusMax.baseValue).toBe(9999);
     });
 
     it('should maintain isStrategicFlexibility flag as true', () => {
-      expect(radiusTokens.radiusFull.isStrategicFlexibility).toBe(true);
+      expect(radiusTokens.radiusMax.isStrategicFlexibility).toBe(true);
     });
 
     it('should preserve special case mathematical relationship', () => {
-      expect(radiusTokens.radiusFull.mathematicalRelationship).toBe('special case = 9999 (effectively infinite)');
+      expect(radiusTokens.radiusMax.mathematicalRelationship).toBe('special case = 9999 (effectively infinite)');
     });
   });
 
@@ -98,14 +98,14 @@ describe('RadiusTokens Strategic Flexibility Preservation', () => {
       expect(strategicTokens).toHaveLength(5);
     });
 
-    it('should include radius075, radius125, radius250, radiusFull, and radiusHalf', () => {
+    it('should include radius075, radius125, radius250, radiusMax, and radiusHalf', () => {
       const strategicTokens = getStrategicFlexibilityRadiusTokens();
       const tokenNames = strategicTokens.map(token => token.name);
       
       expect(tokenNames).toContain('radius075');
       expect(tokenNames).toContain('radius125');
       expect(tokenNames).toContain('radius250');
-      expect(tokenNames).toContain('radiusFull');
+      expect(tokenNames).toContain('radiusMax');
       expect(tokenNames).toContain('radiusHalf');
     });
 

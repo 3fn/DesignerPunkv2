@@ -1,0 +1,42 @@
+---
+description: Specification document formatting standards
+globs: .kiro/specs/**/requirements.md, .kiro/specs/**/design.md, .kiro/specs/**/tasks.md, .kiro/specs/**/design-outline.md
+alwaysApply: false
+---
+
+# Spec Document Standards
+
+## CRITICAL REQUIREMENT
+
+**Before creating or modifying ANY spec document, you MUST query Spec Planning Standards via MCP.**
+
+This is NOT optional. Spec documents have specific formatting requirements that are NOT intuitive.
+
+## Required MCP Queries
+
+**For requirements.md:**
+```
+get_section({ path: ".kiro/steering/Process-Spec-Planning.md", heading: "Requirements Document Format" })
+```
+
+**For design.md:**
+```
+get_section({ path: ".kiro/steering/Process-Spec-Planning.md", heading: "Design Document Format" })
+```
+
+**For tasks.md:**
+```
+get_section({ path: ".kiro/steering/Process-Spec-Planning.md", heading: "Tasks Document Format" })
+get_section({ path: ".kiro/steering/Process-Spec-Planning.md", heading: "Task Type Classification" })
+```
+
+## Confirmation Required
+
+After querying, confirm: "I've queried Spec Planning Standards via MCP and reviewed [section name]!"
+
+## What Happens If You Skip This
+
+- ❌ Tasks will be formatted incorrectly
+- ❌ Requirements will lack proper EARS format
+- ❌ Design documents will miss required sections
+- ❌ Work will need to be redone
