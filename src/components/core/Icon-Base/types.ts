@@ -59,7 +59,7 @@ export type IconBaseName =
  * and is calculated using the formula: iconSize = fontSize × lineHeight (rounded).
  * 
  * Core sizes (90% of use cases):
- * - 18px (size075): Small UI, compact layouts (bodySm, buttonSm, labelSm)
+ * - 20px (size075): Small UI, compact layouts (bodySm, buttonSm, labelSm)
  * - 24px (size100): Standard UI, body text (bodyMd, buttonMd, labelMd, input)
  * - 32px (size125/200/300): Large UI, medium headings (bodyLg, buttonLg, h5, h4)
  * - 36px (size400): Large headings (h3)
@@ -71,17 +71,17 @@ export type IconBaseName =
  * - 44px (size600): Primary heading (h1)
  * - 48px (size700): Display text (hero sections)
  * 
- * All sizes maintain 4pt subgrid alignment (except 13px and 18px, which are
- * smallest sizes where alignment trade-off is acceptable).
+ * All sizes maintain 4pt subgrid alignment (except 13px, which is the
+ * smallest size where alignment trade-off is acceptable).
  * 
  * @example
  * ```typescript
  * const size: IconBaseSize = 24; // Standard size for body text
- * const smallSize: IconBaseSize = 18; // Small UI elements
+ * const smallSize: IconBaseSize = 20; // Small UI elements
  * const largeSize: IconBaseSize = 40; // Primary headings
  * ```
  */
-export type IconBaseSize = 13 | 18 | 24 | 28 | 32 | 36 | 40 | 44 | 48;
+export type IconBaseSize = 13 | 20 | 24 | 28 | 32 | 36 | 40 | 44 | 48;
 
 /**
  * Icon size token reference object mapping token names to calculated values.
@@ -93,7 +93,7 @@ export type IconBaseSize = 13 | 18 | 24 | 28 | 32 | 36 | 40 | 44 | 48;
  * 
  * Token names follow the pattern `sizeXXX` where XXX is the scale level:
  * - size050: 13px (caption, legal, labelXs)
- * - size075: 18px (bodySm, buttonSm, labelSm)
+ * - size075: 20px (bodySm, buttonSm, labelSm)
  * - size100: 24px (bodyMd, buttonMd, labelMd, input) - standard
  * - size125: 32px (bodyLg, buttonLg, labelLg)
  * - size150: 28px (h6)
@@ -124,7 +124,7 @@ export type IconBaseSize = 13 | 18 | 24 | 28 | 32 | 36 | 40 | 44 | 48;
  */
 export const iconBaseSizes = {
   size050: 13,  // icon.size050 - caption, legal, labelXs
-  size075: 18,  // icon.size075 - bodySm, buttonSm, labelSm
+  size075: 20,  // icon.size075 - bodySm, buttonSm, labelSm (14px × 1.429 = 20px)
   size100: 24,  // icon.size100 - bodyMd, buttonMd, labelMd, input (standard)
   size125: 32,  // icon.size125 - bodyLg, buttonLg, labelLg
   size150: 28,  // icon.size150 - h6

@@ -19,7 +19,7 @@
  * Icon Size Mapping (50% ratio with avatar size):
  * - xs (24px avatar) → 12px icon (avatar.icon.size.xs component token)
  * - sm (32px avatar) → 16px icon (icon.size050, IconBaseSize 13)
- * - md (40px avatar) → 20px icon (icon.size075, IconBaseSize 18)
+ * - md (40px avatar) → 20px icon (icon.size075, IconBaseSize 20)
  * - lg (48px avatar) → 24px icon (icon.size100, IconBaseSize 24)
  * - xl (80px avatar) → 40px icon (icon.size500, IconBaseSize 40)
  * - xxl (128px avatar) → 64px icon (avatar.icon.size.xxl component token)
@@ -290,7 +290,7 @@ describe('Avatar Icon Integration', () => {
     });
 
     /**
-     * @see Requirements: 3.3 - md avatar uses icon.size075 token (20px, IconBaseSize 18)
+     * @see Requirements: 3.3 - md avatar uses icon.size075 token (20px, IconBaseSize 20)
      */
     it('should use size075 icon for md avatar', async () => {
       const avatar = document.createElement('avatar-base') as AvatarBaseElement;
@@ -304,7 +304,7 @@ describe('Avatar Icon Integration', () => {
       const svg = iconContainer?.querySelector('svg');
       expect(svg).toBeTruthy();
       
-      // md size uses IconBaseSize 18 which maps to icon-base--size-075 class
+      // md size uses IconBaseSize 20 which maps to icon-base--size-075 class
       expect(svg?.classList.contains('icon-base--size-075')).toBe(true);
     });
 

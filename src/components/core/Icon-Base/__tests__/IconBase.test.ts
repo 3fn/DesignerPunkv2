@@ -49,7 +49,7 @@ describe('Icon-Base Component', () => {
 
   describe('Size Variants', () => {
     it('should accept all IconBaseSize values from icon size tokens', () => {
-      const sizes: IconBaseSize[] = [13, 18, 24, 28, 32, 36, 40, 44, 48];
+      const sizes: IconBaseSize[] = [13, 20, 24, 28, 32, 36, 40, 44, 48];
       
       sizes.forEach(size => {
         const result = createIconBase({ name: 'check', size });

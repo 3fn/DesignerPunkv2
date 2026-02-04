@@ -1,140 +1,133 @@
-# Chip-Base Component - Design Outline
+# Chip Component Family - Design Outline
 
 **Date**: January 19, 2026
+**Updated**: February 3, 2026
 **Purpose**: Capture design decisions and token requirements before creating full spec
-**Status**: Design Outline (Pre-Requirements)
-
-> ⚠️ **PLACEHOLDER NOTICE**: The visual specifications, token references, and pixel values in this document are preliminary placeholders largely derived from the wrkingClass prototype. They are NOT yet aligned with DesignerPunk's token system and design language. This outline must be reviewed and updated to use proper DesignerPunk tokens before proceeding to requirements.md.
+**Status**: Design Outline (Reviewed)
 
 ---
 
 ## Component Overview
 
-Chip is a compact, interactive element used for filtering, selection, or input. Unlike Badges (which are display-only), Chips respond to user interaction. They can be toggled, selected, or dismissed.
+Chip is a compact, interactive element used for filtering, selection, or input. Unlike Badges (which are display-only), Chips respond to user interaction. They can be toggled (Filter) or dismissed (Input).
 
 **Key Characteristics**:
 - **Interactive**: Responds to tap/click
-- **Toggleable**: Can represent selected/unselected state
-- **Dismissible**: Optional close/remove action
+- **Toggleable**: Filter chips represent selected/unselected state
+- **Dismissible**: Input chips can be removed
 - **Compact**: Small footprint for dense UI patterns
 
 ---
 
 ## Architecture
 
-### Component Structure
+### Component Structure (Stemma System)
 
 ```
 Chip-Base (Primitive)
-├── Provides foundational chip behaviors
-├── Toggle state, dismiss action, icon support
-└── Semantic variants inherit from this
+├── All visual tokens (size, typography, colors, states)
+├── Core behavior (press, disabled)
+├── Optional leading icon (via Icon-Base)
+└── Usable directly for general chip needs
 
-Future Semantic Variants:
-├── Chip-Filter (multi-select filtering)
-├── Chip-Input (user-entered values, removable)
-├── Chip-Choice (single-select from group)
-└── Chip-Action (triggers an action)
+Chip-Filter (Semantic - extends Chip-Base)
+├── Inherits ALL from Base
+├── Adds: selected state, toggle behavior
+├── Adds: checkmark icon when selected
+└── No new tokens needed
+
+Chip-Input (Semantic - extends Chip-Base)
+├── Inherits ALL from Base
+├── Adds: X icon (always visible, trailing)
+├── Adds: dismiss behavior (tap anywhere = dismiss)
+└── No new tokens needed
 ```
 
-**Design Pattern**: Base primitive with semantic variants for specialized behaviors.
+**Design Pattern**: Follows Input-Text-Base → Input-Text-Email/Password/PhoneNumber pattern. Chip-Base is usable directly for general/one-off chip needs; semantic variants (Chip-Filter, Chip-Input) provide specialized behaviors for common patterns.
+
+**Out of Scope**: Chip-Set (container with group behaviors, wrapping, clear-all) — separate spec.
 
 ---
 
 ## Visual Specifications
+
+### Single Size
+
+| Property | Token | Value | Notes |
+|----------|-------|-------|-------|
+| Tap Area | `tapAreaRecommended` | 48px | Accessibility touch target |
+| Block Padding | Component token → `space075` | 6px | Block-start/block-end inset |
+| Inline Padding | `space.inset.150` | 12px | Inline-start/inline-end padding |
+| Icon Gap | `space.grouped.tight` | 4px | Between icon and label |
+| Border Width | `borderDefault` | 1px | All states |
+| Border Radius | `radius.full` | pill | Fully rounded |
+
+**Height Math**: 6px (block-start) + 20px (content: 14px × 1.429 line-height) + 6px (block-end) = 32px
+
+### Typography
+
+| Property | Token | Value |
+|----------|-------|-------|
+| Font | `typography.buttonSm` | 14px, medium (500), 1.429 line-height |
 
 ### States
 
 | State | Background | Border | Text | Use Case |
 |-------|------------|--------|------|----------|
 | **default** | `color.surface.secondary` | `color.border.default` | `color.content.primary` | Unselected chip |
-| **selected** | `color.interactive.primary` | `color.interactive.primary` | `color.content.onPrimary` | Active/selected |
+| **selected** | `color.interactive.primary` | `color.interactive.primary` | `color.content.onPrimary` | Active/selected (Filter only) |
 | **hover** | `color.surface.tertiary` | `color.border.emphasis` | `color.content.primary` | Mouse hover |
 | **pressed** | `color.surface.tertiary` | `color.border.emphasis` | `color.content.primary` | Active press |
 | **disabled** | `color.surface.disabled` | `color.border.disabled` | `color.content.disabled` | Non-interactive |
 
+### Icons
 
-### Size Variants
+| Icon | Component | Size | When Visible |
+|------|-----------|------|--------------|
+| Leading (optional) | Icon-Base | `icon.size075` (20px) | Any chip with icon prop |
+| Checkmark | Icon-Base | `icon.size075` (20px) | Chip-Filter when selected (replaces leading icon) |
+| X (dismiss) | Icon-Base | `icon.size075` (20px) | Chip-Input always (trailing) |
 
-| Size | Height | Padding | Font Size | Icon Size | Use Case |
-|------|--------|---------|-----------|-----------|----------|
-| **sm** | 28px | `space150` | `fontSize.sm` | 14px | Compact filters |
-| **md** | 32px | `space200` | `fontSize.md` | 16px | Default |
-| **lg** | 40px | `space250` | `fontSize.lg` | 20px | Touch-friendly |
-
-### Shape
-
-- **Border Radius**: Fully rounded (pill shape) using `radius.full`
-- **Border Width**: `borderWidth100` (1px)
-
-### Typography
-
-- **Font Weight**: `fontWeight.medium` (500)
-- **Line Height**: 1 (single line only)
+**Prerequisite**: Icon-Base TypeScript types need alignment. Currently `IconBaseSize` includes `18` but should be `20` to match `icon.size075` token (14px × 1.429 = 20px). See "Prerequisites" section.
 
 ---
 
 ## Token Requirements
 
-### New Semantic Tokens
+### Component Tokens (New)
 
 ```typescript
-// Chip-specific semantic tokens
-'chip.background.default': {
-  primitiveReferences: { value: 'color.surface.secondary' },
-  context: 'Default chip background',
-  description: 'Background for unselected chips'
-},
-
-'chip.background.selected': {
-  primitiveReferences: { value: 'color.interactive.primary' },
-  context: 'Selected chip background',
-  description: 'Background for selected/active chips'
-},
-
-'chip.border.default': {
-  primitiveReferences: { value: 'color.border.default' },
-  context: 'Default chip border',
-  description: 'Border color for unselected chips'
-},
-
-'chip.text.default': {
-  primitiveReferences: { value: 'color.content.primary' },
-  context: 'Default chip text',
-  description: 'Text color for unselected chips'
-},
-
-'chip.text.selected': {
-  primitiveReferences: { value: 'color.content.onPrimary' },
-  context: 'Selected chip text',
-  description: 'Text color for selected chips'
-},
-
-// Size tokens
-'chip.height.sm': { value: 28 },
-'chip.height.md': { value: 32 },
-'chip.height.lg': { value: 40 }
+// Chip-Base component tokens
+'chip.paddingBlock': {
+  reference: spacingTokens.space075,
+  reasoning: 'Block-start/block-end padding for chip content. 6px padding achieves 32px total height with buttonSm typography (20px line-height). No semantic inset token exists for 6px.'
+}
 ```
 
 ### Existing Tokens Used
 
-**Colors**:
-- `color.surface.secondary`, `color.surface.tertiary`
-- `color.interactive.primary`
-- `color.content.primary`, `color.content.onPrimary`
-- `color.border.default`, `color.border.emphasis`
-
 **Typography**:
-- `fontSize.sm`, `fontSize.md`, `fontSize.lg`
-- `fontWeight.medium`
+- `typography.buttonSm` (14px, medium weight, 1.429 line-height)
 
-**Spacing**:
-- `space150`, `space200`, `space250` (horizontal padding)
-- `space050` (icon gap)
+**Colors**:
+- `color.surface.secondary`, `color.surface.tertiary`, `color.surface.disabled`
+- `color.interactive.primary`
+- `color.content.primary`, `color.content.onPrimary`, `color.content.disabled`
+- `color.border.default`, `color.border.emphasis`, `color.border.disabled`
+
+**Spacing (Semantic)**:
+- `space.inset.150` (12px) — inline padding
+- `space.grouped.tight` (4px) — icon gap
+
+**Spacing (Primitive via Component Token)**:
+- `space075` (6px) — block padding (no semantic equivalent)
 
 **Border**:
-- `borderWidth100`
-- `radius.full`
+- `borderDefault` (1px)
+- `radius.full` (pill shape)
+
+**Accessibility**:
+- `tapAreaRecommended` (48px)
 
 **Motion**:
 - `motion.duration.fast` (state transitions)
@@ -143,24 +136,15 @@ Future Semantic Variants:
 
 ## Component API Design
 
-### Props Interface
+### Chip-Base Props
 
 ```typescript
-interface ChipProps {
+interface ChipBaseProps {
   /** Chip text content */
   label: string;
   
-  /** Whether chip is selected */
-  selected?: boolean;
-  
-  /** Size variant */
-  size?: 'sm' | 'md' | 'lg';
-  
   /** Optional leading icon */
   icon?: IconName;
-  
-  /** Show dismiss/close button */
-  dismissible?: boolean;
   
   /** Disabled state */
   disabled?: boolean;
@@ -168,57 +152,86 @@ interface ChipProps {
   /** Called when chip is pressed */
   onPress?: () => void;
   
-  /** Called when dismiss button is pressed */
-  onDismiss?: () => void;
-  
   /** Test ID for automated testing */
   testID?: string;
 }
 ```
 
-### Default Values
+### Chip-Filter Props (extends Chip-Base)
 
 ```typescript
-const defaults = {
-  selected: false,
-  size: 'md',
-  dismissible: false,
-  disabled: false
-};
+interface ChipFilterProps extends ChipBaseProps {
+  /** Whether chip is selected */
+  selected?: boolean;
+  
+  /** Called when selection changes */
+  onSelectionChange?: (selected: boolean) => void;
+}
+```
+
+### Chip-Input Props (extends Chip-Base)
+
+```typescript
+interface ChipInputProps extends Omit<ChipBaseProps, 'onPress'> {
+  /** Called when chip is dismissed (tap anywhere) */
+  onDismiss?: () => void;
+}
 ```
 
 ### Usage Examples
 
 ```tsx
+// Basic chip (general use)
+<ChipBase 
+  label="Category" 
+  onPress={() => handleCategoryPress()}
+/>
+
+// Basic chip with icon
+<ChipBase 
+  label="Settings" 
+  icon="settings"
+  onPress={() => openSettings()}
+/>
+
 // Filter chip (toggleable)
-<Chip 
+<ChipFilter 
   label="House" 
   selected={filters.includes('house')}
-  onPress={() => toggleFilter('house')}
+  onSelectionChange={(selected) => toggleFilter('house', selected)}
 />
 
-// Dismissible input chip
-<Chip 
-  label="JavaScript" 
-  dismissible 
-  onDismiss={() => removeSkill('javascript')}
-/>
-
-// Chip with icon
-<Chip 
+// Filter chip with icon
+<ChipFilter 
   label="High Impact" 
   icon="alert-circle"
   selected={showHighImpact}
-  onPress={() => setShowHighImpact(!showHighImpact)}
+  onSelectionChange={setShowHighImpact}
+/>
+
+// Input chip (dismissible)
+<ChipInput 
+  label="JavaScript" 
+  onDismiss={() => removeSkill('javascript')}
 />
 
 // Disabled chip
-<Chip label="Unavailable" disabled />
+<ChipBase label="Unavailable" disabled />
 ```
 
 ---
 
 ## Platform Considerations
+
+### Logical Properties
+
+All implementations use logical properties for internationalization:
+
+| Physical | Logical |
+|----------|---------|
+| padding-top/bottom | padding-block |
+| padding-left/right | padding-inline |
+| margin-left/right | margin-inline |
 
 ### Web Implementation
 
@@ -226,54 +239,56 @@ const defaults = {
 .chip {
   display: inline-flex;
   align-items: center;
-  gap: var(--space050);
-  padding: 0 var(--chip-padding);
-  height: var(--chip-height);
-  border: var(--border-width-100) solid var(--chip-border-default);
+  gap: var(--space-grouped-tight);
+  padding-block: var(--chip-padding-block);
+  padding-inline: var(--space-inset-150);
+  block-size: var(--space400);
+  border: var(--border-default) solid var(--chip-border-color);
   border-radius: var(--radius-full);
-  background-color: var(--chip-background-default);
-  color: var(--chip-text-default);
+  background-color: var(--chip-background);
+  color: var(--chip-text);
   cursor: pointer;
   transition: all var(--motion-duration-fast);
 }
 
-.chip:hover:not(:disabled) {
-  background-color: var(--color-surface-tertiary);
-  border-color: var(--color-border-emphasis);
-}
-
-.chip--selected {
-  background-color: var(--chip-background-selected);
-  border-color: var(--chip-background-selected);
-  color: var(--chip-text-selected);
+/* Expanded tap area */
+.chip::before {
+  content: '';
+  position: absolute;
+  inset: calc((var(--tap-area-recommended) - var(--space400)) / -2);
 }
 ```
 
 ### iOS Implementation
 
 ```swift
-struct Chip: View {
+struct ChipBase: View {
     let label: String
-    let selected: Bool
-    let size: ChipSize
+    let icon: String?
+    let disabled: Bool
     let onPress: () -> Void
     
     var body: some View {
         Button(action: onPress) {
             HStack(spacing: Tokens.space050) {
+                if let icon = icon {
+                    Icon(name: icon, size: .buttonSm)
+                }
                 Text(label)
-                    .font(.system(size: size.fontSize, weight: .medium))
+                    .font(Tokens.typographyButtonSm)
             }
-            .padding(.horizontal, size.padding)
-            .frame(height: size.height)
-            .background(selected ? Tokens.chipBackgroundSelected : Tokens.chipBackgroundDefault)
-            .foregroundColor(selected ? Tokens.chipTextSelected : Tokens.chipTextDefault)
+            .padding(.horizontal, Tokens.space150)
+            .padding(.vertical, Tokens.chipPaddingBlock)
+            .background(Tokens.colorSurfaceSecondary)
+            .foregroundColor(Tokens.colorContentPrimary)
             .overlay(
                 Capsule()
-                    .stroke(selected ? Color.clear : Tokens.chipBorderDefault, lineWidth: 1)
+                    .stroke(Tokens.colorBorderDefault, lineWidth: Tokens.borderDefault)
             )
             .clipShape(Capsule())
         }
+        .disabled(disabled)
+        .frame(minHeight: Tokens.tapAreaRecommended)
     }
 }
 ```
@@ -282,63 +297,60 @@ struct Chip: View {
 
 ```kotlin
 @Composable
-fun Chip(
+fun ChipBase(
     label: String,
-    selected: Boolean = false,
-    size: ChipSize = ChipSize.Medium,
+    icon: String? = null,
+    disabled: Boolean = false,
     onClick: () -> Unit
 ) {
-    val backgroundColor = if (selected) 
-        DesignTokens.chipBackgroundSelected 
-    else 
-        DesignTokens.chipBackgroundDefault
-    
-    val textColor = if (selected)
-        DesignTokens.chipTextSelected
-    else
-        DesignTokens.chipTextDefault
-    
     Surface(
         onClick = onClick,
+        enabled = !disabled,
         shape = RoundedCornerShape(50),
-        color = backgroundColor,
-        border = if (!selected) BorderStroke(1.dp, DesignTokens.chipBorderDefault) else null
+        color = DesignTokens.colorSurfaceSecondary,
+        border = BorderStroke(
+            DesignTokens.borderDefault.dp,
+            DesignTokens.colorBorderDefault
+        ),
+        modifier = Modifier.sizeIn(minHeight = DesignTokens.tapAreaRecommended.dp)
     ) {
-        Text(
-            text = label,
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(DesignTokens.space050.dp),
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .height(size.height)
-                .padding(horizontal = size.padding),
-            color = textColor,
-            fontSize = size.fontSize,
-            fontWeight = FontWeight.Medium
-        )
+                .height(DesignTokens.space400.dp)
+                .padding(
+                    horizontal = DesignTokens.space150.dp,
+                    vertical = DesignTokens.chipPaddingBlock.dp
+                )
+        ) {
+            icon?.let { Icon(name = it, size = IconSize.ButtonSm) }
+            Text(
+                text = label,
+                style = DesignTokens.typographyButtonSm,
+                color = DesignTokens.colorContentPrimary
+            )
+        }
     }
 }
 ```
-
-**Platform Notes**:
-- **Web**: Uses CSS transitions for smooth state changes
-- **iOS**: Uses SwiftUI Button with custom styling
-- **Android**: Uses Compose Surface with onClick
 
 ---
 
 ## Accessibility
 
 ### Screen Readers
-- Announce label and selected state
-- `aria-pressed="true/false"` for toggle chips (web)
-- Dismiss button has accessible label "Remove [label]"
+- Announce label and role
+- Chip-Filter: Announce selected state (`aria-pressed="true/false"`)
+- Chip-Input: Announce as removable, X icon has label "Remove [label]"
 
 ### Keyboard Navigation
 - Focusable via Tab
-- Space/Enter to toggle
-- Delete/Backspace to dismiss (if dismissible)
+- Space/Enter to activate (toggle for Filter, dismiss for Input)
 
 ### Touch Targets
-- Minimum 44px touch target (lg size meets this)
-- sm/md sizes should have expanded touch area
+- 48px minimum tap area (exceeds 44px WCAG requirement)
+- Visual chip is 32px, tap area extends beyond
 
 ---
 
@@ -346,28 +358,58 @@ fun Chip(
 
 | # | Decision | Rationale |
 |---|----------|-----------|
-| 1 | Interactive (vs Badge) | Chips handle user input; Badges display info |
-| 2 | Pill shape | Consistent with Badge, universal recognition |
-| 3 | Border in default state | Visual definition without heavy background |
-| 4 | Solid background when selected | Clear selected state indication |
-| 5 | Optional dismiss button | Supports input/removable chip patterns |
-| 6 | Three sizes | Compact to touch-friendly range |
+| 1 | Single size (32px visual, 48px tap) | Simplicity over flexibility; one size works everywhere |
+| 2 | `typography.buttonSm` | Semantic match — chips are interactive like buttons |
+| 3 | Stemma inheritance pattern | Consistency with Input-Text-Base → variants pattern |
+| 4 | X = dismiss whole chip | Simplifies hit area; no separate X button target |
+| 5 | Logical properties | Internationalization support (RTL languages) |
+| 6 | Component token for block padding | `space075` (6px) achieves correct height math |
+| 7 | `borderDefault` on all states | Consistent visual definition |
 
 ---
 
-## Future Enhancements (Separate Specs)
+## Out of Scope (Future Specs)
 
-1. **Chip-Filter**: Multi-select filtering with clear-all
-2. **Chip-Input**: User-entered values (like tags)
-3. **Chip-Choice**: Single-select from group (radio-like)
-4. **Chip-Action**: Triggers action (like quick actions)
+1. **Chip-Set**: Container with horizontal wrapping, group selection, clear-all
+2. **Chip-Choice**: Single-select from group (radio-like behavior)
+3. **Chip-Action**: Triggers action (like quick actions)
+
+---
+
+## Prerequisites
+
+### Icon-Base TypeScript Type Alignment
+
+**Issue**: `IconBaseSize` type includes `18` but should be `20` to match the actual `icon.size075` token value.
+
+**Background**: 
+- `icon.size075` = fontSize075 (14px) × lineHeight075 (1.429) = **20px**
+- The CSS tokens are correct (`--icon-size-075: 20px`)
+- The TypeScript type is outdated (`IconBaseSize = 13 | 18 | 24 | ...`)
+- The component maps `18 → 20` internally, but the API is misleading
+
+**Required Changes**:
+1. `src/components/core/Icon-Base/types.ts`:
+   - Update `IconBaseSize` type: `18` → `20`
+   - Update `iconBaseSizes.size075`: `18` → `20`
+2. `src/components/core/Icon-Base/platforms/web/IconBase.web.ts`:
+   - Update `sizePixelMap` key: `18: 20` → `20: 20`
+   - Update `sizeClassMap` key: `18:` → `20:`
+   - Update `validSizes` array: `18` → `20`
+3. Update any components using `size={18}` to `size={20}`:
+   - Button-Icon
+   - Avatar
+   - Badge-Label-Base
+   - Any tests referencing size 18
+
+**Scope**: This is a type alignment fix within the chip spec, not a separate spec.
 
 ---
 
 ## Next Steps
 
 1. ✅ **Design outline created** - Decisions documented
-2. ⏳ **Review with Peter** - Validate decisions
+2. ✅ **Review with Peter** - Decisions validated
 3. ⏳ **Create requirements.md** - EARS format
 4. ⏳ **Create design.md** - Detailed architecture
 5. ⏳ **Create tasks.md** - Implementation plan

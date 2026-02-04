@@ -169,7 +169,7 @@ function generateRoundedHexagonPath(size: number, cornerRadius?: number): string
  * Icon sizes maintain 50% ratio with avatar sizes:
  * - xs (24px avatar) → 12px icon (calc(icon.size050 × 0.75))
  * - sm (32px avatar) → 16px icon (icon.size050, IconBaseSize 13)
- * - md (40px avatar) → 20px icon (icon.size075, IconBaseSize 18)
+ * - md (40px avatar) → 20px icon (icon.size075, IconBaseSize 20)
  * - lg (48px avatar) → 24px icon (icon.size100, IconBaseSize 24)
  * - xl (80px avatar) → 40px icon (icon.size500, IconBaseSize 40)
  * - xxl (128px avatar) → 64px icon (calc(icon.size050 × 4))
@@ -179,7 +179,7 @@ function generateRoundedHexagonPath(size: number, cornerRadius?: number): string
 const AVATAR_ICON_SIZE_MAP: Record<AvatarSize, IconBaseSize | 'xs' | 'xxl'> = {
   xs: 'xs',    // 12px - uses avatar.icon.size.xs component token
   sm: 13,      // 16px - maps to icon.size050
-  md: 18,      // 20px - maps to icon.size075
+  md: 20,      // 20px - maps to icon.size075
   lg: 24,      // 24px - maps to icon.size100
   xl: 40,      // 40px - maps to icon.size500
   xxl: 'xxl',  // 64px - uses avatar.icon.size.xxl component token

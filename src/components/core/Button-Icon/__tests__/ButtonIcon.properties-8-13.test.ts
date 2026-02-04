@@ -126,7 +126,7 @@ const ariaLabelArbitrary = fc.string({ minLength: 1, maxLength: 50 })
  */
 const expectedIconSizes: Record<ButtonIconSize, number> = {
   small: 13,   // icon.size050
-  medium: 18,  // icon.size075
+  medium: 20,  // icon.size075
   large: 24    // icon.size100
 };
 

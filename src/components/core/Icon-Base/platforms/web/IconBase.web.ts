@@ -105,7 +105,7 @@ export function createIconBase(props: IconBaseProps): string {
   // This ensures icons render correctly regardless of CSS context (Shadow DOM, etc.)
   const sizePixelMap: Record<IconBaseSize, number> = {
     13: 16,   // icon-size-050: 16px
-    18: 20,   // icon-size-075: 20px
+    20: 20,   // icon-size-075: 20px
     24: 24,   // icon-size-100: 24px
     28: 28,   // icon-size-125: 28px
     32: 32,   // icon-size-200: 32px
@@ -130,7 +130,7 @@ export function createIconBase(props: IconBaseProps): string {
   // Map size to CSS class (using icon size token scale) - kept for semantic styling
   const sizeClassMap: Record<IconBaseSize, string> = {
     13: 'icon-base--size-050',
-    18: 'icon-base--size-075',
+    20: 'icon-base--size-075',
     24: 'icon-base--size-100',
     28: 'icon-base--size-125',  // Note: size125 and size150 both = 28px
     32: 'icon-base--size-200',  // Note: size125, size200, size300 all = 32px
@@ -332,7 +332,7 @@ export class IconBaseElement extends HTMLElement {
     
     const size = parseInt(sizeAttr, 10);
     // Validate size is one of the allowed IconBaseSize values
-    const validSizes: IconBaseSize[] = [13, 18, 24, 28, 32, 36, 40, 44, 48];
+    const validSizes: IconBaseSize[] = [13, 20, 24, 28, 32, 36, 40, 44, 48];
     
     if (!validSizes.includes(size as IconBaseSize)) {
       throw new Error(
@@ -409,7 +409,7 @@ export class IconBaseElement extends HTMLElement {
     // Map size to CSS class (using icon size token scale)
     const sizeClassMap: Record<IconBaseSize, string> = {
       13: 'icon-base--size-050',
-      18: 'icon-base--size-075',
+      20: 'icon-base--size-075',
       24: 'icon-base--size-100',
       28: 'icon-base--size-125',  // Note: size125 and size150 both = 28px
       32: 'icon-base--size-200',  // Note: size125, size200, size300 all = 32px

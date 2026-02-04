@@ -60,7 +60,7 @@ export const BADGE_LABEL_SIZE_TOKENS = {
     typography: 'typography.labelSm',
     paddingVertical: 'space.inset.050',
     paddingHorizontal: 'space.inset.100',
-    iconSize: 18, // icon.size075
+    iconSize: 20, // icon.size075
     iconGap: 'space.grouped.tight',
   },
   lg: {
