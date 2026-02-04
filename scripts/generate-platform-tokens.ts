@@ -25,6 +25,7 @@ import '../src/components/core/Button-Icon/buttonIcon.tokens';
 import '../src/components/core/Button-VerticalList-Item/Button-VerticalList-Item.tokens';
 import '../src/components/core/Avatar/avatar.tokens';
 import '../src/components/core/Badge-Label-Base/tokens';
+import '../src/tokens/components/chip';
 
 async function main() {
   console.log('🚀 Generating platform-specific token files...\n');

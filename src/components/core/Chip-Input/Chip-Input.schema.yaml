@@ -1,0 +1,242 @@
+# Chip-Input Component Schema
+#
+# Stemma System: Chip Family
+# Component Type: Semantic Variant
+# Inherits: Chip-Base
+# Naming Convention: [Family]-[Type]-[Variant] = Chip-Input
+#
+# This schema defines the behavioral contracts and properties for the
+# Chip-Input component, which extends Chip-Base with dismiss behavior
+# for managing user-entered values like tags or selections.
+#
+# Rationale: Chip-Input is a semantic variant that provides dismissible
+# chips for user-entered values. It always displays an X icon as a trailing
+# element and dismisses when tapped anywhere on the chip. This simplifies
+# the hit area and provides faster interaction for users.
+#
+# DesignerPunk Philosophy: NO DISABLED STATES
+# This component does not support disabled states. If dismissal is unavailable,
+# the component should not be rendered. This ensures users always see actionable
+# UI elements.
+
+name: Chip-Input
+type: semantic
+family: Chip
+version: "1.0.0"
+readiness: production-ready
+
+# Inheritance declaration
+inherits: Chip-Base
+
+# Component description
+description: |
+  Dismissible chip for managing user-entered values like tags or selections.
+  Extends Chip-Base with dismiss behavior and trailing X icon.
+  
+  Key Characteristics:
+  - Dismissible: Tap anywhere on chip to dismiss
+  - X icon: Always displays trailing X icon as visual affordance
+  - Dual icons: Supports both leading icon AND trailing X icon
+  - Accessible: X icon has accessible label "Remove [label]"
+  
+  Chip-Input inherits Chip-Base styling but modifies behavior:
+  - Replaces onPress with onDismiss callback
+  - Always renders X icon as trailing element
+  - Tap anywhere dismisses (not just X icon)
+  
+  Design Decision: Tap anywhere to dismiss (not X-only) simplifies hit area
+  and provides faster interaction. The X icon is a visual affordance, not
+  a separate tap target.
+  
+  DesignerPunk Philosophy: NO DISABLED STATES
+  If dismissal is unavailable, the component should not be rendered.
+
+# Reusable behaviors this component implements (inherited + new)
+behaviors:
+  - renderable
+  - pressable
+  - focusable
+  - accessible
+  - dismissible
+
+# Component properties (public API)
+# Note: Inherits label, icon, testID from Chip-Base
+# Note: onPress is NOT inherited - replaced by onDismiss
+properties:
+  onDismiss:
+    type: "() => void"
+    required: false
+    description: |
+      Called when chip is dismissed (tap anywhere on chip).
+      
+      Invoked on:
+      - Mouse click anywhere on chip (web)
+      - Touch tap anywhere on chip (all platforms)
+      - Keyboard Enter or Space when focused (web)
+      
+      When not provided, chip is display-only but X icon is still visible.
+      
+      Example: onDismiss={() => setTags(tags.filter(t => t.id !== tag.id))}
+
+# Behavioral contracts - guarantees this component provides
+# Note: Inherits most contracts from Chip-Base, but modifies press behavior
+contracts:
+  dismiss_on_press:
+    description: Dismisses chip on press anywhere
+    behavior: |
+      When pressed anywhere on the chip, Chip-Input calls the onDismiss
+      callback. This provides dismiss behavior for removing user-entered
+      values like tags or selections.
+      
+      Press interactions:
+      - Mouse click anywhere on chip (web)
+      - Touch tap anywhere on chip (all platforms)
+      - Keyboard Enter key (web)
+      - Keyboard Space key (web)
+      
+      Design Decision: Tap anywhere to dismiss (not X-only) simplifies
+      hit area and provides faster interaction. The X icon is a visual
+      affordance indicating dismissibility, not a separate tap target.
+    wcag: "2.1.1 Keyboard"
+    platforms: [web, ios, android]
+    validation: |
+      - Press anywhere on chip triggers onDismiss
+      - X icon is not a separate tap target
+      - Keyboard activation triggers onDismiss
+      - No action when onDismiss is undefined
+  
+  trailing_x_icon:
+    description: Always displays X icon as trailing element
+    behavior: |
+      Chip-Input always renders an X icon (close/dismiss icon) as a
+      trailing element using Icon-Base at icon.size075 (20px). The X icon
+      appears after the label text, separated by space.grouped.tight (4px).
+      
+      The X icon is a visual affordance indicating the chip can be dismissed.
+      It is NOT a separate tap target - tapping anywhere dismisses the chip.
+    wcag: null
+    platforms: [web, ios, android]
+    validation: |
+      - X icon always visible
+      - X icon uses icon.size075 (20px)
+      - X icon appears after label text
+      - Gap between label and X icon is 4px (space.grouped.tight)
+      - X icon color matches text color
+  
+  dual_icons:
+    description: Supports both leading icon AND trailing X icon
+    behavior: |
+      When icon prop is provided, Chip-Input displays BOTH:
+      - Leading icon (from icon prop) before label
+      - Trailing X icon after label
+      
+      Layout: [leading icon] [label] [X icon]
+      
+      This differs from Chip-Filter where checkmark replaces leading icon.
+      Chip-Input preserves the leading icon context while adding dismiss
+      affordance.
+    wcag: null
+    platforms: [web, ios, android]
+    validation: |
+      - Leading icon visible when icon prop provided
+      - X icon always visible regardless of icon prop
+      - Both icons use icon.size075 (20px)
+      - Gaps use space.grouped.tight (4px)
+  
+  x_icon_accessible_label:
+    description: X icon has accessible label for screen readers
+    behavior: |
+      The X icon has an accessible label "Remove [label]" where [label]
+      is the chip's label text. This provides context for screen reader
+      users about what will happen when the chip is activated.
+      
+      Implementation:
+      - Web: aria-label on X icon element
+      - iOS: accessibilityLabel on X icon
+      - Android: contentDescription on X icon
+    wcag: "4.1.2 Name, Role, Value"
+    platforms: [web, ios, android]
+    validation: |
+      - X icon has accessible label "Remove [label]"
+      - Screen readers announce dismiss action
+      - Label text is included in accessible label
+
+# Design tokens this component requires
+# Note: Inherits all tokens from Chip-Base
+tokens:
+  inherited:
+    - chip.paddingBlock
+    - typography.buttonSm
+    - color.structure.surface
+    - color.structure.border
+    - color.text.default
+    - color.action.primary
+    - space.inset.150
+    - space.grouped.tight
+    - borderDefault
+    - radius.full
+    - motion.duration.fast
+    - blend.hoverDarker
+    - blend.pressedDarker
+    - tapAreaRecommended
+    - accessibility.focus.width
+    - accessibility.focus.offset
+    - accessibility.focus.color
+    - icon.size075
+
+# Supported platforms
+platforms:
+  - web
+  - ios
+  - android
+
+# Platform-specific implementation notes
+platform_notes:
+  web:
+    element: "<chip-input>"
+    implementation: Web Component with Shadow DOM
+    file: platforms/web/ChipInput.web.ts
+    notes: |
+      - Extends ChipBaseElement behavior (composition pattern)
+      - Uses Shadow DOM for style encapsulation
+      - X icon rendered via Icon-Base web component with aria-label
+      - Supports both leading icon and trailing X icon
+      - Click anywhere triggers onDismiss callback
+  ios:
+    implementation: SwiftUI View
+    file: platforms/ios/ChipInput.swift
+    notes: |
+      - Uses SwiftUI Button with custom styling
+      - Token consumption via DesignTokens constants
+      - X icon via IconBase component with accessibilityLabel
+      - HStack layout for [icon] [label] [X icon]
+  android:
+    implementation: Jetpack Compose Composable
+    file: platforms/android/ChipInput.android.kt
+    notes: |
+      - Uses Compose Surface with onClick handler
+      - Token consumption via DesignTokens object
+      - X icon via IconBase composable with contentDescription
+      - Row layout for [icon] [label] [X icon]
+
+# Accessibility compliance
+accessibility:
+  wcag_level: AA
+  compliance:
+    - "1.4.3 Contrast (Minimum) - Text meets 4.5:1 contrast ratio"
+    - "1.4.11 Non-text Contrast - Border and X icon meet 3:1 contrast"
+    - "2.1.1 Keyboard - Fully keyboard accessible (Tab, Enter, Space)"
+    - "2.4.7 Focus Visible - Clear focus indicator with :focus-visible"
+    - "2.5.5 Target Size - 48px tap area exceeds 44px minimum"
+    - "4.1.2 Name, Role, Value - X icon has accessible label"
+  aria_attributes:
+    - role: button
+    - tabindex: "0"
+  keyboard_navigation:
+    - Tab: Move focus to/from chip
+    - Enter: Dismiss chip (call onDismiss)
+    - Space: Dismiss chip (call onDismiss)
+  platform_accessibility:
+    web: "role='button', tabindex='0', X icon aria-label='Remove [label]'"
+    ios: "Button accessibility trait, X icon accessibilityLabel"
+    android: "Button semantics, X icon contentDescription"

@@ -10,7 +10,7 @@ inclusion: manual
 **Scope**: cross-project
 **Layer**: 2
 **Relevant Tasks**: component-development, ui-composition, feature-building
-**Last Reviewed**: 2026-01-02
+**Last Reviewed**: 2026-02-04
 
 ---
 
@@ -31,6 +31,7 @@ All 11 component families have MCP-queryable documentation. Production families 
 | Component Family | Shared Need/Purpose | MCP Document Path | Status |
 |------------------|---------------------|-------------------|--------|
 | Buttons | User interaction and actions | `.kiro/steering/Component-Family-Button.md` | 🟢 Production |
+| Chips | Filtering, selection, and input management | `.kiro/steering/Component-Family-Chip.md` | 🟢 Production |
 | Form Inputs | Data collection and validation | `.kiro/steering/Component-Family-Form-Inputs.md` | 🟢 Production |
 | Containers | Layout and content organization | `.kiro/steering/Component-Family-Container.md` | 🟢 Production |
 | Icons | Visual communication | `.kiro/steering/Component-Family-Icon.md` | 🟢 Production |
@@ -44,7 +45,7 @@ All 11 component families have MCP-queryable documentation. Production families 
 
 **Status Legend**: 🟢 Production Ready | 🟡 Beta | 🔴 Placeholder | ⚠️ Deprecated
 
-**Family Count**: 5 Production Ready, 6 Placeholder (structural definitions for future development)
+**Family Count**: 6 Production Ready, 6 Placeholder (structural definitions for future development)
 
 ### Type Primitives
 
@@ -96,6 +97,17 @@ Components follow the **[Family]-[Type]-[Variant]** pattern:
 - **Navigation**: `Nav-Base` (planned)
 - **Tokens**: `Token-Family-Layering.md` → panel stacking, `Token-Family-Radius.md` → section corners
 
+### Filter Bar
+- **Chips**: `Chip-Filter` (multi-select filter toggles)
+- **Containers**: `Container-Base` (filter bar wrapper)
+- **Tokens**: `Token-Family-Spacing.md` → chip gaps, `Token-Family-Color.md` → selected state colors
+
+### Tag Input Field
+- **Chips**: `Chip-Input` (dismissible tags)
+- **Form Inputs**: `Input-Text-Base` (new tag entry)
+- **Containers**: `Container-Base` (field wrapper)
+- **Tokens**: `Token-Family-Spacing.md` → chip spacing, `Token-Family-Motion.md` → dismiss animation
+
 ## MCP Query Examples
 
 Use these MCP queries to access component documentation progressively via the `designerpunk-docs` MCP server.
@@ -129,6 +141,9 @@ get_document_summary({ path: ".kiro/steering/Component-Family-Container.md" })
 // Understand Icon family structure
 get_document_summary({ path: ".kiro/steering/Component-Family-Icon.md" })
 
+// Understand Chip family structure
+get_document_summary({ path: ".kiro/steering/Component-Family-Chip.md" })
+
 // Get Container-Card-Base type primitive details
 get_section({ path: ".kiro/steering/Component-Family-Container.md", heading: "Container-Card-Base" })
 ```
@@ -151,6 +166,9 @@ get_section({ path: ".kiro/steering/Component-Family-Container.md", heading: "To
 
 // Get usage guidelines
 get_section({ path: ".kiro/steering/Component-Family-Icon.md", heading: "Usage Guidelines" })
+
+// Get Chip family behavioral contracts
+get_section({ path: ".kiro/steering/Component-Family-Chip.md", heading: "Behavioral Contracts" })
 
 // Get cross-platform notes
 get_section({ path: ".kiro/steering/Component-Family-Form-Inputs.md", heading: "Cross-Platform Notes" })
