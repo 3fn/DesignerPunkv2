@@ -2,11 +2,24 @@
 
 **A Design System Foundation Built for Modern Product Development, Cross-Platform Excellence, and AI-Assisted Development**
 
-[![Version](https://img.shields.io/badge/Version-6.0.0-purple)](docs/releases/RELEASE-NOTES-6.0.0.md)
+[![Version](https://img.shields.io/badge/Version-6.1.0-purple)](docs/releases/v6.1.0.md)
 [![Repository](https://img.shields.io/badge/GitHub-DesignerPunkv2-blue)](https://github.com/3fn/DesignerPunkv2)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
-[![Tests](https://img.shields.io/badge/Tests-6800%2B-brightgreen)](.)
+[![Tests](https://img.shields.io/badge/Tests-7600%2B-brightgreen)](.)
+
+---
+
+## Latest Release: v6.1.0
+
+**Chip Component Family** — Three new compact, interactive components:
+- **Chip-Base**: Primitive component with optional icon, 32px visual height, 48px tap area
+- **Chip-Filter**: Toggle-based filter with selected/unselected states
+- **Chip-Input**: Dismissible input chip with X icon
+
+Plus: Radius token collision fix and Icon-Base type alignment.
+
+[Full Release Notes →](docs/releases/v6.1.0.md)
 
 ---
 
@@ -134,7 +147,8 @@ This is a working case study in how to lead AI-driven development at scale.
 
 **Core Components** (Web, iOS, Android)
 - Avatar, Badges (Label/Count/Notification), Buttons (CTA/Icon), Containers (Base/Card), Icon System
-- 11 production-ready components with behavioral contracts
+- Chips (Base/Filter/Input) — Compact interactive elements for filtering, selection, and input
+- 14 production-ready components with behavioral contracts
 - Full cross-platform support with platform-native implementations
 
 **Rosetta Token System**
