@@ -1,0 +1,105 @@
+/**
+ * Chip-Filter Component Styles for Web Platform
+ * 
+ * Extends Chip-Base styles with selected state styling.
+ * Uses color.feedback.select.* tokens for selected state.
+ * 
+ * Stemma System Naming: [Family]-[Type] = Chip-Filter
+ * Component Type: Semantic Variant
+ * Inherits: Chip-Base
+ * 
+ * @module Chip-Filter/platforms/web/styles
+ * @see Requirements: 4.2, 4.3, 7.4 in .kiro/specs/045-chip-base/requirements.md
+ */
+
+/* ==========================================================================
+   Selected State Styling
+   ========================================================================== */
+
+/**
+ * Selected state styling for Chip-Filter.
+ * 
+ * Uses color.feedback.select.* tokens for consistent selection feedback
+ * across the design system.
+ * 
+ * Token mappings:
+ * - Background: color.feedback.select.background.rest
+ * - Border: color.feedback.select.text.rest (used for border as no dedicated border token exists)
+ * - Text: color.feedback.select.text.rest
+ * 
+ * @see Requirement 4.2 - Selected state uses primary background, onPrimary text
+ */
+.chip-filter--selected {
+  background-color: var(--color-feedback-select-background-rest);
+  border-color: var(--color-feedback-select-text-rest);
+  color: var(--color-feedback-select-text-rest);
+}
+
+/**
+ * Selected state hover styling.
+ * 
+ * Maintains selected colors on hover to indicate the chip is already selected.
+ * Uses slightly darker background for hover feedback.
+ */
+.chip-filter--selected:hover {
+  background-color: var(--color-feedback-select-background-rest);
+  border-color: var(--color-feedback-select-text-rest);
+  /* Hover effect is subtle when selected - maintain selected appearance */
+  filter: brightness(0.95);
+}
+
+/**
+ * Selected state pressed styling.
+ * 
+ * Provides visual feedback when pressing a selected chip.
+ */
+.chip-filter--selected:active {
+  background-color: var(--color-feedback-select-background-rest);
+  border-color: var(--color-feedback-select-text-rest);
+  filter: brightness(0.9);
+}
+
+/**
+ * Selected state focus styling.
+ * 
+ * Maintains accessibility focus indicator on selected chips.
+ */
+.chip-filter--selected:focus-visible {
+  outline: var(--accessibility-focus-width) solid var(--accessibility-focus-color);
+  outline-offset: var(--accessibility-focus-offset);
+}
+
+/* ==========================================================================
+   High Contrast Mode Support
+   ========================================================================== */
+
+/**
+ * Ensure selected chips remain visible in Windows High Contrast Mode.
+ */
+@media (prefers-contrast: high) {
+  .chip-filter--selected {
+    border: var(--border-emphasis) solid currentColor;
+    /* Use system highlight colors in high contrast mode */
+    background-color: Highlight;
+    color: HighlightText;
+  }
+}
+
+/* ==========================================================================
+   Reduced Motion Support
+   ========================================================================== */
+
+/**
+ * Respect user preference for reduced motion.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .chip-filter--selected {
+    transition: none;
+    filter: none;
+  }
+  
+  .chip-filter--selected:hover,
+  .chip-filter--selected:active {
+    filter: none;
+  }
+}

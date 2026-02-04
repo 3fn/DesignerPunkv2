@@ -99,7 +99,7 @@ This spec implements the Chip component family following the Stemma System archi
 
 ---
 
-- [ ] 2. Chip-Base Implementation
+- [x] 2. Chip-Base Implementation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -107,7 +107,7 @@ This spec implements the Chip component family following the Stemma System archi
   **Success Criteria:**
   - Chip-Base renders correctly on web, iOS, and Android
   - All visual specifications match design (32px height, 48px tap area)
-  - All state styling works (default, hover, pressed, disabled)
+  - All state styling works (default, hover, pressed)
   - Icon integration works with Icon-Base at icon.size075
   - Accessibility requirements met (focusable, keyboard activation, ARIA)
   - Tests follow Test Development Standards (evergreen, behavior-focused)
@@ -130,84 +130,80 @@ This spec implements the Chip component family following the Stemma System archi
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Chip-Base Implementation"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 2.1 Implement Chip-Base types
+  - [x] 2.1 Implement Chip-Base types
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    - Create `ChipBaseProps` interface with label, icon, disabled, onPress, testID
+    - Create `ChipBaseProps` interface with label, icon, onPress, testID
     - Export `IconName` type alias
     - Create web component interface `ChipBaseElement`
     - Define `observedAttributes` for web component
-    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5_
+    - _Requirements: 1.1, 1.2, 1.3_
 
-  - [ ] 2.2 Implement Chip-Base web component
+  - [x] 2.2 Implement Chip-Base web component
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `ChipBaseElement` class extending HTMLElement
     - Implement `connectedCallback` with shadow DOM rendering
     - Implement `attributeChangedCallback` for reactive updates
     - Implement press handling with onPress callback
-    - Implement disabled state (prevent interaction, apply styling)
     - Use CSS custom properties for all token values
     - Use logical properties (padding-block, padding-inline)
     - Implement expanded tap area via ::before pseudo-element
-    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 6.1, 6.4_
+    - _Requirements: 1.1, 1.2, 1.3, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 6.1, 6.4_
 
-  - [ ] 2.3 Implement Chip-Base styles
+  - [x] 2.3 Implement Chip-Base styles
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    - Create CSS with all state styling (default, hover, pressed, disabled)
+    - Create CSS with all state styling (default, hover, pressed)
     - Use semantic color tokens for each state
     - Implement transition using `motion.duration.fast`
     - Implement focus indicator using accessibility tokens
     - Ensure pill shape with `radius.full`
-    - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 7.2_
+    - _Requirements: 3.1, 3.2, 3.3, 3.4, 7.2_
 
-  - [ ] 2.4 Implement Chip-Base accessibility
+  - [x] 2.4 Implement Chip-Base accessibility
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add `role="button"` and `tabindex="0"`
     - Implement keyboard activation (Space/Enter)
-    - Add `aria-disabled` when disabled
     - Ensure 48px tap area meets WCAG requirements
     - _Requirements: 7.1, 7.2, 7.3, 7.6_
 
-  - [ ] 2.5 Write Chip-Base tests
+  - [x] 2.5 Write Chip-Base tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Use explicit custom element registration pattern
     - Wait for `customElements.whenDefined()` before tests
     - Wait after `appendChild()` before querying shadow DOM
-    - Test behavior (label renders, icon appears, press works, disabled prevents press)
+    - Test behavior (label renders, icon appears, press works)
     - Test accessibility (focusable, keyboard activation, ARIA attributes)
     - Clean up DOM after each test
     - Do NOT test implementation details (specific CSS values, token sources)
     - _Requirements: 13.1, 13.2, 13.3, 13.4, 13.5, 13.6, 13.7_
 
-  - [ ] 2.6 Implement Chip-Base iOS
+  - [x] 2.6 Implement Chip-Base iOS
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create SwiftUI `ChipBase` view
     - Use token constants for all styling
     - Implement Button with HStack layout
     - Use Capsule shape for pill appearance
-    - Implement disabled state
     - Ensure 48px minimum tap area
     - _Requirements: 6.2, 6.4, 6.5_
 
-  - [ ] 2.7 Implement Chip-Base Android
+  - [x] 2.7 Implement Chip-Base Android
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create Jetpack Compose `ChipBase` composable
     - Use DesignTokens constants for all styling
     - Use Surface with RoundedCornerShape(50) for pill
     - Implement Row layout with icon and label
-    - Implement disabled state
     - Ensure 48px minimum tap area
     - _Requirements: 6.3, 6.4, 6.5_
 
 ---
 
-- [ ] 3. Semantic Variants Implementation
+- [x] 3. Semantic Variants Implementation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -243,7 +239,7 @@ This spec implements the Chip component family following the Stemma System archi
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Semantic Variants Implementation"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 3.1 Implement Chip-Filter types
+  - [x] 3.1 Implement Chip-Filter types
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `ChipFilterProps` extending `ChipBaseProps`
@@ -251,7 +247,7 @@ This spec implements the Chip component family following the Stemma System archi
     - Add `onSelectionChange` callback prop
     - _Requirements: 4.1_
 
-  - [ ] 3.2 Implement Chip-Filter web component
+  - [x] 3.2 Implement Chip-Filter web component
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `ChipFilterElement` extending or composing ChipBaseElement
@@ -261,18 +257,17 @@ This spec implements the Chip component family following the Stemma System archi
     - Add `aria-pressed` attribute for accessibility
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 7.4_
 
-  - [ ] 3.3 Write Chip-Filter tests
+  - [x] 3.3 Write Chip-Filter tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test toggle behavior (selected state changes on press)
     - Test onSelectionChange callback
     - Test checkmark appears when selected
     - Test checkmark replaces leading icon when both present
-    - Test disabled prevents toggle
     - Test aria-pressed attribute
     - _Requirements: 13.1, 13.5_
 
-  - [ ] 3.4 Implement Chip-Filter iOS and Android
+  - [x] 3.4 Implement Chip-Filter iOS and Android
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create SwiftUI `ChipFilter` view
@@ -281,14 +276,14 @@ This spec implements the Chip component family following the Stemma System archi
     - Implement checkmark icon logic
     - _Requirements: 6.2, 6.3, 6.5_
 
-  - [ ] 3.5 Implement Chip-Input types
+  - [x] 3.5 Implement Chip-Input types
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `ChipInputProps` extending `Omit<ChipBaseProps, 'onPress'>`
     - Add `onDismiss` callback prop
     - _Requirements: 5.1_
 
-  - [ ] 3.6 Implement Chip-Input web component
+  - [x] 3.6 Implement Chip-Input web component
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `ChipInputElement` extending or composing ChipBaseElement
@@ -298,17 +293,16 @@ This spec implements the Chip component family following the Stemma System archi
     - Add accessible label "Remove [label]" to X icon
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 7.5_
 
-  - [ ] 3.7 Write Chip-Input tests
+  - [x] 3.7 Write Chip-Input tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test X icon always visible
     - Test both leading and trailing icons when icon prop provided
     - Test onDismiss callback on press
-    - Test disabled prevents dismiss
     - Test X icon accessible label
     - _Requirements: 13.1, 13.5_
 
-  - [ ] 3.8 Implement Chip-Input iOS and Android
+  - [x] 3.8 Implement Chip-Input iOS and Android
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create SwiftUI `ChipInput` view
@@ -354,7 +348,7 @@ This spec implements the Chip component family following the Stemma System archi
     - Specify type as `primitive` and family as `Chip`
     - Define all props with types and descriptions
     - List all required tokens
-    - Define behavioral contracts (press, disabled)
+    - Define behavioral contracts (press)
     - Add platform implementation notes
     - _Requirements: 10.1, 10.2, 10.5, 10.6, 10.7_
 

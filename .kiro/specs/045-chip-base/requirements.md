@@ -26,10 +26,10 @@ This specification defines the Chip component family for the DesignerPunk design
 1. WHEN Chip-Base renders THEN it SHALL display a pill-shaped container with label text
 2. WHEN Chip-Base has an icon prop THEN it SHALL display the icon before the label using Icon-Base at `icon.size075`
 3. WHEN Chip-Base is pressed THEN it SHALL call the onPress callback
-4. WHEN Chip-Base has disabled=true THEN it SHALL not respond to press events
-5. WHEN Chip-Base has disabled=true THEN it SHALL apply disabled visual styling
-6. WHEN Chip-Base renders THEN it SHALL use `typography.buttonSm` for label text
-7. WHEN Chip-Base renders THEN it SHALL use `borderDefault` border width
+4. WHEN Chip-Base renders THEN it SHALL use `typography.buttonSm` for label text
+5. WHEN Chip-Base renders THEN it SHALL use `borderDefault` border width
+
+**Note**: DesignerPunk does not support disabled states. If an action is unavailable, the component should not be rendered.
 
 ---
 
@@ -54,11 +54,12 @@ This specification defines the Chip component family for the DesignerPunk design
 
 #### Acceptance Criteria
 
-1. WHEN Chip-Base is in default state THEN it SHALL use `color.surface.secondary` background, `color.border.default` border, `color.content.primary` text
-2. WHEN Chip-Base is hovered (web) THEN it SHALL use `color.surface.tertiary` background, `color.border.emphasis` border
-3. WHEN Chip-Base is pressed THEN it SHALL use `color.surface.tertiary` background, `color.border.emphasis` border
-4. WHEN Chip-Base is disabled THEN it SHALL use `color.surface.disabled` background, `color.border.disabled` border, `color.content.disabled` text
-5. WHEN Chip-Base state changes THEN it SHALL animate using `motion.duration.fast`
+1. WHEN Chip-Base is in default state THEN it SHALL use `color.structure.surface` background, `color.structure.border` border, `color.text.default` text
+2. WHEN Chip-Base is hovered (web) THEN it SHALL use `blend.hoverDarker` on background, `color.action.primary` border
+3. WHEN Chip-Base is pressed THEN it SHALL use `blend.pressedDarker` on background, `color.action.primary` border
+4. WHEN Chip-Base state changes THEN it SHALL animate using `motion.duration.fast`
+
+**Note**: DesignerPunk does not support disabled states. If an action is unavailable, the component should not be rendered.
 
 ---
 
@@ -69,11 +70,12 @@ This specification defines the Chip component family for the DesignerPunk design
 #### Acceptance Criteria
 
 1. WHEN Chip-Filter renders THEN it SHALL inherit all Chip-Base visual styling and behavior
-2. WHEN Chip-Filter has selected=true THEN it SHALL use `color.interactive.primary` background, `color.interactive.primary` border, `color.content.onPrimary` text
+2. WHEN Chip-Filter has selected=true THEN it SHALL use `color.feedback.select.background.rest` background, `color.feedback.select.border.rest` border, `color.feedback.select.text.rest` text
 3. WHEN Chip-Filter has selected=true THEN it SHALL display a checkmark icon (Icon-Base, `icon.size075`)
 4. WHEN Chip-Filter has selected=true AND has an icon prop THEN the checkmark SHALL replace the leading icon
 5. WHEN Chip-Filter is pressed THEN it SHALL toggle the selected state and call onSelectionChange callback
-6. WHEN Chip-Filter has disabled=true THEN it SHALL not toggle on press
+
+**Note**: DesignerPunk does not support disabled states. If filtering is unavailable, the chip should not be rendered.
 
 ---
 
@@ -87,8 +89,9 @@ This specification defines the Chip component family for the DesignerPunk design
 2. WHEN Chip-Input renders THEN it SHALL always display an X icon (Icon-Base, `icon.size075`) as trailing element
 3. WHEN Chip-Input has an icon prop THEN it SHALL display both leading icon AND trailing X icon
 4. WHEN Chip-Input is pressed (anywhere on chip) THEN it SHALL call onDismiss callback
-5. WHEN Chip-Input has disabled=true THEN it SHALL not call onDismiss on press
-6. WHEN Chip-Input renders THEN it SHALL NOT have a selected state (dismiss-only behavior)
+5. WHEN Chip-Input renders THEN it SHALL NOT have a selected state (dismiss-only behavior)
+
+**Note**: DesignerPunk does not support disabled states. If dismissal is unavailable, the chip should not be rendered.
 
 ---
 

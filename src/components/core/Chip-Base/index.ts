@@ -14,15 +14,27 @@
  * - Accessible: Keyboard navigable, ARIA compliant
  * - Token-based: Uses design system tokens for all styling
  * 
+ * DesignerPunk Philosophy: NO DISABLED STATES
+ * This component does not support disabled states. If an action is unavailable,
+ * the component should not be rendered.
+ * 
  * @see ./README.md for complete documentation
  * @see .kiro/specs/045-chip-base for design specification
  * @see .kiro/specs/034-component-architecture-system for Stemma System details
  */
 
 // Export types
-export type { IconName, ChipBaseProps } from './types';
+export type { 
+  IconName, 
+  ChipBaseProps, 
+  ChipBaseElement as IChipBaseElement,
+  ChipBaseObservedAttribute 
+} from './types';
 
-// Platform implementations (to be added in Task 2)
-// - Web: ChipBase (Task 2.2)
+export { CHIP_BASE_OBSERVED_ATTRIBUTES } from './types';
+
+// Platform implementations
+// - Web: ChipBaseElement
+export { ChipBaseElement, default as ChipBaseWeb } from './platforms/web/ChipBase.web';
 // - iOS: ChipBase (Task 2.6)
 // - Android: ChipBase (Task 2.7)

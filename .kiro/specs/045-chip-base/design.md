@@ -20,6 +20,9 @@ The Chip component family provides compact, interactive elements for filtering, 
 - Stemma inheritance for behavioral specialization
 - Cross-platform consistency via logical properties
 
+**DesignerPunk Philosophy: NO DISABLED STATES**
+This component family does not support disabled states. If an action is unavailable, the component should not be rendered. This ensures users always see actionable UI elements.
+
 ---
 
 ## Architecture
@@ -31,7 +34,7 @@ The Chip component family provides compact, interactive elements for filtering, 
 │                      Chip-Base (Primitive)                   │
 │  ┌─────────────────────────────────────────────────────────┐│
 │  │ Visual Tokens: typography, colors, spacing, border      ││
-│  │ Core Behavior: press, disabled                          ││
+│  │ Core Behavior: press                                    ││
 │  │ Optional: leading icon (Icon-Base)                      ││
 │  │ Usable directly for general chip needs                  ││
 │  └─────────────────────────────────────────────────────────┘│
@@ -100,15 +103,15 @@ interface ChipBaseProps {
   /** Optional leading icon */
   icon?: IconName;
   
-  /** Disabled state - prevents interaction */
-  disabled?: boolean;
-  
   /** Called when chip is pressed */
   onPress?: () => void;
   
   /** Test ID for automated testing */
   testID?: string;
 }
+
+// Note: DesignerPunk does not support disabled states.
+// If an action is unavailable, the component should not be rendered.
 ```
 
 ### Chip-Filter Interface
@@ -136,12 +139,12 @@ interface ChipInputProps extends Omit<ChipBaseProps, 'onPress'> {
 
 ```typescript
 class ChipBaseElement extends HTMLElement {
-  static observedAttributes = ['label', 'icon', 'disabled'];
+  static observedAttributes = ['label', 'icon', 'test-id'];
   
   // Properties mirror attributes
   label: string;
   icon?: string;
-  disabled: boolean;
+  testID?: string;
   
   // Event callbacks
   onPress?: () => void;
@@ -181,32 +184,33 @@ const semanticTokens = {
 // Color tokens by state
 const colorTokens = {
   default: {
-    background: 'color.surface.secondary',
-    border: 'color.border.default',
-    text: 'color.content.primary'
-  },
-  selected: {
-    background: 'color.interactive.primary',
-    border: 'color.interactive.primary',
-    text: 'color.content.onPrimary'
+    background: 'color.structure.surface',
+    border: 'color.structure.border',
+    text: 'color.text.default'
   },
   hover: {
-    background: 'color.surface.tertiary',
-    border: 'color.border.emphasis',
-    text: 'color.content.primary'
+    background: 'blend.hoverDarker applied to color.structure.surface',
+    border: 'color.action.primary',
+    text: 'color.text.default'
   },
   pressed: {
-    background: 'color.surface.tertiary',
-    border: 'color.border.emphasis',
-    text: 'color.content.primary'
+    background: 'blend.pressedDarker applied to color.structure.surface',
+    border: 'color.action.primary',
+    text: 'color.text.default'
   },
-  disabled: {
-    background: 'color.surface.disabled',
-    border: 'color.border.disabled',
-    text: 'color.content.disabled'
+  selected: {
+    background: 'color.feedback.select.background.rest',
+    border: 'color.feedback.select.border.rest',
+    text: 'color.feedback.select.text.rest'
   }
 };
+
+// Note: Hover and pressed states use blend tokens for theme-aware color calculations.
+// This ensures consistent state styling across light/dark themes.
+// DesignerPunk does not support disabled states - components should not render if unavailable.
 ```
+
+
 
 ### Stemma Schema Structure
 
@@ -226,14 +230,14 @@ props:
     type: IconName
     required: false
     description: Optional leading icon
-  disabled:
-    type: boolean
-    default: false
-    description: Disabled state
   onPress:
     type: function
     required: false
     description: Press callback
+  testID:
+    type: string
+    required: false
+    description: Test ID for automated testing
 
 tokens:
   required:
@@ -246,25 +250,24 @@ tokens:
     - radius.full
     - motion.duration.fast
   colors:
-    - color.surface.secondary
-    - color.surface.tertiary
-    - color.surface.disabled
-    - color.interactive.primary
-    - color.content.primary
-    - color.content.onPrimary
-    - color.content.disabled
-    - color.border.default
-    - color.border.emphasis
-    - color.border.disabled
+    - color.structure.surface
+    - color.structure.border
+    - color.text.default
+    - color.action.primary
+    - color.feedback.select.background.rest
+    - color.feedback.select.border.rest
+    - color.feedback.select.text.rest
+  blends:
+    - blend.hoverDarker
+    - blend.pressedDarker
 
 behaviors:
   press:
     trigger: tap/click
     action: call onPress callback
-    condition: not disabled
-  disabled:
-    trigger: disabled=true
-    action: prevent interaction, apply disabled styling
+
+# Note: DesignerPunk does not support disabled states.
+# If an action is unavailable, the component should not be rendered.
 
 accessibility:
   role: button
@@ -294,7 +297,8 @@ platforms:
 | Empty `label` | Render empty chip | Allow dynamic content |
 | Invalid `icon` name | Render without icon | Graceful degradation |
 | Missing `onPress` | Chip is non-interactive | Valid use case (display-only) |
-| `disabled` + `onPress` | Ignore press events | Disabled takes precedence |
+
+**Note**: DesignerPunk does not support disabled states. If an action is unavailable, the component should not be rendered.
 
 ### Edge Cases
 
@@ -310,14 +314,16 @@ platforms:
 | Scenario | Behavior |
 |----------|----------|
 | `selected` without `onSelectionChange` | Visual state only (controlled) |
-| `disabled` + `selected` | Show selected state, prevent toggle |
+
+**Note**: DesignerPunk does not support disabled states. If filtering is unavailable, the chip should not be rendered.
 
 ### Chip-Input Specific
 
 | Scenario | Behavior |
 |----------|----------|
-| `disabled` + tap | No dismiss callback |
 | Missing `onDismiss` | X icon visible but non-functional |
+
+**Note**: DesignerPunk does not support disabled states. If dismissal is unavailable, the chip should not be rendered.
 
 ---
 
@@ -329,7 +335,7 @@ platforms:
 
 | Component | Test Focus | Example Assertions |
 |-----------|------------|-------------------|
-| Chip-Base | API contract | `label` renders, `icon` appears, `disabled` prevents press |
+| Chip-Base | API contract | `label` renders, `icon` appears, press callback works |
 | Chip-Base | Accessibility | Focusable, keyboard activation, ARIA attributes |
 | Chip-Filter | Toggle behavior | `selected` state changes, `onSelectionChange` called |
 | Chip-Filter | Visual states | Checkmark appears when selected |
@@ -383,20 +389,6 @@ describe('ChipBase Web Component', () => {
     
     element.click();
     expect(onPress).toHaveBeenCalled();
-  });
-
-  it('should not call onPress when disabled', async () => {
-    const onPress = jest.fn();
-    const element = document.createElement('chip-base') as ChipBaseElement;
-    element.setAttribute('label', 'Test');
-    element.setAttribute('disabled', '');
-    element.onPress = onPress;
-    document.body.appendChild(element);
-    
-    await new Promise(resolve => setTimeout(resolve, 0));
-    
-    element.click();
-    expect(onPress).not.toHaveBeenCalled();
   });
 });
 ```
@@ -551,6 +543,30 @@ describe('Chip + Icon-Base Integration', () => {
 
 ---
 
+### Decision 6: No Disabled States (DesignerPunk Philosophy)
+
+**Options Considered**:
+1. Support disabled state with visual styling
+2. No disabled state - don't render if unavailable
+3. Read-only state instead of disabled
+
+**Decision**: No disabled state - components should not render if unavailable
+
+**Rationale**:
+- DesignerPunk philosophy: users should only see actionable UI
+- Disabled states create confusion about why something is unavailable
+- Better UX to hide unavailable actions or explain why they're unavailable
+- Simplifies component API and reduces edge cases
+
+**Trade-offs**:
+- Developers must handle conditional rendering
+- May require additional UI to explain why actions are unavailable
+- Different from common UI patterns that use disabled states
+
+**Counter-argument**: Disabled states are a common UI pattern that users understand. However, they often create poor UX by showing users things they can't interact with without explaining why. DesignerPunk prioritizes clarity over convention.
+
+---
+
 ## Platform Implementation Notes
 
 ### Web (CSS Custom Properties)
@@ -559,16 +575,16 @@ describe('Chip + Icon-Base Integration', () => {
 .chip {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-grouped-tight);
+  gap: var(--space-050);
   padding-block: var(--chip-padding-block);
-  padding-inline: var(--space-inset-150);
-  border: var(--border-default) solid var(--color-border-default);
-  border-radius: var(--radius-full);
-  background-color: var(--color-surface-secondary);
-  color: var(--color-content-primary);
+  padding-inline: var(--space-150);
+  border: var(--border-default) solid var(--color-structure-border);
+  border-radius: var(--radius-max);
+  background-color: var(--color-structure-surface);
+  color: var(--color-text-default);
   font: var(--typography-button-sm);
   cursor: pointer;
-  transition: all var(--motion-duration-fast);
+  transition: all var(--duration-150);
 }
 
 /* Expanded tap area */
@@ -581,7 +597,20 @@ describe('Chip + Icon-Base Integration', () => {
   position: absolute;
   inset: calc((var(--tap-area-recommended) - 32px) / -2);
 }
+
+/* Hover and pressed states use blend tokens calculated at runtime */
+.chip:hover {
+  background-color: var(--_chip-hover-bg);
+  border-color: var(--color-action-primary);
+}
+
+.chip:active {
+  background-color: var(--_chip-pressed-bg);
+  border-color: var(--color-action-primary);
+}
 ```
+
+**Note**: DesignerPunk does not support disabled states. If an action is unavailable, the component should not be rendered.
 
 ### iOS (SwiftUI)
 
@@ -589,7 +618,6 @@ describe('Chip + Icon-Base Integration', () => {
 struct ChipBase: View {
     let label: String
     var icon: String? = nil
-    var disabled: Bool = false
     var onPress: (() -> Void)? = nil
     
     var body: some View {
@@ -603,18 +631,20 @@ struct ChipBase: View {
             }
             .padding(.horizontal, Tokens.spaceInset150)
             .padding(.vertical, Tokens.chipPaddingBlock)
-            .background(Tokens.colorSurfaceSecondary)
-            .foregroundColor(Tokens.colorContentPrimary)
+            .background(Tokens.colorStructureSurface)
+            .foregroundColor(Tokens.colorTextDefault)
             .overlay(
                 Capsule()
-                    .stroke(Tokens.colorBorderDefault, lineWidth: Tokens.borderDefault)
+                    .stroke(Tokens.colorStructureBorder, lineWidth: Tokens.borderDefault)
             )
             .clipShape(Capsule())
         }
-        .disabled(disabled)
         .frame(minHeight: Tokens.tapAreaRecommended)
     }
 }
+
+// Note: DesignerPunk does not support disabled states.
+// If an action is unavailable, the component should not be rendered.
 ```
 
 ### Android (Jetpack Compose)
@@ -624,17 +654,15 @@ struct ChipBase: View {
 fun ChipBase(
     label: String,
     icon: String? = null,
-    disabled: Boolean = false,
     onClick: () -> Unit = {}
 ) {
     Surface(
         onClick = onClick,
-        enabled = !disabled,
         shape = RoundedCornerShape(50),
-        color = DesignTokens.colorSurfaceSecondary,
+        color = DesignTokens.colorStructureSurface,
         border = BorderStroke(
             DesignTokens.borderDefault.dp,
-            DesignTokens.colorBorderDefault
+            DesignTokens.colorStructureBorder
         ),
         modifier = Modifier.sizeIn(minHeight = DesignTokens.tapAreaRecommended.dp)
     ) {
@@ -650,11 +678,14 @@ fun ChipBase(
             Text(
                 text = label,
                 style = DesignTokens.typographyButtonSm,
-                color = DesignTokens.colorContentPrimary
+                color = DesignTokens.colorTextDefault
             )
         }
     }
 }
+
+// Note: DesignerPunk does not support disabled states.
+// If an action is unavailable, the component should not be rendered.
 ```
 
 ---
@@ -667,9 +698,10 @@ fun ChipBase(
 |-----------|-----------|-------|
 | Chip-Base | `role` | `button` |
 | Chip-Base | `tabindex` | `0` (focusable) |
-| Chip-Base | `aria-disabled` | `true` when disabled |
 | Chip-Filter | `aria-pressed` | `true`/`false` based on selected |
 | Chip-Input X icon | `aria-label` | `Remove [label]` |
+
+**Note**: DesignerPunk does not support disabled states, so `aria-disabled` is not applicable.
 
 ### Keyboard Navigation
 

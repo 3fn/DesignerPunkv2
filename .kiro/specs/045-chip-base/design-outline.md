@@ -26,7 +26,7 @@ Chip is a compact, interactive element used for filtering, selection, or input. 
 ```
 Chip-Base (Primitive)
 ├── All visual tokens (size, typography, colors, states)
-├── Core behavior (press, disabled)
+├── Core behavior (press)
 ├── Optional leading icon (via Icon-Base)
 └── Usable directly for general chip needs
 
@@ -42,6 +42,9 @@ Chip-Input (Semantic - extends Chip-Base)
 ├── Adds: dismiss behavior (tap anywhere = dismiss)
 └── No new tokens needed
 ```
+
+**DesignerPunk Philosophy: NO DISABLED STATES**
+Components do not support disabled states. If an action is unavailable, the component should not be rendered. This ensures users always see actionable UI elements.
 
 **Design Pattern**: Follows Input-Text-Base → Input-Text-Email/Password/PhoneNumber pattern. Chip-Base is usable directly for general/one-off chip needs; semantic variants (Chip-Filter, Chip-Input) provide specialized behaviors for common patterns.
 
@@ -74,11 +77,12 @@ Chip-Input (Semantic - extends Chip-Base)
 
 | State | Background | Border | Text | Use Case |
 |-------|------------|--------|------|----------|
-| **default** | `color.surface.secondary` | `color.border.default` | `color.content.primary` | Unselected chip |
-| **selected** | `color.interactive.primary` | `color.interactive.primary` | `color.content.onPrimary` | Active/selected (Filter only) |
-| **hover** | `color.surface.tertiary` | `color.border.emphasis` | `color.content.primary` | Mouse hover |
-| **pressed** | `color.surface.tertiary` | `color.border.emphasis` | `color.content.primary` | Active press |
-| **disabled** | `color.surface.disabled` | `color.border.disabled` | `color.content.disabled` | Non-interactive |
+| **default** | `color.structure.surface` | `color.structure.border` | `color.text.default` | Unselected chip |
+| **selected** | `color.feedback.select.background.rest` | `color.feedback.select.border.rest` | `color.feedback.select.text.rest` | Active/selected (Filter only) |
+| **hover** | `blend.hoverDarker` on surface | `color.action.primary` | `color.text.default` | Mouse hover |
+| **pressed** | `blend.pressedDarker` on surface | `color.action.primary` | `color.text.default` | Active press |
+
+**Note**: DesignerPunk does not support disabled states. If an action is unavailable, the component should not be rendered.
 
 ### Icons
 
@@ -110,10 +114,15 @@ Chip-Input (Semantic - extends Chip-Base)
 - `typography.buttonSm` (14px, medium weight, 1.429 line-height)
 
 **Colors**:
-- `color.surface.secondary`, `color.surface.tertiary`, `color.surface.disabled`
-- `color.interactive.primary`
-- `color.content.primary`, `color.content.onPrimary`, `color.content.disabled`
-- `color.border.default`, `color.border.emphasis`, `color.border.disabled`
+- `color.structure.surface` (default background)
+- `color.structure.border` (default border)
+- `color.text.default` (text color)
+- `color.action.primary` (hover/pressed border emphasis)
+- `color.feedback.select.background.rest`, `color.feedback.select.border.rest`, `color.feedback.select.text.rest` (selected state)
+
+**Blends**:
+- `blend.hoverDarker` (hover background)
+- `blend.pressedDarker` (pressed background)
 
 **Spacing (Semantic)**:
 - `space.inset.150` (12px) — inline padding
@@ -146,15 +155,15 @@ interface ChipBaseProps {
   /** Optional leading icon */
   icon?: IconName;
   
-  /** Disabled state */
-  disabled?: boolean;
-  
   /** Called when chip is pressed */
   onPress?: () => void;
   
   /** Test ID for automated testing */
   testID?: string;
 }
+
+// Note: DesignerPunk does not support disabled states.
+// If an action is unavailable, the component should not be rendered.
 ```
 
 ### Chip-Filter Props (extends Chip-Base)
@@ -214,9 +223,6 @@ interface ChipInputProps extends Omit<ChipBaseProps, 'onPress'> {
   label="JavaScript" 
   onDismiss={() => removeSkill('javascript')}
 />
-
-// Disabled chip
-<ChipBase label="Unavailable" disabled />
 ```
 
 ---
@@ -265,7 +271,6 @@ All implementations use logical properties for internationalization:
 struct ChipBase: View {
     let label: String
     let icon: String?
-    let disabled: Bool
     let onPress: () -> Void
     
     var body: some View {
@@ -279,18 +284,20 @@ struct ChipBase: View {
             }
             .padding(.horizontal, Tokens.space150)
             .padding(.vertical, Tokens.chipPaddingBlock)
-            .background(Tokens.colorSurfaceSecondary)
-            .foregroundColor(Tokens.colorContentPrimary)
+            .background(Tokens.colorStructureSurface)
+            .foregroundColor(Tokens.colorTextDefault)
             .overlay(
                 Capsule()
-                    .stroke(Tokens.colorBorderDefault, lineWidth: Tokens.borderDefault)
+                    .stroke(Tokens.colorStructureBorder, lineWidth: Tokens.borderDefault)
             )
             .clipShape(Capsule())
         }
-        .disabled(disabled)
         .frame(minHeight: Tokens.tapAreaRecommended)
     }
 }
+
+// Note: DesignerPunk does not support disabled states.
+// If an action is unavailable, the component should not be rendered.
 ```
 
 ### Android Implementation
@@ -300,17 +307,15 @@ struct ChipBase: View {
 fun ChipBase(
     label: String,
     icon: String? = null,
-    disabled: Boolean = false,
     onClick: () -> Unit
 ) {
     Surface(
         onClick = onClick,
-        enabled = !disabled,
         shape = RoundedCornerShape(50),
-        color = DesignTokens.colorSurfaceSecondary,
+        color = DesignTokens.colorStructureSurface,
         border = BorderStroke(
             DesignTokens.borderDefault.dp,
-            DesignTokens.colorBorderDefault
+            DesignTokens.colorStructureBorder
         ),
         modifier = Modifier.sizeIn(minHeight = DesignTokens.tapAreaRecommended.dp)
     ) {
@@ -328,7 +333,7 @@ fun ChipBase(
             Text(
                 text = label,
                 style = DesignTokens.typographyButtonSm,
-                color = DesignTokens.colorContentPrimary
+                color = DesignTokens.colorTextDefault
             )
         }
     }

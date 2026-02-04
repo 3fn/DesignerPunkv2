@@ -21,7 +21,14 @@
 // Export types
 export type { ChipFilterProps } from './types';
 
-// Platform implementations (to be added in Task 3)
-// - Web: ChipFilter (Task 3.2)
+// Web platform implementation
+export { 
+  ChipFilterElement, 
+  CHIP_FILTER_OBSERVED_ATTRIBUTES,
+  type ChipFilterObservedAttribute 
+} from './platforms/web/ChipFilter.web';
+
+// Platform implementations
+// - Web: ChipFilterElement (Task 3.2) ✓
 // - iOS: ChipFilter (Task 3.4)
 // - Android: ChipFilter (Task 3.4)

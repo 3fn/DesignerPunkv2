@@ -21,7 +21,15 @@
 // Export types
 export type { ChipInputProps } from './types';
 
-// Platform implementations (to be added in Task 3)
-// - Web: ChipInput (Task 3.6)
+// Web platform implementation
+export { 
+  ChipInputElement,
+  CHIP_INPUT_OBSERVED_ATTRIBUTES,
+  type ChipInputObservedAttribute,
+  type IChipInputElement
+} from './platforms/web/ChipInput.web';
+
+// Platform implementations
+// - Web: ChipInputElement (Task 3.6 - Complete)
 // - iOS: ChipInput (Task 3.8)
 // - Android: ChipInput (Task 3.8)

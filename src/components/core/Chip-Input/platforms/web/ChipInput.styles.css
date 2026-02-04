@@ -1,0 +1,99 @@
+/**
+ * Chip-Input Component Styles for Web Platform
+ * 
+ * Extends Chip-Base styles with trailing X icon for dismiss behavior.
+ * Chip-Input always shows an X icon and dismisses on tap anywhere.
+ * 
+ * Stemma System Naming: [Family]-[Type] = Chip-Input
+ * Component Type: Semantic Variant
+ * Inherits: Chip-Base
+ * 
+ * Key Characteristics:
+ * - Always displays trailing X icon
+ * - Supports both leading icon AND trailing X icon
+ * - Tap anywhere dismisses (not just X icon)
+ * 
+ * DesignerPunk Philosophy: NO DISABLED STATES
+ * This component does not support disabled states. If an action is unavailable,
+ * the component should not be rendered.
+ * 
+ * @module Chip-Input/platforms/web/styles
+ * @see Requirements: 5.1-5.6, 7.5 in .kiro/specs/045-chip-base/requirements.md
+ */
+
+/* ==========================================================================
+   Trailing Icon Container
+   ========================================================================== */
+
+/**
+ * Trailing icon container for the X dismiss icon.
+ * 
+ * - Positioned after the label
+ * - Same styling as leading icon for consistency
+ * - Always visible (X icon is always shown)
+ * 
+ * @see Requirement 5.2 - Always display X icon as trailing element
+ */
+.chip-input__trailing-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: inherit;
+  /* Ensure trailing icon doesn't capture pointer events separately */
+  /* Tap anywhere on chip dismisses, not just the X icon */
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   X Icon Accessibility
+   ========================================================================== */
+
+/**
+ * Visually hidden text for screen readers.
+ * 
+ * Provides accessible label "Remove [label]" for the X icon.
+ * Uses standard visually-hidden pattern.
+ * 
+ * @see Requirement 7.5 - X icon accessible label "Remove [label]"
+ */
+.chip-input__dismiss-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ==========================================================================
+   High Contrast Mode Support
+   ========================================================================== */
+
+/**
+ * Ensure Chip-Input remains visible in Windows High Contrast Mode.
+ */
+@media (prefers-contrast: high) {
+  .chip-input__trailing-icon {
+    /* Ensure X icon is visible in high contrast mode */
+    color: currentColor;
+  }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+/**
+ * Optimize Chip-Input appearance for print.
+ * 
+ * - Hide X icon in print (not interactive)
+ */
+@media print {
+  .chip-input__trailing-icon {
+    display: none;
+  }
+}
