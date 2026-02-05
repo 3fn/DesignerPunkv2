@@ -20,8 +20,10 @@
  * - icon = gray (default icon color)
  * - print = black (print media)
  * - glow = vibrant neon colors for emphasis effects
- * - avatar = component-specific tokens following {component}.{variant}.{property} pattern
  * - badge = component-specific tokens for notification badges
+ * 
+ * MIGRATED TO COMPONENT DIRECTORIES (Spec 058):
+ * - avatar = MIGRATED to src/components/core/Avatar/avatar.tokens.ts
  * 
  * All color tokens reference mode-aware primitive color tokens that support
  * light/dark modes with base/wcag themes.
@@ -527,68 +529,25 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
   },
 
   // ============================================================================
-  // AVATAR COMPONENT TOKENS (5 tokens) - Spec 052 Task 3.1
+  // AVATAR COMPONENT TOKENS - MIGRATED (Spec 058)
   // ============================================================================
   /**
-   * Avatar Component Tokens: Component-specific colors for Avatar
+   * Avatar Component Tokens: MIGRATED to src/components/core/Avatar/avatar.tokens.ts
    * 
-   * Pattern: color.{component}.{variant}.{property}
+   * Per Rosetta System architecture, component tokens live at src/components/[ComponentName]/tokens.ts.
+   * The following tokens have been migrated:
+   * - color.avatar.human.background -> AvatarColorTokens['human.background']
+   * - color.avatar.agent.background -> AvatarColorTokens['agent.background']
+   * - color.avatar.human.icon -> AvatarColorTokens['human.icon']
+   * - color.avatar.agent.icon -> AvatarColorTokens['agent.icon']
+   * - color.avatar.default.border -> AvatarColorTokens['default.border']
    * 
-   * These component tokens reference semantic tokens (identity, contrast) rather than
-   * primitives directly, following the compositional architecture defined in Spec 051.
+   * Import from the canonical location:
+   * import { AvatarColorTokens } from 'src/components/core/Avatar/avatar.tokens';
    * 
-   * Variants: human, agent, default
-   * Properties: background, icon, border
-   * 
-   * Migration (Spec 052 Task 3.1):
-   * - color.avatar.human → color.avatar.human.background (references color.identity.human)
-   * - color.avatar.agent → color.avatar.agent.background (references color.identity.agent)
-   * - color.avatar.contrast.onHuman → color.avatar.human.icon (references color.contrast.onDark)
-   * - color.avatar.contrast.onAgent → color.avatar.agent.icon (references color.contrast.onDark)
-   * - color.avatar.border → color.avatar.default.border (references gray100)
-   * 
-   * @see .kiro/specs/051-semantic-token-naming-restructure/design-outline.md
+   * @see .kiro/specs/058-component-token-architecture-cleanup for migration details
+   * @see src/components/core/Avatar/avatar.tokens.ts for canonical token definitions
    */
-
-  'color.avatar.human.background': {
-    name: 'color.avatar.human.background',
-    primitiveReferences: { value: 'orange300' },
-    category: SemanticCategory.COLOR,
-    context: 'Background color for human avatar',
-    description: 'Orange background for human avatar - references color.identity.human semantic token. Warm, approachable visual identity for human entities.'
-  },
-
-  'color.avatar.agent.background': {
-    name: 'color.avatar.agent.background',
-    primitiveReferences: { value: 'teal200' },
-    category: SemanticCategory.COLOR,
-    context: 'Background color for AI agent avatar',
-    description: 'Teal background for AI agent avatar - references color.identity.agent semantic token. Distinct, technical visual identity for agent entities.'
-  },
-
-  'color.avatar.human.icon': {
-    name: 'color.avatar.human.icon',
-    primitiveReferences: { value: 'white100' },
-    category: SemanticCategory.COLOR,
-    context: 'Icon color on human avatar background',
-    description: 'White icon color for use on human avatar orange background - references color.contrast.onDark semantic token. Ensures WCAG AA contrast compliance.'
-  },
-
-  'color.avatar.agent.icon': {
-    name: 'color.avatar.agent.icon',
-    primitiveReferences: { value: 'white100' },
-    category: SemanticCategory.COLOR,
-    context: 'Icon color on AI agent avatar background',
-    description: 'White icon color for use on AI agent avatar teal background - references color.contrast.onDark semantic token. Ensures WCAG AA contrast compliance.'
-  },
-
-  'color.avatar.default.border': {
-    name: 'color.avatar.default.border',
-    primitiveReferences: { value: 'gray100' },
-    category: SemanticCategory.COLOR,
-    context: 'Border color for avatars',
-    description: 'Gray border color for avatar components - provides subtle visual definition for both human and agent avatars.'
-  },
 
   // Badge Colors (2 tokens) - Spec 044: Badge Component Family
   // Spec 052: Reordered to {component}.{variant}.{property} pattern
@@ -612,24 +571,18 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
 /**
  * Array of all color semantic token names for iteration
  * 
- * Token count updated for Spec 052 semantic naming restructure:
- * - Removed: color.success.strong/subtle, color.error.strong/subtle, color.warning.strong/subtle, 
- *   color.info.strong/subtle, color.select.* (old pattern)
- * - Added: color.feedback.{success|error|warning|info}.{text|background|border} (12 tokens)
- * - Added: color.feedback.select.{text|background|border}.{rest|default} (6 tokens)
- * - Removed: color.avatar.human, color.avatar.agent (moved to identity concept)
- * - Added: color.identity.human, color.identity.agent (2 tokens)
- * - Removed: color.canvas, color.background, color.surface, color.border (moved to structure concept)
- * - Added: color.structure.canvas, color.structure.surface, color.structure.border (3 tokens)
- * - Removed: color.avatar.contrast.onHuman, color.avatar.contrast.onAgent, color.avatar.border (old pattern)
- * - Added: color.avatar.human.background, color.avatar.agent.background, color.avatar.human.icon,
- *   color.avatar.agent.icon, color.avatar.default.border, color.avatar.default.border.subtle (6 tokens - Task 3.1 + Task 4)
+ * Token count updated for Spec 058 component token architecture cleanup:
+ * - Removed 5 Avatar component tokens (migrated to src/components/core/Avatar/avatar.tokens.ts):
+ *   - color.avatar.human.background
+ *   - color.avatar.agent.background
+ *   - color.avatar.human.icon
+ *   - color.avatar.agent.icon
+ *   - color.avatar.default.border
  * 
- * Task 4 Fix: Moved color.structure.border.subtle (semantic) → color.avatar.default.border.subtle (component)
- * Reason: Baked-in RGBA values belong in component tokens, not semantic tokens. The subtle border
- * is Avatar-specific until more use cases emerge. Component tokens can have baked-in values.
+ * Previous count (Spec 052): 50 tokens
+ * Current count (Spec 058): 45 tokens
  * 
- * See design authority: .kiro/specs/051-semantic-token-naming-restructure/design-outline.md
+ * See design authority: .kiro/specs/058-component-token-architecture-cleanup/design.md
  */
 export const colorTokenNames = Object.keys(colorTokens);
 
@@ -648,46 +601,86 @@ export function getAllColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'
 }
 
 /**
- * Validate token count - updated for Spec 052 semantic naming restructure
+ * Validate token count - updated for Spec 058 component token architecture cleanup
  * 
- * Token changes (Task 2.1 - Feedback concept):
- * - Removed 8 old tokens: color.success.strong/subtle, color.error.strong/subtle, 
- *   color.warning.strong/subtle, color.info.strong/subtle
- * - Removed 4 old tokens: color.select.selected.strong/subtle, color.select.notSelected.strong/subtle
- * - Added 18 new tokens: color.feedback.{success|error|warning|info}.{text|background|border} (12)
- *   + color.feedback.select.{text|background|border}.{rest|default} (6)
+ * Token changes (Spec 058 - Avatar component token migration):
+ * - Removed 5 Avatar component tokens (migrated to src/components/core/Avatar/avatar.tokens.ts):
+ *   - color.avatar.human.background
+ *   - color.avatar.agent.background
+ *   - color.avatar.human.icon
+ *   - color.avatar.agent.icon
+ *   - color.avatar.default.border
  * 
- * Token changes (Task 2.2 - Identity concept):
- * - Removed 2 old tokens: color.avatar.human, color.avatar.agent
- * - Added 2 new tokens: color.identity.human, color.identity.agent
+ * Previous count (Spec 052): 50 tokens
+ * Current count (Spec 058): 45 tokens
  * 
- * Token changes (Task 2.3 - Action concept):
- * - Removed 1 old token: color.primary
- * - Added 2 new tokens: color.action.primary, color.action.secondary
- * 
- * Token changes (Task 2.4 - Contrast concept):
- * - Removed 1 old token: color.contrast.onPrimary
- * - Added 2 new tokens: color.contrast.onLight, color.contrast.onDark
- * 
- * Token changes (Task 2.5 - Structure concept):
- * - Removed 4 old tokens: color.canvas, color.background, color.surface, color.border
- * - Added 4 new tokens: color.structure.canvas, color.structure.surface, 
- *   color.structure.border, color.structure.border.subtle
- * 
- * Token changes (Task 3.1 - Avatar component tokens):
- * - Removed 3 old tokens: color.avatar.contrast.onHuman, color.avatar.contrast.onAgent, color.avatar.border
- * - Added 5 new tokens: color.avatar.human.background, color.avatar.agent.background,
- *   color.avatar.human.icon, color.avatar.agent.icon, color.avatar.default.border
- * 
- * Net change: -12 + 18 - 2 + 2 - 1 + 2 - 1 + 2 - 4 + 4 - 3 + 5 = +10 tokens
- * New total: 40 + 10 = 50 tokens
+ * Remaining tokens breakdown:
+ * - Feedback concept: 18 tokens (success/error/warning/info × text/background/border + select × 6)
+ * - Identity concept: 2 tokens (human, agent)
+ * - Action concept: 2 tokens (primary, secondary)
+ * - Contrast concept: 2 tokens (onLight, onDark)
+ * - Structure concept: 4 tokens (canvas, surface, border, border.subtle)
+ * - Attention/Highlight: 2 tokens
+ * - Tech/Data: 2 tokens
+ * - Text hierarchy: 3 tokens (default, muted, subtle)
+ * - Icon: 1 token (default)
+ * - Print: 1 token (default)
+ * - Background: 1 token (primary.subtle)
+ * - Glow: 5 tokens (neonPurple, neonCyan, neonYellow, neonGreen, neonPink)
+ * - Badge component: 2 tokens (notification.background, notification.text)
+ * Total: 45 tokens
  */
 export function validateColorTokenCount(): boolean {
-  const expectedCount = 50;
+  const expectedCount = 45;
   const actualCount = colorTokenNames.length;
   if (actualCount !== expectedCount) {
     console.warn(`Color token count mismatch: expected ${expectedCount}, got ${actualCount}`);
     return false;
   }
   return true;
+}
+
+// ============================================================================
+// BACKWARD COMPATIBILITY RE-EXPORTS (Spec 058)
+// ============================================================================
+/**
+ * Re-export Avatar color tokens for backward compatibility
+ * 
+ * DEPRECATED: Avatar color tokens have been migrated to their canonical location
+ * at src/components/core/Avatar/avatar.tokens.ts per Rosetta System architecture.
+ * 
+ * Update your imports to use the canonical location:
+ * 
+ * Old (deprecated):
+ * import { AvatarColorTokens } from 'src/tokens/semantic/ColorTokens';
+ * 
+ * New (canonical):
+ * import { AvatarColorTokens } from 'src/components/core/Avatar/avatar.tokens';
+ * 
+ * @deprecated Use import from 'src/components/core/Avatar/avatar.tokens' instead
+ * @see .kiro/specs/058-component-token-architecture-cleanup for migration details
+ */
+export { AvatarColorTokens } from '../../components/core/Avatar/avatar.tokens';
+
+// Log deprecation warning once per session
+let avatarDeprecationWarningLogged = false;
+
+/**
+ * Get Avatar color token with deprecation warning
+ * 
+ * @deprecated Use getAvatarColorToken from 'src/components/core/Avatar/avatar.tokens' instead
+ */
+export function getAvatarColorTokenDeprecated(key: string): string | undefined {
+  if (!avatarDeprecationWarningLogged) {
+    console.warn(
+      '[DEPRECATED] Avatar color tokens have moved to src/components/core/Avatar/avatar.tokens.ts. ' +
+      'Update your imports to avoid future breaking changes. ' +
+      'See .kiro/specs/058-component-token-architecture-cleanup for migration details.'
+    );
+    avatarDeprecationWarningLogged = true;
+  }
+  
+  // Import dynamically to avoid circular dependency issues
+  const { AvatarColorTokens } = require('../../components/core/Avatar/avatar.tokens');
+  return AvatarColorTokens[key as keyof typeof AvatarColorTokens];
 }

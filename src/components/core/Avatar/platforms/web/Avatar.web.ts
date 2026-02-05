@@ -809,18 +809,22 @@ export class AvatarBaseElement extends HTMLElement {
           </defs>
           
           <!-- Background fill -->
+          <!-- Spec 058 Migration: Now references semantic token directly -->
+          <!-- Component token mapping: agent.background → color.identity.agent -->
           <path 
             class="avatar__hexagon-bg"
             d="${hexPath}" 
-            fill="var(--color-avatar-agent-background)"
+            fill="var(--color-identity-agent)"
           />
           
           <!-- Border stroke -->
+          <!-- Spec 058 Migration: Now references semantic token directly -->
+          <!-- Component token mapping: default.border → color.structure.border -->
           <path 
             class="avatar__hexagon-border"
             d="${hexPath}" 
             fill="none"
-            stroke="${size === 'xxl' ? 'var(--color-contrast-on-dark)' : 'var(--color-avatar-default-border)'}"
+            stroke="${size === 'xxl' ? 'var(--color-contrast-on-dark)' : 'var(--color-structure-border)'}"
             stroke-width="${borderWidth}"
             stroke-opacity="${size === 'xxl' ? '1' : '0.48'}"
           />

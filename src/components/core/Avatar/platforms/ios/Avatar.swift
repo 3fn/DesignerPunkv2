@@ -48,31 +48,44 @@ enum AvatarTokens {
     // MARK: - Avatar Color Tokens
     // These reference DesignTokens semantic color tokens for consistency with the Rosetta pipeline.
     // When semantic tokens change, regenerate DesignTokens via: npx ts-node src/generators/generateTokenFiles.ts
+    //
+    // Spec 058 Migration: Avatar color tokens now reference semantic tokens directly.
+    // The component-level token definitions in avatar.tokens.ts provide the mapping:
+    // - human.background → color.identity.human
+    // - agent.background → color.identity.agent
+    // - human.icon → color.contrast.onDark
+    // - agent.icon → color.contrast.onDark
+    // - default.border → color.structure.border
     
     /// Background color for human avatars
-    /// References: color.avatar.human.background → color.identity.human → orange300
+    /// References: color.identity.human → orange300
     /// @see Requirements: 4.1 - Human type background color
-    static let colorHuman: Color = Color(DesignTokens.colorAvatarHumanBackground)
+    /// @see src/components/core/Avatar/avatar.tokens.ts for component token mapping
+    static let colorHuman: Color = Color(DesignTokens.colorIdentityHuman)
     
     /// Background color for agent avatars
-    /// References: color.avatar.agent.background → color.identity.agent → teal200
+    /// References: color.identity.agent → teal200
     /// @see Requirements: 4.2 - Agent type background color
-    static let colorAgent: Color = Color(DesignTokens.colorAvatarAgentBackground)
+    /// @see src/components/core/Avatar/avatar.tokens.ts for component token mapping
+    static let colorAgent: Color = Color(DesignTokens.colorIdentityAgent)
     
     /// Icon color on human avatar background
-    /// References: color.avatar.human.icon → color.contrast.onDark → white100
+    /// References: color.contrast.onDark → white100
     /// @see Requirements: 6.1 - Human type icon contrast color
-    static let contrastOnHuman: Color = Color(DesignTokens.colorAvatarHumanIcon)
+    /// @see src/components/core/Avatar/avatar.tokens.ts for component token mapping
+    static let contrastOnHuman: Color = Color(DesignTokens.colorContrastOnDark)
     
     /// Icon color on agent avatar background
-    /// References: color.avatar.agent.icon → color.contrast.onDark → white100
+    /// References: color.contrast.onDark → white100
     /// @see Requirements: 6.2 - Agent type icon contrast color
-    static let contrastOnAgent: Color = Color(DesignTokens.colorAvatarAgentIcon)
+    /// @see src/components/core/Avatar/avatar.tokens.ts for component token mapping
+    static let contrastOnAgent: Color = Color(DesignTokens.colorContrastOnDark)
     
     /// Border color for avatars (xs through xl sizes)
-    /// References: color.avatar.default.border → gray100
+    /// References: color.structure.border → gray100
     /// @see Requirements: 7.2 - Border color for xs-xl sizes
-    static let borderColor: Color = Color(DesignTokens.colorAvatarDefaultBorder)
+    /// @see src/components/core/Avatar/avatar.tokens.ts for component token mapping
+    static let borderColor: Color = Color(DesignTokens.colorStructureBorder)
     
     /// Border color for xxl size avatars
     /// References: color.contrast.onSurface

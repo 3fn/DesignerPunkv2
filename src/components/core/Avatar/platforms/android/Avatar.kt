@@ -93,41 +93,54 @@ object AvatarTokens {
     // MARK: - Avatar Color Tokens
     // These reference DesignTokens semantic color tokens for consistency with the Rosetta pipeline.
     // When semantic tokens change, regenerate DesignTokens via: npx ts-node src/generators/generateTokenFiles.ts
+    //
+    // Spec 058 Migration: Avatar color tokens now reference semantic tokens directly.
+    // The component-level token definitions in avatar.tokens.ts provide the mapping:
+    // - human.background → color.identity.human
+    // - agent.background → color.identity.agent
+    // - human.icon → color.contrast.onDark
+    // - agent.icon → color.contrast.onDark
+    // - default.border → color.structure.border
     
     /**
      * Background color for human avatars
-     * References: color.avatar.human.background → color.identity.human → orange300
+     * References: color.identity.human → orange300
      * @see Requirements: 4.1 - Human type background color
+     * @see src/components/core/Avatar/avatar.tokens.ts for component token mapping
      */
-    val colorHuman: Color = Color(DesignTokens.color_avatar_human_background)
+    val colorHuman: Color = Color(DesignTokens.color_identity_human)
     
     /**
      * Background color for agent avatars
-     * References: color.avatar.agent.background → color.identity.agent → teal200
+     * References: color.identity.agent → teal200
      * @see Requirements: 4.2 - Agent type background color
+     * @see src/components/core/Avatar/avatar.tokens.ts for component token mapping
      */
-    val colorAgent: Color = Color(DesignTokens.color_avatar_agent_background)
+    val colorAgent: Color = Color(DesignTokens.color_identity_agent)
     
     /**
      * Icon color on human avatar background
-     * References: color.avatar.human.icon → color.contrast.onDark → white100
+     * References: color.contrast.onDark → white100
      * @see Requirements: 6.1 - Human type icon contrast color
+     * @see src/components/core/Avatar/avatar.tokens.ts for component token mapping
      */
-    val contrastOnHuman: Color = Color(DesignTokens.color_avatar_human_icon)
+    val contrastOnHuman: Color = Color(DesignTokens.color_contrast_on_dark)
     
     /**
      * Icon color on agent avatar background
-     * References: color.avatar.agent.icon → color.contrast.onDark → white100
+     * References: color.contrast.onDark → white100
      * @see Requirements: 6.2 - Agent type icon contrast color
+     * @see src/components/core/Avatar/avatar.tokens.ts for component token mapping
      */
-    val contrastOnAgent: Color = Color(DesignTokens.color_avatar_agent_icon)
+    val contrastOnAgent: Color = Color(DesignTokens.color_contrast_on_dark)
     
     /**
      * Border color for avatars (xs through xl sizes)
-     * References: color.avatar.default.border → gray100
+     * References: color.structure.border → gray100
      * @see Requirements: 7.2 - Border color for xs-xl sizes
+     * @see src/components/core/Avatar/avatar.tokens.ts for component token mapping
      */
-    val borderColor: Color = Color(DesignTokens.color_avatar_default_border)
+    val borderColor: Color = Color(DesignTokens.color_structure_border)
     
     /**
      * Border color for xxl size avatars

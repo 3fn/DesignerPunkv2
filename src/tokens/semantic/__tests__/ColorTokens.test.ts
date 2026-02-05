@@ -502,10 +502,11 @@ describe('Semantic Color Tokens - Palette Update', () => {
       // Print: 1 token (default)
       // Background: 1 token (primary.subtle)
       // Glow: 5 tokens (neonPurple, neonCyan, neonYellow, neonGreen, neonPink)
-      // Avatar component: 5 tokens (human.background, agent.background, human.icon, agent.icon, default.border)
+      // Avatar component: MIGRATED to src/components/core/Avatar/avatar.tokens.ts (Spec 058)
       // Badge component: 2 tokens (notification.background, notification.text)
-      // Total: 50 tokens (includes color.structure.border.subtle with opacity composition)
-      expect(colorTokenNames.length).toBe(50);
+      // Total: 45 tokens (includes color.structure.border.subtle with opacity composition)
+      // Note: 5 Avatar tokens removed in Spec 058 migration (50 - 5 = 45)
+      expect(colorTokenNames.length).toBe(45);
     });
 
     it('should pass validateColorTokenCount()', () => {
@@ -543,7 +544,8 @@ describe('Semantic Color Tokens - Palette Update', () => {
       expect(contrastTokens.length).toBe(2); // color.contrast.onLight, color.contrast.onDark
       expect(structureTokens.length).toBe(4); // canvas, surface, border, border.subtle
       expect(glowTokens.length).toBe(5);
-      expect(avatarTokens.length).toBe(5); // human.background, agent.background, human.icon, agent.icon, default.border
+      // Avatar tokens MIGRATED to src/components/core/Avatar/avatar.tokens.ts (Spec 058)
+      expect(avatarTokens.length).toBe(0); // Migrated to component directory
       expect(badgeTokens.length).toBe(2); // notification.background, notification.text
     });
   });
@@ -598,9 +600,11 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(Array.isArray(tokens)).toBe(true);
       });
 
-      it('should return exactly 50 tokens', () => {
+      it('should return exactly 45 tokens', () => {
+        // Updated for Spec 058: Avatar tokens migrated to component directory
+        // Previous count: 50, Current count: 45 (5 Avatar tokens removed)
         const tokens = getAllColorTokens();
-        expect(tokens.length).toBe(50);
+        expect(tokens.length).toBe(45);
       });
 
       it('should include all new tokens', () => {
@@ -928,10 +932,10 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(selectTokens.length).toBe(6);
       });
 
-      it('should include select tokens in total count of 50', () => {
+      it('should include select tokens in total count of 45', () => {
         // Verify total count includes the 6 feedback select tokens
-        // Updated for Spec 052 semantic naming restructure: 50 total tokens
-        expect(colorTokenNames.length).toBe(50);
+        // Updated for Spec 058: 45 total tokens (5 Avatar tokens migrated to component directory)
+        expect(colorTokenNames.length).toBe(45);
         expect(validateColorTokenCount()).toBe(true);
       });
     });
@@ -1221,183 +1225,61 @@ describe('Semantic Color Tokens - Palette Update', () => {
     });
   });
 
-  // Avatar Color Tokens (Spec 042: Avatar Component) - Updated for Spec 052
-  // Note: color.avatar.human and color.avatar.agent removed in Spec 052
-  // Avatar component tokens follow {component}.{variant}.{property} pattern (Spec 052 Task 3.1)
-  describe('Avatar Color Tokens (Spec 042, Updated Spec 052 Task 3.1)', () => {
-    describe('Token Existence', () => {
-      it('should have color.avatar.human.background token', () => {
+  // Avatar Color Tokens - MIGRATED (Spec 058: Component Token Architecture Cleanup)
+  // Avatar color tokens have been migrated to src/components/core/Avatar/avatar.tokens.ts
+  // per Rosetta System architecture which mandates component tokens live at src/components/[ComponentName]/tokens.ts
+  // 
+  // These tests now verify:
+  // 1. Avatar tokens are NOT in ColorTokens.ts (migration complete)
+  // 2. Backward compatibility re-exports work correctly
+  // 3. Deprecation warnings are in place
+  //
+  // For Avatar token functionality tests, see: src/components/core/Avatar/__tests__/avatar.tokens.test.ts
+  describe('Avatar Color Tokens - Migration Verification (Spec 058)', () => {
+    describe('Token Migration Complete', () => {
+      it('should NOT have color.avatar.human.background in colorTokens (migrated)', () => {
         const token = colorTokens['color.avatar.human.background'];
-        expect(token).toBeDefined();
-        expect(token.name).toBe('color.avatar.human.background');
+        expect(token).toBeUndefined();
       });
 
-      it('should have color.avatar.agent.background token', () => {
+      it('should NOT have color.avatar.agent.background in colorTokens (migrated)', () => {
         const token = colorTokens['color.avatar.agent.background'];
-        expect(token).toBeDefined();
-        expect(token.name).toBe('color.avatar.agent.background');
+        expect(token).toBeUndefined();
       });
 
-      it('should have color.avatar.human.icon token', () => {
+      it('should NOT have color.avatar.human.icon in colorTokens (migrated)', () => {
         const token = colorTokens['color.avatar.human.icon'];
-        expect(token).toBeDefined();
-        expect(token.name).toBe('color.avatar.human.icon');
+        expect(token).toBeUndefined();
       });
 
-      it('should have color.avatar.agent.icon token', () => {
+      it('should NOT have color.avatar.agent.icon in colorTokens (migrated)', () => {
         const token = colorTokens['color.avatar.agent.icon'];
-        expect(token).toBeDefined();
-        expect(token.name).toBe('color.avatar.agent.icon');
+        expect(token).toBeUndefined();
       });
 
-      it('should have color.avatar.default.border token', () => {
+      it('should NOT have color.avatar.default.border in colorTokens (migrated)', () => {
         const token = colorTokens['color.avatar.default.border'];
-        expect(token).toBeDefined();
-        expect(token.name).toBe('color.avatar.default.border');
+        expect(token).toBeUndefined();
       });
     });
 
-    describe('Primitive References', () => {
-      it('color.avatar.human.background should reference orange300 (via color.identity.human)', () => {
-        const token = colorTokens['color.avatar.human.background'];
-        expect(token.primitiveReferences.value).toBe('orange300');
-      });
-
-      it('color.avatar.agent.background should reference teal200 (via color.identity.agent)', () => {
-        const token = colorTokens['color.avatar.agent.background'];
-        expect(token.primitiveReferences.value).toBe('teal200');
-      });
-
-      it('color.avatar.human.icon should reference white100 (via color.contrast.onDark)', () => {
-        const token = colorTokens['color.avatar.human.icon'];
-        expect(token.primitiveReferences.value).toBe('white100');
-      });
-
-      it('color.avatar.agent.icon should reference white100 (via color.contrast.onDark)', () => {
-        const token = colorTokens['color.avatar.agent.icon'];
-        expect(token.primitiveReferences.value).toBe('white100');
-      });
-
-      it('color.avatar.default.border should reference gray100', () => {
-        const token = colorTokens['color.avatar.default.border'];
-        expect(token.primitiveReferences.value).toBe('gray100');
-      });
-    });
-
-    describe('Token Structure', () => {
-      it('color.avatar.human.background should have correct category', () => {
-        const token = colorTokens['color.avatar.human.background'];
-        expect(token.category).toBe(SemanticCategory.COLOR);
-      });
-
-      it('color.avatar.agent.background should have correct category', () => {
-        const token = colorTokens['color.avatar.agent.background'];
-        expect(token.category).toBe(SemanticCategory.COLOR);
-      });
-
-      it('color.avatar.human.icon should have correct category', () => {
-        const token = colorTokens['color.avatar.human.icon'];
-        expect(token.category).toBe(SemanticCategory.COLOR);
-      });
-
-      it('color.avatar.agent.icon should have correct category', () => {
-        const token = colorTokens['color.avatar.agent.icon'];
-        expect(token.category).toBe(SemanticCategory.COLOR);
-      });
-
-      it('color.avatar.default.border should have correct category', () => {
-        const token = colorTokens['color.avatar.default.border'];
-        expect(token.category).toBe(SemanticCategory.COLOR);
-      });
-
-      it('color.avatar.human.background should have context and description', () => {
-        const token = colorTokens['color.avatar.human.background'];
-        expect(token.context).toBeDefined();
-        expect(token.context.length).toBeGreaterThan(0);
-        expect(token.description).toBeDefined();
-        expect(token.description.length).toBeGreaterThan(0);
-      });
-
-      it('color.avatar.agent.background should have context and description', () => {
-        const token = colorTokens['color.avatar.agent.background'];
-        expect(token.context).toBeDefined();
-        expect(token.context.length).toBeGreaterThan(0);
-        expect(token.description).toBeDefined();
-        expect(token.description.length).toBeGreaterThan(0);
-      });
-
-      it('color.avatar.human.icon should have context and description', () => {
-        const token = colorTokens['color.avatar.human.icon'];
-        expect(token.context).toBeDefined();
-        expect(token.context.length).toBeGreaterThan(0);
-        expect(token.description).toBeDefined();
-        expect(token.description.length).toBeGreaterThan(0);
-      });
-
-      it('color.avatar.agent.icon should have context and description', () => {
-        const token = colorTokens['color.avatar.agent.icon'];
-        expect(token.context).toBeDefined();
-        expect(token.context.length).toBeGreaterThan(0);
-        expect(token.description).toBeDefined();
-        expect(token.description.length).toBeGreaterThan(0);
-      });
-
-      it('color.avatar.default.border should have context and description', () => {
-        const token = colorTokens['color.avatar.default.border'];
-        expect(token.context).toBeDefined();
-        expect(token.context.length).toBeGreaterThan(0);
-        expect(token.description).toBeDefined();
-        expect(token.description.length).toBeGreaterThan(0);
-      });
-    });
-
-    describe('Utility Function Access', () => {
-      it('should return color.avatar.human.background via getColorToken()', () => {
-        const token = getColorToken('color.avatar.human.background');
-        expect(token).toBeDefined();
-        expect(token?.name).toBe('color.avatar.human.background');
-      });
-
-      it('should return color.avatar.agent.background via getColorToken()', () => {
-        const token = getColorToken('color.avatar.agent.background');
-        expect(token).toBeDefined();
-        expect(token?.name).toBe('color.avatar.agent.background');
-      });
-
-      it('should return color.avatar.human.icon via getColorToken()', () => {
-        const token = getColorToken('color.avatar.human.icon');
-        expect(token).toBeDefined();
-        expect(token?.name).toBe('color.avatar.human.icon');
-      });
-
-      it('should return color.avatar.agent.icon via getColorToken()', () => {
-        const token = getColorToken('color.avatar.agent.icon');
-        expect(token).toBeDefined();
-        expect(token?.name).toBe('color.avatar.agent.icon');
-      });
-
-      it('should return color.avatar.default.border via getColorToken()', () => {
-        const token = getColorToken('color.avatar.default.border');
-        expect(token).toBeDefined();
-        expect(token?.name).toBe('color.avatar.default.border');
-      });
-
-      it('should include all avatar tokens in getAllColorTokens()', () => {
-        const tokens = getAllColorTokens();
-        const tokenNames = tokens.map(t => t.name);
-
-        expect(tokenNames).toContain('color.avatar.human.background');
-        expect(tokenNames).toContain('color.avatar.agent.background');
-        expect(tokenNames).toContain('color.avatar.human.icon');
-        expect(tokenNames).toContain('color.avatar.agent.icon');
-        expect(tokenNames).toContain('color.avatar.default.border');
-      });
-    });
-
-    describe('Token Count Includes Avatar Tokens', () => {
-      it('should have exactly 5 avatar tokens (after Spec 052 Task 3.1 migration)', () => {
+    describe('Token Count Updated', () => {
+      it('should have 0 avatar tokens in ColorTokens (all migrated to component directory)', () => {
         const avatarTokens = colorTokenNames.filter(n => n.startsWith('color.avatar'));
-        expect(avatarTokens.length).toBe(5);
+        expect(avatarTokens.length).toBe(0);
+      });
+    });
+
+    describe('Backward Compatibility Re-exports', () => {
+      it('should re-export AvatarColorTokens for backward compatibility', () => {
+        // Import the re-exported AvatarColorTokens
+        const { AvatarColorTokens } = require('../ColorTokens');
+        expect(AvatarColorTokens).toBeDefined();
+        expect(AvatarColorTokens['human.background']).toBe('color.identity.human');
+        expect(AvatarColorTokens['agent.background']).toBe('color.identity.agent');
+        expect(AvatarColorTokens['human.icon']).toBe('color.contrast.onDark');
+        expect(AvatarColorTokens['agent.icon']).toBe('color.contrast.onDark');
+        expect(AvatarColorTokens['default.border']).toBe('color.structure.border');
       });
     });
   });
@@ -1521,10 +1403,10 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(badgeTokens.length).toBe(2);
       });
 
-      it('should include badge tokens in total count of 50', () => {
+      it('should include badge tokens in total count of 45', () => {
         // Verify total count includes the 2 badge tokens
-        // Updated for Spec 052 semantic naming restructure: 50 total tokens
-        expect(colorTokenNames.length).toBe(50);
+        // Updated for Spec 058: 45 total tokens (5 Avatar tokens migrated to component directory)
+        expect(colorTokenNames.length).toBe(45);
         expect(validateColorTokenCount()).toBe(true);
       });
     });

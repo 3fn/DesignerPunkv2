@@ -225,10 +225,14 @@
 /**
  * Human avatar background (orange).
  * 
- * @see Requirements: 4.1 - Human type uses color.avatar.human.background token
+ * Spec 058 Migration: Now references semantic token directly.
+ * Component token mapping: human.background → color.identity.human
+ * 
+ * @see Requirements: 4.1 - Human type uses color.identity.human token
+ * @see src/components/core/Avatar/avatar.tokens.ts for component token mapping
  */
 .avatar--human {
-  background-color: var(--color-avatar-human-background);
+  background-color: var(--color-identity-human);
 }
 
 /**
@@ -268,11 +272,15 @@
 /**
  * Default border for xs through xl sizes.
  * 
- * Uses borderDefault width with color.avatar.border at opacity.heavy (48%).
+ * Uses borderDefault width with color.structure.border at opacity.heavy (48%).
  * Since opacity tokens are decimal values (0.48), we use a fallback approach
  * with a hardcoded percentage that matches the opacity.heavy token value.
  * 
+ * Spec 058 Migration: Now references semantic token directly.
+ * Component token mapping: default.border → color.structure.border
+ * 
  * @see Requirements: 7.1, 7.2 - xs-xl border styles
+ * @see src/components/core/Avatar/avatar.tokens.ts for component token mapping
  */
 .avatar {
   border-width: var(--border-default);
@@ -280,7 +288,7 @@
   /* Apply opacity.heavy (48%) to border color using color-mix
    * Note: opacity.heavy = 0.48, so we use 48% directly since color-mix
    * doesn't support calc() with decimal-to-percentage conversion */
-  border-color: color-mix(in srgb, var(--color-avatar-default-border) 48%, transparent);
+  border-color: color-mix(in srgb, var(--color-structure-border) 48%, transparent);
 }
 
 /**
@@ -390,25 +398,33 @@
 /**
  * Icon color for human avatar type.
  * 
- * Uses color.avatar.human.icon semantic token for proper contrast
+ * Uses color.contrast.onDark semantic token for proper contrast
  * against the orange background.
  * 
- * @see Requirements: 6.1 - Human type icon uses color.avatar.human.icon
+ * Spec 058 Migration: Now references semantic token directly.
+ * Component token mapping: human.icon → color.contrast.onDark
+ * 
+ * @see Requirements: 6.1 - Human type icon uses color.contrast.onDark
+ * @see src/components/core/Avatar/avatar.tokens.ts for component token mapping
  */
 .avatar__icon--human {
-  color: var(--color-avatar-human-icon);
+  color: var(--color-contrast-on-dark);
 }
 
 /**
  * Icon color for agent avatar type.
  * 
- * Uses color.avatar.agent.icon semantic token for proper contrast
+ * Uses color.contrast.onDark semantic token for proper contrast
  * against the teal background.
  * 
- * @see Requirements: 6.2 - Agent type icon uses color.avatar.agent.icon
+ * Spec 058 Migration: Now references semantic token directly.
+ * Component token mapping: agent.icon → color.contrast.onDark
+ * 
+ * @see Requirements: 6.2 - Agent type icon uses color.contrast.onDark
+ * @see src/components/core/Avatar/avatar.tokens.ts for component token mapping
  */
 .avatar__icon--agent {
-  color: var(--color-avatar-agent-icon);
+  color: var(--color-contrast-on-dark);
 }
 
 /**

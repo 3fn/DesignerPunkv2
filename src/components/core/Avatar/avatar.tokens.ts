@@ -34,10 +34,22 @@
  * - xs: calc(icon.size050 × 0.75) = 12px
  * - xxl: calc(icon.size050 × 4) = 64px
  * 
+ * COLOR TOKENS (Spec 058):
+ * Avatar color tokens are defined in this file following the Rosetta System architecture
+ * which mandates component tokens live at src/components/[ComponentName]/tokens.ts.
+ * 
+ * Color token references:
+ * - human.background: References color.identity.human (orange300)
+ * - agent.background: References color.identity.agent (teal200)
+ * - human.icon: References color.contrast.onDark (white100)
+ * - agent.icon: References color.contrast.onDark (white100)
+ * - default.border: References color.structure.border (gray100)
+ * 
  * @see .kiro/specs/042-avatar-component/design.md for token consumption strategy
  * @see .kiro/specs/034-component-architecture-system for Stemma System details
  * @see .kiro/specs/037-component-token-generation-pipeline for pipeline integration
  * @see .kiro/specs/042-avatar-component/requirements.md Requirements 2.1-2.6, 3.1, 3.6
+ * @see .kiro/specs/058-component-token-architecture-cleanup for color token migration
  */
 
 import { defineComponentTokens } from '../../../build/tokens';
@@ -108,6 +120,93 @@ export const AvatarTokens = defineComponentTokens({
     },
   },
 });
+
+/**
+ * Avatar Color Token References
+ * 
+ * Component-specific color tokens for Avatar variants following the Rosetta System
+ * architecture which mandates component tokens live at src/components/[ComponentName]/tokens.ts.
+ * 
+ * These tokens reference semantic tokens (identity, contrast, structure) rather than
+ * primitives directly, following the compositional architecture defined in Spec 051.
+ * 
+ * Token Structure:
+ * - human.background: Background color for human entity avatars
+ * - agent.background: Background color for AI agent entity avatars
+ * - human.icon: Icon color on human avatar background
+ * - agent.icon: Icon color on agent avatar background
+ * - default.border: Border color for all avatar variants
+ * 
+ * Semantic Token References:
+ * - human.background → color.identity.human (orange300) - warm, approachable identity
+ * - agent.background → color.identity.agent (teal200) - distinct, technical identity
+ * - human.icon → color.contrast.onDark (white100) - WCAG AA contrast on orange
+ * - agent.icon → color.contrast.onDark (white100) - WCAG AA contrast on teal
+ * - default.border → color.structure.border (gray100) - subtle visual definition
+ * 
+ * @see .kiro/specs/058-component-token-architecture-cleanup for migration details
+ * @see .kiro/specs/051-semantic-token-naming-restructure for naming conventions
+ */
+export const AvatarColorTokens = {
+  /**
+   * Background color for human entity avatars
+   * References: color.identity.human → orange300
+   * Reasoning: Warm, approachable visual identity for human entities
+   */
+  'human.background': 'color.identity.human',
+
+  /**
+   * Background color for AI agent entity avatars
+   * References: color.identity.agent → teal200
+   * Reasoning: Distinct, technical visual identity for AI agent entities
+   */
+  'agent.background': 'color.identity.agent',
+
+  /**
+   * Icon color on human avatar background
+   * References: color.contrast.onDark → white100
+   * Reasoning: Ensures WCAG AA contrast compliance on orange background
+   */
+  'human.icon': 'color.contrast.onDark',
+
+  /**
+   * Icon color on AI agent avatar background
+   * References: color.contrast.onDark → white100
+   * Reasoning: Ensures WCAG AA contrast compliance on teal background
+   */
+  'agent.icon': 'color.contrast.onDark',
+
+  /**
+   * Border color for avatar components
+   * References: color.structure.border → gray100
+   * Reasoning: Subtle visual definition for both human and agent avatars
+   */
+  'default.border': 'color.structure.border',
+} as const;
+
+/**
+ * Type for Avatar color token keys
+ */
+export type AvatarColorTokenKey = keyof typeof AvatarColorTokens;
+
+/**
+ * Get Avatar color token reference for a given key
+ * 
+ * @param key - Color token key ('human.background' | 'agent.background' | 'human.icon' | 'agent.icon' | 'default.border')
+ * @returns Semantic token reference string
+ * 
+ * @example
+ * ```typescript
+ * getAvatarColorToken('human.background')  // Returns 'color.identity.human'
+ * getAvatarColorToken('agent.icon')        // Returns 'color.contrast.onDark'
+ * getAvatarColorToken('default.border')    // Returns 'color.structure.border'
+ * ```
+ * 
+ * @see .kiro/specs/058-component-token-architecture-cleanup Requirements 1.1-1.5, 1.7
+ */
+export function getAvatarColorToken(key: AvatarColorTokenKey): string {
+  return AvatarColorTokens[key];
+}
 
 /**
  * Type for Avatar size variants
