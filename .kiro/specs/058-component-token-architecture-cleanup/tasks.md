@@ -198,7 +198,7 @@ This spec migrates component tokens from incorrect locations to their canonical 
 
 ---
 
-- [ ] 4. Validation & Cleanup
+- [x] 4. Validation & Cleanup
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -224,7 +224,7 @@ This spec migrates component tokens from incorrect locations to their canonical 
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 Complete: Validation & Cleanup"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 4.1 Update ColorTokens test expectations
+  - [x] 4.1 Update ColorTokens test expectations
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Open `src/tokens/semantic/__tests__/ColorTokens.test.ts`
@@ -233,7 +233,7 @@ This spec migrates component tokens from incorrect locations to their canonical 
     - Run ColorTokens tests to verify updates
     - _Requirements: 5.1, 5.2_
 
-  - [ ] 4.2 Update any Chip token tests
+  - [x] 4.2 Update any Chip token tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Search for tests referencing `src/tokens/components/chip.ts`
@@ -241,7 +241,7 @@ This spec migrates component tokens from incorrect locations to their canonical 
     - Run Chip-related tests to verify updates
     - _Requirements: 5.3_
 
-  - [ ] 4.3 Run full test suite
+  - [x] 4.3 Run full test suite
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run `npm test` to verify all tests pass
@@ -252,7 +252,7 @@ This spec migrates component tokens from incorrect locations to their canonical 
     - Document any unexpected issues
     - _Requirements: 5.4, 5.5, 5.6, 5.7_
 
-  - [ ] 4.4 Rebuild tokens and verify platform outputs
+  - [x] 4.4 Rebuild tokens and verify platform outputs
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run token build pipeline to regenerate all platform outputs
@@ -262,7 +262,7 @@ This spec migrates component tokens from incorrect locations to their canonical 
     - Verify semantic token outputs no longer include removed component tokens
     - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5_
 
-  - [ ] 4.5 Update documentation
+  - [x] 4.5 Update documentation
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Update design-outline.md to mark spec complete
