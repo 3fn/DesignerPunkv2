@@ -1,5 +1,5 @@
 /**
- * Chip Component Token Definitions
+ * Chip-Base Component Token Definitions
  * 
  * Stemma System naming: Chip (Family)
  * Components: Chip-Base (Primitive), Chip-Filter (Semantic), Chip-Input (Semantic)
@@ -20,14 +20,20 @@
  * - Visual height: 32px = (6px padding × 2) + 20px content (buttonSm typography)
  * - Tap area: 48px (tapAreaRecommended) via expanded hit area
  * 
+ * MIGRATION NOTE (Spec 058):
+ * This file was migrated from src/tokens/components/chip.ts to follow the Rosetta
+ * System architecture which mandates component tokens live at
+ * src/components/[ComponentName]/tokens.ts.
+ * 
  * @see .kiro/specs/045-chip-base/design.md for token consumption strategy
  * @see .kiro/specs/034-component-architecture-system for Stemma System details
  * @see .kiro/specs/037-component-token-generation-pipeline for pipeline integration
+ * @see .kiro/specs/058-component-token-architecture-cleanup for migration details
  * @see Requirements 8.1, 8.2, 8.3, 12.1-12.5 in .kiro/specs/045-chip-base/requirements.md
  */
 
-import { defineComponentTokens } from '../../build/tokens';
-import { spacingTokens } from '../SpacingTokens';
+import { defineComponentTokens } from '../../../build/tokens';
+import { spacingTokens } from '../../../tokens/SpacingTokens';
 
 /**
  * Chip component tokens defined using the hybrid authoring API.

@@ -1339,18 +1339,18 @@ describe('Semantic Color Tokens - Palette Update', () => {
 
     describe('Component Token Location', () => {
       it('should have BadgeNotificationColorTokens in component directory', () => {
-        // Import from canonical location
-        const { BadgeNotificationColorTokens } = require('../../../../components/core/Badge-Count-Notification/tokens');
+        // Import from canonical location (3 levels up from __tests__ to src/)
+        const { BadgeNotificationColorTokens } = require('../../../components/core/Badge-Count-Notification/tokens');
         expect(BadgeNotificationColorTokens).toBeDefined();
       });
 
       it('should reference pink400 for notification.background', () => {
-        const { BadgeNotificationColorTokens } = require('../../../../components/core/Badge-Count-Notification/tokens');
+        const { BadgeNotificationColorTokens } = require('../../../components/core/Badge-Count-Notification/tokens');
         expect(BadgeNotificationColorTokens['notification.background']).toBe('pink400');
       });
 
       it('should reference white100 for notification.text', () => {
-        const { BadgeNotificationColorTokens } = require('../../../../components/core/Badge-Count-Notification/tokens');
+        const { BadgeNotificationColorTokens } = require('../../../components/core/Badge-Count-Notification/tokens');
         expect(BadgeNotificationColorTokens['notification.text']).toBe('white100');
       });
     });
@@ -1371,7 +1371,7 @@ describe('Semantic Color Tokens - Palette Update', () => {
 
     describe('Requirements Coverage (Spec 058)', () => {
       it('should satisfy Requirement 2.1: Badge tokens defined in component directory', () => {
-        const { BadgeNotificationColorTokens } = require('../../../../components/core/Badge-Count-Notification/tokens');
+        const { BadgeNotificationColorTokens } = require('../../../components/core/Badge-Count-Notification/tokens');
         expect(BadgeNotificationColorTokens['notification.background']).toBeDefined();
         expect(BadgeNotificationColorTokens['notification.text']).toBeDefined();
       });
