@@ -123,7 +123,7 @@ export function createIconBase(props: IconBaseProps): string {
     throw new Error(
       `Invalid icon size: ${size}. ` +
       `Valid sizes are: ${Object.keys(sizePixelMap).join(', ')}. ` +
-      `Ensure you're using a valid IconBaseSize value (13, 18, 24, 28, 32, 36, 40, 44, 48).`
+      `Ensure you're using a valid IconBaseSize value (13, 20, 24, 28, 32, 36, 40, 44, 48).`
     );
   }
   

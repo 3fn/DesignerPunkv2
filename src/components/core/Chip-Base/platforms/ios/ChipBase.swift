@@ -45,10 +45,10 @@ enum ChipTokens {
     // MARK: - Spacing Tokens
     
     /// Block padding achieving 32px visual height with buttonSm typography
-    /// References: chip.paddingBlock → space075 (6px)
+    /// References: inset.075 semantic token (6px)
     /// Calculation: 6px padding × 2 + 20px content = 32px
     /// @see Requirements: 2.1 - Block padding
-    static let paddingBlock: CGFloat = DesignTokens.space075  // 6px
+    static let paddingBlock: CGFloat = DesignTokens.spaceInset075  // 6px (inset.075)
     
     /// Inline padding for horizontal spacing
     /// References: space.inset.150 (12px)
@@ -402,7 +402,7 @@ struct ChipBase_Previews: PreviewProvider {
                     .font(.subheadline)
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("paddingBlock: \(Int(ChipTokens.paddingBlock))pt (space075)")
+                    Text("paddingBlock: \(Int(ChipTokens.paddingBlock))pt (inset.075)")
                         .font(.caption)
                     Text("paddingInline: \(Int(ChipTokens.paddingInline))pt (space150)")
                         .font(.caption)

@@ -45,7 +45,7 @@
   
   /* Spacing - Uses logical properties for RTL support */
   /* @see Requirements: 6.4 - Logical properties for RTL */
-  padding-block: var(--chip-padding-block); /* 6px component token */
+  padding-block: var(--space-inset-075); /* 6px semantic token (inset.075) */
   padding-inline: var(--space-inset-150); /* 12px */
   
   /* Typography - buttonSm for chip labels */

@@ -1,7 +1,7 @@
 # Input-Checkbox-Base Component - Design Outline
 
 **Date**: January 19, 2026
-**Updated**: February 4, 2026
+**Updated**: February 5, 2026
 **Purpose**: Capture design decisions and token requirements before creating full spec
 **Status**: Design Outline (Pre-Requirements)
 
@@ -29,11 +29,11 @@ Input-Checkbox-Base (Primitive)
 ├── Check states, label, error
 └── Semantic variants inherit from this
 
-Semantic Variants:
-├── Input-Checkbox-Legal (legal authorization checkboxes)
-│   └── Visual/behavioral differences for legal consent patterns
-│   └── May have stricter validation, audit requirements
-│
+Input-Checkbox-Legal (Semantic Variant) [INCLUDED IN THIS SPEC]
+├── Extends Base with legal consent behaviors
+├── Audit timestamps, explicit consent requirements
+└── Enhanced error handling for legal compliance
+
 Future Semantic Variants:
 ├── Input-Checkbox-Group (managed group with select-all)
 ├── Input-Checkbox-Card (checkbox as card selection)
@@ -42,15 +42,11 @@ Future Semantic Variants:
 
 **Design Pattern**: Base primitive with semantic variants for specialized behaviors.
 
-**Why separate Input-Checkbox-Legal?**
-Legal authorization checkboxes have semantic differences from general-use checkboxes:
-- May require stricter validation patterns (can't be pre-checked in some jurisdictions)
-- May need audit trail requirements (timestamp when checked)
-- Different error handling (can't proceed without explicit consent)
-- Accessibility requirements (full legal text must be readable, not truncated)
-- Visual treatment may diverge to emphasize legal weight
-
-This follows the Avatar (Human vs Agent) and Chip (Base vs Filter vs Input) pattern where semantic differences justify separate components.
+**Why include Input-Checkbox-Legal in this spec?**
+- Ensures Base architecture accounts for Legal's needs upfront
+- Avoids refactoring Base later when Legal is built
+- Single coherent spec for the checkbox family
+- Legal extends Base without modifying Base's core implementation
 
 ---
 
@@ -72,18 +68,26 @@ This follows the Avatar (Human vs Agent) and Chip (Base vs Filter vs Input) patt
 
 ### Size Variants
 
-| Size | Box Size | Border Radius | Check Icon | Label Typography | Gap |
-|------|----------|---------------|------------|------------------|-----|
-| **sm** | `icon.size050` | `radiusSubtle` | `icon.size050` | `labelSm` | `space.grouped.normal` |
-| **md** | `icon.size075` | `radiusSmall` | `icon.size075` | `labelMd` | `space.grouped.loose` |
-| **lg** | `icon.size100` | `radiusSmall` | `icon.size100` | `labelLg` | `space.related.normal` |
+| Size | Icon Size | Box Inset | Box Size | Border Radius | Label Typography | Gap |
+|------|-----------|-----------|----------|---------------|------------------|-----|
+| **sm** | `icon.size050` (16px) | `inset.050` (4px) | 24px | `radiusSubtle` | `labelSm` | `space.grouped.normal` |
+| **md** | `icon.size075` (20px) | `inset.075` (6px) | 32px | `radiusSmall` | `labelMd` | `space.grouped.normal` |
+| **lg** | `icon.size100` (24px) | `inset.100` (8px) | 40px | `radiusSmall` | `labelLg` | `space.grouped.loose` |
+
+**Box Size Calculation**: `iconSize + (insetPadding × 2)` — padding applied to all sides centers the icon within the box.
+
+**Size Naming Convention**: Uses abbreviations (`sm`, `md`, `lg`) to align with Badge-Label-Base and Avatar components. Note: Button-CTA uses full words (`small`, `medium`, `large`) — this is a known inconsistency in the codebase.
+
+**New Token Required**: `inset.075` (6px) — justified by Chip-Base precedent which uses `space075` for the same purpose (internal padding). This completes the inset progression: none, 050, **075**, 100, 150, 200, 300, 400.
 
 ### Check Mark
 
-- **Icon**: Simple checkmark (✓) for checked state
-- **Icon**: Horizontal dash (−) for indeterminate state
-- **Stroke Width**: `icon.strokeWidth`
-- **Animation**: Scale + opacity transition on state change (use `motion.duration.fast`)
+- **Component**: Uses `<icon-base>` component for consistent icon rendering
+- **Checked icon**: `check` from Feather Icons (✓)
+- **Indeterminate icon**: `minus` from Feather Icons (−)
+- **Icon size**: Matches box size per size variant (see Size Variants table)
+- **Icon color**: Inherits from `color.contrast.onDark` via Icon-Base color inheritance
+- **Animation**: Scale + opacity transition on state change using `motion.selectionTransition` (250ms, easingStandard)
 
 ### Border
 
@@ -94,15 +98,23 @@ This follows the Avatar (Human vs Agent) and Chip (Base vs Filter vs Input) patt
 
 ## Token Requirements
 
-### Token Strategy: Use Existing Semantic Tokens
+### Token Strategy: Use Existing Semantic Tokens + One New Token
 
-Input-Checkbox-Base uses existing semantic tokens directly. **No component tokens are needed** because the existing `color.feedback.select.*` tokens perfectly serve the checkbox use case.
+Input-Checkbox-Base uses existing semantic tokens directly. **One new semantic token is required**: `inset.075` (6px) for the medium size checkbox box padding.
 
-**Rationale**: Component tokens should only be created when:
-1. A value doesn't exist as a semantic token
-2. The component needs to override a semantic token for specific reasons
+**Rationale for `inset.075`**: 
+- Chip-Base already uses `space075` primitive for the same purpose (internal padding)
+- Two components needing the same value for the same purpose justifies elevation to semantic token
+- Completes the inset progression: none, 050, **075**, 100, 150, 200, 300, 400
+- Maintains mathematical consistency: 0.75 × 8px base = 6px
 
-The checkbox component's visual requirements are fully met by existing semantic tokens.
+### New Token Required
+
+**`inset.075`** (6px)
+- **Primitive reference**: `space075`
+- **Mathematical relationship**: 0.75 × base (space100)
+- **Use case**: Compact internal spacing for medium-density components
+- **Precedent**: Chip-Base uses same value for paddingBlock
 
 ### Semantic Tokens Used
 
@@ -130,9 +142,11 @@ The checkbox component's visual requirements are fully met by existing semantic 
 - `labelSm`, `labelMd`, `labelLg` — label text styles
 
 **Spacing**:
-- `space.grouped.normal` — sm gap (8px)
-- `space.grouped.loose` — md gap (12px)
-- `space.related.normal` — lg gap (16px)
+- `space.grouped.normal` — sm/md gap (8px)
+- `space.grouped.loose` — lg gap (12px)
+- `inset.050` — sm checkbox box padding (4px)
+- `inset.075` — md checkbox box padding (6px) **[NEW TOKEN]**
+- `inset.100` — lg checkbox box padding (8px)
 
 **Border**:
 - `borderEmphasis` — checkbox border width (2px)
@@ -142,7 +156,15 @@ The checkbox component's visual requirements are fully met by existing semantic 
 - `radiusSmall` — md/lg checkbox radius (4px)
 
 **Motion**:
-- `motion.duration.fast` — state transitions
+- `motion.selectionTransition` — check/uncheck state transitions (250ms, easingStandard)
+- `motion.buttonPress` — iOS press feedback (150ms, easingAccelerate)
+
+**Scale**:
+- `scale096` — iOS press scale transform (96%)
+
+**Blend**:
+- `blend.hoverDarker` — web hover feedback (8% darker)
+- `blend.pressedDarker` — Android ripple effect (12% darker)
 
 ### Future: Input-Checkbox-Legal Tokens
 
@@ -171,10 +193,13 @@ interface CheckboxProps {
   /** Size variant */
   size?: 'sm' | 'md' | 'lg';
   
-  /** Error state */
-  error?: boolean;
+  /** Vertical alignment of label relative to checkbox box */
+  labelAlign?: 'center' | 'top';
   
-  /** Error message (displayed below) */
+  /** Helper text displayed below checkbox (persistent) */
+  helperText?: string;
+  
+  /** Error message displayed below helper text (conditional) */
   errorMessage?: string;
   
   /** Called when checkbox state changes */
@@ -195,7 +220,7 @@ const defaults = {
   checked: false,
   indeterminate: false,
   size: 'md',
-  error: false
+  labelAlign: 'center'
 };
 ```
 
@@ -209,12 +234,27 @@ const defaults = {
   onChange={setAgreed}
 />
 
-// Checkbox with error
+// Checkbox with helper text
+<Checkbox 
+  label="Subscribe to newsletter" 
+  helperText="We'll send you updates about new features"
+  checked={subscribed}
+  onChange={setSubscribed}
+/>
+
+// Checkbox with error (aligned with Input-Text-Base pattern)
 <Checkbox 
   label="Required field" 
   checked={false}
-  error
   errorMessage="This field is required"
+/>
+
+// Multi-line label with top alignment
+<Checkbox 
+  label="I understand that this action cannot be undone and all data will be permanently deleted"
+  labelAlign="top"
+  checked={confirmed}
+  onChange={setConfirmed}
 />
 
 // Indeterminate (parent of partially selected group)
@@ -235,17 +275,33 @@ const defaults = {
 
 ### Web Implementation
 
+**Logical Properties**: Web implementation uses CSS logical properties for RTL language support:
+- `margin-inline-start` / `margin-inline-end` instead of `margin-left` / `margin-right`
+- `padding-inline` / `padding-block` instead of directional padding
+- `gap` property for flexbox spacing (inherently logical)
+
 ```html
 <label class="checkbox">
   <input type="checkbox" class="checkbox__input" />
   <span class="checkbox__box">
-    <svg class="checkbox__check"><!-- checkmark --></svg>
+    <icon-base name="check" size="size075" color="inherit" class="checkbox__icon"></icon-base>
   </span>
   <span class="checkbox__label">Label text</span>
 </label>
 ```
 
 ```css
+.checkbox {
+  display: inline-flex;
+  align-items: center; /* Default: center-aligned */
+  gap: var(--space-grouped-normal);
+  cursor: pointer;
+}
+
+.checkbox--align-top {
+  align-items: flex-start; /* Top-aligned for multi-line labels */
+}
+
 .checkbox__input {
   position: absolute;
   opacity: 0;
@@ -254,11 +310,15 @@ const defaults = {
 }
 
 .checkbox__box {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: var(--icon-size-075);
   height: var(--icon-size-075);
   border: var(--border-emphasis) solid var(--color-feedback-select-border-default);
   border-radius: var(--radius-small);
-  transition: all var(--motion-duration-fast);
+  transition: all var(--motion-selection-transition-duration) var(--motion-selection-transition-easing);
 }
 
 .checkbox__input:checked + .checkbox__box {
@@ -270,6 +330,10 @@ const defaults = {
   outline: var(--accessibility-focus-width) solid var(--accessibility-focus-color);
   outline-offset: var(--accessibility-focus-offset);
 }
+
+.checkbox:hover .checkbox__box {
+  border-color: var(--color-feedback-select-border-rest);
+}
 ```
 
 ### iOS Implementation
@@ -277,33 +341,46 @@ const defaults = {
 ```swift
 struct Checkbox: View {
     @Binding var checked: Bool
+    var indeterminate: Bool = false
     let label: String
     let size: CheckboxSize
+    
+    @State private var isPressed = false
     
     var body: some View {
         Button(action: { checked.toggle() }) {
             HStack(spacing: size.gap) {
                 ZStack {
                     RoundedRectangle(cornerRadius: size.radius)
-                        .stroke(checked ? Color.clear : DesignTokens.colorFeedbackSelectBorderDefault, lineWidth: DesignTokens.borderEmphasis)
+                        .stroke(checked || indeterminate ? Color.clear : DesignTokens.colorFeedbackSelectBorderDefault, lineWidth: DesignTokens.borderEmphasis)
                         .frame(width: size.boxSize, height: size.boxSize)
                     
-                    if checked {
+                    if checked || indeterminate {
                         RoundedRectangle(cornerRadius: size.radius)
                             .fill(DesignTokens.colorFeedbackSelectBackgroundRest)
                             .frame(width: size.boxSize, height: size.boxSize)
                         
-                        Image(systemName: "checkmark")
-                            .font(.system(size: size.iconSize, weight: .bold))
-                            .foregroundColor(DesignTokens.colorContrastOnDark)
+                        // Uses IconBase for consistent icon rendering
+                        IconBase(
+                            name: indeterminate ? .minus : .check,
+                            size: size.iconSize,
+                            color: DesignTokens.colorContrastOnDark
+                        )
                     }
                 }
+                .scaleEffect(isPressed ? DesignTokens.scale096 : 1.0)
+                .animation(.easeOut(duration: DesignTokens.motionButtonPressDuration), value: isPressed)
                 
                 Text(label)
                     .font(size.labelFont)
             }
         }
         .buttonStyle(PlainButtonStyle())
+        .simultaneousGesture(
+            DragGesture(minimumDistance: 0)
+                .onChanged { _ in isPressed = true }
+                .onEnded { _ in isPressed = false }
+        )
     }
 }
 
@@ -318,11 +395,18 @@ enum CheckboxSize {
         }
     }
     
+    var iconSize: IconBaseSize {
+        switch self {
+        case .sm: return .size050
+        case .md: return .size075
+        case .lg: return .size100
+        }
+    }
+    
     var gap: CGFloat {
         switch self {
-        case .sm: return DesignTokens.spaceGroupedNormal
-        case .md: return DesignTokens.spaceGroupedLoose
-        case .lg: return DesignTokens.spaceRelatedNormal
+        case .sm, .md: return DesignTokens.spaceGroupedNormal
+        case .lg: return DesignTokens.spaceGroupedLoose
         }
     }
 }
@@ -336,31 +420,43 @@ fun Checkbox(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     label: String,
+    indeterminate: Boolean = false,
     size: CheckboxSize = CheckboxSize.Medium
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(size.gap)
+        horizontalArrangement = Arrangement.spacedBy(size.gap),
+        modifier = Modifier
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(
+                    bounded = false,
+                    color = DesignTokens.colorPrimary.copy(alpha = DesignTokens.blendPressedDarker)
+                )
+            ) { onCheckedChange(!checked) }
     ) {
         Box(
             modifier = Modifier
                 .size(size.boxSize)
                 .clip(RoundedCornerShape(size.radius))
-                .background(if (checked) DesignTokens.colorFeedbackSelectBackgroundRest else Color.Transparent)
+                .background(
+                    if (checked || indeterminate) DesignTokens.colorFeedbackSelectBackgroundRest 
+                    else Color.Transparent
+                )
                 .border(
                     width = DesignTokens.borderEmphasis,
-                    color = if (checked) DesignTokens.colorFeedbackSelectBorderRest else DesignTokens.colorFeedbackSelectBorderDefault,
+                    color = if (checked || indeterminate) DesignTokens.colorFeedbackSelectBorderRest 
+                           else DesignTokens.colorFeedbackSelectBorderDefault,
                     shape = RoundedCornerShape(size.radius)
-                )
-                .clickable { onCheckedChange(!checked) },
+                ),
             contentAlignment = Alignment.Center
         ) {
-            if (checked) {
-                Icon(
-                    Icons.Default.Check,
-                    contentDescription = null,
-                    tint = DesignTokens.colorContrastOnDark,
-                    modifier = Modifier.size(size.iconSize)
+            if (checked || indeterminate) {
+                // Uses IconBase for consistent icon rendering
+                IconBase(
+                    name = if (indeterminate) IconBaseName.Minus else IconBaseName.Check,
+                    size = size.iconSize,
+                    color = DesignTokens.colorContrastOnDark
                 )
             }
         }
@@ -378,10 +474,15 @@ enum class CheckboxSize {
         Large -> DesignTokens.iconSize100.dp
     }
     
+    val iconSize: IconBaseSize get() = when (this) {
+        Small -> IconBaseSize.Size050
+        Medium -> IconBaseSize.Size075
+        Large -> IconBaseSize.Size100
+    }
+    
     val gap: Dp get() = when (this) {
-        Small -> DesignTokens.spaceGroupedNormal.dp
-        Medium -> DesignTokens.spaceGroupedLoose.dp
-        Large -> DesignTokens.spaceRelatedNormal.dp
+        Small, Medium -> DesignTokens.spaceGroupedNormal.dp
+        Large -> DesignTokens.spaceGroupedLoose.dp
     }
 }
 ```
@@ -390,6 +491,28 @@ enum class CheckboxSize {
 - **Web**: Uses hidden native input for form compatibility
 - **iOS**: Custom implementation (native Toggle has different UX)
 - **Android**: Custom implementation (Material Checkbox has specific styling)
+
+---
+
+## Platform-Specific Interaction Patterns
+
+### Web
+- **Hover**: Apply `blend.hoverDarker` (8% darker) to checkbox box border
+- **Focus**: Use `accessibility.focus.*` tokens for focus ring (keyboard navigation only via `:focus-visible`)
+- **State transition**: Use `motion.selectionTransition` (250ms, easingStandard) for check/uncheck animation
+- **Cursor**: `cursor: pointer` on hover
+
+### iOS
+- **Press feedback**: Scale transform using `scale096` (96%) with `motion.buttonPress` (150ms, easingAccelerate)
+- **State transition**: Use `motion.selectionTransition` (250ms, easingStandard) for check/uncheck animation
+- **Touch target**: Entire label area tappable, minimum `tapAreaMinimum` (44pt)
+- **VoiceOver**: State announced as "checked" / "unchecked" / "partially checked"
+
+### Android
+- **Ripple effect**: Material ripple using `blend.pressedDarker` (12% opacity overlay on primary color)
+- **State transition**: Use `motion.selectionTransition` (250ms, easingStandard) for check/uncheck animation
+- **Touch target**: Entire label area tappable, minimum `tapAreaMinimum` (44dp)
+- **TalkBack**: State announced appropriately for screen reader users
 
 ---
 
@@ -421,19 +544,132 @@ enum class CheckboxSize {
 | 3 | Slightly rounded corners | Distinguishes from radio (fully round) |
 | 4 | Indeterminate state support | Common pattern for parent checkboxes |
 | 5 | Label always required | Accessibility best practice |
-| 6 | Three sizes | Covers dense to touch-friendly |
+| 6 | Three sizes (sm, md, lg) | Covers dense to touch-friendly; uses abbreviations to align with Badge/Avatar |
 | 7 | No disabled state | DesignerPunk accessibility philosophy |
-| 8 | Use semantic tokens directly | No component tokens needed — existing `color.feedback.select.*` tokens serve the use case |
-| 9 | Separate Legal variant | Legal checkboxes have semantic differences (validation, audit, accessibility) |
+| 8 | Use semantic tokens directly | Minimal new tokens — only `inset.075` needed |
+| 9 | Include Legal variant in spec | Ensures Base architecture accounts for Legal's needs upfront |
+| 10 | Use Icon-Base for checkmark | Consistent icon rendering, color inheritance, accessibility handling |
+| 11 | CSS logical properties (web) | RTL language support via `inline-start`/`inline-end` |
+| 12 | Create `inset.075` token | Justified by Chip-Base precedent; completes inset progression |
+| 13 | Box size = icon + (inset × 2) | Mathematical consistency: 24px, 32px, 40px on 8px grid |
+
+---
+
+## Input-Checkbox-Legal
+
+Input-Checkbox-Legal extends Input-Checkbox-Base with specialized behaviors for legal consent scenarios (terms of service, privacy policies, GDPR consent, etc.).
+
+### Why a Separate Component?
+
+Legal checkboxes have semantic and behavioral differences that justify separation:
+
+1. **Validation constraints**: Cannot be pre-checked in many jurisdictions (GDPR, CCPA)
+2. **Audit requirements**: May need timestamp when consent was given
+3. **Error handling**: Stricter — cannot proceed without explicit consent
+4. **Accessibility**: Full legal text must be accessible, not truncated
+5. **Visual emphasis**: May need stronger visual treatment to convey legal weight
+
+### Props Interface (extends CheckboxProps)
+
+```typescript
+interface CheckboxLegalProps extends Omit<CheckboxProps, 'size'> {
+  /** Prevents checkbox from being pre-checked (GDPR compliance) */
+  requiresExplicitConsent?: boolean;
+  
+  /** Callback with timestamp when consent is given */
+  onConsentChange?: (consented: boolean, timestamp: Date) => void;
+  
+  /** ID linking to full legal text (for audit trail) */
+  legalTextId?: string;
+  
+  /** Version of legal text being consented to */
+  legalTextVersion?: string;
+  
+  /** Whether to show "Required" indicator */
+  showRequiredIndicator?: boolean;
+  
+  /** Helper text displayed below checkbox (persistent, like Input-Text-Base) */
+  helperText?: string;
+}
+```
+
+### Default Values
+
+```typescript
+const legalDefaults = {
+  checked: false,
+  indeterminate: false, // Legal checkboxes don't support indeterminate
+  requiresExplicitConsent: true,
+  showRequiredIndicator: true
+};
+```
+
+### Visual Differences
+
+| Aspect | Base | Legal |
+|--------|------|-------|
+| Size options | sm, md, lg | Fixed: lg box + labelSm typography |
+| Label alignment | center (default), top | Fixed: top |
+| Pre-check allowed | Yes | No (when `requiresExplicitConsent`) |
+| Required indicator | Optional | Default visible |
+| Label truncation | Allowed | Not allowed (full text required) |
+| Helper text | Supported | Supported (follows Input-Text-Base pattern) |
+
+**Legal Size Rationale**: Large box (40px) provides visual weight appropriate for legal consent, while small label typography (`labelSm`) allows longer legal text to fit without overwhelming the UI. This creates a deliberate visual hierarchy that emphasizes the checkbox action.
+
+**Alignment Rationale**: 
+- **Base (center default)**: Short, single-line labels look best vertically centered with the checkbox box. Use `labelAlign="top"` for multi-line labels.
+- **Legal (top fixed)**: Long legal text wraps to multiple lines; top-alignment anchors the checkbox to the first line, making it clear what action the user is taking
+
+### Error Pattern (aligned with Input-Text-Base)
+
+Following Input-Text-Base patterns:
+- Error message displayed below the checkbox+label row
+- Uses `aria-describedby` to associate error with checkbox
+- Uses `aria-invalid="true"` when error is present
+- Error text uses `color.feedback.error.text` token
+- Helper text (if present) appears above error message
+
+### Usage Examples
+
+```tsx
+// Terms of Service consent
+<CheckboxLegal
+  label="I have read and agree to the Terms of Service"
+  legalTextId="tos-v2.1"
+  legalTextVersion="2.1"
+  onConsentChange={(consented, timestamp) => {
+    logConsent({ type: 'tos', consented, timestamp, version: '2.1' });
+  }}
+  error={!tosAccepted && submitted}
+  errorMessage="You must accept the Terms of Service to continue"
+/>
+
+// GDPR consent
+<CheckboxLegal
+  label="I consent to the processing of my personal data as described in the Privacy Policy"
+  legalTextId="gdpr-consent-v1.0"
+  requiresExplicitConsent={true}
+  onConsentChange={handleGDPRConsent}
+/>
+```
+
+### Architecture Impact on Base
+
+Input-Checkbox-Legal extends Base without requiring changes to Base's core implementation:
+
+- **Inheritance**: Legal imports and extends Base's visual/interaction patterns
+- **Props extension**: Legal adds props, doesn't modify Base props
+- **Token reuse**: Legal uses same tokens as Base (may add component tokens if visual divergence needed)
+- **Platform implementations**: Legal wraps Base with additional validation/audit logic
 
 ---
 
 ## Future Enhancements (Separate Specs)
 
-1. **Input-Checkbox-Legal**: Legal authorization checkboxes with specialized visual/behavioral patterns
-2. **Input-Checkbox-Group**: Managed group with select-all functionality
-3. **Input-Checkbox-Card**: Checkbox as selectable card
-4. **Input-Checkbox-Tree**: Hierarchical checkbox structure
+1. **Input-Checkbox-Group**: Managed group with select-all functionality
+2. **Input-Checkbox-Card**: Checkbox as selectable card
+3. **Input-Checkbox-Tree**: Hierarchical checkbox structure
 
 ---
 

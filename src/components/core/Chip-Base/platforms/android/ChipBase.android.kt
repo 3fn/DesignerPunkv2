@@ -70,11 +70,11 @@ private object ChipTokens {
     // MARK: - Spacing Tokens
     
     /** Block padding achieving 32px visual height with buttonSm typography
-     * References: chip.paddingBlock → space075 (6px)
+     * References: inset.075 semantic token (6px)
      * Calculation: 6px padding × 2 + 20px content = 32px
      * @see Requirements: 2.1 - Block padding
      */
-    val paddingBlock: Dp = DesignTokens.space_075  // 6dp
+    val paddingBlock: Dp = DesignTokens.space_inset_075  // 6dp (inset.075)
     
     /** Inline padding for horizontal spacing
      * References: space.inset.150 (12px)
@@ -354,7 +354,7 @@ fun ChipBasePreview() {
             verticalArrangement = Arrangement.spacedBy(DesignTokens.space_050)
         ) {
             Text(
-                text = "paddingBlock: ${ChipTokens.paddingBlock.value.toInt()}dp (space075)",
+                text = "paddingBlock: ${ChipTokens.paddingBlock.value.toInt()}dp (inset.075)",
                 style = androidx.compose.material3.MaterialTheme.typography.labelSmall
             )
             Text(

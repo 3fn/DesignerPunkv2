@@ -164,6 +164,7 @@ export const layoutSpacing = {
  * Numeric naming exposes mathematical relationships:
  * - none: 0px (no spacing)
  * - 050: 4px (0.5 × base)
+ * - 075: 6px (0.75 × base)
  * - 100: 8px (1 × base)  
  * - 150: 12px (1.5 × base)
  * - 200: 16px (2 × base)
@@ -188,6 +189,14 @@ export const insetSpacing = {
    * Example: Compact chips, dense toolbars, tight buttons
    */
   '050': { value: 'space050' } as SpacingSemanticToken,
+
+  /**
+   * 075 - Compact internal spacing (6px)
+   * Mathematical relationship: 0.75 × base (space100)
+   * Example: Medium checkbox box padding, medium-density component insets
+   * Precedent: Chip-Base uses space075 for paddingBlock
+   */
+  '075': { value: 'space075' } as SpacingSemanticToken,
 
   /**
    * 100 - Compact internal spacing (8px)
@@ -247,7 +256,7 @@ export const spacingTokens = {
  *    → Use .none variant to explicitly remove spacing (better than 0 for search/intent)
  * 
  * 2. Inside containers (padding)?
- *    → Use inset tokens: none / 050 / 100 / 150 / 200 / 300 / 400
+ *    → Use inset tokens: none / 050 / 075 / 100 / 150 / 200 / 300 / 400
  *    → Choose based on desired interface density
  *    → Numeric names expose mathematical relationships (150 = 1.5 × base)
  *    → Use .none to explicitly remove padding (better than 0 for search/intent)

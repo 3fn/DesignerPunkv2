@@ -91,6 +91,7 @@ Inset spacing tokens define internal spacing (padding) within containers and com
 | Token Name | Primitive Reference | Value | Mathematical Relationship | Use Case |
 |------------|---------------------|-------|---------------------------|----------|
 | `space.inset.050` | space050 | 4px | 0.5 × base (space100) | Minimal internal spacing - compact chips, dense toolbars, tight buttons |
+| `space.inset.075` | space075 | 6px | 0.75 × base (space100) | Compact internal spacing - medium-density components, checkbox medium size |
 | `space.inset.100` | space100 | 8px | 1 × base (space100) | Compact internal spacing - small buttons, compact cards, dense forms |
 | `space.inset.150` | space150 | 12px | 1.5 × base (space100) | Standard internal spacing - standard buttons, cards, form inputs |
 | `space.inset.200` | space200 | 16px | 2 × base (space100) | Comfortable internal spacing - large buttons, comfortable cards, readable content |
@@ -99,6 +100,7 @@ Inset spacing tokens define internal spacing (padding) within containers and com
 
 **Component Prop Values**: When using inset tokens in component props, add the "inset" prefix for clarity:
 - `padding="inset050"` → resolves to `space.inset.050` → 4px
+- `padding="inset075"` → resolves to `space.inset.075` → 6px
 - `padding="inset150"` → resolves to `space.inset.150` → 12px
 - `padding="inset300"` → resolves to `space.inset.300` → 24px
 
@@ -226,6 +228,7 @@ Spacing tokens use unitless base values that convert to platform-specific units:
 :root {
   /* Primitive Spacing Tokens */
   --space-050: 4px;
+  --space-075: 6px;
   --space-100: 8px;
   --space-150: 12px;
   --space-200: 16px;
@@ -234,6 +237,7 @@ Spacing tokens use unitless base values that convert to platform-specific units:
   
   /* Semantic Inset Spacing */
   --space-inset-050: var(--space-050);
+  --space-inset-075: var(--space-075);
   --space-inset-100: var(--space-100);
   --space-inset-150: var(--space-150);
   --space-inset-200: var(--space-200);
@@ -253,6 +257,7 @@ Spacing tokens use unitless base values that convert to platform-specific units:
 struct DesignTokens {
     // Primitive Spacing Tokens
     static let space050: CGFloat = 4
+    static let space075: CGFloat = 6
     static let space100: CGFloat = 8
     static let space150: CGFloat = 12
     static let space200: CGFloat = 16
@@ -261,6 +266,7 @@ struct DesignTokens {
     
     // Semantic Inset Spacing
     static let spaceInset050 = space050
+    static let spaceInset075 = space075
     static let spaceInset100 = space100
     static let spaceInset150 = space150
     static let spaceInset200 = space200
@@ -280,6 +286,7 @@ struct DesignTokens {
 object DesignTokens {
     // Primitive Spacing Tokens
     val space_050 = 4.dp
+    val space_075 = 6.dp
     val space_100 = 8.dp
     val space_150 = 12.dp
     val space_200 = 16.dp
@@ -288,6 +295,7 @@ object DesignTokens {
     
     // Semantic Inset Spacing
     val space_inset_050 = space_050
+    val space_inset_075 = space_075
     val space_inset_100 = space_100
     val space_inset_150 = space_150
     val space_inset_200 = space_200
