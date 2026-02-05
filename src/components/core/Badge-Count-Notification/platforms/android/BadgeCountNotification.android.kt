@@ -16,9 +16,17 @@
  * - Pluralized announcement text ("1 notification", "5 notifications")
  * - Optional announceChanges prop (default: true)
  * 
+ * COLOR TOKENS (Spec 058):
+ * Badge notification color tokens are defined in the component directory at
+ * src/components/core/Badge-Count-Notification/tokens.ts following the Rosetta
+ * System architecture. Android uses generated platform tokens:
+ * - DesignTokens.color_badge_notification_background (references pink400)
+ * - DesignTokens.color_badge_notification_text (references white100)
+ * 
  * @module Badge-Count-Notification/platforms/android
  * @see Requirements: 3.1-3.10, 4.7, 5.3, 6.3
  * @see .kiro/specs/044-badge-base/design.md for design specification
+ * @see .kiro/specs/058-component-token-architecture-cleanup for color token migration
  */
 
 package com.designerpunk.components.core
@@ -86,25 +94,32 @@ enum class BadgeCountNotificationSize {
  * Badge-Count-Notification specific design tokens.
  * 
  * Fixed notification colors - not configurable by consumers.
- * These tokens reference the semantic color tokens:
- * - color.badge.notification.background → pink400 (#CC2257)
- * - color.badge.notification.text → white100 (#FFFFFF)
+ * These tokens reference the component color tokens defined in
+ * src/components/core/Badge-Count-Notification/tokens.ts:
+ * - BadgeNotificationColorTokens['notification.background'] → pink400 (#CC2257)
+ * - BadgeNotificationColorTokens['notification.text'] → white100 (#FFFFFF)
+ * 
+ * The Android platform uses generated DesignTokens constants that are produced
+ * by the token build pipeline from the component token definitions.
  * 
  * Contrast Ratio: 6.33:1 (exceeds WCAG AA 4.5:1)
  * 
  * @see Requirements: 3.1, 4.7 - notification-specific color tokens
+ * @see .kiro/specs/058-component-token-architecture-cleanup for color token migration
  */
 private object BadgeCountNotificationTokens {
     // MARK: - Fixed Notification Colors
     
     /** Background color for notification badge
-     * References: color.badge.notification.background → pink400 (#CC2257)
+     * Uses generated token: DesignTokens.color_badge_notification_background
+     * Source: BadgeNotificationColorTokens['notification.background'] → pink400 (#CC2257)
      * @see Requirement 3.1 - notification-specific color tokens
      */
     val backgroundColor: Color = Color(DesignTokens.color_badge_notification_background)
     
     /** Text color for notification badge
-     * References: color.badge.notification.text → white100 (#FFFFFF)
+     * Uses generated token: DesignTokens.color_badge_notification_text
+     * Source: BadgeNotificationColorTokens['notification.text'] → white100 (#FFFFFF)
      * @see Requirement 3.1 - notification-specific color tokens
      */
     val textColor: Color = Color(DesignTokens.color_badge_notification_text)

@@ -16,9 +16,19 @@
  * - Pluralized announcement text ("1 notification", "5 notifications")
  * - Optional announceChanges prop (default: true)
  * 
+ * COLOR TOKENS (Spec 058):
+ * Badge notification color tokens are defined in the component directory at
+ * src/components/core/Badge-Count-Notification/tokens.ts following the Rosetta
+ * System architecture. The web component uses CSS custom properties generated
+ * by the token build pipeline:
+ * - --color-badge-notification-background (references pink400)
+ * - --color-badge-notification-text (references white100)
+ * 
  * @module Badge-Count-Notification/platforms/web
  * @see Requirements: 3.1-3.10, 4.7, 5.1, 6.3
+ * @see ../../tokens.ts for component color token definitions
  * @see .kiro/specs/044-badge-base/design.md for design specification
+ * @see .kiro/specs/058-component-token-architecture-cleanup for color token migration
  */
 
 /// <reference lib="dom" />

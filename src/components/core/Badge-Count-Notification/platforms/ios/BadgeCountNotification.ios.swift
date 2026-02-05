@@ -16,9 +16,17 @@
  * - Pluralized announcement text ("1 notification", "5 notifications")
  * - Optional announceChanges prop (default: true)
  * 
+ * COLOR TOKENS (Spec 058):
+ * Badge notification color tokens are defined in the component directory at
+ * src/components/core/Badge-Count-Notification/tokens.ts following the Rosetta
+ * System architecture. iOS uses generated platform tokens:
+ * - DesignTokens.colorBadgeNotificationBackground (references pink400)
+ * - DesignTokens.colorBadgeNotificationText (references white100)
+ * 
  * @module Badge-Count-Notification/platforms/ios
  * @see Requirements: 3.1-3.10, 4.7, 5.2, 6.3
  * @see .kiro/specs/044-badge-base/design.md for design specification
+ * @see .kiro/specs/058-component-token-architecture-cleanup for color token migration
  */
 
 import SwiftUI
@@ -30,24 +38,31 @@ import UIKit
  * Badge-Count-Notification specific design tokens.
  * 
  * Fixed notification colors - not configurable by consumers.
- * These tokens reference the semantic color tokens:
- * - color.badge.notification.background → pink400
- * - color.badge.notification.text → white100
+ * These tokens reference the component color tokens defined in
+ * src/components/core/Badge-Count-Notification/tokens.ts:
+ * - BadgeNotificationColorTokens['notification.background'] → pink400
+ * - BadgeNotificationColorTokens['notification.text'] → white100
+ * 
+ * The iOS platform uses generated DesignTokens constants that are produced
+ * by the token build pipeline from the component token definitions.
  * 
  * Contrast Ratio: 6.33:1 (exceeds WCAG AA 4.5:1)
  * 
  * @see Requirements: 3.1, 4.7 - notification-specific color tokens
+ * @see .kiro/specs/058-component-token-architecture-cleanup for color token migration
  */
 enum BadgeCountNotificationTokens {
     // MARK: - Fixed Notification Colors
     
     /// Background color for notification badge
-    /// Uses semantic token: color.badge.notification.background
+    /// Uses generated token: DesignTokens.colorBadgeNotificationBackground
+    /// Source: BadgeNotificationColorTokens['notification.background'] → pink400
     /// @see Requirement 3.1 - notification-specific color tokens
     static let backgroundColor: Color = Color(DesignTokens.colorBadgeNotificationBackground)
     
     /// Text color for notification badge
-    /// Uses semantic token: color.badge.notification.text
+    /// Uses generated token: DesignTokens.colorBadgeNotificationText
+    /// Source: BadgeNotificationColorTokens['notification.text'] → white100
     /// @see Requirement 3.1 - notification-specific color tokens
     static let textColor: Color = Color(DesignTokens.colorBadgeNotificationText)
 }

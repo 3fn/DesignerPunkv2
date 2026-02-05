@@ -20,10 +20,10 @@
  * - icon = gray (default icon color)
  * - print = black (print media)
  * - glow = vibrant neon colors for emphasis effects
- * - badge = component-specific tokens for notification badges
  * 
  * MIGRATED TO COMPONENT DIRECTORIES (Spec 058):
  * - avatar = MIGRATED to src/components/core/Avatar/avatar.tokens.ts
+ * - badge = MIGRATED to src/components/core/Badge-Count-Notification/tokens.ts
  * 
  * All color tokens reference mode-aware primitive color tokens that support
  * light/dark modes with base/wcag themes.
@@ -529,43 +529,30 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
   },
 
   // ============================================================================
-  // AVATAR COMPONENT TOKENS - MIGRATED (Spec 058)
+  // COMPONENT TOKENS - MIGRATED (Spec 058)
   // ============================================================================
   /**
-   * Avatar Component Tokens: MIGRATED to src/components/core/Avatar/avatar.tokens.ts
+   * Component Tokens: MIGRATED to component directories per Rosetta System architecture
    * 
    * Per Rosetta System architecture, component tokens live at src/components/[ComponentName]/tokens.ts.
-   * The following tokens have been migrated:
+   * 
+   * Avatar tokens migrated to src/components/core/Avatar/avatar.tokens.ts:
    * - color.avatar.human.background -> AvatarColorTokens['human.background']
    * - color.avatar.agent.background -> AvatarColorTokens['agent.background']
    * - color.avatar.human.icon -> AvatarColorTokens['human.icon']
    * - color.avatar.agent.icon -> AvatarColorTokens['agent.icon']
    * - color.avatar.default.border -> AvatarColorTokens['default.border']
    * 
-   * Import from the canonical location:
+   * Badge tokens migrated to src/components/core/Badge-Count-Notification/tokens.ts:
+   * - color.badge.notification.background -> BadgeNotificationColorTokens['notification.background']
+   * - color.badge.notification.text -> BadgeNotificationColorTokens['notification.text']
+   * 
+   * Import from the canonical locations:
    * import { AvatarColorTokens } from 'src/components/core/Avatar/avatar.tokens';
+   * import { BadgeNotificationColorTokens } from 'src/components/core/Badge-Count-Notification/tokens';
    * 
    * @see .kiro/specs/058-component-token-architecture-cleanup for migration details
-   * @see src/components/core/Avatar/avatar.tokens.ts for canonical token definitions
    */
-
-  // Badge Colors (2 tokens) - Spec 044: Badge Component Family
-  // Spec 052: Reordered to {component}.{variant}.{property} pattern
-  'color.badge.notification.background': {
-    name: 'color.badge.notification.background',
-    primitiveReferences: { value: 'pink400' },
-    category: SemanticCategory.COLOR,
-    context: 'Background color for notification badges',
-    description: 'Pink background for notification badges - provides high-visibility alert indication with 6.33:1 contrast ratio against white text'
-  },
-
-  'color.badge.notification.text': {
-    name: 'color.badge.notification.text',
-    primitiveReferences: { value: 'white100' },
-    category: SemanticCategory.COLOR,
-    context: 'Text color on notification badge background',
-    description: 'White text color for use on notification badge pink background - ensures WCAG AA contrast compliance (6.33:1 ratio)'
-  }
 };
 
 /**
@@ -578,9 +565,13 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
  *   - color.avatar.human.icon
  *   - color.avatar.agent.icon
  *   - color.avatar.default.border
+ * - Removed 2 Badge component tokens (migrated to src/components/core/Badge-Count-Notification/tokens.ts):
+ *   - color.badge.notification.background
+ *   - color.badge.notification.text
  * 
  * Previous count (Spec 052): 50 tokens
- * Current count (Spec 058): 45 tokens
+ * After Avatar migration: 45 tokens
+ * Current count (Spec 058): 43 tokens
  * 
  * See design authority: .kiro/specs/058-component-token-architecture-cleanup/design.md
  */
@@ -603,16 +594,20 @@ export function getAllColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'
 /**
  * Validate token count - updated for Spec 058 component token architecture cleanup
  * 
- * Token changes (Spec 058 - Avatar component token migration):
+ * Token changes (Spec 058 - Component token migration):
  * - Removed 5 Avatar component tokens (migrated to src/components/core/Avatar/avatar.tokens.ts):
  *   - color.avatar.human.background
  *   - color.avatar.agent.background
  *   - color.avatar.human.icon
  *   - color.avatar.agent.icon
  *   - color.avatar.default.border
+ * - Removed 2 Badge component tokens (migrated to src/components/core/Badge-Count-Notification/tokens.ts):
+ *   - color.badge.notification.background
+ *   - color.badge.notification.text
  * 
  * Previous count (Spec 052): 50 tokens
- * Current count (Spec 058): 45 tokens
+ * After Avatar migration: 45 tokens
+ * Current count (Spec 058): 43 tokens
  * 
  * Remaining tokens breakdown:
  * - Feedback concept: 18 tokens (success/error/warning/info × text/background/border + select × 6)
@@ -627,11 +622,10 @@ export function getAllColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'
  * - Print: 1 token (default)
  * - Background: 1 token (primary.subtle)
  * - Glow: 5 tokens (neonPurple, neonCyan, neonYellow, neonGreen, neonPink)
- * - Badge component: 2 tokens (notification.background, notification.text)
- * Total: 45 tokens
+ * Total: 43 tokens
  */
 export function validateColorTokenCount(): boolean {
-  const expectedCount = 45;
+  const expectedCount = 43;
   const actualCount = colorTokenNames.length;
   if (actualCount !== expectedCount) {
     console.warn(`Color token count mismatch: expected ${expectedCount}, got ${actualCount}`);
@@ -662,8 +656,28 @@ export function validateColorTokenCount(): boolean {
  */
 export { AvatarColorTokens } from '../../components/core/Avatar/avatar.tokens';
 
+/**
+ * Re-export Badge notification color tokens for backward compatibility
+ * 
+ * DEPRECATED: Badge notification color tokens have been migrated to their canonical location
+ * at src/components/core/Badge-Count-Notification/tokens.ts per Rosetta System architecture.
+ * 
+ * Update your imports to use the canonical location:
+ * 
+ * Old (deprecated):
+ * import { BadgeNotificationColorTokens } from 'src/tokens/semantic/ColorTokens';
+ * 
+ * New (canonical):
+ * import { BadgeNotificationColorTokens } from 'src/components/core/Badge-Count-Notification/tokens';
+ * 
+ * @deprecated Use import from 'src/components/core/Badge-Count-Notification/tokens' instead
+ * @see .kiro/specs/058-component-token-architecture-cleanup for migration details
+ */
+export { BadgeNotificationColorTokens } from '../../components/core/Badge-Count-Notification/tokens';
+
 // Log deprecation warning once per session
 let avatarDeprecationWarningLogged = false;
+let badgeDeprecationWarningLogged = false;
 
 /**
  * Get Avatar color token with deprecation warning
@@ -683,4 +697,24 @@ export function getAvatarColorTokenDeprecated(key: string): string | undefined {
   // Import dynamically to avoid circular dependency issues
   const { AvatarColorTokens } = require('../../components/core/Avatar/avatar.tokens');
   return AvatarColorTokens[key as keyof typeof AvatarColorTokens];
+}
+
+/**
+ * Get Badge notification color token with deprecation warning
+ * 
+ * @deprecated Use getBadgeNotificationColorToken from 'src/components/core/Badge-Count-Notification/tokens' instead
+ */
+export function getBadgeNotificationColorTokenDeprecated(key: string): string | undefined {
+  if (!badgeDeprecationWarningLogged) {
+    console.warn(
+      '[DEPRECATED] Badge notification color tokens have moved to src/components/core/Badge-Count-Notification/tokens.ts. ' +
+      'Update your imports to avoid future breaking changes. ' +
+      'See .kiro/specs/058-component-token-architecture-cleanup for migration details.'
+    );
+    badgeDeprecationWarningLogged = true;
+  }
+  
+  // Import dynamically to avoid circular dependency issues
+  const { BadgeNotificationColorTokens } = require('../../components/core/Badge-Count-Notification/tokens');
+  return BadgeNotificationColorTokens[key as keyof typeof BadgeNotificationColorTokens];
 }

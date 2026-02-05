@@ -85,7 +85,7 @@ This spec migrates component tokens from incorrect locations to their canonical 
 
 ---
 
-- [ ] 2. Badge Color Token Migration
+- [x] 2. Badge Color Token Migration
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -111,7 +111,7 @@ This spec migrates component tokens from incorrect locations to their canonical 
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Badge Color Token Migration"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 2.1 Create Badge-Count-Notification tokens file
+  - [x] 2.1 Create Badge-Count-Notification tokens file
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/components/core/Badge-Count-Notification/tokens.ts`
@@ -121,7 +121,7 @@ This spec migrates component tokens from incorrect locations to their canonical 
     - Include reasoning for each token (contrast ratio, visibility)
     - _Requirements: 2.1, 2.2, 2.4_
 
-  - [ ] 2.2 Remove Badge tokens from ColorTokens.ts
+  - [x] 2.2 Remove Badge tokens from ColorTokens.ts
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Open `src/tokens/semantic/ColorTokens.ts`
@@ -131,7 +131,7 @@ This spec migrates component tokens from incorrect locations to their canonical 
     - Add re-export with deprecation warning for backward compatibility
     - _Requirements: 2.3, 4.1, 4.2_
 
-  - [ ] 2.3 Update Badge component implementations
+  - [x] 2.3 Update Badge component implementations
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update Badge-Count-Notification web component to import from local tokens

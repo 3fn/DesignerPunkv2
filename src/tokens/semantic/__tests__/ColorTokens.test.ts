@@ -503,10 +503,11 @@ describe('Semantic Color Tokens - Palette Update', () => {
       // Background: 1 token (primary.subtle)
       // Glow: 5 tokens (neonPurple, neonCyan, neonYellow, neonGreen, neonPink)
       // Avatar component: MIGRATED to src/components/core/Avatar/avatar.tokens.ts (Spec 058)
-      // Badge component: 2 tokens (notification.background, notification.text)
-      // Total: 45 tokens (includes color.structure.border.subtle with opacity composition)
+      // Badge component: MIGRATED to src/components/core/Badge-Count-Notification/tokens.ts (Spec 058)
+      // Total: 43 tokens (includes color.structure.border.subtle with opacity composition)
       // Note: 5 Avatar tokens removed in Spec 058 migration (50 - 5 = 45)
-      expect(colorTokenNames.length).toBe(45);
+      // Note: 2 Badge tokens removed in Spec 058 migration (45 - 2 = 43)
+      expect(colorTokenNames.length).toBe(43);
     });
 
     it('should pass validateColorTokenCount()', () => {
@@ -546,7 +547,8 @@ describe('Semantic Color Tokens - Palette Update', () => {
       expect(glowTokens.length).toBe(5);
       // Avatar tokens MIGRATED to src/components/core/Avatar/avatar.tokens.ts (Spec 058)
       expect(avatarTokens.length).toBe(0); // Migrated to component directory
-      expect(badgeTokens.length).toBe(2); // notification.background, notification.text
+      // Badge tokens MIGRATED to src/components/core/Badge-Count-Notification/tokens.ts (Spec 058)
+      expect(badgeTokens.length).toBe(0); // Migrated to component directory
     });
   });
 
@@ -600,11 +602,11 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(Array.isArray(tokens)).toBe(true);
       });
 
-      it('should return exactly 45 tokens', () => {
-        // Updated for Spec 058: Avatar tokens migrated to component directory
-        // Previous count: 50, Current count: 45 (5 Avatar tokens removed)
+      it('should return exactly 43 tokens', () => {
+        // Updated for Spec 058: Avatar and Badge tokens migrated to component directories
+        // Previous count: 50, After Avatar migration: 45, Current count: 43 (2 Badge tokens removed)
         const tokens = getAllColorTokens();
-        expect(tokens.length).toBe(45);
+        expect(tokens.length).toBe(43);
       });
 
       it('should include all new tokens', () => {
@@ -932,10 +934,10 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(selectTokens.length).toBe(6);
       });
 
-      it('should include select tokens in total count of 45', () => {
+      it('should include select tokens in total count of 43', () => {
         // Verify total count includes the 6 feedback select tokens
-        // Updated for Spec 058: 45 total tokens (5 Avatar tokens migrated to component directory)
-        expect(colorTokenNames.length).toBe(45);
+        // Updated for Spec 058: 43 total tokens (5 Avatar + 2 Badge tokens migrated to component directories)
+        expect(colorTokenNames.length).toBe(43);
         expect(validateColorTokenCount()).toBe(true);
       });
     });
@@ -1287,154 +1289,101 @@ describe('Semantic Color Tokens - Palette Update', () => {
   /**
    * Badge Color Token Tests
    * 
-   * Tests for Badge color tokens added in Spec 044: Badge Component Family.
-   * Validates that Badge tokens reference correct primitives and have proper structure.
-   * Following industry-standard naming pattern: [semantic token family].[component].[property].[variant]
+   * Tests for Badge color tokens - MIGRATED to component directory in Spec 058.
+   * 
+   * Badge notification color tokens have been migrated from ColorTokens.ts to
+   * src/components/core/Badge-Count-Notification/tokens.ts per Rosetta System architecture.
+   * 
+   * These tests now verify:
+   * 1. Tokens are NOT in ColorTokens.ts (migration complete)
+   * 2. Re-exports with deprecation warnings are available for backward compatibility
+   * 3. Component tokens are properly defined in the new location
+   * 
+   * @see .kiro/specs/058-component-token-architecture-cleanup for migration details
    */
-  describe('Badge Color Tokens (Spec 044, Updated Spec 052)', () => {
-    describe('Token Existence', () => {
-      it('should have color.badge.notification.background token', () => {
-        expect(colorTokens['color.badge.notification.background']).toBeDefined();
+  describe('Badge Color Tokens (Spec 044, Migrated Spec 058)', () => {
+    describe('Migration Verification', () => {
+      it('should NOT have color.badge.notification.background in ColorTokens', () => {
+        // Badge tokens migrated to src/components/core/Badge-Count-Notification/tokens.ts
+        expect(colorTokens['color.badge.notification.background']).toBeUndefined();
       });
 
-      it('should have color.badge.notification.text token', () => {
-        expect(colorTokens['color.badge.notification.text']).toBeDefined();
-      });
-    });
-
-    describe('Primitive References', () => {
-      it('should reference pink400 primitive for notification background', () => {
-        const token = colorTokens['color.badge.notification.background'];
-        expect(token.primitiveReferences.value).toBe('pink400');
+      it('should NOT have color.badge.notification.text in ColorTokens', () => {
+        // Badge tokens migrated to src/components/core/Badge-Count-Notification/tokens.ts
+        expect(colorTokens['color.badge.notification.text']).toBeUndefined();
       });
 
-      it('should reference white100 primitive for notification text', () => {
-        const token = colorTokens['color.badge.notification.text'];
-        expect(token.primitiveReferences.value).toBe('white100');
-      });
-
-      it('should verify pink400 primitive exists', () => {
-        const token = colorTokens['color.badge.notification.background'];
-        const primitiveName = token.primitiveReferences.value;
-        expect(primitiveColorTokens).toHaveProperty(primitiveName);
-      });
-
-      it('should verify white100 primitive exists', () => {
-        const token = colorTokens['color.badge.notification.text'];
-        const primitiveName = token.primitiveReferences.value;
-        expect(primitiveColorTokens).toHaveProperty(primitiveName);
-      });
-    });
-
-    describe('Token Structure', () => {
-      it('should have COLOR category for badge background token', () => {
-        expect(colorTokens['color.badge.notification.background'].category).toBe(SemanticCategory.COLOR);
-      });
-
-      it('should have COLOR category for badge text token', () => {
-        expect(colorTokens['color.badge.notification.text'].category).toBe(SemanticCategory.COLOR);
-      });
-
-      it('should have meaningful context for badge background token', () => {
-        const token = colorTokens['color.badge.notification.background'];
-        expect(token.context).toBeTruthy();
-        expect(token.context.toLowerCase()).toContain('notification');
-        expect(token.context.toLowerCase()).toContain('badge');
-      });
-
-      it('should have meaningful context for badge text token', () => {
-        const token = colorTokens['color.badge.notification.text'];
-        expect(token.context).toBeTruthy();
-        expect(token.context.toLowerCase()).toContain('notification');
-        expect(token.context.toLowerCase()).toContain('badge');
-      });
-
-      it('should have descriptions for all badge tokens', () => {
-        expect(colorTokens['color.badge.notification.background'].description).toBeTruthy();
-        expect(colorTokens['color.badge.notification.text'].description).toBeTruthy();
-      });
-
-      it('should follow {component}.{variant}.{property} naming pattern (Spec 052)', () => {
-        // Verify naming pattern: color.badge.notification.background
-        const bgToken = colorTokens['color.badge.notification.background'];
-        expect(bgToken.name).toBe('color.badge.notification.background');
-        const bgParts = bgToken.name.split('.');
-        expect(bgParts[0]).toBe('color');        // semantic token family
-        expect(bgParts[1]).toBe('badge');        // component
-        expect(bgParts[2]).toBe('notification'); // variant
-        expect(bgParts[3]).toBe('background');   // property
-
-        // Verify naming pattern: color.badge.notification.text
-        const textToken = colorTokens['color.badge.notification.text'];
-        expect(textToken.name).toBe('color.badge.notification.text');
-        const textParts = textToken.name.split('.');
-        expect(textParts[0]).toBe('color');        // semantic token family
-        expect(textParts[1]).toBe('badge');        // component
-        expect(textParts[2]).toBe('notification'); // variant
-        expect(textParts[3]).toBe('text');         // property
-      });
-    });
-
-    describe('Utility Function Access', () => {
-      it('should return color.badge.notification.background via getColorToken()', () => {
-        const token = getColorToken('color.badge.notification.background');
-        expect(token).toBeDefined();
-        expect(token?.name).toBe('color.badge.notification.background');
-      });
-
-      it('should return color.badge.notification.text via getColorToken()', () => {
-        const token = getColorToken('color.badge.notification.text');
-        expect(token).toBeDefined();
-        expect(token?.name).toBe('color.badge.notification.text');
-      });
-
-      it('should include all badge tokens in getAllColorTokens()', () => {
-        const tokens = getAllColorTokens();
-        const tokenNames = tokens.map(t => t.name);
-
-        expect(tokenNames).toContain('color.badge.notification.background');
-        expect(tokenNames).toContain('color.badge.notification.text');
-      });
-    });
-
-    describe('Token Count Includes Badge Tokens', () => {
-      it('should have exactly 2 badge tokens', () => {
+      it('should have 0 badge tokens in ColorTokens', () => {
         const badgeTokens = colorTokenNames.filter(n => n.startsWith('color.badge'));
-        expect(badgeTokens.length).toBe(2);
+        expect(badgeTokens.length).toBe(0);
+      });
+    });
+
+    describe('Backward Compatibility Re-exports', () => {
+      it('should re-export BadgeNotificationColorTokens for backward compatibility', () => {
+        // Import the re-exported tokens
+        const { BadgeNotificationColorTokens } = require('../ColorTokens');
+        expect(BadgeNotificationColorTokens).toBeDefined();
       });
 
-      it('should include badge tokens in total count of 45', () => {
-        // Verify total count includes the 2 badge tokens
-        // Updated for Spec 058: 45 total tokens (5 Avatar tokens migrated to component directory)
-        expect(colorTokenNames.length).toBe(45);
+      it('should have notification.background in re-exported tokens', () => {
+        const { BadgeNotificationColorTokens } = require('../ColorTokens');
+        expect(BadgeNotificationColorTokens['notification.background']).toBe('pink400');
+      });
+
+      it('should have notification.text in re-exported tokens', () => {
+        const { BadgeNotificationColorTokens } = require('../ColorTokens');
+        expect(BadgeNotificationColorTokens['notification.text']).toBe('white100');
+      });
+    });
+
+    describe('Component Token Location', () => {
+      it('should have BadgeNotificationColorTokens in component directory', () => {
+        // Import from canonical location
+        const { BadgeNotificationColorTokens } = require('../../../../components/core/Badge-Count-Notification/tokens');
+        expect(BadgeNotificationColorTokens).toBeDefined();
+      });
+
+      it('should reference pink400 for notification.background', () => {
+        const { BadgeNotificationColorTokens } = require('../../../../components/core/Badge-Count-Notification/tokens');
+        expect(BadgeNotificationColorTokens['notification.background']).toBe('pink400');
+      });
+
+      it('should reference white100 for notification.text', () => {
+        const { BadgeNotificationColorTokens } = require('../../../../components/core/Badge-Count-Notification/tokens');
+        expect(BadgeNotificationColorTokens['notification.text']).toBe('white100');
+      });
+    });
+
+    describe('Token Count After Migration', () => {
+      it('should have exactly 0 badge tokens in ColorTokens', () => {
+        const badgeTokens = colorTokenNames.filter(n => n.startsWith('color.badge'));
+        expect(badgeTokens.length).toBe(0);
+      });
+
+      it('should have total count of 43 after badge migration', () => {
+        // Verify total count after badge token migration
+        // Previous count: 45 (after Avatar migration), Current count: 43 (2 Badge tokens removed)
+        expect(colorTokenNames.length).toBe(43);
         expect(validateColorTokenCount()).toBe(true);
       });
     });
 
-    describe('Requirements Coverage (Spec 044, Updated Spec 052)', () => {
-      it('should satisfy Requirement 4.7: Badge-Count-Notification uses notification color tokens', () => {
-        expect(colorTokens['color.badge.notification.background']).toBeDefined();
-        expect(colorTokens['color.badge.notification.text']).toBeDefined();
+    describe('Requirements Coverage (Spec 058)', () => {
+      it('should satisfy Requirement 2.1: Badge tokens defined in component directory', () => {
+        const { BadgeNotificationColorTokens } = require('../../../../components/core/Badge-Count-Notification/tokens');
+        expect(BadgeNotificationColorTokens['notification.background']).toBeDefined();
+        expect(BadgeNotificationColorTokens['notification.text']).toBeDefined();
       });
 
-      it('should satisfy Requirement 9.1: color.badge.notification.background references pink400', () => {
-        const token = colorTokens['color.badge.notification.background'];
-        expect(token.primitiveReferences.value).toBe('pink400');
+      it('should satisfy Requirement 2.3: Badge tokens removed from ColorTokens.ts', () => {
+        expect(colorTokens['color.badge.notification.background']).toBeUndefined();
+        expect(colorTokens['color.badge.notification.text']).toBeUndefined();
       });
 
-      it('should satisfy Requirement 9.2: color.badge.notification.text references white100', () => {
-        const token = colorTokens['color.badge.notification.text'];
-        expect(token.primitiveReferences.value).toBe('white100');
-      });
-
-      it('should satisfy Requirement 9.7: tokens follow {component}.{variant}.{property} pattern (Spec 052)', () => {
-        // Pattern: [semantic token family].[component].[variant].[property]
-        const bgToken = colorTokens['color.badge.notification.background'];
-        const textToken = colorTokens['color.badge.notification.text'];
-        
-        // Both tokens follow the pattern
-        expect(bgToken.name.split('.').length).toBe(4);
-        expect(textToken.name.split('.').length).toBe(4);
+      it('should satisfy Requirement 4.1: Re-exports with deprecation warnings available', () => {
+        const { BadgeNotificationColorTokens } = require('../ColorTokens');
+        expect(BadgeNotificationColorTokens).toBeDefined();
       });
     });
   });
