@@ -143,7 +143,7 @@
   justify-content: center;
   width: calc(var(--icon-size-100) + var(--space-inset-100) * 2);
   height: calc(var(--icon-size-100) + var(--space-inset-100) * 2);
-  border: var(--border-emphasis) solid var(--color-select-not-selected-strong);
+  border: var(--border-emphasis) solid var(--color-feedback-select-border-default);
   border-radius: var(--radius-small);
   background-color: transparent;
   transition: background-color var(--motion-selection-transition-duration) var(--motion-selection-transition-easing),
@@ -169,8 +169,8 @@
  * Filled background with checkmark icon.
  */
 .checkbox--checked .checkbox__box {
-  background-color: var(--color-select-selected-strong);
-  border-color: var(--color-select-selected-strong);
+  background-color: var(--color-feedback-select-background-rest);
+  border-color: var(--color-feedback-select-border-rest);
 }
 
 /**
@@ -190,7 +190,7 @@
  * Uses blend.hoverDarker (8% darker) applied via CSS custom property.
  */
 .checkbox__touch-target:hover .checkbox__box {
-  border-color: var(--_checkbox-hover-border, var(--color-select-selected-strong));
+  border-color: var(--_checkbox-hover-border, var(--color-feedback-select-border-rest));
 }
 
 /**
@@ -198,7 +198,7 @@
  * Maintains selected border color.
  */
 .checkbox--checked .checkbox__touch-target:hover .checkbox__box {
-  border-color: var(--color-select-selected-strong);
+  border-color: var(--color-feedback-select-border-rest);
 }
 
 /* ==========================================================================

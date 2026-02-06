@@ -55,6 +55,11 @@ Input-Text-Base (Primitive)
     │
     └── Input-Text-PhoneNumber (Semantic)
         └── Phone formatting + international validation
+
+Input-Checkbox-Base (Primitive)
+    │
+    └── Input-Checkbox-Legal (Semantic)
+        └── Legal consent + audit trail + explicit consent enforcement
 ```
 
 ### Primitive Component
@@ -62,6 +67,7 @@ Input-Text-Base (Primitive)
 | Component | Type | Status | Description |
 |-----------|------|--------|-------------|
 | Input-Text-Base | Primitive | 🟢 Production Ready | Foundational text input with float label pattern |
+| Input-Checkbox-Base | Primitive | 🟢 Production Ready | Binary selection control with three size variants |
 
 ### Semantic Components
 
@@ -70,14 +76,15 @@ Input-Text-Base (Primitive)
 | Input-Text-Email | Input-Text-Base | 🟢 Production Ready | Email validation + autocomplete |
 | Input-Text-Password | Input-Text-Base | 🟢 Production Ready | Secure input + password toggle |
 | Input-Text-PhoneNumber | Input-Text-Base | 🟢 Production Ready | Phone formatting + international validation |
+| Input-Checkbox-Legal | Input-Checkbox-Base | 🟢 Production Ready | Legal consent + audit trail |
 
 ---
 
 ## Behavioral Contracts
 
-### Base Contracts (Inherited by All)
+### Text Input Base Contracts (Inherited by Text Input Components)
 
-All components in the Form Inputs family inherit these 9 foundational contracts from Input-Text-Base:
+All text input components in the Form Inputs family inherit these 9 foundational contracts from Input-Text-Base:
 
 | Contract | Description | WCAG | Platforms |
 |----------|-------------|------|-----------|
@@ -149,6 +156,56 @@ All components in the Form Inputs family inherit these 9 foundational contracts 
 | `validates_phone_format` | Validates phone number against country-specific patterns | 3.3.1 |
 | `provides_phone_formatting` | Formats phone numbers as user types | 3.3.2 |
 | `supports_international_formats` | Handles multiple country phone number formats | 3.3.2 |
+
+### Checkbox Base Contracts (Inherited by Checkbox Components)
+
+All checkbox components in the Form Inputs family inherit these 9 foundational contracts from Input-Checkbox-Base:
+
+| Contract | Description | WCAG | Platforms |
+|----------|-------------|------|-----------|
+| `focusable` | Can receive keyboard focus | 2.1.1 | web, ios, android |
+| `pressable` | Responds to click/tap on entire label area | 2.1.1 | web, ios, android |
+| `hover_state` | Visual feedback on hover (web) | 1.4.13 | web |
+| `pressed_state` | Visual feedback when pressed | 2.4.7 | web, ios, android |
+| `checked_state` | Shows checkmark icon when checked | 1.4.1 | web, ios, android |
+| `indeterminate_state` | Shows minus icon for partial selection | 1.4.1 | web, ios, android |
+| `error_state_display` | Shows error border and message | 3.3.1 | web, ios, android |
+| `focus_ring` | WCAG 2.4.7 focus visible indicator | 2.4.7 | web, ios, android |
+| `form_integration` | Native form submission and reset | 4.1.2 | web, ios, android |
+
+### Checkbox Contract Details
+
+#### checked_state
+
+**Description**: When checked, component displays filled background with checkmark icon via Icon-Base.
+
+**Behavior**: Background uses `color.feedback.select.background.rest`. Border uses `color.feedback.select.border.rest`. Checkmark icon uses `color.contrast.onDark`. State transition animated via `motion.selectionTransition` (250ms).
+
+**WCAG Compliance**: 1.4.1 Use of Color (icon provides non-color indication)
+
+#### indeterminate_state
+
+**Description**: When indeterminate, component displays filled background with horizontal minus icon via Icon-Base.
+
+**Behavior**: Same styling as checked state but with minus icon instead of checkmark. Used for parent checkboxes with partially selected children. Indeterminate state overrides checked state visually.
+
+**WCAG Compliance**: 1.4.1 Use of Color (icon provides non-color indication)
+
+#### form_integration
+
+**Description**: Checkbox integrates with native form submission and reset.
+
+**Behavior**: Hidden native `<input type="checkbox">` ensures form compatibility. Value included in form submission when checked. Form reset returns checkbox to unchecked state (pre-checked checkboxes not supported per DesignerPunk philosophy).
+
+**WCAG Compliance**: 4.1.2 Name, Role, Value
+
+#### Input-Checkbox-Legal Extended Contracts
+
+| Contract | Description | WCAG |
+|----------|-------------|------|
+| `explicit_consent` | Prevents pre-checking with console warning | N/A |
+| `audit_trail` | Provides ISO 8601 timestamp and metadata | N/A |
+| `required_indicator` | Shows "Required" indicator by default | 3.3.2 |
 
 ---
 
@@ -391,11 +448,206 @@ InputTextPhoneNumber(
 
 ---
 
+### Input-Checkbox-Base
+
+**Type**: Primitive
+**Status**: 🟢 Production Ready
+**Inherits**: None
+
+#### Properties
+
+| Property | Type | Required | Default | Description |
+|----------|------|----------|---------|-------------|
+| `label` | `string` | Yes | - | Label text (required for accessibility) |
+| `checked` | `boolean` | No | `false` | Whether checkbox is checked |
+| `indeterminate` | `boolean` | No | `false` | Indeterminate state (overrides checked visually) |
+| `size` | `'sm' \| 'md' \| 'lg'` | No | `'md'` | Size variant |
+| `labelAlign` | `'center' \| 'top'` | No | `'center'` | Vertical alignment of label |
+| `helperText` | `string` | No | - | Helper text displayed below checkbox |
+| `errorMessage` | `string` | No | - | Error message (triggers error styling) |
+| `onChange` | `(checked: boolean) => void` | No | - | Change callback |
+| `id` | `string` | No | auto-generated | Unique identifier |
+| `name` | `string` | No | - | Form field name |
+| `value` | `string` | No | `'on'` | Value submitted when checked |
+| `testID` | `string` | No | - | Test identifier |
+
+#### Size Variants
+
+| Size | Box Size | Icon Size | Inset | Gap | Typography |
+|------|----------|-----------|-------|-----|------------|
+| `sm` | 24px | `icon.size050` (16px) | `inset.050` (4px) | `space.grouped.normal` | `labelSm` |
+| `md` | 32px | `icon.size075` (20px) | `inset.075` (6px) | `space.grouped.normal` | `labelMd` |
+| `lg` | 40px | `icon.size100` (24px) | `inset.100` (8px) | `space.grouped.loose` | `labelLg` |
+
+**Box Size Formula**: `iconSize + (inset × 2)`
+
+#### Usage Example
+
+```html
+<!-- Web -->
+<input-checkbox-base
+  label="Accept terms and conditions"
+></input-checkbox-base>
+
+<!-- With all attributes -->
+<input-checkbox-base
+  label="Subscribe to newsletter"
+  size="lg"
+  label-align="top"
+  helper-text="We'll send weekly updates"
+  name="newsletter"
+></input-checkbox-base>
+
+<!-- Indeterminate state (for parent checkboxes) -->
+<input-checkbox-base
+  label="Select all items"
+  indeterminate
+></input-checkbox-base>
+```
+
+```swift
+// iOS
+InputCheckboxBase(
+    checked: $isChecked,
+    label: "Accept terms",
+    size: .md,
+    labelAlign: .center,
+    onChange: { newValue in
+        print("Checked: \(newValue)")
+    }
+)
+```
+
+```kotlin
+// Android
+InputCheckboxBase(
+    checked = isChecked,
+    onCheckedChange = { isChecked = it },
+    label = "Accept terms",
+    size = CheckboxSize.Medium,
+    labelAlign = LabelAlignment.Center
+)
+```
+
+---
+
+### Input-Checkbox-Legal
+
+**Type**: Semantic
+**Status**: 🟢 Production Ready
+**Inherits**: Input-Checkbox-Base (conceptually, with fixed configuration)
+
+#### Fixed Configuration
+
+Input-Checkbox-Legal uses fixed configuration that cannot be changed:
+
+| Aspect | Fixed Value | Rationale |
+|--------|-------------|-----------|
+| Box Size | 40px (lg) | Larger touch target for important legal actions |
+| Typography | `labelSm` (14px) | Readable for longer legal text |
+| Label Alignment | top | Checkbox aligns to first line of multi-line text |
+| Indeterminate | Not supported | Legal consent is binary (yes/no) |
+| Label Truncation | Disabled | Full legal text must always be visible |
+
+#### Extended Properties
+
+| Property | Type | Required | Default | Description |
+|----------|------|----------|---------|-------------|
+| `label` | `string` | Yes | - | Label text (required for accessibility) |
+| `checked` | `boolean` | No | `false` | Whether checkbox is checked |
+| `helperText` | `string` | No | - | Helper text displayed below checkbox |
+| `errorMessage` | `string` | No | - | Error message (triggers error styling) |
+| `requiresExplicitConsent` | `boolean` | No | `true` | Prevents pre-checking (GDPR compliance) |
+| `legalTextId` | `string` | No | - | ID linking to legal document (audit trail) |
+| `legalTextVersion` | `string` | No | - | Version of legal document (audit trail) |
+| `showRequiredIndicator` | `boolean` | No | `true` | Show "Required" indicator |
+| `onChange` | `(checked: boolean) => void` | No | - | Base change callback |
+| `onConsentChange` | `(data: ConsentChangeData) => void` | No | - | Consent change callback with audit data |
+| `id` | `string` | No | auto-generated | Unique identifier |
+| `name` | `string` | No | - | Form field name |
+| `value` | `string` | No | `'on'` | Value submitted when checked |
+| `testID` | `string` | No | - | Test identifier |
+
+#### ConsentChangeData Interface
+
+```typescript
+interface ConsentChangeData {
+  /** Whether consent was given (true) or withdrawn (false) */
+  consented: boolean;
+  
+  /** ISO 8601 timestamp: "2026-02-05T14:30:00.000Z" */
+  timestamp: string;
+  
+  /** ID linking to legal document (if provided) */
+  legalTextId?: string;
+  
+  /** Version of legal document (if provided) */
+  legalTextVersion?: string;
+}
+```
+
+#### Extended Contracts
+
+| Contract | Description | Platforms |
+|----------|-------------|-----------|
+| `explicit_consent` | Prevents pre-checking with console warning | web, ios, android |
+| `audit_trail` | Provides ISO 8601 timestamp and metadata | web, ios, android |
+| `required_indicator` | Shows "Required" indicator by default | web, ios, android |
+
+#### Usage Example
+
+```html
+<!-- Web -->
+<input-checkbox-legal
+  label="I agree to the Terms of Service and Privacy Policy"
+  legal-text-id="tos-v2"
+  legal-text-version="2.0.0"
+></input-checkbox-legal>
+
+<!-- With audit trail callback -->
+<input-checkbox-legal
+  label="I consent to the processing of my personal data"
+  legal-text-id="privacy-policy-v2"
+  legal-text-version="2.1.0"
+></input-checkbox-legal>
+```
+
+```swift
+// iOS
+InputCheckboxLegal(
+    checked: $hasConsented,
+    label: "I agree to the Terms of Service",
+    legalTextId: "tos-v3",
+    legalTextVersion: "3.0.0",
+    onConsentChange: { data in
+        print("Consent: \(data.consented) at \(data.timestamp)")
+    }
+)
+```
+
+```kotlin
+// Android
+InputCheckboxLegal(
+    checked = hasConsented,
+    onCheckedChange = { hasConsented = it },
+    label = "I agree to the Terms of Service",
+    legalTextId = "tos-v3",
+    legalTextVersion = "3.0.0",
+    onConsentChange = { data ->
+        println("Consent: ${data.consented} at ${data.timestamp}")
+    }
+)
+```
+
+---
+
 ## Token Dependencies
 
 ### Required Tokens
 
 Components in the Form Inputs family consume these design tokens:
+
+#### Text Input Tokens
 
 | Category | Token Pattern | Purpose |
 |----------|---------------|---------|
@@ -425,6 +677,40 @@ Components in the Form Inputs family consume these design tokens:
 | Blend | `blend.focusSaturate` | Focus state saturation |
 | Blend | `blend.disabledDesaturate` | Disabled state desaturation |
 
+#### Checkbox Tokens
+
+| Category | Token Pattern | Purpose |
+|----------|---------------|---------|
+| Typography | `typography.labelSm` | Small size label (14px) |
+| Typography | `typography.labelMd` | Medium size label (16px) |
+| Typography | `typography.labelLg` | Large size label (18px) |
+| Typography | `typography.caption` | Helper text and error messages |
+| Color | `color.feedback.select.background.rest` | Checked/indeterminate background |
+| Color | `color.feedback.select.border.default` | Unchecked border |
+| Color | `color.feedback.select.border.rest` | Checked/hover border |
+| Color | `color.feedback.error.border` | Error state border |
+| Color | `color.contrast.onDark` | Checkmark/minus icon color |
+| Color | `color.contrast.onLight` | Label text color |
+| Spacing | `inset.050` | Small size internal padding (4px) |
+| Spacing | `inset.075` | Medium size internal padding (6px) |
+| Spacing | `inset.100` | Large size internal padding (8px) |
+| Spacing | `space.grouped.normal` | Gap for sm/md sizes |
+| Spacing | `space.grouped.loose` | Gap for lg size |
+| Border | `borderEmphasis` | Checkbox border width (2px) |
+| Border | `radiusSubtle` | Small size corner radius (2px) |
+| Border | `radiusSmall` | Medium/large size corner radius (4px) |
+| Motion | `motion.selectionTransition` | State change animation (250ms) |
+| Motion | `motion.buttonPress` | iOS press feedback (150ms) |
+| Blend | `blend.hoverDarker` | Web hover state (8% darker) |
+| Blend | `blend.pressedDarker` | Android ripple (12% darker) |
+| Scale | `scale096` | iOS press scale (96%) |
+| Accessibility | `accessibility.focus.color` | Focus ring color |
+| Accessibility | `accessibility.focus.width` | Focus ring width (2px) |
+| Accessibility | `accessibility.focus.offset` | Focus ring offset (2px) |
+| Icon | `icon.size050` | Small checkbox icon (16px) |
+| Icon | `icon.size075` | Medium checkbox icon (20px) |
+| Icon | `icon.size100` | Large checkbox icon (24px) |
+
 ### Token Resolution
 
 Form Inputs components resolve tokens through the Rosetta System's semantic-to-primitive hierarchy. Typography tokens compose fontSize, lineHeight, fontFamily, fontWeight, and letterSpacing primitives. Color tokens resolve to theme-aware values supporting light/dark modes.
@@ -453,6 +739,8 @@ Form Inputs components resolve tokens through the Rosetta System's semantic-to-p
 
 ### Primitive vs Semantic Selection
 
+#### Text Inputs
+
 | Scenario | Recommended Component | Rationale |
 |----------|----------------------|-----------|
 | Email address collection | Input-Text-Email | Built-in email validation and autocomplete |
@@ -460,6 +748,17 @@ Form Inputs components resolve tokens through the Rosetta System's semantic-to-p
 | Phone number collection | Input-Text-PhoneNumber | Auto-formatting and international support |
 | Generic text input | Input-Text-Base | No specialized validation needed |
 | Custom validation needs | Input-Text-Base | Use customValidator prop |
+
+#### Checkboxes
+
+| Scenario | Recommended Component | Rationale |
+|----------|----------------------|-----------|
+| Terms of service acceptance | Input-Checkbox-Legal | Audit trail + explicit consent enforcement |
+| Privacy policy consent | Input-Checkbox-Legal | GDPR compliance + timestamp logging |
+| Marketing opt-in | Input-Checkbox-Legal | Audit trail for consent records |
+| Generic binary selection | Input-Checkbox-Base | No legal/audit requirements |
+| Parent checkbox (select all) | Input-Checkbox-Base | Supports indeterminate state |
+| Settings toggle | Input-Checkbox-Base | Simple on/off without audit needs |
 
 ### Common Patterns
 
@@ -528,6 +827,117 @@ Form Inputs components resolve tokens through the Rosetta System's semantic-to-p
 </form>
 ```
 
+#### Registration Form with Legal Consent
+
+```html
+<!-- Web -->
+<form>
+  <input-text-base
+    id="full-name"
+    label="Full name"
+    value=""
+    required
+  ></input-text-base>
+  
+  <input-text-email
+    id="reg-email"
+    label="Email address"
+    value=""
+    required
+  ></input-text-email>
+  
+  <input-text-password
+    id="new-password"
+    label="Create password"
+    value=""
+    is-new-password="true"
+    min-length="8"
+  ></input-text-password>
+  
+  <input-checkbox-legal
+    label="I agree to the Terms of Service and Privacy Policy"
+    legal-text-id="tos-privacy-v2"
+    legal-text-version="2.0.0"
+    name="terms-consent"
+  ></input-checkbox-legal>
+  
+  <input-checkbox-legal
+    label="I would like to receive marketing communications"
+    show-required-indicator="false"
+    legal-text-id="marketing-consent"
+    legal-text-version="1.0.0"
+    name="marketing-consent"
+  ></input-checkbox-legal>
+  
+  <button-cta variant="primary">Create Account</button-cta>
+</form>
+```
+
+#### Settings Panel with Checkboxes
+
+```html
+<!-- Web -->
+<container-base padding="200">
+  <h2>Notification Settings</h2>
+  
+  <input-checkbox-base
+    label="Email notifications"
+    helper-text="Receive updates via email"
+    name="email-notifications"
+  ></input-checkbox-base>
+  
+  <input-checkbox-base
+    label="Push notifications"
+    helper-text="Receive push notifications on your device"
+    name="push-notifications"
+  ></input-checkbox-base>
+  
+  <input-checkbox-base
+    label="SMS notifications"
+    helper-text="Receive text message alerts"
+    name="sms-notifications"
+  ></input-checkbox-base>
+  
+  <button-cta variant="primary">Save Settings</button-cta>
+</container-base>
+```
+
+#### Parent-Child Checkbox Pattern
+
+```html
+<!-- Web -->
+<div class="checkbox-group">
+  <!-- Parent checkbox with indeterminate state -->
+  <input-checkbox-base
+    id="select-all"
+    label="Select all items"
+    indeterminate
+  ></input-checkbox-base>
+  
+  <!-- Child checkboxes -->
+  <div class="checkbox-children">
+    <input-checkbox-base
+      label="Item 1"
+      name="items"
+      value="item-1"
+    ></input-checkbox-base>
+    
+    <input-checkbox-base
+      label="Item 2"
+      name="items"
+      value="item-2"
+      checked
+    ></input-checkbox-base>
+    
+    <input-checkbox-base
+      label="Item 3"
+      name="items"
+      value="item-3"
+    ></input-checkbox-base>
+  </div>
+</div>
+```
+
 ### Accessibility Considerations
 
 - **Label Association**: All inputs have programmatically associated labels via the float label pattern
@@ -554,10 +964,12 @@ Form Inputs components resolve tokens through the Rosetta System's semantic-to-p
 #### Web
 
 - Uses Shadow DOM for style encapsulation
-- Custom element registration: `<input-text-base>`, `<input-text-email>`, etc.
+- Custom element registration: `<input-text-base>`, `<input-text-email>`, `<input-checkbox-base>`, `<input-checkbox-legal>`, etc.
 - Supports `className` prop for additional styling
 - Uses `:focus-visible` for keyboard-only focus indication
 - Autocomplete attributes for browser autofill
+- Checkbox uses hidden native `<input type="checkbox">` for form compatibility
+- CSS logical properties for RTL support
 
 #### iOS
 
@@ -566,6 +978,8 @@ Form Inputs components resolve tokens through the Rosetta System's semantic-to-p
 - `UIKeyboardType` for specialized keyboards (email, phone)
 - `UITextContentType` for autofill support
 - SF Symbols for icons
+- Checkbox uses scale animation on press (96% via `scale096`)
+- Native RTL handling via `leading`/`trailing` alignment
 
 #### Android
 

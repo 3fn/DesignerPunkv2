@@ -349,7 +349,7 @@ This spec implements two components across three platforms:
 
 ---
 
-- [ ] 5. Documentation and Integration
+- [x] 5. Documentation and Integration
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -364,7 +364,8 @@ This spec implements two components across three platforms:
   - `src/components/core/Input-Checkbox-Base/README.md`
   - `src/components/core/Input-Checkbox-Legal/README.md`
   - `.kiro/steering/Component-Quick-Reference.md` (updated)
-  - Example files
+  - `.kiro/steering/Component-Family-Form-Inputs.md` (updated)
+  - `dist/browser/checkbox-demo.html`
   
   **Completion Documentation:**
   - Detailed: `.kiro/specs/046-input-checkbox-base/completion/task-5-completion.md`
@@ -376,7 +377,7 @@ This spec implements two components across three platforms:
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 5 Complete: Documentation and Integration"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 5.1 Create Input-Checkbox-Base README
+  - [x] 5.1 Create Input-Checkbox-Base README
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Create README following existing component documentation patterns
@@ -386,7 +387,7 @@ This spec implements two components across three platforms:
     - Include usage examples for common scenarios
     - _Requirements: 12.1, 12.4_
 
-  - [ ] 5.2 Create Input-Checkbox-Legal README
+  - [x] 5.2 Create Input-Checkbox-Legal README
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Create README following existing component documentation patterns
@@ -396,23 +397,39 @@ This spec implements two components across three platforms:
     - Include usage examples for GDPR/legal scenarios
     - _Requirements: 12.1, 12.5_
 
-  - [ ] 5.3 Update Component-Quick-Reference.md
+  - [x] 5.3 Update Component-Quick-Reference.md and Component-Family-Form-Inputs.md
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
-    - Add checkbox family entry to Component Documentation Map
+    - Add checkbox family entry to Component-Quick-Reference.md Component Documentation Map
     - Include Input-Checkbox-Base and Input-Checkbox-Legal
     - Document inheritance relationship (Legal extends Base)
+    - Update Component-Family-Form-Inputs.md to add checkbox components:
+      - Add Input-Checkbox-Base and Input-Checkbox-Legal to inheritance structure
+      - Document checkbox behavioral contracts (9 contracts)
+      - Add Input-Checkbox-Base schema/properties section
+      - Add Input-Checkbox-Legal schema/properties section
+      - Add checkbox usage examples and patterns
+      - Add checkbox token dependencies
     - _Requirements: 12.2_
 
-  - [ ] 5.4 Create usage examples
+  - [x] 5.4 Create checkbox demo page
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    - Create basic checkbox example
-    - Create checkbox with helper text example
-    - Create checkbox with error example
-    - Create multi-line label with top alignment example
-    - Create indeterminate (select all) example
-    - Create legal consent example with audit trail
+    **Prerequisites**: Browser bundle registration
+    - Register Input-Checkbox-Base and Input-Checkbox-Legal in `src/browser-entry.ts`
+    - Rebuild browser distribution: `npm run build:browser`
+    - Create `dist/browser/checkbox-demo.html` following avatar-demo.html pattern
+    - Demo sections to include:
+      - Size variants (sm, md, lg) for Input-Checkbox-Base
+      - Label alignment (center vs top) comparison
+      - States (unchecked, checked, indeterminate, error)
+      - Helper text and error message display
+      - Interactive hover/focus states
+      - Form integration example (submission and reset)
+      - Input-Checkbox-Legal with audit trail demonstration
+      - Token verification section
+      - Usage examples (HTML and JavaScript)
+    - Verify demo works when served from local file server
     - _Requirements: 12.4_
 
 ---

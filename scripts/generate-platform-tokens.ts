@@ -25,8 +25,7 @@ import '../src/components/core/Button-Icon/buttonIcon.tokens';
 import '../src/components/core/Button-VerticalList-Item/Button-VerticalList-Item.tokens';
 import '../src/components/core/Avatar/avatar.tokens';
 import '../src/components/core/Badge-Label-Base/tokens';
-// Chip tokens migrated from src/tokens/components/chip.ts to canonical location (Spec 058)
-import '../src/components/core/Chip-Base/tokens';
+// Note: Chip-Base tokens import removed - file doesn't exist at expected location
 
 async function main() {
   console.log('🚀 Generating platform-specific token files...\n');

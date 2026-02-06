@@ -37,6 +37,10 @@ import { BadgeLabelBase } from './components/core/Badge-Label-Base/platforms/web
 import { BadgeCountBase } from './components/core/Badge-Count-Base/platforms/web/BadgeCountBase.web';
 // Badge-Count-Notification - Stemma System naming (notification badge with live regions)
 import { BadgeCountNotification } from './components/core/Badge-Count-Notification/platforms/web/BadgeCountNotification.web';
+// Input-Checkbox-Base - Stemma System naming (binary selection control)
+import { InputCheckboxBaseElement } from './components/core/Input-Checkbox-Base/platforms/web/InputCheckboxBase.web';
+// Input-Checkbox-Legal - Stemma System naming (legal consent checkbox with audit trail)
+import { InputCheckboxLegalElement } from './components/core/Input-Checkbox-Legal/platforms/web/InputCheckboxLegal.web';
 
 /**
  * Check if design tokens are loaded in the document.
@@ -121,6 +125,10 @@ safeDefine('badge-label-base', BadgeLabelBase);
 safeDefine('badge-count-base', BadgeCountBase);
 // Badge-Count-Notification - Stemma System naming (notification badge with live regions)
 safeDefine('badge-count-notification', BadgeCountNotification);
+// Input-Checkbox-Base - Stemma System naming (binary selection control)
+safeDefine('input-checkbox-base', InputCheckboxBaseElement);
+// Input-Checkbox-Legal - Stemma System naming (legal consent checkbox with audit trail)
+safeDefine('input-checkbox-legal', InputCheckboxLegalElement);
 
 // Check tokens after DOM is ready and CSS is applied
 // Uses requestAnimationFrame to ensure stylesheets have been fully parsed and applied
@@ -138,7 +146,7 @@ if (typeof document !== 'undefined') {
 
 // Export all components for UMD global access and ESM imports
 // Requirements: 1.2, 2.3
-export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb, ButtonVerticalListItem, ButtonVerticalListSet, AvatarBaseElement, BadgeLabelBase, BadgeCountBase, BadgeCountNotification };
+export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb, ButtonVerticalListItem, ButtonVerticalListSet, AvatarBaseElement, BadgeLabelBase, BadgeCountBase, BadgeCountNotification, InputCheckboxBaseElement, InputCheckboxLegalElement };
 
 // Also export with more intuitive names for the UMD global
 export const Icon = IconBaseElement;
@@ -154,5 +162,8 @@ export const AvatarBase = AvatarBaseElement;
 export const BadgeLabel = BadgeLabelBase;
 export const BadgeCount = BadgeCountBase;
 export const BadgeNotification = BadgeCountNotification;
+// Checkbox - Intuitive aliases for checkbox components
+export const CheckboxBase = InputCheckboxBaseElement;
+export const CheckboxLegal = InputCheckboxLegalElement;
 // Legacy alias for backward compatibility
 export const TextInputField = InputTextBase;

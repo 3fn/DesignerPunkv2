@@ -33,6 +33,7 @@ All 11 component families have MCP-queryable documentation. Production families 
 | Buttons | User interaction and actions | `.kiro/steering/Component-Family-Button.md` | 🟢 Production |
 | Chips | Filtering, selection, and input management | `.kiro/steering/Component-Family-Chip.md` | 🟢 Production |
 | Form Inputs | Data collection and validation | `.kiro/steering/Component-Family-Form-Inputs.md` | 🟢 Production |
+| Checkboxes | Binary selection and legal consent | `.kiro/steering/Component-Family-Form-Inputs.md` | 🟢 Production |
 | Containers | Layout and content organization | `.kiro/steering/Component-Family-Container.md` | 🟢 Production |
 | Icons | Visual communication | `.kiro/steering/Component-Family-Icon.md` | 🟢 Production |
 | Avatars | Identity representation | `.kiro/steering/Component-Family-Avatar.md` | 🟢 Production |
