@@ -191,7 +191,7 @@ This spec implements two components across three platforms:
 
 ---
 
-- [ ] 3. Input-Checkbox-Base Native Implementations
+- [x] 3. Input-Checkbox-Base Native Implementations
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -217,7 +217,7 @@ This spec implements two components across three platforms:
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Input-Checkbox-Base Native Implementations"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 3.1 Implement iOS SwiftUI component
+  - [x] 3.1 Implement iOS SwiftUI component
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `InputCheckboxBase.ios.swift`
@@ -229,7 +229,7 @@ This spec implements two components across three platforms:
     - Use SwiftUI's native RTL handling (leading/trailing)
     - _Requirements: 1.1-1.7, 2.1-2.9, 4.1-4.5, 7.1, 7.2, 8.4_
 
-  - [ ] 3.2 Implement iOS accessibility
+  - [x] 3.2 Implement iOS accessibility
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add accessibilityLabel for checkbox
@@ -238,7 +238,7 @@ This spec implements two components across three platforms:
     - Ensure minimum 44pt touch target
     - _Requirements: 6.1-6.6_
 
-  - [ ] 3.3 Implement Android Jetpack Compose component
+  - [x] 3.3 Implement Android Jetpack Compose component
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `InputCheckboxBase.android.kt`
@@ -250,7 +250,7 @@ This spec implements two components across three platforms:
     - Use Compose's native RTL handling (Arrangement.Start/End)
     - _Requirements: 1.1-1.7, 2.1-2.9, 4.1-4.5, 7.3, 8.5_
 
-  - [ ] 3.4 Implement Android accessibility
+  - [x] 3.4 Implement Android accessibility
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add semantics for checkbox role
