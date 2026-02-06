@@ -1,0 +1,427 @@
+/**
+ * Input-Checkbox-Base Component Styles for Web Platform
+ * 
+ * Token-based styling using CSS custom properties from the mathematical token system.
+ * All values reference semantic or primitive tokens - zero hard-coded values.
+ * Uses CSS logical properties for RTL support.
+ * 
+ * Stemma System Naming: [Family]-[Type]-[Variant] = Input-Checkbox-Base
+ * Component Type: Primitive (Base)
+ * 
+ * Size Variants:
+ * - sm: 24px box (16px icon + 4px inset × 2), labelSm typography
+ * - md: 32px box (20px icon + 6px inset × 2), labelMd typography
+ * - lg: 40px box (24px icon + 8px inset × 2), labelLg typography
+ * 
+ * DesignerPunk Philosophy: NO DISABLED STATES
+ * 
+ * @module Input-Checkbox-Base/platforms/web/styles
+ * @see Requirements: 1.1-1.7, 2.1-2.9, 3.1-3.4, 8.1-8.3
+ */
+
+/* ==========================================================================
+   Base Checkbox Styles
+   ========================================================================== */
+
+:host {
+  display: inline-block;
+}
+
+/**
+ * Checkbox wrapper - contains input and clickable label area.
+ * 
+ * Uses inline-flex for horizontal layout of box + content.
+ * Default alignment is center (vertically centered).
+ * 
+ * @see Requirements: 6.5 - Entire label area tappable
+ */
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+}
+
+/**
+ * Touch target wrapper - ensures minimum 44px touch target for accessibility.
+ * 
+ * Uses inline-flex for horizontal layout of box + content.
+ * Cursor pointer indicates clickability.
+ * Minimum height ensures WCAG touch target compliance.
+ * 
+ * The min-height uses tapAreaRecommended (48px) which exceeds the WCAG 2.1 AA
+ * minimum of 44px for better usability.
+ * 
+ * @see Requirements: 6.5 - Entire label area tappable
+ * @see Requirements: 6.6 - Minimum 44px touch target
+ */
+.checkbox__touch-target {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  min-height: var(--tap-area-recommended);
+  box-sizing: border-box;
+}
+
+/**
+ * Top label alignment variant.
+ * Aligns checkbox box to first line of multi-line text.
+ * 
+ * @see Requirements: 3.2, 3.4 - Top alignment for multi-line labels
+ */
+.checkbox--align-top {
+  align-items: flex-start;
+}
+
+.checkbox--align-top .checkbox__touch-target {
+  align-items: flex-start;
+}
+
+/* ==========================================================================
+   Size Variants
+   ========================================================================== */
+
+/**
+ * Small size variant.
+ * Box: 24px, Icon: 16px, Gap: space.grouped.normal, Typography: labelSm
+ * 
+ * @see Requirements: 2.1, 2.4, 2.7
+ */
+.checkbox--sm .checkbox__touch-target {
+  gap: var(--space-grouped-normal);
+}
+
+.checkbox--sm .checkbox__box {
+  width: calc(var(--icon-size-050) + var(--space-inset-050) * 2);
+  height: calc(var(--icon-size-050) + var(--space-inset-050) * 2);
+  border-radius: var(--radius-subtle);
+}
+
+.checkbox--sm .checkbox__label {
+  font-family: var(--typography-label-sm-font-family);
+  font-size: var(--typography-label-sm-font-size);
+  font-weight: var(--typography-label-sm-font-weight);
+  line-height: var(--typography-label-sm-line-height);
+  letter-spacing: var(--typography-label-sm-letter-spacing);
+}
+
+/**
+ * Medium size variant (default).
+ * Box: 32px, Icon: 20px, Gap: space.grouped.normal, Typography: labelMd
+ * 
+ * @see Requirements: 2.2, 2.5, 2.7, 2.9
+ */
+.checkbox--md .checkbox__touch-target {
+  gap: var(--space-grouped-normal);
+}
+
+.checkbox--md .checkbox__box {
+  width: calc(var(--icon-size-075) + var(--space-inset-075) * 2);
+  height: calc(var(--icon-size-075) + var(--space-inset-075) * 2);
+  border-radius: var(--radius-small);
+}
+
+.checkbox--md .checkbox__label {
+  font-family: var(--typography-label-md-font-family);
+  font-size: var(--typography-label-md-font-size);
+  font-weight: var(--typography-label-md-font-weight);
+  line-height: var(--typography-label-md-line-height);
+  letter-spacing: var(--typography-label-md-letter-spacing);
+}
+
+/**
+ * Large size variant.
+ * Box: 40px, Icon: 24px, Gap: space.grouped.loose, Typography: labelLg
+ * 
+ * @see Requirements: 2.3, 2.6, 2.8
+ */
+.checkbox--lg .checkbox__touch-target {
+  gap: var(--space-grouped-loose);
+}
+
+.checkbox--lg .checkbox__box {
+  width: calc(var(--icon-size-100) + var(--space-inset-100) * 2);
+  height: calc(var(--icon-size-100) + var(--space-inset-100) * 2);
+  border-radius: var(--radius-small);
+}
+
+.checkbox--lg .checkbox__label {
+  font-family: var(--typography-label-lg-font-family);
+  font-size: var(--typography-label-lg-font-size);
+  font-weight: var(--typography-label-lg-font-weight);
+  line-height: var(--typography-label-lg-line-height);
+  letter-spacing: var(--typography-label-lg-letter-spacing);
+}
+
+/* ==========================================================================
+   Hidden Native Checkbox
+   ========================================================================== */
+
+/**
+ * Hidden native checkbox for form compatibility.
+ * Visually hidden but accessible to screen readers and form submission.
+ * 
+ * @see Requirements: 8.2 - Hidden native input for form compatibility
+ */
+.checkbox__input {
+  position: absolute;
+  width: 1px; /* a11y.visuallyHidden */
+  height: 1px; /* a11y.visuallyHidden */
+  padding: 0;
+  margin: -1px; /* a11y.visuallyHidden */
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ==========================================================================
+   Checkbox Box (Visual Indicator)
+   ========================================================================== */
+
+/**
+ * Visual checkbox box.
+ * 
+ * - Flex container for centering icon
+ * - Token-based border, radius, and colors
+ * - Transition for state changes using motion.selectionTransition
+ * 
+ * @see Requirements: 1.1 - Unchecked: transparent background, default border
+ */
+.checkbox__box {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--border-emphasis) solid var(--color-select-not-selected-strong);
+  background-color: transparent;
+  transition: background-color var(--motion-selection-transition-duration) var(--motion-selection-transition-easing),
+              border-color var(--motion-selection-transition-duration) var(--motion-selection-transition-easing);
+  box-sizing: border-box;
+}
+
+/**
+ * Icon inside checkbox box.
+ * Uses color.contrast.onPrimary for visibility on filled background.
+ * 
+ * @see Requirements: 4.4 - Icon color: color.contrast.onDark
+ */
+.checkbox__box icon-base {
+  color: var(--color-contrast-on-primary);
+  display: flex;
+}
+
+/* ==========================================================================
+   Checkbox States
+   ========================================================================== */
+
+/**
+ * Checked state.
+ * Filled background with checkmark icon.
+ * 
+ * @see Requirements: 1.2 - Checked: filled background, checkmark icon
+ */
+.checkbox--checked .checkbox__box {
+  background-color: var(--color-select-selected-strong);
+  border-color: var(--color-select-selected-strong);
+}
+
+/**
+ * Indeterminate state.
+ * Filled background with minus icon.
+ * 
+ * @see Requirements: 1.3 - Indeterminate: filled background, dash icon
+ */
+.checkbox--indeterminate .checkbox__box {
+  background-color: var(--color-select-selected-strong);
+  border-color: var(--color-select-selected-strong);
+}
+
+/**
+ * Error state.
+ * Error border color on checkbox box.
+ * 
+ * @see Requirements: 1.6 - Error: error border color
+ */
+.checkbox--error .checkbox__box {
+  border-color: var(--color-error-strong);
+}
+
+/* ==========================================================================
+   Hover State
+   ========================================================================== */
+
+/**
+ * Hover state for unchecked checkbox.
+ * Uses blend.hoverDarker (8% darker) applied via CSS custom property.
+ * The --_checkbox-hover-border is calculated in JavaScript using blend utilities
+ * and applied as an inline style on the checkbox wrapper element.
+ * 
+ * @see Requirements: 1.4 - Hover feedback on border
+ * @see Requirements: 7.4 - Web hover applies blend.hoverDarker to border
+ */
+.checkbox__touch-target:hover .checkbox__box {
+  border-color: var(--_checkbox-hover-border, var(--color-select-selected-strong));
+}
+
+/**
+ * Hover state for checked/indeterminate checkbox.
+ * Maintains selected border color (no change needed as already selected).
+ * The background color provides sufficient hover feedback through the
+ * transition animation.
+ */
+.checkbox--checked .checkbox__touch-target:hover .checkbox__box,
+.checkbox--indeterminate .checkbox__touch-target:hover .checkbox__box {
+  border-color: var(--color-select-selected-strong);
+}
+
+/* ==========================================================================
+   Container
+   ========================================================================== */
+
+/**
+ * Checkbox container - wraps checkbox label, helper text, and error message.
+ * Uses flex column layout to stack helper/error below the checkbox row.
+ */
+.checkbox-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   Content Area (Label, Helper, Error)
+   ========================================================================== */
+
+/**
+ * Content wrapper for label text within the checkbox row.
+ */
+.checkbox__content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/**
+ * Label text.
+ * Typography is set per size variant above.
+ * 
+ * @see Requirements: 6.1 - Label associated with checkbox
+ */
+.checkbox__label {
+  color: var(--color-text-default);
+}
+
+/* ==========================================================================
+   Helper Text and Error Message
+   ========================================================================== */
+
+/**
+ * Helper text styling - provides additional context below checkbox.
+ * Displayed below the checkbox+label row.
+ * 
+ * Uses caption typography for secondary information.
+ * Uses CSS logical properties for RTL support.
+ * 
+ * @see Requirements: 5.1 - Helper text displayed below checkbox
+ * @see Requirements: 5.6 - aria-describedby for helper text association
+ */
+.checkbox__helper {
+  display: block;
+  margin-block-start: var(--space-grouped-minimal);
+  margin-block-end: 0;
+  margin-inline: 0;
+  padding: 0;
+  font-family: var(--typography-caption-font-family);
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--typography-caption-line-height);
+  font-weight: var(--typography-caption-font-weight);
+  letter-spacing: var(--typography-caption-letter-spacing);
+  color: var(--color-text-muted);
+}
+
+/**
+ * Error message styling - displays validation errors below helper text.
+ * 
+ * Uses caption typography with error color for visibility.
+ * Has role="alert" for screen reader announcement.
+ * Uses CSS logical properties for RTL support.
+ * 
+ * @see Requirements: 5.2 - Error message displayed below helper text
+ * @see Requirements: 5.3 - Error styling applied to checkbox border
+ * @see Requirements: 5.4 - aria-invalid="true" when error present
+ * @see Requirements: 5.5 - aria-describedby for error association
+ */
+.checkbox__error {
+  display: block;
+  margin-block-start: var(--space-grouped-minimal);
+  margin-block-end: 0;
+  margin-inline: 0;
+  padding: 0;
+  font-family: var(--typography-caption-font-family);
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--typography-caption-line-height);
+  font-weight: var(--typography-caption-font-weight);
+  letter-spacing: var(--typography-caption-letter-spacing);
+  color: var(--color-feedback-error-text);
+}
+
+/* ==========================================================================
+   Focus State (Accessibility)
+   ========================================================================== */
+
+/**
+ * Focus ring on keyboard navigation.
+ * Uses :focus-visible via native input to show focus only for keyboard users.
+ * 
+ * The selector targets the checkbox box when the input has keyboard focus.
+ * Since the input is a sibling of the label (which contains the box),
+ * we use the general sibling combinator (~) to target the label,
+ * then descend to the box.
+ * 
+ * @see Requirements: 1.5 - Focus ring using accessibility tokens
+ * @see Requirements: 6.3 - Visible focus ring on keyboard focus
+ * @see Requirements: 7.5 - :focus-visible for keyboard-only focus
+ */
+.checkbox__input:focus-visible ~ .checkbox__touch-target .checkbox__box {
+  outline: var(--accessibility-focus-width) solid var(--accessibility-focus-color);
+  outline-offset: var(--accessibility-focus-offset);
+}
+
+/* ==========================================================================
+   High Contrast Mode Support
+   ========================================================================== */
+
+@media (prefers-contrast: high) {
+  .checkbox__box {
+    border: var(--border-emphasis) solid currentColor;
+  }
+
+  .checkbox__input:focus-visible ~ .checkbox__touch-target .checkbox__box {
+    outline-width: var(--border-heavy);
+  }
+}
+
+/* ==========================================================================
+   Reduced Motion Support
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .checkbox__box {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+  .checkbox__box {
+    background-color: transparent !important;
+    border-color: var(--color-print-default) !important;
+  }
+
+  .checkbox__label {
+    color: var(--color-print-default) !important;
+  }
+}
