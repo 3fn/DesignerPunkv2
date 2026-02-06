@@ -507,7 +507,7 @@ This spec implements two components across three platforms:
 
 ---
 
-- [ ] 8. Architectural Alignment & Test Resolution
+- [x] 8. Architectural Alignment & Test Resolution
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -713,7 +713,7 @@ This spec implements two components across three platforms:
       - Keep only Legal-specific: ConsentChangeData, required indicator, consent enforcement
       - _Requirements: 9.1-9.11_
 
-  - [ ] 8.6 Update Legal component tests for wrapper DOM structure
+  - [x] 8.6 Update Legal component tests for wrapper DOM structure
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Rationale**: After refactor, tests should mostly work; update remaining selector mismatches.
@@ -727,7 +727,7 @@ This spec implements two components across three platforms:
     - Run all Legal tests to verify they pass
     - _Requirements: 11.7_
 
-  - [ ] 8.7 Full test suite validation
+  - [x] 8.7 Full test suite validation
     **Type**: Verification
     **Validation**: Tier 2 - Standard
     - Run `npm test` to verify all tests pass
