@@ -1,0 +1,331 @@
+/**
+ * Input-Checkbox-Legal Component Styles for Web Platform
+ * 
+ * Token-based styling using CSS custom properties from the mathematical token system.
+ * All values reference semantic or primitive tokens - zero hard-coded values.
+ * Uses CSS logical properties for RTL support.
+ * 
+ * Stemma System Naming: [Family]-[Type]-[Variant] = Input-Checkbox-Legal
+ * Component Type: Semantic Variant (extends Input-Checkbox-Base conceptually)
+ * 
+ * Fixed Configuration:
+ * - Box: 40px (lg size - icon.size100 + inset.100 × 2)
+ * - Typography: labelSm (smaller for legal text readability)
+ * - Label alignment: top (for multi-line legal text)
+ * - No indeterminate state support
+ * - No label truncation
+ * 
+ * DesignerPunk Philosophy: NO DISABLED STATES
+ * 
+ * @module Input-Checkbox-Legal/platforms/web/styles
+ * @see Requirements: 9.1-9.11
+ */
+
+/* ==========================================================================
+   Host Element
+   ========================================================================== */
+
+:host {
+  display: block;
+}
+
+/* ==========================================================================
+   Checkbox Container
+   ========================================================================== */
+
+/**
+ * Checkbox container - wraps required indicator, checkbox, helper, and error.
+ * Uses flex column layout to stack components vertically.
+ */
+.checkbox-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   Required Indicator
+   ========================================================================== */
+
+/**
+ * Required indicator styling.
+ * Displays "Required" text above the checkbox for legal consent scenarios.
+ * 
+ * Uses caption typography with error color for visibility.
+ * Uses CSS logical properties for RTL support.
+ * 
+ * @see Requirements: 9.8-9.9 - Required indicator default visible
+ */
+.checkbox__required {
+  display: block;
+  margin-block-end: var(--space-grouped-minimal);
+  font-family: var(--typography-caption-font-family);
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--typography-caption-line-height);
+  font-weight: var(--typography-caption-font-weight);
+  letter-spacing: var(--typography-caption-letter-spacing);
+  color: var(--color-feedback-error-text);
+}
+
+/* ==========================================================================
+   Base Checkbox Styles
+   ========================================================================== */
+
+/**
+ * Checkbox wrapper - contains input and clickable label area.
+ * 
+ * Uses inline-flex for horizontal layout of box + content.
+ * Fixed top alignment for multi-line legal text.
+ * 
+ * @see Requirements: 9.2 - Fixed top label alignment
+ */
+.checkbox {
+  display: inline-flex;
+  align-items: flex-start;
+  position: relative;
+}
+
+/**
+ * Touch target wrapper - ensures minimum 44px touch target for accessibility.
+ * 
+ * Uses inline-flex for horizontal layout of box + content.
+ * Fixed top alignment for multi-line legal text.
+ * Uses space.grouped.loose gap (lg size).
+ * 
+ * @see Requirements: 6.5 - Entire label area tappable
+ * @see Requirements: 6.6 - Minimum 44px touch target
+ */
+.checkbox__touch-target {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--space-grouped-loose);
+  cursor: pointer;
+  user-select: none;
+  min-height: var(--tap-area-recommended);
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   Hidden Native Checkbox
+   ========================================================================== */
+
+/**
+ * Hidden native checkbox for form compatibility.
+ * Visually hidden but accessible to screen readers and form submission.
+ */
+.checkbox__input {
+  position: absolute;
+  width: 1px; /* a11y.visuallyHidden */
+  height: 1px; /* a11y.visuallyHidden */
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ==========================================================================
+   Checkbox Box (Visual Indicator)
+   ========================================================================== */
+
+/**
+ * Visual checkbox box - fixed lg size (40px).
+ * 
+ * Box size = icon.size100 (24px) + inset.100 (8px) × 2 = 40px
+ * Uses radius-small for lg size.
+ * 
+ * @see Requirements: 9.1 - Fixed sizing: lg box (40px)
+ */
+.checkbox__box {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--icon-size-100) + var(--space-inset-100) * 2);
+  height: calc(var(--icon-size-100) + var(--space-inset-100) * 2);
+  border: var(--border-emphasis) solid var(--color-select-not-selected-strong);
+  border-radius: var(--radius-small);
+  background-color: transparent;
+  transition: background-color var(--motion-selection-transition-duration) var(--motion-selection-transition-easing),
+              border-color var(--motion-selection-transition-duration) var(--motion-selection-transition-easing);
+  box-sizing: border-box;
+}
+
+/**
+ * Icon inside checkbox box.
+ * Uses color.contrast.onPrimary for visibility on filled background.
+ */
+.checkbox__box icon-base {
+  color: var(--color-contrast-on-primary);
+  display: flex;
+}
+
+/* ==========================================================================
+   Checkbox States
+   ========================================================================== */
+
+/**
+ * Checked state.
+ * Filled background with checkmark icon.
+ */
+.checkbox--checked .checkbox__box {
+  background-color: var(--color-select-selected-strong);
+  border-color: var(--color-select-selected-strong);
+}
+
+/**
+ * Error state.
+ * Error border color on checkbox box.
+ */
+.checkbox--error .checkbox__box {
+  border-color: var(--color-error-strong);
+}
+
+/* ==========================================================================
+   Hover State
+   ========================================================================== */
+
+/**
+ * Hover state for unchecked checkbox.
+ * Uses blend.hoverDarker (8% darker) applied via CSS custom property.
+ */
+.checkbox__touch-target:hover .checkbox__box {
+  border-color: var(--_checkbox-hover-border, var(--color-select-selected-strong));
+}
+
+/**
+ * Hover state for checked checkbox.
+ * Maintains selected border color.
+ */
+.checkbox--checked .checkbox__touch-target:hover .checkbox__box {
+  border-color: var(--color-select-selected-strong);
+}
+
+/* ==========================================================================
+   Content Area (Label)
+   ========================================================================== */
+
+/**
+ * Content wrapper for label text.
+ */
+.checkbox__content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/**
+ * Label text - fixed labelSm typography for legal text readability.
+ * 
+ * Legal checkboxes use lg box (40px) but labelSm typography.
+ * Label text is never truncated for legal compliance.
+ * 
+ * @see Requirements: 9.1 - Fixed sizing: lg box with labelSm typography
+ * @see Requirements: 9.11 - Label text SHALL NOT be truncated
+ */
+.checkbox__label {
+  color: var(--color-text-default);
+  font-family: var(--typography-label-sm-font-family);
+  font-size: var(--typography-label-sm-font-size);
+  font-weight: var(--typography-label-sm-font-weight);
+  line-height: var(--typography-label-sm-line-height);
+  letter-spacing: var(--typography-label-sm-letter-spacing);
+  /* Prevent truncation - legal text must be fully visible */
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+/* ==========================================================================
+   Helper Text and Error Message
+   ========================================================================== */
+
+/**
+ * Helper text styling - provides additional context below checkbox.
+ */
+.checkbox__helper {
+  display: block;
+  margin-block-start: var(--space-grouped-minimal);
+  margin-block-end: 0;
+  margin-inline: 0;
+  padding: 0;
+  font-family: var(--typography-caption-font-family);
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--typography-caption-line-height);
+  font-weight: var(--typography-caption-font-weight);
+  letter-spacing: var(--typography-caption-letter-spacing);
+  color: var(--color-text-muted);
+}
+
+/**
+ * Error message styling - displays validation errors below helper text.
+ */
+.checkbox__error {
+  display: block;
+  margin-block-start: var(--space-grouped-minimal);
+  margin-block-end: 0;
+  margin-inline: 0;
+  padding: 0;
+  font-family: var(--typography-caption-font-family);
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--typography-caption-line-height);
+  font-weight: var(--typography-caption-font-weight);
+  letter-spacing: var(--typography-caption-letter-spacing);
+  color: var(--color-feedback-error-text);
+}
+
+/* ==========================================================================
+   Focus State (Accessibility)
+   ========================================================================== */
+
+/**
+ * Focus ring on keyboard navigation.
+ * Uses :focus-visible via native input to show focus only for keyboard users.
+ */
+.checkbox__input:focus-visible ~ .checkbox__touch-target .checkbox__box {
+  outline: var(--accessibility-focus-width) solid var(--accessibility-focus-color);
+  outline-offset: var(--accessibility-focus-offset);
+}
+
+/* ==========================================================================
+   High Contrast Mode Support
+   ========================================================================== */
+
+@media (prefers-contrast: high) {
+  .checkbox__box {
+    border: var(--border-emphasis) solid currentColor;
+  }
+
+  .checkbox__input:focus-visible ~ .checkbox__touch-target .checkbox__box {
+    outline-width: var(--border-heavy);
+  }
+}
+
+/* ==========================================================================
+   Reduced Motion Support
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .checkbox__box {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+  .checkbox__box {
+    background-color: transparent !important;
+    border-color: var(--color-print-default) !important;
+  }
+
+  .checkbox__label {
+    color: var(--color-print-default) !important;
+  }
+
+  .checkbox__required {
+    color: var(--color-print-default) !important;
+  }
+}

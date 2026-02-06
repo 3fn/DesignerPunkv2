@@ -262,7 +262,7 @@ This spec implements two components across three platforms:
 
 ---
 
-- [ ] 4. Input-Checkbox-Legal Implementation
+- [x] 4. Input-Checkbox-Legal Implementation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -291,7 +291,7 @@ This spec implements two components across three platforms:
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 Complete: Input-Checkbox-Legal Implementation"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 4.1 Create Legal component directory structure
+  - [x] 4.1 Create Legal component directory structure
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Create `src/components/core/Input-Checkbox-Legal/` directory
@@ -299,7 +299,7 @@ This spec implements two components across three platforms:
     - Create `types.ts` with TypeScript interfaces extending Base
     - _Requirements: 9.1_
 
-  - [ ] 4.2 Implement Legal web component
+  - [x] 4.2 Implement Legal web component
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `InputCheckboxLegal.web.ts` extending/wrapping Base
@@ -313,7 +313,7 @@ This spec implements two components across three platforms:
     - Prevent label truncation
     - _Requirements: 9.1-9.11_
 
-  - [ ] 4.3 Implement Legal iOS component
+  - [x] 4.3 Implement Legal iOS component
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `InputCheckboxLegal.ios.swift` extending/wrapping Base
@@ -324,7 +324,7 @@ This spec implements two components across three platforms:
     - Implement required indicator
     - _Requirements: 9.1-9.11_
 
-  - [ ] 4.4 Implement Legal Android component
+  - [x] 4.4 Implement Legal Android component
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `InputCheckboxLegal.android.kt` extending/wrapping Base
@@ -335,7 +335,7 @@ This spec implements two components across three platforms:
     - Implement required indicator
     - _Requirements: 9.1-9.11_
 
-  - [ ] 4.5 Write Legal component tests
+  - [x] 4.5 Write Legal component tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test explicit consent enforcement (pre-check override + console warning)
