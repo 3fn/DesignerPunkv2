@@ -154,6 +154,56 @@
 }
 
 /* ==========================================================================
+   Label Typography Override
+   ========================================================================== */
+
+/**
+ * Typography override classes.
+ * 
+ * These classes allow overriding the default label typography which normally
+ * matches the size variant. Used by Input-Checkbox-Legal which needs lg box
+ * size with sm typography.
+ * 
+ * The override classes use higher specificity to override the size-based
+ * typography rules above.
+ * 
+ * @see Requirements: 9.1 - Legal uses lg box + labelSm typography
+ */
+
+/**
+ * Force small typography regardless of size variant.
+ */
+.checkbox--label-sm .checkbox__label {
+  font-family: var(--typography-label-sm-font-family);
+  font-size: var(--typography-label-sm-font-size);
+  font-weight: var(--typography-label-sm-font-weight);
+  line-height: var(--typography-label-sm-line-height);
+  letter-spacing: var(--typography-label-sm-letter-spacing);
+}
+
+/**
+ * Force medium typography regardless of size variant.
+ */
+.checkbox--label-md .checkbox__label {
+  font-family: var(--typography-label-md-font-family);
+  font-size: var(--typography-label-md-font-size);
+  font-weight: var(--typography-label-md-font-weight);
+  line-height: var(--typography-label-md-line-height);
+  letter-spacing: var(--typography-label-md-letter-spacing);
+}
+
+/**
+ * Force large typography regardless of size variant.
+ */
+.checkbox--label-lg .checkbox__label {
+  font-family: var(--typography-label-lg-font-family);
+  font-size: var(--typography-label-lg-font-size);
+  font-weight: var(--typography-label-lg-font-weight);
+  line-height: var(--typography-label-lg-line-height);
+  letter-spacing: var(--typography-label-lg-letter-spacing);
+}
+
+/* ==========================================================================
    Hidden Native Checkbox
    ========================================================================== */
 
@@ -202,12 +252,12 @@
 
 /**
  * Icon inside checkbox box.
- * Uses color.contrast.onPrimary for visibility on filled background.
+ * Uses color.contrast.onLight for visibility on light cyan filled background.
  * 
  * @see Requirements: 4.4 - Icon color: color.contrast.onDark
  */
 .checkbox__box icon-base {
-  color: var(--color-contrast-on-primary);
+  color: var(--color-contrast-on-light);
   display: flex;
 }
 
@@ -244,7 +294,7 @@
  * @see Requirements: 1.6 - Error: error border color
  */
 .checkbox--error .checkbox__box {
-  border-color: var(--color-error-strong);
+  border-color: var(--color-feedback-error-border);
 }
 
 /* ==========================================================================

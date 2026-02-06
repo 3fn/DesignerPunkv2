@@ -4,8 +4,12 @@
  * Specialized checkbox for legal consent scenarios (terms of service, privacy policies,
  * GDPR consent) with audit capabilities and stricter validation.
  * 
+ * **Architecture**: Wrapper pattern - wraps InputCheckboxBase with fixed configuration
+ * and Legal-specific features. This reduces code duplication by ~80% and ensures
+ * Legal inherits Base improvements automatically.
+ * 
  * Stemma System Naming: [Family]-[Type]-[Variant] = Input-Checkbox-Legal
- * Component Type: Semantic Variant (extends Base conceptually)
+ * Component Type: Semantic Variant (wraps Base)
  * 
  * Key Differences from Input-Checkbox-Base:
  * - Fixed sizing: lg box (40px) with labelSm typography
@@ -59,11 +63,12 @@ struct ConsentChangeData {
 /**
  * InputCheckboxLegal component for iOS platform.
  * 
- * Renders a legal consent checkbox with SwiftUI, using fixed lg box size
- * with labelSm typography for legal text readability.
- * 
- * Uses Icon-Base for checkmark icon rendering and theme-aware blend utilities
- * for state colors.
+ * **Wrapper Pattern**: This component wraps InputCheckboxBase with fixed configuration
+ * (lg size, top alignment, sm typography) and adds Legal-specific features:
+ * - Required indicator (rendered above Base)
+ * - Explicit consent enforcement (intercepts checked binding)
+ * - Audit trail (onConsentChange with timestamp, legalTextId, version)
+ * - No indeterminate support (not passed to Base)
  * 
  * Usage:
  * ```swift
@@ -143,41 +148,8 @@ struct InputCheckboxLegal: View {
     
     // MARK: - State
     
-    /// Tracks pressed state for scale transform animation
-    @State private var isPressed = false
-    
     /// Flag to track if explicit consent warning has been shown
     @State private var consentWarningShown = false
-    
-    /// Environment for reduce motion preference
-    @Environment(\.accessibilityReduceMotion) var reduceMotion
-    
-    // MARK: - Fixed Configuration (Legal-specific)
-    
-    /// Fixed icon size for Legal checkbox (lg size = 24px icon)
-    /// @see Requirement 9.1 - Fixed sizing
-    private let iconSize: CGFloat = DesignTokens.iconSize100  // 24px
-    
-    /// Fixed inset padding for Legal checkbox (lg size = 8px inset)
-    /// @see Requirement 9.1 - Fixed sizing
-    private let inset: CGFloat = DesignTokens.spaceInset100  // 8px
-    
-    /// Computed box size (icon + inset padding on both sides) = 40px
-    /// @see Requirement 9.1 - Fixed sizing
-    private var boxSize: CGFloat {
-        return iconSize + (inset * 2)  // 24 + 8 + 8 = 40px
-    }
-    
-    /// Fixed gap between checkbox box and label (lg size = loose)
-    /// @see Requirement 9.1 - Fixed sizing
-    private let gap: CGFloat = DesignTokens.spaceGroupedLoose  // 12px
-    
-    /// Fixed border radius for Legal checkbox (lg size = radiusSmall)
-    private let radius: CGFloat = DesignTokens.radiusSmall  // 4px
-    
-    /// Fixed label font size (labelSm typography)
-    /// @see Requirement 9.1 - Fixed sizing (lg box + labelSm typography)
-    private let labelFontSize: CGFloat = DesignTokens.fontSize075  // 14px (labelSm)
     
     // MARK: - Initialization
     
@@ -227,7 +199,7 @@ struct InputCheckboxLegal: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: DesignTokens.spaceGroupedTight) {
-            // Required indicator (above checkbox)
+            // Required indicator (above checkbox, Legal-specific)
             // @see Requirement 9.8-9.9 - Required indicator
             if showRequiredIndicator {
                 Text("Required")
@@ -236,50 +208,22 @@ struct InputCheckboxLegal: View {
                     .accessibilityLabel("Required field")
             }
             
-            // Main checkbox row
-            Button(action: toggleChecked) {
-                // Fixed top alignment for multi-line legal text
-                // @see Requirement 9.2 - Fixed top label alignment
-                HStack(alignment: .top, spacing: gap) {
-                    checkboxBox
-                    labelText
-                }
-            }
-            .buttonStyle(PlainButtonStyle())
-            .simultaneousGesture(pressGesture)
-            // MARK: - Accessibility (Requirements 6.1-6.6)
-            .accessibilityElement(children: .combine)
-            .accessibilityLabel(label)
-            .accessibilityValue(accessibilityState)
-            .accessibilityHint(accessibilityHint)
-            .accessibilityAddTraits(.isButton)
-            .accessibilityIdentifier(testID ?? "")
-            // Requirement 6.6: Minimum 44pt touch target
-            .frame(minHeight: DesignTokens.tapAreaMinimum)
-            .contentShape(Rectangle())
-            
-            // Helper text and error message
-            // @see Requirements 5.1-5.6 - Helper text and error messages
-            if helperText != nil || errorMessage != nil {
-                VStack(alignment: .leading, spacing: DesignTokens.spaceGroupedMinimal) {
-                    if let helperText = helperText {
-                        Text(helperText)
-                            .font(.system(size: DesignTokens.fontSize050, weight: .regular))
-                            .foregroundColor(Color(DesignTokens.colorTextMuted))
-                            .accessibilityLabel("Helper: \(helperText)")
-                            .accessibilityIdentifier("\(testID ?? "legal-checkbox")-helper")
-                    }
-                    
-                    if let errorMessage = errorMessage {
-                        Text(errorMessage)
-                            .font(.system(size: DesignTokens.fontSize050, weight: .regular))
-                            .foregroundColor(Color(DesignTokens.colorFeedbackErrorText))
-                            .accessibilityLabel("Error: \(errorMessage)")
-                            .accessibilityIdentifier("\(testID ?? "legal-checkbox")-error")
-                    }
-                }
-                .padding(.leading, boxSize + gap)
-            }
+            // Wrapped InputCheckboxBase with fixed configuration
+            // @see Requirement 9.1 - Fixed sizing (lg box + labelSm typography)
+            // @see Requirement 9.2 - Fixed top label alignment
+            // @see Requirement 9.10 - No indeterminate state (not passed to Base)
+            InputCheckboxBase(
+                checked: $checked,
+                indeterminate: false,  // Legal never supports indeterminate
+                label: label,
+                size: .lg,             // Fixed: lg box (40px)
+                labelAlign: .top,      // Fixed: top alignment for multi-line legal text
+                labelTypography: .sm,  // Fixed: labelSm typography
+                helperText: helperText,
+                errorMessage: errorMessage,
+                onChange: handleChange,
+                testID: testID
+            )
         }
         .onAppear {
             // Enforce explicit consent on appear
@@ -288,110 +232,11 @@ struct InputCheckboxLegal: View {
         }
     }
     
-    // MARK: - Checkbox Box View
-    
-    /// The checkbox box with border, background, and icon
-    /// Fixed lg size (40px) per Requirement 9.1
-    private var checkboxBox: some View {
-        ZStack {
-            // Border/background rectangle
-            RoundedRectangle(cornerRadius: radius)
-                .stroke(borderColor, lineWidth: DesignTokens.borderEmphasis)
-                .frame(width: boxSize, height: boxSize)
-            
-            // Filled background when checked (no indeterminate for Legal)
-            // @see Requirement 9.10 - No indeterminate state
-            if checked {
-                RoundedRectangle(cornerRadius: radius)
-                    .fill(Color(DesignTokens.colorFeedbackSelectBackgroundRest))
-                    .frame(width: boxSize, height: boxSize)
-                
-                // Check icon only (no minus icon for Legal)
-                IconBase(
-                    name: "check",
-                    size: iconSize,
-                    color: Color(DesignTokens.colorContrastOnDark)
-                )
-            }
-        }
-        .scaleEffect(isPressed ? DesignTokens.scale096 : 1.0)
-        .animation(
-            reduceMotion ? .none : .easeOut(duration: DesignTokens.MotionButtonPress.duration),
-            value: isPressed
-        )
-        .animation(
-            reduceMotion ? .none : .easeInOut(duration: DesignTokens.MotionSelectionTransition.duration),
-            value: checked
-        )
-    }
-    
-    // MARK: - Label Text View
-    
-    /// The label text with fixed labelSm typography
-    /// @see Requirement 9.1 - Fixed sizing (lg box + labelSm typography)
-    /// @see Requirement 9.11 - No label truncation
-    private var labelText: some View {
-        Text(label)
-            .font(.system(size: labelFontSize, weight: .medium))
-            .foregroundColor(Color(DesignTokens.colorTextDefault))
-            // Requirement 9.11: No label truncation - allow full text to display
-            .fixedSize(horizontal: false, vertical: true)
-            .lineLimit(nil)
-    }
-    
-    // MARK: - Computed Properties
-    
-    /// Border color based on state (error or default)
-    private var borderColor: Color {
-        if errorMessage != nil {
-            return Color(DesignTokens.colorFeedbackErrorBorder)
-        } else if checked {
-            return Color(DesignTokens.colorFeedbackSelectBorderRest)
-        } else {
-            return Color(DesignTokens.colorFeedbackSelectBorderDefault)
-        }
-    }
-    
-    /// Accessibility state description
-    private var accessibilityState: String {
-        // No indeterminate state for Legal
-        if checked {
-            return "checked"
-        } else {
-            return "unchecked"
-        }
-    }
-    
-    /// Accessibility hint providing action context
-    private var accessibilityHint: String {
-        if checked {
-            return "Double tap to withdraw consent"
-        } else {
-            return "Double tap to give consent"
-        }
-    }
-    
-    // MARK: - Gestures
-    
-    /// Press gesture for scale feedback
-    /// @see Requirements 7.1, 7.2 - iOS press feedback
-    private var pressGesture: some Gesture {
-        DragGesture(minimumDistance: 0)
-            .onChanged { _ in
-                isPressed = true
-            }
-            .onEnded { _ in
-                isPressed = false
-            }
-    }
-    
     // MARK: - Actions
     
-    /// Toggle checkbox state and fire callbacks with audit trail
-    private func toggleChecked() {
-        let newValue = !checked
-        checked = newValue
-        
+    /// Handle checkbox state change and fire callbacks with audit trail
+    /// Transforms Base's onChange to Legal's onConsentChange
+    private func handleChange(_ newValue: Bool) {
         // Fire base onChange callback
         onChange?(newValue)
         

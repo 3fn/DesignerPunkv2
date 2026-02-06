@@ -120,6 +120,37 @@ enum LabelAlignment {
     }
 }
 
+/**
+ * Label typography override options.
+ * 
+ * Allows overriding the default label typography which normally matches the size variant.
+ * This is primarily used by Input-Checkbox-Legal which needs lg box size with sm typography.
+ * 
+ * - inherit: Uses typography matching the size variant (default behavior)
+ * - sm: Forces labelSm typography (14px) regardless of size
+ * - md: Forces labelMd typography (16px) regardless of size
+ * - lg: Forces labelLg typography (18px) regardless of size
+ * 
+ * @see Requirement 9.1 in .kiro/specs/046-input-checkbox-base/requirements.md
+ */
+enum LabelTypography {
+    case inherit
+    case sm
+    case md
+    case lg
+    
+    /// Font size for this typography option
+    /// Returns nil for .inherit (use size variant's default)
+    var fontSize: CGFloat? {
+        switch self {
+        case .inherit: return nil
+        case .sm: return DesignTokens.fontSize075  // 14px (labelSm)
+        case .md: return DesignTokens.fontSize100  // 16px (labelMd)
+        case .lg: return DesignTokens.fontSize125  // 18px (labelLg)
+        }
+    }
+}
+
 // MARK: - InputCheckboxBase Component
 
 /**
@@ -183,6 +214,11 @@ struct InputCheckboxBase: View {
     /// Vertical alignment of label relative to checkbox box
     var labelAlign: LabelAlignment
     
+    /// Override label typography independent of size variant
+    /// When .inherit (default), uses typography matching the size variant
+    /// @see Requirement 9.1 - Legal uses lg box + labelSm typography
+    var labelTypography: LabelTypography
+    
     /// Helper text displayed below checkbox (persistent)
     var helperText: String?
     
@@ -214,6 +250,7 @@ struct InputCheckboxBase: View {
      *   - label: Label text (required)
      *   - size: Size variant (default: .md)
      *   - labelAlign: Label alignment (default: .center)
+     *   - labelTypography: Typography override (default: .inherit)
      *   - helperText: Optional helper text
      *   - errorMessage: Optional error message
      *   - onChange: Optional change callback
@@ -225,6 +262,7 @@ struct InputCheckboxBase: View {
         label: String,
         size: CheckboxSize = .md,
         labelAlign: LabelAlignment = .center,
+        labelTypography: LabelTypography = .inherit,
         helperText: String? = nil,
         errorMessage: String? = nil,
         onChange: ((Bool) -> Void)? = nil,
@@ -235,6 +273,7 @@ struct InputCheckboxBase: View {
         self.label = label
         self.size = size
         self.labelAlign = labelAlign
+        self.labelTypography = labelTypography
         self.helperText = helperText
         self.errorMessage = errorMessage
         self.onChange = onChange
@@ -339,12 +378,24 @@ struct InputCheckboxBase: View {
     // MARK: - Label Text View
     
     /// The label text with appropriate typography
+    /// Uses labelTypography override if specified, otherwise uses size variant's default
     /// @see Requirements 2.4-2.6 - Label typography
+    /// @see Requirement 9.1 - Legal uses lg box + labelSm typography
     private var labelText: some View {
         Text(label)
-            .font(.system(size: size.labelFontSize, weight: .medium))
+            .font(.system(size: effectiveLabelFontSize, weight: .medium))
             .foregroundColor(Color(DesignTokens.colorTextDefault))
             .fixedSize(horizontal: false, vertical: true)
+    }
+    
+    /// Computed font size for label, respecting typography override
+    private var effectiveLabelFontSize: CGFloat {
+        // If labelTypography is not .inherit, use its explicit font size
+        if let overrideFontSize = labelTypography.fontSize {
+            return overrideFontSize
+        }
+        // Otherwise, use the size variant's default typography
+        return size.labelFontSize
     }
     
     // MARK: - Computed Properties
@@ -459,6 +510,29 @@ struct InputCheckboxBase_Previews: PreviewProvider {
                 
                 Divider()
                 
+                // Typography override (for Legal checkbox pattern)
+                Text("Typography Override")
+                    .font(.headline)
+                
+                VStack(alignment: .leading, spacing: 16) {
+                    PreviewCheckbox(
+                        label: "Large box with default (lg) typography",
+                        size: .lg
+                    )
+                    PreviewCheckbox(
+                        label: "Large box with small typography (Legal pattern)",
+                        size: .lg,
+                        labelTypography: .sm
+                    )
+                    PreviewCheckbox(
+                        label: "Medium box with large typography",
+                        size: .md,
+                        labelTypography: .lg
+                    )
+                }
+                
+                Divider()
+                
                 // Helper text and error
                 Text("Helper Text & Error")
                     .font(.headline)
@@ -489,6 +563,7 @@ private struct PreviewCheckbox: View {
     let label: String
     var size: CheckboxSize = .md
     var labelAlign: LabelAlignment = .center
+    var labelTypography: LabelTypography = .inherit
     var initialChecked: Bool = false
     var indeterminate: Bool = false
     var helperText: String? = nil
@@ -500,6 +575,7 @@ private struct PreviewCheckbox: View {
         label: String,
         size: CheckboxSize = .md,
         labelAlign: LabelAlignment = .center,
+        labelTypography: LabelTypography = .inherit,
         initialChecked: Bool = false,
         indeterminate: Bool = false,
         helperText: String? = nil,
@@ -508,6 +584,7 @@ private struct PreviewCheckbox: View {
         self.label = label
         self.size = size
         self.labelAlign = labelAlign
+        self.labelTypography = labelTypography
         self.initialChecked = initialChecked
         self.indeterminate = indeterminate
         self.helperText = helperText
@@ -522,6 +599,7 @@ private struct PreviewCheckbox: View {
             label: label,
             size: size,
             labelAlign: labelAlign,
+            labelTypography: labelTypography,
             helperText: helperText,
             errorMessage: errorMessage,
             onChange: { checked in

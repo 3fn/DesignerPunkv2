@@ -504,10 +504,12 @@ describe('Semantic Color Tokens - Palette Update', () => {
       // Glow: 5 tokens (neonPurple, neonCyan, neonYellow, neonGreen, neonPink)
       // Avatar component: MIGRATED to src/components/core/Avatar/avatar.tokens.ts (Spec 058)
       // Badge component: MIGRATED to src/components/core/Badge-Count-Notification/tokens.ts (Spec 058)
-      // Total: 43 tokens (includes color.structure.border.subtle with opacity composition)
+      // Notification semantic tokens: 2 tokens added (Spec 046 Task 8.2)
+      // Total: 45 tokens (includes color.structure.border.subtle with opacity composition)
       // Note: 5 Avatar tokens removed in Spec 058 migration (50 - 5 = 45)
       // Note: 2 Badge tokens removed in Spec 058 migration (45 - 2 = 43)
-      expect(colorTokenNames.length).toBe(43);
+      // Note: 2 Notification semantic tokens added in Spec 046 (43 + 2 = 45)
+      expect(colorTokenNames.length).toBe(45);
     });
 
     it('should pass validateColorTokenCount()', () => {
@@ -602,11 +604,12 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(Array.isArray(tokens)).toBe(true);
       });
 
-      it('should return exactly 43 tokens', () => {
-        // Updated for Spec 058: Avatar and Badge tokens migrated to component directories
-        // Previous count: 50, After Avatar migration: 45, Current count: 43 (2 Badge tokens removed)
+      it('should return exactly 45 tokens', () => {
+        // Updated for Spec 046 Task 8.2: Notification semantic tokens added
+        // Previous count: 50, After Avatar migration: 45, After Badge migration: 43
+        // After notification semantic tokens added: 45 (43 + 2)
         const tokens = getAllColorTokens();
-        expect(tokens.length).toBe(43);
+        expect(tokens.length).toBe(45);
       });
 
       it('should include all new tokens', () => {
@@ -934,10 +937,10 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(selectTokens.length).toBe(6);
       });
 
-      it('should include select tokens in total count of 43', () => {
+      it('should include select tokens in total count of 45', () => {
         // Verify total count includes the 6 feedback select tokens
-        // Updated for Spec 058: 43 total tokens (5 Avatar + 2 Badge tokens migrated to component directories)
-        expect(colorTokenNames.length).toBe(43);
+        // Updated for Spec 046 Task 8.2: 45 total tokens (includes 2 notification semantic tokens)
+        expect(colorTokenNames.length).toBe(45);
         expect(validateColorTokenCount()).toBe(true);
       });
     });
@@ -1328,12 +1331,14 @@ describe('Semantic Color Tokens - Palette Update', () => {
 
       it('should have notification.background in re-exported tokens', () => {
         const { BadgeNotificationColorTokens } = require('../ColorTokens');
-        expect(BadgeNotificationColorTokens['notification.background']).toBe('pink400');
+        // Updated to expect semantic token reference (Spec 046 Task 8.2)
+        expect(BadgeNotificationColorTokens['notification.background']).toBe('color.feedback.notification.background');
       });
 
       it('should have notification.text in re-exported tokens', () => {
         const { BadgeNotificationColorTokens } = require('../ColorTokens');
-        expect(BadgeNotificationColorTokens['notification.text']).toBe('white100');
+        // Updated to expect semantic token reference (Spec 046 Task 8.2)
+        expect(BadgeNotificationColorTokens['notification.text']).toBe('color.feedback.notification.text');
       });
     });
 
@@ -1344,14 +1349,16 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(BadgeNotificationColorTokens).toBeDefined();
       });
 
-      it('should reference pink400 for notification.background', () => {
+      it('should reference semantic token for notification.background', () => {
         const { BadgeNotificationColorTokens } = require('../../../components/core/Badge-Count-Notification/tokens');
-        expect(BadgeNotificationColorTokens['notification.background']).toBe('pink400');
+        // Updated to expect semantic token reference (Spec 046 Task 8.2)
+        expect(BadgeNotificationColorTokens['notification.background']).toBe('color.feedback.notification.background');
       });
 
-      it('should reference white100 for notification.text', () => {
+      it('should reference semantic token for notification.text', () => {
         const { BadgeNotificationColorTokens } = require('../../../components/core/Badge-Count-Notification/tokens');
-        expect(BadgeNotificationColorTokens['notification.text']).toBe('white100');
+        // Updated to expect semantic token reference (Spec 046 Task 8.2)
+        expect(BadgeNotificationColorTokens['notification.text']).toBe('color.feedback.notification.text');
       });
     });
 
@@ -1361,10 +1368,11 @@ describe('Semantic Color Tokens - Palette Update', () => {
         expect(badgeTokens.length).toBe(0);
       });
 
-      it('should have total count of 43 after badge migration', () => {
-        // Verify total count after badge token migration
-        // Previous count: 45 (after Avatar migration), Current count: 43 (2 Badge tokens removed)
-        expect(colorTokenNames.length).toBe(43);
+      it('should have total count of 45 after notification semantic tokens added', () => {
+        // Verify total count after notification semantic tokens added (Spec 046 Task 8.2)
+        // Previous count: 43 (after Avatar + Badge migration)
+        // Current count: 45 (2 notification semantic tokens added: color.feedback.notification.background, color.feedback.notification.text)
+        expect(colorTokenNames.length).toBe(45);
         expect(validateColorTokenCount()).toBe(true);
       });
     });

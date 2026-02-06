@@ -751,5 +751,127 @@ describe('Input-Checkbox-Base Web Component', () => {
     it('should observe value attribute', () => {
       expect(InputCheckboxBaseElement.observedAttributes).toContain('value');
     });
+
+    it('should observe label-typography attribute', () => {
+      expect(InputCheckboxBaseElement.observedAttributes).toContain('label-typography');
+    });
+  });
+
+  // ============================================================================
+  // Label Typography Override
+  // ============================================================================
+  
+  describe('Label Typography Override', () => {
+    /**
+     * @see Requirements: 9.1 - Legal uses lg box + labelSm typography
+     */
+    it('should default to inherit typography', async () => {
+      const checkbox = document.createElement('input-checkbox-base') as InputCheckboxBaseElement;
+      checkbox.setAttribute('label', 'Default typography');
+      document.body.appendChild(checkbox);
+      
+      await new Promise(resolve => setTimeout(resolve, 0));
+      
+      expect(checkbox.labelTypography).toBe('inherit');
+      const wrapper = checkbox.shadowRoot?.querySelector('.checkbox');
+      expect(wrapper?.classList.contains('checkbox--label-sm')).toBe(false);
+      expect(wrapper?.classList.contains('checkbox--label-md')).toBe(false);
+      expect(wrapper?.classList.contains('checkbox--label-lg')).toBe(false);
+    });
+
+    it('should apply sm typography override class', async () => {
+      const checkbox = document.createElement('input-checkbox-base') as InputCheckboxBaseElement;
+      checkbox.setAttribute('label', 'Small typography');
+      checkbox.setAttribute('label-typography', 'sm');
+      document.body.appendChild(checkbox);
+      
+      await new Promise(resolve => setTimeout(resolve, 0));
+      
+      expect(checkbox.labelTypography).toBe('sm');
+      const wrapper = checkbox.shadowRoot?.querySelector('.checkbox');
+      expect(wrapper?.classList.contains('checkbox--label-sm')).toBe(true);
+    });
+
+    it('should apply md typography override class', async () => {
+      const checkbox = document.createElement('input-checkbox-base') as InputCheckboxBaseElement;
+      checkbox.setAttribute('label', 'Medium typography');
+      checkbox.setAttribute('label-typography', 'md');
+      document.body.appendChild(checkbox);
+      
+      await new Promise(resolve => setTimeout(resolve, 0));
+      
+      expect(checkbox.labelTypography).toBe('md');
+      const wrapper = checkbox.shadowRoot?.querySelector('.checkbox');
+      expect(wrapper?.classList.contains('checkbox--label-md')).toBe(true);
+    });
+
+    it('should apply lg typography override class', async () => {
+      const checkbox = document.createElement('input-checkbox-base') as InputCheckboxBaseElement;
+      checkbox.setAttribute('label', 'Large typography');
+      checkbox.setAttribute('label-typography', 'lg');
+      document.body.appendChild(checkbox);
+      
+      await new Promise(resolve => setTimeout(resolve, 0));
+      
+      expect(checkbox.labelTypography).toBe('lg');
+      const wrapper = checkbox.shadowRoot?.querySelector('.checkbox');
+      expect(wrapper?.classList.contains('checkbox--label-lg')).toBe(true);
+    });
+
+    it('should support lg size with sm typography (Legal checkbox pattern)', async () => {
+      const checkbox = document.createElement('input-checkbox-base') as InputCheckboxBaseElement;
+      checkbox.setAttribute('label', 'Legal checkbox pattern');
+      checkbox.setAttribute('size', 'lg');
+      checkbox.setAttribute('label-typography', 'sm');
+      document.body.appendChild(checkbox);
+      
+      await new Promise(resolve => setTimeout(resolve, 0));
+      
+      const wrapper = checkbox.shadowRoot?.querySelector('.checkbox');
+      expect(wrapper?.classList.contains('checkbox--lg')).toBe(true);
+      expect(wrapper?.classList.contains('checkbox--label-sm')).toBe(true);
+    });
+
+    it('should default to inherit when invalid typography provided', async () => {
+      const checkbox = document.createElement('input-checkbox-base') as InputCheckboxBaseElement;
+      checkbox.setAttribute('label', 'Invalid typography');
+      checkbox.setAttribute('label-typography', 'invalid');
+      document.body.appendChild(checkbox);
+      
+      await new Promise(resolve => setTimeout(resolve, 0));
+      
+      expect(checkbox.labelTypography).toBe('inherit');
+    });
+
+    it('should update typography class when attribute changes', async () => {
+      const checkbox = document.createElement('input-checkbox-base') as InputCheckboxBaseElement;
+      checkbox.setAttribute('label', 'Reactive typography');
+      checkbox.setAttribute('label-typography', 'sm');
+      document.body.appendChild(checkbox);
+      
+      await new Promise(resolve => setTimeout(resolve, 0));
+      
+      let wrapper = checkbox.shadowRoot?.querySelector('.checkbox');
+      expect(wrapper?.classList.contains('checkbox--label-sm')).toBe(true);
+      
+      checkbox.setAttribute('label-typography', 'lg');
+      await new Promise(resolve => setTimeout(resolve, 0));
+      
+      wrapper = checkbox.shadowRoot?.querySelector('.checkbox');
+      expect(wrapper?.classList.contains('checkbox--label-lg')).toBe(true);
+      expect(wrapper?.classList.contains('checkbox--label-sm')).toBe(false);
+    });
+
+    it('should update via property setter', async () => {
+      const checkbox = document.createElement('input-checkbox-base') as InputCheckboxBaseElement;
+      checkbox.label = 'Property setter';
+      checkbox.labelTypography = 'md';
+      document.body.appendChild(checkbox);
+      
+      await new Promise(resolve => setTimeout(resolve, 0));
+      
+      const wrapper = checkbox.shadowRoot?.querySelector('.checkbox');
+      expect(wrapper?.classList.contains('checkbox--label-md')).toBe(true);
+    });
   });
 });

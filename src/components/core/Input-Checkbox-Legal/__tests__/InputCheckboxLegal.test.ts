@@ -7,7 +7,7 @@
  * Input-Checkbox-Legal Web Component Tests
  * 
  * Stemma System: Form Inputs Family
- * Component Type: Semantic Variant (extends Base conceptually)
+ * Component Type: Semantic Variant (wraps Base)
  * 
  * Tests the Input-Checkbox-Legal component's web component behavior:
  * - Explicit consent enforcement (pre-check override + console warning)
@@ -24,13 +24,51 @@
  * - Clean up DOM after each test
  * - Test behavior, NOT implementation details
  * 
+ * Implementation Note:
+ * Input-Checkbox-Legal wraps Input-Checkbox-Base, so some queries need to
+ * traverse through nested shadow DOMs. Helper functions are provided for this.
+ * 
  * @module Input-Checkbox-Legal/__tests__
  * @see Requirements: 9.1-9.11, 11.7 in .kiro/specs/046-input-checkbox-base/requirements.md
  */
 
 import { InputCheckboxLegalElement } from '../platforms/web/InputCheckboxLegal.web';
+import { InputCheckboxBaseElement } from '../../Input-Checkbox-Base/platforms/web/InputCheckboxBase.web';
 import { IconBaseElement } from '../../Icon-Base/platforms/web/IconBase.web';
 import { ConsentChangeData } from '../types';
+
+/**
+ * Helper to get the wrapped Base checkbox from Legal component.
+ * Legal wraps Base, so we need to query through the nested shadow DOM.
+ */
+function getBaseCheckbox(legal: InputCheckboxLegalElement): InputCheckboxBaseElement | null {
+  return legal.shadowRoot?.querySelector('input-checkbox-base') as InputCheckboxBaseElement | null;
+}
+
+/**
+ * Helper to get the native input from the wrapped Base checkbox.
+ * Traverses: Legal shadow DOM -> Base element -> Base shadow DOM -> input
+ */
+function getNativeInput(legal: InputCheckboxLegalElement): HTMLInputElement | null {
+  const base = getBaseCheckbox(legal);
+  return base?.shadowRoot?.querySelector('.checkbox__input') as HTMLInputElement | null;
+}
+
+/**
+ * Helper to get the checkbox wrapper from the wrapped Base checkbox.
+ */
+function getCheckboxWrapper(legal: InputCheckboxLegalElement): Element | null {
+  const base = getBaseCheckbox(legal);
+  return base?.shadowRoot?.querySelector('.checkbox') ?? null;
+}
+
+/**
+ * Helper to get the checkbox box from the wrapped Base checkbox.
+ */
+function getCheckboxBox(legal: InputCheckboxLegalElement): Element | null {
+  const base = getBaseCheckbox(legal);
+  return base?.shadowRoot?.querySelector('.checkbox__box') ?? null;
+}
 
 describe('Input-Checkbox-Legal Web Component', () => {
   let consoleWarnSpy: jest.SpyInstance;
@@ -40,6 +78,9 @@ describe('Input-Checkbox-Legal Web Component', () => {
     if (!customElements.get('icon-base')) {
       customElements.define('icon-base', IconBaseElement);
     }
+    if (!customElements.get('input-checkbox-base')) {
+      customElements.define('input-checkbox-base', InputCheckboxBaseElement);
+    }
     if (!customElements.get('input-checkbox-legal')) {
       customElements.define('input-checkbox-legal', InputCheckboxLegalElement);
     }
@@ -48,6 +89,7 @@ describe('Input-Checkbox-Legal Web Component', () => {
   beforeEach(async () => {
     // Wait for custom elements to be defined
     await customElements.whenDefined('input-checkbox-legal');
+    await customElements.whenDefined('input-checkbox-base');
     await customElements.whenDefined('icon-base');
     
     // Spy on console.warn for consent warning tests
@@ -171,9 +213,10 @@ describe('Input-Checkbox-Legal Web Component', () => {
       
       await new Promise(resolve => setTimeout(resolve, 0));
       
-      // Click to toggle
-      const input = checkbox.shadowRoot?.querySelector('.checkbox__input') as HTMLInputElement;
-      input.click();
+      // Click to toggle - use the native input from wrapped Base
+      const input = getNativeInput(checkbox);
+      expect(input).toBeTruthy();
+      input!.click();
       
       expect(onConsentChange).toHaveBeenCalledTimes(1);
       const callData = onConsentChange.mock.calls[0][0] as ConsentChangeData;
@@ -193,8 +236,9 @@ describe('Input-Checkbox-Legal Web Component', () => {
       checkbox.addEventListener('consent-change', eventHandler);
       
       // Click to toggle
-      const input = checkbox.shadowRoot?.querySelector('.checkbox__input') as HTMLInputElement;
-      input.click();
+      const input = getNativeInput(checkbox);
+      expect(input).toBeTruthy();
+      input!.click();
       
       expect(eventHandler).toHaveBeenCalledTimes(1);
       const eventData = eventHandler.mock.calls[0][0].detail as ConsentChangeData;
@@ -212,8 +256,9 @@ describe('Input-Checkbox-Legal Web Component', () => {
       
       await new Promise(resolve => setTimeout(resolve, 0));
       
-      const input = checkbox.shadowRoot?.querySelector('.checkbox__input') as HTMLInputElement;
-      input.click();
+      const input = getNativeInput(checkbox);
+      expect(input).toBeTruthy();
+      input!.click();
       
       const callData = onConsentChange.mock.calls[0][0] as ConsentChangeData;
       const parsedDate = new Date(callData.timestamp);
@@ -244,8 +289,9 @@ describe('Input-Checkbox-Legal Web Component', () => {
       
       await new Promise(resolve => setTimeout(resolve, 0));
       
-      const input = checkbox.shadowRoot?.querySelector('.checkbox__input') as HTMLInputElement;
-      input.click();
+      const input = getNativeInput(checkbox);
+      expect(input).toBeTruthy();
+      input!.click();
       
       const callData = onConsentChange.mock.calls[0][0] as ConsentChangeData;
       expect(callData.legalTextId).toBe('tos-v2');
@@ -261,8 +307,9 @@ describe('Input-Checkbox-Legal Web Component', () => {
       
       await new Promise(resolve => setTimeout(resolve, 0));
       
-      const input = checkbox.shadowRoot?.querySelector('.checkbox__input') as HTMLInputElement;
-      input.click();
+      const input = getNativeInput(checkbox);
+      expect(input).toBeTruthy();
+      input!.click();
       
       const callData = onConsentChange.mock.calls[0][0] as ConsentChangeData;
       expect(callData.legalTextVersion).toBe('2.0.0');
@@ -279,8 +326,9 @@ describe('Input-Checkbox-Legal Web Component', () => {
       
       await new Promise(resolve => setTimeout(resolve, 0));
       
-      const input = checkbox.shadowRoot?.querySelector('.checkbox__input') as HTMLInputElement;
-      input.click();
+      const input = getNativeInput(checkbox);
+      expect(input).toBeTruthy();
+      input!.click();
       
       const callData = onConsentChange.mock.calls[0][0] as ConsentChangeData;
       expect(callData.legalTextId).toBe('privacy-policy');
@@ -296,8 +344,9 @@ describe('Input-Checkbox-Legal Web Component', () => {
       
       await new Promise(resolve => setTimeout(resolve, 0));
       
-      const input = checkbox.shadowRoot?.querySelector('.checkbox__input') as HTMLInputElement;
-      input.click();
+      const input = getNativeInput(checkbox);
+      expect(input).toBeTruthy();
+      input!.click();
       
       const callData = onConsentChange.mock.calls[0][0] as ConsentChangeData;
       expect(callData.legalTextId).toBeUndefined();
@@ -312,14 +361,26 @@ describe('Input-Checkbox-Legal Web Component', () => {
       
       await new Promise(resolve => setTimeout(resolve, 0));
       
-      const input = checkbox.shadowRoot?.querySelector('.checkbox__input') as HTMLInputElement;
-      
       // First click - consent given
-      input.click();
+      let input = getNativeInput(checkbox);
+      expect(input).toBeTruthy();
+      input!.click();
+      
+      await new Promise(resolve => setTimeout(resolve, 0));
+      
+      expect(onConsentChange).toHaveBeenCalledTimes(1);
       expect(onConsentChange.mock.calls[0][0].consented).toBe(true);
       
+      // Get fresh reference to input after re-render
+      input = getNativeInput(checkbox);
+      expect(input).toBeTruthy();
+      
       // Second click - consent withdrawn
-      input.click();
+      input!.click();
+      
+      await new Promise(resolve => setTimeout(resolve, 0));
+      
+      expect(onConsentChange).toHaveBeenCalledTimes(2);
       expect(onConsentChange.mock.calls[1][0].consented).toBe(false);
     });
 
@@ -335,8 +396,9 @@ describe('Input-Checkbox-Legal Web Component', () => {
       const eventHandler = jest.fn();
       checkbox.addEventListener('consent-change', eventHandler);
       
-      const input = checkbox.shadowRoot?.querySelector('.checkbox__input') as HTMLInputElement;
-      input.click();
+      const input = getNativeInput(checkbox);
+      expect(input).toBeTruthy();
+      input!.click();
       
       const eventData = eventHandler.mock.calls[0][0].detail as ConsentChangeData;
       expect(eventData.consented).toBe(true);
@@ -355,15 +417,20 @@ describe('Input-Checkbox-Legal Web Component', () => {
      * @see Requirements: 9.1-9.2 - Fixed sizing and alignment
      * @see Requirements: 11.7 - Test fixed configuration
      */
-    it('should render with fixed lg box size (checkbox--legal class)', async () => {
+    it('should render with fixed lg box size (checkbox--legal class on container)', async () => {
       const checkbox = document.createElement('input-checkbox-legal') as InputCheckboxLegalElement;
       checkbox.setAttribute('label', 'I agree to terms');
       document.body.appendChild(checkbox);
       
       await new Promise(resolve => setTimeout(resolve, 0));
       
-      const wrapper = checkbox.shadowRoot?.querySelector('.checkbox');
-      expect(wrapper?.classList.contains('checkbox--legal')).toBe(true);
+      // Legal container should have checkbox--legal class
+      const container = checkbox.shadowRoot?.querySelector('.checkbox-container');
+      expect(container?.classList.contains('checkbox--legal')).toBe(true);
+      
+      // Wrapped Base should have lg size
+      const base = getBaseCheckbox(checkbox);
+      expect(base?.getAttribute('size')).toBe('lg');
     });
 
     it('should not have size attribute in observed attributes', () => {
@@ -384,17 +451,28 @@ describe('Input-Checkbox-Legal Web Component', () => {
       expect(observedAttrs).not.toContain('indeterminate');
     });
 
-    it('should use top alignment for label (flex-start)', async () => {
+    it('should configure Base with top alignment', async () => {
       const checkbox = document.createElement('input-checkbox-legal') as InputCheckboxLegalElement;
       checkbox.setAttribute('label', 'I agree to the Terms of Service and Privacy Policy which may span multiple lines');
       document.body.appendChild(checkbox);
       
       await new Promise(resolve => setTimeout(resolve, 0));
       
-      // The checkbox wrapper should have flex-start alignment (top)
-      const wrapper = checkbox.shadowRoot?.querySelector('.checkbox');
-      expect(wrapper).toBeTruthy();
-      // CSS class checkbox--legal applies top alignment via CSS
+      // Wrapped Base should have top alignment
+      const base = getBaseCheckbox(checkbox);
+      expect(base?.getAttribute('label-align')).toBe('top');
+    });
+
+    it('should configure Base with sm label typography', async () => {
+      const checkbox = document.createElement('input-checkbox-legal') as InputCheckboxLegalElement;
+      checkbox.setAttribute('label', 'I agree to terms');
+      document.body.appendChild(checkbox);
+      
+      await new Promise(resolve => setTimeout(resolve, 0));
+      
+      // Wrapped Base should have sm label typography
+      const base = getBaseCheckbox(checkbox);
+      expect(base?.getAttribute('label-typography')).toBe('sm');
     });
   });
 
@@ -478,8 +556,8 @@ describe('Input-Checkbox-Legal Web Component', () => {
       
       await new Promise(resolve => setTimeout(resolve, 0));
       
-      const wrapper = checkbox.shadowRoot?.querySelector('.checkbox');
-      // Should not have indeterminate class
+      // Wrapped Base should not have indeterminate class
+      const wrapper = getCheckboxWrapper(checkbox);
       expect(wrapper?.classList.contains('checkbox--indeterminate')).toBe(false);
     });
 
@@ -492,8 +570,9 @@ describe('Input-Checkbox-Legal Web Component', () => {
       
       await new Promise(resolve => setTimeout(resolve, 0));
       
-      // Should have check icon, not minus icon
-      const icon = checkbox.shadowRoot?.querySelector('.checkbox__box svg.icon-base');
+      // Should have check icon, not minus icon - query through Base's shadow DOM
+      const box = getCheckboxBox(checkbox);
+      const icon = box?.querySelector('svg.icon-base');
       expect(icon).toBeTruthy();
       expect(icon?.classList.contains('icon-base-check')).toBe(true);
       expect(icon?.classList.contains('icon-base-minus')).toBe(false);
@@ -532,7 +611,8 @@ describe('Input-Checkbox-Legal Web Component', () => {
       
       await new Promise(resolve => setTimeout(resolve, 0));
       
-      const input = checkbox.shadowRoot?.querySelector('.checkbox__input');
+      // Name should be forwarded to Base's native input
+      const input = getNativeInput(checkbox);
       expect(input?.getAttribute('name')).toBe('consent');
     });
   });
@@ -550,7 +630,8 @@ describe('Input-Checkbox-Legal Web Component', () => {
       
       await new Promise(resolve => setTimeout(resolve, 0));
       
-      const input = checkbox.shadowRoot?.querySelector('.checkbox__input');
+      // aria-invalid should be on Base's native input
+      const input = getNativeInput(checkbox);
       expect(input?.getAttribute('aria-invalid')).toBe('true');
     });
 
@@ -562,8 +643,10 @@ describe('Input-Checkbox-Legal Web Component', () => {
       
       await new Promise(resolve => setTimeout(resolve, 0));
       
-      const input = checkbox.shadowRoot?.querySelector('.checkbox__input');
-      const error = checkbox.shadowRoot?.querySelector('.checkbox__error');
+      // aria-describedby should be on Base's native input
+      const base = getBaseCheckbox(checkbox);
+      const input = getNativeInput(checkbox);
+      const error = base?.shadowRoot?.querySelector('.checkbox__error');
       const describedBy = input?.getAttribute('aria-describedby');
       
       expect(describedBy).toContain(error?.id);
@@ -576,6 +659,7 @@ describe('Input-Checkbox-Legal Web Component', () => {
       
       await new Promise(resolve => setTimeout(resolve, 0));
       
+      // Required indicator is in Legal's shadow DOM (not Base's)
       const requiredIndicator = checkbox.shadowRoot?.querySelector('.checkbox__required');
       expect(requiredIndicator?.getAttribute('aria-hidden')).toBe('true');
     });
@@ -596,8 +680,9 @@ describe('Input-Checkbox-Legal Web Component', () => {
       const eventHandler = jest.fn();
       checkbox.addEventListener('consent-change', eventHandler);
       
-      const input = checkbox.shadowRoot?.querySelector('.checkbox__input') as HTMLInputElement;
-      input.click();
+      const input = getNativeInput(checkbox);
+      expect(input).toBeTruthy();
+      input!.click();
       
       const event = eventHandler.mock.calls[0][0] as CustomEvent;
       expect(event.bubbles).toBe(true);
@@ -614,8 +699,9 @@ describe('Input-Checkbox-Legal Web Component', () => {
       const changeHandler = jest.fn();
       checkbox.addEventListener('change', changeHandler);
       
-      const input = checkbox.shadowRoot?.querySelector('.checkbox__input') as HTMLInputElement;
-      input.click();
+      const input = getNativeInput(checkbox);
+      expect(input).toBeTruthy();
+      input!.click();
       
       expect(changeHandler).toHaveBeenCalledTimes(1);
       expect(changeHandler.mock.calls[0][0].detail.checked).toBe(true);
@@ -630,8 +716,9 @@ describe('Input-Checkbox-Legal Web Component', () => {
       
       await new Promise(resolve => setTimeout(resolve, 0));
       
-      const input = checkbox.shadowRoot?.querySelector('.checkbox__input') as HTMLInputElement;
-      input.click();
+      const input = getNativeInput(checkbox);
+      expect(input).toBeTruthy();
+      input!.click();
       
       expect(onChange).toHaveBeenCalledWith(true);
     });

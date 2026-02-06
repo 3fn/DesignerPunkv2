@@ -2,10 +2,10 @@
  * Input-Checkbox-Legal Web Component
  * 
  * Web platform implementation of the Input-Checkbox-Legal component using Web Components.
- * Extends/wraps Input-Checkbox-Base with legal consent-specific functionality.
+ * Wraps Input-Checkbox-Base with legal consent-specific functionality and fixed configuration.
  * 
  * Stemma System: Form Inputs Family
- * Component Type: Semantic Variant (extends Base)
+ * Component Type: Semantic Variant (wraps Base)
  * Naming Convention: [Family]-[Type]-[Variant] = Input-Checkbox-Legal
  * 
  * Key Differences from Input-Checkbox-Base:
@@ -16,6 +16,12 @@
  * - Audit trail support (timestamp, legalTextId, version)
  * - Required indicator visible by default
  * - No label truncation
+ * 
+ * Implementation Pattern:
+ * This component wraps Input-Checkbox-Base, configuring it with fixed props
+ * (size="lg", label-align="top", label-typography="sm") and adding Legal-specific
+ * features on top. This reduces code duplication by ~80% and ensures Legal
+ * inherits Base improvements automatically.
  * 
  * DesignerPunk Philosophy: NO DISABLED STATES
  * 
@@ -28,6 +34,7 @@ import {
   INPUT_CHECKBOX_LEGAL_OBSERVED_ATTRIBUTES,
   INPUT_CHECKBOX_LEGAL_DEFAULTS
 } from '../../types';
+// Import Base component to ensure it's registered
 import { InputCheckboxBaseElement } from '../../../Input-Checkbox-Base/platforms/web/InputCheckboxBase.web';
 
 // Import CSS as string for browser bundle compatibility
@@ -39,8 +46,8 @@ let legalCheckboxIdCounter = 0;
 /**
  * Input-Checkbox-Legal Web Component
  * 
- * Custom element implementing a legal consent checkbox with Shadow DOM encapsulation.
- * Wraps Input-Checkbox-Base with additional legal consent functionality.
+ * Custom element wrapping Input-Checkbox-Base with legal consent functionality.
+ * Uses fixed lg box size with labelSm typography for legal text readability.
  * 
  * @example
  * ```html
@@ -55,14 +62,20 @@ export class InputCheckboxLegalElement extends HTMLElement {
   /** Shadow DOM root */
   private _shadowRoot: ShadowRoot;
 
-  /** Reference to the wrapped base checkbox */
+  /** Reference to the wrapped Input-Checkbox-Base element */
   private _baseCheckbox: InputCheckboxBaseElement | null = null;
+
+  /** Reference to the parent form element for reset handling */
+  private _form: HTMLFormElement | null = null;
 
   /** Generated unique ID for label association */
   private _generatedId: string;
 
   /** Flag to track if explicit consent warning has been shown */
   private _consentWarningShown: boolean = false;
+
+  /** Flag to prevent re-syncing Base when change originates from Base */
+  private _isHandlingBaseChange: boolean = false;
 
   /** Base onChange callback (JS property, not attribute) */
   onChange: ((checked: boolean) => void) | null = null;
@@ -90,8 +103,10 @@ export class InputCheckboxLegalElement extends HTMLElement {
 
   connectedCallback(): void {
     // Enforce explicit consent before rendering
-    // @see Requirements: 9.3-9.4 - Prevent pre-checking with console warning
     this._enforceExplicitConsent();
+    
+    // Find and attach to parent form for reset handling
+    this._attachToForm();
     
     this.render();
     this._attachListeners();
@@ -99,6 +114,7 @@ export class InputCheckboxLegalElement extends HTMLElement {
 
   disconnectedCallback(): void {
     this._detachListeners();
+    this._detachFromForm();
   }
 
   attributeChangedCallback(
@@ -113,9 +129,16 @@ export class InputCheckboxLegalElement extends HTMLElement {
       this._enforceExplicitConsent();
     }
     
-    if (this.isConnected) {
-      this.render();
-      this._attachListeners();
+    // Warn if indeterminate is set (not supported)
+    if (name === 'indeterminate' && newValue !== null) {
+      console.warn(
+        'Input-Checkbox-Legal: Indeterminate state is not supported for legal consent checkboxes. ' +
+        'Legal consent is binary (checked/unchecked).'
+      );
+    }
+    
+    if (this.isConnected && !this._isHandlingBaseChange) {
+      this._updateBaseCheckbox();
     }
   }
 
@@ -131,7 +154,6 @@ export class InputCheckboxLegalElement extends HTMLElement {
     // Enforce explicit consent when setting checked programmatically
     if (value && this.requiresExplicitConsent) {
       this._showConsentWarning();
-      // Override to false
       this.removeAttribute('checked');
       return;
     }
@@ -207,20 +229,9 @@ export class InputCheckboxLegalElement extends HTMLElement {
     this.setAttribute('value', value);
   }
 
-  /**
-   * Whether explicit consent is required.
-   * 
-   * When true, prevents pre-checking the checkbox and emits console warning
-   * if checked={true} is passed.
-   * 
-   * @default true
-   * @see Requirements: 9.3-9.4
-   */
   get requiresExplicitConsent(): boolean {
     const attr = this.getAttribute('requires-explicit-consent');
-    // Default to true if attribute not set
     if (attr === null) return INPUT_CHECKBOX_LEGAL_DEFAULTS.requiresExplicitConsent;
-    // 'false' string means false, anything else (including empty string) means true
     return attr !== 'false';
   }
 
@@ -232,11 +243,6 @@ export class InputCheckboxLegalElement extends HTMLElement {
     }
   }
 
-  /**
-   * Legal text ID for audit trail.
-   * 
-   * @see Requirements: 9.6
-   */
   get legalTextId(): string | null {
     return this.getAttribute('legal-text-id');
   }
@@ -249,11 +255,6 @@ export class InputCheckboxLegalElement extends HTMLElement {
     }
   }
 
-  /**
-   * Legal text version for audit trail.
-   * 
-   * @see Requirements: 9.7
-   */
   get legalTextVersion(): string | null {
     return this.getAttribute('legal-text-version');
   }
@@ -266,17 +267,9 @@ export class InputCheckboxLegalElement extends HTMLElement {
     }
   }
 
-  /**
-   * Whether to show required indicator.
-   * 
-   * @default true
-   * @see Requirements: 9.8-9.9
-   */
   get showRequiredIndicator(): boolean {
     const attr = this.getAttribute('show-required-indicator');
-    // Default to true if attribute not set
     if (attr === null) return INPUT_CHECKBOX_LEGAL_DEFAULTS.showRequiredIndicator;
-    // 'false' string means false, anything else (including empty string) means true
     return attr !== 'false';
   }
 
@@ -289,17 +282,34 @@ export class InputCheckboxLegalElement extends HTMLElement {
   }
 
   // ---------------------------------------------------------------------------
+  // Form Integration
+  // ---------------------------------------------------------------------------
+
+  private _attachToForm(): void {
+    this._form = this.closest('form');
+    if (this._form) {
+      this._form.addEventListener('reset', this._onFormReset);
+    }
+  }
+
+  private _detachFromForm(): void {
+    if (this._form) {
+      this._form.removeEventListener('reset', this._onFormReset);
+      this._form = null;
+    }
+  }
+
+  private _onFormReset = (): void => {
+    this.checked = false;
+    if (this._baseCheckbox) {
+      this._baseCheckbox.checked = false;
+    }
+  };
+
+  // ---------------------------------------------------------------------------
   // Explicit Consent Enforcement
   // ---------------------------------------------------------------------------
 
-  /**
-   * Enforce explicit consent by preventing pre-checked state.
-   * 
-   * If requiresExplicitConsent is true and checked is true, override to false
-   * and emit console warning.
-   * 
-   * @see Requirements: 9.3-9.4
-   */
   private _enforceExplicitConsent(): void {
     if (this.requiresExplicitConsent && this.hasAttribute('checked')) {
       this._showConsentWarning();
@@ -307,13 +317,6 @@ export class InputCheckboxLegalElement extends HTMLElement {
     }
   }
 
-  /**
-   * Show console warning for explicit consent violation.
-   * 
-   * Only shows warning once per component instance to avoid spam.
-   * 
-   * @see Requirements: 9.4 - Console warning for pre-check override
-   */
   private _showConsentWarning(): void {
     if (!this._consentWarningShown) {
       console.warn(
@@ -330,55 +333,23 @@ export class InputCheckboxLegalElement extends HTMLElement {
 
   private render(): void {
     const id = this.getAttribute('id') || this._generatedId;
-    const labelText = this.label;
-    const helperText = this.helperText;
-    const errorMessage = this.errorMessage;
-    const testId = this.testID;
-    const inputName = this.name;
-    const inputValue = this.value;
     const showRequired = this.showRequiredIndicator;
-    
-    // Get checked state (already enforced by _enforceExplicitConsent)
-    const isChecked = this.checked;
-
-    // Build test-id attribute
-    const testIdAttr = testId ? ` test-id="${testId}"` : '';
-    
-    // Build name attribute
-    const nameAttr = inputName ? ` name="${inputName}"` : '';
-    
-    // Build helper text attribute
-    const helperAttr = helperText ? ` helper-text="${this._escapeAttr(helperText)}"` : '';
-    
-    // Build error message attribute
-    const errorAttr = errorMessage ? ` error-message="${this._escapeAttr(errorMessage)}"` : '';
 
     // Build required indicator HTML
-    // @see Requirements: 9.8-9.9 - Required indicator default visible
     const requiredHTML = showRequired 
-      ? '<span class="legal-checkbox__required" aria-hidden="true">Required</span>' 
+      ? '<span class="checkbox__required" aria-hidden="true">Required</span>' 
       : '';
 
-    // Render shadow DOM
-    // Uses Input-Checkbox-Base with fixed configuration:
-    // - size="lg" (40px box)
-    // - label-align="top" (for multi-line legal text)
-    // - No indeterminate attribute (not supported)
-    // 
-    // @see Requirements: 9.1-9.2 - Fixed sizing and alignment
-    // @see Requirements: 9.10 - No indeterminate state support
+    // Render shadow DOM with wrapped Input-Checkbox-Base
     this._shadowRoot.innerHTML = `
       <style>${legalStyles}</style>
-      <div class="legal-checkbox-container">
+      <div class="checkbox-container checkbox--legal">
         ${requiredHTML}
         <input-checkbox-base
-          class="legal-checkbox__base"
           id="${id}-base"
-          label="${this._escapeAttr(labelText)}"
           size="lg"
           label-align="top"
-          value="${inputValue}"
-          ${isChecked ? 'checked' : ''}${nameAttr}${helperAttr}${errorAttr}${testIdAttr}
+          label-typography="sm"
         ></input-checkbox-base>
       </div>
     `;
@@ -386,22 +357,65 @@ export class InputCheckboxLegalElement extends HTMLElement {
     // Store reference to base checkbox
     this._baseCheckbox = this._shadowRoot.querySelector('input-checkbox-base') as InputCheckboxBaseElement;
     
-    // Apply labelSm typography override via CSS class
-    // The CSS handles the typography override via ::part() selector
-    // @see Requirements: 9.1 - Fixed sizing: lg box with labelSm typography
-    // @see Requirements: 9.11 - Label text SHALL NOT be truncated
+    // Update base checkbox with current attributes
+    this._updateBaseCheckbox();
   }
 
   /**
-   * Escape attribute value for safe HTML insertion.
+   * Update the wrapped Input-Checkbox-Base with current attribute values.
+   * Forwards relevant attributes to Base while maintaining fixed configuration.
    */
-  private _escapeAttr(value: string): string {
-    return value
-      .replace(/&/g, '&amp;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
+  private _updateBaseCheckbox(): void {
+    if (!this._baseCheckbox) return;
+
+    // Forward relevant attributes to Base
+    // Note: size, label-align, and label-typography are fixed and set in render()
+    
+    // Label
+    if (this.label) {
+      this._baseCheckbox.setAttribute('label', this.label);
+    }
+    
+    // Checked state (already enforced for explicit consent)
+    if (this.checked) {
+      this._baseCheckbox.setAttribute('checked', '');
+    } else {
+      this._baseCheckbox.removeAttribute('checked');
+    }
+    
+    // Helper text
+    if (this.helperText) {
+      this._baseCheckbox.setAttribute('helper-text', this.helperText);
+    } else {
+      this._baseCheckbox.removeAttribute('helper-text');
+    }
+    
+    // Error message
+    if (this.errorMessage) {
+      this._baseCheckbox.setAttribute('error-message', this.errorMessage);
+    } else {
+      this._baseCheckbox.removeAttribute('error-message');
+    }
+    
+    // Test ID
+    if (this.testID) {
+      this._baseCheckbox.setAttribute('test-id', this.testID);
+    } else {
+      this._baseCheckbox.removeAttribute('test-id');
+    }
+    
+    // Form name
+    if (this.name) {
+      this._baseCheckbox.setAttribute('name', this.name);
+    } else {
+      this._baseCheckbox.removeAttribute('name');
+    }
+    
+    // Form value
+    this._baseCheckbox.setAttribute('value', this.value);
+    
+    // Never set indeterminate on Base (not supported for Legal)
+    this._baseCheckbox.removeAttribute('indeterminate');
   }
 
   // ---------------------------------------------------------------------------
@@ -409,45 +423,47 @@ export class InputCheckboxLegalElement extends HTMLElement {
   // ---------------------------------------------------------------------------
 
   /**
-   * Handle change event from base checkbox.
-   * 
-   * Generates ISO 8601 timestamp and calls both onChange and onConsentChange
-   * callbacks with appropriate data.
-   * 
-   * @see Requirements: 9.5-9.7 - Consent change with timestamp and audit trail
+   * Handle change event from wrapped Input-Checkbox-Base.
+   * Transforms to consent-change event with audit trail data.
    */
   private _onBaseChange = (event: Event): void => {
+    // Prevent the base's change event from bubbling up
+    event.stopPropagation();
+    
     const customEvent = event as CustomEvent<{ checked: boolean }>;
     const newChecked = customEvent.detail.checked;
 
+    // Set flag to prevent attributeChangedCallback from re-syncing Base
+    // (which would cause infinite loop or state reset)
+    this._isHandlingBaseChange = true;
+    
     // Update our checked attribute to reflect new state
     if (newChecked) {
       this.setAttribute('checked', '');
     } else {
       this.removeAttribute('checked');
     }
+    
+    // Clear flag after attribute update
+    this._isHandlingBaseChange = false;
 
     // Generate ISO 8601 timestamp
-    // @see Requirements: 9.5 - ISO 8601 timestamp string
     const timestamp = new Date().toISOString();
 
     // Fire base onChange callback
     this.onChange?.(newChecked);
 
     // Build consent change data with audit trail
-    // @see Requirements: 9.5-9.7 - Audit trail data
     const consentData: ConsentChangeData = {
       consented: newChecked,
       timestamp
     };
 
     // Include audit trail data if provided
-    // @see Requirements: 9.6 - legalTextId in callback
     if (this.legalTextId) {
       consentData.legalTextId = this.legalTextId;
     }
 
-    // @see Requirements: 9.7 - legalTextVersion in callback
     if (this.legalTextVersion) {
       consentData.legalTextVersion = this.legalTextVersion;
     }
@@ -456,7 +472,6 @@ export class InputCheckboxLegalElement extends HTMLElement {
     this.onConsentChange?.(consentData);
 
     // Dispatch custom consent-change event
-    // @see Design doc: Input-Checkbox-Legal Implementation section
     this.dispatchEvent(
       new CustomEvent('consent-change', {
         detail: consentData,
@@ -488,4 +503,3 @@ export class InputCheckboxLegalElement extends HTMLElement {
 if (!customElements.get('input-checkbox-legal')) {
   customElements.define('input-checkbox-legal', InputCheckboxLegalElement);
 }
-

@@ -27,6 +27,7 @@
 import {
   CheckboxSize,
   LabelAlignment,
+  LabelTypography,
   INPUT_CHECKBOX_BASE_OBSERVED_ATTRIBUTES,
   INPUT_CHECKBOX_BASE_DEFAULTS
 } from '../../types';
@@ -206,6 +207,25 @@ export class InputCheckboxBaseElement extends HTMLElement {
     this.setAttribute('label-align', value);
   }
 
+  /**
+   * Label typography override.
+   * 
+   * Allows overriding the default label typography which normally matches the size variant.
+   * When set to 'inherit' (default), typography matches the size variant.
+   * When set to 'sm', 'md', or 'lg', forces that typography regardless of size.
+   * 
+   * @see Requirements: 9.1 - Legal uses lg box + labelSm typography
+   */
+  get labelTypography(): LabelTypography {
+    const attr = this.getAttribute('label-typography');
+    if (attr === 'inherit' || attr === 'sm' || attr === 'md' || attr === 'lg') return attr;
+    return INPUT_CHECKBOX_BASE_DEFAULTS.labelTypography;
+  }
+
+  set labelTypography(value: LabelTypography) {
+    this.setAttribute('label-typography', value);
+  }
+
   get helperText(): string | null {
     return this.getAttribute('helper-text');
   }
@@ -368,6 +388,7 @@ export class InputCheckboxBaseElement extends HTMLElement {
     const labelText = this.label;
     const size = this.size;
     const labelAlign = this.labelAlign;
+    const labelTypography = this.labelTypography;
     const isChecked = this.checked;
     const isIndeterminate = this.indeterminate;
     const helperText = this.helperText;
@@ -378,10 +399,13 @@ export class InputCheckboxBaseElement extends HTMLElement {
     const inputValue = this.value;
 
     // Build CSS class list
+    // Typography override class is only added when labelTypography is not 'inherit'
+    // @see Requirements: 9.1 - Legal uses lg box + labelSm typography
     const classes = [
       'checkbox',
       `checkbox--${size}`,
       labelAlign === 'top' ? 'checkbox--align-top' : '',
+      labelTypography !== 'inherit' ? `checkbox--label-${labelTypography}` : '',
       isChecked ? 'checkbox--checked' : '',
       isIndeterminate ? 'checkbox--indeterminate' : '',
       hasError ? 'checkbox--error' : ''

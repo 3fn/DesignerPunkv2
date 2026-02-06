@@ -165,6 +165,37 @@ enum class LabelAlignment {
         }
 }
 
+/**
+ * Label typography override options.
+ * 
+ * Allows overriding the default label typography which normally matches the size variant.
+ * This is primarily used by Input-Checkbox-Legal which needs lg box size with sm typography.
+ * 
+ * - Inherit: Uses typography matching the size variant (default behavior)
+ * - Small: Forces labelSm typography (14sp) regardless of size
+ * - Medium: Forces labelMd typography (16sp) regardless of size
+ * - Large: Forces labelLg typography (18sp) regardless of size
+ * 
+ * @see Requirement 9.1 in .kiro/specs/046-input-checkbox-base/requirements.md
+ */
+enum class LabelTypography {
+    Inherit,
+    Small,
+    Medium,
+    Large;
+    
+    /** Font size for this typography option
+     * Returns null for Inherit (use size variant's default)
+     */
+    val fontSize: Float?
+        get() = when (this) {
+            Inherit -> null
+            Small -> DesignTokens.font_size_075   // 14sp (labelSm)
+            Medium -> DesignTokens.font_size_100  // 16sp (labelMd)
+            Large -> DesignTokens.font_size_125   // 18sp (labelLg)
+        }
+}
+
 // MARK: - Component Tokens
 
 /**
@@ -321,6 +352,15 @@ private object CheckboxTokens {
  *     labelAlign = LabelAlignment.Top
  * )
  * 
+ * // With typography override (Legal checkbox pattern)
+ * InputCheckboxBase(
+ *     checked = isChecked,
+ *     onCheckedChange = { isChecked = it },
+ *     label = "I agree to the terms and conditions",
+ *     size = CheckboxSize.Large,
+ *     labelTypography = LabelTypography.Small
+ * )
+ * 
  * // With helper text and error
  * InputCheckboxBase(
  *     checked = isChecked,
@@ -339,6 +379,7 @@ private object CheckboxTokens {
  * - 6.1-6.6: Accessibility (TalkBack, touch targets)
  * - 7.3: Material ripple effect using blend.pressedDarker
  * - 8.5: Compose's native RTL handling (Arrangement.Start/End)
+ * - 9.1: Typography override for Legal checkbox pattern
  * 
  * @param checked Whether checkbox is checked
  * @param onCheckedChange Called when checkbox state changes
@@ -347,6 +388,7 @@ private object CheckboxTokens {
  * @param indeterminate Indeterminate state (overrides checked visually)
  * @param size Size variant (default: Medium)
  * @param labelAlign Label alignment (default: Center)
+ * @param labelTypography Typography override (default: Inherit, uses size variant's typography)
  * @param helperText Optional helper text displayed below checkbox
  * @param errorMessage Optional error message displayed below helper text
  * @param testTag Test identifier for automated testing
@@ -360,6 +402,7 @@ fun InputCheckboxBase(
     indeterminate: Boolean = false,
     size: CheckboxSize = CheckboxSize.Medium,
     labelAlign: LabelAlignment = LabelAlignment.Center,
+    labelTypography: LabelTypography = LabelTypography.Inherit,
     helperText: String? = null,
     errorMessage: String? = null,
     testTag: String? = null
@@ -371,6 +414,9 @@ fun InputCheckboxBase(
     // Determine visual state
     val hasError = errorMessage != null
     val isActive = checked || indeterminate
+    
+    // Compute effective label font size (typography override or size default)
+    val effectiveLabelFontSize = labelTypography.fontSize ?: size.labelFontSize
     
     // Animated colors for smooth state transitions
     // @see Requirement 1.7 - State transition animation using motion.selectionTransition
@@ -466,10 +512,11 @@ fun InputCheckboxBase(
             
             // Label text
             // @see Requirement 2.4-2.6 - Label typography
+            // @see Requirement 9.1 - Typography override for Legal checkbox pattern
             Text(
                 text = label,
                 style = TextStyle(
-                    fontSize = size.labelFontSize.sp,
+                    fontSize = effectiveLabelFontSize.sp,
                     fontWeight = FontWeight.Medium
                 ),
                 color = CheckboxTokens.labelColor
@@ -578,6 +625,7 @@ private fun CheckboxBox(
  * - Size variants (sm, md, lg)
  * - States (unchecked, checked, indeterminate, error)
  * - Label alignment (center, top)
+ * - Typography override (for Legal checkbox pattern)
  * - Helper text and error messages
  */
 @Preview(showBackground = true, name = "InputCheckboxBase Component")
@@ -668,6 +716,34 @@ fun InputCheckboxBasePreview() {
                 labelAlign = LabelAlignment.Top,
                 size = CheckboxSize.Large,
                 modifier = Modifier.fillMaxWidth(0.8f)
+            )
+        }
+        
+        // Typography override (for Legal checkbox pattern)
+        Text(
+            text = "Typography Override",
+            style = androidx.compose.material3.MaterialTheme.typography.titleSmall
+        )
+        Column(verticalArrangement = Arrangement.spacedBy(DesignTokens.space_200)) {
+            InputCheckboxBase(
+                checked = false,
+                onCheckedChange = {},
+                label = "Large box with default (lg) typography",
+                size = CheckboxSize.Large
+            )
+            InputCheckboxBase(
+                checked = false,
+                onCheckedChange = {},
+                label = "Large box with small typography (Legal pattern)",
+                size = CheckboxSize.Large,
+                labelTypography = LabelTypography.Small
+            )
+            InputCheckboxBase(
+                checked = false,
+                onCheckedChange = {},
+                label = "Medium box with large typography",
+                size = CheckboxSize.Medium,
+                labelTypography = LabelTypography.Large
             )
         }
         

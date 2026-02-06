@@ -434,5 +434,368 @@ This spec implements two components across three platforms:
 
 ---
 
+---
+
+- [ ] 7. Audit & Diagnose Test-Implementation Mismatches
+
+  **Type**: Parent
+  **Validation**: Tier 2 - Standard
+  
+  **Success Criteria:**
+  - All 26 test failures documented with root cause analysis
+  - Mismatches between design doc, tests, and implementation catalogued
+  - Recommended fix approach documented for each category of issue
+  - Decision documented: fix implementation vs update design doc
+  
+  **Primary Artifacts:**
+  - `.kiro/specs/046-input-checkbox-base/completion/task-7-completion.md` (audit report)
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/046-input-checkbox-base/completion/task-7-completion.md`
+  - Summary: `docs/specs/046-input-checkbox-base/task-7-summary.md`
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 7 Complete: Audit & Diagnose Test-Implementation Mismatches"`
+  - Verify: Check GitHub for committed changes
+
+  - [x] 7.1 Audit InputCheckboxBase.stemma.test.ts failure
+    **Type**: Investigation
+    **Validation**: Tier 1 - Minimal
+    - Document token naming mismatch: test expects `--color-select-selected-strong`, CSS uses `--color-feedback-select-background-rest`
+    - Verify which token name is correct per Rosetta System
+    - Document recommended fix (update test or update CSS)
+    - _Related: Design doc Token Architecture section_
+
+  - [x] 7.2 Audit token-completeness.property.test.ts failures
+    **Type**: Investigation
+    **Validation**: Tier 1 - Minimal
+    - Document browser bundle token reference issues
+    - Identify which tokens are missing or misnamed
+    - Verify token generation pipeline output
+    - Document recommended fix approach
+    - _Related: Task 1 Token Foundation_
+
+  - [x] 7.3 Audit InputCheckboxLegal.test.ts failures (23 tests)
+    **Type**: Investigation
+    **Validation**: Tier 2 - Standard
+    - Document architectural mismatch: tests expect Legal to wrap Base, implementation is standalone
+    - Catalogue all selector mismatches (`.checkbox__input` vs actual DOM)
+    - Document DOM structure differences between design doc and implementation
+    - Identify which approach is better: wrapper pattern vs standalone
+    - Document recommended fix approach for each test category:
+      - ISO 8601 timestamp tests
+      - Audit trail tests
+      - Fixed configuration tests
+      - Required indicator tests
+      - Indeterminate rejection tests
+      - Form integration tests
+      - Accessibility tests
+      - Event tests
+    - _Related: Design doc Input-Checkbox-Legal Implementation section_
+
+  - [x] 7.4 Document fix strategy decision
+    **Type**: Documentation
+    **Validation**: Tier 1 - Minimal
+    - Summarize findings from 7.1-7.3
+    - Recommend: fix implementation to match design doc OR update design doc to match implementation
+    - Document rationale for recommendation
+    - Review and discuss how to proceed with Peter
+    - Get user approval before proceeding to Task 8
+
+
+---
+
+- [ ] 8. Architectural Alignment & Test Resolution
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  
+  **Context**: Task 7 audit revealed that Input-Checkbox-Legal implementation drifted from the design doc's wrapper pattern to a standalone pattern. This task refactors Legal to properly wrap Base per the design doc, fixes token naming issues, and resolves all test failures.
+  
+  **Success Criteria:**
+  - Token naming issues fixed in CSS (deprecated tokens replaced)
+  - Badge-Count-Notification tokens added to generation pipeline
+  - Input-Checkbox-Base extended to support Legal's typography needs
+  - Input-Checkbox-Legal refactored to wrapper pattern per design doc
+  - All previously failing tests pass
+  - No regressions in other component tests
+  - `npm test` passes with 0 failures
+  
+  **Primary Artifacts:**
+  - `src/components/core/Input-Checkbox-Base/platforms/web/InputCheckboxBase.web.ts` (extended)
+  - `src/components/core/Input-Checkbox-Base/platforms/web/InputCheckboxBase.web.css` (token fixes)
+  - `src/components/core/Input-Checkbox-Legal/platforms/web/InputCheckboxLegal.web.ts` (refactored)
+  - `src/components/core/Input-Checkbox-Legal/platforms/web/InputCheckboxLegal.web.css` (token fixes)
+  - `scripts/generate-platform-tokens.ts` (badge tokens added)
+  - Test files (updated selectors)
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/046-input-checkbox-base/completion/task-8-completion.md`
+  - Summary: `docs/specs/046-input-checkbox-base/task-8-summary.md`
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 8 Complete: Architectural Alignment & Test Resolution"`
+  - Verify: Check GitHub for committed changes
+
+  - [x] 8.1 Fix deprecated token names in CSS
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Rationale**: Token fixes are isolated bugs that exist regardless of architecture. Fixing first gives cleaner baseline.
+    - In `InputCheckboxBase.web.css`:
+      - Replace `var(--color-contrast-on-primary)` → `var(--color-contrast-on-light)` (icon on light cyan background needs dark color)
+      - Replace `var(--color-error-strong)` → `var(--color-feedback-error-border)`
+    - In `InputCheckboxLegal.web.css`:
+      - Replace `var(--color-contrast-on-primary)` → `var(--color-contrast-on-light)` (icon on light cyan background needs dark color)
+      - Replace `var(--color-error-strong)` → `var(--color-feedback-error-border)`
+    - Verify CSS still compiles correctly
+    - _Requirements: 1.6 (error state), 4.4 (icon color)_
+
+  - [x] 8.2 Fix Badge-Count-Notification token references
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Rationale**: Unrelated to checkbox but blocks token-completeness tests.
+    
+    **Context**: The `defineComponentTokens()` API only supports numeric values (spacing, sizing), 
+    not color tokens. Investigation during this task revealed that color tokens require the semantic 
+    token pipeline. New semantic tokens `color.feedback.notification.background` and 
+    `color.feedback.notification.text` have been added to resolve this architectural gap.
+    
+    **Architectural Decision**: See Spec 059 (Component Color Token Architecture Investigation) 
+    for documentation of this gap and future considerations.
+    
+    **Steps**:
+    1. **Update `src/components/core/Badge-Count-Notification/tokens.ts`**:
+       - Update `BadgeNotificationColorTokens` to reference semantic tokens instead of primitives:
+         ```typescript
+         export const BadgeNotificationColorTokens = {
+           'notification.background': 'color.feedback.notification.background',
+           'notification.text': 'color.feedback.notification.text',
+         } as const;
+         ```
+       - Update JSDoc to reflect semantic token references
+       - Keep the `BadgeNotificationTokenReferences` documentation object for traceability
+    
+    2. **Update `src/components/core/Badge-Count-Notification/platforms/web/BadgeCountNotification.styles.css`**:
+       - Replace `var(--color-badge-notification-background)` → `var(--color-feedback-notification-background)`
+       - Replace `var(--color-badge-notification-text)` → `var(--color-feedback-notification-text)`
+    
+    3. **Run token generation and rebuild**:
+       - Run `npm run generate:tokens`
+       - Run `npm run build:browser`
+       - Verify `--color-feedback-notification-background` and `--color-feedback-notification-text` 
+         appear in `dist/DesignTokens.web.css`
+    
+    4. **Verify token-completeness test passes**:
+       - Run `npm test -- src/__tests__/browser-distribution/token-completeness.property.test.ts`
+    
+    - _Requirements: N/A (fixes pre-existing issue from Spec 044)_
+
+  - [x] 8.3 Update stemma test token expectations
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Rationale**: Test uses deprecated token names from before Spec 052.
+    - Update `InputCheckboxBase.stemma.test.ts` expected token patterns:
+      - Replace `--color-select-selected-strong` → `--color-feedback-select-background-rest`
+      - Replace `--color-select-not-selected-strong` → `--color-feedback-select-border-default`
+    - Run stemma test to verify it passes
+    - _Requirements: 11.2_
+
+  - [x] 8.4 Extend Input-Checkbox-Base to support Legal's typography needs
+    **Type**: Architecture
+    **Validation**: Tier 3 - Comprehensive
+    **Rationale**: Base must support lg+labelSm combination before Legal can wrap it.
+    - Add `labelTypography` prop to Base component types:
+      ```typescript
+      labelTypography?: 'inherit' | 'sm' | 'md' | 'lg';  // defaults to 'inherit' (matches size)
+      ```
+    - Update `InputCheckboxBase.web.ts` to support `labelTypography` attribute
+    - Update `InputCheckboxBase.web.css` to apply typography override when specified
+    - Add `label-typography` to observed attributes
+    - Ensure backward compatibility (existing usage unchanged)
+    - Write unit test for new prop
+    - _Requirements: 9.1 (Legal uses lg box + labelSm typography)_
+
+    - [x] 8.4.1 Web implementation of labelTypography
+      **Type**: Implementation
+      **Validation**: Tier 2 - Standard
+      - Add `LabelTypography` type to types.ts
+      - Add `labelTypography` prop to `InputCheckboxBaseProps` interface
+      - Add `label-typography` to observed attributes
+      - Update `InputCheckboxBase.web.ts` with property accessor
+      - Update `InputCheckboxBase.web.css` with typography override classes
+      - Write unit tests for new prop
+      - _Requirements: 9.1_
+
+    - [x] 8.4.2 iOS implementation of labelTypography
+      **Type**: Implementation
+      **Validation**: Tier 2 - Standard
+      - Add `LabelTypography` enum to iOS implementation
+      - Add `labelTypography` parameter to `InputCheckboxBase` struct
+      - Update `labelText` view to use override typography when not `.inherit`
+      - Update preview to demonstrate lg+sm combination
+      - Ensure backward compatibility (default is `.inherit`)
+      - _Requirements: 9.1_
+
+    - [x] 8.4.3 Android implementation of labelTypography
+      **Type**: Implementation
+      **Validation**: Tier 2 - Standard
+      - Add `LabelTypography` enum to Android implementation
+      - Add `labelTypography` parameter to `InputCheckboxBase` composable
+      - Update label `Text` to use override typography when not `Inherit`
+      - Update preview to demonstrate lg+sm combination
+      - Ensure backward compatibility (default is `Inherit`)
+      - _Requirements: 9.1_
+
+  - [x] 8.5 Refactor Input-Checkbox-Legal to wrapper pattern
+    **Type**: Architecture
+    **Validation**: Tier 3 - Comprehensive
+    **Rationale**: Aligns implementation with design doc, reduces code duplication, enables inheritance benefits.
+    
+    Currently, all three platform implementations of Input-Checkbox-Legal are standalone (duplicating checkbox rendering logic). This task refactors them to wrap Input-Checkbox-Base, reducing code duplication by ~80% and ensuring Legal inherits Base improvements automatically.
+
+    - [x] 8.5.1 Refactor Web Legal to wrapper pattern
+      **Type**: Architecture
+      **Validation**: Tier 2 - Standard
+      - Rewrite `InputCheckboxLegal.web.ts` to wrap `<input-checkbox-base>`:
+        - Create `<input-checkbox-base>` element in shadow DOM
+        - Configure Base with fixed props: `size="lg"`, `label-align="top"`, `label-typography="sm"`
+        - Forward relevant attributes to Base (label, helper-text, error-message, name, value)
+        - Implement Legal-specific features on top:
+          - Required indicator (rendered by Legal, not Base)
+          - Explicit consent enforcement (intercept checked attribute)
+          - Audit trail (onConsentChange with timestamp, legalTextId, version)
+          - Indeterminate rejection (ignore/warn if set)
+        - Listen to Base's change event and transform to consent-change event
+      - Remove duplicated code (~80% reduction expected)
+      - Update `InputCheckboxLegal.web.css` to style only Legal-specific elements
+      - Verify all Legal-specific features still work
+      - _Requirements: 9.1-9.11_
+
+    - [x] 8.5.2 Refactor iOS Legal to wrapper pattern
+      **Type**: Architecture
+      **Validation**: Tier 2 - Standard
+      - Rewrite `InputCheckboxLegal.ios.swift` to wrap `InputCheckboxBase`:
+        - Use `InputCheckboxBase` view internally with fixed configuration:
+          - `size: .lg`
+          - `labelAlign: .top`
+          - `labelTypography: .sm`
+        - Forward relevant properties to Base (label, helperText, errorMessage)
+        - Implement Legal-specific features on top:
+          - Required indicator (rendered by Legal, above Base)
+          - Explicit consent enforcement (intercept checked binding)
+          - Audit trail (onConsentChange with timestamp, legalTextId, version)
+          - No indeterminate support (don't pass indeterminate to Base)
+        - Transform Base's onChange to Legal's onConsentChange
+      - Remove duplicated code (checkboxBox, labelText, pressGesture, etc.)
+      - Keep only Legal-specific: ConsentChangeData, required indicator, consent enforcement
+      - _Requirements: 9.1-9.11_
+
+    - [x] 8.5.3 Refactor Android Legal to wrapper pattern
+      **Type**: Architecture
+      **Validation**: Tier 2 - Standard
+      - Rewrite `InputCheckboxLegal.android.kt` to wrap `InputCheckboxBase`:
+        - Use `InputCheckboxBase` composable internally with fixed configuration:
+          - `size = CheckboxSize.Large`
+          - `labelAlign = LabelAlignment.Top`
+          - `labelTypography = LabelTypography.Small`
+        - Forward relevant parameters to Base (label, helperText, errorMessage)
+        - Implement Legal-specific features on top:
+          - Required indicator (rendered by Legal, above Base)
+          - Explicit consent enforcement (intercept checked state)
+          - Audit trail (onConsentChange with timestamp, legalTextId, version)
+          - No indeterminate support (don't pass indeterminate to Base)
+        - Transform Base's onCheckedChange to Legal's onConsentChange
+      - Remove duplicated code (LegalCheckboxBox, LegalCheckboxTokens colors, etc.)
+      - Keep only Legal-specific: ConsentChangeData, required indicator, consent enforcement
+      - _Requirements: 9.1-9.11_
+
+  - [ ] 8.6 Update Legal component tests for wrapper DOM structure
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Rationale**: After refactor, tests should mostly work; update remaining selector mismatches.
+    - Update tests that query Base's internal elements to traverse nested shadow DOM:
+      ```typescript
+      const baseCheckbox = el.shadowRoot?.querySelector('input-checkbox-base');
+      const input = baseCheckbox?.shadowRoot?.querySelector('.checkbox__input');
+      ```
+    - Update selector for required indicator if Legal renders it directly
+    - Verify form reset propagates correctly to Base
+    - Run all Legal tests to verify they pass
+    - _Requirements: 11.7_
+
+  - [ ] 8.7 Full test suite validation
+    **Type**: Verification
+    **Validation**: Tier 2 - Standard
+    - Run `npm test` to verify all tests pass
+    - Verify no regressions in:
+      - Input-Checkbox-Base tests
+      - Input-Checkbox-Legal tests
+      - Stemma tests
+      - Token-completeness tests
+      - Other component tests
+    - Document final test results
+    - _Requirements: 11.1-11.7_
+
+
+---
+
 **Organization**: spec-validation
 **Scope**: 046-input-checkbox-base
+
+
+---
+
+- [x] 6. Fix InputCheckboxLegal Test Failures
+
+  **Type**: Parent
+  **Validation**: Tier 2 - Standard
+  
+  **Success Criteria:**
+  - All 3 previously failing tests now pass
+  - Test selectors correctly match component implementation
+  - No regressions in other Legal component tests
+  
+  **Primary Artifacts:**
+  - `src/components/core/Input-Checkbox-Legal/__tests__/InputCheckboxLegal.test.ts` (updated)
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/046-input-checkbox-base/completion/task-6-completion.md`
+  - Summary: `docs/specs/046-input-checkbox-base/task-6-summary.md`
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 6 Complete: Fix InputCheckboxLegal Test Failures"`
+  - Verify: Check GitHub for committed changes
+
+  - [x] 6.1 Analyze Test-Implementation Mismatch
+    **Type**: Investigation
+    **Validation**: Tier 1 - Minimal
+    - Review failing tests in `InputCheckboxLegal.test.ts`
+    - Document the selector mismatch:
+      - Tests expected `.checkbox__required`, `.checkbox__error`, `.checkbox__helper`
+      - Component uses `legal-checkbox__helper`, `legal-checkbox__error`
+      - Required indicator is inside nested `<input-checkbox-base>` shadow DOM
+    - Decide on fix approach: update tests to match implementation
+
+  - [x] 6.2 Update Test Selectors
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    - Update "should render with required indicator" test:
+      - Query through nested shadow DOM: `el.shadowRoot?.querySelector('input-checkbox-base')?.shadowRoot?.querySelector('.checkbox__required')`
+    - Update "should render with error state" test:
+      - Change selector from `.checkbox__error` to `.legal-checkbox__error`
+    - Update "should render with helper text" test:
+      - Change selector from `.checkbox__helper` to `.legal-checkbox__helper`
+
+  - [x] 6.3 Verify All Legal Component Tests Pass
+    **Type**: Verification
+    **Validation**: Tier 2 - Standard
+    - Run `npm test -- InputCheckboxLegal.test.ts`
+    - Ensure all 3 previously failing tests now pass
+    - Ensure no regressions in other Legal component tests (20 tests total)
+    - Document test results

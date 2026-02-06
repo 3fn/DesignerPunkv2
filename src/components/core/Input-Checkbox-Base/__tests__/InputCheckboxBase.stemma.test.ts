@@ -230,10 +230,14 @@ describe('Input-Checkbox-Base Stemma Validators', () => {
       }
       
       // Check for expected CSS custom property patterns
+      // Updated per Spec 052 token naming migration:
+      // - --color-select-not-selected-strong → --color-feedback-select-border-default
+      // - --color-select-selected-strong → --color-feedback-select-background-rest
+      // - --color-error-strong → --color-feedback-error-border
       const expectedTokenPatterns = [
-        '--color-select-not-selected-strong',
-        '--color-select-selected-strong',
-        '--color-error-strong',
+        '--color-feedback-select-border-default',
+        '--color-feedback-select-background-rest',
+        '--color-feedback-error-border',
         '--accessibility-focus-width',
         '--accessibility-focus-color',
         '--accessibility-focus-offset',

@@ -231,8 +231,8 @@ describe('Badge-Count-Notification Stemma Validators', () => {
       }
 
       const expectedTokenPatterns = [
-        '--color-badge-notification-background',
-        '--color-badge-notification-text',
+        '--color-feedback-notification-background',  // Semantic token (Spec 046 Task 8.2)
+        '--color-feedback-notification-text',        // Semantic token (Spec 046 Task 8.2)
         '--radius-full',
         '--typography-label-',  // Composite typography tokens (e.g., --typography-label-xs-font-size)
         '--space-',
@@ -249,9 +249,10 @@ describe('Badge-Count-Notification Stemma Validators', () => {
         return;
       }
 
+      // Updated to use semantic tokens (Spec 046 Task 8.2)
       const notificationTokenReferences = [
-        'var(--color-badge-notification-background)',
-        'var(--color-badge-notification-text)',
+        'var(--color-feedback-notification-background)',
+        'var(--color-feedback-notification-text)',
       ];
 
       for (const reference of notificationTokenReferences) {
@@ -531,7 +532,8 @@ describe('Badge-Count-Notification Stemma Validators', () => {
         return;
       }
 
-      expect(cssSource).toContain('var(--color-badge-notification-background)');
+      // Updated to use semantic token (Spec 046 Task 8.2)
+      expect(cssSource).toContain('var(--color-feedback-notification-background)');
     });
 
     it('should use notification text color token', () => {
@@ -540,7 +542,8 @@ describe('Badge-Count-Notification Stemma Validators', () => {
         return;
       }
 
-      expect(cssSource).toContain('var(--color-badge-notification-text)');
+      // Updated to use semantic token (Spec 046 Task 8.2)
+      expect(cssSource).toContain('var(--color-feedback-notification-text)');
     });
 
     it('should implement pluralization logic', () => {

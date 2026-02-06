@@ -52,6 +52,27 @@ export type CheckboxSize = 'sm' | 'md' | 'lg';
 export type LabelAlignment = 'center' | 'top';
 
 /**
+ * Label typography override options.
+ * 
+ * Allows overriding the default label typography which normally matches the size variant.
+ * This is primarily used by Input-Checkbox-Legal which needs lg box size with sm typography.
+ * 
+ * - 'inherit': Uses typography matching the size variant (default behavior)
+ * - 'sm': Forces labelSm typography regardless of size
+ * - 'md': Forces labelMd typography regardless of size
+ * - 'lg': Forces labelLg typography regardless of size
+ * 
+ * @see Requirement 9.1 in .kiro/specs/046-input-checkbox-base/requirements.md
+ * 
+ * @example
+ * ```typescript
+ * // Legal checkbox uses lg box with sm typography
+ * const typography: LabelTypography = 'sm';
+ * ```
+ */
+export type LabelTypography = 'inherit' | 'sm' | 'md' | 'lg';
+
+/**
  * Props interface for Input-Checkbox-Base component (platform-agnostic).
  * 
  * This interface defines the common API across all platforms (web, iOS, Android).
@@ -133,6 +154,22 @@ export interface InputCheckboxBaseProps {
    * @see Requirement 3.1-3.4 in .kiro/specs/046-input-checkbox-base/requirements.md
    */
   labelAlign?: LabelAlignment;
+  
+  /**
+   * Override label typography independent of size variant.
+   * 
+   * By default ('inherit'), label typography matches the size variant:
+   * - sm size → labelSm typography
+   * - md size → labelMd typography
+   * - lg size → labelLg typography
+   * 
+   * This prop allows overriding that behavior, primarily for Input-Checkbox-Legal
+   * which uses lg box size with sm typography.
+   * 
+   * @default 'inherit'
+   * @see Requirement 9.1 in .kiro/specs/046-input-checkbox-base/requirements.md
+   */
+  labelTypography?: LabelTypography;
   
   /**
    * Helper text displayed below checkbox (persistent).
@@ -222,6 +259,7 @@ export const INPUT_CHECKBOX_BASE_OBSERVED_ATTRIBUTES = [
   'label',
   'size',
   'label-align',
+  'label-typography',
   'helper-text',
   'error-message',
   'test-id',
@@ -295,6 +333,13 @@ export interface InputCheckboxBaseElement extends HTMLElement {
   labelAlign: LabelAlignment;
   
   /**
+   * Label typography override.
+   * 
+   * Reflects the 'label-typography' attribute.
+   */
+  labelTypography: LabelTypography;
+  
+  /**
    * Helper text.
    * 
    * Reflects the 'helper-text' attribute.
@@ -349,5 +394,6 @@ export const INPUT_CHECKBOX_BASE_DEFAULTS = {
   checked: false,
   indeterminate: false,
   size: 'md' as CheckboxSize,
-  labelAlign: 'center' as LabelAlignment
+  labelAlign: 'center' as LabelAlignment,
+  labelTypography: 'inherit' as LabelTypography
 } as const;

@@ -5,7 +5,7 @@
  * Tokens are organized by semantic concept for intuitive discovery and AI agent reasoning.
  * 
  * SEMANTIC CONCEPTS:
- * - feedback = System status communication (success, error, warning, info, select)
+ * - feedback = System status communication (success, error, warning, info, select, notification)
  * - identity = Entity type differentiation (human, agent)
  * - action = Interactive element emphasis (primary, secondary)
  * - contrast = Content on colored backgrounds (onLight, onDark)
@@ -24,6 +24,7 @@
  * MIGRATED TO COMPONENT DIRECTORIES (Spec 058):
  * - avatar = MIGRATED to src/components/core/Avatar/avatar.tokens.ts
  * - badge = MIGRATED to src/components/core/Badge-Count-Notification/tokens.ts
+ *   (Note: Badge component tokens reference the semantic color.feedback.notification.* tokens)
  * 
  * All color tokens reference mode-aware primitive color tokens that support
  * light/dark modes with base/wcag themes.
@@ -240,6 +241,29 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
     category: SemanticCategory.COLOR,
     context: 'Border color for not-selected state in selection components',
     description: 'Gray border for not-selected state in Select mode'
+  },
+
+  // Feedback - Notification (2 tokens)
+  /**
+   * Notification tokens for attention-demanding UI elements like badge counts.
+   * Uses high-visibility pink for maximum visual prominence.
+   * 
+   * @see .kiro/specs/046-input-checkbox-base Task 8.2 for migration context
+   */
+  'color.feedback.notification.background': {
+    name: 'color.feedback.notification.background',
+    primitiveReferences: { value: 'pink400' },
+    category: SemanticCategory.COLOR,
+    context: 'Background color for notification badges and alerts',
+    description: 'High-visibility pink background for notification badges - provides 6.33:1 contrast ratio with white text, exceeds WCAG AA requirements'
+  },
+
+  'color.feedback.notification.text': {
+    name: 'color.feedback.notification.text',
+    primitiveReferences: { value: 'white100' },
+    category: SemanticCategory.COLOR,
+    context: 'Text color for notification badges and alerts',
+    description: 'White text on notification backgrounds - ensures WCAG AA contrast compliance (6.33:1 ratio) for maximum readability'
   },
 
   // ============================================================================
@@ -592,25 +616,18 @@ export function getAllColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'
 }
 
 /**
- * Validate token count - updated for Spec 058 component token architecture cleanup
+ * Validate token count - updated for Spec 046 notification token addition
  * 
- * Token changes (Spec 058 - Component token migration):
- * - Removed 5 Avatar component tokens (migrated to src/components/core/Avatar/avatar.tokens.ts):
- *   - color.avatar.human.background
- *   - color.avatar.agent.background
- *   - color.avatar.human.icon
- *   - color.avatar.agent.icon
- *   - color.avatar.default.border
- * - Removed 2 Badge component tokens (migrated to src/components/core/Badge-Count-Notification/tokens.ts):
- *   - color.badge.notification.background
- *   - color.badge.notification.text
+ * Token changes (Spec 046 - Notification semantic tokens):
+ * - Added 2 notification semantic tokens:
+ *   - color.feedback.notification.background (pink400)
+ *   - color.feedback.notification.text (white100)
  * 
- * Previous count (Spec 052): 50 tokens
- * After Avatar migration: 45 tokens
- * Current count (Spec 058): 43 tokens
+ * Previous count (Spec 058): 43 tokens
+ * Current count (Spec 046): 45 tokens
  * 
  * Remaining tokens breakdown:
- * - Feedback concept: 18 tokens (success/error/warning/info × text/background/border + select × 6)
+ * - Feedback concept: 20 tokens (success/error/warning/info × text/background/border + select × 6 + notification × 2)
  * - Identity concept: 2 tokens (human, agent)
  * - Action concept: 2 tokens (primary, secondary)
  * - Contrast concept: 2 tokens (onLight, onDark)
@@ -622,10 +639,10 @@ export function getAllColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'
  * - Print: 1 token (default)
  * - Background: 1 token (primary.subtle)
  * - Glow: 5 tokens (neonPurple, neonCyan, neonYellow, neonGreen, neonPink)
- * Total: 43 tokens
+ * Total: 45 tokens
  */
 export function validateColorTokenCount(): boolean {
-  const expectedCount = 43;
+  const expectedCount = 45;
   const actualCount = colorTokenNames.length;
   if (actualCount !== expectedCount) {
     console.warn(`Color token count mismatch: expected ${expectedCount}, got ${actualCount}`);
