@@ -1,0 +1,504 @@
+/**
+ * Input-Radio-Base Component Styles for Web Platform
+ * 
+ * Token-based styling using CSS custom properties from the mathematical token system.
+ * All values reference semantic or primitive tokens - zero hard-coded values.
+ * Uses CSS logical properties for RTL support.
+ * 
+ * Stemma System Naming: [Family]-[Type]-[Variant] = Input-Radio-Base
+ * Component Type: Primitive (Base)
+ * 
+ * Size Variants:
+ * - sm: 24px circle (16px dot + 4px inset × 2), labelSm typography
+ * - md: 32px circle (20px dot + 6px inset × 2), labelMd typography
+ * - lg: 40px circle (24px dot + 8px inset × 2), labelLg typography
+ * 
+ * Key Differences from Checkbox:
+ * - Circular shape with filled dot indicator (vs rounded square with checkmark)
+ * - No indeterminate state (not applicable to radio buttons)
+ * - Uses radius.full (50%) for circular shape
+ * 
+ * DesignerPunk Philosophy: NO DISABLED STATES
+ * 
+ * @module Input-Radio-Base/platforms/web/styles
+ * @see Requirements: 1.1-1.7, 2.1-2.9, 3.1-3.4, 8.3
+ */
+
+/* ==========================================================================
+   Host Element
+   ========================================================================== */
+
+:host {
+  display: inline-block;
+}
+
+/* ==========================================================================
+   Container
+   ========================================================================== */
+
+/**
+ * Radio container - wraps radio label, helper text, and error message.
+ * Uses flex column layout to stack helper/error below the radio row.
+ * 
+ * Uses CSS logical properties for RTL support.
+ * @see Requirement 8.3 - CSS logical properties for RTL support
+ */
+.radio-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-grouped-tight);
+}
+
+/* ==========================================================================
+   Base Radio Styles
+   ========================================================================== */
+
+/**
+ * Radio wrapper - contains input and clickable label area.
+ * 
+ * Uses inline-flex for horizontal layout of circle + content.
+ * Default alignment is center (vertically centered).
+ * 
+ * @see Requirement 6.5 - Entire label area tappable
+ */
+.radio {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+}
+
+/**
+ * Touch target wrapper - ensures minimum 44px touch target for accessibility.
+ * 
+ * Uses inline-flex for horizontal layout of circle + content.
+ * Cursor pointer indicates clickability.
+ * Minimum height ensures WCAG touch target compliance.
+ * 
+ * The min-height uses tapAreaRecommended (48px) which exceeds the WCAG 2.1 AA
+ * minimum of 44px for better usability.
+ * 
+ * @see Requirement 6.5 - Entire label area tappable
+ * @see Requirement 6.6 - Minimum 44px touch target
+ */
+.radio__touch-target {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  min-height: var(--tap-area-recommended);
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   Label Alignment Variants
+   ========================================================================== */
+
+/**
+ * Center label alignment (default).
+ * Vertically centers the label with the radio circle.
+ * 
+ * @see Requirement 3.1 - Center alignment vertically centers label with circle
+ * @see Requirement 3.3 - Default to center alignment
+ */
+.radio--align-center {
+  align-items: center;
+}
+
+.radio--align-center .radio__touch-target {
+  align-items: center;
+}
+
+/**
+ * Top label alignment variant.
+ * Aligns radio circle to first line of multi-line text.
+ * 
+ * @see Requirement 3.2 - Top alignment aligns label to top of circle
+ * @see Requirement 3.4 - Multi-line labels with top alignment keep circle at first line
+ */
+.radio--align-top {
+  align-items: flex-start;
+}
+
+.radio--align-top .radio__touch-target {
+  align-items: flex-start;
+}
+
+/* ==========================================================================
+   Size Variants
+   ========================================================================== */
+
+/**
+ * Small size variant.
+ * Circle: 24px (16px dot + 4px inset × 2)
+ * Gap: space.grouped.normal
+ * Typography: labelSm
+ * 
+ * @see Requirement 2.1 - sm: 24px circle
+ * @see Requirement 2.4 - sm uses labelSm typography
+ * @see Requirement 2.7 - sm uses space.grouped.normal gap
+ */
+.radio--sm .radio__touch-target {
+  gap: var(--space-grouped-normal);
+}
+
+.radio--sm .radio__circle {
+  width: calc(var(--icon-size-050) + var(--space-inset-050) * 2);
+  height: calc(var(--icon-size-050) + var(--space-inset-050) * 2);
+}
+
+.radio--sm .radio__dot {
+  width: var(--icon-size-050);
+  height: var(--icon-size-050);
+}
+
+.radio--sm .radio__label {
+  font-family: var(--typography-label-sm-font-family);
+  font-size: var(--typography-label-sm-font-size);
+  font-weight: var(--typography-label-sm-font-weight);
+  line-height: var(--typography-label-sm-line-height);
+  letter-spacing: var(--typography-label-sm-letter-spacing);
+}
+
+/**
+ * Medium size variant (default).
+ * Circle: 32px (20px dot + 6px inset × 2)
+ * Gap: space.grouped.normal
+ * Typography: labelMd
+ * 
+ * @see Requirement 2.2 - md: 32px circle
+ * @see Requirement 2.5 - md uses labelMd typography
+ * @see Requirement 2.7 - md uses space.grouped.normal gap
+ * @see Requirement 2.9 - Default to md size
+ */
+.radio--md .radio__touch-target {
+  gap: var(--space-grouped-normal);
+}
+
+.radio--md .radio__circle {
+  width: calc(var(--icon-size-075) + var(--space-inset-075) * 2);
+  height: calc(var(--icon-size-075) + var(--space-inset-075) * 2);
+}
+
+.radio--md .radio__dot {
+  width: var(--icon-size-075);
+  height: var(--icon-size-075);
+}
+
+.radio--md .radio__label {
+  font-family: var(--typography-label-md-font-family);
+  font-size: var(--typography-label-md-font-size);
+  font-weight: var(--typography-label-md-font-weight);
+  line-height: var(--typography-label-md-line-height);
+  letter-spacing: var(--typography-label-md-letter-spacing);
+}
+
+/**
+ * Large size variant.
+ * Circle: 40px (24px dot + 8px inset × 2)
+ * Gap: space.grouped.loose
+ * Typography: labelLg
+ * 
+ * @see Requirement 2.3 - lg: 40px circle
+ * @see Requirement 2.6 - lg uses labelLg typography
+ * @see Requirement 2.8 - lg uses space.grouped.loose gap
+ */
+.radio--lg .radio__touch-target {
+  gap: var(--space-grouped-loose);
+}
+
+.radio--lg .radio__circle {
+  width: calc(var(--icon-size-100) + var(--space-inset-100) * 2);
+  height: calc(var(--icon-size-100) + var(--space-inset-100) * 2);
+}
+
+.radio--lg .radio__dot {
+  width: var(--icon-size-100);
+  height: var(--icon-size-100);
+}
+
+.radio--lg .radio__label {
+  font-family: var(--typography-label-lg-font-family);
+  font-size: var(--typography-label-lg-font-size);
+  font-weight: var(--typography-label-lg-font-weight);
+  line-height: var(--typography-label-lg-line-height);
+  letter-spacing: var(--typography-label-lg-letter-spacing);
+}
+
+/* ==========================================================================
+   Hidden Native Radio Input
+   ========================================================================== */
+
+/**
+ * Hidden native radio for form compatibility.
+ * Visually hidden but accessible to screen readers and form submission.
+ * 
+ * @see Requirement 8.2 - Hidden native input for form compatibility
+ */
+.radio__input {
+  position: absolute;
+  width: 1px; /* a11y.visuallyHidden */
+  height: 1px; /* a11y.visuallyHidden */
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ==========================================================================
+   Radio Circle (Visual Indicator)
+   ========================================================================== */
+
+/**
+ * Visual radio circle.
+ * 
+ * - Flex container for centering dot
+ * - Token-based border, radius, and colors
+ * - Uses radius.full (50%) for circular shape
+ * - Transition for state changes using motion.selectionTransition
+ * 
+ * @see Requirement 1.1 - Unselected: transparent background, default border
+ * @see Requirement 4.5 - Border uses borderEmphasis (2px)
+ * @see Requirement 4.6 - Border uses radius.full (50%) for circular shape
+ * @see Requirement 1.6 - State changes animate using motion.selectionTransition
+ */
+.radio__circle {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--border-emphasis) solid var(--color-feedback-select-border-default);
+  border-radius: var(--radius-full);
+  background-color: transparent;
+  transition: border-color var(--motion-selection-transition-duration) var(--motion-selection-transition-easing);
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   Radio Dot (Selection Indicator)
+   ========================================================================== */
+
+/**
+ * Filled circular dot indicator for selected state.
+ * 
+ * - Centered within the outer circle
+ * - Uses color.feedback.select.background.rest fill color
+ * - Scale animation on selection using motion.selectionTransition
+ * - Hidden (scale 0) when unselected
+ * 
+ * @see Requirement 4.1 - Filled circular dot centered within outer circle
+ * @see Requirement 4.2 - Dot uses color.feedback.select.background.rest fill
+ * @see Requirement 4.3 - Dot size matches icon size token for current size variant
+ * @see Requirement 4.4 - Unselected displays no dot
+ * @see Requirement 1.7 - Dot scales in using motion.selectionTransition timing
+ */
+.radio__dot {
+  border-radius: var(--radius-full);
+  background-color: var(--color-feedback-select-background-rest);
+  transform: scale(0);
+  transition: transform var(--motion-selection-transition-duration) var(--motion-selection-transition-easing);
+}
+
+/* ==========================================================================
+   Radio States
+   ========================================================================== */
+
+/**
+ * Selected state.
+ * Shows filled dot with selected border color.
+ * 
+ * @see Requirement 1.2 - Selected: filled dot with selected border color
+ */
+.radio--selected .radio__circle {
+  border-color: var(--color-feedback-select-border-rest);
+}
+
+.radio--selected .radio__dot {
+  transform: scale(1);
+}
+
+/**
+ * Error state.
+ * Error border color on radio circle.
+ * 
+ * @see Requirement 1.5 - Error displays error border color
+ * @see Requirement 5.3 - Error styling applied to radio border
+ */
+.radio--error .radio__circle {
+  border-color: var(--color-feedback-error-border);
+}
+
+/* ==========================================================================
+   Hover State
+   ========================================================================== */
+
+/**
+ * Hover state for unselected radio.
+ * Uses blend.hoverDarker (8% darker) applied via CSS custom property.
+ * The --_radio-hover-border is calculated in JavaScript using blend utilities
+ * and applied as an inline style on the radio wrapper element.
+ * 
+ * @see Requirement 1.3 - Hover applies blend.hoverDarker (8%) to border
+ * @see Requirement 7.4 - Web hover applies blend.hoverDarker to border
+ */
+.radio__touch-target:hover .radio__circle {
+  border-color: var(--_radio-hover-border, var(--color-feedback-select-border-rest));
+}
+
+/**
+ * Hover state for selected radio.
+ * Maintains selected border color (no change needed as already selected).
+ * 
+ * @see Design doc State Color Mapping - hover (selected) maintains selected border
+ */
+.radio--selected .radio__touch-target:hover .radio__circle {
+  border-color: var(--color-feedback-select-border-rest);
+}
+
+/* ==========================================================================
+   Focus State (Accessibility)
+   ========================================================================== */
+
+/**
+ * Focus ring on keyboard navigation.
+ * Uses :focus-visible via native input to show focus only for keyboard users.
+ * 
+ * The selector targets the radio circle when the input has keyboard focus.
+ * Since the input is a sibling of the label (which contains the circle),
+ * we use the general sibling combinator (~) to target the label,
+ * then descend to the circle.
+ * 
+ * @see Requirement 1.4 - Focus displays focus ring using accessibility tokens
+ * @see Requirement 6.3 - Visible focus ring on keyboard focus
+ * @see Requirement 7.5 - :focus-visible for keyboard-only focus indication
+ */
+.radio__input:focus-visible ~ .radio__touch-target .radio__circle {
+  outline: var(--accessibility-focus-width) solid var(--accessibility-focus-color);
+  outline-offset: var(--accessibility-focus-offset);
+}
+
+/* ==========================================================================
+   Content Area (Label)
+   ========================================================================== */
+
+/**
+ * Content wrapper for label text within the radio row.
+ */
+.radio__content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/**
+ * Label text.
+ * Typography is set per size variant above.
+ * Uses color.contrast.onLight for label color.
+ * 
+ * @see Requirement 6.1 - Label associated with radio
+ * @see Design doc State Color Mapping - Label uses color.contrast.onLight
+ */
+.radio__label {
+  color: var(--color-text-default);
+}
+
+/* ==========================================================================
+   Helper Text and Error Message
+   ========================================================================== */
+
+/**
+ * Helper text styling - provides additional context below radio.
+ * Displayed below the radio+label row.
+ * 
+ * Uses caption typography for secondary information.
+ * Uses CSS logical properties for RTL support.
+ * 
+ * @see Requirement 5.1 - Helper text displayed below radio
+ * @see Requirement 5.6 - aria-describedby for helper text association
+ * @see Requirement 8.3 - CSS logical properties for RTL support
+ */
+.radio__helper {
+  display: block;
+  margin-block-start: var(--space-grouped-minimal);
+  margin-block-end: 0;
+  margin-inline: 0;
+  padding: 0;
+  font-family: var(--typography-caption-font-family);
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--typography-caption-line-height);
+  font-weight: var(--typography-caption-font-weight);
+  letter-spacing: var(--typography-caption-letter-spacing);
+  color: var(--color-text-muted);
+}
+
+/**
+ * Error message styling - displays validation errors below helper text.
+ * 
+ * Uses caption typography with error color for visibility.
+ * Has role="alert" for screen reader announcement.
+ * Uses CSS logical properties for RTL support.
+ * 
+ * @see Requirement 5.2 - Error message displayed below helper text
+ * @see Requirement 5.3 - Error styling applied to radio border
+ * @see Requirement 5.4 - aria-invalid="true" when error present
+ * @see Requirement 5.5 - aria-describedby for error association
+ * @see Requirement 8.3 - CSS logical properties for RTL support
+ */
+.radio__error {
+  display: block;
+  margin-block-start: var(--space-grouped-minimal);
+  margin-block-end: 0;
+  margin-inline: 0;
+  padding: 0;
+  font-family: var(--typography-caption-font-family);
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--typography-caption-line-height);
+  font-weight: var(--typography-caption-font-weight);
+  letter-spacing: var(--typography-caption-letter-spacing);
+  color: var(--color-feedback-error-text);
+}
+
+/* ==========================================================================
+   High Contrast Mode Support
+   ========================================================================== */
+
+@media (prefers-contrast: high) {
+  .radio__circle {
+    border: var(--border-emphasis) solid currentColor;
+  }
+
+  .radio__input:focus-visible ~ .radio__touch-target .radio__circle {
+    outline-width: var(--border-heavy);
+  }
+}
+
+/* ==========================================================================
+   Reduced Motion Support
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .radio__circle,
+  .radio__dot {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+  .radio__circle {
+    background-color: transparent !important;
+    border-color: var(--color-print-default) !important;
+  }
+
+  .radio__dot {
+    background-color: var(--color-print-default) !important;
+  }
+
+  .radio__label {
+    color: var(--color-print-default) !important;
+  }
+}
