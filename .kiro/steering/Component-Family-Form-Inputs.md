@@ -4,13 +4,13 @@ inclusion: manual
 
 # Form Inputs Components
 
-**Date**: 2026-01-02
+**Date**: 2026-02-07
 **Purpose**: MCP-queryable documentation for Form Inputs component family
 **Organization**: process-standard
 **Scope**: cross-project
 **Layer**: 3
 **Relevant Tasks**: component-development, ui-composition, form-implementation
-**Last Reviewed**: 2026-01-02
+**Last Reviewed**: 2026-02-07
 
 ---
 
@@ -22,20 +22,22 @@ inclusion: manual
 
 ### Purpose
 
-The Form Inputs family provides text input components for collecting user data with built-in validation, accessibility, and cross-platform consistency. All components implement the float label pattern with smooth animated transitions and comprehensive error/success state handling.
+The Form Inputs family provides text input, checkbox, and radio components for collecting user data with built-in validation, accessibility, and cross-platform consistency. Text input components implement the float label pattern with smooth animated transitions. Selection controls (checkbox, radio) provide binary and single-selection capabilities with comprehensive state handling.
 
 ### Key Characteristics
 
-- **Float Label Animation**: Labels smoothly transition between placeholder and floated positions using motion tokens
-- **Built-in Validation**: Validation triggers on blur with error/success state display
+- **Float Label Animation**: Text inputs smoothly transition labels between placeholder and floated positions using motion tokens
+- **Built-in Validation**: Validation triggers on blur (text inputs) or group-level (radio sets) with error/success state display
 - **Accessibility First**: WCAG 2.1 AA compliant with keyboard navigation and screen reader support
 - **Cross-Platform Consistent**: Mathematically equivalent animations across web, iOS, and Android
-- **Semantic Specialization**: Semantic variants extend the primitive base with domain-specific functionality
+- **Semantic Specialization**: Semantic variants extend primitive bases with domain-specific functionality
+- **Orchestration Pattern**: Set components orchestrate Base children without duplicating rendering logic
 
 ### Stemma System Integration
 
-- **Primitive Base**: Input-Text-Base
-- **Semantic Variants**: 3 implemented (Email, Password, PhoneNumber)
+- **Primitive Bases**: Input-Text-Base, Input-Checkbox-Base, Input-Radio-Base
+- **Pattern Components**: Input-Radio-Set (orchestrates Input-Radio-Base children)
+- **Semantic Variants**: 4 implemented (Email, Password, PhoneNumber, Checkbox-Legal)
 - **Cross-Platform**: web, ios, android
 
 ---
@@ -60,6 +62,11 @@ Input-Checkbox-Base (Primitive)
     │
     └── Input-Checkbox-Legal (Semantic)
         └── Legal consent + audit trail + explicit consent enforcement
+
+Input-Radio-Base (Primitive)
+    │
+    └── [Used by] Input-Radio-Set (Pattern/Orchestrator)
+        └── Mutual exclusivity + keyboard navigation + group validation
 ```
 
 ### Primitive Component
@@ -68,6 +75,13 @@ Input-Checkbox-Base (Primitive)
 |-----------|------|--------|-------------|
 | Input-Text-Base | Primitive | 🟢 Production Ready | Foundational text input with float label pattern |
 | Input-Checkbox-Base | Primitive | 🟢 Production Ready | Binary selection control with three size variants |
+| Input-Radio-Base | Primitive | 🟢 Production Ready | Single-selection control with three size variants |
+
+### Pattern Components
+
+| Component | Orchestrates | Status | Purpose |
+|-----------|-------------|--------|---------|
+| Input-Radio-Set | Input-Radio-Base | 🟢 Production Ready | Mutual exclusivity, keyboard navigation, group validation |
 
 ### Semantic Components
 
@@ -206,6 +220,63 @@ All checkbox components in the Form Inputs family inherit these 9 foundational c
 | `explicit_consent` | Prevents pre-checking with console warning | N/A |
 | `audit_trail` | Provides ISO 8601 timestamp and metadata | N/A |
 | `required_indicator` | Shows "Required" indicator by default | 3.3.2 |
+
+### Radio Base Contracts (Inherited by Radio Components)
+
+All radio components in the Form Inputs family inherit these 8 foundational contracts from Input-Radio-Base:
+
+| Contract | Description | WCAG | Platforms |
+|----------|-------------|------|-----------|
+| `focusable` | Can receive keyboard focus | 2.1.1 | web, ios, android |
+| `pressable` | Responds to click/tap on entire label area | 2.1.1 | web, ios, android |
+| `hover_state` | Visual feedback on hover (web) | 1.4.13 | web |
+| `pressed_state` | Visual feedback when pressed | 2.4.7 | web, ios, android |
+| `selected_state` | Shows filled dot when selected | 1.4.1 | web, ios, android |
+| `error_state` | Shows error border and message | 3.3.1 | web, ios, android |
+| `focus_ring` | WCAG 2.4.7 focus visible indicator | 2.4.7 | web, ios, android |
+| `form_integration` | Native form submission | 4.1.2 | web, ios, android |
+
+### Radio Contract Details
+
+#### selected_state
+
+**Description**: When selected, component displays a filled circular dot centered within the outer circle.
+
+**Behavior**: Dot uses `color.feedback.select.background.rest` fill. Border uses `color.feedback.select.border.rest`. Dot scales in via `motion.selectionTransition` (250ms). Unlike checkbox (which uses a checkmark icon via Icon-Base), radio uses a simple filled circle — no icon dependency required.
+
+**WCAG Compliance**: 1.4.1 Use of Color (dot shape provides non-color indication)
+
+#### form_integration (Radio)
+
+**Description**: Radio integrates with native form submission via hidden `<input type="radio">`.
+
+**Behavior**: Hidden native radio ensures form compatibility. Value included in form submission when selected. `name` attribute groups radios for mutual exclusivity. Unlike checkbox, radio `value` is required for group identification.
+
+**WCAG Compliance**: 4.1.2 Name, Role, Value
+
+### Input-Radio-Set Contracts
+
+| Contract | Description | WCAG | Platforms |
+|----------|-------------|------|-----------|
+| `mutual_exclusivity` | Only one radio selected at a time | N/A | web, ios, android |
+| `keyboard_navigation` | Arrow keys navigate within group | 2.1.1 | web, ios, android |
+| `group_validation` | Required validation at group level | 3.3.1 | web, ios, android |
+| `error_announcement` | Error message announced to screen readers | 4.1.3 | web, ios, android |
+| `radiogroup_role` | Proper ARIA role for group | 4.1.2 | web, ios, android |
+
+### Radio Set Contract Details
+
+#### mutual_exclusivity
+
+**Description**: Only one radio within the group can be selected at any time.
+
+**Behavior**: When a user selects a radio, the previously selected radio becomes unselected. Clicking an already-selected radio does NOT deselect it (radio convention). The Set coordinates this via event listening (web), environment values (iOS), or CompositionLocal (Android).
+
+#### keyboard_navigation
+
+**Description**: Arrow keys navigate between radios within the group following WAI-ARIA radio group pattern.
+
+**Behavior**: Tab enters/exits the group. Arrow Down/Right moves to next radio. Arrow Up/Left moves to previous radio. Wrap-around at group boundaries. Space selects focused radio. Home/End jump to first/last radio. Roving tabindex pattern ensures only one radio is in the tab order.
 
 ---
 
@@ -641,6 +712,164 @@ InputCheckboxLegal(
 
 ---
 
+### Input-Radio-Base
+
+**Type**: Primitive
+**Status**: 🟢 Production Ready
+**Inherits**: None
+
+#### Properties
+
+| Property | Type | Required | Default | Description |
+|----------|------|----------|---------|-------------|
+| `label` | `string` | Yes | - | Label text (required for accessibility) |
+| `value` | `string` | Yes | - | Value for form submission and group identification |
+| `selected` | `boolean` | No | `false` | Whether radio is selected |
+| `name` | `string` | No | - | Radio group name (for native form behavior) |
+| `size` | `'sm' \| 'md' \| 'lg'` | No | `'md'` | Size variant |
+| `labelAlign` | `'center' \| 'top'` | No | `'center'` | Vertical alignment of label |
+| `helperText` | `string` | No | - | Helper text displayed below radio (persistent) |
+| `errorMessage` | `string` | No | - | Error message (triggers error styling) |
+| `onSelect` | `(value: string) => void` | No | - | Called when radio is selected |
+| `id` | `string` | No | auto-generated | Unique identifier |
+| `testID` | `string` | No | - | Test identifier |
+
+#### Size Variants
+
+| Size | Circle Size | Dot Size | Inset | Gap | Typography |
+|------|-------------|----------|-------|-----|------------|
+| `sm` | 24px | `icon.size050` (16px) | `inset.050` (4px) | `space.grouped.normal` | `labelSm` |
+| `md` | 32px | `icon.size075` (20px) | `inset.075` (6px) | `space.grouped.normal` | `labelMd` |
+| `lg` | 40px | `icon.size100` (24px) | `inset.100` (8px) | `space.grouped.loose` | `labelLg` |
+
+**Circle Size Formula**: `dotSize + (inset × 2)`
+
+#### Key Differences from Checkbox
+
+| Aspect | Checkbox | Radio |
+|--------|----------|-------|
+| Selection | Multi-select | Single-select (mutual exclusivity) |
+| Shape | Rounded square | Circle (`radius.full`) |
+| Indicator | Icon (check/minus) via Icon-Base | Filled dot (no icon dependency) |
+| Indeterminate | Supported | Not applicable |
+| `value` prop | Optional | Required |
+| Set component | N/A | Input-Radio-Set |
+
+#### Usage Example
+
+```html
+<!-- Web -->
+<input-radio-base
+  label="Option A"
+  value="option-a"
+  name="my-group"
+></input-radio-base>
+
+<!-- With all attributes -->
+<input-radio-base
+  label="Premium Plan"
+  value="premium"
+  name="subscription"
+  size="lg"
+  label-align="top"
+  helper-text="Best value for teams"
+  selected
+></input-radio-base>
+```
+
+```swift
+// iOS
+InputRadioBase(
+    value: "option-a",
+    label: "Option A",
+    selectedValue: $selectedValue,
+    size: .md,
+    onSelect: { value in print("Selected: \(value)") }
+)
+```
+
+```kotlin
+// Android
+InputRadioBase(
+    value = "option-a",
+    label = "Option A",
+    selectedValue = selectedValue,
+    onSelectedChange = { selectedValue = it },
+    size = RadioSize.Medium
+)
+```
+
+---
+
+### Input-Radio-Set
+
+**Type**: Pattern (Orchestrator)
+**Status**: 🟢 Production Ready
+**Orchestrates**: Input-Radio-Base
+
+**Architectural Principle**: Input-Radio-Set orchestrates child Input-Radio-Base components — it does NOT duplicate radio circle/dot rendering logic. This ensures Base improvements automatically benefit Set usage and maintains a single source of truth for radio rendering.
+
+#### Properties
+
+| Property | Type | Required | Default | Description |
+|----------|------|----------|---------|-------------|
+| `selectedValue` | `string \| null` | No | `null` | Currently selected value (controlled) |
+| `onSelectionChange` | `(value: string \| null) => void` | No | - | Callback when selection changes |
+| `required` | `boolean` | No | `false` | Whether a selection is required |
+| `error` | `boolean` | No | `false` | Error state indicator |
+| `errorMessage` | `string` | No | - | Error message to display |
+| `size` | `'sm' \| 'md' \| 'lg'` | No | `'md'` | Size variant applied to all children |
+| `testID` | `string` | No | - | Test identifier |
+
+#### Platform State Coordination
+
+| Platform | Mechanism | Description |
+|----------|-----------|-------------|
+| Web | Slot-based composition | Children rendered via `<slot>`, events bubble up |
+| iOS | Environment values | Selection state passed via SwiftUI environment |
+| Android | CompositionLocal | Selection state passed via CompositionLocalProvider |
+
+#### Usage Example
+
+```html
+<!-- Web -->
+<input-radio-set selected-value="monthly" size="md">
+  <input-radio-base label="Monthly" value="monthly"></input-radio-base>
+  <input-radio-base label="Yearly" value="yearly" helper-text="Save 20%"></input-radio-base>
+  <input-radio-base label="Lifetime" value="lifetime"></input-radio-base>
+</input-radio-set>
+
+<!-- With validation -->
+<input-radio-set required error error-message="Please select a plan">
+  <input-radio-base label="Basic" value="basic"></input-radio-base>
+  <input-radio-base label="Pro" value="pro"></input-radio-base>
+</input-radio-set>
+```
+
+```swift
+// iOS
+InputRadioSet(selectedValue: $selectedPlan, size: .md) {
+    InputRadioBase(value: "monthly", label: "Monthly", selectedValue: $selectedPlan)
+    InputRadioBase(value: "yearly", label: "Yearly", selectedValue: $selectedPlan, helperText: "Save 20%")
+    InputRadioBase(value: "lifetime", label: "Lifetime", selectedValue: $selectedPlan)
+}
+```
+
+```kotlin
+// Android
+InputRadioSet(
+    selectedValue = selectedPlan,
+    onSelectionChange = { selectedPlan = it },
+    size = RadioSize.Medium
+) {
+    InputRadioBase(value = "monthly", label = "Monthly", selectedValue = selectedPlan, onSelectedChange = { selectedPlan = it })
+    InputRadioBase(value = "yearly", label = "Yearly", selectedValue = selectedPlan, onSelectedChange = { selectedPlan = it }, helperText = "Save 20%")
+    InputRadioBase(value = "lifetime", label = "Lifetime", selectedValue = selectedPlan, onSelectedChange = { selectedPlan = it })
+}
+```
+
+---
+
 ## Token Dependencies
 
 ### Required Tokens
@@ -711,6 +940,40 @@ Components in the Form Inputs family consume these design tokens:
 | Icon | `icon.size075` | Medium checkbox icon (20px) |
 | Icon | `icon.size100` | Large checkbox icon (24px) |
 
+#### Radio Tokens
+
+| Category | Token Pattern | Purpose |
+|----------|---------------|---------|
+| Typography | `typography.labelSm` | Small size label (14px) |
+| Typography | `typography.labelMd` | Medium size label (16px) |
+| Typography | `typography.labelLg` | Large size label (18px) |
+| Typography | `typography.caption` | Helper text and error messages |
+| Color | `color.feedback.select.background.rest` | Selected dot fill color |
+| Color | `color.feedback.select.border.default` | Unselected border |
+| Color | `color.feedback.select.border.rest` | Selected border |
+| Color | `color.feedback.error.border` | Error state border |
+| Color | `color.contrast.onLight` | Label text color |
+| Spacing | `inset.050` | Small size internal padding (4px) |
+| Spacing | `inset.075` | Medium size internal padding (6px) |
+| Spacing | `inset.100` | Large size internal padding (8px) |
+| Spacing | `space.grouped.normal` | Gap for sm/md sizes |
+| Spacing | `space.grouped.loose` | Gap for lg size |
+| Border | `borderEmphasis` | Radio border width (2px) |
+| Border | `radius.full` | Fully rounded circle (50%) |
+| Motion | `motion.selectionTransition` | State change animation (250ms) |
+| Motion | `motion.buttonPress` | iOS press feedback (150ms) |
+| Blend | `blend.hoverDarker` | Web hover state (8% darker) |
+| Blend | `blend.pressedDarker` | Android ripple (12% darker) |
+| Scale | `scale096` | iOS press scale (96%) |
+| Accessibility | `accessibility.focus.color` | Focus ring color |
+| Accessibility | `accessibility.focus.width` | Focus ring width (2px) |
+| Accessibility | `accessibility.focus.offset` | Focus ring offset (2px) |
+| Icon | `icon.size050` | Small radio dot (16px) |
+| Icon | `icon.size075` | Medium radio dot (20px) |
+| Icon | `icon.size100` | Large radio dot (24px) |
+
+**Note**: Radio tokens overlap significantly with checkbox tokens. No new tokens were required — all tokens existed from prior specs.
+
 ### Token Resolution
 
 Form Inputs components resolve tokens through the Rosetta System's semantic-to-primitive hierarchy. Typography tokens compose fontSize, lineHeight, fontFamily, fontWeight, and letterSpacing primitives. Color tokens resolve to theme-aware values supporting light/dark modes.
@@ -759,6 +1022,20 @@ Form Inputs components resolve tokens through the Rosetta System's semantic-to-p
 | Generic binary selection | Input-Checkbox-Base | No legal/audit requirements |
 | Parent checkbox (select all) | Input-Checkbox-Base | Supports indeterminate state |
 | Settings toggle | Input-Checkbox-Base | Simple on/off without audit needs |
+
+#### Radio Buttons
+
+| Scenario | Recommended Component | Rationale |
+|----------|----------------------|-----------|
+| Single selection from a group | Input-Radio-Set + Input-Radio-Base | Mutual exclusivity + keyboard navigation |
+| Subscription plan selection | Input-Radio-Set + Input-Radio-Base | Clear single-choice with group validation |
+| Survey question (pick one) | Input-Radio-Set + Input-Radio-Base | Required validation at group level |
+| Standalone radio (rare) | Input-Radio-Base | Only when group behavior is managed externally |
+
+**Radio vs Checkbox Decision**:
+- Use **radio** when the user must pick exactly one option from a group (single-select)
+- Use **checkbox** when the user can pick zero or more options (multi-select)
+- Radios are almost always used in groups via Input-Radio-Set
 
 ### Common Patterns
 
@@ -938,6 +1215,42 @@ Form Inputs components resolve tokens through the Rosetta System's semantic-to-p
 </div>
 ```
 
+#### Radio Group Selection
+
+```html
+<!-- Web: Subscription plan selection -->
+<input-radio-set selected-value="pro" size="md">
+  <input-radio-base
+    label="Basic"
+    value="basic"
+    helper-text="5 projects, 1 GB storage"
+  ></input-radio-base>
+  
+  <input-radio-base
+    label="Pro"
+    value="pro"
+    helper-text="Unlimited projects, 100 GB storage"
+  ></input-radio-base>
+  
+  <input-radio-base
+    label="Enterprise"
+    value="enterprise"
+    helper-text="Custom limits, dedicated support"
+  ></input-radio-base>
+</input-radio-set>
+```
+
+#### Radio Group with Validation
+
+```html
+<!-- Web: Required radio group with error state -->
+<input-radio-set required error error-message="Please select a shipping method">
+  <input-radio-base label="Standard (5-7 days)" value="standard"></input-radio-base>
+  <input-radio-base label="Express (2-3 days)" value="express"></input-radio-base>
+  <input-radio-base label="Overnight" value="overnight"></input-radio-base>
+</input-radio-set>
+```
+
 ### Accessibility Considerations
 
 - **Label Association**: All inputs have programmatically associated labels via the float label pattern
@@ -964,7 +1277,7 @@ Form Inputs components resolve tokens through the Rosetta System's semantic-to-p
 #### Web
 
 - Uses Shadow DOM for style encapsulation
-- Custom element registration: `<input-text-base>`, `<input-text-email>`, `<input-checkbox-base>`, `<input-checkbox-legal>`, etc.
+- Custom element registration: `<input-text-base>`, `<input-text-email>`, `<input-checkbox-base>`, `<input-checkbox-legal>`, `<input-radio-base>`, `<input-radio-set>`, etc.
 - Supports `className` prop for additional styling
 - Uses `:focus-visible` for keyboard-only focus indication
 - Autocomplete attributes for browser autofill
@@ -979,6 +1292,7 @@ Form Inputs components resolve tokens through the Rosetta System's semantic-to-p
 - `UITextContentType` for autofill support
 - SF Symbols for icons
 - Checkbox uses scale animation on press (96% via `scale096`)
+- Radio uses scale animation on press (96% via `scale096`)
 - Native RTL handling via `leading`/`trailing` alignment
 
 #### Android
@@ -993,7 +1307,8 @@ Form Inputs components resolve tokens through the Rosetta System's semantic-to-p
 
 All platforms implement the same behavioral contracts:
 - Float label animation timing matches across platforms (250ms)
-- Validation triggers on blur consistently
+- Selection transition timing matches across platforms (250ms)
+- Validation triggers on blur consistently (text inputs) or group-level (radio sets)
 - Error/success states display identically
 - Focus ring appearance is mathematically equivalent
 - Reduced motion preference is respected

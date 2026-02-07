@@ -1,8 +1,3 @@
----
-inclusion: conditional
-trigger: browser, web-components, distribution, bundle
----
-
 # Browser Distribution Guide
 
 **Date**: 2025-12-23

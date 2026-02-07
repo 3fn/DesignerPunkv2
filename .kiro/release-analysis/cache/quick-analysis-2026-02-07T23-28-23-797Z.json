@@ -1,0 +1,110 @@
+{
+  "timestamp": "2026-02-07T23:28:23.797Z",
+  "lastAnalyzedCommit": "092ebca0a43f9e7bd63edd79f21084d353f8b54c",
+  "documentCount": 20,
+  "documents": [
+    {
+      "path": "docs/specs/046-input-checkbox-base/task-1-summary.md",
+      "lastModified": "2026-02-07T23:28:23.793Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/046-input-checkbox-base/task-2-summary.md",
+      "lastModified": "2026-02-07T23:28:23.794Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/046-input-checkbox-base/task-3-summary.md",
+      "lastModified": "2026-02-07T23:28:23.794Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/046-input-checkbox-base/task-4-summary.md",
+      "lastModified": "2026-02-07T23:28:23.795Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/046-input-checkbox-base/task-5-summary.md",
+      "lastModified": "2026-02-07T23:28:23.795Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/046-input-checkbox-base/task-6-summary.md",
+      "lastModified": "2026-02-07T23:28:23.795Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/046-input-checkbox-base/task-8-summary.md",
+      "lastModified": "2026-02-07T23:28:23.795Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/047-input-radio-base/task-1-summary.md",
+      "lastModified": "2026-02-07T23:28:23.795Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/047-input-radio-base/task-2-summary.md",
+      "lastModified": "2026-02-07T23:28:23.796Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/047-input-radio-base/task-3-summary.md",
+      "lastModified": "2026-02-07T23:28:23.796Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/047-input-radio-base/task-4-summary.md",
+      "lastModified": "2026-02-07T23:28:23.796Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/047-input-radio-base/task-5-summary.md",
+      "lastModified": "2026-02-07T23:28:23.796Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/047-input-radio-base/task-6-summary.md",
+      "lastModified": "2026-02-07T23:28:23.796Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/047-input-radio-base/task-7-summary.md",
+      "lastModified": "2026-02-07T23:28:23.796Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/047-input-radio-base/task-8-summary.md",
+      "lastModified": "2026-02-07T23:28:23.796Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/047-input-radio-base/task-9-summary.md",
+      "lastModified": "2026-02-07T23:28:23.796Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/058-component-token-architecture-cleanup/task-1-summary.md",
+      "lastModified": "2026-02-07T23:28:23.796Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/058-component-token-architecture-cleanup/task-2-summary.md",
+      "lastModified": "2026-02-07T23:28:23.796Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/058-component-token-architecture-cleanup/task-3-summary.md",
+      "lastModified": "2026-02-07T23:28:23.796Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/058-component-token-architecture-cleanup/task-4-summary.md",
+      "lastModified": "2026-02-07T23:28:23.797Z",
+      "gitCommit": "unknown"
+    }
+  ],
+  "quickAnalysisMode": true,
+  "appendOnlyOptimization": true,
+  "note": "Full analysis can be run with: npm run release:analyze"
+}

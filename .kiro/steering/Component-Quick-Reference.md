@@ -10,7 +10,7 @@ inclusion: manual
 **Scope**: cross-project
 **Layer**: 2
 **Relevant Tasks**: component-development, ui-composition, feature-building
-**Last Reviewed**: 2026-02-04
+**Last Reviewed**: 2026-02-07
 
 ---
 
@@ -34,6 +34,7 @@ All 11 component families have MCP-queryable documentation. Production families 
 | Chips | Filtering, selection, and input management | `.kiro/steering/Component-Family-Chip.md` | 🟢 Production |
 | Form Inputs | Data collection and validation | `.kiro/steering/Component-Family-Form-Inputs.md` | 🟢 Production |
 | Checkboxes | Binary selection and legal consent | `.kiro/steering/Component-Family-Form-Inputs.md` | 🟢 Production |
+| Radio Buttons | Single-selection from mutually exclusive options | `.kiro/steering/Component-Family-Form-Inputs.md` | 🟢 Production |
 | Containers | Layout and content organization | `.kiro/steering/Component-Family-Container.md` | 🟢 Production |
 | Icons | Visual communication | `.kiro/steering/Component-Family-Icon.md` | 🟢 Production |
 | Avatars | Identity representation | `.kiro/steering/Component-Family-Avatar.md` | 🟢 Production |
@@ -46,7 +47,7 @@ All 11 component families have MCP-queryable documentation. Production families 
 
 **Status Legend**: 🟢 Production Ready | 🟡 Beta | 🔴 Placeholder | ⚠️ Deprecated
 
-**Family Count**: 6 Production Ready, 6 Placeholder (structural definitions for future development)
+**Family Count**: 7 Production Ready, 6 Placeholder (structural definitions for future development)
 
 ### Type Primitives
 
@@ -75,6 +76,19 @@ Components follow the **[Family]-[Type]-[Variant]** pattern:
 - **Semantics**: Use descriptive variants (e.g., `Input-Text-Email`, `Input-Text-Password`)
 
 **Key Distinction**: The `-Base` suffix indicates a primitive that serves as foundation for semantic variants. Standalone components like `Button-CTA` don't need `-Base` because styling is handled via props, not behavioral inheritance.
+
+### Component Selection: Radio
+
+Radio components follow the **orchestration pattern** — the Set orchestrates Base children without duplicating rendering logic.
+
+| Component | Use When |
+|-----------|----------|
+| `Input-Radio-Base` | Embedding a single radio in a custom layout, or building a custom group orchestrator |
+| `Input-Radio-Set` | Displaying a group of mutually exclusive options (most common use case) |
+
+**Default choice**: Use `Input-Radio-Set` wrapping `Input-Radio-Base` children. The Set handles mutual exclusivity, keyboard navigation (arrow keys, Home/End), and group-level validation so you don't have to.
+
+**Use Base alone** only when you need full control over group behavior or are placing a single radio outside a standard group context.
 
 ## Common Composition Patterns
 
@@ -108,6 +122,13 @@ Components follow the **[Family]-[Type]-[Variant]** pattern:
 - **Form Inputs**: `Input-Text-Base` (new tag entry)
 - **Containers**: `Container-Base` (field wrapper)
 - **Tokens**: `Token-Family-Spacing.md` → chip spacing, `Token-Family-Motion.md` → dismiss animation
+
+### Survey / Preferences Form
+- **Radio Buttons**: `Input-Radio-Set` wrapping `Input-Radio-Base` children (single-select questions)
+- **Checkboxes**: `Input-Checkbox-Base` (multi-select questions)
+- **Buttons**: `Button-CTA` (submit, variant="primary")
+- **Containers**: `Container-Base` (section wrapper)
+- **Tokens**: `Token-Family-Spacing.md` → group spacing, `Token-Family-Color.md` → selection feedback colors
 
 ## MCP Query Examples
 
@@ -173,6 +194,10 @@ get_section({ path: ".kiro/steering/Component-Family-Chip.md", heading: "Behavio
 
 // Get cross-platform notes
 get_section({ path: ".kiro/steering/Component-Family-Form-Inputs.md", heading: "Cross-Platform Notes" })
+
+// Get radio component details
+get_section({ path: ".kiro/steering/Component-Family-Form-Inputs.md", heading: "Input-Radio-Base" })
+get_section({ path: ".kiro/steering/Component-Family-Form-Inputs.md", heading: "Input-Radio-Set" })
 
 // Get component schema definitions
 get_section({ path: ".kiro/steering/Component-Family-Button.md", heading: "Component Schemas" })
@@ -246,6 +271,19 @@ get_section({ path: ".kiro/steering/Component-Family-Button.md", heading: "Butto
 
 // Step 4: Get container for layout
 get_section({ path: ".kiro/steering/Component-Family-Container.md", heading: "Container-Base" })
+```
+
+**Example: Building a Survey with Radio Groups:**
+```
+// Step 1: Get radio component details
+get_section({ path: ".kiro/steering/Component-Family-Form-Inputs.md", heading: "Input-Radio-Base" })
+get_section({ path: ".kiro/steering/Component-Family-Form-Inputs.md", heading: "Input-Radio-Set" })
+
+// Step 2: Get container for section layout
+get_section({ path: ".kiro/steering/Component-Family-Container.md", heading: "Container-Base" })
+
+// Step 3: Get button for submit
+get_section({ path: ".kiro/steering/Component-Family-Button.md", heading: "Button-CTA" })
 ```
 
 ## Related Documentation

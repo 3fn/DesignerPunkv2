@@ -1,8 +1,3 @@
----
-inclusion: conditional
-trigger: architecture, coding
----
-
 # Technology Stack
 
 **Date**: 2025-11-26
