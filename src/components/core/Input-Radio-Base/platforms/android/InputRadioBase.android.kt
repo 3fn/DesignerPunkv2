@@ -459,7 +459,7 @@ fun InputRadioBase(
             Text(
                 text = label,
                 style = TextStyle(
-                    fontSize = size.labelFontSize,
+                    fontSize = size.labelFontSize.sp,
                     fontWeight = FontWeight.Medium
                 ),
                 color = RadioTokens.labelColor
@@ -481,7 +481,7 @@ fun InputRadioBase(
                     Text(
                         text = helperText,
                         style = TextStyle(
-                            fontSize = RadioTokens.helperFontSize,
+                            fontSize = RadioTokens.helperFontSize.sp,
                             fontWeight = FontWeight.Normal
                         ),
                         color = RadioTokens.helperTextColor,
@@ -497,7 +497,7 @@ fun InputRadioBase(
                     Text(
                         text = errorMessage,
                         style = TextStyle(
-                            fontSize = RadioTokens.helperFontSize,
+                            fontSize = RadioTokens.helperFontSize.sp,
                             fontWeight = FontWeight.Normal
                         ),
                         color = RadioTokens.errorTextColor,
@@ -676,7 +676,7 @@ fun InputRadioBasePreview() {
             )
             Text(
                 text = "Selected: $selectedPlan",
-                style = TextStyle(fontSize = RadioTokens.helperFontSizeI made),
+                style = TextStyle(fontSize = RadioTokens.helperFontSize.sp),
                 color = RadioTokens.helperTextColor
             )
         }

@@ -519,8 +519,8 @@ fun ButtonVerticalListSet(
             Text(
                 text = errorMessage,
                 color = Color(DesignTokens.color_feedback_error_text),
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Normal,
+                fontSize = DesignTokens.typography_body_sm.fontSize.sp,
+                fontWeight = FontWeight(DesignTokens.typography_body_sm.fontWeight.toInt()),
                 modifier = Modifier
                     .padding(bottom = 8.dp)
                     .semantics {
