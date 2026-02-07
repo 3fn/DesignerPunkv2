@@ -420,7 +420,7 @@ This implementation follows a phased approach:
 
 ---
 
-- [ ] 8. Input-Radio-Set Android Implementation
+- [x] 8. Input-Radio-Set Android Implementation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -444,7 +444,7 @@ This implementation follows a phased approach:
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 8 Complete: Input-Radio-Set Android Implementation"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 8.1 Implement InputRadioSet Compose function
+  - [x] 8.1 Implement InputRadioSet Compose function
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `InputRadioSet.android.kt` with @Composable function
@@ -453,7 +453,7 @@ This implementation follows a phased approach:
     - Apply `role = Role.RadioGroup` semantics
     - _Requirements: 9.1, 9.3, 9.4, 9.8, 11.3_
 
-  - [ ] 8.2 Implement Android accessibility for Set
+  - [x] 8.2 Implement Android accessibility for Set
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add `.semantics { role = Role.RadioGroup }` for group
