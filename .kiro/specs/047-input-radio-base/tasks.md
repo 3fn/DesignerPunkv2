@@ -376,7 +376,7 @@ This implementation follows a phased approach:
 
 ---
 
-- [ ] 7. Input-Radio-Set iOS Implementation
+- [x] 7. Input-Radio-Set iOS Implementation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -400,7 +400,7 @@ This implementation follows a phased approach:
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 7 Complete: Input-Radio-Set iOS Implementation"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 7.1 Implement InputRadioSet SwiftUI view
+  - [x] 7.1 Implement InputRadioSet SwiftUI view
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `InputRadioSet.ios.swift` with SwiftUI View
@@ -410,7 +410,7 @@ This implementation follows a phased approach:
     - Implement error message display
     - _Requirements: 9.1, 9.3, 9.4, 9.8, 11.2_
 
-  - [ ] 7.2 Implement iOS accessibility for Set
+  - [x] 7.2 Implement iOS accessibility for Set
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add `.accessibilityElement(children: .contain)` for group
