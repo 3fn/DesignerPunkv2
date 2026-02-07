@@ -1,6 +1,6 @@
 ///
 /// DesignerPunk Design System - iOS Tokens
-/// Generated: 2026-01-23T22:59:30.739Z
+/// Generated: 2026-02-07T19:41:14.023Z
 /// Version: 1.0.0
 /// Platform: iOS (Swift Constants)
 ///
@@ -49,113 +49,113 @@ public struct DesignTokens {
 
     // MARK: - COLOR TOKENS
     /// Systematic gray scale progression - lightest
-    public static let gray100: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let gray100: UIColor = UIColor(red: 0.72, green: 0.71, blue: 0.78, alpha: 1.00)
     /// Systematic gray scale progression - medium-light
-    public static let gray200: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let gray200: UIColor = UIColor(red: 0.41, green: 0.40, blue: 0.54, alpha: 1.00)
     /// Systematic gray scale progression - medium
-    public static let gray300: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let gray300: UIColor = UIColor(red: 0.18, green: 0.17, blue: 0.24, alpha: 1.00)
     /// Systematic gray scale progression - dark
-    public static let gray400: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let gray400: UIColor = UIColor(red: 0.12, green: 0.11, blue: 0.18, alpha: 1.00)
     /// Systematic gray scale progression - darkest
-    public static let gray500: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let gray500: UIColor = UIColor(red: 0.08, green: 0.07, blue: 0.12, alpha: 1.00)
     /// Systematic black scale progression - lightest
-    public static let black100: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let black100: UIColor = UIColor(red: 0.23, green: 0.23, blue: 0.27, alpha: 1.00)
     /// Systematic black scale progression - medium
-    public static let black200: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let black200: UIColor = UIColor(red: 0.13, green: 0.13, blue: 0.16, alpha: 1.00)
     /// Systematic black scale progression - dark
-    public static let black300: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let black300: UIColor = UIColor(red: 0.04, green: 0.04, blue: 0.06, alpha: 1.00)
     /// Systematic black scale progression - very dark
-    public static let black400: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let black400: UIColor = UIColor(red: 0.02, green: 0.02, blue: 0.04, alpha: 1.00)
     /// Systematic black scale progression - pure black
-    public static let black500: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let black500: UIColor = UIColor(red: 0.00, green: 0.00, blue: 0.00, alpha: 1.00)
     /// Systematic white scale progression - pure white
-    public static let white100: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let white100: UIColor = UIColor(red: 1.00, green: 1.00, blue: 1.00, alpha: 1.00)
     /// Systematic white scale progression - near white
-    public static let white200: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let white200: UIColor = UIColor(red: 0.96, green: 0.96, blue: 0.98, alpha: 1.00)
     /// Systematic white scale progression - light gray-white
-    public static let white300: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let white300: UIColor = UIColor(red: 0.91, green: 0.91, blue: 0.94, alpha: 1.00)
     /// Systematic white scale progression - medium gray-white
-    public static let white400: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let white400: UIColor = UIColor(red: 0.77, green: 0.77, blue: 0.84, alpha: 1.00)
     /// Systematic white scale progression - dark gray-white
-    public static let white500: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let white500: UIColor = UIColor(red: 0.60, green: 0.60, blue: 0.67, alpha: 1.00)
     /// Systematic yellow scale progression - lightest
-    public static let yellow100: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let yellow100: UIColor = UIColor(red: 1.00, green: 0.98, blue: 0.80, alpha: 1.00)
     /// Systematic yellow scale progression - medium-light
-    public static let yellow200: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let yellow200: UIColor = UIColor(red: 0.99, green: 0.96, blue: 0.50, alpha: 1.00)
     /// Systematic yellow scale progression - bright
-    public static let yellow300: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let yellow300: UIColor = UIColor(red: 0.98, green: 0.94, blue: 0.01, alpha: 1.00)
     /// Systematic yellow scale progression - dark
-    public static let yellow400: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let yellow400: UIColor = UIColor(red: 0.78, green: 0.75, blue: 0.01, alpha: 1.00)
     /// Systematic yellow scale progression - darkest
-    public static let yellow500: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let yellow500: UIColor = UIColor(red: 0.56, green: 0.55, blue: 0.00, alpha: 1.00)
     /// Systematic orange scale progression - lightest
-    public static let orange100: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let orange100: UIColor = UIColor(red: 1.00, green: 0.90, blue: 0.86, alpha: 1.00)
     /// Systematic orange scale progression - medium-light
-    public static let orange200: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let orange200: UIColor = UIColor(red: 1.00, green: 0.72, blue: 0.63, alpha: 1.00)
     /// Systematic orange scale progression - bright
-    public static let orange300: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let orange300: UIColor = UIColor(red: 1.00, green: 0.42, blue: 0.21, alpha: 1.00)
     /// Systematic orange scale progression - dark
-    public static let orange400: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let orange400: UIColor = UIColor(red: 0.80, green: 0.33, blue: 0.16, alpha: 1.00)
     /// Systematic orange scale progression - darkest
-    public static let orange500: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let orange500: UIColor = UIColor(red: 0.56, green: 0.24, blue: 0.11, alpha: 1.00)
     /// Systematic purple scale progression - lightest
-    public static let purple100: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let purple100: UIColor = UIColor(red: 0.95, green: 0.88, blue: 1.00, alpha: 1.00)
     /// Systematic purple scale progression - medium-light
-    public static let purple200: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let purple200: UIColor = UIColor(red: 0.85, green: 0.54, blue: 1.00, alpha: 1.00)
     /// Systematic purple scale progression - primary brand
-    public static let purple300: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let purple300: UIColor = UIColor(red: 0.69, green: 0.15, blue: 1.00, alpha: 1.00)
     /// Systematic purple scale progression - dark
-    public static let purple400: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let purple400: UIColor = UIColor(red: 0.55, green: 0.12, blue: 0.80, alpha: 1.00)
     /// Systematic purple scale progression - darkest
-    public static let purple500: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let purple500: UIColor = UIColor(red: 0.39, green: 0.08, blue: 0.56, alpha: 1.00)
     /// Systematic pink scale progression - lightest
-    public static let pink100: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let pink100: UIColor = UIColor(red: 1.00, green: 0.85, blue: 0.91, alpha: 1.00)
     /// Systematic pink scale progression - medium-light
-    public static let pink200: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let pink200: UIColor = UIColor(red: 1.00, green: 0.51, blue: 0.71, alpha: 1.00)
     /// Systematic pink scale progression - base
-    public static let pink300: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let pink300: UIColor = UIColor(red: 1.00, green: 0.16, blue: 0.43, alpha: 1.00)
     /// Systematic pink scale progression - dark
-    public static let pink400: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let pink400: UIColor = UIColor(red: 0.80, green: 0.13, blue: 0.34, alpha: 1.00)
     /// Systematic pink scale progression - darkest
-    public static let pink500: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let pink500: UIColor = UIColor(red: 0.50, green: 0.08, blue: 0.22, alpha: 1.00)
     /// Systematic green scale progression - lightest
-    public static let green100: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let green100: UIColor = UIColor(red: 0.90, green: 1.00, blue: 0.96, alpha: 1.00)
     /// Systematic green scale progression - medium-light
-    public static let green200: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let green200: UIColor = UIColor(red: 0.50, green: 1.00, blue: 0.73, alpha: 1.00)
     /// Systematic green scale progression - bright
-    public static let green300: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let green300: UIColor = UIColor(red: 0.20, green: 1.00, blue: 0.60, alpha: 1.00)
     /// Systematic green scale progression - strong
-    public static let green400: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let green400: UIColor = UIColor(red: 0.00, green: 1.00, blue: 0.53, alpha: 1.00)
     /// Systematic green scale progression - darkest/glow
-    public static let green500: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let green500: UIColor = UIColor(red: 0.00, green: 0.80, blue: 0.43, alpha: 1.00)
     /// Systematic cyan scale progression - lightest
-    public static let cyan100: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let cyan100: UIColor = UIColor(red: 0.80, green: 0.98, blue: 1.00, alpha: 1.00)
     /// Systematic cyan scale progression - medium-light
-    public static let cyan200: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let cyan200: UIColor = UIColor(red: 0.50, green: 0.96, blue: 1.00, alpha: 1.00)
     /// Systematic cyan scale progression - tech primary
-    public static let cyan300: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let cyan300: UIColor = UIColor(red: 0.00, green: 0.94, blue: 1.00, alpha: 1.00)
     /// Systematic cyan scale progression - dark
-    public static let cyan400: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let cyan400: UIColor = UIColor(red: 0.00, green: 0.75, blue: 0.80, alpha: 1.00)
     /// Systematic cyan scale progression - darkest
-    public static let cyan500: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let cyan500: UIColor = UIColor(red: 0.00, green: 0.53, blue: 0.56, alpha: 1.00)
     /// Systematic teal scale progression - lightest
-    public static let teal100: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let teal100: UIColor = UIColor(red: 0.85, green: 0.91, blue: 0.92, alpha: 1.00)
     /// Systematic teal scale progression - medium-light
-    public static let teal200: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let teal200: UIColor = UIColor(red: 0.30, green: 0.61, blue: 0.65, alpha: 1.00)
     /// Systematic teal scale progression - secondary UI
-    public static let teal300: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let teal300: UIColor = UIColor(red: 0.10, green: 0.33, blue: 0.36, alpha: 1.00)
     /// Systematic teal scale progression - dark
-    public static let teal400: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let teal400: UIColor = UIColor(red: 0.08, green: 0.26, blue: 0.29, alpha: 1.00)
     /// Systematic teal scale progression - darkest
-    public static let teal500: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let teal500: UIColor = UIColor(red: 0.06, green: 0.18, blue: 0.20, alpha: 1.00)
     /// Systematic shadow color family - pure black (0, 0, 0) - mode-agnostic
-    public static let shadowBlack100: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let shadowBlack100: UIColor = UIColor(red: 0.00, green: 0.00, blue: 0.00, alpha: 1.00)
     /// Systematic shadow color family - blue-tinted gray for sunrise/sunset lighting - mode-agnostic
-    public static let shadowBlue100: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let shadowBlue100: UIColor = UIColor(red: 0.08, green: 0.10, blue: 0.16, alpha: 1.00)
     /// Systematic shadow color family - warm-tinted gray for cool lighting environments - mode-agnostic
-    public static let shadowOrange100: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let shadowOrange100: UIColor = UIColor(red: 0.10, green: 0.08, blue: 0.06, alpha: 1.00)
     /// Systematic shadow color family - blue-gray for ambient/overcast conditions - mode-agnostic
-    public static let shadowGray100: UIColor = UIColor { traitCollection in /* dynamic color implementation */ }
+    public static let shadowGray100: UIColor = UIColor(red: 0.06, green: 0.08, blue: 0.12, alpha: 1.00)
 
     // MARK: - DENSITY TOKENS
     /// base × 0.75 = 1.0 × 0.75 = 0.75
@@ -331,7 +331,7 @@ public struct DesignTokens {
     /// base × 4 = 8 × 4 = 32
     public static let radius400: CGFloat = 32
     /// special case = 9999 (effectively infinite)
-    public static let radiusFull: CGFloat = 9999
+    public static let radiusMax: CGFloat = 9999
     /// percentage = 50% (creates circle from square)
     public static let radiusHalf: CGFloat = "Circle"
 
@@ -456,15 +456,30 @@ public struct DesignTokens {
     /// Use these for UI development
     // ============================================
 
-    public static let colorPrimary = purple300
-    public static let colorSuccessStrong = green400
-    public static let colorSuccessSubtle = green100
-    public static let colorWarningStrong = orange400
-    public static let colorWarningSubtle = orange100
-    public static let colorErrorStrong = pink400
-    public static let colorErrorSubtle = pink100
-    public static let colorInfoStrong = teal400
-    public static let colorInfoSubtle = teal100
+    public static let colorFeedbackSuccessText = green400
+    public static let colorFeedbackSuccessBackground = green100
+    public static let colorFeedbackSuccessBorder = green400
+    public static let colorFeedbackErrorText = pink400
+    public static let colorFeedbackErrorBackground = pink100
+    public static let colorFeedbackErrorBorder = pink400
+    public static let colorFeedbackWarningText = orange400
+    public static let colorFeedbackWarningBackground = orange100
+    public static let colorFeedbackWarningBorder = orange400
+    public static let colorFeedbackInfoText = teal400
+    public static let colorFeedbackInfoBackground = teal100
+    public static let colorFeedbackInfoBorder = teal400
+    public static let colorFeedbackSelectTextRest = cyan400
+    public static let colorFeedbackSelectTextDefault = gray200
+    public static let colorFeedbackSelectBackgroundRest = cyan100
+    public static let colorFeedbackSelectBackgroundDefault = gray100
+    public static let colorFeedbackSelectBorderRest = cyan400
+    public static let colorFeedbackSelectBorderDefault = gray200
+    public static let colorFeedbackNotificationBackground = pink400
+    public static let colorFeedbackNotificationText = white100
+    public static let colorIdentityHuman = orange300
+    public static let colorIdentityAgent = teal200
+    public static let colorActionPrimary = purple300
+    public static let colorActionSecondary = black400
     public static let colorAttention = yellow400
     public static let colorHighlight = yellow300
     public static let colorTech = cyan400
@@ -472,12 +487,13 @@ public struct DesignTokens {
     public static let colorTextDefault = gray300
     public static let colorTextMuted = gray200
     public static let colorTextSubtle = gray100
-    public static let colorContrastOnPrimary = white100
-    public static let colorCanvas = white100
-    public static let colorBackground = white100
+    public static let colorContrastOnLight = black500
+    public static let colorContrastOnDark = white100
+    public static let colorStructureCanvas = white100
+    public static let colorStructureSurface = white200
+    public static let colorStructureBorder = gray100
+    public static let colorStructureBorderSubtle: UIColor = UIColor(red: 0.72, green: 0.71, blue: 0.78, alpha: 0.48)
     public static let colorBackgroundPrimarySubtle = purple100
-    public static let colorSurface = white200
-    public static let colorBorder = gray100
     public static let colorIconDefault = gray200
     public static let colorPrintDefault = black100
     public static let glowNeonPurple = purple500
@@ -485,17 +501,6 @@ public struct DesignTokens {
     public static let glowNeonYellow = yellow500
     public static let glowNeonGreen = green500
     public static let glowNeonPink = pink500
-    public static let colorAvatarHuman = orange300
-    public static let colorAvatarAgent = teal200
-    public static let colorAvatarContrastOnHuman = white100
-    public static let colorAvatarContrastOnAgent = white100
-    public static let colorAvatarBorder = gray100
-    public static let colorBadgeBackgroundNotification = pink400
-    public static let colorBadgeTextNotification = white100
-    public static let colorSelectSelectedStrong = cyan400
-    public static let colorSelectSelectedSubtle = cyan100
-    public static let colorSelectNotSelectedStrong = gray200
-    public static let colorSelectNotSelectedSubtle = gray100
     public static let typographyBodySm = Typography(fontSize: fontSize075, lineHeight: lineHeight075, fontFamily: fontFamilyBody, fontWeight: fontWeight400, letterSpacing: letterSpacing100)
     public static let typographyBodyMd = Typography(fontSize: fontSize100, lineHeight: lineHeight100, fontFamily: fontFamilyBody, fontWeight: fontWeight400, letterSpacing: letterSpacing100)
     public static let typographyBodyLg = Typography(fontSize: fontSize125, lineHeight: lineHeight125, fontFamily: fontFamilyBody, fontWeight: fontWeight400, letterSpacing: letterSpacing100)
@@ -587,7 +592,7 @@ public struct DesignTokens {
     public static let radiusSmall = radius050
     public static let radiusNormal = radius100
     public static let radiusLarge = radius200
-    public static let radiusFull = radiusFull
+    public static let radiusFull = radiusMax
     public static let radiusCircle = radiusHalf
     public static let spaceGroupedNone = space000
     public static let spaceGroupedMinimal = space025
@@ -613,6 +618,7 @@ public struct DesignTokens {
     public static let spaceInset400 = space400
     public static let spaceInsetNone = space000
     public static let spaceInset050 = space050
+    public static let spaceInset075 = space075
 
     // MARK: - Motion Tokens
     // MARK: - Duration Tokens

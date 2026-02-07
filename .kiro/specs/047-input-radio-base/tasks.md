@@ -158,7 +158,7 @@ This implementation follows a phased approach:
 
 ---
 
-- [ ] 3. Input-Radio-Base iOS Implementation
+- [x] 3. Input-Radio-Base iOS Implementation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -183,7 +183,7 @@ This implementation follows a phased approach:
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Input-Radio-Base iOS Implementation"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 3.1 Implement InputRadioBase SwiftUI view
+  - [x] 3.1 Implement InputRadioBase SwiftUI view
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `InputRadioBase.ios.swift` with SwiftUI View
@@ -193,7 +193,7 @@ This implementation follows a phased approach:
     - Implement press gesture with scale animation using scale096
     - _Requirements: 7.1, 7.2_
 
-  - [ ] 3.2 Implement iOS accessibility
+  - [x] 3.2 Implement iOS accessibility
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add `.accessibilityLabel(label)` for VoiceOver
