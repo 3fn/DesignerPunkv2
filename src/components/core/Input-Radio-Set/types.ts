@@ -279,4 +279,23 @@ export interface InputRadioSetElement extends HTMLElement {
    * @see Requirement 9.4 in .kiro/specs/047-input-radio-base/requirements.md
    */
   onSelectionChange: ((value: string | null) => void) | null;
+
+  /**
+   * Validate the radio group selection state.
+   *
+   * Checks if the `required` constraint is satisfied. Sets `error` and
+   * `errorMessage` attributes when validation fails.
+   *
+   * @returns `true` if valid, `false` if validation fails
+   * @see Requirement 9.7 in .kiro/specs/047-input-radio-base/requirements.md
+   */
+  validate(): boolean;
+
+  /**
+   * Check validity without modifying error state.
+   *
+   * @returns `true` if valid, `false` if validation would fail
+   * @see Requirement 9.7 in .kiro/specs/047-input-radio-base/requirements.md
+   */
+  checkValidity(): boolean;
 }

@@ -1,0 +1,99 @@
+/**
+ * Input-Radio-Set Component Styles for Web Platform
+ * 
+ * Token-based styling using CSS custom properties from the mathematical token system.
+ * All values reference semantic or primitive tokens - zero hard-coded values.
+ * Uses CSS logical properties for RTL support.
+ * 
+ * Stemma System Naming: [Family]-[Type]-[Variant] = Input-Radio-Set
+ * Component Type: Pattern (Set)
+ * 
+ * This is an orchestrator component — it does NOT duplicate radio circle/dot
+ * rendering from Input-Radio-Base. Styling here covers only the group container,
+ * error message display, and layout.
+ * 
+ * DesignerPunk Philosophy: NO DISABLED STATES
+ * 
+ * @module Input-Radio-Set/platforms/web/styles
+ * @see Requirements: 9.1, 9.2, 9.8, 9.9
+ */
+
+/* ==========================================================================
+   Host Element
+   ========================================================================== */
+
+:host {
+  display: block;
+}
+
+/* ==========================================================================
+   Radio Set Container
+   ========================================================================== */
+
+/**
+ * Radio set container - wraps slotted Input-Radio-Base children.
+ * Uses flex column layout to stack children vertically.
+ * Applies role="radiogroup" for accessibility (set in JS).
+ * 
+ * @see Requirement 9.1 - Orchestrate child Input-Radio-Base components
+ * @see Requirement 9.2 - Apply role="radiogroup" for accessibility
+ */
+.radio-set {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-grouped-normal);
+}
+
+/* ==========================================================================
+   Error Message
+   ========================================================================== */
+
+/**
+ * Error message styling - displays validation errors above the radio group.
+ * 
+ * Uses caption typography with error color for visibility.
+ * Has role="alert" for screen reader announcement (set in JS).
+ * Uses CSS logical properties for RTL support.
+ * 
+ * @see Requirement 9.8 - Display errorMessage above radio group
+ * @see Requirement 9.9 - role="alert" for screen reader announcement
+ */
+.radio-set__error {
+  display: none;
+  margin-block: 0;
+  margin-inline: 0;
+  padding: 0;
+  font-family: var(--typography-caption-font-family);
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--typography-caption-line-height);
+  font-weight: var(--typography-caption-font-weight);
+  letter-spacing: var(--typography-caption-letter-spacing);
+  color: var(--color-feedback-error-text);
+}
+
+/**
+ * Show error message when error state is active.
+ */
+.radio-set--error .radio-set__error {
+  display: block;
+}
+
+/* ==========================================================================
+   Reduced Motion Support
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .radio-set {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+  .radio-set__error {
+    color: var(--color-print-default) !important;
+  }
+}
