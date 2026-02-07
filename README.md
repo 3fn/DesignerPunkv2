@@ -2,7 +2,7 @@
 
 **A Design System Foundation Built for Modern Product Development, Cross-Platform Excellence, and AI-Assisted Development**
 
-[![Version](https://img.shields.io/badge/Version-6.2.0-purple)](docs/releases/RELEASE-NOTES-6.2.0.md)
+[![Version](https://img.shields.io/badge/Version-6.3.0-purple)](docs/releases/RELEASE-NOTES-6.3.0.md)
 [![Repository](https://img.shields.io/badge/GitHub-DesignerPunkv2-blue)](https://github.com/3fn/DesignerPunkv2)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
@@ -10,15 +10,15 @@
 
 ---
 
-## Latest Release: v6.2.0
+## Latest Release: v6.3.0
 
-**Input-Checkbox Component Family** — Two new form input components:
-- **Input-Checkbox-Base**: Primitive checkbox with three size variants, indeterminate state, Icon-Base integration
-- **Input-Checkbox-Legal**: Legal consent checkbox with GDPR compliance, audit trail, ISO 8601 timestamps
+**Input-Radio Component Family** — Two new form input components:
+- **Input-Radio-Base**: Primitive radio button with three size variants (sm/md/lg), dot indicator, and cross-platform support (web, iOS, Android)
+- **Input-Radio-Set**: Orchestrator component managing mutual exclusivity, keyboard navigation (arrow keys, Home/End), and group-level validation
 
-Plus: New `inset.075` token, token naming fixes, and architectural improvements.
+Follows the orchestration pattern established in v6.2.0 — Set orchestrates Base children without duplicating rendering logic.
 
-[Full Release Notes →](docs/releases/RELEASE-NOTES-6.2.0.md)
+[Full Release Notes →](docs/releases/RELEASE-NOTES-6.3.0.md)
 
 ---
 
@@ -148,7 +148,8 @@ This is a working case study in how to lead AI-driven development at scale.
 - Avatar, Badges (Label/Count/Notification), Buttons (CTA/Icon), Containers (Base/Card), Icon System
 - Chips (Base/Filter/Input) — Compact interactive elements for filtering, selection, and input
 - Checkboxes (Base/Legal) — Binary selection controls with legal consent support
-- 16 production-ready components with behavioral contracts
+- Radio Buttons (Base/Set) — Single-selection controls with mutual exclusivity and group orchestration
+- 18 production-ready components with behavioral contracts
 - Full cross-platform support with platform-native implementations
 
 **Rosetta Token System**
@@ -312,7 +313,7 @@ The following represent areas of active development, sequenced by dependencies a
 
 ### Current Work
 
-- Specs 045-050 (active implementation)
+- Specs 048-054 (active implementation)
 
 ### Near-Term Focus
 
@@ -455,13 +456,9 @@ Even if you don't adopt DesignerPunk directly, I hope it influences how you thin
 
 ## What Changed from Previous Version
 
-1. ✅ **Removed** Preserved Knowledge section entirely
-2. ✅ **Added** "Core Systems" section early (defines Rosetta & Stemma upfront)
-3. ✅ **Reframed** engineering section to "AI-Driven Implementation Supported by Human Framing" with producer/musician metaphor
-4. ✅ **Added** "Current State" section with production-ready, structural foundation, and what's not included
-5. ✅ **Replaced** "Roadmap" with "Development Direction" (no Q-based timelines, references specs 045-050)
-6. ✅ **Added** "Areas to Explore" section (Figma Console MCP, expanded theming, component generation, design files)
-7. ✅ **Fixed** links in "If You Want to Explore" to point to `.kiro/steering/` documents
-8. ✅ **Clarified** theming: Original + WCAG 2.2, each with day/night modes
-
-Copy this into your README.md and let me know if you'd like any adjustments!
+1. ✅ **Added** Input-Radio-Base component (web, iOS, Android) with three size variants and dot indicator
+2. ✅ **Added** Input-Radio-Set orchestrator component with mutual exclusivity, keyboard navigation, and group validation
+3. ✅ **Updated** Component-Family-Form-Inputs.md with radio component schemas, contracts, and token dependencies
+4. ✅ **Updated** Component-Quick-Reference.md with radio family routing and selection guidance
+5. ✅ **Updated** Current State to reflect 18 production-ready components (was 16)
+6. ✅ **Updated** specs reference to 048-054 (active implementation)
