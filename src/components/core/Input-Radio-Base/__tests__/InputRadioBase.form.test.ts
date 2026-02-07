@@ -87,6 +87,41 @@ describe('Input-Radio-Base Form Integration', () => {
       const input = radio.shadowRoot?.querySelector('.radio__input');
       expect(input?.getAttribute('name')).toBe('updated-group');
     });
+
+    it('should group multiple radios with the same name attribute', async () => {
+      const form = document.createElement('form');
+      
+      const radioA = document.createElement('input-radio-base') as InputRadioBaseElement;
+      radioA.setAttribute('label', 'Option A');
+      radioA.setAttribute('value', 'a');
+      radioA.setAttribute('name', 'group1');
+      
+      const radioB = document.createElement('input-radio-base') as InputRadioBaseElement;
+      radioB.setAttribute('label', 'Option B');
+      radioB.setAttribute('value', 'b');
+      radioB.setAttribute('name', 'group1');
+      
+      const radioC = document.createElement('input-radio-base') as InputRadioBaseElement;
+      radioC.setAttribute('label', 'Option C');
+      radioC.setAttribute('value', 'c');
+      radioC.setAttribute('name', 'other-group');
+      
+      form.appendChild(radioA);
+      form.appendChild(radioB);
+      form.appendChild(radioC);
+      document.body.appendChild(form);
+      
+      await new Promise(resolve => setTimeout(resolve, 0));
+      
+      // All radios in group1 share the same name
+      const inputA = radioA.shadowRoot?.querySelector('.radio__input');
+      const inputB = radioB.shadowRoot?.querySelector('.radio__input');
+      const inputC = radioC.shadowRoot?.querySelector('.radio__input');
+      
+      expect(inputA?.getAttribute('name')).toBe('group1');
+      expect(inputB?.getAttribute('name')).toBe('group1');
+      expect(inputC?.getAttribute('name')).toBe('other-group');
+    });
   });
 
   // ============================================================================
