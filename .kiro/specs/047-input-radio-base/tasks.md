@@ -204,7 +204,7 @@ This implementation follows a phased approach:
 
 ---
 
-- [ ] 4. Input-Radio-Base Android Implementation
+- [x] 4. Input-Radio-Base Android Implementation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -229,7 +229,7 @@ This implementation follows a phased approach:
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 Complete: Input-Radio-Base Android Implementation"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 4.1 Implement InputRadioBase Compose function
+  - [x] 4.1 Implement InputRadioBase Compose function
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `InputRadioBase.android.kt` with @Composable function
@@ -239,7 +239,7 @@ This implementation follows a phased approach:
     - Implement Material ripple using blend.pressedDarker
     - _Requirements: 7.3_
 
-  - [ ] 4.2 Implement Android accessibility
+  - [x] 4.2 Implement Android accessibility
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add `.semantics { role = Role.RadioButton; selected = isSelected }`
