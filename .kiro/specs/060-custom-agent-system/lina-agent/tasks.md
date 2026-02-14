@@ -245,7 +245,7 @@
     - Test hook execution detects when platform implementations are missing or out of sync
     - _Requirements: 9_
 
-- [ ] 5. Checkpoint — Validate Lina End-to-End
+- [x] 5. Checkpoint — Validate Lina End-to-End
   - Ensure all tests pass (`npm test`)
   - Verify Lina loads correctly via `/agent swap` and `ctrl+shift+l`
   - Verify all four hooks appear and are triggerable
