@@ -1,5 +1,7 @@
 ---
 inclusion: always
+name: Process-File-Organization
+description: File organization standards — metadata-driven organization, directory structure, required metadata fields, organization values, and cross-reference standards. Load when creating files, organizing documents, or understanding project directory structure.
 ---
 
 # File Organization Standards

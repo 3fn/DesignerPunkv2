@@ -1,5 +1,7 @@
 ---
 inclusion: manual
+name: Token-Family-Blend
+description: Blend token family — color modification utilities (darken, lighten, saturate, desaturate) producing opaque colors. Load when working with hover/pressed/disabled/focus color states or theme-aware color blending.
 ---
 
 # Blend Tokens Guide

@@ -1,5 +1,7 @@
 ---
 inclusion: manual
+name: Token-Resolution-Patterns
+description: Token resolution patterns — fixed vs flexible token types, validation strategies, type safety, and tooling guidance. Load when implementing token validation, choosing between fixed and flexible token types, or maintaining type safety in token references.
 ---
 
 # Token Resolution Patterns

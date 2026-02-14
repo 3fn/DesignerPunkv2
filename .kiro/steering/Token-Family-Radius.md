@@ -1,5 +1,7 @@
 ---
 inclusion: manual
+name: Token-Family-Radius
+description: Radius token family — corner rounding tokens on 8-unit baseline grid with strategic flexibility exceptions. Load when working with border-radius, rounded corners, or pill/circle shapes.
 ---
 
 # Radius Tokens Guide

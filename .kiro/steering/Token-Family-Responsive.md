@@ -1,5 +1,7 @@
 ---
 inclusion: manual
+name: Token-Family-Responsive
+description: Responsive token family — breakpoint and density tokens for adaptive interfaces. Load when working with responsive layouts, viewport breakpoints, or density-based scaling.
 ---
 
 # Responsive Tokens Guide

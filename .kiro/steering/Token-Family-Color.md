@@ -1,5 +1,7 @@
 ---
 inclusion: manual
+name: Token-Family-Color
+description: Color token family — palette structure, semantic color tokens, contrast ratios, theme support, and WCAG compliance. Load when working with color tokens, color selection, theme variants, or color-related accessibility.
 ---
 
 # Color Tokens Guide

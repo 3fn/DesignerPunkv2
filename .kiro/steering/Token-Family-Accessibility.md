@@ -1,5 +1,7 @@
 ---
 inclusion: manual
+name: Token-Family-Accessibility
+description: Accessibility token family — focus indicators, tap area sizing, and icon sizing tokens for WCAG 2.1 AA compliance. Load when working with focus states, touch targets, or accessibility-related token selection.
 ---
 
 # Accessibility Tokens Guide

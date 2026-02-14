@@ -1,5 +1,7 @@
 ---
 inclusion: manual
+name: Token-Governance
+description: Token governance framework — selection matrix, usage autonomy levels, creation governance, prior acknowledgment, and decision examples. Load when making token selection decisions, evaluating token usage governance, or creating new tokens.
 ---
 
 # Token Governance Guide

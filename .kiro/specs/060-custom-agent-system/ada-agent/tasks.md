@@ -9,7 +9,7 @@
 
 ## Task List
 
-- [ ] 1. Add Skill Frontmatter to Steering Docs
+- [x] 1. Add Skill Frontmatter to Steering Docs
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -35,7 +35,7 @@
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 1 Complete: Add Skill Frontmatter to Steering Docs"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 1.1 Add frontmatter to Token-Family steering docs
+  - [x] 1.1 Add frontmatter to Token-Family steering docs
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Add YAML frontmatter (name, description) to each Token-Family doc:
@@ -56,7 +56,7 @@
     - Do NOT modify existing document content below the frontmatter
     - _Requirements: 4_
 
-  - [ ] 1.2 Add frontmatter to token domain steering docs
+  - [x] 1.2 Add frontmatter to token domain steering docs
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Add YAML frontmatter to:
@@ -68,7 +68,7 @@
       - Token-Semantic-Structure.md
     - _Requirements: 4_
 
-  - [ ] 1.3 Add frontmatter to process steering docs
+  - [x] 1.3 Add frontmatter to process steering docs
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Add YAML frontmatter to:
