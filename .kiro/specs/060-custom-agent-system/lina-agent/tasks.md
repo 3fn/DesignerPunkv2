@@ -70,7 +70,7 @@
     - Preserve existing `inclusion: manual` field
     - _Requirements: 4_
 
-- [ ] 2. Create Lina Agent Configuration
+- [x] 2. Create Lina Agent Configuration
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -97,7 +97,7 @@
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 (Lina) Complete: Create Lina Agent Configuration"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 2.1 Create lina.json configuration file
+  - [x] 2.1 Create lina.json configuration file
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `.kiro/agents/lina.json` following the design document specification
@@ -106,7 +106,7 @@
     - Verify all file:// and skill:// resource paths resolve to existing files
     - _Requirements: 1, 3, 4, 5_
 
-  - [ ] 2.2 Validate agent loads correctly
+  - [x] 2.2 Validate agent loads correctly
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Switch to Lina using `/agent swap` or `ctrl+shift+l`
@@ -115,7 +115,7 @@
     - Verify Lina can search knowledge base (StemmaComponentSource)
     - _Requirements: 1, 3_
 
-  - [ ] 2.3 Validate write scope for both Ada and Lina
+  - [x] 2.3 Validate write scope for both Ada and Lina
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test Ada's write scoping: attempt write inside `src/tokens/` (should succeed), attempt write inside `src/components/` (should prompt or block)
