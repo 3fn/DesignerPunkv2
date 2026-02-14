@@ -124,7 +124,7 @@
     - Document results of cross-agent write scope validation
     - _Requirements: 5_
 
-- [ ] 3. Create Lina System Prompt
+- [x] 3. Create Lina System Prompt
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -151,7 +151,7 @@
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 (Lina) Complete: Create Lina System Prompt"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 3.1 Write Lina system prompt
+  - [x] 3.1 Write Lina system prompt
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     - Create `.kiro/agents/lina-prompt.md` with sections defined in design document:
@@ -168,7 +168,7 @@
     - Prompt should include examples of domain boundary responses
     - _Requirements: 2, 6, 7, 8, 10_
 
-  - [ ] 3.2 Validate prompt behavior
+  - [x] 3.2 Validate prompt behavior
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test Lina with a component-related question → verify domain expertise response
