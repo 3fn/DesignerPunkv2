@@ -123,7 +123,7 @@
     - Verify write access is scoped correctly (can write to src/tokens/, cannot write to src/components/)
     - _Requirements: 1, 3, 5_
 
-- [ ] 3. Create Ada System Prompt
+- [x] 3. Create Ada System Prompt
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -150,7 +150,7 @@
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Create Ada System Prompt"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 3.1 Write Ada system prompt
+  - [x] 3.1 Write Ada system prompt
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     - Create `.kiro/agents/ada-prompt.md` with sections defined in design document:
@@ -165,7 +165,7 @@
     - Prompt should include examples of domain boundary responses
     - _Requirements: 2, 6, 7, 8, 10_
 
-  - [ ] 3.2 Validate prompt behavior
+  - [x] 3.2 Validate prompt behavior
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test Ada with a token-related question → verify domain expertise response
