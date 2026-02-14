@@ -188,13 +188,20 @@ Agents use `userTriggered` hooks for domain-specific validation (not on spawn):
 - "Token Coverage Report" — identifies under-tested token families
 - "Platform Parity Check" — verifies platform output files (CSS/Swift/Kotlin) are in sync with token sources. Also a required success criterion for parent tasks involving token creation/modification
 
-**Lina** (future):
+**Lina**:
 - "Component Scaffold Validation" — verifies component structure completeness
 - "Platform Parity Check" — ensures all three platforms are implemented
 
-**Thurgood** (future):
+**Lina**:
+- "Stemma Compliance Check" — validates behavioral contracts and inheritance patterns
+- "Component Token Audit" — checks for hard-coded values and token governance compliance
+- "Component Scaffold Validation" — verifies component structure completeness and family doc existence
+- "Platform Parity Check" — ensures all three platform implementations exist and are in sync
+
+**Thurgood**:
 - "Test Suite Health Audit" — coverage gaps, failing tests, flaky tests
 - "Spec Quality Scan" — validates spec format against Process-Spec-Planning standards
+- "Accessibility Test Coverage Audit" — verifies accessibility test coverage exists for all components, checks WCAG-related token tests, flags components with missing or incomplete accessibility tests
 
 Lightweight `agentSpawn` hooks (e.g., `git status --porcelain`) are acceptable for quick context.
 
@@ -288,16 +295,46 @@ Lightweight `agentSpawn` hooks (e.g., `git status --porcelain`) are acceptable f
 - Performance test oversight
 - Spec creation standards ownership (Process-Spec-Planning)
 - Design outline → formal spec transformation
+- Accessibility test coverage auditing
 
-**Key MCP Sources**:
-- `Test-Development-Standards.md`
-- `Test-Failure-Audit-Methodology.md`
-- `Test-Behavioral-Contract-Validation.md`
-- `Process-Spec-Planning.md`
-- `Component-Development-Standards.md` (test-related sections)
-- `Token-Governance.md` (compliance validation sections)
+**Knowledge Base**: None. Thurgood's mission is governance and auditing, not implementation. His workflow is analytical — reading test files to assess coverage, reviewing specs for quality, auditing test health. This is better served by direct file reads and MCP queries than by a pre-indexed search corpus. Tests are scattered across `src/__tests__/`, `src/tokens/__tests__/`, `src/components/*/__tests__/`, etc. — indexing just one directory misses most of them, and indexing all of `src/` would be too broad. If Thurgood consistently struggles to locate tests, a knowledge base can be added later.
 
-**Write Access**: `src/__tests__/**`, `.kiro/specs/**`, `docs/specs/**` (for spec formalization and summary docs)
+**Skill Resources** (metadata at startup, full content on demand):
+- `AI-Collaboration-Framework.md` — detailed collaboration protocols
+- `BUILD-SYSTEM-SETUP.md` — test infrastructure context
+- `Completion Documentation Guide.md` — completion doc standards
+- `Process-Cross-Reference-Standards.md` — documentation quality
+- `Process-Development-Workflow.md` — task completion workflow
+- `Process-File-Organization.md` — file organization standards
+- `Process-Hook-Operations.md` — hook system understanding
+- `Process-Spec-Planning.md` — core ownership doc (spec standards)
+- `Process-Task-Type-Definitions.md` — task classification governance
+- `Start Up Tasks.md` — task execution essentials
+- `Test-Development-Standards.md` — core test governance doc
+- `Test-Failure-Audit-Methodology.md` — audit methodology
+- `Test-Behavioral-Contract-Validation.md` — behavioral contract test patterns
+
+**MCP-Only Sources** (queried on demand):
+- `Token-Governance.md` — when reviewing token compliance tests
+- `Component-Development-Standards.md` — when reviewing component test coverage
+- `Component-Inheritance-Structures.md` — when auditing behavioral contract tests (including accessibility)
+- `Release Management System.md` — when reviewing release-related tests
+- `Technology Stack.md` — platform context for test validation
+- `Rosetta-System-Architecture.md` — when auditing token pipeline tests
+
+**Resource Loading Rationale**: Skill resources (~13) load only name + description metadata (~30-50 tokens each, ~500-700 total). Thurgood's cross-cutting role requires awareness of process, test, and spec standards simultaneously. MCP-only docs are domain-specific references queried during active auditing, not needed for general awareness.
+
+**Spec Formalization Workflow**:
+1. Peter develops a design outline collaboratively with relevant agents
+2. Ada and Lina contribute technical details to the outline
+3. Thurgood reviews the outline for testability and quality
+4. Once Peter approves the outline, Thurgood writes requirements.md, design.md, tasks.md following Process-Spec-Planning standards
+5. Ada and Lina review the formal spec for technical accuracy
+6. Peter approves the formal spec
+
+Thurgood's prompt needs sections for "spec formalization mode" (writing specs), "audit mode" (test health analysis), and "test governance mode" (standards enforcement).
+
+**Write Access**: `src/__tests__/**`, `.kiro/specs/**`, `docs/specs/**` (for spec formalization, test governance, and summary docs)
 
 ---
 
@@ -331,6 +368,11 @@ All handoffs are human-mediated. Peter decides when to invoke each agent and car
 10. ✅ **Agent validation approach**: Domain agent defines what to test, Thurgood designs the tests. Cross-domain check built in.
 11. ✅ **Knowledge base for Ada**: Include `knowledgeBase` indexing of `src/tokens/` in Ada's config.
 12. ✅ **Thurgood write access**: `src/__tests__/**`, `.kiro/specs/**`, `docs/specs/**` — includes summary doc path needed for spec formalization workflow.
+13. ✅ **Thurgood knowledge base**: No knowledge base. Thurgood's analytical/governance mission is better served by direct file reads and MCP queries. Tests are scattered across multiple directories, making a single index impractical. Can be added later if needed.
+14. ✅ **Thurgood skill resources**: ~13 skill resources covering process docs, test standards, audit methodology, spec planning, and collaboration framework. MCP-only for domain-specific docs (token governance, component standards, etc.).
+15. ✅ **Thurgood hooks**: Three userTriggered hooks — "Test Suite Health Audit", "Spec Quality Scan", "Accessibility Test Coverage Audit". The accessibility hook was motivated by a silent accessibility implementation error that no test caught.
+16. ✅ **Spec formalization workflow**: Peter develops design outline with agents → Ada/Lina contribute technical details → Thurgood reviews for testability → Thurgood writes formal spec (requirements.md, design.md, tasks.md) → Ada/Lina review for technical accuracy → Peter approves.
+17. ✅ **Thurgood's own validation**: Ada and Lina review from their domain perspectives, Peter validates throughout. Thurgood cannot validate himself.
 
 ---
 
@@ -351,6 +393,9 @@ All handoffs are human-mediated. Peter decides when to invoke each agent and car
 - ✅ Agent validation: domain agent defines acceptance criteria, Thurgood designs the tests (consistent with domain respect model)
 - ✅ Knowledge base indexing: included for Ada (`src/tokens/`), low-cost searchable access to token source
 - ✅ Thurgood's write access includes `docs/specs/**` for summary docs during spec formalization
+- ✅ Thurgood has no knowledge base — analytical mission better served by direct reads and MCP queries
+- ✅ Thurgood gets "Accessibility Test Coverage Audit" hook — motivated by silent accessibility error that slipped through existing test coverage
+- ✅ Accessibility hook scoped as coverage audit (do accessibility tests exist?) not accessibility checking (is the code accessible?) — respects domain boundaries with Lina and Ada
 
 ---
 

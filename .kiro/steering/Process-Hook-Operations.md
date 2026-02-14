@@ -1,5 +1,7 @@
 ---
 inclusion: manual
+name: Process-Hook-Operations
+description: Agent hook operational guidance — dependency chains, execution order, automatic file organization, release detection, troubleshooting, and best practices. Load when debugging hook issues, setting up or modifying hooks, or troubleshooting automation failures.
 ---
 
 # Hook Operations Guide
