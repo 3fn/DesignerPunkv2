@@ -1,5 +1,7 @@
 ---
 inclusion: manual
+name: Cross-Platform-vs-Platform-Specific-Decision-Framework
+description: Strategic guidance on when to use cross-platform patterns vs platform-specific idioms — decision framework, consistency vs native UX trade-offs, and context-based recommendations. Load when making platform implementation decisions or evaluating cross-platform vs native approaches.
 ---
 
 # Cross-Platform vs Platform-Specific Decision Framework

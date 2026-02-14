@@ -1,5 +1,7 @@
 ---
 inclusion: manual
+name: Component-Development-Standards
+description: Step-by-step guidelines for creating new component families in the Stemma System — family creation criteria, primitive vs semantic design, scaffolding workflow, and documentation requirements. Load when creating new component families or evaluating component design decisions.
 ---
 
 # Component Family Development Standards

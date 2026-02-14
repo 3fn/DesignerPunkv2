@@ -1,5 +1,7 @@
 ---
 inclusion: manual
+name: Component-Quick-Reference
+description: Routing table for component documentation — maps component families to their MCP-queryable docs, readiness status, and semantic variants. Load when selecting components for UI compositions or finding the right component family doc.
 ---
 
 # Component Quick Reference

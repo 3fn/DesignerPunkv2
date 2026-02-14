@@ -14,7 +14,9 @@
       "allowedPaths": [
         "src/tokens/**",
         "src/validators/**",
-        "src/generators/**"
+        "src/generators/**",
+        ".kiro/specs/**",
+        "docs/specs/**"
       ]
     }
   },

@@ -1,5 +1,7 @@
 ---
 inclusion: manual
+name: Component-Family-Form-Inputs
+description: Form Inputs component family — text input (float label pattern), checkbox, and radio components with built-in validation, accessibility, and cross-platform consistency. Load when working with form components, input validation, or selection controls.
 ---
 
 # Form Inputs Components

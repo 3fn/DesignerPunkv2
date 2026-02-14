@@ -1,5 +1,7 @@
 ---
 inclusion: manual
+name: Component-Family-Divider
+description: Divider component family (placeholder) — planned components for visual separation between content sections with horizontal and vertical orientations. Load when planning divider components or reviewing family architecture.
 ---
 
 # Dividers Components

@@ -8,6 +8,6 @@
   },
   "then": {
     "type": "askAgent",
-    "prompt": "Run the token formula validation tests using `npm test -- src/tokens/__tests__/` and `npm test -- src/validators/__tests__/`. Report any failures with analysis of which mathematical relationships are broken and suggest fixes."
+    "prompt": "Run the token formula validation tests using `npx jest --config jest.config.js --testPathPatterns='tokens/__tests__'` and `npx jest --config jest.config.js --testPathPatterns='validators/__tests__'`. Report any failures with analysis of which mathematical relationships are broken and suggest fixes."
   }
 }

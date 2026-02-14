@@ -1,5 +1,7 @@
 ---
 inclusion: manual
+name: Component-Family-Navigation
+description: Navigation component family (placeholder) — planned components for wayfinding including tabs, breadcrumbs, and navigation lists. Load when planning navigation components or reviewing family architecture.
 ---
 
 # Navigation Components

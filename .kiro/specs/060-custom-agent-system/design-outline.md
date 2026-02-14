@@ -223,7 +223,7 @@ Lightweight `agentSpawn` hooks (e.g., `git status --porcelain`) are acceptable f
 - `Token-Semantic-Structure.md`
 - `rosetta-system-principles.md`
 
-**Write Access**: `src/tokens/**`, `src/validators/**`, `src/generators/**`
+**Write Access**: `src/tokens/**`, `src/validators/**`, `src/generators/**`, `.kiro/specs/**`, `docs/specs/**`
 
 **Detailed requirements**: See `ada-agent/requirements.md`
 
@@ -238,17 +238,42 @@ Lightweight `agentSpawn` hooks (e.g., `git status --porcelain`) are acceptable f
 - Component-level test writing (unit tests, stemma behavioral contract tests)
 - Component token integration (using tokens Ada manages)
 
-**Key MCP Sources**:
-- `Component-Development-Guide.md`
-- `Component-Development-Standards.md`
-- `Component-Quick-Reference.md`
-- `Component-Family-*.md` (relevant family docs)
-- `Component-Templates.md`
-- `stemma-system-principles.md`
-- `platform-implementation-guidelines.md`
-- `Technology Stack.md`
+**Skill Resources** (metadata at startup, full content on demand):
+- `stemma-system-principles.md` — foundational Stemma governance and architecture
+- `Component-Development-Standards.md` — family creation guidelines
+- `Component-Quick-Reference.md` — routing table for component docs
+- `Component-Readiness-Status.md` — component maturity and transition guidelines
+- `Component-Inheritance-Structures.md` — inheritance and behavioral contracts for all 11 families
+- `platform-implementation-guidelines.md` — cross-platform behavioral consistency
+- `Cross-Platform vs Platform-Specific Decision Framework.md` — platform idiom guidance
+- `Token-Governance.md` — token selection rules (Lina consumes tokens)
+- `Token-Quick-Reference.md` — token routing table
+- `Component-Family-Avatar.md`
+- `Component-Family-Badge.md`
+- `Component-Family-Button.md`
+- `Component-Family-Chip.md`
+- `Component-Family-Container.md`
+- `Component-Family-Data-Display.md`
+- `Component-Family-Divider.md`
+- `Component-Family-Form-Inputs.md`
+- `Component-Family-Icon.md`
+- `Component-Family-Loading.md`
+- `Component-Family-Modal.md`
+- `Component-Family-Navigation.md`
 
-**Write Access**: `src/components/**`
+**MCP-Only Sources** (queried on demand when actively building):
+- `Component-Development-Guide.md` — 15k tokens, too large for skill; query sections via MCP
+- `Component-Schema-Format.md` — formal schema spec, queried when defining schemas
+- `Component-Templates.md` — scaffolding templates, queried when creating components
+- `Component-MCP-Document-Template.md` — queried when writing component family docs
+- `Component-Primitive-vs-Semantic-Philosophy.md` — decision guidance, queried situationally
+- `Test-Behavioral-Contract-Validation.md` — queried when writing behavioral tests
+- `Token-Resolution-Patterns.md` — edge case token type handling
+- `Technology Stack.md` — platform technology choices
+
+**Resource Loading Rationale**: Skill resources (~24) load only name + description metadata (~30-50 tokens each, ~1,000-1,400 total). The awareness benefit of knowing which docs exist at startup outweighs the negligible metadata cost. MCP-only docs are reference material queried during active building, not needed for general awareness.
+
+**Write Access**: `src/components/**`, `.kiro/specs/**`, `docs/specs/**`
 
 ### Thurgood (Test Governance, Audit & Spec Standards)
 

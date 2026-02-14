@@ -1,5 +1,7 @@
 ---
 inclusion: manual
+name: Component-Family-Avatar
+description: Avatar component family — identity representation with shape-based entity differentiation (circle for humans, hexagon for AI agents), image support with loading states and fallback. Load when working with avatar components, identity representation, or user/agent visual differentiation.
 ---
 
 # Avatars Components
