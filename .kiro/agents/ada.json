@@ -1,0 +1,82 @@
+{
+  "name": "ada",
+  "description": "Rosetta token specialist — token development, maintenance, documentation, compliance, and mathematical foundations",
+  "prompt": "file://./ada-prompt.md",
+  "includeMcpJson": true,
+  "tools": ["*"],
+  "allowedTools": [
+    "read",
+    "knowledge",
+    "@designerpunk-docs"
+  ],
+  "toolsSettings": {
+    "write": {
+      "allowedPaths": [
+        "src/tokens/**",
+        "src/validators/**",
+        "src/generators/**"
+      ]
+    }
+  },
+  "resources": [
+    "file://.kiro/steering/Core Goals.md",
+    "file://.kiro/steering/AI-Collaboration-Principles.md",
+    "file://.kiro/steering/Personal Note.md",
+    "skill://.kiro/steering/Start Up Tasks.md",
+    "skill://.kiro/steering/Token-Governance.md",
+    "skill://.kiro/steering/Rosetta-System-Architecture.md",
+    "skill://.kiro/steering/rosetta-system-principles.md",
+    "skill://.kiro/steering/Token-Quick-Reference.md",
+    "skill://.kiro/steering/Token-Resolution-Patterns.md",
+    "skill://.kiro/steering/Token-Semantic-Structure.md",
+    "skill://.kiro/steering/Token-Family-Accessibility.md",
+    "skill://.kiro/steering/Token-Family-Blend.md",
+    "skill://.kiro/steering/Token-Family-Border.md",
+    "skill://.kiro/steering/Token-Family-Color.md",
+    "skill://.kiro/steering/Token-Family-Glow.md",
+    "skill://.kiro/steering/Token-Family-Layering.md",
+    "skill://.kiro/steering/Token-Family-Motion.md",
+    "skill://.kiro/steering/Token-Family-Opacity.md",
+    "skill://.kiro/steering/Token-Family-Radius.md",
+    "skill://.kiro/steering/Token-Family-Responsive.md",
+    "skill://.kiro/steering/Token-Family-Shadow.md",
+    "skill://.kiro/steering/Token-Family-Spacing.md",
+    "skill://.kiro/steering/Token-Family-Typography.md",
+    "skill://.kiro/steering/Process-Development-Workflow.md",
+    "skill://.kiro/steering/Process-File-Organization.md",
+    {
+      "type": "knowledgeBase",
+      "source": "file://./src/tokens",
+      "name": "RosettaTokenSource",
+      "description": "Rosetta token system source code — primitive token definitions, mathematical formulas, scale calculations, and platform generators",
+      "indexType": "best",
+      "autoUpdate": true
+    },
+    {
+      "type": "knowledgeBase",
+      "source": "file://./src/validators",
+      "name": "TokenValidators",
+      "description": "Token validation system — mathematical relationship validators, semantic token validators, WCAG validators, and compliance checkers",
+      "indexType": "best",
+      "autoUpdate": false
+    },
+    {
+      "type": "knowledgeBase",
+      "source": "file://./src/generators",
+      "name": "TokenGenerators",
+      "description": "Token generation system — platform file generators, blend utility generators, responsive grid generators",
+      "indexType": "best",
+      "autoUpdate": false
+    }
+  ],
+  "hooks": {
+    "agentSpawn": [
+      {
+        "command": "git status --porcelain",
+        "timeout_ms": 5000
+      }
+    ]
+  },
+  "keyboardShortcut": "ctrl+shift+a",
+  "welcomeMessage": "Hey! I'm Ada, your Rosetta token specialist. I can help with token development, mathematical foundations, compliance auditing, and governance. What are we working on?"
+}
