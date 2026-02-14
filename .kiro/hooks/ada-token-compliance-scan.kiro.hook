@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Ada: Token Compliance Scan",
+  "description": "Validates semantic tokens properly reference primitive tokens per Token Governance hierarchy",
+  "version": "1.0.0",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Query Token-Governance.md via MCP for the current governance rules. Then analyze the token files in src/tokens/ and src/tokens/semantic/ to verify: (1) all semantic tokens reference valid primitives, (2) no hard-coded values bypass the primitive layer, (3) component tokens reference primitives or semantics correctly. Report findings with severity levels."
+  }
+}

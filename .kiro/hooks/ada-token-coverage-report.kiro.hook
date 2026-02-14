@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Ada: Token Coverage Report",
+  "description": "Identifies token families without adequate test coverage",
+  "version": "1.0.0",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Analyze test coverage for the token system by: (1) listing all token files in src/tokens/, (2) checking which have corresponding test files in src/tokens/__tests__/, (3) identifying token families with no tests or minimal coverage. Cross-reference with Token-Family docs via MCP to identify which families are most critical. Present a prioritized report of coverage gaps."
+  }
+}

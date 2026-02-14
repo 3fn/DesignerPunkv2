@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Ada: Platform Parity Check",
+  "description": "Verifies platform token output files (CSS, Swift, Kotlin) are in sync with token source definitions",
+  "version": "1.0.0",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Check platform parity for the token system: (1) identify all token source files in src/tokens/ that have been modified (check git status or compare timestamps), (2) verify that corresponding platform output files in src/tokens/platforms/ reflect the current source values, (3) if any platform outputs are stale or missing, report which tokens need regeneration and for which platforms (web/iOS/Android). Recommend running the token generation pipeline if drift is detected."
+  }
+}
