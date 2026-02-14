@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Lina: Component Token Audit",
+  "description": "Checks for hard-coded values that should be tokens and verifies token usage follows Token Governance",
+  "version": "1.0.0",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Query Token-Governance.md and Token-Quick-Reference.md via MCP for current governance rules and token routing. Then analyze component files in src/components/ to verify: (1) no hard-coded color, spacing, typography, or shadow values that should use design tokens, (2) semantic tokens are used where available (not primitives), (3) component token references resolve to valid tokens. Report findings with severity levels and recommend token replacements for any hard-coded values found."
+  }
+}

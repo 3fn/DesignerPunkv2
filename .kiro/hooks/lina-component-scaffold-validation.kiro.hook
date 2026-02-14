@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Lina: Component Scaffold Validation",
+  "description": "Verifies component structure completeness (types.ts, platforms, tests, README) and ensures Component-Family docs exist",
+  "version": "1.0.0",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Analyze the component directory structure in src/components/ to verify each component has: (1) types.ts with proper TypeScript interfaces, (2) platform implementations in platforms/web/, platforms/ios/, platforms/android/, (3) test files, (4) README.md. Then check that each component family has a corresponding Component-Family-*.md doc in .kiro/steering/. If a family doc is missing, query Component-MCP-Document-Template.md via MCP and draft a new family doc for Peter's approval. Report completeness status for each component."
+  }
+}

@@ -178,7 +178,7 @@
     - Test Lina with a component scaffolding request → verify Stemma structure compliance
     - _Requirements: 2, 7, 8_
 
-- [ ] 4. Create Lina User-Triggered Hooks
+- [x] 4. Create Lina User-Triggered Hooks
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -208,7 +208,7 @@
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 (Lina) Complete: Create Lina User-Triggered Hooks"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 4.1 Create Stemma Compliance Check hook
+  - [x] 4.1 Create Stemma Compliance Check hook
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create hook JSON following design document specification
@@ -217,7 +217,7 @@
     - Test hook execution produces meaningful output
     - _Requirements: 9_
 
-  - [ ] 4.2 Create Component Token Audit hook
+  - [x] 4.2 Create Component Token Audit hook
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create hook JSON following design document specification
@@ -226,7 +226,7 @@
     - Test hook execution produces meaningful output
     - _Requirements: 9_
 
-  - [ ] 4.3 Create Component Scaffold Validation hook
+  - [x] 4.3 Create Component Scaffold Validation hook
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create hook JSON following design document specification
@@ -236,7 +236,7 @@
     - Test hook execution produces meaningful output
     - _Requirements: 9_
 
-  - [ ] 4.4 Create Platform Parity Check hook
+  - [x] 4.4 Create Platform Parity Check hook
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create hook JSON following design document specification

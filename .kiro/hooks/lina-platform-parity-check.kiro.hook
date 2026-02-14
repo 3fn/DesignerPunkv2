@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Lina: Platform Parity Check",
+  "description": "Ensures all three platform implementations (web/iOS/Android) exist and are in sync",
+  "version": "1.0.0",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Analyze the component directory structure in src/components/ to verify platform parity: (1) for each component, check that web, iOS, and Android implementations exist in their respective platform directories, (2) compare the behavioral contracts and props/attributes across platforms to ensure consistency, (3) identify any platform that is missing or significantly behind the others. Report parity status for each component with specific gaps and recommendations."
+  }
+}

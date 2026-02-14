@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Lina: Stemma Compliance Check",
+  "description": "Validates components follow Stemma behavioral contracts, inheritance patterns, and schema requirements",
+  "version": "1.0.0",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Query Component-Inheritance-Structures.md and Test-Behavioral-Contract-Validation.md via MCP. Then analyze the component files in src/components/ to verify: (1) all components implement their required behavioral contracts, (2) inheritance structures match the Stemma family definitions, (3) component schemas follow Component-Schema-Format. Report findings with severity levels and specific files that need attention."
+  }
+}

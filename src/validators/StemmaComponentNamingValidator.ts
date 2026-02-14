@@ -24,7 +24,7 @@ export interface ComponentNameValidationResult {
   segments?: ComponentNameSegments;
   
   /** Component type classification */
-  componentType?: 'primitive' | 'semantic' | 'standalone';
+  componentType?: 'primitive' | 'semantic' | 'standalone' | 'pattern';
   
   /** Validation errors (if any) */
   errors: ComponentNameError[];
@@ -333,7 +333,7 @@ export function toPascalCase(str: string): string {
  */
 export function determineComponentType(
   segments: ComponentNameSegments
-): 'primitive' | 'semantic' | 'standalone' {
+): 'primitive' | 'semantic' | 'standalone' | 'pattern' {
   // If variant is "Base", it's a primitive
   if (segments.variant === 'Base') {
     return 'primitive';
@@ -344,8 +344,13 @@ export function determineComponentType(
     return 'primitive';
   }
   
-  // If there's a variant that's not "Base", it's semantic
-  if (segments.variant && segments.variant !== 'Base') {
+  // If variant is "Set", it's a pattern (orchestration component)
+  if (segments.variant === 'Set') {
+    return 'pattern';
+  }
+  
+  // If there's a variant that's not "Base" or "Set", it's semantic
+  if (segments.variant && segments.variant !== 'Base' && segments.variant !== 'Set') {
     return 'semantic';
   }
   
@@ -367,6 +372,16 @@ export function isPrimitiveComponent(name: string): boolean {
 export function isSemanticComponent(name: string): boolean {
   const result = validateComponentName(name);
   return result.valid && result.componentType === 'semantic';
+}
+
+/**
+ * Check if a component name represents a pattern component (orchestration)
+ * @param name Component name to check
+ * @returns True if the component is a pattern component
+ */
+export function isPatternComponent(name: string): boolean {
+  const result = validateComponentName(name);
+  return result.valid && result.componentType === 'pattern';
 }
 
 /**
