@@ -464,9 +464,9 @@ describe('Input-Radio-Set Stemma Validators', () => {
      * Validates component properties against accessibility requirements.
      */
 
-    it('should validate component as input type', () => {
+    it('should validate component as container type', () => {
       const componentType = determineComponentType(null, COMPONENT_NAME);
-      expect(componentType).toBe('input');
+      expect(componentType).toBe('container');
     });
 
     it('should validate required accessibility properties', () => {

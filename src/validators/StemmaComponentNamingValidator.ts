@@ -434,6 +434,7 @@ export function validateComponentNames(names: string[]): {
     primitives: number;
     semantics: number;
     standalones: number;
+    patterns: number;
     warnings: number;
   };
 } {
@@ -443,6 +444,7 @@ export function validateComponentNames(names: string[]): {
   let primitives = 0;
   let semantics = 0;
   let standalones = 0;
+  let patterns = 0;
   let warnings = 0;
   
   for (const name of names) {
@@ -454,6 +456,7 @@ export function validateComponentNames(names: string[]): {
       if (result.componentType === 'primitive') primitives++;
       else if (result.componentType === 'semantic') semantics++;
       else if (result.componentType === 'standalone') standalones++;
+      else if (result.componentType === 'pattern') patterns++;
     } else {
       invalid++;
     }
@@ -470,6 +473,7 @@ export function validateComponentNames(names: string[]): {
       primitives,
       semantics,
       standalones,
+      patterns,
       warnings
     }
   };

@@ -633,6 +633,12 @@ export function determineComponentType(
     if (family === 'icons') return 'icon';
   }
   
+  // Check for orchestration/pattern components (Set, Group) BEFORE substring matching
+  // These are containers that manage children, not direct inputs
+  if (componentName.endsWith('-Set') || componentName.endsWith('-Group')) {
+    return 'container';
+  }
+  
   // Fallback to name-based detection
   const nameLower = componentName.toLowerCase();
   if (nameLower.includes('input') || nameLower.includes('text')) return 'input';
