@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Thurgood: Test Suite Health Audit",
+  "description": "Analyzes test suite health — coverage gaps, failing tests, flaky tests, and test infrastructure issues",
+  "version": "1.0.0",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Query Test-Development-Standards.md and Test-Failure-Audit-Methodology.md via MCP for current standards and audit methodology. Then analyze the test suite: (1) run `npm test` to identify any failing tests, (2) scan test directories (src/__tests__/, src/tokens/__tests__/, src/components/*/__tests__/) to identify coverage gaps — components or token families without corresponding tests, (3) identify any test patterns that suggest flakiness (timing dependencies, order dependencies, shared mutable state). Report findings organized by severity (critical: failing tests, high: missing coverage for core functionality, medium: coverage gaps for secondary features, low: test quality improvements). Flag domain-specific issues for Ada (token tests) or Lina (component tests) as appropriate."
+  }
+}

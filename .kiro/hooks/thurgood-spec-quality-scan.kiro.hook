@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Thurgood: Spec Quality Scan",
+  "description": "Validates spec documents against Process-Spec-Planning standards — EARS format, task types, validation tiers",
+  "version": "1.0.0",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Query Process-Spec-Planning.md and Process-Task-Type-Definitions.md via MCP for current spec standards. Then scan all spec directories under .kiro/specs/ to validate: (1) requirements.md files follow EARS patterns and INCOSE quality rules, (2) design.md files include all required sections (Overview, Architecture, Components and Interfaces, Data Models, Correctness Properties, Error Handling, Testing Strategy), (3) tasks.md files use correct task type classification (Setup, Implementation, Architecture, Documentation) and validation tiers (Tier 1-3), (4) acceptance criteria are testable and specific. Report findings per spec with severity levels and specific violations. Suggest corrections for non-compliant requirements."
+  }
+}

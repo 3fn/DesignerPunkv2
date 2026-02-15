@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Thurgood: Accessibility Test Coverage Audit",
+  "description": "Verifies accessibility test coverage for all components and WCAG-related token tests — motivated by silent accessibility errors",
+  "version": "1.0.0",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Query Component-Inheritance-Structures.md via MCP to understand which behavioral contracts include accessibility requirements. Query Token-Governance.md to understand WCAG-related token compliance requirements. Then audit accessibility test coverage: (1) for each component in src/components/, check whether accessibility-related tests exist (ARIA attributes, keyboard navigation, focus management, screen reader support, color contrast), (2) check whether WCAG-related token tests exist in src/tokens/__tests__/ (contrast ratio validation, accessibility token family tests), (3) cross-reference component behavioral contracts with actual test files to identify components where accessibility contracts exist but tests are missing or incomplete. Report findings organized by component with severity levels (critical: no accessibility tests at all, high: partial coverage missing key interactions, medium: coverage exists but could be more comprehensive). Flag token accessibility gaps for Ada and component accessibility gaps for Lina."
+  }
+}
