@@ -241,7 +241,7 @@ Implementation follows the same pattern established by Ada (Phase 1-2) and Lina 
     - Test hook execution produces meaningful output
     - _Requirements: 9_
 
-- [ ] 5. Checkpoint — Validate Thurgood End-to-End
+- [x] 5. Checkpoint — Validate Thurgood End-to-End
   - Ensure all tests pass (`npm test`)
   - Verify Thurgood loads correctly via `/agent swap` and `ctrl+shift+t`
   - Verify all three hooks appear and are triggerable
