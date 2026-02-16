@@ -1,0 +1,72 @@
+name: Progress-Indicator-Label-Base
+type: primitive
+family: Progress-Indicator
+version: "1.0.0"
+readiness: development
+
+description: |
+  Primitive label component for the Progress Indicator family.
+  Renders text labels centered below progress indicator nodes with
+  optional helper text and ellipsis truncation.
+  
+  Key Characteristics:
+  - Positioned centered below node
+  - Uses typography.labelSm token (14px)
+  - Supports optional helper text
+  - Truncates with ellipsis if text exceeds width
+  - Non-interactive, decorative (a11y handled by semantic variants)
+
+behaviors:
+  - renderable
+  - text-display
+
+properties:
+  label:
+    type: string
+    required: true
+    description: Primary label text displayed below the node.
+  helperText:
+    type: string
+    required: false
+    default: undefined
+    description: Optional helper text displayed below the label.
+  optional:
+    type: boolean
+    required: false
+    default: false
+    description: Whether this step is optional.
+  testID:
+    type: string
+    required: false
+    default: undefined
+    description: Test identifier for automated testing.
+
+tokens:
+  typography:
+    - typography.labelSm
+
+platforms:
+  - web
+  - ios
+  - android
+
+platform_notes:
+  web:
+    element: "<progress-indicator-label-base>"
+    implementation: Web Component with Shadow DOM
+    file: platforms/web/ProgressIndicatorLabelBase.web.ts
+  ios:
+    implementation: SwiftUI View
+    file: platforms/ios/ProgressIndicatorLabelBase.ios.swift
+  android:
+    implementation: Jetpack Compose Composable
+    file: platforms/android/ProgressIndicatorLabelBase.android.kt
+
+accessibility:
+  wcag_level: AA
+  compliance:
+    - "1.4.3 Contrast (Minimum) - Text meets 4.5:1 contrast"
+    - "1.4.4 Resize Text - Text scales with user preferences"
+  notes: |
+    This primitive is decorative (aria-hidden). Semantic variants
+    (Stepper-Detailed) handle ARIA roles and labels.

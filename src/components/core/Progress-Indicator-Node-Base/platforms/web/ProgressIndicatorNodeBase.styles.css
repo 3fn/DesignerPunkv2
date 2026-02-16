@@ -1,0 +1,151 @@
+/**
+ * Progress-Indicator-Node-Base Styles for Web Platform
+ * 
+ * Stemma System: Progress Indicator Family
+ * Component Type: Primitive (Base)
+ * 
+ * Token-based styling using CSS custom properties.
+ * All color values reference semantic progress tokens.
+ * All size values reference component progress tokens.
+ * 
+ * @see .kiro/specs/048-progress-family/design.md
+ * @see Requirements 1.1-1.5, 12.1-12.16
+ */
+
+/* ============================================================================
+ * Base Node Styles
+ * ============================================================================ */
+
+:host {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.node {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-sizing: border-box;
+  transition: width 200ms ease, height 200ms ease;
+}
+
+/* ============================================================================
+ * State Colors
+ * Uses semantic color.progress.* tokens
+ * @see Requirements 12.13-12.16
+ * ============================================================================ */
+
+.node--incomplete {
+  background-color: var(--color-progress-pending-background);
+  color: var(--color-progress-pending-text);
+}
+
+.node--current {
+  background-color: var(--color-progress-current-background);
+  color: var(--color-progress-current-text);
+}
+
+.node--completed {
+  background-color: var(--color-progress-completed-background);
+  color: var(--color-progress-completed-text);
+}
+
+.node--error {
+  background-color: var(--color-progress-error-background);
+  color: var(--color-progress-error-text);
+}
+
+
+/* ============================================================================
+ * Size Variants — Base sizes
+ * @see Requirements 12.1-12.3 — base size for incomplete/completed/error
+ * ============================================================================ */
+
+.node--sm {
+  width: var(--progress-node-size-sm, 12px);
+  height: var(--progress-node-size-sm, 12px);
+}
+
+.node--md {
+  width: var(--progress-node-size-md, 16px);
+  height: var(--progress-node-size-md, 16px);
+}
+
+.node--lg {
+  width: var(--progress-node-size-lg, 24px);
+  height: var(--progress-node-size-lg, 24px);
+}
+
+/* ============================================================================
+ * Current State Size Emphasis (+4px)
+ * Overrides base size when state is current
+ * @see Requirements 1.5, 12.4 — current size emphasis
+ * ============================================================================ */
+
+.node--sm.node--current {
+  width: var(--progress-node-size-sm-current, 16px);
+  height: var(--progress-node-size-sm-current, 16px);
+}
+
+.node--md.node--current {
+  width: var(--progress-node-size-md-current, 20px);
+  height: var(--progress-node-size-md-current, 20px);
+}
+
+.node--lg.node--current {
+  width: var(--progress-node-size-lg-current, 28px);
+  height: var(--progress-node-size-lg-current, 28px);
+}
+
+/* ============================================================================
+ * Content Rendering
+ * @see Requirements 1.3-1.4, 12.6-12.9
+ * ============================================================================ */
+
+/* Dot content for sm size — filled circle, no inner content */
+.node__dot {
+  width: 50%;
+  height: 50%;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+/* Icon/checkmark content container */
+.node__content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  line-height: 0;
+}
+
+/* SVG icon sizing */
+.node__content svg {
+  width: 60%;
+  height: 60%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ============================================================================
+ * Accessibility
+ * @see Requirements 7.10, 12.5 — prefers-reduced-motion
+ * ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .node {
+    transition: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .node {
+    border: 1px solid currentColor;
+  }
+}

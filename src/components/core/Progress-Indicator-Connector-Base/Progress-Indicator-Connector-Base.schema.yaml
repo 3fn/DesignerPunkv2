@@ -1,0 +1,63 @@
+name: Progress-Indicator-Connector-Base
+type: primitive
+family: Progress-Indicator
+version: "1.0.0"
+readiness: development
+
+description: |
+  Primitive connector component for the Progress Indicator family.
+  Renders a horizontal connecting line between progress indicator nodes
+  with state-based color treatment.
+  
+  Key Characteristics:
+  - 2 states: active, inactive
+  - 1px thickness (borderDefault token)
+  - Flexible length (fills space between nodes)
+  - Non-interactive, decorative (a11y handled by semantic variants)
+
+behaviors:
+  - renderable
+  - state-driven
+
+properties:
+  state:
+    type: "'active' | 'inactive'"
+    required: true
+    description: Visual state determining connector color.
+  testID:
+    type: string
+    required: false
+    default: undefined
+    description: Test identifier for automated testing.
+
+tokens:
+  color:
+    - color.progress.completed.connector
+    - color.progress.pending.connector
+  component:
+    - progress.connector.thickness
+
+platforms:
+  - web
+  - ios
+  - android
+
+platform_notes:
+  web:
+    element: "<progress-indicator-connector-base>"
+    implementation: Web Component with Shadow DOM
+    file: platforms/web/ProgressIndicatorConnectorBase.web.ts
+  ios:
+    implementation: SwiftUI View
+    file: platforms/ios/ProgressIndicatorConnectorBase.ios.swift
+  android:
+    implementation: Jetpack Compose Composable
+    file: platforms/android/ProgressIndicatorConnectorBase.android.kt
+
+accessibility:
+  wcag_level: AA
+  compliance:
+    - "1.4.11 Non-text Contrast - Connector colors meet contrast requirements"
+  notes: |
+    This primitive is decorative (aria-hidden). Semantic variants
+    (Stepper-Base, Stepper-Detailed) handle ARIA roles and labels.

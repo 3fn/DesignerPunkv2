@@ -1,0 +1,50 @@
+/**
+ * Progress-Indicator-Connector-Base Styles for Web Platform
+ * 
+ * Stemma System: Progress Indicator Family
+ * Component Type: Primitive (Base)
+ * 
+ * Token-based styling using CSS custom properties.
+ * Color values reference semantic progress connector tokens.
+ * Thickness references component progress connector token.
+ * 
+ * @see .kiro/specs/048-progress-family/design.md
+ * @see Requirements 1.6-1.7, 12.10-12.12
+ */
+
+/* ============================================================================
+ * Host Element
+ * Connector fills available space between nodes (flexible length)
+ * ============================================================================ */
+
+:host {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-inline-size: 0;
+}
+
+/* ============================================================================
+ * Base Connector Styles
+ * @see Requirement 1.7 - 1px thickness (borderDefault token)
+ * @see Requirement 12.12 - Uses borderDefault token
+ * ============================================================================ */
+
+.connector {
+  inline-size: 100%;
+  block-size: var(--progress-connector-thickness, 1px);
+}
+
+/* ============================================================================
+ * State Colors
+ * Uses semantic color.progress.*.connector tokens
+ * @see Requirements 12.10-12.11
+ * ============================================================================ */
+
+.connector--active {
+  background-color: var(--color-progress-completed-connector);
+}
+
+.connector--inactive {
+  background-color: var(--color-progress-pending-connector);
+}

@@ -1,0 +1,82 @@
+version: "1.0.0"
+component: Progress-Indicator-Node-Base
+family: Progress-Indicator
+
+contracts:
+  renders_state_colors:
+    category: visual
+    description: Applies correct color tokens based on node state
+    behavior: |
+      Each state maps to semantic color.progress.* tokens:
+      - incomplete: pending.background / pending.text
+      - current: current.background / current.text
+      - completed: completed.background / completed.text
+      - error: error.background / error.text
+    wcag: "1.4.3 Contrast (Minimum)"
+    platforms: [web, ios, android]
+    validation:
+      - Background color matches state token
+      - Foreground color matches state token
+      - Colors use design tokens, not hardcoded values
+
+  applies_size_emphasis:
+    category: visual
+    description: Current state renders at +4px emphasized size
+    behavior: |
+      Nodes use base size for incomplete/completed/error states
+      and current size (+4px) for current state:
+      - sm: 12px base → 16px current
+      - md: 16px base → 20px current
+      - lg: 24px base → 28px current
+    wcag: "1.4.11 Non-text Contrast"
+    platforms: [web, ios, android]
+    validation:
+      - Non-current states render at base size
+      - Current state renders at current size (+4px)
+      - Size values match component tokens
+
+  renders_content:
+    category: content
+    description: Renders appropriate content based on size and content prop
+    behavior: |
+      - sm: always renders as filled dot (content prop ignored)
+      - md/lg + none: empty circle
+      - md/lg + checkmark: checkmark icon
+      - md/lg + icon: specified icon
+    platforms: [web, ios, android]
+    validation:
+      - sm always shows dot regardless of content prop
+      - md/lg shows correct content type
+      - Checkmark renders for completed nodes
+
+  respects_reduced_motion:
+    category: accessibility
+    description: Size transitions respect prefers-reduced-motion
+    behavior: |
+      When transitioning between states (and thus sizes), the animation
+      is disabled when the user has prefers-reduced-motion enabled.
+    wcag: "2.3.3 Animation from Interactions"
+    platforms: [web, ios, android]
+    validation:
+      - Transitions animate by default
+      - Transitions are instant with prefers-reduced-motion
+
+  decorative_primitive:
+    category: accessibility
+    description: Primitive is decorative; semantic variants handle a11y
+    behavior: |
+      Node-Base is marked as decorative (aria-hidden on web,
+      accessibilityHidden on iOS, clearAndSetSemantics on Android).
+      Semantic variants provide ARIA roles and labels.
+    platforms: [web, ios, android]
+    validation:
+      - Node has aria-hidden="true" (web)
+      - Node is hidden from assistive technology
+
+summary:
+  total_contracts: 5
+  categories:
+    visual: 2
+    content: 1
+    accessibility: 2
+  platforms: [web, ios, android]

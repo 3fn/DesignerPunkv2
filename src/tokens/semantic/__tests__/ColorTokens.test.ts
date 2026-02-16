@@ -27,6 +27,7 @@ import {
   getAllColorTokens,
   validateColorTokenCount
 } from '../ColorTokens';
+import { progressColorTokenNames } from '../color-progress';
 import { colorTokens as primitiveColorTokens } from '../../ColorTokens';
 import { SemanticCategory } from '../../../types/SemanticToken';
 
@@ -489,6 +490,9 @@ describe('Semantic Color Tokens - Palette Update', () => {
 
   describe('Token Count Validation', () => {
     it('should have exactly 50 color tokens', () => {
+      // Combine base color tokens with progress color tokens
+      const allColorTokenNames = [...colorTokenNames, ...progressColorTokenNames];
+      
       // Updated for Spec 052 semantic naming restructure:
       // Feedback concept: 18 tokens (success/error/warning/info × text/background/border + select × 6)
       // Identity concept: 2 tokens (human, agent)
@@ -505,11 +509,13 @@ describe('Semantic Color Tokens - Palette Update', () => {
       // Avatar component: MIGRATED to src/components/core/Avatar/avatar.tokens.ts (Spec 058)
       // Badge component: MIGRATED to src/components/core/Badge-Count-Notification/tokens.ts (Spec 058)
       // Notification semantic tokens: 2 tokens added (Spec 046 Task 8.2)
-      // Total: 45 tokens (includes color.structure.border.subtle with opacity composition)
+      // Progress semantic tokens: 10 tokens added (Spec 048 Task 1.1)
+      // Total: 55 tokens (includes color.structure.border.subtle with opacity composition)
       // Note: 5 Avatar tokens removed in Spec 058 migration (50 - 5 = 45)
       // Note: 2 Badge tokens removed in Spec 058 migration (45 - 2 = 43)
       // Note: 2 Notification semantic tokens added in Spec 046 (43 + 2 = 45)
-      expect(colorTokenNames.length).toBe(45);
+      // Note: 10 Progress semantic tokens added in Spec 048 (45 + 10 = 55)
+      expect(allColorTokenNames.length).toBe(55);
     });
 
     it('should pass validateColorTokenCount()', () => {
@@ -517,22 +523,26 @@ describe('Semantic Color Tokens - Palette Update', () => {
     });
 
     it('should have correct token count breakdown', () => {
+      // Combine base color tokens with progress color tokens
+      const allColorTokenNames = [...colorTokenNames, ...progressColorTokenNames];
+      
       // Updated for Spec 052 semantic naming restructure
-      const actionTokens = colorTokenNames.filter(n => n.startsWith('color.action.'));
-      const feedbackSuccessTokens = colorTokenNames.filter(n => n.startsWith('color.feedback.success'));
-      const feedbackErrorTokens = colorTokenNames.filter(n => n.startsWith('color.feedback.error'));
-      const feedbackWarningTokens = colorTokenNames.filter(n => n.startsWith('color.feedback.warning'));
-      const feedbackInfoTokens = colorTokenNames.filter(n => n.startsWith('color.feedback.info'));
-      const feedbackSelectTokens = colorTokenNames.filter(n => n.startsWith('color.feedback.select'));
-      const identityTokens = colorTokenNames.filter(n => n.startsWith('color.identity.'));
-      const attentionTokens = colorTokenNames.filter(n => n === 'color.attention' || n === 'color.highlight');
-      const techDataTokens = colorTokenNames.filter(n => n === 'color.tech' || n === 'color.data');
-      const textTokens = colorTokenNames.filter(n => n.startsWith('color.text'));
-      const contrastTokens = colorTokenNames.filter(n => n.startsWith('color.contrast'));
-      const structureTokens = colorTokenNames.filter(n => n.startsWith('color.structure.'));
-      const glowTokens = colorTokenNames.filter(n => n.startsWith('glow.'));
-      const avatarTokens = colorTokenNames.filter(n => n.startsWith('color.avatar.'));
-      const badgeTokens = colorTokenNames.filter(n => n.startsWith('color.badge.'));
+      const actionTokens = allColorTokenNames.filter(n => n.startsWith('color.action.'));
+      const feedbackSuccessTokens = allColorTokenNames.filter(n => n.startsWith('color.feedback.success'));
+      const feedbackErrorTokens = allColorTokenNames.filter(n => n.startsWith('color.feedback.error'));
+      const feedbackWarningTokens = allColorTokenNames.filter(n => n.startsWith('color.feedback.warning'));
+      const feedbackInfoTokens = allColorTokenNames.filter(n => n.startsWith('color.feedback.info'));
+      const feedbackSelectTokens = allColorTokenNames.filter(n => n.startsWith('color.feedback.select'));
+      const identityTokens = allColorTokenNames.filter(n => n.startsWith('color.identity.'));
+      const attentionTokens = allColorTokenNames.filter(n => n === 'color.attention' || n === 'color.highlight');
+      const techDataTokens = allColorTokenNames.filter(n => n === 'color.tech' || n === 'color.data');
+      const textTokens = allColorTokenNames.filter(n => n.startsWith('color.text'));
+      const contrastTokens = allColorTokenNames.filter(n => n.startsWith('color.contrast'));
+      const structureTokens = allColorTokenNames.filter(n => n.startsWith('color.structure.'));
+      const glowTokens = allColorTokenNames.filter(n => n.startsWith('glow.'));
+      const avatarTokens = allColorTokenNames.filter(n => n.startsWith('color.avatar.'));
+      const badgeTokens = allColorTokenNames.filter(n => n.startsWith('color.badge.'));
+      const progressTokens = allColorTokenNames.filter(n => n.startsWith('color.progress.'));
 
       expect(actionTokens.length).toBe(2); // color.action.primary, color.action.secondary
       expect(feedbackSuccessTokens.length).toBe(3); // text, background, border
@@ -551,6 +561,8 @@ describe('Semantic Color Tokens - Palette Update', () => {
       expect(avatarTokens.length).toBe(0); // Migrated to component directory
       // Badge tokens MIGRATED to src/components/core/Badge-Count-Notification/tokens.ts (Spec 058)
       expect(badgeTokens.length).toBe(0); // Migrated to component directory
+      // Progress tokens added in Spec 048 Task 1.1
+      expect(progressTokens.length).toBe(10); // current (2), pending (3), completed (3), error (2)
     });
   });
 

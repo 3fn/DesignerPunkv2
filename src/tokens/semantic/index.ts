@@ -590,7 +590,7 @@ export function getSemanticTokenStats() {
   return {
     total: allTokens.length,
     byCategory: categoryCount,
-    colorTokens: Object.keys(colorTokens).length,
+    colorTokens: Object.keys(colorTokens).length + Object.keys(progressColorTokens).length,
     typographyTokens: Object.keys(typographyTokens).length,
     spacingTokens: allTokens.filter(t => t.category === SemanticCategory.SPACING).length,
     borderTokens: Object.keys(SemanticBorderWidthTokens).length,

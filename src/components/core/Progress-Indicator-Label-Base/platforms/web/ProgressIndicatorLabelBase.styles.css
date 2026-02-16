@@ -1,0 +1,81 @@
+/**
+ * Progress-Indicator-Label-Base Styles for Web Platform
+ * 
+ * Stemma System: Progress Indicator Family
+ * Component Type: Primitive (Base)
+ * 
+ * Token-based styling using CSS custom properties.
+ * Typography references typography.labelSm composite token.
+ * 
+ * @see .kiro/specs/048-progress-family/design.md
+ * @see Requirements 1.8-1.10
+ */
+
+/* ============================================================================
+ * Host Element
+ * Label is centered below the node
+ * @see Requirement 1.8 - Position centered below node
+ * ============================================================================ */
+
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+}
+
+/* ============================================================================
+ * Label Container
+ * ============================================================================ */
+
+.label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+}
+
+/* ============================================================================
+ * Primary Label Text
+ * Uses typography.labelSm token (14px)
+ * @see Requirement 1.8 - Position centered below node
+ * @see Requirement 1.10 - Truncate with ellipsis
+ * ============================================================================ */
+
+.label__text {
+  font-family: var(--typography-label-sm-font-family);
+  font-size: var(--typography-label-sm-font-size);
+  line-height: var(--typography-label-sm-line-height);
+  font-weight: var(--typography-label-sm-font-weight);
+  letter-spacing: var(--typography-label-sm-letter-spacing);
+  color: var(--color-text-default, currentColor);
+  max-inline-size: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================================================
+ * Helper Text
+ * Rendered below primary label with reduced emphasis
+ * @see Requirement 1.9 - Support optional helper text
+ * @see Requirement 1.10 - Truncate with ellipsis
+ * ============================================================================ */
+
+.label__helper {
+  font-family: var(--typography-label-sm-font-family);
+  font-size: var(--typography-label-sm-font-size);
+  line-height: var(--typography-label-sm-line-height);
+  font-weight: var(--typography-label-sm-font-weight);
+  letter-spacing: var(--typography-label-sm-letter-spacing);
+  color: var(--color-text-subtle, currentColor);
+  opacity: 0.7;
+  max-inline-size: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

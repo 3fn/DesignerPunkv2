@@ -1,3 +1,8 @@
+---
+inclusion: conditional
+trigger: browser-distribution, web-component-integration, browser-loading, web-component-usage
+---
+
 # Browser Distribution Guide
 
 **Date**: 2025-12-23

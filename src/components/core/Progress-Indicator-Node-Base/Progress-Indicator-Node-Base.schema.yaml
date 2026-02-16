@@ -1,0 +1,93 @@
+name: Progress-Indicator-Node-Base
+type: primitive
+family: Progress-Indicator
+version: "1.0.0"
+readiness: development
+
+description: |
+  Primitive node component for the Progress Indicator family.
+  Renders a circular indicator element with state-based visual treatment
+  including color, size emphasis, and optional content (dot, checkmark, icon).
+  
+  Key Characteristics:
+  - 4 states: incomplete, current, completed, error
+  - 3 sizes: sm (12px), md (16px), lg (24px)
+  - Current state applies +4px size emphasis
+  - sm size always renders as dot (content ignored)
+  - Non-interactive, decorative (a11y handled by semantic variants)
+
+behaviors:
+  - renderable
+  - sizable
+  - state-driven
+
+properties:
+  state:
+    type: "'incomplete' | 'current' | 'completed' | 'error'"
+    required: true
+    description: Visual state determining color and size treatment.
+  size:
+    type: "'sm' | 'md' | 'lg'"
+    required: false
+    default: "'md'"
+    description: Size variant. sm=12px, md=16px, lg=24px base.
+  content:
+    type: "'none' | 'checkmark' | 'icon'"
+    required: false
+    default: "'none'"
+    description: Content inside node. sm always renders as dot.
+  icon:
+    type: string
+    required: false
+    default: undefined
+    description: Icon name when content='icon'. Only md/lg.
+  testID:
+    type: string
+    required: false
+    default: undefined
+    description: Test identifier for automated testing.
+
+tokens:
+  color:
+    - color.progress.current.background
+    - color.progress.current.text
+    - color.progress.pending.background
+    - color.progress.pending.text
+    - color.progress.completed.background
+    - color.progress.completed.text
+    - color.progress.error.background
+    - color.progress.error.text
+  component:
+    - progress.node.size.sm
+    - progress.node.size.md
+    - progress.node.size.lg
+    - progress.node.size.sm.current
+    - progress.node.size.md.current
+    - progress.node.size.lg.current
+
+platforms:
+  - web
+  - ios
+  - android
+
+platform_notes:
+  web:
+    element: "<progress-indicator-node-base>"
+    implementation: Web Component with Shadow DOM
+    file: platforms/web/ProgressIndicatorNodeBase.web.ts
+  ios:
+    implementation: SwiftUI View
+    file: platforms/ios/ProgressIndicatorNodeBase.ios.swift
+  android:
+    implementation: Jetpack Compose Composable
+    file: platforms/android/ProgressIndicatorNodeBase.android.kt
+
+accessibility:
+  wcag_level: AA
+  compliance:
+    - "1.4.3 Contrast (Minimum) - State colors meet 4.5:1"
+    - "1.4.11 Non-text Contrast - Size emphasis provides non-color differentiation"
+    - "2.3.3 Animation from Interactions - Respects prefers-reduced-motion"
+  notes: |
+    This primitive is decorative (aria-hidden). Semantic variants
+    (Pagination-Base, Stepper-Base, Stepper-Detailed) handle ARIA roles and labels.

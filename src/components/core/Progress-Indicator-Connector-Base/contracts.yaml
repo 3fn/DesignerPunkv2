@@ -1,0 +1,61 @@
+version: "1.0.0"
+component: Progress-Indicator-Connector-Base
+family: Progress-Indicator
+
+contracts:
+  renders_state_colors:
+    category: visual
+    description: Applies correct color tokens based on connector state
+    behavior: |
+      Each state maps to semantic color.progress.*.connector tokens:
+      - active: color.progress.completed.connector (green100)
+      - inactive: color.progress.pending.connector (white200)
+    wcag: "1.4.11 Non-text Contrast"
+    platforms: [web, ios, android]
+    validation:
+      - Active connector uses completed.connector token (green100)
+      - Inactive connector uses pending.connector token (white200)
+      - Colors use design tokens, not hardcoded values
+
+  applies_thickness:
+    category: visual
+    description: Uses 1px thickness from borderDefault token
+    behavior: |
+      Connector renders at 1px height using the progress.connector.thickness
+      token which references borderDefault (borderWidth100).
+    platforms: [web, ios, android]
+    validation:
+      - Thickness is 1px/1pt/1dp across platforms
+      - Value references borderDefault token
+
+  flexible_length:
+    category: layout
+    description: Fills available space between nodes
+    behavior: |
+      Connector stretches to fill the horizontal space between adjacent
+      progress indicator nodes. Uses flex: 1 (web), maxWidth .infinity (iOS),
+      or fillMaxWidth (Android).
+    platforms: [web, ios, android]
+    validation:
+      - Connector fills available horizontal space
+      - No fixed width constraint
+
+  decorative_primitive:
+    category: accessibility
+    description: Primitive is decorative; semantic variants handle a11y
+    behavior: |
+      Connector-Base is marked as decorative (aria-hidden on web,
+      accessibilityHidden on iOS, clearAndSetSemantics on Android).
+      Semantic variants provide ARIA roles and labels.
+    platforms: [web, ios, android]
+    validation:
+      - Connector has aria-hidden="true" (web)
+      - Connector is hidden from assistive technology
+
+summary:
+  total_contracts: 4
+  categories:
+    visual: 2
+    layout: 1
+    accessibility: 1
+  platforms: [web, ios, android]
