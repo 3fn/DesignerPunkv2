@@ -146,7 +146,7 @@ fun ProgressIndicatorLabelBasePreview() {
         ProgressIndicatorLabelBase(
             label = "This is a very long step label that should truncate",
             helperText = "This helper text is also very long and should truncate with ellipsis",
-            modifier = Modifier.width(100.dp)
+            modifier = Modifier.width(DesignTokens.space_200) /* preview constraint */
         )
     }
 }

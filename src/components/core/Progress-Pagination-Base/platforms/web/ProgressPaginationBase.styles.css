@@ -1,0 +1,45 @@
+/**
+ * Progress-Pagination-Base Styles for Web Platform
+ * 
+ * Stemma System: Progress Indicator Family
+ * Component Type: Semantic (Base)
+ * 
+ * Layout styles for the pagination container.
+ * Node styling is handled by the Node-Base primitive.
+ * 
+ * @see .kiro/specs/048-progress-family/design.md
+ * @see Requirements 2.1-2.3, 11.1-11.6
+ */
+
+/* ============================================================================
+ * Container Layout
+ * ============================================================================ */
+
+:host {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================================
+ * Gap Tokens — spacing between nodes
+ * Uses component progress.node.gap.* tokens
+ * ============================================================================ */
+
+.pagination--sm {
+  gap: var(--progress-node-gap-sm, 6px);
+}
+
+.pagination--md {
+  gap: var(--progress-node-gap-md, 8px);
+}
+
+.pagination--lg {
+  gap: var(--progress-node-gap-lg, 12px);
+}

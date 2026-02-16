@@ -1,0 +1,70 @@
+version: "1.0.0"
+component: Progress-Pagination-Base
+family: Progress-Indicator
+
+contracts:
+  composes_node_base_only:
+    category: composition
+    description: Renders only Node-Base primitives (no connectors, no labels)
+    behavior: |
+      Pagination-Base composes Progress-Indicator-Node-Base for each visible item.
+      It does NOT render Progress-Indicator-Connector-Base or Progress-Indicator-Label-Base.
+      All nodes receive content='none' (dots only).
+    platforms: [web, ios, android]
+    validation:
+      - Renders Node-Base for each visible item
+      - No Connector-Base elements present
+      - No Label-Base elements present
+      - All nodes have content='none'
+
+  derives_binary_state:
+    category: state
+    description: Derives binary state (current vs incomplete) from currentItem
+    behavior: |
+      State derivation is simple binary logic:
+      - Node at currentItem index → state 'current'
+      - All other nodes → state 'incomplete'
+      No completed or error states in pagination.
+    platforms: [web, ios, android]
+    validation:
+      - Exactly one node has state 'current'
+      - All other nodes have state 'incomplete'
+      - State derivation is deterministic
+
+  virtualizes_large_sets:
+    category: performance
+    description: Renders max 5 visible nodes using sliding window
+    behavior: |
+      When totalItems > 5, only 5 nodes are rendered:
+      - Pages 1-3: show nodes 1-5
+      - Pages 4 to (totalItems-3): center current at position 3
+      - Last 3 pages: show last 5 nodes
+      Window shifts immediately (no animation).
+    platforms: [web, ios, android]
+    validation:
+      - totalItems ≤ 5 renders all nodes
+      - totalItems > 5 renders exactly 5 nodes
+      - Current node centered when possible
+
+  reflects_actual_position:
+    category: accessibility
+    description: ARIA label reflects actual position, not virtualized subset
+    behavior: |
+      The accessibility label always shows the real position
+      (e.g., "Page 26 of 50") regardless of which 5 nodes are visible.
+      Uses role="group" on web.
+    wcag: "4.1.2 Name, Role, Value"
+    platforms: [web, ios, android]
+    validation:
+      - aria-label shows actual currentItem and totalItems
+      - role="group" applied (web)
+      - Screen reader announces actual position
+
+summary:
+  total_contracts: 4
+  categories:
+    composition: 1
+    state: 1
+    performance: 1
+    accessibility: 1
+  platforms: [web, ios, android]

@@ -143,7 +143,7 @@ struct ProgressIndicatorLabelBase_Previews: PreviewProvider {
                     label: "This is a very long step label that should truncate",
                     helperText: "This helper text is also very long and should truncate with ellipsis"
                 )
-                .frame(width: 100)
+                .frame(width: DesignTokens.space.inset.200)
             }
         }
         .padding()

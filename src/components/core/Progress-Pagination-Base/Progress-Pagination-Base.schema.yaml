@@ -1,0 +1,90 @@
+name: Progress-Pagination-Base
+type: semantic
+family: Progress-Indicator
+version: "1.0.0"
+readiness: development
+
+description: |
+  Semantic pagination component for the Progress Indicator family.
+  Composes Progress-Indicator-Node-Base primitives to create a simple
+  pagination indicator for carousels and multi-page flows.
+  
+  Key Characteristics:
+  - Composes Node-Base only (no connectors, no labels)
+  - All nodes use content='none' (dots only)
+  - States: incomplete, current (binary derivation)
+  - Sizes: sm, md, lg
+  - Virtualization: >5 items → sliding window of 5
+  - Max 50 items (dev throw, production warn+clamp)
+  - Non-interactive (navigation handled by parent flow)
+
+behaviors:
+  - renderable
+  - sizable
+  - state-driven
+  - virtualizable
+
+properties:
+  totalItems:
+    type: number
+    required: true
+    description: Total number of items/pages. Max 50.
+  currentItem:
+    type: number
+    required: true
+    description: Current active item (1-indexed). Clamped to [1, totalItems].
+  size:
+    type: "'sm' | 'md' | 'lg'"
+    required: false
+    default: "'md'"
+    description: Size variant for all nodes.
+  accessibilityLabel:
+    type: string
+    required: false
+    default: "'Page {currentItem} of {totalItems}'"
+    description: Custom accessibility label override.
+  testID:
+    type: string
+    required: false
+    default: undefined
+    description: Test identifier for automated testing.
+
+tokens:
+  component:
+    - progress.node.size.sm
+    - progress.node.size.md
+    - progress.node.size.lg
+    - progress.node.size.sm.current
+    - progress.node.size.md.current
+    - progress.node.size.lg.current
+    - progress.node.gap.sm
+    - progress.node.gap.md
+    - progress.node.gap.lg
+
+platforms:
+  - web
+  - ios
+  - android
+
+platform_notes:
+  web:
+    element: "<progress-pagination-base>"
+    implementation: Web Component with Shadow DOM
+    file: platforms/web/ProgressPaginationBase.web.ts
+  ios:
+    implementation: SwiftUI View
+    file: platforms/ios/ProgressPaginationBase.ios.swift
+  android:
+    implementation: Jetpack Compose Composable
+    file: platforms/android/ProgressPaginationBase.android.kt
+
+accessibility:
+  wcag_level: AA
+  compliance:
+    - "1.3.1 Info and Relationships - role='group' with descriptive aria-label"
+    - "1.4.11 Non-text Contrast - Current node size emphasis provides non-color differentiation"
+    - "4.1.2 Name, Role, Value - aria-label reflects actual position, not virtualized subset"
+  notes: |
+    Pagination-Base uses role="group" with aria-label="Page X of Y".
+    The label always reflects the actual position in the full set,
+    not the virtualized visible subset.
