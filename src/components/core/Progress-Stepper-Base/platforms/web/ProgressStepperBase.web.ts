@@ -17,6 +17,7 @@
 
 import {
   StepperSize,
+  NodeState,
   STEPPER_BASE_DEFAULTS,
   STEPPER_MAX_STEPS,
   deriveStepperNodeState,
@@ -237,7 +238,7 @@ export class ProgressStepperBase extends HTMLElement {
 
     // Derive node states and build HTML
     // @see Requirements 10.3-10.7, 11.7-11.13
-    const nodeStates = [];
+    const nodeStates: NodeState[] = [];
     for (let i = 1; i <= totalSteps; i++) {
       nodeStates.push(deriveStepperNodeState(i, currentStep, errorSteps));
     }

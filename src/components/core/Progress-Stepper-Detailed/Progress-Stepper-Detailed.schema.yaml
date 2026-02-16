@@ -1,0 +1,93 @@
+name: Progress-Stepper-Detailed
+type: semantic
+family: Progress-Indicator
+version: "1.0.0"
+readiness: development
+
+description: |
+  Semantic detailed stepper component for the Progress Indicator family.
+  Composes Progress-Indicator-Node-Base, Progress-Indicator-Connector-Base,
+  and Progress-Indicator-Label-Base primitives to create a detailed stepper
+  with labels and optional icons for complex multi-step flows.
+  
+  Key Characteristics:
+  - Composes Node-Base + Connector-Base + Label-Base
+  - State priority: error > completed > current > incomplete
+  - Icon precedence: completed = checkmark always, user icon for others
+  - Connectors: active between completed nodes, inactive otherwise
+  - Sizes: md, lg only (sm throws error)
+  - Max 8 steps (dev throw, production warn+clamp)
+  - Non-interactive (navigation handled by parent flow)
+
+behaviors:
+  - renderable
+  - sizable
+  - state-driven
+
+properties:
+  steps:
+    type: "StepDefinition[]"
+    required: true
+    description: Array of step definitions with label, helperText, icon, optional. Max 8.
+  currentStep:
+    type: number
+    required: true
+    description: Current active step (1-indexed). Clamped to [1, steps.length].
+  size:
+    type: "'md' | 'lg'"
+    required: false
+    default: "'md'"
+    description: Size variant. sm is not supported for steppers.
+  errorSteps:
+    type: "number[]"
+    required: false
+    default: "[]"
+    description: Array of step indices in error state. Filtered to valid range.
+  accessibilityLabel:
+    type: string
+    required: false
+    description: Custom accessibility label override.
+  testID:
+    type: string
+    required: false
+    default: undefined
+    description: Test identifier for automated testing.
+
+tokens:
+  component:
+    - progress.node.size.md
+    - progress.node.size.lg
+    - progress.node.size.md.current
+    - progress.node.size.lg.current
+    - progress.node.gap.md
+    - progress.node.gap.lg
+    - progress.connector.thickness
+
+platforms:
+  - web
+  - ios
+  - android
+
+platform_notes:
+  web:
+    element: "<progress-stepper-detailed>"
+    implementation: Web Component with Shadow DOM
+    file: platforms/web/ProgressStepperDetailed.web.ts
+  ios:
+    implementation: SwiftUI View
+    file: platforms/ios/ProgressStepperDetailed.ios.swift
+  android:
+    implementation: Jetpack Compose Composable
+    file: platforms/android/ProgressStepperDetailed.android.kt
+
+accessibility:
+  wcag_level: AA
+  compliance:
+    - "1.3.1 Info and Relationships - role='list' with role='listitem' per step"
+    - "1.4.11 Non-text Contrast - Current node size emphasis provides non-color differentiation"
+    - "4.1.2 Name, Role, Value - aria-label includes error/optional suffixes"
+  notes: |
+    Stepper-Detailed uses role="list" with each step as role="listitem".
+    Error steps include "error" suffix in aria-label.
+    Optional steps include "optional" suffix in aria-label.
+    Screen reader announces "Step X of Y: [label]".

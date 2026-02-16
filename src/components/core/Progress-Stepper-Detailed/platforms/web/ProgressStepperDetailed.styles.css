@@ -1,0 +1,106 @@
+/**
+ * Progress-Stepper-Detailed Styles for Web Platform
+ * 
+ * Stemma System: Progress Indicator Family
+ * Component Type: Semantic (Detailed)
+ * 
+ * Layout styles for the detailed stepper container.
+ * Each step is a column: node (with connectors) on top, label below.
+ * Node styling handled by Node-Base primitive.
+ * Connector styling handled by Connector-Base primitive.
+ * Label styling handled by Label-Base primitive.
+ * 
+ * @see .kiro/specs/048-progress-family/design.md
+ * @see Requirements 4.1-4.2, 11.14-11.22
+ */
+
+/* ============================================================================
+ * Host Element
+ * ============================================================================ */
+
+:host {
+  display: inline-flex;
+  align-items: flex-start;
+  justify-content: center;
+  inline-size: 100%;
+}
+
+/* ============================================================================
+ * Container Layout
+ * Steps laid out horizontally. Each step is a vertical column
+ * containing a node row and a label below.
+ * ============================================================================ */
+
+.stepper-detailed {
+  display: inline-flex;
+  align-items: flex-start;
+  justify-content: center;
+  inline-size: 100%;
+}
+
+/* ============================================================================
+ * Step Column
+ * Each step is a flex column: node on top, label below.
+ * Steps with connectors share horizontal space equally.
+ * ============================================================================ */
+
+.stepper-detailed__step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-inline-size: 0;
+}
+
+/* ============================================================================
+ * Node Row
+ * Contains the node and half-connectors on each side.
+ * Connectors fill the space between nodes.
+ * ============================================================================ */
+
+.stepper-detailed__node-row {
+  display: flex;
+  align-items: center;
+  inline-size: 100%;
+  justify-content: center;
+}
+
+/* ============================================================================
+ * Connector fills available space between nodes
+ * ============================================================================ */
+
+.stepper-detailed__connector {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+/* ============================================================================
+ * Spacer — invisible element on the outer edges of first/last steps
+ * to keep nodes centered within their column.
+ * ============================================================================ */
+
+.stepper-detailed__spacer {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+/* ============================================================================
+ * Label area below the node
+ * ============================================================================ */
+
+.stepper-detailed__label {
+  margin-block-start: var(--progress-node-gap-md, 8px);
+  inline-size: 100%;
+}
+
+/* ============================================================================
+ * Gap Tokens — vertical spacing between node and label per size
+ * ============================================================================ */
+
+.stepper-detailed--md .stepper-detailed__label {
+  margin-block-start: var(--progress-node-gap-md, 8px);
+}
+
+.stepper-detailed--lg .stepper-detailed__label {
+  margin-block-start: var(--progress-node-gap-lg, 12px);
+}

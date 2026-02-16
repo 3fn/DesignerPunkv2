@@ -334,7 +334,7 @@ This spec implements a complete component family with 3 primitives and 3 semanti
 
 ---
 
-- [ ] 5. Stepper-Detailed Component
+- [x] 5. Stepper-Detailed Component
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -361,7 +361,7 @@ This spec implements a complete component family with 3 primitives and 3 semanti
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 5 Complete: Stepper-Detailed Component"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 5.1 Implement Stepper-Detailed core component
+  - [x] 5.1 Implement Stepper-Detailed core component
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create component directory structure
@@ -379,7 +379,7 @@ This spec implements a complete component family with 3 primitives and 3 semanti
     - Support sizes: md, lg only (throw if sm)
     - _Requirements: 4.1-4.16, 11.14-11.22_
 
-  - [ ] 5.2 Implement validation and error handling
+  - [x] 5.2 Implement validation and error handling
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Validate steps.length ≤ 8 (dev throw, production warn+clamp)
@@ -389,7 +389,7 @@ This spec implements a complete component family with 3 primitives and 3 semanti
     - Implement error messages with guidance
     - _Requirements: 4.9-4.16, 8.6-8.10_
 
-  - [ ] 5.3 Implement accessibility
+  - [x] 5.3 Implement accessibility
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Apply role="list" with each step as role="listitem"
@@ -398,7 +398,7 @@ This spec implements a complete component family with 3 primitives and 3 semanti
     - Verify screen reader announces "Step X of Y: [label]"
     - _Requirements: 4.13-4.15, 7.4-7.6, 7.13_
 
-  - [ ] 5.4 Implement Stepper-Detailed tests
+  - [x] 5.4 Implement Stepper-Detailed tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create Stemma behavioral contract tests (naming, type classification, prop validation, accessibility)
