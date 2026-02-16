@@ -372,6 +372,68 @@ export const chipTokens = {
 
 ---
 
+## Component Tokens
+
+Component tokens are spacing values tied to specific UI components. They follow the pattern:
+
+```
+{component}.{property}.{variant?}
+```
+
+Component tokens either reference primitive spacing tokens OR use formulas based on `SPACING_BASE_VALUE` (8px) to maintain mathematical relationships with the baseline grid.
+
+### Progress Component (10 tokens)
+
+Progress component tokens define sizing, gaps, and connector thickness for the Progress Indicator family (pagination dots, steppers).
+
+#### Base Node Sizes (3 tokens)
+
+Base sizes reference primitive spacing tokens directly.
+
+| Token Name | Reference | Value | Use Case |
+|------------|-----------|-------|----------|
+| `progress.node.size.sm` | space150 | 12px | Small node base size - compact pagination dots |
+| `progress.node.size.md` | space200 | 16px | Medium node base size - default steppers |
+| `progress.node.size.lg` | space300 | 24px | Large node base size - detailed steppers |
+
+#### Current Node Sizes (3 tokens)
+
+Current sizes use formula-based values: `SPACING_BASE_VALUE × multiplier`. This provides +4px emphasis over base size for non-color visual differentiation of the active position.
+
+| Token Name | Formula | Value | Use Case |
+|------------|---------|-------|----------|
+| `progress.node.size.sm.current` | 8 × 2 | 16px | Current node emphasis for sm (+4px over base 12px) |
+| `progress.node.size.md.current` | 8 × 2.5 | 20px | Current node emphasis for md (+4px over base 16px) |
+| `progress.node.size.lg.current` | 8 × 3.5 | 28px | Current node emphasis for lg (+4px over base 24px) |
+
+**Formula Rationale**: Current sizes maintain +4px emphasis across all variants while staying divisible by 4px (baseline grid aligned). The formula approach ensures mathematical consistency: if base sizes change, current sizes automatically maintain the +4px relationship.
+
+#### Gap Tokens (3 tokens)
+
+Gap tokens define spacing between nodes in pagination/steppers.
+
+| Token Name | Reference | Value | Use Case |
+|------------|-----------|-------|----------|
+| `progress.node.gap.sm` | space075 | 6px | Tight spacing for compact pagination dots |
+| `progress.node.gap.md` | space100 | 8px | Default spacing for stepper nodes |
+| `progress.node.gap.lg` | space150 | 12px | Generous spacing for detailed steppers |
+
+#### Connector Tokens (1 token)
+
+Connector tokens define line thickness for stepper connectors.
+
+| Token Name | Reference | Value | Use Case |
+|------------|-----------|-------|----------|
+| `progress.connector.thickness` | borderWidth100 | 1px | Connector line thickness - consistent with border treatment |
+
+**Usage Guidance**:
+- Use **sm** variant for compact mobile contexts (pagination dots)
+- Use **md** variant for default steppers (most common)
+- Use **lg** variant for detailed desktop steppers with labels
+- Current sizes automatically apply to the active node (no manual calculation needed)
+
+---
+
 ## Grid Spacing Tokens
 
 Grid spacing tokens define gutter and margin values for responsive grid layouts. These semantic tokens reference primitive spacing tokens for consistency with the 8px baseline grid.

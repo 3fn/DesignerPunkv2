@@ -1,0 +1,40 @@
+{
+  "timestamp": "2026-02-16T14:39:46.777Z",
+  "lastAnalyzedCommit": "b8311e0456eb22a903e4e57ca473a5153a7d61a5",
+  "documentCount": 6,
+  "documents": [
+    {
+      "path": "docs/specs/048-progress-family/task-1-summary.md",
+      "lastModified": "2026-02-16T14:39:46.775Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/048-progress-family/task-2-summary.md",
+      "lastModified": "2026-02-16T14:39:46.776Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/048-progress-family/task-3-summary.md",
+      "lastModified": "2026-02-16T14:39:46.776Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/048-progress-family/task-4-summary.md",
+      "lastModified": "2026-02-16T14:39:46.776Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/048-progress-family/task-5-summary.md",
+      "lastModified": "2026-02-16T14:39:46.776Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/048-progress-family/task-6-summary.md",
+      "lastModified": "2026-02-16T14:39:46.776Z",
+      "gitCommit": "unknown"
+    }
+  ],
+  "quickAnalysisMode": true,
+  "appendOnlyOptimization": true,
+  "note": "Full analysis can be run with: npm run release:analyze"
+}

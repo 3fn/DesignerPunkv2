@@ -46,48 +46,48 @@ The feedback concept provides colors for success, error, warning, info, and sele
 
 #### Success Tokens (3 tokens)
 
-| Token Name | Primitive | RGBA Value | Use Case |
-|------------|-----------|------------|----------|
-| `color.feedback.success.text` | green400 | rgba(0, 255, 136, 1) | Success text - form validation, confirmation messages |
-| `color.feedback.success.background` | green100 | rgba(230, 255, 245, 1) | Success backgrounds - alert backgrounds, success banners |
-| `color.feedback.success.border` | green400 | rgba(0, 255, 136, 1) | Success borders - input validation borders, success card outlines |
+| Token Name | Primitive | Use Case |
+|------------|-----------|----------|
+| `color.feedback.success.text` | green400 | Success text - form validation, confirmation messages |
+| `color.feedback.success.background` | green100 | Success backgrounds - alert backgrounds, success banners |
+| `color.feedback.success.border` | green400 | Success borders - input validation borders, success card outlines |
 
 #### Error Tokens (3 tokens)
 
-| Token Name | Primitive | RGBA Value | Use Case |
-|------------|-----------|------------|----------|
-| `color.feedback.error.text` | pink400 | rgba(204, 34, 87, 1) | Error text - form validation errors, error messages |
-| `color.feedback.error.background` | pink100 | rgba(255, 218, 232, 1) | Error backgrounds - alert backgrounds, error banners |
-| `color.feedback.error.border` | pink400 | rgba(204, 34, 87, 1) | Error borders - input validation borders, error card outlines |
+| Token Name | Primitive | Use Case |
+|------------|-----------|----------|
+| `color.feedback.error.text` | pink400 | Error text - form validation errors, error messages |
+| `color.feedback.error.background` | pink100 | Error backgrounds - alert backgrounds, error banners |
+| `color.feedback.error.border` | pink400 | Error borders - input validation borders, error card outlines |
 
 #### Warning Tokens (3 tokens)
 
-| Token Name | Primitive | RGBA Value | Use Case |
-|------------|-----------|------------|----------|
-| `color.feedback.warning.text` | orange400 | rgba(204, 85, 41, 1) | Warning text - caution messages, attention-required indicators |
-| `color.feedback.warning.background` | orange100 | rgba(255, 229, 220, 1) | Warning backgrounds - alert backgrounds, caution banners |
-| `color.feedback.warning.border` | orange400 | rgba(204, 85, 41, 1) | Warning borders - input validation borders, warning card outlines |
+| Token Name | Primitive | Use Case |
+|------------|-----------|----------|
+| `color.feedback.warning.text` | orange400 | Warning text - caution messages, attention-required indicators |
+| `color.feedback.warning.background` | orange100 | Warning backgrounds - alert backgrounds, caution banners |
+| `color.feedback.warning.border` | orange400 | Warning borders - input validation borders, warning card outlines |
 
 #### Info Tokens (3 tokens)
 
-| Token Name | Primitive | RGBA Value | Use Case |
-|------------|-----------|------------|----------|
-| `color.feedback.info.text` | teal400 | rgba(21, 66, 74, 1) | Info text - help text, informational messages |
-| `color.feedback.info.background` | teal100 | rgba(217, 232, 234, 1) | Info backgrounds - info banners, help sections |
-| `color.feedback.info.border` | teal400 | rgba(21, 66, 74, 1) | Info borders - info card outlines, help section borders |
+| Token Name | Primitive | Use Case |
+|------------|-----------|----------|
+| `color.feedback.info.text` | teal400 | Info text - help text, informational messages |
+| `color.feedback.info.background` | teal100 | Info backgrounds - info banners, help sections |
+| `color.feedback.info.border` | teal400 | Info borders - info card outlines, help section borders |
 
 #### Select Tokens (6 tokens)
 
 Select tokens include state (`rest`, `default`) because selection has interaction states.
 
-| Token Name | Primitive | RGBA Value | Use Case |
-|------------|-----------|------------|----------|
-| `color.feedback.select.text.rest` | cyan400 | rgba(0, 192, 204, 1) | Selected item text - label text when item is selected |
-| `color.feedback.select.text.default` | gray200 | rgba(104, 101, 138, 1) | Not-selected item text - label text when item is available |
-| `color.feedback.select.background.rest` | cyan100 | rgba(204, 251, 255, 1) | Selected item background - background when item is selected |
-| `color.feedback.select.background.default` | gray100 | rgba(184, 182, 200, 1) | Not-selected item background - background when item is available |
-| `color.feedback.select.border.rest` | cyan400 | rgba(0, 192, 204, 1) | Selected item border - checkmark base, item border when selected |
-| `color.feedback.select.border.default` | gray200 | rgba(104, 101, 138, 1) | Not-selected item border - item border when available |
+| Token Name | Primitive | Use Case |
+|------------|-----------|----------|
+| `color.feedback.select.text.rest` | cyan400 | Selected item text - label text when item is selected |
+| `color.feedback.select.text.default` | gray200 | Not-selected item text - label text when item is available |
+| `color.feedback.select.background.rest` | cyan100 | Selected item background - background when item is selected |
+| `color.feedback.select.background.default` | gray100 | Not-selected item background - background when item is available |
+| `color.feedback.select.border.rest` | cyan400 | Selected item border - checkmark base, item border when selected |
+| `color.feedback.select.border.default` | gray200 | Not-selected item border - item border when available |
 
 **Design Note**: Select is placed under feedback as UI response to user action. If additional interaction-based use cases emerge (focus states, drag states), consider migrating to an 'interaction' concept.
 
@@ -99,10 +99,10 @@ Select tokens include state (`rest`, `default`) because selection has interactio
 
 Identity tokens represent core colors for different entity types. They ARE the color (no property suffix needed).
 
-| Token Name | Primitive | RGBA Value | Use Case |
-|------------|-----------|------------|----------|
-| `color.identity.human` | orange300 | rgba(255, 107, 53, 1) | Human identity - warm, approachable visual identity for human entities |
-| `color.identity.agent` | teal200 | rgba(77, 155, 165, 1) | Agent identity - distinct, technical visual identity for AI agent entities |
+| Token Name | Primitive | Use Case |
+|------------|-----------|----------|
+| `color.identity.human` | orange300 | Human identity - warm, approachable visual identity for human entities |
+| `color.identity.agent` | teal200 | Agent identity - distinct, technical visual identity for AI agent entities |
 
 **Usage**: These tokens are referenced by component tokens (e.g., `color.avatar.human.background` references `color.identity.human`).
 
@@ -114,10 +114,10 @@ Identity tokens represent core colors for different entity types. They ARE the c
 
 Action tokens represent visual emphasis levels, not action types. Use `primary` for single, focused instances (hero CTAs) and `secondary` for repetitive instances (action lists) to avoid UI over-saturation.
 
-| Token Name | Primitive | RGBA Value | Use Case |
-|------------|-----------|------------|----------|
-| `color.action.primary` | purple300 | rgba(176, 38, 255, 1) | Emphasized action - hero CTAs, main buttons, primary interactive elements |
-| `color.action.secondary` | black400 | rgba(6, 6, 10, 1) | De-emphasized action - list item buttons, secondary CTAs, repetitive actions |
+| Token Name | Primitive | Use Case |
+|------------|-----------|----------|
+| `color.action.primary` | purple300 | Emphasized action - hero CTAs, main buttons, primary interactive elements |
+| `color.action.secondary` | black400 | De-emphasized action - list item buttons, secondary CTAs, repetitive actions |
 
 **Critical Distinction**: `primary`/`secondary` represent visual emphasis, not action type. Both can be CTAs.
 
@@ -137,10 +137,10 @@ Action tokens represent visual emphasis levels, not action types. Use `primary` 
 
 Contrast tokens provide colors for content (text, icons) on colored backgrounds. Naming matches the background the content sits ON.
 
-| Token Name | Primitive | RGBA Value | Use Case |
-|------------|-----------|------------|----------|
-| `color.contrast.onLight` | black500 | rgba(0, 0, 0, 1) | Dark content on light backgrounds - ensures WCAG AA contrast |
-| `color.contrast.onDark` | white100 | rgba(255, 255, 255, 1) | Light content on dark backgrounds - ensures WCAG AA contrast |
+| Token Name | Primitive | Use Case |
+|------------|-----------|----------|
+| `color.contrast.onLight` | black500 | Dark content on light backgrounds - ensures WCAG AA contrast |
+| `color.contrast.onDark` | white100 | Light content on dark backgrounds - ensures WCAG AA contrast |
 
 **Usage**: Use `onLight` for text/icons on light surfaces, `onDark` for text/icons on dark or colored surfaces.
 
@@ -152,13 +152,68 @@ Contrast tokens provide colors for content (text, icons) on colored backgrounds.
 
 Structure tokens provide foundational colors for UI structure: canvas (base layer), surface (elevated layer), and border (boundaries).
 
-| Token Name | Primitive | RGBA Value | Use Case |
-|------------|-----------|------------|----------|
-| `color.structure.canvas` | white100 | rgba(255, 255, 255, 1) | Base canvas - page backgrounds, foundational layer |
-| `color.structure.surface` | white200 | rgba(245, 245, 250, 1) | Elevated surface - cards, containers, visual hierarchy above canvas |
-| `color.structure.border` | gray100 | rgba(184, 182, 200, 1) | Standard borders - UI element borders, dividers |
+| Token Name | Primitive | Use Case |
+|------------|-----------|----------|
+| `color.structure.canvas` | white100 | Base canvas - page backgrounds, foundational layer |
+| `color.structure.surface` | white200 | Elevated surface - cards, containers, visual hierarchy above canvas |
+| `color.structure.border` | gray100 | Standard borders - UI element borders, dividers |
 
 **Future Expansion**: Surface layering with `.100`, `.200` suffixes when multiple elevation levels are needed.
+
+---
+
+### Progress Concept
+
+**Purpose**: Communicate progress state and position in multi-step flows
+
+Progress tokens provide colors for multi-step flows like pagination dots and steppers. They distinguish between current position (where you are), pending steps (not yet reached), completed steps (finished), and error steps (requiring attention).
+
+**Design Note**: Progress uses green for completed steps, similar to `feedback.success`, but with different semantic intent. Feedback tokens communicate system response to user actions; progress tokens communicate position in a multi-step flow. Use progress tokens for steppers/pagination, feedback tokens for validation/alerts.
+
+#### Current State Tokens (2 tokens)
+
+Current state represents the active position ("you are here") in the flow.
+
+| Token Name | Primitive | Use Case |
+|------------|-----------|----------|
+| `color.progress.current.background` | cyan300 | Current node background - active position indicator in pagination/steppers |
+| `color.progress.current.text` | cyan400 | Current node text/icon - content inside active position indicator |
+
+#### Pending State Tokens (3 tokens)
+
+Pending state represents incomplete/upcoming steps not yet reached.
+
+| Token Name | Primitive | Use Case |
+|------------|-----------|----------|
+| `color.progress.pending.background` | white300 | Pending node background - upcoming steps |
+| `color.progress.pending.text` | gray300 | Pending node text/icon - content in upcoming steps |
+| `color.progress.pending.connector` | white200 | Pending connector line - untraversed path between incomplete steps |
+
+#### Completed State Tokens (3 tokens)
+
+Completed state represents successfully finished steps.
+
+| Token Name | Primitive | Use Case |
+|------------|-----------|----------|
+| `color.progress.completed.background` | green100 | Completed node background - finished steps |
+| `color.progress.completed.text` | green400 | Completed node text/icon - checkmark icons in finished steps |
+| `color.progress.completed.connector` | green100 | Completed connector line - traversed path showing progress made |
+
+#### Error State Tokens (2 tokens)
+
+Error state represents steps with problems requiring attention.
+
+| Token Name | Primitive | Use Case |
+|------------|-----------|----------|
+| `color.progress.error.background` | pink100 | Error node background - problematic steps |
+| `color.progress.error.text` | pink400 | Error node text/icon - error indicators in problematic steps |
+
+**Usage Guidance**:
+- Use **current** for the active position in pagination dots or stepper nodes
+- Use **pending** for upcoming/incomplete steps
+- Use **completed** for finished steps (typically with checkmark icon)
+- Use **error** for steps that encountered problems
+- Connector tokens only apply to steppers (not pagination dots)
 
 ---
 
@@ -174,22 +229,22 @@ color.{component}.{variant}.{property}
 
 Avatar component tokens reference semantic tokens (identity, contrast) rather than primitives directly.
 
-| Token Name | References | RGBA Value | Use Case |
-|------------|------------|------------|----------|
-| `color.avatar.human.background` | color.identity.human | rgba(255, 107, 53, 1) | Human avatar background |
-| `color.avatar.agent.background` | color.identity.agent | rgba(77, 155, 165, 1) | AI agent avatar background |
-| `color.avatar.human.icon` | color.contrast.onDark | rgba(255, 255, 255, 1) | Icon on human avatar background |
-| `color.avatar.agent.icon` | color.contrast.onDark | rgba(255, 255, 255, 1) | Icon on AI agent avatar background |
-| `color.avatar.default.border` | gray100 | rgba(184, 182, 200, 1) | Avatar border for both variants |
+| Token Name | References | Use Case |
+|------------|------------|----------|
+| `color.avatar.human.background` | color.identity.human | Human avatar background |
+| `color.avatar.agent.background` | color.identity.agent | AI agent avatar background |
+| `color.avatar.human.icon` | color.contrast.onDark | Icon on human avatar background |
+| `color.avatar.agent.icon` | color.contrast.onDark | Icon on AI agent avatar background |
+| `color.avatar.default.border` | gray100 | Avatar border for both variants |
 
 ### Badge Component (2 tokens)
 
 Badge tokens follow the `{component}.{variant}.{property}` pattern.
 
-| Token Name | Primitive | RGBA Value | Use Case |
-|------------|-----------|------------|----------|
-| `color.badge.notification.background` | pink400 | rgba(204, 34, 87, 1) | Notification badge background - high-visibility alert |
-| `color.badge.notification.text` | white100 | rgba(255, 255, 255, 1) | Notification badge text - 6.33:1 contrast ratio |
+| Token Name | Primitive | Use Case |
+|------------|-----------|----------|
+| `color.badge.notification.background` | pink400 | Notification badge background - high-visibility alert |
+| `color.badge.notification.text` | white100 | Notification badge text - 6.33:1 contrast ratio |
 
 **WCAG Compliance**: The notification badge color combination achieves a **6.33:1 contrast ratio**, exceeding WCAG AA requirements (4.5:1 for normal text).
 

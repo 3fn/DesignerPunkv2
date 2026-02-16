@@ -57,6 +57,7 @@ Color tokens follow the **Nathan Curtis concept-first naming model**. Use this t
 | **Action** | Visual emphasis for interactions | `color.action.{emphasis}` | Buttons, links, CTAs (primary = emphasized, secondary = de-emphasized) |
 | **Contrast** | Readable content on backgrounds | `color.contrast.{surface}` | Text/icons on colored surfaces (onLight, onDark) |
 | **Structure** | Visual organization and layering | `color.structure.{role}` | Canvas, surface, border colors |
+| **Progress** | Communicate position in multi-step flows | `color.progress.{state}.{property}` | Pagination dots, steppers, multi-step forms |
 
 ### Feedback Concept Tokens
 
@@ -99,6 +100,15 @@ Color tokens follow the **Nathan Curtis concept-first naming model**. Use this t
 | `color.structure.surface` | Elevated surface - cards, containers |
 | `color.structure.border` | Standard borders - UI element borders, dividers |
 | `color.structure.border.subtle` | Semi-transparent borders (baked-in alpha) |
+
+### Progress Concept Tokens
+
+| State | Properties | Use Case |
+|-------|------------|----------|
+| `current` | `.background`, `.text` | Active position indicator ("you are here") |
+| `pending` | `.background`, `.text`, `.connector` | Upcoming/incomplete steps |
+| `completed` | `.background`, `.text`, `.connector` | Finished steps (typically with checkmark) |
+| `error` | `.background`, `.text` | Steps with problems requiring attention |
 
 ### Component Tokens
 
@@ -152,6 +162,18 @@ These are frequently used token combinations for common UI scenarios:
   - Agent: `color.avatar.agent.background`, `color.avatar.agent.icon`
   - Border: `color.avatar.default.border`
 - **Radius**: `Token-Family-Radius.md` → full (circular)
+
+### Progress Indicator (Pagination/Stepper)
+- **Color**: `Token-Family-Color.md` → Progress concept tokens:
+  - Current: `color.progress.current.{background|text}`
+  - Pending: `color.progress.pending.{background|text|connector}`
+  - Completed: `color.progress.completed.{background|text|connector}`
+  - Error: `color.progress.error.{background|text}`
+- **Spacing**: `Token-Family-Spacing.md` → Progress component tokens:
+  - Node sizes: `progress.node.size.{sm|md|lg}` (base), `progress.node.size.{sm|md|lg}.current` (emphasized)
+  - Gaps: `progress.node.gap.{sm|md|lg}`
+  - Connector: `progress.connector.thickness`
+- **Accessibility**: `Token-Family-Accessibility.md` → tap areas for interactive nodes
 
 ### Modal/Dialog
 - **Shadow**: `Token-Family-Shadow.md` → elevation (xl for modals)

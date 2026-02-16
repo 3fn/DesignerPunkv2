@@ -15,9 +15,10 @@ This spec implements a complete component family with 3 primitives and 3 semanti
 2. **Primitive Components** (Task 2) — Build reusable visual building blocks
 3. **Semantic Variants** (Tasks 3-5) — Compose primitives into user-facing components
 4. **Testing Infrastructure** (Task 6) — Comprehensive test coverage across all domains
+5. **Component Documentation** (Task 7) — Developer-facing documentation and family-level synthesis
 
-**Estimated Timeline**: 4-6 weeks
-**Total Tasks**: 6 parent tasks, 23 subtasks
+**Estimated Timeline**: 4-6 weeks (implementation), +1-2 weeks (documentation)
+**Total Tasks**: 7 parent tasks, 30 subtasks
 
 ---
 
@@ -473,6 +474,111 @@ This spec implements a complete component family with 3 primitives and 3 semanti
 
 ---
 
+- [x] 7. Component Documentation
+
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  
+  **Success Criteria:**
+  - All 6 components have READMEs following Component-Development-Guide standards
+  - READMEs include: Overview, Usage, API Reference, Token Dependencies, Accessibility, Platform-Specific Behavior
+  - Component-Family-Progress.md steering document created following Component-Templates.md MCP document template
+  - Family-level documentation captures architectural patterns (primitive-semantic separation, state derivation, virtualization)
+  - All documentation cross-references spec documents (requirements.md, design.md, design-outline.md)
+  - Documentation is MCP-queryable
+  
+  **Primary Artifacts:**
+  - `src/components/core/Progress-Indicator-Node-Base/README.md`
+  - `src/components/core/Progress-Indicator-Connector-Base/README.md`
+  - `src/components/core/Progress-Indicator-Label-Base/README.md`
+  - `src/components/core/Progress-Pagination-Base/README.md`
+  - `src/components/core/Progress-Stepper-Base/README.md`
+  - `src/components/core/Progress-Stepper-Detailed/README.md`
+  - `.kiro/steering/Component-Family-Progress.md`
+  
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/048-progress-family/completion/task-7-parent-completion.md`
+  - Summary: `docs/specs/048-progress-family/task-7-summary.md` (triggers release detection)
+  
+  **Post-Completion:**
+  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 7 Complete: Component Documentation"`
+  - Verify: Check GitHub for committed changes
+
+  - [x] 7.1 Document Progress-Indicator-Node-Base
+    **Type**: Documentation
+    **Validation**: Tier 1 - Minimal
+    - Create `src/components/core/Progress-Indicator-Node-Base/README.md`
+    - Include sections: Overview, Usage (web/iOS/Android examples), API Reference, Token Dependencies, Accessibility, Platform-Specific Notes, Related Documentation
+    - Reference Button-CTA README as structural model
+    - Extract content from: types.ts, tokens.ts, tests, completion docs, requirements.md, design.md, design-outline.md
+    - Cross-reference: Connector-Base, Label-Base, semantic variants, spec docs
+    - _Requirements: All requirements related to Node-Base primitive_
+
+  - [x] 7.2 Document Progress-Indicator-Connector-Base
+    **Type**: Documentation
+    **Validation**: Tier 1 - Minimal
+    - Create `src/components/core/Progress-Indicator-Connector-Base/README.md`
+    - Include sections: Overview, Usage (web/iOS/Android examples), API Reference, Token Dependencies, Accessibility, Platform-Specific Notes, Related Documentation
+    - Extract content from: types.ts, tokens.ts, tests, completion docs, requirements.md, design.md, design-outline.md
+    - Cross-reference: Node-Base, Label-Base, semantic variants, spec docs
+    - _Requirements: All requirements related to Connector-Base primitive_
+
+  - [x] 7.3 Document Progress-Indicator-Label-Base
+    **Type**: Documentation
+    **Validation**: Tier 1 - Minimal
+    - Create `src/components/core/Progress-Indicator-Label-Base/README.md`
+    - Include sections: Overview, Usage (web/iOS/Android examples), API Reference, Token Dependencies, Accessibility, Platform-Specific Notes, Related Documentation
+    - Extract content from: types.ts, tokens.ts, tests, completion docs, requirements.md, design.md, design-outline.md
+    - Cross-reference: Node-Base, Connector-Base, semantic variants, spec docs
+    - _Requirements: All requirements related to Label-Base primitive_
+
+  - [x] 7.4 Document Progress-Pagination-Base
+    **Type**: Documentation
+    **Validation**: Tier 1 - Minimal
+    - Create `src/components/core/Progress-Pagination-Base/README.md`
+    - Include sections: Overview, Usage (web/iOS/Android examples), API Reference, Composition (how it uses Node-Base), Token Dependencies, Accessibility, Platform-Specific Notes, Related Documentation
+    - Document virtualization behavior (sliding window for >5 items)
+    - Extract content from: types.ts, tokens.ts, tests, completion docs, requirements.md, design.md, design-outline.md
+    - Cross-reference: Node-Base, Stepper variants, spec docs
+    - _Requirements: All requirements related to Pagination-Base semantic variant_
+
+  - [x] 7.5 Document Progress-Stepper-Base
+    **Type**: Documentation
+    **Validation**: Tier 1 - Minimal
+    - Create `src/components/core/Progress-Stepper-Base/README.md`
+    - Include sections: Overview, Usage (web/iOS/Android examples), API Reference, Composition (how it uses Node-Base and Connector-Base), Token Dependencies, Accessibility, Platform-Specific Notes, Related Documentation
+    - Document state derivation logic (priority: error > completed > current > incomplete)
+    - Extract content from: types.ts, tokens.ts, tests, completion docs, requirements.md, design.md, design-outline.md
+    - Cross-reference: Node-Base, Connector-Base, Stepper-Detailed, spec docs
+    - _Requirements: All requirements related to Stepper-Base semantic variant_
+
+  - [x] 7.6 Document Progress-Stepper-Detailed
+    **Type**: Documentation
+    **Validation**: Tier 1 - Minimal
+    - Create `src/components/core/Progress-Stepper-Detailed/README.md`
+    - Include sections: Overview, Usage (web/iOS/Android examples), API Reference, Composition (how it uses all three primitives), Token Dependencies, Accessibility, Platform-Specific Notes, Related Documentation
+    - Document icon precedence logic (completed = checkmark always, user icon for current/incomplete/error)
+    - Extract content from: types.ts, tokens.ts, tests, completion docs, requirements.md, design.md, design-outline.md
+    - Cross-reference: Node-Base, Connector-Base, Label-Base, Stepper-Base, spec docs
+    - _Requirements: All requirements related to Stepper-Detailed semantic variant_
+
+  - [x] 7.7 Create Component-Family-Progress.md steering document
+    **Type**: Documentation
+    **Validation**: Tier 2 - Standard
+    - Create `.kiro/steering/Component-Family-Progress.md`
+    - Follow Component-Templates.md MCP document template structure
+    - Include sections: Family Overview, Inheritance Structure, Behavioral Contracts, Component Details, Token Dependencies, Accessibility Compliance, Platform-Specific Behavior
+    - Document architectural patterns: primitive-semantic separation, state derivation, virtualization
+    - Document composition philosophy: when to use primitives vs semantic variants
+    - Extract content from: all component READMEs, completion docs, design-outline.md, design.md, requirements.md
+    - Ensure MCP queryability (proper frontmatter, heading structure)
+    - Cross-reference: Component-Templates.md, individual component READMEs, spec docs
+    - _Requirements: Cross-cutting architectural patterns and family-level synthesis_
+
+---
+
 ## Implementation Notes
 
 ### Task Dependencies
@@ -482,6 +588,7 @@ This spec implements a complete component family with 3 primitives and 3 semanti
 - Task 2 (Primitives) must complete before Tasks 3-5 (Semantic Variants)
 - Tasks 3-5 can be implemented in parallel (no dependencies between them)
 - Task 6 (Testing) requires all previous tasks complete
+- Task 7 (Documentation) requires Tasks 1-6 complete (documents implemented components)
 
 **Recommended Order**:
 1. Task 1: Token System Foundation
@@ -490,21 +597,24 @@ This spec implements a complete component family with 3 primitives and 3 semanti
 4. Task 4: Stepper-Base Component
 5. Task 5: Stepper-Detailed Component
 6. Task 6: Comprehensive Testing and Platform Parity
+7. Task 7: Component Documentation
 
 ### Validation Tier Summary
 
-**Tier 1 (Minimal)**: 4 subtasks
+**Tier 1 (Minimal)**: 10 subtasks
 - Token creation (1.1, 1.2)
-- Documentation (6.3)
+- Component READMEs (7.1, 7.2, 7.3, 7.4, 7.5, 7.6)
+- Test documentation (6.3)
 
-**Tier 2 (Standard)**: 16 subtasks
+**Tier 2 (Standard)**: 17 subtasks
 - Token tests (1.3, 1.4, 1.5)
 - Primitive implementations (2.1, 2.2, 2.3, 2.4)
 - Semantic variant implementations (3.1, 3.3, 3.4, 3.5, 4.1, 4.2, 4.3, 4.4, 5.1, 5.2, 5.3, 5.4)
 - Platform parity tests (6.1, 6.2)
+- Family steering document (7.7)
 
-**Tier 3 (Comprehensive)**: 7 subtasks (all parent tasks + 1 architecture subtask)
-- Parent tasks (1, 2, 3, 4, 5, 6)
+**Tier 3 (Comprehensive)**: 8 subtasks (all parent tasks + 1 architecture subtask)
+- Parent tasks (1, 2, 3, 4, 5, 6, 7)
 - Virtualization architecture (3.2)
 
 ### Test Coverage Goals
@@ -523,6 +633,22 @@ This spec implements a complete component family with 3 primitives and 3 semanti
 - Platform Parity: ~9 tests
 - Tokens: ~20 tests (formulas, compliance, translation, governance)
 
+### Documentation Coverage Goals
+
+**Component READMEs** (7.1-7.6):
+- 6 component READMEs following Component-Development-Guide standards
+- Usage examples for web, iOS, Android platforms
+- API reference tables with types and descriptions
+- Token dependency documentation
+- Accessibility compliance notes (WCAG 2.1 AA)
+- Platform-specific behavior notes
+
+**Family Steering Document** (7.7):
+- Component-Family-Progress.md following Component-Templates.md MCP document template
+- Architectural pattern documentation (primitive-semantic separation, state derivation, virtualization)
+- Composition philosophy and guidelines
+- MCP-queryable structure with proper frontmatter and heading hierarchy
+
 ### Quality Gates
 
 **Before Release**:
@@ -532,6 +658,8 @@ This spec implements a complete component family with 3 primitives and 3 semanti
 - All validation tests pass (dev throw, production clamp)
 - All token formula tests pass
 - Platform parity verified (web, iOS, Android)
+- All component READMEs complete and follow standards
+- Component-Family-Progress.md steering document complete and MCP-queryable
 
 **Nice to Have**:
 - Test coverage >80% for critical paths
