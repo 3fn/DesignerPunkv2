@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">43.85% </span>
+                <span class="strong">40.57% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>25/57</span>
+                <span class='fraction'>28/69</span>
             </div>
         
             
@@ -487,9 +487,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-yes">28x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -603,7 +603,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">28x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -646,13 +646,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">102x</span>
+<span class="cline-any cline-yes">108x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">102x</span>
+<span class="cline-any cline-yes">108x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">72x</span>
-<span class="cline-any cline-yes">72x</span>
+<span class="cline-any cline-yes">78x</span>
+<span class="cline-any cline-yes">78x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">30x</span>
 <span class="cline-any cline-yes">30x</span>
@@ -729,10 +729,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">123x</span>
-<span class="cline-any cline-yes">111x</span>
-<span class="cline-any cline-yes">111x</span>
-<span class="cline-any cline-yes">111x</span>
+<span class="cline-any cline-yes">129x</span>
+<span class="cline-any cline-yes">117x</span>
+<span class="cline-any cline-yes">117x</span>
+<span class="cline-any cline-yes">117x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1185,26 +1185,26 @@ export class TokenIntegratorImpl implements TokenIntegrator {
     const warnings: string[] = <span class="cstat-no" title="statement not covered" >[];</span>
 &nbsp;
     // Validate priority was followed correctly
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (selection.priority === 'primitive' &amp;&amp; !selection.semanticInsufficiencyReason) {</span>
+<span class="cstat-no" title="statement not covered" >    if (selection.priority === 'primitive' &amp;&amp; !selection.semanticInsufficiencyReason) {</span>
 <span class="cstat-no" title="statement not covered" >      warnings.push('Primitive token selected without documenting why semantic token was insufficient');</span>
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (selection.priority === 'component') {</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (!selection.semanticInsufficiencyReason) {</span>
+<span class="cstat-no" title="statement not covered" >    if (selection.priority === 'component') {</span>
+<span class="cstat-no" title="statement not covered" >      if (!selection.semanticInsufficiencyReason) {</span>
 <span class="cstat-no" title="statement not covered" >        errors.push('Component token selected without documenting why semantic token was insufficient');</span>
       }
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (!selection.primitiveInsufficiencyReason) {</span>
+<span class="cstat-no" title="statement not covered" >      if (!selection.primitiveInsufficiencyReason) {</span>
 <span class="cstat-no" title="statement not covered" >        errors.push('Component token selected without documenting why primitive token was insufficient');</span>
       }
     }
 &nbsp;
     // Validate reasoning is provided
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!selection.reasoning || selection.reasoning.trim().length === 0) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!selection.reasoning || selection.reasoning.trim().length === 0) {</span>
 <span class="cstat-no" title="statement not covered" >      errors.push('Token selection must include reasoning');</span>
     }
 &nbsp;
     // Validate mathematical validity
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!selection.mathematicallyValid &amp;&amp; selection.priority !== 'component') {</span>
+<span class="cstat-no" title="statement not covered" >    if (!selection.mathematicallyValid &amp;&amp; selection.priority !== 'component') {</span>
 <span class="cstat-no" title="statement not covered" >      warnings.push('Selected token is not mathematically valid');</span>
     }
 &nbsp;
@@ -1258,13 +1258,13 @@ export class TokenIntegratorImpl implements TokenIntegrator {
 <span class="cstat-no" title="statement not covered" >      platforms.web = componentToken.platforms.web;</span>
 &nbsp;
       // Validate all platforms have same base value
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (platforms.ios.value !== componentToken.baseValue) {</span>
+<span class="cstat-no" title="statement not covered" >      if (platforms.ios.value !== componentToken.baseValue) {</span>
 <span class="cstat-no" title="statement not covered" >        issues.push(`iOS value (${platforms.ios.value}) does not match base value (${componentToken.baseValue})`);</span>
       }
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (platforms.android.value !== componentToken.baseValue) {</span>
+<span class="cstat-no" title="statement not covered" >      if (platforms.android.value !== componentToken.baseValue) {</span>
 <span class="cstat-no" title="statement not covered" >        issues.push(`Android value (${platforms.android.value}) does not match base value (${componentToken.baseValue})`);</span>
       }
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (platforms.web.value !== componentToken.baseValue) {</span>
+<span class="cstat-no" title="statement not covered" >      if (platforms.web.value !== componentToken.baseValue) {</span>
 <span class="cstat-no" title="statement not covered" >        issues.push(`Web value (${platforms.web.value}) does not match base value (${componentToken.baseValue})`);</span>
       }
     } else {
@@ -1300,7 +1300,7 @@ export class TokenIntegratorImpl implements TokenIntegrator {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-19T07:09:48.315Z
+                at 2026-02-16T14:28:32.200Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80.61% </span>
+                <span class="strong">79.41% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>79/98</span>
+                <span class='fraction'>108/136</span>
             </div>
         
             
@@ -1908,13 +1908,13 @@ export class ConfigHelpers {
 &nbsp;
     // Production mode recommendations
     if (config.mode === 'production') {
-      if (config.sourceMaps !== false) {
+      <span class="missing-if-branch" title="else path not taken" >E</span>if (config.sourceMaps !== false) {
         warnings.push('sourceMaps: Consider disabling source maps in production for smaller bundles');
       }
       if (config.minify !== true) {
         warnings.push('minify: Consider enabling minification in production for smaller bundles');
       }
-      if (config.parallel !== true) {
+      <span class="missing-if-branch" title="else path not taken" >E</span>if (config.parallel !== true) {
         warnings.push('parallel: Consider enabling parallel builds in production for faster builds');
       }
     }
@@ -1959,7 +1959,7 @@ export class ConfigHelpers {
       if (oldConfig.platform) {
         config.platforms = [oldConfig.platform as Platform];
         changes.push(`Migrated 'platform' to 'platforms' array`);
-      } else if (oldConfig.platforms) {
+      } else <span class="missing-if-branch" title="else path not taken" >E</span>if (oldConfig.platforms) {
         config.platforms = oldConfig.platforms as Platform[];
       }
 &nbsp;
@@ -1969,7 +1969,7 @@ export class ConfigHelpers {
       } else if (oldConfig.env === 'production') {
         config.mode = 'production';
         changes.push(`Migrated 'env: production' to 'mode: production'`);
-      } else <span class="cstat-no" title="statement not covered" ><span class="missing-if-branch" title="if path not taken" >I</span><span class="missing-if-branch" title="else path not taken" >E</span>if (oldConfig.env === 'development') {</span>
+      } else <span class="cstat-no" title="statement not covered" ><span class="missing-if-branch" title="else path not taken" >E</span>if (oldConfig.env === 'development') {</span>
 <span class="cstat-no" title="statement not covered" >        config.mode = 'development';</span>
 <span class="cstat-no" title="statement not covered" >        changes.push(`Migrated 'env: development' to 'mode: development'`);</span>
       }
@@ -1980,7 +1980,7 @@ export class ConfigHelpers {
       } else if (oldConfig.output) {
         config.outputDir = oldConfig.output as string;
         changes.push(`Migrated 'output' to 'outputDir'`);
-      } else if (oldConfig.dist) {
+      } else <span class="missing-if-branch" title="else path not taken" >E</span>if (oldConfig.dist) {
         config.outputDir = oldConfig.dist as string;
         changes.push(`Migrated 'dist' to 'outputDir'`);
       }
@@ -2214,7 +2214,7 @@ export class ConfigHelpers {
         markdown += `**Constraints:** ${entry.constraints}\n\n`;
       }
 &nbsp;
-      if (entry.examples &amp;&amp; entry.examples.length &gt; 0) {
+      <span class="missing-if-branch" title="else path not taken" >E</span>if (entry.examples &amp;&amp; entry.examples.length &gt; 0) {
         markdown += '**Examples:**\n\n';
         markdown += '```typescript\n';
         markdown += entry.examples.join('\n');
@@ -2529,7 +2529,7 @@ export class ConfigHelpers {
 <span class="cstat-no" title="statement not covered" >      errors.push('targetSdkVersion: Target SDK version must be a number');</span>
     }
 &nbsp;
-    if (
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (
       typeof options.minSdkVersion === 'number' &amp;&amp;
       typeof options.targetSdkVersion === 'number' &amp;&amp;
       options.minSdkVersion &gt; options.targetSdkVersion
@@ -2548,7 +2548,7 @@ export class ConfigHelpers {
 &nbsp;
     <span class="missing-if-branch" title="if path not taken" >I</span>if (!options.target) {
 <span class="cstat-no" title="statement not covered" >      errors.push('target: ECMAScript target must be specified');</span>
-    } else if (!['es2020', 'es2021', 'esnext'].includes(options.target)) {
+    } else <span class="missing-if-branch" title="else path not taken" >E</span>if (!['es2020', 'es2021', 'esnext'].includes(options.target)) {
       errors.push(`target: Invalid target '${options.target}'. Valid values: es2020, es2021, esnext`);
     }
 &nbsp;
@@ -2557,7 +2557,7 @@ export class ConfigHelpers {
     } else <span class="missing-if-branch" title="else path not taken" >E</span>{
       const validFormats = <span class="cstat-no" title="statement not covered" >['esm', 'cjs', 'umd'];</span>
       const invalidFormats = <span class="cstat-no" title="statement not covered" >options.formats.filter(<span class="fstat-no" title="function not covered" >f </span>=&gt; <span class="cstat-no" title="statement not covered" >!validFormats.includes(f))</span>;</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (invalidFormats.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >      if (invalidFormats.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >        errors.push(`formats: Invalid formats '${invalidFormats.join(', ')}'. Valid values: esm, cjs, umd`);</span>
       }
     }
@@ -2572,7 +2572,7 @@ export class ConfigHelpers {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-19T07:09:48.315Z
+                at 2026-02-16T14:28:32.200Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

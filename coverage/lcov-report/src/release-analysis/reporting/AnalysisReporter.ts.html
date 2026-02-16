@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.7% </span>
+                <span class="strong">78.35% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>55/62</span>
+                <span class='fraction'>76/97</span>
             </div>
         
             
@@ -642,22 +642,7 @@
 <a name='L577'></a><a href='#L577'>577</a>
 <a name='L578'></a><a href='#L578'>578</a>
 <a name='L579'></a><a href='#L579'>579</a>
-<a name='L580'></a><a href='#L580'>580</a>
-<a name='L581'></a><a href='#L581'>581</a>
-<a name='L582'></a><a href='#L582'>582</a>
-<a name='L583'></a><a href='#L583'>583</a>
-<a name='L584'></a><a href='#L584'>584</a>
-<a name='L585'></a><a href='#L585'>585</a>
-<a name='L586'></a><a href='#L586'>586</a>
-<a name='L587'></a><a href='#L587'>587</a>
-<a name='L588'></a><a href='#L588'>588</a>
-<a name='L589'></a><a href='#L589'>589</a>
-<a name='L590'></a><a href='#L590'>590</a>
-<a name='L591'></a><a href='#L591'>591</a>
-<a name='L592'></a><a href='#L592'>592</a>
-<a name='L593'></a><a href='#L593'>593</a>
-<a name='L594'></a><a href='#L594'>594</a>
-<a name='L595'></a><a href='#L595'>595</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L580'></a><a href='#L580'>580</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -666,21 +651,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1266,7 +1236,9 @@ import {
   Feature, 
   BugFix, 
   Improvement,
-  DocumentationChange 
+  DocumentationChange,
+  CompletionDocument,
+  DocumentMetadata
 } from '../types/AnalysisTypes';
 import { VersionRecommendation } from '../versioning/VersionCalculator';
 &nbsp;
@@ -1285,23 +1257,6 @@ export interface AnalysisScope {
   toCommit: string;
   completionDocuments: CompletionDocument[];
   analysisDate: Date;
-}
-&nbsp;
-export interface CompletionDocument {
-  path: string;
-  content: string;
-  lastModified: Date;
-  gitCommit: string;
-  metadata: DocumentMetadata;
-}
-&nbsp;
-export interface DocumentMetadata {
-  title: string;
-  date?: string;
-  task?: string;
-  spec?: string;
-  status?: string;
-  type: 'task-completion' | 'spec-completion' | 'other';
 }
 &nbsp;
 export interface ConfidenceMetrics {
@@ -1362,7 +1317,7 @@ export class AnalysisReporter {
     sections.push(this.formatChangesSummary(result.changes));
     
     // Confidence (if enabled)
-    if (reportOptions.format.includeConfidence) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (reportOptions.format.includeConfidence) {
       sections.push(this.formatConfidenceSummary(result.confidence));
     }
     
@@ -1402,7 +1357,7 @@ export class AnalysisReporter {
     }
     
     // Confidence metrics (if enabled)
-    if (reportOptions.format.includeConfidence) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (reportOptions.format.includeConfidence) {
       sections.push(this.formatConfidenceDetails(result.confidence));
     }
     
@@ -1668,44 +1623,44 @@ export class AnalysisReporter {
     sections.push('📝 Changes Details:');
     
     // Breaking changes
-    if (changes.breakingChanges.length &gt; 0) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (changes.breakingChanges.length &gt; 0) {
       sections.push('  ⚠️  Breaking Changes:');
       changes.breakingChanges.forEach((change, index) =&gt; {
         sections.push(`    ${index + 1}. ${change.title} (${change.severity})`);
-        if (change.description) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (change.description) {
           sections.push(`       ${change.description}`);
         }
       });
     }
     
     // New features
-    if (changes.newFeatures.length &gt; 0) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (changes.newFeatures.length &gt; 0) {
       sections.push('  ✨ New Features:');
       changes.newFeatures.forEach((feature, index) =&gt; {
         sections.push(`    ${index + 1}. ${feature.title}`);
-        if (feature.description) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (feature.description) {
           sections.push(`       ${feature.description}`);
         }
       });
     }
     
     // Bug fixes
-    if (changes.bugFixes.length &gt; 0) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (changes.bugFixes.length &gt; 0) {
       sections.push('  🐛 Bug Fixes:');
       changes.bugFixes.forEach((fix, index) =&gt; {
         sections.push(`    ${index + 1}. ${fix.title} (${fix.severity})`);
-        if (fix.description) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (fix.description) {
           sections.push(`       ${fix.description}`);
         }
       });
     }
     
     // Improvements
-    if (changes.improvements.length &gt; 0) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (changes.improvements.length &gt; 0) {
       sections.push('  🔧 Improvements:');
       changes.improvements.forEach((improvement, index) =&gt; {
         sections.push(`    ${index + 1}. ${improvement.title} (${improvement.type})`);
-        if (improvement.description) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (improvement.description) {
           sections.push(`       ${improvement.description}`);
         }
       });
@@ -1776,7 +1731,7 @@ export class AnalysisReporter {
     lines.push(`  Extraction quality: ${(extractionConfidence * 100).toFixed(1)}%`);
     
     // Ambiguous items
-    if (changes.metadata.ambiguousItems.length &gt; 0) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (changes.metadata.ambiguousItems.length &gt; 0) {
       lines.push(`  Items requiring review: ${changes.metadata.ambiguousItems.length}`);
       changes.metadata.ambiguousItems.slice(0, 3).forEach((item, index) =&gt; {
         lines.push(`    ${index + 1}. ${item}`);
@@ -1787,7 +1742,7 @@ export class AnalysisReporter {
     }
     
     // Filtered items
-    if (changes.metadata.filteredItems.length &gt; 0) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (changes.metadata.filteredItems.length &gt; 0) {
       lines.push(`  Filtered items: ${changes.metadata.filteredItems.length} (documentation-only changes)`);
     }
     
@@ -1807,7 +1762,7 @@ export class AnalysisReporter {
     const lines: string[] = [];
     
     lines.push(`ℹ️  Generated: ${metadata.generatedAt.toISOString()}`);
-    if (metadata.processingTime) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (metadata.processingTime) {
       lines.push(`⏱️  Processing time: ${metadata.processingTime}ms`);
     }
     
@@ -1825,7 +1780,7 @@ export class AnalysisReporter {
     lines.push(`  CLI version: ${metadata.cliVersion}`);
     lines.push(`  Analysis ID: ${metadata.analysisId}`);
     
-    if (metadata.processingTime) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (metadata.processingTime) {
       lines.push(`  Processing time: ${metadata.processingTime}ms`);
     }
     
@@ -1852,7 +1807,7 @@ export class AnalysisReporter {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-19T07:09:48.315Z
+                at 2026-02-16T14:28:32.200Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -73,6 +73,14 @@ export class ProgressStepperDetailed extends HTMLElement {
   }
 
   connectedCallback(): void {
+    // Validate size early so tests can catch the error synchronously
+    const rawSize = this.getAttribute('size');
+    if (rawSize === 'sm') {
+      throw new Error(
+        "Steppers require size 'md' or 'lg'. " +
+        "Size 'sm' is only supported for Pagination-Base."
+      );
+    }
     this.render();
   }
 
@@ -194,15 +202,6 @@ export class ProgressStepperDetailed extends HTMLElement {
    */
   private render(): void {
     const rawSize = this.getAttribute('size');
-
-    // Validation: size='sm' always throws
-    // @see Requirement 4.16, 8.10
-    if (rawSize === 'sm') {
-      throw new Error(
-        "Steppers require size 'md' or 'lg'. " +
-        "Size 'sm' is only supported for Pagination-Base."
-      );
-    }
 
     let steps = this.steps;
     const size = this.size;

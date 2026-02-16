@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">76.31% </span>
+                <span class="strong">68.42% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>58/76</span>
+                <span class='fraction'>65/95</span>
             </div>
         
             
@@ -1744,7 +1744,7 @@ export class ValidationReporter {
     const platformStatus: Record&lt;string, 'pass' | 'fail'&gt; = {};
 &nbsp;
     for (const result of report.results) {
-      if (result.platform) {
+      <span class="missing-if-branch" title="else path not taken" >E</span>if (result.platform) {
         platformStatus[result.platform] = result.valid ? 'pass' : 'fail';
       }
     }
@@ -1884,7 +1884,7 @@ export class ValidationReporter {
         processedLocations.add(key);
 &nbsp;
         const difference = this.createPlatformDifference(error, report.results);
-        if (difference) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (difference) {
           differences.push(difference);
         }
       }
@@ -2119,7 +2119,7 @@ export class ValidationReporter {
     lines.push('');
 &nbsp;
     // Platform Results
-    if (report.platformResults.length &gt; 0) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (report.platformResults.length &gt; 0) {
       lines.push('PLATFORM RESULTS');
       lines.push('-'.repeat(80));
       
@@ -2129,12 +2129,12 @@ export class ValidationReporter {
         lines.push(`  Errors: ${platformResult.errorCount}`);
         lines.push(`  Warnings: ${platformResult.warningCount}`);
 &nbsp;
-        if (platformResult.errors.length &gt; 0) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (platformResult.errors.length &gt; 0) {
           lines.push('\n  Errors:');
           for (const error of platformResult.errors) {
             lines.push(`    • [${error.type}] ${error.message}`);
             lines.push(`      Location: ${error.location}`);
-            if (error.filePath) {
+            <span class="missing-if-branch" title="else path not taken" >E</span>if (error.filePath) {
               lines.push(`      File: ${error.filePath}`);
             }
             lines.push(`      Expected: ${error.expected}`);
@@ -2147,7 +2147,7 @@ export class ValidationReporter {
     }
 &nbsp;
     // Platform Differences
-    if (report.differences.length &gt; 0) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (report.differences.length &gt; 0) {
       lines.push('\nPLATFORM DIFFERENCES');
       lines.push('-'.repeat(80));
       
@@ -2164,7 +2164,7 @@ export class ValidationReporter {
     }
 &nbsp;
     // Actionable Suggestions
-    if (report.suggestions.length &gt; 0) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (report.suggestions.length &gt; 0) {
       lines.push('\nACTIONABLE SUGGESTIONS');
       lines.push('-'.repeat(80));
       
@@ -2221,7 +2221,7 @@ export class ValidationReporter {
     lines.push('');
 &nbsp;
     // Platform Results
-    if (report.platformResults.length &gt; 0) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (report.platformResults.length &gt; 0) {
       lines.push('## Platform Results');
       lines.push('');
       
@@ -2233,14 +2233,14 @@ export class ValidationReporter {
         lines.push(`- **Warnings:** ${platformResult.warningCount}`);
         lines.push('');
 &nbsp;
-        if (platformResult.errors.length &gt; 0) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (platformResult.errors.length &gt; 0) {
           lines.push('#### Errors');
           lines.push('');
           for (const error of platformResult.errors) {
             lines.push(`**[${error.type}]** ${error.message}`);
             lines.push('');
             lines.push(`- **Location:** \`${error.location}\``);
-            if (error.filePath) {
+            <span class="missing-if-branch" title="else path not taken" >E</span>if (error.filePath) {
               lines.push(`- **File:** \`${error.filePath}\``);
             }
             lines.push(`- **Expected:** \`${error.expected}\``);
@@ -2253,7 +2253,7 @@ export class ValidationReporter {
     }
 &nbsp;
     // Platform Differences
-    if (report.differences.length &gt; 0) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (report.differences.length &gt; 0) {
       lines.push('## Platform Differences');
       lines.push('');
       
@@ -2275,7 +2275,7 @@ export class ValidationReporter {
     }
 &nbsp;
     // Actionable Suggestions
-    if (report.suggestions.length &gt; 0) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (report.suggestions.length &gt; 0) {
       lines.push('## Actionable Suggestions');
       lines.push('');
       
@@ -2305,7 +2305,7 @@ export class ValidationReporter {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-19T07:09:48.315Z
+                at 2026-02-16T14:28:32.200Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

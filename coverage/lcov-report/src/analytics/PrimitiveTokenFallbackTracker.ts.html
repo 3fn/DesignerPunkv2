@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">12.5% </span>
+                <span class="strong">9.37% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/24</span>
+                <span class='fraction'>3/32</span>
             </div>
         
             
@@ -641,7 +641,7 @@ export class PrimitiveTokenFallbackTracker {
     const stats = this.getStatistics();
     const feedback: string[] = [];
 &nbsp;
-    if (stats.totalFallbacks === 0) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (stats.totalFallbacks === 0) {
       feedback.push('No primitive token fallback usage recorded yet.');
       return feedback;
     }
@@ -654,7 +654,7 @@ export class PrimitiveTokenFallbackTracker {
 &nbsp;
     // Reason-specific feedback
     const noSemanticCount = <span class="cstat-no" title="statement not covered" >stats.byReason.get(FallbackReason.NO_SEMANTIC_AVAILABLE) || 0;</span>
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (noSemanticCount &gt; stats.totalFallbacks * 0.4) {</span>
+<span class="cstat-no" title="statement not covered" >    if (noSemanticCount &gt; stats.totalFallbacks * 0.4) {</span>
 <span class="cstat-no" title="statement not covered" >      feedback.push(</span>
         `${noSemanticCount} fallback(s) due to missing semantic tokens (${((noSemanticCount / stats.totalFallbacks) * 100).toFixed(1)}%). ` +
         `Review semantic token opportunities below.`
@@ -662,7 +662,7 @@ export class PrimitiveTokenFallbackTracker {
     }
 &nbsp;
     const preferenceCount = <span class="cstat-no" title="statement not covered" >stats.byReason.get(FallbackReason.DEVELOPER_PREFERENCE) || 0;</span>
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (preferenceCount &gt; stats.totalFallbacks * 0.3) {</span>
+<span class="cstat-no" title="statement not covered" >    if (preferenceCount &gt; stats.totalFallbacks * 0.3) {</span>
 <span class="cstat-no" title="statement not covered" >      feedback.push(</span>
         `${preferenceCount} fallback(s) due to developer preference. ` +
         `Consider promoting semantic token benefits and usage guidelines.`
@@ -670,7 +670,7 @@ export class PrimitiveTokenFallbackTracker {
     }
 &nbsp;
     // Semantic token opportunities
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (stats.semanticOpportunities.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >    if (stats.semanticOpportunities.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >      feedback.push(</span>
         `Identified ${stats.semanticOpportunities.length} semantic token opportunity(ies):`
       );
@@ -684,11 +684,11 @@ export class PrimitiveTokenFallbackTracker {
 &nbsp;
     // Category-specific feedback
     const categoryEntries = <span class="cstat-no" title="statement not covered" >Array.from(stats.byCategory.entries());</span>
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (categoryEntries.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >    if (categoryEntries.length &gt; 0) {</span>
       const dominantCategory = <span class="cstat-no" title="statement not covered" >categoryEntries.reduce(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a[1] &gt; b[1] ? a : b)</span>;</span>
       const dominantPercentage = <span class="cstat-no" title="statement not covered" >(dominantCategory[1] / stats.totalFallbacks) * 100;</span>
       
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (dominantPercentage &gt; 50) {</span>
+<span class="cstat-no" title="statement not covered" >      if (dominantPercentage &gt; 50) {</span>
 <span class="cstat-no" title="statement not covered" >        feedback.push(</span>
           `${dominantCategory[0]} tokens account for ${dominantPercentage.toFixed(1)}% of fallbacks. ` +
           `Focus semantic token creation efforts on this category.`
@@ -697,11 +697,11 @@ export class PrimitiveTokenFallbackTracker {
     }
 &nbsp;
     // Most common fallbacks
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (stats.mostCommonFallbacks.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >    if (stats.mostCommonFallbacks.length &gt; 0) {</span>
       const topFallback = <span class="cstat-no" title="statement not covered" >stats.mostCommonFallbacks[0];</span>
       const topPercentage = <span class="cstat-no" title="statement not covered" >(topFallback.count / stats.totalFallbacks) * 100;</span>
       
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (topPercentage &gt; 20) {</span>
+<span class="cstat-no" title="statement not covered" >      if (topPercentage &gt; 20) {</span>
 <span class="cstat-no" title="statement not covered" >        feedback.push(</span>
           `Token "${topFallback.token}" is the most common fallback (${topPercentage.toFixed(1)}% of all fallbacks). ` +
           `Strong candidate for semantic token creation.`
@@ -754,7 +754,7 @@ export class PrimitiveTokenFallbackTracker {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-19T07:09:48.315Z
+                at 2026-02-16T14:28:32.200Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

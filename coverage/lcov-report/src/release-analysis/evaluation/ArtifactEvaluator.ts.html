@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">42.1% </span>
+                <span class="strong">45.71% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>48/114</span>
+                <span class='fraction'>64/140</span>
             </div>
         
             
@@ -3873,7 +3873,7 @@ export class ArtifactEvaluator {
     
 <span class="cstat-no" title="statement not covered" >    for (const docPath of testDocuments) {</span>
       const testCase = <span class="cstat-no" title="statement not covered" >await this.createTestCase(docPath);</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (testCase) {</span>
+<span class="cstat-no" title="statement not covered" >      if (testCase) {</span>
 <span class="cstat-no" title="statement not covered" >        this.testCases.push(testCase);</span>
       }
     }
@@ -3901,7 +3901,7 @@ export class ArtifactEvaluator {
           const completionFiles = <span class="cstat-no" title="statement not covered" >await fs.readdir(completionDir);</span>
           
 <span class="cstat-no" title="statement not covered" >          for (const file of completionFiles) {</span>
-<span class="cstat-no" title="statement not covered" >            <span class="missing-if-branch" title="if path not taken" >I</span>if (file.endsWith('.md')) {</span>
+<span class="cstat-no" title="statement not covered" >            if (file.endsWith('.md')) {</span>
 <span class="cstat-no" title="statement not covered" >              documents.push(path.join(completionDir, file));</span>
             }
           }
@@ -4921,11 +4921,11 @@ reasoning capabilities.`,
 &nbsp;
     // Determine overall complexity
     let complexityScore = <span class="cstat-no" title="statement not covered" >0;</span>
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (extractionComparison.recommendation === 'use-complex') <span class="cstat-no" title="statement not covered" >complexityScore += 3;</span></span>
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (extractionComparison.recommendation === 'hybrid') <span class="cstat-no" title="statement not covered" >complexityScore += 2;</span></span>
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (deduplicationComparison.recommendation === 'use-semantic') <span class="cstat-no" title="statement not covered" >complexityScore += 2;</span></span>
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (sectionParsingComparison.recommendation === 'structured-first') <span class="cstat-no" title="statement not covered" >complexityScore += 2;</span></span>
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (documentationFilteringComparison.recommendation === 'integrate') <span class="cstat-no" title="statement not covered" >complexityScore += 1;</span></span>
+<span class="cstat-no" title="statement not covered" >    if (extractionComparison.recommendation === 'use-complex') <span class="cstat-no" title="statement not covered" >complexityScore += 3;</span></span>
+<span class="cstat-no" title="statement not covered" >    if (extractionComparison.recommendation === 'hybrid') <span class="cstat-no" title="statement not covered" >complexityScore += 2;</span></span>
+<span class="cstat-no" title="statement not covered" >    if (deduplicationComparison.recommendation === 'use-semantic') <span class="cstat-no" title="statement not covered" >complexityScore += 2;</span></span>
+<span class="cstat-no" title="statement not covered" >    if (sectionParsingComparison.recommendation === 'structured-first') <span class="cstat-no" title="statement not covered" >complexityScore += 2;</span></span>
+<span class="cstat-no" title="statement not covered" >    if (documentationFilteringComparison.recommendation === 'integrate') <span class="cstat-no" title="statement not covered" >complexityScore += 1;</span></span>
 &nbsp;
     const overallComplexity: 'low' | 'medium' | 'high' = 
 <span class="cstat-no" title="statement not covered" >      complexityScore &lt;= 3 ? 'low' : complexityScore &lt;= 6 ? 'medium' : 'high';</span>
@@ -5095,7 +5095,7 @@ The recommended approach balances accuracy improvements with implementation comp
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    for (const item of allItems) {</span>
       const text = <span class="cstat-no" title="statement not covered" >(item.title + ' ' + item.description).toLowerCase();</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (docKeywords.some(<span class="fstat-no" title="function not covered" >keyword </span>=&gt; <span class="cstat-no" title="statement not covered" >text.includes(keyword))</span>) {</span>
+<span class="cstat-no" title="statement not covered" >      if (docKeywords.some(<span class="fstat-no" title="function not covered" >keyword </span>=&gt; <span class="cstat-no" title="statement not covered" >text.includes(keyword))</span>) {</span>
 <span class="cstat-no" title="statement not covered" >        count++;</span>
       }
     }
@@ -5349,7 +5349,7 @@ The recommended approach balances accuracy improvements with implementation comp
     report += `**Value vs Cost:** ${result.tradeoffAnalysis.valueVsCost.toFixed(3)}\n\n`;
     report += `**Risk Assessment:** ${result.tradeoffAnalysis.riskAssessment}\n\n`;
     
-    if (result.tradeoffAnalysis.mitigationStrategies.length &gt; 0) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (result.tradeoffAnalysis.mitigationStrategies.length &gt; 0) {
       report += '**Mitigation Strategies:**\n';
       for (const strategy of result.tradeoffAnalysis.mitigationStrategies) {
         report += `- ${strategy}\n`;
@@ -5357,7 +5357,7 @@ The recommended approach balances accuracy improvements with implementation comp
       report += '\n';
     }
     
-    if (result.recommendation.conditions) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (result.recommendation.conditions) {
       report += '## Integration Conditions\n\n';
       for (const condition of result.recommendation.conditions) {
         report += `- ${condition}\n`;
@@ -5398,7 +5398,7 @@ The recommended approach balances accuracy improvements with implementation comp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-19T07:09:48.315Z
+                at 2026-02-16T14:28:32.200Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

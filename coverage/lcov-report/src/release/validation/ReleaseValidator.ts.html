@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">29.28% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>22/88</span>
+                <span class='fraction'>41/140</span>
             </div>
         
             
@@ -1345,21 +1345,21 @@ export class ReleaseValidator {
     const allWarnings: ValidationWarning[] = [];
 &nbsp;
     // Validate release readiness
-    if (this.config.validation.releaseReadiness) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (this.config.validation.releaseReadiness) {
       const readinessResult = await this.releaseReadinessValidator.validateReleaseReadiness(releasePlan);
       allErrors.push(...readinessResult.errors);
       allWarnings.push(...readinessResult.warnings);
     }
 &nbsp;
     // Validate semantic versioning
-    if (this.config.validation.versionBumpValidation) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (this.config.validation.versionBumpValidation) {
       const versionResult = await this.semanticVersionValidator.validateVersionBump(releasePlan.version);
       allErrors.push(...versionResult.errors);
       allWarnings.push(...versionResult.warnings);
     }
 &nbsp;
     // Validate package compatibility
-    if (this.config.validation.packageCompatibility) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (this.config.validation.packageCompatibility) {
       const compatibilityResult = await this.validatePackageCompatibility(releasePlan.packages);
       allErrors.push(...compatibilityResult.errors);
       allWarnings.push(...compatibilityResult.warnings);
@@ -1386,7 +1386,7 @@ export class ReleaseValidator {
     const errors: ValidationError[] = <span class="cstat-no" title="statement not covered" >[];</span>
     const warnings: ValidationWarning[] = <span class="cstat-no" title="statement not covered" >[];</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!this.config.validation.releaseReadiness) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!this.config.validation.releaseReadiness) {</span>
 <span class="cstat-no" title="statement not covered" >      return {</span>
         valid: true,
         errors: [],
@@ -1397,8 +1397,8 @@ export class ReleaseValidator {
     }
 &nbsp;
     // Validate completion documentation exists
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (this.config.validation.validationRules.requireCompletionDocs) {</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (!releaseData.completionDocs || releaseData.completionDocs.length === 0) {</span>
+<span class="cstat-no" title="statement not covered" >    if (this.config.validation.validationRules.requireCompletionDocs) {</span>
+<span class="cstat-no" title="statement not covered" >      if (!releaseData.completionDocs || releaseData.completionDocs.length === 0) {</span>
 <span class="cstat-no" title="statement not covered" >        errors.push({</span>
           code: 'MISSING_COMPLETION_DOCS',
           message: 'Release requires completion documentation',
@@ -1409,10 +1409,10 @@ export class ReleaseValidator {
     }
 &nbsp;
     // Validate required sections in completion documents
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (this.config.validation.validationRules.validateDocFormat &amp;&amp; releaseData.completionDocs) {</span>
+<span class="cstat-no" title="statement not covered" >    if (this.config.validation.validationRules.validateDocFormat &amp;&amp; releaseData.completionDocs) {</span>
 <span class="cstat-no" title="statement not covered" >      for (const doc of releaseData.completionDocs) {</span>
         const missingSection = <span class="cstat-no" title="statement not covered" >this.validateDocumentSections(doc);</span>
-<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (missingSection) {</span>
+<span class="cstat-no" title="statement not covered" >        if (missingSection) {</span>
 <span class="cstat-no" title="statement not covered" >          warnings.push({</span>
             code: 'MISSING_DOC_SECTION',
             message: `Completion document missing required section: ${missingSection}`,
@@ -1446,7 +1446,7 @@ export class ReleaseValidator {
     const errors: ValidationError[] = <span class="cstat-no" title="statement not covered" >[];</span>
     const warnings: ValidationWarning[] = <span class="cstat-no" title="statement not covered" >[];</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!this.config.validation.versionBumpValidation) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!this.config.validation.versionBumpValidation) {</span>
 <span class="cstat-no" title="statement not covered" >      return {</span>
         valid: true,
         errors: [],
@@ -1458,7 +1458,7 @@ export class ReleaseValidator {
 &nbsp;
     // Validate version format
     const versionRegex = <span class="cstat-no" title="statement not covered" >/^(\d+)\.(\d+)\.(\d+)(-[a-zA-Z0-9.-]+)?$/;</span>
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!versionRegex.test(version)) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!versionRegex.test(version)) {</span>
 <span class="cstat-no" title="statement not covered" >      errors.push({</span>
         code: 'INVALID_VERSION_FORMAT',
         message: `Version '${version}' does not follow semantic versioning format`,
@@ -1469,10 +1469,10 @@ export class ReleaseValidator {
 &nbsp;
     // Validate version bump logic
     const versionParts = <span class="cstat-no" title="statement not covered" >version.match(versionRegex);</span>
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (versionParts) {</span>
+<span class="cstat-no" title="statement not covered" >    if (versionParts) {</span>
       const [, major, minor, patch] = <span class="cstat-no" title="statement not covered" >versionParts;</span>
       
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (bumpType === 'major' &amp;&amp; major === '0') {</span>
+<span class="cstat-no" title="statement not covered" >      if (bumpType === 'major' &amp;&amp; major === '0') {</span>
 <span class="cstat-no" title="statement not covered" >        warnings.push({</span>
           code: 'MAJOR_BUMP_FROM_ZERO',
           message: 'Major version bump from 0.x.x - consider if this is appropriate',
@@ -1480,7 +1480,7 @@ export class ReleaseValidator {
         });
       }
       
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (bumpType === 'patch' &amp;&amp; patch === '0') {</span>
+<span class="cstat-no" title="statement not covered" >      if (bumpType === 'patch' &amp;&amp; patch === '0') {</span>
 <span class="cstat-no" title="statement not covered" >        warnings.push({</span>
           code: 'PATCH_BUMP_ON_ZERO_PATCH',
           message: 'Patch bump when patch version is 0 - consider if minor bump is more appropriate',
@@ -1520,7 +1520,7 @@ export class ReleaseValidator {
       <span class="missing-if-branch" title="if path not taken" >I</span>if (pkg.dependencies) {
 <span class="cstat-no" title="statement not covered" >        for (const dep of pkg.dependencies) {</span>
           const conflict = <span class="cstat-no" title="statement not covered" >this.checkDependencyConflict(dep, packages);</span>
-<span class="cstat-no" title="statement not covered" >          <span class="missing-if-branch" title="if path not taken" >I</span>if (conflict) {</span>
+<span class="cstat-no" title="statement not covered" >          if (conflict) {</span>
 <span class="cstat-no" title="statement not covered" >            errors.push({</span>
               code: 'DEPENDENCY_CONFLICT',
               message: `Package '${pkg.name}' has conflicting dependency '${dep.name}': ${conflict}`,
@@ -1563,8 +1563,8 @@ export class ReleaseValidator {
     const safetyChecks = <span class="cstat-no" title="statement not covered" >this.config.validation.safetyChecks;</span>
 &nbsp;
     // Validate rollback capability
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (safetyChecks.rollbackValidation) {</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (!releaseData.rollbackPlan) {</span>
+<span class="cstat-no" title="statement not covered" >    if (safetyChecks.rollbackValidation) {</span>
+<span class="cstat-no" title="statement not covered" >      if (!releaseData.rollbackPlan) {</span>
 <span class="cstat-no" title="statement not covered" >        errors.push({</span>
           code: 'MISSING_ROLLBACK_PLAN',
           message: 'Release requires rollback plan for safety',
@@ -1575,8 +1575,8 @@ export class ReleaseValidator {
     }
 &nbsp;
     // Check for major release confirmation
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (safetyChecks.requireMajorReleaseConfirmation &amp;&amp; releaseData.bumpType === 'major') {</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (!releaseData.majorReleaseConfirmed) {</span>
+<span class="cstat-no" title="statement not covered" >    if (safetyChecks.requireMajorReleaseConfirmation &amp;&amp; releaseData.bumpType === 'major') {</span>
+<span class="cstat-no" title="statement not covered" >      if (!releaseData.majorReleaseConfirmed) {</span>
 <span class="cstat-no" title="statement not covered" >        errors.push({</span>
           code: 'MAJOR_RELEASE_CONFIRMATION_REQUIRED',
           message: 'Major release requires explicit confirmation',
@@ -1587,8 +1587,8 @@ export class ReleaseValidator {
     }
 &nbsp;
     // Check for breaking change confirmation
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (safetyChecks.requireBreakingChangeConfirmation &amp;&amp; releaseData.hasBreakingChanges) {</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (!releaseData.breakingChangesConfirmed) {</span>
+<span class="cstat-no" title="statement not covered" >    if (safetyChecks.requireBreakingChangeConfirmation &amp;&amp; releaseData.hasBreakingChanges) {</span>
+<span class="cstat-no" title="statement not covered" >      if (!releaseData.breakingChangesConfirmed) {</span>
 <span class="cstat-no" title="statement not covered" >        errors.push({</span>
           code: 'BREAKING_CHANGE_CONFIRMATION_REQUIRED',
           message: 'Breaking changes require explicit confirmation',
@@ -1614,7 +1614,7 @@ export class ReleaseValidator {
     const requiredSections = <span class="cstat-no" title="statement not covered" >this.config.validation.validationRules.requiredSections;</span>
     
 <span class="cstat-no" title="statement not covered" >    for (const section of requiredSections) {</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (!doc.content || !doc.content.includes(section)) {</span>
+<span class="cstat-no" title="statement not covered" >      if (!doc.content || !doc.content.includes(section)) {</span>
 <span class="cstat-no" title="statement not covered" >        return section;</span>
       }
     }
@@ -1628,11 +1628,11 @@ export class ReleaseValidator {
   private <span class="fstat-no" title="function not covered" >checkDependencyConflict(</span>dependency: any, packages: any[]): string | null {
     const targetPackage = <span class="cstat-no" title="statement not covered" >packages.find(<span class="fstat-no" title="function not covered" >pkg </span>=&gt; <span class="cstat-no" title="statement not covered" >pkg.name === dependency.name)</span>;</span>
     
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (targetPackage) {</span>
+<span class="cstat-no" title="statement not covered" >    if (targetPackage) {</span>
       const requiredVersion = <span class="cstat-no" title="statement not covered" >dependency.version;</span>
       const actualVersion = <span class="cstat-no" title="statement not covered" >targetPackage.version;</span>
       
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (requiredVersion !== actualVersion &amp;&amp; !this.isVersionCompatible(requiredVersion, actualVersion)) {</span>
+<span class="cstat-no" title="statement not covered" >      if (requiredVersion !== actualVersion &amp;&amp; !this.isVersionCompatible(requiredVersion, actualVersion)) {</span>
 <span class="cstat-no" title="statement not covered" >        return `requires ${requiredVersion} but ${actualVersion} is available`;</span>
       }
     }
@@ -1649,7 +1649,7 @@ export class ReleaseValidator {
     const path: string[] = [];
 &nbsp;
     for (const pkg of packages) {
-      if (!visited.has(pkg.name)) {
+      <span class="missing-if-branch" title="else path not taken" >E</span>if (!visited.has(pkg.name)) {
         const cycle = this.detectCycleFromPackage(pkg.name, packages, visited, recursionStack, path);
         <span class="missing-if-branch" title="if path not taken" >I</span>if (cycle.length &gt; 0) {
 <span class="cstat-no" title="statement not covered" >          return cycle;</span>
@@ -1679,10 +1679,10 @@ export class ReleaseValidator {
 <span class="cstat-no" title="statement not covered" >      for (const dep of pkg.dependencies) {</span>
 <span class="cstat-no" title="statement not covered" >        if (!visited.has(dep.name)) {</span>
           const cycle = <span class="cstat-no" title="statement not covered" >this.detectCycleFromPackage(dep.name, packages, visited, recursionStack, path);</span>
-<span class="cstat-no" title="statement not covered" >          <span class="missing-if-branch" title="if path not taken" >I</span>if (cycle.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >          if (cycle.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >            return cycle;</span>
           }
-        } else <span class="cstat-no" title="statement not covered" ><span class="missing-if-branch" title="if path not taken" >I</span>if (recursionStack.has(dep.name)) {</span>
+        } else <span class="cstat-no" title="statement not covered" >if (recursionStack.has(dep.name)) {</span>
           // Found cycle
           const cycleStart = <span class="cstat-no" title="statement not covered" >path.indexOf(dep.name);</span>
 <span class="cstat-no" title="statement not covered" >          return path.slice(cycleStart).concat([dep.name]);</span>
@@ -1705,17 +1705,17 @@ export class ReleaseValidator {
     const actualParts = <span class="cstat-no" title="statement not covered" >actual.replace(/[^0-9.]/g, '').split('.').map(Number);</span>
 &nbsp;
     // Major version must match
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (requiredParts[0] !== actualParts[0]) {</span>
+<span class="cstat-no" title="statement not covered" >    if (requiredParts[0] !== actualParts[0]) {</span>
 <span class="cstat-no" title="statement not covered" >      return false;</span>
     }
 &nbsp;
     // Minor version must be &gt;= required
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (actualParts[1] &lt; requiredParts[1]) {</span>
+<span class="cstat-no" title="statement not covered" >    if (actualParts[1] &lt; requiredParts[1]) {</span>
 <span class="cstat-no" title="statement not covered" >      return false;</span>
     }
 &nbsp;
     // If minor versions match, patch must be &gt;= required
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (actualParts[1] === requiredParts[1] &amp;&amp; actualParts[2] &lt; requiredParts[2]) {</span>
+<span class="cstat-no" title="statement not covered" >    if (actualParts[1] === requiredParts[1] &amp;&amp; actualParts[2] &lt; requiredParts[2]) {</span>
 <span class="cstat-no" title="statement not covered" >      return false;</span>
     }
 &nbsp;
@@ -1848,11 +1848,11 @@ export class ReleaseValidator {
     const criticalErrors = validationResult.errors.filter(e =&gt; e.severity === 'error');
     const warnings = validationResult.warnings;
 &nbsp;
-    if (criticalErrors.length &gt; 0) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (criticalErrors.length &gt; 0) {
       guidance += '🚨 Critical Issues (must be resolved):\n';
       criticalErrors.forEach((error, index) =&gt; {
         guidance += `${index + 1}. ${error.message}\n`;
-        if (error.suggestion) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (error.suggestion) {
           guidance += `   💡 Solution: ${error.suggestion}\n`;
         }
         <span class="missing-if-branch" title="if path not taken" >I</span>if (error.source) {
@@ -1862,11 +1862,11 @@ export class ReleaseValidator {
       });
     }
 &nbsp;
-    if (warnings.length &gt; 0) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (warnings.length &gt; 0) {
       guidance += '⚠️  Warnings (recommended to address):\n';
       warnings.forEach((warning, index) =&gt; {
         guidance += `${index + 1}. ${warning.message}\n`;
-        if (warning.suggestion) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (warning.suggestion) {
           guidance += `   💡 Suggestion: ${warning.suggestion}\n`;
         }
         <span class="missing-if-branch" title="if path not taken" >I</span>if (warning.source) {
@@ -1942,7 +1942,7 @@ export class ReleaseValidator {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-19T07:09:48.315Z
+                at 2026-02-16T14:28:32.200Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

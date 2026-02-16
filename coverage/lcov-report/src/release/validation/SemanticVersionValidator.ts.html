@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">36.36% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>9/36</span>
+                <span class='fraction'>20/55</span>
             </div>
         
             
@@ -842,7 +842,7 @@ export class SemanticVersionValidator {
     // Validate progression based on bump type
     switch (versionBump.type) {
 <span class="branch-0 cbranch-no" title="branch not covered" >      case 'major':</span>
-<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (toParts.major &lt;= fromParts.major) {</span>
+<span class="cstat-no" title="statement not covered" >        if (toParts.major &lt;= fromParts.major) {</span>
 <span class="cstat-no" title="statement not covered" >          errors.push({</span>
             code: 'INVALID_MAJOR_BUMP',
             message: `Major version must increase: ${versionBump.from} -&gt; ${versionBump.to}`,
@@ -850,7 +850,7 @@ export class SemanticVersionValidator {
             suggestion: 'Ensure major version number increases for major bumps'
           });
         }
-<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (toParts.minor !== 0 || toParts.patch !== 0) {</span>
+<span class="cstat-no" title="statement not covered" >        if (toParts.minor !== 0 || toParts.patch !== 0) {</span>
 <span class="cstat-no" title="statement not covered" >          warnings.push({</span>
             code: 'MAJOR_BUMP_RESET_WARNING',
             message: 'Major version bump should reset minor and patch to 0',
@@ -886,7 +886,7 @@ export class SemanticVersionValidator {
         break;
 &nbsp;
 <span class="branch-2 cbranch-no" title="branch not covered" >      case 'patch':</span>
-<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (toParts.major !== fromParts.major || toParts.minor !== fromParts.minor) {</span>
+<span class="cstat-no" title="statement not covered" >        if (toParts.major !== fromParts.major || toParts.minor !== fromParts.minor) {</span>
 <span class="cstat-no" title="statement not covered" >          errors.push({</span>
             code: 'INVALID_PATCH_BUMP_VERSION_CHANGE',
             message: `Patch bump should only change patch version: ${versionBump.from} -&gt; ${versionBump.to}`,
@@ -894,7 +894,7 @@ export class SemanticVersionValidator {
             suggestion: 'Use appropriate bump type for major or minor changes'
           });
         }
-<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (toParts.patch &lt;= fromParts.patch) {</span>
+<span class="cstat-no" title="statement not covered" >        if (toParts.patch &lt;= fromParts.patch) {</span>
 <span class="cstat-no" title="statement not covered" >          errors.push({</span>
             code: 'INVALID_PATCH_BUMP',
             message: `Patch version must increase: ${versionBump.from} -&gt; ${versionBump.to}`,
@@ -962,7 +962,7 @@ export class SemanticVersionValidator {
     const errors: ValidationError[] = <span class="cstat-no" title="statement not covered" >[];</span>
     const warnings: ValidationWarning[] = <span class="cstat-no" title="statement not covered" >[];</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!this.rules.allowPreRelease) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!this.rules.allowPreRelease) {</span>
 <span class="cstat-no" title="statement not covered" >      errors.push({</span>
         code: 'PRERELEASE_NOT_ALLOWED',
         message: 'Pre-release versions are not allowed by current configuration',
@@ -976,7 +976,7 @@ export class SemanticVersionValidator {
 &nbsp;
     // Validate pre-release type
     const allowedTypes = <span class="cstat-no" title="statement not covered" >['alpha', 'beta', 'rc'];</span>
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!allowedTypes.includes(preRelease.type)) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!allowedTypes.includes(preRelease.type)) {</span>
 <span class="cstat-no" title="statement not covered" >      errors.push({</span>
         code: 'INVALID_PRERELEASE_TYPE',
         message: `Invalid pre-release type '${preRelease.type}'. Allowed: ${allowedTypes.join(', ')}`,
@@ -986,7 +986,7 @@ export class SemanticVersionValidator {
     }
 &nbsp;
     // Validate pre-release number
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (preRelease.number &lt; 1) {</span>
+<span class="cstat-no" title="statement not covered" >    if (preRelease.number &lt; 1) {</span>
 <span class="cstat-no" title="statement not covered" >      errors.push({</span>
         code: 'INVALID_PRERELEASE_NUMBER',
         message: 'Pre-release number must be greater than 0',
@@ -1001,7 +1001,7 @@ export class SemanticVersionValidator {
       .replace('{type}', preRelease.type)
       .replace('{number}', preRelease.number.toString());
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (preRelease.identifier !== expectedFormat) {</span>
+<span class="cstat-no" title="statement not covered" >    if (preRelease.identifier !== expectedFormat) {</span>
 <span class="cstat-no" title="statement not covered" >      warnings.push({</span>
         code: 'PRERELEASE_FORMAT_MISMATCH',
         message: `Pre-release identifier '${preRelease.identifier}' doesn't match expected format '${expectedFormat}'`,
@@ -1057,7 +1057,7 @@ export class SemanticVersionValidator {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-19T07:09:48.315Z
+                at 2026-02-16T14:28:32.200Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

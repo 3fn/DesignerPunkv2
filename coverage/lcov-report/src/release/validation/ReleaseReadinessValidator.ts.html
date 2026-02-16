@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">44.82% </span>
+                <span class="strong">43.18% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>13/29</span>
+                <span class='fraction'>19/44</span>
             </div>
         
             
@@ -784,14 +784,14 @@ export class ReleaseReadinessValidator {
     const warnings: ValidationWarning[] = [];
 &nbsp;
     // Validate completion documentation exists
-    if (this.rules.requireCompletionDocs) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (this.rules.requireCompletionDocs) {
       const docValidation = await this.validateCompletionDocumentation(releasePlan);
       errors.push(...docValidation.errors);
       warnings.push(...docValidation.warnings);
     }
 &nbsp;
     // Validate document format if enabled
-    if (this.rules.validateDocFormat) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (this.rules.validateDocFormat) {
       const formatValidation = await this.validateDocumentFormat(releasePlan);
       errors.push(...formatValidation.errors);
       warnings.push(...formatValidation.warnings);
@@ -828,7 +828,7 @@ export class ReleaseReadinessValidator {
       const specCompletionPath = this.getSpecCompletionPath(packageUpdate.name);
       const specExists = await this.fileExists(specCompletionPath);
 &nbsp;
-      if (!specExists) {
+      <span class="missing-if-branch" title="else path not taken" >E</span>if (!specExists) {
         errors.push({
           code: 'MISSING_SPEC_COMPLETION',
           message: `Missing spec completion documentation for package '${packageUpdate.name}'`,
@@ -844,7 +844,7 @@ export class ReleaseReadinessValidator {
 &nbsp;
       for (const taskPath of taskCompletionPaths) {
         const taskExists = <span class="cstat-no" title="statement not covered" >await this.fileExists(taskPath);</span>
-<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (!taskExists) {</span>
+<span class="cstat-no" title="statement not covered" >        if (!taskExists) {</span>
 <span class="cstat-no" title="statement not covered" >          missingTaskDocs.push(taskPath);</span>
         }
       }
@@ -916,7 +916,7 @@ export class ReleaseReadinessValidator {
       }
 &nbsp;
       // Validate migration guide exists for major releases
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (isMajorRelease &amp;&amp; !releasePlan.releaseNotes.migrationGuide) {</span>
+<span class="cstat-no" title="statement not covered" >      if (isMajorRelease &amp;&amp; !releasePlan.releaseNotes.migrationGuide) {</span>
 <span class="cstat-no" title="statement not covered" >        errors.push({</span>
           code: 'MISSING_MIGRATION_GUIDE',
           message: 'Major release requires migration guide',
@@ -984,7 +984,7 @@ export class ReleaseReadinessValidator {
 <span class="cstat-no" title="statement not covered" >    for (const section of this.rules.requiredSections) {</span>
       // Check for section header (markdown format)
       const sectionRegex = <span class="cstat-no" title="statement not covered" >new RegExp(`^#+\\s*${section}\\s*$`, 'mi');</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (!sectionRegex.test(content)) {</span>
+<span class="cstat-no" title="statement not covered" >      if (!sectionRegex.test(content)) {</span>
 <span class="cstat-no" title="statement not covered" >        warnings.push({</span>
           code: 'MISSING_REQUIRED_SECTION',
           message: `Missing required section '${section}' in completion document`,
@@ -1009,7 +1009,7 @@ export class ReleaseReadinessValidator {
     
 <span class="cstat-no" title="statement not covered" >    for (const field of requiredMetadata) {</span>
       const metadataRegex = <span class="cstat-no" title="statement not covered" >new RegExp(`^\\*\\*${field}\\*\\*:`, 'mi');</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (!metadataRegex.test(content)) {</span>
+<span class="cstat-no" title="statement not covered" >      if (!metadataRegex.test(content)) {</span>
 <span class="cstat-no" title="statement not covered" >        warnings.push({</span>
           code: 'MISSING_METADATA_FIELD',
           message: `Missing metadata field '${field}' in completion document`,
@@ -1032,8 +1032,8 @@ export class ReleaseReadinessValidator {
 <span class="cstat-no" title="statement not covered" >    for (const rule of this.rules.breakingChangeRules) {</span>
       const ruleRegex = <span class="cstat-no" title="statement not covered" >new RegExp(rule.pattern, 'i');</span>
       
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (ruleRegex.test(breakingChange.description)) {</span>
-<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (rule.requireMigrationGuidance &amp;&amp; !breakingChange.migrationGuidance) {</span>
+<span class="cstat-no" title="statement not covered" >      if (ruleRegex.test(breakingChange.description)) {</span>
+<span class="cstat-no" title="statement not covered" >        if (rule.requireMigrationGuidance &amp;&amp; !breakingChange.migrationGuidance) {</span>
 <span class="cstat-no" title="statement not covered" >          errors.push({</span>
             code: 'MISSING_MIGRATION_GUIDANCE',
             message: `Breaking change '${breakingChange.title}' requires migration guidance`,
@@ -1111,7 +1111,7 @@ export class ReleaseReadinessValidator {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-19T07:09:48.315Z
+                at 2026-02-16T14:28:32.200Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

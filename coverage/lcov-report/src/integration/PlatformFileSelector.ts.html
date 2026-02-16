@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">41.02% </span>
+                <span class="strong">37.93% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>16/39</span>
+                <span class='fraction'>22/58</span>
             </div>
         
             
@@ -753,13 +753,13 @@ export class PlatformFileSelector {
    */
 <span class="fstat-no" title="function not covered" >  getFilePath(</span>platform: TargetPlatform): string {
     const file = <span class="cstat-no" title="statement not covered" >this.availableFiles.get(platform);</span>
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!file) {</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (this.options.strict) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!file) {</span>
+<span class="cstat-no" title="statement not covered" >      if (this.options.strict) {</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error(`No file available for platform: ${platform}`);</span>
       }
       // Return fallback
       const fallbackFile = <span class="cstat-no" title="statement not covered" >this.availableFiles.get(this.options.fallback);</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (!fallbackFile) {</span>
+<span class="cstat-no" title="statement not covered" >      if (!fallbackFile) {</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error(`No file available for fallback platform: ${this.options.fallback}`);</span>
       }
 <span class="cstat-no" title="statement not covered" >      return fallbackFile.filePath;</span>
@@ -783,7 +783,7 @@ export class PlatformFileSelector {
 &nbsp;
   private selectExplicit(platform: TargetPlatform): PlatformSelectionResult {
     <span class="missing-if-branch" title="if path not taken" >I</span>if (!this.isPlatformAvailable(platform)) {
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (this.options.strict) {</span>
+<span class="cstat-no" title="statement not covered" >      if (this.options.strict) {</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error(`Platform not available: ${platform}`);</span>
       }
 <span class="cstat-no" title="statement not covered" >      return this.selectFallback(`Explicit platform ${platform} not available`);</span>
@@ -808,23 +808,23 @@ export class PlatformFileSelector {
   private <span class="fstat-no" title="function not covered" >selectFromEnvironment(</span>): PlatformSelectionResult {
     const envPlatform = <span class="cstat-no" title="statement not covered" >process.env[this.options.envVar];</span>
     
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!envPlatform) {</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (this.options.strict) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!envPlatform) {</span>
+<span class="cstat-no" title="statement not covered" >      if (this.options.strict) {</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error(`Environment variable ${this.options.envVar} not set`);</span>
       }
 <span class="cstat-no" title="statement not covered" >      return this.selectFallback(`Environment variable ${this.options.envVar} not set`);</span>
     }
 &nbsp;
     const platform = <span class="cstat-no" title="statement not covered" >this.normalizePlatform(envPlatform);</span>
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!platform) {</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (this.options.strict) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!platform) {</span>
+<span class="cstat-no" title="statement not covered" >      if (this.options.strict) {</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error(`Invalid platform in environment: ${envPlatform}`);</span>
       }
 <span class="cstat-no" title="statement not covered" >      return this.selectFallback(`Invalid platform in environment: ${envPlatform}`);</span>
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!this.isPlatformAvailable(platform)) {</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (this.options.strict) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!this.isPlatformAvailable(platform)) {</span>
+<span class="cstat-no" title="statement not covered" >      if (this.options.strict) {</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error(`Platform from environment not available: ${platform}`);</span>
       }
 <span class="cstat-no" title="statement not covered" >      return this.selectFallback(`Platform from environment not available: ${platform}`);</span>
@@ -842,7 +842,7 @@ export class PlatformFileSelector {
   private <span class="fstat-no" title="function not covered" >selectFromPackage(</span>): PlatformSelectionResult {
     // In a real implementation, this would read package.json
     // For now, return fallback
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (this.options.strict) {</span>
+<span class="cstat-no" title="statement not covered" >    if (this.options.strict) {</span>
 <span class="cstat-no" title="statement not covered" >      throw new Error('Package.json detection not implemented');</span>
     }
 <span class="cstat-no" title="statement not covered" >    return this.selectFallback('Package.json detection not implemented');</span>
@@ -853,7 +853,7 @@ export class PlatformFileSelector {
     const envPlatform = process.env[this.options.envVar];
     if (envPlatform) {
       const platform = this.normalizePlatform(envPlatform);
-      if (platform &amp;&amp; this.isPlatformAvailable(platform)) {
+      <span class="missing-if-branch" title="else path not taken" >E</span>if (platform &amp;&amp; this.isPlatformAvailable(platform)) {
         return {
           platform,
           strategyUsed: 'environment',
@@ -868,7 +868,7 @@ export class PlatformFileSelector {
     const nodeEnv = process.env.NODE_ENV;
     <span class="missing-if-branch" title="if path not taken" >I</span>if (nodeEnv === 'production' || nodeEnv === 'development') {
       // Assume web for Node.js environments
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (this.isPlatformAvailable('web')) {</span>
+<span class="cstat-no" title="statement not covered" >      if (this.isPlatformAvailable('web')) {</span>
 <span class="cstat-no" title="statement not covered" >        return {</span>
           platform: 'web',
           strategyUsed: 'environment',
@@ -934,7 +934,7 @@ export function <span class="fstat-no" title="function not covered" >createPlatf
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-19T07:09:48.315Z
+                at 2026-02-16T14:28:32.200Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

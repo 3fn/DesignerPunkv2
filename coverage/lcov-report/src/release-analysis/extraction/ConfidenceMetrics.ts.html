@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">79.68% </span>
+                <span class="strong">82.7% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>102/128</span>
+                <span class='fraction'>153/185</span>
             </div>
         
             
@@ -1037,11 +1037,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">17x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">155x</span>
+<span class="cline-any cline-yes">180x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2379,7 +2379,7 @@ export class ConfidenceMetrics {
     if (item.description &amp;&amp; item.description.length &gt; 20) score += 0.2;
 &nbsp;
     // Check for source
-    if (item.source) score += 0.1;
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (item.source) score += 0.1;
 &nbsp;
     // Type-specific completeness
     <span class="missing-if-branch" title="if path not taken" >I</span>if ('affectedAPIs' in item &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >item.affectedAPIs?.length &gt; 0)</span> <span class="cstat-no" title="statement not covered" >score += 0.1;</span>
@@ -2394,7 +2394,7 @@ export class ConfidenceMetrics {
 &nbsp;
     // Check for type-specific indicators
     <span class="missing-if-branch" title="if path not taken" >I</span>if ('severity' in item &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >item.severity)</span> <span class="cstat-no" title="statement not covered" >score += 0.2;</span>
-    if ('category' in item &amp;&amp; item.category) score += 0.2;
+    <span class="missing-if-branch" title="else path not taken" >E</span>if ('category' in item &amp;&amp; item.category) score += 0.2;
     <span class="missing-if-branch" title="if path not taken" >I</span>if ('type' in item &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >item.type)</span> <span class="cstat-no" title="statement not covered" >score += 0.2;</span>
     <span class="missing-if-branch" title="if path not taken" >I</span>if ('impact' in item &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >item.impact)</span> <span class="cstat-no" title="statement not covered" >score += 0.1;</span>
 &nbsp;
@@ -2450,7 +2450,7 @@ export class ConfidenceMetrics {
       let score = 0.5;
       if (feature.benefits.length &gt; 0) score += 0.2;
       if (feature.artifacts.length &gt; 0) score += 0.2;
-      if (feature.category) score += 0.1;
+      <span class="missing-if-branch" title="else path not taken" >E</span>if (feature.category) score += 0.1;
       totalScore += Math.min(1, score);
     }
 &nbsp;
@@ -2465,7 +2465,7 @@ export class ConfidenceMetrics {
       let score = 0.5;
       if (bugFix.issueNumber) score += 0.2;
       if (bugFix.affectedComponents.length &gt; 0) score += 0.2;
-      if (bugFix.severity) score += 0.1;
+      <span class="missing-if-branch" title="else path not taken" >E</span>if (bugFix.severity) score += 0.1;
       totalScore += Math.min(1, score);
     }
 &nbsp;
@@ -2479,7 +2479,7 @@ export class ConfidenceMetrics {
     for (const improvement of improvements) {
       let score = 0.5;
       if (improvement.type &amp;&amp; improvement.type !== 'other') score += 0.25;
-      if (improvement.impact) score += 0.25;
+      <span class="missing-if-branch" title="else path not taken" >E</span>if (improvement.impact) score += 0.25;
       totalScore += Math.min(1, score);
     }
 &nbsp;
@@ -2537,7 +2537,7 @@ export class ConfidenceMetrics {
   }
 &nbsp;
   private <span class="fstat-no" title="function not covered" >scorePatternConsistency(</span>patternMatches: PatternMatch[]): number {
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (patternMatches.length === 0) <span class="cstat-no" title="statement not covered" >return 0.5;</span></span>
+<span class="cstat-no" title="statement not covered" >    if (patternMatches.length === 0) <span class="cstat-no" title="statement not covered" >return 0.5;</span></span>
 &nbsp;
     const avgConfidence = <span class="cstat-no" title="statement not covered" >patternMatches.reduce(<span class="fstat-no" title="function not covered" >(s</span>um, match) =&gt; <span class="cstat-no" title="statement not covered" >sum + match.confidence,</span> 0) / patternMatches.length;</span>
     const confidenceVariance = <span class="cstat-no" title="statement not covered" >patternMatches.reduce(<span class="fstat-no" title="function not covered" >(s</span>um, match) =&gt; </span>
@@ -2632,7 +2632,7 @@ export interface QualityReportSection {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-19T07:09:48.315Z
+                at 2026-02-16T14:28:32.200Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

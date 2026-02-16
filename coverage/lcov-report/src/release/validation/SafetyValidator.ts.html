@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">35% </span>
+                <span class="strong">25.71% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>14/40</span>
+                <span class='fraction'>18/70</span>
             </div>
         
             
@@ -1368,35 +1368,35 @@ export class SafetyValidator {
     const warnings: ValidationWarning[] = [];
 &nbsp;
     // Validate rollback capability
-    if (this.config.rollbackValidation) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (this.config.rollbackValidation) {
       const rollbackValidation = await this.validateRollbackCapability(releasePlan);
       errors.push(...rollbackValidation.errors);
       warnings.push(...rollbackValidation.warnings);
     }
 &nbsp;
     // Validate dependency conflicts
-    if (this.config.dependencyConflictDetection) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (this.config.dependencyConflictDetection) {
       const dependencyValidation = await this.validateDependencyConflicts(releasePlan);
       errors.push(...dependencyValidation.errors);
       warnings.push(...dependencyValidation.warnings);
     }
 &nbsp;
     // Validate publishing safety
-    if (this.config.publishingSafetyChecks) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (this.config.publishingSafetyChecks) {
       const publishingValidation = await this.validatePublishingSafety(releasePlan);
       errors.push(...publishingValidation.errors);
       warnings.push(...publishingValidation.warnings);
     }
 &nbsp;
     // Validate major release confirmation
-    if (this.config.requireMajorReleaseConfirmation) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (this.config.requireMajorReleaseConfirmation) {
       const majorReleaseValidation = this.validateMajorReleaseConfirmation(releasePlan);
       errors.push(...majorReleaseValidation.errors);
       warnings.push(...majorReleaseValidation.warnings);
     }
 &nbsp;
     // Validate breaking change confirmation
-    if (this.config.requireBreakingChangeConfirmation) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (this.config.requireBreakingChangeConfirmation) {
       const breakingChangeValidation = this.validateBreakingChangeConfirmation(releasePlan);
       errors.push(...breakingChangeValidation.errors);
       warnings.push(...breakingChangeValidation.warnings);
@@ -1482,7 +1482,7 @@ export class SafetyValidator {
     for (const packageUpdate of releasePlan.packages) {
       for (const depUpdate of packageUpdate.dependencyUpdates) {
         const conflict = <span class="cstat-no" title="statement not covered" >this.checkVersionConflict(depUpdate, releasePlan.packages);</span>
-<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (conflict) {</span>
+<span class="cstat-no" title="statement not covered" >        if (conflict) {</span>
 <span class="cstat-no" title="statement not covered" >          errors.push({</span>
             code: 'DEPENDENCY_VERSION_CONFLICT',
             message: `Version conflict for dependency '${depUpdate.name}': ${conflict}`,
@@ -1549,7 +1549,7 @@ export class SafetyValidator {
       // Check for explicit confirmation in release plan or environment
       const confirmationExists = <span class="cstat-no" title="statement not covered" >this.checkMajorReleaseConfirmation();</span>
       
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (!confirmationExists) {</span>
+<span class="cstat-no" title="statement not covered" >      if (!confirmationExists) {</span>
 <span class="cstat-no" title="statement not covered" >        errors.push({</span>
           code: 'MAJOR_RELEASE_CONFIRMATION_REQUIRED',
           message: 'Major release requires explicit confirmation',
@@ -1559,7 +1559,7 @@ export class SafetyValidator {
       }
 &nbsp;
       // Validate breaking changes are documented
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (releasePlan.releaseNotes.breakingChanges.length === 0) {</span>
+<span class="cstat-no" title="statement not covered" >      if (releasePlan.releaseNotes.breakingChanges.length === 0) {</span>
 <span class="cstat-no" title="statement not covered" >        warnings.push({</span>
           code: 'MAJOR_RELEASE_NO_BREAKING_CHANGES',
           message: 'Major release without documented breaking changes',
@@ -1581,7 +1581,7 @@ export class SafetyValidator {
     <span class="missing-if-branch" title="if path not taken" >I</span>if (releasePlan.releaseNotes.breakingChanges.length &gt; 0) {
       const confirmationExists = <span class="cstat-no" title="statement not covered" >this.checkBreakingChangeConfirmation();</span>
       
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (!confirmationExists) {</span>
+<span class="cstat-no" title="statement not covered" >      if (!confirmationExists) {</span>
 <span class="cstat-no" title="statement not covered" >        errors.push({</span>
           code: 'BREAKING_CHANGE_CONFIRMATION_REQUIRED',
           message: 'Breaking changes require explicit confirmation',
@@ -1592,7 +1592,7 @@ export class SafetyValidator {
 &nbsp;
       // Validate migration guidance exists for each breaking change
 <span class="cstat-no" title="statement not covered" >      for (const breakingChange of releasePlan.releaseNotes.breakingChanges) {</span>
-<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (!breakingChange.migrationGuidance) {</span>
+<span class="cstat-no" title="statement not covered" >        if (!breakingChange.migrationGuidance) {</span>
 <span class="cstat-no" title="statement not covered" >          warnings.push({</span>
             code: 'MISSING_MIGRATION_GUIDANCE',
             message: `Breaking change '${breakingChange.title}' lacks migration guidance`,
@@ -1622,7 +1622,7 @@ export class SafetyValidator {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    for (const section of requiredSections) {</span>
       const sectionRegex = <span class="cstat-no" title="statement not covered" >new RegExp(`^#+\\s*${section}\\s*$`, 'mi');</span>
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (!sectionRegex.test(content)) {</span>
+<span class="cstat-no" title="statement not covered" >      if (!sectionRegex.test(content)) {</span>
 <span class="cstat-no" title="statement not covered" >        warnings.push({</span>
           code: 'MISSING_ROLLBACK_SECTION',
           message: `Rollback plan missing section: ${section}`,
@@ -1648,7 +1648,7 @@ export class SafetyValidator {
       
       try {
         const status = execSync('git status --porcelain', { encoding: 'utf-8' });
-        if (status.trim().length &gt; 0) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (status.trim().length &gt; 0) {
           warnings.push({
             code: 'DIRTY_GIT_STATE',
             message: 'Git repository has uncommitted changes',
@@ -1736,7 +1736,7 @@ export class SafetyValidator {
     const path: string[] = [];
 &nbsp;
     for (const pkg of packages) {
-      if (!visited.has(pkg.name)) {
+      <span class="missing-if-branch" title="else path not taken" >E</span>if (!visited.has(pkg.name)) {
         const cycle = this.detectCycleFromPackage(pkg.name, packages, visited, recursionStack, path);
         <span class="missing-if-branch" title="if path not taken" >I</span>if (cycle.length &gt; 0) {
 <span class="cstat-no" title="statement not covered" >          return cycle;</span>
@@ -1762,14 +1762,14 @@ export class SafetyValidator {
     path.push(packageName);
 &nbsp;
     const pkg = packages.find(p =&gt; p.name === packageName);
-    if (pkg &amp;&amp; pkg.dependencyUpdates) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (pkg &amp;&amp; pkg.dependencyUpdates) {
       for (const dep of pkg.dependencyUpdates) {
 <span class="cstat-no" title="statement not covered" >        if (!visited.has(dep.name)) {</span>
           const cycle = <span class="cstat-no" title="statement not covered" >this.detectCycleFromPackage(dep.name, packages, visited, recursionStack, path);</span>
-<span class="cstat-no" title="statement not covered" >          <span class="missing-if-branch" title="if path not taken" >I</span>if (cycle.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >          if (cycle.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >            return cycle;</span>
           }
-        } else <span class="cstat-no" title="statement not covered" ><span class="missing-if-branch" title="if path not taken" >I</span>if (recursionStack.has(dep.name)) {</span>
+        } else <span class="cstat-no" title="statement not covered" >if (recursionStack.has(dep.name)) {</span>
           const cycleStart = <span class="cstat-no" title="statement not covered" >path.indexOf(dep.name);</span>
 <span class="cstat-no" title="statement not covered" >          return path.slice(cycleStart).concat([dep.name]);</span>
         }
@@ -1787,11 +1787,11 @@ export class SafetyValidator {
   private <span class="fstat-no" title="function not covered" >checkVersionConflict(</span>depUpdate: any, packages: any[]): string | null {
     const targetPackage = <span class="cstat-no" title="statement not covered" >packages.find(<span class="fstat-no" title="function not covered" >pkg </span>=&gt; <span class="cstat-no" title="statement not covered" >pkg.name === depUpdate.name)</span>;</span>
     
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (targetPackage) {</span>
+<span class="cstat-no" title="statement not covered" >    if (targetPackage) {</span>
       const requiredVersion = <span class="cstat-no" title="statement not covered" >depUpdate.to;</span>
       const actualVersion = <span class="cstat-no" title="statement not covered" >targetPackage.versionBump.to;</span>
       
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (requiredVersion !== actualVersion &amp;&amp; !this.isVersionCompatible(requiredVersion, actualVersion)) {</span>
+<span class="cstat-no" title="statement not covered" >      if (requiredVersion !== actualVersion &amp;&amp; !this.isVersionCompatible(requiredVersion, actualVersion)) {</span>
 <span class="cstat-no" title="statement not covered" >        return `requires ${requiredVersion} but ${actualVersion} will be published`;</span>
       }
     }
@@ -1808,10 +1808,10 @@ export class SafetyValidator {
     for (const pkg of packages) {
       for (const depUpdate of pkg.dependencyUpdates) {
         const depExists = <span class="cstat-no" title="statement not covered" >packages.some(<span class="fstat-no" title="function not covered" >p </span>=&gt; <span class="cstat-no" title="statement not covered" >p.name === depUpdate.name)</span>;</span>
-<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (!depExists) {</span>
+<span class="cstat-no" title="statement not covered" >        if (!depExists) {</span>
           // Check if dependency exists in node_modules or registry
           const exists = <span class="cstat-no" title="statement not covered" >await this.checkDependencyExists(depUpdate.name);</span>
-<span class="cstat-no" title="statement not covered" >          <span class="missing-if-branch" title="if path not taken" >I</span>if (!exists) {</span>
+<span class="cstat-no" title="statement not covered" >          if (!exists) {</span>
 <span class="cstat-no" title="statement not covered" >            missingDeps.push({ name: depUpdate.name, package: pkg.name });</span>
           }
         }
@@ -1834,7 +1834,7 @@ export class SafetyValidator {
 &nbsp;
     // Build dependency map
     for (const step of publishingPlan.steps) {
-      if (step.type === 'npm-publish') {
+      <span class="missing-if-branch" title="else path not taken" >E</span>if (step.type === 'npm-publish') {
         for (const pkg of step.packages) {
           // This would need actual dependency information
           // For now, we'll do a basic check
@@ -1853,7 +1853,7 @@ export class SafetyValidator {
     const warnings: ValidationWarning[] = [];
 &nbsp;
     // Check GitHub token
-    if (!process.env.GITHUB_TOKEN) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (!process.env.GITHUB_TOKEN) {
       errors.push({
         code: 'MISSING_GITHUB_TOKEN',
         message: 'GitHub authentication token not found',
@@ -1863,7 +1863,7 @@ export class SafetyValidator {
     }
 &nbsp;
     // Check npm token
-    if (!process.env.NPM_TOKEN) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (!process.env.NPM_TOKEN) {
       errors.push({
         code: 'MISSING_NPM_TOKEN',
         message: 'npm authentication token not found',
@@ -1964,17 +1964,17 @@ export class SafetyValidator {
     const actualParts = <span class="cstat-no" title="statement not covered" >actual.replace(/[^0-9.]/g, '').split('.').map(Number);</span>
 &nbsp;
     // Major version must match
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (requiredParts[0] !== actualParts[0]) {</span>
+<span class="cstat-no" title="statement not covered" >    if (requiredParts[0] !== actualParts[0]) {</span>
 <span class="cstat-no" title="statement not covered" >      return false;</span>
     }
 &nbsp;
     // Minor version must be &gt;= required
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (actualParts[1] &lt; requiredParts[1]) {</span>
+<span class="cstat-no" title="statement not covered" >    if (actualParts[1] &lt; requiredParts[1]) {</span>
 <span class="cstat-no" title="statement not covered" >      return false;</span>
     }
 &nbsp;
     // If minor versions match, patch must be &gt;= required
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (actualParts[1] === requiredParts[1] &amp;&amp; actualParts[2] &lt; requiredParts[2]) {</span>
+<span class="cstat-no" title="statement not covered" >    if (actualParts[1] === requiredParts[1] &amp;&amp; actualParts[2] &lt; requiredParts[2]) {</span>
 <span class="cstat-no" title="statement not covered" >      return false;</span>
     }
 &nbsp;
@@ -1987,7 +1987,7 @@ export class SafetyValidator {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-19T07:09:48.315Z
+                at 2026-02-16T14:28:32.200Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

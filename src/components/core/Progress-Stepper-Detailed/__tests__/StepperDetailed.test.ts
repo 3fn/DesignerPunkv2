@@ -352,13 +352,21 @@ describe('Progress-Stepper-Detailed', () => {
     });
 
     it('throws error when size="sm" (Req 8.10)', () => {
-      expect(() => {
-        createStepperDetailed({
-          steps: stepsJSON(SAMPLE_STEPS),
-          'current-step': '1',
-          size: 'sm',
-        });
-      }).toThrow("Steppers require size 'md' or 'lg'");
+      // jsdom's custom element lifecycle is async, so we need to catch the error differently
+      const errorHandler = jest.fn();
+      window.addEventListener('error', errorHandler);
+
+      createStepperDetailed({
+        steps: stepsJSON(SAMPLE_STEPS),
+        'current-step': '1',
+        size: 'sm',
+      });
+
+      expect(errorHandler).toHaveBeenCalled();
+      const errorEvent = errorHandler.mock.calls[0][0];
+      expect(errorEvent.error.message).toContain("Steppers require size 'md' or 'lg'");
+
+      window.removeEventListener('error', errorHandler);
     });
 
     it('warns and clamps in production when steps.length > 8 (Req 8.7, 15.35)', () => {
