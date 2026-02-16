@@ -1,0 +1,86 @@
+version: "1.0.0"
+component: Progress-Stepper-Base
+family: Progress-Indicator
+
+contracts:
+  composes_node_and_connector:
+    category: composition
+    description: Renders Node-Base and Connector-Base primitives (no labels)
+    behavior: |
+      Stepper-Base composes Progress-Indicator-Node-Base for each step and
+      Progress-Indicator-Connector-Base between all adjacent nodes (n-1 connectors
+      for n nodes). It does NOT render Progress-Indicator-Label-Base.
+      Completed nodes receive content='checkmark', all others receive content='none'.
+    platforms: [web, ios, android]
+    validation:
+      - Renders Node-Base for each step
+      - Renders Connector-Base between all adjacent nodes
+      - No Label-Base elements present
+      - Completed nodes have content='checkmark'
+      - Non-completed nodes have content='none'
+
+  derives_priority_state:
+    category: state
+    description: Derives state with priority error > completed > current > incomplete
+    behavior: |
+      State derivation uses priority logic:
+      1. error: step index in errorSteps (highest priority)
+      2. completed: step index < currentStep and not in errorSteps
+      3. current: step index === currentStep and not in errorSteps
+      4. incomplete: step index > currentStep
+    platforms: [web, ios, android]
+    validation:
+      - Error steps override all other states
+      - Steps before currentStep are completed (unless error)
+      - Exactly one step is current (unless in errorSteps)
+      - Steps after currentStep are incomplete
+
+  connector_state_derivation:
+    category: state
+    description: Connectors are active between completed nodes, inactive otherwise
+    behavior: |
+      Connector state is derived from adjacent node states:
+      - active: both left and right nodes are completed
+      - inactive: any other combination
+    platforms: [web, ios, android]
+    validation:
+      - Connectors between completed nodes are active
+      - All other connectors are inactive
+
+  progressbar_accessibility:
+    category: accessibility
+    description: Uses role="progressbar" with aria-value* attributes
+    behavior: |
+      The stepper uses role="progressbar" with:
+      - aria-valuenow={currentStep}
+      - aria-valuemin={1}
+      - aria-valuemax={totalSteps}
+      Screen reader announces "Step X of Y".
+    wcag: "4.1.2 Name, Role, Value"
+    platforms: [web, ios, android]
+    validation:
+      - role="progressbar" applied (web)
+      - aria-valuenow reflects currentStep
+      - aria-valuemin is 1
+      - aria-valuemax reflects totalSteps
+
+  size_restriction:
+    category: validation
+    description: Throws error if size='sm' is used
+    behavior: |
+      Steppers only support sizes 'md' and 'lg'. If size='sm' is provided,
+      the component throws an error in both development and production.
+    platforms: [web, ios, android]
+    validation:
+      - size='sm' throws error
+      - size='md' renders correctly
+      - size='lg' renders correctly
+
+summary:
+  total_contracts: 5
+  categories:
+    composition: 1
+    state: 2
+    accessibility: 1
+    validation: 1
+  platforms: [web, ios, android]

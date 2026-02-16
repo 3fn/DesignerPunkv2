@@ -1,0 +1,92 @@
+name: Progress-Stepper-Base
+type: semantic
+family: Progress-Indicator
+version: "1.0.0"
+readiness: development
+
+description: |
+  Semantic stepper component for the Progress Indicator family.
+  Composes Progress-Indicator-Node-Base and Progress-Indicator-Connector-Base
+  primitives to create a stepper indicator for linear multi-step flows.
+  
+  Key Characteristics:
+  - Composes Node-Base + Connector-Base (no labels)
+  - State priority: error > completed > current > incomplete
+  - Completed nodes get checkmark, others get none (dots)
+  - Connectors: active between completed nodes, inactive otherwise
+  - Sizes: md, lg only (sm throws error)
+  - Max 8 steps (dev throw, production warn+clamp)
+  - Non-interactive (navigation handled by parent flow)
+
+behaviors:
+  - renderable
+  - sizable
+  - state-driven
+
+properties:
+  totalSteps:
+    type: number
+    required: true
+    description: Total number of steps. Max 8.
+  currentStep:
+    type: number
+    required: true
+    description: Current active step (1-indexed). Clamped to [1, totalSteps].
+  size:
+    type: "'md' | 'lg'"
+    required: false
+    default: "'md'"
+    description: Size variant. sm is not supported for steppers.
+  errorSteps:
+    type: "number[]"
+    required: false
+    default: "[]"
+    description: Array of step indices in error state. Filtered to valid range.
+  accessibilityLabel:
+    type: string
+    required: false
+    default: "'Step {currentStep} of {totalSteps}'"
+    description: Custom accessibility label override.
+  testID:
+    type: string
+    required: false
+    default: undefined
+    description: Test identifier for automated testing.
+
+tokens:
+  component:
+    - progress.node.size.md
+    - progress.node.size.lg
+    - progress.node.size.md.current
+    - progress.node.size.lg.current
+    - progress.node.gap.md
+    - progress.node.gap.lg
+    - progress.connector.thickness
+
+platforms:
+  - web
+  - ios
+  - android
+
+platform_notes:
+  web:
+    element: "<progress-stepper-base>"
+    implementation: Web Component with Shadow DOM
+    file: platforms/web/ProgressStepperBase.web.ts
+  ios:
+    implementation: SwiftUI View
+    file: platforms/ios/ProgressStepperBase.ios.swift
+  android:
+    implementation: Jetpack Compose Composable
+    file: platforms/android/ProgressStepperBase.android.kt
+
+accessibility:
+  wcag_level: AA
+  compliance:
+    - "1.3.1 Info and Relationships - role='progressbar' with aria-value* attributes"
+    - "1.4.11 Non-text Contrast - Current node size emphasis provides non-color differentiation"
+    - "4.1.2 Name, Role, Value - aria-valuenow, aria-valuemin, aria-valuemax reflect step position"
+  notes: |
+    Stepper-Base uses role="progressbar" with aria-valuenow={currentStep},
+    aria-valuemin={1}, aria-valuemax={totalSteps}. Screen reader announces
+    "Step X of Y".

@@ -1,0 +1,49 @@
+/**
+ * Progress-Stepper-Base Styles for Web Platform
+ * 
+ * Stemma System: Progress Indicator Family
+ * Component Type: Semantic (Base)
+ * 
+ * Layout styles for the stepper container.
+ * Node styling is handled by the Node-Base primitive.
+ * Connector styling is handled by the Connector-Base primitive.
+ * 
+ * @see .kiro/specs/048-progress-family/design.md
+ * @see Requirements 3.1-3.2, 11.7-11.13
+ */
+
+/* ============================================================================
+ * Host Element
+ * ============================================================================ */
+
+:host {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================================
+ * Container Layout
+ * Nodes and connectors laid out horizontally with flex.
+ * Connectors fill space between nodes via flex: 1 on connector host.
+ * ============================================================================ */
+
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 100%;
+}
+
+/* ============================================================================
+ * Gap Tokens — spacing between nodes and connectors
+ * Uses component progress.node.gap.* tokens
+ * ============================================================================ */
+
+.stepper--md {
+  gap: var(--progress-node-gap-md, 8px);
+}
+
+.stepper--lg {
+  gap: var(--progress-node-gap-lg, 12px);
+}

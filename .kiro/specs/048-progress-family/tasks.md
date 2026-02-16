@@ -263,7 +263,7 @@ This spec implements a complete component family with 3 primitives and 3 semanti
 
 ---
 
-- [ ] 4. Stepper-Base Component
+- [x] 4. Stepper-Base Component
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -290,7 +290,7 @@ This spec implements a complete component family with 3 primitives and 3 semanti
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 Complete: Stepper-Base Component"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 4.1 Implement Stepper-Base core component
+  - [x] 4.1 Implement Stepper-Base core component
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create component directory structure
@@ -304,7 +304,7 @@ This spec implements a complete component family with 3 primitives and 3 semanti
     - Support sizes: md, lg only (throw if sm)
     - _Requirements: 3.1-3.11, 10.3-10.7, 11.7-11.13_
 
-  - [ ] 4.2 Implement validation and error handling
+  - [x] 4.2 Implement validation and error handling
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Validate totalSteps ≤ 8 (dev throw, production warn+clamp)
@@ -314,7 +314,7 @@ This spec implements a complete component family with 3 primitives and 3 semanti
     - Implement error messages with guidance
     - _Requirements: 3.12-3.17, 8.4-8.5, 8.8-8.10_
 
-  - [ ] 4.3 Implement accessibility
+  - [x] 4.3 Implement accessibility
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Apply role="progressbar"
@@ -322,7 +322,7 @@ This spec implements a complete component family with 3 primitives and 3 semanti
     - Verify screen reader announces "Step X of Y"
     - _Requirements: 3.16, 7.3, 7.12_
 
-  - [ ] 4.4 Implement Stepper-Base tests
+  - [x] 4.4 Implement Stepper-Base tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create Stemma behavioral contract tests (naming, type classification, prop validation, accessibility)
