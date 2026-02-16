@@ -2,23 +2,23 @@
 
 **A Design System Foundation Built for Modern Product Development, Cross-Platform Excellence, and AI-Assisted Development**
 
-[![Version](https://img.shields.io/badge/Version-6.3.0-purple)](docs/releases/RELEASE-NOTES-6.3.0.md)
+[![Version](https://img.shields.io/badge/Version-6.4.0-purple)](docs/releases/RELEASE-NOTES-6.4.0.md)
 [![Repository](https://img.shields.io/badge/GitHub-DesignerPunkv2-blue)](https://github.com/3fn/DesignerPunkv2)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
-[![Tests](https://img.shields.io/badge/Tests-7800%2B-brightgreen)](.)
+[![Tests](https://img.shields.io/badge/Tests-8200%2B-brightgreen)](.)
 
 ---
 
-## Latest Release: v6.3.0
+## Latest Release: v6.4.0
 
-**Input-Radio Component Family** — Two new form input components:
-- **Input-Radio-Base**: Primitive radio button with three size variants (sm/md/lg), dot indicator, and cross-platform support (web, iOS, Android)
-- **Input-Radio-Set**: Orchestrator component managing mutual exclusivity, keyboard navigation (arrow keys, Home/End), and group-level validation
+**Progress Indicator Family + Custom Agent System** — Two major feature areas:
 
-Follows the orchestration pattern established in v6.2.0 — Set orchestrates Base children without duplicating rendering logic.
+- **6 new Progress Indicator components**: Node-Base, Connector-Base, Label-Base (primitives) + Pagination-Base, Stepper-Base, Stepper-Detailed (semantic variants) with dedicated token system (20 tokens), cross-platform support, and sliding window virtualization
+- **3 specialized AI agents**: Ada (token specialist), Lina (component specialist), Thurgood (test governance & spec standards) with domain-scoped configurations, progressive resource loading, and 11 user-triggered validation hooks
+- **Stemma validator bugfix**: Fixed container detection for orchestration components
 
-[Full Release Notes →](docs/releases/RELEASE-NOTES-6.3.0.md)
+[Full Release Notes →](docs/releases/RELEASE-NOTES-6.4.0.md)
 
 ---
 
@@ -65,7 +65,7 @@ A framework for building components that work identically across platforms while
 
 - **Naming Convention**: `[Family]-[Type]-[Variant]` (AI-discoverable)
 - **Behavioral Contracts**: Explicit specifications ensuring cross-platform consistency
-- **11 Component Families**: Navigation, Form Inputs, Core, Data Displays, etc.
+- **11 Component Families**: Navigation, Form Inputs, Core, Progress Indicators, Data Displays, etc.
 - **Purpose**: Systematic, scalable component development with shared architecture
 
 Think of it as: **Build once, implement natively everywhere**
@@ -130,7 +130,7 @@ This is the **producer/musician model**: I don't write the music, but I shape th
 
 **Why this matters**: This demonstrates how modern product teams actually work. You don't need to be an expert coder to build sophisticated systems—you need to understand architecture, make good decisions, and guide implementation effectively.
 
-DesignerPunk has 6,800+ tests, production implementations across Web/iOS/Android, and sophisticated build pipelines—all architected and guided by clear framing, with execution handled by AI.
+DesignerPunk has 8,200+ tests, production implementations across Web/iOS/Android, and sophisticated build pipelines—all architected and guided by clear framing, with execution handled by AI.
 
 This is a working case study in how to lead AI-driven development at scale.
 
@@ -149,8 +149,15 @@ This is a working case study in how to lead AI-driven development at scale.
 - Chips (Base/Filter/Input) — Compact interactive elements for filtering, selection, and input
 - Checkboxes (Base/Legal) — Binary selection controls with legal consent support
 - Radio Buttons (Base/Set) — Single-selection controls with mutual exclusivity and group orchestration
-- 18 production-ready components with behavioral contracts
+- Progress Indicators — Node-Base, Connector-Base, Label-Base (primitives) + Pagination-Base, Stepper-Base, Stepper-Detailed (semantic variants) with sliding window virtualization
+- 24 production-ready components with behavioral contracts
 - Full cross-platform support with platform-native implementations
+
+**Custom Agent System**
+- 3 specialized Kiro agents: Ada (tokens), Lina (components), Thurgood (governance)
+- Domain-scoped configurations with progressive `skill://` resource loading
+- 11 user-triggered validation hooks across all agents
+- 51 steering docs with skill-compatible frontmatter for on-demand loading
 
 **Rosetta Token System**
 - 310+ tokens (spacing, typography, color, radius, shadow, glow, motion, opacity, blend)
@@ -313,7 +320,7 @@ The following represent areas of active development, sequenced by dependencies a
 
 ### Current Work
 
-- Specs 048-054 (active implementation)
+- Specs 048-060 (active implementation)
 
 ### Near-Term Focus
 
@@ -391,7 +398,7 @@ This project demonstrates:
 | **Complete design system foundation** | Shows understanding of system design, not just components |
 | **Cross-platform native code** | Demonstrates bridge between design and deep technical work |
 | **310+ tokens** | Proves ability to create systematic, scalable foundations |
-| **6,800+ tests** | Shows commitment to reliability and quality |
+| **8,200+ tests** | Shows commitment to reliability and quality |
 | **MCP Documentation Server** | Working solution to real AI collaboration problems |
 | **Architectural documentation** | Demonstrates design leadership and systems thinking |
 
@@ -456,9 +463,13 @@ Even if you don't adopt DesignerPunk directly, I hope it influences how you thin
 
 ## What Changed from Previous Version
 
-1. ✅ **Added** Input-Radio-Base component (web, iOS, Android) with three size variants and dot indicator
-2. ✅ **Added** Input-Radio-Set orchestrator component with mutual exclusivity, keyboard navigation, and group validation
-3. ✅ **Updated** Component-Family-Form-Inputs.md with radio component schemas, contracts, and token dependencies
-4. ✅ **Updated** Component-Quick-Reference.md with radio family routing and selection guidance
-5. ✅ **Updated** Current State to reflect 18 production-ready components (was 16)
-6. ✅ **Updated** specs reference to 048-054 (active implementation)
+1. ✅ **Added** Progress Indicator token system: 10 semantic color tokens + 10 component tokens with formula-based current emphasis
+2. ✅ **Added** 3 primitive components: Node-Base, Connector-Base, Label-Base (web, iOS, Android)
+3. ✅ **Added** 3 semantic components: Pagination-Base (with virtualization), Stepper-Base, Stepper-Detailed (web, iOS, Android)
+4. ✅ **Added** Custom Agent System: Ada (tokens), Lina (components), Thurgood (governance) with domain-scoped configs
+5. ✅ **Added** 11 user-triggered validation hooks across 3 agents
+6. ✅ **Added** Progressive resource loading via `skill://` protocol (51 steering docs updated)
+7. ✅ **Fixed** Stemma validator bugs: RadioSet container detection, pattern type counting
+8. ✅ **Updated** Component-Family-Progress.md steering document (MCP-queryable)
+9. ✅ **Updated** Current State to reflect 24 production-ready components (was 18)
+10. ✅ **Updated** Specs reference to 048-060 (active implementation)
