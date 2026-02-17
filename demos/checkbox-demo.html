@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkbox Demo - DesignerPunk</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="demo-styles.css">
+  <script type="module" src="designerpunk.esm.js"></script>
+</head>
+<body class="demo-page">
+  <header class="demo-header">
+    <a href="index.html" class="demo-back-link">← All Components</a>
+    <h1>☑️ Checkbox Component Demo</h1>
+    <p class="demo-subtitle">Binary selection controls for general-purpose and legal consent scenarios</p>
+  </header>
+
+  <main>
+
+    <!-- ============================================================
+         SECTION 1: Size Variants
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>1. Size Variants (Input-Checkbox-Base)</h2>
+      <p>Three size variants with token-based sizing. Box size = icon size + (inset padding × 2):</p>
+      <ul>
+        <li><strong>sm</strong> = 24px box (16px icon + 4px inset × 2)</li>
+        <li><strong>md</strong> = 32px box (20px icon + 6px inset × 2)</li>
+        <li><strong>lg</strong> = 40px box (24px icon + 8px inset × 2)</li>
+      </ul>
+
+      <div class="demo-row">
+        <div class="demo-item">
+          <input-checkbox-base label="Small checkbox" size="sm"></input-checkbox-base>
+          <span class="demo-item-label">Small (sm)</span>
+          <span class="demo-item-label">24px box, labelSm typography</span>
+        </div>
+        <div class="demo-item">
+          <input-checkbox-base label="Medium checkbox" size="md"></input-checkbox-base>
+          <span class="demo-item-label">Medium (md) - Default</span>
+          <span class="demo-item-label">32px box, labelMd typography</span>
+        </div>
+        <div class="demo-item">
+          <input-checkbox-base label="Large checkbox" size="lg"></input-checkbox-base>
+          <span class="demo-item-label">Large (lg)</span>
+          <span class="demo-item-label">40px box, labelLg typography</span>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Token References:</strong> sm uses <code>inset.050</code>, md uses <code>inset.075</code>, lg uses <code>inset.100</code>.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 2: Label Alignment
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>2. Label Alignment</h2>
+      <p>Control vertical alignment of label relative to checkbox box:</p>
+
+      <div class="demo-grid">
+        <div>
+          <h4>Center Alignment (Default)</h4>
+          <p>Label vertically centered with checkbox box</p>
+          <input-checkbox-base
+            label="Single line label"
+            size="lg"
+            label-align="center">
+          </input-checkbox-base>
+          <br><br>
+          <input-checkbox-base
+            label="Multi-line label that wraps to demonstrate center alignment behavior with longer text content"
+            size="lg"
+            label-align="center"
+            style="max-inline-size: 250px;">
+          </input-checkbox-base>
+        </div>
+        <div>
+          <h4>Top Alignment</h4>
+          <p>Label aligned to top of checkbox box</p>
+          <input-checkbox-base
+            label="Single line label"
+            size="lg"
+            label-align="top">
+          </input-checkbox-base>
+          <br><br>
+          <input-checkbox-base
+            label="Multi-line label that wraps to demonstrate top alignment behavior with longer text content"
+            size="lg"
+            label-align="top"
+            style="max-inline-size: 250px;">
+          </input-checkbox-base>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Use Case:</strong> Top alignment is recommended for multi-line labels (like legal text) to keep the checkbox aligned with the first line.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 3: Checkbox States
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>3. Checkbox States</h2>
+      <p>Visual states for different checkbox conditions:</p>
+
+      <h3>Unchecked, Checked, and Indeterminate</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <input-checkbox-base label="Not selected" size="md"></input-checkbox-base>
+          <span class="demo-item-label">Unchecked</span>
+          <span class="demo-item-label">Transparent background, default border</span>
+        </div>
+        <div class="demo-item">
+          <input-checkbox-base label="Selected" size="md" checked></input-checkbox-base>
+          <span class="demo-item-label">Checked</span>
+          <span class="demo-item-label">Filled background, checkmark icon</span>
+        </div>
+        <div class="demo-item">
+          <input-checkbox-base label="Partially selected" size="md" indeterminate id="indeterminate-demo"></input-checkbox-base>
+          <span class="demo-item-label">Indeterminate</span>
+          <span class="demo-item-label">Filled background, minus icon</span>
+        </div>
+      </div>
+
+      <h3>Error State</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <input-checkbox-base
+            label="Accept terms and conditions"
+            size="md"
+            error-message="You must accept the terms to continue">
+          </input-checkbox-base>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Indeterminate State:</strong> Used for parent checkboxes when child checkboxes have mixed selection. Click the indeterminate checkbox above to see it transition to checked.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 4: Helper Text and Error Messages
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>4. Helper Text and Error Messages</h2>
+      <p>Additional context and validation feedback:</p>
+
+      <div class="demo-row">
+        <div class="demo-item" style="align-items: flex-start;">
+          <span class="demo-item-label">With Helper Text</span>
+          <input-checkbox-base
+            label="Subscribe to newsletter"
+            size="md"
+            helper-text="We'll send you weekly updates about new features">
+          </input-checkbox-base>
+        </div>
+        <div class="demo-item" style="align-items: flex-start;">
+          <span class="demo-item-label">With Error Message</span>
+          <input-checkbox-base
+            label="I agree to the privacy policy"
+            size="md"
+            error-message="This field is required">
+          </input-checkbox-base>
+        </div>
+        <div class="demo-item" style="align-items: flex-start;">
+          <span class="demo-item-label">Both Helper and Error</span>
+          <input-checkbox-base
+            label="Enable notifications"
+            size="md"
+            helper-text="You can change this later in settings"
+            error-message="Please make a selection">
+          </input-checkbox-base>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Accessibility:</strong> Helper text and error messages are associated with the checkbox via <code>aria-describedby</code>. Error messages have <code>role="alert"</code> for screen reader announcements.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 5: Interactive States
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>5. Interactive Hover/Focus States</h2>
+      <p>Visual feedback for user interactions:</p>
+
+      <div class="demo-interactive">
+        <p><strong>Hover over and focus on these checkboxes</strong> to see the interaction states:</p>
+
+        <div class="demo-row">
+          <div class="demo-item" style="align-items: flex-start;">
+            <span class="demo-item-label">Hover State</span>
+            <input-checkbox-base label="Hover over me" size="lg"></input-checkbox-base>
+            <span class="demo-item-label">Border darkens by 8% (blend.hoverDarker)</span>
+          </div>
+          <div class="demo-item" style="align-items: flex-start;">
+            <span class="demo-item-label">Focus State</span>
+            <input-checkbox-base label="Tab to focus me" size="lg"></input-checkbox-base>
+            <span class="demo-item-label">Focus ring appears on keyboard focus</span>
+          </div>
+          <div class="demo-item" style="align-items: flex-start;">
+            <span class="demo-item-label">Checked + Hover</span>
+            <input-checkbox-base label="Checked with hover" size="lg" checked></input-checkbox-base>
+            <span class="demo-item-label">Hover effect on checked state</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Focus Visibility:</strong> Focus ring only appears for keyboard navigation (<code>:focus-visible</code>), not mouse clicks.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 6: Form Integration
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>6. Form Integration</h2>
+      <p>Checkbox integration with HTML forms (submission and reset):</p>
+
+      <div class="demo-interactive">
+        <form id="demo-form">
+          <input-checkbox-base
+            label="Receive marketing emails"
+            name="marketing"
+            value="yes"
+            size="md">
+          </input-checkbox-base>
+
+          <input-checkbox-base
+            label="Receive product updates"
+            name="updates"
+            value="yes"
+            size="md"
+            checked>
+          </input-checkbox-base>
+
+          <input-checkbox-base
+            label="Share usage data for improvements"
+            name="analytics"
+            value="yes"
+            size="md"
+            helper-text="Anonymous data helps us improve the product">
+          </input-checkbox-base>
+
+          <div style="display: flex; gap: var(--space-100); margin-block-start: var(--space-100);">
+            <button type="submit" style="padding-inline: var(--space-100); padding-block: var(--space-050); border-radius: var(--radius-050); border: none; cursor: pointer; background: var(--cyan-300); color: var(--gray-500);">Submit Form</button>
+            <button type="reset" style="padding-inline: var(--space-100); padding-block: var(--space-050); border-radius: var(--radius-050); border: none; cursor: pointer; background: var(--gray-300); color: var(--white-200);">Reset Form</button>
+          </div>
+        </form>
+
+        <pre class="demo-code" id="form-output" style="margin-block-start: var(--space-100); min-block-size: 60px;">Submit the form to see the data here...</pre>
+      </div>
+
+      <div class="demo-note">
+        <strong>Form Reset:</strong> Per DesignerPunk philosophy, form reset always returns checkboxes to unchecked state (pre-checked checkboxes are not supported as default values).
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 7: Input-Checkbox-Legal
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>7. Input-Checkbox-Legal</h2>
+      <p>Specialized checkbox for legal consent with audit trail support:</p>
+
+      <h3>Fixed Configuration</h3>
+      <ul>
+        <li><strong>Size:</strong> Fixed lg box (40px) with labelSm typography</li>
+        <li><strong>Alignment:</strong> Fixed top alignment (for multi-line legal text)</li>
+        <li><strong>No Indeterminate:</strong> Legal consent is binary only</li>
+      </ul>
+
+      <div class="demo-row">
+        <div class="demo-item" style="max-inline-size: 400px; align-items: flex-start;">
+          <span class="demo-item-label">Terms of Service</span>
+          <input-checkbox-legal
+            id="tos-checkbox"
+            label="I have read and agree to the Terms of Service and Privacy Policy. I understand that my data will be processed in accordance with these policies."
+            legal-text-id="tos-privacy-v2"
+            legal-text-version="2.0.0"
+            helper-text="You must agree to continue">
+          </input-checkbox-legal>
+        </div>
+      </div>
+
+      <h3>Audit Trail Demonstration</h3>
+      <p>Click the checkbox above to see consent events logged with ISO 8601 timestamps:</p>
+      <div class="demo-interactive" id="audit-log" style="font-family: var(--font-family-mono); font-size: var(--typography-body-sm-font-size); max-block-size: 200px; overflow-y: auto;">
+        <div class="entry" style="color: var(--gray-200);">Waiting for consent events...</div>
+      </div>
+
+      <h3>Explicit Consent Enforcement</h3>
+      <p>Legal checkboxes prevent pre-checking when <code>requires-explicit-consent</code> is true (default):</p>
+      <div class="demo-row">
+        <div class="demo-item" style="max-inline-size: 400px; align-items: flex-start;">
+          <span class="demo-item-label">Pre-check Blocked</span>
+          <input-checkbox-legal
+            id="blocked-precheck"
+            label="This checkbox cannot be pre-checked programmatically"
+            checked>
+          </input-checkbox-legal>
+          <span class="demo-item-label">Check browser console for warning message</span>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>GDPR Compliance:</strong> The <code>requires-explicit-consent</code> attribute (default: true) prevents pre-checking, ensuring users must actively consent. Console warnings are logged when pre-check is attempted.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 8: Token Verification
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>8. Token Verification</h2>
+      <p>Check browser DevTools to verify these CSS custom properties are loaded:</p>
+
+      <h3>Spacing Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--space-inset-050</code> = 4px (sm checkbox inset)</li>
+        <li><code>--space-inset-075</code> = 6px (md checkbox inset)</li>
+        <li><code>--space-inset-100</code> = 8px (lg checkbox inset)</li>
+        <li><code>--space-grouped-normal</code> = gap between box and label (sm/md)</li>
+        <li><code>--space-grouped-loose</code> = gap between box and label (lg)</li>
+      </ul>
+
+      <h3>Color Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--color-select-selected-strong</code> = checked background</li>
+        <li><code>--color-select-not-selected-strong</code> = unchecked border</li>
+        <li><code>--color-feedback-error-strong</code> = error border</li>
+        <li><code>--color-contrast-on-dark</code> = checkmark icon color</li>
+      </ul>
+
+      <h3>Icon Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--icon-size-050</code> = 16px (sm checkbox icon)</li>
+        <li><code>--icon-size-075</code> = 20px (md checkbox icon)</li>
+        <li><code>--icon-size-100</code> = 24px (lg checkbox icon)</li>
+      </ul>
+
+      <h3>Motion Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--motion-selection-transition-duration</code> = 250ms</li>
+        <li><code>--motion-selection-transition-easing</code> = easingStandard</li>
+      </ul>
+    </div>
+
+    <!-- ============================================================
+         SECTION 9: Usage Examples
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>9. Usage Examples</h2>
+
+      <h3>HTML - Input-Checkbox-Base</h3>
+      <pre class="demo-code">&lt;!-- Basic checkbox --&gt;
+&lt;input-checkbox-base label="Accept terms"&gt;&lt;/input-checkbox-base&gt;
+
+&lt;!-- With size and alignment --&gt;
+&lt;input-checkbox-base
+  label="Subscribe to newsletter"
+  size="lg"
+  label-align="top"&gt;
+&lt;/input-checkbox-base&gt;
+
+&lt;!-- With helper text and error --&gt;
+&lt;input-checkbox-base
+  label="Enable notifications"
+  helper-text="You can change this later"
+  error-message="This field is required"&gt;
+&lt;/input-checkbox-base&gt;
+
+&lt;!-- Form integration --&gt;
+&lt;input-checkbox-base
+  label="Remember me"
+  name="remember"
+  value="yes"&gt;
+&lt;/input-checkbox-base&gt;</pre>
+
+      <h3>HTML - Input-Checkbox-Legal</h3>
+      <pre class="demo-code">&lt;!-- Legal consent checkbox --&gt;
+&lt;input-checkbox-legal
+  label="I agree to the Terms of Service"
+  legal-text-id="tos-v2"
+  legal-text-version="2.0.0"&gt;
+&lt;/input-checkbox-legal&gt;
+
+&lt;!-- With helper text --&gt;
+&lt;input-checkbox-legal
+  label="I consent to data processing as described in the Privacy Policy"
+  legal-text-id="privacy-policy"
+  legal-text-version="1.5.0"
+  helper-text="Required to create an account"&gt;
+&lt;/input-checkbox-legal&gt;</pre>
+
+      <h3>JavaScript</h3>
+      <pre class="demo-code">// Programmatic usage - Input-Checkbox-Base
+const checkbox = document.createElement('input-checkbox-base');
+checkbox.label = 'Dynamic checkbox';
+checkbox.size = 'lg';
+checkbox.addEventListener('change', (e) => {
+  console.log('Checked:', e.detail.checked);
+});
+document.body.appendChild(checkbox);
+
+// Programmatic usage - Input-Checkbox-Legal
+const legalCheckbox = document.createElement('input-checkbox-legal');
+legalCheckbox.label = 'I agree to the terms';
+legalCheckbox.legalTextId = 'tos-v3';
+legalCheckbox.legalTextVersion = '3.0.0';
+legalCheckbox.addEventListener('consent-change', (e) => {
+  console.log('Consent:', e.detail.consented);
+  console.log('Timestamp:', e.detail.timestamp);
+  console.log('Legal Text ID:', e.detail.legalTextId);
+  console.log('Version:', e.detail.legalTextVersion);
+});
+document.body.appendChild(legalCheckbox);</pre>
+    </div>
+
+  </main>
+
+  <footer class="demo-footer">
+    <p>DesignerPunk Design System • Checkbox Component Demo</p>
+  </footer>
+
+  <script>
+    if (window.location.protocol === 'file:') {
+      const banner = document.createElement('div');
+      banner.className = 'demo-file-protocol-warning';
+      banner.textContent = 'Components may not load correctly via file:// protocol. Use a local server: npx serve dist/browser';
+      document.body.prepend(banner);
+    }
+  </script>
+
+  <script type="module">
+    // Form submission handler
+    const form = document.getElementById('demo-form');
+    const formOutput = document.getElementById('form-output');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const data = {};
+      for (const [key, value] of formData.entries()) {
+        data[key] = value;
+      }
+      formOutput.textContent = JSON.stringify(data, null, 2) || '(no checkboxes selected)';
+    });
+
+    // Audit log for legal checkbox
+    const auditLog = document.getElementById('audit-log');
+    const tosCheckbox = document.getElementById('tos-checkbox');
+
+    tosCheckbox.addEventListener('consent-change', (e) => {
+      const { consented, timestamp, legalTextId, legalTextVersion } = e.detail;
+      const entry = document.createElement('div');
+      entry.className = 'entry';
+      entry.style.cssText = 'padding-block: var(--space-050); border-block-end: var(--border-default) solid var(--gray-300);';
+      entry.innerHTML = `
+        <span style="color: var(--gray-200);">${timestamp}</span><br>
+        <span style="color: ${consented ? 'var(--color-feedback-success-strong)' : 'var(--pink-300)'};">${consented ? '✓ CONSENT GIVEN' : '✗ CONSENT REVOKED'}</span><br>
+        <span style="color: var(--gray-200);">Legal Text: ${legalTextId} v${legalTextVersion}</span>
+      `;
+
+      // Clear placeholder if first entry
+      if (auditLog.querySelector('.entry').textContent.includes('Waiting')) {
+        auditLog.innerHTML = '';
+      }
+
+      auditLog.insertBefore(entry, auditLog.firstChild);
+    });
+
+    // Set indeterminate state programmatically (can't be set via attribute)
+    const indeterminateCheckbox = document.getElementById('indeterminate-demo');
+    if (indeterminateCheckbox) {
+      // Need to wait for component to render
+      setTimeout(() => {
+        indeterminateCheckbox.indeterminate = true;
+      }, 100);
+    }
+  </script>
+</body>
+</html>

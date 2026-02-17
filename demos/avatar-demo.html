@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Avatar Demo - DesignerPunk</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="demo-styles.css">
+  <script type="module" src="designerpunk.esm.js"></script>
+</head>
+<body class="demo-page">
+  <header class="demo-header">
+    <a href="index.html" class="demo-back-link">← All Components</a>
+    <h1>🎭 Avatar Component Demo</h1>
+    <p class="demo-subtitle">Visual representation component for users (Human) and AI agents (Agent) with shape-based differentiation</p>
+  </header>
+
+  <main>
+
+    <!-- ============================================================
+         SECTION 1: Entity Types
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>1. Entity Type Differentiation</h2>
+      <p>Avatars use shape to instantly distinguish between human users and AI agents:</p>
+      <ul>
+        <li><strong>Human</strong> = Circle (organic, natural)</li>
+        <li><strong>Agent</strong> = Hexagon (synthetic, constructed)</li>
+      </ul>
+
+      <div class="demo-row">
+        <div class="demo-item">
+          <avatar-base type="human" size="xl"></avatar-base>
+          <span class="demo-item-label">Human</span>
+          <span class="demo-item-label">Circle Shape</span>
+        </div>
+        <div class="demo-item">
+          <avatar-base type="agent" size="xl"></avatar-base>
+          <span class="demo-item-label">Agent</span>
+          <span class="demo-item-label">Hexagon Shape</span>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Accessibility:</strong> Shape differentiation doesn't rely on color alone, improving accessibility for colorblind users.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 2: All Six Sizes
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>2. All Six Size Variants</h2>
+      <p>Avatar sizes are derived from the mathematical token system (SPACING_BASE_VALUE = 8px):</p>
+
+      <h3>Human Avatars (Circle)</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <avatar-base type="human" size="xs"></avatar-base>
+          <span class="demo-item-label">xs</span>
+          <span class="demo-item-label">24px (3×base)</span>
+        </div>
+        <div class="demo-item">
+          <avatar-base type="human" size="sm"></avatar-base>
+          <span class="demo-item-label">sm</span>
+          <span class="demo-item-label">32px (4×base)</span>
+        </div>
+        <div class="demo-item">
+          <avatar-base type="human" size="md"></avatar-base>
+          <span class="demo-item-label">md</span>
+          <span class="demo-item-label">40px (5×base)</span>
+        </div>
+        <div class="demo-item">
+          <avatar-base type="human" size="lg"></avatar-base>
+          <span class="demo-item-label">lg</span>
+          <span class="demo-item-label">48px (6×base)</span>
+        </div>
+        <div class="demo-item">
+          <avatar-base type="human" size="xl"></avatar-base>
+          <span class="demo-item-label">xl</span>
+          <span class="demo-item-label">80px (10×base)</span>
+        </div>
+        <div class="demo-item">
+          <avatar-base type="human" size="xxl"></avatar-base>
+          <span class="demo-item-label">xxl</span>
+          <span class="demo-item-label">128px (16×base)</span>
+        </div>
+      </div>
+
+      <h3>Agent Avatars (Hexagon)</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <avatar-base type="agent" size="xs"></avatar-base>
+          <span class="demo-item-label">xs</span>
+          <span class="demo-item-label">24px (3×base)</span>
+        </div>
+        <div class="demo-item">
+          <avatar-base type="agent" size="sm"></avatar-base>
+          <span class="demo-item-label">sm</span>
+          <span class="demo-item-label">32px (4×base)</span>
+        </div>
+        <div class="demo-item">
+          <avatar-base type="agent" size="md"></avatar-base>
+          <span class="demo-item-label">md</span>
+          <span class="demo-item-label">40px (5×base)</span>
+        </div>
+        <div class="demo-item">
+          <avatar-base type="agent" size="lg"></avatar-base>
+          <span class="demo-item-label">lg</span>
+          <span class="demo-item-label">48px (6×base)</span>
+        </div>
+        <div class="demo-item">
+          <avatar-base type="agent" size="xl"></avatar-base>
+          <span class="demo-item-label">xl</span>
+          <span class="demo-item-label">80px (10×base)</span>
+        </div>
+        <div class="demo-item">
+          <avatar-base type="agent" size="xxl"></avatar-base>
+          <span class="demo-item-label">xxl</span>
+          <span class="demo-item-label">128px (16×base)</span>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Token References:</strong> xs-lg reference spacing tokens (space300-space600). xl and xxl use derivations (SPACING_BASE_VALUE × 10 and × 16).
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 3: Icon Content
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>3. Icon Content and Sizing</h2>
+      <p>Icons scale proportionally with avatar size at a 50% ratio:</p>
+
+      <div class="demo-grid">
+        <div style="text-align: center;">
+          <h4>Human Icons</h4>
+          <p>Person icon placeholder</p>
+          <div class="demo-row" style="justify-content: center;">
+            <div class="demo-item">
+              <avatar-base type="human" size="xs"></avatar-base>
+              <span class="demo-item-label">12px icon</span>
+            </div>
+            <div class="demo-item">
+              <avatar-base type="human" size="md"></avatar-base>
+              <span class="demo-item-label">20px icon</span>
+            </div>
+            <div class="demo-item">
+              <avatar-base type="human" size="xxl"></avatar-base>
+              <span class="demo-item-label">64px icon</span>
+            </div>
+          </div>
+        </div>
+        <div style="text-align: center;">
+          <h4>Agent Icons</h4>
+          <p>Bot/AI icon placeholder</p>
+          <div class="demo-row" style="justify-content: center;">
+            <div class="demo-item">
+              <avatar-base type="agent" size="xs"></avatar-base>
+              <span class="demo-item-label">12px icon</span>
+            </div>
+            <div class="demo-item">
+              <avatar-base type="agent" size="md"></avatar-base>
+              <span class="demo-item-label">20px icon</span>
+            </div>
+            <div class="demo-item">
+              <avatar-base type="agent" size="xxl"></avatar-base>
+              <span class="demo-item-label">64px icon</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ul class="demo-token-list" style="margin-block-start: var(--space-150);">
+        <li><code>xs</code> → <code>avatar.icon.size.xs</code> (12px) - component token gap filler</li>
+        <li><code>sm</code> → <code>icon.size050</code> (16px) - existing icon token</li>
+        <li><code>md</code> → <code>icon.size075</code> (20px) - existing icon token</li>
+        <li><code>lg</code> → <code>icon.size100</code> (24px) - existing icon token</li>
+        <li><code>xl</code> → <code>icon.size500</code> (40px) - existing icon token</li>
+        <li><code>xxl</code> → <code>avatar.icon.size.xxl</code> (64px) - component token gap filler</li>
+      </ul>
+    </div>
+
+    <!-- ============================================================
+         SECTION 4: Image Support (Human Only)
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>4. Image Support (Human Only)</h2>
+      <p>Human avatars can display profile images. Agent avatars ignore the <code>src</code> prop.</p>
+
+      <h3>Human with Images</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <avatar-base
+            type="human"
+            size="xs"
+            src="https://i.pravatar.cc/48?img=1"
+            alt="User 1">
+          </avatar-base>
+          <span class="demo-item-label">xs</span>
+        </div>
+        <div class="demo-item">
+          <avatar-base
+            type="human"
+            size="sm"
+            src="https://i.pravatar.cc/64?img=2"
+            alt="User 2">
+          </avatar-base>
+          <span class="demo-item-label">sm</span>
+        </div>
+        <div class="demo-item">
+          <avatar-base
+            type="human"
+            size="md"
+            src="https://i.pravatar.cc/80?img=3"
+            alt="User 3">
+          </avatar-base>
+          <span class="demo-item-label">md</span>
+        </div>
+        <div class="demo-item">
+          <avatar-base
+            type="human"
+            size="lg"
+            src="https://i.pravatar.cc/96?img=4"
+            alt="User 4">
+          </avatar-base>
+          <span class="demo-item-label">lg</span>
+        </div>
+        <div class="demo-item">
+          <avatar-base
+            type="human"
+            size="xl"
+            src="https://i.pravatar.cc/160?img=5"
+            alt="User 5">
+          </avatar-base>
+          <span class="demo-item-label">xl</span>
+        </div>
+        <div class="demo-item">
+          <avatar-base
+            type="human"
+            size="xxl"
+            src="https://i.pravatar.cc/256?img=6"
+            alt="User 6">
+          </avatar-base>
+          <span class="demo-item-label">xxl</span>
+        </div>
+      </div>
+
+      <h3>Agent Ignores Image (Always Shows Icon)</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <avatar-base
+            type="agent"
+            size="xl"
+            src="https://i.pravatar.cc/160?img=7"
+            alt="This will be ignored">
+          </avatar-base>
+          <span class="demo-item-label">src prop ignored</span>
+        </div>
+        <div class="demo-item">
+          <avatar-base type="agent" size="xl"></avatar-base>
+          <span class="demo-item-label">No src prop</span>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Image Fallback:</strong> If an image fails to load, the avatar falls back to the icon placeholder automatically.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 5: Interactive States
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>5. Interactive Hover State</h2>
+      <p>When <code>interactive="true"</code>, avatars show visual feedback on hover by increasing border width.</p>
+
+      <div class="demo-interactive">
+        <p><strong>Hover over these avatars</strong> to see the border transition effect:</p>
+
+        <h3>Human Interactive</h3>
+        <div class="demo-row">
+          <div class="demo-item">
+            <avatar-base type="human" size="sm" interactive="true"></avatar-base>
+            <span class="demo-item-label">sm</span>
+          </div>
+          <div class="demo-item">
+            <avatar-base type="human" size="md" interactive="true"></avatar-base>
+            <span class="demo-item-label">md</span>
+          </div>
+          <div class="demo-item">
+            <avatar-base type="human" size="lg" interactive="true"></avatar-base>
+            <span class="demo-item-label">lg</span>
+          </div>
+          <div class="demo-item">
+            <avatar-base type="human" size="xl" interactive="true"></avatar-base>
+            <span class="demo-item-label">xl</span>
+          </div>
+          <div class="demo-item">
+            <avatar-base
+              type="human"
+              size="xl"
+              interactive="true"
+              src="https://i.pravatar.cc/160?img=8"
+              alt="Interactive user">
+            </avatar-base>
+            <span class="demo-item-label">with image</span>
+          </div>
+        </div>
+
+        <h3>Agent Interactive</h3>
+        <div class="demo-row">
+          <div class="demo-item">
+            <avatar-base type="agent" size="sm" interactive="true"></avatar-base>
+            <span class="demo-item-label">sm</span>
+          </div>
+          <div class="demo-item">
+            <avatar-base type="agent" size="md" interactive="true"></avatar-base>
+            <span class="demo-item-label">md</span>
+          </div>
+          <div class="demo-item">
+            <avatar-base type="agent" size="lg" interactive="true"></avatar-base>
+            <span class="demo-item-label">lg</span>
+          </div>
+          <div class="demo-item">
+            <avatar-base type="agent" size="xl" interactive="true"></avatar-base>
+            <span class="demo-item-label">xl</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Transition:</strong> Uses <code>motion.duration.fast</code> token (150ms) for smooth border width transition from <code>borderDefault</code> to <code>borderEmphasis</code>.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 6: Border Styles
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>6. Border Styles</h2>
+      <p>Borders scale appropriately for hero sizes:</p>
+
+      <div class="demo-grid">
+        <div style="text-align: center;">
+          <h4>xs - xl (Standard Border)</h4>
+          <p><code>borderDefault</code> width, <code>color.avatar.border</code> @ 48% opacity</p>
+          <div class="demo-row" style="justify-content: center;">
+            <avatar-base type="human" size="md"></avatar-base>
+            <avatar-base type="agent" size="md"></avatar-base>
+          </div>
+        </div>
+        <div style="text-align: center;">
+          <h4>xxl (Enhanced Border)</h4>
+          <p><code>borderEmphasis</code> width, <code>white100</code> @ full opacity</p>
+          <div class="demo-row" style="justify-content: center;">
+            <avatar-base type="human" size="xxl"></avatar-base>
+            <avatar-base type="agent" size="xxl"></avatar-base>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 7: Accessibility
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>7. Accessibility Features</h2>
+
+      <h3>Decorative Mode</h3>
+      <p>When <code>decorative="true"</code>, avatar is hidden from screen readers (<code>aria-hidden="true"</code>).</p>
+      <div class="demo-row">
+        <div class="demo-item">
+          <avatar-base type="human" size="lg" decorative="true"></avatar-base>
+          <span class="demo-item-label">decorative="true"</span>
+          <span class="demo-item-label">aria-hidden</span>
+        </div>
+        <div class="demo-item">
+          <avatar-base type="human" size="lg"></avatar-base>
+          <span class="demo-item-label">decorative="false"</span>
+          <span class="demo-item-label">announced</span>
+        </div>
+      </div>
+
+      <h3>Test ID Support</h3>
+      <p>Use <code>testid</code> attribute for automated testing (renders as <code>data-testid</code>).</p>
+      <div class="demo-row">
+        <div class="demo-item">
+          <avatar-base
+            type="human"
+            size="lg"
+            testid="user-profile-avatar"
+            src="https://i.pravatar.cc/96?img=9"
+            alt="Jane Doe's profile picture">
+          </avatar-base>
+          <span class="demo-item-label">testid="user-profile-avatar"</span>
+        </div>
+      </div>
+
+      <h3>Alt Text for Images</h3>
+      <p>When <code>src</code> is provided, <code>alt</code> is required for accessibility.</p>
+      <div class="demo-row">
+        <div class="demo-item">
+          <avatar-base
+            type="human"
+            size="lg"
+            src="https://i.pravatar.cc/96?img=10"
+            alt="John Smith's profile picture">
+          </avatar-base>
+          <span class="demo-item-label">alt="John Smith's profile picture"</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 8: Default Values
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>8. Default Values</h2>
+      <p>When props are omitted, these defaults apply:</p>
+
+      <div class="demo-row">
+        <div class="demo-item">
+          <avatar-base></avatar-base>
+          <span class="demo-item-label">No props</span>
+          <span class="demo-item-label">type="human", size="md"</span>
+        </div>
+        <div class="demo-item">
+          <avatar-base type="agent"></avatar-base>
+          <span class="demo-item-label">Only type</span>
+          <span class="demo-item-label">size="md" (default)</span>
+        </div>
+        <div class="demo-item">
+          <avatar-base size="lg"></avatar-base>
+          <span class="demo-item-label">Only size</span>
+          <span class="demo-item-label">type="human" (default)</span>
+        </div>
+      </div>
+
+      <ul class="demo-token-list" style="margin-block-start: var(--space-150);">
+        <li><code>type</code> → defaults to <code>"human"</code></li>
+        <li><code>size</code> → defaults to <code>"md"</code></li>
+        <li><code>interactive</code> → defaults to <code>false</code></li>
+        <li><code>decorative</code> → defaults to <code>false</code></li>
+      </ul>
+    </div>
+
+    <!-- ============================================================
+         SECTION 9: Token Verification
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>9. Token Verification</h2>
+      <p>Check browser DevTools to verify these CSS custom properties are loaded:</p>
+
+      <ul class="demo-token-list">
+        <li><code>--avatar-size-xs</code> = 24 (unitless)</li>
+        <li><code>--avatar-size-sm</code> = 32 (unitless)</li>
+        <li><code>--avatar-size-md</code> = 40 (unitless)</li>
+        <li><code>--avatar-size-lg</code> = 48 (unitless)</li>
+        <li><code>--avatar-size-xl</code> = 80 (unitless)</li>
+        <li><code>--avatar-size-xxl</code> = 128 (unitless)</li>
+        <li><code>--avatar-icon-size-xs</code> = 12 (unitless)</li>
+        <li><code>--avatar-icon-size-xxl</code> = 64 (unitless)</li>
+        <li><code>--color-avatar-human</code> = orange300 reference</li>
+        <li><code>--color-avatar-agent</code> = teal300 reference</li>
+        <li><code>--color-avatar-border</code> = gray100 reference</li>
+        <li><code>--motion-focus-transition-duration</code> = 150ms</li>
+      </ul>
+    </div>
+
+    <!-- ============================================================
+         SECTION 10: Usage Examples
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>10. Usage Examples</h2>
+
+      <h3>HTML</h3>
+      <pre class="demo-code">&lt;!-- Basic human avatar --&gt;
+&lt;avatar-base type="human" size="md"&gt;&lt;/avatar-base&gt;
+
+&lt;!-- Agent avatar with interactive hover --&gt;
+&lt;avatar-base type="agent" size="lg" interactive="true"&gt;&lt;/avatar-base&gt;
+
+&lt;!-- Human avatar with image --&gt;
+&lt;avatar-base
+  type="human"
+  size="xl"
+  src="/profile.jpg"
+  alt="User profile"&gt;
+&lt;/avatar-base&gt;
+
+&lt;!-- Decorative avatar (hidden from screen readers) --&gt;
+&lt;avatar-base type="human" size="sm" decorative="true"&gt;&lt;/avatar-base&gt;</pre>
+
+      <h3>JavaScript</h3>
+      <pre class="demo-code">// Programmatic usage
+const avatar = document.createElement('avatar-base');
+avatar.type = 'agent';
+avatar.size = 'lg';
+avatar.interactive = true;
+document.body.appendChild(avatar);</pre>
+    </div>
+
+  </main>
+
+  <footer class="demo-footer">
+    <p>DesignerPunk Design System • Avatar Component Demo</p>
+  </footer>
+
+  <script>
+    if (window.location.protocol === 'file:') {
+      const banner = document.createElement('div');
+      banner.className = 'demo-file-protocol-warning';
+      banner.textContent = 'Components may not load correctly via file:// protocol. Use a local server: npx serve dist/browser';
+      document.body.prepend(banner);
+    }
+  </script>
+</body>
+</html>

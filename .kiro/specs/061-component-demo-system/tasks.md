@@ -108,7 +108,7 @@ The Component Demo System will be implemented in two phases:
     - Use demo-index, demo-category, demo-card-grid, demo-card CSS classes
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
-- [ ] 3. Migrate Existing Demos
+- [x] 3. Migrate Existing Demos
 
   **Type**: Parent
   **Validation**: Tier 2 - Standard
@@ -126,7 +126,7 @@ The Component Demo System will be implemented in two phases:
   **Completion Documentation:**
   - `.kiro/specs/061-component-demo-system/completion/task-3-parent-completion.md`
 
-  - [ ] 3.1 Migrate avatar-demo.html
+  - [x] 3.1 Migrate avatar-demo.html
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Copy existing `dist/browser/avatar-demo.html` to `demos/avatar-demo.html`
@@ -136,7 +136,7 @@ The Component Demo System will be implemented in two phases:
     - Test locally to verify component rendering
     - _Requirements: 7.1, 7.4_
 
-  - [ ] 3.2 Migrate badge-demo.html
+  - [x] 3.2 Migrate badge-demo.html
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Copy existing `dist/browser/badge-demo.html` to `demos/badge-demo.html`
@@ -146,7 +146,7 @@ The Component Demo System will be implemented in two phases:
     - Test locally to verify component rendering
     - _Requirements: 7.2, 7.4_
 
-  - [ ] 3.3 Migrate checkbox-demo.html
+  - [x] 3.3 Migrate checkbox-demo.html
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Copy existing `dist/browser/checkbox-demo.html` to `demos/checkbox-demo.html`

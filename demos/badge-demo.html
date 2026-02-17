@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Badge Demo - DesignerPunk</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="demo-styles.css">
+  <script type="module" src="designerpunk.esm.js"></script>
+</head>
+<body class="demo-page">
+  <header class="demo-header">
+    <a href="index.html" class="demo-back-link">← All Components</a>
+    <h1>🏷️ Badge Component Demo</h1>
+    <p class="demo-subtitle">Read-only, non-interactive visual indicators for status, categorization, and notification counts</p>
+  </header>
+
+  <main>
+
+    <!-- ============================================================
+         SECTION 1: Badge Family Overview
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>1. Badge Family Overview</h2>
+      <p>The Badge family consists of three components for different use cases:</p>
+      <ul>
+        <li><strong>Badge-Label-Base</strong> = Text labels for categorization, status, metadata</li>
+        <li><strong>Badge-Count-Base</strong> = Numeric counts with circular/pill shape</li>
+        <li><strong>Badge-Count-Notification</strong> = Notification counts with live region announcements</li>
+      </ul>
+
+      <div class="demo-row">
+        <div class="demo-item">
+          <badge-label-base label="Draft"></badge-label-base>
+          <span class="demo-item-label">Label</span>
+          <span class="demo-item-label">Categorization</span>
+        </div>
+        <div class="demo-item">
+          <badge-count-base count="5"></badge-count-base>
+          <span class="demo-item-label">Count</span>
+          <span class="demo-item-label">Quantities</span>
+        </div>
+        <div class="demo-item">
+          <badge-count-notification count="3"></badge-count-notification>
+          <span class="demo-item-label">Notification</span>
+          <span class="demo-item-label">Alerts</span>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Key Characteristic:</strong> All badges are read-only and non-interactive. They don't respond to clicks and are not focusable.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 2: Badge-Label-Base Sizes
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>2. Badge-Label-Base Size Variants</h2>
+      <p>Label badges come in three sizes with token-based typography and spacing:</p>
+
+      <div class="demo-row">
+        <div class="demo-item">
+          <badge-label-base label="Small" size="sm"></badge-label-base>
+          <span class="demo-item-label">sm</span>
+          <span class="demo-item-label">typography.labelXs</span>
+        </div>
+        <div class="demo-item">
+          <badge-label-base label="Medium" size="md"></badge-label-base>
+          <span class="demo-item-label">md</span>
+          <span class="demo-item-label">typography.labelSm</span>
+        </div>
+        <div class="demo-item">
+          <badge-label-base label="Large" size="lg"></badge-label-base>
+          <span class="demo-item-label">lg</span>
+          <span class="demo-item-label">typography.labelMd</span>
+        </div>
+      </div>
+
+      <h3>Real-World Label Examples</h3>
+      <div class="demo-row">
+        <badge-label-base label="Draft" size="sm"></badge-label-base>
+        <badge-label-base label="Published" size="sm"></badge-label-base>
+        <badge-label-base label="Archived" size="sm"></badge-label-base>
+        <badge-label-base label="Featured" size="sm"></badge-label-base>
+        <badge-label-base label="New" size="sm"></badge-label-base>
+        <badge-label-base label="Beta" size="sm"></badge-label-base>
+      </div>
+
+      <ul class="demo-token-list" style="margin-block-start: var(--space-150);">
+        <li><code>sm</code> → V-Padding: <code>space.inset.none</code>, H-Padding: <code>space.inset.050</code></li>
+        <li><code>md</code> → V-Padding: <code>space.inset.050</code>, H-Padding: <code>space.inset.100</code></li>
+        <li><code>lg</code> → V-Padding: <code>space.inset.100</code>, H-Padding: <code>space.inset.150</code></li>
+      </ul>
+    </div>
+
+    <!-- ============================================================
+         SECTION 3: Badge-Label-Base with Icons
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>3. Badge-Label-Base with Icons</h2>
+      <p>Label badges support optional leading icons via Icon-Base integration:</p>
+
+      <h3>Small Size with Icons</h3>
+      <div class="demo-row">
+        <badge-label-base label="Approved" icon="check" size="sm"></badge-label-base>
+        <badge-label-base label="Warning" icon="alert-triangle" size="sm"></badge-label-base>
+        <badge-label-base label="Info" icon="info" size="sm"></badge-label-base>
+        <badge-label-base label="Settings" icon="settings" size="sm"></badge-label-base>
+      </div>
+
+      <h3>Medium Size with Icons</h3>
+      <div class="demo-row">
+        <badge-label-base label="Approved" icon="check" size="md"></badge-label-base>
+        <badge-label-base label="Warning" icon="alert-triangle" size="md"></badge-label-base>
+        <badge-label-base label="Info" icon="info" size="md"></badge-label-base>
+        <badge-label-base label="Settings" icon="settings" size="md"></badge-label-base>
+      </div>
+
+      <h3>Large Size with Icons</h3>
+      <div class="demo-row">
+        <badge-label-base label="Approved" icon="check" size="lg"></badge-label-base>
+        <badge-label-base label="Warning" icon="alert-triangle" size="lg"></badge-label-base>
+        <badge-label-base label="Info" icon="info" size="lg"></badge-label-base>
+        <badge-label-base label="Settings" icon="settings" size="lg"></badge-label-base>
+      </div>
+
+      <ul class="demo-token-list" style="margin-block-start: var(--space-150);">
+        <li><code>sm</code> → Icon: <code>icon.size050</code> (16px), Gap: <code>space.grouped.minimal</code></li>
+        <li><code>md</code> → Icon: <code>icon.size075</code> (20px), Gap: <code>space.grouped.tight</code></li>
+        <li><code>lg</code> → Icon: <code>icon.size100</code> (24px), Gap: <code>space.grouped.tight</code></li>
+      </ul>
+    </div>
+
+    <!-- ============================================================
+         SECTION 4: Badge-Label-Base Truncation
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>4. Badge-Label-Base Truncation</h2>
+      <p>When <code>truncate="true"</code>, long labels are truncated with ellipsis at <code>badge.label.maxWidth</code> (120px):</p>
+
+      <h3>Without Truncation (Default)</h3>
+      <div class="demo-row">
+        <badge-label-base label="This is a very long category name that will not truncate"></badge-label-base>
+      </div>
+
+      <h3>With Truncation Enabled</h3>
+      <div class="demo-row">
+        <badge-label-base label="This is a very long category name that will truncate" truncate="true"></badge-label-base>
+      </div>
+
+      <div class="demo-note">
+        <strong>Accessibility:</strong> When truncated, the full text is available via the <code>title</code> attribute (hover to see tooltip).
+      </div>
+
+      <h3>Truncation with Icons</h3>
+      <div class="demo-row">
+        <badge-label-base label="Very long status with icon" icon="check" truncate="true" size="sm"></badge-label-base>
+        <badge-label-base label="Very long status with icon" icon="check" truncate="true" size="md"></badge-label-base>
+        <badge-label-base label="Very long status with icon" icon="check" truncate="true" size="lg"></badge-label-base>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 5: Badge-Count-Base Sizes
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>5. Badge-Count-Base Size Variants</h2>
+      <p>Count badges come in three sizes with automatic circular/pill shape adaptation:</p>
+
+      <h3>Single Digit (Circular Shape)</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <badge-count-base count="5" size="sm"></badge-count-base>
+          <span class="demo-item-label">sm</span>
+        </div>
+        <div class="demo-item">
+          <badge-count-base count="5" size="md"></badge-count-base>
+          <span class="demo-item-label">md</span>
+        </div>
+        <div class="demo-item">
+          <badge-count-base count="5" size="lg"></badge-count-base>
+          <span class="demo-item-label">lg</span>
+        </div>
+      </div>
+
+      <h3>Double Digit (Pill Shape)</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <badge-count-base count="42" size="sm"></badge-count-base>
+          <span class="demo-item-label">sm</span>
+        </div>
+        <div class="demo-item">
+          <badge-count-base count="42" size="md"></badge-count-base>
+          <span class="demo-item-label">md</span>
+        </div>
+        <div class="demo-item">
+          <badge-count-base count="42" size="lg"></badge-count-base>
+          <span class="demo-item-label">lg</span>
+        </div>
+      </div>
+
+      <h3>Shape Progression</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <badge-count-base count="1"></badge-count-base>
+          <span class="demo-item-label">1 digit</span>
+        </div>
+        <div class="demo-item">
+          <badge-count-base count="9"></badge-count-base>
+          <span class="demo-item-label">1 digit</span>
+        </div>
+        <div class="demo-item">
+          <badge-count-base count="10"></badge-count-base>
+          <span class="demo-item-label">2 digits</span>
+        </div>
+        <div class="demo-item">
+          <badge-count-base count="99"></badge-count-base>
+          <span class="demo-item-label">2 digits</span>
+        </div>
+        <div class="demo-item">
+          <badge-count-base count="100"></badge-count-base>
+          <span class="demo-item-label">3 digits</span>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Shape Logic:</strong> Min-width equals line-height for circular single-digit counts. Multi-digit counts expand horizontally with padding, creating a pill shape.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 6: Badge-Count-Base Max Truncation
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>6. Badge-Count-Base Max Truncation</h2>
+      <p>When count exceeds <code>max</code> (default: 99), displays "[max]+":</p>
+
+      <h3>Default Max (99)</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <badge-count-base count="50"></badge-count-base>
+          <span class="demo-item-label">count=50</span>
+        </div>
+        <div class="demo-item">
+          <badge-count-base count="99"></badge-count-base>
+          <span class="demo-item-label">count=99</span>
+        </div>
+        <div class="demo-item">
+          <badge-count-base count="100"></badge-count-base>
+          <span class="demo-item-label">count=100 → "99+"</span>
+        </div>
+        <div class="demo-item">
+          <badge-count-base count="999"></badge-count-base>
+          <span class="demo-item-label">count=999 → "99+"</span>
+        </div>
+      </div>
+
+      <h3>Custom Max Values</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <badge-count-base count="15" max="9"></badge-count-base>
+          <span class="demo-item-label">max=9 → "9+"</span>
+        </div>
+        <div class="demo-item">
+          <badge-count-base count="150" max="50"></badge-count-base>
+          <span class="demo-item-label">max=50 → "50+"</span>
+        </div>
+        <div class="demo-item">
+          <badge-count-base count="1500" max="999"></badge-count-base>
+          <span class="demo-item-label">max=999 → "999+"</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 7: Badge-Count-Base showZero Behavior
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>7. Badge-Count-Base showZero Behavior</h2>
+      <p>Control visibility when count is zero:</p>
+
+      <div class="demo-grid">
+        <div style="text-align: center;">
+          <h4>showZero="false" (Default)</h4>
+          <p>Badge is hidden when count=0</p>
+          <div class="demo-row" style="justify-content: center; min-block-size: 40px;">
+            <badge-count-base count="0"></badge-count-base>
+            <span class="demo-item-label">(nothing rendered)</span>
+          </div>
+        </div>
+        <div style="text-align: center;">
+          <h4>showZero="true"</h4>
+          <p>Badge shows "0" when count=0</p>
+          <div class="demo-row" style="justify-content: center; min-block-size: 40px;">
+            <badge-count-base count="0" show-zero="true"></badge-count-base>
+          </div>
+        </div>
+      </div>
+
+      <h3>Transition from Zero</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <badge-count-base count="0" show-zero="true"></badge-count-base>
+          <span class="demo-item-label">0</span>
+        </div>
+        <div class="demo-item">
+          <badge-count-base count="1"></badge-count-base>
+          <span class="demo-item-label">1</span>
+        </div>
+        <div class="demo-item">
+          <badge-count-base count="2"></badge-count-base>
+          <span class="demo-item-label">2</span>
+        </div>
+        <div class="demo-item">
+          <badge-count-base count="5"></badge-count-base>
+          <span class="demo-item-label">5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 8: Badge-Count-Notification
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>8. Badge-Count-Notification</h2>
+      <p>Notification badges with fixed pink/white colors and live region announcements:</p>
+
+      <h3>All Sizes</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <badge-count-notification count="3" size="sm"></badge-count-notification>
+          <span class="demo-item-label">sm</span>
+        </div>
+        <div class="demo-item">
+          <badge-count-notification count="3" size="md"></badge-count-notification>
+          <span class="demo-item-label">md</span>
+        </div>
+        <div class="demo-item">
+          <badge-count-notification count="3" size="lg"></badge-count-notification>
+          <span class="demo-item-label">lg</span>
+        </div>
+      </div>
+
+      <h3>Count Progression</h3>
+      <div class="demo-row">
+        <badge-count-notification count="1"></badge-count-notification>
+        <badge-count-notification count="5"></badge-count-notification>
+        <badge-count-notification count="12"></badge-count-notification>
+        <badge-count-notification count="42"></badge-count-notification>
+        <badge-count-notification count="99"></badge-count-notification>
+        <badge-count-notification count="150"></badge-count-notification>
+      </div>
+
+      <div class="demo-note">
+        <strong>Fixed Colors:</strong> Background: <code>color.badge.notification.background</code> (pink400 #CC2257), Text: <code>color.badge.notification.text</code> (white100). Contrast ratio: 6.33:1 ✅
+      </div>
+
+      <h3>Accessibility: Live Region Announcements</h3>
+      <p>Screen readers announce count changes with proper pluralization:</p>
+      <ul class="demo-token-list">
+        <li><code>count=1</code> → "1 notification"</li>
+        <li><code>count=5</code> → "5 notifications"</li>
+        <li><code>count>99</code> → "99 or more notifications"</li>
+      </ul>
+
+      <h3>Disable Announcements</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <badge-count-notification count="5" announce-changes="false"></badge-count-notification>
+          <span class="demo-item-label">announce-changes="false"</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 9: Inline Usage Examples
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>9. Inline Usage Examples</h2>
+      <p>Badges are designed for inline use alongside other content:</p>
+
+      <h3>Status Labels</h3>
+      <div class="demo-interactive">
+        <div class="demo-row">
+          <span class="demo-item-label">Document Status:</span>
+          <badge-label-base label="Draft" size="sm"></badge-label-base>
+        </div>
+      </div>
+      <div class="demo-interactive" style="margin-block-start: var(--space-050);">
+        <div class="demo-row">
+          <span class="demo-item-label">Review Status:</span>
+          <badge-label-base label="Approved" icon="check" size="sm"></badge-label-base>
+        </div>
+      </div>
+      <div class="demo-interactive" style="margin-block-start: var(--space-050);">
+        <div class="demo-row">
+          <span class="demo-item-label">Priority:</span>
+          <badge-label-base label="High" icon="alert-triangle" size="sm"></badge-label-base>
+        </div>
+      </div>
+
+      <h3>Notification Counts</h3>
+      <div class="demo-interactive">
+        <div class="demo-row">
+          <span class="demo-item-label">Messages</span>
+          <badge-count-notification count="5"></badge-count-notification>
+        </div>
+      </div>
+      <div class="demo-interactive" style="margin-block-start: var(--space-050);">
+        <div class="demo-row">
+          <span class="demo-item-label">Notifications</span>
+          <badge-count-notification count="12"></badge-count-notification>
+        </div>
+      </div>
+      <div class="demo-interactive" style="margin-block-start: var(--space-050);">
+        <div class="demo-row">
+          <span class="demo-item-label">Updates</span>
+          <badge-count-notification count="99"></badge-count-notification>
+        </div>
+      </div>
+
+      <h3>Item Counts</h3>
+      <div class="demo-interactive">
+        <div class="demo-row">
+          <span class="demo-item-label">Cart Items:</span>
+          <badge-count-base count="3"></badge-count-base>
+        </div>
+      </div>
+      <div class="demo-interactive" style="margin-block-start: var(--space-050);">
+        <div class="demo-row">
+          <span class="demo-item-label">Unread:</span>
+          <badge-count-base count="42"></badge-count-base>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 10: Default Values
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>10. Default Values</h2>
+      <p>When props are omitted, these defaults apply:</p>
+
+      <h3>Badge-Label-Base Defaults</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <badge-label-base label="Default"></badge-label-base>
+          <span class="demo-item-label">size="md" (default)</span>
+        </div>
+        <div class="demo-item">
+          <badge-label-base label="No truncate"></badge-label-base>
+          <span class="demo-item-label">truncate=false (default)</span>
+        </div>
+      </div>
+
+      <h3>Badge-Count-Base Defaults</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <badge-count-base count="5"></badge-count-base>
+          <span class="demo-item-label">size="md", max=99</span>
+        </div>
+        <div class="demo-item">
+          <badge-count-base count="0"></badge-count-base>
+          <span class="demo-item-label">showZero=false (hidden)</span>
+        </div>
+      </div>
+
+      <h3>Badge-Count-Notification Defaults</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <badge-count-notification count="5"></badge-count-notification>
+          <span class="demo-item-label">size="md", max=99, announceChanges=true</span>
+        </div>
+      </div>
+
+      <ul class="demo-token-list" style="margin-block-start: var(--space-150);">
+        <li><strong>Badge-Label-Base:</strong> <code>size</code> → "md", <code>truncate</code> → false</li>
+        <li><strong>Badge-Count-Base:</strong> <code>size</code> → "md", <code>max</code> → 99, <code>showZero</code> → false</li>
+        <li><strong>Badge-Count-Notification:</strong> <code>size</code> → "md", <code>max</code> → 99, <code>showZero</code> → false, <code>announceChanges</code> → true</li>
+      </ul>
+    </div>
+
+    <!-- ============================================================
+         SECTION 11: Token Verification
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>11. Token Verification</h2>
+      <p>Check browser DevTools to verify these CSS custom properties are loaded:</p>
+
+      <h3>Typography Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--typography-label-xs</code> - Small badge text</li>
+        <li><code>--typography-label-sm</code> - Medium badge text</li>
+        <li><code>--typography-label-md</code> - Large badge text</li>
+      </ul>
+
+      <h3>Spacing Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--space-inset-050</code> - Minimal padding</li>
+        <li><code>--space-inset-100</code> - Standard padding</li>
+        <li><code>--space-inset-150</code> - Large padding</li>
+        <li><code>--space-grouped-minimal</code> - Icon gap (sm)</li>
+        <li><code>--space-grouped-tight</code> - Icon gap (md, lg)</li>
+      </ul>
+
+      <h3>Color Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--color-badge-notification-background</code> - pink400 (#CC2257)</li>
+        <li><code>--color-badge-notification-text</code> - white100 (#FFFFFF)</li>
+        <li><code>--color-surface</code> - Default badge background</li>
+        <li><code>--color-text-default</code> - Default badge text</li>
+      </ul>
+
+      <h3>Radius Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--radius-subtle</code> - Label badge corners (2px)</li>
+        <li><code>--radius-full</code> - Count badge circular/pill (9999px)</li>
+      </ul>
+    </div>
+
+    <!-- ============================================================
+         SECTION 12: Usage Examples
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>12. Usage Examples</h2>
+
+      <h3>HTML</h3>
+      <pre class="demo-code">&lt;!-- Basic label badge --&gt;
+&lt;badge-label-base label="Draft"&gt;&lt;/badge-label-base&gt;
+
+&lt;!-- Label badge with icon --&gt;
+&lt;badge-label-base label="Approved" icon="check" size="sm"&gt;&lt;/badge-label-base&gt;
+
+&lt;!-- Label badge with truncation --&gt;
+&lt;badge-label-base label="Very long text" truncate="true"&gt;&lt;/badge-label-base&gt;
+
+&lt;!-- Count badge --&gt;
+&lt;badge-count-base count="5"&gt;&lt;/badge-count-base&gt;
+
+&lt;!-- Count badge with custom max --&gt;
+&lt;badge-count-base count="150" max="50"&gt;&lt;/badge-count-base&gt;
+
+&lt;!-- Notification badge --&gt;
+&lt;badge-count-notification count="12"&gt;&lt;/badge-count-notification&gt;
+
+&lt;!-- Notification badge without announcements --&gt;
+&lt;badge-count-notification count="5" announce-changes="false"&gt;&lt;/badge-count-notification&gt;</pre>
+
+      <h3>JavaScript</h3>
+      <pre class="demo-code">// Programmatic usage - Label badge
+const labelBadge = document.createElement('badge-label-base');
+labelBadge.label = 'Status';
+labelBadge.size = 'sm';
+labelBadge.icon = 'check';
+document.body.appendChild(labelBadge);
+
+// Programmatic usage - Count badge
+const countBadge = document.createElement('badge-count-base');
+countBadge.count = 42;
+countBadge.max = 99;
+document.body.appendChild(countBadge);
+
+// Programmatic usage - Notification badge
+const notificationBadge = document.createElement('badge-count-notification');
+notificationBadge.count = 5;
+notificationBadge.announceChanges = true;
+document.body.appendChild(notificationBadge);</pre>
+    </div>
+
+  </main>
+
+  <footer class="demo-footer">
+    <p>DesignerPunk Design System • Badge Component Demo</p>
+  </footer>
+
+  <script>
+    if (window.location.protocol === 'file:') {
+      const banner = document.createElement('div');
+      banner.className = 'demo-file-protocol-warning';
+      banner.textContent = 'Components may not load correctly via file:// protocol. Use a local server: npx serve dist/browser';
+      document.body.prepend(banner);
+    }
+  </script>
+</body>
+</html>
