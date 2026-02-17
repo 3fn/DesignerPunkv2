@@ -1,32 +1,46 @@
-# Figma Console MCP Integration - Design Outline
+# Figma Integration - Design Outline
 
 **Date**: February 3, 2026
-**Purpose**: Capture design decisions and architecture for bidirectional Figma integration
+**Purpose**: Capture design decisions and architecture for Figma integration (Code → Figma → Spec workflow)
 **Status**: Design Outline (Pre-Requirements)
-**Last Updated**: February 3, 2026
+**Last Updated**: February 17, 2026
 **Depends On**: Spec 053 (DTCG Token Format Generator)
 
 ---
 
 ## Executive Summary
 
-This design outline establishes the architecture for integrating DesignerPunk with Figma via the [figma-console-mcp](https://github.com/southleft/figma-console-mcp) server. Building on the DTCG foundation from Spec 053, this spec implements the Figma-specific transformer and bidirectional sync capabilities.
+This design outline establishes the architecture for integrating DesignerPunk with Figma via the [figma-console-mcp](https://github.com/southleft/figma-console-mcp) server. Building on the DTCG foundation from Spec 053, this spec implements the complete Code → Figma → Spec workflow.
 
 **Core Value Proposition:**
-- **Push**: DesignerPunk tokens → Figma variables (designers work in DesignerPunk vocabulary)
-- **Pull**: Figma designs → DesignerPunk-native interpretation (AI reads designs in token language)
+- **Push tokens**: DesignerPunk tokens → Figma variables (designers work in DesignerPunk vocabulary)
+- **Extract designs**: Figma designs → design-outline.md (validated designs become specs)
+- **Preserve code as source of truth**: One-way sync prevents drift and maintains architectural integrity
 
-**The 80/20 Problem This Solves:**
-Design systems solve ~80% of UI problems through components and tokens. The remaining 20% (custom layouts, one-off designs) still need to be communicated to AI agents. This integration enables AI to interpret that 20% using DesignerPunk's vocabulary, even when no component exists.
+**The Workflow This Enables:**
+```
+Code (Rosetta) 
+  → DTCG (spec 053) 
+  → Figma Variables (spec 054 - push) 
+  → Designer iteration 
+  → Validated design 
+  → design-outline.md (spec 054 - extract)
+  → Spec process (requirements → design → tasks)
+  → Implementation 
+  → Code (Rosetta)
+```
+
+**This is a loop, not a sync.** Each step is explicit and human-reviewed. Code remains the source of truth.
 
 ---
 
 ## Architecture Overview
 
-### Dependency on Spec 053
+### Two-Part Workflow
 
-This spec consumes the DTCG output from Spec 053:
+This spec implements both halves of the Code → Figma → Spec workflow:
 
+**Part A: Push Tokens (Code → Figma)**
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                     Spec 053 Output                             │
@@ -36,7 +50,7 @@ This spec consumes the DTCG output from Spec 053:
 │                           │ (consumed by)                       │
 │                           ▼                                     │
 │              ┌────────────────────────┐                         │
-│              │   FigmaTransformer     │  ← THIS SPEC            │
+│              │   FigmaTransformer     │  ← THIS SPEC (Part A)   │
 │              │   (implements          │                         │
 │              │    ITokenTransformer)  │                         │
 │              └────────────────────────┘                         │
@@ -48,21 +62,39 @@ This spec consumes the DTCG output from Spec 053:
                               │ Console MCP (Push)
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                     Figma (Consumer)                            │
+│                     Figma (Design Tool)                         │
 │                                                                 │
 │  Dedicated Token Library File                                   │
 │  Variables populated from DesignerPunk tokens                   │
 │  Designer creates layouts using DesignerPunk vocabulary         │
 └─────────────────────────────────────────────────────────────────┘
+```
+
+**Part B: Extract Designs (Figma → Spec)**
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     Figma (Design Tool)                         │
+│                                                                 │
+│  Designer marks design as "ready for spec"                      │
+│  Component structure, properties, variants defined              │
+└─────────────────────────────────────────────────────────────────┘
                               │
                               │ Console MCP (Read) + Translation Layer
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                     AI Agent                                    │
+│              DesignExtractor (THIS SPEC - Part B)               │
 │                                                                 │
-│  Reads Figma design → Interprets in DesignerPunk language       │
-│  "24px padding" → "space.300"                                   │
-│  Automatic translation with warn-and-suggest                    │
+│  Reads Figma file structure                                     │
+│  Translates values to DesignerPunk tokens                       │
+│  Generates design-outline.md                                    │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                     design-outline.md                           │
+│                                                                 │
+│  Human-reviewed design specification                            │
+│  Enters spec process (requirements → design → tasks)            │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -76,6 +108,71 @@ dist/
 ├── DesignTokens.ios.swift      # Existing
 └── DesignTokens.android.kt     # Existing
 ```
+
+---
+
+## Design Decision: One-Way Sync (Code → Figma → Spec)
+
+**Options Considered:**
+- A) Bidirectional sync (Code ↔ Figma) — automatic sync in both directions
+- B) One-way sync (Code → Figma → Spec) — tokens flow from code to Figma, designs flow from Figma to specs
+- C) Manual export/import — no automatic sync
+
+**Decision:** Option B — One-way sync with explicit spec handoff
+
+**Rationale:**
+
+### Code Is Source of Truth
+DesignerPunk's Rosetta System defines tokens with:
+- Mathematical relationships (`base × 2 = 16`)
+- Primitive → semantic hierarchy (token governance)
+- Platform-specific implementations (True Native architecture)
+- Behavioral contracts (stemma tests)
+
+Figma Variables don't preserve these concepts. If Figma becomes the source of truth (bidirectional sync), DesignerPunk's architectural principles get bypassed.
+
+### Prevents Drift
+Bidirectional sync creates merge conflicts when code and Figma disagree:
+- Designer changes `space.300` to `25px` in Figma
+- Developer changes `space.300` to `24px` in code
+- **Who wins?** Automatic sync can't resolve this.
+
+One-way sync eliminates this problem: code always wins.
+
+### Preserves Architectural Integrity
+Figma changes don't bypass:
+- Token governance (Ada's domain)
+- Mathematical foundations (Rosetta System)
+- Component behavioral contracts (Lina's domain)
+- Test validation (Thurgood's domain)
+
+### Explicit Handoff via Specs
+Designers iterate in Figma, then validated designs become specs (design-outline.md). Specs are the contract between design and code. This handoff is:
+- **Human-reviewed** (not automatic)
+- **Explicit** (designer marks design as "ready for spec")
+- **Traceable** (spec documents the design decisions)
+
+**Trade-offs:**
+- Designers can't "push" token changes from Figma to code (must go through spec process)
+- Requires discipline (designers must use pushed tokens, not create new ones in Figma)
+- **But:** Eliminates drift, preserves system integrity, maintains code as canonical source
+
+**The Workflow:**
+```
+Code (Rosetta) 
+  → DTCG (spec 053) 
+  → Figma Variables (spec 054 - push) 
+  → Designer iteration 
+  → Validated design 
+  → design-outline.md (spec 054 - extract)
+  → Spec process (requirements → design → tasks)
+  → Implementation 
+  → Code (Rosetta)
+```
+
+**This is a loop, not a sync.** Each step is explicit and human-reviewed.
+
+**Counter-argument:** Bidirectional sync would be more convenient for designers (they could change tokens in Figma and see them in code immediately). However, convenience doesn't outweigh the risk of drift and loss of architectural integrity. The spec process provides the necessary review and validation.
 
 ---
 
@@ -240,7 +337,184 @@ export class FigmaTransformer implements ITokenTransformer {
 
 ---
 
-## Token Sync Workflow
+## Design Extraction Workflow (Part B)
+
+### DesignExtractor Implementation
+
+```typescript
+// src/figma/DesignExtractor.ts
+
+interface DesignOutline {
+  componentName: string;
+  description: string;
+  variants: VariantDefinition[];
+  states: StateDefinition[];
+  properties: PropertyDefinition[];
+  tokens: TokenUsage;
+  platformNotes?: PlatformNotes;
+}
+
+interface VariantDefinition {
+  name: string;
+  description: string;
+  properties: Record<string, any>;
+}
+
+interface TokenUsage {
+  spacing: string[];
+  colors: string[];
+  typography: string[];
+  radius: string[];
+  shadows: string[];
+}
+
+class DesignExtractor {
+  constructor(
+    private consoleMcp: ConsoleMCPClient,
+    private translator: TokenTranslator
+  ) {}
+  
+  async extractDesign(
+    figmaFileKey: string,
+    componentNodeId: string
+  ): Promise<DesignOutline> {
+    // 1. Read Figma component structure
+    const component = await this.consoleMcp.getNode(figmaFileKey, componentNodeId);
+    
+    // 2. Extract variants and properties
+    const variants = this.extractVariants(component);
+    const states = this.extractStates(component);
+    const properties = this.extractProperties(component);
+    
+    // 3. Translate values to tokens
+    const tokens = this.extractTokenUsage(component);
+    
+    // 4. Generate design outline
+    return {
+      componentName: component.name,
+      description: component.description || '',
+      variants,
+      states,
+      properties,
+      tokens
+    };
+  }
+  
+  async generateDesignOutlineMarkdown(outline: DesignOutline): Promise<string> {
+    // Generate design-outline.md format from extracted design
+    return `# ${outline.componentName} - Design Outline
+
+**Date**: ${new Date().toISOString().split('T')[0]}
+**Purpose**: Component specification extracted from Figma
+**Status**: Design Outline (Requires Review)
+
+---
+
+## Component Overview
+
+${outline.description}
+
+---
+
+## Variants
+
+${outline.variants.map(v => `### ${v.name}\n${v.description}`).join('\n\n')}
+
+---
+
+## States
+
+${outline.states.map(s => `### ${s.name}\n${s.description}`).join('\n\n')}
+
+---
+
+## Token Usage
+
+**Spacing**: ${outline.tokens.spacing.join(', ')}
+**Colors**: ${outline.tokens.colors.join(', ')}
+**Typography**: ${outline.tokens.typography.join(', ')}
+**Radius**: ${outline.tokens.radius.join(', ')}
+**Shadows**: ${outline.tokens.shadows.join(', ')}
+
+---
+
+## Platform Notes
+
+${outline.platformNotes ? this.formatPlatformNotes(outline.platformNotes) : 'None'}
+`;
+  }
+  
+  private extractVariants(component: FigmaComponent): VariantDefinition[] {
+    // Extract variant definitions from Figma component
+  }
+  
+  private extractStates(component: FigmaComponent): StateDefinition[] {
+    // Extract state definitions (hover, focus, disabled, etc.)
+  }
+  
+  private extractProperties(component: FigmaComponent): PropertyDefinition[] {
+    // Extract component properties (size, variant, etc.)
+  }
+  
+  private extractTokenUsage(component: FigmaComponent): TokenUsage {
+    // Use TokenTranslator to identify which tokens are used
+  }
+}
+```
+
+### Extraction Process
+
+1. **Designer marks design as ready**
+   - Figma component is complete
+   - All variants and states defined
+   - Uses DesignerPunk tokens (pushed from code)
+
+2. **Run extraction command**
+   ```bash
+   npm run figma:extract -- --file <file-key> --node <node-id> --output <path>
+   ```
+
+3. **Review generated design-outline.md**
+   - Human reviews extracted design
+   - Validates token usage
+   - Adds missing context or rationale
+   - Corrects any extraction errors
+
+4. **Enter spec process**
+   - design-outline.md → requirements.md
+   - requirements.md → design.md
+   - design.md → tasks.md
+   - tasks.md → implementation
+
+### Extraction Validation
+
+Before generating design-outline.md, validate:
+
+```typescript
+interface ExtractionValidation {
+  allTokensRecognized: boolean;
+  offSystemValues: OffSystemValue[];
+  missingVariants: string[];
+  missingStates: string[];
+  warnings: string[];
+}
+
+interface OffSystemValue {
+  property: string;
+  value: any;
+  suggestion: string;
+  confidence: 'approximate' | 'no-match';
+}
+```
+
+**If validation fails:**
+- Report off-system values with suggestions
+- Warn about missing variants or states
+- Require human review before proceeding
+
+---
+
+## Token Sync Workflow (Part A)
 
 ### Sync Strategy
 
@@ -580,13 +854,25 @@ async function preflight(): Promise<PreflightResult> {
 
 ### In Scope (Spec 054)
 
+**Part A: Push Tokens (Code → Figma)**
 1. **FigmaTransformer** — Implement ITokenTransformer for Figma
 2. **DesignTokens.figma.json** — Figma Variables API format output
 3. **Token sync workflow** — On-demand push to Figma
-4. **Translation layer** — Automatic, warn-and-suggest
-5. **Console MCP configuration** — Local Mode setup
-6. **Dedicated library strategy** — Documentation for fork workflow
-7. **Error handling** — Fail and report
+4. **Console MCP configuration** — Local Mode setup
+5. **Dedicated library strategy** — Documentation for fork workflow
+6. **Error handling** — Fail and report
+
+**Part B: Extract Designs (Figma → Spec)**
+7. **DesignExtractor** — Read Figma designs, extract component structure
+8. **TokenTranslator** — Automatic translation with warn-and-suggest
+9. **design-outline.md generation** — Transform Figma structure to spec format
+10. **Extraction validation** — Verify token usage, identify off-system values
+11. **CLI commands** — `figma:push` and `figma:extract`
+
+**Documentation**
+12. **Figma Integration Guide** — Full workflow (push + extract)
+13. **Designer workflow guide** — How to use pushed tokens, mark designs ready
+14. **Spec creation workflow** — How to extract and review designs
 
 ### Out of Scope (Future Specs)
 
@@ -594,6 +880,8 @@ async function preflight(): Promise<PreflightResult> {
 2. **Multi-designer workflow** — Handling multiple designers
 3. **Component token sync** — Evaluate after Phase 1
 4. **Figma plugin development** — Custom plugin beyond Desktop Bridge
+5. **Bidirectional sync** — Figma → Code automatic sync (explicitly rejected)
+6. **Real-time collaboration** — Live sync during design iteration
 
 ---
 
@@ -622,15 +910,18 @@ async function preflight(): Promise<PreflightResult> {
 
 | # | Decision | Rationale |
 |---|----------|-----------|
-| 1 | Use BOTH Figma powers | Complementary capabilities |
-| 2 | Implement ITokenTransformer | Clean integration with Spec 053 architecture |
-| 3 | Local Mode installation | Required for variable management |
-| 4 | Dedicated token library file | Clean separation, fork-friendly |
-| 5 | On-demand sync only | Start simple, automate later |
-| 6 | Automatic translation | Seamless AI experience |
-| 7 | Warn and suggest for mismatches | Educational, non-blocking, traceable |
-| 8 | Fail and report for sync errors | Clear state, manual intervention |
-| 9 | Primitives + semantics only | Component tokens add complexity |
+| 1 | One-way sync (Code → Figma → Spec) | Prevents drift, preserves code as source of truth |
+| 2 | Explicit spec handoff (not automatic) | Human review ensures quality and alignment |
+| 3 | Use BOTH Figma powers | Complementary capabilities |
+| 4 | Implement ITokenTransformer | Clean integration with Spec 053 architecture |
+| 5 | Local Mode installation | Required for variable management |
+| 6 | Dedicated token library file | Clean separation, fork-friendly |
+| 7 | On-demand sync only | Start simple, automate later |
+| 8 | Automatic translation | Seamless extraction experience |
+| 9 | Warn and suggest for mismatches | Educational, non-blocking, traceable |
+| 10 | Fail and report for sync errors | Clear state, manual intervention |
+| 11 | Primitives + semantics only | Component tokens add complexity |
+| 12 | Combined push + extract in one spec | Complete workflow, end-to-end testing |
 
 ---
 
@@ -717,18 +1008,41 @@ The following questions must be answered before this spec can proceed to require
 
 ---
 
-### OQ-054-6: Phased Implementation Strategy
+### OQ-054-6: Design Extraction Completeness
 
-**Question**: Should this spec be split into phases to reduce risk and validate assumptions incrementally?
+**Question**: What level of design detail should the extraction capture, and what should be left for human review?
 
-**Proposed phases**:
-1. **Phase 1**: FigmaTransformer only (generate `DesignTokens.figma.json`, manual import)
-2. **Phase 2**: Read-only translation layer (AI interprets Figma in token language)
-3. **Phase 3**: Full sync workflow via Console MCP
+**Why it matters**: The DesignExtractor can read Figma structure, but some design decisions require human interpretation:
+- **Behavioral intent** (e.g., "this button should disable when form is invalid")
+- **Accessibility requirements** (e.g., "this needs ARIA live region")
+- **Platform-specific notes** (e.g., "iOS uses native picker, web uses custom dropdown")
+- **Edge cases** (e.g., "what happens when text overflows?")
 
-**Why it matters**: Full bidirectional sync is complex. Phasing allows validation of each piece before committing to the full workflow.
+**Options to evaluate**:
+1. **Minimal extraction** — Structure and token usage only, human adds all context
+2. **Comprehensive extraction** — Attempt to infer behavior, accessibility, platform notes
+3. **Hybrid** — Extract what's explicit in Figma, flag what needs human input
 
-**Action required**: Decide whether to implement as single spec or split into phases.
+**Action required**: Define what the extractor captures vs. what requires human review. Document in design-outline.md template.
+
+---
+
+### OQ-054-7: Extraction Error Handling
+
+**Question**: What should happen when extraction encounters ambiguous or invalid Figma structures?
+
+**Why it matters**: Figma designs might have:
+- Components without variants defined
+- Inconsistent naming conventions
+- Off-system values with no close token match
+- Missing or incomplete descriptions
+
+**Options to evaluate**:
+1. **Fail fast** — Stop extraction, require Figma fixes before proceeding
+2. **Best effort** — Extract what's possible, flag issues for human review
+3. **Interactive** — Prompt user for decisions during extraction
+
+**Action required**: Define error handling policy and document expected Figma design quality standards.
 
 ---
 

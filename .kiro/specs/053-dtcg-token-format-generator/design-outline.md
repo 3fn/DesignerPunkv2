@@ -2,8 +2,8 @@
 
 **Date**: February 3, 2026
 **Purpose**: Capture design decisions and architecture for DTCG-compliant token output
-**Status**: Design Outline (Pre-Requirements)
-**Last Updated**: February 3, 2026
+**Status**: Design Outline (Open Questions Resolved)
+**Last Updated**: February 17, 2026
 
 ---
 
@@ -71,17 +71,17 @@ Key quote from spec:
 | DTCG Type | DesignerPunk Mapping | Status |
 |-----------|---------------------|--------|
 | `color` | Color tokens (primitives + semantics) | ✅ Direct mapping |
-| `dimension` | Spacing, radius, border-width, tap-area | ✅ Direct mapping |
+| `dimension` | Spacing, radius, border-width, tap-area, breakpoint | ✅ Direct mapping |
 | `fontFamily` | Font family tokens | ✅ Direct mapping |
 | `fontWeight` | Font weight tokens | ✅ Direct mapping |
 | `duration` | Duration tokens | ✅ Direct mapping |
 | `cubicBezier` | Easing tokens | ✅ Direct mapping |
-| `number` | Opacity, blend, scale, density tokens | ✅ Direct mapping |
+| `number` | Opacity, blend, scale, density, z-index, elevation | ✅ Direct mapping |
 | `shadow` (composite) | Shadow compositions | ✅ Direct mapping |
 | `typography` (composite) | Typography compositions | ✅ Direct mapping |
+| `transition` (composite) | Motion compositions | ✅ Direct mapping |
 | `gradient` (composite) | Not currently used | ⏸️ Future |
 | `border` (composite) | Not currently used | ⏸️ Future |
-| `transition` (composite) | Motion compositions | ✅ Direct mapping |
 
 ### Extensions Required
 
@@ -93,8 +93,10 @@ DesignerPunk concepts not covered by DTCG core spec:
 | Token family | `$extensions.designerpunk.family` | Group tokens by category |
 | Base value | `$extensions.designerpunk.baseValue` | Mathematical foundation |
 | Blend operations | `$extensions.designerpunk.blendType` | darkerBlend, lighterBlend, etc. |
-| Glow properties | `$extensions.designerpunk.glowType` | Glow-specific metadata |
-| Platform hints | `$extensions.designerpunk.platforms` | Platform-specific guidance |
+| Glow properties | `$extensions.designerpunk.glowType` | Glow-specific metadata (e.g., `"emission"`) |
+| Platform hints | `$extensions.designerpunk.platforms` | Platform-specific capability flags and notes |
+| Token deprecation | `$extensions.designerpunk.deprecated` | Deprecation status, reason, version |
+| Partial support status | `$extensions.designerpunk.status` | Mark incomplete features (e.g., `"partial"` for glows) |
 
 ---
 
@@ -415,6 +417,8 @@ interface DTCGGeneratorConfig {
   prettyPrint: boolean;
   /** Schema URL to include */
   schemaUrl: string;
+  /** Resolve aliases to final values (default: false, preserves alias references) */
+  resolveAliases: boolean;
 }
 
 class DTCGFormatGenerator {
@@ -438,6 +442,7 @@ class DTCGFormatGenerator {
     output.radius = this.generateRadiusTokens();
     output.borderWidth = this.generateBorderWidthTokens();
     output.shadow = this.generateShadowTokens();
+    output.glow = this.generateGlowTokens();
     output.opacity = this.generateOpacityTokens();
     output.duration = this.generateDurationTokens();
     output.easing = this.generateEasingTokens();
@@ -471,13 +476,20 @@ class DTCGFormatGenerator {
 | `LetterSpacingTokens.ts` | `letterSpacing` | `dimension` |
 | `RadiusTokens.ts` | `radius` | `dimension` |
 | `BorderWidthTokens.ts` | `borderWidth` | `dimension` |
+| `TapAreaTokens.ts` | `tapArea` | `dimension` |
+| `DensityTokens.ts` | `density` | `number` |
+| `BreakpointTokens.ts` | `breakpoint` | `dimension` |
 | `ShadowTokens.ts` (semantic) | `shadow` | `shadow` (composite) |
 | `OpacityTokens.ts` | `opacity` | `number` |
 | `DurationTokens.ts` | `duration` | `duration` |
 | `EasingTokens.ts` | `easing` | `cubicBezier` |
+| `ScaleTokens.ts` | `scale` | `number` |
 | `TypographyTokens.ts` (semantic) | `typography` | `typography` (composite) |
+| `MotionTokens.ts` (semantic) | `motion` | `transition` (composite) |
 | `BlendTokens.ts` | `blend` | `number` + extensions |
-| `GlowTokens.ts` | `glow` | `number` + extensions |
+| `GlowTokens.ts` | `glow` | `shadow` (composite) + extensions |
+| `ZIndexTokens.ts` (semantic) | `zIndex` | `number` |
+| `ElevationTokens.ts` (semantic) | `elevation` | `number` + platform extensions |
 
 ---
 
@@ -524,12 +536,18 @@ describe('DTCGFormatGenerator', () => {
 
 Ensure all tokens are exported:
 
-| Category | Expected Count | Validation |
-|----------|---------------|------------|
-| Spacing | 14 | Count tokens in `space` group |
-| Color (primitives) | 45+ | Count tokens in `color` group |
-| Typography (semantic) | 25+ | Count tokens in `typography` group |
-| **Total** | ~310 | Match Rosetta token inventory |
+| Category | Source | Validation |
+|----------|--------|------------|
+| **Primitives** | `getAllPrimitiveTokens()` | Programmatic count at generation time (~240+ tokens) |
+| **Semantics** | `getAllSemanticTokens()` | Programmatic count at generation time (~199 tokens) |
+
+**Validation approach**: The generator uses `getAllPrimitiveTokens().length` and `getAllSemanticTokens().length` at generation time to validate completeness. Exact counts are living values that change as the token system grows.
+
+**Primitive token families** (24 sources):
+- Spacing (14), Color (~100+), Font size (9), Font weight (5), Font family (3), Line height (9), Letter spacing (9), Radius (9), Border width (4), Tap area (3), Density (3), Breakpoint (5), Opacity (13), Duration (5), Easing (4), Scale (5), Blend (13), Shadow blur/offset/opacity (~20), Glow blur/opacity (~8)
+
+**Semantic token families** (15+ categories):
+- Color (45), Spacing (29), Typography (24), Shadow (14), Border width (4), Radius (7), Opacity (4), Blend (7), Motion (5), Icon (24), Accessibility (3), Grid spacing (10), Z-index (6), Elevation (7), Progress color (10)
 
 ---
 
@@ -547,6 +565,17 @@ DesignerPunk exports tokens in DTCG Format Module 2025.10 compliant JSON.
 
 ## File Location
 `dist/DesignTokens.dtcg.json`
+
+## For DesignerPunk Component Developers
+
+**IMPORTANT**: The DTCG output is for external tool integration (Figma, Style Dictionary, Tokens Studio, etc.). DesignerPunk components should continue importing tokens from TypeScript sources, not from the DTCG file.
+
+**Component token consumption patterns remain unchanged:**
+- Import token TypeScript files directly: `import { space125 } from '@/tokens/primitive/spacing'`
+- Web components use CSS custom properties: `var(--space-125)`
+- iOS/Android use platform-native constants
+
+The DTCG file is a parallel export for external tools. It does not replace the existing token consumption patterns within DesignerPunk components.
 
 ## Using with Style Dictionary
 [Instructions for Style Dictionary integration]
@@ -652,12 +681,249 @@ Document for MCP server integration:
 | 4 | Transformer interface pattern | Clean separation, easy extension |
 | 5 | Registry pattern for transformers | Centralized management, discoverability |
 | 6 | Comprehensive documentation | Enable downstream adoption |
+| 7 | Aliases by default with config option | Preserves primitive→semantic hierarchy; DTCG tools resolve natively; `resolveAliases: boolean` (default `false`) |
+| 8 | Parallel output alongside existing generators | Zero risk to existing pipeline; DTCG is additive, not a replacement; "outward-facing Rosetta Stone" |
+| 9 | Glows as DTCG `shadow` type with extension metadata | Glows are "bright shadows" — structurally identical; `$extensions.designerpunk.glowType: "emission"` distinguishes semantically |
+| 10 | Opacity-color merge during generation | Shadow/glow colors store alpha=1 with separate opacity primitives; generator merges at output time, preserving internal mathematical integrity |
+
+---
+
+## Resolved Open Questions
+
+All four open questions have been resolved through collaborative discussion (February 2026).
+
+### OQ-053-1: Exact Token Inventory — RESOLVED
+
+**Decision**: Token counts are programmatically verifiable at generation time.
+
+**Primitive tokens**: ~186 across 24 source files, covering spacing, color, font size, font weight, font family, line height, letter spacing, radius, border width, opacity, duration, easing, scale, tap area, density, breakpoint, blend, shadow blur/offset/opacity, and glow blur/opacity.
+
+**Semantic tokens**: 15+ categories including color (45 validated), spacing (29 layout+inset), typography (24), shadow (14), border width (4), radius (7), opacity (4 validated), blend (7 validated), motion (5), icon (24 generated), accessibility (3), grid spacing (10), z-index (6), elevation (7), and progress color (varies by component).
+
+**Validation approach**: The generator will use `getAllPrimitiveTokens().length` and `getAllSemanticTokens().length` at generation time to validate completeness. Exact counts are living values that change as the token system grows.
+
+---
+
+### OQ-053-2: Composite Type Mapping — RESOLVED
+
+**Decision**: All four composite types have clear DTCG mappings. See "Composite Type Mapping Details" section below for exact output structures.
+
+Key insights:
+- **Shadow → DTCG `shadow`**: Requires opacity-color merge (see dedicated section below)
+- **Typography → DTCG `typography`**: Clean 1:1 mapping of all 5 properties
+- **Motion → DTCG `transition`**: Maps duration + easing; delay defaults to `0ms`
+- **Glow → DTCG `shadow`**: Glows are "bright shadows" — structurally identical, distinguished by extension metadata (`$extensions.designerpunk.glowType: "emission"`)
+
+---
+
+### OQ-053-3: Alias Resolution Strategy — RESOLVED
+
+**Decision**: Config option with aliases as default (`resolveAliases: boolean`, default `false`).
+
+**Rationale**: Aliases preserve the primitive→semantic hierarchy that is central to DesignerPunk's architecture. DTCG-aware tools handle alias resolution natively. When a downstream transformer (like FigmaTransformer in spec 054) needs resolved values, it resolves aliases during transformation — not at the DTCG generation layer.
+
+---
+
+### OQ-053-4: Integration with Existing Generators — RESOLVED
+
+**Decision**: Parallel output alongside existing generators (Option 1).
+
+**Rationale**: DTCGFormatGenerator runs as a peer to existing platform generators (web CSS, iOS Swift, Android Kotlin), not a replacement. Zero risk to the existing pipeline; DTCG output is purely additive. Integration is just adding a few lines to `generate-platform-tokens.ts`.
+
+Peter's framing: DTCG is the "outward-facing Rosetta Stone" — the internal Rosetta System prioritizes DesignerPunk's needs first, and DTCG serves as the translation layer for communicating the system outwardly to the broader design tools ecosystem.
+
+---
+
+## Composite Type Mapping Details
+
+### Shadow → DTCG `shadow` Type
+
+DesignerPunk shadow compositions (from `ShadowTokens.ts`) reference five primitives: `offsetX`, `offsetY`, `blur`, `opacity`, and `color`. DTCG's `shadow` type expects: `{offsetX, offsetY, blur, spread, color}`.
+
+**Critical implementation detail**: DesignerPunk stores shadow color and opacity as SEPARATE primitives. The generator must MERGE these into a single DTCG color value by replacing the color's alpha channel with the opacity value.
+
+```json
+{
+  "shadow": {
+    "$type": "shadow",
+    "container": {
+      "$value": {
+        "offsetX": "0px",
+        "offsetY": "{shadowOffsetY.100}",
+        "blur": "{shadowBlurModerate}",
+        "spread": "0px",
+        "color": "rgba(0, 0, 0, 0.3)"
+      },
+      "$description": "Container shadow - subtle depth for card-like elements",
+      "$extensions": {
+        "designerpunk": {
+          "family": "shadow",
+          "primitiveRefs": {
+            "offsetX": "shadowOffsetX.000",
+            "offsetY": "shadowOffsetY.100",
+            "blur": "shadowBlurModerate",
+            "opacity": "shadowOpacityModerate",
+            "color": "shadowBlack100"
+          },
+          "android": { "elevation": 2 }
+        }
+      }
+    }
+  }
+}
+```
+
+**Notes**:
+- `spread` is always `0px` (DesignerPunk doesn't use spread)
+- Android elevation goes into `$extensions.designerpunk.android` since DTCG has no elevation concept
+- The merged `color` value is the resolved RGBA with opacity applied (see "Shadow/Glow Opacity-Color Merge" section)
+
+### Glow → DTCG `shadow` Type
+
+Glows are structurally identical to shadows — they're "bright shadows." The DTCG `shadow` composite type is used, with extension metadata distinguishing them semantically.
+
+**Current state**: DesignerPunk has glow primitives (blur via `GlowBlurTokens.ts`, opacity via `GlowOpacityTokens.ts`) and glow colors (semantic `glow.neonPurple`, `glow.neonCyan`, etc. in `semantic/ColorTokens.ts`), but does NOT yet have composed glow tokens equivalent to `ShadowTokens.ts`. The generator will export glow primitives individually for now, with composed glow tokens as a future addition.
+
+**Offset sharing**: Glows and shadows share offset primitives (currently `ShadowOffsetTokens.ts`). Potential rename to `OffsetTokens.ts` (generic) is under consideration but deferred to spec 053 implementation to avoid premature churn.
+
+```json
+{
+  "glow": {
+    "$type": "shadow",
+    "$description": "Glow effects - bright shadows for emphasis and energy",
+    "$extensions": {
+      "designerpunk": {
+        "glowType": "emission"
+      }
+    },
+    "blur": {
+      "$type": "dimension",
+      "100": {
+        "$value": "8px",
+        "$description": "Base glow blur"
+      }
+    },
+    "opacity": {
+      "$type": "number",
+      "100": {
+        "$value": 0.8,
+        "$description": "Inner glow layer opacity"
+      }
+    },
+    "color": {
+      "$type": "color",
+      "neonPurple": {
+        "$value": "{color.purple.500}",
+        "$description": "Vibrant purple glow color"
+      }
+    }
+  }
+}
+```
+
+### Typography → DTCG `typography` Type
+
+Clean 1:1 mapping. DesignerPunk typography compositions reference exactly the five properties DTCG expects.
+
+```json
+{
+  "typography": {
+    "$type": "typography",
+    "bodyMd": {
+      "$value": {
+        "fontFamily": "{fontFamily.body}",
+        "fontSize": "{fontSize.100}",
+        "fontWeight": "{fontWeight.400}",
+        "lineHeight": "{lineHeight.100}",
+        "letterSpacing": "{letterSpacing.100}"
+      },
+      "$description": "Medium body typography - 16px, 1.5 line height, normal weight"
+    }
+  }
+}
+```
+
+### Motion → DTCG `transition` Type
+
+DesignerPunk motion tokens compose `duration` + `easing` (and optionally `scale`). DTCG's `transition` type expects: `{duration, timingFunction, delay}`.
+
+```json
+{
+  "motion": {
+    "$type": "transition",
+    "floatLabel": {
+      "$value": {
+        "duration": "{duration.250}",
+        "timingFunction": "{easing.standard}",
+        "delay": "0ms"
+      },
+      "$description": "Float label animation for text input fields (250ms, standard curve)",
+      "$extensions": {
+        "designerpunk": {
+          "family": "motion",
+          "primitiveRefs": {
+            "duration": "duration250",
+            "easing": "easingStandard"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+**Notes**:
+- `delay` defaults to `0ms` (DesignerPunk doesn't define delay)
+- Optional `scale` property goes into `$extensions.designerpunk` when present
+
+---
+
+## Shadow/Glow Opacity-Color Merge
+
+### The Problem
+
+DesignerPunk stores shadow (and glow) color and opacity as separate primitives:
+- **Color**: `shadowBlack100` = `rgba(0, 0, 0, 1)` (alpha is always `1`)
+- **Opacity**: `shadowOpacityModerate` = `0.3`
+
+DTCG's `shadow` type expects a single `color` value with opacity baked in.
+
+### The Solution
+
+The generator must merge these by replacing the color's alpha channel with the opacity value:
+
+```
+Input:  color = rgba(0, 0, 0, 1)  +  opacity = 0.3
+Output: color = rgba(0, 0, 0, 0.3)
+```
+
+**Edge case**: When a shadow references a semantic color with embedded opacity (e.g., `color.overlay.background = rgba(0, 0, 0, 0.5)`), the shadow's opacity primitive OVERRIDES the color's alpha channel (does not multiply). The shadow opacity is authoritative.
+
+### Why Colors Have Alpha = 1
+
+Shadow color primitives were migrated to RGBA format (spec 052) for consistency with the color system. However, the alpha channel in shadow colors is always `1` because opacity is controlled separately — this is by design. The separate opacity primitives (`shadowOpacityHard: 0.4`, `shadowOpacityModerate: 0.3`, `shadowOpacitySoft: 0.2`) provide mathematical relationships and independent control that would be lost if opacity were embedded in the color value.
+
+### Implementation
+
+```typescript
+function mergeShadowColor(colorRgba: string, opacity: number): string {
+  // Parse rgba(r, g, b, 1) → extract r, g, b
+  const match = colorRgba.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+  if (!match) throw new Error(`Invalid shadow color: ${colorRgba}`);
+  const [, r, g, b] = match;
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+}
+```
+
+This merge happens during DTCG generation only — the internal Rosetta representation preserves the separate primitives for mathematical integrity.
 
 ---
 
 ## Open Questions (Must Resolve Before Requirements)
 
-The following questions must be answered before this spec can proceed to requirements.md:
+~~The following questions must be answered before this spec can proceed to requirements.md:~~
+
+**All open questions have been resolved.** See "Resolved Open Questions" section above for decisions and rationale.
 
 ### OQ-053-1: Exact Token Inventory
 
@@ -715,12 +981,166 @@ The following questions must be answered before this spec can proceed to require
 
 ---
 
+## Review Questions (Pending Response)
+
+**Review Status**: ✅ **COMPLETE** (Ada responded February 17, 2026; Lina responded February 17, 2026)
+
+### For Ada (Token Specialist)
+
+**Q1: Token Type Mapping Completeness**
+Review the "Supported Token Types" table. Does this mapping cover all Rosetta token types? Are there any missing?
+
+**Response**: ✅ **RESOLVED (2026-02-17)** — Mapping is mostly complete but missing five token families:
+- Tap area tokens (`TapAreaTokens.ts`) — `dimension` type
+- Density tokens (`DensityTokens.ts`) — `number` type
+- Breakpoint tokens (`BreakpointTokens.ts`) — `dimension` type
+- Z-index tokens (semantic) — `number` type
+- Elevation tokens (semantic, iOS/Android) — `number` type
+
+**Decision**: Add these five families to the mapping table.
+
+---
+
+**Q2: Shadow/Glow Opacity-Color Merge**
+Review the "Shadow/Glow Opacity-Color Merge" section. Is this merge approach correct? Are there edge cases we're missing?
+
+**Response**: ✅ **RESOLVED (2026-02-17)** — Merge approach is correct with one edge case clarification:
+
+**Edge case**: When a shadow references a semantic color that has embedded opacity (e.g., `color.overlay.background = rgba(0, 0, 0, 0.5)`), the shadow's opacity primitive should OVERRIDE the color's alpha channel, not multiply.
+
+**Decision**: Shadow opacity is authoritative. Strip color's alpha and replace with shadow's opacity value.
+
+---
+
+**Q3: Glow Token Completeness**
+The design outline notes that composed glow tokens don't exist yet (only primitives). Should we add composed glow tokens before spec 053, or is partial glow support acceptable for the first release?
+
+**Response**: ✅ **RESOLVED (2026-02-17)** — Partial glow support is acceptable.
+
+**Context**: Glows are "bright shadows" — structurally identical (offsetX, offsetY, blur, color), distinguished by positive/bright colors and `$extensions.designerpunk.glowType: "emission"` metadata.
+
+**Offset sharing**: Glows and shadows share offset primitives (currently `ShadowOffsetTokens`). Potential rename to `OffsetTokens` deferred to spec 053 implementation.
+
+**Decision**: Export glow primitives individually in spec 053. Add composed glow tokens in future spec when use cases emerge. Document partial support with `"status": "partial"` in extensions.
+
+---
+
+**Q4: Token Count Validation**
+The design outline estimates ~186 primitives, ~150+ semantics. Can you verify these counts are accurate? Are there token categories missing from the DTCG mapping?
+
+**Response**: ✅ **RESOLVED (2026-02-17)** — Counts are underestimated:
+
+**Actual counts**:
+- Primitives: ~240+ (not ~186)
+- Semantics: ~199 (not ~150+)
+
+**Decision**: Use programmatic validation at generation time (`getAllPrimitiveTokens().length`, `getAllSemanticTokens().length`) rather than hard-coded counts. Update design outline to reflect this approach.
+
+---
+
+**Q5: Extension Schema Completeness**
+Review the `$extensions.designerpunk` schema in "Extensions Required" section. Does this schema capture all Rosetta metadata you need (formulas, families, base values, blend operations)?
+
+**Response**: ✅ **RESOLVED (2026-02-17)** — Schema is mostly complete but needs deprecation metadata:
+
+**Missing**: Token deprecation metadata
+```json
+{
+  "$extensions": {
+    "designerpunk": {
+      "deprecated": true,
+      "deprecatedReason": "Use space.grouped.normal instead",
+      "deprecatedSince": "1.2.0"
+    }
+  }
+}
+```
+
+**Governance**: Token deprecation requires human approval (Ada proposes → Thurgood audits usage → Peter approves → Ada implements). Mirrors token creation flow.
+
+**Decision**: Add deprecation metadata to extension schema. Export deprecated tokens by default with clear metadata (downstream consumers can filter if needed).
+
+---
+
+### For Lina (Component Specialist)
+
+**Q1: Component Token Scope**
+The design outline says "component tokens add complexity" and are out of scope for spec 053 (primitives + semantics only). Do you agree with this decision? Are there component-specific tokens that MUST be in DTCG output?
+
+**Response**: ✅ **RESOLVED (2026-02-17)** — Component tokens should be out of scope for Spec 053.
+
+**Rationale**: After reviewing Spec 054 (Figma integration workflow), component tokens are implementation details that don't exist until component implementation (step 4 of the workflow). The Figma workflow (push primitives/semantics → design iteration → extract → spec → implement) doesn't require component tokens in the DTCG output. Designers work with primitives and semantics; component tokens are created during code implementation.
+
+**Decision**: Spec 053 exports primitives + semantics only. Component tokens remain out of scope unless future evidence shows they're needed for a different tool integration.
+
+---
+
+**Q2: Composite Type Decomposition**
+DTCG doesn't support shadow/typography as single variables in Figma. They're decomposed into individual properties. Does this affect how components consume tokens? Are there breaking changes?
+
+**Response**: ✅ **RESOLVED (2026-02-17)** — No breaking changes for components.
+
+**Rationale**: Web components consume tokens via CSS custom properties. Whether the DTCG file has composite `typography` objects or individual `fontSize`/`fontWeight` properties doesn't affect component consumption — the web CSS generator already outputs individual properties. The decomposition happens at the Figma transformer layer (Spec 054), not at the DTCG generation layer. DTCG preserves composites; FigmaTransformer decomposes them.
+
+**Decision**: No changes needed. The transformer architecture (Spec 053) already handles this correctly.
+
+---
+
+**Q3: Platform-Specific Hints**
+The extension schema includes `$extensions.designerpunk.platforms`. What platform hints do you need in DTCG extensions? Are there component-specific platform notes that should be included?
+
+**Response**: ✅ **RESOLVED (2026-02-17)** — Two categories of platform hints are needed.
+
+**Category 1: Platform Capability Flags** (IN SCOPE for Spec 053)
+Components need to know when a token has platform-specific limitations:
+
+```json
+{
+  "$extensions": {
+    "designerpunk": {
+      "platforms": {
+        "web": { "supported": true },
+        "ios": { "supported": true },
+        "android": { "supported": true, "note": "Uses elevation instead of shadow" }
+      }
+    }
+  }
+}
+```
+
+**Example**: Android elevation vs. shadow. Components need to know that `shadow.container` maps to `elevation: 2` on Android.
+
+**Category 2: Component-Specific Platform Overrides** (OUT OF SCOPE for Spec 053)
+Component-specific token usage overrides (e.g., Button-CTA uses different tap areas on iOS vs Android). Deferred to future spec when real use cases emerge.
+
+**Decision**: Add platform capability flags to extension schema (Category 1). Defer component-specific overrides (Category 2).
+
+---
+
+**Q4: Token Consumption Patterns**
+Will DTCG output support current component token consumption patterns? Are there breaking changes we need to address?
+
+**Response**: ✅ **RESOLVED (2026-02-17)** — No breaking changes, but documentation gap identified.
+
+**Current consumption patterns:**
+1. Components import token TypeScript files directly (`import { space125 } from '@/tokens/primitive/spacing'`)
+2. Web components use CSS custom properties (`var(--space-125)`)
+3. iOS/Android use platform-native constants
+
+**DTCG output doesn't replace any of these.** It's a parallel export for external tools (Figma, Style Dictionary, etc.). Components continue consuming tokens the same way.
+
+**Documentation gap**: Developers might see `DesignTokens.dtcg.json` and wonder if they should import it instead of TypeScript sources. The answer is no, but this needs to be explicit.
+
+**Decision**: Add section to DTCG Integration Guide titled "For DesignerPunk Component Developers" clarifying: "DTCG output is for external tool integration. DesignerPunk components continue importing tokens from TypeScript sources."
+
+---
+
 ## Next Steps
 
 1. ✅ **Design outline created** — Architecture and decisions documented
 2. ✅ **DTCG spec researched** — Target version identified (2025.10)
-3. ⏳ **Resolve open questions** — OQ-053-1 through OQ-053-4
-4. ⏳ **Create requirements.md** — EARS format (blocked by open questions)
+3. ✅ **Open questions resolved** — OQ-053-1 through OQ-053-4 all resolved (February 2026)
+4. ⏳ **Create requirements.md** — EARS format (unblocked)
 5. ⏳ **Create design.md** — Detailed architecture
 6. ⏳ **Create tasks.md** — Implementation plan
 7. ⏳ **Implement DTCGFormatGenerator**
