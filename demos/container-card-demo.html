@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Container-Card-Base Demo - DesignerPunk</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="demo-styles.css">
+  <script type="module" src="designerpunk.esm.js"></script>
+  <style>
+    .card-showcase {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-200);
+      align-items: flex-start;
+    }
+    .card-showcase-item {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-050);
+    }
+    .card-showcase-item .demo-item-label {
+      text-align: start;
+    }
+    .card-content {
+      color: var(--gray-100);
+      font-size: var(--typography-body-sm-font-size);
+    }
+    .card-content h4 {
+      margin-block: 0;
+      color: var(--cyan-300);
+      font-size: var(--typography-label-md-font-size);
+    }
+    .card-content p {
+      margin-block: var(--space-050) 0;
+    }
+    .event-log {
+      background: var(--black-300);
+      border: var(--border-default) solid var(--gray-300);
+      border-radius: var(--radius-100);
+      padding-inline: var(--space-inset-100);
+      padding-block: var(--space-inset-100);
+      min-block-size: 60px;
+      max-block-size: 120px;
+      overflow-y: auto;
+      font-family: var(--font-family-mono);
+      font-size: var(--typography-caption-font-size);
+      color: var(--gray-100);
+      margin-block-start: var(--space-100);
+    }
+    .event-log-entry {
+      padding-block: var(--space-025);
+      border-block-end: var(--border-default) solid var(--gray-400);
+    }
+    .event-log-entry:last-child {
+      border-block-end: none;
+    }
+  </style>
+</head>
+<body class="demo-page">
+  <header class="demo-header">
+    <a href="index.html" class="demo-back-link">← All Components</a>
+    <h1>🃏 Container-Card-Base Demo</h1>
+    <p class="demo-subtitle">Specialized card container with opinionated defaults, curated props, and built-in interactive behavior</p>
+  </header>
+
+  <main>
+
+    <!-- ============================================================
+         SECTION 1: Overview
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>1. Overview</h2>
+      <p>Container-Card-Base is a type primitive that composes Container-Base internally, exposing a curated subset of props appropriate for card use cases. It provides zero-config rendering with sensible defaults — a good-looking card without any configuration.</p>
+
+      <h3>Zero-Config Card</h3>
+      <div class="card-showcase">
+        <container-card-base>
+          <div class="card-content">
+            <h4>Zero-Config Card</h4>
+            <p>No props needed. Uses default padding (150), surface.primary background, container shadow, and normal radius.</p>
+          </div>
+        </container-card-base>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 2: Background Variants
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>2. Background Variants</h2>
+      <p>Cards support three surface backgrounds. Unlike Container-Base which accepts any color token, Card-Base is limited to surface colors appropriate for cards.</p>
+
+      <div class="card-showcase">
+        <div class="card-showcase-item">
+          <container-card-base background="surface.primary">
+            <div class="card-content">
+              <h4>Primary Surface</h4>
+              <p>Default background</p>
+            </div>
+          </container-card-base>
+          <span class="demo-item-label">background="surface.primary"</span>
+        </div>
+        <div class="card-showcase-item">
+          <container-card-base background="surface.secondary">
+            <div class="card-content">
+              <h4>Secondary Surface</h4>
+              <p>Alternate background</p>
+            </div>
+          </container-card-base>
+          <span class="demo-item-label">background="surface.secondary"</span>
+        </div>
+        <div class="card-showcase-item">
+          <container-card-base background="surface.tertiary">
+            <div class="card-content">
+              <h4>Tertiary Surface</h4>
+              <p>Third-level background</p>
+            </div>
+          </container-card-base>
+          <span class="demo-item-label">background="surface.tertiary"</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 3: Padding Options
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>3. Padding Options</h2>
+      <p>Card padding is a curated subset: <code>none</code>, <code>100</code>, <code>150</code> (default), <code>200</code>. Larger values like 300/400 are excluded as they're rarely appropriate for cards.</p>
+
+      <div class="card-showcase">
+        <div class="card-showcase-item">
+          <container-card-base padding="none" border="default">
+            <div class="card-content"><p>none (0px)</p></div>
+          </container-card-base>
+          <span class="demo-item-label">padding="none"</span>
+        </div>
+        <div class="card-showcase-item">
+          <container-card-base padding="100" border="default">
+            <div class="card-content"><p>100 (8px)</p></div>
+          </container-card-base>
+          <span class="demo-item-label">padding="100"</span>
+        </div>
+        <div class="card-showcase-item">
+          <container-card-base padding="150" border="default">
+            <div class="card-content"><p>150 (12px)</p></div>
+          </container-card-base>
+          <span class="demo-item-label">padding="150" (default)</span>
+        </div>
+        <div class="card-showcase-item">
+          <container-card-base padding="200" border="default">
+            <div class="card-content"><p>200 (16px)</p></div>
+          </container-card-base>
+          <span class="demo-item-label">padding="200"</span>
+        </div>
+      </div>
+
+      <h3>Directional Padding</h3>
+      <p>Cards support the same three-level override hierarchy as Container-Base. Vertical padding includes <code>050</code> for fine-tuning typography rhythm.</p>
+
+      <div class="card-showcase">
+        <div class="card-showcase-item">
+          <container-card-base padding-vertical="050" padding-horizontal="200" border="default">
+            <div class="card-content"><p>Tight vertical (4px), wide horizontal (16px)</p></div>
+          </container-card-base>
+          <span class="demo-item-label">paddingVertical="050" paddingHorizontal="200"</span>
+        </div>
+        <div class="card-showcase-item">
+          <container-card-base padding-block-start="none" padding-horizontal="150" padding-block-end="150" border="default">
+            <div class="card-content">
+              <p>Image-bleeding pattern: no top padding, content padding below.</p>
+            </div>
+          </container-card-base>
+          <span class="demo-item-label">Image-bleeding card pattern</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 4: Border & Radius
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>4. Border &amp; Radius</h2>
+      <p>Cards support <code>none</code> or <code>default</code> border, with two border colors and two radius options. Sharp corners are excluded — cards always have rounded corners.</p>
+
+      <h3>Border Options</h3>
+      <div class="card-showcase">
+        <div class="card-showcase-item">
+          <container-card-base border="none">
+            <div class="card-content">
+              <h4>No Border</h4>
+              <p>Default — shadow provides visual boundary</p>
+            </div>
+          </container-card-base>
+          <span class="demo-item-label">border="none" (default)</span>
+        </div>
+        <div class="card-showcase-item">
+          <container-card-base border="default">
+            <div class="card-content">
+              <h4>Default Border</h4>
+              <p>1px border with default color</p>
+            </div>
+          </container-card-base>
+          <span class="demo-item-label">border="default"</span>
+        </div>
+        <div class="card-showcase-item">
+          <container-card-base border="default" border-color="border.subtle">
+            <div class="card-content">
+              <h4>Subtle Border</h4>
+              <p>1px border with subtle color</p>
+            </div>
+          </container-card-base>
+          <span class="demo-item-label">border-color="border.subtle"</span>
+        </div>
+      </div>
+
+      <h3>Border Radius</h3>
+      <div class="card-showcase">
+        <div class="card-showcase-item">
+          <container-card-base border-radius="normal" border="default">
+            <div class="card-content">
+              <h4>Normal</h4>
+              <p>8px radius (default)</p>
+            </div>
+          </container-card-base>
+          <span class="demo-item-label">border-radius="normal"</span>
+        </div>
+        <div class="card-showcase-item">
+          <container-card-base border-radius="loose" border="default">
+            <div class="card-content">
+              <h4>Loose</h4>
+              <p>16px radius</p>
+            </div>
+          </container-card-base>
+          <span class="demo-item-label">border-radius="loose"</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 5: Shadow Options
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>5. Shadow Options</h2>
+      <p>Cards default to <code>container</code> shadow. Unlike Container-Base which supports multiple shadow levels, Card-Base is limited to <code>none</code> or <code>container</code>.</p>
+
+      <div class="card-showcase">
+        <div class="card-showcase-item">
+          <container-card-base shadow="none" border="default">
+            <div class="card-content">
+              <h4>No Shadow</h4>
+              <p>Flat card with border for boundary</p>
+            </div>
+          </container-card-base>
+          <span class="demo-item-label">shadow="none"</span>
+        </div>
+        <div class="card-showcase-item">
+          <container-card-base shadow="container">
+            <div class="card-content">
+              <h4>Container Shadow</h4>
+              <p>Default elevated card</p>
+            </div>
+          </container-card-base>
+          <span class="demo-item-label">shadow="container" (default)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 6: Interactive Cards
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>6. Interactive Cards</h2>
+      <p>When <code>interactive="true"</code>, cards gain hover feedback (8% darker), press feedback (12% darker), focus ring, and keyboard activation. The <code>role</code> prop controls ARIA semantics and keyboard behavior.</p>
+
+      <div class="demo-interactive">
+        <p>Hover, click, and tab through these cards:</p>
+        <div class="card-showcase">
+          <div class="card-showcase-item">
+            <container-card-base interactive="true" accessibility-label="View project details" id="card-button">
+              <div class="card-content">
+                <h4>Button Card</h4>
+                <p>role="button" (default). Enter and Space activate.</p>
+              </div>
+            </container-card-base>
+            <span class="demo-item-label">interactive="true" role="button"</span>
+          </div>
+          <div class="card-showcase-item">
+            <container-card-base interactive="true" role="link" accessibility-label="Read article" id="card-link">
+              <div class="card-content">
+                <h4>Link Card</h4>
+                <p>role="link". Only Enter activates (Space scrolls).</p>
+              </div>
+            </container-card-base>
+            <span class="demo-item-label">interactive="true" role="link"</span>
+          </div>
+          <div class="card-showcase-item">
+            <container-card-base accessibility-label="Static content">
+              <div class="card-content">
+                <h4>Static Card</h4>
+                <p>Not interactive. No hover/press/focus behavior.</p>
+              </div>
+            </container-card-base>
+            <span class="demo-item-label">interactive="false" (default)</span>
+          </div>
+        </div>
+
+        <h3>Event Log</h3>
+        <div class="event-log" id="card-event-log">
+          <div class="event-log-entry" style="color: var(--gray-300);">Click or press Enter/Space on interactive cards...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 7: Semantic HTML
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>7. Semantic HTML</h2>
+      <p>The <code>semantic</code> prop controls the inner HTML element. Cards support <code>div</code> (default), <code>section</code>, and <code>article</code> — a curated subset appropriate for card content.</p>
+
+      <div class="card-showcase">
+        <div class="card-showcase-item">
+          <container-card-base semantic="div">
+            <div class="card-content">
+              <h4>Generic Card</h4>
+              <p>Renders as &lt;div&gt;</p>
+            </div>
+          </container-card-base>
+          <span class="demo-item-label">semantic="div" (default)</span>
+        </div>
+        <div class="card-showcase-item">
+          <container-card-base semantic="section" accessibility-label="Feature section">
+            <div class="card-content">
+              <h4>Section Card</h4>
+              <p>Renders as &lt;section&gt;</p>
+            </div>
+          </container-card-base>
+          <span class="demo-item-label">semantic="section"</span>
+        </div>
+        <div class="card-showcase-item">
+          <container-card-base semantic="article" accessibility-label="Blog post">
+            <div class="card-content">
+              <h4>Article Card</h4>
+              <p>Renders as &lt;article&gt;</p>
+            </div>
+          </container-card-base>
+          <span class="demo-item-label">semantic="article"</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 8: Composition with Other Components
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>8. Composition with Other Components</h2>
+      <p>Container-Card-Base wraps other DesignerPunk components to create common card patterns.</p>
+
+      <h3>Action Card</h3>
+      <div class="card-showcase">
+        <container-card-base padding="200">
+          <div class="card-content">
+            <h4>Get Started</h4>
+            <p style="margin-block-end: var(--space-100);">Create your first design system component.</p>
+            <button-cta label="Start Building" variant="primary" size="small"></button-cta>
+          </div>
+        </container-card-base>
+      </div>
+
+      <h3>Form Card</h3>
+      <div class="card-showcase">
+        <container-card-base padding="200" border="default" style="max-inline-size: 360px;">
+          <div class="card-content">
+            <h4>Sign Up</h4>
+            <div style="margin-block-start: var(--space-100);">
+              <input-text-base label="Email" placeholder="you@example.com" type="email"></input-text-base>
+            </div>
+            <div style="margin-block-start: var(--space-100);">
+              <button-cta label="Subscribe" variant="primary"></button-cta>
+            </div>
+          </div>
+        </container-card-base>
+      </div>
+
+      <h3>Card with Icon</h3>
+      <div class="card-showcase">
+        <container-card-base padding="200">
+          <div class="card-content" style="display: flex; align-items: flex-start; gap: var(--space-100);">
+            <icon-base name="star" size="24" color="color-action-primary"></icon-base>
+            <div>
+              <h4>Featured</h4>
+              <p>Card with an icon alongside content.</p>
+            </div>
+          </div>
+        </container-card-base>
+        <container-card-base padding="200">
+          <div class="card-content" style="display: flex; align-items: flex-start; gap: var(--space-100);">
+            <icon-base name="settings" size="24" color="color-action-primary"></icon-base>
+            <div>
+              <h4>Settings</h4>
+              <p>Configure your preferences.</p>
+            </div>
+          </div>
+        </container-card-base>
+      </div>
+
+      <h3>Card Grid</h3>
+      <p>Multiple cards in a responsive grid layout:</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-200);">
+        <container-card-base interactive="true" accessibility-label="Dashboard">
+          <div class="card-content">
+            <h4>Dashboard</h4>
+            <p>View your analytics</p>
+          </div>
+        </container-card-base>
+        <container-card-base interactive="true" accessibility-label="Projects">
+          <div class="card-content">
+            <h4>Projects</h4>
+            <p>Manage your work</p>
+          </div>
+        </container-card-base>
+        <container-card-base interactive="true" accessibility-label="Team">
+          <div class="card-content">
+            <h4>Team</h4>
+            <p>Collaborate with others</p>
+          </div>
+        </container-card-base>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 9: Container-Base vs Card-Base Comparison
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>9. Container-Base vs Card-Base</h2>
+      <p>Card-Base provides opinionated defaults and a curated API. Container-Base is the unconstrained primitive.</p>
+
+      <div class="card-showcase">
+        <div class="card-showcase-item">
+          <container-base padding="200" background="color-surface" border-radius="normal">
+            <div class="card-content">
+              <h4>Container-Base</h4>
+              <p>Requires explicit props for every visual property. No shadow by default.</p>
+            </div>
+          </container-base>
+          <span class="demo-item-label">Container-Base (manual config)</span>
+        </div>
+        <div class="card-showcase-item">
+          <container-card-base>
+            <div class="card-content">
+              <h4>Card-Base</h4>
+              <p>Zero-config: shadow, background, padding, and radius all default to card-appropriate values.</p>
+            </div>
+          </container-card-base>
+          <span class="demo-item-label">Card-Base (zero-config)</span>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>When to use which:</strong> Use Container-Base for generic layout wrapping. Use Container-Card-Base when you want a visually distinct, elevated content section with card semantics.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 10: Token Verification
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>10. Token Verification</h2>
+      <p>Check browser DevTools to verify these CSS custom properties are loaded:</p>
+
+      <h3>Spacing Tokens (Padding)</h3>
+      <ul class="demo-token-list">
+        <li><code>--space-inset-050</code> — padding 050 (4px, vertical only)</li>
+        <li><code>--space-inset-100</code> — padding 100 (8px)</li>
+        <li><code>--space-inset-150</code> — padding 150 (12px, default)</li>
+        <li><code>--space-inset-200</code> — padding 200 (16px)</li>
+      </ul>
+
+      <h3>Color Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--color-surface-primary</code> — primary surface (default background)</li>
+        <li><code>--color-surface-secondary</code> — secondary surface</li>
+        <li><code>--color-surface-tertiary</code> — tertiary surface</li>
+        <li><code>--color-border-default</code> — default border color</li>
+        <li><code>--color-structure-border-subtle</code> — subtle border color</li>
+      </ul>
+
+      <h3>Shadow Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--shadow-container</code> — container elevation shadow (default)</li>
+      </ul>
+
+      <h3>Radius Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--radius-100</code> — normal radius (8px, default)</li>
+        <li><code>--radius-200</code> — loose radius (16px)</li>
+      </ul>
+
+      <h3>Interaction Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--blend-hoverDarker</code> — hover feedback (8% darker)</li>
+        <li><code>--blend-pressedDarker</code> — press feedback (12% darker)</li>
+        <li><code>--motion-focus-transition-duration</code> — focus transition duration</li>
+        <li><code>--motion-focus-transition-easing</code> — focus transition easing</li>
+      </ul>
+    </div>
+
+    <!-- ============================================================
+         SECTION 11: Usage Examples
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>11. Usage Examples</h2>
+
+      <h3>HTML</h3>
+      <pre class="demo-code">&lt;!-- Zero-config card --&gt;
+&lt;container-card-base&gt;
+  &lt;p&gt;Card content&lt;/p&gt;
+&lt;/container-card-base&gt;
+
+&lt;!-- Interactive card --&gt;
+&lt;container-card-base
+  interactive="true"
+  accessibility-label="View details"
+&gt;
+  &lt;h3&gt;Card Title&lt;/h3&gt;
+  &lt;p&gt;Card description&lt;/p&gt;
+&lt;/container-card-base&gt;
+
+&lt;!-- Interactive link card --&gt;
+&lt;container-card-base
+  interactive="true"
+  role="link"
+  accessibility-label="Read article"
+&gt;
+  &lt;h3&gt;Article Title&lt;/h3&gt;
+  &lt;p&gt;Article excerpt...&lt;/p&gt;
+&lt;/container-card-base&gt;
+
+&lt;!-- Custom styling --&gt;
+&lt;container-card-base
+  padding="200"
+  background="surface.secondary"
+  border="default"
+  border-color="border.subtle"
+  border-radius="loose"
+&gt;
+  &lt;p&gt;Styled card content&lt;/p&gt;
+&lt;/container-card-base&gt;
+
+&lt;!-- Asymmetric padding (image-bleeding card) --&gt;
+&lt;container-card-base
+  padding-block-start="none"
+  padding-horizontal="150"
+  padding-block-end="150"
+&gt;
+  &lt;img src="hero.jpg" alt="Hero image" /&gt;
+  &lt;p&gt;Card content below image&lt;/p&gt;
+&lt;/container-card-base&gt;
+
+&lt;!-- Semantic HTML --&gt;
+&lt;container-card-base semantic="article"&gt;
+  &lt;h2&gt;Blog Post Title&lt;/h2&gt;
+  &lt;p&gt;Blog post content...&lt;/p&gt;
+&lt;/container-card-base&gt;</pre>
+
+      <h3>JavaScript</h3>
+      <pre class="demo-code">// Programmatic creation
+const card = document.createElement('container-card-base');
+card.setAttribute('padding', '200');
+card.setAttribute('background', 'surface.secondary');
+card.innerHTML = '&lt;p&gt;Dynamic card content&lt;/p&gt;';
+document.body.appendChild(card);
+
+// Interactive card with event handling
+const interactiveCard = document.createElement('container-card-base');
+interactiveCard.setAttribute('interactive', 'true');
+interactiveCard.setAttribute('accessibility-label', 'View details');
+interactiveCard.innerHTML = '&lt;h3&gt;Clickable Card&lt;/h3&gt;';
+
+// Set onPress callback
+interactiveCard.onPress = () =&gt; {
+  console.log('Card pressed!');
+};
+
+document.body.appendChild(interactiveCard);</pre>
+    </div>
+
+  </main>
+
+  <footer class="demo-footer">
+    <p>DesignerPunk Design System • Container-Card-Base Demo</p>
+  </footer>
+
+  <script>
+    // File protocol detection
+    if (window.location.protocol === 'file:') {
+      const banner = document.createElement('div');
+      banner.className = 'demo-file-protocol-warning';
+      banner.textContent = 'Components may not load correctly via file:// protocol. Use a local server: npx serve dist/browser';
+      document.body.prepend(banner);
+    }
+
+    // Interactive card event handling
+    document.addEventListener('DOMContentLoaded', () => {
+      const eventLog = document.getElementById('card-event-log');
+      const buttonCard = document.getElementById('card-button');
+      const linkCard = document.getElementById('card-link');
+
+      function logEvent(source, detail) {
+        const entry = document.createElement('div');
+        entry.className = 'event-log-entry';
+        const time = new Date().toLocaleTimeString();
+        entry.textContent = `[${time}] ${source}: ${detail}`;
+        eventLog.prepend(entry);
+      }
+
+      if (buttonCard) {
+        buttonCard.onPress = () => logEvent('Button Card', 'onPress triggered (role=button)');
+      }
+      if (linkCard) {
+        linkCard.onPress = () => logEvent('Link Card', 'onPress triggered (role=link)');
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Progress Stepper Demo - DesignerPunk</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="demo-styles.css">
+  <script type="module" src="designerpunk.esm.js"></script>
+  <style>
+    .stepper-container {
+      background: var(--black-300);
+      border: var(--border-default) solid var(--gray-400);
+      border-radius: var(--radius-100);
+      padding-inline: var(--space-inset-200);
+      padding-block: var(--space-inset-200);
+    }
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-200);
+    }
+    @media (max-width: 768px) {
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .comparison-cell {
+      background: var(--black-300);
+      border: var(--border-default) solid var(--gray-400);
+      border-radius: var(--radius-100);
+      padding-inline: var(--space-inset-200);
+      padding-block: var(--space-inset-200);
+    }
+    .comparison-cell h4 {
+      margin-block-start: 0;
+      color: var(--color-text-subtle);
+    }
+    #event-log {
+      background: var(--black-400);
+      border: var(--border-default) solid var(--gray-400);
+      border-radius: var(--radius-100);
+      padding-inline: var(--space-inset-100);
+      padding-block: var(--space-inset-100);
+      font-family: monospace;
+      font-size: 0.85rem;
+      color: var(--color-text-subtle);
+      min-block-size: 40px;
+      max-block-size: 120px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body class="demo-page">
+  <header class="demo-header">
+    <a href="index.html" class="demo-back-link">← All Components</a>
+    <h1>📊 Progress Stepper Demo</h1>
+    <p class="demo-subtitle">Sequential workflow indicators — Base (nodes + connectors) and Detailed (with labels, icons, and helper text) — side by side</p>
+  </header>
+
+  <main>
+
+    <!-- ============================================================
+         SECTION 1: Component Overview
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>1. Component Overview</h2>
+      <p><code>&lt;progress-stepper-base&gt;</code> composes Node-Base and Connector-Base primitives into a compact stepper for linear multi-step flows. <code>&lt;progress-stepper-detailed&gt;</code> adds Label-Base primitives with labels, helper text, and optional icons for richer context.</p>
+
+      <div class="demo-note">
+        <strong>Size constraint:</strong> Both steppers require size <code>md</code> or <code>lg</code>. Size <code>sm</code> is only supported by Pagination-Base. Maximum 8 steps — for longer flows, break into sub-flows.
+      </div>
+
+      <h3>Base — Simple 4-Step Flow</h3>
+      <div class="stepper-container">
+        <progress-stepper-base total-steps="4" current-step="2" size="md"></progress-stepper-base>
+      </div>
+
+      <h3>Detailed — Same 4-Step Flow with Labels</h3>
+      <div class="stepper-container">
+        <progress-stepper-detailed
+          steps='[{"label":"Account"},{"label":"Profile"},{"label":"Preferences"},{"label":"Confirm"}]'
+          current-step="2"
+          size="md"
+        ></progress-stepper-detailed>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 2: Base vs Detailed Comparison
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>2. Base vs Detailed — Side by Side</h2>
+      <p>Same step count and current step, different levels of detail. Choose Base for compact indicators, Detailed when users need context about each step.</p>
+
+      <h3>3-Step Flow at Step 2</h3>
+      <div class="comparison-grid">
+        <div class="comparison-cell">
+          <h4>Base</h4>
+          <progress-stepper-base total-steps="3" current-step="2" size="md"></progress-stepper-base>
+        </div>
+        <div class="comparison-cell">
+          <h4>Detailed</h4>
+          <progress-stepper-detailed
+            steps='[{"label":"Info"},{"label":"Payment"},{"label":"Review"}]'
+            current-step="2"
+            size="md"
+          ></progress-stepper-detailed>
+        </div>
+      </div>
+
+      <h3>5-Step Flow at Step 3 with Error on Step 2</h3>
+      <div class="comparison-grid">
+        <div class="comparison-cell">
+          <h4>Base</h4>
+          <progress-stepper-base total-steps="5" current-step="3" error-steps="2" size="md"></progress-stepper-base>
+        </div>
+        <div class="comparison-cell">
+          <h4>Detailed</h4>
+          <progress-stepper-detailed
+            steps='[{"label":"Cart"},{"label":"Shipping","helperText":"Address invalid"},{"label":"Payment"},{"label":"Review"},{"label":"Done"}]'
+            current-step="3"
+            error-steps="2"
+            size="md"
+          ></progress-stepper-detailed>
+        </div>
+      </div>
+
+      <h3>All Steps Completed</h3>
+      <div class="comparison-grid">
+        <div class="comparison-cell">
+          <h4>Base</h4>
+          <progress-stepper-base total-steps="4" current-step="5" size="md"></progress-stepper-base>
+        </div>
+        <div class="comparison-cell">
+          <h4>Detailed</h4>
+          <progress-stepper-detailed
+            steps='[{"label":"Upload"},{"label":"Process"},{"label":"Verify"},{"label":"Complete"}]'
+            current-step="5"
+            size="md"
+          ></progress-stepper-detailed>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 3: Size Variants
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>3. Size Variants</h2>
+      <p>Both components support <code>md</code> (default) and <code>lg</code> sizes. Larger sizes provide better touch targets and visual prominence.</p>
+
+      <h3>Medium (md) — Default</h3>
+      <div class="stepper-container">
+        <progress-stepper-base total-steps="4" current-step="2" size="md"></progress-stepper-base>
+      </div>
+      <div class="stepper-container" style="margin-block-start: var(--space-100);">
+        <progress-stepper-detailed
+          steps='[{"label":"Step 1"},{"label":"Step 2"},{"label":"Step 3"},{"label":"Step 4"}]'
+          current-step="2"
+          size="md"
+        ></progress-stepper-detailed>
+      </div>
+
+      <h3>Large (lg)</h3>
+      <div class="stepper-container">
+        <progress-stepper-base total-steps="4" current-step="2" size="lg"></progress-stepper-base>
+      </div>
+      <div class="stepper-container" style="margin-block-start: var(--space-100);">
+        <progress-stepper-detailed
+          steps='[{"label":"Step 1"},{"label":"Step 2"},{"label":"Step 3"},{"label":"Step 4"}]'
+          current-step="2"
+          size="lg"
+        ></progress-stepper-detailed>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 4: State Variants
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>4. State Variants</h2>
+      <p>State priority: <strong>error &gt; completed &gt; current &gt; incomplete</strong>. Completed nodes show checkmarks, error nodes use error color tokens.</p>
+
+      <h3>At First Step</h3>
+      <div class="stepper-container">
+        <progress-stepper-base total-steps="5" current-step="1" size="md"></progress-stepper-base>
+      </div>
+
+      <h3>Mid-Flow (Step 3 of 5)</h3>
+      <div class="stepper-container">
+        <progress-stepper-base total-steps="5" current-step="3" size="md"></progress-stepper-base>
+      </div>
+
+      <h3>Error States</h3>
+      <p>Error steps override other states. Multiple errors are supported via comma-separated values.</p>
+      <div class="stepper-container">
+        <progress-stepper-base total-steps="5" current-step="4" error-steps="2,3" size="md"></progress-stepper-base>
+      </div>
+      <div class="stepper-container" style="margin-block-start: var(--space-100);">
+        <progress-stepper-detailed
+          steps='[{"label":"Account"},{"label":"Email","helperText":"Invalid format"},{"label":"Password","helperText":"Too short"},{"label":"Verify"},{"label":"Done"}]'
+          current-step="4"
+          error-steps="2,3"
+          size="md"
+        ></progress-stepper-detailed>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 5: Detailed-Only Features
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>5. Detailed-Only Features</h2>
+      <p>Progress-Stepper-Detailed supports labels, helper text, optional step markers, and custom icons — features not available in the Base variant.</p>
+
+      <h3>Helper Text</h3>
+      <p>Each step can include helper text for additional context.</p>
+      <div class="stepper-container">
+        <progress-stepper-detailed
+          steps='[{"label":"Personal Info","helperText":"Name and email"},{"label":"Payment","helperText":"Card details"},{"label":"Shipping","helperText":"Delivery address"},{"label":"Confirm","helperText":"Review order"}]'
+          current-step="2"
+          size="md"
+        ></progress-stepper-detailed>
+      </div>
+
+      <h3>Optional Steps</h3>
+      <p>Steps marked as optional display an "optional" indicator in their ARIA label.</p>
+      <div class="stepper-container">
+        <progress-stepper-detailed
+          steps='[{"label":"Required Info"},{"label":"Preferences","optional":true,"helperText":"Skip if unsure"},{"label":"Review"}]'
+          current-step="1"
+          size="md"
+        ></progress-stepper-detailed>
+      </div>
+
+      <h3>Custom Icons</h3>
+      <p>Steps can specify icons for current/incomplete/error states. Completed steps always show a checkmark regardless of icon setting.</p>
+      <div class="stepper-container">
+        <progress-stepper-detailed
+          steps='[{"label":"Account","icon":"user"},{"label":"Settings","icon":"settings"},{"label":"Mail","icon":"mail"},{"label":"Done","icon":"check"}]'
+          current-step="2"
+          size="lg"
+        ></progress-stepper-detailed>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 6: Interactive Demo
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>6. Interactive Demo</h2>
+      <p>Use the buttons to step through a workflow and see both components update in sync.</p>
+
+      <div class="demo-row" style="gap: var(--space-100); margin-block-end: var(--space-100);">
+        <button-cta id="btn-prev" label="← Previous" variant="secondary" size="small"></button-cta>
+        <button-cta id="btn-next" label="Next →" variant="primary" size="small"></button-cta>
+        <button-cta id="btn-reset" label="Reset" variant="tertiary" size="small"></button-cta>
+        <button-cta id="btn-error" label="Toggle Error on Step 2" variant="tertiary" size="small"></button-cta>
+      </div>
+
+      <div class="comparison-grid">
+        <div class="comparison-cell">
+          <h4>Base</h4>
+          <progress-stepper-base id="interactive-base" total-steps="5" current-step="1" size="md"></progress-stepper-base>
+        </div>
+        <div class="comparison-cell">
+          <h4>Detailed</h4>
+          <progress-stepper-detailed id="interactive-detailed"
+            steps='[{"label":"Cart","icon":"star"},{"label":"Shipping","icon":"mail"},{"label":"Payment","icon":"settings"},{"label":"Review","icon":"check"},{"label":"Done","icon":"check"}]'
+            current-step="1"
+            size="md"
+          ></progress-stepper-detailed>
+        </div>
+      </div>
+
+      <div id="event-log">Ready — click Next to begin</div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 7: Accessibility
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>7. Accessibility</h2>
+      <p>Both components provide built-in ARIA support for screen readers.</p>
+
+      <h3>Base — role="progressbar"</h3>
+      <p>Progress-Stepper-Base uses <code>role="progressbar"</code> with <code>aria-valuenow</code>, <code>aria-valuemin</code>, and <code>aria-valuemax</code> to communicate progress.</p>
+      <div class="stepper-container">
+        <progress-stepper-base total-steps="4" current-step="2" size="md" accessibility-label="Checkout progress: step 2 of 4"></progress-stepper-base>
+      </div>
+
+      <h3>Detailed — role="list" with role="listitem"</h3>
+      <p>Progress-Stepper-Detailed uses <code>role="list"</code> with each step as <code>role="listitem"</code>. Each item includes the step label, state, and optional marker in its ARIA label.</p>
+      <div class="stepper-container">
+        <progress-stepper-detailed
+          steps='[{"label":"Account"},{"label":"Profile","optional":true},{"label":"Confirm"}]'
+          current-step="2"
+          size="md"
+          accessibility-label="Registration progress"
+        ></progress-stepper-detailed>
+      </div>
+
+      <div class="demo-note">
+        <strong>Keyboard navigation:</strong> Steppers are read-only indicators — they display progress but don't accept user input. Screen readers announce the current step, total steps, and any error states.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 8: Token Verification
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>8. Token Verification</h2>
+      <p>Both stepper components inherit tokens from the Progress Indicator primitives they compose. Check browser DevTools to verify these CSS custom properties are loaded:</p>
+
+      <h3>Node Color Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--color-progress-pending-background</code> — incomplete node background</li>
+        <li><code>--color-progress-current-background</code> — current node background</li>
+        <li><code>--color-progress-completed-background</code> — completed node background</li>
+        <li><code>--color-progress-error-background</code> — error node background</li>
+      </ul>
+
+      <h3>Connector Color Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--color-progress-completed-connector</code> — active connector color</li>
+        <li><code>--color-progress-pending-connector</code> — inactive connector color</li>
+      </ul>
+
+      <h3>Node Size Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--progress-node-size-md</code> — medium node base size</li>
+        <li><code>--progress-node-size-md-current</code> — medium node current size (+4px)</li>
+        <li><code>--progress-node-size-lg</code> — large node base size</li>
+        <li><code>--progress-node-size-lg-current</code> — large node current size (+4px)</li>
+      </ul>
+
+      <h3>Label Typography Tokens (Detailed only)</h3>
+      <ul class="demo-token-list">
+        <li><code>--typography-label-sm-font-family</code> — label font family</li>
+        <li><code>--typography-label-sm-font-size</code> — label font size</li>
+        <li><code>--typography-label-sm-line-height</code> — label line height</li>
+        <li><code>--color-text-default</code> — primary label text color</li>
+        <li><code>--color-text-subtle</code> — helper text color</li>
+      </ul>
+    </div>
+
+    <!-- ============================================================
+         SECTION 9: Usage Examples
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>9. Usage Examples</h2>
+
+      <h3>HTML — Base</h3>
+      <pre class="demo-code">&lt;!-- Simple 4-step stepper at step 2 --&gt;
+&lt;progress-stepper-base
+  total-steps="4"
+  current-step="2"
+  size="md"
+&gt;&lt;/progress-stepper-base&gt;
+
+&lt;!-- With error on step 3 --&gt;
+&lt;progress-stepper-base
+  total-steps="5"
+  current-step="4"
+  error-steps="3"
+  size="lg"
+&gt;&lt;/progress-stepper-base&gt;
+
+&lt;!-- Custom accessibility label --&gt;
+&lt;progress-stepper-base
+  total-steps="3"
+  current-step="1"
+  size="md"
+  accessibility-label="Onboarding progress"
+&gt;&lt;/progress-stepper-base&gt;</pre>
+
+      <h3>HTML — Detailed</h3>
+      <pre class="demo-code">&lt;!-- Detailed stepper with labels --&gt;
+&lt;progress-stepper-detailed
+  steps='[{"label":"Info"},{"label":"Payment"},{"label":"Review"}]'
+  current-step="2"
+  size="md"
+&gt;&lt;/progress-stepper-detailed&gt;
+
+&lt;!-- With helper text, icons, and optional step --&gt;
+&lt;progress-stepper-detailed
+  steps='[
+    {"label":"Account","icon":"user","helperText":"Create account"},
+    {"label":"Preferences","optional":true},
+    {"label":"Confirm","icon":"check"}
+  ]'
+  current-step="1"
+  size="lg"
+&gt;&lt;/progress-stepper-detailed&gt;
+
+&lt;!-- With error steps --&gt;
+&lt;progress-stepper-detailed
+  steps='[{"label":"Cart"},{"label":"Shipping","helperText":"Invalid address"},{"label":"Pay"},{"label":"Done"}]'
+  current-step="3"
+  error-steps="2"
+  size="md"
+&gt;&lt;/progress-stepper-detailed&gt;</pre>
+
+      <h3>JavaScript</h3>
+      <pre class="demo-code">// Programmatic creation — Base
+const baseStepper = document.createElement('progress-stepper-base');
+baseStepper.totalSteps = 5;
+baseStepper.currentStep = 1;
+baseStepper.size = 'md';
+document.body.appendChild(baseStepper);
+
+// Advance step
+baseStepper.currentStep = 2;
+
+// Set error
+baseStepper.errorSteps = [3];
+
+// Programmatic creation — Detailed
+const detailedStepper = document.createElement('progress-stepper-detailed');
+detailedStepper.steps = [
+  { label: 'Account', icon: 'user' },
+  { label: 'Profile', helperText: 'Optional info', optional: true },
+  { label: 'Confirm' }
+];
+detailedStepper.currentStep = 1;
+detailedStepper.size = 'md';
+document.body.appendChild(detailedStepper);
+
+// Advance step
+detailedStepper.currentStep = 2;</pre>
+    </div>
+
+  </main>
+
+  <footer class="demo-footer">
+    <p>DesignerPunk Design System • Progress Stepper Demo</p>
+  </footer>
+
+  <script>
+    // File protocol detection
+    if (window.location.protocol === 'file:') {
+      var banner = document.createElement('div');
+      banner.className = 'demo-file-protocol-warning';
+      banner.textContent = 'Components may not load correctly via file:// protocol. Use a local server: npx serve dist/browser';
+      document.body.prepend(banner);
+    }
+
+    // Interactive demo logic
+    (function() {
+      var currentStep = 1;
+      var totalSteps = 5;
+      var hasError = false;
+      var log = document.getElementById('event-log');
+
+      function updateSteppers() {
+        var base = document.getElementById('interactive-base');
+        var detailed = document.getElementById('interactive-detailed');
+        if (!base || !detailed) return;
+
+        base.setAttribute('current-step', String(currentStep));
+        detailed.setAttribute('current-step', String(currentStep));
+
+        var errorAttr = hasError ? '2' : '';
+        base.setAttribute('error-steps', errorAttr);
+        detailed.setAttribute('error-steps', errorAttr);
+      }
+
+      function logEvent(msg) {
+        if (!log) return;
+        log.textContent = msg;
+      }
+
+      document.getElementById('btn-next')?.addEventListener('press', function() {
+        if (currentStep <= totalSteps) {
+          currentStep++;
+          updateSteppers();
+          logEvent('Step ' + Math.min(currentStep, totalSteps) + ' of ' + totalSteps + (currentStep > totalSteps ? ' (all complete)' : ''));
+        }
+      });
+
+      document.getElementById('btn-prev')?.addEventListener('press', function() {
+        if (currentStep > 1) {
+          currentStep--;
+          updateSteppers();
+          logEvent('Step ' + currentStep + ' of ' + totalSteps);
+        }
+      });
+
+      document.getElementById('btn-reset')?.addEventListener('press', function() {
+        currentStep = 1;
+        hasError = false;
+        updateSteppers();
+        logEvent('Reset — step 1 of ' + totalSteps);
+      });
+
+      document.getElementById('btn-error')?.addEventListener('press', function() {
+        hasError = !hasError;
+        updateSteppers();
+        logEvent('Error on step 2: ' + (hasError ? 'ON' : 'OFF'));
+      });
+    })();
+  </script>
+</body>
+</html>

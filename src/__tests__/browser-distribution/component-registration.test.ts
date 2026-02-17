@@ -194,7 +194,7 @@ describe('Component Registration', () => {
       // AvatarBaseElement added as part of spec 042
       // Badge components added as part of spec 044
       // Checkbox components added as part of spec 046
-      expect(content).toContain('export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb, ButtonVerticalListItem, ButtonVerticalListSet, AvatarBaseElement, BadgeLabelBase, BadgeCountBase, BadgeCountNotification, InputCheckboxBaseElement, InputCheckboxLegalElement }');
+      expect(content).toContain('export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb, ButtonVerticalListItem, ButtonVerticalListSet, AvatarBaseElement, BadgeLabelBase, BadgeCountBase, BadgeCountNotification, InputCheckboxBaseElement, InputCheckboxLegalElement, ChipBaseElement, ChipFilterElement, ChipInputElement, ContainerCardBaseWeb, InputRadioBaseElement, InputRadioSetElement, ProgressIndicatorNodeBase, ProgressIndicatorConnectorBase, ProgressIndicatorLabelBase, ProgressPaginationBase, ProgressStepperBase, ProgressStepperDetailed }');
       expect(content).toContain('export const Icon = IconBaseElement');
       expect(content).toContain('export const IconBase = IconBaseElement');
       expect(content).toContain('export const Container = ContainerBaseWeb');

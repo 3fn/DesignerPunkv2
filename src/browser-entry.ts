@@ -41,6 +41,30 @@ import { BadgeCountNotification } from './components/core/Badge-Count-Notificati
 import { InputCheckboxBaseElement } from './components/core/Input-Checkbox-Base/platforms/web/InputCheckboxBase.web';
 // Input-Checkbox-Legal - Stemma System naming (legal consent checkbox with audit trail)
 import { InputCheckboxLegalElement } from './components/core/Input-Checkbox-Legal/platforms/web/InputCheckboxLegal.web';
+// Chip-Base - Stemma System naming (compact interactive chip primitive)
+import { ChipBaseElement } from './components/core/Chip-Base/platforms/web/ChipBase.web';
+// Chip-Filter - Stemma System naming (toggleable filter chip)
+import { ChipFilterElement } from './components/core/Chip-Filter/platforms/web/ChipFilter.web';
+// Chip-Input - Stemma System naming (dismissible input chip)
+import { ChipInputElement } from './components/core/Chip-Input/platforms/web/ChipInput.web';
+// Container-Card-Base - Stemma System naming (specialized card container with opinionated defaults)
+import { ContainerCardBaseWeb } from './components/core/Container-Card-Base/platforms/web/ContainerCardBase.web';
+// Input-Radio-Base - Stemma System naming (single-selection radio control)
+import { InputRadioBaseElement } from './components/core/Input-Radio-Base/platforms/web/InputRadioBase.web';
+// Input-Radio-Set - Stemma System naming (radio group orchestrator with mutual exclusivity)
+import { InputRadioSetElement } from './components/core/Input-Radio-Set/platforms/web/InputRadioSet.web';
+// Progress-Indicator-Node-Base - Stemma System naming (individual indicator node primitive)
+import { ProgressIndicatorNodeBase } from './components/core/Progress-Indicator-Node-Base/platforms/web/ProgressIndicatorNodeBase.web';
+// Progress-Indicator-Connector-Base - Stemma System naming (connecting line between nodes)
+import { ProgressIndicatorConnectorBase } from './components/core/Progress-Indicator-Connector-Base/platforms/web/ProgressIndicatorConnectorBase.web';
+// Progress-Indicator-Label-Base - Stemma System naming (label below indicator node)
+import { ProgressIndicatorLabelBase } from './components/core/Progress-Indicator-Label-Base/platforms/web/ProgressIndicatorLabelBase.web';
+// Progress-Pagination-Base - Stemma System naming (pagination dot indicator for carousels/multi-page flows)
+import { ProgressPaginationBase } from './components/core/Progress-Pagination-Base/platforms/web/ProgressPaginationBase.web';
+// Progress-Stepper-Base - Stemma System naming (stepper indicator composing node and connector primitives)
+import { ProgressStepperBase } from './components/core/Progress-Stepper-Base/platforms/web/ProgressStepperBase.web';
+// Progress-Stepper-Detailed - Stemma System naming (detailed stepper with labels and optional icons)
+import { ProgressStepperDetailed } from './components/core/Progress-Stepper-Detailed/platforms/web/ProgressStepperDetailed.web';
 
 /**
  * Check if design tokens are loaded in the document.
@@ -129,6 +153,30 @@ safeDefine('badge-count-notification', BadgeCountNotification);
 safeDefine('input-checkbox-base', InputCheckboxBaseElement);
 // Input-Checkbox-Legal - Stemma System naming (legal consent checkbox with audit trail)
 safeDefine('input-checkbox-legal', InputCheckboxLegalElement);
+// Chip-Base - Stemma System naming (compact interactive chip primitive)
+safeDefine('chip-base', ChipBaseElement);
+// Chip-Filter - Stemma System naming (toggleable filter chip)
+safeDefine('chip-filter', ChipFilterElement);
+// Chip-Input - Stemma System naming (dismissible input chip)
+safeDefine('chip-input', ChipInputElement);
+// Container-Card-Base - Stemma System naming (specialized card container with opinionated defaults)
+safeDefine('container-card-base', ContainerCardBaseWeb);
+// Input-Radio-Base - Stemma System naming (single-selection radio control)
+safeDefine('input-radio-base', InputRadioBaseElement);
+// Input-Radio-Set - Stemma System naming (radio group orchestrator with mutual exclusivity)
+safeDefine('input-radio-set', InputRadioSetElement);
+// Progress-Indicator-Node-Base - Stemma System naming (individual indicator node primitive)
+safeDefine('progress-indicator-node-base', ProgressIndicatorNodeBase);
+// Progress-Indicator-Connector-Base - Stemma System naming (connecting line between nodes)
+safeDefine('progress-indicator-connector-base', ProgressIndicatorConnectorBase);
+// Progress-Indicator-Label-Base - Stemma System naming (label below indicator node)
+safeDefine('progress-indicator-label-base', ProgressIndicatorLabelBase);
+// Progress-Pagination-Base - Stemma System naming (pagination dot indicator for carousels/multi-page flows)
+safeDefine('progress-pagination-base', ProgressPaginationBase);
+// Progress-Stepper-Base - Stemma System naming (stepper indicator composing node and connector primitives)
+safeDefine('progress-stepper-base', ProgressStepperBase);
+// Progress-Stepper-Detailed - Stemma System naming (detailed stepper with labels and optional icons)
+safeDefine('progress-stepper-detailed', ProgressStepperDetailed);
 
 // Check tokens after DOM is ready and CSS is applied
 // Uses requestAnimationFrame to ensure stylesheets have been fully parsed and applied
@@ -146,7 +194,7 @@ if (typeof document !== 'undefined') {
 
 // Export all components for UMD global access and ESM imports
 // Requirements: 1.2, 2.3
-export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb, ButtonVerticalListItem, ButtonVerticalListSet, AvatarBaseElement, BadgeLabelBase, BadgeCountBase, BadgeCountNotification, InputCheckboxBaseElement, InputCheckboxLegalElement };
+export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb, ButtonVerticalListItem, ButtonVerticalListSet, AvatarBaseElement, BadgeLabelBase, BadgeCountBase, BadgeCountNotification, InputCheckboxBaseElement, InputCheckboxLegalElement, ChipBaseElement, ChipFilterElement, ChipInputElement, ContainerCardBaseWeb, InputRadioBaseElement, InputRadioSetElement, ProgressIndicatorNodeBase, ProgressIndicatorConnectorBase, ProgressIndicatorLabelBase, ProgressPaginationBase, ProgressStepperBase, ProgressStepperDetailed };
 
 // Also export with more intuitive names for the UMD global
 export const Icon = IconBaseElement;
@@ -167,3 +215,22 @@ export const CheckboxBase = InputCheckboxBaseElement;
 export const CheckboxLegal = InputCheckboxLegalElement;
 // Legacy alias for backward compatibility
 export const TextInputField = InputTextBase;
+// Chip - Intuitive aliases for chip components
+export const ChipBase = ChipBaseElement;
+export const ChipFilter = ChipFilterElement;
+export const ChipInput = ChipInputElement;
+// Container-Card - Intuitive alias for ContainerCardBaseWeb
+export const ContainerCard = ContainerCardBaseWeb;
+export const ContainerCardBase = ContainerCardBaseWeb;
+// Radio - Intuitive aliases for radio components
+export const RadioBase = InputRadioBaseElement;
+export const RadioSet = InputRadioSetElement;
+// Progress-Indicator - Intuitive aliases for progress indicator primitives
+export const ProgressNode = ProgressIndicatorNodeBase;
+export const ProgressConnector = ProgressIndicatorConnectorBase;
+export const ProgressLabel = ProgressIndicatorLabelBase;
+// Progress-Pagination - Intuitive alias for ProgressPaginationBase
+export const PaginationBase = ProgressPaginationBase;
+// Progress-Stepper - Intuitive aliases for stepper components
+export const StepperBase = ProgressStepperBase;
+export const StepperDetailed = ProgressStepperDetailed;

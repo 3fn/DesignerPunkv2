@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Container-Base Demo - DesignerPunk</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="demo-styles.css">
+  <script type="module" src="designerpunk.esm.js"></script>
+  <style>
+    .container-showcase {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-200);
+      align-items: flex-start;
+    }
+    .container-showcase-item {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-050);
+    }
+    .container-showcase-item .demo-item-label {
+      text-align: start;
+    }
+    .container-content {
+      color: var(--gray-100);
+      font-size: var(--typography-body-sm-font-size);
+    }
+    .container-content h4 {
+      margin-block: 0;
+      color: var(--cyan-300);
+      font-size: var(--typography-label-md-font-size);
+    }
+    .container-content p {
+      margin-block: var(--space-050) 0;
+    }
+    .padding-hierarchy-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--space-200);
+      margin-block-start: var(--space-100);
+    }
+  </style>
+</head>
+<body class="demo-page">
+  <header class="demo-header">
+    <a href="index.html" class="demo-back-link">← All Components</a>
+    <h1>📦 Container-Base Demo</h1>
+    <p class="demo-subtitle">Foundational layout primitive providing structural wrapping with token-based padding, background, border, shadow, and border-radius options</p>
+  </header>
+
+  <main>
+
+    <!-- ============================================================
+         SECTION 1: Overview
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>1. Overview</h2>
+      <p>Container-Base is the foundational primitive for all container components. It wraps child content with configurable padding, background color, border, shadow, and border-radius — all mapped to design system tokens.</p>
+
+      <h3>Basic Container</h3>
+      <div class="container-showcase">
+        <container-base padding="200" background="color-surface" border-radius="normal">
+          <div class="container-content">
+            <h4>Default Container</h4>
+            <p>Padding 200 (16px), surface background, normal radius.</p>
+          </div>
+        </container-base>
+      </div>
+
+      <h3>Styled Container</h3>
+      <div class="container-showcase">
+        <container-base padding="300" background="color-surface" border-radius="loose" shadow="shadow-container" border="default">
+          <div class="container-content">
+            <h4>Fully Styled</h4>
+            <p>Padding 300, shadow, border, and loose radius combined.</p>
+          </div>
+        </container-base>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 2: Padding Options
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>2. Padding Options</h2>
+      <p>Uniform padding maps to <code>space.inset</code> tokens. The colored border makes padding visible.</p>
+
+      <div class="container-showcase">
+        <div class="container-showcase-item">
+          <container-base padding="none" background="color-surface" border="default" border-radius="tight">
+            <div class="container-content"><p>none (0px)</p></div>
+          </container-base>
+          <span class="demo-item-label">padding="none"</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="050" background="color-surface" border="default" border-radius="tight">
+            <div class="container-content"><p>050 (4px)</p></div>
+          </container-base>
+          <span class="demo-item-label">padding="050"</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="100" background="color-surface" border="default" border-radius="tight">
+            <div class="container-content"><p>100 (8px)</p></div>
+          </container-base>
+          <span class="demo-item-label">padding="100"</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="150" background="color-surface" border="default" border-radius="tight">
+            <div class="container-content"><p>150 (12px)</p></div>
+          </container-base>
+          <span class="demo-item-label">padding="150"</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-surface" border="default" border-radius="tight">
+            <div class="container-content"><p>200 (16px)</p></div>
+          </container-base>
+          <span class="demo-item-label">padding="200"</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="300" background="color-surface" border="default" border-radius="tight">
+            <div class="container-content"><p>300 (24px)</p></div>
+          </container-base>
+          <span class="demo-item-label">padding="300"</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="400" background="color-surface" border="default" border-radius="tight">
+            <div class="container-content"><p>400 (32px)</p></div>
+          </container-base>
+          <span class="demo-item-label">padding="400"</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 3: Directional Padding
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>3. Directional Padding</h2>
+      <p>Container-Base supports a three-level padding override hierarchy using CSS logical properties. Individual edges override axis props, which override uniform padding.</p>
+
+      <h3>Axis Props (paddingVertical / paddingHorizontal)</h3>
+      <div class="padding-hierarchy-grid">
+        <div class="container-showcase-item">
+          <container-base padding-vertical="100" padding-horizontal="400" background="color-surface" border="default" border-radius="tight">
+            <div class="container-content"><p>Tight vertical (8px), wide horizontal (32px)</p></div>
+          </container-base>
+          <span class="demo-item-label">padding-vertical="100" padding-horizontal="400"</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding-vertical="400" padding-horizontal="100" background="color-surface" border="default" border-radius="tight">
+            <div class="container-content"><p>Wide vertical (32px), tight horizontal (8px)</p></div>
+          </container-base>
+          <span class="demo-item-label">padding-vertical="400" padding-horizontal="100"</span>
+        </div>
+      </div>
+
+      <h3>Individual Edge Props</h3>
+      <div class="padding-hierarchy-grid">
+        <div class="container-showcase-item">
+          <container-base padding-block-start="400" padding-block-end="050" padding-inline-start="200" padding-inline-end="200" background="color-surface" border="default" border-radius="tight">
+            <div class="container-content"><p>Large top (32px), small bottom (4px), medium sides (16px)</p></div>
+          </container-base>
+          <span class="demo-item-label">Individual edge control</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="100" padding-block-start="400" background="color-surface" border="default" border-radius="tight">
+            <div class="container-content"><p>Uniform 100 (8px) with block-start override to 400 (32px)</p></div>
+          </container-base>
+          <span class="demo-item-label">Override hierarchy demo</span>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Override hierarchy:</strong> Individual edges (highest) → Axis props → Uniform padding (lowest). All use CSS logical properties for RTL support.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 4: Background Options
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>4. Background Options</h2>
+      <p>Background accepts any semantic color token name. When omitted, the container is transparent.</p>
+
+      <div class="container-showcase">
+        <div class="container-showcase-item">
+          <container-base padding="200" border="default" border-radius="normal">
+            <div class="container-content"><p>No background (transparent)</p></div>
+          </container-base>
+          <span class="demo-item-label">No background</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-surface" border-radius="normal">
+            <div class="container-content"><p>Surface background</p></div>
+          </container-base>
+          <span class="demo-item-label">background="color-surface"</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-canvas" border-radius="normal">
+            <div class="container-content"><p>Canvas background</p></div>
+          </container-base>
+          <span class="demo-item-label">background="color-canvas"</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-background" border-radius="normal">
+            <div class="container-content"><p>Background color</p></div>
+          </container-base>
+          <span class="demo-item-label">background="color-background"</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 5: Border Options
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>5. Border Options</h2>
+      <p>Border width maps to border tokens. Border color defaults to <code>color.border.default</code> but can be overridden with the <code>border-color</code> attribute.</p>
+
+      <h3>Border Widths</h3>
+      <div class="container-showcase">
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-surface" border="none" border-radius="normal">
+            <div class="container-content"><p>No border</p></div>
+          </container-base>
+          <span class="demo-item-label">border="none"</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-surface" border="default" border-radius="normal">
+            <div class="container-content"><p>Default (1px)</p></div>
+          </container-base>
+          <span class="demo-item-label">border="default"</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-surface" border="emphasis" border-radius="normal">
+            <div class="container-content"><p>Emphasis (2px)</p></div>
+          </container-base>
+          <span class="demo-item-label">border="emphasis"</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-surface" border="heavy" border-radius="normal">
+            <div class="container-content"><p>Heavy (4px)</p></div>
+          </container-base>
+          <span class="demo-item-label">border="heavy"</span>
+        </div>
+      </div>
+
+      <h3>Custom Border Colors</h3>
+      <div class="container-showcase">
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-surface" border="default" border-radius="normal">
+            <div class="container-content"><p>Default color</p></div>
+          </container-base>
+          <span class="demo-item-label">Default border color</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-surface" border="emphasis" border-color="color-action-primary" border-radius="normal">
+            <div class="container-content"><p>Primary accent</p></div>
+          </container-base>
+          <span class="demo-item-label">border-color="color-action-primary"</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-surface" border="emphasis" border-color="color-feedback-error-text" border-radius="normal">
+            <div class="container-content"><p>Error accent</p></div>
+          </container-base>
+          <span class="demo-item-label">border-color="color-feedback-error-text"</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-surface" border="emphasis" border-color="color-feedback-success-text" border-radius="normal">
+            <div class="container-content"><p>Success accent</p></div>
+          </container-base>
+          <span class="demo-item-label">border-color="color-feedback-success-text"</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 6: Border Radius Options
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>6. Border Radius Options</h2>
+      <p>Border radius maps to radius tokens. Affects background, border, and shadow rendering.</p>
+
+      <div class="container-showcase">
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-surface" border="default" border-radius="none">
+            <div class="container-content"><p>Sharp corners</p></div>
+          </container-base>
+          <span class="demo-item-label">border-radius="none" (0px)</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-surface" border="default" border-radius="tight">
+            <div class="container-content"><p>Tight radius</p></div>
+          </container-base>
+          <span class="demo-item-label">border-radius="tight" (4px)</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-surface" border="default" border-radius="normal">
+            <div class="container-content"><p>Normal radius</p></div>
+          </container-base>
+          <span class="demo-item-label">border-radius="normal" (8px)</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-surface" border="default" border-radius="loose">
+            <div class="container-content"><p>Loose radius</p></div>
+          </container-base>
+          <span class="demo-item-label">border-radius="loose" (16px)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 7: Shadow Options
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>7. Shadow Options</h2>
+      <p>Shadow accepts semantic shadow token names. Shadows respect border-radius when set.</p>
+
+      <div class="container-showcase">
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-surface" border-radius="normal">
+            <div class="container-content"><p>No shadow</p></div>
+          </container-base>
+          <span class="demo-item-label">No shadow</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-surface" border-radius="normal" shadow="shadow-container">
+            <div class="container-content"><p>Container shadow</p></div>
+          </container-base>
+          <span class="demo-item-label">shadow="shadow-container"</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-surface" border-radius="normal" shadow="shadow-navigation">
+            <div class="container-content"><p>Navigation shadow</p></div>
+          </container-base>
+          <span class="demo-item-label">shadow="shadow-navigation"</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-surface" border-radius="normal" shadow="shadow-dropdown">
+            <div class="container-content"><p>Dropdown shadow</p></div>
+          </container-base>
+          <span class="demo-item-label">shadow="shadow-dropdown"</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-surface" border-radius="normal" shadow="shadow-modal">
+            <div class="container-content"><p>Modal shadow</p></div>
+          </container-base>
+          <span class="demo-item-label">shadow="shadow-modal"</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 8: Semantic HTML
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>8. Semantic HTML Elements</h2>
+      <p>The <code>semantic</code> attribute controls which HTML element renders inside the Shadow DOM. Defaults to <code>div</code>. Improves accessibility and SEO on web.</p>
+
+      <div class="container-showcase">
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-surface" border="default" border-radius="normal" semantic="section" accessibility-label="Example section">
+            <div class="container-content"><p>Renders as <code>&lt;section&gt;</code></p></div>
+          </container-base>
+          <span class="demo-item-label">semantic="section"</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-surface" border="default" border-radius="normal" semantic="article" accessibility-label="Example article">
+            <div class="container-content"><p>Renders as <code>&lt;article&gt;</code></p></div>
+          </container-base>
+          <span class="demo-item-label">semantic="article"</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-surface" border="default" border-radius="normal" semantic="aside" accessibility-label="Example aside">
+            <div class="container-content"><p>Renders as <code>&lt;aside&gt;</code></p></div>
+          </container-base>
+          <span class="demo-item-label">semantic="aside"</span>
+        </div>
+        <div class="container-showcase-item">
+          <container-base padding="200" background="color-surface" border="default" border-radius="normal" semantic="nav" accessibility-label="Example navigation">
+            <div class="container-content"><p>Renders as <code>&lt;nav&gt;</code></p></div>
+          </container-base>
+          <span class="demo-item-label">semantic="nav"</span>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Accessibility:</strong> Use <code>accessibility-label</code> alongside <code>semantic</code> to provide screen reader context. The label maps to <code>aria-label</code> on web.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 9: Hover State
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>9. Hover State</h2>
+      <p>When <code>hoverable="true"</code>, the container darkens its background by 8% on hover using theme-aware blend utilities.</p>
+
+      <div class="demo-interactive">
+        <p>Hover over these containers to see the hover effect:</p>
+        <div class="container-showcase">
+          <div class="container-showcase-item">
+            <container-base padding="200" background="color-surface" border-radius="normal" hoverable="true">
+              <div class="container-content"><p>Hoverable surface</p></div>
+            </container-base>
+            <span class="demo-item-label">hoverable="true" on surface</span>
+          </div>
+          <div class="container-showcase-item">
+            <container-base padding="200" background="color-canvas" border-radius="normal" hoverable="true">
+              <div class="container-content"><p>Hoverable canvas</p></div>
+            </container-base>
+            <span class="demo-item-label">hoverable="true" on canvas</span>
+          </div>
+          <div class="container-showcase-item">
+            <container-base padding="200" background="color-surface" border-radius="normal">
+              <div class="container-content"><p>Not hoverable</p></div>
+            </container-base>
+            <span class="demo-item-label">No hover (default)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Blend calculation:</strong> Hover uses <code>darkerBlend(baseColor, blend.hoverDarker)</code> — 8% darker. Transition uses <code>motion.focusTransition</code> for smooth animation. Only applies on pointer devices.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 10: Composition with Other Components
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>10. Composition with Other Components</h2>
+      <p>Container-Base is designed to wrap other DesignerPunk components, providing layout structure without affecting child styling.</p>
+
+      <h3>Container with Button</h3>
+      <container-base padding="300" background="color-surface" border-radius="normal" shadow="shadow-container">
+        <div class="container-content">
+          <h4>Action Panel</h4>
+          <p style="margin-block-end: var(--space-100);">A container wrapping a call-to-action button.</p>
+          <button-cta label="Get Started" variant="primary"></button-cta>
+        </div>
+      </container-base>
+
+      <h3>Container with Input</h3>
+      <container-base padding="300" background="color-surface" border-radius="normal" border="default" style="max-inline-size: 400px; margin-block-start: var(--space-100);">
+        <div class="container-content">
+          <h4>Login Form</h4>
+          <div style="margin-block-start: var(--space-100);">
+            <input-text-base label="Email" placeholder="you@example.com" type="email"></input-text-base>
+          </div>
+          <div style="margin-block-start: var(--space-100);">
+            <button-cta label="Sign In" variant="primary"></button-cta>
+          </div>
+        </div>
+      </container-base>
+
+      <h3>Nested Containers</h3>
+      <container-base padding="300" background="color-surface" border-radius="loose" shadow="shadow-container" style="margin-block-start: var(--space-100);">
+        <div class="container-content">
+          <h4>Outer Container</h4>
+          <p style="margin-block-end: var(--space-100);">Containers can nest to create layered layouts.</p>
+          <div style="display: flex; gap: var(--space-100); flex-wrap: wrap;">
+            <container-base padding="200" background="color-canvas" border="default" border-radius="normal">
+              <div class="container-content"><p>Inner card A</p></div>
+            </container-base>
+            <container-base padding="200" background="color-canvas" border="default" border-radius="normal">
+              <div class="container-content"><p>Inner card B</p></div>
+            </container-base>
+            <container-base padding="200" background="color-canvas" border="default" border-radius="normal">
+              <div class="container-content"><p>Inner card C</p></div>
+            </container-base>
+          </div>
+        </div>
+      </container-base>
+    </div>
+
+    <!-- ============================================================
+         SECTION 11: Token Verification
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>11. Token Verification</h2>
+      <p>Check browser DevTools to verify these CSS custom properties are loaded:</p>
+
+      <h3>Spacing Tokens (Padding)</h3>
+      <ul class="demo-token-list">
+        <li><code>--space-inset-050</code> — padding 050 (4px)</li>
+        <li><code>--space-inset-100</code> — padding 100 (8px)</li>
+        <li><code>--space-inset-150</code> — padding 150 (12px)</li>
+        <li><code>--space-inset-200</code> — padding 200 (16px)</li>
+        <li><code>--space-inset-300</code> — padding 300 (24px)</li>
+        <li><code>--space-inset-400</code> — padding 400 (32px)</li>
+      </ul>
+
+      <h3>Color Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--color-surface</code> — default surface background</li>
+        <li><code>--color-canvas</code> — canvas background</li>
+        <li><code>--color-background</code> — page background</li>
+        <li><code>--color-border-default</code> — default border color</li>
+        <li><code>--color-action-primary</code> — primary accent border</li>
+      </ul>
+
+      <h3>Shadow Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--shadow-container</code> — container elevation shadow</li>
+        <li><code>--shadow-navigation</code> — navigation elevation shadow</li>
+        <li><code>--shadow-dropdown</code> — dropdown elevation shadow</li>
+        <li><code>--shadow-modal</code> — modal elevation shadow</li>
+      </ul>
+
+      <h3>Border Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--border-default</code> — default border width (1px)</li>
+        <li><code>--border-emphasis</code> — emphasis border width (2px)</li>
+        <li><code>--border-heavy</code> — heavy border width (4px)</li>
+      </ul>
+
+      <h3>Radius Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--radius-050</code> — tight radius (4px)</li>
+        <li><code>--radius-100</code> — normal radius (8px)</li>
+        <li><code>--radius-200</code> — loose radius (16px)</li>
+      </ul>
+
+      <h3>Motion Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--motion-focus-transition-duration</code> — hover transition duration</li>
+        <li><code>--motion-focus-transition-easing</code> — hover transition easing</li>
+      </ul>
+    </div>
+
+    <!-- ============================================================
+         SECTION 12: Usage Examples
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>12. Usage Examples</h2>
+
+      <h3>HTML</h3>
+      <pre class="demo-code">&lt;!-- Basic container --&gt;
+&lt;container-base padding="200" background="color-surface" border-radius="normal"&gt;
+  &lt;p&gt;Content goes here&lt;/p&gt;
+&lt;/container-base&gt;
+
+&lt;!-- With shadow and border --&gt;
+&lt;container-base
+  padding="300"
+  background="color-surface"
+  shadow="shadow-container"
+  border="default"
+  border-radius="loose"
+&gt;
+  &lt;p&gt;Elevated content&lt;/p&gt;
+&lt;/container-base&gt;
+
+&lt;!-- Custom border color --&gt;
+&lt;container-base
+  padding="200"
+  background="color-surface"
+  border="emphasis"
+  border-color="color-action-primary"
+  border-radius="normal"
+&gt;
+  &lt;p&gt;Accented container&lt;/p&gt;
+&lt;/container-base&gt;
+
+&lt;!-- Directional padding --&gt;
+&lt;container-base
+  padding-vertical="100"
+  padding-horizontal="300"
+  background="color-surface"
+  border-radius="normal"
+&gt;
+  &lt;p&gt;Asymmetric padding&lt;/p&gt;
+&lt;/container-base&gt;
+
+&lt;!-- Semantic HTML with accessibility --&gt;
+&lt;container-base
+  padding="200"
+  semantic="article"
+  accessibility-label="Blog post"
+  background="color-surface"
+  border-radius="normal"
+&gt;
+  &lt;h2&gt;Article Title&lt;/h2&gt;
+  &lt;p&gt;Article content&lt;/p&gt;
+&lt;/container-base&gt;
+
+&lt;!-- Hoverable container --&gt;
+&lt;container-base
+  padding="200"
+  background="color-surface"
+  border-radius="normal"
+  hoverable="true"
+&gt;
+  &lt;p&gt;Hover me!&lt;/p&gt;
+&lt;/container-base&gt;</pre>
+
+      <h3>JavaScript</h3>
+      <pre class="demo-code">// Programmatic creation
+const container = document.createElement('container-base');
+container.setAttribute('padding', '200');
+container.setAttribute('background', 'color-surface');
+container.setAttribute('border-radius', 'normal');
+container.setAttribute('shadow', 'shadow-container');
+container.innerHTML = '&lt;p&gt;Dynamic content&lt;/p&gt;';
+document.body.appendChild(container);
+
+// Update attributes dynamically
+container.setAttribute('border', 'emphasis');
+container.setAttribute('border-color', 'color-action-primary');
+
+// Semantic container
+const article = document.createElement('container-base');
+article.setAttribute('semantic', 'article');
+article.setAttribute('accessibility-label', 'Blog post');
+article.setAttribute('padding', '300');
+article.setAttribute('background', 'color-surface');
+article.innerHTML = '&lt;h2&gt;Title&lt;/h2&gt;&lt;p&gt;Content&lt;/p&gt;';
+document.body.appendChild(article);</pre>
+    </div>
+
+  </main>
+
+  <footer class="demo-footer">
+    <p>DesignerPunk Design System • Container-Base Demo</p>
+  </footer>
+
+  <script>
+    // File protocol detection
+    if (window.location.protocol === 'file:') {
+      const banner = document.createElement('div');
+      banner.className = 'demo-file-protocol-warning';
+      banner.textContent = 'Components may not load correctly via file:// protocol. Use a local server: npx serve dist/browser';
+      document.body.prepend(banner);
+    }
+  </script>
+</body>
+</html>

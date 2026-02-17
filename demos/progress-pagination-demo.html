@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Progress-Pagination-Base Demo - DesignerPunk</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="demo-styles.css">
+  <script type="module" src="designerpunk.esm.js"></script>
+  <style>
+    .pagination-showcase {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-200);
+    }
+    .pagination-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-200);
+    }
+    .pagination-row-label {
+      min-inline-size: 120px;
+      font-family: var(--typography-label-sm-font-family, 'Inter', sans-serif);
+      font-size: var(--typography-label-sm-font-size, 12px);
+      color: var(--color-text-subtle, #999);
+    }
+    .event-log {
+      background: var(--black-300, #1a1a2e);
+      border: var(--border-default, 1px) solid var(--gray-400, #444);
+      border-radius: var(--radius-100, 8px);
+      padding-inline: var(--space-inset-200, 16px);
+      padding-block: var(--space-inset-200, 16px);
+      font-family: monospace;
+      font-size: 13px;
+      color: var(--color-text-default, #e0e0e0);
+      min-block-size: 40px;
+    }
+    .interactive-controls {
+      display: flex;
+      align-items: center;
+      gap: var(--space-100);
+      flex-wrap: wrap;
+    }
+    .interactive-controls button {
+      background: var(--color-action-primary, #6c5ce7);
+      color: var(--color-contrast-on-primary, #fff);
+      border: none;
+      border-radius: var(--radius-100, 8px);
+      padding-inline: var(--space-inset-150, 12px);
+      padding-block: var(--space-075, 6px);
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .interactive-controls button:hover {
+      opacity: 0.85;
+    }
+    .interactive-controls span {
+      font-family: monospace;
+      font-size: 13px;
+      color: var(--color-text-default, #e0e0e0);
+    }
+  </style>
+</head>
+<body class="demo-page">
+  <header class="demo-header">
+    <a href="index.html" class="demo-back-link">← All Components</a>
+    <h1>📄 Progress-Pagination-Base Demo</h1>
+    <p class="demo-subtitle">Page indicator dots for carousels and multi-page flows — composes Node-Base primitives with virtualization for large page counts</p>
+  </header>
+
+  <main>
+
+    <!-- ============================================================
+         SECTION 1: Overview
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>1. Overview</h2>
+      <p>Progress-Pagination-Base renders a row of dot indicators showing the current page within a set. It composes <code>Progress-Indicator-Node-Base</code> primitives internally — all nodes use <code>content="none"</code> (dots only, no checkmarks or icons).</p>
+      <p>Key characteristics: non-interactive (navigation handled by parent flow), virtualizes when total items exceed 5, and supports sm/md/lg sizes.</p>
+
+      <div class="demo-row">
+        <div class="demo-item">
+          <progress-pagination-base total-items="5" current-item="3" size="md"></progress-pagination-base>
+          <span class="demo-item-label">5 pages, page 3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 2: Size Variants
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>2. Size Variants</h2>
+      <p>Three size variants control the dot diameter. The current dot gets a +4px size emphasis inherited from Node-Base.</p>
+
+      <div class="pagination-showcase">
+        <div class="pagination-row">
+          <span class="pagination-row-label">Small (sm)</span>
+          <progress-pagination-base total-items="5" current-item="2" size="sm"></progress-pagination-base>
+        </div>
+        <div class="pagination-row">
+          <span class="pagination-row-label">Medium (md)</span>
+          <progress-pagination-base total-items="5" current-item="2" size="md"></progress-pagination-base>
+        </div>
+        <div class="pagination-row">
+          <span class="pagination-row-label">Large (lg)</span>
+          <progress-pagination-base total-items="5" current-item="2" size="lg"></progress-pagination-base>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Size tokens:</strong> sm = 12px (16px current), md = 16px (20px current), lg = 24px (28px current). Gap between dots also scales with size.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 3: Page Position States
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>3. Page Position States</h2>
+      <p>Pagination uses binary state derivation: the current page is <code>current</code>, all others are <code>incomplete</code>. No "completed" state — this is a position indicator, not a progress tracker.</p>
+
+      <h3>First Page</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <progress-pagination-base total-items="5" current-item="1" size="md"></progress-pagination-base>
+          <span class="demo-item-label">Page 1 of 5</span>
+        </div>
+      </div>
+
+      <h3>Middle Page</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <progress-pagination-base total-items="5" current-item="3" size="md"></progress-pagination-base>
+          <span class="demo-item-label">Page 3 of 5</span>
+        </div>
+      </div>
+
+      <h3>Last Page</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <progress-pagination-base total-items="5" current-item="5" size="md"></progress-pagination-base>
+          <span class="demo-item-label">Page 5 of 5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 4: Virtualization
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>4. Virtualization</h2>
+      <p>When <code>total-items</code> exceeds 5, only 5 dots are rendered using a sliding window algorithm. This prevents the indicator from growing unbounded for large page counts.</p>
+
+      <h3>No Virtualization (≤5 items)</h3>
+      <div class="pagination-showcase">
+        <div class="pagination-row">
+          <span class="pagination-row-label">2 items</span>
+          <progress-pagination-base total-items="2" current-item="1" size="md"></progress-pagination-base>
+        </div>
+        <div class="pagination-row">
+          <span class="pagination-row-label">3 items</span>
+          <progress-pagination-base total-items="3" current-item="2" size="md"></progress-pagination-base>
+        </div>
+        <div class="pagination-row">
+          <span class="pagination-row-label">5 items</span>
+          <progress-pagination-base total-items="5" current-item="3" size="md"></progress-pagination-base>
+        </div>
+      </div>
+
+      <h3>Virtualized (>5 items) — Sliding Window</h3>
+      <p>With 10 total items, the window slides to keep the current page visible. Notice the dot count stays at 5 regardless of position.</p>
+      <div class="pagination-showcase">
+        <div class="pagination-row">
+          <span class="pagination-row-label">Page 1 of 10</span>
+          <progress-pagination-base total-items="10" current-item="1" size="md"></progress-pagination-base>
+        </div>
+        <div class="pagination-row">
+          <span class="pagination-row-label">Page 3 of 10</span>
+          <progress-pagination-base total-items="10" current-item="3" size="md"></progress-pagination-base>
+        </div>
+        <div class="pagination-row">
+          <span class="pagination-row-label">Page 5 of 10</span>
+          <progress-pagination-base total-items="10" current-item="5" size="md"></progress-pagination-base>
+        </div>
+        <div class="pagination-row">
+          <span class="pagination-row-label">Page 8 of 10</span>
+          <progress-pagination-base total-items="10" current-item="8" size="md"></progress-pagination-base>
+        </div>
+        <div class="pagination-row">
+          <span class="pagination-row-label">Page 10 of 10</span>
+          <progress-pagination-base total-items="10" current-item="10" size="md"></progress-pagination-base>
+        </div>
+      </div>
+
+      <h3>Large Page Count (50 items — maximum)</h3>
+      <p>Even with 50 pages, only 5 dots render. The ARIA label always reflects the actual position ("Page X of 50"), not the virtualized subset.</p>
+      <div class="pagination-showcase">
+        <div class="pagination-row">
+          <span class="pagination-row-label">Page 1 of 50</span>
+          <progress-pagination-base total-items="50" current-item="1" size="md"></progress-pagination-base>
+        </div>
+        <div class="pagination-row">
+          <span class="pagination-row-label">Page 25 of 50</span>
+          <progress-pagination-base total-items="50" current-item="25" size="md"></progress-pagination-base>
+        </div>
+        <div class="pagination-row">
+          <span class="pagination-row-label">Page 50 of 50</span>
+          <progress-pagination-base total-items="50" current-item="50" size="md"></progress-pagination-base>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Sliding window algorithm:</strong> Pages 1–3 show nodes 1–5. Pages 4 to (total−3) center the current page. Last 3 pages show the final 5 nodes. Maximum supported: 50 items (exceeding this warns in production, throws in development).
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 5: Interactive Example
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>5. Interactive Example</h2>
+      <p>Use the buttons below to navigate through pages and observe the virtualization behavior in real time.</p>
+
+      <div class="demo-interactive">
+        <div class="interactive-controls">
+          <button id="prev-btn">← Previous</button>
+          <span id="page-display">Page 1 of 10</span>
+          <button id="next-btn">Next →</button>
+        </div>
+        <div style="padding-block-start: var(--space-150, 12px);">
+          <progress-pagination-base id="interactive-pagination" total-items="10" current-item="1" size="lg"></progress-pagination-base>
+        </div>
+        <div id="event-log" class="event-log" style="margin-block-start: var(--space-100, 8px);">Interact with the buttons to see attribute changes logged here.</div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 6: Accessibility
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>6. Accessibility</h2>
+      <p>The component uses <code>role="group"</code> with an <code>aria-label</code> that always reflects the actual position in the full set, not the virtualized subset.</p>
+
+      <h3>Default ARIA Label</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <progress-pagination-base total-items="10" current-item="7" size="md"></progress-pagination-base>
+          <span class="demo-item-label">aria-label: "Page 7 of 10"</span>
+        </div>
+      </div>
+
+      <h3>Custom ARIA Label</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <progress-pagination-base total-items="5" current-item="2" size="md" accessibility-label="Slide 2 of 5 in photo gallery"></progress-pagination-base>
+          <span class="demo-item-label">Custom: "Slide 2 of 5 in photo gallery"</span>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>WCAG compliance:</strong> 1.3.1 (role="group" with descriptive label), 1.4.11 (current dot size emphasis provides non-color differentiation), 4.1.2 (aria-label reflects actual position).
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 7: Token Verification
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>7. Token Verification</h2>
+      <p>Check browser DevTools to verify these CSS custom properties are loaded:</p>
+
+      <h3>Node Size Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--progress-node-size-sm</code> — small dot base size (12px)</li>
+        <li><code>--progress-node-size-sm-current</code> — small dot current size (16px)</li>
+        <li><code>--progress-node-size-md</code> — medium dot base size (16px)</li>
+        <li><code>--progress-node-size-md-current</code> — medium dot current size (20px)</li>
+        <li><code>--progress-node-size-lg</code> — large dot base size (24px)</li>
+        <li><code>--progress-node-size-lg-current</code> — large dot current size (28px)</li>
+      </ul>
+
+      <h3>Node Gap Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--progress-node-gap-sm</code> — gap between small dots (6px)</li>
+        <li><code>--progress-node-gap-md</code> — gap between medium dots (8px)</li>
+        <li><code>--progress-node-gap-lg</code> — gap between large dots (12px)</li>
+      </ul>
+
+      <h3>Node Color Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--color-progress-current-background</code> — current dot color</li>
+        <li><code>--color-progress-pending-background</code> — inactive dot color</li>
+      </ul>
+    </div>
+
+    <!-- ============================================================
+         SECTION 8: Usage Examples
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>8. Usage Examples</h2>
+
+      <h3>HTML</h3>
+      <pre class="demo-code">&lt;!-- Basic pagination (5 pages, on page 3) --&gt;
+&lt;progress-pagination-base
+  total-items="5"
+  current-item="3"
+  size="md"
+&gt;&lt;/progress-pagination-base&gt;
+
+&lt;!-- Large set with virtualization (20 pages) --&gt;
+&lt;progress-pagination-base
+  total-items="20"
+  current-item="8"
+  size="sm"
+&gt;&lt;/progress-pagination-base&gt;
+
+&lt;!-- Custom accessibility label --&gt;
+&lt;progress-pagination-base
+  total-items="10"
+  current-item="4"
+  size="lg"
+  accessibility-label="Photo 4 of 10"
+&gt;&lt;/progress-pagination-base&gt;</pre>
+
+      <h3>JavaScript</h3>
+      <pre class="demo-code">// Programmatic creation
+const pagination = document.createElement('progress-pagination-base');
+pagination.totalItems = 10;
+pagination.currentItem = 1;
+pagination.size = 'md';
+document.body.appendChild(pagination);
+
+// Navigate to next page
+function nextPage() {
+  const current = pagination.currentItem;
+  if (current &lt; pagination.totalItems) {
+    pagination.currentItem = current + 1;
+  }
+}
+
+// Navigate to previous page
+function prevPage() {
+  const current = pagination.currentItem;
+  if (current &gt; 1) {
+    pagination.currentItem = current - 1;
+  }
+}
+
+// Jump to specific page
+pagination.currentItem = 5;</pre>
+    </div>
+
+  </main>
+
+  <footer class="demo-footer">
+    <p>DesignerPunk Design System • Progress-Pagination-Base Demo</p>
+  </footer>
+
+  <script>
+    // File protocol detection
+    if (window.location.protocol === 'file:') {
+      var banner = document.createElement('div');
+      banner.className = 'demo-file-protocol-warning';
+      banner.textContent = 'Components may not load correctly via file:// protocol. Use a local server: npx serve dist/browser';
+      document.body.prepend(banner);
+    }
+
+    // Interactive example
+    document.addEventListener('DOMContentLoaded', function() {
+      var pagination = document.getElementById('interactive-pagination');
+      var prevBtn = document.getElementById('prev-btn');
+      var nextBtn = document.getElementById('next-btn');
+      var pageDisplay = document.getElementById('page-display');
+      var eventLog = document.getElementById('event-log');
+      var currentPage = 1;
+      var totalPages = 10;
+
+      function updateDisplay() {
+        pageDisplay.textContent = 'Page ' + currentPage + ' of ' + totalPages;
+        pagination.setAttribute('current-item', String(currentPage));
+        eventLog.textContent = 'current-item set to ' + currentPage + ' → aria-label: "Page ' + currentPage + ' of ' + totalPages + '"';
+      }
+
+      prevBtn.addEventListener('click', function() {
+        if (currentPage > 1) {
+          currentPage--;
+          updateDisplay();
+        }
+      });
+
+      nextBtn.addEventListener('click', function() {
+        if (currentPage < totalPages) {
+          currentPage++;
+          updateDisplay();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

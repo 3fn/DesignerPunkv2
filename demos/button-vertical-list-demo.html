@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Button-VerticalList Demo - DesignerPunk</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="demo-styles.css">
+  <script type="module" src="designerpunk.esm.js"></script>
+  <style>
+    .vl-demo-container {
+      max-inline-size: 400px;
+    }
+    .vl-demo-side-by-side {
+      display: flex;
+      gap: var(--space-grouped-loose);
+      flex-wrap: wrap;
+    }
+    .vl-demo-side-by-side > div {
+      flex: 1;
+      min-inline-size: 280px;
+    }
+  </style>
+</head>
+<body class="demo-page">
+  <header class="demo-header">
+    <a href="index.html" class="demo-back-link">← All Components</a>
+    <h1>📋 Button-VerticalList Demo</h1>
+    <p class="demo-subtitle">Compositional pattern: VerticalList-Set orchestrates VerticalList-Item children across three interaction modes (Tap, Select, MultiSelect)</p>
+  </header>
+
+  <main>
+
+    <!-- ============================================================
+         SECTION 1: Compositional Pattern Overview
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>1. Compositional Pattern</h2>
+      <p>Button-VerticalList uses a parent-child composition. The <code>&lt;button-vertical-list-set&gt;</code> orchestrates selection behavior, keyboard navigation, and animation timing across <code>&lt;button-vertical-list-item&gt;</code> children.</p>
+
+      <div class="demo-note">
+        <strong>Controlled component:</strong> The Set manages all selection state. Items are presentational — they render the visual state the Set tells them to display. This enables complex patterns like staggered animations and coordinated state transitions.
+      </div>
+
+      <h3>Basic Structure</h3>
+      <div class="vl-demo-container">
+        <button-vertical-list-set mode="tap" id="overview-set">
+          <button-vertical-list-item label="First Item"></button-vertical-list-item>
+          <button-vertical-list-item label="Second Item"></button-vertical-list-item>
+          <button-vertical-list-item label="Third Item"></button-vertical-list-item>
+        </button-vertical-list-set>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 2: Tap Mode
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>2. Tap Mode</h2>
+      <p>Simple action buttons with no selection tracking. All items remain in <code>rest</code> visual state. Clicking invokes the <code>onItemClick</code> callback.</p>
+
+      <h3>Navigation Menu Pattern</h3>
+      <div class="vl-demo-container">
+        <button-vertical-list-set mode="tap" id="tap-nav-set">
+          <button-vertical-list-item label="Settings" leading-icon="settings"></button-vertical-list-item>
+          <button-vertical-list-item label="User Profile" leading-icon="user"></button-vertical-list-item>
+          <button-vertical-list-item label="Notifications" leading-icon="mail"></button-vertical-list-item>
+          <button-vertical-list-item label="Calendar" leading-icon="calendar"></button-vertical-list-item>
+        </button-vertical-list-set>
+      </div>
+
+      <h3>With Descriptions</h3>
+      <div class="vl-demo-container">
+        <button-vertical-list-set mode="tap" id="tap-desc-set">
+          <button-vertical-list-item label="Quick Start" description="Get up and running in 5 minutes"></button-vertical-list-item>
+          <button-vertical-list-item label="Documentation" description="Full API reference and guides"></button-vertical-list-item>
+          <button-vertical-list-item label="Community" description="Join the discussion on Discord"></button-vertical-list-item>
+        </button-vertical-list-set>
+      </div>
+
+      <div class="demo-note">
+        <strong>ARIA:</strong> Tap mode uses <code>role="group"</code> on the container and <code>role="button"</code> on items.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 3: Select Mode (Single Selection)
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>3. Select Mode (Single Selection)</h2>
+      <p>Radio-button style single selection. Clicking an item selects it and deselects the previous. Clicking the selected item deselects it (returns all to <code>rest</code>).</p>
+
+      <h3>Basic Single Selection</h3>
+      <div class="vl-demo-container">
+        <button-vertical-list-set mode="select" id="select-basic-set">
+          <button-vertical-list-item label="Option A" description="First option"></button-vertical-list-item>
+          <button-vertical-list-item label="Option B" description="Second option"></button-vertical-list-item>
+          <button-vertical-list-item label="Option C" description="Third option"></button-vertical-list-item>
+        </button-vertical-list-set>
+      </div>
+      <p id="select-basic-output" style="color: var(--gray-200); font-size: var(--typography-caption-font-size); margin-block-start: var(--space-050);">Selected: none</p>
+
+      <h3>Pre-selected (index 0)</h3>
+      <div class="vl-demo-container">
+        <button-vertical-list-set mode="select" selected-index="0" id="select-preselected-set">
+          <button-vertical-list-item label="Standard Plan" description="$9/month — basic features"></button-vertical-list-item>
+          <button-vertical-list-item label="Pro Plan" description="$19/month — advanced features"></button-vertical-list-item>
+          <button-vertical-list-item label="Enterprise" description="Custom pricing — full platform"></button-vertical-list-item>
+        </button-vertical-list-set>
+      </div>
+      <p id="select-preselected-output" style="color: var(--gray-200); font-size: var(--typography-caption-font-size); margin-block-start: var(--space-050);">Selected: Standard Plan (index 0)</p>
+
+      <h3>With Leading Icons</h3>
+      <div class="vl-demo-container">
+        <button-vertical-list-set mode="select" id="select-icons-set">
+          <button-vertical-list-item label="Light Mode" leading-icon="star" description="Bright and clean interface"></button-vertical-list-item>
+          <button-vertical-list-item label="Dark Mode" leading-icon="settings" description="Easy on the eyes"></button-vertical-list-item>
+          <button-vertical-list-item label="System Default" leading-icon="info" description="Match your OS preference"></button-vertical-list-item>
+        </button-vertical-list-set>
+      </div>
+
+      <div class="demo-note">
+        <strong>ARIA:</strong> Select mode uses <code>role="radiogroup"</code> on the container and <code>role="radio"</code> + <code>aria-checked</code> on items. Selection changes are announced to screen readers.
+      </div>
+
+      <div class="demo-note">
+        <strong>Staggered animation:</strong> When changing selection, the deselecting item starts at 0ms and the selecting item starts at 125ms, creating a smooth "handoff" effect. Try clicking between options to see it.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 4: MultiSelect Mode
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>4. MultiSelect Mode</h2>
+      <p>Checkbox-style multiple selection. Items toggle between <code>checked</code> and <code>unchecked</code>. Supports <code>min-selections</code> and <code>max-selections</code> constraints.</p>
+
+      <h3>Basic MultiSelect</h3>
+      <div class="vl-demo-container">
+        <button-vertical-list-set mode="multiSelect" id="multi-basic-set">
+          <button-vertical-list-item label="Email notifications"></button-vertical-list-item>
+          <button-vertical-list-item label="Push notifications"></button-vertical-list-item>
+          <button-vertical-list-item label="SMS alerts"></button-vertical-list-item>
+          <button-vertical-list-item label="In-app messages"></button-vertical-list-item>
+        </button-vertical-list-set>
+      </div>
+      <p id="multi-basic-output" style="color: var(--gray-200); font-size: var(--typography-caption-font-size); margin-block-start: var(--space-050);">Selected: none</p>
+
+      <h3>Pre-selected with Constraints (min: 1, max: 3)</h3>
+      <div class="vl-demo-container">
+        <button-vertical-list-set mode="multiSelect" selected-indices="[0,2]" min-selections="1" max-selections="3" id="multi-constrained-set">
+          <button-vertical-list-item label="JavaScript" leading-icon="check"></button-vertical-list-item>
+          <button-vertical-list-item label="TypeScript" leading-icon="check"></button-vertical-list-item>
+          <button-vertical-list-item label="Python" leading-icon="check"></button-vertical-list-item>
+          <button-vertical-list-item label="Rust" leading-icon="check"></button-vertical-list-item>
+          <button-vertical-list-item label="Go" leading-icon="check"></button-vertical-list-item>
+        </button-vertical-list-set>
+      </div>
+      <p id="multi-constrained-output" style="color: var(--gray-200); font-size: var(--typography-caption-font-size); margin-block-start: var(--space-050);">Selected: JavaScript, Python (indices: 0, 2)</p>
+
+      <div class="demo-note">
+        <strong>ARIA:</strong> MultiSelect mode uses <code>role="group"</code> + <code>aria-multiselectable="true"</code> on the container and <code>role="checkbox"</code> + <code>aria-checked</code> on items.
+      </div>
+
+      <div class="demo-note">
+        <strong>Max selections:</strong> When <code>max-selections</code> is reached, additional items cannot be selected until one is deselected. Try selecting a 4th item above to see this behavior.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 5: Error States
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>5. Error States</h2>
+      <p>Error state propagates from the Set to all child Items. Error message displays above the list with <code>role="alert"</code> for screen reader announcement.</p>
+
+      <h3>Select Mode — Required Validation</h3>
+      <div class="vl-demo-container">
+        <button-vertical-list-set mode="select" required error error-message="Please select an option" id="error-select-set">
+          <button-vertical-list-item label="Option A"></button-vertical-list-item>
+          <button-vertical-list-item label="Option B"></button-vertical-list-item>
+          <button-vertical-list-item label="Option C"></button-vertical-list-item>
+        </button-vertical-list-set>
+      </div>
+
+      <div class="demo-note">
+        <strong>Auto-clear:</strong> Making a valid selection automatically clears the error state. Try clicking an option above.
+      </div>
+
+      <h3>MultiSelect Mode — Minimum Selections</h3>
+      <div class="vl-demo-container">
+        <button-vertical-list-set mode="multiSelect" min-selections="2" error error-message="Please select at least 2 options" id="error-multi-set">
+          <button-vertical-list-item label="Feature A"></button-vertical-list-item>
+          <button-vertical-list-item label="Feature B"></button-vertical-list-item>
+          <button-vertical-list-item label="Feature C"></button-vertical-list-item>
+        </button-vertical-list-set>
+      </div>
+
+      <div class="demo-note">
+        <strong>Error styling by mode:</strong> In Select mode, error applies full treatment (background + border + text color). In MultiSelect mode, only text/icon colors change to error color (no border/background change).
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 6: Interactive Event Handling
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>6. Event Handling</h2>
+      <p>The Set uses callback properties (<code>onItemClick</code>, <code>onSelectionChange</code>, <code>onMultiSelectionChange</code>) rather than custom events. Click items below to see callbacks logged.</p>
+
+      <div class="demo-interactive">
+        <h3>Tap Mode Events</h3>
+        <div class="vl-demo-container">
+          <button-vertical-list-set mode="tap" id="event-tap-set">
+            <button-vertical-list-item label="Action A" leading-icon="settings"></button-vertical-list-item>
+            <button-vertical-list-item label="Action B" leading-icon="heart"></button-vertical-list-item>
+            <button-vertical-list-item label="Action C" leading-icon="mail"></button-vertical-list-item>
+          </button-vertical-list-set>
+        </div>
+
+        <h3>Select Mode Events</h3>
+        <div class="vl-demo-container">
+          <button-vertical-list-set mode="select" id="event-select-set">
+            <button-vertical-list-item label="Choice 1"></button-vertical-list-item>
+            <button-vertical-list-item label="Choice 2"></button-vertical-list-item>
+            <button-vertical-list-item label="Choice 3"></button-vertical-list-item>
+          </button-vertical-list-set>
+        </div>
+
+        <div class="demo-event-log-header">
+          <span class="demo-event-log-label">Event Log:</span>
+          <button id="clear-log-btn" class="demo-button demo-button-subtle">Clear</button>
+        </div>
+        <div id="event-log" class="demo-event-log">
+          <div class="demo-event-log-empty">Click items above to see events here...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 7: Keyboard Navigation
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>7. Accessibility &amp; Keyboard Navigation</h2>
+      <p>The Set implements roving tabindex: <kbd>Tab</kbd> enters/exits the group, arrow keys move between items, <kbd>Enter</kbd>/<kbd>Space</kbd> activates.</p>
+
+      <div class="demo-interactive">
+        <p>Use <kbd>Tab</kbd> to focus the group, then <kbd>↑</kbd>/<kbd>↓</kbd> to navigate, <kbd>Enter</kbd> or <kbd>Space</kbd> to select:</p>
+        <div class="vl-demo-container">
+          <button-vertical-list-set mode="select" id="a11y-set">
+            <button-vertical-list-item label="Navigate with arrows" description="Use ↑↓ to move focus"></button-vertical-list-item>
+            <button-vertical-list-item label="Activate with Enter" description="Press Enter or Space to select"></button-vertical-list-item>
+            <button-vertical-list-item label="Home and End" description="Jump to first or last item"></button-vertical-list-item>
+          </button-vertical-list-set>
+        </div>
+      </div>
+
+      <h3>Keyboard Reference</h3>
+      <ul class="demo-token-list">
+        <li><code>Tab</code> — move focus into/out of the button group</li>
+        <li><code>Arrow Down</code> — move focus to next item (wraps to first)</li>
+        <li><code>Arrow Up</code> — move focus to previous item (wraps to last)</li>
+        <li><code>Home</code> — move focus to first item</li>
+        <li><code>End</code> — move focus to last item</li>
+        <li><code>Enter / Space</code> — activate focused item (mode-dependent)</li>
+      </ul>
+
+      <h3>ARIA Roles by Mode</h3>
+      <ul class="demo-token-list">
+        <li><code>Tap</code> — container: <code>role="group"</code>, items: <code>role="button"</code></li>
+        <li><code>Select</code> — container: <code>role="radiogroup"</code>, items: <code>role="radio"</code> + <code>aria-checked</code></li>
+        <li><code>MultiSelect</code> — container: <code>role="group"</code> + <code>aria-multiselectable</code>, items: <code>role="checkbox"</code> + <code>aria-checked</code></li>
+      </ul>
+
+      <div class="demo-note">
+        <strong>No disabled state:</strong> Neither Set nor Item supports disabling. Unavailable options should be hidden or validated on interaction. This is an intentional accessibility decision — disabled buttons remove affordance without explanation.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 8: Token Verification
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>8. Token Verification</h2>
+      <p>Check browser DevTools to verify these CSS custom properties are loaded:</p>
+
+      <h3>Set Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--space-grouped-normal</code> — gap between child items (8px)</li>
+        <li><code>--typography-body-sm-font-size</code> — error message text size</li>
+        <li><code>--color-feedback-error-text</code> — error message text color</li>
+      </ul>
+
+      <h3>Item Color Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--color-background</code> — default item background</li>
+        <li><code>--color-text-default</code> — label text color</li>
+        <li><code>--color-text-muted</code> — description text color</li>
+        <li><code>--color-feedback-select-selected-strong</code> — selected state border/text</li>
+        <li><code>--color-feedback-select-selected-subtle</code> — selected state background</li>
+        <li><code>--color-feedback-select-not-selected-strong</code> — not-selected state border/text</li>
+        <li><code>--color-feedback-select-not-selected-subtle</code> — not-selected state background</li>
+        <li><code>--color-feedback-error-strong</code> — error state border/text</li>
+        <li><code>--color-feedback-error-subtle</code> — error state background</li>
+      </ul>
+
+      <h3>Item Spacing &amp; Border Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--space-inset-200</code> — inline padding (16px)</li>
+        <li><code>--space-grouped-loose</code> — icon-to-content gap (16px)</li>
+        <li><code>--border-default</code> — 1px default border</li>
+        <li><code>--border-emphasis</code> — 2px emphasis border (selected/error)</li>
+        <li><code>--radius-normal</code> — 8px border radius</li>
+      </ul>
+
+      <h3>Motion &amp; Accessibility Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--motion-selection-transition-duration</code> — 250ms checkmark animation</li>
+        <li><code>--motion-selection-transition-easing</code> — animation easing curve</li>
+        <li><code>--tap-area-recommended</code> — 48px minimum touch target</li>
+        <li><code>--accessibility-focus-width</code> — focus ring width (2px)</li>
+        <li><code>--accessibility-focus-color</code> — focus ring color</li>
+        <li><code>--accessibility-focus-offset</code> — focus ring offset (2px)</li>
+      </ul>
+    </div>
+
+    <!-- ============================================================
+         SECTION 9: Usage Examples
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>9. Usage Examples</h2>
+
+      <h3>HTML</h3>
+      <pre class="demo-code">&lt;!-- Tap mode - simple action buttons --&gt;
+&lt;button-vertical-list-set mode="tap"&gt;
+  &lt;button-vertical-list-item label="Settings" leading-icon="settings"&gt;&lt;/button-vertical-list-item&gt;
+  &lt;button-vertical-list-item label="Help" leading-icon="info"&gt;&lt;/button-vertical-list-item&gt;
+&lt;/button-vertical-list-set&gt;
+
+&lt;!-- Select mode - single selection (radio-button style) --&gt;
+&lt;button-vertical-list-set mode="select" selected-index="0" required&gt;
+  &lt;button-vertical-list-item label="Option A" description="First option"&gt;&lt;/button-vertical-list-item&gt;
+  &lt;button-vertical-list-item label="Option B" description="Second option"&gt;&lt;/button-vertical-list-item&gt;
+&lt;/button-vertical-list-set&gt;
+
+&lt;!-- MultiSelect mode - multiple selections (checkbox style) --&gt;
+&lt;button-vertical-list-set mode="multiSelect" selected-indices="[0,2]" min-selections="1" max-selections="3"&gt;
+  &lt;button-vertical-list-item label="Choice 1"&gt;&lt;/button-vertical-list-item&gt;
+  &lt;button-vertical-list-item label="Choice 2"&gt;&lt;/button-vertical-list-item&gt;
+  &lt;button-vertical-list-item label="Choice 3"&gt;&lt;/button-vertical-list-item&gt;
+&lt;/button-vertical-list-set&gt;
+
+&lt;!-- With error state --&gt;
+&lt;button-vertical-list-set mode="select" required error error-message="Please select an option"&gt;
+  &lt;button-vertical-list-item label="Option A"&gt;&lt;/button-vertical-list-item&gt;
+  &lt;button-vertical-list-item label="Option B"&gt;&lt;/button-vertical-list-item&gt;
+&lt;/button-vertical-list-set&gt;</pre>
+
+      <h3>JavaScript</h3>
+      <pre class="demo-code">// Wait for components to be defined
+await customElements.whenDefined('button-vertical-list-set');
+await customElements.whenDefined('button-vertical-list-item');
+
+// Tap mode - listen for item clicks
+const tapSet = document.querySelector('button-vertical-list-set[mode="tap"]');
+tapSet.onItemClick = (index) =&gt; {
+  console.log(`Item ${index} clicked`);
+};
+
+// Select mode - controlled single selection
+const selectSet = document.querySelector('button-vertical-list-set[mode="select"]');
+selectSet.onSelectionChange = (index) =&gt; {
+  console.log(`Selection changed to ${index}`);
+  selectSet.selectedIndex = index; // Update controlled state
+};
+
+// MultiSelect mode - controlled multiple selection
+const multiSet = document.querySelector('button-vertical-list-set[mode="multiSelect"]');
+multiSet.onMultiSelectionChange = (indices) =&gt; {
+  console.log(`Selections: ${indices}`);
+  multiSet.selectedIndices = indices; // Update controlled state
+};
+
+// Programmatic validation
+const result = selectSet.validate();
+if (!result.isValid) {
+  selectSet.error = true;
+  selectSet.errorMessage = result.message;
+}</pre>
+    </div>
+
+  </main>
+
+  <footer class="demo-footer">
+    <p>DesignerPunk Design System • Button-VerticalList Component Demo</p>
+  </footer>
+
+  <script>
+    // File protocol detection
+    if (window.location.protocol === 'file:') {
+      const banner = document.createElement('div');
+      banner.className = 'demo-file-protocol-warning';
+      banner.textContent = 'Components may not load correctly via file:// protocol. Use a local server: npx serve dist/browser';
+      document.body.prepend(banner);
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    // Interactive demos: wire up controlled component callbacks
+    // ─────────────────────────────────────────────────────────────────
+
+    // Event log
+    const eventLog = document.getElementById('event-log');
+    const clearBtn = document.getElementById('clear-log-btn');
+    let eventCount = 0;
+
+    function logEvent(mode, detail) {
+      eventCount++;
+      const time = new Date().toLocaleTimeString();
+      const empty = eventLog.querySelector('.demo-event-log-empty');
+      if (empty) empty.remove();
+
+      const entry = document.createElement('div');
+      entry.className = 'demo-event-log-entry';
+      entry.innerHTML = '<span class="demo-event-log-time">[' + time + ']</span> <span class="demo-event-log-event">' + mode + '</span>: <span class="demo-event-log-value">' + detail + '</span> (#' + eventCount + ')';
+      eventLog.prepend(entry);
+
+      while (eventLog.children.length > 20) {
+        eventLog.removeChild(eventLog.lastChild);
+      }
+    }
+
+    clearBtn.addEventListener('click', function() {
+      eventLog.innerHTML = '<div class="demo-event-log-empty">Click items above to see events here...</div>';
+      eventCount = 0;
+    });
+
+    // Wait for components to register, then wire up callbacks
+    Promise.all([
+      customElements.whenDefined('button-vertical-list-set'),
+      customElements.whenDefined('button-vertical-list-item')
+    ]).then(function() {
+
+      // --- Section 2: Tap mode demos (no state to manage) ---
+      var tapNavSet = document.getElementById('tap-nav-set');
+      if (tapNavSet) {
+        tapNavSet.onItemClick = function(index) {
+          var labels = ['Settings', 'User Profile', 'Notifications', 'Calendar'];
+          console.log('Tap nav: ' + labels[index]);
+        };
+      }
+
+      var tapDescSet = document.getElementById('tap-desc-set');
+      if (tapDescSet) {
+        tapDescSet.onItemClick = function(index) {
+          var labels = ['Quick Start', 'Documentation', 'Community'];
+          console.log('Tap desc: ' + labels[index]);
+        };
+      }
+
+      // --- Section 3: Select mode demos (controlled) ---
+      var selectBasicSet = document.getElementById('select-basic-set');
+      var selectBasicOutput = document.getElementById('select-basic-output');
+      if (selectBasicSet) {
+        selectBasicSet.onSelectionChange = function(index) {
+          selectBasicSet.selectedIndex = index;
+          var labels = ['Option A', 'Option B', 'Option C'];
+          selectBasicOutput.textContent = index !== null ? 'Selected: ' + labels[index] + ' (index ' + index + ')' : 'Selected: none';
+        };
+      }
+
+      var selectPreselectedSet = document.getElementById('select-preselected-set');
+      var selectPreselectedOutput = document.getElementById('select-preselected-output');
+      if (selectPreselectedSet) {
+        selectPreselectedSet.onSelectionChange = function(index) {
+          selectPreselectedSet.selectedIndex = index;
+          var labels = ['Standard Plan', 'Pro Plan', 'Enterprise'];
+          selectPreselectedOutput.textContent = index !== null ? 'Selected: ' + labels[index] + ' (index ' + index + ')' : 'Selected: none';
+        };
+      }
+
+      var selectIconsSet = document.getElementById('select-icons-set');
+      if (selectIconsSet) {
+        selectIconsSet.onSelectionChange = function(index) {
+          selectIconsSet.selectedIndex = index;
+        };
+      }
+
+      // --- Section 4: MultiSelect mode demos (controlled) ---
+      var multiBasicSet = document.getElementById('multi-basic-set');
+      var multiBasicOutput = document.getElementById('multi-basic-output');
+      if (multiBasicSet) {
+        multiBasicSet.onMultiSelectionChange = function(indices) {
+          multiBasicSet.selectedIndices = indices;
+          var labels = ['Email notifications', 'Push notifications', 'SMS alerts', 'In-app messages'];
+          var selected = indices.map(function(i) { return labels[i]; });
+          multiBasicOutput.textContent = indices.length > 0 ? 'Selected: ' + selected.join(', ') : 'Selected: none';
+        };
+      }
+
+      var multiConstrainedSet = document.getElementById('multi-constrained-set');
+      var multiConstrainedOutput = document.getElementById('multi-constrained-output');
+      if (multiConstrainedSet) {
+        multiConstrainedSet.onMultiSelectionChange = function(indices) {
+          multiConstrainedSet.selectedIndices = indices;
+          var labels = ['JavaScript', 'TypeScript', 'Python', 'Rust', 'Go'];
+          var selected = indices.map(function(i) { return labels[i]; });
+          multiConstrainedOutput.textContent = indices.length > 0 ? 'Selected: ' + selected.join(', ') + ' (indices: ' + indices.join(', ') + ')' : 'Selected: none';
+        };
+      }
+
+      // --- Section 5: Error state demos (controlled) ---
+      var errorSelectSet = document.getElementById('error-select-set');
+      if (errorSelectSet) {
+        errorSelectSet.onSelectionChange = function(index) {
+          errorSelectSet.selectedIndex = index;
+        };
+      }
+
+      var errorMultiSet = document.getElementById('error-multi-set');
+      if (errorMultiSet) {
+        errorMultiSet.onMultiSelectionChange = function(indices) {
+          errorMultiSet.selectedIndices = indices;
+        };
+      }
+
+      // --- Section 6: Event log demos ---
+      var eventTapSet = document.getElementById('event-tap-set');
+      if (eventTapSet) {
+        eventTapSet.onItemClick = function(index) {
+          var labels = ['Action A', 'Action B', 'Action C'];
+          logEvent('onItemClick', labels[index] + ' (index ' + index + ')');
+        };
+      }
+
+      var eventSelectSet = document.getElementById('event-select-set');
+      if (eventSelectSet) {
+        eventSelectSet.onSelectionChange = function(index) {
+          eventSelectSet.selectedIndex = index;
+          var labels = ['Choice 1', 'Choice 2', 'Choice 3'];
+          var detail = index !== null ? labels[index] + ' (index ' + index + ')' : 'null (deselected)';
+          logEvent('onSelectionChange', detail);
+        };
+      }
+
+      // --- Section 7: Accessibility demo (controlled) ---
+      var a11ySet = document.getElementById('a11y-set');
+      if (a11ySet) {
+        a11ySet.onSelectionChange = function(index) {
+          a11ySet.selectedIndex = index;
+        };
+      }
+
+    });
+  </script>
+</body>
+</html>

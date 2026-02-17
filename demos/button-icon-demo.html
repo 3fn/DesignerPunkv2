@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Button-Icon Demo - DesignerPunk</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="demo-styles.css">
+  <script type="module" src="designerpunk.esm.js"></script>
+  <style>
+    .event-log {
+      background: var(--black-300);
+      border: var(--border-default) solid var(--gray-300);
+      border-radius: var(--radius-100);
+      padding-inline: var(--space-inset-100);
+      padding-block: var(--space-inset-100);
+      min-block-size: 80px;
+      max-block-size: 160px;
+      overflow-y: auto;
+      font-family: var(--font-family-mono);
+      font-size: var(--typography-caption-font-size);
+      color: var(--gray-100);
+      margin-block-start: var(--space-100);
+    }
+    .event-log-entry {
+      padding-block: var(--space-025);
+      border-block-end: var(--border-default) solid var(--gray-400);
+    }
+    .event-log-entry:last-child {
+      border-block-end: none;
+    }
+    .event-log-time {
+      color: var(--gray-200);
+    }
+    .event-log-event {
+      color: var(--cyan-300);
+    }
+    .event-log-empty {
+      color: var(--gray-300);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body class="demo-page">
+  <header class="demo-header">
+    <a href="index.html" class="demo-back-link">← All Components</a>
+    <h1>🔵 Button-Icon Component Demo</h1>
+    <p class="demo-subtitle">Circular icon-only button with three size variants, three visual styles, and no disabled state by design</p>
+  </header>
+
+  <main>
+
+    <!-- ============================================================
+         SECTION 1: Visual Variants
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>1. Visual Variants</h2>
+      <p>Button-Icon supports three visual styles that establish hierarchy through visual weight. All variants render as circular buttons containing a single icon.</p>
+
+      <div class="demo-row">
+        <div class="demo-item">
+          <button-icon icon="settings" aria-label="Settings" variant="primary"></button-icon>
+          <span class="demo-item-label">Primary (filled, highest emphasis)</span>
+        </div>
+        <div class="demo-item">
+          <button-icon icon="settings" aria-label="Settings" variant="secondary"></button-icon>
+          <span class="demo-item-label">Secondary (outlined, medium emphasis)</span>
+        </div>
+        <div class="demo-item">
+          <button-icon icon="settings" aria-label="Settings" variant="tertiary"></button-icon>
+          <span class="demo-item-label">Tertiary (ghost, lowest emphasis)</span>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>No disabled state:</strong> Button-Icon intentionally omits a disabled state. Disabled buttons remove affordance without explanation. Instead, hide unavailable actions, show validation messaging, or use loading states.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 2: Size Variants
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>2. Size Variants</h2>
+      <p>Three sizes with mathematically derived icon sizing. All sizes meet WCAG 2.5.5 touch target requirements (48px minimum).</p>
+
+      <h3>Primary</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <button-icon icon="heart" aria-label="Favorite" variant="primary" size="small"></button-icon>
+          <span class="demo-item-label">Small (13px icon, 32px circle)</span>
+        </div>
+        <div class="demo-item">
+          <button-icon icon="heart" aria-label="Favorite" variant="primary" size="medium"></button-icon>
+          <span class="demo-item-label">Medium (18px icon, 40px circle)</span>
+        </div>
+        <div class="demo-item">
+          <button-icon icon="heart" aria-label="Favorite" variant="primary" size="large"></button-icon>
+          <span class="demo-item-label">Large (24px icon, 48px circle)</span>
+        </div>
+      </div>
+
+      <h3>Secondary</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <button-icon icon="heart" aria-label="Favorite" variant="secondary" size="small"></button-icon>
+          <span class="demo-item-label">Small</span>
+        </div>
+        <div class="demo-item">
+          <button-icon icon="heart" aria-label="Favorite" variant="secondary" size="medium"></button-icon>
+          <span class="demo-item-label">Medium</span>
+        </div>
+        <div class="demo-item">
+          <button-icon icon="heart" aria-label="Favorite" variant="secondary" size="large"></button-icon>
+          <span class="demo-item-label">Large</span>
+        </div>
+      </div>
+
+      <h3>Tertiary</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <button-icon icon="heart" aria-label="Favorite" variant="tertiary" size="small"></button-icon>
+          <span class="demo-item-label">Small</span>
+        </div>
+        <div class="demo-item">
+          <button-icon icon="heart" aria-label="Favorite" variant="tertiary" size="medium"></button-icon>
+          <span class="demo-item-label">Medium</span>
+        </div>
+        <div class="demo-item">
+          <button-icon icon="heart" aria-label="Favorite" variant="tertiary" size="large"></button-icon>
+          <span class="demo-item-label">Large</span>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Touch targets:</strong> Small buttons (32px visual) use a <code>::after</code> pseudo-element to extend the touch target to 48px. Medium and large buttons meet the 48px minimum natively.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 3: Icon Variety
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>3. Icon Variety</h2>
+      <p>Button-Icon works with all icons from the Icon-Base system. The icon is sized automatically based on the button size.</p>
+
+      <h3>Common Action Icons</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <button-icon icon="plus" aria-label="Add item" variant="primary"></button-icon>
+          <span class="demo-item-label">plus</span>
+        </div>
+        <div class="demo-item">
+          <button-icon icon="minus" aria-label="Remove item" variant="primary"></button-icon>
+          <span class="demo-item-label">minus</span>
+        </div>
+        <div class="demo-item">
+          <button-icon icon="check" aria-label="Confirm" variant="primary"></button-icon>
+          <span class="demo-item-label">check</span>
+        </div>
+        <div class="demo-item">
+          <button-icon icon="x" aria-label="Close" variant="primary"></button-icon>
+          <span class="demo-item-label">x</span>
+        </div>
+        <div class="demo-item">
+          <button-icon icon="settings" aria-label="Settings" variant="primary"></button-icon>
+          <span class="demo-item-label">settings</span>
+        </div>
+      </div>
+
+      <h3>Navigation Icons</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <button-icon icon="arrow-left" aria-label="Go back" variant="secondary"></button-icon>
+          <span class="demo-item-label">arrow-left</span>
+        </div>
+        <div class="demo-item">
+          <button-icon icon="arrow-right" aria-label="Go forward" variant="secondary"></button-icon>
+          <span class="demo-item-label">arrow-right</span>
+        </div>
+        <div class="demo-item">
+          <button-icon icon="arrow-up" aria-label="Move up" variant="secondary"></button-icon>
+          <span class="demo-item-label">arrow-up</span>
+        </div>
+        <div class="demo-item">
+          <button-icon icon="arrow-down" aria-label="Move down" variant="secondary"></button-icon>
+          <span class="demo-item-label">arrow-down</span>
+        </div>
+        <div class="demo-item">
+          <button-icon icon="chevron-right" aria-label="Next" variant="secondary"></button-icon>
+          <span class="demo-item-label">chevron-right</span>
+        </div>
+      </div>
+
+      <h3>UI Element Icons</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <button-icon icon="heart" aria-label="Favorite" variant="tertiary"></button-icon>
+          <span class="demo-item-label">heart</span>
+        </div>
+        <div class="demo-item">
+          <button-icon icon="user" aria-label="Profile" variant="tertiary"></button-icon>
+          <span class="demo-item-label">user</span>
+        </div>
+        <div class="demo-item">
+          <button-icon icon="mail" aria-label="Email" variant="tertiary"></button-icon>
+          <span class="demo-item-label">mail</span>
+        </div>
+        <div class="demo-item">
+          <button-icon icon="calendar" aria-label="Calendar" variant="tertiary"></button-icon>
+          <span class="demo-item-label">calendar</span>
+        </div>
+        <div class="demo-item">
+          <button-icon icon="info" aria-label="Information" variant="tertiary"></button-icon>
+          <span class="demo-item-label">info</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 4: Interactive States
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>4. Interactive States</h2>
+      <p>All variants use theme-aware blend utilities for hover and pressed state colors. Hover over and click the buttons to see transitions.</p>
+
+      <div class="demo-interactive">
+        <p>Hover, focus (Tab key), and click these buttons to observe state transitions:</p>
+
+        <h3>Primary States</h3>
+        <div class="demo-row">
+          <div class="demo-item">
+            <button-icon icon="heart" aria-label="Hover me" variant="primary" size="large"></button-icon>
+            <span class="demo-item-label">Hover: 8% darker</span>
+          </div>
+          <div class="demo-item">
+            <button-icon icon="check" aria-label="Press me" variant="primary" size="large"></button-icon>
+            <span class="demo-item-label">Active: 12% darker</span>
+          </div>
+          <div class="demo-item">
+            <button-icon icon="settings" aria-label="Tab to me" variant="primary" size="large"></button-icon>
+            <span class="demo-item-label">Focus: outline ring</span>
+          </div>
+        </div>
+
+        <h3>Secondary States</h3>
+        <div class="demo-row">
+          <div class="demo-item">
+            <button-icon icon="heart" aria-label="Hover me" variant="secondary" size="large"></button-icon>
+            <span class="demo-item-label">Hover: subtle bg + 2px border</span>
+          </div>
+          <div class="demo-item">
+            <button-icon icon="check" aria-label="Press me" variant="secondary" size="large"></button-icon>
+            <span class="demo-item-label">Active: pressed color</span>
+          </div>
+          <div class="demo-item">
+            <button-icon icon="settings" aria-label="Tab to me" variant="secondary" size="large"></button-icon>
+            <span class="demo-item-label">Focus: outline ring</span>
+          </div>
+        </div>
+
+        <h3>Tertiary States</h3>
+        <div class="demo-row">
+          <div class="demo-item">
+            <button-icon icon="heart" aria-label="Hover me" variant="tertiary" size="large"></button-icon>
+            <span class="demo-item-label">Hover: icon color shift</span>
+          </div>
+          <div class="demo-item">
+            <button-icon icon="check" aria-label="Press me" variant="tertiary" size="large"></button-icon>
+            <span class="demo-item-label">Active: pressed color</span>
+          </div>
+          <div class="demo-item">
+            <button-icon icon="settings" aria-label="Tab to me" variant="tertiary" size="large"></button-icon>
+            <span class="demo-item-label">Focus: outline ring</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>State color calculation:</strong> Uses <code>darkerBlend()</code> for hover (8%) and pressed (12%). These are calculated at runtime using theme-aware blend utilities for cross-platform consistency. Secondary hover transitions from box-shadow border to actual 2px border without layout shift.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 5: Event Handling
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>5. Event Handling</h2>
+      <p>Button-Icon dispatches a custom <code>press</code> event (not <code>click</code>) that bubbles and is composed. Click the buttons below to see events logged.</p>
+
+      <div class="demo-interactive">
+        <div class="demo-row">
+          <div class="demo-item">
+            <button-icon id="event-btn-add" icon="plus" aria-label="Add item" variant="primary" size="large"></button-icon>
+            <span class="demo-item-label">Add</span>
+          </div>
+          <div class="demo-item">
+            <button-icon id="event-btn-close" icon="x" aria-label="Close" variant="secondary" size="large"></button-icon>
+            <span class="demo-item-label">Close</span>
+          </div>
+          <div class="demo-item">
+            <button-icon id="event-btn-settings" icon="settings" aria-label="Settings" variant="tertiary" size="large"></button-icon>
+            <span class="demo-item-label">Settings</span>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-block-start: var(--space-100);">
+          <span style="color: var(--gray-200); font-size: var(--typography-caption-font-size);">Event Log:</span>
+          <button id="clear-log-btn" style="background: var(--gray-400); color: var(--gray-200); border: var(--border-default) solid var(--gray-300); border-radius: var(--radius-050); padding-inline: var(--space-050); padding-block: var(--space-025); cursor: pointer; font-size: var(--typography-caption-font-size); font-family: var(--font-family-body);">Clear</button>
+        </div>
+        <div id="event-log" class="event-log">
+          <div class="event-log-empty">Click a button to see events here...</div>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Event details:</strong> The <code>press</code> event includes <code>event.detail.originalEvent</code> containing the underlying click or keyboard event.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 6: Accessibility
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>6. Accessibility Features</h2>
+      <p>Button-Icon requires an <code>aria-label</code> attribute because icon-only buttons need explicit labels for screen reader users.</p>
+
+      <h3>Keyboard Navigation</h3>
+      <div class="demo-interactive">
+        <p>Use <kbd>Tab</kbd> to navigate between buttons, <kbd>Enter</kbd> or <kbd>Space</kbd> to activate:</p>
+        <div class="demo-row">
+          <div class="demo-item">
+            <button-icon icon="arrow-left" aria-label="Previous" variant="secondary"></button-icon>
+            <span class="demo-item-label">Tab → Enter/Space</span>
+          </div>
+          <div class="demo-item">
+            <button-icon icon="heart" aria-label="Favorite" variant="primary"></button-icon>
+            <span class="demo-item-label">Tab → Enter/Space</span>
+          </div>
+          <div class="demo-item">
+            <button-icon icon="arrow-right" aria-label="Next" variant="secondary"></button-icon>
+            <span class="demo-item-label">Tab → Enter/Space</span>
+          </div>
+        </div>
+      </div>
+
+      <h3>Required aria-label</h3>
+      <div class="demo-note">
+        <strong>Warning:</strong> If <code>aria-label</code> is omitted, the component logs a console warning: <em>"ButtonIcon: Missing required aria-label attribute."</em> Always provide a descriptive label that explains the button's action, not the icon name.
+      </div>
+
+      <h3>ARIA Attributes</h3>
+      <ul class="demo-token-list">
+        <li><code>role="button"</code> — semantic button role</li>
+        <li><code>aria-label</code> — required, describes the action (e.g., "Close dialog")</li>
+        <li><code>aria-hidden="true"</code> — on icon container (decorative)</li>
+      </ul>
+
+      <h3>Focus Indicators</h3>
+      <div class="demo-note">
+        <strong>Focus ring:</strong> Uses <code>:focus-visible</code> for keyboard-only focus indicators. The circular outline uses <code>accessibility.focus.width</code> (2px) and <code>accessibility.focus.color</code> tokens with a 2px offset, meeting the 3:1 contrast ratio requirement.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 7: Token Verification
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>7. Token Verification</h2>
+      <p>Check browser DevTools to verify these CSS custom properties are loaded:</p>
+
+      <h3>Color Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--color-action-primary</code> — primary button background and secondary/tertiary icon color</li>
+        <li><code>--color-contrast-on-dark</code> — primary button icon color</li>
+        <li><code>--color-background-primary-subtle</code> — secondary hover background</li>
+      </ul>
+
+      <h3>Size Tokens (Component)</h3>
+      <ul class="demo-token-list">
+        <li><code>--buttonicon-size-small</code> — small button circle size (32px)</li>
+        <li><code>--buttonicon-size-medium</code> — medium button circle size (40px)</li>
+        <li><code>--buttonicon-size-large</code> — large button circle size (48px)</li>
+        <li><code>--buttonicon-inset-small</code> — small button padding (8px)</li>
+        <li><code>--buttonicon-inset-medium</code> — medium button padding (10px)</li>
+        <li><code>--buttonicon-inset-large</code> — large button padding (12px)</li>
+      </ul>
+
+      <h3>Border Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--border-default</code> — secondary button border width (1px)</li>
+        <li><code>--border-emphasis</code> — secondary hover border width (2px)</li>
+      </ul>
+
+      <h3>Motion Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--motion-button-press-duration</code> — transition duration (150ms)</li>
+        <li><code>--motion-button-press-easing</code> — transition easing curve</li>
+      </ul>
+
+      <h3>Accessibility Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--accessibility-focus-width</code> — focus outline width (2px)</li>
+        <li><code>--accessibility-focus-color</code> — focus outline color</li>
+        <li><code>--accessibility-focus-offset</code> — focus outline offset (2px)</li>
+        <li><code>--tap-area-recommended</code> — minimum touch target (48px)</li>
+      </ul>
+    </div>
+
+    <!-- ============================================================
+         SECTION 8: Usage Examples
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>8. Usage Examples</h2>
+
+      <h3>HTML</h3>
+      <pre class="demo-code">&lt;!-- Basic usage (defaults to medium size, primary variant) --&gt;
+&lt;button-icon icon="settings" aria-label="Open settings"&gt;&lt;/button-icon&gt;
+
+&lt;!-- With size and variant --&gt;
+&lt;button-icon icon="heart" aria-label="Add to favorites" size="large" variant="secondary"&gt;&lt;/button-icon&gt;
+
+&lt;!-- Navigation pattern --&gt;
+&lt;button-icon icon="arrow-left" aria-label="Go back" variant="tertiary"&gt;&lt;/button-icon&gt;
+
+&lt;!-- Close button pattern --&gt;
+&lt;button-icon icon="x" aria-label="Close dialog" variant="secondary" size="small"&gt;&lt;/button-icon&gt;
+
+&lt;!-- With test ID for automated testing --&gt;
+&lt;button-icon icon="plus" aria-label="Add item" test-id="add-button"&gt;&lt;/button-icon&gt;</pre>
+
+      <h3>JavaScript</h3>
+      <pre class="demo-code">// Listen for press events (not click!)
+const button = document.querySelector('button-icon');
+button.addEventListener('press', (event) =&gt; {
+  console.log('Button pressed!', event.detail);
+});
+
+// Wait for component registration
+await customElements.whenDefined('button-icon');
+
+// Programmatic creation
+const btn = document.createElement('button-icon');
+btn.icon = 'settings';
+btn.ariaLabel = 'Open settings';
+btn.size = 'large';
+btn.buttonVariant = 'primary';
+btn.addEventListener('press', () =&gt; console.log('Pressed!'));
+document.body.appendChild(btn);
+
+// Dynamic updates
+btn.icon = 'check';              // Change icon
+btn.ariaLabel = 'Confirm action'; // Update label
+btn.size = 'small';              // Change size
+btn.buttonVariant = 'secondary'; // Change variant</pre>
+    </div>
+
+  </main>
+
+  <footer class="demo-footer">
+    <p>DesignerPunk Design System • Button-Icon Component Demo</p>
+  </footer>
+
+  <script>
+    // File protocol detection
+    if (window.location.protocol === 'file:') {
+      const banner = document.createElement('div');
+      banner.className = 'demo-file-protocol-warning';
+      banner.textContent = 'Components may not load correctly via file:// protocol. Use a local server: npx serve dist/browser';
+      document.body.prepend(banner);
+    }
+
+    // Event handling demo
+    const eventLog = document.getElementById('event-log');
+    const clearBtn = document.getElementById('clear-log-btn');
+    let eventCount = 0;
+
+    function logEvent(buttonId, eventType) {
+      eventCount++;
+      const time = new Date().toLocaleTimeString();
+      const empty = eventLog.querySelector('.event-log-empty');
+      if (empty) empty.remove();
+
+      const entry = document.createElement('div');
+      entry.className = 'event-log-entry';
+      entry.innerHTML = '<span class="event-log-time">[' + time + ']</span> <span class="event-log-event">' + eventType + '</span> from <strong>' + buttonId + '</strong> (#' + eventCount + ')';
+      eventLog.prepend(entry);
+
+      while (eventLog.children.length > 20) {
+        eventLog.removeChild(eventLog.lastChild);
+      }
+    }
+
+    clearBtn.addEventListener('click', function() {
+      eventLog.innerHTML = '<div class="event-log-empty">Click a button to see events here...</div>';
+      eventCount = 0;
+    });
+
+    document.getElementById('event-btn-add').addEventListener('press', function() {
+      logEvent('Add (plus)', 'press');
+    });
+
+    document.getElementById('event-btn-close').addEventListener('press', function() {
+      logEvent('Close (x)', 'press');
+    });
+
+    document.getElementById('event-btn-settings').addEventListener('press', function() {
+      logEvent('Settings', 'press');
+    });
+  </script>
+</body>
+</html>

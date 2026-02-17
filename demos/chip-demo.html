@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chip Demo - DesignerPunk</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="demo-styles.css">
+  <script type="module" src="designerpunk.esm.js"></script>
+  <style>
+    .event-log {
+      background: var(--black-300);
+      border: var(--border-default) solid var(--gray-300);
+      border-radius: var(--radius-100);
+      padding-inline: var(--space-inset-100);
+      padding-block: var(--space-inset-100);
+      min-block-size: 80px;
+      max-block-size: 160px;
+      overflow-y: auto;
+      font-family: var(--font-family-mono);
+      font-size: var(--typography-caption-font-size);
+      color: var(--gray-100);
+      margin-block-start: var(--space-100);
+    }
+    .event-log-entry {
+      padding-block: var(--space-025);
+      border-block-end: var(--border-default) solid var(--gray-400);
+    }
+    .event-log-entry:last-child {
+      border-block-end: none;
+    }
+    .event-log-time {
+      color: var(--gray-200);
+    }
+    .event-log-event {
+      color: var(--cyan-300);
+    }
+    .event-log-detail {
+      color: var(--gray-100);
+    }
+    .event-log-empty {
+      color: var(--gray-300);
+      font-style: italic;
+    }
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-100);
+      align-items: center;
+    }
+  </style>
+</head>
+<body class="demo-page">
+  <header class="demo-header">
+    <a href="index.html" class="demo-back-link">← All Components</a>
+    <h1>🏷️ Chip Family Demo</h1>
+    <p class="demo-subtitle">Compact interactive elements for filtering, selection, and input management — Chip-Base, Chip-Filter, and Chip-Input side-by-side</p>
+  </header>
+
+  <main>
+
+    <!-- ============================================================
+         SECTION 1: Family Overview — All Three Variants Side-by-Side
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>1. Family Overview</h2>
+      <p>The Chip family has three variants, each serving a distinct interaction pattern. All share the same visual foundation (pill shape, 32px height, 48px tap area) but differ in behavior.</p>
+
+      <h3>Chip-Base (Actionable)</h3>
+      <p>A simple pressable chip. Fires a <code>press</code> event on click or keyboard activation. No toggle, no dismiss.</p>
+      <div class="chip-group">
+        <chip-base label="Technology"></chip-base>
+        <chip-base label="Design" icon="star"></chip-base>
+        <chip-base label="Engineering" icon="settings"></chip-base>
+      </div>
+
+      <h3>Chip-Filter (Toggleable)</h3>
+      <p>Adds selected/unselected toggle behavior. Shows a checkmark icon when selected. Fires <code>selectionchange</code> event with the new state.</p>
+      <div class="chip-group">
+        <chip-filter label="Active" selected></chip-filter>
+        <chip-filter label="Pending"></chip-filter>
+        <chip-filter label="Archived" icon="calendar"></chip-filter>
+      </div>
+
+      <h3>Chip-Input (Dismissible)</h3>
+      <p>Always shows a trailing X icon. Tap anywhere to dismiss. Fires <code>dismiss</code> event. Used for user-entered tags or selections.</p>
+      <div class="chip-group">
+        <chip-input label="JavaScript"></chip-input>
+        <chip-input label="TypeScript" icon="check"></chip-input>
+        <chip-input label="Rust" icon="star"></chip-input>
+      </div>
+
+      <div class="demo-note">
+        <strong>No disabled state:</strong> DesignerPunk chips intentionally omit disabled states. If an action is unavailable, the chip should not be rendered. This ensures users always see actionable UI elements.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 2: Chip-Base Details
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>2. Chip-Base</h2>
+      <p>The primitive chip component. Compact, interactive, with optional leading icon.</p>
+
+      <h3>Without Icon</h3>
+      <div class="chip-group">
+        <chip-base label="Category"></chip-base>
+        <chip-base label="Tag"></chip-base>
+        <chip-base label="Label"></chip-base>
+        <chip-base label="A longer chip label"></chip-base>
+      </div>
+
+      <h3>With Leading Icon</h3>
+      <div class="chip-group">
+        <chip-base label="Settings" icon="settings"></chip-base>
+        <chip-base label="Favorite" icon="heart"></chip-base>
+        <chip-base label="Mail" icon="mail"></chip-base>
+        <chip-base label="Calendar" icon="calendar"></chip-base>
+        <chip-base label="User" icon="user"></chip-base>
+        <chip-base label="Info" icon="info"></chip-base>
+      </div>
+
+      <div class="demo-note">
+        <strong>Icon sizing:</strong> Leading icons render at <code>icon.size075</code> (20px) using the <code>&lt;icon-base&gt;</code> web component internally. The icon inherits the chip's text color.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 3: Chip-Filter Details
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>3. Chip-Filter</h2>
+      <p>Toggleable chip for filtering content. Click to toggle between selected and unselected states.</p>
+
+      <h3>Unselected State</h3>
+      <div class="chip-group">
+        <chip-filter label="JavaScript"></chip-filter>
+        <chip-filter label="TypeScript"></chip-filter>
+        <chip-filter label="Python"></chip-filter>
+      </div>
+
+      <h3>Selected State</h3>
+      <div class="chip-group">
+        <chip-filter label="JavaScript" selected></chip-filter>
+        <chip-filter label="TypeScript" selected></chip-filter>
+        <chip-filter label="Python" selected></chip-filter>
+      </div>
+
+      <h3>With Leading Icon (Replaced by Checkmark When Selected)</h3>
+      <p>When a Chip-Filter has a leading icon, the checkmark replaces it in the selected state.</p>
+      <div class="chip-group">
+        <chip-filter label="Settings" icon="settings"></chip-filter>
+        <chip-filter label="Settings" icon="settings" selected></chip-filter>
+      </div>
+      <div style="margin-block-start: var(--space-100);">
+        <div class="chip-group">
+          <chip-filter label="Calendar" icon="calendar"></chip-filter>
+          <chip-filter label="Calendar" icon="calendar" selected></chip-filter>
+        </div>
+      </div>
+
+      <h3>Interactive Filter Group</h3>
+      <p>Click chips to toggle selection. The selected state persists until toggled again.</p>
+      <div class="chip-group" id="filter-group">
+        <chip-filter label="Frontend" id="filter-frontend"></chip-filter>
+        <chip-filter label="Backend" id="filter-backend"></chip-filter>
+        <chip-filter label="DevOps" id="filter-devops"></chip-filter>
+        <chip-filter label="Design" id="filter-design"></chip-filter>
+        <chip-filter label="QA" id="filter-qa"></chip-filter>
+      </div>
+      <p id="filter-status" style="color: var(--gray-200); font-size: var(--typography-caption-font-size); margin-block-start: var(--space-050);">No filters selected</p>
+
+      <div class="demo-note">
+        <strong>ARIA support:</strong> Chip-Filter uses <code>aria-pressed</code> to communicate toggle state to screen readers. The value updates automatically when selection changes.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 4: Chip-Input Details
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>4. Chip-Input</h2>
+      <p>Dismissible chip for managing user-entered values. Always shows a trailing X icon. Tap anywhere to dismiss.</p>
+
+      <h3>Without Leading Icon</h3>
+      <div class="chip-group">
+        <chip-input label="React"></chip-input>
+        <chip-input label="Vue"></chip-input>
+        <chip-input label="Angular"></chip-input>
+      </div>
+
+      <h3>With Leading Icon + Trailing X</h3>
+      <p>Chip-Input supports both a leading icon and the trailing X icon simultaneously.</p>
+      <div class="chip-group">
+        <chip-input label="User Tag" icon="user"></chip-input>
+        <chip-input label="Starred" icon="star"></chip-input>
+        <chip-input label="Important" icon="info"></chip-input>
+      </div>
+
+      <h3>Interactive Dismiss Demo</h3>
+      <p>Click any chip to dismiss it. Dismissed chips are removed from the DOM.</p>
+      <div class="chip-group" id="dismiss-group">
+        <chip-input label="HTML" id="dismiss-html"></chip-input>
+        <chip-input label="CSS" id="dismiss-css"></chip-input>
+        <chip-input label="JavaScript" id="dismiss-js"></chip-input>
+        <chip-input label="TypeScript" id="dismiss-ts"></chip-input>
+        <chip-input label="Rust" id="dismiss-rust"></chip-input>
+      </div>
+      <p id="dismiss-status" style="color: var(--gray-200); font-size: var(--typography-caption-font-size); margin-block-start: var(--space-050);">Click a chip to dismiss it</p>
+      <button id="reset-dismiss-btn" style="background: var(--gray-400); color: var(--gray-200); border: var(--border-default) solid var(--gray-300); border-radius: var(--radius-050); padding-inline: var(--space-100); padding-block: var(--space-050); cursor: pointer; font-size: var(--typography-caption-font-size); font-family: var(--font-family-body); margin-block-start: var(--space-050);">Reset Chips</button>
+
+      <div class="demo-note">
+        <strong>Accessibility:</strong> Chip-Input uses <code>aria-label="Remove [label]"</code> so screen readers announce the dismiss action. The X icon is marked <code>aria-hidden="true"</code> since the entire chip is the dismiss target.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 5: Interactive States
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>5. Interactive States</h2>
+      <p>All chip variants use theme-aware blend utilities for hover and pressed state colors. Hover over and click the chips to see transitions.</p>
+
+      <div class="demo-interactive">
+        <p>Hover, focus (Tab key), and click these chips to observe state transitions:</p>
+
+        <h3>Chip-Base States</h3>
+        <div class="chip-group">
+          <div class="demo-item">
+            <chip-base label="Hover me"></chip-base>
+            <span class="demo-item-label">Hover: 8% darker bg</span>
+          </div>
+          <div class="demo-item">
+            <chip-base label="Press me"></chip-base>
+            <span class="demo-item-label">Active: 12% darker bg</span>
+          </div>
+          <div class="demo-item">
+            <chip-base label="Tab to me"></chip-base>
+            <span class="demo-item-label">Focus: outline ring</span>
+          </div>
+        </div>
+
+        <h3>Chip-Filter States (Unselected)</h3>
+        <div class="chip-group">
+          <div class="demo-item">
+            <chip-filter label="Hover me"></chip-filter>
+            <span class="demo-item-label">Hover: 8% darker + primary border</span>
+          </div>
+          <div class="demo-item">
+            <chip-filter label="Press me"></chip-filter>
+            <span class="demo-item-label">Active: 12% darker</span>
+          </div>
+          <div class="demo-item">
+            <chip-filter label="Tab to me"></chip-filter>
+            <span class="demo-item-label">Focus: outline ring</span>
+          </div>
+        </div>
+
+        <h3>Chip-Filter States (Selected)</h3>
+        <div class="chip-group">
+          <div class="demo-item">
+            <chip-filter label="Hover me" selected></chip-filter>
+            <span class="demo-item-label">Hover: brightness 95%</span>
+          </div>
+          <div class="demo-item">
+            <chip-filter label="Press me" selected></chip-filter>
+            <span class="demo-item-label">Active: brightness 90%</span>
+          </div>
+          <div class="demo-item">
+            <chip-filter label="Tab to me" selected></chip-filter>
+            <span class="demo-item-label">Focus: outline ring</span>
+          </div>
+        </div>
+
+        <h3>Chip-Input States</h3>
+        <div class="chip-group">
+          <div class="demo-item">
+            <chip-input label="Hover me"></chip-input>
+            <span class="demo-item-label">Hover: 8% darker bg</span>
+          </div>
+          <div class="demo-item">
+            <chip-input label="Press me"></chip-input>
+            <span class="demo-item-label">Active: 12% darker bg</span>
+          </div>
+          <div class="demo-item">
+            <chip-input label="Tab to me"></chip-input>
+            <span class="demo-item-label">Focus: outline ring</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>State color calculation:</strong> Uses <code>darkerBlend()</code> for hover (8%) and pressed (12%) states. These are calculated at runtime using theme-aware blend utilities for cross-platform consistency with iOS and Android.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 6: Event Handling
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>6. Event Handling</h2>
+      <p>Each chip variant dispatches different custom events. Click the chips below to see events logged.</p>
+
+      <div class="demo-interactive">
+        <h3>Chip-Base → <code>press</code></h3>
+        <div class="chip-group">
+          <chip-base label="Press Me" icon="heart" id="event-base"></chip-base>
+        </div>
+
+        <h3>Chip-Filter → <code>selectionchange</code> + <code>press</code></h3>
+        <div class="chip-group">
+          <chip-filter label="Toggle Me" id="event-filter"></chip-filter>
+        </div>
+
+        <h3>Chip-Input → <code>dismiss</code></h3>
+        <div class="chip-group">
+          <chip-input label="Dismiss Me" id="event-input"></chip-input>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-block-start: var(--space-100);">
+          <span style="color: var(--gray-200); font-size: var(--typography-caption-font-size);">Event Log:</span>
+          <button id="clear-log-btn" style="background: var(--gray-400); color: var(--gray-200); border: var(--border-default) solid var(--gray-300); border-radius: var(--radius-050); padding-inline: var(--space-050); padding-block: var(--space-025); cursor: pointer; font-size: var(--typography-caption-font-size); font-family: var(--font-family-body);">Clear</button>
+        </div>
+        <div id="event-log" class="event-log">
+          <div class="event-log-empty">Click a chip to see events here...</div>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Event summary:</strong>
+        <ul style="margin-block-start: var(--space-050); padding-inline-start: var(--space-200);">
+          <li><code>chip-base</code> → <code>press</code> (bubbles, composed)</li>
+          <li><code>chip-filter</code> → <code>selectionchange</code> with <code>detail.selected</code> + <code>press</code></li>
+          <li><code>chip-input</code> → <code>dismiss</code> (bubbles, composed)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 7: Accessibility
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>7. Accessibility Features</h2>
+
+      <h3>Keyboard Navigation</h3>
+      <div class="demo-interactive">
+        <p>Use <kbd>Tab</kbd> to navigate between chips, <kbd>Enter</kbd> or <kbd>Space</kbd> to activate:</p>
+        <div class="chip-group">
+          <chip-base label="Base Chip"></chip-base>
+          <chip-filter label="Filter Chip"></chip-filter>
+          <chip-input label="Input Chip"></chip-input>
+        </div>
+      </div>
+
+      <h3>ARIA Attributes by Variant</h3>
+      <ul class="demo-token-list">
+        <li><strong>Chip-Base:</strong> <code>role="button"</code>, <code>aria-label="[label]"</code>, <code>tabindex="0"</code></li>
+        <li><strong>Chip-Filter:</strong> <code>role="button"</code>, <code>aria-pressed="true|false"</code>, <code>aria-label="[label]"</code></li>
+        <li><strong>Chip-Input:</strong> <code>role="button"</code>, <code>aria-label="Remove [label]"</code>, visually hidden dismiss text</li>
+      </ul>
+
+      <h3>Focus Indicators</h3>
+      <div class="demo-note">
+        <strong>Focus ring:</strong> Uses <code>:focus-visible</code> for keyboard-only focus indicators. The outline uses <code>accessibility.focus.width</code> (2px) and <code>accessibility.focus.color</code> tokens with a 2px offset, meeting the 3:1 contrast ratio requirement.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 8: Token Verification
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>8. Token Verification</h2>
+      <p>Check browser DevTools to verify these CSS custom properties are loaded:</p>
+
+      <h3>Color Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--color-structure-surface</code> — chip default background</li>
+        <li><code>--color-text-default</code> — chip label text color</li>
+        <li><code>--color-structure-border</code> — chip border color</li>
+        <li><code>--color-action-primary</code> — hover/active border accent</li>
+        <li><code>--color-feedback-select-background-rest</code> — Chip-Filter selected background</li>
+        <li><code>--color-feedback-select-text-rest</code> — Chip-Filter selected text/border</li>
+      </ul>
+
+      <h3>Typography Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--typography-button-sm-font-family</code> — chip label font family</li>
+        <li><code>--typography-button-sm-font-size</code> — chip label font size</li>
+        <li><code>--typography-button-sm-font-weight</code> — chip label font weight</li>
+        <li><code>--typography-button-sm-line-height</code> — chip label line height</li>
+      </ul>
+
+      <h3>Spacing Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--space-inset-075</code> — chip block padding (6px)</li>
+        <li><code>--space-inset-150</code> — chip inline padding (12px)</li>
+        <li><code>--space-grouped-tight</code> — icon-label gap (4px)</li>
+      </ul>
+
+      <h3>Shape &amp; Border Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--radius-full</code> — pill shape border radius</li>
+        <li><code>--border-default</code> — default border width</li>
+      </ul>
+
+      <h3>Motion Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--motion-duration-fast</code> — state transition duration</li>
+        <li><code>--motion-easing-standard</code> — state transition easing</li>
+      </ul>
+
+      <h3>Accessibility Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--accessibility-focus-width</code> — focus outline width (2px)</li>
+        <li><code>--accessibility-focus-color</code> — focus outline color</li>
+        <li><code>--accessibility-focus-offset</code> — focus outline offset (2px)</li>
+        <li><code>--tap-area-recommended</code> — minimum touch target (48px)</li>
+      </ul>
+    </div>
+
+    <!-- ============================================================
+         SECTION 9: Usage Examples
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>9. Usage Examples</h2>
+
+      <h3>HTML</h3>
+      <pre class="demo-code">&lt;!-- Chip-Base: Simple pressable chip --&gt;
+&lt;chip-base label="Category"&gt;&lt;/chip-base&gt;
+&lt;chip-base label="Filter" icon="check"&gt;&lt;/chip-base&gt;
+
+&lt;!-- Chip-Filter: Toggleable selection chip --&gt;
+&lt;chip-filter label="Active"&gt;&lt;/chip-filter&gt;
+&lt;chip-filter label="Selected" selected&gt;&lt;/chip-filter&gt;
+&lt;chip-filter label="With Icon" icon="settings"&gt;&lt;/chip-filter&gt;
+
+&lt;!-- Chip-Input: Dismissible tag chip --&gt;
+&lt;chip-input label="Tag Name"&gt;&lt;/chip-input&gt;
+&lt;chip-input label="With Icon" icon="user"&gt;&lt;/chip-input&gt;</pre>
+
+      <h3>JavaScript</h3>
+      <pre class="demo-code">// Chip-Base: Listen for press events
+const chip = document.querySelector('chip-base');
+chip.addEventListener('press', () =&gt; {
+  console.log('Chip pressed!');
+});
+
+// Chip-Filter: Listen for selection changes
+const filter = document.querySelector('chip-filter');
+filter.addEventListener('selectionchange', (event) =&gt; {
+  console.log('Selected:', event.detail.selected);
+});
+
+// Chip-Input: Listen for dismiss events
+const input = document.querySelector('chip-input');
+input.addEventListener('dismiss', () =&gt; {
+  console.log('Chip dismissed!');
+  input.remove(); // Remove from DOM
+});
+
+// Programmatic creation
+const newChip = document.createElement('chip-filter');
+newChip.label = 'Dynamic';
+newChip.selected = false;
+newChip.onSelectionChange = (selected) =&gt; {
+  console.log('Selection changed:', selected);
+};
+document.body.appendChild(newChip);</pre>
+    </div>
+
+  </main>
+
+  <footer class="demo-footer">
+    <p>DesignerPunk Design System • Chip Family Demo</p>
+  </footer>
+
+  <script>
+    // File protocol detection
+    if (window.location.protocol === 'file:') {
+      const banner = document.createElement('div');
+      banner.className = 'demo-file-protocol-warning';
+      banner.textContent = 'Components may not load correctly via file:// protocol. Use a local server: npx serve dist/browser';
+      document.body.prepend(banner);
+    }
+
+    // ================================================================
+    // Interactive Filter Group (Section 3)
+    // ================================================================
+    const filterStatus = document.getElementById('filter-status');
+    const filterIds = ['filter-frontend', 'filter-backend', 'filter-devops', 'filter-design', 'filter-qa'];
+
+    function updateFilterStatus() {
+      const selected = filterIds
+        .map(function(id) { return document.getElementById(id); })
+        .filter(function(el) { return el && el.selected; })
+        .map(function(el) { return el.label; });
+
+      if (selected.length === 0) {
+        filterStatus.textContent = 'No filters selected';
+      } else {
+        filterStatus.textContent = 'Selected: ' + selected.join(', ');
+      }
+    }
+
+    filterIds.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('selectionchange', updateFilterStatus);
+      }
+    });
+
+    // ================================================================
+    // Interactive Dismiss Demo (Section 4)
+    // ================================================================
+    var dismissGroup = document.getElementById('dismiss-group');
+    var dismissStatus = document.getElementById('dismiss-status');
+    var dismissedCount = 0;
+    var originalDismissHTML = dismissGroup.innerHTML;
+
+    dismissGroup.addEventListener('dismiss', function(event) {
+      var chip = event.target;
+      var label = chip.label;
+      chip.remove();
+      dismissedCount++;
+      dismissStatus.textContent = 'Dismissed: ' + label + ' (' + dismissedCount + ' total)';
+
+      if (dismissGroup.children.length === 0) {
+        dismissStatus.textContent = 'All chips dismissed!';
+      }
+    });
+
+    document.getElementById('reset-dismiss-btn').addEventListener('click', function() {
+      dismissGroup.innerHTML = originalDismissHTML;
+      dismissedCount = 0;
+      dismissStatus.textContent = 'Click a chip to dismiss it';
+    });
+
+    // ================================================================
+    // Event Log (Section 6)
+    // ================================================================
+    var eventLog = document.getElementById('event-log');
+    var clearBtn = document.getElementById('clear-log-btn');
+    var eventCount = 0;
+
+    function logEvent(source, eventType, detail) {
+      eventCount++;
+      var time = new Date().toLocaleTimeString();
+      var empty = eventLog.querySelector('.event-log-empty');
+      if (empty) empty.remove();
+
+      var entry = document.createElement('div');
+      entry.className = 'event-log-entry';
+      var detailStr = detail ? ' — ' + detail : '';
+      entry.innerHTML = '<span class="event-log-time">[' + time + ']</span> <span class="event-log-event">' + eventType + '</span> from <strong>' + source + '</strong><span class="event-log-detail">' + detailStr + '</span> (#' + eventCount + ')';
+      eventLog.prepend(entry);
+
+      while (eventLog.children.length > 20) {
+        eventLog.removeChild(eventLog.lastChild);
+      }
+    }
+
+    clearBtn.addEventListener('click', function() {
+      eventLog.innerHTML = '<div class="event-log-empty">Click a chip to see events here...</div>';
+      eventCount = 0;
+    });
+
+    // Chip-Base events
+    document.getElementById('event-base').addEventListener('press', function() {
+      logEvent('Chip-Base', 'press', '');
+    });
+
+    // Chip-Filter events
+    document.getElementById('event-filter').addEventListener('selectionchange', function(e) {
+      logEvent('Chip-Filter', 'selectionchange', 'selected=' + e.detail.selected);
+    });
+    document.getElementById('event-filter').addEventListener('press', function() {
+      logEvent('Chip-Filter', 'press', '');
+    });
+
+    // Chip-Input events
+    document.getElementById('event-input').addEventListener('dismiss', function() {
+      logEvent('Chip-Input', 'dismiss', '');
+    });
+  </script>
+</body>
+</html>

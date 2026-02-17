@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Progress Indicator Primitives Demo - DesignerPunk</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="demo-styles.css">
+  <script type="module" src="designerpunk.esm.js"></script>
+  <style>
+    .stepper-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-050);
+      padding-block: var(--space-100);
+    }
+    .stepper-labeled-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      padding-block: var(--space-100);
+    }
+    .stepper-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-050);
+      min-inline-size: 60px;
+    }
+    .stepper-connector-wrap {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      min-inline-size: 24px;
+      padding-block-start: 8px;
+    }
+    .composition-example {
+      background: var(--black-300);
+      border: var(--border-default) solid var(--gray-400);
+      border-radius: var(--radius-100);
+      padding-inline: var(--space-inset-200);
+      padding-block: var(--space-inset-200);
+    }
+  </style>
+</head>
+<body class="demo-page">
+  <header class="demo-header">
+    <a href="index.html" class="demo-back-link">← All Components</a>
+    <h1>⚙️ Progress Indicator Primitives Demo</h1>
+    <p class="demo-subtitle">Compositional building blocks — Node-Base, Connector-Base, and Label-Base — that compose into stepper and pagination patterns</p>
+  </header>
+
+  <main>
+
+    <!-- ============================================================
+         SECTION 1: Family Overview
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>1. Family Overview</h2>
+      <p>The Progress Indicator family provides three low-level primitives that compose into higher-level patterns like steppers and pagination. These primitives are not typically used directly — they are the building blocks consumed by <code>Progress-Stepper-Base</code>, <code>Progress-Stepper-Detailed</code>, and <code>Progress-Pagination-Base</code>.</p>
+
+      <h3>Progress-Indicator-Node-Base</h3>
+      <p>A circular indicator node with state-based colors, size emphasis for the current step, and optional content (checkmark or icon).</p>
+      <div class="demo-row">
+        <div class="demo-item">
+          <progress-indicator-node-base state="incomplete" size="md"></progress-indicator-node-base>
+          <span class="demo-item-label">Incomplete</span>
+        </div>
+        <div class="demo-item">
+          <progress-indicator-node-base state="current" size="md"></progress-indicator-node-base>
+          <span class="demo-item-label">Current</span>
+        </div>
+        <div class="demo-item">
+          <progress-indicator-node-base state="completed" size="md" content="checkmark"></progress-indicator-node-base>
+          <span class="demo-item-label">Completed</span>
+        </div>
+        <div class="demo-item">
+          <progress-indicator-node-base state="error" size="md"></progress-indicator-node-base>
+          <span class="demo-item-label">Error</span>
+        </div>
+      </div>
+
+      <h3>Progress-Indicator-Connector-Base</h3>
+      <p>A horizontal line connecting nodes. Has two states: active (between completed nodes) and inactive (between incomplete nodes).</p>
+      <div class="demo-row">
+        <div class="demo-item" style="min-inline-size: 120px;">
+          <progress-indicator-connector-base state="active" style="inline-size: 100%;"></progress-indicator-connector-base>
+          <span class="demo-item-label">Active</span>
+        </div>
+        <div class="demo-item" style="min-inline-size: 120px;">
+          <progress-indicator-connector-base state="inactive" style="inline-size: 100%;"></progress-indicator-connector-base>
+          <span class="demo-item-label">Inactive</span>
+        </div>
+      </div>
+
+      <h3>Progress-Indicator-Label-Base</h3>
+      <p>A centered label positioned below a node. Supports primary text, optional helper text, and ellipsis truncation.</p>
+      <div class="demo-row">
+        <div class="demo-item">
+          <progress-indicator-label-base label="Step 1"></progress-indicator-label-base>
+          <span class="demo-item-label">Label only</span>
+        </div>
+        <div class="demo-item">
+          <progress-indicator-label-base label="Payment" helper-text="Enter card details"></progress-indicator-label-base>
+          <span class="demo-item-label">With helper text</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 2: Node States
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>2. Node States</h2>
+      <p>Four states map to semantic color tokens from <code>color.progress.*</code>. The current state gets a +4px size emphasis to visually highlight the active step.</p>
+
+      <h3>All States at Each Size</h3>
+
+      <h4>Small (sm) — 12px base, 16px current</h4>
+      <p>Small nodes always render as filled dots regardless of content prop.</p>
+      <div class="demo-row">
+        <div class="demo-item">
+          <progress-indicator-node-base state="incomplete" size="sm"></progress-indicator-node-base>
+          <span class="demo-item-label">Incomplete</span>
+        </div>
+        <div class="demo-item">
+          <progress-indicator-node-base state="current" size="sm"></progress-indicator-node-base>
+          <span class="demo-item-label">Current (+4px)</span>
+        </div>
+        <div class="demo-item">
+          <progress-indicator-node-base state="completed" size="sm"></progress-indicator-node-base>
+          <span class="demo-item-label">Completed</span>
+        </div>
+        <div class="demo-item">
+          <progress-indicator-node-base state="error" size="sm"></progress-indicator-node-base>
+          <span class="demo-item-label">Error</span>
+        </div>
+      </div>
+
+      <h4>Medium (md) — 16px base, 20px current (default)</h4>
+      <div class="demo-row">
+        <div class="demo-item">
+          <progress-indicator-node-base state="incomplete" size="md"></progress-indicator-node-base>
+          <span class="demo-item-label">Incomplete</span>
+        </div>
+        <div class="demo-item">
+          <progress-indicator-node-base state="current" size="md"></progress-indicator-node-base>
+          <span class="demo-item-label">Current (+4px)</span>
+        </div>
+        <div class="demo-item">
+          <progress-indicator-node-base state="completed" size="md" content="checkmark"></progress-indicator-node-base>
+          <span class="demo-item-label">Completed ✓</span>
+        </div>
+        <div class="demo-item">
+          <progress-indicator-node-base state="error" size="md"></progress-indicator-node-base>
+          <span class="demo-item-label">Error</span>
+        </div>
+      </div>
+
+      <h4>Large (lg) — 24px base, 28px current</h4>
+      <div class="demo-row">
+        <div class="demo-item">
+          <progress-indicator-node-base state="incomplete" size="lg"></progress-indicator-node-base>
+          <span class="demo-item-label">Incomplete</span>
+        </div>
+        <div class="demo-item">
+          <progress-indicator-node-base state="current" size="lg"></progress-indicator-node-base>
+          <span class="demo-item-label">Current (+4px)</span>
+        </div>
+        <div class="demo-item">
+          <progress-indicator-node-base state="completed" size="lg" content="checkmark"></progress-indicator-node-base>
+          <span class="demo-item-label">Completed ✓</span>
+        </div>
+        <div class="demo-item">
+          <progress-indicator-node-base state="error" size="lg"></progress-indicator-node-base>
+          <span class="demo-item-label">Error</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 3: Node Content Types
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>3. Node Content Types</h2>
+      <p>Nodes support three content types. Small nodes always render as dots regardless of the content attribute.</p>
+
+      <h3>Content: none (default)</h3>
+      <p>Renders as a filled dot (sm) or empty circle (md/lg).</p>
+      <div class="demo-row">
+        <div class="demo-item">
+          <progress-indicator-node-base state="current" size="sm" content="none"></progress-indicator-node-base>
+          <span class="demo-item-label">sm (dot)</span>
+        </div>
+        <div class="demo-item">
+          <progress-indicator-node-base state="current" size="md" content="none"></progress-indicator-node-base>
+          <span class="demo-item-label">md (circle)</span>
+        </div>
+        <div class="demo-item">
+          <progress-indicator-node-base state="current" size="lg" content="none"></progress-indicator-node-base>
+          <span class="demo-item-label">lg (circle)</span>
+        </div>
+      </div>
+
+      <h3>Content: checkmark</h3>
+      <p>Renders a checkmark icon inside the node. Typically used for completed steps.</p>
+      <div class="demo-row">
+        <div class="demo-item">
+          <progress-indicator-node-base state="completed" size="sm" content="checkmark"></progress-indicator-node-base>
+          <span class="demo-item-label">sm (ignored → dot)</span>
+        </div>
+        <div class="demo-item">
+          <progress-indicator-node-base state="completed" size="md" content="checkmark"></progress-indicator-node-base>
+          <span class="demo-item-label">md ✓</span>
+        </div>
+        <div class="demo-item">
+          <progress-indicator-node-base state="completed" size="lg" content="checkmark"></progress-indicator-node-base>
+          <span class="demo-item-label">lg ✓</span>
+        </div>
+      </div>
+
+      <h3>Content: icon</h3>
+      <p>Renders a custom icon inside the node. Requires the <code>icon</code> attribute with a valid icon name.</p>
+      <div class="demo-row">
+        <div class="demo-item">
+          <progress-indicator-node-base state="current" size="md" content="icon" icon="user"></progress-indicator-node-base>
+          <span class="demo-item-label">md + user</span>
+        </div>
+        <div class="demo-item">
+          <progress-indicator-node-base state="current" size="lg" content="icon" icon="settings"></progress-indicator-node-base>
+          <span class="demo-item-label">lg + settings</span>
+        </div>
+        <div class="demo-item">
+          <progress-indicator-node-base state="completed" size="lg" content="icon" icon="check"></progress-indicator-node-base>
+          <span class="demo-item-label">lg + check</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 4: Connector States
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>4. Connector States</h2>
+      <p>Connectors are horizontal lines between nodes. They use <code>flex: 1</code> to fill available space and have 1px thickness via the <code>borderDefault</code> token.</p>
+
+      <h3>Active Connector</h3>
+      <p>Used between completed nodes. Color: <code>color.progress.completed.connector</code> (green).</p>
+      <div class="stepper-row">
+        <progress-indicator-node-base state="completed" size="md" content="checkmark"></progress-indicator-node-base>
+        <progress-indicator-connector-base state="active" style="flex: 1;"></progress-indicator-connector-base>
+        <progress-indicator-node-base state="completed" size="md" content="checkmark"></progress-indicator-node-base>
+      </div>
+
+      <h3>Inactive Connector</h3>
+      <p>Used between incomplete nodes. Color: <code>color.progress.pending.connector</code> (gray).</p>
+      <div class="stepper-row">
+        <progress-indicator-node-base state="incomplete" size="md"></progress-indicator-node-base>
+        <progress-indicator-connector-base state="inactive" style="flex: 1;"></progress-indicator-connector-base>
+        <progress-indicator-node-base state="incomplete" size="md"></progress-indicator-node-base>
+      </div>
+
+      <h3>Mixed Connectors</h3>
+      <p>A typical pattern: active connectors between completed steps, inactive after the current step.</p>
+      <div class="stepper-row">
+        <progress-indicator-node-base state="completed" size="md" content="checkmark"></progress-indicator-node-base>
+        <progress-indicator-connector-base state="active" style="flex: 1;"></progress-indicator-connector-base>
+        <progress-indicator-node-base state="current" size="md"></progress-indicator-node-base>
+        <progress-indicator-connector-base state="inactive" style="flex: 1;"></progress-indicator-connector-base>
+        <progress-indicator-node-base state="incomplete" size="md"></progress-indicator-node-base>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 5: Label Variants
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>5. Label Variants</h2>
+      <p>Labels are centered below nodes using <code>typography.labelSm</code> tokens. They truncate with ellipsis when text exceeds available width.</p>
+
+      <h3>Label Only</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <progress-indicator-label-base label="Step 1"></progress-indicator-label-base>
+        </div>
+        <div class="demo-item">
+          <progress-indicator-label-base label="Review"></progress-indicator-label-base>
+        </div>
+        <div class="demo-item">
+          <progress-indicator-label-base label="Complete"></progress-indicator-label-base>
+        </div>
+      </div>
+
+      <h3>Label with Helper Text</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <progress-indicator-label-base label="Personal Info" helper-text="Name and email"></progress-indicator-label-base>
+        </div>
+        <div class="demo-item">
+          <progress-indicator-label-base label="Payment" helper-text="Card details"></progress-indicator-label-base>
+        </div>
+        <div class="demo-item">
+          <progress-indicator-label-base label="Confirmation" helper-text="Review order"></progress-indicator-label-base>
+        </div>
+      </div>
+
+      <h3>Truncation Behavior</h3>
+      <p>Labels truncate with ellipsis when constrained. Resize the browser to see truncation in action.</p>
+      <div style="max-inline-size: 80px; overflow: hidden;">
+        <progress-indicator-label-base label="Very Long Step Label That Should Truncate" helper-text="This helper text is also quite long"></progress-indicator-label-base>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 6: Composition Patterns
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>6. Composition Patterns</h2>
+      <p>These primitives compose into higher-level patterns. Below are examples showing how nodes, connectors, and labels work together.</p>
+
+      <h3>Simple 3-Step Stepper (Nodes + Connectors)</h3>
+      <div class="composition-example">
+        <div class="stepper-row">
+          <progress-indicator-node-base state="completed" size="lg" content="checkmark"></progress-indicator-node-base>
+          <progress-indicator-connector-base state="active" style="flex: 1;"></progress-indicator-connector-base>
+          <progress-indicator-node-base state="current" size="lg"></progress-indicator-node-base>
+          <progress-indicator-connector-base state="inactive" style="flex: 1;"></progress-indicator-connector-base>
+          <progress-indicator-node-base state="incomplete" size="lg"></progress-indicator-node-base>
+        </div>
+      </div>
+
+      <h3>Labeled Stepper (Nodes + Connectors + Labels)</h3>
+      <div class="composition-example">
+        <div class="stepper-labeled-row">
+          <div class="stepper-step">
+            <progress-indicator-node-base state="completed" size="lg" content="checkmark"></progress-indicator-node-base>
+            <progress-indicator-label-base label="Account" helper-text="Created"></progress-indicator-label-base>
+          </div>
+          <div class="stepper-connector-wrap">
+            <progress-indicator-connector-base state="active" style="flex: 1;"></progress-indicator-connector-base>
+          </div>
+          <div class="stepper-step">
+            <progress-indicator-node-base state="current" size="lg" content="icon" icon="user"></progress-indicator-node-base>
+            <progress-indicator-label-base label="Profile" helper-text="In progress"></progress-indicator-label-base>
+          </div>
+          <div class="stepper-connector-wrap">
+            <progress-indicator-connector-base state="inactive" style="flex: 1;"></progress-indicator-connector-base>
+          </div>
+          <div class="stepper-step">
+            <progress-indicator-node-base state="incomplete" size="lg"></progress-indicator-node-base>
+            <progress-indicator-label-base label="Confirm"></progress-indicator-label-base>
+          </div>
+        </div>
+      </div>
+
+      <h3>5-Step Stepper with Error</h3>
+      <div class="composition-example">
+        <div class="stepper-labeled-row">
+          <div class="stepper-step">
+            <progress-indicator-node-base state="completed" size="md" content="checkmark"></progress-indicator-node-base>
+            <progress-indicator-label-base label="Cart"></progress-indicator-label-base>
+          </div>
+          <div class="stepper-connector-wrap">
+            <progress-indicator-connector-base state="active" style="flex: 1;"></progress-indicator-connector-base>
+          </div>
+          <div class="stepper-step">
+            <progress-indicator-node-base state="completed" size="md" content="checkmark"></progress-indicator-node-base>
+            <progress-indicator-label-base label="Shipping"></progress-indicator-label-base>
+          </div>
+          <div class="stepper-connector-wrap">
+            <progress-indicator-connector-base state="active" style="flex: 1;"></progress-indicator-connector-base>
+          </div>
+          <div class="stepper-step">
+            <progress-indicator-node-base state="error" size="md"></progress-indicator-node-base>
+            <progress-indicator-label-base label="Payment" helper-text="Card declined"></progress-indicator-label-base>
+          </div>
+          <div class="stepper-connector-wrap">
+            <progress-indicator-connector-base state="inactive" style="flex: 1;"></progress-indicator-connector-base>
+          </div>
+          <div class="stepper-step">
+            <progress-indicator-node-base state="incomplete" size="md"></progress-indicator-node-base>
+            <progress-indicator-label-base label="Review"></progress-indicator-label-base>
+          </div>
+          <div class="stepper-connector-wrap">
+            <progress-indicator-connector-base state="inactive" style="flex: 1;"></progress-indicator-connector-base>
+          </div>
+          <div class="stepper-step">
+            <progress-indicator-node-base state="incomplete" size="md"></progress-indicator-node-base>
+            <progress-indicator-label-base label="Done"></progress-indicator-label-base>
+          </div>
+        </div>
+      </div>
+
+      <h3>Pagination-Style Dots (sm nodes, no connectors)</h3>
+      <p>Small nodes without connectors create a pagination indicator pattern.</p>
+      <div class="composition-example">
+        <div class="demo-row" style="gap: var(--space-075);">
+          <progress-indicator-node-base state="completed" size="sm"></progress-indicator-node-base>
+          <progress-indicator-node-base state="completed" size="sm"></progress-indicator-node-base>
+          <progress-indicator-node-base state="current" size="sm"></progress-indicator-node-base>
+          <progress-indicator-node-base state="incomplete" size="sm"></progress-indicator-node-base>
+          <progress-indicator-node-base state="incomplete" size="sm"></progress-indicator-node-base>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Composition philosophy:</strong> These primitives are intentionally low-level. In practice, use <code>&lt;progress-stepper-base&gt;</code>, <code>&lt;progress-stepper-detailed&gt;</code>, or <code>&lt;progress-pagination-base&gt;</code> which compose these primitives with proper state management, keyboard navigation, and accessibility.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 7: Token Verification
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>7. Token Verification</h2>
+      <p>Check browser DevTools to verify these CSS custom properties are loaded:</p>
+
+      <h3>Node Color Tokens (color.progress.*)</h3>
+      <ul class="demo-token-list">
+        <li><code>--color-progress-pending-background</code> — incomplete node background</li>
+        <li><code>--color-progress-pending-text</code> — incomplete node text/icon color</li>
+        <li><code>--color-progress-current-background</code> — current node background</li>
+        <li><code>--color-progress-current-text</code> — current node text/icon color</li>
+        <li><code>--color-progress-completed-background</code> — completed node background</li>
+        <li><code>--color-progress-completed-text</code> — completed node text/icon color</li>
+        <li><code>--color-progress-error-background</code> — error node background</li>
+        <li><code>--color-progress-error-text</code> — error node text/icon color</li>
+      </ul>
+
+      <h3>Connector Color Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--color-progress-completed-connector</code> — active connector color (green)</li>
+        <li><code>--color-progress-pending-connector</code> — inactive connector color (gray)</li>
+      </ul>
+
+      <h3>Node Size Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--progress-node-size-sm</code> — small node base size (12px)</li>
+        <li><code>--progress-node-size-sm-current</code> — small node current size (16px)</li>
+        <li><code>--progress-node-size-md</code> — medium node base size (16px)</li>
+        <li><code>--progress-node-size-md-current</code> — medium node current size (20px)</li>
+        <li><code>--progress-node-size-lg</code> — large node base size (24px)</li>
+        <li><code>--progress-node-size-lg-current</code> — large node current size (28px)</li>
+      </ul>
+
+      <h3>Connector Thickness Token</h3>
+      <ul class="demo-token-list">
+        <li><code>--progress-connector-thickness</code> — connector line thickness (1px)</li>
+      </ul>
+
+      <h3>Label Typography Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--typography-label-sm-font-family</code> — label font family</li>
+        <li><code>--typography-label-sm-font-size</code> — label font size</li>
+        <li><code>--typography-label-sm-line-height</code> — label line height</li>
+        <li><code>--typography-label-sm-font-weight</code> — label font weight</li>
+        <li><code>--typography-label-sm-letter-spacing</code> — label letter spacing</li>
+      </ul>
+
+      <h3>Text Color Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--color-text-default</code> — primary label text color</li>
+        <li><code>--color-text-subtle</code> — helper text color (with 0.7 opacity)</li>
+      </ul>
+    </div>
+
+    <!-- ============================================================
+         SECTION 8: Usage Examples
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>8. Usage Examples</h2>
+
+      <h3>HTML</h3>
+      <pre class="demo-code">&lt;!-- Individual node --&gt;
+&lt;progress-indicator-node-base
+  state="current"
+  size="md"
+  content="none"
+&gt;&lt;/progress-indicator-node-base&gt;
+
+&lt;!-- Completed node with checkmark --&gt;
+&lt;progress-indicator-node-base
+  state="completed"
+  size="lg"
+  content="checkmark"
+&gt;&lt;/progress-indicator-node-base&gt;
+
+&lt;!-- Node with custom icon --&gt;
+&lt;progress-indicator-node-base
+  state="current"
+  size="lg"
+  content="icon"
+  icon="user"
+&gt;&lt;/progress-indicator-node-base&gt;
+
+&lt;!-- Connector between nodes --&gt;
+&lt;progress-indicator-connector-base
+  state="active"
+&gt;&lt;/progress-indicator-connector-base&gt;
+
+&lt;!-- Label below a node --&gt;
+&lt;progress-indicator-label-base
+  label="Step 1"
+  helper-text="Personal Info"
+&gt;&lt;/progress-indicator-label-base&gt;
+
+&lt;!-- Composed: simple 3-step stepper --&gt;
+&lt;div style="display: flex; align-items: center; gap: 4px;"&gt;
+  &lt;progress-indicator-node-base state="completed" size="md" content="checkmark"&gt;&lt;/progress-indicator-node-base&gt;
+  &lt;progress-indicator-connector-base state="active" style="flex: 1;"&gt;&lt;/progress-indicator-connector-base&gt;
+  &lt;progress-indicator-node-base state="current" size="md"&gt;&lt;/progress-indicator-node-base&gt;
+  &lt;progress-indicator-connector-base state="inactive" style="flex: 1;"&gt;&lt;/progress-indicator-connector-base&gt;
+  &lt;progress-indicator-node-base state="incomplete" size="md"&gt;&lt;/progress-indicator-node-base&gt;
+&lt;/div&gt;</pre>
+
+      <h3>JavaScript</h3>
+      <pre class="demo-code">// Programmatic creation
+const node = document.createElement('progress-indicator-node-base');
+node.state = 'current';
+node.size = 'lg';
+node.content = 'icon';
+node.icon = 'settings';
+
+const connector = document.createElement('progress-indicator-connector-base');
+connector.state = 'active';
+
+const label = document.createElement('progress-indicator-label-base');
+label.label = 'Step 1';
+label.helperText = 'Getting started';
+
+// Dynamic state updates
+node.state = 'completed';
+node.content = 'checkmark';
+connector.state = 'active';</pre>
+    </div>
+
+  </main>
+
+  <footer class="demo-footer">
+    <p>DesignerPunk Design System • Progress Indicator Primitives Demo</p>
+  </footer>
+
+  <script>
+    // File protocol detection
+    if (window.location.protocol === 'file:') {
+      var banner = document.createElement('div');
+      banner.className = 'demo-file-protocol-warning';
+      banner.textContent = 'Components may not load correctly via file:// protocol. Use a local server: npx serve dist/browser';
+      document.body.prepend(banner);
+    }
+  </script>
+</body>
+</html>
