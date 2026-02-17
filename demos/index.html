@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DesignerPunk Component Demos</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="demo-styles.css">
+  <script type="module" src="designerpunk.esm.js"></script>
+</head>
+<body class="demo-page">
+  <header class="demo-header">
+    <h1>DesignerPunk Component Demos</h1>
+    <p class="demo-subtitle">Interactive demos for all web component families</p>
+  </header>
+
+  <main class="demo-index">
+
+    <!-- Avatar -->
+    <section class="demo-category">
+      <h2>Avatar</h2>
+      <div class="demo-card-grid">
+        <a href="avatar-demo.html" class="demo-card">
+          <span class="demo-card-title">Avatar</span>
+          <span class="demo-card-desc">User avatar with image, initials, and fallback icon support</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Badge -->
+    <section class="demo-category">
+      <h2>Badge</h2>
+      <div class="demo-card-grid">
+        <a href="badge-demo.html" class="demo-card">
+          <span class="demo-card-title">Badge</span>
+          <span class="demo-card-desc">Label badges, count badges, and notification indicators</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Button -->
+    <section class="demo-category">
+      <h2>Button</h2>
+      <div class="demo-card-grid">
+        <a href="button-cta-demo.html" class="demo-card">
+          <span class="demo-card-title">Button-CTA</span>
+          <span class="demo-card-desc">Call-to-action button with variants, sizes, and icon support</span>
+        </a>
+        <a href="button-icon-demo.html" class="demo-card">
+          <span class="demo-card-title">Button-Icon</span>
+          <span class="demo-card-desc">Icon-only button for compact actions and toolbars</span>
+        </a>
+        <a href="button-vertical-list-demo.html" class="demo-card">
+          <span class="demo-card-title">Button-VerticalList</span>
+          <span class="demo-card-desc">Vertical list items and sets for menu-style navigation</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Chip -->
+    <section class="demo-category">
+      <h2>Chip</h2>
+      <div class="demo-card-grid">
+        <a href="chip-demo.html" class="demo-card">
+          <span class="demo-card-title">Chip</span>
+          <span class="demo-card-desc">Base chips, filter chips, and input chips for selections and tags</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Container -->
+    <section class="demo-category">
+      <h2>Container</h2>
+      <div class="demo-card-grid">
+        <a href="container-base-demo.html" class="demo-card">
+          <span class="demo-card-title">Container-Base</span>
+          <span class="demo-card-desc">Generic layout container with padding, background, and shadow options</span>
+        </a>
+        <a href="container-card-demo.html" class="demo-card">
+          <span class="demo-card-title">Container-Card</span>
+          <span class="demo-card-desc">Specialized card container for elevated content sections</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Icon -->
+    <section class="demo-category">
+      <h2>Icon</h2>
+      <div class="demo-card-grid">
+        <a href="icon-base-demo.html" class="demo-card">
+          <span class="demo-card-title">Icon-Base</span>
+          <span class="demo-card-desc">SVG icon component with size and color variants</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Input -->
+    <section class="demo-category">
+      <h2>Input</h2>
+      <div class="demo-card-grid">
+        <a href="input-text-demo.html" class="demo-card">
+          <span class="demo-card-title">Input-Text</span>
+          <span class="demo-card-desc">Text input with email, password, and phone number variants</span>
+        </a>
+        <a href="checkbox-demo.html" class="demo-card">
+          <span class="demo-card-title">Input-Checkbox</span>
+          <span class="demo-card-desc">Checkbox with base and legal agreement variants</span>
+        </a>
+        <a href="radio-demo.html" class="demo-card">
+          <span class="demo-card-title">Input-Radio</span>
+          <span class="demo-card-desc">Radio button with individual and grouped set patterns</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Progress -->
+    <section class="demo-category">
+      <h2>Progress</h2>
+      <div class="demo-card-grid">
+        <a href="progress-indicator-demo.html" class="demo-card">
+          <span class="demo-card-title">Progress-Indicator</span>
+          <span class="demo-card-desc">Compositional primitives for nodes, connectors, and labels</span>
+        </a>
+        <a href="progress-pagination-demo.html" class="demo-card">
+          <span class="demo-card-title">Progress-Pagination</span>
+          <span class="demo-card-desc">Page indicator dots for multi-page navigation</span>
+        </a>
+        <a href="progress-stepper-demo.html" class="demo-card">
+          <span class="demo-card-title">Progress-Stepper</span>
+          <span class="demo-card-desc">Sequential workflow steps with base and detailed variants</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="demo-footer">
+    <p>DesignerPunk Design System • Component Demos</p>
+  </footer>
+
+  <script>
+    if (window.location.protocol === 'file:') {
+      const banner = document.createElement('div');
+      banner.className = 'demo-file-protocol-warning';
+      banner.textContent = 'Components may not load correctly via file:// protocol. Use a local server: npx serve dist/browser';
+      document.body.prepend(banner);
+    }
+  </script>
+</body>
+</html>
