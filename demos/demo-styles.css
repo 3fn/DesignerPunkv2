@@ -231,6 +231,138 @@
 }
 
 /* ==========================================================================
+   Event Log (shared by demos with interactive event output)
+   ========================================================================== */
+
+.demo-event-log {
+  background: var(--black-300);
+  border: var(--border-default) solid var(--gray-300);
+  border-radius: var(--radius-100);
+  padding-inline: var(--space-inset-100);
+  padding-block: var(--space-inset-100);
+  min-block-size: 80px;
+  max-block-size: 160px;
+  overflow-y: auto;
+  font-family: var(--font-family-mono);
+  font-size: var(--typography-caption-font-size);
+  color: var(--gray-100);
+  margin-block-start: var(--space-100);
+}
+
+.demo-event-log-entry {
+  padding-block: var(--space-025);
+  border-block-end: var(--border-default) solid var(--gray-400);
+}
+
+.demo-event-log-entry:last-child {
+  border-block-end: none;
+}
+
+.demo-event-log-time {
+  color: var(--gray-200);
+}
+
+.demo-event-log-event {
+  color: var(--cyan-300);
+}
+
+.demo-event-log-value {
+  color: var(--pink-300);
+}
+
+.demo-event-log-empty {
+  color: var(--gray-300);
+  font-style: italic;
+}
+
+.demo-event-log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-block-start: var(--space-100);
+}
+
+.demo-event-log-label {
+  color: var(--gray-200);
+  font-size: var(--typography-caption-font-size);
+}
+
+/* ==========================================================================
+   Form Input Layout (wider items for form-style demos)
+   ========================================================================== */
+
+.demo-input-row {
+  display: flex;
+  gap: var(--space-grouped-loose);
+  flex-wrap: wrap;
+  margin-block-end: var(--space-100);
+}
+
+.demo-input-item {
+  flex: 1;
+  min-inline-size: 260px;
+  max-inline-size: 400px;
+}
+
+.demo-input-item-label {
+  display: block;
+  font-size: var(--typography-caption-font-size);
+  color: var(--gray-200);
+  margin-block-start: var(--space-050);
+  text-align: start;
+}
+
+/* ==========================================================================
+   Utility Buttons (for form demos and interactive controls)
+   ========================================================================== */
+
+.demo-button {
+  padding-inline: var(--space-100);
+  padding-block: var(--space-050);
+  border-radius: var(--radius-050);
+  border: none;
+  cursor: pointer;
+  font-size: var(--typography-caption-font-size);
+  font-family: var(--font-family-body);
+}
+
+.demo-button-primary {
+  background: var(--cyan-300);
+  color: var(--gray-500);
+}
+
+.demo-button-secondary {
+  background: var(--gray-300);
+  color: var(--white-200);
+}
+
+.demo-button-subtle {
+  background: var(--gray-400);
+  color: var(--gray-200);
+  border: var(--border-default) solid var(--gray-300);
+}
+
+/* ==========================================================================
+   Layout Modifier Classes
+   ========================================================================== */
+
+.demo-item-start {
+  align-items: flex-start;
+}
+
+.demo-row-center {
+  justify-content: center;
+}
+
+.demo-text-center {
+  text-align: center;
+}
+
+.demo-token-list-spaced {
+  margin-block-start: var(--space-150);
+}
+
+/* ==========================================================================
    Token Verification
    ========================================================================== */
 

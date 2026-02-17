@@ -110,6 +110,25 @@ Include these sections when applicable to the component:
 
 4. **Dark background theme** using DesignerPunk design tokens. Ensure sufficient contrast for readability.
 
+5. **Prefer shared CSS classes over inline styles.** Common layout modifiers are available:
+   - `.demo-item-start` — align items to flex-start (for form-style demos)
+   - `.demo-row-center` — center-justify a demo-row
+   - `.demo-text-center` — center text in grid cells
+   - `.demo-token-list-spaced` — add top margin to token lists
+   - `.demo-button`, `.demo-button-primary`, `.demo-button-secondary`, `.demo-button-subtle` — styled native buttons for interactive demos
+
+6. **For event log demos**, use the shared event log classes instead of per-page `<style>` blocks:
+   - `.demo-event-log` — the log container
+   - `.demo-event-log-entry` — individual log entries
+   - `.demo-event-log-time`, `.demo-event-log-event`, `.demo-event-log-value` — entry parts
+   - `.demo-event-log-header`, `.demo-event-log-label` — header row with clear button
+   - `.demo-event-log-empty` — placeholder text
+
+7. **For form input demos**, use the wider input layout classes:
+   - `.demo-input-row` — flex row with wider items for form inputs
+   - `.demo-input-item` — flex item with min 260px / max 400px width
+   - `.demo-input-item-label` — label below input item
+
 ### Organization Guidelines
 
 1. **Group related examples** in sections with clear headings:
@@ -272,21 +291,41 @@ Demos are manually maintained. When a component's API changes (new props, rename
 
 If a demo page appears broken or outdated, the fix is straightforward: update the HTML to match the current component API, rebuild, and verify locally.
 
+## Phase 1 Learnings
+
+Patterns identified during Phase 1 (6 demos: avatar, badge, checkbox, icon-base, button-cta, input-text) that informed shared CSS additions:
+
+1. **Event log pattern recurs** — Both button-cta and input-text demos needed identical event log styling. Extracted to `.demo-event-log*` shared classes.
+
+2. **Form input demos need wider items** — Standard `.demo-item` (centered, narrow) doesn't suit form inputs that need horizontal space. Added `.demo-input-row` / `.demo-input-item` for form-style layouts.
+
+3. **Inline style overrides were common** — `align-items: flex-start`, `justify-content: center`, `text-align: center`, and `margin-block-start` on token lists appeared repeatedly. Added utility modifier classes to reduce inline styles.
+
+4. **Native button styling** — Interactive demos (form submit, event log clear) used inline-styled `<button>` elements. Added `.demo-button*` classes.
+
+5. **Icon grid is component-specific** — The `.icon-grid` pattern in icon-base-demo is unique to that component and doesn't need extraction to shared CSS.
+
+6. **Page-specific `<style>` blocks are acceptable** — When a pattern is truly unique to one component (icon grid, audit trail log), a page-level `<style>` block is fine. Only extract to shared CSS when the pattern appears in 2+ demos.
+
+7. **Section numbering is valuable** — Numbered sections (e.g., "1. Entity Types", "2. Size Variants") help with navigation in longer demos. Recommended for Phase 2.
+
+8. **Emoji in h1 titles** — All demos use emoji prefixes in h1 (🎭, 🏷️, ☑️, 🎨, 🔘, 📝). This is a nice touch for visual scanning. Recommended for Phase 2.
+
 ## Component Family Demo Checklist
 
 | Component Family | Demo File | Status |
 |-----------------|-----------|--------|
-| Avatar | `avatar-demo.html` | Planned (migrate existing) |
-| Badge | `badge-demo.html` | Planned (migrate existing) |
-| Button-CTA | `button-cta-demo.html` | Planned |
+| Avatar | `avatar-demo.html` | ✅ Complete (migrated) |
+| Badge | `badge-demo.html` | ✅ Complete (migrated) |
+| Button-CTA | `button-cta-demo.html` | ✅ Complete |
 | Button-Icon | `button-icon-demo.html` | Planned |
 | Button-VerticalList | `button-vertical-list-demo.html` | Planned |
 | Chip | `chip-demo.html` | Planned |
 | Container-Base | `container-base-demo.html` | Planned |
 | Container-Card | `container-card-demo.html` | Planned |
-| Icon-Base | `icon-base-demo.html` | Planned |
-| Input-Text | `input-text-demo.html` | Planned |
-| Input-Checkbox | `checkbox-demo.html` | Planned (migrate existing) |
+| Icon-Base | `icon-base-demo.html` | ✅ Complete |
+| Input-Text | `input-text-demo.html` | ✅ Complete |
+| Input-Checkbox | `checkbox-demo.html` | ✅ Complete (migrated) |
 | Input-Radio | `radio-demo.html` | Planned |
 | Progress-Indicator | `progress-indicator-demo.html` | Planned |
 | Progress-Pagination | `progress-pagination-demo.html` | Planned |
