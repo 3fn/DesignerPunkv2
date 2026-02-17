@@ -25,7 +25,10 @@ import '../src/components/core/Button-Icon/buttonIcon.tokens';
 import '../src/components/core/Button-VerticalList-Item/Button-VerticalList-Item.tokens';
 import '../src/components/core/Avatar/avatar.tokens';
 import '../src/components/core/Badge-Label-Base/tokens';
+import '../src/tokens/component/progress';
 // Note: Chip-Base tokens import removed - file doesn't exist at expected location
+// TODO: Progress tokens are in src/tokens/component/ (family-shared) rather than component directory.
+//       Architectural decision needed: keep family-shared tokens centralized or move to component dirs?
 
 async function main() {
   console.log('🚀 Generating platform-specific token files...\n');

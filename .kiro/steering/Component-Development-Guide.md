@@ -1,5 +1,7 @@
 ---
 inclusion: manual
+name: Component-Development-Guide
+description: Guide for building components with appropriate token usage, True Native Architecture, demo maintenance, and effective collaboration practices. Load when implementing components, selecting tokens, integrating icons, or maintaining demo pages.
 ---
 
 # Component Development and Practices Guide
@@ -1592,6 +1594,44 @@ Before implementing a component, verify:
 
 ---
 
+## Demo Maintenance Checklist
+
+When modifying a component's API, adding new variants, or changing behavior, update the corresponding demo page to keep it in sync. Demos load components via the browser bundle, so API changes that break a demo are immediately visible when loading the page — but new features won't appear unless the demo is updated.
+
+### When to Update Demos
+
+- Component API changes (new props, renamed attributes, removed features)
+- New variants or sizes added
+- New states added (e.g., loading, error)
+- Event handling changes (new events, changed event detail shape)
+- Accessibility improvements (new ARIA attributes, keyboard interactions)
+- Visual changes that affect how the component renders
+
+### Component Change Checklist
+
+When making changes to a component with a web implementation:
+
+- [ ] Update component README with new API
+- [ ] Update component demo page (if demo exists in `demos/`)
+- [ ] Run demo locally to verify all examples still work
+- [ ] Update `demos/index.html` if component description changed
+
+### How to Verify Demo Health
+
+1. Build the browser distribution: `npm run build`
+2. Start a local server: `npx http-server dist/browser -p 8080`
+3. Open the demo page in a browser
+4. Verify all variant examples render correctly
+5. Verify interactive examples respond to user input
+6. Verify token verification section shows expected values
+7. Check browser console for errors or warnings
+
+### Demo Location
+
+All demo source files live in `demos/` at the project root. The build process copies them to `dist/browser/`. See `demos/README.md` for full guidelines on creating and maintaining demo pages.
+
+---
+
 ## Component Spec Development Workflow
 
 Components come with their own unique properties that might include, but are not limited to, multiple variants, states, or platform considerations. Use this workflow to create clearer, more precise specifications to fully understand their complexity.
@@ -1676,6 +1716,7 @@ Components come with their own unique properties that might include, but are not
 5. **README** (required) - Create comprehensive component documentation
 6. **HTML Canaries** (required) - Create validation examples
 7. **Implementation** (required) - Build component across platforms
+8. **Demo Page** (if web implementation) - Create or update demo in `demos/` (see Demo Maintenance Checklist)
 
 This workflow produces clearer requirements, better documentation, and validation that ensures documentation stays accurate.
 

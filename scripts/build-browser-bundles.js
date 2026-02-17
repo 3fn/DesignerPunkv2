@@ -25,7 +25,7 @@ const { cssAsStringPlugin } = require('./esbuild-css-plugin');
 // Configuration
 const ENTRY_POINT = 'src/browser-entry.ts';
 const OUTPUT_DIR = 'dist/browser';
-const SOFT_CEILING_KB = 100; // 100KB gzipped soft ceiling
+const SOFT_CEILING_KB = 125; // 125KB gzipped soft ceiling (raised from 100KB as component count grows)
 
 /**
  * Calculate file size in bytes

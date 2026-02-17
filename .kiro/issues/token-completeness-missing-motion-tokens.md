@@ -1,8 +1,8 @@
-# Issue: Token Completeness Test — Missing Motion Tokens
+# Issue: Token Completeness Test — Missing Tokens
 
 **Date**: February 16, 2026
-**Severity**: Medium
-**Status**: Open
+**Severity**: High
+**Status**: Superseded
 **Discovered During**: Spec 061 - Component Demo System (Task 7.4, observed in test run)
 **Affects**: token-completeness.property.test.ts
 
@@ -10,43 +10,44 @@
 
 ## Summary
 
-The token completeness property test reports two motion tokens referenced in the browser bundles (ESM and UMD) that don't exist in `tokens.css`:
+~~The token completeness property test reports two motion tokens referenced in the browser bundles (ESM and UMD) that don't exist in `tokens.css`:~~
 
-- `motion-duration-fast`
-- `motion-easing-standard`
+~~- `motion-duration-fast`~~
+~~- `motion-easing-standard`~~
+
+**Update (Feb 17, 2026):** The scope of this issue is larger than initially reported. There are **22 missing tokens** (2 motion tokens + 20 progress tokens), not just 2.
+
+**This issue has been superseded by a comprehensive collaborative issue document:**
+
+👉 **See: `.kiro/issues/missing-tokens-blocking-demo-system.md`**
+
+The new document includes:
+- Full list of 22 missing tokens
+- Breakdown by domain (Chip motion tokens for Lina, Progress tokens for Ada)
+- Validation steps (Thurgood)
+- Coordination and status tracking
+- Resolution criteria
 
 ---
 
-## Failing Tests
+## Original Report (Incomplete)
 
-**File**: `src/__tests__/browser-distribution/token-completeness.property.test.ts`
-
+**Failing Tests:**
 - `all token references in ESM bundle should exist in tokens.css` (line 379)
 - `all token references in UMD bundle should exist in tokens.css` (line 405)
 
-Both report the same two missing tokens: `["motion-duration-fast", "motion-easing-standard"]`
+**Originally reported missing tokens (2):**
+- `motion-duration-fast`
+- `motion-easing-standard`
+
+**Actual missing tokens (22):**
+- 2 motion tokens (Chip-Base)
+- 20 progress tokens (Progress components)
 
 ---
 
-## Root Cause
+## Resolution
 
-A component (likely Chip or another recently added component) references `--motion-duration-fast` and `--motion-easing-standard` CSS custom properties, but these tokens are not generated in `tokens.css`. This could mean:
+Work on this issue is now tracked in the collaborative document: `.kiro/issues/missing-tokens-blocking-demo-system.md`
 
-1. The token names in the component don't match the generated token names (naming mismatch)
-2. These motion tokens haven't been added to the token generation pipeline yet
-3. The component should be using different token names (e.g., `--motion-focus-transition-duration` instead of `--motion-duration-fast`)
-
----
-
-## Investigation Needed
-
-- Check which component(s) reference these token names
-- Check if equivalent tokens exist under different names in tokens.css
-- Determine if this is a naming mismatch or a missing token generation issue
-
----
-
-## Related Specs
-
-- Spec 014: Motion Token System (if it exists)
-- Spec 047 or similar (Chip components — likely source of references)
+This document remains for historical reference only.

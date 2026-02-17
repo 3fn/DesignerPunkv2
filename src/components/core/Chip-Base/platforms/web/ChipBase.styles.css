@@ -70,12 +70,12 @@
   cursor: pointer;
   user-select: none;
   
-  /* Transitions - Uses motion.duration.fast for state changes */
-  /* @see Requirements: 3.4 - Animate using motion.duration.fast */
-  transition: background-color var(--motion-duration-fast) var(--motion-easing-standard),
-              border-color var(--motion-duration-fast) var(--motion-easing-standard),
-              color var(--motion-duration-fast) var(--motion-easing-standard),
-              box-shadow var(--motion-duration-fast) var(--motion-easing-standard);
+  /* Transitions - Uses selection motion tokens (chips are selection controls) */
+  /* @see Requirements: 3.4 - Animate using motion tokens */
+  transition: background-color var(--motion-selection-transition-duration) var(--motion-selection-transition-easing),
+              border-color var(--motion-selection-transition-duration) var(--motion-selection-transition-easing),
+              color var(--motion-selection-transition-duration) var(--motion-selection-transition-easing),
+              box-shadow var(--motion-selection-transition-duration) var(--motion-selection-transition-easing);
   
   /* Remove default button styles */
   outline: none;

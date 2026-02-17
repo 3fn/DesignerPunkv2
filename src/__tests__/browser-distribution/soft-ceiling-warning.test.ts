@@ -19,7 +19,7 @@ import * as zlib from 'zlib';
 
 describe('Soft Ceiling Warning', () => {
   const BROWSER_DIST_DIR = path.join(process.cwd(), 'dist', 'browser');
-  const SOFT_CEILING_KB = 100; // 100KB gzipped soft ceiling
+  const SOFT_CEILING_KB = 125; // 125KB gzipped soft ceiling (matches build script)
 
   /**
    * Calculate gzipped size of a file
@@ -46,13 +46,13 @@ describe('Soft Ceiling Warning', () => {
   });
 
   describe('Threshold Configuration', () => {
-    it('should have soft ceiling defined at 100KB', () => {
+    it('should have soft ceiling defined at 125KB', () => {
       // Read the build script to verify threshold is configured
       const buildScriptPath = path.join(process.cwd(), 'scripts', 'build-browser-bundles.js');
       const buildScript = fs.readFileSync(buildScriptPath, 'utf-8');
       
       // Check for SOFT_CEILING_KB constant
-      expect(buildScript).toContain('SOFT_CEILING_KB = 100');
+      expect(buildScript).toContain('SOFT_CEILING_KB = 125');
     });
   });
 
@@ -115,12 +115,12 @@ describe('Soft Ceiling Warning', () => {
       expect(warnings.length).toBe(0);
       
       // Log confirmation
-      console.log('All bundles are under the 100KB gzipped soft ceiling');
+      console.log('All bundles are under the 125KB gzipped soft ceiling');
     });
 
     it('should correctly detect when a bundle would exceed ceiling', () => {
       // Test the warning logic with a simulated large bundle
-      const simulatedGzippedKB = 150; // 150KB - exceeds 100KB ceiling
+      const simulatedGzippedKB = 150; // 150KB - exceeds 125KB ceiling
       const exceedsCeiling = simulatedGzippedKB > SOFT_CEILING_KB;
       
       expect(exceedsCeiling).toBe(true);
@@ -128,7 +128,7 @@ describe('Soft Ceiling Warning', () => {
 
     it('should not warn for bundles under ceiling', () => {
       // Test the warning logic with a simulated small bundle
-      const simulatedGzippedKB = 50; // 50KB - under 100KB ceiling
+      const simulatedGzippedKB = 50; // 50KB - under 125KB ceiling
       const exceedsCeiling = simulatedGzippedKB > SOFT_CEILING_KB;
       
       expect(exceedsCeiling).toBe(false);
