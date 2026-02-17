@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Input-Text Demo - DesignerPunk</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="demo-styles.css">
+  <script type="module" src="designerpunk.esm.js"></script>
+  <style>
+    .input-demo-row {
+      display: flex;
+      gap: var(--space-grouped-loose);
+      flex-wrap: wrap;
+      margin-block-end: var(--space-100);
+    }
+    .input-demo-item {
+      flex: 1;
+      min-inline-size: 260px;
+      max-inline-size: 400px;
+    }
+    .input-demo-item-label {
+      display: block;
+      font-size: var(--typography-caption-font-size);
+      color: var(--gray-200);
+      margin-block-start: var(--space-050);
+      text-align: start;
+    }
+    .event-log {
+      background: var(--black-300);
+      border: var(--border-default) solid var(--gray-300);
+      border-radius: var(--radius-100);
+      padding-inline: var(--space-inset-100);
+      padding-block: var(--space-inset-100);
+      min-block-size: 80px;
+      max-block-size: 160px;
+      overflow-y: auto;
+      font-family: var(--font-family-mono);
+      font-size: var(--typography-caption-font-size);
+      color: var(--gray-100);
+      margin-block-start: var(--space-100);
+    }
+    .event-log-entry {
+      padding-block: var(--space-025);
+      border-block-end: var(--border-default) solid var(--gray-400);
+    }
+    .event-log-entry:last-child {
+      border-block-end: none;
+    }
+    .event-log-time {
+      color: var(--gray-200);
+    }
+    .event-log-event {
+      color: var(--cyan-300);
+    }
+    .event-log-value {
+      color: var(--pink-300);
+    }
+    .event-log-empty {
+      color: var(--gray-300);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body class="demo-page">
+  <header class="demo-header">
+    <a href="index.html" class="demo-back-link">← All Components</a>
+    <h1>📝 Input-Text Component Demo</h1>
+    <p class="demo-subtitle">Text input family with float label animation, validation states, and specialized variants for Email, Password, and Phone Number</p>
+  </header>
+
+  <main>
+
+    <!-- ============================================================
+         SECTION 1: Base Input Overview
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>1. Input-Text-Base Overview</h2>
+      <p>The foundational text input with float label animation. Label transitions smoothly from placeholder position to floated position on focus or when filled.</p>
+
+      <div class="input-demo-row">
+        <div class="input-demo-item">
+          <input-text-base id="base-empty" label="Empty input" value=""></input-text-base>
+          <span class="input-demo-item-label">Default (empty, click to see float label)</span>
+        </div>
+        <div class="input-demo-item">
+          <input-text-base id="base-filled" label="Filled input" value="Hello World"></input-text-base>
+          <span class="input-demo-item-label">Pre-filled (label floated)</span>
+        </div>
+      </div>
+
+      <div class="input-demo-row">
+        <div class="input-demo-item">
+          <input-text-base id="base-placeholder" label="With placeholder" placeholder="Type something here..." value=""></input-text-base>
+          <span class="input-demo-item-label">With placeholder (visible when focused)</span>
+        </div>
+        <div class="input-demo-item">
+          <input-text-base id="base-required" label="Required field" required value=""></input-text-base>
+          <span class="input-demo-item-label">Required (shows asterisk)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 2: Validation States
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>2. Validation States</h2>
+      <p>Input-Text-Base supports error and success states with visual indicators including border color changes and trailing icons.</p>
+
+      <h3>Error State</h3>
+      <div class="input-demo-row">
+        <div class="input-demo-item">
+          <input-text-base id="val-error" label="Email address" value="invalid-email" error-message="Please enter a valid email address"></input-text-base>
+          <span class="input-demo-item-label">Error with message (red border + ✕ icon)</span>
+        </div>
+        <div class="input-demo-item">
+          <input-text-base id="val-error-empty" label="Username" value="" error-message="Username is required"></input-text-base>
+          <span class="input-demo-item-label">Error on empty field</span>
+        </div>
+      </div>
+
+      <h3>Success State</h3>
+      <div class="input-demo-row">
+        <div class="input-demo-item">
+          <input-text-base id="val-success" label="Email address" value="jane@example.com" is-success="true"></input-text-base>
+          <span class="input-demo-item-label">Success (green border + ✓ icon)</span>
+        </div>
+      </div>
+
+      <h3>Default State</h3>
+      <div class="input-demo-row">
+        <div class="input-demo-item">
+          <input-text-base id="val-default" label="Neutral input" value="Some text"></input-text-base>
+          <span class="input-demo-item-label">Default (no validation applied)</span>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Validation timing:</strong> Validation triggers on blur by default. Error and success states are set via <code>error-message</code> and <code>is-success</code> attributes. The trailing icon (✕ for error, ✓ for success) appears automatically.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 3: Helper Text
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>3. Helper Text</h2>
+      <p>Persistent helper text provides guidance below the input. When an error message is present, it appears below the helper text.</p>
+
+      <div class="input-demo-row">
+        <div class="input-demo-item">
+          <input-text-base id="helper-basic" label="Password" type="password" helper-text="Must be at least 8 characters" value=""></input-text-base>
+          <span class="input-demo-item-label">Helper text (persistent)</span>
+        </div>
+        <div class="input-demo-item">
+          <input-text-base id="helper-error" label="Password" type="password" helper-text="Must be at least 8 characters" error-message="Password is too short" value="abc"></input-text-base>
+          <span class="input-demo-item-label">Helper + error (both visible)</span>
+        </div>
+      </div>
+
+      <div class="input-demo-row">
+        <div class="input-demo-item">
+          <input-text-base id="helper-info" label="Bio" helper-text="Tell us about yourself" show-info-icon="true" value=""></input-text-base>
+          <span class="input-demo-item-label">With info icon</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 4: Disabled State
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>4. Disabled State</h2>
+      <p>Disabled inputs prevent interaction and use desaturated styling. They are not keyboard focusable.</p>
+
+      <div class="input-demo-row">
+        <div class="input-demo-item">
+          <input-text-base id="disabled-empty" label="Disabled empty" disabled value=""></input-text-base>
+          <span class="input-demo-item-label">Disabled (empty)</span>
+        </div>
+        <div class="input-demo-item">
+          <input-text-base id="disabled-filled" label="Disabled filled" disabled value="Cannot edit this"></input-text-base>
+          <span class="input-demo-item-label">Disabled (with value)</span>
+        </div>
+      </div>
+
+      <div class="input-demo-row">
+        <div class="input-demo-item">
+          <input-text-base id="readonly" label="Read-only field" read-only value="Read-only content"></input-text-base>
+          <span class="input-demo-item-label">Read-only (focusable but not editable)</span>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Disabled vs Read-only:</strong> Disabled inputs are not focusable and use desaturated styling. Read-only inputs are focusable and visually similar to default state but prevent editing.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 5: Interactive States (Focus/Blur)
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>5. Interactive States</h2>
+      <p>Click or tab into these inputs to observe the float label animation, focus ring, and border color transitions.</p>
+
+      <div class="demo-interactive">
+        <p>Use <kbd>Tab</kbd> to navigate between inputs. Watch the label float animation and focus ring:</p>
+        <div class="input-demo-row">
+          <div class="input-demo-item">
+            <input-text-base id="interactive-1" label="First name" value=""></input-text-base>
+            <span class="input-demo-item-label">Focus: primary border + label color</span>
+          </div>
+          <div class="input-demo-item">
+            <input-text-base id="interactive-2" label="Last name" value=""></input-text-base>
+            <span class="input-demo-item-label">Blur: default border + label color</span>
+          </div>
+        </div>
+        <div class="input-demo-row">
+          <div class="input-demo-item">
+            <input-text-base id="interactive-disabled" label="Skipped (disabled)" disabled value=""></input-text-base>
+            <span class="input-demo-item-label">Disabled (skipped by Tab)</span>
+          </div>
+          <div class="input-demo-item">
+            <input-text-base id="interactive-3" label="City" value=""></input-text-base>
+            <span class="input-demo-item-label">Tab continues here</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Motion:</strong> Label float uses <code>motion.floatLabel</code> token (250ms, standard easing). Focus transitions use <code>motion.focusTransition</code> (150ms). Both respect <code>prefers-reduced-motion</code>.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 6: Email Variant
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>6. Input-Text-Email Variant</h2>
+      <p>Extends Input-Text-Base with email format validation on blur and browser email autocomplete support. Uses <code>type="email"</code> for mobile keyboard optimization.</p>
+
+      <div class="input-demo-row">
+        <div class="input-demo-item">
+          <input-text-email id="email-default" label="Email address" placeholder="you@example.com" value=""></input-text-email>
+          <span class="input-demo-item-label">Default (type to test validation on blur)</span>
+        </div>
+        <div class="input-demo-item">
+          <input-text-email id="email-valid" label="Email address" value="jane@example.com" is-success="true"></input-text-email>
+          <span class="input-demo-item-label">Valid email (success state)</span>
+        </div>
+      </div>
+
+      <div class="input-demo-row">
+        <div class="input-demo-item">
+          <input-text-email id="email-helper" label="Work email" placeholder="you@company.com" helper-text="We'll send your invitation here" value=""></input-text-email>
+          <span class="input-demo-item-label">With helper text</span>
+        </div>
+        <div class="input-demo-item">
+          <input-text-email id="email-required" label="Email (required)" required value=""></input-text-email>
+          <span class="input-demo-item-label">Required field</span>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Validation:</strong> Email format is validated on blur using RFC 5322 pattern. Type an invalid email and tab away to see the error. The <code>validate</code> event fires with <code>{ isValid, errorMessage }</code> detail.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 7: Password Variant
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>7. Input-Text-Password Variant</h2>
+      <p>Extends Input-Text-Base with secure password masking, visibility toggle, and password strength validation.</p>
+
+      <h3>Basic Password</h3>
+      <div class="input-demo-row">
+        <div class="input-demo-item">
+          <input-text-password id="pw-default" label="Password" placeholder="Enter password" value=""></input-text-password>
+          <span class="input-demo-item-label">Default (masked, with toggle)</span>
+        </div>
+        <div class="input-demo-item">
+          <input-text-password id="pw-filled" label="Password" value="secretpass123"></input-text-password>
+          <span class="input-demo-item-label">Pre-filled (click eye icon to reveal)</span>
+        </div>
+      </div>
+
+      <h3>With Validation Requirements</h3>
+      <div class="input-demo-row">
+        <div class="input-demo-item">
+          <input-text-password id="pw-requirements" label="New password" helper-text="Min 8 chars, uppercase, number, special char" is-new-password min-length="8" require-uppercase require-lowercase require-number require-special-char value=""></input-text-password>
+          <span class="input-demo-item-label">With strength requirements (blur to validate)</span>
+        </div>
+        <div class="input-demo-item">
+          <input-text-password id="pw-no-toggle" label="PIN code" show-toggle="false" max-length="6" helper-text="6-digit PIN" value=""></input-text-password>
+          <span class="input-demo-item-label">Without toggle (show-toggle="false")</span>
+        </div>
+      </div>
+
+      <h3>States</h3>
+      <div class="input-demo-row">
+        <div class="input-demo-item">
+          <input-text-password id="pw-disabled" label="Password" disabled value="disabled123"></input-text-password>
+          <span class="input-demo-item-label">Disabled</span>
+        </div>
+        <div class="input-demo-item">
+          <input-text-password id="pw-error" label="Password" error-message="Password does not meet requirements" value="weak"></input-text-password>
+          <span class="input-demo-item-label">Error state</span>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Toggle:</strong> The eye icon toggles between masked and visible text. The <code>toggle-visibility</code> event fires with <code>{ visible: boolean }</code>. Use <code>show-toggle="false"</code> to hide the toggle (e.g., for PIN inputs).
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 8: Phone Number Variant
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>8. Input-Text-PhoneNumber Variant</h2>
+      <p>Extends Input-Text-Base with phone number auto-formatting, international format support, and phone validation on blur. Uses <code>type="tel"</code> for numeric keyboard on mobile.</p>
+
+      <div class="input-demo-row">
+        <div class="input-demo-item">
+          <input-text-phone-number id="phone-default" label="Phone number" placeholder="(555) 123-4567" value=""></input-text-phone-number>
+          <span class="input-demo-item-label">Default US format (auto-formats as you type)</span>
+        </div>
+        <div class="input-demo-item">
+          <input-text-phone-number id="phone-filled" label="Phone number" value="5551234567"></input-text-phone-number>
+          <span class="input-demo-item-label">Pre-filled (auto-formatted)</span>
+        </div>
+      </div>
+
+      <div class="input-demo-row">
+        <div class="input-demo-item">
+          <input-text-phone-number id="phone-helper" label="Mobile number" helper-text="We'll send a verification code" required value=""></input-text-phone-number>
+          <span class="input-demo-item-label">Required with helper text</span>
+        </div>
+        <div class="input-demo-item">
+          <input-text-phone-number id="phone-no-format" label="Phone (raw)" auto-format="false" value=""></input-text-phone-number>
+          <span class="input-demo-item-label">Without auto-format</span>
+        </div>
+      </div>
+
+      <div class="input-demo-row">
+        <div class="input-demo-item">
+          <input-text-phone-number id="phone-disabled" label="Phone number" disabled value="5559876543"></input-text-phone-number>
+          <span class="input-demo-item-label">Disabled</span>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Formatting:</strong> Phone numbers are auto-formatted as the user types (US format by default). The <code>change</code> event includes both <code>formattedValue</code> and <code>rawDigits</code>. Use <code>auto-format="false"</code> to disable formatting. Validation triggers on blur.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 9: Accessibility Features
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>9. Accessibility Features</h2>
+      <p>All Input-Text variants are built with WCAG 2.1 AA compliance as a first-class concern.</p>
+
+      <h3>Keyboard Navigation</h3>
+      <div class="demo-interactive">
+        <p>Use <kbd>Tab</kbd> to move between inputs. Disabled inputs are skipped. Focus ring is visible on keyboard navigation:</p>
+        <div class="input-demo-row">
+          <div class="input-demo-item">
+            <input-text-base id="a11y-1" label="First field" value=""></input-text-base>
+          </div>
+          <div class="input-demo-item">
+            <input-text-base id="a11y-disabled" label="Disabled (skipped)" disabled value=""></input-text-base>
+          </div>
+          <div class="input-demo-item">
+            <input-text-base id="a11y-2" label="Third field" value=""></input-text-base>
+          </div>
+        </div>
+      </div>
+
+      <h3>ARIA Attributes</h3>
+      <ul class="demo-token-list">
+        <li><code>aria-describedby</code> — links input to helper text and error message elements</li>
+        <li><code>aria-invalid="true"</code> — set when error-message is present</li>
+        <li><code>role="alert"</code> — on error message element for screen reader announcement</li>
+        <li><code>required</code> — native HTML required attribute for form validation</li>
+        <li><code>disabled</code> — native HTML disabled attribute, removes from tab order</li>
+      </ul>
+
+      <h3>Reduced Motion</h3>
+      <div class="demo-note">
+        <strong>prefers-reduced-motion:</strong> When the user has reduced motion enabled, the float label animation is replaced with an instant transition (no animation). All focus transitions also respect this preference.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 10: Event Handling
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>10. Event Handling</h2>
+      <p>All Input-Text variants dispatch <code>change</code>, <code>focus</code>, and <code>blur</code> events. Specialized variants also dispatch <code>validate</code> events on blur.</p>
+
+      <div class="demo-interactive">
+        <div class="input-demo-row">
+          <div class="input-demo-item">
+            <input-text-base id="event-base" label="Base input" value=""></input-text-base>
+            <span class="input-demo-item-label">change, focus, blur</span>
+          </div>
+          <div class="input-demo-item">
+            <input-text-email id="event-email" label="Email input" value=""></input-text-email>
+            <span class="input-demo-item-label">change, focus, blur, validate</span>
+          </div>
+          <div class="input-demo-item">
+            <input-text-password id="event-password" label="Password input" value=""></input-text-password>
+            <span class="input-demo-item-label">change, focus, blur, validate, toggle-visibility</span>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-block-start: var(--space-100);">
+          <span style="color: var(--gray-200); font-size: var(--typography-caption-font-size);">Event Log:</span>
+          <button id="clear-log-btn" style="background: var(--gray-400); color: var(--gray-200); border: var(--border-default) solid var(--gray-300); border-radius: var(--radius-050); padding-inline: var(--space-050); padding-block: var(--space-025); cursor: pointer; font-size: var(--typography-caption-font-size); font-family: var(--font-family-body);">Clear</button>
+        </div>
+        <div id="event-log" class="event-log">
+          <div class="event-log-empty">Interact with the inputs above to see events here...</div>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Event details:</strong> The <code>change</code> event includes <code>event.detail.value</code>. Email's <code>validate</code> includes <code>{ isValid, errorMessage }</code>. Password's <code>validate</code> adds <code>details</code> with per-requirement results. Phone's <code>change</code> includes <code>{ value, formattedValue, rawDigits }</code>.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 11: Variant Comparison
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>11. Variant Comparison</h2>
+      <p>All four Input-Text variants side-by-side, showing how each specializes the base component for its use case.</p>
+
+      <div class="input-demo-row">
+        <div class="input-demo-item">
+          <input-text-base id="compare-base" label="Full name" placeholder="Jane Doe" value=""></input-text-base>
+          <span class="input-demo-item-label">Base (generic text)</span>
+        </div>
+        <div class="input-demo-item">
+          <input-text-email id="compare-email" label="Email" placeholder="jane@example.com" value=""></input-text-email>
+          <span class="input-demo-item-label">Email (validates format)</span>
+        </div>
+      </div>
+      <div class="input-demo-row">
+        <div class="input-demo-item">
+          <input-text-password id="compare-password" label="Password" placeholder="Enter password" value=""></input-text-password>
+          <span class="input-demo-item-label">Password (masked + toggle)</span>
+        </div>
+        <div class="input-demo-item">
+          <input-text-phone-number id="compare-phone" label="Phone" placeholder="(555) 123-4567" value=""></input-text-phone-number>
+          <span class="input-demo-item-label">Phone (auto-formats)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 12: Token Verification
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>12. Token Verification</h2>
+      <p>Check browser DevTools to verify these CSS custom properties are loaded:</p>
+
+      <h3>Typography Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--typography-label-md-font-size</code> — label text (16px)</li>
+        <li><code>--typography-label-md-float-font-size</code> — floated label text (14px)</li>
+        <li><code>--typography-input-font-size</code> — input text (16px)</li>
+        <li><code>--typography-caption-font-size</code> — helper/error text (13px)</li>
+      </ul>
+
+      <h3>Color Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--color-text-muted</code> — label and helper text (default)</li>
+        <li><code>--color-text-default</code> — input text color</li>
+        <li><code>--color-primary</code> — focused label and border</li>
+        <li><code>--color-error</code> — error state color</li>
+        <li><code>--color-feedback-success-text</code> — success state color</li>
+        <li><code>--color-border</code> — default border color</li>
+        <li><code>--color-background</code> — input background</li>
+      </ul>
+
+      <h3>Spacing Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--space-inset-200</code> — input top padding (16px)</li>
+        <li><code>--space-inset-100</code> — input horizontal padding (8px)</li>
+        <li><code>--space-grouped-tight</code> — label-to-input gap (4px)</li>
+        <li><code>--space-grouped-minimal</code> — input-to-helper gap (2px)</li>
+      </ul>
+
+      <h3>Motion Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--motion-float-label-duration</code> — label animation duration (250ms)</li>
+        <li><code>--motion-float-label-easing</code> — label animation easing</li>
+        <li><code>--motion-focus-transition-duration</code> — focus transition (150ms)</li>
+      </ul>
+
+      <h3>Accessibility Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--tap-area-comfortable</code> — minimum input height (56px)</li>
+        <li><code>--accessibility-focus-width</code> — focus ring width (2px)</li>
+        <li><code>--accessibility-focus-offset</code> — focus ring offset (2px)</li>
+        <li><code>--accessibility-focus-color</code> — focus ring color</li>
+      </ul>
+
+      <h3>Border Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--border-default</code> — border width (1px)</li>
+        <li><code>--radius-150</code> — input border radius (12px)</li>
+      </ul>
+    </div>
+
+    <!-- ============================================================
+         SECTION 13: Usage Examples
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>13. Usage Examples</h2>
+
+      <h3>HTML</h3>
+      <pre class="demo-code">&lt;!-- Basic text input --&gt;
+&lt;input-text-base id="name" label="Full name" value=""&gt;&lt;/input-text-base&gt;
+
+&lt;!-- With helper text and placeholder --&gt;
+&lt;input-text-base
+  id="bio"
+  label="Bio"
+  placeholder="Tell us about yourself"
+  helper-text="Max 200 characters"
+  max-length="200"
+&gt;&lt;/input-text-base&gt;
+
+&lt;!-- Error state --&gt;
+&lt;input-text-base
+  id="email"
+  label="Email"
+  value="bad-email"
+  error-message="Please enter a valid email"
+&gt;&lt;/input-text-base&gt;
+
+&lt;!-- Email variant (validates on blur) --&gt;
+&lt;input-text-email
+  id="email"
+  label="Email address"
+  placeholder="you@example.com"
+  required
+&gt;&lt;/input-text-email&gt;
+
+&lt;!-- Password variant (with requirements) --&gt;
+&lt;input-text-password
+  id="password"
+  label="New password"
+  is-new-password
+  min-length="8"
+  require-uppercase
+  require-number
+  require-special-char
+&gt;&lt;/input-text-password&gt;
+
+&lt;!-- Phone number variant --&gt;
+&lt;input-text-phone-number
+  id="phone"
+  label="Phone number"
+  placeholder="(555) 123-4567"
+  required
+&gt;&lt;/input-text-phone-number&gt;</pre>
+
+      <h3>JavaScript</h3>
+      <pre class="demo-code">// Wait for components to be defined
+await customElements.whenDefined('input-text-base');
+await customElements.whenDefined('input-text-email');
+
+// Listen for change events
+const input = document.querySelector('input-text-base');
+input.addEventListener('change', (event) =&gt; {
+  console.log('Value changed:', event.detail.value);
+});
+
+// Listen for focus/blur
+input.addEventListener('focus', () =&gt; console.log('Focused'));
+input.addEventListener('blur', () =&gt; console.log('Blurred'));
+
+// Email validation events
+const email = document.querySelector('input-text-email');
+email.addEventListener('validate', (event) =&gt; {
+  const { isValid, errorMessage } = event.detail;
+  console.log('Email valid:', isValid, errorMessage);
+});
+
+// Programmatic validation
+const result = email.validate();
+console.log(result.isValid, result.errorMessage);
+
+// Password toggle events
+const password = document.querySelector('input-text-password');
+password.addEventListener('toggle-visibility', (event) =&gt; {
+  console.log('Password visible:', event.detail.visible);
+});
+
+// Phone number change (includes formatted + raw)
+const phone = document.querySelector('input-text-phone-number');
+phone.addEventListener('change', (event) =&gt; {
+  console.log('Formatted:', event.detail.formattedValue);
+  console.log('Raw digits:', event.detail.rawDigits);
+});</pre>
+    </div>
+
+  </main>
+
+  <footer class="demo-footer">
+    <p>DesignerPunk Design System • Input-Text Component Demo</p>
+  </footer>
+
+  <script>
+    // File protocol detection
+    if (window.location.protocol === 'file:') {
+      const banner = document.createElement('div');
+      banner.className = 'demo-file-protocol-warning';
+      banner.textContent = 'Components may not load correctly via file:// protocol. Use a local server: npx serve dist/browser';
+      document.body.prepend(banner);
+    }
+
+    // Event handling demo
+    const eventLog = document.getElementById('event-log');
+    const clearBtn = document.getElementById('clear-log-btn');
+    let eventCount = 0;
+
+    function logEvent(source, eventType, detail) {
+      eventCount++;
+      const time = new Date().toLocaleTimeString();
+      const empty = eventLog.querySelector('.event-log-empty');
+      if (empty) empty.remove();
+
+      const entry = document.createElement('div');
+      entry.className = 'event-log-entry';
+
+      let detailStr = '';
+      if (detail) {
+        detailStr = ' <span class="event-log-value">' + JSON.stringify(detail).substring(0, 80) + '</span>';
+      }
+
+      entry.innerHTML = '<span class="event-log-time">[' + time + ']</span> <span class="event-log-event">' + eventType + '</span> from <strong>' + source + '</strong>' + detailStr + ' (#' + eventCount + ')';
+      eventLog.prepend(entry);
+
+      // Keep log manageable
+      while (eventLog.children.length > 30) {
+        eventLog.removeChild(eventLog.lastChild);
+      }
+    }
+
+    clearBtn.addEventListener('click', function() {
+      eventLog.innerHTML = '<div class="event-log-empty">Interact with the inputs above to see events here...</div>';
+      eventCount = 0;
+    });
+
+    // Base input events
+    var baseInput = document.getElementById('event-base');
+    baseInput.addEventListener('change', function(e) { logEvent('Base', 'change', e.detail); });
+    baseInput.addEventListener('focus', function() { logEvent('Base', 'focus'); });
+    baseInput.addEventListener('blur', function() { logEvent('Base', 'blur'); });
+
+    // Email input events
+    var emailInput = document.getElementById('event-email');
+    emailInput.addEventListener('change', function(e) { logEvent('Email', 'change', e.detail); });
+    emailInput.addEventListener('focus', function() { logEvent('Email', 'focus'); });
+    emailInput.addEventListener('blur', function() { logEvent('Email', 'blur'); });
+    emailInput.addEventListener('validate', function(e) { logEvent('Email', 'validate', e.detail); });
+
+    // Password input events
+    var pwInput = document.getElementById('event-password');
+    pwInput.addEventListener('change', function(e) { logEvent('Password', 'change', e.detail); });
+    pwInput.addEventListener('focus', function() { logEvent('Password', 'focus'); });
+    pwInput.addEventListener('blur', function() { logEvent('Password', 'blur'); });
+    pwInput.addEventListener('validate', function(e) { logEvent('Password', 'validate', e.detail); });
+    pwInput.addEventListener('toggle-visibility', function(e) { logEvent('Password', 'toggle-visibility', e.detail); });
+  </script>
+</body>
+</html>

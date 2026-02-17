@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Icon-Base Demo - DesignerPunk</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="demo-styles.css">
+  <script type="module" src="designerpunk.esm.js"></script>
+  <style>
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: var(--space-grouped-normal);
+    }
+    .icon-grid-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-grouped-tight);
+      padding-block: var(--space-inset-100);
+      padding-inline: var(--space-inset-050);
+      border-radius: var(--radius-100);
+      background: var(--black-200);
+      transition: background 150ms ease;
+    }
+    .icon-grid-item:hover {
+      background: var(--gray-300);
+    }
+    .icon-grid-item .icon-name {
+      font-size: var(--typography-caption-font-size);
+      color: var(--gray-200);
+      text-align: center;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body class="demo-page">
+  <header class="demo-header">
+    <a href="index.html" class="demo-back-link">← All Components</a>
+    <h1>🎨 Icon-Base Component Demo</h1>
+    <p class="demo-subtitle">SVG icon component with size and color variants, using currentColor inheritance for automatic color matching</p>
+  </header>
+
+  <main>
+
+    <!-- ============================================================
+         SECTION 1: All Available Icons
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>1. All Available Icons</h2>
+      <p>The Icon System includes 17 icons covering navigation, actions, UI elements, and complex patterns. All icons use a 24×24 viewBox with stroke-based rendering.</p>
+
+      <h3>Navigation</h3>
+      <div class="icon-grid">
+        <div class="icon-grid-item">
+          <icon-base name="arrow-right" size="24"></icon-base>
+          <span class="icon-name">arrow-right</span>
+        </div>
+        <div class="icon-grid-item">
+          <icon-base name="arrow-left" size="24"></icon-base>
+          <span class="icon-name">arrow-left</span>
+        </div>
+        <div class="icon-grid-item">
+          <icon-base name="arrow-up" size="24"></icon-base>
+          <span class="icon-name">arrow-up</span>
+        </div>
+        <div class="icon-grid-item">
+          <icon-base name="arrow-down" size="24"></icon-base>
+          <span class="icon-name">arrow-down</span>
+        </div>
+        <div class="icon-grid-item">
+          <icon-base name="chevron-right" size="24"></icon-base>
+          <span class="icon-name">chevron-right</span>
+        </div>
+      </div>
+
+      <h3>Actions</h3>
+      <div class="icon-grid">
+        <div class="icon-grid-item">
+          <icon-base name="check" size="24"></icon-base>
+          <span class="icon-name">check</span>
+        </div>
+        <div class="icon-grid-item">
+          <icon-base name="x" size="24"></icon-base>
+          <span class="icon-name">x</span>
+        </div>
+        <div class="icon-grid-item">
+          <icon-base name="x-circle" size="24"></icon-base>
+          <span class="icon-name">x-circle</span>
+        </div>
+        <div class="icon-grid-item">
+          <icon-base name="info" size="24"></icon-base>
+          <span class="icon-name">info</span>
+        </div>
+        <div class="icon-grid-item">
+          <icon-base name="plus" size="24"></icon-base>
+          <span class="icon-name">plus</span>
+        </div>
+        <div class="icon-grid-item">
+          <icon-base name="minus" size="24"></icon-base>
+          <span class="icon-name">minus</span>
+        </div>
+      </div>
+
+      <h3>UI Elements</h3>
+      <div class="icon-grid">
+        <div class="icon-grid-item">
+          <icon-base name="circle" size="24"></icon-base>
+          <span class="icon-name">circle</span>
+        </div>
+        <div class="icon-grid-item">
+          <icon-base name="heart" size="24"></icon-base>
+          <span class="icon-name">heart</span>
+        </div>
+      </div>
+
+      <h3>Complex</h3>
+      <div class="icon-grid">
+        <div class="icon-grid-item">
+          <icon-base name="settings" size="24"></icon-base>
+          <span class="icon-name">settings</span>
+        </div>
+        <div class="icon-grid-item">
+          <icon-base name="user" size="24"></icon-base>
+          <span class="icon-name">user</span>
+        </div>
+        <div class="icon-grid-item">
+          <icon-base name="mail" size="24"></icon-base>
+          <span class="icon-name">mail</span>
+        </div>
+        <div class="icon-grid-item">
+          <icon-base name="calendar" size="24"></icon-base>
+          <span class="icon-name">calendar</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 2: Size Variants
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>2. Size Variants</h2>
+      <p>Icon sizes are mathematically derived from the typography scale using <code>fontSize × lineHeight</code>. Each size aligns with a specific typography context.</p>
+
+      <div class="demo-row">
+        <div class="demo-item">
+          <icon-base name="heart" size="13"></icon-base>
+          <span class="demo-item-label">13px</span>
+          <span class="demo-item-label">size050 (caption)</span>
+        </div>
+        <div class="demo-item">
+          <icon-base name="heart" size="20"></icon-base>
+          <span class="demo-item-label">20px</span>
+          <span class="demo-item-label">size075 (bodySm)</span>
+        </div>
+        <div class="demo-item">
+          <icon-base name="heart" size="24"></icon-base>
+          <span class="demo-item-label">24px</span>
+          <span class="demo-item-label">size100 (bodyMd)</span>
+        </div>
+        <div class="demo-item">
+          <icon-base name="heart" size="28"></icon-base>
+          <span class="demo-item-label">28px</span>
+          <span class="demo-item-label">size150 (h6)</span>
+        </div>
+        <div class="demo-item">
+          <icon-base name="heart" size="32"></icon-base>
+          <span class="demo-item-label">32px</span>
+          <span class="demo-item-label">size200 (h5)</span>
+        </div>
+        <div class="demo-item">
+          <icon-base name="heart" size="36"></icon-base>
+          <span class="demo-item-label">36px</span>
+          <span class="demo-item-label">size400 (h3)</span>
+        </div>
+        <div class="demo-item">
+          <icon-base name="heart" size="40"></icon-base>
+          <span class="demo-item-label">40px</span>
+          <span class="demo-item-label">size500 (h2)</span>
+        </div>
+        <div class="demo-item">
+          <icon-base name="heart" size="44"></icon-base>
+          <span class="demo-item-label">44px</span>
+          <span class="demo-item-label">size600 (h1)</span>
+        </div>
+        <div class="demo-item">
+          <icon-base name="heart" size="48"></icon-base>
+          <span class="demo-item-label">48px</span>
+          <span class="demo-item-label">size700 (display)</span>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Core sizes (90% of use cases):</strong> 20px, 24px, 32px, 36px, 40px. The remaining sizes cover edge cases like captions (13px) and display text (48px).
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 3: Color Variants
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>3. Color Variants</h2>
+      <p>Icons support three color modes: inheritance from parent (default), design token references, and direct hex values.</p>
+
+      <h3>Color Inheritance (Default)</h3>
+      <p>When no <code>color</code> attribute is set, icons use <code>currentColor</code> and inherit from their parent element.</p>
+      <div class="demo-row">
+        <div class="demo-item" style="color: var(--cyan-300);">
+          <icon-base name="info" size="32"></icon-base>
+          <span class="demo-item-label">Parent: cyan-300</span>
+        </div>
+        <div class="demo-item" style="color: var(--pink-300);">
+          <icon-base name="heart" size="32"></icon-base>
+          <span class="demo-item-label">Parent: pink-300</span>
+        </div>
+        <div class="demo-item" style="color: var(--purple-200);">
+          <icon-base name="settings" size="32"></icon-base>
+          <span class="demo-item-label">Parent: purple-200</span>
+        </div>
+      </div>
+
+      <h3>Token References</h3>
+      <p>Pass a token name to the <code>color</code> attribute. It resolves to <code>var(--token-name)</code> internally.</p>
+      <div class="demo-row">
+        <div class="demo-item">
+          <icon-base name="check" size="32" color="color-feedback-success-text"></icon-base>
+          <span class="demo-item-label">color-feedback-success-text</span>
+        </div>
+        <div class="demo-item">
+          <icon-base name="x-circle" size="32" color="color-feedback-error-text"></icon-base>
+          <span class="demo-item-label">color-feedback-error-text</span>
+        </div>
+        <div class="demo-item">
+          <icon-base name="info" size="32" color="color-feedback-info-text"></icon-base>
+          <span class="demo-item-label">color-feedback-info-text</span>
+        </div>
+      </div>
+
+      <h3>Direct Hex Colors</h3>
+      <p>Pass a hex value directly for one-off color overrides.</p>
+      <div class="demo-row">
+        <div class="demo-item">
+          <icon-base name="heart" size="32" color="#FF6B9D"></icon-base>
+          <span class="demo-item-label">#FF6B9D</span>
+        </div>
+        <div class="demo-item">
+          <icon-base name="circle" size="32" color="#4ECDC4"></icon-base>
+          <span class="demo-item-label">#4ECDC4</span>
+        </div>
+        <div class="demo-item">
+          <icon-base name="settings" size="32" color="#FFE66D"></icon-base>
+          <span class="demo-item-label">#FFE66D</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 4: Optical Balance
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>4. Optical Balance</h2>
+      <p>When <code>optical-balance="true"</code> is set alongside a hex <code>color</code>, the icon color is lightened by 8% using blend utilities. This compensates for icons appearing visually heavier than adjacent text due to stroke density.</p>
+
+      <div class="demo-interactive">
+        <p><strong>Compare the icon weight</strong> — the balanced version appears lighter to match text weight:</p>
+        <div class="demo-row">
+          <div class="demo-item">
+            <icon-base name="arrow-right" size="32" color="#A855F7"></icon-base>
+            <span class="demo-item-label">Without balance</span>
+          </div>
+          <div class="demo-item">
+            <icon-base name="arrow-right" size="32" color="#A855F7" optical-balance="true"></icon-base>
+            <span class="demo-item-label">With balance (8% lighter)</span>
+          </div>
+        </div>
+        <div class="demo-row" style="margin-block-start: var(--space-150);">
+          <div class="demo-item">
+            <icon-base name="mail" size="32" color="#FFFFFF"></icon-base>
+            <span class="demo-item-label">White without balance</span>
+          </div>
+          <div class="demo-item">
+            <icon-base name="mail" size="32" color="#FFFFFF" optical-balance="true"></icon-base>
+            <span class="demo-item-label">White with balance</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>When to use:</strong> Optical balance is most useful when pairing icons with text labels in buttons, badges, or list items. It requires a hex <code>color</code> value — it has no effect with <code>inherit</code> or token references.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 5: Size Comparison Across Icons
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>5. Size Comparison Across Icons</h2>
+      <p>Different icon shapes at the same size to verify consistent visual weight:</p>
+
+      <div class="demo-row">
+        <div class="demo-item">
+          <icon-base name="circle" size="32"></icon-base>
+          <span class="demo-item-label">circle</span>
+        </div>
+        <div class="demo-item">
+          <icon-base name="heart" size="32"></icon-base>
+          <span class="demo-item-label">heart (filled)</span>
+        </div>
+        <div class="demo-item">
+          <icon-base name="check" size="32"></icon-base>
+          <span class="demo-item-label">check (line)</span>
+        </div>
+        <div class="demo-item">
+          <icon-base name="mail" size="32"></icon-base>
+          <span class="demo-item-label">mail (complex)</span>
+        </div>
+        <div class="demo-item">
+          <icon-base name="calendar" size="32"></icon-base>
+          <span class="demo-item-label">calendar (detailed)</span>
+        </div>
+        <div class="demo-item">
+          <icon-base name="minus" size="32"></icon-base>
+          <span class="demo-item-label">minus (minimal)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 6: Token Verification
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>6. Token Verification</h2>
+      <p>Check browser DevTools to verify these CSS custom properties are loaded:</p>
+
+      <ul class="demo-token-list">
+        <li><code>--icon-size-050</code> = 13px (caption, legal, labelXs)</li>
+        <li><code>--icon-size-075</code> = 20px (bodySm, buttonSm, labelSm)</li>
+        <li><code>--icon-size-100</code> = 24px (bodyMd, buttonMd — standard)</li>
+        <li><code>--icon-size-125</code> = 32px (bodyLg, buttonLg, labelLg)</li>
+        <li><code>--icon-size-150</code> = 28px (h6)</li>
+        <li><code>--icon-size-200</code> = 32px (h5)</li>
+        <li><code>--icon-size-300</code> = 32px (h4)</li>
+        <li><code>--icon-size-400</code> = 36px (h3)</li>
+        <li><code>--icon-size-500</code> = 40px (h2)</li>
+        <li><code>--icon-size-600</code> = 44px (h1)</li>
+        <li><code>--icon-size-700</code> = 48px (display)</li>
+        <li><code>--icon-stroke-width</code> = stroke width for all icons</li>
+      </ul>
+    </div>
+
+    <!-- ============================================================
+         SECTION 7: Usage Examples
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>7. Usage Examples</h2>
+
+      <h3>HTML</h3>
+      <pre class="demo-code">&lt;!-- Basic icon (size is required) --&gt;
+&lt;icon-base name="arrow-right" size="24"&gt;&lt;/icon-base&gt;
+
+&lt;!-- With token color --&gt;
+&lt;icon-base name="check" size="24" color="color-feedback-success-text"&gt;&lt;/icon-base&gt;
+
+&lt;!-- With hex color and optical balance --&gt;
+&lt;icon-base name="mail" size="32" color="#A855F7" optical-balance="true"&gt;&lt;/icon-base&gt;
+
+&lt;!-- With test ID for automated testing --&gt;
+&lt;icon-base name="settings" size="24" test-id="settings-icon"&gt;&lt;/icon-base&gt;
+
+&lt;!-- Color inheritance from parent --&gt;
+&lt;div style="color: var(--cyan-300);"&gt;
+  &lt;icon-base name="info" size="24"&gt;&lt;/icon-base&gt;
+  &lt;span&gt;Inherits cyan color&lt;/span&gt;
+&lt;/div&gt;</pre>
+
+      <h3>JavaScript</h3>
+      <pre class="demo-code">// Programmatic creation
+const icon = document.createElement('icon-base');
+icon.name = 'arrow-right';
+icon.size = 24;
+icon.color = 'color-feedback-success-text';
+document.body.appendChild(icon);
+
+// Dynamic icon switching
+const statusIcon = document.querySelector('icon-base');
+statusIcon.name = 'check';    // Change icon
+statusIcon.size = 32;          // Change size
+statusIcon.color = '#4ECDC4';  // Change color
+
+// Wait for component registration
+await customElements.whenDefined('icon-base');
+console.log('icon-base is ready');</pre>
+    </div>
+
+  </main>
+
+  <footer class="demo-footer">
+    <p>DesignerPunk Design System • Icon-Base Component Demo</p>
+  </footer>
+
+  <script>
+    if (window.location.protocol === 'file:') {
+      const banner = document.createElement('div');
+      banner.className = 'demo-file-protocol-warning';
+      banner.textContent = 'Components may not load correctly via file:// protocol. Use a local server: npx serve dist/browser';
+      document.body.prepend(banner);
+    }
+  </script>
+</body>
+</html>

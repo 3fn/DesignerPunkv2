@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Button-CTA Demo - DesignerPunk</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="demo-styles.css">
+  <script type="module" src="designerpunk.esm.js"></script>
+  <style>
+    .event-log {
+      background: var(--black-300);
+      border: var(--border-default) solid var(--gray-300);
+      border-radius: var(--radius-100);
+      padding-inline: var(--space-inset-100);
+      padding-block: var(--space-inset-100);
+      min-block-size: 80px;
+      max-block-size: 160px;
+      overflow-y: auto;
+      font-family: var(--font-family-mono);
+      font-size: var(--typography-caption-font-size);
+      color: var(--gray-100);
+      margin-block-start: var(--space-100);
+    }
+    .event-log-entry {
+      padding-block: var(--space-025);
+      border-block-end: var(--border-default) solid var(--gray-400);
+    }
+    .event-log-entry:last-child {
+      border-block-end: none;
+    }
+    .event-log-time {
+      color: var(--gray-200);
+    }
+    .event-log-event {
+      color: var(--cyan-300);
+    }
+    .event-log-empty {
+      color: var(--gray-300);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body class="demo-page">
+  <header class="demo-header">
+    <a href="index.html" class="demo-back-link">← All Components</a>
+    <h1>🔘 Button-CTA Component Demo</h1>
+    <p class="demo-subtitle">Call-to-action button with three size variants, three visual styles, icon support, and comprehensive interaction states</p>
+  </header>
+
+  <main>
+
+    <!-- ============================================================
+         SECTION 1: Visual Variants
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>1. Visual Variants</h2>
+      <p>Button-CTA supports three visual styles that establish hierarchy through visual weight. All variants use the same color palette with different treatments.</p>
+
+      <div class="demo-row">
+        <div class="demo-item">
+          <button-cta label="Primary" variant="primary"></button-cta>
+          <span class="demo-item-label">Primary (filled, highest emphasis)</span>
+        </div>
+        <div class="demo-item">
+          <button-cta label="Secondary" variant="secondary"></button-cta>
+          <span class="demo-item-label">Secondary (outlined, medium emphasis)</span>
+        </div>
+        <div class="demo-item">
+          <button-cta label="Tertiary" variant="tertiary"></button-cta>
+          <span class="demo-item-label">Tertiary (text-only, lowest emphasis)</span>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Hierarchy guidance:</strong> Use primary for the main action, secondary for alternatives, and tertiary for subtle or low-priority actions. Avoid placing multiple primary buttons in the same context.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 2: Size Variants
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>2. Size Variants</h2>
+      <p>Three sizes follow the 8px baseline grid and meet WCAG 2.1 AA touch target requirements (44px minimum).</p>
+
+      <h3>Primary</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <button-cta label="Small" variant="primary" size="small"></button-cta>
+          <span class="demo-item-label">Small (40px height, 44px touch)</span>
+        </div>
+        <div class="demo-item">
+          <button-cta label="Medium" variant="primary" size="medium"></button-cta>
+          <span class="demo-item-label">Medium (48px height, default)</span>
+        </div>
+        <div class="demo-item">
+          <button-cta label="Large" variant="primary" size="large"></button-cta>
+          <span class="demo-item-label">Large (56px height)</span>
+        </div>
+      </div>
+
+      <h3>Secondary</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <button-cta label="Small" variant="secondary" size="small"></button-cta>
+          <span class="demo-item-label">Small</span>
+        </div>
+        <div class="demo-item">
+          <button-cta label="Medium" variant="secondary" size="medium"></button-cta>
+          <span class="demo-item-label">Medium</span>
+        </div>
+        <div class="demo-item">
+          <button-cta label="Large" variant="secondary" size="large"></button-cta>
+          <span class="demo-item-label">Large</span>
+        </div>
+      </div>
+
+      <h3>Tertiary</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <button-cta label="Small" variant="tertiary" size="small"></button-cta>
+          <span class="demo-item-label">Small</span>
+        </div>
+        <div class="demo-item">
+          <button-cta label="Medium" variant="tertiary" size="medium"></button-cta>
+          <span class="demo-item-label">Medium</span>
+        </div>
+        <div class="demo-item">
+          <button-cta label="Large" variant="tertiary" size="large"></button-cta>
+          <span class="demo-item-label">Large</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 3: Icon Support
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>3. Icon Support</h2>
+      <p>Buttons support a leading icon from the Icon System. Icon size is automatically determined by button size: small/medium use 24px, large uses 32px.</p>
+
+      <h3>Icons Across Variants</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <button-cta label="Continue" variant="primary" icon="arrow-right"></button-cta>
+          <span class="demo-item-label">Primary + icon</span>
+        </div>
+        <div class="demo-item">
+          <button-cta label="Cancel" variant="secondary" icon="x"></button-cta>
+          <span class="demo-item-label">Secondary + icon</span>
+        </div>
+        <div class="demo-item">
+          <button-cta label="Learn More" variant="tertiary" icon="info"></button-cta>
+          <span class="demo-item-label">Tertiary + icon</span>
+        </div>
+      </div>
+
+      <h3>Icons Across Sizes</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <button-cta label="Small" variant="primary" size="small" icon="check"></button-cta>
+          <span class="demo-item-label">Small (24px icon)</span>
+        </div>
+        <div class="demo-item">
+          <button-cta label="Medium" variant="primary" size="medium" icon="check"></button-cta>
+          <span class="demo-item-label">Medium (24px icon)</span>
+        </div>
+        <div class="demo-item">
+          <button-cta label="Large" variant="primary" size="large" icon="check"></button-cta>
+          <span class="demo-item-label">Large (32px icon)</span>
+        </div>
+      </div>
+
+      <h3>Common Icon Patterns</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <button-cta label="Add Item" variant="primary" icon="plus"></button-cta>
+          <span class="demo-item-label">Add action</span>
+        </div>
+        <div class="demo-item">
+          <button-cta label="Settings" variant="secondary" icon="settings"></button-cta>
+          <span class="demo-item-label">Settings</span>
+        </div>
+        <div class="demo-item">
+          <button-cta label="Send Email" variant="primary" icon="mail"></button-cta>
+          <span class="demo-item-label">Email action</span>
+        </div>
+        <div class="demo-item">
+          <button-cta label="Favorite" variant="secondary" icon="heart"></button-cta>
+          <span class="demo-item-label">Favorite</span>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Optical balance:</strong> Icons on secondary and tertiary buttons use a lighter blend color (8% lighter) to compensate for icons appearing visually heavier than text due to stroke density.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 4: State Variants
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>4. State Variants</h2>
+      <p>Buttons support disabled state with desaturated styling. Disabled buttons are non-interactive and not keyboard focusable.</p>
+
+      <h3>Disabled State</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <button-cta label="Primary Disabled" variant="primary" disabled></button-cta>
+          <span class="demo-item-label">Primary (12% desaturated)</span>
+        </div>
+        <div class="demo-item">
+          <button-cta label="Secondary Disabled" variant="secondary" disabled></button-cta>
+          <span class="demo-item-label">Secondary disabled</span>
+        </div>
+        <div class="demo-item">
+          <button-cta label="Tertiary Disabled" variant="tertiary" disabled></button-cta>
+          <span class="demo-item-label">Tertiary disabled</span>
+        </div>
+      </div>
+
+      <h3>Disabled with Icons</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <button-cta label="Submit" variant="primary" icon="check" disabled></button-cta>
+          <span class="demo-item-label">Disabled + icon</span>
+        </div>
+        <div class="demo-item">
+          <button-cta label="Cancel" variant="secondary" icon="x" disabled></button-cta>
+          <span class="demo-item-label">Disabled + icon</span>
+        </div>
+      </div>
+
+      <h3>Enabled vs Disabled Comparison</h3>
+      <div class="demo-row">
+        <div class="demo-item">
+          <button-cta label="Enabled" variant="primary" icon="arrow-right"></button-cta>
+          <span class="demo-item-label">Enabled</span>
+        </div>
+        <div class="demo-item">
+          <button-cta label="Disabled" variant="primary" icon="arrow-right" disabled></button-cta>
+          <span class="demo-item-label">Disabled</span>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Accessibility:</strong> Disabled buttons use <code>desaturate()</code> blend utility (12% less saturated) instead of opacity, maintaining color contrast for accessibility. The <code>cursor: not-allowed</code> and <code>aria-disabled="true"</code> attributes communicate the non-interactive state.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 5: Interactive States
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>5. Interactive States</h2>
+      <p>Primary buttons use theme-aware blend utilities for state colors. Hover over and click the buttons below to see the transitions.</p>
+
+      <div class="demo-interactive">
+        <p>Hover, focus (Tab key), and click these buttons to observe state transitions:</p>
+        <div class="demo-row">
+          <div class="demo-item">
+            <button-cta label="Hover Me" variant="primary" size="large"></button-cta>
+            <span class="demo-item-label">Hover: 8% darker</span>
+          </div>
+          <div class="demo-item">
+            <button-cta label="Press Me" variant="primary" size="large"></button-cta>
+            <span class="demo-item-label">Active/Pressed: 12% darker</span>
+          </div>
+          <div class="demo-item">
+            <button-cta label="Tab to Me" variant="primary" size="large"></button-cta>
+            <span class="demo-item-label">Focus: outline + shadow</span>
+          </div>
+        </div>
+
+        <div class="demo-row" style="margin-block-start: var(--space-200);">
+          <div class="demo-item">
+            <button-cta label="Secondary Hover" variant="secondary" size="large"></button-cta>
+            <span class="demo-item-label">Secondary states</span>
+          </div>
+          <div class="demo-item">
+            <button-cta label="Tertiary Hover" variant="tertiary" size="large"></button-cta>
+            <span class="demo-item-label">Tertiary states</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>State color calculation:</strong> Uses <code>darkerBlend()</code> for hover (8%) and pressed (12%), and <code>desaturate()</code> for disabled (12%). These are calculated at runtime using theme-aware blend utilities for cross-platform consistency with iOS and Android.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 6: Text Wrapping
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>6. Text Wrapping</h2>
+      <p>By default, button text wraps to support internationalization. The <code>no-wrap</code> attribute truncates with ellipsis for constrained spaces.</p>
+
+      <div class="demo-row">
+        <div class="demo-item" style="max-inline-size: 160px;">
+          <button-cta label="This is a longer button label that wraps" variant="primary"></button-cta>
+          <span class="demo-item-label">Default (wraps)</span>
+        </div>
+        <div class="demo-item" style="max-inline-size: 160px;">
+          <button-cta label="This is a longer button label that truncates" variant="primary" no-wrap="true"></button-cta>
+          <span class="demo-item-label">no-wrap (truncates)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 7: Event Handling
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>7. Event Handling</h2>
+      <p>Button-CTA dispatches a custom <code>press</code> event (not <code>click</code>) that bubbles and is composed. Click the buttons below to see events logged.</p>
+
+      <div class="demo-interactive">
+        <div class="demo-row">
+          <div class="demo-item">
+            <button-cta id="event-btn-primary" label="Primary Action" variant="primary" icon="check"></button-cta>
+          </div>
+          <div class="demo-item">
+            <button-cta id="event-btn-secondary" label="Secondary Action" variant="secondary" icon="settings"></button-cta>
+          </div>
+          <div class="demo-item">
+            <button-cta id="event-btn-disabled" label="Disabled (no events)" variant="primary" disabled></button-cta>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-block-start: var(--space-100);">
+          <span style="color: var(--gray-200); font-size: var(--typography-caption-font-size);">Event Log:</span>
+          <button id="clear-log-btn" style="background: var(--gray-400); color: var(--gray-200); border: var(--border-default) solid var(--gray-300); border-radius: var(--radius-050); padding-inline: var(--space-050); padding-block: var(--space-025); cursor: pointer; font-size: var(--typography-caption-font-size); font-family: var(--font-family-body);">Clear</button>
+        </div>
+        <div id="event-log" class="event-log">
+          <div class="event-log-empty">Click a button to see events here...</div>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Event details:</strong> The <code>press</code> event includes <code>event.detail.originalEvent</code> containing the underlying click or keyboard event. Disabled buttons do not fire events.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 8: Accessibility
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>8. Accessibility Features</h2>
+      <p>Button-CTA is built with accessibility as a first-class concern, meeting WCAG 2.1 AA requirements.</p>
+
+      <h3>Keyboard Navigation</h3>
+      <div class="demo-interactive">
+        <p>Use <kbd>Tab</kbd> to navigate between buttons, <kbd>Enter</kbd> or <kbd>Space</kbd> to activate:</p>
+        <div class="demo-row">
+          <div class="demo-item">
+            <button-cta label="First" variant="primary" size="medium"></button-cta>
+            <span class="demo-item-label">Tab → Enter/Space</span>
+          </div>
+          <div class="demo-item">
+            <button-cta label="Second" variant="secondary" size="medium"></button-cta>
+            <span class="demo-item-label">Tab → Enter/Space</span>
+          </div>
+          <div class="demo-item">
+            <button-cta label="Skipped" variant="primary" size="medium" disabled></button-cta>
+            <span class="demo-item-label">Disabled (skipped)</span>
+          </div>
+          <div class="demo-item">
+            <button-cta label="Third" variant="tertiary" size="medium"></button-cta>
+            <span class="demo-item-label">Tab → Enter/Space</span>
+          </div>
+        </div>
+      </div>
+
+      <h3>ARIA Attributes</h3>
+      <ul class="demo-token-list">
+        <li><code>role="button"</code> — semantic button role</li>
+        <li><code>aria-label</code> — set to the label text</li>
+        <li><code>aria-disabled</code> — reflects disabled state</li>
+        <li><code>aria-hidden="true"</code> — on icon container (decorative)</li>
+      </ul>
+
+      <h3>Focus Indicators</h3>
+      <div class="demo-note">
+        <strong>Focus ring:</strong> Uses <code>:focus-visible</code> for keyboard-only focus indicators. The outline uses <code>accessibility.focus.width</code> (2px) and <code>accessibility.focus.color</code> tokens with a <code>shadow.hover</code> elevation, meeting the 3:1 contrast ratio requirement.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 9: Token Verification
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>9. Token Verification</h2>
+      <p>Check browser DevTools to verify these CSS custom properties are loaded:</p>
+
+      <h3>Color Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--color-action-primary</code> — primary button background</li>
+        <li><code>--color-contrast-on-dark</code> — primary button text color</li>
+        <li><code>--color-structure-canvas</code> — secondary button background</li>
+      </ul>
+
+      <h3>Spacing Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--space-inset-100</code> — small button vertical padding (8px)</li>
+        <li><code>--space-inset-150</code> — medium/large button vertical padding (12px)</li>
+        <li><code>--space-inset-200</code> — small button horizontal padding (16px)</li>
+        <li><code>--space-inset-300</code> — medium button horizontal padding (24px)</li>
+        <li><code>--space-inset-400</code> — large button horizontal padding (32px)</li>
+        <li><code>--space-grouped-tight</code> — small icon-text gap (4px)</li>
+        <li><code>--space-grouped-normal</code> — medium/large icon-text gap (8px)</li>
+      </ul>
+
+      <h3>Size Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--tap-area-minimum</code> — small button min-height (44px)</li>
+        <li><code>--tap-area-recommended</code> — medium button min-height (48px)</li>
+        <li><code>--tap-area-comfortable</code> — large button min-height (56px)</li>
+        <li><code>--radius-100</code> — small button border-radius (8px)</li>
+        <li><code>--radius-150</code> — medium button border-radius (12px)</li>
+        <li><code>--radius-200</code> — large button border-radius (16px)</li>
+      </ul>
+
+      <h3>Typography Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--typography-label-md-*</code> — small/medium button text</li>
+        <li><code>--typography-label-lg-*</code> — large button text</li>
+      </ul>
+
+      <h3>Motion Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--motion-button-press-duration</code> — transition duration</li>
+        <li><code>--motion-button-press-easing</code> — transition easing curve</li>
+      </ul>
+
+      <h3>Accessibility Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--accessibility-focus-width</code> — focus outline width (2px)</li>
+        <li><code>--accessibility-focus-color</code> — focus outline color</li>
+        <li><code>--accessibility-focus-offset</code> — focus outline offset (2px)</li>
+        <li><code>--shadow-hover</code> — focus elevation shadow</li>
+      </ul>
+    </div>
+
+    <!-- ============================================================
+         SECTION 10: Usage Examples
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>10. Usage Examples</h2>
+
+      <h3>HTML</h3>
+      <pre class="demo-code">&lt;!-- Basic button (defaults to medium size, primary variant) --&gt;
+&lt;button-cta label="Click Me"&gt;&lt;/button-cta&gt;
+
+&lt;!-- With size and variant --&gt;
+&lt;button-cta label="Submit" size="large" variant="primary"&gt;&lt;/button-cta&gt;
+
+&lt;!-- With icon --&gt;
+&lt;button-cta label="Continue" variant="primary" icon="arrow-right"&gt;&lt;/button-cta&gt;
+
+&lt;!-- Disabled state --&gt;
+&lt;button-cta label="Unavailable" variant="primary" disabled&gt;&lt;/button-cta&gt;
+
+&lt;!-- No-wrap for constrained spaces --&gt;
+&lt;button-cta label="Long Label Text" variant="primary" no-wrap="true"&gt;&lt;/button-cta&gt;
+
+&lt;!-- With test ID for automated testing --&gt;
+&lt;button-cta label="Save" variant="primary" test-id="save-button"&gt;&lt;/button-cta&gt;</pre>
+
+      <h3>JavaScript</h3>
+      <pre class="demo-code">// Listen for press events (not click!)
+const button = document.querySelector('button-cta');
+button.addEventListener('press', (event) =&gt; {
+  console.log('Button pressed!', event.detail);
+});
+
+// Wait for component registration
+await customElements.whenDefined('button-cta');
+
+// Programmatic creation
+const btn = document.createElement('button-cta');
+btn.label = 'Dynamic Button';
+btn.size = 'large';
+btn.buttonVariant = 'primary';
+btn.icon = 'arrow-right';
+btn.addEventListener('press', () =&gt; console.log('Pressed!'));
+document.body.appendChild(btn);
+
+// Dynamic state changes
+btn.disabled = true;   // Disable
+btn.disabled = false;  // Re-enable
+btn.label = 'Updated'; // Change label
+btn.icon = 'check';    // Change icon</pre>
+    </div>
+
+  </main>
+
+  <footer class="demo-footer">
+    <p>DesignerPunk Design System • Button-CTA Component Demo</p>
+  </footer>
+
+  <script>
+    // File protocol detection
+    if (window.location.protocol === 'file:') {
+      const banner = document.createElement('div');
+      banner.className = 'demo-file-protocol-warning';
+      banner.textContent = 'Components may not load correctly via file:// protocol. Use a local server: npx serve dist/browser';
+      document.body.prepend(banner);
+    }
+
+    // Event handling demo
+    const eventLog = document.getElementById('event-log');
+    const clearBtn = document.getElementById('clear-log-btn');
+    let eventCount = 0;
+
+    function logEvent(buttonId, eventType) {
+      eventCount++;
+      const time = new Date().toLocaleTimeString();
+      const empty = eventLog.querySelector('.event-log-empty');
+      if (empty) empty.remove();
+
+      const entry = document.createElement('div');
+      entry.className = 'event-log-entry';
+      entry.innerHTML = '<span class="event-log-time">[' + time + ']</span> <span class="event-log-event">' + eventType + '</span> from <strong>' + buttonId + '</strong> (#' + eventCount + ')';
+      eventLog.prepend(entry);
+
+      // Keep log manageable
+      while (eventLog.children.length > 20) {
+        eventLog.removeChild(eventLog.lastChild);
+      }
+    }
+
+    clearBtn.addEventListener('click', function() {
+      eventLog.innerHTML = '<div class="event-log-empty">Click a button to see events here...</div>';
+      eventCount = 0;
+    });
+
+    document.getElementById('event-btn-primary').addEventListener('press', function() {
+      logEvent('Primary Action', 'press');
+    });
+
+    document.getElementById('event-btn-secondary').addEventListener('press', function() {
+      logEvent('Secondary Action', 'press');
+    });
+
+    // Disabled button should not fire events, but listen anyway to verify
+    document.getElementById('event-btn-disabled').addEventListener('press', function() {
+      logEvent('Disabled Button', 'press (unexpected!)');
+    });
+  </script>
+</body>
+</html>

@@ -156,7 +156,7 @@ The Component Demo System will be implemented in two phases:
     - Test locally to verify component rendering
     - _Requirements: 7.3, 7.4_
 
-- [ ] 4. Create Phase 1 New Demos
+- [x] 4. Create Phase 1 New Demos
 
   **Type**: Parent
   **Validation**: Tier 2 - Standard
@@ -174,7 +174,7 @@ The Component Demo System will be implemented in two phases:
   **Completion Documentation:**
   - `.kiro/specs/061-component-demo-system/completion/task-4-parent-completion.md`
 
-  - [ ] 4.1 Create icon-base-demo.html (Simple)
+  - [x] 4.1 Create icon-base-demo.html (Simple)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create demo showing Icon-Base component
@@ -186,7 +186,7 @@ The Component Demo System will be implemented in two phases:
     - Follow demo page guidelines
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.1, 3.3_
 
-  - [ ] 4.2 Create button-cta-demo.html (Medium)
+  - [x] 4.2 Create button-cta-demo.html (Medium)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create demo showing Button-CTA component
@@ -201,7 +201,7 @@ The Component Demo System will be implemented in two phases:
     - Follow demo page guidelines
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.1, 3.2, 3.3, 3.4, 3.5_
 
-  - [ ] 4.3 Create input-text-demo.html (Complex)
+  - [x] 4.3 Create input-text-demo.html (Complex)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create demo showing all Input-Text variants (Base, Email, Password, PhoneNumber)
