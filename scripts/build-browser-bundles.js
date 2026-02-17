@@ -245,6 +245,42 @@ function fixTokenColorValues(filePath) {
 }
 
 /**
+ * Copy demo HTML and CSS files from demos/ to dist/browser/
+ * Handles the case where demos/ directory doesn't exist gracefully.
+ *
+ * @returns {boolean} true if files were copied, false if demos/ not found
+ * @see .kiro/specs/061-component-demo-system/design.md
+ * @see Requirements: 4.3, 4.4
+ */
+function copyDemoFiles() {
+  const DEMOS_DIR = path.join(__dirname, '..', 'demos');
+
+  if (!fs.existsSync(DEMOS_DIR)) {
+    console.log('      Note: No demos/ directory found, skipping demo copy');
+    return false;
+  }
+
+  const files = fs.readdirSync(DEMOS_DIR)
+    .filter(f => f.endsWith('.html') || f.endsWith('.css'));
+
+  if (files.length === 0) {
+    console.log('      Note: No HTML or CSS files found in demos/, skipping demo copy');
+    return false;
+  }
+
+  for (const file of files) {
+    fs.copyFileSync(
+      path.join(DEMOS_DIR, file),
+      path.join(OUTPUT_DIR, file)
+    );
+  }
+
+  console.log(`      Copied ${files.length} demo file(s) to ${OUTPUT_DIR}`);
+  return true;
+}
+
+
+/**
  * Report bundle sizes and check soft ceiling
  * @returns {Object} Size report with warnings
  */
@@ -375,6 +411,11 @@ async function main() {
     // Requirements: 3.1
     console.log('   Copying token CSS...');
     const tokensCopied = copyTokenCSS();
+    
+    // Copy demo files
+    // Requirements: 4.3, 4.4
+    console.log('   Copying demo files...');
+    copyDemoFiles();
     
     console.log('\n✅ Browser bundles built successfully!');
     

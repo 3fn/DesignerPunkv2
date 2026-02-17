@@ -193,6 +193,55 @@ This document defines the format and structure for creating feature specificatio
 - Focus on observable behavior
 - Include success and failure scenarios
 
+### Documentation Requirements
+
+Every spec that introduces or modifies tokens or components MUST include documentation requirements unless explicitly waived by the project lead.
+
+**Documentation as Functional Requirement:**
+Developer-facing documentation is a deliverable, not a process artifact. Documentation requirements should be written as EARS-pattern requirements with testable acceptance criteria.
+
+**Required Documentation Requirements:**
+
+**For Token Work:**
+- Token family documentation (if creating new token family)
+- Token Quick Reference updates (if adding tokens to existing family)
+- Token governance documentation (if introducing new token patterns)
+
+**For Component Work:**
+- Component README for each new component
+- Usage examples (code samples for applicable platforms)
+- API documentation (props, events, platform-specific behavior)
+- Token consumption documentation (which tokens the component uses)
+- Accessibility documentation (WCAG compliance notes, keyboard navigation)
+- Family-level documentation (if introducing architectural patterns)
+
+**EARS Pattern for Documentation Requirements:**
+
+Use **Ubiquitous** pattern for documentation requirements:
+
+> "The [component/token family] **shall** provide developer-facing documentation that includes [specific sections]."
+
+**Example:**
+> "The Progress-Indicator-Node-Base component **shall** provide a README that includes: overview, usage examples for web/iOS/Android, API reference (props table), token dependencies, accessibility notes (WCAG 2.1 AA compliance), and platform-specific behavior notes."
+
+**Acceptance Criteria Template:**
+- Documentation exists at expected path (e.g., `src/components/.../README.md`)
+- Documentation follows Component-Development-Guide standards (or Token-Governance standards for tokens)
+- Documentation includes all required sections
+- Usage examples are runnable (copy-paste ready)
+- Token references use correct format and link to token families
+- Accessibility notes reference specific WCAG criteria
+
+**Waiver Conditions:**
+Documentation requirements may be omitted if:
+- The work is purely internal refactoring with no API changes
+- The work is experimental/prototype with explicit "not for production" status
+- The component/token is internal-only (not exposed to developers)
+- The project lead explicitly approves omission with documented rationale
+
+**Governance Enforcement:**
+During spec formalization (design-outline → requirements.md), Thurgood will identify components/tokens being introduced and draft corresponding documentation requirements. If documentation requirements are omitted, the waiver rationale must be documented in requirements.md.
+
 ---
 
 ## Design Document Format

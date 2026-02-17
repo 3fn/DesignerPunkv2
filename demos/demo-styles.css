@@ -1,0 +1,360 @@
+/**
+ * DesignerPunk Component Demo System - Shared Stylesheet
+ * 
+ * Provides consistent layout, typography, and section styling
+ * for all component demo pages.
+ *
+ * CSS Standards:
+ * - Uses CSS logical properties exclusively (no padding-left, margin-right, etc.)
+ * - Uses DesignerPunk design tokens where available
+ * - Fallback hex values only for demo chrome not covered by tokens
+ * - Responsive: 320px to 1920px
+ * - Dark background theme
+ */
+
+/* ==========================================================================
+   Reset & Base Page Styles
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.demo-page {
+  font-family: var(--font-family-body);
+  background: var(--gray-500);
+  color: var(--white-200);
+  padding-inline: var(--space-inset-300);
+  padding-block: var(--space-inset-300);
+  margin: 0;
+  min-block-size: 100vh;
+  font-size: var(--typography-body-md-font-size);
+  line-height: var(--typography-body-md-line-height);
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+.demo-page h1 {
+  color: var(--cyan-300);
+  margin-block-end: var(--space-050);
+  font-family: var(--typography-h-2-font-family);
+  font-size: var(--typography-h-2-font-size);
+  font-weight: var(--typography-h-2-font-weight);
+  line-height: var(--typography-h-2-line-height);
+}
+
+.demo-page h2 {
+  color: var(--pink-300);
+  margin-block-start: var(--space-200);
+  margin-block-end: var(--space-100);
+  border-block-end: var(--border-default) solid var(--gray-300);
+  padding-block-end: var(--space-050);
+  font-family: var(--typography-h-4-font-family);
+  font-size: var(--typography-h-4-font-size);
+  font-weight: var(--typography-h-4-font-weight);
+  line-height: var(--typography-h-4-line-height);
+}
+
+.demo-page h3 {
+  color: var(--purple-200);
+  margin-block-start: var(--space-150);
+  margin-block-end: var(--space-100);
+  font-family: var(--typography-h-5-font-family);
+  font-size: var(--typography-h-5-font-size);
+  font-weight: var(--typography-h-5-font-weight);
+  line-height: var(--typography-h-5-line-height);
+}
+
+.demo-page h4 {
+  color: var(--purple-200);
+  margin-block-end: var(--space-100);
+  font-family: var(--typography-h-6-font-family);
+  font-size: var(--typography-h-6-font-size);
+  font-weight: var(--typography-h-6-font-weight);
+  line-height: var(--typography-h-6-line-height);
+}
+
+.demo-page p {
+  color: var(--gray-100);
+  line-height: var(--typography-body-md-line-height);
+}
+
+.demo-page code {
+  background: var(--gray-300);
+  padding-inline: var(--space-050);
+  padding-block: var(--space-025);
+  border-radius: var(--radius-050);
+  font-size: var(--typography-body-sm-font-size);
+  font-family: var(--font-family-mono);
+  color: var(--cyan-300);
+}
+
+/* ==========================================================================
+   Page Header
+   ========================================================================== */
+
+.demo-header {
+  margin-block-end: var(--space-300);
+}
+
+.demo-subtitle {
+  color: var(--gray-200);
+  margin-block-end: var(--space-200);
+  font-size: var(--typography-body-sm-font-size);
+  line-height: var(--typography-body-sm-line-height);
+}
+
+.demo-back-link {
+  display: inline-block;
+  color: var(--cyan-300);
+  text-decoration: none;
+  font-size: var(--typography-body-sm-font-size);
+  margin-block-end: var(--space-100);
+  transition: color 150ms ease;
+}
+
+.demo-back-link:hover {
+  color: var(--cyan-200);
+}
+
+.demo-back-link:focus-visible {
+  outline: var(--border-emphasis) solid var(--cyan-300);
+  outline-offset: var(--space-025);
+  border-radius: var(--radius-025);
+}
+
+/* ==========================================================================
+   Page Footer
+   ========================================================================== */
+
+.demo-footer {
+  text-align: center;
+  padding-block: var(--space-300);
+  color: var(--gray-200);
+  font-size: var(--typography-caption-font-size);
+  line-height: var(--typography-caption-line-height);
+}
+
+/* ==========================================================================
+   Section Containers
+   ========================================================================== */
+
+.demo-section {
+  background: var(--gray-400);
+  border-radius: var(--radius-150);
+  padding-inline: var(--space-inset-200);
+  padding-block: var(--space-inset-200);
+  margin-block-end: var(--space-200);
+}
+
+.demo-note {
+  background: var(--black-200);
+  border-inline-start: var(--border-width-400) solid var(--purple-200);
+  padding-inline: var(--space-inset-100);
+  padding-block: var(--space-inset-100);
+  margin-block: var(--space-100);
+  font-size: var(--typography-body-sm-font-size);
+  border-radius: 0 var(--radius-050) var(--radius-050) 0;
+}
+
+.demo-note strong {
+  color: var(--purple-200);
+}
+
+/* ==========================================================================
+   Layout Helpers
+   ========================================================================== */
+
+.demo-row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-grouped-loose);
+  flex-wrap: wrap;
+  margin-block-end: var(--space-100);
+}
+
+.demo-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-grouped-tight);
+}
+
+.demo-item-label {
+  font-size: var(--typography-caption-font-size);
+  color: var(--gray-200);
+  text-align: center;
+}
+
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-200);
+  margin-block-start: var(--space-100);
+}
+
+/* ==========================================================================
+   Code Display
+   ========================================================================== */
+
+.demo-code {
+  background: var(--black-300);
+  padding-inline: var(--space-inset-100);
+  padding-block: var(--space-inset-100);
+  border-radius: var(--radius-100);
+  overflow-x: auto;
+  font-size: var(--typography-body-sm-font-size);
+  font-family: var(--font-family-mono);
+  color: var(--gray-100);
+  line-height: 1.5;
+  white-space: pre;
+}
+
+/* ==========================================================================
+   Interactive Areas
+   ========================================================================== */
+
+.demo-interactive {
+  background: var(--black-300);
+  padding-inline: var(--space-inset-200);
+  padding-block: var(--space-inset-200);
+  border-radius: var(--radius-100);
+  margin-block-start: var(--space-100);
+}
+
+.demo-interactive p {
+  margin-block-end: var(--space-100);
+}
+
+/* ==========================================================================
+   Token Verification
+   ========================================================================== */
+
+.demo-token-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.demo-token-list li {
+  padding-block: var(--space-050);
+  border-block-end: var(--border-default) solid var(--gray-300);
+  font-size: var(--typography-body-sm-font-size);
+  color: var(--gray-200);
+}
+
+.demo-token-list li:last-child {
+  border-block-end: none;
+}
+
+/* ==========================================================================
+   Index Page
+   ========================================================================== */
+
+.demo-index {
+  max-inline-size: 1200px;
+  margin-inline: auto;
+}
+
+.demo-category {
+  margin-block-end: var(--space-300);
+}
+
+.demo-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-grouped-normal);
+}
+
+.demo-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-grouped-tight);
+  background: var(--gray-400);
+  padding-inline: var(--space-inset-200);
+  padding-block: var(--space-inset-150);
+  border-radius: var(--radius-100);
+  text-decoration: none;
+  color: inherit;
+  border: var(--border-default) solid transparent;
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+.demo-card:hover {
+  border-color: var(--purple-300);
+  background: var(--black-200);
+}
+
+.demo-card:focus-visible {
+  outline: var(--border-emphasis) solid var(--cyan-300);
+  outline-offset: var(--space-025);
+}
+
+.demo-card-title {
+  font-size: var(--typography-label-md-font-size);
+  font-weight: var(--typography-label-md-font-weight);
+  color: var(--cyan-300);
+}
+
+.demo-card-desc {
+  font-size: var(--typography-caption-font-size);
+  color: var(--gray-200);
+  line-height: var(--typography-caption-line-height);
+}
+
+/* ==========================================================================
+   File Protocol Warning
+   ========================================================================== */
+
+.demo-file-protocol-warning {
+  background: var(--color-feedback-warning-background);
+  color: var(--color-feedback-warning-text);
+  padding-inline: var(--space-inset-200);
+  padding-block: var(--space-inset-100);
+  text-align: center;
+  font-size: var(--typography-body-sm-font-size);
+  font-family: var(--font-family-body);
+}
+
+/* ==========================================================================
+   Responsive Adjustments
+   ========================================================================== */
+
+@media (max-width: 480px) {
+  .demo-page {
+    padding-inline: var(--space-inset-100);
+    padding-block: var(--space-inset-100);
+  }
+
+  .demo-section {
+    padding-inline: var(--space-inset-100);
+    padding-block: var(--space-inset-100);
+  }
+
+  .demo-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .demo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .demo-row {
+    gap: var(--space-grouped-normal);
+  }
+}
+
+@media (min-width: 1440px) {
+  .demo-page {
+    padding-inline: var(--space-inset-400);
+    padding-block: var(--space-inset-400);
+  }
+
+  .demo-index {
+    max-inline-size: 1400px;
+  }
+}

@@ -88,6 +88,30 @@ The fastest way to get started with DesignerPunk web components:
 
 ---
 
+## Demo Pages
+
+DesignerPunk provides standardized demo pages for all component families. These demos show components in action with all variants, states, and interactive examples.
+
+**Accessing Demos:**
+1. Build the browser distribution: `npm run build:browser`
+2. Start a local server: `npx http-server dist/browser -p 8080`
+3. Open the demo index: `http://localhost:8080/index.html`
+
+**Demo Index:**
+The demo index (`dist/browser/index.html`) lists all available component demos organized by category (Avatar, Badge, Button, Chip, Container, Icon, Input, Progress).
+
+**Individual Demo Pages:**
+Each component family has a dedicated demo page (e.g., `button-demo.html`, `input-demo.html`) that demonstrates:
+- All variants, sizes, and states
+- Interactive examples with event handling
+- Token usage and customization
+- Accessibility features
+
+**Creating New Demos:**
+See the Component Demo System documentation for guidance on creating standardized demo pages for new component families.
+
+---
+
 ## ESM Loading Pattern
 
 **Recommended for modern browsers (ES2020+)**
