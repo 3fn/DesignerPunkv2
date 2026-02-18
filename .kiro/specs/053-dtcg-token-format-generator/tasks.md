@@ -226,7 +226,7 @@ The DTCG Token Format Generator will be implemented in three phases:
     - Document usage pattern for downstream specs (Spec 054)
     - _Requirements: 8.1-8.6_
 
-- [ ] 4. Integration with Build Pipeline
+- [x] 4. Integration with Build Pipeline
 
   **Type**: Parent
   **Validation**: Tier 2 - Standard
@@ -243,7 +243,7 @@ The DTCG Token Format Generator will be implemented in three phases:
   **Completion Documentation:**
   - `.kiro/specs/053-dtcg-token-format-generator/completion/task-4-parent-completion.md`
 
-  - [ ] 4.1 Integrate DTCGFormatGenerator into build script
+  - [x] 4.1 Integrate DTCGFormatGenerator into build script
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update `scripts/generate-platform-tokens.ts` to import DTCGFormatGenerator
@@ -254,7 +254,7 @@ The DTCG Token Format Generator will be implemented in three phases:
     - Handle errors gracefully (log error, don't fail entire build)
     - _Requirements: 7.1, 7.4, 7.5_
 
-  - [ ] 4.2 Test DTCG generation in build pipeline
+  - [x] 4.2 Test DTCG generation in build pipeline
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Run `npm run build` (or equivalent)

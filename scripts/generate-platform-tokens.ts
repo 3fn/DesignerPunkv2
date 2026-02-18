@@ -16,6 +16,7 @@
  */
 
 import { TokenFileGenerator } from '../src/generators/TokenFileGenerator';
+import { DTCGFormatGenerator } from '../src/generators/DTCGFormatGenerator';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -111,6 +112,20 @@ async function main() {
     const allDesignValid = results.every((r: any) => r.valid);
     const allComponentValid = componentResults.every((r: any) => r.valid);
     
+    // --- DTCG Format Generation ---
+    // Parallel export for external tool integration (Figma, Style Dictionary, Tokens Studio)
+    // Errors are logged but don't fail the build — DTCG is additive, not critical path
+    try {
+      console.log('📊 DTCG Token Format Generation:\n');
+      const dtcgGenerator = new DTCGFormatGenerator();
+      const dtcgOutputPath = path.join(outputDir, 'DesignTokens.dtcg.json');
+      dtcgGenerator.writeToFile(dtcgOutputPath);
+      console.log('');
+    } catch (dtcgError) {
+      console.error('⚠️  DTCG generation failed (non-blocking):', dtcgError instanceof Error ? dtcgError.message : dtcgError);
+      console.log('   Platform token generation was not affected.\n');
+    }
+
     if (allDesignValid && allComponentValid) {
       console.log('✨ All platform files generated successfully!');
       process.exit(0);
