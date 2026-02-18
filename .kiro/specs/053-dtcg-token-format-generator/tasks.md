@@ -61,7 +61,7 @@ The DTCG Token Format Generator will be implemented in three phases:
     - Export configuration interface and defaults
     - _Requirements: 9.1, 9.5_
 
-- [ ] 2. DTCGFormatGenerator Core Implementation
+- [x] 2. DTCGFormatGenerator Core Implementation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -79,7 +79,7 @@ The DTCG Token Format Generator will be implemented in three phases:
   **Completion Documentation:**
   - `.kiro/specs/053-dtcg-token-format-generator/completion/task-2-parent-completion.md`
 
-  - [ ] 2.1 Create DTCGFormatGenerator class structure
+  - [x] 2.1 Create DTCGFormatGenerator class structure
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/generators/DTCGFormatGenerator.ts`
@@ -90,7 +90,7 @@ The DTCG Token Format Generator will be implemented in three phases:
     - Implement `validateTokenCounts(output: DTCGTokenFile)` private method
     - _Requirements: 7.1, 10.1-10.5_
 
-  - [ ] 2.2 Implement primitive token generation methods
+  - [x] 2.2 Implement primitive token generation methods
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `generateSpacingTokens()` — spacing primitives to DTCG dimension type
@@ -113,7 +113,7 @@ The DTCG Token Format Generator will be implemented in three phases:
     - Each method includes DesignerPunk extensions (formula, family, baseValue) when `includeExtensions: true`
     - _Requirements: 2.1, 2.2, 4.2-4.5_
 
-  - [ ] 2.3 Implement semantic token generation methods
+  - [x] 2.3 Implement semantic token generation methods
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement semantic color token generation (use alias syntax for primitive references)
@@ -124,7 +124,7 @@ The DTCG Token Format Generator will be implemented in three phases:
     - Handle `resolveAliases: true` configuration (resolve to final values)
     - _Requirements: 2.2, 3.1, 3.2, 3.3_
 
-  - [ ] 2.4 Implement shadow token generation with opacity merge
+  - [x] 2.4 Implement shadow token generation with opacity merge
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `generateShadowTokens()` — shadow compositions to DTCG shadow type
@@ -136,7 +136,7 @@ The DTCG Token Format Generator will be implemented in three phases:
     - Include primitive references in `$extensions.designerpunk.primitiveRefs`
     - _Requirements: 5.1-5.5_
 
-  - [ ] 2.5 Implement glow token generation
+  - [x] 2.5 Implement glow token generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `generateGlowTokens()` — glow primitives (blur, opacity, color) individually
@@ -145,7 +145,7 @@ The DTCG Token Format Generator will be implemented in three phases:
     - Document that glows share offset primitives with shadows
     - _Requirements: 5.6, 5.7_
 
-  - [ ] 2.6 Implement composite token generation
+  - [x] 2.6 Implement composite token generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `generateTypographyTokens()` — typography compositions to DTCG typography type (fontFamily, fontSize, fontWeight, lineHeight, letterSpacing)
@@ -155,7 +155,7 @@ The DTCG Token Format Generator will be implemented in three phases:
     - Preserve alias references in composite properties
     - _Requirements: 6.1-6.5_
 
-  - [ ] 2.7 Implement configuration options
+  - [x] 2.7 Implement configuration options
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Handle `includeExtensions: false` — omit `$extensions.designerpunk` from all tokens
@@ -165,7 +165,7 @@ The DTCG Token Format Generator will be implemented in three phases:
     - Use `schemaUrl` configuration for `$schema` property
     - _Requirements: 9.2-9.4, 7.2, 7.3_
 
-  - [ ] 2.8 Implement error handling
+  - [x] 2.8 Implement error handling
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Throw error for invalid token type (no DTCG mapping)
