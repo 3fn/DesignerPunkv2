@@ -107,4 +107,12 @@ describe('TransformerRegistry', () => {
   it('exports a singleton instance', () => {
     expect(transformerRegistry).toBeInstanceOf(TransformerRegistry);
   });
+
+  it('singleton has FigmaTransformer registered and invocable', () => {
+    const figma = transformerRegistry.get('figma');
+    expect(figma).toBeDefined();
+    expect(figma!.config.id).toBe('figma');
+    expect(figma!.config.name).toBe('Figma Variables and Styles');
+    expect(figma!.canTransform(mockDTCGFile)).toBe(true);
+  });
 });

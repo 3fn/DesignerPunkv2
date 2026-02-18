@@ -10,6 +10,7 @@
 
 import type { DTCGTokenFile } from '../types/DTCGTypes';
 import type { ITokenTransformer, TransformResult } from './ITokenTransformer';
+import { FigmaTransformer } from './FigmaTransformer';
 
 /**
  * Registry for managing and invoking token transformers.
@@ -57,3 +58,6 @@ export class TransformerRegistry {
 
 /** Singleton registry instance for application-wide transformer management */
 export const transformerRegistry = new TransformerRegistry();
+
+// Auto-register built-in transformers
+transformerRegistry.register(new FigmaTransformer());

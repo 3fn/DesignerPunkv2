@@ -38,3 +38,15 @@ export type { ITokenTransformer, TransformerConfig, TransformResult } from './IT
 
 // Registry class and singleton
 export { TransformerRegistry, transformerRegistry } from './TransformerRegistry';
+
+// Transformer implementations
+export { FigmaTransformer } from './FigmaTransformer';
+export type {
+  FigmaVariable,
+  FigmaVariableType,
+  FigmaVariableCollection,
+  FigmaStyleDefinition,
+  FigmaTokenFile,
+  EffectStyleProperties,
+  TextStyleProperties,
+} from './FigmaTransformer';
