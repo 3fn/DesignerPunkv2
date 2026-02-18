@@ -281,3 +281,17 @@ What are you building?
 └─ Page Structure (backgrounds, surfaces, borders)
     └─ Use: color.structure.{canvas|surface|border}
 ```
+
+---
+
+## Related Documentation
+
+### Token System
+- [Token System Overview](../../docs/token-system-overview.md) - Complete token system architecture
+- [Rosetta System Architecture](./Rosetta-System-Architecture.md) - Token pipeline architecture
+- [Token Governance](./Token-Governance.md) - Token selection and creation governance
+
+### DTCG Integration
+- [DTCG Integration Guide](../../docs/dtcg-integration-guide.md) - Integrating DesignerPunk tokens with external design tools
+- [Transformer Development Guide](../../docs/transformer-development-guide.md) - Building custom token transformers
+- [MCP Integration Guide](../../docs/mcp-integration-guide.md) - Programmatic token loading and querying

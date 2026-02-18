@@ -1,6 +1,13 @@
+---
+inclusion: manual
+name: DTCG-Integration-Guide
+description: DTCG integration guide — file location, token type mapping, DesignerPunk extensions, Style Dictionary integration, Tokens Studio integration. Load when working with DTCG export, design tool integration, or external token consumption.
+---
+
 # DTCG Integration Guide
 
 **Date**: February 17, 2026
+**Last Reviewed**: February 17, 2026
 **Purpose**: Guide for integrating DesignerPunk tokens via DTCG format with external design tools
 **Organization**: spec-guide
 **Scope**: 053-dtcg-token-format-generator

@@ -1,6 +1,13 @@
+---
+inclusion: manual
+name: Transformer-Development-Guide
+description: Transformer development guide — ITokenTransformer interface, TransformerRegistry usage, implementation examples. Load when building custom transformers or extending DTCG output for new tools.
+---
+
 # Transformer Development Guide
 
 **Date**: February 17, 2026
+**Last Reviewed**: February 17, 2026
 **Purpose**: Guide for building custom token transformers that consume DTCG output and produce tool-specific formats
 **Organization**: spec-guide
 **Scope**: 053-dtcg-token-format-generator

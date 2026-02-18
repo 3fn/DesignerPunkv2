@@ -581,6 +581,10 @@ get_section({ path: ".kiro/steering/Token-Governance.md", heading: "Token Creati
 - [Core Goals](./Core%20Goals.md) — Project principles including token-first approach
 - [Design Authority](../.kiro/specs/051-semantic-token-naming-restructure/design-outline.md) — Semantic token naming restructure design
 
+### DTCG Integration
+- [DTCG Integration Guide](../../docs/dtcg-integration-guide.md) — Integrating DesignerPunk tokens with external design tools via DTCG format
+- [Transformer Development Guide](../../docs/transformer-development-guide.md) — Building custom token transformers for tool-specific formats
+
 ---
 
 *This governance framework ensures token decisions are deliberate, architecturally sound, and maintain the integrity of the design system.*

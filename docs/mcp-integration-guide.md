@@ -1,6 +1,13 @@
+---
+inclusion: manual
+name: MCP-Integration-Guide
+description: MCP integration guide — file loading, token traversal, path-based querying, transformer invocation. Load when building tooling, scripts, or MCP server resources that consume DTCG output.
+---
+
 # MCP Integration Guide
 
 **Date**: February 17, 2026
+**Last Reviewed**: February 17, 2026
 **Purpose**: Guide for loading, parsing, and querying DTCG tokens programmatically
 **Organization**: spec-guide
 **Scope**: 053-dtcg-token-format-generator

@@ -557,6 +557,65 @@ get_section({
 
 ---
 
+## Individual Component Status
+
+This section lists all implemented components with their readiness status and implementation paths. Used by extraction workflows to check component existence and status.
+
+| Component | Family | Status | Implementation Path |
+|-----------|--------|--------|---------------------|
+| Avatar | Avatars | 🟡 Beta | `src/components/core/Avatar/` |
+| BadgeCountBase | Badges & Tags | 🟢 Production Ready | `src/components/core/Badge-Count-Base/` |
+| BadgeCountNotification | Badges & Tags | 🟢 Production Ready | `src/components/core/Badge-Count-Notification/` |
+| BadgeLabelBase | Badges & Tags | 🟢 Production Ready | `src/components/core/Badge-Label-Base/` |
+| ButtonCTA | Buttons | 🟢 Production Ready | `src/components/core/Button-CTA/` |
+| ButtonIcon | Buttons | 🟢 Production Ready | `src/components/core/Button-Icon/` |
+| ButtonVerticalListItem | Buttons | 🟢 Production Ready | `src/components/core/Button-VerticalList-Item/` |
+| ButtonVerticalListSet | Buttons | 🟢 Production Ready | `src/components/core/Button-VerticalList-Set/` |
+| ChipBase | Badges & Tags | 🟢 Production Ready | `src/components/core/Chip-Base/` |
+| ChipFilter | Badges & Tags | 🟢 Production Ready | `src/components/core/Chip-Filter/` |
+| ChipInput | Badges & Tags | 🟢 Production Ready | `src/components/core/Chip-Input/` |
+| ContainerBase | Containers | 🟢 Production Ready | `src/components/core/Container-Base/` |
+| ContainerCardBase | Containers | 🟢 Production Ready | `src/components/core/Container-Card-Base/` |
+| IconBase | Icons | 🟢 Production Ready | `src/components/core/Icon-Base/` |
+| InputCheckboxBase | Form Inputs | 🟢 Production Ready | `src/components/core/Input-Checkbox-Base/` |
+| InputCheckboxLegal | Form Inputs | 🟢 Production Ready | `src/components/core/Input-Checkbox-Legal/` |
+| InputRadioBase | Form Inputs | 🟢 Production Ready | `src/components/core/Input-Radio-Base/` |
+| InputRadioSet | Form Inputs | 🟢 Production Ready | `src/components/core/Input-Radio-Set/` |
+| InputTextBase | Form Inputs | ⚠️ Deprecated | `src/components/core/Input-Text-Base/` |
+| InputTextEmail | Form Inputs | 🟢 Production Ready | `src/components/core/Input-Text-Email/` |
+| InputTextPassword | Form Inputs | 🟢 Production Ready | `src/components/core/Input-Text-Password/` |
+| InputTextPhoneNumber | Form Inputs | 🟢 Production Ready | `src/components/core/Input-Text-PhoneNumber/` |
+| ProgressIndicatorConnectorBase | Loading | 🟢 Production Ready | `src/components/core/Progress-Indicator-Connector-Base/` |
+| ProgressIndicatorLabelBase | Loading | 🟢 Production Ready | `src/components/core/Progress-Indicator-Label-Base/` |
+| ProgressIndicatorNodeBase | Loading | 🟢 Production Ready | `src/components/core/Progress-Indicator-Node-Base/` |
+| ProgressPaginationBase | Loading | 🟢 Production Ready | `src/components/core/Progress-Pagination-Base/` |
+| ProgressStepperBase | Loading | 🟢 Production Ready | `src/components/core/Progress-Stepper-Base/` |
+| ProgressStepperDetailed | Loading | 🟢 Production Ready | `src/components/core/Progress-Stepper-Detailed/` |
+
+**Usage:**
+
+Extraction workflows query this section to check if a component exists before recommending variant mapping strategies.
+
+**Example MCP Query:**
+```typescript
+const statusDoc = await mcp.getSection({
+  path: '.kiro/steering/Component-Readiness-Status.md',
+  heading: 'Individual Component Status'
+});
+
+// Check if ButtonBase exists
+const hasButtonBase = statusDoc.content.includes('ButtonBase');
+```
+
+**Maintenance:**
+
+This section should be updated when:
+- New components are added
+- Component status changes (Beta → Production Ready, Production Ready → Deprecated)
+- Components are removed
+
+---
+
 ## AI Agent Decision Framework
 
 ### Component Selection Based on Readiness

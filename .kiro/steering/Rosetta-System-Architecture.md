@@ -452,6 +452,11 @@ export const ComponentNameTokens = defineComponentTokens({
 - [Token System Overview](../../docs/token-system-overview.md) - Master document mapping token files
 - [Registry-Validator Pattern](../../docs/architecture/registry-validator-pattern.md) - Validation patterns
 
+### DTCG Integration
+- [DTCG Integration Guide](../../docs/dtcg-integration-guide.md) - Integrating DesignerPunk tokens with external design tools via DTCG format
+- [Transformer Development Guide](../../docs/transformer-development-guide.md) - Building custom token transformers for tool-specific formats
+- [MCP Integration Guide](../../docs/mcp-integration-guide.md) - Programmatic token loading, parsing, and querying
+
 ### Component Development
 - [Component Development Guide](./Component-Development-Guide.md) - Token selection and component patterns
 - [Stemma System Principles](./stemma-system-principles.md) - Component hierarchy and relationships
