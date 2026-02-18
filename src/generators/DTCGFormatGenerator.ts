@@ -1213,7 +1213,7 @@ export class DTCGFormatGenerator {
    * @throws Error if colorRgba is not in valid rgba format
    */
   mergeShadowColor(colorRgba: string, opacity: number, shadowName?: string): string {
-    const match = colorRgba.match(/^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*[\d.]+\s*)?\)$/);
+    const match = colorRgba.match(/^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*[\d.eE+-]+\s*)?\)$/);
     if (!match) {
       const context = shadowName ? ` for "${shadowName}"` : '';
       throw new Error(
