@@ -21,6 +21,7 @@ const mockMcp: ConsoleMCPClient = {
   getVariables: jest.fn(),
   execute: jest.fn(),
   setupDesignTokens: jest.fn(),
+  getStatus: jest.fn(),
 };
 
 function makeWorkflow(): TokenSyncWorkflow {

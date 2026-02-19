@@ -48,6 +48,29 @@ Uses `npx figma-console-mcp@latest` as the subprocess command, ensuring the late
 - Full test suite: 331/332 suites pass (1 pre-existing flaky timing test in HookIntegration unrelated to this task)
 - 8447/8461 tests pass (13 skipped, 1 pre-existing failure)
 
+---
+
+## Desktop Bridge Plugin Setup
+
+The `figma-console-mcp` package (installed as dev dependency in Task 3.1) includes the Desktop Bridge plugin required for Figma Desktop connectivity.
+
+**Plugin Location:**
+```
+node_modules/figma-console-mcp/figma-desktop-bridge/manifest.json
+```
+
+**Setup Instructions:**
+1. Open Figma Desktop
+2. Go to **Plugins → Development → Import plugin from manifest...**
+3. Navigate to `node_modules/figma-console-mcp/figma-desktop-bridge/manifest.json`
+4. Import the plugin
+5. Run the plugin in your Figma file to establish WebSocket connection (port 9223)
+
+**Note:** This is a one-time setup. Once imported, the plugin stays in your Development plugins list and can be run whenever needed for token push operations.
+
+**Verification:**
+After running the plugin, you can verify the connection by checking for WebSocket activity on port 9223. The ConsoleMCPClient will automatically use this connection when available.
+
 ## Artifacts
 
 - `src/figma/ConsoleMCPClientImpl.ts` — Concrete MCP client implementation

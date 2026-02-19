@@ -16,6 +16,9 @@ export type {
   StyleSyncResult,
 } from './TokenSyncWorkflow';
 
-export type { ConsoleMCPClient, DesignTokenSetupPayload } from './ConsoleMCPClient';
+export type { ConsoleMCPClient, ConsoleMCPStatus, DesignTokenSetupPayload } from './ConsoleMCPClient';
 export { ConsoleMCPClientImpl } from './ConsoleMCPClientImpl';
 export type { ConsoleMCPClientOptions } from './ConsoleMCPClientImpl';
+
+export { checkDesktopBridge } from './preflight';
+export type { PreflightResult } from './preflight';

@@ -60,4 +60,25 @@ export interface ConsoleMCPClient {
     fileKey: string,
     payload: DesignTokenSetupPayload,
   ): Promise<void>;
+
+  /**
+   * Get Console MCP server status including transport availability.
+   *
+   * Calls the `figma_get_status` MCP tool and returns the raw status
+   * object. Used by pre-flight checks to verify Desktop Bridge is running.
+   */
+  getStatus(): Promise<ConsoleMCPStatus>;
+}
+
+/**
+ * Status response from the `figma_get_status` MCP tool.
+ */
+export interface ConsoleMCPStatus {
+  transport?: {
+    websocket?: {
+      available?: boolean;
+      port?: number;
+    };
+  };
+  [key: string]: unknown;
 }

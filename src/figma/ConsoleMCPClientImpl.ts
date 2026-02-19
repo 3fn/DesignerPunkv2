@@ -11,7 +11,7 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import type { FigmaVariable } from '../generators/transformers/FigmaTransformer';
-import type { ConsoleMCPClient, DesignTokenSetupPayload } from './ConsoleMCPClient';
+import type { ConsoleMCPClient, ConsoleMCPStatus, DesignTokenSetupPayload } from './ConsoleMCPClient';
 
 /** Options for constructing a ConsoleMCPClientImpl. */
 export interface ConsoleMCPClientOptions {
@@ -219,5 +219,10 @@ export class ConsoleMCPClientImpl implements ConsoleMCPClient {
         })),
       })),
     });
+  }
+
+  async getStatus(): Promise<ConsoleMCPStatus> {
+    const result = await this.callTool('figma_get_status', {});
+    return (result ?? {}) as ConsoleMCPStatus;
   }
 }

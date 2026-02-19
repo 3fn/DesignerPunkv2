@@ -238,6 +238,7 @@ This spec implements the token push workflow in three phases:
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Install `@modelcontextprotocol/sdk` as dependency
+    - Install `figma-console-mcp` as dev dependency (provides Desktop Bridge plugin at `node_modules/figma-console-mcp/figma-desktop-bridge/manifest.json`)
     - Create `src/figma/ConsoleMCPClient.ts`
     - Use `StdioClientTransport` to spawn Console MCP subprocess (`npx figma-console-mcp@latest`)
     - Implement `batchCreateVariables()` method (calls `figma_batch_create_variables` tool)
@@ -258,7 +259,7 @@ This spec implements the token push workflow in three phases:
 
 ---
 
-- [ ] 4. Desktop Bridge Pre-flight Check
+- [x] 4. Desktop Bridge Pre-flight Check
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive
@@ -283,16 +284,18 @@ This spec implements the token push workflow in three phases:
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 Complete: Desktop Bridge Pre-flight Check"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 4.1 Implement Desktop Bridge check
+  - [x] 4.1 Implement Desktop Bridge check
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/figma/preflight.ts`
     - Implement `checkDesktopBridge()` function
-    - Check WebSocket connection on port 9223
-    - Return PreflightResult (ready, error message)
+    - Use ConsoleMCPClient to call `figma_get_status` tool
+    - Check if `transport.websocket.available` is true in response
+    - Return PreflightResult (ready, error message with setup instructions)
+    - Include path to Desktop Bridge plugin manifest in error message
     - _Requirements: Req 8_
 
-  - [ ] 4.2 Write pre-flight tests
+  - [x] 4.2 Write pre-flight tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test Desktop Bridge available
@@ -443,8 +446,17 @@ This spec implements the token push workflow in three phases:
     - Add "Token Push Workflow" section to `docs/dtcg-integration-guide.md`
     - Document CLI commands (`figma:push`, flags)
     - Document drift detection and force override
-    - Document Desktop Bridge setup
-    - Add troubleshooting section
+    - Document Desktop Bridge setup:
+      - Prerequisites (Figma Desktop, Node.js 18+)
+      - Installing figma-console-mcp package
+      - Importing Desktop Bridge plugin (path: `node_modules/figma-console-mcp/figma-desktop-bridge/manifest.json`)
+      - Running the plugin in Figma
+      - Configuring .env file (FIGMA_ACCESS_TOKEN, FIGMA_FILE_KEY)
+    - Add troubleshooting section:
+      - Desktop Bridge not connecting
+      - Port conflicts (9223-9232)
+      - Multiple MCP server instances
+      - Plugin connection errors
     - _Requirements: Req 8_
 
   - [ ] 7.2 Update Transformer Development Guide
