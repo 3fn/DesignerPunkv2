@@ -17,3 +17,5 @@ export type {
 } from './TokenSyncWorkflow';
 
 export type { ConsoleMCPClient, DesignTokenSetupPayload } from './ConsoleMCPClient';
+export { ConsoleMCPClientImpl } from './ConsoleMCPClientImpl';
+export type { ConsoleMCPClientOptions } from './ConsoleMCPClientImpl';
