@@ -109,7 +109,7 @@ This spec implements the token push workflow in three phases:
 
 ---
 
-- [ ] 2. TokenSyncWorkflow Implementation
+- [x] 2. TokenSyncWorkflow Implementation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive
@@ -135,7 +135,7 @@ This spec implements the token push workflow in three phases:
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: TokenSyncWorkflow Implementation"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 2.1 Create TokenSyncWorkflow class structure
+  - [x] 2.1 Create TokenSyncWorkflow class structure
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Create `src/figma/TokenSyncWorkflow.ts`
@@ -144,7 +144,7 @@ This spec implements the token push workflow in three phases:
     - Export from figma index
     - _Requirements: Req 4_
 
-  - [ ] 2.2 Implement drift detection
+  - [x] 2.2 Implement drift detection
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `detectDrift()` method
@@ -153,7 +153,7 @@ This spec implements the token push workflow in three phases:
     - Generate DriftReport with drifted variables
     - _Requirements: Req 5_
 
-  - [ ] 2.3 Implement variable sync (batch operations)
+  - [x] 2.3 Implement variable sync (batch operations)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `syncVariables()` method
@@ -164,7 +164,7 @@ This spec implements the token push workflow in three phases:
     - Track created/updated counts
     - _Requirements: Req 4, Req 9_
 
-  - [ ] 2.4 Implement style sync (individual operations)
+  - [x] 2.4 Implement style sync (individual operations)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `syncStyles()` method
@@ -175,7 +175,7 @@ This spec implements the token push workflow in three phases:
     - Handle style creation/update errors
     - _Requirements: Req 4_
 
-  - [ ] 2.5 Implement main sync method
+  - [x] 2.5 Implement main sync method
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `sync()` method
@@ -187,7 +187,7 @@ This spec implements the token push workflow in three phases:
     - Return SyncResult with counts and errors
     - _Requirements: Req 4, Req 5, Req 9_
 
-  - [ ] 2.6 Implement initial setup method
+  - [x] 2.6 Implement initial setup method
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `initialSetup()` method
@@ -196,7 +196,7 @@ This spec implements the token push workflow in three phases:
     - Handle initial setup errors
     - _Requirements: Req 4_
 
-  - [ ] 2.7 Write sync workflow tests
+  - [x] 2.7 Write sync workflow tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test drift detection (variables edited in Figma)
