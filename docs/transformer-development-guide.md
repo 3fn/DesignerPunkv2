@@ -7,10 +7,10 @@ description: Transformer development guide — ITokenTransformer interface, Tran
 # Transformer Development Guide
 
 **Date**: February 17, 2026
-**Last Reviewed**: February 17, 2026
+**Last Reviewed**: February 18, 2026
 **Purpose**: Guide for building custom token transformers that consume DTCG output and produce tool-specific formats
 **Organization**: spec-guide
-**Scope**: 053-dtcg-token-format-generator
+**Scope**: 053-dtcg-token-format-generator, 054a-figma-token-push
 **Layer**: 3
 **Relevant Tasks**: transformer-development, dtcg-integration
 
@@ -266,78 +266,144 @@ fs.writeFileSync(`dist/${result.filename}`, result.content);
 
 ---
 
-## Spec 054: Figma Transformer
+## FigmaTransformer: Style Generation via Plugin API
 
-Spec 054 will implement a `FigmaTransformer` that converts DTCG tokens into Figma's Variables API format. Here's how it fits into the architecture:
+The `FigmaTransformer` (Spec 054a) is a production transformer that converts DTCG tokens into Figma Variables and Styles. It demonstrates two key patterns beyond the minimal example: generating composite styles via Plugin API code, and applying different naming conventions for variables vs styles.
 
-### Planned Implementation
+### Configuration
 
 ```typescript
-import type { ITokenTransformer, TransformResult, TransformerConfig } from '../generators/transformers';
-import type { DTCGTokenFile } from '../generators/types/DTCGTypes';
+readonly config: TransformerConfig = {
+  id: 'figma',
+  name: 'Figma Variables and Styles',
+  outputExtension: '.figma.json',
+  includeExtensions: false, // Figma doesn't consume DesignerPunk extensions
+};
+```
 
-export class FigmaTransformer implements ITokenTransformer {
-  readonly config: TransformerConfig = {
-    id: 'figma',
-    name: 'Figma Variables',
-    outputExtension: '.figma.json',
-    includeExtensions: false, // Figma doesn't use DesignerPunk extensions
-  };
+### Output Structure
 
-  transform(dtcgTokens: DTCGTokenFile): TransformResult {
-    const figmaFormat = this.convertToFigmaFormat(dtcgTokens);
-    return {
-      content: JSON.stringify(figmaFormat, null, 2),
-      filename: `DesignTokens${this.config.outputExtension}`,
-      warnings: [],
-    };
-  }
+The transformer produces a `FigmaTokenFile` with two sections:
 
-  canTransform(_dtcgTokens: DTCGTokenFile): boolean {
-    return true; // Figma can handle all DTCG token types
-  }
-
-  private convertToFigmaFormat(dtcgTokens: DTCGTokenFile): object {
-    // Spec 054 will implement:
-    // - Map DTCG types to Figma variable types (COLOR, FLOAT, STRING, BOOLEAN)
-    // - Create Figma variable collections from token groups
-    // - Resolve aliases to Figma variable references
-    // - Handle composite tokens (shadow, typography) as Figma styles
-    return {};
-  }
+```typescript
+interface FigmaTokenFile {
+  collections: FigmaVariableCollection[];  // Variables (primitives + semantics)
+  styles: FigmaStyleDefinition[];          // Effect styles + text styles
 }
 ```
 
-### Integration Point
+- `collections` — Two variable collections ("Primitives" and "Semantics"), each with light/dark modes containing identical values (Phase 1)
+- `styles` — Effect styles from shadow tokens and text styles from typography tokens
 
-Spec 054 registers its transformer without modifying any Spec 053 code:
+### Variable vs Style Separation
+
+Not all DTCG tokens become Figma variables. Composite tokens (shadow, typography) become Figma styles instead, because designers apply them as one-click presets in the style picker.
+
+| DTCG Group | Figma Artifact | Rationale |
+|------------|---------------|-----------|
+| `space`, `color`, `fontSize`, etc. | Variables (Primitives collection) | Atomic values that bind to design properties |
+| `semanticColor`, `semanticSpace`, etc. | Variables (Semantics collection) | Alias references to primitives |
+| `shadow` | Effect Styles | Composite — designers apply as a single shadow preset |
+| `typography` | Text Styles | Composite — designers apply as a single type preset |
+
+### Naming Conventions
+
+Variables and styles use different separators because Figma's UI treats them differently:
+
+**Variables** use `/` for visual grouping hierarchy:
+```
+space/100          ← primitive: "space100" → strip prefix, keep number
+color/purple/300   ← primitive: "purple300" → split name + number
+color/primary      ← semantic: "color.primary" → dots become slashes
+```
+
+**Styles** use `.` for flat display in the style picker:
+```
+shadow.container
+shadow.elevation200
+typography.bodySm
+typography.heading200
+```
+
+The naming logic lives in two methods:
+
+```typescript
+// Variables: group + token key → slash-separated path
+toFigmaVariableName("space", "space100")     // → "space/100"
+toFigmaVariableName("color", "purple300")    // → "color/purple/300"
+
+// Styles: group + token key → dot-separated flat name
+toFigmaStyleName("shadow", "container")      // → "shadow.container"
+toFigmaStyleName("typography", "bodySm")     // → "typography.bodySm"
+```
+
+### Style Generation via Plugin API
+
+Figma's Variables API handles atomic tokens (numbers, colors, strings), but composite tokens like shadows and typography require the Plugin API. The `FigmaTransformer` generates style definitions that the `TokenSyncWorkflow` later executes as Plugin API code.
+
+**Effect styles** (shadows):
+
+```typescript
+// FigmaTransformer extracts shadow properties from DTCG:
+{
+  type: 'EFFECT',
+  name: 'shadow.container',
+  properties: {
+    effects: [{
+      type: 'DROP_SHADOW',
+      offset: { x: 0, y: 4 },
+      radius: 12,
+      spread: 0,
+      color: { r: 0, g: 0, b: 0, a: 0.3 }
+    }]
+  },
+  description: 'Source: shadow.container — Container shadow'
+}
+
+// TokenSyncWorkflow converts this to Plugin API code:
+const style = figma.createEffectStyle();
+style.name = "shadow.container";
+style.effects = [{
+  type: "DROP_SHADOW",
+  offset: { x: 0, y: 4 },
+  radius: 12,
+  spread: 0,
+  color: { r: 0, g: 0, b: 0, a: 0.3 }
+}];
+```
+
+**Text styles** (typography):
+
+```typescript
+// FigmaTransformer resolves alias references to concrete values:
+{
+  type: 'TEXT',
+  name: 'typography.bodySm',
+  properties: {
+    fontFamily: 'Inter',       // resolved from {fontFamily.fontFamilyBody}
+    fontSize: 12,              // resolved from {fontSize.fontSize075}
+    fontWeight: 400,           // resolved from {fontWeight.fontWeight400}
+    lineHeight: 16,            // resolved from {lineHeight.lineHeight075}
+    letterSpacing: 0           // resolved from {letterSpacing.letterSpacing100}
+  },
+  description: 'Source: typography.bodySm — Small body typography'
+}
+```
+
+Typography tokens in DTCG use alias references (e.g., `{fontFamily.fontFamilyBody}`). The transformer resolves these to concrete values by looking up the referenced primitive in the DTCG file, since Figma's Plugin API needs actual values, not references.
+
+### Registration
+
+The FigmaTransformer registers without modifying any Spec 053 code:
 
 ```typescript
 import { transformerRegistry } from '../generators/transformers';
 import { FigmaTransformer } from './FigmaTransformer';
 
-// Registration — no changes to DTCGFormatGenerator needed
 transformerRegistry.register(new FigmaTransformer());
 ```
 
-### Build Pipeline Integration
-
-After registration, the Figma transformer runs alongside DTCG generation:
-
-```typescript
-// In generate-platform-tokens.ts (or equivalent)
-const generator = new DTCGFormatGenerator();
-const dtcgTokens = generator.generate();
-generator.writeToFile('dist/DesignTokens.dtcg.json');
-
-// Run all registered transformers
-const results = transformerRegistry.transformAll(dtcgTokens);
-for (const result of results) {
-  fs.writeFileSync(`dist/${result.filename}`, result.content);
-}
-```
-
-This produces both `dist/DesignTokens.dtcg.json` (canonical) and `dist/DesignTokens.figma.json` (Figma-specific) in a single build pass.
+After registration, `transformerRegistry.transformAll()` produces both `DesignTokens.dtcg.json` and `DesignTokens.figma.json` in a single build pass.
 
 ---
 
@@ -417,6 +483,7 @@ return { content, filename, warnings };
 
 ## Related Documentation
 
-- [DTCG Integration Guide](./dtcg-integration-guide.md) — DTCG format overview, token groups, extensions schema, tool integrations
+- [DTCG Integration Guide](./dtcg-integration-guide.md) — DTCG format overview, token groups, extensions schema, tool integrations, Figma token push workflow
 - [MCP Integration Guide](./mcp-integration-guide.md) — Loading and querying DTCG tokens programmatically
 - [DTCG Format Module 2025.10 Specification](https://tr.designtokens.org/format/)
+- [Figma Token Push Design](../.kiro/specs/054a-figma-token-push/design.md) — Architecture and data models for the Figma sync workflow

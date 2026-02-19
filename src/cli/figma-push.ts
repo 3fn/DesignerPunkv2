@@ -21,6 +21,7 @@
  * @requirements Req 7 (CLI Command)
  */
 
+import 'dotenv/config';
 import * as fs from 'fs';
 import * as path from 'path';
 import { FigmaTransformer } from '../generators/transformers/FigmaTransformer';

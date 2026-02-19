@@ -7,10 +7,10 @@ description: DTCG integration guide — file location, token type mapping, Desig
 # DTCG Integration Guide
 
 **Date**: February 17, 2026
-**Last Reviewed**: February 17, 2026
-**Purpose**: Guide for integrating DesignerPunk tokens via DTCG format with external design tools
+**Last Reviewed**: February 18, 2026
+**Purpose**: Guide for integrating DesignerPunk tokens via DTCG format with external design tools, including Figma token push workflow
 **Organization**: spec-guide
-**Scope**: 053-dtcg-token-format-generator
+**Scope**: 053-dtcg-token-format-generator, 054a-figma-token-push
 **Layer**: 3
 **Relevant Tasks**: dtcg-integration, design-tool-integration
 
@@ -496,6 +496,196 @@ Tokens Studio preserves `$extensions` metadata but doesn't display it in the UI 
 
 ---
 
+## Token Push Workflow
+
+DesignerPunk supports pushing tokens directly to Figma as Variables and Styles via the `figma:push` CLI command. This creates a one-way sync (Code → Figma) so designers work with DesignerPunk vocabulary in Figma while code remains the source of truth.
+
+**Workflow:**
+```
+Code (Rosetta)
+  → DTCG (dist/DesignTokens.dtcg.json)
+  → FigmaTransformer
+  → dist/DesignTokens.figma.json
+  → TokenSyncWorkflow
+  → Figma Variables + Styles
+```
+
+### Prerequisites
+
+- **Figma Desktop** app (not the browser version — Desktop Bridge requires the desktop app)
+- **Node.js 18+**
+- **figma-console-mcp** package (installed as a dev dependency)
+- A dedicated Figma file for the token library
+- A Figma Personal Access Token
+
+### Desktop Bridge Setup
+
+The Desktop Bridge plugin enables Console MCP to execute Plugin API calls in Figma Desktop. This is required for creating effect styles (shadows) and text styles (typography).
+
+**Step 1: Import the Desktop Bridge plugin into Figma**
+
+The plugin is bundled with the `figma-console-mcp` package:
+
+```
+node_modules/figma-console-mcp/figma-desktop-bridge/manifest.json
+```
+
+In Figma Desktop:
+1. Open the menu → Plugins → Development → Import plugin from manifest…
+2. Navigate to the path above and select `manifest.json`
+3. The "Figma Desktop Bridge" plugin will appear under Development plugins
+
+**Step 2: Run the plugin**
+
+1. Open your dedicated token library file in Figma Desktop
+2. Go to Plugins → Development → Figma Desktop Bridge
+3. The plugin will start listening for WebSocket connections on port 9223
+
+**Step 3: Configure environment variables**
+
+Copy `.env.example` to `.env` and fill in the Figma values:
+
+```bash
+# Figma Personal Access Token
+# Generate at: https://help.figma.com/hc/en-us/articles/8085703771159-Manage-personal-access-tokens
+FIGMA_ACCESS_TOKEN=figd_YOUR_TOKEN_HERE
+
+# Figma file key (from the URL: https://figma.com/design/FILE_KEY/...)
+FIGMA_FILE_KEY=your-figma-file-key
+```
+
+**Step 4: Verify the connection**
+
+Run a dry-run to confirm the transformer works, then a full push to verify the bridge:
+
+```bash
+# Transform only (no Figma connection needed)
+npm run figma:push -- --dry-run
+
+# Full sync (requires Desktop Bridge running)
+npm run figma:push
+```
+
+### CLI Commands
+
+```bash
+# Normal sync — blocks if drift is detected
+npm run figma:push
+
+# Force override — sync proceeds even if Figma variables were manually edited
+npm run figma:push -- --force
+
+# Resume from a failed batch (e.g., batch 3)
+npm run figma:push -- --resume 3
+
+# Dry run — transform to dist/DesignTokens.figma.json without syncing
+npm run figma:push -- --dry-run
+```
+
+**Exit codes:**
+- `0` — Sync completed successfully
+- `1` — Sync failed (drift detected, batch error, or connection failure)
+
+### Drift Detection and Force Override
+
+The sync workflow enforces code as the source of truth. Before pushing, it compares the current Figma variable state against the expected state. If any variables have been manually edited in Figma, the sync blocks and reports which variables drifted:
+
+```
+Drift detected: 3 variables have been edited in Figma since last push
+
+Drifted variables:
+  - space/300: Expected 24, found 25 (edited in Figma)
+  - color/primary: Expected #B026FF, found #A020E0 (edited in Figma)
+  - fontSize/200: Expected 16, found 18 (edited in Figma)
+
+Resolution options:
+  1. Revert changes in Figma, then re-run: npm run figma:push
+  2. Force override (Figma changes will be lost): npm run figma:push -- --force
+  3. If these values should be tokens, create them through the spec process first
+```
+
+Use `--force` only when you're certain the Figma edits should be discarded.
+
+### Partial Failure and Resume
+
+Token sync operates in batches of 100 variables. If a batch fails (e.g., rate limit), the sync stops immediately. Completed batches remain applied. The error report includes a recovery command:
+
+```
+Sync completed with errors:
+
+✅ Created: 200 variables (batches 1-2)
+❌ Failed: Batch 3 of 5
+   - Error: Rate limit exceeded (429)
+   - Recommendation: Wait 60 seconds, then run:
+     npm run figma:push -- --resume 3
+
+⏸️  Remaining: 200 variables (batches 4-5)
+```
+
+### What Gets Pushed
+
+| Token Type | Figma Artifact | Naming Convention |
+|------------|---------------|-------------------|
+| Primitive variables (space, color, fontSize, etc.) | Figma Variables in "Primitives" collection | `space/100`, `color/purple/300` |
+| Semantic variables (aliases) | Figma Variables in "Semantics" collection | `color/primary`, `space/inset/spacious` |
+| Shadow tokens | Figma Effect Styles | `shadow.elevation200` |
+| Typography tokens | Figma Text Styles | `typography.heading200` |
+
+Variables use `/` for Figma's visual grouping hierarchy. Styles use `.` because they appear flat in Figma's style picker.
+
+All variables are pushed to both light and dark modes with identical values (Phase 1). This establishes the mode structure for future theme support without requiring migration later.
+
+### Troubleshooting {#desktop-bridge-setup}
+
+#### Desktop Bridge Not Connecting
+
+**Symptom:** Pre-flight check fails with "Desktop Bridge not available"
+
+**Solutions:**
+1. Confirm Figma Desktop is running (not the browser version)
+2. Open the Desktop Bridge plugin: Plugins → Development → Figma Desktop Bridge
+3. Check that the plugin UI shows "Connected" or "Listening"
+4. Verify the plugin was imported from the correct manifest:
+   `node_modules/figma-console-mcp/figma-desktop-bridge/manifest.json`
+
+#### Port Conflicts (9223-9232)
+
+**Symptom:** WebSocket connection fails or times out
+
+The Desktop Bridge uses WebSocket ports 9223 through 9232. If port 9223 is occupied, it tries the next port in the range.
+
+**Solutions:**
+1. Check for processes using these ports:
+   ```bash
+   lsof -i :9223-9232
+   ```
+2. Kill any conflicting processes or close other MCP clients that may be holding a connection
+3. Restart the Desktop Bridge plugin in Figma
+
+#### Multiple MCP Server Instances
+
+**Symptom:** Unexpected behavior, commands sent to wrong Figma file
+
+Running multiple Console MCP server instances simultaneously can cause port conflicts and routing issues.
+
+**Solutions:**
+1. Close other tools that spawn Console MCP (e.g., Claude Desktop, other CLI tools)
+2. Ensure only one `figma:push` process runs at a time
+3. If needed, restart Figma Desktop to clear stale WebSocket connections
+
+#### Plugin Connection Errors
+
+**Symptom:** Sync starts but fails with Plugin API errors
+
+**Solutions:**
+1. Ensure the token library file is the active file in Figma Desktop (the plugin operates on the current file)
+2. Re-run the Desktop Bridge plugin if Figma was restarted
+3. Check the Figma Desktop console (Help → Toggle Developer Tools) for plugin errors
+4. Verify your `FIGMA_ACCESS_TOKEN` has the required scopes
+5. Verify `FIGMA_FILE_KEY` matches the file where the Desktop Bridge plugin is running
+
+---
+
 ## For DesignerPunk Component Developers
 
 **DTCG output is for external tool integration. Components continue importing TypeScript sources.**
@@ -559,3 +749,4 @@ generator.writeToFile('dist/DesignTokens.resolved.dtcg.json');
 - [Token System Overview](./token-system-overview.md) — Complete Rosetta token system documentation
 - [Transformer Development Guide](./transformer-development-guide.md) — Building custom transformers for tool-specific output
 - [MCP Integration Guide](./mcp-integration-guide.md) — Loading and querying DTCG tokens programmatically
+- [Figma Token Push Design](../.kiro/specs/054a-figma-token-push/design.md) — Architecture and implementation details for the token push workflow
