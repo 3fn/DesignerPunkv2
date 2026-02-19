@@ -305,7 +305,7 @@ This spec implements the token push workflow in three phases:
 
 ---
 
-- [ ] 5. CLI Command Implementation
+- [x] 5. CLI Command Implementation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive
@@ -332,7 +332,7 @@ This spec implements the token push workflow in three phases:
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 5 Complete: CLI Command Implementation"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 5.1 Create CLI command
+  - [x] 5.1 Create CLI command
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/cli/figma-push.ts`
@@ -346,7 +346,7 @@ This spec implements the token push workflow in three phases:
     - Exit with appropriate code (0 on success, 1 on failure)
     - _Requirements: Req 7_
 
-  - [ ] 5.2 Add npm script
+  - [x] 5.2 Add npm script
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Add `figma:push` script to package.json
@@ -354,7 +354,7 @@ This spec implements the token push workflow in three phases:
     - Test script execution
     - _Requirements: Req 7_
 
-  - [ ] 5.3 Write CLI tests
+  - [x] 5.3 Write CLI tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test normal sync
