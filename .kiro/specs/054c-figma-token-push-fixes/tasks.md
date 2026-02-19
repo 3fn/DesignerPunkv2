@@ -171,7 +171,7 @@
     - Run preservation tests from step 2 (especially 2g)
     - **EXPECTED OUTCOME**: Tests PASS (confirms no regressions)
 
-- [ ] 6. Checkpoint — Ensure all tests pass
+- [x] 6. Checkpoint — Ensure all tests pass
   - **Type**: Implementation
   - **Validation**: Tier 1 — Full test suite
   - Run `npm test` to verify all tests pass (existing + new bugfix tests)
