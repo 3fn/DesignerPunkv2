@@ -30,6 +30,7 @@ import type { FigmaTokenFile } from '../generators/transformers/FigmaTransformer
 import { TokenSyncWorkflow } from '../figma/TokenSyncWorkflow';
 import { ConsoleMCPClientImpl } from '../figma/ConsoleMCPClientImpl';
 import { checkDesktopBridge } from '../figma/preflight';
+import { cleanupStalePorts } from '../figma/portCleanup';
 import type { DTCGTokenFile } from '../generators/types/DTCGTypes';
 
 // ---------------------------------------------------------------------------
@@ -174,7 +175,10 @@ export async function run(argv: string[] = process.argv.slice(2)): Promise<void>
     process.exit(0);
   }
 
-  // 5. Pre-flight check
+  // 5. Clean up stale figma-console-mcp processes before connecting
+  cleanupStalePorts();
+
+  // 6. Pre-flight check
   console.log('🔍 Running pre-flight checks…');
   const mcpClient = new ConsoleMCPClientImpl();
   await mcpClient.connect();
@@ -187,7 +191,7 @@ export async function run(argv: string[] = process.argv.slice(2)): Promise<void>
     }
     console.log('✅ Desktop Bridge is available');
 
-    // 6. Sync to Figma
+    // 7. Sync to Figma
     console.log('🚀 Syncing tokens to Figma…');
     const figmaTokens: FigmaTokenFile = JSON.parse(result.content);
     const workflow = new TokenSyncWorkflow(mcpClient, process.env.FIGMA_FILE_KEY ?? '');
@@ -211,7 +215,7 @@ export async function run(argv: string[] = process.argv.slice(2)): Promise<void>
       });
     }
 
-    // 7. Report results
+    // 8. Report results
     console.log('');
     if (syncResult.success) {
       console.log('✅ Sync complete');

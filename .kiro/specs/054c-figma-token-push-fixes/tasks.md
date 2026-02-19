@@ -139,11 +139,11 @@
     - Run preservation tests from step 2 (especially 2a, 2e, 2f)
     - **EXPECTED OUTCOME**: Tests PASS (confirms no regressions)
 
-- [ ] 5. Fix stale port cleanup on startup (Bug 4)
+- [x] 5. Fix stale port cleanup on startup (Bug 4)
   - **Type**: Implementation
   - **Validation**: Tier 2 — Unit tests
 
-  - [ ] 5.1 Implement port cleanup utility
+  - [x] 5.1 Implement port cleanup utility
     - Create `src/figma/portCleanup.ts` (or add to `figma-push.ts`)
     - Execute `lsof -ti:9223-9232` to find PIDs of stale `figma-console-mcp` processes
     - Kill found processes with `kill <PID>`
@@ -153,19 +153,19 @@
     - _Expected_Behavior: Stale processes terminated before `connect()`_
     - _Requirements: 2.4_
 
-  - [ ] 5.2 Integrate port cleanup into `figma-push.ts` `run()`
+  - [x] 5.2 Integrate port cleanup into `figma-push.ts` `run()`
     - Call port cleanup BEFORE creating `ConsoleMCPClientImpl` and calling `connect()`
     - Add after the dry-run exit point but before pre-flight checks
     - _Requirements: 2.4_
 
-  - [ ] 5.3 Verify bug condition exploration test now passes (Bug 4)
+  - [x] 5.3 Verify bug condition exploration test now passes (Bug 4)
     - **Property 1: Expected Behavior** — Stale Port Cleanup on Startup
     - **IMPORTANT**: Re-run the SAME test from task 1 (test 1d) — do NOT write a new test
     - Run bug condition exploration test 1d from step 1
     - **EXPECTED OUTCOME**: Test PASSES (confirms bug 4 is fixed)
     - _Requirements: 2.4_
 
-  - [ ] 5.4 Verify preservation tests still pass
+  - [x] 5.4 Verify preservation tests still pass
     - **Property 2: Preservation** — Desktop Bridge Retry Logic Unchanged
     - **IMPORTANT**: Re-run the SAME tests from task 2 — do NOT write new tests
     - Run preservation tests from step 2 (especially 2g)
