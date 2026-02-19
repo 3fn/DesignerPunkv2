@@ -105,11 +105,11 @@
     - **EXPECTED OUTCOME**: Tests PASS (confirms no regressions)
     - Confirm all preservation tests still pass after fix
 
-- [ ] 4. Fix semantic token alias creation (Bug 3)
+- [x] 4. Fix semantic token alias creation (Bug 3)
   - **Type**: Implementation
   - **Validation**: Tier 2 — Unit tests
 
-  - [ ] 4.1 Implement `ConsoleMCPClientImpl.createVariableAliases`
+  - [x] 4.1 Implement `ConsoleMCPClientImpl.createVariableAliases`
     - Accept a list of `{ semanticName, primitiveName }` pairs
     - Generate Plugin API code that finds both variables by name using `figma.variables.getLocalVariables()`
     - Create alias via `figma.variables.createVariableAlias(primitiveVariable)`
@@ -119,21 +119,21 @@
     - _Expected_Behavior: `callTool('figma_execute', { fileKey, code })` where code uses `figma.variables.createVariableAlias()`_
     - _Requirements: 2.3_
 
-  - [ ] 4.2 Add alias creation step to `TokenSyncWorkflow`
+  - [x] 4.2 Add alias creation step to `TokenSyncWorkflow`
     - After variable sync completes, identify semantic tokens that reference primitives (tokens with `aliasOf` in their original DTCG definition or in the FigmaVariable data)
     - Call `consoleMcp.createVariableAliases()` to create Figma variable aliases linking semantics to primitives
     - Add to both `initialSetup()` (after `setupDesignTokens`) and `sync()` (after variable sync)
     - _Preservation: Primitive tokens must continue to be pushed with resolved values_
     - _Requirements: 2.3_
 
-  - [ ] 4.3 Verify bug condition exploration test now passes (Bug 3)
+  - [x] 4.3 Verify bug condition exploration test now passes (Bug 3)
     - **Property 1: Expected Behavior** — Semantic Tokens Create Figma Variable Aliases
     - **IMPORTANT**: Re-run the SAME test from task 1 (test 1c) — do NOT write a new test
     - Run bug condition exploration test 1c from step 1
     - **EXPECTED OUTCOME**: Test PASSES (confirms bug 3 is fixed)
     - _Requirements: 2.3_
 
-  - [ ] 4.4 Verify preservation tests still pass
+  - [x] 4.4 Verify preservation tests still pass
     - **Property 2: Preservation** — Primitive Values and Style Sync Unchanged
     - **IMPORTANT**: Re-run the SAME tests from task 2 — do NOT write new tests
     - Run preservation tests from step 2 (especially 2a, 2e, 2f)

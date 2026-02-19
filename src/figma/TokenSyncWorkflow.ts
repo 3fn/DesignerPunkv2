@@ -196,6 +196,26 @@ export class TokenSyncWorkflow {
         };
       }
 
+      // 4b. Create Figma variable aliases for semantic tokens that reference primitives.
+      const aliasPairs = this.extractAliasPairs(allVariables);
+      if (aliasPairs.length > 0) {
+        try {
+          await this.consoleMcp.createVariableAliases(this.figmaFileKey, aliasPairs);
+        } catch (error) {
+          const message = error instanceof Error ? error.message : String(error);
+          return {
+            success: false,
+            created: varResult.created,
+            updated: varResult.updated,
+            deleted: 0,
+            errors: [{
+              phase: 'alias-creation',
+              message: `Failed to create variable aliases: ${message}`,
+            }],
+          };
+        }
+      }
+
       // 5. Sync styles via Plugin API
       // Build set of existing style names from current Figma state
       // (styles don't come from getVariables — we use the token file to
@@ -269,7 +289,23 @@ export class TokenSyncWorkflow {
       };
     }
 
-    // 3. Sync styles via Plugin API (styles can't be created atomically)
+    // 3. Create Figma variable aliases for semantic tokens that reference primitives.
+    //    This must happen after setupDesignTokens so the variables exist in Figma.
+    const allVariables = figmaTokens.collections.flatMap(c => c.variables);
+    const aliasPairs = this.extractAliasPairs(allVariables);
+    if (aliasPairs.length > 0) {
+      try {
+        await this.consoleMcp.createVariableAliases(this.figmaFileKey, aliasPairs);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        errors.push({
+          phase: 'alias-creation',
+          message: `Failed to create variable aliases: ${message}`,
+        });
+      }
+    }
+
+    // 4. Sync styles via Plugin API (styles can't be created atomically)
     const styleResult = await this.syncStyles(
       figmaTokens.styles,
       new Set<string>(), // No existing styles on initial setup
@@ -841,4 +877,39 @@ export class TokenSyncWorkflow {
 
     return false;
   }
+
+  /**
+   * Extract semantic-to-primitive alias pairs from a set of variables.
+   *
+   * Scans `valuesByMode` for values shaped `{ aliasOf: string }` — these
+   * indicate semantic tokens that reference a primitive. Returns pairs
+   * suitable for `ConsoleMCPClient.createVariableAliases()`.
+   */
+  private extractAliasPairs(
+    variables: FigmaVariable[],
+  ): { semanticName: string; primitiveName: string }[] {
+    const pairs: { semanticName: string; primitiveName: string }[] = [];
+    const seen = new Set<string>();
+
+    for (const variable of variables) {
+      for (const modeValue of Object.values(variable.valuesByMode)) {
+        if (
+          modeValue &&
+          typeof modeValue === 'object' &&
+          'aliasOf' in (modeValue as Record<string, unknown>) &&
+          typeof (modeValue as Record<string, unknown>).aliasOf === 'string'
+        ) {
+          const primitiveName = (modeValue as { aliasOf: string }).aliasOf;
+          const key = `${variable.name}→${primitiveName}`;
+          if (!seen.has(key)) {
+            seen.add(key);
+            pairs.push({ semanticName: variable.name, primitiveName });
+          }
+        }
+      }
+    }
+
+    return pairs;
+  }
+
 }

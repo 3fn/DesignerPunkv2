@@ -224,14 +224,46 @@ export class ConsoleMCPClientImpl implements ConsoleMCPClient {
     return this.callTool('figma_execute', { fileKey, code });
   }
   async createVariableAliases(
-    fileKey: string,
-    aliases: { semanticName: string; primitiveName: string }[],
-  ): Promise<void> {
-    // TODO: Full implementation in task 4.1
-    // Will generate Plugin API code using figma.variables.createVariableAlias()
-    // and execute via figma_execute
-    throw new Error('createVariableAliases not yet implemented (task 4.1)');
+      fileKey: string,
+      aliases: { semanticName: string; primitiveName: string }[],
+    ): Promise<void> {
+      if (aliases.length === 0) return;
+
+      // Build Plugin API code that creates variable aliases for each pair.
+      // The code finds both variables by name, creates an alias reference
+      // from the primitive, and sets it on the semantic variable for every mode.
+      const aliasEntries = aliases
+        .map(
+          (a) =>
+            `  { semantic: ${JSON.stringify(a.semanticName)}, primitive: ${JSON.stringify(a.primitiveName)} }`,
+        )
+        .join(',\n');
+
+      const code = `
+  const allVars = figma.variables.getLocalVariables();
+  const byName = new Map(allVars.map(v => [v.name, v]));
+  const pairs = [
+  ${aliasEntries}
+  ];
+  const errors = [];
+  for (const { semantic, primitive } of pairs) {
+    const semVar = byName.get(semantic);
+    const primVar = byName.get(primitive);
+    if (!semVar) { errors.push('Semantic variable not found: ' + semantic); continue; }
+    if (!primVar) { errors.push('Primitive variable not found: ' + primitive); continue; }
+    const alias = figma.variables.createVariableAlias(primVar);
+    const collection = figma.variables.getVariableCollectionById(semVar.variableCollectionId);
+    if (!collection) { errors.push('Collection not found for: ' + semantic); continue; }
+    for (const modeId of collection.modes.map(m => m.modeId)) {
+      semVar.setValueForMode(modeId, alias);
+    }
   }
+  if (errors.length > 0) { figma.notify('Alias errors: ' + errors.join('; ')); }
+  `.trim();
+
+      await this.callTool('figma_execute', { fileKey, code });
+    }
+
 
   async setupDesignTokens(
       fileKey: string,
