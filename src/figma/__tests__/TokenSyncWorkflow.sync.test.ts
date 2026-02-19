@@ -24,6 +24,7 @@ function makeMockMcp(): jest.Mocked<ConsoleMCPClient> {
   return {
     batchCreateVariables: jest.fn().mockResolvedValue(undefined),
     batchUpdateVariables: jest.fn().mockResolvedValue(undefined),
+    createVariableAliases: jest.fn().mockResolvedValue(undefined),
     getVariables: jest.fn().mockResolvedValue([]),
     execute: jest.fn().mockResolvedValue(undefined),
     setupDesignTokens: jest.fn().mockResolvedValue(undefined),
@@ -34,7 +35,7 @@ function makeMockMcp(): jest.Mocked<ConsoleMCPClient> {
 function makeVariable(name: string, value: number = 8): FigmaVariable {
   return {
     name,
-    type: 'FLOAT',
+    resolvedType: 'FLOAT',
     valuesByMode: { light: value, dark: value },
   };
 }
@@ -104,7 +105,8 @@ describe('TokenSyncWorkflow — sync()', () => {
 
   it('updates variables that already exist in Figma', async () => {
     const vars = [makeVariable('space/100', 8)];
-    mockMcp.getVariables.mockResolvedValue(vars);
+    const figmaVars = vars.map((v, i) => ({ ...v, id: `VariableID:${i}:0`, collectionId: 'VariableCollectionId:1:0' }));
+    mockMcp.getVariables.mockResolvedValue(figmaVars);
     const tokens = makeTokenFile(vars);
 
     const result = await workflow.sync(tokens);
@@ -133,7 +135,7 @@ describe('TokenSyncWorkflow — sync()', () => {
 
   it('proceeds with sync when drift detected but forceOverride is true', async () => {
     mockMcp.getVariables.mockResolvedValue([
-      makeVariable('space/100', 10), // Drifted
+      { ...makeVariable('space/100', 10), id: 'VariableID:0:0', collectionId: 'VariableCollectionId:1:0' }, // Drifted
     ]);
     const tokens = makeTokenFile([makeVariable('space/100', 8)]);
 

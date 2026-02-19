@@ -40,18 +40,22 @@ jest.mock('../../generators/transformers/FigmaTransformer', () => ({
 }));
 
 const mockSync = jest.fn();
+const mockInitialSetup = jest.fn();
 jest.mock('../../figma/TokenSyncWorkflow', () => ({
   TokenSyncWorkflow: jest.fn().mockImplementation(() => ({
     sync: mockSync,
+    initialSetup: mockInitialSetup,
   })),
 }));
 
 const mockConnect = jest.fn().mockResolvedValue(undefined);
 const mockDisconnect = jest.fn().mockResolvedValue(undefined);
+const mockGetVariables = jest.fn().mockResolvedValue([]);
 jest.mock('../../figma/ConsoleMCPClientImpl', () => ({
   ConsoleMCPClientImpl: jest.fn().mockImplementation(() => ({
     connect: mockConnect,
     disconnect: mockDisconnect,
+    getVariables: mockGetVariables,
   })),
 }));
 
@@ -90,7 +94,7 @@ const MINIMAL_FIGMA: FigmaTokenFile = {
     {
       name: 'Primitives',
       modes: ['light', 'dark'],
-      variables: [{ name: 'space/100', type: 'FLOAT', valuesByMode: { light: 8, dark: 8 } }],
+      variables: [{ name: 'space/100', resolvedType: 'FLOAT', valuesByMode: { light: 8, dark: 8 } }],
     },
   ],
   styles: [],
@@ -124,6 +128,14 @@ describe('figma-push CLI', () => {
       deleted: 0,
       errors: [],
     });
+    mockInitialSetup.mockResolvedValue({
+      success: true,
+      created: 1,
+      updated: 0,
+      deleted: 0,
+      errors: [],
+    });
+    mockGetVariables.mockResolvedValue([]);
   });
 
   afterAll(() => {
@@ -138,7 +150,7 @@ describe('figma-push CLI', () => {
   describe('parseArgs', () => {
     it('returns defaults when no flags are provided', () => {
       const args = parseArgs([]);
-      expect(args).toEqual({ force: false, resume: undefined, dryRun: false });
+      expect(args).toEqual({ force: false, resume: undefined, dryRun: false, clean: false });
     });
 
     it('parses --force flag', () => {
@@ -219,10 +231,8 @@ describe('figma-push CLI', () => {
       expect(mockExit).toHaveBeenCalledWith(0);
       expect(mockConnect).toHaveBeenCalled();
       expect(mockCheckDesktopBridge).toHaveBeenCalled();
-      expect(mockSync).toHaveBeenCalledWith(
-        expect.any(Object),
-        expect.objectContaining({ forceOverride: false, resume: undefined }),
-      );
+      // With no existing variables, initialSetup is called
+      expect(mockInitialSetup).toHaveBeenCalledWith(expect.any(Object));
       expect(mockDisconnect).toHaveBeenCalled();
     });
   });
@@ -233,6 +243,8 @@ describe('figma-push CLI', () => {
     beforeEach(() => {
       mockExistsSync.mockReturnValue(true);
       mockReadFileSync.mockReturnValue(JSON.stringify(MINIMAL_DTCG));
+      // Return existing variables so sync path is taken (not initialSetup)
+      mockGetVariables.mockResolvedValue([{ name: 'space/100', resolvedType: 'FLOAT', valuesByMode: { light: 8 } }]);
     });
 
     it('passes forceOverride: true to sync', async () => {
@@ -251,6 +263,8 @@ describe('figma-push CLI', () => {
     beforeEach(() => {
       mockExistsSync.mockReturnValue(true);
       mockReadFileSync.mockReturnValue(JSON.stringify(MINIMAL_DTCG));
+      // Return existing variables so sync path is taken
+      mockGetVariables.mockResolvedValue([{ name: 'space/100', resolvedType: 'FLOAT', valuesByMode: { light: 8 } }]);
     });
 
     it('passes resume batch number to sync', async () => {
@@ -269,6 +283,8 @@ describe('figma-push CLI', () => {
     beforeEach(() => {
       mockExistsSync.mockReturnValue(true);
       mockReadFileSync.mockReturnValue(JSON.stringify(MINIMAL_DTCG));
+      // Return existing variables so sync path is taken for error tests
+      mockGetVariables.mockResolvedValue([{ name: 'space/100', resolvedType: 'FLOAT', valuesByMode: { light: 8 } }]);
     });
 
     it('exits 1 and reports errors when sync fails', async () => {

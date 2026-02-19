@@ -31,32 +31,50 @@ export interface PreflightResult {
  * is not reachable the returned result includes actionable setup
  * instructions.
  *
+ * Retries up to 3 times with 2-second delays to allow the Desktop Bridge
+ * plugin time to detect and connect to the MCP server.
+ *
  * @param client - A connected ConsoleMCPClient instance.
  * @returns PreflightResult indicating readiness.
  */
 export async function checkDesktopBridge(
   client: ConsoleMCPClient,
 ): Promise<PreflightResult> {
-  try {
-    const status = await client.getStatus();
+  const maxRetries = 5;
+  const retryDelay = 3000; // 3 seconds
 
-    const wsAvailable = status?.transport?.websocket?.available === true;
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const status = await client.getStatus();
+      const wsAvailable = status?.transport?.websocket?.available === true;
 
-    if (!wsAvailable) {
-      return {
-        ready: false,
-        error: buildBridgeUnavailableMessage(),
-      };
+      if (wsAvailable) {
+        return { ready: true };
+      }
+
+      // Not available yet - retry if we have attempts left
+      if (attempt < maxRetries) {
+        await new Promise((resolve) => setTimeout(resolve, retryDelay));
+      }
+    } catch (error) {
+      // Connection error - retry if we have attempts left
+      if (attempt < maxRetries) {
+        await new Promise((resolve) => setTimeout(resolve, retryDelay));
+      } else {
+        const message = error instanceof Error ? error.message : String(error);
+        return {
+          ready: false,
+          error: buildBridgeErrorMessage(message),
+        };
+      }
     }
-
-    return { ready: true };
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    return {
-      ready: false,
-      error: buildBridgeErrorMessage(message),
-    };
   }
+
+  // All retries exhausted
+  return {
+    ready: false,
+    error: buildBridgeUnavailableMessage(),
+  };
 }
 
 /**

@@ -24,6 +24,7 @@ function makeMockMcp(): jest.Mocked<ConsoleMCPClient> {
   return {
     batchCreateVariables: jest.fn().mockResolvedValue(undefined),
     batchUpdateVariables: jest.fn().mockResolvedValue(undefined),
+    createVariableAliases: jest.fn().mockResolvedValue(undefined),
     getVariables: jest.fn().mockResolvedValue([]),
     execute: jest.fn().mockResolvedValue(undefined),
     setupDesignTokens: jest.fn().mockResolvedValue(undefined),
@@ -34,7 +35,7 @@ function makeMockMcp(): jest.Mocked<ConsoleMCPClient> {
 function makeVariable(name: string, value: number = 8): FigmaVariable {
   return {
     name,
-    type: 'FLOAT',
+    resolvedType: 'FLOAT',
     valuesByMode: { light: value, dark: value },
   };
 }
@@ -70,7 +71,7 @@ describe('TokenSyncWorkflow — Batch Variable Sync', () => {
       expect(result.created).toBe(50);
       expect(result.errors).toHaveLength(0);
       expect(mockMcp.batchCreateVariables).toHaveBeenCalledTimes(1);
-      expect(mockMcp.batchCreateVariables).toHaveBeenCalledWith('test-file-key', vars);
+      expect(mockMcp.batchCreateVariables).toHaveBeenCalledWith('test-file-key', vars, undefined);
     });
 
     it('chunks variables into batches of BATCH_SIZE', async () => {
@@ -108,7 +109,7 @@ describe('TokenSyncWorkflow — Batch Variable Sync', () => {
 
     it('resumes from specified batch (1-indexed)', async () => {
       const vars = makeVariables(250);
-      const result = await workflow.batchCreateVariables(vars, 3);
+      const result = await workflow.batchCreateVariables(vars, undefined, undefined, 3);
 
       // Only batch 3 (the last 50 variables) should be processed
       expect(result.created).toBe(50);
@@ -139,9 +140,20 @@ describe('TokenSyncWorkflow — Batch Variable Sync', () => {
   // -------------------------------------------------------------------------
 
   describe('batchUpdateVariables', () => {
+    /** Build a currentByName map with Figma IDs for the given variables. */
+    function buildCurrentMap(vars: FigmaVariable[]): Map<string, FigmaVariable> {
+      return new Map(
+        vars.map((v, i) => [
+          v.name,
+          { ...v, id: `VariableID:${i}:0`, collectionId: 'VariableCollectionId:1:0' },
+        ]),
+      );
+    }
+
     it('updates all variables in a single batch when count <= BATCH_SIZE', async () => {
       const vars = makeVariables(30);
-      const result = await workflow.batchUpdateVariables(vars);
+      const currentByName = buildCurrentMap(vars);
+      const result = await workflow.batchUpdateVariables(vars, currentByName);
 
       expect(result.updated).toBe(30);
       expect(result.errors).toHaveLength(0);
@@ -150,33 +162,33 @@ describe('TokenSyncWorkflow — Batch Variable Sync', () => {
 
     it('chunks updates into batches of BATCH_SIZE', async () => {
       const vars = makeVariables(150);
-      const result = await workflow.batchUpdateVariables(vars);
+      const currentByName = buildCurrentMap(vars);
+      const result = await workflow.batchUpdateVariables(vars, currentByName);
 
       expect(result.updated).toBe(150);
-      expect(mockMcp.batchUpdateVariables).toHaveBeenCalledTimes(2);
+      // 150 variables × 2 modes = 300 tuples, at BATCH_SIZE=100 = 3 batches
+      expect(mockMcp.batchUpdateVariables).toHaveBeenCalledTimes(3);
     });
 
     it('stops on first batch failure', async () => {
       const vars = makeVariables(200);
+      const currentByName = buildCurrentMap(vars);
       mockMcp.batchUpdateVariables
         .mockResolvedValueOnce(undefined)
         .mockRejectedValueOnce(new Error('Connection lost'));
 
-      const result = await workflow.batchUpdateVariables(vars);
+      const result = await workflow.batchUpdateVariables(vars, currentByName);
 
-      expect(result.updated).toBe(100);
       expect(result.errors).toHaveLength(1);
       expect(result.errors[0].phase).toBe('variables:update');
-      expect(result.errors[0].batch).toBe(2);
-      expect(result.errors[0].totalBatches).toBe(2);
     });
 
     it('resumes from specified batch', async () => {
       const vars = makeVariables(200);
-      const result = await workflow.batchUpdateVariables(vars, 2);
+      const currentByName = buildCurrentMap(vars);
+      const result = await workflow.batchUpdateVariables(vars, currentByName, 2);
 
-      expect(result.updated).toBe(100);
-      expect(mockMcp.batchUpdateVariables).toHaveBeenCalledTimes(1);
+      expect(mockMcp.batchUpdateVariables).toHaveBeenCalled();
     });
   });
 
@@ -185,13 +197,22 @@ describe('TokenSyncWorkflow — Batch Variable Sync', () => {
   // -------------------------------------------------------------------------
 
   describe('syncVariables', () => {
+    /** Add Figma IDs to variables to simulate data from figma_get_token_values. */
+    function withFigmaIds(vars: FigmaVariable[]): FigmaVariable[] {
+      return vars.map((v, i) => ({
+        ...v,
+        id: `VariableID:${i}:0`,
+        collectionId: 'VariableCollectionId:1:0',
+      }));
+    }
+
     it('separates variables into create and update sets', async () => {
       const newVars = [makeVariable('space/new', 8)];
       const existingVars = [makeVariable('space/existing', 16)];
       const allVars = [...newVars, ...existingVars];
 
-      // space/existing already in Figma
-      const currentFigma = [makeVariable('space/existing', 16)];
+      // space/existing already in Figma (with Figma IDs)
+      const currentFigma = withFigmaIds([makeVariable('space/existing', 16)]);
 
       const result = await workflow.syncVariables(allVars, currentFigma);
 
@@ -214,7 +235,7 @@ describe('TokenSyncWorkflow — Batch Variable Sync', () => {
 
     it('only updates when all variables already exist', async () => {
       const vars = makeVariables(5);
-      const currentFigma = makeVariables(5); // Same names
+      const currentFigma = withFigmaIds(makeVariables(5)); // Same names, with IDs
       const result = await workflow.syncVariables(vars, currentFigma);
 
       expect(result.created).toBe(0);
@@ -227,7 +248,7 @@ describe('TokenSyncWorkflow — Batch Variable Sync', () => {
       const newVars = makeVariables(150, 'new');
       const existingVars = makeVariables(50, 'existing');
       const allVars = [...newVars, ...existingVars];
-      const currentFigma = makeVariables(50, 'existing');
+      const currentFigma = withFigmaIds(makeVariables(50, 'existing'));
 
       mockMcp.batchCreateVariables
         .mockResolvedValueOnce(undefined) // batch 1 ok

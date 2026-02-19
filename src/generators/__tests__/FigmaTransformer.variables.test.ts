@@ -57,7 +57,7 @@ describe('FigmaTransformer — Variable Transformation', () => {
         (v) => v.name === 'space/100',
       );
       expect(space100).toBeDefined();
-      expect(space100!.type).toBe('FLOAT');
+      expect(space100!.resolvedType).toBe('FLOAT');
       expect(space100!.valuesByMode.light).toBe(8);
       expect(space100!.valuesByMode.dark).toBe(8);
     });
@@ -81,8 +81,8 @@ describe('FigmaTransformer — Variable Transformation', () => {
         (v) => v.name === 'color/purple/300',
       );
       expect(purple).toBeDefined();
-      expect(purple!.type).toBe('COLOR');
-      expect(purple!.valuesByMode.light).toBe('rgba(176, 38, 255, 1)');
+      expect(purple!.resolvedType).toBe('COLOR');
+      expect(purple!.valuesByMode.light).toBe('#B026FF');
     });
 
     it('generates primitive variables from fontWeight tokens', () => {
@@ -104,7 +104,7 @@ describe('FigmaTransformer — Variable Transformation', () => {
         (v) => v.name === 'fontWeight/400',
       );
       expect(fw).toBeDefined();
-      expect(fw!.type).toBe('FLOAT');
+      expect(fw!.resolvedType).toBe('FLOAT');
       expect(fw!.valuesByMode.light).toBe(400);
     });
 
@@ -127,7 +127,7 @@ describe('FigmaTransformer — Variable Transformation', () => {
         (v) => v.name === 'fontFamily/System',
       );
       expect(ff).toBeDefined();
-      expect(ff!.type).toBe('STRING');
+      expect(ff!.resolvedType).toBe('STRING');
       expect(ff!.valuesByMode.light).toBe(
         '-apple-system, BlinkMacSystemFont, sans-serif',
       );
@@ -152,7 +152,7 @@ describe('FigmaTransformer — Variable Transformation', () => {
         (v) => v.name === 'easing/Standard',
       );
       expect(easing).toBeDefined();
-      expect(easing!.type).toBe('STRING');
+      expect(easing!.resolvedType).toBe('STRING');
       expect(easing!.valuesByMode.light).toBe('cubic-bezier(0.4, 0, 0.2, 1)');
     });
 
@@ -175,7 +175,7 @@ describe('FigmaTransformer — Variable Transformation', () => {
         (v) => v.name === 'duration/250',
       );
       expect(dur).toBeDefined();
-      expect(dur!.type).toBe('FLOAT');
+      expect(dur!.resolvedType).toBe('FLOAT');
       expect(dur!.valuesByMode.light).toBe(250);
     });
   });
@@ -205,7 +205,7 @@ describe('FigmaTransformer — Variable Transformation', () => {
         (v) => v.name === 'color/action/primary',
       );
       expect(primary).toBeDefined();
-      expect(primary!.type).toBe('COLOR');
+      expect(primary!.resolvedType).toBe('COLOR');
       expect(primary!.valuesByMode.light).toEqual({
         aliasOf: 'color/purple/300',
       });

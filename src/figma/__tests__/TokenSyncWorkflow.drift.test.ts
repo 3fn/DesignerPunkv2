@@ -18,6 +18,7 @@ import type {
 const mockMcp: ConsoleMCPClient = {
   batchCreateVariables: jest.fn(),
   batchUpdateVariables: jest.fn(),
+  createVariableAliases: jest.fn(),
   getVariables: jest.fn(),
   execute: jest.fn(),
   setupDesignTokens: jest.fn(),
@@ -46,13 +47,13 @@ describe('TokenSyncWorkflow — Drift Detection', () => {
 
   it('reports no drift when Figma matches expected state', () => {
     const expected = makeExpected([
-      { name: 'space/100', type: 'FLOAT', valuesByMode: { light: 8, dark: 8 } },
-      { name: 'space/200', type: 'FLOAT', valuesByMode: { light: 16, dark: 16 } },
+      { name: 'space/100', resolvedType: 'FLOAT', valuesByMode: { light: 8, dark: 8 } },
+      { name: 'space/200', resolvedType: 'FLOAT', valuesByMode: { light: 16, dark: 16 } },
     ]);
 
     const current: FigmaVariable[] = [
-      { name: 'space/100', type: 'FLOAT', valuesByMode: { light: 8, dark: 8 } },
-      { name: 'space/200', type: 'FLOAT', valuesByMode: { light: 16, dark: 16 } },
+      { name: 'space/100', resolvedType: 'FLOAT', valuesByMode: { light: 8, dark: 8 } },
+      { name: 'space/200', resolvedType: 'FLOAT', valuesByMode: { light: 16, dark: 16 } },
     ];
 
     const report = workflow.detectDrift(current, expected);
@@ -63,11 +64,11 @@ describe('TokenSyncWorkflow — Drift Detection', () => {
 
   it('detects drift when a numeric value has been edited in Figma', () => {
     const expected = makeExpected([
-      { name: 'space/300', type: 'FLOAT', valuesByMode: { light: 24, dark: 24 } },
+      { name: 'space/300', resolvedType: 'FLOAT', valuesByMode: { light: 24, dark: 24 } },
     ]);
 
     const current: FigmaVariable[] = [
-      { name: 'space/300', type: 'FLOAT', valuesByMode: { light: 25, dark: 25 } },
+      { name: 'space/300', resolvedType: 'FLOAT', valuesByMode: { light: 25, dark: 25 } },
     ];
 
     const report = workflow.detectDrift(current, expected);
@@ -86,11 +87,11 @@ describe('TokenSyncWorkflow — Drift Detection', () => {
     const actualColor = { r: 0.63, g: 0.13, b: 0.88, a: 1 };
 
     const expected = makeExpected([
-      { name: 'color/primary', type: 'COLOR', valuesByMode: { light: expectedColor, dark: expectedColor } },
+      { name: 'color/primary', resolvedType: 'COLOR', valuesByMode: { light: expectedColor, dark: expectedColor } },
     ]);
 
     const current: FigmaVariable[] = [
-      { name: 'color/primary', type: 'COLOR', valuesByMode: { light: actualColor, dark: actualColor } },
+      { name: 'color/primary', resolvedType: 'COLOR', valuesByMode: { light: actualColor, dark: actualColor } },
     ];
 
     const report = workflow.detectDrift(current, expected);
@@ -104,12 +105,12 @@ describe('TokenSyncWorkflow — Drift Detection', () => {
 
   it('ignores Figma variables not present in expected state', () => {
     const expected = makeExpected([
-      { name: 'space/100', type: 'FLOAT', valuesByMode: { light: 8, dark: 8 } },
+      { name: 'space/100', resolvedType: 'FLOAT', valuesByMode: { light: 8, dark: 8 } },
     ]);
 
     const current: FigmaVariable[] = [
-      { name: 'space/100', type: 'FLOAT', valuesByMode: { light: 8, dark: 8 } },
-      { name: 'custom/unknown', type: 'FLOAT', valuesByMode: { light: 42, dark: 42 } },
+      { name: 'space/100', resolvedType: 'FLOAT', valuesByMode: { light: 8, dark: 8 } },
+      { name: 'custom/unknown', resolvedType: 'FLOAT', valuesByMode: { light: 42, dark: 42 } },
     ];
 
     const report = workflow.detectDrift(current, expected);
@@ -120,11 +121,11 @@ describe('TokenSyncWorkflow — Drift Detection', () => {
 
   it('detects drift in only one mode', () => {
     const expected = makeExpected([
-      { name: 'space/100', type: 'FLOAT', valuesByMode: { light: 8, dark: 8 } },
+      { name: 'space/100', resolvedType: 'FLOAT', valuesByMode: { light: 8, dark: 8 } },
     ]);
 
     const current: FigmaVariable[] = [
-      { name: 'space/100', type: 'FLOAT', valuesByMode: { light: 8, dark: 10 } },
+      { name: 'space/100', resolvedType: 'FLOAT', valuesByMode: { light: 8, dark: 10 } },
     ];
 
     const report = workflow.detectDrift(current, expected);
@@ -141,14 +142,14 @@ describe('TokenSyncWorkflow — Drift Detection', () => {
           name: 'Primitives',
           modes: ['light', 'dark'],
           variables: [
-            { name: 'space/100', type: 'FLOAT', valuesByMode: { light: 8, dark: 8 } },
+            { name: 'space/100', resolvedType: 'FLOAT', valuesByMode: { light: 8, dark: 8 } },
           ],
         },
         {
           name: 'Semantics',
           modes: ['light', 'dark'],
           variables: [
-            { name: 'fontSize/200', type: 'FLOAT', valuesByMode: { light: 16, dark: 16 } },
+            { name: 'fontSize/200', resolvedType: 'FLOAT', valuesByMode: { light: 16, dark: 16 } },
           ],
         },
       ],
@@ -156,8 +157,8 @@ describe('TokenSyncWorkflow — Drift Detection', () => {
     };
 
     const current: FigmaVariable[] = [
-      { name: 'space/100', type: 'FLOAT', valuesByMode: { light: 9, dark: 9 } },
-      { name: 'fontSize/200', type: 'FLOAT', valuesByMode: { light: 18, dark: 18 } },
+      { name: 'space/100', resolvedType: 'FLOAT', valuesByMode: { light: 9, dark: 9 } },
+      { name: 'fontSize/200', resolvedType: 'FLOAT', valuesByMode: { light: 18, dark: 18 } },
     ];
 
     const report = workflow.detectDrift(current, expected);
@@ -172,7 +173,7 @@ describe('TokenSyncWorkflow — Drift Detection', () => {
 
   it('reports no drift when current Figma has no variables', () => {
     const expected = makeExpected([
-      { name: 'space/100', type: 'FLOAT', valuesByMode: { light: 8, dark: 8 } },
+      { name: 'space/100', resolvedType: 'FLOAT', valuesByMode: { light: 8, dark: 8 } },
     ]);
 
     const report = workflow.detectDrift([], expected);

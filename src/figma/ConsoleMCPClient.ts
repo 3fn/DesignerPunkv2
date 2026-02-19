@@ -34,14 +34,20 @@ export interface DesignTokenSetupPayload {
 export interface ConsoleMCPClient {
   /** Create up to 100 variables per call. */
   batchCreateVariables(
-    fileKey: string,
+    collectionId: string,
     variables: FigmaVariable[],
+    modesMap?: Record<string, string>,
   ): Promise<void>;
 
   /** Update up to 100 variables per call. */
   batchUpdateVariables(
+    updates: { variableId: string; modeId: string; value: unknown }[],
+  ): Promise<void>;
+
+  /** Create Figma variable aliases linking semantic tokens to primitives. */
+  createVariableAliases(
     fileKey: string,
-    variables: FigmaVariable[],
+    aliases: { semanticName: string; primitiveName: string }[],
   ): Promise<void>;
 
   /** Get current variable state from Figma. */

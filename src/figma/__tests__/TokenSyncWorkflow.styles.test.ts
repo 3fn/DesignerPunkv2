@@ -24,6 +24,7 @@ function makeMockMcp(): jest.Mocked<ConsoleMCPClient> {
   return {
     batchCreateVariables: jest.fn().mockResolvedValue(undefined),
     batchUpdateVariables: jest.fn().mockResolvedValue(undefined),
+    createVariableAliases: jest.fn().mockResolvedValue(undefined),
     getVariables: jest.fn().mockResolvedValue([]),
     execute: jest.fn().mockResolvedValue(undefined),
     setupDesignTokens: jest.fn().mockResolvedValue(undefined),

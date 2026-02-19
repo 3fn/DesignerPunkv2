@@ -38,7 +38,7 @@ import { ConsoleMCPClientImpl } from '../ConsoleMCPClientImpl';
 function makeVariable(name: string, value: number = 8): FigmaVariable {
   return {
     name,
-    type: 'FLOAT',
+    resolvedType: 'FLOAT',
     valuesByMode: { light: value, dark: value },
     description: `Token ${name}`,
   };
@@ -111,7 +111,7 @@ describe('ConsoleMCPClientImpl', () => {
     });
 
     it('throws when calling methods before connect', async () => {
-      await expect(client.getVariables(FILE_KEY)).rejects.toThrow(
+      await expect(client.execute(FILE_KEY, 'code')).rejects.toThrow(
         'ConsoleMCPClient is not connected',
       );
     });
@@ -121,7 +121,7 @@ describe('ConsoleMCPClientImpl', () => {
       await client.disconnect();
       expect(mockClose).toHaveBeenCalledTimes(1);
       // After disconnect, calls should fail
-      await expect(client.getVariables(FILE_KEY)).rejects.toThrow(
+      await expect(client.execute(FILE_KEY, 'code')).rejects.toThrow(
         'ConsoleMCPClient is not connected',
       );
     });
@@ -136,20 +136,43 @@ describe('ConsoleMCPClientImpl', () => {
       await client.connect();
     });
 
-    it('calls figma_batch_create_variables with correct arguments', async () => {
+    it('calls figma_batch_create_variables with collectionId', async () => {
       const vars = [makeVariable('space/100', 8), makeVariable('space/200', 16)];
-      await client.batchCreateVariables(FILE_KEY, vars);
+      const collectionId = 'VariableCollectionId:1:2';
+      await client.batchCreateVariables(collectionId, vars);
 
       expect(mockCallTool).toHaveBeenCalledWith({
         name: 'figma_batch_create_variables',
         arguments: {
-          fileKey: FILE_KEY,
+          collectionId,
           variables: vars.map((v) => ({
             name: v.name,
-            type: v.type,
-            valuesByMode: v.valuesByMode,
+            resolvedType: v.resolvedType,
             description: v.description,
+            valuesByMode: v.valuesByMode,
           })),
+        },
+      });
+    });
+
+    it('converts mode name keys to mode IDs when modesMap is provided', async () => {
+      const vars = [makeVariable('space/100', 8)];
+      const collectionId = 'VariableCollectionId:1:2';
+      const modesMap = { light: '1:0', dark: '1:1' };
+      await client.batchCreateVariables(collectionId, vars, modesMap);
+
+      expect(mockCallTool).toHaveBeenCalledWith({
+        name: 'figma_batch_create_variables',
+        arguments: {
+          collectionId,
+          variables: [
+            {
+              name: 'space/100',
+              resolvedType: 'FLOAT',
+              description: 'Token space/100',
+              valuesByMode: { '1:0': 8, '1:1': 8 },
+            },
+          ],
         },
       });
     });
@@ -158,7 +181,8 @@ describe('ConsoleMCPClientImpl', () => {
       mockCallTool.mockResolvedValueOnce(
         makeErrorResult('Rate limit exceeded (429)'),
       );
-      await expect(client.batchCreateVariables(FILE_KEY, [makeVariable('x')])).rejects.toThrow(
+      const collectionId = 'VariableCollectionId:1:2';
+      await expect(client.batchCreateVariables(collectionId, [makeVariable('x')])).rejects.toThrow(
         /MCP tool "figma_batch_create_variables" failed.*Rate limit exceeded/,
       );
     });
@@ -173,22 +197,17 @@ describe('ConsoleMCPClientImpl', () => {
       await client.connect();
     });
 
-    it('calls figma_batch_update_variables with correct arguments', async () => {
-      const vars = [makeVariable('space/100', 12)];
-      await client.batchUpdateVariables(FILE_KEY, vars);
+    it('calls figma_batch_update_variables with update tuples', async () => {
+      const updates = [
+        { variableId: 'VariableID:3:4', modeId: '1:0', value: 12 },
+        { variableId: 'VariableID:3:4', modeId: '1:1', value: 12 },
+      ];
+      await client.batchUpdateVariables(updates);
 
       expect(mockCallTool).toHaveBeenCalledWith({
         name: 'figma_batch_update_variables',
         arguments: {
-          fileKey: FILE_KEY,
-          variables: [
-            {
-              name: 'space/100',
-              type: 'FLOAT',
-              valuesByMode: { light: 12, dark: 12 },
-              description: 'Token space/100',
-            },
-          ],
+          updates,
         },
       });
     });
@@ -197,7 +216,8 @@ describe('ConsoleMCPClientImpl', () => {
       mockCallTool.mockResolvedValueOnce(
         makeErrorResult('Variable not found'),
       );
-      await expect(client.batchUpdateVariables(FILE_KEY, [makeVariable('x')])).rejects.toThrow(
+      const updates = [{ variableId: 'VariableID:1:1', modeId: '1:0', value: 0 }];
+      await expect(client.batchUpdateVariables(updates)).rejects.toThrow(
         /MCP tool "figma_batch_update_variables" failed/,
       );
     });
@@ -220,14 +240,15 @@ describe('ConsoleMCPClientImpl', () => {
       expect(result).toEqual(vars);
     });
 
-    it('returns variables from object response with variables property', async () => {
-      const vars = [makeVariable('color/primary')];
+    it('returns variables from object response with tokens property', async () => {
+      const tokenData = [{ name: 'color/primary', resolvedType: 'COLOR', valuesByMode: { light: '#FF0000' }, id: 'VariableID:1:0', collectionId: 'VariableCollectionId:1:0' }];
       mockCallTool.mockResolvedValueOnce(
-        makeToolResult({ variables: vars }),
+        makeToolResult({ tokens: tokenData }),
       );
 
       const result = await client.getVariables(FILE_KEY);
-      expect(result).toEqual(vars);
+      expect(result).toHaveLength(1);
+      expect(result[0].name).toBe('color/primary');
     });
 
     it('returns empty array for unexpected response shape', async () => {
@@ -304,19 +325,14 @@ describe('ConsoleMCPClientImpl', () => {
       expect(mockCallTool).toHaveBeenCalledWith({
         name: 'figma_setup_design_tokens',
         arguments: {
-          fileKey: FILE_KEY,
-          collections: [
+          collectionName: 'Primitives',
+          modes: ['light', 'dark'],
+          tokens: [
             {
-              name: 'Primitives',
-              modes: ['light', 'dark'],
-              variables: [
-                {
-                  name: 'space/100',
-                  type: 'FLOAT',
-                  valuesByMode: { light: 8, dark: 8 },
-                  description: 'Token space/100',
-                },
-              ],
+              name: 'space/100',
+              resolvedType: 'FLOAT',
+              description: 'Token space/100',
+              values: { light: 8, dark: 8 },
             },
           ],
         },
@@ -335,7 +351,7 @@ describe('ConsoleMCPClientImpl', () => {
 
     it('handles network/connection errors during tool calls', async () => {
       mockCallTool.mockRejectedValueOnce(new Error('Connection reset'));
-      await expect(client.batchCreateVariables(FILE_KEY, [makeVariable('x')])).rejects.toThrow(
+      await expect(client.batchCreateVariables('VariableCollectionId:1:2', [makeVariable('x')])).rejects.toThrow(
         'Connection reset',
       );
     });

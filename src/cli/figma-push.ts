@@ -16,6 +16,7 @@
  *   npm run figma:push -- --force       # Override drift detection
  *   npm run figma:push -- --resume 3    # Resume from batch 3
  *   npm run figma:push -- --dry-run     # Transform only, no sync
+ *   npm run figma:push -- --clean       # Force initial setup (delete & recreate)
  *
  * @see Design: .kiro/specs/054a-figma-token-push/design.md
  * @requirements Req 7 (CLI Command)
@@ -36,10 +37,12 @@ import type { DTCGTokenFile } from '../generators/types/DTCGTypes';
 // ---------------------------------------------------------------------------
 
 /** Parsed CLI arguments. */
+/** Parsed CLI arguments. */
 export interface FigmaPushArgs {
   force: boolean;
   resume: number | undefined;
   dryRun: boolean;
+  clean: boolean;
 }
 
 /**
@@ -50,11 +53,21 @@ export interface FigmaPushArgs {
  *   --resume N   Resume from batch N
  *   --dry-run    Transform only, skip sync
  */
+/**
+ * Parse process.argv into structured arguments.
+ *
+ * Supports:
+ *   --force      Override drift detection
+ *   --resume N   Resume from batch N
+ *   --dry-run    Transform only, skip sync
+ *   --clean      Force initial setup (ignore existing variables)
+ */
 export function parseArgs(argv: string[]): FigmaPushArgs {
   const args: FigmaPushArgs = {
     force: false,
     resume: undefined,
     dryRun: false,
+    clean: false,
   };
 
   for (let i = 0; i < argv.length; i++) {
@@ -63,6 +76,8 @@ export function parseArgs(argv: string[]): FigmaPushArgs {
       args.force = true;
     } else if (arg === '--dry-run') {
       args.dryRun = true;
+    } else if (arg === '--clean') {
+      args.clean = true;
     } else if (arg === '--resume') {
       const next = argv[i + 1];
       if (next === undefined || next.startsWith('--')) {
@@ -177,10 +192,24 @@ export async function run(argv: string[] = process.argv.slice(2)): Promise<void>
     const figmaTokens: FigmaTokenFile = JSON.parse(result.content);
     const workflow = new TokenSyncWorkflow(mcpClient, process.env.FIGMA_FILE_KEY ?? '');
 
-    const syncResult = await workflow.sync(figmaTokens, {
-      forceOverride: args.force,
-      resume: args.resume,
-    });
+    // Check if this is initial setup (no existing variables or --clean flag)
+    const existingVariables = await mcpClient.getVariables(process.env.FIGMA_FILE_KEY ?? '');
+    const isInitialSetup = args.clean || existingVariables.length === 0;
+
+    if (args.clean) {
+      console.log('🧹 --clean flag set: forcing initial setup path (ignoring existing variables)');
+    }
+
+    let syncResult;
+    if (isInitialSetup) {
+      console.log('📦 Performing initial setup…');
+      syncResult = await workflow.initialSetup(figmaTokens);
+    } else {
+      syncResult = await workflow.sync(figmaTokens, {
+        forceOverride: args.force,
+        resume: args.resume,
+      });
+    }
 
     // 7. Report results
     console.log('');

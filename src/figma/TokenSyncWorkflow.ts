@@ -356,54 +356,78 @@ export class TokenSyncWorkflow {
    * @requirements Req 4 (Token Sync Workflow), Req 9 (Error Handling)
    */
   async syncVariables(
-    variables: FigmaVariable[],
-    currentVariables: FigmaVariable[],
-    options?: SyncOptions,
-  ): Promise<VariableSyncResult> {
-    const currentByName = new Map(
-      currentVariables.map((v) => [v.name, v]),
-    );
+      variables: FigmaVariable[],
+      currentVariables: FigmaVariable[],
+      options?: SyncOptions,
+    ): Promise<VariableSyncResult> {
+      const currentByName = new Map(
+        currentVariables.map((v) => [v.name, v]),
+      );
 
-    const toCreate: FigmaVariable[] = [];
-    const toUpdate: FigmaVariable[] = [];
+      const toCreate: FigmaVariable[] = [];
+      const toUpdate: FigmaVariable[] = [];
 
-    for (const variable of variables) {
-      if (currentByName.has(variable.name)) {
-        toUpdate.push(variable);
-      } else {
-        toCreate.push(variable);
+      for (const variable of variables) {
+        if (currentByName.has(variable.name)) {
+          toUpdate.push(variable);
+        } else {
+          toCreate.push(variable);
+        }
       }
-    }
 
-    let created = 0;
-    let updated = 0;
-    const errors: SyncError[] = [];
+      // Extract collectionId and modesMap from current variables for incremental sync.
+      // All variables in a collection share the same collectionId; mode IDs are the
+      // keys in valuesByMode returned by figma_get_token_values.
+      let collectionId: string | undefined;
+      let modesMap: Record<string, string> | undefined;
 
-    // Batch create
-    const createResult = await this.batchCreateVariables(
-      toCreate,
-      options?.resume,
-    );
-    created = createResult.created;
-    if (createResult.errors.length > 0) {
-      errors.push(...createResult.errors);
+      if (currentVariables.length > 0) {
+        // Use the first variable that has a collectionId
+        const withId = currentVariables.find((v) => v.collectionId);
+        collectionId = withId?.collectionId;
+
+        // Build modesMap: figma_get_token_values returns valuesByMode keyed by
+        // mode ID already, so we create an identity map (modeId → modeId).
+        // The batchCreateVariables implementation will use this to convert
+        // mode name keys to mode IDs.
+        if (withId) {
+          const modeIds = Object.keys(withId.valuesByMode);
+          modesMap = Object.fromEntries(modeIds.map((id) => [id, id]));
+        }
+      }
+
+      let created = 0;
+      let updated = 0;
+      const errors: SyncError[] = [];
+
+      // Batch create
+      const createResult = await this.batchCreateVariables(
+        toCreate,
+        collectionId,
+        modesMap,
+        options?.resume,
+      );
+      created = createResult.created;
+      if (createResult.errors.length > 0) {
+        errors.push(...createResult.errors);
+        return { created, updated, errors };
+      }
+
+      // Batch update (only if create succeeded fully)
+      const updateResult = await this.batchUpdateVariables(
+        toUpdate,
+        currentByName,
+        options?.resume != null
+          ? Math.max(1, options.resume - Math.ceil(toCreate.length / BATCH_SIZE))
+          : undefined,
+      );
+      updated = updateResult.updated;
+      if (updateResult.errors.length > 0) {
+        errors.push(...updateResult.errors);
+      }
+
       return { created, updated, errors };
     }
-
-    // Batch update (only if create succeeded fully)
-    const updateResult = await this.batchUpdateVariables(
-      toUpdate,
-      options?.resume != null
-        ? Math.max(1, options.resume - Math.ceil(toCreate.length / BATCH_SIZE))
-        : undefined,
-    );
-    updated = updateResult.updated;
-    if (updateResult.errors.length > 0) {
-      errors.push(...updateResult.errors);
-    }
-
-    return { created, updated, errors };
-  }
 
   /**
    * Create variables in batches of {@link BATCH_SIZE}.
@@ -418,41 +442,49 @@ export class TokenSyncWorkflow {
    * @requirements Req 4, Req 9
    */
   async batchCreateVariables(
-    variables: FigmaVariable[],
-    startBatch?: number,
-  ): Promise<VariableSyncResult> {
-    const batches = this.chunkArray(variables, BATCH_SIZE);
-    const start = (startBatch ?? 1) - 1; // Convert 1-indexed to 0-indexed
-    let created = 0;
+      variables: FigmaVariable[],
+      collectionId?: string,
+      modesMap?: Record<string, string>,
+      startBatch?: number,
+    ): Promise<VariableSyncResult> {
+      const batches = this.chunkArray(variables, BATCH_SIZE);
+      const start = (startBatch ?? 1) - 1; // Convert 1-indexed to 0-indexed
+      let created = 0;
 
-    for (let i = start; i < batches.length; i++) {
-      try {
-        await this.consoleMcp.batchCreateVariables(
-          this.figmaFileKey,
-          batches[i],
-        );
-        created += batches[i].length;
-      } catch (err) {
-        return {
-          created,
-          updated: 0,
-          errors: [
-            {
-              phase: 'variables:create',
-              batch: i + 1,
-              totalBatches: batches.length,
-              message:
-                err instanceof Error
-                  ? err.message
-                  : String(err),
-            },
-          ],
-        };
+      // Use collectionId when available (incremental sync); fall back to
+      // figmaFileKey for backwards compatibility with any callers that
+      // don't yet provide a collectionId.
+      const targetId = collectionId ?? this.figmaFileKey;
+
+      for (let i = start; i < batches.length; i++) {
+        try {
+          await this.consoleMcp.batchCreateVariables(
+            targetId,
+            batches[i],
+            modesMap,
+          );
+          created += batches[i].length;
+        } catch (err) {
+          return {
+            created,
+            updated: 0,
+            errors: [
+              {
+                phase: 'variables:create',
+                batch: i + 1,
+                totalBatches: batches.length,
+                message:
+                  err instanceof Error
+                    ? err.message
+                    : String(err),
+              },
+            ],
+          };
+        }
       }
-    }
 
-    return { created, updated: 0, errors: [] };
-  }
+      return { created, updated: 0, errors: [] };
+    }
 
   /**
    * Update variables in batches of {@link BATCH_SIZE}.
@@ -467,41 +499,69 @@ export class TokenSyncWorkflow {
    * @requirements Req 4, Req 9
    */
   async batchUpdateVariables(
-    variables: FigmaVariable[],
-    startBatch?: number,
-  ): Promise<VariableSyncResult> {
-    const batches = this.chunkArray(variables, BATCH_SIZE);
-    const start = (startBatch ?? 1) - 1;
-    let updated = 0;
+      variables: FigmaVariable[],
+      currentByName: Map<string, FigmaVariable>,
+      startBatch?: number,
+    ): Promise<VariableSyncResult> {
+      // Build { variableId, modeId, value } tuples from the desired variables
+      // and the current Figma state (which carries variableId and mode IDs).
+      const updateTuples: { variableId: string; modeId: string; value: unknown }[] = [];
 
-    for (let i = start; i < batches.length; i++) {
-      try {
-        await this.consoleMcp.batchUpdateVariables(
-          this.figmaFileKey,
-          batches[i],
-        );
-        updated += batches[i].length;
-      } catch (err) {
-        return {
-          created: 0,
-          updated,
-          errors: [
-            {
-              phase: 'variables:update',
-              batch: i + 1,
-              totalBatches: batches.length,
-              message:
-                err instanceof Error
-                  ? err.message
-                  : String(err),
-            },
-          ],
-        };
+      for (const variable of variables) {
+        const current = currentByName.get(variable.name);
+        if (!current?.id) {
+          // Can't update without a variableId — skip (shouldn't happen in practice)
+          continue;
+        }
+
+        // Current variables from figma_get_token_values have valuesByMode keyed
+        // by mode ID. We iterate the desired variable's modes and map them to
+        // the mode IDs from the current variable.
+        const currentModeIds = Object.keys(current.valuesByMode);
+        const desiredModeEntries = Object.entries(variable.valuesByMode);
+
+        for (let m = 0; m < desiredModeEntries.length && m < currentModeIds.length; m++) {
+          const [, value] = desiredModeEntries[m];
+          const modeId = currentModeIds[m];
+          updateTuples.push({
+            variableId: current.id,
+            modeId,
+            value,
+          });
+        }
       }
-    }
 
-    return { created: 0, updated, errors: [] };
-  }
+      const batches = this.chunkArray(updateTuples, BATCH_SIZE);
+      const start = (startBatch ?? 1) - 1;
+      let updated = 0;
+
+      for (let i = start; i < batches.length; i++) {
+        try {
+          await this.consoleMcp.batchUpdateVariables(batches[i]);
+          // Count unique variables in this batch (a variable may have multiple mode tuples)
+          const uniqueVarIds = new Set(batches[i].map((t) => t.variableId));
+          updated += uniqueVarIds.size;
+        } catch (err) {
+          return {
+            created: 0,
+            updated,
+            errors: [
+              {
+                phase: 'variables:update',
+                batch: i + 1,
+                totalBatches: batches.length,
+                message:
+                  err instanceof Error
+                    ? err.message
+                    : String(err),
+              },
+            ],
+          };
+        }
+      }
+
+      return { created: 0, updated, errors: [] };
+    }
 
   // ---------------------------------------------------------------------------
   // Style sync (individual operations) — Task 2.4
@@ -655,59 +715,73 @@ export class TokenSyncWorkflow {
    * Generate Plugin API code for a text style (typography).
    */
   private generateTextStyleCode(
-    style: FigmaStyleDefinition & { properties: TextStyleProperties },
-    action: 'create' | 'update',
-  ): string {
-    const { name, properties, description } = style;
-    const { fontFamily, fontSize, fontWeight, lineHeight, letterSpacing } =
-      properties;
+      style: FigmaStyleDefinition & { properties: TextStyleProperties },
+      action: 'create' | 'update',
+    ): string {
+      const { name, properties, description } = style;
+      const { fontFamily, fontSize, fontWeight, lineHeight, letterSpacing } =
+        properties;
 
-    // Determine font style string from weight
-    const fontStyle = this.fontWeightToStyle(fontWeight);
+      // Figma expects just the primary font name, not the full CSS fallback stack.
+      // "Rajdhani, -apple-system, ..." → "Rajdhani"
+      const primaryFont = fontFamily.split(',')[0].trim();
 
-    const propLines = [
-      `style.fontName = { family: ${JSON.stringify(fontFamily)}, style: ${JSON.stringify(fontStyle)} };`,
-      `style.fontSize = ${fontSize};`,
-      `style.lineHeight = { value: ${lineHeight}, unit: "PIXELS" };`,
-      `style.letterSpacing = { value: ${letterSpacing}, unit: "PIXELS" };`,
-    ];
+      // Determine font style string from weight
+      const fontStyle = this.fontWeightToStyle(fontWeight);
 
-    if (description) {
-      propLines.push(`style.description = ${JSON.stringify(description)};`);
-    }
+      // lineHeight from DTCG is a unitless ratio (e.g. 1.19 = 119%).
+      // Figma needs either pixels or percent. Convert ratio → pixels.
+      const lineHeightPx = lineHeight <= 10
+        ? Math.round(fontSize * lineHeight * 100) / 100
+        : lineHeight;
 
-    if (action === 'create') {
+      const propLines = [
+        `style.fontName = { family: ${JSON.stringify(primaryFont)}, style: ${JSON.stringify(fontStyle)} };`,
+        `style.fontSize = ${fontSize};`,
+        `style.lineHeight = { value: ${lineHeightPx}, unit: "PIXELS" };`,
+        `style.letterSpacing = { value: ${letterSpacing}, unit: "PIXELS" };`,
+      ];
+
+      if (description) {
+        propLines.push(`style.description = ${JSON.stringify(description)};`);
+      }
+
+      if (action === 'create') {
+        return [
+          `const style = figma.createTextStyle();`,
+          `style.name = ${JSON.stringify(name)};`,
+          `await figma.loadFontAsync(${JSON.stringify({ family: primaryFont, style: fontStyle })});`,
+          ...propLines,
+        ].join('\n');
+      }
+
+      // Update: find existing style by name, then update properties
       return [
-        `const style = figma.createTextStyle();`,
-        `style.name = ${JSON.stringify(name)};`,
-        `await figma.loadFontAsync(${JSON.stringify({ family: fontFamily, style: fontStyle })});`,
+        `const styles = figma.getLocalTextStyles();`,
+        `const style = styles.find(s => s.name === ${JSON.stringify(name)});`,
+        `if (!style) throw new Error("Text style not found: ${name}");`,
+        `await figma.loadFontAsync(${JSON.stringify({ family: primaryFont, style: fontStyle })});`,
         ...propLines,
       ].join('\n');
     }
-
-    // Update: find existing style by name, then update properties
-    return [
-      `const styles = figma.getLocalTextStyles();`,
-      `const style = styles.find(s => s.name === ${JSON.stringify(name)});`,
-      `if (!style) throw new Error("Text style not found: ${name}");`,
-      `await figma.loadFontAsync(${JSON.stringify({ family: fontFamily, style: fontStyle })});`,
-      ...propLines,
-    ].join('\n');
-  }
 
   /**
    * Map numeric font weight to Figma font style string.
    */
   private fontWeightToStyle(weight: number): string {
+    // Figma font style names typically use no-space variants
+    // (e.g. "SemiBold" not "Semi Bold", "ExtraBold" not "Extra Bold").
+    // This matches the naming convention used by most font families
+    // including Inter, Rajdhani, SF Mono, and Roboto Mono.
     const weightMap: Record<number, string> = {
       100: 'Thin',
-      200: 'Extra Light',
+      200: 'ExtraLight',
       300: 'Light',
       400: 'Regular',
       500: 'Medium',
-      600: 'Semi Bold',
+      600: 'SemiBold',
       700: 'Bold',
-      800: 'Extra Bold',
+      800: 'ExtraBold',
       900: 'Black',
     };
     return weightMap[weight] ?? 'Regular';

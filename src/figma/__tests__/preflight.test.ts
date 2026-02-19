@@ -20,6 +20,7 @@ function makeMockClient(
   return {
     batchCreateVariables: jest.fn(),
     batchUpdateVariables: jest.fn(),
+    createVariableAliases: jest.fn(),
     getVariables: jest.fn(),
     execute: jest.fn(),
     setupDesignTokens: jest.fn(),
@@ -53,7 +54,7 @@ describe('checkDesktopBridge', () => {
     expect(result.ready).toBe(false);
     expect(result.error).toContain('Desktop Bridge not available');
     expect(result.error).toContain('npm run figma:push');
-  });
+  }, 30000);
 
   it('returns not ready when transport is missing', async () => {
     const client = makeMockClient(async () => ({}));
@@ -62,7 +63,7 @@ describe('checkDesktopBridge', () => {
 
     expect(result.ready).toBe(false);
     expect(result.error).toContain('Desktop Bridge not available');
-  });
+  }, 30000);
 
   it('returns not ready with error details when getStatus throws', async () => {
     const client = makeMockClient(async () => {
@@ -74,7 +75,7 @@ describe('checkDesktopBridge', () => {
     expect(result.ready).toBe(false);
     expect(result.error).toContain('Desktop Bridge connection failed');
     expect(result.error).toContain('WebSocket connection refused on port 9223');
-  });
+  }, 30000);
 
   it('includes setup instructions in error messages', async () => {
     const client = makeMockClient(async () => ({
@@ -86,5 +87,5 @@ describe('checkDesktopBridge', () => {
     expect(result.error).toContain('figma-desktop-bridge/manifest.json');
     expect(result.error).toContain('port 9223');
     expect(result.error).toContain('Troubleshooting');
-  });
+  }, 30000);
 });

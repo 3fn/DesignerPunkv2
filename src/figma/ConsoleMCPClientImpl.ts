@@ -153,73 +153,193 @@ export class ConsoleMCPClientImpl implements ConsoleMCPClient {
   // ---------------------------------------------------------------------------
 
   async batchCreateVariables(
-    fileKey: string,
-    variables: FigmaVariable[],
-  ): Promise<void> {
-    await this.callTool('figma_batch_create_variables', {
-      fileKey,
-      variables: variables.map((v) => ({
-        name: v.name,
-        type: v.type,
-        valuesByMode: v.valuesByMode,
-        description: v.description,
-      })),
-    });
-  }
+      collectionId: string,
+      variables: FigmaVariable[],
+      modesMap?: Record<string, string>,
+    ): Promise<void> {
+      await this.callTool('figma_batch_create_variables', {
+        collectionId,
+        variables: variables.map((v) => {
+          // Convert mode name keys to mode IDs when modesMap is provided,
+          // matching the overflow batch pattern in setupDesignTokens().
+          const valuesByMode: Record<string, unknown> = {};
+          for (const [key, value] of Object.entries(v.valuesByMode)) {
+            const modeId = modesMap?.[key] ?? key;
+            valuesByMode[modeId] = value;
+          }
+          return {
+            name: v.name,
+            resolvedType: v.resolvedType,
+            description: v.description,
+            valuesByMode,
+          };
+        }),
+      });
+    }
 
   async batchUpdateVariables(
-    fileKey: string,
-    variables: FigmaVariable[],
-  ): Promise<void> {
-    await this.callTool('figma_batch_update_variables', {
-      fileKey,
-      variables: variables.map((v) => ({
-        name: v.name,
-        type: v.type,
-        valuesByMode: v.valuesByMode,
-        description: v.description,
-      })),
-    });
-  }
+      updates: { variableId: string; modeId: string; value: unknown }[],
+    ): Promise<void> {
+      await this.callTool('figma_batch_update_variables', {
+        updates,
+      });
+    }
 
   async getVariables(fileKey: string): Promise<FigmaVariable[]> {
-    const result = await this.callTool('figma_get_variables', { fileKey });
+      // figma_get_variables doesn't exist in figma-console-mcp.
+      // Use figma_get_token_values to retrieve current variable state.
+      try {
+        const result = await this.callTool('figma_get_token_values', {
+          type: 'all',
+          limit: 500,
+        });
 
-    // Normalize the response into FigmaVariable[]
-    if (Array.isArray(result)) {
-      return result as FigmaVariable[];
+        // figma_get_token_values returns token objects, normalize to FigmaVariable[]
+        if (result && typeof result === 'object' && 'tokens' in result) {
+          const tokens = (result as { tokens: Array<Record<string, unknown>> }).tokens;
+          return tokens.map((t) => ({
+            name: String(t.name ?? ''),
+            resolvedType: String(t.resolvedType ?? t.type ?? 'FLOAT') as FigmaVariable['resolvedType'],
+            valuesByMode: (t.valuesByMode ?? t.values ?? {}) as Record<string, unknown>,
+            description: t.description as string | undefined,
+            id: t.id as string | undefined,
+            collectionId: t.collectionId as string | undefined,
+            collectionName: t.collectionName as string | undefined,
+          })) as FigmaVariable[];
+        }
+
+        // Handle array response
+        if (Array.isArray(result)) {
+          return result as FigmaVariable[];
+        }
+
+        return [];
+      } catch {
+        // If token retrieval fails (e.g. no design system yet), return empty
+        return [];
+      }
     }
-
-    // Handle object response with variables property
-    if (result && typeof result === 'object' && 'variables' in result) {
-      return (result as { variables: FigmaVariable[] }).variables;
-    }
-
-    return [];
-  }
 
   async execute(fileKey: string, code: string): Promise<unknown> {
     return this.callTool('figma_execute', { fileKey, code });
   }
+  async createVariableAliases(
+    fileKey: string,
+    aliases: { semanticName: string; primitiveName: string }[],
+  ): Promise<void> {
+    // TODO: Full implementation in task 4.1
+    // Will generate Plugin API code using figma.variables.createVariableAlias()
+    // and execute via figma_execute
+    throw new Error('createVariableAliases not yet implemented (task 4.1)');
+  }
 
   async setupDesignTokens(
-    fileKey: string,
-    payload: DesignTokenSetupPayload,
-  ): Promise<void> {
-    await this.callTool('figma_setup_design_tokens', {
-      fileKey,
-      collections: payload.collections.map((c) => ({
-        name: c.name,
-        modes: c.modes,
-        variables: c.variables.map((v) => ({
+      fileKey: string,
+      payload: DesignTokenSetupPayload,
+    ): Promise<void> {
+      const BATCH_SIZE = 100;
+
+      // Build a lookup map of all primitive variable values for alias resolution.
+      // Aliases reference primitives by name (e.g. "color/green/400").
+      const primitiveLookup = new Map<string, Record<string, unknown>>();
+      for (const collection of payload.collections) {
+        for (const v of collection.variables) {
+          // Store the raw valuesByMode keyed by variable name
+          primitiveLookup.set(v.name, v.valuesByMode);
+        }
+      }
+
+      for (const collection of payload.collections) {
+        const tokens = collection.variables.map((v) => ({
           name: v.name,
-          type: v.type,
-          valuesByMode: v.valuesByMode,
+          resolvedType: v.resolvedType,
           description: v.description,
-        })),
-      })),
-    });
-  }
+          values: Object.fromEntries(
+            collection.modes.map((modeName) => {
+              const raw = v.valuesByMode[modeName] ?? v.valuesByMode[collection.modes[0]];
+              // Resolve alias objects to actual values.
+              // figma_setup_design_tokens doesn't support alias references —
+              // it only accepts raw values (hex strings, numbers, etc.).
+              const resolved = this.resolveAliasForFigma(raw, modeName, primitiveLookup);
+              return [modeName, resolved];
+            })
+          ),
+        }));
+
+        // Create collection with first batch of tokens
+        const firstBatch = tokens.slice(0, BATCH_SIZE);
+        const setupResult = await this.callTool('figma_setup_design_tokens', {
+          collectionName: collection.name,
+          modes: collection.modes,
+          tokens: firstBatch,
+        }) as { collectionId?: string; modes?: Record<string, string> } | undefined;
+
+        // If there are more tokens, add them using batch_create_variables
+        if (tokens.length > BATCH_SIZE) {
+          const collectionId = setupResult?.collectionId;
+          const modesMap = setupResult?.modes;
+
+          if (!collectionId) {
+            throw new Error(
+              `Could not find collection ID for "${collection.name}" after creation. ` +
+              `Setup response: ${JSON.stringify(setupResult)}`
+            );
+          }
+
+          for (let i = BATCH_SIZE; i < tokens.length; i += BATCH_SIZE) {
+            const batch = tokens.slice(i, i + BATCH_SIZE);
+            const batchVariables = batch.map(t => {
+              const valuesByModeId: Record<string, unknown> = {};
+              for (const [modeName, value] of Object.entries(t.values)) {
+                const modeId = modesMap?.[modeName] ?? modeName;
+                valuesByModeId[modeId] = value;
+              }
+              return {
+                name: t.name,
+                resolvedType: t.resolvedType,
+                description: t.description,
+                valuesByMode: valuesByModeId,
+              };
+            });
+
+            await this.callTool('figma_batch_create_variables', {
+              collectionId,
+              variables: batchVariables,
+            });
+          }
+        }
+      }
+    }
+
+    /**
+     * Resolve an alias object to its actual value for Figma.
+     *
+     * figma_setup_design_tokens only accepts raw values (hex, numbers, etc.),
+     * not alias references. This method follows alias chains to find the
+     * concrete value from the primitives collection.
+     */
+    private resolveAliasForFigma(
+      value: unknown,
+      modeName: string,
+      lookup: Map<string, Record<string, unknown>>,
+      depth = 0,
+    ): unknown {
+      if (depth > 10) return value; // Guard against circular aliases
+
+      if (value && typeof value === 'object' && 'aliasOf' in value) {
+        const aliasName = (value as { aliasOf: string }).aliasOf;
+        const targetValues = lookup.get(aliasName);
+        if (targetValues) {
+          const targetValue = targetValues[modeName] ?? Object.values(targetValues)[0];
+          // Recurse in case the target is also an alias
+          return this.resolveAliasForFigma(targetValue, modeName, lookup, depth + 1);
+        }
+        // Alias target not found — return a fallback
+        return '#000000';
+      }
+
+      return value;
+    }
 
   async getStatus(): Promise<ConsoleMCPStatus> {
     const result = await this.callTool('figma_get_status', {});

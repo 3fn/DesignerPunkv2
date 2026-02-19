@@ -31,9 +31,13 @@ export type FigmaVariableType = 'FLOAT' | 'COLOR' | 'STRING' | 'BOOLEAN';
  */
 export interface FigmaVariable {
   name: string;
-  type: FigmaVariableType;
+  resolvedType: FigmaVariableType;
   valuesByMode: Record<string, unknown>;
   description?: string;
+  /** Figma-assigned variable ID (populated when querying existing variables). */
+  id?: string;
+  /** Figma-assigned collection ID this variable belongs to. */
+  collectionId?: string;
 }
 
 /**
@@ -322,7 +326,7 @@ export class FigmaTransformer implements ITokenTransformer {
 
         variables.push({
           name: figmaName,
-          type: figmaType,
+          resolvedType: figmaType,
           valuesByMode: {
             light: resolvedValue,
             dark: resolvedValue,
@@ -527,6 +531,32 @@ export class FigmaTransformer implements ITokenTransformer {
       b: parseFloat(match[3]) / 255,
       a: match[4] !== undefined ? parseFloat(match[4]) : 1,
     };
+  }
+  /**
+   * Convert an rgba() color string to hex format for Figma.
+   * e.g. "rgba(184, 182, 200, 1)" → "#B8B6C8"
+   * e.g. "rgba(184, 182, 200, 0.5)" → "#B8B6C880"
+   */
+  rgbaToHex(colorStr: string): string {
+    const match = colorStr.match(
+      /rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*(?:,\s*([\d.]+))?\s*\)/,
+    );
+    if (!match) return colorStr; // Return as-is if not rgba format
+
+    const r = Math.round(parseFloat(match[1]));
+    const g = Math.round(parseFloat(match[2]));
+    const b = Math.round(parseFloat(match[3]));
+    const a = match[4] !== undefined ? parseFloat(match[4]) : 1;
+
+    const hex = '#' +
+      r.toString(16).padStart(2, '0').toUpperCase() +
+      g.toString(16).padStart(2, '0').toUpperCase() +
+      b.toString(16).padStart(2, '0').toUpperCase();
+
+    if (a < 1) {
+      return hex + Math.round(a * 255).toString(16).padStart(2, '0').toUpperCase();
+    }
+    return hex;
   }
 
   /**
@@ -736,9 +766,9 @@ export class FigmaTransformer implements ITokenTransformer {
       return parseFloat(value) || 0;
     }
 
-    // Color values: pass through as string (Figma accepts rgba strings)
+    // Color values: convert rgba() to hex (Figma tools expect hex format like '#FF0000')
     if (typeof value === 'string' && tokenType === 'color') {
-      return value;
+      return this.rgbaToHex(value);
     }
 
     // CubicBezier: stringify array
