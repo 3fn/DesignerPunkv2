@@ -22,3 +22,6 @@ export type { ConsoleMCPClientOptions } from './ConsoleMCPClientImpl';
 
 export { checkDesktopBridge } from './preflight';
 export type { PreflightResult } from './preflight';
+
+export { formatDriftReport, formatPartialFailure, formatValue } from './error-reporting';
+export type { PartialFailureInfo } from './error-reporting';
