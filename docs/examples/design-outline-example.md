@@ -1,7 +1,7 @@
 # Design Outline: ButtonCTA
 
-**Date**: February 20, 2026
-**Last Reviewed**: February 20, 2026
+**Date**: 2026-02-20
+**Last Reviewed**: 2026-02-20
 **Purpose**: Annotated reference example showing every section the DesignExtractor generates, with explanations of confidence flags, component token suggestions, and mode validation
 **Organization**: spec-guide
 **Scope**: 054b-figma-design-extract

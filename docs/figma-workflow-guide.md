@@ -1,7 +1,7 @@
 # Figma Workflow Guide
 
-**Date**: February 20, 2026
-**Last Reviewed**: February 20, 2026
+**Date**: 2026-02-20
+**Last Reviewed**: 2026-02-20
 **Purpose**: Comprehensive guide for DesignerPunk's bidirectional Figma integration — token push and design extraction workflows
 **Organization**: spec-guide
 **Scope**: 054a-figma-token-push, 054b-figma-design-extract

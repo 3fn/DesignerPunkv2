@@ -6,8 +6,8 @@ description: Transformer development guide — ITokenTransformer interface, Tran
 
 # Transformer Development Guide
 
-**Date**: February 17, 2026
-**Last Reviewed**: February 18, 2026
+**Date**: 2026-02-17
+**Last Reviewed**: 2026-02-18
 **Purpose**: Guide for building custom token transformers that consume DTCG output and produce tool-specific formats
 **Organization**: spec-guide
 **Scope**: 053-dtcg-token-format-generator, 054a-figma-token-push

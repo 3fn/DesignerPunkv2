@@ -6,8 +6,8 @@ description: DTCG integration guide — file location, token type mapping, Desig
 
 # DTCG Integration Guide
 
-**Date**: February 17, 2026
-**Last Reviewed**: February 18, 2026
+**Date**: 2026-02-17
+**Last Reviewed**: 2026-02-18
 **Purpose**: Guide for integrating DesignerPunk tokens via DTCG format with external design tools (Style Dictionary, Tokens Studio, and other DTCG-aware tools)
 **Organization**: spec-guide
 **Scope**: 053-dtcg-token-format-generator

@@ -1,7 +1,7 @@
 # Token System Overview
 
-**Date**: December 29, 2025
-**Last Updated**: January 5, 2026
+**Date**: 2025-12-29
+**Last Reviewed**: 2026-01-05
 **Purpose**: Master document mapping token files to their documentation guides
 **Organization**: process-standard
 **Scope**: cross-project
