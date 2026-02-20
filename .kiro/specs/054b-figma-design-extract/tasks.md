@@ -533,7 +533,7 @@ This spec implements the design extraction workflow in four phases:
 
 ---
 
-- [ ] Task 6: Documentation (Parent)
+- [x] Task 6: Documentation (Parent)
 
   **Type**: Documentation (Parent)
   **Validation**: Tier 2 - Standard
@@ -559,7 +559,7 @@ This spec implements the design extraction workflow in four phases:
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 6 Complete: Documentation"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 6.1 Create Figma Workflow Guide
+  - [x] 6.1 Create Figma Workflow Guide
     **Type**: Documentation
     **Validation**: Tier 2 - Standard
     - Create `docs/figma-workflow-guide.md` with complete structure per Requirement 11
@@ -571,7 +571,7 @@ This spec implements the design extraction workflow in four phases:
     - Add Related Documentation section: cross-references to DTCG guide, Token Governance, Component Development Guide, Spec Planning Standards
     - _Requirements: Req 11_
 
-  - [ ] 6.2 Migrate Figma-specific content from DTCG Integration Guide
+  - [x] 6.2 Migrate Figma-specific content from DTCG Integration Guide
     **Type**: Documentation
     **Validation**: Tier 2 - Standard
     - Review `docs/dtcg-integration-guide.md` for Figma-specific content
@@ -581,7 +581,7 @@ This spec implements the design extraction workflow in four phases:
     - Verify no duplication between guides
     - _Requirements: Req 11_
 
-  - [ ] 6.3 Document design-to-spec-to-code workflow
+  - [x] 6.3 Document design-to-spec-to-code workflow
     **Type**: Documentation
     **Validation**: Tier 2 - Standard
     - Add 5-phase workflow diagram to Design Extraction section
@@ -591,7 +591,7 @@ This spec implements the design extraction workflow in four phases:
     - Document critical distinction: extraction surfaces information, humans make decisions
     - _Requirements: Req 11_
 
-  - [ ] 6.4 Document confidence flags and interpretation
+  - [x] 6.4 Document confidence flags and interpretation
     **Type**: Documentation
     **Validation**: Tier 2 - Standard
     - Document ✅ High Confidence: exact match via variable binding or style name
@@ -601,7 +601,7 @@ This spec implements the design extraction workflow in four phases:
     - Include examples of when each flag appears
     - _Requirements: Req 11_
 
-  - [ ] 6.5 Create annotated example design-outline.md
+  - [x] 6.5 Create annotated example design-outline.md
     **Type**: Documentation
     **Validation**: Tier 2 - Standard
     - Create example design-outline.md showing all required sections
