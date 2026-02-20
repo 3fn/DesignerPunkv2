@@ -293,5 +293,6 @@ What are you building?
 
 ### DTCG Integration
 - [DTCG Integration Guide](../../docs/dtcg-integration-guide.md) - Integrating DesignerPunk tokens with external design tools
+- [Figma Workflow Guide](../../docs/figma-workflow-guide.md) - Bidirectional Figma integration: token push and design extraction
 - [Transformer Development Guide](../../docs/transformer-development-guide.md) - Building custom token transformers
 - [MCP Integration Guide](../../docs/mcp-integration-guide.md) - Programmatic token loading and querying
