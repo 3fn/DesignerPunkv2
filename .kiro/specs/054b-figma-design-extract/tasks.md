@@ -498,12 +498,12 @@ This spec implements the design extraction workflow in four phases:
 
 ---
 
-- [ ] Task 5: Error Handling and Edge Cases
+- [x] Task 5: Error Handling and Edge Cases
 
   **Type**: Implementation
   **Validation**: Tier 2 - Standard
 
-  - [ ] 5.1 Implement no-match pause behavior
+  - [x] 5.1 Implement no-match pause behavior
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Detect no-match token values from TokenTranslator results
@@ -513,7 +513,7 @@ This spec implements the design extraction workflow in four phases:
     - CLI exits with code 1 when human input required
     - _Requirements: Req 2_
 
-  - [ ] 5.2 Implement missing Component-Family doc handling
+  - [x] 5.2 Implement missing Component-Family doc handling
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Detect when `queryFamilyPattern()` returns null (doc doesn't exist)
@@ -522,7 +522,7 @@ This spec implements the design extraction workflow in four phases:
     - Allow extraction to continue with ⚠️ confidence on variant recommendations
     - _Requirements: Req 4_
 
-  - [ ] 5.3 Implement conflicting recommendations handling
+  - [x] 5.3 Implement conflicting recommendations handling
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Detect conflicts from `VariantAnalyzer.detectConflicts()`

@@ -20,7 +20,7 @@ import type {
   ModeValidationResult,
   InheritancePattern,
 } from '../DesignExtractor';
-import type { VariantMapping } from '../VariantAnalyzer';
+import type { VariantMapping, FamilyPattern } from '../VariantAnalyzer';
 import type { ConsoleMCPClient } from '../ConsoleMCPClient';
 import type { TokenTranslator } from '../TokenTranslator';
 import type { VariantAnalyzer } from '../VariantAnalyzer';
@@ -264,6 +264,62 @@ describe('DesignExtractor.generateDesignOutlineMarkdown', () => {
       expect(md).toContain('### ⚠️ Mapping Conflicts');
       expect(md).toContain('**Human Decision Required**');
       expect(md).toContain('Family pattern says single but behavior differs.');
+    });
+
+    it('shows ⚠️ reduced confidence warning when familyPattern is null', () => {
+      const mapping: VariantMapping = {
+        componentName: 'ButtonCTA',
+        behavioralClassification: 'styling',
+        recommendations: [
+          {
+            option: 'Option A',
+            description: 'Single component',
+            rationale: 'Styling only',
+            recommended: true,
+            alignsWith: [],
+            tradeoffs: [],
+          },
+        ],
+        conflicts: [],
+        familyPattern: null,
+        existingComponents: [],
+      };
+
+      const md = extractor.generateDesignOutlineMarkdown(
+        makeOutline({ variantMapping: mapping }),
+      );
+      expect(md).toContain('⚠️ **Reduced Confidence**');
+      expect(md).toContain('Component-Family-ButtonCTA.md not found');
+      expect(md).toContain('Recommend creating it before proceeding');
+      expect(md).toContain('Component-Family-Template.md');
+    });
+
+    it('does not show reduced confidence warning when familyPattern exists', () => {
+      const mapping: VariantMapping = {
+        componentName: 'ButtonCTA',
+        behavioralClassification: 'styling',
+        recommendations: [],
+        conflicts: [],
+        familyPattern: {
+          familyName: 'Button',
+          inheritancePattern: 'ButtonBase → ButtonCTA',
+          behavioralContracts: [],
+          tokenUsagePatterns: [],
+        },
+        existingComponents: [],
+      };
+
+      const md = extractor.generateDesignOutlineMarkdown(
+        makeOutline({
+          variantMapping: mapping,
+          inheritancePattern: {
+            familyName: 'Button',
+            pattern: 'ButtonBase → ButtonCTA',
+          },
+        }),
+      );
+      expect(md).not.toContain('⚠️ **Reduced Confidence**');
+      expect(md).not.toContain('not found');
     });
   });
 
@@ -514,10 +570,25 @@ describe('DesignExtractor.generateDesignOutlineMarkdown', () => {
   // -------------------------------------------------------------------------
 
   describe('Inheritance Pattern section', () => {
-    it('renders missing pattern recommendation', () => {
+    it('renders missing pattern recommendation with template reference', () => {
       const md = extractor.generateDesignOutlineMarkdown(makeOutline());
-      expect(md).toContain('_No inheritance pattern detected.');
-      expect(md).toContain('Consider creating a Component-Family doc._');
+      expect(md).toContain('⚠️ Component-Family-Button.md not found. Recommend creating it before proceeding.');
+      expect(md).toContain('Component-Family-Template.md');
+    });
+
+    it('derives family name from variantMapping when available', () => {
+      const mapping: VariantMapping = {
+        componentName: 'Badge',
+        behavioralClassification: 'styling',
+        recommendations: [],
+        conflicts: [],
+        familyPattern: null,
+        existingComponents: [],
+      };
+      const md = extractor.generateDesignOutlineMarkdown(
+        makeOutline({ variantMapping: mapping }),
+      );
+      expect(md).toContain('Component-Family-Badge.md not found');
     });
 
     it('renders inheritance pattern when present', () => {

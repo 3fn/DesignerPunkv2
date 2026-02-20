@@ -79,10 +79,12 @@ jest.mock('../../figma/VariantAnalyzer', () => ({
 // Mock DesignExtractor — the main class under orchestration
 const mockExtractDesign = jest.fn();
 const mockGenerateMarkdown = jest.fn().mockReturnValue('# Design Outline: ButtonCTA\n');
+const mockFormatNoMatchReport = jest.fn().mockReturnValue([]);
 jest.mock('../../figma/DesignExtractor', () => ({
   DesignExtractor: jest.fn().mockImplementation(() => ({
     extractDesign: mockExtractDesign,
     generateDesignOutlineMarkdown: mockGenerateMarkdown,
+    formatNoMatchReport: mockFormatNoMatchReport,
   })),
 }));
 

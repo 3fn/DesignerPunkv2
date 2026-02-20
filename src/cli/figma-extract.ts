@@ -27,6 +27,7 @@ import { ConsoleMCPClientImpl } from '../figma/ConsoleMCPClientImpl';
 import { TokenTranslator } from '../figma/TokenTranslator';
 import { VariantAnalyzer } from '../figma/VariantAnalyzer';
 import { DesignExtractor } from '../figma/DesignExtractor';
+import type { NoMatchEntry } from '../figma/DesignExtractor';
 import { cleanupStalePorts } from '../figma/portCleanup';
 import type { DTCGTokenFile } from '../generators/types/DTCGTypes';
 import type { MCPDocClient } from '../figma/VariantAnalyzer';
@@ -145,16 +146,19 @@ class StubMCPDocClient implements MCPDocClient {
 /**
  * Print a summary of extraction results to stdout.
  */
-function reportResults(outline: {
-  extractionConfidence: {
-    overall: string;
-    exactMatches: number;
-    approximateMatches: number;
-    noMatches: number;
-    requiresHumanInput: boolean;
-    reviewItems: string[];
-  };
-}): void {
+function reportResults(
+  outline: {
+    extractionConfidence: {
+      overall: string;
+      exactMatches: number;
+      approximateMatches: number;
+      noMatches: number;
+      requiresHumanInput: boolean;
+      reviewItems: string[];
+    };
+  },
+  noMatchEntries: NoMatchEntry[],
+): void {
   const conf = outline.extractionConfidence;
 
   console.log('');
@@ -169,6 +173,20 @@ function reportResults(outline: {
     console.log('📋 Items requiring review:');
     for (const item of conf.reviewItems) {
       console.log(`   - ${item}`);
+    }
+  }
+
+  if (noMatchEntries.length > 0) {
+    console.log('');
+    console.log('❌ Unmatched values requiring human decision:');
+    for (const entry of noMatchEntries) {
+      const closest = entry.closestMatch
+        ? `closest: ${entry.closestMatch}${entry.delta ? ` (${entry.delta})` : ''}`
+        : 'no close match';
+      console.log(`   • ${entry.property}: ${entry.figmaValue} — ${closest}`);
+      for (const option of entry.options) {
+        console.log(`     → ${option}`);
+      }
     }
   }
 }
@@ -235,10 +253,13 @@ export async function run(argv: string[] = process.argv.slice(2)): Promise<void>
     fs.writeFileSync(outputPath, markdown, 'utf-8');
     console.log(`✅ Wrote design outline: ${outputPath}`);
 
-    // 8. Report results
-    reportResults(outline);
+    // 8. Format no-match report for CLI output
+    const noMatchEntries = extractor.formatNoMatchReport(outline.tokenUsage);
 
-    // 9. Exit with appropriate code
+    // 9. Report results
+    reportResults(outline, noMatchEntries);
+
+    // 10. Exit with appropriate code
     if (outline.extractionConfidence.requiresHumanInput) {
       console.log('');
       console.log('⚠️  Human input required — review the design outline before proceeding.');

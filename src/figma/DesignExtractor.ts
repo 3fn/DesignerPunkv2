@@ -173,6 +173,30 @@ export interface TokenReference {
   semantic?: string;
   /** Difference from matched token value (e.g. "±1px"). */
   delta?: string;
+  /** Original Figma value as string (preserved for no-match reporting). */
+  rawValue?: string;
+  /** Suggested closest token when no exact match found. */
+  suggestion?: string;
+}
+
+/**
+ * A single no-match entry in the pause report.
+ *
+ * Provides all context needed for a human to decide how to handle
+ * an unmatched Figma value: map to suggested token, document as
+ * off-system, or request new token creation.
+ */
+export interface NoMatchEntry {
+  /** CSS property or Figma property name. */
+  property: string;
+  /** Original Figma value that could not be matched. */
+  figmaValue: string;
+  /** Closest token suggestion (if any). */
+  closestMatch?: string;
+  /** Delta from closest match (e.g. "±3px"). */
+  delta?: string;
+  /** Resolution options for human review. */
+  options: string[];
 }
 
 /**
@@ -1022,6 +1046,8 @@ export class DesignExtractor {
       primitive: result.primitive,
       semantic: result.semantic,
       delta: result.delta,
+      rawValue: result.rawValue,
+      suggestion: result.suggestion,
     };
   }
 
@@ -1896,12 +1922,13 @@ export class DesignExtractor {
           }
         : undefined;
 
-    // Calculate overall extraction confidence
+    // Calculate overall extraction confidence (includes conflict detection)
     const extractionConfidence = this.calculateConfidence(
       tokenUsage,
       behavioralContracts,
       modeValidation,
       context,
+      variantMapping,
     );
 
     return {
@@ -1930,73 +1957,86 @@ export class DesignExtractor {
    * unexpected mode discrepancies are found.
    */
   private calculateConfidence(
-    tokenUsage: TokenUsage,
-    behavioralContracts: BehavioralContractStatus,
-    modeValidation: ModeValidationResult,
-    context: ExtractionContext,
-  ): ConfidenceReport {
-    const allRefs = [
-      ...tokenUsage.spacing,
-      ...tokenUsage.colors,
-      ...tokenUsage.typography,
-      ...tokenUsage.radius,
-      ...tokenUsage.shadows,
-    ];
+      tokenUsage: TokenUsage,
+      behavioralContracts: BehavioralContractStatus,
+      modeValidation: ModeValidationResult,
+      context: ExtractionContext,
+      variantMapping?: VariantMapping,
+    ): ConfidenceReport {
+      const allRefs = [
+        ...tokenUsage.spacing,
+        ...tokenUsage.colors,
+        ...tokenUsage.typography,
+        ...tokenUsage.radius,
+        ...tokenUsage.shadows,
+      ];
 
-    const exactMatches = allRefs.filter((r) => r.confidence === 'exact').length;
-    const approximateMatches = allRefs.filter((r) => r.confidence === 'approximate').length;
-    const noMatches = allRefs.filter((r) => r.confidence === 'no-match').length;
+      const exactMatches = allRefs.filter((r) => r.confidence === 'exact').length;
+      const approximateMatches = allRefs.filter((r) => r.confidence === 'approximate').length;
+      const noMatches = allRefs.filter((r) => r.confidence === 'no-match').length;
 
-    const reviewItems: string[] = [];
+      const reviewItems: string[] = [];
 
-    // Flag no-match tokens
-    if (noMatches > 0) {
-      reviewItems.push(`${noMatches} token value(s) could not be matched — requires human decision`);
+      // Flag no-match tokens
+      if (noMatches > 0) {
+        reviewItems.push(`${noMatches} token value(s) could not be matched — requires human decision`);
+      }
+
+      // Flag missing behavioral contracts for interactive components
+      if (behavioralContracts.classification === 'interactive' && !behavioralContracts.contractsDefined) {
+        reviewItems.push(
+          'Missing behavioral contracts for interactive component — define before proceeding to requirements.md',
+        );
+      }
+
+      // Flag unexpected mode discrepancies
+      if (modeValidation.hasUnexpectedDiscrepancies) {
+        const unexpected = modeValidation.discrepancies.filter((d) => d.category === 'unexpected');
+        reviewItems.push(
+          `${unexpected.length} unexpected mode discrepancy(ies) found — structural tokens differ between modes`,
+        );
+      }
+
+      // Flag missing Component-Family doc — extraction continues with ⚠️ confidence
+      if (!context.familyPattern) {
+        reviewItems.push(
+          'Component-Family doc not found. Recommend creating it before proceeding. '
+          + 'See .kiro/steering/Component-Family-Template.md for the template.',
+        );
+      }
+
+      // Flag conflicting variant mapping recommendations — requires human decision
+      const hasConflicts = variantMapping != null && variantMapping.conflicts.length > 0;
+      if (hasConflicts) {
+        reviewItems.push(
+          `${variantMapping!.conflicts.length} variant mapping conflict(s) — family pattern and behavioral analysis disagree. Human decision required.`,
+        );
+      }
+
+      const requiresHumanInput = noMatches > 0
+        || (behavioralContracts.classification === 'interactive' && !behavioralContracts.contractsDefined)
+        || modeValidation.hasUnexpectedDiscrepancies
+        || hasConflicts;
+
+      // Determine overall confidence level
+      let overall: 'high' | 'medium' | 'low';
+      if (noMatches === 0 && approximateMatches === 0 && !requiresHumanInput) {
+        overall = 'high';
+      } else if (noMatches === 0 && !requiresHumanInput) {
+        overall = 'medium';
+      } else {
+        overall = 'low';
+      }
+
+      return {
+        overall,
+        exactMatches,
+        approximateMatches,
+        noMatches,
+        requiresHumanInput,
+        reviewItems,
+      };
     }
-
-    // Flag missing behavioral contracts for interactive components
-    if (behavioralContracts.classification === 'interactive' && !behavioralContracts.contractsDefined) {
-      reviewItems.push(
-        'Missing behavioral contracts for interactive component — define before proceeding to requirements.md',
-      );
-    }
-
-    // Flag unexpected mode discrepancies
-    if (modeValidation.hasUnexpectedDiscrepancies) {
-      const unexpected = modeValidation.discrepancies.filter((d) => d.category === 'unexpected');
-      reviewItems.push(
-        `${unexpected.length} unexpected mode discrepancy(ies) found — structural tokens differ between modes`,
-      );
-    }
-
-    // Flag missing Component-Family doc
-    if (!context.familyPattern) {
-      reviewItems.push('No Component-Family doc found — variant recommendations may be less accurate');
-    }
-
-    const requiresHumanInput = noMatches > 0
-      || (behavioralContracts.classification === 'interactive' && !behavioralContracts.contractsDefined)
-      || modeValidation.hasUnexpectedDiscrepancies;
-
-    // Determine overall confidence level
-    let overall: 'high' | 'medium' | 'low';
-    if (noMatches === 0 && approximateMatches === 0 && !requiresHumanInput) {
-      overall = 'high';
-    } else if (noMatches === 0 && !requiresHumanInput) {
-      overall = 'medium';
-    } else {
-      overall = 'low';
-    }
-
-    return {
-      overall,
-      exactMatches,
-      approximateMatches,
-      noMatches,
-      requiresHumanInput,
-      reviewItems,
-    };
-  }
 
   /**
    * Generate a design-outline.md markdown document from a DesignOutline.
@@ -2024,6 +2064,12 @@ export class DesignExtractor {
     sections.push(this.renderPlatformParity(outline.platformParity));
     sections.push(this.renderComponentTokenNeeds(outline.componentTokenDecisions));
     sections.push(this.renderAccessibilityContracts(outline));
+
+    // Include no-match pause report when unmatched values exist
+    const noMatchSection = this.renderNoMatchReport(outline.tokenUsage);
+    if (noMatchSection) {
+      sections.push(noMatchSection);
+    }
 
     return sections.join('\n');
   }
@@ -2069,35 +2115,43 @@ export class DesignExtractor {
   }
 
   private renderVariantRecommendations(mapping: VariantMapping): string {
-    let md = `\n### Variant Mapping Recommendations\n\n`;
-    md += `**Behavioral Classification**: ${mapping.behavioralClassification}\n\n`;
+      let md = `\n### Variant Mapping Recommendations\n\n`;
 
-    for (const rec of mapping.recommendations) {
-      const marker = rec.recommended ? '⭐ **Recommended**' : '';
-      md += `#### ${rec.option} ${marker}\n\n`;
-      md += `${rec.description}\n\n`;
-      md += `**Rationale**: ${rec.rationale}\n`;
-      if (rec.alignsWith.length > 0) {
-        md += `**Aligns with**: ${rec.alignsWith.join(', ')}\n`;
+      // Flag reduced confidence when Component-Family doc is missing
+      if (!mapping.familyPattern) {
+        md += `> ⚠️ **Reduced Confidence** — Component-Family-${mapping.componentName}.md not found. `
+          + `Recommend creating it before proceeding. `
+          + `See \`.kiro/steering/Component-Family-Template.md\` for the template.\n\n`;
       }
-      if (rec.tradeoffs.length > 0) {
-        md += `**Tradeoffs**: ${rec.tradeoffs.join('; ')}\n`;
+
+      md += `**Behavioral Classification**: ${mapping.behavioralClassification}\n\n`;
+
+      for (const rec of mapping.recommendations) {
+        const marker = rec.recommended ? '⭐ **Recommended**' : '';
+        md += `#### ${rec.option} ${marker}\n\n`;
+        md += `${rec.description}\n\n`;
+        md += `**Rationale**: ${rec.rationale}\n`;
+        if (rec.alignsWith.length > 0) {
+          md += `**Aligns with**: ${rec.alignsWith.join(', ')}\n`;
+        }
+        if (rec.tradeoffs.length > 0) {
+          md += `**Tradeoffs**: ${rec.tradeoffs.join('; ')}\n`;
+        }
+        md += '\n';
       }
-      md += '\n';
+
+      if (mapping.conflicts.length > 0) {
+        md += `### ⚠️ Mapping Conflicts\n\n`;
+        md += `> **Human Decision Required** — Family pattern and behavioral analysis disagree.\n\n`;
+        for (const c of mapping.conflicts) {
+          md += `- **Family recommends**: ${c.familyRecommendation}\n`;
+          md += `  **Behavioral analysis recommends**: ${c.behavioralRecommendation}\n`;
+          md += `  **Explanation**: ${c.explanation}\n\n`;
+        }
+      }
+
+      return md;
     }
-
-    if (mapping.conflicts.length > 0) {
-      md += `### ⚠️ Mapping Conflicts\n\n`;
-      md += `> **Human Decision Required** — Family pattern and behavioral analysis disagree.\n\n`;
-      for (const c of mapping.conflicts) {
-        md += `- **Family recommends**: ${c.familyRecommendation}\n`;
-        md += `  **Behavioral analysis recommends**: ${c.behavioralRecommendation}\n`;
-        md += `  **Explanation**: ${c.explanation}\n\n`;
-      }
-    }
-
-    return md;
-  }
 
   private renderStates(outline: DesignOutline): string {
     let md = `\n## States\n\n`;
@@ -2247,19 +2301,25 @@ export class DesignExtractor {
   }
 
   private renderInheritancePattern(outline: DesignOutline): string {
-    let md = `\n## Inheritance Pattern\n\n`;
-    if (!outline.inheritancePattern) {
-      md += '_No inheritance pattern detected. Consider creating a Component-Family doc._\n';
+      let md = `\n## Inheritance Pattern\n\n`;
+      if (!outline.inheritancePattern) {
+        const familyName = outline.variantMapping?.componentName
+          ?? (outline.componentName.replace(
+            /(?:Base|CTA|Primary|Secondary|Tertiary|Default|Large|Small|Medium)$/i,
+            '',
+          ) || outline.componentName);
+        md += `⚠️ Component-Family-${familyName}.md not found. Recommend creating it before proceeding.\n\n`;
+        md += `See \`.kiro/steering/Component-Family-Template.md\` for the template.\n`;
+        return md;
+      }
+      const ip = outline.inheritancePattern;
+      md += `**Family**: ${ip.familyName}\n`;
+      md += `**Pattern**: ${ip.pattern}\n`;
+      if (ip.baseComponent) {
+        md += `**Base Component**: \`${ip.baseComponent}\`\n`;
+      }
       return md;
     }
-    const ip = outline.inheritancePattern;
-    md += `**Family**: ${ip.familyName}\n`;
-    md += `**Pattern**: ${ip.pattern}\n`;
-    if (ip.baseComponent) {
-      md += `**Base Component**: \`${ip.baseComponent}\`\n`;
-    }
-    return md;
-  }
 
   private renderBehavioralContracts(
     contracts: BehavioralContractStatus,
@@ -2389,5 +2449,65 @@ export class DesignExtractor {
       ...usage.shadows,
     ];
     return all.filter((r) => r.confidence === 'no-match');
+  }
+
+  /**
+   * Build a structured no-match report from unmatched token references.
+   *
+   * Each entry includes the property name, raw Figma value, closest
+   * suggestion (if any), delta, and resolution options for human review.
+   */
+  formatNoMatchReport(usage: TokenUsage): NoMatchEntry[] {
+    const noMatches = this.collectNoMatchTokens(usage);
+    return noMatches.map((ref) => ({
+      property: ref.property,
+      figmaValue: ref.rawValue ?? ref.token,
+      closestMatch: ref.suggestion,
+      delta: ref.delta,
+      options: [
+        ref.suggestion
+          ? `Map to suggested token: \`${ref.suggestion}\``
+          : 'No close match available — consider creating a new token',
+        'Document as off-system value',
+        'Request new token creation',
+      ],
+    }));
+  }
+
+  /**
+   * Render the no-match pause report as a markdown section.
+   *
+   * Only included in the design outline when no-match values exist.
+   * Provides actionable options for each unmatched value.
+   */
+  private renderNoMatchReport(usage: TokenUsage): string {
+    const entries = this.formatNoMatchReport(usage);
+    if (entries.length === 0) return '';
+
+    let md = `\n## ❌ Unmatched Values — Human Decision Required\n\n`;
+    md += `The following Figma values could not be matched to DesignerPunk tokens. `;
+    md += `Each requires a human decision before proceeding to spec formalization.\n\n`;
+
+    for (let i = 0; i < entries.length; i++) {
+      const entry = entries[i];
+      md += `### ${i + 1}. \`${entry.property}\`\n\n`;
+      md += `**Figma Value**: \`${entry.figmaValue}\`\n`;
+      if (entry.closestMatch) {
+        md += `**Closest Match**: \`${entry.closestMatch}\``;
+        if (entry.delta) {
+          md += ` (${entry.delta})`;
+        }
+        md += '\n';
+      } else {
+        md += `**Closest Match**: _none_\n`;
+      }
+      md += `\n**Options**:\n`;
+      for (const option of entry.options) {
+        md += `- ${option}\n`;
+      }
+      md += '\n';
+    }
+
+    return md;
   }
 }
