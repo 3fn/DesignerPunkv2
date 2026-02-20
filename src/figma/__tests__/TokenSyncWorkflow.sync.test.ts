@@ -29,6 +29,8 @@ function makeMockMcp(): jest.Mocked<ConsoleMCPClient> {
     execute: jest.fn().mockResolvedValue(undefined),
     setupDesignTokens: jest.fn().mockResolvedValue(undefined),
     getStatus: jest.fn().mockResolvedValue({}),
+    getStyles: jest.fn().mockResolvedValue([]),
+    getComponent: jest.fn().mockResolvedValue({}),
   };
 }
 

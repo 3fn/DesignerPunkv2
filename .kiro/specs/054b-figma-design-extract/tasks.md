@@ -243,7 +243,7 @@ This spec implements the design extraction workflow in four phases:
 
 ---
 
-- [ ] Task 3: DesignExtractor Implementation (Parent)
+- [x] Task 3: DesignExtractor Implementation (Parent)
 
   **Type**: Architecture (Parent)
   **Validation**: Tier 3 - Comprehensive
@@ -271,7 +271,7 @@ This spec implements the design extraction workflow in four phases:
   - Verify: Check GitHub for committed changes
 
 
-  - [ ] 3.1 Create DesignExtractor class structure and extend ConsoleMCPClient
+  - [x] 3.1 Create DesignExtractor class structure and extend ConsoleMCPClient
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Create `src/figma/DesignExtractor.ts`
@@ -282,7 +282,7 @@ This spec implements the design extraction workflow in four phases:
     - Export from figma index
     - _Requirements: Req 1_
 
-  - [ ] 3.2 Implement Figma component reading (dual-MCP)
+  - [x] 3.2 Implement Figma component reading (dual-MCP)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `readFigmaComponent(fileKey: string, nodeId: string): Promise<FigmaComponent>`
@@ -292,7 +292,7 @@ This spec implements the design extraction workflow in four phases:
     - Handle errors: component not found, invalid node ID, MCP server unavailable
     - _Requirements: Req 1_
 
-  - [ ] 3.3 Implement token binding reading
+  - [x] 3.3 Implement token binding reading
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `readTokenBindings(fileKey: string): Promise<TokenBinding[]>`
@@ -301,7 +301,7 @@ This spec implements the design extraction workflow in four phases:
     - Detect alias relationships (semantic → primitive) from collection membership
     - _Requirements: Req 1, Req 2_
 
-  - [ ] 3.4 Implement style reading
+  - [x] 3.4 Implement style reading
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `readStyles(fileKey: string): Promise<FigmaStyle[]>`
@@ -310,7 +310,7 @@ This spec implements the design extraction workflow in four phases:
     - Separate effect styles (shadows) from text styles (typography)
     - _Requirements: Req 3_
 
-  - [ ] 3.5 Implement context querying
+  - [x] 3.5 Implement context querying
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `queryContext(componentName: string): Promise<ExtractionContext>`
@@ -319,7 +319,7 @@ This spec implements the design extraction workflow in four phases:
     - Return `ExtractionContext` with family pattern and existing component status
     - _Requirements: Req 1, Req 4_
 
-  - [ ] 3.6 Implement token translation orchestration
+  - [x] 3.6 Implement token translation orchestration
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `translateTokens(component: FigmaComponent, bindings: TokenBinding[]): TokenUsage`
@@ -331,7 +331,7 @@ This spec implements the design extraction workflow in four phases:
     - Track no-match values for pause reporting
     - _Requirements: Req 2_
 
-  - [ ] 3.7 Implement composite token reconstruction
+  - [x] 3.7 Implement composite token reconstruction
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `reconstructCompositeTokens(styles: FigmaStyle[], dtcgTokens: DTCGTokenFile): TokenReference[]`
@@ -342,7 +342,7 @@ This spec implements the design extraction workflow in four phases:
     - Flag unmatched composites for Ada's review with ⚠️ confidence
     - _Requirements: Req 3_
 
-  - [ ] 3.8 Implement behavioral contract detection
+  - [x] 3.8 Implement behavioral contract detection
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `detectBehavioralContracts(component: FigmaComponent): BehavioralContractStatus`
@@ -352,7 +352,7 @@ This spec implements the design extraction workflow in four phases:
     - For static components: auto-generate "no interaction" contract
     - _Requirements: Req 6_
 
-  - [ ] 3.9 Implement platform parity detection
+  - [x] 3.9 Implement platform parity detection
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `detectPlatformParity(component: FigmaComponent): PlatformParityCheck`
@@ -362,7 +362,7 @@ This spec implements the design extraction workflow in four phases:
     - Provide decision options: omit on mobile, map to press, other
     - _Requirements: Req 7_
 
-  - [ ] 3.10 Implement component token decision points
+  - [x] 3.10 Implement component token decision points
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `detectComponentTokenDecisions(tokenUsage: TokenUsage): ComponentTokenDecision[]`
@@ -372,7 +372,7 @@ This spec implements the design extraction workflow in four phases:
     - Defer all decisions to Ada review (no autonomous token creation per governance)
     - _Requirements: Req 8_
 
-  - [ ] 3.11 Implement mode validation
+  - [x] 3.11 Implement mode validation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `validateModes(bindings: TokenBinding[]): ModeValidationResult`
@@ -382,7 +382,7 @@ This spec implements the design extraction workflow in four phases:
     - Pause for human review when unexpected discrepancies found
     - _Requirements: Req 9_
 
-  - [ ] 3.12 Implement design-outline markdown generation
+  - [x] 3.12 Implement design-outline markdown generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `generateDesignOutlineMarkdown(outline: DesignOutline): string`
@@ -393,7 +393,7 @@ This spec implements the design extraction workflow in four phases:
     - Include component token decision points
     - _Requirements: Req 5_
 
-  - [ ] 3.13 Implement main extractDesign orchestration method
+  - [x] 3.13 Implement main extractDesign orchestration method
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `extractDesign(figmaFileKey: string, componentNodeId: string): Promise<DesignOutline>`
@@ -412,7 +412,7 @@ This spec implements the design extraction workflow in four phases:
     - Calculate overall `extractionConfidence` from individual results
     - _Requirements: All_
 
-  - [ ] 3.14 Write DesignExtractor tests
+  - [x] 3.14 Write DesignExtractor tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/figma/__tests__/DesignExtractor.test.ts`

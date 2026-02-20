@@ -11,7 +11,7 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import type { FigmaVariable } from '../generators/transformers/FigmaTransformer';
-import type { ConsoleMCPClient, ConsoleMCPStatus, DesignTokenSetupPayload } from './ConsoleMCPClient';
+import type { ConsoleMCPClient, ConsoleMCPStatus, DesignTokenSetupPayload, FigmaStyleData, FigmaComponentData } from './ConsoleMCPClient';
 
 /** Options for constructing a ConsoleMCPClientImpl. */
 export interface ConsoleMCPClientOptions {
@@ -376,5 +376,51 @@ export class ConsoleMCPClientImpl implements ConsoleMCPClient {
   async getStatus(): Promise<ConsoleMCPStatus> {
     const result = await this.callTool('figma_get_status', {});
     return (result ?? {}) as ConsoleMCPStatus;
+  }
+
+  async getStyles(fileKey: string): Promise<FigmaStyleData[]> {
+    try {
+      const result = await this.callTool('figma_get_styles', { fileKey });
+
+      // Normalize response to FigmaStyleData[]
+      if (Array.isArray(result)) {
+        return result.map((s: Record<string, unknown>) => ({
+          name: String(s.name ?? ''),
+          type: (s.type === 'TEXT' ? 'TEXT' : 'EFFECT') as FigmaStyleData['type'],
+          properties: (s.properties ?? s) as Record<string, unknown>,
+        }));
+      }
+
+      if (result && typeof result === 'object' && 'styles' in result) {
+        const styles = (result as { styles: Array<Record<string, unknown>> }).styles;
+        return styles.map((s) => ({
+          name: String(s.name ?? ''),
+          type: (s.type === 'TEXT' ? 'TEXT' : 'EFFECT') as FigmaStyleData['type'],
+          properties: (s.properties ?? s) as Record<string, unknown>,
+        }));
+      }
+
+      return [];
+    } catch {
+      // If style retrieval fails, return empty array
+      return [];
+    }
+  }
+
+  async getComponent(fileKey: string, nodeId: string): Promise<FigmaComponentData> {
+    const result = await this.callTool('figma_get_component', { fileKey, nodeId });
+
+    if (result && typeof result === 'object') {
+      const data = result as Record<string, unknown>;
+      return {
+        name: data.name != null ? String(data.name) : undefined,
+        description: data.description != null ? String(data.description) : undefined,
+        key: data.key != null ? String(data.key) : undefined,
+        variantProperties: data.variantProperties as Record<string, string[]> | undefined,
+        ...data,
+      };
+    }
+
+    return {};
   }
 }

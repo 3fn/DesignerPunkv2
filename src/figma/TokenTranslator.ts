@@ -225,6 +225,11 @@ export class TokenTranslator {
     this.primitiveToSemanticIndex = this.buildPrimitiveToSemanticIndex();
   }
 
+  /** Expose the DTCG token file for downstream consumers (e.g. composite token reconstruction). */
+  getDtcgTokens(): DTCGTokenFile {
+    return this.dtcgTokens;
+  }
+
   /**
    * Walk the DTCG token tree and build a reverse lookup from Figma variable
    * names to DTCG token paths. Mirrors the naming logic in

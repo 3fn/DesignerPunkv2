@@ -25,6 +25,8 @@ function makeMockClient(
     execute: jest.fn(),
     setupDesignTokens: jest.fn(),
     getStatus: jest.fn().mockImplementation(getStatusImpl),
+    getStyles: jest.fn().mockResolvedValue([]),
+    getComponent: jest.fn().mockResolvedValue({}),
   };
 }
 

@@ -16,7 +16,7 @@ export type {
   StyleSyncResult,
 } from './TokenSyncWorkflow';
 
-export type { ConsoleMCPClient, ConsoleMCPStatus, DesignTokenSetupPayload } from './ConsoleMCPClient';
+export type { ConsoleMCPClient, ConsoleMCPStatus, DesignTokenSetupPayload, FigmaStyleData, FigmaComponentData } from './ConsoleMCPClient';
 export { ConsoleMCPClientImpl } from './ConsoleMCPClientImpl';
 export type { ConsoleMCPClientOptions } from './ConsoleMCPClientImpl';
 
@@ -42,3 +42,31 @@ export type {
   VariantMapping,
   MCPDocClient,
 } from './VariantAnalyzer';
+
+export { DesignExtractor } from './DesignExtractor';
+export type {
+  TokenReference,
+  TokenUsage,
+  TokenBinding,
+  FigmaStyle,
+  VariantDefinition,
+  StateDefinition,
+  PropertyDefinition,
+  InheritancePattern,
+  BehavioralContractStatus,
+  PlatformParityCheck,
+  PlatformInteraction,
+  ComponentTokenDecision,
+  ModeValidationResult,
+  ModeDiscrepancy,
+  ConfidenceReport,
+  DesignOutline,
+  ConfidenceLevel,
+  MatchMethod,
+  KiroFigmaPowerClient,
+  DesignContextResponse,
+  MetadataResponse,
+  FigmaComponentResponse,
+  ExtractedComponent,
+  ExtractedLayout,
+} from './DesignExtractor';
