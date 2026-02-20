@@ -432,7 +432,7 @@ This spec implements the design extraction workflow in four phases:
 
 ---
 
-- [ ] Task 4: CLI Command and ConsoleMCPClient Extension (Parent)
+- [x] Task 4: CLI Command and ConsoleMCPClient Extension (Parent)
 
   **Type**: Implementation (Parent)
   **Validation**: Tier 3 - Comprehensive
@@ -458,7 +458,7 @@ This spec implements the design extraction workflow in four phases:
   - Verify: Check GitHub for committed changes
 
 
-  - [ ] 4.1 Create CLI command
+  - [x] 4.1 Create CLI command
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/cli/figma-extract.ts`
@@ -476,14 +476,14 @@ This spec implements the design extraction workflow in four phases:
     - Call `consoleMcp.disconnect()` in finally block
     - _Requirements: Req 10_
 
-  - [ ] 4.2 Add npm script
+  - [x] 4.2 Add npm script
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Add `"figma:extract": "ts-node src/cli/figma-extract.ts"` to package.json scripts
     - Verify script runs with `npm run figma:extract -- --help` (or similar)
     - _Requirements: Req 10_
 
-  - [ ] 4.3 Write CLI tests
+  - [x] 4.3 Write CLI tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/cli/__tests__/figma-extract.test.ts`

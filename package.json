@@ -58,7 +58,8 @@
     "audit:tokens:detailed": "node scripts/audit-component-tokens.js -- --detailed",
     "serve": "python3 -m http.server 8001",
     "server": "python3 -m http.server 8001",
-    "figma:push": "npx ts-node src/cli/figma-push.ts"
+    "figma:push": "npx ts-node src/cli/figma-push.ts",
+    "figma:extract": "npx ts-node src/cli/figma-extract.ts"
   },
   "devDependencies": {
     "@types/glob": "^8.1.0",
