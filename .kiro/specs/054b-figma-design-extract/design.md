@@ -1,80 +1,92 @@
 # Design Document: Figma Design Extraction
 
 **Date**: February 18, 2026
+**Updated**: February 19, 2026 (Thurgood spec review — Req 8, 9, 11 updates)
 **Spec**: 054b - Figma Design Extraction
-**Status**: Design Phase
-**Dependencies**: Spec 053 (DTCG Token Format Generator), Spec 054 Design Outline (shared architectural context), Spec 054a (Figma Token Push)
+**Status**: Design Phase (Realigned post-054a/054c implementation)
+**Dependencies**: Spec 053 (DTCG Token Format Generator), Spec 054 Design Outline (shared architectural context), Spec 054a (Figma Token Push), Spec 054c (Figma Token Push Fixes)
+
+---
+
+## Realignment Notes (Post-054a/054c)
+
+This design was originally written before 054a implementation. During 054a and 054c, several assumptions were invalidated:
+
+1. **MCP tool schemas differ from assumptions** — `figma_get_variables` doesn't exist; use `figma_get_token_values` instead. Tool parameter schemas must be verified against actual `figma-console-mcp` v1.10.1.
+2. **Two Figma MCP servers available** — Kiro Figma Power (read-only, design inspection) and `figma-console-mcp` (read-write, 56+ tools). This spec uses both strategically.
+3. **Token translation is simpler than originally designed** — 054a pushes tokens with known Figma variable names (`space/100`, `color/purple/300`). Extraction can match by variable binding first, falling back to value-based matching only for unbound values.
+4. **ConsoleMCPClient interface is now concrete** — Post-054c, the interface has verified methods: `batchCreateVariables`, `batchUpdateVariables`, `createVariableAliases`, `getVariables`, `execute`, `setupDesignTokens`, `getStatus`. Extension for read operations should build on this.
+5. **Color format handling** — DTCG tokens use `rgba()` format; Figma uses hex. `FigmaTransformer.rgbaToHex()` handles push direction. Extraction needs the reverse: hex → token lookup.
+6. **Semantic aliases now work** — 054c added `createVariableAliases()` via Plugin API. Extraction can detect alias relationships in Figma.
 
 ---
 
 ## Overview
 
-This spec implements the design extraction workflow that reads Figma designs and generates design-outline.md documents. The implementation uses Console MCP to read Figma structure, queries MCP documentation for context, and applies behavioral analysis heuristics to provide context-aware recommendations.
+This spec implements the design extraction workflow that reads Figma designs and generates design-outline.md documents. The implementation uses two MCP servers strategically and applies behavioral analysis heuristics to provide context-aware recommendations.
 
 **Key Components:**
-- **DesignExtractor** — Reads Figma designs and generates design-outline.md
-- **TokenTranslator** — Translates Figma values to DesignerPunk tokens
+- **DesignExtractor** — Orchestrates extraction and generates design-outline.md
+- **TokenTranslator** — Translates Figma values to DesignerPunk tokens (variable-binding-first approach)
 - **VariantAnalyzer** — Analyzes Figma variants and provides mapping recommendations
 - **CLI Command** — `npm run figma:extract` with arguments for file, node, output
 
-**Architecture Decision:** Context-aware extraction with human-in-the-loop decision points. Extraction surfaces recommendations based on Component-Family patterns, existing components, and behavioral analysis, but defers final decisions to human review.
+**Architecture Decision:** Dual-MCP extraction with human-in-the-loop decision points. Use Kiro Figma Power for rich design context and `figma-console-mcp` for variable/style data. Defer final decisions to human review.
 
 ---
 
 ## Architecture
 
-### Component Diagram
+### Dual-MCP Strategy
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                     Figma (Design Tool)                         │
-│                                                                 │
-│  Designer marks component as "ready for spec"                   │
 │  Component uses DesignerPunk tokens (pushed via 054a)          │
 └─────────────────────────────────────────────────────────────────┘
-                              │
-                              │ Console MCP (Read)
-                              ▼
+          │                                    │
+          │ Kiro Figma Power                   │ figma-console-mcp
+          │ (design structure)                 │ (variables & styles)
+          ▼                                    ▼
+┌──────────────────────┐        ┌──────────────────────────────┐
+│ get_design_context   │        │ figma_get_token_values        │
+│ get_metadata         │        │ figma_get_styles              │
+│ get_variable_defs    │        │ figma_get_component           │
+│ get_screenshot       │        │ figma_execute (Plugin API)    │
+└──────────────────────┘        └──────────────────────────────┘
+          │                                    │
+          └──────────────┬─────────────────────┘
+                         ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │              DesignExtractor (this spec)                        │
 │                                                                 │
-│  - readFigmaComponent()  → Get component structure             │
-│  - queryContext()        → MCP queries for family/status       │
-│  - extractStructure()    → Variants, states, properties        │
+│  - readFigmaComponent()  → Kiro Power: get_design_context      │
+│  - readTokenBindings()   → Console MCP: figma_get_token_values │
+│  - readStyles()          → Console MCP: figma_get_styles       │
+│  - queryContext()        → DesignerPunk MCP: doc queries       │
 │  - translateTokens()     → TokenTranslator                     │
 │  - analyzeVariants()     → VariantAnalyzer                     │
 │  - generateOutline()     → design-outline.md                   │
 └─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│              TokenTranslator (this spec)                        │
-│                                                                 │
-│  - translate()           → Match Figma value to token          │
-│  - findExactMatch()      → Check for exact token match         │
-│  - findApproximateMatch()→ Check within tolerance              │
-│  - enrichResponse()      → Add primitive + semantic refs       │
-└─────────────────────────────────────────────────────────────────┐
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│              VariantAnalyzer (this spec)                        │
-│                                                                 │
-│  - analyzeVariants()     → Behavioral vs styling differences   │
-│  - queryFamilyPattern()  → MCP query for Component-Family      │
-│  - queryExistingComponents() → MCP query for status           │
-│  - generateRecommendations() → Context-aware suggestions       │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
+                         │
+                         ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │                     design-outline.md                           │
-│                                                                 │
 │  Generated with confidence flags (✅ ⚠️ ❌)                      │
 │  Context-aware recommendations                                  │
 │  Human review required before requirements.md                   │
 └─────────────────────────────────────────────────────────────────┘
 ```
+
+### MCP Server Responsibilities
+
+| Server | Purpose | Tools Used |
+|--------|---------|------------|
+| Kiro Figma Power | Design structure, layout, visual properties | `get_design_context`, `get_metadata`, `get_variable_defs`, `get_screenshot` |
+| figma-console-mcp | Variables, styles, Plugin API reads | `figma_get_token_values`, `figma_get_styles`, `figma_get_component`, `figma_execute` |
+| DesignerPunk MCP | Documentation context queries | `get_document_full`, `get_section` |
+
+**Rationale:** Kiro Figma Power provides rich design context (component structure, properties, layout) that `figma-console-mcp` doesn't expose as cleanly. `figma-console-mcp` provides variable/style data that Kiro Power doesn't have. Using both gives us the most complete picture.
 
 ---
 
@@ -82,7 +94,7 @@ This spec implements the design extraction workflow that reads Figma designs and
 
 ### DesignExtractor
 
-**Purpose:** Read Figma designs and generate design-outline.md with context-aware recommendations.
+**Purpose:** Orchestrate extraction from both MCP servers and generate design-outline.md.
 
 **Interface:**
 ```typescript
@@ -107,21 +119,30 @@ export class DesignExtractor {
 **Key Methods:**
 
 ```typescript
+// Uses Kiro Figma Power: get_design_context + get_metadata
 private async readFigmaComponent(
   fileKey: string, 
   nodeId: string
 ): Promise<FigmaComponent>;
 
+// Uses figma-console-mcp: figma_get_token_values
+private async readTokenBindings(
+  fileKey: string
+): Promise<TokenBinding[]>;
+
+// Uses figma-console-mcp: figma_get_styles
+private async readStyles(
+  fileKey: string
+): Promise<FigmaStyle[]>;
+
+// Uses DesignerPunk MCP: get_document_full, get_section
 private async queryContext(
   componentName: string
 ): Promise<ExtractionContext>;
 
-private extractStructure(
-  component: FigmaComponent
-): ComponentStructure;
-
 private async translateTokens(
-  component: FigmaComponent
+  component: FigmaComponent,
+  bindings: TokenBinding[]
 ): Promise<TokenUsage>;
 
 private async analyzeVariants(
@@ -140,17 +161,32 @@ private detectPlatformParity(
 
 ---
 
-### TokenTranslator
+### TokenTranslator (Realigned)
 
-**Purpose:** Translate Figma values to DesignerPunk tokens with tolerance rules.
+**Purpose:** Translate Figma values to DesignerPunk tokens. Uses a variable-binding-first approach that leverages the known token names pushed by 054a.
+
+**Key Change from Original Design:** The original spec assumed all translation would be value-based (reverse-engineering from raw pixel/color values). Since 054a pushes tokens with known Figma variable names, the primary path is now name-based matching. Value-based matching is the fallback for unbound values.
 
 **Interface:**
 ```typescript
 export class TokenTranslator {
   constructor(private dtcgTokens: DTCGTokenFile);
   
-  translate(
+  // Primary: match by Figma variable name → DTCG token
+  translateByBinding(
+    figmaVariableName: string
+  ): TranslationResult;
+  
+  // Fallback: match by raw value with tolerance
+  translateByValue(
     value: number | string,
+    category: 'spacing' | 'color' | 'typography' | 'radius' | 'shadow'
+  ): TranslationResult;
+  
+  // Composite: try binding first, fall back to value
+  translate(
+    figmaVariableName: string | undefined,
+    rawValue: number | string,
     category: 'spacing' | 'color' | 'typography' | 'radius' | 'shadow'
   ): TranslationResult;
 }
@@ -158,6 +194,7 @@ export class TokenTranslator {
 interface TranslationResult {
   token: string;
   confidence: 'exact' | 'approximate' | 'no-match';
+  matchMethod: 'binding' | 'value';
   rawValue: string;
   primitive?: string;
   semantic?: string;
@@ -166,7 +203,15 @@ interface TranslationResult {
 }
 ```
 
-**Tolerance Rules:**
+**Translation Priority (Updated):**
+
+1. **Variable binding match** — Figma element uses a DesignerPunk variable → exact match by name
+2. **Style name match** — Figma element uses a DesignerPunk style → exact match by style name
+3. **Exact value match** — Raw value exactly matches a token value
+4. **Approximate value match** — Raw value within tolerance of a token value
+5. **No match** — No token found, pause for human decision
+
+**Tolerance Rules (Unchanged):**
 
 | Category | Tolerance | Rationale |
 |----------|-----------|-----------|
@@ -175,32 +220,28 @@ interface TranslationResult {
 | Font Size | ±1px | Accounts for rendering differences |
 | Radius | ±1px | Minor visual difference |
 
-**Translation Priority:**
+**Name-to-Token Mapping:**
 
-1. **Exact match** — Value exactly matches token value
-2. **Approximate match** — Value within tolerance of token value
-3. **No match** — No token within tolerance, pause for human decision
+Figma variable names use slash notation (`space/100`, `color/purple/300`). DTCG tokens use dot notation (`space.100`, `color.purple.300`). The translator converts between these:
 
-**Semantic Priority:**
-
-When multiple tokens match, prioritize semantic over primitive:
 ```typescript
-// Example: #B026FF matches both purple.300 (primitive) and color.primary (semantic)
-{
-  token: 'color.primary',
-  confidence: 'exact',
-  primitive: 'purple.300',
-  semantic: 'color.primary'
+function figmaNameToTokenPath(figmaName: string): string {
+  // space/100 → space.100
+  // color/purple/300 → color.purple.300
+  // color/feedback/success/text → color.feedback.success.text
+  return figmaName.replace(/\//g, '.');
 }
 ```
 
 ---
 
-### VariantAnalyzer
+### VariantAnalyzer (Unchanged)
 
 **Purpose:** Analyze Figma variants and provide context-aware mapping recommendations.
 
-**Interface:**
+The VariantAnalyzer design remains valid. It queries Component-Family docs and Component-Readiness-Status via DesignerPunk MCP, analyzes behavioral vs styling differences, and generates recommendations.
+
+**Interface:** (unchanged from original design)
 ```typescript
 export class VariantAnalyzer {
   constructor(private mcp: MCPClient);
@@ -210,37 +251,13 @@ export class VariantAnalyzer {
     context: ExtractionContext
   ): Promise<VariantMapping>;
 }
-
-interface VariantMapping {
-  figmaVariants: FigmaVariantProperty[];
-  recommendations: MappingRecommendation[];
-  conflicts: MappingConflict[];
-  familyPattern?: ComponentFamilyPattern;
-  existingComponents: ComponentStatus[];
-}
-
-interface MappingRecommendation {
-  option: 'single-component' | 'primitive-semantic' | 'other';
-  rationale: string;
-  alignsWith: string[];
-  tradeoffs: string[];
-  recommended: boolean;
-}
 ```
-
-**Analysis Steps:**
-
-1. **Query Component-Family doc** — Get established pattern
-2. **Query Component-Readiness-Status** — Check existing components
-3. **Analyze behavioral differences** — Do variants differ in behavior or just styling?
-4. **Generate recommendations** — Provide options with rationale
-5. **Detect conflicts** — Flag when family pattern conflicts with behavioral analysis
 
 ---
 
 ## Data Models
 
-### DesignOutline
+### DesignOutline (Updated)
 
 ```typescript
 interface DesignOutline {
@@ -269,448 +286,303 @@ interface TokenReference {
   property: string;
   token: string;
   confidence: 'exact' | 'approximate' | 'no-match';
+  matchMethod: 'binding' | 'value';  // NEW: how the match was found
   primitive?: string;
   semantic?: string;
   delta?: string;
 }
 
-interface BehavioralContractStatus {
-  componentType: 'interactive' | 'static';
-  extractedStates: string[];
-  missingContracts: string[];
-  requiresHumanInput: boolean;
-}
-
-interface PlatformParityCheck {
-  extractedInteractions: InteractionDefinition[];
-  platformConcerns: PlatformConcern[];
-  requiresHumanDecision: boolean;
-}
-
-interface ComponentTokenDecision {
-  property: string;
-  currentToken: string;
-  recommendation: string;
-  rationale: string;
-  deferToAda: boolean;
+// NEW: Represents a Figma variable binding on a component
+interface TokenBinding {
+  variableName: string;     // e.g. "space/100"
+  variableId: string;       // Figma variable ID
+  collectionName: string;   // e.g. "Primitives" or "Semantics"
+  resolvedType: string;     // FLOAT, COLOR, STRING
+  valuesByMode: Record<string, unknown>;
+  isAlias: boolean;         // true if this is a semantic alias
+  aliasTarget?: string;     // primitive variable name if alias
 }
 ```
 
 ---
 
-## MCP Query Strategy
+## MCP Query Strategy (Updated)
 
-### Component-Family Doc Query
+### Design Structure Query (Kiro Figma Power)
+
+**When:** First step of extraction — get component structure
+
+**Tool:** `get_design_context`
+```typescript
+const designContext = await kiroFigmaPower.getDesignContext({
+  fileKey: figmaFileKey,
+  nodeId: componentNodeId,
+  clientLanguages: 'typescript',
+  clientFrameworks: 'web-components'
+});
+```
+
+**Extract:**
+- Component name, description
+- Variants and their properties
+- Visual states (hover, focus, disabled)
+- Layout structure (auto-layout, spacing, padding)
+- Visual properties (colors, typography, shadows, radii)
+
+**Fallback:** If `get_design_context` doesn't provide enough detail, use `get_metadata` for structure + `figma_get_component` for reconstruction spec.
+
+---
+
+### Token Bindings Query (figma-console-mcp)
+
+**When:** After getting component structure — identify which tokens are used
+
+**Tool:** `figma_get_token_values`
+```typescript
+const tokenValues = await consoleMcp.getVariables(figmaFileKey);
+// Returns all variables with names, types, values, collection info
+```
+
+**Extract:**
+- All variable names and their resolved values
+- Collection membership (Primitives vs Semantics)
+- Alias relationships (semantic → primitive)
+- Mode values (light/dark)
+
+**Usage:** Build a lookup map of `variableName → tokenPath` for the TokenTranslator.
+
+---
+
+### Style Query (figma-console-mcp)
+
+**When:** After token bindings — identify composite tokens (shadows, typography)
+
+**Tool:** `figma_get_styles`
+```typescript
+const styles = await consoleMcp.callTool('figma_get_styles', {
+  fileKey: figmaFileKey
+});
+```
+
+**Extract:**
+- Effect styles (shadows) — match to `shadow.elevation200` etc.
+- Text styles (typography) — match to `typography.heading200` etc.
+
+**Usage:** Direct name matching against pushed style names from 054a.
+
+---
+
+### Component-Family Doc Query (DesignerPunk MCP — Unchanged)
 
 **When:** During variant analysis
 
 **Query:**
 ```typescript
-const familyDoc = await mcp.getDocumentFull({
+const familyDoc = await designerPunkMcp.getDocumentFull({
   path: `.kiro/steering/Component-Family-${familyName}.md`
 });
 ```
-
-**Extract:**
-- Inheritance pattern (primitive + semantic vs single component)
-- Behavioral contracts
-- Token usage patterns
-- Platform parity requirements
 
 **Fallback:** If doc doesn't exist, flag and recommend creation.
 
 ---
 
-### Component-Readiness-Status Query
+### Component-Readiness-Status Query (DesignerPunk MCP — Unchanged)
 
 **When:** During variant analysis
 
 **Query:**
 ```typescript
-const statusDoc = await mcp.getSection({
+const statusDoc = await designerPunkMcp.getSection({
   path: '.kiro/steering/Component-Readiness-Status.md',
   heading: 'Individual Component Status'
 });
 ```
 
-**Extract:**
-- Check if component exists (e.g., `ButtonBase`)
-- Get component status (🟢 Production Ready, 🟡 Beta, 🔴 Placeholder)
-- Get implementation path
+---
 
-**Usage:** Inform variant mapping recommendations (e.g., "ButtonBase not found — this will establish the pattern").
+## Behavioral Analysis Heuristics (Unchanged)
+
+The behavioral analysis heuristics from the original design remain valid:
+- Interactive vs Static component detection (keyword-based)
+- Behavioral vs Styling difference analysis
+- Platform parity heuristics (hover = web-only, focus = all platforms)
+
+See original design for full heuristic implementations.
 
 ---
 
-### Platform Implementation Guidelines Query
+## Composite Token Reconstruction (Simplified)
 
-**When:** During platform parity detection
+### Style Matching First (Primary Path)
 
-**Query:**
-```typescript
-const guidelines = await mcp.getSection({
-  path: '.kiro/steering/platform-implementation-guidelines.md',
-  heading: 'Interaction Patterns'
-});
-```
-
-**Extract:**
-- Platform-specific interaction patterns
-- Cross-platform consistency rules
-
-**Usage:** Validate heuristics (hover = web-only) against documented guidelines.
-
----
-
-## Behavioral Analysis Heuristics
-
-### Interactive vs Static Components
-
-**Interactive Components:**
-- Buttons, inputs, modals, navigation, forms
-- Require behavioral contracts (click, focus, keyboard, screen reader)
-
-**Static Components:**
-- Badges, dividers, avatars, icons, containers
-- Auto-generate "no interaction" contract
-
-**Detection:**
-```typescript
-function detectComponentType(component: FigmaComponent): 'interactive' | 'static' {
-  const interactiveKeywords = ['button', 'input', 'modal', 'nav', 'form', 'checkbox', 'radio'];
-  const staticKeywords = ['badge', 'divider', 'avatar', 'icon', 'container', 'card'];
-  
-  const name = component.name.toLowerCase();
-  
-  if (interactiveKeywords.some(kw => name.includes(kw))) {
-    return 'interactive';
-  }
-  
-  if (staticKeywords.some(kw => name.includes(kw))) {
-    return 'static';
-  }
-  
-  // Default to interactive (safer to require contracts than skip them)
-  return 'interactive';
-}
-```
-
----
-
-### Behavioral vs Styling Differences
-
-**Behavioral Difference:**
-- Variants have different interaction patterns
-- Example: Button with `variant: primary` has different click behavior than `variant: secondary`
-
-**Styling Difference:**
-- Variants have same interaction patterns, different visual styling
-- Example: Button with `variant: primary` has different color than `variant: secondary`, but same click behavior
-
-**Detection:**
-```typescript
-function analyzeBehavioralDifferences(variants: FigmaVariant[]): 'behavioral' | 'styling' {
-  // Check if variants have different interaction layers
-  const hasInteractionDifferences = variants.some(v => 
-    v.interactions && v.interactions.length > 0
-  );
-  
-  if (hasInteractionDifferences) {
-    return 'behavioral';
-  }
-  
-  // Check if variants differ only in visual properties (color, size, spacing)
-  const visualPropertiesOnly = variants.every(v => 
-    Object.keys(v.properties).every(prop => 
-      ['color', 'size', 'spacing', 'radius', 'shadow'].includes(prop)
-    )
-  );
-  
-  if (visualPropertiesOnly) {
-    return 'styling';
-  }
-  
-  // Default to behavioral (safer to recommend primitive+semantic than single component)
-  return 'behavioral';
-}
-```
-
----
-
-### Platform Parity Heuristics
-
-**Platform-Specific Interactions:**
-
-| Interaction | Platforms | Heuristic |
-|-------------|-----------|-----------|
-| Hover | Web only | No mobile equivalent |
-| Press | Mobile only | Maps to click on web |
-| Focus | All platforms | Keyboard navigation |
-| Disabled | All platforms | Universal state |
-| Swipe | Mobile only | No web equivalent |
-
-**Detection:**
-```typescript
-function detectPlatformParity(component: FigmaComponent): PlatformParityCheck {
-  const concerns: PlatformConcern[] = [];
-  
-  // Check for hover state
-  if (component.states.includes('hover')) {
-    concerns.push({
-      interaction: 'hover',
-      platforms: ['web'],
-      recommendation: 'Omit on mobile or map to press state'
-    });
-  }
-  
-  // Check for swipe gestures
-  if (component.interactions.some(i => i.type === 'SWIPE')) {
-    concerns.push({
-      interaction: 'swipe',
-      platforms: ['mobile'],
-      recommendation: 'No web equivalent — document as mobile-only'
-    });
-  }
-  
-  return {
-    extractedInteractions: component.interactions,
-    platformConcerns: concerns,
-    requiresHumanDecision: concerns.length > 0
-  };
-}
-```
-
----
-
-## Composite Token Reconstruction
-
-### Style Matching First
-
-**Priority:**
-1. **Match style name** — Check if Figma style name matches DesignerPunk composite token
-2. **Match decomposed variables** — Check if raw properties match decomposed variable pattern
-3. **Reconstruct from raw properties** — Match individual properties to tokens
-4. **Flag for review** — If no match, flag for Ada's review
-
-**Example: Shadow Reconstruction**
+Since 054a pushes styles with known names (`shadow.elevation200`, `typography.heading200`), the primary path is direct name matching:
 
 ```typescript
-async function reconstructShadow(
-  component: FigmaComponent
+async function matchCompositeToken(
+  styleName: string,
+  dtcgTokens: DTCGTokenFile
 ): Promise<TokenReference> {
-  // 1. Check for style match
-  if (component.effectStyleId) {
-    const styles = await mcp.getStyles(figmaFileKey);
-    const style = styles.find(s => s.id === component.effectStyleId);
-    
-    if (style && style.name.startsWith('shadow.')) {
-      return {
-        property: 'shadow',
-        token: style.name,
-        confidence: 'exact',
-        semantic: style.name
-      };
-    }
-  }
+  // Direct name match against pushed style names
+  // shadow.elevation200 → shadow.elevation200
+  // typography.heading200 → typography.heading200
+  const tokenPath = styleName; // Style names already match token paths
   
-  // 2. Check for decomposed variables
-  const decomposed = checkDecomposedVariables(component.effects);
-  if (decomposed) {
-    return decomposed;
-  }
-  
-  // 3. Reconstruct from raw properties
-  const reconstructed = reconstructFromProperties(component.effects);
-  if (reconstructed.confidence !== 'no-match') {
-    return reconstructed;
-  }
-  
-  // 4. Flag for review
-  return {
-    property: 'shadow',
-    token: '',
-    confidence: 'no-match',
-    suggestion: 'No matching shadow token found. Consider creating composite token or using decomposed properties.'
-  };
-}
-```
-
----
-
-## Mode Validation
-
-**Check:** Light and dark mode values should be identical (Phase 1).
-
-**Detection:**
-```typescript
-function validateModes(variable: FigmaVariable): ModeValidation {
-  const lightValue = variable.valuesByMode['light'];
-  const darkValue = variable.valuesByMode['dark'];
-  
-  if (JSON.stringify(lightValue) !== JSON.stringify(darkValue)) {
+  if (dtcgTokens.hasToken(tokenPath)) {
     return {
-      valid: false,
-      variable: variable.name,
-      lightValue,
-      darkValue,
-      recommendation: 'Light and dark mode values should be identical (Phase 1). Review and align.'
+      property: styleName.startsWith('shadow') ? 'shadow' : 'typography',
+      token: tokenPath,
+      confidence: 'exact',
+      matchMethod: 'binding'
     };
   }
   
-  return { valid: true };
+  // Fallback: reconstruct from raw properties
+  return reconstructFromProperties(styleName);
 }
 ```
 
-**Behavior:** If mode discrepancy detected, flag as ⚠️ and pause for human review.
+### Reconstruction Fallback
+
+Only needed when:
+- Designer applied raw shadow/typography properties without using a style
+- Style name doesn't match any DesignerPunk token
+
+In these cases, attempt property-by-property matching and flag for Ada's review.
 
 ---
 
-## Confidence Flag System
+## Mode Validation (Updated per Requirement 9)
 
-### Flag Definitions
+Mode validation distinguishes between expected and unexpected discrepancies:
 
-| Flag | Meaning | Trigger | Action Required |
-|------|---------|---------|-----------------|
-| ✅ High Confidence | Exact match, no ambiguity | Figma value exactly matches token | Review for semantic correctness |
-| ⚠️ Needs Review | Approximate match or ambiguous | Value within tolerance OR multiple matches OR unclear structure | Human validates match is appropriate |
-| ❌ Requires Human Input | No match or missing info | No token within tolerance OR behavioral contract missing OR platform parity unclear | Human must provide missing information |
+**Expected Discrepancies (No Flag)**:
+- Color tokens differ by mode (light/dark theme variations)
+- Example: `color.primary` = `#3B82F6` (light) vs `#60A5FA` (dark)
 
-### Flag Application
+**Unexpected Discrepancies (Flag for Review)**:
+- Spacing, radius, or typography tokens differ by mode
+- Structural tokens should be mode-agnostic
+- Example: `space.300` = `24px` (light) vs `32px` (dark) → flags as unexpected
 
+**Rationale**: Modes serve design exploration in Figma. Color variations by mode are expected for light/dark themes. Structural token variations indicate potential design errors or misunderstandings.
+
+**Detection Logic**:
 ```typescript
-function determineConfidenceFlag(result: TranslationResult): ConfidenceFlag {
-  if (result.confidence === 'exact') {
-    return '✅';
-  }
+function categorizeDiscrepancy(
+  tokenCategory: string,
+  lightValue: unknown,
+  darkValue: unknown
+): 'expected' | 'unexpected' | 'none' {
+  if (lightValue === darkValue) return 'none';
   
-  if (result.confidence === 'approximate') {
-    return '⚠️';
-  }
+  if (tokenCategory === 'color') return 'expected';
   
-  if (result.confidence === 'no-match') {
-    return '❌';
-  }
+  // spacing, radius, typography should be mode-agnostic
+  return 'unexpected';
 }
 ```
 
 ---
 
-## Error Handling
+## Component Token Decision Points (Updated per Requirement 8)
 
-### No-Match Token Values (Critical — Human-in-the-Loop)
+The extractor detects repeated primitive token usage and provides **illustrative suggestions** to reduce Ada's cognitive load during spec review.
 
-**Trigger:** TokenTranslator returns `confidence: 'no-match'`
+**Approach**:
+1. Detect repeated primitive token usage across component properties
+2. Generate illustrative component token suggestion following naming conventions
+3. Label suggestion as "Illustrative only — pending Ada review"
+4. Include rationale explaining why pattern is notable
+5. Defer all token creation decisions to Ada during spec review
 
-**Behavior:**
-1. **Flag and PAUSE** — Stop extraction, do not proceed automatically
-2. **Report to human** — Show off-system value with closest suggestion
-3. **Wait for human decision** — Human reviews and decides:
-   - Map to suggested token (accept closest match)
-   - Define as intentional off-system value (document in design-outline)
-   - Request new token creation (enters spec process)
-4. **Execute on feedback** — Resume extraction with human's decision applied
+**Example Detection**:
+```typescript
+interface ComponentTokenPattern {
+  primitiveToken: string;
+  usageCount: number;
+  locations: string[];
+  illustrativeSuggestion: string;
+  rationale: string;
+}
 
-**Example Error Report:**
+function detectComponentTokenPatterns(
+  tokenUsage: TokenUsage
+): ComponentTokenPattern[] {
+  // Detect repeated usage
+  const patterns = findRepeatedUsage(tokenUsage);
+  
+  // Generate illustrative suggestions
+  return patterns.map(pattern => ({
+    primitiveToken: pattern.token,
+    usageCount: pattern.count,
+    locations: pattern.locations,
+    illustrativeSuggestion: generateIllustrativeName(pattern),
+    rationale: explainPattern(pattern)
+  }));
+}
+
+function generateIllustrativeName(pattern: UsagePattern): string {
+  // Follow {component}.{property}.{scale} convention
+  // Example: button.padding.horizontal = space.300
+  return `${pattern.component}.${pattern.property}.${pattern.scale}`;
+}
 ```
-❌ No-match token values found
 
-Property: padding-top
-Figma value: 30px
-Closest match: space.400 (32px, delta: -2px)
-
-Options:
-1. Map to space.400 (accept 2px difference)
-2. Document as off-system value (explain why 30px is needed)
-3. Request new token creation (enter spec process for space.375 = 30px)
-
-Extraction paused. Provide decision to continue.
-```
-
----
-
-### Missing Component-Family Doc
-
-**Trigger:** Component-Family doc doesn't exist for component being extracted
-
-**Behavior:**
-1. **Flag in design-outline** — "⚠️ No Component-Family-Button.md found"
-2. **Recommend creation** — "Before proceeding with variant mapping, recommend creating Component-Family-Button.md"
-3. **Provide template reference** — "Use Component-MCP-Document-Template.md as starting point"
-4. **Allow ad-hoc decision** — Human can proceed without family doc if they document rationale
-
-**Example:**
+**Output Format** (in design-outline.md):
 ```markdown
-## Variants
+## Component Token Needs
 
-**Component-Family Context:**
+### Pattern 1: Repeated Padding Usage
 
-Component-Family Doc: ⚠️ No Component-Family-Button.md found
+**Primitive Token**: `space.300` (24px)
 
-**Action Required:**
-Before proceeding with variant mapping, recommend creating Component-Family-Button.md to establish:
-- Inheritance pattern (primitive + semantic vs single component)
-- Behavioral contracts
-- Token usage patterns
-- Platform parity requirements
+**Usage Context**:
+- Button padding-left: 5 variants
+- Button padding-right: 5 variants
 
-Use Component-MCP-Document-Template.md as starting point.
-
-**Temporary Recommendation:**
-Cannot provide informed variant mapping recommendation without Component-Family context.
-Human must decide whether to:
-1. Create Component-Family-Button.md first (recommended)
-2. Proceed with ad-hoc decision (document rationale for future family doc)
+**Illustrative Suggestion** (pending Ada review):
 ```
+button.padding.horizontal = space.300
+```
+
+**Rationale**: Consistent spacing across button variants suggests semantic intent.
+
+**Ada Decision Required**: Evaluate whether component tokens align with Token Governance standards.
+```
+
+**Critical**: Suggestions are illustrative only. Ada makes final token governance decisions during spec review.
 
 ---
 
-### Conflicting Recommendations
+## Confidence Flag System (Unchanged)
 
-**Trigger:** Component-Family pattern conflicts with behavioral analysis
-
-**Behavior:**
-1. **Flag conflict** — "⚠️ Conflicting Recommendations"
-2. **Show both recommendations** — Family pattern vs behavioral analysis
-3. **Explain conflict** — Why recommendations differ
-4. **Defer to human** — Human decides which to follow
-
-**Example:**
-```markdown
-## Variant Mapping (⚠️ Conflicting Recommendations)
-
-**Component-Family-Button.md Recommendation:**
-- Primitive + semantic structure (`ButtonBase` + `ButtonCTA`/`ButtonSecondary`/`ButtonTertiary`)
-- Rationale: Semantic components encode design intent
-
-**Behavioral Analysis Recommendation:**
-- Single component with variant prop
-- Rationale: Variants differ only in styling, not behavior
-
-**Conflict:**
-Component-Family pattern suggests primitive+semantic, but behavioral analysis suggests single component is sufficient.
-
-**Action Required:**
-Human decision on which recommendation to follow. Consider:
-- Consistency with existing family pattern vs simplicity
-- Future extensibility (will variants diverge in behavior later?)
-- Maintenance overhead (more components vs more props)
-```
+| Flag | Meaning | Trigger |
+|------|---------|---------|
+| ✅ High Confidence | Exact match via variable binding or style name | Element uses DesignerPunk variable/style |
+| ⚠️ Needs Review | Approximate value match or ambiguous | Value within tolerance, no binding |
+| ❌ Requires Human Input | No match or missing info | No token match, missing contracts |
 
 ---
 
-## CLI Command Implementation
+## Error Handling (Unchanged)
+
+The error handling strategy from the original design remains valid:
+- No-match values: pause and report with closest suggestion
+- Missing Component-Family doc: flag and recommend creation
+- Conflicting recommendations: show both, defer to human
+
+---
+
+## CLI Command Implementation (Updated)
 
 ### Command Structure
 
 ```bash
-# Extract design from Figma
 npm run figma:extract -- --file <file-key> --node <node-id> --output <path>
-
-# Example
-npm run figma:extract -- --file abc123 --node 1:234 --output .kiro/specs/button-redesign/design-outline.md
 ```
 
-### Implementation
+### Implementation (Updated)
 
 ```typescript
 // src/cli/figma-extract.ts
@@ -718,7 +590,8 @@ npm run figma:extract -- --file abc123 --node 1:234 --output .kiro/specs/button-
 import { DesignExtractor } from '../figma/DesignExtractor';
 import { TokenTranslator } from '../figma/TokenTranslator';
 import { VariantAnalyzer } from '../figma/VariantAnalyzer';
-import { ConsoleMCPClient } from '../figma/ConsoleMCPClient';
+import { ConsoleMCPClientImpl } from '../figma/ConsoleMCPClientImpl';
+import { cleanupStalePorts } from '../figma/portCleanup';
 
 async function main() {
   const args = parseArgs(process.argv);
@@ -731,27 +604,29 @@ async function main() {
   // Load DTCG tokens for translation
   const dtcgTokens = loadDTCGTokens('dist/DesignTokens.dtcg.json');
   
-  // Initialize components
-  const mcp = new ConsoleMCPClient();
-  const translator = new TokenTranslator(dtcgTokens);
-  const analyzer = new VariantAnalyzer(mcp);
-  const extractor = new DesignExtractor(mcp, translator, analyzer);
+  // Port cleanup (learned from 054c ISSUE-4)
+  await cleanupStalePorts();
   
-  // Extract design
+  // Initialize Console MCP client (reuse from 054a)
+  const consoleMcp = new ConsoleMCPClientImpl();
+  await consoleMcp.connect();
+  
+  // Initialize components
+  const translator = new TokenTranslator(dtcgTokens);
+  const analyzer = new VariantAnalyzer(/* DesignerPunk MCP */);
+  const extractor = new DesignExtractor(consoleMcp, translator, analyzer);
+  
   try {
     const outline = await extractor.extractDesign(args.file, args.node);
     const markdown = await extractor.generateDesignOutlineMarkdown(outline);
     
-    // Write output
     const outputPath = args.output || './design-outline.md';
     fs.writeFileSync(outputPath, markdown);
     
-    // Report results
     console.log(`✅ Extraction complete: ${outputPath}`);
-    console.log(`Confidence: ${outline.extractionConfidence.summary}`);
     
     if (outline.extractionConfidence.requiresHumanInput) {
-      console.log('⚠️  Human input required — review design-outline.md before proceeding');
+      console.log('⚠️  Human input required — review design-outline.md');
       process.exit(1);
     }
     
@@ -759,6 +634,8 @@ async function main() {
   } catch (error) {
     console.error(`❌ Extraction failed: ${error.message}`);
     process.exit(1);
+  } finally {
+    await consoleMcp.disconnect();
   }
 }
 ```
@@ -767,88 +644,76 @@ async function main() {
 
 ## Design Decisions
 
-### Decision 1: Context-Aware Extraction
+### Decision 1: Dual-MCP Strategy (NEW)
 
 **Options Considered:**
-- A) Simple extraction (structure only, no context)
-- B) Context-aware extraction (MCP queries, recommendations)
-
-**Decision:** Option B
-
-**Rationale:**
-- Without context, humans make uninformed decisions
-- Component-Family patterns ensure consistency
-- Existing component checks prevent duplication
-- Behavioral analysis provides rationale for recommendations
-
-**Trade-offs:**
-- More complex implementation (MCP queries, analysis logic)
-- Slower extraction (multiple MCP queries per component)
-
-**Counter-argument:** Simple extraction is faster and easier to implement. However, the quality of recommendations justifies the complexity.
-
----
-
-### Decision 2: Pause on No-Match
-
-**Options Considered:**
-- A) Auto-resolve to closest match
-- B) Pause and wait for human decision
-- C) Flag but continue extraction
-
-**Decision:** Option B
-
-**Rationale:**
-- AI agents have bias toward "solving" rather than stopping to ask
-- No-match values are critical decisions (new token? off-system value?)
-- Pausing enforces human-in-the-loop for critical decisions
-
-**Trade-offs:**
-- Extraction cannot complete automatically
-- Requires human intervention mid-workflow
-
-**Counter-argument:** Auto-resolve is faster. However, incorrect token mappings are worse than pausing for human decision.
-
----
-
-### Decision 3: Semantic Token Priority
-
-**Options Considered:**
-- A) Primitive tokens only
-- B) Semantic tokens only
-- C) Semantic priority, show both
+- A) Use only figma-console-mcp for everything
+- B) Use only Kiro Figma Power for everything
+- C) Use both strategically based on strengths
 
 **Decision:** Option C
 
 **Rationale:**
-- Semantic tokens encode design intent (`color.primary` vs `purple.300`)
-- Showing both provides traceability (audit trail)
-- Designers think in semantic terms ("primary color" not "purple 300")
+- Kiro Figma Power provides rich design context (layout, visual properties, component structure) via `get_design_context`
+- figma-console-mcp provides variable/style data that Kiro Power doesn't expose
+- Using both gives the most complete extraction
 
-**Trade-offs:**
-- More verbose output (both primitive and semantic shown)
-
-**Counter-argument:** Primitive-only is simpler. However, semantic tokens are more maintainable and self-documenting.
+**Counter-argument:** Using two MCP servers adds complexity and potential failure modes. If one server is down, extraction partially fails. However, the data quality improvement justifies the complexity, and we can gracefully degrade if one server is unavailable.
 
 ---
 
-### Decision 4: Best-Effort Extraction with Flags
+### Decision 2: Variable-Binding-First Translation (NEW)
 
 **Options Considered:**
-- A) Fail on any ambiguity
-- B) Best-effort with flags for ambiguous areas
+- A) Value-based matching only (original design)
+- B) Variable-binding-first with value fallback
 
 **Decision:** Option B
 
 **Rationale:**
-- Figma designs are often messy (missing descriptions, inconsistent naming)
-- Failing entire extraction for minor issues is too strict
-- Flags surface issues for human review without blocking extraction
+- 054a pushes tokens with known Figma variable names
+- Matching by name is deterministic (no tolerance ambiguity)
+- Value-based matching is still needed for unbound values
+- Reduces false positives from tolerance-based matching
 
-**Trade-offs:**
-- Incomplete design-outlines require more human review
+**Counter-argument:** Not all design elements will have variable bindings. Designers might use raw values. However, the binding-first approach handles the happy path efficiently and falls back gracefully.
 
-**Counter-argument:** Strict validation ensures quality. However, best-effort with flags is more pragmatic for real-world Figma files.
+---
+
+### Decision 3: Reuse ConsoleMCPClient (NEW)
+
+**Options Considered:**
+- A) Create a separate read-only MCP client
+- B) Extend existing ConsoleMCPClient interface
+- C) Reuse ConsoleMCPClient as-is, add read methods
+
+**Decision:** Option C
+
+**Rationale:**
+- ConsoleMCPClient already has `getVariables()` and `execute()` which cover most read needs
+- `getVariables()` uses `figma_get_token_values` (verified working post-054c)
+- `execute()` can run any Plugin API code for custom reads
+- Adding `getStyles()` is the only new method needed
+
+**Counter-argument:** The ConsoleMCPClient was designed for push operations. Mixing read and write concerns in one interface isn't ideal. However, the underlying MCP connection is the same, and the methods are clearly named.
+
+---
+
+### Decision 4: Context-Aware Extraction (Unchanged)
+
+Option B from original design. MCP queries for Component-Family docs and Component-Readiness-Status provide informed recommendations.
+
+### Decision 5: Pause on No-Match (Unchanged)
+
+Option B from original design. Pause and wait for human decision on no-match values.
+
+### Decision 6: Semantic Token Priority (Unchanged)
+
+Option C from original design. Show both primitive and semantic references.
+
+### Decision 7: Best-Effort Extraction with Flags (Unchanged)
+
+Option B from original design. Best-effort with confidence flags for ambiguous areas.
 
 ---
 
@@ -857,6 +722,8 @@ async function main() {
 - [Requirements](./requirements.md) — What this spec must accomplish
 - [Design Outline](../../054-figma-console-mcp-integration/design-outline.md) — Shared architectural context
 - [Spec 054a Design](../../054a-figma-token-push/design.md) — Token push workflow
+- [Spec 054c Bugfix](../../054c-figma-token-push-fixes/bugfix.md) — Push fixes and lessons learned
+- [Issues File](../../issues/054a-figma-token-push-issues.md) — Known issues and fixes
 - [Component-Readiness-Status](.kiro/steering/Component-Readiness-Status.md) — Component status queries
 - [Platform Implementation Guidelines](.kiro/steering/platform-implementation-guidelines.md) — Platform parity validation
 

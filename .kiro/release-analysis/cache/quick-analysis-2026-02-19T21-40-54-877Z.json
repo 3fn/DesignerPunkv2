@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-02-19T21:40:54.877Z",
+  "lastAnalyzedCommit": "fb255aff91e1daf51b5a6ce6f98fa962b91a769b",
+  "documentCount": 4,
+  "documents": [
+    {
+      "path": "docs/specs/054c-figma-token-push-fixes/task-3-summary.md",
+      "lastModified": "2026-02-19T21:40:54.876Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/054c-figma-token-push-fixes/task-4-summary.md",
+      "lastModified": "2026-02-19T21:40:54.877Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/054c-figma-token-push-fixes/task-5-summary.md",
+      "lastModified": "2026-02-19T21:40:54.877Z",
+      "gitCommit": "unknown"
+    },
+    {
+      "path": "docs/specs/054c-figma-token-push-fixes/task-6-summary.md",
+      "lastModified": "2026-02-19T21:40:54.877Z",
+      "gitCommit": "unknown"
+    }
+  ],
+  "quickAnalysisMode": true,
+  "appendOnlyOptimization": true,
+  "note": "Full analysis can be run with: npm run release:analyze"
+}
