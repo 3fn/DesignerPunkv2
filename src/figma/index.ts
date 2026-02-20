@@ -25,3 +25,20 @@ export type { PreflightResult } from './preflight';
 
 export { formatDriftReport, formatPartialFailure, formatValue } from './error-reporting';
 export type { PartialFailureInfo } from './error-reporting';
+
+export { TokenTranslator, figmaNameToTokenPath } from './TokenTranslator';
+export type { TranslationResult, TokenCategory } from './TokenTranslator';
+export { parseRgba, parseHex, rgbToLab, deltaE } from './TokenTranslator';
+
+export { VariantAnalyzer } from './VariantAnalyzer';
+export type {
+  FigmaVariant,
+  FigmaComponent,
+  FamilyPattern,
+  ComponentStatus,
+  ExtractionContext,
+  MappingRecommendation,
+  MappingConflict,
+  VariantMapping,
+  MCPDocClient,
+} from './VariantAnalyzer';

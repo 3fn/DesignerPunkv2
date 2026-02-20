@@ -59,7 +59,7 @@ This spec implements the design extraction workflow in four phases:
   - Verify: Check GitHub for committed changes
 
 
-  - [ ] 1.1 Create TokenTranslator class structure and interfaces
+  - [x] 1.1 Create TokenTranslator class structure and interfaces
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Create `src/figma/TokenTranslator.ts`
@@ -70,7 +70,7 @@ This spec implements the design extraction workflow in four phases:
     - Export from figma index
     - _Requirements: Req 2_
 
-  - [ ] 1.2 Implement binding-first translation (`translateByBinding`)
+  - [x] 1.2 Implement binding-first translation (`translateByBinding`)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `translateByBinding(figmaVariableName: string): TranslationResult`
@@ -80,7 +80,7 @@ This spec implements the design extraction workflow in four phases:
     - Return no-match if token path not found in DTCG tokens
     - _Requirements: Req 2_
 
-  - [ ] 1.3 Implement value-based translation (`translateByValue`)
+  - [x] 1.3 Implement value-based translation (`translateByValue`)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `translateByValue(value: number | string, category: 'spacing' | 'color' | 'typography' | 'radius' | 'shadow'): TranslationResult`
@@ -95,7 +95,7 @@ This spec implements the design extraction workflow in four phases:
     - Handle color format conversion: hex → rgba lookup (reverse of `FigmaTransformer.rgbaToHex()`)
     - _Requirements: Req 2_
 
-  - [ ] 1.4 Implement semantic token enrichment
+  - [x] 1.4 Implement semantic token enrichment
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `enrichResponse(result: TranslationResult): TranslationResult`
@@ -106,7 +106,7 @@ This spec implements the design extraction workflow in four phases:
     - Prioritize semantic token in the primary `token` field
     - _Requirements: Req 2_
 
-  - [ ] 1.5 Implement composite translate method
+  - [x] 1.5 Implement composite translate method
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `translate(figmaVariableName: string | undefined, rawValue: number | string, category: 'spacing' | 'color' | 'typography' | 'radius' | 'shadow'): TranslationResult`
@@ -117,7 +117,7 @@ This spec implements the design extraction workflow in four phases:
     - If no match found, return no-match result with `suggestion` (closest token if any)
     - _Requirements: Req 2_
 
-  - [ ] 1.6 Write TokenTranslator tests
+  - [x] 1.6 Write TokenTranslator tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/figma/__tests__/TokenTranslator.test.ts`
@@ -160,7 +160,7 @@ This spec implements the design extraction workflow in four phases:
   - Verify: Check GitHub for committed changes
 
 
-  - [ ] 2.1 Create VariantAnalyzer class structure
+  - [x] 2.1 Create VariantAnalyzer class structure
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Create `src/figma/VariantAnalyzer.ts`
@@ -169,6 +169,7 @@ This spec implements the design extraction workflow in four phases:
     - Add constructor accepting MCP client parameter for DesignerPunk doc queries
     - Export from figma index
     - _Requirements: Req 4_
+    - ⚠️ **Agent Note (Feb 19, 2026)**: A previous agent created `src/figma/VariantAnalyzer.ts` and exported it from `src/figma/index.ts` during a context transfer mix-up. The file exists but has not been independently verified. Before marking this task complete, verify that the interfaces and class structure match the design doc's VariantAnalyzer section (design.md → "VariantAnalyzer (Unchanged)"). Refactor if needed, then proceed with completion documentation.
 
   - [ ] 2.2 Implement Component-Family doc query
     **Type**: Implementation
