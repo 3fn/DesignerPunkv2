@@ -30,7 +30,7 @@ This spec implements the design extraction workflow in four phases:
 
 ## Task List
 
-### Task 1: TokenTranslator Implementation (Parent)
+- [x] Task 1: TokenTranslator Implementation (Parent)
 
   **Type**: Architecture (Parent)
   **Validation**: Tier 3 - Comprehensive
@@ -133,7 +133,7 @@ This spec implements the design extraction workflow in four phases:
 
 ---
 
-### Task 2: VariantAnalyzer Implementation (Parent)
+- [x] Task 2: VariantAnalyzer Implementation (Parent)
 
   **Type**: Architecture (Parent)
   **Validation**: Tier 3 - Comprehensive
@@ -171,7 +171,7 @@ This spec implements the design extraction workflow in four phases:
     - _Requirements: Req 4_
     - ⚠️ **Agent Note (Feb 19, 2026)**: A previous agent created `src/figma/VariantAnalyzer.ts` and exported it from `src/figma/index.ts` during a context transfer mix-up. The file exists but has not been independently verified. Before marking this task complete, verify that the interfaces and class structure match the design doc's VariantAnalyzer section (design.md → "VariantAnalyzer (Unchanged)"). Refactor if needed, then proceed with completion documentation.
 
-  - [ ] 2.2 Implement Component-Family doc query
+  - [x] 2.2 Implement Component-Family doc query
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `queryFamilyPattern(familyName: string): Promise<FamilyPattern | null>`
@@ -180,7 +180,7 @@ This spec implements the design extraction workflow in four phases:
     - Handle missing doc gracefully: return null, flag for recommendation to create doc
     - _Requirements: Req 4_
 
-  - [ ] 2.3 Implement Component-Readiness-Status query
+  - [x] 2.3 Implement Component-Readiness-Status query
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `queryExistingComponents(familyName: string): Promise<ComponentStatus[]>`
@@ -189,7 +189,7 @@ This spec implements the design extraction workflow in four phases:
     - Return component status and implementation paths
     - _Requirements: Req 4_
 
-  - [ ] 2.4 Implement behavioral analysis
+  - [x] 2.4 Implement behavioral analysis
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `analyzeBehavioralDifferences(variants: FigmaVariant[]): 'behavioral' | 'styling'`
@@ -198,7 +198,7 @@ This spec implements the design extraction workflow in four phases:
     - Return classification: 'behavioral' (different interactions) or 'styling' (visual only)
     - _Requirements: Req 4_
 
-  - [ ] 2.5 Implement recommendation generation
+  - [x] 2.5 Implement recommendation generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `generateRecommendations(familyPattern: FamilyPattern | null, behavioralAnalysis: string, existingComponents: ComponentStatus[]): MappingRecommendation[]`
@@ -208,7 +208,7 @@ This spec implements the design extraction workflow in four phases:
     - Include `alignsWith` and `tradeoffs` for each option
     - _Requirements: Req 4_
 
-  - [ ] 2.6 Implement conflict detection
+  - [x] 2.6 Implement conflict detection
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `detectConflicts(familyRecommendation: string, behavioralRecommendation: string): MappingConflict[]`
@@ -217,7 +217,7 @@ This spec implements the design extraction workflow in four phases:
     - Generate conflict explanation with both perspectives
     - _Requirements: Req 4_
 
-  - [ ] 2.7 Implement main analyzeVariants method
+  - [x] 2.7 Implement main analyzeVariants method
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `analyzeVariants(component: FigmaComponent, context: ExtractionContext): Promise<VariantMapping>`
@@ -228,7 +228,7 @@ This spec implements the design extraction workflow in four phases:
     - Return `VariantMapping` with all analysis results, recommendations, and conflicts
     - _Requirements: Req 4_
 
-  - [ ] 2.8 Write VariantAnalyzer tests
+  - [x] 2.8 Write VariantAnalyzer tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/figma/__tests__/VariantAnalyzer.test.ts`
@@ -243,7 +243,7 @@ This spec implements the design extraction workflow in four phases:
 
 ---
 
-### Task 3: DesignExtractor Implementation (Parent)
+- [ ] Task 3: DesignExtractor Implementation (Parent)
 
   **Type**: Architecture (Parent)
   **Validation**: Tier 3 - Comprehensive
@@ -432,7 +432,7 @@ This spec implements the design extraction workflow in four phases:
 
 ---
 
-### Task 4: CLI Command and ConsoleMCPClient Extension (Parent)
+- [ ] Task 4: CLI Command and ConsoleMCPClient Extension (Parent)
 
   **Type**: Implementation (Parent)
   **Validation**: Tier 3 - Comprehensive
@@ -498,7 +498,7 @@ This spec implements the design extraction workflow in four phases:
 
 ---
 
-### Task 5: Error Handling and Edge Cases
+- [ ] Task 5: Error Handling and Edge Cases
 
   **Type**: Implementation
   **Validation**: Tier 2 - Standard
@@ -533,7 +533,7 @@ This spec implements the design extraction workflow in four phases:
 
 ---
 
-### Task 6: Documentation (Parent)
+- [ ] Task 6: Documentation (Parent)
 
   **Type**: Documentation (Parent)
   **Validation**: Tier 2 - Standard
