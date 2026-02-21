@@ -582,9 +582,9 @@ get_section({ path: ".kiro/steering/Token-Governance.md", heading: "Token Creati
 - [Design Authority](../.kiro/specs/051-semantic-token-naming-restructure/design-outline.md) — Semantic token naming restructure design
 
 ### DTCG Integration
-- [DTCG Integration Guide](../../docs/dtcg-integration-guide.md) — Integrating DesignerPunk tokens with external design tools via DTCG format
-- [Figma Workflow Guide](../../docs/figma-workflow-guide.md) — Bidirectional Figma integration: token push and design extraction
-- [Transformer Development Guide](../../docs/transformer-development-guide.md) — Building custom token transformers for tool-specific formats
+- [DTCG Integration Guide](./DTCG-Integration-Guide.md) — Integrating DesignerPunk tokens with external design tools via DTCG format
+- [Figma Workflow Guide](./Figma-Workflow-Guide.md) — Bidirectional Figma integration: token push and design extraction
+- [Transformer Development Guide](./Transformer-Development-Guide.md) — Building custom token transformers for tool-specific formats
 
 ---
 

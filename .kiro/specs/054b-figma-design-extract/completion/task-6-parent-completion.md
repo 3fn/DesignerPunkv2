@@ -27,8 +27,8 @@ Created comprehensive developer-facing documentation for the Figma extraction wo
 
 | Artifact | Path | Purpose |
 |----------|------|---------|
-| Figma Workflow Guide | `docs/figma-workflow-guide.md` | Comprehensive guide for both push and extraction workflows |
-| DTCG Integration Guide | `docs/dtcg-integration-guide.md` | Updated with cross-references, Figma content migrated out |
+| Figma Workflow Guide | `.kiro/steering/Figma-Workflow-Guide.md` | Comprehensive guide for both push and extraction workflows |
+| DTCG Integration Guide | `.kiro/steering/DTCG-Integration-Guide.md` | Updated with cross-references, Figma content migrated out |
 | Annotated Example | `docs/examples/design-outline-example.md` | Reference example with annotations for every section |
 
 ## Subtask Completion
@@ -68,12 +68,12 @@ The example (`docs/examples/design-outline-example.md`) demonstrates a `ButtonCT
 
 ## Requirements Compliance
 
-- **Req 11**: All acceptance criteria met — documentation at `docs/figma-workflow-guide.md`, Figma content migrated from DTCG guide, push and extraction workflows documented, confidence flag interpretation guide, troubleshooting section, annotated example, cross-references included
+- **Req 11**: All acceptance criteria met — documentation at `.kiro/steering/Figma-Workflow-Guide.md`, Figma content migrated from DTCG guide, push and extraction workflows documented, confidence flag interpretation guide, troubleshooting section, annotated example, cross-references included
 
 ## Related Documentation
 
 - [Requirements](../requirements.md) — Requirement 11 (Developer-Facing Documentation)
 - [Design](../design.md) — CLI Command Implementation, Confidence Flag System
-- [Figma Workflow Guide](../../../docs/figma-workflow-guide.md) — Primary artifact
-- [DTCG Integration Guide](../../../docs/dtcg-integration-guide.md) — Updated artifact
+- [Figma Workflow Guide](../../../.kiro/steering/Figma-Workflow-Guide.md) — Primary artifact
+- [DTCG Integration Guide](../../../.kiro/steering/DTCG-Integration-Guide.md) — Updated artifact
 - [Annotated Example](../../../docs/examples/design-outline-example.md) — Reference example

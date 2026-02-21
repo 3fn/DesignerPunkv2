@@ -230,13 +230,13 @@ As a DesignerPunk maintainer, I need an intermediate Figma format file, so that 
 
 ### User-Facing Documentation
 
-1. **Figma Integration Guide** (update existing `docs/dtcg-integration-guide.md`)
+1. **Figma Integration Guide** (update existing `.kiro/steering/DTCG-Integration-Guide.md`)
    - Add section on token push workflow
    - Document CLI commands (`figma:push`, flags)
    - Document drift detection and force override
    - Document Desktop Bridge setup
 
-2. **Transformer Development Guide** (update existing `docs/transformer-development-guide.md`)
+2. **Transformer Development Guide** (update existing `.kiro/steering/Transformer-Development-Guide.md`)
    - Add FigmaTransformer as example implementation
    - Document style generation via Plugin API
 

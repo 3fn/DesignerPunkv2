@@ -7,12 +7,12 @@ description: MCP integration guide — file loading, token traversal, path-based
 # MCP Integration Guide
 
 **Date**: 2026-02-17
-**Last Reviewed**: 2026-02-17
+**Last Reviewed**: 2026-02-21
 **Purpose**: Guide for loading, parsing, and querying DTCG tokens programmatically
-**Organization**: spec-guide
-**Scope**: 053-dtcg-token-format-generator
-**Layer**: 3
-**Relevant Tasks**: mcp-integration, dtcg-integration
+**Organization**: process-standard
+**Scope**: mcp-integration
+**Layer**: 2
+**Relevant Tasks**: mcp-integration, dtcg-integration, tooling-development
 
 ---
 

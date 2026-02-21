@@ -164,8 +164,8 @@ Modes in Figma serve design exploration (light/dark theme variants). Color token
 As a DesignerPunk developer, I need comprehensive documentation for the Figma extraction workflow, so that I can run extractions, interpret results, and troubleshoot issues without requiring maintainer assistance.
 
 **Acceptance Criteria:**
-- Documentation created at `docs/figma-workflow-guide.md` covering both token push (054a) and design extraction (054b) workflows
-- Figma-specific content migrated from `docs/dtcg-integration-guide.md` to new Figma workflow guide
+- Documentation created at `.kiro/steering/Figma-Workflow-Guide.md` covering both token push (054a) and design extraction (054b) workflows
+- Figma-specific content migrated from `.kiro/steering/DTCG-Integration-Guide.md` to new Figma workflow guide
 - Token Push section documents `npm run figma:push` with all arguments, flags, and examples
 - Design Extraction section documents `npm run figma:extract` with all arguments, flags, and examples
 - Shared sections cover MCP setup (figma-console-mcp + Kiro Figma Power), Desktop Bridge plugin setup, authentication (PAT and OAuth), and Figma-specific troubleshooting

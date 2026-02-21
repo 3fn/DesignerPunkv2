@@ -334,9 +334,9 @@ The DTCG Token Format Generator will be implemented in three phases:
   - All guides include code examples
   
   **Primary Artifacts:**
-  - `docs/dtcg-integration-guide.md`
-  - `docs/transformer-development-guide.md`
-  - `docs/mcp-integration-guide.md`
+  - `.kiro/steering/DTCG-Integration-Guide.md`
+  - `.kiro/steering/Transformer-Development-Guide.md`
+  - `.kiro/steering/MCP-Integration-Guide.md`
   
   **Completion Documentation:**
   - `.kiro/specs/053-dtcg-token-format-generator/completion/task-6-parent-completion.md`
@@ -344,7 +344,7 @@ The DTCG Token Format Generator will be implemented in three phases:
   - [x] 6.1 Create DTCG Integration Guide
     **Type**: Documentation
     **Validation**: Tier 2 - Standard
-    - Create `docs/dtcg-integration-guide.md`
+    - Create `.kiro/steering/DTCG-Integration-Guide.md`
     - Document file location (`dist/DesignTokens.dtcg.json`)
     - Document DTCG format overview (types, structure, aliases)
     - Document DesignerPunk extensions schema (formula, family, platforms, deprecation)
@@ -357,7 +357,7 @@ The DTCG Token Format Generator will be implemented in three phases:
   - [x] 6.2 Create Transformer Development Guide
     **Type**: Documentation
     **Validation**: Tier 2 - Standard
-    - Create `docs/transformer-development-guide.md`
+    - Create `.kiro/steering/Transformer-Development-Guide.md`
     - Document ITokenTransformer interface (config, transform(), canTransform())
     - Document TransformerRegistry usage (register, get, transform, transformAll)
     - Include example transformer implementation (minimal example)
@@ -367,7 +367,7 @@ The DTCG Token Format Generator will be implemented in three phases:
   - [x] 6.3 Create MCP Integration Guide
     **Type**: Documentation
     **Validation**: Tier 2 - Standard
-    - Create `docs/mcp-integration-guide.md`
+    - Create `.kiro/steering/MCP-Integration-Guide.md`
     - Document how to load and parse DTCG tokens (fs.readFileSync + JSON.parse)
     - Document how to query specific tokens by path (split path, traverse object)
     - Document how to use transformers for tool-specific formats (registry.transform())

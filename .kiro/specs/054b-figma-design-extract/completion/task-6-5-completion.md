@@ -16,7 +16,7 @@ Created `docs/examples/design-outline-example.md` — a complete annotated examp
 ## Artifacts Created
 
 - `docs/examples/design-outline-example.md` — Annotated example design outline
-- `docs/figma-workflow-guide.md` — Updated with reference to the example
+- `.kiro/steering/Figma-Workflow-Guide.md` — Updated with reference to the example
 
 ## Sections Covered
 
@@ -52,5 +52,5 @@ Annotations use HTML comments (`<!-- ... -->`) so they don't interfere with rend
 
 ## Related Documentation
 
-- [Figma Workflow Guide](../../../docs/figma-workflow-guide.md) — References this example
+- [Figma Workflow Guide](../../../.kiro/steering/Figma-Workflow-Guide.md) — References this example
 - [Design Document](../design.md) — Confidence Flag System, Component Token Decision Points, Mode Validation sections

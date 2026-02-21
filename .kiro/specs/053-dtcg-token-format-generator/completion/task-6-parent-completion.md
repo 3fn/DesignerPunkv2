@@ -23,9 +23,9 @@
 
 | Artifact | Location | Requirement |
 |----------|----------|-------------|
-| DTCG Integration Guide | `docs/dtcg-integration-guide.md` | 11.1, 11.4, 11.5 |
-| Transformer Development Guide | `docs/transformer-development-guide.md` | 11.2 |
-| MCP Integration Guide | `docs/mcp-integration-guide.md` | 11.3 |
+| DTCG Integration Guide | `.kiro/steering/DTCG-Integration-Guide.md` | 11.1, 11.4, 11.5 |
+| Transformer Development Guide | `.kiro/steering/Transformer-Development-Guide.md` | 11.2 |
+| MCP Integration Guide | `.kiro/steering/MCP-Integration-Guide.md` | 11.3 |
 
 ## Subtask Completion
 

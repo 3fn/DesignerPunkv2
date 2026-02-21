@@ -58,8 +58,8 @@
 **Added**: Complete documentation requirement with EARS pattern
 
 **Key additions**:
-- New `docs/figma-workflow-guide.md` covering both push (054a) and extraction (054b)
-- Migration of Figma-specific content from `docs/dtcg-integration-guide.md`
+- New `.kiro/steering/Figma-Workflow-Guide.md` covering both push (054a) and extraction (054b)
+- Migration of Figma-specific content from `.kiro/steering/DTCG-Integration-Guide.md`
 - Complete documentation structure with all required sections
 - Testable conditions for documentation completeness
 - Cross-references to related documentation

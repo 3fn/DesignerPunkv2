@@ -10,7 +10,7 @@
 
 ## What Was Done
 
-Expanded the "Confidence Flag Interpretation" subsection in `docs/figma-workflow-guide.md` from a basic reference table into comprehensive interpretation guidance covering:
+Expanded the "Confidence Flag Interpretation" subsection in `.kiro/steering/Figma-Workflow-Guide.md` from a basic reference table into comprehensive interpretation guidance covering:
 
 - Per-token flags (✅ ⚠️ ❌) with meaning, triggers, and required actions
 - Overall extraction confidence (high/medium/low) with the conditions that determine each level
@@ -20,7 +20,7 @@ Expanded the "Confidence Flag Interpretation" subsection in `docs/figma-workflow
 
 ## Artifacts
 
-- Updated: `docs/figma-workflow-guide.md` — Confidence Flag Interpretation section
+- Updated: `.kiro/steering/Figma-Workflow-Guide.md` — Confidence Flag Interpretation section
 
 ## Verification
 

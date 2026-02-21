@@ -10,11 +10,11 @@
 
 ## Summary
 
-Created `docs/transformer-development-guide.md` documenting the transformer architecture for building tool-specific token outputs from DTCG.
+Created `.kiro/steering/Transformer-Development-Guide.md` documenting the transformer architecture for building tool-specific token outputs from DTCG.
 
 ## Artifacts Created
 
-- `docs/transformer-development-guide.md` — Transformer Development Guide
+- `.kiro/steering/Transformer-Development-Guide.md` — Transformer Development Guide
 
 ## Requirements Validated
 

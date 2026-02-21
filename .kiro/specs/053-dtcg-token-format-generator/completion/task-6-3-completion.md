@@ -10,11 +10,11 @@
 
 ## Summary
 
-The MCP Integration Guide (`docs/mcp-integration-guide.md`) was already created and fully covers all task requirements. Verified completeness against Requirement 11.3.
+The MCP Integration Guide (`.kiro/steering/MCP-Integration-Guide.md`) was already created and fully covers all task requirements. Verified completeness against Requirement 11.3.
 
 ## Artifacts
 
-- `docs/mcp-integration-guide.md` — Complete guide with code examples
+- `.kiro/steering/MCP-Integration-Guide.md` — Complete guide with code examples
 
 ## Requirements Coverage
 

@@ -8,11 +8,11 @@
 
 ## Summary
 
-Enhanced the Design-to-Spec-to-Code Workflow subsection in `docs/figma-workflow-guide.md` to fully satisfy Requirement 11's workflow documentation criteria.
+Enhanced the Design-to-Spec-to-Code Workflow subsection in `.kiro/steering/Figma-Workflow-Guide.md` to fully satisfy Requirement 11's workflow documentation criteria.
 
 ## Changes Made
 
-**File**: `docs/figma-workflow-guide.md` — Design Extraction Workflow section
+**File**: `.kiro/steering/Figma-Workflow-Guide.md` — Design Extraction Workflow section
 
 - Added explicit scope note: "This spec (054b) implements Phase 2 only"
 - Marked Phase 2 as "THIS SPEC (054b)" in the diagram
@@ -31,4 +31,4 @@ Enhanced the Design-to-Spec-to-Code Workflow subsection in `docs/figma-workflow-
 
 - [Requirements](../requirements.md) — Requirement 11: Developer-Facing Documentation
 - [Design](../design.md) — Architecture overview and dual-MCP strategy
-- [Figma Workflow Guide](../../../docs/figma-workflow-guide.md) — Updated artifact
+- [Figma Workflow Guide](../../../.kiro/steering/Figma-Workflow-Guide.md) — Updated artifact

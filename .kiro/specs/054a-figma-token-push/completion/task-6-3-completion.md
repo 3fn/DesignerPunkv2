@@ -12,7 +12,7 @@ Added `formatDesktopBridgeError()` to `src/figma/error-reporting.ts` with:
 - `DesktopBridgeErrorInfo` interface (`type: 'unavailable' | 'connection_error'`, optional `errorMessage`)
 - Two message variants: bridge unavailable vs connection error with underlying message
 - Setup instructions (plugin manifest path, WebSocket port, re-run command)
-- Troubleshooting link to `docs/dtcg-integration-guide.md#desktop-bridge-setup`
+- Troubleshooting link to `.kiro/steering/DTCG-Integration-Guide.md#desktop-bridge-setup`
 - Fallback to "unavailable" heading when connection_error has no message
 
 ## Tests Added

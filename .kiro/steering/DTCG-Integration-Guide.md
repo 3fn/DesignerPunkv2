@@ -1,18 +1,18 @@
 ---
 inclusion: manual
 name: DTCG-Integration-Guide
-description: DTCG integration guide — file location, token type mapping, DesignerPunk extensions, Style Dictionary integration, Tokens Studio integration. Load when working with DTCG export, design tool integration, or external token consumption.
+description: Tool-agnostic DTCG format specification and integration patterns. Covers token structure, format details, and how to consume DTCG in design tools. Load when working with DTCG format or tool integrations.
 ---
 
 # DTCG Integration Guide
 
 **Date**: 2026-02-17
-**Last Reviewed**: 2026-02-18
-**Purpose**: Guide for integrating DesignerPunk tokens via DTCG format with external design tools (Style Dictionary, Tokens Studio, and other DTCG-aware tools)
-**Organization**: spec-guide
-**Scope**: 053-dtcg-token-format-generator
-**Layer**: 3
-**Relevant Tasks**: dtcg-integration, design-tool-integration
+**Last Reviewed**: 2026-02-21
+**Purpose**: DTCG format specification and tool integration patterns
+**Organization**: process-standard
+**Scope**: dtcg-format
+**Layer**: 2
+**Relevant Tasks**: token-format, tool-integration, dtcg-integration
 
 ---
 
@@ -566,5 +566,5 @@ generator.writeToFile('dist/DesignTokens.resolved.dtcg.json');
 - [DTCG Format Module 2025.10 Specification](https://tr.designtokens.org/format/)
 - [Figma Workflow Guide](./figma-workflow-guide.md) — Complete Figma integration: token push, design extraction, MCP setup, Desktop Bridge, troubleshooting
 - [Token System Overview](./token-system-overview.md) — Complete Rosetta token system documentation
-- [Transformer Development Guide](./transformer-development-guide.md) — Building custom transformers for tool-specific output
-- [MCP Integration Guide](./mcp-integration-guide.md) — Loading and querying DTCG tokens programmatically
+- [Transformer Development Guide](./Transformer-Development-Guide.md) — Building custom transformers for tool-specific output
+- [MCP Integration Guide](./MCP-Integration-Guide.md) — Loading and querying DTCG tokens programmatically

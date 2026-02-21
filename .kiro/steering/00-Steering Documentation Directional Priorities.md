@@ -537,3 +537,24 @@ After reading all Tier 1 documents (strategically, using their priorities sectio
 - This meta-guide teaches how to use the system
 
 **Result**: You read what you need, when you need it, without wasting tokens on irrelevant sections.
+
+**Figma-Workflow-Guide.md** — Figma integration workflow (push + extraction)
+- Load when: Working with Figma integration, token push, design extraction
+- MCP query: `get_section({ path: ".kiro/steering/Figma-Workflow-Guide.md", heading: "..." })`
+
+**DTCG-Integration-Guide.md** — DTCG format specification
+- Load when: Working with DTCG format, tool integrations, token format questions
+- MCP query: `get_section({ path: ".kiro/steering/DTCG-Integration-Guide.md", heading: "..." })`
+
+**Transformer-Development-Guide.md** — Building custom token transformers
+- Load when: Building custom transformers, extending DTCG output for new tools
+- MCP query: `get_section({ path: ".kiro/steering/Transformer-Development-Guide.md", heading: "..." })`
+
+**MCP-Integration-Guide.md** — Programmatic DTCG token consumption
+- Load when: Building tooling, scripts, or MCP resources that consume DTCG output
+- MCP query: `get_section({ path: ".kiro/steering/MCP-Integration-Guide.md", heading: "..." })`
+
+**Rosetta-Stemma-Systems-Overview.md** — Visual architecture overview
+- Load when: Need high-level system understanding, onboarding, architecture overview
+- MCP query: `get_document_full({ path: ".kiro/steering/Rosetta-Stemma-Systems-Overview.md" })`
+- Note: Contains Mermaid diagrams showing Rosetta + Stemma integration

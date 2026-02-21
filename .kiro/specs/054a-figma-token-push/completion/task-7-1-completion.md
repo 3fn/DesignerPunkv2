@@ -11,7 +11,7 @@
 
 ## What Was Done
 
-Added a comprehensive "Token Push Workflow" section to `docs/dtcg-integration-guide.md` covering the full Figma token push workflow.
+Added a comprehensive "Token Push Workflow" section to `.kiro/steering/DTCG-Integration-Guide.md` covering the full Figma token push workflow.
 
 ## Sections Added
 
@@ -40,7 +40,7 @@ All content was verified against the actual implementation:
 
 ## Files Modified
 
-- `docs/dtcg-integration-guide.md` — Added Token Push Workflow section, updated metadata (scope, last reviewed date), added related documentation link
+- `.kiro/steering/DTCG-Integration-Guide.md` — Added Token Push Workflow section, updated metadata (scope, last reviewed date), added related documentation link
 
 ## Requirements Addressed
 

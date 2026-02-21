@@ -1,12 +1,18 @@
+---
+inclusion: manual
+name: Figma-Workflow-Guide
+description: Bidirectional Figma integration workflow — token push (054a) and design extraction (054b). Covers MCP setup, CLI usage, confidence flags, troubleshooting. Load when working with Figma integration tasks.
+---
+
 # Figma Workflow Guide
 
 **Date**: 2026-02-20
-**Last Reviewed**: 2026-02-20
-**Purpose**: Comprehensive guide for DesignerPunk's bidirectional Figma integration — token push and design extraction workflows
-**Organization**: spec-guide
-**Scope**: 054a-figma-token-push, 054b-figma-design-extract
-**Layer**: 3
-**Relevant Tasks**: figma-integration, design-extraction, token-push
+**Last Reviewed**: 2026-02-21
+**Purpose**: Figma integration workflow documentation for token push and design extraction
+**Organization**: process-standard
+**Scope**: figma-integration
+**Layer**: 2
+**Relevant Tasks**: figma-integration, token-push, design-extraction
 
 ---
 

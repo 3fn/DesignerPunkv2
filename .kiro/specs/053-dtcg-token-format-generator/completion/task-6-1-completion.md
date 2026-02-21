@@ -11,7 +11,7 @@
 
 ## Artifact Created
 
-- `docs/dtcg-integration-guide.md` — DTCG Integration Guide
+- `.kiro/steering/DTCG-Integration-Guide.md` — DTCG Integration Guide
 
 ## Content Coverage
 

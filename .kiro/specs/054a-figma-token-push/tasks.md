@@ -425,8 +425,8 @@ This spec implements the token push workflow in three phases:
   - Developer documentation covers implementation details
   
   **Primary Artifacts:**
-  - `docs/dtcg-integration-guide.md` (updated)
-  - `docs/transformer-development-guide.md` (updated)
+  - `.kiro/steering/DTCG-Integration-Guide.md` (updated)
+  - `.kiro/steering/Transformer-Development-Guide.md` (updated)
   - `.kiro/specs/054a-figma-token-push/completion/` (task completion docs)
   
   **Completion Documentation:**
@@ -443,7 +443,7 @@ This spec implements the token push workflow in three phases:
   - [x] 7.1 Update DTCG Integration Guide
     **Type**: Documentation
     **Validation**: Tier 2 - Standard
-    - Add "Token Push Workflow" section to `docs/dtcg-integration-guide.md`
+    - Add "Token Push Workflow" section to `.kiro/steering/DTCG-Integration-Guide.md`
     - Document CLI commands (`figma:push`, flags)
     - Document drift detection and force override
     - Document Desktop Bridge setup:
@@ -462,7 +462,7 @@ This spec implements the token push workflow in three phases:
   - [x] 7.2 Update Transformer Development Guide
     **Type**: Documentation
     **Validation**: Tier 2 - Standard
-    - Add FigmaTransformer as example to `docs/transformer-development-guide.md`
+    - Add FigmaTransformer as example to `.kiro/steering/Transformer-Development-Guide.md`
     - Document style generation via Plugin API
     - Document naming conventions
     - _Requirements: Req 1, Req 3_

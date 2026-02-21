@@ -371,7 +371,7 @@ Setup:
 3. Verify WebSocket connection on port 9223
 4. Re-run: npm run figma:push
 
-Troubleshooting: See docs/dtcg-integration-guide.md#desktop-bridge-setup
+Troubleshooting: See .kiro/steering/DTCG-Integration-Guide.md#desktop-bridge-setup
 ```
 
 ---
@@ -635,8 +635,8 @@ DesignerPunk Token Library (Figma File)
 ## Related Documentation
 
 - [Design Outline](../../054-figma-console-mcp-integration/design-outline.md) — Shared architectural context
-- [DTCG Integration Guide](../../../docs/dtcg-integration-guide.md) — User-facing integration guide
-- [Transformer Development Guide](../../../docs/transformer-development-guide.md) — ITokenTransformer interface
+- [DTCG Integration Guide](../../../.kiro/steering/DTCG-Integration-Guide.md) — User-facing integration guide
+- [Transformer Development Guide](../../../.kiro/steering/Transformer-Development-Guide.md) — ITokenTransformer interface
 - [Spec 053 Design](../../053-dtcg-token-format-generator/design.md) — DTCG format generator
 
 ---

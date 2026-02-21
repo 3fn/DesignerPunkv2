@@ -546,8 +546,8 @@ This spec implements the design extraction workflow in four phases:
   - All cross-references to related documentation included
 
   **Primary Artifacts:**
-  - `docs/figma-workflow-guide.md`
-  - `docs/dtcg-integration-guide.md` (updated)
+  - `.kiro/steering/Figma-Workflow-Guide.md`
+  - `.kiro/steering/DTCG-Integration-Guide.md` (updated)
 
   **Completion Documentation:**
   - Detailed: `.kiro/specs/054b-figma-design-extract/completion/task-6-parent-completion.md`
@@ -562,7 +562,7 @@ This spec implements the design extraction workflow in four phases:
   - [x] 6.1 Create Figma Workflow Guide
     **Type**: Documentation
     **Validation**: Tier 2 - Standard
-    - Create `docs/figma-workflow-guide.md` with complete structure per Requirement 11
+    - Create `.kiro/steering/Figma-Workflow-Guide.md` with complete structure per Requirement 11
     - Add Overview section: bidirectional integration, prerequisites
     - Add MCP Setup section: figma-console-mcp, Kiro Figma Power, Desktop Bridge, authentication
     - Add Token Push Workflow section: CLI usage, drift detection, troubleshooting (from 054a)
@@ -574,7 +574,7 @@ This spec implements the design extraction workflow in four phases:
   - [x] 6.2 Migrate Figma-specific content from DTCG Integration Guide
     **Type**: Documentation
     **Validation**: Tier 2 - Standard
-    - Review `docs/dtcg-integration-guide.md` for Figma-specific content
+    - Review `.kiro/steering/DTCG-Integration-Guide.md` for Figma-specific content
     - Move Figma CLI commands, MCP setup, authentication to Figma Workflow Guide
     - Keep tool-agnostic DTCG format documentation in DTCG Integration Guide
     - Add cross-reference from DTCG guide to Figma Workflow Guide

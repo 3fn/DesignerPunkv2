@@ -11,11 +11,11 @@
 
 ## Summary
 
-Created `docs/figma-workflow-guide.md` — a comprehensive developer-facing guide covering both the token push (054a) and design extraction (054b) workflows.
+Created `.kiro/steering/Figma-Workflow-Guide.md` — a comprehensive developer-facing guide covering both the token push (054a) and design extraction (054b) workflows.
 
 ## Artifacts Created
 
-- `docs/figma-workflow-guide.md` — Complete Figma Workflow Guide
+- `.kiro/steering/Figma-Workflow-Guide.md` — Complete Figma Workflow Guide
 
 ## Document Structure
 

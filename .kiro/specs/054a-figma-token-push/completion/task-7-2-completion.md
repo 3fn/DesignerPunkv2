@@ -11,7 +11,7 @@
 
 ## What Was Done
 
-Replaced the placeholder "Spec 054: Figma Transformer" section in `docs/transformer-development-guide.md` with comprehensive documentation of the actual FigmaTransformer implementation.
+Replaced the placeholder "Spec 054: Figma Transformer" section in `.kiro/steering/Transformer-Development-Guide.md` with comprehensive documentation of the actual FigmaTransformer implementation.
 
 ## Sections Updated
 
@@ -34,7 +34,7 @@ All content verified against `src/generators/transformers/FigmaTransformer.ts`:
 
 ## Files Modified
 
-- `docs/transformer-development-guide.md` — Replaced placeholder section with actual implementation docs, updated metadata (scope, last reviewed date), added related documentation link
+- `.kiro/steering/Transformer-Development-Guide.md` — Replaced placeholder section with actual implementation docs, updated metadata (scope, last reviewed date), added related documentation link
 
 ## Requirements Addressed
 

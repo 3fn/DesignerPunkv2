@@ -11,11 +11,11 @@
 
 ## What Was Done
 
-Migrated all Figma-specific content from `docs/dtcg-integration-guide.md` to the Figma Workflow Guide (`docs/figma-workflow-guide.md`), leaving the DTCG guide focused on tool-agnostic DTCG format documentation.
+Migrated all Figma-specific content from `.kiro/steering/DTCG-Integration-Guide.md` to the Figma Workflow Guide (`.kiro/steering/Figma-Workflow-Guide.md`), leaving the DTCG guide focused on tool-agnostic DTCG format documentation.
 
 ## Changes Made
 
-### `docs/dtcg-integration-guide.md`
+### `.kiro/steering/DTCG-Integration-Guide.md`
 
 1. **Updated metadata**: Changed Purpose to remove "including Figma token push workflow"; removed `054a-figma-token-push` from Scope
 2. **Removed "Token Push Workflow" section**: Entire section (~150 lines) covering prerequisites, Desktop Bridge setup, CLI commands, drift detection, partial failure/resume, what gets pushed, and troubleshooting — all already present in the Figma Workflow Guide
@@ -41,5 +41,5 @@ Migrated all Figma-specific content from `docs/dtcg-integration-guide.md` to the
 
 ## Related Documentation
 
-- [Figma Workflow Guide](../../../../docs/figma-workflow-guide.md) — Destination for migrated content
-- [DTCG Integration Guide](../../../../docs/dtcg-integration-guide.md) — Source document (now tool-agnostic)
+- [Figma Workflow Guide](../../../../.kiro/steering/Figma-Workflow-Guide.md) — Destination for migrated content
+- [DTCG Integration Guide](../../../../.kiro/steering/DTCG-Integration-Guide.md) — Source document (now tool-agnostic)

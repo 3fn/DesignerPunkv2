@@ -292,7 +292,7 @@ What are you building?
 - [Token Governance](./Token-Governance.md) - Token selection and creation governance
 
 ### DTCG Integration
-- [DTCG Integration Guide](../../docs/dtcg-integration-guide.md) - Integrating DesignerPunk tokens with external design tools
-- [Figma Workflow Guide](../../docs/figma-workflow-guide.md) - Bidirectional Figma integration: token push and design extraction
-- [Transformer Development Guide](../../docs/transformer-development-guide.md) - Building custom token transformers
-- [MCP Integration Guide](../../docs/mcp-integration-guide.md) - Programmatic token loading and querying
+- [DTCG Integration Guide](./DTCG-Integration-Guide.md) - Integrating DesignerPunk tokens with external design tools
+- [Figma Workflow Guide](./Figma-Workflow-Guide.md) - Bidirectional Figma integration: token push and design extraction
+- [Transformer Development Guide](./Transformer-Development-Guide.md) - Building custom token transformers
+- [MCP Integration Guide](./MCP-Integration-Guide.md) - Programmatic token loading and querying

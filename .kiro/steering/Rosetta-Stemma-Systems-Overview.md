@@ -1,10 +1,35 @@
-# Rosetta and Stemma Systems — Mermaid Diagram
+---
+inclusion: always
+name: Rosetta-Stemma-Systems-Overview
+description: Visual architecture overview of DesignerPunk's dual foundation — Rosetta (mathematical token system) and Stemma (relational component system). Mermaid diagrams showing token hierarchy, component families, pipeline flow, and platform integration. Load for high-level system understanding.
+---
 
-**Purpose**: Visual overview of the DesignerPunk dual foundation: Rosetta (mathematical token system) and Stemma (relational component system), and how they integrate.
+# Rosetta and Stemma Systems — Visual Overview
+
+**Date**: 2026-02-21
+**Last Reviewed**: 2026-02-21
+**Purpose**: Visual architecture overview of DesignerPunk's dual foundation systems
+**Organization**: architecture-overview
+**Scope**: cross-project
+**Layer**: 1
+**Relevant Tasks**: all-tasks
 
 ---
 
-## High-level: DesignerPunk dual foundation
+## Overview
+
+DesignerPunk is built on two complementary foundation systems:
+
+- **Rosetta System** — Mathematical foundation for visual consistency (tokens, scales, relationships)
+- **Stemma System** — Relational foundation for behavioral consistency (components, contracts, inheritance)
+
+This document provides visual diagrams showing how these systems work individually and how they integrate to create the complete design system.
+
+---
+
+## High-Level: DesignerPunk Dual Foundation
+
+This diagram shows the relationship between Rosetta (mathematical) and Stemma (relational) systems, and how they work together to provide both visual and behavioral consistency.
 
 ```mermaid
 flowchart TB
@@ -38,7 +63,9 @@ flowchart TB
 
 ---
 
-## Rosetta System — token pipeline and layers
+## Rosetta System: Token Pipeline and Layers
+
+This diagram shows the Rosetta token pipeline (definition → validation → registry → generation → output) and the three-layer token hierarchy (primitive → semantic → component).
 
 ```mermaid
 flowchart LR
@@ -64,7 +91,9 @@ flowchart LR
 
 ---
 
-## Stemma System — families and inheritance
+## Stemma System: Families and Inheritance
+
+This diagram shows the 11 component families, the family inheritance pattern (primitive base → semantic variants), and how behavioral contracts apply to components.
 
 ```mermaid
 flowchart TB
@@ -105,7 +134,9 @@ flowchart TB
 
 ---
 
-## Integration: tokens → components → platforms
+## Integration: Tokens → Components → Platforms
+
+This diagram shows how Rosetta tokens flow into Stemma components, which then generate platform-specific implementations (Web, iOS, Android).
 
 ```mermaid
 flowchart TB
@@ -136,7 +167,9 @@ flowchart TB
 
 ---
 
-## Combined overview (single diagram)
+## Combined Overview (Single Diagram)
+
+This diagram provides a simplified single-view of the complete system: Rosetta foundation → Stemma foundation → Platform output.
 
 ```mermaid
 flowchart TB
@@ -173,8 +206,32 @@ flowchart TB
 
 ---
 
-## Related docs
+## Related Documentation
 
-- **Rosetta**: [Rosetta System Principles](.kiro/steering/rosetta-system-principles.md), [Rosetta System Architecture](.kiro/steering/Rosetta-System-Architecture.md)
-- **Stemma**: [Stemma System Principles](.kiro/steering/stemma-system-principles.md)
-- **Spec**: [034 Component Architecture System](.kiro/specs/034-component-architecture-system/design.md)
+**Rosetta System:**
+- [Rosetta System Principles](./rosetta-system-principles.md) — Mathematical foundation and token philosophy
+- [Rosetta System Architecture](./Rosetta-System-Architecture.md) — Detailed pipeline, generation subsystem, validation
+
+**Stemma System:**
+- [Stemma System Principles](./stemma-system-principles.md) — Component philosophy and inheritance patterns
+- [Component Quick Reference](./Component-Quick-Reference.md) — Routing table for component family docs
+
+**Component Families:**
+- [Component-Family-Button.md](./Component-Family-Button.md)
+- [Component-Family-Form-Inputs.md](./Component-Family-Form-Inputs.md)
+- [Component-Family-Icon.md](./Component-Family-Icon.md)
+- [Component-Family-Container.md](./Component-Family-Container.md)
+- [Component-Family-Avatar.md](./Component-Family-Avatar.md)
+- [Component-Family-Badge.md](./Component-Family-Badge.md)
+- [Component-Family-Chip.md](./Component-Family-Chip.md)
+- [Component-Family-Progress.md](./Component-Family-Progress.md)
+- [Component-Family-Divider.md](./Component-Family-Divider.md) (placeholder)
+- [Component-Family-Loading.md](./Component-Family-Loading.md) (placeholder)
+- [Component-Family-Modal.md](./Component-Family-Modal.md) (placeholder)
+- [Component-Family-Navigation.md](./Component-Family-Navigation.md) (placeholder)
+- [Component-Family-Data-Display.md](./Component-Family-Data-Display.md) (placeholder)
+
+---
+
+**Organization**: architecture-overview
+**Scope**: cross-project

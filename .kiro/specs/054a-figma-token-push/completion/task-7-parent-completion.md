@@ -31,10 +31,10 @@ Completed all documentation for the Figma Token Push spec: updated two user-faci
 
 ## What Was Documented
 
-### 7.1 — DTCG Integration Guide (`docs/dtcg-integration-guide.md`)
+### 7.1 — DTCG Integration Guide (`.kiro/steering/DTCG-Integration-Guide.md`)
 Added Token Push Workflow section covering: workflow overview, prerequisites, Desktop Bridge setup (4-step guide), CLI commands with all flags, drift detection and force override, partial failure and resume, token-to-Figma mapping table, and troubleshooting (4 subsections). All content verified against actual implementation.
 
-### 7.2 — Transformer Development Guide (`docs/transformer-development-guide.md`)
+### 7.2 — Transformer Development Guide (`.kiro/steering/Transformer-Development-Guide.md`)
 Replaced placeholder section with actual FigmaTransformer documentation: configuration, output structure, variable vs style separation rationale, naming conventions (`/` for variables, `.` for styles), Plugin API code generation for effect and text styles, and registry integration.
 
 ### 7.3 — Spec-Wide Completion Documentation
@@ -49,8 +49,8 @@ Created `task-7-3-completion.md` documenting: three-phase implementation approac
 
 ## Primary Artifacts
 
-- `docs/dtcg-integration-guide.md` — Updated with Token Push Workflow section
-- `docs/transformer-development-guide.md` — Updated with FigmaTransformer documentation
+- `.kiro/steering/DTCG-Integration-Guide.md` — Updated with Token Push Workflow section
+- `.kiro/steering/Transformer-Development-Guide.md` — Updated with FigmaTransformer documentation
 - `.kiro/specs/054a-figma-token-push/completion/` — 33 completion documents
 
 ## Related Documentation
