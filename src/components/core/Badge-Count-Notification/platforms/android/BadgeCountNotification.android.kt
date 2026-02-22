@@ -20,8 +20,8 @@
  * Badge notification color tokens are defined in the component directory at
  * src/components/core/Badge-Count-Notification/tokens.ts following the Rosetta
  * System architecture. Android uses generated platform tokens:
- * - DesignTokens.color_badge_notification_background (references pink400)
- * - DesignTokens.color_badge_notification_text (references white100)
+ * - DesignTokens.color_feedback_notification_background (references pink400)
+ * - DesignTokens.color_feedback_notification_text (references white100)
  * 
  * @module Badge-Count-Notification/platforms/android
  * @see Requirements: 3.1-3.10, 4.7, 5.3, 6.3
@@ -111,18 +111,18 @@ private object BadgeCountNotificationTokens {
     // MARK: - Fixed Notification Colors
     
     /** Background color for notification badge
-     * Uses generated token: DesignTokens.color_badge_notification_background
+     * Uses generated token: DesignTokens.color_feedback_notification_background
      * Source: BadgeNotificationColorTokens['notification.background'] → pink400 (#CC2257)
      * @see Requirement 3.1 - notification-specific color tokens
      */
-    val backgroundColor: Color = Color(DesignTokens.color_badge_notification_background)
+    val backgroundColor: Color = Color(DesignTokens.color_feedback_notification_background)
     
     /** Text color for notification badge
-     * Uses generated token: DesignTokens.color_badge_notification_text
+     * Uses generated token: DesignTokens.color_feedback_notification_text
      * Source: BadgeNotificationColorTokens['notification.text'] → white100 (#FFFFFF)
      * @see Requirement 3.1 - notification-specific color tokens
      */
-    val textColor: Color = Color(DesignTokens.color_badge_notification_text)
+    val textColor: Color = Color(DesignTokens.color_feedback_notification_text)
 }
 
 

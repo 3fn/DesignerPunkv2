@@ -408,19 +408,356 @@ export class ConsoleMCPClientImpl implements ConsoleMCPClient {
   }
 
   async getComponent(fileKey: string, nodeId: string): Promise<FigmaComponentData> {
-    const result = await this.callTool('figma_get_component', { fileKey, nodeId });
+      // Figma REST API accepts dash-separated IDs in query params but returns
+      // colon-separated IDs in response keys. The figma-console-mcp tool uses
+      // the raw nodeId for the response lookup, so we normalize to colon format
+      // to ensure the lookup succeeds.
+      const normalizedNodeId = nodeId.replace(/-/g, ':');
+      const result = await this.callTool('figma_get_component', { fileKey, nodeId: normalizedNodeId, format: 'reconstruction' });
 
-    if (result && typeof result === 'object') {
-      const data = result as Record<string, unknown>;
-      return {
-        name: data.name != null ? String(data.name) : undefined,
-        description: data.description != null ? String(data.description) : undefined,
-        key: data.key != null ? String(data.key) : undefined,
-        variantProperties: data.variantProperties as Record<string, string[]> | undefined,
-        ...data,
-      };
+      if (result && typeof result === 'object') {
+        const data = result as Record<string, unknown>;
+
+        // Reconstruction format cannot handle COMPONENT_SET nodes (variant
+        // containers). When this happens, fetch metadata for the parent to
+        // get children IDs, then fetch the first child variant with
+        // figma_get_component_for_development to get rich layout data.
+        if (data.error === 'COMPONENT_SET_NOT_SUPPORTED') {
+          return this.getComponentSetWithReconstruction(fileKey, normalizedNodeId);
+        }
+
+        // The MCP tool returns different structures depending on the source
+        // and format:
+        // - Desktop Bridge metadata: { fileKey, nodeId, component: {...}, source: "desktop_bridge_plugin" }
+        // - Desktop Bridge reconstruction: { fileKey, nodeId, reconstruction: {...}, source: "desktop_bridge_plugin" }
+        // - REST API: { document: {...}, components: {...}, ... }
+        // Extract the actual component data from whichever wrapper is present.
+        const componentObj =
+          (data.reconstruction as Record<string, unknown>) ??
+          (data.component as Record<string, unknown>) ??
+          (data.document as Record<string, unknown>) ??
+          data;
+
+        return this.extractComponentFields(componentObj);
+      }
+
+      return {};
     }
 
-    return {};
-  }
+  /**
+   * Handle COMPONENT_SET nodes by using figma_execute with Plugin API
+   * to get the complete node tree including layout properties,
+   * boundVariables, fills, and cornerRadius for all children.
+   *
+   * The Plugin API via figma.getNodeByIdAsync() returns the full node
+   * with all properties, unlike the Desktop Bridge reconstruction format
+   * which only returns stub children for component sets.
+   */
+  /**
+     * Handle COMPONENT_SET nodes by fetching metadata for the parent
+     * (name, variantProperties, children IDs) and then using
+     * figma_get_component_for_development on the first child variant
+     * to get rich layout/visual data including boundVariables.
+     *
+     * Falls back to figma_execute with Plugin API if the development
+     * tool doesn't return sufficient data.
+     */
+    /**
+       * Handle COMPONENT_SET nodes by fetching metadata for the parent
+       * (name, variantProperties, children IDs) and then using
+       * figma_get_component_for_development on the first child variant
+       * to get rich layout/visual data.
+       *
+       * Falls back to figma_execute with Plugin API if the development
+       * tool doesn't return sufficient data.
+       */
+      /**
+         * Handle COMPONENT_SET nodes by fetching metadata for the parent
+         * (name, variantProperties, children IDs) and then using the Plugin API
+         * on the first child variant to get rich data including boundVariables.
+         *
+         * Strategy order:
+         * 1. figma_execute (Plugin API) — returns boundVariables + layout
+         * 2. figma_get_component_for_development (REST API) — returns layout but no boundVariables
+         *
+         * Plugin API is preferred because it's the only path that returns
+         * boundVariables, which enable binding-first token translation.
+         */
+        /**
+           * Handle COMPONENT_SET nodes by fetching metadata for the parent
+           * (name, variantProperties, children IDs) and then combining data
+           * from both the REST API and Plugin API on the first child variant.
+           *
+           * Strategy: call BOTH sources and merge:
+           * - figma_get_component_for_development (REST API) → layout, fills, children structure
+           * - figma_execute (Plugin API) → boundVariables (only source for these)
+           *
+           * The REST API provides rich structural data but no boundVariables.
+           * The Plugin API provides boundVariables but may fail on some node types.
+           * Merging both gives us the complete picture.
+           */
+          private async getComponentSetWithReconstruction(
+            fileKey: string,
+            nodeId: string,
+          ): Promise<FigmaComponentData> {
+            // Step 1: Get metadata for the component set (works for COMPONENT_SET)
+            // to get name, variantProperties, and children IDs.
+            const metadataResult = await this.callTool('figma_get_component', {
+              fileKey,
+              nodeId,
+            });
+
+            if (!metadataResult || typeof metadataResult !== 'object') {
+              return {};
+            }
+
+            const metaData = metadataResult as Record<string, unknown>;
+            const metaComponent =
+              (metaData.component as Record<string, unknown>) ??
+              (metaData.document as Record<string, unknown>) ??
+              metaData;
+
+            const parentFields = this.extractComponentFields(metaComponent);
+
+            // Step 2: Find first child variant ID
+            const children = metaComponent.children as Array<Record<string, unknown>> | undefined;
+            if (!children || children.length === 0) {
+              return parentFields;
+            }
+
+            const firstChildId = children[0].id as string | undefined;
+            if (!firstChildId) {
+              return parentFields;
+            }
+
+            // Step 3: Fetch from BOTH sources in parallel
+            let restData: Record<string, unknown> | undefined;
+            let pluginData: Record<string, unknown> | undefined;
+
+            // 3a: REST API — layout, fills, children structure
+            try {
+              const devResult = await this.callTool('figma_get_component_for_development', {
+                nodeId: firstChildId,
+                includeImage: false,
+              });
+
+              if (devResult && typeof devResult === 'object') {
+                const devObj = devResult as Record<string, unknown>;
+                restData =
+                  (devObj.component as Record<string, unknown>) ??
+                  devObj;
+              }
+            } catch {
+              // REST API failed — continue with Plugin API only
+            }
+
+            // 3b: Plugin API — boundVariables
+            try {
+              const code = `
+        const node = await figma.getNodeByIdAsync('${firstChildId}');
+        if (!node) return JSON.stringify({ error: 'Node not found' });
+
+        function extractNode(n, depth) {
+          if (depth > 4) return { id: n.id, name: n.name, type: n.type };
+          const data = {
+            id: n.id, name: n.name, type: n.type,
+            visible: n.visible
+          };
+          if ('layoutMode' in n) data.layoutMode = n.layoutMode;
+          if ('itemSpacing' in n) data.itemSpacing = n.itemSpacing;
+          if ('paddingTop' in n) data.paddingTop = n.paddingTop;
+          if ('paddingRight' in n) data.paddingRight = n.paddingRight;
+          if ('paddingBottom' in n) data.paddingBottom = n.paddingBottom;
+          if ('paddingLeft' in n) data.paddingLeft = n.paddingLeft;
+          if ('counterAxisSpacing' in n) data.counterAxisSpacing = n.counterAxisSpacing;
+          if ('cornerRadius' in n) data.cornerRadius = n.cornerRadius;
+          if ('fills' in n) data.fills = n.fills;
+          if ('strokes' in n) data.strokes = n.strokes;
+          if ('effects' in n) data.effects = n.effects;
+          if ('opacity' in n) data.opacity = n.opacity;
+          if ('boundVariables' in n) {
+            const bv = {};
+            for (const [key, val] of Object.entries(n.boundVariables)) {
+              if (val && typeof val === 'object') {
+                if (Array.isArray(val)) {
+                  bv[key] = val.map(v => ({ id: v.id, type: v.type }));
+                } else {
+                  bv[key] = { id: val.id, type: val.type };
+                }
+              }
+            }
+            if (Object.keys(bv).length > 0) data.boundVariables = bv;
+          }
+          if ('componentPropertyDefinitions' in n) data.componentPropertyDefinitions = n.componentPropertyDefinitions;
+          if ('variantProperties' in n) data.variantProperties = n.variantProperties;
+          if ('width' in n) data.width = n.width;
+          if ('height' in n) data.height = n.height;
+          if ('children' in n && n.children) {
+            data.children = n.children.map(c => extractNode(c, depth + 1));
+          }
+          return data;
+        }
+
+        return JSON.stringify(extractNode(node, 0));
+        `.trim();
+
+              const result = await this.callTool('figma_execute', { fileKey, code });
+              pluginData = this.parsePluginApiResult(result);
+            } catch {
+              // Plugin API failed — continue with REST data only
+            }
+
+            // Step 4: Merge results — REST structure + Plugin boundVariables
+            if (restData && pluginData) {
+              // Overlay boundVariables from Plugin API onto REST API structure
+              const merged = this.mergeComponentData(restData, pluginData);
+              return {
+                ...parentFields,
+                children: [merged] as unknown[],
+              };
+            }
+
+            // One source only
+            const childData = restData ?? pluginData;
+            if (childData) {
+              return {
+                ...parentFields,
+                children: [childData] as unknown[],
+              };
+            }
+
+            return parentFields;
+          }
+
+          /**
+           * Parse the result from figma_execute into a component data object.
+           * Handles various response wrapper formats.
+           */
+          private parsePluginApiResult(result: unknown): Record<string, unknown> | undefined {
+            if (result && typeof result === 'string') {
+              try {
+                const parsed = JSON.parse(result) as Record<string, unknown>;
+                if (!parsed.error && parsed.name) return parsed;
+              } catch {
+                // JSON parse failed
+              }
+            } else if (result && typeof result === 'object') {
+              const r = result as Record<string, unknown>;
+              const output = r.result ?? r.output ?? r.returnValue;
+              if (typeof output === 'string') {
+                try {
+                  const parsed = JSON.parse(output) as Record<string, unknown>;
+                  if (!parsed.error && parsed.name) return parsed;
+                } catch {
+                  // JSON parse failed
+                }
+              } else if (typeof output === 'object' && output !== null) {
+                const outputObj = output as Record<string, unknown>;
+                if (outputObj.name && !outputObj.error) return outputObj;
+              } else if (r.name && !r.error) {
+                return r;
+              }
+            }
+            return undefined;
+          }
+
+          /**
+           * Merge REST API data (structure) with Plugin API data (boundVariables).
+           *
+           * Walks both trees by matching node IDs and overlays boundVariables
+           * from the Plugin API onto the REST API structure. Falls back to
+           * name matching when IDs don't align.
+           */
+          private mergeComponentData(
+            restNode: Record<string, unknown>,
+            pluginNode: Record<string, unknown>,
+          ): Record<string, unknown> {
+            const merged = { ...restNode };
+
+            // Overlay boundVariables from plugin onto rest
+            if (pluginNode.boundVariables && !restNode.boundVariables) {
+              merged.boundVariables = pluginNode.boundVariables;
+            }
+
+            // Overlay fill-level boundVariables
+            const restFills = restNode.fills as Array<Record<string, unknown>> | undefined;
+            const pluginFills = pluginNode.fills as Array<Record<string, unknown>> | undefined;
+            if (restFills && pluginFills) {
+              const mergedFills = restFills.map((rf, i) => {
+                const pf = pluginFills[i];
+                if (pf?.boundVariables && !rf.boundVariables) {
+                  return { ...rf, boundVariables: pf.boundVariables };
+                }
+                return rf;
+              });
+              merged.fills = mergedFills;
+            }
+
+            // Recursively merge children by matching IDs or index
+            const restChildren = restNode.children as Array<Record<string, unknown>> | undefined;
+            const pluginChildren = pluginNode.children as Array<Record<string, unknown>> | undefined;
+            if (restChildren && pluginChildren) {
+              // Build ID lookup from plugin children
+              const pluginById = new Map<string, Record<string, unknown>>();
+              for (const pc of pluginChildren) {
+                const id = pc.id as string | undefined;
+                if (id) pluginById.set(id, pc);
+              }
+
+              const mergedChildren = restChildren.map((rc, i) => {
+                const rcId = rc.id as string | undefined;
+                const matchingPlugin = (rcId ? pluginById.get(rcId) : undefined) ?? pluginChildren[i];
+                if (matchingPlugin) {
+                  return this.mergeComponentData(rc, matchingPlugin);
+                }
+                return rc;
+              });
+              merged.children = mergedChildren;
+            } else if (!restChildren && pluginChildren) {
+              // REST had no children but plugin did — use plugin children
+              merged.children = pluginChildren;
+            }
+
+            return merged;
+          }
+
+
+
+
+
+  /** Extract standard FigmaComponentData fields from a raw component object. */
+  private extractComponentFields(obj: Record<string, unknown>): FigmaComponentData {
+      // Normalize componentPropertyDefinitions → variantProperties
+      // COMPONENT_SET nodes use componentPropertyDefinitions with shape:
+      //   { "Property 1": { type: "VARIANT", defaultValue: "Sm", variantOptions: ["Sm","Md","Lg"] } }
+      // We convert VARIANT entries to variantProperties format:
+      //   { "Property 1": ["Sm", "Md", "Lg"] }
+      let variantProperties = obj.variantProperties as Record<string, string[]> | undefined;
+
+      if (!variantProperties) {
+        const cpd = obj.componentPropertyDefinitions as
+          Record<string, { type: string; variantOptions?: string[]; defaultValue?: string }> | undefined;
+        if (cpd) {
+          const converted: Record<string, string[]> = {};
+          for (const [propName, def] of Object.entries(cpd)) {
+            if (def.type === 'VARIANT' && def.variantOptions) {
+              converted[propName] = def.variantOptions;
+            }
+          }
+          if (Object.keys(converted).length > 0) {
+            variantProperties = converted;
+          }
+        }
+      }
+
+      return {
+        name: obj.name != null ? String(obj.name) : undefined,
+        description: obj.description != null ? String(obj.description) : undefined,
+        key: obj.key != null ? String(obj.key) : undefined,
+        variantProperties,
+        ...obj,
+        // Ensure our normalized variantProperties takes precedence over raw spread
+        ...(variantProperties ? { variantProperties } : {}),
+      };
+    }
 }

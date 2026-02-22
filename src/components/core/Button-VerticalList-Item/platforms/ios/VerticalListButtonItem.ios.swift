@@ -608,10 +608,6 @@ extension DesignTokens {
     
     // MARK: - Color Tokens (Semantic)
     
-    /// Background color
-    /// Requirements: 1.1, 1.5
-    public static let colorBackground: UIColor = UIColor.systemBackground
-    
     /// Default text color
     /// Requirements: 1.1, 1.5
     public static let colorTextDefault: UIColor = UIColor.label

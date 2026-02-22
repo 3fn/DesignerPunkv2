@@ -364,7 +364,7 @@ export function mapBorderRadiusToCSS(borderRadius: BorderRadiusValue | null): st
  * @example
  * ```typescript
  * mapColorToCSS('color.primary') // Returns 'background: var(--color-primary)'
- * mapColorToCSS('color.surface') // Returns 'background: var(--color-surface)'
+ * mapColorToCSS('color.structure.surface') // Returns 'background: var(--color-structure-surface)'
  * ```
  * 
  * @see Requirements 2.2, 4.1-4.4

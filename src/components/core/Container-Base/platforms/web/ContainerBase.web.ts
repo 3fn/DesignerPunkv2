@@ -227,25 +227,19 @@ export class ContainerBaseWeb extends HTMLElement {
     
     // Fallback to surface color if no background or couldn't resolve
     if (!baseColor) {
-      baseColor = computedStyle.getPropertyValue('--color-surface').trim();
+      baseColor = computedStyle.getPropertyValue('--color-structure-surface').trim();
     }
     
     // If still no color, use canvas color token (white100)
     if (!baseColor) {
-      baseColor = computedStyle.getPropertyValue('--color-canvas').trim();
-    }
-    
-    // Final fallback - use background color token
-    // If tokens are not loaded, this will result in an empty string
-    // which is acceptable as the hover effect simply won't apply
-    if (!baseColor) {
-      baseColor = computedStyle.getPropertyValue('--color-background').trim();
+      baseColor = computedStyle.getPropertyValue('--color-structure-canvas').trim();
     }
     
     // If no color could be resolved from tokens, skip hover color calculation
     // This follows the "fail loudly" philosophy - if tokens aren't loaded,
     // the hover effect won't work, which is visible during development
     if (!baseColor) {
+      console.warn('ContainerBase: All background color fallbacks failed. Hover effects will not work.');
       this._hoverColor = '';
       return;
     }

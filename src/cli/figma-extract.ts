@@ -28,6 +28,7 @@ import { TokenTranslator } from '../figma/TokenTranslator';
 import { VariantAnalyzer } from '../figma/VariantAnalyzer';
 import { DesignExtractor } from '../figma/DesignExtractor';
 import type { NoMatchEntry } from '../figma/DesignExtractor';
+import { checkDesktopBridge } from '../figma/preflight';
 import { cleanupStalePorts } from '../figma/portCleanup';
 import type { DTCGTokenFile } from '../generators/types/DTCGTypes';
 import type { MCPDocClient } from '../figma/VariantAnalyzer';
@@ -232,19 +233,38 @@ export async function run(argv: string[] = process.argv.slice(2)): Promise<void>
   await consoleMcp.connect();
 
   try {
-    // 4. Initialize components
+    // 4. Pre-flight: wait for Desktop Bridge (same as figma:push)
+    console.log('🔍 Running pre-flight checks…');
+    const preflight = await checkDesktopBridge(consoleMcp);
+    if (!preflight.ready) {
+      console.error(preflight.error);
+      process.exit(1);
+    }
+    console.log('✅ Desktop Bridge is available');
+
+    // 5. Initialize components
     const translator = new TokenTranslator(dtcgTokens);
     const analyzer = new VariantAnalyzer(new StubMCPDocClient());
     const extractor = new DesignExtractor(consoleMcp, translator, analyzer);
 
-    // 5. Run extraction
+    // 6. Run extraction
     console.log(`🔍 Extracting design from file ${args.file}, node ${args.node}…`);
+
+    // Debug: dump raw getComponent response to see figma_execute results
+    try {
+      const rawComponent = await consoleMcp.getComponent(args.file, args.node);
+      fs.writeFileSync(path.resolve('./debug-component-response.json'), JSON.stringify(rawComponent, null, 2), 'utf-8');
+      console.log(`🔬 Debug: wrote response to debug-component-response.json`);
+    } catch (e) {
+      console.log(`🔬 Debug: getComponent failed: ${e instanceof Error ? e.message : String(e)}`);
+    }
+
     const outline = await extractor.extractDesign(args.file, args.node);
 
-    // 6. Generate markdown
+    // 7. Generate markdown
     const markdown = extractor.generateDesignOutlineMarkdown(outline);
 
-    // 7. Write output
+    // 8. Write output
     const outputPath = path.resolve(args.output);
     const outputDir = path.dirname(outputPath);
     if (!fs.existsSync(outputDir)) {
@@ -253,13 +273,13 @@ export async function run(argv: string[] = process.argv.slice(2)): Promise<void>
     fs.writeFileSync(outputPath, markdown, 'utf-8');
     console.log(`✅ Wrote design outline: ${outputPath}`);
 
-    // 8. Format no-match report for CLI output
+    // 9. Format no-match report for CLI output
     const noMatchEntries = extractor.formatNoMatchReport(outline.tokenUsage);
 
-    // 9. Report results
+    // 10. Report results
     reportResults(outline, noMatchEntries);
 
-    // 10. Exit with appropriate code
+    // 11. Exit with appropriate code
     if (outline.extractionConfidence.requiresHumanInput) {
       console.log('');
       console.log('⚠️  Human input required — review the design outline before proceeding.');

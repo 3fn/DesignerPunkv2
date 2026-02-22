@@ -315,8 +315,8 @@ export class InputCheckboxBaseElement extends HTMLElement {
     const computedStyle = getComputedStyle(document.documentElement);
     
     // Get the default border color (unchecked state)
-    // This is --color-select-not-selected-strong
-    const defaultBorderColor = computedStyle.getPropertyValue('--color-select-not-selected-strong').trim();
+    // This is --color-feedback-select-border-default
+    const defaultBorderColor = computedStyle.getPropertyValue('--color-feedback-select-border-default').trim();
     
     if (defaultBorderColor) {
       // Calculate hover border color using blend.hoverDarker (8% darker)

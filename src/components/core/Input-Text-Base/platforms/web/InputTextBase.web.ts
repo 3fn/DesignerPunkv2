@@ -169,10 +169,10 @@ export class InputTextBase extends HTMLElement {
    */
   private _calculateBlendColors(): void {
     const computedStyle = getComputedStyle(document.documentElement);
-    const primaryColor = computedStyle.getPropertyValue('--color-primary').trim();
+    const primaryColor = computedStyle.getPropertyValue('--color-action-primary').trim();
     
     if (!primaryColor) {
-      throw new Error('InputTextBase: Required token --color-primary is missing from CSS custom properties');
+      throw new Error('InputTextBase: Required token --color-action-primary is missing from CSS custom properties');
     }
     
     // Calculate blend colors using theme-aware blend utilities

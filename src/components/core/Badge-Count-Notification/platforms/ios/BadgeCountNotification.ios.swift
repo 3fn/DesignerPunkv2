@@ -20,8 +20,8 @@
  * Badge notification color tokens are defined in the component directory at
  * src/components/core/Badge-Count-Notification/tokens.ts following the Rosetta
  * System architecture. iOS uses generated platform tokens:
- * - DesignTokens.colorBadgeNotificationBackground (references pink400)
- * - DesignTokens.colorBadgeNotificationText (references white100)
+ * - DesignTokens.colorFeedbackNotificationBackground (references pink400)
+ * - DesignTokens.colorFeedbackNotificationText (references white100)
  * 
  * @module Badge-Count-Notification/platforms/ios
  * @see Requirements: 3.1-3.10, 4.7, 5.2, 6.3
@@ -55,13 +55,13 @@ enum BadgeCountNotificationTokens {
     // MARK: - Fixed Notification Colors
     
     /// Background color for notification badge
-    /// Uses generated token: DesignTokens.colorBadgeNotificationBackground
+    /// Uses generated token: DesignTokens.colorFeedbackNotificationBackground
     /// Source: BadgeNotificationColorTokens['notification.background'] → pink400
     /// @see Requirement 3.1 - notification-specific color tokens
     static let backgroundColor: Color = Color(DesignTokens.colorBadgeNotificationBackground)
     
     /// Text color for notification badge
-    /// Uses generated token: DesignTokens.colorBadgeNotificationText
+    /// Uses generated token: DesignTokens.colorFeedbackNotificationText
     /// Source: BadgeNotificationColorTokens['notification.text'] → white100
     /// @see Requirement 3.1 - notification-specific color tokens
     static let textColor: Color = Color(DesignTokens.colorBadgeNotificationText)

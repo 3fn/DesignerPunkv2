@@ -793,10 +793,10 @@ let radius200: CGFloat = 16  /* radius-200 */
 // Border tokens
 let borderDefault: CGFloat = 1  /* border.border.default */
 
-// Color tokens (placeholder values - would be from design system)
-let colorSurfacePrimary: Color = Color(UIColor.systemBackground)      /* color.surface.primary */
-let colorSurfaceSecondary: Color = Color(UIColor.secondarySystemBackground)  /* color.surface.secondary */
-let colorSurfaceTertiary: Color = Color(UIColor.tertiarySystemBackground)    /* color.surface.tertiary */
+// Color tokens
+let colorSurfacePrimary: Color = Color(DesignTokens.colorStructureSurfacePrimary)      /* color.structure.surface.primary */
+let colorSurfaceSecondary: Color = Color(DesignTokens.colorStructureSurfaceSecondary)  /* color.structure.surface.secondary */
+let colorSurfaceTertiary: Color = Color(DesignTokens.colorStructureSurfaceTertiary)    /* color.structure.surface.tertiary */
 let colorBorder: Color = Color(UIColor.separator)                     /* color.border.default */
 let colorBorderSubtle: Color = Color(UIColor.separator).opacity(0.5)  /* color.structure.border.subtle */
 

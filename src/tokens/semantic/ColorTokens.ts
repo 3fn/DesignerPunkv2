@@ -450,7 +450,31 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
     primitiveReferences: { value: 'white200' },
     category: SemanticCategory.COLOR,
     context: 'Surface color for cards and elevated containers',
-    description: 'Surface near-white for cards, containers, and elevated surfaces - provides visual hierarchy above canvas'
+    description: 'Surface near-white for cards, containers, and elevated surfaces - provides visual hierarchy above canvas. Alias for color.structure.surface.primary.'
+  },
+
+  'color.structure.surface.primary': {
+    name: 'color.structure.surface.primary',
+    primitiveReferences: { value: 'white200' },
+    category: SemanticCategory.COLOR,
+    context: 'Primary surface color for cards and elevated containers',
+    description: 'Primary surface near-white for cards - default elevation level, provides visual hierarchy above canvas'
+  },
+
+  'color.structure.surface.secondary': {
+    name: 'color.structure.surface.secondary',
+    primitiveReferences: { value: 'white300' },
+    category: SemanticCategory.COLOR,
+    context: 'Secondary surface color for nested cards or lower emphasis',
+    description: 'Secondary surface light gray-white for nested cards - secondary elevation level, provides subtle visual distinction from primary surface'
+  },
+
+  'color.structure.surface.tertiary': {
+    name: 'color.structure.surface.tertiary',
+    primitiveReferences: { value: 'white400' },
+    category: SemanticCategory.COLOR,
+    context: 'Tertiary surface color for deeply nested cards or lowest emphasis',
+    description: 'Tertiary surface medium gray-white for deeply nested cards - tertiary elevation level, provides clear visual distinction for deep nesting'
   },
 
   'color.structure.border': {
@@ -623,15 +647,23 @@ export function getAllColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'
  *   - color.feedback.notification.background (pink400)
  *   - color.feedback.notification.text (white100)
  * 
+ * Token changes (2026-02-21 - Surface elevation hierarchy):
+ * - Added 3 surface elevation tokens:
+ *   - color.structure.surface.primary (white200) - alias for existing color.structure.surface
+ *   - color.structure.surface.secondary (white300)
+ *   - color.structure.surface.tertiary (white400)
+ * - Kept color.structure.surface as alias for color.structure.surface.primary
+ * 
  * Previous count (Spec 058): 43 tokens
- * Current count (Spec 046): 45 tokens
+ * After Spec 046: 45 tokens
+ * Current count: 48 tokens
  * 
  * Remaining tokens breakdown:
  * - Feedback concept: 20 tokens (success/error/warning/info × text/background/border + select × 6 + notification × 2)
  * - Identity concept: 2 tokens (human, agent)
  * - Action concept: 2 tokens (primary, secondary)
  * - Contrast concept: 2 tokens (onLight, onDark)
- * - Structure concept: 4 tokens (canvas, surface, border, border.subtle)
+ * - Structure concept: 7 tokens (canvas, surface + surface.primary/secondary/tertiary, border, border.subtle)
  * - Attention/Highlight: 2 tokens
  * - Tech/Data: 2 tokens
  * - Text hierarchy: 3 tokens (default, muted, subtle)
@@ -639,10 +671,10 @@ export function getAllColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'
  * - Print: 1 token (default)
  * - Background: 1 token (primary.subtle)
  * - Glow: 5 tokens (neonPurple, neonCyan, neonYellow, neonGreen, neonPink)
- * Total: 45 tokens
+ * Total: 48 tokens
  */
 export function validateColorTokenCount(): boolean {
-  const expectedCount = 45;
+  const expectedCount = 48;
   const actualCount = colorTokenNames.length;
   if (actualCount !== expectedCount) {
     console.warn(`Color token count mismatch: expected ${expectedCount}, got ${actualCount}`);

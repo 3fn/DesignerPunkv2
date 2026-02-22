@@ -198,11 +198,11 @@ export class ContainerCardBaseWeb extends HTMLElement {
     
     // Fallback to default surface color
     if (!baseColor) {
-      baseColor = computedStyle.getPropertyValue('--color-surface-primary').trim();
+      baseColor = computedStyle.getPropertyValue('--color-structure-surface-primary').trim();
     }
     
     if (!baseColor) {
-      baseColor = computedStyle.getPropertyValue('--color-surface').trim();
+      baseColor = computedStyle.getPropertyValue('--color-structure-surface').trim();
     }
     
     if (!baseColor) {

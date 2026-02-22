@@ -6,7 +6,8 @@
   "tools": ["*"],
   "allowedTools": [
     "read",
-    "@designerpunk-docs"
+    "@designerpunk-docs",
+    "@figma-console-mcp"
   ],
   "toolsSettings": {
     "write": {

@@ -43,12 +43,6 @@ import com.designerpunk.tokens.DesignTokens
 
 // MARK: - Color Tokens (Semantic)
 
-/** Background color - color.background
- * Requirements: 1.1, 1.5
- */
-val DesignTokens.Companion.color_background: Int
-    get() = 0xFFFFFFFF.toInt()
-
 /** Default text color - color.text.default
  * Requirements: 1.1, 1.5
  */
@@ -262,10 +256,10 @@ data class VisualStateStyles(
         // MARK: - State-Specific Styles Using Design Tokens
         
         /** Rest state styles (Tap mode default)
-         * Requirements: 1.1 - color.background, borderDefault (1dp), color.text.default
+         * Requirements: 1.1 - color.structure.canvas, borderDefault (1dp), color.text.default
          */
         val rest = VisualStateStyles(
-            background = Color(DesignTokens.color_background),
+            background = Color(DesignTokens.color_structure_canvas),
             borderWidth = DesignTokens.border_border_default.dp,
             borderColor = Color.Transparent,
             labelColor = Color(DesignTokens.color_text_default),
@@ -316,11 +310,11 @@ data class VisualStateStyles(
         )
         
         /** Unchecked state styles (Multi-Select mode)
-         * Requirements: 1.5 - color.background, borderDefault (1dp),
+         * Requirements: 1.5 - color.structure.canvas, borderDefault (1dp),
          *               transparent border, color.text.default
          */
         val unchecked = VisualStateStyles(
-            background = Color(DesignTokens.color_background),
+            background = Color(DesignTokens.color_structure_canvas),
             borderWidth = DesignTokens.border_border_default.dp,
             borderColor = Color.Transparent,
             labelColor = Color(DesignTokens.color_text_default),

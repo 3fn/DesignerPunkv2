@@ -139,9 +139,9 @@ struct InputTextBase: View {
         } else if isSuccess {
             return Color(DesignTokens.colorFeedbackSuccessText)
         } else if isDisabled {
-            return Color(DesignTokens.color.primary).disabledBlend()
+            return Color(DesignTokens.colorActionPrimary).disabledBlend()
         } else if isFocused {
-            return Color(DesignTokens.color.primary).focusBlend()
+            return Color(DesignTokens.colorActionPrimary).focusBlend()
         } else {
             return Color(DesignTokens.color.text.muted)
         }
@@ -163,9 +163,9 @@ struct InputTextBase: View {
         } else if isSuccess {
             return Color(DesignTokens.colorFeedbackSuccessText)
         } else if isDisabled {
-            return Color(DesignTokens.color.primary).disabledBlend()
+            return Color(DesignTokens.colorActionPrimary).disabledBlend()
         } else if isFocused {
-            return Color(DesignTokens.color.primary).focusBlend()
+            return Color(DesignTokens.colorActionPrimary).focusBlend()
         } else {
             return Color(DesignTokens.color.border)
         }
@@ -381,7 +381,7 @@ struct InputTextBaseFieldStyle: TextFieldStyle {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: DesignTokens.radius150)
-                    .stroke(Color(DesignTokens.color.primary), lineWidth: DesignTokens.accessibility.focus.width)
+                    .stroke(Color(DesignTokens.colorActionPrimary), lineWidth: DesignTokens.accessibility.focus.width)
                     .padding(-DesignTokens.accessibility.focus.offset)
                     .opacity(isFocused && !isDisabled ? 1 : 0)
                     .animation(

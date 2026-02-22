@@ -62,7 +62,7 @@ import componentStyles from './ButtonVerticalListItem.styles.css';
  */
 const REQUIRED_CSS_VARIABLES = [
   // Color tokens
-  '--color-background',
+  '--color-structure-canvas',
   '--color-text-default',
   '--color-text-muted',
   '--color-feedback-select-text-rest',
@@ -367,10 +367,10 @@ export class ButtonVerticalListItem extends HTMLElement {
     
     // Get base background color from CSS custom properties
     // This is the color that hover/pressed states will be calculated from
-    const backgroundColor = computedStyle.getPropertyValue('--color-background').trim();
+    const backgroundColor = computedStyle.getPropertyValue('--color-structure-canvas').trim();
     
     if (!backgroundColor) {
-      throw new Error('Button-VerticalList-Item: Required token --color-background is missing from CSS custom properties');
+      throw new Error('Button-VerticalList-Item: Required token --color-structure-canvas is missing from CSS custom properties');
     }
     
     // Calculate blend colors using theme-aware blend utilities

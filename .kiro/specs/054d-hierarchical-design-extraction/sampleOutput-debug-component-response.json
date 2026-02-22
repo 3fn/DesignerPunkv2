@@ -1,0 +1,516 @@
+{
+  "name": "Progress/Pagination",
+  "description": null,
+  "variantProperties": {
+    "Property 1": [
+      "Sm",
+      "Md",
+      "Lg"
+    ]
+  },
+  "id": "1230:112",
+  "type": "COMPONENT_SET",
+  "descriptionMarkdown": null,
+  "visible": true,
+  "locked": false,
+  "annotations": [],
+  "isVariant": false,
+  "componentPropertyDefinitions": {
+    "Property 1": {
+      "type": "VARIANT",
+      "defaultValue": "Sm",
+      "variantOptions": [
+        "Sm",
+        "Md",
+        "Lg"
+      ]
+    }
+  },
+  "children": [
+    {
+      "id": "1230:99",
+      "name": "Property 1=Sm",
+      "type": "COMPONENT",
+      "absoluteBoundingBox": {
+        "x": 738,
+        "y": 268,
+        "width": 108,
+        "height": 28
+      },
+      "constraints": {
+        "vertical": "TOP",
+        "horizontal": "LEFT"
+      },
+      "layoutMode": "HORIZONTAL",
+      "primaryAxisAlignItems": "CENTER",
+      "counterAxisAlignItems": "CENTER",
+      "paddingLeft": 6,
+      "paddingRight": 6,
+      "paddingTop": 6,
+      "paddingBottom": 6,
+      "itemSpacing": 4,
+      "fills": [
+        {
+          "opacity": 0.800000011920929,
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 1
+          }
+        }
+      ],
+      "strokes": [],
+      "strokeWeight": 1,
+      "strokeAlign": "INSIDE",
+      "cornerRadius": 50,
+      "effects": [],
+      "blendMode": "PASS_THROUGH",
+      "children": [
+        {
+          "id": "1230:48",
+          "name": "Progress Indicator Primitive",
+          "type": "INSTANCE",
+          "absoluteBoundingBox": {
+            "x": 744,
+            "y": 274,
+            "width": 16,
+            "height": 16
+          },
+          "constraints": {
+            "vertical": "TOP",
+            "horizontal": "LEFT"
+          },
+          "layoutAlign": "INHERIT",
+          "layoutMode": "HORIZONTAL",
+          "primaryAxisAlignItems": "CENTER",
+          "counterAxisAlignItems": "CENTER",
+          "paddingLeft": 2,
+          "paddingRight": 2,
+          "paddingTop": 2,
+          "paddingBottom": 2,
+          "fills": [],
+          "strokes": [],
+          "strokeWeight": 1,
+          "strokeAlign": "INSIDE",
+          "effects": [],
+          "blendMode": "PASS_THROUGH",
+          "componentProperties": {
+            "Show Label#1231:0": {
+              "type": "BOOLEAN",
+              "value": false
+            },
+            "State": {
+              "value": "Incomplete",
+              "type": "VARIANT",
+              "boundVariables": {}
+            },
+            "Size": {
+              "value": "Sm",
+              "type": "VARIANT",
+              "boundVariables": {}
+            }
+          },
+          "componentId": "1229:9012",
+          "children": [
+            {
+              "id": "I1230:48;1230:41",
+              "name": "Node",
+              "type": "FRAME",
+              "absoluteBoundingBox": {
+                "x": 746,
+                "y": 276,
+                "width": 12,
+                "height": 12
+              },
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "layoutAlign": "INHERIT",
+              "fills": [
+                {
+                  "blendMode": "NORMAL",
+                  "type": "SOLID",
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1,
+                    "a": 1
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:1224:14083"
+                    }
+                  }
+                }
+              ],
+              "strokes": [],
+              "strokeWeight": 1,
+              "strokeAlign": "INSIDE",
+              "cornerRadius": 50,
+              "effects": [],
+              "blendMode": "PASS_THROUGH",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "1230:51",
+          "name": "Progress Indicator Primitive",
+          "type": "INSTANCE",
+          "absoluteBoundingBox": {
+            "x": 764,
+            "y": 274,
+            "width": 16,
+            "height": 16
+          },
+          "constraints": {
+            "vertical": "TOP",
+            "horizontal": "LEFT"
+          },
+          "layoutAlign": "INHERIT",
+          "layoutMode": "HORIZONTAL",
+          "primaryAxisAlignItems": "CENTER",
+          "counterAxisAlignItems": "CENTER",
+          "fills": [],
+          "strokes": [],
+          "strokeWeight": 1,
+          "strokeAlign": "INSIDE",
+          "effects": [],
+          "blendMode": "PASS_THROUGH",
+          "componentProperties": {
+            "Show Label#1231:0": {
+              "type": "BOOLEAN",
+              "value": false
+            },
+            "State": {
+              "value": "Current",
+              "type": "VARIANT",
+              "boundVariables": {}
+            },
+            "Size": {
+              "value": "Sm",
+              "type": "VARIANT",
+              "boundVariables": {}
+            }
+          },
+          "componentId": "1230:29",
+          "children": [
+            {
+              "id": "I1230:51;1230:42",
+              "name": "Node",
+              "type": "FRAME",
+              "absoluteBoundingBox": {
+                "x": 764,
+                "y": 274,
+                "width": 16,
+                "height": 16
+              },
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "layoutAlign": "INHERIT",
+              "fills": [
+                {
+                  "blendMode": "NORMAL",
+                  "type": "SOLID",
+                  "color": {
+                    "r": 0,
+                    "g": 0.9411764740943909,
+                    "b": 1,
+                    "a": 1
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:1224:14345"
+                    }
+                  }
+                }
+              ],
+              "strokes": [],
+              "strokeWeight": 1,
+              "strokeAlign": "INSIDE",
+              "cornerRadius": 50,
+              "effects": [],
+              "blendMode": "PASS_THROUGH",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "1230:53",
+          "name": "Progress Indicator Primitive",
+          "type": "INSTANCE",
+          "absoluteBoundingBox": {
+            "x": 784,
+            "y": 274,
+            "width": 16,
+            "height": 16
+          },
+          "constraints": {
+            "vertical": "TOP",
+            "horizontal": "LEFT"
+          },
+          "layoutAlign": "INHERIT",
+          "layoutMode": "HORIZONTAL",
+          "primaryAxisAlignItems": "CENTER",
+          "counterAxisAlignItems": "CENTER",
+          "paddingLeft": 2,
+          "paddingRight": 2,
+          "paddingTop": 2,
+          "paddingBottom": 2,
+          "fills": [],
+          "strokes": [],
+          "strokeWeight": 1,
+          "strokeAlign": "INSIDE",
+          "effects": [],
+          "blendMode": "PASS_THROUGH",
+          "componentProperties": {
+            "Show Label#1231:0": {
+              "type": "BOOLEAN",
+              "value": false
+            },
+            "State": {
+              "value": "Incomplete",
+              "type": "VARIANT",
+              "boundVariables": {}
+            },
+            "Size": {
+              "value": "Sm",
+              "type": "VARIANT",
+              "boundVariables": {}
+            }
+          },
+          "componentId": "1229:9012",
+          "children": [
+            {
+              "id": "I1230:53;1230:41",
+              "name": "Node",
+              "type": "FRAME",
+              "absoluteBoundingBox": {
+                "x": 786,
+                "y": 276,
+                "width": 12,
+                "height": 12
+              },
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "layoutAlign": "INHERIT",
+              "fills": [
+                {
+                  "blendMode": "NORMAL",
+                  "type": "SOLID",
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1,
+                    "a": 1
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:1224:14083"
+                    }
+                  }
+                }
+              ],
+              "strokes": [],
+              "strokeWeight": 1,
+              "strokeAlign": "INSIDE",
+              "cornerRadius": 50,
+              "effects": [],
+              "blendMode": "PASS_THROUGH",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "1230:55",
+          "name": "Progress Indicator Primitive",
+          "type": "INSTANCE",
+          "absoluteBoundingBox": {
+            "x": 804,
+            "y": 274,
+            "width": 16,
+            "height": 16
+          },
+          "constraints": {
+            "vertical": "TOP",
+            "horizontal": "LEFT"
+          },
+          "layoutAlign": "INHERIT",
+          "layoutMode": "HORIZONTAL",
+          "primaryAxisAlignItems": "CENTER",
+          "counterAxisAlignItems": "CENTER",
+          "paddingLeft": 2,
+          "paddingRight": 2,
+          "paddingTop": 2,
+          "paddingBottom": 2,
+          "fills": [],
+          "strokes": [],
+          "strokeWeight": 1,
+          "strokeAlign": "INSIDE",
+          "effects": [],
+          "blendMode": "PASS_THROUGH",
+          "componentProperties": {
+            "Show Label#1231:0": {
+              "type": "BOOLEAN",
+              "value": false
+            },
+            "State": {
+              "value": "Incomplete",
+              "type": "VARIANT",
+              "boundVariables": {}
+            },
+            "Size": {
+              "value": "Sm",
+              "type": "VARIANT",
+              "boundVariables": {}
+            }
+          },
+          "componentId": "1229:9012",
+          "children": [
+            {
+              "id": "I1230:55;1230:41",
+              "name": "Node",
+              "type": "FRAME",
+              "absoluteBoundingBox": {
+                "x": 806,
+                "y": 276,
+                "width": 12,
+                "height": 12
+              },
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "layoutAlign": "INHERIT",
+              "fills": [
+                {
+                  "blendMode": "NORMAL",
+                  "type": "SOLID",
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1,
+                    "a": 1
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:1224:14083"
+                    }
+                  }
+                }
+              ],
+              "strokes": [],
+              "strokeWeight": 1,
+              "strokeAlign": "INSIDE",
+              "cornerRadius": 50,
+              "effects": [],
+              "blendMode": "PASS_THROUGH",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "1230:57",
+          "name": "Progress Indicator Primitive",
+          "type": "INSTANCE",
+          "absoluteBoundingBox": {
+            "x": 824,
+            "y": 274,
+            "width": 16,
+            "height": 16
+          },
+          "constraints": {
+            "vertical": "TOP",
+            "horizontal": "LEFT"
+          },
+          "layoutAlign": "INHERIT",
+          "layoutMode": "HORIZONTAL",
+          "primaryAxisAlignItems": "CENTER",
+          "counterAxisAlignItems": "CENTER",
+          "paddingLeft": 2,
+          "paddingRight": 2,
+          "paddingTop": 2,
+          "paddingBottom": 2,
+          "fills": [],
+          "strokes": [],
+          "strokeWeight": 1,
+          "strokeAlign": "INSIDE",
+          "effects": [],
+          "blendMode": "PASS_THROUGH",
+          "componentProperties": {
+            "Show Label#1231:0": {
+              "type": "BOOLEAN",
+              "value": false
+            },
+            "State": {
+              "value": "Incomplete",
+              "type": "VARIANT",
+              "boundVariables": {}
+            },
+            "Size": {
+              "value": "Sm",
+              "type": "VARIANT",
+              "boundVariables": {}
+            }
+          },
+          "componentId": "1229:9012",
+          "children": [
+            {
+              "id": "I1230:57;1230:41",
+              "name": "Node",
+              "type": "FRAME",
+              "absoluteBoundingBox": {
+                "x": 826,
+                "y": 276,
+                "width": 12,
+                "height": 12
+              },
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "layoutAlign": "INHERIT",
+              "fills": [
+                {
+                  "blendMode": "NORMAL",
+                  "type": "SOLID",
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1,
+                    "a": 1
+                  },
+                  "boundVariables": {
+                    "color": {
+                      "type": "VARIABLE_ALIAS",
+                      "id": "VariableID:1224:14083"
+                    }
+                  }
+                }
+              ],
+              "strokes": [],
+              "strokeWeight": 1,
+              "strokeAlign": "INSIDE",
+              "cornerRadius": 50,
+              "effects": [],
+              "blendMode": "PASS_THROUGH",
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

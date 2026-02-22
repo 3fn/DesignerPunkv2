@@ -365,8 +365,8 @@ export class InputRadioBaseElement extends HTMLElement {
     const computedStyle = getComputedStyle(document.documentElement);
     
     // Get the default border color (unselected state)
-    // This is --color-select-not-selected-strong (color.feedback.select.border.default)
-    const defaultBorderColor = computedStyle.getPropertyValue('--color-select-not-selected-strong').trim();
+    // This is --color-feedback-select-border-default (color.feedback.select.border.default)
+    const defaultBorderColor = computedStyle.getPropertyValue('--color-feedback-select-border-default').trim();
     
     if (defaultBorderColor) {
       // Calculate hover border color using blend.hoverDarker (8% darker)

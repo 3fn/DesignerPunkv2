@@ -695,9 +695,9 @@ private val radius200: Dp = DesignTokens.radius_200 /* radius-200 */
 private val borderDefault: Dp = DesignTokens.border_default /* border.border.default */
 
 // Color tokens
-private val colorSurfacePrimary: Color = Color(DesignTokens.color_surface_primary) /* color.surface.primary */
-private val colorSurfaceSecondary: Color = Color(DesignTokens.color_surface_secondary) /* color.surface.secondary */
-private val colorSurfaceTertiary: Color = Color(DesignTokens.color_surface_tertiary) /* color.surface.tertiary */
+private val colorSurfacePrimary: Color = Color(DesignTokens.color_structure_surface_primary) /* color.structure.surface.primary */
+private val colorSurfaceSecondary: Color = Color(DesignTokens.color_structure_surface_secondary) /* color.structure.surface.secondary */
+private val colorSurfaceTertiary: Color = Color(DesignTokens.color_structure_surface_tertiary) /* color.structure.surface.tertiary */
 private val colorBorder: Color = Color(DesignTokens.color_border) /* color.border.default */
 private val colorBorderSubtle: Color = Color(DesignTokens.color_structure_border_subtle) /* color.structure.border.subtle */
 

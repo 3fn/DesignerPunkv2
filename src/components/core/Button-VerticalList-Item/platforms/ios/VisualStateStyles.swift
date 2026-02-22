@@ -162,9 +162,9 @@ public struct VisualStateStyles: Equatable {
     // MARK: - State-Specific Styles Using Design Tokens
     
     /// Rest state styles (Tap mode default)
-    /// Requirements: 1.1 - color.background, borderDefault (1px), color.text.default
+    /// Requirements: 1.1 - color.structure.canvas, borderDefault (1px), color.text.default
     public static let rest = VisualStateStyles(
-        background: Color(DesignTokens.colorBackground),
+        background: Color(DesignTokens.colorStructureCanvas),
         borderWidth: DesignTokens.borderBorderDefault,
         borderColor: .clear,
         labelColor: Color(DesignTokens.colorTextDefault),
@@ -209,10 +209,10 @@ public struct VisualStateStyles: Equatable {
     )
     
     /// Unchecked state styles (Multi-Select mode)
-    /// Requirements: 1.5 - color.background, borderDefault (1px),
+    /// Requirements: 1.5 - color.structure.canvas, borderDefault (1px),
     ///               transparent border, color.text.default
     public static let unchecked = VisualStateStyles(
-        background: Color(DesignTokens.colorBackground),
+        background: Color(DesignTokens.colorStructureCanvas),
         borderWidth: DesignTokens.borderBorderDefault,
         borderColor: .clear,
         labelColor: Color(DesignTokens.colorTextDefault),

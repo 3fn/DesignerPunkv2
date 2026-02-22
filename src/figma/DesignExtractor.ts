@@ -143,6 +143,19 @@ export interface ExtractedComponent {
   rawMetadata?: string;
   /** Which MCP source provided the primary data. */
   source: 'kiro-power' | 'console-mcp-fallback';
+  /**
+   * Direct variable bindings from Figma component children.
+   *
+   * Maps Figma property names (e.g. "paddingLeft", "itemSpacing", "cornerRadius")
+   * to their bound variable names (e.g. "space/100", "radius/200").
+   * Extracted from `boundVariables` on child nodes via Console MCP.
+   * Enables binding-first token translation without value scanning.
+   */
+  boundVariableMap?: Map<string, string>;
+  /** Corner radius value (px) extracted from component children. */
+  cornerRadius?: number;
+  /** Fill colors extracted from component children (hex or rgba). */
+  fills?: Array<{ type: string; color?: string; opacity?: number }>;
 }
 
 // ---------------------------------------------------------------------------
@@ -509,70 +522,448 @@ export class DesignExtractor {
   /**
    * Fallback component reading via get_metadata + figma_get_component.
    *
-   * Used when Kiro Power is unavailable or returns insufficient data.
+   * Primary extraction path when Kiro Power is unavailable (which is the
+   * common case). Extracts structured layout data, boundVariables, fills,
+   * and cornerRadius directly from the Console MCP component response.
    */
   private async readFigmaComponentFallback(
-    fileKey: string,
-    nodeId: string,
-  ): Promise<ExtractedComponent> {
-    // Try metadata from Kiro Power if available
-    let rawMetadata: string | undefined;
-    if (this.kiroPower) {
-      try {
-        const metadata = await this.kiroPower.getMetadata(fileKey, nodeId);
-        rawMetadata = metadata.xml;
-      } catch {
-        // Metadata unavailable — continue without it
+      fileKey: string,
+      nodeId: string,
+    ): Promise<ExtractedComponent> {
+      // Try metadata from Kiro Power if available
+      let rawMetadata: string | undefined;
+      if (this.kiroPower) {
+        try {
+          const metadata = await this.kiroPower.getMetadata(fileKey, nodeId);
+          rawMetadata = metadata.xml;
+        } catch {
+          // Metadata unavailable — continue without it
+        }
       }
+
+      // Get component data from figma-console-mcp
+      let componentData: FigmaComponentResponse;
+      try {
+        componentData = await this.consoleMcp.getComponent(fileKey, nodeId);
+      } catch (error) {
+        const msg = error instanceof Error ? error.message : String(error);
+        throw new Error(
+          `Failed to read Figma component (file: ${fileKey}, node: ${nodeId}): ${msg}`,
+        );
+      }
+
+      if (!componentData.name) {
+        throw new Error(
+          `Component not found or invalid node ID (file: ${fileKey}, node: ${nodeId})`,
+        );
+      }
+
+      // Build variants from variantProperties map
+      const variants: VariantDefinition[] = [];
+      if (componentData.variantProperties) {
+        const propEntries = Object.entries(componentData.variantProperties);
+        if (propEntries.length > 0) {
+          // Generate variant combinations from the first property's values
+          const [firstProp, firstValues] = propEntries[0];
+          for (const val of firstValues) {
+            variants.push({
+              name: `${firstProp}=${val}`,
+              properties: { [firstProp]: val },
+            });
+          }
+        }
+      }
+
+      // Extract component properties and states from children's componentProperties.
+      // Children of a COMPONENT_SET carry componentProperties like:
+      //   { "State": { value: "Incomplete", type: "VARIANT" },
+      //     "Size": { value: "Sm", type: "VARIANT" },
+      //     "Show Label#1231:0": { type: "BOOLEAN", value: false } }
+      const { properties, states: childStates } = this.extractChildComponentProperties(componentData);
+
+      // Extract states from metadata XML if available, merge with child states
+      const metadataStates = rawMetadata ? this.extractStatesFromMetadata(rawMetadata) : [];
+      const stateNames = new Set(metadataStates.map(s => s.name));
+      for (const cs of childStates) {
+        if (!stateNames.has(cs.name)) {
+          metadataStates.push(cs);
+          stateNames.add(cs.name);
+        }
+      }
+
+      // Extract structured layout data from component children
+      const { layout, boundVariableMap, cornerRadius, fills } =
+        this.extractLayoutFromComponentData(componentData);
+
+      return {
+        name: componentData.name,
+        description: componentData.description ?? '',
+        variants,
+        states: metadataStates,
+        properties,
+        layout,
+        boundVariableMap,
+        cornerRadius,
+        fills,
+        rawMetadata,
+        source: 'console-mcp-fallback',
+      };
     }
 
-    // Get component data from figma-console-mcp
-    let componentData: FigmaComponentResponse;
-    try {
-      componentData = await this.consoleMcp.getComponent(fileKey, nodeId);
-    } catch (error) {
-      const msg = error instanceof Error ? error.message : String(error);
-      throw new Error(
-        `Failed to read Figma component (file: ${fileKey}, node: ${nodeId}): ${msg}`,
-      );
-    }
+  /**
+   * Extract structured layout data from a Console MCP component response.
+   *
+   * Walks the component's children (variant instances in a component set)
+   * to extract padding, itemSpacing, cornerRadius, fills, and boundVariables.
+   * Uses the first child with layout data as the representative, since
+   * variant children typically share the same structural tokens.
+   *
+   * boundVariables entries use VARIABLE_ALIAS format:
+   *   { "paddingLeft": { "type": "VARIABLE_ALIAS", "id": "VariableID:..." } }
+   *
+   * We resolve variable IDs to names via the bindings loaded separately
+   * in readTokenBindings(). Here we store the raw property→variableId map
+   * and also extract any inline variable name references.
+   */
+  /**
+     * Extract structured layout data from a Console MCP component response.
+     *
+     * Walks the component's children recursively to extract padding,
+     * itemSpacing, cornerRadius, fills, and boundVariables. Uses the first
+     * child with layout data as the representative for spacing/layout, and
+     * collects boundVariables from all levels of the tree (since bindings
+     * often live on grandchildren — e.g. fill color bindings on inner frames).
+     *
+     * boundVariables entries use VARIABLE_ALIAS format:
+     *   { "paddingLeft": { "type": "VARIABLE_ALIAS", "id": "VariableID:..." } }
+     *
+     * Fill-level boundVariables are nested inside the fills array:
+     *   fills: [{ color: {...}, boundVariables: { color: { id: "..." } } }]
+     *
+     * We resolve variable IDs to names via the bindings loaded separately
+     * in readTokenBindings(). Here we store the raw property→variableId map.
+     */
+    private extractLayoutFromComponentData(
+      componentData: FigmaComponentResponse,
+    ): {
+      layout: ExtractedLayout;
+      boundVariableMap: Map<string, string>;
+      cornerRadius?: number;
+      fills?: Array<{ type: string; color?: string; opacity?: number }>;
+    } {
+      const boundVariableMap = new Map<string, string>();
+      let layout: ExtractedLayout = { mode: 'none' };
+      let cornerRadius: number | undefined;
+      let fills: Array<{ type: string; color?: string; opacity?: number }> | undefined;
 
-    if (!componentData.name) {
-      throw new Error(
-        `Component not found or invalid node ID (file: ${fileKey}, node: ${nodeId})`,
-      );
-    }
+      // The component data may be a component set (with children) or a single component.
+      // Try children first, then fall back to the component itself.
+      const raw = componentData as Record<string, unknown>;
+      const children = raw.children as Array<Record<string, unknown>> | undefined;
+      const nodesToInspect = children && children.length > 0
+        ? children
+        : [raw];
 
-    // Build variants from variantProperties map
-    const variants: VariantDefinition[] = [];
-    if (componentData.variantProperties) {
-      const propEntries = Object.entries(componentData.variantProperties);
-      if (propEntries.length > 0) {
-        // Generate variant combinations from the first property's values
-        const [firstProp, firstValues] = propEntries[0];
-        for (const val of firstValues) {
-          variants.push({
-            name: `${firstProp}=${val}`,
-            properties: { [firstProp]: val },
+      for (const node of nodesToInspect) {
+        // Extract layout mode from layoutMode field
+        const layoutMode = node.layoutMode as string | undefined;
+        if (layoutMode && layout.mode === 'none') {
+          if (layoutMode === 'HORIZONTAL') layout.mode = 'horizontal';
+          else if (layoutMode === 'VERTICAL') layout.mode = 'vertical';
+        }
+
+        // Extract spacing values — use first node that has them
+        const itemSpacing = node.itemSpacing as number | undefined;
+        if (itemSpacing != null && layout.itemSpacing == null) {
+          layout.itemSpacing = itemSpacing;
+        }
+
+        // Extract padding
+        const pTop = node.paddingTop as number | undefined;
+        const pRight = node.paddingRight as number | undefined;
+        const pBottom = node.paddingBottom as number | undefined;
+        const pLeft = node.paddingLeft as number | undefined;
+        if ((pTop != null || pRight != null || pBottom != null || pLeft != null) && !layout.padding) {
+          layout.padding = {
+            top: pTop,
+            right: pRight,
+            bottom: pBottom,
+            left: pLeft,
+          };
+        }
+
+        // Extract corner radius
+        const cr = node.cornerRadius as number | undefined;
+        if (cr != null && cornerRadius == null) {
+          cornerRadius = cr;
+        }
+
+        // Extract fills from this node (top-level fills for the component)
+        const nodeFills = node.fills as Array<Record<string, unknown>> | undefined;
+        if (nodeFills && nodeFills.length > 0 && !fills) {
+          fills = nodeFills.map((f) => {
+            const color = f.color as Record<string, number> | undefined;
+            let colorStr: string | undefined;
+            if (color) {
+              const r = Math.round((color.r ?? 0) * 255);
+              const g = Math.round((color.g ?? 0) * 255);
+              const b = Math.round((color.b ?? 0) * 255);
+              colorStr = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+            }
+            // Extract fill-level boundVariables (e.g. color bound to a variable)
+            const fillBoundVars = f.boundVariables as Record<string, unknown> | undefined;
+            if (fillBoundVars) {
+              this.extractBoundVariables(fillBoundVars, boundVariableMap);
+            }
+            return {
+              type: String(f.type ?? 'SOLID'),
+              color: colorStr,
+              opacity: f.opacity as number | undefined,
+            };
           });
+        }
+
+        // Extract node-level boundVariables (spacing, padding, radius bindings)
+        const boundVars = node.boundVariables as Record<string, unknown> | undefined;
+        if (boundVars) {
+          this.extractBoundVariables(boundVars, boundVariableMap);
+        }
+
+        // Stop scanning siblings once we have layout data (spacing/padding)
+        if (layout.mode !== 'none') break;
+      }
+
+      // Always walk the full tree for boundVariables and deep fills.
+      // boundVariables and color bindings often live on grandchildren
+      // (e.g. fill color bindings on inner frames within instance children).
+      // We collect ALL of them, not just the first match.
+      for (const node of nodesToInspect) {
+        this.collectBoundVariablesRecursive(node, boundVariableMap, 0, 4);
+      }
+
+      // Collect fills from deep children that have boundVariables on their
+      // fills — these represent designer-intentional color assignments that
+      // the top-level fills may not capture.
+      const deepFills = this.collectDeepFills(nodesToInspect);
+      if (deepFills.length > 0) {
+        // Merge deep fills with top-level fills, deduplicating by color value
+        const existingColors = new Set((fills ?? []).map(f => f.color));
+        for (const df of deepFills) {
+          if (df.color && !existingColors.has(df.color)) {
+            if (!fills) fills = [];
+            fills.push(df);
+            existingColors.add(df.color);
+          }
+        }
+      }
+
+      return { layout, boundVariableMap, cornerRadius, fills };
+    }
+
+    /**
+     * Extract component properties and visual states from children's
+     * componentProperties fields.
+     *
+     * Walks all children (and grandchildren) looking for `componentProperties`
+     * objects. Extracts:
+     * - VARIANT properties with value matching known state names → StateDefinition
+     * - VARIANT properties → PropertyDefinition (with type from variant options)
+     * - BOOLEAN properties → PropertyDefinition
+     *
+     * Deduplicates by property name (strips Figma hash suffixes like "#1231:0").
+     */
+    private extractChildComponentProperties(
+      componentData: FigmaComponentResponse,
+    ): { properties: PropertyDefinition[]; states: StateDefinition[] } {
+      const properties: PropertyDefinition[] = [];
+      const states: StateDefinition[] = [];
+      const seenProps = new Set<string>();
+      const seenStates = new Set<string>();
+
+      const stateKeywords = new Set([
+        'hover', 'focus', 'disabled', 'pressed', 'active', 'selected',
+        'error', 'loading', 'incomplete', 'complete', 'current',
+      ]);
+
+      const raw = componentData as Record<string, unknown>;
+      const children = raw.children as Array<Record<string, unknown>> | undefined;
+      if (!children) return { properties, states };
+
+      const walkNode = (node: Record<string, unknown>): void => {
+        const cp = node.componentProperties as
+          Record<string, { type: string; value: unknown; boundVariables?: unknown }> | undefined;
+
+        if (cp) {
+          for (const [rawName, def] of Object.entries(cp)) {
+            // Strip Figma hash suffix (e.g. "Show Label#1231:0" → "Show Label")
+            const cleanName = rawName.replace(/#[\d:]+$/, '').trim();
+            if (seenProps.has(cleanName)) continue;
+            seenProps.add(cleanName);
+
+            if (def.type === 'VARIANT') {
+              const value = String(def.value ?? '');
+
+              // Check if this variant value is a visual state
+              if (stateKeywords.has(value.toLowerCase()) && !seenStates.has(value.toLowerCase())) {
+                states.push({ name: value.toLowerCase() });
+                seenStates.add(value.toLowerCase());
+              }
+
+              properties.push({
+                name: cleanName,
+                type: 'variant',
+                defaultValue: value,
+              });
+            } else if (def.type === 'BOOLEAN') {
+              properties.push({
+                name: cleanName,
+                type: 'boolean',
+                defaultValue: String(def.value ?? 'false'),
+              });
+            }
+          }
+        }
+
+        // Recurse into children
+        const nodeChildren = node.children as Array<Record<string, unknown>> | undefined;
+        if (nodeChildren) {
+          for (const child of nodeChildren) {
+            walkNode(child);
+          }
+        }
+      };
+
+      for (const child of children) {
+        walkNode(child);
+      }
+
+      return { properties, states };
+    }
+
+
+
+    /**
+     * Extract boundVariables from a node's boundVariables object into the map.
+     */
+    private extractBoundVariables(
+      boundVars: Record<string, unknown>,
+      boundVariableMap: Map<string, string>,
+    ): void {
+      for (const [prop, binding] of Object.entries(boundVars)) {
+        if (!binding || typeof binding !== 'object') continue;
+
+        const bindingObj = binding as Record<string, unknown>;
+        const bindingEntries = Array.isArray(bindingObj) ? bindingObj : [bindingObj];
+
+        for (const entry of bindingEntries) {
+          const entryObj = entry as Record<string, unknown>;
+          const varId = entryObj.id as string | undefined;
+          if (varId && !boundVariableMap.has(prop)) {
+            boundVariableMap.set(prop, varId);
+          }
         }
       }
     }
 
-    // Extract states from metadata XML if available
-    const states = rawMetadata ? this.extractStatesFromMetadata(rawMetadata) : [];
+    /**
+     * Recursively walk a node tree to collect all boundVariables.
+     *
+     * Collects from node-level boundVariables and fill-level boundVariables
+     * on all descendants up to maxDepth.
+     */
+    private collectBoundVariablesRecursive(
+      node: Record<string, unknown>,
+      boundVariableMap: Map<string, string>,
+      depth: number,
+      maxDepth: number,
+    ): void {
+      if (depth > maxDepth) return;
 
-    return {
-      name: componentData.name,
-      description: componentData.description ?? '',
-      variants,
-      states,
-      properties: [],
-      layout: { mode: 'none' },
-      rawMetadata,
-      source: 'console-mcp-fallback',
-    };
-  }
+      // Node-level boundVariables
+      const boundVars = node.boundVariables as Record<string, unknown> | undefined;
+      if (boundVars) {
+        this.extractBoundVariables(boundVars, boundVariableMap);
+      }
+
+      // Fill-level boundVariables (color bindings inside fills array)
+      const nodeFills = node.fills as Array<Record<string, unknown>> | undefined;
+      if (nodeFills) {
+        for (const fill of nodeFills) {
+          const fillBoundVars = fill.boundVariables as Record<string, unknown> | undefined;
+          if (fillBoundVars) {
+            this.extractBoundVariables(fillBoundVars, boundVariableMap);
+          }
+        }
+      }
+
+      // Recurse into children
+      const children = node.children as Array<Record<string, unknown>> | undefined;
+      if (children) {
+        for (const child of children) {
+          this.collectBoundVariablesRecursive(child, boundVariableMap, depth + 1, maxDepth);
+        }
+      }
+    }
+
+    /**
+     * Collect fills from deep children that have boundVariables on their fills.
+     *
+     * These represent designer-intentional color assignments (variables bound
+     * to fill colors) that may differ from the parent component's fills.
+     * Returns deduplicated fills with their hex color values.
+     */
+    private collectDeepFills(
+      nodes: Array<Record<string, unknown>>,
+    ): Array<{ type: string; color?: string; opacity?: number }> {
+      const result: Array<{ type: string; color?: string; opacity?: number }> = [];
+      const seenColors = new Set<string>();
+
+      const walk = (node: Record<string, unknown>, depth: number): void => {
+        if (depth > 4) return;
+
+        const nodeFills = node.fills as Array<Record<string, unknown>> | undefined;
+        if (nodeFills) {
+          for (const fill of nodeFills) {
+            // Only collect fills that have boundVariables (designer intent)
+            const fillBv = fill.boundVariables as Record<string, unknown> | undefined;
+            if (!fillBv || Object.keys(fillBv).length === 0) continue;
+
+            const color = fill.color as Record<string, number> | undefined;
+            if (!color) continue;
+
+            const r = Math.round((color.r ?? 0) * 255);
+            const g = Math.round((color.g ?? 0) * 255);
+            const b = Math.round((color.b ?? 0) * 255);
+            const hex = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+
+            if (!seenColors.has(hex)) {
+              seenColors.add(hex);
+              result.push({
+                type: String(fill.type ?? 'SOLID'),
+                color: hex,
+                opacity: fill.opacity as number | undefined,
+              });
+            }
+          }
+        }
+
+        const children = node.children as Array<Record<string, unknown>> | undefined;
+        if (children) {
+          for (const child of children) {
+            walk(child, depth + 1);
+          }
+        }
+      };
+
+      for (const node of nodes) {
+        walk(node, 0);
+      }
+
+      return result;
+    }
+
+
+
 
   // -------------------------------------------------------------------------
   // Design context parsing helpers
@@ -923,6 +1314,14 @@ export class DesignExtractor {
       bindingMap.set(binding.variableName, binding);
     }
 
+    // Build variable ID → variable name lookup for resolving boundVariables
+    const nameById = new Map<string, string>();
+    for (const binding of bindings) {
+      if (binding.variableId) {
+        nameById.set(binding.variableId, binding.variableName);
+      }
+    }
+
     const usage: TokenUsage = {
       spacing: [],
       colors: [],
@@ -931,27 +1330,115 @@ export class DesignExtractor {
       shadows: [],
     };
 
-    // --- Spacing: layout.itemSpacing and layout.padding ---
-    const layout = component.layout;
+    // --- Direct boundVariable translation (highest confidence path) ---
+    // When Console MCP provides boundVariables from component children,
+    // we can resolve variable IDs directly to token names without value scanning.
+    const bvMap = component.boundVariableMap;
+    // Track which layout properties were resolved via boundVariables so we
+    // can fall through to value-based matching for the rest.
+    const resolvedByBinding = new Set<string>();
 
-    if (layout.itemSpacing != null) {
-      const ref = this.translateProperty(
-        'item-spacing', layout.itemSpacing, 'spacing', bindingMap,
-      );
-      usage.spacing.push(ref);
+    if (bvMap && bvMap.size > 0) {
+      // Mapping of Figma boundVariable property names to our categories
+      const spacingProps: Record<string, string> = {
+        paddingLeft: 'padding-left',
+        paddingRight: 'padding-right',
+        paddingTop: 'padding-top',
+        paddingBottom: 'padding-bottom',
+        itemSpacing: 'item-spacing',
+      };
+      const radiusProps: Record<string, string> = {
+        topLeftRadius: 'border-radius-top-left',
+        topRightRadius: 'border-radius-top-right',
+        bottomLeftRadius: 'border-radius-bottom-left',
+        bottomRightRadius: 'border-radius-bottom-right',
+        cornerRadius: 'border-radius',
+      };
+      const colorProps: Record<string, string> = {
+        color: 'fill',
+      };
+
+      for (const [figmaProp, varId] of bvMap) {
+        const varName = nameById.get(varId);
+        if (!varName) continue; // Variable ID not found in bindings
+
+        const cssProperty = spacingProps[figmaProp] ?? radiusProps[figmaProp] ?? colorProps[figmaProp];
+        if (!cssProperty) continue; // Unknown property — skip
+
+        let category: TokenCategory;
+        if (spacingProps[figmaProp]) category = 'spacing';
+        else if (radiusProps[figmaProp]) category = 'radius';
+        else category = 'color';
+
+        const result = this.translator.translate(varName, 0, category);
+
+        const ref: TokenReference = {
+          property: cssProperty,
+          token: result.token,
+          confidence: result.confidence,
+          matchMethod: 'binding',
+          primitive: result.primitive,
+          semantic: result.semantic,
+          delta: result.delta,
+          rawValue: result.rawValue,
+          suggestion: result.suggestion,
+        };
+
+        if (category === 'spacing') {
+          usage.spacing.push(ref);
+          resolvedByBinding.add(cssProperty);
+        } else if (category === 'radius') {
+          usage.radius.push(ref);
+          resolvedByBinding.add(cssProperty);
+        } else {
+          usage.colors.push(ref);
+        }
+      }
     }
 
-    if (layout.padding) {
-      const sides: Array<[string, number | undefined]> = [
-        ['padding-top', layout.padding.top],
-        ['padding-right', layout.padding.right],
-        ['padding-bottom', layout.padding.bottom],
-        ['padding-left', layout.padding.left],
-      ];
-      for (const [prop, value] of sides) {
-        if (value != null) {
-          usage.spacing.push(
-            this.translateProperty(prop, value, 'spacing', bindingMap),
+    // --- Layout-based spacing (fills gaps not covered by boundVariables) ---
+    // Always attempt layout-based translation for properties that weren't
+    // resolved via direct boundVariable binding above.
+    {
+      const layout = component.layout;
+
+      if (layout.itemSpacing != null && !resolvedByBinding.has('item-spacing')) {
+        const ref = this.translateProperty(
+          'item-spacing', layout.itemSpacing, 'spacing', bindingMap,
+        );
+        usage.spacing.push(ref);
+      }
+
+      if (layout.padding) {
+        const sides: Array<[string, number | undefined]> = [
+          ['padding-top', layout.padding.top],
+          ['padding-right', layout.padding.right],
+          ['padding-bottom', layout.padding.bottom],
+          ['padding-left', layout.padding.left],
+        ];
+        for (const [prop, value] of sides) {
+          if (value != null && !resolvedByBinding.has(prop)) {
+            usage.spacing.push(
+              this.translateProperty(prop, value, 'spacing', bindingMap),
+            );
+          }
+        }
+      }
+
+      // Corner radius from structured data (when not resolved via boundVariable)
+      if (component.cornerRadius != null && usage.radius.length === 0) {
+        usage.radius.push(
+          this.translateProperty('border-radius', component.cornerRadius, 'radius', bindingMap),
+        );
+      }
+    }
+
+    // --- Fills from structured data (when no rawDesignContext) ---
+    if (component.fills && component.fills.length > 0 && !component.rawDesignContext) {
+      for (const fill of component.fills) {
+        if (fill.color) {
+          usage.colors.push(
+            this.translateProperty('fill', fill.color, 'color', bindingMap),
           );
         }
       }
@@ -1814,6 +2301,99 @@ export class DesignExtractor {
   }
 
   /**
+   * Resolve variable IDs from boundVariableMap that aren't in the bindings.
+   *
+   * When `figma_get_token_values` (limit: 500) doesn't return all variables,
+   * some boundVariable IDs from the component tree won't resolve in the
+   * `nameById` lookup during `translateTokens`. This method uses
+   * `figma_execute` with Plugin API to batch-resolve those missing IDs,
+   * returning synthetic TokenBinding entries that can be appended to the
+   * bindings array.
+   *
+   * @param fileKey - The Figma file key.
+   * @param boundVariableMap - Property→variableId map from component extraction.
+   * @param existingBindings - Bindings already loaded from figma_get_token_values.
+   * @returns Additional TokenBinding entries for previously unresolved IDs.
+   */
+  async resolveUnknownVariableIds(
+    fileKey: string,
+    boundVariableMap: Map<string, string>,
+    existingBindings: TokenBinding[],
+  ): Promise<TokenBinding[]> {
+    if (!boundVariableMap || boundVariableMap.size === 0) return [];
+
+    // Build set of known variable IDs
+    const knownIds = new Set<string>();
+    for (const binding of existingBindings) {
+      if (binding.variableId) knownIds.add(binding.variableId);
+    }
+
+    // Collect unresolved IDs (deduplicated)
+    const unresolvedIds = new Set<string>();
+    for (const varId of boundVariableMap.values()) {
+      if (!knownIds.has(varId)) unresolvedIds.add(varId);
+    }
+
+    if (unresolvedIds.size === 0) return [];
+
+    // Batch-resolve via Plugin API
+    const idsArray = [...unresolvedIds];
+    const code = `
+      const results = {};
+      for (const id of ${JSON.stringify(idsArray)}) {
+        try {
+          const v = figma.variables.getVariableById(id);
+          if (v) {
+            results[id] = {
+              name: v.name,
+              resolvedType: v.resolvedType,
+              id: v.id,
+            };
+          }
+        } catch (e) {
+          // Variable not found — skip
+        }
+      }
+      return results;
+    `.trim();
+
+    try {
+      const result = await this.consoleMcp.execute(fileKey, code);
+
+      // Parse the result — may be wrapped in various formats
+      let resolved: Record<string, { name: string; resolvedType: string; id: string }> = {};
+      if (result && typeof result === 'object') {
+        // Handle { result: { ... } } wrapper from figma_execute
+        const raw = result as Record<string, unknown>;
+        const inner = raw.result ?? raw;
+        if (inner && typeof inner === 'object') {
+          resolved = inner as typeof resolved;
+        }
+      }
+
+      const additionalBindings: TokenBinding[] = [];
+      for (const [varId, info] of Object.entries(resolved)) {
+        if (!info?.name) continue;
+        additionalBindings.push({
+          variableName: info.name,
+          variableId: varId,
+          collectionName: this.inferCollectionFromName(info.name, false),
+          resolvedType: (info.resolvedType ?? 'FLOAT') as TokenBinding['resolvedType'],
+          valuesByMode: {},
+          isAlias: false,
+        });
+      }
+
+      return additionalBindings;
+    } catch {
+      // Plugin API resolution failed — return empty (value-based fallback still works)
+      return [];
+    }
+  }
+
+
+
+  /**
    * Check whether a mode value is an alias reference (not a resolved value).
    */
   private isAliasValue(value: unknown): boolean {
@@ -1861,6 +2441,20 @@ export class DesignExtractor {
       this.readTokenBindings(figmaFileKey),
       this.readStyles(figmaFileKey),
     ]);
+
+    // Step 3b: Resolve any boundVariable IDs not found in token bindings.
+    // figma_get_token_values (limit: 500) may not return all variables,
+    // so we use Plugin API to resolve missing IDs for binding-first translation.
+    if (component.boundVariableMap && component.boundVariableMap.size > 0) {
+      const additionalBindings = await this.resolveUnknownVariableIds(
+        figmaFileKey,
+        component.boundVariableMap,
+        bindings,
+      );
+      if (additionalBindings.length > 0) {
+        bindings.push(...additionalBindings);
+      }
+    }
 
     // Step 4: Query Component-Family and readiness context
     const context = await this.queryContext(component.name);

@@ -54,7 +54,7 @@ export interface VisualStateStyles {
  * design system.
  * 
  * Token Mapping (Spec 052 - Semantic Token Naming):
- * - color.background → --color-background
+ * - color.structure.canvas → --color-structure-canvas
  * - color.text.default → --color-text-default
  * - color.feedback.select.text.rest → --color-feedback-select-text-rest (foreground, selected)
  * - color.feedback.select.background.rest → --color-feedback-select-background-rest (background, selected)
