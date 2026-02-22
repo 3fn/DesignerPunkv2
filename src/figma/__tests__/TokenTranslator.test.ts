@@ -21,6 +21,7 @@ import {
   deltaE,
   TokenTranslator,
 } from '../TokenTranslator';
+import type { ClassificationSummary } from '../TokenTranslator';
 import type { DTCGTokenFile } from '../../generators/types/DTCGTypes';
 
 // ---------------------------------------------------------------------------
@@ -537,6 +538,220 @@ describe('TokenTranslator', () => {
 
     it('returns undefined for group path (not a leaf token)', () => {
       expect(translator.lookupToken('space')).toBeUndefined();
+    });
+  });
+
+  // -----------------------------------------------------------------------
+  // classifyTokenMatch (three-tier classification)
+  // -----------------------------------------------------------------------
+
+  describe('classifyTokenMatch', () => {
+    it('classifies as semantic when both semantic and primitive are present', () => {
+      const result = translator.translate('color/purple/purple/300', 'rgba(147, 51, 234, 1)', 'color');
+      // enrichResponse promotes semantic; result has both semantic + primitive
+      expect(result.semantic).toBe('color.primary');
+      expect(result.primitive).toBe('color.purple.purple300');
+      expect(translator.classifyTokenMatch(result)).toBe('semantic');
+    });
+
+    it('classifies as primitive when only primitive is present (no semantic alias)', () => {
+      const result = translator.translate('space/300', '24px', 'spacing');
+      // space.space300 has no semantic alias
+      expect(result.primitive).toBe('space.space300');
+      expect(result.semantic).toBeUndefined();
+      expect(translator.classifyTokenMatch(result)).toBe('primitive');
+    });
+
+    it('classifies as unidentified when confidence is no-match', () => {
+      const result = translator.translate(undefined, '100px', 'spacing');
+      expect(result.confidence).toBe('no-match');
+      expect(translator.classifyTokenMatch(result)).toBe('unidentified');
+    });
+
+    it('classifies approximate semantic match as semantic', () => {
+      // Slightly off color that still matches within ΔE < 3
+      const result = translator.translate(undefined, '#9535E8', 'color');
+      if (result.confidence !== 'no-match' && result.semantic) {
+        expect(translator.classifyTokenMatch(result)).toBe('semantic');
+      }
+    });
+
+    it('classifies approximate primitive match as primitive', () => {
+      // 25px is within ±2px of space300 (24px), no semantic alias for spacing
+      const result = translator.translate(undefined, '25px', 'spacing');
+      expect(result.confidence).toBe('approximate');
+      expect(result.primitive).toBeDefined();
+      expect(result.semantic).toBeUndefined();
+      expect(translator.classifyTokenMatch(result)).toBe('primitive');
+    });
+
+    it('classifies value-based semantic match as semantic', () => {
+      // Exact hex match for purple300 which has semantic alias color.primary
+      const result = translator.translate(undefined, '#9333EA', 'color');
+      expect(result.semantic).toBe('color.primary');
+      expect(translator.classifyTokenMatch(result)).toBe('semantic');
+    });
+
+    it('preserves existing confidence flags alongside classification', () => {
+      // Exact match
+      const exact = translator.translate('space/100', '8px', 'spacing');
+      expect(exact.confidence).toBe('exact');
+      expect(translator.classifyTokenMatch(exact)).toBe('primitive');
+
+      // Approximate match
+      const approx = translator.translate(undefined, '25px', 'spacing');
+      expect(approx.confidence).toBe('approximate');
+      expect(translator.classifyTokenMatch(approx)).toBe('primitive');
+
+      // No match
+      const noMatch = translator.translate(undefined, '100px', 'spacing');
+      expect(noMatch.confidence).toBe('no-match');
+      expect(translator.classifyTokenMatch(noMatch)).toBe('unidentified');
+    });
+
+    it('classifies radius match as primitive (no semantic aliases for radius)', () => {
+      const result = translator.translate(undefined, '4px', 'radius');
+      expect(result.confidence).toBe('exact');
+      expect(result.primitive).toBe('radius.radius100');
+      expect(result.semantic).toBeUndefined();
+      expect(translator.classifyTokenMatch(result)).toBe('primitive');
+    });
+
+    it('classifies typography match as primitive (no semantic aliases for fontSize)', () => {
+      const result = translator.translate(undefined, '14px', 'typography');
+      expect(result.confidence).toBe('exact');
+      expect(result.primitive).toBe('fontSize.fontSize200');
+      expect(result.semantic).toBeUndefined();
+      expect(translator.classifyTokenMatch(result)).toBe('primitive');
+    });
+  });
+
+  // -----------------------------------------------------------------------
+  // toClassifiedToken
+  // -----------------------------------------------------------------------
+
+  describe('toClassifiedToken', () => {
+    it('converts semantic result to ClassifiedToken with both token paths', () => {
+      const result = translator.translate('color/purple/purple/300', 'rgba(147, 51, 234, 1)', 'color');
+      const classified = translator.toClassifiedToken(result, 'fill');
+
+      expect(classified.property).toBe('fill');
+      expect(classified.semanticToken).toBe('color.primary');
+      expect(classified.primitiveToken).toBe('color.purple.purple300');
+      expect(classified.rawValue).toBe('rgba(147, 51, 234, 1)');
+      expect(classified.matchMethod).toBe('binding');
+      expect(classified.confidence).toBe('exact');
+      expect(classified.delta).toBeUndefined();
+    });
+
+    it('converts primitive result to ClassifiedToken without semantic', () => {
+      const result = translator.translate('space/300', '24px', 'spacing');
+      const classified = translator.toClassifiedToken(result, 'padding-top');
+
+      expect(classified.property).toBe('padding-top');
+      expect(classified.semanticToken).toBeUndefined();
+      expect(classified.primitiveToken).toBe('space.space300');
+      expect(classified.rawValue).toBe('24px');
+      expect(classified.matchMethod).toBe('binding');
+      expect(classified.confidence).toBe('exact');
+    });
+
+    it('includes delta for approximate matches', () => {
+      const result = translator.translate(undefined, '25px', 'spacing');
+      const classified = translator.toClassifiedToken(result, 'item-spacing');
+
+      expect(classified.confidence).toBe('approximate');
+      expect(classified.delta).toBeDefined();
+      expect(classified.delta).toMatch(/±?\d+px/);
+    });
+  });
+
+  // -----------------------------------------------------------------------
+  // toUnidentifiedValue
+  // -----------------------------------------------------------------------
+
+  describe('toUnidentifiedValue', () => {
+    it('creates UnidentifiedValue with out-of-tolerance reason', () => {
+      const result = translator.translate(undefined, '100px', 'spacing');
+      const unidentified = translator.toUnidentifiedValue(result, 'padding-top');
+
+      expect(unidentified.property).toBe('padding-top');
+      expect(unidentified.rawValue).toBe('100px');
+      expect(unidentified.reason).toBe('out-of-tolerance');
+      expect(unidentified.closestMatch).toBeDefined();
+      expect(unidentified.boundVariableId).toBeUndefined();
+    });
+
+    it('creates UnidentifiedValue with unresolved-binding reason when boundVariableId provided', () => {
+      const result = translator.translate(undefined, '100px', 'spacing');
+      const unidentified = translator.toUnidentifiedValue(result, 'fill', 'VariableID:1224:14083');
+
+      expect(unidentified.reason).toBe('unresolved-binding');
+      expect(unidentified.boundVariableId).toBe('VariableID:1224:14083');
+    });
+
+    it('creates UnidentifiedValue with no-token-match when no suggestion exists', () => {
+      // Unparseable color has no suggestion
+      const result = translator.translate(undefined, 'not-a-color', 'color');
+      const unidentified = translator.toUnidentifiedValue(result, 'fill');
+
+      expect(unidentified.reason).toBe('no-token-match');
+      expect(unidentified.closestMatch).toBeUndefined();
+    });
+
+    it('includes closest match info when suggestion available', () => {
+      const result = translator.translate(undefined, '100px', 'spacing');
+      const unidentified = translator.toUnidentifiedValue(result, 'width');
+
+      if (unidentified.closestMatch) {
+        expect(unidentified.closestMatch.token).toBeDefined();
+        expect(typeof unidentified.closestMatch.delta).toBe('string');
+      }
+    });
+  });
+
+  // -----------------------------------------------------------------------
+  // createClassificationSummary
+  // -----------------------------------------------------------------------
+
+  describe('createClassificationSummary', () => {
+    it('counts values in each tier', () => {
+      const semantic = [
+        translator.toClassifiedToken(
+          translator.translate('color/purple/purple/300', 'rgba(147, 51, 234, 1)', 'color'),
+          'fill',
+        ),
+      ];
+      const primitive = [
+        translator.toClassifiedToken(
+          translator.translate('space/300', '24px', 'spacing'),
+          'padding-top',
+        ),
+        translator.toClassifiedToken(
+          translator.translate('space/100', '8px', 'spacing'),
+          'padding-bottom',
+        ),
+      ];
+      const unidentified = [
+        translator.toUnidentifiedValue(
+          translator.translate(undefined, '100px', 'spacing'),
+          'width',
+        ),
+      ];
+
+      const summary = TokenTranslator.createClassificationSummary(semantic, primitive, unidentified);
+
+      expect(summary.semanticIdentified).toBe(1);
+      expect(summary.primitiveIdentified).toBe(2);
+      expect(summary.unidentified).toBe(1);
+    });
+
+    it('returns zeros for empty arrays', () => {
+      const summary = TokenTranslator.createClassificationSummary([], [], []);
+
+      expect(summary.semanticIdentified).toBe(0);
+      expect(summary.primitiveIdentified).toBe(0);
+      expect(summary.unidentified).toBe(0);
     });
   });
 });

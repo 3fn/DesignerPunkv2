@@ -7,36 +7,130 @@
 
 ---
 
-## Problem Statement
+## Current State
 
-The Figma design extraction pipeline currently produces a "design-outline" — a flat, single-component document that maps one Figma node to one output. This works for leaf components but breaks down for composed components and multi-component specs.
+The Figma design extraction pipeline (Spec 054b) reads Figma components and auto-generates `design-outline.md` documents with:
 
-The core issues:
+- Token translation via `TokenTranslator` (binding-first, value-fallback matching)
+- Variant mapping recommendations via `VariantAnalyzer` (Option A vs B with rationale)
+- Component token suggestions via `detectComponentTokenDecisions` (illustrative suggestions for repeated primitive usage)
+- Behavioral contract detection (interactive vs static classification)
+- Platform parity detection (web-only interaction flags)
+- Mode validation (light/dark discrepancy detection)
+- Confidence flags (✅ exact, ⚠️ approximate, ❌ no-match)
 
-1. **Single-component scope**: The pipeline extracts one Figma node at a time. A spec that covers Progress/Pagination, Progress Indicator Primitive, and Connector has no way to capture all three in a unified analysis.
+**What works:**
+- The extraction pipeline already gets hierarchical node tree data from Figma (COMPONENT_SET → COMPONENT → INSTANCE → FRAME with all properties, bindings, and fills at every depth)
+- Token translation with confidence flags is solid
+- Variant analysis with Component-Family doc queries provides valuable context
 
-2. **Flat token output**: Token matches are dumped into a flat table with no indication of which node they belong to. A composed component's parent spacing, child spacing, and grandchild color bindings all land in the same undifferentiated list.
-
-3. **No classification of extracted data**: Every token match is treated equally. There's no distinction between "this is a known semantic token," "this matched a primitive but has no semantic," and "we couldn't identify this at all."
-
-4. **Design-outline conflates extraction with specification**: The current design-outline tries to be both "what did Figma tell us" and "what should we build." These are different concerns that should be separated.
+**What's broken:**
+- The design-outline output is **flat** — token matches lose node context (which node did this token come from?)
+- The design-outline is **auto-generated** — it conflates extraction (what Figma has) with specification (what code should be)
+- The design-outline is **single-component** — composed components with multiple child instances can't be analyzed together
+- Recommendations are **mixed with data** — variant mapping suggestions and component token ideas are presented alongside raw extraction data, creating confirmation bias risk
 
 ---
 
-## Proposed Change: From Design-Outline to Component Analysis
+## Problem Statement
+
+The core issues:
+
+1. **Flat token output loses node context**: Token matches are dumped into a flat table with no indication of which node they belong to. A composed component's parent spacing, child spacing, and grandchild color bindings all land in the same undifferentiated list.
+
+2. **No classification of extracted data**: Every token match is treated equally. There's no distinction between "this is a known semantic token," "this matched a primitive but has no semantic," and "we couldn't identify this at all."
+
+3. **Design-outline conflates extraction with specification**: The current auto-generated design-outline tries to be both "what did Figma tell us" and "what should we build." These are different concerns that should be separated.
+
+4. **Single-component scope**: The pipeline extracts one Figma node at a time. A spec that covers Progress/Pagination, Progress Indicator Primitive, and Connector has no way to capture all three in a unified analysis.
+
+5. **Figma structure ≠ code structure**: The extraction assumes Figma component structure maps to optimal code structure, but designers often structure components for visual convenience, not code architecture. Recommendations based on Figma structure can create confirmation bias.
+
+---
+
+## Proposed Change: Component Analysis as Descriptive Artifact
 
 ### The Concept
 
-Introduce a **component analysis** as an intermediate artifact between Figma extraction and the design-outline. The component analysis is purely descriptive — it captures what was found, categorized by identification confidence. The design-outline remains the human-authored specification artifact, now informed by one or more component analyses.
+Introduce a **component analysis** as a purely descriptive artifact that replaces the auto-generated design-outline. The component analysis captures what was found in Figma, categorized by identification confidence, with hierarchical node context preserved.
+
+**The design-outline becomes a human-authored specification document** created AFTER reviewing one or more component analyses. It's no longer auto-generated.
 
 ### Information Flow
 
 ```
-Current:  Figma Node → Design-Outline → Spec
-Proposed: Figma Node(s) → Component Analysis (per component) → Review → Design-Outline → Spec
+Current:  Figma Node → Auto-Generated Design-Outline (conflates extraction + specification)
+
+Proposed: Figma Node(s) → Component Analysis (descriptive, per component)
+                        ↓
+          Human/AI Review (Ada, Lina, Thurgood validate recommendations)
+                        ↓
+          Human-Authored Design-Outline (prescriptive, synthesis)
 ```
 
-The key shift: a design-outline can be informed by multiple component analyses. A Progress/Pagination spec would have analyses for the Pagination container, the Progress Indicator Primitive, and potentially the Connector — all feeding into one design-outline.
+**Key distinction:** The component analysis says "here's what Figma has." The design-outline says "here's what we're building."
+
+### What Gets Deprecated
+
+- `generateDesignOutlineMarkdown()` method and auto-generation logic
+- Auto-generated behavioral contract text ("No interaction — static display component")
+- Platform parity prescriptive recommendations ("use touch-based alternative")
+
+### What Gets Preserved (with Validation Requirements)
+
+The following recommendations stay in the component analysis but are explicitly framed as **validation-required**:
+
+- **Variant mapping recommendations** (Option A vs B with rationale, conflict detection)
+- **Component token suggestions** (illustrative suggestions for repeated primitive usage)
+- **Mode validation** (light/dark discrepancy detection)
+- **Platform parity detection** (which interactions exist, which platforms support them)
+- **Component screenshots** (visual reference via `figma_get_component_image`)
+
+All recommendations include:
+- Prominent disclaimers that Figma structure ≠ optimal code structure
+- Validation prompts requiring domain specialist review
+- Explicit warnings against confirmation bias
+
+Component screenshots are captured at 2x scale and stored in `analysis/images/` with URLs embedded in the Markdown analysis for visual reference during review.
+
+---
+
+## Analysis Limitations and Validation Requirements
+
+### Critical Disclaimer
+
+**This analysis is based on Figma component structure as designed. The optimal code structure may differ.**
+
+Figma structure reflects how designers organized components for visual convenience and design system consistency. Code structure reflects how developers implement components for optimal API surface, composition patterns, and use case coverage.
+
+**Common divergences:**
+
+| Figma Shows | Code Might Need |
+|-------------|-----------------|
+| 3 size variants (Sm, Md, Lg) | A `size` prop accepting any token value |
+| 5 child INSTANCE nodes composed by designer | A `steps` prop with parent managing composition |
+| Separate variants for each state | A single component with `state` prop |
+| Repeated primitive token usage | Consolidated semantic or component token |
+| Flat property structure | Nested prop groups for related values |
+
+### Validation Requirements
+
+**All recommendations require validation by domain specialists without confirmation bias:**
+
+- **Ada (Token Governance)**: Validate token classifications, evaluate component token suggestions, confirm semantic vs primitive decisions
+- **Lina (Component Architecture)**: Validate variant mapping recommendations, evaluate composition patterns, confirm behavioral contracts
+- **Thurgood (Spec Quality)**: Validate completeness, testability, cross-platform considerations
+
+**Do not accept recommendations without critical review.** The analysis surfaces patterns in the Figma design; it does not prescribe the optimal implementation.
+
+### Validation Questions to Ask
+
+**For every recommendation:**
+- Does the Figma structure match the intended code API?
+- Are there use cases the Figma design doesn't cover?
+- Should code support combinations or variations not shown in Figma?
+- Is the recommendation based on designer convenience or code architecture?
+- What are the counter-arguments against this recommendation?
 
 ---
 
@@ -45,14 +139,14 @@ The key shift: a design-outline can be informed by multiple component analyses. 
 Every extracted detail falls into one of three categories:
 
 ### Semantic Identified
-Token matches where both the semantic token and its primitive reference are known and confirmed.
+Token and component matches where both the semantic and primitive references are known and confirmed.
 
 Example: `padding-top` → `semanticSpace.inset.075` (primitive: `space.space075`) ✅
 
 These are ready to use. No human intervention needed unless the semantic mapping is wrong for the context.
 
 ### Primitive Identified
-Token matches where a primitive token was found but no semantic token exists or the semantic mapping is uncertain.
+Token and component matches where a primitive reference was found but no semantic token exists or the semantic mapping is uncertain.
 
 Example: Child `padding` = 2 → matches `space.space025` but no semantic token covers "child instance inset padding."
 
@@ -62,7 +156,7 @@ These are opportunities. A primitive match with no semantic could indicate:
 - A candidate for a new component token
 
 ### Unidentified
-Values extracted from Figma that couldn't be matched to any known token — primitive or semantic.
+Values extracted from Figma that couldn't be matched to any known token or component — primitive or semantic.
 
 Example: `boundVariable: VariableID:1224:14083` that isn't in the token values response and can't be resolved via Plugin API.
 
@@ -140,23 +234,37 @@ Each node carries its own token classification. The tree structure shows composi
 
 ## What This Changes in the Pipeline
 
-### New: Component Analysis Output
+### New: Component Analysis Output (Replaces Auto-Generated Design-Outline)
 
-The extraction pipeline produces a `ComponentAnalysis` instead of (or in addition to) a `DesignOutline`. The analysis contains:
+The extraction pipeline produces a `ComponentAnalysis` artifact containing:
 
 - **Component identity**: Name, type, Figma ID, variant definitions
 - **Node tree**: Hierarchical structure with token usage per node
-- **Three-tier classification**: Every extracted value categorized as Semantic, Primitive, or Unidentified
+- **Three-tier classification**: Every extracted value categorized as Semantic Identified, Primitive Identified, or Unidentified
 - **Composition patterns**: Grouped repeated instances with property variations
 - **Unresolved bindings**: List of Figma variable IDs that couldn't be resolved
+- **Validation-required recommendations**: Variant mapping, component token suggestions, mode validation, platform parity detection (all with disclaimers)
 
-### Changed: Design-Outline Becomes a Synthesis
+### Deprecated: Auto-Generated Design-Outline
 
-The design-outline is no longer auto-generated from a single extraction. It's authored (by human or AI) using one or more component analyses as input. The design-outline retains its current sections (variants, states, token usage, accessibility, contracts) but is now informed by richer, multi-component data.
+The following are removed from the extraction pipeline:
 
-### Preserved: Existing Flat Output
+- `generateDesignOutlineMarkdown()` method
+- Auto-generated behavioral contract text
+- Platform parity prescriptive recommendations
+- Any logic that tries to prescribe code structure from Figma structure
 
-For backward compatibility, the existing flat `TokenUsage` and `DesignOutline` interfaces remain. Simple leaf components that don't need the full analysis can still use the current pipeline. The component analysis is an addition, not a replacement.
+### Changed: Design-Outline Becomes Human-Authored
+
+The design-outline is **no longer auto-generated**. It's authored by humans (with AI assistance) AFTER reviewing component analyses.
+
+**Workflow:**
+1. Generate component analysis for each Figma component in scope
+2. Ada, Lina, Thurgood review analyses and validate recommendations
+3. Collaboratively author design-outline synthesizing findings
+4. Design-outline proceeds to requirements.md, design.md, tasks.md per existing spec planning workflow
+
+The design-outline retains its current sections (variants, states, token usage, accessibility, contracts) but is now informed by validated analysis data rather than being mechanically generated.
 
 ---
 
@@ -200,20 +308,24 @@ Component analyses live in `.kiro/specs/[spec-name]/analysis/`, paralleling the 
 │   ├── progress-pagination-analysis.json
 │   ├── progress-pagination-analysis.md
 │   ├── progress-indicator-primitive-analysis.json
-│   └── progress-indicator-primitive-analysis.md
+│   ├── progress-indicator-primitive-analysis.md
+│   └── images/
+│       ├── progress-pagination-sm.png
+│       ├── progress-pagination-md.png
+│       └── progress-indicator-primitive-incomplete.png
 └── completion/
     └── ...
 ```
 
-Each component in scope gets its own JSON + Markdown pair. Discoverable, consistent with existing organization patterns.
+Each component in scope gets its own JSON + Markdown pair. Component screenshots are stored in `analysis/images/` and embedded in the Markdown analysis. Discoverable, consistent with existing organization patterns.
 
-### 3. Automation Boundary: Human-AI Collaborative
+### 3. Automation Boundary: Extraction is Mechanical, Synthesis is Collaborative
 
-- **Fully automated**: Figma extraction → JSON data → three-tier classification → composition detection
-- **AI-assisted, human-directed**: Markdown analysis generation, design-outline drafting, scope recommendations
-- **Human-owned**: Final design-outline decisions, semantic token creation decisions, scope confirmation
+- **Fully automated**: Figma extraction → JSON data → three-tier classification → composition detection → dual output generation
+- **Validation-required**: Recommendations (variant mapping, component token suggestions) presented with disclaimers and validation prompts
+- **Human-owned**: Design-outline authoring, semantic token creation decisions, component architecture decisions, scope confirmation
 
-The extraction and classification is mechanical. The synthesis into a design-outline is where human judgment and AI collaboration meet — Ada and Lina can help draft, but Peter makes the calls on what matters and what doesn't.
+The extraction and classification is mechanical. The synthesis into a design-outline is where human judgment and AI collaboration meet — Ada, Lina, and Thurgood review the analysis, validate recommendations, and collaboratively author the design-outline.
 
 ### 4. Scope Declaration: Human-Driven with Analysis-Surfaced Dependencies
 
@@ -231,13 +343,55 @@ This keeps scope declaration lightweight and organic rather than requiring upfro
 
 ---
 
-## What Needs to Change (Summary)
+## What Needs to Change (Implementation Scope)
 
-1. **New data model**: `ComponentAnalysis` type with hierarchical node tree, three-tier classification, and composition patterns
-2. **Extraction pipeline update**: Walk the full Figma node tree, classify each extracted value, preserve node context
-3. **Bound variable resolution**: Batch-resolve unknown variable IDs, classify failures as Unidentified
-4. **Analysis output**: Generate component analysis documents (format TBD)
-5. **Design-outline evolution**: Update the design-outline to reference component analyses rather than being the direct extraction output
-6. **Multi-component support**: Allow specs to declare multiple components in scope, each with its own analysis
+This is a **medium-sized refactor** focused on output format and classification, not a rewrite of the extraction pipeline.
+
+**What stays the same:**
+- Extraction pipeline (DesignExtractor, TokenTranslator, VariantAnalyzer)
+- Token translation logic (binding-first, value-fallback matching)
+- Confidence flags (✅ exact, ⚠️ approximate, ❌ no-match)
+- Tolerance rules for approximate matches
+- Component-Family doc queries for context
+
+**What changes:**
+
+1. **Add three-tier classification** to TokenTranslator
+   - Classify each match as Semantic Identified, Primitive Identified, or Unidentified
+   - Semantic Identified: both semantic and primitive tokens confirmed
+   - Primitive Identified: primitive token matched, no semantic exists or uncertain
+   - Unidentified: no token match found
+
+2. **Add boundVariable resolution**
+   - Batch-resolve unknown variable IDs via figma-console-mcp
+   - Classify resolution failures as Unidentified
+   - Associate resolved/unresolved bindings with node context
+
+3. **Add composition pattern detection**
+   - Group repeated INSTANCE children by component name
+   - Detect property variations within groups
+   - Surface composition patterns at every tree level
+
+4. **Build ComponentAnalysis data structure**
+   - Hierarchical node tree with classifications per node
+   - Variant definitions, composition patterns, unresolved bindings
+   - Validation-required recommendations with disclaimers
+
+5. **Build dual output generators**
+   - JSON output: structured data (authoritative source of truth)
+   - Markdown output: human-readable with tier indicators, validation prompts
+
+6. **Deprecate design-outline auto-generation**
+   - Remove `generateDesignOutlineMarkdown()` method
+   - Remove auto-generated behavioral contract text
+   - Remove platform parity prescriptive recommendations
+
+7. **Update CLI and workflow**
+   - `figma:extract` generates component analysis (JSON + Markdown)
+   - Capture component screenshots via `figma_get_component_image` (2x scale PNG)
+   - Store screenshots in `.kiro/specs/[spec-name]/analysis/images/`
+   - Embed screenshot URLs in Markdown analysis
+   - Design-outline is authored separately after analysis review
+   - Multi-component specs generate multiple analyses in `.kiro/specs/[spec-name]/analysis/`
 
 This is the scope for spec 054d.

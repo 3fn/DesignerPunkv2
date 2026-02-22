@@ -10,6 +10,12 @@
  */
 
 import type { DTCGTokenFile, DTCGToken, DTCGGroup } from '../generators/types/DTCGTypes';
+import type {
+  ClassificationTier,
+  ClassifiedToken,
+  UnidentifiedValue,
+  UnidentifiedReason,
+} from './ComponentAnalysis';
 
 // Re-export for consumers that need the type alongside TokenTranslator
 export type { DTCGTokenFile };
@@ -39,6 +45,16 @@ export interface TranslationResult {
   suggestion?: string;
   /** Difference from matched token value (e.g., "±1px", "ΔE 2.1") */
   delta?: string;
+}
+
+/**
+ * Aggregate counts of classified values across all three tiers.
+ * @requirements Req 1 (AC 5)
+ */
+export interface ClassificationSummary {
+  semanticIdentified: number;
+  primitiveIdentified: number;
+  unidentified: number;
 }
 
 /**
@@ -738,6 +754,113 @@ export class TokenTranslator {
       rawValue: rawStr,
       suggestion: valueResult.suggestion,
       delta: valueResult.delta,
+    };
+  }
+
+  /**
+   * Classify an enriched TranslationResult into one of three tiers:
+   * - **semantic**: Both semantic and primitive references confirmed
+   * - **primitive**: Primitive reference found but no semantic exists
+   * - **unidentified**: No token match found within tolerance
+   *
+   * Must be called on an enriched result (after `enrichResponse()`).
+   *
+   * @requirements Req 1 (AC 1–4)
+   * @spec 054d-hierarchical-design-extraction
+   */
+  classifyTokenMatch(result: TranslationResult): ClassificationTier {
+    // AC 4: No match → unidentified
+    if (result.confidence === 'no-match') {
+      return 'unidentified';
+    }
+
+    // AC 2: Has semantic token reference → semantic
+    if (result.semantic) {
+      return 'semantic';
+    }
+
+    // AC 3: Has primitive but no semantic → primitive
+    if (result.primitive) {
+      return 'primitive';
+    }
+
+    // Fallback: matched token but no primitive/semantic resolved
+    // (shouldn't happen after enrichResponse, but defensive)
+    return 'unidentified';
+  }
+
+  /**
+   * Convert an enriched TranslationResult to a ClassifiedToken.
+   * Only valid for results classified as 'semantic' or 'primitive'.
+   *
+   * @param result - Enriched translation result
+   * @param property - CSS/Figma property name (e.g. 'padding-top', 'fill')
+   * @returns ClassifiedToken with tier-appropriate fields
+   *
+   * @requirements Req 1 (AC 6)
+   * @spec 054d-hierarchical-design-extraction
+   */
+  toClassifiedToken(result: TranslationResult, property: string): ClassifiedToken {
+    return {
+      property,
+      semanticToken: result.semantic,
+      primitiveToken: result.primitive ?? result.token,
+      rawValue: result.rawValue,
+      matchMethod: result.matchMethod,
+      confidence: result.confidence as 'exact' | 'approximate',
+      delta: result.delta,
+    };
+  }
+
+  /**
+   * Convert an enriched TranslationResult to an UnidentifiedValue.
+   * Only valid for results classified as 'unidentified'.
+   *
+   * @param result - Translation result with no-match confidence
+   * @param property - CSS/Figma property name
+   * @param boundVariableId - Optional Figma variable ID if this was a binding
+   * @returns UnidentifiedValue with reason and closest match info
+   *
+   * @requirements Req 1 (AC 6)
+   * @spec 054d-hierarchical-design-extraction
+   */
+  toUnidentifiedValue(
+    result: TranslationResult,
+    property: string,
+    boundVariableId?: string,
+  ): UnidentifiedValue {
+    const reason: UnidentifiedReason = boundVariableId
+      ? 'unresolved-binding'
+      : result.delta
+        ? 'out-of-tolerance'
+        : 'no-token-match';
+
+    return {
+      property,
+      rawValue: result.rawValue,
+      reason,
+      closestMatch: result.suggestion
+        ? { token: result.suggestion, delta: result.delta ?? '' }
+        : undefined,
+      boundVariableId,
+    };
+  }
+
+  /**
+   * Create a ClassificationSummary from arrays of classified results.
+   *
+   * @requirements Req 1 (AC 5)
+   * @spec 054d-hierarchical-design-extraction
+   */
+  static createClassificationSummary(
+    semanticIdentified: ClassifiedToken[],
+    primitiveIdentified: ClassifiedToken[],
+    unidentified: UnidentifiedValue[],
+  ): ClassificationSummary {
+    return {
+      semanticIdentified: semanticIdentified.length,
+      primitiveIdentified: primitiveIdentified.length,
+      unidentified: unidentified.length,
     };
   }
 }

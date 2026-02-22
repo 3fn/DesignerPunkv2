@@ -30,6 +30,9 @@ const mockConnect = jest.fn().mockResolvedValue(undefined);
 const mockDisconnect = jest.fn().mockResolvedValue(undefined);
 const mockGetVariables = jest.fn().mockResolvedValue([]);
 const mockGetStyles = jest.fn().mockResolvedValue([]);
+const mockGetStatus = jest.fn().mockResolvedValue({
+  transport: { websocket: { available: true } },
+});
 const mockGetComponent = jest.fn().mockResolvedValue({
   name: 'ButtonCTA',
   description: 'A call-to-action button',
@@ -41,6 +44,7 @@ jest.mock('../../figma/ConsoleMCPClientImpl', () => ({
     disconnect: mockDisconnect,
     getVariables: mockGetVariables,
     getStyles: mockGetStyles,
+    getStatus: mockGetStatus,
     getComponent: mockGetComponent,
   })),
 }));
@@ -262,8 +266,8 @@ describe('figma-extract CLI', () => {
 
     it('writes design-outline.md to default output path', async () => {
       await expect(run(['--file', 'key1', '--node', 'n1'])).rejects.toThrow('process.exit called');
-      // writeFileSync called with a resolved path containing design-outline.md
-      const writtenPath = mockWriteFileSync.mock.calls[0][0] as string;
+      // writeFileSync called twice: [0] debug file, [1] design-outline.md
+      const writtenPath = mockWriteFileSync.mock.calls[1][0] as string;
       expect(writtenPath).toContain('design-outline.md');
     });
 
@@ -271,7 +275,8 @@ describe('figma-extract CLI', () => {
       await expect(
         run(['--file', 'key1', '--node', 'n1', '--output', '/tmp/custom-outline.md']),
       ).rejects.toThrow('process.exit called');
-      const writtenPath = mockWriteFileSync.mock.calls[0][0] as string;
+      // writeFileSync called twice: [0] debug file, [1] custom output
+      const writtenPath = mockWriteFileSync.mock.calls[1][0] as string;
       expect(writtenPath).toContain('custom-outline.md');
     });
 

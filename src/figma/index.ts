@@ -27,7 +27,7 @@ export { formatDriftReport, formatPartialFailure, formatValue } from './error-re
 export type { PartialFailureInfo } from './error-reporting';
 
 export { TokenTranslator, figmaNameToTokenPath } from './TokenTranslator';
-export type { TranslationResult, TokenCategory } from './TokenTranslator';
+export type { TranslationResult, TokenCategory, ClassificationSummary } from './TokenTranslator';
 export { parseRgba, parseHex, rgbToLab, deltaE } from './TokenTranslator';
 
 export { VariantAnalyzer } from './VariantAnalyzer';
@@ -45,6 +45,7 @@ export type {
 
 export { DesignExtractor } from './DesignExtractor';
 export type {
+  BoundVariableEntry,
   TokenReference,
   TokenUsage,
   TokenBinding,
@@ -70,3 +71,17 @@ export type {
   ExtractedComponent,
   ExtractedLayout,
 } from './DesignExtractor';
+
+export type {
+  ClassificationTier,
+  ClassifiedToken,
+  UnidentifiedReason,
+  UnidentifiedValue,
+  FigmaNodeType,
+  NodeWithClassifications,
+  CompositionPattern,
+  UnresolvedBindingReason,
+  UnresolvedBinding,
+  ScreenshotMetadata,
+  ComponentAnalysis,
+} from './ComponentAnalysis';

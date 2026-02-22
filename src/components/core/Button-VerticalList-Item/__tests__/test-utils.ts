@@ -30,7 +30,7 @@ export function setupRequiredTokens(): void {
   const root = document.documentElement;
   
   // Color tokens (Spec 052 - Semantic Token Naming)
-  root.style.setProperty('--color-background', '#FFFFFF');
+  root.style.setProperty('--color-structure-canvas', '#FFFFFF');
   root.style.setProperty('--color-text-default', '#1A1A1A');
   root.style.setProperty('--color-text-muted', '#6B7280');
   root.style.setProperty('--color-feedback-select-text-rest', '#06B6D4');
@@ -70,7 +70,7 @@ export function cleanupRequiredTokens(): void {
   const root = document.documentElement;
   
   // Color tokens (Spec 052 - Semantic Token Naming)
-  root.style.removeProperty('--color-background');
+  root.style.removeProperty('--color-structure-canvas');
   root.style.removeProperty('--color-text-default');
   root.style.removeProperty('--color-text-muted');
   root.style.removeProperty('--color-feedback-select-text-rest');

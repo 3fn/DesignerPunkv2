@@ -15,6 +15,7 @@ import type { ConsoleMCPClient } from './ConsoleMCPClient';
 import type { TokenTranslator, TranslationResult, TokenCategory } from './TokenTranslator';
 import type { VariantAnalyzer, ExtractionContext, VariantMapping, MCPDocClient } from './VariantAnalyzer';
 import type { DTCGTokenFile } from '../generators/types/DTCGTypes';
+import type { NodeWithClassifications, FigmaNodeType, CompositionPattern, UnresolvedBinding, UnresolvedBindingReason } from './ComponentAnalysis';
 
 // ---------------------------------------------------------------------------
 // Kiro Figma Power Client Interface
@@ -415,6 +416,34 @@ export interface DesignOutline {
   componentTokenDecisions: ComponentTokenDecision[];
   modeValidation?: ModeValidationResult;
   extractionConfidence: ConfidenceReport;
+}
+
+// ---------------------------------------------------------------------------
+// Bound Variable Batch Resolution
+// ---------------------------------------------------------------------------
+
+/**
+ * Entry representing a single bound variable found during node tree traversal.
+ *
+ * Captures the variable ID, the property it was bound to, and full node
+ * context (nodeId, nodeName, ancestorChain) so that unresolved bindings
+ * can be reported with enough information for human review.
+ */
+export interface BoundVariableEntry {
+  /** Figma variable ID (e.g. 'VariableID:1224:14083'). */
+  variableId: string;
+  /** Property where the binding was found (e.g. 'padding-top', 'fill'). */
+  property: string;
+  /** Figma node ID where the binding was found. */
+  nodeId: string;
+  /** Name of the node where the binding was found. */
+  nodeName: string;
+  /** Ancestor chain of the node for context. */
+  ancestorChain: string[];
+  /** Raw Figma value for the property. */
+  rawValue: number | string;
+  /** Token category for translation. */
+  category: TokenCategory;
 }
 
 // ---------------------------------------------------------------------------
@@ -840,7 +869,405 @@ export class DesignExtractor {
       return { properties, states };
     }
 
+    // -------------------------------------------------------------------------
+    // Hierarchical Node Tree Construction (Task 1.3)
+    // -------------------------------------------------------------------------
 
+    /**
+     * Build a hierarchical node tree with per-node token classifications.
+     *
+     * Recursively walks the Figma node tree preserving parent-child
+     * relationships. Each node carries its own token classifications
+     * (semantic, primitive, unidentified) rather than flattening them.
+     *
+     * @param figmaNode - Raw Figma node object from API response
+     * @param depth - Current depth in the tree (root = 0)
+     * @param ancestors - Ancestor node types from root to parent
+     * @returns NodeWithClassifications tree
+     * @requirements Req 2 (Hierarchical Node Tree Preservation)
+     */
+    buildNodeTree(
+      figmaNode: Record<string, unknown>,
+      depth: number = 0,
+      ancestors: string[] = [],
+    ): NodeWithClassifications {
+      const nodeType = (figmaNode.type as string) ?? 'FRAME';
+      const validTypes = new Set<string>([
+        'COMPONENT_SET', 'COMPONENT', 'INSTANCE', 'FRAME', 'TEXT',
+      ]);
+      const type: FigmaNodeType = validTypes.has(nodeType)
+        ? (nodeType as FigmaNodeType)
+        : 'FRAME';
+
+      const node: NodeWithClassifications = {
+        id: String(figmaNode.id ?? ''),
+        name: String(figmaNode.name ?? ''),
+        type,
+        depth,
+        ancestorChain: ancestors,
+        tokenClassifications: {
+          semanticIdentified: [],
+          primitiveIdentified: [],
+          unidentified: [],
+        },
+        children: [],
+      };
+
+      // Extract layout properties
+      node.layout = this.extractNodeLayout(figmaNode);
+
+      // Extract componentProperties for INSTANCE nodes
+      if (type === 'INSTANCE') {
+        node.componentProperties = this.extractNodeComponentProperties(figmaNode);
+      }
+
+      // Classify tokens for this node
+      this.classifyNodeTokens(figmaNode, node);
+
+      // Recursively build children
+      const children = figmaNode.children as
+        Array<Record<string, unknown>> | undefined;
+      if (children) {
+        const newAncestors = [...ancestors, nodeType];
+        node.children = children.map(child =>
+          this.buildNodeTree(child, depth + 1, newAncestors),
+        );
+      }
+
+      return node;
+    }
+
+    /**
+     * Detect composition patterns in a node tree.
+     *
+     * Groups INSTANCE children by component name and identifies repeated
+     * usage patterns with shared properties and property variations.
+     * Applies recursively at every level of the node tree.
+     *
+     * @param nodeTree - Root of the classified node tree
+     * @returns Array of detected composition patterns across all tree levels
+     * @requirements Req 3 (Composition Pattern Detection)
+     */
+    detectCompositionPatterns(
+      nodeTree: NodeWithClassifications,
+    ): CompositionPattern[] {
+      const patterns: CompositionPattern[] = [];
+      this.detectPatternsAtLevel(nodeTree, patterns);
+      return patterns;
+    }
+
+    /**
+     * Detect composition patterns at a single level and recurse into children.
+     */
+    private detectPatternsAtLevel(
+      node: NodeWithClassifications,
+      patterns: CompositionPattern[],
+    ): void {
+      if (node.children.length > 0) {
+        // Group INSTANCE children by component name
+        const grouped = new Map<string, NodeWithClassifications[]>();
+        for (const child of node.children) {
+          if (child.type === 'INSTANCE') {
+            const existing = grouped.get(child.name);
+            if (existing) {
+              existing.push(child);
+            } else {
+              grouped.set(child.name, [child]);
+            }
+          }
+        }
+
+        // Build patterns for groups with 2+ instances
+        for (const [componentName, instances] of grouped) {
+          if (instances.length < 2) continue;
+
+          const shared = this.findSharedProperties(instances);
+          const variations = this.groupByPropertyVariations(instances, shared);
+
+          patterns.push({
+            componentName,
+            count: instances.length,
+            sharedProperties: shared,
+            propertyVariations: variations,
+            depth: instances[0].depth,
+          });
+        }
+
+        // Recurse into all children (not just INSTANCE)
+        for (const child of node.children) {
+          this.detectPatternsAtLevel(child, patterns);
+        }
+      }
+    }
+
+    /**
+     * Find properties shared across all instances in a group.
+     *
+     * A property is "shared" when every instance has the same value for it.
+     */
+    private findSharedProperties(
+      instances: NodeWithClassifications[],
+    ): Record<string, unknown> {
+      const first = instances[0].componentProperties;
+      if (!first || instances.length === 0) return {};
+
+      const shared: Record<string, unknown> = {};
+      for (const [key, def] of Object.entries(first)) {
+        const allSame = instances.every(inst => {
+          const cp = inst.componentProperties;
+          if (!cp || !(key in cp)) return false;
+          return this.valuesEqual(cp[key].value, def.value);
+        });
+        if (allSame) {
+          shared[key] = def.value;
+        }
+      }
+      return shared;
+    }
+
+    /**
+     * Group instances by their non-shared property combinations.
+     *
+     * Returns distinct property value combinations with counts.
+     */
+    private groupByPropertyVariations(
+      instances: NodeWithClassifications[],
+      sharedProperties: Record<string, unknown>,
+    ): CompositionPattern['propertyVariations'] {
+      const variationMap = new Map<string, { properties: Record<string, unknown>; count: number }>();
+
+      for (const inst of instances) {
+        const cp = inst.componentProperties;
+        const varying: Record<string, unknown> = {};
+        if (cp) {
+          for (const [key, def] of Object.entries(cp)) {
+            if (!(key in sharedProperties)) {
+              varying[key] = def.value;
+            }
+          }
+        }
+
+        const key = JSON.stringify(varying, Object.keys(varying).sort());
+        const existing = variationMap.get(key);
+        if (existing) {
+          existing.count++;
+        } else {
+          variationMap.set(key, { properties: varying, count: 1 });
+        }
+      }
+
+      return Array.from(variationMap.values());
+    }
+
+    /**
+     * Deep equality check for property values.
+     */
+    private valuesEqual(a: unknown, b: unknown): boolean {
+      if (a === b) return true;
+      if (a === null || b === null) return false;
+      if (typeof a !== typeof b) return false;
+      if (typeof a === 'object') {
+        return JSON.stringify(a) === JSON.stringify(b);
+      }
+      return false;
+    }
+
+    /**
+     * Extract layout properties from a single Figma node.
+     *
+     * Returns undefined when the node has no layout-related properties,
+     * keeping the node tree compact.
+     */
+    private extractNodeLayout(
+      node: Record<string, unknown>,
+    ): NodeWithClassifications['layout'] | undefined {
+      const layoutMode = node.layoutMode as string | undefined;
+      const pTop = node.paddingTop as number | undefined;
+      const pRight = node.paddingRight as number | undefined;
+      const pBottom = node.paddingBottom as number | undefined;
+      const pLeft = node.paddingLeft as number | undefined;
+      const itemSpacing = node.itemSpacing as number | undefined;
+      const counterAxisSpacing = node.counterAxisSpacing as number | undefined;
+      const cornerRadius = node.cornerRadius as number | undefined;
+
+      const hasLayout =
+        layoutMode != null ||
+        pTop != null ||
+        pRight != null ||
+        pBottom != null ||
+        pLeft != null ||
+        itemSpacing != null ||
+        counterAxisSpacing != null ||
+        cornerRadius != null;
+
+      if (!hasLayout) return undefined;
+
+      const layout: NonNullable<NodeWithClassifications['layout']> = {};
+
+      if (layoutMode === 'HORIZONTAL' || layoutMode === 'VERTICAL') {
+        layout.layoutMode = layoutMode;
+      } else if (layoutMode) {
+        layout.layoutMode = 'NONE';
+      }
+
+      if (pTop != null || pRight != null || pBottom != null || pLeft != null) {
+        layout.padding = {
+          top: pTop ?? 0,
+          right: pRight ?? 0,
+          bottom: pBottom ?? 0,
+          left: pLeft ?? 0,
+        };
+      }
+
+      if (itemSpacing != null) layout.itemSpacing = itemSpacing;
+      if (counterAxisSpacing != null) layout.counterAxisSpacing = counterAxisSpacing;
+      if (cornerRadius != null) layout.cornerRadius = cornerRadius;
+
+      return layout;
+    }
+
+    /**
+     * Extract componentProperties from an INSTANCE node.
+     *
+     * Strips Figma hash suffixes (e.g. "Show Label#1231:0" → "Show Label")
+     * and returns undefined when no properties exist.
+     */
+    private extractNodeComponentProperties(
+      node: Record<string, unknown>,
+    ): NodeWithClassifications['componentProperties'] | undefined {
+      const cp = node.componentProperties as
+        Record<string, { type: string; value: unknown }> | undefined;
+      if (!cp || Object.keys(cp).length === 0) return undefined;
+
+      const result: NonNullable<NodeWithClassifications['componentProperties']> = {};
+      for (const [rawName, def] of Object.entries(cp)) {
+        const cleanName = rawName.replace(/#[\d:]+$/, '').trim();
+        const type = def.type as 'VARIANT' | 'BOOLEAN' | 'TEXT' | 'INSTANCE_SWAP';
+        result[cleanName] = { type, value: def.value };
+      }
+      return result;
+    }
+
+    /**
+     * Classify tokens for a single Figma node using TokenTranslator.
+     *
+     * Collects spacing, radius, and fill-color properties from the node,
+     * translates each via the translator, and sorts results into the
+     * three-tier classification buckets on the node.
+     */
+    private classifyNodeTokens(
+      figmaNode: Record<string, unknown>,
+      node: NodeWithClassifications,
+    ): void {
+      const propertiesToClassify: Array<{
+        property: string;
+        figmaVarName?: string;
+        rawValue: number | string;
+        category: TokenCategory;
+      }> = [];
+
+      // Spacing properties
+      const spacingProps: Array<[string, string]> = [
+        ['paddingTop', 'padding-top'],
+        ['paddingRight', 'padding-right'],
+        ['paddingBottom', 'padding-bottom'],
+        ['paddingLeft', 'padding-left'],
+        ['itemSpacing', 'item-spacing'],
+        ['counterAxisSpacing', 'counter-axis-spacing'],
+      ];
+
+      const boundVars = figmaNode.boundVariables as
+        Record<string, unknown> | undefined;
+
+      for (const [figmaProp, cssProp] of spacingProps) {
+        const value = figmaNode[figmaProp] as number | undefined;
+        if (value == null) continue;
+        const varName = this.getBoundVariableName(boundVars, figmaProp);
+        propertiesToClassify.push({
+          property: cssProp,
+          figmaVarName: varName,
+          rawValue: value,
+          category: 'spacing',
+        });
+      }
+
+      // Corner radius
+      const cornerRadius = figmaNode.cornerRadius as number | undefined;
+      if (cornerRadius != null) {
+        const varName = this.getBoundVariableName(boundVars, 'cornerRadius');
+        propertiesToClassify.push({
+          property: 'border-radius',
+          figmaVarName: varName,
+          rawValue: cornerRadius,
+          category: 'radius',
+        });
+      }
+
+      // Fill colors
+      const fills = figmaNode.fills as
+        Array<Record<string, unknown>> | undefined;
+      if (fills) {
+        for (const fill of fills) {
+          const color = fill.color as Record<string, number> | undefined;
+          if (!color) continue;
+          const r = Math.round((color.r ?? 0) * 255);
+          const g = Math.round((color.g ?? 0) * 255);
+          const b = Math.round((color.b ?? 0) * 255);
+          const a = color.a ?? 1;
+          const rgba = `rgba(${r}, ${g}, ${b}, ${a})`;
+
+          const fillBv = fill.boundVariables as
+            Record<string, unknown> | undefined;
+          const varName = this.getBoundVariableName(fillBv, 'color');
+          propertiesToClassify.push({
+            property: 'fill',
+            figmaVarName: varName,
+            rawValue: rgba,
+            category: 'color',
+          });
+        }
+      }
+
+      // Classify each property
+      for (const { property, figmaVarName, rawValue, category } of propertiesToClassify) {
+        const result = this.translator.translate(figmaVarName, rawValue, category);
+        const tier = this.translator.classifyTokenMatch(result);
+
+        if (tier === 'semantic') {
+          node.tokenClassifications.semanticIdentified.push(
+            this.translator.toClassifiedToken(result, property),
+          );
+        } else if (tier === 'primitive') {
+          node.tokenClassifications.primitiveIdentified.push(
+            this.translator.toClassifiedToken(result, property),
+          );
+        } else {
+          node.tokenClassifications.unidentified.push(
+            this.translator.toUnidentifiedValue(result, property),
+          );
+        }
+      }
+    }
+
+    /**
+     * Extract a Figma variable name from a node's boundVariables for a
+     * given property.
+     *
+     * Handles both single-binding objects and array-of-bindings.
+     */
+    private getBoundVariableName(
+      boundVars: Record<string, unknown> | undefined,
+      property: string,
+    ): string | undefined {
+      if (!boundVars) return undefined;
+      const binding = boundVars[property];
+      if (!binding || typeof binding !== 'object') return undefined;
+      const bindingObj = binding as Record<string, unknown>;
+      const entry = Array.isArray(bindingObj) ? bindingObj[0] : bindingObj;
+      if (!entry || typeof entry !== 'object') return undefined;
+      const entryObj = entry as Record<string, unknown>;
+      return entryObj.id as string | undefined;
+    }
 
     /**
      * Extract boundVariables from a node's boundVariables object into the map.
@@ -902,6 +1329,283 @@ export class DesignExtractor {
         for (const child of children) {
           this.collectBoundVariablesRecursive(child, boundVariableMap, depth + 1, maxDepth);
         }
+      }
+    }
+
+    // -----------------------------------------------------------------------
+    // Bound Variable Batch Resolution (Task 1.5)
+    // -----------------------------------------------------------------------
+
+    /**
+     * Walk a raw Figma node tree and collect all bound variable entries
+     * with full node context.
+     *
+     * Checks spacing properties, cornerRadius, and fill colors for
+     * boundVariables. Returns all entries (not deduplicated) — dedup
+     * happens in batchResolveBoundVariables.
+     *
+     * @param figmaNode - Raw Figma node object from API response
+     * @param depth - Current depth in the tree (root = 0)
+     * @param ancestors - Ancestor node types from root to parent
+     * @returns Array of BoundVariableEntry with full node context
+     * @requirements Req 4 (Bound Variable Batch Resolution)
+     */
+    collectBoundVariableIds(
+      figmaNode: Record<string, unknown>,
+      depth: number = 0,
+      ancestors: string[] = [],
+    ): BoundVariableEntry[] {
+      const entries: BoundVariableEntry[] = [];
+      const nodeId = String(figmaNode.id ?? '');
+      const nodeName = String(figmaNode.name ?? '');
+      const nodeType = String(figmaNode.type ?? 'FRAME');
+
+      const boundVars = figmaNode.boundVariables as
+        Record<string, unknown> | undefined;
+
+      // Spacing properties
+      const spacingProps: Array<[string, string]> = [
+        ['paddingTop', 'padding-top'],
+        ['paddingRight', 'padding-right'],
+        ['paddingBottom', 'padding-bottom'],
+        ['paddingLeft', 'padding-left'],
+        ['itemSpacing', 'item-spacing'],
+        ['counterAxisSpacing', 'counter-axis-spacing'],
+      ];
+
+      for (const [figmaProp, cssProp] of spacingProps) {
+        const value = figmaNode[figmaProp] as number | undefined;
+        if (value == null) continue;
+        const varId = this.getBoundVariableName(boundVars, figmaProp);
+        if (varId) {
+          entries.push({
+            variableId: varId,
+            property: cssProp,
+            nodeId,
+            nodeName,
+            ancestorChain: ancestors,
+            rawValue: value,
+            category: 'spacing',
+          });
+        }
+      }
+
+      // Corner radius
+      const cornerRadius = figmaNode.cornerRadius as number | undefined;
+      if (cornerRadius != null) {
+        const varId = this.getBoundVariableName(boundVars, 'cornerRadius');
+        if (varId) {
+          entries.push({
+            variableId: varId,
+            property: 'border-radius',
+            nodeId,
+            nodeName,
+            ancestorChain: ancestors,
+            rawValue: cornerRadius,
+            category: 'radius',
+          });
+        }
+      }
+
+      // Fill colors
+      const fills = figmaNode.fills as
+        Array<Record<string, unknown>> | undefined;
+      if (fills) {
+        for (const fill of fills) {
+          const color = fill.color as Record<string, number> | undefined;
+          if (!color) continue;
+          const r = Math.round((color.r ?? 0) * 255);
+          const g = Math.round((color.g ?? 0) * 255);
+          const b = Math.round((color.b ?? 0) * 255);
+          const a = color.a ?? 1;
+          const rgba = `rgba(${r}, ${g}, ${b}, ${a})`;
+
+          const fillBv = fill.boundVariables as
+            Record<string, unknown> | undefined;
+          const varId = this.getBoundVariableName(fillBv, 'color');
+          if (varId) {
+            entries.push({
+              variableId: varId,
+              property: 'fill',
+              nodeId,
+              nodeName,
+              ancestorChain: ancestors,
+              rawValue: rgba,
+              category: 'color',
+            });
+          }
+        }
+      }
+
+      // Recurse into children
+      const children = figmaNode.children as
+        Array<Record<string, unknown>> | undefined;
+      if (children) {
+        const newAncestors = [...ancestors, nodeType];
+        for (const child of children) {
+          entries.push(
+            ...this.collectBoundVariableIds(child, depth + 1, newAncestors),
+          );
+        }
+      }
+
+      return entries;
+    }
+
+    /**
+     * Batch-resolve bound variable IDs via the Figma Plugin API.
+     *
+     * Deduplicates variable IDs, calls figma_execute to resolve names,
+     * and returns a map of resolved names plus an array of unresolved
+     * bindings with full node context.
+     *
+     * @param fileKey - The Figma file key
+     * @param entries - BoundVariableEntry[] collected from the node tree
+     * @returns Object with resolved map and unresolvedBindings array
+     * @requirements Req 4 (Bound Variable Batch Resolution)
+     */
+    async batchResolveBoundVariables(
+      fileKey: string,
+      entries: BoundVariableEntry[],
+    ): Promise<{
+      resolved: Map<string, string>;
+      unresolvedBindings: UnresolvedBinding[];
+    }> {
+      const resolved = new Map<string, string>();
+      const unresolvedBindings: UnresolvedBinding[] = [];
+
+      if (entries.length === 0) {
+        return { resolved, unresolvedBindings };
+      }
+
+      // Deduplicate variable IDs
+      const uniqueIds = [...new Set(entries.map(e => e.variableId))];
+
+      // Build Plugin API code
+      const code = `
+      const results = {};
+      for (const id of ${JSON.stringify(uniqueIds)}) {
+        try {
+          const v = figma.variables.getVariableById(id);
+          if (v) {
+            results[id] = { name: v.name };
+          }
+        } catch (e) {
+          // Variable not found — skip
+        }
+      }
+      return results;
+      `.trim();
+
+      try {
+        const result = await this.consoleMcp.execute(fileKey, code);
+
+        // Parse the result — may be wrapped in { result: { ... } }
+        let resolvedData: Record<string, { name: string }> = {};
+        if (result && typeof result === 'object') {
+          const raw = result as Record<string, unknown>;
+          const inner = raw.result ?? raw;
+          if (inner && typeof inner === 'object') {
+            resolvedData = inner as typeof resolvedData;
+          }
+        }
+
+        // Populate resolved map
+        for (const [varId, info] of Object.entries(resolvedData)) {
+          if (info?.name) {
+            resolved.set(varId, info.name);
+          }
+        }
+
+        // Build unresolvedBindings for IDs that failed
+        for (const entry of entries) {
+          if (!resolved.has(entry.variableId)) {
+            unresolvedBindings.push({
+              variableId: entry.variableId,
+              property: entry.property,
+              nodeId: entry.nodeId,
+              nodeName: entry.nodeName,
+              ancestorChain: entry.ancestorChain,
+              reason: 'api-resolution-failed' as UnresolvedBindingReason,
+            });
+          }
+        }
+      } catch {
+        // API call failed entirely — all entries are unresolved
+        for (const entry of entries) {
+          unresolvedBindings.push({
+            variableId: entry.variableId,
+            property: entry.property,
+            nodeId: entry.nodeId,
+            nodeName: entry.nodeName,
+            ancestorChain: entry.ancestorChain,
+            reason: 'api-resolution-failed' as UnresolvedBindingReason,
+          });
+        }
+      }
+
+      return { resolved, unresolvedBindings };
+    }
+
+    /**
+     * Walk a NodeWithClassifications tree and reclassify unidentified values
+     * that have a boundVariableId using resolved variable names.
+     *
+     * For each unidentified value with a boundVariableId found in the
+     * resolvedMap, re-translates using the resolved name and moves
+     * successfully classified tokens from unidentified to semantic or
+     * primitive. Mutates the tree in place.
+     *
+     * @param nodeTree - Root of the classified node tree
+     * @param resolvedMap - Map of variableId → resolved variable name
+     * @requirements Req 4 (Bound Variable Batch Resolution)
+     */
+    reclassifyWithResolvedBindings(
+      nodeTree: NodeWithClassifications,
+      resolvedMap: Map<string, string>,
+    ): void {
+      const { unidentified } = nodeTree.tokenClassifications;
+      const remaining: typeof unidentified = [];
+
+      for (const entry of unidentified) {
+        if (entry.boundVariableId && resolvedMap.has(entry.boundVariableId)) {
+          const resolvedName = resolvedMap.get(entry.boundVariableId)!;
+          // Determine category from property
+          const category: TokenCategory = entry.property === 'fill'
+            ? 'color'
+            : entry.property === 'border-radius'
+              ? 'radius'
+              : 'spacing';
+
+          const result = this.translator.translate(
+            resolvedName,
+            entry.rawValue as string | number,
+            category,
+          );
+          const tier = this.translator.classifyTokenMatch(result);
+
+          if (tier === 'semantic') {
+            nodeTree.tokenClassifications.semanticIdentified.push(
+              this.translator.toClassifiedToken(result, entry.property),
+            );
+          } else if (tier === 'primitive') {
+            nodeTree.tokenClassifications.primitiveIdentified.push(
+              this.translator.toClassifiedToken(result, entry.property),
+            );
+          } else {
+            // Still unidentified even with resolved name
+            remaining.push(entry);
+          }
+        } else {
+          remaining.push(entry);
+        }
+      }
+
+      nodeTree.tokenClassifications.unidentified = remaining;
+
+      // Recurse into children
+      for (const child of nodeTree.children) {
+        this.reclassifyWithResolvedBindings(child, resolvedMap);
       }
     }
 
