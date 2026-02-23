@@ -1,8 +1,8 @@
-# DesignerPunk v6
+# DesignerPunk v7
 
 **A Design System Foundation Built for Modern Product Development, Cross-Platform Excellence, and AI-Assisted Development**
 
-[![Version](https://img.shields.io/badge/Version-6.4.0-purple)](docs/releases/RELEASE-NOTES-6.4.0.md)
+[![Version](https://img.shields.io/badge/Version-7.0.0-purple)](docs/releases/RELEASE-NOTES-7.0.0.md)
 [![Repository](https://img.shields.io/badge/GitHub-DesignerPunkv2-blue)](https://github.com/3fn/DesignerPunkv2)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
@@ -10,15 +10,18 @@
 
 ---
 
-## Latest Release: v6.4.0
+## Latest Release: v7.0.0
 
-**Progress Indicator Family + Custom Agent System** — Two major feature areas:
+**Figma Integration Pipeline** — Six specs delivering end-to-end bidirectional Figma integration:
 
-- **6 new Progress Indicator components**: Node-Base, Connector-Base, Label-Base (primitives) + Pagination-Base, Stepper-Base, Stepper-Detailed (semantic variants) with dedicated token system (20 tokens), cross-platform support, and sliding window virtualization
-- **3 specialized AI agents**: Ada (token specialist), Lina (component specialist), Thurgood (test governance & spec standards) with domain-scoped configurations, progressive resource loading, and 11 user-triggered validation hooks
-- **Stemma validator bugfix**: Fixed container detection for orchestration components
+- **DTCG Token Format Generator** (Spec 053): Generates DTCG Format Module 2025.10 compliant JSON from the Rosetta token system — the interchange format for external tool interoperability
+- **Figma Token Push** (Spec 054a): Pushes tokens to Figma as native Variables and Styles via figma-console-mcp Desktop Bridge, with drift detection, batch operations, and incremental sync
+- **Figma Design Extraction** (Specs 054b/054d): Extracts Figma components into ComponentAnalysis artifacts with three-tier token classification (Semantic/Primitive/Unidentified), hierarchical node trees, binding resolution via Plugin API, per-variant screenshots, and 13 classified property categories
+- **Component Demo System** (Spec 061): 16 interactive HTML demos for all DesignerPunk components with live property controls
 
-[Full Release Notes →](docs/releases/RELEASE-NOTES-6.4.0.md)
+**Breaking**: `DesignOutline` type replaced by `ComponentAnalysis`; `ConsoleMCPClient` interface expanded.
+
+[Full Release Notes →](docs/releases/RELEASE-NOTES-7.0.0.md)
 
 ---
 
@@ -161,9 +164,10 @@ This is a working case study in how to lead AI-driven development at scale.
 
 **Rosetta Token System**
 - 310+ tokens (spacing, typography, color, radius, shadow, glow, motion, opacity, blend)
-- Cross-platform generation (CSS, Swift, Kotlin)
+- Cross-platform generation (CSS, Swift, Kotlin, DTCG JSON)
 - Three-tier architecture (Primitive → Semantic → Component)
 - MCP Documentation Server with 82% token reduction for AI agent queries
+- Bidirectional Figma integration: token push (Variables + Styles) and design extraction (ComponentAnalysis with three-tier classification)
 
 ### 🟡 Structural Foundation Ready
 
@@ -175,8 +179,8 @@ This is a working case study in how to lead AI-driven development at scale.
 ### 📋 What's Not Included (And Why)
 
 **Design Tool Integration** 
-- Intentionally deferred—exploring through tools like Figma Console MCP
-- Code-first philosophy; design tools are implementation details
+- Figma integration is production-ready (v7.0.0) — bidirectional token sync and component analysis
+- Other design tools (Sketch, Adobe XD) not currently supported
 
 **Pre-built Themes Beyond Base/WCAG**
 - By design—you define additional themes using the token system
@@ -320,7 +324,7 @@ The following represent areas of active development, sequenced by dependencies a
 
 ### Current Work
 
-- Specs 048-060 (active implementation)
+- Specs 048-061 (active implementation)
 
 ### Near-Term Focus
 
@@ -334,9 +338,9 @@ These represent genuine interests—not committed roadmap items, but directions 
 
 ### Design Tool Integration
 
-**Figma Console MCP** — Feed DesignerPunk tokens directly into Figma for design-to-dev alignment. TJ Pitre's approach provides the template; we'd adapt it for our token architecture.
+**Figma Console MCP** — Bidirectional Figma integration is now production-ready (v7.0.0). Token push syncs DesignerPunk tokens to Figma as native Variables and Styles. Design extraction reads Figma components and generates ComponentAnalysis artifacts with three-tier token classification.
 
-**Why it matters**: Closes the loop between design decisions and implementation, reducing the "design spec vs actual code" gap.
+**What's next**: Expanded property extraction for HTML/CSS prototype generation, typography style capture, and multi-file support.
 
 ### Expanded Theming System
 
@@ -357,13 +361,11 @@ Future exploration:
 
 **Why it matters**: Reduces manual scaffolding; accelerates component development cycle.
 
-### Design File-to-Component Exploration
+### Design File-to-Component Pipeline
 
-**Long-term thinking**: Can we extract component specifications from design files?
+**Active exploration**: ComponentAnalysis extraction (v7.0.0) captures layout, typography, color, stroke, and dimensions from Figma components with token classification. The analysis data is rich enough to inform prototype generation — a natural next step.
 
-Current state: Experimental, exploring feasibility
-
-**Why it matters**: If successful, closes the final gap between design and implementation.
+**Why it matters**: Closes the gap between design and implementation with structured, machine-readable analysis rather than manual translation.
 
 ---
 
@@ -463,13 +465,15 @@ Even if you don't adopt DesignerPunk directly, I hope it influences how you thin
 
 ## What Changed from Previous Version
 
-1. ✅ **Added** Progress Indicator token system: 10 semantic color tokens + 10 component tokens with formula-based current emphasis
-2. ✅ **Added** 3 primitive components: Node-Base, Connector-Base, Label-Base (web, iOS, Android)
-3. ✅ **Added** 3 semantic components: Pagination-Base (with virtualization), Stepper-Base, Stepper-Detailed (web, iOS, Android)
-4. ✅ **Added** Custom Agent System: Ada (tokens), Lina (components), Thurgood (governance) with domain-scoped configs
-5. ✅ **Added** 11 user-triggered validation hooks across 3 agents
-6. ✅ **Added** Progressive resource loading via `skill://` protocol (51 steering docs updated)
-7. ✅ **Fixed** Stemma validator bugs: RadioSet container detection, pattern type counting
-8. ✅ **Updated** Component-Family-Progress.md steering document (MCP-queryable)
-9. ✅ **Updated** Current State to reflect 24 production-ready components (was 18)
-10. ✅ **Updated** Specs reference to 048-060 (active implementation)
+1. ✅ **Added** DTCG Token Format Generator: DTCG 2025.10 compliant JSON output with 23 generation methods (Spec 053)
+2. ✅ **Added** Figma Token Push: Bidirectional sync of tokens to Figma Variables and Styles via Desktop Bridge (Spec 054a)
+3. ✅ **Added** Figma Design Extraction: Component analysis with three-tier token classification, node trees, binding resolution (Specs 054b/054d)
+4. ✅ **Added** Figma Token Push Fixes: Stale port cleanup, alias creation, incremental sync schemas (Spec 054c)
+5. ✅ **Added** Component Demo System: 16 interactive HTML demos with live property controls (Spec 061)
+6. ✅ **Added** ComponentAnalysis artifacts: JSON + Markdown output with per-variant screenshots
+7. ✅ **Added** 13 classified property categories: spacing, color, radius, fontSize, fontWeight, lineHeight, letterSpacing, borderWidth, opacity, sizing, stroke
+8. ✅ **Added** `--url` flag for Figma extraction CLI (parses full Figma URLs)
+9. ✅ **Breaking** Removed `DesignOutline` type (replaced by `ComponentAnalysis`)
+10. ✅ **Breaking** `ConsoleMCPClient` interface expanded with `getComponentImage()`
+11. ✅ **Updated** Figma Workflow Guide with complete push and extraction documentation
+12. ✅ **Updated** Specs reference to 048-061 (active implementation)
