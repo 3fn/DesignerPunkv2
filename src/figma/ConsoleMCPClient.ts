@@ -103,12 +103,39 @@ export interface ConsoleMCPClient {
   getComponent(fileKey: string, nodeId: string): Promise<FigmaComponentData>;
 
   /**
+   * Render a Figma component as an image.
+   *
+   * Calls the `figma_get_component_image` MCP tool and returns the
+   * image URL and metadata.
+   *
+   * @param fileUrl - Full Figma file URL (e.g. https://www.figma.com/design/KEY/NAME).
+   * @param nodeId - The node ID of the component to render.
+   * @param options - Optional scale and format overrides.
+   * @returns Image URL and metadata.
+   */
+  getComponentImage(
+    fileUrl: string,
+    nodeId: string,
+    options?: { scale?: number; format?: 'png' | 'jpg' | 'svg' | 'pdf' },
+  ): Promise<ComponentImageResult>;
+
+  /**
    * Get Console MCP server status including transport availability.
    *
    * Calls the `figma_get_status` MCP tool and returns the raw status
    * object. Used by pre-flight checks to verify Desktop Bridge is running.
    */
   getStatus(): Promise<ConsoleMCPStatus>;
+}
+
+/**
+ * Result from the `figma_get_component_image` MCP tool.
+ */
+export interface ComponentImageResult {
+  /** Image URL (expires after ~30 days). */
+  imageUrl: string;
+  /** Additional metadata returned by the tool. */
+  [key: string]: unknown;
 }
 
 /**

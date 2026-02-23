@@ -361,13 +361,13 @@ describe('TokenTranslator', () => {
 
   describe('translateByValue (typography)', () => {
     it('exact match: 14px → fontSize.fontSize200', () => {
-      const result = translator.translateByValue('14px', 'typography');
+      const result = translator.translateByValue('14px', 'fontSize');
       expect(result.confidence).toBe('exact');
       expect(result.token).toBe('fontSize.fontSize200');
     });
 
     it('approximate match within ±1px: 15px → fontSize.fontSize300 (16px)', () => {
-      const result = translator.translateByValue('15px', 'typography');
+      const result = translator.translateByValue('15px', 'fontSize');
       expect(result.confidence).toBe('approximate');
       // 15px is 1px from both fontSize200 (14px) and fontSize300 (16px)
       // Either match is acceptable
@@ -618,7 +618,7 @@ describe('TokenTranslator', () => {
     });
 
     it('classifies typography match as primitive (no semantic aliases for fontSize)', () => {
-      const result = translator.translate(undefined, '14px', 'typography');
+      const result = translator.translate(undefined, '14px', 'fontSize');
       expect(result.confidence).toBe('exact');
       expect(result.primitive).toBe('fontSize.fontSize200');
       expect(result.semantic).toBeUndefined();

@@ -1,23 +1,23 @@
 #!/usr/bin/env node
 
 /**
- * CLI command for extracting Figma designs to design-outline.md.
+ * CLI command for extracting Figma component analyses.
  *
- * Orchestrates the full design extraction workflow:
- * 1. Parse CLI arguments (--file, --node, --output)
+ * Orchestrates the full component analysis workflow:
+ * 1. Parse CLI arguments (--file, --node [repeatable], --output-dir)
  * 2. Load DTCG tokens from dist/DesignTokens.dtcg.json
- * 3. Run stale port cleanup (lesson from 054c ISSUE-4)
+ * 3. Run stale port cleanup
  * 4. Connect to figma-console-mcp
- * 5. Run DesignExtractor.extractDesign()
- * 6. Generate design-outline.md with confidence flags
- * 7. Report results and exit with appropriate code
+ * 5. Run DesignExtractor.extractComponentAnalysis() per node
+ * 6. Generate ComponentAnalysis JSON + Markdown files
+ * 7. Report classification summary and exit
  *
  * Usage:
  *   npm run figma:extract -- --file <file-key> --node <node-id>
- *   npm run figma:extract -- --file <key> --node <id> --output ./my-outline.md
+ *   npm run figma:extract -- --file <key> --node <id1> --node <id2> --output-dir ./analysis
  *
- * @see Design: .kiro/specs/054b-figma-design-extract/design.md
- * @requirements Req 10 (CLI Command)
+ * @spec 054d-hierarchical-design-extraction
+ * @requirements Req 10 (CLI and Workflow Updates)
  */
 
 import 'dotenv/config';
@@ -27,11 +27,12 @@ import { ConsoleMCPClientImpl } from '../figma/ConsoleMCPClientImpl';
 import { TokenTranslator } from '../figma/TokenTranslator';
 import { VariantAnalyzer } from '../figma/VariantAnalyzer';
 import { DesignExtractor } from '../figma/DesignExtractor';
-import type { NoMatchEntry } from '../figma/DesignExtractor';
+import { generateComponentAnalysisJSON, generateComponentAnalysisMarkdown } from '../figma/ComponentAnalysisGenerator';
 import { checkDesktopBridge } from '../figma/preflight';
 import { cleanupStalePorts } from '../figma/portCleanup';
 import type { DTCGTokenFile } from '../generators/types/DTCGTypes';
 import type { MCPDocClient } from '../figma/VariantAnalyzer';
+import type { ComponentAnalysis } from '../figma/ComponentAnalysis';
 
 // ---------------------------------------------------------------------------
 // Argument parsing
@@ -40,23 +41,54 @@ import type { MCPDocClient } from '../figma/VariantAnalyzer';
 /** Parsed CLI arguments for figma-extract. */
 export interface FigmaExtractArgs {
   file: string | undefined;
-  node: string | undefined;
-  output: string;
+  nodes: string[];
+  outputDir: string;
+  fileUrl: string | undefined;
+}
+
+/**
+ * Parse a Figma design URL into fileKey, nodeId, and fileUrl.
+ * Returns null if the URL is not a valid Figma design URL.
+ *
+ * Example: https://www.figma.com/design/yU7908VXR1khQN5hZXC6Cy/DP?node-id=1230-112
+ *   → { fileKey: 'yU7908VXR1khQN5hZXC6Cy', nodeId: '1230:112', fileUrl: 'https://www.figma.com/design/yU7908VXR1khQN5hZXC6Cy/DP' }
+ */
+export function parseFigmaUrl(url: string): { fileKey: string; nodeId?: string; fileUrl: string } | null {
+  let parsed: URL;
+  try {
+    parsed = new URL(url);
+  } catch {
+    return null;
+  }
+
+  // Match /design/<fileKey> or /design/<fileKey>/<name>
+  const match = parsed.pathname.match(/^\/design\/([^/]+)/);
+  if (!match) return null;
+
+  const fileKey = match[1];
+  const fileUrl = `${parsed.origin}${parsed.pathname}`;
+
+  const nodeIdParam = parsed.searchParams.get('node-id');
+  const nodeId = nodeIdParam ? nodeIdParam.replace(/-/g, ':') : undefined;
+
+  return { fileKey, nodeId, fileUrl };
 }
 
 /**
  * Parse process.argv into structured arguments.
  *
  * Supports:
- *   --file <file-key>   Figma file key (required)
- *   --node <node-id>    Figma component node ID (required)
- *   --output <path>     Output path for design-outline.md (default: ./design-outline.md)
+ *   --file <file-key>       Figma file key (required unless --url provided)
+ *   --node <node-id>        Figma component node ID (required, repeatable)
+ *   --output-dir <path>     Output directory for analysis files (default: ./analysis)
+ *   --url <figma-url>       Full Figma URL (alternative to --file + --node)
  */
 export function parseArgs(argv: string[]): FigmaExtractArgs {
   const args: FigmaExtractArgs = {
     file: undefined,
-    node: undefined,
-    output: './design-outline.md',
+    nodes: [],
+    outputDir: './analysis',
+    fileUrl: undefined,
   };
 
   for (let i = 0; i < argv.length; i++) {
@@ -75,15 +107,30 @@ export function parseArgs(argv: string[]): FigmaExtractArgs {
         console.error('❌ --node requires a Figma node ID');
         process.exit(1);
       }
-      args.node = next;
+      args.nodes.push(next);
       i++;
-    } else if (arg === '--output') {
+    } else if (arg === '--output-dir') {
       const next = argv[i + 1];
       if (next === undefined || next.startsWith('--')) {
-        console.error('❌ --output requires a file path');
+        console.error('❌ --output-dir requires a directory path');
         process.exit(1);
       }
-      args.output = next;
+      args.outputDir = next;
+      i++;
+    } else if (arg === '--url') {
+      const next = argv[i + 1];
+      if (next === undefined || next.startsWith('--')) {
+        console.error('❌ --url requires a Figma URL');
+        process.exit(1);
+      }
+      const parsed = parseFigmaUrl(next);
+      if (!parsed) {
+        console.error('❌ Invalid Figma URL. Expected: https://www.figma.com/design/<key>/...');
+        process.exit(1);
+      }
+      args.file = parsed.fileKey;
+      args.fileUrl = parsed.fileUrl;
+      if (parsed.nodeId) args.nodes.push(parsed.nodeId);
       i++;
     }
   }
@@ -119,18 +166,10 @@ export function loadDTCGTokens(filePath: string): DTCGTokenFile {
   }
 }
 
-
 // ---------------------------------------------------------------------------
 // Stub MCPDocClient for CLI usage
 // ---------------------------------------------------------------------------
 
-/**
- * Stub MCPDocClient that returns null for all queries.
- *
- * In CLI mode, the DesignerPunk MCP documentation server may not be
- * available. The VariantAnalyzer handles null responses gracefully,
- * flagging missing docs with ⚠️ confidence instead of failing.
- */
 class StubMCPDocClient implements MCPDocClient {
   async getDocumentFull(_path: string): Promise<string | null> {
     return null;
@@ -144,50 +183,18 @@ class StubMCPDocClient implements MCPDocClient {
 // Result reporting
 // ---------------------------------------------------------------------------
 
-/**
- * Print a summary of extraction results to stdout.
- */
-function reportResults(
-  outline: {
-    extractionConfidence: {
-      overall: string;
-      exactMatches: number;
-      approximateMatches: number;
-      noMatches: number;
-      requiresHumanInput: boolean;
-      reviewItems: string[];
-    };
-  },
-  noMatchEntries: NoMatchEntry[],
-): void {
-  const conf = outline.extractionConfidence;
-
+function reportResults(analyses: ComponentAnalysis[]): void {
   console.log('');
-  console.log('📊 Extraction Results:');
-  console.log(`   Overall confidence: ${conf.overall}`);
-  console.log(`   ✅ Exact matches:       ${conf.exactMatches}`);
-  console.log(`   ⚠️  Approximate matches: ${conf.approximateMatches}`);
-  console.log(`   ❌ No matches:          ${conf.noMatches}`);
-
-  if (conf.reviewItems.length > 0) {
-    console.log('');
-    console.log('📋 Items requiring review:');
-    for (const item of conf.reviewItems) {
-      console.log(`   - ${item}`);
-    }
-  }
-
-  if (noMatchEntries.length > 0) {
-    console.log('');
-    console.log('❌ Unmatched values requiring human decision:');
-    for (const entry of noMatchEntries) {
-      const closest = entry.closestMatch
-        ? `closest: ${entry.closestMatch}${entry.delta ? ` (${entry.delta})` : ''}`
-        : 'no close match';
-      console.log(`   • ${entry.property}: ${entry.figmaValue} — ${closest}`);
-      for (const option of entry.options) {
-        console.log(`     → ${option}`);
-      }
+  console.log('📊 Classification Summary:');
+  for (const a of analyses) {
+    const s = a.classificationSummary;
+    const total = s.semanticIdentified + s.primitiveIdentified + s.unidentified;
+    console.log(`   ${a.componentName} (${total} values):`);
+    console.log(`     ✅ Semantic:    ${s.semanticIdentified}`);
+    console.log(`     ⚠️  Primitive:   ${s.primitiveIdentified}`);
+    console.log(`     ❌ Unidentified: ${s.unidentified}`);
+    if (a.screenshots.length > 0) {
+      console.log(`     📸 Screenshots:  ${a.screenshots.length}`);
     }
   }
 }
@@ -197,7 +204,7 @@ function reportResults(
 // ---------------------------------------------------------------------------
 
 /**
- * Run the Figma design extraction workflow.
+ * Run the Figma component analysis workflow.
  *
  * Exported for testing — the default invocation calls this via the
  * bottom-of-file bootstrap.
@@ -205,18 +212,19 @@ function reportResults(
 export async function run(argv: string[] = process.argv.slice(2)): Promise<void> {
   const args = parseArgs(argv);
 
-  // Validate required arguments
   if (!args.file) {
-    console.error('❌ Missing required argument: --file <file-key>');
+    console.error('❌ Missing required argument: --file <file-key> or --url <figma-url>');
     console.error('');
-    console.error('Usage: npm run figma:extract -- --file <file-key> --node <node-id> [--output <path>]');
+    console.error('Usage: npm run figma:extract -- --file <file-key> --node <node-id> [--output-dir <path>]');
+    console.error('       npm run figma:extract -- --url <figma-url> [--node <extra-node-id>] [--output-dir <path>]');
     process.exit(1);
   }
 
-  if (!args.node) {
-    console.error('❌ Missing required argument: --node <node-id>');
+  if (args.nodes.length === 0) {
+    console.error('❌ Missing required argument: --node <node-id> (or use --url with node-id in URL)');
     console.error('');
-    console.error('Usage: npm run figma:extract -- --file <file-key> --node <node-id> [--output <path>]');
+    console.error('Usage: npm run figma:extract -- --file <file-key> --node <node-id> [--output-dir <path>]');
+    console.error('       npm run figma:extract -- --url <figma-url> [--node <extra-node-id>] [--output-dir <path>]');
     process.exit(1);
   }
 
@@ -224,7 +232,7 @@ export async function run(argv: string[] = process.argv.slice(2)): Promise<void>
   console.log('📦 Loading DTCG tokens…');
   const dtcgTokens = loadDTCGTokens(DTCG_INPUT_PATH);
 
-  // 2. Clean up stale ports (lesson from 054c ISSUE-4)
+  // 2. Clean up stale ports
   cleanupStalePorts();
 
   // 3. Connect to figma-console-mcp
@@ -233,7 +241,7 @@ export async function run(argv: string[] = process.argv.slice(2)): Promise<void>
   await consoleMcp.connect();
 
   try {
-    // 4. Pre-flight: wait for Desktop Bridge (same as figma:push)
+    // 4. Pre-flight check
     console.log('🔍 Running pre-flight checks…');
     const preflight = await checkDesktopBridge(consoleMcp);
     if (!preflight.ready) {
@@ -247,45 +255,45 @@ export async function run(argv: string[] = process.argv.slice(2)): Promise<void>
     const analyzer = new VariantAnalyzer(new StubMCPDocClient());
     const extractor = new DesignExtractor(consoleMcp, translator, analyzer);
 
-    // 6. Run extraction
-    console.log(`🔍 Extracting design from file ${args.file}, node ${args.node}…`);
+    // 6. Extract each component
+    const baseOutputDir = path.resolve(args.outputDir);
+    if (!fs.existsSync(baseOutputDir)) fs.mkdirSync(baseOutputDir, { recursive: true });
+    const baseImagesDir = path.join(baseOutputDir, 'images');
+    const analyses: ComponentAnalysis[] = [];
+    for (const nodeId of args.nodes) {
+      console.log(`🔍 Extracting component ${nodeId}…`);
+      // Ensure temp images dir exists for downloads
+      if (!fs.existsSync(baseImagesDir)) fs.mkdirSync(baseImagesDir, { recursive: true });
 
-    // Debug: dump raw getComponent response to see figma_execute results
-    try {
-      const rawComponent = await consoleMcp.getComponent(args.file, args.node);
-      fs.writeFileSync(path.resolve('./debug-component-response.json'), JSON.stringify(rawComponent, null, 2), 'utf-8');
-      console.log(`🔬 Debug: wrote response to debug-component-response.json`);
-    } catch (e) {
-      console.log(`🔬 Debug: getComponent failed: ${e instanceof Error ? e.message : String(e)}`);
+      const analysis = await extractor.extractComponentAnalysis(args.file, nodeId, baseOutputDir, args.fileUrl);
+      analyses.push(analysis);
+
+      // Build component-specific output directory
+      const safeName = analysis.componentName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+      const componentDir = path.join(baseOutputDir, `analysis-${safeName}`);
+      const imagesDir = path.join(componentDir, 'images');
+      if (!fs.existsSync(componentDir)) fs.mkdirSync(componentDir, { recursive: true });
+      if (!fs.existsSync(imagesDir)) fs.mkdirSync(imagesDir, { recursive: true });
+
+      // Move downloaded screenshots to component dir
+      if (fs.existsSync(baseImagesDir)) {
+        for (const file of fs.readdirSync(baseImagesDir)) {
+          fs.renameSync(path.join(baseImagesDir, file), path.join(imagesDir, file));
+        }
+        try { fs.rmdirSync(baseImagesDir); } catch { /* may not be empty */ }
+      }
+
+      // Write JSON + Markdown
+      const jsonResult = generateComponentAnalysisJSON(analysis, { outputDir: componentDir });
+      const mdResult = generateComponentAnalysisMarkdown(analysis, { outputDir: componentDir });
+      console.log(`   ✅ ${analysis.componentName}: ${jsonResult.filePath}`);
+      console.log(`   ✅ ${analysis.componentName}: ${mdResult.filePath}`);
     }
 
-    const outline = await extractor.extractDesign(args.file, args.node);
+    // 8. Report results
+    reportResults(analyses);
 
-    // 7. Generate markdown
-    const markdown = extractor.generateDesignOutlineMarkdown(outline);
-
-    // 8. Write output
-    const outputPath = path.resolve(args.output);
-    const outputDir = path.dirname(outputPath);
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
-    }
-    fs.writeFileSync(outputPath, markdown, 'utf-8');
-    console.log(`✅ Wrote design outline: ${outputPath}`);
-
-    // 9. Format no-match report for CLI output
-    const noMatchEntries = extractor.formatNoMatchReport(outline.tokenUsage);
-
-    // 10. Report results
-    reportResults(outline, noMatchEntries);
-
-    // 11. Exit with appropriate code
-    if (outline.extractionConfidence.requiresHumanInput) {
-      console.log('');
-      console.log('⚠️  Human input required — review the design outline before proceeding.');
-      process.exit(1);
-    }
-
+    // 9. Exit 0 — unidentified values do NOT cause failure
     process.exit(0);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);

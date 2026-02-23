@@ -33,6 +33,7 @@ function makeMockConsoleMcp(): jest.Mocked<ConsoleMCPClient> {
     getStatus: jest.fn().mockResolvedValue({}),
     getStyles: jest.fn().mockResolvedValue([]),
     getComponent: jest.fn().mockResolvedValue({}),
+    getComponentImage: jest.fn().mockResolvedValue({ imageUrl: '' }),
   };
 }
 

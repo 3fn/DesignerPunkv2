@@ -1,0 +1,384 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json",
+  "basics": {
+    "name": "Peter Michaels Allen",
+    "label": "Design Systems Architect",
+    "email": "peter@3firstnamesdesign.com",
+    "portfolio": "Figma portfolio available upon request",
+    "summary": "Design systems leader with 18 years of design experience and 10+ years creating and managing design systems at scale. Bridges design and engineering to drive organizational transformation and measurable business impact. Combines expertise in user experience design, research, product management, and AI-driven development to deliver user-centric solutions for diverse and growing customer bases. Currently building DesignerPunk, a True Native cross-platform design system with mathematical foundations, 310+ tokens, 8,200+ tests, and an MCP Documentation Server achieving 82% AI context reduction.",
+    "location": {
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "petermichaelsallen",
+        "url": "https://linkedin.com/in/petermichaelsallen"
+      },
+      {
+        "network": "GitHub",
+        "username": "3fn",
+        "url": "https://github.com/3fn"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Stealth AI Nonprofit",
+      "location": "United States",
+      "position": "Founder",
+      "startDate": "2025-06",
+      "summary": "Exploring the intersection of AI, democracy, and government — not politics.",
+      "highlights": [
+        "Created vibe coding prototypes to explore experiences for US citizens to engage in the democratic process",
+        "Built DesignerPunk as the foundation for the nonprofit's design system, including MCP documentation architecture, Figma integration, and custom AI agents",
+        "Consulted with other nonprofit organizations on AI-related initiatives"
+      ]
+    },
+    {
+      "name": "3fn Design",
+      "location": "United States",
+      "position": "Principal - Product, User Experience Designer",
+      "startDate": "2006-06",
+      "summary": "Independent design consultancy serving clients across enterprise, healthcare, fintech, government, and gaming sectors.",
+      "highlights": [
+        "Strategized and reconciled business requirements with user expectations and experiences",
+        "Directed and collaborated with designers, researchers, engineers, product managers, and stakeholders",
+        "Past clients include Comcast, DudaMobile, eHealth, Expensify, FDIC, Hairclub for Men, iContact, Reddit, Redfin, Parsec.co, and more"
+      ]
+    },
+    {
+      "name": "Venmo",
+      "location": "San Francisco, CA",
+      "position": "Senior User Experience Designer II, Design Systems",
+      "startDate": "2020-07",
+      "endDate": "2024-04",
+      "summary": "Established and led Venmo's independent design systems practice from grassroots to executive approval.",
+      "highlights": [
+        "Partnered with PayPal Design Systems & Ops to enhance and scale Figma practices, tooling, and architectures",
+        "Led accessibility compliance for design and development program to meet PayPal organization mandates",
+        "Managed part-time Venmo design system contributors while simultaneously supporting the PayPal consumer product redesign"
+      ]
+    },
+    {
+      "name": "Venmo",
+      "location": "San Francisco, CA",
+      "position": "Senior User Experience Designer, Design Systems",
+      "startDate": "2019-07",
+      "endDate": "2020-06",
+      "summary": "Design systems role prior to promotion to Senior UX Designer II.",
+      "highlights": [
+        "Established, directed, and maintained Venmo's 0-1 independent design systems and best practices",
+        "Led the advocacy, transition, and training of Figma for Venmo and PayPal pre and mid-COVID pandemic",
+        "Facilitated strategic partnerships with Leadership, Engineering, Product, and Marketing organizations from grassroots to executive approval"
+      ]
+    },
+    {
+      "name": "Reddit, Inc.",
+      "location": "San Francisco, CA",
+      "position": "Senior User Experience Designer, Design Systems",
+      "startDate": "2018-08",
+      "endDate": "2019-06",
+      "summary": "Led the company's first Design Systems efforts for Web and Native platforms.",
+      "highlights": [
+        "Led the company's first design system and tooling practices",
+        "Shipped cohesive token system for iOS and Native platforms",
+        "Facilitated design needs for Platform Team programs and team needs across Reddit"
+      ]
+    },
+    {
+      "name": "Reddit, Inc.",
+      "location": "San Francisco, CA",
+      "position": "Senior User Experience Designer, Product Design",
+      "startDate": "2017-05",
+      "endDate": "2018-08",
+      "summary": "Product design for the Reddit redesign, launching core community systems.",
+      "highlights": [
+        "Led the design of Community Styling System, Community Widgets, and v1 Moderator Tooling systems as part of the Reddit redesign",
+        "Designed and prototyped content discovery features in Feed, Search, and Event experiences",
+        "Developed learning sessions for enhanced design and prototyping tooling"
+      ]
+    },
+    {
+      "name": "Reddit, Inc.",
+      "location": "San Francisco, CA",
+      "position": "Product Design Consultant",
+      "startDate": "2017-02",
+      "endDate": "2017-05",
+      "summary": "Developed design proofs of concept for Reddit's Community Styling System as part of their redesign."
+    },
+    {
+      "name": "FanTalk",
+      "location": "San Francisco, CA",
+      "position": "Product Design Consultant",
+      "startDate": "2015-05",
+      "endDate": "2016-02",
+      "summary": "Championed the voice of the sports fan to translate emotion into engaging experiences.",
+      "highlights": [
+        "Developed methods for user research, heuristic evaluations, user flows, product ideation, wireframing, product design, and iterations based on quantitative and qualitative feedback for the iOS app",
+        "Collaborated directly with FanTalk advisors to turn product and design feedback into actionable goals and deliverables",
+        "Contributed to competitive analysis, product strategy, product and project planning, user growth and acquisition, and social media"
+      ]
+    },
+    {
+      "name": "eHealth",
+      "location": "San Francisco, CA",
+      "position": "User Experience Designer",
+      "startDate": "2013-10",
+      "endDate": "2015-03",
+      "summary": "Led design and user research for the company's first fully end-to-end Affordable Care Act eCommerce product line.",
+      "highlights": [
+        "Led design and user research for all external and internal facing needs in developing the company's first fully end-to-end Affordable Care Act eCommerce product line",
+        "Led design tasks for a newly generated team tasked with user engagement initiatives",
+        "Evangelized early Responsive Design and Design System practices including grids, interaction patterns, typography, and icon fonts"
+      ]
+    },
+    {
+      "name": "eHealth",
+      "location": "San Francisco, CA",
+      "position": "Contract Interactive Designer",
+      "startDate": "2013-04",
+      "endDate": "2013-10",
+      "summary": "Navigated complex technical and design requirements for the first iteration of the company's Affordable Care Act initiatives."
+    },
+    {
+      "name": "Magi.com (formerly hi5.com)",
+      "position": "User Experience Designer",
+      "startDate": "2011-02",
+      "endDate": "2012-03",
+      "summary": "Designed innovative interfaces for the next generation of social gaming. Participated in decision making with V and C-Level personnel on projects ranging from high-level site branding to internal technical tool UI."
+    },
+    {
+      "name": "Electronic Arts",
+      "position": "Contract Lead User Interface Designer",
+      "startDate": "2010-08",
+      "endDate": "2010-10",
+      "summary": "Led UI Design for the Nintendo 3DS version of EA Sports' FIFA video game. Reshaped the original Wii console-based UI for a mobile interface focused on the device's dual screen experience using touch-screen and 3D technologies."
+    },
+    {
+      "name": "Valliant & Associates LLC",
+      "location": "Chestertown, MD",
+      "position": "Client Resource Management Associate",
+      "startDate": "2007-07",
+      "endDate": "2008-03",
+      "summary": "In-house specialist for managing and executing the firm's Marketing and Technology initiatives. Developed Internet-based marketing strategies, graphic design, IT maintenance, and web mastering. Deployed Raymond James Financial Service proprietary CRM software including policy, process documentation, and education."
+    }
+  ],
+  "volunteer": [
+    {
+      "organization": "ADPList",
+      "position": "Design Mentor",
+      "startDate": "2024-05",
+      "endDate": "2024-10",
+      "summary": "100+ mentorship minutes providing guidance to emerging designers on design systems, career development, and industry practices.",
+      "highlights": [
+        "Supported the efforts of designers to secure roles at Apple, Google, and Capital One",
+        "Mentored designers in their practical and professional growth in design systems",
+        "Continued to mentor after ending relationship with platform"
+      ]
+    },
+    {
+      "organization": "Ravens in the Fog",
+      "position": "Co-Founder, President",
+      "startDate": "2011-05",
+      "endDate": "2022-10",
+      "summary": "Co-founded and managed an officially recognized San Francisco-based Baltimore Ravens fan association. Coordinated press and media requests with KTVU Fox, The Baltimore Sun, and WMAR ABC. Managed community relations through social media and organized live events."
+    }
+  ],
+  "education": [
+    {
+      "institution": "Elon University",
+      "area": "Art - Digital Art",
+      "studyType": "Bachelor of Arts",
+      "startDate": "2002",
+      "endDate": "2006"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Design Systems",
+      "level": "Expert",
+      "keywords": [
+        "Token Architecture",
+        "Cross-Platform Design",
+        "Component Libraries",
+        "Mathematical Foundations",
+        "Accessibility (WCAG 2.1 AA)",
+        "Design Governance"
+      ]
+    },
+    {
+      "name": "Design Direction",
+      "level": "Expert",
+      "keywords": [
+        "System & Platform Design",
+        "Responsive & Native Design",
+        "Flow Diagramming & Wireframing",
+        "Interactive Prototyping",
+        "Copywriting"
+      ]
+    },
+    {
+      "name": "Design Tools",
+      "level": "Expert",
+      "keywords": [
+        "Figma",
+        "Adobe Creative Suite",
+        "Sketch",
+        "ProtoPie"
+      ]
+    },
+    {
+      "name": "Research",
+      "level": "Advanced",
+      "keywords": [
+        "Qualitative & Quantitative Research",
+        "Usability Testing",
+        "Multi-Variant Testing",
+        "Heuristic Evaluations"
+      ]
+    },
+    {
+      "name": "AI & Vibe Coding",
+      "level": "Advanced",
+      "keywords": [
+        "Kiro",
+        "Cursor",
+        "Bolt.New",
+        "MCP Servers",
+        "AI-Human Collaboration",
+        "MCP architecture and development",
+        "Custom AI agent development",
+        "Figma workflow development"
+      ]
+    },
+    {
+      "name": "Project Management",
+      "level": "Advanced",
+      "keywords": [
+        "Agile & Waterfall",
+        "Jira",
+        "Trello",
+        "Asana",
+        "Sprint & Release Planning",
+        "Scrum Mastering",
+        "Roadmap Development"
+      ]
+    },
+    {
+      "name": "Engineering",
+      "level": "Intermediate",
+      "keywords": [
+        "HTML",
+        "CSS",
+        "LESS",
+        "SASS",
+        "TypeScript",
+        "Web Components",
+        "GitHub",
+        "Xcode Interface Builder"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "DesignerPunk",
+      "description": "True Native cross-platform design system with mathematical foundations, built for Human-AI collaboration. Features 310+ tokens, 24 production-ready components, 8,200+ tests, and an MCP Documentation Server.",
+      "url": "https://github.com/3fn/DesignerPunkv2",
+      "startDate": "2025",
+      "roles": ["Creator", "Architect", "Maintainer"],
+      "type": "application",
+      "keywords": [
+        "Design Systems",
+        "TypeScript",
+        "Web Components",
+        "SwiftUI",
+        "Jetpack Compose",
+        "MCP Server",
+        "Cross-Platform",
+        "Design Tokens"
+      ],
+      "highlights": [
+        "310+ mathematical tokens with cross-platform generation (CSS, Swift, Kotlin)",
+        "24 production-ready components across 8 families with behavioral contracts",
+        "MCP Documentation Server achieving 82% token reduction for AI agent queries",
+        "8,200+ tests with comprehensive validation across all platforms",
+        "3 specialized AI agents for token, component, and governance workflows"
+      ]
+    }
+  ],
+  "publications": [
+    {
+      "name": "Conscious UX: Leading Human-Centered Design in the Age of AI",
+      "publisher": "Rikk Tetters",
+      "releaseDate": "2025-08-25",
+      "url": "https://www.amazon.com/Conscious-Human-Centered-Artificial-Intelligence-Compassion/dp/B0FNPL7HBW",
+      "summary": "Interviewed and quoted as a subject matter expert on design systems and human-centered design practices."
+    }
+  ],
+  "awards": [
+    {
+      "title": "Venmo Hackathon First Runner-Up",
+      "date": "2019-10",
+      "awarder": "Venmo",
+      "summary": "Designer of the first runner-up team to develop 'Venmigos' — a group experience for shared payments and expenses",
+      "highlights": [
+        "Created a dynamic prototype for live demonstration for creation, payment, and management experiences",
+        "Project eventually became the live product Venmo Groups"
+      ]
+    },
+    {
+      "title": "eHealth Designathon Winner",
+      "date": "2013-11",
+      "awarder": "eHealth",
+      "summary": "Member of the winning team for eHealth's first designathon. Designed and built a working product expanding eHealth's product line from invisible to visible offerings by recommending curated health products, with an immediately revenue-generating prototype."
+    }
+  ],
+  "certificates": [
+    {
+      "name": "100 Mentorship Minutes",
+      "date": "2024-03",
+      "issuer": "ADPList",
+      "url": "https://adplist.org/certifications/185394"
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native"
+    },
+    {
+      "language": "Italian",
+      "fluency": "Elementary"
+    }
+  ],
+  "interests": [
+    {
+      "name": "Cycling",
+      "keywords": ["Avid cyclist"]
+    },
+    {
+      "name": "Karaoke",
+      "keywords": ["Karaoke enthusiast"]
+    },
+    {
+      "name": "Woodworking",
+      "keywords": ["Woodworker"]
+    }
+  ],
+  "references": [
+    {
+      "name": "James Carleton",
+      "reference": "I've enjoyed working with Peter as we have collaborated on design systems at PayPal for the past 4+ years. He has shown strong leadership by creating and evolving the Venmo product design system. Peter is great at getting into UI details, he is eager to explore the best tools and methods to produce optimized design libraries. His effort helped guide leadership and raised the level of skill across the UX design organization."
+    },
+    {
+      "name": "PJ Onori",
+      "reference": "Peter is the consummate systems designer. He has a strong understanding of the subject matter and an equally strong point of view on how to do the work. He's an equally strong analytical thinker and executor. He's able to take complicated/convoluted inputs and distill them into a cogent, useful, repeatable output. He's smart, outspoken, unafraid to challenge/question and unquestionably made the team better for it."
+    }
+  ],
+  "meta": {
+    "canonical": "https://raw.githubusercontent.com/3fn/DesignerPunkv2/main/resume.json",
+    "version": "v1.0.0",
+    "lastModified": "2026-02-23"
+  }
+}

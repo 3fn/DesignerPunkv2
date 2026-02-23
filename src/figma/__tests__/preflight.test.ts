@@ -27,6 +27,7 @@ function makeMockClient(
     getStatus: jest.fn().mockImplementation(getStatusImpl),
     getStyles: jest.fn().mockResolvedValue([]),
     getComponent: jest.fn().mockResolvedValue({}),
+    getComponentImage: jest.fn().mockResolvedValue({ imageUrl: '' }),
   };
 }
 

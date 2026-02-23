@@ -316,6 +316,7 @@ describe('Preservation — ConsoleMCPClient', () => {
         }),
         getStyles: jest.fn().mockResolvedValue([]),
         getComponent: jest.fn().mockResolvedValue({}),
+    getComponentImage: jest.fn().mockResolvedValue({ imageUrl: '' }),
       };
 
       const result = await checkDesktopBridge(mockClient);
@@ -338,6 +339,7 @@ describe('Preservation — ConsoleMCPClient', () => {
         }),
         getStyles: jest.fn().mockResolvedValue([]),
         getComponent: jest.fn().mockResolvedValue({}),
+    getComponentImage: jest.fn().mockResolvedValue({ imageUrl: '' }),
       };
 
       const result = await checkDesktopBridge(mockClient);
@@ -360,6 +362,7 @@ describe('Preservation — ConsoleMCPClient', () => {
           .mockResolvedValueOnce({ transport: { websocket: { available: true } } }),
         getStyles: jest.fn().mockResolvedValue([]),
         getComponent: jest.fn().mockResolvedValue({}),
+    getComponentImage: jest.fn().mockResolvedValue({ imageUrl: '' }),
       };
 
       const result = await checkDesktopBridge(mockClient);
@@ -379,6 +382,7 @@ describe('Preservation — ConsoleMCPClient', () => {
         getStatus: jest.fn().mockRejectedValue(new Error('Connection refused')),
         getStyles: jest.fn().mockResolvedValue([]),
         getComponent: jest.fn().mockResolvedValue({}),
+    getComponentImage: jest.fn().mockResolvedValue({ imageUrl: '' }),
       };
 
       const result = await checkDesktopBridge(mockClient);

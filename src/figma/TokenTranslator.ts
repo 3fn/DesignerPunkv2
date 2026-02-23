@@ -23,7 +23,7 @@ export type { DTCGTokenFile };
 /**
  * Categories of token values that determine matching tolerance rules.
  */
-export type TokenCategory = 'spacing' | 'color' | 'typography' | 'radius' | 'shadow';
+export type TokenCategory = 'spacing' | 'color' | 'typography' | 'radius' | 'shadow' | 'fontSize' | 'fontWeight' | 'lineHeight' | 'letterSpacing' | 'borderWidth' | 'opacity' | 'sizing';
 
 /**
  * Result of translating a Figma value to a DesignerPunk token.
@@ -286,7 +286,7 @@ export class TokenTranslator {
    */
   private buildValueIndex(): Map<TokenCategory, ValueIndexEntry[]> {
     const index = new Map<TokenCategory, ValueIndexEntry[]>();
-    for (const cat of ['spacing', 'color', 'typography', 'radius', 'shadow'] as TokenCategory[]) {
+    for (const cat of ['spacing', 'color', 'typography', 'radius', 'shadow', 'fontSize', 'fontWeight', 'lineHeight', 'letterSpacing', 'borderWidth', 'opacity', 'sizing'] as TokenCategory[]) {
       index.set(cat, []);
     }
 
@@ -316,7 +316,10 @@ export class TokenTranslator {
             if (rgb) {
               index.get('color')!.push({ tokenPath: dtcgPath, numericValue: NaN, rgb, family });
             }
-          } else if (category === 'spacing' || category === 'radius' || category === 'typography') {
+          } else if (category === 'spacing' || category === 'radius' || category === 'typography'
+            || category === 'fontSize' || category === 'fontWeight' || category === 'lineHeight'
+            || category === 'letterSpacing' || category === 'borderWidth' || category === 'opacity'
+            || category === 'sizing') {
             const num = typeof value === 'string' ? parseDimension(value) : typeof value === 'number' ? value : NaN;
             if (!isNaN(num)) {
               index.get(category)!.push({ tokenPath: dtcgPath, numericValue: num, rgb: null, family });
@@ -382,7 +385,13 @@ export class TokenTranslator {
     if (family === 'spacing' || family === 'inset') return 'spacing';
     if (family === 'color') return 'color';
     if (family === 'radius') return 'radius';
-    if (family === 'fontSize') return 'typography';
+    if (family === 'fontSize') return 'fontSize';
+    if (family === 'fontWeight') return 'fontWeight';
+    if (family === 'lineHeight') return 'lineHeight';
+    if (family === 'letterSpacing') return 'letterSpacing';
+    if (family === 'borderWidth') return 'borderWidth';
+    if (family === 'opacity') return 'opacity';
+    if (family === 'sizing' || family === 'icon' || family === 'tapArea') return 'sizing';
     if (type === 'color') return 'color';
     if (type === 'shadow') return 'shadow';
     return null;
@@ -455,9 +464,24 @@ export class TokenTranslator {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let current: any = this.dtcgTokens;
 
-    for (const part of parts) {
+    for (let i = 0; i < parts.length; i++) {
       if (current == null || typeof current !== 'object') return undefined;
-      current = current[part];
+
+      // Try single segment first (normal nested key)
+      if (parts[i] in current) {
+        current = current[parts[i]];
+        continue;
+      }
+
+      // Try joining remaining segments for flat dot-separated keys
+      // e.g., semanticColor has key "color.feedback.success.text"
+      const remaining = parts.slice(i).join('.');
+      if (remaining in current) {
+        current = current[remaining];
+        break;
+      }
+
+      return undefined;
     }
 
     // A valid DTCG token has a $value field

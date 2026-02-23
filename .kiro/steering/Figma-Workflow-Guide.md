@@ -1,13 +1,13 @@
 ---
 inclusion: manual
 name: Figma-Workflow-Guide
-description: Bidirectional Figma integration workflow — token push (054a) and design extraction (054b). Covers MCP setup, CLI usage, confidence flags, troubleshooting. Load when working with Figma integration tasks.
+description: Bidirectional Figma integration workflow — token push (054a) and design extraction (054b/054d). Covers MCP setup, CLI usage, ComponentAnalysis artifacts, troubleshooting. Load when working with Figma integration tasks.
 ---
 
 # Figma Workflow Guide
 
 **Date**: 2026-02-20
-**Last Reviewed**: 2026-02-21
+**Last Reviewed**: 2026-02-22
 **Purpose**: Figma integration workflow documentation for token push and design extraction
 **Organization**: process-standard
 **Scope**: figma-integration
@@ -21,9 +21,9 @@ description: Bidirectional Figma integration workflow — token push (054a) and 
 DesignerPunk provides bidirectional Figma integration through two complementary workflows:
 
 1. **Token Push** (Code → Figma): Push DesignerPunk tokens to Figma as Variables and Styles so designers work with the system's vocabulary. Implemented in Spec 054a.
-2. **Design Extraction** (Figma → design-outline.md): Extract validated Figma designs into structured design outlines that enter the spec process. Implemented in Spec 054b.
+2. **Design Extraction** (Figma → ComponentAnalysis): Extract Figma components into structured analysis artifacts (JSON + Markdown) that inform the spec process. Implemented in Specs 054b/054d.
 
-Both workflows use code as the source of truth. Designers iterate in Figma using DesignerPunk tokens; validated designs are extracted and formalized through the spec process with human review at every governance decision point.
+Both workflows use code as the source of truth. Designers iterate in Figma using DesignerPunk tokens; extracted analyses provide structured data for human-authored design outlines and spec formalization.
 
 ### Prerequisites
 
@@ -215,13 +215,13 @@ Token sync operates in batches of 100 variables. If a batch fails (e.g., rate li
 
 ---
 
-## Design Extraction Workflow (Spec 054b)
+## Design Extraction Workflow (Specs 054b/054d)
 
-Reads Figma designs and generates `design-outline.md` documents with confidence flags, context-aware recommendations, and decision points for human review.
+Reads Figma components and generates ComponentAnalysis artifacts — structured JSON (source of truth) and human-readable Markdown — with hierarchical node trees, three-tier token classification, composition pattern detection, and screenshots.
 
 ### Design-to-Spec-to-Code Workflow
 
-The extraction workflow is Phase 2 of a five-phase design-to-spec-to-code pipeline. This spec (054b) implements Phase 2 only. Phases 3–5 follow existing DesignerPunk processes (Spec Planning Standards, Component Development Guide, Token Governance).
+The extraction workflow is Phase 2 of a five-phase design-to-spec-to-code pipeline.
 
 ```
 Phase 1: Design in Figma
@@ -229,11 +229,13 @@ Phase 1: Design in Figma
 ├─ Designers mark designs as "ready for spec"
 └─ Design validated in Figma environment
 
-Phase 2: Extraction — THIS SPEC (054b)
+Phase 2: Extraction — Specs 054b/054d
 ├─ DesignExtractor reads Figma component structure
-├─ TokenTranslator matches Figma values to DesignerPunk tokens
-├─ VariantAnalyzer provides context-aware recommendations
-└─ design-outline.md generated with confidence flags
+├─ Builds hierarchical node tree with per-node token classification
+├─ Detects composition patterns and resolves bound variables
+├─ Captures component screenshots
+├─ Generates ComponentAnalysis JSON + Markdown artifacts
+└─ Human authors design-outline.md using analysis as reference
 
 Phase 3: Spec Review — out of scope (human decision-making)
 ├─ Ada reviews token usage and governance decisions
@@ -250,22 +252,19 @@ Phase 5: Implementation — out of scope
 └─ Code written following formal spec
 ```
 
-**Critical distinction: extraction surfaces information, humans make decisions.**
-
-The extraction workflow is automated information gathering with illustrative suggestions to reduce cognitive load. It does not make governance decisions. Those require human judgment, domain expertise, and alignment with DesignerPunk principles during Phases 3–5:
-
-- **Extraction surfaces**: Repeated primitive token usage patterns with illustrative suggestions — **Ada decides** whether to create component tokens during spec review
-- **Extraction surfaces**: Variant mapping recommendations with rationale — **Lina decides** component architecture during spec review
-- **Extraction surfaces**: Missing behavioral contracts — **Thurgood validates** spec completeness during spec review
+**Critical distinction**: Extraction surfaces structured data. Humans author design outlines and make governance decisions. The pipeline no longer auto-generates design-outline.md — that document is human-authored using ComponentAnalysis as reference material.
 
 ### CLI Usage
 
 ```bash
-# Extract a component from a Figma file
+# Extract a single component
 npm run figma:extract -- --file <file-key> --node <node-id>
 
-# Specify a custom output path
-npm run figma:extract -- --file <file-key> --node <node-id> --output ./my-outline.md
+# Extract multiple components in one run
+npm run figma:extract -- --file <file-key> --node <node-id-1> --node <node-id-2>
+
+# Specify a custom output directory
+npm run figma:extract -- --file <file-key> --node <node-id> --output-dir ./my-analysis
 ```
 
 **Arguments:**
@@ -273,119 +272,101 @@ npm run figma:extract -- --file <file-key> --node <node-id> --output ./my-outlin
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `--file <key>` | Yes | — | Figma file key (from the file URL) |
-| `--node <id>` | Yes | — | Figma component node ID |
-| `--output <path>` | No | `./design-outline.md` | Output path for the generated outline |
+| `--node <id>` | Yes (repeatable) | — | Figma component node ID(s) |
+| `--output-dir <path>` | No | `./analysis` | Output directory for analysis files |
 
 **Exit codes:**
-- `0` — Extraction completed, no human input required
-- `1` — Extraction completed but human input required (no-match tokens, missing contracts), or extraction failed
+- `0` — Extraction completed successfully
+- `1` — Extraction failed (connection error, component not found, etc.)
+
+Unidentified token values do **not** cause failure — they are reported in the classification summary and included in the analysis artifacts for human review.
+
+### Output Artifacts
+
+Each extracted component produces:
+
+| File | Purpose |
+|------|---------|
+| `{component-name}-analysis.json` | Structured data (source of truth) — node tree, classifications, composition patterns, unresolved bindings, recommendations |
+| `{component-name}-analysis.md` | Human-readable summary — classification counts, indented node tree, token usage by node with tier indicators, recommendations with validation disclaimers |
+| `images/{component-name}.png` | Component screenshot (2x scale) |
+
+Files are written to the output directory (default: `./analysis`). The `images/` subdirectory is created automatically.
 
 ### Extraction Pipeline
 
-When you run `figma:extract`, the following steps execute:
+When you run `figma:extract`, the following steps execute per component:
 
 1. Load DTCG tokens from `dist/DesignTokens.dtcg.json`
 2. Clean up stale ports (prevents connection issues)
-3. Connect to figma-console-mcp
-4. Read component structure via Kiro Figma Power
-5. Read token bindings via figma-console-mcp
-6. Read styles via figma-console-mcp
-7. Query Component-Family docs for context
-8. Translate all values using TokenTranslator (binding-first, value fallback)
-9. Reconstruct composite tokens (shadows, typography)
-10. Detect behavioral contracts (interactive vs static)
-11. Detect platform parity (web-only vs cross-platform states)
-12. Surface component token decision points
-13. Validate mode consistency (light/dark)
-14. Generate `design-outline.md` with confidence flags
+3. Connect to figma-console-mcp and run pre-flight checks
+4. Read component structure, token bindings, and styles in parallel
+5. Resolve unknown bound variable IDs via Plugin API
+6. Build hierarchical node tree with per-node token classification
+7. Collect and batch-resolve bound variable IDs across all nodes
+8. Reclassify unidentified values using resolved variable names
+9. Detect composition patterns (repeated child instances)
+10. Capture component screenshot via `figma_get_component_image`
+11. Gather recommendations (variant mapping, component tokens, mode validation, platform parity)
+12. Generate ComponentAnalysis JSON and Markdown artifacts
 
-### Confidence Flag Interpretation
+### Three-Tier Token Classification
 
-Every section in the generated design outline includes confidence flags indicating how reliably the extraction matched Figma values to DesignerPunk tokens. Flags appear at two levels: per-token (individual matches) and overall (the entire extraction).
+Every token value found in the node tree is classified into one of three tiers:
 
-#### Per-Token Flags
+| Tier | Indicator | Meaning |
+|------|-----------|---------|
+| Semantic Identified | ✅ | Value maps to a semantic token (e.g., `color.primary`) |
+| Primitive Identified | ⚠️ | Value maps to a primitive token only (e.g., `space.300`) — may warrant a component token |
+| Unidentified | ❌ | No token match found — requires human review |
 
-Each token reference in the Token Usage tables carries a flag:
+The classification summary in the CLI output and Markdown report shows counts per component:
 
-| Flag | Meaning | When It Appears | Action Required |
-|------|---------|-----------------|-----------------|
-| ✅ High Confidence | Exact match via variable binding or style name | Element uses a DesignerPunk variable or style directly | None — value is confirmed |
-| ⚠️ Needs Review | Approximate value match or ambiguous result | Value is within tolerance but no direct binding exists; or recommendations conflict | Review the match and confirm or correct |
-| ❌ Requires Human Input | No match found or critical information missing | No token matches the value; behavioral contracts missing for interactive component | Must resolve before proceeding to spec formalization |
+```
+📊 Classification Summary:
+   ButtonCTA (8 values):
+     ✅ Semantic:    5
+     ⚠️  Primitive:   2
+     ❌ Unidentified: 1
+     📸 Screenshots:  1
+```
 
-#### Overall Extraction Confidence
+### Composition Pattern Detection
 
-The Extraction Confidence section at the bottom of the design outline aggregates all per-token flags into an overall assessment:
+The extractor identifies repeated child component instances within the node tree:
 
-| Overall Flag | Condition |
-|-------------|-----------|
-| ✅ High | All matches are exact, no approximate or no-match values, and no review items |
-| ⚠️ Medium | No unmatched values and no blocking review items, but some approximate matches exist |
-| ❌ Low | One or more no-match values, missing behavioral contracts, unexpected mode discrepancies, or conflicting variant recommendations |
+```json
+{
+  "componentName": "Progress-Indicator-Node-Base",
+  "instanceCount": 5,
+  "propertyVariations": {
+    "State": ["Complete", "Current", "Incomplete"]
+  }
+}
+```
 
-When overall confidence is ❌ Low, the CLI exits with code 1 and the Extraction Confidence section lists specific review items that must be resolved before proceeding to spec formalization.
+This helps identify dependencies between components and informs scope decisions during spec review.
 
-#### When Each Flag Appears — Examples
+### Recommendations
 
-**✅ High Confidence examples:**
+The Markdown report includes recommendations requiring domain specialist review, each prefixed with validation disclaimers:
 
-- A button's padding uses the Figma variable `space/300` → TokenTranslator resolves it to `space.300` via binding match. The Token Usage table shows:
+- **Variant Mapping** — How Figma variants map to Stemma naming conventions (Lina reviews)
+- **Component Tokens** — Repeated primitive usage that may warrant component tokens (Ada reviews)
+- **Mode Validation** — Unexpected light/dark mode discrepancies (structural tokens should be mode-agnostic)
+- **Platform Parity** — Web-only vs cross-platform interaction patterns (Thurgood reviews)
 
-  ```
-  | padding-inline | `space.300` | ✅ exact | binding |
-  ```
+All recommendations include `⚠️ **Validation Required**` disclaimers — they are suggestions for human review, not automated decisions.
 
-- A shadow style named `shadow.elevation200` matches the DTCG composite token `shadow.elevation200` by name. The Shadows table shows:
+### Token Translation
 
-  ```
-  | box-shadow | `shadow.elevation200` | ✅ exact | binding |
-  ```
+The TokenTranslator uses a binding-first approach:
 
-- A text element uses the Figma variable `color/purple/300` → TokenTranslator resolves it to `color.purple.300` and enriches with the semantic alias `color.primary`:
-
-  ```
-  | background | `color.primary` (primitive: `color.purple.300`) | ✅ exact | binding |
-  ```
-
-**⚠️ Needs Review examples:**
-
-- A designer manually typed `25px` for padding instead of binding the `space/300` variable (24px). The value falls within the ±2px spacing tolerance, so TokenTranslator returns an approximate match:
-
-  ```
-  | padding-block | `space.300` | ⚠️ approximate (delta: +1px) | value |
-  ```
-
-  Action: Confirm the designer intended `space.300` and update the Figma design to use the variable binding.
-
-- A color value `#B12AF0` has no variable binding but is perceptually close to `color.purple.300` (`#B026FF`) with ΔE < 3:
-
-  ```
-  | border-color | `color.purple.300` | ⚠️ approximate (ΔE: 2.1) | value |
-  ```
-
-  Action: Verify the designer intended this token. If so, bind the variable in Figma. If the color is intentionally different, document it as an off-system value.
-
-- The VariantAnalyzer's family pattern recommendation conflicts with its behavioral analysis. The Inheritance Pattern section shows ⚠️ with both recommendations and a "Human Decision Required" label.
-
-- The Component-Family doc is missing. The Inheritance Pattern section shows ⚠️ and recommends creating the doc before proceeding.
-
-**❌ Requires Human Input examples:**
-
-- A designer used `30px` for padding, which exceeds the ±2px tolerance for any spacing token. No match is found:
-
-  ```
-  | margin-block | — | ❌ no-match (closest: space.300, delta: +6px) | value |
-  ```
-
-  Action: Choose one of three options — map to the suggested token, document as an off-system value, or request a new token through the spec process.
-
-- An interactive component (button) has no behavioral contracts defined. The Behavioral Contracts section shows ❌ and blocks progression to requirements.md.
-
-- A spacing token has different values in light mode (24px) and dark mode (32px). The Mode Validation section flags this as an unexpected discrepancy because structural tokens should be mode-agnostic.
-
-#### Tolerance Rules for Approximate Matches
-
-When no variable binding exists, the TokenTranslator falls back to value-based matching with these tolerances:
+1. **Variable binding match** — Figma element uses a DesignerPunk variable → exact match by name
+2. **Style name match** — Figma element uses a DesignerPunk style → exact match by style name
+3. **Exact value match** — Raw value exactly matches a token value
+4. **Approximate value match** — Raw value within tolerance of a token value
+5. **No match** — No token found; classified as Unidentified for human review
 
 | Category | Tolerance | Rationale |
 |----------|-----------|-----------|
@@ -393,102 +374,6 @@ When no variable binding exists, the TokenTranslator falls back to value-based m
 | Color | ΔE < 3 | Perceptually similar (CIELAB color difference) |
 | Font Size | ±1px | Accounts for rendering differences |
 | Radius | ±1px | Minor visual difference |
-
-Values within tolerance produce ⚠️ approximate matches. Values outside tolerance produce ❌ no-match results. Binding matches always produce ✅ exact results regardless of the underlying value.
-
-#### Reading the Extraction Confidence Summary
-
-The Extraction Confidence section at the bottom of every design outline looks like this:
-
-```markdown
-## Extraction Confidence
-
-**Overall**: ⚠️ medium
-
-| Metric | Count |
-|--------|-------|
-| ✅ Exact matches | 12 |
-| ⚠️ Approximate matches | 3 |
-| ❌ No matches | 0 |
-```
-
-When human input is required, a callout appears below the table listing each item that needs attention:
-
-```markdown
-> **⚠️ Human Input Required** — Review the items below before proceeding to spec formalization.
-
-- 2 token value(s) could not be matched — requires human decision
-- Missing behavioral contracts for interactive component — define before proceeding to requirements.md
-```
-
-Resolve all listed items before moving the design outline into the spec process (Phase 3).
-
-### Token Translation
-
-The TokenTranslator uses a binding-first approach:
-
-1. **Variable binding match** — Figma element uses a DesignerPunk variable → exact match by name (e.g., `space/300` → `space.300`)
-2. **Style name match** — Figma element uses a DesignerPunk style → exact match by style name
-3. **Exact value match** — Raw value exactly matches a token value
-4. **Approximate value match** — Raw value within tolerance of a token value
-5. **No match** — No token found; extraction pauses for human decision
-
-The `matchMethod` field in results indicates whether the match was found via `binding` (name-based) or `value` (value-based).
-
-### Design Outline Sections
-
-The generated `design-outline.md` includes these sections:
-
-- **Component Purpose** — Name, description, and classification
-- **Variants** — Figma variant definitions and properties
-- **States** — Visual states (hover, focus, disabled, pressed)
-- **Token Usage** — Spacing, colors, typography, radius, shadows with confidence flags
-- **Accessibility** — Accessibility considerations extracted from the design
-- **Platform Behaviors** — Platform-specific interaction patterns
-- **Edge Cases** — Detected edge cases and boundary conditions
-- **Extraction Confidence** — Overall confidence summary with match counts
-- **Inheritance Pattern** — Component-Family alignment and recommendations
-- **Behavioral Contracts** — Interactive vs static classification; missing contracts flagged
-- **Platform Parity** — Web-only vs cross-platform state detection
-- **Component Token Needs** — Repeated primitive usage patterns with illustrative suggestions (pending Ada review)
-- **Accessibility Contracts** — Accessibility requirements for the component
-
-### Annotated Example
-
-A complete annotated example design-outline.md is available at [`docs/examples/design-outline-example.md`](./examples/design-outline-example.md). It shows every section the extractor generates for a `ButtonCTA` component, with HTML comment annotations explaining each section's purpose, how to interpret confidence flags in context, illustrative component token suggestions, and mode validation categorization. Use it as a companion when reviewing real extraction results.
-
-### Component Token Suggestions
-
-When the extractor detects repeated primitive token usage across component properties, it surfaces illustrative suggestions to reduce cognitive load during spec review:
-
-```markdown
-## Component Token Needs
-
-### Pattern 1: Repeated Padding Usage
-
-**Primitive Token**: `space.300` (24px)
-
-**Usage Context**:
-- Button padding-left: 5 variants
-- Button padding-right: 5 variants
-
-**Illustrative Suggestion** (pending Ada review):
-  button.padding.horizontal = space.300
-
-**Rationale**: Consistent spacing across button variants suggests semantic intent.
-
-**Ada Decision Required**: Evaluate whether component tokens align with
-Token Governance standards and button component architecture.
-```
-
-These suggestions are illustrative only. Ada makes final token governance decisions during spec review.
-
-### Mode Validation
-
-The extractor checks light/dark mode consistency for each token binding:
-
-- **Expected differences** (no flag): Color tokens differ by mode (light/dark theme variations)
-- **Unexpected differences** (flagged for review): Spacing, radius, or typography tokens differ by mode — structural tokens should be mode-agnostic
 
 ---
 
@@ -526,31 +411,23 @@ The extractor checks light/dark mode consistency for each token binding:
 3. Verify `FIGMA_FILE_KEY` matches the file where the Desktop Bridge is running
 4. Check that the PAT has the required scopes for the operations you're performing
 
-### No-Match Token Values (Extraction)
+### Unidentified Token Values (Extraction)
 
-**Symptom:** Extraction exits with code 1 and reports unmatched values.
+**Symptom:** Classification summary shows ❌ Unidentified values.
 
-This means the extractor found Figma values that don't correspond to any DesignerPunk token. The CLI output shows each unmatched value with options:
-
-```
-❌ Unmatched values requiring human decision:
-   • padding-left: 30px — closest: space.300 (delta: +6px)
-     → Map to suggested token (space.300)
-     → Document as off-system value
-     → Request new token creation through spec process
-```
+This means the extractor found Figma values that don't correspond to any DesignerPunk token. These are included in the ComponentAnalysis artifacts for human review but do **not** cause the CLI to fail.
 
 **Resolution:**
-1. **Map to suggested token** — If the value is close enough and the designer intended to use that token, update the Figma design to use the correct variable binding
-2. **Document as off-system value** — If the value is intentionally different, note it in the design outline for spec review
+1. **Bind the correct variable** — If the designer intended to use a token, update the Figma design to use the correct variable binding
+2. **Document as off-system value** — If the value is intentionally different, note it in the human-authored design outline
 3. **Request new token** — If a new token is needed, create it through the spec process (token creation requires human approval per Token Governance)
 
 ### Missing Component-Family Docs (Extraction)
 
-**Symptom:** Design outline shows ⚠️ on variant recommendations with a note about missing Component-Family doc.
+**Symptom:** Markdown analysis shows reduced recommendation quality.
 
 **Resolution:**
-The VariantAnalyzer queries Component-Family docs (e.g., `Component-Family-Button.md`) for context-aware recommendations. If the doc doesn't exist, extraction continues with reduced confidence.
+The VariantAnalyzer queries Component-Family docs (e.g., `Component-Family-Button.md`) for context-aware recommendations. If the doc doesn't exist, extraction continues but variant mapping recommendations may be less accurate.
 
 Create the Component-Family doc before re-running extraction for better recommendations. See the Component Development Guide for the doc template.
 
@@ -575,4 +452,5 @@ This produces `dist/DesignTokens.dtcg.json` which both push and extraction workf
 - [Spec Planning Standards](./../.kiro/steering/Process-Spec-Planning.md) — Spec formalization process (requirements → design → tasks)
 - [Token System Overview](./token-system-overview.md) — Complete Rosetta token system documentation
 - [Spec 054a Design](./../.kiro/specs/054a-figma-token-push/design.md) — Token push architecture and implementation details
-- [Spec 054b Design](./../.kiro/specs/054b-figma-design-extract/design.md) — Design extraction architecture and implementation details
+- [Spec 054b Design](./../.kiro/specs/054b-figma-design-extract/design.md) — Design extraction architecture (054b) and hierarchical analysis (054d)
+- [Spec 054d Design](./../.kiro/specs/054d-hierarchical-design-extraction/design.md) — Hierarchical design extraction with three-tier classification

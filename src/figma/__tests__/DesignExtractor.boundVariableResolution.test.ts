@@ -30,6 +30,7 @@ function makeMockConsoleMcp(): jest.Mocked<ConsoleMCPClient> {
     getStatus: jest.fn().mockResolvedValue({}),
     getStyles: jest.fn().mockResolvedValue([]),
     getComponent: jest.fn().mockResolvedValue({}),
+    getComponentImage: jest.fn().mockResolvedValue({ imageUrl: '' }),
   } as unknown as jest.Mocked<ConsoleMCPClient>;
 }
 
@@ -417,15 +418,16 @@ describe('DesignExtractor.reclassifyWithResolvedBindings', () => {
   });
 
   it('moves resolved bindings from unidentified to semantic/primitive', () => {
-    // First call: classify as semantic
-    mockTranslator.classifyTokenMatch.mockReturnValueOnce('semantic');
-    mockTranslator.toClassifiedToken.mockReturnValueOnce({
-      property: 'padding-top',
-      semanticToken: 'semanticSpace.inset.200',
-      primitiveToken: 'space.200',
-      rawValue: 16,
-      matchMethod: 'binding',
+    // translateByBinding finds the token; lookupToken reveals it's an alias (semantic)
+    mockTranslator.translateByBinding.mockReturnValueOnce({
+      token: 'semanticSpace.inset.200',
       confidence: 'exact',
+      matchMethod: 'binding',
+      rawValue: '{space.200}',
+    });
+    mockTranslator.lookupToken.mockReturnValueOnce({
+      $value: '{space.200}',
+      $type: 'dimension',
     });
 
     const nodeTree = makeClassifiedNode({
@@ -448,9 +450,13 @@ describe('DesignExtractor.reclassifyWithResolvedBindings', () => {
     extractor.reclassifyWithResolvedBindings(nodeTree, resolvedMap);
 
     expect(nodeTree.tokenClassifications.semanticIdentified).toHaveLength(1);
-    expect(nodeTree.tokenClassifications.semanticIdentified[0].semanticToken).toBe(
-      'semanticSpace.inset.200',
-    );
+    expect(nodeTree.tokenClassifications.semanticIdentified[0]).toMatchObject({
+      property: 'padding-top',
+      semanticToken: 'semanticSpace.inset.200',
+      primitiveToken: 'space.200',
+      matchMethod: 'binding',
+      confidence: 'exact',
+    });
     expect(nodeTree.tokenClassifications.unidentified).toHaveLength(0);
   });
 
@@ -491,13 +497,16 @@ describe('DesignExtractor.reclassifyWithResolvedBindings', () => {
   });
 
   it('recurses into children', () => {
-    mockTranslator.classifyTokenMatch.mockReturnValue('primitive');
-    mockTranslator.toClassifiedToken.mockReturnValue({
-      property: 'padding-top',
-      primitiveToken: 'space.200',
-      rawValue: 16,
-      matchMethod: 'binding',
+    // translateByBinding finds a primitive token; lookupToken reveals raw value (not alias)
+    mockTranslator.translateByBinding.mockReturnValueOnce({
+      token: 'space.200',
       confidence: 'exact',
+      matchMethod: 'binding',
+      rawValue: '16',
+    });
+    mockTranslator.lookupToken.mockReturnValueOnce({
+      $value: 16,
+      $type: 'dimension',
     });
 
     const childNode = makeClassifiedNode({
@@ -528,6 +537,12 @@ describe('DesignExtractor.reclassifyWithResolvedBindings', () => {
     extractor.reclassifyWithResolvedBindings(nodeTree, resolvedMap);
 
     expect(childNode.tokenClassifications.primitiveIdentified).toHaveLength(1);
+    expect(childNode.tokenClassifications.primitiveIdentified[0]).toMatchObject({
+      property: 'padding-top',
+      primitiveToken: 'space.200',
+      matchMethod: 'binding',
+      confidence: 'exact',
+    });
     expect(childNode.tokenClassifications.unidentified).toHaveLength(0);
   });
 

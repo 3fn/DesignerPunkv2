@@ -25,6 +25,7 @@ const mockMcp: ConsoleMCPClient = {
   getStatus: jest.fn(),
   getStyles: jest.fn().mockResolvedValue([]),
   getComponent: jest.fn().mockResolvedValue({}),
+    getComponentImage: jest.fn().mockResolvedValue({ imageUrl: '' }),
 };
 
 function makeWorkflow(): TokenSyncWorkflow {

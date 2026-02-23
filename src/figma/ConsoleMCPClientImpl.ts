@@ -11,7 +11,7 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import type { FigmaVariable } from '../generators/transformers/FigmaTransformer';
-import type { ConsoleMCPClient, ConsoleMCPStatus, DesignTokenSetupPayload, FigmaStyleData, FigmaComponentData } from './ConsoleMCPClient';
+import type { ConsoleMCPClient, ConsoleMCPStatus, DesignTokenSetupPayload, FigmaStyleData, FigmaComponentData, ComponentImageResult } from './ConsoleMCPClient';
 
 /** Options for constructing a ConsoleMCPClientImpl. */
 export interface ConsoleMCPClientOptions {
@@ -378,6 +378,22 @@ export class ConsoleMCPClientImpl implements ConsoleMCPClient {
     return (result ?? {}) as ConsoleMCPStatus;
   }
 
+  async getComponentImage(
+    fileUrl: string,
+    nodeId: string,
+    options?: { scale?: number; format?: 'png' | 'jpg' | 'svg' | 'pdf' },
+  ): Promise<ComponentImageResult> {
+    const result = await this.callTool('figma_get_component_image', {
+      fileUrl,
+      nodeId,
+      scale: options?.scale ?? 2,
+      format: options?.format ?? 'png',
+    });
+    const data = (result ?? {}) as Record<string, unknown>;
+    const imageUrl = (data.imageUrl ?? data.url ?? data.image ?? '') as string;
+    return { ...data, imageUrl };
+  }
+
   async getStyles(fileKey: string): Promise<FigmaStyleData[]> {
     try {
       const result = await this.callTool('figma_get_styles', { fileKey });
@@ -519,18 +535,107 @@ export class ConsoleMCPClientImpl implements ConsoleMCPClient {
 
             const parentFields = this.extractComponentFields(metaComponent);
 
-            // Step 2: Find first child variant ID
+            // Step 2: Get all child variant IDs
             const children = metaComponent.children as Array<Record<string, unknown>> | undefined;
             if (!children || children.length === 0) {
               return parentFields;
             }
 
-            const firstChildId = children[0].id as string | undefined;
-            if (!firstChildId) {
+            const childIds = children
+              .map(c => c.id as string | undefined)
+              .filter((id): id is string => !!id);
+            if (childIds.length === 0) {
               return parentFields;
             }
 
-            // Step 3: Fetch from BOTH sources in parallel
+            // Step 3: Fetch all variants via Plugin API (single call, returns all children)
+            let pluginChildren: Array<Record<string, unknown>> = [];
+            try {
+              const code = `
+        const parent = await figma.getNodeByIdAsync('${nodeId}');
+        if (!parent || !('children' in parent)) return JSON.stringify({ error: 'Node not found' });
+
+        function extractNode(n, depth) {
+          if (depth > 4) return { id: n.id, name: n.name, type: n.type };
+          const data = {
+            id: n.id, name: n.name, type: n.type,
+            visible: n.visible
+          };
+          if ('layoutMode' in n) data.layoutMode = n.layoutMode;
+          if ('itemSpacing' in n) data.itemSpacing = n.itemSpacing;
+          if ('paddingTop' in n) data.paddingTop = n.paddingTop;
+          if ('paddingRight' in n) data.paddingRight = n.paddingRight;
+          if ('paddingBottom' in n) data.paddingBottom = n.paddingBottom;
+          if ('paddingLeft' in n) data.paddingLeft = n.paddingLeft;
+          if ('counterAxisSpacing' in n) data.counterAxisSpacing = n.counterAxisSpacing;
+          if ('cornerRadius' in n) data.cornerRadius = n.cornerRadius;
+          if ('fills' in n) data.fills = n.fills;
+          if ('strokes' in n) data.strokes = n.strokes;
+          if ('effects' in n) data.effects = n.effects;
+          if ('opacity' in n) data.opacity = n.opacity;
+          if ('strokeWeight' in n) data.strokeWeight = n.strokeWeight;
+          if ('strokeAlign' in n) data.strokeAlign = n.strokeAlign;
+          if ('layoutSizingHorizontal' in n) data.layoutSizingHorizontal = n.layoutSizingHorizontal;
+          if ('layoutSizingVertical' in n) data.layoutSizingVertical = n.layoutSizingVertical;
+          if ('primaryAxisAlignItems' in n) data.primaryAxisAlignItems = n.primaryAxisAlignItems;
+          if ('counterAxisAlignItems' in n) data.counterAxisAlignItems = n.counterAxisAlignItems;
+          if ('layoutAlign' in n) data.layoutAlign = n.layoutAlign;
+          if ('layoutGrow' in n) data.layoutGrow = n.layoutGrow;
+          if (n.type === 'TEXT') {
+            if ('fontSize' in n) data.fontSize = n.fontSize;
+            if ('fontName' in n) data.fontName = n.fontName;
+            if ('fontWeight' in n) data.fontWeight = n.fontWeight;
+            if ('lineHeight' in n) data.lineHeight = n.lineHeight;
+            if ('letterSpacing' in n) data.letterSpacing = n.letterSpacing;
+            if ('characters' in n) data.characters = n.characters;
+            if ('textAlignHorizontal' in n) data.textAlignHorizontal = n.textAlignHorizontal;
+            if ('textAlignVertical' in n) data.textAlignVertical = n.textAlignVertical;
+          }
+          if ('boundVariables' in n) {
+            const bv = {};
+            for (const [key, val] of Object.entries(n.boundVariables)) {
+              if (val && typeof val === 'object') {
+                if (Array.isArray(val)) {
+                  bv[key] = val.map(v => ({ id: v.id, type: v.type }));
+                } else {
+                  bv[key] = { id: val.id, type: val.type };
+                }
+              }
+            }
+            if (Object.keys(bv).length > 0) data.boundVariables = bv;
+          }
+          try { if ('componentPropertyDefinitions' in n) data.componentPropertyDefinitions = n.componentPropertyDefinitions; } catch(e) {}
+          try { if ('variantProperties' in n) data.variantProperties = n.variantProperties; } catch(e) {}
+          if ('width' in n) data.width = n.width;
+          if ('height' in n) data.height = n.height;
+          if ('children' in n && n.children) {
+            data.children = n.children.map(c => extractNode(c, depth + 1));
+          }
+          return data;
+        }
+
+        const results = parent.children.map(c => extractNode(c, 0));
+        return JSON.stringify(results);
+        `.trim();
+
+              const result = await this.callTool('figma_execute', { fileKey, code });
+              const parsed = this.parsePluginApiArrayResult(result);
+              if (parsed) pluginChildren = parsed;
+            } catch (e) {
+              // Plugin API failed — fall back to single first-child approach
+            }
+
+            // Step 4: If Plugin API returned all children, use them
+            if (pluginChildren.length > 0) {
+              return {
+                ...parentFields,
+                children: pluginChildren as unknown[],
+              };
+            }
+
+            // Step 5: Fallback — fetch just the first child via REST + Plugin API
+            const firstChildId = childIds[0];
+
             let restData: Record<string, unknown> | undefined;
             let pluginData: Record<string, unknown> | undefined;
 
@@ -575,6 +680,24 @@ export class ConsoleMCPClientImpl implements ConsoleMCPClient {
           if ('strokes' in n) data.strokes = n.strokes;
           if ('effects' in n) data.effects = n.effects;
           if ('opacity' in n) data.opacity = n.opacity;
+          if ('strokeWeight' in n) data.strokeWeight = n.strokeWeight;
+          if ('strokeAlign' in n) data.strokeAlign = n.strokeAlign;
+          if ('layoutSizingHorizontal' in n) data.layoutSizingHorizontal = n.layoutSizingHorizontal;
+          if ('layoutSizingVertical' in n) data.layoutSizingVertical = n.layoutSizingVertical;
+          if ('primaryAxisAlignItems' in n) data.primaryAxisAlignItems = n.primaryAxisAlignItems;
+          if ('counterAxisAlignItems' in n) data.counterAxisAlignItems = n.counterAxisAlignItems;
+          if ('layoutAlign' in n) data.layoutAlign = n.layoutAlign;
+          if ('layoutGrow' in n) data.layoutGrow = n.layoutGrow;
+          if (n.type === 'TEXT') {
+            if ('fontSize' in n) data.fontSize = n.fontSize;
+            if ('fontName' in n) data.fontName = n.fontName;
+            if ('fontWeight' in n) data.fontWeight = n.fontWeight;
+            if ('lineHeight' in n) data.lineHeight = n.lineHeight;
+            if ('letterSpacing' in n) data.letterSpacing = n.letterSpacing;
+            if ('characters' in n) data.characters = n.characters;
+            if ('textAlignHorizontal' in n) data.textAlignHorizontal = n.textAlignHorizontal;
+            if ('textAlignVertical' in n) data.textAlignVertical = n.textAlignVertical;
+          }
           if ('boundVariables' in n) {
             const bv = {};
             for (const [key, val] of Object.entries(n.boundVariables)) {
@@ -657,6 +780,26 @@ export class ConsoleMCPClientImpl implements ConsoleMCPClient {
               } else if (r.name && !r.error) {
                 return r;
               }
+            }
+            return undefined;
+          }
+
+          /** Parse a Plugin API result that returns a JSON array of nodes. */
+          private parsePluginApiArrayResult(result: unknown): Array<Record<string, unknown>> | undefined {
+            let raw: string | undefined;
+            if (typeof result === 'string') {
+              raw = result;
+            } else if (result && typeof result === 'object') {
+              const r = result as Record<string, unknown>;
+              const output = r.result ?? r.output ?? r.returnValue;
+              if (typeof output === 'string') raw = output;
+              else if (Array.isArray(output)) return output as Array<Record<string, unknown>>;
+            }
+            if (raw) {
+              try {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) return parsed as Array<Record<string, unknown>>;
+              } catch { /* parse failed */ }
             }
             return undefined;
           }

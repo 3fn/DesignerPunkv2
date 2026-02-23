@@ -16,7 +16,7 @@ export type {
   StyleSyncResult,
 } from './TokenSyncWorkflow';
 
-export type { ConsoleMCPClient, ConsoleMCPStatus, DesignTokenSetupPayload, FigmaStyleData, FigmaComponentData } from './ConsoleMCPClient';
+export type { ConsoleMCPClient, ConsoleMCPStatus, DesignTokenSetupPayload, FigmaStyleData, FigmaComponentData, ComponentImageResult } from './ConsoleMCPClient';
 export { ConsoleMCPClientImpl } from './ConsoleMCPClientImpl';
 export type { ConsoleMCPClientOptions } from './ConsoleMCPClientImpl';
 
@@ -61,7 +61,6 @@ export type {
   ModeValidationResult,
   ModeDiscrepancy,
   ConfidenceReport,
-  DesignOutline,
   ConfidenceLevel,
   MatchMethod,
   KiroFigmaPowerClient,
@@ -85,3 +84,15 @@ export type {
   ScreenshotMetadata,
   ComponentAnalysis,
 } from './ComponentAnalysis';
+
+export {
+  generateComponentAnalysisJSON,
+  generateComponentAnalysisMarkdown,
+  sanitizeComponentName,
+} from './ComponentAnalysisGenerator';
+export type {
+  JSONOutputOptions,
+  JSONOutputResult,
+  MarkdownOutputOptions,
+  MarkdownOutputResult,
+} from './ComponentAnalysisGenerator';

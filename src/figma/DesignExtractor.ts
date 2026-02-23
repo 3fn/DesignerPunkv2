@@ -15,7 +15,11 @@ import type { ConsoleMCPClient } from './ConsoleMCPClient';
 import type { TokenTranslator, TranslationResult, TokenCategory } from './TokenTranslator';
 import type { VariantAnalyzer, ExtractionContext, VariantMapping, MCPDocClient } from './VariantAnalyzer';
 import type { DTCGTokenFile } from '../generators/types/DTCGTypes';
-import type { NodeWithClassifications, FigmaNodeType, CompositionPattern, UnresolvedBinding, UnresolvedBindingReason } from './ComponentAnalysis';
+import type { NodeWithClassifications, FigmaNodeType, CompositionPattern, UnresolvedBinding, UnresolvedBindingReason, ScreenshotMetadata, ComponentAnalysis, ClassifiedToken } from './ComponentAnalysis';
+import * as fs from 'fs';
+import * as path from 'path';
+import https from 'https';
+import http from 'http';
 
 // ---------------------------------------------------------------------------
 // Kiro Figma Power Client Interface
@@ -191,26 +195,6 @@ export interface TokenReference {
   rawValue?: string;
   /** Suggested closest token when no exact match found. */
   suggestion?: string;
-}
-
-/**
- * A single no-match entry in the pause report.
- *
- * Provides all context needed for a human to decide how to handle
- * an unmatched Figma value: map to suggested token, document as
- * off-system, or request new token creation.
- */
-export interface NoMatchEntry {
-  /** CSS property or Figma property name. */
-  property: string;
-  /** Original Figma value that could not be matched. */
-  figmaValue: string;
-  /** Closest token suggestion (if any). */
-  closestMatch?: string;
-  /** Delta from closest match (e.g. "±3px"). */
-  delta?: string;
-  /** Resolution options for human review. */
-  options: string[];
 }
 
 /**
@@ -394,28 +378,6 @@ export interface ConfidenceReport {
   requiresHumanInput: boolean;
   /** Specific items requiring human review. */
   reviewItems: string[];
-}
-
-/**
- * Complete design outline generated from Figma extraction.
- *
- * Contains all information needed to generate a design-outline.md
- * document with confidence flags for human review.
- */
-export interface DesignOutline {
-  componentName: string;
-  description: string;
-  variants: VariantDefinition[];
-  states: StateDefinition[];
-  properties: PropertyDefinition[];
-  tokenUsage: TokenUsage;
-  inheritancePattern?: InheritancePattern;
-  variantMapping?: VariantMapping;
-  behavioralContracts: BehavioralContractStatus;
-  platformParity: PlatformParityCheck;
-  componentTokenDecisions: ComponentTokenDecision[];
-  modeValidation?: ModeValidationResult;
-  extractionConfidence: ConfidenceReport;
 }
 
 // ---------------------------------------------------------------------------
@@ -916,6 +878,27 @@ export class DesignExtractor {
       // Extract layout properties
       node.layout = this.extractNodeLayout(figmaNode);
 
+      // Extract text style for TEXT nodes
+      if (type === 'TEXT') {
+        node.textStyle = this.extractTextStyle(figmaNode);
+      }
+
+      // Extract stroke colors
+      const strokes = figmaNode.strokes as Array<Record<string, unknown>> | undefined;
+      if (strokes?.length) {
+        const extracted: Array<{ color: string }> = [];
+        for (const stroke of strokes) {
+          const c = stroke.color as Record<string, number> | undefined;
+          if (!c) continue;
+          const r = Math.round((c.r ?? 0) * 255);
+          const g = Math.round((c.g ?? 0) * 255);
+          const b = Math.round((c.b ?? 0) * 255);
+          const a = (c.a ?? 1) * ((stroke.opacity as number) ?? 1);
+          extracted.push({ color: `rgba(${r}, ${g}, ${b}, ${a})` });
+        }
+        if (extracted.length) node.strokes = extracted;
+      }
+
       // Extract componentProperties for INSTANCE nodes
       if (type === 'INSTANCE') {
         node.componentProperties = this.extractNodeComponentProperties(figmaNode);
@@ -1059,6 +1042,103 @@ export class DesignExtractor {
       return Array.from(variationMap.values());
     }
 
+    // -----------------------------------------------------------------------
+    // Screenshot Capture (Task 2.3)
+    // -----------------------------------------------------------------------
+
+    /**
+     * Capture a component screenshot via figma-console-mcp.
+     *
+     * Calls `figma_get_component_image` at 2x scale in PNG format.
+     * On failure, logs a warning and returns null so extraction can
+     * continue without a screenshot.
+     *
+     * @param fileKey - The Figma file key.
+     * @param nodeId - The node ID of the component to capture.
+     * @param outputDir - Directory for storing screenshot images.
+     * @param componentName - Component name for the filename.
+     * @param variant - Optional variant identifier for the filename.
+     * @returns ScreenshotMetadata or null if capture failed.
+     * @requirements Req 5 (Component Screenshots)
+     */
+    async captureComponentScreenshot(
+      fileUrl: string,
+      nodeId: string,
+      outputDir: string,
+      componentName: string,
+      variant?: string,
+    ): Promise<ScreenshotMetadata | null> {
+      try {
+        const result = await this.consoleMcp.getComponentImage(fileUrl, nodeId, {
+          scale: 2,
+          format: 'png',
+        });
+
+        if (!result.imageUrl) {
+          console.warn(`[DesignExtractor] Screenshot capture returned no image URL for "${componentName}"`);
+          return null;
+        }
+
+        // Build filename
+        const safeName = componentName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        const safeVariant = variant
+          ? '-' + variant.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+          : '';
+        const filename = `${safeName}${safeVariant}.png`;
+        const relativePath = `./images/${filename}`;
+
+        // Download image to disk
+        const absPath = path.join(outputDir, 'images', filename);
+        try {
+          await this.downloadFile(result.imageUrl, absPath);
+        } catch (dlErr) {
+          const msg = dlErr instanceof Error ? dlErr.message : String(dlErr);
+          console.warn(`[DesignExtractor] Image download failed for "${componentName}": ${msg}`);
+        }
+
+        return {
+          filePath: relativePath,
+          url: result.imageUrl,
+          format: 'png',
+          scale: 2,
+          variant,
+          capturedAt: new Date().toISOString(),
+        };
+      } catch (error) {
+        const msg = error instanceof Error ? error.message : String(error);
+        console.warn(`[DesignExtractor] Screenshot capture failed for "${componentName}": ${msg}`);
+        return null;
+      }
+    }
+
+    /** Download a file from a URL to a local path. */
+    private downloadFile(url: string, dest: string): Promise<void> {
+      return new Promise((resolve, reject) => {
+        const mod = url.startsWith('https') ? https : http;
+        const file = fs.createWriteStream(dest);
+        mod.get(url, (res) => {
+          if (res.statusCode === 301 || res.statusCode === 302) {
+            file.close();
+            fs.unlinkSync(dest);
+            this.downloadFile(res.headers.location!, dest).then(resolve, reject);
+            return;
+          }
+          if (res.statusCode !== 200) {
+            file.close();
+            fs.unlinkSync(dest);
+            reject(new Error(`HTTP ${res.statusCode}`));
+            return;
+          }
+          res.pipe(file);
+          file.on('finish', () => { file.close(); resolve(); });
+        }).on('error', (err) => {
+          file.close();
+          fs.unlinkSync(dest);
+          reject(err);
+        });
+      });
+    }
+
     /**
      * Deep equality check for property values.
      */
@@ -1089,16 +1169,23 @@ export class DesignExtractor {
       const itemSpacing = node.itemSpacing as number | undefined;
       const counterAxisSpacing = node.counterAxisSpacing as number | undefined;
       const cornerRadius = node.cornerRadius as number | undefined;
+      const width = node.width as number | undefined;
+      const height = node.height as number | undefined;
+      const layoutSizingH = node.layoutSizingHorizontal as string | undefined;
+      const layoutSizingV = node.layoutSizingVertical as string | undefined;
+      const primaryAlign = node.primaryAxisAlignItems as string | undefined;
+      const counterAlign = node.counterAxisAlignItems as string | undefined;
+      const layoutAlign = node.layoutAlign as string | undefined;
+      const layoutGrow = node.layoutGrow as number | undefined;
+      const opacity = node.opacity as number | undefined;
+      const strokeWeight = node.strokeWeight as number | undefined;
+      const strokeAlign = node.strokeAlign as string | undefined;
 
       const hasLayout =
         layoutMode != null ||
-        pTop != null ||
-        pRight != null ||
-        pBottom != null ||
-        pLeft != null ||
-        itemSpacing != null ||
-        counterAxisSpacing != null ||
-        cornerRadius != null;
+        pTop != null || pRight != null || pBottom != null || pLeft != null ||
+        itemSpacing != null || counterAxisSpacing != null || cornerRadius != null ||
+        width != null || height != null || opacity != null || strokeWeight != null;
 
       if (!hasLayout) return undefined;
 
@@ -1122,8 +1209,60 @@ export class DesignExtractor {
       if (itemSpacing != null) layout.itemSpacing = itemSpacing;
       if (counterAxisSpacing != null) layout.counterAxisSpacing = counterAxisSpacing;
       if (cornerRadius != null) layout.cornerRadius = cornerRadius;
+      if (width != null) layout.width = width;
+      if (height != null) layout.height = height;
+      if (layoutSizingH === 'FIXED' || layoutSizingH === 'HUG' || layoutSizingH === 'FILL') {
+        layout.layoutSizingHorizontal = layoutSizingH;
+      }
+      if (layoutSizingV === 'FIXED' || layoutSizingV === 'HUG' || layoutSizingV === 'FILL') {
+        layout.layoutSizingVertical = layoutSizingV;
+      }
+      if (primaryAlign) layout.primaryAxisAlignItems = primaryAlign;
+      if (counterAlign) layout.counterAxisAlignItems = counterAlign;
+      if (layoutAlign) layout.layoutAlign = layoutAlign;
+      if (layoutGrow != null) layout.layoutGrow = layoutGrow;
+      if (opacity != null && opacity !== 1) layout.opacity = opacity;
+      if (strokeWeight != null && strokeWeight > 0) layout.strokeWeight = strokeWeight;
+      if (strokeAlign) layout.strokeAlign = strokeAlign;
 
       return layout;
+    }
+
+    /**
+     * Extract text style properties from a TEXT node.
+     */
+    private extractTextStyle(
+      node: Record<string, unknown>,
+    ): NodeWithClassifications['textStyle'] | undefined {
+      const style: NonNullable<NodeWithClassifications['textStyle']> = {};
+      let hasData = false;
+
+      const chars = node.characters as string | undefined;
+      if (chars != null) { style.characters = chars; hasData = true; }
+
+      const fontSize = node.fontSize as number | undefined;
+      if (fontSize != null) { style.fontSize = fontSize; hasData = true; }
+
+      const fontName = node.fontName as { family?: string; style?: string } | undefined;
+      if (fontName?.family) { style.fontFamily = fontName.family; hasData = true; }
+      if (fontName?.style) { style.fontStyle = fontName.style; hasData = true; }
+
+      const fontWeight = node.fontWeight as number | undefined;
+      if (fontWeight != null) { style.fontWeight = fontWeight; hasData = true; }
+
+      const lh = node.lineHeight as { value?: number; unit?: string } | undefined;
+      if (lh?.value != null && lh.unit !== 'AUTO') { style.lineHeight = lh.value; hasData = true; }
+
+      const ls = node.letterSpacing as { value?: number } | undefined;
+      if (ls?.value != null && ls.value !== 0) { style.letterSpacing = ls.value; hasData = true; }
+
+      const tah = node.textAlignHorizontal as string | undefined;
+      if (tah) { style.textAlignHorizontal = tah; hasData = true; }
+
+      const tav = node.textAlignVertical as string | undefined;
+      if (tav) { style.textAlignVertical = tav; hasData = true; }
+
+      return hasData ? style : undefined;
     }
 
     /**
@@ -1178,10 +1317,21 @@ export class DesignExtractor {
 
       const boundVars = figmaNode.boundVariables as
         Record<string, unknown> | undefined;
+      const layoutMode = figmaNode.layoutMode as string | undefined;
+      const nodeType = figmaNode.type as string | undefined;
+      const isLeaf = nodeType === 'TEXT' || nodeType === 'VECTOR'
+        || nodeType === 'ELLIPSE' || nodeType === 'LINE'
+        || nodeType === 'STAR' || nodeType === 'POLYGON';
 
       for (const [figmaProp, cssProp] of spacingProps) {
         const value = figmaNode[figmaProp] as number | undefined;
         if (value == null) continue;
+
+        // Skip irrelevant zero-value defaults
+        if (cssProp === 'counter-axis-spacing' && value === 0) continue;
+        if (cssProp === 'item-spacing' && layoutMode === 'NONE') continue;
+        if (isLeaf && cssProp.startsWith('padding-') && value === 0) continue;
+
         const varName = this.getBoundVariableName(boundVars, figmaProp);
         propertiesToClassify.push({
           property: cssProp,
@@ -1193,7 +1343,7 @@ export class DesignExtractor {
 
       // Corner radius
       const cornerRadius = figmaNode.cornerRadius as number | undefined;
-      if (cornerRadius != null) {
+      if (cornerRadius != null && cornerRadius !== 0) {
         const varName = this.getBoundVariableName(boundVars, 'cornerRadius');
         propertiesToClassify.push({
           property: 'border-radius',
@@ -1213,7 +1363,7 @@ export class DesignExtractor {
           const r = Math.round((color.r ?? 0) * 255);
           const g = Math.round((color.g ?? 0) * 255);
           const b = Math.round((color.b ?? 0) * 255);
-          const a = color.a ?? 1;
+          const a = (color.a ?? 1) * ((fill.opacity as number) ?? 1);
           const rgba = `rgba(${r}, ${g}, ${b}, ${a})`;
 
           const fillBv = fill.boundVariables as
@@ -1228,12 +1378,113 @@ export class DesignExtractor {
         }
       }
 
+      // Opacity
+      const opacity = figmaNode.opacity as number | undefined;
+      if (opacity != null && opacity !== 1) {
+        const varName = this.getBoundVariableName(boundVars, 'opacity');
+        propertiesToClassify.push({
+          property: 'opacity',
+          figmaVarName: varName,
+          rawValue: opacity,
+          category: 'opacity',
+        });
+      }
+
+      // Stroke weight
+      const strokeWeight = figmaNode.strokeWeight as number | undefined;
+      if (strokeWeight != null && strokeWeight > 0) {
+        const varName = this.getBoundVariableName(boundVars, 'strokeWeight');
+        propertiesToClassify.push({
+          property: 'border-width',
+          figmaVarName: varName,
+          rawValue: strokeWeight,
+          category: 'borderWidth',
+        });
+      }
+
+      // Stroke colors
+      const strokes = figmaNode.strokes as Array<Record<string, unknown>> | undefined;
+      if (strokes) {
+        for (const stroke of strokes) {
+          const c = stroke.color as Record<string, number> | undefined;
+          if (!c) continue;
+          const r = Math.round((c.r ?? 0) * 255);
+          const g = Math.round((c.g ?? 0) * 255);
+          const b = Math.round((c.b ?? 0) * 255);
+          const a = (c.a ?? 1) * ((stroke.opacity as number) ?? 1);
+          const strokeBv = stroke.boundVariables as Record<string, unknown> | undefined;
+          const varName = this.getBoundVariableName(strokeBv, 'color');
+          propertiesToClassify.push({
+            property: 'stroke',
+            figmaVarName: varName,
+            rawValue: `rgba(${r}, ${g}, ${b}, ${a})`,
+            category: 'color',
+          });
+        }
+      }
+
+      // Typography properties (TEXT nodes only)
+      if (nodeType === 'TEXT') {
+        const fontSize = figmaNode.fontSize as number | undefined;
+        if (fontSize != null) {
+          const varName = this.getBoundVariableName(boundVars, 'fontSize');
+          propertiesToClassify.push({
+            property: 'font-size',
+            figmaVarName: varName,
+            rawValue: fontSize,
+            category: 'fontSize',
+          });
+        }
+
+        const fontWeight = figmaNode.fontWeight as number | undefined;
+        if (fontWeight != null) {
+          const varName = this.getBoundVariableName(boundVars, 'fontWeight');
+          propertiesToClassify.push({
+            property: 'font-weight',
+            figmaVarName: varName,
+            rawValue: fontWeight,
+            category: 'fontWeight',
+          });
+        }
+
+        const lh = figmaNode.lineHeight as { value?: number; unit?: string } | undefined;
+        if (lh?.value != null && lh.unit !== 'AUTO') {
+          const varName = this.getBoundVariableName(boundVars, 'lineHeight');
+          propertiesToClassify.push({
+            property: 'line-height',
+            figmaVarName: varName,
+            rawValue: lh.value,
+            category: 'lineHeight',
+          });
+        }
+
+        const ls = figmaNode.letterSpacing as { value?: number } | undefined;
+        if (ls?.value != null && ls.value !== 0) {
+          const varName = this.getBoundVariableName(boundVars, 'letterSpacing');
+          propertiesToClassify.push({
+            property: 'letter-spacing',
+            figmaVarName: varName,
+            rawValue: ls.value,
+            category: 'letterSpacing',
+          });
+        }
+      }
+
       // Classify each property
       for (const { property, figmaVarName, rawValue, category } of propertiesToClassify) {
         const result = this.translator.translate(figmaVarName, rawValue, category);
         const tier = this.translator.classifyTokenMatch(result);
 
-        if (tier === 'semantic') {
+        // Value-based matches → Unidentified with suggestion (only bindings earn Identified)
+        if (result.matchMethod === 'value' && tier !== 'unidentified') {
+          node.tokenClassifications.unidentified.push({
+            property,
+            rawValue: result.rawValue,
+            reason: figmaVarName ? 'unresolved-binding' : 'value-match',
+            suggestedToken: result.semantic ?? result.primitive ?? result.token,
+            boundVariableId: figmaVarName,
+          });
+        } else if (tier === 'semantic') {
           node.tokenClassifications.semanticIdentified.push(
             this.translator.toClassifiedToken(result, property),
           );
@@ -1417,7 +1668,7 @@ export class DesignExtractor {
           const r = Math.round((color.r ?? 0) * 255);
           const g = Math.round((color.g ?? 0) * 255);
           const b = Math.round((color.b ?? 0) * 255);
-          const a = color.a ?? 1;
+          const a = (color.a ?? 1) * ((fill.opacity as number) ?? 1);
           const rgba = `rgba(${r}, ${g}, ${b}, ${a})`;
 
           const fillBv = fill.boundVariables as
@@ -1432,6 +1683,74 @@ export class DesignExtractor {
               ancestorChain: ancestors,
               rawValue: rgba,
               category: 'color',
+            });
+          }
+        }
+      }
+
+      // Opacity
+      const opacity = figmaNode.opacity as number | undefined;
+      if (opacity != null && opacity !== 1) {
+        const varId = this.getBoundVariableName(boundVars, 'opacity');
+        if (varId) {
+          entries.push({
+            variableId: varId, property: 'opacity', nodeId, nodeName,
+            ancestorChain: ancestors, rawValue: opacity, category: 'opacity',
+          });
+        }
+      }
+
+      // Stroke weight
+      const strokeWeight = figmaNode.strokeWeight as number | undefined;
+      if (strokeWeight != null && strokeWeight > 0) {
+        const varId = this.getBoundVariableName(boundVars, 'strokeWeight');
+        if (varId) {
+          entries.push({
+            variableId: varId, property: 'border-width', nodeId, nodeName,
+            ancestorChain: ancestors, rawValue: strokeWeight, category: 'borderWidth',
+          });
+        }
+      }
+
+      // Stroke colors
+      const strokes = figmaNode.strokes as Array<Record<string, unknown>> | undefined;
+      if (strokes) {
+        for (const stroke of strokes) {
+          const sc = stroke.color as Record<string, number> | undefined;
+          if (!sc) continue;
+          const sr = Math.round((sc.r ?? 0) * 255);
+          const sg = Math.round((sc.g ?? 0) * 255);
+          const sb = Math.round((sc.b ?? 0) * 255);
+          const sa = (sc.a ?? 1) * ((stroke.opacity as number) ?? 1);
+          const strokeBv = stroke.boundVariables as Record<string, unknown> | undefined;
+          const varId = this.getBoundVariableName(strokeBv, 'color');
+          if (varId) {
+            entries.push({
+              variableId: varId, property: 'stroke', nodeId, nodeName,
+              ancestorChain: ancestors, rawValue: `rgba(${sr}, ${sg}, ${sb}, ${sa})`, category: 'color',
+            });
+          }
+        }
+      }
+
+      // Typography bindings (TEXT nodes only)
+      if (nodeType === 'TEXT') {
+        const typoProps: Array<[string, string, TokenCategory]> = [
+          ['fontSize', 'font-size', 'fontSize'],
+          ['fontWeight', 'font-weight', 'fontWeight'],
+          ['lineHeight', 'line-height', 'lineHeight'],
+          ['letterSpacing', 'letter-spacing', 'letterSpacing'],
+        ];
+        for (const [figmaProp, cssProp, cat] of typoProps) {
+          const varId = this.getBoundVariableName(boundVars, figmaProp);
+          if (varId) {
+            const raw = figmaNode[figmaProp];
+            const rawVal = typeof raw === 'object' && raw !== null
+              ? (raw as Record<string, unknown>).value ?? 0
+              : raw ?? 0;
+            entries.push({
+              variableId: varId, property: cssProp, nodeId, nodeName,
+              ancestorChain: ancestors, rawValue: rawVal as number, category: cat,
             });
           }
         }
@@ -1484,11 +1803,20 @@ export class DesignExtractor {
       // Build Plugin API code
       const code = `
       const results = {};
+      const collections = {};
       for (const id of ${JSON.stringify(uniqueIds)}) {
         try {
-          const v = figma.variables.getVariableById(id);
+          const v = await figma.variables.getVariableByIdAsync(id);
           if (v) {
-            results[id] = { name: v.name };
+            let collectionName = collections[v.variableCollectionId];
+            if (!collectionName) {
+              try {
+                const c = await figma.variables.getVariableCollectionByIdAsync(v.variableCollectionId);
+                collectionName = c ? c.name : '';
+              } catch(e) { collectionName = ''; }
+              collections[v.variableCollectionId] = collectionName;
+            }
+            results[id] = { name: v.name, collection: collectionName };
           }
         } catch (e) {
           // Variable not found — skip
@@ -1500,11 +1828,14 @@ export class DesignExtractor {
       try {
         const result = await this.consoleMcp.execute(fileKey, code);
 
-        // Parse the result — may be wrapped in { result: { ... } }
-        let resolvedData: Record<string, { name: string }> = {};
+        // Parse the result — may be wrapped in { result: { ... } } or { result: "..." }
+        let resolvedData: Record<string, { name: string; collection?: string }> = {};
         if (result && typeof result === 'object') {
           const raw = result as Record<string, unknown>;
-          const inner = raw.result ?? raw;
+          let inner = raw.result ?? raw;
+          if (typeof inner === 'string') {
+            try { inner = JSON.parse(inner); } catch { /* not JSON */ }
+          }
           if (inner && typeof inner === 'object') {
             resolvedData = inner as typeof resolvedData;
           }
@@ -1570,31 +1901,39 @@ export class DesignExtractor {
       for (const entry of unidentified) {
         if (entry.boundVariableId && resolvedMap.has(entry.boundVariableId)) {
           const resolvedName = resolvedMap.get(entry.boundVariableId)!;
-          // Determine category from property
-          const category: TokenCategory = entry.property === 'fill'
-            ? 'color'
-            : entry.property === 'border-radius'
-              ? 'radius'
-              : 'spacing';
 
-          const result = this.translator.translate(
-            resolvedName,
-            entry.rawValue as string | number,
-            category,
-          );
-          const tier = this.translator.classifyTokenMatch(result);
-
-          if (tier === 'semantic') {
-            nodeTree.tokenClassifications.semanticIdentified.push(
-              this.translator.toClassifiedToken(result, entry.property),
-            );
-          } else if (tier === 'primitive') {
-            nodeTree.tokenClassifications.primitiveIdentified.push(
-              this.translator.toClassifiedToken(result, entry.property),
-            );
-          } else {
-            // Still unidentified even with resolved name
+          // Use translateByBinding directly — no enrichResponse promotion.
+          // The designer bound to THIS variable; honour the tier it lives at.
+          const bindingResult = this.translator.translateByBinding(resolvedName);
+          if (bindingResult.confidence === 'no-match') {
+            // Binding resolved to a name but no matching token in DTCG —
+            // likely a component-level variable that needs to be created.
+            entry.reason = 'no-token-match';
+            entry.suggestedToken = resolvedName;
             remaining.push(entry);
+            continue;
+          }
+
+          // Determine tier from the token itself (alias = semantic, raw = primitive)
+          const tokenObj = this.translator.lookupToken(bindingResult.token);
+          const isAlias = tokenObj && typeof tokenObj.$value === 'string'
+            && tokenObj.$value.startsWith('{') && tokenObj.$value.endsWith('}');
+
+          const classified: ClassifiedToken = {
+            property: entry.property,
+            semanticToken: isAlias ? bindingResult.token : undefined,
+            primitiveToken: isAlias
+              ? (tokenObj!.$value as string).slice(1, -1)
+              : bindingResult.token,
+            rawValue: bindingResult.rawValue,
+            matchMethod: 'binding',
+            confidence: 'exact',
+          };
+
+          if (isAlias) {
+            nodeTree.tokenClassifications.semanticIdentified.push(classified);
+          } else {
+            nodeTree.tokenClassifications.primitiveIdentified.push(classified);
           }
         } else {
           remaining.push(entry);
@@ -3125,687 +3464,157 @@ export class DesignExtractor {
 
 
   /**
-   * Extract a Figma component and produce a complete DesignOutline.
+   * Extract a Figma component and produce a ComponentAnalysis.
    *
-   * Orchestrates all extraction steps: reading component structure,
-   * token bindings, styles, context queries, translation, behavioral
-   * analysis, platform parity, and mode validation.
-   *
-   * @param figmaFileKey - The Figma file key.
-   * @param componentNodeId - The node ID of the component to extract.
-   * @returns A DesignOutline ready for markdown generation.
+   * Orchestrates: read component → build node tree → collect/resolve
+   * bound variables → reclassify → detect composition patterns →
+   * capture screenshot → gather recommendations.
    */
-  async extractDesign(
-    figmaFileKey: string,
-    componentNodeId: string,
-  ): Promise<DesignOutline> {
-    // Step 1–3: Read component structure, token bindings, and styles in parallel
+  async extractComponentAnalysis(
+    fileKey: string,
+    nodeId: string,
+    outputDir: string,
+    fileUrl?: string,
+  ): Promise<ComponentAnalysis> {
+    // 1. Read component structure, token bindings, and styles in parallel
     const [component, bindings, styles] = await Promise.all([
-      this.readFigmaComponent(figmaFileKey, componentNodeId),
-      this.readTokenBindings(figmaFileKey),
-      this.readStyles(figmaFileKey),
+      this.readFigmaComponent(fileKey, nodeId),
+      this.readTokenBindings(fileKey),
+      this.readStyles(fileKey),
     ]);
 
-    // Step 3b: Resolve any boundVariable IDs not found in token bindings.
-    // figma_get_token_values (limit: 500) may not return all variables,
-    // so we use Plugin API to resolve missing IDs for binding-first translation.
+    // 2. Resolve unknown variable IDs
     if (component.boundVariableMap && component.boundVariableMap.size > 0) {
-      const additionalBindings = await this.resolveUnknownVariableIds(
-        figmaFileKey,
-        component.boundVariableMap,
-        bindings,
+      const additional = await this.resolveUnknownVariableIds(
+        fileKey, component.boundVariableMap, bindings,
       );
-      if (additionalBindings.length > 0) {
-        bindings.push(...additionalBindings);
-      }
+      if (additional.length > 0) bindings.push(...additional);
     }
 
-    // Step 4: Query Component-Family and readiness context
-    const context = await this.queryContext(component.name);
+    // 3. Get raw component data for node tree building
+    const rawComponent = await this.consoleMcp.getComponent(fileKey, nodeId);
 
-    // Step 5: Translate all component values to DesignerPunk tokens
+    // 4. Build hierarchical node tree with per-node classification
+    const nodeTree = this.buildNodeTree(rawComponent as Record<string, unknown>);
+
+    // 5. Collect and resolve bound variable IDs
+    const boundEntries = this.collectBoundVariableIds(rawComponent as Record<string, unknown>);
+    const { resolved, unresolvedBindings } = await this.batchResolveBoundVariables(fileKey, boundEntries);
+
+    // 6. Reclassify unidentified values using resolved bindings
+    this.reclassifyWithResolvedBindings(nodeTree, resolved);
+
+    // 7. Aggregate classification counts
+    const classificationSummary = this.aggregateClassifications(nodeTree);
+
+    // 8. Detect composition patterns
+    const compositionPatterns = this.detectCompositionPatterns(nodeTree);
+
+    // 9. Capture screenshots (variants for COMPONENT_SET, single for others)
+    const screenshots: ScreenshotMetadata[] = [];
+    const screenshotUrl = fileUrl ?? `https://www.figma.com/design/${fileKey}`;
+    if (nodeTree.type === 'COMPONENT_SET' && nodeTree.children.length > 0) {
+      for (const child of nodeTree.children) {
+        const shot = await this.captureComponentScreenshot(
+          screenshotUrl, child.id, outputDir, component.name, child.name,
+        );
+        if (shot) screenshots.push(shot);
+      }
+    } else {
+      const shot = await this.captureComponentScreenshot(
+        screenshotUrl, nodeId, outputDir, component.name,
+      );
+      if (shot) screenshots.push(shot);
+    }
+
+    // 10. Gather recommendations (reuse existing methods)
     const tokenUsage = this.translateTokens(component, bindings);
-
-    // Step 6: Reconstruct composite tokens from Figma styles
-    const compositeTokens = this.reconstructCompositeTokens(
-      styles,
-      this.translator.getDtcgTokens(),
-    );
-
-    // Merge composite tokens into tokenUsage
+    const compositeTokens = this.reconstructCompositeTokens(styles, this.translator.getDtcgTokens());
     for (const ref of compositeTokens) {
-      if (ref.property === 'shadow') {
-        tokenUsage.shadows.push(ref);
-      } else if (ref.property === 'typography') {
-        tokenUsage.typography.push(ref);
-      }
+      if (ref.property === 'shadow') tokenUsage.shadows.push(ref);
+      else if (ref.property === 'typography') tokenUsage.typography.push(ref);
     }
-
-    // Step 7: Detect behavioral contracts (interactive vs static)
-    const behavioralContracts = this.detectBehavioralContracts(component);
-
-    // Step 8: Detect platform parity concerns
-    const platformParity = await this.detectPlatformParity(component);
-
-    // Step 9: Surface component token decision points
-    const componentTokenDecisions = this.detectComponentTokenDecisions(
-      tokenUsage,
-      component.name,
-    );
-
-    // Step 10: Validate light/dark mode consistency
-    const modeValidation = this.validateModes(bindings);
-
-    // Run variant analysis via VariantAnalyzer
+    const context = await this.queryContext(component.name);
     const analyzerComponent = {
       name: component.name,
       description: component.description,
-      variants: component.variants.map((v) => ({
-        name: v.name,
-        properties: v.properties,
-      })),
-      states: component.states.map((s) => s.name),
+      variants: component.variants.map(v => ({ name: v.name, properties: v.properties })),
+      states: component.states.map(s => s.name),
     };
-    const variantMapping = await this.analyzer.analyzeVariants(
-      analyzerComponent,
-      context,
-    );
+    const variantMapping = await this.analyzer.analyzeVariants(analyzerComponent, context);
+    const componentTokens = this.detectComponentTokenDecisions(tokenUsage, component.name);
+    const modeValidation = this.validateModes(bindings);
+    const platformParity = await this.detectPlatformParity(component);
 
-    // Build inheritance pattern from family context
-    const inheritancePattern: InheritancePattern | undefined =
-      context.familyPattern
-        ? {
-            familyName: context.familyPattern.familyName,
-            pattern: context.familyPattern.inheritancePattern,
-          }
-        : undefined;
+    // 11. Build variant definitions from raw response
+    const variantDefinitions = this.buildVariantDefinitions(rawComponent);
 
-    // Calculate overall extraction confidence (includes conflict detection)
-    const extractionConfidence = this.calculateConfidence(
-      tokenUsage,
-      behavioralContracts,
-      modeValidation,
-      context,
-      variantMapping,
-    );
+    // 12. Determine component type
+    const componentType = this.resolveComponentType(rawComponent);
 
     return {
       componentName: component.name,
-      description: component.description,
-      variants: component.variants,
-      states: component.states,
-      properties: component.properties,
-      tokenUsage,
-      inheritancePattern,
-      variantMapping,
-      behavioralContracts,
-      platformParity,
-      componentTokenDecisions,
-      modeValidation,
-      extractionConfidence,
+      componentType,
+      figmaId: nodeId,
+      fileKey,
+      variantDefinitions: Object.keys(variantDefinitions).length > 0 ? variantDefinitions : undefined,
+      nodeTree,
+      classificationSummary,
+      compositionPatterns,
+      unresolvedBindings,
+      recommendations: {
+        variantMapping: variantMapping.recommendations.length > 0 || variantMapping.conflicts.length > 0 ? variantMapping : undefined,
+        componentTokens: componentTokens.length > 0 ? componentTokens : undefined,
+        modeValidation: modeValidation.hasUnexpectedDiscrepancies ? modeValidation : undefined,
+        platformParity: platformParity.hasConcerns ? platformParity : undefined,
+      },
+      screenshots,
+      extractedAt: new Date().toISOString(),
+      extractorVersion: '6.3.0',
     };
   }
 
-  /**
-   * Calculate overall extraction confidence from individual results.
-   *
-   * Aggregates exact, approximate, and no-match counts across all token
-   * references. Flags human input as required when no-match tokens exist,
-   * behavioral contracts are missing for interactive components, or
-   * unexpected mode discrepancies are found.
-   */
-  private calculateConfidence(
-      tokenUsage: TokenUsage,
-      behavioralContracts: BehavioralContractStatus,
-      modeValidation: ModeValidationResult,
-      context: ExtractionContext,
-      variantMapping?: VariantMapping,
-    ): ConfidenceReport {
-      const allRefs = [
-        ...tokenUsage.spacing,
-        ...tokenUsage.colors,
-        ...tokenUsage.typography,
-        ...tokenUsage.radius,
-        ...tokenUsage.shadows,
-      ];
-
-      const exactMatches = allRefs.filter((r) => r.confidence === 'exact').length;
-      const approximateMatches = allRefs.filter((r) => r.confidence === 'approximate').length;
-      const noMatches = allRefs.filter((r) => r.confidence === 'no-match').length;
-
-      const reviewItems: string[] = [];
-
-      // Flag no-match tokens
-      if (noMatches > 0) {
-        reviewItems.push(`${noMatches} token value(s) could not be matched — requires human decision`);
-      }
-
-      // Flag missing behavioral contracts for interactive components
-      if (behavioralContracts.classification === 'interactive' && !behavioralContracts.contractsDefined) {
-        reviewItems.push(
-          'Missing behavioral contracts for interactive component — define before proceeding to requirements.md',
-        );
-      }
-
-      // Flag unexpected mode discrepancies
-      if (modeValidation.hasUnexpectedDiscrepancies) {
-        const unexpected = modeValidation.discrepancies.filter((d) => d.category === 'unexpected');
-        reviewItems.push(
-          `${unexpected.length} unexpected mode discrepancy(ies) found — structural tokens differ between modes`,
-        );
-      }
-
-      // Flag missing Component-Family doc — extraction continues with ⚠️ confidence
-      if (!context.familyPattern) {
-        reviewItems.push(
-          'Component-Family doc not found. Recommend creating it before proceeding. '
-          + 'See .kiro/steering/Component-Family-Template.md for the template.',
-        );
-      }
-
-      // Flag conflicting variant mapping recommendations — requires human decision
-      const hasConflicts = variantMapping != null && variantMapping.conflicts.length > 0;
-      if (hasConflicts) {
-        reviewItems.push(
-          `${variantMapping!.conflicts.length} variant mapping conflict(s) — family pattern and behavioral analysis disagree. Human decision required.`,
-        );
-      }
-
-      const requiresHumanInput = noMatches > 0
-        || (behavioralContracts.classification === 'interactive' && !behavioralContracts.contractsDefined)
-        || modeValidation.hasUnexpectedDiscrepancies
-        || hasConflicts;
-
-      // Determine overall confidence level
-      let overall: 'high' | 'medium' | 'low';
-      if (noMatches === 0 && approximateMatches === 0 && !requiresHumanInput) {
-        overall = 'high';
-      } else if (noMatches === 0 && !requiresHumanInput) {
-        overall = 'medium';
-      } else {
-        overall = 'low';
-      }
-
-      return {
-        overall,
-        exactMatches,
-        approximateMatches,
-        noMatches,
-        requiresHumanInput,
-        reviewItems,
-      };
+  /** Aggregate classification counts across all nodes in a tree. */
+  private aggregateClassifications(node: NodeWithClassifications): {
+    semanticIdentified: number;
+    primitiveIdentified: number;
+    unidentified: number;
+  } {
+    let semantic = node.tokenClassifications.semanticIdentified.length;
+    let primitive = node.tokenClassifications.primitiveIdentified.length;
+    let unidentified = node.tokenClassifications.unidentified.length;
+    for (const child of node.children) {
+      const c = this.aggregateClassifications(child);
+      semantic += c.semanticIdentified;
+      primitive += c.primitiveIdentified;
+      unidentified += c.unidentified;
     }
-
-  /**
-   * Generate a design-outline.md markdown document from a DesignOutline.
-   *
-   * Includes all required sections with confidence flags (✅ ⚠️ ❌),
-   * context-aware recommendations, and human action items.
-   *
-   * @param outline - The DesignOutline to render as markdown.
-   * @returns Markdown string for design-outline.md.
-   */
-  generateDesignOutlineMarkdown(outline: DesignOutline): string {
-    const sections: string[] = [];
-
-    sections.push(this.renderHeader(outline));
-    sections.push(this.renderComponentPurpose(outline));
-    sections.push(this.renderVariants(outline));
-    sections.push(this.renderStates(outline));
-    sections.push(this.renderTokenUsage(outline.tokenUsage));
-    sections.push(this.renderAccessibility(outline));
-    sections.push(this.renderPlatformBehaviors(outline));
-    sections.push(this.renderEdgeCases(outline));
-    sections.push(this.renderExtractionConfidence(outline.extractionConfidence));
-    sections.push(this.renderInheritancePattern(outline));
-    sections.push(this.renderBehavioralContracts(outline.behavioralContracts));
-    sections.push(this.renderPlatformParity(outline.platformParity));
-    sections.push(this.renderComponentTokenNeeds(outline.componentTokenDecisions));
-    sections.push(this.renderAccessibilityContracts(outline));
-
-    // Include no-match pause report when unmatched values exist
-    const noMatchSection = this.renderNoMatchReport(outline.tokenUsage);
-    if (noMatchSection) {
-      sections.push(noMatchSection);
-    }
-
-    return sections.join('\n');
+    return { semanticIdentified: semantic, primitiveIdentified: primitive, unidentified };
   }
 
-  // ---------------------------------------------------------------------------
-  // Markdown section renderers (private)
-  // ---------------------------------------------------------------------------
-
-  private renderHeader(outline: DesignOutline): string {
-    return `# Design Outline: ${outline.componentName}\n\n` +
-      `**Generated**: ${new Date().toISOString().split('T')[0]}\n` +
-      `**Extraction Confidence**: ${this.overallConfidenceFlag(outline.extractionConfidence)}\n` +
-      `**Status**: Pending Human Review\n\n---\n`;
-  }
-
-  private renderComponentPurpose(outline: DesignOutline): string {
-    return `\n## Component Purpose\n\n` +
-      `**Name**: \`${outline.componentName}\`\n` +
-      `**Description**: ${outline.description || '_No description extracted_'}\n` +
-      `**Properties**: ${outline.properties.length} defined\n`;
-  }
-
-  private renderVariants(outline: DesignOutline): string {
-    let md = `\n## Variants\n\n`;
-    if (outline.variants.length === 0) {
-      md += '_No variants detected._\n';
-    } else {
-      md += `| Variant | Properties |\n|---------|------------|\n`;
-      for (const v of outline.variants) {
-        const props = Object.entries(v.properties)
-          .map(([k, val]) => `${k}=${val}`)
-          .join(', ');
-        md += `| ${v.name} | ${props || '—'} |\n`;
+  /** Build variantDefinitions from raw Figma component response. */
+  private buildVariantDefinitions(raw: Record<string, unknown>): Record<string, {
+    type: 'VARIANT' | 'BOOLEAN' | 'TEXT' | 'INSTANCE_SWAP';
+    defaultValue: unknown;
+    variantOptions?: string[];
+  }> {
+    const defs: Record<string, { type: 'VARIANT' | 'BOOLEAN' | 'TEXT' | 'INSTANCE_SWAP'; defaultValue: unknown; variantOptions?: string[] }> = {};
+    const vp = raw.variantProperties as Record<string, string[]> | undefined;
+    if (vp) {
+      for (const [name, options] of Object.entries(vp)) {
+        defs[name] = { type: 'VARIANT', defaultValue: options[0] ?? '', variantOptions: options };
       }
     }
-
-    // Context-aware recommendations from VariantAnalyzer
-    if (outline.variantMapping) {
-      md += this.renderVariantRecommendations(outline.variantMapping);
-    }
-
-    return md;
+    return defs;
   }
 
-  private renderVariantRecommendations(mapping: VariantMapping): string {
-      let md = `\n### Variant Mapping Recommendations\n\n`;
-
-      // Flag reduced confidence when Component-Family doc is missing
-      if (!mapping.familyPattern) {
-        md += `> ⚠️ **Reduced Confidence** — Component-Family-${mapping.componentName}.md not found. `
-          + `Recommend creating it before proceeding. `
-          + `See \`.kiro/steering/Component-Family-Template.md\` for the template.\n\n`;
-      }
-
-      md += `**Behavioral Classification**: ${mapping.behavioralClassification}\n\n`;
-
-      for (const rec of mapping.recommendations) {
-        const marker = rec.recommended ? '⭐ **Recommended**' : '';
-        md += `#### ${rec.option} ${marker}\n\n`;
-        md += `${rec.description}\n\n`;
-        md += `**Rationale**: ${rec.rationale}\n`;
-        if (rec.alignsWith.length > 0) {
-          md += `**Aligns with**: ${rec.alignsWith.join(', ')}\n`;
-        }
-        if (rec.tradeoffs.length > 0) {
-          md += `**Tradeoffs**: ${rec.tradeoffs.join('; ')}\n`;
-        }
-        md += '\n';
-      }
-
-      if (mapping.conflicts.length > 0) {
-        md += `### ⚠️ Mapping Conflicts\n\n`;
-        md += `> **Human Decision Required** — Family pattern and behavioral analysis disagree.\n\n`;
-        for (const c of mapping.conflicts) {
-          md += `- **Family recommends**: ${c.familyRecommendation}\n`;
-          md += `  **Behavioral analysis recommends**: ${c.behavioralRecommendation}\n`;
-          md += `  **Explanation**: ${c.explanation}\n\n`;
-        }
-      }
-
-      return md;
-    }
-
-  private renderStates(outline: DesignOutline): string {
-    let md = `\n## States\n\n`;
-    if (outline.states.length === 0) {
-      md += '_No visual states detected._\n';
-    } else {
-      for (const s of outline.states) {
-        md += `- **${s.name}**`;
-        if (s.description) md += `: ${s.description}`;
-        md += '\n';
-      }
-    }
-    return md;
+  /** Resolve component type from raw Figma response. */
+  private resolveComponentType(raw: Record<string, unknown>): 'COMPONENT_SET' | 'COMPONENT' | 'INSTANCE' {
+    const t = raw.type as string | undefined;
+    if (t === 'COMPONENT_SET' || t === 'COMPONENT' || t === 'INSTANCE') return t;
+    // If it has variantProperties, it's a COMPONENT_SET
+    if (raw.variantProperties) return 'COMPONENT_SET';
+    return 'COMPONENT';
   }
 
-  private renderTokenUsage(usage: TokenUsage): string {
-    let md = `\n## Token Usage\n\n`;
-
-    const categories: { label: string; refs: TokenReference[] }[] = [
-      { label: 'Spacing', refs: usage.spacing },
-      { label: 'Colors', refs: usage.colors },
-      { label: 'Typography', refs: usage.typography },
-      { label: 'Radius', refs: usage.radius },
-      { label: 'Shadows', refs: usage.shadows },
-    ];
-
-    for (const cat of categories) {
-      md += `### ${cat.label}\n\n`;
-      if (cat.refs.length === 0) {
-        md += '_None detected._\n\n';
-        continue;
-      }
-      md += `| Property | Token | Confidence | Method |\n`;
-      md += `|----------|-------|------------|--------|\n`;
-      for (const ref of cat.refs) {
-        const flag = this.confidenceFlag(ref.confidence);
-        const tokenDisplay = ref.semantic
-          ? `\`${ref.semantic}\` (primitive: \`${ref.primitive || ref.token}\`)`
-          : `\`${ref.token}\``;
-        const delta = ref.delta ? ` (${ref.delta})` : '';
-        md += `| ${ref.property} | ${tokenDisplay} | ${flag} ${ref.confidence}${delta} | ${ref.matchMethod} |\n`;
-      }
-      md += '\n';
-    }
-
-    return md;
-  }
-
-  private renderAccessibility(outline: DesignOutline): string {
-    let md = `\n## Accessibility\n\n`;
-    const isInteractive = outline.behavioralContracts.classification === 'interactive';
-
-    if (isInteractive) {
-      md += `**Component Type**: Interactive\n\n`;
-      md += `**Required Considerations**:\n`;
-      md += `- Keyboard navigation support\n`;
-      md += `- ARIA role and attributes\n`;
-      md += `- Focus indicator visibility\n`;
-      md += `- Screen reader announcements\n`;
-
-      const hasFocus = outline.states.some(
-        (s) => s.name.toLowerCase().includes('focus'),
-      );
-      if (!hasFocus) {
-        md += `\n⚠️ **No focus state detected** — interactive components require visible focus indicators.\n`;
-      }
-    } else {
-      md += `**Component Type**: Static\n\n`;
-      md += `**Required Considerations**:\n`;
-      md += `- Semantic HTML element selection\n`;
-      md += `- Color contrast compliance\n`;
-    }
-
-    return md;
-  }
-
-  private renderPlatformBehaviors(outline: DesignOutline): string {
-    let md = `\n## Platform Behaviors\n\n`;
-
-    if (outline.platformParity.interactions.length === 0) {
-      md += '_No platform-specific behaviors detected._\n';
-      return md;
-    }
-
-    md += `| Interaction | Platforms | Recommendation |\n`;
-    md += `|-------------|-----------|----------------|\n`;
-    for (const pi of outline.platformParity.interactions) {
-      md += `| ${pi.interaction} | ${pi.platforms.join(', ')} | ${pi.recommendation} |\n`;
-    }
-
-    return md;
-  }
-
-  private renderEdgeCases(outline: DesignOutline): string {
-    let md = `\n## Edge Cases\n\n`;
-    const items: string[] = [];
-
-    // No-match tokens
-    const noMatches = this.collectNoMatchTokens(outline.tokenUsage);
-    if (noMatches.length > 0) {
-      items.push(`**Off-system values detected** (${noMatches.length}): ${noMatches.map((r) => `\`${r.property}\``).join(', ')} — require human decision`);
-    }
-
-    // Mode discrepancies
-    if (outline.modeValidation?.hasUnexpectedDiscrepancies) {
-      const unexpected = outline.modeValidation.discrepancies.filter(
-        (d) => d.category === 'unexpected',
-      );
-      items.push(`**Unexpected mode discrepancies** (${unexpected.length}): ${unexpected.map((d) => `\`${d.variableName}\``).join(', ')}`);
-    }
-
-    // Missing behavioral contracts for interactive components
-    if (
-      outline.behavioralContracts.classification === 'interactive' &&
-      !outline.behavioralContracts.contractsDefined
-    ) {
-      items.push('**Missing behavioral contracts** — interactive component requires explicit contracts before spec formalization');
-    }
-
-    if (items.length === 0) {
-      md += '_No edge cases flagged._\n';
-    } else {
-      for (const item of items) {
-        md += `- ${item}\n`;
-      }
-    }
-
-    return md;
-  }
-
-  private renderExtractionConfidence(confidence: ConfidenceReport): string {
-    let md = `\n## Extraction Confidence\n\n`;
-    md += `**Overall**: ${this.overallConfidenceFlag(confidence)} ${confidence.overall}\n\n`;
-    md += `| Metric | Count |\n|--------|-------|\n`;
-    md += `| ✅ Exact matches | ${confidence.exactMatches} |\n`;
-    md += `| ⚠️ Approximate matches | ${confidence.approximateMatches} |\n`;
-    md += `| ❌ No matches | ${confidence.noMatches} |\n\n`;
-
-    if (confidence.requiresHumanInput) {
-      md += `> **⚠️ Human Input Required** — Review the items below before proceeding to spec formalization.\n\n`;
-      for (const item of confidence.reviewItems) {
-        md += `- ${item}\n`;
-      }
-    }
-
-    return md;
-  }
-
-  private renderInheritancePattern(outline: DesignOutline): string {
-      let md = `\n## Inheritance Pattern\n\n`;
-      if (!outline.inheritancePattern) {
-        const familyName = outline.variantMapping?.componentName
-          ?? (outline.componentName.replace(
-            /(?:Base|CTA|Primary|Secondary|Tertiary|Default|Large|Small|Medium)$/i,
-            '',
-          ) || outline.componentName);
-        md += `⚠️ Component-Family-${familyName}.md not found. Recommend creating it before proceeding.\n\n`;
-        md += `See \`.kiro/steering/Component-Family-Template.md\` for the template.\n`;
-        return md;
-      }
-      const ip = outline.inheritancePattern;
-      md += `**Family**: ${ip.familyName}\n`;
-      md += `**Pattern**: ${ip.pattern}\n`;
-      if (ip.baseComponent) {
-        md += `**Base Component**: \`${ip.baseComponent}\`\n`;
-      }
-      return md;
-    }
-
-  private renderBehavioralContracts(
-    contracts: BehavioralContractStatus,
-  ): string {
-    let md = `\n## Behavioral Contracts\n\n`;
-    md += `**Classification**: ${contracts.classification} ${contracts.confidence}\n`;
-    md += `**Detected States**: ${contracts.detectedStates.length > 0 ? contracts.detectedStates.join(', ') : '_none_'}\n`;
-    md += `**Contracts Defined**: ${contracts.contractsDefined ? 'Yes' : 'No'}\n`;
-
-    if (contracts.autoContract) {
-      md += `\n**Auto-generated Contract**: ${contracts.autoContract}\n`;
-    }
-
-    if (
-      contracts.classification === 'interactive' &&
-      !contracts.contractsDefined
-    ) {
-      md += `\n> ❌ **Action Required** — Define behavioral contracts for this interactive component before proceeding to requirements.md.\n`;
-    }
-
-    return md;
-  }
-
-  private renderPlatformParity(parity: PlatformParityCheck): string {
-    let md = `\n## Platform Parity\n\n`;
-    if (!parity.hasConcerns) {
-      md += '✅ No platform parity concerns detected.\n';
-      return md;
-    }
-
-    md += `⚠️ **Platform parity concerns detected** — review recommendations below.\n\n`;
-    for (const pi of parity.interactions) {
-      md += `- **${pi.interaction}** (${pi.platforms.join(', ')}): ${pi.recommendation}\n`;
-    }
-
-    return md;
-  }
-
-  private renderComponentTokenNeeds(
-    decisions: ComponentTokenDecision[],
-  ): string {
-    let md = `\n## Component Token Needs\n\n`;
-    if (decisions.length === 0) {
-      md += '_No repeated primitive token usage patterns detected._\n';
-      return md;
-    }
-
-    for (let i = 0; i < decisions.length; i++) {
-      const d = decisions[i];
-      md += `### Pattern ${i + 1}: ${d.illustrativeSuggestion}\n\n`;
-      md += `**Primitive Token**: \`${d.primitiveToken}\`\n`;
-      md += `**Usage Count**: ${d.usageCount} locations\n\n`;
-      md += `**Usage Context**:\n`;
-      for (const loc of d.locations) {
-        md += `- ${loc}\n`;
-      }
-      md += `\n**Illustrative Suggestion** (pending Ada review):\n`;
-      md += `\`\`\`\n${d.illustrativeSuggestion}\n\`\`\`\n\n`;
-      md += `**Rationale**: ${d.rationale}\n\n`;
-      md += `**Ada Decision Required**: Evaluate whether component tokens align with Token Governance standards.\n\n`;
-    }
-
-    return md;
-  }
-
-  private renderAccessibilityContracts(outline: DesignOutline): string {
-    let md = `\n## Accessibility Contracts\n\n`;
-    const isInteractive = outline.behavioralContracts.classification === 'interactive';
-
-    if (isInteractive) {
-      md += `**Component Type**: Interactive\n\n`;
-      md += `| Contract | Status |\n|----------|--------|\n`;
-
-      const hasFocus = outline.states.some(
-        (s) => s.name.toLowerCase().includes('focus'),
-      );
-      const hasDisabled = outline.states.some(
-        (s) => s.name.toLowerCase().includes('disabled'),
-      );
-
-      md += `| Focus visible indicator | ${hasFocus ? '✅ Detected' : '❌ Missing'} |\n`;
-      md += `| Disabled state handling | ${hasDisabled ? '✅ Detected' : '⚠️ Not detected'} |\n`;
-      md += `| Keyboard activation | ⚠️ Requires implementation review |\n`;
-      md += `| ARIA role assignment | ⚠️ Requires implementation review |\n`;
-    } else {
-      md += `**Component Type**: Static\n\n`;
-      md += `| Contract | Status |\n|----------|--------|\n`;
-      md += `| Semantic HTML | ⚠️ Requires implementation review |\n`;
-      md += `| Color contrast | ⚠️ Requires implementation review |\n`;
-    }
-
-    return md;
-  }
-
-  // ---------------------------------------------------------------------------
-  // Helpers
-  // ---------------------------------------------------------------------------
-
-  private confidenceFlag(level: ConfidenceLevel): string {
-    switch (level) {
-      case 'exact':
-        return '✅';
-      case 'approximate':
-        return '⚠️';
-      case 'no-match':
-        return '❌';
-    }
-  }
-
-  private overallConfidenceFlag(confidence: ConfidenceReport): string {
-    switch (confidence.overall) {
-      case 'high':
-        return '✅';
-      case 'medium':
-        return '⚠️';
-      case 'low':
-        return '❌';
-    }
-  }
-
-  private collectNoMatchTokens(usage: TokenUsage): TokenReference[] {
-    const all = [
-      ...usage.spacing,
-      ...usage.colors,
-      ...usage.typography,
-      ...usage.radius,
-      ...usage.shadows,
-    ];
-    return all.filter((r) => r.confidence === 'no-match');
-  }
-
-  /**
-   * Build a structured no-match report from unmatched token references.
-   *
-   * Each entry includes the property name, raw Figma value, closest
-   * suggestion (if any), delta, and resolution options for human review.
-   */
-  formatNoMatchReport(usage: TokenUsage): NoMatchEntry[] {
-    const noMatches = this.collectNoMatchTokens(usage);
-    return noMatches.map((ref) => ({
-      property: ref.property,
-      figmaValue: ref.rawValue ?? ref.token,
-      closestMatch: ref.suggestion,
-      delta: ref.delta,
-      options: [
-        ref.suggestion
-          ? `Map to suggested token: \`${ref.suggestion}\``
-          : 'No close match available — consider creating a new token',
-        'Document as off-system value',
-        'Request new token creation',
-      ],
-    }));
-  }
-
-  /**
-   * Render the no-match pause report as a markdown section.
-   *
-   * Only included in the design outline when no-match values exist.
-   * Provides actionable options for each unmatched value.
-   */
-  private renderNoMatchReport(usage: TokenUsage): string {
-    const entries = this.formatNoMatchReport(usage);
-    if (entries.length === 0) return '';
-
-    let md = `\n## ❌ Unmatched Values — Human Decision Required\n\n`;
-    md += `The following Figma values could not be matched to DesignerPunk tokens. `;
-    md += `Each requires a human decision before proceeding to spec formalization.\n\n`;
-
-    for (let i = 0; i < entries.length; i++) {
-      const entry = entries[i];
-      md += `### ${i + 1}. \`${entry.property}\`\n\n`;
-      md += `**Figma Value**: \`${entry.figmaValue}\`\n`;
-      if (entry.closestMatch) {
-        md += `**Closest Match**: \`${entry.closestMatch}\``;
-        if (entry.delta) {
-          md += ` (${entry.delta})`;
-        }
-        md += '\n';
-      } else {
-        md += `**Closest Match**: _none_\n`;
-      }
-      md += `\n**Options**:\n`;
-      for (const option of entry.options) {
-        md += `- ${option}\n`;
-      }
-      md += '\n';
-    }
-
-    return md;
-  }
 }

@@ -51,7 +51,8 @@ export interface ClassifiedToken {
 export type UnidentifiedReason =
   | 'no-token-match'
   | 'unresolved-binding'
-  | 'out-of-tolerance';
+  | 'out-of-tolerance'
+  | 'value-match';
 
 /**
  * A value extracted from Figma that could not be matched to any token.
@@ -70,6 +71,8 @@ export interface UnidentifiedValue {
   };
   /** Bound variable ID if this was a binding that couldn't resolve. */
   boundVariableId?: string;
+  /** Token suggested by value match (not a binding — designer may not have intended this token). */
+  suggestedToken?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -109,7 +112,34 @@ export interface NodeWithClassifications {
     itemSpacing?: number;
     counterAxisSpacing?: number;
     cornerRadius?: number;
+    width?: number;
+    height?: number;
+    layoutSizingHorizontal?: 'FIXED' | 'HUG' | 'FILL';
+    layoutSizingVertical?: 'FIXED' | 'HUG' | 'FILL';
+    primaryAxisAlignItems?: string;
+    counterAxisAlignItems?: string;
+    layoutAlign?: string;
+    layoutGrow?: number;
+    opacity?: number;
+    strokeWeight?: number;
+    strokeAlign?: string;
   };
+
+  /** Text properties for TEXT nodes. */
+  textStyle?: {
+    characters?: string;
+    fontSize?: number;
+    fontFamily?: string;
+    fontStyle?: string;
+    fontWeight?: number;
+    lineHeight?: number | string;
+    letterSpacing?: number;
+    textAlignHorizontal?: string;
+    textAlignVertical?: string;
+  };
+
+  /** Stroke colors extracted from this node. */
+  strokes?: Array<{ color: string }>;
 
   /** Component properties for INSTANCE nodes. */
   componentProperties?: Record<string, {

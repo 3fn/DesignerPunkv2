@@ -113,7 +113,7 @@ This spec refactors the Figma design extraction pipeline to produce Component An
     - Write unit tests for batch resolution (all resolve, some fail, node context preserved)
     - _Requirements: Req 4_
 
-- [ ] 2. Output Generation and CLI Integration
+- [x] 2. Output Generation and CLI Integration
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive
@@ -143,7 +143,7 @@ This spec refactors the Figma design extraction pipeline to produce Component An
   - Update Figma-Workflow-Guide.md with new component analysis workflow
   - Verify: Check GitHub for committed changes
 
-  - [ ] 2.1 Implement JSON output generator
+  - [x] 2.1 Implement JSON output generator
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create `src/figma/ComponentAnalysisGenerator.ts`
@@ -153,7 +153,7 @@ This spec refactors the Figma design extraction pipeline to produce Component An
     - Write integration tests verifying JSON structure matches interface
     - _Requirements: Req 7_
 
-  - [ ] 2.2 Implement Markdown output generator
+  - [x] 2.2 Implement Markdown output generator
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add `generateComponentAnalysisMarkdown()` method
@@ -166,7 +166,7 @@ This spec refactors the Figma design extraction pipeline to produce Component An
     - Write integration tests verifying Markdown includes all required sections
     - _Requirements: Req 6, Req 7_
 
-  - [ ] 2.3 Implement screenshot capture
+  - [x] 2.3 Implement screenshot capture
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add `captureComponentScreenshot()` method to DesignExtractor
@@ -179,7 +179,7 @@ This spec refactors the Figma design extraction pipeline to produce Component An
     - Write integration tests for screenshot capture (mock MCP response, verify metadata, verify graceful failure)
     - _Requirements: Req 5_
 
-  - [ ] 2.4 Deprecate design-outline auto-generation
+  - [x] 2.4 Deprecate design-outline auto-generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Remove or deprecate `generateDesignOutlineMarkdown()` method
@@ -188,7 +188,7 @@ This spec refactors the Figma design extraction pipeline to produce Component An
     - Update tests to remove design-outline generation expectations
     - _Requirements: Req 9_
 
-  - [ ] 2.5 Update CLI to generate ComponentAnalysis
+  - [x] 2.5 Update CLI to generate ComponentAnalysis
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update `scripts/figma-extract.ts` CLI command
@@ -198,8 +198,93 @@ This spec refactors the Figma design extraction pipeline to produce Component An
     - Support extracting multiple components (loop over node IDs)
     - Update CLI output messages (summarize classification results, report screenshot status, report output paths)
     - Update CLI exit codes (0 = success, 1 = failure, Unidentified values don't cause failure)
+    - Remove deprecated `generateDesignOutlineMarkdown()` and its private render helpers from DesignExtractor (cleanup from Task 2.4)
+    - Remove `DesignOutline` interface and related types if no longer referenced
+    - Remove `DesignExtractor.generateDesignOutlineMarkdown.test.ts` and update any remaining tests that reference the removed method
     - Write integration tests for CLI (single component, multi-component, classification summary, exit codes)
     - _Requirements: Req 10_
+
+---
+
+## Follow-Up Tasks
+
+These issues were discovered during manual validation of the Progress/Pagination extraction and should be addressed before relying on classification results.
+
+- [x] 3. Fix fill opacity extraction in classifyNodeTokens
+    **Type**: Bug Fix
+    **Validation**: Tier 2 - Standard
+    **Priority**: High
+    - `classifyNodeTokens` reads `color.a` but ignores `fill.opacity` — Figma stores these separately
+    - A fill with `#000` at 80% opacity produces `rgba(0, 0, 0, 1)` instead of `rgba(0, 0, 0, 0.8)`
+    - Fix: multiply `color.a` by `fill.opacity` (default 1) when building the rgba string
+    - Same bug exists in `collectBoundVariableIds` (line ~1490) — fix both locations
+    - Update tests to verify opacity is incorporated
+    - _Discovered: Progress/Pagination extraction, 2026-02-22_
+
+- [x] 4. Value-match classification should be Unidentified with suggestion
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Priority**: High
+    - Value-based matches (`matchMethod: "value"`) are currently promoted to Semantic/Primitive Identified
+    - This hides design intent signals — a hard-coded value that happens to match a token is not the same as the designer choosing that token
+    - Policy change: only binding matches (`matchMethod: "binding"`) earn Identified status
+    - Value matches should classify as ❌ Unidentified with the matched token included as a suggestion (e.g., "closest match: `color.black500`")
+    - Requires changes to `classifyNodeTokens` tier logic and `UnidentifiedValue` interface (add optional `suggestedToken` field)
+    - Update Markdown renderer to show suggestions within Unidentified entries
+    - Update tests to verify value matches classify as Unidentified
+    - _Rationale: The pipeline should be a discovery tool, not a compliance checker. Honest representation of what was designed surfaces opportunities to evolve the token system (e.g., scrim tokens)._
+    - _Discovered: Progress/Pagination extraction, 2026-02-22_
+
+- [x] 5. Support --url flag and fix screenshot capture
+    **Type**: Bug Fix + Enhancement
+    **Validation**: Tier 2 - Standard
+    **Priority**: High
+    - Accept `--url <figma-url>` as alternative to `--file` + `--node`
+    - Parse Figma URL to extract `fileKey` (path segment after `/design/`), `nodeId` (from `node-id` query param, replacing `-` with `:`), and full `fileUrl`
+    - Example: `--url "https://www.figma.com/design/yU7908VXR1khQN5hZXC6Cy/DP?node-id=1230-112"` → fileKey=`yU7908VXR1khQN5hZXC6Cy`, nodeId=`1230:112`
+    - Allow `--node` alongside `--url` to add extra nodes beyond what's in the URL
+    - Keep `--file` / `--node` for backwards compatibility and scripting
+    - Pass parsed `fileUrl` through to `getComponentImage` — fixes screenshot capture (`figma_get_component_image` expects `fileUrl`, not `fileKey`)
+    - Also verify: does the tool need `nodeId` in `123:456` format or URL-encoded `123-456`?
+    - Update `FigmaExtractArgs` interface, `parseArgs`, `run`, `ConsoleMCPClient` interface, and `ConsoleMCPClientImpl`
+    - Write tests for URL parsing (valid URLs, missing node-id, malformed URLs, combined with --node) and screenshot capture with fileUrl
+    - Verify with live extraction that screenshot URL is returned
+    - _Discovered: Progress/Pagination extraction, 2026-02-22_
+
+- [x] 6. Fetch all variant trees for COMPONENT_SET nodes
+    **Type**: Enhancement
+    **Validation**: Tier 2 - Standard
+    **Priority**: Medium
+    - `figma_get_component` only returns the default variant's subtree for COMPONENT_SET nodes (confirmed via debug log: 12-variant set returned 1 child)
+    - Use `figma_get_file_data` with the COMPONENT_SET node ID and sufficient depth to get all variant children and their IDs
+    - Build node trees for all variants, not just the default
+    - Screenshot loop already handles multiple children — this task feeds it the full set
+    - Consider: should each variant get its own classification summary, or aggregate across all?
+    - _Discovered: Progress Indicator Primitive extraction, 2026-02-23_
+
+- [ ] 7. Expand node extraction to capture full design properties
+    **Type**: Enhancement
+    **Validation**: Tier 2 - Standard
+    **Priority**: Medium
+    - Current extraction captures: padding, item-spacing, counter-axis-spacing, corner-radius, fill colors
+    - Expand to capture additional properties from Figma Plugin API for richer analysis and prototype generation:
+      - **Dimensions**: width, height, minWidth, minHeight, maxWidth, maxHeight, layoutSizingHorizontal, layoutSizingVertical (fill/hug/fixed)
+      - **Typography** (TEXT nodes): fontSize, fontName (family + style), lineHeight, letterSpacing, textAlignHorizontal, textAlignVertical, characters (text content)
+      - **Stroke**: strokeWeight, stroke color (from `strokes` array), strokeAlign
+      - **Layout alignment**: primaryAxisAlignItems, counterAxisAlignItems, layoutAlign, layoutGrow
+      - **Opacity**: opacity
+    - Classify new properties through existing token pipeline:
+      - fontSize → `fontSize` family, fontWeight → `fontWeight` family, lineHeight → `lineHeight` family, letterSpacing → `letterSpacing` family
+      - strokeWeight → `borderWidth` / `semanticBorderWidth` family, stroke color → `color` family
+      - width/height → `sizing` family, opacity → `opacity` family
+    - Collect `boundVariables` for new properties (fontSize, strokeWeight, opacity, etc.) in `collectBoundVariableIds`
+    - Add new categories to `classifyNodeTokens` and `TokenTranslator` value matching
+    - Non-tokenizable properties (font-family, alignment, text content, sizing mode) stored as raw layout/style data on the node — not classified
+    - Update `NodeWithClassifications` interface: expand `layout` field to include new structural properties
+    - Update Markdown renderer to show new properties in Token Usage sections
+    - _Rationale: Enables HTML/CSS prototype generation from analysis data and provides complete design-to-token coverage_
+    - _Noise reduction filters (applied in Task 6 follow-up): skip counter-axis-spacing when 0, skip item-spacing when layoutMode is NONE, skip padding 0 on leaf nodes (TEXT/VECTOR/ELLIPSE/etc.), skip border-radius 0. For new properties: classify what's bound, store what's not._
+    - _Discovered: Analysis review, 2026-02-23_
 
 ---
 
@@ -227,6 +312,6 @@ This spec is complete when:
 - [ ] Screenshots captured and embedded in Markdown
 - [ ] Design-outline auto-generation deprecated
 - [ ] CLI generates analysis artifacts in `.kiro/specs/[spec-name]/analysis/`
-- [ ] Figma-Workflow-Guide.md updated with new workflow
+- [x] Figma-Workflow-Guide.md updated with new workflow
 - [ ] Completion documentation created for all tasks
 
