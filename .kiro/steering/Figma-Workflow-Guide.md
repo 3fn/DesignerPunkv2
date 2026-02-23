@@ -7,7 +7,7 @@ description: Bidirectional Figma integration workflow — token push (054a) and 
 # Figma Workflow Guide
 
 **Date**: 2026-02-20
-**Last Reviewed**: 2026-02-22
+**Last Reviewed**: 2026-02-23
 **Purpose**: Figma integration workflow documentation for token push and design extraction
 **Organization**: process-standard
 **Scope**: figma-integration
@@ -257,23 +257,25 @@ Phase 5: Implementation — out of scope
 ### CLI Usage
 
 ```bash
-# Extract a single component
+# Extract using a Figma URL (recommended)
+npm run figma:extract -- --url "https://www.figma.com/design/FILE_KEY/NAME?node-id=1230-47"
+
+# Extract a single component by file key and node ID
 npm run figma:extract -- --file <file-key> --node <node-id>
 
 # Extract multiple components in one run
 npm run figma:extract -- --file <file-key> --node <node-id-1> --node <node-id-2>
-
-# Specify a custom output directory
-npm run figma:extract -- --file <file-key> --node <node-id> --output-dir ./my-analysis
 ```
 
 **Arguments:**
 
 | Argument | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `--file <key>` | Yes | — | Figma file key (from the file URL) |
-| `--node <id>` | Yes (repeatable) | — | Figma component node ID(s) |
-| `--output-dir <path>` | No | `./analysis` | Output directory for analysis files |
+| `--url <figma-url>` | Yes* | — | Full Figma URL (extracts file key, node ID, and file URL) |
+| `--file <key>` | Yes* | — | Figma file key (from the file URL) |
+| `--node <id>` | Yes* (repeatable) | — | Figma component node ID(s) |
+
+*Either `--url` or `--file`/`--node` is required. `--url` is preferred as it also provides the file URL needed for screenshot capture.
 
 **Exit codes:**
 - `0` — Extraction completed successfully
@@ -283,15 +285,24 @@ Unidentified token values do **not** cause failure — they are reported in the 
 
 ### Output Artifacts
 
-Each extracted component produces:
+Each extracted component produces a dedicated directory:
+
+```
+analysis/
+  analysis-progress-indicator-primitive/
+    progress-indicator-primitive-analysis.json
+    progress-indicator-primitive-analysis.md
+    images/
+      progress-indicator-primitive-state-incomplete-size-sm.png
+      progress-indicator-primitive-state-complete-size-md.png
+      ...
+```
 
 | File | Purpose |
 |------|---------|
 | `{component-name}-analysis.json` | Structured data (source of truth) — node tree, classifications, composition patterns, unresolved bindings, recommendations |
 | `{component-name}-analysis.md` | Human-readable summary — classification counts, indented node tree, token usage by node with tier indicators, recommendations with validation disclaimers |
-| `images/{component-name}.png` | Component screenshot (2x scale) |
-
-Files are written to the output directory (default: `./analysis`). The `images/` subdirectory is created automatically.
+| `images/{component-name}-{variant}.png` | Per-variant screenshots (2x scale). COMPONENT_SET nodes produce one screenshot per variant child. |
 
 ### Extraction Pipeline
 
@@ -316,9 +327,20 @@ Every token value found in the node tree is classified into one of three tiers:
 
 | Tier | Indicator | Meaning |
 |------|-----------|---------|
-| Semantic Identified | ✅ | Value maps to a semantic token (e.g., `color.primary`) |
-| Primitive Identified | ⚠️ | Value maps to a primitive token only (e.g., `space.300`) — may warrant a component token |
-| Unidentified | ❌ | No token match found — requires human review |
+| Semantic Identified | ✅ | Figma variable binding resolves to a semantic token (alias `$value` like `{color.green400}`) |
+| Primitive Identified | ⚠️ | Figma variable binding resolves to a primitive token (raw `$value` like `2px`) |
+| Unidentified | ❌ | No variable binding, or binding resolves to a token not in the DTCG system |
+
+**Classification policy**: Only Figma variable bindings earn Identified status. Value-based matches (a raw value that happens to match a token) classify as Unidentified with a `suggestedToken` — the designer may not have intended that token. This ensures honest representation of design intent.
+
+**Properties classified** (13 categories):
+- Layout: padding, item-spacing, border-radius
+- Color: fill, stroke
+- Typography: font-size, font-weight, line-height, letter-spacing
+- Structure: border-width, opacity
+- Sizing: width, height (when bound to variables)
+
+**Noise reduction**: Zero-value defaults are filtered out — `counter-axis-spacing: 0`, `item-spacing` on non-auto-layout frames, `padding: 0` on leaf nodes, `border-radius: 0`.
 
 The classification summary in the CLI output and Markdown report shows counts per component:
 
