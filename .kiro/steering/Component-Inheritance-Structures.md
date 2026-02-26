@@ -1,13 +1,13 @@
 ---
 inclusion: manual
 name: Component-Inheritance-Structures
-description: Complete inheritance structures and behavioral contracts for all 11 component families — primitive bases, semantic variants, relationship diagrams, and contract definitions. Load when implementing component inheritance, verifying behavioral contracts, or checking family structures.
+description: Complete inheritance structures and behavioral contracts for all 13 component families — primitive bases, semantic variants, relationship diagrams, and contract definitions. Load when implementing component inheritance, verifying behavioral contracts, or checking family structures.
 ---
 
 # Component Family Inheritance Structures
 
 **Date**: 2026-01-02
-**Purpose**: Comprehensive inheritance structures and behavioral contracts for all 11 component families
+**Purpose**: Comprehensive inheritance structures and behavioral contracts for all 13 component families
 **Organization**: process-standard
 **Scope**: cross-project
 **Layer**: 2
@@ -18,7 +18,7 @@ description: Complete inheritance structures and behavioral contracts for all 11
 
 ## Overview
 
-This document defines the complete inheritance structures for all 11 component families in the Stemma System. Each family section includes primitive component definition, semantic variants, behavioral contracts, and relationship diagrams.
+This document defines the complete inheritance structures for all 13 component families in the Stemma System. Each family section includes primitive component definition, semantic variants, behavioral contracts, and relationship diagrams.
 
 **Status Legend**:
 - 🟢 **Production Ready**: Fully implemented, tested, documented

@@ -28,7 +28,7 @@ This document serves as a routing table for component documentation—it helps A
 
 ## Component Documentation Map
 
-All 11 component families have MCP-queryable documentation. Production families have full implementation details; placeholder families have structural definitions for future development.
+All 13 component families have MCP-queryable documentation. Production families have full implementation details; placeholder families have structural definitions for future development.
 
 | Component Family | Shared Need/Purpose | MCP Document Path | Status |
 |------------------|---------------------|-------------------|--------|

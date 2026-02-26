@@ -550,6 +550,16 @@ Decision 1 notes removing `behavioral_contracts:` from schema YAML. For the 14 s
 
 ---
 
+## Post-Spec Follow-Up Items
+
+These items were identified during spec execution but are out of scope for 063. They are not blocking for downstream work.
+
+1. **Avatar → Avatar-Base rename** — Lina task. Component is named `Avatar` but convention requires `Avatar-Base`. Rename touches: file paths, imports, tests, contracts.yaml, README, steering doc references. Should be completed before spec 064 encodes the component name in the metadata schema.
+2. **Contract-System-Reference.md** — New Tier 2 steering doc consolidating: 10-category taxonomy with definitions, `{category}_{concept}` naming convention, canonical format specification, classification tiebreaker rule, boundary notes. Requires ballot measure. Add to Lina's default understanding for consistent application.
+3. **`content_supports_icon` in Badge-Label-Base** — Minor naming observation. Structurally compliant but uses "supports" in concept name. Rename to `content_icon_display` or `content_optional_icon` at Lina's discretion.
+
+---
+
 ## Related Documentation
 
 - `.kiro/specs/062-stemma-catalog-readiness-audit/` — Audit findings that drive this work

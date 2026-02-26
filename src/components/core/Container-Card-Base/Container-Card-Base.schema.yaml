@@ -19,6 +19,10 @@ family: Containers
 version: "1.0.0"
 readiness: development
 
+composes:
+  - component: Container-Base
+    relationship: Uses Container-Base internally for layout and styling primitives
+
 # Component description
 description: |
   Type primitive container component providing card-specific styling and

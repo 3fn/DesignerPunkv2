@@ -121,21 +121,25 @@ Behavioral contracts work uniformly across web, iOS, and Android:
 
 ## Component Family Architecture
 
-### The 11 Component Families
+### The 13 Component Families
 
-| Family | Shared Need/Purpose | Primitive Base |
-|--------|---------------------|----------------|
-| **Buttons** | User interaction and actions | Button-Base |
-| **Form Inputs** | Data collection and validation | Input-Text-Base |
-| **Containers** | Layout and content organization | Container-Base |
-| **Icons** | Visual communication | Icon-Base |
-| **Modals** | Overlay interactions | Modal-Base |
-| **Avatars** | Identity representation | Avatar-Base |
-| **Badges & Tags** | Status and labeling | Badge-Base |
-| **Data Displays** | Information presentation | DataDisplay-Base |
-| **Dividers** | Visual separation | Divider-Base |
-| **Loading** | Progress indication | Loading-Base |
-| **Navigation** | Wayfinding | Nav-Base |
+| Family | Shared Need/Purpose | Primitive Base | Status |
+|--------|---------------------|----------------|--------|
+| **Buttons** | User interaction and actions | Button-Base | Active |
+| **Form Inputs** | Data collection and validation | Input-Text-Base | Active |
+| **Containers** | Layout and content organization | Container-Base | Active |
+| **Icons** | Visual communication | Icon-Base | Active |
+| **Badges & Tags** | Status and labeling | Badge-Base | Active |
+| **Chips** | Selectable/filterable compact elements | Chip-Base | Active |
+| **Progress Indicators** | Step and state progression | Progress-Indicator-Node-Base | Active |
+| **Avatars** | Identity representation | Avatar | Active |
+| **Modals** | Overlay interactions | Modal-Base | Placeholder |
+| **Data Displays** | Information presentation | DataDisplay-Base | Placeholder |
+| **Dividers** | Visual separation | Divider-Base | Placeholder |
+| **Loading** | Progress indication | Loading-Base | Placeholder |
+| **Navigation** | Wayfinding | Nav-Base | Placeholder |
+
+> **Note on Avatar naming**: Avatar does not follow the `[Family]-Base` naming convention because it is a standalone component with no planned semantic variants. A rename to `Avatar-Base` is planned as a follow-up task.
 
 ### Family Inheritance Structure
 

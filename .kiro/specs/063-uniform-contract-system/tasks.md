@@ -155,7 +155,7 @@ Lina executes the migration work. Thurgood validates the result and handles gove
   - Human checkpoint review of governance proposals and migration validation
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Inheritance, Composition, and Governance"`
 
-  - [ ] 3.1 Formalize inheritance relationships
+  - [x] 3.1 Formalize inheritance relationships
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add `inherits:` declarations to all child components
@@ -164,7 +164,7 @@ Lina executes the migration work. Thurgood validates the result and handles gove
     - Verify all "conceptual" inheritance is either formalized or dropped
     - _Requirements: 5.1, 5.2, 5.3, 5.4_
 
-  - [ ] 3.2 Formalize composition relationships
+  - [x] 3.2 Formalize composition relationships
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Add `composes:` blocks to schema YAML for: Progress-Stepper-Base, Container-Card-Base, Button-VerticalList-Set, Input-Radio-Set
@@ -172,7 +172,7 @@ Lina executes the migration work. Thurgood validates the result and handles gove
     - Confirm Input-Radio-Set uses `composes:` not `inherits:`
     - _Requirements: 6.1, 6.2, 6.3, 5.5_
 
-  - [ ] 3.3 Propose and apply governance updates (ballot measures)
+  - [x] 3.3 Propose and apply governance updates (ballot measures)
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     - Draft deprecation note for Component-Schema-Format.md
@@ -183,7 +183,7 @@ Lina executes the migration work. Thurgood validates the result and handles gove
     - **Human checkpoint**: All governance changes require ballot measure approval
     - _Requirements: 8.1, 8.2, 9.1, 9.2, 9.3_
 
-  - [ ] 3.4 Validate migration completeness
+  - [x] 3.4 Validate migration completeness
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     - Validate all 28 components have contracts.yaml in canonical format

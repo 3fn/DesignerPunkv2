@@ -245,6 +245,12 @@ ContractCategory:
 
 ### Standard Contracts Library
 
+> **⚠️ DEPRECATED (Spec 063 — Uniform Contract System, February 2026)**
+>
+> This standard contracts library is superseded by the per-component `contracts.yaml` files using the uniform contract system. No component references these abstract contracts. The canonical contract format, vocabulary, and taxonomy are defined in: `.kiro/specs/063-uniform-contract-system/findings/format-specification.md`
+>
+> This section is retained for historical reference only. Do not use these contract names or definitions for new components.
+
 Common contracts available for component use:
 
 ```yaml

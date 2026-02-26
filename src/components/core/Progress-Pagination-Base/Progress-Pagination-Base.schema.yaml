@@ -4,8 +4,11 @@ family: Progress-Indicator
 version: "1.0.0"
 readiness: development
 
+composes:
+  - component: Progress-Indicator-Node-Base
+    relationship: Renders one Node-Base per visible pagination item
+
 description: |
-  Semantic pagination component for the Progress Indicator family.
   Composes Progress-Indicator-Node-Base primitives to create a simple
   pagination indicator for carousels and multi-page flows.
   

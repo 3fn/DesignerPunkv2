@@ -93,11 +93,11 @@ flowchart LR
 
 ## Stemma System: Families and Inheritance
 
-This diagram shows the 11 component families, the family inheritance pattern (primitive base → semantic variants), and how behavioral contracts apply to components.
+This diagram shows the 13 component families, the family inheritance pattern (primitive base → semantic variants), and how behavioral contracts apply to components.
 
 ```mermaid
 flowchart TB
-    subgraph Families["11 component families"]
+    subgraph Families["13 component families"]
         F1["Buttons"]
         F2["Form Inputs"]
         F3["Containers"]

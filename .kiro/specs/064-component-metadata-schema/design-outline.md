@@ -121,6 +121,7 @@ Per the agentic UI strategy doc, this spec produces the "component catalog schem
 
 - 063 execution complete (all 28 components migrated to uniform contracts.yaml)
 - 063 governance updates applied (family list, standard library deprecated)
+- Avatar → Avatar-Base rename complete (063 follow-up item — schema will encode component names, should use final name)
 - Lina + Ada available for design consultation
 
 ---
