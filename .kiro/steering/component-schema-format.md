@@ -21,6 +21,7 @@ This document defines the formal YAML schema structure for Stemma System compone
 **Related Documentation**:
 - [Stemma System Principles](./stemma-system-principles.md) - Core principles and governance
 - [Component Development Guide](./Component-Development-Guide.md) - Implementation guidance
+- [Contract System Reference](./Contract-System-Reference.md) - Behavioral contract format, taxonomy, and naming conventions
 
 ---
 

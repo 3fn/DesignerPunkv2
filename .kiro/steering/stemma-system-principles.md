@@ -53,21 +53,9 @@ Family (e.g., Form Inputs)
 
 ### Principle 2: Behavioral Contracts
 
-Each component guarantees consistent behaviors across platforms through explicit contracts:
+Each component guarantees consistent behaviors across platforms through explicit contracts documented in per-component `contracts.yaml` files.
 
-**Contract Structure**:
-```yaml
-contracts:
-  - contract_name: provides_float_label_animation
-    description: Label animates from placeholder to floating position on focus
-    platforms: [web, ios, android]
-    required: true
-    
-  - contract_name: validates_on_blur
-    description: Validation triggers when field loses focus
-    platforms: [web, ios, android]
-    required: true
-```
+> For the complete contract system reference — taxonomy, naming convention, format specification, and classification rules — see [Contract-System-Reference.md](./Contract-System-Reference.md).
 
 **Contract Rules**:
 1. Contracts define WHAT behavior occurs, not HOW it's implemented

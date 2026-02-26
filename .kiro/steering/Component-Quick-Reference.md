@@ -182,6 +182,11 @@ Returns targeted content (~500-2,000 tokens) for specific information needs:
 // Get component behavioral contracts
 get_section({ path: ".kiro/steering/Component-Family-Form-Inputs.md", heading: "Behavioral Contracts" })
 
+// Get contract system conventions (taxonomy, naming, format)
+get_section({ path: ".kiro/steering/Contract-System-Reference.md", heading: "Taxonomy" })
+get_section({ path: ".kiro/steering/Contract-System-Reference.md", heading: "Naming Convention" })
+get_section({ path: ".kiro/steering/Contract-System-Reference.md", heading: "Canonical Format" })
+
 // Get inheritance structure
 get_section({ path: ".kiro/steering/Component-Family-Button.md", heading: "Inheritance Structure" })
 

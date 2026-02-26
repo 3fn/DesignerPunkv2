@@ -25,8 +25,9 @@ description: Guide for building components with appropriate token usage, True Na
 2. ✅ **Semantic tokens**: Read `src/tokens/semantic/index.ts` for available tokens
 3. ✅ **Component Structure Pattern** (file organization)
 4. ✅ **True Native Architecture**: `preserved-knowledge/true-native-architecture-concepts.md`
-5. ✅ **Icon System Integration** (if component uses icons)
-6. ✅ **Validation Checklist** (before implementation)
+5. ✅ **Contract System Reference**: `Contract-System-Reference.md` (taxonomy, naming, format for contracts.yaml)
+6. ✅ **Icon System Integration** (if component uses icons)
+7. ✅ **Validation Checklist** (before implementation)
 
 **WHEN selecting tokens for components THEN read:**
 1. ✅ **Token Selection Decision Framework** (all steps)
