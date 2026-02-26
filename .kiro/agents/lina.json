@@ -46,6 +46,8 @@
     "skill://.kiro/steering/Component-Family-Loading.md",
     "skill://.kiro/steering/Component-Family-Modal.md",
     "skill://.kiro/steering/Component-Family-Navigation.md",
+    "skill://.kiro/steering/Component-Schema-Format.md",
+    "skill://.kiro/steering/Contract-System-Reference.md",
     {
       "type": "knowledgeBase",
       "source": "file://./src/components",
