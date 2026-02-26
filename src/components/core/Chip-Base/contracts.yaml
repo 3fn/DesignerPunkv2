@@ -1,0 +1,143 @@
+version: "1.0.0"
+component: Chip-Base
+family: Chip
+
+contracts:
+  visual_pill_container:
+    category: visual
+    description: Renders pill-shaped container with label text
+    behavior: |
+      Chip-Base renders a pill-shaped container using radius.full token.
+      Displays label text using typography.buttonSm. Visual height is 32px.
+      Container has 1px border using borderDefault token.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Container renders with pill shape (radius.full)
+      - Label text visible with typography.buttonSm
+      - Visual height is 32px
+      - Border width is 1px (borderDefault)
+    test_approach: |
+      - Render chip, verify pill shape and label
+    required: true
+
+  visual_renders_icon:
+    category: visual
+    description: Renders optional leading icon using Icon-Base
+    behavior: |
+      When icon prop provided, renders Icon-Base at icon.size075 (20px)
+      before label text with space.grouped.tight (4px) gap.
+      Icon inherits color via currentColor.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Icon renders when icon prop provided
+      - Icon size is 20px (icon.size075)
+      - Gap is 4px (space.grouped.tight)
+      - No icon when prop undefined
+    test_approach: |
+      - Render with icon prop, verify icon present
+      - Render without, verify no icon
+    required: true
+
+  interaction_pressable:
+    category: interaction
+    description: Responds to press/click/tap events
+    behavior: |
+      Responds to click, tap, Enter, and Space. Calls onPress callback.
+      When onPress not provided, chip is display-only.
+    wcag: "2.1.1 Keyboard"
+    platforms: [web, ios, android]
+    validation:
+      - Click/tap triggers onPress
+      - Enter/Space triggers onPress (web)
+      - No action when onPress undefined
+    test_approach: |
+      - Click chip, verify onPress called
+    required: true
+
+  state_styling:
+    category: state
+    description: Visual feedback for interaction states
+    behavior: |
+      Default: surface background, border color, default text.
+      Hover (web): blend.hoverDarker on background, primary border.
+      Pressed: blend.pressedDarker on background, primary border.
+      Transitions use motion.duration.fast.
+    wcag: "1.4.13 Content on Hover or Focus"
+    platforms: [web, ios, android]
+    validation:
+      - Default state uses color.structure.surface background
+      - Hover darkens background
+      - Pressed darkens background further
+    test_approach: |
+      - Verify default, hover, and pressed visual states
+    required: true
+
+  interaction_focusable:
+    category: interaction
+    description: Can receive keyboard focus
+    behavior: |
+      Can receive focus via Tab key. Focus ring visible on keyboard focus
+      only via :focus-visible (web). Uses accessibility tokens.
+    wcag: "2.1.1 Keyboard"
+    platforms: [web, ios, android]
+    validation:
+      - Tab key moves focus to chip
+      - Focus ring visible on keyboard focus
+      - Focus ring not shown on mouse click (web)
+    test_approach: |
+      - Tab to chip, verify focus ring
+    required: true
+
+  interaction_keyboard_activation:
+    category: interaction
+    description: Activates on Space/Enter key press
+    behavior: |
+      When focused, Space or Enter calls onPress. Provides keyboard
+      equivalence to click/tap.
+    wcag: "2.1.1 Keyboard"
+    platforms: [web]
+    validation:
+      - Space triggers onPress when focused
+      - Enter triggers onPress when focused
+    test_approach: |
+      - Focus chip, press Space, verify onPress called
+    required: true
+
+  interaction_expanded_tap_area:
+    category: interaction
+    description: 48px tap area for accessibility
+    behavior: |
+      Provides 48px tap area (tapAreaRecommended) despite 32px visual height.
+      Web: ::before pseudo-element. iOS: frame modifier. Android: Modifier.sizeIn.
+      Exceeds WCAG 2.5.5 minimum of 44px.
+    wcag: "2.5.5 Target Size"
+    platforms: [web, ios, android]
+    validation:
+      - Tap area is 48px minimum
+      - Visual appearance remains 32px height
+    test_approach: |
+      - Verify clickable area extends beyond visual bounds
+    required: true
+
+  accessibility_role:
+    category: accessibility
+    description: Announces as button to assistive technology
+    behavior: |
+      Announces as button: Web=role="button", iOS=Button trait,
+      Android=Button semantics. Label text is accessible name.
+    wcag: "4.1.2 Name, Role, Value"
+    platforms: [web, ios, android]
+    validation:
+      - Screen readers announce as button
+      - Label text is accessible name
+    test_approach: |
+      - Verify role="button" (web)
+    required: true
+
+excludes:
+  state_disabled:
+    reason: "If an action is unavailable, the component should not be rendered."
+    category: state
+    reference: "Chip-Base.schema.yaml, design philosophy section"

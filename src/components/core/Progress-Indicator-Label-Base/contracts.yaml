@@ -3,33 +3,43 @@ component: Progress-Indicator-Label-Base
 family: Progress-Indicator
 
 contracts:
-  renders_label_text:
+  content_label_text:
     category: content
     description: Renders primary label text centered below node
     behavior: |
       Label text is rendered using typography.labelSm token (14px).
       Text is centered horizontally below the associated node.
       Text truncates with ellipsis when exceeding available width.
+    wcag: null
     platforms: [web, ios, android]
     validation:
       - Label text renders with labelSm typography
       - Text is horizontally centered
       - Long text truncates with ellipsis
+    test_approach: |
+      Render label with text. Verify typography matches labelSm,
+      text is centered, and long text truncates.
+    required: true
 
-  renders_helper_text:
+  content_helper_text:
     category: content
     description: Renders optional helper text below the label
     behavior: |
-      When helperText is provided, it renders below the primary label
+      When helperText is provided, renders below the primary label
       using the same typography token at reduced emphasis.
       Helper text also truncates with ellipsis when exceeding width.
+    wcag: null
     platforms: [web, ios, android]
     validation:
       - Helper text renders below label when provided
       - Helper text is not rendered when not provided
       - Helper text truncates with ellipsis
+    test_approach: |
+      Render with helperText. Verify it appears below label and truncates
+      when exceeding width. Render without — verify absent.
+    required: false
 
-  applies_typography_tokens:
+  visual_typography:
     category: visual
     description: Uses typography.labelSm token for text rendering
     behavior: |
@@ -39,27 +49,28 @@ contracts:
       - line-height: var(--typography-label-sm-line-height)
       - font-weight: var(--typography-label-sm-font-weight)
       - letter-spacing: var(--typography-label-sm-letter-spacing)
+    wcag: null
     platforms: [web, ios, android]
     validation:
       - Typography uses design tokens, not hardcoded values
       - Font size matches labelSm token (14px)
+    test_approach: |
+      Render label. Verify computed font properties match labelSm token values.
+    required: true
 
-  decorative_primitive:
+  accessibility_decorative:
     category: accessibility
     description: Primitive is decorative; semantic variants handle a11y
     behavior: |
       Label-Base is marked as decorative (aria-hidden on web,
       accessibilityHidden on iOS, clearAndSetSemantics on Android).
       Semantic variants provide ARIA roles and labels.
+    wcag: null
     platforms: [web, ios, android]
     validation:
       - Label has aria-hidden="true" (web)
       - Label is hidden from assistive technology
-
-summary:
-  total_contracts: 4
-  categories:
-    content: 2
-    visual: 1
-    accessibility: 1
-  platforms: [web, ios, android]
+    test_approach: |
+      Render label. Verify aria-hidden="true" (web). Verify not in
+      accessibility tree.
+    required: true

@@ -1,0 +1,101 @@
+version: "1.0.0"
+component: Input-Radio-Set
+family: Input-Radio
+
+contracts:
+  composition_mutual_exclusivity:
+    category: composition
+    description: Only one radio selected at a time
+    behavior: |
+      When a radio is selected, any previously selected radio in the
+      group is deselected. The Set enforces single-selection across
+      all child Input-Radio-Base components.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Selecting one radio deselects the previous
+      - Only one radio is selected at any time
+    test_approach: |
+      - Render Set with multiple radios
+      - Select radio A, then select radio B
+      - Verify only radio B is selected
+    required: true
+
+  interaction_keyboard_navigation:
+    category: interaction
+    description: Arrow keys, Home, End navigate within group
+    behavior: |
+      Arrow keys move focus between radios in the group.
+      Home moves to first radio, End moves to last.
+      Enter and Space select the focused radio.
+      Navigation wraps from last to first and vice versa.
+    wcag: "2.1.1 Keyboard"
+    platforms: [web, ios, android]
+    validation:
+      - Arrow Down/Right moves focus to next radio
+      - Arrow Up/Left moves focus to previous radio
+      - Home moves focus to first radio
+      - End moves focus to last radio
+    test_approach: |
+      - Focus first radio, press Arrow Down
+      - Verify focus moves to second radio
+      - Press End, verify focus moves to last radio
+    required: true
+
+  validation_group_required:
+    category: validation
+    description: Required validation at group level
+    behavior: |
+      When required, the Set validates that at least one radio
+      is selected. Error state is shown at the group level,
+      not on individual radios.
+    wcag: "3.3.1 Error Identification"
+    platforms: [web, ios, android]
+    validation:
+      - Error shown when required and no selection
+      - Error clears when a selection is made
+    test_approach: |
+      - Render required Set with no selection
+      - Trigger validation and verify error displayed
+      - Select a radio and verify error clears
+    required: true
+
+  accessibility_error_announcement:
+    category: accessibility
+    description: Error message announced to screen readers
+    behavior: |
+      When error state is active, the error message is announced
+      to screen readers via appropriate platform mechanisms.
+    wcag: "4.1.3 Status Messages"
+    platforms: [web, ios, android]
+    validation:
+      - Error message is announced to screen readers
+      - Announcement uses polite live region (web)
+    test_approach: |
+      - Trigger error state
+      - Verify error message is in accessible announcement
+    required: true
+
+  accessibility_radiogroup_role:
+    category: accessibility
+    description: Proper ARIA role for group
+    behavior: |
+      Set uses role="radiogroup" (web) with appropriate label.
+      Child radios use role="radio" with aria-checked state.
+    wcag: "4.1.2 Name, Role, Value"
+    platforms: [web, ios, android]
+    validation:
+      - Container has role="radiogroup" (web)
+      - Each child has role="radio" (web)
+      - aria-checked reflects selection state
+    test_approach: |
+      - Verify container role is "radiogroup"
+      - Verify child roles are "radio"
+      - Select a radio and verify aria-checked updates
+    required: true
+
+excludes:
+  state_disabled:
+    reason: "If an action is unavailable, the component should not be rendered."
+    category: state
+    reference: "Input-Radio-Set README, DesignerPunk Philosophy"

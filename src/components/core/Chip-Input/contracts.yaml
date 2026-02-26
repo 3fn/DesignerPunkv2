@@ -1,0 +1,76 @@
+version: "1.0.0"
+component: Chip-Input
+family: Chip
+inherits: Chip-Base
+
+contracts:
+  interaction_dismiss:
+    category: interaction
+    description: Dismisses chip on press anywhere
+    behavior: |
+      Press anywhere on chip calls onDismiss. X icon is visual affordance,
+      not a separate tap target. Supports click, tap, Enter, Space.
+    wcag: "2.1.1 Keyboard"
+    platforms: [web, ios, android]
+    validation:
+      - Press anywhere triggers onDismiss
+      - X icon is not a separate tap target
+      - Keyboard activation triggers onDismiss
+    test_approach: |
+      - Click chip, verify onDismiss called
+    required: true
+
+  content_trailing_dismiss_icon:
+    category: content
+    description: Always displays X icon as trailing element
+    behavior: |
+      Always renders X icon (close/dismiss) at icon.size075 (20px)
+      after label text with space.grouped.tight (4px) gap.
+      Visual affordance indicating dismissibility.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - X icon always visible
+      - X icon appears after label text
+      - Gap is 4px
+    test_approach: |
+      - Render chip, verify X icon present
+    required: true
+
+  content_dual_icons:
+    category: content
+    description: Supports both leading icon AND trailing X icon
+    behavior: |
+      When icon prop provided, displays both leading icon and trailing X icon.
+      Layout: [leading icon] [label] [X icon]. Differs from Chip-Filter
+      where checkmark replaces leading icon.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Leading icon visible when icon prop provided
+      - X icon always visible regardless of icon prop
+      - Both icons use icon.size075
+    test_approach: |
+      - Render with icon prop, verify both icons present
+    required: true
+
+  accessibility_dismiss_label:
+    category: accessibility
+    description: X icon has accessible label for screen readers
+    behavior: |
+      X icon has accessible label "Remove [label]" where [label] is
+      the chip's label text. Provides context for screen reader users.
+    wcag: "4.1.2 Name, Role, Value"
+    platforms: [web, ios, android]
+    validation:
+      - X icon has accessible label "Remove [label]"
+      - Label text included in accessible label
+    test_approach: |
+      - Verify aria-label on X icon element (web)
+    required: true
+
+excludes:
+  state_disabled:
+    reason: "If dismissal is unavailable, the component should not be rendered."
+    category: state
+    reference: "Chip-Input.schema.yaml, design philosophy section"

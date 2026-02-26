@@ -1,0 +1,89 @@
+version: "1.0.0"
+component: Icon-Base
+family: Icons
+
+contracts:
+  visual_renders_svg:
+    category: visual
+    description: Renders inline SVG with correct viewBox and stroke attributes
+    behavior: |
+      Renders inline SVG with viewBox="0 0 24 24", fill="none",
+      stroke-linecap/linejoin="round", stroke-width from token.
+      Content loaded from internal icon map. Falls back to 'circle' if not found.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - SVG renders with correct viewBox
+      - Stroke attributes match Feather Icons spec
+      - Fallback to 'circle' if name not found
+    test_approach: |
+      - Render icon, verify SVG attributes
+      - Render invalid name, verify fallback
+    required: true
+
+  visual_color_inheritance:
+    category: visual
+    description: Inherits color from parent via currentColor
+    behavior: |
+      By default inherits color from parent element:
+      Web: stroke="currentColor". iOS: .renderingMode(.template).
+      Android: tint=LocalContentColor.current.
+    wcag: "1.4.1 Use of Color"
+    platforms: [web, ios, android]
+    validation:
+      - Icon color matches parent element color
+      - Color changes when parent color changes
+    test_approach: |
+      - Place icon in colored parent, verify color match
+    required: true
+
+  visual_size_variants:
+    category: visual
+    description: Supports 11 size variants from typography scale
+    behavior: |
+      11 sizes calculated from fontSize × lineHeight for optical balance
+      with paired typography. Range: size050 (13px) to size700 (48px).
+      Standard size is size100 (24px).
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - All size values render correctly
+      - Dimensions match specified size
+      - Invalid sizes throw descriptive error
+    test_approach: |
+      - Render at each size, verify dimensions
+    required: true
+
+  visual_optical_balance:
+    category: visual
+    description: Optional 8% lighter blend for icon-text pairing
+    behavior: |
+      When opticalBalance=true and hex color provided, applies
+      lighterBlend(color, blend.iconLighter) to compensate for icons
+      appearing heavier than adjacent text. Not applied when
+      color='inherit' or color is a token reference.
+    wcag: "1.4.3 Contrast (Minimum)"
+    platforms: [web, ios, android]
+    validation:
+      - Hex color lightened by 8% when opticalBalance=true
+      - Original color when opticalBalance=false
+      - currentColor when color='inherit'
+    test_approach: |
+      - Set opticalBalance=true with hex color, verify lightening
+    required: false
+
+  accessibility_hidden:
+    category: accessibility
+    description: Decorative icons hidden from assistive technology
+    behavior: |
+      Icons are decorative and hidden from AT. Parent elements provide
+      accessible labels. Web: aria-hidden="true". iOS: .accessibilityHidden(true).
+      Android: contentDescription=null.
+    wcag: "1.1.1 Non-text Content"
+    platforms: [web, ios, android]
+    validation:
+      - Icons not announced by screen readers
+      - Icons not in accessibility tree
+    test_approach: |
+      - Verify aria-hidden="true" (web)
+    required: true

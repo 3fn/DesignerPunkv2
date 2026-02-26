@@ -1,0 +1,135 @@
+version: "1.0.0"
+component: Button-VerticalList-Item
+family: Buttons
+
+contracts:
+  interaction_focusable:
+    category: interaction
+    description: Can receive keyboard focus
+    behavior: |
+      Component can receive focus via Tab key navigation
+      (or arrow keys when inside a Set with roving tabindex).
+    wcag: "2.1.1 Keyboard"
+    platforms: [web, ios, android]
+    validation:
+      - Component can receive keyboard focus
+      - Focus state is visually indicated
+    test_approach: |
+      - Tab to item and verify it receives focus
+    required: true
+
+  interaction_pressable:
+    category: interaction
+    description: Responds to press/click events
+    behavior: |
+      Component responds to click, tap, Enter key, and Space key.
+      Press triggers the onPress callback.
+    wcag: "2.1.1 Keyboard"
+    platforms: [web, ios, android]
+    validation:
+      - Click/tap triggers onPress
+      - Enter and Space trigger onPress
+    test_approach: |
+      - Click item and verify handler called
+      - Focus item, press Enter, verify handler called
+    required: true
+
+  interaction_hover:
+    category: interaction
+    description: Visual feedback on hover
+    behavior: |
+      On desktop platforms, component shows visual feedback on hover.
+    wcag: "1.4.13 Content on Hover or Focus"
+    platforms: [web]
+    validation:
+      - Visual change on mouse enter
+      - Visual reverts on mouse leave
+    test_approach: |
+      - Simulate hover and verify visual change
+    required: true
+
+  interaction_pressed:
+    category: interaction
+    description: Visual feedback when pressed
+    behavior: |
+      Component shows visual feedback during active press/click.
+    wcag: "2.4.7 Focus Visible"
+    platforms: [web, ios, android]
+    validation:
+      - Visual feedback shown during press
+    test_approach: |
+      - Simulate press and verify visual change
+    required: true
+
+  state_visual_driven:
+    category: state
+    description: Renders appearance based on visualState prop
+    behavior: |
+      Component is presentational — it renders the visual state it's told
+      to display via the visualState prop. Five states: rest, selected,
+      notSelected, checked, unchecked. Selection logic is delegated to
+      the parent Set component.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Each visualState value produces distinct visual treatment
+      - Component does not manage its own selection state
+    test_approach: |
+      - Render with each visualState value
+      - Verify distinct visual treatment for each
+    required: true
+
+  animation_checkmark:
+    category: animation
+    description: Animated selection indicator
+    behavior: |
+      Checkmark appearance/disappearance is animated. Configurable
+      via checkmarkTransition prop (fade or instant). Respects
+      prefers-reduced-motion by using instant transition.
+    wcag: "2.3.3 Animation from Interactions"
+    platforms: [web, ios, android]
+    validation:
+      - Checkmark animates on state change (default)
+      - Instant transition when checkmarkTransition="instant"
+      - Instant transition when prefers-reduced-motion enabled
+    test_approach: |
+      - Toggle to checked state and verify animation
+      - Set checkmarkTransition="instant" and verify no animation
+    required: true
+
+  state_error:
+    category: state
+    description: Shows error styling when error=true
+    behavior: |
+      When error prop is true, component applies error styling.
+      Treatment varies by mode (set by parent). Error state is
+      typically propagated from the parent Set component.
+    wcag: "3.3.1 Error Identification"
+    platforms: [web, ios, android]
+    validation:
+      - Error styling applied when error=true
+      - Error styling removed when error=false
+    test_approach: |
+      - Render with error=true and verify error styling
+    required: true
+
+  interaction_focus_ring:
+    category: interaction
+    description: WCAG 2.4.7 focus visible indicator
+    behavior: |
+      When focused via keyboard, component displays a focus ring.
+      Uses :focus-visible (web) for keyboard-only focus indication.
+    wcag: "2.4.7 Focus Visible"
+    platforms: [web, ios, android]
+    validation:
+      - Focus ring appears on keyboard focus
+      - Focus ring meets 3:1 contrast ratio
+    test_approach: |
+      - Tab to item and verify focus ring visible
+    required: true
+
+excludes:
+  state_disabled:
+    reason: "Items are controlled by the parent Set component. Individual item disabling is not supported."
+    category: state
+    reference: "Button-VerticalList-Item README, Design Decisions"

@@ -1,0 +1,117 @@
+version: "1.0.0"
+component: Container-Base
+family: Containers
+
+contracts:
+  layout_contains_children:
+    category: layout
+    description: Can contain child components
+    behavior: |
+      Renders child content inside the container with applied styling.
+      Web: <slot> element. iOS: @ViewBuilder. Android: Composable content lambda.
+    wcag: "1.3.1 Info and Relationships"
+    platforms: [web, ios, android]
+    validation:
+      - Child content renders inside container
+      - Container styling does not affect child styling
+    test_approach: |
+      - Render with child content, verify children visible
+    required: true
+
+  layout_padding:
+    category: layout
+    description: Applies consistent internal padding with override hierarchy
+    behavior: |
+      Three levels of padding control (highest to lowest priority):
+      1. Individual edges (paddingBlockStart, etc.)
+      2. Axis props (paddingVertical, paddingHorizontal)
+      3. Uniform padding (padding prop)
+      All values use space.inset tokens. Web uses CSS logical properties.
+    wcag: "1.4.12 Text Spacing"
+    platforms: [web, ios, android]
+    validation:
+      - Padding values match space.inset tokens
+      - Override hierarchy respected
+      - Web uses CSS logical properties for RTL
+    test_approach: |
+      - Set uniform padding, verify all sides
+      - Override one axis, verify hierarchy
+    required: true
+
+  visual_background:
+    category: visual
+    description: Applies background color styling
+    behavior: |
+      When background prop set, applies semantic color token as background.
+      Undefined results in transparent.
+    wcag: "1.4.3 Contrast (Minimum)"
+    platforms: [web, ios, android]
+    validation:
+      - Background color matches specified token
+      - Undefined background is transparent
+    test_approach: |
+      - Set background prop, verify color applied
+    required: true
+
+  visual_shadow:
+    category: visual
+    description: Applies shadow/elevation styling
+    behavior: |
+      When shadow prop set, applies semantic shadow token.
+      Android: layering prop takes precedence over shadow.
+    wcag: "1.4.11 Non-text Contrast"
+    platforms: [web, ios, android]
+    validation:
+      - Shadow matches specified token
+      - Android: layering takes precedence
+    test_approach: |
+      - Set shadow prop, verify shadow rendered
+    required: true
+
+  visual_border:
+    category: visual
+    description: Applies border styling with configurable color
+    behavior: |
+      When border prop set, applies border with specified width.
+      Border color from borderColor prop or defaults to color.border.default.
+      Border respects border radius.
+    wcag: "1.4.11 Non-text Contrast"
+    platforms: [web, ios, android]
+    validation:
+      - Border width matches token
+      - Border color uses borderColor prop or default
+      - "'none' results in no border"
+    test_approach: |
+      - Set border prop, verify border rendered
+    required: true
+
+  visual_radius:
+    category: visual
+    description: Applies border radius styling
+    behavior: |
+      When borderRadius prop set, applies rounded corners using radius tokens.
+      Affects background, border, and shadow rendering.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Border radius matches token
+      - Background clips to radius
+    test_approach: |
+      - Set borderRadius, verify rounded corners
+    required: true
+
+  interaction_hover:
+    category: interaction
+    description: Visual feedback on hover when hoverable
+    behavior: |
+      When hoverable=true and pointer device hovers, darkens background
+      by blend.hoverDarker (8%). Transition uses motion.focusTransition.
+      Only applies with pointer devices.
+    wcag: "1.4.13 Content on Hover or Focus"
+    platforms: [web, ios, android]
+    validation:
+      - Background darkens on hover when hoverable=true
+      - Only applies with pointer devices
+    test_approach: |
+      - Set hoverable=true, simulate hover, verify darkening
+    required: true

@@ -3,7 +3,7 @@ component: Progress-Indicator-Connector-Base
 family: Progress-Indicator
 
 contracts:
-  renders_state_colors:
+  visual_state_colors:
     category: visual
     description: Applies correct color tokens based on connector state
     behavior: |
@@ -16,46 +16,55 @@ contracts:
       - Active connector uses completed.connector token (green100)
       - Inactive connector uses pending.connector token (white200)
       - Colors use design tokens, not hardcoded values
+    test_approach: |
+      Render active connector — verify green100. Render inactive — verify white200.
+    required: true
 
-  applies_thickness:
+  visual_thickness:
     category: visual
     description: Uses 1px thickness from borderDefault token
     behavior: |
       Connector renders at 1px height using the progress.connector.thickness
       token which references borderDefault (borderWidth100).
+    wcag: null
     platforms: [web, ios, android]
     validation:
       - Thickness is 1px/1pt/1dp across platforms
       - Value references borderDefault token
+    test_approach: |
+      Render connector. Verify height is 1px and references borderDefault token.
+    required: true
 
-  flexible_length:
+  layout_flexible_length:
     category: layout
     description: Fills available space between nodes
     behavior: |
       Connector stretches to fill the horizontal space between adjacent
       progress indicator nodes. Uses flex: 1 (web), maxWidth .infinity (iOS),
       or fillMaxWidth (Android).
+    wcag: null
     platforms: [web, ios, android]
     validation:
       - Connector fills available horizontal space
       - No fixed width constraint
+    test_approach: |
+      Render connector between two nodes. Verify it fills available space
+      with no fixed width.
+    required: true
 
-  decorative_primitive:
+  accessibility_decorative:
     category: accessibility
     description: Primitive is decorative; semantic variants handle a11y
     behavior: |
       Connector-Base is marked as decorative (aria-hidden on web,
       accessibilityHidden on iOS, clearAndSetSemantics on Android).
       Semantic variants provide ARIA roles and labels.
+    wcag: null
     platforms: [web, ios, android]
     validation:
       - Connector has aria-hidden="true" (web)
       - Connector is hidden from assistive technology
-
-summary:
-  total_contracts: 4
-  categories:
-    visual: 2
-    layout: 1
-    accessibility: 1
-  platforms: [web, ios, android]
+    test_approach: |
+      Render connector. Verify aria-hidden="true" (web). Verify not in
+      accessibility tree.
+    required: true

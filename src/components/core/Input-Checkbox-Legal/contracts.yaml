@@ -1,0 +1,56 @@
+version: "1.0.0"
+component: Input-Checkbox-Legal
+family: Input-Checkbox
+inherits: Input-Checkbox-Base
+
+contracts:
+  validation_explicit_consent:
+    category: validation
+    description: Prevents pre-checking with warning
+    behavior: |
+      If checked prop is passed as true on initial render, the component
+      overrides it to false and emits a console warning. This enforces
+      GDPR-compliant explicit consent — users must actively check the box.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Pre-checked state is overridden to unchecked
+      - Console warning emitted when pre-checking attempted
+    test_approach: |
+      - Render with checked=true
+      - Verify checkbox renders unchecked
+      - Verify console warning is emitted
+    required: true
+
+  validation_audit_trail:
+    category: validation
+    description: Provides ISO 8601 timestamp and metadata on consent events
+    behavior: |
+      On consent change, the onConsentChange callback provides:
+      - consented: boolean (true=given, false=withdrawn)
+      - timestamp: ISO 8601 string
+      - legalTextId: string (from prop)
+      - legalTextVersion: string (from prop)
+      Component produces audit data; consumer is responsible for persistence.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - onConsentChange fires on check/uncheck
+      - Timestamp is valid ISO 8601 format
+      - legalTextId and legalTextVersion included when provided
+    test_approach: |
+      - Render with legalTextId and legalTextVersion props
+      - Toggle checkbox and capture onConsentChange data
+      - Verify all fields present with correct types
+    required: true
+
+excludes:
+  state_indeterminate:
+    reason: "Indeterminate state is not applicable to legal consent checkboxes. Consent is binary: given or not given."
+    category: state
+    reference: "Input-Checkbox-Legal README, Key Differences from Input-Checkbox-Base table"
+
+  state_disabled:
+    reason: "If an action is unavailable, the component should not be rendered."
+    category: state
+    reference: "Input-Checkbox-Legal README, DesignerPunk Philosophy"

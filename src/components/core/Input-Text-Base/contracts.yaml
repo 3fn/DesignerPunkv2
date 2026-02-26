@@ -1,0 +1,161 @@
+version: "1.0.0"
+component: Input-Text-Base
+family: Input-Text
+
+contracts:
+  interaction_focusable:
+    category: interaction
+    description: Can receive keyboard focus
+    behavior: |
+      Component can receive focus via Tab key navigation.
+      Focus state is visually indicated and triggers label animation.
+    wcag: "2.1.1 Keyboard"
+    platforms: [web, ios, android]
+    validation:
+      - Tab key moves focus to input
+      - Focus state is visually distinct
+      - Focus triggers label float animation
+    test_approach: |
+      - Press Tab, verify input receives focus
+      - Verify label animates on focus
+    required: true
+
+  content_float_label:
+    category: content
+    description: Label animates from placeholder to floated position
+    behavior: |
+      Label smoothly transitions from placeholder position inside input
+      to floated position above input when focused or filled.
+      Animation uses motion.floatLabel token (250ms, standard easing).
+    wcag: "2.3.3 Animation from Interactions"
+    platforms: [web, ios, android]
+    validation:
+      - Label animates from inside to above input on focus
+      - Label stays floated when input has content
+      - Animation respects prefers-reduced-motion
+      - Animation timing matches motion.floatLabel token
+    test_approach: |
+      - Focus empty input, verify label floats
+      - Type text, blur, verify label stays floated
+    required: true
+
+  validation_on_blur:
+    category: validation
+    description: Validation triggers on blur
+    behavior: |
+      Validation state is evaluated when input loses focus.
+      Error or success state is applied based on validation result.
+    wcag: "3.3.1 Error Identification"
+    platforms: [web, ios, android]
+    validation:
+      - Blur event triggers validation callback
+      - Error state applied when validation fails
+      - Success state applied when validation succeeds
+    test_approach: |
+      - Focus input, type invalid value, blur
+      - Verify error state applied
+    required: true
+
+  state_error:
+    category: state
+    description: Shows error message and styling
+    behavior: |
+      When in error state, component displays red border (color.error),
+      red label text, error icon in trailing position, and error message
+      below helper text.
+    wcag: "3.3.1 Error Identification"
+    platforms: [web, ios, android]
+    validation:
+      - Border color changes to error color
+      - Label color changes to error color
+      - Error icon appears in trailing position
+      - Error message displayed and associated via aria-describedby
+    test_approach: |
+      - Set error state, verify border/label/icon/message
+    required: true
+
+  state_success:
+    category: state
+    description: Shows success styling
+    behavior: |
+      When in success state, component displays green border
+      (color.success.strong), green label text, and success icon
+      in trailing position.
+    wcag: "1.4.1 Use of Color"
+    platforms: [web, ios, android]
+    validation:
+      - Border color changes to success color
+      - Label color changes to success color
+      - Success icon appears in trailing position
+    test_approach: |
+      - Set success state, verify border/label/icon
+    required: true
+
+  state_disabled:
+    category: state
+    description: Prevents interaction when disabled
+    behavior: |
+      When disabled, component cannot receive focus, cannot be edited,
+      uses desaturated colors (blend.disabledDesaturate), and shows
+      cursor: not-allowed (web).
+    wcag: "4.1.2 Name, Role, Value"
+    platforms: [web, ios, android]
+    validation:
+      - Input cannot receive focus when disabled
+      - Input value cannot be changed when disabled
+      - Visual styling indicates disabled state
+    test_approach: |
+      - Set disabled, verify not focusable and not editable
+    required: true
+
+  content_trailing_icon:
+    category: content
+    description: Shows contextual trailing icons
+    behavior: |
+      Trailing icon area displays contextual icons with priority:
+      error > success > info. Icons fade in after label animation completes.
+      Icons are decorative (hidden from screen readers).
+    wcag: "1.4.1 Use of Color"
+    platforms: [web, ios, android]
+    validation:
+      - Only one icon displayed at a time (priority order)
+      - Icons appear after label animation completes
+      - Icons use appropriate semantic colors
+      - Icons are decorative (hidden from screen readers)
+    test_approach: |
+      - Set error state, verify error icon shown
+      - Set success state, verify success icon shown
+    required: true
+
+  interaction_focus_ring:
+    category: interaction
+    description: WCAG 2.4.7 focus visible indicator
+    behavior: |
+      When focused via keyboard, displays 2px focus ring with 2px offset
+      using accessibility tokens. Visible in all states (default, error, success).
+      Uses :focus-visible (web) for keyboard-only focus indication.
+    wcag: "2.4.7 Focus Visible"
+    platforms: [web, ios, android]
+    validation:
+      - Focus ring appears on keyboard focus
+      - Focus ring meets 3:1 contrast ratio
+      - Focus ring visible in error and success states
+    test_approach: |
+      - Tab to input, verify focus ring visible
+    required: true
+
+  accessibility_reduced_motion:
+    category: accessibility
+    description: Respects prefers-reduced-motion
+    behavior: |
+      When user has reduced motion preference, label position changes
+      instantly, icon visibility changes instantly, and focus ring
+      transitions instantly. Functionality unchanged.
+    wcag: "2.3.3 Animation from Interactions"
+    platforms: [web, ios, android]
+    validation:
+      - Animations disabled when prefers-reduced-motion: reduce
+      - State changes still occur without animation
+    test_approach: |
+      - Enable reduced motion, verify instant transitions
+    required: true

@@ -1,0 +1,57 @@
+version: "1.0.0"
+component: Input-Text-PhoneNumber
+family: Input-Text
+inherits: Input-Text-Base
+
+contracts:
+  validation_phone_format:
+    category: validation
+    description: Validates phone number against country-specific patterns
+    behavior: |
+      On blur, validates input against country-specific phone number pattern.
+      If validation fails, displays error state with error message.
+      Custom validator can override default validation.
+    wcag: "3.3.1 Error Identification"
+    platforms: [web, ios, android]
+    validation:
+      - Phone validation triggers on blur
+      - Valid numbers pass (10 digits for US)
+      - Invalid numbers fail (wrong digit count)
+      - Custom validator overrides default
+    test_approach: |
+      - Type valid US number, blur, verify no error
+      - Type invalid number, blur, verify error state
+    required: true
+
+  content_phone_formatting:
+    category: content
+    description: Formats phone numbers as user types
+    behavior: |
+      As user types digits, automatically formats per country pattern.
+      US: (###) ###-####. Non-digit characters stripped.
+      Backspace removes formatting appropriately.
+    wcag: "3.3.2 Labels or Instructions"
+    platforms: [web, ios, android]
+    validation:
+      - Digits formatted as user types
+      - Non-digit characters stripped
+      - Format follows country-specific pattern
+    test_approach: |
+      - Type digits, verify formatting applied progressively
+    required: true
+
+  content_international_formats:
+    category: content
+    description: Handles multiple country phone number formats
+    behavior: |
+      Supports formats for US, CA, GB, DE, FR, AU, JP, IN, BR, MX.
+      Each country has its own format pattern and expected digit count.
+    wcag: "3.3.2 Labels or Instructions"
+    platforms: [web, ios, android]
+    validation:
+      - US/CA: (###) ###-#### (10 digits)
+      - GB: #### ### #### (11 digits)
+      - Country selector available when enabled
+    test_approach: |
+      - Switch country, type number, verify correct format
+    required: true

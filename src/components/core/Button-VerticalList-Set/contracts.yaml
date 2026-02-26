@@ -1,0 +1,171 @@
+version: "1.0.0"
+component: Button-VerticalList-Set
+family: Buttons
+
+contracts:
+  state_mode_driven:
+    category: state
+    description: Behavior determined by mode prop (tap/select/multiSelect)
+    behavior: |
+      The mode prop determines selection behavior:
+      - tap: no selection state, items act as action buttons
+      - select: single selection (radio-button style)
+      - multiSelect: multiple selections (checkbox style)
+      Mode affects ARIA roles, visual states, and keyboard behavior.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - tap mode produces no selection state
+      - select mode allows single selection
+      - multiSelect mode allows multiple selections
+    test_approach: |
+      - Render in each mode and verify selection behavior
+    required: true
+
+  state_controlled:
+    category: state
+    description: Selection state managed by parent via props
+    behavior: |
+      Set is a controlled component. Selection state is passed in
+      via selectedIndex (select mode) or selectedIndices (multiSelect mode).
+      Parent manages state; Set coordinates visual states across children.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Selection reflects prop values
+      - Visual states update when props change
+    test_approach: |
+      - Pass selectedIndex and verify correct item is selected
+      - Change selectedIndex and verify selection updates
+    required: true
+
+  composition_state_coordination:
+    category: composition
+    description: Derives and propagates visual states to children
+    behavior: |
+      Set derives visualState for each child based on mode and selection:
+      - tap: all children get "rest"
+      - select: selected gets "selected", others get "notSelected"
+      - multiSelect: selected get "checked", others get "unchecked"
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Children receive correct visualState based on mode and selection
+      - Visual states update when selection changes
+    test_approach: |
+      - Render in select mode with selectedIndex=0
+      - Verify first child has visualState="selected"
+      - Verify other children have visualState="notSelected"
+    required: true
+
+  animation_coordination:
+    category: animation
+    description: Coordinates transition timing across children
+    behavior: |
+      When selection changes, Set coordinates staggered animation
+      timing across children for smooth visual transitions.
+      Respects prefers-reduced-motion.
+    wcag: "2.3.3 Animation from Interactions"
+    platforms: [web, ios, android]
+    validation:
+      - Selection change triggers coordinated animation
+      - Animation disabled with prefers-reduced-motion
+    test_approach: |
+      - Change selection and observe staggered transitions
+    required: true
+
+  interaction_keyboard_navigation:
+    category: interaction
+    description: Arrow keys, Home, End, Enter, Space support
+    behavior: |
+      Arrow Up/Down navigate between items. Home moves to first,
+      End moves to last. Enter and Space activate the focused item.
+      Navigation wraps from last to first and vice versa.
+    wcag: "2.1.1 Keyboard"
+    platforms: [web, ios, android]
+    validation:
+      - Arrow keys move focus between items
+      - Home/End move to first/last item
+      - Enter/Space activate focused item
+    test_approach: |
+      - Focus first item, press Arrow Down
+      - Verify focus moves to second item
+    required: true
+
+  interaction_roving_tabindex:
+    category: interaction
+    description: Single tab stop with arrow key navigation
+    behavior: |
+      Set uses roving tabindex pattern (web). Only one item is in
+      the tab order at a time. Tab moves focus into/out of the Set;
+      arrow keys navigate within.
+    wcag: "2.4.3 Focus Order"
+    platforms: [web]
+    validation:
+      - Tab enters Set at the active/first item
+      - Tab exits Set to next focusable element
+      - Arrow keys navigate within Set
+    test_approach: |
+      - Tab into Set and verify single tab stop
+      - Arrow Down and verify internal navigation
+      - Tab again and verify focus leaves Set
+    required: true
+
+  composition_error_propagation:
+    category: composition
+    description: Error state propagates to all children
+    behavior: |
+      When error prop is true on the Set, all child items receive
+      error=true. Error message is displayed at the Set level.
+    wcag: "3.3.1 Error Identification"
+    platforms: [web, ios, android]
+    validation:
+      - All children show error styling when Set has error=true
+      - Error message displayed at Set level
+    test_approach: |
+      - Set error=true on Set
+      - Verify all children show error styling
+    required: true
+
+  validation_selection_constraints:
+    category: validation
+    description: Validates selection against constraints
+    behavior: |
+      Set validates selection state against constraints:
+      - required: at least one selection required (select/multiSelect)
+      - minSelections: minimum selections (multiSelect)
+      - maxSelections: maximum selections (multiSelect)
+    wcag: "3.3.1 Error Identification"
+    platforms: [web, ios, android]
+    validation:
+      - Error when required and no selection
+      - Error when below minSelections
+      - Selection prevented when at maxSelections
+    test_approach: |
+      - Render required Set with no selection, verify error
+      - Select an item, verify error clears
+    required: true
+
+  accessibility_aria_roles:
+    category: accessibility
+    description: Appropriate ARIA roles based on mode
+    behavior: |
+      ARIA roles change based on mode:
+      - tap: role="group" on container
+      - select: role="radiogroup" on container, role="radio" + aria-checked on items
+      - multiSelect: role="group" + aria-multiselectable on container, role="checkbox" + aria-checked on items
+    wcag: "4.1.2 Name, Role, Value"
+    platforms: [web, ios, android]
+    validation:
+      - Container role matches mode
+      - Item roles match mode
+      - aria-checked reflects selection state
+    test_approach: |
+      - Render in each mode and verify ARIA roles
+    required: true
+
+excludes:
+  state_disabled:
+    reason: "The Set does not support disabling individual items. If an option shouldn't be available, it shouldn't be in the Set."
+    category: state
+    reference: "Button-VerticalList-Set README, Design Decisions"

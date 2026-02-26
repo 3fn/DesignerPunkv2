@@ -1,98 +1,18 @@
-# Badge-Count-Notification Behavioral Contracts
-#
-# Stemma System: Badge Family
-# Component Type: Semantic Variant (inherits from Badge-Count-Base)
-#
-# This file defines the behavioral contracts for Badge-Count-Notification.
-# Contracts are guarantees the component provides to consumers.
-#
-# Inheritance: Badge-Count-Notification inherits all contracts from Badge-Count-Base
-# and adds notification-specific contracts for colors and live region announcements.
-#
-# Contract Categories:
-# - Inherited: Contracts inherited from Badge-Count-Base
-# - Notification: Notification-specific color and semantic contracts
-# - Accessibility: Live region and announcement contracts
-#
-# @see Badge-Count-Notification.schema.yaml for full component schema
-# @see Badge-Count-Base/contracts.yaml for inherited contracts
-# @see .kiro/specs/044-badge-base/design.md for design specification
-
 version: "1.0.0"
 component: Badge-Count-Notification
 family: Badge
 inherits: Badge-Count-Base
 
-# ============================================================================
-# Inherited Contracts (from Badge-Count-Base)
-# ============================================================================
-
-inherited_contracts:
-  # Reference to Badge-Count-Base contracts - these are inherited automatically
-  # See Badge-Count-Base/contracts.yaml for full contract definitions
-  
-  displays_count:
-    source: Badge-Count-Base
-    description: Shows numeric value
-    wcag: "1.3.1 Info and Relationships"
-    
-  truncates_at_max:
-    source: Badge-Count-Base
-    description: Shows "[max]+" when count exceeds max
-    wcag: "1.3.1 Info and Relationships"
-    
-  circular_single_digit:
-    source: Badge-Count-Base
-    description: Renders circular for single-digit counts
-    wcag: null
-    
-  pill_multi_digit:
-    source: Badge-Count-Base
-    description: Renders pill shape for multi-digit counts
-    wcag: null
-    
-  non_interactive:
-    source: Badge-Count-Base
-    description: Does not respond to user interaction
-    wcag: null
-    
-  color_contrast:
-    source: Badge-Count-Base
-    description: Meets WCAG AA contrast requirements (4.5:1)
-    wcag: "1.4.3 Contrast (Minimum)"
-    note: Badge-Count-Notification exceeds this with 6.33:1 contrast ratio
-    
-  text_scaling:
-    source: Badge-Count-Base
-    description: Scales proportionally with user font size preferences
-    wcag: "1.4.4 Resize Text"
-
-# ============================================================================
-# Extended Contracts (unique to Badge-Count-Notification)
-# ============================================================================
-
 contracts:
-  # ---------------------------------------------------------------------------
-  # notification_semantics
-  # ---------------------------------------------------------------------------
-  notification_semantics:
-    category: notification
+  visual_notification_color:
+    category: visual
     description: Conveys notification/alert meaning through color
     behavior: |
-      Badge-Count-Notification uses fixed notification colors that convey
-      urgency and importance:
+      Uses fixed notification colors conveying urgency:
       - Background: color.badge.background.notification (pink400 #CC2257)
       - Text: color.badge.text.notification (white100 #FFFFFF)
-      
-      These colors are not configurable by consumers, ensuring consistent
-      notification semantics across the application. The pink/magenta color
-      is commonly associated with notifications and alerts.
-      
-      Contrast Ratio: 6.33:1 (exceeds WCAG AA 4.5:1 minimum)
-      
-      Color Token References:
-      - color.badge.background.notification → pink400 primitive
-      - color.badge.text.notification → white100 primitive
+      Colors are not configurable by consumers. Contrast ratio: 6.33:1
+      (exceeds WCAG AA 4.5:1 minimum).
     wcag: "1.3.1 Info and Relationships"
     platforms: [web, ios, android]
     validation:
@@ -100,46 +20,22 @@ contracts:
       - Text color is white100 (#FFFFFF)
       - Colors are not configurable via props
       - Contrast ratio meets WCAG AA (4.5:1)
-      - Contrast ratio is 6.33:1 (exceeds minimum)
     test_approach: |
-      - Render badge and verify background color is #CC2257
-      - Verify text color is #FFFFFF
-      - Verify no props exist to change notification colors
-      - Calculate contrast ratio and verify >= 4.5:1
+      Render badge. Verify background is #CC2257, text is #FFFFFF.
+      Verify no props exist to change notification colors.
+    required: true
 
-  # ---------------------------------------------------------------------------
-  # announces_count_changes
-  # ---------------------------------------------------------------------------
-  announces_count_changes:
+  accessibility_announces_changes:
     category: accessibility
     description: Announces count changes to screen readers when enabled
     behavior: |
-      When announceChanges is true (default), Badge-Count-Notification
-      announces count changes to screen readers via platform-specific
-      live region implementations:
-      
-      Web:
-      - aria-live="polite" for non-interruptive announcements
-      - aria-atomic="true" to announce entire content
-      - Visually hidden announcement text for screen readers
-      
-      iOS:
-      - .accessibilityAddTraits(.updatesFrequently) marks as live region
-      - UIAccessibility.post(notification:) announces changes
-      
-      Android:
-      - LiveRegionMode.Polite in semantics modifier
-      - announceForAccessibility() for explicit announcements
-      
-      Announcement Conditions:
-      - announceChanges must be true
-      - There must be a previous count (not initial render)
-      - The count must have actually changed
-      
-      When announceChanges is false:
-      - No live region attributes are applied
-      - No announcements are made on count changes
-      - Use when parent handles announcements or updates are frequent
+      When announceChanges is true (default), announces count changes via
+      platform-specific live region implementations:
+      - Web: aria-live="polite", aria-atomic="true"
+      - iOS: .accessibilityAddTraits(.updatesFrequently)
+      - Android: LiveRegionMode.Polite
+      Conditions: announceChanges=true, previous count exists, count changed.
+      When announceChanges=false, no live region attributes applied.
     wcag: "4.1.3 Status Messages"
     platforms: [web, ios, android]
     validation:
@@ -149,130 +45,48 @@ contracts:
       - Announcements occur on count changes
       - No announcements on initial render
       - No announcements when announceChanges=false
-      - No live region attributes when announceChanges=false
     test_approach: |
-      - Render badge with announceChanges=true
-      - Verify aria-live="polite" attribute present (web)
-      - Verify aria-atomic="true" attribute present (web)
-      - Change count and verify announcement occurs
-      - Render badge with announceChanges=false
-      - Verify no aria-live attribute present (web)
-      - Change count and verify no announcement occurs
+      Render with announceChanges=true. Verify aria-live="polite" (web).
+      Change count — verify announcement. Render with announceChanges=false —
+      verify no aria-live attribute.
+    required: true
 
-  # ---------------------------------------------------------------------------
-  # pluralized_announcements
-  # ---------------------------------------------------------------------------
-  pluralized_announcements:
+  accessibility_pluralized_announcements:
     category: accessibility
     description: Uses correct pluralization in announcements
     behavior: |
-      Badge-Count-Notification uses grammatically correct pluralization
-      in screen reader announcements:
-      
-      Singular (count=1):
-      - Announcement: "1 notification"
-      
-      Plural (count>1):
-      - Announcement: "[count] notifications"
-      - Examples: "5 notifications", "42 notifications"
-      
-      Overflow (count>max):
-      - Announcement: "[max] or more notifications"
-      - Example with max=99: "99 or more notifications"
-      
-      Zero (count=0, showZero=true):
-      - Announcement: "0 notifications"
-      
-      This ensures natural language announcements that are easy to understand
-      and follow English grammar rules for singular/plural forms.
+      Uses grammatically correct pluralization in screen reader announcements:
+      - count=1: "1 notification" (singular)
+      - count>1: "[count] notifications" (plural)
+      - count>max: "[max] or more notifications"
+      - count=0 (showZero=true): "0 notifications"
     wcag: "4.1.3 Status Messages"
     platforms: [web, ios, android]
     validation:
       - count=1 announces "1 notification" (singular)
-      - count=0 announces "0 notifications" (plural)
       - count=5 announces "5 notifications" (plural)
-      - count=42 announces "42 notifications" (plural)
       - count=100 with max=99 announces "99 or more notifications"
-      - count=1000 with max=99 announces "99 or more notifications"
+      - count=0 announces "0 notifications" (plural)
     test_approach: |
-      - Render badge with count=1
-      - Verify announcement text is "1 notification"
-      - Render badge with count=5
-      - Verify announcement text is "5 notifications"
-      - Render badge with count=100, max=99
-      - Verify announcement text is "99 or more notifications"
-      - Render badge with count=0, showZero=true
-      - Verify announcement text is "0 notifications"
+      Render with count=1 — verify "1 notification". Render with count=5 —
+      verify "5 notifications". Render with count=100/max=99 —
+      verify "99 or more notifications".
+    required: true
 
-# ============================================================================
-# Contract Summary
-# ============================================================================
-
-summary:
-  total_contracts: 10
-  inherited_contracts: 7
-  extended_contracts: 3
-  categories:
-    inherited:
-      content: 2
-      shape: 2
-      interaction: 1
-      accessibility: 2
-    extended:
-      notification: 1
-      accessibility: 2
-  wcag_coverage:
-    inherited:
-      - "1.3.1 Info and Relationships"
-      - "1.4.3 Contrast (Minimum)"
-      - "1.4.4 Resize Text"
-    extended:
-      - "1.3.1 Info and Relationships"
-      - "4.1.3 Status Messages"
-  platforms: [web, ios, android]
-
-# ============================================================================
-# announceChanges Opt-Out Use Cases
-# ============================================================================
-
-announceChanges_opt_out_use_cases:
-  description: |
-    The announceChanges prop defaults to true, but can be set to false in
-    specific scenarios where automatic announcements would be inappropriate
-    or redundant.
-  
-  use_cases:
-    parent_handles_announcements:
-      description: |
-        When a parent component already announces notification changes,
-        disable announceChanges to prevent duplicate announcements.
-      example: |
-        A notification center component that announces "You have 5 new
-        notifications" should disable announceChanges on child badges.
-    
-    frequent_updates:
-      description: |
-        When notification counts update very frequently (e.g., real-time
-        counters), constant announcements can be disruptive. Disable
-        announceChanges and provide periodic summary announcements instead.
-      example: |
-        A live chat unread counter that updates every second should
-        disable announceChanges to avoid overwhelming screen reader users.
-    
-    decorative_context:
-      description: |
-        When the badge is purely decorative or the count is already
-        announced through other means (e.g., page title, heading).
-      example: |
-        A badge next to a heading that already says "Notifications (5)"
-        doesn't need to announce changes separately.
-    
-    batch_updates:
-      description: |
-        When multiple badges update simultaneously, individual announcements
-        can be confusing. Disable announceChanges and provide a single
-        summary announcement for all changes.
-      example: |
-        A dashboard with multiple notification badges should announce
-        "Dashboard updated" rather than each badge individually.
-
+excludes:
+  interaction_focusable:
+    reason: "Badges are visual indicators, not interactive elements."
+    category: interaction
+    reference: "062 audit intentional-exclusions.md"
+  interaction_pressable:
+    reason: "Badges are visual indicators, not interactive elements."
+    category: interaction
+    reference: "062 audit intentional-exclusions.md"
+  interaction_hover:
+    reason: "Badges are visual indicators — no hover feedback expected."
+    category: interaction
+    reference: "062 audit intentional-exclusions.md"
+  interaction_pressed:
+    reason: "Badges are visual indicators — no press feedback expected."
+    category: interaction
+    reference: "062 audit intentional-exclusions.md"

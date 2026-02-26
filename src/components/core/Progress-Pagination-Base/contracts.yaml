@@ -3,35 +3,44 @@ component: Progress-Pagination-Base
 family: Progress-Indicator
 
 contracts:
-  composes_node_base_only:
+  composition_node_only:
     category: composition
     description: Renders only Node-Base primitives (no connectors, no labels)
     behavior: |
-      Pagination-Base composes Progress-Indicator-Node-Base for each visible item.
-      It does NOT render Progress-Indicator-Connector-Base or Progress-Indicator-Label-Base.
+      Composes Progress-Indicator-Node-Base for each visible item.
+      Does NOT render Connector-Base or Label-Base.
       All nodes receive content='none' (dots only).
+    wcag: null
     platforms: [web, ios, android]
     validation:
       - Renders Node-Base for each visible item
       - No Connector-Base elements present
       - No Label-Base elements present
       - All nodes have content='none'
+    test_approach: |
+      Render pagination with 5 items. Verify 5 nodes, no connectors,
+      no labels. Verify all nodes have content='none'.
+    required: true
 
-  derives_binary_state:
+  state_binary_derivation:
     category: state
     description: Derives binary state (current vs incomplete) from currentItem
     behavior: |
-      State derivation is simple binary logic:
+      Simple binary logic:
       - Node at currentItem index → state 'current'
       - All other nodes → state 'incomplete'
       No completed or error states in pagination.
+    wcag: null
     platforms: [web, ios, android]
     validation:
       - Exactly one node has state 'current'
       - All other nodes have state 'incomplete'
       - State derivation is deterministic
+    test_approach: |
+      Render with currentItem=2. Verify node 2 is current, all others incomplete.
+    required: true
 
-  virtualizes_large_sets:
+  performance_virtualization:
     category: performance
     description: Renders max 5 visible nodes using sliding window
     behavior: |
@@ -40,13 +49,18 @@ contracts:
       - Pages 4 to (totalItems-3): center current at position 3
       - Last 3 pages: show last 5 nodes
       Window shifts immediately (no animation).
+    wcag: null
     platforms: [web, ios, android]
     validation:
       - totalItems ≤ 5 renders all nodes
       - totalItems > 5 renders exactly 5 nodes
       - Current node centered when possible
+    test_approach: |
+      Render with totalItems=10, currentItem=5. Verify exactly 5 nodes
+      rendered with current centered.
+    required: true
 
-  reflects_actual_position:
+  accessibility_actual_position:
     category: accessibility
     description: ARIA label reflects actual position, not virtualized subset
     behavior: |
@@ -59,12 +73,7 @@ contracts:
       - aria-label shows actual currentItem and totalItems
       - role="group" applied (web)
       - Screen reader announces actual position
-
-summary:
-  total_contracts: 4
-  categories:
-    composition: 1
-    state: 1
-    performance: 1
-    accessibility: 1
-  platforms: [web, ios, android]
+    test_approach: |
+      Render with totalItems=50, currentItem=26. Verify aria-label says
+      "Page 26 of 50" (web).
+    required: true

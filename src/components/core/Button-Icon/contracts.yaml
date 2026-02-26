@@ -1,0 +1,229 @@
+version: "1.0.0"
+component: Button-Icon
+family: Buttons
+
+contracts:
+  interaction_focusable:
+    category: interaction
+    description: Can receive keyboard focus
+    behavior: |
+      Component can receive focus via Tab key navigation.
+      Focus state is visually indicated with a focus ring.
+      Uses :focus-visible (web) for keyboard-only focus indication.
+    wcag: "2.1.1 Keyboard"
+    platforms: [web, ios, android]
+    validation:
+      - Tab key moves focus to button
+      - Focus state is visually distinct
+      - Button participates in tab order
+    test_approach: |
+      - Render button in default state
+      - Press Tab and verify button receives focus
+      - Verify focus ring is visible
+    required: true
+
+  interaction_pressable:
+    category: interaction
+    description: Responds to press/click events
+    behavior: |
+      Component responds to click, tap, Enter key, and Space key.
+      Press triggers the onPress callback. Platform-specific feedback:
+      - Web: color transition
+      - iOS: scale animation (0.97)
+      - Android: Material ripple effect
+    wcag: "2.1.1 Keyboard"
+    platforms: [web, ios, android]
+    validation:
+      - Click/tap triggers onPress callback
+      - Enter key triggers onPress callback
+      - Space key triggers onPress callback
+    test_approach: |
+      - Render button with onPress handler
+      - Click button and verify handler called
+      - Focus button, press Enter, verify handler called
+      - Focus button, press Space, verify handler called
+    required: true
+
+  interaction_hover:
+    category: interaction
+    description: Visual feedback on hover
+    behavior: |
+      On desktop platforms, component shows visual feedback on hover.
+      Treatment varies by variant:
+      - Primary: blend.hoverDarker on background
+      - Secondary: color.background.primary.subtle bg + 2px border
+      - Tertiary: blend.hoverDarker on icon
+    wcag: "1.4.13 Content on Hover or Focus"
+    platforms: [web]
+    validation:
+      - Visual change on mouse enter
+      - Visual reverts on mouse leave
+      - Hover treatment matches variant specification
+    test_approach: |
+      - Render each variant
+      - Simulate hover and verify visual change per variant
+    required: true
+
+  interaction_pressed:
+    category: interaction
+    description: Visual feedback when pressed
+    behavior: |
+      Component shows visual feedback during active press.
+      Treatment varies by variant:
+      - Primary: blend.pressedDarker on background
+      - Secondary: color.background.primary.subtle bg + 2px border
+      - Tertiary: blend.pressedDarker on icon
+      Platform-specific: iOS scale animation, Android ripple effect.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Visual feedback shown during press
+      - Platform-appropriate animation applied
+    test_approach: |
+      - Render button and simulate press
+      - Verify visual feedback is applied
+    required: true
+
+  interaction_focus_ring:
+    category: interaction
+    description: WCAG 2.4.7 focus visible indicator
+    behavior: |
+      When focused via keyboard, component displays a circular focus ring:
+      - 2px width (accessibility.focus.width)
+      - 2px offset (accessibility.focus.offset)
+      - Focus color (accessibility.focus.color)
+      Self-contained 4px buffer on all sides prevents clipping.
+      Uses :focus-visible (web) for keyboard-only indication.
+    wcag: "2.4.7 Focus Visible"
+    platforms: [web, ios, android]
+    validation:
+      - Focus ring appears on keyboard focus
+      - Focus ring meets 3:1 contrast ratio
+      - Focus ring does not clip or overlap adjacent elements
+      - Focus ring uses :focus-visible for keyboard-only (web)
+    test_approach: |
+      - Tab to button and verify focus ring visible
+      - Verify focus ring dimensions match token values
+      - Verify no clipping against adjacent elements
+    required: true
+
+  visual_circular_shape:
+    category: visual
+    description: Circular button shape via radiusCircle token
+    behavior: |
+      Button renders as a circle using radiusCircle semantic token (50%).
+      Visual circle size = iconSize + (padding × 2).
+      Total box size = visualCircle + (focusBuffer × 2).
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Button renders as circle
+      - Shape uses radiusCircle token
+    test_approach: |
+      - Render button and verify circular shape
+      - Verify border-radius is 50% (web)
+    required: true
+
+  visual_size_variants:
+    category: visual
+    description: Three size variants with token-based dimensions
+    behavior: |
+      Three sizes using component tokens:
+      - small: icon.size050 (16px) + buttonIcon.inset.small (8px) = 32px circle, 40px box
+      - medium: icon.size075 (20px) + buttonIcon.inset.medium (10px) = 40px circle, 48px box
+      - large: icon.size100 (24px) + buttonIcon.inset.large (12px) = 48px circle, 56px box
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Each size renders at correct dimensions
+      - Icon size matches size variant token
+      - Default size is medium
+    test_approach: |
+      - Render button at each size
+      - Verify dimensions match specification
+    required: true
+
+  visual_variant_styling:
+    category: visual
+    description: Three visual variants with distinct treatments
+    behavior: |
+      - Primary: solid color.primary background, color.contrast.onPrimary icon
+      - Secondary: transparent background, borderDefault border with color.primary, color.primary icon
+      - Tertiary: transparent background, no border, color.primary icon
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Primary has solid background
+      - Secondary has border, no background
+      - Tertiary has no border, no background
+      - Default variant is primary
+    test_approach: |
+      - Render each variant and verify visual treatment
+    required: true
+
+  accessibility_aria_label:
+    category: accessibility
+    description: Required ariaLabel provides accessible name
+    behavior: |
+      ariaLabel prop is required (TypeScript enforced) because icon-only
+      buttons need explicit labels for screen reader users.
+      - Web: aria-label attribute
+      - iOS: .accessibilityLabel() modifier
+      - Android: contentDescription parameter
+      Icon element is marked decorative (aria-hidden="true").
+    wcag: "4.1.2 Name, Role, Value"
+    platforms: [web, ios, android]
+    validation:
+      - aria-label matches ariaLabel prop (web)
+      - Accessible name present for screen readers
+      - Icon is hidden from assistive technology
+    test_approach: |
+      - Render button with ariaLabel="Close dialog"
+      - Verify aria-label attribute is "Close dialog" (web)
+      - Verify icon has aria-hidden="true" (web)
+    required: true
+
+  accessibility_touch_target:
+    category: accessibility
+    description: All sizes meet 48px minimum touch target
+    behavior: |
+      All size variants meet WCAG 2.5.5 Target Size Enhanced (44px)
+      and 2.5.8 Target Size Minimum (24px). Small size extends touch
+      target to 48px via the focus buffer. Medium and large meet 48px
+      natively.
+    wcag: "2.5.5 Target Size"
+    platforms: [web, ios, android]
+    validation:
+      - Small total box is 40px but touch target extends to 48px
+      - Medium total box is 48px
+      - Large total box is 56px
+      - All sizes meet 48px minimum touch target
+    test_approach: |
+      - Render button at small size
+      - Verify clickable area meets 48px minimum
+    required: true
+
+  accessibility_color_contrast:
+    category: accessibility
+    description: Icon colors meet WCAG AA contrast requirements
+    behavior: |
+      Icon color tokens ensure minimum 4.5:1 contrast ratio:
+      - Primary: color.contrast.onPrimary on color.primary background
+      - Secondary/Tertiary: color.primary on transparent/page background
+      Focus ring meets 3:1 non-text contrast ratio.
+    wcag: "1.4.3 Contrast (Minimum)"
+    platforms: [web, ios, android]
+    validation:
+      - Icon/background contrast >= 4.5:1 for all variants
+      - Focus ring contrast >= 3:1
+      - Colors use design tokens
+    test_approach: |
+      - Calculate contrast ratio for each variant
+      - Verify all meet WCAG AA minimums
+    required: true
+
+excludes:
+  state_disabled:
+    reason: "Disabled buttons remove affordance without explanation. Screen reader users may not understand why something is disabled. Use alternative patterns: hide unavailable actions, show validation messaging, or use loading states."
+    category: state
+    reference: "Button-Icon README, Design Decisions section"

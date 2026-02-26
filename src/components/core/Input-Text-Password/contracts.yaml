@@ -1,0 +1,58 @@
+version: "1.0.0"
+component: Input-Text-Password
+family: Input-Text
+inherits: Input-Text-Base
+
+contracts:
+  interaction_secure_input:
+    category: interaction
+    description: Masks password input by default
+    behavior: |
+      Password characters are masked (dots/asterisks) by default.
+      Actual value never exposed in DOM or accessibility tree.
+      Screen readers announce "password" input type.
+    wcag: "3.3.2 Labels or Instructions"
+    platforms: [web, ios, android]
+    validation:
+      - Input type is password by default
+      - Characters are visually masked
+      - Value not exposed in DOM attributes
+    test_approach: |
+      - Render, type text, verify characters masked
+    required: true
+
+  interaction_password_toggle:
+    category: interaction
+    description: Provides show/hide password functionality
+    behavior: |
+      Toggle button allows showing/hiding password. Keyboard accessible,
+      properly labeled for screen readers. When visible, input type
+      changes to text.
+    wcag: "2.1.1 Keyboard"
+    platforms: [web, ios, android]
+    validation:
+      - Toggle button present when showToggle is true
+      - Toggle is keyboard accessible (Enter/Space)
+      - Toggle has accessible label ("Show password"/"Hide password")
+      - Password visibility changes on toggle
+    test_approach: |
+      - Click toggle, verify password visible
+      - Click again, verify password masked
+    required: true
+
+  interaction_password_autocomplete:
+    category: interaction
+    description: Enables browser/platform password autofill
+    behavior: |
+      Sets autocomplete/content type attributes for password autofill:
+      Web: autocomplete="current-password" or "new-password",
+      iOS: textContentType=.password or .newPassword,
+      Android: Autofill framework password type.
+    wcag: "1.3.5 Identify Input Purpose"
+    platforms: [web, ios, android]
+    validation:
+      - Web: autocomplete attribute set correctly
+      - Password manager integration works
+    test_approach: |
+      - Verify autocomplete attribute (web)
+    required: true

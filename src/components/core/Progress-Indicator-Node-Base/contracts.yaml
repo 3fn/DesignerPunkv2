@@ -3,7 +3,7 @@ component: Progress-Indicator-Node-Base
 family: Progress-Indicator
 
 contracts:
-  renders_state_colors:
+  visual_state_colors:
     category: visual
     description: Applies correct color tokens based on node state
     behavior: |
@@ -18,8 +18,12 @@ contracts:
       - Background color matches state token
       - Foreground color matches state token
       - Colors use design tokens, not hardcoded values
+    test_approach: |
+      Render node in each state. Verify background and foreground colors
+      match the corresponding color.progress.* tokens.
+    required: true
 
-  applies_size_emphasis:
+  visual_size_emphasis:
     category: visual
     description: Current state renders at +4px emphasized size
     behavior: |
@@ -34,8 +38,12 @@ contracts:
       - Non-current states render at base size
       - Current state renders at current size (+4px)
       - Size values match component tokens
+    test_approach: |
+      Render node as current — verify +4px size. Render as incomplete —
+      verify base size.
+    required: true
 
-  renders_content:
+  content_renders:
     category: content
     description: Renders appropriate content based on size and content prop
     behavior: |
@@ -43,13 +51,18 @@ contracts:
       - md/lg + none: empty circle
       - md/lg + checkmark: checkmark icon
       - md/lg + icon: specified icon
+    wcag: null
     platforms: [web, ios, android]
     validation:
       - sm always shows dot regardless of content prop
       - md/lg shows correct content type
       - Checkmark renders for completed nodes
+    test_approach: |
+      Render sm node with content=checkmark — verify dot. Render md node
+      with content=checkmark — verify checkmark icon.
+    required: true
 
-  respects_reduced_motion:
+  accessibility_reduced_motion:
     category: accessibility
     description: Size transitions respect prefers-reduced-motion
     behavior: |
@@ -60,23 +73,24 @@ contracts:
     validation:
       - Transitions animate by default
       - Transitions are instant with prefers-reduced-motion
+    test_approach: |
+      Enable prefers-reduced-motion. Change node state. Verify transition
+      is instant (no animation duration).
+    required: true
 
-  decorative_primitive:
+  accessibility_decorative:
     category: accessibility
     description: Primitive is decorative; semantic variants handle a11y
     behavior: |
       Node-Base is marked as decorative (aria-hidden on web,
       accessibilityHidden on iOS, clearAndSetSemantics on Android).
       Semantic variants provide ARIA roles and labels.
+    wcag: null
     platforms: [web, ios, android]
     validation:
       - Node has aria-hidden="true" (web)
       - Node is hidden from assistive technology
-
-summary:
-  total_contracts: 5
-  categories:
-    visual: 2
-    content: 1
-    accessibility: 2
-  platforms: [web, ios, android]
+    test_approach: |
+      Render node. Verify aria-hidden="true" (web). Verify not in
+      accessibility tree.
+    required: true

@@ -1,0 +1,138 @@
+version: "1.0.0"
+component: Input-Radio-Base
+family: Input-Radio
+
+contracts:
+  interaction_focusable:
+    category: interaction
+    description: Can receive keyboard focus
+    behavior: |
+      Component can receive focus via Tab key navigation.
+      Focus applies to the radio control element.
+      Entire label area is part of the interactive target.
+    wcag: "2.1.1 Keyboard"
+    platforms: [web, ios, android]
+    validation:
+      - Tab key moves focus to radio button
+      - Focus state is visually indicated
+    test_approach: |
+      - Render radio in default state
+      - Press Tab and verify radio receives focus
+    required: true
+
+  interaction_pressable:
+    category: interaction
+    description: Responds to click/tap on entire label area
+    behavior: |
+      Clicking or tapping anywhere on the radio button or its label
+      selects the radio. Space key also selects when focused.
+    wcag: "2.1.1 Keyboard"
+    platforms: [web, ios, android]
+    validation:
+      - Click on label selects radio
+      - Click on radio control selects radio
+      - Space key selects radio
+    test_approach: |
+      - Render radio unselected
+      - Click label and verify radio becomes selected
+    required: true
+
+  interaction_hover:
+    category: interaction
+    description: Visual feedback on hover (web)
+    behavior: |
+      On desktop platforms, component shows visual feedback when
+      mouse hovers over the radio button or label area.
+    wcag: "1.4.13 Content on Hover or Focus"
+    platforms: [web]
+    validation:
+      - Visual change on mouse enter
+      - Visual reverts on mouse leave
+    test_approach: |
+      - Simulate hover and verify visual feedback
+    required: true
+
+  interaction_pressed:
+    category: interaction
+    description: Visual feedback when pressed
+    behavior: |
+      Component shows visual feedback during active press/click
+      on the radio button or label area.
+    wcag: "2.4.7 Focus Visible"
+    platforms: [web, ios, android]
+    validation:
+      - Visual feedback shown during press
+    test_approach: |
+      - Simulate press and verify visual change
+    required: true
+
+  state_selected:
+    category: state
+    description: Shows filled dot when selected
+    behavior: |
+      When selected, the radio button displays a filled dot inside
+      the circular control. Visual treatment changes to indicate
+      the selected state.
+    wcag: "1.4.1 Use of Color"
+    platforms: [web, ios, android]
+    validation:
+      - Filled dot visible when selected
+      - Visual treatment distinct from unselected state
+    test_approach: |
+      - Select radio and verify filled dot is rendered
+    required: true
+
+  state_error:
+    category: state
+    description: Shows error border and message
+    behavior: |
+      When errorMessage prop is provided, radio shows error styling
+      on the control border and displays the error message below.
+    wcag: "3.3.1 Error Identification"
+    platforms: [web, ios, android]
+    validation:
+      - Error border applied when errorMessage provided
+      - Error message text displayed below radio
+    test_approach: |
+      - Render with errorMessage="Required"
+      - Verify error border and message visible
+    required: true
+
+  interaction_focus_ring:
+    category: interaction
+    description: WCAG 2.4.7 focus visible indicator
+    behavior: |
+      When focused via keyboard, component displays a focus ring
+      around the radio control. Uses :focus-visible (web) for
+      keyboard-only focus indication.
+    wcag: "2.4.7 Focus Visible"
+    platforms: [web, ios, android]
+    validation:
+      - Focus ring appears on keyboard focus
+      - Focus ring meets 3:1 contrast ratio
+    test_approach: |
+      - Tab to radio and verify focus ring visible
+    required: true
+
+  validation_form_integration:
+    category: validation
+    description: Native form submission
+    behavior: |
+      Radio participates in native form submission.
+      Selected radio's value is included in form data.
+      Name prop groups radios for native radio behavior.
+    wcag: "4.1.2 Name, Role, Value"
+    platforms: [web, ios, android]
+    validation:
+      - Selected radio value included in form submission
+      - Name prop groups radios correctly
+    test_approach: |
+      - Place radio in form, select it, submit
+      - Verify value in form data
+    required: true
+
+excludes:
+  state_disabled:
+    reason: "If an action is unavailable, the component should not be rendered."
+    category: state
+    reference: "Input-Radio-Base README, DesignerPunk Philosophy"

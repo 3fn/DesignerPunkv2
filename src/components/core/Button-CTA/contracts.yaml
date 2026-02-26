@@ -1,0 +1,137 @@
+version: "1.0.0"
+component: Button-CTA
+family: Buttons
+
+contracts:
+  interaction_focusable:
+    category: interaction
+    description: Can receive keyboard focus
+    behavior: |
+      Component can receive focus via Tab key navigation.
+      Focus state is visually indicated with a focus ring.
+      Focus is managed appropriately when disabled state changes.
+    wcag: "2.1.1 Keyboard"
+    platforms: [web, ios, android]
+    validation:
+      - Tab key moves focus to button
+      - Focus state is visually distinct with focus ring
+      - Focus ring meets 3:1 contrast ratio
+      - Disabled buttons are not focusable
+    test_approach: |
+      - Render button, press Tab, verify focus
+      - Set disabled=true, verify not focusable
+    required: true
+
+  interaction_pressable:
+    category: interaction
+    description: Responds to press/click events
+    behavior: |
+      Component responds to click, tap, Enter key, and Space key.
+      Press triggers the onPress callback when not disabled.
+      Platform-appropriate feedback is provided during press.
+    wcag: "2.1.1 Keyboard"
+    platforms: [web, ios, android]
+    validation:
+      - Click/tap triggers onPress callback
+      - Enter key triggers onPress callback
+      - Space key triggers onPress callback
+      - onPress not called when disabled
+    test_approach: |
+      - Click button, verify onPress called
+      - Focus and press Enter, verify onPress called
+      - Set disabled, click, verify onPress not called
+    required: true
+
+  interaction_hover:
+    category: interaction
+    description: Visual feedback on hover (desktop only)
+    behavior: |
+      On desktop platforms, component shows visual feedback when mouse
+      hovers over the button. Uses blend.hoverDarker token (8% darker)
+      for primary variant background color change.
+    wcag: "1.4.13 Content on Hover or Focus"
+    platforms: [web]
+    validation:
+      - Background color changes on mouse enter
+      - Background color reverts on mouse leave
+      - Hover state uses blend.hoverDarker token
+      - Hover state not shown when disabled
+    test_approach: |
+      - Simulate hover, verify background change
+      - Set disabled, simulate hover, verify no change
+    required: true
+
+  interaction_pressed:
+    category: interaction
+    description: Visual feedback when pressed
+    behavior: |
+      Component shows visual feedback during active press/click.
+      Uses blend.pressedDarker token (12% darker) for primary variant.
+      Platform-specific: Web=color change, iOS=scale+haptic, Android=ripple+haptic.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Visual feedback shown during press
+      - Feedback uses blend.pressedDarker token
+      - Platform-appropriate animation/effect applied
+      - Pressed state not shown when disabled
+    test_approach: |
+      - Simulate press, verify visual feedback
+    required: true
+
+  state_disabled:
+    category: state
+    description: Prevents interaction when disabled
+    behavior: |
+      When disabled, component cannot receive focus, cannot be clicked/tapped,
+      uses desaturated colors (blend.disabledDesaturate), shows cursor: not-allowed
+      (web), and communicates disabled state to assistive technology.
+    wcag: "4.1.2 Name, Role, Value"
+    platforms: [web, ios, android]
+    validation:
+      - Button cannot receive focus when disabled
+      - onPress not called when disabled
+      - Visual styling indicates disabled state
+      - aria-disabled="true" set (web)
+    test_approach: |
+      - Set disabled=true, verify not focusable
+      - Verify aria-disabled attribute (web)
+    required: true
+
+  state_loading:
+    category: state
+    description: Shows loading indicator during async operations
+    behavior: |
+      When in loading state, component shows loading spinner, prevents
+      interaction, maintains button dimensions to prevent layout shift,
+      and communicates loading state to assistive technology.
+    wcag: "4.1.3 Status Messages"
+    platforms: [web, ios, android]
+    validation:
+      - Loading spinner displayed
+      - Interaction prevented during loading
+      - Button dimensions maintained
+      - Loading state announced to screen readers
+    test_approach: |
+      - Set loading state, verify spinner visible
+      - Verify button dimensions unchanged
+    required: true
+
+  interaction_focus_ring:
+    category: interaction
+    description: WCAG 2.4.7 focus visible indicator
+    behavior: |
+      When focused via keyboard, displays 2px focus ring with 2px offset
+      using accessibility tokens. Visible in all visual variants.
+      Uses :focus-visible (web) for keyboard-only focus indication.
+    wcag: "2.4.7 Focus Visible"
+    platforms: [web, ios, android]
+    validation:
+      - Focus ring appears on keyboard focus
+      - Focus ring meets 3:1 contrast ratio
+      - Focus ring visible in all visual variants
+      - Uses :focus-visible for keyboard-only (web)
+    test_approach: |
+      - Tab to button, verify focus ring visible
+      - Test in each variant
+    required: true

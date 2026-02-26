@@ -1,0 +1,76 @@
+version: "1.0.0"
+component: Chip-Filter
+family: Chip
+inherits: Chip-Base
+
+contracts:
+  interaction_toggle_selection:
+    category: interaction
+    description: Toggles selected state on press
+    behavior: |
+      When pressed, toggles selected state and calls onSelectionChange
+      with the new state. Supports click, tap, Enter, Space.
+    wcag: "4.1.2 Name, Role, Value"
+    platforms: [web, ios, android]
+    validation:
+      - Press toggles selected state
+      - onSelectionChange called with new state
+      - aria-pressed attribute updates (web)
+    test_approach: |
+      - Click chip, verify selected toggles
+    required: true
+
+  state_selected_styling:
+    category: state
+    description: Visual feedback for selected state
+    behavior: |
+      Selected: color.feedback.select.background/border/text tokens.
+      Unselected: default Chip-Base styling.
+      Transitions use motion.duration.fast.
+    wcag: "1.4.1 Use of Color"
+    platforms: [web, ios, android]
+    validation:
+      - Selected state uses select feedback colors
+      - Unselected uses default Chip-Base colors
+    test_approach: |
+      - Toggle selection, verify color changes
+    required: true
+
+  visual_checkmark_icon:
+    category: visual
+    description: Displays checkmark icon when selected
+    behavior: |
+      When selected, displays checkmark icon at icon.size075 (20px)
+      in leading position. Replaces leading icon if both present.
+      No checkmark when unselected.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Checkmark visible when selected
+      - Checkmark replaces leading icon when both present
+      - No checkmark when unselected
+    test_approach: |
+      - Select chip, verify checkmark appears
+      - Provide icon prop, select, verify checkmark replaces icon
+    required: true
+
+  accessibility_aria_pressed:
+    category: accessibility
+    description: Announces selection state to assistive technology
+    behavior: |
+      Uses aria-pressed to communicate toggle state:
+      aria-pressed="true" when selected, "false" when not.
+    wcag: "4.1.2 Name, Role, Value"
+    platforms: [web]
+    validation:
+      - aria-pressed="true" when selected
+      - aria-pressed="false" when not selected
+    test_approach: |
+      - Toggle selection, verify aria-pressed updates
+    required: true
+
+excludes:
+  state_disabled:
+    reason: "If filtering is unavailable, the component should not be rendered."
+    category: state
+    reference: "Chip-Filter.schema.yaml, design philosophy section"

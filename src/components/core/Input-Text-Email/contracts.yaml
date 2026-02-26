@@ -1,0 +1,42 @@
+version: "1.0.0"
+component: Input-Text-Email
+family: Input-Text
+inherits: Input-Text-Base
+
+contracts:
+  validation_email_format:
+    category: validation
+    description: Validates email against RFC 5322 pattern
+    behavior: |
+      On blur, validates input against RFC 5322 compliant email pattern.
+      If validation fails, displays error state with error message.
+      Custom validator function can override default validation.
+    wcag: "3.3.1 Error Identification"
+    platforms: [web, ios, android]
+    validation:
+      - Email validation triggers on blur
+      - Valid emails pass (user@example.com)
+      - Invalid emails fail (invalid-email)
+      - Empty values pass (use required for empty check)
+      - Custom validator overrides default
+    test_approach: |
+      - Type valid email, blur, verify no error
+      - Type invalid email, blur, verify error state
+    required: true
+
+  interaction_email_autocomplete:
+    category: interaction
+    description: Enables browser/platform email autofill
+    behavior: |
+      Sets autocomplete/content type attributes for email autofill:
+      Web: autocomplete="email", iOS: textContentType=.emailAddress,
+      Android: KeyboardType.Email.
+    wcag: "1.3.5 Identify Input Purpose"
+    platforms: [web, ios, android]
+    validation:
+      - Web: autocomplete="email"
+      - iOS: textContentType set to emailAddress
+      - Android: KeyboardType set to Email
+    test_approach: |
+      - Verify autocomplete attribute (web)
+    required: true

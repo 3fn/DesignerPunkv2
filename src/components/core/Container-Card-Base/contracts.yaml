@@ -1,0 +1,127 @@
+version: "1.0.0"
+component: Container-Card-Base
+family: Containers
+
+contracts:
+  visual_boundary:
+    category: visual
+    description: Card has clear visual separation from background
+    behavior: |
+      Provides visual boundary through background color (color.surface.primary),
+      shadow (shadow.container), and border radius (radius.normal).
+      Defaults ensure cards are visually distinct without configuration.
+    wcag: "1.4.11 Non-text Contrast"
+    platforms: [web, ios, android]
+    validation:
+      - Card is visually distinct from surrounding content
+      - Default styling provides clear boundary
+    test_approach: |
+      - Render card with defaults, verify visual separation
+    required: true
+
+  layout_padding:
+    category: layout
+    description: Content has consistent internal spacing
+    behavior: |
+      Applies consistent padding using space.inset tokens.
+      Default: space.inset.150 (12px). Same override hierarchy as Container-Base.
+    wcag: "1.4.12 Text Spacing"
+    platforms: [web, ios, android]
+    validation:
+      - Default padding is space.inset.150
+      - Override hierarchy respected
+    test_approach: |
+      - Render card, verify default padding
+    required: true
+
+  visual_rounded_corners:
+    category: visual
+    description: Card has rounded corners per token
+    behavior: |
+      Applies rounded corners using radius tokens. Default: radius.normal (8px).
+      Only 'normal' and 'loose' values available.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Default border radius is radius.normal (8px)
+      - Only 'normal' and 'loose' available
+    test_approach: |
+      - Render card, verify rounded corners
+    required: true
+
+  interaction_hover:
+    category: interaction
+    description: Background darkens on hover when interactive
+    behavior: |
+      When interactive=true and pointer device hovers, darkens background
+      by blend.hoverDarker (8%). Transition uses motion.focusTransition.
+    wcag: "1.4.13 Content on Hover or Focus"
+    platforms: [web]
+    validation:
+      - Background darkens on hover when interactive=true
+      - Only applies with pointer devices
+    test_approach: |
+      - Set interactive=true, simulate hover, verify darkening
+    required: true
+
+  interaction_pressed:
+    category: interaction
+    description: Background darkens on press when interactive
+    behavior: |
+      When interactive=true, darkens background by blend.pressedDarker (12%).
+      No scale transform to avoid layout shift in card grids.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Background darkens on press when interactive=true
+      - No scale transform applied
+    test_approach: |
+      - Set interactive=true, simulate press, verify darkening
+    required: true
+
+  interaction_focus_ring:
+    category: interaction
+    description: Visible focus ring when interactive and keyboard focused
+    behavior: |
+      When interactive=true and card receives keyboard focus, displays
+      visible focus ring using established DesignerPunk focus pattern.
+    wcag: "2.4.7 Focus Visible"
+    platforms: [web, ios, android]
+    validation:
+      - Focus ring visible on keyboard focus
+      - Focus ring meets contrast requirements
+    test_approach: |
+      - Set interactive=true, tab to card, verify focus ring
+    required: true
+
+  interaction_pressable:
+    category: interaction
+    description: Keyboard activation when interactive
+    behavior: |
+      When interactive=true: role='button' supports Enter and Space,
+      role='link' supports Enter only (Space scrolls page).
+    wcag: "2.1.1 Keyboard"
+    platforms: [web]
+    validation:
+      - Enter triggers onPress for both roles
+      - Space triggers onPress only for role='button'
+    test_approach: |
+      - Set role='button', press Space, verify onPress
+      - Set role='link', press Space, verify no onPress
+    required: true
+
+  accessibility_aria_role:
+    category: accessibility
+    description: Applies appropriate ARIA role when interactive
+    behavior: |
+      When interactive=true, applies role="button" or role="link" based
+      on role prop. No role applied when interactive=false.
+    wcag: "4.1.2 Name, Role, Value"
+    platforms: [web]
+    validation:
+      - role="button" when interactive and role='button'
+      - role="link" when interactive and role='link'
+      - No role when not interactive
+    test_approach: |
+      - Set interactive=true, role='button', verify role attribute
+    required: true

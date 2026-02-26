@@ -1,0 +1,208 @@
+version: "1.0.0"
+component: Avatar
+family: Avatar
+
+contracts:
+  content_displays_image:
+    category: content
+    description: Renders user image within shaped frame
+    behavior: |
+      When src prop is provided (human type only), Avatar renders the image
+      within the entity-appropriate shape (circle for human, hexagon for agent).
+      Image is cropped to fill the frame using object-fit: cover (web),
+      AsyncImage (iOS), or Coil SubcomposeAsyncImage (Android).
+      Agent type ignores the src prop.
+    wcag: "1.1.1 Non-text Content"
+    platforms: [web, ios, android]
+    validation:
+      - Image renders within shaped frame when src provided
+      - Image fills frame without distortion
+      - Image source matches provided URL
+      - Agent type does not render user image
+    test_approach: |
+      - Render Avatar with type=human and src URL
+      - Verify image element is present and visible
+      - Verify image is clipped to circular shape
+      - Render Avatar with type=agent and src URL
+      - Verify image is not rendered
+    required: true
+
+  content_displays_fallback:
+    category: content
+    description: Shows default icon when no image provided
+    behavior: |
+      When no src is provided, or when type is agent, Avatar displays
+      a default icon centered within the shape. Icon size follows the
+      50% icon-to-avatar ratio across all sizes.
+      Human fallback: user icon. Agent fallback: settings (web) or sparkles (native).
+    wcag: "1.1.1 Non-text Content"
+    platforms: [web, ios, android]
+    validation:
+      - Default icon displayed when no src provided
+      - Icon size is 50% of avatar size
+      - Agent type always shows icon fallback
+    test_approach: |
+      - Render Avatar without src prop
+      - Verify fallback icon is rendered
+      - Verify icon size matches 50% ratio for each size variant
+    required: true
+
+  visual_entity_shape:
+    category: visual
+    description: Circle for human, hexagon for agent
+    behavior: |
+      Avatar shape is determined by entity type:
+      - Human: circle via border-radius 50% (web), Circle() (iOS), CircleShape (Android)
+      - Agent: pointy-top hexagon via SVG clipPath (web), custom Shape (iOS/Android)
+      Hexagon uses cos(30°) ≈ 0.866 aspect ratio with 5% corner radius.
+      Shape differentiation provides non-color-based entity recognition.
+    wcag: "1.4.1 Use of Color"
+    platforms: [web, ios, android]
+    validation:
+      - Human type renders as circle
+      - Agent type renders as hexagon
+      - Hexagon orientation is pointy-top
+      - Shape is consistent across platforms
+    test_approach: |
+      - Render Avatar with type=human, verify circular clipping
+      - Render Avatar with type=agent, verify hexagonal clipping
+    required: true
+
+  visual_size_variants:
+    category: visual
+    description: Six size variants from xs (24px) to xxl (128px)
+    behavior: |
+      Avatar supports 6 size variants using component tokens:
+      xs=24px, sm=32px, md=40px (default), lg=48px, xl=80px, xxl=128px.
+      Icon sizes scale at 50% ratio. Border width changes at xxl
+      (borderEmphasis instead of borderDefault).
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Each size variant renders at correct dimensions
+      - Icon size is 50% of avatar size
+      - Default size is md (40px)
+      - xxl uses borderEmphasis width
+    test_approach: |
+      - Render Avatar at each size variant
+      - Verify dimensions match token values
+      - Verify icon size matches 50% ratio
+    required: true
+
+  visual_border:
+    category: visual
+    description: Border with entity-appropriate color token
+    behavior: |
+      Avatar renders a border using color.avatar.border token.
+      xs-xl sizes use borderDefault width with opacity.heavy.
+      xxl size uses borderEmphasis width with full opacity and
+      color.contrast.onSurface color.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Border visible on all sizes
+      - Border color uses design tokens
+      - xxl border uses emphasis width
+    test_approach: |
+      - Render Avatar at md size, verify border is visible
+      - Render Avatar at xxl size, verify thicker border
+    required: true
+
+  interaction_hover:
+    category: interaction
+    description: Visual feedback on hover when interactive=true
+    behavior: |
+      When interactive prop is true, Avatar shows hover visual feedback
+      on desktop platforms. Web uses CSS transition with motion.duration.fast
+      token. iOS uses onHover modifier. Android uses hoverable modifier.
+      No hover feedback when interactive is false (default).
+    wcag: "1.4.13 Content on Hover or Focus"
+    platforms: [web, ios, android]
+    validation:
+      - Hover feedback shown when interactive=true
+      - No hover feedback when interactive=false
+      - Transition uses motion token (web)
+    test_approach: |
+      - Render Avatar with interactive=true
+      - Simulate hover and verify visual change
+      - Render Avatar with interactive=false
+      - Simulate hover and verify no visual change
+    required: true
+
+  accessibility_decorative_mode:
+    category: accessibility
+    description: Hidden from screen readers when decorative=true
+    behavior: |
+      When decorative prop is true, Avatar is hidden from assistive technology:
+      - Web: aria-hidden="true"
+      - iOS: .accessibilityHidden(true)
+      - Android: semantics { invisibleToUser() }
+      Use when avatar is adjacent to name text or inside a labeled wrapper.
+    wcag: "1.1.1 Non-text Content"
+    platforms: [web, ios, android]
+    validation:
+      - Avatar hidden from AT when decorative=true
+      - Avatar visible to AT when decorative=false
+      - aria-hidden="true" set on web when decorative
+    test_approach: |
+      - Render Avatar with decorative=true
+      - Verify aria-hidden="true" (web)
+      - Render Avatar with decorative=false
+      - Verify avatar is in accessibility tree
+    required: true
+
+  accessibility_alt_text:
+    category: accessibility
+    description: Alt text from alt prop or default label by entity type
+    behavior: |
+      When not decorative, Avatar provides accessible name:
+      - If alt prop provided: uses alt text
+      - If no alt prop (iOS/Android): "User avatar" for human, "AI agent avatar" for agent
+      - Web requires alt prop when src is provided
+    wcag: "1.1.1 Non-text Content"
+    platforms: [web, ios, android]
+    validation:
+      - Alt text matches alt prop when provided
+      - Default label used when no alt prop (native)
+      - Accessible name present for non-decorative avatars
+    test_approach: |
+      - Render Avatar with alt="John Doe"
+      - Verify accessible name is "John Doe"
+      - Render Avatar without alt prop (native)
+      - Verify default label is applied
+    required: true
+
+  accessibility_color_contrast:
+    category: accessibility
+    description: Icon-on-background meets WCAG AA contrast
+    behavior: |
+      Icon color tokens (color.avatar.contrast.onHuman, color.avatar.contrast.onAgent)
+      ensure minimum 4.5:1 contrast ratio against their respective backgrounds
+      (color.avatar.human, color.avatar.agent).
+    wcag: "1.4.3 Contrast (Minimum)"
+    platforms: [web, ios, android]
+    validation:
+      - Human icon/background contrast >= 4.5:1
+      - Agent icon/background contrast >= 4.5:1
+      - Colors use design tokens
+    test_approach: |
+      - Calculate contrast ratio for human icon on human background
+      - Calculate contrast ratio for agent icon on agent background
+      - Verify both >= 4.5:1
+    required: true
+
+excludes:
+  interaction_focusable:
+    reason: "Avatar is a visual-only component. Interactive avatars must be wrapped in button/link which provides focus management."
+    category: interaction
+    reference: "Avatar README, Wrapper-Delegated Interaction Pattern section"
+
+  interaction_pressable:
+    reason: "Avatar does not handle click/tap events. Wrappers (button, link) handle interaction, keyboard navigation, and accessible names."
+    category: interaction
+    reference: "Avatar README, Wrapper-Delegated Interaction Pattern section"
+
+  interaction_focus_ring:
+    reason: "Focus ring is the wrapper's responsibility, not Avatar's. Wrapper provides :focus-visible styles."
+    category: interaction
+    reference: "Avatar README, Wrapper Responsibilities table"
