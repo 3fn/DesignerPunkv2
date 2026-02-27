@@ -45,7 +45,11 @@ DesignerPunk isn't a design system you download and use off-the-shelf. It's:
 
 DesignerPunk is built on two interconnected systems:
 
+![High-Level Architecture](docs/architecture/High-Level%20Architecture.png)
+
 ### Rosetta System — The Mathematical Foundation
+
+![Rosetta System](docs/architecture/Rosetta.png)
 
 A token system + build pipeline that translates design intent into platform-native code.
 
@@ -64,6 +68,8 @@ Think of it as: **Define once, generate everywhere**
 
 ### Stemma System — The Component Architecture
 
+![Stemma System](docs/architecture/Stemma.png)
+
 A framework for building components that work identically across platforms while staying native.
 
 - **Naming Convention**: `[Family]-[Type]-[Variant]` (AI-discoverable)
@@ -79,6 +85,12 @@ Think of it as: **Build once, implement natively everywhere**
 - Placeholder families with documented patterns (6 families, ready for implementation)
 - Health guardrails with 270+ validation tests
 - Component token API for lightweight, reasoned token authoring
+
+#### Unified Contract System
+
+![Unified Contract System](docs/architecture/Unified%20Contract%20System.png)
+
+Every component makes explicit behavioral promises organized by a 10-category taxonomy, with formal inheritance and intentional exclusions. Contracts define WHAT behavior occurs across platforms — implementations define HOW.
 
 ---
 
