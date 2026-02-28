@@ -113,7 +113,7 @@ Build the release tool incrementally: scaffold → extract salvageable code → 
     - Ensure extracted code compiles against new types
     - _Requirements: 8.2_
 
-- [ ] 3. Pipeline Components
+- [x] 3. Pipeline Components
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -171,7 +171,7 @@ Build the release tool incrementally: scaffold → extract salvageable code → 
     - Write tests covering both paths
     - _Requirements: 3.1, 3.2_
 
-  - [ ] 3.5 Implement NotesRenderer
+  - [x] 3.5 Implement NotesRenderer
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Generate markdown organized by priority tier with spec name and summary
@@ -180,7 +180,7 @@ Build the release tool incrementally: scaffold → extract salvageable code → 
     - Write tests verifying markdown output structure
     - _Requirements: 5.1, 5.2, 5.3, 5.4_
 
-  - [ ] 3.6 Pipeline integration test
+  - [x] 3.6 Pipeline integration test
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create fixture summary docs (with and without Deliverables field)
@@ -212,7 +212,7 @@ Build the release tool incrementally: scaffold → extract salvageable code → 
   - Mark complete: Use `taskStatus` tool to update task status
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 Complete: CLI and Hook Integration"`
 
-  - [ ] 4.1 Implement CLI entry point
+  - [x] 4.1 Implement CLI entry point
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create CLI with `analyze`, `notes`, and `release` commands
@@ -221,7 +221,7 @@ Build the release tool incrementally: scaffold → extract salvageable code → 
     - Add accumulation warning (>5 files in output dir)
     - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5_
 
-  - [ ] 4.2 Update hook files
+  - [x] 4.2 Update hook files
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Remove `release-detection-auto.kiro.hook`
@@ -230,7 +230,7 @@ Build the release tool incrementally: scaffold → extract salvageable code → 
     - Verify hooks point to correct paths
     - _Requirements: 9.2_
 
-  - [ ] 4.3 Test GitHub release creation
+  - [x] 4.3 Test GitHub release creation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Test `release` command end-to-end with a dry-run flag
