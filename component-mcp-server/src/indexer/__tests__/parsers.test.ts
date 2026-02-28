@@ -86,10 +86,12 @@ describe('parseContractsYaml', () => {
 });
 
 describe('parseComponentMetaYaml', () => {
-  it('returns null with warning for missing file (expected — no meta files yet)', () => {
+  it('parses component-meta.yaml successfully', () => {
     const result = parseComponentMetaYaml(path.join(COMPONENTS_DIR, 'Badge-Count-Base', 'component-meta.yaml'));
-    expect(result.data).toBeNull();
-    expect(result.warning).toContain('File not found');
+    expect(result.data).not.toBeNull();
+    expect(result.data!.purpose).toContain('numeric count');
+    expect(result.data!.alternatives.length).toBeGreaterThan(0);
+    expect(result.warning).toBeNull();
   });
 
   it('returns null with warning for nonexistent path', () => {

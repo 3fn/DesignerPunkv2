@@ -1,0 +1,25 @@
+purpose: "Collect general text input from the user with a float label pattern, validation states, and helper text."
+
+usage:
+  when_to_use:
+    - "Generic text fields (name, address, search queries)"
+    - "Base text input behavior for specialized input variants"
+  when_not_to_use:
+    - "Email addresses — use Input-Text-Email"
+    - "Passwords — use Input-Text-Password"
+    - "Phone numbers — use Input-Text-PhoneNumber"
+    - "Boolean or selection inputs — use checkbox or radio components"
+
+contexts:
+  - "forms"
+  - "search-bars"
+  - "dialog-content"
+  - "registration-flows"
+
+alternatives:
+  - component: Input-Text-Email
+    reason: "When collecting an email address with format validation"
+  - component: Input-Text-Password
+    reason: "When collecting a password with masking and visibility toggle"
+  - component: Input-Text-PhoneNumber
+    reason: "When collecting a phone number with formatting"

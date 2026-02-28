@@ -1,0 +1,22 @@
+purpose: "Display a text label badge for categorization, status, or tagging content with short descriptive words."
+
+usage:
+  when_to_use:
+    - "Showing status labels like 'New', 'Sale', or 'Beta'"
+    - "Categorizing content with short text tags"
+    - "Indicating feature flags or content types"
+  when_not_to_use:
+    - "Displaying numeric counts — use Badge-Count-Base"
+    - "Interactive tags that can be dismissed — use Chip-Input"
+
+contexts:
+  - "product-cards"
+  - "list-items"
+  - "content-headers"
+  - "feature-flags"
+
+alternatives:
+  - component: Badge-Count-Base
+    reason: "When the indicator is a number rather than a text label"
+  - component: Chip-Base
+    reason: "When the label needs to be interactive (selectable or dismissible)"

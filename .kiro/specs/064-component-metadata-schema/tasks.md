@@ -234,7 +234,7 @@ The work is organized into 4 primary tasks, executed sequentially. Task 1 (clean
     - Update QueryEngine tests: multi-filter combination test, purpose ranking order test
     - _Requirements: 3.1, 3.2, 3.3, 3.4_
 
-- [ ] 3. Semantic Annotations
+- [x] 3. Semantic Annotations
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -258,7 +258,7 @@ The work is organized into 4 primary tasks, executed sequentially. Task 1 (clean
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Semantic Annotations"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 3.1 Create authoring guide
+  - [x] 3.1 Create authoring guide
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     **Lead**: Lina
@@ -267,7 +267,7 @@ The work is organized into 4 primary tasks, executed sequentially. Task 1 (clean
     - Place at `docs/component-meta-authoring-guide.md`
     - _Requirements: 9.2, 9.5_
 
-  - [ ] 3.2 Author component-meta.yaml for all 28 components
+  - [x] 3.2 Author component-meta.yaml for all 28 components
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Lead**: Lina | **Review**: Ada (token-adjacent components)

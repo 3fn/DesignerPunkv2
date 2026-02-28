@@ -1,0 +1,24 @@
+purpose: "Provide a prominent call-to-action button for primary user actions like submitting forms, confirming dialogs, or starting flows."
+
+usage:
+  when_to_use:
+    - "Primary actions on a page or dialog (submit, confirm, continue)"
+    - "High-emphasis actions that need visual prominence"
+    - "Actions with text labels (with or without icons)"
+  when_not_to_use:
+    - "Icon-only actions without text labels — use Button-Icon"
+    - "Vertical menu-style action lists — use Button-VerticalList-Set"
+    - "Low-emphasis or inline actions"
+
+contexts:
+  - "form-footers"
+  - "dialog-actions"
+  - "hero-sections"
+  - "onboarding-flows"
+  - "page-actions"
+
+alternatives:
+  - component: Button-Icon
+    reason: "When the action is icon-only without a text label"
+  - component: Button-VerticalList-Item
+    reason: "When the action appears in a vertical menu-style list"

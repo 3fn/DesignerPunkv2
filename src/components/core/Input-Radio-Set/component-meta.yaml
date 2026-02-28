@@ -1,0 +1,21 @@
+purpose: "Group radio buttons into a mutually exclusive selection set where only one option can be active at a time."
+
+usage:
+  when_to_use:
+    - "Form fields requiring exactly one selection from multiple options"
+    - "Settings where choices are mutually exclusive (e.g., theme, language)"
+  when_not_to_use:
+    - "Multi-select choices — use multiple Input-Checkbox-Base components"
+    - "Action-driven vertical menus — use Button-VerticalList-Set"
+
+contexts:
+  - "forms"
+  - "settings-screens"
+  - "preference-panels"
+  - "onboarding-flows"
+
+alternatives:
+  - component: Button-VerticalList-Set
+    reason: "When the selection is action-driven (tap/select mode) rather than form data"
+  - component: Input-Checkbox-Base
+    reason: "When multiple selections are allowed"

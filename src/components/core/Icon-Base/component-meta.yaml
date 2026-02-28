@@ -1,0 +1,21 @@
+purpose: "Render an inline SVG icon that inherits the parent's text color, used for visual affordances alongside text or in icon-only buttons."
+
+usage:
+  when_to_use:
+    - "Icons alongside text labels in buttons, list items, or navigation"
+    - "Decorative icons that inherit color from surrounding context"
+    - "Icon content inside Button-Icon or other interactive components"
+  when_not_to_use:
+    - "User or entity identity images — use Avatar-Base"
+    - "Complex illustrations or multi-color graphics"
+
+contexts:
+  - "buttons"
+  - "navigation-items"
+  - "list-items"
+  - "toolbars"
+  - "form-fields"
+
+alternatives:
+  - component: Avatar-Base
+    reason: "When the image represents a user or entity identity rather than a generic icon"

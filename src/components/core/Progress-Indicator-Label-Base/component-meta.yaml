@@ -1,0 +1,15 @@
+purpose: "Display a text label beneath or beside a progress indicator node to describe the step's name or status."
+
+usage:
+  when_to_use:
+    - "Labeling steps in a stepper or progress indicator"
+    - "Showing step names, numbers, or status text alongside nodes"
+  when_not_to_use:
+    - "General text labels outside progress contexts — use typography tokens directly"
+    - "Badge-style labels — use Badge-Label-Base"
+
+contexts:
+  - "stepper-layouts"
+  - "progress-indicators"
+
+alternatives: []

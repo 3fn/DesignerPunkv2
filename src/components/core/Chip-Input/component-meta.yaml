@@ -1,0 +1,22 @@
+purpose: "Represent a user-entered value like a tag or selection that can be dismissed with a remove action."
+
+usage:
+  when_to_use:
+    - "Displaying tags or selections the user has entered or chosen"
+    - "Email recipient chips in compose fields"
+    - "Removable filter selections in search interfaces"
+  when_not_to_use:
+    - "Toggling content filters — use Chip-Filter"
+    - "Non-interactive labels — use Badge-Label-Base"
+
+contexts:
+  - "tag-inputs"
+  - "email-compose"
+  - "multi-select-fields"
+  - "search-refinements"
+
+alternatives:
+  - component: Chip-Filter
+    reason: "When the chip toggles a filter rather than representing a removable value"
+  - component: Chip-Base
+    reason: "When generic chip behavior is needed without dismiss semantics"

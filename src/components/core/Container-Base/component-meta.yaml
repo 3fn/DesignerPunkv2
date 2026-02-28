@@ -1,0 +1,18 @@
+purpose: "Provide a foundational structural wrapper with configurable edge spacing for grouping and laying out child content."
+
+usage:
+  when_to_use:
+    - "Wrapping content sections that need consistent padding"
+    - "Base container behavior for specialized container variants"
+  when_not_to_use:
+    - "Card-style containers with elevation and borders — use Container-Card-Base"
+    - "Semantic sectioning (header, footer, nav) — use native HTML elements"
+
+contexts:
+  - "page-sections"
+  - "content-groups"
+  - "layout-wrappers"
+
+alternatives:
+  - component: Container-Card-Base
+    reason: "When the container needs card styling (elevation, border radius, background)"

@@ -1,0 +1,21 @@
+purpose: "Toggle a content filter on or off, allowing users to narrow displayed content by multiple criteria simultaneously."
+
+usage:
+  when_to_use:
+    - "Filter bars where users toggle criteria to narrow results"
+    - "Multi-select filtering (multiple chips can be active at once)"
+  when_not_to_use:
+    - "Representing removable user input like tags — use Chip-Input"
+    - "Single-select choices — use Input-Radio-Set"
+
+contexts:
+  - "filter-bars"
+  - "search-results"
+  - "product-listings"
+  - "content-feeds"
+
+alternatives:
+  - component: Chip-Input
+    reason: "When the chip represents a user-entered value that can be dismissed"
+  - component: Chip-Base
+    reason: "When generic chip behavior is needed without filter semantics"

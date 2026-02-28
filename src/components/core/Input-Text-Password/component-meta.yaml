@@ -1,0 +1,19 @@
+purpose: "Collect a password with masked input, visibility toggle, and strength validation feedback."
+
+usage:
+  when_to_use:
+    - "Password fields in login or registration forms"
+    - "Any secret input that needs masking and optional reveal"
+  when_not_to_use:
+    - "Non-secret text inputs — use Input-Text-Base"
+    - "PIN or numeric code inputs"
+
+contexts:
+  - "login-forms"
+  - "registration-forms"
+  - "account-settings"
+  - "password-reset-flows"
+
+alternatives:
+  - component: Input-Text-Base
+    reason: "When the field collects non-secret text without masking"

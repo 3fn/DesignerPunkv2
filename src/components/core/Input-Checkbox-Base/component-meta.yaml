@@ -1,0 +1,22 @@
+purpose: "Collect a single boolean choice from the user with a checkbox control and associated label."
+
+usage:
+  when_to_use:
+    - "Binary yes/no choices in forms (e.g., 'Remember me')"
+    - "Opt-in toggles for preferences or settings"
+    - "Individual standalone checkboxes (not part of a multi-select group)"
+  when_not_to_use:
+    - "Legal consent checkboxes requiring GDPR compliance — use Input-Checkbox-Legal"
+    - "Mutually exclusive choices — use Input-Radio-Base or Input-Radio-Set"
+
+contexts:
+  - "forms"
+  - "settings-screens"
+  - "preference-panels"
+  - "dialog-content"
+
+alternatives:
+  - component: Input-Checkbox-Legal
+    reason: "When the checkbox is for legal consent and must prevent pre-checking"
+  - component: Input-Radio-Base
+    reason: "When the choice is one of several mutually exclusive options"

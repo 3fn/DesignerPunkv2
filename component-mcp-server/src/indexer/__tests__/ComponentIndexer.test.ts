@@ -75,9 +75,10 @@ describe('ComponentIndexer', () => {
       expect(indexer.getComponent('Nonexistent')).toBeNull();
     });
 
-    it('annotations are null (no component-meta.yaml files yet)', () => {
+    it('annotations are populated from component-meta.yaml', () => {
       const meta = indexer.getComponent('Badge-Count-Base');
-      expect(meta!.annotations).toBeNull();
+      expect(meta!.annotations).not.toBeNull();
+      expect(meta!.annotations!.purpose).toContain('numeric count');
     });
   });
 
@@ -89,7 +90,7 @@ describe('ComponentIndexer', () => {
       expect(entry).toBeDefined();
       expect(entry!.family).toBe('Badge');
       expect(entry!.contractCount).toBeGreaterThan(0);
-      expect(entry!.purpose).toBeNull(); // no meta files yet
+      expect(entry!.purpose).toContain('numeric count');
     });
   });
 

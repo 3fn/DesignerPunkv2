@@ -1,0 +1,23 @@
+purpose: "Provide a compact interactive element for selections, filters, or actions in horizontal groups."
+
+usage:
+  when_to_use:
+    - "Base chip behavior shared across filter and input chip variants"
+    - "Simple interactive chip without specialized filter or input semantics"
+  when_not_to_use:
+    - "Filtering content by toggling criteria — use Chip-Filter"
+    - "Representing user-entered values that can be dismissed — use Chip-Input"
+    - "Non-interactive labels — use Badge-Label-Base"
+
+contexts:
+  - "filter-bars"
+  - "selection-groups"
+  - "content-tags"
+
+alternatives:
+  - component: Chip-Filter
+    reason: "When the chip toggles a content filter on/off"
+  - component: Chip-Input
+    reason: "When the chip represents a dismissible user-entered value"
+  - component: Badge-Label-Base
+    reason: "When the element is non-interactive and display-only"

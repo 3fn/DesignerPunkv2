@@ -1,0 +1,22 @@
+purpose: "Represent a single action item within a vertical list menu, supporting tap, select, and multi-select modes."
+
+usage:
+  when_to_use:
+    - "Individual items in a vertical action menu or settings list"
+    - "Menu items that support selection state (single or multi)"
+    - "List-style navigation actions with icons and labels"
+  when_not_to_use:
+    - "Standalone buttons outside a vertical list — use Button-CTA or Button-Icon"
+    - "Horizontal button groups or toolbars"
+
+contexts:
+  - "settings-screens"
+  - "action-menus"
+  - "navigation-drawers"
+  - "bottom-sheets"
+
+alternatives:
+  - component: Button-CTA
+    reason: "When the action is standalone, not part of a vertical list"
+  - component: Button-Icon
+    reason: "When only an icon-only compact action is needed"

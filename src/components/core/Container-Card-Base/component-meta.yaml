@@ -1,0 +1,21 @@
+purpose: "Display content in a card with elevation, border radius, and background styling for visually distinct content grouping."
+
+usage:
+  when_to_use:
+    - "Product cards, profile cards, or content preview cards"
+    - "Elevated content sections that need visual separation from the background"
+    - "Interactive cards that respond to tap or click"
+  when_not_to_use:
+    - "Simple content wrapping without card styling — use Container-Base"
+    - "Full-width page sections without elevation"
+
+contexts:
+  - "content-feeds"
+  - "product-listings"
+  - "dashboards"
+  - "profile-sections"
+  - "settings-screens"
+
+alternatives:
+  - component: Container-Base
+    reason: "When content grouping is needed without card-specific styling (no elevation, no border radius)"

@@ -1,0 +1,16 @@
+purpose: "Render a single step indicator node showing completion state (incomplete, active, complete) within a progress sequence."
+
+usage:
+  when_to_use:
+    - "Individual step indicators in stepper or pagination components"
+    - "Showing step completion state with visual differentiation"
+  when_not_to_use:
+    - "Standalone status indicators outside progress contexts — use Badge-Label-Base"
+    - "Navigation dots without step semantics"
+
+contexts:
+  - "stepper-layouts"
+  - "progress-indicators"
+  - "pagination-dots"
+
+alternatives: []

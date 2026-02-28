@@ -1,0 +1,15 @@
+purpose: "Draw a visual connector line between progress indicator nodes to show step sequence and completion flow."
+
+usage:
+  when_to_use:
+    - "Connecting nodes in stepper or progress indicator layouts"
+    - "Showing visual continuity between sequential steps"
+  when_not_to_use:
+    - "Separating content sections — use Divider-Base or spacing tokens"
+    - "Standalone decorative lines"
+
+contexts:
+  - "stepper-layouts"
+  - "progress-indicators"
+
+alternatives: []

@@ -1,0 +1,21 @@
+purpose: "Represent a single option within a radio group for mutually exclusive choices."
+
+usage:
+  when_to_use:
+    - "Individual radio options inside an Input-Radio-Set"
+    - "Mutually exclusive choices where only one can be selected"
+  when_not_to_use:
+    - "Standalone boolean choices — use Input-Checkbox-Base"
+    - "Multi-select choices — use Input-Checkbox-Base (multiple instances)"
+    - "Using outside an Input-Radio-Set container"
+
+contexts:
+  - "forms"
+  - "settings-screens"
+  - "preference-panels"
+
+alternatives:
+  - component: Input-Checkbox-Base
+    reason: "When the choice allows multiple selections or is a standalone boolean"
+  - component: Button-VerticalList-Item
+    reason: "When the selection is action-driven rather than form data"

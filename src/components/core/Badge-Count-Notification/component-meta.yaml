@@ -1,0 +1,21 @@
+purpose: "Display a notification-specific count badge with semantic color and live region announcements for screen readers."
+
+usage:
+  when_to_use:
+    - "Notification counts that need urgent visual treatment (semantic color)"
+    - "Counts that must announce updates to assistive technology via live regions"
+  when_not_to_use:
+    - "Generic numeric counts without notification semantics — use Badge-Count-Base"
+    - "Text-based status indicators — use Badge-Label-Base"
+
+contexts:
+  - "notification-bells"
+  - "inbox-indicators"
+  - "app-bars"
+  - "navigation-tabs"
+
+alternatives:
+  - component: Badge-Count-Base
+    reason: "When the count is informational without notification urgency"
+  - component: Badge-Label-Base
+    reason: "When the indicator shows text labels instead of numbers"

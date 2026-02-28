@@ -1,0 +1,20 @@
+purpose: "Group Button-VerticalList-Item components into a vertical action menu with mode-driven selection behavior (tap, select, multi-select)."
+
+usage:
+  when_to_use:
+    - "Vertical menus with multiple action items"
+    - "Settings lists where items can be selected"
+    - "Action sheets with grouped options"
+  when_not_to_use:
+    - "Horizontal button groups — use individual Button-CTA components"
+    - "Radio-style selection without action semantics — use Input-Radio-Set"
+
+contexts:
+  - "settings-screens"
+  - "action-menus"
+  - "navigation-drawers"
+  - "bottom-sheets"
+
+alternatives:
+  - component: Input-Radio-Set
+    reason: "When the selection is form data (radio-style) rather than action-driven"

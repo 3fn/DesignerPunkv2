@@ -1,0 +1,19 @@
+purpose: "Collect explicit legal consent with a checkbox that enforces GDPR compliance by preventing pre-checked state."
+
+usage:
+  when_to_use:
+    - "Terms of service or privacy policy consent checkboxes"
+    - "Any legal agreement requiring explicit user action to opt in"
+  when_not_to_use:
+    - "General preference checkboxes without legal requirements — use Input-Checkbox-Base"
+    - "Non-consent boolean choices"
+
+contexts:
+  - "registration-forms"
+  - "checkout-flows"
+  - "consent-dialogs"
+  - "account-settings"
+
+alternatives:
+  - component: Input-Checkbox-Base
+    reason: "When the checkbox is a general preference without legal consent requirements"

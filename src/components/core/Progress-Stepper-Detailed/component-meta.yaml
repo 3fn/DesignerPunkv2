@@ -1,0 +1,22 @@
+purpose: "Guide users through a multi-step workflow with labeled nodes, step descriptions, and connector lines showing full progress detail."
+
+usage:
+  when_to_use:
+    - "Complex multi-step flows where each step needs a description"
+    - "Workflows where visual connectors between steps aid comprehension"
+    - "When users need to understand what each step involves before reaching it"
+  when_not_to_use:
+    - "Simple step indicators with labels only — use Progress-Stepper-Base"
+    - "Dot-based pagination — use Progress-Pagination-Base"
+
+contexts:
+  - "checkout-flows"
+  - "application-forms"
+  - "onboarding-flows"
+  - "setup-wizards"
+
+alternatives:
+  - component: Progress-Stepper-Base
+    reason: "When step labels are sufficient without descriptions or connector lines"
+  - component: Progress-Pagination-Base
+    reason: "When simple dot indicators are sufficient"

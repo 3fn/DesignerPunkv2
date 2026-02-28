@@ -1,0 +1,22 @@
+purpose: "Display a numeric count indicator, such as unread notifications or item quantities, in a compact badge."
+
+usage:
+  when_to_use:
+    - "Showing unread message or notification counts"
+    - "Displaying item quantities in a cart or list"
+    - "Numeric indicators overlaid on icons or avatars"
+  when_not_to_use:
+    - "Displaying text labels or status words — use Badge-Label-Base"
+    - "Notification-specific counts needing semantic color — use Badge-Count-Notification"
+
+contexts:
+  - "navigation-tabs"
+  - "list-items"
+  - "icon-overlays"
+  - "app-bars"
+
+alternatives:
+  - component: Badge-Label-Base
+    reason: "When the indicator shows text labels instead of numbers"
+  - component: Badge-Count-Notification
+    reason: "When the count represents notifications requiring semantic color and live region announcements"
