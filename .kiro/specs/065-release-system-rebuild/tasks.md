@@ -135,7 +135,7 @@ Build the release tool incrementally: scaffold → extract salvageable code → 
   - Mark complete: Use `taskStatus` tool to update task status
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Pipeline Components"`
 
-  - [ ] 3.1 Implement TagResolver
+  - [x] 3.1 Implement TagResolver
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `getLatestTag()` wrapping `git describe --tags --abbrev=0`
@@ -144,7 +144,7 @@ Build the release tool incrementally: scaffold → extract salvageable code → 
     - Write tests with mocked git commands
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
-  - [ ] 3.2 Implement SummaryScanner
+  - [x] 3.2 Implement SummaryScanner
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Implement `findSummariesSinceTag()` using `git log --diff-filter=A --name-only`
@@ -153,7 +153,7 @@ Build the release tool incrementally: scaffold → extract salvageable code → 
     - Write tests with fixture summary docs
     - _Requirements: 2.1, 2.2_
 
-  - [ ] 3.3 Implement ChangeExtractor
+  - [x] 3.3 Implement ChangeExtractor
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Parse summary doc markdown by heading (What Was Done, Why It Matters, Key Changes, Impact)
@@ -162,7 +162,7 @@ Build the release tool incrementally: scaffold → extract salvageable code → 
     - Write tests with fixture docs (with and without Deliverables field)
     - _Requirements: 2.3, 2.4, 2.5_
 
-  - [ ] 3.4 Implement ChangeClassifier
+  - [x] 3.4 Implement ChangeClassifier
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - When DeliverableEntry exists, use it directly for classification
