@@ -197,13 +197,13 @@ The release tool will include the `NpmPublisher` code path, gated behind a confi
 
 ### Q5: Should the release system be a separate package?
 
-**Answered**: Move to `.kiro/tools/release/`. It's project tooling, not product code.
+**Answered**: Move to `src/tools/release/`. Originally planned for `.kiro/tools/release/`, but Jest roots and tsconfig are scoped to `src/` — using `src/tools/release/` avoids config changes while still separating tooling from product code via the `tools/` directory name.
 
-- CLI commands point to `.kiro/tools/release/cli/`
-- Tests in `.kiro/tools/release/__tests__/`
+- CLI commands point to `src/tools/release/cli/`
+- Tests in `src/tools/release/__tests__/`
 - Runs as part of normal Jest test suite
 
-**Fallback**: If `.kiro/tools/` creates friction with Jest/tsconfig, use `src/tools/release/` instead. Still separates tooling from product code.
+**Fallback**: If `src/tools/` creates friction with other conventions, revisit. The `tools/` directory name provides the separation.
 
 **Migration**: After rebuild is complete, archive `src/release/` and `src/release-analysis/` (or remove if Peter approves).
 

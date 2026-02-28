@@ -15,7 +15,7 @@ Build the release tool incrementally: scaffold → extract salvageable code → 
 
 ## Task List
 
-- [ ] 1. Summary Format Enhancement (Ballot Measure)
+- [x] 1. Summary Format Enhancement (Ballot Measure)
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -37,7 +37,7 @@ Build the release tool incrementally: scaffold → extract salvageable code → 
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 1 Complete: Summary Format Enhancement"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 1.1 Draft ballot measure for Deliverables field addition
+  - [x] 1.1 Draft ballot measure for Deliverables field addition
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     - Draft proposed change to Parent Task Summary Documents section
@@ -46,7 +46,7 @@ Build the release tool incrementally: scaffold → extract salvageable code → 
     - Present to Peter for approval
     - _Requirements: 10.1, 10.2, 10.3_
 
-  - [ ] 1.2 Apply approved ballot measure
+  - [x] 1.2 Apply approved ballot measure
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Apply the approved change to Process-Spec-Planning.md
@@ -77,7 +77,7 @@ Build the release tool incrementally: scaffold → extract salvageable code → 
   - Mark complete: Use `taskStatus` tool to update task status
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Tool Scaffold and Code Extraction"`
 
-  - [ ] 2.1 Create directory structure
+  - [x] 2.1 Create directory structure
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Create `.kiro/tools/release/` with subdirectories: `cli/`, `pipeline/`, `publishers/`, `validators/`, `types/`, `__tests__/`
@@ -86,7 +86,7 @@ Build the release tool incrementally: scaffold → extract salvageable code → 
     - Verify Jest can discover test files in the new location
     - _Requirements: 7.1, 7.5_
 
-  - [ ] 2.2 Extract and adapt VersionCalculator
+  - [x] 2.2 Extract and adapt VersionCalculator
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Copy `src/release-analysis/versioning/VersionCalculator.ts` to `.kiro/tools/release/pipeline/`
@@ -95,7 +95,7 @@ Build the release tool incrementally: scaffold → extract salvageable code → 
     - Verify tests pass
     - _Requirements: 8.1, 8.2, 8.3_
 
-  - [ ] 2.3 Extract and adapt publishers and validators
+  - [x] 2.3 Extract and adapt publishers and validators
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Extract `GitHubPublisher.ts` to `.kiro/tools/release/publishers/`
@@ -105,7 +105,7 @@ Build the release tool incrementally: scaffold → extract salvageable code → 
     - Verify all tests pass
     - _Requirements: 8.1, 8.2, 8.3, 11.1, 11.2_
 
-  - [ ] 2.4 Define shared types
+  - [x] 2.4 Define shared types
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Create type definitions: TagInfo, SummaryDoc, ExtractedChange, DeliverableEntry, ClassifiedChange, VersionRecommendation, RenderedNotes, PublishResult, ReleaseConfig
