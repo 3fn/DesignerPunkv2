@@ -73,7 +73,7 @@ description: Essential startup checklist — date verification, Jest test comman
    
    **WHEN validating parent task completion THEN:**
    - **Default**: Use `npm test` (comprehensive functional validation, ~10 min)
-   - **If task modifies release-analysis or release-detection systems**: Use `npm run test:all` (~28 min)
+   - **If task modifies release tool**: Use `npm run test:all` (~28 min)
    - **If task is performance-critical**: Use `npm run test:all` (~28 min)
    
    **WHEN task involves performance changes THEN:**
@@ -84,7 +84,7 @@ description: Essential startup checklist — date verification, Jest test comman
    **Decision tree:**
    ```
    Is this a parent task completion?
-   ├─ YES → Does task modify release-analysis or release-detection systems?
+   ├─ YES → Does task modify release tool or performance systems?
    │   ├─ YES → npm run test:all (includes performance regression tests)
    │   └─ NO → npm test (comprehensive functional validation)
    └─ NO → Does task involve performance changes?
@@ -97,7 +97,7 @@ description: Essential startup checklist — date verification, Jest test comman
    - `npm run test:all` adds 20 minutes of performance regression tests for release analysis
    - Most parent tasks only need functional validation
    
-   **Default assumption**: Use `npm test` for parent tasks unless working on release-analysis/release-detection systems.
+   **Default assumption**: Use `npm test` for parent tasks unless working on release tool or performance systems.
 
 5. **CRITICAL: Task Completion Sequence (MUST FOLLOW)**
    
@@ -124,9 +124,8 @@ description: Essential startup checklist — date verification, Jest test comman
    2. [ ] Mark parent task complete (use `taskStatus` tool) **AFTER** validation passes
    3. [ ] Create completion doc: `.kiro/specs/[spec]/completion/task-N-completion.md`
    4. [ ] Create summary doc: `docs/specs/[spec]/task-N-summary.md`
-   5. [ ] Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
-   6. [ ] Commit changes: `./.kiro/hooks/commit-task.sh "Task N Complete: Description"`
-   7. [ ] **STOP** and wait for user authorization
+   5. [ ] Commit changes: `./.kiro/hooks/commit-task.sh "Task N Complete: Description"` (runs release analysis automatically)
+   6. [ ] **STOP** and wait for user authorization
    
    ---
    
@@ -135,9 +134,8 @@ description: Essential startup checklist — date verification, Jest test comman
    2. [ ] Mark parent task complete (use `taskStatus` tool)
    3. [ ] Create completion doc: `.kiro/specs/[spec]/completion/task-N-completion.md`
    4. [ ] Create summary doc: `docs/specs/[spec]/task-N-summary.md`
-   5. [ ] Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
-   6. [ ] Commit changes: `./.kiro/hooks/commit-task.sh "Task N Complete: Description"`
-   7. [ ] **STOP** and wait for user authorization
+   5. [ ] Commit changes: `./.kiro/hooks/commit-task.sh "Task N Complete: Description"` (runs release analysis automatically)
+   6. [ ] **STOP** and wait for user authorization
    
    ---
    

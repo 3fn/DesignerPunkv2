@@ -161,7 +161,7 @@ get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading:
 - Summary docs are ONLY for parent tasks (not subtasks)
 - Naming pattern: `task-N-summary.md` (e.g., `task-1-summary.md`)
 - Hook pattern: `**/task-*-summary.md`
-- AI workflows require manual trigger: `./.kiro/hooks/release-manager.sh auto`
+- AI workflows: `commit-task.sh` runs release analysis automatically after commit
 
 **For detailed guidance** on summary document templates, cross-references, and the two-document workflow, query Completion Documentation Guide via MCP:
 

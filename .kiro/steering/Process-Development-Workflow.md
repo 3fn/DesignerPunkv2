@@ -74,15 +74,13 @@ description: Development workflow and task completion practices — task complet
 2. **[MANUAL]** **Validate Implementation**: 
    - For regular tasks: Run `npm test` (fast validation, ~10 min)
    - For parent tasks (default): Run `npm test` (comprehensive functional validation, ~10 min)
-   - For parent tasks modifying release-analysis/release-detection: Run `npm run test:all` (~28 min)
+   - For parent tasks modifying release tool: Run `npm run test:all` (~28 min)
    - For performance tasks: Run `npm run test:performance` (~20 min)
 3. **[MANUAL]** **Create Detailed Completion Document**: For parent tasks, create comprehensive completion doc at `.kiro/specs/[spec-name]/completion/task-N-parent-completion.md` (Tier 3)
-4. **[MANUAL]** **Create Summary Document**: For parent tasks, create concise summary doc at `docs/specs/[spec-name]/task-N-summary.md` (triggers release detection for manual files only)
-5. **[MANUAL - CRITICAL AI Workflows]** **Trigger Release Detection**: Run `./.kiro/hooks/release-manager.sh auto` (required for AI-created files; automatic hooks only work for manual IDE file operations)
-6. **[AUTOMATED - Manual Files]** **Release Detection**: Kiro IDE detects summary document creation and triggers release detection hook automatically (only for manually created files through IDE UI)
-7. **[MANUAL]** **Mark Task Complete**: Use `taskStatus` tool to update task status to "completed" when finished
-8. **[MANUAL]** **Commit Changes**: Run `./.kiro/hooks/commit-task.sh "Task Name"` to automatically commit and push
-9. **[MANUAL]** **Verify on GitHub**: Confirm changes appear in repository with correct commit message
+4. **[MANUAL]** **Create Summary Document**: For parent tasks, create concise summary doc at `docs/specs/[spec-name]/task-N-summary.md`
+5. **[MANUAL]** **Mark Task Complete**: Use `taskStatus` tool to update task status to "completed" when finished
+6. **[MANUAL]** **Commit Changes**: Run `./.kiro/hooks/commit-task.sh "Task Name"` to automatically commit, push, and run release analysis
+7. **[MANUAL]** **Verify on GitHub**: Confirm changes appear in repository with correct commit message
 
 **Why use `taskStatus` tool?**
 - Triggers agent hooks for automatic file organization
@@ -114,7 +112,7 @@ get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading:
 2. **Manually update tasks.md**: Change task status from `[ ]` to `[x]`
 3. **Commit Changes**: Run `./.kiro/hooks/commit-task.sh "Task Name"` to automatically commit and push
 4. **Verify on GitHub**: Confirm changes appear in repository with correct commit message
-5. **[OPTIONAL]** **Manual Release Detection**: Run `./.kiro/hooks/release-manager.sh auto` if release analysis needed
+5. **[OPTIONAL]** **Release Analysis**: Run `npm run release:analyze` if you want detailed release analysis beyond what commit-task.sh provides
 
 **When to use this approach:**
 - Quick fixes or minor changes

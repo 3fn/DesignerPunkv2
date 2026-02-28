@@ -775,7 +775,7 @@ The release analysis system loads entire git history into memory before processi
 - Ability to analyze repositories with longer history
 - Faster startup time (no upfront loading)
 
-**Related Code**: 
+**Related Code** (historical — these files were removed in Spec 065): 
 - `src/release-analysis/git-operations.ts`
 - `src/release-analysis/history-analyzer.ts`
 ```

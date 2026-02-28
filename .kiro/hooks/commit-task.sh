@@ -102,25 +102,13 @@ if [ "$NO_ANALYZE" = false ]; then
         echo "📊 Running release analysis..."
         echo "   (This provides immediate feedback on change significance)"
         
-        # Run quick analysis mode (non-blocking, fails silently)
-        if command -v node &> /dev/null && [ -f "src/release-analysis/cli/quick-analyze.ts" ]; then
-            # Use ts-node if available, otherwise try node with compiled version
-            if command -v ts-node &> /dev/null; then
-                ts-node src/release-analysis/cli/quick-analyze.ts 2>/dev/null || {
-                    echo "⚠️  Release analysis failed (non-blocking)"
-                    echo "   Run 'npm run release:analyze' for detailed analysis"
-                }
-            elif [ -f "dist/release-analysis/cli/quick-analyze.js" ]; then
-                node dist/release-analysis/cli/quick-analyze.js 2>/dev/null || {
-                    echo "⚠️  Release analysis failed (non-blocking)"
-                    echo "   Run 'npm run release:analyze' for detailed analysis"
-                }
-            else
-                echo "ℹ️  Release analysis not available (quick-analyze not compiled)"
-                echo "   Run 'npm run build' to enable automatic analysis"
-            fi
+        if command -v npx &> /dev/null && [ -f "src/tools/release/cli/release-tool.ts" ]; then
+            npx ts-node src/tools/release/cli/release-tool.ts analyze 2>/dev/null || {
+                echo "⚠️  Release analysis failed (non-blocking)"
+                echo "   Run 'npm run release:analyze' for detailed analysis"
+            }
         else
-            echo "ℹ️  Release analysis not available (Node.js or quick-analyze.ts not found)"
+            echo "ℹ️  Release analysis not available (release-tool.ts not found)"
         fi
         
         echo ""

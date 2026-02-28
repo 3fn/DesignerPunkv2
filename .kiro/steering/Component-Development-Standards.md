@@ -1119,11 +1119,8 @@ test_integration:
 
 #### Completion Documentation
 
-Family completion triggers release detection:
-
 1. **Create Summary Document**: `docs/specs/[spec-name]/task-N-summary.md`
-2. **Trigger Release Detection**: Run `./.kiro/hooks/release-manager.sh auto`
-3. **Verify Trigger Created**: Check `.kiro/release-triggers/` for new trigger file
+2. **Commit Changes**: `./.kiro/hooks/commit-task.sh "Task N Complete: Description"` (runs release analysis automatically)
 
 #### Version Impact
 

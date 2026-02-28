@@ -1,7 +1,7 @@
 ---
 inclusion: manual
 name: Process-Hook-Operations
-description: Agent hook operational guidance — dependency chains, execution order, automatic file organization, release detection, troubleshooting, and best practices. Load when debugging hook issues, setting up or modifying hooks, or troubleshooting automation failures.
+description: Agent hook operational guidance — dependency chains, execution order, automatic file organization, troubleshooting, and best practices. Load when debugging hook issues, setting up or modifying hooks, or troubleshooting automation failures. NOTE - Release detection sections are outdated; the release system was rebuilt in Spec 065 as an on-demand CLI tool at src/tools/release/. See Release Management System.md for current architecture.
 ---
 
 # Hook Operations Guide

@@ -276,37 +276,20 @@ Detailed completion documents can optionally link to the summary document:
 
 ## Release Detection Integration
 
-### How Summary Documents Trigger Release Detection
+### How Summary Documents Feed Release Notes
 
 1. **Summary document created** in `docs/specs/[spec-name]/`
-2. **Kiro IDE detects** file creation (for manual files only)
-3. **Release detection hook** triggers automatically
-4. **Release manager** scans for completion documents
-5. **Trigger files** created in `.kiro/release-triggers/`
+2. **Release tool** (`npm run release:analyze`) scans summary docs via git log since last tag
+3. **ChangeExtractor** parses markdown sections into structured data
+4. **ChangeClassifier** maps changes to priority tiers (🔴/🟡/🔵)
+5. **NotesRenderer** generates public + internal markdown release notes
 
-### Hook Limitation
+### Automatic Analysis
 
-Kiro IDE's `fileCreated` hooks only trigger for **manual file operations through the IDE UI**, not for programmatically created files by AI agents.
-
-**Hybrid Approach**:
-- ✅ **Manual file creation**: Hook triggers automatically
-- ❌ **AI-created files**: Requires manual trigger
-
-### Manual Trigger for AI Workflows
-
-After AI agent creates summary document:
+`commit-task.sh` runs release analysis automatically after each task commit. For on-demand analysis:
 
 ```bash
-./.kiro/hooks/release-manager.sh auto
-```
-
-**Verification**:
-```bash
-# Check trigger files created
-ls -la .kiro/release-triggers/
-
-# Check release manager log
-tail -20 .kiro/logs/release-manager.log
+npm run release:analyze
 ```
 
 ---

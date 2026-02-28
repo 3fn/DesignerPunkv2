@@ -400,7 +400,7 @@ During spec formalization (design-outline → requirements.md), Thurgood will id
 **Completion Documentation**:
 - Two documents per primary task:
   - Detailed: `.kiro/specs/[spec-name]/completion/task-[N]-parent-completion.md` (comprehensive internal documentation)
-  - Summary: `docs/specs/[spec-name]/task-[N]-summary.md` (concise public-facing summary that triggers release detection)
+  - Summary: `docs/specs/[spec-name]/task-[N]-summary.md` (concise public-facing summary, used by release tool)
 - Detailed docs preserve comprehensive knowledge; summary docs trigger hooks and serve as release notes
 
 **Sub-tasks**:
@@ -444,12 +444,11 @@ During spec formalization (design-outline → requirements.md), Thurgood will id
   
   **Completion Documentation:**
   - Detailed: `.kiro/specs/cross-platform-build-system/completion/task-1-parent-completion.md`
-  - Summary: `docs/specs/cross-platform-build-system/task-1-summary.md` (triggers release detection)
+  - Summary: `docs/specs/cross-platform-build-system/task-1-summary.md`
   
   **Post-Completion:**
-  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
   - Mark complete: Use `taskStatus` tool to update task status
-  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 1 Complete: Build System Foundation"`
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 1 Complete: Build System Foundation"` (runs release analysis automatically)
   - Verify: Check GitHub for committed changes
 
   - [ ] 1.1 Create directory structure
@@ -545,12 +544,11 @@ During spec formalization (design-outline → requirements.md), Thurgood will id
   
   **Completion Documentation:**
   - Detailed: `.kiro/specs/token-generation/completion/task-5-parent-completion.md`
-  - Summary: `docs/specs/token-generation/task-5-summary.md` (triggers release detection)
+  - Summary: `docs/specs/token-generation/task-5-summary.md`
   
   **Post-Completion:**
-  - Trigger release detection: `./.kiro/hooks/release-manager.sh auto`
   - Mark complete: Use `taskStatus` tool to update task status
-  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 5 Complete: Token Generation System"`
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 5 Complete: Token Generation System"` (runs release analysis automatically)
   - Verify: Check GitHub for committed changes
 
   - [ ] 5.1 Set up generator directory structure
@@ -2183,7 +2181,7 @@ Developers can now:
 
 ### Parent Task Summary Documents
 
-**Purpose**: Create concise, commit-style summaries of parent task completion that trigger release detection hooks and serve as release note content.
+**Purpose**: Create concise, commit-style summaries of parent task completion that serve as release note content for the release tool.
 
 **Location**: `docs/specs/[spec-name]/task-N-summary.md`
 
@@ -2199,12 +2197,9 @@ Developers can now:
 - **Clear Separation**: Detailed completion docs (internal knowledge preservation) remain in `.kiro/`, while summaries (public-facing) live in `docs/`.
 - **Hybrid Approach**: Automatic hooks for manual edits, manual trigger for AI workflows ensures release detection works in all scenarios.
 
-**Forward-Looking Note**: This summary document workflow applies to new specs going forward. Existing completion documents don't need changes - this is a forward-looking enhancement to enable reliable hook triggering.
+**Forward-Looking Note**: This summary document workflow applies to new specs going forward. Existing completion documents don't need changes.
 
-**Important Note on Hook Behavior**: Kiro IDE's `fileCreated` and `fileSaved` hooks only trigger for manual file operations through the IDE UI, not for programmatically created files by AI agents. When working with AI agents to create summary documents:
-1. Create the summary document programmatically as part of task completion
-2. Manually run `./.kiro/hooks/release-manager.sh auto` to trigger release detection
-3. This manual trigger is the standard practice for AI-assisted workflows
+**Release Analysis**: The release tool (`src/tools/release/`) scans summary documents via git log to generate release notes. `commit-task.sh` runs release analysis automatically after each commit.
 
 **Format Template**:
 
@@ -2351,14 +2346,14 @@ Format:
 ```markdown
 **Completion Documentation:**
 - Detailed: `.kiro/specs/[spec-name]/completion/task-[N]-parent-completion.md`
-- Summary: `docs/specs/[spec-name]/task-[N]-summary.md` (triggers release detection)
+- Summary: `docs/specs/[spec-name]/task-[N]-summary.md`
 ```
 
 Example:
 ```markdown
 **Completion Documentation:**
 - Detailed: `.kiro/specs/release-detection-trigger-fix/completion/task-1-parent-completion.md`
-- Summary: `docs/specs/release-detection-trigger-fix/task-1-summary.md` (triggers release detection)
+- Summary: `docs/specs/release-detection-trigger-fix/task-1-summary.md`
 ```
 
 **Relative Path Calculation**:
@@ -2449,7 +2444,7 @@ When creating cross-references, calculate relative paths based on the source doc
 - Manual task status updates → Manual commit via script → No agent hooks triggered
 - **Benefit**: Simpler, direct control
 - **Use when**: Quick fixes, non-spec work, or when agent hooks aren't needed
-- **Note**: Can manually trigger release detection with `./.kiro/hooks/release-manager.sh auto`
+- **Note**: Run `npm run release:analyze` for on-demand release analysis
 
 ---
 
