@@ -121,7 +121,7 @@ Per the agentic UI strategy doc, this spec produces the "component catalog schem
 
 - 063 execution complete (all 28 components migrated to uniform contracts.yaml)
 - 063 governance updates applied (family list, standard library deprecated)
-- **Resolve stale behavioral contract documentation**: Component-Schema-Format.md contains outdated Contract Structure (old fields: `depends_on`, `conflicts_with`, `verification`), Contract Categories (6 categories, not 10), and Standard Contracts Library (deprecated but retained). Principle 2 in stemma-system-principles.md still shows old list-based contract format with deprecated names. Either remove these sections and replace with uniform contract system references, or create Contract-System-Reference.md and redirect. Must be completed before any 064 implementation tasks begin.
+- **Resolve stale behavioral contract documentation**: ✅ Resolved (2026-02-25). Component-Schema-Format.md rewritten to reflect actual schema YAML structure. Contract System Reference created as authoritative contract format doc. Old Standard Contracts Library, stale Contract Structure/Categories sections, and outdated Principle 2 examples replaced. Approved via ballot measure.
 - Avatar → Avatar-Base rename complete (063 follow-up item — schema will encode component names, should use final name)
 - Lina + Ada available for design consultation
 

@@ -2237,10 +2237,23 @@ Developers can now:
 - ✅ [Positive impact 2]
 - ✅ [Positive impact 3]
 
+## Deliverables *(optional)*
+
+- 🔴 [Token/Component/Breaking]: [description]
+- 🟡 [Tool/Agent/MCP/Build]: [description]
+- 🔵 [Governance/Infrastructure]: [description]
+
 ---
 
 *For detailed implementation notes, see [task-N-parent-completion.md](../../.kiro/specs/[spec-name]/completion/task-N-parent-completion.md)*
 ```
+
+**Deliverables Field**: Optional. Classifies what this task delivered for release notes.
+- 🔴 **Consumer-facing** — changes that directly affect token consumers, component users, or break existing behavior. Always surfaced in release notes.
+- 🟡 **Ecosystem** — new tools, agents, MCPs, build system changes, or third-party integrations. Surfaced prominently.
+- 🔵 **Internal** — governance updates, process changes, infrastructure work. Included as context.
+
+When present, the release tool uses this for accurate classification. When absent, it falls back to section-based extraction. Include when your task delivers artifacts that should appear in release notes.
 
 **Example - Task 1 Summary**:
 
@@ -2274,6 +2287,10 @@ Enables automatic release detection by creating summary documents in a location 
 - ✅ Format template ensures consistent summary document structure
 - ✅ Rationale explains why two documents are needed (`.kiro/` filtering + dual purpose)
 - ✅ Forward-looking approach avoids migration complexity
+
+## Deliverables *(optional)*
+
+- 🔵 Governance: Summary document workflow added to Process-Spec-Planning.md
 
 ---
 
