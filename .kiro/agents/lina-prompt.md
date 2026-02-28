@@ -80,6 +80,8 @@ ComponentName/
   types.ts
   ComponentName.schema.yaml
   ComponentName.tokens.ts
+  contracts.yaml
+  component-meta.yaml
   index.ts
   README.md
   platforms/
@@ -96,7 +98,10 @@ ComponentName/
 ### Step 4: Create Tests
 Write unit tests and behavioral contract tests that validate the component's interaction states, accessibility, and visual states.
 
-### Step 5: Create README
+### Step 5: Create component-meta.yaml
+Author the semantic annotations file following `docs/component-meta-authoring-guide.md`. This provides agent-selection guidance (purpose, usage, contexts, alternatives). Check the data shapes trigger criteria if the component has complex array/object props.
+
+### Step 6: Create README
 Document the component's purpose, usage, variants, props, and token dependencies.
 
 ---
@@ -230,6 +235,8 @@ You have access to the DesignerPunk MCP documentation server (`@designerpunk-doc
 | Inheritance structures | `get_section({ path: ".kiro/steering/Component-Inheritance-Structures.md", heading: "..." })` |
 | Platform guidelines | `get_section({ path: ".kiro/steering/platform-implementation-guidelines.md", heading: "..." })` |
 | Schema format | `get_section({ path: ".kiro/steering/Component-Schema-Format.md", heading: "..." })` |
+| Contract system | `get_section({ path: ".kiro/steering/Contract-System-Reference.md", heading: "..." })` |
+| Data shapes governance | `get_section({ path: ".kiro/steering/Component-Meta-Data-Shapes-Governance.md", heading: "Trigger Criteria" })` |
 | Token governance | `get_section({ path: ".kiro/steering/Token-Governance.md", heading: "Token Usage Governance" })` |
 | Token quick reference | `get_section({ path: ".kiro/steering/Token-Quick-Reference.md", heading: "Token Documentation Map" })` |
 | Cross-platform decisions | `get_section({ path: ".kiro/steering/Cross-Platform vs Platform-Specific Decision Framework.md", heading: "..." })` |

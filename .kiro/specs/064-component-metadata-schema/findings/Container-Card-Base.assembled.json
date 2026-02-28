@@ -1,0 +1,334 @@
+{
+  "name": "Container-Card-Base",
+  "type": "type-primitive",
+  "family": "Containers",
+  "version": "1.0.0",
+  "readiness": "development",
+  "description": "Type primitive container component providing card-specific styling and\nbehaviors. Uses Container-Base internally via composition and exposes\na curated subset of props appropriate for card use cases.\n\nDesign Philosophy: Inspired by Spotify Encore and Shopify Polaris—opinionated\ndefaults with constrained flexibility. The base provides consistent card\nstyling through a filtered subset of Container-Base's API; semantic variants\nhandle content-specific layouts.\n\nKey Features:\n- Zero-config card rendering with sensible defaults\n- Curated prop subset (only card-appropriate values)\n- Interactive behavior (hover, press, focus, keyboard)\n- ARIA semantics based on role prop\n- Cross-platform consistency",
+  "platforms": [
+    "web",
+    "ios",
+    "android"
+  ],
+  "properties": {
+    "padding": {
+      "type": "'none' | '100' | '150' | '200'",
+      "description": "Internal padding for the card. Maps to space.inset tokens.\nCurated subset of Container-Base padding values appropriate for cards.\n- none: No padding\n- 100: 8px (space.inset.100)\n- 150: 12px (space.inset.150) [DEFAULT]\n- 200: 16px (space.inset.200)\n\nOverride hierarchy (highest to lowest priority):\n1. Individual edges (paddingBlockStart, paddingBlockEnd, paddingInlineStart, paddingInlineEnd)\n2. Axis props (paddingVertical, paddingHorizontal)\n3. Uniform padding (this prop)\n",
+      "default": "'150'",
+      "required": false
+    },
+    "paddingVertical": {
+      "type": "'none' | '050' | '100' | '150' | '200'",
+      "description": "Vertical (block-axis) padding for the card. Maps to space.inset tokens.\nIncludes '050' for fine-tuning vertical rhythm with typography.\n- none: No padding\n- 050: 4px (space.inset.050)\n- 100: 8px (space.inset.100)\n- 150: 12px (space.inset.150)\n- 200: 16px (space.inset.200)\n",
+      "default": "undefined",
+      "required": false
+    },
+    "paddingHorizontal": {
+      "type": "'none' | '100' | '150' | '200'",
+      "description": "Horizontal (inline-axis) padding for the card. Maps to space.inset tokens.\n- none: No padding\n- 100: 8px (space.inset.100)\n- 150: 12px (space.inset.150)\n- 200: 16px (space.inset.200)\n",
+      "default": "undefined",
+      "required": false
+    },
+    "paddingBlockStart": {
+      "type": "'none' | '050' | '100' | '150' | '200'",
+      "description": "Block-start padding for the card. Maps to space.inset tokens.\nIncludes '050' for fine-tuning vertical rhythm with typography.\nHighest priority - overrides both paddingVertical and uniform padding.\n",
+      "default": "undefined",
+      "required": false
+    },
+    "paddingBlockEnd": {
+      "type": "'none' | '050' | '100' | '150' | '200'",
+      "description": "Block-end padding for the card. Maps to space.inset tokens.\nIncludes '050' for fine-tuning vertical rhythm with typography.\nHighest priority - overrides both paddingVertical and uniform padding.\n",
+      "default": "undefined",
+      "required": false
+    },
+    "paddingInlineStart": {
+      "type": "'none' | '100' | '150' | '200'",
+      "description": "Inline-start padding for the card. Maps to space.inset tokens.\nHighest priority - overrides both paddingHorizontal and uniform padding.\n",
+      "default": "undefined",
+      "required": false
+    },
+    "paddingInlineEnd": {
+      "type": "'none' | '100' | '150' | '200'",
+      "description": "Inline-end padding for the card. Maps to space.inset tokens.\nHighest priority - overrides both paddingHorizontal and uniform padding.\n",
+      "default": "undefined",
+      "required": false
+    },
+    "background": {
+      "type": "'surface.primary' | 'surface.secondary' | 'surface.tertiary'",
+      "description": "Background color for the card. Curated to surface colors only.\n- surface.primary: Primary surface color [DEFAULT]\n- surface.secondary: Secondary surface color\n- surface.tertiary: Tertiary surface color\n",
+      "default": "'surface.primary'",
+      "required": false
+    },
+    "shadow": {
+      "type": "'none' | 'container'",
+      "description": "Shadow for the card. Curated to container shadow only.\n- none: No shadow\n- container: Container shadow [DEFAULT]\n",
+      "default": "'container'",
+      "required": false
+    },
+    "border": {
+      "type": "'none' | 'default'",
+      "description": "Border for the card. Curated to subtle border only.\n- none: No border [DEFAULT]\n- default: 1px border using borderColor\n",
+      "default": "'none'",
+      "required": false
+    },
+    "borderColor": {
+      "type": "'border.default' | 'border.subtle'",
+      "description": "Border color for the card. Curated to card-appropriate colors.\n- border.default: Standard border color [DEFAULT]\n- border.subtle: Subtle/muted border color\nOnly visible when border is 'default'.\n",
+      "default": "'border.default'",
+      "required": false
+    },
+    "borderRadius": {
+      "type": "'normal' | 'loose'",
+      "description": "Border radius for the card. Curated to rounded values only.\n- normal: 8px (radius-100) [DEFAULT]\n- loose: 16px (radius-200)\n",
+      "default": "'normal'",
+      "required": false
+    },
+    "semantic": {
+      "type": "'div' | 'section' | 'article'",
+      "description": "Semantic HTML element to render (web only). Curated to card-appropriate elements.\n- div: Generic container [DEFAULT]\n- section: Thematic grouping of content\n- article: Self-contained composition\n",
+      "default": "'div'",
+      "required": false
+    },
+    "accessibilityLabel": {
+      "type": "string",
+      "description": "Accessibility label for the card. Platform-specific implementation:\n- Web: aria-label attribute\n- iOS: .accessibilityLabel() modifier\n- Android: contentDescription in semantics\n",
+      "default": "undefined",
+      "required": false
+    },
+    "interactive": {
+      "type": "boolean",
+      "description": "Whether the card is interactive. When true:\n- Enables hover feedback (8% darker via blend.hoverDarker)\n- Enables press feedback (12% darker via blend.pressedDarker)\n- Makes card focusable via keyboard navigation\n- Applies ARIA role based on role prop\n- Internally sets hoverable: true on Container-Base\n",
+      "default": false,
+      "required": false
+    },
+    "onPress": {
+      "type": "() => void",
+      "description": "Callback when card is pressed/clicked. Only triggered when interactive is true.\nKeyboard activation:\n- role='button': Enter or Space triggers onPress\n- role='link': Only Enter triggers onPress (Space does NOT trigger)\n",
+      "default": "undefined",
+      "required": false
+    },
+    "role": {
+      "type": "'button' | 'link'",
+      "description": "ARIA role for interactive cards. Only applies when interactive is true.\n- button: Card acts as a button (Enter/Space activates) [DEFAULT]\n- link: Card acts as a link (only Enter activates)\n",
+      "default": "'button'",
+      "required": false
+    },
+    "children": {
+      "type": "any",
+      "description": "Child content to render inside the card. Platform-specific types:\n- Web: HTMLElement children via slot\n- iOS: SwiftUI View via @ViewBuilder\n- Android: Composable content lambda\n",
+      "required": false
+    },
+    "testID": {
+      "type": "string",
+      "description": "Test identifier for automated testing. Platform-specific implementation:\n- Web: data-testid attribute\n- iOS: accessibilityIdentifier\n- Android: testTag in semantics\n",
+      "default": "undefined",
+      "required": false
+    }
+  },
+  "tokens": [
+    "space.inset.050",
+    "space.inset.100",
+    "space.inset.150",
+    "space.inset.200",
+    "color.surface.primary",
+    "color.surface.secondary",
+    "color.surface.tertiary",
+    "color.border.default",
+    "color.structure.border.subtle",
+    "shadow.container",
+    "radius-100",
+    "radius-200",
+    "motion.focusTransition",
+    "blend.hoverDarker",
+    "blend.pressedDarker"
+  ],
+  "composition": {
+    "composes": [
+      {
+        "component": "Container-Base",
+        "relationship": "Uses Container-Base internally for layout and styling primitives"
+      }
+    ]
+  },
+  "contracts": {
+    "inheritsFrom": null,
+    "active": {
+      "visual_boundary": {
+        "category": "visual",
+        "description": "Card has clear visual separation from background",
+        "behavior": "Provides visual boundary through background color (color.surface.primary),\nshadow (shadow.container), and border radius (radius.normal).\nDefaults ensure cards are visually distinct without configuration.",
+        "wcag": "1.4.11 Non-text Contrast",
+        "platforms": [
+          "web",
+          "ios",
+          "android"
+        ],
+        "validation": [
+          "Card is visually distinct from surrounding content",
+          "Default styling provides clear boundary"
+        ],
+        "required": true,
+        "source": "own"
+      },
+      "layout_padding": {
+        "category": "layout",
+        "description": "Content has consistent internal spacing",
+        "behavior": "Applies consistent padding using space.inset tokens.\nDefault: space.inset.150 (12px). Same override hierarchy as Container-Base.",
+        "wcag": "1.4.12 Text Spacing",
+        "platforms": [
+          "web",
+          "ios",
+          "android"
+        ],
+        "validation": [
+          "Default padding is space.inset.150",
+          "Override hierarchy respected"
+        ],
+        "required": true,
+        "source": "own"
+      },
+      "visual_rounded_corners": {
+        "category": "visual",
+        "description": "Card has rounded corners per token",
+        "behavior": "Applies rounded corners using radius tokens. Default: radius.normal (8px).\nOnly 'normal' and 'loose' values available.",
+        "wcag": null,
+        "platforms": [
+          "web",
+          "ios",
+          "android"
+        ],
+        "validation": [
+          "Default border radius is radius.normal (8px)",
+          "Only 'normal' and 'loose' available"
+        ],
+        "required": true,
+        "source": "own"
+      },
+      "interaction_hover": {
+        "category": "interaction",
+        "description": "Background darkens on hover when interactive",
+        "behavior": "When interactive=true and pointer device hovers, darkens background\nby blend.hoverDarker (8%). Transition uses motion.focusTransition.",
+        "wcag": "1.4.13 Content on Hover or Focus",
+        "platforms": [
+          "web"
+        ],
+        "validation": [
+          "Background darkens on hover when interactive=true",
+          "Only applies with pointer devices"
+        ],
+        "required": true,
+        "source": "own"
+      },
+      "interaction_pressed": {
+        "category": "interaction",
+        "description": "Background darkens on press when interactive",
+        "behavior": "When interactive=true, darkens background by blend.pressedDarker (12%).\nNo scale transform to avoid layout shift in card grids.",
+        "wcag": null,
+        "platforms": [
+          "web",
+          "ios",
+          "android"
+        ],
+        "validation": [
+          "Background darkens on press when interactive=true",
+          "No scale transform applied"
+        ],
+        "required": true,
+        "source": "own"
+      },
+      "interaction_focus_ring": {
+        "category": "interaction",
+        "description": "Visible focus ring when interactive and keyboard focused",
+        "behavior": "When interactive=true and card receives keyboard focus, displays\nvisible focus ring using established DesignerPunk focus pattern.",
+        "wcag": "2.4.7 Focus Visible",
+        "platforms": [
+          "web",
+          "ios",
+          "android"
+        ],
+        "validation": [
+          "Focus ring visible on keyboard focus",
+          "Focus ring meets contrast requirements"
+        ],
+        "required": true,
+        "source": "own"
+      },
+      "interaction_pressable": {
+        "category": "interaction",
+        "description": "Keyboard activation when interactive",
+        "behavior": "When interactive=true: role='button' supports Enter and Space,\nrole='link' supports Enter only (Space scrolls page).",
+        "wcag": "2.1.1 Keyboard",
+        "platforms": [
+          "web"
+        ],
+        "validation": [
+          "Enter triggers onPress for both roles",
+          "Space triggers onPress only for role='button'"
+        ],
+        "required": true,
+        "source": "own"
+      },
+      "accessibility_aria_role": {
+        "category": "accessibility",
+        "description": "Applies appropriate ARIA role when interactive",
+        "behavior": "When interactive=true, applies role=\"button\" or role=\"link\" based\non role prop. No role applied when interactive=false.",
+        "wcag": "4.1.2 Name, Role, Value",
+        "platforms": [
+          "web"
+        ],
+        "validation": [
+          "role=\"button\" when interactive and role='button'",
+          "role=\"link\" when interactive and role='link'",
+          "No role when not interactive"
+        ],
+        "required": true,
+        "source": "own"
+      }
+    },
+    "excluded": {},
+    "own": [
+      "visual_boundary",
+      "layout_padding",
+      "visual_rounded_corners",
+      "interaction_hover",
+      "interaction_pressed",
+      "interaction_focus_ring",
+      "interaction_pressable",
+      "accessibility_aria_role"
+    ],
+    "inherited": []
+  },
+  "annotations": {
+    "purpose": "Display content in a card with elevation, border radius, and background styling for visually distinct content grouping.",
+    "usage": {
+      "whenToUse": [
+        "Product cards, profile cards, or content preview cards",
+        "Elevated content sections that need visual separation from the background",
+        "Interactive cards that respond to tap or click"
+      ],
+      "whenNotToUse": [
+        "Simple content wrapping without card styling — use Container-Base",
+        "Full-width page sections without elevation"
+      ]
+    },
+    "contexts": [
+      "content-feeds",
+      "product-listings",
+      "dashboards",
+      "profile-sections",
+      "settings-screens"
+    ],
+    "alternatives": [
+      {
+        "component": "Container-Base",
+        "reason": "When content grouping is needed without card-specific styling (no elevation, no border radius)"
+      }
+    ]
+  },
+  "contractTokenRelationships": {
+    "resolved": [],
+    "gaps": []
+  },
+  "indexedAt": "2026-02-28T21:37:29.667Z",
+  "warnings": []
+}

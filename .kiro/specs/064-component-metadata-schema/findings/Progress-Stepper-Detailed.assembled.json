@@ -1,0 +1,237 @@
+{
+  "name": "Progress-Stepper-Detailed",
+  "type": "semantic",
+  "family": "Progress-Indicator",
+  "version": "1.0.0",
+  "readiness": "development",
+  "description": "Composes Progress-Indicator-Node-Base, Progress-Indicator-Connector-Base,\nand Progress-Indicator-Label-Base primitives to create a detailed stepper\nwith labels and optional icons for complex multi-step flows.\n\nKey Characteristics:\n- Composes Node-Base + Connector-Base + Label-Base\n- State priority: error > completed > current > incomplete\n- Icon precedence: completed = checkmark always, user icon for others\n- Connectors: active between completed nodes, inactive otherwise\n- Sizes: md, lg only (sm throws error)\n- Max 8 steps (dev throw, production warn+clamp)\n- Non-interactive (navigation handled by parent flow)",
+  "platforms": [
+    "web",
+    "ios",
+    "android"
+  ],
+  "properties": {
+    "steps": {
+      "type": "StepDefinition[]",
+      "description": "Array of step definitions with label, helperText, icon, optional. Max 8.",
+      "required": true
+    },
+    "currentStep": {
+      "type": "number",
+      "description": "Current active step (1-indexed). Clamped to [1, steps.length].",
+      "required": true
+    },
+    "size": {
+      "type": "'md' | 'lg'",
+      "description": "Size variant. sm is not supported for steppers.",
+      "default": "'md'",
+      "required": false
+    },
+    "errorSteps": {
+      "type": "number[]",
+      "description": "Array of step indices in error state. Filtered to valid range.",
+      "default": "[]",
+      "required": false
+    },
+    "accessibilityLabel": {
+      "type": "string",
+      "description": "Custom accessibility label override.",
+      "required": false
+    },
+    "testID": {
+      "type": "string",
+      "description": "Test identifier for automated testing.",
+      "default": "undefined",
+      "required": false
+    }
+  },
+  "tokens": [
+    "progress.node.size.md",
+    "progress.node.size.lg",
+    "progress.node.size.md.current",
+    "progress.node.size.lg.current",
+    "progress.node.gap.md",
+    "progress.node.gap.lg",
+    "progress.connector.thickness"
+  ],
+  "composition": {
+    "composes": [
+      {
+        "component": "Progress-Indicator-Node-Base",
+        "relationship": "Renders one Node-Base per step"
+      },
+      {
+        "component": "Progress-Indicator-Connector-Base",
+        "relationship": "Renders one Connector-Base between each adjacent pair of nodes"
+      },
+      {
+        "component": "Progress-Indicator-Label-Base",
+        "relationship": "Renders one Label-Base per step"
+      }
+    ]
+  },
+  "contracts": {
+    "inheritsFrom": null,
+    "active": {
+      "composition_all_primitives": {
+        "category": "composition",
+        "description": "Renders Node-Base, Connector-Base, and Label-Base primitives",
+        "behavior": "Composes Node-Base for each step, Connector-Base between adjacent nodes\n(n-1 for n nodes), and Label-Base for each step.\nCompleted nodes receive content='checkmark' (icon precedence).\nCurrent/incomplete/error nodes with icon receive content='icon'.\nCurrent/incomplete/error nodes without icon receive content='none'.",
+        "wcag": null,
+        "platforms": [
+          "web",
+          "ios",
+          "android"
+        ],
+        "validation": [
+          "Renders Node-Base for each step",
+          "Renders Connector-Base between all adjacent nodes",
+          "Renders Label-Base for each step",
+          "Completed nodes have content='checkmark'",
+          "Non-completed nodes with icon have content='icon'",
+          "Non-completed nodes without icon have content='none'"
+        ],
+        "required": true,
+        "source": "own"
+      },
+      "composition_icon_precedence": {
+        "category": "composition",
+        "description": "Completed steps always show checkmark, user icon only for other states",
+        "behavior": "Icon precedence rules:\n- Completed: ALWAYS checkmark (user-provided icon ignored)\n- Current/incomplete/error with icon: renders user icon\n- Current/incomplete/error without icon: empty circle (none)",
+        "wcag": null,
+        "platforms": [
+          "web",
+          "ios",
+          "android"
+        ],
+        "validation": [
+          "Completed nodes always render checkmark",
+          "User icon ignored for completed nodes",
+          "User icon rendered for current/incomplete/error nodes",
+          "No icon renders as empty circle"
+        ],
+        "required": true,
+        "source": "own"
+      },
+      "state_priority_derivation": {
+        "category": "state",
+        "description": "Derives state with priority error > completed > current > incomplete",
+        "behavior": "State derivation uses priority logic (same as Stepper-Base):\n1. error: step index in errorSteps (highest priority)\n2. completed: step index < currentStep and not in errorSteps\n3. current: step index === currentStep and not in errorSteps\n4. incomplete: step index > currentStep",
+        "wcag": null,
+        "platforms": [
+          "web",
+          "ios",
+          "android"
+        ],
+        "validation": [
+          "Error steps override all other states",
+          "Steps before currentStep are completed (unless error)",
+          "Exactly one step is current (unless in errorSteps)",
+          "Steps after currentStep are incomplete"
+        ],
+        "required": true,
+        "source": "own"
+      },
+      "state_connector_derivation": {
+        "category": "state",
+        "description": "Connectors are active between completed nodes, inactive otherwise",
+        "behavior": "Connector state derived from adjacent node states:\n- active: both left and right nodes are completed\n- inactive: any other combination",
+        "wcag": null,
+        "platforms": [
+          "web",
+          "ios",
+          "android"
+        ],
+        "validation": [
+          "Connectors between completed nodes are active",
+          "All other connectors are inactive"
+        ],
+        "required": true,
+        "source": "own"
+      },
+      "accessibility_list_role": {
+        "category": "accessibility",
+        "description": "Uses role=\"list\" with role=\"listitem\" per step",
+        "behavior": "Uses role=\"list\" with each step as role=\"listitem\".\nError steps include \"error\" suffix in aria-label.\nOptional steps include \"optional\" suffix in aria-label.\nScreen reader announces \"Step X of Y: [label]\".",
+        "wcag": "4.1.2 Name, Role, Value",
+        "platforms": [
+          "web",
+          "ios",
+          "android"
+        ],
+        "validation": [
+          "role=\"list\" applied to container (web)",
+          "role=\"listitem\" applied to each step (web)",
+          "Error steps have \"error\" in aria-label",
+          "Optional steps have \"optional\" in aria-label"
+        ],
+        "required": true,
+        "source": "own"
+      },
+      "validation_size_restriction": {
+        "category": "validation",
+        "description": "Throws error if size='sm' is used",
+        "behavior": "Steppers only support sizes 'md' and 'lg'. If size='sm' is provided,\nthe component throws an error.",
+        "wcag": null,
+        "platforms": [
+          "web",
+          "ios",
+          "android"
+        ],
+        "validation": [
+          "size='sm' throws error",
+          "size='md' renders correctly",
+          "size='lg' renders correctly"
+        ],
+        "required": true,
+        "source": "own"
+      }
+    },
+    "excluded": {},
+    "own": [
+      "composition_all_primitives",
+      "composition_icon_precedence",
+      "state_priority_derivation",
+      "state_connector_derivation",
+      "accessibility_list_role",
+      "validation_size_restriction"
+    ],
+    "inherited": []
+  },
+  "annotations": {
+    "purpose": "Guide users through a multi-step workflow with labeled nodes, step descriptions, and connector lines showing full progress detail.",
+    "usage": {
+      "whenToUse": [
+        "Complex multi-step flows where each step needs a description",
+        "Workflows where visual connectors between steps aid comprehension",
+        "When users need to understand what each step involves before reaching it"
+      ],
+      "whenNotToUse": [
+        "Simple step indicators with labels only — use Progress-Stepper-Base",
+        "Dot-based pagination — use Progress-Pagination-Base"
+      ]
+    },
+    "contexts": [
+      "checkout-flows",
+      "application-forms",
+      "onboarding-flows",
+      "setup-wizards"
+    ],
+    "alternatives": [
+      {
+        "component": "Progress-Stepper-Base",
+        "reason": "When step labels are sufficient without descriptions or connector lines"
+      },
+      {
+        "component": "Progress-Pagination-Base",
+        "reason": "When simple dot indicators are sufficient"
+      }
+    ]
+  },
+  "contractTokenRelationships": {
+    "resolved": [],
+    "gaps": []
+  },
+  "indexedAt": "2026-02-28T21:37:29.670Z",
+  "warnings": []
+}

@@ -2,7 +2,7 @@
 
 **Date**: 2026-02-28
 **Spec**: 064 - Component Metadata Schema
-**Status**: Implementation Planning
+**Status**: Complete
 **Dependencies**: 063 (Uniform Contract System — COMPLETE)
 
 ---
@@ -278,7 +278,7 @@ The work is organized into 4 primary tasks, executed sequentially. Task 1 (clean
     - Verify all 28 files parse and index without errors
     - _Requirements: 5.1, 5.2, 5.3, 5.4_
 
-- [ ] 4. A2UI Mapping Exercise and Documentation
+- [x] 4. A2UI Mapping Exercise and Documentation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -306,19 +306,30 @@ The work is organized into 4 primary tasks, executed sequentially. Task 1 (clean
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 Complete: A2UI Validation and Documentation"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 4.1 A2UI mapping exercise
+  - [x] 4.1 A2UI mapping exercise
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
-    **Lead**: Lina + Thurgood | **Review**: Peter (pause point decision)
-    - Draft assembled metadata for Badge-Count-Base (simple primitive), Badge-Count-Notification (inheritance), Container-Card-Base (composition + conditional rules)
-    - Map each field to A2UI v0.9 component description model
+    **Lead**: Lina (Phase 1) → Thurgood (Phase 2) | **Review**: Peter (Phase 3 — pause point decision)
+
+    **Phase 1 — Assembled metadata drafts (Lina):**
+    - Query the component MCP for assembled JSON output for Badge-Count-Base (simple primitive), Badge-Count-Notification (inheritance), Container-Card-Base (composition + conditional rules)
+    - Also capture Progress-Stepper-Detailed output for the data contracts pause point evaluation
+    - Deliver 4 assembled JSON outputs for Phase 2
+
+    **Phase 2 — Mapping exercise (Thurgood):**
+    - Map each field from the 3 representative components to A2UI v0.9 component description model
     - Identify gaps: what can't translate? Classify each as schema omission or renderer bridge concern
-    - **Data contracts pause point**: Evaluate whether Progress-Stepper-Detailed's `StepDefinition[]` can be communicated adequately. Document decision: defer data contracts or add `data_shapes:` to component-meta.yaml
+    - **Data contracts pause point**: Using Progress-Stepper-Detailed output, evaluate whether agents can construct correct invocations for `StepDefinition[]` without formal data shapes
     - Document findings in `findings/a2ui-mapping-exercise.md`
-    - If schema omissions found: adjust data models and implementation (coordinate with Task 2 agent)
+
+    **Phase 3 — Decision point (Peter):**
+    - Review mapping findings and gap classifications
+    - Decide: defer data contracts or add `data_shapes:` to component-meta.yaml
+    - If schema omissions found: Lina adjusts data models and implementation
+
     - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5_
 
-  - [ ] 4.2 Schema format reference documentation
+  - [x] 4.2 Schema format reference documentation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Lead**: Lina
@@ -328,7 +339,7 @@ The work is organized into 4 primary tasks, executed sequentially. Task 1 (clean
     - Place at `docs/component-metadata-schema-reference.md`
     - _Requirements: 9.1_
 
-  - [ ] 4.3 MCP query interface documentation
+  - [x] 4.3 MCP query interface documentation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Lead**: Lina
@@ -337,7 +348,7 @@ The work is organized into 4 primary tasks, executed sequentially. Task 1 (clean
     - Place at `docs/component-mcp-query-guide.md`
     - _Requirements: 9.3_
 
-  - [ ] 4.4 Contract-System-Reference.md update (if needed)
+  - [x] 4.4 Contract-System-Reference.md update (if needed)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Lead**: Thurgood | **Review**: Peter (ballot measure)

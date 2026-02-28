@@ -163,3 +163,22 @@ alternatives: []
 4. List 2–6 `contexts` where the component appears
 5. Add `alternatives` referencing valid canonical component names
 6. Verify the file parses: start the component MCP and check health output for warnings
+
+---
+
+## Future: Data Shapes (Deferred)
+
+Component-meta.yaml does NOT currently include a `data_shapes:` field for describing complex prop structures. This was evaluated during spec 064 and deferred.
+
+**Governance criteria for when to add `data_shapes:`** are maintained in the steering doc:
+
+```
+.kiro/steering/Component-Meta-Data-Shapes-Governance.md
+```
+
+Or query via MCP:
+```
+get_section({ path: ".kiro/steering/Component-Meta-Data-Shapes-Governance.md", heading: "Trigger Criteria" })
+```
+
+**Any agent creating or reviewing a component-meta.yaml should evaluate the trigger criteria in that doc.** If any criterion is met, follow the escalation process defined there.
