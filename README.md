@@ -1,27 +1,26 @@
-# DesignerPunk v7
+# DesignerPunk v8
 
 **A Design System Foundation Built for Modern Product Development, Cross-Platform Excellence, and AI-Assisted Development**
 
-[![Version](https://img.shields.io/badge/Version-7.0.0-purple)](docs/releases/RELEASE-NOTES-7.0.0.md)
+[![Version](https://img.shields.io/badge/Version-8.0.0-purple)](docs/releases/RELEASE-NOTES-8.0.0.md)
 [![Repository](https://img.shields.io/badge/GitHub-DesignerPunkv2-blue)](https://github.com/3fn/DesignerPunkv2)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
-[![Tests](https://img.shields.io/badge/Tests-8200%2B-brightgreen)](.)
+[![Tests](https://img.shields.io/badge/Tests-7400%2B-brightgreen)](.)
 
 ---
 
-## Latest Release: v7.0.0
+## Latest Release: v8.0.0
 
-**Figma Integration Pipeline** — Six specs delivering end-to-end bidirectional Figma integration:
+**Contract & Metadata Infrastructure** — Three specs delivering uniform behavioral contracts, machine-readable component metadata, and a rebuilt release pipeline:
 
-- **DTCG Token Format Generator** (Spec 053): Generates DTCG Format Module 2025.10 compliant JSON from the Rosetta token system — the interchange format for external tool interoperability
-- **Figma Token Push** (Spec 054a): Pushes tokens to Figma as native Variables and Styles via figma-console-mcp Desktop Bridge, with drift detection, batch operations, and incremental sync
-- **Figma Design Extraction** (Specs 054b/054d): Extracts Figma components into ComponentAnalysis artifacts with three-tier token classification (Semantic/Primitive/Unidentified), hierarchical node trees, binding resolution via Plugin API, per-variant screenshots, and 13 classified property categories
-- **Component Demo System** (Spec 061): 16 interactive HTML demos for all DesignerPunk components with live property controls
+- **Uniform Contract System** (Spec 063): 10-category behavioral contract taxonomy with 112 concepts across all 28 components — standardized `contracts.yaml` files as the sole source of truth for behavioral guarantees, with formal inheritance and intentional exclusions
+- **Component Metadata Schema** (Spec 064): New component MCP server assembling schema, contracts, and semantic annotations into a queryable catalog — 6 tools with progressive disclosure for agent-driven component selection and composition
+- **Release System Rebuild** (Spec 065): Summary-driven release analysis pipeline with LLM-powered change classification, version recommendation, and automated release notes generation
 
-**Breaking**: `DesignOutline` type replaced by `ComponentAnalysis`; `ConsoleMCPClient` interface expanded.
+**Breaking**: Avatar renamed to Avatar-Base; component MCP server is a new sibling server; release tool relocated to `src/tools/release/`.
 
-[Full Release Notes →](docs/releases/RELEASE-NOTES-7.0.0.md)
+[Full Release Notes →](docs/releases/RELEASE-NOTES-8.0.0.md)
 
 ---
 
@@ -55,7 +54,7 @@ A token system + build pipeline that translates design intent into platform-nati
 
 - **Tokens**: ~310 mathematical values (spacing, color, typography, radius, shadow, glow, motion, opacity, blend)
 - **Build Pipeline**: Converts tokens to CSS (web), Swift (iOS), Kotlin (Android)
-- **Documentation**: Mechanical parsing + MCP server for AI-friendly access
+- **Documentation**: Mechanical parsing + MCP servers for AI-friendly access
 - **Purpose**: Single source of truth that generates consistent output across platforms
 
 Think of it as: **Define once, generate everywhere**
@@ -64,6 +63,7 @@ Think of it as: **Define once, generate everywhere**
 - Three-tier architecture: Primitive → Semantic → Component tokens
 - Cross-platform generation with platform-native syntax
 - MCP Documentation Server with 82% token reduction for AI agents
+- Component MCP Server with 6 query tools for agent-driven component selection
 - Empirically validated performance and token efficiency
 
 ### Stemma System — The Component Architecture
@@ -73,7 +73,8 @@ Think of it as: **Define once, generate everywhere**
 A framework for building components that work identically across platforms while staying native.
 
 - **Naming Convention**: `[Family]-[Type]-[Variant]` (AI-discoverable)
-- **Behavioral Contracts**: Explicit specifications ensuring cross-platform consistency
+- **Behavioral Contracts**: 10-category taxonomy with 112 concepts — explicit specifications ensuring cross-platform consistency
+- **Component MCP Server**: Machine-readable metadata with 6 query tools for agent-driven component selection
 - **11 Component Families**: Navigation, Form Inputs, Core, Progress Indicators, Data Displays, etc.
 - **Purpose**: Systematic, scalable component development with shared architecture
 
@@ -85,12 +86,14 @@ Think of it as: **Build once, implement natively everywhere**
 - Placeholder families with documented patterns (6 families, ready for implementation)
 - Health guardrails with 270+ validation tests
 - Component token API for lightweight, reasoned token authoring
+- 28 contracts.yaml files with formal inheritance and intentional exclusions
+- 28 component-meta.yaml semantic annotations for agent selection guidance
 
 #### Unified Contract System
 
 ![Unified Contract System](docs/architecture/Unified%20Contract%20System.png)
 
-Every component makes explicit behavioral promises organized by a 10-category taxonomy, with formal inheritance and intentional exclusions. Contracts define WHAT behavior occurs across platforms — implementations define HOW.
+Every component makes explicit behavioral promises organized by a 10-category taxonomy (layout, interaction, state, validation, accessibility, composition, content, animation, visual, performance), with formal inheritance and intentional exclusions. Contracts define WHAT behavior occurs across platforms — implementations define HOW. The component MCP server makes these contracts queryable by agents.
 
 ---
 
@@ -145,7 +148,7 @@ This is the **producer/musician model**: I don't write the music, but I shape th
 
 **Why this matters**: This demonstrates how modern product teams actually work. You don't need to be an expert coder to build sophisticated systems—you need to understand architecture, make good decisions, and guide implementation effectively.
 
-DesignerPunk has 8,200+ tests, production implementations across Web/iOS/Android, and sophisticated build pipelines—all architected and guided by clear framing, with execution handled by AI.
+DesignerPunk has 7,400+ tests, production implementations across Web/iOS/Android, and sophisticated build pipelines—all architected and guided by clear framing, with execution handled by AI.
 
 This is a working case study in how to lead AI-driven development at scale.
 
@@ -165,20 +168,22 @@ This is a working case study in how to lead AI-driven development at scale.
 - Checkboxes (Base/Legal) — Binary selection controls with legal consent support
 - Radio Buttons (Base/Set) — Single-selection controls with mutual exclusivity and group orchestration
 - Progress Indicators — Node-Base, Connector-Base, Label-Base (primitives) + Pagination-Base, Stepper-Base, Stepper-Detailed (semantic variants) with sliding window virtualization
-- 24 production-ready components with behavioral contracts
+- 28 production-ready components with behavioral contracts
 - Full cross-platform support with platform-native implementations
+- Uniform contract system: 10 categories, 112 concepts, formal inheritance
 
 **Custom Agent System**
 - 3 specialized Kiro agents: Ada (tokens), Lina (components), Thurgood (governance)
 - Domain-scoped configurations with progressive `skill://` resource loading
 - 11 user-triggered validation hooks across all agents
-- 51 steering docs with skill-compatible frontmatter for on-demand loading
+- 53 steering docs with skill-compatible frontmatter for on-demand loading
 
 **Rosetta Token System**
 - 310+ tokens (spacing, typography, color, radius, shadow, glow, motion, opacity, blend)
 - Cross-platform generation (CSS, Swift, Kotlin, DTCG JSON)
 - Three-tier architecture (Primitive → Semantic → Component)
 - MCP Documentation Server with 82% token reduction for AI agent queries
+- Component MCP Server with progressive disclosure queries for agent-driven selection
 - Bidirectional Figma integration: token push (Variables + Styles) and design extraction (ComponentAnalysis with three-tier classification)
 
 ### 🟡 Structural Foundation Ready
@@ -214,7 +219,8 @@ If you want to understand how these ideas work in practice:
 1. **The token system** (`src/tokens/`) — 310 tokens organized mathematically with cross-platform generation
 2. **Component implementations** (`src/components/`) — Real, production-ready components for Web/iOS/Android
 3. **MCP Documentation Server** (`mcp-server/`) — Working implementation you can integrate with Cursor or Claude
-4. **Steering Documentation** (`.kiro/steering/`) — Current architectural thinking and development guidance
+4. **Component MCP Server** (`component-mcp-server/`) — Agent-driven component discovery and selection
+5. **Steering Documentation** (`.kiro/steering/`) — Current architectural thinking and development guidance
 
 ### Installation
 
@@ -274,6 +280,13 @@ Instead of: *"Read our 26,000-token documentation"*
 With MCP: *"Query the documentation map → get summary → retrieve specific section"*
 
 **Result**: 82% token reduction, AI agents can access design guidance without context exhaustion
+
+### Component Selection as a Queryable System
+
+Instead of: *"Parse 28 schema files, 28 contract files, and 28 annotation files"*
+With Component MCP: *"find_components({ purpose: 'email' }) → get_component_summary('Input-Text-Email')"*
+
+**Result**: Agents discover and select components through structured queries, not file parsing
 
 ### Component Token Authoring
 
@@ -336,7 +349,7 @@ The following represent areas of active development, sequenced by dependencies a
 
 ### Current Work
 
-- Specs 048-061 (active implementation)
+- Specs 048-065 (active implementation)
 
 ### Near-Term Focus
 
@@ -412,8 +425,9 @@ This project demonstrates:
 | **Complete design system foundation** | Shows understanding of system design, not just components |
 | **Cross-platform native code** | Demonstrates bridge between design and deep technical work |
 | **310+ tokens** | Proves ability to create systematic, scalable foundations |
-| **8,200+ tests** | Shows commitment to reliability and quality |
-| **MCP Documentation Server** | Working solution to real AI collaboration problems |
+| **7,400+ tests** | Shows commitment to reliability and quality |
+| **2 MCP Servers** (docs + components) | Working solutions to real AI collaboration problems |
+| **112 behavioral contracts** | Explicit cross-platform consistency guarantees |
 | **Architectural documentation** | Demonstrates design leadership and systems thinking |
 
 For hiring managers: This shows someone who understands both design and engineering deeply enough to build infrastructure that serves both disciplines.
@@ -477,15 +491,16 @@ Even if you don't adopt DesignerPunk directly, I hope it influences how you thin
 
 ## What Changed from Previous Version
 
-1. ✅ **Added** DTCG Token Format Generator: DTCG 2025.10 compliant JSON output with 23 generation methods (Spec 053)
-2. ✅ **Added** Figma Token Push: Bidirectional sync of tokens to Figma Variables and Styles via Desktop Bridge (Spec 054a)
-3. ✅ **Added** Figma Design Extraction: Component analysis with three-tier token classification, node trees, binding resolution (Specs 054b/054d)
-4. ✅ **Added** Figma Token Push Fixes: Stale port cleanup, alias creation, incremental sync schemas (Spec 054c)
-5. ✅ **Added** Component Demo System: 16 interactive HTML demos with live property controls (Spec 061)
-6. ✅ **Added** ComponentAnalysis artifacts: JSON + Markdown output with per-variant screenshots
-7. ✅ **Added** 13 classified property categories: spacing, color, radius, fontSize, fontWeight, lineHeight, letterSpacing, borderWidth, opacity, sizing, stroke
-8. ✅ **Added** `--url` flag for Figma extraction CLI (parses full Figma URLs)
-9. ✅ **Breaking** Removed `DesignOutline` type (replaced by `ComponentAnalysis`)
-10. ✅ **Breaking** `ConsoleMCPClient` interface expanded with `getComponentImage()`
-11. ✅ **Updated** Figma Workflow Guide with complete push and extraction documentation
-12. ✅ **Updated** Specs reference to 048-061 (active implementation)
+1. ✅ **Added** Uniform Contract System: 10-category taxonomy, 112 concepts, 28 contracts.yaml files (Spec 063)
+2. ✅ **Added** Component MCP Server: 6 query tools with progressive disclosure, resolve-on-read assembly (Spec 064)
+3. ✅ **Added** 28 component-meta.yaml semantic annotations with purpose, usage, contexts, alternatives (Spec 064)
+4. ✅ **Added** Contract-token derivation for accessibility and animation contracts (Spec 064)
+5. ✅ **Added** Composition checking with bounded conditional rules (Spec 064)
+6. ✅ **Added** Release analysis pipeline rebuild with summary-driven change detection (Spec 065)
+7. ✅ **Added** Contract-System-Reference.md and Component-Schema-Format.md steering docs (Spec 063)
+8. ✅ **Added** Schema reference, query guide, and authoring guide documentation (Spec 064)
+9. ✅ **Breaking** Avatar renamed to Avatar-Base across all references (Spec 064)
+10. ✅ **Breaking** Component MCP server is a new sibling server requiring configuration (Spec 064)
+11. ✅ **Breaking** Release tool relocated from `src/release-analysis/` to `src/tools/release/` (Spec 065)
+12. ✅ **Updated** Agent configurations: Lina's scaffolding workflow, MCP queries, write paths (Spec 064)
+13. ✅ **Updated** Specs reference to 048-065 (active implementation)
