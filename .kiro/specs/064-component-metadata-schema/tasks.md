@@ -26,6 +26,7 @@ The work is organized into 4 primary tasks, executed sequentially. Task 1 (clean
 | 2.6 CompositionChecker | Lina | — | — |
 | 2.7 QueryEngine + MCP tools | Lina | Thurgood (test coverage) | — |
 | 2.8 FileWatcher | Lina | — | — |
+| 2.9 QueryEngine refinements | Lina | Thurgood (verify fixes) | — |
 | 3.1 Authoring guide | Lina | — | — |
 | 3.2 28 component-meta.yaml | Lina | Ada (token-adjacent components) | — |
 | 4.1 A2UI mapping exercise | Lina + Thurgood | Peter (pause point decision) | — |
@@ -95,7 +96,7 @@ The work is organized into 4 primary tasks, executed sequentially. Task 1 (clean
     - If adjusting: update implementation and verify tests pass
     - _Requirements: 8.3_
 
-- [ ] 2. Component MCP Server
+- [x] 2. Component MCP Server
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -129,7 +130,7 @@ The work is organized into 4 primary tasks, executed sequentially. Task 1 (clean
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Component MCP Server"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 2.1 Project scaffolding
+  - [x] 2.1 Project scaffolding
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     **Lead**: Lina
@@ -140,7 +141,7 @@ The work is organized into 4 primary tasks, executed sequentially. Task 1 (clean
     - Verify project compiles with `tsc --noEmit`
     - _Requirements: 1.4_
 
-  - [ ] 2.2 YAML parsers
+  - [x] 2.2 YAML parsers
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Lead**: Lina
@@ -152,7 +153,7 @@ The work is organized into 4 primary tasks, executed sequentially. Task 1 (clean
     - Unit tests for each parser: valid input, malformed input, missing file
     - _Requirements: 1.1, 1.3_
 
-  - [ ] 2.3 InheritanceResolver
+  - [x] 2.3 InheritanceResolver
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Lead**: Lina
@@ -165,7 +166,7 @@ The work is organized into 4 primary tasks, executed sequentially. Task 1 (clean
     - Unit tests: merge, override, exclude, missing parent, depth violation
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5_
 
-  - [ ] 2.4 ComponentIndexer
+  - [x] 2.4 ComponentIndexer
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     **Lead**: Lina | **Review**: Thurgood (test coverage)
@@ -179,7 +180,7 @@ The work is organized into 4 primary tasks, executed sequentially. Task 1 (clean
     - Integration test: index Badge-Count-Base, verify assembled output matches source files
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
-  - [ ] 2.5 ContractTokenDeriver
+  - [x] 2.5 ContractTokenDeriver
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Lead**: Lina | **Review**: Ada (token logic accuracy)
@@ -191,7 +192,7 @@ The work is organized into 4 primary tasks, executed sequentially. Task 1 (clean
     - Unit tests: known contract prose → expected token pairs, gap detection, category scoping
     - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5_
 
-  - [ ] 2.6 CompositionChecker
+  - [x] 2.6 CompositionChecker
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Lead**: Lina
@@ -202,7 +203,7 @@ The work is organized into 4 primary tasks, executed sequentially. Task 1 (clean
     - Unit tests: static allow, static prohibit, conditional override, self-nesting, unknown component
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
 
-  - [ ] 2.7 QueryEngine and MCP tools
+  - [x] 2.7 QueryEngine and MCP tools
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Lead**: Lina | **Review**: Thurgood (test coverage)
@@ -214,7 +215,7 @@ The work is organized into 4 primary tasks, executed sequentially. Task 1 (clean
     - Unit tests for query logic; integration test for MCP tool round-trip
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6_
 
-  - [ ] 2.8 FileWatcher integration
+  - [x] 2.8 FileWatcher integration
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Lead**: Lina
@@ -223,6 +224,15 @@ The work is organized into 4 primary tasks, executed sequentially. Task 1 (clean
     - Debounce rapid changes (same pattern as docs MCP FileWatcher)
     - Integration test: modify source file, verify re-index and subsequent query reflects change
     - _Requirements: 1.2_
+
+  - [x] 2.9 QueryEngine refinements (audit findings)
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Lead**: Lina | **Review**: Thurgood (verify fixes match findings)
+    - Fix `handleFind` to combine filters: when multiple parameters are passed (category + platform, concept + purpose, etc.), intersect results instead of early-returning on the first filter. _Current behavior: only first filter applied, rest ignored._
+    - Add basic relevance ordering to `searchByPurpose()`: purpose match ranked above description-only match, alphabetical within each tier. _Current behavior: flat substring match in Map iteration order._
+    - Update QueryEngine tests: multi-filter combination test, purpose ranking order test
+    - _Requirements: 3.1, 3.2, 3.3, 3.4_
 
 - [ ] 3. Semantic Annotations
 
