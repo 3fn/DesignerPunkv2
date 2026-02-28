@@ -328,7 +328,7 @@ Uses `radiusCircle` semantic token (50%) instead of hardcoded values.
 - Box-shadow technique for secondary border shift prevention
 
 ### iOS
-- Scale animation on press (0.97 scale)
+- Scale animation on press (scale096 = 0.96)
 - `.clipShape(Circle())` for circular shape
 - `.accessibilityLabel()` for screen reader support
 

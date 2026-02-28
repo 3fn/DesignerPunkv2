@@ -229,7 +229,7 @@
  * Component token mapping: human.background → color.identity.human
  * 
  * @see Requirements: 4.1 - Human type uses color.identity.human token
- * @see src/components/core/Avatar/avatar.tokens.ts for component token mapping
+ * @see src/components/core/Avatar-Base/avatar.tokens.ts for component token mapping
  */
 .avatar--human {
   background-color: var(--color-identity-human);
@@ -280,7 +280,7 @@
  * Component token mapping: default.border → color.structure.border
  * 
  * @see Requirements: 7.1, 7.2 - xs-xl border styles
- * @see src/components/core/Avatar/avatar.tokens.ts for component token mapping
+ * @see src/components/core/Avatar-Base/avatar.tokens.ts for component token mapping
  */
 .avatar {
   border-width: var(--border-default);
@@ -315,9 +315,7 @@
  * by increasing border width from borderDefault to borderEmphasis.
  * 
  * Uses motion.focusTransition semantic token (150ms, standard easing) for
- * fast, responsive transition. This semantic token is appropriate for
- * interactive state transitions and matches the design requirement for
- * motion.duration.fast.
+ * fast, responsive interactive state transitions.
  * 
  * @see Requirements: 8.1, 8.2, 8.3, 8.4 - Interactive hover state
  */
@@ -405,7 +403,7 @@
  * Component token mapping: human.icon → color.contrast.onDark
  * 
  * @see Requirements: 6.1 - Human type icon uses color.contrast.onDark
- * @see src/components/core/Avatar/avatar.tokens.ts for component token mapping
+ * @see src/components/core/Avatar-Base/avatar.tokens.ts for component token mapping
  */
 .avatar__icon--human {
   color: var(--color-contrast-on-dark);
@@ -421,7 +419,7 @@
  * Component token mapping: agent.icon → color.contrast.onDark
  * 
  * @see Requirements: 6.2 - Agent type icon uses color.contrast.onDark
- * @see src/components/core/Avatar/avatar.tokens.ts for component token mapping
+ * @see src/components/core/Avatar-Base/avatar.tokens.ts for component token mapping
  */
 .avatar__icon--agent {
   color: var(--color-contrast-on-dark);

@@ -262,10 +262,10 @@ struct ButtonIcon: View {
             Circle()
                 .stroke(borderColor, lineWidth: borderWidth)
         )
-        // Platform-specific press feedback: scale transform (0.97)
+        // Platform-specific press feedback: scale transform using scale096 token
         // Uses motionButtonPress semantic token (duration150 + easingAccelerate)
-        // @see Requirement 8.4, 12.1, 12.2
-        .scaleEffect(isPressed ? 0.97 : 1.0)
+        // @see ScaleTokens.ts — scale096: Button press feedback (0.96)
+        .scaleEffect(isPressed ? DesignTokens.scale096 : DesignTokens.scale100)
         .animation(motionButtonPress, value: isPressed)
         // Focus buffer margin on all sides
         .padding(focusBuffer)

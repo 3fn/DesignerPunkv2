@@ -99,6 +99,26 @@ function loadComponentSchema(componentName: string): ComponentSchema | null {
 }
 
 /**
+ * Load behavioral contracts from contracts.yaml (sole source of truth per spec 063)
+ */
+function loadComponentContracts(componentName: string): Record<string, BehavioralContract> | null {
+  const contractsPath = path.join(COMPONENTS_DIR, componentName, 'contracts.yaml');
+  
+  if (!fs.existsSync(contractsPath)) {
+    return null;
+  }
+  
+  try {
+    const content = fs.readFileSync(contractsPath, 'utf-8');
+    const parsed = yaml.load(content) as Record<string, any>;
+    return (parsed?.contracts as Record<string, BehavioralContract>) || null;
+  } catch (error) {
+    console.log(`Warning: Could not parse contracts for ${componentName}: ${(error as Error).message}`);
+    return null;
+  }
+}
+
+/**
  * Check if a platform implementation file exists
  */
 function checkPlatformImplementation(
@@ -188,7 +208,8 @@ describe('Behavioral Contract Validation Suite', () => {
     });
 
     it('all schemas should have required fields', () => {
-      const requiredFields = ['name', 'type', 'family', 'behaviors', 'contracts', 'platforms'];
+      // Per spec 063: contracts live in contracts.yaml, not in schema
+      const requiredFields = ['name', 'type', 'family', 'behaviors', 'platforms'];
       
       for (const component of COMPONENTS) {
         const schema = loadComponentSchema(component);
@@ -212,11 +233,14 @@ describe('Behavioral Contract Validation Suite', () => {
 
     it('all schemas should have at least one behavioral contract', () => {
       for (const component of COMPONENTS) {
-        const schema = loadComponentSchema(component);
+        const contracts = loadComponentContracts(component);
         
-        if (!schema) continue;
+        if (!contracts) {
+          console.log(`${component}: No contracts.yaml found`);
+          continue;
+        }
         
-        const contractCount = Object.keys(schema.contracts || {}).length;
+        const contractCount = Object.keys(contracts).length;
         
         if (contractCount === 0) {
           console.log(`${component}: No behavioral contracts defined`);
@@ -248,11 +272,11 @@ describe('Behavioral Contract Validation Suite', () => {
 
     it('all contracts should specify platforms', () => {
       for (const component of COMPONENTS) {
-        const schema = loadComponentSchema(component);
+        const contracts = loadComponentContracts(component);
         
-        if (!schema) continue;
+        if (!contracts) continue;
         
-        for (const [contractName, contract] of Object.entries(schema.contracts || {})) {
+        for (const [contractName, contract] of Object.entries(contracts)) {
           const hasPlatforms = contract.platforms && contract.platforms.length > 0;
           
           if (!hasPlatforms) {
@@ -270,11 +294,11 @@ describe('Behavioral Contract Validation Suite', () => {
       const results: ContractValidationResult[] = [];
       
       for (const component of COMPONENTS) {
-        const schema = loadComponentSchema(component);
+        const contracts = loadComponentContracts(component);
         
-        if (!schema) continue;
+        if (!contracts) continue;
         
-        for (const [contractName, contract] of Object.entries(schema.contracts || {})) {
+        for (const [contractName, contract] of Object.entries(contracts)) {
           const result = validateContract(component, contractName, contract);
           results.push(result);
           
@@ -308,11 +332,11 @@ describe('Behavioral Contract Validation Suite', () => {
       ];
       
       for (const component of COMPONENTS) {
-        const schema = loadComponentSchema(component);
+        const contracts = loadComponentContracts(component);
         
-        if (!schema) continue;
+        if (!contracts) continue;
         
-        for (const [contractName, contract] of Object.entries(schema.contracts || {})) {
+        for (const [contractName, contract] of Object.entries(contracts)) {
           if (accessibilityContracts.includes(contractName)) {
             const hasWcag = contract.wcag && contract.wcag.length > 0;
             
@@ -337,11 +361,11 @@ describe('Behavioral Contract Validation Suite', () => {
       const singleRefPattern = /^\d+\.\d+(\.\d+)?\s+.+$/;
       
       for (const component of COMPONENTS) {
-        const schema = loadComponentSchema(component);
+        const contracts = loadComponentContracts(component);
         
-        if (!schema) continue;
+        if (!contracts) continue;
         
-        for (const [contractName, contract] of Object.entries(schema.contracts || {})) {
+        for (const [contractName, contract] of Object.entries(contracts)) {
           if (contract.wcag && contract.wcag !== 'N/A') {
             // Try to validate the WCAG reference
             // It could be a single reference or multiple separated by comma + space + number
@@ -378,17 +402,19 @@ describe('Behavioral Contract Validation Suite', () => {
       let contractsWithoutValidation = 0;
       
       for (const component of COMPONENTS) {
-        const schema = loadComponentSchema(component);
+        const contracts = loadComponentContracts(component);
         
-        if (!schema) continue;
+        if (!contracts) continue;
         
-        for (const [contractName, contract] of Object.entries(schema.contracts || {})) {
+        for (const [contractName, contract] of Object.entries(contracts)) {
           // Inherited contracts may not have validation defined locally
           if (contract.inherited) {
             continue;
           }
           
-          const hasValidation = contract.validation && contract.validation.trim().length > 0;
+          // In canonical format (spec 063), validation is a list
+          const hasValidation = contract.validation &&
+            (Array.isArray(contract.validation) ? contract.validation.length > 0 : String(contract.validation).trim().length > 0);
           
           if (!hasValidation) {
             console.log(`${component}.${contractName}: Missing validation criteria`);
@@ -408,20 +434,23 @@ describe('Behavioral Contract Validation Suite', () => {
     });
 
     it('validation criteria should include testable assertions', () => {
-      // Validation criteria should contain actionable items (typically starting with -)
+      // In canonical format (spec 063), validation is a list of assertions
       for (const component of COMPONENTS) {
-        const schema = loadComponentSchema(component);
+        const contracts = loadComponentContracts(component);
         
-        if (!schema) continue;
+        if (!contracts) continue;
         
-        for (const [contractName, contract] of Object.entries(schema.contracts || {})) {
+        for (const [contractName, contract] of Object.entries(contracts)) {
           // Skip inherited contracts
           if (contract.inherited) {
             continue;
           }
           
           if (contract.validation) {
-            const hasAssertions = contract.validation.includes('-');
+            // Canonical format uses a list; legacy format uses multiline string with dashes
+            const hasAssertions = Array.isArray(contract.validation)
+              ? contract.validation.length > 0
+              : String(contract.validation).includes('-');
             
             if (!hasAssertions) {
               console.log(`${component}.${contractName}: Validation lacks testable assertions`);

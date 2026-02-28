@@ -109,7 +109,7 @@ enum ChipFilterTokens {
     // MARK: - Animation Tokens
     
     /// Animation duration for state transitions
-    /// References: motion.duration.fast (150ms)
+    /// References: motion.selectionTransition (150ms)
     static let animationDuration: Double = DesignTokens.duration150  // 0.15s
 }
 

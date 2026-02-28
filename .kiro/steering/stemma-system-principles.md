@@ -127,8 +127,6 @@ Behavioral contracts work uniformly across web, iOS, and Android:
 | **Loading** | Progress indication | Loading-Base | Placeholder |
 | **Navigation** | Wayfinding | Nav-Base | Placeholder |
 
-> **Note on Avatar naming**: Avatar does not follow the `[Family]-Base` naming convention because it is a standalone component with no planned semantic variants. A rename to `Avatar-Base` is planned as a follow-up task.
-
 ### Family Inheritance Structure
 
 Each family follows this inheritance pattern:

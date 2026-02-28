@@ -1,5 +1,5 @@
 version: "1.0.0"
-component: Avatar
+component: Avatar-Base
 family: Avatar
 
 contracts:
@@ -113,8 +113,9 @@ contracts:
     description: Visual feedback on hover when interactive=true
     behavior: |
       When interactive prop is true, Avatar shows hover visual feedback
-      on desktop platforms. Web uses CSS transition with motion.duration.fast
-      token. iOS uses onHover modifier. Android uses hoverable modifier.
+      on desktop platforms. Web uses CSS transition with motion.focusTransition
+      semantic token (duration150 + easingStandard). iOS uses onHover modifier.
+      Android uses hoverable modifier.
       No hover feedback when interactive is false (default).
     wcag: "1.4.13 Content on Hover or Focus"
     platforms: [web, ios, android]

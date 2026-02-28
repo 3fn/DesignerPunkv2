@@ -133,7 +133,7 @@ private object ChipInputTokens {
     // MARK: - Animation Tokens
     
     /** Animation duration for state transitions
-     * References: motion.duration.fast (150ms)
+     * References: motion.selectionTransition (150ms)
      */
     val animationDuration: Int = DesignTokens.Duration.Duration150  // 150ms
 }

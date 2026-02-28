@@ -63,7 +63,8 @@ contracts:
       Default: surface background, border color, default text.
       Hover (web): blend.hoverDarker on background, primary border.
       Pressed: blend.pressedDarker on background, primary border.
-      Transitions use motion.duration.fast.
+      Transitions use motion.selectionTransition semantic token
+      (duration250 + easingStandard).
     wcag: "1.4.13 Content on Hover or Focus"
     platforms: [web, ios, android]
     validation:

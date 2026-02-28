@@ -337,8 +337,6 @@ Components follow `[Family]-[Type]-[Variant]`:
 - `Badge-Count-Base` (type-primitive)
 - `Badge-Count-Notification` (semantic of type-primitive)
 
-Exception: `Avatar` does not follow this convention. Rename to `Avatar-Base` is planned.
-
 ---
 
 ## Related Documentation

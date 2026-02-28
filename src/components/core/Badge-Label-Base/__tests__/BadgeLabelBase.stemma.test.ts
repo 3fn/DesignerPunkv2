@@ -439,21 +439,21 @@ describe('Badge-Label-Base Stemma Validators', () => {
       expect(fileExists(CONTRACTS_PATH)).toBe(true);
     });
 
-    it('should define required behavioral contracts in schema', () => {
-      if (!fileExists(SCHEMA_PATH)) {
-        console.warn('Schema file not found, skipping test');
+    it('should define required behavioral contracts in contracts.yaml', () => {
+      if (!fileExists(CONTRACTS_PATH)) {
+        console.warn('Contracts file not found, skipping test');
         return;
       }
 
-      const schemaContent = readFileContent(SCHEMA_PATH);
+      const contractsContent = readFileContent(CONTRACTS_PATH);
 
-      // Check for required contracts
-      expect(schemaContent).toContain('displays_label');
-      expect(schemaContent).toContain('non_interactive');
-      expect(schemaContent).toContain('supports_icon');
-      expect(schemaContent).toContain('supports_truncation');
-      expect(schemaContent).toContain('color_contrast');
-      expect(schemaContent).toContain('text_scaling');
+      // Check for required contracts (canonical names per 063 uniform contract system)
+      expect(contractsContent).toContain('content_displays_label');
+      expect(contractsContent).toContain('accessibility_non_interactive');
+      expect(contractsContent).toContain('content_supports_icon');
+      expect(contractsContent).toContain('content_truncation');
+      expect(contractsContent).toContain('accessibility_color_contrast');
+      expect(contractsContent).toContain('accessibility_text_scaling');
     });
 
     it('should define WCAG references in contracts', () => {

@@ -30,7 +30,7 @@ import { ButtonVerticalListItem } from './components/core/Button-VerticalList-It
 // Button-VerticalList-Set - Stemma System naming (vertical list button set container)
 import { ButtonVerticalListSet } from './components/core/Button-VerticalList-Set/platforms/web/ButtonVerticalListSet.web';
 // Avatar-Base - Stemma System naming (visual representation for users and AI agents)
-import { AvatarBaseElement } from './components/core/Avatar/platforms/web/Avatar.web';
+import { AvatarBaseElement } from './components/core/Avatar-Base/platforms/web/Avatar.web';
 // Badge-Label-Base - Stemma System naming (label badge for categorization/status)
 import { BadgeLabelBase } from './components/core/Badge-Label-Base/platforms/web/BadgeLabelBase.web';
 // Badge-Count-Base - Stemma System naming (count badge for numeric values)

@@ -150,15 +150,19 @@ Contrast tokens provide colors for content (text, icons) on colored backgrounds.
 
 **Purpose**: Define visual organization and layering of UI elements
 
-Structure tokens provide foundational colors for UI structure: canvas (base layer), surface (elevated layer), and border (boundaries).
+Structure tokens provide foundational colors for UI structure: canvas (base layer), surface (elevated layers), and border (boundaries).
 
 | Token Name | Primitive | Use Case |
 |------------|-----------|----------|
 | `color.structure.canvas` | white100 | Base canvas - page backgrounds, foundational layer |
-| `color.structure.surface` | white200 | Elevated surface - cards, containers, visual hierarchy above canvas |
+| `color.structure.surface` | white200 | Elevated surface - cards, containers. Alias for `color.structure.surface.primary` |
+| `color.structure.surface.primary` | white200 | Primary surface - default elevation level above canvas |
+| `color.structure.surface.secondary` | white300 | Secondary surface - nested cards, lower emphasis |
+| `color.structure.surface.tertiary` | white400 | Tertiary surface - deeply nested cards, lowest emphasis |
 | `color.structure.border` | gray100 | Standard borders - UI element borders, dividers |
+| `color.structure.border.subtle` | gray100 @ opacity600 | Semi-transparent border (48% opacity) - soft visual separation |
 
-**Future Expansion**: Surface layering with `.100`, `.200` suffixes when multiple elevation levels are needed.
+**Surface Hierarchy**: Three elevation levels (`primary`, `secondary`, `tertiary`) provide progressive visual distinction for nested containers. `color.structure.surface` is retained as an alias for `color.structure.surface.primary` for backward compatibility.
 
 ---
 

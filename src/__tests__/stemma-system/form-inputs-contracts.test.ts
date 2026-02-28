@@ -162,6 +162,26 @@ function loadSchema(componentName: string): ComponentSchema | null {
 }
 
 /**
+ * Load component contracts from contracts.yaml (sole source of truth per spec 063)
+ */
+function loadContracts(componentName: string): Record<string, any> | null {
+  const contractsPath = path.join(COMPONENTS_DIR, componentName, 'contracts.yaml');
+  
+  if (!fs.existsSync(contractsPath)) {
+    return null;
+  }
+  
+  try {
+    const content = fs.readFileSync(contractsPath, 'utf-8');
+    const parsed = yaml.load(content) as Record<string, any>;
+    return parsed?.contracts || null;
+  } catch (error) {
+    console.log(`Warning: Could not parse contracts for ${componentName}: ${(error as Error).message}`);
+    return null;
+  }
+}
+
+/**
  * Load platform implementation
  */
 function loadPlatformImpl(componentName: string, platform: string): string | null {
@@ -395,17 +415,15 @@ describe('Form Inputs Family Behavioral Contracts', () => {
     for (const component of semanticComponents) {
       describe(`${component} inherits base contracts`, () => {
         it('should have schema with inherited contracts', () => {
-          const schema = loadSchema(component);
+          const contracts = loadContracts(component);
           
-          // Schema may fail to parse due to YAML syntax - that's okay for this test
-          if (!schema) {
-            console.log(`${component}: Schema could not be parsed (YAML syntax issue)`);
-            // Skip this test if schema can't be parsed
+          if (!contracts) {
+            console.log(`${component}: Contracts file could not be parsed`);
             return;
           }
           
-          // Semantic components should have contracts
-          const contractCount = Object.keys(schema.contracts || {}).length;
+          // Semantic components should have contracts in contracts.yaml (spec 063)
+          const contractCount = Object.keys(contracts).length;
           console.log(`${component}: ${contractCount} contracts defined`);
           
           expect(contractCount).toBeGreaterThan(0);

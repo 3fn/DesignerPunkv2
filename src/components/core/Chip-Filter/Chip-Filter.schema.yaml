@@ -96,7 +96,7 @@ tokens:
     - space.grouped.tight
     - borderDefault
     - radius.full
-    - motion.duration.fast
+    - motion.selectionTransition
     - blend.hoverDarker
     - blend.pressedDarker
     - tapAreaRecommended

@@ -26,7 +26,8 @@ contracts:
     behavior: |
       Selected: color.feedback.select.background/border/text tokens.
       Unselected: default Chip-Base styling.
-      Transitions use motion.duration.fast.
+      Transitions use motion.selectionTransition semantic token
+      (duration250 + easingStandard).
     wcag: "1.4.1 Use of Color"
     platforms: [web, ios, android]
     validation:

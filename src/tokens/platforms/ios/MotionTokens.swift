@@ -174,7 +174,7 @@ public let motionFocusTransition = motionEasingStandard.speed(1.0 / motionDurati
  * ```swift
  * @Environment(\.accessibilityReduceMotion) var reduceMotion
  * 
- * .scaleEffect(isPressed ? 0.97 : 1.0)
+ * .scaleEffect(isPressed ? DesignTokens.scale096 : DesignTokens.scale100)
  * .animation(reduceMotion ? .none : motionButtonPress, value: isPressed)
  * ```
  */

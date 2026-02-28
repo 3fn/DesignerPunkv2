@@ -106,7 +106,7 @@ object AvatarTokens {
      * Background color for human avatars
      * References: color.identity.human → orange300
      * @see Requirements: 4.1 - Human type background color
-     * @see src/components/core/Avatar/avatar.tokens.ts for component token mapping
+     * @see src/components/core/Avatar-Base/avatar.tokens.ts for component token mapping
      */
     val colorHuman: Color = Color(DesignTokens.color_identity_human)
     
@@ -114,7 +114,7 @@ object AvatarTokens {
      * Background color for agent avatars
      * References: color.identity.agent → teal200
      * @see Requirements: 4.2 - Agent type background color
-     * @see src/components/core/Avatar/avatar.tokens.ts for component token mapping
+     * @see src/components/core/Avatar-Base/avatar.tokens.ts for component token mapping
      */
     val colorAgent: Color = Color(DesignTokens.color_identity_agent)
     
@@ -122,7 +122,7 @@ object AvatarTokens {
      * Icon color on human avatar background
      * References: color.contrast.onDark → white100
      * @see Requirements: 6.1 - Human type icon contrast color
-     * @see src/components/core/Avatar/avatar.tokens.ts for component token mapping
+     * @see src/components/core/Avatar-Base/avatar.tokens.ts for component token mapping
      */
     val contrastOnHuman: Color = Color(DesignTokens.color_contrast_on_dark)
     
@@ -130,7 +130,7 @@ object AvatarTokens {
      * Icon color on agent avatar background
      * References: color.contrast.onDark → white100
      * @see Requirements: 6.2 - Agent type icon contrast color
-     * @see src/components/core/Avatar/avatar.tokens.ts for component token mapping
+     * @see src/components/core/Avatar-Base/avatar.tokens.ts for component token mapping
      */
     val contrastOnAgent: Color = Color(DesignTokens.color_contrast_on_dark)
     
@@ -138,7 +138,7 @@ object AvatarTokens {
      * Border color for avatars (xs through xl sizes)
      * References: color.structure.border → gray100
      * @see Requirements: 7.2 - Border color for xs-xl sizes
-     * @see src/components/core/Avatar/avatar.tokens.ts for component token mapping
+     * @see src/components/core/Avatar-Base/avatar.tokens.ts for component token mapping
      */
     val borderColor: Color = Color(DesignTokens.color_structure_border)
     
@@ -595,4 +595,4 @@ private fun AvatarImageContent(
 // MARK: - Preview
 // 
 // Comprehensive previews are available in AvatarPreview.kt
-// @see src/components/core/Avatar/platforms/android/AvatarPreview.kt
+// @see src/components/core/Avatar-Base/platforms/android/AvatarPreview.kt

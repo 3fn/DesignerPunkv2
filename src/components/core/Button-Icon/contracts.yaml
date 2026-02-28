@@ -29,7 +29,7 @@ contracts:
       Component responds to click, tap, Enter key, and Space key.
       Press triggers the onPress callback. Platform-specific feedback:
       - Web: color transition
-      - iOS: scale animation (0.97)
+      - iOS: scale animation (scale096 = 0.96)
       - Android: Material ripple effect
     wcag: "2.1.1 Keyboard"
     platforms: [web, ios, android]

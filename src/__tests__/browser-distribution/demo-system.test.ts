@@ -31,7 +31,7 @@ const DIST_BROWSER_DIR = path.join(process.cwd(), 'dist', 'browser');
  * Each entry maps component family directories to their expected demo file.
  */
 const COMPONENT_FAMILY_DEMO_MAP: Record<string, string> = {
-  'Avatar': 'avatar-demo.html',
+  'Avatar-Base': 'avatar-demo.html',
   'Badge-Label-Base,Badge-Count-Base,Badge-Count-Notification': 'badge-demo.html',
   'Button-CTA': 'button-cta-demo.html',
   'Button-Icon': 'button-icon-demo.html',

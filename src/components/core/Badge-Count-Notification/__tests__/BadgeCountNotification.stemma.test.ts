@@ -365,18 +365,18 @@ describe('Badge-Count-Notification Stemma Validators', () => {
       expect(fileExists(CONTRACTS_PATH)).toBe(true);
     });
 
-    it('should define notification-specific behavioral contracts in schema', () => {
-      if (!fileExists(SCHEMA_PATH)) {
-        console.warn('Schema file not found, skipping test');
+    it('should define notification-specific behavioral contracts in contracts.yaml', () => {
+      if (!fileExists(CONTRACTS_PATH)) {
+        console.warn('Contracts file not found, skipping test');
         return;
       }
 
-      const schemaContent = readFileContent(SCHEMA_PATH);
+      const contractsContent = readFileContent(CONTRACTS_PATH);
 
-      // Check for notification-specific contracts
-      expect(schemaContent).toContain('notification_semantics');
-      expect(schemaContent).toContain('announces_count_changes');
-      expect(schemaContent).toContain('pluralized_announcements');
+      // Check for notification-specific contracts (canonical names per 063 uniform contract system)
+      expect(contractsContent).toContain('visual_notification_color');
+      expect(contractsContent).toContain('accessibility_announces_changes');
+      expect(contractsContent).toContain('accessibility_pluralized_announcements');
     });
 
     it('should define inheritance from Badge-Count-Base in schema', () => {

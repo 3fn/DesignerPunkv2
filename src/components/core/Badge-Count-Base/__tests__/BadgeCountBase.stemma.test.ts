@@ -355,22 +355,22 @@ describe('Badge-Count-Base Stemma Validators', () => {
       expect(fileExists(CONTRACTS_PATH)).toBe(true);
     });
 
-    it('should define required behavioral contracts in schema', () => {
-      if (!fileExists(SCHEMA_PATH)) {
-        console.warn('Schema file not found, skipping test');
+    it('should define required behavioral contracts in contracts.yaml', () => {
+      if (!fileExists(CONTRACTS_PATH)) {
+        console.warn('Contracts file not found, skipping test');
         return;
       }
 
-      const schemaContent = readFileContent(SCHEMA_PATH);
+      const contractsContent = readFileContent(CONTRACTS_PATH);
 
-      // Check for required contracts
-      expect(schemaContent).toContain('displays_count');
-      expect(schemaContent).toContain('truncates_at_max');
-      expect(schemaContent).toContain('circular_single_digit');
-      expect(schemaContent).toContain('pill_multi_digit');
-      expect(schemaContent).toContain('non_interactive');
-      expect(schemaContent).toContain('color_contrast');
-      expect(schemaContent).toContain('text_scaling');
+      // Check for required contracts (canonical names per 063 uniform contract system)
+      expect(contractsContent).toContain('content_displays_count');
+      expect(contractsContent).toContain('content_truncates_at_max');
+      expect(contractsContent).toContain('visual_circular_shape');
+      expect(contractsContent).toContain('visual_pill_shape');
+      expect(contractsContent).toContain('accessibility_non_interactive');
+      expect(contractsContent).toContain('accessibility_color_contrast');
+      expect(contractsContent).toContain('accessibility_text_scaling');
     });
 
     it('should define WCAG references in contracts', () => {

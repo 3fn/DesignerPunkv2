@@ -190,7 +190,7 @@ Build the release tool incrementally: scaffold → extract salvageable code → 
     - Verify version recommendation logic with classified changes
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
 
-- [ ] 4. CLI and Hook Integration
+- [x] 4. CLI and Hook Integration
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -239,7 +239,7 @@ Build the release tool incrementally: scaffold → extract salvageable code → 
     - Verify error handling for API failures
     - _Requirements: 6.1, 6.2, 6.3, 6.4_
 
-- [ ] 5. Cleanup and Removal
+- [x] 5. Cleanup and Removal
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -261,7 +261,7 @@ Build the release tool incrementally: scaffold → extract salvageable code → 
   - Mark complete: Use `taskStatus` tool to update task status
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 5 Complete: Cleanup and Removal"`
 
-  - [ ] 5.1 Remove accumulated waste files
+  - [x] 5.1 Remove accumulated waste files
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     - Delete `.kiro/release-state/` (82MB, 20,880 files)
@@ -270,7 +270,7 @@ Build the release tool incrementally: scaffold → extract salvageable code → 
     - Verify disk space reclaimed
     - _Requirements: 9.1_
 
-  - [ ] 5.2 Remove old source code
+  - [x] 5.2 Remove old source code
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Remove `src/release/` (46 source + 45 test files)
@@ -279,7 +279,7 @@ Build the release tool incrementally: scaffold → extract salvageable code → 
     - Run `npm test` to verify no broken imports or test discovery issues
     - _Requirements: 9.1_
 
-  - [ ] 5.3 Update references and documentation
+  - [x] 5.3 Update references and documentation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     - Update `.kiro/steering/Release Management System.md` to reflect new architecture

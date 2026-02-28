@@ -506,7 +506,7 @@ describe('Semantic Color Tokens - Palette Update', () => {
       // Print: 1 token (default)
       // Background: 1 token (primary.subtle)
       // Glow: 5 tokens (neonPurple, neonCyan, neonYellow, neonGreen, neonPink)
-      // Avatar component: MIGRATED to src/components/core/Avatar/avatar.tokens.ts (Spec 058)
+      // Avatar component: MIGRATED to src/components/core/Avatar-Base/avatar.tokens.ts (Spec 058)
       // Badge component: MIGRATED to src/components/core/Badge-Count-Notification/tokens.ts (Spec 058)
       // Notification semantic tokens: 2 tokens added (Spec 046 Task 8.2)
       // Progress semantic tokens: 10 tokens added (Spec 048 Task 1.1)
@@ -553,9 +553,9 @@ describe('Semantic Color Tokens - Palette Update', () => {
       expect(techDataTokens.length).toBe(2);
       expect(textTokens.length).toBe(3); // color.text.default, color.text.muted, color.text.subtle
       expect(contrastTokens.length).toBe(2); // color.contrast.onLight, color.contrast.onDark
-      expect(structureTokens.length).toBe(4); // canvas, surface, border, border.subtle
+      expect(structureTokens.length).toBe(7); // canvas, surface, surface.primary, surface.secondary, surface.tertiary, border, border.subtle
       expect(glowTokens.length).toBe(5);
-      // Avatar tokens MIGRATED to src/components/core/Avatar/avatar.tokens.ts (Spec 058)
+      // Avatar tokens MIGRATED to src/components/core/Avatar-Base/avatar.tokens.ts (Spec 058)
       expect(avatarTokens.length).toBe(0); // Migrated to component directory
       // Badge tokens MIGRATED to src/components/core/Badge-Count-Notification/tokens.ts (Spec 058)
       expect(badgeTokens.length).toBe(0); // Migrated to component directory
@@ -1243,7 +1243,7 @@ describe('Semantic Color Tokens - Palette Update', () => {
   });
 
   // Avatar Color Tokens - MIGRATED (Spec 058: Component Token Architecture Cleanup)
-  // Avatar color tokens have been migrated to src/components/core/Avatar/avatar.tokens.ts
+  // Avatar color tokens have been migrated to src/components/core/Avatar-Base/avatar.tokens.ts
   // per Rosetta System architecture which mandates component tokens live at src/components/[ComponentName]/tokens.ts
   // 
   // These tests now verify:
@@ -1251,7 +1251,7 @@ describe('Semantic Color Tokens - Palette Update', () => {
   // 2. Backward compatibility re-exports work correctly
   // 3. Deprecation warnings are in place
   //
-  // For Avatar token functionality tests, see: src/components/core/Avatar/__tests__/avatar.tokens.test.ts
+  // For Avatar token functionality tests, see: src/components/core/Avatar-Base/__tests__/avatar.tokens.test.ts
   describe('Avatar Color Tokens - Migration Verification (Spec 058)', () => {
     describe('Token Migration Complete', () => {
       it('should NOT have color.avatar.human.background in colorTokens (migrated)', () => {

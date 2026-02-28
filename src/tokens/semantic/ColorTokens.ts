@@ -22,7 +22,7 @@
  * - glow = vibrant neon colors for emphasis effects
  * 
  * MIGRATED TO COMPONENT DIRECTORIES (Spec 058):
- * - avatar = MIGRATED to src/components/core/Avatar/avatar.tokens.ts
+ * - avatar = MIGRATED to src/components/core/Avatar-Base/avatar.tokens.ts
  * - badge = MIGRATED to src/components/core/Badge-Count-Notification/tokens.ts
  *   (Note: Badge component tokens reference the semantic color.feedback.notification.* tokens)
  * 
@@ -584,7 +584,7 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
    * 
    * Per Rosetta System architecture, component tokens live at src/components/[ComponentName]/tokens.ts.
    * 
-   * Avatar tokens migrated to src/components/core/Avatar/avatar.tokens.ts:
+   * Avatar tokens migrated to src/components/core/Avatar-Base/avatar.tokens.ts:
    * - color.avatar.human.background -> AvatarColorTokens['human.background']
    * - color.avatar.agent.background -> AvatarColorTokens['agent.background']
    * - color.avatar.human.icon -> AvatarColorTokens['human.icon']
@@ -596,7 +596,7 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
    * - color.badge.notification.text -> BadgeNotificationColorTokens['notification.text']
    * 
    * Import from the canonical locations:
-   * import { AvatarColorTokens } from 'src/components/core/Avatar/avatar.tokens';
+   * import { AvatarColorTokens } from 'src/components/core/Avatar-Base/avatar.tokens';
    * import { BadgeNotificationColorTokens } from 'src/components/core/Badge-Count-Notification/tokens';
    * 
    * @see .kiro/specs/058-component-token-architecture-cleanup for migration details
@@ -607,7 +607,7 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
  * Array of all color semantic token names for iteration
  * 
  * Token count updated for Spec 058 component token architecture cleanup:
- * - Removed 5 Avatar component tokens (migrated to src/components/core/Avatar/avatar.tokens.ts):
+ * - Removed 5 Avatar component tokens (migrated to src/components/core/Avatar-Base/avatar.tokens.ts):
  *   - color.avatar.human.background
  *   - color.avatar.agent.background
  *   - color.avatar.human.icon
@@ -690,7 +690,7 @@ export function validateColorTokenCount(): boolean {
  * Re-export Avatar color tokens for backward compatibility
  * 
  * DEPRECATED: Avatar color tokens have been migrated to their canonical location
- * at src/components/core/Avatar/avatar.tokens.ts per Rosetta System architecture.
+ * at src/components/core/Avatar-Base/avatar.tokens.ts per Rosetta System architecture.
  * 
  * Update your imports to use the canonical location:
  * 
@@ -698,12 +698,12 @@ export function validateColorTokenCount(): boolean {
  * import { AvatarColorTokens } from 'src/tokens/semantic/ColorTokens';
  * 
  * New (canonical):
- * import { AvatarColorTokens } from 'src/components/core/Avatar/avatar.tokens';
+ * import { AvatarColorTokens } from 'src/components/core/Avatar-Base/avatar.tokens';
  * 
- * @deprecated Use import from 'src/components/core/Avatar/avatar.tokens' instead
+ * @deprecated Use import from 'src/components/core/Avatar-Base/avatar.tokens' instead
  * @see .kiro/specs/058-component-token-architecture-cleanup for migration details
  */
-export { AvatarColorTokens } from '../../components/core/Avatar/avatar.tokens';
+export { AvatarColorTokens } from '../../components/core/Avatar-Base/avatar.tokens';
 
 /**
  * Re-export Badge notification color tokens for backward compatibility
@@ -731,12 +731,12 @@ let badgeDeprecationWarningLogged = false;
 /**
  * Get Avatar color token with deprecation warning
  * 
- * @deprecated Use getAvatarColorToken from 'src/components/core/Avatar/avatar.tokens' instead
+ * @deprecated Use getAvatarColorToken from 'src/components/core/Avatar-Base/avatar.tokens' instead
  */
 export function getAvatarColorTokenDeprecated(key: string): string | undefined {
   if (!avatarDeprecationWarningLogged) {
     console.warn(
-      '[DEPRECATED] Avatar color tokens have moved to src/components/core/Avatar/avatar.tokens.ts. ' +
+      '[DEPRECATED] Avatar color tokens have moved to src/components/core/Avatar-Base/avatar.tokens.ts. ' +
       'Update your imports to avoid future breaking changes. ' +
       'See .kiro/specs/058-component-token-architecture-cleanup for migration details.'
     );
@@ -744,7 +744,7 @@ export function getAvatarColorTokenDeprecated(key: string): string | undefined {
   }
   
   // Import dynamically to avoid circular dependency issues
-  const { AvatarColorTokens } = require('../../components/core/Avatar/avatar.tokens');
+  const { AvatarColorTokens } = require('../../components/core/Avatar-Base/avatar.tokens');
   return AvatarColorTokens[key as keyof typeof AvatarColorTokens];
 }
 

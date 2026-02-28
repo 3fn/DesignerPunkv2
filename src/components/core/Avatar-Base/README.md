@@ -283,7 +283,7 @@ Row(
 - Custom element: `<avatar-base>`
 - Hexagon uses SVG clipPath with Ana Tudor technique for rounded corners
 - External CSS file with token-based custom properties
-- Hover transitions use CSS `transition` with `motion.duration.fast` token
+- Hover transitions use CSS `transition` with `motion.focusTransition` token
 - Circle shape uses `border-radius: var(--radius-half)` (50%)
 
 ### iOS
