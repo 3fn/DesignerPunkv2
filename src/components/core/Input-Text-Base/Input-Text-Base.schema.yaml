@@ -160,7 +160,6 @@ tokens:
     - icon.size100
   blend:
     - blend.focusSaturate
-    - blend.disabledDesaturate
 
 # Supported platforms
 platforms:

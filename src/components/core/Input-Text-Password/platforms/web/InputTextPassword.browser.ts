@@ -80,7 +80,6 @@ class InputTextPassword extends HTMLElement {
       'value',
       'placeholder',
       'required',
-      'disabled',
       'read-only',
       'error-message',
       'helper-text',
@@ -133,7 +132,6 @@ class InputTextPassword extends HTMLElement {
     const value = this.getAttribute('value') || '';
     const placeholder = this.getAttribute('placeholder') || '';
     const required = this.hasAttribute('required');
-    const disabled = this.hasAttribute('disabled');
     const readOnly = this.hasAttribute('read-only');
     const propsErrorMessage = this.getAttribute('error-message');
     const helperText = this.getAttribute('helper-text');
@@ -201,11 +199,6 @@ class InputTextPassword extends HTMLElement {
           border-color: var(--color-success-strong);
         }
 
-        .input-container.disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-
         input {
           flex: 1;
           border: none;
@@ -267,7 +260,7 @@ class InputTextPassword extends HTMLElement {
           border-radius: 4px;
         }
 
-        .toggle-button:hover:not(:disabled) {
+        .toggle-button:hover {
           color: var(--color-text-default, #333);
           background-color: rgba(0, 0, 0, 0.05);
         }
@@ -275,11 +268,6 @@ class InputTextPassword extends HTMLElement {
         .toggle-button:focus {
           outline: var(--accessibility-focus-width, 2px) solid var(--accessibility-focus-color, #0066cc);
           outline-offset: var(--accessibility-focus-offset, 2px);
-        }
-
-        .toggle-button:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
         }
 
         .toggle-button svg {
@@ -313,14 +301,13 @@ class InputTextPassword extends HTMLElement {
         }
       </style>
 
-      <div class="input-container ${isFilled ? 'filled' : ''} ${hasError ? 'error' : ''} ${isSuccess ? 'success' : ''} ${disabled ? 'disabled' : ''}">
+      <div class="input-container ${isFilled ? 'filled' : ''} ${hasError ? 'error' : ''} ${isSuccess ? 'success' : ''}">
         <input
           type="${inputType}"
           autocomplete="${autocomplete}"
           value="${value}"
           placeholder="${placeholder}"
           ${required ? 'required' : ''}
-          ${disabled ? 'disabled' : ''}
           ${readOnly ? 'readonly' : ''}
           aria-label="${label}"
           ${hasError ? 'aria-invalid="true"' : ''}
@@ -333,7 +320,6 @@ class InputTextPassword extends HTMLElement {
             class="toggle-button" 
             aria-label="${this.isPasswordVisible ? 'Hide password' : 'Show password'}"
             aria-pressed="${this.isPasswordVisible}"
-            ${disabled ? 'disabled' : ''}
           >
             ${this.isPasswordVisible ? hideIcon : showIcon}
           </button>

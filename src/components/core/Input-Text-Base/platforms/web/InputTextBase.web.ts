@@ -14,7 +14,7 @@
  * - Position animation (translateY)
  * - Respects prefers-reduced-motion
  * - WCAG 2.1 AA compliant
- * - Uses theme-aware blend utilities for state colors (focus, disabled) instead of opacity workarounds
+ * - Uses theme-aware blend utilities for state colors (focus) instead of opacity workarounds
  * 
  * Behavioral Contracts:
  * - focusable: Can receive keyboard focus
@@ -22,7 +22,6 @@
  * - validates_on_blur: Validation triggers on blur
  * - error_state_display: Shows error message and styling
  * - success_state_display: Shows success styling
- * - disabled_state: Prevents interaction when disabled
  * - trailing_icon_display: Shows contextual trailing icons
  * - focus_ring: WCAG 2.4.7 focus visible indicator
  * - reduced_motion_support: Respects prefers-reduced-motion
@@ -58,7 +57,7 @@ import inputTextBaseStyles from './InputTextBase.web.css';
  * Input-Text-Base Web Component
  * 
  * Custom element implementing the float label pattern with animated transitions.
- * Uses theme-aware blend utilities for state colors (focus, disabled).
+ * Uses theme-aware blend utilities for state colors (focus).
  */
 export class InputTextBase extends HTMLElement {
   // Component state
@@ -79,7 +78,6 @@ export class InputTextBase extends HTMLElement {
   
   // Cached blend colors for state styling
   private _focusColor: string = '';
-  private _disabledColor: string = '';
   
   constructor() {
     super();
@@ -118,8 +116,7 @@ export class InputTextBase extends HTMLElement {
       'read-only',
       'required',
       'max-length',
-      'autocomplete',
-      'disabled'
+      'autocomplete'
     ];
   }
   
@@ -177,7 +174,6 @@ export class InputTextBase extends HTMLElement {
     
     // Calculate blend colors using theme-aware blend utilities
     this._focusColor = this._blendUtils.focusColor(primaryColor);
-    this._disabledColor = this._blendUtils.disabledColor(primaryColor);
   }
   
   /**
@@ -286,14 +282,11 @@ export class InputTextBase extends HTMLElement {
     // Generate blend color CSS custom properties
     const blendColorStyles = `
       --_itb-focus-color: ${this._focusColor};
-      --_itb-disabled-color: ${this._disabledColor};
     `;
-    
-    const isDisabled = this.hasAttribute('disabled');
     
     // Build HTML structure
     this.container.innerHTML = `
-      <div class="input-wrapper ${this.state.hasError ? 'error' : ''} ${this.state.isSuccess ? 'success' : ''} ${this.state.isFocused ? 'focused' : ''} ${this.state.isFilled ? 'filled' : ''} ${isDisabled ? 'disabled' : ''}" style="${blendColorStyles}">
+      <div class="input-wrapper ${this.state.hasError ? 'error' : ''} ${this.state.isSuccess ? 'success' : ''} ${this.state.isFocused ? 'focused' : ''} ${this.state.isFilled ? 'filled' : ''}" style="${blendColorStyles}">
         <label 
           for="${props.id}" 
           class="input-label ${labelPosition.isFloated ? 'floated' : ''}"
@@ -307,7 +300,6 @@ export class InputTextBase extends HTMLElement {
           value="${props.value}"
           placeholder="${labelPosition.isFloated && props.placeholder ? props.placeholder : ''}"
           ${props.readOnly ? 'readonly' : ''}
-          ${isDisabled ? 'disabled' : ''}
           ${props.required ? 'required' : ''}
           ${props.maxLength ? `maxlength="${props.maxLength}"` : ''}
           ${props.autocomplete ? `autocomplete="${props.autocomplete}"` : ''}

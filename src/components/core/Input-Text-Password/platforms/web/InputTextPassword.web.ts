@@ -77,7 +77,6 @@ export class InputTextPassword extends HTMLElement {
       'read-only',
       'required',
       'max-length',
-      'disabled',
       'show-password',
       'show-toggle',
       'is-new-password',
@@ -158,7 +157,6 @@ export class InputTextPassword extends HTMLElement {
     const readOnly = this.hasAttribute('read-only');
     const required = this.hasAttribute('required');
     const maxLength = this.getAttribute('max-length');
-    const disabled = this.hasAttribute('disabled');
     const showToggle = this.getAttribute('show-toggle') !== 'false'; // Default true
     const isNewPassword = this.hasAttribute('is-new-password');
     const invalidPasswordMessage = this.getAttribute('invalid-password-message') || DEFAULT_INVALID_PASSWORD_MESSAGE;
@@ -180,7 +178,6 @@ export class InputTextPassword extends HTMLElement {
         class="toggle-button" 
         aria-label="${this._isPasswordVisible ? 'Hide password' : 'Show password'}"
         aria-pressed="${this._isPasswordVisible}"
-        ${disabled ? 'disabled' : ''}
       >
         ${this._isPasswordVisible ? this.getHideIcon() : this.getShowIcon()}
       </button>
@@ -203,7 +200,6 @@ export class InputTextPassword extends HTMLElement {
           ${readOnly ? 'read-only' : ''}
           ${required ? 'required' : ''}
           ${maxLength ? `max-length="${maxLength}"` : ''}
-          ${disabled ? 'disabled' : ''}
         ></input-text-base>
         ${toggleButtonHTML}
       </div>
@@ -248,7 +244,7 @@ export class InputTextPassword extends HTMLElement {
         z-index: 1;
       }
       
-      .toggle-button:hover:not(:disabled) {
+      .toggle-button:hover {
         color: var(--color-text-default, #333);
         background-color: var(--color-background-hover, rgba(0, 0, 0, 0.05));
       }
@@ -256,11 +252,6 @@ export class InputTextPassword extends HTMLElement {
       .toggle-button:focus {
         outline: var(--accessibility-focus-width, 2px) solid var(--accessibility-focus-color, #0066cc);
         outline-offset: var(--accessibility-focus-offset, 2px);
-      }
-      
-      .toggle-button:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
       }
       
       .toggle-button svg {

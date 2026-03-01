@@ -13,7 +13,7 @@
  * - Position animation (translateY)
  * - Respects prefers-reduced-motion
  * - WCAG 2.1 AA compliant
- * - Uses theme-aware blend utilities for state colors (focus, disabled)
+ * - Uses theme-aware blend utilities for state colors (focus)
  * 
  * @module Input-Text-Base/platforms/web/styles
  * @see Requirements: 5.2, 5.3, 5.4
@@ -29,7 +29,7 @@
  * 
  * Component-scoped properties use --_itb-* naming convention:
  * - --_itb-focus-color: Blend utility calculated focus color
- * - --_itb-disabled-color: Blend utility calculated disabled color
+ * - --_itb-focus-color: Blend utility calculated focus color
  * 
  * @see Requirements 5.2, 5.3, 5.4 - CSS architecture standardization
  */
@@ -104,18 +104,6 @@
   outline: var(--accessibility-focus-width) solid var(--accessibility-focus-color);
   outline-offset: var(--accessibility-focus-offset);
   transition: outline-color var(--motion-focus-transition-duration) var(--motion-focus-transition-easing);
-}
-
-/**
- * Disabled state - uses blend utility calculated color.
- * 
- * @see Requirements 1.1, 1.2, 1.5, 1.6 - Blend utility adoption
- */
-.input-element:disabled {
-  border-color: var(--_itb-disabled-color, var(--color-structure-border));
-  color: var(--color-text-muted);
-  cursor: not-allowed;
-  opacity: 1;
 }
 
 /* ==========================================================================
@@ -196,13 +184,6 @@
 
 .input-wrapper.success .input-label {
   color: var(--color-feedback-success-text);
-}
-
-/**
- * Disabled state label color - uses blend utility calculated color.
- */
-.input-wrapper.disabled .input-label {
-  color: var(--_itb-disabled-color, var(--color-text-muted));
 }
 
 /* ==========================================================================

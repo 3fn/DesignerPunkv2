@@ -73,7 +73,6 @@ export class InputTextEmail extends HTMLElement {
       'read-only',
       'required',
       'max-length',
-      'disabled',
       'invalid-email-message'
     ];
   }
@@ -127,7 +126,6 @@ export class InputTextEmail extends HTMLElement {
     const readOnly = this.hasAttribute('read-only');
     const required = this.hasAttribute('required');
     const maxLength = this.getAttribute('max-length');
-    const disabled = this.hasAttribute('disabled');
     const invalidEmailMessage = this.getAttribute('invalid-email-message') || DEFAULT_INVALID_EMAIL_MESSAGE;
     
     // Determine error message (props error takes precedence over validation error)
@@ -152,7 +150,6 @@ export class InputTextEmail extends HTMLElement {
         ${readOnly ? 'read-only' : ''}
         ${required ? 'required' : ''}
         ${maxLength ? `max-length="${maxLength}"` : ''}
-        ${disabled ? 'disabled' : ''}
       ></input-text-base>
     `;
     

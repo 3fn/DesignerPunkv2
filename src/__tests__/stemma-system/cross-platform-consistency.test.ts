@@ -526,23 +526,18 @@ describe('Cross-Platform Consistency Validation', () => {
       }
     });
 
-    it('all platforms should implement disabled state', () => {
+    it('all form input components should exclude disabled state per design philosophy', () => {
       for (const component of FORM_INPUT_COMPONENTS) {
-        for (const platform of ['web', 'ios', 'android']) {
-          const analysis = analyzePlatform(component, platform);
-          
-          if (!analysis) continue;
-          
-          const hasDisabledState = 
-            analysis.fileContent.toLowerCase().includes('disabled') ||
-            analysis.fileContent.toLowerCase().includes('enabled');
-          
-          if (!hasDisabledState) {
-            console.log(`${component} (${platform}): No disabled state found`);
-          }
-          
-          expect(hasDisabledState).toBe(true);
+        const contractsPath = path.join(COMPONENTS_DIR, component, 'contracts.yaml');
+        if (!fs.existsSync(contractsPath)) continue;
+        const content = fs.readFileSync(contractsPath, 'utf-8');
+        const hasExclusion = content.includes('excludes') && content.includes('state_disabled');
+        
+        if (!hasExclusion) {
+          console.log(`${component}: Missing state_disabled exclusion in contracts.yaml`);
         }
+        
+        expect(hasExclusion).toBe(true);
       }
     });
 

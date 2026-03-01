@@ -90,7 +90,6 @@ class InputTextPhoneNumber extends HTMLElement {
       'value',
       'placeholder',
       'required',
-      'disabled',
       'read-only',
       'error-message',
       'helper-text',
@@ -133,7 +132,6 @@ class InputTextPhoneNumber extends HTMLElement {
     const label = this.getAttribute('label') || '';
     const placeholder = this.getAttribute('placeholder') || '';
     const required = this.hasAttribute('required');
-    const disabled = this.hasAttribute('disabled');
     const readOnly = this.hasAttribute('read-only');
     const propsErrorMessage = this.getAttribute('error-message');
     const helperText = this.getAttribute('helper-text');
@@ -187,11 +185,6 @@ class InputTextPhoneNumber extends HTMLElement {
 
         .input-container.success {
           border-color: var(--color-success-strong);
-        }
-
-        .input-container.disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
         }
 
         input {
@@ -264,14 +257,13 @@ class InputTextPhoneNumber extends HTMLElement {
         }
       </style>
 
-      <div class="input-container ${isFilled ? 'filled' : ''} ${hasError ? 'error' : ''} ${isSuccess ? 'success' : ''} ${disabled ? 'disabled' : ''}">
+      <div class="input-container ${isFilled ? 'filled' : ''} ${hasError ? 'error' : ''} ${isSuccess ? 'success' : ''}">
         <input
           type="tel"
           autocomplete="tel"
           value="${displayValue}"
           placeholder="${placeholder}"
           ${required ? 'required' : ''}
-          ${disabled ? 'disabled' : ''}
           ${readOnly ? 'readonly' : ''}
           aria-label="${label}"
           ${hasError ? 'aria-invalid="true"' : ''}

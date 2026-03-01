@@ -10,17 +10,15 @@
  */
 
 // Inline the state management
-type InputState = 'default' | 'focused' | 'filled' | 'error' | 'success' | 'disabled' | 'readonly';
+type InputState = 'default' | 'focused' | 'filled' | 'error' | 'success' | 'readonly';
 
 function getInputState(
   value: string,
   isFocused: boolean,
   hasError: boolean,
   isSuccess: boolean,
-  isDisabled: boolean,
   isReadOnly: boolean
 ): InputState {
-  if (isDisabled) return 'disabled';
   if (isReadOnly) return 'readonly';
   if (hasError) return 'error';
   if (isSuccess) return 'success';
@@ -52,7 +50,6 @@ class InputTextBase extends HTMLElement {
       'type',
       'placeholder',
       'required',
-      'disabled',
       'read-only',
       'error-message',
       'helper-text',
@@ -78,7 +75,6 @@ class InputTextBase extends HTMLElement {
     const type = this.getAttribute('type') || 'text';
     const placeholder = this.getAttribute('placeholder') || '';
     const required = this.hasAttribute('required');
-    const disabled = this.hasAttribute('disabled');
     const readOnly = this.hasAttribute('read-only');
     const errorMessage = this.getAttribute('error-message');
     const helperText = this.getAttribute('helper-text');
@@ -87,7 +83,7 @@ class InputTextBase extends HTMLElement {
 
     const hasError = !!errorMessage;
     const isFocused = document.activeElement === this.input;
-    const state = getInputState(value, isFocused, hasError, isSuccess, disabled, readOnly);
+    const state = getInputState(value, isFocused, hasError, isSuccess, readOnly);
 
     this.shadow.innerHTML = `
       <style>
@@ -123,11 +119,6 @@ class InputTextBase extends HTMLElement {
 
         .input-container.success {
           border-color: var(--color-feedback-success-text);
-        }
-
-        .input-container.disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
         }
 
         input {
@@ -206,7 +197,6 @@ class InputTextBase extends HTMLElement {
           value="${value}"
           placeholder="${placeholder}"
           ${required ? 'required' : ''}
-          ${disabled ? 'disabled' : ''}
           ${readOnly ? 'readonly' : ''}
           aria-label="${label}"
           ${hasError ? 'aria-invalid="true"' : ''}

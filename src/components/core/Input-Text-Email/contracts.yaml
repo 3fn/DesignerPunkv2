@@ -40,3 +40,8 @@ contracts:
     test_approach: |
       - Verify autocomplete attribute (web)
     required: true
+
+excludes:
+  state_disabled:
+    reason: "DesignerPunk does not support disabled states for usability and accessibility reasons. If an action is unavailable, the component should not be rendered."
+    category: state

@@ -364,47 +364,12 @@ describe('Form Inputs Family Behavioral Contracts', () => {
       });
     });
 
-    describe('disabled_state contract', () => {
-      it('web implementation should support disabled state', () => {
-        const content = loadPlatformImpl(component, 'web');
-        expect(content).not.toBeNull();
-        
-        if (content) {
-          const patterns = CONTRACT_PATTERNS.disabled_state.web;
-          const result = checkContractPatterns(content, patterns);
-          
-          console.log(`${component} (web) disabled_state: Found ${result.found.length}/${patterns.length} patterns`);
-          
-          expect(result.found.length).toBeGreaterThan(0);
-        }
-      });
-
-      it('iOS implementation should support disabled state', () => {
-        const content = loadPlatformImpl(component, 'ios');
-        expect(content).not.toBeNull();
-        
-        if (content) {
-          const patterns = CONTRACT_PATTERNS.disabled_state.ios;
-          const result = checkContractPatterns(content, patterns);
-          
-          console.log(`${component} (iOS) disabled_state: Found ${result.found.length}/${patterns.length} patterns`);
-          
-          expect(result.found.length).toBeGreaterThan(0);
-        }
-      });
-
-      it('Android implementation should support disabled state', () => {
-        const content = loadPlatformImpl(component, 'android');
-        expect(content).not.toBeNull();
-        
-        if (content) {
-          const patterns = CONTRACT_PATTERNS.disabled_state.android;
-          const result = checkContractPatterns(content, patterns);
-          
-          console.log(`${component} (Android) disabled_state: Found ${result.found.length}/${patterns.length} patterns`);
-          
-          expect(result.found.length).toBeGreaterThan(0);
-        }
+    describe('disabled_state exclusion', () => {
+      it('should be excluded per DesignerPunk no-disabled-states philosophy', () => {
+        const contractsPath = path.join(COMPONENTS_DIR, component, 'contracts.yaml');
+        const content = fs.readFileSync(contractsPath, 'utf-8');
+        expect(content).toContain('state_disabled');
+        expect(content).toContain('excludes');
       });
     });
   });

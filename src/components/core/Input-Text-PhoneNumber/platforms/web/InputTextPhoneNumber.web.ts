@@ -86,7 +86,6 @@ export class InputTextPhoneNumber extends HTMLElement {
       'read-only',
       'required',
       'max-length',
-      'disabled',
       'country-code',
       'auto-format',
       'invalid-phone-message'
@@ -156,7 +155,6 @@ export class InputTextPhoneNumber extends HTMLElement {
     const readOnly = this.hasAttribute('read-only');
     const required = this.hasAttribute('required');
     const maxLength = this.getAttribute('max-length');
-    const disabled = this.hasAttribute('disabled');
     const autoFormat = this.getAttribute('auto-format') !== 'false';
     const invalidPhoneMessage = this.getAttribute('invalid-phone-message') || DEFAULT_INVALID_PHONE_MESSAGE;
     
@@ -185,7 +183,6 @@ export class InputTextPhoneNumber extends HTMLElement {
         ${readOnly ? 'read-only' : ''}
         ${required ? 'required' : ''}
         ${maxLength ? `max-length="${maxLength}"` : ''}
-        ${disabled ? 'disabled' : ''}
       ></input-text-base>
     `;
     
