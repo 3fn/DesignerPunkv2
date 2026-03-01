@@ -75,6 +75,64 @@ contracts:
       - Verify default, hover, and pressed visual states
     required: true
 
+  interaction_hover:
+    category: interaction
+    description: Visual feedback on hover (pointer-only, desktop)
+    behavior: |
+      On desktop platforms, chip shows visual feedback when pointer hovers.
+      Uses blend.hoverDarker token (8% darker) on background color.
+      Border transitions to primary color. Transition uses
+      motion.selectionTransition (duration250 + easingStandard).
+      Pointer-only — no keyboard equivalent (focus ring serves keyboard users).
+    wcag: "1.4.13 Content on Hover or Focus"
+    platforms: [web]
+    validation:
+      - Background darkens on mouse enter
+      - Background reverts on mouse leave
+      - Border changes to primary color
+      - Hover uses blend.hoverDarker token
+    test_approach: |
+      - Simulate hover, verify background and border change
+    required: true
+
+  interaction_pressed:
+    category: interaction
+    description: Visual feedback when pressed
+    behavior: |
+      Shows visual feedback during active press/click/tap.
+      Uses blend.pressedDarker token (12% darker) on background.
+      Web: color change. iOS: pressedBlend() on background.
+      Android: pressedBlend() on background.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Visual feedback shown during press
+      - Feedback uses blend.pressedDarker token
+      - Platform-appropriate effect applied
+    test_approach: |
+      - Simulate press, verify visual feedback
+    required: true
+
+  interaction_focus_ring:
+    category: interaction
+    description: WCAG 2.4.7 focus visible indicator
+    behavior: |
+      When focused via keyboard, displays focus ring using accessibility tokens:
+      2px outline (accessibility.focus.width), primary color (accessibility.focus.color),
+      2px offset (accessibility.focus.offset). Uses :focus-visible for keyboard-only
+      indication. High contrast mode increases to 4px (borderHeavy).
+    wcag: "2.4.7 Focus Visible"
+    platforms: [web, ios, android]
+    validation:
+      - Focus ring appears on keyboard focus
+      - Focus ring meets 3:1 contrast ratio
+      - Uses :focus-visible for keyboard-only (web)
+      - High contrast mode uses 4px outline
+    test_approach: |
+      - Tab to chip, verify focus ring visible
+      - Click chip, verify no focus ring (web)
+    required: true
+
   interaction_focusable:
     category: interaction
     description: Can receive keyboard focus
@@ -139,6 +197,5 @@ contracts:
 
 excludes:
   state_disabled:
-    reason: "If an action is unavailable, the component should not be rendered."
+    reason: "DesignerPunk does not support disabled states for usability and accessibility reasons. If an action is unavailable, the component should not be rendered."
     category: state
-    reference: "Chip-Base.schema.yaml, design philosophy section"

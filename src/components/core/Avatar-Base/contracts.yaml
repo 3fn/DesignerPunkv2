@@ -117,6 +117,9 @@ contracts:
       semantic token (duration150 + easingStandard). iOS uses onHover modifier.
       Android uses hoverable modifier.
       No hover feedback when interactive is false (default).
+      Note: Hover is pointer-only with no keyboard equivalent. Keyboard
+      interaction (focus, activation) is delegated to the wrapping element
+      (button/link) per the Wrapper-Delegated Interaction Pattern.
     wcag: "1.4.13 Content on Hover or Focus"
     platforms: [web, ios, android]
     validation:

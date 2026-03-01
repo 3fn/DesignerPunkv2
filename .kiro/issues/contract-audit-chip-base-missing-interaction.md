@@ -2,7 +2,9 @@
 
 **Date**: February 28, 2026
 **Severity**: Medium
-**Status**: Open
+**Status**: Closed
+**Resolved**: 2026-03-01 (Spec 066, Task 3.2)
+**Resolution**: All three behaviors existed in platform code. Added interaction_hover, interaction_pressed, interaction_focus_ring contracts to Chip-Base contracts.yaml. Propagates to Chip-Filter and Chip-Input via inheritance.
 **Discovered During**: Post-064 contract audit
 **Affects**: Chip-Base, Chip-Filter (inherits), Chip-Input (inherits)
 **Recommended Owner**: Lina (component domain)

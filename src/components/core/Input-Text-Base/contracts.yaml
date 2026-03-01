@@ -91,23 +91,6 @@ contracts:
       - Set success state, verify border/label/icon
     required: true
 
-  state_disabled:
-    category: state
-    description: Prevents interaction when disabled
-    behavior: |
-      When disabled, component cannot receive focus, cannot be edited,
-      uses desaturated colors (blend.disabledDesaturate), and shows
-      cursor: not-allowed (web).
-    wcag: "4.1.2 Name, Role, Value"
-    platforms: [web, ios, android]
-    validation:
-      - Input cannot receive focus when disabled
-      - Input value cannot be changed when disabled
-      - Visual styling indicates disabled state
-    test_approach: |
-      - Set disabled, verify not focusable and not editable
-    required: true
-
   content_trailing_icon:
     category: content
     description: Shows contextual trailing icons
@@ -159,3 +142,8 @@ contracts:
     test_approach: |
       - Enable reduced motion, verify instant transitions
     required: true
+
+excludes:
+  state_disabled:
+    reason: "DesignerPunk does not support disabled states for usability and accessibility reasons. If an action is unavailable, the component should not be rendered."
+    category: state

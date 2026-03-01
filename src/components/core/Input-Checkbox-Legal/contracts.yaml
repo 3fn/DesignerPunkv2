@@ -51,6 +51,5 @@ excludes:
     reference: "Input-Checkbox-Legal README, Key Differences from Input-Checkbox-Base table"
 
   state_disabled:
-    reason: "If an action is unavailable, the component should not be rendered."
+    reason: "DesignerPunk does not support disabled states for usability and accessibility reasons. If an action is unavailable, the component should not be rendered."
     category: state
-    reference: "Input-Checkbox-Legal README, DesignerPunk Philosophy"

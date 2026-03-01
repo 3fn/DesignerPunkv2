@@ -239,7 +239,7 @@ The work is organized into 4 parent tasks. Task 1 (MCP model evolution) must com
     - Verify MCP re-indexes updated components without warnings
     - _Requirements: 1.4, 5.5_
 
-- [ ] 3. Contract Audit Resolution
+- [x] 3. Contract Audit Resolution
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -262,14 +262,14 @@ The work is organized into 4 parent tasks. Task 1 (MCP model evolution) must com
   **Post-Completion:**
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Contract Audit Resolution"`
 
-  - [ ] 3.1 Avatar-Base hover clarification
+  - [x] 3.1 Avatar-Base hover clarification
     **Type**: Implementation
     **Validation**: Tier 1 - Minimal
     **Lead**: Lina
     - Add clarifying note to Avatar-Base's `interaction_hover` contract behavior field: pointer-only, no keyboard equivalent
     - _Requirements: 5.1_
 
-  - [ ] 3.2 Chip-Base missing interaction contracts
+  - [x] 3.2 Chip-Base missing interaction contracts
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Lead**: Lina | **Review**: Thurgood
@@ -278,16 +278,24 @@ The work is organized into 4 parent tasks. Task 1 (MCP model evolution) must com
     - IF behavior absent: document as implementation gap with WCAG 2.4.7 note (focus ring is required for focusable elements)
     - _Requirements: 5.2_
 
-  - [ ] 3.3 state_disabled investigation and classification
+  - [x] 3.3 state_disabled investigation and classification
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     **Lead**: Lina + Thurgood | **Review**: Peter
-    - For each of 9 affected components: read platform implementations for disabled prop support
-    - Classify each as: gap, intentional, or deferred
-    - For gap classifications on the 6 components being schemaed (Button-Icon, Button-VerticalList-Item, Button-VerticalList-Set, Input-Checkbox-Base, Input-Radio-Base, Input-Radio-Set): add `state_disabled` contract
-    - For the 3 Chip family components NOT being schemaed (Chip-Base, Chip-Filter, Chip-Input): document findings only
+
+    **Phase 1 — Investigation (Thurgood):**
+    - For each of 9 affected components: audit platform implementations (web/iOS/Android) for disabled prop, disabled styling, disabled behavior
+    - Produce findings table with classification recommendations (gap, intentional, deferred)
     - Write findings to `findings/state-disabled-classification.md`
-    - Present classifications to Peter for review before applying contract changes
+
+    **Phase 2 — Peter review gate:**
+    - Present classification recommendations to Peter
+    - Peter approves, modifies, or overrides each classification
+
+    **Phase 3 — Contract changes (Lina):**
+    - For gap classifications on the 6 components being schemaed (Button-Icon, Button-VerticalList-Item, Button-VerticalList-Set, Input-Checkbox-Base, Input-Radio-Base, Input-Radio-Set): add `state_disabled` contract
+    - For intentional/deferred classifications: add `excludes.state_disabled` entry
+    - For the 3 Chip family components NOT being schemaed (Chip-Base, Chip-Filter, Chip-Input): document findings only
     - _Requirements: 5.3, 5.4_
 
 - [ ] 4. Verification and Documentation

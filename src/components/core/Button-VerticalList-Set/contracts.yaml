@@ -166,6 +166,5 @@ contracts:
 
 excludes:
   state_disabled:
-    reason: "The Set does not support disabling individual items. If an option shouldn't be available, it shouldn't be in the Set."
+    reason: "DesignerPunk does not support disabled states for usability and accessibility reasons. If an action is unavailable, the component should not be rendered."
     category: state
-    reference: "Button-VerticalList-Set README, Design Decisions"

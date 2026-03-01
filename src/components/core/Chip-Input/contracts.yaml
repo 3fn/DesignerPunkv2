@@ -71,6 +71,5 @@ contracts:
 
 excludes:
   state_disabled:
-    reason: "If dismissal is unavailable, the component should not be rendered."
+    reason: "DesignerPunk does not support disabled states for usability and accessibility reasons. If an action is unavailable, the component should not be rendered."
     category: state
-    reference: "Chip-Input.schema.yaml, design philosophy section"

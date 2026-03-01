@@ -624,6 +624,12 @@ export function determineComponentType(
   schema: ComponentSchema | null,
   componentName: string
 ): 'input' | 'button' | 'container' | 'icon' | 'generic' {
+  // Check for orchestration/pattern components (Set, Group) FIRST
+  // These are containers that manage children, not direct inputs/buttons
+  if (componentName.endsWith('-Set') || componentName.endsWith('-Group')) {
+    return 'container';
+  }
+
   // Check schema family
   if (schema?.family) {
     const family = schema.family.toLowerCase();
@@ -631,12 +637,6 @@ export function determineComponentType(
     if (family === 'buttons') return 'button';
     if (family === 'containers') return 'container';
     if (family === 'icons') return 'icon';
-  }
-  
-  // Check for orchestration/pattern components (Set, Group) BEFORE substring matching
-  // These are containers that manage children, not direct inputs
-  if (componentName.endsWith('-Set') || componentName.endsWith('-Group')) {
-    return 'container';
   }
   
   // Fallback to name-based detection

@@ -224,6 +224,5 @@ contracts:
 
 excludes:
   state_disabled:
-    reason: "Disabled buttons remove affordance without explanation. Screen reader users may not understand why something is disabled. Use alternative patterns: hide unavailable actions, show validation messaging, or use loading states."
+    reason: "DesignerPunk does not support disabled states for usability and accessibility reasons. If an action is unavailable, the component should not be rendered."
     category: state
-    reference: "Button-Icon README, Design Decisions section"
