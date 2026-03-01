@@ -62,7 +62,9 @@ Includes all Tier 1 fields plus:
 | `contractCategories` | string[] | contracts.yaml | Distinct categories across active contracts |
 | `tokenCount` | number | schema.yaml | Number of tokens in the component's token list |
 | `annotations` | SemanticAnnotations \| null | component-meta.yaml | Full semantic annotations (see below) |
-| `composesComponents` | string[] | schema.yaml | Names of components used internally |
+| `composesComponents` | string[] | schema.yaml | Names of components used internally (deprecated — use `internalComponents`) |
+| `internalComponents` | string[] | schema.yaml | Names of components used internally via `composition.internal` |
+| `requiredChildren` | string[] | schema.yaml | Required child component types via `composition.children.requires` |
 | `inheritsFrom` | string \| null | contracts.yaml | Parent component name, or null |
 
 ### Tier 3: Full Component Metadata
@@ -92,6 +94,8 @@ Returned by `get_component_full`. Complete assembled metadata.
 | `properties` | Record<string, PropertyDefinition> | yes | schema.yaml | Component props (see below) |
 | `tokens` | string[] | yes | schema.yaml | Design tokens used by this component |
 | `composition` | CompositionDefinition \| null | no | schema.yaml | Composition relationships and constraints |
+| `omits` | string[] | no | schema.yaml | Property names omitted from parent (inheriting components only) |
+| `resolvedTokens` | object | no | assembled | `{ own: string[], composed: Record<string, string[]> }` — own tokens plus tokens from composed children |
 
 #### PropertyDefinition
 
@@ -106,8 +110,8 @@ Returned by `get_component_full`. Complete assembled metadata.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `composes` | CompositionRelationship[] | yes | Components used internally |
-| `children` | object | no | Child constraints: `allowed`, `prohibited`, `allowedCategories`, `prohibitedCategories`, `minCount`, `maxCount` |
+| `internal` | CompositionRelationship[] | yes | Components used internally (replaces former `composes`) |
+| `children` | object | no | Child constraints: `requires`, `allowed`, `prohibited`, `allowedCategories`, `prohibitedCategories`, `minCount`, `maxCount` |
 | `nesting` | object | no | Self-nesting constraint: `{ self: boolean }` |
 | `rules` | CompositionRule[] | no | Conditional rules: `when` (prop + value) → `then` (child overrides) |
 

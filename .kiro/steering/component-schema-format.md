@@ -34,7 +34,7 @@ description: Formal specification for Stemma System component schema YAML files 
 5. ❌ **SKIP**: Composition, Platform Notes (unless applicable)
 
 **WHEN adding composition to a component THEN read:**
-1. ✅ **Composition** — `composes:` format and placement
+1. ✅ **Composition** — `composition:` format and placement
 2. ❌ **SKIP**: Everything else
 
 **WHEN validating or auditing schema files THEN read:**
@@ -102,7 +102,8 @@ Fields present across all 20 component schemas, ordered by frequency:
 | `platform_notes` | no | 17/20 | Platform-specific implementation notes |
 | `semantic_variants` | no | 7/20 | Planned semantic variants (primitives only) |
 | `inherits` | conditional | 6/20 | Parent component (semantic components only) |
-| `composes` | no | 4/20 | Composition relationships |
+| `omits` | no | 4/28 | Properties omitted from parent when inheriting |
+| `composition` | no | 6/28 | Composition relationships (`internal`, `children`) |
 | `inheritance` | no | 3/20 | Inheritance metadata (older schemas) |
 
 ### Type System
@@ -196,17 +197,46 @@ inherits: Input-Text-Base
 
 ## Composition
 
-Components that orchestrate child components declare `composes:`:
+Components that use other components internally or orchestrate children declare `composition:`:
 
 ```yaml
-composes:
-  - component: Progress-Indicator-Node-Base
-    relationship: Renders one Node-Base per step
-  - component: Progress-Indicator-Connector-Base
-    relationship: Renders one Connector-Base between each adjacent pair of nodes
+# Internal composition (uses another component internally)
+composition:
+  internal:
+    - component: Container-Base
+      relationship: Uses internally for layout
+  nesting:
+    self: false
+
+# Children orchestration (manages child components)
+composition:
+  internal:
+    - component: Input-Radio-Base
+      relationship: Orchestrates selection state and keyboard navigation
+  children:
+    requires: [Input-Radio-Base]
+    allowed: [Input-Radio-Base]
+    minCount: 2
+  nesting:
+    self: false
 ```
 
+`internal` replaces the former top-level `composes:` field. `children.requires` declares required child types (presence check). `children.allowed` constrains which types can be slotted.
+
 Placed after `readiness:` and before `description:` in the schema file. Composition is structural (what contains what); behavioral composition contracts live in contracts.yaml.
+
+---
+
+## Omits
+
+Inheriting components can omit parent properties that don't apply:
+
+```yaml
+inherits: Input-Checkbox-Base
+omits: [size, indeterminate, labelAlign]
+```
+
+Omitted properties are excluded from the assembled metadata. The MCP validates that omitted property names exist on the parent's property set.
 
 ---
 
