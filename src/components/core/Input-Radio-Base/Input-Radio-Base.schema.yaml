@@ -1,0 +1,133 @@
+# Input-Radio-Base Component Schema
+#
+# Stemma System: Form Inputs Family
+# Component Type: Primitive (Base)
+# Naming Convention: [Family]-[Type]-[Variant] = Input-Radio-Base
+#
+# Single-selection radio control with circular shape and filled dot indicator.
+# Composed by Input-Radio-Set for group behavior.
+# No disabled state by design.
+
+name: Input-Radio-Base
+type: primitive
+family: FormInputs
+version: "1.0.0"
+readiness: production-ready
+
+description: |
+  Primitive radio button component supporting selected/unselected states
+  with three size variants and configurable label alignment.
+
+  Key Characteristics:
+  - Single-select (mutual exclusivity within a group)
+  - Circular shape with filled dot indicator
+  - Three sizes: sm (24px), md (32px), lg (40px)
+  - Label alignment: center or top (for multi-line)
+  - Helper text and error message support
+  - No disabled state by design
+
+behaviors:
+  - selectable
+  - focusable
+  - accessible
+  - sizable
+  - validatable
+
+properties:
+  selected:
+    type: boolean
+    required: false
+    default: false
+    description: Whether radio is selected.
+  label:
+    type: string
+    required: true
+    description: Label text associated with radio for accessibility.
+  value:
+    type: string
+    required: true
+    description: Value for form submission and group identification.
+  name:
+    type: string
+    required: false
+    description: Radio group name for mutual exclusivity and form submission.
+  size:
+    type: "'sm' | 'md' | 'lg'"
+    required: false
+    default: "'md'"
+    description: Size variant controlling circle size, dot size, and label typography.
+  labelAlign:
+    type: "'center' | 'top'"
+    required: false
+    default: "'center'"
+    description: Vertical alignment of label relative to radio circle.
+  helperText:
+    type: string
+    required: false
+    description: Helper text displayed below radio.
+  errorMessage:
+    type: string
+    required: false
+    description: Error message with error styling and aria-invalid.
+  onSelect:
+    type: "(value: string) => void"
+    required: false
+    description: Called when radio is selected. Receives value string.
+  id:
+    type: string
+    required: false
+    description: Unique identifier for label association and form integration.
+  testID:
+    type: string
+    required: false
+    description: Test identifier for automated testing.
+
+tokens:
+  color:
+    - color.feedback.error.border
+    - color.feedback.error.text
+    - color.feedback.select.background.rest
+    - color.feedback.select.border.default
+    - color.feedback.select.border.rest
+    - color.print.default
+    - color.text.default
+    - color.text.muted
+  icon:
+    - icon.size050
+    - icon.size075
+    - icon.size100
+  typography:
+    - typography.caption
+    - typography.label.lg
+    - typography.label.md
+    - typography.label.sm
+  accessibility:
+    - accessibility.focus.color
+    - accessibility.focus.offset
+    - accessibility.focus.width
+    - tapAreaMinimum
+    - tapAreaRecommended
+  motion:
+    - motion.buttonPress
+    - motion.selectionTransition
+  blend:
+    - blend.hoverDarker
+    - blend.pressedDarker
+  border:
+    - borderEmphasis
+    - borderHeavy
+  radius:
+    - radiusFull
+  spacing:
+    - space.grouped.loose
+    - space.grouped.minimal
+    - space.grouped.normal
+    - space.grouped.tight
+    - space.inset.050
+    - space.inset.075
+    - space.inset.100
+
+platforms:
+  - web
+  - ios
+  - android

@@ -1,0 +1,75 @@
+# Input-Checkbox-Legal Component Schema
+#
+# Stemma System: Form Inputs Family
+# Component Type: Semantic Variant (inherits Input-Checkbox-Base)
+# Naming Convention: [Family]-[Type]-[Variant] = Input-Checkbox-Legal
+#
+# Specialized checkbox for legal consent with audit trail support.
+# Fixed: lg size, top label alignment, no indeterminate state.
+
+name: Input-Checkbox-Legal
+type: semantic
+family: FormInputs
+version: "1.0.0"
+readiness: production-ready
+inherits: Input-Checkbox-Base
+omits: [size, indeterminate, labelAlign]
+
+description: |
+  Semantic variant of Input-Checkbox-Base for legal consent scenarios
+  (terms of service, privacy policies, GDPR consent).
+
+  Key Differences from Base:
+  - Fixed lg box (40px) with labelSm typography
+  - Fixed top label alignment (for multi-line legal text)
+  - No indeterminate state (consent is binary)
+  - Explicit consent enforcement (prevents pre-checking)
+  - Audit trail support (timestamp, legalTextId, version)
+  - Required indicator visible by default
+
+behaviors:
+  - toggleable
+  - focusable
+  - accessible
+  - validatable
+  - auditable
+
+properties:
+  requiresExplicitConsent:
+    type: boolean
+    required: false
+    default: true
+    description: Prevents pre-checking for GDPR compliance.
+  onConsentChange:
+    type: "(data: ConsentChangeData) => void"
+    required: false
+    description: Callback with ISO 8601 timestamp and audit data on consent change.
+  legalTextId:
+    type: string
+    required: false
+    description: ID linking to full legal text for audit trail.
+  legalTextVersion:
+    type: string
+    required: false
+    description: Version of legal text being consented to.
+  showRequiredIndicator:
+    type: boolean
+    required: false
+    default: true
+    description: Whether to show Required indicator.
+
+tokens:
+  color:
+    - color.feedback.error.text
+    - color.text.muted
+  typography:
+    - fontSize.050
+    - typography.caption
+  spacing:
+    - space.grouped.minimal
+    - space.grouped.tight
+
+platforms:
+  - web
+  - ios
+  - android

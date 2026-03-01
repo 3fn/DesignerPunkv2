@@ -117,7 +117,7 @@ The work is organized into 4 parent tasks. Task 1 (MCP model evolution) must com
     - Verify component MCP indexes all migrated components without warnings
     - _Requirements: 2.5, 3.1_
 
-- [ ] 2. Schema Creation (8 Components)
+- [x] 2. Schema Creation (8 Components)
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -141,7 +141,7 @@ The work is organized into 4 parent tasks. Task 1 (MCP model evolution) must com
   **Post-Completion:**
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Schema Creation — 8 Components"`
 
-  - [ ] 2.1 Avatar-Base schema
+  - [x] 2.1 Avatar-Base schema
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Lead**: Lina
@@ -152,7 +152,7 @@ The work is organized into 4 parent tasks. Task 1 (MCP model evolution) must com
     - Verify MCP indexes Avatar-Base without warnings
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
-  - [ ] 2.2 Button-Icon schema
+  - [x] 2.2 Button-Icon schema
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Lead**: Lina
@@ -163,7 +163,7 @@ The work is organized into 4 parent tasks. Task 1 (MCP model evolution) must com
     - Verify MCP indexes without warnings
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
-  - [ ] 2.3 Button-VerticalList-Item schema
+  - [x] 2.3 Button-VerticalList-Item schema
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Lead**: Lina
@@ -174,7 +174,7 @@ The work is organized into 4 parent tasks. Task 1 (MCP model evolution) must com
     - Verify MCP indexes without warnings
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
-  - [ ] 2.4 Button-VerticalList-Set schema
+  - [x] 2.4 Button-VerticalList-Set schema
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Lead**: Lina
@@ -185,7 +185,7 @@ The work is organized into 4 parent tasks. Task 1 (MCP model evolution) must com
     - Verify MCP indexes and composition checker validates Set → Item
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 2.1, 2.2, 2.3_
 
-  - [ ] 2.5 Input-Checkbox-Base schema
+  - [x] 2.5 Input-Checkbox-Base schema
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Lead**: Lina
@@ -196,7 +196,7 @@ The work is organized into 4 parent tasks. Task 1 (MCP model evolution) must com
     - Verify MCP indexes without warnings
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
-  - [ ] 2.6 Input-Checkbox-Legal schema
+  - [x] 2.6 Input-Checkbox-Legal schema
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Lead**: Lina | **Review**: Thurgood
@@ -206,7 +206,7 @@ The work is organized into 4 parent tasks. Task 1 (MCP model evolution) must com
     - Verify MCP resolves inheritance correctly — omitted props absent from assembled metadata
     - _Requirements: 1.1, 1.2, 1.3, 1.5, 3.1, 3.2_
 
-  - [ ] 2.7 Input-Radio-Base schema
+  - [x] 2.7 Input-Radio-Base schema
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Lead**: Lina
@@ -217,7 +217,7 @@ The work is organized into 4 parent tasks. Task 1 (MCP model evolution) must com
     - Verify MCP indexes without warnings
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
-  - [ ] 2.8 Input-Radio-Set schema
+  - [x] 2.8 Input-Radio-Set schema
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Lead**: Lina
@@ -229,7 +229,7 @@ The work is organized into 4 parent tasks. Task 1 (MCP model evolution) must com
     - Verify `resolvedTokens.composed` includes Radio-Base's tokens
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 2.1, 2.2, 2.3, 4.1, 4.2_
 
-  - [ ] 2.9 Audit blend token completeness in existing schemas
+  - [x] 2.9 Audit blend token completeness in existing schemas
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Lead**: Lina | **Consult**: Ada (blend token accuracy)

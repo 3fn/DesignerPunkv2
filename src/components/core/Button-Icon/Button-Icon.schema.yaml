@@ -1,0 +1,102 @@
+# Button-Icon Component Schema
+#
+# Stemma System: Button Family
+# Component Type: Primitive
+# Naming Convention: [Family]-[Type] = Button-Icon
+#
+# Icon-only button with three size and three style variants.
+# No disabled state by design — unavailable actions should be hidden.
+
+name: Button-Icon
+type: primitive
+family: Button
+version: "1.0.0"
+readiness: production-ready
+
+description: |
+  Primitive icon-only button supporting three sizes (small, medium, large)
+  and three visual variants (primary, secondary, tertiary).
+
+  Key Characteristics:
+  - No disabled state by design
+  - Required ariaLabel for accessibility (icon-only needs explicit label)
+  - All sizes meet WCAG 2.5.5 minimum 48px touch target
+  - Focus buffer (4px) on all sides for keyboard navigation
+
+behaviors:
+  - pressable
+  - focusable
+  - accessible
+  - sizable
+
+properties:
+  icon:
+    type: IconBaseName
+    required: true
+    description: Icon to display from Icon-Base component.
+  ariaLabel:
+    type: string
+    required: true
+    description: Accessible label for screen readers. Required for icon-only buttons.
+  onPress:
+    type: "() => void"
+    required: true
+    description: Click/tap handler.
+  size:
+    type: "'small' | 'medium' | 'large'"
+    required: false
+    default: "'medium'"
+    description: Visual size variant controlling icon size and padding.
+  variant:
+    type: "'primary' | 'secondary' | 'tertiary'"
+    required: false
+    default: "'primary'"
+    description: Visual style variant controlling background, border, and icon color.
+  testID:
+    type: string
+    required: false
+    description: Test identifier for automated testing.
+
+tokens:
+  component:
+    - buttonIcon.inset.large
+    - buttonIcon.inset.medium
+    - buttonIcon.inset.small
+    - buttonIcon.size.large
+    - buttonIcon.size.medium
+    - buttonIcon.size.small
+  color:
+    - color.action.primary
+    - color.background.primary.subtle
+    - color.contrast.onDark
+    - color.contrast.onPrimary
+    - color.primary
+  icon:
+    - icon.size050
+    - icon.size075
+    - icon.size100
+  accessibility:
+    - accessibility.focus.buffer
+    - accessibility.focus.color
+    - accessibility.focus.offset
+    - accessibility.focus.width
+    - tapAreaRecommended
+  motion:
+    - motion.buttonPress
+  blend:
+    - blend.hoverDarker
+    - blend.pressedDarker
+  scale:
+    - scale096
+    - scale100
+  spacing:
+    - space100
+    - space125
+    - space150
+  radius:
+    - radiusCircle
+
+platforms:
+  - web
+  - ios
+  - android

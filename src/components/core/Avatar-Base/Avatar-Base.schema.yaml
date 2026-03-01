@@ -1,0 +1,101 @@
+# Avatar-Base Component Schema
+#
+# Stemma System: Avatar Family
+# Component Type: Primitive
+# Naming Convention: [Family]-[Type] = Avatar-Base
+#
+# Platform-agnostic schema for the Avatar component. Supports two entity
+# types (human = circle, agent = hexagon) with six size variants.
+
+name: Avatar-Base
+type: primitive
+family: Avatar
+version: "1.0.0"
+readiness: production-ready
+
+description: |
+  Primitive avatar component supporting human (circle) and agent (hexagon)
+  entity types with image, fallback icon, and initials rendering.
+
+  Key Characteristics:
+  - Entity-driven shape: human = circle, agent = hexagon
+  - Six size variants: xs (24px) through xxl (128px)
+  - Image loading with fallback to default icon
+  - Optional hover feedback for interactive contexts
+  - Decorative mode for screen reader exclusion
+
+behaviors:
+  - renderable
+  - sizable
+  - accessible
+  - interactive-optional
+
+properties:
+  type:
+    type: "'human' | 'agent'"
+    required: false
+    default: "'human'"
+    description: Entity type determines shape. human = circle, agent = hexagon.
+  size:
+    type: "'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'"
+    required: false
+    default: "'md'"
+    description: Avatar size variant.
+  src:
+    type: string
+    required: false
+    description: Image source URL or local asset. Ignored for agent type.
+  alt:
+    type: string
+    required: false
+    description: Alt text for accessibility. Required if src provided.
+  interactive:
+    type: boolean
+    required: false
+    default: false
+    description: Whether avatar shows hover visual feedback.
+  decorative:
+    type: boolean
+    required: false
+    default: false
+    description: Hide from screen readers when avatar is purely decorative.
+  testID:
+    type: string
+    required: false
+    description: Test identifier for automated testing.
+
+tokens:
+  component:
+    - avatar.icon.size.xs
+    - avatar.icon.size.xxl
+    - avatar.size.lg
+    - avatar.size.md
+    - avatar.size.sm
+    - avatar.size.xl
+    - avatar.size.xs
+    - avatar.size.xxl
+  color:
+    - color.contrast.onDark
+    - color.contrast.onSurface
+    - color.identity.agent
+    - color.identity.human
+    - color.structure.border
+  icon:
+    - icon.size050
+    - icon.size075
+    - icon.size100
+    - icon.size500
+  motion:
+    - motion.focusTransition
+  opacity:
+    - opacity.heavy
+  spacing:
+    - space300
+    - space400
+    - space500
+    - space600
+
+platforms:
+  - web
+  - ios
+  - android

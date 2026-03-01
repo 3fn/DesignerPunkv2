@@ -21,20 +21,19 @@ describe('ComponentIndexer', () => {
     it('indexes components that have schema.yaml files', () => {
       const health = indexer.getHealth();
       expect(health.componentsIndexed).toBeGreaterThan(0);
-      // 20 of 28 have schema.yaml, 8 don't
-      expect(health.componentsIndexed).toBe(20);
+      // 28 of 28 have schema.yaml, all components indexed
+      expect(health.componentsIndexed).toBe(28);
     });
 
-    it('warns about components without schema.yaml', () => {
+    it('has no schema warnings when all components have schema.yaml', () => {
       const health = indexer.getHealth();
-      expect(health.warnings).toEqual(
-        expect.arrayContaining([expect.stringContaining('has no schema.yaml')])
-      );
+      const schemaWarnings = health.warnings.filter(w => w.includes('has no schema.yaml'));
+      expect(schemaWarnings).toEqual([]);
     });
 
-    it('reports degraded health when warnings exist', () => {
+    it('reports healthy status when all components indexed', () => {
       const health = indexer.getHealth();
-      expect(health.status).toBe('degraded');
+      expect(health.status).toBe('healthy');
     });
   });
 
@@ -85,7 +84,7 @@ describe('ComponentIndexer', () => {
   describe('getCatalog', () => {
     it('returns lightweight entries for all indexed components', () => {
       const catalog = indexer.getCatalog();
-      expect(catalog.length).toBe(20);
+      expect(catalog.length).toBe(28);
       const entry = catalog.find(c => c.name === 'Badge-Count-Base');
       expect(entry).toBeDefined();
       expect(entry!.family).toBe('Badge');

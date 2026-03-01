@@ -1,0 +1,104 @@
+# Button-VerticalList-Set Component Schema
+#
+# Stemma System: Button Family
+# Component Type: Pattern (orchestrator)
+# Naming Convention: [Family]-[Type] = Button-VerticalList-Set
+#
+# Smart orchestrator managing selection state across child Item components.
+# Supports tap, select (radio), and multiSelect (checkbox) modes.
+
+name: Button-VerticalList-Set
+type: pattern
+family: Button
+version: "1.0.0"
+readiness: production-ready
+
+description: |
+  Pattern orchestrator for vertical list button groups. Manages selection
+  state, keyboard navigation, and accessibility across child
+  Button-VerticalList-Item components.
+
+  Key Characteristics:
+  - Three selection modes: tap, select, multiSelect
+  - Controlled component (parent manages selection state)
+  - Staggered animation coordination between items
+  - Validation with min/max selection constraints
+  - Roving tabindex keyboard navigation
+
+behaviors:
+  - orchestrator
+  - focusable
+  - accessible
+  - validatable
+
+composition:
+  children:
+    requires: [Button-VerticalList-Item]
+    allowed: [Button-VerticalList-Item]
+    minCount: 2
+  nesting:
+    self: false
+
+properties:
+  mode:
+    type: "'tap' | 'select' | 'multiSelect'"
+    required: true
+    description: Selection mode determining interaction behavior.
+  selectedIndex:
+    type: "number | null"
+    required: false
+    description: Currently selected index for select mode (controlled).
+  onSelectionChange:
+    type: "(index: number | null) => void"
+    required: false
+    description: Callback when selection changes in select mode.
+  selectedIndices:
+    type: "number[]"
+    required: false
+    description: Currently selected indices for multiSelect mode (controlled).
+  onMultiSelectionChange:
+    type: "(indices: number[]) => void"
+    required: false
+    description: Callback when selections change in multiSelect mode.
+  onItemClick:
+    type: "(index: number) => void"
+    required: false
+    description: Callback when an item is clicked in tap mode.
+  required:
+    type: boolean
+    required: false
+    default: false
+    description: Whether a selection is required (select mode only).
+  minSelections:
+    type: number
+    required: false
+    description: Minimum selections required (multiSelect mode only).
+  maxSelections:
+    type: number
+    required: false
+    description: Maximum selections allowed (multiSelect mode only).
+  error:
+    type: boolean
+    required: false
+    default: false
+    description: Error state indicator applied to all child items.
+  errorMessage:
+    type: string
+    required: false
+    description: Error message displayed above the list with role=alert.
+  testID:
+    type: string
+    required: false
+    description: Test identifier for automated testing.
+
+tokens:
+  color:
+    - color.error.strong
+    - color.feedback.error.text
+  typography:
+    - typography.body.small
+
+platforms:
+  - web
+  - ios
+  - android

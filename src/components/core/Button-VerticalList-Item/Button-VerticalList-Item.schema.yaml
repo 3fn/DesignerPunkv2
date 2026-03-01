@@ -1,0 +1,126 @@
+# Button-VerticalList-Item Component Schema
+#
+# Stemma System: Button Family
+# Component Type: Primitive
+# Naming Convention: [Family]-[Type] = Button-VerticalList-Item
+#
+# Presentational list button item. Visual state controlled by parent Set.
+# No disabled state by design.
+
+name: Button-VerticalList-Item
+type: primitive
+family: Button
+version: "1.0.0"
+readiness: production-ready
+
+description: |
+  Presentational vertical list button item supporting five visual states
+  (rest, selected, notSelected, checked, unchecked) across tap, select,
+  and multi-select modes. State is controlled by parent pattern.
+
+  Key Characteristics:
+  - Dumb presentational component (parent controls state)
+  - Five visual states for three selection modes
+  - Error state with mode-specific treatment
+  - Checkmark transition control (fade/instant)
+  - No disabled state by design
+
+behaviors:
+  - pressable
+  - focusable
+  - accessible
+  - state-driven
+
+properties:
+  label:
+    type: string
+    required: true
+    description: Primary text content displayed on the button.
+  description:
+    type: string
+    required: false
+    description: Secondary text below the label providing additional context.
+  leadingIcon:
+    type: IconBaseName
+    required: false
+    description: Optional leading icon from Icon-Base component.
+  visualState:
+    type: "'rest' | 'selected' | 'notSelected' | 'checked' | 'unchecked'"
+    required: true
+    description: Visual state controlled by parent pattern.
+  error:
+    type: boolean
+    required: false
+    default: false
+    description: Error state indicator. Treatment varies by selection mode.
+  checkmarkTransition:
+    type: "'fade' | 'instant'"
+    required: false
+    default: "'fade'"
+    description: Checkmark hide transition behavior.
+  transitionDelay:
+    type: number
+    required: false
+    description: Transition delay in milliseconds for staggered animations.
+  onClick:
+    type: "() => void"
+    required: false
+    description: Click/tap handler. Parent uses this to update selection state.
+  onFocus:
+    type: "() => void"
+    required: false
+    description: Focus handler for keyboard navigation tracking.
+  onBlur:
+    type: "() => void"
+    required: false
+    description: Blur handler.
+  testID:
+    type: string
+    required: false
+    description: Test identifier for automated testing.
+
+tokens:
+  component:
+    - verticalListItem.paddingBlock.rest
+    - verticalListItem.paddingBlock.selected
+  color:
+    - color.feedback.error.background
+    - color.feedback.error.text
+    - color.feedback.select.background.default
+    - color.feedback.select.background.rest
+    - color.feedback.select.text.default
+    - color.feedback.select.text.rest
+    - color.icon.opticalBalance
+    - color.select.notSelected.subtle
+    - color.select.selected.strong
+    - color.select.selected.subtle
+    - color.structure.canvas
+    - color.text.default
+    - color.text.muted
+  typography:
+    - typography.bodySm
+    - typography.buttonMd
+  accessibility:
+    - accessibility.focus.color
+    - accessibility.focus.offset
+    - accessibility.focus.width
+    - tapAreaRecommended
+  motion:
+    - motion.selectionTransition
+  blend:
+    - blend.hoverDarker
+    - blend.pressedDarker
+  border:
+    - borderDefault
+    - borderEmphasis
+  radius:
+    - radiusNormal
+  spacing:
+    - space125
+  opacity:
+    - opacity.animation
+
+platforms:
+  - web
+  - ios
+  - android

@@ -1,0 +1,86 @@
+# Input-Radio-Set Component Schema
+#
+# Stemma System: Form Inputs Family
+# Component Type: Pattern (Set/Orchestrator)
+# Naming Convention: [Family]-[Type]-[Variant] = Input-Radio-Set
+#
+# Orchestrator for Input-Radio-Base children providing mutual exclusivity,
+# keyboard navigation, and group-level validation.
+# Does NOT duplicate radio rendering — delegates to Base children.
+
+name: Input-Radio-Set
+type: pattern
+family: FormInputs
+version: "1.0.0"
+readiness: production-ready
+
+description: |
+  Orchestrator component managing a group of Input-Radio-Base children.
+  Provides mutual exclusivity, controlled selection state, keyboard
+  navigation (arrow keys, Home, End), and group-level validation.
+  All visual rendering delegated to Base children.
+
+behaviors:
+  - orchestrator
+  - focusable
+  - accessible
+  - validatable
+
+composition:
+  internal:
+    - component: Input-Radio-Base
+      relationship: Orchestrates selection state and keyboard navigation
+  children:
+    requires: [Input-Radio-Base]
+    allowed: [Input-Radio-Base]
+    minCount: 2
+  nesting:
+    self: false
+
+properties:
+  selectedValue:
+    type: "string | null"
+    required: false
+    default: "null"
+    description: Currently selected value. Matched against child value props.
+  onSelectionChange:
+    type: "(value: string | null) => void"
+    required: false
+    description: Called when a child radio is selected.
+  required:
+    type: boolean
+    required: false
+    default: false
+    description: Whether a selection is required for validation.
+  error:
+    type: boolean
+    required: false
+    default: false
+    description: Error state indicator for group-level validation.
+  errorMessage:
+    type: string
+    required: false
+    description: Error message displayed above radio group with role=alert.
+  size:
+    type: "'sm' | 'md' | 'lg'"
+    required: false
+    default: "'md'"
+    description: Size variant propagated to all child Radio-Base components.
+  testID:
+    type: string
+    required: false
+    description: Test identifier for automated testing.
+
+tokens:
+  color:
+    - color.feedback.error.text
+    - color.print.default
+  typography:
+    - typography.caption
+  spacing:
+    - space.grouped.normal
+
+platforms:
+  - web
+  - ios
+  - android

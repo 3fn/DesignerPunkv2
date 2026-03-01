@@ -1,0 +1,135 @@
+# Input-Checkbox-Base Component Schema
+#
+# Stemma System: Form Inputs Family
+# Component Type: Primitive (Base)
+# Naming Convention: [Family]-[Type]-[Variant] = Input-Checkbox-Base
+#
+# Binary selection control with three sizes, label alignment options,
+# and indeterminate state. Parent for Input-Checkbox-Legal.
+# No disabled state by design.
+
+name: Input-Checkbox-Base
+type: primitive
+family: FormInputs
+version: "1.0.0"
+readiness: production-ready
+
+description: |
+  Primitive checkbox component supporting checked, unchecked, and
+  indeterminate states with three size variants and configurable
+  label alignment.
+
+  Key Characteristics:
+  - Three states: checked, unchecked, indeterminate
+  - Three sizes: sm (24px), md (32px), lg (40px)
+  - Label alignment: center or top (for multi-line)
+  - Label typography override for variant reuse
+  - Helper text and error message support
+  - No disabled state by design
+
+behaviors:
+  - toggleable
+  - focusable
+  - accessible
+  - sizable
+  - validatable
+
+properties:
+  checked:
+    type: boolean
+    required: false
+    default: false
+    description: Whether checkbox is checked.
+  indeterminate:
+    type: boolean
+    required: false
+    default: false
+    description: Indeterminate state displaying dash icon instead of checkmark.
+  label:
+    type: string
+    required: true
+    description: Label text associated with checkbox for accessibility.
+  size:
+    type: "'sm' | 'md' | 'lg'"
+    required: false
+    default: "'md'"
+    description: Size variant controlling box size, icon size, and label typography.
+  labelAlign:
+    type: "'center' | 'top'"
+    required: false
+    default: "'center'"
+    description: Vertical alignment of label relative to checkbox box.
+  labelTypography:
+    type: "'inherit' | 'sm' | 'md' | 'lg'"
+    required: false
+    default: "'inherit'"
+    description: Override label typography independent of size variant.
+  helperText:
+    type: string
+    required: false
+    description: Helper text displayed below checkbox.
+  errorMessage:
+    type: string
+    required: false
+    description: Error message with error styling and aria-invalid.
+  onChange:
+    type: "(checked: boolean) => void"
+    required: false
+    description: Called when checkbox state changes via user interaction.
+  id:
+    type: string
+    required: false
+    description: Unique identifier for label association and form integration.
+  testID:
+    type: string
+    required: false
+    description: Test identifier for automated testing.
+  name:
+    type: string
+    required: false
+    description: Form field name for form submission.
+  value:
+    type: string
+    required: false
+    default: "'on'"
+    description: Value submitted with form when checked.
+
+tokens:
+  color:
+    - color.contrast.onDark
+    - color.contrast.onLight
+    - color.feedback.error.border
+    - color.feedback.error.text
+    - color.feedback.select.background.rest
+    - color.feedback.select.border.default
+    - color.feedback.select.border.rest
+    - color.text.default
+    - color.text.muted
+  icon:
+    - icon.size050
+    - icon.size075
+    - icon.size100
+  accessibility:
+    - tapAreaMinimum
+    - tapAreaRecommended
+  motion:
+    - motion.buttonPress
+    - motion.selectionTransition
+  blend:
+    - blend.hoverDarker
+    - blend.pressedDarker
+  border:
+    - borderEmphasis
+  radius:
+    - radiusSmall
+    - radiusSubtle
+  scale:
+    - scale096
+  typography:
+    - typography.titleMedium
+    - typography.titleSmall
+
+platforms:
+  - web
+  - ios
+  - android
