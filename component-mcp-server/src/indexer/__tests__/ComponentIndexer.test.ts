@@ -66,7 +66,7 @@ describe('ComponentIndexer', () => {
       const meta = indexer.getComponent('Container-Card-Base');
       expect(meta).not.toBeNull();
       expect(meta!.composition).not.toBeNull();
-      expect(meta!.composition!.composes).toEqual(
+      expect(meta!.composition!.internal).toEqual(
         expect.arrayContaining([expect.objectContaining({ component: 'Container-Base' })])
       );
     });
@@ -106,6 +106,21 @@ describe('ComponentIndexer', () => {
       const after = indexer.getComponent('Badge-Count-Base');
       expect(after).not.toBeNull();
       expect(after!.indexedAt).not.toBe(beforeTime);
+    });
+  });
+
+  describe('resolvedTokens', () => {
+    it('populates composed tokens from internal relationships', () => {
+      const meta = indexer.getComponent('Container-Card-Base');
+      expect(meta!.resolvedTokens.own.length).toBeGreaterThan(0);
+      expect(meta!.resolvedTokens.composed['Container-Base']).toBeDefined();
+      expect(meta!.resolvedTokens.composed['Container-Base'].length).toBeGreaterThan(0);
+    });
+
+    it('returns empty composed for components with no composition', () => {
+      const meta = indexer.getComponent('Badge-Count-Base');
+      expect(meta!.resolvedTokens.own).toEqual(meta!.tokens);
+      expect(meta!.resolvedTokens.composed).toEqual({});
     });
   });
 

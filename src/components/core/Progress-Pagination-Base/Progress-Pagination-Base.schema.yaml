@@ -4,9 +4,10 @@ family: Progress-Indicator
 version: "1.0.0"
 readiness: development
 
-composes:
-  - component: Progress-Indicator-Node-Base
-    relationship: Renders one Node-Base per visible pagination item
+composition:
+  internal:
+    - component: Progress-Indicator-Node-Base
+      relationship: Renders one Node-Base per visible pagination item
 
 description: |
   Composes Progress-Indicator-Node-Base primitives to create a simple

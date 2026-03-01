@@ -4,11 +4,12 @@ family: Progress-Indicator
 version: "1.0.0"
 readiness: development
 
-composes:
-  - component: Progress-Indicator-Node-Base
-    relationship: Renders one Node-Base per step
-  - component: Progress-Indicator-Connector-Base
-    relationship: Renders one Connector-Base between each adjacent pair of nodes
+composition:
+  internal:
+    - component: Progress-Indicator-Node-Base
+      relationship: Renders one Node-Base per step
+    - component: Progress-Indicator-Connector-Base
+      relationship: Renders one Connector-Base between each adjacent pair of nodes
 
 description: |
   Semantic stepper component for the Progress Indicator family.

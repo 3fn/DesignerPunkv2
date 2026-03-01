@@ -2,12 +2,19 @@
  * Composition Checker
  *
  * Evaluates whether a parent component can contain a child component,
- * applying static constraints and conditional rules.
+ * applying static constraints and conditional rules. Also validates
+ * composition completeness against `requires` constraints.
  *
  * @see .kiro/specs/064-component-metadata-schema/design.md — Requirements 4.1–4.5
+ * @see .kiro/specs/066-schema-completion/design.md — requires/allowed/prohibited distinction
  */
 
 import { ComponentMetadata, CompositionResult } from '../models';
+
+export interface RequiresValidationResult {
+  complete: boolean;
+  missing: string[];
+}
 
 /**
  * Check if parent can contain child, given parent's current prop values.
@@ -84,4 +91,19 @@ function evaluateChildren(
   }
 
   return null;
+}
+
+/**
+ * Validate that a parent's `requires` constraints are satisfied by the given children.
+ * `requires` is a presence check: are all required component types present?
+ */
+export function validateRequires(
+  parent: ComponentMetadata,
+  childNames: string[],
+): RequiresValidationResult {
+  const requires = parent.composition?.children?.requires;
+  if (!requires || requires.length === 0) return { complete: true, missing: [] };
+
+  const missing = requires.filter(r => !childNames.includes(r));
+  return { complete: missing.length === 0, missing };
 }

@@ -39,6 +39,7 @@ contracts:
     description: Visual feedback on hover
     behavior: |
       On desktop platforms, component shows visual feedback on hover.
+      Uses blend.hoverDarker token (8% darker) applied to background color.
     wcag: "1.4.13 Content on Hover or Focus"
     platforms: [web]
     validation:
@@ -53,6 +54,7 @@ contracts:
     description: Visual feedback when pressed
     behavior: |
       Component shows visual feedback during active press/click.
+      Uses blend.pressedDarker token (12% darker) applied to background color.
     wcag: "2.4.7 Focus Visible"
     platforms: [web, ios, android]
     validation:

@@ -47,6 +47,7 @@ contracts:
     behavior: |
       On desktop platforms, component shows visual feedback when
       mouse hovers over the checkbox or label area.
+      Uses blend.hoverDarker token (8% darker) applied to border color.
     wcag: "1.4.13 Content on Hover or Focus"
     platforms: [web]
     validation:
@@ -63,6 +64,8 @@ contracts:
     behavior: |
       Component shows visual feedback during active press/click
       on the checkbox or label area.
+      Uses blend.pressedDarker token (12% darker) for ripple effect (Android)
+      and press feedback (web, iOS).
     wcag: "2.4.7 Focus Visible"
     platforms: [web, ios, android]
     validation:

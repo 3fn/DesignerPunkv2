@@ -2,16 +2,17 @@
  * CompositionChecker Unit Tests
  */
 
-import { checkComposition } from '../CompositionChecker';
+import { checkComposition, validateRequires } from '../CompositionChecker';
 import { ComponentMetadata, CompositionDefinition } from '../../models';
 
 function makeMeta(name: string, composition: CompositionDefinition | null, type = 'type-primitive'): ComponentMetadata {
   return {
     name, type, family: 'Test', version: '1.0.0', readiness: 'production-ready',
     description: '', platforms: ['web'], properties: {}, tokens: [],
-    composition,
+    composition, omits: [],
     contracts: { inheritsFrom: null, active: {}, excluded: {}, own: [], inherited: [] },
     annotations: null, contractTokenRelationships: { resolved: [], gaps: [] },
+    resolvedTokens: { own: [], composed: {} },
     indexedAt: '', warnings: [],
   };
 }
@@ -33,7 +34,7 @@ describe('checkComposition', () => {
 
   it('prohibits explicitly listed child', () => {
     const parent = makeMeta('Parent', {
-      composes: [],
+      internal: [],
       children: { prohibited: ['BadChild'] },
     });
     const index = makeIndex(parent);
@@ -44,7 +45,7 @@ describe('checkComposition', () => {
 
   it('allows explicitly listed child', () => {
     const parent = makeMeta('Parent', {
-      composes: [],
+      internal: [],
       children: { allowed: ['GoodChild'] },
     });
     const index = makeIndex(parent);
@@ -54,7 +55,7 @@ describe('checkComposition', () => {
 
   it('rejects child not in allowed list', () => {
     const parent = makeMeta('Parent', {
-      composes: [],
+      internal: [],
       children: { allowed: ['GoodChild'] },
     });
     const index = makeIndex(parent);
@@ -65,7 +66,7 @@ describe('checkComposition', () => {
 
   it('prohibits self-nesting when nesting.self is false', () => {
     const parent = makeMeta('Parent', {
-      composes: [],
+      internal: [],
       nesting: { self: false },
     });
     const index = makeIndex(parent);
@@ -76,7 +77,7 @@ describe('checkComposition', () => {
 
   it('conditional rule overrides static constraints', () => {
     const parent = makeMeta('Card', {
-      composes: [],
+      internal: [],
       children: { allowed: ['Text', 'Image', 'Button'] },
       rules: [{
         when: { prop: 'role', equals: 'button' },
@@ -97,9 +98,46 @@ describe('checkComposition', () => {
   });
 
   it('allows unknown component by default with no constraints', () => {
-    const parent = makeMeta('Parent', { composes: [] });
+    const parent = makeMeta('Parent', { internal: [] });
     const index = makeIndex(parent);
     const result = checkComposition(parent, 'UnknownComponent', index);
     expect(result.allowed).toBe(true);
+  });
+});
+
+describe('validateRequires', () => {
+  it('returns complete when all required types present', () => {
+    const parent = makeMeta('Set', {
+      internal: [],
+      children: { requires: ['Item-Base'], allowed: ['Item-Base'] },
+    });
+    const result = validateRequires(parent, ['Item-Base']);
+    expect(result.complete).toBe(true);
+    expect(result.missing).toHaveLength(0);
+  });
+
+  it('returns missing when required type absent', () => {
+    const parent = makeMeta('Set', {
+      internal: [],
+      children: { requires: ['Item-Base'], allowed: ['Item-Base'] },
+    });
+    const result = validateRequires(parent, ['Other-Component']);
+    expect(result.complete).toBe(false);
+    expect(result.missing).toEqual(['Item-Base']);
+  });
+
+  it('returns complete when no requires defined', () => {
+    const parent = makeMeta('Parent', {
+      internal: [],
+      children: { allowed: ['Anything'] },
+    });
+    const result = validateRequires(parent, []);
+    expect(result.complete).toBe(true);
+  });
+
+  it('returns complete when no composition at all', () => {
+    const parent = makeMeta('Parent', null);
+    const result = validateRequires(parent, []);
+    expect(result.complete).toBe(true);
   });
 });

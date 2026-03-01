@@ -87,8 +87,9 @@ export interface CompositionRule {
 }
 
 export interface CompositionDefinition {
-  composes: CompositionRelationship[];
+  internal: CompositionRelationship[];
   children?: {
+    requires?: string[];
     allowed?: string[];
     prohibited?: string[];
     allowedCategories?: string[];
@@ -149,6 +150,9 @@ export interface ComponentMetadata {
   tokens: string[];
   composition: CompositionDefinition | null;
 
+  /** Property omissions from parent (schema-level, distinct from contract excludes) */
+  omits: string[];
+
   /** Behavioral contracts (from contracts.yaml, inheritance resolved) */
   contracts: ResolvedContracts;
 
@@ -157,6 +161,12 @@ export interface ComponentMetadata {
 
   /** Derived data (computed at query time) */
   contractTokenRelationships: ContractTokenRelationships;
+
+  /** Resolved token assembly (own + depth-1 composed children) */
+  resolvedTokens: {
+    own: string[];
+    composed: Record<string, string[]>;
+  };
 
   /** Indexing metadata */
   indexedAt: string;
@@ -190,7 +200,8 @@ export interface ComponentSummary {
   contractCount: number;
   tokenCount: number;
   annotations: SemanticAnnotations | null;
-  composesComponents: string[];
+  internalComponents: string[];
+  requiredChildren: string[];
   inheritsFrom: string | null;
 }
 

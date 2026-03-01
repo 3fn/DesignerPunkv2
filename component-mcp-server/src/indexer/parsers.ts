@@ -32,6 +32,7 @@ export interface ParsedSchema {
   platforms: string[];
   properties: Record<string, PropertyDefinition>;
   tokens: string[];
+  omits: string[];
   composition: CompositionDefinition | null;
 }
 
@@ -112,6 +113,7 @@ export function parseSchemaYaml(filePath: string): ParseResult<ParsedSchema> {
       platforms,
       properties,
       tokens,
+      omits: toStringArray(doc.omits),
       composition,
     },
     warning: null,
@@ -232,22 +234,17 @@ function extractTokens(raw: unknown): string[] {
 
 /** Extract composition definition from schema doc. */
 function extractComposition(doc: Record<string, unknown>): CompositionDefinition | null {
-  const rawComposes = doc.composes;
   const rawComposition = doc.composition as Record<string, unknown> | undefined;
 
-  // No composition data at all
-  if (!rawComposes && !rawComposition) return null;
+  if (!rawComposition) return null;
 
-  const composes: CompositionRelationship[] = Array.isArray(rawComposes)
-    ? rawComposes.map((c: Record<string, unknown>) => ({
+  const rawInternal = rawComposition.internal;
+  const internal: CompositionRelationship[] = Array.isArray(rawInternal)
+    ? rawInternal.map((c: Record<string, unknown>) => ({
         component: String(c.component ?? ''),
         relationship: String(c.relationship ?? ''),
       }))
     : [];
-
-  if (!rawComposition) {
-    return composes.length > 0 ? { composes } : null;
-  }
 
   const children = rawComposition.children as Record<string, unknown> | undefined;
   const nesting = rawComposition.nesting as Record<string, unknown> | undefined;
@@ -261,8 +258,9 @@ function extractComposition(doc: Record<string, unknown>): CompositionDefinition
     : undefined;
 
   return {
-    composes,
+    internal,
     children: children ? {
+      requires: toStringArray(children.requires),
       allowed: toStringArray(children.allowed),
       prohibited: toStringArray(children.prohibited),
       allowedCategories: toStringArray(children.allowed_categories),

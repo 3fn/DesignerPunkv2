@@ -30,10 +30,10 @@ describe('parseSchemaYaml', () => {
     expect(result.data!.tokens).toContain('space.inset.150');
   });
 
-  it('extracts composition from composes field', () => {
+  it('extracts composition from internal field', () => {
     const result = parseSchemaYaml(path.join(COMPONENTS_DIR, 'Container-Card-Base', 'Container-Card-Base.schema.yaml'));
     expect(result.data!.composition).not.toBeNull();
-    expect(result.data!.composition!.composes).toEqual(
+    expect(result.data!.composition!.internal).toEqual(
       expect.arrayContaining([expect.objectContaining({ component: 'Container-Base' })])
     );
   });

@@ -27,6 +27,7 @@ readiness: production-ready
 
 # Inheritance declaration
 inherits: Chip-Base
+omits: [onPress]
 
 # Component description
 description: |

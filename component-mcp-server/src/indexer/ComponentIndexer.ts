@@ -17,7 +17,7 @@ import {
   ResolvedContracts,
 } from '../models';
 import { parseSchemaYaml, parseContractsYaml, parseComponentMetaYaml, ParsedContracts } from './parsers';
-import { resolveInheritance } from './InheritanceResolver';
+import { resolveInheritance, validateOmits } from './InheritanceResolver';
 import { deriveContractTokenRelationships } from './ContractTokenDeriver';
 
 export class ComponentIndexer {
@@ -58,6 +58,9 @@ export class ComponentIndexer {
       this.assembleComponent(componentsDir, dir);
     }
 
+    // Third pass: resolve composed tokens (needs all components indexed first)
+    this.resolveComposedTokens();
+
     this.lastIndexTime = new Date().toISOString();
   }
 
@@ -84,6 +87,7 @@ export class ComponentIndexer {
     }
 
     this.assembleComponent(componentsDir, dir);
+    this.resolveComposedTokens();
     this.lastIndexTime = new Date().toISOString();
   }
 
@@ -174,6 +178,19 @@ export class ComponentIndexer {
     const metaResult = parseComponentMetaYaml(path.join(dirPath, 'component-meta.yaml'));
     // No warning for missing meta — expected for components without annotations yet
 
+    // Validate omits against parent properties
+    if (schema.omits.length > 0) {
+      const parentName = contracts.inheritsFrom;
+      const parentMeta = parentName ? this.index.get(parentName) : null;
+      const omitsResult = validateOmits(
+        schema.name,
+        schema.omits,
+        parentName,
+        parentMeta?.properties ?? null,
+      );
+      warnings.push(...omitsResult.warnings);
+    }
+
     // Assemble
     const metadata: ComponentMetadata = {
       name: schema.name,
@@ -186,6 +203,7 @@ export class ComponentIndexer {
       properties: schema.properties,
       tokens: schema.tokens,
       composition: schema.composition,
+      omits: schema.omits,
       contracts,
       annotations: metaResult.data ? {
         purpose: metaResult.data.purpose,
@@ -194,10 +212,43 @@ export class ComponentIndexer {
         alternatives: metaResult.data.alternatives,
       } : null,
       contractTokenRelationships: deriveContractTokenRelationships(contracts, schema.tokens),
+      resolvedTokens: { own: schema.tokens, composed: {} },
       indexedAt: new Date().toISOString(),
       warnings,
     };
 
     this.index.set(schema.name, metadata);
+  }
+
+  /**
+   * Resolve composed tokens for all indexed components (depth-1 only).
+   * Collects tokens from internal and children.requires relationships.
+   */
+  private resolveComposedTokens(): void {
+    for (const meta of this.index.values()) {
+      if (!meta.composition) continue;
+
+      const composed: Record<string, string[]> = {};
+      const childNames = new Set<string>();
+
+      for (const rel of meta.composition.internal) childNames.add(rel.component);
+      if (meta.composition.children?.requires) {
+        for (const r of meta.composition.children.requires) childNames.add(r);
+      }
+
+      for (const name of childNames) {
+        const child = this.index.get(name);
+        if (child) {
+          composed[name] = child.tokens;
+        } else {
+          composed[name] = [];
+          meta.warnings.push(`Composed child ${name} not indexed — tokens unavailable`);
+        }
+      }
+
+      if (Object.keys(composed).length > 0) {
+        meta.resolvedTokens = { own: meta.tokens, composed };
+      }
+    }
   }
 }

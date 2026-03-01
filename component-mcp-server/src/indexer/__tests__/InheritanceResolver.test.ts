@@ -3,7 +3,7 @@
  */
 
 import * as path from 'path';
-import { resolveInheritance } from '../InheritanceResolver';
+import { resolveInheritance, validateOmits } from '../InheritanceResolver';
 import { parseContractsYaml, ParsedContracts } from '../parsers';
 
 const COMPONENTS_DIR = path.resolve(__dirname, '../../../../src/components/core');
@@ -107,5 +107,39 @@ describe('resolveInheritance', () => {
     expect(result.contracts.inheritsFrom).toBeNull();
     expect(result.contracts.inherited).toHaveLength(0);
     expect(result.contracts.own.length).toBe(Object.keys(standalone.contracts).length);
+  });
+});
+
+describe('validateOmits', () => {
+  const parentProps = { size: {}, indeterminate: {}, labelAlign: {}, checked: {} };
+
+  it('returns valid omits when props exist on parent', () => {
+    const result = validateOmits('Child', ['size', 'indeterminate'], 'Parent', parentProps);
+    expect(result.valid).toEqual(['size', 'indeterminate']);
+    expect(result.warnings).toHaveLength(0);
+  });
+
+  it('warns when omitted prop not found on parent', () => {
+    const result = validateOmits('Child', ['size', 'nonexistent'], 'Parent', parentProps);
+    expect(result.valid).toEqual(['size']);
+    expect(result.warnings).toEqual(["Omit 'nonexistent' not found on parent Parent"]);
+  });
+
+  it('warns when omits declared but no parent', () => {
+    const result = validateOmits('Child', ['size'], null, null);
+    expect(result.warnings).toEqual(['Child declares omits but has no parent']);
+    expect(result.valid).toHaveLength(0);
+  });
+
+  it('returns empty for no omits', () => {
+    const result = validateOmits('Child', [], 'Parent', parentProps);
+    expect(result.valid).toHaveLength(0);
+    expect(result.warnings).toHaveLength(0);
+  });
+
+  it('warns when parent not indexed but preserves omits', () => {
+    const result = validateOmits('Child', ['size'], 'Parent', null);
+    expect(result.valid).toEqual(['size']);
+    expect(result.warnings).toEqual(['Cannot validate omits for Child: parent Parent not indexed']);
   });
 });

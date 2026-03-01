@@ -9,7 +9,7 @@
  */
 
 import { ComponentIndexer } from '../indexer/ComponentIndexer';
-import { checkComposition } from '../indexer/CompositionChecker';
+import { checkComposition, validateRequires, RequiresValidationResult } from '../indexer/CompositionChecker';
 import {
   ComponentMetadata,
   ComponentCatalogEntry,
@@ -61,7 +61,8 @@ export class ComponentQueryEngine {
       contractCount: Object.keys(meta.contracts.active).length,
       tokenCount: meta.tokens.length,
       annotations: meta.annotations,
-      composesComponents: meta.composition?.composes.map(c => c.component) ?? [],
+      internalComponents: meta.composition?.internal.map(c => c.component) ?? [],
+      requiredChildren: meta.composition?.children?.requires ?? [],
       inheritsFrom: meta.contracts.inheritsFrom,
     };
     return { data: summary, error: null, warnings: [], metrics: { responseTimeMs: Date.now() - start } };
@@ -157,6 +158,16 @@ export class ComponentQueryEngine {
     return { data: result, error: null, warnings: [], metrics: { responseTimeMs: Date.now() - start } };
   }
 
+  checkRequires(parent: string, childNames: string[]): QueryResult<RequiresValidationResult> {
+    const start = Date.now();
+    const parentMeta = this.indexer.getComponent(parent);
+    if (!parentMeta) {
+      return { data: null, error: `Parent component "${parent}" not found`, warnings: [], metrics: { responseTimeMs: Date.now() - start } };
+    }
+    const result = validateRequires(parentMeta, childNames);
+    return { data: result, error: null, warnings: [], metrics: { responseTimeMs: Date.now() - start } };
+  }
+
   getHealth(): IndexHealth {
     return this.indexer.getHealth();
   }
@@ -173,7 +184,8 @@ export class ComponentQueryEngine {
       contractCount: Object.keys(meta.contracts.active).length,
       tokenCount: meta.tokens.length,
       annotations: meta.annotations,
-      composesComponents: meta.composition?.composes.map(c => c.component) ?? [],
+      internalComponents: meta.composition?.internal.map(c => c.component) ?? [],
+      requiredChildren: meta.composition?.children?.requires ?? [],
       inheritsFrom: meta.contracts.inheritsFrom,
     };
   }

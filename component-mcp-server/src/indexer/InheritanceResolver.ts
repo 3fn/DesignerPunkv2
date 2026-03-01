@@ -105,3 +105,50 @@ function buildOwnOnly(parsed: ParsedContracts, inheritsFrom?: string): ResolvedC
     inherited: [],
   };
 }
+
+// ---------------------------------------------------------------------------
+// Property Omits Validation
+// ---------------------------------------------------------------------------
+
+export interface OmitsValidationResult {
+  valid: string[];
+  warnings: string[];
+}
+
+/**
+ * Validate that omitted props exist on the parent's property set.
+ * Returns the valid omits and warnings for any that don't match.
+ */
+export function validateOmits(
+  childName: string,
+  omits: string[],
+  parentName: string | null,
+  parentProperties: Record<string, unknown> | null,
+): OmitsValidationResult {
+  if (omits.length === 0) return { valid: [], warnings: [] };
+
+  if (!parentName) {
+    return {
+      valid: [],
+      warnings: [`${childName} declares omits but has no parent`],
+    };
+  }
+
+  if (!parentProperties) {
+    return {
+      valid: omits,
+      warnings: [`Cannot validate omits for ${childName}: parent ${parentName} not indexed`],
+    };
+  }
+
+  const valid: string[] = [];
+  const warnings: string[] = [];
+  for (const prop of omits) {
+    if (prop in parentProperties) {
+      valid.push(prop);
+    } else {
+      warnings.push(`Omit '${prop}' not found on parent ${parentName}`);
+    }
+  }
+  return { valid, warnings };
+}
