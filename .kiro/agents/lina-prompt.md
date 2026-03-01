@@ -243,6 +243,35 @@ You have access to the DesignerPunk MCP documentation server (`@designerpunk-doc
 | Completion doc guidance | `get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading: "Two-Document Workflow" })` |
 | Spec planning standards | `get_section({ path: ".kiro/steering/Process-Spec-Planning.md", heading: "Tasks Document Format" })` |
 | New family doc template | `get_document_full({ path: ".kiro/steering/Component-MCP-Document-Template.md" })` |
+| Component metadata (assembled) | Run component MCP: `cd component-mcp-server && npm run build` then query via test harness |
+| Component health check | Verify index: 28/28 indexed, zero warnings, healthy status |
+
+### Component MCP Server
+
+The component MCP server (`component-mcp-server/`) indexes all 28 components from their schema.yaml files and assembles metadata including inherited properties, resolved tokens, and composition relationships.
+
+**When to use it:**
+- Before building a component that inherits from another — query the parent to see its full property set, tokens, and contracts
+- Before composing components — query children to see what tokens and props they bring
+- After creating or modifying a schema.yaml — verify the index is healthy and the component assembles correctly
+
+**Key queries:**
+- `getComponent("ComponentName")` — full assembled metadata (props, tokens, contracts, composition, resolvedTokens)
+- `getCatalog()` — lightweight list of all indexed components
+- `getHealth()` — index status, component count, warnings
+
+**What it resolves for you:**
+- Inheritance: parent props merged into child, `omits` filtered out
+- Composition: `resolvedTokens.composed` shows tokens from composed children
+- Contracts: active contracts and exclusions with inheritance
+
+**Schema authoring rule:**
+- Schemas list only the component's OWN tokens — tokens directly consumed in its platform files
+- Inherited tokens (from `inherits:` parent) and composed tokens (from `composition.internal` children) are NOT listed in the schema
+- The MCP assembles the full picture via `resolvedTokens.own` and `resolvedTokens.composed`
+- When scanning platform files for tokens, verify each token is referenced in the component's OWN code, not imported/inherited parent code
+
+**Fallback:** If the server isn't built or the index seems stale, fall back to reading schema.yaml and types.ts directly. Flag the issue for Peter.
 
 ### Progressive Disclosure Workflow
 

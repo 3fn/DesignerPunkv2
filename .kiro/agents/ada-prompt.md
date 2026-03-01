@@ -154,6 +154,17 @@ You have access to the DesignerPunk MCP documentation server (`@designerpunk-doc
 | Completion doc guidance | `get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading: "Two-Document Workflow" })` |
 | Spec planning standards | `get_section({ path: ".kiro/steering/Process-Spec-Planning.md", heading: "Tasks Document Format" })` |
 | Component dev guide | `get_section({ path: ".kiro/steering/Component-Development-Guide.md", heading: "Token Selection Decision Framework" })` |
+| Component token usage | Query component MCP: `getComponent("Name")` → check `tokens` and `resolvedTokens` fields |
+
+### Component MCP Server
+
+The component MCP server (`component-mcp-server/`) indexes all 28 components and their token usage from schema.yaml files.
+
+**When to use it:**
+- When checking which tokens a component consumes — query `getComponent("Name")` and read the `tokens` and `resolvedTokens` fields
+- When auditing blend token coverage across components — query `getCatalog()` then spot-check individual components
+
+**Fallback:** If unavailable, read the component's schema.yaml `tokens:` section directly.
 
 ### Progressive Disclosure Workflow
 
