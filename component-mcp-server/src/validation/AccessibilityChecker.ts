@@ -37,6 +37,8 @@ export class AccessibilityChecker {
           severity: 'error',
         });
       }
+      // TODO: Hardcodes Button-CTA. When role-based component flexibility is resolved,
+      // check for any component with a submit-action role instead. (Thurgood, Task 3.2 review)
       if (!this.hasDescendant(node, 'Button-CTA')) {
         issues.push({
           rule: 'form-needs-submit-action',

@@ -65,8 +65,8 @@ export class ComponentIndexer {
     // Third pass: resolve composed tokens (needs all components indexed first)
     this.resolveComposedTokens();
 
-    // Index experience patterns
-    const patternsDir = path.resolve(path.dirname(componentsDir), '..', 'experience-patterns');
+    // Index experience patterns (resolve from project root, not components dir)
+    const patternsDir = path.resolve(componentsDir, '..', '..', '..', 'experience-patterns');
     await this.patternIndexer.indexPatterns(patternsDir);
 
     this.lastIndexTime = new Date().toISOString();
