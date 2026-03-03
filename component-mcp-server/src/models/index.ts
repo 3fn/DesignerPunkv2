@@ -205,6 +205,15 @@ export interface ComponentSummary {
   inheritsFrom: string | null;
 }
 
+/** Tier 2+: Application-facing summary (promotes annotation fields for agent consumption) */
+export interface ApplicationSummary extends ComponentSummary {
+  purpose: string | null;
+  whenToUse: string[];
+  whenNotToUse: string[];
+  alternatives: Alternative[];
+  contexts: string[];
+}
+
 // ---------------------------------------------------------------------------
 // Index Health
 // ---------------------------------------------------------------------------

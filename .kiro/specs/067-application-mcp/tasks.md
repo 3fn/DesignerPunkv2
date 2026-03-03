@@ -118,7 +118,7 @@ Tasks are grouped into 4 parent tasks: (1) Experience Pattern Schema, (2) Enhanc
     **Informed Placeholder**: Rewrite after Task 1.7 (Pattern C complete). Interview questions and validation focus will be informed by what Patterns A and C established. Core intent: validate schema handles sequencing (multiple steps with different component sets, inter-step navigation).
     - _Requirements: 3, 6.3_
 
-- [ ] 2. Enhanced Component Selection
+- [x] 2. Enhanced Component Selection
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -143,7 +143,7 @@ Tasks are grouped into 4 parent tasks: (1) Experience Pattern Schema, (2) Enhanc
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Enhanced Component Selection"` (runs release analysis automatically)
   - Verify: Check GitHub for committed changes
 
-  - [ ] 2.1 Add ApplicationSummary model and context filter
+  - [x] 2.1 Add ApplicationSummary model and context filter
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -156,7 +156,7 @@ Tasks are grouped into 4 parent tasks: (1) Experience Pattern Schema, (2) Enhanc
     - Write new tests for context filter (match, no match, conjunctive, no annotations)
     - _Requirements: 1, 2_
 
-  - [ ] 2.2 Update find_components tool description
+  - [x] 2.2 Update find_components tool description
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     **Agent**: Lina

@@ -47,7 +47,7 @@ const tools = [
   },
   {
     name: 'find_components',
-    description: 'Find components by category, concept, platform, or purpose keyword. All parameters optional and combinable.',
+    description: 'Find components by category, concept, platform, purpose keyword, or usage context. Returns ApplicationSummary with promoted selection guidance (purpose, whenToUse, whenNotToUse, alternatives, contexts). All parameters optional and combinable (conjunctive).',
     inputSchema: {
       type: 'object' as const,
       properties: {
@@ -55,6 +55,7 @@ const tools = [
         concept: { type: 'string', description: 'Specific contract concept (e.g., "keyboard_navigation")' },
         platform: { type: 'string', description: 'Platform (e.g., "ios")' },
         purpose: { type: 'string', description: 'Purpose keyword search' },
+        context: { type: 'string', description: 'Usage context — exact match (e.g., "form-footers", "onboarding-flows", "settings-screens")' },
       },
     },
   },
@@ -167,6 +168,7 @@ class ComponentMCPServer {
       concept: params.concept as string | undefined,
       platform: params.platform as string | undefined,
       purpose: params.purpose as string | undefined,
+      context: params.context as string | undefined,
     });
   }
 }

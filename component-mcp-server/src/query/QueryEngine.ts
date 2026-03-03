@@ -14,6 +14,7 @@ import {
   ComponentMetadata,
   ComponentCatalogEntry,
   ComponentSummary,
+  ApplicationSummary,
   CompositionResult,
   IndexHealth,
   QueryResult,
@@ -123,7 +124,7 @@ export class ComponentQueryEngine {
     return { data: results, error: null, warnings: [], metrics: { responseTimeMs: Date.now() - start } };
   }
 
-  findComponents(filters: { category?: string; concept?: string; platform?: string; purpose?: string }): QueryResult<ComponentSummary[]> {
+  findComponents(filters: { category?: string; concept?: string; platform?: string; purpose?: string; context?: string }): QueryResult<ApplicationSummary[]> {
     const start = Date.now();
     let candidates = Array.from(this.indexer.getIndex().values());
 
@@ -145,8 +146,12 @@ export class ComponentQueryEngine {
         return purpose.includes(lower) || desc.includes(lower);
       });
     }
+    if (filters.context) {
+      candidates = candidates.filter(m =>
+        m.annotations?.contexts?.includes(filters.context!) ?? false);
+    }
 
-    const results = candidates.map(m => this.toSummary(m)).sort((a, b) => a.name.localeCompare(b.name));
+    const results = candidates.map(m => this.toApplicationSummary(m)).sort((a, b) => a.name.localeCompare(b.name));
     return { data: results, error: null, warnings: [], metrics: { responseTimeMs: Date.now() - start } };
   }
 
@@ -205,6 +210,17 @@ export class ComponentQueryEngine {
       internalComponents: meta.composition?.internal.map(c => c.component) ?? [],
       requiredChildren: meta.composition?.children?.requires ?? [],
       inheritsFrom: meta.contracts.inheritsFrom,
+    };
+  }
+
+  private toApplicationSummary(meta: ComponentMetadata): ApplicationSummary {
+    return {
+      ...this.toSummary(meta),
+      purpose: meta.annotations?.purpose ?? null,
+      whenToUse: meta.annotations?.usage.whenToUse ?? [],
+      whenNotToUse: meta.annotations?.usage.whenNotToUse ?? [],
+      alternatives: meta.annotations?.alternatives ?? [],
+      contexts: meta.annotations?.contexts ?? [],
     };
   }
 }

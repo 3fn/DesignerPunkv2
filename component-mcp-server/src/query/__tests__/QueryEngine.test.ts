@@ -123,6 +123,59 @@ describe('ComponentQueryEngine', () => {
       const result = engine.findComponents({ concept: 'content_displays_count', platform: 'nonexistent' });
       expect(result.data!).toHaveLength(0);
     });
+
+    it('filters by context (exact match against contexts array)', () => {
+      const result = engine.findComponents({ context: 'form-footers' });
+      expect(result.data!.length).toBeGreaterThan(0);
+      for (const s of result.data!) {
+        expect(s.contexts).toContain('form-footers');
+      }
+    });
+
+    it('context filter excludes components without annotations', () => {
+      const result = engine.findComponents({ context: 'form-footers' });
+      for (const s of result.data!) {
+        expect(s.annotations).not.toBeNull();
+      }
+    });
+
+    it('context filter conjunctive with other filters', () => {
+      const contextOnly = engine.findComponents({ context: 'form-footers' });
+      const combined = engine.findComponents({ context: 'form-footers', platform: 'web' });
+      expect(combined.data!.length).toBeLessThanOrEqual(contextOnly.data!.length);
+    });
+
+    it('returns empty for nonexistent context', () => {
+      const result = engine.findComponents({ context: 'nonexistent-context' });
+      expect(result.data!).toHaveLength(0);
+    });
+
+    it('returns ApplicationSummary with promoted annotation fields', () => {
+      const result = engine.findComponents({ context: 'form-footers' });
+      const first = result.data![0];
+      expect(first).toHaveProperty('purpose');
+      expect(first).toHaveProperty('whenToUse');
+      expect(first).toHaveProperty('whenNotToUse');
+      expect(first).toHaveProperty('alternatives');
+      expect(first).toHaveProperty('contexts');
+      expect(Array.isArray(first.whenToUse)).toBe(true);
+      expect(Array.isArray(first.whenNotToUse)).toBe(true);
+      expect(Array.isArray(first.alternatives)).toBe(true);
+      expect(Array.isArray(first.contexts)).toBe(true);
+    });
+
+    it('ApplicationSummary has null purpose when annotations missing', () => {
+      // No filters — returns all components, some may lack annotations
+      const result = engine.findComponents({});
+      const withoutAnnotations = result.data!.filter(s => s.annotations === null);
+      for (const s of withoutAnnotations) {
+        expect(s.purpose).toBeNull();
+        expect(s.whenToUse).toEqual([]);
+        expect(s.whenNotToUse).toEqual([]);
+        expect(s.alternatives).toEqual([]);
+        expect(s.contexts).toEqual([]);
+      }
+    });
   });
 
   describe('searchByPurpose ordering', () => {
