@@ -1,26 +1,25 @@
-# DesignerPunk v8
+# DesignerPunk v9
 
 **A Design System Foundation Built for Modern Product Development, Cross-Platform Excellence, and AI-Assisted Development**
 
-[![Version](https://img.shields.io/badge/Version-8.0.0-purple)](docs/releases/RELEASE-NOTES-8.0.0.md)
+[![Version](https://img.shields.io/badge/Version-9.0.0-purple)](docs/releases/RELEASE-NOTES-9.0.0.md)
 [![Repository](https://img.shields.io/badge/GitHub-DesignerPunkv2-blue)](https://github.com/3fn/DesignerPunkv2)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
-[![Tests](https://img.shields.io/badge/Tests-7400%2B-brightgreen)](.)
+[![Tests](https://img.shields.io/badge/Tests-7500%2B-brightgreen)](.)
 
 ---
 
-## Latest Release: v8.0.0
+## Latest Release: v9.0.0
 
-**Contract & Metadata Infrastructure** — Three specs delivering uniform behavioral contracts, machine-readable component metadata, and a rebuilt release pipeline:
+**Application MCP** — Two specs completing the component catalog and evolving the component MCP from a development tool into an application MCP:
 
-- **Uniform Contract System** (Spec 063): 10-category behavioral contract taxonomy with 112 concepts across all 28 components — standardized `contracts.yaml` files as the sole source of truth for behavioral guarantees, with formal inheritance and intentional exclusions
-- **Component Metadata Schema** (Spec 064): New component MCP server assembling schema, contracts, and semantic annotations into a queryable catalog — 6 tools with progressive disclosure for agent-driven component selection and composition
-- **Release System Rebuild** (Spec 065): Summary-driven release analysis pipeline with LLM-powered change classification, version recommendation, and automated release notes generation
+- **Schema Completion** (Spec 066): 8 remaining components schemaed, 28/28 catalog complete. MCP models evolved with `internal`/`children.requires` composition split, property `omits`, and `resolvedTokens`. Disabled state exclusion standardized across 14 components.
+- **Application MCP** (Spec 067): 3 new MCP tools — `list_experience_patterns` and `get_experience_pattern` for assembly guidance, `validate_assembly` for structural and accessibility validation. Enhanced `findComponents` with context filter and `ApplicationSummary` response. 3 experience patterns authored through structured interviews.
 
-**Breaking**: Avatar renamed to Avatar-Base; component MCP server is a new sibling server; release tool relocated to `src/tools/release/`.
+**Breaking**: `composes` → `internal` on CompositionDefinition; `children.requires` added; `findComponents` returns `ApplicationSummary[]`.
 
-[Full Release Notes →](docs/releases/RELEASE-NOTES-8.0.0.md)
+[Full Release Notes →](docs/releases/RELEASE-NOTES-9.0.0.md)
 
 ---
 
@@ -74,7 +73,7 @@ A framework for building components that work identically across platforms while
 
 - **Naming Convention**: `[Family]-[Type]-[Variant]` (AI-discoverable)
 - **Behavioral Contracts**: 10-category taxonomy with 112 concepts — explicit specifications ensuring cross-platform consistency
-- **Component MCP Server**: Machine-readable metadata with 6 query tools for agent-driven component selection
+- **Component MCP Server**: Machine-readable metadata with 9 query tools for agent-driven component selection, experience patterns, and assembly validation
 - **11 Component Families**: Navigation, Form Inputs, Core, Progress Indicators, Data Displays, etc.
 - **Purpose**: Systematic, scalable component development with shared architecture
 
@@ -148,7 +147,7 @@ This is the **producer/musician model**: I don't write the music, but I shape th
 
 **Why this matters**: This demonstrates how modern product teams actually work. You don't need to be an expert coder to build sophisticated systems—you need to understand architecture, make good decisions, and guide implementation effectively.
 
-DesignerPunk has 7,400+ tests, production implementations across Web/iOS/Android, and sophisticated build pipelines—all architected and guided by clear framing, with execution handled by AI.
+DesignerPunk has 7,500+ tests, production implementations across Web/iOS/Android, and sophisticated build pipelines—all architected and guided by clear framing, with execution handled by AI.
 
 This is a working case study in how to lead AI-driven development at scale.
 
@@ -176,7 +175,7 @@ This is a working case study in how to lead AI-driven development at scale.
 - 3 specialized Kiro agents: Ada (tokens), Lina (components), Thurgood (governance)
 - Domain-scoped configurations with progressive `skill://` resource loading
 - 11 user-triggered validation hooks across all agents
-- 53 steering docs with skill-compatible frontmatter for on-demand loading
+- 54 steering docs with skill-compatible frontmatter for on-demand loading
 
 **Rosetta Token System**
 - 310+ tokens (spacing, typography, color, radius, shadow, glow, motion, opacity, blend)
@@ -184,6 +183,7 @@ This is a working case study in how to lead AI-driven development at scale.
 - Three-tier architecture (Primitive → Semantic → Component)
 - MCP Documentation Server with 82% token reduction for AI agent queries
 - Component MCP Server with progressive disclosure queries for agent-driven selection
+- 3 experience patterns for assembly guidance (forms, settings, onboarding)
 - Bidirectional Figma integration: token push (Variables + Styles) and design extraction (ComponentAnalysis with three-tier classification)
 
 ### 🟡 Structural Foundation Ready
@@ -219,7 +219,7 @@ If you want to understand how these ideas work in practice:
 1. **The token system** (`src/tokens/`) — 310 tokens organized mathematically with cross-platform generation
 2. **Component implementations** (`src/components/`) — Real, production-ready components for Web/iOS/Android
 3. **MCP Documentation Server** (`mcp-server/`) — Working implementation you can integrate with Cursor or Claude
-4. **Component MCP Server** (`component-mcp-server/`) — Agent-driven component discovery and selection
+4. **Application MCP Server** (`component-mcp-server/`) — Agent-driven component selection, experience patterns, and assembly validation
 5. **Steering Documentation** (`.kiro/steering/`) — Current architectural thinking and development guidance
 
 ### Installation
@@ -284,9 +284,9 @@ With MCP: *"Query the documentation map → get summary → retrieve specific se
 ### Component Selection as a Queryable System
 
 Instead of: *"Parse 28 schema files, 28 contract files, and 28 annotation files"*
-With Component MCP: *"find_components({ purpose: 'email' }) → get_component_summary('Input-Text-Email')"*
+With Component MCP: *"find_components({ context: 'login-forms' }) → get_experience_pattern('simple-form') → validate_assembly(tree)"*
 
-**Result**: Agents discover and select components through structured queries, not file parsing
+**Result**: Agents select components by context, learn assembly patterns, and validate complete UI trees — all through structured queries
 
 ### Component Token Authoring
 
@@ -349,7 +349,7 @@ The following represent areas of active development, sequenced by dependencies a
 
 ### Current Work
 
-- Specs 048-065 (active implementation)
+- Specs 048-067 (active implementation)
 
 ### Near-Term Focus
 
@@ -425,8 +425,8 @@ This project demonstrates:
 | **Complete design system foundation** | Shows understanding of system design, not just components |
 | **Cross-platform native code** | Demonstrates bridge between design and deep technical work |
 | **310+ tokens** | Proves ability to create systematic, scalable foundations |
-| **7,400+ tests** | Shows commitment to reliability and quality |
-| **2 MCP Servers** (docs + components) | Working solutions to real AI collaboration problems |
+| **7,500+ tests** | Shows commitment to reliability and quality |
+| **2 MCP Servers** (docs + application) | Working solutions to real AI collaboration problems |
 | **112 behavioral contracts** | Explicit cross-platform consistency guarantees |
 | **Architectural documentation** | Demonstrates design leadership and systems thinking |
 
@@ -491,16 +491,18 @@ Even if you don't adopt DesignerPunk directly, I hope it influences how you thin
 
 ## What Changed from Previous Version
 
-1. ✅ **Added** Uniform Contract System: 10-category taxonomy, 112 concepts, 28 contracts.yaml files (Spec 063)
-2. ✅ **Added** Component MCP Server: 6 query tools with progressive disclosure, resolve-on-read assembly (Spec 064)
-3. ✅ **Added** 28 component-meta.yaml semantic annotations with purpose, usage, contexts, alternatives (Spec 064)
-4. ✅ **Added** Contract-token derivation for accessibility and animation contracts (Spec 064)
-5. ✅ **Added** Composition checking with bounded conditional rules (Spec 064)
-6. ✅ **Added** Release analysis pipeline rebuild with summary-driven change detection (Spec 065)
-7. ✅ **Added** Contract-System-Reference.md and Component-Schema-Format.md steering docs (Spec 063)
-8. ✅ **Added** Schema reference, query guide, and authoring guide documentation (Spec 064)
-9. ✅ **Breaking** Avatar renamed to Avatar-Base across all references (Spec 064)
-10. ✅ **Breaking** Component MCP server is a new sibling server requiring configuration (Spec 064)
-11. ✅ **Breaking** Release tool relocated from `src/release-analysis/` to `src/tools/release/` (Spec 065)
-12. ✅ **Updated** Agent configurations: Lina's scaffolding workflow, MCP queries, write paths (Spec 064)
-13. ✅ **Updated** Specs reference to 048-065 (active implementation)
+1. ✅ **Added** 8 schema.yaml files completing 28/28 component catalog (Spec 066)
+2. ✅ **Added** `omits` field for property omission on inheriting components (Spec 066)
+3. ✅ **Added** `resolvedTokens` for depth-1 composed token assembly (Spec 066)
+4. ✅ **Added** `state_disabled` exclusion standardized across 14 components (Spec 066)
+5. ✅ **Added** Experience pattern YAML schema with 3 authored patterns (Spec 067)
+6. ✅ **Added** `list_experience_patterns` and `get_experience_pattern` MCP tools (Spec 067)
+7. ✅ **Added** `validate_assembly` MCP tool with accessibility checking (Spec 067)
+8. ✅ **Added** `context` filter on `findComponents` with `ApplicationSummary` response (Spec 067)
+9. ✅ **Added** `AccessibilityChecker` module with 3 WCAG-referenced structural checks (Spec 067)
+10. ✅ **Added** Informed Placeholder task pattern in Process-Task-Type-Definitions (Process)
+11. ✅ **Breaking** `composes` → `internal` rename on CompositionDefinition (Spec 066)
+12. ✅ **Breaking** `children.requires` added to CompositionDefinition (Spec 066)
+13. ✅ **Breaking** `findComponents` returns `ApplicationSummary[]` instead of `ComponentSummary[]` (Spec 067)
+14. ✅ **Removed** Dead disabled state implementation from Input-Text-Base family (Spec 066)
+15. ✅ **Updated** Specs reference to 048-067 (active implementation)
