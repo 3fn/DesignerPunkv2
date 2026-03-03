@@ -73,8 +73,22 @@ const tools = [
   },
   {
     name: 'get_component_health',
-    description: 'Get index health: status, component count, warnings, gaps.',
+    description: 'Get index health: status, component count, pattern count, warnings, gaps.',
     inputSchema: { type: 'object' as const, properties: {} },
+  },
+  {
+    name: 'list_experience_patterns',
+    description: 'List all experience patterns with name, description, category, tags, step count, and component count.',
+    inputSchema: { type: 'object' as const, properties: {} },
+  },
+  {
+    name: 'get_experience_pattern',
+    description: 'Get full experience pattern by name: steps, components with roles and hints, accessibility notes, and alternatives.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: { name: { type: 'string', description: 'Pattern name (e.g., "simple-form")' } },
+      required: ['name'],
+    },
   },
 ];
 
@@ -138,6 +152,10 @@ class ComponentMCPServer {
         );
       case 'get_component_health':
         return this.queryEngine.getHealth();
+      case 'list_experience_patterns':
+        return this.queryEngine.getPatternCatalog();
+      case 'get_experience_pattern':
+        return this.queryEngine.getPattern(params.name as string);
       default:
         throw new Error(`Unknown tool: ${name}`);
     }

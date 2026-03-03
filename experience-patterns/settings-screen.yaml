@@ -1,0 +1,98 @@
+name: settings-screen
+source: system
+description: Settings page with grouped sections containing navigation items, toggles, and preferences. Sections use landmark navigation for screen reader efficiency.
+category: settings
+tags: [settings, preferences, navigation, sections, landmarks]
+
+steps:
+  - name: settings-layout
+    purpose: Display grouped settings sections with navigation and toggle controls
+    layout: vertical-stack
+    components:
+      - component: Container-Base
+        role: page-container
+        hints:
+          semantic: main
+          accessibilityLabel: "Settings"
+          padding: "Use space.inset tokens. 200 (16px) is a reasonable default."
+          sectionSpacing: "Use space.layout.separated.normal (24px) between sections. Sections are independent content groups. For dense mobile layouts, space.layout.separated.tight (16px)."
+        children:
+          - component: Container-Base
+            role: settings-section
+            hints:
+              semantic: section
+              accessibilityLabel: "Section heading text — must match visible heading"
+              sectionHeading: "Visible heading text above the list (e.g., 'Account Settings', 'Viewing Preferences'). Not a DesignerPunk component — rendered as text content."
+            children:
+              - component: Button-VerticalList-Set
+                role: settings-list
+                hints:
+                  mode: "tap — items navigate to detail screens. Use 'select' for mutually exclusive choices, 'multiSelect' for multi-toggle."
+                children:
+                  - component: Button-VerticalList-Item
+                    role: settings-item
+                    hints:
+                      label: "Setting name"
+                      detail: "Some items display a current value inline (e.g., 'English', 'Card'). A detail-value variant of VerticalList-Item is a component gap — use label text to convey current value until the variant exists."
+
+                  - component: Button-VerticalList-Item
+                    role: settings-item
+                    hints:
+                      label: "Setting name"
+
+                  - component: Button-VerticalList-Item
+                    role: settings-item
+                    hints:
+                      label: "Setting name"
+
+          - component: Container-Base
+            role: settings-section
+            hints:
+              semantic: section
+              accessibilityLabel: "Section heading text"
+              sectionHeading: "Section heading for toggle preferences"
+            children:
+              - component: Input-Checkbox-Base
+                role: toggle
+                hints:
+                  label: "Toggle setting name"
+                  componentGap: "A dedicated toggle/switch component is the intended control. Input-Checkbox-Base is a placeholder until the switch component is built."
+
+          - component: Container-Base
+            role: settings-section
+            hints:
+              semantic: section
+              accessibilityLabel: "Section heading text"
+              sectionHeading: "Section heading for mixed controls"
+            children:
+              - component: Button-VerticalList-Set
+                role: settings-list
+                hints:
+                  mode: tap
+                children:
+                  - component: Button-VerticalList-Item
+                    role: settings-item
+                    hints:
+                      label: "Navigation setting"
+
+                  - component: Button-VerticalList-Item
+                    role: settings-item
+                    hints:
+                      label: "Navigation setting"
+
+              - component: Input-Checkbox-Base
+                role: toggle
+                hints:
+                  label: "Toggle setting in same section"
+                  componentGap: "Placeholder for future switch component."
+
+accessibility:
+  - "Each section must be a landmark (semantic: section) with an accessible name matching the visible heading (WCAG 1.3.1)"
+  - "Screen readers should navigate between sections as landmarks without traversing every item (WCAG 2.4.1)"
+  - "Page must have a heading or accessible name (WCAG 2.4.2)"
+  - "Toggle controls must announce their current state — on or off (WCAG 4.1.2)"
+  - "Prefer grouping items into sections of 2+ items. When a single item is unavoidable, use a standalone control rather than a lone VerticalList-Item (VerticalList-Set requires minCount: 2)."
+
+alternatives:
+  - pattern: simple-form
+    reason: "When collecting user input rather than navigating or toggling preferences"

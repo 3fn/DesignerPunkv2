@@ -15,14 +15,18 @@ import {
   ComponentCatalogEntry,
   IndexHealth,
   ResolvedContracts,
+  ExperiencePattern,
+  PatternCatalogEntry,
 } from '../models';
 import { parseSchemaYaml, parseContractsYaml, parseComponentMetaYaml, ParsedContracts } from './parsers';
 import { resolveInheritance, validateOmits } from './InheritanceResolver';
 import { deriveContractTokenRelationships } from './ContractTokenDeriver';
+import { PatternIndexer } from './PatternIndexer';
 
 export class ComponentIndexer {
   private index = new Map<string, ComponentMetadata>();
   private contractsCache = new Map<string, ParsedContracts>();
+  private patternIndexer = new PatternIndexer();
   private lastIndexTime = '';
   private indexWarnings: string[] = [];
 
@@ -60,6 +64,10 @@ export class ComponentIndexer {
 
     // Third pass: resolve composed tokens (needs all components indexed first)
     this.resolveComposedTokens();
+
+    // Index experience patterns
+    const patternsDir = path.resolve(path.dirname(componentsDir), '..', 'experience-patterns');
+    await this.patternIndexer.indexPatterns(patternsDir);
 
     this.lastIndexTime = new Date().toISOString();
   }
@@ -118,13 +126,25 @@ export class ComponentIndexer {
    */
   getHealth(): IndexHealth {
     const count = this.index.size;
+    const patternHealth = this.patternIndexer.getHealth();
     return {
-      status: count === 0 ? 'empty' : this.indexWarnings.length > 0 ? 'degraded' : 'healthy',
+      status: count === 0 ? 'empty' : this.indexWarnings.length > 0 || patternHealth.warnings.length > 0 ? 'degraded' : 'healthy',
       componentsIndexed: count,
+      patternsIndexed: patternHealth.patternsIndexed,
       lastIndexTime: this.lastIndexTime,
       errors: [],
-      warnings: this.indexWarnings,
+      warnings: [...this.indexWarnings, ...patternHealth.warnings],
     };
+  }
+
+  /** Get a single experience pattern by name. */
+  getPattern(name: string): ExperiencePattern | null {
+    return this.patternIndexer.getPattern(name);
+  }
+
+  /** Get lightweight catalog of all experience patterns. */
+  getPatternCatalog(): PatternCatalogEntry[] {
+    return this.patternIndexer.getCatalog();
   }
 
   /** Expose index for query engine */

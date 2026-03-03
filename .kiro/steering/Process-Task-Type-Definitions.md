@@ -342,6 +342,32 @@ Each update should follow this format:
 - Create environment variable validation with type checking
 ```
 
+### March 1, 2026 - Informed Placeholder Tasks
+
+**Pattern**: Tasks whose implementation steps depend on the output of upstream tasks (interviews, audits, investigations) where the findings are unknowable at planning time.
+
+**Classification Decision**: Retains original type classification (Implementation, Architecture, etc.) — the placeholder is a planning pattern, not a task type.
+
+**Rationale**: Some tasks exist in a spec's execution sequence but their concrete steps can only be defined after an upstream task produces findings. Writing speculative implementation steps creates false authority — the executing agent may treat fiction as plan. Informed placeholders preserve the task's metadata (Type, Validation tier, Requirement references) while explicitly deferring implementation steps to the moment when upstream context is available.
+
+**Decided By**: Peter Michaels Allen + Thurgood
+
+**Format**:
+- Include `**Informed Placeholder**:` field after Validation metadata
+- State what the task is waiting for and which upstream task provides it
+- State the rewrite trigger (which task completion unlocks the rewrite)
+- Include known structural elements (files to create, models to add) where possible
+- Mark remaining steps as `_Remaining steps TBD from [upstream task] findings_`
+
+**When to use**: Only when the upstream task is explicitly designed to produce findings that shape the downstream task (interviews, audits, investigations). Normal implementation dependencies (Task B uses the code from Task A) do not qualify — those have knowable steps even if the code doesn't exist yet.
+
+**Precedent**: Spec 066 Task 3.3 (state_disabled investigation) used a phased approach where each phase's scope was informed by the previous phase's output. Spec 067 formalizes this as a named pattern.
+
+**Examples**:
+- Task depends on interview findings (067 Tasks 1.3, 1.7, 1.8, 3.2)
+- Task depends on audit findings (066 Task 3.3 phases)
+- Task depends on investigation results where scope of fix is unknowable
+
 ---
 
 *Updates to this section help refine task type definitions over time while maintaining consistency in classification decisions.*

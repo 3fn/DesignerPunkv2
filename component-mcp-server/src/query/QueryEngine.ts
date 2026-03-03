@@ -17,6 +17,8 @@ import {
   CompositionResult,
   IndexHealth,
   QueryResult,
+  ExperiencePattern,
+  PatternCatalogEntry,
 } from '../models';
 
 export class ComponentQueryEngine {
@@ -166,6 +168,22 @@ export class ComponentQueryEngine {
     }
     const result = validateRequires(parentMeta, childNames);
     return { data: result, error: null, warnings: [], metrics: { responseTimeMs: Date.now() - start } };
+  }
+
+  getPatternCatalog(): QueryResult<PatternCatalogEntry[]> {
+    const start = Date.now();
+    return { data: this.indexer.getPatternCatalog(), error: null, warnings: [], metrics: { responseTimeMs: Date.now() - start } };
+  }
+
+  getPattern(name: string): QueryResult<ExperiencePattern> {
+    const start = Date.now();
+    const data = this.indexer.getPattern(name);
+    return {
+      data,
+      error: data ? null : `Pattern "${name}" not found`,
+      warnings: [],
+      metrics: { responseTimeMs: Date.now() - start },
+    };
   }
 
   getHealth(): IndexHealth {

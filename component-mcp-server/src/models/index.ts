@@ -214,7 +214,60 @@ export type IndexHealthStatus = 'healthy' | 'degraded' | 'empty';
 export interface IndexHealth {
   status: IndexHealthStatus;
   componentsIndexed: number;
+  patternsIndexed: number;
   lastIndexTime: string;
+  errors: string[];
+  warnings: string[];
+}
+
+// ---------------------------------------------------------------------------
+// Experience Patterns
+// ---------------------------------------------------------------------------
+
+export interface PatternComponent {
+  component: string;
+  role: string;
+  optional?: boolean;
+  hints?: Record<string, unknown>;
+  children?: PatternComponent[];
+}
+
+export interface PatternStep {
+  name: string;
+  purpose: string;
+  layout?: string;
+  components: PatternComponent[];
+}
+
+export interface PatternAlternative {
+  pattern: string;
+  reason: string;
+}
+
+export interface ExperiencePattern {
+  name: string;
+  source: 'system' | 'project';
+  extends?: string;
+  description: string;
+  category: string;
+  tags: string[];
+  steps: PatternStep[];
+  accessibility: string[];
+  alternatives: PatternAlternative[];
+}
+
+export interface PatternCatalogEntry {
+  name: string;
+  description: string;
+  category: string;
+  tags: string[];
+  source: 'system' | 'project';
+  stepCount: number;
+  componentCount: number;
+}
+
+export interface PatternHealth {
+  patternsIndexed: number;
   errors: string[];
   warnings: string[];
 }

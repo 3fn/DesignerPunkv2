@@ -90,6 +90,75 @@ The application MCP is not just a documentation artifact — it's callable. An a
 
 ---
 
+## Product Configuration Layer
+
+The application MCP embodies DesignerPunk's opinionated intelligence — its best judgment about how to apply the design system. Out of the box, that intelligence reflects system-level defaults. Products adopting DesignerPunk need a way to tune that intelligence to their context without forking the system.
+
+### Three layers of product preference
+
+Products express preferences at three levels:
+
+1. **Token values** — "Our primary color is X." Solved by the Rosetta theming pipeline. Products create custom themes that change token values while preserving mathematical relationships.
+
+2. **Component configuration defaults** — "Our containers default to padding 200." "Our submit buttons use the primary variant." No mechanism exists today. This is the gap.
+
+3. **Assembly preferences** — "Our forms use elevated containers." "Our onboarding is 3 steps." Solved by project-level experience patterns (`source: project`, `extends` mechanism).
+
+Layer 2 is the most common product need. Most products don't need custom patterns — they want to tune how the system's existing components behave by default.
+
+### Resolution order
+
+When the MCP assembles guidance for an agent, product preferences merge with system defaults in a defined cascade:
+
+```
+Component built-in defaults → Product component defaults → Product role defaults → Pattern hints → Agent decision
+```
+
+Each layer overrides the previous. The agent always has final say — product defaults are defaults, not constraints. When multiple layers provide a value for the same property, the more contextual layer wins: role defaults override component defaults, pattern hints override role defaults, agent decisions override everything.
+
+**Component defaults** apply whenever a component is used, regardless of context. **Role defaults** apply when a component fills a specific role in a pattern (e.g., `form-container`, `submit-action`). Role defaults are more contextual and override component defaults when both apply.
+
+### Scope: MCP advisory layer, not component runtime
+
+The product configuration layer configures the MCP's *recommendations*, not the components themselves. A developer using Container-Base directly still gets the component's built-in default. The product default only surfaces when an agent queries the MCP for guidance.
+
+This preserves developer flexibility. The MCP is the system's opinionated intelligence; developers can follow its guidance or diverge for exploration, experimentation, or edge cases the MCP's patterns don't cover. The MCP teaches; it doesn't constrain.
+
+### Boundary: configuration references tokens, doesn't create them
+
+Product configuration values must reference existing token values. A product can set `Container-Base.padding: "200"` because `space.inset.200` exists. Setting `padding: "500"` is a blocking error — the value doesn't exist in the token system. If a product needs a value that doesn't exist, the path is to extend the token layer first, then reference the new value in configuration.
+
+This enforces the token-first principle at the configuration layer. Products configure within the design system's vocabulary, not outside it.
+
+### Theme independence
+
+Component configuration defaults are generally theme-independent. A product sets `padding: "200"` and it applies across all themes. If a product needs different prop defaults per theme, that's typically a signal the prop should be a token (theme-resolved) rather than a configuration default. Edge cases exist (e.g., variant selection in accessibility themes) — theme-conditional configuration is a future consideration.
+
+### Authorship and setup
+
+Product configuration is authored by any stakeholder — developers, designers, or agents — and lives in the product's own repository. DesignerPunk ships with no product configuration; the MCP's defaults are the system defaults. A product connects its configuration to the MCP through a setup mechanism.
+
+**Adoption requirement**: Seamless onboarding is a priority. Products should be able to configure the MCP quickly with clear guidance, starter templates, and a straightforward connection mechanism.
+
+### Integration points with existing architecture
+
+The product configuration layer connects to existing 067 architecture:
+
+- **`role` field on pattern components** — the hook for role-specific defaults
+- **`source` field on patterns** (`system` / `project`) — separates system intelligence from product preferences
+- **`extends` field on patterns** — project patterns inherit and override system patterns
+- **`ApplicationSummary` response shape** — must accommodate merged defaults without breaking the response contract
+
+### Open questions (future spec territory)
+
+- **Configuration file format and directory structure** — YAML is the likely format (consistent with schemas and patterns). Directory location and naming conventions to be determined.
+- **MCP connection mechanism** — How the MCP discovers and loads product configuration. Configuration path at startup, environment variable, or convention-based scan.
+- **Validation mechanism** — How product configuration values are validated against component property definitions. Blocking errors for invalid values are confirmed; the validation implementation is future spec territory.
+- **Merge semantics** — Detailed rules for how component defaults, role defaults, and pattern hints compose. Edge cases (conflicting role defaults, circular extends) need specification.
+- **CLI scaffolding** — Whether a `designerpunk init-product` or similar command scaffolds the configuration directory and starter template.
+
+---
+
 ## Why DesignerPunk Is Better Positioned Than Most Systems
 
 Most design systems (Atlassian/Atlaskit, Carbon, Material, Polaris, Encore) were built for human authoring workflows. They're retrofitting toward agent-readiness. DesignerPunk has structural properties that make agent-readiness a natural extension:

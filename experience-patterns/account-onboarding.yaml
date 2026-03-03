@@ -1,0 +1,197 @@
+name: account-onboarding
+source: system
+description: "Multi-step account creation and onboarding flow with authentication, preference selection, and post-creation guidance."
+category: onboarding
+tags:
+  - multi-step
+  - authentication
+  - onboarding
+  - account-creation
+
+steps:
+  - name: authentication
+    purpose: "Collect credentials for login or account creation, toggled by a segmented controller."
+    layout: centered
+    components:
+      - component: Container-Base
+        role: page-container
+        hints:
+          semantic: main
+          padding: "Use space.inset tokens. 200 (16px) is a reasonable default."
+          layout: "Center content horizontally. On desktop, constrain max-width. On mobile, full width."
+        children:
+          - component: Container-Base
+            role: branding
+            hints:
+              componentGap: "Logo/branding component not yet in catalog. Use product-specific branding element."
+              content: "App logo and optional tagline or title."
+
+          - component: Container-Base
+            role: auth-mode-toggle
+            hints:
+              componentGap: "Segmented controller not yet in catalog. Toggles visibility between login and create-account fieldsets."
+              accessibilityRole: "tablist"
+              accessibilityHint: "Announce selected mode (Login or Create Account) on toggle."
+
+          - component: Container-Base
+            role: login-fieldset
+            hints:
+              semantic: form
+              accessibilityLabel: "Login"
+              visibility: "Shown when auth mode is Login. Hidden when Create Account is selected."
+            children:
+              - component: Input-Text-Base
+                role: username
+                hints:
+                  label: "Username or email"
+              - component: Input-Text-Password
+                role: password
+                hints:
+                  label: "Password"
+              - component: Input-Checkbox-Base
+                role: remember-password
+                optional: true
+                hints:
+                  label: "Remember me"
+              - component: Container-Base
+                role: forgot-password-link
+                hints:
+                  componentGap: "Link/text-button component not yet in catalog. Navigates to password recovery."
+                  content: "Forgot password?"
+              - component: Button-CTA
+                role: login-submit
+                hints:
+                  label: "Log In"
+
+          - component: Container-Base
+            role: create-account-fieldset
+            hints:
+              semantic: form
+              accessibilityLabel: "Create Account"
+              visibility: "Shown when auth mode is Create Account. Hidden when Login is selected."
+            children:
+              - component: Input-Text-Email
+                role: email
+                hints:
+                  label: "Email address"
+              - component: Input-Text-Base
+                role: username
+                hints:
+                  label: "Username"
+              - component: Input-Text-Password
+                role: password
+                hints:
+                  label: "Password"
+              - component: Input-Text-Password
+                role: confirm-password
+                hints:
+                  label: "Confirm password"
+              - component: Button-CTA
+                role: create-submit
+                hints:
+                  label: "Create Account"
+
+  - name: preferences
+    purpose: "Collect user preferences for personalization after account creation."
+    components:
+      - component: Container-Base
+        role: page-container
+        hints:
+          semantic: main
+          padding: "Use space.inset tokens. 200 (16px) is a reasonable default."
+        children:
+          - component: Container-Base
+            role: interests-section
+            hints:
+              semantic: section
+              accessibilityLabel: "Choose your interests"
+            children:
+              - component: Button-VerticalList-Set
+                role: interest-selection
+                hints:
+                  mode: select
+                  selectionType: "multi"
+                  minItems: "2 required by VerticalList-Set constraint."
+                children:
+                  - component: Button-VerticalList-Item
+                    role: interest-option
+                    hints:
+                      content: "Interest category. Repeat for each option."
+                  - component: Button-VerticalList-Item
+                    role: interest-option
+                    hints:
+                      content: "Interest category."
+
+          - component: Input-Text-Base
+            role: display-name
+            hints:
+              label: "Display name"
+
+          - component: Container-Base
+            role: notification-section
+            hints:
+              semantic: section
+              accessibilityLabel: "Notification preferences"
+            children:
+              - component: Button-VerticalList-Set
+                role: notification-preference
+                hints:
+                  mode: select
+                  selectionType: "single"
+                  minItems: "2 required by VerticalList-Set constraint."
+                children:
+                  - component: Button-VerticalList-Item
+                    role: notification-option
+                    hints:
+                      content: "Notification frequency option."
+                  - component: Button-VerticalList-Item
+                    role: notification-option
+                    hints:
+                      content: "Notification frequency option."
+
+          - component: Container-Base
+            role: step-navigation
+            children:
+              - component: Button-Icon
+                role: back-navigation
+                hints:
+                  action: "Return to authentication step."
+                  icon: "back-arrow"
+                  accessibilityLabel: "Back"
+              - component: Button-CTA
+                role: continue
+                hints:
+                  label: "Continue"
+
+  - name: whats-next
+    purpose: "Inform the user of post-creation steps and transition to the main experience."
+    components:
+      - component: Container-Base
+        role: page-container
+        hints:
+          semantic: main
+          padding: "Use space.inset tokens. 200 (16px) is a reasonable default."
+        children:
+          - component: Container-Base
+            role: status-content
+            hints:
+              componentGap: "Text/paragraph display component not yet in catalog. Shows heading ('What's next') and instructional content (e.g., 'Check your email to verify your account')."
+              content: "Heading and body text explaining next steps."
+
+          - component: Button-CTA
+            role: proceed-to-app
+            hints:
+              label: "Get Started"
+
+accessibility:
+  - "Segmented controller must announce selected mode and manage focus between login and create-account fieldsets (WCAG 4.1.2)"
+  - "Step progress must be announced to screen readers — 'Step N of 3' or equivalent (WCAG 1.3.1)"
+  - "Focus must move to the first interactive element or step heading on step transition (WCAG 2.4.3)"
+  - "Each fieldset must have an accessible name matching its purpose (WCAG 1.3.1)"
+  - "Confirm password field must be programmatically associated with the password field for validation context (WCAG 3.3.2)"
+
+alternatives:
+  - pattern: simple-form
+    reason: "When the flow is a single-step form without multi-step sequencing or authentication toggle."
+  - pattern: settings-screen
+    reason: "When the experience is preference management within an existing session, not onboarding."
