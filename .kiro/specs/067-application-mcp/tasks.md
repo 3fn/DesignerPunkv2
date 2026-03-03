@@ -164,7 +164,7 @@ Tasks are grouped into 4 parent tasks: (1) Experience Pattern Schema, (2) Enhanc
     - Document `ApplicationSummary` response shape in tool description
     - _Requirements: 8_
 
-- [ ] 3. Assembly Validation
+- [x] 3. Assembly Validation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -190,7 +190,7 @@ Tasks are grouped into 4 parent tasks: (1) Experience Pattern Schema, (2) Enhanc
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Assembly Validation"` (runs release analysis automatically)
   - Verify: Check GitHub for committed changes
 
-  - [ ] 3.1 Implement AssemblyValidator
+  - [x] 3.1 Implement AssemblyValidator
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -201,7 +201,7 @@ Tasks are grouped into 4 parent tasks: (1) Experience Pattern Schema, (2) Enhanc
     - Write unit tests for single node, parent-child, requires, counts, nested tree, unknown component, empty tree
     - _Requirements: 5_
 
-  - [ ] 3.2 Implement AccessibilityChecker
+  - [x] 3.2 Implement AccessibilityChecker
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina (implement), Thurgood (review)
@@ -211,7 +211,7 @@ Tasks are grouped into 4 parent tasks: (1) Experience Pattern Schema, (2) Enhanc
     - _Remaining steps TBD from interview findings_
     - _Requirements: 6_
 
-  - [ ] 3.3 Register validate_assembly tool
+  - [x] 3.3 Register validate_assembly tool
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina

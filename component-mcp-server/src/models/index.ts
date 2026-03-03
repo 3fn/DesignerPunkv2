@@ -282,6 +282,36 @@ export interface PatternHealth {
 }
 
 // ---------------------------------------------------------------------------
+// Assembly Validation
+// ---------------------------------------------------------------------------
+
+export interface AssemblyNode {
+  component: string;
+  props?: Record<string, unknown>;
+  children?: AssemblyNode[];
+}
+
+export interface AssemblyIssue {
+  path: string;
+  component: string;
+  message: string;
+}
+
+export interface AccessibilityIssue {
+  rule: string;
+  wcag: string;
+  message: string;
+  severity: 'error' | 'warning';
+}
+
+export interface AssemblyValidationResult {
+  valid: boolean;
+  errors: AssemblyIssue[];
+  warnings: AssemblyIssue[];
+  accessibility: AccessibilityIssue[];
+}
+
+// ---------------------------------------------------------------------------
 // Query Result Wrapper
 // ---------------------------------------------------------------------------
 

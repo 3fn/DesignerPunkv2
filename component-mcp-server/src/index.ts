@@ -14,6 +14,7 @@ import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprot
 
 import { ComponentIndexer } from './indexer/ComponentIndexer';
 import { ComponentQueryEngine } from './query/QueryEngine';
+import { AssemblyValidator } from './validation/AssemblyValidator';
 import { FileWatcher } from './watcher/FileWatcher';
 
 const SERVER_NAME = 'mcp-component-server';
@@ -91,18 +92,34 @@ const tools = [
       required: ['name'],
     },
   },
+  {
+    name: 'validate_assembly',
+    description: 'Validate a component tree. Checks component existence, parent-child composition rules, requires/count constraints, and assembly-level accessibility (form labels, submit actions, page headings). Returns errors, warnings, and accessibility issues with paths.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        assembly: {
+          type: 'object',
+          description: 'Component tree. Each node: { component: string, props?: object, children?: node[] }',
+        },
+      },
+      required: ['assembly'],
+    },
+  },
 ];
 
 class ComponentMCPServer {
   private server: Server;
   private indexer: ComponentIndexer;
   private queryEngine: ComponentQueryEngine;
+  private assemblyValidator: AssemblyValidator;
   private fileWatcher: FileWatcher;
 
   constructor(private componentsDir: string = DEFAULT_COMPONENTS_DIR) {
     this.server = new Server({ name: SERVER_NAME, version: SERVER_VERSION }, { capabilities: { tools: {} } });
     this.indexer = new ComponentIndexer();
     this.queryEngine = new ComponentQueryEngine(this.indexer);
+    this.assemblyValidator = new AssemblyValidator(this.indexer);
     this.fileWatcher = new FileWatcher(this.indexer, this.componentsDir);
     this.registerHandlers();
   }
@@ -157,6 +174,8 @@ class ComponentMCPServer {
         return this.queryEngine.getPatternCatalog();
       case 'get_experience_pattern':
         return this.queryEngine.getPattern(params.name as string);
+      case 'validate_assembly':
+        return this.assemblyValidator.validate(params.assembly as any);
       default:
         throw new Error(`Unknown tool: ${name}`);
     }
