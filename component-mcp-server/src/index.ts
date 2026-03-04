@@ -106,6 +106,18 @@ const tools = [
       required: ['assembly'],
     },
   },
+  {
+    name: 'get_prop_guidance',
+    description: 'Get prop selection and family member guidance for a component or family. Returns whenToUse, whenNotToUse, selectionRules (scenario→recommendation with optional props), accessibilityNotes, and family-scoped patterns. Query by component name (returns its family guidance) or family name.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        component: { type: 'string', description: 'Component name (e.g., "Button-CTA") or family name (e.g., "Buttons")' },
+        verbose: { type: 'boolean', description: 'Include rationale and descriptions (default: false)' },
+      },
+      required: ['component'],
+    },
+  },
 ];
 
 class ComponentMCPServer {
@@ -176,6 +188,8 @@ class ComponentMCPServer {
         return this.queryEngine.getPattern(params.name as string);
       case 'validate_assembly':
         return this.assemblyValidator.validate(params.assembly as any);
+      case 'get_prop_guidance':
+        return this.queryEngine.getGuidance(params.component as string, params.verbose as boolean | undefined);
       default:
         throw new Error(`Unknown tool: ${name}`);
     }

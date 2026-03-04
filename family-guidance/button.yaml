@@ -1,0 +1,102 @@
+# Family Guidance: Buttons
+# Companion to: .kiro/steering/Component-Family-Button.md
+# Read-both protocol: Read the family doc before modifying this file.
+
+family: "Buttons"
+companion: ".kiro/steering/Component-Family-Button.md"
+
+whenToUse:
+  - "A clearly promoted action that needs visual emphasis (Button-CTA)"
+  - "A set of evenly prioritized choices without promoting one over another (Button-VerticalList-Set)"
+  - "A compact, icon-only action where the icon communicates intent without a label (Button-Icon)"
+
+whenNotToUse:
+  - "Displaying read-only status — use Badge family instead"
+  - "Filtering or toggling a state — use Chip family instead"
+  - "Multiple visible actions where none is clearly promoted — neutral variant needed (component gap, not yet implemented)"
+
+selectionRules:
+  # Family member selection
+  - scenario: "Promoted action — single clear CTA per view"
+    recommend: Button-CTA
+    rationale: "CTA is for clearly promoted choices — ideally one primary per view"
+  - scenario: "Compact action without text label (toolbar, icon bar)"
+    recommend: Button-Icon
+    rationale: "Icon-only for space-constrained contexts where the icon is self-explanatory"
+  - scenario: "Evenly prioritized choices from a set of options"
+    recommend: Button-VerticalList-Set
+    rationale: "Vertical list buttons present equally weighted options without promoting one over another"
+
+  # Button-CTA variant selection
+  - scenario: "Primary action (submit, save)"
+    recommend: Button-CTA
+    props:
+      variant: primary
+    rationale: "Highest visual emphasis — use for single, focused CTAs"
+  - scenario: "Secondary action (cancel, back)"
+    recommend: Button-CTA
+    props:
+      variant: secondary
+    rationale: "Medium emphasis, clear alternative to primary action"
+  - scenario: "Tertiary action (skip, dismiss)"
+    recommend: Button-CTA
+    props:
+      variant: tertiary
+    rationale: "Lowest emphasis, de-emphasized action"
+  - scenario: "Multiple actions in a list"
+    recommend: Button-CTA
+    props:
+      variant: secondary
+    rationale: "Avoid purple-ication — use primary sparingly when multiple CTAs appear together"
+
+  # Button-VerticalList-Set mode selection
+  - scenario: "User picks one option from a set of evenly weighted choices"
+    recommend: Button-VerticalList-Set
+    props:
+      mode: select
+    rationale: "Single-selection, radio-style — one active choice at a time"
+  - scenario: "User picks multiple options from a set of evenly weighted choices"
+    recommend: Button-VerticalList-Set
+    props:
+      mode: multiSelect
+    rationale: "Multi-selection, checkbox-style — multiple active choices"
+  - scenario: "List of actions to trigger (no selection state)"
+    recommend: Button-VerticalList-Set
+    props:
+      mode: tap
+    rationale: "Action list — each item triggers an action without maintaining selection"
+
+accessibilityNotes:
+  - "All buttons are keyboard accessible — do not wrap in non-focusable containers that break tab order"
+  - "Button-CTA variants are distinguishable by shape and border, not just color — do not override border styles"
+  - "All sizes meet tapAreaMinimum (WCAG 2.1 AA floor). Components target tapAreaRecommended for enhanced usability — do not constrain button height below tapAreaMinimum"
+
+patterns:
+  - name: "Form Actions"
+    description: "Primary + tertiary button pairing for form submit/cancel"
+    components:
+      - component: Button-CTA
+        role: submit
+        props:
+          variant: primary
+      - component: Button-CTA
+        role: cancel
+        props:
+          variant: tertiary
+    relatedPatterns:
+      - simple-form
+      - account-onboarding
+
+  - name: "Dialog Actions"
+    description: "Primary + secondary button pairing for dialog confirm/cancel"
+    components:
+      - component: Button-CTA
+        role: confirm
+        props:
+          variant: primary
+      - component: Button-CTA
+        role: cancel
+        props:
+          variant: secondary
+    relatedPatterns: []
+

@@ -1319,6 +1319,7 @@ All platforms implement the same behavioral contracts:
 
 ## Related Documentation
 
+- [Family Guidance (Machine-Queryable)](../../family-guidance/form-inputs.yaml) - Companion YAML for Application MCP — **read-both protocol: read this doc before modifying the companion YAML, and vice versa**
 - [Component Quick Reference](./Component-Quick-Reference.md) - Family routing table
 - [Stemma System Principles](./stemma-system-principles.md) - Architecture overview
 - [Token Quick Reference](./Token-Quick-Reference.md) - Token documentation

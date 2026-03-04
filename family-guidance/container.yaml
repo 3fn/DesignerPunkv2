@@ -1,0 +1,68 @@
+# Family Guidance: Containers
+# Companion to: .kiro/steering/Component-Family-Container.md
+# Read-both protocol: Read the family doc before modifying this file.
+
+family: "Containers"
+companion: ".kiro/steering/Component-Family-Container.md"
+
+whenToUse:
+  - "Wrapping content or components that need a visual boundary that can evolve independently of its contents"
+  - "Grouping related content or components that should be visually associated"
+  - "Establishing semantic document structure (section, nav, main, article)"
+  - "Card presentation with opinionated, consistent defaults (Container-Card-Base)"
+
+whenNotToUse:
+  - "Interactive buttons or actions — use Button family instead"
+  - "Form inputs or data collection — use Form Inputs family instead"
+  - "Modals or overlays — Modal component needed (component gap, not yet implemented)"
+  - "Nesting containers for layered styling — adjust the existing container's props instead. Structural nesting for semantic document outline (main containing sections) is valid"
+
+selectionRules:
+  - scenario: "Generic content wrapper with flexible styling"
+    recommend: Container-Base
+    rationale: "Full API access for custom layout needs"
+  - scenario: "Card with elevation and consistent styling"
+    recommend: Container-Card-Base
+    rationale: "Opinionated defaults — zero-config card with curated API"
+  - scenario: "Interactive card (clickable, navigable)"
+    recommend: Container-Card-Base
+    props:
+      interactive: true
+    rationale: "Built-in hover, press, focus, and keyboard activation"
+  - scenario: "Card-like container needing props not exposed by Card-Base (opacity, layering)"
+    recommend: Container-Base
+    rationale: "Escape hatch — use Container-Base directly when Card-Base is too restrictive"
+  - scenario: "Page section with heading and related content"
+    recommend: Container-Base
+    props:
+      semantic: section
+    rationale: "Semantic section for document outline and screen reader navigation"
+  - scenario: "Navigation wrapper"
+    recommend: Container-Base
+    props:
+      semantic: nav
+    rationale: "Semantic nav for screen reader landmark navigation"
+  - scenario: "Independent, self-contained content (blog post, comment)"
+    recommend: Container-Base
+    props:
+      semantic: article
+    rationale: "Semantic article for content that makes sense independently"
+  - scenario: "Primary page content area"
+    recommend: Container-Base
+    props:
+      semantic: main
+    rationale: "Semantic main — one per page, identifies primary content"
+  - scenario: "Form wrapper"
+    recommend: Container-Base
+    props:
+      semantic: fieldset
+    rationale: "Semantic fieldset for grouping related form controls"
+
+accessibilityNotes:
+  - "Use the semantic prop to provide document structure — screen readers use landmarks (nav, main, section) for navigation"
+  - "Interactive cards (interactive=true) must have an accessibilityLabel — the card itself becomes the interactive element"
+  - "One semantic='main' per page — multiple mains break screen reader landmark navigation"
+  - "Do not nest interactive cards inside other interactive elements — nested interactives create ambiguous click targets for assistive technology"
+
+patterns: []
+

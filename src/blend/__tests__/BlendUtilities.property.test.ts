@@ -268,7 +268,6 @@ describe('Property-Based Tests: Blend Utilities', () => {
             '12345',
             '#12345',
             '',
-            'rgb(255,0,0)',
             '#GGGGGG'
           ),
           (invalidHex) => {

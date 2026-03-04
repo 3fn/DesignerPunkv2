@@ -20,6 +20,7 @@ import {
   QueryResult,
   ExperiencePattern,
   PatternCatalogEntry,
+  PropGuidanceResponse,
 } from '../models';
 
 export class ComponentQueryEngine {
@@ -189,6 +190,26 @@ export class ComponentQueryEngine {
       warnings: [],
       metrics: { responseTimeMs: Date.now() - start },
     };
+  }
+
+  getGuidance(component: string, verbose?: boolean): QueryResult<PropGuidanceResponse> {
+    const start = Date.now();
+    const guidance = this.indexer.getGuidance(component);
+    if (!guidance) {
+      return { data: null, error: `No guidance available for "${component}"`, warnings: [], metrics: { responseTimeMs: Date.now() - start } };
+    }
+    const response: PropGuidanceResponse = {
+      family: guidance.family,
+      whenToUse: guidance.whenToUse,
+      whenNotToUse: guidance.whenNotToUse,
+      selectionRules: verbose ? guidance.selectionRules : guidance.selectionRules.map(g => ({
+        ...g,
+        rules: g.rules.map(({ rationale, ...rest }) => ({ ...rest, rationale: '' })),
+      })),
+      accessibilityNotes: guidance.accessibilityNotes,
+      patterns: verbose ? guidance.patterns : guidance.patterns.map(({ description, ...rest }) => ({ ...rest, description: '' })),
+    };
+    return { data: response, error: null, warnings: [], metrics: { responseTimeMs: Date.now() - start } };
   }
 
   getHealth(): IndexHealth {

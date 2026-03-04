@@ -224,6 +224,7 @@ export interface IndexHealth {
   status: IndexHealthStatus;
   componentsIndexed: number;
   patternsIndexed: number;
+  guidanceFamiliesIndexed: number;
   lastIndexTime: string;
   errors: string[];
   warnings: string[];
@@ -322,4 +323,58 @@ export interface QueryResult<T> {
   metrics: {
     responseTimeMs: number;
   };
+}
+
+// ---------------------------------------------------------------------------
+// Family Guidance (Spec 068)
+// ---------------------------------------------------------------------------
+
+export interface SelectionRule {
+  scenario: string;
+  recommend: string;
+  props?: Record<string, unknown>;
+  rationale: string;
+}
+
+export interface SelectionRuleGroup {
+  group?: string;
+  rules: SelectionRule[];
+}
+
+export interface FamilyPatternComponent {
+  component: string;
+  role: string;
+  props?: Record<string, unknown>;
+}
+
+export interface FamilyPattern {
+  name: string;
+  description: string;
+  components: FamilyPatternComponent[];
+  relatedPatterns: string[];
+}
+
+export interface FamilyGuidance {
+  family: string;
+  companion: string;
+  whenToUse: string[];
+  whenNotToUse: string[];
+  selectionRules: SelectionRuleGroup[];
+  accessibilityNotes: string[];
+  patterns: FamilyPattern[];
+}
+
+export interface PropGuidanceResponse {
+  family: string;
+  whenToUse: string[];
+  whenNotToUse: string[];
+  selectionRules: SelectionRuleGroup[];
+  accessibilityNotes: string[];
+  patterns: FamilyPattern[];
+}
+
+export interface FamilyGuidanceHealth {
+  familiesIndexed: number;
+  errors: string[];
+  warnings: string[];
 }

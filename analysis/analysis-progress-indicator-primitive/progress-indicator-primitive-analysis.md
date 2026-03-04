@@ -3,7 +3,7 @@
 **Component Type**: COMPONENT_SET
 **Figma ID**: 1230:47
 **File Key**: yU7908VXR1khQN5hZXC6Cy
-**Extracted**: 2026-02-23T17:54:20.372Z
+**Extracted**: 2026-03-03T16:20:54.353Z
 **Extractor Version**: 6.3.0
 
 **Variant Definitions**:
@@ -17,8 +17,8 @@
 | Tier | Count | Percentage |
 | --- | --- | --- |
 | ✅ Semantic Identified | 14 | 6% |
-| ⚠️ Primitive Identified | 53 | 24% |
-| ❌ Unidentified | 157 | 70% |
+| ⚠️ Primitive Identified | 54 | 24% |
+| ❌ Unidentified | 156 | 70% |
 | **Total** | **224** | **100%** |
 
 ## Node Tree
@@ -47,7 +47,7 @@
         - **Vector (Stroke)** (FRAME, depth 4) [S:0 P:1 U:1]
     - **Label** (TEXT, depth 2) [S:0 P:2 U:3]
   - **State=Error, Size=Sm** (COMPONENT, depth 1) [S:0 P:4 U:2]
-    - **Node** (FRAME, depth 2) [S:1 P:0 U:7]
+    - **Node** (FRAME, depth 2) [S:1 P:1 U:6]
   - **State=Error, Size=Md** (COMPONENT, depth 1) [S:0 P:4 U:2]
     - **Node** (FRAME, depth 2) [S:1 P:0 U:6]
     - **Label** (TEXT, depth 2) [S:1 P:1 U:3]
@@ -268,13 +268,13 @@
 ### Node (FRAME, depth 2)
 
 - ✅ `fill`: progressColor.color.progress.error.background → color.pink100 (binding, exact)
+- ⚠️ `stroke`: color.pink300 (binding, exact)
 - ❌ `padding-top`: 0 (value-match)
 - ❌ `padding-right`: 0 (value-match)
 - ❌ `padding-bottom`: 0 (value-match)
 - ❌ `padding-left`: 0 (value-match)
 - ❌ `border-radius`: 50 (value-match)
 - ❌ `border-width`: 1 (value-match)
-- ❌ `stroke`: rgba(0, 0, 0, 1) (value-match)
 
 ### State=Error, Size=Md (COMPONENT, depth 1)
 
@@ -537,7 +537,6 @@
 - **Node** → `padding-left`: 0 (value-match — suggested: `semanticSpace.grouped.none`)
 - **Node** → `border-radius`: 50 (value-match — suggested: `semanticRadius.circle`)
 - **Node** → `border-width`: 1 (value-match — suggested: `semanticBorderWidth.default`)
-- **Node** → `stroke`: rgba(0, 0, 0, 1) (value-match — suggested: `semanticColor.color.contrast.onLight`)
 - **State=Error, Size=Md** → `item-spacing`: 0 (value-match — suggested: `semanticSpace.grouped.none`)
 - **State=Error, Size=Md** → `border-width`: 1 (value-match — suggested: `semanticBorderWidth.default`)
 - **Node** → `padding-top`: 0 (value-match — suggested: `semanticSpace.grouped.none`)
@@ -605,38 +604,38 @@
 
 ## Screenshots
 
-![State=Incomplete, Size=Sm (png, 2x, captured 2026-02-23T17:54:04.008Z)](./images/progress-indicator-primitive-state-incomplete-size-sm.png)
-*State=Incomplete, Size=Sm (png, 2x, captured 2026-02-23T17:54:04.008Z)*
+![State=Incomplete, Size=Sm (png, 2x, captured 2026-03-03T16:20:22.884Z)](./images/progress-indicator-primitive-state-incomplete-size-sm.png)
+*State=Incomplete, Size=Sm (png, 2x, captured 2026-03-03T16:20:22.884Z)*
 
-![State=Incomplete, Size=Md (png, 2x, captured 2026-02-23T17:54:05.449Z)](./images/progress-indicator-primitive-state-incomplete-size-md.png)
-*State=Incomplete, Size=Md (png, 2x, captured 2026-02-23T17:54:05.449Z)*
+![State=Incomplete, Size=Md (png, 2x, captured 2026-03-03T16:20:25.681Z)](./images/progress-indicator-primitive-state-incomplete-size-md.png)
+*State=Incomplete, Size=Md (png, 2x, captured 2026-03-03T16:20:25.681Z)*
 
-![State=Incomplete, Size=Lg (png, 2x, captured 2026-02-23T17:54:07.330Z)](./images/progress-indicator-primitive-state-incomplete-size-lg.png)
-*State=Incomplete, Size=Lg (png, 2x, captured 2026-02-23T17:54:07.330Z)*
+![State=Incomplete, Size=Lg (png, 2x, captured 2026-03-03T16:20:28.771Z)](./images/progress-indicator-primitive-state-incomplete-size-lg.png)
+*State=Incomplete, Size=Lg (png, 2x, captured 2026-03-03T16:20:28.771Z)*
 
-![State=Complete, Size=Sm (png, 2x, captured 2026-02-23T17:54:08.755Z)](./images/progress-indicator-primitive-state-complete-size-sm.png)
-*State=Complete, Size=Sm (png, 2x, captured 2026-02-23T17:54:08.755Z)*
+![State=Complete, Size=Sm (png, 2x, captured 2026-03-03T16:20:31.364Z)](./images/progress-indicator-primitive-state-complete-size-sm.png)
+*State=Complete, Size=Sm (png, 2x, captured 2026-03-03T16:20:31.364Z)*
 
-![State=Complete, Size=Md (png, 2x, captured 2026-02-23T17:54:10.280Z)](./images/progress-indicator-primitive-state-complete-size-md.png)
-*State=Complete, Size=Md (png, 2x, captured 2026-02-23T17:54:10.280Z)*
+![State=Complete, Size=Md (png, 2x, captured 2026-03-03T16:20:34.274Z)](./images/progress-indicator-primitive-state-complete-size-md.png)
+*State=Complete, Size=Md (png, 2x, captured 2026-03-03T16:20:34.274Z)*
 
-![State=Complete, Size=Lg (png, 2x, captured 2026-02-23T17:54:11.706Z)](./images/progress-indicator-primitive-state-complete-size-lg.png)
-*State=Complete, Size=Lg (png, 2x, captured 2026-02-23T17:54:11.706Z)*
+![State=Complete, Size=Lg (png, 2x, captured 2026-03-03T16:20:37.466Z)](./images/progress-indicator-primitive-state-complete-size-lg.png)
+*State=Complete, Size=Lg (png, 2x, captured 2026-03-03T16:20:37.466Z)*
 
-![State=Error, Size=Sm (png, 2x, captured 2026-02-23T17:54:13.204Z)](./images/progress-indicator-primitive-state-error-size-sm.png)
-*State=Error, Size=Sm (png, 2x, captured 2026-02-23T17:54:13.204Z)*
+![State=Error, Size=Sm (png, 2x, captured 2026-03-03T16:20:40.146Z)](./images/progress-indicator-primitive-state-error-size-sm.png)
+*State=Error, Size=Sm (png, 2x, captured 2026-03-03T16:20:40.146Z)*
 
-![State=Error, Size=Md (png, 2x, captured 2026-02-23T17:54:14.574Z)](./images/progress-indicator-primitive-state-error-size-md.png)
-*State=Error, Size=Md (png, 2x, captured 2026-02-23T17:54:14.574Z)*
+![State=Error, Size=Md (png, 2x, captured 2026-03-03T16:20:42.827Z)](./images/progress-indicator-primitive-state-error-size-md.png)
+*State=Error, Size=Md (png, 2x, captured 2026-03-03T16:20:42.827Z)*
 
-![State=Error, Size=Lg (png, 2x, captured 2026-02-23T17:54:15.934Z)](./images/progress-indicator-primitive-state-error-size-lg.png)
-*State=Error, Size=Lg (png, 2x, captured 2026-02-23T17:54:15.934Z)*
+![State=Error, Size=Lg (png, 2x, captured 2026-03-03T16:20:45.636Z)](./images/progress-indicator-primitive-state-error-size-lg.png)
+*State=Error, Size=Lg (png, 2x, captured 2026-03-03T16:20:45.636Z)*
 
-![State=Current, Size=Sm (png, 2x, captured 2026-02-23T17:54:17.552Z)](./images/progress-indicator-primitive-state-current-size-sm.png)
-*State=Current, Size=Sm (png, 2x, captured 2026-02-23T17:54:17.552Z)*
+![State=Current, Size=Sm (png, 2x, captured 2026-03-03T16:20:48.355Z)](./images/progress-indicator-primitive-state-current-size-sm.png)
+*State=Current, Size=Sm (png, 2x, captured 2026-03-03T16:20:48.355Z)*
 
-![State=Current, Size=Md (png, 2x, captured 2026-02-23T17:54:18.907Z)](./images/progress-indicator-primitive-state-current-size-md.png)
-*State=Current, Size=Md (png, 2x, captured 2026-02-23T17:54:18.907Z)*
+![State=Current, Size=Md (png, 2x, captured 2026-03-03T16:20:50.969Z)](./images/progress-indicator-primitive-state-current-size-md.png)
+*State=Current, Size=Md (png, 2x, captured 2026-03-03T16:20:50.969Z)*
 
-![State=Current, Size=Lg (png, 2x, captured 2026-02-23T17:54:20.370Z)](./images/progress-indicator-primitive-state-current-size-lg.png)
-*State=Current, Size=Lg (png, 2x, captured 2026-02-23T17:54:20.370Z)*
+![State=Current, Size=Lg (png, 2x, captured 2026-03-03T16:20:54.350Z)](./images/progress-indicator-primitive-state-current-size-lg.png)
+*State=Current, Size=Lg (png, 2x, captured 2026-03-03T16:20:54.350Z)*

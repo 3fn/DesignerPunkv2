@@ -17,16 +17,19 @@ import {
   ResolvedContracts,
   ExperiencePattern,
   PatternCatalogEntry,
+  FamilyGuidance,
 } from '../models';
 import { parseSchemaYaml, parseContractsYaml, parseComponentMetaYaml, ParsedContracts } from './parsers';
 import { resolveInheritance, validateOmits } from './InheritanceResolver';
 import { deriveContractTokenRelationships } from './ContractTokenDeriver';
 import { PatternIndexer } from './PatternIndexer';
+import { FamilyGuidanceIndexer } from './FamilyGuidanceIndexer';
 
 export class ComponentIndexer {
   private index = new Map<string, ComponentMetadata>();
   private contractsCache = new Map<string, ParsedContracts>();
   private patternIndexer = new PatternIndexer();
+  private guidanceIndexer = new FamilyGuidanceIndexer();
   private lastIndexTime = '';
   private indexWarnings: string[] = [];
 
@@ -68,6 +71,16 @@ export class ComponentIndexer {
     // Index experience patterns (resolve from project root, not components dir)
     const patternsDir = path.resolve(componentsDir, '..', '..', '..', 'experience-patterns');
     await this.patternIndexer.indexPatterns(patternsDir);
+
+    // Index family guidance (must run after components and patterns for cross-reference validation)
+    const guidanceDir = path.resolve(componentsDir, '..', '..', '..', 'family-guidance');
+    await this.guidanceIndexer.indexGuidance(guidanceDir);
+
+    // Cross-reference validation (components + patterns must be indexed first)
+    const componentNames = new Set(Array.from(this.index.keys()));
+    const patternNames = new Set(this.patternIndexer.getCatalog().map(p => p.name));
+    const projectRoot = path.resolve(componentsDir, '..', '..', '..');
+    this.guidanceIndexer.validateCrossReferences(componentNames, patternNames, projectRoot);
 
     this.lastIndexTime = new Date().toISOString();
   }
@@ -127,13 +140,16 @@ export class ComponentIndexer {
   getHealth(): IndexHealth {
     const count = this.index.size;
     const patternHealth = this.patternIndexer.getHealth();
+    const guidanceHealth = this.guidanceIndexer.getHealth();
+    const allWarnings = [...this.indexWarnings, ...patternHealth.warnings, ...guidanceHealth.warnings];
     return {
-      status: count === 0 ? 'empty' : this.indexWarnings.length > 0 || patternHealth.warnings.length > 0 ? 'degraded' : 'healthy',
+      status: count === 0 ? 'empty' : allWarnings.length > 0 ? 'degraded' : 'healthy',
       componentsIndexed: count,
       patternsIndexed: patternHealth.patternsIndexed,
+      guidanceFamiliesIndexed: guidanceHealth.familiesIndexed,
       lastIndexTime: this.lastIndexTime,
       errors: [],
-      warnings: [...this.indexWarnings, ...patternHealth.warnings],
+      warnings: allWarnings,
     };
   }
 
@@ -145,6 +161,16 @@ export class ComponentIndexer {
   /** Get lightweight catalog of all experience patterns. */
   getPatternCatalog(): PatternCatalogEntry[] {
     return this.patternIndexer.getCatalog();
+  }
+
+  /** Get family guidance by family or component name. */
+  getGuidance(familyOrComponent: string): FamilyGuidance | null {
+    return this.guidanceIndexer.getGuidance(familyOrComponent);
+  }
+
+  /** Get all indexed guidance family names. */
+  getGuidanceFamilies(): string[] {
+    return this.guidanceIndexer.getAllFamilies();
   }
 
   /** Expose index for query engine */

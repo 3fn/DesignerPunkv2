@@ -1771,7 +1771,15 @@
                   "confidence": "exact"
                 }
               ],
-              "primitiveIdentified": [],
+              "primitiveIdentified": [
+                {
+                  "property": "stroke",
+                  "primitiveToken": "color.pink300",
+                  "rawValue": "rgba(255, 42, 109, 1)",
+                  "matchMethod": "binding",
+                  "confidence": "exact"
+                }
+              ],
               "unidentified": [
                 {
                   "property": "padding-top",
@@ -1808,12 +1816,6 @@
                   "rawValue": "1",
                   "reason": "value-match",
                   "suggestedToken": "semanticBorderWidth.default"
-                },
-                {
-                  "property": "stroke",
-                  "rawValue": "rgba(0, 0, 0, 1)",
-                  "reason": "value-match",
-                  "suggestedToken": "semanticColor.color.contrast.onLight"
                 }
               ]
             },
@@ -1842,7 +1844,7 @@
             },
             "strokes": [
               {
-                "color": "rgba(0, 0, 0, 1)"
+                "color": "rgba(255, 42, 109, 1)"
               }
             ]
           }
@@ -2979,8 +2981,8 @@
   },
   "classificationSummary": {
     "semanticIdentified": 14,
-    "primitiveIdentified": 53,
-    "unidentified": 157
+    "primitiveIdentified": 54,
+    "unidentified": 156
   },
   "compositionPatterns": [],
   "unresolvedBindings": [],
@@ -3038,101 +3040,101 @@
   "screenshots": [
     {
       "filePath": "./images/progress-indicator-primitive-state-incomplete-size-sm.png",
-      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/34d178e3-805d-4834-b76c-47859ed35fef",
+      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/3ecff520-d5de-4f80-a49b-d53e7ac7f233",
       "format": "png",
       "scale": 2,
       "variant": "State=Incomplete, Size=Sm",
-      "capturedAt": "2026-02-23T17:54:04.008Z"
+      "capturedAt": "2026-03-03T16:20:22.884Z"
     },
     {
       "filePath": "./images/progress-indicator-primitive-state-incomplete-size-md.png",
-      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/37bdfeef-09b9-4483-ae8f-9874282d1675",
+      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/0d512274-6b28-43a6-82e1-68a4dfa3c1e3",
       "format": "png",
       "scale": 2,
       "variant": "State=Incomplete, Size=Md",
-      "capturedAt": "2026-02-23T17:54:05.449Z"
+      "capturedAt": "2026-03-03T16:20:25.681Z"
     },
     {
       "filePath": "./images/progress-indicator-primitive-state-incomplete-size-lg.png",
-      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/8b3fbbb5-be47-40ad-a5b2-ae9b1a703574",
+      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/1783b2d3-f32c-45ff-99fd-0744d40c95c3",
       "format": "png",
       "scale": 2,
       "variant": "State=Incomplete, Size=Lg",
-      "capturedAt": "2026-02-23T17:54:07.330Z"
+      "capturedAt": "2026-03-03T16:20:28.771Z"
     },
     {
       "filePath": "./images/progress-indicator-primitive-state-complete-size-sm.png",
-      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/47ff4023-f4b6-4c36-8381-bd71f06a9f03",
+      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/a05ca498-b30e-4d6f-85d2-4937b10bac64",
       "format": "png",
       "scale": 2,
       "variant": "State=Complete, Size=Sm",
-      "capturedAt": "2026-02-23T17:54:08.755Z"
+      "capturedAt": "2026-03-03T16:20:31.364Z"
     },
     {
       "filePath": "./images/progress-indicator-primitive-state-complete-size-md.png",
-      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/23093269-39b3-4f4a-9b7e-08a4571111f9",
+      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/cbccbf7a-72b6-4c3d-9d25-f99eedabff5d",
       "format": "png",
       "scale": 2,
       "variant": "State=Complete, Size=Md",
-      "capturedAt": "2026-02-23T17:54:10.280Z"
+      "capturedAt": "2026-03-03T16:20:34.274Z"
     },
     {
       "filePath": "./images/progress-indicator-primitive-state-complete-size-lg.png",
-      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/62d19407-0ccf-4704-a3b7-c842e03df976",
+      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/73c4ab82-8eb4-4aa8-a1f1-3fd8cb3c858a",
       "format": "png",
       "scale": 2,
       "variant": "State=Complete, Size=Lg",
-      "capturedAt": "2026-02-23T17:54:11.706Z"
+      "capturedAt": "2026-03-03T16:20:37.466Z"
     },
     {
       "filePath": "./images/progress-indicator-primitive-state-error-size-sm.png",
-      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/a154ef37-7812-4e18-836e-1f354f727616",
+      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/2e137a8c-8b81-4a3f-92c6-133af438451b",
       "format": "png",
       "scale": 2,
       "variant": "State=Error, Size=Sm",
-      "capturedAt": "2026-02-23T17:54:13.204Z"
+      "capturedAt": "2026-03-03T16:20:40.146Z"
     },
     {
       "filePath": "./images/progress-indicator-primitive-state-error-size-md.png",
-      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/3e016105-1a47-4788-bc36-bf109c044b1a",
+      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/c124e4bc-fa08-4907-9fec-8c6c3e5efa69",
       "format": "png",
       "scale": 2,
       "variant": "State=Error, Size=Md",
-      "capturedAt": "2026-02-23T17:54:14.574Z"
+      "capturedAt": "2026-03-03T16:20:42.827Z"
     },
     {
       "filePath": "./images/progress-indicator-primitive-state-error-size-lg.png",
-      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/671a7108-4f65-4b58-bb71-84ead92840f1",
+      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/4f337713-bbfc-493f-af8c-7c61d1c2f1ac",
       "format": "png",
       "scale": 2,
       "variant": "State=Error, Size=Lg",
-      "capturedAt": "2026-02-23T17:54:15.934Z"
+      "capturedAt": "2026-03-03T16:20:45.636Z"
     },
     {
       "filePath": "./images/progress-indicator-primitive-state-current-size-sm.png",
-      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/d4600fab-5cc1-4348-a5da-11fef02043f5",
+      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/4dca7568-35fb-4866-b596-5d3408dfd646",
       "format": "png",
       "scale": 2,
       "variant": "State=Current, Size=Sm",
-      "capturedAt": "2026-02-23T17:54:17.552Z"
+      "capturedAt": "2026-03-03T16:20:48.355Z"
     },
     {
       "filePath": "./images/progress-indicator-primitive-state-current-size-md.png",
-      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/96bd4376-edcb-4c70-b768-1aed22fce10b",
+      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/2d306f85-8681-4ed4-8ca8-39fbd02b529e",
       "format": "png",
       "scale": 2,
       "variant": "State=Current, Size=Md",
-      "capturedAt": "2026-02-23T17:54:18.907Z"
+      "capturedAt": "2026-03-03T16:20:50.969Z"
     },
     {
       "filePath": "./images/progress-indicator-primitive-state-current-size-lg.png",
-      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/90a6c78c-cde6-47cd-a0bf-8715a61565a6",
+      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/6d47be27-5d66-40fc-be96-e5d6066d2985",
       "format": "png",
       "scale": 2,
       "variant": "State=Current, Size=Lg",
-      "capturedAt": "2026-02-23T17:54:20.370Z"
+      "capturedAt": "2026-03-03T16:20:54.350Z"
     }
   ],
-  "extractedAt": "2026-02-23T17:54:20.372Z",
+  "extractedAt": "2026-03-03T16:20:54.353Z",
   "extractorVersion": "6.3.0"
 }

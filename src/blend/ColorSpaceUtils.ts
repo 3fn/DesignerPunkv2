@@ -137,6 +137,12 @@ export function hslToRgb(hsl: HSL): RGB {
  * // Returns: { r: 170, g: 187, b: 204 }
  */
 export function hexToRgb(hex: string): RGB {
+  // Handle rgba() format from CSS computed styles
+  const rgbaMatch = hex.match(/^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+  if (rgbaMatch) {
+    return { r: parseInt(rgbaMatch[1]), g: parseInt(rgbaMatch[2]), b: parseInt(rgbaMatch[3]) };
+  }
+
   // Remove # prefix if present
   const cleanHex = hex.replace(/^#/, '');
 

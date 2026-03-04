@@ -1,0 +1,103 @@
+# Family Guidance: Form Inputs
+# Companion to: .kiro/steering/Component-Family-Form-Inputs.md
+# Read-both protocol: Read the family doc before modifying this file.
+
+family: "Form Inputs"
+companion: ".kiro/steering/Component-Family-Form-Inputs.md"
+
+whenToUse:
+  - "Collecting user data that requires validation (text, email, password, phone)"
+  - "Binary or multi-selection with optional/mandatory distinction (checkbox, radio)"
+  - "Legal consent collection with audit trail requirements (Input-Checkbox-Legal)"
+
+whenNotToUse:
+  - "Displaying read-only text — use Data Display components instead"
+  - "Multi-line text input — Textarea component needed (component gap, not yet implemented)"
+  - "Search interfaces — Search component needed (component gap, not yet implemented)"
+  - "Evenly weighted choices presented as buttons — use Button-VerticalList-Set instead"
+  - "Mixing with similarly functioning components (e.g., VerticalList Buttons) within the same form — keep input families consistent unless explicitly directed otherwise"
+
+selectionRules:
+  # Cross-group selection (which sub-type?)
+  - scenario: "Mandatory single selection from a set of options"
+    recommend: Input-Radio-Set
+    rationale: "Radio for single-select when a choice is required"
+  - scenario: "Optional single selection or multi-selection"
+    recommend: Input-Checkbox-Base
+    rationale: "Checkbox for optional single-select or any multi-select — radios cannot be deselected once selected, so optional selections require checkbox"
+
+  # Grouped rules
+  - group: "Text Inputs"
+    rules:
+      - scenario: "Email address collection"
+        recommend: Input-Text-Email
+        rationale: "Built-in email validation and autocomplete"
+      - scenario: "Password entry"
+        recommend: Input-Text-Password
+        rationale: "Secure input with toggle functionality"
+      - scenario: "Phone number collection"
+        recommend: Input-Text-PhoneNumber
+        rationale: "Auto-formatting and international support"
+      - scenario: "URL collection"
+        recommend: Input-Text-Base
+        props:
+          type: url
+        rationale: "No semantic URL variant — use Base with type='url' for keyboard optimization"
+      - scenario: "Generic text input or custom validation needs"
+        recommend: Input-Text-Base
+        rationale: "No specialized validation — use onChange and onBlur for custom validation logic"
+
+  - group: "Checkboxes"
+    rules:
+      - scenario: "Terms of service or privacy policy acceptance"
+        recommend: Input-Checkbox-Legal
+        rationale: "Audit trail and explicit consent enforcement for legal compliance"
+      - scenario: "Marketing opt-in"
+        recommend: Input-Checkbox-Legal
+        rationale: "Audit trail for consent records"
+      - scenario: "Generic binary selection (settings, preferences)"
+        recommend: Input-Checkbox-Base
+        rationale: "Simple on/off without legal or audit requirements"
+      - scenario: "Parent checkbox (select all)"
+        recommend: Input-Checkbox-Base
+        rationale: "Supports indeterminate state for partial selection"
+
+  - group: "Radio Buttons"
+    rules:
+      - scenario: "Single selection from a group of options"
+        recommend: Input-Radio-Set
+        rationale: "Orchestrates mutual exclusivity, keyboard navigation, and group validation"
+      - scenario: "Standalone radio (managed externally)"
+        recommend: Input-Radio-Base
+        rationale: "Only when group behavior is managed by a custom parent"
+
+accessibilityNotes:
+  - "All text inputs have programmatically associated labels via the float label pattern — do not add redundant aria-label"
+  - "Errors are identified with color, icon, and text — do not rely on color alone for error indication"
+  - "Radio groups must use Input-Radio-Set for keyboard navigation (arrow keys within group, Tab to enter/exit) — do not manually wire individual radios"
+  - "Input-Checkbox-Legal prevents pre-checking by design (GDPR compliance) — do not override with checked=true"
+  - "Text-based inputs validate on blur (field exit). Non-text inputs (checkbox, radio) validate on form submit"
+
+patterns:
+  - name: "Radio Group"
+    description: "Input-Radio-Set orchestrates Input-Radio-Base children for mutual exclusivity, keyboard navigation, and group validation"
+    components:
+      - component: Input-Radio-Set
+        role: orchestrator
+      - component: Input-Radio-Base
+        role: children
+    relatedPatterns: []
+
+  - name: "Parent-Child Checkbox"
+    description: "Indeterminate parent checkbox controlling a group of child checkboxes for bulk selection"
+    components:
+      - component: Input-Checkbox-Base
+        role: parent
+        props:
+          indeterminate: true
+      - component: Input-Checkbox-Base
+        role: children
+    relatedPatterns:
+      - settings-screen
+
+
