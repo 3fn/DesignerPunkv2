@@ -137,7 +137,7 @@
 
 ---
 
-- [ ] 4. Verification and Documentation
+- [x] 4. Verification and Documentation
 
   **Type**: Documentation
   **Validation**: Tier 3 (Comprehensive)
@@ -159,12 +159,12 @@
     - Verify verbose vs non-verbose response shapes
     - Count: verify current test baseline before comparing (067 baseline was 113, but may have changed since)
 
-  - [ ] 4.2 Update documentation
+  - [x] 4.2 Update documentation
     **Agent**: Lina
     - Update `component-mcp-server/` README or docs with `get_prop_guidance` tool documentation
     - Update `family-guidance/README.md` if schema evolved during Phase 2
 
-  - [ ] 4.3 Ada token governance review
+  - [x] 4.3 Ada token governance review
     **Agent**: Ada
     - Review all 3 companion YAML files for D9 compliance
     - Verify token references in rationale text use token names, not raw values
