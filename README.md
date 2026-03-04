@@ -2,7 +2,7 @@
 
 **A Design System Foundation Built for Modern Product Development, Cross-Platform Excellence, and AI-Assisted Development**
 
-[![Version](https://img.shields.io/badge/Version-9.0.0-purple)](docs/releases/RELEASE-NOTES-9.0.0.md)
+[![Version](https://img.shields.io/badge/Version-9.1.0-purple)](docs/releases/RELEASE-NOTES-9.1.0.md)
 [![Repository](https://img.shields.io/badge/GitHub-DesignerPunkv2-blue)](https://github.com/3fn/DesignerPunkv2)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
@@ -10,16 +10,16 @@
 
 ---
 
-## Latest Release: v9.0.0
+## Latest Release: v9.1.0
 
-**Application MCP** — Two specs completing the component catalog and evolving the component MCP from a development tool into an application MCP:
+**Family Guidance Indexer** (Spec 068) — Machine-queryable family guidance through structured companion YAML files and a new MCP tool:
 
-- **Schema Completion** (Spec 066): 8 remaining components schemaed, 28/28 catalog complete. MCP models evolved with `internal`/`children.requires` composition split, property `omits`, and `resolvedTokens`. Disabled state exclusion standardized across 14 components.
-- **Application MCP** (Spec 067): 3 new MCP tools — `list_experience_patterns` and `get_experience_pattern` for assembly guidance, `validate_assembly` for structural and accessibility validation. Enhanced `findComponents` with context filter and `ApplicationSummary` response. 3 experience patterns authored through structured interviews.
+- **`get_prop_guidance` MCP tool**: Query by component or family name for selection rules, accessibility notes, and family-scoped patterns. Verbose flag controls token cost (default: rationale stripped).
+- **3 companion YAML files**: `button.yaml` (flat rules), `form-inputs.yaml` (grouped rules), `container.yaml` (composition patterns) — schema validated across all structural types.
+- **FamilyGuidanceIndexer**: Parses companion YAML at startup with cross-reference validation against component catalog and pattern index.
+- **10 MCP tools total**, 136 tests across 11 suites, 3 guidance families indexed.
 
-**Breaking**: `composes` → `internal` on CompositionDefinition; `children.requires` added; `findComponents` returns `ApplicationSummary[]`.
-
-[Full Release Notes →](docs/releases/RELEASE-NOTES-9.0.0.md)
+[Full Release Notes →](docs/releases/RELEASE-NOTES-9.1.0.md)
 
 ---
 
@@ -73,7 +73,7 @@ A framework for building components that work identically across platforms while
 
 - **Naming Convention**: `[Family]-[Type]-[Variant]` (AI-discoverable)
 - **Behavioral Contracts**: 10-category taxonomy with 112 concepts — explicit specifications ensuring cross-platform consistency
-- **Component MCP Server**: Machine-readable metadata with 9 query tools for agent-driven component selection, experience patterns, and assembly validation
+- **Component MCP Server**: Machine-readable metadata with 10 query tools for agent-driven component selection, experience patterns, family guidance, and assembly validation
 - **11 Component Families**: Navigation, Form Inputs, Core, Progress Indicators, Data Displays, etc.
 - **Purpose**: Systematic, scalable component development with shared architecture
 
@@ -184,6 +184,7 @@ This is a working case study in how to lead AI-driven development at scale.
 - MCP Documentation Server with 82% token reduction for AI agent queries
 - Component MCP Server with progressive disclosure queries for agent-driven selection
 - 3 experience patterns for assembly guidance (forms, settings, onboarding)
+- 3 family guidance YAML files for machine-queryable component selection (Buttons, Form Inputs, Containers)
 - Bidirectional Figma integration: token push (Variables + Styles) and design extraction (ComponentAnalysis with three-tier classification)
 
 ### 🟡 Structural Foundation Ready
@@ -284,9 +285,9 @@ With MCP: *"Query the documentation map → get summary → retrieve specific se
 ### Component Selection as a Queryable System
 
 Instead of: *"Parse 28 schema files, 28 contract files, and 28 annotation files"*
-With Component MCP: *"find_components({ context: 'login-forms' }) → get_experience_pattern('simple-form') → validate_assembly(tree)"*
+With Component MCP: *"find_components({ context: 'login-forms' }) → get_experience_pattern('simple-form') → get_prop_guidance('Form Inputs') → validate_assembly(tree)"*
 
-**Result**: Agents select components by context, learn assembly patterns, and validate complete UI trees — all through structured queries
+**Result**: Agents select components by context, learn assembly patterns, query family-level selection guidance, and validate complete UI trees — all through structured queries
 
 ### Component Token Authoring
 
@@ -349,7 +350,7 @@ The following represent areas of active development, sequenced by dependencies a
 
 ### Current Work
 
-- Specs 048-067 (active implementation)
+- Specs 048-068 (active implementation)
 
 ### Near-Term Focus
 
@@ -491,18 +492,12 @@ Even if you don't adopt DesignerPunk directly, I hope it influences how you thin
 
 ## What Changed from Previous Version
 
-1. ✅ **Added** 8 schema.yaml files completing 28/28 component catalog (Spec 066)
-2. ✅ **Added** `omits` field for property omission on inheriting components (Spec 066)
-3. ✅ **Added** `resolvedTokens` for depth-1 composed token assembly (Spec 066)
-4. ✅ **Added** `state_disabled` exclusion standardized across 14 components (Spec 066)
-5. ✅ **Added** Experience pattern YAML schema with 3 authored patterns (Spec 067)
-6. ✅ **Added** `list_experience_patterns` and `get_experience_pattern` MCP tools (Spec 067)
-7. ✅ **Added** `validate_assembly` MCP tool with accessibility checking (Spec 067)
-8. ✅ **Added** `context` filter on `findComponents` with `ApplicationSummary` response (Spec 067)
-9. ✅ **Added** `AccessibilityChecker` module with 3 WCAG-referenced structural checks (Spec 067)
-10. ✅ **Added** Informed Placeholder task pattern in Process-Task-Type-Definitions (Process)
-11. ✅ **Breaking** `composes` → `internal` rename on CompositionDefinition (Spec 066)
-12. ✅ **Breaking** `children.requires` added to CompositionDefinition (Spec 066)
-13. ✅ **Breaking** `findComponents` returns `ApplicationSummary[]` instead of `ComponentSummary[]` (Spec 067)
-14. ✅ **Removed** Dead disabled state implementation from Input-Text-Base family (Spec 066)
-15. ✅ **Updated** Specs reference to 048-067 (active implementation)
+1. ✅ **Added** `get_prop_guidance` MCP tool — family guidance queries with verbose flag (Spec 068)
+2. ✅ **Added** 3 companion YAML files: `button.yaml`, `form-inputs.yaml`, `container.yaml` (Spec 068)
+3. ✅ **Added** `FamilyGuidanceIndexer` with cross-reference validation (Spec 068)
+4. ✅ **Added** `family-guidance/` directory with schema reference and read-both protocol (Spec 068)
+5. ✅ **Added** Bidirectional cross-references between family guidance YAML and Component-Family steering docs (Spec 068)
+6. ✅ **Updated** MCP tool count: 9 → 10
+7. ✅ **Updated** MCP test count: 113 → 136 across 11 suites
+8. ✅ **Updated** Health check reports `guidanceFamiliesIndexed` (3 families)
+9. ✅ **Updated** Specs reference to 048-068 (active implementation)
