@@ -9,7 +9,7 @@
 
 ## Task List
 
-- [ ] 1. Schema Convention and Directory Setup
+- [x] 1. Schema Convention and Directory Setup
 
   **Type**: Setup
   **Validation**: Tier 1 (Minimal)
@@ -19,7 +19,7 @@
   **Post-Completion:**
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 1 Complete: Schema Convention and Directory Setup"`
 
-  - [ ] 1.1 Create `family-guidance/` directory and README.md
+  - [x] 1.1 Create `family-guidance/` directory and README.md
     **Agent**: Lina
     Create the directory at project root. README.md documents:
     - YAML schema reference (all fields with types and optionality)
@@ -27,7 +27,7 @@
     - D9 compliance convention for rationale text
     - File naming convention (lowercase family name, e.g., `button.yaml`)
 
-  - [ ] 1.2 Schema convention ballot measure
+  - [x] 1.2 Schema convention ballot measure
     **Agent**: Thurgood (present), Peter (approve)
     Present the schema convention for ballot measure approval. Includes:
     - Schema format and field definitions
