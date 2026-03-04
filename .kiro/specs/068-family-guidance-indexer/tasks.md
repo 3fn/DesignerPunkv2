@@ -88,7 +88,7 @@
 
 ---
 
-- [ ] 3. Indexer and MCP Tool Implementation
+- [x] 3. Indexer and MCP Tool Implementation
 
   **Type**: Implementation
   **Validation**: Tier 2 (Standard)
@@ -98,7 +98,7 @@
   **Post-Completion:**
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Indexer and MCP Tool Implementation"`
 
-  - [ ] 3.1 Implement `FamilyGuidanceIndexer`
+  - [x] 3.1 Implement `FamilyGuidanceIndexer`
     **Agent**: Lina
     Create `component-mcp-server/src/indexer/FamilyGuidanceIndexer.ts`:
     - Scan `family-guidance/` directory for YAML files
@@ -108,7 +108,7 @@
 
     Tests: parse valid YAML (flat + grouped), handle malformed entries, validate schema, warning for unknown families.
 
-  - [ ] 3.2 Integrate with `ComponentIndexer`
+  - [x] 3.2 Integrate with `ComponentIndexer`
     **Agent**: Lina
     Update `ComponentIndexer` to instantiate and integrate `FamilyGuidanceIndexer`, following the same pattern as `PatternIndexer` integration.
 
@@ -116,7 +116,7 @@
 
     Tests: guidance data accessible through `ComponentIndexer` queries.
 
-  - [ ] 3.3 Implement `get_prop_guidance` MCP tool
+  - [x] 3.3 Implement `get_prop_guidance` MCP tool
     **Agent**: Lina
     Register `get_prop_guidance` in `index.ts`:
     - Accept `component` parameter (component name or family name)
@@ -151,7 +151,7 @@
   **Post-Completion:**
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 Complete: Verification and Documentation"`
 
-  - [ ] 4.1 Final verification
+  - [x] 4.1 Final verification
     **Agent**: Thurgood
     - Run full MCP test suite — all tests pass
     - Verify `get_component_health` reports clean status with guidance data
