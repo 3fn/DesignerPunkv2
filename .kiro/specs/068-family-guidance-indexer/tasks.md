@@ -49,7 +49,7 @@
   **Post-Completion:**
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Phase 2 Interview-Driven Authoring"`
 
-  - [ ] 2.1 Author `button.yaml`
+  - [x] 2.1 Author `button.yaml`
     **Agent**: Lina (Ada consults on D9 compliance in rationale text)
     **Type**: Informed Placeholder — schema may evolve during interview
     Interview-driven authoring of Button family guidance. Simplest family (flat rules, no groups). Validates the base schema shape.
@@ -60,7 +60,7 @@
 
     **Checkpoint**: Review schema shape with Peter before proceeding to 2.2. If Button reveals the schema needs restructuring, catch it before investing in Form-Inputs.
 
-  - [ ] 2.2 Author `form-inputs.yaml`
+  - [x] 2.2 Author `form-inputs.yaml`
     **Agent**: Lina (Ada consults on D9 compliance in rationale text)
     **Type**: Informed Placeholder — schema may evolve based on 2.1 findings
     Interview-driven authoring of Form-Inputs family guidance. Complex family (grouped rules: Text Inputs, Checkboxes, Radio Buttons). Validates the `group` field and sub-type structure.
@@ -69,7 +69,7 @@
 
     Add cross-reference to `Component-Family-Form-Inputs.md`.
 
-  - [ ] 2.3 Author `container.yaml`
+  - [x] 2.3 Author `container.yaml`
     **Agent**: Lina (Ada consults on D9 compliance in rationale text)
     **Type**: Informed Placeholder — schema may evolve based on 2.1-2.2 findings
     Interview-driven authoring of Container family guidance. Composition-heavy family. Validates patterns with `relatedPatterns` cross-references.
@@ -78,7 +78,7 @@
 
     Add cross-reference to `Component-Family-Container.md`.
 
-  - [ ] 2.4 Schema Review Gate
+  - [x] 2.4 Schema Review Gate
     **Agent**: Thurgood
     Review the schema as validated by 3 real companion files. Checkpoints:
     - Schema handles flat rules (Button), grouped rules (Form-Inputs), and composition patterns (Container)
