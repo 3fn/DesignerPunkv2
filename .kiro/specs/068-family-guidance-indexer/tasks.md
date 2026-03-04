@@ -44,7 +44,7 @@ Present the schema convention for ballot measure approval. Includes:
 **Critical**: Phase 2 is strictly serial. Complete each subtask before starting the next. Schema changes from one inform the next.
 
 #### 2.1 Author `button.yaml`
-**Agent**: Lina
+**Agent**: Lina (Ada consults on D9 compliance in rationale text)
 **Type**: Informed Placeholder — schema may evolve during interview
 Interview-driven authoring of Button family guidance. Simplest family (flat rules, no groups). Validates the base schema shape.
 
@@ -52,8 +52,10 @@ For every pattern encountered, explicitly ask: "Does this belong in family guida
 
 Add cross-reference to `Component-Family-Button.md`.
 
+**Checkpoint**: Review schema shape with Peter before proceeding to 2.2. If Button reveals the schema needs restructuring, catch it before investing in Form-Inputs.
+
 #### 2.2 Author `form-inputs.yaml`
-**Agent**: Lina
+**Agent**: Lina (Ada consults on D9 compliance in rationale text)
 **Type**: Informed Placeholder — schema may evolve based on 2.1 findings
 Interview-driven authoring of Form-Inputs family guidance. Complex family (grouped rules: Text Inputs, Checkboxes, Radio Buttons). Validates the `group` field and sub-type structure.
 
@@ -62,7 +64,7 @@ Apply any schema changes from 2.1 before starting. D4 boundary test for all patt
 Add cross-reference to `Component-Family-Form-Inputs.md`.
 
 #### 2.3 Author `container.yaml`
-**Agent**: Lina
+**Agent**: Lina (Ada consults on D9 compliance in rationale text)
 **Type**: Informed Placeholder — schema may evolve based on 2.1-2.2 findings
 Interview-driven authoring of Container family guidance. Composition-heavy family. Validates patterns with `relatedPatterns` cross-references.
 
@@ -102,6 +104,8 @@ Tests: parse valid YAML (flat + grouped), handle malformed entries, validate sch
 **Agent**: Lina
 Update `ComponentIndexer` to instantiate and integrate `FamilyGuidanceIndexer`, following the same pattern as `PatternIndexer` integration.
 
+Startup ordering must be enforced: `ComponentIndexer` → `PatternIndexer` → `FamilyGuidanceIndexer`. Cross-reference validation (`recommend` against component catalog, `relatedPatterns` against pattern index) requires both prior indexes to be built.
+
 Tests: guidance data accessible through `ComponentIndexer` queries.
 
 #### 3.3 Implement `get_prop_guidance` MCP tool
@@ -139,7 +143,7 @@ Tests: valid references pass, invalid references emit warnings.
 - Verify `get_component_health` reports clean status with guidance data
 - Verify `get_prop_guidance` returns correct data for all 3 authored families
 - Verify verbose vs non-verbose response shapes
-- Count: confirm test count increase over 067 baseline (113)
+- Count: verify current test baseline before comparing (067 baseline was 113, but may have changed since)
 
 #### 4.2 Update documentation
 **Agent**: Lina
@@ -153,3 +157,35 @@ Tests: valid references pass, invalid references emit warnings.
 - Verify prop values in selection rules are valid token-backed values
 
 **Post-completion**: Commit documentation updates. Ready for release analysis.
+
+
+---
+
+## Lina's Review Notes (2026-03-04)
+
+**Reviewer**: Lina (Stemma Component Specialist)
+
+### Actionable: Task 3.2 or 3.4 — state startup ordering dependency
+Cross-reference validation (Task 3.4) depends on both component and pattern indexes being built. The startup sequence `ComponentIndexer` → `PatternIndexer` → `FamilyGuidanceIndexer` should be noted. Recommend handling this in Task 3.2 (integration with ComponentIndexer) where the startup lifecycle is wired, rather than 3.4 — it's an integration concern, not a validation concern.
+
+### Actionable: Add lightweight checkpoint after Task 2.1
+Button is the schema discovery doc. If it reveals the schema needs restructuring, that should be caught before investing in Form-Inputs. Add a lightweight checkpoint after 2.1: "Review schema shape with Peter before proceeding to 2.2." The full schema review gate at 2.4 is still correct, but waiting until after all 3 interviews to catch a schema problem from the first interview is wasteful.
+
+### Note: Task 4.1 test baseline
+The tasks doc references 113 as the 067 baseline. The actual count is higher after the blend fix (property test update in `BlendUtilities.property.test.ts`). Thurgood should verify the current baseline before running 4.1 verification.
+
+### No other task-level concerns. Sequencing is correct, phasing is right, agent assignments are appropriate.
+
+---
+
+## Ada's Technical Review (2026-03-04)
+
+**Reviewer**: Ada (Rosetta Token Specialist)
+
+### Actionable: Task 3.4 — state ordering dependency
+
+Cross-reference validation (Task 3.4) depends on both the component index and the pattern index being built. The `FamilyGuidanceIndexer` validates `recommend` against the component catalog and `relatedPatterns` against the pattern index. The indexer startup sequence must be `ComponentIndexer` → `PatternIndexer` → `FamilyGuidanceIndexer`. Either note this dependency on Task 3.4 or on Task 3.2 (integration with ComponentIndexer) where the startup lifecycle is wired.
+
+### Note: Task 2.1–2.3 interview consultation
+
+My consultation role during the interviews is specifically to catch rationale text that references visual properties by appearance ("uses purple", "white text") rather than by token name ("uses `color.action.primary`", "uses `color.contrast.onDark`"). Same role as 067 pattern interviews, same risk surface, different file format.

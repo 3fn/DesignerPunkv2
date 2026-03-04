@@ -67,7 +67,7 @@ This spec makes family-level guidance machine-queryable by introducing companion
 2. WHEN queried with a component name THEN it SHALL return the guidance for that component's family, filtered to rules relevant to the queried component.
 3. WHEN queried with a family name THEN it SHALL return the full family guidance.
 4. The response SHALL include `whenToUse`, `whenNotToUse`, `selectionRules`, `accessibilityNotes`, and `patterns`.
-5. The tool SHALL support an optional `verbose` parameter (default: false). WHEN verbose is false THEN `rationale` fields SHALL be omitted from the response to reduce token cost.
+5. The tool SHALL support an optional `verbose` parameter (default: false). WHEN verbose is false THEN `rationale` fields on selection rules AND `description` fields on patterns SHALL be omitted from the response to reduce token cost.
 6. WHEN no guidance exists for the queried component or family THEN the tool SHALL return a clear "no guidance available" response, not an error.
 
 ### Requirement 5: Phased Authoring with Ballot Measures
@@ -91,3 +91,27 @@ This spec makes family-level guidance machine-queryable by introducing companion
 1. Bidirectional cross-references SHALL exist between each companion YAML and its family doc.
 2. The read-both protocol SHALL be documented in companion YAML frontmatter or header comments — not only in external steering docs.
 3. A commit-level validation mechanism (hook or CI check) SHALL be implemented as a follow-up to flag when one file is modified without the other in the same commit.
+
+
+---
+
+## Lina's Review Notes (2026-03-04)
+
+**Reviewer**: Lina (Stemma Component Specialist)
+
+### Actionable: Requirement 4.5 — verbose=false scope gap
+Ada caught this: Requirement 4.5 says `verbose=false` omits `rationale` from selection rules, but the design doc also strips `description` from `FamilyPattern` entries. Update to: "WHEN verbose is false THEN `rationale` fields on selection rules AND `description` fields on patterns SHALL be omitted."
+
+### No other requirement-level concerns. Acceptance criteria are testable and specific. Requirement 6 (drift mitigation) is appropriately scoped with the commit-level hook as follow-up.
+
+---
+
+## Ada's Technical Review (2026-03-04)
+
+**Reviewer**: Ada (Rosetta Token Specialist)
+
+### Actionable: Requirement 4.5 gap — `verbose=false` scope
+
+Requirement 4.5 says `verbose=false` omits `rationale` from selection rules. The design doc also strips `description` from `FamilyPattern` entries. The requirement should match the design doc — add: "WHEN verbose is false THEN `rationale` fields on selection rules AND `description` fields on patterns SHALL be omitted."
+
+### No other requirement-level concerns. Requirements are clean and map directly to design outline decisions.

@@ -29,11 +29,15 @@ The companion YAML files are authored in phases: schema convention first (ballot
 ### Data Flow
 
 ```
+Startup sequence (strict ordering):
+  ComponentIndexer → PatternIndexer → FamilyGuidanceIndexer
+  (Cross-reference validation requires prior indexes to be built)
+
 Agent query (get_prop_guidance)
   → MCP tool handler (index.ts)
     → ComponentIndexer.getGuidance(componentOrFamily)
       → FamilyGuidanceIndexer (parsed YAML data)
-    → Apply verbose filter (omit rationale if verbose=false)
+    → Apply verbose filter (omit rationale/description if verbose=false)
   → Response to agent
 ```
 
@@ -150,6 +154,8 @@ All selection rules are stored as `SelectionRuleGroup[]`, even for families with
 
 **Alternative considered**: Union type (`SelectionRule[] | SelectionRuleGroup[]`). Rejected because it pushes type-checking to every consumer.
 
+The MCP tool always returns `SelectionRuleGroup[]` as-is — no flattening of single-ungrouped-groups for simple families. Consumers check `group === undefined` themselves. This avoids special-case logic for marginal benefit.
+
 ### Decision 3: Verbose Flag for Token Cost Control
 
 `get_prop_guidance` defaults to `verbose=false`, omitting `rationale` and `description` fields.
@@ -201,3 +207,30 @@ Enforcement: structural validation in the indexer (prop values checked against s
 3. Every `relatedPatterns` entry must reference an experience pattern that exists in the pattern index.
 4. `props` values in selection rules must be valid prop values for the recommended component (validated against schema.yaml when available).
 5. No duplicate `scenario` values within the same group.
+
+
+---
+
+## Lina's Review Notes (2026-03-04)
+
+**Reviewer**: Lina (Stemma Component Specialist)
+
+### Actionable: Architecture section — explicit startup ordering
+The Data Flow section implies but doesn't state the initialization sequence. Make it explicit: `ComponentIndexer` → `PatternIndexer` → `FamilyGuidanceIndexer`. Cross-reference validation (`recommend` against component catalog, `relatedPatterns` against pattern index) requires both prior indexes to be built. Without this stated, someone wiring the integration without reading Ada's review will hit runtime errors against an empty catalog.
+
+### Actionable: Decision 2 — MCP tool behavior for single-ungrouped-group
+The normalization decision is correct (always `SelectionRuleGroup[]`). But the design doc should specify what the MCP tool does with it in the response: always return the array as-is. Don't flatten single-ungrouped-groups for simple families — that adds special-case logic for marginal benefit. Consumers can check `group === undefined` themselves.
+
+### No other design-level concerns. Data models, normalization, verbose flag, and D9 compliance are sound.
+
+---
+
+## Ada's Technical Review (2026-03-04)
+
+**Reviewer**: Ada (Rosetta Token Specialist)
+
+### Actionable: Correctness Property 4 — ordering dependency
+
+Property 4 ("props values validated against schema.yaml") requires the component index to be built before the guidance index validates. This means the indexer startup sequence must be: `ComponentIndexer` → `PatternIndexer` → `FamilyGuidanceIndexer`. This ordering isn't stated in the design doc but is implied by the cross-reference validation. Make it explicit — either in the Architecture section or as a note on Correctness Property 4.
+
+### No other design-level concerns. Data models, normalization approach, verbose filter, and D9 compliance section are all sound.
