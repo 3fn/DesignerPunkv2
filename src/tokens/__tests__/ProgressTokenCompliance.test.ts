@@ -20,7 +20,7 @@ import {
   progressColorTokens,
   progressColorTokenNames,
   PROGRESS_COLOR_TOKEN_COUNT,
-} from '../semantic/color-progress';
+} from '../semantic/ColorTokens';
 import {
   ProgressTokens,
   PROGRESS_COMPONENT_TOKEN_COUNT,

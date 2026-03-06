@@ -65,7 +65,7 @@ import { iconTokens } from '../tokens/semantic/IconTokens';
 import { accessibilityTokens } from '../tokens/semantic/AccessibilityTokens';
 import { motionTokens as semanticMotionTokens } from '../tokens/semantic/MotionTokens';
 import { typographyTokens } from '../tokens/semantic/TypographyTokens';
-import { progressColorTokens } from '../tokens/semantic/color-progress';
+import { progressColorTokens } from '../tokens/semantic/ColorTokens';
 import { shadowTokens as semanticShadowTokens } from '../tokens/semantic/ShadowTokens';
 
 /** Set of valid DTCG types for validation (Format Module 2025.10) */

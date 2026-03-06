@@ -601,6 +601,107 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
    * 
    * @see .kiro/specs/058-component-token-architecture-cleanup for migration details
    */
+
+  // ============================================================================
+  // PROGRESS INDICATOR FAMILY (Spec 048)
+  // Color tokens for progress states: current, pending, completed, error
+  // ============================================================================
+
+  'color.progress.current.background': {
+    name: 'color.progress.current.background',
+    primitiveReferences: { value: 'cyan300' },
+    category: SemanticCategory.COLOR,
+    context: 'Reasoning: Cyan300 provides a vibrant, accessible background that distinguishes the active position from completed (green) and error (pink) states without conflicting with feedback semantics.',
+    description: 'Background color for the currently active progress node — the "you are here" indicator in pagination dots and stepper nodes.'
+  },
+
+  'color.progress.current.text': {
+    name: 'color.progress.current.text',
+    primitiveReferences: { value: 'cyan400' },
+    category: SemanticCategory.COLOR,
+    context: 'Reasoning: Cyan400 is darker than cyan300, ensuring sufficient contrast for text/icon content rendered inside the current node background.',
+    description: 'Text/icon color for content inside the currently active progress node — checkmarks, step numbers, or icons within the active indicator.'
+  },
+
+  'color.progress.pending.background': {
+    name: 'color.progress.pending.background',
+    primitiveReferences: { value: 'white300' },
+    category: SemanticCategory.COLOR,
+    context: 'Reasoning: White300 provides a subtle, low-emphasis background for incomplete nodes, visually receding behind the active and completed states.',
+    description: 'Background color for incomplete/pending progress nodes — upcoming steps that have not been reached yet.'
+  },
+
+  'color.progress.pending.text': {
+    name: 'color.progress.pending.text',
+    primitiveReferences: { value: 'gray300' },
+    category: SemanticCategory.COLOR,
+    context: 'Reasoning: Gray300 provides muted text that signals "not yet active" while maintaining readability against the white300 background.',
+    description: 'Text/icon color for content inside pending progress nodes — step numbers or icons in upcoming/incomplete steps.'
+  },
+
+  'color.progress.pending.connector': {
+    name: 'color.progress.pending.connector',
+    primitiveReferences: { value: 'white200' },
+    category: SemanticCategory.COLOR,
+    context: 'Reasoning: White200 is lighter than the pending node background (white300), creating a subtle connector line that indicates untraversed path between incomplete steps.',
+    description: 'Color for connector lines between incomplete/pending progress nodes — the inactive path segments in steppers.'
+  },
+
+  'color.progress.completed.background': {
+    name: 'color.progress.completed.background',
+    primitiveReferences: { value: 'green100' },
+    category: SemanticCategory.COLOR,
+    context: 'Reasoning: Green100 aligns with the established success/completion semantic (feedback.success.background also uses green100), providing immediate recognition of finished steps.',
+    description: 'Background color for completed progress nodes — steps that have been successfully finished.'
+  },
+
+  'color.progress.completed.text': {
+    name: 'color.progress.completed.text',
+    primitiveReferences: { value: 'green400' },
+    category: SemanticCategory.COLOR,
+    context: 'Reasoning: Green400 provides strong contrast against green100 background for checkmark icons and text content, matching the feedback.success.text pattern.',
+    description: 'Text/icon color for content inside completed progress nodes — primarily the checkmark icon that signals step completion.'
+  },
+
+  'color.progress.completed.connector': {
+    name: 'color.progress.completed.connector',
+    primitiveReferences: { value: 'green100' },
+    category: SemanticCategory.COLOR,
+    context: 'Reasoning: Green100 for active connectors creates visual continuity between completed nodes, showing the traversed path as a unified green "progress trail."',
+    description: 'Color for connector lines between completed progress nodes — the active path segments showing progress already made.'
+  },
+
+  'color.progress.error.background': {
+    name: 'color.progress.error.background',
+    primitiveReferences: { value: 'pink100' },
+    category: SemanticCategory.COLOR,
+    context: 'Reasoning: Pink100 aligns with the established error semantic (feedback.error.background also uses pink100), providing immediate recognition of problematic steps.',
+    description: 'Background color for error progress nodes — steps that have encountered a problem requiring attention.'
+  },
+
+  'color.progress.error.text': {
+    name: 'color.progress.error.text',
+    primitiveReferences: { value: 'pink400' },
+    category: SemanticCategory.COLOR,
+    context: 'Reasoning: Pink400 provides strong contrast against pink100 background for error icons and text, matching the feedback.error.text pattern.',
+    description: 'Text/icon color for content inside error progress nodes — error icons or indicators within problematic steps.'
+  },
+
+  // ============================================================================
+  // SCRIM TOKENS (Spec 073)
+  // Dark translucent overlays for floating surfaces. Mode-invariant.
+  // Uses modifier architecture: base color + opacity modifier.
+  // ============================================================================
+
+  'color.scrim.standard': {
+    name: 'color.scrim.standard',
+    primitiveReferences: { value: 'black500' },
+    modifiers: [{ type: 'opacity', reference: 'opacity080' }],
+    modeInvariant: true,
+    category: SemanticCategory.COLOR,
+    context: 'Derived from black500 at opacity080 (80%). Scrim tokens dim content regardless of theme.',
+    description: 'Standard scrim for floating surfaces over content — pagination pills, dense overlays, floating toolbars.'
+  },
 };
 
 /**
@@ -656,7 +757,8 @@ export function getAllColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'
  * 
  * Previous count (Spec 058): 43 tokens
  * After Spec 046: 45 tokens
- * Current count: 48 tokens
+ * After progress (10) + scrim (1): 59 tokens
+ * Current count: 59 tokens
  * 
  * Remaining tokens breakdown:
  * - Feedback concept: 20 tokens (success/error/warning/info × text/background/border + select × 6 + notification × 2)
@@ -671,10 +773,12 @@ export function getAllColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'
  * - Print: 1 token (default)
  * - Background: 1 token (primary.subtle)
  * - Glow: 5 tokens (neonPurple, neonCyan, neonYellow, neonGreen, neonPink)
- * Total: 48 tokens
+ * - Progress: 10 tokens (current/pending/completed/error × background/text + connectors)
+ * - Scrim: 1 token (standard)
+ * Total: 59 tokens
  */
 export function validateColorTokenCount(): boolean {
-  const expectedCount = 48;
+  const expectedCount = 59;
   const actualCount = colorTokenNames.length;
   if (actualCount !== expectedCount) {
     console.warn(`Color token count mismatch: expected ${expectedCount}, got ${actualCount}`);
@@ -682,6 +786,43 @@ export function validateColorTokenCount(): boolean {
   }
   return true;
 }
+
+// ============================================================================
+// PROGRESS & SCRIM CONVENIENCE EXPORTS
+// Filtered views for consumers that need just these subsets
+// ============================================================================
+
+/** Progress color token names */
+export const progressColorTokenNames = colorTokenNames.filter(n => n.startsWith('color.progress.'));
+export const PROGRESS_COLOR_TOKEN_COUNT = 10;
+
+export function getProgressColorToken(name: string): Omit<SemanticToken, 'primitiveTokens'> | undefined {
+  return name.startsWith('color.progress.') ? colorTokens[name] : undefined;
+}
+
+export function getAllProgressColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'>> {
+  return progressColorTokenNames.map(n => colorTokens[n]);
+}
+
+export function validateProgressColorTokenCount(): boolean {
+  return progressColorTokenNames.length === PROGRESS_COLOR_TOKEN_COUNT;
+}
+
+/** Scrim color token names */
+export const scrimColorTokenNames = colorTokenNames.filter(n => n.startsWith('color.scrim.'));
+export const SCRIM_COLOR_TOKEN_COUNT = 1;
+
+export function getScrimColorToken(name: string): Omit<SemanticToken, 'primitiveTokens'> | undefined {
+  return name.startsWith('color.scrim.') ? colorTokens[name] : undefined;
+}
+
+export function getAllScrimColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'>> {
+  return scrimColorTokenNames.map(n => colorTokens[n]);
+}
+
+// Aliases for barrel compatibility
+export const progressColorTokens = Object.fromEntries(progressColorTokenNames.map(n => [n, colorTokens[n]]));
+export const scrimColorTokens = Object.fromEntries(scrimColorTokenNames.map(n => [n, colorTokens[n]]));
 
 // ============================================================================
 // BACKWARD COMPATIBILITY RE-EXPORTS (Spec 058)

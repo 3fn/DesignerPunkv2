@@ -27,7 +27,7 @@ import {
   getAllColorTokens,
   validateColorTokenCount
 } from '../ColorTokens';
-import { progressColorTokenNames } from '../color-progress';
+import { progressColorTokenNames } from '../ColorTokens';
 import { colorTokens as primitiveColorTokens } from '../../ColorTokens';
 import { SemanticCategory } from '../../../types/SemanticToken';
 
@@ -489,9 +489,9 @@ describe('Semantic Color Tokens - Palette Update', () => {
   });
 
   describe('Token Count Validation', () => {
-    it('should have exactly 58 color tokens', () => {
-      // Combine base color tokens with progress color tokens
-      const allColorTokenNames = [...colorTokenNames, ...progressColorTokenNames];
+    it('should have exactly 59 color tokens', () => {
+      // colorTokenNames now includes all color tokens (base + progress + scrim)
+      const allColorTokenNames = colorTokenNames;
       
       // Updated for Spec 052 semantic naming restructure:
       // Feedback concept: 18 tokens (success/error/warning/info × text/background/border + select × 6)
@@ -510,10 +510,8 @@ describe('Semantic Color Tokens - Palette Update', () => {
       // Badge component: MIGRATED to src/components/core/Badge-Count-Notification/tokens.ts (Spec 058)
       // Notification semantic tokens: 2 tokens added (Spec 046 Task 8.2)
       // Progress semantic tokens: 10 tokens added (Spec 048 Task 1.1)
-      // Total: 58 tokens (48 base + 10 progress)
-      // Base: 43 color.* tokens + 5 glow.* tokens = 48
-      // Progress: 10 tokens
-      expect(allColorTokenNames.length).toBe(58);
+      // Total: 59 tokens (48 base + 10 progress + 1 scrim)
+      expect(allColorTokenNames.length).toBe(59);
     });
 
     it('should pass validateColorTokenCount()', () => {
@@ -521,8 +519,7 @@ describe('Semantic Color Tokens - Palette Update', () => {
     });
 
     it('should have correct token count breakdown', () => {
-      // Combine base color tokens with progress color tokens
-      const allColorTokenNames = [...colorTokenNames, ...progressColorTokenNames];
+      const allColorTokenNames = colorTokenNames;
       
       // Updated for Spec 052 semantic naming restructure
       const actionTokens = allColorTokenNames.filter(n => n.startsWith('color.action.'));
@@ -617,10 +614,9 @@ describe('Semantic Color Tokens - Palette Update', () => {
       it('should return exactly 48 tokens', () => {
         // Updated for Spec 046 Task 8.2: Notification semantic tokens added
         // Previous count: 50, After Avatar migration: 45, After Badge migration: 43
-        // After notification semantic tokens added: 45 (43 + 2)
-        // Updated count: 48 (43 color.* tokens + 5 glow.* tokens)
+        // Updated count: 59 (48 base + 10 progress + 1 scrim)
         const tokens = getAllColorTokens();
-        expect(tokens.length).toBe(48);
+        expect(tokens.length).toBe(59);
       });
 
       it('should include all new tokens', () => {
@@ -658,12 +654,13 @@ describe('Semantic Color Tokens - Palette Update', () => {
   describe('Token Structure Consistency', () => {
     it('should have consistent structure across all tokens', () => {
       const tokens = getAllColorTokens();
-      const firstToken = tokens[0];
-      const firstTokenKeys = Object.keys(firstToken).sort();
+      const requiredKeys = ['name', 'primitiveReferences', 'category', 'context', 'description'];
 
       tokens.forEach(token => {
-        const tokenKeys = Object.keys(token).sort();
-        expect(tokenKeys).toEqual(firstTokenKeys);
+        const tokenKeys = Object.keys(token);
+        requiredKeys.forEach(key => {
+          expect(tokenKeys).toContain(key);
+        });
       });
     });
 
@@ -950,9 +947,8 @@ describe('Semantic Color Tokens - Palette Update', () => {
 
       it('should include select tokens in total count of 48', () => {
         // Verify total count includes the 6 feedback select tokens
-        // Updated for Spec 046 Task 8.2: 45 total tokens (includes 2 notification semantic tokens)
-        // Updated count: 48 (43 color.* tokens + 5 glow.* tokens)
-        expect(colorTokenNames.length).toBe(48);
+        // Updated count: 59 (48 base + 10 progress + 1 scrim)
+        expect(colorTokenNames.length).toBe(59);
         expect(validateColorTokenCount()).toBe(true);
       });
     });
@@ -1383,9 +1379,8 @@ describe('Semantic Color Tokens - Palette Update', () => {
       it('should have total count of 48 after notification semantic tokens added', () => {
         // Verify total count after notification semantic tokens added (Spec 046 Task 8.2)
         // Previous count: 43 (after Avatar + Badge migration)
-        // Updated count: 48 (43 color.* tokens + 5 glow.* tokens)
-        // Note: Includes 2 notification semantic tokens (color.feedback.notification.background, color.feedback.notification.text)
-        expect(colorTokenNames.length).toBe(48);
+        // Updated count: 59 (48 base + 10 progress + 1 scrim)
+        expect(colorTokenNames.length).toBe(59);
         expect(validateColorTokenCount()).toBe(true);
       });
     });

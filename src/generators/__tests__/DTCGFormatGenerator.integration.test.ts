@@ -304,7 +304,7 @@ describe('token completeness', () => {
       'semantic/MotionTokens': 'motion',
       'semantic/TypographyTokens': 'typography',
       'semantic/ShadowTokens': 'shadow',
-      'semantic/color-progress': 'progressColor',
+      'semantic/ColorTokens (progress)': 'progressColor',
     };
 
     for (const [source, group] of Object.entries(semanticSourceToGroup)) {

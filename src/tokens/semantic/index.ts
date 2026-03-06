@@ -144,16 +144,13 @@ export {
   PROGRESS_COLOR_TOKEN_COUNT,
   getProgressColorToken,
   getAllProgressColorTokens,
-  validateProgressColorTokenCount
-} from './color-progress';
-
-export {
+  validateProgressColorTokenCount,
   scrimColorTokens,
   scrimColorTokenNames,
   SCRIM_COLOR_TOKEN_COUNT,
   getScrimColorToken,
   getAllScrimColorTokens
-} from './color-scrim';
+} from './ColorTokens';
 
 // Import types for utility functions
 import type { SemanticToken } from '../../types/SemanticToken';
@@ -171,17 +168,16 @@ import { gridSpacingTokens } from './GridSpacingTokens';
 import { iconTokens } from './IconTokens';
 import { accessibility, accessibilityTokens } from './AccessibilityTokens';
 import { motionTokens } from './MotionTokens';
-import { progressColorTokens } from './color-progress';
-import { scrimColorTokens } from './color-scrim';
+import { progressColorTokenNames } from './ColorTokens';
 
 /**
  * Get any semantic token by name across all categories
  * Searches color, spacing, typography, border, shadow, and opacity tokens
  */
 export function getSemanticToken(name: string): Omit<SemanticToken, 'primitiveTokens'> | undefined {
-  // Check color tokens (includes progress color tokens and scrim tokens)
+  // Check color tokens (includes progress and scrim tokens)
   if (name.startsWith('color.')) {
-    return colorTokens[name] || progressColorTokens[name] || scrimColorTokens[name];
+    return colorTokens[name];
   }
 
   // Check typography tokens
@@ -415,12 +411,6 @@ export function getAllSemanticTokens(): Array<Omit<SemanticToken, 'primitiveToke
   // Add motion tokens
   tokens.push(...Object.values(motionTokens));
 
-  // Add progress color tokens
-  tokens.push(...Object.values(progressColorTokens));
-
-  // Add scrim color tokens
-  tokens.push(...Object.values(scrimColorTokens));
-
   // Add border width tokens
   for (const [name, token] of Object.entries(SemanticBorderWidthTokens)) {
     tokens.push({
@@ -463,7 +453,7 @@ export function getAllSemanticTokens(): Array<Omit<SemanticToken, 'primitiveToke
 export function getSemanticTokensByCategory(category: SemanticCategory): Array<Omit<SemanticToken, 'primitiveTokens'>> {
   switch (category) {
     case SemanticCategory.COLOR:
-      return [...Object.values(colorTokens), ...Object.values(progressColorTokens), ...Object.values(scrimColorTokens)];
+      return [...Object.values(colorTokens)];
     case SemanticCategory.TYPOGRAPHY:
       return Object.values(typographyTokens);
     case SemanticCategory.SPACING:
@@ -602,7 +592,7 @@ export function getSemanticTokenStats() {
   return {
     total: allTokens.length,
     byCategory: categoryCount,
-    colorTokens: Object.keys(colorTokens).length + Object.keys(progressColorTokens).length + Object.keys(scrimColorTokens).length,
+    colorTokens: Object.keys(colorTokens).length,
     typographyTokens: Object.keys(typographyTokens).length,
     spacingTokens: allTokens.filter(t => t.category === SemanticCategory.SPACING).length,
     borderTokens: Object.keys(SemanticBorderWidthTokens).length,
@@ -616,6 +606,6 @@ export function getSemanticTokenStats() {
     iconTokens: Object.keys(iconTokens).length,
     accessibilityTokens: Object.keys(accessibility.focus).length,
     motionTokens: Object.keys(motionTokens).length,
-    progressColorTokens: Object.keys(progressColorTokens).length
+    progressColorTokens: progressColorTokenNames.length
   };
 }
