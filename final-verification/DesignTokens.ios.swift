@@ -281,31 +281,31 @@ public struct DesignTokens {
     /// base × 0 = 0.08 × 0 = 0.0
     public static let opacity000: CGFloat = 0
     /// base × 1 = 0.08 × 1 = 0.08
-    public static let opacity100: CGFloat = 0.08
+    public static let opacity008: CGFloat = 0.08
     /// base × 2 = 0.08 × 2 = 0.16
-    public static let opacity200: CGFloat = 0.16
+    public static let opacity016: CGFloat = 0.16
     /// base × 3 = 0.08 × 3 = 0.24
-    public static let opacity300: CGFloat = 0.24
+    public static let opacity024: CGFloat = 0.24
     /// base × 4 = 0.08 × 4 = 0.32
-    public static let opacity400: CGFloat = 0.32
+    public static let opacity032: CGFloat = 0.32
     /// base × 5 = 0.08 × 5 = 0.40
-    public static let opacity500: CGFloat = 0.4
+    public static let opacity040: CGFloat = 0.4
     /// base × 6 = 0.08 × 6 = 0.48
-    public static let opacity600: CGFloat = 0.48
+    public static let opacity048: CGFloat = 0.48
     /// base × 7 = 0.08 × 7 = 0.56
-    public static let opacity700: CGFloat = 0.56
+    public static let opacity056: CGFloat = 0.56
     /// base × 8 = 0.08 × 8 = 0.64
-    public static let opacity800: CGFloat = 0.64
+    public static let opacity064: CGFloat = 0.64
     /// base × 9 = 0.08 × 9 = 0.72
-    public static let opacity900: CGFloat = 0.72
+    public static let opacity072: CGFloat = 0.72
     /// base × 10 = 0.08 × 10 = 0.80
-    public static let opacity1000: CGFloat = 0.8
+    public static let opacity080: CGFloat = 0.8
     /// base × 11 = 0.08 × 11 = 0.88
-    public static let opacity1100: CGFloat = 0.88
+    public static let opacity088: CGFloat = 0.88
     /// base × 12 = 0.08 × 12 = 0.96
-    public static let opacity1200: CGFloat = 0.96
+    public static let opacity096: CGFloat = 0.96
     /// Special case: full opacity = 1.0
-    public static let opacity1300: CGFloat = 1
+    public static let opacity100: CGFloat = 1
 
     // MARK: - RADIUS TOKENS
     /// base × 0 = 8 × 0 = 0
@@ -539,10 +539,10 @@ public struct DesignTokens {
     public static let shadowNoon = Typography(offsetX: shadowOffsetX000, offsetY: shadowOffsetY200, blur: shadowBlurModerate, opacity: shadowOpacityModerate, color: shadowBlack100)
     public static let shadowDusk = Typography(offsetX: shadowOffsetX150, offsetY: shadowOffsetY200, blur: shadowBlurModerate, opacity: shadowOpacityModerate, color: shadowBlack100)
     public static let shadowSunset = Typography(offsetX: shadowOffsetX300, offsetY: shadowOffsetY200, blur: shadowBlurModerate, opacity: shadowOpacityModerate, color: shadowBlue100)
-    public static let opacitySubtle = opacity1100
-    public static let opacityMedium = opacity900
-    public static let opacityHeavy = opacity600
-    public static let opacityGhost = opacity400
+    public static let opacitySubtle = opacity088
+    public static let opacityMedium = opacity072
+    public static let opacityHeavy = opacity048
+    public static let opacityGhost = opacity032
     public static let blendHoverDarker = blend200
     public static let blendHoverLighter = blend200
     public static let blendPressedDarker = blend300

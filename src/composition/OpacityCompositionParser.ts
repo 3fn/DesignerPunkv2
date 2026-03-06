@@ -7,9 +7,9 @@
  * 
  * Syntax:
  * - Simple: "color at opacity" → OpacityComposition
- * - Example: "purple500 at opacity600" → { color: "purple500", opacity: "opacity600" }
+ * - Example: "purple500 at opacity048" → { color: "purple500", opacity: "opacity048" }
  * - Blend + Opacity: "color with blend direction at opacity" → BlendOpacityComposition
- * - Example: "purple500 with blend200 darker at opacity600"
+ * - Example: "purple500 with blend200 darker at opacity048"
  */
 
 import type { OpacityComposition, BlendOpacityComposition, CompositionValidationResult } from './OpacityComposition';
@@ -38,15 +38,15 @@ export class OpacityCompositionParser {
      * @returns Validation result with parsed composition or error
      * 
      * @example
-     * parse("purple500 at opacity600")
-     * // Returns: { valid: true, composition: { color: "purple500", opacity: "opacity600", original: "..." } }
+     * parse("purple500 at opacity048")
+     * // Returns: { valid: true, composition: { color: "purple500", opacity: "opacity048", original: "..." } }
      * 
      * @example
-     * parse("purple500 with blend200 darker at opacity600")
-     * // Returns: { valid: true, composition: { color: "purple500", blend: "blend200", blendDirection: "darker", opacity: "opacity600", original: "..." } }
+     * parse("purple500 with blend200 darker at opacity048")
+     * // Returns: { valid: true, composition: { color: "purple500", blend: "blend200", blendDirection: "darker", opacity: "opacity048", original: "..." } }
      * 
      * @example
-     * parse("invalidColor at opacity600")
+     * parse("invalidColor at opacity048")
      * // Returns: { valid: false, error: "Color token 'invalidColor' not found" }
      */
     parse(compositionString: string): CompositionValidationResult {

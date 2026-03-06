@@ -251,6 +251,14 @@ export class WebFormatGenerator extends BaseFormatProvider {
       return this.formatOpacityCompositionToken(semantic, refs.color, refs.opacity);
     }
 
+    // Check for modifier-based opacity composition
+    if (semantic.modifiers?.length) {
+      const opacityMod = semantic.modifiers.find(m => m.type === 'opacity');
+      if (opacityMod && refs.value) {
+        return this.formatOpacityCompositionToken(semantic, refs.value, opacityMod.reference);
+      }
+    }
+
     // Get the primitive reference name (e.g., 'purple300' from primitiveReferences)
     const primitiveRef = semantic.primitiveReferences.value || 
                          semantic.primitiveReferences.default ||
@@ -292,7 +300,7 @@ export class WebFormatGenerator extends BaseFormatProvider {
    * 
    * @param semantic - Semantic token with color+opacity composition
    * @param colorRef - Color primitive token name (e.g., 'gray100')
-   * @param opacityRef - Opacity primitive token name (e.g., 'opacity600')
+   * @param opacityRef - Opacity primitive token name (e.g., 'opacity048')
    * @returns CSS custom property string with resolved RGBA value
    */
   private formatOpacityCompositionToken(
@@ -486,9 +494,9 @@ export class WebFormatGenerator extends BaseFormatProvider {
 
   /**
    * Generate CSS custom property for opacity token
-   * Outputs: --opacity600: 0.48;
+   * Outputs: --opacity048: 0.48;
    * 
-   * @param tokenName - Opacity token name (e.g., 'opacity600')
+   * @param tokenName - Opacity token name (e.g., 'opacity048')
    * @param opacityValue - Opacity value (0.0 - 1.0)
    * @returns CSS custom property string
    */

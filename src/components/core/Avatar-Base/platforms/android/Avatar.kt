@@ -169,7 +169,7 @@ object AvatarTokens {
     
     /**
      * Heavy opacity for border (48%)
-     * References: opacity.heavy → opacity600 (0.48)
+     * References: opacity.heavy → opacity048 (0.48)
      * @see Requirements: 7.2 - Border opacity for xs-xl sizes
      */
     const val opacityHeavy: Float = 0.48f

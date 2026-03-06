@@ -19,13 +19,13 @@ describe('Opacity Platform Translation Integration', () => {
   describe('Cross-Platform Opacity Value Consistency', () => {
     const testOpacityValues = [
       { name: 'opacity000', value: 0.0, description: 'Fully transparent' },
-      { name: 'opacity100', value: 0.08, description: 'Subtle transparency' },
-      { name: 'opacity200', value: 0.16, description: 'Light transparency' },
-      { name: 'opacity400', value: 0.32, description: 'Modal overlay' },
-      { name: 'opacity600', value: 0.48, description: 'Disabled state' },
-      { name: 'opacity800', value: 0.64, description: 'Very opaque' },
-      { name: 'opacity1000', value: 0.80, description: 'Nearly full opacity' },
-      { name: 'opacity1300', value: 1.0, description: 'Fully opaque' }
+      { name: 'opacity008', value: 0.08, description: 'Subtle transparency' },
+      { name: 'opacity016', value: 0.16, description: 'Light transparency' },
+      { name: 'opacity032', value: 0.32, description: 'Modal overlay' },
+      { name: 'opacity048', value: 0.48, description: 'Disabled state' },
+      { name: 'opacity064', value: 0.64, description: 'Very opaque' },
+      { name: 'opacity080', value: 0.80, description: 'Nearly full opacity' },
+      { name: 'opacity100', value: 1.0, description: 'Fully opaque' }
     ];
 
     test('all platforms should use same unitless opacity values', () => {
@@ -83,9 +83,9 @@ describe('Opacity Platform Translation Integration', () => {
     });
 
     test('should generate valid CSS custom property', () => {
-      const result = generator.generateCustomProperty('opacity600', 0.48);
+      const result = generator.generateCustomProperty('opacity048', 0.48);
       
-      expect(result).toBe('--opacity600: 0.48;');
+      expect(result).toBe('--opacity048: 0.48;');
       expect(result).toMatch(/^--[\w-]+: [\d.]+;$/);
     });
 
@@ -118,9 +118,9 @@ describe('Opacity Platform Translation Integration', () => {
     });
 
     test('should generate valid Swift constant', () => {
-      const result = generator.generateConstant('opacity600', 0.48);
+      const result = generator.generateConstant('opacity048', 0.48);
       
-      expect(result).toBe('static let opacity600 = 0.48');
+      expect(result).toBe('static let opacity048 = 0.48');
       expect(result).toMatch(/^static let \w+ = [\d.]+$/);
     });
 
@@ -153,9 +153,9 @@ describe('Opacity Platform Translation Integration', () => {
     });
 
     test('should generate valid Kotlin constant', () => {
-      const result = generator.generateConstant('opacity600', 0.48);
+      const result = generator.generateConstant('opacity048', 0.48);
       
-      expect(result).toBe('const val OPACITY_600 = 0.48f');
+      expect(result).toBe('const val OPACITY_048 = 0.48f');
       expect(result).toMatch(/^const val [A-Z_0-9]+ = [\d.]+f$/);
     });
 
@@ -168,11 +168,11 @@ describe('Opacity Platform Translation Integration', () => {
 
   describe('Cross-Platform Semantic Opacity Tokens', () => {
     const semanticOpacityTokens = [
-      { name: 'opacityDisabled', primitiveValue: 0.48, primitiveRef: 'opacity600' },
-      { name: 'opacityOverlay', primitiveValue: 0.32, primitiveRef: 'opacity400' },
+      { name: 'opacityDisabled', primitiveValue: 0.48, primitiveRef: 'opacity048' },
+      { name: 'opacityOverlay', primitiveValue: 0.32, primitiveRef: 'opacity032' },
       { name: 'opacityHover', primitiveValue: 0.08, primitiveRef: 'opacity100' },
-      { name: 'opacityPressed', primitiveValue: 0.16, primitiveRef: 'opacity200' },
-      { name: 'opacityLoading', primitiveValue: 0.16, primitiveRef: 'opacity200' }
+      { name: 'opacityPressed', primitiveValue: 0.16, primitiveRef: 'opacity016' },
+      { name: 'opacityLoading', primitiveValue: 0.16, primitiveRef: 'opacity016' }
     ];
 
     test('semantic tokens should resolve to same primitive values across platforms', () => {
@@ -280,7 +280,7 @@ describe('Opacity Platform Translation Integration', () => {
       expect(generator.generateRgbaAlpha(0, 0, 0, 0.48)).toMatch(/^rgba\(\d+, \d+, \d+, [\d.]+\)$/);
       
       // Custom property uses double dash prefix
-      expect(generator.generateCustomProperty('opacity600', 0.48)).toMatch(/^--[\w-]+: [\d.]+;$/);
+      expect(generator.generateCustomProperty('opacity048', 0.48)).toMatch(/^--[\w-]+: [\d.]+;$/);
     });
 
     test('iOS Swift should use correct syntax patterns', () => {
@@ -294,7 +294,7 @@ describe('Opacity Platform Translation Integration', () => {
         .toMatch(/^Color\(red: [\d.]+, green: [\d.]+, blue: [\d.]+, opacity: [\d.]+\)$/);
       
       // Constant uses static let
-      expect(generator.generateConstant('opacity600', 0.48)).toMatch(/^static let \w+ = [\d.]+$/);
+      expect(generator.generateConstant('opacity048', 0.48)).toMatch(/^static let \w+ = [\d.]+$/);
     });
 
     test('Android Kotlin should use correct syntax patterns', () => {
@@ -308,7 +308,7 @@ describe('Opacity Platform Translation Integration', () => {
         .toMatch(/^Color\(0x[A-F0-9]+\)\.copy\(alpha = [\d.]+f\)$/);
       
       // Constant uses const val with UPPER_SNAKE_CASE
-      expect(generator.generateConstant('opacity600', 0.48)).toMatch(/^const val [A-Z_0-9]+ = [\d.]+f$/);
+      expect(generator.generateConstant('opacity048', 0.48)).toMatch(/^const val [A-Z_0-9]+ = [\d.]+f$/);
     });
   });
 

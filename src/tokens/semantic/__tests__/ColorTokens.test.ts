@@ -732,7 +732,7 @@ describe('Semantic Color Tokens - Palette Update', () => {
       const refs = token.primitiveReferences as Record<string, string>;
       // Verify opacity composition pattern (color + opacity)
       expect(refs.color).toBe('gray100');
-      expect(refs.opacity).toBe('opacity600');
+      expect(refs.opacity).toBe('opacity048');
     });
   });
 

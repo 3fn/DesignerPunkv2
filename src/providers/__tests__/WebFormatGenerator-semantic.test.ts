@@ -191,13 +191,13 @@ describe('WebFormatGenerator - Semantic Token Methods', () => {
 
     describe('generateCustomProperty', () => {
       test('should generate CSS custom property with -- prefix', () => {
-        const result = generator.generateCustomProperty('opacity600', 0.48);
-        expect(result).toBe('--opacity600: 0.48;');
+        const result = generator.generateCustomProperty('opacity048', 0.48);
+        expect(result).toBe('--opacity048: 0.48;');
       });
 
       test('should not duplicate -- prefix if already present', () => {
-        const result = generator.generateCustomProperty('--opacity600', 0.48);
-        expect(result).toBe('--opacity600: 0.48;');
+        const result = generator.generateCustomProperty('--opacity048', 0.48);
+        expect(result).toBe('--opacity048: 0.48;');
       });
 
       test('should handle opacity value of 0', () => {
@@ -206,13 +206,13 @@ describe('WebFormatGenerator - Semantic Token Methods', () => {
       });
 
       test('should handle opacity value of 1', () => {
-        const result = generator.generateCustomProperty('opacity1300', 1);
-        expect(result).toBe('--opacity1300: 1;');
+        const result = generator.generateCustomProperty('opacity100', 1);
+        expect(result).toBe('--opacity100: 1;');
       });
 
       test('should handle decimal opacity values', () => {
-        const result = generator.generateCustomProperty('opacity100', 0.08);
-        expect(result).toBe('--opacity100: 0.08;');
+        const result = generator.generateCustomProperty('opacity008', 0.08);
+        expect(result).toBe('--opacity008: 0.08;');
       });
     });
   });

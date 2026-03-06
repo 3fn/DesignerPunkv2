@@ -44,24 +44,24 @@ describe('Semantic Opacity Tokens', () => {
   });
 
   describe('Primitive References', () => {
-    test('opacity.subtle should reference opacity1100', () => {
+    test('opacity.subtle should reference opacity088', () => {
       const token = opacityTokens['opacity.subtle'];
-      expect(token.primitiveReferences.value).toBe('opacity1100');
+      expect(token.primitiveReferences.value).toBe('opacity088');
     });
 
-    test('opacity.medium should reference opacity900', () => {
+    test('opacity.medium should reference opacity072', () => {
       const token = opacityTokens['opacity.medium'];
-      expect(token.primitiveReferences.value).toBe('opacity900');
+      expect(token.primitiveReferences.value).toBe('opacity072');
     });
 
-    test('opacity.heavy should reference opacity600', () => {
+    test('opacity.heavy should reference opacity048', () => {
       const token = opacityTokens['opacity.heavy'];
-      expect(token.primitiveReferences.value).toBe('opacity600');
+      expect(token.primitiveReferences.value).toBe('opacity048');
     });
 
-    test('opacity.ghost should reference opacity400', () => {
+    test('opacity.ghost should reference opacity032', () => {
       const token = opacityTokens['opacity.ghost'];
-      expect(token.primitiveReferences.value).toBe('opacity400');
+      expect(token.primitiveReferences.value).toBe('opacity032');
     });
 
     test('all semantic tokens should reference valid primitive token names', () => {
@@ -74,7 +74,7 @@ describe('Semantic Opacity Tokens', () => {
   });
 
   describe('Token Resolution', () => {
-    test('opacity.subtle should resolve to opacity1100 (0.88)', () => {
+    test('opacity.subtle should resolve to opacity088 (0.88)', () => {
       const semanticToken = opacityTokens['opacity.subtle'];
       const primitiveTokenName = semanticToken.primitiveReferences.value;
       const primitiveToken = primitiveOpacityTokens[primitiveTokenName];
@@ -95,10 +95,10 @@ describe('Semantic Opacity Tokens', () => {
 
     test('semantic token references should be valid', () => {
       const expectedReferences = {
-        'opacity.subtle': 'opacity1100',
-        'opacity.medium': 'opacity900',
-        'opacity.heavy': 'opacity600',
-        'opacity.ghost': 'opacity400'
+        'opacity.subtle': 'opacity088',
+        'opacity.medium': 'opacity072',
+        'opacity.heavy': 'opacity048',
+        'opacity.ghost': 'opacity032'
       };
 
       Object.entries(expectedReferences).forEach(([semanticName, primitiveName]) => {
@@ -117,7 +117,7 @@ describe('Semantic Opacity Tokens', () => {
       const token = getOpacityToken('opacity.subtle');
       expect(token).toBeDefined();
       expect(token?.name).toBe('opacity.subtle');
-      expect(token?.primitiveReferences.value).toBe('opacity1100');
+      expect(token?.primitiveReferences.value).toBe('opacity088');
     });
 
     test('getOpacityToken should return undefined for invalid name', () => {

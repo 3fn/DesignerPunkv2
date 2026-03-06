@@ -406,7 +406,7 @@ describe('Platform Output Format Tests', () => {
 
   describe('Opacity Composition Resolution', () => {
     /**
-     * Tests for opacity composition pattern: { color: 'gray100', opacity: 'opacity600' }
+     * Tests for opacity composition pattern: { color: 'gray100', opacity: 'opacity048' }
      * Validates that generators resolve color + opacity primitives to RGBA output
      * 
      * **Validates: Requirements 1.3, 5.4** - Platform generators resolve opacity composition
@@ -423,7 +423,7 @@ describe('Platform Output Format Tests', () => {
         // Create a semantic token with opacity composition
         const semanticToken = {
           name: 'color.structure.border.subtle',
-          primitiveReferences: { color: 'gray100', opacity: 'opacity600' },
+          primitiveReferences: { color: 'gray100', opacity: 'opacity048' },
           category: 'color',
           context: 'Subtle border with transparency',
           description: 'Semi-transparent border'
@@ -434,14 +434,14 @@ describe('Platform Output Format Tests', () => {
         // Should contain the CSS custom property name
         expect(result).toContain('--color-structure-border-subtle');
         // Should contain rgba format with resolved values
-        // gray100 = rgba(184, 182, 200, 1), opacity600 = 0.48
+        // gray100 = rgba(184, 182, 200, 1), opacity048 = 0.48
         expect(result).toContain('rgba(184, 182, 200, 0.48)');
       });
 
       test('should produce correct CSS output format', () => {
         const semanticToken = {
           name: 'color.structure.border.subtle',
-          primitiveReferences: { color: 'gray100', opacity: 'opacity600' },
+          primitiveReferences: { color: 'gray100', opacity: 'opacity048' },
           category: 'color',
           context: 'Subtle border',
           description: 'Semi-transparent border'
@@ -464,7 +464,7 @@ describe('Platform Output Format Tests', () => {
       test('should resolve opacity composition to UIColor format', () => {
         const semanticToken = {
           name: 'color.structure.border.subtle',
-          primitiveReferences: { color: 'gray100', opacity: 'opacity600' },
+          primitiveReferences: { color: 'gray100', opacity: 'opacity048' },
           category: 'color',
           context: 'Subtle border with transparency',
           description: 'Semi-transparent border'
@@ -483,7 +483,7 @@ describe('Platform Output Format Tests', () => {
       test('should produce correct Swift output format', () => {
         const semanticToken = {
           name: 'color.structure.border.subtle',
-          primitiveReferences: { color: 'gray100', opacity: 'opacity600' },
+          primitiveReferences: { color: 'gray100', opacity: 'opacity048' },
           category: 'color',
           context: 'Subtle border',
           description: 'Semi-transparent border'
@@ -506,7 +506,7 @@ describe('Platform Output Format Tests', () => {
       test('should resolve opacity composition to Color.argb format', () => {
         const semanticToken = {
           name: 'color.structure.border.subtle',
-          primitiveReferences: { color: 'gray100', opacity: 'opacity600' },
+          primitiveReferences: { color: 'gray100', opacity: 'opacity048' },
           category: 'color',
           context: 'Subtle border with transparency',
           description: 'Semi-transparent border'
@@ -518,14 +518,14 @@ describe('Platform Output Format Tests', () => {
         expect(result).toContain('color_structure_border_subtle');
         // Should contain Color.argb format
         expect(result).toContain('Color.argb(');
-        // opacity600 = 0.48, 0.48 * 255 = 122.4 → 122
+        // opacity048 = 0.48, 0.48 * 255 = 122.4 → 122
         expect(result).toContain('Color.argb(122,');
       });
 
       test('should produce correct Kotlin output format', () => {
         const semanticToken = {
           name: 'color.structure.border.subtle',
-          primitiveReferences: { color: 'gray100', opacity: 'opacity600' },
+          primitiveReferences: { color: 'gray100', opacity: 'opacity048' },
           category: 'color',
           context: 'Subtle border',
           description: 'Semi-transparent border'
@@ -541,7 +541,7 @@ describe('Platform Output Format Tests', () => {
         const xmlGenerator = new AndroidFormatGenerator('xml');
         const semanticToken = {
           name: 'color.structure.border.subtle',
-          primitiveReferences: { color: 'gray100', opacity: 'opacity600' },
+          primitiveReferences: { color: 'gray100', opacity: 'opacity048' },
           category: 'color',
           context: 'Subtle border',
           description: 'Semi-transparent border'
@@ -550,7 +550,7 @@ describe('Platform Output Format Tests', () => {
         const result = xmlGenerator.formatSingleReferenceToken(semanticToken as any);
 
         // Verify XML color format with hex ARGB
-        // opacity600 = 0.48, 0.48 * 255 = 122 = 0x7A
+        // opacity048 = 0.48, 0.48 * 255 = 122 = 0x7A
         expect(result).toContain('<color name="color_structure_border_subtle">');
         expect(result).toMatch(/#[0-9A-F]{8}/); // ARGB hex format
       });
@@ -564,7 +564,7 @@ describe('Platform Output Format Tests', () => {
 
         const semanticToken = {
           name: 'color.structure.border.subtle',
-          primitiveReferences: { color: 'gray100', opacity: 'opacity600' },
+          primitiveReferences: { color: 'gray100', opacity: 'opacity048' },
           category: 'color',
           context: 'Subtle border',
           description: 'Semi-transparent border'
@@ -574,7 +574,7 @@ describe('Platform Output Format Tests', () => {
         const iosResult = iosGenerator.formatSingleReferenceToken(semanticToken as any);
         const androidResult = androidGenerator.formatSingleReferenceToken(semanticToken as any);
 
-        // All should resolve gray100 (184, 182, 200) with opacity600 (0.48)
+        // All should resolve gray100 (184, 182, 200) with opacity048 (0.48)
         
         // Web: rgba(184, 182, 200, 0.48)
         expect(webResult).toContain('rgba(184, 182, 200, 0.48)');

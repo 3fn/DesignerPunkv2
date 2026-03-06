@@ -1,10 +1,10 @@
 /**
  * Opacity Token Definitions
  * 
- * Opacity tokens follow 0.08 base value with 13-token scale (0-100%) in 8% increments.
+ * Opacity tokens follow 0.08 base value with 14-token scale (0-100%) in 8% increments.
  * Base value: 0.08 (8%)
  * Mathematical progression: Systematic multiples of base value
- * Scale notation: opacity100 = 1 × base, opacity200 = 2 × base, etc.
+ * Naming: Three-digit zero-padded percentage values (opacity080 = 80%)
  */
 
 import { PrimitiveToken, TokenCategory, PlatformValues } from '../types/PrimitiveToken';
@@ -27,7 +27,7 @@ function generateOpacityPlatformValues(baseValue: number): PlatformValues {
 }
 
 /**
- * Opacity tokens with 13-token scale from 0% to 100% in 8% increments
+ * Opacity tokens with 14-token scale from 0% to 100% in 8% increments
  */
 export const opacityTokens: Record<string, PrimitiveToken> = {
   opacity000: {
@@ -43,8 +43,8 @@ export const opacityTokens: Record<string, PrimitiveToken> = {
     platforms: generateOpacityPlatformValues(0.0)
   },
 
-  opacity100: {
-    name: 'opacity100',
+  opacity008: {
+    name: 'opacity008',
     category: TokenCategory.OPACITY,
     baseValue: OPACITY_BASE_VALUE,
     familyBaseValue: OPACITY_BASE_VALUE,
@@ -56,8 +56,8 @@ export const opacityTokens: Record<string, PrimitiveToken> = {
     platforms: generateOpacityPlatformValues(OPACITY_BASE_VALUE)
   },
 
-  opacity200: {
-    name: 'opacity200',
+  opacity016: {
+    name: 'opacity016',
     category: TokenCategory.OPACITY,
     baseValue: OPACITY_BASE_VALUE * 2,
     familyBaseValue: OPACITY_BASE_VALUE,
@@ -69,8 +69,8 @@ export const opacityTokens: Record<string, PrimitiveToken> = {
     platforms: generateOpacityPlatformValues(OPACITY_BASE_VALUE * 2)
   },
 
-  opacity300: {
-    name: 'opacity300',
+  opacity024: {
+    name: 'opacity024',
     category: TokenCategory.OPACITY,
     baseValue: OPACITY_BASE_VALUE * 3,
     familyBaseValue: OPACITY_BASE_VALUE,
@@ -82,8 +82,8 @@ export const opacityTokens: Record<string, PrimitiveToken> = {
     platforms: generateOpacityPlatformValues(OPACITY_BASE_VALUE * 3)
   },
 
-  opacity400: {
-    name: 'opacity400',
+  opacity032: {
+    name: 'opacity032',
     category: TokenCategory.OPACITY,
     baseValue: OPACITY_BASE_VALUE * 4,
     familyBaseValue: OPACITY_BASE_VALUE,
@@ -95,8 +95,8 @@ export const opacityTokens: Record<string, PrimitiveToken> = {
     platforms: generateOpacityPlatformValues(OPACITY_BASE_VALUE * 4)
   },
 
-  opacity500: {
-    name: 'opacity500',
+  opacity040: {
+    name: 'opacity040',
     category: TokenCategory.OPACITY,
     baseValue: OPACITY_BASE_VALUE * 5,
     familyBaseValue: OPACITY_BASE_VALUE,
@@ -108,8 +108,8 @@ export const opacityTokens: Record<string, PrimitiveToken> = {
     platforms: generateOpacityPlatformValues(OPACITY_BASE_VALUE * 5)
   },
 
-  opacity600: {
-    name: 'opacity600',
+  opacity048: {
+    name: 'opacity048',
     category: TokenCategory.OPACITY,
     baseValue: OPACITY_BASE_VALUE * 6,
     familyBaseValue: OPACITY_BASE_VALUE,
@@ -121,8 +121,8 @@ export const opacityTokens: Record<string, PrimitiveToken> = {
     platforms: generateOpacityPlatformValues(OPACITY_BASE_VALUE * 6)
   },
 
-  opacity700: {
-    name: 'opacity700',
+  opacity056: {
+    name: 'opacity056',
     category: TokenCategory.OPACITY,
     baseValue: OPACITY_BASE_VALUE * 7,
     familyBaseValue: OPACITY_BASE_VALUE,
@@ -134,8 +134,8 @@ export const opacityTokens: Record<string, PrimitiveToken> = {
     platforms: generateOpacityPlatformValues(OPACITY_BASE_VALUE * 7)
   },
 
-  opacity800: {
-    name: 'opacity800',
+  opacity064: {
+    name: 'opacity064',
     category: TokenCategory.OPACITY,
     baseValue: OPACITY_BASE_VALUE * 8,
     familyBaseValue: OPACITY_BASE_VALUE,
@@ -147,8 +147,8 @@ export const opacityTokens: Record<string, PrimitiveToken> = {
     platforms: generateOpacityPlatformValues(OPACITY_BASE_VALUE * 8)
   },
 
-  opacity900: {
-    name: 'opacity900',
+  opacity072: {
+    name: 'opacity072',
     category: TokenCategory.OPACITY,
     baseValue: OPACITY_BASE_VALUE * 9,
     familyBaseValue: OPACITY_BASE_VALUE,
@@ -160,8 +160,8 @@ export const opacityTokens: Record<string, PrimitiveToken> = {
     platforms: generateOpacityPlatformValues(OPACITY_BASE_VALUE * 9)
   },
 
-  opacity1000: {
-    name: 'opacity1000',
+  opacity080: {
+    name: 'opacity080',
     category: TokenCategory.OPACITY,
     baseValue: OPACITY_BASE_VALUE * 10,
     familyBaseValue: OPACITY_BASE_VALUE,
@@ -173,8 +173,8 @@ export const opacityTokens: Record<string, PrimitiveToken> = {
     platforms: generateOpacityPlatformValues(OPACITY_BASE_VALUE * 10)
   },
 
-  opacity1100: {
-    name: 'opacity1100',
+  opacity088: {
+    name: 'opacity088',
     category: TokenCategory.OPACITY,
     baseValue: OPACITY_BASE_VALUE * 11,
     familyBaseValue: OPACITY_BASE_VALUE,
@@ -186,8 +186,8 @@ export const opacityTokens: Record<string, PrimitiveToken> = {
     platforms: generateOpacityPlatformValues(OPACITY_BASE_VALUE * 11)
   },
 
-  opacity1200: {
-    name: 'opacity1200',
+  opacity096: {
+    name: 'opacity096',
     category: TokenCategory.OPACITY,
     baseValue: OPACITY_BASE_VALUE * 12,
     familyBaseValue: OPACITY_BASE_VALUE,
@@ -199,8 +199,8 @@ export const opacityTokens: Record<string, PrimitiveToken> = {
     platforms: generateOpacityPlatformValues(OPACITY_BASE_VALUE * 12)
   },
 
-  opacity1300: {
-    name: 'opacity1300',
+  opacity100: {
+    name: 'opacity100',
     category: TokenCategory.OPACITY,
     baseValue: 1.0,
     familyBaseValue: OPACITY_BASE_VALUE,

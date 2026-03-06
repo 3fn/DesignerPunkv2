@@ -52,6 +52,8 @@ export interface DesignerPunkExtensions {
   status?: 'partial';
   /** Primitive token references (for composite tokens) */
   primitiveRefs?: Record<string, string>;
+  /** Token modifiers (e.g., opacity applied to a color) */
+  modifiers?: Array<{ type: string; reference: string }>;
 }
 
 

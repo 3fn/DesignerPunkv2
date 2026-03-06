@@ -67,8 +67,8 @@ describe('OpacityCompositionParser', () => {
     primitiveRegistry.register(black500, { skipValidation: true });
 
     // Register test opacity tokens
-    const opacity600: PrimitiveToken = {
-      name: 'opacity600',
+    const opacity048: PrimitiveToken = {
+      name: 'opacity048',
       category: TokenCategory.OPACITY,
       baseValue: 0.48,
       familyBaseValue: 0.08,
@@ -84,8 +84,8 @@ describe('OpacityCompositionParser', () => {
       }
     };
 
-    const opacity1000: PrimitiveToken = {
-      name: 'opacity1000',
+    const opacity080: PrimitiveToken = {
+      name: 'opacity080',
       category: TokenCategory.OPACITY,
       baseValue: 0.80,
       familyBaseValue: 0.08,
@@ -101,13 +101,13 @@ describe('OpacityCompositionParser', () => {
       }
     };
 
-    primitiveRegistry.register(opacity600, { skipValidation: true });
-    primitiveRegistry.register(opacity1000, { skipValidation: true });
+    primitiveRegistry.register(opacity048, { skipValidation: true });
+    primitiveRegistry.register(opacity080, { skipValidation: true });
 
     // Register semantic opacity token
     const opacityDisabled: SemanticToken = {
       name: 'opacityDisabled',
-      primitiveReferences: { default: 'opacity600' },
+      primitiveReferences: { default: 'opacity048' },
       category: SemanticCategory.INTERACTION,
       context: 'Disabled UI elements',
       description: 'Opacity for disabled states (48% opacity)'
@@ -160,13 +160,13 @@ describe('OpacityCompositionParser', () => {
   describe('parse()', () => {
     describe('Valid Compositions', () => {
       test('parses simple "color at opacity" composition', () => {
-        const result = parser.parse('purple500 at opacity600');
+        const result = parser.parse('purple500 at opacity048');
         
         expect(result.valid).toBe(true);
         expect(result.composition).toBeDefined();
         expect(result.composition?.color).toBe('purple500');
-        expect(result.composition?.opacity).toBe('opacity600');
-        expect(result.composition?.original).toBe('purple500 at opacity600');
+        expect(result.composition?.opacity).toBe('opacity048');
+        expect(result.composition?.original).toBe('purple500 at opacity048');
       });
 
       test('parses composition with semantic opacity token', () => {
@@ -179,17 +179,17 @@ describe('OpacityCompositionParser', () => {
       });
 
       test('handles extra whitespace', () => {
-        const result = parser.parse('  purple500   at   opacity1000  ');
+        const result = parser.parse('  purple500   at   opacity080  ');
         
         expect(result.valid).toBe(true);
         expect(result.composition?.color).toBe('purple500');
-        expect(result.composition?.opacity).toBe('opacity1000');
+        expect(result.composition?.opacity).toBe('opacity080');
       });
     });
 
     describe('Invalid Syntax', () => {
       test('rejects composition without "at" keyword', () => {
-        const result = parser.parse('purple500 opacity600');
+        const result = parser.parse('purple500 opacity048');
         
         expect(result.valid).toBe(false);
         expect(result.error).toContain('Invalid composition syntax');
@@ -197,7 +197,7 @@ describe('OpacityCompositionParser', () => {
       });
 
       test('rejects composition with multiple "at" keywords', () => {
-        const result = parser.parse('purple500 at opacity600 at opacity1000');
+        const result = parser.parse('purple500 at opacity048 at opacity080');
         
         expect(result.valid).toBe(false);
         expect(result.error).toContain('Expected exactly one "at" keyword');
@@ -213,7 +213,7 @@ describe('OpacityCompositionParser', () => {
 
     describe('Invalid Token References', () => {
       test('rejects non-existent color token', () => {
-        const result = parser.parse('invalidColor at opacity600');
+        const result = parser.parse('invalidColor at opacity048');
         
         expect(result.valid).toBe(false);
         expect(result.error).toContain('Color token "invalidColor" not found');
@@ -238,22 +238,22 @@ describe('OpacityCompositionParser', () => {
 
   describe('parseOrThrow()', () => {
     test('returns composition for valid input', () => {
-      const composition = parser.parseOrThrow('purple500 at opacity600');
+      const composition = parser.parseOrThrow('purple500 at opacity048');
       
       expect(composition.color).toBe('purple500');
-      expect(composition.opacity).toBe('opacity600');
-      expect(composition.original).toBe('purple500 at opacity600');
+      expect(composition.opacity).toBe('opacity048');
+      expect(composition.original).toBe('purple500 at opacity048');
     });
 
     test('throws error for invalid syntax', () => {
       expect(() => {
-        parser.parseOrThrow('purple500 opacity600');
+        parser.parseOrThrow('purple500 opacity048');
       }).toThrow('Invalid composition syntax');
     });
 
     test('throws error for invalid color token', () => {
       expect(() => {
-        parser.parseOrThrow('invalidColor at opacity600');
+        parser.parseOrThrow('invalidColor at opacity048');
       }).toThrow('Color token "invalidColor" not found');
     });
 
@@ -266,13 +266,13 @@ describe('OpacityCompositionParser', () => {
 
   describe('isOpacityComposition()', () => {
     test('returns true for valid composition syntax', () => {
-      expect(parser.isOpacityComposition('purple500 at opacity600')).toBe(true);
+      expect(parser.isOpacityComposition('purple500 at opacity048')).toBe(true);
       expect(parser.isOpacityComposition('color at opacity')).toBe(true);
       expect(parser.isOpacityComposition('  a  at  b  ')).toBe(true);
     });
 
     test('returns false for invalid syntax', () => {
-      expect(parser.isOpacityComposition('purple500 opacity600')).toBe(false);
+      expect(parser.isOpacityComposition('purple500 opacity048')).toBe(false);
       expect(parser.isOpacityComposition('purple500')).toBe(false);
       expect(parser.isOpacityComposition('')).toBe(false);
       expect(parser.isOpacityComposition('at')).toBe(false);
@@ -290,7 +290,7 @@ describe('OpacityCompositionParser', () => {
 
   describe('Integration with Registries', () => {
     test('validates against primitive color tokens', () => {
-      const result = parser.parse('purple500 at opacity600');
+      const result = parser.parse('purple500 at opacity048');
       expect(result.valid).toBe(true);
     });
 
@@ -319,7 +319,7 @@ describe('OpacityCompositionParser', () => {
       };
       primitiveRegistry.register(space100, { skipValidation: true });
 
-      const result = parser.parse('space100 at opacity600');
+      const result = parser.parse('space100 at opacity048');
       expect(result.valid).toBe(false);
       expect(result.error).toContain('Color token "space100" not found');
     });
@@ -353,7 +353,7 @@ describe('OpacityCompositionParser', () => {
   describe('Blend + Opacity Composition', () => {
     describe('Valid Blend + Opacity Compositions', () => {
       test('parses "color with blend direction at opacity" composition', () => {
-        const result = parser.parse('purple500 with blend200 darker at opacity600');
+        const result = parser.parse('purple500 with blend200 darker at opacity048');
         
         expect(result.valid).toBe(true);
         expect(result.composition).toBeDefined();
@@ -362,23 +362,23 @@ describe('OpacityCompositionParser', () => {
         expect(composition.color).toBe('purple500');
         expect(composition.blend).toBe('blend200');
         expect(composition.blendDirection).toBe('darker');
-        expect(composition.opacity).toBe('opacity600');
-        expect(composition.original).toBe('purple500 with blend200 darker at opacity600');
+        expect(composition.opacity).toBe('opacity048');
+        expect(composition.original).toBe('purple500 with blend200 darker at opacity048');
       });
 
       test('parses composition with "lighter" direction', () => {
-        const result = parser.parse('black500 with blend300 lighter at opacity1000');
+        const result = parser.parse('black500 with blend300 lighter at opacity080');
         
         expect(result.valid).toBe(true);
         const composition = result.composition as BlendOpacityComposition;
         expect(composition.color).toBe('black500');
         expect(composition.blend).toBe('blend300');
         expect(composition.blendDirection).toBe('lighter');
-        expect(composition.opacity).toBe('opacity1000');
+        expect(composition.opacity).toBe('opacity080');
       });
 
       test('parses composition with "saturate" direction', () => {
-        const result = parser.parse('purple500 with blend200 saturate at opacity600');
+        const result = parser.parse('purple500 with blend200 saturate at opacity048');
         
         expect(result.valid).toBe(true);
         const composition = result.composition as BlendOpacityComposition;
@@ -386,7 +386,7 @@ describe('OpacityCompositionParser', () => {
       });
 
       test('parses composition with "desaturate" direction', () => {
-        const result = parser.parse('purple500 with blend200 desaturate at opacity600');
+        const result = parser.parse('purple500 with blend200 desaturate at opacity048');
         
         expect(result.valid).toBe(true);
         const composition = result.composition as BlendOpacityComposition;
@@ -394,14 +394,14 @@ describe('OpacityCompositionParser', () => {
       });
 
       test('handles extra whitespace in blend composition', () => {
-        const result = parser.parse('  purple500   with   blend200   darker   at   opacity600  ');
+        const result = parser.parse('  purple500   with   blend200   darker   at   opacity048  ');
         
         expect(result.valid).toBe(true);
         const composition = result.composition as BlendOpacityComposition;
         expect(composition.color).toBe('purple500');
         expect(composition.blend).toBe('blend200');
         expect(composition.blendDirection).toBe('darker');
-        expect(composition.opacity).toBe('opacity600');
+        expect(composition.opacity).toBe('opacity048');
       });
 
       test('parses composition with semantic opacity token', () => {
@@ -415,14 +415,14 @@ describe('OpacityCompositionParser', () => {
 
     describe('Invalid Blend + Opacity Syntax', () => {
       test('rejects composition without "at" keyword', () => {
-        const result = parser.parse('purple500 with blend200 darker opacity600');
+        const result = parser.parse('purple500 with blend200 darker opacity048');
         
         expect(result.valid).toBe(false);
         expect(result.error).toContain('Invalid composition syntax');
       });
 
       test('rejects composition without "with" keyword', () => {
-        const result = parser.parse('purple500 blend200 darker at opacity600');
+        const result = parser.parse('purple500 blend200 darker at opacity048');
         
         expect(result.valid).toBe(false);
         // Without "with", it's parsed as simple composition where "purple500 blend200 darker" is treated as color
@@ -430,21 +430,21 @@ describe('OpacityCompositionParser', () => {
       });
 
       test('rejects composition with multiple "with" keywords', () => {
-        const result = parser.parse('purple500 with blend200 with darker at opacity600');
+        const result = parser.parse('purple500 with blend200 with darker at opacity048');
         
         expect(result.valid).toBe(false);
         expect(result.error).toContain('Expected exactly one "with" keyword');
       });
 
       test('rejects composition with multiple "at" keywords', () => {
-        const result = parser.parse('purple500 with blend200 darker at opacity600 at opacity1000');
+        const result = parser.parse('purple500 with blend200 darker at opacity048 at opacity080');
         
         expect(result.valid).toBe(false);
         expect(result.error).toContain('Expected exactly one "at" keyword');
       });
 
       test('rejects composition without blend direction', () => {
-        const result = parser.parse('purple500 with blend200 at opacity600');
+        const result = parser.parse('purple500 with blend200 at opacity048');
         
         expect(result.valid).toBe(false);
         expect(result.error).toContain('Invalid blend syntax');
@@ -452,7 +452,7 @@ describe('OpacityCompositionParser', () => {
       });
 
       test('rejects composition with too many blend parts', () => {
-        const result = parser.parse('purple500 with blend200 darker extra at opacity600');
+        const result = parser.parse('purple500 with blend200 darker extra at opacity048');
         
         expect(result.valid).toBe(false);
         expect(result.error).toContain('Invalid blend syntax');
@@ -461,21 +461,21 @@ describe('OpacityCompositionParser', () => {
 
     describe('Invalid Blend + Opacity Token References', () => {
       test('rejects non-existent color token', () => {
-        const result = parser.parse('invalidColor with blend200 darker at opacity600');
+        const result = parser.parse('invalidColor with blend200 darker at opacity048');
         
         expect(result.valid).toBe(false);
         expect(result.error).toContain('Color token "invalidColor" not found');
       });
 
       test('rejects non-existent blend token', () => {
-        const result = parser.parse('purple500 with invalidBlend darker at opacity600');
+        const result = parser.parse('purple500 with invalidBlend darker at opacity048');
         
         expect(result.valid).toBe(false);
         expect(result.error).toContain('Blend token "invalidBlend" not found');
       });
 
       test('rejects invalid blend direction', () => {
-        const result = parser.parse('purple500 with blend200 invalid at opacity600');
+        const result = parser.parse('purple500 with blend200 invalid at opacity048');
         
         expect(result.valid).toBe(false);
         expect(result.error).toContain('Invalid blend direction "invalid"');
@@ -493,14 +493,14 @@ describe('OpacityCompositionParser', () => {
     describe('Order Enforcement: Blend First, Then Opacity', () => {
       test('enforces correct order in syntax', () => {
         // Correct order: color with blend direction at opacity
-        const result = parser.parse('purple500 with blend200 darker at opacity600');
+        const result = parser.parse('purple500 with blend200 darker at opacity048');
         expect(result.valid).toBe(true);
       });
 
       test('syntax enforces blend before opacity', () => {
         // The syntax "with...at" enforces the order
         // There's no way to express opacity before blend in this syntax
-        const result = parser.parse('purple500 with blend200 darker at opacity600');
+        const result = parser.parse('purple500 with blend200 darker at opacity048');
         
         expect(result.valid).toBe(true);
         const composition = result.composition as BlendOpacityComposition;
@@ -516,18 +516,18 @@ describe('OpacityCompositionParser', () => {
 
   describe('isBlendOpacityComposition()', () => {
     test('returns true for valid blend + opacity composition syntax', () => {
-      expect(parser.isBlendOpacityComposition('purple500 with blend200 darker at opacity600')).toBe(true);
+      expect(parser.isBlendOpacityComposition('purple500 with blend200 darker at opacity048')).toBe(true);
       expect(parser.isBlendOpacityComposition('color with blend direction at opacity')).toBe(true);
       expect(parser.isBlendOpacityComposition('  a  with  b  c  at  d  ')).toBe(true);
     });
 
     test('returns false for simple opacity composition', () => {
-      expect(parser.isBlendOpacityComposition('purple500 at opacity600')).toBe(false);
+      expect(parser.isBlendOpacityComposition('purple500 at opacity048')).toBe(false);
     });
 
     test('returns false for invalid syntax', () => {
       expect(parser.isBlendOpacityComposition('purple500 with blend200')).toBe(false);
-      expect(parser.isBlendOpacityComposition('purple500 at opacity600')).toBe(false);
+      expect(parser.isBlendOpacityComposition('purple500 at opacity048')).toBe(false);
       expect(parser.isBlendOpacityComposition('')).toBe(false);
     });
 

@@ -288,6 +288,14 @@ export class iOSFormatGenerator extends BaseFormatProvider {
       return this.formatOpacityCompositionToken(semantic, refs.color, refs.opacity);
     }
 
+    // Check for modifier-based opacity composition
+    if (semantic.modifiers?.length) {
+      const opacityMod = semantic.modifiers.find(m => m.type === 'opacity');
+      if (opacityMod && refs.value) {
+        return this.formatOpacityCompositionToken(semantic, refs.value, opacityMod.reference);
+      }
+    }
+
     // Get the primitive reference name (e.g., 'purple300' from primitiveReferences)
     const primitiveRef = semantic.primitiveReferences.value || 
                          semantic.primitiveReferences.default ||
@@ -327,7 +335,7 @@ export class iOSFormatGenerator extends BaseFormatProvider {
    * 
    * @param semantic - Semantic token with color+opacity composition
    * @param colorRef - Color primitive token name (e.g., 'gray100')
-   * @param opacityRef - Opacity primitive token name (e.g., 'opacity600')
+   * @param opacityRef - Opacity primitive token name (e.g., 'opacity048')
    * @returns Swift constant declaration string with resolved UIColor value
    */
   private formatOpacityCompositionToken(
@@ -482,9 +490,9 @@ export class iOSFormatGenerator extends BaseFormatProvider {
 
   /**
    * Generate Swift constant for opacity token
-   * Outputs: static let opacity600 = 0.48
+   * Outputs: static let opacity048 = 0.48
    * 
-   * @param tokenName - Opacity token name (e.g., 'opacity600')
+   * @param tokenName - Opacity token name (e.g., 'opacity048')
    * @param opacityValue - Opacity value (0.0 - 1.0)
    * @returns Swift constant declaration string
    */

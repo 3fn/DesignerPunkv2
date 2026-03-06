@@ -136,7 +136,7 @@ Mathematical foundation allows documented exceptions for design requirements:
 | **Radius** | Shape definition | radius100, radius200 | radius.button, radius.card |
 | **Shadow** | Depth and elevation | shadowBlur200, shadowOpacity300 | shadow.container, shadow.modal |
 | **Glow** | Emphasis effects | glowBlur200, glowOpacity100 | glow.focus, glow.highlight |
-| **Opacity** | Transparency | opacity050, opacity080 | opacity.disabled, opacity.hover |
+| **Opacity** | Transparency | opacity048, opacity080 | opacity.disabled, opacity.hover |
 | **Blend** | Color modification | blend100, blend200 | blend.hoverDarker, blend.focusSaturate |
 | **Border** | Edge definition | borderWidth100, borderWidth200 | border.input, border.focus |
 | **Motion** | Animation timing | duration250, easingStandard | motion.floatLabel |

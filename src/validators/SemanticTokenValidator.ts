@@ -10,6 +10,7 @@ import type { SemanticToken } from '../types/SemanticToken';
 import type { ValidationResult } from '../types/ValidationResult';
 import type { PrimitiveTokenRegistry } from '../registries/PrimitiveTokenRegistry';
 import type { SemanticTokenRegistry } from '../registries/SemanticTokenRegistry';
+import type { PrimitiveToken, ColorTokenValue } from '../types/PrimitiveToken';
 import { PrimitiveReferenceValidator } from './PrimitiveReferenceValidator';
 import { CompositionPatternValidator } from './CompositionPatternValidator';
 import type { IValidator } from './IValidator';
@@ -48,6 +49,7 @@ export interface ComprehensiveValidationResult {
 
 export class SemanticTokenValidator implements IValidator<SemanticValidationInput> {
   readonly name = 'SemanticTokenValidator';
+  private primitiveRegistry: PrimitiveTokenRegistry;
   private primitiveReferenceValidator: PrimitiveReferenceValidator;
   private compositionPatternValidator: CompositionPatternValidator;
 
@@ -55,6 +57,7 @@ export class SemanticTokenValidator implements IValidator<SemanticValidationInpu
     primitiveRegistry: PrimitiveTokenRegistry,
     semanticRegistry: SemanticTokenRegistry
   ) {
+    this.primitiveRegistry = primitiveRegistry;
     this.primitiveReferenceValidator = new PrimitiveReferenceValidator(primitiveRegistry);
     this.compositionPatternValidator = new CompositionPatternValidator(semanticRegistry);
   }
@@ -103,6 +106,18 @@ export class SemanticTokenValidator implements IValidator<SemanticValidationInpu
         strictValidation
       });
       validationResults.push(primitiveReferencesResult);
+
+      // Validate modifier references
+      const modifierResult = this.primitiveReferenceValidator.validateModifiers(semanticToken);
+      if (modifierResult.level !== 'Pass' || (semanticToken.modifiers && semanticToken.modifiers.length > 0)) {
+        validationResults.push(modifierResult);
+      }
+    }
+
+    // Validate mode-invariance consistency
+    const modeInvarianceResult = this.validateModeInvariance(semanticToken);
+    if (modeInvarianceResult) {
+      validationResults.push(modeInvarianceResult);
     }
 
     // Validate composition patterns (basic semantic token structure)
@@ -174,6 +189,61 @@ export class SemanticTokenValidator implements IValidator<SemanticValidationInpu
       rationale: `Semantic token ${semanticToken.name} has all required fields`,
       mathematicalReasoning: 'Proper token structure maintains system organization and clarity'
     };
+  }
+
+  /**
+   * Validate mode-invariance consistency.
+   * Flags tokens marked modeInvariant: true that reference mode-aware primitives
+   * (primitives where light and dark values differ).
+   * Returns null if no check is needed (token not marked modeInvariant).
+   */
+  private validateModeInvariance(semanticToken: SemanticToken): ValidationResult | null {
+    if (!semanticToken.modeInvariant) {
+      return null;
+    }
+
+    const modeAwareRefs: string[] = [];
+
+    for (const ref of Object.values(semanticToken.primitiveReferences)) {
+      if (typeof ref !== 'string' || ref.startsWith('custom:')) continue;
+      const primitive = this.primitiveRegistry.get(ref);
+      if (primitive && this.isModeAwarePrimitive(primitive)) {
+        modeAwareRefs.push(ref);
+      }
+    }
+
+    if (modeAwareRefs.length > 0) {
+      return {
+        level: 'Warning',
+        token: semanticToken.name,
+        message: `Mode-invariant token references mode-aware primitive(s): ${modeAwareRefs.join(', ')}`,
+        rationale: `Token ${semanticToken.name} is marked modeInvariant but references primitives that differ between light/dark modes`,
+        suggestions: [
+          'Verify this token should be mode-invariant',
+          'Consider using a primitive that does not change between modes',
+          'If intentional, document why in the token context field'
+        ],
+        mathematicalReasoning: 'Mode-invariant tokens should resolve identically across all modes'
+      };
+    }
+
+    return null;
+  }
+
+  /**
+   * Check if a primitive token has different values in light vs dark mode.
+   */
+  private isModeAwarePrimitive(primitive: PrimitiveToken): boolean {
+    for (const platform of Object.values(primitive.platforms)) {
+      const val = platform.value;
+      if (val && typeof val === 'object' && 'light' in val && 'dark' in val) {
+        const colorVal = val as ColorTokenValue;
+        if (colorVal.light.base !== colorVal.dark.base) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   /**

@@ -436,16 +436,16 @@ fun mapShadowToElevation(tokenName: String?): Dp {
  * - Returns 1.0f for null/empty input
  * 
  * Note: Tokens regenerated Dec 18, 2025 to include semantic opacity tokens.
- * Semantic tokens map to primitives: opacity.subtle→opacity1100, opacity.medium→opacity900,
- * opacity.heavy→opacity600, opacity.ghost→opacity400.
+ * Semantic tokens map to primitives: opacity.subtle→opacity088, opacity.medium→opacity072,
+ * opacity.heavy→opacity048, opacity.ghost→opacity032.
  * 
  * @param tokenName Opacity token name (e.g., "opacity.subtle")
  * @return Opacity value as Float (0.0 to 1.0)
  * 
  * @example
  * ```kotlin
- * resolveOpacityToken("opacity.subtle") // Returns 0.88f (opacity1100)
- * resolveOpacityToken("opacity.ghost") // Returns 0.32f (opacity400)
+ * resolveOpacityToken("opacity.subtle") // Returns 0.88f (opacity088)
+ * resolveOpacityToken("opacity.ghost") // Returns 0.32f (opacity032)
  * resolveOpacityToken(null) // Returns 1.0f
  * resolveOpacityToken("invalid") // Returns 0.88f (opacity.subtle)
  * ```
@@ -460,10 +460,10 @@ fun resolveOpacityToken(tokenName: String?): Float {
     
     // Use generated token constants from DesignTokens
     return when (tokenName) {
-        "opacity.subtle" -> opacitySubtle    // Maps to opacity1100 (0.88f)
-        "opacity.medium" -> opacityMedium    // Maps to opacity900 (0.72f)
-        "opacity.heavy" -> opacityHeavy      // Maps to opacity600 (0.48f)
-        "opacity.ghost" -> opacityGhost      // Maps to opacity400 (0.32f)
+        "opacity.subtle" -> opacitySubtle    // Maps to opacity088 (0.88f)
+        "opacity.medium" -> opacityMedium    // Maps to opacity072 (0.72f)
+        "opacity.heavy" -> opacityHeavy      // Maps to opacity048 (0.48f)
+        "opacity.ghost" -> opacityGhost      // Maps to opacity032 (0.32f)
         else -> opacitySubtle  // Default to opacity.subtle (0.88f)
     }
 }
@@ -594,7 +594,7 @@ private val colorIconDefault: Color = Color(DesignTokens.color_icon_default)
 
 // Opacity tokens
 // Regenerated Dec 18, 2025 - includes all semantic opacity tokens
-private val opacitySubtle: Float = DesignTokens.opacity_subtle    // Maps to opacity1100 (0.88f)
-private val opacityMedium: Float = DesignTokens.opacity_medium    // Maps to opacity900 (0.72f)
-private val opacityHeavy: Float = DesignTokens.opacity_heavy      // Maps to opacity600 (0.48f)
-private val opacityGhost: Float = DesignTokens.opacity_ghost      // Maps to opacity400 (0.32f)
+private val opacitySubtle: Float = DesignTokens.opacity_subtle    // Maps to opacity088 (0.88f)
+private val opacityMedium: Float = DesignTokens.opacity_medium    // Maps to opacity072 (0.72f)
+private val opacityHeavy: Float = DesignTokens.opacity_heavy      // Maps to opacity048 (0.48f)
+private val opacityGhost: Float = DesignTokens.opacity_ghost      // Maps to opacity032 (0.32f)

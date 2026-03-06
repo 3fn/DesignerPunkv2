@@ -270,7 +270,7 @@ if (validationResult.valid) {
 #### Opacity Tokens
 - **File**: `src/tokens/OpacityTokens.ts`
 - **Description**: Comprehensive opacity progression for various use cases
-- **Range**: opacity005 (0.05) through opacity100 (1.0)
+- **Range**: opacity000 (0.0) through opacity100 (1.0)
 - **Count**: 14 tokens
 
 #### Blend Tokens

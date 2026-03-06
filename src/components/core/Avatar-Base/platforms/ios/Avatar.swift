@@ -107,7 +107,7 @@ enum AvatarTokens {
     // MARK: - Avatar Opacity Tokens
     
     /// Heavy opacity for border (48%)
-    /// References: opacity.heavy → opacity600 (0.48)
+    /// References: opacity.heavy → opacity048 (0.48)
     /// @see Requirements: 7.2 - Border opacity for xs-xl sizes
     static let opacityHeavy: Double = 0.48
 }

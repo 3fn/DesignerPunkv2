@@ -160,7 +160,7 @@ Structure tokens provide foundational colors for UI structure: canvas (base laye
 | `color.structure.surface.secondary` | white300 | Secondary surface - nested cards, lower emphasis |
 | `color.structure.surface.tertiary` | white400 | Tertiary surface - deeply nested cards, lowest emphasis |
 | `color.structure.border` | gray100 | Standard borders - UI element borders, dividers |
-| `color.structure.border.subtle` | gray100 @ opacity600 | Semi-transparent border (48% opacity) - soft visual separation |
+| `color.structure.border.subtle` | gray100 @ opacity048 | Semi-transparent border (48% opacity) - soft visual separation |
 
 **Surface Hierarchy**: Three elevation levels (`primary`, `secondary`, `tertiary`) provide progressive visual distinction for nested containers. `color.structure.surface` is retained as an alias for `color.structure.surface.primary` for backward compatibility.
 
@@ -410,6 +410,48 @@ Primitive color tokens provide the foundation for semantic tokens. All primitive
 | `teal300` | rgba(26, 83, 92, 1) | rgba(0, 240, 255, 1) | Secondary UI elements |
 | `teal400` | rgba(21, 66, 74, 1) | rgba(21, 66, 74, 1) | **Info strong** - dark teal |
 | `teal500` | rgba(15, 46, 51, 1) | rgba(15, 46, 51, 1) | Info text on light backgrounds |
+
+---
+
+## Scrim Concept
+
+Scrim tokens provide dark translucent overlays for floating surfaces over content. They use the **modifier architecture**: a base color primitive combined with an opacity modifier, resolved by generators into platform-native RGBA output.
+
+### Available Scrim Tokens
+
+| Token | Base Color | Opacity Modifier | Output | Mode-Invariant |
+|-------|-----------|-----------------|--------|----------------|
+| `color.scrim.standard` | black500 | opacity080 (80%) | `rgba(0, 0, 0, 0.80)` | Yes |
+
+### Mode-Invariance
+
+Scrim tokens are marked `modeInvariant: true` — they produce identical output in light and dark modes. Scrims dim content regardless of theme, so mode-switching is inappropriate.
+
+### Modifier Pattern
+
+Scrim tokens use `SemanticToken.modifiers` rather than the older `primitiveReferences.color` + `primitiveReferences.opacity` composition pattern. The modifier pattern maintains Rosetta traceability through the primitive→semantic reference chain:
+
+```typescript
+{
+  name: 'color.scrim.standard',
+  primitiveReferences: { value: 'black500' },
+  modifiers: [{ type: 'opacity', reference: 'opacity080' }],
+  modeInvariant: true
+}
+```
+
+### Use Cases
+
+- Pagination pill backgrounds over content
+- Modal backdrop overlays
+- Floating toolbar backgrounds
+- Dense overlay surfaces
+
+### Platform Output
+
+- **Web**: `rgba(0, 0, 0, 0.80)`
+- **iOS**: `UIColor(red: 0, green: 0, blue: 0, alpha: 0.80)`
+- **Android**: `Color.argb(204, 0, 0, 0)`
 
 ---
 

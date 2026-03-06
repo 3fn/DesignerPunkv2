@@ -554,6 +554,19 @@ export const ComponentNameTokens = defineComponentTokens({
 
 ---
 
+## Modifier Type Governance
+
+The `TokenModifier` system (introduced in Spec 073) currently supports `type: 'opacity'` only. Adding new modifier types requires:
+
+1. **Justification**: Multiple components need the transformation, AND no existing pattern covers the use case
+2. **Mathematical composability**: The transformation must be mathematically composable (applying modifier A then B produces a deterministic, order-independent result where possible)
+3. **Human approval**: Peter must approve before a new modifier type is added to the `TokenModifier` type union
+4. **Documentation**: New modifier types must be documented in the relevant Token-Family doc and this governance section
+
+This gate exists to prevent ungoverned growth of the modifier pattern. The opacity modifier was justified by the scrim use case (Spec 073); future modifiers should meet the same bar.
+
+---
+
 ## MCP Query Examples
 
 ```

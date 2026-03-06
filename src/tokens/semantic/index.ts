@@ -147,6 +147,14 @@ export {
   validateProgressColorTokenCount
 } from './color-progress';
 
+export {
+  scrimColorTokens,
+  scrimColorTokenNames,
+  SCRIM_COLOR_TOKEN_COUNT,
+  getScrimColorToken,
+  getAllScrimColorTokens
+} from './color-scrim';
+
 // Import types for utility functions
 import type { SemanticToken } from '../../types/SemanticToken';
 import { SemanticCategory } from '../../types/SemanticToken';
@@ -164,15 +172,16 @@ import { iconTokens } from './IconTokens';
 import { accessibility, accessibilityTokens } from './AccessibilityTokens';
 import { motionTokens } from './MotionTokens';
 import { progressColorTokens } from './color-progress';
+import { scrimColorTokens } from './color-scrim';
 
 /**
  * Get any semantic token by name across all categories
  * Searches color, spacing, typography, border, shadow, and opacity tokens
  */
 export function getSemanticToken(name: string): Omit<SemanticToken, 'primitiveTokens'> | undefined {
-  // Check color tokens (includes progress color tokens)
+  // Check color tokens (includes progress color tokens and scrim tokens)
   if (name.startsWith('color.')) {
-    return colorTokens[name] || progressColorTokens[name];
+    return colorTokens[name] || progressColorTokens[name] || scrimColorTokens[name];
   }
 
   // Check typography tokens
@@ -409,6 +418,9 @@ export function getAllSemanticTokens(): Array<Omit<SemanticToken, 'primitiveToke
   // Add progress color tokens
   tokens.push(...Object.values(progressColorTokens));
 
+  // Add scrim color tokens
+  tokens.push(...Object.values(scrimColorTokens));
+
   // Add border width tokens
   for (const [name, token] of Object.entries(SemanticBorderWidthTokens)) {
     tokens.push({
@@ -451,7 +463,7 @@ export function getAllSemanticTokens(): Array<Omit<SemanticToken, 'primitiveToke
 export function getSemanticTokensByCategory(category: SemanticCategory): Array<Omit<SemanticToken, 'primitiveTokens'>> {
   switch (category) {
     case SemanticCategory.COLOR:
-      return [...Object.values(colorTokens), ...Object.values(progressColorTokens)];
+      return [...Object.values(colorTokens), ...Object.values(progressColorTokens), ...Object.values(scrimColorTokens)];
     case SemanticCategory.TYPOGRAPHY:
       return Object.values(typographyTokens);
     case SemanticCategory.SPACING:
@@ -590,7 +602,7 @@ export function getSemanticTokenStats() {
   return {
     total: allTokens.length,
     byCategory: categoryCount,
-    colorTokens: Object.keys(colorTokens).length + Object.keys(progressColorTokens).length,
+    colorTokens: Object.keys(colorTokens).length + Object.keys(progressColorTokens).length + Object.keys(scrimColorTokens).length,
     typographyTokens: Object.keys(typographyTokens).length,
     spacingTokens: allTokens.filter(t => t.category === SemanticCategory.SPACING).length,
     borderTokens: Object.keys(SemanticBorderWidthTokens).length,

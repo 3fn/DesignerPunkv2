@@ -496,16 +496,16 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
    * - Android: Color.argb(alpha, r, g, b)
    * 
    * This pattern aligns with the mathematical token foundation where opacity
-   * values are derived from the opacity token scale (opacity600 = 0.48).
+   * values are derived from the opacity token scale (opacity048 = 0.48).
    * 
    * @see src/tokens/OpacityTokens.ts for opacity scale definition
    */
   'color.structure.border.subtle': {
     name: 'color.structure.border.subtle',
-    primitiveReferences: { color: 'gray100', opacity: 'opacity600' },
+    primitiveReferences: { color: 'gray100', opacity: 'opacity048' },
     category: SemanticCategory.COLOR,
     context: 'Subtle border color with transparency for softer visual separation',
-    description: 'Semi-transparent border (gray100 at opacity600/48%) for subtle visual separation - used by Container-Base, Container-Card-Base, and other components needing soft borders'
+    description: 'Semi-transparent border (gray100 at opacity048/48%) for subtle visual separation - used by Container-Base, Container-Card-Base, and other components needing soft borders'
   },
 
   // Background Variants (1 token - kept for specific use case)

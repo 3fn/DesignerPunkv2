@@ -325,13 +325,13 @@ func resolveOpacityToken(_ tokenName: String?) -> Double {
     // Will be replaced by generated token constants from build system
     switch tokenName {
     case "opacity.subtle":
-        return opacitySubtle  // Maps to opacity1100 (0.88)
+        return opacitySubtle  // Maps to opacity088 (0.88)
     case "opacity.medium":
-        return opacityMedium  // Maps to opacity900 (0.72)
+        return opacityMedium  // Maps to opacity072 (0.72)
     case "opacity.heavy":
-        return opacityHeavy   // Maps to opacity600 (0.48)
+        return opacityHeavy   // Maps to opacity048 (0.48)
     case "opacity.ghost":
-        return opacityGhost   // Maps to opacity400 (0.32)
+        return opacityGhost   // Maps to opacity032 (0.32)
     default:
         // Default to opacity.subtle (0.88) for invalid token names
         return opacitySubtle
@@ -444,10 +444,10 @@ private let colorBorderSubtle: Color = Color.gray.opacity(0.15)  // color.struct
 private let colorBorderEmphasis: Color = Color.gray.opacity(0.5)  // color.border.emphasis
 
 // Opacity tokens (semantic)
-private let opacitySubtle: Double = 0.88   // opacity1100 (base × 11 = 0.08 × 11)
-private let opacityMedium: Double = 0.72   // opacity900 (base × 9 = 0.08 × 9)
-private let opacityHeavy: Double = 0.48    // opacity600 (base × 6 = 0.08 × 6)
-private let opacityGhost: Double = 0.32    // opacity400 (base × 4 = 0.08 × 4)
+private let opacitySubtle: Double = 0.88   // opacity088 (88%)
+private let opacityMedium: Double = 0.72   // opacity072 (72%)
+private let opacityHeavy: Double = 0.48    // opacity048 (48%)
+private let opacityGhost: Double = 0.32    // opacity032 (32%)
 
 // Shadow tokens (semantic) - sunrise
 private let shadowSunriseColor: Color = Color.black.opacity(0.08)

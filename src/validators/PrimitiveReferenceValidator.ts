@@ -9,6 +9,7 @@
 import type { SemanticToken } from '../types/SemanticToken';
 import type { ValidationResult } from '../types/ValidationResult';
 import type { PrimitiveTokenRegistry } from '../registries/PrimitiveTokenRegistry';
+import { TokenCategory } from '../types/PrimitiveToken';
 
 export interface PrimitiveReferenceValidationOptions {
   /** Whether to allow empty primitive references (default: false) */
@@ -134,6 +135,71 @@ export class PrimitiveReferenceValidator {
       message: `Semantic token references ${referenceCount} valid primitive token(s)`,
       rationale: `All primitive references are valid: ${validReferences.join(', ')}`,
       mathematicalReasoning: `Semantic token inherits mathematical properties from ${referenceCount} primitive token(s)`
+    };
+  }
+
+  /**
+   * Validate modifier references on a semantic token.
+   * Checks that each modifier references an existing primitive of the correct family.
+   */
+  validateModifiers(semanticToken: SemanticToken): ValidationResult {
+    if (!semanticToken.modifiers || semanticToken.modifiers.length === 0) {
+      return {
+        level: 'Pass',
+        token: semanticToken.name,
+        message: 'No modifiers to validate',
+        rationale: 'Token has no modifiers',
+        mathematicalReasoning: 'No modifier validation needed'
+      };
+    }
+
+    const MODIFIER_FAMILY_MAP: Record<string, TokenCategory> = {
+      opacity: TokenCategory.OPACITY
+    };
+
+    for (const modifier of semanticToken.modifiers) {
+      const expectedCategory = MODIFIER_FAMILY_MAP[modifier.type];
+      if (!expectedCategory) {
+        return {
+          level: 'Error',
+          token: semanticToken.name,
+          message: `Unknown modifier type '${modifier.type}'`,
+          rationale: `Modifier type '${modifier.type}' is not a recognized modifier type`,
+          suggestions: [`Supported modifier types: ${Object.keys(MODIFIER_FAMILY_MAP).join(', ')}`],
+          mathematicalReasoning: 'Modifier types must be recognized for proper value resolution'
+        };
+      }
+
+      const primitive = this.primitiveRegistry.get(modifier.reference);
+      if (!primitive) {
+        return {
+          level: 'Error',
+          token: semanticToken.name,
+          message: `Modifier references non-existent primitive '${modifier.reference}'`,
+          rationale: `Opacity modifier on ${semanticToken.name} references '${modifier.reference}' which does not exist`,
+          suggestions: ['Verify the primitive token name is correct', 'Check for typos in the modifier reference'],
+          mathematicalReasoning: 'Modifier references must resolve to valid primitives for value composition'
+        };
+      }
+
+      if (primitive.category !== expectedCategory) {
+        return {
+          level: 'Error',
+          token: semanticToken.name,
+          message: `Modifier references wrong-family primitive '${modifier.reference}'`,
+          rationale: `${modifier.type} modifier must reference a ${expectedCategory} primitive, but '${modifier.reference}' is category '${primitive.category}'`,
+          suggestions: [`Use a primitive from the ${expectedCategory} family`],
+          mathematicalReasoning: 'Modifier references must match the expected token family for correct value resolution'
+        };
+      }
+    }
+
+    return {
+      level: 'Pass',
+      token: semanticToken.name,
+      message: `All ${semanticToken.modifiers.length} modifier reference(s) valid`,
+      rationale: 'All modifier references exist and belong to the correct token family',
+      mathematicalReasoning: 'Modifier references maintain proper primitive hierarchy'
     };
   }
 

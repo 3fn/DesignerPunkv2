@@ -204,7 +204,7 @@ export function validateBlendTokenCount(): boolean {
  *    → Combine with color tokens: "color with blend direction"
  *    → Example: "purple500 with blend.hoverDarker" for button hover state
  *    → Can compose with opacity: "color with blend direction at opacity"
- *    → Example: "purple500 with blend.hoverDarker at opacity600" for complex effects
+ *    → Example: "purple500 with blend.hoverDarker at opacity048" for complex effects
  * 
  * 9. Semantic vs Component Boundary?
  *    → Semantic tokens (this file): Generic, reusable patterns for interaction states

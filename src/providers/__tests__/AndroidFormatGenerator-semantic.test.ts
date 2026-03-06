@@ -69,13 +69,13 @@ describe('AndroidFormatGenerator - Opacity Generation', () => {
 
   describe('generateConstant', () => {
     test('should generate correct Kotlin constant syntax', () => {
-      const result = generator.generateConstant('opacity600', 0.48);
-      expect(result).toBe('const val OPACITY_600 = 0.48f');
+      const result = generator.generateConstant('opacity048', 0.48);
+      expect(result).toBe('const val OPACITY_048 = 0.48f');
     });
 
     test('should handle full opacity constant', () => {
-      const result = generator.generateConstant('opacity1300', 1.0);
-      expect(result).toBe('const val OPACITY_1300 = 1.0f');
+      const result = generator.generateConstant('opacity100', 1.0);
+      expect(result).toBe('const val OPACITY_100 = 1.0f');
     });
 
     test('should handle full transparency constant', () => {
@@ -90,10 +90,10 @@ describe('AndroidFormatGenerator - Opacity Generation', () => {
     });
 
     test('should handle various primitive opacity token constants', () => {
-      expect(generator.generateConstant('opacity100', 0.08)).toBe('const val OPACITY_100 = 0.08f');
-      expect(generator.generateConstant('opacity200', 0.16)).toBe('const val OPACITY_200 = 0.16f');
-      expect(generator.generateConstant('opacity400', 0.32)).toBe('const val OPACITY_400 = 0.32f');
-      expect(generator.generateConstant('opacity800', 0.64)).toBe('const val OPACITY_800 = 0.64f');
+      expect(generator.generateConstant('opacity008', 0.08)).toBe('const val OPACITY_008 = 0.08f');
+      expect(generator.generateConstant('opacity016', 0.16)).toBe('const val OPACITY_016 = 0.16f');
+      expect(generator.generateConstant('opacity032', 0.32)).toBe('const val OPACITY_032 = 0.32f');
+      expect(generator.generateConstant('opacity064', 0.64)).toBe('const val OPACITY_064 = 0.64f');
     });
 
     test('should handle semantic opacity token constants', () => {

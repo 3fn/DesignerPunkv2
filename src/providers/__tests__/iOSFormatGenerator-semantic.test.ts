@@ -362,15 +362,15 @@ describe('iOSFormatGenerator - Opacity Generation', () => {
 
   describe('generateConstant', () => {
     test('should generate Swift constant with correct syntax', () => {
-      const result = generator.generateConstant('opacity600', 0.48);
+      const result = generator.generateConstant('opacity048', 0.48);
 
-      expect(result).toBe('static let opacity600 = 0.48');
+      expect(result).toBe('static let opacity048 = 0.48');
     });
 
     test('should handle full opacity constant', () => {
-      const result = generator.generateConstant('opacity1300', 1.0);
+      const result = generator.generateConstant('opacity100', 1.0);
 
-      expect(result).toBe('static let opacity1300 = 1');
+      expect(result).toBe('static let opacity100 = 1');
     });
 
     test('should handle full transparency constant', () => {
@@ -380,20 +380,20 @@ describe('iOSFormatGenerator - Opacity Generation', () => {
     });
 
     test('should handle various opacity token constants', () => {
-      expect(generator.generateConstant('opacity100', 0.08))
-        .toBe('static let opacity100 = 0.08');
+      expect(generator.generateConstant('opacity008', 0.08))
+        .toBe('static let opacity008 = 0.08');
       
-      expect(generator.generateConstant('opacity200', 0.16))
-        .toBe('static let opacity200 = 0.16');
+      expect(generator.generateConstant('opacity016', 0.16))
+        .toBe('static let opacity016 = 0.16');
       
-      expect(generator.generateConstant('opacity400', 0.32))
-        .toBe('static let opacity400 = 0.32');
+      expect(generator.generateConstant('opacity032', 0.32))
+        .toBe('static let opacity032 = 0.32');
       
-      expect(generator.generateConstant('opacity800', 0.64))
-        .toBe('static let opacity800 = 0.64');
+      expect(generator.generateConstant('opacity064', 0.64))
+        .toBe('static let opacity064 = 0.64');
       
-      expect(generator.generateConstant('opacity1100', 0.88))
-        .toBe('static let opacity1100 = 0.88');
+      expect(generator.generateConstant('opacity088', 0.88))
+        .toBe('static let opacity088 = 0.88');
     });
 
     test('should handle semantic opacity token constants', () => {

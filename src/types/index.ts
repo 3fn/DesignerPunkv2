@@ -10,7 +10,7 @@ export type { PrimitiveToken, PlatformValues, ColorTokenValue, ModeThemeValues }
 export { TokenCategory } from './PrimitiveToken';
 
 // Semantic Token Types  
-export type { SemanticToken } from './SemanticToken';
+export type { SemanticToken, TokenModifier } from './SemanticToken';
 export { SemanticCategory } from './SemanticToken';
 
 // Validation Result Types

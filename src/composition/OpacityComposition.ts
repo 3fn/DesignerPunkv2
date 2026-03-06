@@ -5,9 +5,9 @@
  * Supports "color at opacity" syntax for compositional transparency effects.
  * 
  * Examples:
- * - "purple500 at opacity600" → purple500 with 48% opacity
+ * - "purple500 at opacity048" → purple500 with 48% opacity
  * - "black500 at opacityOverlay" → black500 with 32% opacity (semantic)
- * - "white100 at opacity1000" → white100 with 80% opacity
+ * - "white100 at opacity080" → white100 with 80% opacity
  */
 
 /**
@@ -18,7 +18,7 @@ export interface OpacityComposition {
   /** Color token name (e.g., "purple500", "black500") */
   color: string;
 
-  /** Opacity token name (e.g., "opacity600", "opacityOverlay") */
+  /** Opacity token name (e.g., "opacity048", "opacityOverlay") */
   opacity: string;
 
   /** Original composition string for reference */

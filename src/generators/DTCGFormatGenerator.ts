@@ -20,6 +20,7 @@ import { DTCGGeneratorConfig, DEFAULT_DTCG_GENERATOR_CONFIG } from './DTCGGenera
 import type { DTCGTokenFile, DTCGGroup, DTCGToken, DTCGType, DesignerPunkExtensions } from './types/DTCGTypes';
 import { getAllPrimitiveTokens } from '../tokens/index';
 import { getAllSemanticTokens } from '../tokens/semantic/index';
+import type { SemanticToken } from '../types/SemanticToken';
 import type { PrimitiveToken, ColorTokenValue } from '../types/PrimitiveToken';
 
 // Primitive token imports
@@ -529,6 +530,16 @@ export class DTCGFormatGenerator {
       // If token has separate color + opacity composition, note it
       if (refs.color && refs.opacity) {
         extensions.primitiveRefs = { color: refs.color, opacity: refs.opacity };
+      }
+
+      // If token has modifier-based opacity composition, note it
+      const semanticToken = token as unknown as SemanticToken;
+      if (semanticToken.modifiers?.length) {
+        const opacityMod = semanticToken.modifiers.find((m: { type: string }) => m.type === 'opacity');
+        if (opacityMod) {
+          extensions.primitiveRefs = { color: refs.value, opacity: opacityMod.reference };
+          extensions.modifiers = semanticToken.modifiers;
+        }
       }
 
       group[key] = this.toDTCGToken(aliasValue, 'color', token.description, extensions);

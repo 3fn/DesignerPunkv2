@@ -320,6 +320,14 @@ export class AndroidFormatGenerator extends BaseFormatProvider {
       return this.formatOpacityCompositionToken(semantic, refs.color, refs.opacity);
     }
 
+    // Check for modifier-based opacity composition
+    if (semantic.modifiers?.length) {
+      const opacityMod = semantic.modifiers.find(m => m.type === 'opacity');
+      if (opacityMod && refs.value) {
+        return this.formatOpacityCompositionToken(semantic, refs.value, opacityMod.reference);
+      }
+    }
+
     // Get the primitive reference name (e.g., 'purple300' from primitiveReferences)
     const primitiveRef = semantic.primitiveReferences.value || 
                          semantic.primitiveReferences.default ||
@@ -382,7 +390,7 @@ export class AndroidFormatGenerator extends BaseFormatProvider {
    * 
    * @param semantic - Semantic token with color+opacity composition
    * @param colorRef - Color primitive token name (e.g., 'gray100')
-   * @param opacityRef - Opacity primitive token name (e.g., 'opacity600')
+   * @param opacityRef - Opacity primitive token name (e.g., 'opacity048')
    * @returns Kotlin constant or XML resource string with resolved Color.argb value
    */
   private formatOpacityCompositionToken(
@@ -566,15 +574,15 @@ export class AndroidFormatGenerator extends BaseFormatProvider {
 
   /**
    * Generate Kotlin constant for opacity token
-   * Outputs: const val OPACITY_600 = 0.48f
+   * Outputs: const val OPACITY_048 = 0.48f
    * 
-   * @param tokenName - Token name (e.g., 'opacity600')
+   * @param tokenName - Token name (e.g., 'opacity048')
    * @param opacityValue - Unitless opacity value (0.0 - 1.0)
    * @returns Kotlin constant declaration string
    */
   generateConstant(tokenName: string, opacityValue: number): string {
     // Convert camelCase or kebab-case to UPPER_SNAKE_CASE for Kotlin constants
-    // Also add underscores between letters and numbers (opacity600 → OPACITY_600)
+    // Also add underscores between letters and numbers (opacity048 → OPACITY_048)
     const constantName = tokenName
       .replace(/([a-z])([A-Z])/g, '$1_$2') // camelCase to snake_case
       .replace(/([a-zA-Z])(\d)/g, '$1_$2') // Add underscore between letter and number

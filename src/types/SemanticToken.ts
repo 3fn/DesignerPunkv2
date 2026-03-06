@@ -25,6 +25,17 @@ export enum SemanticCategory {
 }
 
 /**
+ * Modifier applied to a semantic token's resolved value.
+ * Modifiers are resolved in array order after the base value.
+ */
+export interface TokenModifier {
+  /** Modifier type. Currently only 'opacity' is supported. */
+  type: 'opacity';
+  /** Reference to a primitive token (e.g., 'opacity080') */
+  reference: string;
+}
+
+/**
  * Semantic token interface providing contextual abstraction over primitive tokens
  * Supports both single primitive references and composite multi-primitive tokens
  */
@@ -39,6 +50,12 @@ export interface SemanticToken {
    * For icon tokens: multiplier can be a lineHeight token reference or 'custom:X.XXX' for optical correction
    */
   primitiveReferences: Record<string, string>;
+
+  /** Ordered modifiers applied after base value resolution (e.g., opacity on a color) */
+  modifiers?: TokenModifier[];
+
+  /** When true, this token resolves to the same value in all theme modes */
+  modeInvariant?: boolean;
 
   /** Semantic category for organizational purposes */
   category: SemanticCategory;

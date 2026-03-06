@@ -1,14 +1,14 @@
 ---
 inclusion: manual
 name: Token-Family-Opacity
-description: Opacity token family — transparency tokens with 8% base increment system and 14-token scale. Load when working with transparency effects, disabled states, overlays, or visual hierarchy through opacity.
+description: Opacity token family — transparency tokens with 8% base increment system and 14-token percentage-based scale (opacity000–opacity100). Load when working with transparency effects, disabled states, overlays, or visual hierarchy through opacity.
 ---
 
 # Opacity Tokens Guide
 
 **Date**: 2025-12-30
-**Last Reviewed**: 2025-12-30
-**Purpose**: Complete reference for opacity tokens with numeric naming convention and mathematical relationships
+**Last Reviewed**: 2026-03-06
+**Purpose**: Complete reference for opacity tokens with percentage-based naming convention and mathematical relationships
 **Organization**: token-documentation
 **Scope**: cross-project
 **Layer**: 3
@@ -18,10 +18,10 @@ description: Opacity token family — transparency tokens with 8% base increment
 
 ## Overview
 
-The DesignerPunk opacity token system provides a mathematically consistent foundation for transparency effects across all platforms. Opacity tokens follow an 8% base increment system with a 14-token scale (0-100%), using numeric naming that exposes mathematical relationships.
+The DesignerPunk opacity token system provides a mathematically consistent foundation for transparency effects across all platforms. Opacity tokens follow an 8% base increment system with a 14-token scale (0-100%), using percentage-based naming where the token name directly represents the opacity percentage.
 
 **Key Principles**:
-- **Numeric Naming**: Token names use numbers (000, 100, 200, etc.) that represent mathematical relationships
+- **Percentage-Based Naming**: Token names use three-digit zero-padded percentage values (e.g., `opacity048` = 48%)
 - **Mathematical Foundation**: All values derive from base unit (0.08 = 8%) with clear multipliers
 - **Unitless Values**: All platforms use the same unitless values (0.0 - 1.0)
 - **Semantic Mapping**: Four semantic tokens map to common transparency use cases
@@ -38,19 +38,19 @@ All opacity tokens derive from a base unit of **0.08 (8%)**:
 | Token Name | Value | Percentage | Mathematical Relationship | Use Case |
 |------------|-------|------------|---------------------------|----------|
 | `opacity000` | 0.00 | 0% | 0 × base | Fully transparent, invisible |
-| `opacity100` | 0.08 | 8% | 1 × base | Subtle hover feedback, very light overlay |
-| `opacity200` | 0.16 | 16% | 2 × base | Light overlay, pressed state |
-| `opacity300` | 0.24 | 24% | 3 × base | Medium-light overlay |
-| `opacity400` | 0.32 | 32% | 4 × base | Modal scrim, medium overlay |
-| `opacity500` | 0.40 | 40% | 5 × base | Strong overlay |
-| `opacity600` | 0.48 | 48% | 6 × base | Disabled state, very strong overlay |
-| `opacity700` | 0.56 | 56% | 7 × base | Nearly opaque, subtle transparency |
-| `opacity800` | 0.64 | 64% | 8 × base | Very opaque, minimal transparency |
-| `opacity900` | 0.72 | 72% | 9 × base | Extremely opaque |
-| `opacity1000` | 0.80 | 80% | 10 × base | Nearly full opacity |
-| `opacity1100` | 0.88 | 88% | 11 × base | Almost fully opaque |
-| `opacity1200` | 0.96 | 96% | 12 × base | Imperceptible transparency |
-| `opacity1300` | 1.00 | 100% | Special case | Fully opaque, no transparency |
+| `opacity008` | 0.08 | 8% | 1 × base | Subtle hover feedback, very light overlay |
+| `opacity016` | 0.16 | 16% | 2 × base | Light overlay, pressed state |
+| `opacity024` | 0.24 | 24% | 3 × base | Medium-light overlay |
+| `opacity032` | 0.32 | 32% | 4 × base | Ghost effects, medium overlay |
+| `opacity040` | 0.40 | 40% | 5 × base | Strong overlay |
+| `opacity048` | 0.48 | 48% | 6 × base | Disabled state, very strong overlay |
+| `opacity056` | 0.56 | 56% | 7 × base | Nearly opaque, subtle transparency |
+| `opacity064` | 0.64 | 64% | 8 × base | Very opaque, minimal transparency |
+| `opacity072` | 0.72 | 72% | 9 × base | Extremely opaque |
+| `opacity080` | 0.80 | 80% | 10 × base | Nearly full opacity |
+| `opacity088` | 0.88 | 88% | 11 × base | Almost fully opaque |
+| `opacity096` | 0.96 | 96% | 12 × base | Imperceptible transparency |
+| `opacity100` | 1.00 | 100% | Special case | Fully opaque, no transparency |
 
 ### Why 8% Base Increment?
 
@@ -62,24 +62,23 @@ The 8% base increment provides:
 
 **Practical Coverage**: The scale covers all common transparency use cases from invisible (0%) to fully opaque (100%).
 
-### Why Numeric Naming?
+### Why Percentage-Based Naming?
 
-Numeric token names expose mathematical relationships that enable:
+Percentage-based token names provide immediate clarity:
 
-**Proportion Reasoning**: Developers and AI agents can calculate relationships without memorization
-- "opacity200 is 2× opacity100" is immediately clear
-- "opacity600 is 6× opacity100" shows the multiplier pattern
-- "opacity400 is half of opacity800" reveals proportional relationships
+**Intuitive Reading**: The token name directly communicates the opacity value
+- `opacity048` is immediately understood as 48% opacity
+- `opacity080` is immediately understood as 80% opacity
+- No lookup table or multiplier calculation needed
 
-**AI-Friendly Context**: Numeric names provide unambiguous mathematical context for AI collaboration
+**AI-Friendly Context**: Percentage names provide unambiguous context for AI collaboration
 - No subjective interpretation needed
-- Clear mathematical operations possible
+- Value is encoded in the name itself
 - Consistent reasoning across all opacity decisions
 
-**Scalability**: Adding new tokens maintains mathematical consistency
-- New tokens follow the same multiplier pattern
-- Relationships remain clear as system grows
-- No arbitrary naming decisions required
+**Scalability**: Adding new tokens maintains naming consistency
+- New tokens follow the same percentage pattern
+- Names remain self-documenting as system grows
 
 ---
 
@@ -91,16 +90,16 @@ Semantic opacity tokens provide contextual meaning for specific transparency pat
 
 | Semantic Token | Primitive Reference | Value | Percentage | Use Case |
 |----------------|---------------------|-------|------------|----------|
-| `opacity.subtle` | opacity1100 | 0.88 | 88% | Minimal transparency, subtle effects |
-| `opacity.medium` | opacity900 | 0.72 | 72% | Moderate transparency, overlays |
-| `opacity.heavy` | opacity600 | 0.48 | 48% | Strong transparency, modal backgrounds |
-| `opacity.ghost` | opacity400 | 0.32 | 32% | Maximum transparency, ghost effects |
+| `opacity.subtle` | opacity088 | 0.88 | 88% | Minimal transparency, subtle effects |
+| `opacity.medium` | opacity072 | 0.72 | 72% | Moderate transparency, overlays |
+| `opacity.heavy` | opacity048 | 0.48 | 48% | Strong transparency, modal backgrounds |
+| `opacity.ghost` | opacity032 | 0.32 | 32% | Maximum transparency, ghost effects |
 
 ### Semantic Token Details
 
 #### opacity.subtle (Minimal Transparency)
 
-**References**: opacity1100 (0.88 / 88%)
+**References**: opacity088 (0.88 / 88%)
 
 **Use Cases**:
 - Subtle overlay effects with minimal visual impact
@@ -114,7 +113,7 @@ Semantic opacity tokens provide contextual meaning for specific transparency pat
 
 #### opacity.medium (Moderate Transparency)
 
-**References**: opacity900 (0.72 / 72%)
+**References**: opacity072 (0.72 / 72%)
 
 **Use Cases**:
 - Overlay backgrounds for tooltips and popovers
@@ -128,7 +127,7 @@ Semantic opacity tokens provide contextual meaning for specific transparency pat
 
 #### opacity.heavy (Strong Transparency)
 
-**References**: opacity600 (0.48 / 48%)
+**References**: opacity048 (0.48 / 48%)
 
 **Use Cases**:
 - Modal dialog backdrop/scrim
@@ -142,7 +141,7 @@ Semantic opacity tokens provide contextual meaning for specific transparency pat
 
 #### opacity.ghost (Maximum Transparency)
 
-**References**: opacity400 (0.32 / 32%)
+**References**: opacity032 (0.32 / 32%)
 
 **Use Cases**:
 - Ghost button backgrounds
@@ -164,20 +163,20 @@ Semantic opacity tokens provide contextual meaning for specific transparency pat
 All opacity tokens follow a clear multiplier pattern from the base unit (0.08):
 
 ```
-opacity000  = 0.08 × 0  = 0.00 (0%)
-opacity100  = 0.08 × 1  = 0.08 (8%)
-opacity200  = 0.08 × 2  = 0.16 (16%)
-opacity300  = 0.08 × 3  = 0.24 (24%)
-opacity400  = 0.08 × 4  = 0.32 (32%)
-opacity500  = 0.08 × 5  = 0.40 (40%)
-opacity600  = 0.08 × 6  = 0.48 (48%)
-opacity700  = 0.08 × 7  = 0.56 (56%)
-opacity800  = 0.08 × 8  = 0.64 (64%)
-opacity900  = 0.08 × 9  = 0.72 (72%)
-opacity1000 = 0.08 × 10 = 0.80 (80%)
-opacity1100 = 0.08 × 11 = 0.88 (88%)
-opacity1200 = 0.08 × 12 = 0.96 (96%)
-opacity1300 = 1.00 (special case: full opacity)
+opacity000 = 0.08 × 0  = 0.00 (0%)
+opacity008 = 0.08 × 1  = 0.08 (8%)
+opacity016 = 0.08 × 2  = 0.16 (16%)
+opacity024 = 0.08 × 3  = 0.24 (24%)
+opacity032 = 0.08 × 4  = 0.32 (32%)
+opacity040 = 0.08 × 5  = 0.40 (40%)
+opacity048 = 0.08 × 6  = 0.48 (48%)
+opacity056 = 0.08 × 7  = 0.56 (56%)
+opacity064 = 0.08 × 8  = 0.64 (64%)
+opacity072 = 0.08 × 9  = 0.72 (72%)
+opacity080 = 0.08 × 10 = 0.80 (80%)
+opacity088 = 0.08 × 11 = 0.88 (88%)
+opacity096 = 0.08 × 12 = 0.96 (96%)
+opacity100 = 1.00 (special case: full opacity)
 ```
 
 ### Doubling Pattern
@@ -185,9 +184,9 @@ opacity1300 = 1.00 (special case: full opacity)
 Many tokens follow a doubling pattern for easy mental calculation:
 
 ```
-opacity100 (0.08)  → opacity200 (0.16)  → 2× increase
-opacity200 (0.16)  → opacity400 (0.32)  → 2× increase
-opacity400 (0.32)  → opacity800 (0.64)  → 2× increase
+opacity008 (0.08) → opacity016 (0.16) → 2× increase
+opacity016 (0.16) → opacity032 (0.32) → 2× increase
+opacity032 (0.32) → opacity064 (0.64) → 2× increase
 ```
 
 ### Proportional Relationships
@@ -195,9 +194,9 @@ opacity400 (0.32)  → opacity800 (0.64)  → 2× increase
 Tokens maintain clear proportional relationships:
 
 ```
-opacity400 = 2 × opacity200 = 4 × opacity100
-opacity600 = 3 × opacity200 = 1.5 × opacity400
-opacity800 = 2 × opacity400 = 4 × opacity200
+opacity032 = 2 × opacity016 = 4 × opacity008
+opacity048 = 3 × opacity016 = 1.5 × opacity032
+opacity064 = 2 × opacity032 = 4 × opacity016
 ```
 
 ---
@@ -220,25 +219,25 @@ Opacity tokens use unitless values (0.0 - 1.0) that are identical across all pla
 :root {
   /* Primitive Opacity Tokens */
   --opacity-000: 0;
-  --opacity-100: 0.08;
-  --opacity-200: 0.16;
-  --opacity-300: 0.24;
-  --opacity-400: 0.32;
-  --opacity-500: 0.40;
-  --opacity-600: 0.48;
-  --opacity-700: 0.56;
-  --opacity-800: 0.64;
-  --opacity-900: 0.72;
-  --opacity-1000: 0.80;
-  --opacity-1100: 0.88;
-  --opacity-1200: 0.96;
-  --opacity-1300: 1;
+  --opacity-008: 0.08;
+  --opacity-016: 0.16;
+  --opacity-024: 0.24;
+  --opacity-032: 0.32;
+  --opacity-040: 0.40;
+  --opacity-048: 0.48;
+  --opacity-056: 0.56;
+  --opacity-064: 0.64;
+  --opacity-072: 0.72;
+  --opacity-080: 0.80;
+  --opacity-088: 0.88;
+  --opacity-096: 0.96;
+  --opacity-100: 1;
   
   /* Semantic Opacity Tokens */
-  --opacity-subtle: var(--opacity-1100);
-  --opacity-medium: var(--opacity-900);
-  --opacity-heavy: var(--opacity-600);
-  --opacity-ghost: var(--opacity-400);
+  --opacity-subtle: var(--opacity-088);
+  --opacity-medium: var(--opacity-072);
+  --opacity-heavy: var(--opacity-048);
+  --opacity-ghost: var(--opacity-032);
 }
 
 /* Usage Examples */
@@ -251,7 +250,7 @@ Opacity tokens use unitless values (0.0 - 1.0) that are identical across all pla
 }
 
 .disabled-overlay {
-  opacity: var(--opacity-600);
+  opacity: var(--opacity-048);
 }
 ```
 
@@ -261,25 +260,25 @@ Opacity tokens use unitless values (0.0 - 1.0) that are identical across all pla
 struct DesignTokens {
     // Primitive Opacity Tokens
     static let opacity000: CGFloat = 0.0
-    static let opacity100: CGFloat = 0.08
-    static let opacity200: CGFloat = 0.16
-    static let opacity300: CGFloat = 0.24
-    static let opacity400: CGFloat = 0.32
-    static let opacity500: CGFloat = 0.40
-    static let opacity600: CGFloat = 0.48
-    static let opacity700: CGFloat = 0.56
-    static let opacity800: CGFloat = 0.64
-    static let opacity900: CGFloat = 0.72
-    static let opacity1000: CGFloat = 0.80
-    static let opacity1100: CGFloat = 0.88
-    static let opacity1200: CGFloat = 0.96
-    static let opacity1300: CGFloat = 1.0
+    static let opacity008: CGFloat = 0.08
+    static let opacity016: CGFloat = 0.16
+    static let opacity024: CGFloat = 0.24
+    static let opacity032: CGFloat = 0.32
+    static let opacity040: CGFloat = 0.40
+    static let opacity048: CGFloat = 0.48
+    static let opacity056: CGFloat = 0.56
+    static let opacity064: CGFloat = 0.64
+    static let opacity072: CGFloat = 0.72
+    static let opacity080: CGFloat = 0.80
+    static let opacity088: CGFloat = 0.88
+    static let opacity096: CGFloat = 0.96
+    static let opacity100: CGFloat = 1.0
     
     // Semantic Opacity Tokens
-    static let opacitySubtle = opacity1100
-    static let opacityMedium = opacity900
-    static let opacityHeavy = opacity600
-    static let opacityGhost = opacity400
+    static let opacitySubtle = opacity088
+    static let opacityMedium = opacity072
+    static let opacityHeavy = opacity048
+    static let opacityGhost = opacity032
 }
 
 // Usage Examples
@@ -303,25 +302,25 @@ struct GhostButton: View {
 object DesignTokens {
     // Primitive Opacity Tokens
     const val opacity_000 = 0.0f
-    const val opacity_100 = 0.08f
-    const val opacity_200 = 0.16f
-    const val opacity_300 = 0.24f
-    const val opacity_400 = 0.32f
-    const val opacity_500 = 0.40f
-    const val opacity_600 = 0.48f
-    const val opacity_700 = 0.56f
-    const val opacity_800 = 0.64f
-    const val opacity_900 = 0.72f
-    const val opacity_1000 = 0.80f
-    const val opacity_1100 = 0.88f
-    const val opacity_1200 = 0.96f
-    const val opacity_1300 = 1.0f
+    const val opacity_008 = 0.08f
+    const val opacity_016 = 0.16f
+    const val opacity_024 = 0.24f
+    const val opacity_032 = 0.32f
+    const val opacity_040 = 0.40f
+    const val opacity_048 = 0.48f
+    const val opacity_056 = 0.56f
+    const val opacity_064 = 0.64f
+    const val opacity_072 = 0.72f
+    const val opacity_080 = 0.80f
+    const val opacity_088 = 0.88f
+    const val opacity_096 = 0.96f
+    const val opacity_100 = 1.0f
     
     // Semantic Opacity Tokens
-    val opacity_subtle = opacity_1100
-    val opacity_medium = opacity_900
-    val opacity_heavy = opacity_600
-    val opacity_ghost = opacity_400
+    val opacity_subtle = opacity_088
+    val opacity_medium = opacity_072
+    val opacity_heavy = opacity_048
+    val opacity_ghost = opacity_032
 }
 
 // Usage Examples
@@ -372,12 +371,12 @@ Use opacity tokens to indicate disabled or inactive states:
 
 ```typescript
 // Disabled button - apply opacity to entire element
-<Button disabled opacity="opacity600">  // 48% opacity
+<Button disabled opacity="opacity048">  // 48% opacity
   Submit
 </Button>
 
 // Disabled content area
-<ContentArea disabled opacity="opacity600">
+<ContentArea disabled opacity="opacity048">
   <Content />
 </ContentArea>
 ```
@@ -393,12 +392,12 @@ Use opacity tokens for hover states and interaction feedback:
 </Button>
 
 // Pressed state - use light opacity for pressed feedback
-<Button pressedBackground="rgba(0, 0, 0, opacity200)">  // 16% opacity
+<Button pressedBackground="rgba(0, 0, 0, opacity016)">  // 16% opacity
   Action
 </Button>
 
 // Subtle hover - use very light opacity
-<ListItem hoverBackground="rgba(0, 0, 0, opacity100)">  // 8% opacity
+<ListItem hoverBackground="rgba(0, 0, 0, opacity008)">  // 8% opacity
   Item
 </ListItem>
 ```
@@ -417,7 +416,7 @@ Use opacity tokens for ghost buttons and transparent UI elements:
 <SkeletonLoader opacity="opacity.ghost" />  // 32% opacity
 
 // Watermark effect
-<Watermark opacity="opacity300" />  // 24% opacity
+<Watermark opacity="opacity024" />  // 24% opacity
 ```
 
 ---
@@ -440,7 +439,7 @@ When combining opacity with colors:
 
 ```typescript
 // ❌ AVOID: Low opacity on text
-<Text opacity="opacity400">Important information</Text>  // May fail contrast
+<Text opacity="opacity032">Important information</Text>  // May fail contrast
 
 // ✅ CORRECT: Full opacity on text, opacity on backgrounds
 <Container backgroundOpacity="opacity.ghost">
@@ -461,7 +460,7 @@ When using opacity for disabled states:
 <Button 
   disabled 
   aria-disabled="true"
-  opacity="opacity600"
+  opacity="opacity048"
 >
   Submit
 </Button>
@@ -500,7 +499,7 @@ Use primitive opacity tokens when:
 ```typescript
 // Component-level token referencing primitive
 export const tooltipTokens = {
-  backdropOpacity: 'opacity300',  // Reference primitive directly for 24%
+  backdropOpacity: 'opacity024',  // Reference primitive directly for 24%
 };
 ```
 
@@ -544,15 +543,15 @@ When applying opacity:
    → 32% opacity for highly transparent elements
 
 5. **Disabled state?**
-   → Use `opacity600` (primitive)
+   → Use `opacity048` (primitive)
    → 48% opacity is standard for disabled elements
 
 6. **Hover feedback?**
-   → Use `opacity100` or `opacity200` (primitives)
+   → Use `opacity008` or `opacity016` (primitives)
    → 8-16% opacity for subtle interaction feedback
 
 7. **Fully transparent or fully opaque?**
-   → Use `opacity000` (0%) or `opacity1300` (100%)
+   → Use `opacity000` (0%) or `opacity100` (100%)
    → Edge cases for complete transparency or opacity
 
 8. **Component-specific needs?**
@@ -574,4 +573,4 @@ When applying opacity:
 
 ---
 
-*This guide provides complete reference for opacity tokens with numeric naming convention and mathematical relationships that enable proportion reasoning and AI-human collaboration.*
+*This guide provides complete reference for opacity tokens with percentage-based naming convention and mathematical relationships that enable intuitive usage and AI-human collaboration.*

@@ -24,7 +24,7 @@ import { SemanticToken, SemanticCategory } from '../../types/SemanticToken';
 export const opacityTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>> = {
   'opacity.subtle': {
     name: 'opacity.subtle',
-    primitiveReferences: { value: 'opacity1100' },
+    primitiveReferences: { value: 'opacity088' },
     category: SemanticCategory.INTERACTION,
     context: 'Subtle transparency for minimal visual effects',
     description: 'Subtle opacity (88%) for minimal transparency effects and subtle overlays'
@@ -32,7 +32,7 @@ export const opacityTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'
 
   'opacity.medium': {
     name: 'opacity.medium',
-    primitiveReferences: { value: 'opacity900' },
+    primitiveReferences: { value: 'opacity072' },
     category: SemanticCategory.INTERACTION,
     context: 'Moderate transparency for overlays and effects',
     description: 'Medium opacity (72%) for moderate transparency in overlays and visual effects'
@@ -40,7 +40,7 @@ export const opacityTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'
 
   'opacity.heavy': {
     name: 'opacity.heavy',
-    primitiveReferences: { value: 'opacity600' },
+    primitiveReferences: { value: 'opacity048' },
     category: SemanticCategory.INTERACTION,
     context: 'Strong transparency for backgrounds and overlays',
     description: 'Heavy opacity (48%) for strong transparency in backgrounds and modal overlays'
@@ -48,7 +48,7 @@ export const opacityTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'
 
   'opacity.ghost': {
     name: 'opacity.ghost',
-    primitiveReferences: { value: 'opacity400' },
+    primitiveReferences: { value: 'opacity032' },
     category: SemanticCategory.INTERACTION,
     context: 'Maximum transparency for ghost effects',
     description: 'Ghost opacity (32%) for maximum transparency and ghost button effects'

@@ -55,19 +55,19 @@ describe('Opacity Tokens', () => {
     test('should have correct token names', () => {
       expect(opacityTokenNames).toEqual([
         'opacity000',
-        'opacity100',
-        'opacity200',
-        'opacity300',
-        'opacity400',
-        'opacity500',
-        'opacity600',
-        'opacity700',
-        'opacity800',
-        'opacity900',
-        'opacity1000',
-        'opacity1100',
-        'opacity1200',
-        'opacity1300'
+        'opacity008',
+        'opacity016',
+        'opacity024',
+        'opacity032',
+        'opacity040',
+        'opacity048',
+        'opacity056',
+        'opacity064',
+        'opacity072',
+        'opacity080',
+        'opacity088',
+        'opacity096',
+        'opacity100'
       ]);
       expect(opacityTokenNames).toHaveLength(14);
     });
@@ -79,54 +79,54 @@ describe('Opacity Tokens', () => {
   });
 
   describe('Mathematical Relationships', () => {
-    test('opacity100 should equal base value', () => {
-      const opacity100 = getOpacityToken('opacity100');
-      expect(opacity100?.baseValue).toBe(OPACITY_BASE_VALUE);
-      expect(opacity100?.baseValue).toBe(0.08);
+    test('opacity008 should equal base value', () => {
+      const opacity008 = getOpacityToken('opacity008');
+      expect(opacity008?.baseValue).toBe(OPACITY_BASE_VALUE);
+      expect(opacity008?.baseValue).toBe(0.08);
     });
 
-    test('opacity600 should equal 6 × base value', () => {
-      const opacity600 = getOpacityToken('opacity600');
-      expect(opacity600?.baseValue).toBe(OPACITY_BASE_VALUE * 6);
-      expect(opacity600?.baseValue).toBe(0.48);
+    test('opacity048 should equal 6 × base value', () => {
+      const opacity048 = getOpacityToken('opacity048');
+      expect(opacity048?.baseValue).toBe(OPACITY_BASE_VALUE * 6);
+      expect(opacity048?.baseValue).toBe(0.48);
     });
 
     test('should maintain 8% increment progression', () => {
-      const opacity100 = getOpacityToken('opacity100');
-      const opacity200 = getOpacityToken('opacity200');
-      const opacity300 = getOpacityToken('opacity300');
-      const opacity400 = getOpacityToken('opacity400');
-      const opacity500 = getOpacityToken('opacity500');
+      const opacity008 = getOpacityToken('opacity008');
+      const opacity016 = getOpacityToken('opacity016');
+      const opacity024 = getOpacityToken('opacity024');
+      const opacity032 = getOpacityToken('opacity032');
+      const opacity040 = getOpacityToken('opacity040');
       
-      expect(opacity100?.baseValue).toBe(0.08);
-      expect(opacity200?.baseValue).toBe(0.16);
-      expect(opacity300?.baseValue).toBe(0.24);
-      expect(opacity400?.baseValue).toBe(0.32);
-      expect(opacity500?.baseValue).toBe(0.40);
+      expect(opacity008?.baseValue).toBe(0.08);
+      expect(opacity016?.baseValue).toBe(0.16);
+      expect(opacity024?.baseValue).toBe(0.24);
+      expect(opacity032?.baseValue).toBe(0.32);
+      expect(opacity040?.baseValue).toBe(0.40);
     });
 
     test('should verify mathematical relationships for all tokens', () => {
       expect(getOpacityToken('opacity000')?.baseValue).toBe(0.0);
-      expect(getOpacityToken('opacity100')?.baseValue).toBe(OPACITY_BASE_VALUE * 1);
-      expect(getOpacityToken('opacity200')?.baseValue).toBe(OPACITY_BASE_VALUE * 2);
-      expect(getOpacityToken('opacity300')?.baseValue).toBe(OPACITY_BASE_VALUE * 3);
-      expect(getOpacityToken('opacity400')?.baseValue).toBe(OPACITY_BASE_VALUE * 4);
-      expect(getOpacityToken('opacity500')?.baseValue).toBe(OPACITY_BASE_VALUE * 5);
-      expect(getOpacityToken('opacity600')?.baseValue).toBe(OPACITY_BASE_VALUE * 6);
-      expect(getOpacityToken('opacity700')?.baseValue).toBe(OPACITY_BASE_VALUE * 7);
-      expect(getOpacityToken('opacity800')?.baseValue).toBe(OPACITY_BASE_VALUE * 8);
-      expect(getOpacityToken('opacity900')?.baseValue).toBe(OPACITY_BASE_VALUE * 9);
-      expect(getOpacityToken('opacity1000')?.baseValue).toBe(OPACITY_BASE_VALUE * 10);
-      expect(getOpacityToken('opacity1100')?.baseValue).toBe(OPACITY_BASE_VALUE * 11);
-      expect(getOpacityToken('opacity1200')?.baseValue).toBe(OPACITY_BASE_VALUE * 12);
-      expect(getOpacityToken('opacity1300')?.baseValue).toBe(1.0);
+      expect(getOpacityToken('opacity008')?.baseValue).toBe(OPACITY_BASE_VALUE * 1);
+      expect(getOpacityToken('opacity016')?.baseValue).toBe(OPACITY_BASE_VALUE * 2);
+      expect(getOpacityToken('opacity024')?.baseValue).toBe(OPACITY_BASE_VALUE * 3);
+      expect(getOpacityToken('opacity032')?.baseValue).toBe(OPACITY_BASE_VALUE * 4);
+      expect(getOpacityToken('opacity040')?.baseValue).toBe(OPACITY_BASE_VALUE * 5);
+      expect(getOpacityToken('opacity048')?.baseValue).toBe(OPACITY_BASE_VALUE * 6);
+      expect(getOpacityToken('opacity056')?.baseValue).toBe(OPACITY_BASE_VALUE * 7);
+      expect(getOpacityToken('opacity064')?.baseValue).toBe(OPACITY_BASE_VALUE * 8);
+      expect(getOpacityToken('opacity072')?.baseValue).toBe(OPACITY_BASE_VALUE * 9);
+      expect(getOpacityToken('opacity080')?.baseValue).toBe(OPACITY_BASE_VALUE * 10);
+      expect(getOpacityToken('opacity088')?.baseValue).toBe(OPACITY_BASE_VALUE * 11);
+      expect(getOpacityToken('opacity096')?.baseValue).toBe(OPACITY_BASE_VALUE * 12);
+      expect(getOpacityToken('opacity100')?.baseValue).toBe(1.0);
     });
 
     test('should have correct mathematical relationship descriptions', () => {
       expect(getOpacityToken('opacity000')?.mathematicalRelationship).toBe('base × 0 = 0.08 × 0 = 0.0');
-      expect(getOpacityToken('opacity100')?.mathematicalRelationship).toBe('base × 1 = 0.08 × 1 = 0.08');
-      expect(getOpacityToken('opacity600')?.mathematicalRelationship).toBe('base × 6 = 0.08 × 6 = 0.48');
-      expect(getOpacityToken('opacity1300')?.mathematicalRelationship).toBe('Special case: full opacity = 1.0');
+      expect(getOpacityToken('opacity008')?.mathematicalRelationship).toBe('base × 1 = 0.08 × 1 = 0.08');
+      expect(getOpacityToken('opacity048')?.mathematicalRelationship).toBe('base × 6 = 0.08 × 6 = 0.48');
+      expect(getOpacityToken('opacity100')?.mathematicalRelationship).toBe('Special case: full opacity = 1.0');
     });
 
     test('should have correct familyBaseValue for all tokens', () => {
@@ -150,16 +150,16 @@ describe('Opacity Tokens', () => {
       });
     });
 
-    test('should have correct platform values for opacity100', () => {
-      const token = getOpacityToken('opacity100');
+    test('should have correct platform values for opacity008', () => {
+      const token = getOpacityToken('opacity008');
       
       expect(token?.platforms.web).toEqual({ value: 0.08, unit: 'unitless' });
       expect(token?.platforms.ios).toEqual({ value: 0.08, unit: 'unitless' });
       expect(token?.platforms.android).toEqual({ value: 0.08, unit: 'unitless' });
     });
 
-    test('should have correct platform values for opacity600', () => {
-      const token = getOpacityToken('opacity600');
+    test('should have correct platform values for opacity048', () => {
+      const token = getOpacityToken('opacity048');
       
       expect(token?.platforms.web).toEqual({ value: 0.48, unit: 'unitless' });
       expect(token?.platforms.ios).toEqual({ value: 0.48, unit: 'unitless' });
@@ -174,8 +174,8 @@ describe('Opacity Tokens', () => {
       expect(token?.platforms.android).toEqual({ value: 0.0, unit: 'unitless' });
     });
 
-    test('should have correct platform values for opacity1300', () => {
-      const token = getOpacityToken('opacity1300');
+    test('should have correct platform values for opacity100', () => {
+      const token = getOpacityToken('opacity100');
       
       expect(token?.platforms.web).toEqual({ value: 1.0, unit: 'unitless' });
       expect(token?.platforms.ios).toEqual({ value: 1.0, unit: 'unitless' });
@@ -183,21 +183,21 @@ describe('Opacity Tokens', () => {
     });
 
     test('should maintain mathematical relationships in platform values', () => {
-      const opacity100 = getOpacityToken('opacity100');
-      const opacity200 = getOpacityToken('opacity200');
-      const opacity600 = getOpacityToken('opacity600');
+      const opacity008 = getOpacityToken('opacity008');
+      const opacity016 = getOpacityToken('opacity016');
+      const opacity048 = getOpacityToken('opacity048');
       
       // Web platform
-      expect(opacity200?.platforms.web.value).toBe((opacity100!.platforms.web.value as number) * 2);
-      expect(opacity600?.platforms.web.value).toBe((opacity100!.platforms.web.value as number) * 6);
+      expect(opacity016?.platforms.web.value).toBe((opacity008!.platforms.web.value as number) * 2);
+      expect(opacity048?.platforms.web.value).toBe((opacity008!.platforms.web.value as number) * 6);
       
       // iOS platform
-      expect(opacity200?.platforms.ios.value).toBe((opacity100!.platforms.ios.value as number) * 2);
-      expect(opacity600?.platforms.ios.value).toBe((opacity100!.platforms.ios.value as number) * 6);
+      expect(opacity016?.platforms.ios.value).toBe((opacity008!.platforms.ios.value as number) * 2);
+      expect(opacity048?.platforms.ios.value).toBe((opacity008!.platforms.ios.value as number) * 6);
       
       // Android platform
-      expect(opacity200?.platforms.android.value).toBe((opacity100!.platforms.android.value as number) * 2);
-      expect(opacity600?.platforms.android.value).toBe((opacity100!.platforms.android.value as number) * 6);
+      expect(opacity016?.platforms.android.value).toBe((opacity008!.platforms.android.value as number) * 2);
+      expect(opacity048?.platforms.android.value).toBe((opacity008!.platforms.android.value as number) * 6);
     });
 
     test('should have same values across all platforms', () => {
@@ -212,18 +212,18 @@ describe('Opacity Tokens', () => {
 
   describe('Helper Functions', () => {
     test('getOpacityToken should retrieve tokens by name', () => {
+      const opacity008 = getOpacityToken('opacity008');
+      const opacity048 = getOpacityToken('opacity048');
       const opacity100 = getOpacityToken('opacity100');
-      const opacity600 = getOpacityToken('opacity600');
-      const opacity1300 = getOpacityToken('opacity1300');
+      
+      expect(opacity008).toBeDefined();
+      expect(opacity008?.name).toBe('opacity008');
+      
+      expect(opacity048).toBeDefined();
+      expect(opacity048?.name).toBe('opacity048');
       
       expect(opacity100).toBeDefined();
       expect(opacity100?.name).toBe('opacity100');
-      
-      expect(opacity600).toBeDefined();
-      expect(opacity600?.name).toBe('opacity600');
-      
-      expect(opacity1300).toBeDefined();
-      expect(opacity1300?.name).toBe('opacity1300');
     });
 
     test('getOpacityToken should return undefined for invalid names', () => {
@@ -274,14 +274,14 @@ describe('Opacity Tokens', () => {
 
     test('should have descriptive descriptions', () => {
       const opacity000 = getOpacityToken('opacity000');
+      const opacity008 = getOpacityToken('opacity008');
+      const opacity048 = getOpacityToken('opacity048');
       const opacity100 = getOpacityToken('opacity100');
-      const opacity600 = getOpacityToken('opacity600');
-      const opacity1300 = getOpacityToken('opacity1300');
       
       expect(opacity000?.description).toContain('Fully transparent');
-      expect(opacity100?.description).toContain('Subtle transparency');
-      expect(opacity600?.description).toContain('Disabled state');
-      expect(opacity1300?.description).toContain('Fully opaque');
+      expect(opacity008?.description).toContain('Subtle transparency');
+      expect(opacity048?.description).toContain('Disabled state');
+      expect(opacity100?.description).toContain('Fully opaque');
     });
 
     test('should have correct category for all tokens', () => {
@@ -348,16 +348,16 @@ describe('Opacity Tokens', () => {
       expect(token?.baseValue).toBe(0.0);
     });
 
-    test('opacity1300 should be 1.0 (fully opaque)', () => {
-      const token = getOpacityToken('opacity1300');
+    test('opacity100 should be 1.0 (fully opaque)', () => {
+      const token = getOpacityToken('opacity100');
       expect(token?.baseValue).toBe(1.0);
     });
 
     test('intermediate tokens should be between 0.0 and 1.0', () => {
       const intermediateTokens = [
-        'opacity100', 'opacity200', 'opacity300', 'opacity400',
-        'opacity500', 'opacity600', 'opacity700', 'opacity800',
-        'opacity900', 'opacity1000', 'opacity1100', 'opacity1200'
+        'opacity008', 'opacity016', 'opacity024', 'opacity032',
+        'opacity040', 'opacity048', 'opacity056', 'opacity064',
+        'opacity072', 'opacity080', 'opacity088', 'opacity096'
       ];
       
       intermediateTokens.forEach(name => {
