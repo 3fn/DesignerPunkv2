@@ -24,7 +24,7 @@ import * as path from 'path';
 // These imports cause defineComponentTokens() to execute, which registers tokens
 import '../src/components/core/Button-Icon/buttonIcon.tokens';
 import '../src/components/core/Button-VerticalList-Item/Button-VerticalList-Item.tokens';
-import '../src/components/core/Avatar/avatar.tokens';
+import '../src/components/core/Avatar-Base/avatar.tokens';
 import '../src/components/core/Badge-Label-Base/tokens';
 import '../src/tokens/component/progress';
 // Note: Chip-Base tokens import removed - file doesn't exist at expected location
