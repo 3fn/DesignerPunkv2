@@ -50,6 +50,9 @@ import paginationStyles from './ProgressPaginationBase.styles.css';
  */
 export class ProgressPaginationBase extends HTMLElement {
   private _shadowRoot: ShadowRoot;
+  private _container: HTMLDivElement | null = null;
+  private _nodes: HTMLElement[] = [];
+  private _initialized = false;
 
   static get observedAttributes(): string[] {
     return ['total-items', 'current-item', 'size', 'accessibility-label', 'test-id'];
@@ -61,12 +64,16 @@ export class ProgressPaginationBase extends HTMLElement {
   }
 
   connectedCallback(): void {
-    this.render();
+    if (!this._initialized) {
+      this._setup();
+      this._initialized = true;
+    }
+    this._render();
   }
 
   attributeChangedCallback(_name: string, oldValue: string | null, newValue: string | null): void {
     if (oldValue !== newValue && this.isConnected) {
-      this.render();
+      this._render();
     }
   }
 
@@ -142,22 +149,38 @@ export class ProgressPaginationBase extends HTMLElement {
   }
 
   // ============================================================================
-  // Rendering
+  // DOM Setup & Rendering
   // ============================================================================
 
   /**
-   * Render the pagination into shadow DOM.
+   * One-time DOM setup: create style, container, and initial node elements.
+   */
+  private _setup(): void {
+    const style = document.createElement('style');
+    style.textContent = paginationStyles;
+    this._shadowRoot.appendChild(style);
+
+    this._container = document.createElement('div');
+    this._container.setAttribute('role', 'group');
+    this._shadowRoot.appendChild(this._container);
+  }
+
+  /**
+   * Incremental render: update container attributes and node elements.
    * 
    * Rendering logic:
    * 1. Validate totalItems (dev throw, production warn+clamp)
    * 2. Clamp currentItem to valid range
    * 3. Calculate visible window (virtualization if >5 items)
-   * 4. Render Node-Base primitives for visible items
-   * 5. Apply ARIA role="group" with actual position label
+   * 4. Sync node element count to match visible window size
+   * 5. Update node attributes (state, size, content)
+   * 6. Update container class and ARIA label
    * 
    * @see Requirements 2.1-2.12, 10.1-10.2, 11.1-11.6
    */
-  private render(): void {
+  private _render(): void {
+    if (!this._container) return;
+
     let totalItems = this.totalItems;
     const size = this.size;
     const testID = this.testID;
@@ -181,41 +204,41 @@ export class ProgressPaginationBase extends HTMLElement {
       }
     }
 
-    // Clamp currentItem to valid range
-    // @see Requirement 2.11
     const currentItem = clampCurrentItem(this.currentItem, totalItems);
-
-    // Calculate visible window
-    // @see Requirements 2.4-2.8, 9.1-9.6
     const window = calculateVisibleWindow(currentItem, totalItems);
+    const visibleCount = window.end - window.start + 1;
 
-    // ARIA label reflects actual position, not virtualized subset
-    // @see Requirements 2.12, 7.1-7.2, 9.7
-    const ariaLabel = this.accessibilityLabel || `Page ${currentItem} of ${totalItems}`;
-
-    const containerClasses = [
-      'pagination',
-      `pagination--${size}`,
-    ].join(' ');
-
-    const testIDAttr = testID ? ` data-testid="${this.escapeHtml(testID)}"` : '';
-
-    // Generate Node-Base elements for visible window
-    // @see Requirements 11.1-11.6 — Composition contracts
-    let nodesHTML = '';
-    for (let i = window.start; i <= window.end; i++) {
-      const state = derivePaginationNodeState(i, currentItem);
-      nodesHTML += `<progress-indicator-node-base state="${state}" size="${size}" content="none"></progress-indicator-node-base>`;
+    // Sync node count
+    while (this._nodes.length < visibleCount) {
+      const node = document.createElement('progress-indicator-node-base');
+      this._container.appendChild(node);
+      this._nodes.push(node);
+    }
+    while (this._nodes.length > visibleCount) {
+      const node = this._nodes.pop()!;
+      this._container.removeChild(node);
     }
 
-    this._shadowRoot.innerHTML = `
-      <style>
-        ${paginationStyles}
-      </style>
-      <div class="${containerClasses}"${testIDAttr} role="group" aria-label="${this.escapeHtml(ariaLabel)}">
-        ${nodesHTML}
-      </div>
-    `;
+    // Update node attributes
+    for (let i = 0; i < visibleCount; i++) {
+      const itemIndex = window.start + i;
+      const state = derivePaginationNodeState(itemIndex, currentItem);
+      const node = this._nodes[i];
+      node.setAttribute('state', state);
+      node.setAttribute('size', size);
+      node.setAttribute('content', 'none');
+    }
+
+    // Update container
+    this._container.className = `pagination pagination--${size}`;
+    const ariaLabel = this.accessibilityLabel || `Page ${currentItem} of ${totalItems}`;
+    this._container.setAttribute('aria-label', this.escapeHtml(ariaLabel));
+
+    if (testID) {
+      this._container.setAttribute('data-testid', this.escapeHtml(testID));
+    } else {
+      this._container.removeAttribute('data-testid');
+    }
   }
 
   private escapeHtml(str: string): string {
