@@ -61,9 +61,15 @@ tokens:
     - progress.node.size.sm.current
     - progress.node.size.md.current
     - progress.node.size.lg.current
-    - progress.node.gap.sm
-    - progress.node.gap.md
-    - progress.node.gap.lg
+  color:
+    - color.scrim.standard
+  spacing:
+    - space.inset.075
+    - space.inset.100
+    - space.grouped.tight
+    - space.grouped.normal
+  radius:
+    - radius.full
 
 platforms:
   - web

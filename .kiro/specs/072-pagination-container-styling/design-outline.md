@@ -34,8 +34,10 @@ The existing behavioral contracts, types, virtualization logic, accessibility im
 | Container border-radius | None | Pill shape | `radius.full` (9999px) |
 | Container padding (Sm/Md) | None | 6px all sides | `space.inset.075` |
 | Container padding (Lg) | None | 8px all sides | `space.inset.100` |
-| Item gap (Sm/Md) | 6px/8px (fallback) | 4px | `space.grouped.tight` |
-| Item gap (Lg) | 12px (fallback) | 8px | `space.grouped.normal` |
+| Item gap (Sm/Md) | 6px/8px (hardcoded/primitive) | 4px | `space.grouped.tight` |
+| Item gap (Lg) | 12px (primitive) | 8px | `space.grouped.normal` |
+
+**Note on gap token migration**: The gap change is both a value change and a token governance improvement. iOS currently uses hardcoded values (6/8/12); Android references primitive spacing tokens directly (`space_075`/`space_100`/`space_150`). Both migrate to semantic grouped tokens. The size tiers also collapse from three (sm/md/lg each different) to two (sm+md share `space.grouped.tight`, lg uses `space.grouped.normal`).
 
 ### What Does NOT Change
 
@@ -136,12 +138,21 @@ All three platforms are in scope. Web is implemented first to validate the desig
    - Update gap values to match current Figma design
    - Remove CSS fallback values
 
-### Files to Modify — iOS and Android
+### Files to Modify — iOS
 
-**Lina to confirm**: What platform files need updating for container styling? Potential candidates:
-- `src/components/core/Progress-Pagination-Base/platforms/ios/` — styling/layout changes
-- `src/components/core/Progress-Pagination-Base/platforms/android/` — styling/layout changes
-- Token mapping files if container tokens need platform-specific resolution
+1. `src/components/core/Progress-Pagination-Base/platforms/ios/ProgressPaginationBase.ios.swift`
+   - Add container styling modifiers to `HStack`: `.background()` with scrim color, `.clipShape(Capsule())` for pill shape, `.padding()` for inset
+   - Update `PaginationGap.value(for:)` — replace hardcoded values (6/8/12) with `DesignTokens` semantic references; collapse from 3 tiers to 2 (sm+md share tight, lg uses normal)
+
+### Files to Modify — Android
+
+1. `src/components/core/Progress-Pagination-Base/platforms/android/ProgressPaginationBase.android.kt`
+   - Add container styling modifiers to `Row`: `.background()` with scrim color and `RoundedCornerShape(percent = 50)`, `.padding()` for inset
+   - Update `paginationGap()` — replace primitive token references (`space_075`/`space_100`/`space_150`) with semantic grouped tokens; collapse from 3 tiers to 2
+
+No token mapping files need updating — all 6 semantic tokens are already available in generated platform files (`DesignTokens.swift`, `DesignTokens.android.kt`). `color.scrim.standard` added to generated output as of Spec 073 Task 1.8.
+
+(Lina, 2026-03-06)
 
 ### Files to Modify — Shared
 
@@ -150,7 +161,7 @@ All three platforms are in scope. Web is implemented first to validate the desig
    - Add container styling documentation
 
 2. `src/components/core/Progress-Pagination-Base/Progress-Pagination-Base.schema.yaml`
-   - Add container token references
+   - Add the 6 container tokens the component now consumes: `color.scrim.standard`, `radius.full`, `space.inset.075`, `space.inset.100`, `space.grouped.tight`, `space.grouped.normal`
 
 ### Files NOT Modified
 
@@ -238,10 +249,10 @@ Token bindings use direct token references without fallback values. If a token d
 4. ~~**Ada**: Primitive padding tokens directly, or component tokens?~~ → Semantic inset tokens: `space.inset.075` / `space.inset.100`. (Ada recommendation, Peter approved, 2026-03-06)
 5. ~~**Peter**: Should iOS/Android be in-scope for this spec, or deferred?~~ → All platforms in scope. (Peter, 2026-03-06)
 
-## Open Questions for Lina
+## Open Questions for Lina — All Resolved
 
-1. **iOS/Android platform files**: What files need updating for container styling on iOS and Android? Are the changes purely declarative (styling/layout), or do token mappings need updating? (Flagged by Thurgood, 2026-03-06)
+1. ~~**iOS/Android platform files**~~ **RESOLVED**: iOS needs styling modifiers on `HStack` (background, clipShape, padding) and gap value updates in `PaginationGap`. Android needs styling modifiers on `Row` (background, shape, padding) and gap updates in `paginationGap()`. Both are purely declarative. No token mapping files need updating. (Lina, 2026-03-06)
 
-2. **Token resolution on native platforms**: The Complete Token Summary above lists 6 semantic tokens. Are all of these already available in the generated platform files (`DesignTokens.swift`, `DesignTokens.kt`), or do any need to be added to the generator output? In particular, `color.scrim.standard` is new (Spec 073) — confirm it will be present in generated output before 072 implementation begins. (Flagged by Thurgood, 2026-03-06)
+2. ~~**Token resolution on native platforms**~~ **RESOLVED**: 5 of 6 tokens already present in generated platform files. `color.scrim.standard` added to generated output via Spec 073 Task 1.8. All 6 tokens confirmed available. (Lina, 2026-03-06)
 
-3. **DOM update strategy**: The current web implementation uses full `innerHTML` replacement on render. The CSS-only changes in this spec (background, radius, padding, gap) don't require DOM strategy changes — but Spec 074 (Pagination Animation) will. Is there anything in the CSS implementation here that should be done with 074 in mind to avoid rework? (Flagged by Thurgood, 2026-03-06)
+3. ~~**DOM update strategy**~~ **RESOLVED**: No 074-aware changes needed. All 072 CSS changes are container-level and static — they work identically whether child nodes are replaced (`innerHTML`) or incrementally updated. The `gap` property is container-level and DOM-strategy-agnostic. (Lina, 2026-03-06)

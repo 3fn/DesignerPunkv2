@@ -34,9 +34,8 @@ private let paginationVisibleWindow = 5
 private enum PaginationGap {
     static func value(for size: ProgressNodeSize) -> CGFloat {
         switch size {
-        case .sm: return 6   // progress.node.gap.sm (space075)
-        case .md: return 8   // progress.node.gap.md (space100)
-        case .lg: return 12  // progress.node.gap.lg (space150)
+        case .sm, .md: return DesignTokens.spaceGroupedTight   // space.grouped.tight
+        case .lg:      return DesignTokens.spaceGroupedNormal  // space.grouped.normal
         }
     }
 }
@@ -165,6 +164,9 @@ public struct ProgressPaginationBase: View {
                 )
             }
         }
+        .padding(size == .lg ? DesignTokens.spaceInset100 : DesignTokens.spaceInset075)
+        .background(DesignTokens.colorScrimStandard)
+        .clipShape(Capsule())
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(effectiveAccessibilityLabel)
         .accessibilityIdentifier(testID ?? "")

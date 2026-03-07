@@ -200,13 +200,21 @@ When `totalItems > 5`, only 5 nodes are rendered using a sliding window algorith
 | `progress.node.size.md.current` | 20px | Medium current emphasis (+4px) |
 | `progress.node.size.lg.current` | 28px | Large current emphasis (+4px) |
 
-### Component Gap Tokens (`progress.node.gap.*`)
+### Component Gap Tokens (`space.grouped.*`)
 
 | Token | Value | Primitive | Usage |
 |-------|-------|-----------|-------|
-| `progress.node.gap.sm` | 6px | `space075` | Spacing between small nodes |
-| `progress.node.gap.md` | 8px | `space100` | Spacing between medium nodes |
-| `progress.node.gap.lg` | 12px | `space150` | Spacing between large nodes |
+| `space.grouped.tight` | 4px | `space050` | Gap between sm/md nodes |
+| `space.grouped.normal` | 8px | `space100` | Gap between lg nodes |
+
+### Container Tokens (Spec 072)
+
+| Token | Value | Primitive | Usage |
+|-------|-------|-----------|-------|
+| `color.scrim.standard` | rgba(0,0,0,0.80) | `black500` @ `opacity080` | Container background |
+| `radius.full` | 9999px | `radiusMax` | Pill shape (Capsule) |
+| `space.inset.075` | 6px | `space075` | Container padding (sm/md) |
+| `space.inset.100` | 8px | `space100` | Container padding (lg) |
 
 ### Semantic Color Tokens (via Node-Base)
 
@@ -253,20 +261,23 @@ Color tokens are applied by the Node-Base primitive, not directly by Pagination-
 ### Web
 - Custom Element: `<progress-pagination-base>`
 - Shadow DOM for style encapsulation
-- CSS custom properties for gap tokens (with fallback values)
+- CSS custom properties for token references (no fallback values)
+- Container: scrim background, pill shape, size-variant padding and gap
 - Attributes use kebab-case: `total-items`, `current-item`, `accessibility-label`, `test-id`
 - Composes `<progress-indicator-node-base>` elements in shadow DOM
 
 ### iOS
 - SwiftUI `View` struct: `ProgressPaginationBase`
-- Uses `HStack` with `spacing` from gap token values
+- Uses `HStack` with `spacing` from semantic gap tokens
+- Container: `.padding()` → `.background(colorScrimStandard)` → `.clipShape(Capsule())`
 - Composes `ProgressIndicatorNodeBase` views via `ForEach`
 - Accessibility: `.accessibilityElement(children: .ignore)` with `.accessibilityLabel`
 - Debug builds use `assertionFailure` for validation errors
 
 ### Android
 - Jetpack Compose `@Composable` function: `ProgressPaginationBase`
-- Uses `Row` with `Arrangement.spacedBy` from gap token values
+- Uses `Row` with `Arrangement.spacedBy` from semantic gap tokens
+- Container: `.background(color_scrim_standard, RoundedCornerShape(50%))` → `.padding()`
 - Composes `ProgressIndicatorNodeBase` composables in a loop
 - Accessibility: `semantics { contentDescription = ... }`
 - Debug builds throw `IllegalArgumentException` for validation errors

@@ -16,10 +16,12 @@
 package com.designerpunk.components.core
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -50,9 +52,8 @@ private const val TAG = "ProgressPaginationBase"
  */
 private fun paginationGap(size: ProgressNodeSize): Dp {
     return when (size) {
-        ProgressNodeSize.SM -> DesignTokens.space_075   /* progress.node.gap.sm */
-        ProgressNodeSize.MD -> DesignTokens.space_100   /* progress.node.gap.md */
-        ProgressNodeSize.LG -> DesignTokens.space_150   /* progress.node.gap.lg */
+        ProgressNodeSize.SM, ProgressNodeSize.MD -> DesignTokens.space_grouped_tight   /* space.grouped.tight */
+        ProgressNodeSize.LG -> DesignTokens.space_grouped_normal                       /* space.grouped.normal */
     }
 }
 
@@ -152,11 +153,18 @@ fun ProgressPaginationBase(
     // @see Requirements 2.12, 7.1-7.2, 9.7
     val effectiveLabel = accessibilityLabel ?: "Page $effectiveCurrentItem of $effectiveTotalItems"
 
+    val containerPadding = if (size == ProgressNodeSize.LG) DesignTokens.space_inset_100 else DesignTokens.space_inset_075
+
     val rowModifier = modifier
         .then(if (testTag != null) Modifier.testTag(testTag) else Modifier)
         .semantics {
             contentDescription = effectiveLabel
         }
+        .background(
+            color = DesignTokens.color_scrim_standard,
+            shape = RoundedCornerShape(percent = 50)
+        )
+        .padding(containerPadding)
 
     Row(
         modifier = rowModifier,
