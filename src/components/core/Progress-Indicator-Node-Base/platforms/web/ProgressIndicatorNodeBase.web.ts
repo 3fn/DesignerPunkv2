@@ -190,7 +190,7 @@ export class ProgressIndicatorNodeBase extends HTMLElement {
     } else if (effectiveContent === 'icon' && iconName) {
       // md/lg + icon: render icon-base element
       // @see Requirement 12.9
-      innerHTML = `<span class="node__content"><icon-base name="${this.escapeHtml(iconName)}" size="${size === 'md' ? 13 : 18}" color="inherit"></icon-base></span>`;
+      innerHTML = `<span class="node__content"><icon-base name="${this.escapeHtml(iconName)}" size="${size === 'md' ? 13 : 20}" color="inherit"></icon-base></span>`;
     }
     // md/lg + none: empty circle (no inner content)
     // @see Requirement 12.7
