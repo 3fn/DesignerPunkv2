@@ -155,6 +155,10 @@ public struct ProgressPaginationBase: View {
     // MARK: - Body
 
     public var body: some View {
+        let animation: Animation? = UIAccessibility.isReduceMotionEnabled
+            ? nil
+            : .easeInOut(duration: DesignTokens.MotionSelectionTransition.duration)
+
         HStack(spacing: PaginationGap.value(for: size)) {
             ForEach(visibleWindow.start...visibleWindow.end, id: \.self) { index in
                 ProgressIndicatorNodeBase(
@@ -170,6 +174,7 @@ public struct ProgressPaginationBase: View {
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(effectiveAccessibilityLabel)
         .accessibilityIdentifier(testID ?? "")
+        .animation(animation, value: currentItem)
     }
 }
 
