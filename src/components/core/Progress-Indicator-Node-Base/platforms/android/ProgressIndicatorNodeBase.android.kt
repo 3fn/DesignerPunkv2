@@ -15,7 +15,9 @@
 
 package com.designerpunk.components.core
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -31,11 +33,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalAccessibilityManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,7 +47,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.designerpunk.tokens.DesignTokens
 import com.designerpunk.tokens.motionDurationFast
+import com.designerpunk.tokens.motionDurationNormal
 import com.designerpunk.tokens.motionEasingStandard
+import android.provider.Settings
 
 // MARK: - Node State Enum
 
@@ -167,12 +173,23 @@ fun ProgressIndicatorNodeBase(
     // Determine dimension: current state gets +4dp emphasis
     val targetDimension = if (state == ProgressNodeState.CURRENT) size.currentDp else size.baseDp
 
+    // Check reduced motion preference
+    // @see Requirement 5.3 — ANIMATOR_DURATION_SCALE
+    val context = LocalContext.current
+    val reduceMotion = remember {
+        Settings.Global.getFloat(
+            context.contentResolver,
+            Settings.Global.TRANSITION_ANIMATION_SCALE,
+            1f
+        ) == 0f
+    }
+
     // Animate size transitions, respecting reduced motion
     // @see Requirement 12.5 - prefers-reduced-motion
     val dimension by animateDpAsState(
         targetValue = targetDimension,
-        animationSpec = tween(
-            durationMillis = motionDurationFast,
+        animationSpec = if (reduceMotion) snap() else tween(
+            durationMillis = motionDurationNormal,
             easing = motionEasingStandard
         ),
         label = "node-size"
@@ -182,7 +199,14 @@ fun ProgressIndicatorNodeBase(
     // @see Requirement 1.3
     val effectiveContent = if (size == ProgressNodeSize.SM) ProgressNodeContent.NONE else content
 
-    val bgColor = nodeBackgroundColor(state)
+    val bgColor by animateColorAsState(
+        targetValue = nodeBackgroundColor(state),
+        animationSpec = if (reduceMotion) snap() else tween(
+            durationMillis = motionDurationNormal,
+            easing = motionEasingStandard
+        ),
+        label = "node-bg-color"
+    )
     val fgColor = nodeForegroundColor(state)
 
     val nodeModifier = modifier
