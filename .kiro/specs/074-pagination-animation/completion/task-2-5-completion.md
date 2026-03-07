@@ -19,7 +19,12 @@ Updated `performance_virtualization` contract and README to reflect animated win
 
 ### contracts.yaml
 
-Replaced "Window shifts immediately (no animation)" with animated behavior description referencing `motion.selectionTransition` timing and `prefers-reduced-motion` disabling.
+Updated all fields of `performance_virtualization` contract per Thurgood's review:
+- `description`: Added "animated" to reflect new behavior
+- `behavior`: Replaced "Window shifts immediately (no animation)" with animated transition description, all three platform reduced-motion mechanisms (web, iOS, Android), and "simultaneously" qualifier
+- `wcag`: `null` → `"2.3.3 Animation from Interactions"`
+- `validation`: Added 3 animation items (state transitions, reduced motion, ARIA timing)
+- `test_approach`: Added animation verification, reduced motion toggle, and ARIA timing steps
 
 ### README.md
 
