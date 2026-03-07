@@ -168,7 +168,8 @@ When `totalItems > 5`, only 5 nodes are rendered using a sliding window algorith
 
 ### Window Behavior
 
-- Window shifts immediately — no animation on window change
+- Window shifts are animated — nodes transition size and color using `motion.selectionTransition` (250ms, easingStandard)
+- Animation is disabled when `prefers-reduced-motion: reduce` is active (web), `UIAccessibility.isReduceMotionEnabled` is true (iOS), or `TRANSITION_ANIMATION_SCALE` is 0 (Android)
 - Exactly 5 nodes are always visible when `totalItems > 5`
 - When `totalItems ≤ 5`, all nodes render (no virtualization)
 - ARIA label always reflects actual position (e.g., "Page 26 of 50"), not the visible subset

@@ -48,7 +48,10 @@ contracts:
       - Pages 1-3: show nodes 1-5
       - Pages 4 to (totalItems-3): center current at position 3
       - Last 3 pages: show last 5 nodes
-      Window shifts immediately (no animation).
+      Window shifts with animated transition. When the visible window
+      changes, nodes animate to their new states (size and color) using
+      motion.selectionTransition timing. Animation is disabled when
+      prefers-reduced-motion: reduce is active.
     wcag: null
     platforms: [web, ios, android]
     validation:
