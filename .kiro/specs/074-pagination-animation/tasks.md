@@ -64,7 +64,7 @@
     - Verify generated `DesignTokens.ios.swift` has correct motion types
     - _Requirements: 7.3_
 
-- [ ] 2. Pagination Animation
+- [x] 2. Pagination Animation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -154,9 +154,73 @@
 
 ---
 
+- [ ] 3. Animation Refinement
+  **Type**: Architecture
+  **Validation**: Tier 3 - Comprehensive
+  **Success Criteria**:
+  - No layout twitch/jump during node state transitions on any size variant
+  - Dots visually slide left (forward) or right (backward) when the visible window shifts
+  - Slide direction matches navigation direction
+  - All existing behavioral tests pass
+  - Demo verified by Peter after web implementation
+  _Requirements: 1.1–1.4, 2.1–2.4_
+
+  - [x] 3.1 Web: Fix layout twitch with scale-based sizing
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Agent**: Lina
+    - Add `sizing` to Node-Base `observedAttributes` (optional, values: `"scale"` or absent)
+    - Update Node-Base schema (`Progress-Indicator-Node-Base.schema.yaml`)
+    - Add `:host([sizing="scale"]) .node` CSS rules: fixed layout box at current-state size, `transform: scale()` for inactive, `scale(1.0)` for current
+    - Transition on `transform` and `background-color` (scoped to `sizing="scale"` only)
+    - Default behavior (no `sizing` attr) unchanged — steppers unaffected
+    - Pagination-Base `_render()`: add `node.setAttribute('sizing', 'scale')`
+    - Evaluate visual gap spacing — may be acceptable, flag if not
+    - Update `VisualStates.test.ts` transition assertion
+    - _Requirements: 1.1–1.4_
+
+  - [ ] 3.2 Web: Add scroll slide animation
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Agent**: Lina
+    **Gate**: Peter verifies web demo after this task — must approve feel before native work
+    - Track previous `window.start` in Pagination-Base `_render()`
+    - On window shift, apply initial `translateX` offset to each node, then remove on next frame
+    - Slide left on forward navigation, right on backward
+    - Compose with scale: `transform: translateX(Xpx) scale(S)`
+    - Respect reduced motion: skip translateX when `prefers-reduced-motion: reduce` is active
+    - _Requirements: 2.1–2.4, 5.1–5.5_
+
+  - [ ] 3.3 iOS: Apply scale + slide fixes
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Agent**: Lina
+    - Verify if SwiftUI already handles layout twitch (may not need fix)
+    - Add positional slide animation if not present
+    - _Requirements: 1.1–1.4, 2.1–2.4_
+
+  - [ ] 3.4 Android: Apply scale + slide fixes
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Agent**: Lina
+    - Switch from `animateDpAsState` (size) to `graphicsLayer { scaleX/scaleY }` with `animateFloatAsState`
+    - Add positional slide via `graphicsLayer { translationX }` or `Modifier.offset`
+    - _Requirements: 1.1–1.4, 2.1–2.4_
+
+  - [ ] 3.5 Rebuild bundle and final verification
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Agent**: Lina (rebuild) → Thurgood (behavioral audit)
+    - Rebuild browser bundle
+    - Run full test suite
+    - Verify demo on all three platforms
+    - _Requirements: 1.1–1.4, 2.1–2.4, 5.1–5.5_
+
+---
+
 ## Domain Review Recommendations
 
 After formalization, recommend domain review:
-- **Ada**: Token pipeline fix implementation (1.2, 1.3), motion token semantic correctness
+- **Ada**: Token pipeline fix implementation (1.2, 1.3), motion token semantic correctness, scale token question (Task 3)
 - **Lina**: All animation implementation tasks, DOM refactor approach, platform-specific animation APIs
-- **Thurgood**: Contract update review, test audit at validation gate (2.1), final behavioral audit (2.6)
+- **Thurgood**: Contract update review, test audit at validation gate (2.1), final behavioral audit (2.6, 3.5)

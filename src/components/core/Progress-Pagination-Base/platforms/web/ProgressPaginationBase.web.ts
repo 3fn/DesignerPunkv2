@@ -227,6 +227,7 @@ export class ProgressPaginationBase extends HTMLElement {
       node.setAttribute('state', state);
       node.setAttribute('size', size);
       node.setAttribute('content', 'none');
+      node.setAttribute('sizing', 'scale');
     }
 
     // Update container

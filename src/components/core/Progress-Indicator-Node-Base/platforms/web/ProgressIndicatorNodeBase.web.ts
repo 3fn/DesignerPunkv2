@@ -51,9 +51,11 @@ const CHECKMARK_SVG = `<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12
  */
 export class ProgressIndicatorNodeBase extends HTMLElement {
   private _shadowRoot: ShadowRoot;
+  private _node: HTMLSpanElement | null = null;
+  private _initialized = false;
 
   static get observedAttributes(): string[] {
-    return ['state', 'size', 'content', 'icon', 'test-id'];
+    return ['state', 'size', 'content', 'icon', 'test-id', 'sizing'];
   }
 
   constructor() {
@@ -62,12 +64,16 @@ export class ProgressIndicatorNodeBase extends HTMLElement {
   }
 
   connectedCallback(): void {
-    this.render();
+    if (!this._initialized) {
+      this._setup();
+      this._initialized = true;
+    }
+    this._render();
   }
 
   attributeChangedCallback(_name: string, oldValue: string | null, newValue: string | null): void {
     if (oldValue !== newValue && this.isConnected) {
-      this.render();
+      this._render();
     }
   }
 
@@ -149,16 +155,27 @@ export class ProgressIndicatorNodeBase extends HTMLElement {
   // ============================================================================
 
   /**
-   * Render the node into shadow DOM.
-   * 
-   * Rendering logic:
-   * 1. Determine effective content (sm always = dot)
-   * 2. Build CSS classes for state + size
-   * 3. Render inner content (dot, checkmark, icon, or empty circle)
+   * One-time DOM setup: create style and persistent node span.
+   */
+  private _setup(): void {
+    const style = document.createElement('style');
+    style.textContent = nodeStyles;
+    this._shadowRoot.appendChild(style);
+
+    this._node = document.createElement('span');
+    this._node.setAttribute('role', 'presentation');
+    this._node.setAttribute('aria-hidden', 'true');
+    this._shadowRoot.appendChild(this._node);
+  }
+
+  /**
+   * Incremental render: update class and inner content on persistent node.
    * 
    * @see Requirements 1.1-1.5, 12.1-12.16
    */
-  private render(): void {
+  private _render(): void {
+    if (!this._node) return;
+
     const state = this.state;
     const size = this.size;
     const content = this.content;
@@ -169,40 +186,24 @@ export class ProgressIndicatorNodeBase extends HTMLElement {
     // @see Requirement 1.3
     const effectiveContent = size === 'sm' ? 'none' : content;
 
-    const nodeClasses = [
-      'node',
-      `node--${state}`,
-      `node--${size}`,
-    ].join(' ');
+    this._node.className = `node node--${state} node--${size}`;
 
-    const testIDAttr = testID ? ` data-testid="${this.escapeHtml(testID)}"` : '';
+    if (testID) {
+      this._node.setAttribute('data-testid', this.escapeHtml(testID));
+    } else {
+      this._node.removeAttribute('data-testid');
+    }
 
     // Generate inner content HTML
     let innerHTML = '';
     if (size === 'sm') {
-      // sm: always a filled dot
-      // @see Requirement 12.6
       innerHTML = '<span class="node__dot"></span>';
     } else if (effectiveContent === 'checkmark') {
-      // md/lg + checkmark: render checkmark SVG
-      // @see Requirement 12.8
       innerHTML = `<span class="node__content">${CHECKMARK_SVG}</span>`;
     } else if (effectiveContent === 'icon' && iconName) {
-      // md/lg + icon: render icon-base element
-      // @see Requirement 12.9
       innerHTML = `<span class="node__content"><icon-base name="${this.escapeHtml(iconName)}" size="${size === 'md' ? 13 : 20}" color="inherit"></icon-base></span>`;
     }
-    // md/lg + none: empty circle (no inner content)
-    // @see Requirement 12.7
-
-    this._shadowRoot.innerHTML = `
-      <style>
-        ${nodeStyles}
-      </style>
-      <span class="${nodeClasses}"${testIDAttr} role="presentation" aria-hidden="true">
-        ${innerHTML}
-      </span>
-    `;
+    this._node.innerHTML = innerHTML;
   }
 
   private escapeHtml(str: string): string {

@@ -102,6 +102,46 @@
 }
 
 /* ============================================================================
+ * Scale-Based Sizing (opt-in via sizing="scale")
+ * Fixed layout box at current-state size, inactive nodes scale down.
+ * Prevents layout twitch during animation — transform is GPU-composited.
+ * Used by Pagination-Base for smooth dot transitions.
+ * @see findings/scale-scoping-decision.md
+ * ============================================================================ */
+
+:host([sizing="scale"]) .node {
+  transition: transform var(--motion-selection-transition-duration) var(--motion-selection-transition-easing),
+              background-color var(--motion-selection-transition-duration) var(--motion-selection-transition-easing);
+}
+
+:host([sizing="scale"]) .node--sm {
+  width: var(--progress-node-size-sm-current);
+  height: var(--progress-node-size-sm-current);
+  transform: scale(0.75);
+}
+:host([sizing="scale"]) .node--sm.node--current {
+  transform: scale(1.0);
+}
+
+:host([sizing="scale"]) .node--md {
+  width: var(--progress-node-size-md-current);
+  height: var(--progress-node-size-md-current);
+  transform: scale(0.80);
+}
+:host([sizing="scale"]) .node--md.node--current {
+  transform: scale(1.0);
+}
+
+:host([sizing="scale"]) .node--lg {
+  width: var(--progress-node-size-lg-current);
+  height: var(--progress-node-size-lg-current);
+  transform: scale(0.833);
+}
+:host([sizing="scale"]) .node--lg.node--current {
+  transform: scale(1.0);
+}
+
+/* ============================================================================
  * Content Rendering
  * @see Requirements 1.3-1.4, 12.6-12.9
  * ============================================================================ */

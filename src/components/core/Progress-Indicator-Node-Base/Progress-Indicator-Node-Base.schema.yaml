@@ -46,6 +46,14 @@ properties:
     required: false
     default: undefined
     description: Test identifier for automated testing.
+  sizing:
+    type: "'scale'"
+    required: false
+    default: undefined
+    description: |
+      Layout sizing strategy. When 'scale', the node uses a fixed layout box
+      at current-state size and scales down for inactive states via transform.
+      Prevents layout twitch during animation. Used by Pagination-Base.
 
 tokens:
   color:
