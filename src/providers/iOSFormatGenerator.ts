@@ -436,13 +436,16 @@ export class iOSFormatGenerator extends BaseFormatProvider {
     // getPlatformTokenName will handle dot notation conversion (e.g., 'typography.bodyMd' -> 'typographyBodyMd')
     const semanticName = this.getTokenName(semantic.name, semantic.category);
     
-    // Generate Typography struct initialization format
+    // Use correct type wrapper based on token family
+    const typeWrapper = semantic.name.startsWith('motion.') ? 'Motion' : 'Typography';
+
+    // Generate struct initialization format
     const parameters = refs.map(([key, primitiveRef]) => {
       const primitiveRefName = this.getTokenName(primitiveRef, semantic.category);
       return `${key}: ${primitiveRefName}`;
     }).join(', ');
     
-    return `    public static let ${semanticName} = Typography(${parameters})`;
+    return `    public static let ${semanticName} = ${typeWrapper}(${parameters})`;
   }
 
   /**

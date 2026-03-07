@@ -50,33 +50,33 @@ export const ProgressTokens = defineComponentTokens({
 
     'node.size.sm': {
       reference: spacingTokens.space150,
-      reasoning: 'Small node base size (12px = 1.5× base). Used for pagination dots in compact mobile contexts where minimal visual footprint is needed.',
+      reasoning: 'Small node base size (12px). Inactive dots in compact mobile contexts.',
     },
     'node.size.md': {
       reference: spacingTokens.space200,
-      reasoning: 'Medium node base size (16px = 2× base). Default size for steppers, providing balanced visual weight for most UI contexts.',
+      reasoning: 'Medium node base size (16px). Default inactive dot size.',
     },
     'node.size.lg': {
-      reference: spacingTokens.space300,
-      reasoning: 'Large node base size (24px = 3× base). Used for detailed steppers in desktop contexts requiring prominent visual presence.',
+      reference: spacingTokens.space250,
+      reasoning: 'Large node base size (20px). Inactive dots in desktop contexts.',
     },
 
     // ========================================================================
-    // CURRENT NODE SIZES — formula-based: SPACING_BASE_VALUE × multiplier
-    // Provides +4px emphasis over base size for non-color visual differentiation
+    // CURRENT NODE SIZES — one spacing tier above base for +4px emphasis
+    // Provides non-color visual differentiation of active position
     // ========================================================================
 
     'node.size.sm.current': {
-      value: SPACING_BASE_VALUE * 2,
-      reasoning: 'Current node emphasis for sm (16px = 8×2). Provides +4px over base 12px for non-color visual differentiation of active position. Divisible by 4px (baseline grid aligned).',
+      reference: spacingTokens.space200,
+      reasoning: 'Current node emphasis for sm (16px). +4px over base 12px for non-color visual differentiation.',
     },
     'node.size.md.current': {
-      value: SPACING_BASE_VALUE * 2.5,
-      reasoning: 'Current node emphasis for md (20px = 8×2.5). Provides +4px over base 16px for non-color visual differentiation of active position. Divisible by 4px (baseline grid aligned).',
+      reference: spacingTokens.space250,
+      reasoning: 'Current node emphasis for md (20px). +4px over base 16px for non-color visual differentiation.',
     },
     'node.size.lg.current': {
-      value: SPACING_BASE_VALUE * 3.5,
-      reasoning: 'Current node emphasis for lg (28px = 8×3.5). Provides +4px over base 24px for non-color visual differentiation of active position. Divisible by 4px (baseline grid aligned).',
+      reference: spacingTokens.space300,
+      reasoning: 'Current node emphasis for lg (24px). +4px over base 20px for non-color visual differentiation.',
     },
 
     // ========================================================================

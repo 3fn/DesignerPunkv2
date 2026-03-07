@@ -106,20 +106,20 @@ async function buildBundle(options) {
  */
 function copyTokenCSS() {
   // Possible source locations for the design token CSS file
-  // Priority order: output/ (primary), dist/ (fallback)
+  // Priority order: dist/ (canonical generation target), output/ (legacy fallback)
   const possibleDesignTokenSources = [
-    'output/DesignTokens.web.css',
     'dist/DesignTokens.web.css',
-    'output/web/DesignTokens.web.css',
-    'dist/web/DesignTokens.web.css'
+    'dist/web/DesignTokens.web.css',
+    'output/DesignTokens.web.css',
+    'output/web/DesignTokens.web.css'
   ];
   
   // Possible source locations for the component token CSS file
   const possibleComponentTokenSources = [
-    'output/ComponentTokens.web.css',
     'dist/ComponentTokens.web.css',
-    'output/web/ComponentTokens.web.css',
-    'dist/web/ComponentTokens.web.css'
+    'dist/web/ComponentTokens.web.css',
+    'output/ComponentTokens.web.css',
+    'output/web/ComponentTokens.web.css'
   ];
   
   const destPath = path.join(OUTPUT_DIR, 'tokens.css');

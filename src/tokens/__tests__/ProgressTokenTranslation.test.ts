@@ -46,19 +46,19 @@ describe('Progress Token Cross-Platform Translation', () => {
   // ==========================================================================
 
   describe('Web CSS output includes progress current size tokens', () => {
-    it('should include sm current size token with raw value 16', () => {
+    it('should reference space200 for sm current size', () => {
       expect(webContent).toContain('--progress-node-size-sm-current');
-      expect(webContent).toMatch(/--progress-node-size-sm-current:\s*16/);
+      expect(webContent).toMatch(/--progress-node-size-sm-current:\s*var\(--space-200\)/);
     });
 
-    it('should include md current size token with raw value 20', () => {
+    it('should reference space250 for md current size', () => {
       expect(webContent).toContain('--progress-node-size-md-current');
-      expect(webContent).toMatch(/--progress-node-size-md-current:\s*20/);
+      expect(webContent).toMatch(/--progress-node-size-md-current:\s*var\(--space-250\)/);
     });
 
-    it('should include lg current size token with raw value 28', () => {
+    it('should reference space300 for lg current size', () => {
       expect(webContent).toContain('--progress-node-size-lg-current');
-      expect(webContent).toMatch(/--progress-node-size-lg-current:\s*28/);
+      expect(webContent).toMatch(/--progress-node-size-lg-current:\s*var\(--space-300\)/);
     });
 
     it('should reference spacing primitives for base size tokens', () => {
@@ -67,7 +67,7 @@ describe('Progress Token Cross-Platform Translation', () => {
       expect(webContent).toContain('--progress-node-size-md');
       expect(webContent).toContain('var(--space-200)');
       expect(webContent).toContain('--progress-node-size-lg');
-      expect(webContent).toContain('var(--space-300)');
+      expect(webContent).toContain('var(--space-250)');
     });
   });
 
@@ -76,19 +76,19 @@ describe('Progress Token Cross-Platform Translation', () => {
   // ==========================================================================
 
   describe('iOS Swift output includes progress current size tokens', () => {
-    it('should include sm current size token with value 16', () => {
+    it('should reference space200 for sm current size', () => {
       expect(iosContent).toContain('nodeSizeSmCurrent');
-      expect(iosContent).toMatch(/nodeSizeSmCurrent.*16/);
+      expect(iosContent).toMatch(/nodeSizeSmCurrent.*SpacingTokens\.space200/);
     });
 
-    it('should include md current size token with value 20', () => {
+    it('should reference space250 for md current size', () => {
       expect(iosContent).toContain('nodeSizeMdCurrent');
-      expect(iosContent).toMatch(/nodeSizeMdCurrent.*20/);
+      expect(iosContent).toMatch(/nodeSizeMdCurrent.*SpacingTokens\.space250/);
     });
 
-    it('should include lg current size token with value 28', () => {
+    it('should reference space300 for lg current size', () => {
       expect(iosContent).toContain('nodeSizeLgCurrent');
-      expect(iosContent).toMatch(/nodeSizeLgCurrent.*28/);
+      expect(iosContent).toMatch(/nodeSizeLgCurrent.*SpacingTokens\.space300/);
     });
 
     it('should use CGFloat type for spacing tokens', () => {
@@ -98,7 +98,7 @@ describe('Progress Token Cross-Platform Translation', () => {
     it('should reference SpacingTokens for base size tokens', () => {
       expect(iosContent).toContain('SpacingTokens.space150');
       expect(iosContent).toContain('SpacingTokens.space200');
-      expect(iosContent).toContain('SpacingTokens.space300');
+      expect(iosContent).toContain('SpacingTokens.space250');
     });
   });
 
@@ -107,25 +107,25 @@ describe('Progress Token Cross-Platform Translation', () => {
   // ==========================================================================
 
   describe('Android Kotlin output includes progress current size tokens', () => {
-    it('should include sm current size token with value 16', () => {
+    it('should reference space200 for sm current size', () => {
       expect(androidContent).toContain('nodeSizeSmCurrent');
-      expect(androidContent).toMatch(/nodeSizeSmCurrent\s*=\s*16/);
+      expect(androidContent).toMatch(/nodeSizeSmCurrent\s*=\s*SpacingTokens\.space200/);
     });
 
-    it('should include md current size token with value 20', () => {
+    it('should reference space250 for md current size', () => {
       expect(androidContent).toContain('nodeSizeMdCurrent');
-      expect(androidContent).toMatch(/nodeSizeMdCurrent\s*=\s*20/);
+      expect(androidContent).toMatch(/nodeSizeMdCurrent\s*=\s*SpacingTokens\.space250/);
     });
 
-    it('should include lg current size token with value 28', () => {
+    it('should reference space300 for lg current size', () => {
       expect(androidContent).toContain('nodeSizeLgCurrent');
-      expect(androidContent).toMatch(/nodeSizeLgCurrent\s*=\s*28/);
+      expect(androidContent).toMatch(/nodeSizeLgCurrent\s*=\s*SpacingTokens\.space300/);
     });
 
     it('should reference SpacingTokens for base size tokens', () => {
       expect(androidContent).toContain('SpacingTokens.space150');
       expect(androidContent).toContain('SpacingTokens.space200');
-      expect(androidContent).toContain('SpacingTokens.space300');
+      expect(androidContent).toContain('SpacingTokens.space250');
     });
   });
 
@@ -134,18 +134,17 @@ describe('Progress Token Cross-Platform Translation', () => {
   // ==========================================================================
 
   describe('Cross-platform value consistency', () => {
-    it('should produce numerically equivalent current size values across all platforms', () => {
-      // All platforms should contain the same numeric values for formula-based tokens
+    it('should reference same spacing primitives for current sizes across all platforms', () => {
       const currentSizes = [
-        { cssName: 'sm-current', camelName: 'nodeSizeSmCurrent', value: 16 },
-        { cssName: 'md-current', camelName: 'nodeSizeMdCurrent', value: 20 },
-        { cssName: 'lg-current', camelName: 'nodeSizeLgCurrent', value: 28 },
+        { cssRef: 'space-200', swiftRef: 'SpacingTokens.space200', kotlinRef: 'SpacingTokens.space200', cssName: 'sm-current', camelName: 'nodeSizeSmCurrent' },
+        { cssRef: 'space-250', swiftRef: 'SpacingTokens.space250', kotlinRef: 'SpacingTokens.space250', cssName: 'md-current', camelName: 'nodeSizeMdCurrent' },
+        { cssRef: 'space-300', swiftRef: 'SpacingTokens.space300', kotlinRef: 'SpacingTokens.space300', cssName: 'lg-current', camelName: 'nodeSizeLgCurrent' },
       ];
 
-      for (const { cssName, camelName, value } of currentSizes) {
-        expect(webContent).toMatch(new RegExp(`--progress-node-size-${cssName}:\\s*${value}`));
-        expect(iosContent).toMatch(new RegExp(`${camelName}.*${value}`));
-        expect(androidContent).toMatch(new RegExp(`${camelName}\\s*=\\s*${value}`));
+      for (const { cssRef, swiftRef, kotlinRef, cssName, camelName } of currentSizes) {
+        expect(webContent).toMatch(new RegExp(`--progress-node-size-${cssName}:\\s*var\\(--${cssRef}\\)`));
+        expect(iosContent).toMatch(new RegExp(`${camelName}.*${swiftRef.replace('.', '\\.')}`));
+        expect(androidContent).toMatch(new RegExp(`${camelName}\\s*=\\s*${kotlinRef.replace('.', '\\.')}`));
       }
     });
 

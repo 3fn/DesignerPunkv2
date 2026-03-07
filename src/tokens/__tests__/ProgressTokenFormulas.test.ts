@@ -18,27 +18,27 @@ import { SPACING_BASE_VALUE } from '../SpacingTokens';
 
 describe('Progress Token Formula Validation', () => {
   /**
-   * Expected current size values derived from SPACING_BASE_VALUE × multiplier:
-   * - sm: 8 × 2   = 16px
-   * - md: 8 × 2.5 = 20px
-   * - lg: 8 × 3.5 = 28px
+   * Expected current size values — one spacing tier above base:
+   * - sm: space200 = 16px
+   * - md: space250 = 20px
+   * - lg: space300 = 24px
    */
   const expectedCurrentSizes = {
     sm: { multiplier: 2, expected: 16 },
     md: { multiplier: 2.5, expected: 20 },
-    lg: { multiplier: 3.5, expected: 28 },
+    lg: { multiplier: 3, expected: 24 },
   };
 
   /**
    * Expected base sizes (from spacing primitives):
    * - sm: space150 = 12px
    * - md: space200 = 16px
-   * - lg: space300 = 24px
+   * - lg: space250 = 20px
    */
   const expectedBaseSizes = {
     sm: 12,
     md: 16,
-    lg: 24,
+    lg: 20,
   };
 
   describe('Current Size Formulas Derive Correct Values', () => {

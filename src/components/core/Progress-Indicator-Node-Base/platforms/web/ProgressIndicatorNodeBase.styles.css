@@ -64,18 +64,18 @@
  * ============================================================================ */
 
 .node--sm {
-  width: var(--progress-node-size-sm, 12px);
-  height: var(--progress-node-size-sm, 12px);
+  width: var(--progress-node-size-sm);
+  height: var(--progress-node-size-sm);
 }
 
 .node--md {
-  width: var(--progress-node-size-md, 16px);
-  height: var(--progress-node-size-md, 16px);
+  width: var(--progress-node-size-md);
+  height: var(--progress-node-size-md);
 }
 
 .node--lg {
-  width: var(--progress-node-size-lg, 24px);
-  height: var(--progress-node-size-lg, 24px);
+  width: var(--progress-node-size-lg);
+  height: var(--progress-node-size-lg);
 }
 
 /* ============================================================================
@@ -85,18 +85,18 @@
  * ============================================================================ */
 
 .node--sm.node--current {
-  width: var(--progress-node-size-sm-current, 16px);
-  height: var(--progress-node-size-sm-current, 16px);
+  width: var(--progress-node-size-sm-current);
+  height: var(--progress-node-size-sm-current);
 }
 
 .node--md.node--current {
-  width: var(--progress-node-size-md-current, 20px);
-  height: var(--progress-node-size-md-current, 20px);
+  width: var(--progress-node-size-md-current);
+  height: var(--progress-node-size-md-current);
 }
 
 .node--lg.node--current {
-  width: var(--progress-node-size-lg-current, 28px);
-  height: var(--progress-node-size-lg-current, 28px);
+  width: var(--progress-node-size-lg-current);
+  height: var(--progress-node-size-lg-current);
 }
 
 /* ============================================================================
