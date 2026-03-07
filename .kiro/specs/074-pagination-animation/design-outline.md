@@ -120,13 +120,25 @@ This must be updated to:
 
 ### Decision 2: Token-Based Animation Timing
 
-The token system already has duration primitives (`duration150`, `duration250`, `duration350`), easing primitives (`easingStandard`, `easingDecelerate`, `easingAccelerate`), and semantic motion tokens that compose them. Animation timing should use these tokens rather than CSS defaults or hardcoded values. Candidate tokens: `motion.selectionTransition` for node state changes, `motion.focusTransition` for scroll animation. Ada to confirm semantic fit.
+The token system already has duration primitives (`duration150`, `duration250`, `duration350`), easing primitives (`easingStandard`, `easingDecelerate`, `easingAccelerate`), and semantic motion tokens that compose them. Animation timing uses these tokens rather than CSS defaults or hardcoded values. **Confirmed**: `motion.selectionTransition` (250ms, easingStandard) for both state transitions and scroll animation. (Ada confirmed, Peter approved, 2026-03-07)
 
 ---
 
-## Open Questions — Partially Resolved
+## Open Questions — Resolved
 
-1. ~~**Lina**: What's the implementation approach for incremental DOM updates on web?~~ **PARTIALLY RESOLVED**: Option (c) — maintain a pool of 5 node elements and update their attributes — is the likely approach. The Shadow DOM contains a `<style>` block + one container `<div>` + N `<progress-indicator-node-base>` children. The container div and style tag can be created once in `connectedCallback`, then `_render()` only updates child node attributes and adds/removes nodes as needed. Lina to confirm. (Thurgood analysis from 072 findings, 2026-03-06)
+1. ~~**Lina**: What's the implementation approach for incremental DOM updates on web?~~ **RESOLVED**: Option (c) — maintain a stable set of node elements and update their attributes. Confirmed by Lina after reviewing the full `render()` method (2026-03-07).
+
+   **Current state**: `render()` rebuilds the entire Shadow DOM on every call — `this._shadowRoot.innerHTML` replaces the `<style>` block, container `<div>`, and all `<progress-indicator-node-base>` children. This is triggered by `attributeChangedCallback` on any observed attribute change.
+
+   **Approach**: Split `render()` into two phases:
+   - **One-time setup** (`connectedCallback`): Create the `<style>` element and container `<div>` once. Append them to `_shadowRoot`. Pre-create 5 `<progress-indicator-node-base>` elements as children of the container.
+   - **Update** (`_render()` on attribute change): Update the container's `class` and `aria-label`. For each node child, update its `state` and `size` attributes. If the visible window size changes (rare — only when `totalItems` drops below 5), add or remove node children.
+
+   **Why this works**: The node elements persist across renders, so CSS transitions on `<progress-indicator-node-base>` (which applies its own transitions internally via its Shadow DOM) will fire when `state` changes from `incomplete` to `current` or vice versa. The container `<div>` also persists, so any scroll/slide animation on the container's children will work.
+
+   **What to watch for**: The `<progress-indicator-node-base>` custom element must handle attribute changes via its own `attributeChangedCallback` — it already does (it observes `state`, `size`, `content`). No changes needed in Node-Base for this to work. The key constraint is that we never destroy and recreate node elements during normal pagination — only update their attributes.
+
+   **Complexity**: Low-medium. The refactor is straightforward but touches the core render path, so the test audit checkpoint (see Lina's feedback below) is important.
 
 2. ~~**Lina**: How do iOS and Android handle this?~~ **RESOLVED**: iOS uses SwiftUI declarative views (implicit diffing via `ForEach`) — already has element continuity. Android uses Compose recomposition (implicit diffing) — already has element continuity. Neither platform does full rebuilds. Animation on these platforms is about adding animation modifiers (`.animation()` on iOS, `animateXAsState` on Android), not restructuring the update strategy. (Thurgood analysis from 072 findings, 2026-03-06)
 
@@ -148,13 +160,13 @@ The token system already has duration primitives (`duration150`, `duration250`, 
    - `motion.modalSlide` — 350ms + easingDecelerate (overlay entry)
    - `motion.floatLabel` — 250ms + easingStandard (label float)
 
-   **Recommendation for 074**: `motion.selectionTransition` (250ms, easingStandard) is the closest semantic match for pagination node state changes — a node transitioning between "current" and "incomplete" is a selection state change. Working assumption is to use `motion.selectionTransition` for both state transitions and scroll animation. Ada to confirm semantic fit and advise whether the scroll animation warrants a separate token (e.g., `motion.paginationScroll`) or if unified timing is correct. Prepared to move forward with `motion.selectionTransition` for both if Ada concurs.
+   **Recommendation for 074**: `motion.selectionTransition` (250ms, easingStandard) for both state transitions and scroll animation. A node transitioning between "current" and "incomplete" is a selection state change — direct semantic match. For scroll, the spatial repositioning isn't strictly a "selection" but 250ms/easingStandard gives the right feel, and a dedicated `motion.paginationScroll` token would be premature for a single consumer. Can split later if scroll timing needs independent tuning. (Ada confirmed, Peter approved, 2026-03-07)
 
 4. ~~**Peter**: Any preference on animation feel — snappy vs smooth?~~ **RESOLVED**: Smooth. This aligns with `motion.selectionTransition` (250ms, easingStandard) — the longer duration with balanced easing produces a smooth, deliberate feel rather than a snappy one. (Peter, 2026-03-07)
 
 5. ~~**Lina**: The Node-Base rendering bugs (4 dots instead of 5, no current emphasis) need to be resolved before animation work. Should this be a prerequisite task within 074, or a separate fix?~~ **RESOLVED**: Prerequisite task within 074. The bugs are small (likely a few-line rendering logic fix in Node-Base's web component) and blocking 074's visual validation. A separate spec would be overhead. Structure as an early task in 074's task list. (Lina recommendation, Peter confirmed, 2026-03-07)
 
-6. **Lina → Ada**: The `output/` directory contains a stale copy of generated tokens that the browser build script reads first (before `dist/`). During 072, this caused the container styling to not appear in the demo until manually synced (`cp dist/DesignTokens.web.css output/`). Having two locations with different freshness is a recurring debugging trap. Recommendation: the build script should read from `dist/` only, or the generation script should write to both. Flagged for Ada to resolve as part of her next token pipeline work.
+6. ~~**Lina → Ada**: The `output/` directory contains a stale copy of generated tokens that the browser build script reads first (before `dist/`). During 072, this caused the container styling to not appear in the demo until manually synced (`cp dist/DesignTokens.web.css output/`). Having two locations with different freshness is a recurring debugging trap.~~ **RESOLVED**: Ada investigated. Root cause: `output/` is a fossil from the original pipeline — generation moved to `dist/` but `build-browser-bundles.js` still prefers `output/` (commit `3fd1ac77` added `dist/` as fallback, never flipped priority). Additionally, `generate-platform-tokens.ts` is not wired into `npm run build` at all — platform token regeneration is entirely manual. Fix included as a prerequisite task in 074. See "Token Pipeline Fix" section below. (Ada analysis, Peter confirmed, 2026-03-07)
 
 ---
 
@@ -182,6 +194,34 @@ The "What Does NOT Change" section states the composition contract is unchanged,
 
 ---
 
+## Token Pipeline Fix (Ada — Prerequisite)
+
+### Problem
+
+Two issues cause stale platform tokens during development:
+
+1. **`generate-platform-tokens.ts` is not in the build pipeline.** It's a standalone script — `npm run build` does not regenerate `DesignTokens.web.css`, `DesignTokens.ios.swift`, or `DesignTokens.android.kt`. Token source changes compile and pass tests, but generated platform output stays stale until someone manually runs `npx ts-node scripts/generate-platform-tokens.ts`.
+
+2. **`build-browser-bundles.js` prefers `output/` over `dist/`.** The `output/` directory is a fossil from the original pipeline (pre-`dist/`). No script writes to it anymore, but the browser build script checks it first. Result: browser demo uses stale `output/` tokens even when `dist/` is fresh.
+
+### History
+
+- Original pipeline wrote to `output/`. Build script read from `output/`. Worked fine.
+- Generation script migrated to `dist/`. Build script added `dist/` as fallback (commit `3fd1ac77`) but kept `output/` as primary.
+- Nobody flipped the priority. `output/` files are now months stale (iOS/Android: Feb 3, web CSS: manually copied Mar 7).
+
+### Fix (3 changes)
+
+1. **Add npm script**: `"generate:platform-tokens": "ts-node scripts/generate-platform-tokens.ts"`
+2. **Wire into build**: `prebuild` runs both `generate:types` and `generate:platform-tokens` (1.5s overhead — negligible)
+3. **Flip source priority** in `build-browser-bundles.js`: `dist/` first, `output/` fallback (or remove `output/` entries entirely)
+
+### iOS Motion Token Type Fix
+
+The iOS generator wraps motion tokens in `Typography` structs (e.g., `motionSelectionTransition = Typography(duration:easing:)`). This is a type mismatch — motion tokens aren't typography. The structured output (`MotionSelectionTransition` struct with `Duration`/`Easing` fields) is correct; the shorthand constants on lines 595-599 need a proper `Motion` type wrapper. Fix in the iOS generator as part of this task.
+
+---
+
 ## Domain Review Recommendations
 
 ### Lina (Component Specialist) — Primary implementer
@@ -190,8 +230,9 @@ The "What Does NOT Change" section states the composition contract is unchanged,
 - Animation accessibility (`prefers-reduced-motion`)
 
 ### Ada (Token Specialist)
-- Animation token availability (duration, easing)
-- Any token implications for animated state transitions
+- Animation token availability (duration, easing) — ✅ Confirmed: `motion.selectionTransition` for both state and scroll
+- iOS motion token type bug fix (shorthand constants use `Typography` wrapper — should be a `Motion` type)
+- Token pipeline fix: wire `generate-platform-tokens.ts` into build, flip `output/`→`dist/` priority
 
 ### Thurgood (Governance)
 - Contract update review
