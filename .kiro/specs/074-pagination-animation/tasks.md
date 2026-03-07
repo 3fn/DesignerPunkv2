@@ -105,7 +105,7 @@
     - **⚠️ VALIDATION GATE**: Run full behavioral test suite (`npm test -- PaginationBase.test.ts`) — must pass with zero failures before proceeding to animation tasks
     - _Requirements: 3.1, 3.2, 3.3, 3.4_
 
-  - [ ] 2.2 Add web animation CSS and reduced motion
+  - [x] 2.2 Add web animation CSS and reduced motion
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina (component implementation)

@@ -28,7 +28,9 @@
   justify-content: center;
   border-radius: 50%;
   box-sizing: border-box;
-  transition: width 200ms ease, height 200ms ease;
+  transition: width var(--motion-selection-transition-duration) var(--motion-selection-transition-easing),
+              height var(--motion-selection-transition-duration) var(--motion-selection-transition-easing),
+              background-color var(--motion-selection-transition-duration) var(--motion-selection-transition-easing);
 }
 
 /* ============================================================================
