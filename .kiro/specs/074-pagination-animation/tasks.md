@@ -179,7 +179,7 @@
     - Update `VisualStates.test.ts` transition assertion
     - _Requirements: 1.1–1.4_
 
-  - [ ] 3.2 Web: Add scroll slide animation
+  - [x] 3.2 Web: Add scroll slide animation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina

@@ -53,6 +53,7 @@ export class ProgressPaginationBase extends HTMLElement {
   private _container: HTMLDivElement | null = null;
   private _nodes: HTMLElement[] = [];
   private _initialized = false;
+  private _prevWindowStart = -1;
 
   static get observedAttributes(): string[] {
     return ['total-items', 'current-item', 'size', 'accessibility-label', 'test-id'];
@@ -228,6 +229,30 @@ export class ProgressPaginationBase extends HTMLElement {
       node.setAttribute('size', size);
       node.setAttribute('content', 'none');
       node.setAttribute('sizing', 'scale');
+    }
+
+    // Slide animation on window shift
+    const shift = this._prevWindowStart >= 0 ? window.start - this._prevWindowStart : 0;
+    this._prevWindowStart = window.start;
+
+    if (shift !== 0 && typeof globalThis.matchMedia === 'function' &&
+        !globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const stride = size === 'lg' ? 32 : size === 'md' ? 24 : 20;
+      const offset = shift * stride;
+
+      for (const node of this._nodes) {
+        node.style.transition = 'none';
+        node.style.transform = `translateX(${offset}px)`;
+      }
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          for (const node of this._nodes) {
+            node.style.transition = `transform var(--motion-selection-transition-duration) var(--motion-selection-transition-easing)`;
+            node.style.transform = '';
+          }
+        });
+      });
     }
 
     // Update container
