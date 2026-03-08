@@ -45,18 +45,18 @@ public enum ProgressNodeSize: String, CaseIterable {
     /// Base size in points
     var baseSize: CGFloat {
         switch self {
-        case .sm: return 12  // progress.node.size.sm
-        case .md: return 16  // progress.node.size.md
-        case .lg: return 24  // progress.node.size.lg
+        case .sm: return 12  // progress.node.size.sm = space150
+        case .md: return 16  // progress.node.size.md = space200
+        case .lg: return 20  // progress.node.size.lg = space250
         }
     }
 
     /// Current (emphasized) size in points (+4px)
     var currentSize: CGFloat {
         switch self {
-        case .sm: return 16  // progress.node.size.sm.current
-        case .md: return 20  // progress.node.size.md.current
-        case .lg: return 28  // progress.node.size.lg.current
+        case .sm: return 16  // progress.node.size.sm.current = space200
+        case .md: return 20  // progress.node.size.md.current = space250
+        case .lg: return 24  // progress.node.size.lg.current = space300
         }
     }
 }

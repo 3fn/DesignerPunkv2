@@ -154,73 +154,253 @@
 
 ---
 
-- [ ] 3. Animation Refinement
-  **Type**: Architecture
-  **Validation**: Tier 3 - Comprehensive
-  **Success Criteria**:
-  - No layout twitch/jump during node state transitions on any size variant
-  - Dots visually slide left (forward) or right (backward) when the visible window shifts
-  - Slide direction matches navigation direction
-  - All existing behavioral tests pass
-  - Demo verified by Peter after web implementation
-  _Requirements: 1.1–1.4, 2.1–2.4_
+- [ ] 3. Animation Refinement (Render-All-Dots Realignment)
 
-  - [x] 3.1 Web: Fix layout twitch with scale-based sizing
+  **Type**: Parent
+  **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  **Pivot Context**: Web implementation pivoted from windowed 7-node buffer to render-all-dots
+  with translateX centering mid-task. See `findings/architectural-pivot-render-all-dots.md`.
+
+  **Success Criteria:**
+  - Design outline and tasks.md reflect render-all-dots architecture (not buffer model)
+  - Behavioral contracts reflect actual rendering behavior per platform
+  - Gap token strategy decided and documented
+  - Split-timing motion strategy decided (tokens created or experimental properties removed)
+  - iOS and Android use native scroll centering (not windowed rendering)
+  - All behavioral tests pass across all platforms
+  - Token-completeness tests pass (no known suppressions remaining)
+  - Demo verified by Peter on all three platforms
+  - Scope expansion documented in task completion doc
+
+  **Primary Artifacts:**
+  - Updated design outline (`design-outline-task3.md`)
+  - Updated `contracts.yaml`
+  - iOS platform file (`ProgressPaginationBase.ios.swift`)
+  - Android platform file (`ProgressPaginationBase.android.kt`)
+  - Component README
+
+  **Completion Documentation:**
+  - Detailed: `.kiro/specs/074-pagination-animation/completion/task-3-parent-completion.md`
+  - Summary: `docs/specs/074-pagination-animation/task-3-summary.md`
+
+  **Post-Completion:**
+  - Mark complete: Use `taskStatus` tool to update task status
+  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Animation Refinement (Render-All-Dots)"` (runs release analysis automatically)
+  - Verify: Check GitHub for committed changes
+
+  **Completed Subtasks (Pre-Pivot):**
+
+  - [x] 3.1 Web: Scale-based sizing on Node-Base
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
-    - Add `sizing` to Node-Base `observedAttributes` (optional, values: `"scale"` or absent)
-    - Update Node-Base schema (`Progress-Indicator-Node-Base.schema.yaml`)
-    - Add `:host([sizing="scale"]) .node` CSS rules: fixed layout box at current-state size, `transform: scale()` for inactive, `scale(1.0)` for current
-    - Transition on `transform` and `background-color` (scoped to `sizing="scale"` only)
-    - Default behavior (no `sizing` attr) unchanged — steppers unaffected
-    - Pagination-Base `_render()`: add `node.setAttribute('sizing', 'scale')`
-    - Evaluate visual gap spacing — may be acceptable, flag if not
-    - Update `VisualStates.test.ts` transition assertion
+    - `sizing="scale"` attribute on Node-Base — fixed layout box, transform-based scaling
+    - Working across all size variants
     - _Requirements: 1.1–1.4_
 
-  - [x] 3.2 Web: Add scroll slide animation
-    **Type**: Implementation
-    **Validation**: Tier 2 - Standard
+  - [x] 3.2 Web: Render-all-dots slide animation (PIVOTED)
+    **Type**: Architecture
+    **Validation**: Tier 3 - Comprehensive
     **Agent**: Lina
-    **Gate**: Peter verifies web demo after this task — must approve feel before native work
-    - Track previous `window.start` in Pagination-Base `_render()`
-    - On window shift, apply initial `translateX` offset to each node, then remove on next frame
-    - Slide left on forward navigation, right on backward
-    - Compose with scale: `transform: translateX(Xpx) scale(S)`
-    - Respect reduced motion: skip translateX when `prefers-reduced-motion: reduce` is active
+    **Note**: Originally scoped as per-node translateX with 7-node buffer. Pivoted to
+    render-all-dots with track-level translateX centering. See architectural pivot finding.
+    - Render all `totalItems` dots in flex track
+    - Fixed-width viewport with `overflow: hidden` + `clip-path`
+    - Track-level `translateX` centering, clamped at edges
+    - CSS transition on track transform
+    - Reduced motion: `transition: none`
+    - Peter verified web demo ✅
     - _Requirements: 2.1–2.4, 5.1–5.5_
 
-  - [ ] 3.3 iOS: Apply scale + slide fixes
+  **Gate 1 — Decisions (unblocks Gates 2–3):**
+
+  - [x] 3.3 Decision: Gap token strategy
+    **Type**: Architecture
+    **Validation**: Tier 1 - Minimal
+    **Agent**: Peter (decision) → Ada (documentation)
+    - Decide Option A (semantic tokens as-is, document stepper-specific scope of `progress.node.gap.*`) or Option B (create `progress.pagination.gap.*` component tokens)
+    - See `findings/ada-token-review-render-all-dots.md`, Finding #2
+    - If Option A: Ada documents stepper-specific scope (ballot measure)
+    - If Option B: Ada creates component tokens, Lina updates CSS references
+    - _Requirements: Token governance compliance_
+
+  - [x] 3.4 Decision: Split-timing motion strategy
+    **Type**: Architecture
+    **Validation**: Tier 1 - Minimal
+    **Agent**: Peter (experimentation + decision) → Ada (token creation or property removal)
+    - Peter experiments with 250ms scale / 350ms color+slide split in DevTools
+    - Path A: Split timing feels right → Ada creates `motion.color.transition.*` semantic tokens
+    - Path B: Unified timing is fine → Lina removes experimental `--motion-color-transition-*` properties from Node-Base CSS
+    - Resolves 2 token-completeness test failures either way
+    - See `findings/ada-token-review-render-all-dots.md`, Finding #4
+    - _Requirements: Motion token governance_
+    - **Decision**: Path A — `motion.settleTransition` created (350ms/easingDecelerate)
+    - **Remaining**: Lina to replace `--motion-color-transition-*` with `--motion-settle-transition-*` in Node-Base CSS, and update track slide in PaginationBase.web.ts to use `--motion-settle-transition-*` (unblocks 3.8)
+
+  **Gate 2 — Source of Truth (unblocks Gate 3):**
+
+  - [x] 3.5 Update design outline for render-all-dots
+    **Type**: Documentation
+    **Validation**: Tier 2 - Standard
+    **Agent**: Lina
+    - Replace buffer model description with render-all-dots + translateX centering ✅
+    - Document centering math, DOM structure, reduced motion behavior ✅
+    - Document native platform approach (ScrollViewReader for iOS, ScrollState for Android) ✅
+    - This becomes the source of truth for iOS/Android implementation ✅
+    - _Requirements: Documentation accuracy_
+    - **Completion**: `.kiro/specs/074-pagination-animation/completion/task-3-5-completion.md`
+
+  - [x] 3.6 Update tasks.md descriptions
+    **Type**: Documentation
+    **Validation**: Tier 1 - Minimal
+    **Agent**: Lina
+    **Note**: This is the task you're reading — it is now self-referentially accurate.
+    - Rewrite completed 3.2 description to reflect what actually happened ✅ (done by Thurgood during reprioritization)
+    - Ensure remaining task descriptions match render-all-dots approach ✅ (done by Thurgood during reprioritization)
+    - Mark 3.5 complete, update blocker statuses ✅
+    - _Requirements: Documentation accuracy_
+    - **Completion**: `.kiro/specs/074-pagination-animation/completion/task-3-6-completion.md`
+
+  **Parallel opportunity (Gate 2):** 3.5 and 3.6 are Lina's work. If Ada's
+  gap token documentation (from 3.3 Option A) is ready, it can proceed in
+  parallel — different files, no overlap.
+
+  **Gate 3 — Contract and Test Alignment (unblocks Gate 4):**
+
+  - [x] 3.7 Update `performance_virtualization` contract
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Agent**: Thurgood (audit + recommendation) → Lina (contract update)
+    **Status**: COMPLETE
+    **Unblock Criteria**:
+      - Design outline accurately describes render-all-dots for web
+      - Design outline describes native scroll centering for iOS/Android
+    - Audit current `performance_virtualization` contract against updated design outline
+    - Determine if contract should be rewritten, split per-platform, or replaced
+    - Lina implements the contract change
+    - _Requirements: 4.1, 4.2_
+
+  - [x] 3.8 Annotate or resolve token-completeness test failures
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Agent**: Thurgood (governance) → Lina (implementation)
+    **Status**: COMPLETE
+    **Resolution**: Replaced `--motion-color-transition-*` with `--motion-settle-transition-*` in Node-Base CSS. Updated PaginationBase.web.ts track slide to use `--motion-settle-transition-*`. Rebuilt. 2 token-completeness failures resolved. Full suite: 7457 passed, 0 failed.
+    - _Requirements: Test suite integrity_
+
+  - [x] 3.9 Behavioral audit of web implementation
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Agent**: Thurgood
+    **Status**: UNBLOCKED (3.7 complete)
+    - Audit web implementation against all behavioral contracts
+    - Flag any contracts needing new assertions
+    - Flag any gaps for Lina
+    - _Requirements: 4.1, 4.2, 5.4_
+
+  **Parallel opportunity (Gate 3):** 3.8 is independent of 3.7 and 3.9 — it
+  depends only on the split-timing decision (3.4), not on the contract update.
+  If 3.4 resolves before 3.7, 3.8 can proceed immediately.
+
+  **Gate 4 — Native Platform Implementation:**
+
+  - [x] 3.10 iOS: Native scroll centering
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
-    - Verify if SwiftUI already handles layout twitch (may not need fix)
-    - Add positional slide animation if not present
+    **Status**: UNBLOCKED (3.5 complete, 3.7 in progress or pending)
+    **Unblock Criteria**:
+      - Design outline documents iOS approach (ScrollViewReader + scrollTo)
+      - Contracts updated (3.7) or at minimum, contract update is in progress
+    - Replace windowed `ForEach` with full dot rendering
+    - Use `ScrollViewReader` + `scrollTo(anchor: .center)` for centering
+    - Remove `calculateVisibleWindow` calls
+    - Respect reduced motion via `UIAccessibility.isReduceMotionEnabled`
     - _Requirements: 1.1–1.4, 2.1–2.4_
 
-  - [ ] 3.4 Android: Apply scale + slide fixes
+  - [x] 3.11 Android: Native scroll centering
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
-    - Switch from `animateDpAsState` (size) to `graphicsLayer { scaleX/scaleY }` with `animateFloatAsState`
-    - Add positional slide via `graphicsLayer { translationX }` or `Modifier.offset`
+    **Status**: UNBLOCKED (3.5 complete, 3.7 in progress or pending)
+    **Unblock Criteria**:
+      - Design outline documents Android approach (ScrollState + animateScrollTo)
+      - Contracts updated (3.7) or at minimum, contract update is in progress
+    - Replace windowed `Row` with full dot rendering
+    - Use `ScrollState` + `animateScrollTo()` for centering
+    - Remove `calculateVisibleWindow` calls
+    - Respect reduced motion via `Settings.Global.ANIMATOR_DURATION_SCALE`
     - _Requirements: 1.1–1.4, 2.1–2.4_
 
-  - [ ] 3.5 Rebuild bundle and final verification
+  **Parallel opportunity (Gate 4):** 3.10 and 3.11 are independent of each
+  other — different platform files, no shared state. Could be done in parallel
+  if context allows.
+
+  **Gate 5 — Cleanup:**
+
+  - [x] 3.12 Remove `calculateVisibleWindow` from types.ts
+    **Type**: Implementation
+    **Validation**: Tier 1 - Minimal
+    **Agent**: Lina
+    **Status**: COMPLETE
+    - Removed `calculateVisibleWindow` and `PAGINATION_VISIBLE_WINDOW` from types.ts, index.ts
+    - Removed 9 associated unit tests from PaginationBase.test.ts
+    - _Requirements: Code hygiene_
+
+  - [x] 3.13 Update component README and demo page
+    **Type**: Documentation
+    **Validation**: Tier 1 - Minimal
+    **Agent**: Lina
+    **Status**: COMPLETE
+    - README fully rewritten for render-all-dots, fixed lg tokens, added animation docs
+    - Demo page updated — removed virtualization language, fixed lg token values
+    - _Requirements: Documentation accuracy_
+
+  - [x] 3.14 Evaluate `clip-path` 2px magic number
+    **Type**: Implementation
+    **Validation**: Tier 1 - Minimal
+    **Agent**: Lina
+    **Status**: COMPLETE
+    - 2px is stable across sm/md/lg — fixed safety margin, not proportional
+    - Not a token candidate — rendering artifact workaround
+    - Added explanatory code comment
+    - _Requirements: Code quality_
+
+  **Gate 6 — Final Verification:**
+
+  - [x] 3.15 Rebuild bundle and full verification
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    **Agent**: Lina (rebuild) → Thurgood (behavioral audit)
+    **Agent**: Lina (rebuild) → Thurgood (full behavioral audit) → Peter (demo verification)
+    **Status**: BLOCKED
+    **Blocker**: All prior gates
+    **Unblock Criteria**:
+      - All Gate 1–5 tasks complete
+      - All decisions resolved
+      - All platforms implemented
     - Rebuild browser bundle
-    - Run full test suite
-    - Verify demo on all three platforms
+    - Run full test suite — zero failures
+    - Thurgood: full behavioral audit across all platforms
+    - Peter: demo verification on web, iOS, Android
     - _Requirements: 1.1–1.4, 2.1–2.4, 5.1–5.5_
+
+  **Tech Debt (tracked, not gated):**
+
+  - [x] 3.TD Hardcoded JS constants → computed style reading
+    **Type**: Architecture
+    **Validation**: Tier 2 - Standard
+    **Agent**: Lina
+    **Status**: COMPLETE
+    - `getComputedStyle` reads `--progress-node-size-{size}-current`, `--space-grouped-*`, `--space-inset-*`
+    - No fallback values — trusts the token pipeline
+    - JSDOM limitation accepted: centering math returns NaN in tests, validated in browser
+    - _Requirements: Token-code sync integrity_
 
 ---
 
 ## Domain Review Recommendations
 
 After formalization, recommend domain review:
-- **Ada**: Token pipeline fix implementation (1.2, 1.3), motion token semantic correctness, scale token question (Task 3)
-- **Lina**: All animation implementation tasks, DOM refactor approach, platform-specific animation APIs
-- **Thurgood**: Contract update review, test audit at validation gate (2.1), final behavioral audit (2.6, 3.5)
+- **Ada**: Gap token decision follow-through (3.3), split-timing token creation or removal (3.4), token mapping verification (3.TD), clip-path evaluation (3.14)
+- **Lina**: Design outline update (3.5), tasks.md update (3.6), contract implementation (3.7), native platforms (3.10, 3.11), cleanup (3.12–3.14), rebuild (3.15)
+- **Thurgood**: Contract audit (3.7), test failure annotation (3.8), behavioral audits (3.9, 3.15)

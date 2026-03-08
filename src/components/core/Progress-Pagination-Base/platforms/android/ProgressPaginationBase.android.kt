@@ -6,7 +6,8 @@
  * Naming Convention: [Family]-[Type]-[Variant] = Progress-Pagination-Base
  * 
  * Simple pagination indicator composing Node-Base primitives (dots only).
- * Supports virtualization for large item counts (>5 items → sliding window).
+ * Renders all dots in a LazyRow with native scroll centering via
+ * animateScrollToItem(). Viewport clips to ~5 visible.
  * 
  * @module Progress-Pagination-Base/platforms/android
  * @see Requirements: 2.1-2.12, 10.1-10.2, 11.1-11.6
@@ -15,17 +16,25 @@
 
 package com.designerpunk.components.core
 
+import android.provider.Settings
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -38,9 +47,6 @@ import com.designerpunk.tokens.DesignTokens
 
 /** Maximum number of items supported */
 private const val PAGINATION_MAX_ITEMS = 50
-
-/** Maximum visible nodes when virtualized */
-private const val PAGINATION_VISIBLE_WINDOW = 5
 
 private const val TAG = "ProgressPaginationBase"
 
@@ -66,32 +72,6 @@ private fun paginationGap(size: ProgressNodeSize): Dp {
  */
 private fun derivePaginationNodeState(index: Int, currentItem: Int): ProgressNodeState {
     return if (index == currentItem) ProgressNodeState.CURRENT else ProgressNodeState.INCOMPLETE
-}
-
-// MARK: - Virtualization
-
-/**
- * Calculate visible window for virtualized pagination.
- * 
- * @see Requirements 2.4-2.8, 9.1-9.6
- */
-private fun calculateVisibleWindow(currentItem: Int, totalItems: Int): Pair<Int, Int> {
-    if (totalItems <= PAGINATION_VISIBLE_WINDOW) {
-        return Pair(1, totalItems)
-    }
-
-    // Near start: show first 5
-    if (currentItem <= 3) {
-        return Pair(1, 5)
-    }
-
-    // Near end: show last 5
-    if (currentItem >= totalItems - 2) {
-        return Pair(totalItems - 4, totalItems)
-    }
-
-    // Middle: center current at position 3
-    return Pair(currentItem - 2, currentItem + 2)
 }
 
 // MARK: - Progress-Pagination-Base Composable
@@ -145,35 +125,58 @@ fun ProgressPaginationBase(
     // @see Requirement 2.11
     val effectiveCurrentItem = currentItem.coerceIn(1, effectiveTotalItems)
 
-    // Calculate visible window
-    // @see Requirements 2.4-2.8, 9.1-9.6
-    val (windowStart, windowEnd) = calculateVisibleWindow(effectiveCurrentItem, effectiveTotalItems)
-
-    // ARIA label reflects actual position, not virtualized subset
+    // Accessibility label reflects actual position
     // @see Requirements 2.12, 7.1-7.2, 9.7
     val effectiveLabel = accessibilityLabel ?: "Page $effectiveCurrentItem of $effectiveTotalItems"
 
-    val containerPadding = if (size == ProgressNodeSize.LG) DesignTokens.space_inset_100 else DesignTokens.space_inset_075
+    // Viewport width: maxVisible dots + gaps + padding
+    val maxVisible = minOf(effectiveTotalItems, 5)
+    val stride = size.current
+    val gap = paginationGap(size)
+    val hPad = if (size == ProgressNodeSize.LG) DesignTokens.space_inset_150 else DesignTokens.space_inset_100
+    val vPad = if (size == ProgressNodeSize.LG) DesignTokens.space_inset_100 else DesignTokens.space_inset_075
+    val viewportWidth = (stride * maxVisible) + (gap * (maxVisible - 1)) + (hPad * 2)
 
-    val rowModifier = modifier
-        .then(if (testTag != null) Modifier.testTag(testTag) else Modifier)
-        .semantics {
-            contentDescription = effectiveLabel
+    // Reduced motion check
+    val context = LocalContext.current
+    val reduceMotion = remember {
+        Settings.Global.getFloat(
+            context.contentResolver,
+            Settings.Global.TRANSITION_ANIMATION_SCALE,
+            1f
+        ) == 0f
+    }
+
+    val listState = rememberLazyListState()
+
+    // Scroll to center current dot
+    LaunchedEffect(effectiveCurrentItem) {
+        val targetIndex = effectiveCurrentItem - 1
+        if (reduceMotion) {
+            listState.scrollToItem(targetIndex)
+        } else {
+            listState.animateScrollToItem(targetIndex)
         }
-        .background(
-            color = DesignTokens.color_scrim_standard,
-            shape = RoundedCornerShape(percent = 50)
-        )
-        .padding(containerPadding)
+    }
 
-    Row(
-        modifier = rowModifier,
-        horizontalArrangement = Arrangement.spacedBy(paginationGap(size)),
-        verticalAlignment = Alignment.CenterVertically
+    val pillShape = RoundedCornerShape(percent = 50)
+
+    LazyRow(
+        modifier = modifier
+            .then(if (testTag != null) Modifier.testTag(testTag) else Modifier)
+            .semantics { contentDescription = effectiveLabel }
+            .width(viewportWidth)
+            .background(color = DesignTokens.color_scrim_standard, shape = pillShape)
+            .clip(pillShape),
+        state = listState,
+        horizontalArrangement = Arrangement.spacedBy(gap),
+        verticalAlignment = Alignment.CenterVertically,
+        contentPadding = PaddingValues(horizontal = hPad, vertical = vPad),
+        userScrollEnabled = false
     ) {
-        for (i in windowStart..windowEnd) {
+        items(effectiveTotalItems) { index ->
             ProgressIndicatorNodeBase(
-                state = derivePaginationNodeState(i, effectiveCurrentItem),
+                state = derivePaginationNodeState(index + 1, effectiveCurrentItem),
                 size = size,
                 content = ProgressNodeContent.NONE
             )
@@ -196,7 +199,7 @@ fun ProgressPaginationBasePreview() {
         Text(text = "5 items, current=3, sm")
         ProgressPaginationBase(totalItems = 5, currentItem = 3, size = ProgressNodeSize.SM)
 
-        // Virtualized pagination (20 items)
+        // Scroll centering (20 items)
         Text(text = "20 items, current=10, md")
         ProgressPaginationBase(totalItems = 20, currentItem = 10, size = ProgressNodeSize.MD)
 

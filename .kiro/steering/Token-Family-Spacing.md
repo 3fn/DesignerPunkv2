@@ -410,7 +410,7 @@ Current sizes use formula-based values: `SPACING_BASE_VALUE × multiplier`. This
 
 #### Gap Tokens (3 tokens)
 
-Gap tokens define spacing between nodes in pagination/steppers.
+Gap tokens define spacing between nodes in **stepper** layouts (nodes with connectors and labels). Pagination dots use semantic `space.grouped.*` tokens directly (`space.grouped.tight` for sm/md, `space.grouped.normal` for lg) — their tighter spacing reflects the grouped-element relationship without connectors.
 
 | Token Name | Reference | Value | Use Case |
 |------------|-----------|-------|----------|

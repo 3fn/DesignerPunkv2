@@ -6,7 +6,7 @@
  * Naming Convention: [Family]-[Type]-[Variant] = Progress-Pagination-Base
  * 
  * Simple pagination indicator composing Node-Base primitives (dots only).
- * Supports virtualization for large item counts (>5 items → sliding window).
+ * Renders all dots with a fixed-width viewport and translateX track centering.
  * 
  * @module Progress-Pagination-Base/platforms/web
  * @see Requirements: 2.1-2.12, 10.1-10.2, 11.1-11.6
@@ -20,7 +20,6 @@ import {
   PAGINATION_BASE_DEFAULTS,
   PAGINATION_MAX_ITEMS,
   derivePaginationNodeState,
-  calculateVisibleWindow,
   clampCurrentItem,
 } from '../../types';
 
@@ -37,7 +36,7 @@ import paginationStyles from './ProgressPaginationBase.styles.css';
  * - Uses Shadow DOM for style encapsulation
  * - Composes Node-Base primitives (no connectors, no labels)
  * - All nodes use content='none' (dots only)
- * - Virtualizes when totalItems > 5 (sliding window of 5)
+ * - Renders all dots; fixed-width viewport with translateX centering
  * - ARIA: role="group" with aria-label reflecting actual position
  * - Validates totalItems ≤ 50 (dev throw, production warn+clamp)
  * 
@@ -51,9 +50,9 @@ import paginationStyles from './ProgressPaginationBase.styles.css';
 export class ProgressPaginationBase extends HTMLElement {
   private _shadowRoot: ShadowRoot;
   private _container: HTMLDivElement | null = null;
+  private _track: HTMLDivElement | null = null;
   private _nodes: HTMLElement[] = [];
   private _initialized = false;
-  private _prevWindowStart = -1;
 
   static get observedAttributes(): string[] {
     return ['total-items', 'current-item', 'size', 'accessibility-label', 'test-id'];
@@ -164,23 +163,23 @@ export class ProgressPaginationBase extends HTMLElement {
     this._container = document.createElement('div');
     this._container.setAttribute('role', 'group');
     this._shadowRoot.appendChild(this._container);
+
+    this._track = document.createElement('div');
+    this._track.className = 'pagination__track';
+    this._container.appendChild(this._track);
   }
 
   /**
-   * Incremental render: update container attributes and node elements.
+   * Incremental render: update container and node elements.
    * 
-   * Rendering logic:
-   * 1. Validate totalItems (dev throw, production warn+clamp)
-   * 2. Clamp currentItem to valid range
-   * 3. Calculate visible window (virtualization if >5 items)
-   * 4. Sync node element count to match visible window size
-   * 5. Update node attributes (state, size, content)
-   * 6. Update container class and ARIA label
+   * Renders all dots (up to 50). The track is translated so the
+   * current dot is centered in the fixed-width viewport, clamped
+   * at the edges to avoid empty space.
    * 
    * @see Requirements 2.1-2.12, 10.1-10.2, 11.1-11.6
    */
   private _render(): void {
-    if (!this._container) return;
+    if (!this._container || !this._track) return;
 
     let totalItems = this.totalItems;
     const size = this.size;
@@ -206,57 +205,64 @@ export class ProgressPaginationBase extends HTMLElement {
     }
 
     const currentItem = clampCurrentItem(this.currentItem, totalItems);
-    const window = calculateVisibleWindow(currentItem, totalItems);
-    const visibleCount = window.end - window.start + 1;
 
-    // Sync node count
-    while (this._nodes.length < visibleCount) {
+    // Render all dots
+    while (this._nodes.length < totalItems) {
       const node = document.createElement('progress-indicator-node-base');
-      this._container.appendChild(node);
+      this._track.appendChild(node);
       this._nodes.push(node);
     }
-    while (this._nodes.length > visibleCount) {
+    while (this._nodes.length > totalItems) {
       const node = this._nodes.pop()!;
-      this._container.removeChild(node);
+      this._track.removeChild(node);
     }
 
     // Update node attributes
-    for (let i = 0; i < visibleCount; i++) {
-      const itemIndex = window.start + i;
-      const state = derivePaginationNodeState(itemIndex, currentItem);
+    for (let i = 0; i < totalItems; i++) {
+      const itemIndex = i + 1;
       const node = this._nodes[i];
-      node.setAttribute('state', state);
+      node.setAttribute('state', derivePaginationNodeState(itemIndex, currentItem));
       node.setAttribute('size', size);
       node.setAttribute('content', 'none');
       node.setAttribute('sizing', 'scale');
     }
 
-    // Slide animation on window shift
-    const shift = this._prevWindowStart >= 0 ? window.start - this._prevWindowStart : 0;
-    this._prevWindowStart = window.start;
+    // Read sizing constants from CSS custom properties (token-driven)
+    const cs = getComputedStyle(this);
+    const stride = parseFloat(cs.getPropertyValue(`--progress-node-size-${size}-current`));
+    const gap = parseFloat(cs.getPropertyValue(size === 'lg' ? '--space-grouped-normal' : '--space-grouped-tight'));
+    const padding = parseFloat(cs.getPropertyValue(size === 'lg' ? '--space-inset-150' : '--space-inset-100'));
 
-    if (shift !== 0 && typeof globalThis.matchMedia === 'function' &&
-        !globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const stride = size === 'lg' ? 32 : size === 'md' ? 24 : 20;
-      const offset = shift * stride;
+    // Viewport shows max 5 dots
+    const maxVisible = Math.min(totalItems, 5);
+    const contentWidth = (maxVisible * stride) + ((maxVisible - 1) * gap);
+    this._container.style.width = `${contentWidth + (padding * 2)}px`;
+    this._container.style.boxSizing = 'border-box';
 
-      for (const node of this._nodes) {
-        node.style.transition = 'none';
-        node.style.transform = `translateX(${offset}px)`;
-      }
+    // Center the current dot via translateX on the track, clamped at edges
+    const trackWidth = (totalItems * stride) + ((totalItems - 1) * gap);
+    const activeCenter = ((currentItem - 1) * (stride + gap)) + (stride / 2);
+    let targetX = (contentWidth / 2) - activeCenter;
 
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          for (const node of this._nodes) {
-            node.style.transition = `transform var(--motion-selection-transition-duration) var(--motion-selection-transition-easing)`;
-            node.style.transform = '';
-          }
-        });
-      });
+    // Clamp: track can't go past start or end
+    const minX = contentWidth - trackWidth;
+    targetX = Math.min(0, Math.max(minX, targetX));
+
+    const isInitial = !this._container.dataset.rendered;
+    const reduceMotion = typeof globalThis.matchMedia === 'function' &&
+      globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (isInitial || reduceMotion) {
+      this._track.style.transition = 'none';
+    } else {
+      this._track.style.transition = 'transform var(--motion-settle-transition-duration) var(--motion-settle-transition-easing)';
     }
+    this._track.style.transform = `translateX(${targetX}px)`;
+    this._container.dataset.rendered = '1';
 
     // Update container
     this._container.className = `pagination pagination--${size}`;
+
     const ariaLabel = this.accessibilityLabel || `Page ${currentItem} of ${totalItems}`;
     this._container.setAttribute('aria-label', this.escapeHtml(ariaLabel));
 

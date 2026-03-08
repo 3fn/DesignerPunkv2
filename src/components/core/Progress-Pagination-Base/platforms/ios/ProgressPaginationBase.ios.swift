@@ -6,7 +6,8 @@
  * Naming Convention: [Family]-[Type]-[Variant] = Progress-Pagination-Base
  * 
  * Simple pagination indicator composing Node-Base primitives (dots only).
- * Supports virtualization for large item counts (>5 items → sliding window).
+ * Renders all dots in a ScrollView with native scroll centering via
+ * ScrollViewReader + scrollTo(anchor: .center). Viewport clips to ~5 visible.
  * 
  * @module Progress-Pagination-Base/platforms/ios
  * @see Requirements: 2.1-2.12, 10.1-10.2, 11.1-11.6
@@ -20,10 +21,6 @@ import SwiftUI
 /// Maximum number of items supported
 /// @see Requirement 2.9
 private let paginationMaxItems = 50
-
-/// Maximum visible nodes when virtualized
-/// @see Requirements 2.4-2.8
-private let paginationVisibleWindow = 5
 
 // MARK: - Gap Token Values
 
@@ -49,32 +46,6 @@ private enum PaginationGap {
  */
 private func derivePaginationNodeState(index: Int, currentItem: Int) -> ProgressNodeState {
     return index == currentItem ? .current : .incomplete
-}
-
-// MARK: - Virtualization
-
-/**
- * Calculate visible window for virtualized pagination.
- * 
- * @see Requirements 2.4-2.8, 9.1-9.6
- */
-private func calculateVisibleWindow(currentItem: Int, totalItems: Int) -> (start: Int, end: Int) {
-    if totalItems <= paginationVisibleWindow {
-        return (start: 1, end: totalItems)
-    }
-
-    // Near start: show first 5
-    if currentItem <= 3 {
-        return (start: 1, end: 5)
-    }
-
-    // Near end: show last 5
-    if currentItem >= totalItems - 2 {
-        return (start: totalItems - 4, end: totalItems)
-    }
-
-    // Middle: center current at position 3
-    return (start: currentItem - 2, end: currentItem + 2)
 }
 
 // MARK: - Progress-Pagination-Base View
@@ -141,12 +112,12 @@ public struct ProgressPaginationBase: View {
 
     // MARK: - Computed Properties
 
-    /// Visible window for virtualization
-    private var visibleWindow: (start: Int, end: Int) {
-        calculateVisibleWindow(currentItem: currentItem, totalItems: totalItems)
+    /// Maximum visible dots in the viewport (matches web)
+    private var maxVisible: Int {
+        min(totalItems, 5)
     }
 
-    /// ARIA label reflecting actual position (not virtualized subset)
+    /// Accessibility label reflecting actual position
     /// @see Requirements 2.12, 7.1-7.2, 9.7
     private var effectiveAccessibilityLabel: String {
         accessibilityLabel ?? "Page \(currentItem) of \(totalItems)"
@@ -155,26 +126,55 @@ public struct ProgressPaginationBase: View {
     // MARK: - Body
 
     public var body: some View {
-        let animation: Animation? = UIAccessibility.isReduceMotionEnabled
+        let reduceMotion = UIAccessibility.isReduceMotionEnabled
+        let stateAnimation: Animation? = reduceMotion
             ? nil
             : .easeInOut(duration: DesignTokens.MotionSelectionTransition.duration)
 
-        HStack(spacing: PaginationGap.value(for: size)) {
-            ForEach(visibleWindow.start...visibleWindow.end, id: \.self) { index in
-                ProgressIndicatorNodeBase(
-                    state: derivePaginationNodeState(index: index, currentItem: currentItem),
-                    size: size,
-                    content: .none
-                )
+        ScrollViewReader { proxy in
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: PaginationGap.value(for: size)) {
+                    ForEach(1...totalItems, id: \.self) { index in
+                        ProgressIndicatorNodeBase(
+                            state: derivePaginationNodeState(index: index, currentItem: currentItem),
+                            size: size,
+                            content: .none
+                        )
+                        .id(index)
+                    }
+                }
+                .padding(.vertical, size == .lg ? DesignTokens.spaceInset100 : DesignTokens.spaceInset075)
+                .padding(.horizontal, size == .lg ? DesignTokens.spaceInset150 : DesignTokens.spaceInset100)
+            }
+            .scrollDisabled(true)
+            .onChange(of: currentItem) { newValue in
+                if reduceMotion {
+                    proxy.scrollTo(newValue, anchor: .center)
+                } else {
+                    withAnimation(.easeOut(duration: DesignTokens.MotionSettleTransition.duration)) {
+                        proxy.scrollTo(newValue, anchor: .center)
+                    }
+                }
+            }
+            .onAppear {
+                proxy.scrollTo(currentItem, anchor: .center)
             }
         }
-        .padding(size == .lg ? DesignTokens.spaceInset100 : DesignTokens.spaceInset075)
+        .frame(width: viewportWidth)
         .background(DesignTokens.colorScrimStandard)
         .clipShape(Capsule())
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(effectiveAccessibilityLabel)
         .accessibilityIdentifier(testID ?? "")
-        .animation(animation, value: currentItem)
+        .animation(stateAnimation, value: currentItem)
+    }
+
+    /// Fixed viewport width based on maxVisible dots + gaps + padding
+    private var viewportWidth: CGFloat {
+        let stride = size.currentSize
+        let gap = PaginationGap.value(for: size)
+        let hPad = size == .lg ? DesignTokens.spaceInset150 : DesignTokens.spaceInset100
+        return CGFloat(maxVisible) * stride + CGFloat(maxVisible - 1) * gap + 2 * hPad
     }
 }
 
@@ -192,7 +192,7 @@ struct ProgressPaginationBase_Previews: PreviewProvider {
                     .font(.subheadline)
                 ProgressPaginationBase(totalItems: 5, currentItem: 3, size: .sm)
 
-                // Virtualized pagination (20 items)
+                // Scroll centering (20 items)
                 Text("20 items, current=10, md")
                     .font(.subheadline)
                 ProgressPaginationBase(totalItems: 20, currentItem: 10, size: .md)

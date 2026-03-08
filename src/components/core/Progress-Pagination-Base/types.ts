@@ -38,13 +38,6 @@ export const PAGINATION_BASE_DEFAULTS = {
 export const PAGINATION_MAX_ITEMS = 50;
 
 /**
- * Maximum number of visible nodes when virtualization is active.
- * 
- * @see Requirements 2.4-2.8 - Sliding window algorithm
- */
-export const PAGINATION_VISIBLE_WINDOW = 5;
-
-/**
  * Props interface for Progress-Pagination-Base component (platform-agnostic).
  * 
  * This interface defines the common API across all platforms (web, iOS, Android).
@@ -107,38 +100,6 @@ export interface ProgressPaginationBaseProps {
  */
 export function derivePaginationNodeState(index: number, currentItem: number): NodeState {
   return index === currentItem ? 'current' : 'incomplete';
-}
-
-/**
- * Calculate the visible window for virtualized pagination.
- * 
- * When totalItems > 5, only 5 nodes are rendered using a sliding window:
- * - Pages 1-3: show nodes 1-5
- * - Pages 4 to (totalItems - 3): center current at position 3
- * - Last 3 pages: show last 5 nodes
- * 
- * @see Requirements 2.4-2.8, 9.1-9.6
- */
-export function calculateVisibleWindow(
-  currentItem: number,
-  totalItems: number
-): { start: number; end: number } {
-  if (totalItems <= PAGINATION_VISIBLE_WINDOW) {
-    return { start: 1, end: totalItems };
-  }
-
-  // Near start: show first 5
-  if (currentItem <= 3) {
-    return { start: 1, end: 5 };
-  }
-
-  // Near end: show last 5
-  if (currentItem >= totalItems - 2) {
-    return { start: totalItems - 4, end: totalItems };
-  }
-
-  // Middle: center current at position 3
-  return { start: currentItem - 2, end: currentItem + 2 };
 }
 
 /**

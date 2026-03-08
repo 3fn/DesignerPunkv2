@@ -157,31 +157,31 @@ describe('Progress Indicator Family — Platform Parity', () => {
       platforms = loadAllPlatforms('Progress-Pagination-Base');
     });
 
-    it('web and iOS render same node count (via identical virtualization logic)', () => {
+    it('web and iOS render same node count (render-all-dots architecture)', () => {
       const web = platforms.find(p => p.platform === 'web')!;
       const ios = platforms.find(p => p.platform === 'ios')!;
 
-      // All platforms compose Node-Base primitives in a loop over the visible window
-      // Web: for (let i = window.start; i <= window.end; i++)
-      // iOS: ForEach(visibleWindow.start...visibleWindow.end, id: \.self)
+      // All platforms compose Node-Base primitives for every item (render-all-dots)
       expect(web.content).toContain('progress-indicator-node-base');
       expect(ios.content).toContain('ProgressIndicatorNodeBase');
 
-      // Both use the same virtualization constants
-      expect(web.content).toContain('calculateVisibleWindow');
-      expect(ios.content).toContain('calculateVisibleWindow');
+      // Neither platform's own implementation uses windowed rendering
+      const webImpl = fs.readFileSync(web.filePath, 'utf-8');
+      expect(webImpl).not.toContain('calculateVisibleWindow');
+      expect(ios.content).not.toContain('calculateVisibleWindow');
     });
 
-    it('web and Android render same node count (via identical virtualization logic)', () => {
+    it('web and Android render same node count (render-all-dots architecture)', () => {
       const web = platforms.find(p => p.platform === 'web')!;
       const android = platforms.find(p => p.platform === 'android')!;
 
       expect(web.content).toContain('progress-indicator-node-base');
       expect(android.content).toContain('ProgressIndicatorNodeBase');
 
-      // Both use the same virtualization constants
-      expect(web.content).toContain('calculateVisibleWindow');
-      expect(android.content).toContain('calculateVisibleWindow');
+      // Neither platform uses windowed rendering
+      const webImpl = fs.readFileSync(web.filePath, 'utf-8');
+      expect(webImpl).not.toContain('calculateVisibleWindow');
+      expect(android.content).not.toContain('calculateVisibleWindow');
     });
 
     it('all platforms use same max items limit (50)', () => {

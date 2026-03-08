@@ -19,7 +19,7 @@ It renders dots only — no connectors, no labels. State derivation is binary: t
 - All nodes use `content='none'` (dots only)
 - Binary state: `current` or `incomplete`
 - 3 sizes: `sm`, `md`, `lg`
-- Virtualization: when `totalItems > 5`, a sliding window renders only 5 visible nodes
+- Render-all-dots: all items rendered, viewport clips to ~5 visible with animated centering
 - Max 50 items (dev: throws, production: warns and clamps)
 - Non-interactive — navigation is handled by the parent flow
 - Accessibility: `role="group"` with `aria-label` reflecting actual position
@@ -41,11 +41,8 @@ It renders dots only — no connectors, no labels. State derivation is binary: t
 <!-- Basic: 5 items, current is 3 -->
 <progress-pagination-base total-items="5" current-item="3" size="sm"></progress-pagination-base>
 
-<!-- Virtualized: 20 items, only 5 dots visible -->
+<!-- Large set: 20 items, viewport clips to ~5 visible dots -->
 <progress-pagination-base total-items="20" current-item="10" size="md"></progress-pagination-base>
-
-<!-- Large size -->
-<progress-pagination-base total-items="8" current-item="4" size="lg"></progress-pagination-base>
 
 <!-- Custom accessibility label -->
 <progress-pagination-base
@@ -61,11 +58,8 @@ It renders dots only — no connectors, no labels. State derivation is binary: t
 // Basic: 5 items, current is 3, small dots
 ProgressPaginationBase(totalItems: 5, currentItem: 3, size: .sm)
 
-// Virtualized: 20 items, only 5 dots visible
+// Large set: 20 items, scroll centers current dot
 ProgressPaginationBase(totalItems: 20, currentItem: 10, size: .md)
-
-// Large size
-ProgressPaginationBase(totalItems: 8, currentItem: 4, size: .lg)
 
 // Custom accessibility label
 ProgressPaginationBase(
@@ -81,11 +75,8 @@ ProgressPaginationBase(
 // Basic: 5 items, current is 3, small dots
 ProgressPaginationBase(totalItems = 5, currentItem = 3, size = ProgressNodeSize.SM)
 
-// Virtualized: 20 items, only 5 dots visible
+// Large set: 20 items, scroll centers current dot
 ProgressPaginationBase(totalItems = 20, currentItem = 10, size = ProgressNodeSize.MD)
-
-// Large size
-ProgressPaginationBase(totalItems = 8, currentItem = 4, size = ProgressNodeSize.LG)
 
 // Custom accessibility label
 ProgressPaginationBase(
@@ -112,7 +103,6 @@ ProgressPaginationBase(
 | Constant | Value | Description |
 |----------|-------|-------------|
 | `PAGINATION_MAX_ITEMS` | 50 | Maximum supported items |
-| `PAGINATION_VISIBLE_WINDOW` | 5 | Max visible nodes when virtualized |
 
 ### Validation Behavior
 
@@ -127,7 +117,6 @@ ProgressPaginationBase(
 | Function | Signature | Description |
 |----------|-----------|-------------|
 | `derivePaginationNodeState` | `(index, currentItem) → NodeState` | Returns `'current'` if index matches, `'incomplete'` otherwise |
-| `calculateVisibleWindow` | `(currentItem, totalItems) → { start, end }` | Computes the 1-indexed visible window range |
 | `clampCurrentItem` | `(currentItem, totalItems) → number` | Clamps to valid range [1, totalItems] |
 
 ---
@@ -138,7 +127,7 @@ Progress-Pagination-Base composes a single primitive:
 
 | Primitive | Usage | Props Passed |
 |-----------|-------|--------------|
-| [Node-Base](../Progress-Indicator-Node-Base/README.md) | One per visible item | `state` (current/incomplete), `size`, `content="none"` |
+| [Node-Base](../Progress-Indicator-Node-Base/README.md) | One per item | `state` (current/incomplete), `size`, `content="none"` |
 
 **Not composed:**
 - Connector-Base — pagination uses dots without connecting lines
@@ -148,43 +137,42 @@ Progress-Pagination-Base composes a single primitive:
 
 ```
 Progress-Pagination-Base
-└── Node-Base × N (where N = min(totalItems, 5))
-    ├── state = derivePaginationNodeState(index, currentItem)
-    ├── size = props.size
-    └── content = "none" (always dots)
+├── viewport (fixed width, overflow clipped, pill shape)
+└── track (all dots, centered via platform-native scrolling)
+    └── Node-Base × totalItems
+        ├── state = derivePaginationNodeState(index, currentItem)
+        ├── size = props.size
+        └── content = "none" (always dots)
 ```
 
 ---
 
-## Virtualization
+## Rendering Architecture
 
-When `totalItems > 5`, only 5 nodes are rendered using a sliding window algorithm. The window position depends on `currentItem`:
+All `totalItems` dots are rendered in the DOM. A fixed-width viewport clips to ~5 visible dots. The current dot is centered by translating the track (web) or native scroll centering (iOS/Android), clamped at edges to prevent overscroll.
 
-| Current Item Position | Visible Window | Example (50 items) |
-|-----------------------|----------------|---------------------|
-| Pages 1–3 (near start) | Nodes 1–5 | current=2 → show 1,2,3,4,5 |
-| Pages 4 to (total−3) (middle) | current ±2 (centered) | current=26 → show 24,25,26,27,28 |
-| Last 3 pages (near end) | Last 5 nodes | current=49 → show 46,47,48,49,50 |
+### Viewport Behavior
 
-### Window Behavior
+| Condition | Behavior |
+|-----------|----------|
+| `totalItems ≤ 5` | All dots visible, no clipping needed |
+| `totalItems > 5` | Viewport clips to ~5 visible, track centers current dot |
+| Current near start | First dot at left edge (no overscroll) |
+| Current near end | Last dot at right edge (no overscroll) |
 
-- Window shifts are animated — nodes transition size and color using `motion.selectionTransition` (250ms, easingStandard)
-- Animation is disabled when `prefers-reduced-motion: reduce` is active (web), `UIAccessibility.isReduceMotionEnabled` is true (iOS), or `TRANSITION_ANIMATION_SCALE` is 0 (Android)
-- Exactly 5 nodes are always visible when `totalItems > 5`
-- When `totalItems ≤ 5`, all nodes render (no virtualization)
-- ARIA label always reflects actual position (e.g., "Page 26 of 50"), not the visible subset
+### Animation
 
-### Edge Cases
+State transitions and track centering use split timing for a polished feel:
 
-| Page | totalItems | Window |
-|------|------------|--------|
-| 1 | 50 | 1–5 |
-| 3 | 50 | 1–5 |
-| 4 | 50 | 2–6 |
-| 26 | 50 | 24–28 |
-| 47 | 50 | 45–49 |
-| 48 | 50 | 46–50 |
-| 50 | 50 | 46–50 |
+| Animation | Token | Duration | Easing | Description |
+|-----------|-------|----------|--------|-------------|
+| Dot scale | `motion.selectionTransition` | 250ms | easingStandard | Snappy state change |
+| Dot color | `motion.settleTransition` | 350ms | easingDecelerate | Smooth follow-through |
+| Track slide | `motion.settleTransition` | 350ms | easingDecelerate | Smooth follow-through |
+
+- First render snaps to position without animation
+- Animation disabled when reduced motion preference is active
+- ARIA announcements update immediately, never delayed by animation
 
 ---
 
@@ -196,10 +184,10 @@ When `totalItems > 5`, only 5 nodes are rendered using a sliding window algorith
 |-------|-------|-------|
 | `progress.node.size.sm` | 12px | Small node base size |
 | `progress.node.size.md` | 16px | Medium node base size |
-| `progress.node.size.lg` | 24px | Large node base size |
+| `progress.node.size.lg` | 20px | Large node base size |
 | `progress.node.size.sm.current` | 16px | Small current emphasis (+4px) |
 | `progress.node.size.md.current` | 20px | Medium current emphasis (+4px) |
-| `progress.node.size.lg.current` | 28px | Large current emphasis (+4px) |
+| `progress.node.size.lg.current` | 24px | Large current emphasis (+4px) |
 
 ### Component Gap Tokens (`space.grouped.*`)
 
@@ -208,14 +196,22 @@ When `totalItems > 5`, only 5 nodes are rendered using a sliding window algorith
 | `space.grouped.tight` | 4px | `space050` | Gap between sm/md nodes |
 | `space.grouped.normal` | 8px | `space100` | Gap between lg nodes |
 
-### Container Tokens (Spec 072)
+### Container Tokens
 
 | Token | Value | Primitive | Usage |
 |-------|-------|-----------|-------|
 | `color.scrim.standard` | rgba(0,0,0,0.80) | `black500` @ `opacity080` | Container background |
 | `radius.full` | 9999px | `radiusMax` | Pill shape (Capsule) |
-| `space.inset.075` | 6px | `space075` | Container padding (sm/md) |
-| `space.inset.100` | 8px | `space100` | Container padding (lg) |
+| `space.inset.075` | 6px | `space075` | Block padding (sm/md) |
+| `space.inset.100` | 8px | `space100` | Block padding (lg), inline padding (sm/md) |
+| `space.inset.150` | 12px | `space150` | Inline padding (lg) |
+
+### Motion Tokens
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `motion.selectionTransition` | 250ms / easingStandard | Dot scale animation |
+| `motion.settleTransition` | 350ms / easingDecelerate | Dot color + track slide animation |
 
 ### Semantic Color Tokens (via Node-Base)
 
@@ -225,10 +221,6 @@ Color tokens are applied by the Node-Base primitive, not directly by Pagination-
 |-------|-----------|-------|
 | `color.progress.current.background` | `cyan300` | Current node |
 | `color.progress.pending.background` | `white300` | Incomplete nodes |
-
-**Token source files:**
-- Semantic: `src/tokens/semantic/color-progress.ts`
-- Component: `src/tokens/component/progress.ts`
 
 ---
 
@@ -244,16 +236,17 @@ Color tokens are applied by the Node-Base primitive, not directly by Pagination-
 
 ### Key Accessibility Behaviors
 
-- ARIA label always reflects actual position, not the virtualized visible subset
-- When virtualized, "Page 26 of 50" is announced — not "Page 3 of 5"
+- ARIA label always reflects actual position (e.g., "Page 26 of 50")
 - Custom `accessibilityLabel` prop overrides the default label
 - Current node has non-color differentiation via +4px size emphasis
+- Animation disabled when reduced motion preference is active
 
 ### WCAG 2.1 AA Compliance
 
 - **1.3.1 Info and Relationships**: `role="group"` with descriptive `aria-label`
 - **1.4.11 Non-text Contrast**: Current node size emphasis provides non-color differentiation
-- **4.1.2 Name, Role, Value**: `aria-label` reflects actual position, not virtualized subset
+- **2.3.3 Animation from Interactions**: Respects reduced motion preferences on all platforms
+- **4.1.2 Name, Role, Value**: `aria-label` reflects actual position
 
 ---
 
@@ -261,27 +254,28 @@ Color tokens are applied by the Node-Base primitive, not directly by Pagination-
 
 ### Web
 - Custom Element: `<progress-pagination-base>`
-- Shadow DOM for style encapsulation
-- CSS custom properties for token references (no fallback values)
-- Container: scrim background, pill shape, size-variant padding and gap
+- Shadow DOM with `.pagination` (viewport) → `.pagination__track` (flex container) → Node-Base elements
+- Track centering via `translateX`, CSS transition on transform
+- `overflow: hidden` + `clip-path: inset(0 2px round var(--radius-full))` clips to pill shape
+- Split padding: `padding-inline` one tier larger than `padding-block` for pill curve clearance
+- `box-sizing: border-box` so width includes padding
 - Attributes use kebab-case: `total-items`, `current-item`, `accessibility-label`, `test-id`
-- Composes `<progress-indicator-node-base>` elements in shadow DOM
 
 ### iOS
 - SwiftUI `View` struct: `ProgressPaginationBase`
-- Uses `HStack` with `spacing` from semantic gap tokens
-- Container: `.padding()` → `.background(colorScrimStandard)` → `.clipShape(Capsule())`
-- Composes `ProgressIndicatorNodeBase` views via `ForEach`
+- `ScrollViewReader` + `scrollTo(id, anchor: .center)` for native centering
+- `ScrollView(.horizontal)` with `.scrollDisabled(true)` (programmatic scroll only)
+- Container: `.background(colorScrimStandard)` → `.clipShape(Capsule())`
+- Split padding: `.padding(.horizontal)` one tier larger than `.padding(.vertical)`
 - Accessibility: `.accessibilityElement(children: .ignore)` with `.accessibilityLabel`
-- Debug builds use `assertionFailure` for validation errors
 
 ### Android
 - Jetpack Compose `@Composable` function: `ProgressPaginationBase`
-- Uses `Row` with `Arrangement.spacedBy` from semantic gap tokens
-- Container: `.background(color_scrim_standard, RoundedCornerShape(50%))` → `.padding()`
-- Composes `ProgressIndicatorNodeBase` composables in a loop
+- `LazyRow` with `rememberLazyListState()` + `animateScrollToItem()` for native centering
+- `userScrollEnabled = false` (programmatic scroll only)
+- Container: `.background(color_scrim_standard, RoundedCornerShape(50%))` → `.clip()`
+- Split padding via `PaddingValues(horizontal, vertical)`
 - Accessibility: `semantics { contentDescription = ... }`
-- Debug builds throw `IllegalArgumentException` for validation errors
 
 ---
 
@@ -294,4 +288,3 @@ Color tokens are applied by the Node-Base primitive, not directly by Pagination-
 - [Stepper-Detailed](../Progress-Stepper-Detailed/README.md) — Semantic variant: nodes + connectors + labels
 - [Spec Requirements](/.kiro/specs/048-progress-family/requirements.md) — Requirements 2.1–2.12, 7.1–7.2, 8.1–8.3, 9.1–9.7, 10.1–10.2, 11.1–11.6
 - [Spec Design](/.kiro/specs/048-progress-family/design.md) — Design specification
-- [Design Outline](/.kiro/specs/048-progress-family/design-outline.md) — Original design outline

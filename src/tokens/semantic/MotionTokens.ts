@@ -97,6 +97,16 @@ export const motionTokens: Record<string, SemanticMotionToken> = {
     category: SemanticCategory.INTERACTION,
     context: 'Selection state transitions for selectable elements',
     description: 'Standard motion for selection state changes with balanced easing (250ms, standard curve). Used when selectable elements (buttons, list items, checkboxes) transition between selected/unselected states, providing smooth visual feedback for user selections.'
+  },
+  'motion.settleTransition': {
+    name: 'motion.settleTransition',
+    primitiveReferences: {
+      duration: 'duration350',
+      easing: 'easingDecelerate'
+    },
+    category: SemanticCategory.INTERACTION,
+    context: 'Follow-through transitions that settle after a state change',
+    description: 'Deliberate follow-through motion with decelerate easing (350ms, decelerate curve). Used for color fades and positional slides that accompany a faster state-change snap, creating a natural settling effect.'
   }
 };
 

@@ -70,7 +70,7 @@ enum class ProgressNodeState {
 /**
  * Size variants for the progress indicator node.
  * 
- * @see Requirement 1.2 - Three sizes: sm (12dp), md (16dp), lg (24dp)
+ * @see Requirement 1.2 - Three sizes: sm (12dp), md (16dp), lg (20dp)
  * @see Requirement 1.5 - Current state applies +4dp emphasis
  */
 enum class ProgressNodeSize {
@@ -83,7 +83,7 @@ enum class ProgressNodeSize {
         get() = when (this) {
             SM -> DesignTokens.space_150  // progress.node.size.sm = 12
             MD -> DesignTokens.space_200  // progress.node.size.md = 16
-            LG -> DesignTokens.space_300  // progress.node.size.lg = 24
+            LG -> DesignTokens.space_250  // progress.node.size.lg = 20
         }
 
     /// Current (emphasized) size (+4 emphasis)
@@ -91,7 +91,7 @@ enum class ProgressNodeSize {
         get() = when (this) {
             SM -> DesignTokens.space_200  // progress.node.size.sm.current = 16 (space200)
             MD -> DesignTokens.space_250  // progress.node.size.md.current = 20 (space250)
-            LG -> DesignTokens.space_300 + DesignTokens.space_050  // progress.node.size.lg.current = 28 (space300 + space050)
+            LG -> DesignTokens.space_300  // progress.node.size.lg.current = 24 (space300)
         }
 
     /// Base size in Dp

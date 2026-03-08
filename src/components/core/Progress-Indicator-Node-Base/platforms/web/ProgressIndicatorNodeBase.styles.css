@@ -111,7 +111,7 @@
 
 :host([sizing="scale"]) .node {
   transition: transform var(--motion-selection-transition-duration) var(--motion-selection-transition-easing),
-              background-color var(--motion-selection-transition-duration) var(--motion-selection-transition-easing);
+              background-color var(--motion-settle-transition-duration) var(--motion-settle-transition-easing);
 }
 
 :host([sizing="scale"]) .node--sm {

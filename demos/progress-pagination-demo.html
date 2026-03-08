@@ -65,7 +65,7 @@
   <header class="demo-header">
     <a href="index.html" class="demo-back-link">← All Components</a>
     <h1>📄 Progress-Pagination-Base Demo</h1>
-    <p class="demo-subtitle">Page indicator dots for carousels and multi-page flows — composes Node-Base primitives with virtualization for large page counts</p>
+    <p class="demo-subtitle">Page indicator dots for carousels and multi-page flows — composes Node-Base primitives with animated centering for large page counts</p>
   </header>
 
   <main>
@@ -76,7 +76,7 @@
     <div class="demo-section">
       <h2>1. Overview</h2>
       <p>Progress-Pagination-Base renders a row of dot indicators showing the current page within a set. It composes <code>Progress-Indicator-Node-Base</code> primitives internally — all nodes use <code>content="none"</code> (dots only, no checkmarks or icons).</p>
-      <p>Key characteristics: non-interactive (navigation handled by parent flow), virtualizes when total items exceed 5, and supports sm/md/lg sizes.</p>
+      <p>Key characteristics: non-interactive (navigation handled by parent flow), viewport clips to ~5 visible dots with animated centering when total items exceed 5, and supports sm/md/lg sizes.</p>
 
       <div class="demo-row">
         <div class="demo-item">
@@ -109,7 +109,7 @@
       </div>
 
       <div class="demo-note">
-        <strong>Size tokens:</strong> sm = 12px (16px current), md = 16px (20px current), lg = 24px (28px current). Gap between dots also scales with size.
+        <strong>Size tokens:</strong> sm = 12px (16px current), md = 16px (20px current), lg = 20px (24px current). Gap between dots also scales with size.
       </div>
     </div>
 
@@ -149,10 +149,10 @@
          SECTION 4: Virtualization
          ============================================================ -->
     <div class="demo-section">
-      <h2>4. Virtualization</h2>
-      <p>When <code>total-items</code> exceeds 5, only 5 dots are rendered using a sliding window algorithm. This prevents the indicator from growing unbounded for large page counts.</p>
+      <h2>4. Viewport Clipping &amp; Animated Centering</h2>
+      <p>When <code>total-items</code> exceeds 5, all dots are rendered but the viewport clips to ~5 visible. The current dot is centered via animated track translation, clamped at edges to prevent overscroll.</p>
 
-      <h3>No Virtualization (≤5 items)</h3>
+      <h3>No Clipping (≤5 items)</h3>
       <div class="pagination-showcase">
         <div class="pagination-row">
           <span class="pagination-row-label">2 items</span>
@@ -168,8 +168,8 @@
         </div>
       </div>
 
-      <h3>Virtualized (>5 items) — Sliding Window</h3>
-      <p>With 10 total items, the window slides to keep the current page visible. Notice the dot count stays at 5 regardless of position.</p>
+      <h3>Viewport Clipping (>5 items) — Animated Centering</h3>
+      <p>With 10 total items, the track slides to center the current dot. The viewport clips to ~5 visible dots regardless of position.</p>
       <div class="pagination-showcase">
         <div class="pagination-row">
           <span class="pagination-row-label">Page 1 of 10</span>
@@ -194,7 +194,7 @@
       </div>
 
       <h3>Large Page Count (50 items — maximum)</h3>
-      <p>Even with 50 pages, only 5 dots render. The ARIA label always reflects the actual position ("Page X of 50"), not the virtualized subset.</p>
+      <p>Even with 50 pages, the viewport clips to ~5 visible dots. The ARIA label always reflects the actual position ("Page X of 50").</p>
       <div class="pagination-showcase">
         <div class="pagination-row">
           <span class="pagination-row-label">Page 1 of 50</span>
@@ -211,7 +211,7 @@
       </div>
 
       <div class="demo-note">
-        <strong>Sliding window algorithm:</strong> Pages 1–3 show nodes 1–5. Pages 4 to (total−3) center the current page. Last 3 pages show the final 5 nodes. Maximum supported: 50 items (exceeding this warns in production, throws in development).
+        <strong>Rendering architecture:</strong> All dots are rendered in the DOM. A fixed-width viewport clips to ~5 visible. The current dot is centered via animated track translation (web: translateX, iOS: ScrollViewReader, Android: LazyRow). Edge clamping prevents overscroll. Maximum supported: 50 items.
       </div>
     </div>
 
@@ -220,7 +220,7 @@
          ============================================================ -->
     <div class="demo-section">
       <h2>5. Interactive Example</h2>
-      <p>Use the buttons below to navigate through pages and observe the virtualization behavior in real time.</p>
+      <p>Use the buttons below to navigate through pages and observe the animated centering in real time.</p>
 
       <div class="demo-interactive">
         <div class="interactive-controls">
@@ -240,7 +240,7 @@
          ============================================================ -->
     <div class="demo-section">
       <h2>6. Accessibility</h2>
-      <p>The component uses <code>role="group"</code> with an <code>aria-label</code> that always reflects the actual position in the full set, not the virtualized subset.</p>
+      <p>The component uses <code>role="group"</code> with an <code>aria-label</code> that always reflects the actual position in the full set.</p>
 
       <h3>Default ARIA Label</h3>
       <div class="demo-row">
@@ -276,8 +276,8 @@
         <li><code>--progress-node-size-sm-current</code> — small dot current size (16px)</li>
         <li><code>--progress-node-size-md</code> — medium dot base size (16px)</li>
         <li><code>--progress-node-size-md-current</code> — medium dot current size (20px)</li>
-        <li><code>--progress-node-size-lg</code> — large dot base size (24px)</li>
-        <li><code>--progress-node-size-lg-current</code> — large dot current size (28px)</li>
+        <li><code>--progress-node-size-lg</code> — large dot base size (20px)</li>
+        <li><code>--progress-node-size-lg-current</code> — large dot current size (24px)</li>
       </ul>
 
       <h3>Container Tokens (Spec 072)</h3>
@@ -315,7 +315,7 @@
   size="md"
 &gt;&lt;/progress-pagination-base&gt;
 
-&lt;!-- Large set with virtualization (20 pages) --&gt;
+&lt;!-- Large set (20 pages) --&gt;
 &lt;progress-pagination-base
   total-items="20"
   current-item="8"

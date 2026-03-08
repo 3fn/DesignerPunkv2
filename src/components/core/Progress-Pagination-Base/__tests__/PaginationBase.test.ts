@@ -31,10 +31,8 @@ import { describe, it, expect, beforeAll, beforeEach } from '@jest/globals';
 import { ProgressPaginationBase } from '../platforms/web/ProgressPaginationBase.web';
 import {
   derivePaginationNodeState,
-  calculateVisibleWindow,
   clampCurrentItem,
   PAGINATION_MAX_ITEMS,
-  PAGINATION_VISIBLE_WINDOW,
 } from '../types';
 
 // ============================================================================
@@ -186,48 +184,6 @@ describe('Progress-Pagination-Base', () => {
   // Virtualization Tests (Req 15.33-15.34, 9.1-9.6)
   // ==========================================================================
 
-  describe('Virtualization — calculateVisibleWindow', () => {
-    it('totalItems ≤ 5 renders all nodes (no virtualization) (Req 9.1)', () => {
-      expect(calculateVisibleWindow(1, 3)).toEqual({ start: 1, end: 3 });
-      expect(calculateVisibleWindow(2, 5)).toEqual({ start: 1, end: 5 });
-    });
-
-    it('page 1: shows nodes 1-5 (Req 9.3)', () => {
-      expect(calculateVisibleWindow(1, 50)).toEqual({ start: 1, end: 5 });
-    });
-
-    it('page 3: shows nodes 1-5 (near start edge) (Req 9.3)', () => {
-      expect(calculateVisibleWindow(3, 50)).toEqual({ start: 1, end: 5 });
-    });
-
-    it('page 4: centers current at position 3 (Req 9.4)', () => {
-      expect(calculateVisibleWindow(4, 50)).toEqual({ start: 2, end: 6 });
-    });
-
-    it('page 26: centers current at position 3 (Req 9.4)', () => {
-      expect(calculateVisibleWindow(26, 50)).toEqual({ start: 24, end: 28 });
-    });
-
-    it('page 47: centers current at position 3 (Req 9.4)', () => {
-      expect(calculateVisibleWindow(47, 50)).toEqual({ start: 45, end: 49 });
-    });
-
-    it('page 48: shows last 5 nodes (near end edge) (Req 9.5)', () => {
-      expect(calculateVisibleWindow(48, 50)).toEqual({ start: 46, end: 50 });
-    });
-
-    it('page 50: shows last 5 nodes (Req 9.5)', () => {
-      expect(calculateVisibleWindow(50, 50)).toEqual({ start: 46, end: 50 });
-    });
-
-    it('always returns exactly 5 visible nodes when totalItems > 5', () => {
-      for (const page of [1, 3, 4, 26, 47, 48, 50]) {
-        const w = calculateVisibleWindow(page, 50);
-        expect(w.end - w.start + 1).toBe(PAGINATION_VISIBLE_WINDOW);
-      }
-    });
-  });
-
   describe('Virtualization — Rendered Output', () => {
     it('renders all nodes when totalItems ≤ 5', () => {
       const el = createPagination({ 'total-items': '4', 'current-item': '2' });
@@ -235,10 +191,10 @@ describe('Progress-Pagination-Base', () => {
       expect(nodes.length).toBe(4);
     });
 
-    it('renders exactly 5 nodes when totalItems > 5', () => {
+    it('renders all nodes when totalItems > 5 (native scroll handles viewport)', () => {
       const el = createPagination({ 'total-items': '20', 'current-item': '10' });
       const nodes = el.shadowRoot!.querySelectorAll('progress-indicator-node-base');
-      expect(nodes.length).toBe(5);
+      expect(nodes.length).toBe(20);
     });
   });
 
@@ -278,9 +234,9 @@ describe('Progress-Pagination-Base', () => {
       try {
         const el = createPagination({ 'total-items': '60', 'current-item': '1' });
         expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('maximum is 50'));
-        // Should still render (clamped to 50, virtualized to 5 visible)
+        // Should still render (clamped to 50, all dots rendered)
         const nodes = el.shadowRoot!.querySelectorAll('progress-indicator-node-base');
-        expect(nodes.length).toBe(5);
+        expect(nodes.length).toBe(50);
       } finally {
         warnSpy.mockRestore();
         process.env.NODE_ENV = origEnv;

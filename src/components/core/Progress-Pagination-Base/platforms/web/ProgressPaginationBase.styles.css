@@ -9,9 +9,10 @@
  * 
  * Tokens consumed:
  * - color.scrim.standard (container background — modeInvariant)
- * - radius.full (pill shape)
- * - space.inset.075 (padding sm/md)
- * - space.inset.100 (padding lg)
+ * - radius.full (pill shape + clip-path)
+ * - space.inset.075 (block padding sm/md)
+ * - space.inset.100 (inline padding sm/md, block padding lg)
+ * - space.inset.150 (inline padding lg)
  * - space.grouped.tight (gap sm/md)
  * - space.grouped.normal (gap lg)
  * 
@@ -33,23 +34,47 @@
 .pagination {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  overflow: hidden;
   background: var(--color-scrim-standard);
   border-radius: var(--radius-full);
+  clip-path: inset(0 2px round var(--radius-full));
+  /* 2px horizontal inset clips dot slivers that peek past the pill curve.
+     overflow:hidden clips to the bounding box, but the pill's rounded ends
+     leave a sliver zone where dots are inside the box but outside the curve.
+     2px is a fixed safety margin — stable across sm/md/lg because the curve
+     geometry at the dot centerline is similar for all container heights. */
+}
+
+/* Inner track holds all dots in a flex row.
+ * The .pagination container clips to a fixed viewport width;
+ * scrollIntoView on the current dot handles the scroll animation. */
+.pagination__track {
+  display: inline-flex;
+  align-items: center;
 }
 
 /* ============================================================================
  * Size Variants — padding and gap
  * Sm and Md share the same tier; Lg uses larger values.
+ * Padding on .pagination (clipping viewport), gap on .pagination__track (node layout).
  * ============================================================================ */
 
 .pagination--sm,
 .pagination--md {
-  padding: var(--space-inset-075);
-  gap: var(--space-grouped-tight);
+  padding-block: var(--space-inset-075);
+  padding-inline: var(--space-inset-100);
 }
 
 .pagination--lg {
-  padding: var(--space-inset-100);
+  padding-block: var(--space-inset-100);
+  padding-inline: var(--space-inset-150);
+}
+
+.pagination--sm > .pagination__track,
+.pagination--md > .pagination__track {
+  gap: var(--space-grouped-tight);
+}
+
+.pagination--lg > .pagination__track {
   gap: var(--space-grouped-normal);
 }

@@ -13,7 +13,7 @@
  * - All nodes use content='none' (dots only)
  * - States: incomplete, current (binary derivation)
  * - Sizes: sm, md, lg
- * - Virtualization: >5 items → sliding window of 5
+ * - Viewport clipping: >5 items → render all, clip to ~5 visible
  * - Max 50 items (dev throw, production warn+clamp)
  * - Accessibility: role="group" with actual position label
  * 
@@ -24,9 +24,7 @@
 export {
   PAGINATION_BASE_DEFAULTS,
   PAGINATION_MAX_ITEMS,
-  PAGINATION_VISIBLE_WINDOW,
   derivePaginationNodeState,
-  calculateVisibleWindow,
   clampCurrentItem,
 } from './types';
 
