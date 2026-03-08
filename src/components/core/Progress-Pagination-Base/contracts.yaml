@@ -48,8 +48,8 @@ contracts:
       viewport. The viewport clips to ~5 visible dots via overflow:hidden and
       clip-path. The current dot is centered by translating the track, clamped
       at edges to prevent overscroll. Track translation animates via CSS
-      transition using motion.selectionTransition timing (250ms,
-      easingStandard). Node state transitions (scale + color) animate
+      transition using motion.settleTransition timing (350ms,
+      easingDecelerate). Node state transitions (scale + color) animate
       independently via Node-Base CSS.
 
       iOS: Uses ScrollViewReader with scrollTo(anchor: .center) for native
