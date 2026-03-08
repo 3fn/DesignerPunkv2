@@ -2,7 +2,7 @@
 
 **A Design System Foundation Built for Modern Product Development, Cross-Platform Excellence, and AI-Assisted Development**
 
-[![Version](https://img.shields.io/badge/Version-9.1.0-purple)](docs/releases/RELEASE-NOTES-9.1.0.md)
+[![Version](https://img.shields.io/badge/Version-9.2.0-purple)](docs/releases/RELEASE-NOTES-9.2.0.md)
 [![Repository](https://img.shields.io/badge/GitHub-DesignerPunkv2-blue)](https://github.com/3fn/DesignerPunkv2)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
@@ -10,16 +10,17 @@
 
 ---
 
-## Latest Release: v9.1.0
+## Latest Release: v9.2.0
 
-**Family Guidance Indexer** (Spec 068) — Machine-queryable family guidance through structured companion YAML files and a new MCP tool:
+**Pagination Animation & Render-All-Dots Architecture** (Specs 072–074) — Smooth, split-timed animation for pagination dots with a new rendering architecture across all three platforms:
 
-- **`get_prop_guidance` MCP tool**: Query by component or family name for selection rules, accessibility notes, and family-scoped patterns. Verbose flag controls token cost (default: rationale stripped).
-- **3 companion YAML files**: `button.yaml` (flat rules), `form-inputs.yaml` (grouped rules), `container.yaml` (composition patterns) — schema validated across all structural types.
-- **FamilyGuidanceIndexer**: Parses companion YAML at startup with cross-reference validation against component catalog and pattern index.
-- **10 MCP tools total**, 136 tests across 11 suites, 3 guidance families indexed.
+- **Render-all-dots architecture**: Replaced windowed 7-node buffer with full dot rendering + viewport clipping + track-level translateX centering. Eliminates buffer-in-flex layout bugs entirely.
+- **Split-timing motion**: New `motion.settleTransition` token (350ms/easingDecelerate) — scale snaps at 250ms, color+slide settle at 350ms for a polished feel.
+- **Cross-platform**: Web (translateX + clip-path), iOS (ScrollViewReader), Android (LazyRow + animateScrollTo).
+- **Opacity architecture**: `color-mix()` based opacity with theme-aware semantic tokens replacing raw alpha values.
+- 291 test suites, 7,448 tests passing, 0 missing tokens.
 
-[Full Release Notes →](docs/releases/RELEASE-NOTES-9.1.0.md)
+[Full Release Notes →](docs/releases/RELEASE-NOTES-9.2.0.md)
 
 ---
 
