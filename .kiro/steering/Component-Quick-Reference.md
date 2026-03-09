@@ -40,8 +40,9 @@ All 13 component families have MCP-queryable documentation. Production families 
 | Containers | Layout and content organization | `.kiro/steering/Component-Family-Container.md` | 🟢 Production |
 | Icons | Visual communication | `.kiro/steering/Component-Family-Icon.md` | 🟢 Production |
 | Avatars | Identity representation | `.kiro/steering/Component-Family-Avatar.md` | 🟢 Production |
+| Badges | Status and labeling | `.kiro/steering/Component-Family-Badge.md` | 🟢 Production |
+| Progress Indicators | Step tracking and pagination | `.kiro/steering/Component-Family-Progress.md` | 🟢 Production |
 | Modals | Overlay interactions | `.kiro/steering/Component-Family-Modal.md` | 🔴 Placeholder |
-| Badges & Tags | Status and labeling | `.kiro/steering/Component-Family-Badge.md` | 🔴 Placeholder |
 | Data Displays | Information presentation | `.kiro/steering/Component-Family-Data-Display.md` | 🔴 Placeholder |
 | Dividers | Visual separation | `.kiro/steering/Component-Family-Divider.md` | 🔴 Placeholder |
 | Loading | Progress indication | `.kiro/steering/Component-Family-Loading.md` | 🔴 Placeholder |
@@ -49,7 +50,7 @@ All 13 component families have MCP-queryable documentation. Production families 
 
 **Status Legend**: 🟢 Production Ready | 🟡 Beta | 🔴 Placeholder | ⚠️ Deprecated
 
-**Family Count**: 7 Production Ready, 6 Placeholder (structural definitions for future development)
+**Family Count**: 9 Production Ready, 5 Placeholder (structural definitions for future development)
 
 ### Type Primitives
 

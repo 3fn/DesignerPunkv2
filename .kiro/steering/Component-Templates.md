@@ -1070,6 +1070,14 @@ renders_svg:
 | Container behavior | contains_children |
 | Icon rendering | renders_svg, accessibility_hidden |
 
+### Application MCP Checklist
+
+| When | Action |
+|------|--------|
+| New component in existing family | Verify `family-guidance/<family>.yaml` selectionRules include the new component |
+| New component family | Create `family-guidance/<family>.yaml` following enriched schema (see `family-guidance/README.md`) |
+| New experience pattern | Add pattern YAML to `experience-patterns/` |
+
 ---
 
 ## Related Documentation
@@ -1079,6 +1087,7 @@ renders_svg:
 - [MCP Component Family Document Template](./Component-MCP-Document-Template.md) - Documentation template
 - [Component Family Inheritance Structures](./Component-Inheritance-Structures.md) - All family structures
 - [Component Quick Reference](./Component-Quick-Reference.md) - Family routing table
+- [Family Guidance Schema](../family-guidance/README.md) - YAML schema for family guidance files
 
 ---
 

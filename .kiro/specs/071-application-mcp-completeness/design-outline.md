@@ -4,7 +4,7 @@
 **Purpose**: Identify and address remaining gaps in the Application MCP to maximize its effectiveness for product agent consumption
 **Organization**: spec-guide
 **Scope**: 071-application-mcp-completeness
-**Status**: Design outline — early thinking, pending review
+**Status**: Gap 1 complete (Spec 071). Gaps 2–4 deferred.
 
 ---
 
@@ -18,56 +18,37 @@ This spec addresses the known coverage gaps and positions the MCP for its first 
 
 ---
 
-## Current State (Post-068, v9.1.0)
+## Current State (Post-071, v9.2.0)
 
 ### What the MCP serves well
 - **Component discovery**: catalog, summary, full, find (with context filter), health — 28 components indexed
 - **Composition validation**: check_composition — structural parent/child rules
 - **Experience patterns**: list, get, validate_assembly — 3 patterns (simple-form, settings-screen, account-onboarding)
-- **Family guidance**: get_prop_guidance — 3 families (Buttons, Form Inputs, Containers)
+- **Family guidance**: get_prop_guidance — 8 production families (Buttons, Form Inputs, Containers, Chips, Progress Indicators, Badges, Icons, Avatars)
 
-### What's missing or underserving
-1. **Family guidance coverage** — 10 of 13 families have no companion YAML
-2. **Token query capability** — no MCP tool for token selection guidance
-3. **Negative guidance** — no "don't do this" query path beyond whenNotToUse in family guidance
-4. **Cross-layer synthesis** — every query is stateless; no tool combines pattern + guidance + token knowledge
+### What's missing or underserving (deferred)
+1. ~~**Family guidance coverage**~~ — ✅ Complete. 8/8 production families covered. 5 placeholder families excluded (no implemented components).
+2. **Token query capability** — no MCP tool for token selection guidance (deferred — needs Ada's design input)
+3. **Negative guidance** — discouragedPatterns added to 5 family YAMLs as advisory field; no dedicated query path beyond family guidance (deferred — let real usage reveal the need)
+4. **Cross-layer synthesis** — every query is stateless; no tool combines pattern + guidance + token knowledge (deferred — respect system/product boundary per 070)
 
 ---
 
-## Gap 1: Remaining Family Guidance Files (Phase 3 of 068)
+## Gap 1: Family Guidance Coverage — ✅ COMPLETE (Spec 071)
 
-### The Gap
-Only 3 of 13 component families have companion YAML files. A product agent asking about Avatars, Badges, Chips, Progress indicators, Navigation components, or Icons gets null from `get_prop_guidance`.
+Completed 2026-03-09. All 8 production families have companion YAML files indexed by FamilyGuidanceIndexer.
 
-### Families Remaining
-Per D3 from 068, these should be batched by structural similarity:
+### What was delivered
+- 5 new family guidance YAMLs: chips.yaml, progress.yaml, badges.yaml, icons.yaml, avatars.yaml
+- Enriched schema: discouragedPatterns (advisory, overridable), composesWithFamilies, platformVariants (Icons only)
+- ~40 new Feather icon SVGs added to Icon-Base across web/iOS/Android
+- IconBaseName type expanded
+- Component Quick Reference updated: 9 production families, 5 placeholder
 
-**Batch A — Simple flat families** (similar to button.yaml):
-- Avatar (Avatar-Base, Avatar-Group)
-- Badge (Badge-Count-Base, Badge-Count-Notification, Badge-Label-Base)
-- Chip (Chip-Base)
-- Icon (Icon-Base)
-
-**Batch B — Grouped families** (similar to form-inputs.yaml):
-- Progress (Progress-Bar-Base, Progress-Circle-Base, Progress-Step-Base)
-- Navigation (Nav-SegmentedChoice-Base, Nav-BottomTabs-Base — design outlines exist)
-
-**Batch C — Complex/composition families** (similar to container.yaml):
-- Container (Container-Card-Base already covered; remaining variants if any)
-- Text Input (Input-Text-Base and specialized inputs — overlap with Form Inputs family?)
-- Vertical List Buttons (Button-VerticalList-Set, Button-VerticalList-Item)
-
-### Scope
-- Pure content work — no new code, no new MCP tools
-- FamilyGuidanceIndexer already handles all structural types
-- Interview-driven authoring process proven in 068 Phase 2
-- D9 compliance required for all files
-
-### Open Decision (D1): Text Input / Form Inputs Overlap
-Form Inputs family guidance already covers Input-Text-Base, Input-Email, Input-PhoneNumber. Does the Text Input family need its own companion YAML, or is it fully covered by form-inputs.yaml? Need to audit the Component-Family steering docs to determine if there's a separate Text Input family or if it's subsumed.
-
-### Effort Estimate
-~10 companion YAML files. Each takes roughly the effort of one 068 Phase 2 interview cycle. Batching by similarity should accelerate later files in each batch.
+### What was scoped out
+- Placeholder families (Modal, Data-Display, Divider, Loading, Navigation) — no guidance for unimplemented components
+- Backfilling enriched schema fields to pre-071 YAMLs (Buttons, Containers, Form Inputs) — optional fields, not required
+- Avatar-Group — future semantic variant, not implemented
 
 ---
 
@@ -176,10 +157,10 @@ This is exactly what a product agent should be doing — orchestrating multiple 
 
 ## Open Decisions Summary
 
-| ID | Decision | Options | Recommendation |
-|----|----------|---------|----------------|
-| D1 | Text Input / Form Inputs overlap | Audit needed | Audit before Phase 3 |
-| D2 | Token tool scope | (a) semantic only, (b) full hierarchy, (c) component-context, (d) defer | Low confidence — needs Ada |
-| D3 | Token data source | (a) parse source, (b) companion YAML, (c) test infra, (d) cross-MCP | Low confidence — needs Ada |
-| D4 | Negative guidance approach | (a) expand whenNotToUse, (b) dedicated system, (c) accept gap, (d) defer | (d) defer |
-| D5 | Synthesis responsibility | (a) product agent's job, (b) lightweight tool, (c) defer | (a) with reevaluation after 070 |
+| ID | Decision | Status | Resolution |
+|----|----------|--------|------------|
+| D1 | Text Input / Form Inputs overlap | ✅ Resolved | Form Inputs family guidance covers all text inputs. No separate family needed. |
+| D2 | Token tool scope | Deferred | Needs Ada's design input. No product agent usage yet to validate need. |
+| D3 | Token data source | Deferred | Blocked on D2. |
+| D4 | Negative guidance approach | Partially addressed | discouragedPatterns added as advisory field in family YAMLs. Dedicated system deferred. |
+| D5 | Synthesis responsibility | Deferred | Respect system/product boundary. Reevaluate after 070. |
