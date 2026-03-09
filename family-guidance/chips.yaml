@@ -1,0 +1,81 @@
+# Family Guidance: Chips
+# Companion to: .kiro/steering/Component-Family-Chip.md
+# Read-both protocol: Read the family doc before modifying this file.
+
+family: "Chips"
+companion: ".kiro/steering/Component-Family-Chip.md"
+
+whenToUse:
+  - "Filtering displayed content by toggling criteria on/off (Chip-Filter)"
+  - "Managing user-created tags or values that can be added and removed (Chip-Input)"
+  - "Compact interactive elements in filter bars, tag fields, or selection surfaces"
+
+whenNotToUse:
+  - "Displaying read-only status or counts — use Badge family instead"
+  - "Primary or secondary actions — use Button family instead"
+  - "Navigation between views or pages — use Navigation family instead"
+  - "Collecting form data with fixed option sets — use Form Inputs family (checkbox, radio) instead"
+  - "Single-select choice from a group — Chip-Choice is a component gap (not yet implemented). Do not use Chip-Filter for single-select"
+
+selectionRules:
+  - scenario: "Toggle selection for filtering displayed content"
+    recommend: Chip-Filter
+    rationale: "Built-in selected state with checkmark icon and aria-pressed for accessibility"
+  - scenario: "Dismissible tag representing a user-created value"
+    recommend: Chip-Input
+    rationale: "Built-in dismiss behavior with trailing X icon and 'Remove [label]' accessible label"
+  - scenario: "Tag-style input inside a form where user creates and manages a dynamic set of values"
+    recommend: Chip-Input
+    rationale: "Chip-Input is appropriate in forms for dynamic value sets (tags, skills, recipients). For fixed option sets, use Input-Checkbox-Base instead"
+  - scenario: "General interactive chip with custom behavior"
+    recommend: Chip-Base
+    rationale: "Flexible base — use when Filter and Input semantics don't apply"
+
+discouragedPatterns:
+  - pattern: "Using Chip-Filter or Chip-Base inside a form as a replacement for checkboxes or radios"
+    rationale: "Chips don't participate in form semantics (no name/value, no form submission, no validation lifecycle). Use Form Input components for form data collection."
+    override: "Human confirmation required"
+  - pattern: "Using Chip-Filter for single-select (radio-style) behavior"
+    rationale: "Chip-Filter is a multi-select toggle. Single-select chip is a component gap (Chip-Choice, not yet implemented). Forcing single-select on Filter requires manual state management that bypasses built-in toggle semantics."
+    override: "Human confirmation required"
+  - pattern: "Using Chips as interactive badges"
+    rationale: "Badges are read-only indicators. If the element displays status or counts without user interaction, use Badge family. Chips are for user-initiated actions (filter, dismiss, press)."
+    override: "Human confirmation required"
+  - pattern: "Chip-Input without a companion text input for adding new values"
+    rationale: "Chip-Input represents a value that was entered through an input. Orphaned Chip-Input elements with no way to add new chips create a remove-only dead end."
+    override: "Human confirmation required"
+
+composesWithFamilies:
+  - family: "Form Inputs"
+    relationship: "Chip-Input composes alongside text inputs in tag-style fields where the user types a value and it becomes a dismissible chip"
+    companion: ".kiro/steering/Component-Family-Form-Inputs.md"
+  - family: "Buttons"
+    relationship: "Filter bars may pair Chip-Filter groups with a Button-CTA for applying or clearing filters"
+    companion: ".kiro/steering/Component-Family-Button.md"
+  - family: "Badges"
+    relationship: "Chips and Badges share compact pill shape but differ in interactivity — Chips are interactive, Badges are read-only. Selection between families is based on whether the element responds to user input"
+    companion: ".kiro/steering/Component-Family-Badge.md"
+
+accessibilityNotes:
+  - "All chips meet tapAreaRecommended (48px) — do not constrain chip height below tapAreaMinimum"
+  - "Chip-Filter uses aria-pressed to announce selection state — do not override with custom ARIA attributes"
+  - "Chip-Input X icon has accessible label 'Remove [label]' — do not remove or override this label"
+  - "Chips do not support disabled states. If an action is unavailable, do not render the chip"
+  - "Keyboard: Tab to focus, Space/Enter to activate. Do not wrap chips in containers that break tab order"
+
+patterns:
+  - name: "Filter Bar"
+    description: "Horizontal group of Chip-Filter elements for toggling content filters"
+    components:
+      - component: Chip-Filter
+        role: filters
+    relatedPatterns: []
+
+  - name: "Tag Input"
+    description: "Text input paired with Chip-Input elements representing user-created values"
+    components:
+      - component: Chip-Input
+        role: tags
+      - component: Input-Text-Base
+        role: input
+    relatedPatterns: []
