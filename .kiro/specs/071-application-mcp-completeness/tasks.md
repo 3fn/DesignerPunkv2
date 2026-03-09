@@ -188,7 +188,7 @@ Family guidance YAML files are authored vertically — Chips first as the refere
 
 ---
 
-- [ ] 4. Icon Asset Expansion and Family Guidance
+- [x] 4. Icon Asset Expansion and Family Guidance
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -215,7 +215,7 @@ Family guidance YAML files are authored vertically — Chips first as the refere
   - Verify: FamilyGuidanceIndexer reports 7 families indexed
   - Verify: All tests pass
 
-  - [ ] 4.1 Source and add Feather icon SVGs for web
+  - [x] 4.1 Source and add Feather icon SVGs for web
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -226,7 +226,7 @@ Family guidance YAML files are authored vertically — Chips first as the refere
     - Verify SVG format matches normalized standard
     - _Requirements: 5_
 
-  - [ ] 4.2 Add icons to iOS and Android platforms
+  - [x] 4.2 Add icons to iOS and Android platforms
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -235,7 +235,7 @@ Family guidance YAML files are authored vertically — Chips first as the refere
     - Follow existing platform-specific format conventions
     - _Requirements: 5.3_
 
-  - [ ] 4.3 Update IconBaseName type and README
+  - [x] 4.3 Update IconBaseName type and README
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -245,7 +245,7 @@ Family guidance YAML files are authored vertically — Chips first as the refere
     - Verify every `IconBaseName` entry has a corresponding asset on all three platforms (web SVG, iOS asset catalog, Android vector drawable). If no existing test covers this, add a validation check.
     - _Requirements: 5.4, 5.5, 5.6_
 
-  - [ ] 4.4 Author icons.yaml with platform-variant conventions
+  - [x] 4.4 Author icons.yaml with platform-variant conventions
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina (primary author), Ada (D9 compliance + token reference review)

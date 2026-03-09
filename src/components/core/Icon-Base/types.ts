@@ -32,24 +32,62 @@ export type IconBaseName =
   | 'arrow-up'
   | 'arrow-down'
   | 'chevron-right'
+  | 'chevron-left'
+  | 'chevron-down'
+  | 'external-link'
   
   // Action icons
   | 'check'
+  | 'check-circle'
   | 'x'
   | 'x-circle'
-  | 'info'
   | 'plus'
   | 'minus'
+  | 'save'
+  | 'search'
+  | 'filter'
+  | 'refresh-cw'
+  | 'share'
+  | 'share-2'
+  | 'more-horizontal'
+  | 'more-vertical'
+  
+  // Status icons
+  | 'info'
+  | 'alert-circle'
+  | 'shield'
+  | 'eye'
+  | 'eye-off'
   
   // UI element icons
   | 'circle'
   | 'heart'
+  | 'star'
+  | 'smile'
+  | 'bell'
   
-  // Complex icons
-  | 'settings'
+  // People icons
   | 'user'
+  | 'users'
+  | 'user-check'
+  | 'user-x'
+  
+  // Object icons
+  | 'settings'
   | 'mail'
-  | 'calendar';
+  | 'calendar'
+  | 'clock'
+  | 'phone'
+  | 'smartphone'
+  | 'globe'
+  | 'map-pin'
+  | 'briefcase'
+  | 'credit-card'
+  | 'dollar-sign'
+  | 'file-text'
+  | 'award'
+  | 'trending-up'
+  | 'wifi';
 
 /**
  * Available icon sizes calculated from fontSize × lineHeight formula.

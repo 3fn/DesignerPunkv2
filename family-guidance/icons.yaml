@@ -1,0 +1,86 @@
+# Family Guidance: Icons
+# Companion to: .kiro/steering/Component-Family-Icon.md
+# Read-both protocol: Read the family doc before modifying this file.
+
+family: "Icons"
+companion: ".kiro/steering/Component-Family-Icon.md"
+
+whenToUse:
+  - "Inline visual indicators alongside text in buttons, list items, or navigation"
+  - "Decorative icons that inherit color from surrounding context via currentColor"
+  - "Icon content inside interactive components (Button-Icon, Chip-Base, Badge-Label-Base)"
+
+whenNotToUse:
+  - "User or entity identity images — use Avatar-Base instead"
+  - "Complex illustrations or multi-color graphics — use dedicated image assets"
+  - "Icons as the sole means of conveying information — always pair with text or accessible label"
+  - "Logos or brand marks — use dedicated brand assets"
+
+selectionRules:
+  - scenario: "Any icon usage"
+    recommend: Icon-Base
+    rationale: "Icon-Base is the only production component in this family. Planned semantic variants (Icon-Status, Icon-Action, Icon-Navigation) are not yet implemented"
+
+discouragedPatterns:
+  - pattern: "Using an icon as the only way to communicate meaning without a text label or accessible name"
+    rationale: "Icons are decorative by default (aria-hidden=true). The parent element must provide context. An icon-only button needs an accessibilityLabel."
+    override: "Human confirmation required"
+  - pattern: "Overriding icon color directly instead of letting it inherit from the parent"
+    rationale: "Color inheritance via currentColor ensures icons stay consistent with surrounding text. Direct color overrides break theme consistency. Use the color prop only for optical balance compensation."
+    override: "Human confirmation required"
+
+platformVariants:
+  - name: share
+    intent: "Share content externally"
+    resolution:
+      web: share
+      ios: share
+      android: share-2
+    note: "iOS/web use box-with-arrow style; Android uses three-connected-dots style"
+  - name: overflow-menu
+    intent: "Access additional actions"
+    resolution:
+      web: more-horizontal
+      ios: more-horizontal
+      android: more-vertical
+    note: "iOS/web use horizontal dots; Android uses vertical dots"
+  - name: back-navigation
+    intent: "Navigate to previous screen"
+    resolution:
+      web: arrow-left
+      ios: chevron-left
+      android: arrow-left
+    note: "iOS uses chevron-style back; web and Android use arrow-style"
+
+composesWithFamilies:
+  - family: "Buttons"
+    relationship: "Icon-Base provides icon content for Button-Icon (icon-only buttons) and optional leading icons in Button-CTA"
+    companion: ".kiro/steering/Component-Family-Button.md"
+  - family: "Chips"
+    relationship: "Icon-Base provides optional leading icons in Chip-Base and Chip-Filter, and the trailing X icon in Chip-Input"
+    companion: ".kiro/steering/Component-Family-Chip.md"
+  - family: "Badges"
+    relationship: "Icon-Base provides optional leading icons in Badge-Label-Base"
+    companion: ".kiro/steering/Component-Family-Badge.md"
+
+accessibilityNotes:
+  - "Icons are decorative and hidden from assistive technology (aria-hidden=true). Parent elements must provide accessible labels"
+  - "Never use color alone to convey meaning — pair icons with text or other non-color indicators"
+  - "Use opticalBalance prop when icons appear visually heavier than adjacent text (8% lighter blend)"
+
+patterns:
+  - name: "Button with Icon"
+    description: "Icon-Base as leading content inside Button-CTA or as the sole content of Button-Icon"
+    components:
+      - component: Icon-Base
+        role: icon
+      - component: Button-CTA
+        role: container
+    relatedPatterns: []
+
+  - name: "Icon-Text Pair"
+    description: "Icon-Base inline with text label, inheriting color from parent"
+    components:
+      - component: Icon-Base
+        role: icon
+    relatedPatterns: []
