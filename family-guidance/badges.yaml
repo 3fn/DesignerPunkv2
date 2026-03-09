@@ -1,0 +1,75 @@
+# Family Guidance: Badges
+# Companion to: .kiro/steering/Component-Family-Badge.md
+# Read-both protocol: Read the family doc before modifying this file.
+
+family: "Badges"
+companion: ".kiro/steering/Component-Family-Badge.md"
+
+whenToUse:
+  - "Displaying categorization labels, status indicators, or metadata tags (Badge-Label-Base)"
+  - "Showing numeric counts such as unread messages or item quantities (Badge-Count-Base)"
+  - "Notification counts requiring semantic color and screen reader announcements (Badge-Count-Notification)"
+
+whenNotToUse:
+  - "Interactive elements that respond to tap/click — use Chip family instead"
+  - "Dismissible tags or user-entered values — use Chip-Input instead"
+  - "Selection or toggle behavior — use Chip-Filter or Form Inputs instead"
+  - "Focusable indicators — Badges are not in tab order by design"
+
+selectionRules:
+  - scenario: "Category label, status indicator, or metadata tag (Draft, Published, New, Beta)"
+    recommend: Badge-Label-Base
+    rationale: "Text-based badge with optional leading icon. Supports truncation for long labels"
+  - scenario: "Generic numeric count (cart items, unread messages, quantities)"
+    recommend: Badge-Count-Base
+    rationale: "Circular for single digits, pill for multi-digit. Truncates at configurable max (default 99+)"
+  - scenario: "Notification count requiring urgency and screen reader announcements"
+    recommend: Badge-Count-Notification
+    rationale: "Inherits Badge-Count-Base with fixed semantic color (color.feedback.notification.background) and live region announcements. Use when the count represents notifications, not generic quantities"
+  - scenario: "Count badge needing custom color (not notification urgency)"
+    recommend: Badge-Count-Base
+    rationale: "When notification styling (color.feedback.notification.background) isn't appropriate for the context"
+
+discouragedPatterns:
+  - pattern: "Using Badge-Count-Base for notification counts instead of Badge-Count-Notification"
+    rationale: "Badge-Count-Notification provides live region announcements (aria-live, UIAccessibility.post, LiveRegionMode.Polite) that Badge-Count-Base lacks. Notification counts that change dynamically need to be announced to screen readers."
+    override: "Human confirmation required"
+  - pattern: "Using Badge-Count-Notification for non-notification counts"
+    rationale: "The fixed color.feedback.notification.background implies urgency. Using it for generic quantities (cart items, page counts) misrepresents the semantic meaning to users and assistive technology."
+    override: "Human confirmation required"
+  - pattern: "Making Badges interactive (wrapping in buttons or adding click handlers)"
+    rationale: "Badges are read-only by contract. If the indicator needs to respond to user input, use Chip family instead. Wrapping a badge in a clickable container creates confusing semantics for assistive technology."
+    override: "Human confirmation required"
+
+composesWithFamilies:
+  - family: "Buttons"
+    relationship: "Badge-Count-Notification commonly overlays Button-Icon for notification bell patterns (e.g., inbox icon with unread count)"
+    companion: ".kiro/steering/Component-Family-Button.md"
+  - family: "Chips"
+    relationship: "Badges and Chips share compact pill shape but differ in interactivity — Badges are read-only, Chips are interactive. Selection between families is based on whether the element responds to user input"
+    companion: ".kiro/steering/Component-Family-Chip.md"
+
+accessibilityNotes:
+  - "Badges are non-interactive and not in tab order — do not add tabindex or click handlers"
+  - "Badge-Count-Notification announces count changes via live regions (announceChanges=true by default) — do not disable without reason"
+  - "Truncated Badge-Label-Base provides full text via title attribute (web) or accessibility label (native)"
+  - "All badges meet WCAG AA contrast (4.5:1 minimum). Badge-Count-Notification achieves 6.33:1"
+  - "Text scales with user font size preferences on all platforms"
+
+patterns:
+  - name: "Notification Bell"
+    description: "Badge-Count-Notification overlaid on a Button-Icon for inbox or notification indicators"
+    components:
+      - component: Button-Icon
+        role: trigger
+      - component: Badge-Count-Notification
+        role: count-overlay
+    relatedPatterns: []
+
+  - name: "List Item Status"
+    description: "Badge-Label-Base in trailing position of a list item to show status or category"
+    components:
+      - component: Badge-Label-Base
+        role: status-indicator
+    relatedPatterns:
+      - settings-screen

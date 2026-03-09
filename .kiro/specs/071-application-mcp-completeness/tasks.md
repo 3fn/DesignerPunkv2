@@ -143,7 +143,7 @@ Family guidance YAML files are authored vertically — Chips first as the refere
 
 ---
 
-- [ ] 3. Badges Family Guidance
+- [x] 3. Badges Family Guidance
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -165,7 +165,7 @@ Family guidance YAML files are authored vertically — Chips first as the refere
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Badges Family Guidance"`
   - Verify: FamilyGuidanceIndexer reports 6 families indexed
 
-  - [ ] 3.1 Read Badges family steering doc
+  - [x] 3.1 Read Badges family steering doc
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     **Agent**: Lina
@@ -174,7 +174,7 @@ Family guidance YAML files are authored vertically — Chips first as the refere
     - **Authoring method**: Structured extraction. If steering doc is insufficient, request interview with Peter.
     - _Requirements: 1, 4_
 
-  - [ ] 3.2 Author badges.yaml
+  - [x] 3.2 Author badges.yaml
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina (primary author), Ada (D9 compliance + token reference review)
