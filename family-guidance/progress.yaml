@@ -1,0 +1,80 @@
+# Family Guidance: Progress Indicators
+# Companion to: .kiro/steering/Component-Family-Progress.md
+# Read-both protocol: Read the family doc before modifying this file.
+
+family: "Progress Indicators"
+companion: ".kiro/steering/Component-Family-Progress.md"
+
+whenToUse:
+  - "Showing position in a carousel, onboarding flow, or swipeable content (Pagination-Base)"
+  - "Displaying progress through a linear multi-step flow with visual connectors (Stepper-Base)"
+  - "Showing labeled steps with descriptions and icons in complex workflows (Stepper-Detailed)"
+
+whenNotToUse:
+  - "Navigation between views or pages — Progress indicators show position, they don't enable movement. Use Navigation family instead"
+  - "Continuous or percentage-based progress — use a progress bar (component gap, not yet implemented)"
+  - "Non-linear flows where steps can be completed in any order"
+  - "Fewer than 3 items — Pagination viewport clipping is meaningless with 1–2 dots"
+
+selectionRules:
+  - scenario: "Carousel page dots or onboarding position indicator"
+    recommend: Progress-Pagination-Base
+    rationale: "Binary state (current/incomplete), render-all-dots with viewport clipping for large counts. Max 50 items"
+  - scenario: "Simple linear multi-step flow (checkout, setup wizard)"
+    recommend: Progress-Stepper-Base
+    rationale: "Nodes + connectors show progression. Checkmarks confirm completion. Priority state derivation handles errors. Max 8 steps"
+  - scenario: "Labeled workflow with step names, descriptions, or icons"
+    recommend: Progress-Stepper-Detailed
+    rationale: "Full composition (nodes + connectors + labels). Icon precedence ensures completed steps always show checkmark. Max 8 steps"
+  - scenario: "Custom progress visualization not covered by semantic variants"
+    recommend: Progress-Indicator-Node-Base
+    rationale: "Escape hatch — compose primitives (Node-Base, Connector-Base, Label-Base) directly. You own state management and accessibility"
+
+discouragedPatterns:
+  - pattern: "Using Node-Base, Connector-Base, or Label-Base directly in product code"
+    rationale: "Primitives are internal composition children. The semantic variants (Pagination-Base, Stepper-Base, Stepper-Detailed) manage state derivation, animation, and accessibility. Using primitives directly bypasses all of that."
+    override: "Human confirmation required — valid for custom compositions not covered by semantic variants"
+  - pattern: "Using Pagination-Base for linear workflows where users need to see all steps"
+    rationale: "Pagination shows only dots with no labels or connectors. If users need to understand what each step is or see overall progress, use Stepper-Base or Stepper-Detailed."
+    override: "Human confirmation required"
+  - pattern: "Using Stepper-Base or Stepper-Detailed with size='sm'"
+    rationale: "Steppers only support md and lg sizes. size='sm' throws an error. Nodes at sm size are too small for checkmark content."
+    override: "Not overridable — component throws error"
+  - pattern: "Using Progress components for navigation"
+    rationale: "Progress indicators are non-interactive by default. They show position, not enable movement. Navigation should be handled by the parent flow or Navigation family components."
+    override: "Human confirmation required"
+
+composesWithFamilies:
+  - family: "Navigation"
+    relationship: "Progress indicators and Navigation components serve complementary roles — Progress shows where the user is, Navigation enables movement. A stepper flow typically pairs a Progress indicator with navigation buttons (next/back)"
+    companion: ".kiro/steering/Component-Family-Navigation.md"
+
+accessibilityNotes:
+  - "Pagination uses role='group' with aria-label reflecting actual position (e.g., 'Page 26 of 50'), not the visible dot subset"
+  - "Stepper-Base uses role='progressbar' with aria-valuenow, aria-valuemin, aria-valuemax"
+  - "Stepper-Detailed uses role='list' with role='listitem' per step. Error and optional steps include suffixes in aria-label"
+  - "Current state has non-color differentiation via +4px size emphasis. Completed state uses checkmark icon"
+  - "All animation respects prefers-reduced-motion — transitions disabled when active"
+
+patterns:
+  - name: "Onboarding Flow"
+    description: "Pagination dots paired with swipeable content screens"
+    components:
+      - component: Progress-Pagination-Base
+        role: position-indicator
+    relatedPatterns:
+      - account-onboarding
+
+  - name: "Checkout Stepper"
+    description: "Linear stepper showing progress through a multi-step purchase flow"
+    components:
+      - component: Progress-Stepper-Base
+        role: progress-indicator
+    relatedPatterns: []
+
+  - name: "Admin Workflow"
+    description: "Detailed stepper with labeled steps, descriptions, and icons for complex workflows"
+    components:
+      - component: Progress-Stepper-Detailed
+        role: progress-indicator
+    relatedPatterns: []

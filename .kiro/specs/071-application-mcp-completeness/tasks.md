@@ -94,7 +94,7 @@ Family guidance YAML files are authored vertically — Chips first as the refere
 
 ---
 
-- [ ] 2. Progress Family Guidance
+- [x] 2. Progress Family Guidance
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -117,7 +117,7 @@ Family guidance YAML files are authored vertically — Chips first as the refere
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Progress Family Guidance"`
   - Verify: FamilyGuidanceIndexer reports 5 families indexed
 
-  - [ ] 2.1 Read Progress family steering doc and component contracts
+  - [x] 2.1 Read Progress family steering doc and component contracts
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     **Agent**: Lina (built the Progress components and render-all-dots architecture)
@@ -127,7 +127,7 @@ Family guidance YAML files are authored vertically — Chips first as the refere
     - **Authoring method**: Structured extraction. If steering doc is insufficient for meaningful guidance, request interview with Peter.
     - _Requirements: 1, 2, 3_
 
-  - [ ] 2.2 Author progress.yaml
+  - [x] 2.2 Author progress.yaml
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina (primary author), Ada (D9 compliance + token reference review)

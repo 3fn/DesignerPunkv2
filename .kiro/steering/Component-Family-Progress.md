@@ -10,7 +10,7 @@ inclusion: manual
 **Scope**: cross-project
 **Layer**: 3
 **Relevant Tasks**: component-development, ui-composition, progress-implementation
-**Last Reviewed**: 2026-02-16
+**Last Reviewed**: 2026-03-09
 
 ---
 
@@ -71,7 +71,7 @@ Progress Indicator Family
 
 | Component | Composes | Status | Specialized Purpose |
 |-----------|----------|--------|---------------------|
-| Progress-Pagination-Base | Node-Base | 🟡 Development | Dot pagination for carousels/onboarding. Virtualization for >5 items. Max 50 items |
+| Progress-Pagination-Base | Node-Base | 🟡 Development | Dot pagination for carousels/onboarding. Render-all-dots with viewport clipping for >5 items. Max 50 items |
 | Progress-Stepper-Base | Node-Base + Connector-Base | 🟡 Development | Linear stepper with connectors. State priority logic. Max 8 steps |
 | Progress-Stepper-Detailed | Node-Base + Connector-Base + Label-Base | 🟡 Development | Detailed stepper with labels and icons. Icon precedence logic. Max 8 steps |
 
@@ -172,7 +172,7 @@ All primitives in this family share these foundational contracts:
 |------|------|----------------|
 | `sm` | 12px | 16px |
 | `md` | 16px | 20px |
-| `lg` | 24px | 28px |
+| `lg` | 20px | 24px |
 
 ---
 
@@ -221,13 +221,14 @@ All primitives in this family share these foundational contracts:
 | `accessibilityLabel` | `string` | No | `'Page X of Y'` | Custom ARIA label |
 | `testID` | `string` | No | — | Test identifier |
 
-#### Virtualization
+#### Rendering
 
-When `totalItems > 5`, a sliding window renders only 5 visible nodes:
-- Pages 1–3: show nodes 1–5
-- Pages 4 to (total−3): current ±2 (centered)
-- Last 3 pages: show last 5 nodes
-- ARIA label always reflects actual position
+All dots are rendered regardless of totalItems count. When `totalItems > 5`, a fixed-width viewport clips to ~5 visible dots via overflow clipping. The current dot is centered by platform-native mechanisms:
+- Web: translateX on the dot track, clamped at edges
+- iOS: ScrollViewReader with scrollTo(anchor: .center)
+- Android: LazyRow with animateScrollToItem()
+
+ARIA label always reflects actual position (e.g., "Page 26 of 50").
 
 ---
 
@@ -314,7 +315,7 @@ Current sizes are formula-based, not direct primitive references:
 current_size = SPACING_BASE_VALUE × multiplier
   sm: 8px × 2   = 16px  (base 12px + 4px)
   md: 8px × 2.5 = 20px  (base 16px + 4px)
-  lg: 8px × 3.5 = 28px  (base 24px + 4px)
+  lg: 8px × 3   = 24px  (base 20px + 4px)
 ```
 
 All values align to the 4px baseline grid.
@@ -368,9 +369,9 @@ State is always derived from props, never stored internally. This makes componen
 - Pagination: `currentItem` → binary state derivation
 - Steppers: `currentStep` + `errorSteps` → priority-based state derivation
 
-#### Virtualization (Pagination only)
+#### Render-All-Dots (Pagination only)
 
-For large item counts (>5), Pagination-Base renders only 5 visible nodes using a sliding window. The window calculation is a pure function isolated in a utility, making it independently testable and memoizable.
+For any item count, Pagination-Base renders all dots and uses a fixed-width viewport with overflow clipping to show ~5 at a time. The current dot is centered via platform-native scroll/translation mechanisms. This avoids DOM manipulation on page change and enables smooth CSS/native animation.
 
 ### Accessibility Considerations
 
@@ -425,7 +426,7 @@ For large item counts (>5), Pagination-Base renders only 5 visible nodes using a
 
 All platforms implement identical:
 - State derivation logic (same inputs → same node states)
-- Virtualization window calculation (same currentItem/totalItems → same visible window)
+- Render-all-dots with viewport clipping (Pagination)
 - Validation rules (same thresholds, same error/clamp behavior)
 - Composition contracts (same primitive count, same prop passing)
 
