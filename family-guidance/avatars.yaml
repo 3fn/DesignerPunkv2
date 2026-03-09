@@ -1,0 +1,62 @@
+# Family Guidance: Avatars
+# Companion to: .kiro/steering/Component-Family-Avatar.md
+# Read-both protocol: Read the family doc before modifying this file.
+
+family: "Avatars"
+companion: ".kiro/steering/Component-Family-Avatar.md"
+
+whenToUse:
+  - "Representing user identity with optional profile image (type='human')"
+  - "Representing AI agent identity with shape-based differentiation (type='agent')"
+  - "Identity indicators in list items, cards, headers, or conversation threads"
+
+whenNotToUse:
+  - "Logos or brand marks — use dedicated image assets"
+  - "Decorative images unrelated to identity — use standard image elements"
+  - "Icon-only indicators without identity context — use Icon-Base instead"
+
+selectionRules:
+  - scenario: "Any identity representation"
+    recommend: Avatar-Base
+    rationale: "Avatar-Base is the only production component. Use type='human' for people (circle shape, supports images) and type='agent' for AI entities (hexagon shape, icon only)"
+
+discouragedPatterns:
+  - pattern: "Adding click/tap handlers directly to Avatar-Base"
+    rationale: "Avatar uses wrapper-delegated interaction. The avatar provides visual feedback (interactive prop) but the wrapper element handles click events, focus ring, touch target, and accessible name."
+    override: "Human confirmation required"
+  - pattern: "Providing src (image) to type='agent' avatars"
+    rationale: "Agent avatars render a bot icon only — no image support. The hexagon shape with icon is the intentional visual distinction for AI entities."
+    override: "Human confirmation required"
+
+composesWithFamilies:
+  - family: "Badges"
+    relationship: "Badge-Count-Notification or Badge-Label-Base can overlay Avatar-Base for online status or notification indicators"
+    companion: ".kiro/steering/Component-Family-Badge.md"
+  - family: "Icons"
+    relationship: "Avatar-Base uses Icon-Base internally for fallback icons (person icon for human, bot icon for agent)"
+    companion: ".kiro/steering/Component-Family-Icon.md"
+
+accessibilityNotes:
+  - "When decorative (adjacent to text identifying the person), set decorative=true to hide from screen readers"
+  - "When the avatar is the only identifier, provide alt text via the alt prop"
+  - "Interactive avatars must be wrapped in a focusable element (button/link) that provides the accessible name — Avatar itself is not focusable"
+  - "Shape differentiation (circle vs hexagon) provides non-color entity distinction (WCAG 1.4.1)"
+
+patterns:
+  - name: "User Profile Card"
+    description: "Avatar-Base with adjacent user name and optional status badge"
+    components:
+      - component: Avatar-Base
+        role: identity
+        props:
+          type: human
+      - component: Badge-Label-Base
+        role: status
+    relatedPatterns: []
+
+  - name: "Conversation Thread"
+    description: "Avatar-Base identifying message sender in a chat or thread context"
+    components:
+      - component: Avatar-Base
+        role: sender-identity
+    relatedPatterns: []

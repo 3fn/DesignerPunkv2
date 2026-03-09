@@ -260,7 +260,7 @@ Family guidance YAML files are authored vertically — Chips first as the refere
 
 ---
 
-- [ ] 5. Avatars Family Guidance
+- [x] 5. Avatars Family Guidance
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -283,7 +283,7 @@ Family guidance YAML files are authored vertically — Chips first as the refere
   - Verify: FamilyGuidanceIndexer reports 8 families indexed (full coverage)
   - Run full test suite to confirm 0 failures
 
-  - [ ] 5.1 Read Avatars family steering doc
+  - [x] 5.1 Read Avatars family steering doc
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     **Agent**: Lina
@@ -292,7 +292,7 @@ Family guidance YAML files are authored vertically — Chips first as the refere
     - **Authoring method**: Structured extraction. Avatars is the simplest family — extraction should be sufficient. Interview fallback available if needed.
     - _Requirements: 1_
 
-  - [ ] 5.2 Author avatars.yaml
+  - [x] 5.2 Author avatars.yaml
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina (primary author), Ada (D9 compliance + token reference review)
