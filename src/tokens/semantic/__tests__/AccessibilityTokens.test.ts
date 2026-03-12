@@ -35,8 +35,8 @@ describe('Accessibility Tokens', () => {
       // Test that focus.width references borderWidth200 (via border.emphasis)
       expect(accessibility.focus.width).toBe('borderWidth200');
       
-      // Test that focus.color references purple300 (via color.primary)
-      expect(accessibility.focus.color).toBe('purple300');
+      // Test that focus.color references cyan300 (via color.primary)
+      expect(accessibility.focus.color).toBe('cyan300');
     });
 
     test('should have correct resolved values', () => {
@@ -46,9 +46,9 @@ describe('Accessibility Tokens', () => {
       // borderWidth200 resolves to 2px
       expect(accessibility.focus.width).toBe('borderWidth200');
       
-      // purple300 is a string (hex color)
+      // cyan300 is a string (hex color)
       expect(typeof accessibility.focus.color).toBe('string');
-      expect(accessibility.focus.color).toBe('purple300');
+      expect(accessibility.focus.color).toBe('cyan300');
     });
 
     test('should follow compositional architecture pattern', () => {
@@ -78,7 +78,7 @@ describe('Accessibility Tokens', () => {
       // Test valid token retrieval
       expect(getAccessibilityToken('accessibility.focus.offset')).toBe('space025');
       expect(getAccessibilityToken('accessibility.focus.width')).toBe('borderWidth200');
-      expect(getAccessibilityToken('accessibility.focus.color')).toBe('purple300');
+      expect(getAccessibilityToken('accessibility.focus.color')).toBe('cyan300');
     });
 
     test('should return undefined for invalid token paths', () => {
@@ -94,7 +94,7 @@ describe('Accessibility Tokens', () => {
       expect(allTokens).toEqual([
         { name: 'accessibility.focus.offset', value: 'space025' },
         { name: 'accessibility.focus.width', value: 'borderWidth200' },
-        { name: 'accessibility.focus.color', value: 'purple300' }
+        { name: 'accessibility.focus.color', value: 'cyan300' }
       ]);
     });
   });
@@ -120,13 +120,13 @@ describe('Accessibility Tokens', () => {
       expect(accessibility.focus.width).toBe('borderWidth200');
       
       // Focus color should be primary brand color for visibility
-      expect(accessibility.focus.color).toBe('purple300');
+      expect(accessibility.focus.color).toBe('cyan300');
     });
 
     test('should support WCAG 1.4.11 Non-text Contrast requirements', () => {
       // Focus color should reference a color token that provides 3:1 contrast
-      // purple300 is the primary brand color designed for sufficient contrast
-      expect(accessibility.focus.color).toBe('purple300');
+      // cyan300 is the primary brand color designed for sufficient contrast
+      expect(accessibility.focus.color).toBe('cyan300');
       expect(typeof accessibility.focus.color).toBe('string');
     });
   });
@@ -163,7 +163,7 @@ describe('Accessibility Tokens', () => {
       // AI agents should be able to discover tokens through clear paths
       expect(accessibility.focus.offset).toBe('space025');
       expect(accessibility.focus.width).toBe('borderWidth200');
-      expect(accessibility.focus.color).toBe('purple300');
+      expect(accessibility.focus.color).toBe('cyan300');
       
       // Token names should be self-documenting
       expect(accessibilityTokenNames[0]).toContain('focus');

@@ -434,8 +434,8 @@ describe('Platform Output Format Tests', () => {
         // Should contain the CSS custom property name
         expect(result).toContain('--color-structure-border-subtle');
         // Should contain rgba format with resolved values
-        // gray100 = rgba(184, 182, 200, 1), opacity048 = 0.48
-        expect(result).toContain('rgba(184, 182, 200, 0.48)');
+        // gray100 = rgba(178, 188, 196, 1), opacity048 = 0.48
+        expect(result).toContain('rgba(178, 188, 196, 0.48)');
       });
 
       test('should produce correct CSS output format', () => {
@@ -574,10 +574,10 @@ describe('Platform Output Format Tests', () => {
         const iosResult = iosGenerator.formatSingleReferenceToken(semanticToken as any);
         const androidResult = androidGenerator.formatSingleReferenceToken(semanticToken as any);
 
-        // All should resolve gray100 (184, 182, 200) with opacity048 (0.48)
+        // All should resolve gray100 (178, 188, 196) with opacity048 (0.48)
         
-        // Web: rgba(184, 182, 200, 0.48)
-        expect(webResult).toContain('rgba(184, 182, 200, 0.48)');
+        // Web: rgba(178, 188, 196, 0.48)
+        expect(webResult).toContain('rgba(178, 188, 196, 0.48)');
         
         // iOS: UIColor with alpha: 0.48
         expect(iosResult).toContain('alpha: 0.48');

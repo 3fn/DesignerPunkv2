@@ -37,7 +37,7 @@ Task 1 is prerequisite for Task 2. Task 3 depends on Task 2. Task 4 depends on T
 
 ## Task List
 
-- [ ] 1. `wcagValue` Infrastructure
+- [x] 1. `wcagValue` Infrastructure
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -84,7 +84,7 @@ Task 1 is prerequisite for Task 2. Task 3 depends on Task 2. Task 4 depends on T
     - Verify backward compatibility: tokens without `wcagValue` generate identically
     - _Requirements: 1.3, 1.4, 1.5, 1.6_
 
-  - [ ] 1.3 Infrastructure tests
+  - [x] 1.3 Infrastructure tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -132,7 +132,7 @@ Task 1 is prerequisite for Task 2. Task 3 depends on Task 2. Task 4 depends on T
   **Post-Completion:**
   - Commit: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Token Migration"`
 
-  - [ ] 2.1 Update gray primitive values
+  - [x] 2.1 Update gray primitive values
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -141,7 +141,7 @@ Task 1 is prerequisite for Task 2. Task 3 depends on Task 2. Task 4 depends on T
     - Regenerate platform outputs
     - _Requirements: 6.1, 6.2, 6.3, 6.4_
 
-  - [ ] 2.2 Migrate semantic action tokens
+  - [x] 2.2 Migrate semantic action tokens
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -150,7 +150,7 @@ Task 1 is prerequisite for Task 2. Task 3 depends on Task 2. Task 4 depends on T
     - `color.action.secondary`: change `value` to `gray400`
     - _Requirements: 2.1, 2.2, 5.1_
 
-  - [ ] 2.3 Create new semantic tokens
+  - [x] 2.3 Create new semantic tokens
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -159,7 +159,7 @@ Task 1 is prerequisite for Task 2. Task 3 depends on Task 2. Task 4 depends on T
     - Verify no naming conflict with Spec 052 (`color.contrast.onPrimary` must remain undefined)
     - _Requirements: 3.1, 3.4, 4.1_
 
-  - [ ] 2.4 Token migration tests
+  - [x] 2.4 Token migration tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -173,7 +173,7 @@ Task 1 is prerequisite for Task 2. Task 3 depends on Task 2. Task 4 depends on T
     - Test `color.feedback.info.border` resolves to teal400/purple500 per theme
     - _Requirements: 2.1, 2.2, 3.1, 4.1, 5.1, 6.1, 9.1, 9.2, 10.1, 10.2, 10.3_
 
-  - [ ] 2.5 Reassign data/tech semantic tokens
+  - [x] 2.5 Reassign data/tech semantic tokens
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -183,7 +183,7 @@ Task 1 is prerequisite for Task 2. Task 3 depends on Task 2. Task 4 depends on T
     - Verify no component consumers are affected (expected: zero)
     - _Requirements: 9.1, 9.2, 9.3_
 
-  - [ ] 2.6 Migrate info feedback tokens for WCAG theme
+  - [x] 2.6 Migrate info feedback tokens for WCAG theme
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada

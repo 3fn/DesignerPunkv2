@@ -37,22 +37,22 @@ export const grayTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: 'rgba(184, 182, 200, 1)', wcag: 'rgba(184, 182, 200, 1)' },
-          dark: { base: 'rgba(184, 182, 200, 1)', wcag: 'rgba(184, 182, 200, 1)' }
+          light: { base: 'rgba(178, 188, 196, 1)', wcag: 'rgba(178, 188, 196, 1)' },
+          dark: { base: 'rgba(178, 188, 196, 1)', wcag: 'rgba(178, 188, 196, 1)' }
         } as ColorTokenValue,
         unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: 'rgba(184, 182, 200, 1)', wcag: 'rgba(184, 182, 200, 1)' },
-          dark: { base: 'rgba(184, 182, 200, 1)', wcag: 'rgba(184, 182, 200, 1)' }
+          light: { base: 'rgba(178, 188, 196, 1)', wcag: 'rgba(178, 188, 196, 1)' },
+          dark: { base: 'rgba(178, 188, 196, 1)', wcag: 'rgba(178, 188, 196, 1)' }
         } as ColorTokenValue,
         unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: 'rgba(184, 182, 200, 1)', wcag: 'rgba(184, 182, 200, 1)' },
-          dark: { base: 'rgba(184, 182, 200, 1)', wcag: 'rgba(184, 182, 200, 1)' }
+          light: { base: 'rgba(178, 188, 196, 1)', wcag: 'rgba(178, 188, 196, 1)' },
+          dark: { base: 'rgba(178, 188, 196, 1)', wcag: 'rgba(178, 188, 196, 1)' }
         } as ColorTokenValue,
         unit: 'rgba' as const
       }
@@ -72,22 +72,22 @@ export const grayTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: 'rgba(104, 101, 138, 1)', wcag: 'rgba(104, 101, 138, 1)' },
-          dark: { base: 'rgba(104, 101, 138, 1)', wcag: 'rgba(104, 101, 138, 1)' }
+          light: { base: 'rgba(94, 112, 124, 1)', wcag: 'rgba(94, 112, 124, 1)' },
+          dark: { base: 'rgba(94, 112, 124, 1)', wcag: 'rgba(94, 112, 124, 1)' }
         } as ColorTokenValue,
         unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: 'rgba(104, 101, 138, 1)', wcag: 'rgba(104, 101, 138, 1)' },
-          dark: { base: 'rgba(104, 101, 138, 1)', wcag: 'rgba(104, 101, 138, 1)' }
+          light: { base: 'rgba(94, 112, 124, 1)', wcag: 'rgba(94, 112, 124, 1)' },
+          dark: { base: 'rgba(94, 112, 124, 1)', wcag: 'rgba(94, 112, 124, 1)' }
         } as ColorTokenValue,
         unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: 'rgba(104, 101, 138, 1)', wcag: 'rgba(104, 101, 138, 1)' },
-          dark: { base: 'rgba(104, 101, 138, 1)', wcag: 'rgba(104, 101, 138, 1)' }
+          light: { base: 'rgba(94, 112, 124, 1)', wcag: 'rgba(94, 112, 124, 1)' },
+          dark: { base: 'rgba(94, 112, 124, 1)', wcag: 'rgba(94, 112, 124, 1)' }
         } as ColorTokenValue,
         unit: 'rgba' as const
       }
@@ -107,22 +107,22 @@ export const grayTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: 'rgba(45, 43, 62, 1)', wcag: 'rgba(45, 43, 62, 1)' },
-          dark: { base: 'rgba(45, 43, 62, 1)', wcag: 'rgba(45, 43, 62, 1)' }
+          light: { base: 'rgba(38, 50, 58, 1)', wcag: 'rgba(38, 50, 58, 1)' },
+          dark: { base: 'rgba(38, 50, 58, 1)', wcag: 'rgba(38, 50, 58, 1)' }
         } as ColorTokenValue,
         unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: 'rgba(45, 43, 62, 1)', wcag: 'rgba(45, 43, 62, 1)' },
-          dark: { base: 'rgba(45, 43, 62, 1)', wcag: 'rgba(45, 43, 62, 1)' }
+          light: { base: 'rgba(38, 50, 58, 1)', wcag: 'rgba(38, 50, 58, 1)' },
+          dark: { base: 'rgba(38, 50, 58, 1)', wcag: 'rgba(38, 50, 58, 1)' }
         } as ColorTokenValue,
         unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: 'rgba(45, 43, 62, 1)', wcag: 'rgba(45, 43, 62, 1)' },
-          dark: { base: 'rgba(45, 43, 62, 1)', wcag: 'rgba(45, 43, 62, 1)' }
+          light: { base: 'rgba(38, 50, 58, 1)', wcag: 'rgba(38, 50, 58, 1)' },
+          dark: { base: 'rgba(38, 50, 58, 1)', wcag: 'rgba(38, 50, 58, 1)' }
         } as ColorTokenValue,
         unit: 'rgba' as const
       }
@@ -142,22 +142,22 @@ export const grayTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: 'rgba(31, 29, 46, 1)', wcag: 'rgba(31, 29, 46, 1)' },
-          dark: { base: 'rgba(31, 29, 46, 1)', wcag: 'rgba(31, 29, 46, 1)' }
+          light: { base: 'rgba(24, 34, 40, 1)', wcag: 'rgba(24, 34, 40, 1)' },
+          dark: { base: 'rgba(24, 34, 40, 1)', wcag: 'rgba(24, 34, 40, 1)' }
         } as ColorTokenValue,
         unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: 'rgba(31, 29, 46, 1)', wcag: 'rgba(31, 29, 46, 1)' },
-          dark: { base: 'rgba(31, 29, 46, 1)', wcag: 'rgba(31, 29, 46, 1)' }
+          light: { base: 'rgba(24, 34, 40, 1)', wcag: 'rgba(24, 34, 40, 1)' },
+          dark: { base: 'rgba(24, 34, 40, 1)', wcag: 'rgba(24, 34, 40, 1)' }
         } as ColorTokenValue,
         unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: 'rgba(31, 29, 46, 1)', wcag: 'rgba(31, 29, 46, 1)' },
-          dark: { base: 'rgba(31, 29, 46, 1)', wcag: 'rgba(31, 29, 46, 1)' }
+          light: { base: 'rgba(24, 34, 40, 1)', wcag: 'rgba(24, 34, 40, 1)' },
+          dark: { base: 'rgba(24, 34, 40, 1)', wcag: 'rgba(24, 34, 40, 1)' }
         } as ColorTokenValue,
         unit: 'rgba' as const
       }
@@ -177,22 +177,22 @@ export const grayTokens = {
     platforms: {
       web: {
         value: {
-          light: { base: 'rgba(21, 19, 31, 1)', wcag: 'rgba(21, 19, 31, 1)' },
-          dark: { base: 'rgba(21, 19, 31, 1)', wcag: 'rgba(21, 19, 31, 1)' }
+          light: { base: 'rgba(16, 22, 26, 1)', wcag: 'rgba(16, 22, 26, 1)' },
+          dark: { base: 'rgba(16, 22, 26, 1)', wcag: 'rgba(16, 22, 26, 1)' }
         } as ColorTokenValue,
         unit: 'rgba' as const
       },
       ios: {
         value: {
-          light: { base: 'rgba(21, 19, 31, 1)', wcag: 'rgba(21, 19, 31, 1)' },
-          dark: { base: 'rgba(21, 19, 31, 1)', wcag: 'rgba(21, 19, 31, 1)' }
+          light: { base: 'rgba(16, 22, 26, 1)', wcag: 'rgba(16, 22, 26, 1)' },
+          dark: { base: 'rgba(16, 22, 26, 1)', wcag: 'rgba(16, 22, 26, 1)' }
         } as ColorTokenValue,
         unit: 'rgba' as const
       },
       android: {
         value: {
-          light: { base: 'rgba(21, 19, 31, 1)', wcag: 'rgba(21, 19, 31, 1)' },
-          dark: { base: 'rgba(21, 19, 31, 1)', wcag: 'rgba(21, 19, 31, 1)' }
+          light: { base: 'rgba(16, 22, 26, 1)', wcag: 'rgba(16, 22, 26, 1)' },
+          dark: { base: 'rgba(16, 22, 26, 1)', wcag: 'rgba(16, 22, 26, 1)' }
         } as ColorTokenValue,
         unit: 'rgba' as const
       }

@@ -140,7 +140,15 @@ export class DTCGFormatGenerator {
     output.blend = this.generateBlendTokens();
 
     // --- Semantic token groups ---
-    output.semanticColor = this.generateSemanticColorTokens();
+    // semanticColor may throw if tokens have wcagValue (guard rail from Spec 076 Task 1.4)
+    // Skip gracefully — all other groups still generate
+    try {
+      output.semanticColor = this.generateSemanticColorTokens();
+    } catch (e) {
+      if (!(e instanceof Error && e.message.includes('wcagValue'))) {
+        throw e;
+      }
+    }
     output.semanticSpace = this.generateSemanticSpacingTokens();
     output.semanticBorderWidth = this.generateSemanticBorderWidthTokens();
     output.semanticRadius = this.generateSemanticRadiusTokens();

@@ -166,7 +166,7 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
   // Feedback - Info (3 tokens)
   'color.feedback.info.text': {
     name: 'color.feedback.info.text',
-    primitiveReferences: { value: 'teal400' },
+    primitiveReferences: { value: 'teal400', wcagValue: 'purple500' },
     category: SemanticCategory.COLOR,
     context: 'Text color for informational feedback messages',
     description: 'Teal text color for informational states - help text, informational messages, neutral feedback'
@@ -174,7 +174,7 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
 
   'color.feedback.info.background': {
     name: 'color.feedback.info.background',
-    primitiveReferences: { value: 'teal100' },
+    primitiveReferences: { value: 'teal100', wcagValue: 'purple100' },
     category: SemanticCategory.COLOR,
     context: 'Background color for informational feedback areas',
     description: 'Light teal background for informational states - info banners, help sections'
@@ -182,7 +182,7 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
 
   'color.feedback.info.border': {
     name: 'color.feedback.info.border',
-    primitiveReferences: { value: 'teal400' },
+    primitiveReferences: { value: 'teal400', wcagValue: 'purple500' },
     category: SemanticCategory.COLOR,
     context: 'Border color for informational feedback elements',
     description: 'Teal border for informational states - info card outlines, help section borders'
@@ -316,18 +316,26 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
 
   'color.action.primary': {
     name: 'color.action.primary',
-    primitiveReferences: { value: 'purple300' },
+    primitiveReferences: { value: 'cyan300', wcagValue: 'teal300' },
     category: SemanticCategory.COLOR,
     context: 'Primary action color for emphasized interactive elements',
-    description: 'Purple color for emphasized actions - hero CTAs, main buttons, primary interactive elements. Use for single, focused instances where visual prominence is desired.'
+    description: 'Cyan color for emphasized actions - hero CTAs, main buttons, primary interactive elements. Use for single, focused instances where visual prominence is desired.'
   },
 
   'color.action.secondary': {
     name: 'color.action.secondary',
-    primitiveReferences: { value: 'black400' },
+    primitiveReferences: { value: 'gray400' },
     category: SemanticCategory.COLOR,
     context: 'Secondary action color for de-emphasized interactive elements',
     description: 'Dark neutral color for de-emphasized actions - list item buttons, secondary CTAs, repetitive action elements. Use for supporting instances to avoid UI over-saturation.'
+  },
+
+  'color.action.navigation': {
+    name: 'color.action.navigation',
+    primitiveReferences: { value: 'cyan500', wcagValue: 'teal500' },
+    category: SemanticCategory.COLOR,
+    context: 'Navigation action color for inline links and navigation elements',
+    description: 'Cyan color for navigation actions - inline text links, breadcrumbs, and navigation-specific interactive elements.'
   },
 
   // Attention & Highlight (2 tokens)
@@ -350,18 +358,18 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
   // Tech & Data (2 tokens)
   'color.tech': {
     name: 'color.tech',
-    primitiveReferences: { value: 'cyan400' },
+    primitiveReferences: { value: 'purple400' },
     category: SemanticCategory.COLOR,
     context: 'Tech color for technical elements and code',
-    description: 'Cyan for technical elements, code snippets, and tech-related UI'
+    description: 'Purple for technical elements, code snippets, and tech-related UI'
   },
 
   'color.data': {
     name: 'color.data',
-    primitiveReferences: { value: 'cyan300' },
+    primitiveReferences: { value: 'purple300' },
     category: SemanticCategory.COLOR,
     context: 'Data color for data visualization and metrics',
-    description: 'Cyan for data visualization, metrics, and data-related elements'
+    description: 'Purple for data visualization, metrics, and data-related elements'
   },
 
   // Text Hierarchy (4 tokens)
@@ -418,6 +426,14 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
     category: SemanticCategory.COLOR,
     context: 'Contrast color for content on dark backgrounds',
     description: 'White color for content (text, icons) on dark backgrounds - ensures WCAG AA contrast compliance for readability'
+  },
+
+  'color.contrast.onAction': {
+    name: 'color.contrast.onAction',
+    primitiveReferences: { value: 'black500', wcagValue: 'white100' },
+    category: SemanticCategory.COLOR,
+    context: 'Contrast color for content on action-colored backgrounds',
+    description: 'Content color for text and icons on primary action backgrounds. Black on cyan (base), white on teal (WCAG) to maintain contrast compliance.'
   },
 
   // ============================================================================
@@ -511,10 +527,10 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
   // Background Variants (1 token - kept for specific use case)
   'color.background.primary.subtle': {
     name: 'color.background.primary.subtle',
-    primitiveReferences: { value: 'purple100' },
+    primitiveReferences: { value: 'cyan100', wcagValue: 'teal100' },
     category: SemanticCategory.COLOR,
     context: 'Subtle primary background for hover states and selections',
-    description: 'Subtle purple tint background for secondary button hover states, selected list items, and hover states on cards/containers'
+    description: 'Subtle cyan tint background for secondary button hover states, selected list items, and hover states on cards/containers'
   },
 
   // Icon Colors (1 token)
@@ -778,7 +794,7 @@ export function getAllColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'
  * Total: 59 tokens
  */
 export function validateColorTokenCount(): boolean {
-  const expectedCount = 59;
+  const expectedCount = 61;
   const actualCount = colorTokenNames.length;
   if (actualCount !== expectedCount) {
     console.warn(`Color token count mismatch: expected ${expectedCount}, got ${actualCount}`);

@@ -47,8 +47,8 @@ describe('Accessibility Token Generation', () => {
       const result = generator.generateWebTokens();
 
       expect(result.content).toContain('--accessibility-focus-color');
-      // Color should reference the primitive color token (purple300)
-      expect(result.content).toMatch(/--accessibility-focus-color:\s*var\(--purple-300\)/);
+      // Color should reference the primitive color token (cyan300)
+      expect(result.content).toMatch(/--accessibility-focus-color:\s*var\(--cyan-300\)/);
     });
 
     it('should include WCAG comments when comments enabled', () => {
@@ -97,7 +97,7 @@ describe('Accessibility Token Generation', () => {
 
       expect(result.content).toContain('accessibilityFocusColor');
       // Color should reference the primitive color constant
-      expect(result.content).toMatch(/let accessibilityFocusColor\s*=\s*purple300/);
+      expect(result.content).toMatch(/let accessibilityFocusColor\s*=\s*cyan300/);
     });
 
     it('should include WCAG comments when comments enabled', () => {
@@ -146,7 +146,7 @@ describe('Accessibility Token Generation', () => {
 
       expect(result.content).toContain('accessibility_focus_color');
       // Color should reference the primitive color constant
-      expect(result.content).toMatch(/val accessibility_focus_color\s*=\s*purple_300/);
+      expect(result.content).toMatch(/val accessibility_focus_color\s*=\s*cyan_300/);
     });
 
     it('should include WCAG comments when comments enabled', () => {
@@ -206,10 +206,10 @@ describe('Accessibility Token Generation', () => {
     it('should reference same primitive color token across platforms', () => {
       const results = generator.generateAll();
 
-      // All platforms should reference purple300 for focus color
-      expect(results[0].content).toMatch(/--accessibility-focus-color:\s*var\(--purple-300\)/);
-      expect(results[1].content).toMatch(/accessibilityFocusColor\s*=\s*purple300/);
-      expect(results[2].content).toMatch(/accessibility_focus_color\s*=\s*purple_300/);
+      // All platforms should reference cyan300 for focus color
+      expect(results[0].content).toMatch(/--accessibility-focus-color:\s*var\(--cyan-300\)/);
+      expect(results[1].content).toMatch(/accessibilityFocusColor\s*=\s*cyan300/);
+      expect(results[2].content).toMatch(/accessibility_focus_color\s*=\s*cyan_300/);
     });
 
     it('should follow platform-specific naming conventions', () => {
@@ -271,7 +271,7 @@ describe('Accessibility Token Generation', () => {
       expect(result.content).toMatch(/--accessibility-focus-width:\s*var\(--border-width-200\);/);
       
       // CSS should use var() for color references
-      expect(result.content).toMatch(/--accessibility-focus-color:\s*var\(--purple-300\);/);
+      expect(result.content).toMatch(/--accessibility-focus-color:\s*var\(--cyan-300\);/);
     });
 
     it('should generate valid Swift syntax for iOS', () => {
@@ -285,7 +285,7 @@ describe('Accessibility Token Generation', () => {
       expect(result.content).toMatch(/public static let accessibilityFocusWidth\s*=\s*borderWidth200/);
       
       // Swift should reference color constant
-      expect(result.content).toMatch(/public static let accessibilityFocusColor\s*=\s*purple300/);
+      expect(result.content).toMatch(/public static let accessibilityFocusColor\s*=\s*cyan300/);
     });
 
     it('should generate valid Kotlin syntax for Android', () => {
@@ -299,7 +299,7 @@ describe('Accessibility Token Generation', () => {
       expect(result.content).toMatch(/val accessibility_focus_width\s*=\s*border_width_200/);
       
       // Kotlin should reference color constant
-      expect(result.content).toMatch(/val accessibility_focus_color\s*=\s*purple_300/);
+      expect(result.content).toMatch(/val accessibility_focus_color\s*=\s*cyan_300/);
     });
   });
 

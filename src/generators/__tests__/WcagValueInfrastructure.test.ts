@@ -96,20 +96,20 @@ describe('wcagValue Infrastructure (Spec 076)', () => {
   });
 
   describe('Backward compatibility', () => {
-    it('should not generate WCAG block when no tokens have wcagValue', () => {
-      // useWcagMock is false — real tokens (none have wcagValue yet)
+    it('tokens without wcagValue should not appear in WCAG override block', () => {
+      // Real tokens now include wcagValue tokens (Spec 076), so the WCAG block exists.
+      // Verify that tokens WITHOUT wcagValue are absent from the override block.
       const webResult = generator.generateWebTokens();
-      const iosResult = generator.generateiOSTokens();
-      const androidResult = generator.generateAndroidTokens();
-
-      expect(webResult.content).not.toContain(':root[data-theme="wcag"]');
-      expect(webResult.content).not.toContain('Spec 076');
-      expect(iosResult.content).not.toContain('WCAG Theme Semantic Overrides');
-      expect(androidResult.content).not.toContain('WCAG Theme Semantic Overrides');
-
-      expect(webResult.valid).toBe(true);
-      expect(iosResult.valid).toBe(true);
-      expect(androidResult.valid).toBe(true);
+      const wcagMatch = webResult.content.match(/:root\[data-theme="wcag"\]\s*\{([^}]*)\}/);
+      if (!wcagMatch) {
+        // No WCAG block at all — backward compat trivially satisfied
+        return;
+      }
+      const wcagBlock = wcagMatch[1];
+      // color.action.secondary has no wcagValue — should NOT appear in WCAG block
+      expect(wcagBlock).not.toContain('--color-action-secondary');
+      // color.text.default has no wcagValue — should NOT appear
+      expect(wcagBlock).not.toContain('--color-text-default');
     });
   });
 });

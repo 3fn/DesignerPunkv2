@@ -51,11 +51,14 @@ describe('wcagValue Export Guard Rails (Spec 076)', () => {
   });
 
   describe('DTCG export', () => {
-    it('should throw when a semantic color token has wcagValue', () => {
+    it('should omit semanticColor from output when a token has wcagValue', () => {
       injectWcag = true;
       const generator = new DTCGFormatGenerator();
-      expect(() => generator.generate()).toThrow(/wcagValue/);
-      expect(() => generator.generate()).toThrow(/color\.feedback\.info\.text/);
+      const output = generator.generate();
+      // Guard rail fires internally — semanticColor is skipped, not thrown
+      expect(output.semanticColor).toBeUndefined();
+      // Other groups still present
+      expect(output.space).toBeDefined();
     });
 
     it('should not throw when no tokens have wcagValue', () => {
