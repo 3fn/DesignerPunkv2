@@ -18,6 +18,7 @@ import { getAllPrimitiveTokens, getTokensByCategory, durationTokens, easingToken
 import { getAllSemanticTokens, getAllZIndexTokens, getAllElevationTokens, motionTokens } from '../tokens/semantic';
 import { BlendUtilityGenerator, BlendUtilityGenerationOptions } from './BlendUtilityGenerator';
 import { ComponentTokenRegistry, RegisteredComponentToken } from '../registries/ComponentTokenRegistry';
+import { getPlatformTokenName } from '../naming/PlatformNamingRules';
 
 export interface GenerationOptions {
   outputDir?: string;
@@ -763,6 +764,9 @@ export class TokenFileGenerator {
         return lines;
     }
 
+    // Collect tokens with wcagValue for WCAG theme override block
+    const wcagOverrides: Array<{ name: string; wcagPrimitiveRef: string; category: string }> = [];
+
     // Iterate over semantic tokens
     for (const semantic of semantics) {
       // Skip tokens without primitiveReferences (e.g., semantic-only layering tokens)
@@ -770,6 +774,15 @@ export class TokenFileGenerator {
         continue;
       }
       
+      // Track tokens with wcagValue for WCAG override generation
+      if (semantic.primitiveReferences.wcagValue) {
+        wcagOverrides.push({
+          name: semantic.name,
+          wcagPrimitiveRef: semantic.primitiveReferences.wcagValue,
+          category: semantic.category
+        });
+      }
+
       // Special handling for ICON category tokens with fontSize/multiplier (icon sizes)
       // Icon property tokens (like strokeWidth) are handled as single-reference tokens below
       if (semantic.category === 'icon' && semantic.primitiveReferences.fontSize && semantic.primitiveReferences.multiplier) {
@@ -799,6 +812,78 @@ export class TokenFileGenerator {
       } else {
         // Multi-reference tokens (typography with multiple properties)
         lines.push(generator.formatMultiReferenceToken(semantic as SemanticToken));
+      }
+    }
+
+    // Store WCAG overrides for the caller to retrieve via getLastWcagOverrides()
+    this.lastWcagOverrides = wcagOverrides.length > 0
+      ? { overrides: wcagOverrides, platform, generator }
+      : null;
+
+    return lines;
+  }
+
+  /**
+   * Pending WCAG overrides from the last generateSemanticSection call.
+   * Used by platform-specific generate methods to append WCAG blocks.
+   */
+  private lastWcagOverrides: {
+    overrides: Array<{ name: string; wcagPrimitiveRef: string; category: string }>;
+    platform: 'web' | 'ios' | 'android';
+    generator: WebFormatGenerator | iOSFormatGenerator | AndroidFormatGenerator;
+  } | null = null;
+
+  /**
+   * Generate WCAG theme override block for semantic tokens with wcagValue (Spec 076)
+   * 
+   * When a semantic token has primitiveReferences.wcagValue, the WCAG theme
+   * should reference a different primitive than the standard theme.
+   * 
+   * Web: [data-theme="wcag"] { --semantic: var(--wcag-primitive); }
+   * iOS: static let semanticName_wcag = wcagPrimitive
+   * Android: val semanticName_wcag = wcagPrimitive
+   */
+  private generateWcagOverrides(
+    overrides: Array<{ name: string; wcagPrimitiveRef: string; category: string }>,
+    platform: 'web' | 'ios' | 'android',
+    generator: WebFormatGenerator | iOSFormatGenerator | AndroidFormatGenerator
+  ): string[] {
+    const lines: string[] = [];
+
+    switch (platform) {
+      case 'web': {
+        lines.push('');
+        lines.push('/* WCAG Theme: Semantic token overrides referencing WCAG-specific primitives (Spec 076) */');
+        lines.push(':root[data-theme="wcag"] {');
+        for (const override of overrides) {
+          const semanticName = (generator as WebFormatGenerator).getTokenName(override.name, override.category);
+          const cssSemanticName = semanticName.startsWith('--') ? semanticName : `--${semanticName}`;
+          const wcagPrimitiveName = getPlatformTokenName(override.wcagPrimitiveRef, 'web', override.category as any);
+          const cssPrimitiveRef = wcagPrimitiveName.startsWith('--') ? wcagPrimitiveName : `--${wcagPrimitiveName}`;
+          lines.push(`  ${cssSemanticName}: var(${cssPrimitiveRef});`);
+        }
+        lines.push('}');
+        break;
+      }
+      case 'ios': {
+        lines.push('');
+        lines.push('    // MARK: - WCAG Theme Semantic Overrides (Spec 076)');
+        for (const override of overrides) {
+          const semanticName = (generator as iOSFormatGenerator).getTokenName(override.name, override.category);
+          const wcagPrimitiveName = (generator as iOSFormatGenerator).getTokenName(override.wcagPrimitiveRef, override.category);
+          lines.push(`    public static let ${semanticName}_wcag = ${wcagPrimitiveName}`);
+        }
+        break;
+      }
+      case 'android': {
+        lines.push('');
+        lines.push('    // WCAG Theme Semantic Overrides (Spec 076)');
+        for (const override of overrides) {
+          const semanticName = (generator as AndroidFormatGenerator).getTokenName(override.name, override.category);
+          const wcagPrimitiveName = (generator as AndroidFormatGenerator).getTokenName(override.wcagPrimitiveRef, override.category);
+          lines.push(`    val ${semanticName}_wcag = ${wcagPrimitiveName}`);
+        }
+        break;
       }
     }
 
@@ -1044,8 +1129,18 @@ export class TokenFileGenerator {
     lines.push(...layeringLines);
     semanticTokenCount += layeringLines.length;
 
-    // Add footer
+    // Add footer (closes :root)
     lines.push(this.webGenerator.generateFooter());
+
+    // Append WCAG theme semantic overrides after :root (Spec 076)
+    if (this.lastWcagOverrides && this.lastWcagOverrides.platform === 'web') {
+      lines.push(...this.generateWcagOverrides(
+        this.lastWcagOverrides.overrides,
+        'web',
+        this.lastWcagOverrides.generator
+      ));
+      this.lastWcagOverrides = null;
+    }
 
     const content = lines.join('\n');
     const validation = this.webGenerator.validateSyntax(content);
@@ -1148,6 +1243,16 @@ export class TokenFileGenerator {
     const layeringLines = this.generateLayeringSection('ios');
     lines.push(...layeringLines);
     semanticTokenCount += layeringLines.length;
+
+    // Add WCAG theme semantic overrides (Spec 076)
+    if (this.lastWcagOverrides && this.lastWcagOverrides.platform === 'ios') {
+      lines.push(...this.generateWcagOverrides(
+        this.lastWcagOverrides.overrides,
+        'ios',
+        this.lastWcagOverrides.generator
+      ));
+      this.lastWcagOverrides = null;
+    }
 
     // Add footer
     lines.push(this.iosGenerator.generateFooter());
@@ -1253,6 +1358,16 @@ export class TokenFileGenerator {
     const layeringLines = this.generateLayeringSection('android');
     lines.push(...layeringLines);
     semanticTokenCount += layeringLines.length;
+
+    // Add WCAG theme semantic overrides (Spec 076)
+    if (this.lastWcagOverrides && this.lastWcagOverrides.platform === 'android') {
+      lines.push(...this.generateWcagOverrides(
+        this.lastWcagOverrides.overrides,
+        'android',
+        this.lastWcagOverrides.generator
+      ));
+      this.lastWcagOverrides = null;
+    }
 
     // Add footer
     lines.push(this.androidGenerator.generateFooter());

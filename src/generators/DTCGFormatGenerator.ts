@@ -516,6 +516,16 @@ export class DTCGFormatGenerator {
     const group: DTCGGroup = { $type: 'color' };
     for (const [key, token] of Object.entries(semanticColorTokens)) {
       const refs = token.primitiveReferences;
+
+      // Guard rail (Spec 076): wcagValue is not yet supported in DTCG export
+      if (refs.wcagValue) {
+        throw new Error(
+          `DTCG export does not support wcagValue. Token "${token.name}" has ` +
+          `wcagValue: "${refs.wcagValue}". A follow-up spec is needed to define ` +
+          `DTCG/Figma representation of theme-conditional semantic references.`
+        );
+      }
+
       // Determine alias value — use {color.primitiveRef} syntax
       const primaryRef = refs.value || refs.color;
       if (!primaryRef) continue;

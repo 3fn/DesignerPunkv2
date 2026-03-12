@@ -23,6 +23,11 @@ DesignerPunk is a True Native cross-platform design system with mathematical fou
 - Cross-platform consistency through unitless token architecture
 - Human-AI partnership as foundational value
 
+**Platform Minimum Versions:**
+- iOS: 17.0+
+- Android: Not yet constrained
+- Web: Not yet constrained
+
 **For detailed architectural guidance, see:**
 - True Native Architecture: `preserved-knowledge/true-native-architecture-concepts.md`
 - Token System: `docs/token-system-overview.md`

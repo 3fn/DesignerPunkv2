@@ -267,6 +267,31 @@ export const shadowTokens: Record<string, ShadowToken> = {
     description: 'Subtle shadow with no horizontal offset, 4px vertical offset, 20px blur, lighter opacity'
   },
   
+  'shadow.navigation.indicator': {
+    name: 'shadow.navigation.indicator',
+    primitiveReferences: {
+      offsetX: 'shadowOffsetX.000',
+      offsetY: 'shadowOffsetY.000',
+      blur: 'shadowBlurHard',
+      opacity: 'shadowOpacitySoft',
+      color: 'shadowBlack100'
+    },
+    platforms: {
+      web: {
+        // CSS box-shadow uses primitive references
+      },
+      ios: {
+        // SwiftUI shadow uses primitive references
+      },
+      android: {
+        elevation: 2  // Material Design elevation (dp) — inset element, below navigation surface
+      }
+    },
+    category: SemanticCategory.SHADOW,
+    context: 'Navigation indicator shadow for active segment/tab indicators within navigation controls',
+    description: 'Omnidirectional shadow with no offset, 4px blur, 20% opacity — tight but gentle edge definition for indicators sitting inside a container surface'
+  },
+
   // Directional shadow variations demonstrating sun arc framework
   
   'shadow.sunrise': {

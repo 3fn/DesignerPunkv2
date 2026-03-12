@@ -202,6 +202,23 @@ Floating action button shadow with sunset lighting and hard quality.
 
 **Visual Effect**: Dramatic shadow with directional offset and warm tint
 
+#### shadow.navigation.indicator
+
+Navigation indicator shadow for active segment/tab indicators within navigation controls.
+
+**Composition**:
+- offsetX: `shadowOffsetX.000` (0px)
+- offsetY: `shadowOffsetY.000` (0px)
+- blur: `shadowBlurHard` (4px)
+- opacity: `shadowOpacitySoft` (0.2)
+- color: `shadowBlack100` (black)
+
+**Use Cases**: Active segment indicators in SegmentedChoice, sliding tab indicators
+
+**Visual Effect**: Omnidirectional, tight but gentle edge definition — "lifted paper" feel for inset elements
+
+**Android Note**: This token must be consumed via `Modifier.shadow(elevation = 2.dp, shape = ...).clip(shape)`, NOT through `mapShadowToElevation()` or `Surface(elevation = ...)`. The indicator is an inset element — absolute elevation would conflict with parent surfaces. See Spec 049 design outline for full rationale.
+
 ### Directional Shadow Variations
 
 Directional shadows demonstrate the sun arc framework with lighting-appropriate colors. These tokens follow the sun's arc throughout the day, providing consistent directional lighting for themed interfaces.
@@ -632,6 +649,12 @@ For precise shadow control beyond elevation approximation, custom drawable gener
 - **Elevation level**: High (depth 300)
 - **Visual weight**: Strong, dramatic
 - **Lighting**: Sunset (directional offset with warm tint)
+
+#### shadow.navigation.indicator
+- **Use for**: Active indicators within navigation controls (segmented choice, tab bars)
+- **Elevation level**: Minimal (2dp Android, purely visual — no stacking context)
+- **Visual weight**: Very subtle, omnidirectional
+- **Lighting**: None (no directional offset — element is inside a container, not floating)
 
 #### Directional Shadows (sunrise, morning, noon, afternoon, sunset)
 - **Use for**: Themed interfaces, time-of-day experiences, completing the sun arc series

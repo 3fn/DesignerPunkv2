@@ -235,6 +235,8 @@ Each elevation token references a corresponding shadow token to maintain cross-p
 | toast | 500 / 5 | 24dp | shadow.toast | High |
 | tooltip | 600 / 6 | 24dp | shadow.tooltip | High |
 
+**Note**: `shadow.navigation.indicator` (Android: 2dp via `Modifier.shadow()`) provides shadow for inset navigation indicators (e.g., SegmentedChoice active segment). It does not have a corresponding z-index/elevation token — the indicator exists within a navigation surface, not as a separate stacking context. On Android, it must use `Modifier.shadow()` (purely visual) rather than `Surface(elevation = ...)` to avoid absolute elevation conflicts with parent surfaces.
+
 ### How It Works
 
 **Web/iOS**: Stacking order and visual depth are separate concerns
