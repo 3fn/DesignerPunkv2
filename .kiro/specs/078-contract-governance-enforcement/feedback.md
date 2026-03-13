@@ -155,6 +155,17 @@ Solid requirements doc. Clean traceability from design outline → feedback → 
 - 5 design decisions with rationale and trade-offs → design.md § "Design Decisions"
 - Empty contracts.yaml is valid (existence check passes, name validation has nothing to check) → design.md § "Error Handling"
 
+#### [THURGOOD R2]
+- Incorporated Ada Design-R1 items 1-3 and Lina Design-R1 items 1-2.
+- Added per-category count assertion to structural assertion (Ada R1 + Lina R1 endorsement). Each category heading's parenthetical count must match parsed concept count.
+- Added middle dot delimiter implementation note (Lina R1). Parser must be explicit about `·` (U+00B7).
+- Added underscore edge case documentation (Ada R1). Current categories have no underscores; structural assertion catches new categories.
+- Clarified empty contracts.yaml handling for auto-discovery (Lina R1). Req 5 skips components with zero contracts.
+- Refined Decision 2 trade-offs (Ada R1). Format coupling is to the inline-list format specifically, not just markdown in general.
+- Lina's observation about steering doc changes lacking design detail: intentionally light — ballot measure model means Peter has editorial authority over steering doc content. No change.
+- Ada's note on Decision 4 (scan as deliverable): confirmed, no change needed.
+- Lina's note on Decision 1 (file name = failure mode): good practical benefit, no change needed.
+
 #### [ADA R1]
 
 Clean design. The architecture diagram showing independent safeguard layers at different lifecycle points is the right framing — no single point of failure. A few items:
@@ -190,4 +201,42 @@ The design is clean and implementable. The architecture diagram, error handling 
 ## Tasks Feedback
 
 ### Context for Reviewers
-- [Populated by spec author before requesting review]
+- 4 parent tasks, 10 subtasks total → tasks.md
+- Task 1 (Audit) is prerequisite for Task 2 (Automated Validation) — audit resolves non-catalog names before validation test ships
+- Tasks 3 and 4 are independent of each other and of Tasks 1-2 — can proceed in parallel
+- Agent assignments follow domain boundaries: Lina performs audit (Stemma knowledge), Thurgood writes tests (test governance), Peter approves ballot measures
+- Task 3.1 (Lina's prompt) assigned to Peter — prompt authoring is his domain
+- All steering doc changes require ballot measures — reflected in agent assignments
+- Req 9 (Concept Catalog ownership) is addressed within Task 1.2 (catalog updates) and Task 3.1 (prompt step includes catalog check instruction)
+
+#### [LINA R1]
+
+Well-structured task plan. The dependency graph is correct, agent assignments respect domain boundaries, and the subtask granularity is appropriate. A few items:
+
+- Task 1.1 is assigned to me — confirmed, I'm ready to run the audit. One clarification: the subtask says "Classify each non-catalog name: (a) legitimate new concept or (b) naming mistake." I'll need a decision framework for this classification. My proposed heuristic: if the concept describes a behavior that no existing catalog concept covers (genuinely new behavioral pattern), it's (a). If the concept describes a behavior that an existing catalog concept already covers under a different name, it's (b). I'll document the rationale for each classification in the findings doc so Thurgood can review the judgment calls. → tasks.md § "Task 1.1"
+
+- Task 1.2 says "Lina (changes) + Thurgood (review classifications) + Peter (ballot measures)." That's three agents on one subtask. The sequencing matters: I make changes → Thurgood reviews → Peter approves ballot measures. This is sequential, not parallel. If there are many non-catalog names requiring ballot measures, this could be slow. Suggest: I batch all catalog additions into a single ballot measure rather than one per concept. Peter reviews the batch, approves or modifies. This keeps the approval overhead proportional to the task, not to the number of concepts. → tasks.md § "Task 1.2"
+
+- Task 2.2 (catalog name validation test) is the most complex subtask. The design doc specifies the parsing approach, error format, and edge cases well. One thing not in the task description: the per-category parenthetical count assertion that Ada suggested in design feedback. The design doc mentions it in Ada's feedback but it's not explicitly in the subtask description or the success criteria for Task 2. Suggest adding to Task 2 success criteria: "per-category concept count matches parenthetical count in heading." → tasks.md § "Task 2" Success Criteria
+
+- Task 2.3 says "filter to components with non-empty contracts." This addresses my design feedback about empty contracts.yaml + auto-discovery. Good — that's incorporated. → tasks.md § "Task 2.3"
+
+- Task 3.1 is assigned to Peter. This is correct — it's his prompt. But the task description includes specific content ("MCP query instruction for Concept Catalog, `{category}_{concept}` naming, 'before platform implementation' gate"). Peter may want to author the step differently. Suggest framing the subtask as "the step must cover these concerns" rather than prescribing exact content. Peter's editorial authority. → tasks.md § "Task 3.1"
+
+- Task 3.3 (CDG contracts section) is assigned to Thurgood as drafter. I raised in my design feedback that the design doc lacks detail on what this section should contain. The task description says "when to author, naming convention, Concept Catalog consultation via MCP, relationship to platform implementation" — that's the right scope. But Thurgood may want my input on the component-specific aspects (e.g., how contracts.yaml relates to schema.yaml and component-meta.yaml in the scaffolding sequence, what MCP queries are relevant). Suggest adding "Lina (consult)" to the agent assignment, same pattern as Task 2.3. → tasks.md § "Task 3.3"
+
+- I don't see `_Contracts:` lines on any of the implementation subtasks. This spec (078) is about process infrastructure, not component implementation, so contracts.yaml doesn't apply in the traditional sense. But it's worth noting the irony: the spec that mandates `_Contracts:` lines on implementation subtasks doesn't use them itself. Not a real issue — just an observation that the mandate applies to component specs, not process specs. → tasks.md (general observation)
+
+#### [ADA R1]
+
+Well-structured task plan. The dependency graph is clean — Task 1 → Task 2 is the only hard dependency, and it's the right one. Tasks 3 and 4 being independent means they can run in parallel or be picked up by different agents in different sessions. A few items:
+
+- Task 2.2 (catalog name validation test) includes the per-category parenthetical count assertion I recommended in my Design R1 feedback. Good — that's the strongest structural guard against partial parsing failures. The subtask description says "per-category parenthetical count matches parsed count" which is exactly right. → tasks.md § "Task 2.2"
+
+- Task 2.2 baseline concept count: the subtask says "total concepts >= baseline (post-audit count from Task 1)." This creates a handoff dependency — Thurgood needs to know the final concept count from Lina's audit before writing the assertion. The Task 1 → Task 2 dependency already captures this, but the handoff mechanism isn't specified. Suggest: Task 1.2's completion doc should include the final concept count as a named deliverable (e.g., "Final catalog count: 117 concepts across 10 categories"). Thurgood reads that number and hardcodes it as the baseline floor in the test. Small coordination detail, but worth making explicit. → tasks.md § "Task 2.2"
+
+- Task 3.1 is assigned to Peter (prompt authoring). This is correct — Lina's prompt is Peter's artifact. But the subtask says "Ballot measure required." Ballot measures are for steering docs, and agent prompts aren't steering docs — they're in `.kiro/agents/`. Is the ballot measure requirement accurate here, or is this a direct Peter edit that doesn't need the ballot process? If it's a direct edit, the subtask should say so. If it does need a ballot measure, the Context for Reviewers should explain why. → tasks.md § "Task 3.1"
+
+- No Ada-assigned subtasks, which is correct. This spec is entirely in Lina's (Stemma), Thurgood's (test governance), and Peter's (prompt/steering) domains. My domain stays clean. I'm available for consult if the catalog parsing in Task 2.2 needs a second pair of eyes on the markdown parsing approach — I've worked with markdown-based steering docs in the token pipeline — but that's optional, not required.
+
+- One observation on sequencing: Tasks 3 and 4 could theoretically start immediately (they're independent), but in practice, Task 3.1 (Lina's prompt fix) is the highest-impact safeguard. If Peter is going to work on tasks in any order, I'd recommend 3.1 first — it's the lowest effort and prevents the exact failure that triggered this spec. The automated validation (Task 2) is the strongest safeguard but takes the most effort. The prompt fix buys immediate protection while the automation is built. → tasks.md § "Dependency Graph"

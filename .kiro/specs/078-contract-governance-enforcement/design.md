@@ -77,9 +77,14 @@ Two-phase test:
 **Structural assertion** (Req 4 AC 4): Before validating names, assert:
 - The catalog has exactly 10 category headings
 - The total concept count >= 112 (baseline floor, rises as concepts are added)
-- If either assertion fails, the test fails with a format-change error before attempting name validation
+- Each category heading's parenthetical count matches the actual number of concepts parsed from that category's inline list (e.g., `### accessibility (22)` must yield exactly 22 concepts — catches partial parsing failures)
+- If any assertion fails, the test fails with a format-change error before attempting name validation
 
 **Contract name splitting**: Contract names in `contracts.yaml` follow `{category}_{concept}` format. The category is the first segment before `_`. The concept is everything after the first `_`. Example: `interaction_hover` → category `interaction`, concept `hover`. Example: `accessibility_reduced_motion` → category `accessibility`, concept `reduced_motion`.
+
+**Implementation notes**:
+- The inline concept list uses `·` (middle dot, U+00B7) as a separator. The parser must be explicit about this delimiter — a regular period `.` or bullet `•` would be a different character and should not match.
+- Current catalog categories (accessibility, animation, content, data, interaction, layout, noop, state, visual, validation) contain no underscores, so the "first underscore splits category from concept" rule works. If a future category contained an underscore, the splitting logic would need revisiting. The structural assertion on category count (exactly 10) catches new categories being added, which is the right moment to address this. Worth a comment in the test code.
 
 **Error format** (Req 4 AC 2): `"Component Nav-SegmentedChoice-Base: contract 'interaction_noop_active' has unrecognized concept 'noop_active' in category 'interaction'"`
 
@@ -133,7 +138,7 @@ No new data models. The existing `contracts.yaml` format and `Contract-System-Re
 1. **Contract name with no underscore**: Invalid format. Test fails with: `"Contract '{name}' does not follow {category}_{concept} format"`
 2. **Category not in catalog**: Test fails with: `"Contract '{name}' has unrecognized category '{category}'"`
 3. **Concept not in category**: Test fails with the standard error format (Req 4 AC 2)
-4. **Empty contracts.yaml**: Valid — a component may have an empty contracts file during scaffolding. The existence check (Req 3) passes; the name validation (Req 4) has nothing to validate.
+4. **Empty contracts.yaml**: Valid — a component may have an empty contracts file during scaffolding. The existence check (Req 3) passes; the name validation (Req 4) has nothing to validate. The auto-discovery test (Req 5) should skip components with zero contracts rather than failing — an empty contracts.yaml is an incomplete scaffolding state, not a finished component. The workflow (contracts authoring subtask) catches this.
 5. **Catalog format change**: Structural assertion (Req 4 AC 4) fails before name validation runs, with a clear message about expected format.
 
 ### Existence Check — Edge Cases
@@ -172,7 +177,7 @@ The one-time audit (Req 6) is a manual task, not an automated test. Lina scans e
 **Options Considered**: (a) Parse Contract-System-Reference.md markdown, (b) Extract catalog to YAML/JSON
 **Decision**: Parse markdown directly
 **Rationale**: Process-first principle. One consumer (the validation test) doesn't justify a second source of truth. Structural assertion catches format drift. Extraction triggered when a second consumer needs to parse the catalog programmatically.
-**Trade-offs**: Fragile coupling to markdown format. Mitigated by structural assertion that fails loudly on format changes.
+**Trade-offs**: Fragile coupling to the *current* inline-list markdown format (category headings + backtick-delimited concept lists separated by `·`). If the catalog is restructured — e.g., into a table for readability — the parser breaks. The structural assertion catches this, but the fix requires updating the parser. Mitigated by structural assertion that fails loudly on format changes.
 
 ### Decision 3: Errors, Not Warnings, for Non-Catalog Names
 
