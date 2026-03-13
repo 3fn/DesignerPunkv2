@@ -46,11 +46,11 @@ All 13 component families have MCP-queryable documentation. Production families 
 | Data Displays | Information presentation | `.kiro/steering/Component-Family-Data-Display.md` | 🔴 Placeholder |
 | Dividers | Visual separation | `.kiro/steering/Component-Family-Divider.md` | 🔴 Placeholder |
 | Loading | Progress indication | `.kiro/steering/Component-Family-Loading.md` | 🔴 Placeholder |
-| Navigation | Wayfinding | `.kiro/steering/Component-Family-Navigation.md` | 🔴 Placeholder |
+| Navigation | Wayfinding and view switching | `.kiro/steering/Component-Family-Navigation.md` | 🟡 Beta |
 
 **Status Legend**: 🟢 Production Ready | 🟡 Beta | 🔴 Placeholder | ⚠️ Deprecated
 
-**Family Count**: 9 Production Ready, 5 Placeholder (structural definitions for future development)
+**Family Count**: 9 Production Ready, 1 Beta, 4 Placeholder (structural definitions for future development)
 
 ### Type Primitives
 
@@ -112,7 +112,7 @@ Radio components follow the **orchestration pattern** — the Set orchestrates B
 - **Form Inputs**: `Input-Text-Base` (for custom inputs)
 - **Containers**: `Container-Base` (section wrapper)
 - **Dividers**: `Divider-Base` (planned)
-- **Navigation**: `Nav-Base` (planned)
+- **Navigation**: `Nav-SegmentedChoice-Base` (segmented control)
 - **Tokens**: `Token-Family-Layering.md` → panel stacking, `Token-Family-Radius.md` → section corners
 
 ### Filter Bar
