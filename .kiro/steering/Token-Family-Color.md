@@ -7,7 +7,7 @@ description: Color token family — palette structure, semantic color tokens, co
 # Color Tokens Guide
 
 **Date**: 2025-12-08
-**Last Reviewed**: 2026-01-25
+**Last Reviewed**: 2026-03-12
 **Purpose**: Complete reference for color tokens organized by semantic concept with usage guidance
 **Organization**: token-documentation
 **Scope**: cross-project
@@ -70,11 +70,11 @@ The feedback concept provides colors for success, error, warning, info, and sele
 
 #### Info Tokens (3 tokens)
 
-| Token Name | Primitive | Use Case |
-|------------|-----------|----------|
-| `color.feedback.info.text` | teal400 | Info text - help text, informational messages |
-| `color.feedback.info.background` | teal100 | Info backgrounds - info banners, help sections |
-| `color.feedback.info.border` | teal400 | Info borders - info card outlines, help section borders |
+| Token Name | Primitive | wcagValue | Use Case |
+|------------|-----------|-----------|----------|
+| `color.feedback.info.text` | teal400 | purple500 | Info text - help text, informational messages |
+| `color.feedback.info.background` | teal100 | purple100 | Info backgrounds - info banners, help sections |
+| `color.feedback.info.border` | teal400 | purple500 | Info borders - info card outlines, help section borders |
 
 #### Select Tokens (6 tokens)
 
@@ -112,18 +112,21 @@ Identity tokens represent core colors for different entity types. They ARE the c
 
 **Purpose**: Visual emphasis levels for interactive elements
 
-Action tokens represent visual emphasis levels, not action types. Use `primary` for single, focused instances (hero CTAs) and `secondary` for repetitive instances (action lists) to avoid UI over-saturation.
+Action tokens represent visual emphasis levels, not action types. Use `primary` for single, focused instances (hero CTAs), `secondary` for repetitive instances (action lists), and `navigation` for inline links and breadcrumbs.
 
-| Token Name | Primitive | Use Case |
-|------------|-----------|----------|
-| `color.action.primary` | purple300 | Emphasized action - hero CTAs, main buttons, primary interactive elements |
-| `color.action.secondary` | black400 | De-emphasized action - list item buttons, secondary CTAs, repetitive actions |
+| Token Name | Primitive | wcagValue | Use Case |
+|------------|-----------|-----------|----------|
+| `color.action.primary` | cyan300 | teal300 | Emphasized action - hero CTAs, main buttons, primary interactive elements |
+| `color.action.secondary` | gray400 | — | De-emphasized action - list item buttons, secondary CTAs, repetitive actions |
+| `color.action.navigation` | cyan500 | teal500 | Navigation actions - inline text links, breadcrumbs |
 
 **Critical Distinction**: `primary`/`secondary` represent visual emphasis, not action type. Both can be CTAs.
 
+**wcagValue**: Tokens with `wcagValue` resolve to a different primitive in WCAG accessibility mode. Standard theme uses `value`, WCAG theme uses `wcagValue`. See Spec 076 for architecture details.
+
 ```typescript
 // Single hero CTA on a page
-<ButtonCTA emphasis="primary" />   // → color.action.primary (purple)
+<ButtonCTA emphasis="primary" />   // → color.action.primary (cyan)
 
 // List of 10 action items
 <ButtonCTA emphasis="secondary" /> // → color.action.secondary (neutral)
@@ -137,12 +140,13 @@ Action tokens represent visual emphasis levels, not action types. Use `primary` 
 
 Contrast tokens provide colors for content (text, icons) on colored backgrounds. Naming matches the background the content sits ON.
 
-| Token Name | Primitive | Use Case |
-|------------|-----------|----------|
-| `color.contrast.onLight` | black500 | Dark content on light backgrounds - ensures WCAG AA contrast |
-| `color.contrast.onDark` | white100 | Light content on dark backgrounds - ensures WCAG AA contrast |
+| Token Name | Primitive | wcagValue | Use Case |
+|------------|-----------|-----------|----------|
+| `color.contrast.onLight` | black500 | — | Dark content on light backgrounds - ensures WCAG AA contrast |
+| `color.contrast.onDark` | white100 | — | Light content on dark backgrounds - ensures WCAG AA contrast |
+| `color.contrast.onAction` | black500 | white100 | Content on action-colored backgrounds - dark on cyan (Standard), white on teal (WCAG) |
 
-**Usage**: Use `onLight` for text/icons on light surfaces, `onDark` for text/icons on dark or colored surfaces.
+**Usage**: Use `onLight` for text/icons on light surfaces, `onDark` for text/icons on dark surfaces, `onAction` for text/icons on primary action backgrounds.
 
 ---
 
@@ -267,29 +271,29 @@ Badge tokens follow the `{component}.{variant}.{property}` pattern.
 
 | Token Name | Primitive | RGBA Value | Use Case |
 |------------|-----------|------------|----------|
-| `color.tech` | cyan400 | rgba(0, 192, 204, 1) | Technical elements, code snippets |
-| `color.data` | cyan300 | rgba(0, 240, 255, 1) | Data visualization, metrics |
+| `color.tech` | purple400 | rgba(141, 30, 204, 1) | Technical elements, code snippets |
+| `color.data` | purple300 | rgba(176, 38, 255, 1) | Data visualization, metrics |
 
 ### Text Hierarchy (3 tokens)
 
 | Token Name | Primitive | RGBA Value | Use Case |
 |------------|-----------|------------|----------|
-| `color.text.default` | gray300 | rgba(45, 43, 62, 1) | Primary text - body content |
-| `color.text.muted` | gray200 | rgba(104, 101, 138, 1) | Secondary text - less prominent |
-| `color.text.subtle` | gray100 | rgba(184, 182, 200, 1) | Tertiary text - very subtle elements |
+| `color.text.default` | gray300 | rgba(38, 50, 58, 1) | Primary text - body content |
+| `color.text.muted` | gray200 | rgba(94, 112, 124, 1) | Secondary text - less prominent |
+| `color.text.subtle` | gray100 | rgba(178, 188, 196, 1) | Tertiary text - very subtle elements |
 
 ### Icon & Print (2 tokens)
 
 | Token Name | Primitive | RGBA Value | Use Case |
 |------------|-----------|------------|----------|
-| `color.icon.default` | gray200 | rgba(104, 101, 138, 1) | Default icon color - optical balance |
+| `color.icon.default` | gray200 | rgba(94, 112, 124, 1) | Default icon color - optical balance |
 | `color.print.default` | black100 | rgba(58, 58, 69, 1) | Print media - optimal printing quality |
 
 ### Background Variant (1 token)
 
-| Token Name | Primitive | RGBA Value | Use Case |
-|------------|-----------|------------|----------|
-| `color.background.primary.subtle` | purple100 | rgba(243, 224, 255, 1) | Subtle primary background - hover states, selections |
+| Token Name | Primitive | wcagValue | RGBA Value | Use Case |
+|------------|-----------|-----------|------------|----------|
+| `color.background.primary.subtle` | cyan100 | teal100 | rgba(204, 251, 255, 1) | Subtle primary background - hover states, selections |
 
 ---
 
@@ -315,11 +319,11 @@ Primitive color tokens provide the foundation for semantic tokens. All primitive
 
 | Token Name | RGBA Value | Use Case |
 |------------|------------|----------|
-| `gray100` | rgba(184, 182, 200, 1) | Subtle backgrounds, muted text |
-| `gray200` | rgba(104, 101, 138, 1) | Secondary text, borders |
-| `gray300` | rgba(45, 43, 62, 1) | Primary text, prominent borders |
-| `gray400` | rgba(31, 29, 46, 1) | Strong text, container backgrounds |
-| `gray500` | rgba(21, 19, 31, 1) | Deep backgrounds, high contrast text |
+| `gray100` | rgba(178, 188, 196, 1) | Subtle backgrounds, muted text |
+| `gray200` | rgba(94, 112, 124, 1) | Secondary text, borders |
+| `gray300` | rgba(38, 50, 58, 1) | Primary text, prominent borders |
+| `gray400` | rgba(24, 34, 40, 1) | Strong text, container backgrounds |
+| `gray500` | rgba(16, 22, 26, 1) | Deep backgrounds, high contrast text |
 
 ### Black Scale - Deep Backgrounds and Containers
 
@@ -341,15 +345,15 @@ Primitive color tokens provide the foundation for semantic tokens. All primitive
 | `white400` | rgba(197, 197, 213, 1) | Medium gray-white, borders and dividers |
 | `white500` | rgba(153, 153, 171, 1) | Dark gray-white, muted text |
 
-### Purple Scale - Primary Brand and Focus States
+### Purple Scale - Data, Tech, and Informational States
 
 | Token Name | RGBA Value | Use Case |
 |------------|------------|----------|
-| `purple100` | rgba(243, 224, 255, 1) | Subtle brand backgrounds, highlights |
-| `purple200` | rgba(217, 138, 255, 1) | Brand accents, secondary elements |
-| `purple300` | rgba(176, 38, 255, 1) | **Primary brand color** - CTAs, links |
-| `purple400` | rgba(141, 30, 204, 1) | Brand text, secondary brand elements |
-| `purple500` | rgba(99, 21, 143, 1) | Darkest brand, neon glow effects |
+| `purple100` | rgba(243, 224, 255, 1) | Subtle backgrounds, WCAG info feedback backgrounds |
+| `purple200` | rgba(217, 138, 255, 1) | Accents, secondary elements |
+| `purple300` | rgba(176, 38, 255, 1) | Data visualization, tech elements |
+| `purple400` | rgba(141, 30, 204, 1) | Tech text, secondary tech elements |
+| `purple500` | rgba(99, 21, 143, 1) | WCAG info feedback text, neon glow effects |
 
 ### Green Scale - Success States
 
@@ -391,15 +395,15 @@ Primitive color tokens provide the foundation for semantic tokens. All primitive
 | `yellow400` | rgba(199, 192, 2, 1) | rgba(199, 192, 2, 1) | **Attention color** |
 | `yellow500` | rgba(143, 139, 1, 1) | rgba(143, 139, 1, 1) | Neon yellow glow effects |
 
-### Cyan Scale - Tech Elements and Data
+### Cyan Scale - Primary Action and Navigation
 
 | Token Name | RGBA Value | Use Case |
 |------------|------------|----------|
-| `cyan100` | rgba(204, 251, 255, 1) | Subtle tech backgrounds |
-| `cyan200` | rgba(128, 246, 255, 1) | Tech accents, link highlights |
-| `cyan300` | rgba(0, 240, 255, 1) | **Data visualization** - bright cyan |
-| `cyan400` | rgba(0, 192, 204, 1) | **Tech elements** - dark cyan |
-| `cyan500` | rgba(0, 136, 143, 1) | Neon cyan glow effects |
+| `cyan100` | rgba(204, 251, 255, 1) | Subtle action backgrounds, hover states |
+| `cyan200` | rgba(128, 246, 255, 1) | Action accents, link highlights |
+| `cyan300` | rgba(0, 240, 255, 1) | **Primary action color** - CTAs, main buttons |
+| `cyan400` | rgba(0, 192, 204, 1) | Selection states, selected item indicators |
+| `cyan500` | rgba(0, 136, 143, 1) | **Navigation actions** - links, breadcrumbs |
 
 ### Teal Scale - Informational States
 
@@ -508,7 +512,7 @@ All color tokens use RGBA format for native alpha channel support and direct cro
   /* Semantic Concept Tokens */
   --color-feedback-success-text: rgba(0, 255, 136, 1);
   --color-feedback-error-text: rgba(204, 34, 87, 1);
-  --color-action-primary: rgba(176, 38, 255, 1);
+  --color-action-primary: rgba(0, 240, 255, 1);
   --color-contrast-on-dark: rgba(255, 255, 255, 1);
   --color-structure-canvas: rgba(255, 255, 255, 1);
   
@@ -525,7 +529,7 @@ struct DesignTokens {
     // Semantic Concept Tokens
     static let colorFeedbackSuccessText = UIColor(red: 0, green: 1, blue: 0.53, alpha: 1)
     static let colorFeedbackErrorText = UIColor(red: 0.8, green: 0.13, blue: 0.34, alpha: 1)
-    static let colorActionPrimary = UIColor(red: 0.69, green: 0.15, blue: 1, alpha: 1)
+    static let colorActionPrimary = UIColor(red: 0, green: 0.94, blue: 1, alpha: 1)
     
     // Component Tokens
     static let colorAvatarHumanBackground = UIColor(red: 1, green: 0.42, blue: 0.21, alpha: 1)
@@ -539,7 +543,7 @@ object DesignTokens {
     // Semantic Concept Tokens
     val colorFeedbackSuccessText = Color.argb(255, 0, 255, 136)
     val colorFeedbackErrorText = Color.argb(255, 204, 34, 87)
-    val colorActionPrimary = Color.argb(255, 176, 38, 255)
+    val colorActionPrimary = Color.argb(255, 0, 240, 255)
     
     // Component Tokens
     val colorAvatarHumanBackground = Color.argb(255, 255, 107, 53)
@@ -572,7 +576,7 @@ Use semantic concept tokens for:
 // Action example
 <Button 
   background="color.action.primary"
-  textColor="color.contrast.onDark"
+  textColor="color.contrast.onAction"
 >
   Submit
 </Button>
@@ -613,13 +617,13 @@ export const chipTokens = {
 
 | Color | Meaning | Use For | Don't Use For |
 |-------|---------|---------|---------------|
-| **Purple** | Brand | Primary buttons, links, brand elements | Status indicators |
+| **Cyan** | Action | Primary buttons, navigation links, action elements | Status indicators |
+| **Purple** | Data/Tech | Data visualization, code blocks, tech elements, WCAG info feedback | Primary actions |
 | **Green** | Success | Success messages, confirmation, positive feedback | Neutral info, warnings |
 | **Pink** | Error | Error messages, delete buttons, critical warnings | Success states, neutral info |
 | **Orange** | Warning | Warning messages, caution buttons, important notices | Success states, errors |
 | **Yellow** | Attention | Highlights, emphasis, attention-grabbing elements | Status indicators |
-| **Cyan** | Tech/Data | Code blocks, data charts, technical information | Status indicators, brand |
-| **Teal** | Info | Info messages, help text, neutral notifications | Success states, brand |
+| **Teal** | Info | Info messages, help text, neutral notifications, WCAG action overrides | Success states |
 
 ---
 

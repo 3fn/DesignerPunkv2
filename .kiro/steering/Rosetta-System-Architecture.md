@@ -79,7 +79,7 @@ Color tokens use RGBA format at the primitive level, enabling native alpha chann
 │                                                                              │
 │   SEMANTIC INHERITANCE                                                       │
 │   └── src/tokens/semantic/ColorSemanticTokens.ts                            │
-│       └── References primitives: 'color.action.primary': 'purple-300'       │
+│       └── References primitives: 'color.action.primary': 'cyan-300'       │
 │       └── Baked-in alpha: 'color.structure.border.subtle': 'rgba(...,0.48)'│
 │                                                                              │
 │                              │                                               │

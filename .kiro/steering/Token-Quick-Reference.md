@@ -82,6 +82,7 @@ Color tokens follow the **Nathan Curtis concept-first naming model**. Use this t
 |-------|----------|
 | `color.action.primary` | Emphasized actions - hero CTAs, main buttons |
 | `color.action.secondary` | De-emphasized actions - list items, repetitive actions |
+| `color.action.navigation` | Navigation actions - inline links, breadcrumbs |
 
 **Note**: `primary`/`secondary` represent visual emphasis, not action type. Use `primary` for single, focused instances; `secondary` for repetitive instances to avoid UI over-saturation.
 
@@ -91,6 +92,7 @@ Color tokens follow the **Nathan Curtis concept-first naming model**. Use this t
 |-------|----------|
 | `color.contrast.onLight` | Dark content on light backgrounds |
 | `color.contrast.onDark` | Light content on dark/colored backgrounds |
+| `color.contrast.onAction` | Content on action-colored backgrounds (theme-conditional) |
 
 ### Structure Concept Tokens
 
@@ -128,7 +130,7 @@ These are frequently used token combinations for common UI scenarios:
 ### Button Component
 - **Typography**: `Token-Family-Typography.md` → label sizes (labelSm, labelMd, labelLg)
 - **Spacing**: `Token-Family-Spacing.md` → inset patterns for padding
-- **Color**: `Token-Family-Color.md` → `color.action.primary`, `color.action.secondary`, `color.contrast.onDark`
+- **Color**: `Token-Family-Color.md` → `color.action.primary`, `color.action.secondary`, `color.contrast.onAction`
 - **Radius**: `Token-Family-Radius.md` → button radius (typically md)
 - **Border**: `Token-Family-Border.md` → button borders (thin for outlined variants)
 

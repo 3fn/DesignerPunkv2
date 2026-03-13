@@ -132,7 +132,7 @@ Mathematical foundation allows documented exceptions for design requirements:
 |--------|---------|-------------------|-------------------|
 | **Spacing** | Layout and positioning | space100, space200 | space.grouped.*, space.inset.* |
 | **Typography** | Text styling | fontSize100, lineHeight150 | bodyMd, labelSm, h1 |
-| **Color** | Visual identity | purple300, gray500 | color.primary, color.error |
+| **Color** | Visual identity | cyan300, gray500 | color.primary, color.error |
 | **Radius** | Shape definition | radius100, radius200 | radius.button, radius.card |
 | **Shadow** | Depth and elevation | shadowBlur200, shadowOpacity300 | shadow.container, shadow.modal |
 | **Glow** | Emphasis effects | glowBlur200, glowOpacity100 | glow.focus, glow.highlight |

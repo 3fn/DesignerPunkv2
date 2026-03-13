@@ -220,7 +220,7 @@ Tokens that reference a single primitive token. Used for colors, spacing, border
 - Used for straightforward semantic mappings (primary color, normal spacing, default border)
 
 **Real-World Examples**:
-- **Color tokens**: See `color.primary` token in `src/tokens/semantic/ColorTokens.ts` (references `purple300`)
+- **Color tokens**: See `color.primary` token in `src/tokens/semantic/ColorTokens.ts` (references `cyan300`)
 - **Spacing tokens**: See `spacing.grouped.normal` token in `src/tokens/semantic/SpacingTokens.ts` (references `space100`)
 - **Border tokens**: See `src/tokens/semantic/BorderWidthTokens.ts` for border width tokens with single-reference pattern
 

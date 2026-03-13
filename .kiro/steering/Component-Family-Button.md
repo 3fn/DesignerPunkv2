@@ -452,7 +452,7 @@ Button components rely on three semantic concepts:
 
 | Concept | Token | Primitive | Purpose |
 |---------|-------|-----------|---------|
-| **Action** | `color.action.primary` | purple300 | Emphasized action (single, focused instances) |
+| **Action** | `color.action.primary` | cyan300 | Emphasized action (single, focused instances) |
 | **Action** | `color.action.secondary` | black400 | De-emphasized action (repetitive, supporting instances) |
 | **Contrast** | `color.contrast.onDark` | white100 | Content on dark/colored backgrounds |
 | **Contrast** | `color.contrast.onLight` | black500 | Content on light backgrounds |

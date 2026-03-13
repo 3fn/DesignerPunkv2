@@ -50,7 +50,7 @@ Focus indicator tokens ensure keyboard navigation is visible and accessible. The
 |------------|---------------------|----------------|---------------|
 | `accessibility.focus.offset` | space025 | 2px | 2.4.7 Focus Visible |
 | `accessibility.focus.width` | borderWidth200 | 2px | 2.4.7 Focus Visible |
-| `accessibility.focus.color` | purple300 | Primary color | 2.4.7, 1.4.11 Non-text Contrast |
+| `accessibility.focus.color` | cyan300 | Primary color | 2.4.7, 1.4.11 Non-text Contrast |
 
 ### Token Details
 
@@ -82,7 +82,7 @@ Focus indicator tokens ensure keyboard navigation is visible and accessible. The
 
 #### accessibility.focus.color
 
-**References**: purple300 (primary color)
+**References**: cyan300 (primary color)
 
 **Purpose**: Ensures sufficient contrast for focus indicator visibility.
 
