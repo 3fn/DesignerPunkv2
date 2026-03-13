@@ -71,7 +71,7 @@ import { shadowTokens as semanticShadowTokens } from '../tokens/semantic/ShadowT
 /** Set of valid DTCG types for validation (Format Module 2025.10) */
 const VALID_DTCG_TYPES: ReadonlySet<string> = new Set([
   'color', 'dimension', 'fontFamily', 'fontWeight', 'duration',
-  'cubicBezier', 'number', 'shadow', 'typography', 'transition',
+  'cubicBezier', 'linearEasing', 'number', 'shadow', 'typography', 'transition',
 ]);
 
 /** Minimum expected primitive token count (programmatic validation threshold) */
@@ -464,16 +464,20 @@ export class DTCGFormatGenerator {
    * Parses cubic-bezier CSS string into [p1, p2, p3, p4] array.
    */
   private generateEasingTokens(): DTCGGroup {
-    const group: DTCGGroup = { $type: 'cubicBezier' };
+    const group: DTCGGroup = {};
     for (const [key, token] of Object.entries(easingTokens)) {
-      const bezierStr = String(token.platforms.web.value);
-      const match = bezierStr.match(/cubic-bezier\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*\)/);
-      if (!match) {
-        throw new Error(`Invalid easing value for ${token.name}: ${bezierStr}. Expected cubic-bezier(p1, p2, p3, p4) format.`);
-      }
-      const bezierArray = [parseFloat(match[1]), parseFloat(match[2]), parseFloat(match[3]), parseFloat(match[4])];
       const extensions = this.buildPrimitiveExtensions(token, 'easing');
-      group[key] = this.toDTCGToken(bezierArray, 'cubicBezier', token.description, extensions);
+      if (token.easingType === 'linear' && token.stops) {
+        group[key] = this.toDTCGToken(token.stops, 'linearEasing', token.description, extensions);
+      } else {
+        const bezierStr = String(token.platforms.web.value);
+        const match = bezierStr.match(/cubic-bezier\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*\)/);
+        if (!match) {
+          throw new Error(`Invalid easing value for ${token.name}: ${bezierStr}. Expected cubic-bezier(p1, p2, p3, p4) format.`);
+        }
+        const bezierArray = [parseFloat(match[1]), parseFloat(match[2]), parseFloat(match[3]), parseFloat(match[4])];
+        group[key] = this.toDTCGToken(bezierArray, 'cubicBezier', token.description, extensions);
+      }
     }
     return group;
   }

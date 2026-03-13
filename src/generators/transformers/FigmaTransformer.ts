@@ -750,6 +750,7 @@ export class FigmaTransformer implements ITokenTransformer {
       case 'duration':
         return 'FLOAT';
       case 'cubicBezier':
+      case 'linearEasing':
         return 'STRING';
       default:
         return 'FLOAT';
@@ -786,6 +787,17 @@ export class FigmaTransformer implements ITokenTransformer {
     // CubicBezier: stringify array
     if (Array.isArray(value) && tokenType === 'cubicBezier') {
       return `cubic-bezier(${value.join(', ')})`;
+    }
+
+    // LinearEasing: stringify stops array
+    if (Array.isArray(value) && tokenType === 'linearEasing') {
+      const stops = value as Array<[number, number]>;
+      const parts = stops.map(([time, progress], i) => {
+        if (i === 0 && time === 0) return `${progress}`;
+        if (i === stops.length - 1 && time === 1) return `${progress}`;
+        return `${progress} ${(time * 100).toFixed(1)}%`;
+      });
+      return `linear(${parts.join(', ')})`;
     }
 
     // FontFamily: join array with commas

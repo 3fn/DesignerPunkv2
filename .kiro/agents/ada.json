@@ -1,6 +1,6 @@
 {
   "name": "ada",
-  "description": "Rosetta token specialist — token development, maintenance, documentation, compliance, and mathematical foundations",
+  "description": "Rosetta token specialist — token development, maintenance, documentation, compliance, mathematical foundations, export pipeline architecture (DTCG/Figma), and design token standards alignment",
   "prompt": "file://./ada-prompt.md",
   "includeMcpJson": true,
   "tools": ["*"],
@@ -66,7 +66,7 @@
       "type": "knowledgeBase",
       "source": "file://./src/generators",
       "name": "TokenGenerators",
-      "description": "Token generation system — platform file generators, blend utility generators, responsive grid generators",
+      "description": "Token generation system — platform file generators (web/iOS/Android), DTCG format generator with modes extension, Figma variable transformer, blend utility generators, responsive grid generators",
       "indexType": "best",
       "autoUpdate": false
     }
@@ -80,5 +80,5 @@
     ]
   },
   "keyboardShortcut": "ctrl+shift+a",
-  "welcomeMessage": "Hey! I'm Ada, your Rosetta token specialist. I can help with token development, mathematical foundations, compliance auditing, and governance. What are we working on?"
+  "welcomeMessage": "Hey! I'm Ada, your Rosetta token specialist. I can help with token development, mathematical foundations, token compliance, and export pipeline work (DTCG, Figma, platform generators). What are we working on?"
 }

@@ -37,46 +37,96 @@ function generateEasingPlatformValues(cubicBezier: string): PlatformValues {
 }
 
 /**
+ * Generate platform values for piecewise linear easing tokens
+ * 
+ * Platform-specific formats:
+ * - Web: CSS linear() function
+ * - iOS: PiecewiseLinearEasing (CustomAnimation) with stops array
+ * - Android: Custom Easing with lookup table
+ * 
+ * The stops array is stored as the platform value; builders convert to platform syntax.
+ */
+function generateLinearEasingPlatformValues(stops: Array<[number, number]>): PlatformValues {
+  const stopsJson = JSON.stringify(stops);
+  return {
+    web: { value: stopsJson, unit: 'unitless' },
+    ios: { value: stopsJson, unit: 'unitless' },
+    android: { value: stopsJson, unit: 'unitless' }
+  };
+}
+
+/**
  * Easing tokens with Material Design cubic-bezier curves
  */
 export const easingTokens: Record<string, PrimitiveToken> = {
   easingStandard: {
     name: 'easingStandard',
-    category: TokenCategory.SPACING, // Using SPACING temporarily until EASING category is added
-    baseValue: 0, // N/A for categorical tokens - actual value stored in platforms
-    familyBaseValue: 0, // N/A for categorical tokens
+    category: TokenCategory.EASING,
+    baseValue: 0,
+    familyBaseValue: 0,
     description: 'Standard easing - Balanced acceleration and deceleration for general transitions. Material Design standard curve.',
     mathematicalRelationship: 'Material Design standard curve: cubic-bezier(0.4, 0.0, 0.2, 1)',
-    baselineGridAlignment: false, // Easing tokens don't align to baseline grid
+    baselineGridAlignment: false,
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
+    easingType: 'cubicBezier',
     platforms: generateEasingPlatformValues('cubic-bezier(0.4, 0.0, 0.2, 1)')
   },
 
   easingDecelerate: {
     name: 'easingDecelerate',
-    category: TokenCategory.SPACING, // Using SPACING temporarily until EASING category is added
-    baseValue: 0, // N/A for categorical tokens - actual value stored in platforms
-    familyBaseValue: 0, // N/A for categorical tokens
+    category: TokenCategory.EASING,
+    baseValue: 0,
+    familyBaseValue: 0,
     description: 'Decelerate easing - Quick start with gradual slowdown for entering elements. Material Design deceleration curve.',
     mathematicalRelationship: 'Material Design deceleration curve: cubic-bezier(0.0, 0.0, 0.2, 1)',
-    baselineGridAlignment: false, // Easing tokens don't align to baseline grid
+    baselineGridAlignment: false,
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
+    easingType: 'cubicBezier',
     platforms: generateEasingPlatformValues('cubic-bezier(0.0, 0.0, 0.2, 1)')
   },
 
   easingAccelerate: {
     name: 'easingAccelerate',
-    category: TokenCategory.SPACING, // Using SPACING temporarily until EASING category is added
-    baseValue: 0, // N/A for categorical tokens - actual value stored in platforms
-    familyBaseValue: 0, // N/A for categorical tokens
+    category: TokenCategory.EASING,
+    baseValue: 0,
+    familyBaseValue: 0,
     description: 'Accelerate easing - Gradual start with quick finish for exiting elements. Material Design acceleration curve.',
     mathematicalRelationship: 'Material Design acceleration curve: cubic-bezier(0.4, 0.0, 1, 1)',
-    baselineGridAlignment: false, // Easing tokens don't align to baseline grid
+    baselineGridAlignment: false,
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
+    easingType: 'cubicBezier',
     platforms: generateEasingPlatformValues('cubic-bezier(0.4, 0.0, 1, 1)')
+  },
+
+  easingGlideDecelerate: {
+    name: 'easingGlideDecelerate',
+    category: TokenCategory.EASING,
+    baseValue: 0,
+    familyBaseValue: 0,
+    description: 'Glide decelerate easing - Aggressive deceleration with long settling tail. 41% of movement in first 10% of time. No overshoot. Weighted slide-to-stop feel.',
+    mathematicalRelationship: 'Piecewise linear: 15 stops, aggressive deceleration curve. Paired with duration350 (350ms).',
+    baselineGridAlignment: false,
+    isStrategicFlexibility: false,
+    isPrecisionTargeted: false,
+    easingType: 'linear',
+    easingDuration: 350,
+    stops: [
+      [0, 0], [0.009, 0.012], [0.02, 0.05], [0.092, 0.411],
+      [0.118, 0.517], [0.146, 0.611], [0.177, 0.694],
+      [0.211, 0.765], [0.248, 0.824], [0.289, 0.872],
+      [0.334, 0.91], [0.384, 0.939], [0.509, 0.977],
+      [0.684, 0.994], [1.0, 1.0]
+    ],
+    platforms: generateLinearEasingPlatformValues([
+      [0, 0], [0.009, 0.012], [0.02, 0.05], [0.092, 0.411],
+      [0.118, 0.517], [0.146, 0.611], [0.177, 0.694],
+      [0.211, 0.765], [0.248, 0.824], [0.289, 0.872],
+      [0.334, 0.91], [0.384, 0.939], [0.509, 0.977],
+      [0.684, 0.994], [1.0, 1.0]
+    ])
   }
 };
 

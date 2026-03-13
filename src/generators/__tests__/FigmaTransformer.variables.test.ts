@@ -156,6 +156,28 @@ describe('FigmaTransformer — Variable Transformation', () => {
       expect(easing!.valuesByMode.light).toBe('cubic-bezier(0.4, 0, 0.2, 1)');
     });
 
+    it('generates primitive variables from linearEasing tokens', () => {
+      const dtcg: DTCGTokenFile = {
+        $schema: 'https://tr.designtokens.org/format/',
+        easing: {
+          easingGlide: {
+            $value: [[0, 0], [0.5, 0.8], [1, 1]],
+            $type: 'linearEasing',
+            $description: 'Glide easing',
+          },
+        },
+      };
+
+      const collections = transformer.transformVariables(dtcg);
+      const primitives = collections[0];
+      const easing = primitives.variables.find(
+        (v) => v.name === 'easing/Glide',
+      );
+      expect(easing).toBeDefined();
+      expect(easing!.resolvedType).toBe('STRING');
+      expect(easing!.valuesByMode.light).toBe('linear(0, 0.8 50.0%, 1)');
+    });
+
     it('generates primitive variables from duration tokens', () => {
       const dtcg: DTCGTokenFile = {
         $schema: 'https://tr.designtokens.org/format/',

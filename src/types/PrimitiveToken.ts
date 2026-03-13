@@ -25,7 +25,8 @@ export enum TokenCategory {
   GLOW = 'glow',
   OPACITY = 'opacity',
   BLEND = 'blend',
-  BREAKPOINT = 'breakpoint'
+  BREAKPOINT = 'breakpoint',
+  EASING = 'easing'
 }
 
 /**
@@ -95,4 +96,13 @@ export interface PrimitiveToken {
   
   /** Generated platform-specific values maintaining mathematical relationships */
   platforms: PlatformValues;
+
+  /** Easing type discriminator — cubic bezier or piecewise linear */
+  easingType?: 'cubicBezier' | 'linear';
+
+  /** Piecewise linear stops as [time, progress] pairs (normalized 0–1). Required when easingType is 'linear'. */
+  stops?: Array<[number, number]>;
+
+  /** Paired duration in ms for piecewise linear easings (curve shape is time-scale dependent) */
+  easingDuration?: number;
 }

@@ -1082,28 +1082,49 @@ dependencies {${composeDependencies}${dependenciesStr ? '\n' + dependenciesStr :
    */
   generateEasingTokens(easingTokens: Record<string, any>): string {
     const lines: string[] = [];
+    const hasLinear = Object.values(easingTokens).some((t: any) => t.easingType === 'linear');
     
     lines.push('    // MARK: Easing Tokens');
     lines.push('    ');
-    lines.push('    /** Animation easing curves using CubicBezierEasing */');
+
+    if (hasLinear) {
+      lines.push('    /** Piecewise linear easing via lookup table interpolation */');
+      lines.push('    class PiecewiseLinearEasing(private val stops: List<Pair<Float, Float>>) : Easing {');
+      lines.push('        override fun transform(fraction: Float): Float {');
+      lines.push('            if (fraction <= 0f) return 0f');
+      lines.push('            if (fraction >= 1f) return 1f');
+      lines.push('            var lo = 0; var hi = stops.size - 1');
+      lines.push('            while (lo < hi - 1) { val mid = (lo + hi) / 2; if (stops[mid].first <= fraction) lo = mid else hi = mid }');
+      lines.push('            val seg = stops[lo]; val next = stops[hi]');
+      lines.push('            val frac = if (next.first > seg.first) (fraction - seg.first) / (next.first - seg.first) else 1f');
+      lines.push('            return seg.second + (next.second - seg.second) * frac');
+      lines.push('        }');
+      lines.push('    }');
+      lines.push('    ');
+    }
+
+    lines.push('    /** Animation easing curves */');
     lines.push('    object Easing {');
     
     for (const [name, token] of Object.entries(easingTokens)) {
       const kotlinName = this.toKotlinTypeName(name);
-      const cubicBezier = token.platforms.android.value;
-      
-      // Extract cubic-bezier parameters from string like "cubic-bezier(0.4, 0.0, 0.2, 1)"
-      const match = cubicBezier.match(/cubic-bezier\(([\d.]+),\s*([\d.]+),\s*([\d.]+),\s*([\d.]+)\)/);
-      if (match) {
-        const [, p1, p2, p3, p4] = match;
-        // Format float values to always include .0 for whole numbers (1.0f instead of 1f)
-        const formatFloat = (val: string) => {
-          const num = parseFloat(val);
-          return num === Math.floor(num) ? `${num}.0f` : `${val}f`;
-        };
-        const comment = `        /** ${name}: ${cubicBezier} */`;
-        lines.push(comment);
-        lines.push(`        val ${kotlinName} = CubicBezierEasing(${formatFloat(p1)}, ${formatFloat(p2)}, ${formatFloat(p3)}, ${formatFloat(p4)})`);
+      if (token.easingType === 'linear' && token.stops) {
+        const stops = (token.stops as Array<[number, number]>)
+          .map(([time, progress]) => `${time}f to ${progress}f`).join(', ');
+        lines.push(`        /** ${name}: piecewise linear (${(token.stops as Array<[number, number]>).length} stops, ${token.easingDuration}ms) */`);
+        lines.push(`        val ${kotlinName} = PiecewiseLinearEasing(listOf(${stops}))`);
+      } else {
+        const cubicBezier = token.platforms.android.value;
+        const match = cubicBezier.match(/cubic-bezier\(([\d.]+),\s*([\d.]+),\s*([\d.]+),\s*([\d.]+)\)/);
+        if (match) {
+          const [, p1, p2, p3, p4] = match;
+          const formatFloat = (val: string) => {
+            const num = parseFloat(val);
+            return num === Math.floor(num) ? `${num}.0f` : `${val}f`;
+          };
+          lines.push(`        /** ${name}: ${cubicBezier} */`);
+          lines.push(`        val ${kotlinName} = CubicBezierEasing(${formatFloat(p1)}, ${formatFloat(p2)}, ${formatFloat(p3)}, ${formatFloat(p4)})`);
+        }
       }
     }
     

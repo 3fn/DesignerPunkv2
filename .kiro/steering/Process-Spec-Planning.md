@@ -367,6 +367,7 @@ During spec formalization (design-outline → requirements.md), Thurgood will id
   - [ ] [N.1] [Sub-task Title]
     **Type**: [Setup | Implementation | Architecture]
     **Validation**: [Tier 1: Minimal | Tier 2: Standard | Tier 3: Comprehensive]
+    **Agent**: [Agent name]
     - [Implementation step 1]
     - [Implementation step 2]
     - _Requirements: [Requirement IDs]_
@@ -374,6 +375,7 @@ During spec formalization (design-outline → requirements.md), Thurgood will id
   - [ ] [N.2] [Sub-task Title]
     **Type**: [Setup | Implementation | Architecture]
     **Validation**: [Tier 1: Minimal | Tier 2: Standard | Tier 3: Comprehensive]
+    **Agent**: [Agent name]
     - [Implementation step 1]
     - [Implementation step 2]
     - _Requirements: [Requirement IDs]_
@@ -418,6 +420,12 @@ During spec formalization (design-outline → requirements.md), Thurgood will id
 **Task Type Metadata**:
 - All subtasks must include **Type** metadata field
 - All subtasks must include **Validation** metadata field
+
+**Agent Assignment**:
+- All tasks and subtasks must include **Agent** metadata field
+- Indicates the optimal agent based on domain boundaries (Ada: tokens/pipeline, Lina: components/tests, Thurgood: governance/specs)
+- For cross-domain tasks, use `Agent A + Agent B` with rationale
+- Agent field is a recommendation — Peter may route differently based on context
 - Parent tasks use Type: Parent with Tier 3: Comprehensive validation
 - Type determines which validation tier and documentation tier to apply
 
@@ -454,6 +462,7 @@ During spec formalization (design-outline → requirements.md), Thurgood will id
   - [ ] 1.1 Create directory structure
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
+    **Agent**: Lina
     - Create `src/build/` directory
     - Create `src/build/platforms/` subdirectory
     - Create `src/build/interfaces/` subdirectory
@@ -462,6 +471,7 @@ During spec formalization (design-outline → requirements.md), Thurgood will id
   - [ ] 1.2 Implement TokenSelector class
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Agent**: Ada
     - Implement TokenSelector with selectToken() method
     - Add priority logic (semantic > primitive)
     - Implement error handling for invalid references
@@ -470,6 +480,7 @@ During spec formalization (design-outline → requirements.md), Thurgood will id
   - [ ] 1.3 Design BuildOrchestrator architecture
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
+    **Agent**: Ada + Lina (cross-domain: token selection + component build)
     - Design orchestration pattern for build coordination
     - Establish error handling and rollback strategy
     - Define platform generator interfaces

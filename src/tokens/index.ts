@@ -274,7 +274,8 @@ export const allTokens = {
   [TokenCategory.GLOW]: { ...glowBlur, ...glowOpacity },
   [TokenCategory.OPACITY]: opacityTokens,
   [TokenCategory.BLEND]: blendTokens,
-  [TokenCategory.BREAKPOINT]: breakpointTokens
+  [TokenCategory.BREAKPOINT]: breakpointTokens,
+  [TokenCategory.EASING]: easingTokens
 };
 
 /**

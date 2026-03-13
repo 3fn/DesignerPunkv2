@@ -45,6 +45,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  **Agent**: Ada (token pipeline)
 
   **Success Criteria:**
   - Easing token system supports both `cubicBezier` and `linear` (piecewise) types
@@ -71,9 +72,10 @@ Documentation (README, Navigation family steering doc update) is included as sub
   - Commit: `./.kiro/hooks/commit-task.sh "Task 1 Complete: Easing Token Infrastructure Extension"`
   - Verify: `npm test` — all suites pass, no regressions
 
-  - [ ] 1.1 iOS easing research spike
+  - [x] 1.1 iOS easing research spike
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
+    **Agent**: Ada (token pipeline) + Lina (iOS platform review)
     - Research `UnitCurve` (iOS 17+) as representation for piecewise linear curves
     - Evaluate: can `UnitCurve` be generated as a static constant like `CubicBezierEasing`?
     - If `UnitCurve` doesn't fit, evaluate `KeyframeAnimator` with `LinearKeyframe` segments
@@ -82,9 +84,10 @@ Documentation (README, Navigation family steering doc update) is included as sub
     - Minimum iOS target: 17.0+ (confirmed in Core Goals)
     - _Requirements: 10.5_
 
-  - [ ] 1.2 Extend easing token type system
+  - [x] 1.2 Extend easing token type system
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
+    **Agent**: Ada
     - Incorporate iOS findings from 1.1 into token data shape
     - Add `type` discriminator to easing token definition (`cubicBezier` | `linear`)
     - Add stops array field: `Array<[number, number]>` (progress, timePercent) — or adjusted format if iOS requires it
@@ -93,18 +96,20 @@ Documentation (README, Navigation family steering doc update) is included as sub
     - Define `easingGlideDecelerate` token with the approved piecewise linear stops
     - _Requirements: 3.4_
 
-  - [ ] 1.3 Update platform builders
+  - [x] 1.3 Update platform builders
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Agent**: Ada
     - Web: `generateEasingTokens()` outputs `linear(...)` for linear type (line ~694)
     - iOS: `generateEasingTokens()` outputs chosen approach from 1.2 (line ~1324)
     - Android: `generateEasingTokens()` outputs custom `Easing` implementation or `keyframes` (line ~1083)
     - All existing cubic-bezier output unchanged
     - _Requirements: 10.5_
 
-  - [ ] 1.4 Update DTCG generator and Figma transformer
+  - [x] 1.4 Update DTCG generator and Figma transformer
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Agent**: Ada
     - DTCG: Add custom `$type` for linear easing (e.g., `linearEasing`) in `DTCGTypes.ts` (line ~20) and `generateEasingTokens()` (line ~466)
     - Figma: Add linear case in transformer (line ~740) and stops serialization (line ~775)
     - _Requirements: 3.4_
@@ -112,6 +117,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   - [ ] 1.5 Tests for linear easing path
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Agent**: Ada
     - Add linear easing tests to `WebMotionTokenGeneration.test.ts`
     - Add linear easing tests to `iOSMotionTokenGeneration.test.ts`
     - Add linear easing tests to `AndroidMotionTokenGeneration.test.ts`
@@ -124,6 +130,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   - [ ] 1.6 Steering documentation updates
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
+    **Agent**: Ada
     - Update Token-Family-Motion.md (or easing section) with new easing type documentation
     - Ballot measure required for steering doc changes
     - **Housekeeping note**: Figma effect style `shadow.nav.segmented` should be renamed to match token `shadow.navigation.indicator` — Figma-side update, not codebase. Flag for Ada/Peter.
@@ -133,6 +140,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  **Agent**: Lina (component architecture)
 
   **Success Criteria:**
   - Directory structure follows Stemma conventions
@@ -157,6 +165,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   - [ ] 2.1 Create directory structure
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
+    **Agent**: Lina
     - Create `src/components/core/Nav-SegmentedChoice-Base/`
     - Create platform directories: `platforms/web/`, `platforms/ios/`, `platforms/android/`
     - Create `schema/`, `__tests__/`
@@ -166,6 +175,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   - [ ] 2.2 Author component-meta.yaml
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Agent**: Lina
     - Define purpose, usage.when_to_use, usage.when_not_to_use
     - Define contexts (navigation, view-switching)
     - Define alternatives (if any)
@@ -175,6 +185,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   - [ ] 2.3 Define schema and props interface
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Agent**: Lina
     - Create `types.ts` with `SegmentedChoiceProps` and `SegmentOption` union type
     - Create schema defining component structure
     - Export props interface for platform implementations
@@ -184,6 +195,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  **Agent**: Lina (component implementation)
 
   **Success Criteria:**
   - Web Component renders with Shadow DOM
@@ -209,6 +221,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   - [ ] 3.1 Web Component structure and rendering
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Agent**: Lina
     - Create Web Component class with Shadow DOM
     - Render container (tablist), segments (tab), and indicator element
     - Apply token-based CSS custom properties for all visual specs
@@ -219,6 +232,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   - [ ] 3.2 Selection logic and state management
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Agent**: Lina
     - Implement selection via `selectedValue` + `onSelectionChange`
     - Handle no-op on active segment tap
     - Handle fallback when `selectedValue` doesn't match any segment
@@ -228,6 +242,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   - [ ] 3.3 Indicator animation choreography
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
+    **Agent**: Lina
     - Implement four-phase animation: shadow out → resize+glide → shadow in
     - CSS transitions for shadow phases, JS-orchestrated position/width
     - Use `linear()` CSS function for glide easing (consuming `easingGlideDecelerate` token)
@@ -238,6 +253,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   - [ ] 3.4 Keyboard navigation and accessibility
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Agent**: Lina
     - Implement arrow key navigation with wrapping
     - Implement Enter/Space selection
     - Implement Tab entry (to selected segment) and Tab exit
@@ -248,6 +264,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   - [ ] 3.5 Hover state
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Agent**: Lina
     - Apply `blend.containerHoverDarker` on inactive segment hover
     - No hover feedback on active segment
     - _Requirements: 8.1, 8.2, 8.3_
@@ -255,6 +272,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   - [ ] 3.6 Web interaction and accessibility tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Agent**: Lina
     - Selection tests (tap, no-op, fallback, minimum segments error)
     - Keyboard tests (arrows, Enter/Space, Tab, wrapping)
     - Accessibility tests (roles, aria-selected, aria-controls with/without id)
@@ -264,6 +282,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   - [ ] 3.7 Web animation and visual tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Agent**: Lina
     - Animation choreography tests (phases fire in order, timing)
     - Reduced motion bypass test
     - Initial render no-animation test
@@ -274,6 +293,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   - [ ] 3.8 Component README
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Agent**: Lina
     - Author README with overview, usage examples (web), API reference, token dependencies, accessibility notes, platform-specific behavior
     - iOS and Android sections added as stubs, completed in Tasks 4/5
     - _Requirements: 11.1_
@@ -282,6 +302,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  **Agent**: Lina (component implementation)
 
   **Success Criteria:**
   - SwiftUI View renders correctly
@@ -305,6 +326,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   - [ ] 4.1 SwiftUI View structure and rendering
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Agent**: Lina
     - Create SwiftUI View with container, segments, indicator
     - Apply token-based styling
     - Equal-width layout, Standard and Condensed sizes
@@ -313,6 +335,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   - [ ] 4.2 Selection logic and indicator animation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Agent**: Lina
     - Selection via binding, no-op on active, fallback for invalid value
     - Four-phase animation using SwiftUI `.animation()` with custom timing
     - `UnitCurve` for glide (or approach from 1.2)
@@ -323,6 +346,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   - [ ] 4.3 Accessibility
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Agent**: Lina
     - VoiceOver: `accessibilityElement` with tab semantics
     - Keyboard navigation (external keyboard support)
     - Icon segments announced by `accessibilityLabel`
@@ -331,6 +355,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   - [ ] 4.4 iOS behavioral contract tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Agent**: Lina
     - Selection, animation, accessibility, size variant tests
     - _Requirements: 1–9_
 
@@ -338,6 +363,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
+  **Agent**: Lina (component implementation)
 
   **Success Criteria:**
   - Compose Composable renders correctly
@@ -362,6 +388,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   - [ ] 5.1 Compose Composable structure and rendering
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Agent**: Lina
     - Create Composable with container, segments, indicator
     - Apply token-based styling
     - Indicator shadow: `Modifier.shadow(elevation, shape)` + `.clip(shape)` — NOT `Surface(elevation)` or `mapShadowToElevation()`
@@ -371,6 +398,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   - [ ] 5.2 Selection logic and indicator animation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Agent**: Lina
     - Selection via state hoisting, no-op on active, fallback for invalid value
     - Four-phase animation using Compose `Animatable` / `animateFloatAsState`
     - Shadow choreography: `animateDpAsState` between 0.dp and 2.dp
@@ -382,6 +410,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   - [ ] 5.3 Accessibility
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Agent**: Lina
     - TalkBack: Semantics with `Role.Tab` and `selected` state
     - Keyboard navigation (hardware keyboard)
     - Icon segments announced by `accessibilityLabel`
@@ -390,6 +419,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   - [ ] 5.4 Android behavioral contract tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Agent**: Lina
     - Selection, animation, accessibility, size variant tests
     - Shadow implementation test: verify `Modifier.shadow()` used, not elevation
     - _Requirements: 1–9, 10.6_
@@ -397,6 +427,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   - [ ] 5.5 Navigation family steering doc update
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
+    **Agent**: Lina
     - Update Navigation family placeholder in Component-Quick-Reference.md to reflect implemented component
     - Ballot measure required for steering doc changes
     - _Requirements: 11.3_

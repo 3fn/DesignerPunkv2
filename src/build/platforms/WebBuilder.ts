@@ -695,13 +695,22 @@ export class WebBuilder implements PlatformBuilder {
     const lines: string[] = [];
     
     lines.push('  /* Easing Tokens */');
-    lines.push('  /* Animation curve definitions (cubic-bezier) */');
+    lines.push('  /* Animation curve definitions */');
     lines.push('  ');
     
     for (const [name, token] of Object.entries(easingTokens)) {
       const cssName = this.toCSSVariableName(name);
-      const value = token.platforms.web.value;
-      lines.push(`  --${cssName}: ${value};`);
+      if (token.easingType === 'linear' && token.stops) {
+        const stops = token.stops as Array<[number, number]>;
+        const parts = stops.map(([time, progress], i) => {
+          if (i === 0 && time === 0) return `${progress}`;
+          if (i === stops.length - 1 && time === 1) return `${progress}`;
+          return `${progress} ${(time * 100).toFixed(1)}%`;
+        });
+        lines.push(`  --${cssName}: linear(${parts.join(', ')});`);
+      } else {
+        lines.push(`  --${cssName}: ${token.platforms.web.value};`);
+      }
     }
     
     lines.push('  ');

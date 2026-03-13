@@ -104,15 +104,21 @@ describe('Property-Based Tests: Motion Tokens', () => {
             // Token must exist
             expect(token).toBeDefined();
             
-            // Must have cubic-bezier string value
-            const webValue = token!.platforms.web.value as string;
-            expect(typeof webValue).toBe('string');
-            expect(webValue).toMatch(/^cubic-bezier\(/);
-            
             // Must have required properties
             expect(token!.name).toBe(tokenName);
-            expect(token!.category).toBe(TokenCategory.SPACING);
+            expect(token!.category).toBe(TokenCategory.EASING);
             expect(token!.baseValue).toBe(0); // Categorical token
+            
+            // Type-specific validation
+            if (token!.easingType === 'linear') {
+              expect(token!.stops).toBeDefined();
+              expect(token!.stops!.length).toBeGreaterThanOrEqual(2);
+              expect(token!.easingDuration).toBeGreaterThan(0);
+            } else {
+              const webValue = token!.platforms.web.value as string;
+              expect(typeof webValue).toBe('string');
+              expect(webValue).toMatch(/^cubic-bezier\(/);
+            }
             
             // Must have platform values
             expect(token!.platforms.web).toBeDefined();
@@ -230,14 +236,17 @@ describe('Property-Based Tests: Motion Tokens', () => {
             const iosValue = token!.platforms.ios.value as string;
             const androidValue = token!.platforms.android.value as string;
             
-            // All platforms should have identical cubic-bezier strings
+            // All platforms should have identical values
             expect(webValue).toBe(iosValue);
             expect(iosValue).toBe(androidValue);
             
-            // All should be valid cubic-bezier format
-            expect(webValue).toMatch(/^cubic-bezier\(/);
-            expect(iosValue).toMatch(/^cubic-bezier\(/);
-            expect(androidValue).toMatch(/^cubic-bezier\(/);
+            // Type-specific format validation
+            if (token!.easingType === 'linear') {
+              // Linear easing stores JSON stops array
+              expect(() => JSON.parse(webValue)).not.toThrow();
+            } else {
+              expect(webValue).toMatch(/^cubic-bezier\(/);
+            }
           }
         ),
         { numRuns: 100 }

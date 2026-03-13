@@ -92,6 +92,38 @@ Strategic gaps are easy to identify in conversation and easy to forget between s
 
 ---
 
+### Gap 5: Agent Review Cycle Friction
+
+**What's missing**: No structured mechanism for multi-agent review of shared artifacts. The current workflow requires Peter to act as a message bus: agent A produces a document → Peter tells agent B to review → agent B writes a findings file → Peter tells agent A findings exist → agent A incorporates. For Spec 077 formalization, this produced 3 review cycles × 2 reviewers = 6 handoffs across requirements, design, and tasks documents.
+
+**Pain points observed:**
+- Human acts as router between agents who can't communicate directly
+- Each agent swap requires rebuilding context from conversation summaries and findings files
+- Findings files are full-document reviews when targeted section feedback would suffice
+- Review cycles are the dominant time cost of spec formalization (the writing is fast; the feedback loop is slow)
+
+**What works well:**
+- Domain boundaries prevent agents from overstepping (Ada doesn't write component tests, Lina doesn't create tokens)
+- Findings files create a durable audit trail of review decisions
+- Resolution tables in spec documents capture what changed and why
+- The async model allows deep, focused review rather than shallow real-time responses
+
+**Where it lives**: Process layer — may be steering doc conventions, workflow changes, tooling, or some combination. Not yet determined.
+
+**Priority**: Medium. Friction is recurring and predictable (every spec formalization hits it), but the current process works and produces quality output. The cost is human time, not quality.
+
+**Trigger**: Spec formalization consistently takes 3+ review cycles, OR Peter identifies the routing overhead as a bottleneck to spec throughput.
+
+**Possible approaches (not yet evaluated):**
+- Process: Standardized review protocol with predictable file locations and section-level targeting
+- Process: Agents proactively check for review requests at known paths
+- Tooling: Multi-agent session for decision-making conversations (Party Mode concept from BMAD Method)
+- Tooling: Lightweight orchestration for review routing
+- Steering: Conventions that reduce the need for cross-agent review (e.g., clearer domain boundaries in spec templates)
+- Steering: Agent-Agent Collaboration Framework — analogous to the AI-Human Collaboration Framework (AI-Collaboration-Framework.md), but governing inter-agent interactions. The human framework codifies candor, counter-arguments, and disagreement protocols for agent↔human. An agent↔agent framework would codify review conventions, findings file format, domain handoff protocols, and escalation paths. Currently these patterns exist as organic practice (findings files, `[ADA]` markers, resolution tables) but aren't formalized.
+
+---
+
 ## Deferred from Spec 071
 
 These were identified in the 071 design outline and explicitly deferred:

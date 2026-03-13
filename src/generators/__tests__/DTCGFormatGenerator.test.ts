@@ -120,13 +120,16 @@ describe('token type mapping', () => {
     expect(String(token.$value)).toMatch(/^\d+ms$/);
   });
 
-  it('should map easing tokens to DTCG cubicBezier type (4-element array)', () => {
+  it('should map easing tokens to DTCG cubicBezier and linearEasing types', () => {
     const group = defaultOutput.easing as DTCGGroup;
-    expect(group.$type).toBe('cubicBezier');
-    const firstKey = Object.keys(group).find(k => !k.startsWith('$'))!;
-    const token = group[firstKey] as DTCGToken;
-    expect(Array.isArray(token.$value)).toBe(true);
-    expect((token.$value as number[]).length).toBe(4);
+    const cubicKey = Object.keys(group).find(k => !k.startsWith('$') && k !== 'easingGlideDecelerate')!;
+    const cubicToken = group[cubicKey] as DTCGToken;
+    expect(cubicToken.$type).toBe('cubicBezier');
+    expect(Array.isArray(cubicToken.$value)).toBe(true);
+    expect((cubicToken.$value as number[]).length).toBe(4);
+    const linearToken = group['easingGlideDecelerate'] as DTCGToken;
+    expect(linearToken.$type).toBe('linearEasing');
+    expect(Array.isArray(linearToken.$value)).toBe(true);
   });
 
   it('should map opacity tokens to DTCG number type', () => {

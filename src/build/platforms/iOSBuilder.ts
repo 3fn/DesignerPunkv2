@@ -1323,24 +1323,49 @@ ${dependenciesSection}
    */
   generateEasingTokens(easingTokens: Record<string, any>): string {
     const lines: string[] = [];
+    const hasLinear = Object.values(easingTokens).some((t: any) => t.easingType === 'linear');
     
     lines.push('    // MARK: - Easing Tokens');
     lines.push('    ');
-    lines.push('    /// Animation easing curves using Animation.timingCurve');
+
+    if (hasLinear) {
+      lines.push('    /// Piecewise linear easing via CustomAnimation (iOS 17+)');
+      lines.push('    struct PiecewiseLinearEasing: CustomAnimation {');
+      lines.push('        let stops: [(time: Double, progress: Double)]');
+      lines.push('        let duration: Double');
+      lines.push('        func animate<V>(value: V, time: TimeInterval, context: inout AnimationContext<V>) -> V? where V: VectorArithmetic {');
+      lines.push('            let t = min(time / duration, 1.0)');
+      lines.push('            guard t < 1.0 else { return nil }');
+      lines.push('            var lo = 0, hi = stops.count - 1');
+      lines.push('            while lo < hi - 1 { let mid = (lo + hi) / 2; if stops[mid].time <= t { lo = mid } else { hi = mid } }');
+      lines.push('            let seg = stops[lo], next = stops[hi]');
+      lines.push('            let frac = next.time > seg.time ? (t - seg.time) / (next.time - seg.time) : 1.0');
+      lines.push('            let progress = seg.progress + (next.progress - seg.progress) * frac');
+      lines.push('            return value.scaled(by: progress)');
+      lines.push('        }');
+      lines.push('    }');
+      lines.push('    ');
+    }
+
+    lines.push('    /// Animation easing curves');
     lines.push('    public enum Easing {');
     
     for (const [name, token] of Object.entries(easingTokens)) {
       const swiftName = this.toSwiftConstantName(name);
-      const cubicBezier = token.platforms.ios.value;
-      
-      // Extract cubic-bezier parameters from string like "cubic-bezier(0.4, 0.0, 0.2, 1)"
-      const match = cubicBezier.match(/cubic-bezier\(([\d.]+),\s*([\d.]+),\s*([\d.]+),\s*([\d.]+)\)/);
-      if (match) {
-        const [, p1, p2, p3, p4] = match;
-        // Use Animation.timingCurve format in comment (iOS-specific, no cubic-bezier)
-        const comment = `        /// ${name}: Animation.timingCurve(${p1}, ${p2}, ${p3}, ${p4})`;
-        lines.push(comment);
-        lines.push(`        public static let ${swiftName} = Animation.timingCurve(${p1}, ${p2}, ${p3}, ${p4})`);
+      if (token.easingType === 'linear' && token.stops) {
+        const stops = (token.stops as Array<[number, number]>)
+          .map(([time, progress]) => `(${time}, ${progress})`).join(', ');
+        const dur = (token.easingDuration / 1000).toFixed(2);
+        lines.push(`        /// ${name}: piecewise linear (${(token.stops as Array<[number, number]>).length} stops, ${token.easingDuration}ms)`);
+        lines.push(`        public static let ${swiftName} = Animation(PiecewiseLinearEasing(stops: [${stops}], duration: ${dur}))`);
+      } else {
+        const cubicBezier = token.platforms.ios.value;
+        const match = cubicBezier.match(/cubic-bezier\(([\d.]+),\s*([\d.]+),\s*([\d.]+),\s*([\d.]+)\)/);
+        if (match) {
+          const [, p1, p2, p3, p4] = match;
+          lines.push(`        /// ${name}: Animation.timingCurve(${p1}, ${p2}, ${p3}, ${p4})`);
+          lines.push(`        public static let ${swiftName} = Animation.timingCurve(${p1}, ${p2}, ${p3}, ${p4})`);
+        }
       }
     }
     

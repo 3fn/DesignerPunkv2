@@ -41,9 +41,9 @@ Duration tokens determine animation timing in milliseconds.
 **Mathematical Foundation**: Linear progression with +100ms steps (150, 250, 350)
 
 **Design Philosophy**:
-- **150ms**: Faster than Material Design's 200ms for more responsive feel
+- **150ms**: Fast, responsive micro-interactions
 - **250ms**: Standard transition duration for most UI animations
-- **350ms**: Slower than Material Design's 300ms for more deliberate animations
+- **350ms**: Deliberate, weighted animations
 
 **Platform-Specific Output**:
 - **Web**: `150ms`, `250ms`, `350ms` (milliseconds with "ms" suffix)
@@ -52,25 +52,38 @@ Duration tokens determine animation timing in milliseconds.
 
 ### Easing Tokens
 
-Easing tokens determine animation acceleration curves using Material Design cubic-bezier definitions.
+Easing tokens determine animation acceleration curves. The system supports two types: cubic bezier (4-parameter curves) and piecewise linear (arbitrary stops arrays).
 
-| Token | Value | Description | Use Case |
-|-------|-------|-------------|----------|
-| `easingStandard` | cubic-bezier(0.4, 0.0, 0.2, 1) | Balanced acceleration | Standard UI transitions, float labels, most animations |
-| `easingDecelerate` | cubic-bezier(0.0, 0.0, 0.2, 1) | Slow start, fast end | Entering elements, expanding panels, appearing content |
-| `easingAccelerate` | cubic-bezier(0.4, 0.0, 1, 1) | Fast start, slow end | Exiting elements, collapsing panels, disappearing content |
+| Token | Type | Value | Description | Use Case |
+|-------|------|-------|-------------|----------|
+| `easingStandard` | cubicBezier | cubic-bezier(0.4, 0.0, 0.2, 1) | Balanced acceleration | Standard UI transitions, float labels, most animations |
+| `easingDecelerate` | cubicBezier | cubic-bezier(0.0, 0.0, 0.2, 1) | Slow start, fast end | Entering elements, expanding panels, appearing content |
+| `easingAccelerate` | cubicBezier | cubic-bezier(0.4, 0.0, 1, 1) | Fast start, slow end | Exiting elements, collapsing panels, disappearing content |
+| `easingGlideDecelerate` | linear | 15 stops | Aggressive deceleration, long settle | Indicator glide, weighted slide-to-stop motion |
 
-**Mathematical Foundation**: Material Design cubic-bezier curves for natural motion feel
+**Mathematical Foundation**: Cubic-bezier curves for natural, physics-based motion feel. Piecewise linear curves for complex motion that can't be expressed as a single cubic bezier.
 
 **Design Philosophy**:
 - **easingStandard**: Most versatile curve for general UI animations
 - **easingDecelerate**: Elements entering the screen feel natural with slow start
 - **easingAccelerate**: Elements leaving the screen feel natural with fast start
+- **easingGlideDecelerate**: Heavy object sliding to a stop — 41% of movement in first 10% of time, then long gentle settle. No overshoot.
 
-**Platform-Specific Output**:
+**Platform-Specific Output (cubic bezier)**:
 - **Web**: `cubic-bezier(0.4, 0.0, 0.2, 1)` (CSS cubic-bezier format)
 - **iOS**: `Animation.timingCurve(0.4, 0.0, 0.2, 1.0)` (Swift Animation API)
 - **Android**: `CubicBezierEasing(0.4f, 0.0f, 0.2f, 1.0f)` (Kotlin Compose API)
+
+**Platform-Specific Output (piecewise linear)**:
+- **Web**: `linear(0, 0.012 0.9%, ...)` (CSS `linear()` function)
+- **iOS**: `Animation(PiecewiseLinearEasing(stops: [...], duration: 0.35))` (CustomAnimation protocol, iOS 17+)
+- **Android**: `PiecewiseLinearEasing(listOf(0f to 0f, ...))` (custom Easing implementation)
+
+#### Piecewise Linear Easing
+
+Linear easing tokens define progress at specific time points, with linear interpolation between stops. Data shape: `stops: Array<[time, progress]>` where both values are normalized 0–1.
+
+Linear easing tokens also carry `easingDuration` (ms) because piecewise linear curves are time-scale dependent — the same stops at different durations produce different motion character. This is a deliberate coupling: `easingGlideDecelerate` is designed for 350ms (`duration350`).
 
 ### Scale Tokens
 
@@ -526,6 +539,13 @@ val labelOffset by animateFloatAsState(
 - **Feel**: Elements leaving the screen
 - **Examples**: Modal dismissing, panel collapsing, content fading out
 
+#### easingGlideDecelerate (Weighted Slide)
+- **Use for**: Indicator sliding, weighted object motion, glide-to-stop
+- **Acceleration**: 41% of movement in first 10% of time, then long gentle settle
+- **Feel**: Heavy object sliding to a stop, no overshoot
+- **Examples**: Segmented control indicator, tab indicator, sliding selection
+- **Paired duration**: `duration350` (350ms) — curve shape assumes this time scale
+
 ### When to Use Each Scale
 
 #### scale088 (Float Label)
@@ -604,15 +624,19 @@ Duration tokens follow a linear +100ms progression:
 
 **Design Philosophy**: Linear progression provides predictable timing relationships. Each step up feels proportionally slower, making it easy to reason about animation timing.
 
-### Material Design Easing Curves
+### Easing Curve Foundations
 
-Easing tokens use Material Design cubic-bezier curves:
+Cubic bezier easing tokens use industry-standard curves for natural motion:
 
 - **easingStandard**: cubic-bezier(0.4, 0.0, 0.2, 1) - Balanced acceleration
 - **easingDecelerate**: cubic-bezier(0.0, 0.0, 0.2, 1) - Slow start, fast end
 - **easingAccelerate**: cubic-bezier(0.4, 0.0, 1, 1) - Fast start, slow end
 
-**Design Philosophy**: Material Design curves are industry-proven and feel natural across platforms. They provide consistent motion feel that users recognize.
+**Design Philosophy**: These curves are industry-proven and feel natural across platforms. They provide consistent motion feel that users recognize.
+
+Piecewise linear easing tokens use custom stop arrays for motion that can't be expressed as a single cubic bezier:
+
+- **easingGlideDecelerate**: 15-stop deceleration curve — aggressive initial movement with long settling tail. Designed for 350ms duration.
 
 ### 8-Interval Scale Progression
 

@@ -212,7 +212,8 @@ describe('ThreeTierValidator', () => {
             [TokenCategory.GLOW]: { primitiveUsage: 0, semanticUsage: 0, totalUsage: 0 },
             [TokenCategory.OPACITY]: { primitiveUsage: 0, semanticUsage: 0, totalUsage: 0 },
             [TokenCategory.BLEND]: { primitiveUsage: 0, semanticUsage: 0, totalUsage: 0 },
-            [TokenCategory.BREAKPOINT]: { primitiveUsage: 0, semanticUsage: 0, totalUsage: 0 }
+            [TokenCategory.BREAKPOINT]: { primitiveUsage: 0, semanticUsage: 0, totalUsage: 0 },
+            [TokenCategory.EASING]: { primitiveUsage: 0, semanticUsage: 0, totalUsage: 0 }
           }
         }
       };

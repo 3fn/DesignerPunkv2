@@ -19,7 +19,7 @@ import type { DTCGTokenFile, DTCGToken, DTCGGroup, DTCGType } from '../types/DTC
 // Valid DTCG types per Format Module 2025.10
 const VALID_DTCG_TYPES: ReadonlySet<string> = new Set([
   'color', 'dimension', 'fontFamily', 'fontWeight', 'duration',
-  'cubicBezier', 'number', 'shadow', 'typography', 'transition',
+  'cubicBezier', 'linearEasing', 'number', 'shadow', 'typography', 'transition',
 ]);
 
 // Generate output once — it's deterministic and read-only for property checks

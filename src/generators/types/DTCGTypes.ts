@@ -18,6 +18,7 @@ export type DTCGType =
   | 'fontWeight'
   | 'duration'
   | 'cubicBezier'
+  | 'linearEasing'
   | 'number'
   | 'shadow'
   | 'typography'

@@ -157,8 +157,8 @@ describe('Easing Tokens', () => {
       expect(easingTokens.easingAccelerate).toBeDefined();
     });
 
-    test('should have valid cubic-bezier strings for all easing tokens', () => {
-      const allTokens = getAllEasingTokens();
+    test('should have valid cubic-bezier strings for all cubic-bezier easing tokens', () => {
+      const allTokens = getAllEasingTokens().filter(t => t.easingType === 'cubicBezier');
       
       allTokens.forEach(token => {
         const value = token.platforms.web.value as string;
@@ -178,7 +178,7 @@ describe('Easing Tokens', () => {
       const allTokens = getAllEasingTokens();
       
       allTokens.forEach(token => {
-        expect(token.category).toBe(TokenCategory.SPACING); // Temporary until EASING category added
+        expect(token.category).toBe(TokenCategory.EASING);
       });
     });
 
@@ -219,13 +219,13 @@ describe('Easing Tokens', () => {
       const allTokens = getAllEasingTokens();
       
       expect(Array.isArray(allTokens)).toBe(true);
-      expect(allTokens).toHaveLength(3);
-      expect(allTokens.every(token => token.category === TokenCategory.SPACING)).toBe(true);
+      expect(allTokens).toHaveLength(4);
+      expect(allTokens.every(token => token.category === TokenCategory.EASING)).toBe(true);
     });
 
     test('easingTokenNames should contain all token names', () => {
-      expect(easingTokenNames).toEqual(['easingStandard', 'easingDecelerate', 'easingAccelerate']);
-      expect(easingTokenNames).toHaveLength(3);
+      expect(easingTokenNames).toEqual(['easingStandard', 'easingDecelerate', 'easingAccelerate', 'easingGlideDecelerate']);
+      expect(easingTokenNames).toHaveLength(4);
     });
   });
 
