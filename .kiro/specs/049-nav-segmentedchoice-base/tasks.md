@@ -114,7 +114,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
     - Figma: Add linear case in transformer (line ~740) and stops serialization (line ~775)
     - _Requirements: 3.4_
 
-  - [ ] 1.5 Tests for linear easing path
+  - [x] 1.5 Tests for linear easing path
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -127,7 +127,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
     - Verify all existing easing tests still pass
     - _Requirements: 3.4_
 
-  - [ ] 1.6 Steering documentation updates
+  - [x] 1.6 Steering documentation updates
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     **Agent**: Ada
@@ -136,7 +136,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
     - **Housekeeping note**: Figma effect style `shadow.nav.segmented` should be renamed to match token `shadow.navigation.indicator` — Figma-side update, not codebase. Flag for Ada/Peter.
     - _Requirements: 11.1_
 
-- [ ] 2. Component Scaffolding
+- [x] 2. Component Scaffolding
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -162,7 +162,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   **Post-Completion:**
   - Commit: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Component Scaffolding"`
 
-  - [ ] 2.1 Create directory structure
+  - [x] 2.1 Create directory structure
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     **Agent**: Lina
@@ -172,7 +172,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
     - Create placeholder index files
     - _Requirements: 10.1, 10.2, 10.3_
 
-  - [ ] 2.2 Author component-meta.yaml
+  - [x] 2.2 Author component-meta.yaml
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -182,7 +182,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
     - Follow existing component-meta patterns (reference Chip-Base, Progress-Pagination-Base)
     - _Requirements: 11.2_
 
-  - [ ] 2.3 Define schema and props interface
+  - [x] 2.3 Define schema and props interface
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina

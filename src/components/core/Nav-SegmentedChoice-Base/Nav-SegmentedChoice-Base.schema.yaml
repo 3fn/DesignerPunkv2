@@ -1,0 +1,197 @@
+# Nav-SegmentedChoice-Base Component Schema
+#
+# Stemma System: Navigation Family
+# Component Type: Primitive (Base)
+# Naming Convention: [Family]-[Type]-[Variant] = Nav-SegmentedChoice-Base
+#
+# Navigation control for switching between mutually exclusive content views.
+# Connected segments with a sliding indicator. Text OR icon per segment
+# (union type). First component in the Navigation family.
+#
+# DesignerPunk Philosophy: NO DISABLED STATES
+# Unavailable options should not be rendered as segments.
+
+name: Nav-SegmentedChoice-Base
+type: primitive
+family: Navigation
+version: "1.0.0"
+readiness: development
+
+description: |
+  Navigation control for switching between mutually exclusive content surfaces.
+  Presents connected segments — text or icon — with a sliding indicator that
+  animates between selections using a four-phase choreography.
+
+  Key Characteristics:
+  - Text OR icon per segment (union type, never both)
+  - Four-phase indicator animation (shadow out → resize+glide → shadow in)
+  - Sizes: standard, condensed
+  - Minimum 2 segments (runtime error if fewer)
+  - Equal-width segments, full-width container
+  - Keyboard: arrow keys with wrapping, Enter/Space, Tab to selected
+  - ARIA: tablist/tab roles, aria-selected, optional aria-controls via id prop
+
+  DesignerPunk Philosophy: NO DISABLED STATES
+  If a segment option is unavailable, do not include it in the segments array.
+
+behaviors:
+  - renderable
+  - selectable
+  - focusable
+  - accessible
+  - animatable
+
+properties:
+  segments:
+    type: "SegmentOption[]"
+    required: true
+    description: |
+      Array of segment options (minimum 2). Each segment is either text
+      ({ value, label }) or icon ({ value, icon, accessibilityLabel }).
+      Union type enforces text OR icon per segment, never both.
+      Icon segments require accessibilityLabel for WCAG compliance.
+
+  selectedValue:
+    type: string
+    required: true
+    description: |
+      Currently selected segment value. Exactly one segment is selected
+      at all times. If value doesn't match any segment, first segment
+      is selected as fallback.
+
+  onSelectionChange:
+    type: "(value: string) => void"
+    required: true
+    description: |
+      Called when selection changes. Not called when active segment is
+      tapped (no-op). Receives the new segment's value string.
+
+  size:
+    type: "'standard' | 'condensed'"
+    required: false
+    default: "'standard'"
+    description: |
+      Size variant. Standard uses larger padding and typography for
+      primary layouts. Condensed uses compact sizing for tight spaces.
+
+  id:
+    type: string
+    required: false
+    description: |
+      DOM identity for panel association. When provided, generates
+      aria-controls="[id]-panel-[value]" on each segment. When omitted,
+      aria-controls is not rendered. Independent of testID.
+
+  testID:
+    type: string
+    required: false
+    description: |
+      Test identifier for automated testing. Platform-specific:
+      - Web: data-testid attribute
+      - iOS: accessibilityIdentifier
+      - Android: testTag
+
+tokens:
+  color:
+    - color.structure.surface
+    - color.structure.canvas
+    - color.structure.border
+    - color.action.navigation
+  spacing:
+    - space.inset.050
+    - space.inset.100
+    - space.inset.150
+    - space.inset.200
+    - space.grouped.none
+  border:
+    - border.default
+    - radius.normal
+    - radius.small
+  typography:
+    - fontSize100
+    - fontSize125
+    - fontWeight700
+    - lineHeight100
+    - lineHeight125
+  shadow:
+    - shadow.navigation.indicator
+  motion:
+    - duration150
+    - duration350
+    - easingStandard
+    - easingAccelerate
+    - easingDecelerate
+    - easingGlideDecelerate
+  blend:
+    - blend.containerHoverDarker
+  accessibility:
+    - tapAreaMinimum
+    - tapAreaRecommended
+    - accessibility.focus.width
+    - accessibility.focus.offset
+    - accessibility.focus.color
+
+platforms:
+  - web
+  - ios
+  - android
+
+platform_notes:
+  web:
+    element: "<nav-segmented-choice>"
+    implementation: Web Component with Shadow DOM
+    file: platforms/web/NavSegmentedChoiceBase.web.ts
+    notes: |
+      - Shadow DOM for style encapsulation
+      - CSS logical properties for RTL support
+      - role="tablist" container, role="tab" segments
+      - CSS transitions + linear() for indicator animation
+      - prefers-reduced-motion media query
+  ios:
+    implementation: SwiftUI View
+    file: platforms/ios/NavSegmentedChoiceBase.ios.swift
+    notes: |
+      - SwiftUI View with custom animation
+      - CustomAnimation (PiecewiseLinearEasing) for glide
+      - VoiceOver tab semantics
+      - UIAccessibility.isReduceMotionEnabled check
+  android:
+    implementation: Jetpack Compose Composable
+    file: platforms/android/NavSegmentedChoiceBase.android.kt
+    notes: |
+      - Compose Composable with state hoisting
+      - Modifier.shadow() + .clip(shape) for indicator shadow (NOT Surface elevation)
+      - TalkBack Role.Tab semantics
+      - Settings.Global.ANIMATOR_DURATION_SCALE for reduced motion
+
+semantic_variants:
+  - name: Nav-SegmentedChoice-Badge
+    extends: Segments with notification dot indicator
+    status: planned
+    inherits: Nav-SegmentedChoice-Base
+  - name: Nav-SegmentedChoice-Scrollable
+    extends: Horizontal scroll for many segments
+    status: planned
+    inherits: Nav-SegmentedChoice-Base
+
+accessibility:
+  wcag_level: AA
+  compliance:
+    - "1.3.1 Info and Relationships - tablist/tab roles with aria-selected"
+    - "1.4.3 Contrast (Minimum) - WCAG theme provides AAA contrast (teal500)"
+    - "1.4.11 Non-text Contrast - Focus ring and indicator meet 3:1"
+    - "2.1.1 Keyboard - Arrow keys, Enter/Space, Tab navigation"
+    - "2.4.7 Focus Visible - Focus ring on keyboard navigation"
+    - "2.5.5 Target Size - min-width tapAreaMinimum per segment"
+    - "4.1.2 Name, Role, Value - tab role, aria-selected, optional aria-controls"
+  aria_attributes:
+    - role: tablist (container)
+    - role: tab (segments)
+    - aria-selected: "true/false per segment"
+    - aria-controls: "[id]-panel-[value] (when id prop provided)"
+  keyboard_navigation:
+    - Left/Up Arrow: Previous segment (wraps)
+    - Right/Down Arrow: Next segment (wraps)
+    - Enter: Select focused segment
+    - Space: Select focused segment
+    - Tab: Focus selected segment (entry) / exit control (within)

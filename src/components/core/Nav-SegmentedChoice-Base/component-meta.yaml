@@ -1,0 +1,23 @@
+purpose: "Switch between mutually exclusive content views using connected segments with a sliding indicator."
+
+usage:
+  when_to_use:
+    - "Switching between related content views within a single screen (e.g., Daily/Weekly/Monthly)"
+    - "Toggling between a small set of view modes (e.g., List/Grid/Map)"
+    - "Icon-based view switching when labels are unnecessary (e.g., layout mode icons)"
+  when_not_to_use:
+    - "Primary app navigation between unrelated sections — use a tab bar or bottom navigation"
+    - "More than ~5 text segments or ~7 icon segments — use Nav-SegmentedChoice-Scrollable (future)"
+    - "Binary on/off toggle — use a switch or toggle component"
+    - "Filtering content by multiple criteria — use Chip-Filter"
+
+contexts:
+  - "view-switching"
+  - "content-filtering"
+  - "settings-screens"
+  - "dashboard-views"
+  - "media-galleries"
+
+alternatives:
+  - component: Chip-Filter
+    reason: "When selections are non-exclusive or filter content rather than switch views"

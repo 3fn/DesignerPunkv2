@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nav-SegmentedChoice-Base Demo - DesignerPunk</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="demo-styles.css">
+  <script type="module" src="designerpunk.esm.js"></script>
+</head>
+<body>
+  <header class="demo-header">
+    <h1>Nav-SegmentedChoice-Base</h1>
+    <p>Navigation control for switching between mutually exclusive content views.</p>
+  </header>
+
+  <main>
+    <div class="demo-section">
+      <h2>Usage Example</h2>
+      <p>Web implementation pending (Task 3).</p>
+      <pre><code>&lt;nav-segmented-choice
+  segments='[{"value":"daily","label":"Daily"},{"value":"weekly","label":"Weekly"}]'
+  selected-value="daily"&gt;
+&lt;/nav-segmented-choice&gt;</code></pre>
+    </div>
+
+    <div class="demo-section">
+      <h2>Token Verification</h2>
+      <p>Token application pending web implementation (Task 3).</p>
+    </div>
+  </main>
+
+  <footer class="demo-footer">
+    <p>DesignerPunk Design System • Nav-SegmentedChoice-Base Demo</p>
+  </footer>
+
+  <script>
+    // File protocol detection
+    if (window.location.protocol === 'file:') {
+      var banner = document.createElement('div');
+      banner.className = 'demo-file-protocol-warning';
+      banner.textContent = 'Components may not load correctly via file:// protocol. Use a local server: npx serve dist/browser';
+      document.body.prepend(banner);
+    }
+  </script>
+</body>
+</html>
