@@ -4,7 +4,7 @@
 **Purpose**: Ensure behavioral contracts are authored before implementation and aligned with the Concept Catalog
 **Organization**: spec-guide
 **Scope**: 078-contract-governance-enforcement
-**Status**: Design outline — open questions unresolved
+**Status**: Design outline — questions resolved, ready for formalization
 
 ---
 
@@ -117,7 +117,7 @@ Option A, plus automated checks:
 - The Concept Catalog is in a steering doc (markdown), not structured data — parsing it for validation requires either extracting it to a machine-readable format or parsing the markdown
 - Name validation needs to distinguish "legitimately new concept" from "invented name that should use catalog" — this is a judgment call that's hard to automate
 
-### Option D: All Three (Prompt + Task Template + Automated) ← Recommended
+### Option D: All Three (Prompt + Task Template + Automated) ← Approved
 
 Layer all three safeguards:
 
@@ -139,21 +139,29 @@ Layer all three safeguards:
 
 ## Open Questions
 
-1. **Is the prompt fix alone sufficient?** The root cause was a missing workflow step. Adding the step might be enough. The catalog naming issue is secondary — it's about consulting a reference, which the step would instruct. Counter-argument: the demo-system test proves that automated checks catch things agents miss, even when the knowledge is available.
+1. **Is the prompt fix alone sufficient?**
+   **Resolved**: No. Option D (all three layers). The 049 incident proved single safeguards fail — Lina had the knowledge but the task plan directed her attention elsewhere. Defense in depth.
 
-2. **Should the Concept Catalog be extracted to a machine-readable format?** Currently it's a markdown list in a steering doc. Automated validation would need to parse it. Extracting to YAML or JSON would make validation trivial but creates a second source of truth. Alternatively, the validation could parse the markdown directly (fragile but avoids duplication).
+2. **Should the Concept Catalog be extracted to a machine-readable format?**
+   **Resolved**: Not yet. Parse markdown for now. **Trigger for extraction**: when a second consumer needs to parse the catalog programmatically. One consumer (validation test) parsing markdown is pragmatic. Two consumers reimplementing the same parsing is the signal to extract.
 
-3. **Where does the existence check live?** Options: (a) a new test file in the component test infrastructure, (b) a component MCP health check extension, (c) a pre-commit hook. The demo-system test pattern (property-based test that scans directories) is the closest precedent.
+3. **Where does the existence check live?**
+   **Resolved**: A test file following the demo-system test pattern. `src/__tests__/stemma-system/contract-existence-validation.test.ts` — scans `src/components/core/*/platforms/` and verifies a sibling `contracts.yaml` exists. Runs in `npm test`.
 
-4. **Should non-catalog names be errors or warnings?** New concepts are legitimate (Nav-SegmentedChoice-Base introduced `interaction_noop_active` and `animation_initial_render`). Hard failures would block legitimate new concepts. Warnings with a "confirm this is intentional" gate might be the right balance.
+4. **Should non-catalog names be errors or warnings?**
+   **Resolved**: Errors. If a concept isn't in the catalog, either the catalog needs updating or the name needs fixing. Both require resolution before proceeding. With catalog updates as part of the contracts.yaml authoring subtask, the workflow is: author contracts → new concept detected → update catalog (ballot measure) → test passes. Errors enforce that innovation gets cataloged.
 
-5. **Does Thurgood's task planning process need a formal checklist?** Or is a note in Process-Spec-Planning.md sufficient? The current spec planning standards don't have a "required artifacts per component" checklist.
+5. **Does Thurgood's task planning process need a formal checklist?**
+   **Resolved**: Yes. A "Required Artifacts for Component Specs" checklist in Process-Spec-Planning.md. Includes: `contracts.yaml`, `component-meta.yaml`, `schema/`, `types.ts`.
 
-6. **Should every implementation subtask require `_Contracts:` lines?** The web subtasks got them after the 3.1.CORRECTION, but iOS/Android subtasks in the same spec didn't. This suggests the task template should mandate that every implementation subtask maps to the contracts it satisfies — not just that contracts.yaml exists as a scaffolding artifact. This is the difference between "contracts exist" and "contracts are used as a specification tool."
+6. **Should every implementation subtask require `_Contracts:` lines?**
+   **Resolved**: Yes. Every platform implementation subtask maps to the contracts it satisfies. Task template mandates this for component specs. This is the difference between "contracts exist" and "contracts drive implementation."
 
-7. **Who owns the Concept Catalog update process?** (Finding 2) Three new concepts from Nav-SegmentedChoice-Base aren't in the catalog. Should the catalog update be: (a) part of the contracts.yaml authoring subtask, (b) a separate post-implementation audit step, (c) automated by scanning all contracts.yaml files? And who owns it — Thurgood (spec governance) or Lina (component architecture)?
+7. **Who owns the Concept Catalog update process?**
+   **Resolved**: Lina. Contracts are a core Stemma artifact, and Lina owns Stemma. When authoring contracts.yaml introduces a new concept, Lina proposes the catalog addition (ballot measure). Thurgood audits catalog health but doesn't own the content.
 
-8. **Should the behavioral-contract-validation test auto-discover components?** (Finding 1) The hard-coded list covers 7 of 29 components. Switching to filesystem discovery (`src/components/core/*/contracts.yaml`) would be a small change with high impact. Is this a quick fix or should it wait for the full Option D implementation?
+8. **Should the behavioral-contract-validation test auto-discover components?**
+   **Resolved**: Yes. Swap the hard-coded array for filesystem discovery (`src/components/core/*/contracts.yaml`). Thurgood owns the task, Lina consults. Small change, high impact.
 
 ---
 
@@ -221,6 +229,33 @@ These findings strengthen the case for **Option D** (all three layers):
 - Findings 1 and 3 are tooling gaps → Option C's automated validation
 - Finding 2 is a process gap → Option B's task template could include catalog update triggers
 - Finding 4 is a prompt/documentation gap → Option A's prompt fix, extended to the Component Development Guide
+
+---
+
+## Key Framing Decision: Contracts Are Core Stemma
+
+Behavioral contracts are not a separate governance layer bolted onto Stemma — they are the specification layer *of* Stemma. A component without contracts is an incomplete Stemma component, the same way a component without a schema is incomplete.
+
+This framing means:
+- Lina owns contracts as part of her Stemma domain
+- The Component Development Guide's missing contracts section is a gap in Stemma documentation, not a separate concern
+- The behavioral-contract-validation test is a Stemma system health check
+- The Concept Catalog is a Stemma artifact
+- Thurgood audits contract system health (coverage, catalog freshness, cross-component consistency) but the artifacts are Lina's
+
+All 078 deliverables — prompt fix, task template, automated validation, documentation — should frame contracts as core Stemma, not as an external governance check.
+
+---
+
+## Deferred: Contract-to-Test Traceability
+
+**What**: A system that maps each contract promise to the specific tests that verify it, enabling automated coverage auditing.
+
+**Why deferred**: The mapping is inherently contextual across platforms. The same promise (e.g., `interaction_hover`) maps to different tests on web, may not apply on iOS, and manifests differently on Android. A traceability system needs to model platform applicability per contract, which is a judgment call that varies per component. The "how" isn't obvious yet.
+
+**What we're accepting**: Contract-to-test coverage remains trust-based, mitigated by `_Contracts:` lines on implementation subtasks and agent discipline.
+
+**Trigger to revisit**: After 2-3 more components go through the full contract workflow (078 process in place), evaluate whether a pattern emerges that's systematic enough to automate. Candidate for a future spec.
 
 ---
 

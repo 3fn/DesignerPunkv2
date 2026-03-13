@@ -7,13 +7,13 @@ inclusion: always
 # Steering Documentation Directional Priorities
 
 **Date**: 2025-10-20
-**Updated**: December 14, 2025
+**Updated**: March 13, 2026
 **Purpose**: Meta-guide teaching AI agents how to use the conditional loading steering system
 **Organization**: process-standard
 **Scope**: cross-project
 **Layer**: 0
 **Relevant Tasks**: all-tasks
-**Last Reviewed**: 2025-12-15
+**Last Reviewed**: 2026-03-13
 
 ## How This Steering System Works
 
@@ -96,12 +96,22 @@ Core project context and development practices. Read completely.
 
 Core skepticism and candid communication requirements. Read completely.
 
+#### 7. Spec-Feedback-Protocol
+**File**: #[[file:.kiro/steering/Spec-Feedback-Protocol.md]]
+
+Structured protocol for multi-agent feedback during spec formalization. Defines stamp format, @ mention scanning, feedback checkpoints, and context for reviewers. Read completely.
+
+#### 8. Rosetta-Stemma-Systems-Overview
+**File**: #[[file:.kiro/steering/Rosetta-Stemma-Systems-Overview.md]]
+
+Visual architecture overview of Rosetta (token) + Stemma (component) systems. Contains Mermaid diagrams. Read completely.
+
 
 ---
 
 ## Tier 2: MCP-Only Documents
 
-These documents are **NOT auto-loaded**. Query them via MCP when needed.
+These documents are **NOT auto-loaded**. Query them via MCP when needed. Organized by domain.
 
 ---
 
@@ -113,7 +123,7 @@ These documents are **NOT auto-loaded**. Query them via MCP when needed.
 
 **Why this matters:**
 - Spec documents have specific formatting requirements that are NOT intuitive
-- Tasks.md has a precise structure including task type classification, validation tiers, and completion documentation paths
+- Tasks.md has a precise structure including task type classification, validation tiers, agent assignments, and completion documentation paths
 - Failure to query Spec Planning Standards WILL result in incorrectly formatted documents that require rework
 - This has happened before and caused wasted effort - learn from this mistake
 
@@ -132,355 +142,111 @@ These documents are **NOT auto-loaded**. Query them via MCP when needed.
 
 ---
 
-### 1. Spec Planning Standards
-**Access**: MCP query required (not auto-loaded)
-**When needed**: Creating or updating specification documents (requirements.md, design.md, tasks.md)
+### Process & Workflow
+
+| Document | Path | When to Load |
+|----------|------|-------------|
+| Spec Planning Standards | `Process-Spec-Planning.md` | Creating or updating spec documents (requirements.md, design.md, tasks.md) — **MANDATORY** |
+| Task Type Definitions | `Process-Task-Type-Definitions.md` | Task classification, validation tier decisions |
+| Cross-Reference Standards | `Process-Cross-Reference-Standards.md` | Adding cross-references to documentation |
+| Hook Operations | `Process-Hook-Operations.md` | Debugging hooks, understanding automation, troubleshooting |
+| Integration Methodology | `Process-Integration-Methodology.md` | Cross-spec integration, dependency management |
+| Completion Documentation Guide | `Completion Documentation Guide.md` | Creating completion docs, two-document workflow |
+| Release Management System | `Release Management System.md` | Release pipeline, task completion workflows |
+
+### Token System — Rosetta
+
+| Document | Path | When to Load |
+|----------|------|-------------|
+| Token Governance | `Token-Governance.md` | Token selection, usage, creation decisions |
+| Token Quick Reference | `Token-Quick-Reference.md` | Quick token lookup, common patterns |
+| Token Semantic Structure | `Token-Semantic-Structure.md` | Semantic token architecture, mode keys |
+| Token Resolution Patterns | `Token-Resolution-Patterns.md` | Token resolution, alias chains |
+| Rosetta System Architecture | `Rosetta-System-Architecture.md` | Token pipeline architecture, subsystem entry points |
+| Rosetta System Principles | `rosetta-system-principles.md` | Core Rosetta design principles |
+| Token-Family-Color | `Token-Family-Color.md` | Color token work |
+| Token-Family-Typography | `Token-Family-Typography.md` | Typography token work |
+| Token-Family-Spacing | `Token-Family-Spacing.md` | Spacing token work |
+| Token-Family-Shadow | `Token-Family-Shadow.md` | Shadow token work |
+| Token-Family-Motion | `Token-Family-Motion.md` | Motion/easing token work |
+| Token-Family-Border | `Token-Family-Border.md` | Border token work |
+| Token-Family-Radius | `Token-Family-Radius.md` | Radius token work |
+| Token-Family-Opacity | `Token-Family-Opacity.md` | Opacity token work |
+| Token-Family-Blend | `Token-Family-Blend.md` | Blend token work |
+| Token-Family-Glow | `Token-Family-Glow.md` | Glow token work |
+| Token-Family-Layering | `Token-Family-Layering.md` | Layering/z-index token work |
+| Token-Family-Responsive | `Token-Family-Responsive.md` | Responsive token work |
+| Token-Family-Accessibility | `Token-Family-Accessibility.md` | Accessibility token work |
+
+### Component System — Stemma
+
+| Document | Path | When to Load |
+|----------|------|-------------|
+| Component Development Guide | `Component-Development-Guide.md` | Building or modifying components — **key reference** |
+| Component Development Standards | `Component-Development-Standards.md` | Component coding standards |
+| Component Quick Reference | `Component-Quick-Reference.md` | Component selection, UI compositions |
+| Component Inheritance Structures | `Component-Inheritance-Structures.md` | Base/variant inheritance patterns |
+| Component Schema Format | `Component-Schema-Format.md` | Schema authoring, validation |
+| Component Templates | `Component-Templates.md` | Component scaffolding templates |
+| Component-Meta-Data-Shapes-Governance | `Component-Meta-Data-Shapes-Governance.md` | component-meta.yaml governance |
+| Component-Primitive-vs-Semantic-Philosophy | `Component-Primitive-vs-Semantic-Philosophy.md` | Primitive vs semantic component decisions |
+| Component Readiness Status | `Component-Readiness-Status.md` | Component maturity tracking |
+| Component-MCP-Document-Template | `Component-MCP-Document-Template.md` | MCP document templates for components |
+| Contract System Reference | `Contract-System-Reference.md` | Behavioral contracts, Concept Catalog — **core Stemma artifact** |
+| Test-Behavioral-Contract-Validation | `Test-Behavioral-Contract-Validation.md` | Contract validation patterns |
+| Stemma System Principles | `stemma-system-principles.md` | Core Stemma design principles |
+| Platform Implementation Guidelines | `platform-implementation-guidelines.md` | Cross-platform implementation patterns |
+| Cross-Platform Decision Framework | `Cross-Platform vs Platform-Specific Decision Framework.md` | Platform-specific vs shared decisions |
+| Component-Family-Button | `Component-Family-Button.md` | Button family work |
+| Component-Family-Form-Inputs | `Component-Family-Form-Inputs.md` | Form input family work |
+| Component-Family-Navigation | `Component-Family-Navigation.md` | Navigation family work |
+| Component-Family-Icon | `Component-Family-Icon.md` | Icon family work |
+| Component-Family-Container | `Component-Family-Container.md` | Container family work |
+| Component-Family-Progress | `Component-Family-Progress.md` | Progress family work |
+| Component-Family-Chip | `Component-Family-Chip.md` | Chip family work |
+| Component-Family-Badge | `Component-Family-Badge.md` | Badge family work |
+| Component-Family-Avatar | `Component-Family-Avatar.md` | Avatar family work |
+| Component-Family-Divider | `Component-Family-Divider.md` | Divider family work |
+| Component-Family-Loading | `Component-Family-Loading.md` | Loading family work |
+| Component-Family-Modal | `Component-Family-Modal.md` | Modal family work |
+| Component-Family-Data-Display | `Component-Family-Data-Display.md` | Data display family work |
+
+### Integration & Tooling
+
+| Document | Path | When to Load |
+|----------|------|-------------|
+| DTCG Integration Guide | `DTCG-Integration-Guide.md` | DTCG format, tool integrations |
+| Figma Workflow Guide | `Figma-Workflow-Guide.md` | Figma integration, token push, design extraction |
+| Transformer Development Guide | `Transformer-Development-Guide.md` | Custom token transformers |
+| MCP Integration Guide | `MCP-Integration-Guide.md` | Programmatic DTCG token consumption |
+| Browser Distribution Guide | `Browser Distribution Guide.md` | Browser loading, web component distribution |
+| BUILD-SYSTEM-SETUP | `BUILD-SYSTEM-SETUP.md` | Build system configuration |
+
+### Testing
+
+| Document | Path | When to Load |
+|----------|------|-------------|
+| Test Development Standards | `Test-Development-Standards.md` | Writing tests, test patterns, Stemma validators |
+| Test Failure Audit Methodology | `Test-Failure-Audit-Methodology.md` | Test failure audits, clean exit audits, performance investigation |
+| Test-Behavioral-Contract-Validation | `Test-Behavioral-Contract-Validation.md` | Contract validation test patterns |
+
+### Architecture & Vision
+
+| Document | Path | When to Load |
+|----------|------|-------------|
+| A Vision of the Future | `A Vision of the Future.md` | DesignerPunk vision context (optional) |
+| AI-Collaboration-Framework | `AI-Collaboration-Framework.md` | Detailed collaboration protocols, validation gates |
+| MCP Evolution Roadmap | `MCP-Evolution-Roadmap.md` | Known MCP gaps, trigger conditions |
+| Technology Stack | `Technology Stack.md` | Technology choices, platform decisions |
+
+### How to Access Any MCP-Only Document
+
+All paths are relative to `.kiro/steering/`. Use progressive disclosure:
+
 
-**MANDATORY SECTIONS TO QUERY:**
-- **For requirements.md**: Query "Requirements Document Format" section
-- **For design.md**: Query "Design Document Format" section  
-- **For tasks.md**: Query "Tasks Document Format" AND "Task Type Classification" sections
+## MCP Documentation Server
 
-**How to access**:
-```
-get_document_summary({ path: ".kiro/steering/Process-Spec-Planning.md" })
-```
-
-Then query the specific section you need:
-```
-get_section({ path: ".kiro/steering/Process-Spec-Planning.md", heading: "Tasks Document Format" })
-```
-
-**REQUIRED Confirmation**: You MUST reply "I've queried Spec Planning Standards via MCP and reviewed [section name]!" after accessing. If you do not include this confirmation, you have NOT followed the requirement.
-
----
-
-### 2. Component Development Guide
-**Access**: MCP query required (not auto-loaded)
-**When needed**: Building or modifying components
-
-**How to access**:
-```
-get_section({ path: ".kiro/steering/Component-Development-Guide.md", heading: "Token Selection Decision Framework" })
-```
-
-**Confirmation**: Reply "I've queried Component Development Guide via MCP!" after accessing
-
----
-
-### 3. A Vision of the Future
-**When needed**: Need greater context on DesignerPunk vision (optional)
-
-**File**: #[[file:.kiro/steering/A Vision of the Future.md]]
-
-**How to access**:
-```
-get_document_summary({ path: ".kiro/steering/A Vision of the Future.md" })
-```
-
-
----
-
-
-
-### 4. Token Quick Reference
-**When needed**: Working with design tokens, component development, token selection
-
-**File**: #[[file:.kiro/steering/Token-Quick-Reference.md]]
-
-**How to access**:
-```
-get_document_summary({ path: ".kiro/steering/Token-Quick-Reference.md" })
-```
-
-Then query the specific section you need:
-```
-get_section({ path: ".kiro/steering/Token-Quick-Reference.md", heading: "Token Documentation Map" })
-get_section({ path: ".kiro/steering/Token-Quick-Reference.md", heading: "Common Patterns" })
-```
-
-**Confirmation**: Reply "I've queried Token Quick Reference via MCP!" after accessing
-
----
-
-### 5. Browser Distribution Guide
-**When needed**: Working with browser distribution, web components, or bundle loading
-
-**File**: #[[file:.kiro/steering/Browser Distribution Guide.md]]
-
-**How to access**:
-```
-get_section({ path: ".kiro/steering/Browser Distribution Guide.md", heading: "Troubleshooting" })
-```
-
-**Confirmation**: Reply "I've queried Browser Distribution Guide via MCP!" after accessing
-
----
-
-### 6. Test Failure Audit Methodology
-**When needed**: Conducting test failure audits, completing specs (clean exit audit), investigating performance issues
-
-**File**: #[[file:.kiro/steering/Test-Failure-Audit-Methodology.md]]
-
-**How to access**:
-get_document_summary({ path: ".kiro/steering/Test-Failure-Audit-Methodology.md" })
-
-Then query the specific section you need:
-```
-get_section({ path: ".kiro/steering/Test-Failure-Audit-Methodology.md", heading: "Audit Workflow Steps" }) get_section({ path: ".kiro/steering/Test-Failure-Audit-Methodology.md", heading: "Clean Exit Audit Requirement" }) get_section({ path: ".kiro/steering/Test-Failure-Audit-Methodology.md", heading: "Performance Investigation Protocol" })
-```
-
-**Confirmation**: Reply "I've queried Test Failure Audit Methodology via MCP!" after accessing
-
-
-### 7. Release Management System
-**When needed**: Working with release management, understanding release pipeline, task completion workflows
-
-**File**: #[[file:.kiro/steering/Release Management System.md]]
-
-**How to access**:
-```
-get_document_summary({ path: ".kiro/steering/Release Management System.md" })
-```
-
-Then query the specific section you need:
-```
-get_section({ path: ".kiro/steering/Release Management System.md", heading: "Release Pipeline Architecture" })
-get_section({ path: ".kiro/steering/Release Management System.md", heading: "AI Agent Decision Points" })
-```
-
-**Confirmation**: Reply "I've queried Release Management System via MCP!" after accessing
-
----
-
-### 8. Component Quick Reference
-**When needed**: Building UI compositions, selecting components, understanding component architecture
-
-**File**: #[[file:.kiro/steering/Component-Quick-Reference.md]]
-
-**How to access**:
-```
-get_document_summary({ path: ".kiro/steering/Component-Quick-Reference.md" })
-```
-
-Then query the specific section you need:
-```
-get_section({ path: ".kiro/steering/Component-Quick-Reference.md", heading: "Component Selection Guide" })
-get_section({ path: ".kiro/steering/Component-Quick-Reference.md", heading: "Common UI Compositions" })
-get_section({ path: ".kiro/steering/Component-Quick-Reference.md", heading: "MCP Query Examples" })
-```
-
-**Confirmation**: Reply "I've queried Component Quick Reference via MCP!" after accessing
-
----
-
-### 9. Test Development Standards
-**When needed**: Writing tests, debugging test failures, understanding test patterns, using Stemma System validators
-
-**File**: #[[file:.kiro/steering/Test-Development-Standards.md]]
-
-**How to access**:
-get_document_summary({ path: ".kiro/steering/Test-Development-Standards.md" })
-
-
-Then query the specific section you need:
-```
-get_section({ path: ".kiro/steering/Test-Development-Standards.md", heading: "Test Categories" }) get_section({ path: ".kiro/steering/Test-Development-Standards.md", heading: "Web Component Testing Patterns" }) get_section({ path: ".kiro/steering/Test-Development-Standards.md", heading: "Linting and Testing Integration" }) get_section({ path: ".kiro/steering/Test-Development-Standards.md", heading: "Integrated Workflow Examples" })
-```
-
-**Confirmation**: Reply "I've queried Test Development Standards via MCP!" after accessing
-
----
-
-### 10. Completion Documentation Guide
-**When needed**: Creating completion documentation, understanding two-document workflow, parent task completion
-
-**File**: #[[file:.kiro/steering/Completion Documentation Guide.md]]
-
-**How to access**:
-```
-get_document_summary({ path: ".kiro/steering/Completion Documentation Guide.md" })
-```
-
-Then query the specific section you need:
-```
-get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading: "Two-Document Workflow" })
-get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading: "Documentation Tiers" })
-get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading: "Naming Conventions" })
-get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading: "Document Templates" })
-```
-
-**Confirmation**: Reply "I've queried Completion Documentation Guide via MCP!" after accessing
-
----
-
-### 11. Process-Cross-Reference-Standards
-**When needed**: Adding cross-references to documentation, understanding cross-reference patterns, avoiding anti-patterns
-
-**File**: #[[file:.kiro/steering/Process-Cross-Reference-Standards.md]]
-
-**How to access**:
-```
-get_document_summary({ path: ".kiro/steering/Process-Cross-Reference-Standards.md" })
-```
-
-Then query the specific section you need:
-```
-get_section({ path: ".kiro/steering/Process-Cross-Reference-Standards.md", heading: "How to Format Cross-References" })
-get_section({ path: ".kiro/steering/Process-Cross-Reference-Standards.md", heading: "Common Cross-Reference Patterns" })
-get_section({ path: ".kiro/steering/Process-Cross-Reference-Standards.md", heading: "Anti-Patterns to Avoid" })
-```
-
-**Confirmation**: Reply "I've queried Process-Cross-Reference-Standards via MCP!" after accessing
-
----
-
-### 12. Process-Hook-Operations
-**When needed**: Debugging hook issues, understanding hook dependencies, setting up or modifying hooks, troubleshooting automation failures
-
-**File**: #[[file:.kiro/steering/Process-Hook-Operations.md]]
-
-**How to access**:
-```
-get_document_summary({ path: ".kiro/steering/Process-Hook-Operations.md" })
-```
-
-Then query the specific section you need:
-```
-get_section({ path: ".kiro/steering/Process-Hook-Operations.md", heading: "Agent Hook Dependency Chains" })
-get_section({ path: ".kiro/steering/Process-Hook-Operations.md", heading: "Dependency Chain Behavior" })
-get_section({ path: ".kiro/steering/Process-Hook-Operations.md", heading: "Troubleshooting" })
-get_section({ path: ".kiro/steering/Process-Hook-Operations.md", heading: "Common Issues and Solutions" })
-get_section({ path: ".kiro/steering/Process-Hook-Operations.md", heading: "Release Detection Not Triggering" })
-get_section({ path: ".kiro/steering/Process-Hook-Operations.md", heading: "Best Practices" })
-```
-
-**Confirmation**: Reply "I've queried Process-Hook-Operations via MCP!" after accessing
-
----
-
-### 13. Rosetta System Architecture
-**When needed**: Understanding token pipeline architecture, finding subsystem entry points, debugging token generation, component token integration
-
-**File**: #[[file:.kiro/steering/Rosetta-System-Architecture.md]]
-
-**How to access**:
-```
-get_document_summary({ path: ".kiro/steering/Rosetta-System-Architecture.md" })
-```
-
-Then query the specific section you need:
-```
-get_section({ path: ".kiro/steering/Rosetta-System-Architecture.md", heading: "Token Pipeline Architecture" })
-get_section({ path: ".kiro/steering/Rosetta-System-Architecture.md", heading: "Component Token Integration" })
-get_section({ path: ".kiro/steering/Rosetta-System-Architecture.md", heading: "Subsystem Entry Points Summary" })
-```
-
-**Confirmation**: Reply "I've queried Rosetta System Architecture via MCP!" after accessing
-
----
-
-### 14. Token Governance
-**When needed**: Token selection decisions, token usage governance, token creation decisions, understanding autonomy levels for different token types
-
-**File**: #[[file:.kiro/steering/Token-Governance.md]]
-
-**How to access**:
-```
-get_document_summary({ path: ".kiro/steering/Token-Governance.md" })
-```
-
-Then query the specific section you need:
-```
-get_section({ path: ".kiro/steering/Token-Governance.md", heading: "Token Selection Matrix" })
-get_section({ path: ".kiro/steering/Token-Governance.md", heading: "Token Usage Governance" })
-get_section({ path: ".kiro/steering/Token-Governance.md", heading: "Token Creation Governance" })
-get_section({ path: ".kiro/steering/Token-Governance.md", heading: "Prior Acknowledgment" })
-get_section({ path: ".kiro/steering/Token-Governance.md", heading: "Decision Examples" })
-```
-
-**Confirmation**: Reply "I've queried Token Governance via MCP!" after accessing
-
----
-
-### 15. AI-Collaboration-Framework
-**When needed**: Understanding detailed AI collaboration protocols, bias mitigation techniques, validation gates, devil's advocate protocols
-
-**File**: #[[file:.kiro/steering/AI-Collaboration-Framework.md]]
-
-**How to access**:
-```
-get_document_summary({ path: ".kiro/steering/AI-Collaboration-Framework.md" })
-```
-
-Then query the specific section you need:
-```
-get_section({ path: ".kiro/steering/AI-Collaboration-Framework.md", heading: "Objective Validation Gates" })
-get_section({ path: ".kiro/steering/AI-Collaboration-Framework.md", heading: "Mandatory Devil's Advocate Protocols" })
-get_section({ path: ".kiro/steering/AI-Collaboration-Framework.md", heading: "Candid vs Brutal Communication" })
-```
-
-**Confirmation**: Reply "I've queried AI-Collaboration-Framework via MCP!" after accessing
-
-
-## MCP Documentation Server (Primary for Large Docs)
-
-The MCP Documentation Server is the **primary source** for large steering documents. AI agents MUST query MCP for these documents rather than expecting them to be auto-loaded.
-
-### MCP-Only Documents (Not Auto-Loaded)
-
-These documents are available ONLY via MCP queries:
-
-
-| Document | Path |
-|----------|------|
-| Spec Planning Standards | `.kiro/steering/Process-Spec-Planning.md` |
-| Component Development Guide | `.kiro/steering/Component-Development-Guide.md` |
-| Component Quick Reference | `.kiro/steering/Component-Quick-Reference.md` |
-| Test Failure Audit Methodology | `.kiro/steering/Test-Failure-Audit-Methodology.md` |
-| Test Development Standards | `.kiro/steering/Test-Development-Standards.md` |
-| Completion Documentation Guide | `.kiro/steering/Completion Documentation Guide.md` |
-| Process-Cross-Reference-Standards | `.kiro/steering/Process-Cross-Reference-Standards.md` |
-| Process-Hook-Operations | `.kiro/steering/Process-Hook-Operations.md` |
-| Rosetta System Architecture | `.kiro/steering/Rosetta-System-Architecture.md` |
-| Token Governance | `.kiro/steering/Token-Governance.md` |
-| AI-Collaboration-Framework | `.kiro/steering/AI-Collaboration-Framework.md` |
-
-### How to Access MCP-Only Documents
-
-**Step 1**: Query the documentation map to confirm document exists
-```
-get_documentation_map()
-```
-
-**Step 2**: Get document summary to understand structure
-```
-get_document_summary({ path: ".kiro/steering/Process-Spec-Planning.md" })
-```
-
-**Step 3**: Get specific section you need
-```
-get_section({ path: ".kiro/steering/Process-Spec-Planning.md", heading: "Tasks Document Format" })
-```
-
-### When to Use MCP
-
-- **ALWAYS** for Spec Planning Standards and Component Development Guide
-- When you need specific sections from large documents
-- When context is constrained
-
-### Still Auto-Loaded (Small, Essential)
-
-These documents remain auto-loaded:
-- Personal Note (~600 tokens)
-- Core Goals (~550 tokens)
-- Start Up Tasks (~700 tokens)
-- AI-Collaboration-Principles (~800 tokens)
-- This Meta-Guide (~2,000 tokens)
-- Process-Development-Workflow (~16,000 tokens) - strategic reading applies
-- Process-File-Organization (~16,000 tokens) - strategic reading applies
-
-### Progressive Disclosure Workflow
+The MCP Documentation Server is the **primary source** for all Tier 2 steering documents. Use progressive disclosure:
 
 1. **Query documentation map** (~500 tokens)
    ```
@@ -504,7 +270,6 @@ These documents remain auto-loaded:
 
 ### Available Tools
 
-
 | Tool | Purpose |
 |------|---------|
 | `get_documentation_map` | List all documents with metadata |
@@ -516,7 +281,20 @@ These documents remain auto-loaded:
 | `get_index_health` | Check server status |
 | `rebuild_index` | Force re-indexing |
 
+### Still Auto-Loaded (Tier 1)
 
+These documents remain auto-loaded every session:
+- This Meta-Guide (~2,000 tokens)
+- Personal Note (~600 tokens)
+- Core Goals (~550 tokens)
+- Start Up Tasks (~700 tokens)
+- AI-Collaboration-Principles (~800 tokens)
+- Spec-Feedback-Protocol (~1,500 tokens)
+- Rosetta-Stemma-Systems-Overview (~1,000 tokens)
+- Process-Development-Workflow (~16,000 tokens) - strategic reading applies
+- Process-File-Organization (~16,000 tokens) - strategic reading applies
+
+---
 
 ## Completion Confirmation
 
@@ -533,28 +311,7 @@ After reading all Tier 1 documents (strategically, using their priorities sectio
 **Solution**: 
 - Aggressive explicit direction ensures compliance
 - "AI Agent Reading Priorities" sections teach strategic reading
-- Conditional loading only loads relevant documents
+- MCP progressive disclosure loads only what's needed
 - This meta-guide teaches how to use the system
 
 **Result**: You read what you need, when you need it, without wasting tokens on irrelevant sections.
-
-**Figma-Workflow-Guide.md** — Figma integration workflow (push + extraction)
-- Load when: Working with Figma integration, token push, design extraction
-- MCP query: `get_section({ path: ".kiro/steering/Figma-Workflow-Guide.md", heading: "..." })`
-
-**DTCG-Integration-Guide.md** — DTCG format specification
-- Load when: Working with DTCG format, tool integrations, token format questions
-- MCP query: `get_section({ path: ".kiro/steering/DTCG-Integration-Guide.md", heading: "..." })`
-
-**Transformer-Development-Guide.md** — Building custom token transformers
-- Load when: Building custom transformers, extending DTCG output for new tools
-- MCP query: `get_section({ path: ".kiro/steering/Transformer-Development-Guide.md", heading: "..." })`
-
-**MCP-Integration-Guide.md** — Programmatic DTCG token consumption
-- Load when: Building tooling, scripts, or MCP resources that consume DTCG output
-- MCP query: `get_section({ path: ".kiro/steering/MCP-Integration-Guide.md", heading: "..." })`
-
-**Rosetta-Stemma-Systems-Overview.md** — Visual architecture overview
-- Load when: Need high-level system understanding, onboarding, architecture overview
-- MCP query: `get_document_full({ path: ".kiro/steering/Rosetta-Stemma-Systems-Overview.md" })`
-- Note: Contains Mermaid diagrams showing Rosetta + Stemma integration

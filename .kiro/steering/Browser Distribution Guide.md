@@ -1,6 +1,7 @@
 ---
-inclusion: conditional
-trigger: browser-distribution, web-component-integration, browser-loading, web-component-usage
+inclusion: manual
+name: Browser-Distribution-Guide
+description: Guide for loading and using DesignerPunk web components in browsers — CDN loading, bundle strategies, component registration. Load when working with browser distribution, web component integration, or bundle loading.
 ---
 
 # Browser Distribution Guide
