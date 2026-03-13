@@ -178,7 +178,7 @@ interface SemanticToken {
   description: string;             // Human-readable description
   
   // Primitive References (by name, not value)
-  primitiveReferences: string[];   // Referenced primitives (e.g., ["fontSize100", "lineHeight150"])
+  primitiveReferences: Record<string, string>; // Primitive refs (e.g., { value: "cyan300", wcagValue: "teal300" })
   
   // Optional Composition
   composition?: {                  // For multi-property tokens

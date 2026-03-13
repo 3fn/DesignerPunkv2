@@ -126,7 +126,7 @@ Strictly sequential — Task 2 reads DTCG output from Task 1, Task 3 restores te
     - Note: this is the first real exercise of mode-conditional resolution — light/dark currently hold identical values
     - _Requirements: 3.1, 3.3, 3.4_
 
-- [ ] 3. Test Restoration & Transformation
+- [x] 3. Test Restoration & Transformation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -197,7 +197,7 @@ Strictly sequential — Task 2 reads DTCG output from Task 1, Task 3 restores te
     - Preserve source token fixtures; update DTCG structure fixtures to new `modes` shape
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
 
-  - [ ] 3.6 Add new modes verification tests
+  - [x] 3.6 Add new modes verification tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -209,7 +209,7 @@ Strictly sequential — Task 2 reads DTCG output from Task 1, Task 3 restores te
     - Figma: Primitives collection has no wcag mode (Req 3 AC 5)
     - _Requirements: 1.2, 1.3, 1.5, 3.2, 3.3, 3.5_
 
-- [ ] 4. Steering Documentation
+- [x] 4. Steering Documentation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -232,7 +232,7 @@ Strictly sequential — Task 2 reads DTCG output from Task 1, Task 3 restores te
   **Post-Completion:**
   - Commit: `./.kiro/hooks/commit-task.sh "Task 4 Complete: Steering Documentation"`
 
-  - [ ] 4.1 Update Token-Semantic-Structure.md
+  - [x] 4.1 Update Token-Semantic-Structure.md
     **Type**: Documentation
     **Validation**: Tier 1 - Minimal
     **Agent**: Ada
@@ -242,7 +242,7 @@ Strictly sequential — Task 2 reads DTCG output from Task 1, Task 3 restores te
     - Ballot measure required
     - _Requirements: 7.1_
 
-  - [ ] 4.2 Update Rosetta-System-Architecture.md
+  - [x] 4.2 Update Rosetta-System-Architecture.md
     **Type**: Documentation
     **Validation**: Tier 1 - Minimal
     **Agent**: Ada
@@ -251,7 +251,7 @@ Strictly sequential — Task 2 reads DTCG output from Task 1, Task 3 restores te
     - Ballot measure required
     - _Requirements: 7.2_
 
-  - [ ] 4.3 Fix rosetta-system-principles.md type signature
+  - [x] 4.3 Fix rosetta-system-principles.md type signature
     **Type**: Documentation
     **Validation**: Tier 1 - Minimal
     **Agent**: Ada

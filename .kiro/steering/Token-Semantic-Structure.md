@@ -90,6 +90,13 @@ References to primitive tokens that this semantic token uses. This is the MOST I
 - See `typography.bodyMd` and `typography.h1` tokens in `src/tokens/semantic/TypographyTokens.ts` for examples
 - See `shadow.container` and `shadow.modal` tokens in `src/tokens/semantic/ShadowTokens.ts` for examples
 
+**Theme-Conditional Pattern** (wcagValue):
+- Single-reference tokens may include an optional `wcagValue` key alongside `value`
+- `wcagValue` names a primitive token used in WCAG accessibility theme output
+- Platform generators resolve `wcagValue` for WCAG theme; DTCG exports it as `$extensions.designerpunk.modes.wcag`; Figma maps it to `valuesByMode.wcag`
+- Example: `{ value: 'cyan300', wcagValue: 'teal300' }`
+- See `color.action.primary` in `src/tokens/semantic/ColorTokens.ts`
+
 **Why This Field is Required**:
 - Maintains the primitive→semantic hierarchy that enables mathematical consistency
 - Enables automatic updates when primitive tokens change
