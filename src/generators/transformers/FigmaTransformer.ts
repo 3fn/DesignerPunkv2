@@ -288,7 +288,7 @@ export class FigmaTransformer implements ITokenTransformer {
 
     return {
       name: 'Semantics',
-      modes: ['light', 'dark'],
+      modes: ['light', 'dark', 'wcag'],
       variables,
     };
   }
@@ -315,15 +315,10 @@ export class FigmaTransformer implements ITokenTransformer {
       if ('$value' in value && value.$value !== undefined) {
         const token = value as DTCGToken;
 
-        // Guard rail (Spec 076): wcagValue is not yet supported in Figma export
+        // Read WCAG mode override from extensions
         const ext = token.$extensions?.designerpunk as Record<string, unknown> | undefined;
-        if (ext?.wcagValue) {
-          throw new Error(
-            `Figma export does not support wcagValue. Token "${parentPath}/${key}" has ` +
-            `wcagValue in extensions. A follow-up spec is needed to define ` +
-            `Figma representation of theme-conditional semantic references.`
-          );
-        }
+        const modes = ext?.modes as Record<string, string> | undefined;
+        const wcagAlias = modes?.wcag;
 
         const tokenType = token.$type ?? inheritedType;
         const figmaName = this.toFigmaVariableName(parentPath, key);
@@ -333,6 +328,11 @@ export class FigmaTransformer implements ITokenTransformer {
           ? this.resolveAliasValue(token.$value)
           : this.resolveDirectValue(token.$value, tokenType);
 
+        // Resolve WCAG value if present, otherwise fall back to default
+        const wcagValue = wcagAlias && isSemantic
+          ? this.resolveAliasValue(wcagAlias)
+          : resolvedValue;
+
         const description = this.buildVariableDescription(token);
 
         variables.push({
@@ -341,6 +341,7 @@ export class FigmaTransformer implements ITokenTransformer {
           valuesByMode: {
             light: resolvedValue,
             dark: resolvedValue,
+            wcag: wcagValue,
           },
           ...(description ? { description } : {}),
         });

@@ -25,7 +25,7 @@ Strictly sequential — Task 2 reads DTCG output from Task 1, Task 3 restores te
 
 ## Task List
 
-- [ ] 1. DTCG Export — Modes Extension
+- [x] 1. DTCG Export — Modes Extension
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -56,7 +56,7 @@ Strictly sequential — Task 2 reads DTCG output from Task 1, Task 3 restores te
     - Add `modes?: Record<string, string>` to `DesignerPunkExtensions` in `src/generators/types/DTCGTypes.ts`
     - _Requirements: 1.1, 6.1_
 
-  - [ ] 1.2 Replace DTCG guard rail with modes generation
+  - [x] 1.2 Replace DTCG guard rail with modes generation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -67,7 +67,7 @@ Strictly sequential — Task 2 reads DTCG output from Task 1, Task 3 restores te
     - Note: `resolveAliases` has never needed to walk into `$extensions` before — this is new behavior. Verify that the existing resolution path can be reused for mode values, or extend it if needed.
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 2.1, 2.5_
 
-  - [ ] 1.3 Remove generate() try/catch
+  - [x] 1.3 Remove generate() try/catch
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -75,7 +75,7 @@ Strictly sequential — Task 2 reads DTCG output from Task 1, Task 3 restores te
     - Replace with direct call: `output.semanticColor = this.generateSemanticColorTokens();`
     - _Requirements: 2.2, 2.3_
 
-  - [ ] 1.4 Regenerate dist/DesignTokens.dtcg.json
+  - [x] 1.4 Regenerate dist/DesignTokens.dtcg.json
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     **Agent**: Ada
@@ -107,7 +107,7 @@ Strictly sequential — Task 2 reads DTCG output from Task 1, Task 3 restores te
   **Post-Completion:**
   - Commit: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Figma Import — WCAG Mode"`
 
-  - [ ] 2.1 Add WCAG mode to Semantics collection
+  - [x] 2.1 Add WCAG mode to Semantics collection
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
