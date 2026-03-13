@@ -7,6 +7,8 @@
  * Architecture: These utilities are designed for vanilla Web Components that read
  * theme colors from CSS custom properties via getComputedStyle(document.documentElement).
  * 
+ * Note: Input colors are arbitrary — they test pure blend math, not token values.
+ * 
  * @see Requirements: 11.4 - Theme-aware wrapper functions
  */
 

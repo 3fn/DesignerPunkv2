@@ -6,6 +6,8 @@
  * Blend Composition Parser Tests
  * 
  * Tests for parsing "color with blend direction" syntax
+ * 
+ * Note: Input colors are arbitrary — they test pure blend math, not token values.
  */
 
 import { BlendCompositionParser } from '../BlendCompositionParser';

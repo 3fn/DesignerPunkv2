@@ -104,7 +104,7 @@ Task 1 is prerequisite for Task 2. Task 3 depends on Task 2. Task 4 depends on T
     - Test: export of tokens without `wcagValue` is unaffected
     - _Requirements: 11.1, 11.2, 11.3_
 
-- [ ] 2. Token Migration
+- [x] 2. Token Migration
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -193,7 +193,7 @@ Task 1 is prerequisite for Task 2. Task 3 depends on Task 2. Task 4 depends on T
     - Verify WCAG contrast: purple500 on purple100 ≥ 7:1 (expected: 8.32:1 AAA)
     - _Requirements: 10.1, 10.2, 10.3, 10.4_
 
-- [ ] 3. Component & Test Updates
+- [x] 3. Component & Test Updates
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -221,7 +221,7 @@ Task 1 is prerequisite for Task 2. Task 3 depends on Task 2. Task 4 depends on T
   **Post-Completion:**
   - Commit: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Component & Test Updates"`
 
-  - [ ] 3.1 Update Button-CTA contrast token consumption
+  - [x] 3.1 Update Button-CTA contrast token consumption
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -231,7 +231,7 @@ Task 1 is prerequisite for Task 2. Task 3 depends on Task 2. Task 4 depends on T
     - Verify rendering in both Standard and WCAG themes
     - _Requirements: 3.2_
 
-  - [ ] 3.2 Update Button-Icon contrast token consumption
+  - [x] 3.2 Update Button-Icon contrast token consumption
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -239,7 +239,7 @@ Task 1 is prerequisite for Task 2. Task 3 depends on Task 2. Task 4 depends on T
     - Update stemma test reference from `var(--color-contrast-on-dark)` to `var(--color-contrast-on-action)`
     - _Requirements: 3.3_
 
-  - [ ] 3.3 Refactor component tests
+  - [x] 3.3 Refactor component tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -251,7 +251,7 @@ Task 1 is prerequisite for Task 2. Task 3 depends on Task 2. Task 4 depends on T
     - Verify tests pass with new cyan token values
     - _Requirements: 7.1, 7.2, 7.3_
 
-  - [ ] 3.4 Add blend math test comments
+  - [x] 3.4 Add blend math test comments
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     **Agent**: Thurgood

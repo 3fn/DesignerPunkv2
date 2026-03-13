@@ -60,7 +60,7 @@
   
   /* Color tokens */
   --_bi-color-primary: var(--color-action-primary);
-  --_bi-color-contrast: var(--color-contrast-on-dark);
+  --_bi-color-contrast: var(--color-contrast-on-action);
   --_bi-color-bg-subtle: var(--color-background-primary-subtle);
   
   /* ─────────────────────────────────────────────────────────────────────────
@@ -245,8 +245,8 @@
 /**
  * Primary button style (filled background)
  * 
- * - Background: color.primary (purple300)
- * - Icon: color.contrast.onPrimary (white100)
+ * - Background: color.action.primary (cyan300 Standard / teal300 WCAG)
+ * - Icon: color.contrast.onAction (black500 Standard / white100 WCAG)
  * - Border: none
  * - Highest visual emphasis
  * 

@@ -9,6 +9,8 @@
  * from CSS custom properties. Theme switching is handled by changing CSS custom
  * property values on document.documentElement.
  * 
+ * Note: Input colors are arbitrary — they test pure blend math, not token values.
+ * 
  * @see Requirements: 11.1 - Light theme produces appropriate blend results
  * @see Requirements: 11.2 - Dark theme produces appropriate blend results
  * @see Requirements: 11.3 - Theme switching updates component colors

@@ -308,7 +308,7 @@ describe('Button-Icon Stemma Validators', () => {
         'var(--border-default)',
         'var(--border-emphasis)',
         'var(--color-action-primary)',          // Updated from --color-primary (Spec 052)
-        'var(--color-contrast-on-dark)',        // Updated from --color-contrast-on-primary (Spec 052)
+        'var(--color-contrast-on-action)',      // Updated from --color-contrast-on-dark (Spec 076)
         'var(--color-background-primary-subtle)',
       ];
       

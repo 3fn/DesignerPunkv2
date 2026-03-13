@@ -22,21 +22,23 @@ import { InputTextBase } from '../platforms/web/InputTextBase.web';
  * This function sets up the required properties in the test environment.
  * 
  * Required properties:
- * - --color-primary: Base primary color for blend calculations
+ * - --color-action-primary: Base primary color for blend calculations (cyan300)
+ * 
+ * Updated to use Spec 052 naming and Spec 076 values.
+ * Note: Test values are arbitrary valid colors for exercising blend math.
  * 
  * @see InputTextBase._calculateBlendColors() for usage
  */
 export function setupBlendColorProperties(): void {
   // Set up required CSS custom properties on document root
-  // These values match the design system's semantic color tokens
-  document.documentElement.style.setProperty('--color-primary', '#A855F7');
+  document.documentElement.style.setProperty('--color-action-primary', 'rgba(0, 240, 255, 1)');
 }
 
 /**
  * Clean up CSS custom properties set by setupBlendColorProperties
  */
 export function cleanupBlendColorProperties(): void {
-  document.documentElement.style.removeProperty('--color-primary');
+  document.documentElement.style.removeProperty('--color-action-primary');
 }
 
 /**

@@ -24,7 +24,7 @@ import { ButtonIconSize, ButtonIconVariant } from '../types';
  * 
  * Required properties:
  * - --color-action-primary: Base action primary color (Spec 052 naming)
- * - --color-contrast-on-dark: Content color on dark/primary background (Spec 052 naming)
+ * - --color-contrast-on-action: Content color on action background (Spec 076 naming)
  * - --color-background-primary-subtle: Subtle background for hover states
  * - --accessibility-focus-*: Focus ring tokens
  * - --border-*: Border width tokens
@@ -33,15 +33,16 @@ import { ButtonIconSize, ButtonIconVariant } from '../types';
  * @see ButtonIcon._generateStyles() for usage
  */
 export function setupButtonIconTokens(): void {
-  // Color tokens (Spec 052 semantic token naming)
-  document.documentElement.style.setProperty('--color-action-primary', '#A855F7');
-  document.documentElement.style.setProperty('--color-contrast-on-dark', '#FFFFFF');
+  // Color tokens (Spec 052 naming, Spec 076 values)
+  // Note: Test values are arbitrary valid colors for exercising blend math and rendering.
+  document.documentElement.style.setProperty('--color-action-primary', 'rgba(0, 240, 255, 1)');
+  document.documentElement.style.setProperty('--color-contrast-on-action', 'rgba(0, 0, 0, 1)');
   document.documentElement.style.setProperty('--color-background-primary-subtle', '#F3E8FF');
   
   // Focus ring tokens
   document.documentElement.style.setProperty('--accessibility-focus-offset', '2px');
   document.documentElement.style.setProperty('--accessibility-focus-width', '2px');
-  document.documentElement.style.setProperty('--accessibility-focus-color', '#A855F7');
+  document.documentElement.style.setProperty('--accessibility-focus-color', 'rgba(0, 240, 255, 1)');
   
   // Border tokens
   document.documentElement.style.setProperty('--border-default', '1px');
@@ -62,7 +63,7 @@ export function setupButtonIconTokens(): void {
  */
 export function cleanupButtonIconTokens(): void {
   document.documentElement.style.removeProperty('--color-action-primary');
-  document.documentElement.style.removeProperty('--color-contrast-on-dark');
+  document.documentElement.style.removeProperty('--color-contrast-on-action');
   document.documentElement.style.removeProperty('--color-background-primary-subtle');
   document.documentElement.style.removeProperty('--accessibility-focus-offset');
   document.documentElement.style.removeProperty('--accessibility-focus-width');

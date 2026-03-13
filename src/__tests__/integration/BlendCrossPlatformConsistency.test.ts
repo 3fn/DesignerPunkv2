@@ -8,6 +8,8 @@
  * Tests that blend values and utilities produce mathematically identical
  * results across web, iOS, and Android platforms.
  * 
+ * Note: Input colors are arbitrary — they test pure blend math, not token values.
+ * 
  * Requirements: 6, 9
  */
 

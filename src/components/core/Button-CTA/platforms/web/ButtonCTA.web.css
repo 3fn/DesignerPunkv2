@@ -157,13 +157,13 @@
  * Primary button style (filled background)
  * 
  * - Background: color.action.primary
- * - Text: color.contrast.onDark (white100)
+ * - Text: color.contrast.onAction (black500 Standard / white100 WCAG)
  * - Border: none
  * - Highest visual emphasis
  */
 .button-cta--primary {
   background-color: var(--color-action-primary);
-  color: var(--color-contrast-on-dark);
+  color: var(--color-contrast-on-action);
   border: none;
 }
 

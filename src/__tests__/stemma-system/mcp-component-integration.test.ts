@@ -10,7 +10,7 @@
  * Validates that the Component Quick Reference and all component family documents
  * are properly structured for MCP server indexing and can be queried. This test validates:
  * - Progressive disclosure workflow (summary → section → full)
- * - Routing paths work correctly for all 11 component families
+ * - Routing paths work correctly for all 13 component families
  * - Query performance with designerpunk-docs server
  * - Document structure supports MCP queries
  *
@@ -26,16 +26,18 @@ describe('MCP Component Integration: Component Quick Reference', () => {
   const STEERING_DIR = path.join(process.cwd(), '.kiro/steering');
   const COMPONENT_QUICK_REFERENCE_PATH = '.kiro/steering/Component-Quick-Reference.md';
 
-  // All 11 component family document paths from the routing table
+  // All 13 component family document paths from the routing table
   // Note: File naming follows Component-Family-*.md pattern per Stemma System conventions
   const COMPONENT_FAMILY_DOCS = [
     { family: 'Buttons', path: '.kiro/steering/Component-Family-Button.md', status: 'Production' },
+    { family: 'Chips', path: '.kiro/steering/Component-Family-Chip.md', status: 'Production' },
     { family: 'Form Inputs', path: '.kiro/steering/Component-Family-Form-Inputs.md', status: 'Production' },
     { family: 'Containers', path: '.kiro/steering/Component-Family-Container.md', status: 'Production' },
     { family: 'Icons', path: '.kiro/steering/Component-Family-Icon.md', status: 'Production' },
+    { family: 'Avatars', path: '.kiro/steering/Component-Family-Avatar.md', status: 'Production' },
+    { family: 'Badges', path: '.kiro/steering/Component-Family-Badge.md', status: 'Production' },
+    { family: 'Progress Indicators', path: '.kiro/steering/Component-Family-Progress.md', status: 'Production' },
     { family: 'Modals', path: '.kiro/steering/Component-Family-Modal.md', status: 'Placeholder' },
-    { family: 'Avatars', path: '.kiro/steering/Component-Family-Avatar.md', status: 'Placeholder' },
-    { family: 'Badges & Tags', path: '.kiro/steering/Component-Family-Badge.md', status: 'Production' },
     { family: 'Data Displays', path: '.kiro/steering/Component-Family-Data-Display.md', status: 'Placeholder' },
     { family: 'Dividers', path: '.kiro/steering/Component-Family-Divider.md', status: 'Placeholder' },
     { family: 'Loading', path: '.kiro/steering/Component-Family-Loading.md', status: 'Placeholder' },
@@ -85,7 +87,7 @@ describe('MCP Component Integration: Component Quick Reference', () => {
       expect(documentContent).toMatch(/Progressive Disclosure Workflow/);
     });
 
-    it('should document all 11 component families in routing table', () => {
+    it('should document all 13 component families in routing table', () => {
       for (const family of COMPONENT_FAMILY_DOCS) {
         expect(documentContent).toContain(family.family);
         expect(documentContent).toContain(family.path);

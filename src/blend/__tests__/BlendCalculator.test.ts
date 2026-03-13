@@ -7,6 +7,8 @@
  * 
  * Tests the BlendCalculator orchestrator with all blend directions
  * and verifies integration with color space utilities and blend tokens.
+ * 
+ * Note: Input colors are arbitrary — they test pure blend math, not token values.
  */
 
 import { BlendCalculator, calculateBlend } from '../BlendCalculator';

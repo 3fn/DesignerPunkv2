@@ -6,6 +6,8 @@
  * Color Space Conversion Utilities Tests
  * 
  * Tests for RGB ↔ HSL ↔ Hex color space conversions
+ * 
+ * Note: Input colors are arbitrary — they test pure blend math, not token values.
  */
 
 import {

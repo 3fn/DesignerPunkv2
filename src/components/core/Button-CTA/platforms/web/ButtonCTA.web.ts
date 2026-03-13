@@ -228,7 +228,7 @@ export class ButtonCTA extends HTMLElement {
    * - Hover: darkerBlend(color.action.primary, blend.hoverDarker) - 8% darker
    * - Pressed: darkerBlend(color.action.primary, blend.pressedDarker) - 12% darker
    * - Disabled: desaturate(color.action.primary, blend.disabledDesaturate) - 12% less saturated
-   * - Icon: lighterBlend(color.contrast.onDark, blend.iconLighter) - 8% lighter
+   * - Icon: lighterBlend(color.contrast.onAction, blend.iconLighter) - 8% lighter
    * 
    * @see Requirements: 7.1, 7.2, 7.3, 7.4 - Button-CTA state colors
    * @see Requirements: 11.1, 11.2, 11.3 - Theme-aware utilities
@@ -240,15 +240,15 @@ export class ButtonCTA extends HTMLElement {
     
     // Get base colors from CSS custom properties
     // Fail loudly if required tokens are missing
-    // Updated to use new semantic token names (Spec 052)
+    // Updated to use new semantic token names (Spec 052, Spec 076)
     const primaryColor = computedStyle.getPropertyValue('--color-action-primary').trim();
-    const onDarkColor = computedStyle.getPropertyValue('--color-contrast-on-dark').trim();
+    const onActionColor = computedStyle.getPropertyValue('--color-contrast-on-action').trim();
     
     if (!primaryColor) {
       throw new Error('ButtonCTA: Required token --color-action-primary is missing from CSS custom properties');
     }
-    if (!onDarkColor) {
-      throw new Error('ButtonCTA: Required token --color-contrast-on-dark is missing from CSS custom properties');
+    if (!onActionColor) {
+      throw new Error('ButtonCTA: Required token --color-contrast-on-action is missing from CSS custom properties');
     }
     
     // Calculate blend colors using theme-aware blend utilities
@@ -262,9 +262,9 @@ export class ButtonCTA extends HTMLElement {
     // @see Requirements: 7.3 - Disabled uses desaturate(color.action.primary, blend.disabledDesaturate)
     this._disabledColor = this._blendUtils.disabledColor(primaryColor);
     
-    // @see Requirements: 7.4 - Icon uses lighterBlend(color.contrast.onDark, blend.iconLighter)
+    // @see Requirements: 7.4 - Icon uses lighterBlend(color.contrast.onAction, blend.iconLighter)
     // Icon for primary buttons: provides optical balance for icons on primary background
-    this._iconColor = this._blendUtils.iconColor(onDarkColor);
+    this._iconColor = this._blendUtils.iconColor(onActionColor);
     
     // Icon for secondary/tertiary buttons: provides optical balance for icons on light background
     this._iconOpticalBalanceColor = this._blendUtils.iconColor(primaryColor);

@@ -198,6 +198,45 @@ Option A (Figma modes) is the natural fit. Figma's variable mode system was desi
 
 ---
 
+## Test Coverage Debt (from Spec 076)
+
+When Spec 076 Task 2 migrated tokens with `wcagValue`, the DTCG `generate()` method was made to catch the guard rail error and skip `semanticColor` rather than abort. This kept the test suite green but created a coverage gap: 10 tests across 4 files lost their semantic color assertions.
+
+### Affected Tests
+
+| File | Test | What Happened |
+|------|------|---------------|
+| `DTCGFormatGenerator.test.ts` | "should use alias syntax in semantic color tokens" | Early return when semanticColor absent |
+| `DTCGFormatGenerator.test.ts` | "should contain all expected top-level token groups" | semanticColor removed from expected list |
+| `DTCGFormatGenerator.test.ts` | "should produce at least 180 semantic tokens" | Threshold lowered 180→120 |
+| `DTCGConfigOptions.test.ts` | "should resolve semantic color aliases" | Early return when semanticColor absent |
+| `DTCGConfigOptions.test.ts` | "should preserve alias syntax in semantic tokens" | Early return when semanticColor absent |
+| `DTCGFormatGenerator.integration.test.ts` | "should include both primitive and semantic groups" | semanticColor removed from expected list |
+| `DTCGFormatGenerator.integration.test.ts` | "should have a DTCG group for every semantic token category" | semanticColor removed from mapping |
+| `DTCGFormatGenerator.property.test.ts` | "semantic color tokens use alias syntax" | Early return when semanticColor absent |
+| `DTCGFormatGenerator.property.test.ts` | "total token count meets minimum thresholds" | Threshold lowered 350→290 |
+| `DTCGFormatGenerator.property.test.ts` | "every expected semantic group exists" | semanticColor removed from expected list |
+
+### What Spec 077 Must Do
+
+1. Replace the guard rail in `generateSemanticColorTokens()` with real wcagValue-aware DTCG generation
+2. Remove the try/catch in `generate()` that swallows the semantic color error
+3. Restore `semanticColor` to all expected group lists in the 4 test files
+4. Restore thresholds (120→original+new, 290→original+new)
+5. Remove all early-return guards (`if (!semanticColors) return`)
+6. Add new tests verifying wcagValue data appears correctly in DTCG output
+
+### Source Files to Restore
+
+- `src/generators/DTCGFormatGenerator.ts` — remove try/catch around `generateSemanticColorTokens()`
+- `src/generators/__tests__/DTCGFormatGenerator.test.ts`
+- `src/generators/__tests__/DTCGConfigOptions.test.ts`
+- `src/generators/__tests__/DTCGFormatGenerator.integration.test.ts`
+- `src/generators/__tests__/DTCGFormatGenerator.property.test.ts`
+- `src/generators/__tests__/WcagValueExportGuardRails.test.ts` — DTCG test currently verifies omission; restore to verify correct output
+
+---
+
 ## Origin
 
 - Guard rails installed: Spec 076, Task 1.4
