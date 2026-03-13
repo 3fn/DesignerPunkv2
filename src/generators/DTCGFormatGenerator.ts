@@ -140,15 +140,7 @@ export class DTCGFormatGenerator {
     output.blend = this.generateBlendTokens();
 
     // --- Semantic token groups ---
-    // semanticColor may throw if tokens have wcagValue (guard rail from Spec 076 Task 1.4)
-    // Skip gracefully — all other groups still generate
-    try {
-      output.semanticColor = this.generateSemanticColorTokens();
-    } catch (e) {
-      if (!(e instanceof Error && e.message.includes('wcagValue'))) {
-        throw e;
-      }
-    }
+    output.semanticColor = this.generateSemanticColorTokens();
     output.semanticSpace = this.generateSemanticSpacingTokens();
     output.semanticBorderWidth = this.generateSemanticBorderWidthTokens();
     output.semanticRadius = this.generateSemanticRadiusTokens();
@@ -525,15 +517,6 @@ export class DTCGFormatGenerator {
     for (const [key, token] of Object.entries(semanticColorTokens)) {
       const refs = token.primitiveReferences;
 
-      // Guard rail (Spec 076): wcagValue is not yet supported in DTCG export
-      if (refs.wcagValue) {
-        throw new Error(
-          `DTCG export does not support wcagValue. Token "${token.name}" has ` +
-          `wcagValue: "${refs.wcagValue}". A follow-up spec is needed to define ` +
-          `DTCG/Figma representation of theme-conditional semantic references.`
-        );
-      }
-
       // Determine alias value — use {color.primitiveRef} syntax
       const primaryRef = refs.value || refs.color;
       if (!primaryRef) continue;
@@ -545,6 +528,15 @@ export class DTCGFormatGenerator {
       const extensions: DesignerPunkExtensions = {
         family: 'color',
       };
+
+      // Spec 077: emit theme-conditional modes (e.g., wcagValue → modes.wcag)
+      if (refs.wcagValue) {
+        extensions.modes = {
+          wcag: this.config.resolveAliases
+            ? this.resolvePrimitiveColorAlias(refs.wcagValue)
+            : `{color.${refs.wcagValue}}`,
+        };
+      }
       // If token has separate color + opacity composition, note it
       if (refs.color && refs.opacity) {
         extensions.primitiveRefs = { color: refs.color, opacity: refs.opacity };

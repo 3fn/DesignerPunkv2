@@ -4,7 +4,7 @@
 **Purpose**: Add wcagValue support to DTCG token export and Figma variable import pipelines
 **Organization**: spec-guide
 **Scope**: 077-dtcg-figma-wcagvalue-support
-**Status**: Design outline — needs exploration of DTCG extension conventions and Figma variable modes
+**Status**: Design outline — open questions resolved, ready for requirements/tasks
 
 ---
 
@@ -25,9 +25,9 @@ Both pipelines currently have guard rails (deliberate throws with descriptive er
 | `color.background.primary.subtle` | `cyan100` | `teal100` |
 | `color.contrast.onAction` | `black500` | `white100` |
 | `color.action.navigation` | `cyan500` | `teal500` |
-| `color.feedback.info.text` | `teal400` | `purple500` (pending 076 Task 2.6) |
-| `color.feedback.info.background` | `teal100` | `purple100` (pending 076 Task 2.6) |
-| `color.feedback.info.border` | `teal400` | `purple500` (pending 076 Task 2.6) |
+| `color.feedback.info.text` | `teal400` | `purple500` |
+| `color.feedback.info.background` | `teal100` | `purple100` |
+| `color.feedback.info.border` | `teal400` | `purple500` |
 
 This list will grow as more tokens adopt theme-conditional behavior.
 
@@ -84,7 +84,7 @@ Cons:
 - Breaks the 1:1 mapping between semantic token names and DTCG entries
 - Harder to enforce that `.wcag` tokens are always paired
 
-### Option C: DTCG `$extensions` with mode concept
+### Option C: DTCG `$extensions` with mode concept ✅ SELECTED
 
 ```json
 "color.action.primary": {
@@ -93,7 +93,6 @@ Cons:
   "$extensions": {
     "designerpunk": {
       "modes": {
-        "default": "{color.cyan300}",
         "wcag": "{color.teal300}"
       }
     }
@@ -101,29 +100,31 @@ Cons:
 }
 ```
 
-Pros:
-- Forward-looking — if DTCG ever adds native mode support, migration is straightforward
-- Extensible to other modes beyond wcag (e.g., high-contrast, reduced-motion color shifts)
-- `$value` remains canonical for tools that don't understand modes
+Key design decisions:
+- `$value` stays as the canonical default — no `"default"` key in `modes` (eliminates drift risk)
+- `$extensions.designerpunk.modes` holds only non-default overrides
+- Extensible to future modes (high-contrast, reduced-motion) without schema changes
+- Migration-compatible with DTCG native `$modes` proposal ([#210](https://github.com/design-tokens/community-group/issues/210), milestoned "Next Draft Priority")
 
-Cons:
-- More complex schema
-- `$value` duplicates the `default` mode — potential for drift
-- Over-engineering if wcag is the only mode we'll ever need
+When native `$modes` lands in the DTCG spec, migration is mechanical:
+1. `$value` stays as-is (already the fallback in #210's pattern)
+2. Move `$extensions.designerpunk.modes.*` → top-level `$modes.*`
+3. Add file-level `$modes` declaration
+4. Drop the extension
 
-### Ada's Initial Recommendation
+### Decision Record
 
-Option A is the simplest path that solves the problem. Option C is more future-proof but adds complexity we may not need. Option B is a non-starter — it breaks the token identity model.
-
-**Needs Peter's input**: Is multi-mode support a realistic future need, or is wcag the only theme-conditional case we foresee?
+- Option B rejected — breaks token identity model (doubles token count, breaks 1:1 naming)
+- Option A rejected — multi-mode is inevitable (Peter's assessment), so the generalized modes schema is worth the marginal complexity now vs. a breaking migration later
+- Option C selected — Peter approved 2026-03-12
 
 ---
 
-## Figma Import: Exploration Needed
+## Figma Import: Resolved
 
 Figma Variables support "modes" natively — a variable collection can have multiple modes, and each mode can hold a different value. This maps naturally to `wcagValue`.
 
-### Option A: Single collection with modes
+### Option A: Single collection with modes ✅ SELECTED
 
 Map `value` → default mode, `wcagValue` → "WCAG" mode within the same Figma variable collection.
 
@@ -162,7 +163,15 @@ Cons:
 
 Option A (Figma modes) is the natural fit. Figma's variable mode system was designed for exactly this use case. The plan limitation is a constraint worth documenting but shouldn't drive the architecture.
 
-**Needs exploration**: How does the current `FigmaTransformer` handle variable collections and modes? Does it already have mode infrastructure we can extend?
+### Decision Record
+
+- Option B rejected — same identity model problems as DTCG Option B (doubles variables, breaks 1:1 mapping)
+- Option A selected — native Figma modes are the exact mechanism for theme-conditional values. Existing `FigmaTransformer` already has mode infrastructure (`modes: string[]`, `valuesByMode: Record<string, unknown>`). Peter approved 2026-03-12.
+
+**Exploration result**: The `FigmaTransformer` already has mode infrastructure. `FigmaVariableCollection` has `modes: string[]` and `FigmaVariable` has `valuesByMode: Record<string, unknown>`. Both Primitives and Semantics collections are constructed with `modes: ['light', 'dark']` and `valuesByMode: { light: resolvedValue, dark: resolvedValue }` (identical values, commented as "future theme support"). Adding WCAG mode means:
+1. Add `'wcag'` to the Semantics collection `modes` array
+2. Populate `valuesByMode.wcag` with the resolved WCAG value when `$extensions.designerpunk.modes.wcag` is present
+3. Tokens without a WCAG mode get `valuesByMode.wcag` = same as `light` (fallback)
 
 ---
 
@@ -177,24 +186,39 @@ Option A (Figma modes) is the natural fit. Figma's variable mode system was desi
 ### Out of Scope
 - Figma plugin development (this spec covers the data format, not a sync tool)
 - DTCG community standardization of theme-conditional tokens
-- Non-color wcagValue tokens (if they ever exist)
+- Non-color wcagValue tokens — the `$extensions.designerpunk.modes` schema is type-agnostic by design, and the platform generators already resolve `wcagValue` across all semantic token families (not just color). Adding non-color WCAG overrides in the future requires only adding `wcagValue` to a token's `primitiveReferences` — no infrastructure changes. This spec implements and tests the color path only since those are the only tokens with `wcagValue` today.
 
 ---
 
 ## Dependencies
 
-- **Spec 076**: Must be complete — provides the `wcagValue` infrastructure and guard rails this spec replaces
-- **DTCG spec knowledge**: Need to verify current `$extensions` conventions in the community
-- **Figma API**: Need to verify variable mode creation/update capabilities
+- **Spec 076**: Complete (`d79f4ed5`) — provides the `wcagValue` infrastructure and guard rails this spec replaces
+- **DTCG spec**: No native mode support in 2025.10. [#210](https://github.com/design-tokens/community-group/issues/210) (native modes) is milestoned "Next Draft Priority." Our `$extensions.designerpunk.modes` schema is designed as a bridge.
+- **Figma API**: Variable mode creation/update supported on paid plans. `FigmaTransformer` already has mode infrastructure.
 
 ---
 
-## Open Questions
+## Resolved Questions
 
-1. Is multi-mode support (beyond wcag) a realistic future need?
-2. Does the current FigmaTransformer have any mode infrastructure?
-3. Should the DTCG file omit wcagValue tokens entirely (skip instead of throw) as an interim option, or is full support the only acceptable path?
-4. Are there other DTCG consumers in the ecosystem we should consider for interop?
+1. **Is multi-mode support (beyond WCAG) a realistic future need?**
+   Yes — inevitable per Peter's assessment (2026-03-12). Drives Option C selection over simpler Option A.
+
+2. **Does the current FigmaTransformer have any mode infrastructure?**
+   Yes — `FigmaVariableCollection.modes: string[]` and `FigmaVariable.valuesByMode: Record<string, unknown>` already exist. Both collections use `['light', 'dark']` with identical values. Adding WCAG is extension, not invention.
+
+3. **Should the DTCG file omit wcagValue tokens entirely (skip) as an interim option?**
+   No — Spec 077 is the full support path. The skip behavior from 076 was explicitly temporary.
+
+4. **Are there other DTCG consumers in the ecosystem we should consider for interop?**
+   No — DesignerPunk is the only serious consumer. The `$extensions.designerpunk` namespace is safe to iterate on without external breakage concerns.
+
+### DTCG Spec Landscape (as of 2026-03-12)
+
+The DTCG spec (2025.10) has no native mode/theming support. Two relevant proposals:
+- [#210](https://github.com/design-tokens/community-group/issues/210) — "Native modes and theming support" (Figma team, 2023). Milestoned "Next Draft Priority." Proposes file-level `$modes` with per-token `$modes` overrides and `$value` as fallback.
+- [#348](https://github.com/design-tokens/community-group/issues/348) — "First-Class Mode Support with `$modes` Array" (closed, Nov 2025). Built on `$root` pattern.
+
+Our `$extensions.designerpunk.modes` schema is designed to be migration-compatible with #210's direction.
 
 ---
 
@@ -234,6 +258,8 @@ When Spec 076 Task 2 migrated tokens with `wcagValue`, the DTCG `generate()` met
 - `src/generators/__tests__/DTCGFormatGenerator.integration.test.ts`
 - `src/generators/__tests__/DTCGFormatGenerator.property.test.ts`
 - `src/generators/__tests__/WcagValueExportGuardRails.test.ts` — DTCG test currently verifies omission; restore to verify correct output
+
+> **Note from Thurgood review (2026-03-12):** `WcagValueExportGuardRails.test.ts` should be *transformed*, not deleted. The guard rail tests currently assert "wcagValue → throw." Post-077, the same test inputs should assert "wcagValue → correct `$extensions.designerpunk.modes` output." Same inputs, flipped assertions. This preserves the coverage intent while reflecting the new behavior. The file may also warrant renaming (e.g., `WcagValueExportSupport.test.ts`) since "guard rails" no longer describes what it tests.
 
 ---
 

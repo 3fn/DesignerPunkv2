@@ -54,6 +54,8 @@ export interface DesignerPunkExtensions {
   primitiveRefs?: Record<string, string>;
   /** Token modifiers (e.g., opacity applied to a color) */
   modifiers?: Array<{ type: string; reference: string }>;
+  /** Theme-conditional mode overrides (e.g., { wcag: '{color.teal300}' }) */
+  modes?: Record<string, string>;
 }
 
 
