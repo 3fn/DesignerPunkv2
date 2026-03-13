@@ -49,13 +49,12 @@ describe('DTCG schema structure', () => {
   });
 
   it('should contain all expected top-level token groups', () => {
-    // semanticColor may be absent when tokens have wcagValue (Spec 076 guard rail)
     const expectedGroups = [
       'space', 'color', 'fontSize', 'fontWeight', 'fontFamily',
       'lineHeight', 'letterSpacing', 'radius', 'borderWidth',
       'tapArea', 'density', 'breakpoint', 'opacity', 'duration',
       'easing', 'scale', 'blend',
-      'semanticSpace', 'semanticBorderWidth',
+      'semanticColor', 'semanticSpace', 'semanticBorderWidth',
       'semanticRadius', 'semanticOpacity', 'semanticBlend',
       'gridSpacing', 'icon', 'accessibility', 'progressColor',
       'zIndex', 'elevation',
@@ -156,9 +155,8 @@ describe('token type mapping', () => {
 // ---------------------------------------------------------------------------
 describe('alias preservation', () => {
   it('should use {token.path} alias syntax in semantic color tokens', () => {
-    // semanticColor may be absent when tokens have wcagValue (Spec 076 guard rail)
     const semanticColors = defaultOutput.semanticColor as DTCGGroup;
-    if (!semanticColors) return; // Skipped — wcagValue guard rail active
+    expect(semanticColors).toBeDefined();
 
     const tokenKeys = Object.keys(semanticColors).filter(k => !k.startsWith('$'));
     expect(tokenKeys.length).toBeGreaterThan(0);
@@ -442,8 +440,8 @@ describe('token count validation', () => {
       const group = defaultOutput[groupName] as DTCGGroup;
       if (group) count += countTokensInGroup(group);
     }
-    // Threshold lowered: semanticColor (61 tokens) may be absent due to wcagValue guard rail
-    expect(count).toBeGreaterThanOrEqual(120);
+    // Threshold: 180+ semantic tokens expected across all semantic groups
+    expect(count).toBeGreaterThanOrEqual(180);
   });
 });
 

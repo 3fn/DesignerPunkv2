@@ -1,21 +1,21 @@
 /**
  * @category evergreen
- * @purpose Verify DTCG and Figma exports throw when tokens have wcagValue
+ * @purpose Verify DTCG and Figma exports correctly handle wcagValue via modes extension
  */
 /**
- * wcagValue Export Guard Rails (Spec 076, Task 1.4)
+ * wcagValue Export Support (Spec 077)
  *
- * DTCG and Figma formats do not yet support theme-conditional semantic
- * references (wcagValue). These tests verify that attempting to export
- * a token with wcagValue produces a clear error.
+ * Replaces guard rail tests from Spec 076 Task 1.4. Verifies that DTCG and
+ * Figma exports produce correct modes output for tokens with wcagValue.
+ * Test fixtures preserved from original guard rail tests.
  */
 
 import { SemanticCategory } from '../../types/SemanticToken';
 import type { SemanticToken } from '../../types/SemanticToken';
 import { FigmaTransformer } from '../transformers/FigmaTransformer';
-import type { DTCGTokenFile } from '../types/DTCGTypes';
+import type { DTCGTokenFile, DTCGGroup, DTCGToken } from '../types/DTCGTypes';
 
-// --- DTCG guard rail tests ---
+// --- DTCG tests ---
 
 const MOCK_WCAG_TOKEN: Omit<SemanticToken, 'primitiveTokens'> = {
   name: 'color.feedback.info.text',
@@ -45,20 +45,20 @@ jest.mock('../../tokens/semantic/ColorTokens', () => {
 // Import after mock
 import { DTCGFormatGenerator } from '../DTCGFormatGenerator';
 
-describe('wcagValue Export Guard Rails (Spec 076)', () => {
+describe('wcagValue Export Support (Spec 077)', () => {
   afterEach(() => {
     injectWcag = false;
   });
 
   describe('DTCG export', () => {
-    it('should omit semanticColor from output when a token has wcagValue', () => {
+    it('should include semanticColor with modes.wcag when a token has wcagValue', () => {
       injectWcag = true;
       const generator = new DTCGFormatGenerator();
       const output = generator.generate();
-      // Guard rail fires internally — semanticColor is skipped, not thrown
-      expect(output.semanticColor).toBeUndefined();
-      // Other groups still present
-      expect(output.space).toBeDefined();
+      expect(output.semanticColor).toBeDefined();
+      const token = (output.semanticColor as DTCGGroup)['color.feedback.info.text'] as DTCGToken;
+      expect(token.$extensions?.designerpunk?.modes?.wcag).toBe('{color.purple500}');
+      expect(token.$value).toBe('{color.teal400}');
     });
 
     it('should not throw when no tokens have wcagValue', () => {
@@ -69,7 +69,7 @@ describe('wcagValue Export Guard Rails (Spec 076)', () => {
   });
 
   describe('Figma export', () => {
-    it('should throw when a DTCG token has wcagValue in extensions', () => {
+    it('should populate valuesByMode.wcag when DTCG token has modes extension', () => {
       const transformer = new FigmaTransformer();
       const dtcgInput: DTCGTokenFile = {
         $schema: 'https://design-tokens.org/schema.json',
@@ -79,15 +79,20 @@ describe('wcagValue Export Guard Rails (Spec 076)', () => {
             $value: '{color.teal400}',
             $type: 'color',
             $extensions: {
-              designerpunk: { family: 'color', wcagValue: 'purple500' } as any
+              designerpunk: { family: 'color', modes: { wcag: '{color.purple500}' } } as any
             }
           }
         }
       };
-      expect(() => transformer.transform(dtcgInput)).toThrow(/wcagValue/);
+      const result = transformer.transform(dtcgInput);
+      const collections = JSON.parse(result.content).collections;
+      const semantics = collections.find((c: any) => c.name === 'Semantics');
+      const variable = semantics.variables.find((v: any) => v.name.includes('info/text'));
+      expect(variable.valuesByMode.wcag).toBeDefined();
+      expect(variable.valuesByMode.wcag).not.toEqual(variable.valuesByMode.light);
     });
 
-    it('should not throw when DTCG tokens have no wcagValue', () => {
+    it('should not throw when DTCG tokens have no modes extension', () => {
       const transformer = new FigmaTransformer();
       const dtcgInput: DTCGTokenFile = {
         $schema: 'https://design-tokens.org/schema.json',

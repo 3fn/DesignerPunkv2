@@ -84,7 +84,7 @@ Strictly sequential — Task 2 reads DTCG output from Task 1, Task 3 restores te
     - Verify tokens with `wcagValue` have `$extensions.designerpunk.modes.wcag`
     - _Requirements: 1.6, 2.3_
 
-- [ ] 2. Figma Import — WCAG Mode
+- [x] 2. Figma Import — WCAG Mode
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -115,7 +115,7 @@ Strictly sequential — Task 2 reads DTCG output from Task 1, Task 3 restores te
     - Primitives collection remains `['light', 'dark']` — no WCAG mode
     - _Requirements: 3.2, 3.5_
 
-  - [ ] 2.2 Replace Figma guard rail with mode-conditional resolution
+  - [x] 2.2 Replace Figma guard rail with mode-conditional resolution
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -154,7 +154,7 @@ Strictly sequential — Task 2 reads DTCG output from Task 1, Task 3 restores te
   **Post-Completion:**
   - Commit: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Test Restoration & Transformation"`
 
-  - [ ] 3.1 Restore DTCGFormatGenerator.test.ts
+  - [x] 3.1 Restore DTCGFormatGenerator.test.ts
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -162,7 +162,7 @@ Strictly sequential — Task 2 reads DTCG output from Task 1, Task 3 restores te
     - Restore semantic token count threshold to ≥180
     - _Requirements: 4.1, 4.2_
 
-  - [ ] 3.2 Restore DTCGConfigOptions.test.ts
+  - [x] 3.2 Restore DTCGConfigOptions.test.ts
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -170,7 +170,7 @@ Strictly sequential — Task 2 reads DTCG output from Task 1, Task 3 restores te
     - Assert semantic color alias resolution works
     - _Requirements: 4.3_
 
-  - [ ] 3.3 Restore DTCGFormatGenerator.integration.test.ts
+  - [x] 3.3 Restore DTCGFormatGenerator.integration.test.ts
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -178,7 +178,7 @@ Strictly sequential — Task 2 reads DTCG output from Task 1, Task 3 restores te
     - Re-add `semanticColor` to semantic token category mapping
     - _Requirements: 4.4_
 
-  - [ ] 3.4 Restore DTCGFormatGenerator.property.test.ts
+  - [x] 3.4 Restore DTCGFormatGenerator.property.test.ts
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -186,7 +186,7 @@ Strictly sequential — Task 2 reads DTCG output from Task 1, Task 3 restores te
     - Restore total token count threshold to ≥350
     - _Requirements: 4.5, 4.6_
 
-  - [ ] 3.5 Transform guard rail tests
+  - [x] 3.5 Transform guard rail tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
