@@ -189,9 +189,10 @@ Documentation (README, Navigation family steering doc update) is included as sub
     - Create `types.ts` with `SegmentedChoiceProps` and `SegmentOption` union type
     - Create schema defining component structure
     - Export props interface for platform implementations
+    - **Gap identified post-completion**: `contracts.yaml` is a standard Stemma scaffolding artifact (alongside schema.yaml and component-meta.yaml) and should have been authored here. Corrected in Task 3.1.CORRECTION.
     - _Requirements: 1.1, 2.1, 2.2, 2.3, 2.4, 6.1, 6.2, 6.3, 7.1, 7.2, 7.3_
 
-- [ ] 3. Web Implementation
+- [x] 3. Web Implementation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -218,7 +219,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   **Post-Completion:**
   - Commit: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Web Implementation"`
 
-  - [ ] 3.1 Web Component structure and rendering
+  - [x] 3.1 Web Component structure and rendering
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -229,7 +230,17 @@ Documentation (README, Navigation family steering doc update) is included as sub
     - Implement Standard and Condensed size variants
     - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5, 9.6, 9.7, 9.8, 10.1, 7.1, 7.2, 7.3_
 
-  - [ ] 3.2 Selection logic and state management
+  - [x] 3.1.CORRECTION Author behavioral contracts (contracts.yaml)
+    **Type**: Architecture
+    **Validation**: Tier 2 - Standard
+    **Agent**: Lina
+    - **Process correction**: contracts.yaml should have been authored during Task 2 (scaffolding) as a standard Stemma component artifact, before platform implementation began. Task 3.1 was implemented without pre-defined contracts — implementation preceded specification. This task corrects that by authoring contracts.yaml and verifying 3.1 satisfies the rendering/visual contracts retroactively.
+    - Author `contracts.yaml` covering all behavioral contracts: rendering, selection, animation choreography, keyboard navigation, accessibility, hover state, size variants
+    - Verify Task 3.1 implementation satisfies the rendering and visual contracts; fix any gaps
+    - Remaining subtasks (3.2–3.5) implement against defined contracts; test subtasks (3.6–3.7) validate them
+    - _Requirements: all (contracts define the full behavioral specification)_
+
+  - [x] 3.2 Selection logic and state management
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -238,8 +249,9 @@ Documentation (README, Navigation family steering doc update) is included as sub
     - Handle fallback when `selectedValue` doesn't match any segment
     - Enforce minimum 2 segments
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5_
+    - _Contracts: interaction_pressable, interaction_noop_active, validation_selection_constraints, content_displays_fallback_
 
-  - [ ] 3.3 Indicator animation choreography
+  - [x] 3.3 Indicator animation choreography
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     **Agent**: Lina
@@ -249,8 +261,9 @@ Documentation (README, Navigation family steering doc update) is included as sub
     - Suppress animation on initial render
     - Implement `prefers-reduced-motion` media query bypass
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7_
+    - _Contracts: animation_coordination, accessibility_reduced_motion, animation_initial_render_
 
-  - [ ] 3.4 Keyboard navigation and accessibility
+  - [x] 3.4 Keyboard navigation and accessibility
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -260,16 +273,18 @@ Documentation (README, Navigation family steering doc update) is included as sub
     - Set ARIA roles: tablist, tab, aria-selected
     - Generate aria-controls from `id` prop (when provided)
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 5.1, 5.2, 5.3, 5.4, 5.5, 6.1, 6.2, 6.3_
+    - _Contracts: interaction_keyboard_navigation, interaction_keyboard_activation, interaction_roving_tabindex, accessibility_aria_roles, accessibility_aria_controls, accessibility_alt_text, interaction_focus_ring_
 
-  - [ ] 3.5 Hover state
+  - [x] 3.5 Hover state
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
     - Apply `blend.containerHoverDarker` on inactive segment hover
     - No hover feedback on active segment
     - _Requirements: 8.1, 8.2, 8.3_
+    - _Contracts: interaction_hover_
 
-  - [ ] 3.6 Web interaction and accessibility tests
+  - [x] 3.6 Web interaction and accessibility tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -278,8 +293,9 @@ Documentation (README, Navigation family steering doc update) is included as sub
     - Accessibility tests (roles, aria-selected, aria-controls with/without id)
     - Hover tests (inactive only, no hover on active)
     - _Requirements: 1, 4, 5, 6, 8_
+    - _Validates contracts: interaction_pressable, interaction_noop_active, interaction_hover, interaction_focus_ring, interaction_keyboard_navigation, interaction_keyboard_activation, interaction_roving_tabindex, accessibility_aria_roles, accessibility_aria_controls, accessibility_alt_text, validation_selection_constraints, content_displays_fallback_
 
-  - [ ] 3.7 Web animation and visual tests
+  - [x] 3.7 Web animation and visual tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -289,8 +305,9 @@ Documentation (README, Navigation family steering doc update) is included as sub
     - Size variant tests (standard vs condensed token application)
     - Visual spec compliance tests (container, segment, indicator tokens)
     - _Requirements: 3, 7, 9_
+    - _Validates contracts: animation_coordination, accessibility_reduced_motion, animation_initial_render, visual_background, visual_border, visual_shadow, visual_state_colors, visual_size_variants, layout_flexible_length, content_displays_label, content_supports_icon_
 
-  - [ ] 3.8 Component README
+  - [x] 3.8 Component README
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina

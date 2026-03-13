@@ -32,6 +32,7 @@ export type {
 export { SEGMENTED_CHOICE_DEFAULTS } from './types';
 
 // Platform implementations
-// - Web: NavSegmentedChoiceBase (Task 3) — pending
+// - Web: NavSegmentedChoiceBase (Task 3) — in progress
 // - iOS: NavSegmentedChoiceBase (Task 4) — pending
 // - Android: NavSegmentedChoiceBase (Task 5) — pending
+export { NavSegmentedChoiceBase } from './platforms/web/NavSegmentedChoiceBase.web';

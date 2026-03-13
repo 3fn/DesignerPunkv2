@@ -1,9 +1,160 @@
 /**
- * Nav-SegmentedChoice-Base — Web Styles
+ * Nav-SegmentedChoice-Base Styles for Web Platform
  * 
- * CSS with logical properties. Task 3.
+ * Token-based styling using CSS custom properties. All values reference
+ * semantic or primitive tokens — zero hard-coded values.
  * 
- * @see .kiro/specs/049-nav-segmentedchoice-base/design-outline.md
+ * Stemma System: Navigation Family, Primitive (Base)
+ * 
+ * @see Requirements: 7.1–7.3, 9.1–9.8 in .kiro/specs/049-nav-segmentedchoice-base/requirements.md
  */
 
-/* Placeholder — implementation in Task 3 */
+/* ==========================================================================
+   Host & Container
+   ========================================================================== */
+
+:host {
+  display: block;
+  inline-size: 100%; /* Req 9.9: full-width within parent */
+}
+
+/**
+ * Tablist container.
+ * 
+ * Near-white surface background with rounded corners and subtle border.
+ * Flexbox row with equal-width children. Inner padding creates the
+ * "track" around segments.
+ * 
+ * @see Req 9.1: container visual spec
+ */
+.segmented-choice {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-grouped-none);
+  position: relative;
+
+  padding: var(--space-inset-050);
+  background-color: var(--color-structure-surface);
+  border: var(--border-default) solid var(--color-structure-border);
+  border-radius: var(--radius-normal);
+}
+
+/* ==========================================================================
+   Indicator (slides behind selected segment)
+   ========================================================================== */
+
+/**
+ * Selection indicator — separate element that slides behind the active segment.
+ * Positioned absolutely within the container. Width and position are set via
+ * inline styles by the JS component.
+ * 
+ * @see Req 9.2: active segment canvas background
+ * @see Req 9.6: shadow.navigation.indicator
+ */
+.segmented-choice__indicator {
+  position: absolute;
+  inset-block: var(--space-inset-050);
+  border-radius: var(--radius-small);
+  background-color: var(--color-structure-canvas);
+  box-shadow: var(--shadow-navigation-indicator);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ==========================================================================
+   Segments (tabs)
+   ========================================================================== */
+
+/**
+ * Individual segment button.
+ * 
+ * Equal-width via flex: 1. Transparent background (indicator provides
+ * the active background). Text/icon color from color.action.navigation.
+ * 
+ * @see Req 9.3: inactive segment transparent
+ * @see Req 9.4: color.action.navigation for text/icon
+ * @see Req 9.7: equal-width segments
+ * @see Req 9.8: min-width tapAreaMinimum
+ */
+.segmented-choice__segment {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-inline-size: var(--tap-area-minimum);
+  border: none;
+  border-radius: var(--radius-small);
+  background: transparent;
+  color: var(--color-action-navigation);
+  cursor: pointer;
+
+  /* Typography — Standard size defaults, overridden by size attribute */
+  font-weight: var(--font-weight-700);
+
+  /* Remove default button styling */
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ==========================================================================
+   Size Variants
+   ========================================================================== */
+
+/**
+ * Standard size (default).
+ * @see Req 7.1
+ */
+.segmented-choice__segment--standard {
+  padding-block: var(--space-inset-150);
+  padding-inline: var(--space-inset-200);
+  font-size: var(--font-size-125);
+  line-height: var(--line-height-125);
+}
+
+/**
+ * Condensed size.
+ * @see Req 7.2
+ */
+.segmented-choice__segment--condensed {
+  padding-block: var(--space-inset-100);
+  padding-inline: var(--space-inset-150);
+  font-size: var(--font-size-100);
+  line-height: var(--line-height-100);
+}
+
+/* ==========================================================================
+   Hover (inactive segments only, web — Req 8.1–8.3)
+   ========================================================================== */
+
+.segmented-choice__segment[aria-selected="false"]:hover {
+  background-color: var(--blend-container-hover-darker);
+}
+
+/* ==========================================================================
+   Focus
+   ========================================================================== */
+
+.segmented-choice__segment:focus {
+  outline: none;
+}
+
+.segmented-choice__segment:focus-visible {
+  outline: var(--accessibility-focus-width) solid var(--accessibility-focus-color);
+  outline-offset: var(--accessibility-focus-offset);
+}
+
+/* ==========================================================================
+   Reduced Motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .segmented-choice__indicator {
+    transition: none !important;
+  }
+}

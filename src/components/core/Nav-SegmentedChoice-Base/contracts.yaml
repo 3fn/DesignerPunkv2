@@ -1,0 +1,433 @@
+version: "1.0.0"
+component: Nav-SegmentedChoice-Base
+family: Navigation
+
+contracts:
+  # ============================================================
+  # VISUAL CONTRACTS
+  # ============================================================
+
+  visual_background:
+    category: visual
+    description: Container renders with surface background token
+    behavior: |
+      Container renders with color.structure.surface background and
+      space.inset.050 padding. Full-width within parent container.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Container has color.structure.surface background
+      - Container has space.inset.050 padding
+      - Container stretches to full parent width
+    test_approach: |
+      Render component, verify container background and padding tokens.
+    required: true
+
+  visual_border:
+    category: visual
+    description: Container has border and rounded corners
+    behavior: |
+      Container has border.default border and radius.normal border-radius.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Container has border.default border
+      - Container has radius.normal border-radius
+    test_approach: |
+      Render component, verify border and radius tokens.
+    required: true
+
+  visual_shadow:
+    category: visual
+    description: Indicator has shadow for depth separation
+    behavior: |
+      The selection indicator uses shadow.navigation.indicator
+      (0 offset, 4px blur, 20% black) for gentle edge definition
+      against the container surface.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Indicator has shadow.navigation.indicator box-shadow
+    test_approach: |
+      Render with selection, verify indicator shadow token.
+    required: true
+
+  visual_state_colors:
+    category: visual
+    description: State-dependent visual treatment for segments and indicator
+    behavior: |
+      Inactive segments: transparent background, color.action.navigation text/icon.
+      Active segment: indicated by a separate indicator element with
+      color.structure.canvas background and radius.small border-radius.
+      Active text/icon color is color.action.navigation (same as inactive).
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Inactive segment has transparent background
+      - Inactive segment text/icon is color.action.navigation
+      - Indicator has color.structure.canvas background
+      - Indicator has radius.small border-radius
+      - Active segment text/icon is color.action.navigation
+    test_approach: |
+      Render with selection, verify inactive and active segment styling.
+    required: true
+
+  visual_size_variants:
+    category: visual
+    description: Standard and Condensed size variants with different tokens
+    behavior: |
+      Standard (default): space.inset.150 block / space.inset.200 inline padding,
+      fontSize125, lineHeight125, fontWeight700.
+      Condensed: space.inset.100 block / space.inset.150 inline padding,
+      fontSize100, lineHeight100, fontWeight700.
+      Segments have radius.small border-radius in both sizes.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Standard uses space.inset.150/200, fontSize125, lineHeight125
+      - Condensed uses space.inset.100/150, fontSize100, lineHeight100
+      - Both use fontWeight700
+      - Default size is standard when omitted
+    test_approach: |
+      Render with each size, verify token application.
+    required: true
+
+  # ============================================================
+  # LAYOUT CONTRACTS
+  # ============================================================
+
+  layout_flexible_length:
+    category: layout
+    description: Equal-width segments with minimum touch target
+    behavior: |
+      Segments divide the container width equally regardless of content
+      length. Each segment enforces min-width tapAreaMinimum so touch
+      targets never compress below accessible size.
+    wcag: "2.5.5 Target Size"
+    platforms: [web, ios, android]
+    validation:
+      - All segments have equal width
+      - Segment width is independent of content length
+      - Each segment has min-width of tapAreaMinimum
+    test_approach: |
+      Render with segments of varying label lengths, verify equal widths.
+    required: true
+
+  # ============================================================
+  # CONTENT CONTRACTS
+  # ============================================================
+
+  content_displays_label:
+    category: content
+    description: Renders text label for text segments
+    behavior: |
+      When a segment has a label property, renders the label as text content.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Text segment displays label string
+    test_approach: |
+      Render with text segments, verify labels visible.
+    required: true
+
+  content_supports_icon:
+    category: content
+    description: Renders icon for icon segments via Icon-Base
+    behavior: |
+      When a segment has an icon property, renders the icon via Icon-Base.
+      Icon inherits color from color.action.navigation via currentColor.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Icon segment renders icon via Icon-Base
+      - Icon color inherits via currentColor
+    test_approach: |
+      Render with icon segments, verify icon rendering.
+    required: true
+
+  content_displays_fallback:
+    category: content
+    description: Falls back to first segment when selectedValue is invalid
+    behavior: |
+      When selectedValue does not match any segment's value, the component
+      selects the first segment as fallback. No error thrown.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Invalid selectedValue results in first segment selected
+      - No error thrown for invalid selectedValue
+    test_approach: |
+      Provide non-matching selectedValue, verify first segment selected.
+    required: true
+
+  # ============================================================
+  # INTERACTION CONTRACTS
+  # ============================================================
+
+  interaction_pressable:
+    category: interaction
+    description: Activating an unselected segment changes selection
+    behavior: |
+      When a user activates an unselected segment (click, tap, Enter, Space),
+      the component invokes onSelectionChange with the new segment's value.
+      Exactly one segment is selected at all times.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Activating unselected segment calls onSelectionChange with value
+      - Exactly one segment is selected after activation
+    test_approach: |
+      Click an unselected segment, verify callback invoked with correct value.
+    required: true
+
+  interaction_noop_active:
+    category: interaction
+    description: Activating the selected segment is a no-op
+    behavior: |
+      When a user activates the already-selected segment, onSelectionChange
+      is NOT invoked. No state change occurs.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Activating selected segment does not call onSelectionChange
+    test_approach: |
+      Click the selected segment, verify callback not invoked.
+    required: true
+
+  interaction_hover:
+    category: interaction
+    description: Hover feedback on inactive segments only (web)
+    behavior: |
+      On hover over an inactive segment, background shows
+      blend.containerHoverDarker (4% darker). No hover feedback on the
+      active segment — it's already selected, and hover would falsely
+      suggest "click me" for a no-op action. Web platform only.
+    wcag: "1.4.13 Content on Hover or Focus"
+    platforms: [web]
+    validation:
+      - Inactive segment shows hover background on mouse enter
+      - Hover background reverts on mouse leave
+      - Active segment shows no hover feedback
+    test_approach: |
+      Hover over inactive segment, verify background change.
+      Hover over active segment, verify no change.
+    required: true
+
+  interaction_focus_ring:
+    category: interaction
+    description: Focus visible indicator on keyboard navigation
+    behavior: |
+      When a segment receives keyboard focus, displays focus ring using
+      accessibility.focus.width, accessibility.focus.color, and
+      accessibility.focus.offset tokens. Uses :focus-visible for
+      keyboard-only indication (web).
+    wcag: "2.4.7 Focus Visible"
+    platforms: [web, ios, android]
+    validation:
+      - Focus ring appears on keyboard focus
+      - Focus ring uses accessibility focus tokens
+      - Focus ring not shown on mouse click (web)
+    test_approach: |
+      Tab to segment, verify focus ring visible.
+    required: true
+
+  interaction_keyboard_navigation:
+    category: interaction
+    description: Arrow key navigation between segments with wrapping
+    behavior: |
+      Left/Up arrow moves focus to previous segment, wrapping from first
+      to last. Right/Down arrow moves focus to next segment, wrapping from
+      last to first. Arrow keys move focus only — they do not change selection.
+    wcag: "2.1.1 Keyboard"
+    platforms: [web]
+    validation:
+      - Left/Up arrow moves focus to previous segment
+      - Right/Down arrow moves focus to next segment
+      - Focus wraps from first to last and last to first
+    test_approach: |
+      Focus a segment, press arrow keys, verify focus movement and wrapping.
+    required: true
+
+  interaction_keyboard_activation:
+    category: interaction
+    description: Enter/Space selects the focused segment
+    behavior: |
+      When a segment has focus, pressing Enter or Space selects it
+      (invokes onSelectionChange). Provides keyboard equivalence to click/tap.
+    wcag: "2.1.1 Keyboard"
+    platforms: [web]
+    validation:
+      - Enter selects focused segment
+      - Space selects focused segment
+    test_approach: |
+      Focus an unselected segment, press Enter, verify selection changes.
+    required: true
+
+  interaction_roving_tabindex:
+    category: interaction
+    description: Tab enters to selected segment and exits the control
+    behavior: |
+      Tab into the control focuses the currently selected segment
+      (tabindex="0"). All other segments have tabindex="-1". Tab while
+      inside the control moves focus to the next focusable element outside
+      the control (not the next segment). Arrow keys navigate within.
+    wcag: "2.1.1 Keyboard"
+    platforms: [web]
+    validation:
+      - Tab into control focuses the selected segment
+      - Selected segment has tabindex="0"
+      - Other segments have tabindex="-1"
+      - Tab from within control exits to next focusable element
+    test_approach: |
+      Tab into control, verify selected segment focused.
+      Tab again, verify focus leaves the control.
+    required: true
+
+  # ============================================================
+  # ANIMATION CONTRACTS
+  # ============================================================
+
+  animation_coordination:
+    category: animation
+    description: Four-phase indicator animation on selection change
+    behavior: |
+      When selection changes, the indicator animates through four phases:
+      1. Shadow out: shadow fades to 0 (duration150 + easingAccelerate)
+      2. Resize: width transitions (duration150 + easingStandard)
+      3. Glide: position slides (duration350 + easingGlideDecelerate)
+      4. Shadow in: shadow fades back (duration150 + easingDecelerate)
+      Phases 2 and 3 (resize + glide) are simultaneous.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Shadow fades out before glide begins
+      - Indicator slides to new position with glide easing
+      - Shadow fades back in after glide completes
+      - Timing uses specified duration and easing tokens
+    test_approach: |
+      Change selection, verify animation phases fire in order with
+      correct timing tokens.
+    required: true
+
+  animation_initial_render:
+    category: animation
+    description: No animation on first render
+    behavior: |
+      When the component first renders, the indicator appears at the
+      selected segment's position without animation. No slide-in on mount.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Indicator at correct position on first render
+      - No animation on mount
+    test_approach: |
+      Render component, verify indicator positioned without transition.
+    required: true
+
+  # ============================================================
+  # ACCESSIBILITY CONTRACTS
+  # ============================================================
+
+  accessibility_aria_roles:
+    category: accessibility
+    description: Tablist/tab roles with selection state
+    behavior: |
+      Container has role="tablist" (web) or equivalent semantic role
+      (iOS/Android). Each segment has role="tab" with aria-selected
+      reflecting its selection state. Selected segment has
+      aria-selected="true", all others "false".
+    wcag: "4.1.2 Name, Role, Value"
+    platforms: [web, ios, android]
+    validation:
+      - Container has role="tablist"
+      - Each segment has role="tab"
+      - Selected segment has aria-selected="true"
+      - Unselected segments have aria-selected="false"
+    test_approach: |
+      Render with selection, verify roles and aria-selected on all segments.
+    required: true
+
+  accessibility_aria_controls:
+    category: accessibility
+    description: Optional panel association via id prop
+    behavior: |
+      When id prop is provided, each segment generates
+      aria-controls="[id]-panel-[value]". When id is omitted,
+      aria-controls is not rendered. id is independent of testID.
+    wcag: "4.1.2 Name, Role, Value"
+    platforms: [web, ios, android]
+    validation:
+      - With id prop, aria-controls follows [id]-panel-[value] pattern
+      - Without id prop, no aria-controls attribute
+    test_approach: |
+      Render with and without id prop, verify aria-controls presence/absence.
+    required: true
+
+  accessibility_alt_text:
+    category: accessibility
+    description: Icon segments announced by accessibilityLabel
+    behavior: |
+      Icon segments are announced by their accessibilityLabel, not the
+      icon name. accessibilityLabel is required on icon segments
+      (enforced by TypeScript union type at compile time).
+    wcag: "1.1.1 Non-text Content"
+    platforms: [web, ios, android]
+    validation:
+      - Icon segment accessible name is accessibilityLabel value
+    test_approach: |
+      Render icon segment, verify screen reader accessible name.
+    required: true
+
+  accessibility_reduced_motion:
+    category: accessibility
+    description: Animation disabled when reduced motion preferred
+    behavior: |
+      When prefers-reduced-motion: reduce is active (web), or platform
+      equivalent (iOS: isReduceMotionEnabled, Android: ANIMATOR_DURATION_SCALE),
+      the indicator moves instantly without animation. All phases collapse
+      to immediate state change.
+    wcag: "2.3.3 Animation from Interactions"
+    platforms: [web, ios, android]
+    validation:
+      - Indicator moves instantly when reduced motion active
+      - No animation phases execute
+    test_approach: |
+      Enable reduced motion, change selection, verify instant position change.
+    required: true
+
+  # ============================================================
+  # VALIDATION CONTRACTS
+  # ============================================================
+
+  validation_selection_constraints:
+    category: validation
+    description: Throws runtime error when fewer than 2 segments provided
+    behavior: |
+      When fewer than 2 segments are provided, the component throws a
+      runtime error with descriptive message including the count received.
+      Fail loudly during development — no silent degradation.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - 0 segments throws error
+      - 1 segment throws error
+      - 2 segments renders normally
+      - Error message includes segment count
+    test_approach: |
+      Provide 0 and 1 segments, verify error thrown with descriptive message.
+    required: true
+
+# ============================================================
+# EXCLUSIONS
+# ============================================================
+
+excludes:
+  state_disabled:
+    reason: "DesignerPunk does not support disabled states. If a segment option is unavailable, do not include it in the segments array."
+    category: state
+    reference: "design-outline.md § Props Interface — 'No disabled prop'"
+
+  interaction_segment_disabled:
+    reason: "Individual segment disabling is not supported. Remove unavailable segments from the array instead."
+    category: interaction
+    reference: "design-outline.md § Props Interface — 'No disabled prop'"
