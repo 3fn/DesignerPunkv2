@@ -3,7 +3,7 @@
 **Stemma System**: Navigation Family
 **Component Type**: Primitive (Base)
 **Naming Convention**: `[Family]-[Type]-[Variant]` = Nav-SegmentedChoice-Base
-**Status**: 🟡 Web Implementation Complete (iOS/Android pending)
+**Status**: 🟢 All Platforms Implemented (Web, iOS, Android)
 
 ---
 
@@ -116,11 +116,70 @@ el.addEventListener('selection-change', (e) => {
 
 ### iOS (SwiftUI)
 
-> 🔲 Stub — implementation pending (Task 4)
+```swift
+NavSegmentedChoiceBase(
+    segments: [
+        .text(value: "daily", label: "Daily"),
+        .text(value: "weekly", label: "Weekly")
+    ],
+    selectedValue: $selection,
+    onSelectionChange: { value in print(value) },
+    size: .standard
+)
+
+// Icon segments
+NavSegmentedChoiceBase(
+    segments: [
+        .icon(value: "list", icon: "list.bullet", accessibilityLabel: "List view"),
+        .icon(value: "grid", icon: "square.grid.2x2", accessibilityLabel: "Grid view")
+    ],
+    selectedValue: $viewMode,
+    size: .condensed
+)
+
+// With panel association
+NavSegmentedChoiceBase(
+    segments: [.text(value: "monthly", label: "Monthly"), .text(value: "onetime", label: "One-time")],
+    selectedValue: $freq,
+    componentId: "freq"
+)
+```
 
 ### Android (Jetpack Compose)
 
-> 🔲 Stub — implementation pending (Task 5)
+```kotlin
+NavSegmentedChoiceBase(
+    segments = listOf(
+        SegmentOption.Text("daily", "Daily"),
+        SegmentOption.Text("weekly", "Weekly")
+    ),
+    selectedValue = selection,
+    onSelectionChange = { selection = it },
+    size = NavSegmentedChoiceSize.STANDARD
+)
+
+// Icon segments
+NavSegmentedChoiceBase(
+    segments = listOf(
+        SegmentOption.IconSegment("list", "list", "List view"),
+        SegmentOption.IconSegment("grid", "grid", "Grid view")
+    ),
+    selectedValue = viewMode,
+    onSelectionChange = { viewMode = it },
+    size = NavSegmentedChoiceSize.CONDENSED
+)
+
+// With panel association
+NavSegmentedChoiceBase(
+    segments = listOf(
+        SegmentOption.Text("monthly", "Monthly"),
+        SegmentOption.Text("onetime", "One-time")
+    ),
+    selectedValue = freq,
+    onSelectionChange = { freq = it },
+    componentId = "freq"
+)
+```
 
 ---
 
@@ -243,15 +302,19 @@ Phases 2 and 3 run simultaneously. The glide uses a piecewise linear curve (`eas
 - `prefers-reduced-motion` media query (CSS safety net + JS check)
 - `:focus-visible` for keyboard-only focus indication
 
-### iOS (pending)
-- SwiftUI `.animation()` with custom timing curves
-- `UnitCurve` for glide easing
-- `UIAccessibility.isReduceMotionEnabled`
+### iOS
+- SwiftUI View with GeometryReader for equal-width segments
+- `withAnimation` + `DispatchQueue.main.asyncAfter` phase sequencing
+- Consumes `PiecewiseLinearEasing` CustomAnimation (iOS 17+) for glide easing
+- `UIAccessibility.isReduceMotionEnabled` for reduced motion
+- `@FocusState` + `.onMoveCommand` for external keyboard navigation
 
-### Android (pending)
-- Compose `animateFloatAsState` / `Animatable`
-- `Modifier.shadow()` for indicator (not elevation)
-- `Settings.Global.ANIMATOR_DURATION_SCALE` for reduced motion
+### Android
+- Jetpack Compose with `BoxWithConstraints` for pixel-level indicator positioning
+- `Animatable` + coroutine sequencing for four-phase animation
+- `Modifier.shadow()` + `.clip()` for indicator shadow (not elevation)
+- `Settings.Global.TRANSITION_ANIMATION_SCALE` for reduced motion
+- `FocusRequester` + `onKeyEvent` for hardware keyboard navigation
 
 ---
 

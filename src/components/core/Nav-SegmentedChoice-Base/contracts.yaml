@@ -238,8 +238,9 @@ contracts:
       Left/Up arrow moves focus to previous segment, wrapping from first
       to last. Right/Down arrow moves focus to next segment, wrapping from
       last to first. Arrow keys move focus only — they do not change selection.
+      Web: keydown handler. iOS: .onMoveCommand. Android: onKeyEvent.
     wcag: "2.1.1 Keyboard"
-    platforms: [web]
+    platforms: [web, ios, android]
     validation:
       - Left/Up arrow moves focus to previous segment
       - Right/Down arrow moves focus to next segment
@@ -254,8 +255,9 @@ contracts:
     behavior: |
       When a segment has focus, pressing Enter or Space selects it
       (invokes onSelectionChange). Provides keyboard equivalence to click/tap.
+      Web: keydown handler. iOS: implicit via SwiftUI Button. Android: onKeyEvent.
     wcag: "2.1.1 Keyboard"
-    platforms: [web]
+    platforms: [web, ios, android]
     validation:
       - Enter selects focused segment
       - Space selects focused segment
