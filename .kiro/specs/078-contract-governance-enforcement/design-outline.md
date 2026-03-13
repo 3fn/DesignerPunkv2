@@ -151,6 +151,77 @@ Layer all three safeguards:
 
 6. **Should every implementation subtask require `_Contracts:` lines?** The web subtasks got them after the 3.1.CORRECTION, but iOS/Android subtasks in the same spec didn't. This suggests the task template should mandate that every implementation subtask maps to the contracts it satisfies — not just that contracts.yaml exists as a scaffolding artifact. This is the difference between "contracts exist" and "contracts are used as a specification tool."
 
+7. **Who owns the Concept Catalog update process?** (Finding 2) Three new concepts from Nav-SegmentedChoice-Base aren't in the catalog. Should the catalog update be: (a) part of the contracts.yaml authoring subtask, (b) a separate post-implementation audit step, (c) automated by scanning all contracts.yaml files? And who owns it — Thurgood (spec governance) or Lina (component architecture)?
+
+8. **Should the behavioral-contract-validation test auto-discover components?** (Finding 1) The hard-coded list covers 7 of 29 components. Switching to filesystem discovery (`src/components/core/*/contracts.yaml`) would be a small change with high impact. Is this a quick fix or should it wait for the full Option D implementation?
+
+---
+
+## Integration Audit Findings (Spec 049 Post-Completion)
+
+After completing all five Spec 049 tasks (web, iOS, Android), an audit of contract integration across Stemma systems revealed additional gaps beyond the original problem statement. These findings reinforce the case for Option D (layered safeguards).
+
+### Finding 1: Behavioral Contract Validation Test Has Hard-Coded Component List
+
+`src/__tests__/stemma-system/behavioral-contract-validation.test.ts` validates contracts across platforms, but only for 7 hard-coded components: Input-Text-Base, Input-Text-Email, Input-Text-Password, Input-Text-PhoneNumber, Button-CTA, Container-Base, Icon-Base.
+
+Nav-SegmentedChoice-Base and 21 other components with `contracts.yaml` files are not validated by this system-level test. The test should auto-discover components from the filesystem (scan `src/components/core/*/contracts.yaml`) rather than maintaining a manual list.
+
+**Impact**: System-level contract validation only covers 7 of 29 components (24%). New components are silently excluded.
+
+**Owner**: Thurgood (test governance)
+
+### Finding 2: Concept Catalog Is Stale
+
+The Contract-System-Reference Concept Catalog states "112 concepts across 10 categories. Derived from the 28 deployed contracts.yaml files as of Spec 063 completion."
+
+With Nav-SegmentedChoice-Base (component 29), three new concepts were introduced that aren't in the catalog:
+- `noop_active` (interaction) — activating the selected segment is a no-op
+- `initial_render` (animation) — no animation on first render
+- `aria_controls` (accessibility) — optional panel association via id prop
+
+The catalog has no update process — no trigger, no owner, no cadence.
+
+**Impact**: Cross-component concept searchability degrades as new components add unlisted concepts. An agent searching the catalog for "all components with aria-controls contracts" won't find Nav-SegmentedChoice-Base.
+
+**Owner**: Thurgood (spec governance) or Lina (component architecture) — needs decision
+
+### Finding 3: No Automated Contract-to-Test Mapping
+
+Nothing verifies that every contract in a `contracts.yaml` has a corresponding test. For Spec 049, Lina manually ensured all 24 contracts had test coverage across web (62 tests), iOS (24 tests), and Android (26 tests). This worked because Peter enforced it through review.
+
+Without Peter's enforcement, a contract could exist in `contracts.yaml` with no test validating it. The component MCP server indexes contracts but doesn't check test coverage.
+
+**Impact**: Contracts can become aspirational documentation rather than validated specifications.
+
+**Owner**: Thurgood (test governance)
+
+### Finding 4: Component Development Guide Has No Contracts Section
+
+The Component Development Guide (15,944 tokens, Layer 3 steering doc) covers tokens, icons, blend utilities, CSS patterns, incremental DOM, and more — but has zero mention of behavioral contracts, `contracts.yaml`, or the Contract-System-Reference.
+
+An agent loading this guide for component development gets no guidance on contracts as a workflow artifact.
+
+**Impact**: Contracts are invisible in the primary component development reference. Agents must independently know to consult Contract-System-Reference.md.
+
+**Owner**: Peter (steering doc authoring) — ballot measure required
+
+### Summary Table
+
+| Finding | Gap Type | Severity | Owner |
+|---------|----------|----------|-------|
+| Hard-coded component list in validation test | Tooling | High — 76% of components unvalidated | Thurgood |
+| Stale Concept Catalog (3 missing concepts) | Documentation | Medium — searchability degraded | TBD |
+| No contract-to-test mapping | Tooling | Medium — no enforcement of test coverage | Thurgood |
+| Component Dev Guide missing contracts section | Documentation | Medium — invisible in primary reference | Peter |
+
+### Relationship to Options
+
+These findings strengthen the case for **Option D** (all three layers):
+- Findings 1 and 3 are tooling gaps → Option C's automated validation
+- Finding 2 is a process gap → Option B's task template could include catalog update triggers
+- Finding 4 is a prompt/documentation gap → Option A's prompt fix, extended to the Component Development Guide
+
 ---
 
 ## Dependencies
