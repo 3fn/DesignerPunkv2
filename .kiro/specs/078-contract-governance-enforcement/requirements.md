@@ -26,7 +26,7 @@ The requirements implement Option D (approved): prompt fix + task template enfor
 1. WHEN Lina's scaffolding workflow is executed THEN the workflow SHALL include a dedicated step for authoring `contracts.yaml` between types.ts authoring and platform implementation.
 2. WHEN the contracts.yaml step is reached THEN the step SHALL instruct the agent to query the Concept Catalog via MCP before authoring.
 3. WHEN the contracts.yaml step is reached THEN the step SHALL state that all contract names must follow `{category}_{concept}` naming from the Concept Catalog.
-4. WHEN a new concept is introduced that does not exist in the Concept Catalog THEN the agent SHALL propose a catalog addition (ballot measure) before proceeding.
+4. WHEN a new concept is introduced that does not exist in the Concept Catalog THEN the agent SHALL propose a catalog addition (ballot measure) before proceeding to platform implementation. The agent may complete contracts.yaml authoring with the new concept name; the ballot measure gates implementation, not authoring. The Req 4 validation test enforces catalog alignment in CI.
 
 ---
 
@@ -61,9 +61,9 @@ The requirements implement Option D (approved): prompt fix + task template enfor
 #### Acceptance Criteria
 
 1. WHEN `npm test` is run THEN a test SHALL parse each `contracts.yaml` file and extract contract concept names.
-2. WHEN a contract concept name does not exist in the Concept Catalog THEN the test SHALL fail with an error identifying the component, the contract name, and the unrecognized concept.
+2. WHEN a contract concept name does not exist in the Concept Catalog THEN the test SHALL fail with an error identifying the component, the contract name, the unrecognized concept, and the category (e.g., "Component Nav-SegmentedChoice-Base: contract 'interaction_noop_active' has unrecognized concept 'noop_active' in category 'interaction'").
 3. WHEN the test parses the Concept Catalog THEN it SHALL read from `Contract-System-Reference.md` markdown directly (no separate machine-readable format).
-4. WHEN the test parses the Concept Catalog THEN it SHALL include a structural assertion (expected column headers, minimum row count) that fails loudly if the catalog format changes.
+4. WHEN the test parses the Concept Catalog THEN it SHALL include a structural assertion (expected column headers, row count >= current baseline of 112) that fails loudly if the catalog format changes or concepts are deleted. The floor rises as concepts are added.
 
 ---
 
@@ -80,13 +80,13 @@ The requirements implement Option D (approved): prompt fix + task template enfor
 
 ### Requirement 6: Existing Component Audit
 
-**User Story**: As a test governance specialist, I want a one-time audit of all existing components' contracts against the Concept Catalog, so that the catalog name validation test (Req 4) doesn't fail on pre-existing non-catalog names when it ships.
+**User Story**: As the Stemma component specialist, I want a one-time audit of all existing components' contracts against the Concept Catalog, so that the catalog name validation test (Req 4) doesn't fail on pre-existing non-catalog names when it ships.
 
 #### Acceptance Criteria
 
 1. WHEN the audit is performed THEN it SHALL scan all `contracts.yaml` files under `src/components/core/` and extract all concept names.
-2. WHEN a concept name is not in the Concept Catalog THEN the audit SHALL classify it as either (a) a legitimate new concept requiring catalog addition or (b) an invented name requiring renaming.
-3. WHEN the audit is complete THEN all non-catalog names SHALL be resolved (catalog updated or name fixed) before the Req 4 validation test is enabled.
+2. WHEN a concept name is not in the Concept Catalog THEN the audit SHALL classify it as either (a) a legitimate new concept requiring catalog addition or (b) an invented name requiring renaming. Lina performs the audit; Thurgood reviews the classification decisions.
+3. WHEN the audit is complete THEN all non-catalog names SHALL be resolved (catalog updated or name fixed) and the Concept Catalog header SHALL be updated to reflect the current concept count and component count, before the Req 4 validation test is enabled.
 
 ---
 
@@ -110,10 +110,7 @@ The requirements implement Option D (approved): prompt fix + task template enfor
 1. WHEN Stemma-referencing steering docs are updated THEN the following critical docs SHALL include contracts as a core Stemma concept:
    - `Rosetta-Stemma-Systems-Overview.md` (Layer 1, always-loaded)
    - `Component-Primitive-vs-Semantic-Philosophy.md`
-2. WHEN Stemma-referencing steering docs are updated THEN the following docs SHALL be reviewed and updated where appropriate:
-   - `Rosetta-System-Architecture.md`
-   - `Process-Integration-Methodology.md`
-   - Component family docs that reference Stemma without mentioning contracts
+2. WHEN Stemma-referencing steering docs are audited THEN a scan of all steering docs mentioning "Stemma" SHALL be performed, and a list of docs requiring contracts-as-core-Stemma updates SHALL be produced. Updates to docs on that list are scoped as individual ballot measures. The scan is the deliverable; the updates are individually bounded.
 3. WHEN updates are applied THEN each update SHALL require a ballot measure (steering doc change).
 
 ---
@@ -148,10 +145,19 @@ This spec is primarily process and tooling infrastructure. Requirements 1, 2, 7,
 | Q6 | Peter/Thurgood | Every implementation subtask requires `_Contracts:` lines |
 | Q7 | Peter/Thurgood | Lina owns Concept Catalog updates |
 | Q8 | Peter/Thurgood | Auto-discovery for behavioral-contract-validation test |
-| Ada R1 | Ada | Structural assertion on catalog parsing — incorporated in Req 4 AC 4 |
-| Ada R1 | Ada | One-time audit of existing components — Req 6 |
-| Ada R1 | Ada | Ballot measure dependency chain — monitor after 2-3 components |
-| Lina R1 | Lina | CDG contracts section as fourth safeguard — Req 7 |
-| Lina R1 | Lina | Contract inheritance out of scope — noted as boundary |
-| Lina R1 | Lina | `_Contracts:` lines are real safeguard, not overhead — confirmed Q6 |
-| Finding 5 | Thurgood | Stemma docs don't reflect contracts as core — Req 8 |
+| Ada DO-R1 | Ada | Structural assertion on catalog parsing — incorporated in Req 4 AC 4 |
+| Ada DO-R1 | Ada | One-time audit of existing components — Req 6 |
+| Ada DO-R1 | Ada | Ballot measure dependency chain — monitor after 2-3 components |
+| Lina DO-R1 | Lina | CDG contracts section as fourth safeguard — Req 7 |
+| Lina DO-R1 | Lina | Contract inheritance out of scope — noted as boundary |
+| Lina DO-R1 | Lina | `_Contracts:` lines are real safeguard, not overhead — confirmed Q6 |
+| Finding 5 | Thurgood | Stemma docs don't reflect contracts as core — Req 8 (added to design-outline.md) |
+| Lina Req-R1 | Lina | Req 1 AC 4: ballot measure gates implementation, not authoring — clarified |
+| Lina Req-R1 | Lina | Req 4 AC 2: include category in error message — added |
+| Lina Req-R1 | Lina | Req 6: Lina performs audit, Thurgood reviews — updated user story and AC 2 |
+| Lina Req-R1 | Lina | Req 8 AC 2: open-ended — reframed as bounded scan + individual ballot measures |
+| Lina Req-R1 | Lina | Concept Catalog header count — folded into Req 6 AC 3 |
+| Ada Req-R1 | Ada | Req 4 AC 4: baseline row count >= 112, floor rises — refined |
+| Ada Req-R1 | Ada | Req 8 AC 2: scan as deliverable, not open-ended update — incorporated |
+| Ada Req-R1 | Ada | Req 6 AC 3: catalog header update — incorporated |
+| Ada Req-R1 | Ada | Req 4 AC 3: catalog table has separate columns — implementation note, no AC change |

@@ -98,6 +98,17 @@ Ada raises a good point. I'd recommend a one-time audit before the catalog name 
 - Contract-to-test traceability intentionally excluded (deferred) → design-outline.md § "Deferred: Contract-to-Test Traceability"
 - Contract inheritance intentionally excluded (out of scope) → feedback.md § "Design Outline Feedback" [LINA R1]
 
+#### [THURGOOD R2]
+- Incorporated Lina Req-R1 items 1-5 and Ada Req-R1 items 1-4.
+- Req 1 AC 4: Clarified — ballot measure gates implementation, not authoring. Lina can finish contracts.yaml, then propose ballot measure in parallel with implementation prep. Req 4 test is the CI enforcement point.
+- Req 4 AC 2: Added category to error message per Lina's suggestion.
+- Req 4 AC 4: Refined baseline to >= 112, floor rises per Ada's suggestion.
+- Req 6: Updated user story to Stemma component specialist. AC 2 clarifies Lina performs, Thurgood reviews. AC 3 now includes catalog header count update per both Lina and Ada.
+- Req 8 AC 2: Reframed per Ada's suggestion — scan is the deliverable, updates are individually bounded ballot measures.
+- Ada's note on Req 4 AC 3 (separate columns in catalog table): noted as implementation detail, no AC change needed.
+- Lina's question about Finding 5 in design outline: confirmed, Finding 5 was added to design-outline.md § "Integration Audit Findings" before requirements were written.
+- Resolved review items table updated with all requirements-round feedback (10 new entries).
+
 #### [LINA R1]
 
 Overall: the requirements are well-structured and trace cleanly back to the design outline decisions and feedback incorporation. All 8 open questions and the key feedback items from Ada and me are represented. A few items:
@@ -116,12 +127,63 @@ Overall: the requirements are well-structured and trace cleanly back to the desi
 
 - The Resolved Review Items table is a nice touch — clear traceability from feedback to requirements. Finding 5 is referenced but I don't see it in the design outline's Integration Audit Findings (which has Findings 1-4). Was Finding 5 added to the design outline, or is it only in the requirements doc? If only in requirements, the design outline should be updated for consistency. → requirements.md § "Resolved Review Items"
 
+#### [ADA R1]
+
+Solid requirements doc. Clean traceability from design outline → feedback → requirements. My structural assertion recommendation (Req 4 AC 4) and the existing component audit (Req 6) are both well-represented. A few items:
+
+- Req 4 AC 3 says "read from `Contract-System-Reference.md` markdown directly." The concept names in that catalog follow `{category}_{concept}` format, but the catalog table itself lists category and concept in separate columns. The test needs to reconstruct the full contract name from the table columns to match against contracts.yaml entries. This is an implementation detail, not an AC issue, but worth flagging so the implementer doesn't assume the catalog lists full `{category}_{concept}` strings. → requirements.md § "Requirement 4" AC 3
+
+- Lina's point about Req 1 AC 4 ("before proceeding") is correct and I'd second it. The ballot measure dependency should gate *implementation*, not *authoring*. Contracts.yaml should be completable with new concept names, then the ballot measure runs in parallel with implementation prep. The Req 4 validation test is the enforcement point — it fails in CI if the catalog isn't updated. This keeps the workflow flowing without losing the safeguard. → requirements.md § "Requirement 1" AC 4
+
+- Req 4 AC 4 (my structural assertion recommendation) says "expected column headers, minimum row count." I'd refine: the minimum row count should be the *current* catalog size (112 concepts), not a static number. If the count drops below the known baseline, something was deleted — that's a different failure mode than format change, but equally worth catching. The assertion becomes: "catalog has expected headers AND row count >= 112." The floor rises as concepts are added. → requirements.md § "Requirement 4" AC 4
+
+- Lina's observation about Req 8 AC 2 being open-ended is a real concern. "Reviewed and updated where appropriate" is unbounded. I'd recommend: Req 8 AC 1 covers the two critical docs (bounded, required). Req 8 AC 2 should be reframed as "a scan of steering docs mentioning 'Stemma' SHALL be performed, and a list of docs requiring updates SHALL be produced. Updates to docs on that list are scoped as individual ballot measures." This makes the *scan* the deliverable, not an open-ended update pass. The scan is bounded; the updates are individually scoped. → requirements.md § "Requirement 8" AC 2
+
+- Lina's catch about the Concept Catalog header count ("112 concepts across 10 categories") going stale after Req 6 is valid. I'd fold it into Req 6 AC 3: "WHEN the audit is complete THEN the Concept Catalog header SHALL be updated to reflect the current concept count and component count." Small addition, prevents immediate staleness. → requirements.md § "Requirement 6" AC 3
+
+- No token domain concerns. Reqs 3-5 are test infrastructure in Thurgood's domain. Reqs 1, 2, 7, 8, 9 are process/documentation. None of this touches the token pipeline, generators, or platform builders. My domain stays clean.
+
 ---
 
 ## Design Feedback
 
 ### Context for Reviewers
-- [Populated by spec author before requesting review]
+- Architecture shows 4 safeguard layers operating at different lifecycle points, each independent → design.md § "Architecture"
+- Catalog parsing note: actual format is category headings + inline concept lists, NOT table format (corrects Ada's R1 assumption) → design.md § "Components and Interfaces" Catalog Name Validation
+- Contract name splitting: `{category}_{concept}` where category is first segment before `_`, concept is everything after → design.md § "Components and Interfaces" Catalog Name Validation
+- Auto-discovery replaces hard-coded array with filesystem scan, no other test logic changes → design.md § "Components and Interfaces" Behavioral Contract Validation
+- 5 design decisions with rationale and trade-offs → design.md § "Design Decisions"
+- Empty contracts.yaml is valid (existence check passes, name validation has nothing to check) → design.md § "Error Handling"
+
+#### [ADA R1]
+
+Clean design. The architecture diagram showing independent safeguard layers at different lifecycle points is the right framing — no single point of failure. A few items:
+
+- The catalog parsing note correcting my R1 assumption is appreciated. I assumed a table format; the actual format is category headings (`### accessibility (22)`) with inline backtick-delimited concept lists. This is a more fragile format to parse than a table — inline concept lists separated by `·` are less structured than pipe-delimited table rows. The structural assertion (10 categories, >= 112 concepts) becomes even more important here. I'd add one more assertion: verify that every category heading's parenthetical count matches the actual number of concepts parsed from that category's inline list. E.g., `### accessibility (22)` should yield exactly 22 concepts. This catches partial parsing failures where the regex misses some backtick-delimited names. → design.md § "Components and Interfaces" Catalog Name Validation
+
+- Contract name splitting logic is correct but the design should document one edge case: what about contract names with multiple underscores where the category itself contains an underscore? Looking at the current catalog categories (accessibility, animation, content, data, interaction, layout, noop, state, visual, validation) — none contain underscores, so the "first underscore splits category from concept" rule works today. But if a future category like `data_binding` were added, `data_binding_source` would be ambiguous: is it category `data`, concept `binding_source`? Or category `data_binding`, concept `source`? The structural assertion on category count (exactly 10) would catch a new category being added, which is the right moment to revisit the splitting logic. Worth a comment in the test code, not an AC change. → design.md § "Components and Interfaces" Catalog Name Validation
+
+- Decision 2 (parse markdown directly) is correct and I'd reinforce it. The process-first principle applies. HOWEVER, the catalog format (category headings + inline lists) is less stable than a table format. If the catalog is ever restructured — say, into a table for readability — the parser breaks. The structural assertion catches this, but the fix requires updating the parser. Worth noting in the trade-offs: "format coupling is to the *current* inline-list format, not just to markdown in general." → design.md § "Design Decisions" Decision 2
+
+- Decision 4 (scan as deliverable) directly addresses the Req 8 AC 2 concern Lina and I both raised. The scan is bounded, updates are individually scoped. This is the right resolution.
+
+- No token domain concerns. The test files live in `src/__tests__/stemma-system/`, which is outside the token pipeline entirely. The catalog parsing doesn't interact with any token generators or platform builders.
+
+#### [LINA R1]
+
+The design is clean and implementable. The architecture diagram, error handling edge cases, and design decisions are all well-reasoned. A few items:
+
+- Ada's suggestion to verify each category heading's parenthetical count against actual parsed concepts is a good one. During 049, I authored 24 contracts across 10 categories — if the parser had silently missed one due to a formatting quirk (e.g., a concept name with a period or hyphen inside backticks), the structural assertion on total count might still pass while individual category counts would catch it. Low effort, high diagnostic value. → design.md § "Components and Interfaces" Catalog Name Validation
+
+- The catalog parsing note correcting Ada's table assumption is important. I want to flag a related concern: the inline concept list format uses `·` (middle dot) as a separator. If someone accidentally uses a regular period `.` or a bullet `•` instead, the parser would miss concepts. The parser should be explicit about the delimiter and the structural per-category count assertion would catch this. Not an AC change — just an implementation note for whoever writes the test. → design.md § "Components and Interfaces" Catalog Name Validation
+
+- Edge case 4 (empty contracts.yaml) — I agree this is valid during scaffolding, but I'd add a nuance: an empty contracts.yaml should be valid for the *existence check* (Req 3) and the *name validation* (Req 4), but the *behavioral-contract-validation test* (Req 5, auto-discovery) would discover the component and then find zero contracts to validate. Is that a pass or a warning? If a component has platforms/ and contracts.yaml but zero contracts defined, that's likely an incomplete scaffolding state, not a finished component. Suggest the auto-discovery test (Req 5) skip components with zero contracts rather than failing on them — they'll be caught by the workflow (the contracts authoring subtask isn't complete until contracts are defined). → design.md § "Error Handling" Edge Case 4
+
+- Decision 1 (separate test files) is correct. I'd note one practical benefit not mentioned: when a test fails in CI, the file name immediately tells you what's wrong. `contract-existence-validation.test.ts` failing means "missing contracts.yaml." `contract-catalog-name-validation.test.ts` failing means "naming issue." If they were combined, you'd need to read the test output to distinguish the failure mode. → design.md § "Design Decisions" Decision 1
+
+- Decision 5 (Lina performs audit, Thurgood reviews) — confirmed, this matches my R1 volunteer and the requirements feedback. I have the Stemma domain knowledge to classify concepts; Thurgood has the governance perspective to validate the classifications. The design correctly captures this split. → design.md § "Design Decisions" Decision 5
+
+- One thing I notice is missing from the design: the steering doc changes (Reqs 1, 2, 7, 8) don't have design-level detail. The test infrastructure (Reqs 3-5) has pseudocode, file paths, error formats, and edge cases. The steering doc changes have one-line descriptions ("Add Step 3", "New section covering..."). I understand these are ballot measures and the exact content is authored at implementation time, but some design-level guidance would help — especially for Req 7 (CDG contracts section). What subsections should it have? What MCP queries should it reference? What anti-patterns should it call out? Without this, the implementer is designing the section from scratch during implementation. HOWEVER — this might be intentional. Steering doc content is Peter's domain (ballot measure model), so over-specifying it in the design could conflict with Peter's editorial authority. I'd defer to Peter on whether more design detail is wanted here. → design.md § "Components and Interfaces" Steering Doc Changes
 
 ---
 
