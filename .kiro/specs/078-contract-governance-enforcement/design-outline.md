@@ -214,14 +214,39 @@ An agent loading this guide for component development gets no guidance on contra
 
 **Owner**: Peter (steering doc authoring) — ballot measure required
 
+### Finding 5: Stemma Documentation Doesn't Reflect Contracts as Core
+
+With the key framing decision that contracts are core Stemma (not a separate governance layer), 10 steering docs that reference Stemma have no mention of contracts. These docs give agents an incomplete mental model of what Stemma is.
+
+**Critical gaps:**
+- `Rosetta-Stemma-Systems-Overview.md` — Layer 1, `inclusion: always`. The visual architecture overview every agent reads at session start. If it shows Stemma without contracts, agents start every session with an incomplete picture.
+- `Component-Primitive-vs-Semantic-Philosophy.md` — Describes component architecture philosophy without mentioning contracts as the specification layer.
+
+**Lower priority gaps (component family docs without contracts mention):**
+- `Component-Family-Avatar.md`
+- `Component-Family-Divider.md`
+- `Component-Family-Loading.md`
+- `Component-Family-Data-Display.md`
+- `Component-Family-Modal.md`
+- `Component-Family-Progress.md`
+
+**Also missing contracts:**
+- `Rosetta-System-Architecture.md` — Mentions Stemma but not contracts
+- `Process-Integration-Methodology.md` — Cross-spec integration without contracts as integration artifacts
+
+**Impact**: Agents working with Stemma docs don't encounter contracts as a core concept. The reframing exists in 078's design outline but isn't reflected in the documentation agents actually read.
+
+**Owner**: Peter (steering doc authoring) — ballot measures required. Thurgood audits which docs need updates; Ada/Lina review for domain accuracy.
+
 ### Summary Table
 
 | Finding | Gap Type | Severity | Owner |
 |---------|----------|----------|-------|
 | Hard-coded component list in validation test | Tooling | High — 76% of components unvalidated | Thurgood |
-| Stale Concept Catalog (3 missing concepts) | Documentation | Medium — searchability degraded | TBD |
-| No contract-to-test mapping | Tooling | Medium — no enforcement of test coverage | Thurgood |
-| Component Dev Guide missing contracts section | Documentation | Medium — invisible in primary reference | Peter |
+| Stale Concept Catalog (3 missing concepts) | Documentation | Medium — searchability degraded | Lina (catalog), Thurgood (audit) |
+| No contract-to-test mapping | Tooling | Medium — no enforcement of test coverage | Deferred |
+| Component Dev Guide missing contracts section | Documentation | Medium — invisible in primary reference | Peter (ballot measure) |
+| Stemma docs don't reflect contracts as core | Documentation | High — agents start sessions with incomplete Stemma model | Peter (ballot measures), Thurgood (audit) |
 
 ### Relationship to Options
 
@@ -229,6 +254,7 @@ These findings strengthen the case for **Option D** (all three layers):
 - Findings 1 and 3 are tooling gaps → Option C's automated validation
 - Finding 2 is a process gap → Option B's task template could include catalog update triggers
 - Finding 4 is a prompt/documentation gap → Option A's prompt fix, extended to the Component Development Guide
+- Finding 5 is a documentation gap → requires a documentation audit task to update Stemma-referencing docs with contracts-as-core framing (ballot measures required)
 
 ---
 

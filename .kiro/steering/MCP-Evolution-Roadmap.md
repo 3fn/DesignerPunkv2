@@ -124,6 +124,26 @@ Strategic gaps are easy to identify in conversation and easy to forget between s
 
 ---
 
+### Gap 6: Behavioral Discovery via Contracts
+
+**What's missing**: The Application MCP supports component discovery by purpose (family guidance, selection rules) and structure (schema, inheritance), but not by behavior. With contracts reframed as core Stemma (Spec 078), the Concept Catalog (112 concepts, 10 categories) provides a structured behavioral vocabulary — but it's not queryable through the MCP.
+
+**What it would unlock:**
+- Behavioral search: "which components guarantee keyboard navigation?" → all components with `accessibility_keyboard_navigation` contracts
+- Behavioral gap analysis: "I need a component with drag support" → no component has `interaction_drag`, surfacing a discoverable gap
+- Composition validation: "do all 4 components in my form guarantee focus management?" → behavioral compatibility check at the composition level
+- Accessibility auditing: "which components lack screen reader contracts?" → systematic coverage visibility
+
+**Where it lives**: Application MCP — contracts indexed alongside schema and component-meta, queryable by concept category or specific concept name.
+
+**Priority**: Low. Requires Spec 078 completion (contracts as core Stemma, catalog validation, auto-discovery). Current consumers of contract data are implementing agents and test infrastructure, not product agents. Value increases when product agents are actively composing UIs and need behavioral guarantees.
+
+**Trigger**: A product agent build cycle where component selection requires behavioral guarantees (e.g., accessibility compliance verification), and the agent can't discover which components meet the requirement without manually reading contracts.yaml files.
+
+**Possible approach**: Extend the Application MCP's component indexing to read contracts.yaml alongside schema.yaml and component-meta.yaml. Add a `queryByContract()` or `queryByBehavior()` tool that accepts concept names or categories and returns matching components. The Concept Catalog provides the vocabulary; the contracts.yaml files provide the per-component data.
+
+---
+
 ## Deferred from Spec 071
 
 These were identified in the 071 design outline and explicitly deferred:

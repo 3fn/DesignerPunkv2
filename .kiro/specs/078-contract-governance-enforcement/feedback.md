@@ -86,7 +86,35 @@ Ada raises a good point. I'd recommend a one-time audit before the catalog name 
 ## Requirements Feedback
 
 ### Context for Reviewers
-- [Populated by spec author before requesting review]
+- 9 requirements covering Option D's three layers (prompt, task template, automated) plus documentation and audit → requirements.md
+- Req 1: Lina's scaffolding prompt fix → design-outline.md § "Option A"
+- Req 2: Task template enforcement including `_Contracts:` lines on implementation subtasks → design-outline.md § "Option B", § "Open Questions" Q6
+- Reqs 3-5: Automated validation (existence check, catalog name validation, auto-discovery fix) → design-outline.md § "Option C", § "Integration Audit Findings" Findings 1-2
+- Req 4 AC 4: Structural assertion on catalog parsing per Ada R1 feedback → feedback.md § "Design Outline Feedback" [ADA R1]
+- Req 6: One-time audit of existing components per Ada R1 observation → feedback.md § "Design Outline Feedback" [ADA R1]
+- Req 7: CDG update per Lina R1 feedback → feedback.md § "Design Outline Feedback" [LINA R1]
+- Req 8: Stemma documentation updates per Finding 5 → design-outline.md § "Integration Audit Findings" Finding 5
+- Req 9: Concept Catalog ownership per Q7 resolution → design-outline.md § "Open Questions" Q7
+- Contract-to-test traceability intentionally excluded (deferred) → design-outline.md § "Deferred: Contract-to-Test Traceability"
+- Contract inheritance intentionally excluded (out of scope) → feedback.md § "Design Outline Feedback" [LINA R1]
+
+#### [LINA R1]
+
+Overall: the requirements are well-structured and trace cleanly back to the design outline decisions and feedback incorporation. All 8 open questions and the key feedback items from Ada and me are represented. A few items:
+
+- Req 1 AC 4 creates a sequential dependency: discover new concept → ballot measure → wait for Peter → resume. The AC says "before proceeding" — does "proceeding" mean before finishing contracts.yaml, or before starting platform implementation? I'd recommend clarifying: the agent should be able to *finish authoring* contracts.yaml with the new concept name, then propose the ballot measure, then proceed to implementation. The catalog addition and the implementation can be parallel as long as the catalog is updated before the Req 4 validation test runs in CI. Blocking contracts authoring itself on the ballot measure would be unnecessarily sequential. → requirements.md § "Requirement 1" AC 4
+
+- Req 3 AC 1 says "every component directory containing a `platforms/` subdirectory." Worth noting: some component directories might have `platforms/` with only placeholder files (e.g., a single-line comment). The existence check should still flag these — a placeholder platform directory is a signal that contracts should be authored as part of scaffolding. This is consistent with my Finding 1 response in R1. No AC change needed, just confirming the intent is correct as written. → requirements.md § "Requirement 3" AC 1
+
+- Req 4 AC 2 says the test fails with "the unrecognized concept." Suggest also including the category in the error message — e.g., "Component Nav-SegmentedChoice-Base: contract 'interaction_noop_active' has unrecognized concept 'noop_active' in category 'interaction'." The category context helps the developer decide whether this is a new concept (add to catalog) or a naming mistake (rename to existing concept). Small quality-of-life improvement. → requirements.md § "Requirement 4" AC 2
+
+- Req 6 (existing component audit) is correctly scoped as a one-time prerequisite for Req 4. One question: who performs the audit? The user story says "test governance specialist" (Thurgood), but the actual work is scanning contracts.yaml files and classifying concepts — that's closer to my domain (Stemma component knowledge). I volunteered in my R1 feedback to run it. Suggest the requirement clarify: Lina performs the audit, Thurgood reviews the classification decisions. → requirements.md § "Requirement 6"
+
+- Req 7 and Req 8 are both steering doc ballot measures. Req 7 is one section in one doc (Component Development Guide). Req 8 touches 2 critical docs and potentially several more. These have very different scopes. Req 8's AC 2 ("reviewed and updated where appropriate") is open-ended — how do we know when it's done? Suggest adding a bounded list or a "minimum set" so the task is completable. Otherwise it risks becoming an unbounded audit of every steering doc that mentions Stemma. → requirements.md § "Requirement 8" AC 2
+
+- I don't see a requirement for updating the Contract-System-Reference Concept Catalog count ("112 concepts across 10 categories. Derived from the 28 deployed contracts.yaml files"). After Req 6 (audit + catalog additions), this header will be stale. It's a small thing, but the catalog's own metadata should be accurate. Could be folded into Req 6 AC 3 or Req 9. → requirements.md § "Requirement 9"
+
+- The Resolved Review Items table is a nice touch — clear traceability from feedback to requirements. Finding 5 is referenced but I don't see it in the design outline's Integration Audit Findings (which has Findings 1-4). Was Finding 5 added to the design outline, or is it only in the requirements doc? If only in requirements, the design outline should be updated for consistency. → requirements.md § "Resolved Review Items"
 
 ---
 
