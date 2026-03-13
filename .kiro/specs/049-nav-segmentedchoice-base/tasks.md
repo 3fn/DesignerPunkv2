@@ -315,7 +315,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
     - iOS and Android sections added as stubs, completed in Tasks 4/5
     - _Requirements: 11.1_
 
-- [ ] 4. iOS Implementation
+- [x] 4. iOS Implementation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -340,7 +340,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
   **Post-Completion:**
   - Commit: `./.kiro/hooks/commit-task.sh "Task 4 Complete: iOS Implementation"`
 
-  - [ ] 4.1 SwiftUI View structure and rendering
+  - [x] 4.1 SwiftUI View structure and rendering
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -348,8 +348,9 @@ Documentation (README, Navigation family steering doc update) is included as sub
     - Apply token-based styling
     - Equal-width layout, Standard and Condensed sizes
     - _Requirements: 9.1–9.8, 10.2, 7.1–7.3_
+    - _Contracts: visual_background, visual_border, visual_shadow, visual_state_colors, visual_size_variants, layout_flexible_length, content_displays_label, content_supports_icon, content_displays_fallback_
 
-  - [ ] 4.2 Selection logic and indicator animation
+  - [x] 4.2 Selection logic and indicator animation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -359,8 +360,9 @@ Documentation (README, Navigation family steering doc update) is included as sub
     - `UIAccessibility.isReduceMotionEnabled` check
     - No animation on initial render
     - _Requirements: 1.1–1.5, 3.1–3.7_
+    - _Contracts: interaction_pressable, interaction_noop_active, validation_selection_constraints, animation_coordination, accessibility_reduced_motion, animation_initial_render_
 
-  - [ ] 4.3 Accessibility
+  - [x] 4.3 Accessibility
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -368,13 +370,15 @@ Documentation (README, Navigation family steering doc update) is included as sub
     - Keyboard navigation (external keyboard support)
     - Icon segments announced by `accessibilityLabel`
     - _Requirements: 4.1–4.5, 5.1–5.5_
+    - _Contracts: accessibility_aria_roles, accessibility_aria_controls, accessibility_alt_text, interaction_keyboard_navigation, interaction_keyboard_activation, interaction_roving_tabindex, interaction_focus_ring_
 
-  - [ ] 4.4 iOS behavioral contract tests
+  - [x] 4.4 iOS behavioral contract tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
     - Selection, animation, accessibility, size variant tests
     - _Requirements: 1–9_
+    - _Validates contracts: all iOS-applicable contracts_
 
 - [ ] 5. Android Implementation
 
@@ -411,6 +415,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
     - Indicator shadow: `Modifier.shadow(elevation, shape)` + `.clip(shape)` — NOT `Surface(elevation)` or `mapShadowToElevation()`
     - Equal-width layout, Standard and Condensed sizes
     - _Requirements: 9.1–9.8, 10.3, 10.6, 7.1–7.3_
+    - _Contracts: visual_background, visual_border, visual_shadow, visual_state_colors, visual_size_variants, layout_flexible_length, content_displays_label, content_supports_icon, content_displays_fallback_
 
   - [ ] 5.2 Selection logic and indicator animation
     **Type**: Implementation
@@ -423,6 +428,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
     - `Settings.Global.ANIMATOR_DURATION_SCALE` check for reduced motion
     - No animation on initial render
     - _Requirements: 1.1–1.5, 3.1–3.7_
+    - _Contracts: interaction_pressable, interaction_noop_active, validation_selection_constraints, animation_coordination, accessibility_reduced_motion, animation_initial_render_
 
   - [ ] 5.3 Accessibility
     **Type**: Implementation
@@ -432,6 +438,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
     - Keyboard navigation (hardware keyboard)
     - Icon segments announced by `accessibilityLabel`
     - _Requirements: 4.1–4.5, 5.1–5.5_
+    - _Contracts: accessibility_aria_roles, accessibility_aria_controls, accessibility_alt_text, interaction_keyboard_navigation, interaction_keyboard_activation, interaction_focus_ring_
 
   - [ ] 5.4 Android behavioral contract tests
     **Type**: Implementation
@@ -440,6 +447,7 @@ Documentation (README, Navigation family steering doc update) is included as sub
     - Selection, animation, accessibility, size variant tests
     - Shadow implementation test: verify `Modifier.shadow()` used, not elevation
     - _Requirements: 1–9, 10.6_
+    - _Validates contracts: all Android-applicable contracts_
 
   - [ ] 5.5 Navigation family steering doc update
     **Type**: Implementation

@@ -28,6 +28,16 @@ The result: implementation preceded specification, and when specification was wr
 - Non-catalog contract names break cross-component searchability. An agent searching for "all components with hover contracts" won't find `interaction_hover_inactive` when the catalog concept is `interaction_hover`.
 - The correction required a dedicated task (3.1.CORRECTION), adding overhead and creating a visible process gap in the task history.
 
+### Secondary Finding: Contract References in Task Plans
+
+Discovered during Spec 049 Task 4.1 (iOS implementation): even after contracts.yaml was authored and the web subtasks were updated with `_Contracts:` lines, the iOS and Android subtasks in the same spec had no contract references. The contracts existed, the implementation satisfied them, but:
+
+- The task plan didn't map subtasks to contracts, so the implementer had no checklist
+- The completion docs didn't track contract coverage
+- The gap was only caught when Peter asked "should any of these use contracts?"
+
+This is a distinct failure from "contracts not authored" — it's "contracts not integrated into the workflow." The file exists but isn't used as a specification tool across all platform subtasks. Thurgood added `_Contracts:` lines to web subtasks after the 3.1.CORRECTION but didn't propagate to iOS/Android subtasks in the same task plan.
+
 ---
 
 ## Root Cause Analysis
@@ -39,6 +49,8 @@ The result: implementation preceded specification, and when specification was wr
 | No automated validation of contracts existence | Tooling | Ada or Lina (MCP/test infrastructure) |
 | No automated validation of catalog name alignment | Tooling | Ada or Lina (MCP/test infrastructure) |
 | Agent didn't consult Concept Catalog before authoring | Agent discipline | Lina (self-monitoring) |
+| Implementation subtasks don't reference contracts | Spec planning process | Thurgood (task plan authoring) |
+| Contract coverage not tracked in completion docs | Agent discipline | Lina (completion documentation) |
 
 ---
 
@@ -136,6 +148,8 @@ Layer all three safeguards:
 4. **Should non-catalog names be errors or warnings?** New concepts are legitimate (Nav-SegmentedChoice-Base introduced `interaction_noop_active` and `animation_initial_render`). Hard failures would block legitimate new concepts. Warnings with a "confirm this is intentional" gate might be the right balance.
 
 5. **Does Thurgood's task planning process need a formal checklist?** Or is a note in Process-Spec-Planning.md sufficient? The current spec planning standards don't have a "required artifacts per component" checklist.
+
+6. **Should every implementation subtask require `_Contracts:` lines?** The web subtasks got them after the 3.1.CORRECTION, but iOS/Android subtasks in the same spec didn't. This suggests the task template should mandate that every implementation subtask maps to the contracts it satisfies — not just that contracts.yaml exists as a scaffolding artifact. This is the difference between "contracts exist" and "contracts are used as a specification tool."
 
 ---
 
