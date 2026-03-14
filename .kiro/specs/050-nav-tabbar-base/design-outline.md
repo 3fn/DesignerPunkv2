@@ -1,28 +1,37 @@
-# Nav-BottomTabs-Base Component - Design Outline
+# Nav-TabBar-Base Component - Design Outline
 
 **Date**: January 19, 2026
+**Revised**: March 14, 2026
 **Purpose**: Capture design decisions and token requirements before creating full spec
 **Status**: Design Outline (Pre-Requirements)
 
-> ⚠️ **PLACEHOLDER NOTICE**: The visual specifications, token references, and pixel values in this document are preliminary placeholders largely derived from the wrkingClass prototype. They are NOT yet aligned with DesignerPunk's token system and design language. This outline must be reviewed and updated to use proper DesignerPunk tokens before proceeding to requirements.md.
+> ⚠️ **PLACEHOLDER NOTICE**: The visual specifications, token references, and pixel values in this document are preliminary placeholders largely derived from the wrkingClass prototype. They are NOT yet aligned with DesignerPunk's token system and design language. This outline must be reviewed and updated to use proper DesignerPunk tokens before proceeding to requirements.md. See feedback.md for specific issues.
+
+> ⚠️ **SCOPE CHANGE (2026-03-14)**: Originally scoped as Nav-BottomTabs-Base covering all platforms. After architectural review, split into two components:
+> - **Nav-TabBar-Base** (this spec) — Mobile-first tab bar navigation. Icon+label, 3-5 items, safe area aware. Primary use: iOS and Android. Secondary: mobile web.
+> - **Nav-Header-Base** (separate spec TBD) — Web-first header navigation. Label-primary, flexible item count, responsive, overflow-capable.
+>
+> Rationale: The behavioral contracts, interaction models, content patterns, and platform-native expectations diverge enough that a single component would require extensive runtime branching — counter to DesignerPunk's build-time platform separation philosophy.
 
 ---
 
 ## Component Overview
 
-BottomTabs is a primary navigation component that provides persistent access to top-level destinations in an app. It appears at the bottom of the screen and allows users to switch between major sections with a single tap.
+Nav-TabBar-Base is a primary navigation component that provides persistent access to top-level destinations in an app. It appears at the bottom of the screen and allows users to switch between major sections with a single tap.
 
 **Key Characteristics**:
 - **Primary navigation**: Top-level app destinations
 - **Persistent**: Always visible during navigation
 - **Icon + label**: Visual and text identification
-- **Badge support**: Notification indicators
-- **Platform-agnostic**: Unified API across web/iOS/Android
+- **Badge support**: Notification indicators via Badge family composition
+- **Mobile-first**: Optimized for thumb-zone interaction on iOS, Android, and mobile web
 
 **Platform Equivalents**:
 - iOS: `UITabBar` / `TabView`
 - Android: `BottomNavigationView` / `NavigationBar`
-- Web: Custom bottom navigation
+- Web: Custom bottom tab bar (mobile web contexts)
+
+**Nav Family Sibling**: Nav-SegmentedChoice-Base (in-context content switching)
 
 ---
 
@@ -31,18 +40,19 @@ BottomTabs is a primary navigation component that provides persistent access to 
 ### Component Structure
 
 ```
-Nav-BottomTabs-Base (Primitive)
-├── Provides foundational bottom tab navigation
-├── Tab items, selected state, badges
+Nav-TabBar-Base (Primitive)
+├── Provides foundational tab bar navigation
+├── Tab items, selected state, badge composition
 └── Semantic variants inherit from this
 
 Future Semantic Variants:
-├── Nav-BottomTabs-Floating (elevated floating bar)
-├── Nav-BottomTabs-Minimal (icon-only, labels on selection)
-└── Nav-BottomTabs-Adaptive (responds to screen size)
+├── Nav-TabBar-Floating (elevated floating bar)
+└── Nav-TabBar-Minimal (icon-only, labels on selection)
 ```
 
 **Design Pattern**: Base primitive with semantic variants for specialized behaviors.
+
+**Related Component (separate spec)**: Nav-Header-Base — web-first header navigation for desktop/responsive contexts.
 
 ---
 
@@ -518,9 +528,9 @@ fun BottomTabs(
 
 ## Future Enhancements (Separate Specs)
 
-1. **Nav-BottomTabs-Floating**: Elevated floating bar with rounded corners
-2. **Nav-BottomTabs-Minimal**: Icon-only, labels appear on selection
-3. **Nav-BottomTabs-Adaptive**: Converts to side rail on larger screens
+1. **Nav-TabBar-Floating**: Elevated floating bar with rounded corners
+2. **Nav-TabBar-Minimal**: Icon-only, labels appear on selection
+3. **Nav-Header-Base**: Web-first header navigation (separate component, separate spec)
 
 ---
 
@@ -535,4 +545,4 @@ fun BottomTabs(
 ---
 
 **Organization**: spec-guide
-**Scope**: 050-nav-bottomtabs-base
+**Scope**: 050-nav-tabbar-base
