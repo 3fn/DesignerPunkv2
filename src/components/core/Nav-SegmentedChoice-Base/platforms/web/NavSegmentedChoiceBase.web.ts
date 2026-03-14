@@ -422,7 +422,7 @@ export class NavSegmentedChoiceBase extends HTMLElement {
    * 
    * @see Req 3.1–3.7, contracts: animation_coordination, animation_initial_render, accessibility_reduced_motion
    */
-  private async _animateIndicator(_prevValue: string): Promise<void> {
+  private _animateIndicator(_prevValue: string): void {
     if (!this._indicatorEl || this._segments.length === 0) return;
 
     const selectedIndex = this._segments.findIndex(s => s.value === this._selectedValue);
@@ -456,32 +456,35 @@ export class NavSegmentedChoiceBase extends HTMLElement {
     this._indicatorEl.style.transition =
       'box-shadow calc(var(--duration-150) * 1ms) var(--easing-accelerate)';
     this._indicatorEl.style.boxShadow = 'none';
-    await this._waitForTransition('box-shadow');
+    this._waitForTransition('box-shadow').then(() => {
+      if (!this._animating) return;
 
-    if (!this._animating) return;
+      // Phase 2+3: Resize + Glide (simultaneous)
+      this._indicatorEl!.style.transition = [
+        'inline-size calc(var(--duration-150) * 1ms) var(--easing-standard)',
+        'inset-inline-start calc(var(--duration-350) * 1ms) var(--easing-glide-decelerate)',
+      ].join(', ');
+      this._indicatorEl!.style.insetInlineStart = `${targetLeft}px`;
+      this._indicatorEl!.style.inlineSize = `${targetWidth}px`;
 
-    // Phase 2+3: Resize + Glide (simultaneous)
-    this._indicatorEl.style.transition = [
-      'inline-size calc(var(--duration-150) * 1ms) var(--easing-standard)',
-      'inset-inline-start calc(var(--duration-350) * 1ms) var(--easing-glide-decelerate)',
-    ].join(', ');
-    this._indicatorEl.style.insetInlineStart = `${targetLeft}px`;
-    this._indicatorEl.style.inlineSize = `${targetWidth}px`;
-    // Wait for the longer transition (glide)
-    await this._waitForTransition('inset-inline-start');
+      return this._waitForTransition('inset-inline-start');
+    }).then(() => {
+      if (!this._animating) return;
 
-    if (!this._animating) return;
+      // Phase 4: Shadow in
+      this._indicatorEl!.style.transition =
+        'box-shadow calc(var(--duration-150) * 1ms) var(--easing-decelerate)';
+      this._indicatorEl!.style.boxShadow = '';
 
-    // Phase 4: Shadow in
-    this._indicatorEl.style.transition =
-      'box-shadow calc(var(--duration-150) * 1ms) var(--easing-decelerate)';
-    this._indicatorEl.style.boxShadow = '';
-    await this._waitForTransition('box-shadow');
-
-    // Clean up
-    this._indicatorEl.style.transition = '';
-    this._animating = false;
-  };
+      return this._waitForTransition('box-shadow');
+    }).then(() => {
+      // Clean up
+      if (this._indicatorEl) {
+        this._indicatorEl.style.transition = '';
+      }
+      this._animating = false;
+    });
+  }
 }
 
 // Register custom element
