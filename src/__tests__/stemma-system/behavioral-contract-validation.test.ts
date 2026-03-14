@@ -60,21 +60,23 @@ interface ContractValidationResult {
 
 // Component paths
 const COMPONENTS_DIR = path.join(process.cwd(), 'src/components/core');
-const COMPONENTS = [
-  'Input-Text-Base',
-  'Input-Text-Email',
-  'Input-Text-Password',
-  'Input-Text-PhoneNumber',
-  'Button-CTA',
-  'Container-Base',
-  'Icon-Base',
-];
+// Auto-discover components with non-empty contracts.yaml (Spec 078 Task 2.3)
+const COMPONENTS = fs.readdirSync(COMPONENTS_DIR, { withFileTypes: true })
+  .filter(d => d.isDirectory())
+  .map(d => d.name)
+  .filter(name => {
+    const contractsPath = path.join(COMPONENTS_DIR, name, 'contracts.yaml');
+    if (!fs.existsSync(contractsPath)) return false;
+    const content = fs.readFileSync(contractsPath, 'utf-8');
+    const parsed = yaml.load(content) as Record<string, any>;
+    return parsed?.contracts && Object.keys(parsed.contracts).length > 0;
+  });
 
 // Platform file patterns
 const PLATFORM_PATTERNS: Record<string, { dir: string; extension: string }> = {
-  web: { dir: 'platforms/web', extension: '.web.ts' },
-  ios: { dir: 'platforms/ios', extension: '.ios.swift' },
-  android: { dir: 'platforms/android', extension: '.android.kt' },
+  web: { dir: 'platforms/web', extension: '.ts' },
+  ios: { dir: 'platforms/ios', extension: '.swift' },
+  android: { dir: 'platforms/android', extension: '.kt' },
 };
 
 /**
@@ -258,7 +260,7 @@ describe('Behavioral Contract Validation Suite', () => {
         
         if (!schema) continue;
         
-        for (const platform of schema.platforms) {
+        for (const platform of (schema.platforms || [])) {
           const impl = checkPlatformImplementation(component, platform);
           
           if (!impl.exists) {

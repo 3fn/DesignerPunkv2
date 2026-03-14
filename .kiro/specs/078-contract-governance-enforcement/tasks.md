@@ -67,7 +67,7 @@ Task 1 must complete before Task 2 (audit resolves non-catalog names so the vali
     - Completion doc must include final concept count as a named deliverable (e.g., "Final catalog count: N concepts across 10 categories") — Task 2.2 depends on this number for the baseline floor assertion
     - _Requirements: 6.2, 6.3, 9.3_
 
-- [ ] 2. Automated Validation
+- [x] 2. Automated Validation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -94,7 +94,7 @@ Task 1 must complete before Task 2 (audit resolves non-catalog names so the vali
   - Commit: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Automated Validation"`
   - Verify: `npm test` — all suites pass, no regressions
 
-  - [ ] 2.1 Create contract existence validation test
+  - [x] 2.1 Create contract existence validation test
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Thurgood
@@ -104,7 +104,7 @@ Task 1 must complete before Task 2 (audit resolves non-catalog names so the vali
     - Descriptive error on failure: "Component {name} has platforms/ but no contracts.yaml"
     - _Requirements: 3.1, 3.2, 3.3_
 
-  - [ ] 2.2 Create catalog name validation test
+  - [x] 2.2 Create catalog name validation test
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Thurgood
@@ -116,7 +116,7 @@ Task 1 must complete before Task 2 (audit resolves non-catalog names so the vali
     - Handle edge cases: no underscore in name (format error), unknown category, empty contracts.yaml (skip)
     - _Requirements: 4.1, 4.2, 4.3, 4.4_
 
-  - [ ] 2.3 Update behavioral-contract-validation test to auto-discover
+  - [x] 2.3 Update behavioral-contract-validation test to auto-discover
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Thurgood + Lina (consult)

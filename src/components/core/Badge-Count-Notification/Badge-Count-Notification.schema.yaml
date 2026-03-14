@@ -19,6 +19,7 @@ family: Badge
 inherits: Badge-Count-Base
 version: "1.0.0"
 readiness: production-ready
+platforms: [web, ios, android]
 
 # Component description
 description: |
