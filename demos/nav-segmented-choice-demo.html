@@ -3,31 +3,288 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nav-SegmentedChoice-Base Demo - DesignerPunk</title>
+  <title>Nav-SegmentedChoice Demo - DesignerPunk</title>
   <link rel="stylesheet" href="tokens.css">
   <link rel="stylesheet" href="demo-styles.css">
   <script type="module" src="designerpunk.esm.js"></script>
+  <style>
+    .event-log {
+      background: var(--black-300);
+      border: var(--border-default) solid var(--gray-300);
+      border-radius: var(--radius-100);
+      padding-inline: var(--space-inset-100);
+      padding-block: var(--space-inset-100);
+      min-block-size: 80px;
+      max-block-size: 160px;
+      overflow-y: auto;
+      font-family: var(--font-family-mono);
+      font-size: var(--typography-caption-font-size);
+      color: var(--gray-100);
+      margin-block-start: var(--space-100);
+    }
+    .event-log-entry {
+      padding-block: var(--space-025);
+      border-block-end: var(--border-default) solid var(--gray-400);
+    }
+    .event-log-entry:last-child {
+      border-block-end: none;
+    }
+    .event-log-time {
+      color: var(--gray-200);
+    }
+    .event-log-event {
+      color: var(--cyan-300);
+    }
+    .event-log-detail {
+      color: var(--gray-100);
+    }
+    .event-log-empty {
+      color: var(--gray-300);
+      font-style: italic;
+    }
+    .segmented-demo-row {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-200);
+      max-inline-size: 480px;
+    }
+  </style>
 </head>
-<body>
+<body class="demo-page">
   <header class="demo-header">
-    <h1>Nav-SegmentedChoice-Base</h1>
-    <p>Navigation control for switching between mutually exclusive content views.</p>
+    <a href="index.html" class="demo-back-link">← All Components</a>
+    <h1>🧭 Nav-SegmentedChoice-Base Demo</h1>
+    <p class="demo-subtitle">Navigation control for switching between mutually exclusive content views — sliding indicator, keyboard navigation, and animated transitions</p>
   </header>
 
   <main>
+
+    <!-- ============================================================
+         SECTION 1: Basic Usage
+         ============================================================ -->
     <div class="demo-section">
-      <h2>Usage Example</h2>
-      <p>Web implementation pending (Task 3).</p>
-      <pre><code>&lt;nav-segmented-choice
-  segments='[{"value":"daily","label":"Daily"},{"value":"weekly","label":"Weekly"}]'
-  selected-value="daily"&gt;
-&lt;/nav-segmented-choice&gt;</code></pre>
+      <h2>1. Basic Usage</h2>
+      <p>Segmented controls with 2 and 3 segments. Click a segment to select it. The indicator slides to the active segment.</p>
+
+      <div class="segmented-demo-row">
+        <div class="demo-item">
+          <nav-segmented-choice
+            segments='[{"value":"daily","label":"Daily"},{"value":"weekly","label":"Weekly"}]'
+            selected-value="daily">
+          </nav-segmented-choice>
+          <span class="demo-item-label">2 segments</span>
+        </div>
+
+        <div class="demo-item">
+          <nav-segmented-choice
+            segments='[{"value":"all","label":"All"},{"value":"active","label":"Active"},{"value":"completed","label":"Completed"}]'
+            selected-value="all">
+          </nav-segmented-choice>
+          <span class="demo-item-label">3 segments</span>
+        </div>
+
+        <div class="demo-item">
+          <nav-segmented-choice
+            segments='[{"value":"day","label":"Day"},{"value":"week","label":"Week"},{"value":"month","label":"Month"},{"value":"year","label":"Year"}]'
+            selected-value="month">
+          </nav-segmented-choice>
+          <span class="demo-item-label">4 segments — pre-selected "Month"</span>
+        </div>
+      </div>
+
+      <div class="demo-note">
+        <strong>Noop on active:</strong> Clicking the already-selected segment does nothing — no event, no animation. This is the <code>interaction_noop_active</code> contract.
+      </div>
     </div>
 
+    <!-- ============================================================
+         SECTION 2: Size Variants
+         ============================================================ -->
     <div class="demo-section">
-      <h2>Token Verification</h2>
-      <p>Token application pending web implementation (Task 3).</p>
+      <h2>2. Size Variants</h2>
+      <p>Standard (default) and condensed sizes. Condensed uses smaller padding and font size.</p>
+
+      <div class="segmented-demo-row">
+        <div class="demo-item">
+          <nav-segmented-choice
+            segments='[{"value":"list","label":"List"},{"value":"grid","label":"Grid"},{"value":"board","label":"Board"}]'
+            selected-value="list"
+            size="standard">
+          </nav-segmented-choice>
+          <span class="demo-item-label">Standard (default)</span>
+        </div>
+
+        <div class="demo-item">
+          <nav-segmented-choice
+            segments='[{"value":"list","label":"List"},{"value":"grid","label":"Grid"},{"value":"board","label":"Board"}]'
+            selected-value="list"
+            size="condensed">
+          </nav-segmented-choice>
+          <span class="demo-item-label">Condensed</span>
+        </div>
+      </div>
     </div>
+
+    <!-- ============================================================
+         SECTION 3: Keyboard Navigation
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>3. Keyboard Navigation</h2>
+
+      <div class="demo-interactive">
+        <p>Click a segment to focus the control, then use keyboard:</p>
+        <ul style="margin-block: var(--space-050); padding-inline-start: var(--space-200); color: var(--gray-200); font-size: var(--typography-caption-font-size);">
+          <li><kbd>←</kbd> / <kbd>→</kbd> — Move between segments (wraps around)</li>
+          <li><kbd>Home</kbd> — Jump to first segment</li>
+          <li><kbd>End</kbd> — Jump to last segment</li>
+          <li><kbd>Enter</kbd> / <kbd>Space</kbd> — Activate focused segment</li>
+        </ul>
+
+        <div class="segmented-demo-row">
+          <nav-segmented-choice
+            id="keyboard-demo"
+            segments='[{"value":"inbox","label":"Inbox"},{"value":"sent","label":"Sent"},{"value":"drafts","label":"Drafts"},{"value":"trash","label":"Trash"}]'
+            selected-value="inbox">
+          </nav-segmented-choice>
+        </div>
+
+        <p id="keyboard-status" style="color: var(--gray-200); font-size: var(--typography-caption-font-size); margin-block-start: var(--space-050);">Use arrow keys after focusing a segment</p>
+      </div>
+
+      <div class="demo-note">
+        <strong>Roving tabindex:</strong> Only the active segment is in the tab order (<code>tabindex="0"</code>). Arrow keys move focus between segments. This follows the WAI-ARIA Tabs pattern.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 4: Event Handling
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>4. Event Handling</h2>
+      <p>Click segments to see <code>selection-change</code> events logged. Re-clicking the active segment produces no event.</p>
+
+      <div class="demo-interactive">
+        <div class="segmented-demo-row">
+          <nav-segmented-choice
+            id="event-demo"
+            segments='[{"value":"overview","label":"Overview"},{"value":"details","label":"Details"},{"value":"reviews","label":"Reviews"}]'
+            selected-value="overview">
+          </nav-segmented-choice>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-block-start: var(--space-100);">
+          <span style="color: var(--gray-200); font-size: var(--typography-caption-font-size);">Event Log:</span>
+          <button id="clear-log-btn" style="background: var(--gray-400); color: var(--gray-200); border: var(--border-default) solid var(--gray-300); border-radius: var(--radius-050); padding-inline: var(--space-050); padding-block: var(--space-025); cursor: pointer; font-size: var(--typography-caption-font-size); font-family: var(--font-family-body);">Clear</button>
+        </div>
+        <div id="event-log" class="event-log">
+          <div class="event-log-empty">Click a segment to see events here...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 5: Accessibility
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>5. Accessibility Features</h2>
+
+      <h3>ARIA Attributes</h3>
+      <ul class="demo-token-list">
+        <li><code>role="tablist"</code> on the container</li>
+        <li><code>role="tab"</code> on each segment</li>
+        <li><code>aria-selected="true|false"</code> on each segment</li>
+        <li><code>aria-controls</code> — optional panel association via <code>id</code> prop</li>
+      </ul>
+
+      <h3>Focus Indicators</h3>
+      <div class="demo-note">
+        <strong>Focus ring:</strong> Uses <code>:focus-visible</code> for keyboard-only focus indicators. The outline uses <code>accessibility.focus.width</code> (2px) and <code>accessibility.focus.color</code> tokens with a 2px offset.
+      </div>
+
+      <h3>Reduced Motion</h3>
+      <div class="demo-note">
+        <strong>Animation suppression:</strong> When <code>prefers-reduced-motion: reduce</code> is active, the sliding indicator snaps instantly instead of animating. First render always snaps (no animation on initial load).
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 6: Token Verification
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>6. Token Verification</h2>
+      <p>Check browser DevTools to verify these CSS custom properties are loaded:</p>
+
+      <h3>Color Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--color-structure-surface</code> — container background</li>
+        <li><code>--color-structure-canvas</code> — active indicator background</li>
+        <li><code>--color-structure-border</code> — container border</li>
+        <li><code>--color-action-navigation</code> — active segment text</li>
+        <li><code>--color-text-default</code> — inactive segment text</li>
+      </ul>
+
+      <h3>Spacing Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--space-inset-050</code> — container padding</li>
+        <li><code>--space-inset-100</code> — segment block padding (standard)</li>
+        <li><code>--space-inset-075</code> — segment block padding (condensed)</li>
+      </ul>
+
+      <h3>Shape &amp; Border Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--radius-normal</code> — container and indicator border radius</li>
+        <li><code>--border-default</code> — container border width</li>
+      </ul>
+
+      <h3>Motion Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--motion-duration-150</code> — indicator slide duration</li>
+        <li><code>--motion-easing-standard</code> — indicator slide easing</li>
+      </ul>
+
+      <h3>Shadow Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--shadow-navigation-indicator</code> — active indicator shadow</li>
+      </ul>
+    </div>
+
+    <!-- ============================================================
+         SECTION 7: Usage Examples
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>7. Usage Examples</h2>
+
+      <h3>HTML</h3>
+      <pre class="demo-code">&lt;nav-segmented-choice
+  segments='[{"value":"daily","label":"Daily"},{"value":"weekly","label":"Weekly"}]'
+  selected-value="daily"&gt;
+&lt;/nav-segmented-choice&gt;
+
+&lt;!-- Condensed size --&gt;
+&lt;nav-segmented-choice
+  segments='[{"value":"a","label":"A"},{"value":"b","label":"B"},{"value":"c","label":"C"}]'
+  selected-value="a"
+  size="condensed"&gt;
+&lt;/nav-segmented-choice&gt;</pre>
+
+      <h3>JavaScript</h3>
+      <pre class="demo-code">const nav = document.querySelector('nav-segmented-choice');
+
+// Listen for selection changes
+nav.addEventListener('selection-change', (event) =&gt; {
+  console.log('Selected:', event.detail.value);
+});
+
+// Programmatic selection
+nav.selectedValue = 'weekly';
+
+// Update segments dynamically
+nav.segments = [
+  { value: 'a', label: 'Option A' },
+  { value: 'b', label: 'Option B' },
+];</pre>
+    </div>
+
   </main>
 
   <footer class="demo-footer">
@@ -42,6 +299,46 @@
       banner.textContent = 'Components may not load correctly via file:// protocol. Use a local server: npx serve dist/browser';
       document.body.prepend(banner);
     }
+
+    // ================================================================
+    // Keyboard Demo (Section 3)
+    // ================================================================
+    var keyboardStatus = document.getElementById('keyboard-status');
+    document.getElementById('keyboard-demo').addEventListener('selection-change', function(e) {
+      keyboardStatus.textContent = 'Selected: ' + e.detail.value;
+    });
+
+    // ================================================================
+    // Event Log (Section 4)
+    // ================================================================
+    var eventLog = document.getElementById('event-log');
+    var clearBtn = document.getElementById('clear-log-btn');
+    var eventCount = 0;
+
+    function logEvent(eventType, detail) {
+      eventCount++;
+      var time = new Date().toLocaleTimeString();
+      var empty = eventLog.querySelector('.event-log-empty');
+      if (empty) empty.remove();
+
+      var entry = document.createElement('div');
+      entry.className = 'event-log-entry';
+      entry.innerHTML = '<span class="event-log-time">[' + time + ']</span> <span class="event-log-event">' + eventType + '</span><span class="event-log-detail"> — value="' + detail + '"</span> (#' + eventCount + ')';
+      eventLog.prepend(entry);
+
+      while (eventLog.children.length > 20) {
+        eventLog.removeChild(eventLog.lastChild);
+      }
+    }
+
+    clearBtn.addEventListener('click', function() {
+      eventLog.innerHTML = '<div class="event-log-empty">Click a segment to see events here...</div>';
+      eventCount = 0;
+    });
+
+    document.getElementById('event-demo').addEventListener('selection-change', function(e) {
+      logEvent('selection-change', e.detail.value);
+    });
   </script>
 </body>
 </html>
