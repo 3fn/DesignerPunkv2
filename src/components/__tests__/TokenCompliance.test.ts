@@ -749,7 +749,8 @@ describe('Token Compliance - All Components', () => {
           } else if (platform === 'android') {
             // Android: Look for hard-coded durationMillis values
             // Pattern: tween(durationMillis = 250), animateFloatAsState(animationSpec = tween(durationMillis = 250))
-            const androidMotionPattern = /durationMillis\s*=\s*\d+/;
+            // Exception: durationMillis = 0 is intentional "no animation" (instant state change)
+            const androidMotionPattern = /durationMillis\s*=\s*[1-9]\d*/;
             if (androidMotionPattern.test(line)) {
               hasViolation = true;
             }
