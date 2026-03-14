@@ -33,3 +33,54 @@ The platform suffix is redundant since the directory (`platforms/ios/`, `platfor
 ## Recommendation
 
 Standardize on one convention going forward. The unsuffixed approach is simpler since the directory provides context. Existing files don't need to be renamed — just pick a convention for new components.
+
+---
+
+## Lina Assessment (2026-03-13)
+
+### Full Survey
+
+The inconsistency is broader than the initial report. Three distinct issues:
+
+**1. Platform suffix inconsistency**
+
+| Convention | iOS | Android | Web |
+|-----------|-----|---------|-----|
+| Suffixed (`.ios.swift`, `.android.kt`, `.web.ts`) | 21 | 24 | 25 |
+| Unsuffixed (`.swift`, `.kt`) | 5 | 3 | — |
+| `.browser.ts` variant | — | — | 4 |
+
+Unsuffixed iOS: Avatar-Base, Button-VerticalList-Set, Chip-Base, Chip-Filter, Chip-Input
+Unsuffixed Android: Avatar-Base, Button-VerticalList-Item, Button-VerticalList-Set
+`.browser.ts` web: Input-Text-Base, Input-Text-Email, Input-Text-Password, Input-Text-PhoneNumber
+
+**2. `.web.ts` vs `.browser.ts`**
+
+The Input-Text family uses `.browser.ts` instead of `.web.ts`. Likely predates the `.web.ts` convention.
+
+**3. PascalCase name reordering**
+
+Button-VerticalList-Item: iOS file is `VerticalListButtonItem.ios.swift`, web is `ButtonVerticalListItem.web.ts`. The component name segments are reordered across platforms.
+
+### Recommendation
+
+Disagree with unsuffixed approach. Recommend standardizing on **suffixed** (`ComponentName.ios.swift`, `.android.kt`, `.web.ts`) because:
+
+- Already the >80% majority convention
+- Matches the scaffolding template in Lina's agent prompt
+- More explicit in editor tabs — `BadgeCountBase.ios.swift` communicates platform without checking directory path
+- Counter-argument: the suffix is technically redundant since `platforms/ios/` already communicates platform. But redundancy in naming aids readability when files are viewed outside their directory context (editor tabs, search results, git diffs).
+
+### Resolution Strategy
+
+Fix outliers **opportunistically** when those components are next touched for functional work — not as a dedicated rename sweep. A bulk rename would touch imports, test files, and risk breakage for zero functional benefit.
+
+### Convention for New Components
+
+Already documented in Lina's scaffolding workflow:
+```
+platforms/
+  web/ComponentName.web.ts
+  ios/ComponentName.ios.swift
+  android/ComponentName.android.kt
+```
