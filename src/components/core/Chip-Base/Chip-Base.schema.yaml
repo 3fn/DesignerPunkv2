@@ -138,7 +138,7 @@ platform_notes:
       - Logical properties (padding-block, padding-inline) for RTL support
   ios:
     implementation: SwiftUI View
-    file: platforms/ios/ChipBase.swift
+    file: platforms/ios/ChipBase.ios.swift
     notes: |
       - Uses SwiftUI Button with custom styling
       - Token consumption via DesignTokens constants

@@ -547,11 +547,11 @@ src/components/core/Button-VerticalList-Set/
 │   │   ├── ButtonVerticalListSet.web.ts      # Web Component implementation
 │   │   └── Button-VerticalList-Set.styles.css # Web styles
 │   ├── ios/
-│   │   ├── ButtonVerticalListSet.swift       # SwiftUI implementation
+│   │   ├── ButtonVerticalListSet.ios.swift       # SwiftUI implementation
 │   │   ├── ButtonVerticalListSetPreview.swift # SwiftUI Preview
 │   │   └── ButtonVerticalListSetTests.swift  # iOS unit tests
 │   └── android/
-│       ├── ButtonVerticalListSet.kt          # Jetpack Compose implementation
+│       ├── ButtonVerticalListSet.android.kt          # Jetpack Compose implementation
 │       ├── ButtonVerticalListSetPreview.kt   # Compose Preview
 │       └── ButtonVerticalListSetTest.kt      # Android unit tests
 └── __tests__/

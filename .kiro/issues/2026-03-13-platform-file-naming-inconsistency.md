@@ -4,7 +4,7 @@
 **Discovered by**: Thurgood (during Spec 078 Task 2.3)
 **Domain**: Lina (component scaffolding)
 **Severity**: Low
-**Status**: Open
+**Status**: Resolved — Convention confirmed, opportunistic fixes
 
 ---
 
@@ -48,15 +48,13 @@ The inconsistency is broader than the initial report. Three distinct issues:
 |-----------|-----|---------|-----|
 | Suffixed (`.ios.swift`, `.android.kt`, `.web.ts`) | 21 | 24 | 25 |
 | Unsuffixed (`.swift`, `.kt`) | 5 | 3 | — |
-| `.browser.ts` variant | — | — | 4 |
 
 Unsuffixed iOS: Avatar-Base, Button-VerticalList-Set, Chip-Base, Chip-Filter, Chip-Input
 Unsuffixed Android: Avatar-Base, Button-VerticalList-Item, Button-VerticalList-Set
-`.browser.ts` web: Input-Text-Base, Input-Text-Email, Input-Text-Password, Input-Text-PhoneNumber
 
-**2. `.web.ts` vs `.browser.ts`**
+**~~2. `.web.ts` vs `.browser.ts`~~** ← RETRACTED
 
-The Input-Text family uses `.browser.ts` instead of `.web.ts`. Likely predates the `.web.ts` convention.
+The Input-Text family `.browser.ts` files are intentional — they're standalone browser-bundle variants that exist alongside the `.web.ts` files. Not a naming inconsistency.
 
 **3. PascalCase name reordering**
 
@@ -84,3 +82,37 @@ platforms/
   ios/ComponentName.ios.swift
   android/ComponentName.android.kt
 ```
+
+---
+
+## Resolution (2026-03-13)
+
+**Convention**: Suffixed — `ComponentName.ios.swift`, `ComponentName.android.kt`, `ComponentName.web.ts`
+
+**Rationale**: Lina's assessment accepted. Suffixed is the >80% majority, matches the scaffolding template, and aids readability in editor tabs, search results, and diffs. Thurgood's initial unsuffixed recommendation withdrawn.
+
+**Existing outliers** (8 unsuffixed files, 4 `.browser.ts` files, 1 PascalCase reorder): Fix opportunistically when those components are next touched for functional work. No dedicated rename sweep.
+
+**Documentation**: Convention already reflected in Component Development Guide's "Component Structure Pattern" file listing and Lina's scaffolding workflow. No additional doc changes needed.
+
+**No spec required.** This is a convention confirmation, not a code change.
+
+---
+
+## Fix Applied (2026-03-13)
+
+Renamed all 8 unsuffixed platform files to follow the suffixed convention. Updated 3 schema.yaml files and 2 READMEs with new filenames.
+
+**Files renamed:**
+- `Avatar-Base`: `Avatar.swift` → `Avatar.ios.swift`, `Avatar.kt` → `Avatar.android.kt`
+- `Button-VerticalList-Set`: `ButtonVerticalListSet.swift` → `ButtonVerticalListSet.ios.swift`, `ButtonVerticalListSet.kt` → `ButtonVerticalListSet.android.kt`
+- `Button-VerticalList-Item`: `VerticalListButtonItem.kt` → `VerticalListButtonItem.android.kt`
+- `Chip-Base`: `ChipBase.swift` → `ChipBase.ios.swift`
+- `Chip-Filter`: `ChipFilter.swift` → `ChipFilter.ios.swift`
+- `Chip-Input`: `ChipInput.swift` → `ChipInput.ios.swift`
+
+**Correction**: The `.browser.ts` files in the Input-Text family are NOT naming inconsistencies — they're intentional standalone browser-bundle variants that coexist with `.web.ts` files. Initial rename attempt overwrote the real `.web.ts` files; reverted immediately.
+
+**Remaining**: Button-VerticalList-Item iOS file uses reordered PascalCase (`VerticalListButtonItem` vs `ButtonVerticalListItem`). Not renamed — the name is deeply embedded in Swift/Kotlin source, test classes, and test utilities. Fix deferred to when the component is next refactored.
+
+**Validation**: Build clean (1.55 MB raw, ~298.07 KB gzipped). 302 suites, 7852 tests, 2 pre-existing failures (TokenCompliance — unrelated). Zero regressions from renames.

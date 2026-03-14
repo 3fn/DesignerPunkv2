@@ -424,7 +424,7 @@ src/components/core/Button-VerticalList-Item/
 │   │   ├── VisualStateStyles.swift            # Visual state styles
 │   │   └── VerticalListButtonItemTests.swift  # iOS unit tests
 │   └── android/
-│       ├── VerticalListButtonItem.kt          # Jetpack Compose implementation
+│       ├── VerticalListButtonItem.android.kt          # Jetpack Compose implementation
 │       ├── VisualStateStyles.kt               # Visual state styles
 │       └── VerticalListButtonItemTest.kt      # Android unit tests
 └── __tests__/

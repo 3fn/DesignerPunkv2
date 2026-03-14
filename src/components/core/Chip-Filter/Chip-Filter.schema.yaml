@@ -129,7 +129,7 @@ platform_notes:
       - Selected state styling via CSS custom properties
   ios:
     implementation: SwiftUI View
-    file: platforms/ios/ChipFilter.swift
+    file: platforms/ios/ChipFilter.ios.swift
     notes: |
       - Uses SwiftUI Button with @Binding for selected state
       - Token consumption via DesignTokens constants
