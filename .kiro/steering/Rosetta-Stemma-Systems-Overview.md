@@ -120,10 +120,10 @@ flowchart TB
     end
 
     subgraph Contracts["Behavioral contracts (examples)"]
-        C1["focusable"]
-        C2["validatable"]
-        C3["float-label"]
-        C4["error-state"]
+        C1["interaction_focusable"]
+        C2["validation_validatable"]
+        C3["content_float_label"]
+        C4["state_error"]
     end
 
     Families --> Inheritance
@@ -214,6 +214,7 @@ flowchart TB
 
 **Stemma System:**
 - [Stemma System Principles](./stemma-system-principles.md) — Component philosophy and inheritance patterns
+- [Contract System Reference](./Contract-System-Reference.md) — Behavioral contracts, Concept Catalog, classification rules
 - [Component Quick Reference](./Component-Quick-Reference.md) — Routing table for component family docs
 
 **Component Families:**

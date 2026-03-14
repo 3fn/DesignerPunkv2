@@ -462,6 +462,7 @@ export const ComponentNameTokens = defineComponentTokens({
 ### Component Development
 - [Component Development Guide](./Component-Development-Guide.md) - Token selection and component patterns
 - [Stemma System Principles](./stemma-system-principles.md) - Component hierarchy and relationships
+- [Contract System Reference](./Contract-System-Reference.md) - Behavioral contracts that component tokens satisfy
 
 ---
 

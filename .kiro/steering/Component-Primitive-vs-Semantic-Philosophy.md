@@ -97,6 +97,7 @@ Components encode **behavioral patterns** that build upon each other:
 - `Input-Text-Base` provides foundational text input behaviors
 - `Input-Text-Email` extends with email-specific behaviors
 - Using primitives provides the foundation when no semantic exists
+- Behavioral contracts (`contracts.yaml`) specify what each component guarantees, regardless of primitive or semantic status
 
 **Consequence**: Primitive component usage is expected and appropriate.
 
@@ -391,6 +392,7 @@ Create a semantic component when:
 ## Related Documentation
 
 - [Stemma System Principles](./stemma-system-principles.md) - Core component architecture principles
+- [Contract System Reference](./Contract-System-Reference.md) - Behavioral contracts and Concept Catalog
 - [Component Development Guide](./Component-Development-Guide.md) - Token selection framework
 - [Token Quick Reference](./Token-Quick-Reference.md) - Token documentation routing
 - [Component Schema Format](./Component-Schema-Format.md) - Component definition structure

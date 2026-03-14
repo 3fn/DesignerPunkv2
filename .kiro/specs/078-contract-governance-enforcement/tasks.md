@@ -176,7 +176,7 @@ Task 1 must complete before Task 2 (audit resolves non-catalog names so the vali
     - Ballot measure required
     - _Requirements: 7.1, 7.2_
 
-- [ ] 4. Stemma Documentation Updates
+- [x] 4. Stemma Documentation Updates
 
   **Type**: Parent
   **Validation**: Tier 2 - Standard
@@ -200,7 +200,7 @@ Task 1 must complete before Task 2 (audit resolves non-catalog names so the vali
   **Post-Completion:**
   - Commit: `./.kiro/hooks/commit-task.sh "Task 4 Complete: Stemma Documentation Updates"`
 
-  - [ ] 4.1 Scan Stemma-referencing steering docs
+  - [x] 4.1 Scan Stemma-referencing steering docs
     **Type**: Architecture
     **Validation**: Tier 1 - Minimal
     **Agent**: Thurgood
@@ -209,7 +209,7 @@ Task 1 must complete before Task 2 (audit resolves non-catalog names so the vali
     - Document in `findings/stemma-doc-scan.md`
     - _Requirements: 8.2_
 
-  - [ ] 4.2 Update critical Stemma docs
+  - [x] 4.2 Update critical Stemma docs
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Thurgood (draft) + Peter (ballot measures)
@@ -218,7 +218,7 @@ Task 1 must complete before Task 2 (audit resolves non-catalog names so the vali
     - Individual ballot measure for each doc
     - _Requirements: 8.1, 8.3_
 
-  - [ ] 4.3 Update additional Stemma docs from scan
+  - [x] 4.3 Update additional Stemma docs from scan
     **Type**: Implementation
     **Validation**: Tier 1 - Minimal
     **Agent**: Thurgood (draft) + Peter (ballot measures)
