@@ -429,6 +429,15 @@ During spec formalization (design-outline → requirements.md), Thurgood will id
 - Parent tasks use Type: Parent with Tier 3: Comprehensive validation
 - Type determines which validation tier and documentation tier to apply
 
+**Required Artifacts for Component Specs:**
+- Component specs must include subtasks that produce these artifacts: `contracts.yaml`, `component-meta.yaml`, `schema.yaml`, `types.ts`
+- The `contracts.yaml` subtask must precede platform implementation subtasks
+
+**Contract Traceability:**
+- Every platform implementation subtask in a component spec must include `_Contracts:` lines listing the contracts that subtask satisfies
+- Format: `_Contracts: interaction_focusable, interaction_pressable, state_disabled_`
+- This maps implementation work to behavioral guarantees, enabling review and audit
+
 ### Task Format Examples
 
 #### Example 1: Parent Task with Mixed Subtask Types

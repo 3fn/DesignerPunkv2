@@ -73,7 +73,20 @@ If no family doc exists, draft one from the Component-MCP-Document-Template and 
 ### Step 2: Create types.ts
 Define the component's TypeScript interfaces — props, variants, states, and platform-agnostic types.
 
-### Step 3: Create Platform Implementations
+### Step 3: Author contracts.yaml
+Before platform implementation, define the component's behavioral contracts. This is the specification that platform implementations must satisfy.
+
+1. Query the Concept Catalog for existing concepts:
+   
+  `get_section({ path: ".kiro/steering/Contract-System-Reference.md", heading: 
+"Concept Catalog" })`
+  
+2. Author contracts.yaml using `{category}_{concept}`
+ naming from the catalog. See Contract-System-Reference.md for the canonical format, 10-category taxonomy, and naming convention.
+3. If a behavior doesn't map to any existing catalog concept, propose a new concept addition (ballot measure) before using it.
+4. Contracts must be authored before platform implementation begins — platform code implements the contracts, not the other way around.
+
+### Step 4: Create Platform Implementations
 Build-time platform separation under `platforms/`:
 ```
 ComponentName/
@@ -95,13 +108,13 @@ ComponentName/
     BasicUsage.html
 ```
 
-### Step 4: Create Tests
+### Step 5: Create Tests
 Write unit tests and behavioral contract tests that validate the component's interaction states, accessibility, and visual states.
 
-### Step 5: Create component-meta.yaml
+### Step 6: Create component-meta.yaml
 Author the semantic annotations file following `docs/component-meta-authoring-guide.md`. This provides agent-selection guidance (purpose, usage, contexts, alternatives). Check the data shapes trigger criteria if the component has complex array/object props.
 
-### Step 6: Create README
+### Step 7: Create README
 Document the component's purpose, usage, variants, props, and token dependencies.
 
 ---

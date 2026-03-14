@@ -406,6 +406,45 @@ src/components/
 
 ---
 
+## Behavioral Contracts Workflow
+
+Behavioral contracts (`contracts.yaml`) define what a component guarantees to its consumers. They are core Stemma — not a separate governance layer.
+
+### When to Author Contracts
+
+Author `contracts.yaml` after `types.ts` and before platform implementation. Contracts are the specification; platform code is the implementation.
+
+### Naming Convention
+
+All contract names follow `{category}_{concept}` in `snake_case`:
+- `interaction_focusable`, `state_disabled`, `accessibility_reduced_motion`
+- 10 categories: accessibility, animation, composition, content, interaction, layout, performance, state, validation, visual
+
+### Concept Catalog Consultation
+
+Before naming a contract, query the Concept Catalog via MCP:
+```
+get_section({ path: ".kiro/steering/Contract-System-Reference.md", heading: "Concept Catalog" })
+```
+- Use existing catalog concepts whenever possible
+- If a behavior needs a new concept, propose a catalog addition (ballot measure) before using it
+- Non-catalog concept names will fail the automated validation test (`npm test`)
+
+### Relationship to Platform Implementation
+
+- Each platform implementation satisfies the same set of contracts
+- Spec task subtasks for platform implementation should include `_Contracts:` lines mapping to the contracts they satisfy
+- The automated existence check verifies every component with `platforms/` has `contracts.yaml`
+
+### Reference
+
+For the full contract system (taxonomy, canonical format, classification rules, inheritance patterns):
+```
+get_document_full({ path: ".kiro/steering/Contract-System-Reference.md" })
+```
+
+---
+
 ## What If Design Doc Is Unclear?
 
 **When design documentation leaves questions unanswered:**

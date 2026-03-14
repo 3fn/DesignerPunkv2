@@ -126,7 +126,7 @@ Task 1 must complete before Task 2 (audit resolves non-catalog names so the vali
     - Verify all previously validated components still pass
     - _Requirements: 5.1, 5.2_
 
-- [ ] 3. Process & Prompt Updates
+- [x] 3. Process & Prompt Updates
 
   **Type**: Parent
   **Validation**: Tier 2 - Standard
@@ -149,7 +149,7 @@ Task 1 must complete before Task 2 (audit resolves non-catalog names so the vali
   **Post-Completion:**
   - Commit: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Process & Prompt Updates"`
 
-  - [ ] 3.1 Add contracts.yaml step to Lina's scaffolding workflow
+  - [x] 3.1 Add contracts.yaml step to Lina's scaffolding workflow
     **Type**: Implementation
     **Validation**: Tier 1 - Minimal
     **Agent**: Peter (prompt authoring — direct edit, not ballot measure)
@@ -158,7 +158,7 @@ Task 1 must complete before Task 2 (audit resolves non-catalog names so the vali
     - Renumber existing Steps 3-6 to 4-7
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
-  - [ ] 3.2 Add required artifacts checklist and _Contracts: mandate to Process-Spec-Planning
+  - [x] 3.2 Add required artifacts checklist and _Contracts: mandate to Process-Spec-Planning
     **Type**: Implementation
     **Validation**: Tier 1 - Minimal
     **Agent**: Thurgood + Peter (ballot measure)
@@ -167,7 +167,7 @@ Task 1 must complete before Task 2 (audit resolves non-catalog names so the vali
     - Ballot measure required
     - _Requirements: 2.1, 2.2, 2.3_
 
-  - [ ] 3.3 Add Behavioral Contracts Workflow section to Component Development Guide
+  - [x] 3.3 Add Behavioral Contracts Workflow section to Component Development Guide
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Thurgood (draft) + Lina (consult) + Peter (ballot measure)
