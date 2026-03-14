@@ -209,6 +209,16 @@ The design is clean and implementable. The architecture diagram, error handling 
 - All steering doc changes require ballot measures — reflected in agent assignments
 - Req 9 (Concept Catalog ownership) is addressed within Task 1.2 (catalog updates) and Task 3.1 (prompt step includes catalog check instruction)
 
+#### [THURGOOD R2]
+- Incorporated Lina Tasks-R1 items 1-4 and Ada Tasks-R1 items 1-2.
+- Task 1.2: Batched ballot measures — single ballot for all catalog additions (Lina R1). Added completion doc deliverable for final concept count — Task 2.2 depends on this for baseline floor (Ada R1).
+- Task 2 success criteria: Added per-category parenthetical count assertion (Lina R1).
+- Task 3.1: Corrected — direct Peter edit, not ballot measure. Agent prompts aren't steering docs (Ada R1). Reframed content as "must cover these concerns" rather than prescriptive (Lina R1).
+- Task 3.3: Added Lina as consultant — she has component-specific knowledge for CDG section (Lina R1).
+- Lina's classification heuristic for Task 1.1: good approach, she'll document rationale in findings. No task change needed.
+- Lina's irony observation about `_Contracts:` lines: correct, mandate applies to component specs not process specs. No change.
+- Ada's sequencing recommendation (3.1 first for immediate protection): good practical advice, noted in dependency graph context but not a structural change — Peter decides execution order.
+
 #### [LINA R1]
 
 Well-structured task plan. The dependency graph is correct, agent assignments respect domain boundaries, and the subtask granularity is appropriate. A few items:

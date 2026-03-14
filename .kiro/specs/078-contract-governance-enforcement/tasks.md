@@ -20,7 +20,7 @@ Task 1 must complete before Task 2 (audit resolves non-catalog names so the vali
 
 ## Task List
 
-- [ ] 1. Existing Component Audit
+- [x] 1. Existing Component Audit
 
   **Type**: Parent
   **Validation**: Tier 2 - Standard
@@ -45,7 +45,7 @@ Task 1 must complete before Task 2 (audit resolves non-catalog names so the vali
   - Commit: `./.kiro/hooks/commit-task.sh "Task 1 Complete: Existing Component Audit"`
   - Verify: `npm test` — all suites pass, no regressions
 
-  - [ ] 1.1 Scan all contracts.yaml and diff against Concept Catalog
+  - [x] 1.1 Scan all contracts.yaml and diff against Concept Catalog
     **Type**: Architecture
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -56,14 +56,15 @@ Task 1 must complete before Task 2 (audit resolves non-catalog names so the vali
     - Document findings in `findings/contract-catalog-audit.md`
     - _Requirements: 6.1, 6.2_
 
-  - [ ] 1.2 Resolve non-catalog names
+  - [x] 1.2 Resolve non-catalog names
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina (changes) + Thurgood (review classifications) + Peter (ballot measures)
-    - For legitimate new concepts: propose catalog additions (ballot measures)
+    - For legitimate new concepts: propose catalog additions as a single batched ballot measure
     - For naming mistakes: rename in the component's `contracts.yaml`
     - Include Spec 049's three new concepts: `noop_active` (interaction), `initial_render` (animation), `aria_controls` (accessibility)
     - Update Concept Catalog header with current concept count and component count
+    - Completion doc must include final concept count as a named deliverable (e.g., "Final catalog count: N concepts across 10 categories") — Task 2.2 depends on this number for the baseline floor assertion
     - _Requirements: 6.2, 6.3, 9.3_
 
 - [ ] 2. Automated Validation
@@ -76,6 +77,7 @@ Task 1 must complete before Task 2 (audit resolves non-catalog names so the vali
   - Contract existence test catches any component with `platforms/` but no `contracts.yaml`
   - Catalog name validation test catches any non-catalog concept name (error, not warning)
   - Catalog structural assertion catches format changes (10 categories, >= baseline count, per-category count match)
+  - Per-category parenthetical count matches actual parsed concept count
   - Behavioral-contract-validation test auto-discovers all components with `contracts.yaml`
   - All existing tests continue passing
 
@@ -150,11 +152,10 @@ Task 1 must complete before Task 2 (audit resolves non-catalog names so the vali
   - [ ] 3.1 Add contracts.yaml step to Lina's scaffolding workflow
     **Type**: Implementation
     **Validation**: Tier 1 - Minimal
-    **Agent**: Peter (prompt authoring)
+    **Agent**: Peter (prompt authoring — direct edit, not ballot measure)
     - Add dedicated Step 3 between types.ts and platform implementation
-    - Include: MCP query instruction for Concept Catalog, `{category}_{concept}` naming, "before platform implementation" gate
+    - Step must cover: MCP query instruction for Concept Catalog, `{category}_{concept}` naming, "before platform implementation" gate
     - Renumber existing Steps 3-6 to 4-7
-    - Ballot measure required
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
   - [ ] 3.2 Add required artifacts checklist and _Contracts: mandate to Process-Spec-Planning
@@ -169,7 +170,7 @@ Task 1 must complete before Task 2 (audit resolves non-catalog names so the vali
   - [ ] 3.3 Add Behavioral Contracts Workflow section to Component Development Guide
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
-    **Agent**: Thurgood (draft) + Peter (ballot measure)
+    **Agent**: Thurgood (draft) + Lina (consult) + Peter (ballot measure)
     - New section covering: when to author contracts, `{category}_{concept}` naming convention, Concept Catalog consultation via MCP, relationship between contracts.yaml and platform implementation
     - Frame contracts as core Stemma, not separate governance
     - Ballot measure required

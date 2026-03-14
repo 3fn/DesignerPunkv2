@@ -40,8 +40,8 @@ contracts:
       Render with currentItem=2. Verify node 2 is current, all others incomplete.
     required: true
 
-  rendering_and_animation:
-    category: performance
+  visual_viewport_clipping:
+    category: visual
     description: Renders dots with viewport clipping and animated centering
     behavior: |
       Web: Renders all totalItems dots in a flex track inside a fixed-width
