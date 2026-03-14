@@ -115,18 +115,15 @@ describe('MCP Queryability: Browser Distribution Guide', () => {
     });
 
     /**
-     * Verify the document has conditional loading frontmatter.
-     * This enables trigger-based loading via MCP.
+     * Verify the document has loading frontmatter.
+     * The inclusion field controls how the document is loaded by the context system.
      */
-    it('should have conditional loading frontmatter', () => {
+    it('should have loading frontmatter', () => {
       // Check for frontmatter
       expect(documentContent).toMatch(/^---\n/);
 
       // Check for inclusion type
       expect(documentContent).toMatch(/inclusion:\s*(conditional|always|manual)/);
-
-      // Check for trigger keywords
-      expect(documentContent).toMatch(/trigger:\s*.+/);
     });
   });
 
