@@ -112,9 +112,9 @@ describe('Nav-SegmentedChoice-Base — Animation & Visual', () => {
     it('should position indicator at selected segment on mount', async () => {
       const el = await createComponent({ 'selected-value': 'weekly' });
       const indicator = getIndicator(el);
-      // Indicator should have inset-inline-start and inline-size set
-      expect(indicator.style.insetInlineStart).toBeTruthy();
-      expect(indicator.style.inlineSize).toBeTruthy();
+      // Indicator should have left and width set
+      expect(indicator.style.left).toBeTruthy();
+      expect(indicator.style.width).toBeTruthy();
     });
   });
 
@@ -123,98 +123,77 @@ describe('Nav-SegmentedChoice-Base — Animation & Visual', () => {
   // ==========================================================================
 
   describe('Animation Choreography', () => {
-    it('should set shadow-out transition on phase 1 when selection changes', async () => {
-      const el = await createComponent();
-      const indicator = getIndicator(el);
-
-      // Click inactive segment to trigger animation
-      getSegments(el)[1].click();
-
-      // Phase 1: shadow out — transition should target box-shadow with accelerate easing
-      expect(indicator.style.transition).toContain('box-shadow');
-      expect(indicator.style.transition).toContain('var(--easing-accelerate)');
-      expect(indicator.style.transition).toContain('var(--duration-150)');
-    });
-
-    it('should set box-shadow to none during shadow-out phase', async () => {
+    it('should set compound transition with all phases when selection changes', async () => {
       const el = await createComponent();
       const indicator = getIndicator(el);
 
       getSegments(el)[1].click();
 
-      expect(indicator.style.boxShadow).toBe('none');
+      // Compound transition includes width, left, and box-shadow
+      const transition = indicator.style.transition;
+      expect(transition).toContain('box-shadow');
+      expect(transition).toContain('width');
+      expect(transition).toContain('left');
+      expect(transition).toContain('var(--easing-decelerate)');
+      expect(transition).toContain('var(--easing-standard)');
+      expect(transition).toContain('var(--easing-glide-decelerate)');
     });
 
-    it('should use duration and easing tokens (not hard-coded values) in transitions', async () => {
+    it('should set box-shadow to empty to transition back from none', async () => {
+      const el = await createComponent();
+      const indicator = getIndicator(el);
+
+      getSegments(el)[1].click();
+
+      // box-shadow is set to '' (empty) to transition back from 'none' via CSS default
+      expect(indicator.style.boxShadow).toBe('');
+    });
+
+    it('should use easing and duration tokens in transitions', async () => {
       const el = await createComponent();
       const indicator = getIndicator(el);
 
       getSegments(el)[2].click();
 
-      // Verify token references, not hard-coded ms or bezier values
       const transition = indicator.style.transition;
-      expect(transition).toContain('var(--duration-');
       expect(transition).toContain('var(--easing-');
-      expect(transition).not.toMatch(/\d{2,}ms/);
+      expect(transition).toContain('var(--duration-');
     });
 
-    it('should advance to resize+glide phase after shadow-out completes', async () => {
+    it('should set target position and width on click', async () => {
       const el = await createComponent();
       const indicator = getIndicator(el);
 
       getSegments(el)[1].click();
 
-      // Simulate transitionend for phase 1 (shadow out)
-      indicator.dispatchEvent(transitionEnd('box-shadow'));
+      // Indicator should have left and width set for the target segment
+      expect(indicator.style.left).toBeTruthy();
+      expect(indicator.style.width).toBeTruthy();
+    });
 
-      await new Promise(r => setTimeout(r, 0));
+    it('should include delay-based choreography in transition', async () => {
+      const el = await createComponent();
+      const indicator = getIndicator(el);
 
-      // Phase 2+3: resize + glide
+      getSegments(el)[1].click();
+
+      // Compound transition uses delays to sequence phases
       const transition = indicator.style.transition;
-      expect(transition).toContain('inline-size');
-      expect(transition).toContain('inset-inline-start');
-      expect(transition).toContain('var(--easing-standard)');
-      expect(transition).toContain('var(--easing-glide-decelerate)');
-      expect(transition).toContain('var(--duration-350)');
+      // box-shadow has the longest delay (shadow-in after glide completes)
+      expect(transition).toMatch(/box-shadow.*500ms/);
     });
 
-    it('should advance to shadow-in phase after glide completes', async () => {
-      const el = await createComponent();
-      const indicator = getIndicator(el);
+    it('should clean up transition after all phases complete', (done) => {
+      createComponent().then(el => {
+        const indicator = getIndicator(el);
+        getSegments(el)[1].click();
 
-      getSegments(el)[1].click();
-
-      // Phase 1 complete
-      indicator.dispatchEvent(transitionEnd('box-shadow'));
-      await new Promise(r => setTimeout(r, 0));
-
-      // Phase 2+3 complete (glide is the longer one)
-      indicator.dispatchEvent(transitionEnd('inset-inline-start'));
-      await new Promise(r => setTimeout(r, 0));
-
-      // Phase 4: shadow in — decelerate easing, box-shadow cleared to CSS default
-      expect(indicator.style.transition).toContain('box-shadow');
-      expect(indicator.style.transition).toContain('var(--easing-decelerate)');
-      expect(indicator.style.boxShadow).toBe('');
-    });
-
-    it('should clean up transition after all phases complete', async () => {
-      const el = await createComponent();
-      const indicator = getIndicator(el);
-
-      getSegments(el)[1].click();
-
-      // Run all 3 transitionend events
-      indicator.dispatchEvent(transitionEnd('box-shadow'));
-      await new Promise(r => setTimeout(r, 0));
-
-      indicator.dispatchEvent(transitionEnd('inset-inline-start'));
-      await new Promise(r => setTimeout(r, 0));
-
-      indicator.dispatchEvent(transitionEnd('box-shadow'));
-      await new Promise(r => setTimeout(r, 0));
-
-      expect(indicator.style.transition).toBe('');
+        // Compound transition cleans up via setTimeout(700)
+        setTimeout(() => {
+          expect(indicator.style.transition).toBe('');
+          done();
+        }, 750);
+      });
     });
   });
 

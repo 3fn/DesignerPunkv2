@@ -287,6 +287,7 @@ export class NavSegmentedChoiceBase extends HTMLElement {
   /**
    * Position the indicator behind the selected segment (no animation).
    * Used for initial render and non-animated updates.
+   * Uses physical properties (left/width) for Safari transition compatibility.
    * @see contract: animation_initial_render
    */
   private _updateIndicator(): void {
@@ -299,8 +300,8 @@ export class NavSegmentedChoiceBase extends HTMLElement {
     if (!btn) return;
 
     this._indicatorEl.style.transition = 'none';
-    this._indicatorEl.style.insetInlineStart = `${btn.offsetLeft}px`;
-    this._indicatorEl.style.inlineSize = `${btn.offsetWidth}px`;
+    this._indicatorEl.style.left = `${btn.offsetLeft}px`;
+    this._indicatorEl.style.width = `${btn.offsetWidth}px`;
 
     if (this._isInitialRender) {
       this._isInitialRender = false;
@@ -401,24 +402,13 @@ export class NavSegmentedChoiceBase extends HTMLElement {
   /**
    * Wait for a specific CSS transition to end on the indicator.
    */
-  private _waitForTransition(property: string): Promise<void> {
-    return new Promise(resolve => {
-      const handler = (e: TransitionEvent) => {
-        if (e.propertyName === property) {
-          this._indicatorEl!.removeEventListener('transitionend', handler);
-          resolve();
-        }
-      };
-      this._indicatorEl!.addEventListener('transitionend', handler);
-    });
-  }
-
   /**
-   * Four-phase indicator animation choreography.
+   * Four-phase indicator animation choreography using CSS transition delays.
    * 
-   * Phase 1: Shadow out (150ms, easingAccelerate)
-   * Phase 2+3: Resize + Glide simultaneous (150ms easingStandard / 350ms easingGlideDecelerate)
-   * Phase 4: Shadow in (150ms, easingDecelerate)
+   * Phase 1 (0ms):       Shadow out — 150ms easingAccelerate
+   * Phase 2+3 (150ms):   Resize + Glide — 150ms/350ms simultaneous
+   * Phase 4 (500ms):     Shadow in — 150ms easingDecelerate
+   * Total: ~650ms
    * 
    * @see Req 3.1–3.7, contracts: animation_coordination, animation_initial_render, accessibility_reduced_motion
    */
@@ -436,54 +426,48 @@ export class NavSegmentedChoiceBase extends HTMLElement {
     // Reduced motion: instant move (contract: accessibility_reduced_motion)
     if (this._prefersReducedMotion()) {
       this._indicatorEl.style.transition = 'none';
-      this._indicatorEl.style.insetInlineStart = `${targetLeft}px`;
-      this._indicatorEl.style.inlineSize = `${targetWidth}px`;
+      this._indicatorEl.style.left = `${targetLeft}px`;
+      this._indicatorEl.style.width = `${targetWidth}px`;
       return;
     }
 
     // Prevent re-entrant animation — snap to current target if already animating
     if (this._animating) {
       this._indicatorEl.style.transition = 'none';
-      this._indicatorEl.style.insetInlineStart = `${targetLeft}px`;
-      this._indicatorEl.style.inlineSize = `${targetWidth}px`;
+      this._indicatorEl.style.left = `${targetLeft}px`;
+      this._indicatorEl.style.width = `${targetWidth}px`;
       this._animating = false;
       return;
     }
 
     this._animating = true;
 
-    // Phase 1: Shadow out
-    this._indicatorEl.style.transition =
-      'box-shadow calc(var(--duration-150) * 1ms) var(--easing-accelerate)';
+    // Phase 1: Shadow out immediately
     this._indicatorEl.style.boxShadow = 'none';
-    this._waitForTransition('box-shadow').then(() => {
-      if (!this._animating) return;
 
-      // Phase 2+3: Resize + Glide (simultaneous)
-      this._indicatorEl!.style.transition = [
-        'inline-size calc(var(--duration-150) * 1ms) var(--easing-standard)',
-        'inset-inline-start calc(var(--duration-350) * 1ms) var(--easing-glide-decelerate)',
-      ].join(', ');
-      this._indicatorEl!.style.insetInlineStart = `${targetLeft}px`;
-      this._indicatorEl!.style.inlineSize = `${targetWidth}px`;
+    // All four phases as a single compound transition with delays.
+    // Uses physical properties (left/width) because Safari doesn't
+    // reliably transition logical properties (inset-inline-start/inline-size).
+    // Force reflow so box-shadow: none applies before transition starts
+    this._indicatorEl.offsetWidth;
 
-      return this._waitForTransition('inset-inline-start');
-    }).then(() => {
-      if (!this._animating) return;
+    // Duration tokens already include ms units in browser build
+    this._indicatorEl.style.transition = [
+      'width var(--duration-150) var(--easing-standard) var(--duration-150)',
+      'left var(--duration-350) var(--easing-glide-decelerate) var(--duration-150)',
+      'box-shadow var(--duration-150) var(--easing-decelerate) calc(var(--duration-150) + var(--duration-350))',
+    ].join(', ');
+    this._indicatorEl.style.left = `${targetLeft}px`;
+    this._indicatorEl.style.width = `${targetWidth}px`;
+    this._indicatorEl.style.boxShadow = '';
 
-      // Phase 4: Shadow in
-      this._indicatorEl!.style.transition =
-        'box-shadow calc(var(--duration-150) * 1ms) var(--easing-decelerate)';
-      this._indicatorEl!.style.boxShadow = '';
-
-      return this._waitForTransition('box-shadow');
-    }).then(() => {
-      // Clean up
+    // Clean up after total animation time (~650ms + buffer)
+    setTimeout(() => {
       if (this._indicatorEl) {
         this._indicatorEl.style.transition = '';
       }
       this._animating = false;
-    });
+    }, 700);
   }
 }
 
