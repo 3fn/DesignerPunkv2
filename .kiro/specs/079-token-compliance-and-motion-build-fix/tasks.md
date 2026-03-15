@@ -78,7 +78,7 @@ Three issues, ordered by dependency:
     - Verify: spacing/radius/tap area tokens now output as `val X: Dp = N.dp` instead of `const val X: Float = Nf`
     - _Requirements: 5.1, 5.2, 5.3, 5.4_
 
-- [x] 2. Avatar-Base Token Compliance
+- [ ] 2. Avatar-Base Token Compliance
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive

@@ -83,7 +83,9 @@ Lina completed Task 2.2 before this issue was discovered. She identified the typ
 - XL (`80.dp`) and XXL (`128.dp`) dimensions kept as hard-coded `Dp` literals instead of referencing `AvatarTokens.sizeXl` / `sizeXxl` (which are `Int`)
 - Icon gap-fillers (`iconSizeXs`, `iconSizeXxl`) defined locally in the file's `AvatarTokens` object with explicit `: Dp = 12.dp` / `64.dp` typing, not referencing the generated `ComponentTokens.android.kt` values
 
-This is correct and compiles, but means 4 values in `Avatar.android.kt` are not consuming the generated component tokens:
+This is a workaround, not a fix. The values are correct and it compiles, but it creates **two sources of truth** for those 4 values — the token definition in `avatar.tokens.ts` (which feeds the generated `ComponentTokens.android.kt`) and the hand-written duplicates in `Avatar.android.kt`. If someone changes a value in `avatar.tokens.ts`, the generated output updates but the hand-written Kotlin file does not. This breaks the token chain the Rosetta pipeline is designed to maintain.
+
+4 values in `Avatar.android.kt` are not consuming the generated component tokens:
 
 | Line | Current | After generator fix |
 |------|---------|-------------------|
