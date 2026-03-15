@@ -4,7 +4,7 @@
 **Discovered by**: Thurgood (audit of Task 2.1 completion, Spec 079)
 **Domain**: Ada (token pipeline/generator)
 **Severity**: Low (technical debt — no longer a blocker)
-**Status**: Open (downgraded — Lina worked around it in Task 2.2)
+**Status**: Fully Resolved (Ada generator fix + Lina cleanup pass)
 **Related**: Spec 079 Task 1.4 (Android generator type fix)
 
 ---
@@ -95,6 +95,27 @@ This is a workaround, not a fix. The values are correct and it compiles, but it 
 | ~91 | `val iconSizeXxl: Dp = 64.dp` | Remove — use generated `AvatarTokens.iconSizeXxl` |
 
 **Follow-up**: Once Ada fixes the generator to append `.dp` to derivation values, Lina can do a small cleanup pass to replace these 4 hard-coded values with generated component token references.
+
+---
+
+## Lina Cleanup Pass
+
+**Date**: 2026-03-14
+**Fixed by**: Lina
+
+Replaced the 4 workaround values in `Avatar.android.kt` with generated component token references:
+
+- Imported `com.designerpunk.tokens.AvatarTokens as GeneratedAvatarTokens` (aliased to avoid collision with local `AvatarTokens` object)
+- `val iconSizeXs: Dp = 12.dp` → `GeneratedAvatarTokens.iconSizeXs`
+- `val iconSizeXxl: Dp = 64.dp` → `GeneratedAvatarTokens.iconSizeXxl`
+- `dimension = 80.dp` → `GeneratedAvatarTokens.sizeXl`
+- `dimension = 128.dp` → `GeneratedAvatarTokens.sizeXxl`
+
+Token chain fully restored: `avatar.tokens.ts` → generator → `ComponentTokens.android.kt` → `Avatar.android.kt`. No more dual sources of truth.
+
+TokenCompliance test now passes with zero violations across the entire codebase.
+
+**Status**: Fully Resolved
 
 ---
 

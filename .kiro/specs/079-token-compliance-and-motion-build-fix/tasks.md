@@ -78,7 +78,7 @@ Three issues, ordered by dependency:
     - Verify: spacing/radius/tap area tokens now output as `val X: Dp = N.dp` instead of `const val X: Float = Nf`
     - _Requirements: 5.1, 5.2, 5.3, 5.4_
 
-- [ ] 2. Avatar-Base Token Compliance
+- [x] 2. Avatar-Base Token Compliance
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive
@@ -160,7 +160,7 @@ Three issues, ordered by dependency:
     - Android: Replace `.padding(bottom = 8.dp)` with `DesignTokens.space_100` reference (no `.dp` after Task 1.4)
     - _Requirements: 4.4, 5.5_
 
-- [ ] 4. Validation & Verification
+- [x] 4. Validation & Verification
 
   **Type**: Parent
   **Validation**: Tier 2 - Standard
@@ -181,7 +181,7 @@ Three issues, ordered by dependency:
   **Post-Completion:**
   - Commit: `./.kiro/hooks/commit-task.sh "Task 4 Complete: Validation & Verification"`
 
-  - [ ] 4.1 Run full validation
+  - [x] 4.1 Run full validation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Thurgood
