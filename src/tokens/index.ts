@@ -275,7 +275,9 @@ export const allTokens = {
   [TokenCategory.OPACITY]: opacityTokens,
   [TokenCategory.BLEND]: blendTokens,
   [TokenCategory.BREAKPOINT]: breakpointTokens,
-  [TokenCategory.EASING]: easingTokens
+  [TokenCategory.EASING]: easingTokens,
+  [TokenCategory.DURATION]: durationTokens,
+  [TokenCategory.SCALE]: scaleTokens
 };
 
 /**

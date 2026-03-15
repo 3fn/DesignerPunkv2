@@ -180,7 +180,7 @@ describe('Nav-SegmentedChoice-Base — Animation & Visual', () => {
       // Compound transition uses delays to sequence phases
       const transition = indicator.style.transition;
       // box-shadow has the longest delay (shadow-in after glide completes)
-      expect(transition).toMatch(/box-shadow.*500ms/);
+      expect(transition).toMatch(/box-shadow.*var\(--duration-150\).*calc\(/);
     });
 
     it('should clean up transition after all phases complete', (done) => {

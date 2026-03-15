@@ -81,7 +81,7 @@ describe('Property-Based Tests: Motion Tokens', () => {
             
             // Must have required properties
             expect(token!.name).toBe(tokenName);
-            expect(token!.category).toBe(TokenCategory.SPACING);
+            expect(token!.category).toBe(TokenCategory.DURATION);
             expect(token!.familyBaseValue).toBe(DURATION_BASE_VALUE);
             
             // Must have platform values
@@ -149,7 +149,7 @@ describe('Property-Based Tests: Motion Tokens', () => {
             
             // Must have required properties
             expect(token!.name).toBe(tokenName);
-            expect(token!.category).toBe(TokenCategory.SPACING);
+            expect(token!.category).toBe(TokenCategory.SCALE);
             expect(token!.familyBaseValue).toBe(SCALE_BASE_VALUE);
             
             // Must have platform values

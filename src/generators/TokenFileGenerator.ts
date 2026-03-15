@@ -1057,7 +1057,10 @@ export class TokenFileGenerator {
       generatedAt: new Date()
     };
 
-    const tokens = getAllPrimitiveTokens();
+    // Motion tokens (easing, duration, scale) are handled by generateMotionSection(),
+    // so exclude them from the primitive pass to prevent duplicate declarations
+    const MOTION_CATEGORIES = new Set([TokenCategory.EASING, TokenCategory.DURATION, TokenCategory.SCALE]);
+    const tokens = getAllPrimitiveTokens().filter(t => !MOTION_CATEGORIES.has(t.category));
     const allSemantics = getAllSemanticTokens();
     
     // Filter out layering tokens (they don't have primitiveReferences)
@@ -1149,7 +1152,7 @@ export class TokenFileGenerator {
       platform: 'web',
       filePath: `${outputDir}/DesignTokens.web.css`,
       content,
-      tokenCount: tokens.length,
+      tokenCount: getAllPrimitiveTokens().length,
       semanticTokenCount,
       valid: validation.valid,
       errors: validation.errors

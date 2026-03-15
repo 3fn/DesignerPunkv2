@@ -449,9 +449,9 @@ struct DesignTokens {
         const token = createMockPrimitiveToken();
         const result = generator.formatToken(token);
 
-        expect(result).toContain('const val space_100');
-        expect(result).toContain('Float');
-        expect(result).toContain('= 8f');
+        expect(result).toContain('val space_100');
+        expect(result).toContain('.dp');
+        expect(result).toContain('= 8.dp');
       });
 
       test('should format fontSize token with Float type', () => {
@@ -469,8 +469,8 @@ struct DesignTokens {
         const result = generator.formatToken(token);
 
         expect(result).toContain('font_size_100');
-        expect(result).toContain('Float');
-        expect(result).toContain('= 16f');
+        expect(result).toContain('.dp');
+        expect(result).toContain('= 16.dp');
       });
 
       test('should format fontWeight token as Int', () => {
@@ -507,8 +507,8 @@ struct DesignTokens {
         const result = generator.formatToken(token);
 
         expect(result).toContain('border_width_100');
-        expect(result).toContain('Float');
-        expect(result).toContain('= 1f');
+        expect(result).toContain('.dp');
+        expect(result).toContain('= 1.dp');
       });
 
       test('should generate complete Kotlin file', () => {
@@ -684,7 +684,7 @@ object DesignTokens {
       // All should contain the value 8 in their respective formats
       expect(webResult).toContain('8px');
       expect(iosResult).toContain('= 8');
-      expect(androidResult).toContain('= 8f');
+      expect(androidResult).toContain('= 8.dp');
     });
 
     test('should maintain consistent naming semantics across platforms', () => {

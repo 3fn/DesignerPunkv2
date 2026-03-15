@@ -137,6 +137,9 @@ export class AndroidFormatGenerator extends BaseFormatProvider {
   private formatKotlinConstant(name: string, value: number | string | object, unit: string, category: string): string {
     const kotlinType = this.getKotlinType(category, unit);
     const formattedValue = this.formatKotlinValue(value, unit, kotlinType);
+    if (kotlinType === 'Dp') {
+      return `    val ${name} = ${formattedValue}`;
+    }
     return `    const val ${name}: ${kotlinType} = ${formattedValue}`;
   }
 
@@ -153,7 +156,7 @@ export class AndroidFormatGenerator extends BaseFormatProvider {
       case 'tapArea':
       case 'fontSize':
       case 'borderWidth':
-        return 'Float';
+        return 'Dp';
       case 'lineHeight':
       case 'density':
       case 'letterSpacing':
@@ -209,6 +212,9 @@ export class AndroidFormatGenerator extends BaseFormatProvider {
     }
 
     // Numeric values
+    if (kotlinType === 'Dp') {
+      return `${value}.dp`;
+    }
     if (kotlinType === 'Float') {
       return `${value}f`;
     }

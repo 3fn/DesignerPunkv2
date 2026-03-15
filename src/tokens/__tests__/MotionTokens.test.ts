@@ -64,7 +64,7 @@ describe('Duration Tokens', () => {
       const allTokens = getAllDurationTokens();
       
       allTokens.forEach(token => {
-        expect(token.category).toBe(TokenCategory.SPACING); // Temporary until DURATION category added
+        expect(token.category).toBe(TokenCategory.DURATION);
       });
     });
 
@@ -106,7 +106,7 @@ describe('Duration Tokens', () => {
       
       expect(Array.isArray(allTokens)).toBe(true);
       expect(allTokens).toHaveLength(3);
-      expect(allTokens.every(token => token.category === TokenCategory.SPACING)).toBe(true);
+      expect(allTokens.every(token => token.category === TokenCategory.DURATION)).toBe(true);
     });
 
     test('durationTokenNames should contain all token names', () => {
@@ -299,7 +299,7 @@ describe('Scale Tokens', () => {
       const allTokens = getAllScaleTokens();
       
       allTokens.forEach(token => {
-        expect(token.category).toBe(TokenCategory.SPACING); // Temporary until SCALE category added
+        expect(token.category).toBe(TokenCategory.SCALE);
       });
     });
 
@@ -341,7 +341,7 @@ describe('Scale Tokens', () => {
       
       expect(Array.isArray(allTokens)).toBe(true);
       expect(allTokens).toHaveLength(6);
-      expect(allTokens.every(token => token.category === TokenCategory.SPACING)).toBe(true);
+      expect(allTokens.every(token => token.category === TokenCategory.SCALE)).toBe(true);
     });
 
     test('scaleTokenNames should contain all token names', () => {

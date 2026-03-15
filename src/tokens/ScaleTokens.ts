@@ -57,7 +57,7 @@ function generateScalePlatformValues(scaleFactor: number): PlatformValues {
 export const scaleTokens: Record<string, PrimitiveToken> = {
   scale088: {
     name: 'scale088',
-    category: TokenCategory.SPACING, // Using SPACING temporarily until SCALE category is added
+    category: TokenCategory.SCALE,
     baseValue: 0.88,
     familyBaseValue: SCALE_BASE_VALUE,
     description: 'Float label scale - 88% scale for text input label transitions. Example: 16px × 0.88 = 14.08px → rounds to 14px',
@@ -70,7 +70,7 @@ export const scaleTokens: Record<string, PrimitiveToken> = {
 
   scale092: {
     name: 'scale092',
-    category: TokenCategory.SPACING, // Using SPACING temporarily until SCALE category is added
+    category: TokenCategory.SCALE,
     baseValue: 0.92,
     familyBaseValue: SCALE_BASE_VALUE,
     description: 'Subtle scale down - 92% scale for pressed states and subtle emphasis reduction. Example: 16px × 0.92 = 14.72px → rounds to 15px',
@@ -83,7 +83,7 @@ export const scaleTokens: Record<string, PrimitiveToken> = {
 
   scale096: {
     name: 'scale096',
-    category: TokenCategory.SPACING, // Using SPACING temporarily until SCALE category is added
+    category: TokenCategory.SCALE,
     baseValue: 0.96,
     familyBaseValue: SCALE_BASE_VALUE,
     description: 'Button press feedback - 96% scale for button press states and subtle emphasis reduction. Example: 16px × 0.96 = 15.36px → rounds to 15px',
@@ -96,7 +96,7 @@ export const scaleTokens: Record<string, PrimitiveToken> = {
 
   scale100: {
     name: 'scale100',
-    category: TokenCategory.SPACING, // Using SPACING temporarily until SCALE category is added
+    category: TokenCategory.SCALE,
     baseValue: SCALE_BASE_VALUE,
     familyBaseValue: SCALE_BASE_VALUE,
     description: 'Default state - 100% scale, no transformation. Example: 16px × 1.00 = 16px',
@@ -109,7 +109,7 @@ export const scaleTokens: Record<string, PrimitiveToken> = {
 
   scale104: {
     name: 'scale104',
-    category: TokenCategory.SPACING, // Using SPACING temporarily until SCALE category is added
+    category: TokenCategory.SCALE,
     baseValue: 1.04,
     familyBaseValue: SCALE_BASE_VALUE,
     description: 'Hover emphasis - 104% scale for hover states and subtle emphasis. Example: 16px × 1.04 = 16.64px → rounds to 17px',
@@ -122,7 +122,7 @@ export const scaleTokens: Record<string, PrimitiveToken> = {
 
   scale108: {
     name: 'scale108',
-    category: TokenCategory.SPACING, // Using SPACING temporarily until SCALE category is added
+    category: TokenCategory.SCALE,
     baseValue: 1.08,
     familyBaseValue: SCALE_BASE_VALUE,
     description: 'Strong emphasis - 108% scale for strong hover emphasis and significant scale up. Example: 16px × 1.08 = 17.28px → rounds to 17px',

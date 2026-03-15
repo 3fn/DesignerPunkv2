@@ -26,7 +26,9 @@ export enum TokenCategory {
   OPACITY = 'opacity',
   BLEND = 'blend',
   BREAKPOINT = 'breakpoint',
-  EASING = 'easing'
+  EASING = 'easing',
+  DURATION = 'duration',
+  SCALE = 'scale'
 }
 
 /**

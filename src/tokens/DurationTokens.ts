@@ -40,7 +40,7 @@ function generateDurationPlatformValues(baseValue: number): PlatformValues {
 export const durationTokens: Record<string, PrimitiveToken> = {
   duration150: {
     name: 'duration150',
-    category: TokenCategory.SPACING, // Using SPACING temporarily until DURATION category is added
+    category: TokenCategory.DURATION,
     baseValue: 150,
     familyBaseValue: DURATION_BASE_VALUE,
     description: 'Fast interactions - 150ms duration for hover, focus states, and micro-interactions',
@@ -53,7 +53,7 @@ export const durationTokens: Record<string, PrimitiveToken> = {
 
   duration250: {
     name: 'duration250',
-    category: TokenCategory.SPACING, // Using SPACING temporarily until DURATION category is added
+    category: TokenCategory.DURATION,
     baseValue: DURATION_BASE_VALUE,
     familyBaseValue: DURATION_BASE_VALUE,
     description: 'Standard transitions - 250ms duration for float labels, state changes, and most animations',
@@ -66,7 +66,7 @@ export const durationTokens: Record<string, PrimitiveToken> = {
 
   duration350: {
     name: 'duration350',
-    category: TokenCategory.SPACING, // Using SPACING temporarily until DURATION category is added
+    category: TokenCategory.DURATION,
     baseValue: 350,
     familyBaseValue: DURATION_BASE_VALUE,
     description: 'Deliberate animations - 350ms duration for modals, drawers, and complex transitions',

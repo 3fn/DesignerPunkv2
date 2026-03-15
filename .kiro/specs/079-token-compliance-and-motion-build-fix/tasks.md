@@ -44,14 +44,14 @@ Three issues, ordered by dependency:
   **Post-Completion:**
   - Commit: `./.kiro/hooks/commit-task.sh "Task 1 Complete: Category Migration, Duplicate Elimination & Generator Fix"`
 
-  - [ ] 1.1 Add DURATION and SCALE to TokenCategory enum
+  - [x] 1.1 Add DURATION and SCALE to TokenCategory enum
     **Type**: Implementation
     **Validation**: Tier 1 - Minimal
     **Agent**: Ada
     - Add `DURATION = 'duration'` and `SCALE = 'scale'` to `TokenCategory` in `src/types/PrimitiveToken.ts`
     - _Requirements: 2.1_
 
-  - [ ] 1.2 Migrate duration and scale token categories
+  - [x] 1.2 Migrate duration and scale token categories
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -61,7 +61,7 @@ Three issues, ordered by dependency:
     - Remove "Using SPACING temporarily" comments
     - _Requirements: 2.2, 2.3, 2.4, 2.5_
 
-  - [ ] 1.3 Filter motion tokens from primitive pass
+  - [x] 1.3 Filter motion tokens from primitive pass
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
