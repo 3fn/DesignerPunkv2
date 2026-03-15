@@ -50,6 +50,7 @@ import com.designerpunk.components.core.IconBase
 // Import DesignTokens for semantic color token references
 // @see Rosetta System Architecture - Token Consumption Rule
 import com.designerpunk.tokens.DesignTokens
+import com.designerpunk.tokens.AvatarTokens as GeneratedAvatarTokens
 // Import Coil AsyncImage for image loading
 // @see Requirements: 5.1, 5.2, 5.3, 5.5, 5.6 - Image support
 import coil.compose.AsyncImage
@@ -81,14 +82,14 @@ object AvatarTokens {
      * Component token gap filler - no existing icon token at this size
      * @see Requirements: 3.1 - xs avatar icon size
      */
-    val iconSizeXs: Dp = 12.dp
+    val iconSizeXs: Dp = GeneratedAvatarTokens.iconSizeXs
     
     /**
      * Icon size for xxl avatar (64dp = 8 × base)
      * Component token gap filler - no existing icon token at this size
      * @see Requirements: 3.6 - xxl avatar icon size
      */
-    val iconSizeXxl: Dp = 64.dp
+    val iconSizeXxl: Dp = GeneratedAvatarTokens.iconSizeXxl
     
     // MARK: - Avatar Color Tokens
     // These reference DesignTokens semantic color tokens for consistency with the Rosetta pipeline.
@@ -244,12 +245,12 @@ enum class AvatarSize(
         iconTokenReference = "icon.size100"
     ),
     Xl(
-        dimension = 80.dp,  // avatar.size.xl - no spacing token at this value
+        dimension = GeneratedAvatarTokens.sizeXl,  // 80dp - avatar.size.xl
         iconDimension = DesignTokens.icon_size_500,  // 40dp
         iconTokenReference = "icon.size500"
     ),
     Xxl(
-        dimension = 128.dp,  // avatar.size.xxl - no spacing token at this value
+        dimension = GeneratedAvatarTokens.sizeXxl,  // 128dp - avatar.size.xxl
         iconDimension = AvatarTokens.iconSizeXxl,  // 64dp - component token gap filler
         iconTokenReference = "avatar.icon.size.xxl"
     );

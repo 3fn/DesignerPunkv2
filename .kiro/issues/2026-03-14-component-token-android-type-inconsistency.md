@@ -95,3 +95,30 @@ This is a workaround, not a fix. The values are correct and it compiles, but it 
 | ~91 | `val iconSizeXxl: Dp = 64.dp` | Remove — use generated `AvatarTokens.iconSizeXxl` |
 
 **Follow-up**: Once Ada fixes the generator to append `.dp` to derivation values, Lina can do a small cleanup pass to replace these 4 hard-coded values with generated component token references.
+
+---
+
+## Resolution
+
+**Date**: 2026-03-14
+**Fixed by**: Ada
+**Status**: Resolved
+
+Fixed in `TokenFileGenerator.formatAndroidComponentTokenValue()` — dimensional family derivation values now append `.dp` suffix, matching the primitive token output from Task 1.4.
+
+```typescript
+const dimensionalFamilies = ['spacing', 'radius', 'tapArea', 'fontSize', 'borderWidth'];
+if (dimensionalFamilies.includes(token.family)) {
+  return `${token.value}.dp`;
+}
+```
+
+All 6 affected tokens now output correctly:
+- `AvatarTokens.sizeXl = 80.dp` (was `80`)
+- `AvatarTokens.sizeXxl = 128.dp` (was `128`)
+- `AvatarTokens.iconSizeXs = 12.dp` (was `12`)
+- `AvatarTokens.iconSizeXxl = 64.dp` (was `64`)
+- `BadgeLabelBaseTokens.maxWidth = 120.dp` (was `120`)
+- `SegmentedChoice.paddingBlockRest = 11.dp` (was `11`)
+
+Lina can now replace the 4 workaround values in `Avatar.android.kt` with generated component token references.

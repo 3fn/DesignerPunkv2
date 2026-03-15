@@ -570,7 +570,11 @@ export class TokenFileGenerator {
       const familyClass = this.getFamilyClassName(token.family);
       return `${familyClass}.${token.primitiveReference}`;
     }
-    // Return raw value for non-reference tokens
+    // Dimensional families need .dp suffix to match primitive token output (Task 1.4)
+    const dimensionalFamilies = ['spacing', 'radius', 'tapArea', 'fontSize', 'borderWidth'];
+    if (dimensionalFamilies.includes(token.family)) {
+      return `${token.value}.dp`;
+    }
     return String(token.value);
   }
 
