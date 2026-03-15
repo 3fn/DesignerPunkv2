@@ -522,7 +522,7 @@ fun ButtonVerticalListSet(
                 fontSize = DesignTokens.typography_body_sm.fontSize.sp,
                 fontWeight = FontWeight(DesignTokens.typography_body_sm.fontWeight.toInt()),
                 modifier = Modifier
-                    .padding(bottom = 8.dp)
+                    .padding(bottom = DesignTokens.space_100)
                     .semantics {
                         // role="alert" equivalent for TalkBack - immediate announcement
                         liveRegion = LiveRegionMode.Assertive

@@ -95,33 +95,33 @@ class DesignTokensProvider {
     /** Recommended tap area size (48dp)
      * Requirements: 5.1, 14.6 - Minimum height for touch targets
      */
-    val tapAreaRecommended: Dp = DesignTokens.tap_area_recommended.dp
+    val tapAreaRecommended: Dp = DesignTokens.tap_area_recommended
     
     // MARK: - Spacing Tokens
     
     /** Grouped loose spacing (12dp)
      * Requirements: 4.6, 4.7 - Internal spacing between elements
      */
-    val spaceGroupedLoose: Dp = DesignTokens.space_150.dp
+    val spaceGroupedLoose: Dp = DesignTokens.space_150
     
     /** Inset 200 spacing (16dp)
      * Requirements: 5.4 - Inline padding
      */
-    val spaceInset200: Dp = DesignTokens.space_200.dp
+    val spaceInset200: Dp = DesignTokens.space_200
     
     // MARK: - Radius Tokens
     
     /** Normal border radius (8dp)
      * Requirements: 5.3 - Border radius
      */
-    val radiusNormal: Dp = DesignTokens.radius_100.dp
+    val radiusNormal: Dp = DesignTokens.radius_100
     
     // MARK: - Icon Tokens
     
     /** Icon size 100 (24dp)
      * Requirements: 9.1, 9.2 - Icon sizing
      */
-    val iconSize100: Dp = 24.dp
+    val iconSize100: Dp = DesignTokens.icon_size_100
     
     // MARK: - Typography Tokens
     
@@ -606,7 +606,7 @@ fun IconBase(
         Box(
             modifier = Modifier
                 .size(size * 0.8f)
-                .background(color, RoundedCornerShape(4.dp))
+                .background(color, RoundedCornerShape(DesignTokens.radius_050))
         )
     }
 }
@@ -623,8 +623,8 @@ fun VerticalListButtonItemPreview() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .padding(DesignTokens.space_200),
+        verticalArrangement = Arrangement.spacedBy(DesignTokens.space_200)
     ) {
         // Tap Mode
         Text("Tap Mode", fontWeight = FontWeight.Bold)

@@ -543,7 +543,7 @@ public struct ButtonVerticalListSet: View {
         Text(message)
             .font(.system(size: 14, weight: .regular))
             .foregroundColor(Color(DesignTokens.colorFeedbackErrorText))
-            .padding(.bottom, 8)
+            .padding(.bottom, DesignTokens.space100)
             .accessibilityAddTraits(.isStaticText)
             // role="alert" equivalent for VoiceOver - immediate announcement
             .accessibilityLabel("Error: \(message)")

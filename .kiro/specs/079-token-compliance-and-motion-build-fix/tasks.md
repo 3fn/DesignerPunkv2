@@ -120,7 +120,7 @@ Three issues, ordered by dependency:
     - Remove `.dp` suffix on token references (after Task 1.4 generator fix)
     - _Requirements: 3.1, 3.3, 3.4, 3.5_
 
-- [ ] 3. Button-VerticalList Token Compliance
+- [x] 3. Button-VerticalList Token Compliance
 
   **Type**: Parent
   **Validation**: Tier 2 - Standard
@@ -142,7 +142,7 @@ Three issues, ordered by dependency:
   **Post-Completion:**
   - Commit: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Button-VerticalList Token Compliance"`
 
-  - [ ] 3.1 Fix Button-VerticalList-Item Android violations
+  - [x] 3.1 Fix Button-VerticalList-Item Android violations
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -152,7 +152,7 @@ Three issues, ordered by dependency:
     - Leave Preview composable hard-coded values as-is (intentional decoupling)
     - _Requirements: 4.1, 4.2, 4.3, 5.5_
 
-  - [ ] 3.2 Fix Button-VerticalList-Set padding violations
+  - [x] 3.2 Fix Button-VerticalList-Set padding violations
     **Type**: Implementation
     **Validation**: Tier 1 - Minimal
     **Agent**: Lina
