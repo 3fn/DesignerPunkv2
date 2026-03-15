@@ -459,7 +459,7 @@ The MCP Documentation Server is a working solution to the "AI context exhaustion
 
 - [Strategic Framework](strategic-framework/) — How core systems fit together
 - [Steering Documentation](.kiro/steering/) — Current architectural thinking and development guidance  
-- [Component Development Guide](.kiro/steering/Component%20Development%20Guide.md) — How to build components in this system
+- [Component Development Guide](.kiro/steering/Component-Development-Guide.md) — How to build components in this system
 - [Token System Overview](docs/token-system-overview.md) — Complete token documentation
 
 ---
