@@ -4,7 +4,7 @@
 **Discovered by**: Thurgood (audit of pre-existing TokenCompliance test failures)
 **Domain**: Lina (platform implementation files)
 **Severity**: Medium
-**Status**: Open
+**Status**: Resolved (Spec 079 Tasks 2 and 3 — all violations fixed)
 
 ---
 

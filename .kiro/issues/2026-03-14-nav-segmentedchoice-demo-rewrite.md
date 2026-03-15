@@ -4,7 +4,7 @@
 **Discovered by**: Thurgood (Peter's request)
 **Domain**: Lina (component demos)
 **Severity**: Medium
-**Status**: Open
+**Status**: Resolved (Lina completed — commit `88fbc036`)
 
 ---
 

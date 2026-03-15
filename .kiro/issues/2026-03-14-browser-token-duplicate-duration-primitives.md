@@ -4,7 +4,7 @@
 **Discovered by**: Lina (during Safari ESM bug investigation)
 **Domain**: Ada (token pipeline)
 **Severity**: Medium
-**Status**: Open
+**Status**: Resolved (Spec 079 Task 1.3 — filtered from primitive pass)
 
 ---
 

@@ -2,7 +2,7 @@
 
 **A Design System Foundation Built for Modern Product Development, Cross-Platform Excellence, and AI-Assisted Development**
 
-[![Version](https://img.shields.io/badge/Version-9.3.0-purple)](docs/releases/RELEASE-NOTES-9.3.0.md)
+[![Version](https://img.shields.io/badge/Version-9.4.0-purple)](docs/releases/RELEASE-NOTES-9.4.0.md)
 [![Repository](https://img.shields.io/badge/GitHub-DesignerPunkv2-blue)](https://github.com/3fn/DesignerPunkv2)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
@@ -10,18 +10,17 @@
 
 ---
 
-## Latest Release: v9.3.0
+## Latest Release: v9.4.0
 
-**Nav-SegmentedChoice, Easing Tokens, WCAG Themes & Contract Governance** (Specs 049, 071, 072.5, 075, 078) — New navigation component, easing token infrastructure, WCAG theme-conditional tokens, and behavioral contract governance:
+**Token Compliance & Motion Build Fix** (Spec 079) — Token pipeline correctness, Android generator type fix, and full compliance resolution:
 
-- **Nav-SegmentedChoice-Base**: Full cross-platform navigation control with four-phase indicator animation, keyboard navigation, and ARIA tablist roles.
-- **Easing token infrastructure**: New `EasingTokens.ts` with cubic bezier and piecewise linear curves. `PrimitiveToken` extended with easing fields.
-- **WCAG theme infrastructure**: `wcagValue` support across the full token pipeline — semantic tokens can reference different primitives in WCAG mode.
-- **Color migration**: Purple-centric → cyan-centric palette. New `contrast.onAction` and `action.navigation` semantic tokens.
-- **Contract governance**: 29 components audited, 3 automated validation tests, contracts embedded into scaffolding workflow and development guide.
-- 301 test suites, 7,820 tests passing, 0 missing tokens.
+- **Category migration**: `DURATION` and `SCALE` added to `TokenCategory` enum, completing the motion token infrastructure started in Spec 049.
+- **Duplicate elimination**: Browser CSS no longer outputs motion tokens twice — `EASING`, `DURATION`, `SCALE` filtered from primitive pass.
+- **Android generator fix**: Dimensional token families now output `Dp` type instead of `Float`, ensuring type-safe consumption in Kotlin Compose.
+- **Compliance fixes**: 20 spacing violations resolved across Avatar-Base and Button-VerticalList components — all hard-coded values replaced with token references.
+- 301 test suites, 7,820 tests passing, 0 TokenCompliance violations.
 
-[Full Release Notes →](docs/releases/RELEASE-NOTES-9.3.0.md)
+[Full Release Notes →](docs/releases/RELEASE-NOTES-9.4.0.md)
 
 ---
 
@@ -74,7 +73,7 @@ Think of it as: **Define once, generate everywhere**
 A framework for building components that work identically across platforms while staying native.
 
 - **Naming Convention**: `[Family]-[Type]-[Variant]` (AI-discoverable)
-- **Behavioral Contracts**: 10-category taxonomy with 116 concepts — explicit specifications ensuring cross-platform consistency
+- **Behavioral Contracts**: 10-category taxonomy with 190 concepts — explicit specifications ensuring cross-platform consistency
 - **Component MCP Server**: Machine-readable metadata with 10 query tools for agent-driven component selection, experience patterns, family guidance, and assembly validation
 - **11 Component Families**: Navigation, Form Inputs, Core, Progress Indicators, Data Displays, etc.
 - **Purpose**: Systematic, scalable component development with shared architecture
@@ -171,7 +170,7 @@ This is a working case study in how to lead AI-driven development at scale.
 - Progress Indicators — Node-Base, Connector-Base, Label-Base (primitives) + Pagination-Base, Stepper-Base, Stepper-Detailed (semantic variants) with sliding window virtualization
 - 28 production-ready components with behavioral contracts
 - Full cross-platform support with platform-native implementations
-- Uniform contract system: 10 categories, 116 concepts, formal inheritance
+- Uniform contract system: 10 categories, 190 concepts, formal inheritance
 
 **Custom Agent System**
 - 3 specialized Kiro agents: Ada (tokens), Lina (components), Thurgood (governance)
