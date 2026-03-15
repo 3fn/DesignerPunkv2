@@ -144,10 +144,10 @@ object AvatarTokens {
     
     /**
      * Border color for xxl size avatars
-     * References: color.contrast.onSurface
+     * References: color.contrast.onDark → white100
      * @see Requirements: 7.4 - Border color for xxl size
      */
-    val borderColorXxl: Color = Color.White
+    val borderColorXxl: Color = Color(DesignTokens.color_contrast_on_dark)
     
     // MARK: - Avatar Border Tokens
     
@@ -156,14 +156,14 @@ object AvatarTokens {
      * References: borderDefault → borderWidth100
      * @see Requirements: 7.1 - Border width for xs-xl sizes
      */
-    val borderWidthDefault: Dp = 1.dp
+    val borderWidthDefault: Dp = DesignTokens.border_width_100
     
     /**
      * Emphasis border width (2dp)
      * References: borderEmphasis → borderWidth200
      * @see Requirements: 7.3 - Border width for xxl size
      */
-    val borderWidthEmphasis: Dp = 2.dp
+    val borderWidthEmphasis: Dp = DesignTokens.border_width_200
     
     // MARK: - Avatar Opacity Tokens
     
@@ -172,7 +172,7 @@ object AvatarTokens {
      * References: opacity.heavy → opacity048 (0.48)
      * @see Requirements: 7.2 - Border opacity for xs-xl sizes
      */
-    const val opacityHeavy: Float = 0.48f
+    val opacityHeavy: Float = DesignTokens.opacity_heavy
 }
 
 // MARK: - Avatar Type Enum
@@ -224,32 +224,32 @@ enum class AvatarSize(
     val iconTokenReference: String
 ) {
     Xs(
-        dimension = 24.dp,
+        dimension = DesignTokens.space_300,  // 24dp - avatar.size.xs
         iconDimension = AvatarTokens.iconSizeXs,  // 12dp - component token gap filler
         iconTokenReference = "avatar.icon.size.xs"
     ),
     Sm(
-        dimension = 32.dp,
-        iconDimension = 16.dp,  // references icon.size050
+        dimension = DesignTokens.space_400,  // 32dp - avatar.size.sm
+        iconDimension = DesignTokens.icon_size_050,  // 16dp
         iconTokenReference = "icon.size050"
     ),
     Md(
-        dimension = 40.dp,
-        iconDimension = 20.dp,  // references icon.size075
+        dimension = DesignTokens.space_500,  // 40dp - avatar.size.md
+        iconDimension = DesignTokens.icon_size_075,  // 20dp
         iconTokenReference = "icon.size075"
     ),
     Lg(
-        dimension = 48.dp,
-        iconDimension = 24.dp,  // references icon.size100
+        dimension = DesignTokens.space_600,  // 48dp - avatar.size.lg
+        iconDimension = DesignTokens.icon_size_100,  // 24dp
         iconTokenReference = "icon.size100"
     ),
     Xl(
-        dimension = 80.dp,
-        iconDimension = 40.dp,  // references icon.size500
+        dimension = 80.dp,  // avatar.size.xl - no spacing token at this value
+        iconDimension = DesignTokens.icon_size_500,  // 40dp
         iconTokenReference = "icon.size500"
     ),
     Xxl(
-        dimension = 128.dp,
+        dimension = 128.dp,  // avatar.size.xxl - no spacing token at this value
         iconDimension = AvatarTokens.iconSizeXxl,  // 64dp - component token gap filler
         iconTokenReference = "avatar.icon.size.xxl"
     );

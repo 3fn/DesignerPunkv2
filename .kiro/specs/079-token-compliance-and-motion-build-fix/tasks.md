@@ -16,7 +16,7 @@ Three issues, ordered by dependency:
 
 ## Task List
 
-- [ ] 1. Category Migration, Duplicate Elimination & Generator Fix
+- [x] 1. Category Migration, Duplicate Elimination & Generator Fix
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive
@@ -69,7 +69,7 @@ Three issues, ordered by dependency:
     - Rebuild browser bundle and verify no duplicate `--duration-*` declarations in `tokens.css`
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 5.2_
 
-  - [ ] 1.4 Fix Android generator type inconsistency
+  - [x] 1.4 Fix Android generator type inconsistency
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -101,7 +101,7 @@ Three issues, ordered by dependency:
   **Post-Completion:**
   - Commit: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Avatar-Base Token Compliance"`
 
-  - [ ] 2.1 Create avatar component tokens
+  - [x] 2.1 Create avatar component tokens
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
