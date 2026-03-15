@@ -50,18 +50,24 @@ Update token definitions in `DurationTokens.ts` and `ScaleTokens.ts` to use the 
 
 **Avatar component tokens** (`src/components/core/Avatar-Base/tokens.ts`):
 
+Dimension tokens (all 6 need component tokens — no existing token family maps semantically):
 ```
-avatar.dimension.xs  = 24     avatar.icon.xs  = 12
-avatar.dimension.s   = 32     avatar.icon.s   = 16
-avatar.dimension.m   = 40     avatar.icon.m   = 20
-avatar.dimension.l   = 48     avatar.icon.l   = 24
-avatar.dimension.xl  = 80     avatar.icon.xl  = 40
-avatar.dimension.xxl = 128    avatar.icon.xxl = 64
+avatar.dimension.xs  = 24
+avatar.dimension.s   = 32
+avatar.dimension.m   = 40
+avatar.dimension.l   = 48
+avatar.dimension.xl  = 80
+avatar.dimension.xxl = 128
 ```
 
-Mathematical relationship: icon = dimension × 0.5 (consistent across all sizes).
+Icon tokens (only 2 need component tokens — 4 map to existing icon tokens):
+```
+avatar.icon.xs  = 12   (component token — below icon scale)
+avatar.icon.xxl = 64   (component token — above icon scale)
+```
+S→XL use existing tokens: `icon.size050`=16dp, `icon.size075`=20dp, `icon.size100`=24dp, `icon.size500`=40dp.
 
-Note: Existing code comments claim icon sizes reference `icon.size050` (16dp), `icon.size075` (20dp), etc. — but the actual hard-coded values don't match those tokens. The component token approach makes the real values explicit.
+Mathematical relationship: icon = dimension × 0.5 (documented in component token reasoning).
 
 **Button-VerticalList fixes** are straightforward token reference substitutions — no new tokens needed.
 
@@ -75,3 +81,13 @@ Note: Existing code comments claim icon sizes reference `icon.size050` (16dp), `
 - Existing `TokenCompliance.test.ts` validates Issue 3 fixes (should go from 20 violations to 0).
 - Browser build output can be validated by checking `tokens.css` for duplicate `--duration-*` declarations.
 - Existing token validation tests cover category enum changes.
+
+## Issue 4: Android Generator Type Consistency
+
+The Android generator (`AndroidBuilder`) outputs `Dp` for icon sizes and elevations but `Float` for spacing, radius, and tap area. This inconsistency means `.dp` is required for some families and forbidden for others.
+
+**Fix**: Update `AndroidBuilder` formatting logic for spacing, radius, and tap area to output `val` with `.dp` suffix instead of `const val` with `Float` type. Same pattern already used for icon sizes and elevations.
+
+**Consumer impact** (from Lina's audit): Only 5 `.dp` references across 2 files (Button-VerticalList-Item: 4, Button-VerticalList-Set: 1) need the suffix removed. The other 27 components already omit `.dp`. No arithmetic on affected tokens — migration is purely mechanical.
+
+**Dependency**: Issue 4 must complete before Tasks 2.2 and 3.1 so compliance fixes are done against the correct generator output.

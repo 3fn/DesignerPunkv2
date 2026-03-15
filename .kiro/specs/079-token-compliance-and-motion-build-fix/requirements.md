@@ -31,9 +31,9 @@
 
 ## 3. Token Compliance — Avatar-Base
 
-3.1 **When** Avatar-Base Android references icon sizes that have existing tokens, **the implementation shall** use `DesignTokens.icon_size*` references instead of hard-coded `Dp` values.
+3.1 **When** Avatar-Base Android references icon sizes that have existing tokens (S=16dp, M=20dp, L=24dp, XL=40dp), **the implementation shall** use `DesignTokens.icon_size*` references instead of hard-coded `Dp` values.
 
-3.2 **The system shall** define component tokens for avatar dimensions (`avatar.dimension.xs` through `avatar.dimension.xxl`) and avatar icon sizes (`avatar.icon.xs` through `avatar.icon.xxl`).
+3.2 **The system shall** define component tokens for avatar dimensions (`avatar.dimension.xs` through `avatar.dimension.xxl`) and for the two avatar icon sizes without existing tokens (`avatar.icon.xs` = 12dp, `avatar.icon.xxl` = 64dp). The component token definition shall document the 0.5× icon-to-dimension ratio.
 
 3.3 **When** Avatar-Base Android references avatar dimensions or avatar-specific icon sizes, **the implementation shall** use the component tokens defined in 3.2.
 
@@ -51,8 +51,20 @@
 
 4.4 **When** Button-VerticalList-Set uses bottom padding (iOS and Android), **the implementation shall** use spacing token references instead of hard-coded `8` / `8.dp`.
 
-## 5. Validation
+## 5. Android Generator Type Consistency
 
-5.1 **When** the full test suite runs after all changes, **the system shall** pass all TokenCompliance tests with zero spacing and zero motion violations.
+5.1 **The system shall** generate all dimensional token families (spacing, radius, tap area) as `Dp` type in the Android output, matching the existing pattern for icon sizes and elevations.
 
-5.2 **When** the browser build runs after Issue 1 changes, **the system shall** produce `tokens.css` with no duplicate CSS custom property declarations for duration, easing, or scale tokens.
+5.2 **When** the Android generator outputs spacing tokens, **the system shall** use `val` with `.dp` suffix instead of `const val` with `Float` type.
+
+5.3 **When** the Android generator outputs radius tokens, **the system shall** use `val` with `.dp` suffix instead of `const val` with `Float` type.
+
+5.4 **When** the Android generator outputs tap area tokens, **the system shall** use `val` with `.dp` suffix instead of `const val` with `Float` type.
+
+5.5 **When** Android component files consume spacing, radius, or tap area tokens after the generator update, **the implementation shall not** append `.dp` (tokens are now pre-unitized as `Dp`).
+
+## 6. Validation
+
+6.1 **When** the full test suite runs after all changes, **the system shall** pass all TokenCompliance tests with zero spacing and zero motion violations.
+
+6.2 **When** the browser build runs after Issue 1 changes, **the system shall** produce `tokens.css` with no duplicate CSS custom property declarations for duration, easing, or scale tokens.

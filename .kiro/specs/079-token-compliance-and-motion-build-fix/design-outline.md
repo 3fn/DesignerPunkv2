@@ -177,7 +177,30 @@ Use `icon.size050` (16dp) with a scale factor, or accept the gap and document it
 - Issue 1 (build pipeline) and Issue 2 (category migration) are Ada's domain
 - Issue 3 (component compliance fixes) is Lina's domain — platform implementation files
 - Issue 3's component token creation decisions need Peter's approval per governance
-- The 12dp and 64dp icon sizes may need Ada's input on whether they fit the icon size scale's mathematical progression
+- Issue 4 (Android generator type consistency) is Ada's domain (generator) + Lina's domain (consumer migration)
+
+---
+
+## Issue 4: Android Generator Type Inconsistency
+
+Added during feedback review. Peter directed this be fixed in this spec, not deferred.
+
+**Problem**: The Android generator outputs `Dp` for icon sizes and elevations but `Float` for spacing, radius, and tap area. This means component code must know which families need `.dp` and which don't.
+
+**Fix**: Update `AndroidBuilder` to output `Dp` for ALL dimensional token families.
+
+**Impact (from Lina's audit)**: 27 of 29 components already omit `.dp` on spacing/radius tokens (assigning Float to Dp-typed variables — invisible because these are reference implementations, not compiled). Only 2 components (Button-VerticalList-Item: 4 refs, Button-VerticalList-Set: 1 ref) use `.dp`. The "codebase-wide migration" is actually 5 lines across 2 files.
+
+**No arithmetic on affected tokens**: Lina confirmed zero arithmetic expressions on spacing/radius/tap area tokens across all 29 Android files. Migration is purely mechanical.
+
+---
+
+## Feedback Corrections (incorporated)
+
+1. **Avatar icon tokens**: Ada corrected — existing comments were right. `icon.size100` = 24dp, `icon.size500` = 40dp (after rounding). Only 2 component tokens needed (12dp for XS, 64dp for XXL), not 6.
+2. **`DesignTokens.radius_100.dp` is NOT double-unitizing**: Radius tokens are generated as `Float`, so `.dp` is required. After Issue 4 generator fix, `.dp` becomes unnecessary and should be removed.
+3. **Preview composable values**: Accepted carve-out — Preview code is intentionally decoupled from token system. Fix `PlaceholderIcon` (production) and icon size reference only.
+4. **Revised violation count**: ~17 real violations after removing false positives and Preview carve-outs. Exact count depends on Issue 4 resolution order.
 
 ---
 
@@ -186,3 +209,4 @@ Use `icon.size050` (16dp) with a scale factor, or accept the gap and document it
 - Issue 1: Discovered by Lina during Safari ESM bug investigation (`.kiro/issues/2026-03-14-browser-token-duplicate-duration-primitives.md`)
 - Issue 2: Noted during Spec 049 Task 1.2 as deferred cleanup
 - Issue 3: Discovered by Thurgood during TokenCompliance audit (`.kiro/issues/2026-03-14-token-compliance-violations-avatar-verticallist.md`)
+- Issue 4: Discovered by Lina during feedback review of Issue 3 violations

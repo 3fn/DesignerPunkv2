@@ -16,7 +16,7 @@ Three issues, ordered by dependency:
 
 ## Task List
 
-- [ ] 1. Category Migration & Duplicate Elimination
+- [ ] 1. Category Migration, Duplicate Elimination & Generator Fix
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive
@@ -26,6 +26,7 @@ Three issues, ordered by dependency:
   - `DURATION` and `SCALE` categories exist in `TokenCategory` enum
   - All duration and scale tokens use correct categories
   - Browser CSS output has zero duplicate motion token declarations
+  - Android generator outputs `Dp` for all dimensional token families
   - All existing tests pass
 
   **Primary Artifacts:**
@@ -34,13 +35,14 @@ Three issues, ordered by dependency:
   - `src/tokens/ScaleTokens.ts` (modified)
   - `src/tokens/index.ts` (modified)
   - `src/generators/TokenFileGenerator.ts` (modified)
+  - `src/providers/AndroidFormatGenerator.ts` (modified)
 
   **Completion Documentation:**
   - Detailed: `.kiro/specs/079-token-compliance-and-motion-build-fix/completion/task-1-parent-completion.md`
   - Summary: `docs/specs/079-token-compliance-and-motion-build-fix/task-1-summary.md`
 
   **Post-Completion:**
-  - Commit: `./.kiro/hooks/commit-task.sh "Task 1 Complete: Category Migration & Duplicate Elimination"`
+  - Commit: `./.kiro/hooks/commit-task.sh "Task 1 Complete: Category Migration, Duplicate Elimination & Generator Fix"`
 
   - [ ] 1.1 Add DURATION and SCALE to TokenCategory enum
     **Type**: Implementation
@@ -66,6 +68,15 @@ Three issues, ordered by dependency:
     - In `TokenFileGenerator.generateWebTokens()`, add category filter excluding `EASING`, `DURATION`, `SCALE` from primitive loop
     - Rebuild browser bundle and verify no duplicate `--duration-*` declarations in `tokens.css`
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 5.2_
+
+  - [ ] 1.4 Fix Android generator type inconsistency
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Agent**: Ada
+    - Update `AndroidBuilder` to output `Dp` for spacing, radius, and tap area families (matching existing icon/elevation pattern)
+    - Regenerate `dist/android/DesignTokens.android.kt`
+    - Verify: spacing/radius/tap area tokens now output as `val X: Dp = N.dp` instead of `const val X: Float = Nf`
+    - _Requirements: 5.1, 5.2, 5.3, 5.4_
 
 - [ ] 2. Avatar-Base Token Compliance
 
@@ -95,18 +106,18 @@ Three issues, ordered by dependency:
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
     - Define `avatar.dimension.*` tokens (xs=24, s=32, m=40, l=48, xl=80, xxl=128)
-    - Define `avatar.icon.*` tokens (xs=12, s=16, m=20, l=24, xl=40, xxl=64)
-    - Use `defineComponentTokens()` pattern with reasoning documenting the 0.5× ratio
+    - Define `avatar.icon.xs` = 12dp and `avatar.icon.xxl` = 64dp (only 2 gaps — S through XL map to existing icon tokens)
+    - Use `defineComponentTokens()` pattern with reasoning documenting the 0.5× icon-to-dimension ratio
     - _Requirements: 3.2_
 
   - [ ] 2.2 Fix Avatar-Base Android token references
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
-    - Replace hard-coded icon sizes with `DesignTokens.icon_size*` or avatar component token references
+    - Replace hard-coded icon sizes: S→`icon.size050`, M→`icon.size075`, L→`icon.size100`, XL→`icon.size500`, XS/XXL→avatar component tokens
     - Replace hard-coded avatar dimensions with avatar component token references
     - Replace hard-coded border widths with border width token references
-    - Remove any `.dp` suffix on `DesignTokens.*` references
+    - Remove `.dp` suffix on token references (after Task 1.4 generator fix)
     - _Requirements: 3.1, 3.3, 3.4, 3.5_
 
 - [ ] 3. Button-VerticalList Token Compliance
@@ -135,19 +146,19 @@ Three issues, ordered by dependency:
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
-    - Remove `.dp` from `DesignTokens.radius_100.dp` (double-unitizing)
-    - Replace `24.dp` icon size with `DesignTokens.icon_size100`
-    - Replace hard-coded spacing in Preview composable with `DesignTokens.space*` references
-    - Replace hard-coded `RoundedCornerShape(4.dp)` with token reference
-    - _Requirements: 4.1, 4.2, 4.3_
+    - Replace `24.dp` icon size with `DesignTokens.icon_size_100` (already `Dp` type — no suffix needed)
+    - Replace `RoundedCornerShape(4.dp)` in `PlaceholderIcon` with token reference (production code)
+    - Remove `.dp` from 4 spacing/radius token references (after Task 1.4 generator fix)
+    - Leave Preview composable hard-coded values as-is (intentional decoupling)
+    - _Requirements: 4.1, 4.2, 4.3, 5.5_
 
   - [ ] 3.2 Fix Button-VerticalList-Set padding violations
     **Type**: Implementation
     **Validation**: Tier 1 - Minimal
     **Agent**: Lina
-    - iOS: Replace `.padding(.bottom, 8)` with spacing token reference
-    - Android: Replace `.padding(bottom = 8.dp)` with spacing token reference
-    - _Requirements: 4.4_
+    - iOS: Replace `.padding(.bottom, 8)` with `DesignTokens.space100` reference
+    - Android: Replace `.padding(bottom = 8.dp)` with `DesignTokens.space_100` reference (no `.dp` after Task 1.4)
+    - _Requirements: 4.4, 5.5_
 
 - [ ] 4. Validation & Verification
 
@@ -177,7 +188,7 @@ Three issues, ordered by dependency:
     - Run `npm test` — verify zero TokenCompliance failures
     - Run `npm run build:browser` — verify no duplicate `--duration-*` in `tokens.css`
     - Document results
-    - _Requirements: 5.1, 5.2_
+    - _Requirements: 6.1, 6.2_
 
 ---
 
@@ -185,12 +196,15 @@ Three issues, ordered by dependency:
 
 ```
 Task 1.1 (enum) → Task 1.2 (migration) → Task 1.3 (filter)
+                                        → Task 1.4 (Android generator)
+
+Task 1.4 (generator) → Task 2.2 (avatar fixes)
+Task 1.4 (generator) → Task 3.1 (VerticalList-Item fixes)
+Task 1.4 (generator) → Task 3.2 (VerticalList-Set fixes)
 
 Task 2.1 (avatar tokens) → Task 2.2 (avatar fixes)
-
-Task 3.1, 3.2 (VerticalList fixes)     [independent]
 
 Task 1, 2, 3 → Task 4 (validation)
 ```
 
-Tasks 2 and 3 are independent of Task 1 and of each other. Task 4 runs after all others complete.
+Tasks 2.1 and 1.1-1.3 are independent. Tasks 2.2, 3.1, and 3.2 depend on Task 1.4 (generator fix) so compliance fixes are done against correct output. Task 4 runs after all others complete.
