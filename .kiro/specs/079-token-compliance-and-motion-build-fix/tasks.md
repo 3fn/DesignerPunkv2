@@ -78,7 +78,7 @@ Three issues, ordered by dependency:
     - Verify: spacing/radius/tap area tokens now output as `val X: Dp = N.dp` instead of `const val X: Float = Nf`
     - _Requirements: 5.1, 5.2, 5.3, 5.4_
 
-- [ ] 2. Avatar-Base Token Compliance
+- [x] 2. Avatar-Base Token Compliance
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive
@@ -110,7 +110,7 @@ Three issues, ordered by dependency:
     - Use `defineComponentTokens()` pattern with reasoning documenting the 0.5× icon-to-dimension ratio
     - _Requirements: 3.2_
 
-  - [ ] 2.2 Fix Avatar-Base Android token references
+  - [x] 2.2 Fix Avatar-Base Android token references
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
