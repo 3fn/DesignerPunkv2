@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Nav-TabBar Chrome Tracking Demo</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    background: #f5f5f5;
+    /* Enough content to enable scrolling */
+    padding-bottom: 120px;
+  }
+
+  .content {
+    padding: 16px;
+    padding-top: env(safe-area-inset-top, 16px);
+  }
+
+  .content h1 { font-size: 20px; margin-bottom: 8px; }
+  .content p { font-size: 14px; color: #666; margin-bottom: 16px; }
+
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .card h3 { font-size: 16px; margin-bottom: 4px; }
+  .card p { font-size: 13px; color: #888; margin: 0; }
+
+  /* --- Tab Bar --- */
+  .tabbar {
+    position: fixed;
+    left: 16px;
+    right: 16px;
+    bottom: calc(var(--chrome-offset, 0px) + env(safe-area-inset-bottom, 0px) + 12px);
+    height: 56px;
+    background: rgba(28, 28, 30, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    transition: bottom 100ms ease-out;
+    z-index: 100;
+  }
+
+  .tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    background: none;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .tab svg { width: 24px; height: 24px; }
+  .tab span { font-size: 10px; font-weight: 500; }
+
+  .tab.active svg { fill: #0a84ff; stroke: #0a84ff; }
+  .tab.active span { color: #0a84ff; }
+  .tab:not(.active) svg { fill: none; stroke: #8e8e93; }
+  .tab:not(.active) span { color: #8e8e93; }
+
+  /* --- Debug overlay (toggle with button) --- */
+  .debug {
+    position: fixed;
+    top: env(safe-area-inset-top, 12px);
+    right: 12px;
+    background: rgba(0,0,0,0.75);
+    color: #0f0;
+    font-family: monospace;
+    font-size: 11px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    z-index: 200;
+    display: none;
+    line-height: 1.6;
+  }
+  .debug.visible { display: block; }
+
+  .debug-toggle {
+    position: fixed;
+    top: env(safe-area-inset-top, 12px);
+    left: 12px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 11px;
+    z-index: 200;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<button class="debug-toggle" onclick="document.querySelector('.debug').classList.toggle('visible')">Debug</button>
+<div class="debug" id="debug"></div>
+
+<div class="content">
+  <h1>Chrome Tracking Demo</h1>
+  <p>Scroll to see the tab bar track the browser toolbar. Test on a real mobile device in Safari or Chrome.</p>
+
+  <script>
+    // Generate enough cards to make the page scrollable
+    for (let i = 1; i <= 30; i++) {
+      document.write(`<div class="card"><h3>Item ${i}</h3><p>Scroll content to trigger toolbar show/hide</p></div>`);
+    }
+  </script>
+</div>
+
+<nav class="tabbar" id="tabbar" role="tablist">
+  <button class="tab active" role="tab" aria-selected="true" onclick="selectTab(this)">
+    <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/>
+    </svg>
+    <span>Home</span>
+  </button>
+  <button class="tab" role="tab" aria-selected="false" onclick="selectTab(this)">
+    <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/>
+    </svg>
+    <span>Search</span>
+  </button>
+  <button class="tab" role="tab" aria-selected="false" onclick="selectTab(this)">
+    <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/>
+    </svg>
+    <span>Alerts</span>
+  </button>
+  <button class="tab" role="tab" aria-selected="false" onclick="selectTab(this)">
+    <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+    </svg>
+    <span>Profile</span>
+  </button>
+</nav>
+
+<script>
+  const tabbar = document.getElementById('tabbar');
+  const debug = document.getElementById('debug');
+
+  function selectTab(el) {
+    document.querySelectorAll('.tab').forEach(t => {
+      t.classList.remove('active');
+      t.setAttribute('aria-selected', 'false');
+    });
+    el.classList.add('active');
+    el.setAttribute('aria-selected', 'true');
+  }
+
+  function updateChromeOffset() {
+    if (!window.visualViewport) return;
+    const offset = window.innerHeight - window.visualViewport.height;
+    tabbar.style.setProperty('--chrome-offset', `${offset}px`);
+
+    debug.innerHTML =
+      `innerHeight: ${window.innerHeight}<br>` +
+      `vv.height: ${Math.round(window.visualViewport.height)}<br>` +
+      `offset: ${Math.round(offset)}px<br>` +
+      `vv.offsetTop: ${Math.round(window.visualViewport.offsetTop)}`;
+  }
+
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', updateChromeOffset);
+    window.visualViewport.addEventListener('scroll', updateChromeOffset);
+    updateChromeOffset();
+  }
+</script>
+
+</body>
+</html>

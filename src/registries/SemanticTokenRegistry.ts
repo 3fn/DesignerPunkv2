@@ -130,6 +130,7 @@ export class SemanticTokenRegistry implements IRegistry<SemanticToken> {
 
     // Resolve primitive token reference on-the-fly
     const primitiveRef = semanticToken.primitiveReferences.default || 
+                        semanticToken.primitiveReferences.value ||
                         semanticToken.primitiveReferences.color ||
                         Object.values(semanticToken.primitiveReferences)[0];
     

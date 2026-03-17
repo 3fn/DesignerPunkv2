@@ -1,0 +1,1964 @@
+{
+  "componentName": "Tab",
+  "componentType": "COMPONENT_SET",
+  "figmaId": "1888:1195",
+  "fileKey": "yU7908VXR1khQN5hZXC6Cy",
+  "variantDefinitions": {
+    "State": {
+      "type": "VARIANT",
+      "defaultValue": "Active",
+      "variantOptions": [
+        "Active",
+        "Inactive",
+        "State"
+      ]
+    },
+    "Mode": {
+      "type": "VARIANT",
+      "defaultValue": "Day",
+      "variantOptions": [
+        "Day",
+        "Night"
+      ]
+    }
+  },
+  "nodeTree": {
+    "id": "1888:1195",
+    "name": "Tab",
+    "type": "COMPONENT_SET",
+    "depth": 0,
+    "ancestorChain": [],
+    "tokenClassifications": {
+      "semanticIdentified": [],
+      "primitiveIdentified": [],
+      "unidentified": []
+    },
+    "children": [
+      {
+        "id": "1888:1183",
+        "name": "State=Inactive, Mode=Day",
+        "type": "COMPONENT",
+        "depth": 1,
+        "ancestorChain": [
+          "COMPONENT_SET"
+        ],
+        "tokenClassifications": {
+          "semanticIdentified": [],
+          "primitiveIdentified": [
+            {
+              "property": "padding-top",
+              "primitiveToken": "space.space200",
+              "rawValue": "16px",
+              "matchMethod": "binding",
+              "confidence": "exact"
+            },
+            {
+              "property": "padding-right",
+              "primitiveToken": "space.space150",
+              "rawValue": "12px",
+              "matchMethod": "binding",
+              "confidence": "exact"
+            },
+            {
+              "property": "padding-bottom",
+              "primitiveToken": "space.space100",
+              "rawValue": "8px",
+              "matchMethod": "binding",
+              "confidence": "exact"
+            },
+            {
+              "property": "padding-left",
+              "primitiveToken": "space.space150",
+              "rawValue": "12px",
+              "matchMethod": "binding",
+              "confidence": "exact"
+            }
+          ],
+          "unidentified": [
+            {
+              "property": "item-spacing",
+              "rawValue": "0",
+              "reason": "value-match",
+              "suggestedToken": "semanticSpace.grouped.none"
+            },
+            {
+              "property": "border-radius",
+              "rawValue": "4",
+              "reason": "value-match",
+              "suggestedToken": "semanticRadius.small"
+            },
+            {
+              "property": "border-width",
+              "rawValue": "1",
+              "reason": "value-match",
+              "suggestedToken": "semanticBorderWidth.default"
+            }
+          ]
+        },
+        "children": [
+          {
+            "id": "1888:1175",
+            "name": "Icon",
+            "type": "INSTANCE",
+            "depth": 2,
+            "ancestorChain": [
+              "COMPONENT_SET",
+              "COMPONENT"
+            ],
+            "tokenClassifications": {
+              "semanticIdentified": [],
+              "primitiveIdentified": [],
+              "unidentified": [
+                {
+                  "property": "padding-top",
+                  "rawValue": "0",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticSpace.grouped.none"
+                },
+                {
+                  "property": "padding-right",
+                  "rawValue": "0",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticSpace.grouped.none"
+                },
+                {
+                  "property": "padding-bottom",
+                  "rawValue": "0",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticSpace.grouped.none"
+                },
+                {
+                  "property": "padding-left",
+                  "rawValue": "0",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticSpace.grouped.none"
+                },
+                {
+                  "property": "fill",
+                  "rawValue": "rgba(255, 255, 255, 1)",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticColor.color.feedback.notification.text"
+                },
+                {
+                  "property": "border-width",
+                  "rawValue": "1",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticBorderWidth.default"
+                }
+              ]
+            },
+            "children": [
+              {
+                "id": "I1888:1175;1670:199",
+                "name": "Vector (Stroke)",
+                "type": "FRAME",
+                "depth": 3,
+                "ancestorChain": [
+                  "COMPONENT_SET",
+                  "COMPONENT",
+                  "INSTANCE"
+                ],
+                "tokenClassifications": {
+                  "semanticIdentified": [],
+                  "primitiveIdentified": [
+                    {
+                      "property": "fill",
+                      "primitiveToken": "color.gray300",
+                      "rawValue": "rgba(38, 50, 58, 1)",
+                      "matchMethod": "binding",
+                      "confidence": "exact"
+                    }
+                  ],
+                  "unidentified": [
+                    {
+                      "property": "border-width",
+                      "rawValue": "2",
+                      "reason": "value-match",
+                      "suggestedToken": "semanticBorderWidth.emphasis"
+                    }
+                  ]
+                },
+                "children": [],
+                "layout": {
+                  "cornerRadius": 0,
+                  "width": 18,
+                  "height": 21.999998092651367,
+                  "layoutSizingHorizontal": "FIXED",
+                  "layoutSizingVertical": "FIXED",
+                  "layoutAlign": "INHERIT",
+                  "layoutGrow": 0,
+                  "strokeWeight": 2,
+                  "strokeAlign": "CENTER"
+                }
+              },
+              {
+                "id": "I1888:1175;1670:200",
+                "name": "Vector (Stroke)",
+                "type": "FRAME",
+                "depth": 3,
+                "ancestorChain": [
+                  "COMPONENT_SET",
+                  "COMPONENT",
+                  "INSTANCE"
+                ],
+                "tokenClassifications": {
+                  "semanticIdentified": [],
+                  "primitiveIdentified": [
+                    {
+                      "property": "fill",
+                      "primitiveToken": "color.gray300",
+                      "rawValue": "rgba(38, 50, 58, 1)",
+                      "matchMethod": "binding",
+                      "confidence": "exact"
+                    }
+                  ],
+                  "unidentified": [
+                    {
+                      "property": "border-width",
+                      "rawValue": "2",
+                      "reason": "value-match",
+                      "suggestedToken": "semanticBorderWidth.emphasis"
+                    }
+                  ]
+                },
+                "children": [],
+                "layout": {
+                  "cornerRadius": 0,
+                  "width": 7.999999523162842,
+                  "height": 7.999999523162842,
+                  "layoutSizingHorizontal": "FIXED",
+                  "layoutSizingVertical": "FIXED",
+                  "layoutAlign": "INHERIT",
+                  "layoutGrow": 0,
+                  "strokeWeight": 2,
+                  "strokeAlign": "CENTER"
+                }
+              },
+              {
+                "id": "I1888:1175;1670:201",
+                "name": "Vector (Stroke)",
+                "type": "FRAME",
+                "depth": 3,
+                "ancestorChain": [
+                  "COMPONENT_SET",
+                  "COMPONENT",
+                  "INSTANCE"
+                ],
+                "tokenClassifications": {
+                  "semanticIdentified": [],
+                  "primitiveIdentified": [
+                    {
+                      "property": "fill",
+                      "primitiveToken": "color.gray300",
+                      "rawValue": "rgba(38, 50, 58, 1)",
+                      "matchMethod": "binding",
+                      "confidence": "exact"
+                    }
+                  ],
+                  "unidentified": [
+                    {
+                      "property": "border-width",
+                      "rawValue": "2",
+                      "reason": "value-match",
+                      "suggestedToken": "semanticBorderWidth.emphasis"
+                    }
+                  ]
+                },
+                "children": [],
+                "layout": {
+                  "cornerRadius": 0,
+                  "width": 10.000000953674316,
+                  "height": 1.9999998807907104,
+                  "layoutSizingHorizontal": "FIXED",
+                  "layoutSizingVertical": "FIXED",
+                  "layoutAlign": "INHERIT",
+                  "layoutGrow": 0,
+                  "strokeWeight": 2,
+                  "strokeAlign": "CENTER"
+                }
+              },
+              {
+                "id": "I1888:1175;1670:202",
+                "name": "Vector (Stroke)",
+                "type": "FRAME",
+                "depth": 3,
+                "ancestorChain": [
+                  "COMPONENT_SET",
+                  "COMPONENT",
+                  "INSTANCE"
+                ],
+                "tokenClassifications": {
+                  "semanticIdentified": [],
+                  "primitiveIdentified": [
+                    {
+                      "property": "fill",
+                      "primitiveToken": "color.gray300",
+                      "rawValue": "rgba(38, 50, 58, 1)",
+                      "matchMethod": "binding",
+                      "confidence": "exact"
+                    }
+                  ],
+                  "unidentified": [
+                    {
+                      "property": "border-width",
+                      "rawValue": "2",
+                      "reason": "value-match",
+                      "suggestedToken": "semanticBorderWidth.emphasis"
+                    }
+                  ]
+                },
+                "children": [],
+                "layout": {
+                  "cornerRadius": 0,
+                  "width": 10.000000953674316,
+                  "height": 1.9999998807907104,
+                  "layoutSizingHorizontal": "FIXED",
+                  "layoutSizingVertical": "FIXED",
+                  "layoutAlign": "INHERIT",
+                  "layoutGrow": 0,
+                  "strokeWeight": 2,
+                  "strokeAlign": "CENTER"
+                }
+              },
+              {
+                "id": "I1888:1175;1670:203",
+                "name": "Vector (Stroke)",
+                "type": "FRAME",
+                "depth": 3,
+                "ancestorChain": [
+                  "COMPONENT_SET",
+                  "COMPONENT",
+                  "INSTANCE"
+                ],
+                "tokenClassifications": {
+                  "semanticIdentified": [],
+                  "primitiveIdentified": [
+                    {
+                      "property": "fill",
+                      "primitiveToken": "color.gray300",
+                      "rawValue": "rgba(38, 50, 58, 1)",
+                      "matchMethod": "binding",
+                      "confidence": "exact"
+                    }
+                  ],
+                  "unidentified": [
+                    {
+                      "property": "border-width",
+                      "rawValue": "2",
+                      "reason": "value-match",
+                      "suggestedToken": "semanticBorderWidth.emphasis"
+                    }
+                  ]
+                },
+                "children": [],
+                "layout": {
+                  "cornerRadius": 0,
+                  "width": 3.999999761581421,
+                  "height": 1.9999998807907104,
+                  "layoutSizingHorizontal": "FIXED",
+                  "layoutSizingVertical": "FIXED",
+                  "layoutAlign": "INHERIT",
+                  "layoutGrow": 0,
+                  "strokeWeight": 2,
+                  "strokeAlign": "CENTER"
+                }
+              }
+            ],
+            "layout": {
+              "layoutMode": "NONE",
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "itemSpacing": 0,
+              "counterAxisSpacing": 0,
+              "cornerRadius": 0,
+              "width": 24,
+              "height": 24,
+              "layoutSizingHorizontal": "FIXED",
+              "layoutSizingVertical": "FIXED",
+              "primaryAxisAlignItems": "MIN",
+              "counterAxisAlignItems": "MIN",
+              "layoutAlign": "INHERIT",
+              "layoutGrow": 0,
+              "strokeWeight": 1,
+              "strokeAlign": "INSIDE"
+            }
+          },
+          {
+            "id": "1888:1176",
+            "name": "Item 1",
+            "type": "TEXT",
+            "depth": 2,
+            "ancestorChain": [
+              "COMPONENT_SET",
+              "COMPONENT"
+            ],
+            "tokenClassifications": {
+              "semanticIdentified": [],
+              "primitiveIdentified": [
+                {
+                  "property": "fill",
+                  "primitiveToken": "color.gray500",
+                  "rawValue": "rgba(16, 22, 26, 1)",
+                  "matchMethod": "binding",
+                  "confidence": "exact"
+                }
+              ],
+              "unidentified": [
+                {
+                  "property": "border-width",
+                  "rawValue": "1",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticBorderWidth.default"
+                },
+                {
+                  "property": "font-size",
+                  "rawValue": "13",
+                  "reason": "value-match",
+                  "suggestedToken": "icon.icon.size050"
+                },
+                {
+                  "property": "font-weight",
+                  "rawValue": "500",
+                  "reason": "value-match",
+                  "suggestedToken": "fontWeight.fontWeight500"
+                },
+                {
+                  "property": "line-height",
+                  "rawValue": "19.989999771118164",
+                  "reason": "out-of-tolerance",
+                  "closestMatch": {
+                    "token": "lineHeight.lineHeight125",
+                    "delta": "±18.433999771118163px"
+                  }
+                }
+              ]
+            },
+            "children": [],
+            "layout": {
+              "width": 37,
+              "height": 20,
+              "layoutSizingHorizontal": "FIXED",
+              "layoutSizingVertical": "FIXED",
+              "layoutAlign": "INHERIT",
+              "layoutGrow": 0,
+              "strokeWeight": 1,
+              "strokeAlign": "OUTSIDE"
+            },
+            "textStyle": {
+              "characters": "Item 1",
+              "fontSize": 13,
+              "fontFamily": "Inter",
+              "fontStyle": "Medium",
+              "fontWeight": 500,
+              "lineHeight": 19.989999771118164,
+              "textAlignHorizontal": "LEFT",
+              "textAlignVertical": "TOP"
+            }
+          }
+        ],
+        "layout": {
+          "layoutMode": "VERTICAL",
+          "padding": {
+            "top": 16,
+            "right": 12,
+            "bottom": 8,
+            "left": 12
+          },
+          "itemSpacing": 0,
+          "counterAxisSpacing": 0,
+          "cornerRadius": 4,
+          "width": 90,
+          "height": 48,
+          "layoutSizingHorizontal": "FIXED",
+          "layoutSizingVertical": "HUG",
+          "primaryAxisAlignItems": "CENTER",
+          "counterAxisAlignItems": "CENTER",
+          "layoutAlign": "STRETCH",
+          "layoutGrow": 1,
+          "strokeWeight": 1,
+          "strokeAlign": "INSIDE"
+        }
+      },
+      {
+        "id": "1888:1194",
+        "name": "State=Active, Mode=Day",
+        "type": "COMPONENT",
+        "depth": 1,
+        "ancestorChain": [
+          "COMPONENT_SET"
+        ],
+        "tokenClassifications": {
+          "semanticIdentified": [],
+          "primitiveIdentified": [
+            {
+              "property": "padding-top",
+              "primitiveToken": "space.space150",
+              "rawValue": "12px",
+              "matchMethod": "binding",
+              "confidence": "exact"
+            },
+            {
+              "property": "padding-right",
+              "primitiveToken": "space.space150",
+              "rawValue": "12px",
+              "matchMethod": "binding",
+              "confidence": "exact"
+            },
+            {
+              "property": "padding-bottom",
+              "primitiveToken": "space.space050",
+              "rawValue": "4px",
+              "matchMethod": "binding",
+              "confidence": "exact"
+            },
+            {
+              "property": "padding-left",
+              "primitiveToken": "space.space150",
+              "rawValue": "12px",
+              "matchMethod": "binding",
+              "confidence": "exact"
+            },
+            {
+              "property": "item-spacing",
+              "primitiveToken": "space.space050",
+              "rawValue": "4px",
+              "matchMethod": "binding",
+              "confidence": "exact"
+            }
+          ],
+          "unidentified": [
+            {
+              "property": "border-radius",
+              "rawValue": "2",
+              "reason": "value-match",
+              "suggestedToken": "semanticRadius.subtle"
+            },
+            {
+              "property": "border-width",
+              "rawValue": "1",
+              "reason": "value-match",
+              "suggestedToken": "semanticBorderWidth.default"
+            }
+          ]
+        },
+        "children": [
+          {
+            "id": "1888:1185",
+            "name": "Icon Solid",
+            "type": "INSTANCE",
+            "depth": 2,
+            "ancestorChain": [
+              "COMPONENT_SET",
+              "COMPONENT"
+            ],
+            "tokenClassifications": {
+              "semanticIdentified": [],
+              "primitiveIdentified": [],
+              "unidentified": [
+                {
+                  "property": "padding-top",
+                  "rawValue": "0",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticSpace.grouped.none"
+                },
+                {
+                  "property": "padding-right",
+                  "rawValue": "0",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticSpace.grouped.none"
+                },
+                {
+                  "property": "padding-bottom",
+                  "rawValue": "0",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticSpace.grouped.none"
+                },
+                {
+                  "property": "padding-left",
+                  "rawValue": "0",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticSpace.grouped.none"
+                },
+                {
+                  "property": "fill",
+                  "rawValue": "rgba(255, 255, 255, 1)",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticColor.color.feedback.notification.text"
+                },
+                {
+                  "property": "border-width",
+                  "rawValue": "1",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticBorderWidth.default"
+                }
+              ]
+            },
+            "children": [
+              {
+                "id": "I1888:1185;1858:1692",
+                "name": "Union",
+                "type": "FRAME",
+                "depth": 3,
+                "ancestorChain": [
+                  "COMPONENT_SET",
+                  "COMPONENT",
+                  "INSTANCE"
+                ],
+                "tokenClassifications": {
+                  "semanticIdentified": [],
+                  "primitiveIdentified": [
+                    {
+                      "property": "fill",
+                      "primitiveToken": "color.cyan500",
+                      "rawValue": "rgba(0, 136, 143, 1)",
+                      "matchMethod": "binding",
+                      "confidence": "exact"
+                    }
+                  ],
+                  "unidentified": []
+                },
+                "children": [
+                  {
+                    "id": "I1888:1185;1858:1686",
+                    "name": "Vector (Stroke)",
+                    "type": "FRAME",
+                    "depth": 4,
+                    "ancestorChain": [
+                      "COMPONENT_SET",
+                      "COMPONENT",
+                      "INSTANCE",
+                      "BOOLEAN_OPERATION"
+                    ],
+                    "tokenClassifications": {
+                      "semanticIdentified": [],
+                      "primitiveIdentified": [
+                        {
+                          "property": "fill",
+                          "primitiveToken": "color.gray500",
+                          "rawValue": "rgba(16, 22, 26, 1)",
+                          "matchMethod": "binding",
+                          "confidence": "exact"
+                        }
+                      ],
+                      "unidentified": [
+                        {
+                          "property": "border-width",
+                          "rawValue": "2",
+                          "reason": "value-match",
+                          "suggestedToken": "semanticBorderWidth.emphasis"
+                        }
+                      ]
+                    },
+                    "children": [],
+                    "layout": {
+                      "cornerRadius": 0,
+                      "width": 18,
+                      "height": 21.999998092651367,
+                      "layoutSizingHorizontal": "FIXED",
+                      "layoutSizingVertical": "FIXED",
+                      "layoutAlign": "INHERIT",
+                      "layoutGrow": 0,
+                      "strokeWeight": 2,
+                      "strokeAlign": "CENTER"
+                    }
+                  },
+                  {
+                    "id": "I1888:1185;1858:1687",
+                    "name": "Vector (Stroke)",
+                    "type": "FRAME",
+                    "depth": 4,
+                    "ancestorChain": [
+                      "COMPONENT_SET",
+                      "COMPONENT",
+                      "INSTANCE",
+                      "BOOLEAN_OPERATION"
+                    ],
+                    "tokenClassifications": {
+                      "semanticIdentified": [],
+                      "primitiveIdentified": [
+                        {
+                          "property": "fill",
+                          "primitiveToken": "color.gray500",
+                          "rawValue": "rgba(16, 22, 26, 1)",
+                          "matchMethod": "binding",
+                          "confidence": "exact"
+                        }
+                      ],
+                      "unidentified": [
+                        {
+                          "property": "border-width",
+                          "rawValue": "2",
+                          "reason": "value-match",
+                          "suggestedToken": "semanticBorderWidth.emphasis"
+                        }
+                      ]
+                    },
+                    "children": [],
+                    "layout": {
+                      "cornerRadius": 0,
+                      "width": 7.999999523162842,
+                      "height": 7.999999523162842,
+                      "layoutSizingHorizontal": "FIXED",
+                      "layoutSizingVertical": "FIXED",
+                      "layoutAlign": "INHERIT",
+                      "layoutGrow": 0,
+                      "strokeWeight": 2,
+                      "strokeAlign": "CENTER"
+                    }
+                  },
+                  {
+                    "id": "I1888:1185;1858:1688",
+                    "name": "Vector (Stroke)",
+                    "type": "FRAME",
+                    "depth": 4,
+                    "ancestorChain": [
+                      "COMPONENT_SET",
+                      "COMPONENT",
+                      "INSTANCE",
+                      "BOOLEAN_OPERATION"
+                    ],
+                    "tokenClassifications": {
+                      "semanticIdentified": [],
+                      "primitiveIdentified": [
+                        {
+                          "property": "fill",
+                          "primitiveToken": "color.gray500",
+                          "rawValue": "rgba(16, 22, 26, 1)",
+                          "matchMethod": "binding",
+                          "confidence": "exact"
+                        }
+                      ],
+                      "unidentified": [
+                        {
+                          "property": "border-width",
+                          "rawValue": "2",
+                          "reason": "value-match",
+                          "suggestedToken": "semanticBorderWidth.emphasis"
+                        }
+                      ]
+                    },
+                    "children": [],
+                    "layout": {
+                      "cornerRadius": 0,
+                      "width": 10.000000953674316,
+                      "height": 1.9999998807907104,
+                      "layoutSizingHorizontal": "FIXED",
+                      "layoutSizingVertical": "FIXED",
+                      "layoutAlign": "INHERIT",
+                      "layoutGrow": 0,
+                      "strokeWeight": 2,
+                      "strokeAlign": "CENTER"
+                    }
+                  },
+                  {
+                    "id": "I1888:1185;1858:1689",
+                    "name": "Vector (Stroke)",
+                    "type": "FRAME",
+                    "depth": 4,
+                    "ancestorChain": [
+                      "COMPONENT_SET",
+                      "COMPONENT",
+                      "INSTANCE",
+                      "BOOLEAN_OPERATION"
+                    ],
+                    "tokenClassifications": {
+                      "semanticIdentified": [],
+                      "primitiveIdentified": [
+                        {
+                          "property": "fill",
+                          "primitiveToken": "color.gray500",
+                          "rawValue": "rgba(16, 22, 26, 1)",
+                          "matchMethod": "binding",
+                          "confidence": "exact"
+                        }
+                      ],
+                      "unidentified": [
+                        {
+                          "property": "border-width",
+                          "rawValue": "2",
+                          "reason": "value-match",
+                          "suggestedToken": "semanticBorderWidth.emphasis"
+                        }
+                      ]
+                    },
+                    "children": [],
+                    "layout": {
+                      "cornerRadius": 0,
+                      "width": 10.000000953674316,
+                      "height": 1.9999998807907104,
+                      "layoutSizingHorizontal": "FIXED",
+                      "layoutSizingVertical": "FIXED",
+                      "layoutAlign": "INHERIT",
+                      "layoutGrow": 0,
+                      "strokeWeight": 2,
+                      "strokeAlign": "CENTER"
+                    }
+                  },
+                  {
+                    "id": "I1888:1185;1858:1690",
+                    "name": "Vector (Stroke)",
+                    "type": "FRAME",
+                    "depth": 4,
+                    "ancestorChain": [
+                      "COMPONENT_SET",
+                      "COMPONENT",
+                      "INSTANCE",
+                      "BOOLEAN_OPERATION"
+                    ],
+                    "tokenClassifications": {
+                      "semanticIdentified": [],
+                      "primitiveIdentified": [
+                        {
+                          "property": "fill",
+                          "primitiveToken": "color.gray500",
+                          "rawValue": "rgba(16, 22, 26, 1)",
+                          "matchMethod": "binding",
+                          "confidence": "exact"
+                        }
+                      ],
+                      "unidentified": [
+                        {
+                          "property": "border-width",
+                          "rawValue": "2",
+                          "reason": "value-match",
+                          "suggestedToken": "semanticBorderWidth.emphasis"
+                        }
+                      ]
+                    },
+                    "children": [],
+                    "layout": {
+                      "cornerRadius": 0,
+                      "width": 3.999999761581421,
+                      "height": 1.9999998807907104,
+                      "layoutSizingHorizontal": "FIXED",
+                      "layoutSizingVertical": "FIXED",
+                      "layoutAlign": "INHERIT",
+                      "layoutGrow": 0,
+                      "strokeWeight": 2,
+                      "strokeAlign": "CENTER"
+                    }
+                  }
+                ],
+                "layout": {
+                  "cornerRadius": 0,
+                  "width": 18,
+                  "height": 22,
+                  "layoutSizingHorizontal": "FIXED",
+                  "layoutSizingVertical": "FIXED",
+                  "layoutAlign": "INHERIT",
+                  "layoutGrow": 0,
+                  "strokeAlign": "CENTER"
+                }
+              }
+            ],
+            "layout": {
+              "layoutMode": "NONE",
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "itemSpacing": 0,
+              "counterAxisSpacing": 0,
+              "cornerRadius": 0,
+              "width": 24,
+              "height": 24,
+              "layoutSizingHorizontal": "FIXED",
+              "layoutSizingVertical": "FIXED",
+              "primaryAxisAlignItems": "MIN",
+              "counterAxisAlignItems": "MIN",
+              "layoutAlign": "INHERIT",
+              "layoutGrow": 0,
+              "strokeWeight": 1,
+              "strokeAlign": "INSIDE"
+            }
+          },
+          {
+            "id": "1888:1186",
+            "name": "Ellipse 1",
+            "type": "FRAME",
+            "depth": 2,
+            "ancestorChain": [
+              "COMPONENT_SET",
+              "COMPONENT"
+            ],
+            "tokenClassifications": {
+              "semanticIdentified": [],
+              "primitiveIdentified": [
+                {
+                  "property": "fill",
+                  "primitiveToken": "color.cyan500",
+                  "rawValue": "rgba(0, 136, 143, 1)",
+                  "matchMethod": "binding",
+                  "confidence": "exact"
+                }
+              ],
+              "unidentified": [
+                {
+                  "property": "border-width",
+                  "rawValue": "1",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticBorderWidth.default"
+                }
+              ]
+            },
+            "children": [],
+            "layout": {
+              "cornerRadius": 0,
+              "width": 4,
+              "height": 4,
+              "layoutSizingHorizontal": "FIXED",
+              "layoutSizingVertical": "FIXED",
+              "layoutAlign": "INHERIT",
+              "layoutGrow": 0,
+              "strokeWeight": 1,
+              "strokeAlign": "INSIDE"
+            }
+          }
+        ],
+        "layout": {
+          "layoutMode": "VERTICAL",
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 4,
+            "left": 12
+          },
+          "itemSpacing": 4,
+          "counterAxisSpacing": 0,
+          "cornerRadius": 2,
+          "width": 90,
+          "height": 48,
+          "layoutSizingHorizontal": "FIXED",
+          "layoutSizingVertical": "HUG",
+          "primaryAxisAlignItems": "CENTER",
+          "counterAxisAlignItems": "CENTER",
+          "layoutAlign": "STRETCH",
+          "layoutGrow": 1,
+          "strokeWeight": 1,
+          "strokeAlign": "INSIDE"
+        }
+      },
+      {
+        "id": "1888:1309",
+        "name": "State=State, Mode=Night",
+        "type": "COMPONENT",
+        "depth": 1,
+        "ancestorChain": [
+          "COMPONENT_SET"
+        ],
+        "tokenClassifications": {
+          "semanticIdentified": [],
+          "primitiveIdentified": [
+            {
+              "property": "padding-top",
+              "primitiveToken": "space.space150",
+              "rawValue": "12px",
+              "matchMethod": "binding",
+              "confidence": "exact"
+            },
+            {
+              "property": "padding-right",
+              "primitiveToken": "space.space150",
+              "rawValue": "12px",
+              "matchMethod": "binding",
+              "confidence": "exact"
+            },
+            {
+              "property": "padding-bottom",
+              "primitiveToken": "space.space050",
+              "rawValue": "4px",
+              "matchMethod": "binding",
+              "confidence": "exact"
+            },
+            {
+              "property": "padding-left",
+              "primitiveToken": "space.space150",
+              "rawValue": "12px",
+              "matchMethod": "binding",
+              "confidence": "exact"
+            },
+            {
+              "property": "item-spacing",
+              "primitiveToken": "space.space050",
+              "rawValue": "4px",
+              "matchMethod": "binding",
+              "confidence": "exact"
+            }
+          ],
+          "unidentified": [
+            {
+              "property": "border-radius",
+              "rawValue": "2",
+              "reason": "value-match",
+              "suggestedToken": "semanticRadius.subtle"
+            },
+            {
+              "property": "border-width",
+              "rawValue": "1",
+              "reason": "value-match",
+              "suggestedToken": "semanticBorderWidth.default"
+            }
+          ]
+        },
+        "children": [
+          {
+            "id": "1888:1310",
+            "name": "Icon Solid",
+            "type": "INSTANCE",
+            "depth": 2,
+            "ancestorChain": [
+              "COMPONENT_SET",
+              "COMPONENT"
+            ],
+            "tokenClassifications": {
+              "semanticIdentified": [],
+              "primitiveIdentified": [],
+              "unidentified": [
+                {
+                  "property": "padding-top",
+                  "rawValue": "0",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticSpace.grouped.none"
+                },
+                {
+                  "property": "padding-right",
+                  "rawValue": "0",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticSpace.grouped.none"
+                },
+                {
+                  "property": "padding-bottom",
+                  "rawValue": "0",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticSpace.grouped.none"
+                },
+                {
+                  "property": "padding-left",
+                  "rawValue": "0",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticSpace.grouped.none"
+                },
+                {
+                  "property": "fill",
+                  "rawValue": "rgba(255, 255, 255, 1)",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticColor.color.feedback.notification.text"
+                },
+                {
+                  "property": "border-width",
+                  "rawValue": "1",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticBorderWidth.default"
+                }
+              ]
+            },
+            "children": [
+              {
+                "id": "I1888:1310;1858:1692",
+                "name": "Union",
+                "type": "FRAME",
+                "depth": 3,
+                "ancestorChain": [
+                  "COMPONENT_SET",
+                  "COMPONENT",
+                  "INSTANCE"
+                ],
+                "tokenClassifications": {
+                  "semanticIdentified": [],
+                  "primitiveIdentified": [
+                    {
+                      "property": "fill",
+                      "primitiveToken": "color.cyan100",
+                      "rawValue": "rgba(204, 251, 255, 1)",
+                      "matchMethod": "binding",
+                      "confidence": "exact"
+                    }
+                  ],
+                  "unidentified": []
+                },
+                "children": [
+                  {
+                    "id": "I1888:1310;1858:1686",
+                    "name": "Vector (Stroke)",
+                    "type": "FRAME",
+                    "depth": 4,
+                    "ancestorChain": [
+                      "COMPONENT_SET",
+                      "COMPONENT",
+                      "INSTANCE",
+                      "BOOLEAN_OPERATION"
+                    ],
+                    "tokenClassifications": {
+                      "semanticIdentified": [],
+                      "primitiveIdentified": [
+                        {
+                          "property": "fill",
+                          "primitiveToken": "color.gray500",
+                          "rawValue": "rgba(16, 22, 26, 1)",
+                          "matchMethod": "binding",
+                          "confidence": "exact"
+                        }
+                      ],
+                      "unidentified": [
+                        {
+                          "property": "border-width",
+                          "rawValue": "2",
+                          "reason": "value-match",
+                          "suggestedToken": "semanticBorderWidth.emphasis"
+                        }
+                      ]
+                    },
+                    "children": [],
+                    "layout": {
+                      "cornerRadius": 0,
+                      "width": 18,
+                      "height": 21.999998092651367,
+                      "layoutSizingHorizontal": "FIXED",
+                      "layoutSizingVertical": "FIXED",
+                      "layoutAlign": "INHERIT",
+                      "layoutGrow": 0,
+                      "strokeWeight": 2,
+                      "strokeAlign": "CENTER"
+                    }
+                  },
+                  {
+                    "id": "I1888:1310;1858:1687",
+                    "name": "Vector (Stroke)",
+                    "type": "FRAME",
+                    "depth": 4,
+                    "ancestorChain": [
+                      "COMPONENT_SET",
+                      "COMPONENT",
+                      "INSTANCE",
+                      "BOOLEAN_OPERATION"
+                    ],
+                    "tokenClassifications": {
+                      "semanticIdentified": [],
+                      "primitiveIdentified": [
+                        {
+                          "property": "fill",
+                          "primitiveToken": "color.gray500",
+                          "rawValue": "rgba(16, 22, 26, 1)",
+                          "matchMethod": "binding",
+                          "confidence": "exact"
+                        }
+                      ],
+                      "unidentified": [
+                        {
+                          "property": "border-width",
+                          "rawValue": "2",
+                          "reason": "value-match",
+                          "suggestedToken": "semanticBorderWidth.emphasis"
+                        }
+                      ]
+                    },
+                    "children": [],
+                    "layout": {
+                      "cornerRadius": 0,
+                      "width": 7.999999523162842,
+                      "height": 7.999999523162842,
+                      "layoutSizingHorizontal": "FIXED",
+                      "layoutSizingVertical": "FIXED",
+                      "layoutAlign": "INHERIT",
+                      "layoutGrow": 0,
+                      "strokeWeight": 2,
+                      "strokeAlign": "CENTER"
+                    }
+                  },
+                  {
+                    "id": "I1888:1310;1858:1688",
+                    "name": "Vector (Stroke)",
+                    "type": "FRAME",
+                    "depth": 4,
+                    "ancestorChain": [
+                      "COMPONENT_SET",
+                      "COMPONENT",
+                      "INSTANCE",
+                      "BOOLEAN_OPERATION"
+                    ],
+                    "tokenClassifications": {
+                      "semanticIdentified": [],
+                      "primitiveIdentified": [
+                        {
+                          "property": "fill",
+                          "primitiveToken": "color.gray500",
+                          "rawValue": "rgba(16, 22, 26, 1)",
+                          "matchMethod": "binding",
+                          "confidence": "exact"
+                        }
+                      ],
+                      "unidentified": [
+                        {
+                          "property": "border-width",
+                          "rawValue": "2",
+                          "reason": "value-match",
+                          "suggestedToken": "semanticBorderWidth.emphasis"
+                        }
+                      ]
+                    },
+                    "children": [],
+                    "layout": {
+                      "cornerRadius": 0,
+                      "width": 10.000000953674316,
+                      "height": 1.9999998807907104,
+                      "layoutSizingHorizontal": "FIXED",
+                      "layoutSizingVertical": "FIXED",
+                      "layoutAlign": "INHERIT",
+                      "layoutGrow": 0,
+                      "strokeWeight": 2,
+                      "strokeAlign": "CENTER"
+                    }
+                  },
+                  {
+                    "id": "I1888:1310;1858:1689",
+                    "name": "Vector (Stroke)",
+                    "type": "FRAME",
+                    "depth": 4,
+                    "ancestorChain": [
+                      "COMPONENT_SET",
+                      "COMPONENT",
+                      "INSTANCE",
+                      "BOOLEAN_OPERATION"
+                    ],
+                    "tokenClassifications": {
+                      "semanticIdentified": [],
+                      "primitiveIdentified": [
+                        {
+                          "property": "fill",
+                          "primitiveToken": "color.gray500",
+                          "rawValue": "rgba(16, 22, 26, 1)",
+                          "matchMethod": "binding",
+                          "confidence": "exact"
+                        }
+                      ],
+                      "unidentified": [
+                        {
+                          "property": "border-width",
+                          "rawValue": "2",
+                          "reason": "value-match",
+                          "suggestedToken": "semanticBorderWidth.emphasis"
+                        }
+                      ]
+                    },
+                    "children": [],
+                    "layout": {
+                      "cornerRadius": 0,
+                      "width": 10.000000953674316,
+                      "height": 1.9999998807907104,
+                      "layoutSizingHorizontal": "FIXED",
+                      "layoutSizingVertical": "FIXED",
+                      "layoutAlign": "INHERIT",
+                      "layoutGrow": 0,
+                      "strokeWeight": 2,
+                      "strokeAlign": "CENTER"
+                    }
+                  },
+                  {
+                    "id": "I1888:1310;1858:1690",
+                    "name": "Vector (Stroke)",
+                    "type": "FRAME",
+                    "depth": 4,
+                    "ancestorChain": [
+                      "COMPONENT_SET",
+                      "COMPONENT",
+                      "INSTANCE",
+                      "BOOLEAN_OPERATION"
+                    ],
+                    "tokenClassifications": {
+                      "semanticIdentified": [],
+                      "primitiveIdentified": [
+                        {
+                          "property": "fill",
+                          "primitiveToken": "color.gray500",
+                          "rawValue": "rgba(16, 22, 26, 1)",
+                          "matchMethod": "binding",
+                          "confidence": "exact"
+                        }
+                      ],
+                      "unidentified": [
+                        {
+                          "property": "border-width",
+                          "rawValue": "2",
+                          "reason": "value-match",
+                          "suggestedToken": "semanticBorderWidth.emphasis"
+                        }
+                      ]
+                    },
+                    "children": [],
+                    "layout": {
+                      "cornerRadius": 0,
+                      "width": 3.999999761581421,
+                      "height": 1.9999998807907104,
+                      "layoutSizingHorizontal": "FIXED",
+                      "layoutSizingVertical": "FIXED",
+                      "layoutAlign": "INHERIT",
+                      "layoutGrow": 0,
+                      "strokeWeight": 2,
+                      "strokeAlign": "CENTER"
+                    }
+                  }
+                ],
+                "layout": {
+                  "cornerRadius": 0,
+                  "width": 18,
+                  "height": 22,
+                  "layoutSizingHorizontal": "FIXED",
+                  "layoutSizingVertical": "FIXED",
+                  "layoutAlign": "INHERIT",
+                  "layoutGrow": 0,
+                  "strokeAlign": "CENTER"
+                }
+              }
+            ],
+            "layout": {
+              "layoutMode": "NONE",
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "itemSpacing": 0,
+              "counterAxisSpacing": 0,
+              "cornerRadius": 0,
+              "width": 24,
+              "height": 24,
+              "layoutSizingHorizontal": "FIXED",
+              "layoutSizingVertical": "FIXED",
+              "primaryAxisAlignItems": "MIN",
+              "counterAxisAlignItems": "MIN",
+              "layoutAlign": "INHERIT",
+              "layoutGrow": 0,
+              "strokeWeight": 1,
+              "strokeAlign": "INSIDE"
+            }
+          },
+          {
+            "id": "1888:1311",
+            "name": "Ellipse 1",
+            "type": "FRAME",
+            "depth": 2,
+            "ancestorChain": [
+              "COMPONENT_SET",
+              "COMPONENT"
+            ],
+            "tokenClassifications": {
+              "semanticIdentified": [],
+              "primitiveIdentified": [
+                {
+                  "property": "fill",
+                  "primitiveToken": "color.cyan100",
+                  "rawValue": "rgba(204, 251, 255, 1)",
+                  "matchMethod": "binding",
+                  "confidence": "exact"
+                }
+              ],
+              "unidentified": [
+                {
+                  "property": "border-width",
+                  "rawValue": "1",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticBorderWidth.default"
+                }
+              ]
+            },
+            "children": [],
+            "layout": {
+              "cornerRadius": 0,
+              "width": 4,
+              "height": 4,
+              "layoutSizingHorizontal": "FIXED",
+              "layoutSizingVertical": "FIXED",
+              "layoutAlign": "INHERIT",
+              "layoutGrow": 0,
+              "strokeWeight": 1,
+              "strokeAlign": "INSIDE"
+            }
+          }
+        ],
+        "layout": {
+          "layoutMode": "VERTICAL",
+          "padding": {
+            "top": 12,
+            "right": 12,
+            "bottom": 4,
+            "left": 12
+          },
+          "itemSpacing": 4,
+          "counterAxisSpacing": 0,
+          "cornerRadius": 2,
+          "width": 90,
+          "height": 48,
+          "layoutSizingHorizontal": "FIXED",
+          "layoutSizingVertical": "HUG",
+          "primaryAxisAlignItems": "CENTER",
+          "counterAxisAlignItems": "CENTER",
+          "layoutAlign": "INHERIT",
+          "layoutGrow": 0,
+          "strokeWeight": 1,
+          "strokeAlign": "INSIDE"
+        }
+      },
+      {
+        "id": "1888:1312",
+        "name": "State=Inactive, Mode=Night",
+        "type": "COMPONENT",
+        "depth": 1,
+        "ancestorChain": [
+          "COMPONENT_SET"
+        ],
+        "tokenClassifications": {
+          "semanticIdentified": [],
+          "primitiveIdentified": [
+            {
+              "property": "padding-top",
+              "primitiveToken": "space.space200",
+              "rawValue": "16px",
+              "matchMethod": "binding",
+              "confidence": "exact"
+            },
+            {
+              "property": "padding-right",
+              "primitiveToken": "space.space150",
+              "rawValue": "12px",
+              "matchMethod": "binding",
+              "confidence": "exact"
+            },
+            {
+              "property": "padding-bottom",
+              "primitiveToken": "space.space100",
+              "rawValue": "8px",
+              "matchMethod": "binding",
+              "confidence": "exact"
+            },
+            {
+              "property": "padding-left",
+              "primitiveToken": "space.space150",
+              "rawValue": "12px",
+              "matchMethod": "binding",
+              "confidence": "exact"
+            },
+            {
+              "property": "item-spacing",
+              "primitiveToken": "space.space025",
+              "rawValue": "2px",
+              "matchMethod": "binding",
+              "confidence": "exact"
+            },
+            {
+              "property": "stroke",
+              "primitiveToken": "color.teal200",
+              "rawValue": "rgba(77, 155, 165, 1)",
+              "matchMethod": "binding",
+              "confidence": "exact"
+            }
+          ],
+          "unidentified": [
+            {
+              "property": "border-radius",
+              "rawValue": "4",
+              "reason": "value-match",
+              "suggestedToken": "semanticRadius.small"
+            },
+            {
+              "property": "border-width",
+              "rawValue": "1",
+              "reason": "value-match",
+              "suggestedToken": "semanticBorderWidth.default"
+            }
+          ]
+        },
+        "children": [
+          {
+            "id": "1888:1313",
+            "name": "Icon",
+            "type": "INSTANCE",
+            "depth": 2,
+            "ancestorChain": [
+              "COMPONENT_SET",
+              "COMPONENT"
+            ],
+            "tokenClassifications": {
+              "semanticIdentified": [],
+              "primitiveIdentified": [],
+              "unidentified": [
+                {
+                  "property": "padding-top",
+                  "rawValue": "0",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticSpace.grouped.none"
+                },
+                {
+                  "property": "padding-right",
+                  "rawValue": "0",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticSpace.grouped.none"
+                },
+                {
+                  "property": "padding-bottom",
+                  "rawValue": "0",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticSpace.grouped.none"
+                },
+                {
+                  "property": "padding-left",
+                  "rawValue": "0",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticSpace.grouped.none"
+                },
+                {
+                  "property": "fill",
+                  "rawValue": "rgba(255, 255, 255, 1)",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticColor.color.feedback.notification.text"
+                },
+                {
+                  "property": "border-width",
+                  "rawValue": "1",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticBorderWidth.default"
+                }
+              ]
+            },
+            "children": [
+              {
+                "id": "I1888:1313;1670:199",
+                "name": "Vector (Stroke)",
+                "type": "FRAME",
+                "depth": 3,
+                "ancestorChain": [
+                  "COMPONENT_SET",
+                  "COMPONENT",
+                  "INSTANCE"
+                ],
+                "tokenClassifications": {
+                  "semanticIdentified": [],
+                  "primitiveIdentified": [
+                    {
+                      "property": "fill",
+                      "primitiveToken": "color.gray100",
+                      "rawValue": "rgba(178, 188, 196, 1)",
+                      "matchMethod": "binding",
+                      "confidence": "exact"
+                    }
+                  ],
+                  "unidentified": [
+                    {
+                      "property": "border-width",
+                      "rawValue": "2",
+                      "reason": "value-match",
+                      "suggestedToken": "semanticBorderWidth.emphasis"
+                    }
+                  ]
+                },
+                "children": [],
+                "layout": {
+                  "cornerRadius": 0,
+                  "width": 18,
+                  "height": 21.999998092651367,
+                  "layoutSizingHorizontal": "FIXED",
+                  "layoutSizingVertical": "FIXED",
+                  "layoutAlign": "INHERIT",
+                  "layoutGrow": 0,
+                  "strokeWeight": 2,
+                  "strokeAlign": "CENTER"
+                }
+              },
+              {
+                "id": "I1888:1313;1670:200",
+                "name": "Vector (Stroke)",
+                "type": "FRAME",
+                "depth": 3,
+                "ancestorChain": [
+                  "COMPONENT_SET",
+                  "COMPONENT",
+                  "INSTANCE"
+                ],
+                "tokenClassifications": {
+                  "semanticIdentified": [],
+                  "primitiveIdentified": [
+                    {
+                      "property": "fill",
+                      "primitiveToken": "color.gray100",
+                      "rawValue": "rgba(178, 188, 196, 1)",
+                      "matchMethod": "binding",
+                      "confidence": "exact"
+                    }
+                  ],
+                  "unidentified": [
+                    {
+                      "property": "border-width",
+                      "rawValue": "2",
+                      "reason": "value-match",
+                      "suggestedToken": "semanticBorderWidth.emphasis"
+                    }
+                  ]
+                },
+                "children": [],
+                "layout": {
+                  "cornerRadius": 0,
+                  "width": 7.999999523162842,
+                  "height": 7.999999523162842,
+                  "layoutSizingHorizontal": "FIXED",
+                  "layoutSizingVertical": "FIXED",
+                  "layoutAlign": "INHERIT",
+                  "layoutGrow": 0,
+                  "strokeWeight": 2,
+                  "strokeAlign": "CENTER"
+                }
+              },
+              {
+                "id": "I1888:1313;1670:201",
+                "name": "Vector (Stroke)",
+                "type": "FRAME",
+                "depth": 3,
+                "ancestorChain": [
+                  "COMPONENT_SET",
+                  "COMPONENT",
+                  "INSTANCE"
+                ],
+                "tokenClassifications": {
+                  "semanticIdentified": [],
+                  "primitiveIdentified": [
+                    {
+                      "property": "fill",
+                      "primitiveToken": "color.gray100",
+                      "rawValue": "rgba(178, 188, 196, 1)",
+                      "matchMethod": "binding",
+                      "confidence": "exact"
+                    }
+                  ],
+                  "unidentified": [
+                    {
+                      "property": "border-width",
+                      "rawValue": "2",
+                      "reason": "value-match",
+                      "suggestedToken": "semanticBorderWidth.emphasis"
+                    }
+                  ]
+                },
+                "children": [],
+                "layout": {
+                  "cornerRadius": 0,
+                  "width": 10.000000953674316,
+                  "height": 1.9999998807907104,
+                  "layoutSizingHorizontal": "FIXED",
+                  "layoutSizingVertical": "FIXED",
+                  "layoutAlign": "INHERIT",
+                  "layoutGrow": 0,
+                  "strokeWeight": 2,
+                  "strokeAlign": "CENTER"
+                }
+              },
+              {
+                "id": "I1888:1313;1670:202",
+                "name": "Vector (Stroke)",
+                "type": "FRAME",
+                "depth": 3,
+                "ancestorChain": [
+                  "COMPONENT_SET",
+                  "COMPONENT",
+                  "INSTANCE"
+                ],
+                "tokenClassifications": {
+                  "semanticIdentified": [],
+                  "primitiveIdentified": [
+                    {
+                      "property": "fill",
+                      "primitiveToken": "color.gray100",
+                      "rawValue": "rgba(178, 188, 196, 1)",
+                      "matchMethod": "binding",
+                      "confidence": "exact"
+                    }
+                  ],
+                  "unidentified": [
+                    {
+                      "property": "border-width",
+                      "rawValue": "2",
+                      "reason": "value-match",
+                      "suggestedToken": "semanticBorderWidth.emphasis"
+                    }
+                  ]
+                },
+                "children": [],
+                "layout": {
+                  "cornerRadius": 0,
+                  "width": 10.000000953674316,
+                  "height": 1.9999998807907104,
+                  "layoutSizingHorizontal": "FIXED",
+                  "layoutSizingVertical": "FIXED",
+                  "layoutAlign": "INHERIT",
+                  "layoutGrow": 0,
+                  "strokeWeight": 2,
+                  "strokeAlign": "CENTER"
+                }
+              },
+              {
+                "id": "I1888:1313;1670:203",
+                "name": "Vector (Stroke)",
+                "type": "FRAME",
+                "depth": 3,
+                "ancestorChain": [
+                  "COMPONENT_SET",
+                  "COMPONENT",
+                  "INSTANCE"
+                ],
+                "tokenClassifications": {
+                  "semanticIdentified": [],
+                  "primitiveIdentified": [
+                    {
+                      "property": "fill",
+                      "primitiveToken": "color.gray100",
+                      "rawValue": "rgba(178, 188, 196, 1)",
+                      "matchMethod": "binding",
+                      "confidence": "exact"
+                    }
+                  ],
+                  "unidentified": [
+                    {
+                      "property": "border-width",
+                      "rawValue": "2",
+                      "reason": "value-match",
+                      "suggestedToken": "semanticBorderWidth.emphasis"
+                    }
+                  ]
+                },
+                "children": [],
+                "layout": {
+                  "cornerRadius": 0,
+                  "width": 3.999999761581421,
+                  "height": 1.9999998807907104,
+                  "layoutSizingHorizontal": "FIXED",
+                  "layoutSizingVertical": "FIXED",
+                  "layoutAlign": "INHERIT",
+                  "layoutGrow": 0,
+                  "strokeWeight": 2,
+                  "strokeAlign": "CENTER"
+                }
+              }
+            ],
+            "layout": {
+              "layoutMode": "NONE",
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "itemSpacing": 0,
+              "counterAxisSpacing": 0,
+              "cornerRadius": 0,
+              "width": 24,
+              "height": 24,
+              "layoutSizingHorizontal": "FIXED",
+              "layoutSizingVertical": "FIXED",
+              "primaryAxisAlignItems": "MIN",
+              "counterAxisAlignItems": "MIN",
+              "layoutAlign": "INHERIT",
+              "layoutGrow": 0,
+              "strokeWeight": 1,
+              "strokeAlign": "INSIDE"
+            }
+          },
+          {
+            "id": "1888:1314",
+            "name": "Item 1",
+            "type": "TEXT",
+            "depth": 2,
+            "ancestorChain": [
+              "COMPONENT_SET",
+              "COMPONENT"
+            ],
+            "tokenClassifications": {
+              "semanticIdentified": [],
+              "primitiveIdentified": [
+                {
+                  "property": "fill",
+                  "primitiveToken": "color.gray500",
+                  "rawValue": "rgba(16, 22, 26, 1)",
+                  "matchMethod": "binding",
+                  "confidence": "exact"
+                }
+              ],
+              "unidentified": [
+                {
+                  "property": "border-width",
+                  "rawValue": "1",
+                  "reason": "value-match",
+                  "suggestedToken": "semanticBorderWidth.default"
+                },
+                {
+                  "property": "font-size",
+                  "rawValue": "13",
+                  "reason": "value-match",
+                  "suggestedToken": "icon.icon.size050"
+                },
+                {
+                  "property": "font-weight",
+                  "rawValue": "500",
+                  "reason": "value-match",
+                  "suggestedToken": "fontWeight.fontWeight500"
+                },
+                {
+                  "property": "line-height",
+                  "rawValue": "19.989999771118164",
+                  "reason": "out-of-tolerance",
+                  "closestMatch": {
+                    "token": "lineHeight.lineHeight125",
+                    "delta": "±18.433999771118163px"
+                  }
+                }
+              ]
+            },
+            "children": [],
+            "layout": {
+              "width": 37,
+              "height": 20,
+              "layoutSizingHorizontal": "FIXED",
+              "layoutSizingVertical": "FIXED",
+              "layoutAlign": "INHERIT",
+              "layoutGrow": 0,
+              "strokeWeight": 1,
+              "strokeAlign": "OUTSIDE"
+            },
+            "textStyle": {
+              "characters": "Item 1",
+              "fontSize": 13,
+              "fontFamily": "Inter",
+              "fontStyle": "Medium",
+              "fontWeight": 500,
+              "lineHeight": 19.989999771118164,
+              "textAlignHorizontal": "LEFT",
+              "textAlignVertical": "TOP"
+            }
+          }
+        ],
+        "layout": {
+          "layoutMode": "VERTICAL",
+          "padding": {
+            "top": 16,
+            "right": 12,
+            "bottom": 8,
+            "left": 12
+          },
+          "itemSpacing": 2,
+          "counterAxisSpacing": 0,
+          "cornerRadius": 4,
+          "width": 90,
+          "height": 48,
+          "layoutSizingHorizontal": "FIXED",
+          "layoutSizingVertical": "HUG",
+          "primaryAxisAlignItems": "CENTER",
+          "counterAxisAlignItems": "CENTER",
+          "layoutAlign": "INHERIT",
+          "layoutGrow": 0,
+          "strokeWeight": 1,
+          "strokeAlign": "INSIDE"
+        },
+        "strokes": [
+          {
+            "color": "rgba(77, 155, 165, 1)"
+          }
+        ]
+      }
+    ]
+  },
+  "classificationSummary": {
+    "semanticIdentified": 0,
+    "primitiveIdentified": 46,
+    "unidentified": 63
+  },
+  "compositionPatterns": [],
+  "unresolvedBindings": [],
+  "recommendations": {
+    "variantMapping": {
+      "componentName": "Tab",
+      "behavioralClassification": "styling",
+      "recommendations": [
+        {
+          "option": "A",
+          "description": "Single component with a variant prop",
+          "rationale": "Variants differ only in visual styling, making a single component with a variant prop the simplest API surface.",
+          "recommended": true,
+          "alignsWith": [
+            "Behavioral analysis: variants are styling-only"
+          ],
+          "tradeoffs": [
+            "Simpler consumer API — one import, one tag.",
+            "Internal complexity grows if behavioral differences emerge later.",
+            "Harder to tree-shake unused variants."
+          ]
+        },
+        {
+          "option": "B",
+          "description": "Primitive + semantic component structure (Stemma pattern)",
+          "rationale": "A split structure future-proofs the component for behavioral divergence, though current variants are styling-only.",
+          "recommended": false,
+          "alignsWith": [],
+          "tradeoffs": [
+            "Clean separation of behavioral contracts per component.",
+            "Aligns with Stemma inheritance pattern used across DesignerPunk.",
+            "More components to maintain and document."
+          ]
+        }
+      ],
+      "conflicts": [],
+      "familyPattern": null,
+      "existingComponents": []
+    },
+    "componentTokens": [
+      {
+        "primitiveToken": "space.space150",
+        "usageCount": 2,
+        "locations": [
+          "padding-right",
+          "padding-left"
+        ],
+        "illustrativeSuggestion": "tab.padding.horizontal = space.space150",
+        "rationale": "space.space150 is used across 2 properties (padding-right, padding-left). Consistent usage suggests semantic intent that could be encoded as a component token."
+      }
+    ]
+  },
+  "screenshots": [
+    {
+      "filePath": "./images/tab-state-inactive-mode-day.png",
+      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/1a133742-0350-4f97-8772-7e9e43847621",
+      "format": "png",
+      "scale": 2,
+      "variant": "State=Inactive, Mode=Day",
+      "capturedAt": "2026-03-16T18:06:06.625Z"
+    },
+    {
+      "filePath": "./images/tab-state-active-mode-day.png",
+      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/ff27661c-2114-4476-b0d9-17d40d629ae3",
+      "format": "png",
+      "scale": 2,
+      "variant": "State=Active, Mode=Day",
+      "capturedAt": "2026-03-16T18:06:09.689Z"
+    },
+    {
+      "filePath": "./images/tab-state-state-mode-night.png",
+      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/f2be6a4e-c243-4a37-9a16-71d07d36357b",
+      "format": "png",
+      "scale": 2,
+      "variant": "State=State, Mode=Night",
+      "capturedAt": "2026-03-16T18:06:12.273Z"
+    },
+    {
+      "filePath": "./images/tab-state-inactive-mode-night.png",
+      "url": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/195bfa4c-c476-4459-83cf-4b269e28f729",
+      "format": "png",
+      "scale": 2,
+      "variant": "State=Inactive, Mode=Night",
+      "capturedAt": "2026-03-16T18:06:15.041Z"
+    }
+  ],
+  "extractedAt": "2026-03-16T18:06:15.045Z",
+  "extractorVersion": "6.3.0"
+}

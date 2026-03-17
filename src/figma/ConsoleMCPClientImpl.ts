@@ -192,6 +192,7 @@ export class ConsoleMCPClientImpl implements ConsoleMCPClient {
         const result = await this.callTool('figma_get_token_values', {
           type: 'all',
           limit: 500,
+          fileKey,
         });
 
         // figma_get_token_values returns token objects, normalize to FigmaVariable[]
@@ -214,8 +215,10 @@ export class ConsoleMCPClientImpl implements ConsoleMCPClient {
         }
 
         return [];
-      } catch {
-        // If token retrieval fails (e.g. no design system yet), return empty
+      } catch (error) {
+        // Log the error so it's visible, but return empty array
+        // to allow initialSetup path for genuinely new Figma files
+        console.warn('⚠️  Failed to read existing Figma variables:', error);
         return [];
       }
     }

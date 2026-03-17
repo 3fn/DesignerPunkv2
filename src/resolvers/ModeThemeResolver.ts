@@ -137,13 +137,13 @@ export class ModeThemeResolver {
         return false;
       }
 
-      // Validate hex color format (basic check)
-      const hexPattern = /^#[0-9A-Fa-f]{6}$/;
+      // Validate color format: rgba() (current standard) or hex (legacy/test)
+      const colorPattern = /^(rgba\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*[\d.]+\s*\)|#[0-9A-Fa-f]{6})$/;
       return (
-        hexPattern.test(colorValue.light.base) &&
-        hexPattern.test(colorValue.light.wcag) &&
-        hexPattern.test(colorValue.dark.base) &&
-        hexPattern.test(colorValue.dark.wcag)
+        colorPattern.test(colorValue.light.base) &&
+        colorPattern.test(colorValue.light.wcag) &&
+        colorPattern.test(colorValue.dark.base) &&
+        colorPattern.test(colorValue.dark.wcag)
       );
     } catch {
       return false;

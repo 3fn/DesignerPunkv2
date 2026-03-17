@@ -82,3 +82,25 @@ The CLI can then decide whether to abort or offer a `--clean` flag explicitly, r
 ## Note
 
 The `figma_get_token_values` tool parameter schema should be verified against the actual figma-console-mcp version to confirm the correct parameter name for the file key (may be `fileKey`, `file_key`, or passed differently). Spec 054b's design doc notes this exact concern: "Tool parameter schemas must be verified against actual figma-console-mcp."
+
+---
+
+## Partial Fix Applied
+
+**Date**: 2026-03-15
+**Applied by**: Ada
+**Status**: Partially fixed — schema verification still needed
+
+### Changes made (our code only)
+
+1. **Bug 1 fix**: Added `fileKey` to the `figma_get_token_values` tool call arguments in `ConsoleMCPClientImpl.getVariables()`. Parameter name `fileKey` matches the pattern used by `figma_execute` in the same file.
+
+2. **Bug 2 fix**: Changed silent `catch { return []; }` to `catch` with `console.warn()` + `return []`. Errors are now visible in the console but still fall through to `initialSetup` path (preserving behavior for genuinely new Figma files with no variables).
+
+### What's NOT verified
+
+The `fileKey` parameter name is an assumption based on our codebase's conventions. The actual `figma-console-mcp` tool schema for `figma_get_token_values` has not been verified. If Console MCP expects a different parameter name (or doesn't accept a file key at all), the call will still fail — but now visibly instead of silently.
+
+### Next step
+
+Peter needs to verify the `figma_get_token_values` parameter schema against the actual Console MCP / Figma Power MCP tool definitions before this fix can be considered complete.
