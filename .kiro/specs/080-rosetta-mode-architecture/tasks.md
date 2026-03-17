@@ -357,7 +357,7 @@ Tasks 4 and 7 are blocked on Spec 050's token mapping (Nav-TabBar-Base semantic 
     - _Traces: Thurgood R6 F37_
 
 
-- [ ] 6. Mode Parity Audit + Theme Template Tooling
+- [x] 6. Mode Parity Audit + Theme Template Tooling
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -382,7 +382,7 @@ Tasks 4 and 7 are blocked on Spec 050's token mapping (Nav-TabBar-Base semantic 
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 6 Complete: Mode Parity Audit + Theme Template Tooling"`
   - Verify: CI integration working on token file changes
 
-  - [ ] 6.1 Implement mode parity audit
+  - [x] 6.1 Implement mode parity audit
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -395,7 +395,7 @@ Tasks 4 and 7 are blocked on Spec 050's token mapping (Nav-TabBar-Base semantic 
     - _Requirements: R5 AC4-5, R7 AC3-4_
     - _Traces: Testing strategy Layer 2_
 
-  - [ ] 6.2 Implement theme file generator
+  - [x] 6.2 Implement theme file generator
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -447,9 +447,10 @@ Tasks 4 and 7 are blocked on Spec 050's token mapping (Nav-TabBar-Base semantic 
       - Top stroke (`white200` → `gray500`): Level 2 — verify semantic override
     - Include at least one composite-reference token (e.g., `color.structure.border.subtle` if applicable)
     - Verify web `light-dark()` output for each token
+    - **Fix DTCG Level 2 gap (F39)**: Wire DTCG generator into orchestration layer so it consumes override-resolved tokens for mode detection, not raw primitive values. Currently reads `ColorTokenValue` directly — misses Level 2 overrides where the primitive *name* changes between modes. Verify DTCG `modes.light`/`modes.dark` output for Level 2 tokens.
     - Document end-to-end resolution path per token
-    - _Requirements: R1, R2, R3, R6_
-    - _Traces: Thurgood R1 F9 (composite proof case), Lina R1 F10 (validated mappings)_
+    - _Requirements: R1, R2, R3, R6, R9_
+    - _Traces: Thurgood R1 F9 (composite proof case), Lina R1 F10 (validated mappings), Thurgood R7 F39 (DTCG Level 2 gap)_
 
 
 - [ ] 8. Documentation Updates

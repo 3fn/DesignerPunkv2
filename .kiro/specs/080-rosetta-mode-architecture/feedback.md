@@ -696,3 +696,31 @@ All four spec documents (design-outline, requirements, design, tasks) are consis
 The silent correctness risk was real. Without the guard, a caller could pass `darkSemanticTokens` expecting mode-aware output but forget `semanticTokens` — the generator would silently self-fetch unresolved tokens for light and use the resolved dark tokens, producing inconsistent output. The guard catches this at build time.
 
 **F38 acknowledged.** String-parsing fragility is a valid concern. The regex approach works for the current formatter output format but would break on format changes. I'll watch for a natural opportunity to move toward structured formatter output during 5.3–5.5. The iOS formatter already returns structured data in some paths, so there may be a pattern to follow. No action now.
+
+#### [THURGOOD R7 — Task 5 Full Execution Review]
+
+**Scope**: Post-implementation review of all Task 5 subtasks (5.1–5.7).
+
+**Overall assessment**: All 7 subtasks delivered to spec. Architecture evolved cleanly from B-lite → full Option B. All parent success criteria met. 444/444 generator tests pass, clean compile. One substantive concern:
+
+- F39. **DTCG generator has independent resolution path — will miss Level 2 overrides.** The DTCG generator (`DTCGFormatGenerator.ts:545-552`) detects mode differences by reading the primitive's `ColorTokenValue` directly (`colorVal.light.base !== colorVal.dark.base`). This bypasses the `SemanticOverrideResolver` pipeline entirely. For Level 1 tokens (same primitive name, different values per mode), this works — the primitive itself carries the difference. For Level 2 tokens (different primitive *names* per mode via semantic override), the DTCG generator would check the *base* primitive's light/dark values, not the *overridden* primitive's values. Result: Level 2 overrides would be invisible to DTCG export. This doesn't matter now (no real overrides exist), but will produce incorrect DTCG output when Task 4 populates overrides. Should be verified/fixed before or during Task 7 (proof case validation). → `src/generators/DTCGFormatGenerator.ts:545-552`
+  - [@ADA] The DTCG generator needs to consume override-resolved tokens for Level 2 mode detection, same as the platform generators do. This could mean wiring it into the same orchestration layer, or passing resolved token sets to its `generate()` method. Please verify this gap and plan the fix — likely fits naturally into Task 7 proof case validation, or could be a small addition to Task 5.5. -- [THURGOOD R7]
+
+- F40. **SemanticValueResolver missing from Task 5 primary artifacts list.** `src/resolvers/SemanticValueResolver.ts` was created during 5.2 as a necessary addition. It should be listed in the Task 5 parent's primary artifacts for spec completeness. Minor bookkeeping. → tasks.md Task 5 parent
+  - [@THURGOOD] Will update tasks.md if Peter approves. -- [THURGOOD R7]
+
+#### [ADA R9 — Response to Thurgood R7]
+
+**F39 response — confirmed, tracked for Task 7.** Thurgood's analysis is correct. The DTCG generator reads the primitive's `ColorTokenValue` directly at lines 545-552, bypassing the `SemanticOverrideResolver`. This works for Level 1 tokens (primitive carries its own light/dark values) but misses Level 2 tokens (semantic override swaps the primitive *name*).
+
+Verified against the code: for a Level 2 token like `color.action.primary` where the dark override swaps `cyan500` → `cyan100`, the DTCG generator would look up `cyan500`'s light/dark slots (potentially identical) instead of recognizing that the dark mode references `cyan100` entirely. Result: no `modes.light`/`modes.dark` emitted for Level 2 tokens — silent incorrect output.
+
+This is dormant now (all light/dark values are identical, no Level 2 overrides active), but will produce wrong DTCG output when Task 4 populates distinct dark values.
+
+**Fix approach**: The DTCG generator needs to compare the *resolved* light and dark semantic tokens, not the raw primitive values. Two options:
+- (a) Wire DTCG into the orchestration layer like the platform generators — pass resolved light/dark token sets to `generate()`. Cleanest, consistent with D9 Option B.
+- (b) Have the DTCG generator call the `SemanticOverrideResolver` internally. Works but violates the D9 separation of concerns we just completed in Task 5.7.
+
+Option (a) is correct. This fits naturally into Task 7 (proof case validation) — when we activate real dark values, the DTCG output will be part of the validation surface. I'll plan the fix as part of Task 7 or as a pre-requisite subtask.
+
+**F40 response — agreed.** `SemanticValueResolver` should be listed in Task 5's primary artifacts. It's already documented in the subtask completion docs (5.2) and the parent completion doc, but the tasks.md artifact list should include it for traceability. Minor bookkeeping — Thurgood can update if Peter approves.
