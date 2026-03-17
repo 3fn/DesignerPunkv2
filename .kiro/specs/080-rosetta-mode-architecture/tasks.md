@@ -63,7 +63,7 @@ Phase 2 follows the same pattern: snapshot existing behavior, migrate infrastruc
     - _Traces: Ada R4 F20, Lina F25_
 
 
-- [ ] 2. Semantic Override Infrastructure
+- [x] 2. Semantic Override Infrastructure
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -92,7 +92,7 @@ Phase 2 follows the same pattern: snapshot existing behavior, migrate infrastruc
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Semantic Override Infrastructure"`
   - Verify: All tests pass including new resolver tests
 
-  - [ ] 2.1 Create theme override types
+  - [x] 2.1 Create theme override types
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     **Agent**: Ada
@@ -102,7 +102,7 @@ Phase 2 follows the same pattern: snapshot existing behavior, migrate infrastruc
     - Import `TokenModifier` from `../types/SemanticToken.js`
     - _Requirements: R2_
 
-  - [ ] 2.2 Implement `SemanticOverrideResolver`
+  - [x] 2.2 Implement `SemanticOverrideResolver`
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     **Agent**: Ada
@@ -115,7 +115,7 @@ Phase 2 follows the same pattern: snapshot existing behavior, migrate infrastruc
     - Modifier inheritance: override with `modifiers` key (even `[]`) replaces base. Override without `modifiers` key inherits base.
     - _Requirements: R2 AC1-4, R3 AC1-5, R4 AC1_
 
-  - [ ] 2.3 Write resolver unit tests
+  - [x] 2.3 Write resolver unit tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada + Thurgood (Ada writes, Thurgood audits coverage)
