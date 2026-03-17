@@ -24,6 +24,7 @@ import { Platform, PLATFORM_METADATA } from './types/Platform';
 import { TokenFileGenerator } from '../generators/TokenFileGenerator';
 import { getAllPrimitiveTokens, getTokensByCategory } from '../tokens';
 import { getAllSemanticTokens } from '../tokens/semantic';
+import { resolveSemanticTokenValue } from '../resolvers/SemanticValueResolver';
 import { TokenCategory } from '../types/PrimitiveToken';
 import { SemanticTokenValidator } from '../validators/SemanticTokenValidator';
 import { PrimitiveTokenRegistry } from '../registries/PrimitiveTokenRegistry';
@@ -435,6 +436,11 @@ export class BuildOrchestrator implements IBuildOrchestrator {
         warnings.push(validationResult.message);
       }
 
+      // Resolve semantic tokens for mode-aware generation (Spec 080, D9)
+      const baseSemantics = getAllSemanticTokens();
+      const resolvedLight = baseSemantics.map(t => resolveSemanticTokenValue(t, 'light'));
+      const resolvedDark = baseSemantics.map(t => resolveSemanticTokenValue(t, 'dark'));
+
       // Generate platform-specific token file
       let generationResult;
       switch (platform) {
@@ -443,7 +449,9 @@ export class BuildOrchestrator implements IBuildOrchestrator {
             outputDir: this.config.outputDir,
             version: '1.0.0',
             includeComments: true,
-            groupByCategory: true
+            groupByCategory: true,
+            semanticTokens: resolvedLight,
+            darkSemanticTokens: resolvedDark
           });
           break;
         case 'ios':
@@ -451,7 +459,9 @@ export class BuildOrchestrator implements IBuildOrchestrator {
             outputDir: this.config.outputDir,
             version: '1.0.0',
             includeComments: true,
-            groupByCategory: true
+            groupByCategory: true,
+            semanticTokens: resolvedLight,
+            darkSemanticTokens: resolvedDark
           });
           break;
         case 'android':
@@ -459,7 +469,9 @@ export class BuildOrchestrator implements IBuildOrchestrator {
             outputDir: this.config.outputDir,
             version: '1.0.0',
             includeComments: true,
-            groupByCategory: true
+            groupByCategory: true,
+            semanticTokens: resolvedLight,
+            darkSemanticTokens: resolvedDark
           });
           break;
         default:

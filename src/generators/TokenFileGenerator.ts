@@ -20,11 +20,18 @@ import { BlendUtilityGenerator, BlendUtilityGenerationOptions } from './BlendUti
 import { ComponentTokenRegistry, RegisteredComponentToken } from '../registries/ComponentTokenRegistry';
 import { getPlatformTokenName } from '../naming/PlatformNamingRules';
 
-export interface GenerationOptions {
+export interface BaseGenerationOptions {
   outputDir?: string;
   version?: string;
   includeComments?: boolean;
   groupByCategory?: boolean;
+}
+
+export interface GenerationOptions extends BaseGenerationOptions {
+  /** Pre-resolved semantic tokens (light mode). Generators require externally-resolved tokens (D9 Option B). */
+  semanticTokens: Array<Omit<SemanticToken, 'primitiveTokens'>>;
+  /** Pre-resolved semantic tokens (dark mode). Used with semanticTokens to produce mode-aware output. */
+  darkSemanticTokens: Array<Omit<SemanticToken, 'primitiveTokens'>>;
 }
 
 export interface GenerationResult {
@@ -85,7 +92,7 @@ export class TokenFileGenerator {
   /**
    * Generate all platform-specific token files
    */
-  generateAll(options: GenerationOptions = {}): GenerationResult[] {
+  generateAll(options: GenerationOptions): GenerationResult[] {
     const results: GenerationResult[] = [];
 
     results.push(this.generateWebTokens(options));
@@ -99,7 +106,7 @@ export class TokenFileGenerator {
    * Generate all platform-specific token files AND blend utilities
    * This is the comprehensive generation method that produces all artifacts
    */
-  generateAllWithBlendUtilities(options: GenerationOptions = {}): AllGenerationResults {
+  generateAllWithBlendUtilities(options: GenerationOptions): AllGenerationResults {
     const tokenResults = this.generateAll(options);
     const blendResults = this.generateBlendUtilities(options);
 
@@ -115,7 +122,7 @@ export class TokenFileGenerator {
    * @param options - Generation options
    * @returns Array of blend utility generation results
    */
-  generateBlendUtilities(options: GenerationOptions = {}): BlendUtilityResult[] {
+  generateBlendUtilities(options: BaseGenerationOptions = {}): BlendUtilityResult[] {
     const { outputDir = 'output', includeComments = true } = options;
     const blendOptions: BlendUtilityGenerationOptions = { includeComments };
     const results: BlendUtilityResult[] = [];
@@ -192,7 +199,7 @@ export class TokenFileGenerator {
    * 
    * @see Requirements 5.1, 5.2, 5.3, 5.4 in .kiro/specs/037-component-token-generation-pipeline/requirements.md
    */
-  generateComponentTokens(options: GenerationOptions = {}): ComponentTokenGenerationResult[] {
+  generateComponentTokens(options: BaseGenerationOptions = {}): ComponentTokenGenerationResult[] {
     const { outputDir = 'dist', version = '1.0.0', includeComments = true } = options;
     const results: ComponentTokenGenerationResult[] = [];
 
@@ -747,7 +754,8 @@ export class TokenFileGenerator {
    */
   private generateSemanticSection(
     semantics: Array<Omit<SemanticToken, 'primitiveTokens'>>,
-    platform: 'web' | 'ios' | 'android'
+    platform: 'web' | 'ios' | 'android',
+    darkSemantics?: Array<Omit<SemanticToken, 'primitiveTokens'>>
   ): string[] {
     const lines: string[] = [];
 
@@ -766,6 +774,14 @@ export class TokenFileGenerator {
         break;
       default:
         return lines;
+    }
+
+    // Build dark token lookup for mode-aware output
+    const darkMap = new Map<string, Omit<SemanticToken, 'primitiveTokens'>>();
+    if (darkSemantics) {
+      for (const dt of darkSemantics) {
+        darkMap.set(dt.name, dt);
+      }
     }
 
     // Collect tokens with wcagValue for WCAG theme override block
@@ -810,13 +826,50 @@ export class TokenFileGenerator {
         isOpacityComposition;
 
       // Call appropriate formatter method for each token based on reference type
+      let lightLine: string;
       if (isSingleReference) {
-        // Single-reference tokens (colors, spacing, borders, opacity compositions)
-        lines.push(generator.formatSingleReferenceToken(semantic as SemanticToken));
+        lightLine = generator.formatSingleReferenceToken(semantic as SemanticToken);
       } else {
-        // Multi-reference tokens (typography with multiple properties)
-        lines.push(generator.formatMultiReferenceToken(semantic as SemanticToken));
+        lightLine = generator.formatMultiReferenceToken(semantic as SemanticToken);
       }
+
+      // Mode-aware output: wrap in light-dark() when dark value differs (web only)
+      const darkToken = darkMap.get(semantic.name);
+      if (darkToken) {
+        let darkLine: string;
+        if (isSingleReference) {
+          darkLine = generator.formatSingleReferenceToken(darkToken as SemanticToken);
+        } else {
+          darkLine = generator.formatMultiReferenceToken(darkToken as SemanticToken);
+        }
+
+        const lightParts = this.extractFormattedParts(lightLine);
+        const darkParts = this.extractFormattedParts(darkLine);
+
+        if (lightParts && darkParts && lightParts.value !== darkParts.value) {
+          if (platform === 'web') {
+            lines.push(`  ${lightParts.name}: light-dark(${lightParts.value}, ${darkParts.value});`);
+            continue;
+          }
+          if (platform === 'ios') {
+            lines.push(
+              `    public static let ${lightParts.name}: UIColor = UIColor { $0.userInterfaceStyle == .dark ? ${darkParts.value} : ${lightParts.value} }`
+            );
+            continue;
+          }
+          if (platform === 'android') {
+            lines.push(
+              `    val ${lightParts.name}_light = ${lightParts.value}`
+            );
+            lines.push(
+              `    val ${lightParts.name}_dark = ${darkParts.value}`
+            );
+            continue;
+          }
+        }
+      }
+
+      lines.push(lightLine);
     }
 
     // Store WCAG overrides for the caller to retrieve via getLastWcagOverrides()
@@ -1048,12 +1101,14 @@ export class TokenFileGenerator {
   /**
    * Generate web token file (JavaScript)
    */
-  generateWebTokens(options: GenerationOptions = {}): GenerationResult {
+  generateWebTokens(options: GenerationOptions): GenerationResult {
     const {
       outputDir = 'output',
       version = '1.0.0',
       includeComments = true,
-      groupByCategory = true
+      groupByCategory = true,
+      semanticTokens,
+      darkSemanticTokens
     } = options;
 
     const metadata: FileMetadata = {
@@ -1065,10 +1120,15 @@ export class TokenFileGenerator {
     // so exclude them from the primitive pass to prevent duplicate declarations
     const MOTION_CATEGORIES = new Set([TokenCategory.EASING, TokenCategory.DURATION, TokenCategory.SCALE]);
     const tokens = getAllPrimitiveTokens().filter(t => !MOTION_CATEGORIES.has(t.category));
-    const allSemantics = getAllSemanticTokens();
+    const allSemantics = semanticTokens;
     
     // Filter out layering tokens (they don't have primitiveReferences)
     const semantics = allSemantics.filter(s => 
+      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.')
+    );
+
+    // Filter dark tokens the same way
+    const darkSemantics = darkSemanticTokens.filter(s =>
       !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.')
     );
 
@@ -1077,6 +1137,9 @@ export class TokenFileGenerator {
 
     // Add header
     lines.push(this.webGenerator.generateHeader(metadata));
+
+    // Mode-aware: always declare color-scheme support
+    lines.push('  color-scheme: light dark;');
 
     // Add primitive tokens section comment
     if (includeComments) {
@@ -1114,7 +1177,7 @@ export class TokenFileGenerator {
     }
 
     // Add semantic tokens section
-    const semanticLines = this.generateSemanticSection(semantics, 'web');
+    const semanticLines = this.generateSemanticSection(semantics, 'web', darkSemantics);
     lines.push(...semanticLines);
     semanticTokenCount = semantics.length;
 
@@ -1166,12 +1229,14 @@ export class TokenFileGenerator {
   /**
    * Generate iOS token file (Swift)
    */
-  generateiOSTokens(options: GenerationOptions = {}): GenerationResult {
+  generateiOSTokens(options: GenerationOptions): GenerationResult {
     const {
       outputDir = 'output',
       version = '1.0.0',
       includeComments = true,
-      groupByCategory = true
+      groupByCategory = true,
+      semanticTokens,
+      darkSemanticTokens
     } = options;
 
     const metadata: FileMetadata = {
@@ -1180,10 +1245,15 @@ export class TokenFileGenerator {
     };
 
     const tokens = getAllPrimitiveTokens();
-    const allSemantics = getAllSemanticTokens();
+    const allSemantics = semanticTokens;
     
     // Filter out layering tokens (they don't have primitiveReferences)
     const semantics = allSemantics.filter(s => 
+      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.')
+    );
+
+    // Filter dark tokens the same way
+    const darkSemantics = darkSemanticTokens.filter(s =>
       !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.')
     );
 
@@ -1229,7 +1299,7 @@ export class TokenFileGenerator {
     }
 
     // Add semantic tokens section
-    const semanticLines = this.generateSemanticSection(semantics, 'ios');
+    const semanticLines = this.generateSemanticSection(semantics, 'ios', darkSemantics);
     lines.push(...semanticLines);
     semanticTokenCount = semantics.length;
 
@@ -1281,12 +1351,14 @@ export class TokenFileGenerator {
   /**
    * Generate Android token file (Kotlin)
    */
-  generateAndroidTokens(options: GenerationOptions = {}): GenerationResult {
+  generateAndroidTokens(options: GenerationOptions): GenerationResult {
     const {
       outputDir = 'output',
       version = '1.0.0',
       includeComments = true,
-      groupByCategory = true
+      groupByCategory = true,
+      semanticTokens,
+      darkSemanticTokens
     } = options;
 
     const metadata: FileMetadata = {
@@ -1295,10 +1367,15 @@ export class TokenFileGenerator {
     };
 
     const tokens = getAllPrimitiveTokens();
-    const allSemantics = getAllSemanticTokens();
+    const allSemantics = semanticTokens;
     
     // Filter out layering tokens (they don't have primitiveReferences)
     const semantics = allSemantics.filter(s => 
+      !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.')
+    );
+
+    // Filter dark tokens the same way
+    const darkSemantics = darkSemanticTokens.filter(s =>
       !s.name.startsWith('zIndex.') && !s.name.startsWith('elevation.')
     );
 
@@ -1344,7 +1421,7 @@ export class TokenFileGenerator {
     }
 
     // Add semantic tokens section
-    const semanticLines = this.generateSemanticSection(semantics, 'android');
+    const semanticLines = this.generateSemanticSection(semantics, 'android', darkSemantics);
     lines.push(...semanticLines);
     semanticTokenCount = semantics.length;
 
@@ -1391,6 +1468,26 @@ export class TokenFileGenerator {
       valid: validation.valid,
       errors: validation.errors
     };
+  }
+
+  /**
+   * Extract name and value from a formatted token line (any platform).
+   * Web:     `  --color-text-default: rgba(38, 50, 58, 1);` → { name: '--color-text-default', value: 'rgba(38, 50, 58, 1)' }
+   * iOS:     `    public static let colorTextDefault: UIColor = UIColor(...)` → { name: 'colorTextDefault', value: 'UIColor(...)' }
+   * Android: `    val color_text_default = Color.argb(255, 38, 50, 58)` → { name: 'color_text_default', value: 'Color.argb(255, 38, 50, 58)' }
+   */
+  private extractFormattedParts(line: string): { name: string; value: string } | null {
+    const lastLine = line.includes('\n') ? line.split('\n').pop()! : line;
+    // Web: --prop-name: value;
+    const cssMatch = lastLine.match(/^\s*(--[\w-]+):\s*(.+);$/);
+    if (cssMatch) return { name: cssMatch[1], value: cssMatch[2].trim() };
+    // iOS: public static let name: Type = value
+    const swiftMatch = lastLine.match(/public static let (\w+).*?=\s*(.+)$/);
+    if (swiftMatch) return { name: swiftMatch[1], value: swiftMatch[2].trim() };
+    // Android (Kotlin): val name = value
+    const kotlinMatch = lastLine.match(/^\s*val\s+([\w_]+)\s*=\s*(.+)$/);
+    if (kotlinMatch) return { name: kotlinMatch[1], value: kotlinMatch[2].trim() };
+    return null;
   }
 
   /**

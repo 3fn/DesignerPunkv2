@@ -10,6 +10,7 @@
  */
 
 import { TokenFileGenerator } from '../TokenFileGenerator';
+import { defaultSemanticOptions } from './helpers/defaultSemanticOptions';
 import { getTokensByCategory } from '../../tokens';
 import { TokenCategory } from '../../types/PrimitiveToken';
 
@@ -52,7 +53,7 @@ describe('Breakpoint Token Generation', () => {
 
   describe('Web Platform Generation', () => {
     it('should generate breakpoint tokens for web with px units', () => {
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
       
       expect(result.valid).toBe(true);
       expect(result.content).toContain('--breakpoint-xs: 320px');
@@ -62,17 +63,14 @@ describe('Breakpoint Token Generation', () => {
     });
 
     it('should include breakpoint tokens in token count', () => {
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
       
       // Token count should include the 4 breakpoint tokens
       expect(result.tokenCount).toBeGreaterThanOrEqual(4);
     });
 
     it('should include breakpoint category comment when grouping enabled', () => {
-      const result = generator.generateWebTokens({
-        groupByCategory: true,
-        includeComments: true
-      });
+      const result = generator.generateWebTokens({ ...defaultSemanticOptions(), groupByCategory: true, includeComments: true });
       
       expect(result.content).toContain('BREAKPOINT');
     });
@@ -80,7 +78,7 @@ describe('Breakpoint Token Generation', () => {
 
   describe('iOS Platform Generation', () => {
     it('should generate breakpoint tokens for iOS with pt units (CGFloat)', () => {
-      const result = generator.generateiOSTokens();
+      const result = generator.generateiOSTokens(defaultSemanticOptions());
       
       expect(result.valid).toBe(true);
       expect(result.content).toContain('public static let breakpointXs: CGFloat = 320');
@@ -90,7 +88,7 @@ describe('Breakpoint Token Generation', () => {
     });
 
     it('should include breakpoint tokens in token count', () => {
-      const result = generator.generateiOSTokens();
+      const result = generator.generateiOSTokens(defaultSemanticOptions());
       
       // Token count should include the 4 breakpoint tokens
       expect(result.tokenCount).toBeGreaterThanOrEqual(4);
@@ -99,7 +97,7 @@ describe('Breakpoint Token Generation', () => {
 
   describe('Android Platform Generation', () => {
     it('should generate breakpoint tokens for Android with dp units (Float)', () => {
-      const result = generator.generateAndroidTokens();
+      const result = generator.generateAndroidTokens(defaultSemanticOptions());
       
       expect(result.valid).toBe(true);
       expect(result.content).toContain('const val breakpoint_xs: Float = 320f');
@@ -109,7 +107,7 @@ describe('Breakpoint Token Generation', () => {
     });
 
     it('should include breakpoint tokens in token count', () => {
-      const result = generator.generateAndroidTokens();
+      const result = generator.generateAndroidTokens(defaultSemanticOptions());
       
       // Token count should include the 4 breakpoint tokens
       expect(result.tokenCount).toBeGreaterThanOrEqual(4);
@@ -118,9 +116,9 @@ describe('Breakpoint Token Generation', () => {
 
   describe('Cross-Platform Consistency', () => {
     it('should generate same breakpoint values across all platforms', () => {
-      const webResult = generator.generateWebTokens();
-      const iosResult = generator.generateiOSTokens();
-      const androidResult = generator.generateAndroidTokens();
+      const webResult = generator.generateWebTokens(defaultSemanticOptions());
+      const iosResult = generator.generateiOSTokens(defaultSemanticOptions());
+      const androidResult = generator.generateAndroidTokens(defaultSemanticOptions());
       
       // All platforms should have the same token count
       expect(webResult.tokenCount).toBe(iosResult.tokenCount);
@@ -133,7 +131,7 @@ describe('Breakpoint Token Generation', () => {
     });
 
     it('should maintain mathematical consistency across platforms', () => {
-      const results = generator.generateAll();
+      const results = generator.generateAll(defaultSemanticOptions());
       const validation = generator.validateCrossPlatformConsistency(results);
       
       expect(validation.consistent).toBe(true);

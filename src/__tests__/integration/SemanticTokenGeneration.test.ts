@@ -19,7 +19,16 @@
 import { TokenFileGenerator } from '../../generators/TokenFileGenerator';
 import { getAllPrimitiveTokens } from '../../tokens';
 import { getAllSemanticTokens } from '../../tokens/semantic';
+import { resolveSemanticTokenValue } from '../../resolvers/SemanticValueResolver';
 import { getPlatformTokenName } from '../../naming/PlatformNamingRules';
+
+function defaultSemanticOptions() {
+  const base = getAllSemanticTokens();
+  return {
+    semanticTokens: base.map(t => resolveSemanticTokenValue(t, 'light')),
+    darkSemanticTokens: base.map(t => resolveSemanticTokenValue(t, 'dark')),
+  };
+}
 
 describe('Semantic Token Generation - End-to-End Integration', () => {
   let generator: TokenFileGenerator;
@@ -30,7 +39,7 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
 
   describe('Web Platform - CSS Format with Primitives + Semantics', () => {
     it('should generate web tokens in CSS format with :root wrapper', () => {
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
 
       // Basic generation validation
       expect(result.platform).toBe('web');
@@ -51,7 +60,7 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
     });
 
     it('should generate file with .css extension', () => {
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
 
       // File path should end with .css, not .js
       expect(result.filePath).toContain('DesignTokens.web.css');
@@ -59,7 +68,7 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
     });
 
     it('should use kebab-case with -- prefix for token names', () => {
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
 
       // Should contain primitive tokens with -- prefix and kebab-case
       expect(result.content).toContain('--space-100');
@@ -73,7 +82,7 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
     });
 
     it('should use var(--token-name) for semantic token references', () => {
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
 
       // Semantic tokens should reference primitives using var() syntax
       const semanticSection = result.content.substring(
@@ -87,7 +96,7 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
     });
 
     it('should maintain file structure with primitives first, semantics second', () => {
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
 
       // Find positions of primitive and semantic sections
       const primitiveCommentIndex = result.content.indexOf('PRIMITIVE TOKENS');
@@ -112,7 +121,7 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
 
   describe('iOS Platform - Swift Format with Primitives + Semantics', () => {
     it('should generate iOS tokens with both primitives and semantics', () => {
-      const result = generator.generateiOSTokens();
+      const result = generator.generateiOSTokens(defaultSemanticOptions());
 
       // Basic generation validation
       expect(result.platform).toBe('ios');
@@ -130,7 +139,7 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
     });
 
     it('should use camelCase for token names', () => {
-      const result = generator.generateiOSTokens();
+      const result = generator.generateiOSTokens(defaultSemanticOptions());
       
       // Should contain primitive tokens in camelCase
       expect(result.content).toContain('space100');
@@ -144,7 +153,7 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
     });
 
     it('should maintain file structure with primitives first, semantics second', () => {
-      const result = generator.generateiOSTokens();
+      const result = generator.generateiOSTokens(defaultSemanticOptions());
 
       // Find positions of primitive and semantic sections
       const primitiveCommentIndex = result.content.indexOf('PRIMITIVE TOKENS');
@@ -167,7 +176,7 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
     });
 
     it('should generate semantic tokens with primitive references', () => {
-      const result = generator.generateiOSTokens();
+      const result = generator.generateiOSTokens(defaultSemanticOptions());
 
       // Semantic tokens should reference primitives in Swift syntax
       const semanticSection = result.content.substring(
@@ -182,7 +191,7 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
 
   describe('Android Platform - Kotlin Format with Primitives + Semantics', () => {
     it('should generate Android tokens with both primitives and semantics', () => {
-      const result = generator.generateAndroidTokens();
+      const result = generator.generateAndroidTokens(defaultSemanticOptions());
 
       // Basic generation validation
       expect(result.platform).toBe('android');
@@ -200,7 +209,7 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
     });
 
     it('should use snake_case for token names', () => {
-      const result = generator.generateAndroidTokens();
+      const result = generator.generateAndroidTokens(defaultSemanticOptions());
       
       // Should contain primitive tokens in snake_case
       expect(result.content).toContain('space_100');
@@ -213,7 +222,7 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
     });
 
     it('should maintain file structure with primitives first, semantics second', () => {
-      const result = generator.generateAndroidTokens();
+      const result = generator.generateAndroidTokens(defaultSemanticOptions());
 
       // Find positions of primitive and semantic sections
       const primitiveCommentIndex = result.content.indexOf('PRIMITIVE TOKENS');
@@ -235,7 +244,7 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
     });
 
     it('should generate semantic tokens with primitive references', () => {
-      const result = generator.generateAndroidTokens();
+      const result = generator.generateAndroidTokens(defaultSemanticOptions());
 
       // Semantic tokens should reference primitives in Kotlin syntax
       const semanticSection = result.content.substring(
@@ -250,9 +259,9 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
 
   describe('Cross-Platform Consistency', () => {
     it('should generate same semantic token names across all platforms (with platform-specific formatting)', () => {
-      const webResult = generator.generateWebTokens();
-      const iosResult = generator.generateiOSTokens();
-      const androidResult = generator.generateAndroidTokens();
+      const webResult = generator.generateWebTokens(defaultSemanticOptions());
+      const iosResult = generator.generateiOSTokens(defaultSemanticOptions());
+      const androidResult = generator.generateAndroidTokens(defaultSemanticOptions());
 
       // All platforms should be valid
       expect(webResult.valid).toBe(true);
@@ -298,9 +307,9 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
     });
 
     it('should maintain identical primitive→semantic relationships across platforms', () => {
-      const webResult = generator.generateWebTokens();
-      const iosResult = generator.generateiOSTokens();
-      const androidResult = generator.generateAndroidTokens();
+      const webResult = generator.generateWebTokens(defaultSemanticOptions());
+      const iosResult = generator.generateiOSTokens(defaultSemanticOptions());
+      const androidResult = generator.generateAndroidTokens(defaultSemanticOptions());
 
       // Get semantic tokens (filter out platform-specific layering tokens)
       const semanticTokens = getAllSemanticTokens().filter(s => 
@@ -373,9 +382,9 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
 
   describe('Backward Compatibility', () => {
     it('should maintain primitive token output unchanged', () => {
-      const webResult = generator.generateWebTokens();
-      const iosResult = generator.generateiOSTokens();
-      const androidResult = generator.generateAndroidTokens();
+      const webResult = generator.generateWebTokens(defaultSemanticOptions());
+      const iosResult = generator.generateiOSTokens(defaultSemanticOptions());
+      const androidResult = generator.generateAndroidTokens(defaultSemanticOptions());
       const primitives = getAllPrimitiveTokens();
 
       // All primitive tokens should be present in each platform
@@ -392,9 +401,9 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
     });
 
     it('should not modify primitive token values', () => {
-      const webResult = generator.generateWebTokens();
-      const iosResult = generator.generateiOSTokens();
-      const androidResult = generator.generateAndroidTokens();
+      const webResult = generator.generateWebTokens(defaultSemanticOptions());
+      const iosResult = generator.generateiOSTokens(defaultSemanticOptions());
+      const androidResult = generator.generateAndroidTokens(defaultSemanticOptions());
       
       // Verify specific primitive values are unchanged across platforms
       expect(webResult.content).toContain('16'); // fontSize100
@@ -408,9 +417,9 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
     });
 
     it('should add semantic tokens without removing primitive tokens', () => {
-      const webResult = generator.generateWebTokens();
-      const iosResult = generator.generateiOSTokens();
-      const androidResult = generator.generateAndroidTokens();
+      const webResult = generator.generateWebTokens(defaultSemanticOptions());
+      const iosResult = generator.generateiOSTokens(defaultSemanticOptions());
+      const androidResult = generator.generateAndroidTokens(defaultSemanticOptions());
       
       // Should have both primitive and semantic sections
       expect(webResult.content).toContain('PRIMITIVE TOKENS');

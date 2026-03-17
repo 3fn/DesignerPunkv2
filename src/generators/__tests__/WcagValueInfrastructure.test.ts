@@ -38,6 +38,7 @@ jest.mock('../../tokens/semantic', () => ({
 }));
 
 import { TokenFileGenerator } from '../TokenFileGenerator';
+import { defaultSemanticOptions } from './helpers/defaultSemanticOptions';
 
 describe('wcagValue Infrastructure (Spec 076)', () => {
   let generator: TokenFileGenerator;
@@ -50,7 +51,7 @@ describe('wcagValue Infrastructure (Spec 076)', () => {
   describe('Web platform', () => {
     it('should generate WCAG override block when token has wcagValue', () => {
       useWcagMock = true;
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
 
       expect(result.valid).toBe(true);
       expect(result.content).toContain(':root[data-theme="wcag"]');
@@ -61,7 +62,7 @@ describe('wcagValue Infrastructure (Spec 076)', () => {
 
     it('should still output standard value in :root section', () => {
       useWcagMock = true;
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
 
       // The main :root block should reference teal400 (the standard value) → --teal-400
       const rootBlock = result.content.split(':root[data-theme="wcag"]')[0];
@@ -72,7 +73,7 @@ describe('wcagValue Infrastructure (Spec 076)', () => {
   describe('iOS platform', () => {
     it('should generate WCAG override lines when token has wcagValue', () => {
       useWcagMock = true;
-      const result = generator.generateiOSTokens();
+      const result = generator.generateiOSTokens(defaultSemanticOptions());
 
       expect(result.valid).toBe(true);
       expect(result.content).toContain('MARK: - WCAG Theme Semantic Overrides (Spec 076)');
@@ -85,7 +86,7 @@ describe('wcagValue Infrastructure (Spec 076)', () => {
   describe('Android platform', () => {
     it('should generate WCAG override lines when token has wcagValue', () => {
       useWcagMock = true;
-      const result = generator.generateAndroidTokens();
+      const result = generator.generateAndroidTokens(defaultSemanticOptions());
 
       expect(result.valid).toBe(true);
       expect(result.content).toContain('WCAG Theme Semantic Overrides (Spec 076)');
@@ -99,7 +100,7 @@ describe('wcagValue Infrastructure (Spec 076)', () => {
     it('tokens without wcagValue should not appear in WCAG override block', () => {
       // Real tokens now include wcagValue tokens (Spec 076), so the WCAG block exists.
       // Verify that tokens WITHOUT wcagValue are absent from the override block.
-      const webResult = generator.generateWebTokens();
+      const webResult = generator.generateWebTokens(defaultSemanticOptions());
       const wcagMatch = webResult.content.match(/:root\[data-theme="wcag"\]\s*\{([^}]*)\}/);
       if (!wcagMatch) {
         // No WCAG block at all — backward compat trivially satisfied

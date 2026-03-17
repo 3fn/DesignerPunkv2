@@ -15,6 +15,17 @@ Tasks are ordered to minimize risk: pre-requisite fixes first, then infrastructu
 
 Phase 2 follows the same pattern: snapshot existing behavior, migrate infrastructure, migrate data, verify zero regression.
 
+### Revised Execution Sequence (2026-03-17)
+
+Tasks 4 and 7 are blocked on Spec 050's token mapping (Nav-TabBar-Base semantic token assignments not yet defined). Rather than populate theoretical values, we proceed conservatively: complete infrastructure, then validate with real design values once 050 provides them.
+
+1. **Tasks 3, 5, 6** — Complete Phase 1 infrastructure (audit, pipeline integration, mode parity tooling)
+2. **Tasks 8.1–8.4** — Documentation updates that can be written against proven infrastructure
+3. **Spec 050** — Resolve token mapping (unblocks Tasks 4 and 7)
+4. **Tasks 4, 7** — Activate primitive dark values and validate proof case with real design values
+5. **Task 8.5** — Finalize ballot measures after end-to-end workflow is proven
+6. **Tasks 9–11** — Phase 2 (wcagValue unification) after system is validated end-to-end
+
 ---
 
 ## Task List
@@ -192,7 +203,7 @@ Phase 2 follows the same pattern: snapshot existing behavior, migrate infrastruc
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
 
-  ⏸️ **DEFERRED (2026-03-17)**: Figma analysis confirmed Nav-TabBar-Base uses different primitive *names* per mode (Level 2), not different values for the same primitive (Level 1). No primitives need distinct dark slot values for this component. 050 semantic token assignment is also pending (OQ-11). Deferring entire task until either: (a) a component spec requires a primitive to carry distinct dark values, or (b) a system-wide dark palette design is undertaken. Snapshot (4.1) should be captured fresh at that time — premature snapshot would be stale.
+  ⏸️ **BLOCKED (2026-03-17)**: Dependent on Spec 050 (Nav-TabBar-Base) token mapping, which is not yet defined. Figma analysis also confirmed Nav-TabBar-Base uses different primitive *names* per mode (Level 2), not different values for the same primitive (Level 1) — so no primitives need distinct dark slot values for this component. Deferring entire task until 050's token mapping is resolved and provides the design values needed to populate dark entries. Remaining 080 tasks (3, 5, 6, 8) proceed independently — they operate on infrastructure and mechanisms, not component-specific values.
 
   **Success Criteria:**
   - Color primitives that need distinct dark values have them populated
@@ -246,7 +257,7 @@ Phase 2 follows the same pattern: snapshot existing behavior, migrate infrastruc
     - _Traces: Testing strategy Layer 4_
 
 
-- [ ] 5. Pipeline Integration + Generator Updates
+- [x] 5. Pipeline Integration + Generator Updates
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -274,7 +285,7 @@ Phase 2 follows the same pattern: snapshot existing behavior, migrate infrastruc
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 5 Complete: Pipeline Integration + Generator Updates"`
   - Verify: Full pipeline produces correct mode-aware output for all platforms
 
-  - [ ] 5.1 Integrate `SemanticOverrideResolver` into pipeline
+  - [x] 5.1 Integrate `SemanticOverrideResolver` into pipeline
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     **Agent**: Ada
@@ -286,7 +297,7 @@ Phase 2 follows the same pattern: snapshot existing behavior, migrate infrastruc
     - Pass both sets to generators
     - _Requirements: R3 AC1-2, R4 AC1_
 
-  - [ ] 5.2 Update web generator for mode-aware output
+  - [x] 5.2 Update web generator for mode-aware output
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -296,7 +307,7 @@ Phase 2 follows the same pattern: snapshot existing behavior, migrate infrastruc
     - Mode-invariant tokens (identical light/dark): output single value (optimization, R6 AC4)
     - _Requirements: R6 AC1, R6 AC4_
 
-  - [ ] 5.3 Update iOS generator for mode-aware output
+  - [x] 5.3 Update iOS generator for mode-aware output
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -304,7 +315,7 @@ Phase 2 follows the same pattern: snapshot existing behavior, migrate infrastruc
     - Mode-invariant tokens: single value
     - _Requirements: R6 AC2_
 
-  - [ ] 5.4 Update Android generator for mode-aware output
+  - [x] 5.4 Update Android generator for mode-aware output
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -312,7 +323,7 @@ Phase 2 follows the same pattern: snapshot existing behavior, migrate infrastruc
     - Mode-invariant tokens: single value
     - _Requirements: R6 AC3_
 
-  - [ ] 5.5 Update DTCG export with mode contexts
+  - [x] 5.5 Update DTCG export with mode contexts
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -322,7 +333,7 @@ Phase 2 follows the same pattern: snapshot existing behavior, migrate infrastruc
     - Align with DTCG Resolver specification set/modifier pattern
     - _Requirements: R9 AC1-3_
 
-  - [ ] 5.6 Write generator integration tests
+  - [x] 5.6 Write generator integration tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada + Thurgood (Ada writes, Thurgood audits coverage)
@@ -333,6 +344,17 @@ Phase 2 follows the same pattern: snapshot existing behavior, migrate infrastruc
     - DTCG: verify mode context export
     - _Requirements: R6, R9_
     - _Traces: Testing strategy Layer 3_
+
+  - [x] 5.7 Remove generator self-fetch fallback (cleanup)
+    **Type**: Implementation
+    **Validation**: Tier 2 - Standard
+    **Agent**: Ada
+    - Remove `getAllSemanticTokens()` self-fetch fallback from `generateWebTokens`, `generateiOSTokens`, `generateAndroidTokens`
+    - Make `semanticTokens` and `darkSemanticTokens` required in `GenerationOptions` (or in a new `ModeAwareGenerationOptions`)
+    - Update all ~40 test call sites to pass token arrays explicitly
+    - Remove mismatched-provision guard (no longer needed when both fields are required)
+    - Completes full Option B per design outline D9: generators receive resolved tokens, no self-fetch
+    - _Traces: Thurgood R6 F37_
 
 
 - [ ] 6. Mode Parity Audit + Theme Template Tooling
@@ -390,6 +412,8 @@ Phase 2 follows the same pattern: snapshot existing behavior, migrate infrastruc
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
+
+  ⏸️ **BLOCKED (2026-03-17)**: Depends on Task 4 (dark primitive values) and Spec 050 token mapping. Cannot validate end-to-end resolution without real design values. Unblocks when 050's token mapping is defined and Task 4 is complete.
 
   **Success Criteria:**
   - Nav-TabBar-Base mode-differentiated tokens resolve correctly through the full pipeline

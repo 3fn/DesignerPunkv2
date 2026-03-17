@@ -5,6 +5,7 @@
 import { colorTokens } from '../../tokens/semantic/ColorTokens';
 import { grayTokens } from '../../tokens/ColorTokens';
 import { TokenFileGenerator } from '../TokenFileGenerator';
+import { defaultSemanticOptions } from './helpers/defaultSemanticOptions';
 
 describe('Spec 076 Token Migration', () => {
   // ── Semantic token primitive references ──
@@ -109,7 +110,7 @@ describe('Spec 076 Token Migration', () => {
   describe('Web WCAG override block', () => {
     it('generates WCAG overrides for all wcagValue tokens', () => {
       const generator = new TokenFileGenerator();
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
       const web = result.content;
 
       // WCAG block should contain overrides for all tokens with wcagValue

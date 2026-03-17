@@ -14,6 +14,7 @@
  */
 
 import { TokenFileGenerator } from '../TokenFileGenerator';
+import { defaultSemanticOptions } from './helpers/defaultSemanticOptions';
 import { iconTokens, parseMultiplier } from '../../tokens/semantic/IconTokens';
 import { fontSizeTokens } from '../../tokens/FontSizeTokens';
 import { lineHeightTokens } from '../../tokens/LineHeightTokens';
@@ -27,7 +28,7 @@ describe('Icon Size Token Cross-Platform Generation', () => {
 
   describe('Web Token Generation (TypeScript + CSS)', () => {
     it('should generate web tokens with icon size tokens', () => {
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
 
       expect(result.valid).toBe(true);
       expect(result.platform).toBe('web');
@@ -35,7 +36,7 @@ describe('Icon Size Token Cross-Platform Generation', () => {
     });
 
     it('should include all icon size tokens in generated content', () => {
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
 
       // Verify all 11 icon size tokens are present
       // Exclude icon.strokeWidth as it's a fixed value property, not a size-based token
@@ -48,7 +49,7 @@ describe('Icon Size Token Cross-Platform Generation', () => {
     });
 
     it('should generate icon tokens with calculated values', () => {
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
 
       // Test specific icon sizes with known values (updated for custom multiplier on size050)
       expect(result.content).toContain('--icon-size-050: 16px');  // 13 × 1.231 ≈ 16 (custom multiplier)
@@ -59,21 +60,21 @@ describe('Icon Size Token Cross-Platform Generation', () => {
     });
 
     it('should use CSS custom property format', () => {
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
 
       // Icon tokens should use -- prefix and kebab-case
       expect(result.content).toMatch(/--icon-size-\d{3}:\s*\d+px/);
     });
 
     it('should include icon tokens in semantic token count', () => {
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
 
       // Semantic token count should include the 11 icon size tokens
       expect(result.semanticTokenCount).toBeGreaterThanOrEqual(11);
     });
 
     it('should include formula and typography pairing in comments', () => {
-      const result = generator.generateWebTokens({ includeComments: true });
+      const result = generator.generateWebTokens({ ...defaultSemanticOptions(), includeComments: true });
 
       // Should include calculation formula in comments
       expect(result.content).toContain('fontSize');
@@ -84,7 +85,7 @@ describe('Icon Size Token Cross-Platform Generation', () => {
 
   describe('iOS Token Generation (Swift)', () => {
     it('should generate iOS tokens with icon size tokens', () => {
-      const result = generator.generateiOSTokens();
+      const result = generator.generateiOSTokens(defaultSemanticOptions());
 
       expect(result.valid).toBe(true);
       expect(result.platform).toBe('ios');
@@ -92,7 +93,7 @@ describe('Icon Size Token Cross-Platform Generation', () => {
     });
 
     it('should include all icon size tokens in generated content', () => {
-      const result = generator.generateiOSTokens();
+      const result = generator.generateiOSTokens(defaultSemanticOptions());
 
       // Verify all 11 icon size tokens are present
       // Exclude icon.strokeWidth as it's a fixed value property, not a size-based token
@@ -105,7 +106,7 @@ describe('Icon Size Token Cross-Platform Generation', () => {
     });
 
     it('should generate icon tokens with calculated values', () => {
-      const result = generator.generateiOSTokens();
+      const result = generator.generateiOSTokens(defaultSemanticOptions());
 
       // Test specific icon sizes with known values (updated for custom multiplier on size050)
       expect(result.content).toContain('iconSize050: CGFloat = 16');  // 13 × 1.231 ≈ 16 (custom multiplier)
@@ -116,21 +117,21 @@ describe('Icon Size Token Cross-Platform Generation', () => {
     });
 
     it('should use Swift CGFloat type', () => {
-      const result = generator.generateiOSTokens();
+      const result = generator.generateiOSTokens(defaultSemanticOptions());
 
       // Icon tokens should use CGFloat type
       expect(result.content).toMatch(/iconSize\d{3}:\s*CGFloat\s*=\s*\d+/);
     });
 
     it('should include icon tokens in semantic token count', () => {
-      const result = generator.generateiOSTokens();
+      const result = generator.generateiOSTokens(defaultSemanticOptions());
 
       // Semantic token count should include the 11 icon size tokens
       expect(result.semanticTokenCount).toBeGreaterThanOrEqual(11);
     });
 
     it('should include formula and typography pairing in comments', () => {
-      const result = generator.generateiOSTokens({ includeComments: true });
+      const result = generator.generateiOSTokens({ ...defaultSemanticOptions(), includeComments: true });
 
       // Should include calculation formula in comments
       expect(result.content).toContain('fontSize');
@@ -141,7 +142,7 @@ describe('Icon Size Token Cross-Platform Generation', () => {
 
   describe('Android Token Generation (Kotlin)', () => {
     it('should generate Android tokens with icon size tokens', () => {
-      const result = generator.generateAndroidTokens();
+      const result = generator.generateAndroidTokens(defaultSemanticOptions());
 
       expect(result.valid).toBe(true);
       expect(result.platform).toBe('android');
@@ -149,7 +150,7 @@ describe('Icon Size Token Cross-Platform Generation', () => {
     });
 
     it('should include all icon size tokens in generated content', () => {
-      const result = generator.generateAndroidTokens();
+      const result = generator.generateAndroidTokens(defaultSemanticOptions());
 
       // Verify all 11 icon size tokens are present
       // Exclude icon.strokeWidth as it's a fixed value property, not a size-based token
@@ -162,7 +163,7 @@ describe('Icon Size Token Cross-Platform Generation', () => {
     });
 
     it('should generate icon tokens with calculated values', () => {
-      const result = generator.generateAndroidTokens();
+      const result = generator.generateAndroidTokens(defaultSemanticOptions());
 
       // Test specific icon sizes with known values (updated for custom multiplier on size050)
       expect(result.content).toContain('icon_size_050 = 16.dp');  // 13 × 1.231 ≈ 16 (custom multiplier)
@@ -173,21 +174,21 @@ describe('Icon Size Token Cross-Platform Generation', () => {
     });
 
     it('should use Kotlin Dp type', () => {
-      const result = generator.generateAndroidTokens();
+      const result = generator.generateAndroidTokens(defaultSemanticOptions());
 
       // Icon tokens should use .dp extension
       expect(result.content).toMatch(/icon_size_\d{3}\s*=\s*\d+\.dp/);
     });
 
     it('should include icon tokens in semantic token count', () => {
-      const result = generator.generateAndroidTokens();
+      const result = generator.generateAndroidTokens(defaultSemanticOptions());
 
       // Semantic token count should include the 11 icon size tokens
       expect(result.semanticTokenCount).toBeGreaterThanOrEqual(11);
     });
 
     it('should include formula and typography pairing in comments', () => {
-      const result = generator.generateAndroidTokens({ includeComments: true });
+      const result = generator.generateAndroidTokens({ ...defaultSemanticOptions(), includeComments: true });
 
       // Should include calculation formula in comments
       expect(result.content).toContain('fontSize');
@@ -198,9 +199,9 @@ describe('Icon Size Token Cross-Platform Generation', () => {
 
   describe('Cross-Platform Consistency', () => {
     it('should generate same icon token count across all platforms', () => {
-      const webResult = generator.generateWebTokens();
-      const iosResult = generator.generateiOSTokens();
-      const androidResult = generator.generateAndroidTokens();
+      const webResult = generator.generateWebTokens(defaultSemanticOptions());
+      const iosResult = generator.generateiOSTokens(defaultSemanticOptions());
+      const androidResult = generator.generateAndroidTokens(defaultSemanticOptions());
 
       // All platforms should include the same number of icon tokens (11)
       const webIconCount = (webResult.content.match(/--icon-size-\d{3}/g) || []).length;
@@ -213,9 +214,9 @@ describe('Icon Size Token Cross-Platform Generation', () => {
     });
 
     it('should generate same calculated values across all platforms', () => {
-      const webResult = generator.generateWebTokens();
-      const iosResult = generator.generateiOSTokens();
-      const androidResult = generator.generateAndroidTokens();
+      const webResult = generator.generateWebTokens(defaultSemanticOptions());
+      const iosResult = generator.generateiOSTokens(defaultSemanticOptions());
+      const androidResult = generator.generateAndroidTokens(defaultSemanticOptions());
 
       // Verify specific values match across platforms (updated for custom multiplier on size050)
       const testCases = [
@@ -239,9 +240,9 @@ describe('Icon Size Token Cross-Platform Generation', () => {
     });
 
     it('should maintain mathematical relationships across platforms', () => {
-      const webResult = generator.generateWebTokens();
-      const iosResult = generator.generateiOSTokens();
-      const androidResult = generator.generateAndroidTokens();
+      const webResult = generator.generateWebTokens(defaultSemanticOptions());
+      const iosResult = generator.generateiOSTokens(defaultSemanticOptions());
+      const androidResult = generator.generateAndroidTokens(defaultSemanticOptions());
 
       // Extract icon size values from each platform
       const extractIconSizes = (content: string, pattern: RegExp): number[] => {
@@ -263,9 +264,9 @@ describe('Icon Size Token Cross-Platform Generation', () => {
     });
 
     it('should validate all platforms generate successfully', () => {
-      const webResult = generator.generateWebTokens();
-      const iosResult = generator.generateiOSTokens();
-      const androidResult = generator.generateAndroidTokens();
+      const webResult = generator.generateWebTokens(defaultSemanticOptions());
+      const iosResult = generator.generateiOSTokens(defaultSemanticOptions());
+      const androidResult = generator.generateAndroidTokens(defaultSemanticOptions());
 
       expect(webResult.valid).toBe(true);
       expect(iosResult.valid).toBe(true);
@@ -279,7 +280,7 @@ describe('Icon Size Token Cross-Platform Generation', () => {
 
   describe('Naming Convention Validation', () => {
     it('should use kebab-case with -- prefix for web CSS custom properties', () => {
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
 
       // All icon size tokens should follow --icon-size-* pattern
       const iconTokenPattern = /--icon-size-\d{3}:\s*\d+px/g;
@@ -295,7 +296,7 @@ describe('Icon Size Token Cross-Platform Generation', () => {
     });
 
     it('should use camelCase for iOS Swift constants', () => {
-      const result = generator.generateiOSTokens();
+      const result = generator.generateiOSTokens(defaultSemanticOptions());
 
       // All icon size tokens should use camelCase
       const iconTokenPattern = /iconSize\d{3}:\s*CGFloat\s*=\s*\d+/g;
@@ -311,7 +312,7 @@ describe('Icon Size Token Cross-Platform Generation', () => {
     });
 
     it('should use snake_case for Android Kotlin constants', () => {
-      const result = generator.generateAndroidTokens();
+      const result = generator.generateAndroidTokens(defaultSemanticOptions());
 
       // All icon size tokens should use snake_case
       const iconTokenPattern = /icon_size_\d{3}\s*=\s*\d+\.dp/g;
@@ -329,7 +330,7 @@ describe('Icon Size Token Cross-Platform Generation', () => {
 
   describe('Calculated Value Verification', () => {
     it('should verify all icon sizes match fontSize × multiplier formula', () => {
-      const webResult = generator.generateWebTokens();
+      const webResult = generator.generateWebTokens(defaultSemanticOptions());
 
       // Filter to only icon size tokens (exclude icon.strokeWidth which is a fixed value, not size-based)
       Object.entries(iconTokens)
@@ -348,7 +349,7 @@ describe('Icon Size Token Cross-Platform Generation', () => {
     });
 
     it('should verify iOS values match calculated sizes', () => {
-      const iosResult = generator.generateiOSTokens();
+      const iosResult = generator.generateiOSTokens(defaultSemanticOptions());
 
       // Filter to only icon size tokens (exclude icon.strokeWidth which is a fixed value, not size-based)
       Object.entries(iconTokens)
@@ -367,7 +368,7 @@ describe('Icon Size Token Cross-Platform Generation', () => {
     });
 
     it('should verify Android values match calculated sizes', () => {
-      const androidResult = generator.generateAndroidTokens();
+      const androidResult = generator.generateAndroidTokens(defaultSemanticOptions());
 
       // Filter to only icon size tokens (exclude icon.strokeWidth which is a fixed value, not size-based)
       Object.entries(iconTokens)
@@ -388,9 +389,9 @@ describe('Icon Size Token Cross-Platform Generation', () => {
 
   describe('Token Convergence Handling', () => {
     it('should handle natural convergence at multiple sizes across platforms', () => {
-      const webResult = generator.generateWebTokens();
-      const iosResult = generator.generateiOSTokens();
-      const androidResult = generator.generateAndroidTokens();
+      const webResult = generator.generateWebTokens(defaultSemanticOptions());
+      const iosResult = generator.generateiOSTokens(defaultSemanticOptions());
+      const androidResult = generator.generateAndroidTokens(defaultSemanticOptions());
 
       // With precision-targeted multipliers, convergence patterns:
       // size050 uses custom multiplier (1.231) for 16px - no longer converges with size075
@@ -424,7 +425,7 @@ describe('Icon Size Token Cross-Platform Generation', () => {
     });
 
     it('should maintain separate token names despite value convergence', () => {
-      const webResult = generator.generateWebTokens();
+      const webResult = generator.generateWebTokens(defaultSemanticOptions());
 
       // Even though some values converge, token names should remain distinct
       // Test size050 (16px - custom multiplier) and size075 (20px - no longer converge)

@@ -10,6 +10,7 @@
  */
 
 import { TokenFileGenerator, GenerationOptions } from '../TokenFileGenerator';
+import { defaultSemanticOptions } from './helpers/defaultSemanticOptions';
 import { SemanticTokenValidator } from '../../validators/SemanticTokenValidator';
 import { PrimitiveTokenRegistry } from '../../registries/PrimitiveTokenRegistry';
 import { SemanticTokenRegistry } from '../../registries/SemanticTokenRegistry';
@@ -30,7 +31,7 @@ describe('TokenFileGenerator', () => {
 
   describe('Web Token Generation', () => {
     it('should generate web tokens with default options', () => {
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
 
       expect(result.platform).toBe('web');
       expect(result.filePath).toBe('output/DesignTokens.web.css');
@@ -41,25 +42,24 @@ describe('TokenFileGenerator', () => {
 
     it('should generate web tokens with custom output directory', () => {
       const result = generator.generateWebTokens({
-        outputDir: 'custom/output'
-      });
+              ...defaultSemanticOptions(),
+              outputDir: 'custom/output'
+            });
 
       expect(result.filePath).toBe('custom/output/DesignTokens.web.css');
     });
 
     it('should include version in generated content', () => {
       const result = generator.generateWebTokens({
-        version: '2.0.0'
-      });
+              ...defaultSemanticOptions(),
+              version: '2.0.0'
+            });
 
       expect(result.content).toContain('2.0.0');
     });
 
     it('should group tokens by category when requested', () => {
-      const result = generator.generateWebTokens({
-        groupByCategory: true,
-        includeComments: true
-      });
+      const result = generator.generateWebTokens({ ...defaultSemanticOptions(), groupByCategory: true, includeComments: true });
 
       // Should contain category comments
       expect(result.content).toContain('SPACING');
@@ -68,25 +68,24 @@ describe('TokenFileGenerator', () => {
 
     it('should generate flat token list when grouping disabled', () => {
       const result = generator.generateWebTokens({
-        groupByCategory: false,
-        includeComments: false
-      });
+              ...defaultSemanticOptions(),
+              groupByCategory: false,
+              includeComments: false
+            });
 
       expect(result.content).toBeDefined();
       expect(result.tokenCount).toBeGreaterThan(0);
     });
 
     it('should include mathematical comments when requested', () => {
-      const result = generator.generateWebTokens({
-        includeComments: true
-      });
+      const result = generator.generateWebTokens({ ...defaultSemanticOptions(), includeComments: true });
 
       // Should contain mathematical relationship comments
       expect(result.content).toContain('base ×');
     });
 
     it('should validate generated syntax', () => {
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
 
       expect(result.valid).toBe(true);
       expect(result.errors).toBeUndefined();
@@ -95,7 +94,7 @@ describe('TokenFileGenerator', () => {
 
   describe('iOS Token Generation', () => {
     it('should generate iOS tokens with default options', () => {
-      const result = generator.generateiOSTokens();
+      const result = generator.generateiOSTokens(defaultSemanticOptions());
 
       expect(result.platform).toBe('ios');
       expect(result.filePath).toBe('output/DesignTokens.ios.swift');
@@ -106,14 +105,15 @@ describe('TokenFileGenerator', () => {
 
     it('should generate iOS tokens with custom output directory', () => {
       const result = generator.generateiOSTokens({
-        outputDir: 'ios/output'
-      });
+              ...defaultSemanticOptions(),
+              outputDir: 'ios/output'
+            });
 
       expect(result.filePath).toBe('ios/output/DesignTokens.ios.swift');
     });
 
     it('should include Swift-specific syntax', () => {
-      const result = generator.generateiOSTokens();
+      const result = generator.generateiOSTokens(defaultSemanticOptions());
 
       expect(result.content).toContain('struct DesignTokens');
       expect(result.content).toContain('static let');
@@ -121,10 +121,7 @@ describe('TokenFileGenerator', () => {
     });
 
     it('should group tokens by category when requested', () => {
-      const result = generator.generateiOSTokens({
-        groupByCategory: true,
-        includeComments: true
-      });
+      const result = generator.generateiOSTokens({ ...defaultSemanticOptions(), groupByCategory: true, includeComments: true });
 
       // Should contain category comments (iOS uses MARK comments)
       expect(result.content).toContain('MARK:');
@@ -132,7 +129,7 @@ describe('TokenFileGenerator', () => {
     });
 
     it('should validate generated Swift syntax', () => {
-      const result = generator.generateiOSTokens();
+      const result = generator.generateiOSTokens(defaultSemanticOptions());
 
       expect(result.valid).toBe(true);
       expect(result.errors).toBeUndefined();
@@ -141,7 +138,7 @@ describe('TokenFileGenerator', () => {
 
   describe('Android Token Generation', () => {
     it('should generate Android tokens with default options', () => {
-      const result = generator.generateAndroidTokens();
+      const result = generator.generateAndroidTokens(defaultSemanticOptions());
 
       expect(result.platform).toBe('android');
       expect(result.filePath).toBe('output/DesignTokens.android.kt');
@@ -152,14 +149,15 @@ describe('TokenFileGenerator', () => {
 
     it('should generate Android tokens with custom output directory', () => {
       const result = generator.generateAndroidTokens({
-        outputDir: 'android/output'
-      });
+              ...defaultSemanticOptions(),
+              outputDir: 'android/output'
+            });
 
       expect(result.filePath).toBe('android/output/DesignTokens.android.kt');
     });
 
     it('should include Kotlin-specific syntax', () => {
-      const result = generator.generateAndroidTokens();
+      const result = generator.generateAndroidTokens(defaultSemanticOptions());
 
       expect(result.content).toContain('object DesignTokens');
       expect(result.content).toContain('const val');
@@ -167,10 +165,7 @@ describe('TokenFileGenerator', () => {
     });
 
     it('should group tokens by category when requested', () => {
-      const result = generator.generateAndroidTokens({
-        groupByCategory: true,
-        includeComments: true
-      });
+      const result = generator.generateAndroidTokens({ ...defaultSemanticOptions(), groupByCategory: true, includeComments: true });
 
       // Should contain category comments
       expect(result.content).toContain('SPACING');
@@ -178,7 +173,7 @@ describe('TokenFileGenerator', () => {
     });
 
     it('should validate generated Kotlin syntax', () => {
-      const result = generator.generateAndroidTokens();
+      const result = generator.generateAndroidTokens(defaultSemanticOptions());
 
       expect(result.valid).toBe(true);
       expect(result.errors).toBeUndefined();
@@ -187,7 +182,7 @@ describe('TokenFileGenerator', () => {
 
   describe('Generate All Platforms', () => {
     it('should generate tokens for all platforms', () => {
-      const results = generator.generateAll();
+      const results = generator.generateAll(defaultSemanticOptions());
 
       expect(results).toHaveLength(3);
       expect(results.map(r => r.platform)).toEqual(['web', 'ios', 'android']);
@@ -195,6 +190,7 @@ describe('TokenFileGenerator', () => {
 
     it('should generate all platforms with custom options', () => {
       const options: GenerationOptions = {
+        ...defaultSemanticOptions(),
         outputDir: 'dist',
         version: '3.0.0',
         includeComments: true,
@@ -212,7 +208,7 @@ describe('TokenFileGenerator', () => {
     });
 
     it('should generate all platforms successfully', () => {
-      const results = generator.generateAll();
+      const results = generator.generateAll(defaultSemanticOptions());
 
       results.forEach(result => {
         expect(result.valid).toBe(true);
@@ -224,7 +220,7 @@ describe('TokenFileGenerator', () => {
 
   describe('Cross-Platform Consistency Validation', () => {
     it('should validate consistent token counts across platforms', () => {
-      const results = generator.generateAll();
+      const results = generator.generateAll(defaultSemanticOptions());
       const validation = generator.validateCrossPlatformConsistency(results);
 
       expect(validation.consistent).toBe(true);
@@ -339,7 +335,7 @@ describe('TokenFileGenerator', () => {
 
   describe('File Structure Consistency', () => {
     it('should generate consistent file names across platforms', () => {
-      const results = generator.generateAll();
+      const results = generator.generateAll(defaultSemanticOptions());
 
       expect(results[0].filePath).toContain('DesignTokens.web.css');
       expect(results[1].filePath).toContain('DesignTokens.ios.swift');
@@ -347,7 +343,7 @@ describe('TokenFileGenerator', () => {
     });
 
     it('should use consistent output directory across platforms', () => {
-      const results = generator.generateAll({ outputDir: 'tokens' });
+      const results = generator.generateAll({ ...defaultSemanticOptions(), outputDir: 'tokens' });
 
       results.forEach(result => {
         expect(result.filePath.startsWith('tokens/')).toBe(true);
@@ -357,7 +353,7 @@ describe('TokenFileGenerator', () => {
     // UPDATED (Spec 025 F3): Verify behavior instead of hardcoded token counts
     // Tests should survive token system evolution
     it('should generate valid tokens for all platforms', () => {
-      const results = generator.generateAll();
+      const results = generator.generateAll(defaultSemanticOptions());
 
       // Verify all platforms generate tokens
       results.forEach(result => {
@@ -374,15 +370,15 @@ describe('TokenFileGenerator', () => {
 
   describe('Generation Options', () => {
     it('should respect includeComments option', () => {
-      const withComments = generator.generateWebTokens({ includeComments: true });
-      const withoutComments = generator.generateWebTokens({ includeComments: false });
+      const withComments = generator.generateWebTokens({ ...defaultSemanticOptions(), includeComments: true });
+      const withoutComments = generator.generateWebTokens({ ...defaultSemanticOptions(), includeComments: false });
 
       expect(withComments.content.length).toBeGreaterThan(withoutComments.content.length);
     });
 
     it('should respect groupByCategory option', () => {
-      const grouped = generator.generateWebTokens({ groupByCategory: true });
-      const flat = generator.generateWebTokens({ groupByCategory: false });
+      const grouped = generator.generateWebTokens({ ...defaultSemanticOptions(), groupByCategory: true });
+      const flat = generator.generateWebTokens({ ...defaultSemanticOptions(), groupByCategory: false });
 
       // Both should be valid but potentially different structure
       expect(grouped.valid).toBe(true);
@@ -391,6 +387,7 @@ describe('TokenFileGenerator', () => {
 
     it('should apply options consistently across platforms', () => {
       const options: GenerationOptions = {
+        ...defaultSemanticOptions(),
         version: '4.0.0',
         includeComments: true,
         groupByCategory: true
@@ -407,7 +404,7 @@ describe('TokenFileGenerator', () => {
 
   describe('Error Handling', () => {
     it('should handle generation with minimal tokens', () => {
-      const results = generator.generateAll();
+      const results = generator.generateAll(defaultSemanticOptions());
 
       results.forEach(result => {
         expect(result.tokenCount).toBeGreaterThanOrEqual(0);
@@ -416,7 +413,7 @@ describe('TokenFileGenerator', () => {
     });
 
     it('should validate syntax for all generated files', () => {
-      const results = generator.generateAll();
+      const results = generator.generateAll(defaultSemanticOptions());
 
       results.forEach(result => {
         expect(result.valid).toBe(true);
@@ -427,7 +424,7 @@ describe('TokenFileGenerator', () => {
 
   describe('Content Validation', () => {
     it('should generate non-empty content for all platforms', () => {
-      const results = generator.generateAll();
+      const results = generator.generateAll(defaultSemanticOptions());
 
       results.forEach(result => {
         expect(result.content).toBeDefined();
@@ -436,9 +433,9 @@ describe('TokenFileGenerator', () => {
     });
 
     it('should include header and footer in generated content', () => {
-      const webResult = generator.generateWebTokens();
-      const iosResult = generator.generateiOSTokens();
-      const androidResult = generator.generateAndroidTokens();
+      const webResult = generator.generateWebTokens(defaultSemanticOptions());
+      const iosResult = generator.generateiOSTokens(defaultSemanticOptions());
+      const androidResult = generator.generateAndroidTokens(defaultSemanticOptions());
 
       // Web should have CSS custom properties
       expect(webResult.content).toContain(':root');
@@ -451,7 +448,7 @@ describe('TokenFileGenerator', () => {
     });
 
     it('should include token definitions in generated content', () => {
-      const results = generator.generateAll();
+      const results = generator.generateAll(defaultSemanticOptions());
 
       results.forEach(result => {
         // Should contain at least some token definitions
@@ -498,7 +495,7 @@ describe('TokenFileGenerator', () => {
       expect(validation.level).toBe('Pass');
 
       // Step 2: Generate tokens (assuming valid input)
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
 
       expect(result.valid).toBe(true);
       expect(result.tokenCount).toBeGreaterThan(0);
@@ -580,7 +577,7 @@ describe('TokenFileGenerator', () => {
       expect(validation.level).toBe('Pass');
 
       // Step 2: Generate tokens (assuming valid input)
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
 
       expect(result.valid).toBe(true);
       expect(result.tokenCount).toBeGreaterThan(0);
@@ -661,7 +658,7 @@ describe('TokenFileGenerator', () => {
       expect(validation.level).toBe('Pass');
 
       // Step 2: Generate tokens for all platforms (assuming valid input)
-      const results = generator.generateAll();
+      const results = generator.generateAll(defaultSemanticOptions());
 
       expect(results).toHaveLength(3);
       results.forEach(result => {

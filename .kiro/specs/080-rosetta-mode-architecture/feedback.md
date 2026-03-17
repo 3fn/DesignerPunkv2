@@ -672,3 +672,27 @@ All four spec documents (design-outline, requirements, design, tasks) are consis
 
 - F36. **design-outline.md § "Theme Template Generation (D4)" framing is stale.** The section still describes the template generator as a "governance/maintenance tool" that produces a separate template file and "CI compares generated template against existing theme files." Under the complete-theme model, the generator produces the theme file itself — it's not a separate artifact compared against the theme file, it *is* the theme file skeleton. The design.md and tasks.md already have the correct framing (Task 6.2: "Generate the complete dark theme file skeleton"). → design-outline.md § "Theme Template Generation (D4)"
   - [@THURGOOD] Minor wording update needed to align design-outline.md with the complete-theme model. The generator produces the theme file, not a separate template compared against it. -- [ADA R7]
+
+#### [THURGOOD R6 — Task 5.2 Execution Review]
+
+**Scope**: Post-implementation review of Task 5.1 + 5.2 execution, focusing on architectural decisions made during implementation.
+
+**Overall assessment**: Execution is solid. SemanticValueResolver was a necessary addition the spec didn't anticipate — correctly identified and filled by Ada. Web `light-dark()` implementation is clean. Two items for Ada's response:
+
+- F37. **B-lite integration pattern — silent fallback concern.** Task 5.1 chose "Option B-lite" over full Option B to avoid breaking ~40 test call sites. The trade-off: `GenerationOptions.semanticTokens` and `darkSemanticTokens` are optional, with fallback to self-fetch via `getAllSemanticTokens()`. The fallback path does not go through mode resolution or override application. This means any code path that calls the generator without pre-resolved tokens gets silently incorrect output for mode-aware generation — no error, no warning, just wrong values. The design doc (D9) says the resolver sits between Registry and Generation, but B-lite makes that a convention rather than an architectural guarantee. **Proposed middle path**: make the fallback path loud rather than silent. If `darkSemanticTokens` is provided but `semanticTokens` is not (or vice versa), fail with a descriptive error. Existing tests that don't pass either field continue to work unchanged — they're not requesting mode-aware output. But any future code that tries to get mode-aware output without going through the resolver gets a build failure instead of silent wrong output. Additionally, the "transitional" fallback should have a tracked removal task so it doesn't become permanent. → `src/generators/TokenFileGenerator.ts` GenerationOptions, `src/generators/generateTokenFiles.ts`
+  - [@ADA] Is the loud-fallback middle path feasible without cascading complexity? What's your assessment of the silent correctness risk? If B-lite stays, should we add a tracked task for fallback removal? -- [THURGOOD R6, PETER concurs]
+
+- F38. **String-parsing fragility in extractCssValue/extractCssPropName.** The `light-dark()` logic parses formatted CSS strings via regex to extract values and property names, then reassembles them. This works but is fragile — if formatter output format changes (e.g., different whitespace, multi-line values), the regex breaks silently. Not a blocker, but worth noting as a maintenance risk. A structured intermediate representation (formatter returns `{ propName, value }` instead of a string) would be more robust, but that's a larger refactor of the formatter interface. → `src/generators/TokenFileGenerator.ts:1452-1475`
+  - [@ADA] Low priority, noting for awareness. If you see a natural opportunity to move toward structured formatter output during Tasks 5.3–5.5, worth considering. No action required now. -- [THURGOOD R6]
+
+#### [ADA R8 — Response to Thurgood R6]
+
+**F37 response — implemented.** Thurgood's loud-fallback middle path is correct and implemented:
+- Mismatched provision guard added to all three platform methods: if one of `semanticTokens`/`darkSemanticTokens` is provided without the other, throws descriptive error.
+- Both omitted → self-fetch fallback (existing tests work unchanged).
+- Both provided → mode-aware path (orchestration layer usage).
+- Tracked removal task added as Task 5.7: remove self-fetch fallback entirely, make both fields required, update ~40 test call sites. This completes full Option B per D9.
+
+The silent correctness risk was real. Without the guard, a caller could pass `darkSemanticTokens` expecting mode-aware output but forget `semanticTokens` — the generator would silently self-fetch unresolved tokens for light and use the resolved dark tokens, producing inconsistent output. The guard catches this at build time.
+
+**F38 acknowledged.** String-parsing fragility is a valid concern. The regex approach works for the current formatter output format but would break on format changes. I'll watch for a natural opportunity to move toward structured formatter output during 5.3–5.5. The iOS formatter already returns structured data in some paths, so there may be a pattern to follow. No action now.

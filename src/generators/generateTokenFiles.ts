@@ -11,6 +11,9 @@ import { TokenFileGenerator } from './TokenFileGenerator';
 import { SemanticTokenValidator } from '../validators/SemanticTokenValidator';
 import { PrimitiveTokenRegistry } from '../registries/PrimitiveTokenRegistry';
 import { SemanticTokenRegistry } from '../registries/SemanticTokenRegistry';
+import { SemanticOverrideResolver } from '../resolvers/SemanticOverrideResolver';
+import { resolveSemanticTokenValue } from '../resolvers/SemanticValueResolver';
+import { darkSemanticOverrides } from '../tokens/themes/dark/SemanticOverrides';
 import { getAllPrimitiveTokens } from '../tokens';
 import { getAllSemanticTokens } from '../tokens/semantic';
 
@@ -66,12 +69,35 @@ export function generateTokenFiles(outputDir: string = 'output'): void {
   // Initialize generator
   const generator = new TokenFileGenerator();
 
-  // Generate all platform files
+  // Mode resolution: resolve semantic tokens into light/dark sets (Spec 080)
+  const overrideResolver = new SemanticOverrideResolver(semanticRegistry, darkSemanticOverrides);
+  const overrideValidation = overrideResolver.validate();
+  if (!overrideValidation.valid) {
+    console.error('❌ Semantic override validation failed:\n');
+    overrideValidation.errors.forEach(err => console.error(`   ${err}`));
+    console.error('\n⚠️  Token generation aborted due to override validation errors.\n');
+    return;
+  }
+  console.log('✅ Semantic override validation passed\n');
+
+  const { light: lightTokens, dark: darkTokens } = overrideResolver.resolveAll(semanticTokens);
+
+  // Level 1: Resolve primitive references to concrete rgba values per mode
+  const resolvedLight = lightTokens.map(t =>
+    resolveSemanticTokenValue(t, 'light')
+  );
+  const resolvedDark = darkTokens.map(t =>
+    resolveSemanticTokenValue(t, 'dark')
+  );
+
+  // Generate all platform files (passing resolved tokens for both modes)
   const results = generator.generateAll({
     outputDir,
     version: '1.0.0',
     includeComments: true,
-    groupByCategory: true
+    groupByCategory: true,
+    semanticTokens: resolvedLight,
+    darkSemanticTokens: resolvedDark
   });
 
   // Write files to disk

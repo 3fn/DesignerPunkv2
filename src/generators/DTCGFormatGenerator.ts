@@ -541,6 +541,17 @@ export class DTCGFormatGenerator {
             : `{color.${refs.wcagValue}}`,
         };
       }
+
+      // Spec 080: emit mode contexts when light/dark values differ
+      const primitiveToken = (colorTokens as Record<string, PrimitiveToken>)[primaryRef];
+      if (primitiveToken) {
+        const colorVal = primitiveToken.platforms.web.value as ColorTokenValue;
+        if (colorVal?.light?.base && colorVal?.dark?.base && colorVal.light.base !== colorVal.dark.base) {
+          if (!extensions.modes) extensions.modes = {};
+          extensions.modes.light = colorVal.light.base;
+          extensions.modes.dark = colorVal.dark.base;
+        }
+      }
       // If token has separate color + opacity composition, note it
       if (refs.color && refs.opacity) {
         extensions.primitiveRefs = { color: refs.color, opacity: refs.opacity };

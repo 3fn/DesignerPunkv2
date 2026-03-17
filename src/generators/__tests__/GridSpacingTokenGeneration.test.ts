@@ -10,6 +10,7 @@
  */
 
 import { TokenFileGenerator } from '../TokenFileGenerator';
+import { defaultSemanticOptions } from './helpers/defaultSemanticOptions';
 import { getAllGridSpacingTokens } from '../../tokens/semantic/GridSpacingTokens';
 
 describe('Grid Spacing Token Generation', () => {
@@ -76,7 +77,7 @@ describe('Grid Spacing Token Generation', () => {
 
   describe('Web Platform Generation', () => {
     it('should generate grid spacing tokens for web with proper CSS custom property naming', () => {
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
       
       expect(result.valid).toBe(true);
       
@@ -98,7 +99,7 @@ describe('Grid Spacing Token Generation', () => {
     });
 
     it('should reference primitive spacing tokens using CSS var() syntax', () => {
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
       
       // Grid spacing tokens should reference primitive spacing tokens
       // Example: --grid-gutter-xs: var(--space-200);
@@ -109,7 +110,7 @@ describe('Grid Spacing Token Generation', () => {
     });
 
     it('should include grid spacing tokens in semantic token count', () => {
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
       
       // Semantic token count should include the 10 grid spacing tokens
       expect(result.semanticTokenCount).toBeGreaterThanOrEqual(10);
@@ -118,7 +119,7 @@ describe('Grid Spacing Token Generation', () => {
 
   describe('iOS Platform Generation', () => {
     it('should generate grid spacing tokens for iOS with camelCase naming', () => {
-      const result = generator.generateiOSTokens();
+      const result = generator.generateiOSTokens(defaultSemanticOptions());
       
       expect(result.valid).toBe(true);
       
@@ -140,7 +141,7 @@ describe('Grid Spacing Token Generation', () => {
     });
 
     it('should include grid spacing tokens in semantic token count', () => {
-      const result = generator.generateiOSTokens();
+      const result = generator.generateiOSTokens(defaultSemanticOptions());
       
       // Semantic token count should include the 10 grid spacing tokens
       expect(result.semanticTokenCount).toBeGreaterThanOrEqual(10);
@@ -149,7 +150,7 @@ describe('Grid Spacing Token Generation', () => {
 
   describe('Android Platform Generation', () => {
     it('should generate grid spacing tokens for Android with snake_case naming', () => {
-      const result = generator.generateAndroidTokens();
+      const result = generator.generateAndroidTokens(defaultSemanticOptions());
       
       expect(result.valid).toBe(true);
       
@@ -171,7 +172,7 @@ describe('Grid Spacing Token Generation', () => {
     });
 
     it('should include grid spacing tokens in semantic token count', () => {
-      const result = generator.generateAndroidTokens();
+      const result = generator.generateAndroidTokens(defaultSemanticOptions());
       
       // Semantic token count should include the 10 grid spacing tokens
       expect(result.semanticTokenCount).toBeGreaterThanOrEqual(10);
@@ -180,16 +181,16 @@ describe('Grid Spacing Token Generation', () => {
 
   describe('Cross-Platform Consistency', () => {
     it('should generate same grid spacing token count across all platforms', () => {
-      const webResult = generator.generateWebTokens();
-      const iosResult = generator.generateiOSTokens();
-      const androidResult = generator.generateAndroidTokens();
+      const webResult = generator.generateWebTokens(defaultSemanticOptions());
+      const iosResult = generator.generateiOSTokens(defaultSemanticOptions());
+      const androidResult = generator.generateAndroidTokens(defaultSemanticOptions());
       
       // Web and iOS should have the same semantic token count
       expect(webResult.semanticTokenCount).toBe(iosResult.semanticTokenCount);
       
       // Android may have platform-specific tokens (e.g., elevation.none)
       // Use validateCrossPlatformConsistency for nuanced comparison
-      const results = generator.generateAll();
+      const results = generator.generateAll(defaultSemanticOptions());
       const validation = generator.validateCrossPlatformConsistency(results);
       
       // Validation should pass (accounts for documented platform-specific tokens)
@@ -202,7 +203,7 @@ describe('Grid Spacing Token Generation', () => {
     });
 
     it('should maintain primitive token references across platforms', () => {
-      const results = generator.generateAll();
+      const results = generator.generateAll(defaultSemanticOptions());
       const validation = generator.validateCrossPlatformConsistency(results);
       
       expect(validation.consistent).toBe(true);
@@ -212,7 +213,7 @@ describe('Grid Spacing Token Generation', () => {
 
   describe('Naming Convention Validation', () => {
     it('should use kebab-case with -- prefix for web CSS custom properties', () => {
-      const result = generator.generateWebTokens();
+      const result = generator.generateWebTokens(defaultSemanticOptions());
       
       // All grid spacing tokens should follow --grid-* pattern
       const gridTokenMatches = result.content.match(/--grid-[a-z-]+:/g);
@@ -225,7 +226,7 @@ describe('Grid Spacing Token Generation', () => {
     });
 
     it('should use camelCase for iOS Swift constants', () => {
-      const result = generator.generateiOSTokens();
+      const result = generator.generateiOSTokens(defaultSemanticOptions());
       
       // All grid spacing tokens should use camelCase
       expect(result.content).toMatch(/gridGutterXs/);
@@ -238,7 +239,7 @@ describe('Grid Spacing Token Generation', () => {
     });
 
     it('should use snake_case for Android Kotlin constants', () => {
-      const result = generator.generateAndroidTokens();
+      const result = generator.generateAndroidTokens(defaultSemanticOptions());
       
       // All grid spacing tokens should use snake_case
       expect(result.content).toMatch(/grid_gutter_xs/);

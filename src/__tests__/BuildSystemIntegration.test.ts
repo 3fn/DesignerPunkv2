@@ -13,6 +13,8 @@ import { WebFileOrganizer } from '../providers/WebFileOrganizer';
 import { iOSFileOrganizer } from '../providers/iOSFileOrganizer';
 import { AndroidFileOrganizer } from '../providers/AndroidFileOrganizer';
 import { TokenFileGenerator } from '../generators/TokenFileGenerator';
+import { getAllSemanticTokens } from '../tokens/semantic';
+import { resolveSemanticTokenValue } from '../resolvers/SemanticValueResolver';
 
 describe('Build System Integration', () => {
   describe('Web Build System Integration', () => {
@@ -292,12 +294,20 @@ describe('Build System Integration', () => {
   describe('Token File Generator Build Integration', () => {
     let generator: TokenFileGenerator;
 
+    const defaultSemanticOptions = () => {
+      const base = getAllSemanticTokens();
+      return {
+        semanticTokens: base.map(t => resolveSemanticTokenValue(t, 'light')),
+        darkSemanticTokens: base.map(t => resolveSemanticTokenValue(t, 'dark')),
+      };
+    };
+
     beforeEach(() => {
       generator = new TokenFileGenerator();
     });
 
     it('should generate build-compatible files for all platforms', () => {
-      const results = generator.generateAll();
+      const results = generator.generateAll(defaultSemanticOptions());
 
       expect(results).toHaveLength(3);
       results.forEach(result => {
@@ -307,7 +317,7 @@ describe('Build System Integration', () => {
     });
 
     it('should generate files with consistent token counts', () => {
-      const results = generator.generateAll();
+      const results = generator.generateAll(defaultSemanticOptions());
 
       // Verify all platforms generated successfully
       expect(results).toHaveLength(3);
@@ -336,7 +346,7 @@ describe('Build System Integration', () => {
     });
 
     it('should generate files in correct output directories', () => {
-      const results = generator.generateAll({ outputDir: 'dist' });
+      const results = generator.generateAll({ ...defaultSemanticOptions(), outputDir: 'dist' });
 
       expect(results[0].filePath).toContain('dist/');
       expect(results[1].filePath).toContain('dist/');
@@ -344,7 +354,7 @@ describe('Build System Integration', () => {
     });
 
     it('should generate syntactically valid files for each platform', () => {
-      const results = generator.generateAll();
+      const results = generator.generateAll(defaultSemanticOptions());
 
       results.forEach(result => {
         expect(result.valid).toBe(true);
