@@ -192,6 +192,8 @@ Phase 2 follows the same pattern: snapshot existing behavior, migrate infrastruc
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
 
+  ⏸️ **DEFERRED (2026-03-17)**: Figma analysis confirmed Nav-TabBar-Base uses different primitive *names* per mode (Level 2), not different values for the same primitive (Level 1). No primitives need distinct dark slot values for this component. 050 semantic token assignment is also pending (OQ-11). Deferring entire task until either: (a) a component spec requires a primitive to carry distinct dark values, or (b) a system-wide dark palette design is undertaken. Snapshot (4.1) should be captured fresh at that time — premature snapshot would be stale.
+
   **Success Criteria:**
   - Color primitives that need distinct dark values have them populated
   - Primitives that are mode-invariant retain identical light/dark values
@@ -213,6 +215,7 @@ Phase 2 follows the same pattern: snapshot existing behavior, migrate infrastruc
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     **Agent**: Ada
+    - ⏸️ **DEFERRED (2026-03-17)**: Nav-TabBar-Base mode differentiation is entirely Level 2 (different primitive names per mode), not Level 1 (different values for the same primitive). No primitives need distinct dark values for this component. Deferring until a component spec or system-wide dark palette design requires primitive dark value population. Snapshot should be captured fresh at that time.
     - Run full token pipeline with current (identical light/dark) primitive data
     - Capture output as regression baseline snapshot
     - This snapshot validates correctness property #8 after dark values are populated
