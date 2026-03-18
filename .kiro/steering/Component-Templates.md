@@ -948,6 +948,28 @@ pressed_state:
     - Pressed state not shown when disabled
 ```
 
+#### Gradient Glow Contract
+
+```yaml
+gradient_glow:
+  description: Radial gradient background providing state-dependent visual emphasis
+  behavior: |
+    Component renders an elliptical radial gradient background on
+    state-bearing elements. Active state uses an accent center color
+    for visual prominence. Inactive state uses a same-color center
+    (matching container background) for subtle contrast protection.
+    Gradient geometry (radii, stops) is component-defined.
+    Glow intensity is independently animatable during state transitions.
+  wcag: null
+  platforms: [web, ios, android]
+  validation: |
+    - Active elements show accent-colored gradient center
+    - Inactive elements show same-color gradient (subtle vignette)
+    - Gradient geometry matches component specification
+    - Glow intensity animates during state transitions
+    - Glow respects prefers-reduced-motion (snaps, no animation)
+```
+
 ---
 
 ### Contract Category 5: Validation Contracts

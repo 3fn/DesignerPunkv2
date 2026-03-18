@@ -89,6 +89,17 @@ export const blendTokens: Record<string, SemanticBlendToken> = {
     description: 'Blend for pressed states with darkening (12% darker) - provides clear visual feedback when buttons or interactive elements are actively pressed'
   },
 
+  'blend.pressedLighter': {
+    name: 'blend.pressedLighter',
+    primitiveReferences: {
+      value: 'blend300'
+    },
+    direction: BlendDirection.LIGHTER,
+    category: 'interaction',
+    context: 'Pressed state feedback - clear lightening for active press on dark surfaces',
+    description: 'Blend for pressed states with lightening (12% lighter) - provides clear visual feedback when interactive elements on dark surfaces are actively pressed'
+  },
+
   'blend.focusSaturate': {
     name: 'blend.focusSaturate',
     primitiveReferences: {
@@ -155,10 +166,10 @@ export function getAllBlendTokens(): SemanticBlendToken[] {
 }
 
 /**
- * Validate token count matches spec (7 tokens)
+ * Validate token count matches spec (8 tokens)
  */
 export function validateBlendTokenCount(): boolean {
-  const expectedCount = 7;
+  const expectedCount = 8;
   const actualCount = blendTokenNames.length;
   if (actualCount !== expectedCount) {
     console.warn(`Blend token count mismatch: expected ${expectedCount}, got ${actualCount}`);

@@ -47,9 +47,9 @@ describe('Semantic Blend Tokens', () => {
       });
     });
 
-    test('should have exactly 7 semantic blend tokens', () => {
-      expect(Object.keys(blendTokens)).toHaveLength(7);
-      expect(blendTokenNames).toHaveLength(7);
+    test('should have exactly 8 semantic blend tokens', () => {
+      expect(Object.keys(blendTokens)).toHaveLength(8);
+      expect(blendTokenNames).toHaveLength(8);
     });
   });
 
@@ -66,6 +66,11 @@ describe('Semantic Blend Tokens', () => {
 
     test('blend.pressedDarker should reference blend300', () => {
       const token = blendTokens['blend.pressedDarker'];
+      expect(token.primitiveReferences.value).toBe('blend300');
+    });
+
+    test('blend.pressedLighter should reference blend300', () => {
+      const token = blendTokens['blend.pressedLighter'];
       expect(token.primitiveReferences.value).toBe('blend300');
     });
 
@@ -112,6 +117,11 @@ describe('Semantic Blend Tokens', () => {
     test('blend.pressedDarker should have DARKER direction', () => {
       const token = blendTokens['blend.pressedDarker'];
       expect(token.direction).toBe(BlendDirection.DARKER);
+    });
+
+    test('blend.pressedLighter should have LIGHTER direction', () => {
+      const token = blendTokens['blend.pressedLighter'];
+      expect(token.direction).toBe(BlendDirection.LIGHTER);
     });
 
     test('blend.focusSaturate should have SATURATE direction', () => {
@@ -181,6 +191,7 @@ describe('Semantic Blend Tokens', () => {
         'blend.hoverDarker': 'blend200',
         'blend.hoverLighter': 'blend200',
         'blend.pressedDarker': 'blend300',
+        'blend.pressedLighter': 'blend300',
         'blend.focusSaturate': 'blend200',
         'blend.disabledDesaturate': 'blend300',
         'blend.containerHoverDarker': 'blend100',
@@ -258,7 +269,7 @@ describe('Semantic Blend Tokens', () => {
 
     test('getAllBlendTokens should return all tokens as array', () => {
       const tokens = getAllBlendTokens();
-      expect(tokens).toHaveLength(7);
+      expect(tokens).toHaveLength(8);
       expect(Array.isArray(tokens)).toBe(true);
     });
 
