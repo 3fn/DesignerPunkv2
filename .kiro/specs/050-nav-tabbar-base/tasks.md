@@ -265,7 +265,7 @@ Task 6 (Documentation + Dark Mode)
     - _Requirements: R1–R9_
     - _Validates contracts: all web-applicable contracts_
 
-- [ ] 4. iOS Implementation
+- [x] 4. iOS Implementation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -292,7 +292,7 @@ Task 6 (Documentation + Dark Mode)
   **Post-Completion:**
   - Commit: `./.kiro/hooks/commit-task.sh "Task 4 Complete: iOS Implementation"`
 
-  - [ ] 4.1 SwiftUI View structure and rendering
+  - [x] 4.1 SwiftUI View structure and rendering
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -304,7 +304,7 @@ Task 6 (Documentation + Dark Mode)
     - _Requirements: R5 AC1, AC6-8, R2, R4, R6_
     - _Contracts: visual_background, visual_state_colors, visual_gradient_glow, layout_flexible_length_
 
-  - [ ] 4.2 Selection logic, animation, and haptics
+  - [x] 4.2 Selection logic, animation, and haptics
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -320,7 +320,7 @@ Task 6 (Documentation + Dark Mode)
     - _Requirements: R1, R3, R10 AC1_
     - _Contracts: interaction_pressable, interaction_noop_active, validation_selection_constraints, animation_coordination, animation_initial_render, accessibility_reduced_motion_
 
-  - [ ] 4.3 Accessibility
+  - [x] 4.3 Accessibility
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -331,7 +331,7 @@ Task 6 (Documentation + Dark Mode)
     - _Requirements: R7, R8, R2 AC3_
     - _Contracts: accessibility_aria_roles, accessibility_aria_label, interaction_keyboard_navigation, interaction_keyboard_activation, interaction_focus_ring_
 
-  - [ ] 4.4 iOS behavioral contract tests
+  - [x] 4.4 iOS behavioral contract tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
