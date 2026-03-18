@@ -1,26 +1,25 @@
-# DesignerPunk v9
+# DesignerPunk v10
 
 **A Design System Foundation Built for Modern Product Development, Cross-Platform Excellence, and AI-Assisted Development**
 
-[![Version](https://img.shields.io/badge/Version-9.4.0-purple)](docs/releases/RELEASE-NOTES-9.4.0.md)
+[![Version](https://img.shields.io/badge/Version-10.0.0-purple)](docs/releases/RELEASE-NOTES-10.0.0.md)
 [![Repository](https://img.shields.io/badge/GitHub-DesignerPunkv2-blue)](https://github.com/3fn/DesignerPunkv2)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
-[![Tests](https://img.shields.io/badge/Tests-7800%2B-brightgreen)](.)
+[![Tests](https://img.shields.io/badge/Tests-7960%2B-brightgreen)](.)
 
 ---
 
-## Latest Release: v9.4.0
+## Latest Release: v10.0.0
 
-**Token Compliance & Motion Build Fix** (Spec 079) — Token pipeline correctness, Android generator type fix, and full compliance resolution:
+**Rosetta Mode Architecture & Nav-TabBar-Base** (Specs 080 + 050) — Dark mode infrastructure and the first Navigation family component:
 
-- **Category migration**: `DURATION` and `SCALE` added to `TokenCategory` enum, completing the motion token infrastructure started in Spec 049.
-- **Duplicate elimination**: Browser CSS no longer outputs motion tokens twice — `EASING`, `DURATION`, `SCALE` filtered from primitive pass.
-- **Android generator fix**: Dimensional token families now output `Dp` type instead of `Float`, ensuring type-safe consumption in Kotlin Compose.
-- **Compliance fixes**: 20 spacing violations resolved across Avatar-Base and Button-VerticalList components — all hard-coded values replaced with token references.
-- 301 test suites, 7,820 tests passing, 0 TokenCompliance violations.
+- **Rosetta Mode Architecture** (Spec 080): Two-level mode resolution (Level 1 primitive + Level 2 semantic override), 4-context resolution matrix (light-base, light-wcag, dark-base, dark-wcag), full Option B generators, mode parity audit tooling, and theme template generation. All four output targets (CSS, Swift, Kotlin, DTCG JSON) now produce mode-aware light/dark output.
+- **Nav-TabBar-Base** (Spec 050): True Native tab bar component across Web, iOS, and Android. Floating pill container (web) with dynamic browser chrome tracking, three-phase selection animation choreography, radial glow gradients, `blend.pressedLighter` for pressed feedback, full keyboard navigation, ARIA/VoiceOver/TalkBack accessibility, and haptic feedback (iOS/Android). 20 behavioral contracts, 123 new tests.
+- **New governance**: `visual_gradient_glow` contract template added to the Concept Catalog via ballot measure.
+- 306 test suites, 7,963 tests passing, 30 production components, 210 behavioral contract concepts.
 
-[Full Release Notes →](docs/releases/RELEASE-NOTES-9.4.0.md)
+[Full Release Notes →](docs/releases/RELEASE-NOTES-10.0.0.md)
 
 ---
 
@@ -73,7 +72,7 @@ Think of it as: **Define once, generate everywhere**
 A framework for building components that work identically across platforms while staying native.
 
 - **Naming Convention**: `[Family]-[Type]-[Variant]` (AI-discoverable)
-- **Behavioral Contracts**: 10-category taxonomy with 190 concepts — explicit specifications ensuring cross-platform consistency
+- **Behavioral Contracts**: 10-category taxonomy with 210 concepts — explicit specifications ensuring cross-platform consistency
 - **Component MCP Server**: Machine-readable metadata with 10 query tools for agent-driven component selection, experience patterns, family guidance, and assembly validation
 - **11 Component Families**: Navigation, Form Inputs, Core, Progress Indicators, Data Displays, etc.
 - **Purpose**: Systematic, scalable component development with shared architecture
@@ -83,11 +82,11 @@ Think of it as: **Build once, implement natively everywhere**
 **What's included:**
 - Form Inputs family (4 production-ready components)
 - Core components (11 production-ready components)
-- Placeholder families with documented patterns (6 families, ready for implementation)
+- Placeholder families with documented patterns (5 families, ready for implementation)
 - Health guardrails with 270+ validation tests
 - Component token API for lightweight, reasoned token authoring
-- 28 contracts.yaml files with formal inheritance and intentional exclusions
-- 28 component-meta.yaml semantic annotations for agent selection guidance
+- 30 contracts.yaml files with formal inheritance and intentional exclusions
+- 30 component-meta.yaml semantic annotations for agent selection guidance
 
 #### Unified Contract System
 
@@ -148,7 +147,7 @@ This is the **producer/musician model**: I don't write the music, but I shape th
 
 **Why this matters**: This demonstrates how modern product teams actually work. You don't need to be an expert coder to build sophisticated systems—you need to understand architecture, make good decisions, and guide implementation effectively.
 
-DesignerPunk has 7,500+ tests, production implementations across Web/iOS/Android, and sophisticated build pipelines—all architected and guided by clear framing, with execution handled by AI.
+DesignerPunk has 7,960+ tests, production implementations across Web/iOS/Android, and sophisticated build pipelines—all architected and guided by clear framing, with execution handled by AI.
 
 This is a working case study in how to lead AI-driven development at scale.
 
@@ -168,9 +167,10 @@ This is a working case study in how to lead AI-driven development at scale.
 - Checkboxes (Base/Legal) — Binary selection controls with legal consent support
 - Radio Buttons (Base/Set) — Single-selection controls with mutual exclusivity and group orchestration
 - Progress Indicators — Node-Base, Connector-Base, Label-Base (primitives) + Pagination-Base, Stepper-Base, Stepper-Detailed (semantic variants) with sliding window virtualization
-- 28 production-ready components with behavioral contracts
+- Navigation — SegmentedChoice-Base, TabBar-Base with three-phase animation choreography and cross-platform behavioral contracts
+- 30 production-ready components with behavioral contracts
 - Full cross-platform support with platform-native implementations
-- Uniform contract system: 10 categories, 190 concepts, formal inheritance
+- Uniform contract system: 10 categories, 210 concepts, formal inheritance
 
 **Custom Agent System**
 - 3 specialized Kiro agents: Ada (tokens), Lina (components), Thurgood (governance)
@@ -190,8 +190,8 @@ This is a working case study in how to lead AI-driven development at scale.
 
 ### 🟡 Structural Foundation Ready
 
-**Placeholder Component Families** (6 families)
-- Navigation, Data Displays, Loading, Modals, Dividers
+**Placeholder Component Families** (5 families)
+- Data Displays, Loading, Modals, Dividers, and additional Navigation components
 - Architecture documented, inheritance patterns defined, ready for implementation
 - Waiting for component-specific needs to drive development
 
@@ -351,7 +351,7 @@ The following represent areas of active development, sequenced by dependencies a
 
 ### Current Work
 
-- Specs 048-068 (active implementation)
+- Specs 048-080 (active implementation)
 
 ### Near-Term Focus
 
@@ -427,9 +427,9 @@ This project demonstrates:
 | **Complete design system foundation** | Shows understanding of system design, not just components |
 | **Cross-platform native code** | Demonstrates bridge between design and deep technical work |
 | **310+ tokens** | Proves ability to create systematic, scalable foundations |
-| **7,500+ tests** | Shows commitment to reliability and quality |
+| **7,960+ tests** | Shows commitment to reliability and quality |
 | **2 MCP Servers** (docs + application) | Working solutions to real AI collaboration problems |
-| **112 behavioral contracts** | Explicit cross-platform consistency guarantees |
+| **112+ behavioral contracts** | Explicit cross-platform consistency guarantees |
 | **Architectural documentation** | Demonstrates design leadership and systems thinking |
 
 For hiring managers: This shows someone who understands both design and engineering deeply enough to build infrastructure that serves both disciplines.
@@ -493,12 +493,14 @@ Even if you don't adopt DesignerPunk directly, I hope it influences how you thin
 
 ## What Changed from Previous Version
 
-1. ✅ **Added** `get_prop_guidance` MCP tool — family guidance queries with verbose flag (Spec 068)
-2. ✅ **Added** 3 companion YAML files: `button.yaml`, `form-inputs.yaml`, `container.yaml` (Spec 068)
-3. ✅ **Added** `FamilyGuidanceIndexer` with cross-reference validation (Spec 068)
-4. ✅ **Added** `family-guidance/` directory with schema reference and read-both protocol (Spec 068)
-5. ✅ **Added** Bidirectional cross-references between family guidance YAML and Component-Family steering docs (Spec 068)
-6. ✅ **Updated** MCP tool count: 9 → 10
-7. ✅ **Updated** MCP test count: 113 → 136 across 11 suites
-8. ✅ **Updated** Health check reports `guidanceFamiliesIndexed` (3 families)
-9. ✅ **Updated** Specs reference to 048-068 (active implementation)
+1. ✅ **Added** Nav-TabBar-Base — True Native tab bar component (Web/iOS/Android) with three-phase animation, radial glow gradients, chrome tracking (web), haptics (iOS/Android), and full accessibility (Spec 050)
+2. ✅ **Added** Nav-SegmentedChoice-Base — Segmented choice navigation component (Spec 049)
+3. ✅ **Added** Rosetta Mode Architecture — Two-level mode resolution, 4-context matrix, Option B generators, mode parity audit, theme template generation (Spec 080)
+4. ✅ **Added** `blend.pressedLighter` semantic token — completes blend family directional symmetry
+5. ✅ **Added** `visual_gradient_glow` contract template — new Concept Catalog entry for gradient-based visual emphasis
+6. ✅ **Added** Dark theme infrastructure — `SemanticOverrideResolver`, complete dark theme skeleton, 5 Nav-TabBar-Base dark overrides
+7. ✅ **Updated** All four generators (CSS, Swift, Kotlin, DTCG JSON) produce mode-aware light/dark output
+8. ✅ **Updated** Component count: 28 → 30
+9. ✅ **Updated** Contract concepts: 190 → 210
+10. ✅ **Updated** Test count: 7,820 → 7,963 across 306 suites
+11. ✅ **Updated** Specs reference to 048-080 (active implementation)
