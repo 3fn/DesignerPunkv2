@@ -340,9 +340,9 @@ Our proposed architecture aligns with this spec's concepts. We should evaluate w
 
 ### Component MCP (`component-mcp-server/`)
 
-- Component `resolvedTokens` should indicate mode-aware resolution
-- `getComponent()` responses should show light/dark token values where applicable
-- Schema validation should recognize mode-differentiated tokens
+- Component `resolvedTokens` should indicate mode-aware resolution via classification annotations
+- `getComponent()` responses should classify each color token as `level-1`, `level-2`, or `mode-invariant`
+- Schema validation should recognize mode-awareness annotations
 
 ---
 

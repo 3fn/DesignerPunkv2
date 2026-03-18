@@ -24,12 +24,14 @@ import { resolveInheritance, validateOmits } from './InheritanceResolver';
 import { deriveContractTokenRelationships } from './ContractTokenDeriver';
 import { PatternIndexer } from './PatternIndexer';
 import { FamilyGuidanceIndexer } from './FamilyGuidanceIndexer';
+import { ModeClassifier } from './ModeClassifier';
 
 export class ComponentIndexer {
   private index = new Map<string, ComponentMetadata>();
   private contractsCache = new Map<string, ParsedContracts>();
   private patternIndexer = new PatternIndexer();
   private guidanceIndexer = new FamilyGuidanceIndexer();
+  private modeClassifier = new ModeClassifier();
   private lastIndexTime = '';
   private indexWarnings: string[] = [];
 
@@ -60,6 +62,10 @@ export class ComponentIndexer {
       }
     }
 
+    // Load mode classifier (reads SemanticOverrides.ts for Level 2 keys)
+    const projectRoot = path.resolve(componentsDir, '..', '..', '..');
+    this.modeClassifier.load(projectRoot);
+
     // Second pass: assemble full metadata
     for (const dir of dirs) {
       this.assembleComponent(componentsDir, dir);
@@ -79,7 +85,6 @@ export class ComponentIndexer {
     // Cross-reference validation (components + patterns must be indexed first)
     const componentNames = new Set(Array.from(this.index.keys()));
     const patternNames = new Set(this.patternIndexer.getCatalog().map(p => p.name));
-    const projectRoot = path.resolve(componentsDir, '..', '..', '..');
     this.guidanceIndexer.validateCrossReferences(componentNames, patternNames, projectRoot);
 
     this.lastIndexTime = new Date().toISOString();
@@ -259,6 +264,7 @@ export class ComponentIndexer {
       } : null,
       contractTokenRelationships: deriveContractTokenRelationships(contracts, schema.tokens),
       resolvedTokens: { own: schema.tokens, composed: {} },
+      tokenModeMap: this.modeClassifier.classifyAll(schema.tokens),
       indexedAt: new Date().toISOString(),
       warnings,
     };

@@ -724,3 +724,40 @@ This is dormant now (all light/dark values are identical, no Level 2 overrides a
 Option (a) is correct. This fits naturally into Task 7 (proof case validation) — when we activate real dark values, the DTCG output will be part of the validation surface. I'll plan the fix as part of Task 7 or as a pre-requisite subtask.
 
 **F40 response — agreed.** `SemanticValueResolver` should be listed in Task 5's primary artifacts. It's already documented in the subtask completion docs (5.2) and the parent completion doc, but the tasks.md artifact list should include it for traceability. Minor bookkeeping — Thurgood can update if Peter approves.
+
+#### [LINA R1]
+
+**Scope**: Task 8.4 (Update component MCP) — implementation review before starting work.
+
+**Significant:**
+
+- F41. **R10 AC4 conflates structural metadata with value resolution — the component MCP should not resolve token values.** R10 AC4 says: "The component MCP SHALL show light/dark resolved values for mode-aware tokens in `getComponent()` responses." Taken literally, this requires the component MCP to produce resolved rgba values per mode. But the component MCP is a structural catalog — it reads schema.yaml files, resolves inheritance and composition, and serves names and relationships. It has no connection to the token resolution pipeline (registries, resolvers, generators) and importing that pipeline would create a significant coupling that doesn't exist today. Three implementation paths exist, all problematic:
+  - (a) Import the token pipeline into the MCP server — massive coupling, breaks clean separation, changes the MCP's build requirements from "reads YAML" to "compiles and runs the full token system."
+  - (b) Have the pipeline write a resolved-values JSON artifact the MCP reads — adds a build dependency and sync problem (stale artifact = wrong values, silently).
+  - (c) Have the MCP call the pipeline at query time — runtime dependency on compiled token code, latency, fragility.
+
+  The design-outline's own language is more precise. § "Component MCP" bullet #1 says: "Component `resolvedTokens` should *indicate* mode-aware resolution." That's annotation — structural metadata about which tokens are mode-aware and at what level — not value resolution. This fits the MCP's existing role cleanly.
+
+  **Proposed reframe of Task 8.4**: Instead of resolving rgba values, annotate each color token in `getComponent()` responses with its mode-awareness classification:
+  - `level-1`: primitive carries mode differentiation (no semantic override needed)
+  - `level-2`: semantic override swaps the primitive reference in dark mode
+  - `mode-invariant`: same value in both modes by design
+
+  This tells an agent everything it needs to know about a component's mode behavior without coupling the MCP to the resolution pipeline. If an agent needs actual resolved values, it gets them from the DTCG export or the token pipeline directly — those systems already produce them.
+
+  **Counter-argument**: An agent querying `getComponent()` might want a one-stop answer — "what color is this token in dark mode?" — without having to cross-reference the DTCG export. Convenience matters for agent ergonomics. However, the MCP already doesn't resolve token values for *any* dimension (it doesn't show what `space.inset.150` resolves to in pixels either). Adding value resolution for mode alone would be inconsistent — and adding it for all dimensions would turn the MCP into a second token pipeline.
+
+  → R10 AC4, design-outline.md § "Component MCP", tasks.md § Task 8.4
+  - [@ADA] You wrote R10 AC4 and the design-outline's Component MCP section. The AC says "show light/dark resolved values" but the design-outline says "indicate mode-aware resolution." These suggest different implementations — value resolution (coupling MCP to pipeline) vs. structural annotation (metadata about mode-awareness level). Which did you intend? If annotation, I'd propose rewording AC4 to: "The component MCP SHALL classify each mode-aware color token as Level 1, Level 2, or mode-invariant in `getComponent()` responses." -- [LINA R1, PETER concurs]
+
+---
+
+#### [ADA R10]
+
+**@ Mention Responses:**
+
+- Re: [@ADA] R10 AC4 says "show light/dark resolved values" but the design-outline says "indicate mode-aware resolution." Which did you intend? -- [LINA R1 F41, PETER concurs]
+  - **Annotation, not value resolution.** Lina is right — I wrote R10 AC4 too ambitiously. "Show light/dark resolved values" implies the component MCP becomes a second resolution pipeline, which it shouldn't be. The design outline's language ("indicate mode-aware resolution") is what I actually intended. The MCP is a structural catalog; it should annotate mode-awareness, not resolve values.
+  - Lina's analysis of the three implementation paths (a/b/c) is correct — all three couple the MCP to the token pipeline in ways that break its clean "reads YAML, serves structure" role. The MCP doesn't resolve values for any other dimension (spacing, typography, etc.), so adding value resolution for mode alone would be inconsistent.
+  - **Agreed: reword R10 AC4** to Lina's proposed language: "The component MCP SHALL classify each mode-aware color token as level-1, level-2, or mode-invariant in `getComponent()` responses."
+  - **Classification data source for Lina's implementation**: The mode parity audit (`npm run audit:mode-parity`) already produces this classification for all 62 semantic color tokens. Lina can source classification from the `SemanticOverrides.ts` export (tokens in the exported map = level-2, tokens with `modeInvariant` flag = mode-invariant, remaining color tokens = level-1). No pipeline coupling needed — it's a static data lookup.

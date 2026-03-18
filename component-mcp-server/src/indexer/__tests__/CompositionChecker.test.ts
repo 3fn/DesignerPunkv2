@@ -13,6 +13,7 @@ function makeMeta(name: string, composition: CompositionDefinition | null, type 
     contracts: { inheritsFrom: null, active: {}, excluded: {}, own: [], inherited: [] },
     annotations: null, contractTokenRelationships: { resolved: [], gaps: [] },
     resolvedTokens: { own: [], composed: {} },
+    tokenModeMap: {},
     indexedAt: '', warnings: [],
   };
 }

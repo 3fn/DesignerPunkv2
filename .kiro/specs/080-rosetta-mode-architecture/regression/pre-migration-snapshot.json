@@ -1,0 +1,407 @@
+{
+  "meta": {
+    "generatedAt": "2026-03-18T09:49:00.000Z",
+    "spec": "080-rosetta-mode-architecture",
+    "task": "9.1",
+    "purpose": "Pre-migration snapshot for Phase 2 wcagValue unification regression verification",
+    "tokenCount": 62,
+    "contexts": [
+      "light-base",
+      "light-wcag",
+      "dark-base",
+      "dark-wcag"
+    ],
+    "wcagValueTokens": [
+      "color.feedback.info.text",
+      "color.feedback.info.background",
+      "color.feedback.info.border",
+      "color.action.primary",
+      "color.action.navigation",
+      "color.contrast.onAction",
+      "color.background.primary.subtle"
+    ],
+    "darkOverrideTokens": [
+      "color.structure.canvas",
+      "color.action.navigation",
+      "color.background.primary.subtle",
+      "color.structure.border.subtle",
+      "color.icon.navigation.inactive"
+    ],
+    "componentColorTokenCount": 0,
+    "componentColorTokenNote": "Zero component tokens reference color semantics — semantic snapshot alone is sufficient for regression"
+  },
+  "snapshot": {
+    "color.feedback.success.text": {
+      "light-base": "rgba(0, 255, 136, 1)",
+      "light-wcag": "rgba(27, 94, 32, 1)",
+      "dark-base": "rgba(0, 255, 136, 1)",
+      "dark-wcag": "rgba(38, 179, 38, 1)"
+    },
+    "color.feedback.success.background": {
+      "light-base": "rgba(230, 255, 245, 1)",
+      "light-wcag": "rgba(232, 245, 233, 1)",
+      "dark-base": "rgba(230, 255, 245, 1)",
+      "dark-wcag": "rgba(179, 255, 179, 1)"
+    },
+    "color.feedback.success.border": {
+      "light-base": "rgba(0, 255, 136, 1)",
+      "light-wcag": "rgba(27, 94, 32, 1)",
+      "dark-base": "rgba(0, 255, 136, 1)",
+      "dark-wcag": "rgba(38, 179, 38, 1)"
+    },
+    "color.feedback.error.text": {
+      "light-base": "rgba(204, 34, 87, 1)",
+      "light-wcag": "rgba(136, 14, 79, 1)",
+      "dark-base": "rgba(204, 34, 87, 1)",
+      "dark-wcag": "rgba(179, 38, 89, 1)"
+    },
+    "color.feedback.error.background": {
+      "light-base": "rgba(255, 218, 232, 1)",
+      "light-wcag": "rgba(252, 228, 236, 1)",
+      "dark-base": "rgba(255, 218, 232, 1)",
+      "dark-wcag": "rgba(255, 179, 209, 1)"
+    },
+    "color.feedback.error.border": {
+      "light-base": "rgba(204, 34, 87, 1)",
+      "light-wcag": "rgba(136, 14, 79, 1)",
+      "dark-base": "rgba(204, 34, 87, 1)",
+      "dark-wcag": "rgba(179, 38, 89, 1)"
+    },
+    "color.feedback.warning.text": {
+      "light-base": "rgba(204, 85, 41, 1)",
+      "light-wcag": "rgba(140, 90, 0, 1)",
+      "dark-base": "rgba(204, 85, 41, 1)",
+      "dark-wcag": "rgba(166, 112, 0, 1)"
+    },
+    "color.feedback.warning.background": {
+      "light-base": "rgba(255, 229, 220, 1)",
+      "light-wcag": "rgba(255, 243, 224, 1)",
+      "dark-base": "rgba(255, 229, 220, 1)",
+      "dark-wcag": "rgba(255, 217, 163, 1)"
+    },
+    "color.feedback.warning.border": {
+      "light-base": "rgba(204, 85, 41, 1)",
+      "light-wcag": "rgba(140, 90, 0, 1)",
+      "dark-base": "rgba(204, 85, 41, 1)",
+      "dark-wcag": "rgba(166, 112, 0, 1)"
+    },
+    "color.feedback.info.text": {
+      "light-base": "rgba(21, 66, 74, 1)",
+      "light-wcag": "rgba(99, 21, 143, 1)",
+      "dark-base": "rgba(21, 66, 74, 1)",
+      "dark-wcag": "rgba(99, 21, 143, 1)"
+    },
+    "color.feedback.info.background": {
+      "light-base": "rgba(217, 232, 234, 1)",
+      "light-wcag": "rgba(243, 224, 255, 1)",
+      "dark-base": "rgba(217, 232, 234, 1)",
+      "dark-wcag": "rgba(243, 224, 255, 1)"
+    },
+    "color.feedback.info.border": {
+      "light-base": "rgba(21, 66, 74, 1)",
+      "light-wcag": "rgba(99, 21, 143, 1)",
+      "dark-base": "rgba(21, 66, 74, 1)",
+      "dark-wcag": "rgba(99, 21, 143, 1)"
+    },
+    "color.feedback.select.text.rest": {
+      "light-base": "rgba(0, 192, 204, 1)",
+      "light-wcag": "rgba(0, 192, 204, 1)",
+      "dark-base": "rgba(0, 192, 204, 1)",
+      "dark-wcag": "rgba(0, 192, 204, 1)"
+    },
+    "color.feedback.select.text.default": {
+      "light-base": "rgba(94, 112, 124, 1)",
+      "light-wcag": "rgba(94, 112, 124, 1)",
+      "dark-base": "rgba(94, 112, 124, 1)",
+      "dark-wcag": "rgba(94, 112, 124, 1)"
+    },
+    "color.feedback.select.background.rest": {
+      "light-base": "rgba(204, 251, 255, 1)",
+      "light-wcag": "rgba(204, 251, 255, 1)",
+      "dark-base": "rgba(204, 251, 255, 1)",
+      "dark-wcag": "rgba(204, 251, 255, 1)"
+    },
+    "color.feedback.select.background.default": {
+      "light-base": "rgba(178, 188, 196, 1)",
+      "light-wcag": "rgba(178, 188, 196, 1)",
+      "dark-base": "rgba(178, 188, 196, 1)",
+      "dark-wcag": "rgba(178, 188, 196, 1)"
+    },
+    "color.feedback.select.border.rest": {
+      "light-base": "rgba(0, 192, 204, 1)",
+      "light-wcag": "rgba(0, 192, 204, 1)",
+      "dark-base": "rgba(0, 192, 204, 1)",
+      "dark-wcag": "rgba(0, 192, 204, 1)"
+    },
+    "color.feedback.select.border.default": {
+      "light-base": "rgba(94, 112, 124, 1)",
+      "light-wcag": "rgba(94, 112, 124, 1)",
+      "dark-base": "rgba(94, 112, 124, 1)",
+      "dark-wcag": "rgba(94, 112, 124, 1)"
+    },
+    "color.feedback.notification.background": {
+      "light-base": "rgba(204, 34, 87, 1)",
+      "light-wcag": "rgba(136, 14, 79, 1)",
+      "dark-base": "rgba(204, 34, 87, 1)",
+      "dark-wcag": "rgba(179, 38, 89, 1)"
+    },
+    "color.feedback.notification.text": {
+      "light-base": "rgba(255, 255, 255, 1)",
+      "light-wcag": "rgba(255, 255, 255, 1)",
+      "dark-base": "rgba(255, 255, 255, 1)",
+      "dark-wcag": "rgba(255, 255, 255, 1)"
+    },
+    "color.identity.human": {
+      "light-base": "rgba(255, 107, 53, 1)",
+      "light-wcag": "rgba(184, 117, 0, 1)",
+      "dark-base": "rgba(255, 107, 53, 1)",
+      "dark-wcag": "rgba(217, 149, 0, 1)"
+    },
+    "color.identity.agent": {
+      "light-base": "rgba(77, 155, 165, 1)",
+      "light-wcag": "rgba(77, 155, 165, 1)",
+      "dark-base": "rgba(77, 155, 165, 1)",
+      "dark-wcag": "rgba(77, 155, 165, 1)"
+    },
+    "color.action.primary": {
+      "light-base": "rgba(0, 240, 255, 1)",
+      "light-wcag": "rgba(26, 83, 92, 1)",
+      "dark-base": "rgba(0, 240, 255, 1)",
+      "dark-wcag": "rgba(0, 240, 255, 1)"
+    },
+    "color.action.secondary": {
+      "light-base": "rgba(24, 34, 40, 1)",
+      "light-wcag": "rgba(24, 34, 40, 1)",
+      "dark-base": "rgba(24, 34, 40, 1)",
+      "dark-wcag": "rgba(24, 34, 40, 1)"
+    },
+    "color.action.navigation": {
+      "light-base": "rgba(0, 136, 143, 1)",
+      "light-wcag": "rgba(15, 46, 51, 1)",
+      "dark-base": "rgba(204, 251, 255, 1)",
+      "dark-wcag": "rgba(204, 251, 255, 1)"
+    },
+    "color.attention": {
+      "light-base": "rgba(199, 192, 2, 1)",
+      "light-wcag": "rgba(199, 192, 2, 1)",
+      "dark-base": "rgba(199, 192, 2, 1)",
+      "dark-wcag": "rgba(143, 139, 1, 1)"
+    },
+    "color.highlight": {
+      "light-base": "rgba(249, 240, 2, 1)",
+      "light-wcag": "rgba(249, 240, 2, 1)",
+      "dark-base": "rgba(249, 240, 2, 1)",
+      "dark-wcag": "rgba(199, 192, 2, 1)"
+    },
+    "color.tech": {
+      "light-base": "rgba(141, 30, 204, 1)",
+      "light-wcag": "rgba(141, 30, 204, 1)",
+      "dark-base": "rgba(141, 30, 204, 1)",
+      "dark-wcag": "rgba(141, 30, 204, 1)"
+    },
+    "color.data": {
+      "light-base": "rgba(176, 38, 255, 1)",
+      "light-wcag": "rgba(176, 38, 255, 1)",
+      "dark-base": "rgba(176, 38, 255, 1)",
+      "dark-wcag": "rgba(176, 38, 255, 1)"
+    },
+    "color.text.default": {
+      "light-base": "rgba(38, 50, 58, 1)",
+      "light-wcag": "rgba(38, 50, 58, 1)",
+      "dark-base": "rgba(38, 50, 58, 1)",
+      "dark-wcag": "rgba(38, 50, 58, 1)"
+    },
+    "color.text.muted": {
+      "light-base": "rgba(94, 112, 124, 1)",
+      "light-wcag": "rgba(94, 112, 124, 1)",
+      "dark-base": "rgba(94, 112, 124, 1)",
+      "dark-wcag": "rgba(94, 112, 124, 1)"
+    },
+    "color.text.subtle": {
+      "light-base": "rgba(178, 188, 196, 1)",
+      "light-wcag": "rgba(178, 188, 196, 1)",
+      "dark-base": "rgba(178, 188, 196, 1)",
+      "dark-wcag": "rgba(178, 188, 196, 1)"
+    },
+    "color.contrast.onLight": {
+      "light-base": "rgba(0, 0, 0, 1)",
+      "light-wcag": "rgba(0, 0, 0, 1)",
+      "dark-base": "rgba(0, 0, 0, 1)",
+      "dark-wcag": "rgba(0, 0, 0, 1)"
+    },
+    "color.contrast.onDark": {
+      "light-base": "rgba(255, 255, 255, 1)",
+      "light-wcag": "rgba(255, 255, 255, 1)",
+      "dark-base": "rgba(255, 255, 255, 1)",
+      "dark-wcag": "rgba(255, 255, 255, 1)"
+    },
+    "color.contrast.onAction": {
+      "light-base": "rgba(0, 0, 0, 1)",
+      "light-wcag": "rgba(255, 255, 255, 1)",
+      "dark-base": "rgba(0, 0, 0, 1)",
+      "dark-wcag": "rgba(255, 255, 255, 1)"
+    },
+    "color.structure.canvas": {
+      "light-base": "rgba(255, 255, 255, 1)",
+      "light-wcag": "rgba(255, 255, 255, 1)",
+      "dark-base": "rgba(24, 34, 40, 1)",
+      "dark-wcag": "rgba(24, 34, 40, 1)"
+    },
+    "color.structure.surface": {
+      "light-base": "rgba(245, 245, 250, 1)",
+      "light-wcag": "rgba(245, 245, 250, 1)",
+      "dark-base": "rgba(245, 245, 250, 1)",
+      "dark-wcag": "rgba(245, 245, 250, 1)"
+    },
+    "color.structure.surface.primary": {
+      "light-base": "rgba(245, 245, 250, 1)",
+      "light-wcag": "rgba(245, 245, 250, 1)",
+      "dark-base": "rgba(245, 245, 250, 1)",
+      "dark-wcag": "rgba(245, 245, 250, 1)"
+    },
+    "color.structure.surface.secondary": {
+      "light-base": "rgba(232, 232, 240, 1)",
+      "light-wcag": "rgba(232, 232, 240, 1)",
+      "dark-base": "rgba(232, 232, 240, 1)",
+      "dark-wcag": "rgba(232, 232, 240, 1)"
+    },
+    "color.structure.surface.tertiary": {
+      "light-base": "rgba(197, 197, 213, 1)",
+      "light-wcag": "rgba(197, 197, 213, 1)",
+      "dark-base": "rgba(197, 197, 213, 1)",
+      "dark-wcag": "rgba(197, 197, 213, 1)"
+    },
+    "color.structure.border": {
+      "light-base": "rgba(178, 188, 196, 1)",
+      "light-wcag": "rgba(178, 188, 196, 1)",
+      "dark-base": "rgba(178, 188, 196, 1)",
+      "dark-wcag": "rgba(178, 188, 196, 1)"
+    },
+    "color.structure.border.subtle": {
+      "light-base": "rgba(178, 188, 196, 0.48)",
+      "light-wcag": "rgba(178, 188, 196, 0.48)",
+      "dark-base": "rgba(16, 22, 26, 0.48)",
+      "dark-wcag": "rgba(16, 22, 26, 0.48)"
+    },
+    "color.background.primary.subtle": {
+      "light-base": "rgba(204, 251, 255, 1)",
+      "light-wcag": "rgba(217, 232, 234, 1)",
+      "dark-base": "rgba(0, 136, 143, 1)",
+      "dark-wcag": "rgba(0, 136, 143, 1)"
+    },
+    "color.icon.default": {
+      "light-base": "rgba(94, 112, 124, 1)",
+      "light-wcag": "rgba(94, 112, 124, 1)",
+      "dark-base": "rgba(94, 112, 124, 1)",
+      "dark-wcag": "rgba(94, 112, 124, 1)"
+    },
+    "color.icon.navigation.inactive": {
+      "light-base": "rgba(38, 50, 58, 1)",
+      "light-wcag": "rgba(38, 50, 58, 1)",
+      "dark-base": "rgba(178, 188, 196, 1)",
+      "dark-wcag": "rgba(178, 188, 196, 1)"
+    },
+    "color.print.default": {
+      "light-base": "rgba(58, 58, 69, 1)",
+      "light-wcag": "rgba(82, 82, 92, 1)",
+      "dark-base": "rgba(58, 58, 69, 1)",
+      "dark-wcag": "rgba(82, 82, 92, 1)"
+    },
+    "glow.neonPurple": {
+      "light-base": "rgba(99, 21, 143, 1)",
+      "light-wcag": "rgba(99, 21, 143, 1)",
+      "dark-base": "rgba(99, 21, 143, 1)",
+      "dark-wcag": "rgba(99, 21, 143, 1)"
+    },
+    "glow.neonCyan": {
+      "light-base": "rgba(0, 136, 143, 1)",
+      "light-wcag": "rgba(0, 136, 143, 1)",
+      "dark-base": "rgba(0, 136, 143, 1)",
+      "dark-wcag": "rgba(0, 136, 143, 1)"
+    },
+    "glow.neonYellow": {
+      "light-base": "rgba(143, 139, 1, 1)",
+      "light-wcag": "rgba(143, 139, 1, 1)",
+      "dark-base": "rgba(143, 139, 1, 1)",
+      "dark-wcag": "rgba(143, 139, 1, 1)"
+    },
+    "glow.neonGreen": {
+      "light-base": "rgba(0, 204, 110, 1)",
+      "light-wcag": "rgba(13, 48, 16, 1)",
+      "dark-base": "rgba(0, 204, 110, 1)",
+      "dark-wcag": "rgba(20, 89, 20, 1)"
+    },
+    "glow.neonPink": {
+      "light-base": "rgba(128, 21, 55, 1)",
+      "light-wcag": "rgba(77, 8, 41, 1)",
+      "dark-base": "rgba(128, 21, 55, 1)",
+      "dark-wcag": "rgba(92, 26, 51, 1)"
+    },
+    "color.progress.current.background": {
+      "light-base": "rgba(0, 240, 255, 1)",
+      "light-wcag": "rgba(0, 240, 255, 1)",
+      "dark-base": "rgba(0, 240, 255, 1)",
+      "dark-wcag": "rgba(0, 240, 255, 1)"
+    },
+    "color.progress.current.text": {
+      "light-base": "rgba(0, 192, 204, 1)",
+      "light-wcag": "rgba(0, 192, 204, 1)",
+      "dark-base": "rgba(0, 192, 204, 1)",
+      "dark-wcag": "rgba(0, 192, 204, 1)"
+    },
+    "color.progress.pending.background": {
+      "light-base": "rgba(232, 232, 240, 1)",
+      "light-wcag": "rgba(232, 232, 240, 1)",
+      "dark-base": "rgba(232, 232, 240, 1)",
+      "dark-wcag": "rgba(232, 232, 240, 1)"
+    },
+    "color.progress.pending.text": {
+      "light-base": "rgba(38, 50, 58, 1)",
+      "light-wcag": "rgba(38, 50, 58, 1)",
+      "dark-base": "rgba(38, 50, 58, 1)",
+      "dark-wcag": "rgba(38, 50, 58, 1)"
+    },
+    "color.progress.pending.connector": {
+      "light-base": "rgba(245, 245, 250, 1)",
+      "light-wcag": "rgba(245, 245, 250, 1)",
+      "dark-base": "rgba(245, 245, 250, 1)",
+      "dark-wcag": "rgba(245, 245, 250, 1)"
+    },
+    "color.progress.completed.background": {
+      "light-base": "rgba(230, 255, 245, 1)",
+      "light-wcag": "rgba(232, 245, 233, 1)",
+      "dark-base": "rgba(230, 255, 245, 1)",
+      "dark-wcag": "rgba(179, 255, 179, 1)"
+    },
+    "color.progress.completed.text": {
+      "light-base": "rgba(0, 255, 136, 1)",
+      "light-wcag": "rgba(27, 94, 32, 1)",
+      "dark-base": "rgba(0, 255, 136, 1)",
+      "dark-wcag": "rgba(38, 179, 38, 1)"
+    },
+    "color.progress.completed.connector": {
+      "light-base": "rgba(230, 255, 245, 1)",
+      "light-wcag": "rgba(232, 245, 233, 1)",
+      "dark-base": "rgba(230, 255, 245, 1)",
+      "dark-wcag": "rgba(179, 255, 179, 1)"
+    },
+    "color.progress.error.background": {
+      "light-base": "rgba(255, 218, 232, 1)",
+      "light-wcag": "rgba(252, 228, 236, 1)",
+      "dark-base": "rgba(255, 218, 232, 1)",
+      "dark-wcag": "rgba(255, 179, 209, 1)"
+    },
+    "color.progress.error.text": {
+      "light-base": "rgba(204, 34, 87, 1)",
+      "light-wcag": "rgba(136, 14, 79, 1)",
+      "dark-base": "rgba(204, 34, 87, 1)",
+      "dark-wcag": "rgba(179, 38, 89, 1)"
+    },
+    "color.scrim.standard": {
+      "light-base": "rgba(0, 0, 0, 0.8)",
+      "light-wcag": "rgba(0, 0, 0, 0.8)",
+      "dark-base": "rgba(0, 0, 0, 0.8)",
+      "dark-wcag": "rgba(0, 0, 0, 0.8)"
+    }
+  }
+}

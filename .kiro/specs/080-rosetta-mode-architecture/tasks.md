@@ -15,15 +15,15 @@ Tasks are ordered to minimize risk: pre-requisite fixes first, then infrastructu
 
 Phase 2 follows the same pattern: snapshot existing behavior, migrate infrastructure, migrate data, verify zero regression.
 
-### Revised Execution Sequence (2026-03-17)
+### Revised Execution Sequence (2026-03-17, updated 2026-03-18)
 
-Tasks 4 and 7 are blocked on Spec 050's token mapping (Nav-TabBar-Base semantic token assignments not yet defined). Rather than populate theoretical values, we proceed conservatively: complete infrastructure, then validate with real design values once 050 provides them.
+Tasks 4 was closed as not applicable — Nav-TabBar-Base is entirely Level 2 (semantic overrides), so no primitives need distinct dark slot values. Task 7 was completed using the 050 token mapping (Ada R2) to validate all 5 overrides through the full pipeline.
 
-1. **Tasks 3, 5, 6** — Complete Phase 1 infrastructure (audit, pipeline integration, mode parity tooling)
-2. **Tasks 8.1–8.4** — Documentation updates that can be written against proven infrastructure
-3. **Spec 050** — Resolve token mapping (unblocks Tasks 4 and 7)
-4. **Tasks 4, 7** — Activate primitive dark values and validate proof case with real design values
-5. **Task 8.5** — Finalize ballot measures after end-to-end workflow is proven
+1. **Tasks 3, 5, 6** — Complete Phase 1 infrastructure (audit, pipeline integration, mode parity tooling) ✅
+2. **Tasks 8.1–8.4** — Documentation updates ✅
+3. **Task 4** — Closed N/A (no Level 1 primitive dark values needed for Nav-TabBar-Base)
+4. **Task 7** — Proof case validated with 050 token mapping ✅
+5. **Task 8.5** — Ballot measures approved and applied ✅
 6. **Tasks 9–11** — Phase 2 (wcagValue unification) after system is validated end-to-end
 
 ---
@@ -198,63 +198,36 @@ Tasks 4 and 7 are blocked on Spec 050's token mapping (Nav-TabBar-Base semantic 
     - _Requirements: R2 AC1-2, R4 AC1-4, R7_
 
 
-- [ ] 4. Activate Primitive Dark Values
+- [x] 4. Activate Primitive Dark Values
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
 
-  ⏸️ **BLOCKED (2026-03-17)**: Dependent on Spec 050 (Nav-TabBar-Base) token mapping, which is not yet defined. Figma analysis also confirmed Nav-TabBar-Base uses different primitive *names* per mode (Level 2), not different values for the same primitive (Level 1) — so no primitives need distinct dark slot values for this component. Deferring entire task until 050's token mapping is resolved and provides the design values needed to populate dark entries. Remaining 080 tasks (3, 5, 6, 8) proceed independently — they operate on infrastructure and mechanisms, not component-specific values.
+  ✅ **CLOSED — NOT APPLICABLE (2026-03-18)**: Figma analysis and Spec 050 Ada R2 confirmed Nav-TabBar-Base mode differentiation is entirely Level 2 (semantic overrides swap primitive *names*). No primitives need distinct dark slot values for this component. Task 7 (proof case) validated the full pipeline with all 5 Nav-TabBar-Base tokens resolving correctly through Level 2 overrides alone. If a future component or system-wide dark palette design requires primitives to carry distinct light/dark values, a new task will be created under that component's spec.
 
-  **Success Criteria:**
-  - Color primitives that need distinct dark values have them populated
-  - Primitives that are mode-invariant retain identical light/dark values
-  - `ModeThemeResolver` resolves correct mode-appropriate values
-  - Backward compatibility regression passes — pipeline with current data produces identical output (correctness property #8)
+  **Success Criteria (disposition):**
+  - Color primitives that need distinct dark values have them populated → N/A — no primitives need distinct dark values for Nav-TabBar-Base
+  - Primitives that are mode-invariant retain identical light/dark values → ✅ All primitives retain identical values (correct behavior)
+  - `ModeThemeResolver` resolves correct mode-appropriate values → ✅ Validated in Task 7 proof case
+  - Backward compatibility regression passes → ✅ No primitive changes made, pipeline output unchanged for non-overridden tokens
 
-  **Primary Artifacts:**
-  - `src/tokens/ColorTokens.ts` (modified — dark slot values populated)
-
-  **Completion Documentation:**
-  - Detailed: `.kiro/specs/080-rosetta-mode-architecture/completion/task-4-parent-completion.md`
-  - Summary: `docs/specs/080-rosetta-mode-architecture/task-4-summary.md`
-
-  **Post-Completion:**
-  - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 Complete: Activate Primitive Dark Values"`
-  - Verify: Backward compatibility regression test passes
-
-  - [ ] 4.1 Snapshot pre-activation pipeline output
+  - [x] 4.1 Snapshot pre-activation pipeline output
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     **Agent**: Ada
-    - ⏸️ **DEFERRED (2026-03-17)**: Nav-TabBar-Base mode differentiation is entirely Level 2 (different primitive names per mode), not Level 1 (different values for the same primitive). No primitives need distinct dark values for this component. Deferring until a component spec or system-wide dark palette design requires primitive dark value population. Snapshot should be captured fresh at that time.
-    - Run full token pipeline with current (identical light/dark) primitive data
-    - Capture output as regression baseline snapshot
-    - This snapshot validates correctness property #8 after dark values are populated
-    - _Requirements: R1 (enables regression verification)_
-    - _Traces: Lina F28 (backward compatibility regression)_
+    - ✅ **N/A**: No primitive dark values to activate. Snapshot unnecessary.
 
-  - [ ] 4.2 Populate distinct dark values in color primitives (Nav-TabBar-Base scope)
+  - [x] 4.2 Populate distinct dark values in color primitives (Nav-TabBar-Base scope)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
-    - **Scope**: Nav-TabBar-Base primitives only. Full dark palette design work is not complete — other components will populate their dark primitive values as part of their own specs. (Peter direction, 2026-03-17)
-    - Using audit results (Task 3.1) and Figma analysis (`analysis/analysis-tab-bar/`), populate distinct `dark` slot values for primitives referenced by Nav-TabBar-Base tokens
-    - Primitives referenced by Nav-TabBar-Base Level 1 tokens: populate dark values from Figma
-    - Primitives referenced by Nav-TabBar-Base Level 2 override targets: populate dark values (the override swaps the primitive name, but the target primitive still needs its own dark value)
-    - All other primitives: leave identical light/dark values (fallback to light in dark mode until their component specs populate them)
-    - No interface changes — `ColorTokenValue` already has the right shape
-    - _Requirements: R1 AC1-3_
+    - ✅ **N/A**: Nav-TabBar-Base is entirely Level 2. Dark mode is handled by semantic overrides in `SemanticOverrides.ts`, not by primitive dark slot values.
 
-  - [ ] 4.3 Verify backward compatibility
+  - [x] 4.3 Verify backward compatibility
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada + Thurgood (Ada runs, Thurgood audits)
-    - Run full pipeline with updated primitives but no semantic overrides active
-    - Compare output against Task 4.1 snapshot
-    - For tokens where light/dark are now distinct: verify light output matches snapshot (dark output is new)
-    - For tokens where light/dark remain identical: verify output matches snapshot exactly
-    - _Requirements: R5 AC1-3 (fallback behavior)_
-    - _Traces: Testing strategy Layer 4_
+    - ✅ **N/A**: No primitive changes made. Backward compatibility is inherent — pipeline output for non-overridden tokens is unchanged. Task 7 proof case validated overridden tokens.
 
 
 - [x] 5. Pipeline Integration + Generator Updates
@@ -461,7 +434,7 @@ Tasks 4 and 7 are blocked on Spec 050's token mapping (Nav-TabBar-Base semantic 
     - _Traces: Thurgood R1 F9 (composite proof case), Lina R1 F10 (validated mappings), Thurgood R7 F39 (DTCG Level 2 gap)_
 
 
-- [ ] 8. Documentation Updates
+- [x] 8. Documentation Updates
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -514,16 +487,17 @@ Tasks 4 and 7 are blocked on Spec 050's token mapping (Nav-TabBar-Base semantic 
     - Add sections queryable via `get_section()` for mode resolution, override format, fallback behavior
     - _Requirements: R10 AC3_
 
-  - [ ] 8.4 Update component MCP
+  - [x] 8.4 Update component MCP
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
-    **Depends on**: Tasks 2 and 5 (needs resolver output format and working pipeline — cannot parallelize with 8.1-8.3)
-    - Update `getComponent()` responses to show light/dark resolved values for mode-aware tokens
-    - Update schema validation to recognize mode-differentiated tokens
+    **Depends on**: Task 3 (needs semantic color token audit classifications and SemanticOverrides.ts)
+    - Classify each color token in `getComponent()` responses as `level-1`, `level-2`, or `mode-invariant` using audit data and SemanticOverrides.ts export
+    - Update schema validation to recognize mode-awareness annotations
     - _Requirements: R10 AC4_
+    - _Traces: Lina R1 F41, Ada R10_
 
-  - [ ] 8.5 Propose governance updates (ballot measures)
+  - [x] 8.5 Propose governance updates (ballot measures)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Thurgood
@@ -544,16 +518,18 @@ Phase 2 migrates the inline `wcagValue` pattern into the theme file architecture
 
 ---
 
-- [ ] 9. Phase 2 Pre-Migration Snapshot
+- [x] 9. Phase 2 Pre-Migration Snapshot
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
 
+  ✅ **COMPLETE (2026-03-18)**: 62 semantic color tokens resolved across all 4 contexts. 7 wcagValue tokens inventoried. 0 component tokens reference color semantics.
+
   **Success Criteria:**
-  - Complete snapshot of all resolved token values across the full mode × theme matrix (light-base, light-wcag, dark-base, dark-wcag)
-  - Snapshot includes both semantic token AND component token resolved values
-  - Snapshot stored as regression baseline for post-migration verification
-  - All 7 tokens currently using `wcagValue` identified and documented
+  - Complete snapshot of all resolved token values across the full mode × theme matrix (light-base, light-wcag, dark-base, dark-wcag) ✅
+  - Snapshot includes both semantic token AND component token resolved values ✅ (0 component color refs — semantic snapshot sufficient)
+  - Snapshot stored as regression baseline for post-migration verification ✅
+  - All 7 tokens currently using `wcagValue` identified and documented ✅
 
   **Primary Artifacts:**
   - `.kiro/specs/080-rosetta-mode-architecture/regression/pre-migration-snapshot.json` (new)
@@ -567,7 +543,7 @@ Phase 2 migrates the inline `wcagValue` pattern into the theme file architecture
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 9 Complete: Phase 2 Pre-Migration Snapshot"`
   - Verify: Snapshot covers all tokens across all 4 contexts
 
-  - [ ] 9.1 Capture full resolution matrix snapshot
+  - [x] 9.1 Capture full resolution matrix snapshot
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -577,7 +553,7 @@ Phase 2 migrates the inline `wcagValue` pattern into the theme file architecture
     - _Requirements: R11 AC3-4_
     - _Traces: Thurgood R1 F5.4, Lina R1 F13_
 
-  - [ ] 9.2 Inventory wcagValue tokens
+  - [x] 9.2 Inventory wcagValue tokens
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     **Agent**: Ada

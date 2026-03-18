@@ -145,7 +145,7 @@ This spec activates mode-aware resolution at two levels: primitive values that d
 1. The Rosetta System Architecture documentation SHALL include an updated pipeline diagram showing the Mode Resolution step.
 2. The Token Quick Reference SHALL include mode-aware lookup guidance.
 3. The documentation MCP (`@designerpunk-docs`) SHALL serve mode architecture content.
-4. The component MCP SHALL show light/dark resolved values for mode-aware tokens in `getComponent()` responses.
+4. The component MCP SHALL classify each mode-aware color token as level-1, level-2, or mode-invariant in `getComponent()` responses.
 
 **Documentation waiver**: No component README is required (this is infrastructure, not a component). No usage examples are required (token authors interact with the system through existing token definition patterns, extended with dark values/overrides).
 

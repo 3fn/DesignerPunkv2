@@ -168,6 +168,9 @@ export interface ComponentMetadata {
     composed: Record<string, string[]>;
   };
 
+  /** Mode-awareness classification for color tokens (Spec 080 Task 8.4) */
+  tokenModeMap: Record<string, 'level-1' | 'level-2' | 'mode-invariant'>;
+
   /** Indexing metadata */
   indexedAt: string;
   warnings: string[];

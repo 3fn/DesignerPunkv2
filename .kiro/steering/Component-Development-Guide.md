@@ -1756,7 +1756,8 @@ Components come with their own unique properties that might include, but are not
 5. **README** (required) - Create comprehensive component documentation
 6. **HTML Canaries** (required) - Create validation examples
 7. **Implementation** (required) - Build component across platforms
-8. **Demo Page** (if web implementation) - Create or update demo in `demos/` (see Demo Maintenance Checklist)
+8. **Dark Mode Token Population** (if component has dark mode differentiation) - Coordinate with Ada to populate the component's semantic color token entries in the dark theme file (`src/tokens/themes/dark/SemanticOverrides.ts`). Identify which tokens need Level 2 overrides (different primitive name in dark mode) and populate those entries. Leave Level 1 tokens (same primitive name, different value per mode) as commented-out — they resolve automatically via primitive dark values. Without this step, the component will silently render light-mode fallback values in dark mode for any tokens that need Level 2 overrides. *(Added by Spec 080, Lina R2 F36)*
+9. **Demo Page** (if web implementation) - Create or update demo in `demos/` (see Demo Maintenance Checklist)
 
 This workflow produces clearer requirements, better documentation, and validation that ensures documentation stays accurate.
 

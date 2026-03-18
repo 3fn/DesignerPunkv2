@@ -228,6 +228,22 @@ The human should consider:
 
 ---
 
+### Dimension Governance
+
+The Rosetta token system currently resolves across three dimensions: platform (build-time), theme (WCAG), and mode (light/dark). Adding new dimensions — or new values within existing dimensions (e.g., a "high contrast" mode, a "compact" density dimension) — has cascading impact across the resolver pipeline, generator output, theme files, and governance documentation.
+
+**Rule**: Adding a new mode, theme, or resolution dimension requires:
+1. A formal spec (design outline → requirements → design → tasks)
+2. Peter's explicit approval before implementation begins
+
+This applies to both new dimensions (e.g., density) and new values within existing dimensions (e.g., a third mode beyond light/dark).
+
+**Rationale**: Dimensions are multiplicative. Each new dimension multiplies the resolution matrix, theme file surface, and testing burden. This is an architectural decision, not a token decision.
+
+*Added by Spec 080 (Rosetta Mode Architecture), Decision #12.*
+
+---
+
 ## Prior Acknowledgment
 
 ### Concept
@@ -495,6 +511,15 @@ export const semanticTokenName = {
 ```
 
 **Detailed guide**: See `.kiro/specs/token-system/token-category-pattern-guide.md`
+
+**Theme file sync (Spec 080)**: When creating a new semantic color token, add a corresponding entry to all existing theme files (`src/tokens/themes/dark/SemanticOverrides.ts` and any future theme files). The entry should be commented-out with the base primitive reference as a note. This prevents theme files from drifting out of sync with the base token set.
+
+```typescript
+// In src/tokens/themes/dark/SemanticOverrides.ts:
+// color.new.token.name: { value: 'primitiveRef' }
+```
+
+The theme file generator (Spec 080, Task 6) will also catch missing entries in CI, but manual sync at creation time is preferred to avoid CI churn.
 
 ---
 
