@@ -30,7 +30,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
+import com.designerpunk.components.core.IconBase
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -52,7 +52,6 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
@@ -375,17 +374,14 @@ fun NavSegmentedChoiceBase(
                                     vertical = size.blockPadding
                                 )
                             )
-                            is SegmentOption.IconSegment -> Icon(
-                                painter = painterResource(id = 0),
-                                contentDescription = segment.accessibilityLabel,
-                                tint = NavSegmentedChoiceTokens.segmentColor,
-                                modifier = Modifier
-                                    .height(size.iconSize)
-                                    .width(size.iconSize)
-                                    .padding(
-                                        horizontal = size.inlinePadding,
-                                        vertical = size.blockPadding
-                                    )
+                            is SegmentOption.IconSegment -> IconBase(
+                                name = segment.icon,
+                                size = size.iconSize,
+                                color = NavSegmentedChoiceTokens.segmentColor,
+                                modifier = Modifier.padding(
+                                    horizontal = size.inlinePadding,
+                                    vertical = size.blockPadding
+                                )
                             )
                         }
                     }

@@ -252,11 +252,11 @@ public struct NavSegmentedChoiceBase: View {
                 .padding(.horizontal, size.inlinePadding)
 
         case .icon(_, let icon, _):
-            Image(systemName: icon)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: size.iconSize, height: size.iconSize)
-                .foregroundColor(NavSegmentedChoiceTokens.segmentColor)
+            IconBase(
+                name: icon,
+                size: size.iconSize,
+                color: NavSegmentedChoiceTokens.segmentColor
+            )
                 .padding(.vertical, size.blockPadding)
                 .padding(.horizontal, size.inlinePadding)
         }

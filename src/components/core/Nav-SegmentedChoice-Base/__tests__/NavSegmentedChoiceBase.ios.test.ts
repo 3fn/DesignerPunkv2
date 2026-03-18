@@ -83,7 +83,7 @@ describe('Nav-SegmentedChoice-Base iOS — Contract Compliance', () => {
 
     it('content_supports_icon: renders Image for icon segments', () => {
       expect(swift).toContain('case .icon(_, let icon,');
-      expect(swift).toContain('Image(systemName: icon)');
+      expect(swift).toContain('IconBase(');
     });
 
     it('content_displays_fallback: falls back to first segment', () => {

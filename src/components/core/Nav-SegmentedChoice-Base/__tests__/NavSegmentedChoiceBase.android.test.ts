@@ -82,8 +82,8 @@ describe('Nav-SegmentedChoice-Base Android — Contract Compliance', () => {
       expect(kt).toContain('is SegmentOption.Text -> Text(');
     });
 
-    it('content_supports_icon: renders Icon for icon segments', () => {
-      expect(kt).toContain('is SegmentOption.IconSegment -> Icon(');
+    it('content_supports_icon: renders IconBase for icon segments', () => {
+      expect(kt).toContain('is SegmentOption.IconSegment -> IconBase(');
     });
 
     it('content_displays_fallback: falls back to first segment', () => {
