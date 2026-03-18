@@ -47,6 +47,7 @@ const COMPONENT_FAMILY_DEMO_MAP: Record<string, string> = {
   'Progress-Pagination-Base': 'progress-pagination-demo.html',
   'Progress-Stepper-Base,Progress-Stepper-Detailed': 'progress-stepper-demo.html',
   'Nav-SegmentedChoice-Base': 'nav-segmented-choice-demo.html',
+  'Nav-TabBar-Base': 'nav-tabbar-base-demo.html',
 };
 
 /** Required CSS classes that demo pages should use for structural consistency */

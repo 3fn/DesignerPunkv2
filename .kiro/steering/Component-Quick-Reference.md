@@ -112,7 +112,7 @@ Radio components follow the **orchestration pattern** — the Set orchestrates B
 - **Form Inputs**: `Input-Text-Base` (for custom inputs)
 - **Containers**: `Container-Base` (section wrapper)
 - **Dividers**: `Divider-Base` (planned)
-- **Navigation**: `Nav-SegmentedChoice-Base` (segmented control)
+- **Navigation**: `Nav-SegmentedChoice-Base` (segmented control), `Nav-TabBar-Base` (bottom tab bar)
 - **Tokens**: `Token-Family-Layering.md` → panel stacking, `Token-Family-Radius.md` → section corners
 
 ### Filter Bar

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nav-TabBar Demo - DesignerPunk</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="demo-styles.css">
+  <script type="module" src="designerpunk.esm.js"></script>
+  <style>
+    .tab-bar-container {
+      max-inline-size: 420px;
+      position: relative;
+    }
+    .tab-bar-viewport {
+      position: relative;
+      border: var(--border-default) solid var(--gray-300);
+      border-radius: var(--radius-100);
+      overflow: hidden;
+      min-block-size: 200px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background: var(--color-structure-canvas);
+    }
+    .tab-bar-viewport-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-muted);
+      font-size: var(--typography-caption-font-size);
+    }
+    .event-log {
+      background: var(--black-300);
+      border: var(--border-default) solid var(--gray-300);
+      border-radius: var(--radius-100);
+      padding-inline: var(--space-inset-100);
+      padding-block: var(--space-inset-100);
+      min-block-size: 60px;
+      max-block-size: 120px;
+      overflow-y: auto;
+      font-family: var(--font-family-mono);
+      font-size: var(--typography-caption-font-size);
+      color: var(--gray-100);
+      margin-block-start: var(--space-100);
+    }
+    .event-log-entry {
+      padding-block: var(--space-025);
+      border-block-end: var(--border-default) solid var(--gray-400);
+    }
+    .event-log-entry:last-child {
+      border-block-end: none;
+    }
+    .event-log-time { color: var(--gray-200); }
+    .event-log-event { color: var(--cyan-300); }
+    .event-log-empty {
+      color: var(--gray-300);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body class="demo-page">
+  <header class="demo-header">
+    <a href="index.html" class="demo-back-link">← All Components</a>
+    <h1>🧭 Nav-TabBar-Base Demo</h1>
+    <p class="demo-subtitle">Primary bottom navigation bar with icon-only tabs, dot indicator, radial glow gradients, and three-phase selection animation</p>
+  </header>
+
+  <main>
+
+    <!-- ============================================================
+         SECTION 1: Tab Configurations
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>1. Tab Configurations</h2>
+      <p>Tab bars with 3, 4, and 5 tabs. Click a tab to select it. The dot indicator glides to the active tab with a glow transition.</p>
+
+      <div class="tab-bar-container">
+        <div class="demo-item">
+          <div class="tab-bar-viewport">
+            <div class="tab-bar-viewport-content">3-tab configuration</div>
+            <nav-tab-bar id="demo-3tab" selected-value="home"></nav-tab-bar>
+          </div>
+          <span class="demo-item-label">3 tabs</span>
+        </div>
+      </div>
+
+      <div class="tab-bar-container" style="margin-block-start: var(--space-200);">
+        <div class="demo-item">
+          <div class="tab-bar-viewport">
+            <div class="tab-bar-viewport-content">4-tab configuration</div>
+            <nav-tab-bar id="demo-4tab" selected-value="home"></nav-tab-bar>
+          </div>
+          <span class="demo-item-label">4 tabs</span>
+        </div>
+      </div>
+
+      <div class="tab-bar-container" style="margin-block-start: var(--space-200);">
+        <div class="demo-item">
+          <div class="tab-bar-viewport">
+            <div class="tab-bar-viewport-content">5-tab configuration</div>
+            <nav-tab-bar id="demo-5tab" selected-value="home"></nav-tab-bar>
+          </div>
+          <span class="demo-item-label">5 tabs</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 2: Selection & Animation
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>2. Selection Change with Animation</h2>
+      <p>Click tabs to see the three-phase animation: departing glow dims → dot glides → arriving glow brightens. The event log shows selection changes.</p>
+
+      <div class="tab-bar-container">
+        <div class="demo-item">
+          <div class="tab-bar-viewport">
+            <div class="tab-bar-viewport-content" id="animation-content">Selected: home</div>
+            <nav-tab-bar id="demo-animation" selected-value="home"></nav-tab-bar>
+          </div>
+        </div>
+        <div class="event-log" id="event-log">
+          <div class="event-log-empty">Click a tab to see events here...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 3: Day/Night Mode
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>3. Day/Night Mode</h2>
+      <p>Toggle between light and dark themes. The tab bar tokens adapt automatically via semantic color overrides.</p>
+
+      <button class="demo-button" id="theme-toggle-btn">Toggle Dark Mode</button>
+
+      <div class="tab-bar-container" style="margin-block-start: var(--space-200);">
+        <div class="demo-item">
+          <div class="tab-bar-viewport" id="theme-viewport">
+            <div class="tab-bar-viewport-content">Theme demo</div>
+            <nav-tab-bar id="demo-theme" selected-value="home"></nav-tab-bar>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 4: Accessibility Features
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>4. Accessibility Features</h2>
+
+      <h3>ARIA Attributes</h3>
+      <ul class="demo-token-list">
+        <li><code>role="tablist"</code> on the container</li>
+        <li><code>role="tab"</code> on each tab item</li>
+        <li><code>aria-selected="true|false"</code> on each tab</li>
+        <li><code>aria-label</code> from <code>accessibilityLabel</code> (not icon name)</li>
+      </ul>
+
+      <h3>Keyboard Navigation</h3>
+      <div class="demo-note">
+        <strong>Arrow keys:</strong> Left/Right arrows move focus between tabs with wrapping. Enter/Space selects the focused tab. Tab key enters on selected tab, Tab again exits.
+      </div>
+
+      <h3>Reduced Motion</h3>
+      <div class="demo-note">
+        <strong>Animation suppression:</strong> When <code>prefers-reduced-motion: reduce</code> is active, all animation phases collapse to instant state change. Initial render always snaps without animation.
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SECTION 5: Token Verification
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>5. Token Verification</h2>
+      <p>Check browser DevTools to verify these CSS custom properties are loaded:</p>
+
+      <h3>Color Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--color-structure-canvas</code> — container background</li>
+        <li><code>--color-structure-border-subtle</code> — top stroke</li>
+        <li><code>--color-action-navigation</code> — active icon + dot</li>
+        <li><code>--color-icon-navigation-inactive</code> — inactive icon</li>
+        <li><code>--color-background-primary-subtle</code> — glow center (active)</li>
+      </ul>
+
+      <h3>Spacing Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--space-050</code> — dot size, active bottom padding</li>
+        <li><code>--space-100</code> — inactive bottom padding</li>
+        <li><code>--space-150</code> — active top/inline padding</li>
+        <li><code>--space-200</code> — inactive top padding, container inline margins</li>
+      </ul>
+
+      <h3>Motion Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--motion-duration-150</code> — depart/arrive phase timing</li>
+        <li><code>--motion-duration-350</code> — dot glide timing</li>
+        <li><code>--motion-easing-glide-decelerate</code> — dot glide curve</li>
+      </ul>
+
+      <h3>Blend Tokens</h3>
+      <ul class="demo-token-list">
+        <li><code>--blend-pressed-lighter</code> — inactive tab press feedback (12% lighter)</li>
+      </ul>
+    </div>
+
+    <!-- ============================================================
+         SECTION 6: Usage Examples
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>6. Usage Examples</h2>
+
+      <h3>HTML</h3>
+      <pre class="demo-code">&lt;nav-tab-bar selected-value="home"&gt;&lt;/nav-tab-bar&gt;
+
+&lt;script&gt;
+  const tabBar = document.querySelector('nav-tab-bar');
+  tabBar.tabs = [
+    { value: 'home', icon: 'home-outline', activeIcon: 'home-solid', accessibilityLabel: 'Home' },
+    { value: 'search', icon: 'search-outline', activeIcon: 'search-solid', accessibilityLabel: 'Search' },
+    { value: 'profile', icon: 'person-outline', activeIcon: 'person-solid', accessibilityLabel: 'Profile' }
+  ];
+  tabBar.onSelectionChange = (value) =&gt; console.log('Selected:', value);
+&lt;/script&gt;</pre>
+
+      <h3>JavaScript</h3>
+      <pre class="demo-code">const tabBar = document.querySelector('nav-tab-bar');
+
+// Listen for selection changes
+tabBar.addEventListener('selection-change', (event) =&gt; {
+  console.log('Selected:', event.detail.value);
+});
+
+// Programmatic selection
+tabBar.selectedValue = 'search';</pre>
+    </div>
+
+  </main>
+
+  <footer class="demo-footer">
+    <p>DesignerPunk Design System • Nav-TabBar-Base Demo</p>
+  </footer>
+
+  <script>
+    // File protocol detection
+    if (window.location.protocol === 'file:') {
+      var banner = document.createElement('div');
+      banner.className = 'demo-file-protocol-warning';
+      banner.textContent = 'Components may not load correctly via file:// protocol. Use a local server: npx serve dist/browser';
+      document.body.prepend(banner);
+    }
+
+    // ================================================================
+    // Tab data
+    // ================================================================
+    var tabs3 = [
+      { value: 'home', icon: 'home-outline', activeIcon: 'home-solid', accessibilityLabel: 'Home' },
+      { value: 'search', icon: 'search-outline', activeIcon: 'search-solid', accessibilityLabel: 'Search' },
+      { value: 'profile', icon: 'person-outline', activeIcon: 'person-solid', accessibilityLabel: 'Profile' }
+    ];
+    var tabs4 = tabs3.concat([
+      { value: 'settings', icon: 'settings-outline', activeIcon: 'settings-solid', accessibilityLabel: 'Settings' }
+    ]);
+    var tabs5 = tabs4.concat([
+      { value: 'notifications', icon: 'bell-outline', activeIcon: 'bell-solid', accessibilityLabel: 'Notifications' }
+    ]);
+
+    // ================================================================
+    // Section 1: Tab Configurations
+    // ================================================================
+    var demo3 = document.getElementById('demo-3tab');
+    var demo4 = document.getElementById('demo-4tab');
+    var demo5 = document.getElementById('demo-5tab');
+    demo3.tabs = tabs3;
+    demo4.tabs = tabs4;
+    demo5.tabs = tabs5;
+
+    // ================================================================
+    // Section 2: Selection & Animation
+    // ================================================================
+    var demoAnim = document.getElementById('demo-animation');
+    var animContent = document.getElementById('animation-content');
+    var eventLog = document.getElementById('event-log');
+    var eventCount = 0;
+
+    demoAnim.tabs = tabs4;
+    demoAnim.addEventListener('selection-change', function(e) {
+      animContent.textContent = 'Selected: ' + e.detail.value;
+
+      eventCount++;
+      var time = new Date().toLocaleTimeString();
+      var empty = eventLog.querySelector('.event-log-empty');
+      if (empty) empty.remove();
+
+      var entry = document.createElement('div');
+      entry.className = 'event-log-entry';
+      entry.innerHTML = '<span class="event-log-time">[' + time + ']</span> <span class="event-log-event">selection-change</span> — value="' + e.detail.value + '" (#' + eventCount + ')';
+      eventLog.prepend(entry);
+
+      while (eventLog.children.length > 20) {
+        eventLog.removeChild(eventLog.lastChild);
+      }
+    });
+
+    // ================================================================
+    // Section 3: Day/Night Mode
+    // ================================================================
+    var demoTheme = document.getElementById('demo-theme');
+    var themeViewport = document.getElementById('theme-viewport');
+    var themeBtn = document.getElementById('theme-toggle-btn');
+    var isDark = false;
+
+    demoTheme.tabs = tabs3;
+    themeBtn.addEventListener('click', function() {
+      isDark = !isDark;
+      themeViewport.setAttribute('data-theme', isDark ? 'dark' : 'light');
+      themeBtn.textContent = isDark ? 'Toggle Light Mode' : 'Toggle Dark Mode';
+    });
+  </script>
+</body>
+</html>

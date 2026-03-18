@@ -28,9 +28,10 @@ describe('Nav-TabBar-Base Android — Contract Compliance', () => {
   // ==========================================================================
 
   describe('Visual Contracts', () => {
-    it('visual_background: uses canvas background and border.subtle tokens', () => {
+    it('visual_background: uses canvas background, border.subtle, and border.default tokens', () => {
       expect(kt).toContain('color_structure_canvas');
       expect(kt).toContain('color_structure_border_subtle');
+      expect(kt).toContain('border_default');
       expect(kt).toContain('Divider(');
     });
 
@@ -246,8 +247,8 @@ describe('Nav-TabBar-Base Android — Contract Compliance', () => {
       expect(kt).toContain('val accessibilityLabel: String');
     });
 
-    it('should use same icon size as web and iOS (24dp)', () => {
-      expect(kt).toContain('Modifier.size(24.dp)');
+    it('should use icon size token (icon_size_100 = 24dp)', () => {
+      expect(kt).toContain('icon_size_100');
     });
 
     it('should use state-hoisted selection pattern', () => {

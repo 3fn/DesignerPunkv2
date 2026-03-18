@@ -412,7 +412,7 @@ Task 6 (Documentation + Dark Mode)
     - _Requirements: R1–R10_
     - _Validates contracts: all Android-applicable contracts_
 
-- [ ] 6. Documentation & Dark Mode
+- [x] 6. Documentation & Dark Mode
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -436,7 +436,7 @@ Task 6 (Documentation + Dark Mode)
   **Post-Completion:**
   - Commit: `./.kiro/hooks/commit-task.sh "Task 6 Complete: Documentation & Dark Mode"`
 
-  - [ ] 6.1 Component README
+  - [x] 6.1 Component README
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -447,7 +447,7 @@ Task 6 (Documentation + Dark Mode)
     - Copy-paste ready usage examples per platform
     - _Requirements: R12_
 
-  - [ ] 6.2 Dark mode token population verification
+  - [x] 6.2 Dark mode token population verification
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -457,7 +457,7 @@ Task 6 (Documentation + Dark Mode)
     - Per Component-Development-Guide step 8 (Dark Mode Token Population)
     - _Requirements: R10 AC4_
 
-  - [ ] 6.3 Demo page
+  - [x] 6.3 Demo page
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -469,7 +469,7 @@ Task 6 (Documentation + Dark Mode)
     - Reference existing demo patterns
     - _Requirements: R1, R2, R3, R4_
 
-  - [ ] 6.4 Navigation family steering doc update
+  - [x] 6.4 Navigation family steering doc update
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina

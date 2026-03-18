@@ -82,6 +82,7 @@ private object NavTabBarTokens {
     // Container (contract: visual_background)
     val containerBackground = Color(DesignTokens.color_structure_canvas)
     val borderColor = Color(DesignTokens.color_structure_border_subtle)
+    val borderWidth = DesignTokens.border_default
 
     // Icons (contract: visual_state_colors)
     val activeIconColor = Color(DesignTokens.color_action_navigation)
@@ -106,6 +107,9 @@ private object NavTabBarTokens {
     val inactivePaddingInline = DesignTokens.space_150
     val inactivePaddingBottom = DesignTokens.space_100
     val minTapWidth = DesignTokens.tap_area_minimum
+
+    // Icon
+    val iconSize = DesignTokens.icon_size_100
 
     // Motion
     val durationShort = DesignTokens.Duration.Duration150
@@ -189,7 +193,7 @@ fun NavTabBarBase(
         val tabWidthPx = totalWidthPx / tabs.size
 
         // Top stroke (contract: visual_background)
-        Divider(color = NavTabBarTokens.borderColor, thickness = 1.dp)
+        Divider(color = NavTabBarTokens.borderColor, thickness = NavTabBarTokens.borderWidth.dp)
 
         // Contract: animation_initial_render
         LaunchedEffect(Unit) {
@@ -336,7 +340,7 @@ fun NavTabBarBase(
                             ),
                             contentDescription = null, // accessibilityLabel on parent
                             tint = iconTint,
-                            modifier = Modifier.size(24.dp)
+                            modifier = Modifier.size(NavTabBarTokens.iconSize.dp)
                         )
                     }
                 }

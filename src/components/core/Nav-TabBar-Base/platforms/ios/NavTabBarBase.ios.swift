@@ -22,6 +22,7 @@ enum NavTabBarTokens {
     // Container (contract: visual_background)
     static let containerBackground: Color = Color(DesignTokens.colorStructureCanvas)
     static let borderColor: Color = Color(DesignTokens.colorStructureBorderSubtle)
+    static let borderWidth: CGFloat = DesignTokens.borderDefault
 
     // Icons (contract: visual_state_colors)
     static let activeIconColor: Color = Color(DesignTokens.colorActionNavigation)
@@ -46,6 +47,9 @@ enum NavTabBarTokens {
     static let inactivePaddingInline: CGFloat = DesignTokens.space150
     static let inactivePaddingBottom: CGFloat = DesignTokens.space100
     static let minTapWidth: CGFloat = DesignTokens.tapAreaMinimum
+
+    // Icon
+    static let iconSize: CGFloat = DesignTokens.iconSize100
 
     // Motion
     static let durationShort: Double = DesignTokens.duration150 / 1000.0
@@ -131,7 +135,7 @@ public struct NavTabBarBase: View {
             .overlay(alignment: .top) {
                 Rectangle()
                     .fill(NavTabBarTokens.borderColor)
-                    .frame(height: 1)
+                    .frame(height: NavTabBarTokens.borderWidth)
             }
             .onAppear {
                 // Contract: animation_initial_render — no animation on first render
@@ -172,7 +176,7 @@ public struct NavTabBarBase: View {
                 Image(systemName: isSelected ? tab.activeIcon : tab.icon)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 24, height: 24)
+                    .frame(width: NavTabBarTokens.iconSize, height: NavTabBarTokens.iconSize)
                     .foregroundColor(isSelected ? NavTabBarTokens.activeIconColor : NavTabBarTokens.inactiveIconColor)
             }
             .padding(.top, isSelected ? NavTabBarTokens.activePaddingTop : NavTabBarTokens.inactivePaddingTop)
