@@ -30,6 +30,9 @@ object BlendTokenValues {
     /** Pressed state darkening - blend300 (12%) */
     const val pressedDarker: Float = 0.12f
     
+    /** Pressed state lightening - blend300 (12%) for dark surfaces */
+    const val pressedLighter: Float = 0.12f
+    
     /** Focus state saturation increase - blend200 (8%) */
     const val focusSaturate: Float = 0.08f
     
@@ -110,6 +113,20 @@ fun Color.hoverBlend(): Color {
  */
 fun Color.pressedBlend(): Color {
     return this.darkerBlend(BlendTokenValues.pressedDarker)
+}
+
+/**
+ * Calculate pressed color by lightening the color using blend token value.
+ *
+ * Uses `BlendTokenValues.pressedLighter` (12%) for consistent pressed state styling
+ * on dark surfaces (e.g., inactive navigation icons).
+ *
+ * @return Lightened color for pressed state on dark surfaces
+ *
+ * @see Requirements: 11.4 - Theme-aware wrapper functions
+ */
+fun Color.pressedLighterBlend(): Color {
+    return this.lighterBlend(BlendTokenValues.pressedLighter)
 }
 
 /**

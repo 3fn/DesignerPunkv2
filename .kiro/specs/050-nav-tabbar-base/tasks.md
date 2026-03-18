@@ -339,7 +339,7 @@ Task 6 (Documentation + Dark Mode)
     - _Requirements: R1–R10_
     - _Validates contracts: all iOS-applicable contracts_
 
-- [ ] 5. Android Implementation
+- [x] 5. Android Implementation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -365,7 +365,7 @@ Task 6 (Documentation + Dark Mode)
   **Post-Completion:**
   - Commit: `./.kiro/hooks/commit-task.sh "Task 5 Complete: Android Implementation"`
 
-  - [ ] 5.1 Compose Composable structure and rendering
+  - [x] 5.1 Compose Composable structure and rendering
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -378,7 +378,7 @@ Task 6 (Documentation + Dark Mode)
     - _Requirements: R5 AC1, AC6-8, R2, R4, R6, R10 AC3_
     - _Contracts: visual_background, visual_state_colors, visual_gradient_glow, layout_flexible_length_
 
-  - [ ] 5.2 Selection logic and animation
+  - [x] 5.2 Selection logic and animation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -393,7 +393,7 @@ Task 6 (Documentation + Dark Mode)
     - _Requirements: R1, R3_
     - _Contracts: interaction_pressable, interaction_noop_active, validation_selection_constraints, animation_coordination, animation_initial_render, accessibility_reduced_motion_
 
-  - [ ] 5.3 Accessibility
+  - [x] 5.3 Accessibility
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -404,7 +404,7 @@ Task 6 (Documentation + Dark Mode)
     - _Requirements: R7, R8, R2 AC3_
     - _Contracts: accessibility_aria_roles, accessibility_aria_label, interaction_keyboard_navigation, interaction_keyboard_activation, interaction_focus_ring_
 
-  - [ ] 5.4 Android behavioral contract tests
+  - [x] 5.4 Android behavioral contract tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
