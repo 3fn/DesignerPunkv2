@@ -1,68 +1,39 @@
 /**
  * @category evergreen
- * @purpose Verify DTCG and Figma exports correctly handle wcagValue via modes extension
+ * @purpose Verify DTCG and Figma exports handle mode contexts correctly
  */
 /**
- * wcagValue Export Support (Spec 077)
+ * WCAG Export Support Tests (Spec 080 Phase 2)
  *
- * Replaces guard rail tests from Spec 076 Task 1.4. Verifies that DTCG and
- * Figma exports produce correct modes output for tokens with wcagValue.
- * Test fixtures preserved from original guard rail tests.
+ * Verifies DTCG mode emission and Figma mode handling.
+ * wcagValue inline pattern removed — WCAG overrides now come from theme files.
  */
 
-import { SemanticCategory } from '../../types/SemanticToken';
-import type { SemanticToken } from '../../types/SemanticToken';
 import { FigmaTransformer } from '../transformers/FigmaTransformer';
+import { DTCGFormatGenerator } from '../DTCGFormatGenerator';
 import type { DTCGTokenFile, DTCGGroup, DTCGToken } from '../types/DTCGTypes';
 
-// --- DTCG tests ---
-
-const MOCK_WCAG_TOKEN: Omit<SemanticToken, 'primitiveTokens'> = {
-  name: 'color.feedback.info.text',
-  primitiveReferences: { value: 'teal400', wcagValue: 'purple500' },
-  category: SemanticCategory.COLOR,
-  context: 'Test',
-  description: 'Test'
-};
-
-const originalColorTokens = jest.requireActual('../../tokens/semantic/ColorTokens');
-let injectWcag = false;
-
-jest.mock('../../tokens/semantic/ColorTokens', () => {
-  const actual = jest.requireActual('../../tokens/semantic/ColorTokens');
-  return {
-    ...actual,
-    get colorTokens() {
-      if (!injectWcag) return actual.colorTokens;
-      return {
-        ...actual.colorTokens,
-        'color.feedback.info.text': MOCK_WCAG_TOKEN
-      };
-    }
-  };
-});
-
-// Import after mock
-import { DTCGFormatGenerator } from '../DTCGFormatGenerator';
-
-describe('wcagValue Export Support (Spec 077)', () => {
-  afterEach(() => {
-    injectWcag = false;
-  });
-
+describe('WCAG Export Support (Spec 080 Phase 2)', () => {
   describe('DTCG export', () => {
-    it('should include semanticColor with modes.wcag when a token has wcagValue', () => {
-      injectWcag = true;
+    it('should emit light/dark modes for tokens with dark overrides', () => {
       const generator = new DTCGFormatGenerator();
       const output = generator.generate();
-      expect(output.semanticColor).toBeDefined();
-      const token = (output.semanticColor as DTCGGroup)['color.feedback.info.text'] as DTCGToken;
-      expect(token.$extensions?.designerpunk?.modes?.wcag).toBe('{color.purple500}');
-      expect(token.$value).toBe('{color.teal400}');
+      const sc = output.semanticColor as DTCGGroup;
+      // color.action.navigation has a dark override
+      const token = sc['color.action.navigation'] as DTCGToken;
+      expect(token.$extensions?.designerpunk?.modes?.light).toBeDefined();
+      expect(token.$extensions?.designerpunk?.modes?.dark).toBeDefined();
     });
 
-    it('should not throw when no tokens have wcagValue', () => {
-      injectWcag = false;
+    it('should not emit modes for tokens without mode differentiation', () => {
+      const generator = new DTCGFormatGenerator();
+      const output = generator.generate();
+      const sc = output.semanticColor as DTCGGroup;
+      const token = sc['color.action.secondary'] as DTCGToken;
+      expect(token.$extensions?.designerpunk?.modes).toBeUndefined();
+    });
+
+    it('should not throw when generating', () => {
       const generator = new DTCGFormatGenerator();
       expect(() => generator.generate()).not.toThrow();
     });

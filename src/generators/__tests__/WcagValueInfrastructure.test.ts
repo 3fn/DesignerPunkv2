@@ -1,116 +1,122 @@
 /**
  * @category evergreen
- * @purpose Verify wcagValue infrastructure generates correct WCAG theme overrides on all platforms
+ * @purpose Verify WCAG theme override generation from theme files on all platforms (Spec 080 Phase 2)
  */
 /**
- * WCAG Value Infrastructure Tests (Spec 076)
+ * WCAG Theme Override Infrastructure Tests
  *
- * Tests that semantic tokens with primitiveReferences.wcagValue generate
- * correct WCAG theme override blocks on web, iOS, and Android platforms,
- * and that tokens without wcagValue are unaffected.
+ * Tests that generators produce correct WCAG theme override blocks when
+ * wcagSemanticTokens and darkWcagSemanticTokens are provided via GenerationOptions.
+ * Replaces inline wcagValue tests (Spec 076) with theme-file-based tests (Spec 080 Phase 2).
  */
-
-import { SemanticCategory } from '../../types/SemanticToken';
-import type { SemanticToken } from '../../types/SemanticToken';
-
-// A mock token with wcagValue — references purple500 in WCAG theme instead of teal400
-const MOCK_WCAG_TOKEN: Omit<SemanticToken, 'primitiveTokens'> = {
-  name: 'color.feedback.info.text',
-  primitiveReferences: { value: 'teal400', wcagValue: 'purple500' },
-  category: SemanticCategory.COLOR,
-  context: 'Test token with wcagValue',
-  description: 'Test token for WCAG override generation'
-};
-
-// Must use jest.mock to intercept the import before TokenFileGenerator binds it
-const originalModule = jest.requireActual('../../tokens/semantic');
-let useWcagMock = false;
-
-jest.mock('../../tokens/semantic', () => ({
-  ...jest.requireActual('../../tokens/semantic'),
-  getAllSemanticTokens: (...args: any[]) => {
-    if (!useWcagMock) return originalModule.getAllSemanticTokens(...args);
-    const realTokens = originalModule.getAllSemanticTokens(...args);
-    return realTokens.map((t: any) =>
-      t.name === 'color.feedback.info.text' ? MOCK_WCAG_TOKEN : t
-    );
-  }
-}));
 
 import { TokenFileGenerator } from '../TokenFileGenerator';
 import { defaultSemanticOptions } from './helpers/defaultSemanticOptions';
+import { resolveSemanticTokenValue } from '../../resolvers/SemanticValueResolver';
+import { SemanticOverrideResolver } from '../../resolvers/SemanticOverrideResolver';
+import { PrimitiveTokenRegistry } from '../../registries/PrimitiveTokenRegistry';
+import { SemanticTokenRegistry } from '../../registries/SemanticTokenRegistry';
+import { getAllSemanticTokens } from '../../tokens/semantic';
+import { SemanticCategory } from '../../types/SemanticToken';
+import { darkSemanticOverrides } from '../../tokens/themes/dark/SemanticOverrides';
+import { wcagSemanticOverrides } from '../../tokens/themes/wcag/SemanticOverrides';
+import { darkWcagSemanticOverrides } from '../../tokens/themes/dark-wcag/SemanticOverrides';
+import type { ContextOverrideSet } from '../../tokens/themes/types';
 
-describe('wcagValue Infrastructure (Spec 076)', () => {
+/** Build fully resolved 4-context options for generator tests. */
+function wcagOptions() {
+  const base = defaultSemanticOptions();
+  const primReg = new PrimitiveTokenRegistry();
+  const semReg = new SemanticTokenRegistry(primReg);
+  for (const t of getAllSemanticTokens()) semReg.register(t);
+
+  const colorTokens = getAllSemanticTokens().filter(t => t.category === SemanticCategory.COLOR);
+  const resolver = new SemanticOverrideResolver(semReg, darkSemanticOverrides);
+
+  const contextOverrides: ContextOverrideSet = {
+    'light-wcag': wcagSemanticOverrides,
+    'dark-base': darkSemanticOverrides,
+    'dark-wcag': { ...darkSemanticOverrides, ...wcagSemanticOverrides, ...darkWcagSemanticOverrides },
+  };
+
+  const sets = resolver.resolveAllContexts(colorTokens, contextOverrides);
+
+  return {
+    ...base,
+    wcagSemanticTokens: sets['light-wcag'].map(t => resolveSemanticTokenValue(t, 'light', 'wcag')),
+    darkWcagSemanticTokens: sets['dark-wcag'].map(t => resolveSemanticTokenValue(t, 'dark', 'wcag')),
+    wcagOverrideKeys: new Set([
+      ...Object.keys(wcagSemanticOverrides),
+      ...Object.keys(darkWcagSemanticOverrides),
+    ]),
+  };
+}
+
+describe('WCAG Theme Override Infrastructure (Spec 080 Phase 2)', () => {
   let generator: TokenFileGenerator;
 
   beforeEach(() => {
     generator = new TokenFileGenerator();
-    useWcagMock = false;
   });
 
   describe('Web platform', () => {
-    it('should generate WCAG override block when token has wcagValue', () => {
-      useWcagMock = true;
-      const result = generator.generateWebTokens(defaultSemanticOptions());
-
+    it('should generate WCAG override block from theme files', () => {
+      const result = generator.generateWebTokens(wcagOptions());
       expect(result.valid).toBe(true);
       expect(result.content).toContain(':root[data-theme="wcag"]');
-      expect(result.content).toContain('Spec 076');
-      // Platform naming: purple500 → --purple-500
-      expect(result.content).toMatch(/\[data-theme="wcag"\][\s\S]*purple-500/);
+      expect(result.content).toContain('Spec 080 Phase 2');
     });
 
-    it('should still output standard value in :root section', () => {
-      useWcagMock = true;
+    it('should not generate WCAG block when wcag tokens not provided', () => {
       const result = generator.generateWebTokens(defaultSemanticOptions());
+      expect(result.content).not.toContain(':root[data-theme="wcag"]');
+    });
 
-      // The main :root block should reference teal400 (the standard value) → --teal-400
-      const rootBlock = result.content.split(':root[data-theme="wcag"]')[0];
-      expect(rootBlock).toContain('teal-400');
+    it('should only include tokens that differ between base and wcag', () => {
+      const result = generator.generateWebTokens(wcagOptions());
+      const wcagMatch = result.content.match(/:root\[data-theme="wcag"\]\s*\{([^}]*)\}/);
+      expect(wcagMatch).toBeTruthy();
+      const wcagBlock = wcagMatch![1];
+      // color.action.secondary has no wcag override — should NOT appear
+      expect(wcagBlock).not.toContain('--color-action-secondary');
+      // color.action.primary has a wcag override — should appear
+      expect(wcagBlock).toContain('--color-action-primary');
+    });
+  });
+
+  describe('WCAG cyan→teal swap (unified mechanism)', () => {
+    it('should resolve color.action.primary from cyan300 to teal300 in wcag context', () => {
+      const opts = wcagOptions();
+      const base = opts.semanticTokens.find(t => t.name === 'color.action.primary');
+      const wcag = opts.wcagSemanticTokens!.find(t => t.name === 'color.action.primary');
+      expect(base!.primitiveReferences).toEqual({ value: 'rgba(0, 240, 255, 1)' });
+      expect(wcag!.primitiveReferences).toEqual({ value: 'rgba(26, 83, 92, 1)' });
+    });
+
+    it('should resolve color.action.navigation from cyan500 to teal500 in wcag context', () => {
+      const opts = wcagOptions();
+      const base = opts.semanticTokens.find(t => t.name === 'color.action.navigation');
+      const wcag = opts.wcagSemanticTokens!.find(t => t.name === 'color.action.navigation');
+      expect(base!.primitiveReferences).toEqual({ value: 'rgba(0, 136, 143, 1)' });
+      expect(wcag!.primitiveReferences).toEqual({ value: 'rgba(15, 46, 51, 1)' });
     });
   });
 
   describe('iOS platform', () => {
-    it('should generate WCAG override lines when token has wcagValue', () => {
-      useWcagMock = true;
-      const result = generator.generateiOSTokens(defaultSemanticOptions());
-
+    it('should generate WCAG override lines from theme files', () => {
+      const result = generator.generateiOSTokens(wcagOptions());
       expect(result.valid).toBe(true);
-      expect(result.content).toContain('MARK: - WCAG Theme Semantic Overrides (Spec 076)');
+      expect(result.content).toContain('WCAG Theme Semantic Overrides');
       expect(result.content).toContain('_wcag');
-      // iOS naming: camelCase → purple500
-      expect(result.content).toMatch(/purple500/);
     });
   });
 
   describe('Android platform', () => {
-    it('should generate WCAG override lines when token has wcagValue', () => {
-      useWcagMock = true;
-      const result = generator.generateAndroidTokens(defaultSemanticOptions());
-
+    it('should generate WCAG override lines from theme files', () => {
+      const result = generator.generateAndroidTokens(wcagOptions());
       expect(result.valid).toBe(true);
-      expect(result.content).toContain('WCAG Theme Semantic Overrides (Spec 076)');
+      expect(result.content).toContain('WCAG Theme Semantic Overrides');
       expect(result.content).toContain('_wcag');
-      // Android naming: snake_case → purple_500
-      expect(result.content).toMatch(/purple_500/);
-    });
-  });
-
-  describe('Backward compatibility', () => {
-    it('tokens without wcagValue should not appear in WCAG override block', () => {
-      // Real tokens now include wcagValue tokens (Spec 076), so the WCAG block exists.
-      // Verify that tokens WITHOUT wcagValue are absent from the override block.
-      const webResult = generator.generateWebTokens(defaultSemanticOptions());
-      const wcagMatch = webResult.content.match(/:root\[data-theme="wcag"\]\s*\{([^}]*)\}/);
-      if (!wcagMatch) {
-        // No WCAG block at all — backward compat trivially satisfied
-        return;
-      }
-      const wcagBlock = wcagMatch[1];
-      // color.action.secondary has no wcagValue — should NOT appear in WCAG block
-      expect(wcagBlock).not.toContain('--color-action-secondary');
-      // color.text.default has no wcagValue — should NOT appear
-      expect(wcagBlock).not.toContain('--color-text-default');
     });
   });
 });

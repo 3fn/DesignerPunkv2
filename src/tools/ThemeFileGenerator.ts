@@ -69,8 +69,7 @@ export function generateThemeFile(overrideMap: SemanticOverrideMap): string {
 
     const refs = token.primitiveReferences;
     const refsStr = formatRefs(refs);
-    const wcagNote = refs.wcagValue ? ' [has wcagValue — Phase 2]' : '';
-    lines.push(`// ${token.name}: ${refsStr}${wcagNote}`);
+    lines.push(`// ${token.name}: ${refsStr}`);
   }
 
   // Export map with populated overrides

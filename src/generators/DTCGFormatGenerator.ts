@@ -535,15 +535,6 @@ export class DTCGFormatGenerator {
         family: 'color',
       };
 
-      // Spec 077: emit theme-conditional modes (e.g., wcagValue → modes.wcag)
-      if (refs.wcagValue) {
-        extensions.modes = {
-          wcag: this.config.resolveAliases
-            ? this.resolvePrimitiveColorAlias(refs.wcagValue)
-            : `{color.${refs.wcagValue}}`,
-        };
-      }
-
       // Spec 080: emit mode contexts for Level 2 overrides or Level 1 primitive differences
       const override = darkSemanticOverrides[key];
       if (override) {

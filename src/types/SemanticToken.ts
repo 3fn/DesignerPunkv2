@@ -49,11 +49,9 @@ export interface SemanticToken {
    * For composite tokens: { fontSize: 'fontSize100', lineHeight: 'lineHeight100', fontFamily: 'fontFamilyBody' }
    * For icon tokens: multiplier can be a lineHeight token reference or 'custom:X.XXX' for optical correction
    * 
-   * Theme-conditional override (Spec 076):
-   *   wcagValue?: string — optional WCAG-theme override for the `value` key only.
-   *   When present, generators resolve `wcagValue` instead of `value` for WCAG theme output.
-   *   When absent, generators fall back to `value` for all themes (backward compatible).
-   *   Does not apply to composite tokens using other key names (e.g., color, opacity).
+   * Theme-conditional overrides are handled via theme override files (Spec 080 Phase 2).
+   * See src/tokens/themes/wcag/SemanticOverrides.ts for WCAG overrides,
+   * src/tokens/themes/dark/SemanticOverrides.ts for dark mode overrides.
    */
   primitiveReferences: Record<string, string>;
 

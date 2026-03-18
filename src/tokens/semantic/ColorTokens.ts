@@ -166,7 +166,7 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
   // Feedback - Info (3 tokens)
   'color.feedback.info.text': {
     name: 'color.feedback.info.text',
-    primitiveReferences: { value: 'teal400', wcagValue: 'purple500' },
+    primitiveReferences: { value: 'teal400' },
     category: SemanticCategory.COLOR,
     context: 'Text color for informational feedback messages',
     description: 'Teal text color for informational states - help text, informational messages, neutral feedback'
@@ -174,7 +174,7 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
 
   'color.feedback.info.background': {
     name: 'color.feedback.info.background',
-    primitiveReferences: { value: 'teal100', wcagValue: 'purple100' },
+    primitiveReferences: { value: 'teal100' },
     category: SemanticCategory.COLOR,
     context: 'Background color for informational feedback areas',
     description: 'Light teal background for informational states - info banners, help sections'
@@ -182,7 +182,7 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
 
   'color.feedback.info.border': {
     name: 'color.feedback.info.border',
-    primitiveReferences: { value: 'teal400', wcagValue: 'purple500' },
+    primitiveReferences: { value: 'teal400' },
     category: SemanticCategory.COLOR,
     context: 'Border color for informational feedback elements',
     description: 'Teal border for informational states - info card outlines, help section borders'
@@ -316,7 +316,7 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
 
   'color.action.primary': {
     name: 'color.action.primary',
-    primitiveReferences: { value: 'cyan300', wcagValue: 'teal300' },
+    primitiveReferences: { value: 'cyan300' },
     category: SemanticCategory.COLOR,
     context: 'Primary action color for emphasized interactive elements',
     description: 'Cyan color for emphasized actions - hero CTAs, main buttons, primary interactive elements. Use for single, focused instances where visual prominence is desired.'
@@ -332,7 +332,7 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
 
   'color.action.navigation': {
     name: 'color.action.navigation',
-    primitiveReferences: { value: 'cyan500', wcagValue: 'teal500' },
+    primitiveReferences: { value: 'cyan500' },
     category: SemanticCategory.COLOR,
     context: 'Navigation action color for inline links and navigation elements',
     description: 'Cyan color for navigation actions - inline text links, breadcrumbs, and navigation-specific interactive elements.'
@@ -430,7 +430,7 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
 
   'color.contrast.onAction': {
     name: 'color.contrast.onAction',
-    primitiveReferences: { value: 'black500', wcagValue: 'white100' },
+    primitiveReferences: { value: 'black500' },
     category: SemanticCategory.COLOR,
     context: 'Contrast color for content on action-colored backgrounds',
     description: 'Content color for text and icons on primary action backgrounds. Black on cyan (base), white on teal (WCAG) to maintain contrast compliance.'
@@ -527,7 +527,7 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
   // Background Variants (1 token - kept for specific use case)
   'color.background.primary.subtle': {
     name: 'color.background.primary.subtle',
-    primitiveReferences: { value: 'cyan100', wcagValue: 'teal100' },
+    primitiveReferences: { value: 'cyan100' },
     category: SemanticCategory.COLOR,
     context: 'Subtle primary background for hover states and selections',
     description: 'Subtle cyan tint background for secondary button hover states, selected list items, and hover states on cards/containers'

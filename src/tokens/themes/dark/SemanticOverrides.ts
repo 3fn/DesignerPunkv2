@@ -38,9 +38,9 @@ import type { SemanticOverrideMap } from '../types';
 // ======================================================================
 // FEEDBACK — INFO
 // ======================================================================
-// color.feedback.info.text: { value: 'teal400' } [has wcagValue — Phase 2]
-// color.feedback.info.background: { value: 'teal100' } [has wcagValue — Phase 2]
-// color.feedback.info.border: { value: 'teal400' } [has wcagValue — Phase 2]
+// color.feedback.info.text: { value: 'teal400' }
+// color.feedback.info.background: { value: 'teal100' }
+// color.feedback.info.border: { value: 'teal400' }
 
 // ======================================================================
 // FEEDBACK — SELECT
@@ -67,9 +67,9 @@ import type { SemanticOverrideMap } from '../types';
 // ======================================================================
 // ACTION
 // ======================================================================
-// color.action.primary: { value: 'cyan300' } [has wcagValue — Phase 2]
+// color.action.primary: { value: 'cyan300' }
 // color.action.secondary: { value: 'gray400' }
-// color.action.navigation: { value: 'cyan500' } [has wcagValue — Phase 2]
+// color.action.navigation: { value: 'cyan500' }
 
 // ======================================================================
 // ATTENTION / HIGHLIGHT
@@ -95,7 +95,7 @@ import type { SemanticOverrideMap } from '../types';
 // ======================================================================
 // color.contrast.onLight: { value: 'black500' }
 // color.contrast.onDark: { value: 'white100' }
-// color.contrast.onAction: { value: 'black500' } [has wcagValue — Phase 2]
+// color.contrast.onAction: { value: 'black500' }
 
 // ======================================================================
 // STRUCTURE
@@ -111,7 +111,7 @@ import type { SemanticOverrideMap } from '../types';
 // ======================================================================
 // BACKGROUND
 // ======================================================================
-// color.background.primary.subtle: { value: 'cyan100' } [has wcagValue — Phase 2]
+// color.background.primary.subtle: { value: 'cyan100' }
 
 // ======================================================================
 // ICON

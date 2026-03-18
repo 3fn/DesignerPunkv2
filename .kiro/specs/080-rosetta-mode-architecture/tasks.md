@@ -523,13 +523,11 @@ Phase 2 migrates the inline `wcagValue` pattern into the theme file architecture
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
 
-  ✅ **COMPLETE (2026-03-18)**: 62 semantic color tokens resolved across all 4 contexts. 7 wcagValue tokens inventoried. 0 component tokens reference color semantics.
-
   **Success Criteria:**
-  - Complete snapshot of all resolved token values across the full mode × theme matrix (light-base, light-wcag, dark-base, dark-wcag) ✅
-  - Snapshot includes both semantic token AND component token resolved values ✅ (0 component color refs — semantic snapshot sufficient)
-  - Snapshot stored as regression baseline for post-migration verification ✅
-  - All 7 tokens currently using `wcagValue` identified and documented ✅
+  - Complete snapshot of all resolved token values across the full mode × theme matrix (light-base, light-wcag, dark-base, dark-wcag)
+  - Snapshot includes both semantic token AND component token resolved values
+  - Snapshot stored as regression baseline for post-migration verification
+  - All 7 tokens currently using `wcagValue` identified and documented
 
   **Primary Artifacts:**
   - `.kiro/specs/080-rosetta-mode-architecture/regression/pre-migration-snapshot.json` (new)
@@ -563,7 +561,7 @@ Phase 2 migrates the inline `wcagValue` pattern into the theme file architecture
     - _Requirements: R11 AC1-2_
 
 
-- [ ] 10. Unified Theme Resolver
+- [x] 10. Unified Theme Resolver
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -591,7 +589,7 @@ Phase 2 migrates the inline `wcagValue` pattern into the theme file architecture
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 10 Complete: Unified Theme Resolver"`
   - Verify: All 4 contexts resolve correctly, WCAG validation case passes
 
-  - [ ] 10.1 Extend override types for theme dimension
+  - [x] 10.1 Extend override types for theme dimension
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     **Agent**: Ada
@@ -602,7 +600,7 @@ Phase 2 migrates the inline `wcagValue` pattern into the theme file architecture
     - Document architectural decision with rationale
     - _Requirements: R11 AC1-2_
 
-  - [ ] 10.2 Create WCAG theme override files
+  - [x] 10.2 Create WCAG theme override files
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -611,7 +609,7 @@ Phase 2 migrates the inline `wcagValue` pattern into the theme file architecture
     - Create `src/tokens/themes/wcag/SemanticOverrides.ts` (and `dark-wcag/` if the architecture requires it)
     - _Requirements: R11 AC5_
 
-  - [ ] 10.3 Update `SemanticOverrideResolver` for unified resolution
+  - [x] 10.3 Update `SemanticOverrideResolver` for unified resolution
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     **Agent**: Ada
@@ -621,7 +619,7 @@ Phase 2 migrates the inline `wcagValue` pattern into the theme file architecture
     - Maintain backward compatibility — Phase 1 dark overrides continue working
     - _Requirements: R11 AC1-2, R3_
 
-  - [ ] 10.4 Remove `wcagValue` from `SemanticToken` interface
+  - [x] 10.4 Remove `wcagValue` from `SemanticToken` interface
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -630,7 +628,7 @@ Phase 2 migrates the inline `wcagValue` pattern into the theme file architecture
     - Update `resolveColorValue()` to remove `wcagValue` handling
     - _Requirements: R11 AC1_
 
-  - [ ] 10.5 Update generators for 4-context output
+  - [x] 10.5 Update generators for 4-context output
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -641,7 +639,7 @@ Phase 2 migrates the inline `wcagValue` pattern into the theme file architecture
     - Update DTCG export for 4-context mode structure
     - _Requirements: R6, R9, R11 AC2_
 
-  - [ ] 10.6 Update existing wcagValue tests
+  - [x] 10.6 Update existing wcagValue tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada + Thurgood (Ada updates, Thurgood audits)

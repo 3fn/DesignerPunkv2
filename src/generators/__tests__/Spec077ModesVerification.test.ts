@@ -5,8 +5,9 @@
 /**
  * Spec 077 — Modes Verification Tests
  *
- * Verifies the modes extension schema and Figma mode behavior
- * for tokens with and without wcagValue.
+ * Verifies the modes extension schema and Figma mode behavior.
+ * wcagValue inline overrides removed in Spec 080 Phase 2 — WCAG modes
+ * will be emitted from 4-context generation (Task 10.5).
  */
 
 import { DTCGFormatGenerator } from '../DTCGFormatGenerator';
@@ -19,20 +20,17 @@ describe('Spec 077 — Modes Verification', () => {
   const semanticColors = output.semanticColor as DTCGGroup;
 
   describe('DTCG modes extension', () => {
-    it('should not have modes when token has no wcagValue', () => {
+    it('should not have modes when token has no mode differentiation', () => {
       const token = semanticColors['color.action.secondary'] as DTCGToken;
       expect(token.$extensions?.designerpunk?.modes).toBeUndefined();
     });
 
-    it('should use alias syntax for modes values', () => {
-      const token = semanticColors['color.action.primary'] as DTCGToken;
-      expect(token.$extensions?.designerpunk?.modes?.wcag).toMatch(/^\{color\..+\}$/);
-    });
-
-    it('should not change $value when wcagValue is present', () => {
-      const token = semanticColors['color.action.primary'] as DTCGToken;
-      expect(token.$value).toBe('{color.cyan300}');
-      expect(token.$extensions?.designerpunk?.modes?.wcag).toBe('{color.teal300}');
+    it('should emit light/dark modes for tokens with dark overrides', () => {
+      // color.action.navigation has a dark override (cyan500 → cyan100)
+      const token = semanticColors['color.action.navigation'] as DTCGToken;
+      const modes = token.$extensions?.designerpunk?.modes;
+      expect(modes?.light).toBeDefined();
+      expect(modes?.dark).toBeDefined();
     });
   });
 
@@ -43,17 +41,12 @@ describe('Spec 077 — Modes Verification', () => {
     const semantics = collections.find((c: any) => c.name === 'Semantics');
     const primitives = collections.find((c: any) => c.name === 'Primitives');
 
-    it('should include wcag in Semantics collection modes', () => {
-      expect(semantics.modes).toContain('wcag');
-    });
-
-    it('should fall back to light value when token has no wcag override', () => {
-      const variable = semantics.variables.find((v: any) => v.name.includes('text/default'));
-      expect(variable.valuesByMode.wcag).toEqual(variable.valuesByMode.light);
-    });
-
     it('should not include wcag in Primitives collection modes', () => {
       expect(primitives.modes).not.toContain('wcag');
+    });
+
+    it('should include light mode in Semantics collection', () => {
+      expect(semantics.modes).toContain('light');
     });
   });
 });

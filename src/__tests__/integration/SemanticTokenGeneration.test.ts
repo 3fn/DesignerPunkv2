@@ -91,7 +91,7 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
 
       // Should contain var() references to primitive tokens
       expect(semanticSection).toContain('var(--');
-      expect(semanticSection).toContain('var(--purple');
+      expect(semanticSection).toContain('var(--font-size');
       expect(semanticSection).toContain('var(--space');
     });
 
@@ -178,14 +178,14 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
     it('should generate semantic tokens with primitive references', () => {
       const result = generator.generateiOSTokens(defaultSemanticOptions());
 
-      // Semantic tokens should reference primitives in Swift syntax
+      // Semantic tokens should appear with platform-appropriate naming
       const semanticSection = result.content.substring(
         result.content.indexOf('SEMANTIC TOKENS')
       );
 
-      // Should contain references to primitive token names
-      expect(semanticSection).toContain('purple');
-      expect(semanticSection).toContain('space');
+      // Should contain semantic token names in camelCase Swift format
+      expect(semanticSection).toContain('colorActionPrimary');
+      expect(semanticSection).toContain('spaceGroupedNormal');
     });
   });
 
@@ -246,14 +246,14 @@ describe('Semantic Token Generation - End-to-End Integration', () => {
     it('should generate semantic tokens with primitive references', () => {
       const result = generator.generateAndroidTokens(defaultSemanticOptions());
 
-      // Semantic tokens should reference primitives in Kotlin syntax
+      // Semantic tokens should appear with platform-appropriate naming
       const semanticSection = result.content.substring(
         result.content.indexOf('SEMANTIC TOKENS')
       );
 
-      // Should contain references to primitive token names
-      expect(semanticSection).toContain('purple');
-      expect(semanticSection).toContain('space');
+      // Should contain semantic token names in snake_case Kotlin format
+      expect(semanticSection).toContain('color_action_primary');
+      expect(semanticSection).toContain('space_grouped_normal');
     });
   });
 

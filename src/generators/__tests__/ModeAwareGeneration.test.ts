@@ -144,13 +144,14 @@ describe('Mode-Aware Generation (Spec 080)', () => {
       }
     });
 
-    it('should preserve existing wcag mode contexts (Spec 077)', () => {
+    it('should not emit wcag mode from inline wcagValue (migrated to theme files)', () => {
       const { DTCGFormatGenerator } = require('../DTCGFormatGenerator');
       const gen = new DTCGFormatGenerator();
       const output = gen.generate();
       const sc = output.semanticColor as Record<string, any>;
       const actionPrimary = sc['color.action.primary'];
-      expect(actionPrimary?.$extensions?.designerpunk?.modes?.wcag).toBeDefined();
+      // wcagValue removed from token definitions — WCAG modes will come from 4-context generation
+      expect(actionPrimary?.$extensions?.designerpunk?.modes?.wcag).toBeUndefined();
     });
   });
 

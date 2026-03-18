@@ -9,7 +9,7 @@
  */
 
 import { PrimitiveToken, TokenCategory } from '../types/PrimitiveToken';
-import { SemanticToken } from '../types/SemanticToken';
+import { SemanticToken, SemanticCategory } from '../types/SemanticToken';
 import { WebFormatGenerator } from '../providers/WebFormatGenerator';
 import { iOSFormatGenerator } from '../providers/iOSFormatGenerator';
 import { AndroidFormatGenerator } from '../providers/AndroidFormatGenerator';
@@ -18,7 +18,6 @@ import { getAllPrimitiveTokens, getTokensByCategory, durationTokens, easingToken
 import { getAllSemanticTokens, getAllZIndexTokens, getAllElevationTokens, motionTokens } from '../tokens/semantic';
 import { BlendUtilityGenerator, BlendUtilityGenerationOptions } from './BlendUtilityGenerator';
 import { ComponentTokenRegistry, RegisteredComponentToken } from '../registries/ComponentTokenRegistry';
-import { getPlatformTokenName } from '../naming/PlatformNamingRules';
 
 export interface BaseGenerationOptions {
   outputDir?: string;
@@ -28,11 +27,16 @@ export interface BaseGenerationOptions {
 }
 
 export interface GenerationOptions extends BaseGenerationOptions {
-  /** Pre-resolved semantic tokens (light mode). Generators require externally-resolved tokens (D9 Option B). */
+  /** Pre-resolved semantic tokens (light-base context). Generators require externally-resolved tokens (D9 Option B). */
   semanticTokens: Array<Omit<SemanticToken, 'primitiveTokens'>>;
-  /** Pre-resolved semantic tokens (dark mode). Used with semanticTokens to produce mode-aware output. */
+  /** Pre-resolved semantic tokens (dark-base context). Used with semanticTokens to produce mode-aware output. */
   darkSemanticTokens: Array<Omit<SemanticToken, 'primitiveTokens'>>;
-}
+  /** Pre-resolved semantic tokens (light-wcag context). When provided, generates WCAG theme overrides. */
+  wcagSemanticTokens?: Array<Omit<SemanticToken, 'primitiveTokens'>>;
+  /** Pre-resolved semantic tokens (dark-wcag context). Used with wcagSemanticTokens for mode-aware WCAG output. */
+  darkWcagSemanticTokens?: Array<Omit<SemanticToken, 'primitiveTokens'>>;
+  /** Token names that have WCAG semantic overrides (Level 2). Only these appear in the WCAG override block. */
+  wcagOverrideKeys?: Set<string>;}
 
 export interface GenerationResult {
   platform: 'web' | 'ios' | 'android';
@@ -784,9 +788,6 @@ export class TokenFileGenerator {
       }
     }
 
-    // Collect tokens with wcagValue for WCAG theme override block
-    const wcagOverrides: Array<{ name: string; wcagPrimitiveRef: string; category: string }> = [];
-
     // Iterate over semantic tokens
     for (const semantic of semantics) {
       // Skip tokens without primitiveReferences (e.g., semantic-only layering tokens)
@@ -794,15 +795,6 @@ export class TokenFileGenerator {
         continue;
       }
       
-      // Track tokens with wcagValue for WCAG override generation
-      if (semantic.primitiveReferences.wcagValue) {
-        wcagOverrides.push({
-          name: semantic.name,
-          wcagPrimitiveRef: semantic.primitiveReferences.wcagValue,
-          category: semantic.category
-        });
-      }
-
       // Special handling for ICON category tokens with fontSize/multiplier (icon sizes)
       // Icon property tokens (like strokeWidth) are handled as single-reference tokens below
       if (semantic.category === 'icon' && semantic.primitiveReferences.fontSize && semantic.primitiveReferences.multiplier) {
@@ -872,73 +864,102 @@ export class TokenFileGenerator {
       lines.push(lightLine);
     }
 
-    // Store WCAG overrides for the caller to retrieve via getLastWcagOverrides()
-    this.lastWcagOverrides = wcagOverrides.length > 0
-      ? { overrides: wcagOverrides, platform, generator }
-      : null;
-
     return lines;
   }
 
   /**
-   * Pending WCAG overrides from the last generateSemanticSection call.
-   * Used by platform-specific generate methods to append WCAG blocks.
+   * Generate WCAG theme override block from 4-context resolved token sets (Spec 080 Phase 2).
+   * Compares base vs wcag tokens — emits overrides only where values differ.
    */
-  private lastWcagOverrides: {
-    overrides: Array<{ name: string; wcagPrimitiveRef: string; category: string }>;
-    platform: 'web' | 'ios' | 'android';
-    generator: WebFormatGenerator | iOSFormatGenerator | AndroidFormatGenerator;
-  } | null = null;
-
-  /**
-   * Generate WCAG theme override block for semantic tokens with wcagValue (Spec 076)
-   * 
-   * When a semantic token has primitiveReferences.wcagValue, the WCAG theme
-   * should reference a different primitive than the standard theme.
-   * 
-   * Web: [data-theme="wcag"] { --semantic: var(--wcag-primitive); }
-   * iOS: static let semanticName_wcag = wcagPrimitive
-   * Android: val semanticName_wcag = wcagPrimitive
-   */
-  private generateWcagOverrides(
-    overrides: Array<{ name: string; wcagPrimitiveRef: string; category: string }>,
+  private generateWcagOverrideBlock(
+    lightBase: Array<Omit<SemanticToken, 'primitiveTokens'>>,
+    darkBase: Array<Omit<SemanticToken, 'primitiveTokens'>>,
+    lightWcag: Array<Omit<SemanticToken, 'primitiveTokens'>>,
+    darkWcag: Array<Omit<SemanticToken, 'primitiveTokens'>>,
     platform: 'web' | 'ios' | 'android',
-    generator: WebFormatGenerator | iOSFormatGenerator | AndroidFormatGenerator
+    wcagKeys?: Set<string>
   ): string[] {
     const lines: string[] = [];
+
+    // Build lookup maps
+    const lbMap = new Map(lightBase.map(t => [t.name, t]));
+    const dbMap = new Map(darkBase.map(t => [t.name, t]));
+    const lwMap = new Map(lightWcag.map(t => [t.name, t]));
+    const dwMap = new Map(darkWcag.map(t => [t.name, t]));
+
+    // Find color tokens where wcag override changes the primitive reference (Level 2 only).
+    // Tokens where only the primitive's own wcag slot differs are handled by the primitive layer.
+    const overrides: Array<{ token: Omit<SemanticToken, 'primitiveTokens'>; lwVal: string; dwVal: string; lbVal: string; dbVal: string }> = [];
+    for (const [name, lbToken] of lbMap) {
+      if (lbToken.category !== SemanticCategory.COLOR) continue;
+      if (wcagKeys && !wcagKeys.has(name)) continue;
+      const lwToken = lwMap.get(name);
+      const dbToken = dbMap.get(name);
+      const dwToken = dwMap.get(name);
+      if (!lwToken || !dbToken || !dwToken) continue;
+
+      const getVal = (t: Omit<SemanticToken, 'primitiveTokens'>) =>
+        t.primitiveReferences?.value ?? t.primitiveReferences?.default ?? Object.values(t.primitiveReferences || {})[0] ?? '';
+
+      overrides.push({ token: lbToken, lwVal: getVal(lwToken), dwVal: getVal(dwToken), lbVal: getVal(lbToken), dbVal: getVal(dbToken) });
+    }
+
+    if (overrides.length === 0) return lines;
+
+    // Helper: rgba string → iOS UIColor
+    const toIOS = (rgba: string) => {
+      const m = rgba.match(/rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\d.]+)\s*\)/);
+      if (!m) return rgba;
+      return `UIColor(red: ${(+m[1]/255).toFixed(2)}, green: ${(+m[2]/255).toFixed(2)}, blue: ${(+m[3]/255).toFixed(2)}, alpha: ${(+m[4]).toFixed(2)})`;
+    };
+
+    // Helper: rgba string → Android Color.argb
+    const toAndroid = (rgba: string) => {
+      const m = rgba.match(/rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\d.]+)\s*\)/);
+      if (!m) return rgba;
+      return `Color.argb(${Math.round(+m[4] * 255)}, ${m[1]}, ${m[2]}, ${m[3]})`;
+    };
 
     switch (platform) {
       case 'web': {
         lines.push('');
-        lines.push('/* WCAG Theme: Semantic token overrides referencing WCAG-specific primitives (Spec 076) */');
+        lines.push('/* WCAG Theme: Semantic token overrides from theme files (Spec 080 Phase 2) */');
         lines.push(':root[data-theme="wcag"] {');
-        for (const override of overrides) {
-          const semanticName = (generator as WebFormatGenerator).getTokenName(override.name, override.category);
-          const cssSemanticName = semanticName.startsWith('--') ? semanticName : `--${semanticName}`;
-          const wcagPrimitiveName = getPlatformTokenName(override.wcagPrimitiveRef, 'web', override.category as any);
-          const cssPrimitiveRef = wcagPrimitiveName.startsWith('--') ? wcagPrimitiveName : `--${wcagPrimitiveName}`;
-          lines.push(`  ${cssSemanticName}: var(${cssPrimitiveRef});`);
+        for (const o of overrides) {
+          const name = this.webGenerator.getTokenName(o.token.name, o.token.category);
+          const cssName = name.startsWith('--') ? name : `--${name}`;
+          const value = o.lwVal !== o.dwVal
+            ? `light-dark(${o.lwVal}, ${o.dwVal})`
+            : o.lwVal;
+          lines.push(`  ${cssName}: ${value};`);
         }
         lines.push('}');
         break;
       }
       case 'ios': {
         lines.push('');
-        lines.push('    // MARK: - WCAG Theme Semantic Overrides (Spec 076)');
-        for (const override of overrides) {
-          const semanticName = (generator as iOSFormatGenerator).getTokenName(override.name, override.category);
-          const wcagPrimitiveName = (generator as iOSFormatGenerator).getTokenName(override.wcagPrimitiveRef, override.category);
-          lines.push(`    public static let ${semanticName}_wcag = ${wcagPrimitiveName}`);
+        lines.push('    // MARK: - WCAG Theme Semantic Overrides (Spec 080 Phase 2)');
+        for (const o of overrides) {
+          const name = this.iosGenerator.getTokenName(o.token.name, o.token.category);
+          if (o.lwVal !== o.dwVal) {
+            lines.push(`    public static let ${name}_wcag: UIColor = UIColor { $0.userInterfaceStyle == .dark ? ${toIOS(o.dwVal)} : ${toIOS(o.lwVal)} }`);
+          } else {
+            lines.push(`    public static let ${name}_wcag: UIColor = ${toIOS(o.lwVal)}`);
+          }
         }
         break;
       }
       case 'android': {
         lines.push('');
-        lines.push('    // WCAG Theme Semantic Overrides (Spec 076)');
-        for (const override of overrides) {
-          const semanticName = (generator as AndroidFormatGenerator).getTokenName(override.name, override.category);
-          const wcagPrimitiveName = (generator as AndroidFormatGenerator).getTokenName(override.wcagPrimitiveRef, override.category);
-          lines.push(`    val ${semanticName}_wcag = ${wcagPrimitiveName}`);
+        lines.push('    // WCAG Theme Semantic Overrides (Spec 080 Phase 2)');
+        for (const o of overrides) {
+          const name = this.androidGenerator.getTokenName(o.token.name, o.token.category);
+          if (o.lwVal !== o.dwVal) {
+            lines.push(`    val ${name}_wcag_light = ${toAndroid(o.lwVal)}`);
+            lines.push(`    val ${name}_wcag_dark = ${toAndroid(o.dwVal)}`);
+          } else {
+            lines.push(`    val ${name}_wcag = ${toAndroid(o.lwVal)}`);
+          }
         }
         break;
       }
@@ -1108,7 +1129,9 @@ export class TokenFileGenerator {
       includeComments = true,
       groupByCategory = true,
       semanticTokens,
-      darkSemanticTokens
+      darkSemanticTokens,
+      wcagSemanticTokens,
+      darkWcagSemanticTokens
     } = options;
 
     const metadata: FileMetadata = {
@@ -1202,14 +1225,16 @@ export class TokenFileGenerator {
     // Add footer (closes :root)
     lines.push(this.webGenerator.generateFooter());
 
-    // Append WCAG theme semantic overrides after :root (Spec 076)
-    if (this.lastWcagOverrides && this.lastWcagOverrides.platform === 'web') {
-      lines.push(...this.generateWcagOverrides(
-        this.lastWcagOverrides.overrides,
-        'web',
-        this.lastWcagOverrides.generator
-      ));
-      this.lastWcagOverrides = null;
+    // Append WCAG theme semantic overrides after :root (Spec 080 Phase 2)
+    if (wcagSemanticTokens && darkWcagSemanticTokens) {
+      const wcagLines = this.generateWcagOverrideBlock(
+        semanticTokens, darkSemanticTokens,
+        wcagSemanticTokens, darkWcagSemanticTokens,
+        'web', options.wcagOverrideKeys
+      );
+      if (wcagLines.length > 0) {
+        lines.push(...wcagLines);
+      }
     }
 
     const content = lines.join('\n');
@@ -1321,14 +1346,16 @@ export class TokenFileGenerator {
     lines.push(...layeringLines);
     semanticTokenCount += layeringLines.length;
 
-    // Add WCAG theme semantic overrides (Spec 076)
-    if (this.lastWcagOverrides && this.lastWcagOverrides.platform === 'ios') {
-      lines.push(...this.generateWcagOverrides(
-        this.lastWcagOverrides.overrides,
-        'ios',
-        this.lastWcagOverrides.generator
-      ));
-      this.lastWcagOverrides = null;
+    // Add WCAG theme semantic overrides (Spec 080 Phase 2)
+    if (options.wcagSemanticTokens && options.darkWcagSemanticTokens) {
+      const wcagLines = this.generateWcagOverrideBlock(
+        options.semanticTokens, options.darkSemanticTokens,
+        options.wcagSemanticTokens, options.darkWcagSemanticTokens,
+        'ios', options.wcagOverrideKeys
+      );
+      if (wcagLines.length > 0) {
+        lines.push(...wcagLines);
+      }
     }
 
     // Add footer
@@ -1443,14 +1470,16 @@ export class TokenFileGenerator {
     lines.push(...layeringLines);
     semanticTokenCount += layeringLines.length;
 
-    // Add WCAG theme semantic overrides (Spec 076)
-    if (this.lastWcagOverrides && this.lastWcagOverrides.platform === 'android') {
-      lines.push(...this.generateWcagOverrides(
-        this.lastWcagOverrides.overrides,
-        'android',
-        this.lastWcagOverrides.generator
-      ));
-      this.lastWcagOverrides = null;
+    // Add WCAG theme semantic overrides (Spec 080 Phase 2)
+    if (options.wcagSemanticTokens && options.darkWcagSemanticTokens) {
+      const wcagLines = this.generateWcagOverrideBlock(
+        options.semanticTokens, options.darkSemanticTokens,
+        options.wcagSemanticTokens, options.darkWcagSemanticTokens,
+        'android', options.wcagOverrideKeys
+      );
+      if (wcagLines.length > 0) {
+        lines.push(...wcagLines);
+      }
     }
 
     // Add footer

@@ -1,20 +1,19 @@
 /**
  * @category evergreen
- * @purpose Verify Spec 076 token migration: correct primitive references, wcagValue keys, and gray RGBA values
+ * @purpose Verify Spec 076 token migration: correct primitive references and gray RGBA values.
+ * wcagValue inline overrides removed in Spec 080 Phase 2 — WCAG overrides now in theme files.
  */
 import { colorTokens } from '../../tokens/semantic/ColorTokens';
 import { grayTokens } from '../../tokens/ColorTokens';
-import { TokenFileGenerator } from '../TokenFileGenerator';
-import { defaultSemanticOptions } from './helpers/defaultSemanticOptions';
 
 describe('Spec 076 Token Migration', () => {
   // ── Semantic token primitive references ──
 
   describe('Action tokens', () => {
-    it('color.action.primary → cyan300 with wcagValue teal300', () => {
+    it('color.action.primary → cyan300 (wcagValue migrated to theme file)', () => {
       const refs = colorTokens['color.action.primary'].primitiveReferences;
       expect(refs.value).toBe('cyan300');
-      expect(refs.wcagValue).toBe('teal300');
+      expect(refs.wcagValue).toBeUndefined();
     });
 
     it('color.action.secondary → gray400, no wcagValue', () => {
@@ -23,18 +22,18 @@ describe('Spec 076 Token Migration', () => {
       expect(refs.wcagValue).toBeUndefined();
     });
 
-    it('color.action.navigation → cyan500 with wcagValue teal500', () => {
+    it('color.action.navigation → cyan500 (wcagValue migrated to theme file)', () => {
       const refs = colorTokens['color.action.navigation'].primitiveReferences;
       expect(refs.value).toBe('cyan500');
-      expect(refs.wcagValue).toBe('teal500');
+      expect(refs.wcagValue).toBeUndefined();
     });
   });
 
   describe('Contrast tokens', () => {
-    it('color.contrast.onAction → black500 with wcagValue white100', () => {
+    it('color.contrast.onAction → black500 (wcagValue migrated to theme file)', () => {
       const refs = colorTokens['color.contrast.onAction'].primitiveReferences;
       expect(refs.value).toBe('black500');
-      expect(refs.wcagValue).toBe('white100');
+      expect(refs.wcagValue).toBeUndefined();
     });
 
     it('color.contrast.onPrimary must not exist (Spec 052 guard)', () => {
@@ -43,10 +42,10 @@ describe('Spec 076 Token Migration', () => {
   });
 
   describe('Background tokens', () => {
-    it('color.background.primary.subtle → cyan100 with wcagValue teal100', () => {
+    it('color.background.primary.subtle → cyan100 (wcagValue migrated to theme file)', () => {
       const refs = colorTokens['color.background.primary.subtle'].primitiveReferences;
       expect(refs.value).toBe('cyan100');
-      expect(refs.wcagValue).toBe('teal100');
+      expect(refs.wcagValue).toBeUndefined();
     });
   });
 
@@ -64,23 +63,23 @@ describe('Spec 076 Token Migration', () => {
     });
   });
 
-  describe('Info feedback tokens (WCAG theme)', () => {
-    it('color.feedback.info.text → teal400 with wcagValue purple500', () => {
+  describe('Info feedback tokens (WCAG override migrated to theme file)', () => {
+    it('color.feedback.info.text → teal400 (wcagValue migrated to theme file)', () => {
       const refs = colorTokens['color.feedback.info.text'].primitiveReferences;
       expect(refs.value).toBe('teal400');
-      expect(refs.wcagValue).toBe('purple500');
+      expect(refs.wcagValue).toBeUndefined();
     });
 
-    it('color.feedback.info.background → teal100 with wcagValue purple100', () => {
+    it('color.feedback.info.background → teal100 (wcagValue migrated to theme file)', () => {
       const refs = colorTokens['color.feedback.info.background'].primitiveReferences;
       expect(refs.value).toBe('teal100');
-      expect(refs.wcagValue).toBe('purple100');
+      expect(refs.wcagValue).toBeUndefined();
     });
 
-    it('color.feedback.info.border → teal400 with wcagValue purple500', () => {
+    it('color.feedback.info.border → teal400 (wcagValue migrated to theme file)', () => {
       const refs = colorTokens['color.feedback.info.border'].primitiveReferences;
       expect(refs.value).toBe('teal400');
-      expect(refs.wcagValue).toBe('purple500');
+      expect(refs.wcagValue).toBeUndefined();
     });
   });
 
@@ -102,25 +101,6 @@ describe('Spec 076 Token Migration', () => {
         expect(val.light.base).toBe(rgba);
         expect(val.dark.base).toBe(rgba);
       }
-    });
-  });
-
-  // ── WCAG overrides appear in generated web output ──
-
-  describe('Web WCAG override block', () => {
-    it('generates WCAG overrides for all wcagValue tokens', () => {
-      const generator = new TokenFileGenerator();
-      const result = generator.generateWebTokens(defaultSemanticOptions());
-      const web = result.content;
-
-      // WCAG block should contain overrides for all tokens with wcagValue
-      expect(web).toContain('data-theme="wcag"');
-      expect(web).toContain('var(--teal-300)');   // action.primary wcag
-      expect(web).toContain('var(--teal-100)');   // background.primary.subtle wcag
-      expect(web).toContain('var(--teal-500)');   // action.navigation wcag
-      expect(web).toContain('var(--white-100)');  // contrast.onAction wcag
-      expect(web).toContain('var(--purple-500)'); // info.text + info.border wcag
-      expect(web).toContain('var(--purple-100)'); // info.background wcag
     });
   });
 });

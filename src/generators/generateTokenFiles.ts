@@ -14,6 +14,9 @@ import { SemanticTokenRegistry } from '../registries/SemanticTokenRegistry';
 import { SemanticOverrideResolver } from '../resolvers/SemanticOverrideResolver';
 import { resolveSemanticTokenValue } from '../resolvers/SemanticValueResolver';
 import { darkSemanticOverrides } from '../tokens/themes/dark/SemanticOverrides';
+import { wcagSemanticOverrides } from '../tokens/themes/wcag/SemanticOverrides';
+import { darkWcagSemanticOverrides } from '../tokens/themes/dark-wcag/SemanticOverrides';
+import type { ContextOverrideSet } from '../tokens/themes/types';
 import { getAllPrimitiveTokens } from '../tokens';
 import { getAllSemanticTokens } from '../tokens/semantic';
 
@@ -69,7 +72,7 @@ export function generateTokenFiles(outputDir: string = 'output'): void {
   // Initialize generator
   const generator = new TokenFileGenerator();
 
-  // Mode resolution: resolve semantic tokens into light/dark sets (Spec 080)
+  // Mode + theme resolution: resolve semantic tokens into 4 context sets (Spec 080 Phase 2)
   const overrideResolver = new SemanticOverrideResolver(semanticRegistry, darkSemanticOverrides);
   const overrideValidation = overrideResolver.validate();
   if (!overrideValidation.valid) {
@@ -78,26 +81,46 @@ export function generateTokenFiles(outputDir: string = 'output'): void {
     console.error('\n⚠️  Token generation aborted due to override validation errors.\n');
     return;
   }
+
+  const contextOverrides: ContextOverrideSet = {
+    'light-wcag': wcagSemanticOverrides,
+    'dark-base': darkSemanticOverrides,
+    'dark-wcag': { ...darkSemanticOverrides, ...wcagSemanticOverrides, ...darkWcagSemanticOverrides },
+  };
+
+  const contextValidation = overrideResolver.validateAll(contextOverrides);
+  if (!contextValidation.valid) {
+    console.error('❌ Context override validation failed:\n');
+    contextValidation.errors.forEach(err => console.error(`   ${err}`));
+    console.error('\n⚠️  Token generation aborted due to override validation errors.\n');
+    return;
+  }
   console.log('✅ Semantic override validation passed\n');
 
-  const { light: lightTokens, dark: darkTokens } = overrideResolver.resolveAll(semanticTokens);
+  const contextSets = overrideResolver.resolveAllContexts(semanticTokens, contextOverrides);
 
-  // Level 1: Resolve primitive references to concrete rgba values per mode
-  const resolvedLight = lightTokens.map(t =>
-    resolveSemanticTokenValue(t, 'light')
-  );
-  const resolvedDark = darkTokens.map(t =>
-    resolveSemanticTokenValue(t, 'dark')
-  );
+  // Level 1: Resolve primitive references to concrete rgba values per context
+  const resolvedLight = contextSets['light-base'].map(t => resolveSemanticTokenValue(t, 'light', 'base'));
+  const resolvedDark = contextSets['dark-base'].map(t => resolveSemanticTokenValue(t, 'dark', 'base'));
+  const resolvedLightWcag = contextSets['light-wcag'].map(t => resolveSemanticTokenValue(t, 'light', 'wcag'));
+  const resolvedDarkWcag = contextSets['dark-wcag'].map(t => resolveSemanticTokenValue(t, 'dark', 'wcag'));
 
-  // Generate all platform files (passing resolved tokens for both modes)
+  // Generate all platform files (passing resolved tokens for all 4 contexts)
+  const wcagOverrideKeys = new Set([
+    ...Object.keys(wcagSemanticOverrides),
+    ...Object.keys(darkWcagSemanticOverrides),
+  ]);
+
   const results = generator.generateAll({
     outputDir,
     version: '1.0.0',
     includeComments: true,
     groupByCategory: true,
     semanticTokens: resolvedLight,
-    darkSemanticTokens: resolvedDark
+    darkSemanticTokens: resolvedDark,
+    wcagSemanticTokens: resolvedLightWcag,
+    darkWcagSemanticTokens: resolvedDarkWcag,
+    wcagOverrideKeys
   });
 
   // Write files to disk

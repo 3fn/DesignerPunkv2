@@ -28,7 +28,25 @@
       "color.icon.navigation.inactive"
     ],
     "componentColorTokenCount": 0,
-    "componentColorTokenNote": "Zero component tokens reference color semantics — semantic snapshot alone is sufficient for regression"
+    "componentColorTokenNote": "Zero component tokens reference color semantics — semantic snapshot alone is sufficient for regression",
+    "knownLimitations": [
+      {
+        "tokens": [
+          "color.action.navigation",
+          "color.background.primary.subtle"
+        ],
+        "context": "dark-wcag",
+        "issue": "Pre-migration dark-wcag resolves dark override primitive (cyan) against wcag slot instead of using teal equivalent. Dark overrides replace primitiveReferences entirely, removing wcagValue. Phase 2 dark-wcag overrides correct this.",
+        "snapshotValues": {
+          "color.action.navigation": "rgba(204, 251, 255, 1)",
+          "color.background.primary.subtle": "rgba(0, 136, 143, 1)"
+        },
+        "correctedValues": {
+          "color.action.navigation": "rgba(217, 232, 234, 1)",
+          "color.background.primary.subtle": "rgba(15, 46, 51, 1)"
+        }
+      }
+    ]
   },
   "snapshot": {
     "color.feedback.success.text": {
