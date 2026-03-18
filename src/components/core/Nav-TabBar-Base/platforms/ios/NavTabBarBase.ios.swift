@@ -173,11 +173,11 @@ public struct NavTabBarBase: View {
         return Button(action: { handleTap(tab.value, tabWidth: tabWidth) }) {
             VStack(spacing: isSelected ? NavTabBarTokens.activeItemSpacing : 0) {
                 // Icon — solid (active) or outline (inactive)
-                Image(systemName: isSelected ? tab.activeIcon : tab.icon)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: NavTabBarTokens.iconSize, height: NavTabBarTokens.iconSize)
-                    .foregroundColor(isSelected ? NavTabBarTokens.activeIconColor : NavTabBarTokens.inactiveIconColor)
+                IconBase(
+                    name: isSelected ? tab.activeIcon : tab.icon,
+                    size: NavTabBarTokens.iconSize,
+                    color: isSelected ? NavTabBarTokens.activeIconColor : NavTabBarTokens.inactiveIconColor
+                )
             }
             .padding(.top, isSelected ? NavTabBarTokens.activePaddingTop : NavTabBarTokens.inactivePaddingTop)
             .padding(.horizontal, NavTabBarTokens.activePaddingInline)

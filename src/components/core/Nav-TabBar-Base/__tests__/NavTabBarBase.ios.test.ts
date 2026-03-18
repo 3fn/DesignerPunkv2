@@ -38,6 +38,10 @@ describe('Nav-TabBar-Base iOS — Contract Compliance', () => {
       expect(swift).toContain('colorIconNavigationInactive');
     });
 
+    it('visual_state_colors: composes IconBase component for icons', () => {
+      expect(swift).toContain('IconBase(');
+    });
+
     it('visual_state_colors: dot uses color.action.navigation', () => {
       expect(swift).toContain('dotColor');
       expect(swift).toContain('colorActionNavigation');

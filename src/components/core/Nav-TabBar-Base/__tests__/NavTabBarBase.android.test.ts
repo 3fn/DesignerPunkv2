@@ -210,8 +210,11 @@ describe('Nav-TabBar-Base Android — Contract Compliance', () => {
       expect(kt).toContain('contentDescription = tab.accessibilityLabel');
     });
 
-    it('accessibility_aria_label: icon has null contentDescription', () => {
-      expect(kt).toContain('contentDescription = null');
+    it('accessibility_aria_label: icon is decorative via IconBase (no contentDescription)', () => {
+      // IconBase renders icons as decorative (contentDescription = null internally)
+      // accessibilityLabel is on the parent tab semantics, not the icon
+      expect(kt).toContain('IconBase(');
+      expect(kt).toContain('contentDescription = tab.accessibilityLabel');
     });
 
     it('accessibility_touch_target: minimum tap width enforced', () => {
@@ -249,6 +252,10 @@ describe('Nav-TabBar-Base Android — Contract Compliance', () => {
 
     it('should use icon size token (icon_size_100 = 24dp)', () => {
       expect(kt).toContain('icon_size_100');
+    });
+
+    it('should compose IconBase component for icons', () => {
+      expect(kt).toContain('IconBase(');
     });
 
     it('should use state-hoisted selection pattern', () => {

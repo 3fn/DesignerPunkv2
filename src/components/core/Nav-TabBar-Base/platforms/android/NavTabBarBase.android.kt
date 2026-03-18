@@ -35,7 +35,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
+import com.designerpunk.components.core.IconBase
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -57,7 +57,6 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
@@ -334,13 +333,10 @@ fun NavTabBarBase(
                             }
                     ) {
                         // Icon — solid (active) or outline (inactive)
-                        Icon(
-                            painter = painterResource(
-                                id = if (isSelected) tab.activeIcon.toResId() else tab.icon.toResId()
-                            ),
-                            contentDescription = null, // accessibilityLabel on parent
-                            tint = iconTint,
-                            modifier = Modifier.size(NavTabBarTokens.iconSize.dp)
+                        IconBase(
+                            name = if (isSelected) tab.activeIcon else tab.icon,
+                            size = NavTabBarTokens.iconSize.dp,
+                            color = iconTint
                         )
                     }
                 }
@@ -357,11 +353,4 @@ fun NavTabBarBase(
             )
         }
     }
-}
-
-// Helper to resolve icon resource IDs (platform-specific mapping)
-private fun String.toResId(): Int {
-    // In production, this maps icon names to R.drawable resources
-    // Placeholder — actual mapping depends on icon asset pipeline
-    return 0
 }
