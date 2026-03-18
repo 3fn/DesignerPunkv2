@@ -1,0 +1,190 @@
+# Nav-TabBar-Base Component Schema
+#
+# Stemma System: Navigation Family
+# Component Type: Primitive (Base)
+# Naming Convention: [Family]-[Type]-[Variant] = Nav-TabBar-Base
+#
+# Primary bottom navigation with icon-only tabs, dot indicator,
+# radial glow gradients, and three-phase selection animation.
+# Mobile-first: iOS, Android, mobile web.
+#
+# DesignerPunk Philosophy: NO DISABLED STATES
+# Unavailable destinations should not be rendered as tabs.
+
+name: Nav-TabBar-Base
+type: primitive
+family: Navigation
+version: "1.0.0"
+readiness: development
+
+description: |
+  Primary navigation component providing persistent access to top-level
+  app destinations via a bottom tab bar. Icon-only tabs (v1) with a dot
+  indicator that glides between selections using a three-phase choreography.
+  Radial glow gradients on all tabs: accent glow on active, subtle vignette
+  on inactive for contrast protection.
+
+  Key Characteristics:
+  - Icon-only v1 (labels deferred to Nav-TabBar-Labeled)
+  - 3-5 tabs recommended, minimum 2 required
+  - Three-phase animation: depart → glide → arrive
+  - Elliptical radial gradient on all tabs (88% radii, three stops)
+  - Build-time platform separation: floating pill (web) vs full-width (native)
+  - Mode (Day/Night) via Spec 080 Level 2 semantic overrides
+  - Badge composition slot (empty in v1)
+
+  DesignerPunk Philosophy: NO DISABLED STATES
+  If a destination is unavailable, do not include it in the tabs array.
+
+behaviors:
+  - renderable
+  - selectable
+  - focusable
+  - accessible
+  - animatable
+
+properties:
+  tabs:
+    type: "TabOption[]"
+    required: true
+    description: |
+      Array of tab definitions (minimum 2). Each tab has a value, outline
+      icon (inactive), solid-fill icon (active), and required
+      accessibilityLabel (icon-only, no visible text). 3-5 tabs recommended.
+
+  selectedValue:
+    type: string
+    required: true
+    description: |
+      Currently selected tab value. Exactly one tab is selected at all
+      times. If value doesn't match any tab, first tab is selected as
+      fallback.
+
+  onSelectionChange:
+    type: "(value: string) => void"
+    required: true
+    description: |
+      Called when selection changes. Fires immediately on confirmed
+      selection (press release), before animation begins. Not called
+      when active tab is tapped (no-op).
+
+  testID:
+    type: string
+    required: false
+    description: |
+      Test identifier for automated testing. Platform-specific:
+      - Web: data-testid attribute
+      - iOS: accessibilityIdentifier
+      - Android: testTag
+
+tokens:
+  color:
+    - color.structure.canvas
+    - color.structure.border.subtle
+    - color.action.navigation
+    - color.icon.navigation.inactive
+    - color.background.primary.subtle
+  spacing:
+    - space.inset.050
+    - space.inset.100
+    - space.inset.150
+    - space.inset.200
+    - space.grouped.minimal
+  border:
+    - radiusFull
+  opacity:
+    - opacity024
+    - opacity000
+  motion:
+    - duration150
+    - duration350
+    - easingAccelerate
+    - easingGlideDecelerate
+    - easingDecelerate
+  blend:
+    - blend.pressedLighter
+  accessibility:
+    - tapAreaMinimum
+    - accessibility.focus.width
+    - accessibility.focus.offset
+    - accessibility.focus.color
+
+composition:
+  internal:
+    - component: Icon-Base
+      role: Tab icon (outline inactive, solid-fill active)
+      required: true
+  slots:
+    - name: badge
+      description: Composition slot for future Badge family integration (empty in v1)
+      required: false
+
+platforms:
+  - web
+  - ios
+  - android
+
+platform_notes:
+  web:
+    element: "<nav-tab-bar>"
+    implementation: Web Component with Shadow DOM
+    file: platforms/web/NavTabBarBase.web.ts
+    notes: |
+      - Shadow DOM for style encapsulation
+      - Floating pill shape with radiusFull, backdrop blur
+      - Dynamic chrome tracking via Visual Viewport API
+      - CSS logical properties for RTL support
+      - role="tablist" container, role="tab" items
+      - CSS transitions for animation choreography
+      - prefers-reduced-motion media query
+  ios:
+    implementation: SwiftUI View
+    file: platforms/ios/NavTabBarBase.ios.swift
+    notes: |
+      - Full-width anchored to bottom, OS safe area
+      - SwiftUI .animation() with UnitCurve (iOS 17+)
+      - Haptic feedback on selection
+      - VoiceOver tab semantics
+      - UIAccessibility.isReduceMotionEnabled check
+  android:
+    implementation: Jetpack Compose Composable
+    file: platforms/android/NavTabBarBase.android.kt
+    notes: |
+      - Material 3 NavigationBar as base, customized with DesignerPunk tokens
+      - Full-width anchored to bottom, OS safe area
+      - Compose animation APIs for choreography
+      - TalkBack Role.Tab semantics
+      - Settings.Global.ANIMATOR_DURATION_SCALE for reduced motion
+
+semantic_variants:
+  - name: Nav-TabBar-Labeled
+    extends: Restores icon + label layout
+    status: planned
+    inherits: Nav-TabBar-Base
+  - name: Nav-TabBar-Floating
+    extends: Elevated floating bar for native platforms
+    status: planned
+    inherits: Nav-TabBar-Base
+  - name: Nav-TabBar-Minimal
+    extends: Icon-only, labels appear on selection
+    status: planned
+    inherits: Nav-TabBar-Base
+
+accessibility:
+  wcag_level: AA
+  compliance:
+    - "2.1.1 Keyboard - Arrow keys, Enter/Space, Tab navigation"
+    - "2.4.7 Focus Visible - Focus ring on keyboard navigation"
+    - "2.3.3 Animation from Interactions - Reduced motion support"
+    - "2.5.5 Target Size - min-width tapAreaMinimum per tab"
+    - "4.1.2 Name, Role, Value - tab role, aria-selected, accessibilityLabel"
+  aria_attributes:
+    - role: tablist (container)
+    - role: tab (items)
+    - aria-selected: "true/false per tab"
+  keyboard_navigation:
+    - Left Arrow: Previous tab (wraps)
+    - Right Arrow: Next tab (wraps)
+    - Enter: Select focused tab
+    - Space: Select focused tab
+    - Tab: Focus selected tab (entry) / exit control (within)

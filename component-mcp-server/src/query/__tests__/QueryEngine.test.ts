@@ -23,7 +23,7 @@ describe('ComponentQueryEngine', () => {
     it('returns all indexed components', () => {
       const result = engine.getCatalog();
       expect(result.error).toBeNull();
-      expect(result.data!.length).toBe(29);
+      expect(result.data!.length).toBe(30);
       expect(result.metrics.responseTimeMs).toBeDefined();
     });
   });

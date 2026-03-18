@@ -86,7 +86,7 @@ Task 6 (Documentation + Dark Mode)
     - Apply if approved
     - _Requirements: design.md § Behavioral Contracts_
 
-- [ ] 2. Component Scaffolding
+- [x] 2. Component Scaffolding
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -114,7 +114,7 @@ Task 6 (Documentation + Dark Mode)
   **Post-Completion:**
   - Commit: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Component Scaffolding"`
 
-  - [ ] 2.1 Create directory structure
+  - [x] 2.1 Create directory structure
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     **Agent**: Lina
@@ -124,7 +124,7 @@ Task 6 (Documentation + Dark Mode)
     - Create placeholder index files
     - _Requirements: R10_
 
-  - [ ] 2.2 Author contracts.yaml
+  - [x] 2.2 Author contracts.yaml
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     **Agent**: Lina
@@ -135,7 +135,7 @@ Task 6 (Documentation + Dark Mode)
     - Contracts must be complete before platform implementation begins (lesson from 049 Task 3.1.CORRECTION)
     - _Requirements: all (contracts define the full behavioral specification)_
 
-  - [ ] 2.3 Author component-meta.yaml and schema.yaml
+  - [x] 2.3 Author component-meta.yaml and schema.yaml
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -146,7 +146,7 @@ Task 6 (Documentation + Dark Mode)
     - Follow existing patterns (reference Nav-SegmentedChoice-Base)
     - _Requirements: R12_
 
-  - [ ] 2.4 Define props interface (types.ts)
+  - [x] 2.4 Define props interface (types.ts)
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina

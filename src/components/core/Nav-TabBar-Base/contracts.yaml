@@ -1,0 +1,412 @@
+version: "1.0.0"
+component: Nav-TabBar-Base
+family: Navigation
+
+contracts:
+  # ============================================================
+  # INTERACTION CONTRACTS (6)
+  # ============================================================
+
+  interaction_pressable:
+    category: interaction
+    description: Inactive tabs respond to press with blend feedback
+    behavior: |
+      When an unselected tab is pressed, blend.pressedLighter is applied
+      to the icon as a press hint. The blend reverts on drag-away
+      (cancellation). On confirmed release, the full selection animation
+      begins (animation_coordination).
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Pressing inactive tab applies blend.pressedLighter to icon
+      - Dragging away from pressed tab reverts blend
+      - Releasing pressed tab triggers selection change and animation
+    test_approach: |
+      Press inactive tab, verify blend applied. Drag away, verify reverted.
+      Release on tab, verify selection change callback invoked.
+    required: true
+
+  interaction_noop_active:
+    category: interaction
+    description: Active tab press is a no-op with no visual feedback
+    behavior: |
+      When the selected tab is pressed, no visual feedback is shown and
+      onSelectionChange is NOT invoked. Active tab has no pressed state.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Pressing active tab does not apply blend
+      - Pressing active tab does not invoke onSelectionChange
+    test_approach: |
+      Press active tab, verify no blend applied and no callback invoked.
+    required: true
+
+  interaction_roving_tabindex:
+    category: interaction
+    description: "Web: selected tab gets tabindex=\"0\", others tabindex=\"-1\""
+    behavior: |
+      The selected tab has tabindex="0" and receives focus when the tab bar
+      is focused via Tab key. All other tabs have tabindex="-1".
+    wcag: "2.1.1 Keyboard"
+    platforms: [web]
+    validation:
+      - Selected tab has tabindex="0"
+      - Unselected tabs have tabindex="-1"
+      - Tab key focuses the selected tab
+    test_approach: |
+      Render with selection, verify tabindex attributes. Tab into component,
+      verify focus lands on selected tab.
+    required: true
+
+  interaction_keyboard_navigation:
+    category: interaction
+    description: Left/Right arrows move focus between tabs with wrapping
+    behavior: |
+      When the tab bar has focus, Left and Right arrow keys move focus to
+      the adjacent tab. Focus wraps from last to first and first to last.
+    wcag: "2.1.1 Keyboard"
+    platforms: [web]
+    validation:
+      - Right arrow moves focus to next tab
+      - Left arrow moves focus to previous tab
+      - Focus wraps from last to first
+      - Focus wraps from first to last
+    test_approach: |
+      Focus tab bar, press arrow keys, verify focus movement and wrapping.
+    required: true
+
+  interaction_keyboard_activation:
+    category: interaction
+    description: Enter/Space selects the focused tab
+    behavior: |
+      When a tab has focus and the user presses Enter or Space, that tab
+      becomes selected and onSelectionChange is invoked.
+    wcag: "2.1.1 Keyboard"
+    platforms: [web]
+    validation:
+      - Enter key selects focused tab
+      - Space key selects focused tab
+      - onSelectionChange invoked with focused tab's value
+    test_approach: |
+      Focus an unselected tab, press Enter/Space, verify selection changes.
+    required: true
+
+  interaction_focus_ring:
+    category: interaction
+    description: Focus ring visible on keyboard focus via :focus-visible
+    behavior: |
+      When a tab has keyboard focus, a focus ring is displayed using
+      accessibility.focus.width, accessibility.focus.offset, and
+      accessibility.focus.color tokens. Only visible on keyboard
+      navigation (:focus-visible), not on pointer interaction.
+    wcag: "2.4.7 Focus Visible"
+    platforms: [web]
+    validation:
+      - Focus ring visible on keyboard focus
+      - Focus ring uses accessibility focus tokens
+      - Focus ring not visible on pointer click
+    test_approach: |
+      Tab to focus a tab, verify focus ring. Click a tab, verify no ring.
+    required: true
+
+  # ============================================================
+  # ANIMATION CONTRACTS (2)
+  # ============================================================
+
+  animation_coordination:
+    category: animation
+    description: Three-phase choreography for tab selection transitions
+    behavior: |
+      Selection change animates through three phases:
+      Phase 1 (depart): Glow dims on departing tab, icon begins settling
+        to inactive position. duration150, easingAccelerate.
+      Phase 2 (glide): Dot glides from departing to arriving tab center.
+        duration350, easingGlideDecelerate. Icon outline/solid swap snaps
+        when arriving glow begins (Phase 3).
+      Phase 3 (arrive): Arriving icon lifts to active position, glow
+        brightens. duration150, easingDecelerate. Overlaps Phase 2 at ~80%.
+      All timing uses Rosetta motion tokens — no hard-coded values.
+    wcag: "2.3.3 Animation from Interactions"
+    platforms: [web, ios, android]
+    validation:
+      - Phase 1 dims departing glow and begins icon settle
+      - Phase 2 glides dot between tab centers
+      - Phase 3 lifts arriving icon and brightens glow
+      - Phase 3 overlaps Phase 2 at approximately 80%
+      - Icon swap is snap, not crossfade
+      - All timing uses motion tokens
+    test_approach: |
+      Trigger selection change, verify phase ordering and token usage.
+      Verify icon swap is discrete (snap), not interpolated.
+    required: true
+
+  animation_initial_render:
+    category: animation
+    description: Selected tab appears in active state without animation on first render
+    behavior: |
+      When the component first renders, the selected tab is immediately
+      in its active visual state (solid icon, dot, glow). No animation
+      phases execute on initial render.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Initial render shows selected tab in active state
+      - No animation fires on first render
+    test_approach: |
+      Render component, verify selected tab is immediately active with
+      no transition or animation.
+    required: true
+
+  # ============================================================
+  # STATE CONTRACTS (2)
+  # ============================================================
+
+  state_selected:
+    category: state
+    description: Exactly one tab selected at all times via selectedValue
+    behavior: |
+      The component is controlled — selectedValue determines which tab
+      is active. Exactly one tab is visually and programmatically
+      indicated as selected at all times.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Exactly one tab is selected
+      - Selected tab matches selectedValue prop
+    test_approach: |
+      Render with selectedValue, verify exactly one tab is active.
+    required: true
+
+  state_mode_driven:
+    category: state
+    description: Colors resolve through Spec 080 mode architecture, not props
+    behavior: |
+      Day/Night mode is resolved at the theme level through the Spec 080
+      two-level mode architecture (Level 2 semantic overrides). Mode is
+      NOT a component prop. The component consumes semantic color tokens
+      that resolve differently per mode.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - No mode prop on the component
+      - Color tokens resolve through semantic override system
+    test_approach: |
+      Verify component has no mode/theme prop. Verify color tokens are
+      semantic (not primitive).
+    required: true
+
+  # ============================================================
+  # VISUAL CONTRACTS (4)
+  # ============================================================
+
+  visual_state_colors:
+    category: visual
+    description: Active and inactive tabs have distinct icon and indicator styling
+    behavior: |
+      Active tab: solid-fill icon using color.action.navigation, with a
+      space050 x space050 indicator dot below the icon in the same color.
+      Inactive tab: outline-stroke icon using color.icon.navigation.inactive,
+      no indicator dot.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Active tab has solid-fill icon with color.action.navigation
+      - Active tab has indicator dot with color.action.navigation
+      - Inactive tab has outline-stroke icon with color.icon.navigation.inactive
+      - Inactive tab has no indicator dot
+    test_approach: |
+      Render with selection, verify icon variants and dot presence per state.
+    required: true
+
+  visual_background:
+    category: visual
+    description: Container uses canvas background with subtle top stroke
+    behavior: |
+      Container background is color.structure.canvas. Top edge has a
+      1px stroke using color.structure.border.subtle.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Container background is color.structure.canvas
+      - Container top stroke is color.structure.border.subtle
+    test_approach: |
+      Render component, verify container background and border tokens.
+    required: true
+
+  visual_pill_container:
+    category: visual
+    description: "Web: floating pill with radiusFull, backdrop blur, chrome tracking"
+    behavior: |
+      On web, the container is a floating pill shape with radiusFull
+      border-radius, backdrop blur, and space200 inline margins.
+      On mobile web, dynamically tracks browser chrome via Visual Viewport
+      API with --chrome-offset CSS custom property and 100ms ease-out
+      transition. Falls back to static positioning if visualViewport
+      is unavailable.
+    wcag: null
+    platforms: [web]
+    validation:
+      - Container has radiusFull border-radius
+      - Container has backdrop blur
+      - Container has space200 inline margins
+      - Chrome offset computed from visualViewport
+      - Fallback to static positioning when visualViewport unavailable
+    test_approach: |
+      Render on web, verify pill shape and blur. Mock visualViewport,
+      verify chrome tracking. Remove mock, verify fallback.
+    required: true
+
+  visual_gradient_glow:
+    category: visual
+    description: Elliptical radial gradient on all tabs with mode-aware colors
+    behavior: |
+      Every tab has an elliptical radial gradient background centered on
+      the icon center. Radii: 88% of tab width (horizontal) x 88% of
+      tab height (vertical). Three stops:
+      - 0%: accent center color at 100% opacity
+      - 88%: color.structure.canvas at opacity024
+      - 100%: color.structure.canvas at opacity000
+      Active tab center: color.background.primary.subtle (visible glow).
+      Inactive tab center: color.structure.canvas (subtle vignette).
+      Glow bleeds into adjacent tabs — no clipping. Glow opacity is
+      independently animatable during selection transitions.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - All tabs have radial gradient background
+      - Active gradient center is color.background.primary.subtle
+      - Inactive gradient center is color.structure.canvas
+      - Gradient radii are 88% of tab dimensions
+      - Three gradient stops at 0%, 88%, 100%
+      - Gradient bleeds into adjacent tabs (no overflow clipping)
+    test_approach: |
+      Render with selection, verify gradient presence on all tabs.
+      Verify center color differs between active and inactive.
+    required: true
+
+  # ============================================================
+  # ACCESSIBILITY CONTRACTS (4)
+  # ============================================================
+
+  accessibility_aria_roles:
+    category: accessibility
+    description: Container is tablist, items are tab with aria-selected
+    behavior: |
+      Container has role="tablist" (web) or equivalent semantics
+      (iOS/Android). Each tab has role="tab" with aria-selected
+      reflecting selection state.
+    wcag: "4.1.2 Name, Role, Value"
+    platforms: [web, ios, android]
+    validation:
+      - Container has role="tablist"
+      - Each tab has role="tab"
+      - Selected tab has aria-selected="true"
+      - Unselected tabs have aria-selected="false"
+    test_approach: |
+      Render component, verify ARIA roles and aria-selected attributes.
+    required: true
+
+  accessibility_reduced_motion:
+    category: accessibility
+    description: All animation collapses to immediate state change
+    behavior: |
+      When prefers-reduced-motion (web), isReduceMotionEnabled (iOS),
+      or ANIMATOR_DURATION_SCALE=0 (Android) is active, all animation
+      phases collapse to immediate state change. No animation executes.
+    wcag: "2.3.3 Animation from Interactions"
+    platforms: [web, ios, android]
+    validation:
+      - Reduced motion setting disables all animation
+      - State changes are immediate with reduced motion
+    test_approach: |
+      Enable reduced motion, trigger selection change, verify no animation.
+    required: true
+
+  accessibility_touch_target:
+    category: accessibility
+    description: Minimum tapAreaMinimum width, full tab width tappable
+    behavior: |
+      Each tab's tappable area has a minimum width of tapAreaMinimum.
+      The full width of the tab item is tappable, not just the icon.
+    wcag: "2.5.5 Target Size"
+    platforms: [web, ios, android]
+    validation:
+      - Each tab has min-width of tapAreaMinimum
+      - Full tab width responds to tap/click
+    test_approach: |
+      Render component, verify tab min-width. Tap edge of tab, verify
+      selection change fires.
+    required: true
+
+  accessibility_aria_label:
+    category: accessibility
+    description: accessibilityLabel required, announced instead of icon name
+    behavior: |
+      Each tab requires an accessibilityLabel property (icon-only v1).
+      Screen readers announce the accessibility label, not the icon name.
+    wcag: "4.1.2 Name, Role, Value"
+    platforms: [web, ios, android]
+    validation:
+      - Each tab has accessibilityLabel
+      - Screen reader announces accessibilityLabel
+    test_approach: |
+      Render with accessibilityLabel, verify accessible name matches label.
+    required: true
+
+  # ============================================================
+  # LAYOUT CONTRACTS (1)
+  # ============================================================
+
+  layout_flexible_length:
+    category: layout
+    description: 3-5 tabs with equal-width distribution and no inter-tab gaps
+    behavior: |
+      Tabs distribute evenly within the container with no inter-tab
+      spacing. 3-5 tabs recommended. Each tab has equal width regardless
+      of icon size.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - All tabs have equal width
+      - No gaps between tabs
+      - Layout works with 3, 4, and 5 tabs
+    test_approach: |
+      Render with 3, 4, and 5 tabs, verify equal widths and no gaps.
+    required: true
+
+  # ============================================================
+  # VALIDATION CONTRACTS (1)
+  # ============================================================
+
+  validation_selection_constraints:
+    category: validation
+    description: Minimum 2 tabs, fallback on invalid selectedValue
+    behavior: |
+      If fewer than 2 tabs are provided, the component throws a runtime
+      error with a descriptive message. If selectedValue does not match
+      any tab value, the first tab is selected as fallback.
+    wcag: null
+    platforms: [web, ios, android]
+    validation:
+      - Fewer than 2 tabs throws runtime error
+      - Invalid selectedValue selects first tab
+      - Error message is descriptive
+    test_approach: |
+      Provide 1 tab, verify error thrown. Provide invalid selectedValue,
+      verify first tab selected.
+    required: true
+
+# ============================================================
+# EXCLUSIONS
+# ============================================================
+
+exclusions:
+  state_disabled:
+    reason: |
+      No disabled state. Unavailable destinations should not be rendered.
+      Consistent with DesignerPunk philosophy and Nav-SegmentedChoice-Base.
+
+  interaction_hoverable:
+    reason: |
+      No hover state on tabs. Pressed state (blend.pressedLighter) provides
+      touch feedback. Hover is not applicable to the primary mobile context.
