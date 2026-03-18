@@ -408,12 +408,20 @@ Tasks 4 and 7 are blocked on Spec 050's token mapping (Nav-TabBar-Base semantic 
     - _Requirements: R8 AC1-4_
 
 
-- [ ] 7. Proof Case Validation (Nav-TabBar-Base Tokens)
+- [x] 7. Proof Case Validation (Nav-TabBar-Base Tokens)
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
 
-  ⏸️ **BLOCKED (2026-03-17)**: Depends on Task 4 (dark primitive values) and Spec 050 token mapping. Cannot validate end-to-end resolution without real design values. Unblocks when 050's token mapping is defined and Task 4 is complete.
+  ✅ **COMPLETE (2026-03-17)**: All 5 Nav-TabBar-Base Level 2 overrides validated end-to-end. F39 DTCG gap fixed.
+
+  **Success Criteria:**
+  - Nav-TabBar-Base mode-differentiated tokens resolve correctly through the full pipeline ✅
+  - At least one composite-reference token validated (structural replacement) ✅ (`color.structure.border.subtle`)
+  - Web output produces correct `light-dark()` values for Nav-TabBar-Base tokens ✅
+  - iOS and Android output produces correct mode-aware values ✅
+  - Level 2 tokens resolve via semantic overrides ✅ (all 5 tokens are Level 2)
+  - Proof case documents the end-to-end resolution path for each token ✅
 
   **Success Criteria:**
   - Nav-TabBar-Base mode-differentiated tokens resolve correctly through the full pipeline
@@ -435,7 +443,7 @@ Tasks 4 and 7 are blocked on Spec 050's token mapping (Nav-TabBar-Base semantic 
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 7 Complete: Proof Case Validation"`
   - Verify: Nav-TabBar-Base tokens produce correct mode-aware output
 
-  - [ ] 7.1 Validate Nav-TabBar-Base token resolution
+  - [x] 7.1 Validate Nav-TabBar-Base token resolution
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada + Lina (Ada validates resolution correctness, Lina validates pipeline output matches Figma-extracted values. Peter validates that Figma design intent is correct — separate step.)
@@ -480,7 +488,7 @@ Tasks 4 and 7 are blocked on Spec 050's token mapping (Nav-TabBar-Base semantic 
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 8 Complete: Documentation Updates"`
   - Verify: MCP queries return mode architecture content
 
-  - [ ] 8.1 Update Rosetta System Architecture documentation
+  - [x] 8.1 Update Rosetta System Architecture documentation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -489,7 +497,7 @@ Tasks 4 and 7 are blocked on Spec 050's token mapping (Nav-TabBar-Base semantic 
     - Document fallback behavior and correctness properties
     - _Requirements: R10 AC1_
 
-  - [ ] 8.2 Update Token Quick Reference
+  - [x] 8.2 Update Token Quick Reference
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -498,7 +506,7 @@ Tasks 4 and 7 are blocked on Spec 050's token mapping (Nav-TabBar-Base semantic 
     - Include examples of Level 1 and Level 2 resolution
     - _Requirements: R10 AC2_
 
-  - [ ] 8.3 Update documentation MCP
+  - [x] 8.3 Update documentation MCP
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada

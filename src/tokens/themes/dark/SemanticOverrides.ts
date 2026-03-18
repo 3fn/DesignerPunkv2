@@ -117,6 +117,7 @@ import type { SemanticOverrideMap } from '../types';
 // ICON
 // ======================================================================
 // color.icon.default: { value: 'gray200' }
+// color.icon.navigation.inactive: { value: 'gray300' }
 
 // ======================================================================
 // PRINT (MODE-INVARIANT)
@@ -158,7 +159,10 @@ import type { SemanticOverrideMap } from '../types';
 // Each key must match a semantic token name in the registry.
 
 export const darkSemanticOverrides: SemanticOverrideMap = {
-  // No confirmed Level 2 overrides yet.
-  // Nav-TabBar-Base semantic token assignment pending (050 OQ-11).
-  // Overrides will be added here as component specs complete their mappings.
+  // Nav-TabBar-Base overrides (Spec 050 Ada R2, 2026-03-17)
+  'color.structure.canvas': { primitiveReferences: { value: 'gray400' } },
+  'color.action.navigation': { primitiveReferences: { value: 'cyan100' } },
+  'color.background.primary.subtle': { primitiveReferences: { value: 'cyan500' } },
+  'color.structure.border.subtle': { primitiveReferences: { color: 'gray500', opacity: 'opacity048' } },
+  'color.icon.navigation.inactive': { primitiveReferences: { value: 'gray100' } },
 };

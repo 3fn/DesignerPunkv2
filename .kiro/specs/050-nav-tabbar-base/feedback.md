@@ -20,7 +20,7 @@
 - **Design change (2026-03-16)**: Glow effect on active tab required for both Day and Night modes. Token definition needed from Ada. Confirmed by Peter.
 - **Correction (2026-03-16)**: Badge deferment was assumed from Figma delivery absence, not authorized by Peter. Badge scope is an open question requiring explicit decision. See design-outline.md § Open Questions OQ-6.
 - **Correction (2026-03-16)**: Night inactive tab `color.teal200` stroke is a Figma delivery error (strokes turned off in design, data carried over). Disregard. See feedback.md [ADA R1] F23.
-- **Blocker (2026-03-16)**: Spec formalization paused — token system lacks mode-differentiated semantic tokens. Mode architecture work required before full token pass and formalization can proceed. See feedback.md [ADA R1] B1.
+- **Blocker CLEARED (2026-03-17)**: Mode architecture implemented in Spec 080. Two-level resolution system (SemanticOverrideResolver + SemanticValueResolver) supports mode-differentiated semantic tokens. Full token pass (Ada R2) can proceed. B1 resolved.
 
 ---
 
@@ -267,6 +267,78 @@
 - F8 (3-5 tabs enforcement) → noted in decisions, method TBD
 - F9 (speculative future variants) → kept as future direction, doesn't influence base design
 - F15 (Figma "State" variant naming) → Figma-side correction, not a spec issue
+
+---
+
+#### [ADA R2]
+
+**Date**: 2026-03-17
+**Context**: Full token pass (OQ-11). Mode architecture (Spec 080) now implemented. All choreography questions resolved (Peter R1).
+
+**Final Token Mapping for Nav-TabBar-Base:**
+
+**Reuse existing semantic tokens (3) — add Level 2 dark overrides in `SemanticOverrides.ts`:**
+
+| Token | Day (base) | Dark Override | Role |
+|-------|-----------|---------------|------|
+| `color.structure.canvas` | `white100` | → `gray400` | Container background + inactive gradient center |
+| `color.action.navigation` | `cyan500` | → `cyan100` | Active icon fill + indicator dot |
+| `color.background.primary.subtle` | `cyan100` | → `cyan500` | Active gradient center |
+
+**Modify existing composite token (1) — Level 2 dark override on color component:**
+
+| Token | Day (base) | Dark Override | Role |
+|-------|-----------|---------------|------|
+| `color.structure.border.subtle` | `gray100 @ opacity048` | → `gray500 @ opacity048` | Container top stroke |
+
+**New semantic token (1) — approved by Peter:**
+
+| Token | Day Primitive | Dark Override | Role |
+|-------|--------------|---------------|------|
+| `color.icon.navigation.inactive` | `gray300` | → `gray100` | Inactive icon fill |
+
+Scoped to navigation contexts (Nav-TabBar, Nav-Header, nav family). Not `color.icon.inactive` — the specific gray values are tuned for nav-on-canvas contrast and shouldn't promise universal applicability. Blend token alternatives explored (all 4 directions × 5 levels, chained desaturate+darken, opacity compositing) — none approach the target neutral grays from saturated cyan. These are independent color roles, not blend-derivable states.
+
+**Mode-invariant (no override needed):**
+
+| Primitive | Value | Role |
+|-----------|-------|------|
+| `opacity024` | `0.24` | Gradient edge opacity |
+
+**Spacing tokens (confirmed, unchanged from R1):**
+- `space050`, `space100`, `space150`, `space200` — all confirmed via Figma bindings
+
+**Motion tokens (confirmed, unchanged from R1):**
+- `duration150`, `duration350`, `easingAccelerate`, `easingGlideDecelerate`, `easingDecelerate`
+
+**Blocker B1 Status**: CLEARED. Spec 080 delivered two-level mode resolution. These overrides will be the first active Level 2 entries in the system.
+
+**Next**: Implement overrides (Spec 080 Task 4 + Task 7 proof case). Create `color.icon.navigation.inactive` in semantic registry.
+
+---
+
+#### [PETER R1]
+
+**Date**: 2026-03-17
+**Context**: Resolving open questions OQ-1 through OQ-6 after Spec 080 mode architecture implementation.
+
+**OQ-1 (Glow scope)**: Glow bleeds into adjacent tabs — no clipping. "I don't mind if it bleeds." Ada assessment: bleed is simpler to implement (no overflow hidden or masking), produces more organic visual result.
+
+**OQ-2 (Glow animation)**: Dims at departing tab, brightens at arriving tab. Confirms decomposed token structure — glow opacity must be independently animatable during transition phases.
+
+**OQ-3 (Icon lift timing)**: Slight overlap with end of dot glide. More fluid feel than strictly sequential phases.
+
+**OQ-4 (Icon swap style)**: Icon outline→solid swap happens when the arriving glow animates in (Phase 3). Snap, not crossfade during glide.
+
+**OQ-5 (Padding vs lift)**: Figma padding asymmetry is a construction artifact of building components in Figma, not prescribed implementation. Any mechanism (transform, padding, flex) that achieves the same visual result is acceptable, as long as it aligns with DesignerPunk principles and patterns.
+
+**OQ-6 (Badge scope)**: Badges deferred from v1. Condition: structure must support adding badges later as a light effort. Ada assessment: Stemma composition with Badge family components (Badge-Count-Base, Badge-Count-Notification) via a named slot on the tab item makes future integration lightweight. Tab item structure should include a composition slot placeholder. No badge tokens needed for v1.
+
+**Impact on Blocked Items:**
+- OQ-11 (Full token pass): UNBLOCKED — mode architecture (Spec 080) implemented + all choreography questions answered
+- OQ-12 (Badge tokens): RESOLVED — deferred per OQ-6
+- OQ-13 (Badge composition): RESOLVED — deferred, slot placeholder only
+- OQ-14 (Behavioral contracts): UNBLOCKED — choreography answers available for Lina
 
 ---
 

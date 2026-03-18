@@ -67,6 +67,8 @@ import { motionTokens as semanticMotionTokens } from '../tokens/semantic/MotionT
 import { typographyTokens } from '../tokens/semantic/TypographyTokens';
 import { progressColorTokens } from '../tokens/semantic/ColorTokens';
 import { shadowTokens as semanticShadowTokens } from '../tokens/semantic/ShadowTokens';
+import { darkSemanticOverrides } from '../tokens/themes/dark/SemanticOverrides';
+import { resolveSemanticTokenValue } from '../resolvers/SemanticValueResolver';
 
 /** Set of valid DTCG types for validation (Format Module 2025.10) */
 const VALID_DTCG_TYPES: ReadonlySet<string> = new Set([
@@ -542,14 +544,31 @@ export class DTCGFormatGenerator {
         };
       }
 
-      // Spec 080: emit mode contexts when light/dark values differ
-      const primitiveToken = (colorTokens as Record<string, PrimitiveToken>)[primaryRef];
-      if (primitiveToken) {
-        const colorVal = primitiveToken.platforms.web.value as ColorTokenValue;
-        if (colorVal?.light?.base && colorVal?.dark?.base && colorVal.light.base !== colorVal.dark.base) {
+      // Spec 080: emit mode contexts for Level 2 overrides or Level 1 primitive differences
+      const override = darkSemanticOverrides[key];
+      if (override) {
+        // Level 2: semantic override swaps primitive name in dark mode
+        // Resolve both modes to concrete rgba values
+        const lightResolved = resolveSemanticTokenValue(token as any, 'light');
+        const darkToken = { ...token, primitiveReferences: override.primitiveReferences } as any;
+        const darkResolved = resolveSemanticTokenValue(darkToken, 'dark');
+        const lightVal = lightResolved.primitiveReferences?.value;
+        const darkVal = darkResolved.primitiveReferences?.value;
+        if (lightVal && darkVal && lightVal !== darkVal) {
           if (!extensions.modes) extensions.modes = {};
-          extensions.modes.light = colorVal.light.base;
-          extensions.modes.dark = colorVal.dark.base;
+          extensions.modes.light = lightVal;
+          extensions.modes.dark = darkVal;
+        }
+      } else {
+        // Level 1: check if primitive itself has distinct light/dark values
+        const primitiveToken = (colorTokens as Record<string, PrimitiveToken>)[primaryRef];
+        if (primitiveToken) {
+          const colorVal = primitiveToken.platforms.web.value as ColorTokenValue;
+          if (colorVal?.light?.base && colorVal?.dark?.base && colorVal.light.base !== colorVal.dark.base) {
+            if (!extensions.modes) extensions.modes = {};
+            extensions.modes.light = colorVal.light.base;
+            extensions.modes.dark = colorVal.dark.base;
+          }
         }
       }
       // If token has separate color + opacity composition, note it

@@ -3,7 +3,7 @@
 **Date**: January 19, 2026
 **Revised**: March 16, 2026 (Thurgood R2)
 **Purpose**: Capture design decisions and token requirements before creating full spec
-**Status**: Design Outline (Pre-Requirements) — Open questions blocking formalization (see § Open Questions)
+**Status**: Design Outline (Pre-Requirements) — Open questions resolved. Mode architecture blocker cleared. Awaiting Ada R2 (full token pass) and Lina R2.
 
 > ⚠️ **REVISION NOTICE (2026-03-16, Thurgood R2)**: This outline has been substantially revised to incorporate:
 > - Figma analysis data (`analysis/analysis-tab/`, `analysis/analysis-tab-bar/`)
@@ -78,13 +78,13 @@ Per DesignerPunk's True Native architecture and feedback F14:
 
 ### Container
 
-> **Mode note**: Container values differ between Day and Night modes. Semantic token abstraction blocked on mode architecture (B1). Primitives listed per mode.
+> **Mode note (updated Ada R2)**: Semantic tokens mapped. Dark overrides will be first active Level 2 entries in the system.
 
-| Property | Day | Night | Notes |
-|----------|-----|-------|-------|
-| Background | `white100` | `gray400` | ⚠️ Not `color.structure.surface.primary` (resolves to `white200`). Needs mode-aware semantic token. |
-| Top Stroke | `white200` | `gray500` | Peter approved `color.structure.border.subtle` semantically. Current definition doesn't match either value — needs mode update. |
-| Position | Fixed to bottom | Fixed to bottom | See § Platform Position Behavior |
+| Property | Day | Night | Semantic Token | Notes |
+|----------|-----|-------|----------------|-------|
+| Background | `white100` | `gray400` | `color.structure.canvas` + dark override | Canvas = base layer surface. Dark override swaps primitive name. |
+| Top Stroke | `gray100 @ opacity048` | `gray500 @ opacity048` | `color.structure.border.subtle` + dark override | Composite token. Dark override swaps color component, opacity constant. |
+| Position | Fixed to bottom | Fixed to bottom | — | See § Platform Position Behavior |
 
 **Home Indicator**: OS-managed, not part of component surface. Implementation relies on OS safe area insets (iOS/Android) and `env(safe-area-inset-bottom)` + `--chrome-offset` (web). Figma Home Indicator frame uses Apple device-specific hard-coded values — not tokenizable. (F16)
 
@@ -151,23 +151,23 @@ Per DesignerPunk's True Native architecture and feedback F14:
 
 > **Mode note**: Icon colors differ between Day and Night. The cyan primitives are intentionally inverted between icon fill and gradient center across modes — glow is softer in Day, more vivid in Night; icon does the opposite for legibility. (F20)
 
-| State | Day Icon | Night Icon | Description |
-|-------|----------|------------|-------------|
-| **Active** | `cyan500` (solid fill) | `cyan100` (solid fill) | Selected tab — solid icon variant |
-| **Inactive** | `gray300` (outline stroke) | `gray100` (outline stroke) | Default — outline icon variant |
-| **Pressed** | TBD | TBD | Touch feedback — open question, not in Figma analysis |
-| **Disabled** | TBD | TBD | Unavailable — not in Figma delivery |
+| State | Day Icon | Night Icon | Semantic Token | Description |
+|-------|----------|------------|----------------|-------------|
+| **Active** | `cyan500` (solid fill) | `cyan100` (solid fill) | `color.action.navigation` | Selected tab — solid icon variant |
+| **Inactive** | `gray300` (outline stroke) | `gray100` (outline stroke) | `color.icon.navigation.inactive` (new) | Default — outline icon variant |
+| **Pressed** | TBD | TBD | TBD (blend on active/inactive base) | Touch feedback — not in Figma analysis |
+| **Disabled** | TBD | TBD | TBD | Unavailable — not in Figma delivery |
 
-**Icon Style**: Active tabs use "Icon Solid" (filled) variant. Inactive tabs use "Icon" (outline/stroke) variant. The icon swap between outline↔solid is part of the selection transition (choreography TBD — see OQ-4).
+**Icon Style**: Active tabs use "Icon Solid" (filled) variant. Inactive tabs use "Icon" (outline/stroke) variant. The icon swap between outline↔solid snaps when the arriving glow animates in (Phase 3, per OQ-4).
 
 ### Indicator Dot
 
 4×4px circle below the icon in active state only. (F21)
 
-| Property | Day | Night |
-|----------|-----|-------|
-| Fill | `cyan500` | `cyan100` |
-| Size | 4×4px | 4×4px |
+| Property | Day | Night | Semantic Token |
+|----------|-----|-------|----------------|
+| Fill | `cyan500` | `cyan100` | `color.action.navigation` |
+| Size | 4×4px | 4×4px | — |
 
 Same color as the active icon fill per mode. Positioned below icon with `space050` gap (the item-spacing value on active tabs).
 
@@ -179,19 +179,19 @@ Same color as the active icon fill per mode. Positioned below icon with `space05
 - Stop 0% (center): accent color at 100% opacity
 - Stop 100% (edge): tab bar container background at `opacity024` (24%)
 
-| State | Day Center | Night Center | Edge Color |
-|-------|-----------|-------------|------------|
-| **Active** | `cyan100` | `cyan500` | Container background @ `opacity024` |
-| **Inactive** | `white100` | `gray400` | Container background @ `opacity024` |
+| State | Day Center | Night Center | Semantic Token (center) | Edge Color |
+|-------|-----------|-------------|------------------------|------------|
+| **Active** | `cyan100` | `cyan500` | `color.background.primary.subtle` + dark override | `color.structure.canvas` @ `opacity024` |
+| **Inactive** | `white100` | `gray400` | `color.structure.canvas` (same as container bg) | `color.structure.canvas` @ `opacity024` |
 
 **Notes**:
-- Edge color is always the tab bar container background for that mode
+- Edge color is always `color.structure.canvas` for that mode (= container background)
 - `opacity024` exists in the opacity scale (value: `0.24`)
 - Inactive gradients create a subtle same-color vignette (center = container background, so the gradient is nearly invisible — provides contrast protection without visual prominence)
 - Active gradients create the visible glow effect (center = cyan accent, distinct from container background)
 - Gradient is applied as the tab item background, not layered behind the icon
 - Gradient radius/aspect ratio TBD from Figma (extractor didn't capture gradient geometry)
-- Token structure recommendation: decomposed (only center color varies; edge = container background constant, edge opacity = `opacity024` constant). Final structure depends on animation choreography (OQ-2). (F11, OQ-9)
+- Token structure: decomposed. Only center color varies; edge = `color.structure.canvas` constant, edge opacity = `opacity024` constant. Glow opacity independently animatable per OQ-2. (F11, OQ-9)
 
 ### Figma Errors (Disregard)
 
@@ -225,13 +225,13 @@ Same color as the active icon fill per mode. Positioned below icon with `space05
 - `easingGlideDecelerate` — glide motion
 - `easingDecelerate` — arriving motion
 
-### Open Choreography Questions
+### Choreography Decisions (Peter R1, 2026-03-17)
 
-- **OQ-1**: Does the glow bleed into adjacent tabs, or clip to tab bounds?
-- **OQ-2**: Does the glow animate with the dot glide (dim/brighten), or snap as a static property of selected state?
-- **OQ-3**: Should the icon lift overlap with the end of the glide (more fluid) or be strictly sequential (clearer phases)?
-- **OQ-4**: Does the icon fill/outline swap happen as a crossfade during the glide, or as a snap at the midpoint?
-- **OQ-5**: Is the padding asymmetry the complete icon lift, or is there an additional transform on top?
+- **OQ-1 ✅**: Glow bleeds into adjacent tabs — no clipping. Simpler implementation, more organic visual.
+- **OQ-2 ✅**: Glow dims at departing tab, brightens at arriving tab (animated, not snapped). Confirms decomposed token structure — glow opacity must be independently animatable.
+- **OQ-3 ✅**: Icon lift overlaps slightly with end of dot glide (~80% through). More fluid feel.
+- **OQ-4 ✅**: Icon outline→solid swap happens when the arriving glow animates in (Phase 3), not during the glide. Snap, not crossfade.
+- **OQ-5 ✅**: Padding asymmetry in Figma is a construction artifact, not prescribed implementation. Any mechanism (transform, padding, flex) that achieves the same visual result is acceptable.
 
 ### Reduced Motion
 
@@ -277,11 +277,11 @@ All animation phases must respect `prefers-reduced-motion` (web), `isReduceMotio
 
 ### Token Gaps
 
-- **Mode-aware semantic tokens**: The token system cannot currently express different primitive references per mode. Every color property in this component needs mode branching. Blocked on mode architecture (B1).
+- **Mode-aware semantic tokens**: ✅ RESOLVED (Ada R2, 2026-03-17). Five tokens mapped: 3 existing with dark overrides, 1 existing composite with dark override, 1 new (`color.icon.navigation.inactive`). Implementation pending Spec 080 Task 4.
 - **Glow gradient geometry**: Radius and aspect ratio of the radial gradient not captured by Figma extractor. Needs manual extraction or Ada definition.
 - **Pressed state colors**: Not in Figma analysis. Need definition.
 - **Disabled state colors**: Not in Figma delivery. Need definition if disabled tabs are supported.
-- **Badge tokens**: Dependent on badge scope decision (OQ-6). If in v1, Ada needs to define badge-related tokens alongside glow/animation tokens (OQ-12).
+- **Badge tokens**: Deferred from v1 (OQ-6 resolved). Tab item structure should include composition slot placeholder for future Badge family integration.
 - **Web container item-spacing**: 8px value in Figma has no token binding. Needs mapping (likely `space100`).
 
 ### Premature Component Tokens (Removed)
@@ -299,7 +299,7 @@ The previous `bottomTabs.*` component token proposal has been removed per feedba
 - `selectedValue` — currently selected tab
 - Selection change callback
 - `testID` — test automation
-- Badge composition slot (if badges in v1 scope)
+- Badge composition slot (deferred from v1 — placeholder slot for future Badge family integration)
 
 **Reference**: `src/components/core/Nav-SegmentedChoice-Base/types.ts` for the established pattern.
 
@@ -396,26 +396,26 @@ The previous `bottomTabs.*` component token proposal has been removed per feedba
 
 ### Peter
 
-- **OQ-1 (Glow scope)**: Does the active tab glow bleed into adjacent tabs, or is it clipped to the tab's bounds? → feedback.md [LINA R1] F11
-- **OQ-2 (Glow animation)**: Does the glow animate with the dot glide (dims at departing, brightens at arriving), or snap as a static property of selected state? → feedback.md [LINA R1] F11
-- **OQ-3 (Icon lift timing)**: Should the icon lift overlap with the end of the dot glide (more fluid) or be strictly sequential (clearer phases)? → feedback.md [LINA R1] F12
-- **OQ-4 (Icon swap style)**: Does the icon fill/outline swap happen as a crossfade during the glide, or as a snap at the midpoint? → feedback.md [LINA R1] F12
-- **OQ-5 (Padding vs lift)**: Is the active/inactive padding asymmetry (F13) the icon lift animation itself, or is there an additional transform on top? → feedback.md [LINA R1] F13
-- **OQ-6 (Badge scope)**: Badge support is listed as a key characteristic of this component. Figma delivery did not include badge variants — are badges in v1 scope or deferred? Explicit decision needed. → feedback.md [LINA R1] re: badge deferment assumption
+- **OQ-1 (Glow scope)**: ✅ RESOLVED (2026-03-17). Glow bleeds into adjacent tabs — no clipping. Simpler, more organic. → feedback.md [PETER R1]
+- **OQ-2 (Glow animation)**: ✅ RESOLVED (2026-03-17). Dims at departing, brightens at arriving (animated). Confirms decomposed token structure — glow opacity independently animatable. → feedback.md [PETER R1]
+- **OQ-3 (Icon lift timing)**: ✅ RESOLVED (2026-03-17). Slight overlap with end of dot glide (~80% through). → feedback.md [PETER R1]
+- **OQ-4 (Icon swap style)**: ✅ RESOLVED (2026-03-17). Snap when arriving glow animates in (Phase 3), not crossfade during glide. → feedback.md [PETER R1]
+- **OQ-5 (Padding vs lift)**: ✅ RESOLVED (2026-03-17). Figma padding asymmetry is construction artifact. Any mechanism achieving same visual result is acceptable. → feedback.md [PETER R1]
+- **OQ-6 (Badge scope)**: ✅ RESOLVED (2026-03-17). Badges deferred from v1. Tab item structure includes composition slot placeholder for future Badge family integration. → feedback.md [PETER R1]
 
 ### Ada
 
 - **OQ-7 (Glow color definition)**: ✅ RESOLVED (2026-03-16). Distinct primitives per mode. Day active: `cyan100` center. Night active: `cyan500` center. Inactive tabs also use radial gradients. → feedback.md [ADA R1] F17, F20
 - **OQ-8 (Glow color stops)**: ✅ RESOLVED (2026-03-16). Radial gradient, two stops: center at 100% → container background at `opacity024`. Gradient radius/aspect ratio still TBD. → feedback.md [ADA R1]
-- **OQ-9 (Glow token structure)**: ✅ RESOLVED (2026-03-16). Decomposed recommended. Final structure depends on animation choreography (OQ-2). → feedback.md [ADA R1]
-- **OQ-10 (Icon lift spacing)**: ✅ RESOLVED (2026-03-16). `space050` (4px). Padding delta, not a transform. → feedback.md [ADA R1]
-- **OQ-11 (Full token pass)**: ⏸️ BLOCKED on mode architecture. Partial mapping complete. Full pass resumes after mode support is implemented. → feedback.md [ADA R1] B1
-- **OQ-12 (Badge tokens)**: ⏸️ Dependent on OQ-6. No badge data in Figma delivery.
+- **OQ-9 (Glow token structure)**: ✅ RESOLVED (2026-03-16, confirmed 2026-03-17). Decomposed. OQ-2 answer (glow animates) confirms independent opacity control needed. → feedback.md [ADA R1]
+- **OQ-10 (Icon lift spacing)**: ✅ RESOLVED (2026-03-16). `space050` (4px). Implementation mechanism flexible per OQ-5. → feedback.md [ADA R1]
+- **OQ-11 (Full token pass)**: ✅ RESOLVED (2026-03-17, Ada R2). Five tokens mapped: 3 existing with dark overrides, 1 composite with dark override, 1 new (`color.icon.navigation.inactive`). → feedback.md [ADA R2]
+- **OQ-12 (Badge tokens)**: ✅ RESOLVED (2026-03-17). Deferred from v1 per OQ-6. No badge tokens needed now.
 
-### Lina (pending Ada token resolution + Peter answers above)
+### Lina (pending Ada token resolution)
 
-- **OQ-13 (Badge composition)**: Confirm composition with Badge family components vs internal rendering. Deferred pending OQ-6 resolution. → feedback.md [LINA R1] re: F6
-- **OQ-14 (Behavioral contracts)**: Draft contracts during requirements phase. Blocked on animation choreography answers (OQ-2 through OQ-5) and glow token definitions. → feedback.md [LINA R1] re: F7
+- **OQ-13 (Badge composition)**: ✅ RESOLVED (2026-03-17). Badges deferred from v1. Include composition slot placeholder in tab item structure for future Badge family integration. → feedback.md [PETER R1] OQ-6
+- **OQ-14 (Behavioral contracts)**: ⏳ UNBLOCKED. Peter's choreography answers (OQ-1 through OQ-5) resolved. Pending Ada's full token pass (OQ-11). → feedback.md [LINA R1] re: F7
 
 ---
 
@@ -425,10 +425,10 @@ The previous `bottomTabs.*` component token proposal has been removed per feedba
 2. ✅ **Initial review** — Thurgood R1 + Lina R1 feedback captured
 3. ✅ **Ada R1 token analysis** — Figma analysis reviewed, glow/gradient pattern resolved, icon colors mapped, mode architecture gap identified
 4. ✅ **Thurgood R2** — Design outline revised to incorporate all findings, corrected token references, removed placeholder content
-5. ⏳ **Resolve remaining open questions** — Peter answers OQ-1 through OQ-6
-6. ⛔ **BLOCKED: Mode architecture** — Token system lacks mode-differentiated semantic tokens. Spec formalization paused pending mode architecture work (separate spec). See feedback.md [ADA R1] B1.
-7. ⏳ **Ada R2** — Complete full token pass (OQ-11) after mode architecture is implemented
-8. ⏳ **Lina R2** — After token resolution and Peter's animation choreography answers
+5. ✅ **Resolve remaining open questions** — Peter R1 resolved OQ-1 through OQ-6 (2026-03-17)
+6. ✅ **Mode architecture implemented** — Spec 080 delivered two-level mode resolution system. B1 blocker cleared.
+7. ✅ **Ada R2** — Full token pass complete (OQ-11). 5 tokens mapped, 1 new token approved (`color.icon.navigation.inactive`).
+8. ⏳ **Lina R2** — After Ada's token implementation. Choreography answers and token mapping now available.
 9. ⏳ **Create requirements.md** — EARS format
 10. ⏳ **Create design.md** — Detailed architecture
 11. ⏳ **Create tasks.md** — Implementation plan

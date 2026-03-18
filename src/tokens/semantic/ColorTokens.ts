@@ -533,13 +533,21 @@ export const colorTokens: Record<string, Omit<SemanticToken, 'primitiveTokens'>>
     description: 'Subtle cyan tint background for secondary button hover states, selected list items, and hover states on cards/containers'
   },
 
-  // Icon Colors (1 token)
+  // Icon Colors (2 tokens)
   'color.icon.default': {
     name: 'color.icon.default',
     primitiveReferences: { value: 'gray200' },
     category: SemanticCategory.COLOR,
     context: 'Default icon color with optical balance (slightly lighter than text)',
     description: 'Default icon color using gray200 for optical balance - slightly lighter than text (gray300) for proper visual weight'
+  },
+
+  'color.icon.navigation.inactive': {
+    name: 'color.icon.navigation.inactive',
+    primitiveReferences: { value: 'gray300' },
+    category: SemanticCategory.COLOR,
+    context: 'Inactive navigation icon color — neutral gray for unselected destinations',
+    description: 'Inactive icon fill for navigation components (Nav-TabBar, Nav-Header). Neutral gray distinct from active cyan. Dark override swaps to gray100. Scoped to navigation contexts — not a universal inactive icon token.'
   },
 
   // Print Media Colors (1 token)
@@ -794,7 +802,7 @@ export function getAllColorTokens(): Array<Omit<SemanticToken, 'primitiveTokens'
  * Total: 59 tokens
  */
 export function validateColorTokenCount(): boolean {
-  const expectedCount = 61;
+  const expectedCount = 62;
   const actualCount = colorTokenNames.length;
   if (actualCount !== expectedCount) {
     console.warn(`Color token count mismatch: expected ${expectedCount}, got ${actualCount}`);

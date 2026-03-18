@@ -147,7 +147,7 @@ Some semantic tokens have baked-in alpha values for specific use cases:
 
 ## Token Pipeline Architecture
 
-The Rosetta System processes tokens through a five-stage pipeline:
+The Rosetta System processes tokens through a six-stage pipeline:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -161,6 +161,16 @@ The Rosetta System processes tokens through a five-stage pipeline:
 │   │ define raw   │    │ relationships│    │ for queries  │                  │
 │   │ values       │    │ verified     │    │ and lookups  │                  │
 │   └──────────────┘    └──────────────┘    └──────────────┘                  │
+│                                                  │                           │
+│                                                  ▼                           │
+│                                           ┌──────────────┐                  │
+│                                           │     MODE     │                  │
+│                                           │  RESOLUTION  │                  │
+│                                           │              │                  │
+│                                           │ Two-level    │                  │
+│                                           │ light/dark   │                  │
+│                                           │ resolver     │                  │
+│                                           └──────────────┘                  │
 │                                                  │                           │
 │                                                  ▼                           │
 │                       ┌──────────────┐    ┌──────────────┐                  │
@@ -278,9 +288,55 @@ Validated tokens are stored in global registries for querying and lookup.
 - Semantic registry: `src/registries/SemanticTokenRegistry.ts`
 - Component registry: `src/registries/ComponentTokenRegistry.ts`
 
-### Stage 4: Generation
+### Stage 4: Mode Resolution (Spec 080)
 
-Registered tokens are transformed into platform-specific formats.
+Semantic color tokens are resolved into light and dark mode sets before generation. This is a two-level process that sits between Registry and Generation — generators receive fully-resolved token sets and have no self-fetch capability.
+
+**Two-Level Resolution:**
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                       MODE RESOLUTION SUBSYSTEM                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   Level 1: Primitive Mode Values                                             │
+│   ├── Primitives carry distinct light/dark values in ColorTokenValue         │
+│   ├── Same primitive name in both modes — primitive handles differentiation │
+│   ├── Handles the common case (~85% of semantic color tokens)               │
+│   └── Resolved by: SemanticValueResolver                                    │
+│                                                                              │
+│   Level 2: Semantic Overrides                                                │
+│   ├── Dark theme file swaps the primitive *name* (role remapping)           │
+│   ├── Example: active icon cyan500 (light) → cyan100 (dark)                │
+│   ├── Handles the exception case (tokens needing different primitives)      │
+│   └── Resolved by: SemanticOverrideResolver                                │
+│                                                                              │
+│   Orchestration (generateTokenFiles.ts)                                      │
+│   ├── Level 2 first: produces light + dark token name sets                  │
+│   ├── Level 1 second: resolves each set's names to rgba values             │
+│   ├── Passes both resolved sets to generators                               │
+│   └── Generators receive GenerationOptions with required semanticTokens     │
+│       and darkSemanticTokens                                                │
+│                                                                              │
+│   Fallback Behavior                                                          │
+│   ├── Absent dark override → token uses base (light) primitive reference    │
+│   ├── Absent dark primitive value → primitive's light value used            │
+│   ├── Fallback is graceful degradation, not build failure                   │
+│   └── Mode parity audit reports fallback usage: npm run audit:mode-parity   │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Entry Points:**
+- Override resolver: `src/resolvers/SemanticOverrideResolver.ts`
+- Value resolver: `src/resolvers/SemanticValueResolver.ts`
+- Dark theme file: `src/tokens/themes/dark/SemanticOverrides.ts`
+- Override types: `src/tokens/themes/types.ts`
+- Mode parity audit: `src/validators/ModeParity.ts`
+- Theme file generator: `src/tools/ThemeFileGenerator.ts`
+
+### Stage 5: Generation
+
+Mode-resolved tokens are transformed into platform-specific formats. Generators receive pre-resolved light and dark token sets and produce mode-aware output when values differ between modes.
 
 **Generation Architecture**:
 ```
@@ -290,13 +346,16 @@ Registered tokens are transformed into platform-specific formats.
 │                                                                              │
 │   TokenFileGenerator (Orchestrator)                                          │
 │   ├── Coordinates all generation activities                                 │
-│   ├── Queries registries for tokens to generate                             │
+│   ├── Receives pre-resolved light + dark semantic token sets                │
 │   └── Location: src/generators/TokenFileGenerator.ts                        │
 │                                                                              │
 │   Platform Format Generators                                                 │
 │   ├── WebFormatGenerator: CSS custom properties (RGBA format)               │
+│   │   └── Mode-aware: light-dark(lightVal, darkVal) when values differ     │
 │   ├── iOSFormatGenerator: Swift constants (UIColor format)                  │
+│   │   └── Mode-aware: UIColor { traitCollection } when values differ       │
 │   ├── AndroidFormatGenerator: Kotlin constants (Color.argb format)          │
+│   │   └── Mode-aware: name_light + name_dark when values differ            │
 │   └── Location: src/providers/*FormatGenerator.ts                           │
 │                                                                              │
 │   Color Format Conversion                                                    │
@@ -318,7 +377,7 @@ Registered tokens are transformed into platform-specific formats.
 - iOS generation: `src/providers/iOSFormatGenerator.ts`
 - Android generation: `src/providers/AndroidFormatGenerator.ts`
 
-### Stage 5: Platform Output
+### Stage 6: Platform Output
 
 Generated files are written to the `dist/` directory for consumption.
 

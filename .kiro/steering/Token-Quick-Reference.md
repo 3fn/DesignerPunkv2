@@ -46,6 +46,54 @@ This document serves as a routing table for token documentation—it helps AI ag
 
 ---
 
+## Mode-Aware Token Lookup (Spec 080)
+
+Semantic color tokens support light/dark mode through a two-level resolution system. Use this guide to determine how a token behaves across modes.
+
+### Does My Token Need a Dark Override?
+
+| Question | Answer | Resolution Level |
+|----------|--------|-----------------|
+| Is the token mode-invariant (print, glow, scrim, contrast.onLight/onDark)? | Yes → same value in both modes | Mode-invariant — no action needed |
+| Does the token use the same primitive name in both modes, just with different light/dark values? | Yes → primitive handles it | Level 1 — populate primitive's dark value in `ColorTokens.ts` |
+| Does the token need a *different primitive name* in dark mode (role remapping)? | Yes → semantic override needed | Level 2 — add entry to `src/tokens/themes/dark/SemanticOverrides.ts` |
+
+### Level 1 Example (Primitive Handles Mode)
+
+`color.structure.canvas` references `white100`. The primitive `white100` carries its own light/dark values:
+```
+white100.light.base = 'rgba(255, 255, 255, 1)'   // white in light mode
+white100.dark.base  = 'rgba(30, 30, 30, 1)'       // near-black in dark mode
+```
+No semantic override needed — the primitive handles differentiation.
+
+### Level 2 Example (Semantic Override)
+
+`color.action.navigation` references `cyan500` in light mode, but dark mode needs `cyan100` (a different primitive). The dark theme file overrides the reference:
+```typescript
+// src/tokens/themes/dark/SemanticOverrides.ts
+export const darkSemanticOverrides: SemanticOverrideMap = {
+  'color.action.navigation': { primitiveReferences: { value: 'cyan100' } },
+};
+```
+
+### Governance Tools
+
+| Tool | Command | Purpose |
+|------|---------|---------|
+| Mode parity audit | `npm run audit:mode-parity` | Reports Level 1/Level 2/mode-invariant/missing for all color tokens |
+| Theme drift audit | `npm run audit:theme-drift` | Diffs generated skeleton against existing theme file |
+| Theme skeleton | `npm run generate:theme-skeleton` | Regenerates complete theme file from registry |
+
+### MCP Queries for Mode Architecture
+
+```
+get_section({ path: ".kiro/steering/Rosetta-System-Architecture.md", heading: "Stage 4: Mode Resolution (Spec 080)" })
+get_section({ path: ".kiro/steering/Token-Quick-Reference.md", heading: "Mode-Aware Token Lookup (Spec 080)" })
+```
+
+---
+
 ## Color Token Concept Lookup
 
 Color tokens follow the **Nathan Curtis concept-first naming model**. Use this table to find the right concept for your use case:
