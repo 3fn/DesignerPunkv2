@@ -83,10 +83,11 @@ public struct TabOption: Identifiable {
 ///     onSelectionChange: { value in print(value) }
 /// )
 /// ```
-public struct NavTabBarBase: View {
+public struct NavTabBarBase<Badge: View>: View {
     let tabs: [TabOption]
     @Binding var selectedValue: String
     var onSelectionChange: ((String) -> Void)? = nil
+    let badgeContent: (String) -> Badge
 
     // Animation state
     @State private var dotOffset: CGFloat = 0
@@ -97,19 +98,37 @@ public struct NavTabBarBase: View {
     // Keyboard focus (contract: interaction_keyboard_navigation)
     @FocusState private var focusedTab: String?
 
+    // Pressed state (contract: interaction_pressable)
+    @State private var pressedTab: String? = nil
+
     // Haptics
     private let haptic = UIImpactFeedbackGenerator(style: .light)
 
     /// Contract: validation_selection_constraints
     init(tabs: [TabOption], selectedValue: Binding<String>,
-         onSelectionChange: ((String) -> Void)? = nil) {
+         onSelectionChange: ((String) -> Void)? = nil,
+         @ViewBuilder badge: @escaping (String) -> Badge) {
         precondition(tabs.count >= 2,
             "Nav-TabBar-Base requires at least 2 tabs. Received: \(tabs.count).")
         self.tabs = tabs
         self._selectedValue = selectedValue
         self.onSelectionChange = onSelectionChange
+        self.badgeContent = badge
     }
+}
 
+// MARK: - Convenience init (no badge)
+
+extension NavTabBarBase where Badge == EmptyView {
+    init(tabs: [TabOption], selectedValue: Binding<String>,
+         onSelectionChange: ((String) -> Void)? = nil) {
+        self.init(tabs: tabs, selectedValue: selectedValue,
+                  onSelectionChange: onSelectionChange,
+                  badge: { _ in EmptyView() })
+    }
+}
+
+extension NavTabBarBase {
     public var body: some View {
         GeometryReader { geometry in
             let tabWidth = geometry.size.width / CGFloat(tabs.count)
@@ -169,6 +188,16 @@ public struct NavTabBarBase: View {
     /// interaction_noop_active, accessibility_aria_roles, accessibility_aria_label
     private func tabItem(_ tab: TabOption, tabWidth: CGFloat, containerHeight: CGFloat) -> some View {
         let isSelected = tab.value == resolvedSelectedValue
+        let isTabPressed = pressedTab == tab.value && !isSelected
+
+        // Contract: interaction_pressable — blend.pressedLighter on inactive press
+        let iconColor: Color = if isSelected {
+            NavTabBarTokens.activeIconColor
+        } else if isTabPressed {
+            NavTabBarTokens.inactiveIconColor.pressedLighterBlend()
+        } else {
+            NavTabBarTokens.inactiveIconColor
+        }
 
         return Button(action: { handleTap(tab.value, tabWidth: tabWidth) }) {
             VStack(spacing: isSelected ? NavTabBarTokens.activeItemSpacing : 0) {
@@ -176,8 +205,12 @@ public struct NavTabBarBase: View {
                 IconBase(
                     name: isSelected ? tab.activeIcon : tab.icon,
                     size: NavTabBarTokens.iconSize,
-                    color: isSelected ? NavTabBarTokens.activeIconColor : NavTabBarTokens.inactiveIconColor
+                    color: iconColor
                 )
+            }
+            .overlay(alignment: .topTrailing) {
+                // Badge composition slot (empty in v1)
+                badgeContent(tab.value)
             }
             .padding(.top, isSelected ? NavTabBarTokens.activePaddingTop : NavTabBarTokens.inactivePaddingTop)
             .padding(.horizontal, NavTabBarTokens.activePaddingInline)
@@ -185,7 +218,7 @@ public struct NavTabBarBase: View {
             .frame(width: tabWidth, minWidth: NavTabBarTokens.minTapWidth)
             .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(TabBarButtonStyle(tabValue: tab.value, pressedTab: $pressedTab))
         .focused($focusedTab, equals: tab.value)
         .background(
             // Glow gradient (contract: visual_gradient_glow)
@@ -310,5 +343,21 @@ public struct NavTabBarBase: View {
         for tab in tabs {
             glowOpacities[tab.value] = 1.0
         }
+    }
+}
+
+// MARK: - TabBarButtonStyle
+
+/// Custom ButtonStyle that tracks pressed state per tab for blend.pressedLighter.
+/// Contract: interaction_pressable
+private struct TabBarButtonStyle: ButtonStyle {
+    let tabValue: String
+    @Binding var pressedTab: String?
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .onChange(of: configuration.isPressed) { newValue in
+                pressedTab = newValue ? tabValue : nil
+            }
     }
 }

@@ -258,6 +258,11 @@ describe('Nav-TabBar-Base Android — Contract Compliance', () => {
       expect(kt).toContain('IconBase(');
     });
 
+    it('badge composition slot via content lambda', () => {
+      expect(kt).toContain('badgeContent');
+      expect(kt).toContain('@Composable (String) -> Unit');
+    });
+
     it('should use state-hoisted selection pattern', () => {
       expect(kt).toContain('selectedValue: String');
       expect(kt).toContain('onSelectionChange: (String) -> Unit');

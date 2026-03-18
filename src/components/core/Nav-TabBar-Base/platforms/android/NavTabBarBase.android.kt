@@ -28,11 +28,9 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Divider
 import com.designerpunk.components.core.IconBase
@@ -49,7 +47,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
@@ -144,7 +141,8 @@ fun NavTabBarBase(
     selectedValue: String,
     onSelectionChange: (String) -> Unit,
     testTag: String? = null,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    badgeContent: @Composable (String) -> Unit = {}
 ) {
     // Contract: validation_selection_constraints
     require(tabs.size >= 2) {
@@ -338,6 +336,8 @@ fun NavTabBarBase(
                             size = NavTabBarTokens.iconSize.dp,
                             color = iconTint
                         )
+                        // Badge composition slot (empty in v1)
+                        badgeContent(tab.value)
                     }
                 }
             }

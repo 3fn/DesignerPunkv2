@@ -21,6 +21,9 @@ public struct BlendTokenValues {
     /// Pressed state darkening - blend300 (12%)
     public static let pressedDarker: Double = 0.12
     
+    /// Pressed state lightening - blend300 (12%) for dark surfaces
+    public static let pressedLighter: Double = 0.12
+    
     /// Focus state saturation increase - blend200 (8%)
     public static let focusSaturate: Double = 0.08
     
@@ -125,6 +128,18 @@ extension Color {
     /// @see Requirements: 11.4 - Theme-aware wrapper functions
     public func pressedBlend() -> Color {
         return self.darkerBlend(BlendTokenValues.pressedDarker)
+    }
+    
+    /// Calculate pressed color by lightening the color using blend token value.
+    ///
+    /// Uses `BlendTokenValues.pressedLighter` (12%) for consistent pressed state styling
+    /// on dark surfaces (e.g., inactive navigation icons).
+    ///
+    /// - Returns: Lightened color for pressed state on dark surfaces
+    ///
+    /// @see Requirements: 11.4 - Theme-aware wrapper functions
+    public func pressedLighterBlend() -> Color {
+        return self.lighterBlend(BlendTokenValues.pressedLighter)
     }
     
     /// Calculate focus color by saturating the color using blend token value

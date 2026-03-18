@@ -104,6 +104,16 @@ describe('Nav-TabBar-Base iOS — Contract Compliance', () => {
       expect(swift).toContain('onSelectionChange');
     });
 
+    it('interaction_pressable: tracks pressed state for blend.pressedLighter', () => {
+      expect(swift).toContain('pressedTab');
+      expect(swift).toContain('pressedLighterBlend');
+    });
+
+    it('interaction_pressable: custom ButtonStyle for press tracking', () => {
+      expect(swift).toContain('TabBarButtonStyle');
+      expect(swift).toContain('configuration.isPressed');
+    });
+
     it('interaction_noop_active: guards against active tab tap', () => {
       expect(swift).toContain('guard value != resolvedSelectedValue');
     });
@@ -193,8 +203,14 @@ describe('Nav-TabBar-Base iOS — Contract Compliance', () => {
       expect(swift).toContain('impactOccurred');
     });
 
+    it('badge composition slot via ViewBuilder', () => {
+      expect(swift).toContain('badgeContent');
+      expect(swift).toContain('@ViewBuilder');
+    });
+
     it('uses SwiftUI View pattern', () => {
-      expect(swift).toContain('struct NavTabBarBase: View');
+      expect(swift).toContain('struct NavTabBarBase');
+      expect(swift).toContain(': View');
       expect(swift).toContain('var body: some View');
     });
 
