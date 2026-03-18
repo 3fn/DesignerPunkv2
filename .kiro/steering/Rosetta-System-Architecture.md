@@ -80,7 +80,7 @@ Color tokens use RGBA format at the primitive level, enabling native alpha chann
 │   SEMANTIC INHERITANCE                                                       │
 │   └── src/tokens/semantic/ColorSemanticTokens.ts                            │
 │       └── References primitives: 'color.action.primary': 'cyan-300'       │
-│       └── Theme-conditional: wcagValue → DTCG modes.wcag / Figma valuesByMode.wcag │
+│       └── Theme overrides: wcag/ + dark-wcag/ → 4-context resolution (Spec 080)    │
 │       └── Baked-in alpha: 'color.structure.border.subtle': 'rgba(...,0.48)'│
 │                                                                              │
 │                              │                                               │

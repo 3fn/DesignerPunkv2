@@ -77,6 +77,19 @@ export const darkSemanticOverrides: SemanticOverrideMap = {
 };
 ```
 
+### 4-Context Resolution (Phase 2)
+
+Mode (light/dark) and theme (base/wcag) are independent dimensions, producing 4 contexts:
+
+| Context | Mode | Theme | Override Source |
+|---------|------|-------|----------------|
+| light-base | light | base | No overrides (base tokens) |
+| light-wcag | light | wcag | `src/tokens/themes/wcag/SemanticOverrides.ts` |
+| dark-base | dark | base | `src/tokens/themes/dark/SemanticOverrides.ts` |
+| dark-wcag | dark | wcag | Composed: dark + wcag + `src/tokens/themes/dark-wcag/SemanticOverrides.ts` |
+
+`SemanticOverrideResolver.resolveAllContexts()` produces all 4 token sets from a `ContextOverrideSet`.
+
 ### Governance Tools
 
 | Tool | Command | Purpose |

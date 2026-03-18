@@ -64,7 +64,7 @@ describe('WCAG Theme Override Infrastructure (Spec 080 Phase 2)', () => {
       const result = generator.generateWebTokens(wcagOptions());
       expect(result.valid).toBe(true);
       expect(result.content).toContain(':root[data-theme="wcag"]');
-      expect(result.content).toContain('Spec 080 Phase 2');
+      expect(result.content).toContain('light-dark(');
     });
 
     it('should not generate WCAG block when wcag tokens not provided', () => {

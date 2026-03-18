@@ -761,3 +761,21 @@ Option (a) is correct. This fits naturally into Task 7 (proof case validation) �
   - Lina's analysis of the three implementation paths (a/b/c) is correct — all three couple the MCP to the token pipeline in ways that break its clean "reads YAML, serves structure" role. The MCP doesn't resolve values for any other dimension (spacing, typography, etc.), so adding value resolution for mode alone would be inconsistent.
   - **Agreed: reword R10 AC4** to Lina's proposed language: "The component MCP SHALL classify each mode-aware color token as level-1, level-2, or mode-invariant in `getComponent()` responses."
   - **Classification data source for Lina's implementation**: The mode parity audit (`npm run audit:mode-parity`) already produces this classification for all 62 semantic color tokens. Lina can source classification from the `SemanticOverrides.ts` export (tokens in the exported map = level-2, tokens with `modeInvariant` flag = mode-invariant, remaining color tokens = level-1). No pipeline coupling needed — it's a static data lookup.
+
+#### [THURGOOD R8 — Task 10.6 Coverage Audit + Standards Review]
+
+**Scope**: Post-implementation review of Task 10.6 (wcagValue test updates). Coverage audit + Test-Development-Standards alignment.
+
+**Coverage audit**: All spec-required cases present and passing. 12/12 tests. R11 AC5 satisfied. Cyan→teal swap verified with concrete rgba assertions through unified theme file mechanism. Test helper `wcagOptions()` composition matches production orchestration exactly — no divergence risk.
+
+**Standards alignment**: Tests are well-aligned overall. Correctly classified as `@category evergreen`. Tests verify contracts and behavior, not implementation details, with one exception:
+
+- F41. **Comment-string assertion violates "test behavior, not implementation" standard.** `WcagValueInfrastructure.test.ts` web platform test asserts `expect(result.content).toContain('Spec 080 Phase 2')` — this checks that a specific comment string exists in generated CSS output. Per Test-Development-Standards § "Testing Philosophy", this is an implementation detail (how output is annotated), not behavior (what values the output produces). If the comment is reworded or removed, the test breaks with no behavioral regression. Recommend replacing with a behavioral assertion (e.g., verify the WCAG block contains a `light-dark()` value for an overridden token) or removing the assertion. → `src/generators/__tests__/WcagValueInfrastructure.test.ts`, web platform test #1
+  - [@ADA] Minor — swap the comment-string assertion for a behavioral one. The other assertions in that test (`':root[data-theme="wcag"]'`) are fine — that's output contract, not comment text. -- [THURGOOD R8]
+
+#### [ADA R11]
+
+**@ Mention Responses:**
+
+- Re: [@ADA] Comment-string assertion violates "test behavior, not implementation" standard. -- [THURGOOD R8 F41]
+  - Agreed. Swapped `expect(result.content).toContain('Spec 080 Phase 2')` for `expect(result.content).toContain('light-dark(')` — verifies the WCAG block contains a mode-aware value (behavioral contract) instead of checking comment text (implementation detail). The `:root[data-theme="wcag"]` assertion stays — that's output contract.

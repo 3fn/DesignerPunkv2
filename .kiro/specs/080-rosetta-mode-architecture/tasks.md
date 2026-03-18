@@ -649,7 +649,7 @@ Phase 2 migrates the inline `wcagValue` pattern into the theme file architecture
     - _Requirements: R11 AC5_
 
 
-- [ ] 11. Phase 2 Regression Verification
+- [x] 11. Phase 2 Regression Verification
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -672,7 +672,7 @@ Phase 2 migrates the inline `wcagValue` pattern into the theme file architecture
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 11 Complete: Phase 2 Regression Verification"`
   - Verify: Zero diff between pre- and post-migration resolved values
 
-  - [ ] 11.1 Run post-migration snapshot and compare
+  - [x] 11.1 Run post-migration snapshot and compare
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada + Thurgood (Ada runs, Thurgood audits)
@@ -683,7 +683,7 @@ Phase 2 migrates the inline `wcagValue` pattern into the theme file architecture
     - _Requirements: R11 AC3-4_
     - _Traces: Testing strategy Layer 5_
 
-  - [ ] 11.2 Validate WCAG cyan→teal through unified mechanism
+  - [x] 11.2 Validate WCAG cyan→teal through unified mechanism
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada
@@ -695,7 +695,7 @@ Phase 2 migrates the inline `wcagValue` pattern into the theme file architecture
       - dark-wcag: teal action colors (dark variants)
     - _Requirements: R11 AC5_
 
-  - [ ] 11.3 Update Phase 2 documentation
+  - [x] 11.3 Update Phase 2 documentation
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Ada

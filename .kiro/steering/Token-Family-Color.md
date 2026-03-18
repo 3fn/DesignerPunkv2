@@ -70,11 +70,11 @@ The feedback concept provides colors for success, error, warning, info, and sele
 
 #### Info Tokens (3 tokens)
 
-| Token Name | Primitive | wcagValue | Use Case |
-|------------|-----------|-----------|----------|
-| `color.feedback.info.text` | teal400 | purple500 | Info text - help text, informational messages |
-| `color.feedback.info.background` | teal100 | purple100 | Info backgrounds - info banners, help sections |
-| `color.feedback.info.border` | teal400 | purple500 | Info borders - info card outlines, help section borders |
+| Token Name | Primitive | Use Case |
+|------------|-----------|----------|
+| `color.feedback.info.text` | teal400 | Info text - help text, informational messages |
+| `color.feedback.info.background` | teal100 | Info backgrounds - info banners, help sections |
+| `color.feedback.info.border` | teal400 | Info borders - info card outlines, help section borders |
 
 #### Select Tokens (6 tokens)
 
@@ -114,15 +114,15 @@ Identity tokens represent core colors for different entity types. They ARE the c
 
 Action tokens represent visual emphasis levels, not action types. Use `primary` for single, focused instances (hero CTAs), `secondary` for repetitive instances (action lists), and `navigation` for inline links and breadcrumbs.
 
-| Token Name | Primitive | wcagValue | Use Case |
-|------------|-----------|-----------|----------|
-| `color.action.primary` | cyan300 | teal300 | Emphasized action - hero CTAs, main buttons, primary interactive elements |
-| `color.action.secondary` | gray400 | — | De-emphasized action - list item buttons, secondary CTAs, repetitive actions |
-| `color.action.navigation` | cyan500 | teal500 | Navigation actions - inline text links, breadcrumbs |
+| Token Name | Primitive | Use Case |
+|------------|-----------|----------|
+| `color.action.primary` | cyan300 | Emphasized action - hero CTAs, main buttons, primary interactive elements |
+| `color.action.secondary` | gray400 | De-emphasized action - list item buttons, secondary CTAs, repetitive actions |
+| `color.action.navigation` | cyan500 | Navigation actions - inline text links, breadcrumbs |
 
 **Critical Distinction**: `primary`/`secondary` represent visual emphasis, not action type. Both can be CTAs.
 
-**wcagValue**: Tokens with `wcagValue` resolve to a different primitive in WCAG accessibility mode. Standard theme uses `value`, WCAG theme uses `wcagValue`. See Spec 076 for architecture details.
+**WCAG Overrides**: 7 color tokens have WCAG theme overrides in `src/tokens/themes/wcag/SemanticOverrides.ts`. See Spec 080 for architecture.
 
 ```typescript
 // Single hero CTA on a page
@@ -140,11 +140,11 @@ Action tokens represent visual emphasis levels, not action types. Use `primary` 
 
 Contrast tokens provide colors for content (text, icons) on colored backgrounds. Naming matches the background the content sits ON.
 
-| Token Name | Primitive | wcagValue | Use Case |
-|------------|-----------|-----------|----------|
-| `color.contrast.onLight` | black500 | — | Dark content on light backgrounds - ensures WCAG AA contrast |
-| `color.contrast.onDark` | white100 | — | Light content on dark backgrounds - ensures WCAG AA contrast |
-| `color.contrast.onAction` | black500 | white100 | Content on action-colored backgrounds - dark on cyan (Standard), white on teal (WCAG) |
+| Token Name | Primitive | Use Case |
+|------------|-----------|----------|
+| `color.contrast.onLight` | black500 | Dark content on light backgrounds - ensures WCAG AA contrast |
+| `color.contrast.onDark` | white100 | Light content on dark backgrounds - ensures WCAG AA contrast |
+| `color.contrast.onAction` | black500 | Content on action-colored backgrounds - dark on cyan (Standard), white on teal (WCAG) |
 
 **Usage**: Use `onLight` for text/icons on light surfaces, `onDark` for text/icons on dark surfaces, `onAction` for text/icons on primary action backgrounds.
 
@@ -291,9 +291,9 @@ Badge tokens follow the `{component}.{variant}.{property}` pattern.
 
 ### Background Variant (1 token)
 
-| Token Name | Primitive | wcagValue | RGBA Value | Use Case |
-|------------|-----------|-----------|------------|----------|
-| `color.background.primary.subtle` | cyan100 | teal100 | rgba(204, 251, 255, 1) | Subtle primary background - hover states, selections |
+| Token Name | Primitive | RGBA Value | Use Case |
+|------------|-----------|------------|----------|
+| `color.background.primary.subtle` | cyan100 | rgba(204, 251, 255, 1) | Subtle primary background - hover states, selections |
 
 ---
 

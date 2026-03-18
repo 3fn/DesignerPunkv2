@@ -178,7 +178,7 @@ interface SemanticToken {
   description: string;             // Human-readable description
   
   // Primitive References (by name, not value)
-  primitiveReferences: Record<string, string>; // Primitive refs (e.g., { value: "cyan300", wcagValue: "teal300" })
+  primitiveReferences: Record<string, string>; // Primitive refs (e.g., { value: "cyan300" }). WCAG overrides in theme files.
   
   // Optional Composition
   composition?: {                  // For multi-property tokens
