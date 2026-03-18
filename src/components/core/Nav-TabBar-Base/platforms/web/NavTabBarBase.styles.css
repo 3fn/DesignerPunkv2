@@ -1,2 +1,260 @@
-/* Nav-TabBar-Base Web Styles */
-/* Placeholder — Task 3 (Web Implementation) */
+/**
+ * Nav-TabBar-Base Styles for Web Platform
+ *
+ * Token-based styling using CSS custom properties. All values reference
+ * semantic or primitive tokens — zero hard-coded values except chrome
+ * tracking transition (100ms ease-out, below motion token scale).
+ *
+ * Stemma System: Navigation Family, Primitive (Base)
+ *
+ * @see .kiro/specs/050-nav-tabbar-base/design.md
+ */
+
+/* ==========================================================================
+   Host — Floating pill container
+   ========================================================================== */
+
+/**
+ * Floating pill positioned above browser chrome.
+ * --chrome-offset is set by JS via Visual Viewport API (Task 3.2).
+ *
+ * @see R5 AC2-3: floating pill, radiusFull, backdrop blur, inline margins
+ * @see contract: visual_pill_container
+ */
+:host {
+  display: block;
+  position: fixed;
+  inset-inline: var(--space-200);
+  bottom: calc(var(--space-200) + var(--chrome-offset, 0px));
+  z-index: 1000;
+
+  transition: bottom 100ms ease-out;
+}
+
+/* ==========================================================================
+   Container (tablist)
+   ========================================================================== */
+
+/**
+ * Tab bar container — pill shape with backdrop blur.
+ *
+ * @see R5 AC6: canvas background + border.subtle top stroke
+ * @see R5 AC7: equal-width distribution, no inter-tab spacing
+ * @see contract: visual_background, layout_flexible_length
+ */
+.tab-bar {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  position: relative;
+
+  padding-block-start: var(--space-inset-050);
+  padding-inline-end: var(--space-inset-100);
+  padding-block-end: var(--space-inset-150);
+  padding-inline-start: var(--space-inset-100);
+
+  background-color: var(--color-structure-canvas);
+  border-block-start: 1px solid var(--color-structure-border-subtle);
+  border-radius: var(--radius-full);
+
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+
+/* ==========================================================================
+   Tab Items
+   ========================================================================== */
+
+/**
+ * Individual tab button — equal-width via flex: 1.
+ * Padding differs between active/inactive to produce icon lift.
+ *
+ * @see R6 AC1-3: padding values, icon lift via padding delta
+ * @see R9 AC1: min-width tapAreaMinimum, full width tappable
+ * @see contract: accessibility_touch_target, layout_flexible_length
+ */
+.tab-item {
+  flex: 1;
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  min-inline-size: var(--tap-area-minimum);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  overflow: visible; /* Glow bleeds into adjacent tabs — R4 AC6 */
+
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+
+  /* Glow gradient center color — overridden per state */
+  --glow-center: var(--color-structure-canvas);
+
+  /* Inactive padding (default) — R6 AC2 */
+  padding-block-start: var(--space-inset-200);
+  padding-inline: var(--space-inset-150);
+  padding-block-end: var(--space-inset-100);
+}
+
+/**
+ * Glow gradient on all tabs — elliptical radial, 88% radii, three stops.
+ * Applied via ::before pseudo-element so it sits behind content but can
+ * bleed beyond tab bounds.
+ *
+ * Stop 0%: --glow-center at 100%
+ * Stop 88%: color.structure.canvas at opacity024 (24%)
+ * Stop 100%: transparent
+ *
+ * @see R4 AC1-6: gradient geometry, stops, bleed
+ * @see contract: visual_gradient_glow
+ */
+.tab-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  background: radial-gradient(
+    ellipse 88% 88% at center,
+    var(--glow-center) 0%,
+    color-mix(in srgb, var(--color-structure-canvas) 24%, transparent) 88%,
+    transparent 100%
+  );
+}
+
+/**
+ * Active tab: accent glow center.
+ * @see R4 AC3: color.background.primary.subtle
+ */
+.tab-item[aria-selected="true"] {
+  --glow-center: var(--color-background-primary-subtle);
+  padding-block-start: var(--space-inset-150);
+  padding-block-end: var(--space-inset-050);
+  gap: var(--space-grouped-minimal);
+}
+
+/* ==========================================================================
+   Icons
+   ========================================================================== */
+
+/**
+ * Icon color per state.
+ * @see R2 AC1-2: active = color.action.navigation, inactive = color.icon.navigation.inactive
+ * @see contract: visual_state_colors
+ */
+.tab-item[aria-selected="true"] icon-base {
+  color: var(--color-action-navigation);
+}
+
+.tab-item[aria-selected="false"] icon-base {
+  color: var(--color-icon-navigation-inactive);
+}
+
+/* ==========================================================================
+   Indicator Dot
+   ========================================================================== */
+
+/**
+ * Indicator dot — single element positioned absolutely in the container.
+ * Centered horizontally via transform, positioned at bottom of tab content area.
+ * Animated between tab positions during selection change (Task 3.4).
+ *
+ * @see R2 AC1: dot below icon using color.action.navigation
+ * @see contract: visual_state_colors
+ */
+.tab-bar__dot {
+  position: absolute;
+  bottom: var(--space-inset-050);
+  inline-size: var(--space-050);
+  block-size: var(--space-050);
+  border-radius: 50%;
+  background-color: var(--color-action-navigation);
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ==========================================================================
+   Pressed State (inactive only)
+   ========================================================================== */
+
+/**
+ * @see R2 AC3: blend.pressedLighter on inactive press
+ * @see contract: interaction_pressable
+ */
+.tab-item[aria-selected="false"]:active icon-base {
+  filter: var(--blend-pressed-lighter);
+}
+
+/* ==========================================================================
+   Focus
+   ========================================================================== */
+
+.tab-item:focus {
+  outline: none;
+}
+
+/**
+ * @see R7 AC5: focus ring via :focus-visible
+ * @see contract: interaction_focus_ring
+ */
+.tab-item:focus-visible {
+  outline: var(--accessibility-focus-width) solid var(--accessibility-focus-color);
+  outline-offset: var(--accessibility-focus-offset);
+}
+
+/* ==========================================================================
+   Badge Slot (empty in v1)
+   ========================================================================== */
+
+::slotted([slot^="badge-"]) {
+  position: absolute;
+  inset-block-start: var(--space-inset-050);
+  inset-inline-end: var(--space-inset-050);
+}
+
+/* ==========================================================================
+   Animation Phase Classes
+   ========================================================================== */
+
+/**
+ * Phase 1: Departing tab — glow dims.
+ * @see R3 AC2: glow dims on departing tab
+ * @see contract: animation_coordination
+ */
+.tab-item--departing::before {
+  transition: opacity var(--duration-150) var(--easing-accelerate);
+  opacity: 0;
+}
+
+/**
+ * Phase 3: Arriving tab — glow brightens.
+ * @see R3 AC4: glow brightens on arriving tab
+ * @see contract: animation_coordination
+ */
+.tab-item--arriving::before {
+  transition: opacity var(--duration-150) var(--easing-decelerate);
+  opacity: 1;
+}
+
+/* ==========================================================================
+   Reduced Motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    transition: none !important;
+  }
+
+  .tab-item,
+  .tab-item::before,
+  .tab-bar__dot {
+    transition: none !important;
+  }
+}

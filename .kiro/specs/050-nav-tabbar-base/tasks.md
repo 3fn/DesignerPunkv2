@@ -156,7 +156,7 @@ Task 6 (Documentation + Dark Mode)
     - Reference Nav-SegmentedChoice-Base's `types.ts` for pattern
     - _Requirements: R1, R2, R8 AC3_
 
-- [ ] 3. Web Implementation
+- [x] 3. Web Implementation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -184,7 +184,7 @@ Task 6 (Documentation + Dark Mode)
   **Post-Completion:**
   - Commit: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Web Implementation"`
 
-  - [ ] 3.1 Web Component structure and container
+  - [x] 3.1 Web Component structure and container
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -197,7 +197,7 @@ Task 6 (Documentation + Dark Mode)
     - _Requirements: R5 AC2-3, AC6-8_
     - _Contracts: visual_background, visual_pill_container, layout_flexible_length_
 
-  - [ ] 3.2 Chrome tracking
+  - [x] 3.2 Chrome tracking
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -210,7 +210,7 @@ Task 6 (Documentation + Dark Mode)
     - _Requirements: R5 AC4-5_
     - _Contracts: visual_pill_container_
 
-  - [ ] 3.3 Tab item rendering and visual states
+  - [x] 3.3 Tab item rendering and visual states
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -222,7 +222,7 @@ Task 6 (Documentation + Dark Mode)
     - _Requirements: R2, R4, R6_
     - _Contracts: visual_state_colors, visual_gradient_glow, interaction_pressable, interaction_noop_active_
 
-  - [ ] 3.4 Selection animation choreography
+  - [x] 3.4 Selection animation choreography
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -237,7 +237,7 @@ Task 6 (Documentation + Dark Mode)
     - _Requirements: R3_
     - _Contracts: animation_coordination, animation_initial_render, accessibility_reduced_motion_
 
-  - [ ] 3.5 Keyboard navigation and accessibility
+  - [x] 3.5 Keyboard navigation and accessibility
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -251,7 +251,7 @@ Task 6 (Documentation + Dark Mode)
     - _Requirements: R7, R8_
     - _Contracts: interaction_roving_tabindex, interaction_keyboard_navigation, interaction_keyboard_activation, interaction_focus_ring, accessibility_aria_roles, accessibility_aria_label_
 
-  - [ ] 3.6 Web behavioral contract tests
+  - [x] 3.6 Web behavioral contract tests
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
