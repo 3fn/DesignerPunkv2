@@ -1,7 +1,7 @@
 ---
 inclusion: manual
 name: Contract-System-Reference
-description: Uniform behavioral contract system reference — 10-category taxonomy with definitions, concept catalog with all 116 concepts, {category}_{concept} naming convention, canonical contracts.yaml format, exclusion format, inheritance and composition patterns, classification rules. Load when creating or modifying component contracts, auditing contract coverage, or building contract-consuming systems.
+description: Uniform behavioral contract system reference — 10-category taxonomy with definitions, concept catalog with all 117 concepts, {category}_{concept} naming convention, canonical contracts.yaml format, exclusion format, inheritance and composition patterns, classification rules. Load when creating or modifying component contracts, auditing contract coverage, or building contract-consuming systems.
 ---
 
 # Contract System Reference
@@ -44,7 +44,7 @@ This document is the authoritative reference for contract conventions. For the d
 
 ## Concept Catalog
 
-116 concepts across 10 categories. Derived from the 29 deployed contracts.yaml files as of Spec 078 audit.
+117 concepts across 10 categories. Derived from the 29 deployed contracts.yaml files as of Spec 078 audit.
 
 ### accessibility (23)
 
@@ -82,9 +82,9 @@ This document is the authoritative reference for contract conventions. For the d
 
 `audit_trail` · `email_format` · `explicit_consent` · `form_integration` · `group_required` · `on_blur` · `phone_format` · `selection_constraints` · `size_restriction`
 
-### visual (23)
+### visual (24)
 
-`background` · `border` · `boundary` · `checkmark_icon` · `circular_shape` · `color_inheritance` · `entity_shape` · `notification_color` · `optical_balance` · `pill_container` · `pill_shape` · `radius` · `renders_icon` · `renders_svg` · `rounded_corners` · `shadow` · `size_emphasis` · `size_variants` · `state_colors` · `thickness` · `typography` · `variant_styling` · `viewport_clipping`
+`background` · `border` · `boundary` · `checkmark_icon` · `circular_shape` · `color_inheritance` · `entity_shape` · `gradient_glow` · `notification_color` · `optical_balance` · `pill_container` · `pill_shape` · `radius` · `renders_icon` · `renders_svg` · `rounded_corners` · `shadow` · `size_emphasis` · `size_variants` · `state_colors` · `thickness` · `typography` · `variant_styling` · `viewport_clipping`
 
 ---
 
@@ -106,7 +106,7 @@ All contract names follow `{category}_{concept}` in `snake_case`. No `supports_`
 | Checkmark animation | `animation_checkmark` |
 | Circular shape | `visual_circular_shape` |
 
-The Concept Catalog above lists all 116 concepts. For the historical migration mapping (113 source names → 104 canonical names, pre-Task 2.1), see `.kiro/specs/063-uniform-contract-system/findings/canonical-name-mapping.md`.
+The Concept Catalog above lists all 117 concepts. For the historical migration mapping (113 source names → 104 canonical names, pre-Task 2.1), see `.kiro/specs/063-uniform-contract-system/findings/canonical-name-mapping.md`.
 
 ---
 
