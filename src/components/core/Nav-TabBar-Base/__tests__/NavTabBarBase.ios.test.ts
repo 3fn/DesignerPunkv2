@@ -85,8 +85,8 @@ describe('Nav-TabBar-Base iOS — Contract Compliance', () => {
     it('uses correct active/inactive padding tokens', () => {
       expect(swift).toContain('space150'); // active top + inline
       expect(swift).toContain('space050'); // active bottom, dot size
-      expect(swift).toContain('space200'); // inactive top
-      expect(swift).toContain('space100'); // inactive bottom
+      expect(swift).toContain('space150'); // inactive top
+      expect(swift).toContain('space075'); // inactive bottom
     });
 
     it('uses grouped minimal for active item spacing', () => {
@@ -145,8 +145,9 @@ describe('Nav-TabBar-Base iOS — Contract Compliance', () => {
       expect(swift).toContain('arriving');
     });
 
-    it('animation_coordination: Phase 3 overlaps Phase 2 at ~80%', () => {
-      expect(swift).toContain('durationGlide * 0.8');
+    it('animation_coordination: depart at 8%, arrive at 50%', () => {
+      expect(swift).toContain('durationGlide * 0.08');
+      expect(swift).toContain('durationGlide * 0.5');
     });
 
     it('animation_coordination: uses motion token durations', () => {

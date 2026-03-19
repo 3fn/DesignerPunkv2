@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -97,15 +98,19 @@ private object NavTabBarTokens {
     // Spacing
     val activePaddingTop = DesignTokens.space_150
     val activePaddingInline = DesignTokens.space_150
-    val activePaddingBottom = DesignTokens.space_050
+    val activePaddingBottom = DesignTokens.space_150
     val activeItemSpacing = DesignTokens.space_grouped_minimal
-    val inactivePaddingTop = DesignTokens.space_200
+    val inactivePaddingTop = DesignTokens.space_150
     val inactivePaddingInline = DesignTokens.space_150
-    val inactivePaddingBottom = DesignTokens.space_100
+    val inactivePaddingBottom = DesignTokens.space_075
     val minTapWidth = DesignTokens.tap_area_minimum
+    val minTabHeight = DesignTokens.space_600
 
     // Icon
     val iconSize = DesignTokens.icon_size_100
+
+    // Glow geometry
+    val glowHorizontalRadius = DesignTokens.space_700
 
     // Motion
     val durationShort = DesignTokens.Duration.Duration150
@@ -183,7 +188,16 @@ fun NavTabBarBase(
     BoxWithConstraints(
         modifier = modifier
             .fillMaxWidth()
-            .background(NavTabBarTokens.containerBackground)
+            .background(
+                Brush.verticalGradient(
+                    colorStops = arrayOf(
+                        0f to NavTabBarTokens.containerBackground.copy(alpha = 0.80f),
+                        0.16f to NavTabBarTokens.containerBackground.copy(alpha = 0.88f),
+                        0.32f to NavTabBarTokens.containerBackground.copy(alpha = 0.96f),
+                        0.48f to NavTabBarTokens.containerBackground
+                    )
+                )
+            )
             .let { mod -> testTag?.let { mod.semantics { this.testTag = it } } ?: mod }
     ) {
         val totalWidthPx = with(density) { maxWidth.toPx() }
@@ -219,13 +233,7 @@ fun NavTabBarBase(
             isAnimating = true
             val prevValue = tabs.getOrNull(selectedIndex)?.value
 
-            // Phase 1: Depart — dim departing glow
-            if (prevValue != null) {
-                glowAlphas.value = glowAlphas.value.toMutableMap().apply { put(prevValue, 0f) }
-            }
-            delay(NavTabBarTokens.durationShort.toLong())
-
-            // Phase 2: Glide — dot moves to new tab
+            // Dot glide starts immediately
             launch {
                 dotOffsetPx.animateTo(
                     newOffsetPx,
@@ -233,8 +241,14 @@ fun NavTabBarBase(
                 )
             }
 
-            // Phase 3: Arrive (~80% through glide) — brighten arriving glow
-            delay((NavTabBarTokens.durationGlide * 0.8).toLong())
+            // At 8%: departing tab settles down, glow dims
+            delay((NavTabBarTokens.durationGlide * 0.08).toLong())
+            if (prevValue != null) {
+                glowAlphas.value = glowAlphas.value.toMutableMap().apply { put(prevValue, 0f) }
+            }
+
+            // At 50%: arriving tab lifts up, glow brightens
+            delay((NavTabBarTokens.durationGlide * 0.42).toLong()) // 0.50 - 0.08 = 0.42 remaining
             glowAlphas.value = glowAlphas.value.toMutableMap().apply {
                 put(resolvedSelectedValue, 1f)
             }
@@ -271,6 +285,7 @@ fun NavTabBarBase(
                         modifier = Modifier
                             .weight(1f)
                             .width(with(density) { tabWidthPx.toDp() }.coerceAtLeast(NavTabBarTokens.minTapWidth.dp))
+                            .heightIn(min = NavTabBarTokens.minTabHeight.dp)
                             .clickable(
                                 interactionSource = interactionSource,
                                 indication = null, // custom pressed state via blend
@@ -311,18 +326,21 @@ fun NavTabBarBase(
                                 end = NavTabBarTokens.activePaddingInline.dp,
                                 bottom = (if (isSelected) NavTabBarTokens.activePaddingBottom else NavTabBarTokens.inactivePaddingBottom).dp
                             )
-                            // Glow gradient (contract: visual_gradient_glow)
+                            // Glow gradient — active only (contract: visual_gradient_glow)
                             .drawBehind {
-                                drawCircle(
-                                    brush = Brush.radialGradient(
-                                        colorStops = arrayOf(
-                                            0f to centerColor.copy(alpha = glowAlpha),
-                                            0.88f to NavTabBarTokens.glowEdgeColor.copy(alpha = NavTabBarTokens.glowEdgeOpacity),
-                                            1f to Color.Transparent
-                                        ),
-                                        radius = size.minDimension * 0.88f
+                                if (isSelected) {
+                                    drawCircle(
+                                        brush = Brush.radialGradient(
+                                            colorStops = arrayOf(
+                                                0f to centerColor.copy(alpha = glowAlpha),
+                                                0.4f to centerColor.copy(alpha = glowAlpha * 0.5f),
+                                                0.8f to NavTabBarTokens.glowEdgeColor.copy(alpha = NavTabBarTokens.glowEdgeOpacity),
+                                                1f to Color.Transparent
+                                            ),
+                                            radius = NavTabBarTokens.glowHorizontalRadius * density.density
+                                        )
                                     )
-                                )
+                                }
                             }
                             .semantics {
                                 role = Role.Tab

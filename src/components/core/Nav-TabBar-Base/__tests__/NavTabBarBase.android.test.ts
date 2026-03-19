@@ -53,8 +53,8 @@ describe('Nav-TabBar-Base Android — Contract Compliance', () => {
       expect(kt).toContain('opacity_024');
     });
 
-    it('visual_gradient_glow: gradient uses 88% radius', () => {
-      expect(kt).toContain('0.88f');
+    it('visual_gradient_glow: gradient uses space_700 radius', () => {
+      expect(kt).toContain('glowHorizontalRadius');
     });
 
     it('visual_gradient_glow: glow alpha tracked per tab', () => {
@@ -89,8 +89,8 @@ describe('Nav-TabBar-Base Android — Contract Compliance', () => {
     it('uses correct active/inactive padding tokens', () => {
       expect(kt).toContain('space_150'); // active top + inline
       expect(kt).toContain('space_050'); // active bottom, dot size
-      expect(kt).toContain('space_200'); // inactive top
-      expect(kt).toContain('space_100'); // inactive bottom
+      expect(kt).toContain('space_150'); // inactive top
+      expect(kt).toContain('space_075'); // inactive bottom
     });
 
     it('uses grouped minimal for active item spacing', () => {
@@ -157,16 +157,15 @@ describe('Nav-TabBar-Base Android — Contract Compliance', () => {
     });
 
     it('animation_coordination: phases in correct order', () => {
-      const phase1 = kt.indexOf('Phase 1: Depart');
-      const phase2 = kt.indexOf('Phase 2: Glide');
-      const phase3 = kt.indexOf('Phase 3: Arrive');
-      expect(phase1).toBeGreaterThan(-1);
-      expect(phase2).toBeGreaterThan(phase1);
-      expect(phase3).toBeGreaterThan(phase2);
+      const depart8 = kt.indexOf('durationGlide * 0.08');
+      const arrive50 = kt.indexOf('durationGlide * 0.42');
+      expect(depart8).toBeGreaterThan(-1);
+      expect(arrive50).toBeGreaterThan(depart8);
     });
 
-    it('animation_coordination: Phase 3 overlaps Phase 2 at ~80%', () => {
-      expect(kt).toContain('durationGlide * 0.8');
+    it('animation_coordination: depart at 8%, arrive at 50%', () => {
+      expect(kt).toContain('durationGlide * 0.08');
+      expect(kt).toContain('durationGlide * 0.42');
     });
 
     it('animation_coordination: uses Animatable for dot offset', () => {

@@ -41,15 +41,19 @@ enum NavTabBarTokens {
     // Spacing (contract: layout_flexible_length)
     static let activePaddingTop: CGFloat = DesignTokens.space150
     static let activePaddingInline: CGFloat = DesignTokens.space150
-    static let activePaddingBottom: CGFloat = DesignTokens.space050
+    static let activePaddingBottom: CGFloat = DesignTokens.space150
     static let activeItemSpacing: CGFloat = DesignTokens.spaceGroupedMinimal
-    static let inactivePaddingTop: CGFloat = DesignTokens.space200
+    static let inactivePaddingTop: CGFloat = DesignTokens.space150
     static let inactivePaddingInline: CGFloat = DesignTokens.space150
-    static let inactivePaddingBottom: CGFloat = DesignTokens.space100
+    static let inactivePaddingBottom: CGFloat = DesignTokens.space075
     static let minTapWidth: CGFloat = DesignTokens.tapAreaMinimum
+    static let minTabHeight: CGFloat = DesignTokens.space600
 
     // Icon
     static let iconSize: CGFloat = DesignTokens.iconSize100
+
+    // Glow geometry
+    static let glowHorizontalRadius: CGFloat = DesignTokens.space700
 
     // Motion
     static let durationShort: Double = DesignTokens.duration150 / 1000.0
@@ -147,10 +151,20 @@ extension NavTabBarBase {
                     .frame(width: NavTabBarTokens.dotSize, height: NavTabBarTokens.dotSize)
                     .offset(x: dotOffset - NavTabBarTokens.dotSize / 2)
                     .frame(maxHeight: .infinity, alignment: .bottom)
-                    .padding(.bottom, NavTabBarTokens.activePaddingBottom)
-            }
+                    .padding(.bottom, NavTabBarTokens.activePaddingBottom)            }
             .frame(maxWidth: .infinity)
-            .background(NavTabBarTokens.containerBackground)
+            .background(
+                LinearGradient(
+                    stops: [
+                        .init(color: NavTabBarTokens.containerBackground.opacity(0.80), location: 0.0),
+                        .init(color: NavTabBarTokens.containerBackground.opacity(0.88), location: 0.16),
+                        .init(color: NavTabBarTokens.containerBackground.opacity(0.96), location: 0.32),
+                        .init(color: NavTabBarTokens.containerBackground, location: 0.48),
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
             .overlay(alignment: .top) {
                 Rectangle()
                     .fill(NavTabBarTokens.borderColor)
@@ -215,7 +229,7 @@ extension NavTabBarBase {
             .padding(.top, isSelected ? NavTabBarTokens.activePaddingTop : NavTabBarTokens.inactivePaddingTop)
             .padding(.horizontal, NavTabBarTokens.activePaddingInline)
             .padding(.bottom, isSelected ? NavTabBarTokens.activePaddingBottom : NavTabBarTokens.inactivePaddingBottom)
-            .frame(width: tabWidth, minWidth: NavTabBarTokens.minTapWidth)
+            .frame(width: tabWidth, minWidth: NavTabBarTokens.minTapWidth, minHeight: NavTabBarTokens.minTabHeight)
             .contentShape(Rectangle())
         }
         .buttonStyle(TabBarButtonStyle(tabValue: tab.value, pressedTab: $pressedTab))
@@ -232,23 +246,28 @@ extension NavTabBarBase {
 
     // MARK: - Glow Gradient
 
-    /// Elliptical radial gradient — 88% radii, three stops.
+    /// Radial glow gradient — active tab only, tighter ellipse.
     /// Contract: visual_gradient_glow
     private func glowGradient(isSelected: Bool, tab: TabOption, width: CGFloat, height: CGFloat) -> some View {
-        let center = isSelected ? NavTabBarTokens.glowActiveCenter : NavTabBarTokens.glowInactiveCenter
-        let opacity = glowOpacities[tab.value] ?? (isSelected ? 1.0 : 1.0)
+        let opacity = glowOpacities[tab.value, default: 1]
 
-        return RadialGradient(
-            gradient: Gradient(stops: [
-                .init(color: center.opacity(opacity), location: 0.0),
-                .init(color: NavTabBarTokens.glowEdgeColor.opacity(NavTabBarTokens.glowEdgeOpacity), location: 0.88),
-                .init(color: .clear, location: 1.0),
-            ]),
-            center: .center,
-            startRadius: 0,
-            endRadius: min(width, height) * 0.88
-        )
-        .clipped(antialiased: false) // Allow bleed via ZStack — no per-tab clipping
+        return Group {
+            if isSelected {
+                RadialGradient(
+                    gradient: Gradient(stops: [
+                        .init(color: NavTabBarTokens.glowActiveCenter.opacity(opacity), location: 0.0),
+                        .init(color: NavTabBarTokens.glowActiveCenter.opacity(opacity * 0.5), location: 0.4),
+                        .init(color: NavTabBarTokens.glowEdgeColor.opacity(NavTabBarTokens.glowEdgeOpacity), location: 0.8),
+                        .init(color: .clear, location: 1.0),
+                    ]),
+                    center: .center,
+                    startRadius: 0,
+                    endRadius: NavTabBarTokens.glowHorizontalRadius
+                )
+            } else {
+                Color.clear
+            }
+        }
     }
 
     // MARK: - Selection
@@ -285,40 +304,39 @@ extension NavTabBarBase {
         case idle, departing, gliding, arriving
     }
 
-    /// Three-phase animation choreography.
+    /// Animation choreography: dot glides immediately, depart at 8%, arrive at 50%.
     /// Contract: animation_coordination
     private func animateSelection(from prevValue: String, to newValue: String, targetOffset: CGFloat) {
         guard phase == .idle else {
-            // Re-entrant: snap
             dotOffset = targetOffset
             updateGlowForSelection()
             return
         }
-        phase = .departing
+        phase = .gliding
 
-        // Phase 1: Depart — dim departing glow
-        withAnimation(.easeIn(duration: NavTabBarTokens.durationShort)) {
-            glowOpacities[prevValue] = 0.0
+        // Dot glide starts immediately
+        withAnimation(Animation.timingCurve(0.0, 0.0, 0.2, 1.0, duration: NavTabBarTokens.durationGlide)) {
+            dotOffset = targetOffset
         }
 
-        // Phase 2: Glide — dot moves to new tab
-        DispatchQueue.main.asyncAfter(deadline: .now() + NavTabBarTokens.durationShort) {
-            phase = .gliding
-            withAnimation(Animation.timingCurve(0.0, 0.0, 0.2, 1.0, duration: NavTabBarTokens.durationGlide)) {
-                dotOffset = targetOffset
+        // At 8%: departing tab settles down, glow dims
+        DispatchQueue.main.asyncAfter(deadline: .now() + NavTabBarTokens.durationGlide * 0.08) {
+            phase = .departing
+            withAnimation(.easeIn(duration: NavTabBarTokens.durationShort)) {
+                glowOpacities[prevValue] = 0.0
+            }
+        }
+
+        // At 50%: arriving tab lifts up, glow brightens
+        DispatchQueue.main.asyncAfter(deadline: .now() + NavTabBarTokens.durationGlide * 0.5) {
+            phase = .arriving
+            withAnimation(.easeOut(duration: NavTabBarTokens.durationShort)) {
+                glowOpacities[newValue] = 1.0
             }
 
-            // Phase 3: Arrive (~80% through glide) — brighten arriving glow
-            DispatchQueue.main.asyncAfter(deadline: .now() + NavTabBarTokens.durationGlide * 0.8) {
-                phase = .arriving
-                withAnimation(.easeOut(duration: NavTabBarTokens.durationShort)) {
-                    glowOpacities[newValue] = 1.0
-                }
-
-                // Cleanup
-                DispatchQueue.main.asyncAfter(deadline: .now() + NavTabBarTokens.durationShort) {
-                    phase = .idle
-                }
+            // Cleanup
+            DispatchQueue.main.asyncAfter(deadline: .now() + NavTabBarTokens.durationShort) {
+                phase = .idle
             }
         }
     }
