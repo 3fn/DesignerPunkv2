@@ -41,6 +41,8 @@ describe('AI-Readable Mathematical Relationships', () => {
       expect(spacingTokens.space400.baseValue).toBe(SPACING_BASE_VALUE * 4); // 32
       expect(spacingTokens.space500.baseValue).toBe(SPACING_BASE_VALUE * 5); // 40
       expect(spacingTokens.space600.baseValue).toBe(SPACING_BASE_VALUE * 6); // 48
+      expect(spacingTokens.space700.baseValue).toBe(SPACING_BASE_VALUE * 7); // 56
+      expect(spacingTokens.space800.baseValue).toBe(SPACING_BASE_VALUE * 8); // 64
     });
 
     it('should have formulas that match mathematicalRelationship strings', () => {

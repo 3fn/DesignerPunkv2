@@ -43,41 +43,10 @@ async function main() {
   }
 
   try {
-    // Generate all platform files (primitive + semantic tokens)
-    const results = generator.generateAll({
-      outputDir,
-      version: '1.0.0',
-      includeComments: true,
-      groupByCategory: true
-    });
-
-    // Write design token files to disk
-    for (const result of results) {
-      if (result.valid) {
-        fs.writeFileSync(result.filePath, result.content, 'utf-8');
-      }
-    }
-
-    // Report design token results
-    console.log('📊 Design Token Generation Results:\n');
-    for (const result of results) {
-      const status = result.valid ? '✅' : '❌';
-      console.log(`${status} ${result.platform.toUpperCase()}`);
-      console.log(`   File: ${result.filePath}`);
-      console.log(`   Tokens: ${result.tokenCount} primitive, ${result.semanticTokenCount} semantic`);
-      
-      if (result.warnings && result.warnings.length > 0) {
-        console.log(`   ⚠️  Warnings: ${result.warnings.length}`);
-        result.warnings.forEach((w: string) => console.log(`      - ${w}`));
-      }
-      
-      if (result.errors && result.errors.length > 0) {
-        console.log(`   ❌ Errors: ${result.errors.length}`);
-        result.errors.forEach((e: string) => console.log(`      - ${e}`));
-      }
-      
-      console.log('');
-    }
+    // Generate all platform files using the unified orchestration (Spec 080 Phase 2)
+    // This handles 4-context resolution, override validation, and WCAG override keys
+    const { generateTokenFiles } = await import('../src/generators/generateTokenFiles');
+    generateTokenFiles(outputDir);
 
     // Generate component tokens (from ComponentTokenRegistry)
     console.log('📊 Component Token Generation Results:\n');
@@ -109,7 +78,6 @@ async function main() {
       console.log('');
     }
 
-    const allDesignValid = results.every((r: any) => r.valid);
     const allComponentValid = componentResults.every((r: any) => r.valid);
     
     // --- DTCG Format Generation ---
@@ -126,7 +94,7 @@ async function main() {
       console.log('   Platform token generation was not affected.\n');
     }
 
-    if (allDesignValid && allComponentValid) {
+    if (allComponentValid) {
       console.log('✨ All platform files generated successfully!');
       process.exit(0);
     } else {

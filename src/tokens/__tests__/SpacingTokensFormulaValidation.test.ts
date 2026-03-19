@@ -28,7 +28,9 @@ describe('SpacingTokens Formula Validation', () => {
     space300: 24,
     space400: 32,
     space500: 40,
-    space600: 48
+    space600: 48,
+    space700: 56,
+    space800: 64
   };
 
   describe('Formula Results Match Original Values', () => {
@@ -117,6 +119,20 @@ describe('SpacingTokens Formula Validation', () => {
       const calculated = SPACING_BASE_VALUE * 6;
       expect(calculated).toBe(expected);
       expect(spacingTokens.space600.baseValue).toBe(expected);
+    });
+
+    it('should calculate space700 correctly (SPACING_BASE_VALUE * 7)', () => {
+      const expected = originalValues.space700;
+      const calculated = SPACING_BASE_VALUE * 7;
+      expect(calculated).toBe(expected);
+      expect(spacingTokens.space700.baseValue).toBe(expected);
+    });
+
+    it('should calculate space800 correctly (SPACING_BASE_VALUE * 8)', () => {
+      const expected = originalValues.space800;
+      const calculated = SPACING_BASE_VALUE * 8;
+      expect(calculated).toBe(expected);
+      expect(spacingTokens.space800.baseValue).toBe(expected);
     });
   });
 

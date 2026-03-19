@@ -196,6 +196,32 @@ export const spacingTokens: Record<string, PrimitiveToken> = {
     isStrategicFlexibility: false,
     isPrecisionTargeted: false,
     platforms: generateSpacingPlatformValues(SPACING_BASE_VALUE * 6)
+  },
+
+  space700: {
+    name: 'space700',
+    category: TokenCategory.SPACING,
+    baseValue: SPACING_BASE_VALUE * 7,
+    familyBaseValue: SPACING_BASE_VALUE,
+    description: 'Extra huge spacing - 7x base value',
+    mathematicalRelationship: 'base × 7 = 8 × 7 = 56',
+    baselineGridAlignment: true, // 56 is baseline grid aligned (8 × 7)
+    isStrategicFlexibility: false,
+    isPrecisionTargeted: false,
+    platforms: generateSpacingPlatformValues(SPACING_BASE_VALUE * 7)
+  },
+
+  space800: {
+    name: 'space800',
+    category: TokenCategory.SPACING,
+    baseValue: SPACING_BASE_VALUE * 8,
+    familyBaseValue: SPACING_BASE_VALUE,
+    description: 'Maximum spacing - 8x base value',
+    mathematicalRelationship: 'base × 8 = 8 × 8 = 64',
+    baselineGridAlignment: true, // 64 is baseline grid aligned (8 × 8)
+    isStrategicFlexibility: false,
+    isPrecisionTargeted: false,
+    platforms: generateSpacingPlatformValues(SPACING_BASE_VALUE * 8)
   }
 };
 

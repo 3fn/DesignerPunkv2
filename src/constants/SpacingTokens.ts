@@ -35,6 +35,7 @@ export const SPACING_MULTIPLIERS = {
   SPACE_300: 3,     // space300 = 24 (8-unit grid)
   SPACE_400: 4,     // space400 = 32 (8-unit grid)
   SPACE_600: 6,     // space600 = 48 (8-unit grid)
+  SPACE_700: 7,     // space700 = 56 (8-unit grid)
   SPACE_800: 8,     // space800 = 64 (8-unit grid)
 } as const;
 

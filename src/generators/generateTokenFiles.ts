@@ -41,6 +41,11 @@ export function generateTokenFiles(outputDir: string = 'output'): void {
   
   const primitiveTokens = getAllPrimitiveTokens();
   const semanticTokens = getAllSemanticTokens();
+
+  // Register semantic tokens so override resolver can validate against them
+  for (const token of semanticTokens) {
+    semanticRegistry.register(token);
+  }
   
   const validationResult = validator.validateSemanticReferences(semanticTokens, primitiveTokens);
   
