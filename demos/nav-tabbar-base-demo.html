@@ -8,6 +8,12 @@
   <link rel="stylesheet" href="demo-styles.css">
   <script type="module" src="designerpunk.esm.js"></script>
   <style>
+    .tab-bar-viewport nav-tab-bar {
+      position: relative !important;
+      inset-inline: unset !important;
+      bottom: unset !important;
+      z-index: auto !important;
+    }
     .tab-bar-container {
       max-inline-size: 420px;
       position: relative;
@@ -21,7 +27,8 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      background: var(--color-structure-canvas);
+      background: linear-gradient(to right, red, blue);
+      color-scheme: light;
     }
     .tab-bar-viewport-content {
       flex: 1;
@@ -58,6 +65,31 @@
       color: var(--gray-300);
       font-style: italic;
     }
+    /* Full-viewport scrollable demo */
+    .fullscreen-demo {
+      position: relative;
+      block-size: 80vh;
+      overflow: hidden;
+      border: var(--border-default) solid var(--gray-300);
+      border-radius: var(--radius-100);
+      color-scheme: light;
+    }
+    .fullscreen-demo-scroll {
+      block-size: 100%;
+      overflow-y: auto;
+      padding-block-end: 80px; /* space for tab bar */
+    }
+    .fullscreen-demo-scroll img {
+      inline-size: 100%;
+      display: block;
+    }
+    .fullscreen-demo nav-tab-bar {
+      /* Keep fixed positioning but scope to demo container */
+      position: absolute !important;
+      inset-inline: var(--space-200) !important;
+      bottom: var(--space-200) !important;
+      z-index: 10 !important;
+    }
   </style>
 </head>
 <body class="demo-page">
@@ -68,6 +100,21 @@
   </header>
 
   <main>
+
+    <!-- ============================================================
+         SECTION 0: Full-Viewport Scrollable Demo
+         ============================================================ -->
+    <div class="demo-section">
+      <h2>0. Scrollable Content Demo</h2>
+      <p>Tab bar floating over scrollable content. Scroll to see translucency and glow behavior against varying backgrounds.</p>
+
+      <div class="fullscreen-demo" id="fullscreen-demo">
+        <div class="fullscreen-demo-scroll">
+          <img src="https://picsum.photos/800/1600?random=1" alt="Sample content">
+        </div>
+        <nav-tab-bar id="demo-fullscreen" selected-value="home"></nav-tab-bar>
+      </div>
+    </div>
 
     <!-- ============================================================
          SECTION 1: Tab Configurations
@@ -269,6 +316,15 @@ tabBar.selectedValue = 'search';</pre>
       { value: 'notifications', icon: 'bell-outline', activeIcon: 'bell-solid', accessibilityLabel: 'Notifications' }
     ]);
 
+    // Wait for nav-tab-bar to be defined (module script is deferred)
+    customElements.whenDefined('nav-tab-bar').then(function() {
+
+    // ================================================================
+    // Section 0: Full-Viewport Scrollable Demo
+    // ================================================================
+    var demoFullscreen = document.getElementById('demo-fullscreen');
+    demoFullscreen.tabs = tabs4;
+
     // ================================================================
     // Section 1: Tab Configurations
     // ================================================================
@@ -318,8 +374,11 @@ tabBar.selectedValue = 'search';</pre>
     themeBtn.addEventListener('click', function() {
       isDark = !isDark;
       themeViewport.setAttribute('data-theme', isDark ? 'dark' : 'light');
+      themeViewport.style.colorScheme = isDark ? 'dark' : 'light';
       themeBtn.textContent = isDark ? 'Toggle Light Mode' : 'Toggle Dark Mode';
     });
+
+    }); // end customElements.whenDefined
   </script>
 </body>
 </html>

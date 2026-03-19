@@ -17,6 +17,4 @@ export type {
 } from './types';
 
 // Platform implementations
-// - Web: NavTabBarBase (Task 3) — pending
-// - iOS: NavTabBarBase (Task 4) — pending
-// - Android: NavTabBarBase (Task 5) — pending
+export { NavTabBarBase } from './platforms/web/NavTabBarBase.web';

@@ -47,13 +47,20 @@
   align-items: stretch;
   gap: 0;
   position: relative;
+  min-inline-size: 327px;
 
   padding-block-start: var(--space-inset-050);
   padding-inline-end: var(--space-inset-100);
   padding-block-end: var(--space-inset-150);
   padding-inline-start: var(--space-inset-100);
 
-  background-color: var(--color-structure-canvas);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-structure-canvas) 80%, transparent),
+    color-mix(in srgb, var(--color-structure-canvas) 88%, transparent),
+    color-mix(in srgb, var(--color-structure-canvas) 96%, transparent),
+    var(--color-structure-canvas) 48%
+  );
   border-block-start: 1px solid var(--color-structure-border-subtle);
   border-radius: var(--radius-full);
 
@@ -76,6 +83,7 @@
 .tab-item {
   flex: 1;
   position: relative;
+  isolation: isolate; /* Stacking context so ::before z-index:-1 stays above .tab-bar bg */
 
   display: flex;
   flex-direction: column;
@@ -83,6 +91,7 @@
   justify-content: center;
 
   min-inline-size: var(--tap-area-minimum);
+  min-block-size: var(--space-600);
   border: none;
   background: transparent;
   cursor: pointer;
@@ -92,28 +101,21 @@
   appearance: none;
   margin: 0;
 
-  /* Glow gradient center color — overridden per state */
-  --glow-center: var(--color-structure-canvas);
-
   /* Inactive padding (default) — R6 AC2 */
-  padding-block-start: var(--space-inset-200);
+  padding-block-start: var(--space-inset-150);
   padding-inline: var(--space-inset-150);
-  padding-block-end: var(--space-inset-100);
+  padding-block-end: var(--space-inset-075);
 }
 
 /**
- * Glow gradient on all tabs — elliptical radial, 88% radii, three stops.
+ * Glow gradient on active tab only — elliptical radial, tighter bloom.
  * Applied via ::before pseudo-element so it sits behind content but can
  * bleed beyond tab bounds.
- *
- * Stop 0%: --glow-center at 100%
- * Stop 88%: color.structure.canvas at opacity024 (24%)
- * Stop 100%: transparent
  *
  * @see R4 AC1-6: gradient geometry, stops, bleed
  * @see contract: visual_gradient_glow
  */
-.tab-item::before {
+.tab-item[aria-selected="true"]::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -121,21 +123,20 @@
   pointer-events: none;
 
   background: radial-gradient(
-    ellipse 88% 88% at center,
-    var(--glow-center) 0%,
-    color-mix(in srgb, var(--color-structure-canvas) 24%, transparent) 88%,
+    ellipse var(--space-700) 56% at center,
+    var(--color-background-primary-subtle) 0%, color-mix(in srgb, var(--color-background-primary-subtle) 50%, transparent),
+    color-mix(in srgb, var(--color-structure-canvas) 24%, transparent) 80%,
     transparent 100%
   );
 }
 
 /**
- * Active tab: accent glow center.
+ * Active tab: padding shift for icon lift + dot spacing.
  * @see R4 AC3: color.background.primary.subtle
  */
 .tab-item[aria-selected="true"] {
-  --glow-center: var(--color-background-primary-subtle);
   padding-block-start: var(--space-inset-150);
-  padding-block-end: var(--space-inset-050);
+  padding-block-end: var(--space-inset-150);
   gap: var(--space-grouped-minimal);
 }
 
@@ -170,7 +171,7 @@
  */
 .tab-bar__dot {
   position: absolute;
-  bottom: var(--space-inset-050);
+  bottom: var(--space-inset-150);
   inline-size: var(--space-050);
   block-size: var(--space-050);
   border-radius: 50%;
@@ -224,23 +225,43 @@
    ========================================================================== */
 
 /**
- * Phase 1: Departing tab — glow dims.
+ * Phase 1: Departing tab — glow dims, icon settles down.
+ * Transition is set first, then _updateTabs() changes aria-selected
+ * which removes the active padding, triggering the animated settle.
  * @see R3 AC2: glow dims on departing tab
  * @see contract: animation_coordination
  */
+.tab-item--departing {
+  transition: padding-block-start var(--duration-150) var(--easing-accelerate),
+              padding-block-end var(--duration-150) var(--easing-accelerate),
+              gap var(--duration-150) var(--easing-accelerate);
+}
+
 .tab-item--departing::before {
   transition: opacity var(--duration-150) var(--easing-accelerate);
   opacity: 0;
 }
 
 /**
- * Phase 3: Arriving tab — glow brightens.
+ * Phase 3: Arriving tab — glow brightens, icon lifts up.
+ * Transition is set, then aria-selected="true" applies active padding,
+ * triggering the animated lift.
  * @see R3 AC4: glow brightens on arriving tab
  * @see contract: animation_coordination
  */
+.tab-item--arriving {
+  transition: padding-block-start var(--duration-150) var(--easing-decelerate),
+              padding-block-end var(--duration-150) var(--easing-decelerate),
+              gap var(--duration-150) var(--easing-decelerate);
+}
+
 .tab-item--arriving::before {
-  transition: opacity var(--duration-150) var(--easing-decelerate);
-  opacity: 1;
+  animation: glow-in var(--duration-150) var(--easing-decelerate) forwards;
+}
+
+@keyframes glow-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* ==========================================================================

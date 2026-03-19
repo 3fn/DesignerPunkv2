@@ -233,8 +233,10 @@ export class NavTabBarBase extends HTMLElement {
     const btn = this._tabEls[idx];
     if (!btn) return;
 
-    // Center dot horizontally under the tab, at the bottom of the tab's content area
-    const tabCenter = btn.offsetLeft + btn.offsetWidth / 2;
+    // Center dot horizontally under the tab using getBoundingClientRect for sub-pixel accuracy
+    const containerRect = this._containerEl.getBoundingClientRect();
+    const btnRect = btn.getBoundingClientRect();
+    const tabCenter = btnRect.left - containerRect.left + btnRect.width / 2;
     this._dotEl.style.transition = 'none';
     this._dotEl.style.left = `${tabCenter}px`;
     this._dotEl.style.display = '';
@@ -338,44 +340,38 @@ export class NavTabBarBase extends HTMLElement {
     this._animating = true;
 
     // Phase durations used for setTimeout scheduling.
-    // These match the Rosetta motion tokens (duration150=150ms, duration350=350ms).
-    // CSS transitions reference the token custom properties directly;
-    // these constants are only for JS phase coordination.
     const PHASE_SHORT = 150; // matches --duration-150
     const PHASE_GLIDE = 350; // matches --duration-350
 
-    // --- Phase 1: Depart (0ms) ---
-    // Dim departing glow
-    fromBtn.classList.add('tab-item--departing');
-
-    // --- Phase 2: Dot glide (after duration150) ---
-    const toCenter = toBtn.offsetLeft + toBtn.offsetWidth / 2;
-
-    setTimeout(() => {
-      if (!this._dotEl) return;
-
-      // Glide dot to arriving tab
-      this._dotEl.style.transition = `left var(--duration-350) var(--easing-glide-decelerate)`;
+    // --- Dot glide starts immediately ---
+    const containerRect = this._containerEl.getBoundingClientRect();
+    const toRect = toBtn.getBoundingClientRect();
+    const toCenter = toRect.left - containerRect.left + toRect.width / 2;
+    if (this._dotEl) {
+      this._dotEl.style.transition = `left ${PHASE_GLIDE}ms var(--easing-glide-decelerate)`;
       this._dotEl.style.left = `${toCenter}px`;
+    }
 
-      // --- Phase 3: Arrive (~80% through glide) ---
+    // --- At 8%: departing tab settles down, glow dims ---
+    setTimeout(() => {
+      fromBtn.classList.add('tab-item--departing');
+    }, PHASE_GLIDE * 0.08);
+
+    // --- At 50%: arriving tab lifts up, icon swap, glow brightens ---
+    setTimeout(() => {
+      toBtn.classList.add('tab-item--arriving');
+      this._updateTabs();
+
+      // Clean up after lift/settle animations complete
       setTimeout(() => {
-        // Snap icon swap + update ARIA + glow brighten
-        this._updateTabs();
-        toBtn.classList.add('tab-item--arriving');
-
-        // Clean up after Phase 3 completes
-        setTimeout(() => {
-          fromBtn.classList.remove('tab-item--departing');
-          toBtn.classList.remove('tab-item--arriving');
-          if (this._dotEl) {
-            this._dotEl.style.transition = 'none';
-          }
-          this._animating = false;
-        }, PHASE_SHORT);
-      }, PHASE_GLIDE * 0.8); // ~80% through glide
-
-    }, PHASE_SHORT); // After Phase 1
+        fromBtn.classList.remove('tab-item--departing');
+        toBtn.classList.remove('tab-item--arriving');
+        if (this._dotEl) {
+          this._dotEl.style.transition = 'none';
+        }
+        this._animating = false;
+      }, PHASE_SHORT);
+    }, PHASE_GLIDE * 0.5);
   }
 
   private _prefersReducedMotion(): boolean {

@@ -57,6 +57,10 @@ describe('Property 1: Token CSS Completeness', () => {
     // Tokens used with fallback values that may not exist in the token system yet
     // These should be addressed in future specs to add proper semantic tokens
     'color-background-hover', // Used in InputTextPassword with fallback rgba(0, 0, 0, 0.05)
+
+    // Component-internal custom properties (not design tokens)
+    'chrome-offset', // Nav-TabBar-Base: set by JS via Visual Viewport API
+    'glow-center',   // Nav-TabBar-Base: per-tab-state alias defined in component CSS
   ]);
 
   /**

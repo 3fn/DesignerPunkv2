@@ -67,6 +67,8 @@ import { ProgressStepperBase } from './components/core/Progress-Stepper-Base/pla
 import { ProgressStepperDetailed } from './components/core/Progress-Stepper-Detailed/platforms/web/ProgressStepperDetailed.web';
 // Nav-SegmentedChoice-Base - Stemma System naming (segmented navigation control with sliding indicator)
 import { NavSegmentedChoiceBase } from './components/core/Nav-SegmentedChoice-Base/platforms/web/NavSegmentedChoiceBase.web';
+// Nav-TabBar-Base - Stemma System naming (primary bottom navigation with icon-only tabs)
+import { NavTabBarBase } from './components/core/Nav-TabBar-Base/platforms/web/NavTabBarBase.web';
 
 /**
  * Check if design tokens are loaded in the document.
@@ -181,6 +183,8 @@ safeDefine('progress-stepper-base', ProgressStepperBase);
 safeDefine('progress-stepper-detailed', ProgressStepperDetailed);
 // Nav-SegmentedChoice-Base - Stemma System naming (segmented navigation control with sliding indicator)
 safeDefine('nav-segmented-choice', NavSegmentedChoiceBase);
+// Nav-TabBar-Base - Stemma System naming (primary bottom navigation with icon-only tabs)
+safeDefine('nav-tab-bar', NavTabBarBase);
 
 // Check tokens after DOM is ready and CSS is applied
 // Uses requestAnimationFrame to ensure stylesheets have been fully parsed and applied
@@ -198,7 +202,7 @@ if (typeof document !== 'undefined') {
 
 // Export all components for UMD global access and ESM imports
 // Requirements: 1.2, 2.3
-export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb, ButtonVerticalListItem, ButtonVerticalListSet, AvatarBaseElement, BadgeLabelBase, BadgeCountBase, BadgeCountNotification, InputCheckboxBaseElement, InputCheckboxLegalElement, ChipBaseElement, ChipFilterElement, ChipInputElement, ContainerCardBaseWeb, InputRadioBaseElement, InputRadioSetElement, ProgressIndicatorNodeBase, ProgressIndicatorConnectorBase, ProgressIndicatorLabelBase, ProgressPaginationBase, ProgressStepperBase, ProgressStepperDetailed, NavSegmentedChoiceBase };
+export { InputTextBase, InputTextEmail, InputTextPassword, InputTextPhoneNumber, ButtonCTA, IconBaseElement, ButtonIcon, ContainerBaseWeb, ButtonVerticalListItem, ButtonVerticalListSet, AvatarBaseElement, BadgeLabelBase, BadgeCountBase, BadgeCountNotification, InputCheckboxBaseElement, InputCheckboxLegalElement, ChipBaseElement, ChipFilterElement, ChipInputElement, ContainerCardBaseWeb, InputRadioBaseElement, InputRadioSetElement, ProgressIndicatorNodeBase, ProgressIndicatorConnectorBase, ProgressIndicatorLabelBase, ProgressPaginationBase, ProgressStepperBase, ProgressStepperDetailed, NavSegmentedChoiceBase, NavTabBarBase };
 
 // Also export with more intuitive names for the UMD global
 export const Icon = IconBaseElement;
@@ -240,3 +244,5 @@ export const StepperBase = ProgressStepperBase;
 export const StepperDetailed = ProgressStepperDetailed;
 // Nav-SegmentedChoice - Intuitive alias for NavSegmentedChoiceBase
 export const SegmentedChoice = NavSegmentedChoiceBase;
+// Nav-TabBar - Intuitive alias for NavTabBarBase
+export const TabBar = NavTabBarBase;
