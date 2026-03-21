@@ -1,26 +1,23 @@
 # Task 3 Summary: Governance Infrastructure
 
 **Date**: 2026-03-21
-**Spec**: 082 — Application MCP Consistency & Governance
-**Organization**: spec-summary
-**Scope**: 082-application-mcp-consistency
+**Spec**: 082 - Application MCP Consistency & Governance
 
----
+## What Was Done
 
-## What
+Added governance infrastructure to prevent family name drift: a `FamilyNameValidation.test.ts` that enforces canonical names against the family registry, and a "Family Naming Convention" section in the Component Development Guide documenting the convention, registry, legacy prefix mapping, and forward-looking rule.
 
-Added automated family name governance via `FamilyNameValidation.test.ts` and documented the canonical naming convention in the Component Development Guide.
+## Why It Matters
 
-## Why
+Without enforcement, the family name inconsistency that prompted this spec would recur with every new family. The validation test catches drift at the point of introduction — before it reaches agents or MCP queries.
 
-Without enforcement, a developer creating a new component could use any string for `family:` — singular, plural, hyphenated, spaced — and nothing would catch it until an agent hit a query mismatch. The validation test catches invalid family names at test time with diagnostic error messages. The Component Development Guide documents the convention so agents and humans know the rules.
+## Key Changes
 
-## Artifacts
-
-- `application-mcp-server/src/indexer/__tests__/FamilyNameValidation.test.ts` — 3 tests: schema family validation, guidance displayName cross-check, registry format validation
-- `.kiro/steering/Component-Development-Guide.md` — "Family Naming Convention" section with canonical names, legacy prefix mapping, forward-looking rule, and enforcement reference
+- `FamilyNameValidation.test.ts` — 3 tests validating schema family names, format, and displayName consistency
+- Component Development Guide — "Family Naming Convention" section with canonical table, legacy mapping, and new-family rule
 
 ## Impact
 
-- Application MCP: 13 suites, 142 tests passing
-- Any new component with an unregistered or malformed family name will fail the test with a clear message listing valid canonical names
+- New families must register in `family-registry.yaml` before any schema can reference them
+- Agents have a single authoritative reference for family identity in the Component Development Guide
+- 306 suites, 7,965 tests passing
