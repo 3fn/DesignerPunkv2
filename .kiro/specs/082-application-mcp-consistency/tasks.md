@@ -118,7 +118,7 @@ Tasks 1-2 must be sequential (registry before normalization). Tasks 3-4 can proc
     - Run `npm test` to verify all tests pass
     - _Requirements: 2.2, 2.3, 2.4, 2.5_
 
-- [ ] 3. Governance Infrastructure
+- [x] 3. Governance Infrastructure
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -142,7 +142,7 @@ Tasks 1-2 must be sequential (registry before normalization). Tasks 3-4 can proc
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Governance Infrastructure"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 3.1 Create FamilyNameValidation test
+  - [x] 3.1 Create FamilyNameValidation test
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -156,7 +156,7 @@ Tasks 1-2 must be sequential (registry before normalization). Tasks 3-4 can proc
     - Run test to verify it passes with normalized data
     - _Requirements: 4.1, 4.2, 4.3, 4.4_
 
-  - [ ] 3.2 Update Component Development Guide
+  - [x] 3.2 Update Component Development Guide
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     **Agent**: Thurgood (Lina reviews before commit)

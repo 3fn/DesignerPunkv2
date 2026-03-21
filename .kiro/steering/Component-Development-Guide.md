@@ -313,6 +313,52 @@ Accessibility testing requires understanding:
 
 ---
 
+## Family Naming Convention
+
+### Authoritative Source
+
+`family-registry.yaml` (project root) is the single source of truth for component family identity. It defines three fields per family:
+
+- **`canonical`**: Machine identifier — singular PascalCase, no spaces, no hyphens (e.g., `FormInput`, `ProgressIndicator`)
+- **`displayName`**: Human-facing label for docs and MCP responses (e.g., "Form Inputs", "Progress Indicators")
+- **`prefix`**: Primary component name prefix (e.g., `Input-`, `Progress-`)
+
+All schema.yaml `family:` fields and guidance YAML `family:` fields MUST use the canonical name from the registry.
+
+### Canonical Family Names
+
+| Canonical | Display Name | Prefix | Notes |
+|-----------|-------------|--------|-------|
+| `Avatar` | "Avatars" | `Avatar-` | |
+| `Badge` | "Badges" | `Badge-` | |
+| `Button` | "Buttons" | `Button-` | |
+| `Chip` | "Chips" | `Chip-` | |
+| `Container` | "Containers" | `Container-` | |
+| `FormInput` | "Form Inputs" | `Input-` | ⚠️ Legacy prefix omits `Form` |
+| `Icon` | "Icons" | `Icon-` | |
+| `Navigation` | "Navigation" | `Nav-` | ⚠️ Legacy abbreviated prefix |
+| `ProgressIndicator` | "Progress Indicators" | `Progress-` | ⚠️ Dual prefix — primitives use `Progress-Indicator-`, semantic variants use `Progress-` |
+
+### Legacy Prefix Mapping
+
+Three families have component name prefixes that don't match their canonical family name. These are documented, not changed — component names are stable identifiers with deep references across the codebase.
+
+An agent encountering `Input-Text-Base` should know it belongs to the `FormInput` family. An agent encountering `Nav-TabBar-Base` should know it belongs to the `Navigation` family. The mapping above is the authoritative reference.
+
+### Forward-Looking Rule
+
+**New families MUST use the canonical family name as the component prefix.** No abbreviations, no divergence. If the canonical name is `DataDisplay`, the component prefix is `DataDisplay-`, not `DD-` or `Data-`.
+
+### Guidance YAML Filenames
+
+Guidance YAML filenames (e.g., `button.yaml`, `form-inputs.yaml`) are filesystem identifiers independent of the canonical family name. A file named `form-inputs.yaml` contains `family: FormInput`. This is expected — the filename convention predates the canonical naming convention and is not worth renaming.
+
+### Enforcement
+
+The `FamilyNameValidation.test.ts` test validates that every schema `family:` value matches a canonical name in `family-registry.yaml`. Adding a new family requires registering it in the registry first — the test will fail with a clear message if an unregistered family name appears.
+
+---
+
 ## Component Attribute Standards
 
 ### Variant Attribute Naming
