@@ -1,0 +1,49 @@
+# Canonical Family Registry
+# Single source of truth for component family identity.
+# Consumed by: FamilyNameValidation test, FamilyGuidanceIndexer (displayName fallback),
+#              Component Development Guide, CoverageDrift test.
+#
+# Rules:
+#   - canonical: Singular PascalCase, no spaces, no hyphens. Machine identifier.
+#   - displayName: Human-facing label for docs and MCP responses.
+#   - prefix: Primary component name prefix. Not exhaustive — see Component Development
+#     Guide for families with multiple prefixes (e.g., ProgressIndicator).
+#
+# To add a new family: append an entry here BEFORE creating any schema that references it.
+
+families:
+  - canonical: Avatar
+    displayName: "Avatars"
+    prefix: "Avatar-"
+
+  - canonical: Badge
+    displayName: "Badges"
+    prefix: "Badge-"
+
+  - canonical: Button
+    displayName: "Buttons"
+    prefix: "Button-"
+
+  - canonical: Chip
+    displayName: "Chips"
+    prefix: "Chip-"
+
+  - canonical: Container
+    displayName: "Containers"
+    prefix: "Container-"
+
+  - canonical: FormInput
+    displayName: "Form Inputs"
+    prefix: "Input-"
+
+  - canonical: Icon
+    displayName: "Icons"
+    prefix: "Icon-"
+
+  - canonical: Navigation
+    displayName: "Navigation"
+    prefix: "Nav-"
+
+  - canonical: ProgressIndicator
+    displayName: "Progress Indicators"
+    prefix: "Progress-"

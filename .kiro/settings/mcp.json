@@ -23,7 +23,7 @@
         "designerpunk-components": {
             "command": "node",
             "args": [
-                "/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/component-mcp-server/dist/index.js"
+                "/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/application-mcp-server/dist/index.js"
             ],
             "env": {
                 "COMPONENTS_DIR": "/Users/3fn/Documents/Work Projects/Kiro/DesignerPunk-v2/src/components/core"

@@ -15,7 +15,7 @@
         "src/components/**",
         ".kiro/specs/**",
         "docs/specs/**",
-        "component-mcp-server/**",
+        "application-mcp-server/**",
         "docs/component-meta-authoring-guide.md"
       ]
     }

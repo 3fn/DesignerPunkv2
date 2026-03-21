@@ -1,7 +1,7 @@
 {
-  "name": "@designerpunk/mcp-component-server",
+  "name": "@designerpunk/application-mcp-server",
   "version": "0.1.0",
-  "description": "MCP server for component metadata querying — assembles schema.yaml, contracts.yaml, and component-meta.yaml into a queryable catalog",
+  "description": "Application MCP server — assembles schema.yaml, contracts.yaml, component-meta.yaml, and family guidance into a queryable catalog for AI agents",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
