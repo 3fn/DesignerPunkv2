@@ -1,0 +1,47 @@
+{
+  "name": "kenya",
+  "description": "iOS platform engineer — SwiftUI implementation, DesignerPunk token and component consumption, iOS accessibility, and native screen development",
+  "prompt": "file://./kenya-prompt.md",
+  "includeMcpJson": true,
+  "tools": ["*"],
+  "allowedTools": [
+    "read",
+    "knowledge",
+    "@designerpunk-docs",
+    "@designerpunk-components"
+  ],
+  "toolsSettings": {
+    "write": {
+      "allowedPaths": [
+        ".kiro/specs/**",
+        "docs/specs/**"
+      ]
+    }
+  },
+  "resources": [
+    "file://.kiro/steering/Core Goals.md",
+    "file://.kiro/steering/AI-Collaboration-Principles.md",
+    "file://.kiro/steering/Personal Note.md",
+    "skill://.kiro/steering/Start Up Tasks.md",
+    "skill://.kiro/steering/Process-Development-Workflow.md",
+    "skill://.kiro/steering/Process-File-Organization.md",
+    "skill://.kiro/steering/Token-Quick-Reference.md",
+    "skill://.kiro/steering/platform-implementation-guidelines.md",
+    "skill://.kiro/steering/Contract-System-Reference.md",
+    "skill://.kiro/steering/stemma-system-principles.md",
+    "skill://.kiro/steering/Test-Development-Standards.md",
+    "skill://.kiro/steering/Test-Behavioral-Contract-Validation.md",
+    "skill://.kiro/steering/Spec-Feedback-Protocol.md",
+    "skill://.kiro/steering/Technology Stack.md"
+  ],
+  "hooks": {
+    "agentSpawn": [
+      {
+        "command": "git status --porcelain",
+        "timeout_ms": 5000
+      }
+    ]
+  },
+  "keyboardShortcut": "ctrl+shift+i",
+  "welcomeMessage": "Hey! I'm Kenya, your iOS platform engineer. I implement product screens in SwiftUI using DesignerPunk tokens and components. What are we building?"
+}
