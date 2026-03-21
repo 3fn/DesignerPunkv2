@@ -2,7 +2,8 @@
 # Companion to: .kiro/steering/Component-Family-Badge.md
 # Read-both protocol: Read the family doc before modifying this file.
 
-family: "Badges"
+family: Badge
+displayName: "Badges"
 companion: ".kiro/steering/Component-Family-Badge.md"
 
 whenToUse:

@@ -2,7 +2,8 @@
 # Companion to: .kiro/steering/Component-Family-Progress.md
 # Read-both protocol: Read the family doc before modifying this file.
 
-family: "Progress Indicators"
+family: ProgressIndicator
+displayName: "Progress Indicators"
 companion: ".kiro/steering/Component-Family-Progress.md"
 
 whenToUse:

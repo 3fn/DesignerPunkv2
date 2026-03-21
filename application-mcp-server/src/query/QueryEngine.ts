@@ -200,6 +200,7 @@ export class ComponentQueryEngine {
     }
     const response: PropGuidanceResponse = {
       family: guidance.family,
+      displayName: guidance.displayName,
       whenToUse: guidance.whenToUse,
       whenNotToUse: guidance.whenNotToUse,
       selectionRules: verbose ? guidance.selectionRules : guidance.selectionRules.map(g => ({

@@ -25,7 +25,8 @@ describe('FamilyGuidanceIndexer', () => {
   };
 
   const validFlat = `
-family: "Buttons"
+family: Button
+displayName: "Buttons"
 companion: ".kiro/steering/Component-Family-Button.md"
 whenToUse:
   - "Promoted actions"
@@ -59,7 +60,8 @@ patterns:
 `;
 
   const validGrouped = `
-family: "Form Inputs"
+family: FormInput
+displayName: "Form Inputs"
 companion: ".kiro/steering/Component-Family-Form-Inputs.md"
 whenToUse:
   - "Data collection"
@@ -136,9 +138,9 @@ accessibilityNotes:
       writeGuidance('button', validFlat);
       const indexer = new FamilyGuidanceIndexer();
       await indexer.indexGuidance(tmpDir);
-      const result = indexer.getGuidance('Buttons');
+      const result = indexer.getGuidance('Button');
       expect(result).not.toBeNull();
-      expect(result!.family).toBe('Buttons');
+      expect(result!.family).toBe('Button');
     });
 
     it('retrieves by component name', async () => {
@@ -147,7 +149,7 @@ accessibilityNotes:
       await indexer.indexGuidance(tmpDir);
       const result = indexer.getGuidance('Button-CTA');
       expect(result).not.toBeNull();
-      expect(result!.family).toBe('Buttons');
+      expect(result!.family).toBe('Button');
     });
 
     it('retrieves by component in grouped rules', async () => {
@@ -156,7 +158,7 @@ accessibilityNotes:
       await indexer.indexGuidance(tmpDir);
       const result = indexer.getGuidance('Input-Text-Email');
       expect(result).not.toBeNull();
-      expect(result!.family).toBe('Form Inputs');
+      expect(result!.family).toBe('FormInput');
     });
 
     it('returns null for unknown component', async () => {
@@ -172,7 +174,7 @@ accessibilityNotes:
       writeGuidance('button', validFlat);
       const indexer = new FamilyGuidanceIndexer();
       await indexer.indexGuidance(tmpDir);
-      const result = indexer.getGuidance('Buttons')!;
+      const result = indexer.getGuidance('Button')!;
       expect(result.selectionRules.length).toBe(1);
       expect(result.selectionRules[0].group).toBeUndefined();
       expect(result.selectionRules[0].rules.length).toBe(2);
@@ -184,7 +186,7 @@ accessibilityNotes:
       writeGuidance('form-inputs', validGrouped);
       const indexer = new FamilyGuidanceIndexer();
       await indexer.indexGuidance(tmpDir);
-      const result = indexer.getGuidance('Form Inputs')!;
+      const result = indexer.getGuidance('FormInput')!;
       // 1 ungrouped (flat rule) + 2 groups
       expect(result.selectionRules.length).toBe(3);
       expect(result.selectionRules[0].group).toBeUndefined();
@@ -198,7 +200,7 @@ accessibilityNotes:
       writeGuidance('button', validFlat);
       const indexer = new FamilyGuidanceIndexer();
       await indexer.indexGuidance(tmpDir);
-      const result = indexer.getGuidance('Buttons')!;
+      const result = indexer.getGuidance('Button')!;
       expect(result.patterns.length).toBe(1);
       expect(result.patterns[0].name).toBe('Form Actions');
       expect(result.patterns[0].components.length).toBe(2);
@@ -209,7 +211,7 @@ accessibilityNotes:
       writeGuidance('form-inputs', validGrouped);
       const indexer = new FamilyGuidanceIndexer();
       await indexer.indexGuidance(tmpDir);
-      const result = indexer.getGuidance('Form Inputs')!;
+      const result = indexer.getGuidance('FormInput')!;
       expect(result.patterns).toEqual([]);
     });
   });
@@ -219,7 +221,7 @@ accessibilityNotes:
       writeGuidance('button', validFlat);
       const indexer = new FamilyGuidanceIndexer();
       await indexer.indexGuidance(tmpDir);
-      const result = indexer.getGuidance('Buttons')!;
+      const result = indexer.getGuidance('Button')!;
       const primaryRule = result.selectionRules[0].rules[0];
       expect(primaryRule.props).toEqual({ variant: 'primary' });
     });
@@ -228,7 +230,7 @@ accessibilityNotes:
       writeGuidance('button', validFlat);
       const indexer = new FamilyGuidanceIndexer();
       await indexer.indexGuidance(tmpDir);
-      const result = indexer.getGuidance('Buttons')!;
+      const result = indexer.getGuidance('Button')!;
       const iconRule = result.selectionRules[0].rules[1];
       expect(iconRule.props).toBeUndefined();
     });
@@ -240,7 +242,7 @@ accessibilityNotes:
       writeGuidance('form-inputs', validGrouped);
       const indexer = new FamilyGuidanceIndexer();
       await indexer.indexGuidance(tmpDir);
-      expect(indexer.getAllFamilies()).toEqual(['Buttons', 'Form Inputs']);
+      expect(indexer.getAllFamilies()).toEqual(['Button', 'FormInput']);
     });
   });
 

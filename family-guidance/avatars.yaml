@@ -2,7 +2,8 @@
 # Companion to: .kiro/steering/Component-Family-Avatar.md
 # Read-both protocol: Read the family doc before modifying this file.
 
-family: "Avatars"
+family: Avatar
+displayName: "Avatars"
 companion: ".kiro/steering/Component-Family-Avatar.md"
 
 whenToUse:

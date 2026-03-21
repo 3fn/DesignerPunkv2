@@ -15,7 +15,7 @@
 
 name: Container-Base
 type: primitive
-family: Containers
+family: Container
 version: "1.0.0"
 readiness: production-ready
 

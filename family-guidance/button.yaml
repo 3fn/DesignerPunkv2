@@ -2,7 +2,8 @@
 # Companion to: .kiro/steering/Component-Family-Button.md
 # Read-both protocol: Read the family doc before modifying this file.
 
-family: "Buttons"
+family: Button
+displayName: "Buttons"
 companion: ".kiro/steering/Component-Family-Button.md"
 
 whenToUse:

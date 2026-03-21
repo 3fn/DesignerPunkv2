@@ -83,7 +83,7 @@ describe('Progress-Pagination-Base', () => {
   describe('Stemma Behavioral Contracts', () => {
     it('follows [Family]-[Type]-[Variant] naming pattern (Req 13.1)', () => {
       expect(schemaContent).toMatch(/name:\s*Progress-Pagination-Base/);
-      expect(schemaContent).toMatch(/family:\s*Progress-Indicator/);
+      expect(schemaContent).toMatch(/family:\s*ProgressIndicator/);
     });
 
     it('is classified as semantic component type (Req 13.7)', () => {

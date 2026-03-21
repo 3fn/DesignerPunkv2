@@ -15,7 +15,7 @@
 
 name: Container-Card-Base
 type: type-primitive
-family: Containers
+family: Container
 version: "1.0.0"
 readiness: development
 

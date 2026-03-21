@@ -1,6 +1,6 @@
 name: Progress-Pagination-Base
 type: semantic
-family: Progress-Indicator
+family: ProgressIndicator
 version: "1.0.0"
 readiness: development
 

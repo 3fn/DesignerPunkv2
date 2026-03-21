@@ -10,7 +10,7 @@
 
 name: Input-Text-Base
 type: primitive
-family: FormInputs
+family: FormInput
 version: "1.0.0"
 readiness: production-ready
 

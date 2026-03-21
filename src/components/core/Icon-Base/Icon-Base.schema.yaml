@@ -15,7 +15,7 @@
 
 name: Icon-Base
 type: primitive
-family: Icons
+family: Icon
 version: "1.0.0"
 readiness: production-ready
 

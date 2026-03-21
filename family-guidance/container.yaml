@@ -2,7 +2,8 @@
 # Companion to: .kiro/steering/Component-Family-Container.md
 # Read-both protocol: Read the family doc before modifying this file.
 
-family: "Containers"
+family: Container
+displayName: "Containers"
 companion: ".kiro/steering/Component-Family-Container.md"
 
 whenToUse:

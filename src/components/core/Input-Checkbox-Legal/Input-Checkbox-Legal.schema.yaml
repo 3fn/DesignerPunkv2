@@ -9,7 +9,7 @@
 
 name: Input-Checkbox-Legal
 type: semantic
-family: FormInputs
+family: FormInput
 version: "1.0.0"
 readiness: production-ready
 inherits: Input-Checkbox-Base

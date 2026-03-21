@@ -2,7 +2,8 @@
 # Companion to: .kiro/steering/Component-Family-Chip.md
 # Read-both protocol: Read the family doc before modifying this file.
 
-family: "Chips"
+family: Chip
+displayName: "Chips"
 companion: ".kiro/steering/Component-Family-Chip.md"
 
 whenToUse:

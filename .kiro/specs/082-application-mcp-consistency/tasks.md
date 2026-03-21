@@ -62,7 +62,7 @@ Tasks 1-2 must be sequential (registry before normalization). Tasks 3-4 can proc
     - Run `npm test` to verify all tests pass after rename
     - _Requirements: 3.1, 3.2, 3.4_
 
-- [ ] 2. Family Name Normalization
+- [x] 2. Family Name Normalization
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -91,7 +91,7 @@ Tasks 1-2 must be sequential (registry before normalization). Tasks 3-4 can proc
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Family Name Normalization"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 2.1 Normalize schema family names
+  - [x] 2.1 Normalize schema family names
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -104,7 +104,7 @@ Tasks 1-2 must be sequential (registry before normalization). Tasks 3-4 can proc
     - Verify each schema against the canonical name table in `family-registry.yaml`
     - _Requirements: 2.1_
 
-  - [ ] 2.2 Normalize guidance YAMLs and update indexer
+  - [x] 2.2 Normalize guidance YAMLs and update indexer
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina

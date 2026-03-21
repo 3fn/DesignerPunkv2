@@ -359,6 +359,7 @@ export interface FamilyPattern {
 
 export interface FamilyGuidance {
   family: string;
+  displayName: string;
   companion: string;
   whenToUse: string[];
   whenNotToUse: string[];
@@ -369,6 +370,7 @@ export interface FamilyGuidance {
 
 export interface PropGuidanceResponse {
   family: string;
+  displayName: string;
   whenToUse: string[];
   whenNotToUse: string[];
   selectionRules: SelectionRuleGroup[];

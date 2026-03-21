@@ -137,6 +137,7 @@ export class FamilyGuidanceIndexer {
 
     return {
       family: String(doc.family),
+      displayName: doc.displayName ? String(doc.displayName) : String(doc.family),
       companion: String(doc.companion),
       whenToUse: (doc.whenToUse as string[]).map(String),
       whenNotToUse: (doc.whenNotToUse as string[]).map(String),

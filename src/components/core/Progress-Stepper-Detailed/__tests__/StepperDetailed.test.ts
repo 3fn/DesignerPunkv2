@@ -108,7 +108,7 @@ describe('Progress-Stepper-Detailed', () => {
   describe('Stemma Behavioral Contracts', () => {
     it('follows [Family]-[Type]-[Variant] naming pattern (Req 13.3)', () => {
       expect(schemaContent).toMatch(/name:\s*Progress-Stepper-Detailed/);
-      expect(schemaContent).toMatch(/family:\s*Progress-Indicator/);
+      expect(schemaContent).toMatch(/family:\s*ProgressIndicator/);
     });
 
     it('is classified as semantic component type (Req 13.9)', () => {

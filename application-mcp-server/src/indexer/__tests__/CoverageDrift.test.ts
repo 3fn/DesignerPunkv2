@@ -23,24 +23,18 @@ describe('CoverageDrift', () => {
 
   it('every production family has family guidance', () => {
     const catalog = indexer.getCatalog();
-    const productionByFamily = new Map<string, string[]>();
+    const productionFamilies = new Set<string>();
 
     for (const c of catalog) {
       if (c.readiness === 'production-ready' && c.family) {
-        const list = productionByFamily.get(c.family) || [];
-        list.push(c.name);
-        productionByFamily.set(c.family, list);
+        productionFamilies.add(c.family);
       }
     }
 
-    // A family has guidance if any of its components resolve via getGuidance.
-    // Schema family names may differ from guidance family names (e.g. "Button" vs "Buttons"),
-    // so we check via component lookup rather than direct family name lookup.
     const uncovered: string[] = [];
-    for (const [family, components] of productionByFamily) {
-      const hasGuidance = components.some(name => indexer.getGuidance(name) !== null);
-      if (!hasGuidance) {
-        uncovered.push(`${family} (components: ${components.join(', ')})`);
+    for (const family of productionFamilies) {
+      if (!indexer.getGuidance(family)) {
+        uncovered.push(family);
       }
     }
 

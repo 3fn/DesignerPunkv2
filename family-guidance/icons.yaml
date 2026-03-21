@@ -2,7 +2,8 @@
 # Companion to: .kiro/steering/Component-Family-Icon.md
 # Read-both protocol: Read the family doc before modifying this file.
 
-family: "Icons"
+family: Icon
+displayName: "Icons"
 companion: ".kiro/steering/Component-Family-Icon.md"
 
 whenToUse:

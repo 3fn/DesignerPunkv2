@@ -10,7 +10,7 @@
 
 name: Input-Text-PhoneNumber
 type: semantic
-family: FormInputs
+family: FormInput
 inherits: Input-Text-Base
 version: "1.0.0"
 readiness: production-ready
