@@ -1,8 +1,8 @@
-# Component MCP Query Guide
+# Application MCP Query Guide
 
 **Date**: 2026-02-28
 **Spec**: 064 — Component Metadata Schema
-**Purpose**: Documents all MCP tools, parameters, and usage patterns for the component MCP server
+**Purpose**: Documents all MCP tools, parameters, and usage patterns for the Application MCP server
 
 ---
 
@@ -10,7 +10,7 @@
 
 - **Name**: `mcp-component-server`
 - **Transport**: stdio
-- **Start**: `node component-mcp-server/dist/index.js`
+- **Start**: `node application-mcp-server/dist/index.js`
 - **Components directory**: `src/components/core` (default)
 
 ---

@@ -75,7 +75,7 @@ When a trigger criterion is met:
    - The proposed `data_shapes:` format (see below)
    - Impact assessment: which files change, which agents are affected
 3. **Present to Peter** for approval, modification, or rejection
-4. **If approved**: Add `data_shapes:` to the component-meta.yaml authoring guide, update affected component-meta.yaml files, update the component MCP parser
+4. **If approved**: Add `data_shapes:` to the component-meta.yaml authoring guide, update affected component-meta.yaml files, update the Application MCP parser
 
 ---
 

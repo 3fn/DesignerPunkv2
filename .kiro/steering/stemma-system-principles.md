@@ -531,7 +531,7 @@ ComponentSchema:
 Input-Text-Base:
   name: Input-Text-Base
   type: primitive
-  family: FormInputs
+  family: FormInput
   
   behaviors:
     - focusable
@@ -597,7 +597,7 @@ Input-Text-Base:
 Input-Text-Email:
   name: Input-Text-Email
   type: semantic
-  family: FormInputs
+  family: FormInput
   inherits: Input-Text-Base
   
   behaviors:

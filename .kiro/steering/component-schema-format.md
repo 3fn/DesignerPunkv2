@@ -177,12 +177,12 @@ Semantic components declare inheritance with `inherits:`:
 # Primitive — no inherits field
 name: Input-Text-Base
 type: primitive
-family: FormInputs
+family: FormInput
 
 # Semantic — inherits from primitive
 name: Input-Text-Email
 type: semantic
-family: FormInputs
+family: FormInput
 inherits: Input-Text-Base
 ```
 

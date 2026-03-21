@@ -290,7 +290,7 @@ readiness: [placeholder | beta | production-ready]
 ```yaml
 name: Input-Text-Base
 type: primitive
-family: FormInputs
+family: FormInput
 
 behaviors:
   - focusable

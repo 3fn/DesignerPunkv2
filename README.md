@@ -65,7 +65,7 @@ Think of it as: **Define once, generate everywhere**
 - Three-tier architecture: Primitive → Semantic → Component tokens
 - Cross-platform generation with platform-native syntax
 - MCP Documentation Server with 82% token reduction for AI agents
-- Component MCP Server with 6 query tools for agent-driven component selection
+- Application MCP Server with 6 query tools for agent-driven component selection
 - Empirically validated performance and token efficiency
 
 ### Stemma System — The Component Architecture
@@ -76,7 +76,7 @@ A framework for building components that work identically across platforms while
 
 - **Naming Convention**: `[Family]-[Type]-[Variant]` (AI-discoverable)
 - **Behavioral Contracts**: 10-category taxonomy with 210 concepts — explicit specifications ensuring cross-platform consistency
-- **Component MCP Server**: Machine-readable metadata with 10 query tools for agent-driven component selection, experience patterns, family guidance, and assembly validation
+- **Application MCP Server**: Machine-readable metadata with 10 query tools for agent-driven component selection, experience patterns, family guidance, and assembly validation
 - **11 Component Families**: Navigation, Form Inputs, Core, Progress Indicators, Data Displays, etc.
 - **Purpose**: Systematic, scalable component development with shared architecture
 
@@ -95,7 +95,7 @@ Think of it as: **Build once, implement natively everywhere**
 
 ![Unified Contract System](docs/architecture/Unified%20Contract%20System.png)
 
-Every component makes explicit behavioral promises organized by a 10-category taxonomy (layout, interaction, state, validation, accessibility, composition, content, animation, visual, performance), with formal inheritance and intentional exclusions. Contracts define WHAT behavior occurs across platforms — implementations define HOW. The component MCP server makes these contracts queryable by agents.
+Every component makes explicit behavioral promises organized by a 10-category taxonomy (layout, interaction, state, validation, accessibility, composition, content, animation, visual, performance), with formal inheritance and intentional exclusions. Contracts define WHAT behavior occurs across platforms — implementations define HOW. The Application MCP server makes these contracts queryable by agents.
 
 ---
 
@@ -186,7 +186,7 @@ This is a working case study in how to lead AI-driven development at scale.
 - Cross-platform generation (CSS, Swift, Kotlin, DTCG JSON)
 - Three-tier architecture (Primitive → Semantic → Component)
 - MCP Documentation Server with 82% token reduction for AI agent queries
-- Component MCP Server with progressive disclosure queries for agent-driven selection
+- Application MCP Server with progressive disclosure queries for agent-driven selection
 - 3 experience patterns for assembly guidance (forms, settings, onboarding)
 - 3 family guidance YAML files for machine-queryable component selection (Buttons, Form Inputs, Containers)
 - Bidirectional Figma integration: token push (Variables + Styles) and design extraction (ComponentAnalysis with three-tier classification)
@@ -224,7 +224,7 @@ If you want to understand how these ideas work in practice:
 1. **The token system** (`src/tokens/`) — 310 tokens organized mathematically with cross-platform generation
 2. **Component implementations** (`src/components/`) — Real, production-ready components for Web/iOS/Android
 3. **MCP Documentation Server** (`mcp-server/`) — Working implementation you can integrate with Cursor or Claude
-4. **Application MCP Server** (`component-mcp-server/`) — Agent-driven component selection, experience patterns, and assembly validation
+4. **Application MCP Server** (`application-mcp-server/`) — Agent-driven component selection, experience patterns, and assembly validation
 5. **Steering Documentation** (`.kiro/steering/`) — Current architectural thinking and development guidance
 
 ### Installation
@@ -289,7 +289,7 @@ With MCP: *"Query the documentation map → get summary → retrieve specific se
 ### Component Selection as a Queryable System
 
 Instead of: *"Parse 28 schema files, 28 contract files, and 28 annotation files"*
-With Component MCP: *"find_components({ context: 'login-forms' }) → get_experience_pattern('simple-form') → get_prop_guidance('Form Inputs') → validate_assembly(tree)"*
+With Application MCP: *"find_components({ context: 'login-forms' }) → get_experience_pattern('simple-form') → get_prop_guidance('Form Inputs') → validate_assembly(tree)"*
 
 **Result**: Agents select components by context, learn assembly patterns, query family-level selection guidance, and validate complete UI trees — all through structured queries
 

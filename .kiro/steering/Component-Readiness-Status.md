@@ -451,7 +451,7 @@ ReadinessStatus:
 Input-Text-Email:
   name: Input-Text-Email
   type: semantic
-  family: FormInputs
+  family: FormInput
   inherits: Input-Text-Base
   readiness: production-ready
   # ... rest of schema
@@ -462,7 +462,7 @@ Input-Text-Email:
 Input-Text-Search:
   name: Input-Text-Search
   type: semantic
-  family: FormInputs
+  family: FormInput
   inherits: Input-Text-Base
   readiness: beta
   # ... rest of schema
@@ -483,7 +483,7 @@ Avatar-User-Base:
 Input-Text-Base:
   name: Input-Text-Base
   type: primitive
-  family: FormInputs
+  family: FormInput
   readiness: deprecated
   deprecation:
     replacement: Input-Text-Email, Input-Text-Password
@@ -501,7 +501,7 @@ Input-Text-Base:
 ```yaml
 # MCP document metadata
 metadata:
-  family: FormInputs
+  family: FormInput
   purpose: Data collection and validation
   readiness: production-ready  # Family-level readiness
   

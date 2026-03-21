@@ -256,12 +256,12 @@ You have access to the DesignerPunk MCP documentation server (`@designerpunk-doc
 | Completion doc guidance | `get_section({ path: ".kiro/steering/Completion Documentation Guide.md", heading: "Two-Document Workflow" })` |
 | Spec planning standards | `get_section({ path: ".kiro/steering/Process-Spec-Planning.md", heading: "Tasks Document Format" })` |
 | New family doc template | `get_document_full({ path: ".kiro/steering/Component-MCP-Document-Template.md" })` |
-| Component metadata (assembled) | Run component MCP: `cd component-mcp-server && npm run build` then query via test harness |
+| Component metadata (assembled) | Run Application MCP: `cd application-mcp-server && npm run build` then query via test harness |
 | Component health check | Verify index: 28/28 indexed, zero warnings, healthy status |
 
-### Component MCP Server
+### Application MCP Server
 
-The component MCP server (`component-mcp-server/`) indexes all 28 components from their schema.yaml files and assembles metadata including inherited properties, resolved tokens, and composition relationships.
+The Application MCP server (`application-mcp-server/`) indexes all 28 components from their schema.yaml files and assembles metadata including inherited properties, resolved tokens, and composition relationships.
 
 **When to use it:**
 - Before building a component that inherits from another — query the parent to see its full property set, tokens, and contracts

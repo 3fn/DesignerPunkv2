@@ -8,7 +8,7 @@
 
 ## Overview
 
-The component MCP server assembles metadata from three source files per component:
+The Application MCP server assembles metadata from three source files per component:
 
 | Source File | What It Provides |
 |-------------|-----------------|

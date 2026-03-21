@@ -169,7 +169,7 @@ Tasks 1-2 must be sequential (registry before normalization). Tasks 3-4 can proc
     - Note that guidance YAML filenames are independent of canonical family names
     - _Requirements: 4.5_
 
-- [ ] 4. Documentation Sweep
+- [x] 4. Documentation Sweep
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -195,7 +195,7 @@ Tasks 1-2 must be sequential (registry before normalization). Tasks 3-4 can proc
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 4 Complete: Documentation Sweep"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 4.1 Update teaching material (hard references)
+  - [x] 4.1 Update teaching material (hard references)
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     **Agent**: Thurgood
@@ -205,7 +205,7 @@ Tasks 1-2 must be sequential (registry before normalization). Tasks 3-4 can proc
     - Update `Process-Spec-Planning.md` — family name in examples
     - _Requirements: 5.1_
 
-  - [ ] 4.2 Update steering docs and agent prompts (soft references)
+  - [x] 4.2 Update steering docs and agent prompts (soft references)
     **Type**: Setup
     **Validation**: Tier 1 - Minimal
     **Agent**: Thurgood

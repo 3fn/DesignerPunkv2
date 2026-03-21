@@ -8,7 +8,7 @@
 
 ## Overview
 
-Each Stemma component has a `component-meta.yaml` file that provides human-authored semantic annotations. These annotations help AI agents select the right component for a given task. The component MCP server reads these files alongside `schema.yaml` and `contracts.yaml` to assemble the queryable catalog.
+Each Stemma component has a `component-meta.yaml` file that provides human-authored semantic annotations. These annotations help AI agents select the right component for a given task. The Application MCP server reads these files alongside `schema.yaml` and `contracts.yaml` to assemble the queryable catalog.
 
 The key distinction: `schema.yaml` describes what a component *is* (structure, props, tokens). `component-meta.yaml` describes when and why an agent should *choose* it.
 
@@ -162,7 +162,7 @@ alternatives: []
 3. Add 2–5 `when_to_use` and `when_not_to_use` scenarios
 4. List 2–6 `contexts` where the component appears
 5. Add `alternatives` referencing valid canonical component names
-6. Verify the file parses: start the component MCP and check health output for warnings
+6. Verify the file parses: start the Application MCP and check health output for warnings
 
 ---
 
