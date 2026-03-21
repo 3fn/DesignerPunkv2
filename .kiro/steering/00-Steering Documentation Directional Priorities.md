@@ -153,6 +153,7 @@ These documents are **NOT auto-loaded**. Query them via MCP when needed. Organiz
 | Integration Methodology | `Process-Integration-Methodology.md` | Cross-spec integration, dependency management |
 | Completion Documentation Guide | `Completion Documentation Guide.md` | Creating completion docs, two-document workflow |
 | Release Management System | `Release Management System.md` | Release pipeline, task completion workflows |
+| Product Handoff Protocol | `Product-Handoff-Protocol.md` | Product agent communication during implementation — three tiers, lessons synthesis |
 
 ### Token System — Rosetta
 
@@ -238,6 +239,7 @@ These documents are **NOT auto-loaded**. Query them via MCP when needed. Organiz
 | AI-Collaboration-Framework | `AI-Collaboration-Framework.md` | Detailed collaboration protocols, validation gates |
 | MCP Evolution Roadmap | `MCP-Evolution-Roadmap.md` | Known MCP gaps, trigger conditions |
 | Technology Stack | `Technology Stack.md` | Technology choices, platform decisions |
+| MCP Relationship Model | `MCP-Relationship-Model.md` | Three-MCP boundaries, information flow, access model, cross-MCP references |
 
 ### How to Access Any MCP-Only Document
 
