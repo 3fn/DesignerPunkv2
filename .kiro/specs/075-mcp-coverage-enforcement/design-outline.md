@@ -1,10 +1,11 @@
 # MCP Coverage Enforcement: Automated Drift Detection
 
 **Date**: 2026-03-09
+**Updated**: 2026-03-20
 **Purpose**: Detect when implemented components or families lack corresponding Application MCP coverage (family guidance YAML, experience patterns, component-meta.yaml)
 **Organization**: spec-guide
 **Scope**: 075-mcp-coverage-enforcement
-**Status**: Design outline — pending review
+**Status**: Design outline — decisions resolved, ready for formalization
 
 ---
 
@@ -18,7 +19,7 @@ Spec 071 brought coverage from 3/8 to 8/8 production families. Without enforceme
 
 ## Current State
 
-- 28 implemented components across 9 production families (including Progress Indicators)
+- 30 implemented components across 9 production families (including Progress Indicators and Navigation)
 - 8 family guidance YAMLs indexed by FamilyGuidanceIndexer
 - 3 experience patterns indexed
 - FamilyGuidanceIndexer reports health (familiesIndexed, warnings) but doesn't compare against implemented families
@@ -35,49 +36,39 @@ A test that runs as part of `npm test` and fails when an implemented production 
 
 1. **Family coverage**: Every production component family with implemented components must have a `family-guidance/<family>.yaml` that the FamilyGuidanceIndexer parses without warnings.
 2. **Component coverage**: Every component referenced in a family guidance YAML's `selectionRules.recommend` must exist in the component catalog.
-3. **Reverse coverage**: Every implemented component must be reachable via `getGuidance(componentName)` — i.e., it appears in at least one family's selectionRules.
+3. **Reverse coverage**: Every implemented production component must be reachable via `getGuidance(componentName)` — i.e., it appears in at least one family's selectionRules.
 
 ### What it does NOT check
 
-- YAML content quality (that's D9 compliance — Ada's domain, manual review)
+- YAML content quality (that's D9 compliance — manual review)
 - Experience pattern coverage (patterns are optional compositions, not 1:1 with components)
 - Placeholder family coverage (no guidance required for unimplemented families)
 - Enriched schema field presence (discouragedPatterns, composesWithFamilies are optional)
 
-### How it distinguishes production from placeholder
-
-The test needs a source of truth for which families are production vs. placeholder. Options:
-
-**Option A: Derive from component catalog.** If any component in a family has `readiness: production` in its component-meta.yaml, the family is production. No separate registry needed.
-
-**Option B: Explicit registry.** A config file or constant listing production families. Must be manually maintained.
-
-**Option C: Derive from Quick Reference.** Parse Component-Quick-Reference.md for 🟢 Production rows. Fragile — depends on markdown formatting.
-
-**Recommendation**: Option A. The component-meta.yaml files already exist and are the source of truth for readiness. Deriving production families from them avoids a separate registry that can drift.
-
-**Counter-argument for Option A**: component-meta.yaml doesn't have a `readiness` field today — it has `purpose`, `usage`, `contexts`, `alternatives`. The readiness status lives in Component-Readiness-Status.md. So Option A requires either adding a readiness field to component-meta.yaml or parsing the readiness doc. Option B (explicit list) is simpler and more honest about the manual step.
-
 ---
 
-## Open Decisions
+## Resolved Decisions
 
-| ID | Decision | Options | Notes |
-|----|----------|---------|-------|
-| D1 | Production family source of truth | (A) Derive from component-meta, (B) Explicit registry, (C) Parse Quick Reference | See trade-offs above |
-| D2 | Test location | (a) FamilyGuidanceIndexer test file, (b) Dedicated coverage test file, (c) ComponentIndexer health check | Dedicated file is cleanest |
-| D3 | Failure mode | (a) Hard fail — test fails, blocks CI, (b) Warning — test passes with console warning | Hard fail is the point of enforcement |
-| D4 | Reverse coverage granularity | (a) Every component must appear in selectionRules, (b) Every component must be reachable via getGuidance() | (b) is sufficient — getGuidance uses the component→family map built from selectionRules |
+### D1: Production Family Source of Truth
+**Resolution**: Option A — derive from the `readiness` field in each component's schema.yaml. The ComponentIndexer already parses this field and exposes it in the component catalog. A family is "production" if any of its components have `readiness: production-ready`. No separate registry needed.
+
+### D2: Test Location
+**Resolution**: Dedicated coverage test file in `component-mcp-server/src/indexer/__tests__/`. Colocated with the indexers it validates. Runs automatically when agents work on component or MCP changes.
+
+### D3: Failure Mode
+**Resolution**: Hard fail — test fails, blocks CI. The whole point is enforcement. Warnings get ignored.
+
+### D4: Reverse Coverage Granularity
+**Resolution**: Every production component must be reachable via `getGuidance(componentName)`. This uses the component→family map built from selectionRules, which is sufficient.
 
 ---
 
 ## Scope
 
-- One test file
+- One test file in component-mcp-server
 - No new MCP tools
-- No schema changes
+- No schema changes (readiness field already exists and is indexed)
 - No new steering docs
-- Possibly one small data addition (production family list or readiness field, depending on D1)
 
 ---
 
@@ -92,11 +83,11 @@ The test needs a source of truth for which families are production vs. placehold
 
 ## Effort Estimate
 
-Small. This is a single test file that wires together existing indexer APIs. The hardest part is D1 — deciding where the production family list comes from.
+Small. Single test file wiring together existing indexer APIs (ComponentIndexer for catalog/readiness, FamilyGuidanceIndexer for guidance coverage, getGuidance for reverse coverage).
 
 ---
 
 ## Reevaluation Triggers
 
-- If component-meta.yaml gains a readiness field in a future spec, D1 should be revisited in favor of Option A.
-- If experience patterns grow beyond 3, consider adding pattern coverage checks.
+- If a product agent reports a null pattern query for an implemented flow, consider adding experience pattern coverage checks.
+- If layout templates (Spec 069) add a new content type to the Application MCP, extend coverage enforcement to include it.

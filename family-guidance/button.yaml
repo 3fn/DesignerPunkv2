@@ -66,6 +66,11 @@ selectionRules:
       mode: tap
     rationale: "Action list — each item triggers an action without maintaining selection"
 
+  # Button-VerticalList-Item (child primitive — always used inside Button-VerticalList-Set)
+  - scenario: "Individual item within a Button-VerticalList-Set"
+    recommend: Button-VerticalList-Item
+    rationale: "Child primitive — not independently selectable. Always used as a child of Button-VerticalList-Set."
+
 accessibilityNotes:
   - "All buttons are keyboard accessible — do not wrap in non-focusable containers that break tab order"
   - "Button-CTA variants are distinguishable by shape and border, not just color — do not override border styles"
