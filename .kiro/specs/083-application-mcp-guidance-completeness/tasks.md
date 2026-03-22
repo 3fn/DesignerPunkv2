@@ -73,7 +73,7 @@ Three parent tasks corresponding to the three pillars: governance (Task 1), cont
     - Lina reviews section content before commit — it governs her domain (guidance authoring standards)
     - _Requirements: Req 3_
 
-- [ ] 2. Experience Pattern Seeding
+- [x] 2. Experience Pattern Seeding
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -129,7 +129,7 @@ Three parent tasks corresponding to the three pillars: governance (Task 1), cont
     - Run `npm test` — all suites pass (patterns indexed correctly)
     - _Requirements: Req 4_
 
-  - [ ] 2.3 Rename existing experience patterns for naming consistency
+  - [x] 2.3 Rename existing experience patterns for naming consistency
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -142,7 +142,7 @@ Three parent tasks corresponding to the three pillars: governance (Task 1), cont
     - Run `npm test` — all suites pass
     - _Requirements: Req 4_
 
-- [ ] 3. Application MCP Gap Report
+- [x] 3. Application MCP Gap Report
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -164,7 +164,7 @@ Three parent tasks corresponding to the three pillars: governance (Task 1), cont
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 3 Complete: Application MCP Gap Report"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 3.1 Create and populate gap report
+  - [x] 3.1 Create and populate gap report
     **Type**: Documentation
     **Validation**: Tier 1 - Minimal
     **Agent**: Thurgood
