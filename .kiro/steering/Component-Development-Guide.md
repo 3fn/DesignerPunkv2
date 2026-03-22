@@ -359,6 +359,35 @@ The `FamilyNameValidation.test.ts` test validates that every schema `family:` va
 
 ---
 
+## Family Guidance Standards
+
+When a component family reaches production readiness, its guidance YAML must meet minimum quality standards. These standards ensure that product agents (Leonardo) can select the right component for the right context from day one — not just find that guidance exists, but find guidance that's *useful*.
+
+### Minimum Quality Bar
+
+| Standard | Rationale | Enforcement |
+|----------|-----------|-------------|
+| Every production component appears in at least one `selectionRule` | An unreachable component is invisible to agents querying `getGuidance()` — it exists in the catalog but can't be selected through guidance | `GuidanceCompleteness.test.ts` — hard failure |
+| `whenToUse` is non-empty | Agents need to know what problem this family solves before selecting from it | `GuidanceCompleteness.test.ts` — hard failure |
+| `whenNotToUse` is non-empty | The most common guidance failure is selecting a component for the wrong use case. Explicit anti-patterns prevent this | `GuidanceCompleteness.test.ts` — hard failure |
+| `accessibilityNotes` is non-empty | Every production family has accessibility implications. Notes ensure agents don't produce inaccessible compositions | `GuidanceCompleteness.test.ts` — hard failure |
+| `displayName` is present | Human-facing label for docs and MCP responses. Falls back to `family` value if omitted | `FamilyNameValidation.test.ts` (Spec 082) |
+
+### Resolution Path
+
+When `GuidanceCompleteness.test.ts` fails, the error message identifies the specific family or component and points to this section. To resolve:
+
+1. **Component not reachable**: Add the component to a `selectionRule` in the family's guidance YAML. Every `selectionRule` needs a `scenario` (when to use it), `recommend` (the component name), and `rationale` (why this component fits).
+2. **Empty `whenToUse`**: Add at least one entry describing what problem this family solves. Be specific — "Use for forms" is less useful than "Use for capturing structured user input with validation feedback."
+3. **Empty `whenNotToUse`**: Add at least one entry describing the common misuse. What do agents reach for this family when they should reach for something else?
+4. **Empty `accessibilityNotes`**: Add at least one entry covering the family's key accessibility consideration — keyboard navigation, screen reader behavior, focus management, or ARIA requirements.
+
+### Enforcement
+
+Quality enforcement lives in `application-mcp-server/src/indexer/__tests__/GuidanceCompleteness.test.ts`. This file is the dedicated home for guidance *quality* checks — distinct from `CoverageDrift.test.ts` (guidance *existence*) and `FamilyNameValidation.test.ts` (family *naming*).
+
+---
+
 ## Component Attribute Standards
 
 ### Variant Attribute Naming
