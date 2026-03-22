@@ -91,7 +91,7 @@ patterns:
           variant: tertiary
     relatedPatterns:
       - simple-form
-      - account-onboarding
+      - onboarding
 
   - name: "Dialog Actions"
     description: "Primary + secondary button pairing for dialog confirm/cancel"

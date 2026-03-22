@@ -1,0 +1,125 @@
+name: view-edit-screen
+source: system
+description: "Screen that displays user data in read-only mode with an edit affordance that transitions to an editable form, maintaining consistent information hierarchy across both modes."
+category: forms
+tags:
+  - view-mode
+  - edit-mode
+  - profile
+  - data-display
+  - mode-switching
+
+steps:
+  - name: view-mode
+    purpose: "Display user data in read-only sections with an edit affordance"
+    layout: vertical-stack
+    components:
+      - component: Container-Base
+        role: page-container
+        hints:
+          semantic: main
+          accessibilityLabel: "Describe the screen's purpose"
+          padding: "Use space.inset tokens. 200 (16px) is a reasonable default."
+          sectionSpacing: "Use space.layout.separated.normal (24px) between sections."
+          hierarchy: "Section ordering is a data architecture decision. The same ordering MUST be used in edit mode — components change, structure doesn't."
+        children:
+          - component: Avatar-Base
+            role: identity-display
+            optional: true
+            hints:
+              placement: "Top of screen, before data sections. Use when the data has a visual identity (user profile, contact, organization)."
+              fallback: "Initials fallback when no image is available."
+
+          - component: Container-Base
+            role: data-section
+            hints:
+              semantic: section
+              accessibilityLabel: "Section heading text — must match visible heading"
+              sectionHeading: "Section heading (e.g., 'Personal Information', 'Contact Details'). Same heading used in edit mode."
+              content: "Display field labels and values as read-only text. Not DesignerPunk components — rendered as text content."
+
+          - component: Container-Base
+            role: data-section
+            hints:
+              semantic: section
+              accessibilityLabel: "Section heading text"
+              sectionHeading: "Second section heading."
+              content: "Read-only field values."
+
+          - component: Button-CTA
+            role: edit-action
+            hints:
+              variant: primary
+              label: "Edit Profile, Edit Details, etc."
+              navigation: "Navigates to edit mode — either a separate screen (push navigation) or an in-place mode switch."
+
+  - name: edit-mode
+    purpose: "Edit user data in a sectioned form matching the view mode hierarchy"
+    layout: vertical-stack
+    components:
+      - component: Container-Base
+        role: page-container
+        hints:
+          semantic: main
+          accessibilityLabel: "Editing — describe the screen's purpose"
+          padding: "Use space.inset tokens. Match view mode padding."
+          sectionSpacing: "Use space.layout.separated.normal (24px). Match view mode spacing."
+          hierarchy: "Section ordering MUST match view mode. Same sections, same order — only the interaction components change."
+        children:
+          - component: Container-Base
+            role: form-section
+            hints:
+              semantic: section
+              accessibilityLabel: "Same section heading as view mode"
+              sectionHeading: "Same heading as the corresponding view mode section."
+            children:
+              - component: Input-Text-Base
+                role: form-field
+                hints:
+                  label: "Field label matching the view mode display label"
+
+          - component: Container-Base
+            role: form-section
+            hints:
+              semantic: section
+              accessibilityLabel: "Same section heading as view mode"
+              sectionHeading: "Same heading as the corresponding view mode section."
+            children:
+              - component: Input-Radio-Set
+                role: form-field
+                hints:
+                  label: "Selection field replacing the view mode display value"
+                children:
+                  - component: Input-Radio-Base
+                    role: radio-option
+                    hints:
+                      label: "Option label"
+                  - component: Input-Radio-Base
+                    role: radio-option
+                    hints:
+                      label: "Option label"
+
+          - component: Button-CTA
+            role: save-action
+            hints:
+              variant: primary
+              label: "Save Changes, Update, etc."
+
+          - component: Button-CTA
+            role: cancel-action
+            hints:
+              variant: secondary
+              label: "Cancel — returns to view mode without saving"
+
+accessibility:
+  - "Section landmarks must use the same accessible names in both view and edit modes (WCAG 1.3.1)"
+  - "When transitioning between modes, focus should move to the first interactive element in edit mode or the page heading in view mode (WCAG 2.4.3)"
+  - "Edit mode must have both save and cancel actions — cancel returns to view mode without changes (WCAG 3.2.2)"
+  - "If edit mode is a separate screen (push navigation), the back action must be equivalent to cancel (WCAG 3.2.3)"
+  - "Form-level error summary on save failure communicated to assistive technology (WCAG 3.3.1)"
+
+alternatives:
+  - pattern: settings
+    reason: "When the screen is preference toggles and navigation items, not editable data fields"
+  - pattern: multi-section-form
+    reason: "When there is no view mode — the screen is always a form"

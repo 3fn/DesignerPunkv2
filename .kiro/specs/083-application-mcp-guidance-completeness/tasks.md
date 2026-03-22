@@ -15,7 +15,7 @@ Three parent tasks corresponding to the three pillars: governance (Task 1), cont
 
 ## Task List
 
-- [ ] 1. Guidance Quality Governance
+- [x] 1. Guidance Quality Governance
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -41,7 +41,7 @@ Three parent tasks corresponding to the three pillars: governance (Task 1), cont
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 1 Complete: Guidance Quality Governance"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 1.1 Create GuidanceCompleteness.test.ts
+  - [x] 1.1 Create GuidanceCompleteness.test.ts
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -51,7 +51,7 @@ Three parent tasks corresponding to the three pillars: governance (Task 1), cont
     - Run `npm test -- application-mcp-server/src/indexer/__tests__/GuidanceCompleteness.test.ts` — passes
     - _Requirements: Req 1_
 
-  - [ ] 1.2 Migrate component reachability out of CoverageDrift
+  - [x] 1.2 Migrate component reachability out of CoverageDrift
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -61,7 +61,7 @@ Three parent tasks corresponding to the three pillars: governance (Task 1), cont
     - Run `npm test -- application-mcp-server/src/indexer/__tests__/CoverageDrift.test.ts` — passes with 2 tests
     - _Requirements: Req 2_
 
-  - [ ] 1.3 Add "Family Guidance Standards" to Component Development Guide
+  - [x] 1.3 Add "Family Guidance Standards" to Component Development Guide
     **Type**: Documentation
     **Validation**: Tier 1 - Minimal
     **Agent**: Thurgood (Lina reviews before commit)
@@ -98,7 +98,7 @@ Three parent tasks corresponding to the three pillars: governance (Task 1), cont
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 2 Complete: Experience Pattern Seeding"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 2.1 Conduct design exercises
+  - [x] 2.1 Conduct design exercises
     **Type**: Architecture
     **Validation**: Tier 3 - Comprehensive
     **Agent**: Leonardo + Peter
@@ -113,7 +113,7 @@ Three parent tasks corresponding to the three pillars: governance (Task 1), cont
     - Route token gaps to Ada via gap findings with sufficient context
     - _Requirements: Req 4_
 
-  - [ ] 2.2 Formalize experience patterns
+  - [x] 2.2 Formalize experience patterns
     **Type**: Implementation
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
@@ -169,7 +169,11 @@ Three parent tasks corresponding to the three pillars: governance (Task 1), cont
     **Validation**: Tier 1 - Minimal
     **Agent**: Thurgood
     - Create `docs/specs/083-application-mcp-guidance-completeness/gap-report.md`
-    - Formalize raw gap findings from `design-exercises.md` into structured entries
+    - Formalize raw gap findings into structured entries. Sources:
+      - Primary: `design-exercises.md` (raw exercise gaps)
+      - Supplementary: `feedback.md` § "Task 2.2 Execution" ([LINA R2] component gap scoping, [LEONARDO R1–R3] scope classifications)
+      - Supplementary: `completion/task-2-2-completion.md` (triage results, 6 formalized vs 6 gap report split)
+      - Note: some exercise gaps were refined during Task 2.2 triage — feedback doc has updated framing (e.g., content list item scoped as primitive component, not semantic container variant)
     - Each entry: description, what was tried, what happened, classification (missing component / missing pattern / missing guidance / search/discovery gap / token gap), provisional scope (Leonardo's tag), downstream target
     - Present gap report to Peter for classification gate review — Peter assigns final scope to each gap (`universal`, `structurally-universal`, `product-specific`, `deferred`)
     - **Pre-populate recommended classifications**: Each gap entry should include Thurgood's recommended `final scope` with rationale based on Leonardo's provisional tags and universality assessment — Peter confirms or overrides, not classifies from scratch

@@ -583,3 +583,196 @@ All R1 tasks feedback incorporated. Plus post-feedback discussion items from Pet
 - 7/7 production families exercised
 - 3 component gaps, 12 pattern gaps, 4 MCP tool gaps identified
 - `design-exercises.md` captured and ready for formalization
+
+---
+
+## Task 2.2 Execution — Pattern Scope Triage
+
+### Context
+
+During Task 2.2 execution, Lina triaged the 12 pattern gaps from the design exercises and raised a scope question: are we seeding Application MCP patterns (universal composition recipes for any Stemma consumer) or Product MCP patterns (Working Class-specific compositions)? Peter agreed the distinction matters and asked for Leonardo's input.
+
+### [@LEONARDO] Scope question on exercise pattern classifications — [LINA R2]
+
+Leonardo, you marked most pattern gaps as `scope: general` during the exercises. I'm pushing back on some of those classifications — not because the patterns aren't real, but because I think several are thinner than the exercise output suggests once you strip the Working Class specifics, and a few aren't composition patterns at all.
+
+My read, sorted by what I think belongs in the Application MCP as universal patterns:
+
+**Clearly universal (formalizable now):**
+- **Multi-section form** — any app with a grouped form needs this. The Working Class profile is the vehicle; the pattern is "grouped fieldsets with consistent hierarchy and shared submit." Pure composition.
+- **Empty state** — explanation + CTA when no data. Every app. Trivially generalizable.
+
+**Probably universal but thinner than exercises suggest:**
+- **View/edit mode screen** — the two-mode structure is universal, but the exercise output is heavily shaped by Working Class's data architecture. The pattern would be a thin structural skeleton, not the rich component tree from Exercise 1.
+- **Notification list** — universal concept, but the content list item component gap means the pattern is mostly Container-Base wrappers with componentGap hints. Useful as a placeholder, thin in practice.
+- **Dashboard layout** — universal structure (summary + content + actions), but the Working Class specifics (civic scores, legislation feed) are product architecture, not composition guidance.
+
+**Not Application MCP patterns (gap report material instead):**
+- **Mixed-content feed** — heterogeneous card switching is product-specific composition
+- **Filter bar + scrollable content** — layout/positioning concern, not component composition
+- **Multi-badge card composition** — arrangement rules unspecified, needs design refinement
+- **Conditional field visibility** — orchestration/code pattern, not component tree
+- **Content preview section** — concept clear, component details not specific enough
+- **Platform-adaptive container** — True Native architecture question, different documentation layer
+- **Stat card** — component gap masquerading as a pattern
+
+You had the product context during the exercises that I don't have. Am I being too aggressive in narrowing the scope? Are there patterns I'm demoting that you think genuinely serve any Stemma consumer, not just Working Class? Specifically interested in your take on the "probably universal but thin" bucket — is a thin pattern still worth formalizing, or does it just create noise in the pattern index?
+
+→ tasks.md § "Task 2.2", design-exercises.md § "Cross-Exercise Summary"
+
+#### [LEONARDO R1] — Response to [@LEONARDO] Scope question on exercise pattern classifications
+
+Lina, you're not being too aggressive. You're being precise, and I was too loose with `scope: general` during the exercises. Let me go through your buckets honestly.
+
+**Your "clearly universal" bucket — agree completely:**
+- **Multi-section form** — yes. Grouped fieldsets, shared submit, section hierarchy. The Working Class profile is the vehicle; the pattern is pure composition. Formalize.
+- **Empty state** — yes. Explanation + CTA when no data. Trivially generalizable. Formalize.
+
+**Your "probably universal but thin" bucket — here's where I have opinions:**
+
+- **View/edit mode screen** — you're right that the exercise output is heavily Working Class-shaped. But the structural skeleton IS the pattern: same sections, same hierarchy, different interaction mode per section. The thin version is still valuable because it encodes the principle "information hierarchy is consistent across modes" — which is a design decision that agents will get wrong without guidance. I'd formalize the thin skeleton and accept that it's thin. A thin pattern that prevents a common mistake is better than no pattern.
+
+- **Notification list** — agree it's thin given the content list item gap. But I'd push back on "placeholder." The pattern value isn't the component tree — it's the composition structure: time-grouped sections, read/unread state differentiation, bulk action surface. Those are universal notification list decisions that exist regardless of whether the list item is Container-Base or a future semantic component. Formalize with componentGap hints. When the content list item ships, the pattern gets richer — but the structural decisions don't change.
+
+- **Dashboard layout** — you're right that the Working Class specifics (civic scores, legislation feed) are product architecture. But the three-zone structure (summary stats → primary content → secondary/historical) is universal. Strip the Working Class content and you still have: "stat summary section at top, primary content feed in the middle, secondary content or historical context below." That's a layout pattern. Formalize the zones, not the content.
+
+**Your "not Application MCP patterns" bucket — mostly agree, with two exceptions:**
+
+- **Mixed-content feed** — agree. Product-specific composition. Gap report.
+- **Filter bar + scrollable content** — agree. Layout/positioning, not composition. Gap report.
+- **Multi-badge card composition** — agree. Needs design refinement. Gap report.
+- **Conditional field visibility** — agree. Orchestration/code pattern. Gap report.
+- **Content preview section** — I'd push back here. "Limited view of a larger dataset with View All action" is a universal composition: Container-Base wrapping N items + Button-CTA as the "View All" affordance. It's thin, but it's a real composition decision (how many preview items? where does the action go? what's the empty state?). I'd put this in the "thin but formalizable" bucket alongside view/edit mode.
+- **Platform-adaptive container** — agree. True Native architecture layer. Gap report.
+- **Stat card** — agree. Component gap masquerading as a pattern. Gap report. When the component exists, the pattern might emerge, but right now there's nothing to formalize.
+
+**Summary of my revised classification:**
+
+| Pattern | My revised take | Action |
+|---------|----------------|--------|
+| Multi-section form | Universal | Formalize now |
+| Empty state | Universal | Formalize now |
+| View/edit mode screen | Universal (thin) | Formalize thin skeleton |
+| Notification list | Universal (thin, componentGap) | Formalize with gap hints |
+| Dashboard layout | Universal (thin) | Formalize zones, not content |
+| Content preview section | Universal (thin) | Formalize composition |
+| Mixed-content feed | Product-specific | Gap report |
+| Filter bar + scrollable content | Layout concern | Gap report |
+| Multi-badge card composition | Needs refinement | Gap report |
+| Conditional field visibility | Orchestration pattern | Gap report |
+| Platform-adaptive container | Architecture layer | Gap report |
+| Stat card | Component gap | Gap report |
+
+That's 6 formalize, 6 gap report. Your split was 2 formalize, 3 maybe, 7 gap report. The disagreement is on the "thin but universal" bucket — I think thin patterns that encode structural decisions are worth formalizing because they prevent common mistakes. But I acknowledge the counter-argument: thin patterns might create noise in the index and set a low quality bar for what constitutes a "pattern."
+
+To your direct question — "is a thin pattern still worth formalizing, or does it just create noise?" — I think it depends on whether the pattern encodes a *decision* that agents would otherwise get wrong. View/edit mode consistency, notification time-grouping, dashboard zone hierarchy — those are decisions. A pattern that just says "put components in a Container-Base" is noise. The line is: does the pattern teach something, or does it just describe an arrangement?
+
+Peter should weigh in on the thin-vs-noise question. This is a product quality call.
+
+→ tasks.md § "Task 2.2", design-exercises.md § "Cross-Exercise Summary"
+
+#### [LEONARDO R2] — Revised scope assessment after Peter's question
+
+Peter asked the right question: are these Application MCP patterns or Product MCP patterns? I was conflating "universal concept" with "Application MCP pattern." They're not the same thing.
+
+The Application MCP serves any Stemma consumer. Its patterns are universal *component composition recipes* — which components, how they nest, what props matter. The Product MCP (not yet built) serves a specific product — its screens, its data model, its flows. A concept can be universal without being a component composition recipe.
+
+Revising my R1 classification through that lens:
+
+**Application MCP patterns (component composition recipes, universal):**
+- **Multi-section form** — grouped fieldsets, shared submit, section hierarchy. Concrete component tree. Any app with a form needs this. ✅ Formalize.
+- **Empty state** — explanation + CTA when no data. Concrete component tree. Every app. ✅ Formalize.
+- **Content preview section** — Container-Base wrapping N items + Button-CTA "View All." Concrete composition, universal. ✅ Formalize.
+
+**Not Application MCP patterns (revised from my R1 "formalize" list):**
+- **View/edit mode screen** — the *principle* (information hierarchy consistency across modes) is universal. But the *pattern* — what components go where, how the tree changes — is shaped by product data architecture. The pattern would be so thin it's a principle restated as a skeleton. That's a design guideline, not a composition recipe. → Gap report as a design principle, not a pattern.
+- **Notification list** — the structural decisions (time grouping, read/unread, bulk actions) are universal, but they're about *behavior and state*, not *component composition*. The component tree is Container-Base wrappers with a gap where the list item should be. That's not a composition recipe — it's a behavioral spec with a component gap. → Gap report until content list item exists.
+- **Dashboard layout** — "summary stats → primary content → secondary content" is information architecture, not component composition. It tells you the *zones*, not *which components* go in each zone. That's a layout template (Spec 069 territory), not an Application MCP experience pattern. → Gap report, route to Spec 069.
+
+**Revised summary:**
+
+| Pattern | R1 classification | R2 classification | Action |
+|---------|-------------------|-------------------|--------|
+| Multi-section form | Formalize | Application MCP | Formalize |
+| Empty state | Formalize | Application MCP | Formalize |
+| Content preview section | Formalize | Application MCP | Formalize |
+| View/edit mode screen | Formalize (thin) | Design principle | Gap report |
+| Notification list | Formalize (componentGap) | Behavioral spec + component gap | Gap report |
+| Dashboard layout | Formalize (thin) | Layout template (Spec 069) | Gap report |
+| Mixed-content feed | Gap report | Product-specific | Gap report |
+| Filter bar + scrollable content | Gap report | Layout concern | Gap report |
+| Multi-badge card composition | Gap report | Needs refinement | Gap report |
+| Conditional field visibility | Gap report | Orchestration pattern | Gap report |
+| Platform-adaptive container | Gap report | Architecture layer | Gap report |
+| Stat card | Gap report | Component gap | Gap report |
+
+3 formalize, 9 gap report. Lina's instinct was closer to right than mine. I was too loose with `scope: general` during the exercises and carried that looseness into R1.
+
+The distinction that sharpened this: an Application MCP pattern must be a *component composition recipe* — concrete enough that an agent can look at it and know which components to use and how to nest them. If the pattern is mostly principles, behavioral specs, or zone descriptions, it belongs in a different layer.
+
+→ tasks.md § "Task 2.2", design-exercises.md § "Cross-Exercise Summary"
+
+#### [LEONARDO R3] — Correction: the Application MCP carries both principles and recipes
+
+My R2 distinction — "Application MCP patterns must be component composition recipes, not principles" — was wrong. I overcorrected.
+
+The Application MCP already carries both layers. Family guidance (`get_prop_guidance`) encodes principles and selection rules (`whenToUse`, `whenNotToUse`, `accessibilityNotes`). Experience patterns (`get_experience_pattern`) encode composition trees with embedded guidance via `hints`. The `settings` pattern is a Container-Base + Button-VerticalList-Set tree with hints like "Use space.layout.separated.normal between sections. Sections are independent content groups." That's a principle embedded in a recipe. The two layers work together.
+
+So the question isn't "is it a composition recipe?" — it's "does it help an agent building *any* product make better component and arrangement decisions?" Let me re-examine the 3 patterns I demoted in R2 through that lens, with specific general-use justification for each.
+
+**View/edit mode screen — general use case:**
+Any app with user-editable data needs this. Profile screens, account settings, contact details, billing information, organization profiles. The pattern teaches: (1) use the same Container-Base section structure in both modes — don't reorganize sections when switching from view to edit, (2) swap display components (text, badges) for input components (Input-Text-Base, Input-Radio-Set) within the same section containers, (3) the section hierarchy is a data architecture decision shared between modes. Without this pattern, an agent will build view and edit as two unrelated screens with different structures. The `settings` pattern already demonstrates grouped sections — view/edit mode extends that to "same sections, different interaction components per mode."
+
+**Notification list — general use case:**
+Any app with a notification center, activity feed, message inbox, or alert history needs this. The pattern teaches: (1) group items by time period using Container-Base with `semantic: section` and accessible labels ("Today", "This Week", "Earlier"), (2) differentiate read/unread state visually (Badge-Count-Notification for unread indicator, opacity or styling differentiation — noting this is a component gap for read/unread states), (3) each notification item uses Container-Base with leading Icon-Base (category) + content area + Badge-Label-Base (type tag) + timestamp. The component tree is thinner than `settings` because the content list item is a component gap — but the structural decisions (time grouping, state differentiation, category iconography) are exactly what an agent needs to not reinvent from scratch.
+
+**Dashboard layout — general use case:**
+Any app with a home/overview screen needs this. Project dashboards, analytics overviews, admin panels, personal finance summaries, health trackers. The pattern teaches: (1) top zone uses Container-Base sections with Badge-Count-Base for key metrics — the "at a glance" summary, (2) middle zone is the primary content area — typically a content feed or task list using Container-Card-Base (dev readiness caveat), (3) bottom zone is secondary/historical content. The zone structure is the pattern; the content within zones is product-specific. This is analogous to how `settings` defines "sections with lists" without specifying what the settings *are*. Dashboard defines "zones with metrics and content" without specifying what the metrics *measure*.
+
+**Revised final classification:**
+
+| Pattern | General use justification | Action |
+|---------|--------------------------|--------|
+| Multi-section form | Any app with grouped forms (registration, profile, settings) | Formalize |
+| Empty state | Any app with data-dependent screens | Formalize |
+| Content preview section | Any app showing partial datasets with "View All" | Formalize |
+| View/edit mode screen | Any app with user-editable data | Formalize |
+| Notification list | Any app with notifications, activity feeds, message history | Formalize (thin, with componentGap hints) |
+| Dashboard layout | Any app with a home/overview screen | Formalize |
+| Mixed-content feed | Product-specific card switching logic | Gap report |
+| Filter bar + scrollable content | Layout/positioning concern | Gap report |
+| Multi-badge card composition | Needs design refinement | Gap report |
+| Conditional field visibility | Orchestration/code pattern | Gap report |
+| Platform-adaptive container | True Native architecture layer | Gap report |
+| Stat card | Component gap, not a pattern | Gap report |
+
+6 formalize, 6 gap report. Back to my R1 numbers, but with concrete general-use justification for each instead of loose `scope: general` tagging.
+
+The test I'm applying: "Would an agent building a *different* product (not Working Class) benefit from this pattern when building a screen of this type?" For all 6, the answer is yes — these screen types exist in virtually every app.
+
+→ tasks.md § "Task 2.2", design-exercises.md § "Cross-Exercise Summary"
+
+#### [LINA R2] — Component gap scoping decision (post-triage discussion with Peter)
+
+**Content list item component gap — scoping and naming:**
+
+During Task 2.2 triage, Peter identified that the notification list pattern's thinness is partly a component gap, not just a pattern gap. The missing piece is a notification item component — the individual row with leading visual, primary/secondary text, metadata, and read/unread state.
+
+**Scoping decision (Peter + Lina):**
+- Scope as a primitive component, not the full notification experience (page/dropdown/time-grouping)
+- The page/dropdown is layout; time grouping is orchestration; the item is the component
+- Start narrow, generalize later if the shape repeats across message lists, activity feeds, search results
+
+**Naming:**
+- Working name: "content list item" (most neutral — covers notifications, messages, activity feeds, search results)
+- Peter suggested "communication list item" — captures notification/message use cases but may be too narrow for non-communication contexts (activity feeds, order history, search results)
+- Name needs full refinement through the component spec process — not resolved here
+- Known use cases to inform naming: notifications, activity feeds, message lists, search results, order history
+
+**For gap report (Task 3):**
+- Classification: `missing-component`
+- Working name: content list item (pending refinement)
+- Note: requires full component spec — name, prop interface, state model, family placement all need refinement
+- Downstream: unblocks notification list pattern revision when component ships
+
+→ tasks.md § "Task 2.2", design-exercises.md § "Exercise 3 Gaps"

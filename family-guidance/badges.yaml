@@ -73,4 +73,4 @@ patterns:
       - component: Badge-Label-Base
         role: status-indicator
     relatedPatterns:
-      - settings-screen
+      - settings

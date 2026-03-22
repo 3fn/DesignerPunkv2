@@ -1,4 +1,4 @@
-name: settings-screen
+name: settings
 source: system
 description: Settings page with grouped sections containing navigation items, toggles, and preferences. Sections use landmark navigation for screen reader efficiency.
 category: settings

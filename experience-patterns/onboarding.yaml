@@ -1,4 +1,4 @@
-name: account-onboarding
+name: onboarding
 source: system
 description: "Multi-step account creation and onboarding flow with authentication, preference selection, and post-creation guidance."
 category: onboarding
@@ -193,5 +193,5 @@ accessibility:
 alternatives:
   - pattern: simple-form
     reason: "When the flow is a single-step form without multi-step sequencing or authentication toggle."
-  - pattern: settings-screen
+  - pattern: settings
     reason: "When the experience is preference management within an existing session, not onboarding."

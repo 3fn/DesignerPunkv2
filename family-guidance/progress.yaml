@@ -64,7 +64,7 @@ patterns:
       - component: Progress-Pagination-Base
         role: position-indicator
     relatedPatterns:
-      - account-onboarding
+      - onboarding
 
   - name: "Checkout Stepper"
     description: "Linear stepper showing progress through a multi-step purchase flow"

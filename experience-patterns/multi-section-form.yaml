@@ -1,0 +1,105 @@
+name: multi-section-form
+source: system
+description: "Form with multiple grouped sections (fieldsets), each containing related inputs, sharing a common submit action. Sections maintain consistent hierarchy."
+category: forms
+tags:
+  - form
+  - multi-section
+  - fieldset
+  - data-collection
+  - grouped-inputs
+
+steps:
+  - name: sectioned-form
+    purpose: "Collect user input across multiple grouped sections with a shared submit action"
+    layout: vertical-stack
+    components:
+      - component: Container-Base
+        role: form-container
+        hints:
+          semantic: main
+          accessibilityLabel: "Describe the form's overall purpose for screen readers"
+          padding: "Use space.inset tokens. 200 (16px) is a reasonable default."
+          sectionSpacing: "Use space.layout.separated.normal (24px) between sections."
+        children:
+          - component: Container-Base
+            role: form-section
+            hints:
+              semantic: section
+              accessibilityLabel: "Section heading text — must match visible heading"
+              sectionHeading: "Visible heading above the section (e.g., 'Personal Information', 'Contact Details'). Not a DesignerPunk component — rendered as text content."
+            children:
+              - component: Input-Text-Base
+                role: form-field
+                hints:
+                  label: "Describe what this field collects"
+
+              - component: Input-Text-Base
+                role: form-field
+                hints:
+                  label: "Describe what this field collects"
+
+          - component: Container-Base
+            role: form-section
+            hints:
+              semantic: section
+              accessibilityLabel: "Section heading text"
+              sectionHeading: "Section heading for the second group of related fields"
+            children:
+              - component: Input-Radio-Set
+                role: form-field
+                hints:
+                  label: "Mutually exclusive choice (e.g., age range, category)"
+                children:
+                  - component: Input-Radio-Base
+                    role: radio-option
+                    hints:
+                      label: "Option label"
+                  - component: Input-Radio-Base
+                    role: radio-option
+                    hints:
+                      label: "Option label"
+
+              - component: Input-Checkbox-Base
+                role: form-field
+                hints:
+                  label: "Boolean question (e.g., opt-in, agreement)"
+
+          - component: Container-Base
+            role: form-section
+            hints:
+              semantic: section
+              accessibilityLabel: "Section heading text"
+              sectionHeading: "Section heading for selection-based inputs"
+            children:
+              - component: Chip-Filter
+                role: multi-select
+                hints:
+                  label: "Selectable option"
+                  selectionConstraint: "Max selection limits are parent-orchestrated, not component-level. Display selection count feedback (e.g., '2/3 selected') near the chip group."
+
+              - component: Chip-Filter
+                role: multi-select
+                hints:
+                  label: "Selectable option"
+
+          - component: Button-CTA
+            role: submit-action
+            hints:
+              variant: primary
+              label: "Action verb — Save, Submit, Update, etc."
+              placement: "After all sections. Single shared submit for the entire form."
+
+accessibility:
+  - "Each section must be a landmark (semantic: section) with an accessible name matching the visible heading (WCAG 1.3.1)"
+  - "Focus order follows visual order within and across sections, block-start to block-end (WCAG 2.4.3)"
+  - "Form must have a submit action (WCAG 3.2.2)"
+  - "Section hierarchy is a data architecture decision — maintain consistent section ordering if the form has a corresponding view mode"
+  - "Form-level error summary communicated to assistive technology when applicable (WCAG 3.3.1)"
+  - "Field-level errors handled by individual component contracts — no assembly-level duplication needed"
+
+alternatives:
+  - pattern: simple-form
+    reason: "When the form has a single group of fields that don't need sectioning"
+  - pattern: settings
+    reason: "When the screen is preference management with navigation items and toggles, not data collection"

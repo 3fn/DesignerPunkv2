@@ -1,0 +1,97 @@
+name: dashboard
+source: system
+description: "Overview screen with a stat summary zone, primary content area, and optional secondary content. Organizes information by temporal relevance: current state first, upcoming second, historical third."
+category: content
+tags:
+  - dashboard
+  - overview
+  - home-screen
+  - stats
+  - zones
+
+steps:
+  - name: dashboard-layout
+    purpose: "Display a zoned overview with stats, primary content, and secondary content"
+    layout: vertical-stack
+    components:
+      - component: Container-Base
+        role: page-container
+        hints:
+          semantic: main
+          accessibilityLabel: "Dashboard or overview screen name"
+          padding: "Use space.inset tokens. 200 (16px) is a reasonable default."
+          sectionSpacing: "Use space.layout.separated.normal (24px) between zones."
+          hierarchy: "Information hierarchy principle: 'What is → What will be → What was.' Present state first (stats), upcoming changes second (if applicable), historical context third."
+        children:
+          - component: Container-Base
+            role: stat-summary-zone
+            hints:
+              semantic: section
+              accessibilityLabel: "Summary or Overview"
+              layout: "Horizontal row or grid of stat cards. On narrow viewports, stack vertically or use a horizontal scroll."
+            children:
+              - component: Container-Base
+                role: stat-card
+                hints:
+                  content: "Individual stat: numeric value (Badge-Count-Base), label, and optional Icon-Base. Repeat for each key metric."
+                  componentGap: "Container-Card-Base is the better fit for stat cards (elevation, interactive behavior) but is development readiness. Use Container-Base until Container-Card-Base ships."
+                children:
+                  - component: Badge-Count-Base
+                    role: stat-value
+                    hints:
+                      label: "The numeric metric value"
+
+                  - component: Icon-Base
+                    role: stat-icon
+                    optional: true
+                    hints:
+                      decorative: true
+                      purpose: "Visual category indicator for the stat. Decorative — the label provides the meaning."
+
+              - component: Container-Base
+                role: stat-card
+                hints:
+                  content: "Second stat card."
+                children:
+                  - component: Badge-Count-Base
+                    role: stat-value
+                    hints:
+                      label: "Metric value"
+
+          - component: Container-Base
+            role: primary-content-zone
+            hints:
+              semantic: section
+              accessibilityLabel: "Section heading for primary content"
+              sectionHeading: "Heading for the main content area (e.g., 'Recent Activity', 'Your Feed', 'Active Items'). Not a DesignerPunk component — rendered as text content."
+              content: "Primary content — typically a feed, task list, or item list. May reference another pattern (e.g., content-preview) for partial dataset display."
+              componentGap: "Container-Card-Base is the better fit for content cards but is development readiness."
+
+          - component: Container-Base
+            role: secondary-content-zone
+            optional: true
+            hints:
+              semantic: section
+              accessibilityLabel: "Section heading for secondary content"
+              sectionHeading: "Heading for secondary/historical content (e.g., 'Recent Updates', 'History')."
+              content: "Secondary content — historical context, less urgent information. May be omitted on initial versions and added as the product matures."
+
+          - component: Container-Base
+            role: empty-state-fallback
+            optional: true
+            hints:
+              content: "Shown when the dashboard has no data (new user, empty dataset). Reference the empty-state pattern for the component tree."
+              relatedPattern: "empty-state"
+
+accessibility:
+  - "Page must have a heading or accessible name (WCAG 2.4.2)"
+  - "Each zone must be a landmark (semantic: section) with an accessible name matching the visible heading (WCAG 1.3.1)"
+  - "Screen readers should navigate between zones as landmarks without traversing every item (WCAG 2.4.1)"
+  - "Stat values must be programmatically associated with their labels — not just visually adjacent (WCAG 1.3.1)"
+  - "If stats update dynamically, consider a live region for significant changes (WCAG 4.1.3)"
+
+alternatives:
+  - pattern: settings
+    reason: "When the screen is preference management, not an information overview"
+  - pattern: content-preview
+    reason: "When building a single preview section, not a full multi-zone dashboard"

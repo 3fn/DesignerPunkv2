@@ -99,6 +99,6 @@ patterns:
       - component: Input-Checkbox-Base
         role: children
     relatedPatterns:
-      - settings-screen
+      - settings
 
 

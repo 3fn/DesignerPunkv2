@@ -1,0 +1,50 @@
+name: empty-state
+source: system
+description: "Placeholder screen or section shown when no data is available, with an explanation and a call-to-action to resolve the empty state."
+category: feedback
+tags:
+  - empty-state
+  - no-data
+  - onboarding
+  - placeholder
+
+steps:
+  - name: empty-display
+    purpose: "Communicate absence of data and provide an action to resolve it"
+    layout: centered
+    components:
+      - component: Container-Base
+        role: empty-state-container
+        hints:
+          semantic: section
+          accessibilityLabel: "Describe the empty state context for screen readers"
+          padding: "Use space.inset tokens. 200 (16px) is a reasonable default."
+          layout: "Center content horizontally. Constrain max-width for readability on wide viewports."
+        children:
+          - component: Icon-Base
+            role: illustration
+            optional: true
+            hints:
+              decorative: true
+              size: "Use a larger icon size (icon.size300 or above) for visual emphasis. Decorative — does not convey information not available in text."
+
+          - component: Container-Base
+            role: explanation
+            hints:
+              content: "Heading and body text explaining why this area is empty and what the user can do about it. Not a DesignerPunk component — rendered as text content."
+              guidance: "Be specific about the empty state cause. 'No notifications yet' is better than 'Nothing here'. Include what action will populate this area."
+
+          - component: Button-CTA
+            role: resolve-action
+            hints:
+              variant: primary
+              label: "Action verb that resolves the empty state — Add, Create, Get Started, etc."
+
+accessibility:
+  - "Empty state must be announced to screen readers — the section landmark with accessible name provides this (WCAG 1.3.1)"
+  - "The resolve action must be keyboard-accessible and clearly labeled (WCAG 2.1.1)"
+  - "If the empty state replaces content that was previously present, consider announcing the state change via a live region (WCAG 4.1.3)"
+
+alternatives:
+  - pattern: simple-form
+    reason: "When the screen's primary purpose is data collection, not communicating absence of data"

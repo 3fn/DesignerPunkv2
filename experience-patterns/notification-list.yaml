@@ -1,0 +1,109 @@
+name: notification-list
+source: system
+description: "Vertical list of notification or activity items grouped by time period, with read/unread state differentiation and bulk actions. Individual items use Container-Base pending a dedicated content list item component."
+category: content
+tags:
+  - notifications
+  - activity-feed
+  - read-unread
+  - time-grouped
+  - content-list
+
+steps:
+  - name: notification-layout
+    purpose: "Display time-grouped notifications with read/unread state and header actions"
+    layout: vertical-stack
+    components:
+      - component: Container-Base
+        role: page-container
+        hints:
+          semantic: main
+          accessibilityLabel: "Notifications"
+          padding: "Use space.inset tokens. 200 (16px) is a reasonable default."
+        children:
+          - component: Container-Base
+            role: header-actions
+            hints:
+              layout: "Horizontal row at top of list."
+            children:
+              - component: Button-Icon
+                role: bulk-action
+                hints:
+                  label: "Mark all as read"
+                  icon: "checkmark or similar"
+                  accessibilityLabel: "Mark all notifications as read"
+
+              - component: Button-Icon
+                role: settings-action
+                optional: true
+                hints:
+                  label: "Notification settings"
+                  icon: "settings or gear"
+
+          - component: Container-Base
+            role: time-group
+            hints:
+              semantic: section
+              accessibilityLabel: "Today"
+              sectionHeading: "Time period label (e.g., 'Today', 'This Week', 'Earlier'). Not a DesignerPunk component — rendered as text content."
+            children:
+              - component: Container-Base
+                role: notification-item
+                hints:
+                  componentGap: "A dedicated content list item component is the intended control. Container-Base is a structural placeholder. The content list item would provide: leading visual slot, primary/secondary text, metadata, and read/unread state. See gap report for component specification."
+                  interaction: "Tap-and-go — one action per item that navigates deeper. No inline actions or swipe gestures."
+                  readState: "Read/unread is the primary visual distinction. Unread items use stronger visual weight (bold text, background differentiation). This is a content-consumption state distinct from action-oriented states (selected, checked)."
+                children:
+                  - component: Icon-Base
+                    role: type-indicator
+                    hints:
+                      purpose: "Communicates notification category before reading text (e.g., bill update, vote, message)."
+                      decorative: false
+                      accessibilityLabel: "Notification type name"
+
+                  - component: Badge-Label-Base
+                    role: category-tag
+                    optional: true
+                    hints:
+                      label: "Category or type label when icon alone is insufficient"
+
+              - component: Container-Base
+                role: notification-item
+                hints:
+                  componentGap: "Content list item placeholder. See above."
+                  interaction: "Tap-and-go."
+                children:
+                  - component: Icon-Base
+                    role: type-indicator
+                    hints:
+                      purpose: "Notification category indicator."
+
+          - component: Container-Base
+            role: time-group
+            hints:
+              semantic: section
+              accessibilityLabel: "This Week"
+              sectionHeading: "Earlier time period."
+            children:
+              - component: Container-Base
+                role: notification-item
+                hints:
+                  componentGap: "Content list item placeholder."
+                  interaction: "Tap-and-go."
+                children:
+                  - component: Icon-Base
+                    role: type-indicator
+                    hints:
+                      purpose: "Notification category indicator."
+
+accessibility:
+  - "Each time group must be a landmark (semantic: section) with an accessible name matching the visible heading (WCAG 1.3.1)"
+  - "Read/unread state must be programmatically determinable, not just visual (WCAG 1.3.1)"
+  - "Bulk actions (mark all as read) must announce the result to assistive technology (WCAG 4.1.3)"
+  - "Notification items must be keyboard-navigable with clear focus indicators (WCAG 2.4.7)"
+  - "New notifications arriving while the list is open should be announced via a live region (WCAG 4.1.3)"
+  - "This pattern will be revised when the content list item component ships — structural decisions (time grouping, state differentiation) will persist; the item component tree will change"
+
+alternatives:
+  - pattern: settings
+    reason: "When the list contains actionable settings items rather than content-consumption items"

@@ -37,5 +37,5 @@ accessibility:
   - "Field-level errors handled by individual component contracts — no assembly-level duplication needed"
 
 alternatives:
-  - pattern: account-onboarding
+  - pattern: onboarding
     reason: "When the form has too many fields for a single view"

@@ -1,0 +1,48 @@
+name: content-preview
+source: system
+description: "Limited view of a larger dataset with a 'View All' action, used in dashboards and overview screens to surface key items without overwhelming the layout."
+category: content
+tags:
+  - preview
+  - view-all
+  - dashboard
+  - partial-list
+
+steps:
+  - name: preview-section
+    purpose: "Show a limited number of items from a larger dataset with an action to see the full list"
+    layout: vertical-stack
+    components:
+      - component: Container-Base
+        role: preview-container
+        hints:
+          semantic: section
+          accessibilityLabel: "Section heading text — must match visible heading"
+          sectionHeading: "Visible heading describing the dataset (e.g., 'Recent Activity', 'Your Bills', 'Top Items'). Not a DesignerPunk component — rendered as text content."
+          padding: "Use space.inset tokens."
+        children:
+          - component: Container-Base
+            role: preview-item
+            hints:
+              content: "Individual item from the dataset. Repeat 2–4 times depending on available space and content density. The number of preview items is a design decision — enough to demonstrate value, few enough to not overwhelm."
+
+          - component: Container-Base
+            role: preview-item
+            hints:
+              content: "Second preview item."
+
+          - component: Button-CTA
+            role: view-all-action
+            hints:
+              variant: secondary
+              label: "'View All' or 'See More' — navigates to the full dataset"
+              placement: "After preview items, at the bottom of the section."
+
+accessibility:
+  - "Section must be a landmark with an accessible name matching the visible heading (WCAG 1.3.1)"
+  - "The 'View All' action must clearly indicate what dataset it navigates to — 'View All Activity' is better than 'View All' (WCAG 2.4.4)"
+  - "If the preview updates dynamically (e.g., real-time data), consider a live region for significant changes (WCAG 4.1.3)"
+
+alternatives:
+  - pattern: dashboard
+    reason: "When building a full dashboard with multiple preview sections and a stat summary zone"
