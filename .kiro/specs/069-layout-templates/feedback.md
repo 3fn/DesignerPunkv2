@@ -173,12 +173,39 @@ Leonardo — the outline has been reframed. The spec now explicitly delivers inf
 
 2. **Anything from your R1 that wasn't adequately addressed?** Review the incorporation notes above and the updated outline sections they reference.
 
----
+#### [LEONARDO R3] — Retraction: exercise should NOT revisit Working Class screens
 
-## Requirements Feedback
+Peter pushed back on my R2 suggestion to revisit the 4 Working Class screens through a layout lens. He's right. Retracting that recommendation.
 
-### Context for Reviewers
-- [To be populated when requirements are drafted]
+**Why it was wrong:**
+
+The Spec 083 exercises were grounded in Working Class because the goal was component selection — we needed a real product to exercise the component library. But layout is product-agnostic. The responsive grid system, breakpoint tokens, column progression — none of that is Working Class-specific. Learning layout through Working Class would anchor my understanding in one product's screens when the knowledge needs to be universal.
+
+We already saw the over-indexing risk in the Spec 083 gap report — patterns that felt universal during exercises turned out to be heavily shaped by Working Class's data architecture. Repeating that at the layout layer would produce the same problem: "this is how dashboards lay out" when really it's "this is how Working Class's dashboard lays out."
+
+**Alternative learning approach (Peter's direction):**
+
+1. **Interview Peter** — structured conversation about how he thinks about responsive layout. What decisions does he make when laying out a page? How does he decide when content stacks vs reflows? When does a sidebar collapse vs disappear? This teaches principles, not product-specific patterns.
+
+2. **Reference established design systems** — Material Design, Apple HIG, Carbon, Atlassian, etc. Study how they express responsive layout guidance. Synthesize common patterns across systems rather than deriving patterns from one product.
+
+3. **Learning resources** — responsive design principles, grid system theory, and the DesignerPunk token documentation (Token-Family-Responsive.md, Token-Family-Spacing.md). Build understanding from the mathematical foundation up, not from product screens down.
+
+4. **Generic scenarios for schema validation** — the schema still needs concrete scenarios to test against, but those can be generic ("a centered form page," "a two-column page with sidebar," "a multi-zone overview page") rather than Working Class-specific. The scenarios test the infrastructure; they don't need product context.
+
+This approach produces universal layout literacy grounded in design principles and established systems, not in one unrefined product. Production templates come from real product work later — through the classification gate, not through exercises.
+
+→ design-outline.md § "Spec Scope", § "Two-Layer Solution"
+
+#### [THURGOOD R3] — Incorporation Notes
+
+Incorporated Leonardo R3 retraction. Key changes:
+
+- **Learning approach rewritten**: Replaced "design exercise on real screens" with Peter interview + established design system study + generic scenarios. Avoids over-indexing on Working Class. → design-outline.md § "Two-Layer Solution" Layer 1
+- **D6 reframed**: From "Candidate Templates for Exercise" to "Candidate Scenarios for Schema Validation". Generic scenarios (centered page, sidebar page, multi-zone, full-width list) replace Working Class-derived candidates. → design-outline.md § D6
+- **D7 updated**: Learning step now references interview + established systems + generic exercises instead of product-specific design exercise. → design-outline.md § D7
+
+Leonardo's self-correction is well-reasoned. The Spec 083 classification gate taught us that product-specific patterns masquerade as universal when you only exercise against one product. Applying that lesson to layout learning prevents the same mistake.
 
 ---
 

@@ -79,7 +79,12 @@ Leonardo must internalize the responsive grid system as a core competency. This 
 
 **Source material exists**: Token-Family-Responsive.md (breakpoint tokens, density tokens, responsive design patterns, cross-platform usage) and Token-Family-Spacing.md § "Grid Spacing Tokens" (gutter/margin tokens, progressive column grid, platform-specific patterns). This knowledge needs to be synthesized into guidance that serves both specification and implementation.
 
-**Learning approach**: A design exercise focused on layout specification (similar to the Spec 083 component exercises) would be more effective than documentation alone. Leonardo learns by applying the grid system to real screens, discovering gaps in his understanding through practice. The exercise also validates the schema and vocabulary against real scenarios.
+**Learning approach**: The learning step should NOT revisit Working Class screens (same over-indexing risk as Spec 083 gap report — product-specific patterns masquerading as universal). Instead:
+
+1. **Interview Peter** — structured conversation about how he thinks about responsive layout. What decisions does he make when laying out a page? How does he decide when content stacks vs reflows? When does a sidebar collapse vs disappear? This teaches principles, not product-specific patterns.
+2. **Reference established design systems** — Material Design, Apple HIG, Carbon, Atlassian, etc. Study how they express responsive layout guidance. Synthesize common patterns across systems.
+3. **Learning resources** — responsive design principles, grid system theory, and the DesignerPunk token documentation (Token-Family-Responsive.md, Token-Family-Spacing.md). Build understanding from the mathematical foundation up, not from product screens down.
+4. **Generic scenarios for schema validation** — the schema needs concrete scenarios to test against, but those can be generic ("a centered form page," "a two-column page with sidebar," "a multi-zone overview page") rather than product-specific. The scenarios test the infrastructure; they don't need product context.
 
 **Delivery mechanism**: Both a steering doc and MCP-queryable reference, serving different moments:
 - **Steering doc** (concise — principles + mental model, not exhaustive reference) for internalization. Loaded when doing screen specification work. Serves both Leonardo and platform agents.
@@ -208,14 +213,15 @@ How does an agent know which layout template to use?
 
 **Leaning context-based matching** (Leonardo R1 concurs) — same model as `find_components({ context })`. Experience pattern cross-references as secondary hints ("commonly used with `centered-content-page` layout template"). Browse-a-list works for the initial small set but won't scale.
 
-### D6: Candidate Templates for Exercise
+### D6: Candidate Scenarios for Schema Validation
 
-The design exercise needs starting scenarios to test the schema against. These are not production templates — they're exercise inputs that validate the infrastructure.
+The schema needs concrete scenarios to test against, but these should be generic rather than product-specific (Leonardo R3 — avoids over-indexing on one product's screens).
 
-Candidates informed by Spec 083 exercises (layout aspects, not component aspects):
-- Centered content page (login, profile edit — single content area, centered in grid)
-- List page (feed, notifications — full-width scrollable content, optional sticky header)
-- Multi-zone page (dashboard — distinct content regions with different grid behavior)
+Generic scenarios:
+- Centered content page (single content area, centered in grid)
+- Two-column page with sidebar (primary + secondary regions, sidebar collapses at narrow viewports)
+- Multi-zone overview page (distinct content regions with different grid behavior)
+- Full-width list page (scrollable content, optional sticky header)
 
 Whether any of these become production templates depends on product work and classification gate review.
 
@@ -227,7 +233,7 @@ Whether any of these become production templates depends on product work and cla
 
 The steering doc is more important. If Leonardo internalizes the system, he'll rarely need the MCP reference. The MCP reference without understanding produces specs that are technically correct but lack design coherence.
 
-The learning step includes a layout-focused design exercise (Leonardo R1 recommendation). Similar to Spec 083 component exercises but focused on specifying layout for real screens using the grid system. This serves double duty: Leonardo learns the vocabulary, and the exercise validates the template schema.
+The learning step includes an interview with Peter about responsive layout thinking, study of established design systems (Material, HIG, Carbon, Atlassian), and generic scenario exercises to validate the schema (Leonardo R3).
 
 ---
 
