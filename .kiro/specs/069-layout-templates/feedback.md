@@ -634,4 +634,10 @@ Incorporated Ada R1, Lina R1, Leonardo R1 design feedback. Key changes:
 ## Tasks Feedback
 
 ### Context for Reviewers
-- [To be populated when tasks are drafted]
+- 3 parent tasks, 11 subtasks: learning foundation (Task 1, 4 subtasks), steering doc (Task 2, 3 subtasks), infrastructure (Task 3, 4 subtasks)
+- Task 1 happens first — establishes knowledge base before codifying or implementing
+- Task 2 depends on Task 1 outputs (learning foundation feeds steering doc content)
+- Task 3 depends on Task 2 (vocabulary and schema co-designed, Req 1 AC6)
+- Leonardo + Lina co-assigned on learning tasks (1.1–1.4) and candidate templates (3.3) per Req 6 AC4
+- Lina owns infrastructure implementation (3.1, 3.2, 3.4) — her domain
+- Thurgood owns steering doc creation (2.1, 2.3) with Leonardo co-authoring vocabulary and Lina co-authoring authoring guidance
