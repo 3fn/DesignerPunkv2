@@ -15,7 +15,7 @@ Three parent tasks corresponding to the three deliverables: learning foundation 
 
 ## Task List
 
-- [ ] 1. Responsive Layout Learning Foundation
+- [x] 1. Responsive Layout Learning Foundation
 
   **Type**: Parent
   **Validation**: Tier 3 - Comprehensive (includes success criteria)
@@ -39,7 +39,7 @@ Three parent tasks corresponding to the three deliverables: learning foundation 
   - Commit changes: `./.kiro/hooks/commit-task.sh "Task 1 Complete: Responsive Layout Learning Foundation"`
   - Verify: Check GitHub for committed changes
 
-  - [ ] 1.1 Interview Peter on responsive layout decision-making
+  - [x] 1.1 Interview Peter on responsive layout decision-making
     **Type**: Documentation
     **Validation**: Tier 1 - Minimal
     **Agent**: Leonardo + Lina
@@ -50,17 +50,17 @@ Three parent tasks corresponding to the three deliverables: learning foundation 
     - Capture insights in `learning-foundation.md` § "Peter Interview"
     - _Requirements: Req 6_
 
-  - [ ] 1.2 Study established design systems
+  - [x] 1.2 Study established design systems
     **Type**: Documentation
     **Validation**: Tier 1 - Minimal
     **Agent**: Leonardo + Lina
-    - Study responsive layout guidance from Material Design, Apple HIG, Carbon, Atlassian
+    - Study responsive layout guidance from Material Design, Apple HIG, Carbon, Atlassian, Encore, Polaris
     - Focus: how each system expresses layout to implementers — vocabulary, format, level of detail. Goal is "learn how established systems communicate layout decisions," not a broad survey
     - Synthesize common patterns across systems — what's universal, what's system-specific
     - Capture findings in `learning-foundation.md` § "Design System Study"
     - _Requirements: Req 6_
 
-  - [ ] 1.3 Review DesignerPunk responsive token documentation
+  - [x] 1.3 Review DesignerPunk responsive token documentation
     **Type**: Documentation
     **Validation**: Tier 1 - Minimal
     **Agent**: Leonardo + Lina
@@ -71,7 +71,7 @@ Three parent tasks corresponding to the three deliverables: learning foundation 
     - Capture in `learning-foundation.md` § "DesignerPunk Grid System"
     - _Requirements: Req 6_
 
-  - [ ] 1.4 Produce template authoring guidance
+  - [x] 1.4 Produce template authoring guidance
     **Type**: Documentation
     **Validation**: Tier 1 - Minimal
     **Agent**: Leonardo + Lina

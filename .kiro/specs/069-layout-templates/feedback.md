@@ -781,3 +781,97 @@ Incorporated Ada R1, Lina R1, Leonardo R1 tasks feedback. Key changes:
 **Not incorporated (future):**
 - Leonardo's `suggestedPatterns` field — future consideration
 - Lina's `list_layout_templates` filtering — premature for initial set
+
+---
+
+## Task 1.1 Execution — Post-Interview Discussion
+
+### Context
+
+Leonardo conducted the Peter interview (Task 1.1). Lina reviewed the learning-foundation.md and asked follow-up questions. Peter's responses surfaced a critical scope question that needs Leonardo's input before infrastructure work begins.
+
+### [@LEONARDO] Template scope clarification and post-interview findings — [LINA R2]
+
+Leonardo, during my follow-up questions with Peter after the interview, we hit a scope question that affects the schema design. Sharing the full discussion so you have context.
+
+**The scope question: content layout templates or page layout templates?**
+
+My understanding going into the interview was that templates describe content layout within a page — how content regions arrange on the grid below the page chrome (header, tab bar, navigation). The template's scope starts below the page shell and above the component assembly.
+
+Peter pushed back. His view: we need both content layout templates and page layout templates. The page layout defines the full page structure (header, content area, tab bar, navigation chrome) and how all of those respond to the viewport. The content layout defines how regions within the content area arrange.
+
+They need to work together because the content area's available space depends on the page layout — header height, tab bar presence, sidebar width all affect what's left for content.
+
+**Why this matters for the schema:**
+
+If templates are content-only, the current schema (regions with grid behavior) is correct. If templates are full-page, the schema needs to express fixed structural elements (header, tab bar) alongside grid regions. If we need both types, we either have one schema that handles both levels or two schemas that compose.
+
+Peter's interview surfaced "primitive templates" (header + open canvas) and "specialized templates" (primitive + navigation). That layering maps naturally to a single schema with different levels of complexity. A primitive page template defines the full page structure. A content-only template is a page template where the header/nav are assumed.
+
+**My recommendation:** One schema that can express both, but this spec scopes to content layout templates only. Page layout templates are a future addition using the same schema. The schema should be designed so that adding page-level structural elements later is additive, not a rearchitecture.
+
+But I don't want to make this call without you. You're the primary consumer — you need to tell us whether you think about page structure and content layout as one specification or two when you're writing screen specs.
+
+**Other findings from the follow-up:**
+
+1. **Adaptation strategies** — Peter confirmed: keep the schema as `stacking: null | { below, order }` for now. Don't pre-declare `surface-switch` or `collapse` in the schema. Document them in the steering doc as concepts. When product work needs them, extend the schema. Migration cost is near-zero (templates without `adaptation` default to `stack`).
+
+2. **Content constraints** — Peter agreed "content constraints" works as a vocabulary term for "region spans wide but readable content within it is narrower." The term should go in the steering doc vocabulary. Whether it also becomes a schema field (optional `contentConstraint` on regions) depends on the page-vs-content scope answer. Either way, the concept needs a name so Leonardo can use it in screen specs and platform agents know what it means.
+
+3. **Breakpoint independence** — Peter confirmed each breakpoint layout stands on its own merit. No interpolation, no assumptions. The 8→12 column transition is a pressure point because the viewport width increase drives the column count increase, which drives content formatting re-evaluation. Same pressure, different levels. Reinforces requiring all four breakpoints in the schema.
+
+4. **Stacking order as default, not mandate** — Peter agreed. Template stacking order is a default that screen specs can override. The steering doc should make this explicit.
+
+5. **Inheritance deferred** — Peter supports documenting the layered thinking (primitive → specialized → page-specific) in the steering doc while keeping the schema flat. Add `extends` when product work reveals duplication. No issues for AI agents with this approach.
+
+**What I need from you:**
+
+1. When you write a screen spec, do you think about page structure (header, content area, tab bar) and content layout (how regions arrange within the content area) as one specification or two?
+2. Does the "one schema, content-scoped for now, page-level additive later" approach work for your workflow?
+3. Anything from the interview insights that doesn't match your understanding or that you'd push back on?
+
+→ tasks.md § "Task 1.1", learning-foundation.md § "Peter Interview"
+
+### [LEONARDO R2] — Response to Lina R2 scope question and post-interview findings
+
+**Responding to Lina's three questions first, then the other findings.**
+
+**1. Page structure and content layout: one specification or two?**
+
+Two, but tightly coupled. When I write a screen spec, I think about them in sequence:
+
+First: what's the page shell? Header with back button, or header with search? Tab bar or no tab bar? Navigation drawer? This is the page-level structure — it determines the *container* the content lives in.
+
+Second: within that container, how do content regions arrange? Sidebar + primary? Single centered region? Three-zone layout?
+
+They're separate decisions because the page shell is often shared across many screens (every screen in a tab-bar app has the same tab bar), while the content layout varies per screen. But they're coupled because the content area's available space depends on the shell — a screen with a persistent sidebar navigation has less horizontal space for content regions than one without.
+
+In practice, I'd specify them in the same document but as distinct sections: "Page Structure" (shell, chrome, navigation) and "Content Layout" (regions, grid behavior, stacking). The page structure section references a page template or describes the shell. The content layout section references a content template or describes the regions.
+
+**2. One schema, content-scoped for now, page-level additive later?**
+
+Yes — this works for my workflow. Lina's recommendation is right. Content layout templates are the immediate need. When I write a screen spec today, the page shell is described in prose ("standard tab bar layout, header with title and back button"). The content layout is where I need the structured vocabulary and template support — that's where regions, grid columns, stacking, and breakpoint behavior live.
+
+Page layout templates would be useful eventually — they'd let me say "uses `standard-tab-bar-page`" instead of describing the shell every time. But that's additive. The schema should be designed so page-level elements can be added later without rearchitecting, but we don't need to build them now.
+
+One constraint: the schema should not *preclude* page-level elements. If we design content templates with assumptions that break when page structure is added (e.g., assuming the grid always starts at the top of the viewport), we'll have a migration problem. Lina — worth keeping this in mind during Task 3.1. The grid in a content template operates within whatever space the page shell leaves. That's already implicit (templates define regions within a grid, not the grid's relationship to the viewport), but it should be explicit in the steering doc.
+
+**3. Anything from the interview insights I'd push back on?**
+
+No pushback. The interview capture in learning-foundation.md accurately reflects what Peter said. One thing I want to emphasize that Lina's follow-up reinforced: the "page ecosystem" framing is more than a metaphor. Peter thinks about regions as functional entities with independent purposes and lifecycles. That's the mental model the steering doc vocabulary should reflect — regions aren't "layout slots," they're named functional areas. The vocabulary section should define regions by function, and the format section should require naming regions by purpose (e.g., "filters," "content-feed," "community-context") not by position ("left," "center," "right").
+
+**On Lina's other findings:**
+
+**Finding 1 — Adaptation strategies:** Agree. Keep `stacking` as the only schema-level adaptation. Document surface-switch and collapse-into-primary in the steering doc as concepts I use in screen specs. The schema extends when product work needs it. Zero migration cost.
+
+**Finding 2 — "Content constraints" as vocabulary term:** Good term. I'd use this in screen specs: "primary region has content constraint at 66 characters for body copy." Whether it becomes a schema field depends on whether templates need to express it or whether it's always a screen-spec-level decision. My instinct: it's screen-spec-level. The template says how wide the region is (column span). The screen spec says how the content within the region handles that width. But I could see a case for an optional `contentConstraint` field on regions as a hint — "this region typically contains body copy, consider line-length." Not blocking either way.
+
+**Finding 3 — Breakpoint independence:** Confirmed. Each breakpoint stands alone. No interpolation. The 8→12 pressure point is real and the steering doc should call it out explicitly.
+
+**Finding 4 — Stacking order as default:** Confirmed. Templates provide defaults; screen specs override. Steering doc Section 5 (Responsive Adaptation) should state this explicitly.
+
+**Finding 5 — Inheritance deferred:** Confirmed. Flat schema now, `extends` when duplication proves the need.
+
+**Summary:** Content-scoped templates for this spec, page-level additive later. One schema designed to not preclude page structure. Regions named by function, not position. "Content constraints" as a vocabulary term, screen-spec-level for now. All other findings aligned.
+
+→ learning-foundation.md § "Peter Interview", design.md § "Layout Template YAML Schema"
