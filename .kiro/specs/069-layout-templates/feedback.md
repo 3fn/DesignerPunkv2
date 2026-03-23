@@ -641,3 +641,143 @@ Incorporated Ada R1, Lina R1, Leonardo R1 design feedback. Key changes:
 - Leonardo + Lina co-assigned on learning tasks (1.1–1.4) and candidate templates (3.3) per Req 6 AC4
 - Lina owns infrastructure implementation (3.1, 3.2, 3.4) — her domain
 - Thurgood owns steering doc creation (2.1, 2.3) with Leonardo co-authoring vocabulary and Lina co-authoring authoring guidance
+
+#### [ADA R1]
+
+**What's solid:**
+
+- Task sequencing is correct: learn first (Task 1), codify (Task 2), implement (Task 3). Each task's outputs feed the next. You can't write a steering doc without the learning foundation, and you can't build infrastructure without the vocabulary and schema being co-designed.
+- Task 1.3 explicitly includes reading my domain docs (Token-Family-Responsive.md, Token-Family-Spacing.md § "Grid Spacing Tokens"). Good — that's where the grid system lives. The task says "Map DesignerPunk's grid system against patterns found in Task 1.2" which is the right synthesis approach.
+- Task 3.1 includes "Column counts hardcoded: `{ xs: 4, sm: 8, md: 12, lg: 16 }` with comment noting Token-Family-Spacing.md source." This directly addresses my design feedback concern #2. Good.
+- Task 3.1 includes "Token allowlist: `breakpointXs/Sm/Md/Lg`, `gridMarginXs/Sm/Md/Lg`." These are the correct token names (camelCase, no dots). This means the `breakpoint.sm` issue from the design doc schema sketch has been resolved at the task level — the implementation will use actual token names. Confirming that's correct.
+- Task 3.3 says "token references by actual camelCase name." Explicitly addresses my design feedback concern #1. Good.
+- Leonardo + Lina co-assigned on learning tasks is the right call. Both need the foundation — Leonardo for specification, Lina for template authoring and infrastructure.
+
+**Concerns and pushback:**
+
+1. Task 1.3 says Leonardo and Lina review my token docs. If they have questions about the mathematical foundations — why gutters scale with column count, why margins use specific primitive references, the `gridMarginSm` 24px vs 28px discrepancy — I should be available. The task doesn't flag this cross-domain touchpoint. Consider adding a note: "Route token questions to Ada if mathematical relationships or token gaps need clarification." Same coordination pattern as the 083 exercises routing token gaps to me. → tasks.md § "Task 1.3"
+
+2. Task 2.1 says "Include CSS grid generator relationship in Section 7." Good — this addresses my design feedback concern #5. But the task doesn't specify what to say about the relationship. At minimum: the generator exists, it consumes the same tokens templates reference, and Kenya (web agent) can use generator output as a starting point when implementing template-specified layouts. The task should be specific enough that the author doesn't have to rediscover the relationship. → tasks.md § "Task 2.1"
+
+3. Task 2.1 says "Co-design vocabulary terms with template schema (Req 1 AC6) — terms used in the doc must match terms used in YAML schema." This is important and I'm glad it's explicit. One addition: the vocabulary should also match the token names. If the steering doc says "grid margin at xs" but the schema says `gridMarginXs` and the token is `gridMarginXs`, the vocabulary should use the token name as the canonical term. Three naming systems (prose, schema, token) that don't align would recreate the exact problem Spec 082 solved for family names. → tasks.md § "Task 2.1"
+
+4. Task 3.1 validation includes "all four breakpoints present." The design doc's schema rules say "at least `xs` breakpoint." The task says all four. These contradict — is every breakpoint required, or just xs? If all four are required, the schema is stricter than the design doc states. If only xs is required, the task is over-specifying. My recommendation: require all four. A template that only specifies xs and lg leaves agents guessing about sm and md behavior. But the design doc should be updated to match. → tasks.md § "Task 3.1"
+
+5. The `gridMarginSm` gap (24px actual vs 28px design spec) is still not documented anywhere in the tasks. Task 3.3 will author candidate templates that reference `gridMarginSm`. The template will work correctly with the current 24px value, but anyone comparing the template's sm-breakpoint margins against the design spec will see a 4px discrepancy. A comment in the candidate template YAML (or in the learning foundation doc) noting this known gap would prevent confusion. → tasks.md § "Task 3.3"
+
+6. No token-domain tasks in this spec, which is correct. My involvement is consultative — available for token questions during Task 1.3, and the `gridMarginSm` gap is a separate token governance decision outside this spec's scope. No implementation work for me here.
+
+**Overall assessment:** The tasks are well-structured, correctly sequenced, and appropriately assigned. The token name corrections from my design feedback are reflected in the task details (camelCase names, source comments). My main items are the cross-domain touchpoint for Task 1.3, the all-four-breakpoints contradiction between design doc and task, and documenting the `gridMarginSm` gap. All minor. Ready for execution.
+
+#### [LINA R1]
+
+**What's solid:**
+
+- Task sequencing is correct and the dependencies are real. I can't build the indexer (Task 3) without knowing the schema, and the schema vocabulary needs to be co-designed with the steering doc (Task 2), which needs the learning foundation (Task 1). No shortcuts here.
+- I'm co-assigned on Task 1 (learning) alongside Leonardo. This directly addresses my design outline concern #1 (YAML typist vs domain expert) and my design feedback concern #5 (learning step should include me). Good — I'll have the layout knowledge I need before I start building infrastructure.
+- Task 3.1 incorporates my design feedback cleanly: all four breakpoints required, column counts hardcoded with source comment, token allowlist with actual camelCase names, stacking order rules (positive integers, no duplicates). These were all items I raised. No gaps.
+- Task 3.4 test categories match what I outlined in my design feedback: valid parsing, validation errors, catalog generation, health reporting, edge cases including `"1-1"` single-column. The MCP tool integration tests follow the same pattern as experience pattern tools.
+- Task 3.3 co-assigns me with Leonardo on candidate templates. That's the right pairing — I know the schema and indexer, he knows what layout information is useful for specification. Neither of us should author templates alone.
+
+**Concerns:**
+
+1. **Task 3.1 and 3.4 ordering.** Task 3.1 is "implement LayoutTemplateIndexer" and Task 3.4 is "write LayoutTemplateIndexer tests." In practice, I'll write these together — tests alongside implementation, not after. The subtask separation is fine for documentation purposes (separate completion docs), but I want to flag that I'll be writing tests as I implement, not as a separate pass. Same approach I used for FamilyNameValidation in 082. No task change needed — just noting the implementation approach. → tasks.md § "Task 3"
+
+2. **Task 3.2 (register MCP tools) depends on Task 3.1 (indexer) but also on the ComponentIndexer integration.** The experience pattern tools are wired through ComponentIndexer, which delegates to PatternIndexer. Will layout template tools follow the same pattern (ComponentIndexer delegates to LayoutTemplateIndexer), or will LayoutTemplateIndexer be wired directly to the MCP tool handler? The design doc says "mirrors PatternIndexer architecture" but doesn't specify the wiring. I need to know before I implement 3.2. Let me check the current wiring to understand the pattern.
+
+    Looking at the existing code: ComponentIndexer creates and manages PatternIndexer internally, and the MCP tools go through ComponentIndexer's methods. If layout templates follow the same pattern, I'd add `getLayoutTemplate()` and `listLayoutTemplates()` to ComponentIndexer, which delegates to LayoutTemplateIndexer. If they're independent, I'd wire LayoutTemplateIndexer directly to the tool handler. The former is more consistent; the latter is simpler. Recommend: follow the existing pattern (through ComponentIndexer) for consistency, even though it adds a thin delegation layer. → tasks.md § "Task 3.2"
+
+3. **Task 2.2 assigns me as co-author with Thurgood on Section 8 (template authoring guidance) and Section 9 (common layout patterns).** Section 8 makes sense — I'm the template author, I should help define authoring guidance. Section 9 ("common layout patterns — suggestive, evolving guidelines seeded from Task 1.2 design system study") is new — it wasn't in the design doc's 8-section steering doc structure. The design doc lists 8 sections; the task adds a 9th. Is this intentional? If so, the design doc's steering doc structure should be updated. If not, Section 9 might be scope creep. My read: it's a reasonable addition (the design system study will surface common patterns worth documenting), but it should be explicitly marked as suggestive and evolving, not authoritative. The task already says "Explicitly marked as not definitive" — good. → tasks.md § "Task 2.2"
+
+4. **Agreeing with Ada's concern #4 — the all-four-breakpoints requirement contradicts the design doc.** The design doc says "at least `xs` breakpoint." Task 3.1 says all four required. I recommended requiring all four in my design feedback, and the task reflects that. But the design doc needs to be updated to match. Otherwise the schema rules in the design doc and the validation rules in the implementation disagree. This is a Thurgood item — flag for design doc update before implementation. → tasks.md § "Task 3.1"
+
+5. **Agreeing with Ada's concern #1 — Task 1.3 should note Ada as available for token questions.** When Leonardo and I read Token-Family-Responsive.md and Token-Family-Spacing.md, we'll have questions. The `gridMarginSm` gap alone will need context. Adding "Route token questions to Ada" is the same coordination pattern we used in 083 exercises. → tasks.md § "Task 1.3"
+
+6. **Task 1.1 (Peter interview) is the highest-value subtask.** The design system study (1.2) and token doc review (1.3) are inputs I can read. Peter's layout thinking — how he decides when content stacks vs reflows, how he allocates columns to regions — is knowledge that doesn't exist in any document. This interview shapes everything downstream. Worth noting that the interview should be structured enough to produce actionable insights, not just a conversation. The topic list in the task is a good start. → tasks.md § "Task 1.1"
+
+#### [LEONARDO R1]
+
+**What's solid:**
+
+- Task sequencing is right: learn → codify → implement. Each task's outputs feed the next. You can't write a specification vocabulary without understanding the grid system, and you can't build infrastructure without the vocabulary and schema being co-designed.
+- I'm co-assigned on the learning tasks (1.1–1.4) alongside Lina. This is the right call — we both need the foundation, for different reasons. I need it for specification; she needs it for template authoring.
+- Task 2.1 explicitly says "Co-design vocabulary terms with template schema (Req 1 AC6)." This addresses my requirements concern about vocabulary and schema using the same concepts. Ada (#3) reinforces this — the vocabulary, schema, and token names should all align. Three naming systems that don't match would recreate the problem Spec 082 solved.
+- Task 3.3 co-assigns me with Lina on candidate templates. Right pairing — she knows the schema and indexer, I know what layout information is useful for specification. Neither of us should author templates alone.
+- The Peter interview topic list (Task 1.1) covers the right ground: stacking vs reflow, sidebar collapse vs disappear, column allocation, max-width decisions, responsive vs reactive in practice.
+
+**Concerns:**
+
+1. **Task 1.1 (Peter interview) needs more structure.** Ada and Lina both flagged this as the highest-value subtask, and I agree — Peter's layout thinking is knowledge that doesn't exist in any document. But the task says "structured conversation" without defining the structure. I'd suggest: prepare specific questions in advance, organized by the topic list. Not a rigid script, but enough structure that we capture actionable insights rather than a freeform discussion. The Spec 083 exercises worked well because each screen had a clear goal (exercise the component library). The interview needs a similar goal structure — each topic should produce a concrete insight we can reference in the steering doc.
+
+    Suggested question areas beyond the topic list:
+    - How do you decide the *number* of regions on a page? When is single-region right vs multi-region?
+    - How do you think about content priority when regions stack? Does the most important content always go first?
+    - When you're designing for mobile-first, do you start with the stacked layout and expand, or start with the desktop layout and collapse?
+    - How do you decide when a layout pattern is reusable vs one-off?
+
+    → tasks.md § "Task 1.1"
+
+2. **Task 1.2 (design system study) scope could be tighter.** "Study responsive layout guidance from Material Design, Apple HIG, Carbon, Atlassian" is broad. Each of those systems has extensive layout documentation. Without focus, this becomes a reading exercise that produces a survey rather than actionable synthesis. I'd suggest: focus on *how each system expresses layout to implementers* — what vocabulary do they use, what format, what level of detail. That directly feeds the steering doc's specification vocabulary and format sections. The goal isn't "learn everything about responsive layout" — it's "learn how established systems communicate layout decisions." → tasks.md § "Task 1.2"
+
+3. **Agreeing with Ada (#4) and Lina (#4) — the all-four-breakpoints contradiction needs resolution before implementation.** The design doc says "at least `xs`." Task 3.1 says all four required. I recommended all four in my design feedback. The task reflects my recommendation, which is correct — but the design doc needs to be updated to match. Thurgood should resolve this before Task 3 begins. → tasks.md § "Task 3.1"
+
+4. **Agreeing with Ada (#1) — Task 1.3 should note Ada as available for token questions.** When Lina and I read the token docs, we'll have questions. The `gridMarginSm` gap, the mathematical relationships between gutters and column counts, the density token implications — Ada has the context. Same coordination pattern as Spec 083 routing token gaps to Ada. → tasks.md § "Task 1.3"
+
+5. **Agreeing with Lina (#2) — Task 3.2 MCP tool wiring needs a decision.** Experience pattern tools go through ComponentIndexer, which delegates to PatternIndexer. Do layout template tools follow the same pattern (through ComponentIndexer) or wire directly? Lina recommends through ComponentIndexer for consistency. I agree — it's a thin delegation layer, but it keeps the MCP tool surface consistent. All component/pattern/template queries go through one coordinator. The task should specify this so Lina doesn't have to make the decision during implementation. → tasks.md § "Task 3.2"
+
+6. **Task 2.1 assigns Thurgood + Leonardo.** I'm the right co-author for the specification vocabulary and format sections (Sections 3-6) — those define how I express layout in screen specs. But Sections 1-2 (token source map, grid system mental model) are more Ada's domain than mine. I can contribute, but Ada should review those sections before the steering doc ships. Not a co-author — a reviewer. Same pattern as Lina reviewing the Component Dev Guide section in Spec 083 Task 1.3. → tasks.md § "Task 2.1"
+
+7. **Section 9 (Common Layout Patterns) is a good addition.** Lina (#3) flagged it as new — it wasn't in the design doc's 8-section structure. I suggested it in my design feedback as a "design judgment" layer. The task correctly marks it as "suggestive, evolving, not definitive." This is the right framing — it's seeded from the design system study, not from product experience. It'll grow as we learn from real product work. → tasks.md § "Task 2.2"
+
+**One observation on the overall plan:**
+
+Task 1 (learning) is the riskiest task because its quality determines everything downstream. If the Peter interview produces vague insights, the steering doc will be vague. If the design system study is too broad, the synthesis will be shallow. If the token doc review is surface-level, the grid system mental model will be incomplete.
+
+The mitigation is the co-assignment — Lina and I both participate, which means two perspectives on what's useful and what's missing. But the real quality gate is Peter. He's the layout authority. If the learning foundation doc doesn't capture his thinking accurately, he should push back before we move to Task 2.
+
+**Overall assessment:** Tasks are well-structured, correctly sequenced, and appropriately assigned. The learning-first approach is right — we can't codify or implement what we don't understand. Main items: tighter structure for the Peter interview, tighter scope for the design system study, resolve the breakpoint requirement contradiction, specify MCP tool wiring, and add Ada as reviewer for steering doc Sections 1-2. All refinements, not structural issues. Ready for execution.
+
+→ tasks.md §§ "Task 1.1", "Task 1.2", "Task 2.1", "Task 3.1", "Task 3.2"
+
+---
+
+## Tasks Feedback
+
+#### [THURGOOD R1] — Tasks Incorporation Notes
+
+Incorporated Ada R1, Lina R1, Leonardo R1 tasks feedback. Key changes:
+
+**Task 1.1 — tighter interview structure (Leonardo #1):**
+- Added: prepare questions in advance, each topic should produce a concrete insight
+- Added Leonardo's suggested question areas: number of regions, content priority when stacking, mobile-first vs desktop-first, reusable vs one-off patterns
+
+**Task 1.2 — tighter study scope (Leonardo #2):**
+- Focused: "how each system expresses layout to implementers — vocabulary, format, level of detail"
+- Goal reframed: "learn how established systems communicate layout decisions," not broad survey
+
+**Task 1.3 — Ada as token consultant (Ada #1, Lina #5, Leonardo #4):**
+- Added: "Route token questions to Ada if mathematical relationships or token gaps need clarification"
+- Same coordination pattern as Spec 083 exercises
+
+**Task 2.1 — three additions:**
+- Token name alignment (Ada #3): vocabulary, schema, and token names must all use actual camelCase
+- CSS grid generator specificity (Ada #2): generator consumes same tokens, Kenya can use output as starting point
+- Ada reviews Sections 1-2 (Leonardo #6): token source map and grid system mental model reviewed by Ada before shipping
+
+**Task 3.2 — MCP tool wiring (Lina #2, Leonardo #5):**
+- Specified: wire through ComponentIndexer (delegates to LayoutTemplateIndexer) for consistency with experience pattern tool wiring
+
+**Task 3.3 — gridMarginSm gap (Ada #5):**
+- Added: note known discrepancy (24px vs 28px) in YAML comment where gridMarginSm is referenced
+
+**Verified — already resolved in design doc (reviewers working from pre-incorporation state):**
+- All-four-breakpoints requirement (Ada #4, Lina #4, Leonardo #3): design doc already says "all four breakpoints required" — updated during design R1 incorporation
+- Section 9 in steering doc (Lina #3): already added during design R1 incorporation
+- Token name format (Ada, Lina, Leonardo): already camelCase throughout — updated during design R1 incorporation
+
+**Acknowledged — no task change needed:**
+- Lina #1: tests written alongside implementation, not after. Noted, no structural change.
+
+**Not incorporated (future):**
+- Leonardo's `suggestedPatterns` field — future consideration
+- Lina's `list_layout_templates` filtering — premature for initial set

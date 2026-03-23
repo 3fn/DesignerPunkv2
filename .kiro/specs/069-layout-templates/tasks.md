@@ -44,7 +44,9 @@ Three parent tasks corresponding to the three deliverables: learning foundation 
     **Validation**: Tier 1 - Minimal
     **Agent**: Leonardo + Lina
     - Structured conversation with Peter about how he thinks about responsive layout
+    - Prepare questions in advance organized by topic — each topic should produce a concrete insight referenceable in the steering doc
     - Topics: when content stacks vs reflows, when sidebars collapse vs disappear, how columns are allocated to regions, how max-width decisions are made, responsive vs reactive distinction in practice
+    - Additional question areas: how he decides the number of regions on a page, how he thinks about content priority when regions stack, whether he designs mobile-first (expand) or desktop-first (collapse), when a layout pattern is reusable vs one-off
     - Capture insights in `learning-foundation.md` § "Peter Interview"
     - _Requirements: Req 6_
 
@@ -53,6 +55,7 @@ Three parent tasks corresponding to the three deliverables: learning foundation 
     **Validation**: Tier 1 - Minimal
     **Agent**: Leonardo + Lina
     - Study responsive layout guidance from Material Design, Apple HIG, Carbon, Atlassian
+    - Focus: how each system expresses layout to implementers — vocabulary, format, level of detail. Goal is "learn how established systems communicate layout decisions," not a broad survey
     - Synthesize common patterns across systems — what's universal, what's system-specific
     - Capture findings in `learning-foundation.md` § "Design System Study"
     - _Requirements: Req 6_
@@ -64,6 +67,7 @@ Three parent tasks corresponding to the three deliverables: learning foundation 
     - Read Token-Family-Responsive.md (breakpoints, density, responsive design patterns, cross-platform usage)
     - Read Token-Family-Spacing.md § "Grid Spacing Tokens" (gutters, margins, column progression, platform patterns)
     - Map DesignerPunk's grid system against patterns found in Task 1.2
+    - Route token questions to Ada if mathematical relationships or token gaps need clarification (e.g., `gridMarginSm` 24px vs 28px discrepancy)
     - Capture in `learning-foundation.md` § "DesignerPunk Grid System"
     - _Requirements: Req 6_
 
@@ -107,8 +111,9 @@ Three parent tasks corresponding to the three deliverables: learning foundation 
     - Create `Layout-Specification-Vocabulary.md` as Layer 3 conditional doc
     - Sections 1-7: Token source map, grid system mental model, specification vocabulary, specification format, responsive adaptation, reactive annotations, platform translation patterns
     - Draw from Task 1 learning foundation and existing token family docs
-    - Co-design vocabulary terms with template schema (Req 1 AC6) — terms used in the doc must match terms used in YAML schema
-    - Include CSS grid generator relationship in Section 7
+    - Co-design vocabulary terms with template schema (Req 1 AC6) — terms used in the doc must match terms used in YAML schema. Use actual token names (camelCase) as canonical terms — vocabulary, schema, and token names must all align
+    - Section 7: Note that the CSS grid generator consumes the same tokens templates reference, and Kenya (web agent) can use generator output as a starting point when implementing template-specified layouts
+    - Ada reviews Sections 1-2 (token source map, grid system mental model) before steering doc ships — same pattern as Lina reviewing Component Dev Guide in Spec 083
     - _Requirements: Req 1, Req 2_
 
   - [ ] 2.2 Add template authoring guidance and common layout patterns
@@ -171,7 +176,7 @@ Three parent tasks corresponding to the three deliverables: learning foundation 
     **Validation**: Tier 2 - Standard
     **Agent**: Lina
     - Add `list_layout_templates` and `get_layout_template` tool definitions to `index.ts`
-    - Wire tools to LayoutTemplateIndexer methods
+    - Wire tools through ComponentIndexer (which delegates to LayoutTemplateIndexer) for consistency with experience pattern tool wiring
     - Follow same patterns as `list_experience_patterns` / `get_experience_pattern`
     - Error handling: unknown template name returns `{ error: "TemplateNotFound", message: "..." }`
     - _Requirements: Req 4_
@@ -186,6 +191,7 @@ Three parent tasks corresponding to the three deliverables: learning foundation 
       - `sidebar-page.yaml` — primary + sidebar regions, sidebar stacks below at narrow viewports
       - `multi-zone-page.yaml` — 3+ regions with distinct grid behavior
     - All templates: `source: system`, all four breakpoints, token references by actual camelCase name
+    - Note `gridMarginSm` known discrepancy (24px actual vs 28px design spec) in a YAML comment where referenced
     - Verify all 3 are indexable and queryable through MCP tools
     - _Requirements: Req 3, Req 5_
 
